@@ -2,11 +2,11 @@
 
 > **用途**：维护当前活跃阶段的范围、依赖、实施顺序与验收入口；长期路线以 [roadmap](roadmap.md) 为准。
 >
-> **当前状态**：**Phase 12-1 与 Phase 12-2 已完成并验证；Phase 12-3 待开始**。6.9 补丁回植已完成并归档。
+> **当前状态**：**Phase 12-1、12-2、12-3 已全部完成并验收归档**。6.9 补丁回植已完成并归档。
 >
 > **版本边界**：内容版本保持 **6.9**；Phase 12 是画布、相机与 HUD 的展示层重构，不新增内容版本，不改变已验收的 6.9 业务行为。
 >
-> **归档口径**：6.9 的完整范围、文件映射、实施批次与验收结果见 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)；本页不再重复历史台账。
+> **归档口径**：6.9 的完整范围、文件映射、实施批次与验收结果见 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)；Phase 12 的最终验收记录见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
 
 ---
 
@@ -15,6 +15,7 @@
 - 迁移方法与红线：[`../guides/migration_playbook.md`](../guides/migration_playbook.md)
 - 当前工程状态与基线：[`../reference/status.md`](../reference/status.md)
 - 6.9 补丁回植归档：[`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)
+- Phase 12 显示层验收归档：[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)
 - 命名与目录约束：[`../standards/naming_standard.md`](../standards/naming_standard.md)
 - Godot 设计约束：[`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)
 - 机器报告目录：[`../reports/README.md`](../reports/README.md)
@@ -100,7 +101,7 @@
 |:---|:---|:---|
 | Phase 12-1 画布、窗口与相机基线 | 完成 | 本次提交 |
 | Phase 12-2 桌面 HUD 重构 | 完成 | 本次提交 |
-| Phase 12-3 多分辨率验收与收口 | 规划中 | 未开始；依赖 12-1/12-2 |
+| Phase 12-3 多分辨率验收与收口 | 完成 | 本次提交；归档见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) |
 
 #### Phase 12-1：画布、窗口与相机基线 [已完成]
 
@@ -154,7 +155,7 @@
 - 通过 1280×800、1600×1000、1830×1126、1920×1200 视口截图检查，HUD 均位于左下且不遮挡中心战斗区；
 - 七维门禁 **7/7 PASS**，`level_1` 冒烟 **PASS**，日志 0 ERROR / 0 WARNING；`level_10`、`level_22`、`level_59` 抽检无底部清屏色。
 
-#### Phase 12-3：多分辨率验收与收口 [规划中]
+#### Phase 12-3：多分辨率验收与收口 [已完成]
 
 - 验收矩阵：
   - 16:10：1280×800、1600×1000、1920×1200、2560×1600；
@@ -168,6 +169,20 @@
 - 将 Phase 12 的验收记录归档，并更新 roadmap 与索引。
 
 **出口**：目标分辨率下无灰边、无 HUD 遮挡、无布局溢出；1P/2P 与移动端无回归；门禁通过；文档和状态同步。
+
+**实施结果（2026-10-24）**：
+
+- 单机验收：1280×800、1600×1000、1920×1200、2560×1600、1920×1080、2560×1440、2560×1080、3440×1440 全部通过；
+- 21:9 下 `BackGround/End` 增加 1440px `motion_mirroring`，右侧默认清屏色消除；`level_1`、`level_10`、`level_22`、`level_59` 抽检无灰边；
+- 双人验收：1280×800、1600×1000、1920×1080 通过，P1/P2 技能栏取消负缩放镜像，文字方向正常，按钮组保持居中 6 列；
+- 全量关卡回归 **PASS 128/128 + SKIP 5**（133 关，703.6s）；
+- 双人探针矩阵 **PASS 15 / SKIP 0 / FAIL 0**；
+- Atlas 元数据 **379/379 同步**；
+- 七维质量门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**，0 ERROR / 0 WARNING；
+- 文档链接检查 **97 条，0 缺失**；
+- 验收归档：[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
+
+**已知边界**：Steam Deck 全屏与 Android 实机未在本环境运行；21:9 静态背景使用镜像重复，部分关卡可能存在轻微接缝；全量视觉抽检覆盖 4 个代表性关卡，非 133 关逐帧截图。
 
 ### 1.4 验收标准
 
@@ -215,8 +230,8 @@ Phase 12 完成前不启动新的内容版本迁移。之后按 [roadmap](roadma
 
 ## 3. 恢复规则
 
-- 本页记录 **Phase 12-1/12-2 已完成、Phase 12-3 待开始** 的当前状态。
-- Phase 12-3 开始前须由用户明确确认；不得因前两个阶段通过自动进入全量收口。
+- 本页记录 **Phase 12-1/12-2/12-3 已全部完成并归档** 的状态。
+- Phase 12 已完成；后续内容迁移或显示优化不得自动启动，须由用户明确确认。
 - 内容版本保持 6.9；Phase 12 不产生新的内容版本号。
 - 每个 Phase 完成后单独提交，并在本页记录验证结果；未验证的截图、估算或外部参考不作为完成证据。
 - 外部 1.2.0.1 / 1.3.3.2 参考只读使用，不复制 `.gdc`、测试探针、缓存或本地路径进入仓库。

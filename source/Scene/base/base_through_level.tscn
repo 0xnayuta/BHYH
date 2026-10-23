@@ -186,6 +186,7 @@ position = Vector2(-1, -111)
 
 [node name="End" type="ParallaxLayer" parent="BackGround" unique_id=653194421]
 motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(1440, 0)
 
 [node name="floor_2" type="ParallaxLayer" parent="BackGround" unique_id=458132924]
 

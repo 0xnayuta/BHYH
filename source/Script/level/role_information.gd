@@ -142,8 +142,12 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 	menu.anchor_top = 1.0
 	menu.anchor_bottom = 1.0
 	menu.pivot_offset = Vector2.ZERO
-	menu.scale = Vector2(0.85 if second else -0.85, 0.85)
-	menu.position = Vector2(hud.size.x - 320 if second else 320, hud.size.y - 120)
+	menu.scale = Vector2(0.85, 0.85)
+	var bar_width := menu.size.x * 0.85
+	if second:
+		menu.position = Vector2(hud.size.x - bar_width - 24.0, hud.size.y - 120)
+	else:
+		menu.position = Vector2(24.0, hud.size.y - 120)
 	hud.grey.position = Vector2(82, 86)
 
 

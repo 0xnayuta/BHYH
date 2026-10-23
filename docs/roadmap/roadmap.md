@@ -2,7 +2,7 @@
 
 > **定位**：只记录当前版本之后的工作方向，不保留历史阶段流水账。
 >
-> **当前版本**：6.9。当前迭代为 **Phase 12 画布与 HUD 重构**（Phase 12-1/12-2 已完成；Phase 12-3 待开始）。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
+> **当前版本**：6.9。当前迭代 **Phase 12 画布与 HUD 重构已全部完成并归档**（验收记录见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
 >
 > **迁移方法**：见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
@@ -21,9 +21,7 @@
 - 桌面 HUD 恢复左下按钮簇、无双圆盘和 Y/U/I/O/L 技能槽，图标优先使用 6.9 高清素材；
 - 移动端保留右上角/触控布局，不把 PC 布局强加给手机。
 
-Phase 12-1 已完成：1280×800 画布、1600×1000 默认窗口、1.356 相机缩放和小屏全屏策略已落地。Phase 12-2 已完成：桌面 HUD 迁移到左下，图标映射、Y/U/I/O/L 技能槽、PC 常驻/移动端自动隐藏、HUD 安全边距与 1.2 视野缩放已落地。Phase 12-3 的范围、实施顺序和验收矩阵见 [`current-iteration.md`](current-iteration.md)；Phase 12-3 须由用户明确确认后开始。
-
-后续技术债与设计规范方向仍按本文后续章节推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
+Phase 12 已全部完成：1280×800 画布、1600×1000 默认窗口、1.2 相机缩放与纵向取景偏移、左下 HUD、双人正常文字方向、21:9 背景覆盖及多分辨率验收均已落地，验收记录见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。后续技术债与设计规范方向仍按本文后续章节推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
 ---
 
