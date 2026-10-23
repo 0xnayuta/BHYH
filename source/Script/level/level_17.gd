@@ -41,9 +41,11 @@ func _physics_process(delta: float) -> void:
 
 func _on_hddy_body_entered(body: Node2D) -> void:
 	if body is BaseHero:
-		if PlayerData.get_item_data("bsz") > 0:
-			PlayerData.remove_dj("bsz", PlayerData.get_dj_page("bsz"), 1)
+		var profile: Node = LocalCoop.data_for(body) if LocalCoop.is_enabled() else PlayerData
+		var props: Node = LocalCoop.props_for(body) if LocalCoop.is_enabled() else RoleProp
+		if profile.get_item_data("bsz") > 0:
+			profile.remove_dj("bsz", profile.get_dj_page("bsz"), 1)
 			MemoryClass.save_game(Global.cd_path)
 			Global.change_scene("res://Scene/level/level_hddy.tscn")
 		else:
-			RoleProp.roleprop.Hp = -100
+			props.roleprop.Hp = 0
