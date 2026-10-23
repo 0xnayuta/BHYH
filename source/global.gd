@@ -3552,6 +3552,8 @@ func add_reward_box(parent, item_id, num):
 	var target = instance_scene(reward_box, parent)
 	target.item_id = item_id
 	target.num = num
+	if is_instance_valid(target) and get_tree().paused:
+		target.process_mode = Node.PROCESS_MODE_ALWAYS
 	return target
 
 
@@ -4719,6 +4721,8 @@ func add_choose_item(parent, position, list, _name, page):
 		target.position = viewport_center_for_parent(parent)
 	else:
 		target.position = position
+	if is_instance_valid(target) and get_tree().paused:
+		target.process_mode = Node.PROCESS_MODE_ALWAYS
 	return target
 
 
@@ -4899,6 +4903,8 @@ func add_choose_text(parent, _position, text_, calm_time):
 	target.position = _position
 	target.my_text = text_
 	target.calm_time = calm_time
+	if is_instance_valid(target) and get_tree().paused:
+		target.process_mode = Node.PROCESS_MODE_ALWAYS
 	return target
 
 

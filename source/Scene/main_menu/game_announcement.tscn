@@ -222,6 +222,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
+[node name="V0_50" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177987]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("1")
+theme_override_styles/pressed = SubResource("3")
+theme_override_styles/hover = SubResource("2")
+theme_override_styles/disabled = SubResource("4")
+theme_override_styles/focus = SubResource("5")
+text = "V6.9"
+
 [node name="V0_49" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177986]
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
@@ -1198,6 +1210,7 @@ texture_pressed = ExtResource("7")
 texture_hover = ExtResource("8")
 texture_disabled = ExtResource("7")
 
+[connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_50" to="." method="_on_v_0_50_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_47" to="." method="_on_v_0_47_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_49" to="." method="_on_v_0_49_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_48" to="." method="_on_v_0_48_pressed"]

@@ -120,6 +120,23 @@ var _last_secret_pointer_msec := -1
 var verisions_name: String = "V6_0"
 var verisions: String = "V6.0"
 var text_data = {
+	"V6_9":
+	[
+		"",
+		"一、版本新增内容：==============================",
+		"1.修复双人模式使用宝箱卡死",
+		"2.修复双人模式丹药只对1p生效",
+		"3.修复双人模式法宝洗练",
+		"4.日常任务八仙尽伏改成每完成一次可以领取一次",
+		"5.修复双人模式忘川河异常死亡",
+		"6.修复自动战斗第三个技能异常",
+		"7.自动战斗添加双人模式",
+		"8.修复双人模式万灵图录只对1p生效",
+		"9.修复双人模式炼体只对1p生效",
+		"10.修复双人模式宠物2p没有解锁",
+		"11.双人模式宠物背包互通",
+		"12.修复哪吒和玉兔装备不掉落",
+	],
 	"V6_8":
 	[
 		"",
@@ -1500,4 +1517,10 @@ func _on_v_0_48_pressed() -> void:
 func _on_v_0_49_pressed() -> void:
 	verisions_name = "V6_8"
 	verisions = "V6.8"
+	add_text_info()
+
+
+func _on_v_0_50_pressed() -> void:
+	verisions_name = "V6_9"
+	verisions = "V6.9"
 	add_text_info()
