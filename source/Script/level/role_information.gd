@@ -8,7 +8,7 @@ var gogo: AnimatedSprite2D:
 		return _gogo
 @onready var role_layer: Control = $roleLayer/Control
 @onready var control_2: Control = $roleLayer/Control2
-@onready var set_menu_con: BoxContainer = $roleLayer/ButtonGroup
+@onready var set_menu_con: GridContainer = $roleLayer/ButtonGroup
 
 var set_key_tscn: PackedScene = preload("res://Scene/tools/set_com.tscn")
 var head_tscn: PackedScene = preload("res://Scene/base/base_role.tscn")
@@ -23,6 +23,7 @@ var buff_box: HBoxContainer
 var is_stop: bool = false
 var cur_prop: bool = false
 const OLD_WUSHUANG_POSITION := Vector2(735, 505)
+const DESKTOP_BUTTON_ORDER := ["pet", "skill", "magic_weapon", "backpack", "set", "menu"]
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func _ready() -> void:
 	player = _main_role()
 	if player == null:
 		player = RoleProp.source_player
+	_order_hud_buttons()
 	gogo.visible = false
 
 	role_p1 = head_tscn.instantiate()
@@ -111,11 +113,14 @@ func reveal_after_scene_loaded() -> void:
 	_show_role_hud(role_p2)
 	set_menu_con.visible = true
 	if LocalCoop.is_enabled():
+		set_menu_con.columns = 6
 		set_menu_con.custom_minimum_size = Vector2(350, 72)
-		set_menu_con.add_theme_constant_override("separation", 5)
+		set_menu_con.add_theme_constant_override("h_separation", 5)
+		set_menu_con.add_theme_constant_override("v_separation", 5)
 		for button in set_menu_con.get_children():
 			if button is TextureButton:
 				button.custom_minimum_size = Vector2(54, 54)
+				button.visible = true
 		set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 		set_menu_con.size = Vector2(350, 72)
 		set_menu_con.position = Vector2(
@@ -124,6 +129,8 @@ func reveal_after_scene_loaded() -> void:
 		)
 		_layout_coop_skill_menu(role_p1, false)
 		_layout_coop_skill_menu(role_p2, true)
+	else:
+		_layout_desktop()
 
 
 func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
@@ -140,15 +147,46 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 	hud.grey.position = Vector2(82, 86)
 
 
+func _order_hud_buttons() -> void:
+	for index in DESKTOP_BUTTON_ORDER.size():
+		var button := set_menu_con.get_node_or_null(DESKTOP_BUTTON_ORDER[index])
+		if button != null:
+			set_menu_con.move_child(button, index)
+
+
+func _layout_desktop() -> void:
+	set_menu_con.visible = true
+	set_menu_con.columns = 1
+	set_menu_con.custom_minimum_size = Vector2(56, 304)
+	set_menu_con.add_theme_constant_override("h_separation", 0)
+	set_menu_con.add_theme_constant_override("v_separation", 6)
+	for button in set_menu_con.get_children():
+		if button is TextureButton:
+			button.custom_minimum_size = Vector2(56, 56)
+			button.visible = true
+	var menu_button := set_menu_con.get_node_or_null("menu") as TextureButton
+	if menu_button != null:
+		menu_button.visible = false
+	set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	set_menu_con.offset_left = 24.0
+	set_menu_con.offset_right = 80.0
+	set_menu_con.offset_top = -328.0
+	set_menu_con.offset_bottom = -24.0
+
+
 func _layout_mobile() -> void:
 	set_menu_con.visible = false
-	if player_p2 != null:
-		set_menu_con.position.x -= 100
-		set_menu_con.position.y -= 17
-	else:
-		set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-		set_menu_con.position.x -= 20
-		set_menu_con.position.y -= 17
+	set_menu_con.columns = 2
+	set_menu_con.custom_minimum_size = Vector2(118, 180)
+	for button in set_menu_con.get_children():
+		if button is TextureButton:
+			button.custom_minimum_size = Vector2(56, 56)
+			button.visible = true
+	set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	set_menu_con.offset_left = -134.0
+	set_menu_con.offset_right = -16.0
+	set_menu_con.offset_top = 16.0
+	set_menu_con.offset_bottom = 196.0
 	set_menu_con.visible = true
 
 	_show_role_hud(role_p1)

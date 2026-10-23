@@ -21,7 +21,7 @@
 - 桌面 HUD 恢复左下按钮簇、无双圆盘和 Y/U/I/O/L 技能槽，图标优先使用 6.9 高清素材；
 - 移动端保留右上角/触控布局，不把 PC 布局强加给手机。
 
-Phase 12-1 已完成：1280×800 画布、1600×1000 默认窗口、1.356 相机缩放和小屏全屏策略已落地，并通过七维门禁与完整关卡回归。Phase 12-2/12-3 的范围、实施顺序和验收矩阵见 [`current-iteration.md`](current-iteration.md)；Phase 12-2 须由用户明确确认后开始。
+Phase 12-1 已完成：1280×800 画布、1600×1000 默认窗口、1.356 相机缩放和小屏全屏策略已落地。Phase 12-2 已完成：桌面 HUD 迁移到左下，图标映射、Y/U/I/O/L 技能槽与 PC 常驻/移动端自动隐藏已落地。Phase 12-3 的范围、实施顺序和验收矩阵见 [`current-iteration.md`](current-iteration.md)；Phase 12-3 须由用户明确确认后开始。
 
 后续技术债与设计规范方向仍按本文后续章节推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 

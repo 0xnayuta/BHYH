@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends GridContainer
 
 @onready var backpack: TextureButton = $"../ButtonGroup/backpack"
 @onready var _set: TextureButton = $"../ButtonGroup/set"
@@ -9,13 +9,14 @@ var set_cd: float = 0
 
 
 func _physics_process(delta):
-	if !backpack.visible:
+	# PC 端按钮常驻；仅移动端恢复自动隐藏。
+	if not OS.has_feature("android") or not backpack.visible:
 		set_cd = 0
-	else:
-		set_cd += delta
-		if set_cd >= 5:
-			set_cd = 0
-			_on_menu_pressed()
+		return
+	set_cd += delta
+	if set_cd >= 5:
+		set_cd = 0
+		_on_menu_pressed()
 
 
 func _on_menu_pressed():

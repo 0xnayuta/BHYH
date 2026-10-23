@@ -266,8 +266,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ButtonGroup" type="HBoxContainer" parent="roleLayer" unique_id=1945758134]
-custom_minimum_size = Vector2(450, 100)
+[node name="ButtonGroup" type="GridContainer" parent="roleLayer" unique_id=1945758134]
+custom_minimum_size = Vector2(56, 304)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -277,8 +277,9 @@ offset_right = -16.0
 offset_bottom = 73.0
 grow_horizontal = 0
 mouse_filter = 2
-theme_override_constants/separation = 8
-alignment = 2
+columns = 1
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 6
 script = ExtResource("5")
 
 [node name="backpack" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=654017739]
@@ -288,6 +289,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 0
+tooltip_text = "背包"
 texture_normal = ExtResource("6")
 ignore_texture_size = true
 stretch_mode = 4
@@ -299,7 +301,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 0
-texture_normal = ExtResource("7")
+tooltip_text = "设置"
+texture_normal = ExtResource("10")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -310,6 +313,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 0
+tooltip_text = "技能"
 texture_normal = ExtResource("8")
 ignore_texture_size = true
 stretch_mode = 4
@@ -321,6 +325,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 0
+tooltip_text = "法宝"
 texture_normal = ExtResource("9")
 ignore_texture_size = true
 stretch_mode = 4
@@ -332,7 +337,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 0
-texture_normal = ExtResource("10")
+tooltip_text = "宠物"
+texture_normal = ExtResource("7")
 ignore_texture_size = true
 stretch_mode = 4
 

@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-23（Phase 12-1 显示基线完成后）
+> 最后更新：2026-10-23（Phase 12-2 桌面 HUD 完成后）
 
 ---
 
@@ -97,6 +97,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | Atlas 元数据 | **379/379 同步** | `scripts/convert_atlas_metadata.py --check` |
 | 6.9 完整工作区验收基线 | 七维门禁 7/7；关卡回归 **128/128 PASS + 5 SKIP**；双人矩阵 **15/15 PASS**；Atlas **379/379** | 本地完整素材工作区；6.9 定向探针 0 failures |
 | Phase 12-1 显示基线 | 七维门禁 **7/7 PASS**；关卡回归 **128/128 PASS + 5 SKIP**；705 脚本 0 Error / 0 Warning | 1280×800 画布、1600×1000 窗口、相机缩放 1.3559；16:10 截图无底部灰带 |
+| Phase 12-2 HUD 基线 | 七维门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**；日志 0 ERROR / 0 WARNING | 桌面左下按钮簇、Wushuang 与 Y/U/I/O/L 技能槽；1280×800 / 1600×1000 / 1920×1200 截图通过 |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 15 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 

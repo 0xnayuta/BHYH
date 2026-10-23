@@ -282,13 +282,11 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 460.0
+offset_left = 122.0
 offset_top = -136.0
-offset_right = 824.0
+offset_right = 486.0
 offset_bottom = -2.0
 grow_vertical = 0
-scale = Vector2(-1, 1)
-pivot_offset = Vector2(162, 0)
 texture = ExtResource("13")
 
 [node name="ws_wk" type="Sprite2D" parent="role_menu" unique_id=639498269]
@@ -321,19 +319,19 @@ alignment = 2
 [node name="skil_1" type="TextureRect" parent="role_menu" unique_id=1856619771]
 custom_minimum_size = Vector2(35, 35)
 layout_mode = 0
-offset_left = 291.0
+offset_left = 131.46045
 offset_top = 74.0
-offset_right = 326.8934
-offset_bottom = 109.78174
+offset_right = 167.0
+offset_bottom = 109.78412
 metadata/_edit_lock_ = true
 
 [node name="skil_2" type="TextureRect" parent="role_menu" unique_id=1998545073]
 custom_minimum_size = Vector2(35, 35)
 layout_mode = 0
-offset_left = 251.0
+offset_left = 171.0
 offset_top = 74.0
-offset_right = 286.89343
-offset_bottom = 109.78174
+offset_right = 206.74323
+offset_bottom = 109.78412
 metadata/_edit_lock_ = true
 
 [node name="skil_3" type="TextureRect" parent="role_menu" unique_id=113386109]
@@ -348,20 +346,95 @@ metadata/_edit_lock_ = true
 [node name="skil_4" type="TextureRect" parent="role_menu" unique_id=959931360]
 custom_minimum_size = Vector2(35, 35)
 layout_mode = 0
-offset_left = 171.0
+offset_left = 251.0
 offset_top = 74.0
-offset_right = 206.74323
-offset_bottom = 109.78412
+offset_right = 286.89343
+offset_bottom = 109.78174
 metadata/_edit_lock_ = true
 
 [node name="skil_5" type="TextureRect" parent="role_menu" unique_id=567273258]
 custom_minimum_size = Vector2(35, 35)
 layout_mode = 0
-offset_left = 131.46045
+offset_left = 291.0
 offset_top = 74.0
-offset_right = 167.0
-offset_bottom = 109.78412
+offset_right = 326.8934
+offset_bottom = 109.78174
 metadata/_edit_lock_ = true
+
+[node name="KeyY" type="Label" parent="role_menu"]
+offset_left = 133.0
+offset_top = 74.0
+offset_right = 166.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+text = "Y"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="KeyU" type="Label" parent="role_menu"]
+offset_left = 173.0
+offset_top = 74.0
+offset_right = 206.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+text = "U"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="KeyI" type="Label" parent="role_menu"]
+offset_left = 213.0
+offset_top = 74.0
+offset_right = 246.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+text = "I"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="KeyO" type="Label" parent="role_menu"]
+offset_left = 253.0
+offset_top = 74.0
+offset_right = 286.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+text = "O"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="KeyL" type="Label" parent="role_menu"]
+offset_left = 293.0
+offset_top = 74.0
+offset_right = 326.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+text = "L"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="SkillBox2" type="HBoxContainer" parent="role_menu" unique_id=1697939467]
 layout_mode = 0

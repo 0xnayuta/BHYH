@@ -33,7 +33,7 @@
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **当前迭代 Phase 12**：Phase 12-1 画布/窗口/相机基线已完成；Phase 12-2 HUD 与 12-3 验收待开始 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **当前迭代 Phase 12**：Phase 12-1 画布/窗口/相机与 Phase 12-2 桌面 HUD 已完成；12-3 验收待开始 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
