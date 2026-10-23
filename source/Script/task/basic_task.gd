@@ -12,6 +12,13 @@ var task_is_finish: bool
 var current_task_name: String
 var current_task_type: int = 1
 var all_daily_list = {
+	DataKeys.Daily.EIGHT_IMMORTAL_TASK:
+	{
+		"task_name": DataKeys.Daily.EIGHT_IMMORTAL_TASK,
+		"task_type": "DailyTask",
+		"task_info": "分别击败八位八仙，各1次。每完成一轮可领取1颗三级昆仑玉。",
+		"task_reward": [{"Name": "kly3", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}],
+	},
 	"关注八荒湮隳":
 	{
 		"task_name": "关注八荒湮隳",
@@ -382,6 +389,18 @@ func _physics_process(delta: float) -> void:
 				_disable_claim_button()
 				return
 			text.text = str(all_daily_list[current_task_name]["task_info"])
+			if current_task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
+				var progress := PlayerData.get_eight_immortal_daily_progress()
+				task_is_finish = PlayerData.is_eight_immortal_daily_complete()
+				var lines: Array[String] = [str(all_daily_list[current_task_name]["task_info"])]
+				var names: Array[String] = ["吕洞宾", "何仙姑", "韩湘子", "汉钟离", "张果老", "蓝采和", "曹国舅", "铁拐李"]
+				for index in PlayerData.EIGHT_IMMORTAL_DAILY_IDS.size():
+					var boss_id: int = PlayerData.EIGHT_IMMORTAL_DAILY_IDS[index]
+					var defeated: Array = progress.get(DataKeys.Daily.DEFEATED, [])
+					lines.append("%s：%s" % [names[index], "已击败" if boss_id in defeated else "未击败"])
+				if task_is_finish:
+					lines.append("本轮已完成，可领取奖励")
+				text.text = "\n".join(lines)
 			lqjl.disabled = not task_is_finish
 
 
@@ -441,13 +460,18 @@ func _on_lqjl_pressed() -> void:
 	if task_data.is_empty():
 		_disable_claim_button()
 		return
+	if current_task_type == 2 and current_task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
+		if not PlayerData.claim_eight_immortal_daily():
+			_disable_claim_button()
+			return
+		task_is_finish = true
 	if not task_is_finish:
 		_disable_claim_button()
 		return
 	if current_task_type == 1 and PlayerData.player_data.get(current_task_name, false):
 		_disable_claim_button()
 		return
-	if not task_data.get("UnlimitedClaim", false):
+	if current_task_name != DataKeys.Daily.EIGHT_IMMORTAL_TASK and not task_data.get("UnlimitedClaim", false):
 		PlayerData.player_data[current_task_name] = true
 	var list = task_data["task_reward"]
 	Global.add_reward_info(Global.get_ancestor(self, 1), Vector2(0, 0), list, null, null)

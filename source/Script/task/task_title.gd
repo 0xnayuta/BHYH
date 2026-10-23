@@ -87,7 +87,9 @@ func check_task_finish():
 					return true
 
 		"DailyTask":
-			pass
+			if task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
+				return PlayerData.is_eight_immortal_daily_complete()
+			return true
 	return true
 
 

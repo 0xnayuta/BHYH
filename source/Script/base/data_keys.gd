@@ -100,6 +100,15 @@ class Skill:
 	const AWAKENED_ENABLED = "技能觉醒启用"
 
 
+## 日常任务与跨日进度契约
+class Daily:
+	const EIGHT_IMMORTAL_TASK = "八仙尽伏"
+	const EIGHT_IMMORTAL_PROGRESS = "八仙日常"
+	const DATE = "日期"
+	const DEFEATED = "击败"
+	const CLAIMED = "已领取"
+
+
 # ==============================================================================
 # 2. 扁平高频快捷常量 (供全局直接快速访问: DataKeys.NAME)
 # ==============================================================================

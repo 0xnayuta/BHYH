@@ -4685,6 +4685,59 @@ func check_next_day():
 				return false
 
 
+const EIGHT_IMMORTAL_DAILY_IDS: Array[int] = [163, 175, 165, 166, 168, 169, 174, 164]
+
+
+func get_eight_immortal_daily_progress() -> Dictionary:
+	var today := Time.get_date_string_from_system()
+	var progress_value: Variant = player_data.get(DataKeys.Daily.EIGHT_IMMORTAL_PROGRESS, {})
+	if not progress_value is Dictionary or str((progress_value as Dictionary).get(DataKeys.Daily.DATE, "")) != today:
+		progress_value = {
+			DataKeys.Daily.DATE: today,
+			DataKeys.Daily.DEFEATED: [],
+			DataKeys.Daily.CLAIMED: false,
+		}
+		player_data[DataKeys.Daily.EIGHT_IMMORTAL_PROGRESS] = progress_value
+	var progress: Dictionary = progress_value
+	var defeated: Array[int] = []
+	var saved_value: Variant = progress.get(DataKeys.Daily.DEFEATED, [])
+	if saved_value is Array:
+		for saved_id in saved_value:
+			var boss_id := int(saved_id)
+			if boss_id in EIGHT_IMMORTAL_DAILY_IDS and boss_id not in defeated:
+				defeated.append(boss_id)
+	progress[DataKeys.Daily.DEFEATED] = defeated
+	return progress
+
+
+func record_eight_immortal_daily_defeat(boss_id: int) -> void:
+	if boss_id not in EIGHT_IMMORTAL_DAILY_IDS:
+		return
+	var progress := get_eight_immortal_daily_progress()
+	var defeated: Array = progress.get(DataKeys.Daily.DEFEATED, [])
+	if boss_id not in defeated:
+		defeated.append(boss_id)
+	progress[DataKeys.Daily.DEFEATED] = defeated
+
+
+func is_eight_immortal_daily_complete() -> bool:
+	var defeated: Array = get_eight_immortal_daily_progress().get(DataKeys.Daily.DEFEATED, [])
+	for boss_id in EIGHT_IMMORTAL_DAILY_IDS:
+		if boss_id not in defeated:
+			return false
+	return true
+
+
+func claim_eight_immortal_daily() -> bool:
+	var progress := get_eight_immortal_daily_progress()
+	if not is_eight_immortal_daily_complete():
+		return false
+	# 6.9 起每完成一轮即可领取，领取后清空本轮击败进度。
+	progress[DataKeys.Daily.CLAIMED] = false
+	progress[DataKeys.Daily.DEFEATED] = []
+	return true
+
+
 func add_ini_buff():
 	if player_data["初始Buff"].size() != 0:
 		for i in player_data["初始Buff"]:

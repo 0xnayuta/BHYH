@@ -398,6 +398,8 @@ func _handle_boss_death() -> void:
 	if _boss_death_handled:
 		return
 	_boss_death_handled = true
+	PlayerData.record_eight_immortal_daily_defeat(selected_boss_id)
+	MemoryClass.save_game(Global.cd_path)
 	if stage_501_boat != null:
 		stage_501_boat.set_static()
 
