@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_67.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg30.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg31_frames/0001.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg32_frames/0001.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg33_frames/0001.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg34_frames/0001.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/background/bg10.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/shuiliandong/foreground/front11111.png" id="9"]
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(5000, 500)
+
+[sub_resource type="RectangleShape2D" id="right_shape"]
+size = Vector2(120, 2400)
+
+[node name="Level_67" unique_id=1171970526 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "shuiliandong"
+display_name = "水帘洞"
+stage_number = 67
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(2500, 669.5)
+shape = SubResource("floor_shape")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(4971, -300)
+shape = SubResource("right_shape")
+
+[node name="bg30" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=622462973]
+position = Vector2(675, 315.00003)
+scale = Vector2(1.0305344, 1.0500001)
+texture = ExtResource("3")
+
+[node name="water1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=174735914]
+position = Vector2(415, 509.5)
+texture = ExtResource("4")
+
+[node name="water2" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="2" unique_id=1212281866]
+position = Vector2(145.5, 424)
+texture = ExtResource("5")
+
+[node name="water3" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="3" unique_id=992379734]
+position = Vector2(295, 307.5)
+texture = ExtResource("6")
+
+[node name="water4" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="4" unique_id=161344110]
+position = Vector2(469.5, 275)
+texture = ExtResource("7")
+
+[node name="floor1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1297195648]
+position = Vector2(498.5, 532)
+texture = ExtResource("8")
+
+[node name="floor2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1897812905]
+position = Vector2(1495.5, 532)
+texture = ExtResource("8")
+
+[node name="floor3" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=30420603]
+position = Vector2(2492.5, 532)
+texture = ExtResource("8")
+
+[node name="floor4" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=1413143037]
+position = Vector2(3489.5, 532)
+texture = ExtResource("8")
+
+[node name="floor5" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=807821466]
+position = Vector2(4532.5, 532)
+scale = Vector2(1.0922768, 1)
+texture = ExtResource("8")
+
+[node name="floor" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=643279606]
+position = Vector2(0, 20)
+
+[node name="front11111" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1795759760]
+position = Vector2(1677.25, 262.75)
+scale = Vector2(1.0899054, 1.0776772)
+texture = ExtResource("9")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4835, 350)

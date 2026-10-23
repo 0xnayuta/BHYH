@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster130_bullet.gd" id="1"]
+
+[sub_resource type="SpriteFrames" id="frames"]
+animations = [{
+"frames": [],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Monster130Bullet4" type="Node2D" unique_id=333572162]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=703157940]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1229333842]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=478383523]
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1101832923]
+texture_filter = 1
+sprite_frames = SubResource("frames")
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1983380928]
+
+[node name="poision" type="Sprite2D" parent="." unique_id=300272323]
+visible = false
+
+[node name="queue_timer" type="Timer" parent="." unique_id=859054669]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=2030405019]
+one_shot = true
+
+[connection signal="area_entered" from="middle/HitBox" to="." method="_on_hit_box_area_entered"]

@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/streaming_role_bullet.gd" id="1"]
+
+[sub_resource type="SpriteFrames" id="EmptyFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 1,
+"name": &"Empty",
+"speed": 1.0
+}]
+
+[sub_resource type="CircleShape2D" id="DefaultShape"]
+radius = 8.0
+
+[sub_resource type="Animation" id="EmptyAnimation"]
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="EmptyLibrary"]
+_data = {
+&"Empty": SubResource("EmptyAnimation")
+}
+
+[node name="RoleBullet" type="Node2D" unique_id=1304276313]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=279948146]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=1883854806]
+visible = false
+sprite_frames = SubResource("EmptyFrames")
+animation = &"Empty"
+
+[node name="StreamVisual" type="Sprite2D" parent="Middle" unique_id=2055238819]
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=1825612544]
+visible = false
+sprite_frames = SubResource("EmptyFrames")
+animation = &"Empty"
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=233479432]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=487515879]
+shape = SubResource("DefaultShape")
+disabled = true
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=461413374]
+libraries/ = SubResource("EmptyLibrary")
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=457077741]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

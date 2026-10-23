@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_hero.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/hero/yutu_hero.gd" id="2"]
+[ext_resource type="SpriteFrames" path="res://Art/hero_picture/wings/standard_wings.tres" id="3"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_6/official_parts_trial/transparent.tres" id="4"]
+[ext_resource type="Script" path="res://Script/hero/yutu_official_parts.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(180, 100)
+
+[sub_resource type="CapsuleShape2D" id="2"]
+radius = 27.0
+height = 116.0
+
+[sub_resource type="CapsuleShape2D" id="3"]
+radius = 22.0
+height = 88.0
+
+[node name="Role_7" unique_id=119400580 instance=ExtResource("1")]
+collision_layer = 18
+script = ExtResource("2")
+
+[node name="Name_" parent="." index="0" unique_id=630687534]
+offset_left = -24.0
+offset_top = -134.0
+offset_right = 25.0
+offset_bottom = -112.0
+
+[node name="tx" parent="." index="1" unique_id=478600657]
+position = Vector2(0, -156)
+
+[node name="Wings" parent="Action" parent_id_path=PackedInt32Array(160066331) index="0" unique_id=642149650]
+visible = false
+position = Vector2(28, -83)
+scale = Vector2(1, 1)
+sprite_frames = ExtResource("3")
+offset = Vector2(20, 10)
+
+[node name="RoleBody" parent="Action" parent_id_path=PackedInt32Array(160066331) index="1" unique_id=1863677651]
+scale = Vector2(-1, 1)
+texture = ExtResource("4")
+offset = Vector2(0, -188)
+script = ExtResource("5")
+
+[node name="RoleEquipment" parent="Action" parent_id_path=PackedInt32Array(160066331) index="2" unique_id=1245527093]
+scale = Vector2(-1, 1)
+texture = ExtResource("4")
+offset = Vector2(0, -188)
+
+[node name="HitBox" parent="base_damagebox/HitBox" parent_id_path=PackedInt32Array(1211041154) index="0" unique_id=1909176091]
+position = Vector2(-85, -58)
+shape = SubResource("1")
+disabled = true
+
+[node name="HurtBox" parent="base_damagebox" parent_id_path=PackedInt32Array(1954076280) index="1" unique_id=236678663]
+collision_layer = 896
+
+[node name="HurtBox" parent="base_damagebox/HurtBox" index="0" unique_id=317521668]
+position = Vector2(0, -54)
+shape = SubResource("2")
+
+[node name="pz" parent="." index="6" unique_id=367880502]
+position = Vector2(0, -44)
+shape = SubResource("3")

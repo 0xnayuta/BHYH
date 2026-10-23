@@ -1,0 +1,180 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_special_effect.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_2/role2_skill_lxyz4.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_slb1t"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l2uo8"]
+atlas = ExtResource("2")
+region = Rect2(258, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k8y40"]
+atlas = ExtResource("2")
+region = Rect2(516, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtt0e"]
+atlas = ExtResource("2")
+region = Rect2(774, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rq3hh"]
+atlas = ExtResource("2")
+region = Rect2(1032, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27mu5"]
+atlas = ExtResource("2")
+region = Rect2(1290, 0, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vi6u"]
+atlas = ExtResource("2")
+region = Rect2(0, 181, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t704p"]
+atlas = ExtResource("2")
+region = Rect2(258, 181, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1ty0"]
+atlas = ExtResource("2")
+region = Rect2(516, 181, 258, 181)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ub5al"]
+atlas = ExtResource("2")
+region = Rect2(774, 181, 258, 181)
+
+[sub_resource type="SpriteFrames" id="350"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_slb1t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l2uo8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k8y40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtt0e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rq3hh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27mu5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vi6u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t704p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1ty0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ub5al")
+}],
+"loop": 0,
+"name": &"lxyz_skillxl",
+"speed": 15.0
+}]
+
+[sub_resource type="Animation" id="lxyz_skillxlAnimation"]
+resource_name = "lxyz_skillxl"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpecialAN:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"lxyz_skillxl"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpecialAN:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 9]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpecialAN:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.7, 0.7)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Area2D/cc:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.033333335),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpecialAN:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="EffectLibrary"]
+_data = {
+&"lxyz_skillxl": SubResource("lxyz_skillxlAnimation")
+}
+
+[sub_resource type="RectangleShape2D" id="357"]
+size = Vector2(198, 204)
+
+[node name="RoleSpecialEffect" type="Node2D" unique_id=1296957268]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=271378140]
+
+[node name="SpecialAN" type="AnimatedSprite2D" parent="Middle" unique_id=1613698705]
+sprite_frames = SubResource("350")
+animation = &"lxyz_skillxl"
+
+[node name="SpecialPlayer" type="AnimationPlayer" parent="Middle" unique_id=1440584018]
+libraries/ = SubResource("EffectLibrary")
+
+[node name="Area2D" type="Area2D" parent="Middle" unique_id=310754931]
+collision_layer = 2
+collision_mask = 2064
+monitorable = false
+
+[node name="cc" type="CollisionShape2D" parent="Middle/Area2D" unique_id=59133320]
+position = Vector2(-1, -29)
+shape = SubResource("357")
+
+[connection signal="animation_finished" from="Middle/SpecialPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="Middle/Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Middle/Area2D" to="." method="_on_area_2d_body_exited"]

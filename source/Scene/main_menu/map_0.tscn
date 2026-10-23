@@ -1,0 +1,469 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/map_0.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/bg_runtime.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/south_normal.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/south_highlight.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/east_normal.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/east_highlight.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/north_normal.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/north_highlight.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/west_normal.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/west_highlight.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/tower_normal.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/tower_highlight.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/rj1.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/rj2.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/df1.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/df2.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/tt1.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/tt2.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/role_head_1.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/player_panel.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/bag_normal.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/bag_pressed.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/bag_hover.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/magic_weapon_normal.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/magic_weapon_pressed.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/magic_weapon_hover.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/mount_normal.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/mount_pressed.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/mount_hover.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/pet_normal.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/pet_pressed.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/pet_hover.png" id="32"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/wing_normal.png" id="33"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/wing_pressed.png" id="34"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/wing_hover.png" id="35"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/body_training_normal.png" id="36"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/body_training_pressed.png" id="37"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/body_training_hover.png" id="38"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_normal.png" id="39"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_pressed.png" id="40"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_hover.png" id="41"]
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="42"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_normal.png" id="43"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_pressed.png" id="44"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_hover.png" id="45"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/alchemy_normal.png" id="46"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/alchemy_pressed.png" id="47"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/alchemy_hover.png" id="48"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/skill_normal.png" id="49"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/skill_pressed.png" id="50"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/skill_hover.png" id="51"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/activity_normal.png" id="52"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/activity_pressed.png" id="53"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/activity_hover.png" id="54"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_normal.png" id="55"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_pressed.png" id="56"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_hover.png" id="57"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_normal.png" id="58"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_pressed.png" id="59"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_hover.png" id="60"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_normal.png" id="61"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_pressed.png" id="62"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_hover.png" id="63"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_normal"]
+bg_color = Color(0.13, 0.17, 0.16, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.52, 0.24, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_pressed"]
+bg_color = Color(0.08, 0.11, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84, 0.63, 0.29, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_hover"]
+bg_color = Color(0.2, 0.29, 0.25, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.75, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Map_0" type="Node2D" unique_id=306605179]
+script = ExtResource("1")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1209394111]
+z_index = -10
+offset_left = -329.0
+offset_right = 1267.0
+offset_bottom = 590.0
+mouse_filter = 2
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MapButtons" type="Node2D" parent="." unique_id=1048709671]
+z_index = -1
+
+[node name="SouthContinent" type="TextureButton" parent="MapButtons" unique_id=296587682]
+offset_left = 329.0
+offset_top = 356.00003
+offset_right = 617.0
+offset_bottom = 542.0
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(144, 93)
+focus_mode = 0
+texture_normal = ExtResource("3")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="EastContinent" type="TextureButton" parent="MapButtons" unique_id=152302921]
+offset_left = 516.625
+offset_top = 198.0
+offset_right = 744.125
+offset_bottom = 420.8333
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(113.5, 111.5)
+focus_mode = 0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("6")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="NorthContinent" type="TextureButton" parent="MapButtons" unique_id=1054681350]
+offset_left = 343.0
+offset_top = 74.0
+offset_right = 570.0
+offset_bottom = 297.00003
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(113.5, 111.5)
+focus_mode = 0
+texture_normal = ExtResource("7")
+texture_pressed = ExtResource("8")
+texture_hover = ExtResource("8")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="WestContinent" type="TextureButton" parent="MapButtons" unique_id=1013981367]
+offset_left = 154.00002
+offset_top = 200.00002
+offset_right = 426.0
+offset_bottom = 430.0
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(136, 115)
+focus_mode = 0
+texture_normal = ExtResource("9")
+texture_pressed = ExtResource("10")
+texture_hover = ExtResource("10")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="DemonTower" type="TextureButton" parent="MapButtons" unique_id=735095060]
+offset_left = 494.0
+offset_top = 15.000015
+offset_right = 785.0
+offset_bottom = 245.0
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(145.5, 115)
+focus_mode = 0
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("12")
+texture_hover = ExtResource("12")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="HumanWorld" type="TextureButton" parent="MapButtons" unique_id=867059551]
+offset_left = -17.0
+offset_top = 193.00002
+offset_right = 213.0
+offset_bottom = 414.0
+scale = Vector2(0.62898934, 0.6029788)
+pivot_offset = Vector2(115, 110.5)
+focus_mode = 0
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("14")
+texture_hover = ExtResource("14")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="Underworld" type="TextureButton" parent="MapButtons" unique_id=1036100700]
+offset_left = 48.999996
+offset_top = 353.0
+offset_right = 279.0
+offset_bottom = 565.0
+scale = Vector2(0.64352864, 0.62)
+pivot_offset = Vector2(115, 106)
+focus_mode = 0
+texture_normal = ExtResource("15")
+texture_pressed = ExtResource("16")
+texture_hover = ExtResource("16")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="Heaven" type="TextureButton" parent="MapButtons" unique_id=518006303]
+offset_left = 78.00001
+offset_top = 46.0
+offset_right = 352.0
+offset_bottom = 276.0
+scale = Vector2(0.49999875, 0.49472383)
+pivot_offset = Vector2(137, 115)
+focus_mode = 0
+texture_normal = ExtResource("17")
+texture_pressed = ExtResource("18")
+texture_hover = ExtResource("18")
+ignore_texture_size = true
+stretch_mode = 3
+
+[node name="PlayerHead" type="TextureRect" parent="." unique_id=1978095610]
+z_index = 1
+offset_left = 15.0
+offset_top = 2.0
+offset_right = 99.0
+offset_bottom = 114.0
+mouse_filter = 2
+texture = ExtResource("19")
+expand_mode = 1
+
+[node name="PlayerPanel" type="TextureRect" parent="." unique_id=1533754664]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 104.0
+offset_bottom = 109.0
+mouse_filter = 2
+texture = ExtResource("20")
+expand_mode = 1
+
+[node name="PlayerLevel" type="Label" parent="." unique_id=2038194501]
+z_index = 2
+offset_left = 10.0
+offset_top = 84.0
+offset_right = 38.0
+offset_bottom = 101.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 12
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopButtons" type="Node2D" parent="." unique_id=902486410]
+
+[node name="Bag" type="TextureButton" parent="TopButtons" unique_id=2121888016]
+offset_left = 109.0
+offset_top = 16.0
+offset_right = 163.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("21")
+texture_pressed = ExtResource("22")
+texture_hover = ExtResource("23")
+
+[node name="MagicWeapon" type="TextureButton" parent="TopButtons" unique_id=377100912]
+offset_left = 162.0
+offset_top = 16.0
+offset_right = 216.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("24")
+texture_pressed = ExtResource("25")
+texture_hover = ExtResource("26")
+
+[node name="Mount" type="TextureButton" parent="TopButtons" unique_id=2122359837]
+offset_left = 215.0
+offset_top = 16.0
+offset_right = 269.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("27")
+texture_pressed = ExtResource("28")
+texture_hover = ExtResource("29")
+
+[node name="Pet" type="TextureButton" parent="TopButtons" unique_id=429250870]
+offset_left = 268.0
+offset_top = 16.0
+offset_right = 322.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("30")
+texture_pressed = ExtResource("31")
+texture_hover = ExtResource("32")
+
+[node name="Wing" type="TextureButton" parent="TopButtons" unique_id=646490077]
+offset_left = 321.0
+offset_top = 16.0
+offset_right = 375.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("33")
+texture_pressed = ExtResource("34")
+texture_hover = ExtResource("35")
+
+[node name="BodyTraining" type="TextureButton" parent="TopButtons" unique_id=225055154]
+offset_left = 374.0
+offset_top = 16.0
+offset_right = 428.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("36")
+texture_pressed = ExtResource("37")
+texture_hover = ExtResource("38")
+
+[node name="ZhuXian" type="TextureButton" parent="TopButtons" unique_id=2019826295]
+offset_left = 427.0
+offset_top = 16.0
+offset_right = 485.0
+offset_bottom = 74.0
+focus_mode = 0
+texture_normal = ExtResource("39")
+texture_pressed = ExtResource("40")
+texture_hover = ExtResource("41")
+
+[node name="WanLingCatalog" type="Button" parent="TopButtons" unique_id=1050870640]
+offset_left = 498.0
+offset_top = 27.0
+offset_right = 582.0
+offset_bottom = 71.0
+tooltip_text = "万灵图录"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.86, 0.62, 1)
+theme_override_colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
+theme_override_colors/font_hover_color = Color(1, 0.96, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("42")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBox_wanling_normal")
+theme_override_styles/pressed = SubResource("StyleBox_wanling_pressed")
+theme_override_styles/hover = SubResource("StyleBox_wanling_hover")
+text = "万灵图录"
+
+[node name="EquipmentCatalog" type="Button" parent="." unique_id=440307013]
+offset_left = 834.0
+offset_top = 27.0
+offset_right = 918.0
+offset_bottom = 71.0
+tooltip_text = "装备图鉴"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.86, 0.62, 1)
+theme_override_colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
+theme_override_colors/font_hover_color = Color(1, 0.96, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("42")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBox_wanling_normal")
+theme_override_styles/pressed = SubResource("StyleBox_wanling_pressed")
+theme_override_styles/hover = SubResource("StyleBox_wanling_hover")
+text = "装备图鉴"
+
+[node name="BottomButtons" type="Node2D" parent="." unique_id=1759593118]
+
+[node name="Shop" type="TextureButton" parent="BottomButtons" unique_id=305557915]
+offset_left = 5.0
+offset_top = 510.0
+offset_right = 75.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("43")
+texture_pressed = ExtResource("44")
+texture_hover = ExtResource("45")
+
+[node name="Alchemy" type="TextureButton" parent="BottomButtons" unique_id=1782638972]
+offset_left = 72.0
+offset_top = 510.0
+offset_right = 142.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("46")
+texture_pressed = ExtResource("47")
+texture_hover = ExtResource("48")
+
+[node name="Skill" type="TextureButton" parent="BottomButtons" unique_id=1415184162]
+offset_left = 139.0
+offset_top = 510.0
+offset_right = 209.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("49")
+texture_pressed = ExtResource("50")
+texture_hover = ExtResource("51")
+
+[node name="Activity" type="TextureButton" parent="BottomButtons" unique_id=793445848]
+offset_left = 206.0
+offset_top = 510.0
+offset_right = 276.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("52")
+texture_pressed = ExtResource("53")
+texture_hover = ExtResource("54")
+
+[node name="Task" type="TextureButton" parent="BottomButtons" unique_id=2012264541]
+offset_left = 273.0
+offset_top = 510.0
+offset_right = 343.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("55")
+texture_pressed = ExtResource("56")
+texture_hover = ExtResource("57")
+
+[node name="Group" type="TextureButton" parent="BottomButtons" unique_id=1240517321]
+offset_left = 340.0
+offset_top = 510.0
+offset_right = 410.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("58")
+texture_pressed = ExtResource("59")
+texture_hover = ExtResource("60")
+
+[node name="Return" type="TextureButton" parent="BottomButtons" unique_id=829179327]
+offset_left = 407.0
+offset_top = 510.0
+offset_right = 477.0
+offset_bottom = 586.0
+focus_mode = 0
+texture_normal = ExtResource("61")
+texture_pressed = ExtResource("62")
+texture_hover = ExtResource("63")
+
+[connection signal="pressed" from="MapButtons/SouthContinent" to="." method="_on_south_continent_pressed"]
+[connection signal="pressed" from="MapButtons/EastContinent" to="." method="_on_east_continent_pressed"]
+[connection signal="pressed" from="MapButtons/NorthContinent" to="." method="_on_north_continent_pressed"]
+[connection signal="pressed" from="MapButtons/WestContinent" to="." method="_on_west_continent_pressed"]
+[connection signal="pressed" from="MapButtons/DemonTower" to="." method="_on_demon_tower_pressed"]
+[connection signal="pressed" from="MapButtons/HumanWorld" to="." method="_on_human_world_pressed"]
+[connection signal="pressed" from="MapButtons/Underworld" to="." method="_on_underworld_pressed"]
+[connection signal="pressed" from="MapButtons/Heaven" to="." method="_on_heaven_pressed"]
+[connection signal="pressed" from="TopButtons/Bag" to="." method="_on_bag_pressed"]
+[connection signal="pressed" from="TopButtons/MagicWeapon" to="." method="_on_magic_weapon_pressed"]
+[connection signal="pressed" from="TopButtons/Mount" to="." method="_on_mount_pressed"]
+[connection signal="pressed" from="TopButtons/Pet" to="." method="_on_pet_pressed"]
+[connection signal="pressed" from="TopButtons/Wing" to="." method="_on_wing_pressed"]
+[connection signal="pressed" from="TopButtons/BodyTraining" to="." method="_on_body_training_pressed"]
+[connection signal="pressed" from="TopButtons/ZhuXian" to="." method="_on_zhuxian_pressed"]
+[connection signal="pressed" from="TopButtons/WanLingCatalog" to="." method="_on_wanling_catalog_pressed"]
+[connection signal="pressed" from="EquipmentCatalog" to="." method="_on_equipment_catalog_pressed"]
+[connection signal="pressed" from="BottomButtons/Shop" to="." method="_on_shop_pressed"]
+[connection signal="pressed" from="BottomButtons/Alchemy" to="." method="_on_alchemy_pressed"]
+[connection signal="pressed" from="BottomButtons/Skill" to="." method="_on_skill_pressed"]
+[connection signal="pressed" from="BottomButtons/Activity" to="." method="_on_activity_pressed"]
+[connection signal="pressed" from="BottomButtons/Task" to="." method="_on_task_pressed"]
+[connection signal="pressed" from="BottomButtons/Group" to="." method="_on_group_pressed"]
+[connection signal="pressed" from="BottomButtons/Return" to="." method="_on_return_pressed"]

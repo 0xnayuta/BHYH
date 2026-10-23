@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/tongtian3057_beam.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="Shape_hit"]
+size = Vector2(1120.4, 119.15)
+
+[node name="Tongtian3057Beam" type="Node2D" unique_id=956671435]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=2098505617]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1379970714]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=1033368401]
+position = Vector2(614.4, -35.475)
+shape = SubResource("Shape_hit")
+disabled = true
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1950805248]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=477760744]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=542881547]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=223755602]
+one_shot = true
+
+[connection signal="area_entered" from="middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="timeout" from="queue_timer" to="." method="_on_queue_timer_timeout"]

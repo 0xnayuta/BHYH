@@ -1,0 +1,125 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/skill/skill_awaken_popup.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/skill/awaken/skill_awaken_popup_v3.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/skill/skill_icon/zznh.png" id="3"]
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="4"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/skill/awaken/skill_awaken_confirm_normal.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/skill/awaken/skill_awaken_confirm_pressed.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/skill/awaken/skill_awaken_confirm_hover.png" id="9"]
+
+[node name="SkillAwakenPopup" type="Control" unique_id=480863792]
+z_index = 200
+layout_mode = 3
+anchors_preset = 0
+offset_right = 940.0
+offset_bottom = 590.0
+script = ExtResource("1")
+
+[node name="Backdrop" type="TextureRect" parent="." unique_id=754916214]
+layout_mode = 0
+offset_right = 940.0
+offset_bottom = 590.0
+mouse_filter = 2
+texture = ExtResource("2")
+expand_mode = 1
+
+[node name="SkillIcon" type="TextureRect" parent="." unique_id=358622150]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 143.0
+offset_right = 365.0
+offset_bottom = 208.0
+mouse_filter = 2
+texture = ExtResource("3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SkillName" type="Label" parent="." unique_id=1954001616]
+layout_mode = 0
+offset_left = 367.0
+offset_top = 152.0
+offset_right = 602.0
+offset_bottom = 198.0
+theme_override_colors/font_color = Color(1, 0.92, 0.05, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.06, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 22
+text = "战争怒吼"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="." unique_id=728733236]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 235.0
+offset_right = 640.0
+offset_bottom = 275.0
+theme_override_colors/font_color = Color(1, 0.86, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.14, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 22
+text = "觉醒效果暂未开放"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EffectDescription" type="Label" parent="." unique_id=1940488986]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 282.0
+offset_right = 645.0
+offset_bottom = 390.0
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 17
+text = "当前技能的觉醒效果暂未开放"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CloseButton" type="TextureButton" parent="." unique_id=1230715422]
+layout_mode = 0
+offset_left = 642.0
+offset_top = 109.0
+offset_right = 677.0
+offset_bottom = 144.0
+tooltip_text = "关闭"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("6")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ConfirmButton" type="TextureButton" parent="." unique_id=1961036680]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 421.0
+offset_right = 509.0
+offset_bottom = 455.0
+tooltip_text = "觉醒"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("7")
+texture_pressed = ExtResource("8")
+texture_hover = ExtResource("9")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="AwakenEnabled" type="CheckBox" parent="." unique_id=2026081101]
+layout_mode = 0
+offset_left = 412.0
+offset_top = 416.0
+offset_right = 509.0
+offset_bottom = 456.0
+tooltip_text = "选中后释放觉醒技能"
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.1, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 17
+text = "启用技能"

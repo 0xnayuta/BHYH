@@ -1,0 +1,177 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scene/other_scene/lsh.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/3_3.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/10.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/10_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/20.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/20_1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/15.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/15_1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/36.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/36_1.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/41.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/41_1.png" id="14"]
+[ext_resource type="FontFile" path="res://Font/194_song_ti.ttf" id="15"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="16"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_1.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_2.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cy_2.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cy_1.png" id="20"]
+
+[node name="lsh" type="Node2D" unique_id=487920029]
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1801088243]
+offset_left = -244.0
+offset_top = -222.0
+offset_right = 1181.0
+offset_bottom = 864.0
+color = Color(0, 0, 0, 0.027451)
+
+[node name="Hdgqbg" type="Sprite2D" parent="." unique_id=1740478287]
+position = Vector2(492, 254)
+texture = ExtResource("2")
+
+[node name="xss" type="TextureButton" parent="Hdgqbg" unique_id=933983159]
+offset_left = -269.0
+offset_top = -152.0
+offset_right = -85.0
+offset_bottom = 32.0
+texture_normal = ExtResource("3")
+texture_pressed = ExtResource("3")
+texture_hover = ExtResource("4")
+texture_disabled = ExtResource("3")
+
+[node name="xbj" type="TextureButton" parent="Hdgqbg" unique_id=2068303365]
+offset_left = -95.0
+offset_top = -152.0
+offset_right = 89.0
+offset_bottom = 32.0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("5")
+texture_hover = ExtResource("6")
+texture_disabled = ExtResource("5")
+
+[node name="xts" type="TextureButton" parent="Hdgqbg" unique_id=1826405485]
+offset_left = 79.0
+offset_top = -155.0
+offset_right = 263.0
+offset_bottom = 29.0
+texture_normal = ExtResource("7")
+texture_pressed = ExtResource("7")
+texture_hover = ExtResource("8")
+texture_disabled = ExtResource("7")
+
+[node name="xwk" type="TextureButton" parent="Hdgqbg" unique_id=1336190749]
+offset_left = -269.0
+offset_top = 23.0
+offset_right = -85.0
+offset_bottom = 207.0
+texture_normal = ExtResource("9")
+texture_pressed = ExtResource("9")
+texture_hover = ExtResource("10")
+texture_disabled = ExtResource("9")
+
+[node name="xhy" type="TextureButton" parent="Hdgqbg" unique_id=1027435401]
+offset_left = -95.0
+offset_top = 8.0
+offset_right = 89.0
+offset_bottom = 192.0
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("11")
+texture_hover = ExtResource("12")
+texture_disabled = ExtResource("11")
+
+[node name="xs" type="TextureButton" parent="Hdgqbg" unique_id=1135870544]
+offset_left = 60.0
+offset_top = 22.0
+offset_right = 244.0
+offset_bottom = 206.0
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("14")
+texture_disabled = ExtResource("13")
+
+[node name="ButtonList" type="HBoxContainer" parent="Hdgqbg" unique_id=606929549]
+visible = false
+offset_left = -269.0
+offset_top = -152.0
+offset_right = 263.0
+offset_bottom = 32.0
+theme_override_constants/separation = -10
+
+[node name="ButtonList2" type="HBoxContainer" parent="Hdgqbg" unique_id=383693463]
+visible = false
+offset_left = -269.0
+offset_top = 23.0
+offset_right = 263.0
+offset_bottom = 207.0
+theme_override_constants/separation = -10
+
+[node name="LastTimes" type="Label" parent="Hdgqbg" unique_id=1407929590]
+visible = false
+offset_left = 211.0
+offset_top = 63.0
+offset_right = 212.0
+offset_bottom = 94.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 20
+text = "∞"
+metadata/_edit_lock_ = true
+
+[node name="StageInfo" type="Label" parent="Hdgqbg" unique_id=1464403567]
+visible = false
+offset_left = -281.0
+offset_top = 92.0
+offset_right = 264.0
+offset_bottom = 167.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("16")
+theme_override_font_sizes/font_size = 16
+text = "搜遍了整个天庭，都找不到玉帝。唯一的可能就是玉帝被人挟持，通过混沌之门传送到另一个世界里了。而要进入那个世界必须拥有通天令牌和足够强的实力。斩妖除魔，找到罪魁祸首，加油挑战自我吧！"
+autowrap_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="Close" type="TextureButton" parent="Hdgqbg" unique_id=1479065765]
+offset_left = 271.0
+offset_top = -221.0
+offset_right = 316.0
+offset_bottom = -177.0
+texture_normal = ExtResource("17")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+texture_disabled = ExtResource("17")
+metadata/_edit_lock_ = true
+
+[node name="Challenge" type="TextureButton" parent="Hdgqbg" unique_id=1869551846]
+visible = false
+offset_left = -89.0
+offset_top = 169.0
+offset_right = 51.0
+offset_bottom = 235.0
+texture_normal = ExtResource("19")
+texture_pressed = ExtResource("19")
+texture_hover = ExtResource("20")
+texture_disabled = ExtResource("19")
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="Hdgqbg/xss" to="." method="_on_return_xss_pressed"]
+[connection signal="pressed" from="Hdgqbg/xbj" to="." method="_on_return_xbj_pressed"]
+[connection signal="pressed" from="Hdgqbg/xts" to="." method="_on_return_xts_pressed"]
+[connection signal="pressed" from="Hdgqbg/xwk" to="." method="_on_return_xwk_pressed"]
+[connection signal="pressed" from="Hdgqbg/xhy" to="." method="_on_return_xhy_pressed"]
+[connection signal="pressed" from="Hdgqbg/xs" to="." method="_on_return_xs_pressed"]
+[connection signal="pressed" from="Hdgqbg/Close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Hdgqbg/Challenge" to="." method="_on_challenge_pressed"]

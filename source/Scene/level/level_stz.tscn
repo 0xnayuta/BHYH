@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_stz.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_stz/bg441.jpg" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_stz/bg442.jpg" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_stz/bg443.jpg" id="5"]
+
+[sub_resource type="RectangleShape2D" id="floor"]
+size = Vector2(1400, 553)
+
+[sub_resource type="RectangleShape2D" id="wall"]
+size = Vector2(17, 1786)
+
+[sub_resource type="RectangleShape2D" id="left_wall"]
+size = Vector2(101, 1420)
+
+[sub_resource type="RectangleShape2D" id="right_wall"]
+size = Vector2(600, 1420)
+
+[node name="Level_stz" unique_id=274340821 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [394.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=15652121]
+position = Vector2(600, 669.5)
+shape = SubResource("floor")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1551448808]
+position = Vector2(1007.5, -406)
+shape = SubResource("wall")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=2049089502]
+position = Vector2(-54.5, -221)
+shape = SubResource("left_wall")
+metadata/_edit_lock_ = true
+
+[node name="stop_right" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=73672472]
+position = Vector2(1504, -221)
+shape = SubResource("right_wall")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1986394215]
+
+[node name="BackgroundNezha" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1936231144]
+texture_filter = 1
+position = Vector2(600, 292)
+scale = Vector2(1.1834319, 1)
+texture = ExtResource("3")
+
+[node name="BackgroundMuzha" type="Sprite2D" parent="BackGround/front" index="1" unique_id=1115263869]
+texture_filter = 1
+position = Vector2(604.63025, 282.50003)
+scale = Vector2(1.2484477, 1.0355933)
+texture = ExtResource("4")
+
+[node name="BackgroundJinzha" type="Sprite2D" parent="BackGround/front" index="2" unique_id=999506606]
+texture_filter = 1
+position = Vector2(602.1302, 278.5)
+scale = Vector2(1.239198, 1.0352349)
+texture = ExtResource("5")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1135, 316)
+metadata/_edit_lock_ = true

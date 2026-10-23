@@ -1,0 +1,401 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_55.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg15.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0001.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0004.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0007.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0010.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0013.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0016.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0019.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0022.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0025.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0028.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0031.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0034.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0037.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0040.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bg10_frames/0043.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0001.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0005.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0009.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0013.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0017.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0021.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0025.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0029.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0033.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0037.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0041.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0045.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0049.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/fahualingdong_boss_v1/background/bubble_frames/0053.png" id="32"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(1700, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fish"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("12")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 1,
+"name": &"play",
+"speed": 24.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bubble"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 1,
+"name": &"play",
+"speed": 24.0
+}]
+
+[node name="Level_55_Boss" unique_id=1617424968 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "fahualingdong_boss_v1"
+display_name = "法华灵洞"
+stage_number = 55
+background_offset_y = -680
+fixed_layers = null
+level_width_override = 1200
+background_baked = true
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+shape = SubResource("RectangleShape_right")
+
+[node name="bg15_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=556116821]
+z_index = -100
+position = Vector2(599, 117)
+texture = ExtResource("3")
+
+[node name="bg10_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1150857849]
+position = Vector2(225.5, 91)
+sprite_frames = SubResource("SpriteFrames_fish")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg11_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1855437221]
+position = Vector2(389.55, 148.95)
+sprite_frames = SubResource("SpriteFrames_bubble")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg12_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=1933016581]
+position = Vector2(978.55, 236.95)
+sprite_frames = SubResource("SpriteFrames_bubble")
+animation = &"play"
+autoplay = "play"
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(982, 350)

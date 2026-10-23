@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/mount/runtime/mounts/1003900/idle/back_0.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_5_all_equipment/role_5_body_empty.png" id="2"]
+
+[node name="RiderAdjustment" type="Node2D" unique_id=1926543201]
+editor_description = "角色 5 × 坐骑 1003900。只调整 Pose 节点；MountGuide 仅供 2D 编辑器对位，运行时隐藏。"
+metadata/role_id = 5
+metadata/mount_id = "1003900"
+
+[node name="MountGuide" type="Node2D" parent="." unique_id=1734743680]
+modulate = Color(1, 1, 1, 0.55)
+show_behind_parent = true
+position = Vector2(8.1, 73.65)
+
+[node name="Back" type="Sprite2D" parent="MountGuide" unique_id=1692426766]
+position = Vector2(14.5, -70.5)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(2, 2, 293, 165)
+
+[node name="Pose" type="Node2D" parent="." unique_id=1954387669]
+position = Vector2(0, -30)
+scale = Vector2(-1, 1)
+
+[node name="Body" type="Sprite2D" parent="Pose" unique_id=1218846722]
+texture_filter = 2
+position = Vector2(-30, -72)
+texture = ExtResource("2")
+hframes = 8
+vframes = 17
+frame = 116
+
+[node name="BodyFront" type="Sprite2D" parent="Pose" unique_id=112082523]
+visible = false
+z_index = 1
+texture_filter = 2
+position = Vector2(-30, -65)

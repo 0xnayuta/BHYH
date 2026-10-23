@@ -1,0 +1,937 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/zhu_xian_sword_page.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/98.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/7.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/5.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/15.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/1.png" id="9"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="10"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_84/1.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/1.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/1.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_87/1.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/26.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/32.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/30.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/28.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/76.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/2.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/2.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/2.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/2.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/3.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/3.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/3.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/4.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/4.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/4.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/4.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/5.png" id="32"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/5.png" id="33"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/5.png" id="34"]
+[ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/5.png" id="35"]
+
+[node name="ZhuXianSwordPage" type="Control" unique_id=113292984]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=1959959356]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Stage" type="Control" parent="." unique_id=1292363282]
+anchors_preset = 0
+offset_right = 941.0
+offset_bottom = 591.0
+
+[node name="Background" type="TextureRect" parent="Stage" unique_id=800721033]
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 591.0
+mouse_filter = 2
+texture = ExtResource("2")
+
+[node name="ReleaseTip" type="TextureRect" parent="Stage" unique_id=1733563605]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 46.0
+offset_right = 711.0
+offset_bottom = 81.0
+mouse_filter = 2
+texture = ExtResource("3")
+
+[node name="Help" type="TextureRect" parent="Stage" unique_id=926388887]
+visible = false
+layout_mode = 0
+offset_left = 798.0
+offset_top = 44.0
+offset_right = 836.0
+offset_bottom = 82.0
+mouse_filter = 2
+texture = ExtResource("4")
+
+[node name="CloseButton" type="TextureButton" parent="Stage" unique_id=746350017]
+layout_mode = 0
+offset_left = 885.0
+offset_top = 17.0
+offset_right = 943.0
+offset_bottom = 73.0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("7")
+
+[node name="SwordCard1" type="Control" parent="Stage" unique_id=854839586]
+anchors_preset = 0
+offset_left = 82.0
+offset_top = 98.0
+offset_right = 242.0
+offset_bottom = 519.0
+
+[node name="CardBg" type="TextureRect" parent="Stage/SwordCard1" unique_id=1776071731]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 421.0
+mouse_filter = 2
+texture = ExtResource("8")
+
+[node name="SwordName" type="TextureRect" parent="Stage/SwordCard1" unique_id=1903324247]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 15.0
+offset_right = 103.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("9")
+
+[node name="Level" type="Label" parent="Stage/SwordCard1" unique_id=1698749514]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 19.0
+offset_right = 156.0
+offset_bottom = 45.0
+scale = Vector2(0.8, 0.8800006)
+theme_override_colors/font_color = Color(1, 1, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "Lv.10"
+vertical_alignment = 1
+
+[node name="Sword" type="TextureRect" parent="Stage/SwordCard1" unique_id=592698071]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 37.0
+offset_right = 117.0
+offset_bottom = 194.0
+mouse_filter = 2
+texture = ExtResource("11")
+
+[node name="BattleStamp" type="TextureRect" parent="Stage/SwordCard1" unique_id=1831939139]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 130.0
+offset_right = 133.0
+offset_bottom = 189.0
+mouse_filter = 2
+texture = ExtResource("12")
+
+[node name="SkillIcon" type="TextureRect" parent="Stage/SwordCard1" unique_id=455287218]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 204.0
+offset_right = 105.0
+offset_bottom = 254.0
+mouse_filter = 2
+texture = ExtResource("13")
+
+[node name="Stat0" type="Label" parent="Stage/SwordCard1" unique_id=989692259]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 267.0
+offset_right = 125.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "攻击: 300"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon1" type="TextureRect" parent="Stage/SwordCard1" unique_id=239677585]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 323.0
+offset_right = 44.0
+offset_bottom = 347.0
+mouse_filter = 2
+texture = ExtResource("14")
+
+[node name="MaterialText1" type="Label" parent="Stage/SwordCard1" unique_id=2047305783]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 322.0
+offset_right = 152.0
+offset_bottom = 346.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon2" type="TextureRect" parent="Stage/SwordCard1" unique_id=1714200324]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 348.0
+offset_right = 44.0
+offset_bottom = 372.0
+mouse_filter = 2
+texture = ExtResource("15")
+
+[node name="MaterialText2" type="Label" parent="Stage/SwordCard1" unique_id=1705122839]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 347.0
+offset_right = 152.0
+offset_bottom = 371.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="Stage/SwordCard1" unique_id=1173858270]
+modulate = Color(0.62, 0.62, 0.62, 1)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 371.0
+offset_right = 76.0
+offset_bottom = 405.0
+disabled = true
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard1/UpgradeButton" unique_id=2147447294]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("19")
+
+[node name="ActionButton" type="TextureButton" parent="Stage/SwordCard1" unique_id=1404909570]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 371.0
+offset_right = 145.0
+offset_bottom = 405.0
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard1/ActionButton" unique_id=1043235187]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[node name="SwordCard2" type="Control" parent="Stage" unique_id=745358550]
+anchors_preset = 0
+offset_left = 244.0
+offset_top = 98.0
+offset_right = 404.0
+offset_bottom = 519.0
+
+[node name="CardBg" type="TextureRect" parent="Stage/SwordCard2" unique_id=284915881]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 421.0
+mouse_filter = 2
+texture = ExtResource("8")
+
+[node name="SwordName" type="TextureRect" parent="Stage/SwordCard2" unique_id=1868536803]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 15.0
+offset_right = 103.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("21")
+
+[node name="Level" type="Label" parent="Stage/SwordCard2" unique_id=1868615996]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 19.0
+offset_right = 156.0
+offset_bottom = 45.0
+scale = Vector2(0.8, 0.8800006)
+theme_override_colors/font_color = Color(1, 1, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "Lv.10"
+vertical_alignment = 1
+
+[node name="Sword" type="TextureRect" parent="Stage/SwordCard2" unique_id=384438230]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 37.0
+offset_right = 117.0
+offset_bottom = 194.0
+mouse_filter = 2
+texture = ExtResource("22")
+
+[node name="BattleStamp" type="TextureRect" parent="Stage/SwordCard2" unique_id=777211743]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 130.0
+offset_right = 133.0
+offset_bottom = 189.0
+mouse_filter = 2
+texture = ExtResource("12")
+
+[node name="SkillIcon" type="TextureRect" parent="Stage/SwordCard2" unique_id=1880007498]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 204.0
+offset_right = 105.0
+offset_bottom = 254.0
+mouse_filter = 2
+texture = ExtResource("23")
+
+[node name="Stat0" type="Label" parent="Stage/SwordCard2" unique_id=392228147]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 267.0
+offset_right = 125.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "生命: 2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon1" type="TextureRect" parent="Stage/SwordCard2" unique_id=695291472]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 323.0
+offset_right = 44.0
+offset_bottom = 347.0
+mouse_filter = 2
+texture = ExtResource("24")
+
+[node name="MaterialText1" type="Label" parent="Stage/SwordCard2" unique_id=1111139071]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 322.0
+offset_right = 152.0
+offset_bottom = 346.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon2" type="TextureRect" parent="Stage/SwordCard2" unique_id=741890357]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 348.0
+offset_right = 44.0
+offset_bottom = 372.0
+mouse_filter = 2
+texture = ExtResource("15")
+
+[node name="MaterialText2" type="Label" parent="Stage/SwordCard2" unique_id=572000512]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 347.0
+offset_right = 152.0
+offset_bottom = 371.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="Stage/SwordCard2" unique_id=712705234]
+modulate = Color(0.62, 0.62, 0.62, 1)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 371.0
+offset_right = 76.0
+offset_bottom = 405.0
+disabled = true
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard2/UpgradeButton" unique_id=1915655858]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("19")
+
+[node name="ActionButton" type="TextureButton" parent="Stage/SwordCard2" unique_id=1807134746]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 371.0
+offset_right = 145.0
+offset_bottom = 405.0
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard2/ActionButton" unique_id=670437652]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[node name="SwordCard3" type="Control" parent="Stage" unique_id=643055479]
+anchors_preset = 0
+offset_left = 406.0
+offset_top = 98.0
+offset_right = 566.0
+offset_bottom = 519.0
+
+[node name="CardBg" type="TextureRect" parent="Stage/SwordCard3" unique_id=548928671]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 421.0
+mouse_filter = 2
+texture = ExtResource("8")
+
+[node name="SwordName" type="TextureRect" parent="Stage/SwordCard3" unique_id=2125587436]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 15.0
+offset_right = 102.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("25")
+
+[node name="Level" type="Label" parent="Stage/SwordCard3" unique_id=1828711772]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 19.0
+offset_right = 158.0
+offset_bottom = 45.0
+scale = Vector2(0.8, 0.8800006)
+theme_override_colors/font_color = Color(1, 1, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "Lv.10"
+vertical_alignment = 1
+
+[node name="Sword" type="TextureRect" parent="Stage/SwordCard3" unique_id=1190121902]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 37.0
+offset_right = 117.0
+offset_bottom = 194.0
+mouse_filter = 2
+texture = ExtResource("26")
+
+[node name="BattleStamp" type="TextureRect" parent="Stage/SwordCard3" unique_id=1212584829]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 130.0
+offset_right = 133.0
+offset_bottom = 189.0
+mouse_filter = 2
+texture = ExtResource("12")
+
+[node name="SkillIcon" type="TextureRect" parent="Stage/SwordCard3" unique_id=429117305]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 204.0
+offset_right = 105.0
+offset_bottom = 254.0
+mouse_filter = 2
+texture = ExtResource("27")
+
+[node name="Stat0" type="Label" parent="Stage/SwordCard3" unique_id=1246533943]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 267.0
+offset_right = 125.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "暴击: 10%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Stat1" type="Label" parent="Stage/SwordCard3" unique_id=2122869995]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 289.0
+offset_right = 125.0
+offset_bottom = 313.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "闪避: 10%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Stat2" type="Label" parent="Stage/SwordCard3" unique_id=1665467662]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 311.0
+offset_right = 125.0
+offset_bottom = 335.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "魔抗: 10%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="Stage/SwordCard3" unique_id=1666290483]
+visible = false
+modulate = Color(0.62, 0.62, 0.62, 1)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 371.0
+offset_right = 76.0
+offset_bottom = 405.0
+disabled = true
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard3/UpgradeButton" unique_id=1942385665]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("19")
+
+[node name="ActionButton" type="TextureButton" parent="Stage/SwordCard3" unique_id=1472218575]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 371.0
+offset_right = 110.0
+offset_bottom = 405.0
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard3/ActionButton" unique_id=285582167]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[node name="SwordCard4" type="Control" parent="Stage" unique_id=2076542371]
+anchors_preset = 0
+offset_left = 568.0
+offset_top = 98.0
+offset_right = 728.0
+offset_bottom = 519.0
+
+[node name="CardBg" type="TextureRect" parent="Stage/SwordCard4" unique_id=1674092066]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 421.0
+mouse_filter = 2
+texture = ExtResource("8")
+
+[node name="SwordName" type="TextureRect" parent="Stage/SwordCard4" unique_id=992490341]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 15.0
+offset_right = 103.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("28")
+
+[node name="Level" type="Label" parent="Stage/SwordCard4" unique_id=1557254796]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 19.0
+offset_right = 156.0
+offset_bottom = 45.0
+scale = Vector2(0.8, 0.8800006)
+theme_override_colors/font_color = Color(1, 1, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "Lv.10"
+vertical_alignment = 1
+
+[node name="Sword" type="TextureRect" parent="Stage/SwordCard4" unique_id=2117070655]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 37.0
+offset_right = 117.0
+offset_bottom = 194.0
+mouse_filter = 2
+texture = ExtResource("29")
+
+[node name="BattleStamp" type="TextureRect" parent="Stage/SwordCard4" unique_id=2031553136]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 130.0
+offset_right = 133.0
+offset_bottom = 189.0
+mouse_filter = 2
+texture = ExtResource("12")
+
+[node name="SkillIcon" type="TextureRect" parent="Stage/SwordCard4" unique_id=125238897]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 204.0
+offset_right = 105.0
+offset_bottom = 254.0
+mouse_filter = 2
+texture = ExtResource("30")
+
+[node name="Stat0" type="Label" parent="Stage/SwordCard4" unique_id=65696828]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 267.0
+offset_right = 125.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "防御: 150"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon1" type="TextureRect" parent="Stage/SwordCard4" unique_id=1414583953]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 323.0
+offset_right = 44.0
+offset_bottom = 347.0
+mouse_filter = 2
+texture = ExtResource("31")
+
+[node name="MaterialText1" type="Label" parent="Stage/SwordCard4" unique_id=1480825573]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 322.0
+offset_right = 152.0
+offset_bottom = 346.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon2" type="TextureRect" parent="Stage/SwordCard4" unique_id=408350340]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 348.0
+offset_right = 44.0
+offset_bottom = 372.0
+mouse_filter = 2
+texture = ExtResource("15")
+
+[node name="MaterialText2" type="Label" parent="Stage/SwordCard4" unique_id=754486348]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 347.0
+offset_right = 152.0
+offset_bottom = 371.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="Stage/SwordCard4" unique_id=1714764164]
+modulate = Color(0.62, 0.62, 0.62, 1)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 371.0
+offset_right = 76.0
+offset_bottom = 405.0
+disabled = true
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard4/UpgradeButton" unique_id=5012599]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("19")
+
+[node name="ActionButton" type="TextureButton" parent="Stage/SwordCard4" unique_id=1145935827]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 371.0
+offset_right = 145.0
+offset_bottom = 405.0
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard4/ActionButton" unique_id=2019817305]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[node name="SwordCard5" type="Control" parent="Stage" unique_id=30514219]
+anchors_preset = 0
+offset_left = 731.0
+offset_top = 98.0
+offset_right = 891.0
+offset_bottom = 519.0
+
+[node name="CardBg" type="TextureRect" parent="Stage/SwordCard5" unique_id=1022102457]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 421.0
+mouse_filter = 2
+texture = ExtResource("8")
+
+[node name="SwordName" type="TextureRect" parent="Stage/SwordCard5" unique_id=59306708]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 15.0
+offset_right = 103.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("32")
+
+[node name="Level" type="Label" parent="Stage/SwordCard5" unique_id=741779017]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 19.0
+offset_right = 156.0
+offset_bottom = 45.0
+scale = Vector2(0.8, 0.8800006)
+theme_override_colors/font_color = Color(1, 1, 0.22, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "Lv.10"
+vertical_alignment = 1
+
+[node name="Sword" type="TextureRect" parent="Stage/SwordCard5" unique_id=1343576710]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 37.0
+offset_right = 117.0
+offset_bottom = 194.0
+mouse_filter = 2
+texture = ExtResource("33")
+
+[node name="BattleStamp" type="TextureRect" parent="Stage/SwordCard5" unique_id=695318]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 130.0
+offset_right = 133.0
+offset_bottom = 189.0
+mouse_filter = 2
+texture = ExtResource("12")
+
+[node name="SkillIcon" type="TextureRect" parent="Stage/SwordCard5" unique_id=1081680784]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 204.0
+offset_right = 105.0
+offset_bottom = 254.0
+mouse_filter = 2
+texture = ExtResource("34")
+
+[node name="Stat0" type="Label" parent="Stage/SwordCard5" unique_id=145895413]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 267.0
+offset_right = 125.0
+offset_bottom = 291.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 18
+text = "魔法: 2000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon1" type="TextureRect" parent="Stage/SwordCard5" unique_id=1065434309]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 323.0
+offset_right = 44.0
+offset_bottom = 347.0
+mouse_filter = 2
+texture = ExtResource("35")
+
+[node name="MaterialText1" type="Label" parent="Stage/SwordCard5" unique_id=689702571]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 322.0
+offset_right = 152.0
+offset_bottom = 346.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaterialIcon2" type="TextureRect" parent="Stage/SwordCard5" unique_id=387844272]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 348.0
+offset_right = 44.0
+offset_bottom = 372.0
+mouse_filter = 2
+texture = ExtResource("15")
+
+[node name="MaterialText2" type="Label" parent="Stage/SwordCard5" unique_id=198543854]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 347.0
+offset_right = 152.0
+offset_bottom = 371.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("10")
+theme_override_font_sizes/font_size = 16
+text = "该版本已满级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="Stage/SwordCard5" unique_id=1055722236]
+modulate = Color(0.62, 0.62, 0.62, 1)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 371.0
+offset_right = 76.0
+offset_bottom = 405.0
+disabled = true
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard5/UpgradeButton" unique_id=1531003582]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("19")
+
+[node name="ActionButton" type="TextureButton" parent="Stage/SwordCard5" unique_id=132836535]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 371.0
+offset_right = 145.0
+offset_bottom = 405.0
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("17")
+texture_hover = ExtResource("18")
+
+[node name="Text" type="TextureRect" parent="Stage/SwordCard5/ActionButton" unique_id=295429469]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[connection signal="pressed" from="Stage/CloseButton" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Stage/SwordCard1/UpgradeButton" to="." method="_on_upgrade_pressed"]
+[connection signal="pressed" from="Stage/SwordCard1/ActionButton" to="." method="_on_action_1_pressed"]
+[connection signal="pressed" from="Stage/SwordCard2/UpgradeButton" to="." method="_on_upgrade_pressed"]
+[connection signal="pressed" from="Stage/SwordCard2/ActionButton" to="." method="_on_action_2_pressed"]
+[connection signal="pressed" from="Stage/SwordCard3/UpgradeButton" to="." method="_on_upgrade_pressed"]
+[connection signal="pressed" from="Stage/SwordCard3/ActionButton" to="." method="_on_action_3_pressed"]
+[connection signal="pressed" from="Stage/SwordCard4/UpgradeButton" to="." method="_on_upgrade_pressed"]
+[connection signal="pressed" from="Stage/SwordCard4/ActionButton" to="." method="_on_action_4_pressed"]
+[connection signal="pressed" from="Stage/SwordCard5/UpgradeButton" to="." method="_on_upgrade_pressed"]
+[connection signal="pressed" from="Stage/SwordCard5/ActionButton" to="." method="_on_action_5_pressed"]

@@ -1,0 +1,305 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_48.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/62694bd15c36a32e8b76e15012e09b3078fb6b2e569bfe48cc180b96aad1b726.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/03f549fa3a252f6e864d56752039cbffd49956a2156687fd93422f2b2c9ee273.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/ea34bf3070946b57229f40cdac5f576bfdbcc486e5f504dd2eef5eacc9c9d4c4.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/45c44bf41401a138aea5288ff81a087876d18119b0844be8a1305d62e439b389.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/45509a5a0f5a182b6e95aa931dc9d52474bdac642f50531e2a099e91e38a902f.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/c8eb06e23598080bc5db6247139874307ac9114d05c9dcea876bce8fa86b3677.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/53bd2fc893984511ace2fbeea3d041e8a1151f82c86c07bc237e0dcf05f57220.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/6756edf405448fc002fc02fcc4c41ab6ff198d8f714fd10976360223a6dd92f1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/58910ca2c9ae6a66c6446fc9b8969b68f76039e4da17d0f76193d32c9913d932.png" id="11"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(5485, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[node name="Level_48" unique_id=1551296767 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "zhuquejie_v1"
+display_name = "朱雀街"
+stage_number = 48
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(2492.5, 690.5)
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(5045, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="ImportedBackdrop" type="Polygon2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1229906324]
+z_index = -100
+color = Color(0.025, 0.035, 0.055, 1)
+polygon = PackedVector2Array(-1000, -1200, 2500, -1200, 2500, 2200, -1000, 2200)
+
+[node name="bg30_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=2051876954]
+position = Vector2(720, 123.5)
+texture = ExtResource("3")
+
+[node name="bg15_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1327647345]
+position = Vector2(3229.5, 226)
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg14_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=36208718]
+position = Vector2(2232.5, 226)
+sprite_frames = SubResource("SpriteFrames_2")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg13_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=266569152]
+position = Vector2(1235.5, 226.8)
+sprite_frames = SubResource("SpriteFrames_3")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg12_1" type="AnimatedSprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=166008389]
+position = Vector2(238.5, 226)
+sprite_frames = SubResource("SpriteFrames_4")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=2067827226]
+position = Vector2(498.5, 250)
+texture = ExtResource("9")
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=1682365013]
+position = Vector2(1495.5, 250)
+texture = ExtResource("9")
+
+[node name="bg16_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="6" unique_id=10722748]
+position = Vector2(2492.5, 250)
+texture = ExtResource("10")
+
+[node name="bg17_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="7" unique_id=232834650]
+position = Vector2(3489.5, 250)
+texture = ExtResource("9")
+
+[node name="bg11_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="8" unique_id=634985104]
+position = Vector2(4486.5, 250)
+texture = ExtResource("11")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4835, 350)

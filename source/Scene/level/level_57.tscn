@@ -1,0 +1,843 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_57.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/0dd54bbcd23323dc73cc17da81f9049c60256c27793ccf708eb41501882e8f64.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/806f8258c4c0e3f26774de937d22feba61ee5db9c2f0e6f66dfbcb3538fff190.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/e73af5348cff89cff9be421d70202271c52423ea96527d26f679f40aa7a872ee.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8f1388211abc957d6895fd4364d59210f9c346090eca858c66b2ece3cbbc3f8e.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/46926c19bb51ef8425ee02a9d2a43e9e719cabd8e99783bd08f92788ce32c59c.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/bfee5b4a67e4cccf61cbb3d81d7e1973d6d13f0ef592f9a74da4355e0f768c58.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/fcdfd87c68c14c9eeaa91e53841da6ff709ba7fa3995c95546fcb5cdae8c6d32.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/6ce98a4dbe1bdeb706322669de348a76fc07e642826931f03521b3e19892d7eb.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8d7077051124b55fe4b090a817d79e0857e0d491c6d571e6be8534dcd418b866.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/bf7a927582393f17e73b8197e53bdd5f344d7d98527e349ca60e20d841649e23.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/caa3a3bbc6c1a69c266f7a45af8916ce59656d22b938039d2be0cb1efc0c097d.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/9b7af4929bbefc360c81948cf851fd3dcedf743f1452ad38ac3e2e0fb0389eaf.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/06ebcb884c0dac47ed4c8611ef0eb48281740427d2b6c227714c4a74de28076f.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/565d5b05f7e0144d7081df21dd2e5f79cc0477a4fdf3035de42d0bd2e497677b.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/24e3b042619dbebc5d12c021057cf4e578b21c32c7b437727f5c114b00836496.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/d22c4724be12834771603177c144028a7a11f5beca6f7cd4073888a7760ecb7f.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/76a065095745221ed7d9867ab71e1673c0017d7cac8f1d528e144aa0c85abd6e.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/0e716ad7ba8a98c33c0088e45e8aae70fc780a13405281c9dc389f3671eff078.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/b467cd1ce458552a8ff0aed25fcda5ce0d331bb0c59a0d48c3edf913aae171aa.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8995b7e2bc8ddb4f4db81366f0d36ad4480cb3fd85bbcf59d3c1525b25b7edfb.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/952da3595111e9c12743ff36e290bd7e901325b5290e9aae41c4911722ae22c7.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/89cf9980eaeb7530e20b688a40bf850a800c5020fb283974553cad0151b54389.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/71452b29781442600737e3b694b3b9cc6a6d665e4ff818ad968b227d91f7398c.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/972c64c24967522616d8342d321d9242f71eed67b72273e1a4cd038e8ce26f04.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8bcfbd9ba3cd1c45cfdfc937a6b6aa0781dfc6a0fa171278eaf529faf706a78c.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/f25a7a86d8bc3d899d8eef40417283b27a47179ee051d75dd49d3cecb7221947.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/9fb0bd3c78ae5524c7bc254eb27d321d227e188352eae72adfa50da67260a2a5.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/e62b912623c9f7b3dc5353a9505e0e9372fc158548b176c671730caec8b62ff0.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/94e8fbe4c6dd762ee6adac19d331127f38d05da285c2fe19edec6079fc3428d8.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/c3328baaccf9de6170c3be8131e53b158629e09cabcf4652b179d234a945208a.png" id="32"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/64f72846500dab54947b95d77a218776e18750564d4d78cc8223c30c4a5c5c45.png" id="33"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/02655074539ce25df240cbeb64a07cb371e7050dad8ac8616fafa011b68e08fa.png" id="34"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/be31979f6c93ca5b7cb4a0c1b3a944341e003606da15b5df6d4d398d5bb6b57c.png" id="35"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/f9b1b0e637cb45978408c93ffdc973e4d484cca922a15d165826d63507539433.png" id="36"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/2b0253e1edb278a590eb9b39ae6e920a9b2b65089518a29bd8b91a4cc179e89a.png" id="37"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/09381bb3026a5d06ad01750fa86ab8cd026d48c836bd9038e1c5a3357d536e6d.png" id="38"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(1244.0695, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_2"]
+size = Vector2(555.8052, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_3"]
+size = Vector2(2657.823, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_step_1"]
+size = Vector2(53.999947, 73.01137)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_step_2"]
+size = Vector2(52.00003, 40.06141)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_step_3"]
+size = Vector2(59.00004, 34.061424)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_fall_death"]
+size = Vector2(2677, 21)
+
+[node name="Level_57" unique_id=620120114 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "qingyinge"
+display_name = "清音阁"
+stage_number = 57
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(605.95, 455.34998)
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(5045, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="floor_2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1945451056]
+position = Vector2(2034.9001, 411.34998)
+shape = SubResource("RectangleShape_floor_2")
+
+[node name="floor_3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=1964469723]
+position = Vector2(4035.8, 455.34998)
+shape = SubResource("RectangleShape_floor_3")
+
+[node name="step_1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=1943191471]
+position = Vector2(1567, 433.49432)
+shape = SubResource("RectangleShape_step_1")
+
+[node name="step_2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=38172505]
+position = Vector2(1404, 458.9693)
+shape = SubResource("RectangleShape_step_2")
+
+[node name="step_3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="8" unique_id=1477608044]
+position = Vector2(2475.5, 455.9693)
+shape = SubResource("RectangleShape_step_3")
+
+[node name="ImportedBackdrop" type="Polygon2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=727996695]
+z_index = -100
+color = Color(0.025, 0.035, 0.055, 1)
+polygon = PackedVector2Array(-1000, -1200, 2500, -1200, 2500, 2200, -1000, 2200)
+
+[node name="bg30_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=42261947]
+position = Vector2(720, 342)
+texture = ExtResource("3")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
+position = Vector2(0, -197)
+
+[node name="bg31_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="0" unique_id=1802019679]
+position = Vector2(413, 617.5)
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" index="1" unique_id=1650933120]
+position = Vector2(2492.5, 480)
+texture = ExtResource("12")
+
+[node name="bg11_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="2" unique_id=180140243]
+position = Vector2(483, 651)
+sprite_frames = SubResource("SpriteFrames_2")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg12_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="3" unique_id=3437251]
+position = Vector2(2048.375, 589)
+scale = Vector2(1.2590932, 1.254717)
+sprite_frames = SubResource("SpriteFrames_3")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg13_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="4" unique_id=1738205592]
+position = Vector2(3499, 651)
+sprite_frames = SubResource("SpriteFrames_4")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg14_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="5" unique_id=768128814]
+position = Vector2(1399.5, 806.5)
+sprite_frames = SubResource("SpriteFrames_5")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg15_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="6" unique_id=594910432]
+position = Vector2(1648.5, 806.5)
+sprite_frames = SubResource("SpriteFrames_6")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg16_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="7" unique_id=1733184561]
+position = Vector2(2524.5, 806.5)
+sprite_frames = SubResource("SpriteFrames_7")
+animation = &"play"
+autoplay = "play"
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4835, 350)
+
+[node name="FallDeath" type="Area2D" parent="." index="12" unique_id=120913595]
+position = Vector2(2182.5, 796.5)
+collision_layer = 0
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FallDeath" index="0" unique_id=1880301363]
+position = Vector2(15.5, -274.5)
+shape = SubResource("RectangleShape_fall_death")
+
+[connection signal="body_entered" from="FallDeath" to="." method="_on_fall_death_body_entered"]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Script/magic_weapon/qinglong_sword_platform.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/magic_weapon/magic_weapon_qlsword/official/magic_big_bottle_data.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(130, 20)
+
+[node name="QinglongSwordPlatform" type="StaticBody2D"]
+process_physics_priority = -10
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("1")
+
+[node name="Sword" type="Sprite2D" parent="."]
+position = Vector2(2.75, 0.55)
+texture = ExtResource("2")
+
+[node name="Floor" type="CollisionShape2D" parent="."]
+shape = SubResource("FloorShape")
+one_way_collision = true

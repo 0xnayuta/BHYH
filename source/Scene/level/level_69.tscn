@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_69.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/bianfuku/background/bg10.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/bianfuku/background/bg11.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(6000, 300)
+
+[node name="Level_69" unique_id=545359967 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "bianfuku"
+display_name = "蝙蝠窟"
+stage_number = 69
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 6000.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(3000, 555.5)
+shape = SubResource("floor_shape")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(6060, -300)
+
+[node name="bg10_0" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1489069856]
+z_index = -1
+position = Vector2(-1, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=1182138037]
+z_index = -1
+position = Vector2(1199, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=139852483]
+z_index = -1
+position = Vector2(2399, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_3" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=610969733]
+z_index = -1
+position = Vector2(3599, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_4" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=1518467016]
+z_index = -1
+position = Vector2(4799, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg11_0" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="6" unique_id=1655586816]
+z_index = -1
+position = Vector2(1199, -89)
+scale = Vector2(1, 1.2000002)
+texture = ExtResource("4")
+centered = false
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(5835, 350)

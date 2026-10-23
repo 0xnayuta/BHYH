@@ -1,0 +1,86 @@
+# ==========================================
+# 1. 构建与导出产物
+# ==========================================
+*.exe
+*.dll
+*.so
+*.dylib
+*.pck
+*.apk
+*.aab
+*.msi
+
+# ==========================================
+# 2. Godot 4 缓存与导入衍生文件
+# ==========================================
+.godot/
+*.fontdata
+*.ctex
+*.stex
+*.sample
+*.mp3str
+*.oggstr
+*.translation
+
+# ==========================================
+# 3. 公开仓库：第三方游戏素材不入库
+# ==========================================
+/source/Art/
+/source/Music/
+/source/Font/
+/source/Spritesheet/
+
+*.ogv
+*.mp4
+*.webm
+*.ttf
+*.ttc
+*.otf
+*.mp3
+*.MP3
+*.wav
+*.ogg
+
+# ==========================================
+# 4. 临时文件与本地工具
+# ==========================================
+*.tmp
+*.log
+*.bak
+*.orig
+*.swp
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+export_credentials.cfg
+
+# ==========================================
+# 5. 操作系统与 IDE
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.suo
+*.user
+.omp/
+
+# ==========================================
+# 6. 关卡冒烟夹具临时产物
+# ==========================================
+level_smoke_driver*.gd
+level_smoke_driver*.gd.uid
+level_smoke_driver*.tscn
+level_smoke_driver*.tscn.uid
+level_smoke_report*.json
+
+# ==========================================
+# 7. Spine GDExtension（仅 Windows x86_64 入库）
+# ==========================================
+!source/bin/spine_godot_extension.gdextension
+!source/bin/windows/libspine_godot.windows.editor.x86_64.dll
+!source/bin/windows/libspine_godot.windows.template_debug.x86_64.dll
+!source/bin/windows/libspine_godot.windows.template_release.x86_64.dll

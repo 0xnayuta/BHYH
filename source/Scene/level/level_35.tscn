@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_35.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/423.png" id="3"]
+[ext_resource type="PackedScene" path="res://Scene/level/yf_list.tscn" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(2398, 832)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1193, 1663)
+
+[node name="Level_35" unique_id=364011999 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="Stage" type="Node2D" parent="." index="1" unique_id=868226680]
+
+[node name="thb" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1586212661]
+position = Vector2(4612.5, -328)
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=200778796]
+position = Vector2(848, 1120)
+shape = SubResource("1")
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=32221247]
+position = Vector2(1733, 41.5)
+shape = SubResource("2")
+
+[node name="levelbg" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=624681333]
+position = Vector2(585.25, 298.99997)
+scale = Vector2(1.1859027, 1.2818792)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=664144024]
+
+[node name="exit" parent="." index="12" unique_id=2115553614]
+position = Vector2(1055, 256)
+metadata/_edit_lock_ = true
+
+[node name="ActivityButton" type="GridContainer" parent="CanvasLayer" parent_id_path=PackedInt32Array(1390746928) index="4" unique_id=922834893]
+offset_left = 355.0
+offset_top = 7.0
+offset_right = 912.0
+offset_bottom = 212.0
+
+[node name="YFList" parent="CanvasLayer/ActivityButton" index="0" unique_id=637177147 instance=ExtResource("4")]
+position = Vector2(157, 95)

@@ -1,0 +1,270 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/zhenfa/senluozhen/slz_effect.png" id="1"]
+[ext_resource type="Script" path="res://Script/base/special_affect.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="563"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 670, 242)
+
+[sub_resource type="AtlasTexture" id="564"]
+atlas = ExtResource("1")
+region = Rect2(670, 0, 670, 242)
+
+[sub_resource type="AtlasTexture" id="565"]
+atlas = ExtResource("1")
+region = Rect2(1340, 0, 670, 242)
+
+[sub_resource type="AtlasTexture" id="566"]
+atlas = ExtResource("1")
+region = Rect2(0, 242, 670, 242)
+
+[sub_resource type="AtlasTexture" id="567"]
+atlas = ExtResource("1")
+region = Rect2(670, 242, 670, 242)
+
+[sub_resource type="AtlasTexture" id="568"]
+atlas = ExtResource("1")
+region = Rect2(1340, 242, 670, 242)
+
+[sub_resource type="AtlasTexture" id="569"]
+atlas = ExtResource("1")
+region = Rect2(0, 484, 670, 242)
+
+[sub_resource type="AtlasTexture" id="570"]
+atlas = ExtResource("1")
+region = Rect2(670, 484, 670, 242)
+
+[sub_resource type="AtlasTexture" id="571"]
+atlas = ExtResource("1")
+region = Rect2(1340, 484, 670, 242)
+
+[sub_resource type="AtlasTexture" id="572"]
+atlas = ExtResource("1")
+region = Rect2(0, 726, 670, 242)
+
+[sub_resource type="AtlasTexture" id="573"]
+atlas = ExtResource("1")
+region = Rect2(670, 726, 670, 242)
+
+[sub_resource type="AtlasTexture" id="574"]
+atlas = ExtResource("1")
+region = Rect2(1340, 726, 670, 242)
+
+[sub_resource type="AtlasTexture" id="575"]
+atlas = ExtResource("1")
+region = Rect2(0, 968, 670, 242)
+
+[sub_resource type="AtlasTexture" id="576"]
+atlas = ExtResource("1")
+region = Rect2(670, 968, 670, 242)
+
+[sub_resource type="AtlasTexture" id="577"]
+atlas = ExtResource("1")
+region = Rect2(1340, 968, 670, 242)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1ffxr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("563")
+}, {
+"duration": 1.0,
+"texture": SubResource("564")
+}, {
+"duration": 1.0,
+"texture": SubResource("565")
+}, {
+"duration": 1.0,
+"texture": SubResource("566")
+}, {
+"duration": 1.0,
+"texture": SubResource("567")
+}, {
+"duration": 1.0,
+"texture": SubResource("568")
+}, {
+"duration": 1.0,
+"texture": SubResource("569")
+}, {
+"duration": 1.0,
+"texture": SubResource("570")
+}, {
+"duration": 1.0,
+"texture": SubResource("571")
+}, {
+"duration": 1.0,
+"texture": SubResource("572")
+}, {
+"duration": 1.0,
+"texture": SubResource("573")
+}, {
+"duration": 1.0,
+"texture": SubResource("574")
+}, {
+"duration": 1.0,
+"texture": SubResource("575")
+}, {
+"duration": 1.0,
+"texture": SubResource("576")
+}, {
+"duration": 1.0,
+"texture": SubResource("577")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"slzeffect",
+"speed": 16.0
+}]
+
+[sub_resource type="Animation" id="Animation_srcrp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Empty"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_pff8i"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["slzeffect"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n11l1"]
+_data = {
+&"RESET": SubResource("Animation_srcrp"),
+&"slzeffect": SubResource("Animation_pff8i")
+}
+
+[node name="SpecialAffect" type="AnimatedSprite2D" unique_id=2019943588]
+sprite_frames = SubResource("SpriteFrames_1ffxr")
+animation = &"Empty"
+script = ExtResource("2")
+metadata/_edit_lock_ = true
+
+[node name="SpecialAffect" type="AnimationPlayer" parent="." unique_id=869592249]
+libraries/ = SubResource("AnimationLibrary_n11l1")

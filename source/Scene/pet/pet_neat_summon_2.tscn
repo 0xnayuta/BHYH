@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/pet/pet_neat_summon_1.tscn" id="1"]
+
+[node name="PetNeatSummon2" unique_id=1212081006 instance=ExtResource("1")]
+turtle_stage = 2

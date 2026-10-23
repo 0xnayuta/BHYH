@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/summon_base_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/monster_zhw/guanyin_summon.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="AttackShape"]
+size = Vector2(105, 75)
+
+[sub_resource type="CapsuleShape2D" id="HurtShape"]
+radius = 24.0
+height = 90.0
+
+[sub_resource type="CapsuleShape2D" id="BodyShape"]
+radius = 21.0
+height = 75.0
+
+[node name="GuanyinSummon" unique_id=5580717 instance=ExtResource("1")]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2")
+
+[node name="mr_ani" parent="MonsterDir" parent_id_path=PackedInt32Array(1323501082) index="0" unique_id=496442925]
+visible = false
+
+[node name="SpineVisual" type="SpineSprite" parent="MonsterDir" parent_id_path=PackedInt32Array(1323501082) index="1" unique_id=1898871984]
+position = Vector2(0, -3.2)
+scale = Vector2(0.36, 0.36)
+
+[node name="HitBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(668901738) index="0" unique_id=353428225]
+collision_mask = 1024
+
+[node name="HitBox" parent="BaseDamageBox/HitBox" index="0" unique_id=1869538357]
+position = Vector2(-52.5, -37.5)
+shape = SubResource("AttackShape")
+disabled = true
+
+[node name="HurtBox" parent="BaseDamageBox/HurtBox" parent_id_path=PackedInt32Array(567800610) index="0" unique_id=961174029]
+position = Vector2(0, -45)
+shape = SubResource("HurtShape")
+
+[node name="pz" parent="." index="4" unique_id=533286033]
+position = Vector2(0, -22.5)
+shape = SubResource("BodyShape")

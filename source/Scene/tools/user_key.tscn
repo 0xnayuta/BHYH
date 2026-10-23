@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/ui_2_5_9_0/key/p.png" id="1"]
+[ext_resource type="Script" path="res://Script/tools/user_key.gd" id="2"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
+
+[node name="UserKey" type="TouchScreenButton" unique_id=1985117933]
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("1")
+script = ExtResource("2")
+
+[node name="Button" type="Button" parent="." unique_id=1020140005]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Key" type="Label" parent="." unique_id=1760585504]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.901961, 0.890196, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 24
+text = "Y"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PicBox" type="TextureProgressBar" parent="." unique_id=1955109001]
+modulate = Color(0.329412, 0.329412, 0.329412, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.0
+fill_mode = 5
+nine_patch_stretch = true
+
+[node name="TimeText" type="Label" parent="." unique_id=787153928]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeText2" type="Label" parent="." unique_id=1565608471]
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 43.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_fonts/font = ExtResource("4")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
+[connection signal="released" from="." to="." method="_on_released"]
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

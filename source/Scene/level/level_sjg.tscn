@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_sjg.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_sjg/248.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_sjg/131.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_sjg/232.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1666, 1025)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(792.5, 2256)
+
+[node name="Level_sjg" unique_id=120981214 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="wall" parent="." index="1" unique_id=1221902799]
+metadata/_edit_lock_ = true
+
+[node name="floor" type="CollisionShape2D" parent="wall" index="1" unique_id=45743207]
+position = Vector2(792, 925.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" index="2" unique_id=105893002]
+position = Vector2(1300.75, 126)
+shape = SubResource("2")
+
+[node name="create_control" parent="." index="8" unique_id=1989637868]
+wait_time = 3.0
+
+[node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
+position = Vector2(4, 0)
+
+[node name="248" type="Sprite2D" parent="BackGround/End" index="0" unique_id=312079600]
+position = Vector2(675.25, 230.75)
+scale = Vector2(1.0648856, 1.0745298)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=747723841]
+position = Vector2(17, -48)
+metadata/_edit_lock_ = true
+
+[node name="131" type="Sprite2D" parent="BackGround/front" index="0" unique_id=45352590]
+position = Vector2(454, 328)
+texture = ExtResource("4")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=458132924]
+metadata/_edit_lock_ = true
+
+[node name="232" type="Sprite2D" parent="BackGround/floor_2" index="1" unique_id=194672932]
+position = Vector2(589.25, 557)
+scale = Vector2(1.0718678, 1)
+texture = ExtResource("5")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(768, 326)
+metadata/_edit_lock_ = true

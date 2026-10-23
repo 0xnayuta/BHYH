@@ -1,0 +1,383 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/monster/game_3_monster/monster_1409/effect2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4sqmn"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hu8g3"]
+atlas = ExtResource("2")
+region = Rect2(4941, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dj4x1"]
+atlas = ExtResource("2")
+region = Rect2(4392, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ippq6"]
+atlas = ExtResource("2")
+region = Rect2(3843, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ugbp3"]
+atlas = ExtResource("2")
+region = Rect2(3294, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7r6je"]
+atlas = ExtResource("2")
+region = Rect2(2745, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3ch0"]
+atlas = ExtResource("2")
+region = Rect2(2196, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g03r2"]
+atlas = ExtResource("2")
+region = Rect2(1647, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3c8mv"]
+atlas = ExtResource("2")
+region = Rect2(1098, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xv6mu"]
+atlas = ExtResource("2")
+region = Rect2(549, 0, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibucx"]
+atlas = ExtResource("2")
+region = Rect2(4941, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgn0i"]
+atlas = ExtResource("2")
+region = Rect2(4392, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sugkt"]
+atlas = ExtResource("2")
+region = Rect2(3843, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cbfbb"]
+atlas = ExtResource("2")
+region = Rect2(3294, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0c3sr"]
+atlas = ExtResource("2")
+region = Rect2(2745, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0lox"]
+atlas = ExtResource("2")
+region = Rect2(2196, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_psiom"]
+atlas = ExtResource("2")
+region = Rect2(1647, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmxjv"]
+atlas = ExtResource("2")
+region = Rect2(1098, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqqdl"]
+atlas = ExtResource("2")
+region = Rect2(549, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dh85t"]
+atlas = ExtResource("2")
+region = Rect2(0, 92, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hltul"]
+atlas = ExtResource("2")
+region = Rect2(4941, 184, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rirhm"]
+atlas = ExtResource("2")
+region = Rect2(4392, 184, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_twgag"]
+atlas = ExtResource("2")
+region = Rect2(3843, 184, 549, 92)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74s8g"]
+atlas = ExtResource("2")
+region = Rect2(3294, 184, 549, 92)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hixoe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hu8g3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dj4x1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ippq6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ugbp3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7r6je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3ch0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g03r2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3c8mv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xv6mu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibucx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rgn0i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sugkt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cbfbb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0c3sr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m0lox")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_psiom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmxjv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kqqdl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dh85t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hltul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rirhm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_twgag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74s8g")
+}],
+"loop": 0,
+"name": &"Monster1409Bullet2",
+"speed": 20.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fgcdu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a3hks"]
+resource_local_to_scene = true
+radius = 60.0
+
+[sub_resource type="Animation" id="Animation_5bx7i"]
+resource_name = "Monster1409Bullet2"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("middle/BulletANI:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_fgcdu")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("middle/BulletANI:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("middle/BulletANI:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("middle/BulletANI:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("middle/BulletANI:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(160, 0), Vector2(1160, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("middle/BulletANI:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"Monster1409Bullet2"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("middle/BulletANI:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("middle/HitBox/Hit_Box:shape")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("CircleShape2D_a3hks")]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("middle/HitBox/Hit_Box:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("middle/HitBox/Hit_Box:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1000, 0)]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath(".")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("poision:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cugts"]
+_data = {
+&"Monster1409Bullet2": SubResource("Animation_5bx7i")
+}
+
+[node name="MonsterBullet" type="Node2D" unique_id=509864291]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=1910603185]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=953133333]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=974223900]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_4sqmn")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1003985147]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_hixoe")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1746914820]
+libraries/ = SubResource("AnimationLibrary_cugts")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=116768705]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("3")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1906205150]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=2124785105]
+one_shot = true

@@ -1,0 +1,1238 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/map_1.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/1.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/185.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/188.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/192.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/195.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/199.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/202.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/206.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/209.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/220.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/223.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/213.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/216.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/qa.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/shallow_shore.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/dh.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/east_sea.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/267.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/shark_vortex.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/234.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/237.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/241.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/244.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/227.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/230.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/game_2/button/445.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/game_2/button/447.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/level_choose/294.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/487.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/481.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/480.png" id="32"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/492.png" id="33"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/gg_1.png" id="34"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/gg_2.png" id="35"]
+[ext_resource type="Texture2D" path="res://Art/level/level_9/80.png" id="36"]
+[ext_resource type="Texture2D" path="res://Art/main_game/463.png" id="37"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="38"]
+[ext_resource type="Texture2D" path="res://Art/game_2/button/button_return_main_menu.png" id="39"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="40"]
+[ext_resource type="Shader" path="res://Shader/level_button.gdshader" id="41"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hj1.png" id="42"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hj2.png" id="43"]
+
+[sub_resource type="ShaderMaterial" id="23"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="24"]
+resource_name = "Level1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_1:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_1:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_1:material:shader_parameter/line_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_1:material")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("23")]
+}
+
+[sub_resource type="Animation" id="25"]
+length = 0.001
+
+[sub_resource type="ShaderMaterial" id="26"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="27"]
+resource_name = "level10"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_10:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_10:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_10:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("26")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_10:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="28"]
+resource_name = "level10_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_10:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="Animation" id="29"]
+resource_name = "level1_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_1:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="30"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="31"]
+resource_name = "level2"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_2:material:shader_parameter/line_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_2:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("30")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_2:material:shader_parameter/line_thickness")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_2:material:shader")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+
+[sub_resource type="Animation" id="32"]
+resource_name = "level2_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_2:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="33"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="34"]
+resource_name = "level3"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_3:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("33")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_3:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_3:material:shader_parameter/line_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_3:material:shader_parameter/line_thickness")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+
+[sub_resource type="Animation" id="35"]
+resource_name = "level3_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_3:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="36"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="37"]
+resource_name = "level4"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_4:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_4:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_4:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("36")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_4:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="38"]
+resource_name = "level4_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_4:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="39"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="40"]
+resource_name = "level5"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_5:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_5:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("39")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_5:material:shader")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_5:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="41"]
+resource_name = "level5_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_5:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="42"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="43"]
+resource_name = "level6"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_6:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_6:material:shader_parameter/line_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_6:material:shader")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_6:material")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("42")]
+}
+
+[sub_resource type="Animation" id="44"]
+resource_name = "level6_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_6:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="45"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="46"]
+resource_name = "level7"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_7:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_7:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("45")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_7:material:shader")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_7:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="47"]
+resource_name = "level7_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_7:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="48"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="49"]
+resource_name = "level8"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_8:material:shader_parameter/line_thickness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level_8:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("level_8:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("48")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("level_8:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="50"]
+resource_name = "level8_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("level_8:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="ShaderMaterial" id="51"]
+shader = ExtResource("41")
+shader_parameter/line_color = Color(1, 1, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[sub_resource type="Animation" id="52"]
+resource_name = "level9"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D2/Node2D/level_9:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("51")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Node2D2/Node2D/level_9:material:shader")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("41")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Node2D2/Node2D/level_9:material:shader_parameter/line_thickness")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 3.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Node2D2/Node2D/level_9:material:shader_parameter/line_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 1)]
+}
+
+[sub_resource type="Animation" id="53"]
+resource_name = "level9_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D2/Node2D/level_9:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="AnimationLibrary" id="54"]
+_data = {
+&"Level1": SubResource("24"),
+&"RESET": SubResource("25"),
+&"level10": SubResource("27"),
+&"level10_1": SubResource("28"),
+&"level1_1": SubResource("29"),
+&"level2": SubResource("31"),
+&"level2_1": SubResource("32"),
+&"level3": SubResource("34"),
+&"level3_1": SubResource("35"),
+&"level4": SubResource("37"),
+&"level4_1": SubResource("38"),
+&"level5": SubResource("40"),
+&"level5_1": SubResource("41"),
+&"level6": SubResource("43"),
+&"level6_1": SubResource("44"),
+&"level7": SubResource("46"),
+&"level7_1": SubResource("47"),
+&"level8": SubResource("49"),
+&"level8_1": SubResource("50"),
+&"level9": SubResource("52"),
+&"level9_1": SubResource("53")
+}
+
+[sub_resource type="Animation" id="55"]
+resource_name = "szwl"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D2/Node2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Node2D2:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.8, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Level2:speed_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.5]
+}
+
+[sub_resource type="Animation" id="56"]
+resource_name = "szwl2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D2:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.6, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Node2D2/Node2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="57"]
+_data = {
+&"szwl": SubResource("55"),
+&"szwl2": SubResource("56")
+}
+
+[node name="Map_1" type="Node2D" unique_id=1459079726]
+process_mode = 3
+script = ExtResource("1")
+
+[node name="background" type="Sprite2D" parent="." unique_id=1994358030]
+position = Vector2(451.77496, 295.5)
+scale = Vector2(0.25177428, 0.25550848)
+texture = ExtResource("2")
+
+[node name="level_1" type="TextureButton" parent="." unique_id=665934769]
+offset_left = 175.0
+offset_top = 126.0
+offset_right = 243.0
+offset_bottom = 204.0
+texture_normal = ExtResource("3")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+texture_disabled = ExtResource("3")
+stretch_mode = 3
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="level_2" type="TextureButton" parent="." unique_id=1700971829]
+offset_left = 321.0
+offset_top = 123.0
+offset_right = 389.0
+offset_bottom = 201.0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("6")
+texture_disabled = ExtResource("5")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="level_3" type="TextureButton" parent="." unique_id=287872012]
+offset_left = 512.0
+offset_top = 57.0
+offset_right = 580.0
+offset_bottom = 135.0
+texture_normal = ExtResource("7")
+texture_pressed = ExtResource("8")
+texture_hover = ExtResource("8")
+texture_disabled = ExtResource("7")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="level_4" type="TextureButton" parent="." unique_id=819091510]
+offset_left = 643.0
+offset_top = 38.0
+offset_right = 711.0
+offset_bottom = 116.0
+texture_normal = ExtResource("9")
+texture_pressed = ExtResource("10")
+texture_hover = ExtResource("10")
+texture_disabled = ExtResource("9")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="level_5" type="TextureButton" parent="." unique_id=1697174237]
+offset_left = 562.0
+offset_top = 213.0
+offset_right = 648.0
+offset_bottom = 291.0
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("12")
+texture_hover = ExtResource("12")
+texture_disabled = ExtResource("11")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="level_6" type="TextureButton" parent="." unique_id=506006446]
+offset_left = 699.0
+offset_top = 115.0
+offset_right = 824.0
+offset_bottom = 193.0
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("14")
+texture_hover = ExtResource("14")
+texture_disabled = ExtResource("13")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="level_7" type="TextureButton" parent="." unique_id=233533834]
+offset_left = 331.0
+offset_top = 235.0
+offset_right = 555.0
+offset_bottom = 393.0
+texture_normal = ExtResource("15")
+texture_pressed = ExtResource("16")
+texture_hover = ExtResource("16")
+ignore_texture_size = true
+metadata/_edit_lock_ = true
+
+[node name="level_8" type="TextureButton" parent="." unique_id=1745063917]
+self_modulate = Color(1, 1, 0.835294, 1)
+offset_left = 253.0
+offset_top = 314.0
+offset_right = 903.0
+offset_bottom = 448.0
+texture_normal = ExtResource("17")
+texture_pressed = ExtResource("18")
+texture_hover = ExtResource("18")
+ignore_texture_size = true
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Node2D2" type="Node2D" parent="." unique_id=2124844379]
+position = Vector2(769, 499)
+scale = Vector2(0.6, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="Node2D" type="Node2D" parent="Node2D2" unique_id=1686845299]
+position = Vector2(-3.333374, -8)
+
+[node name="level_9" type="TextureButton" parent="Node2D2/Node2D" unique_id=1801453251]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.20099
+offset_top = -115.42401
+offset_right = 125.79901
+offset_bottom = 92.57599
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("19")
+texture_pressed = ExtResource("20")
+texture_hover = ExtResource("20")
+texture_disabled = ExtResource("19")
+ignore_texture_size = true
+
+[node name="level_10" type="TextureButton" parent="." unique_id=250840933]
+offset_left = 202.0
+offset_top = 335.0
+offset_right = 327.0
+offset_bottom = 413.0
+texture_normal = ExtResource("21")
+texture_pressed = ExtResource("22")
+texture_hover = ExtResource("22")
+texture_disabled = ExtResource("21")
+stretch_mode = 3
+
+[node name="ldl" type="TextureButton" parent="." unique_id=335118259]
+offset_left = 111.0
+offset_top = 401.0
+offset_right = 236.0
+offset_bottom = 479.0
+texture_normal = ExtResource("23")
+texture_pressed = ExtResource("24")
+texture_hover = ExtResource("24")
+texture_disabled = ExtResource("23")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="jjc" type="TextureButton" parent="." unique_id=933302349]
+visible = false
+offset_left = 785.0
+offset_top = 196.0
+offset_right = 910.0
+offset_bottom = 274.0
+disabled = true
+texture_normal = ExtResource("25")
+texture_pressed = ExtResource("26")
+texture_hover = ExtResource("26")
+texture_disabled = ExtResource("25")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="Shop" type="TextureButton" parent="." unique_id=2135283245]
+offset_left = 33.0
+offset_top = 428.0
+offset_right = 93.0
+offset_bottom = 490.0
+texture_normal = ExtResource("27")
+texture_pressed = ExtResource("27")
+texture_hover = ExtResource("28")
+texture_disabled = ExtResource("27")
+metadata/_edit_lock_ = true
+
+[node name="bc_game" type="TextureButton" parent="." unique_id=1103017988]
+offset_left = -1.0
+offset_top = 179.0
+offset_right = 137.0
+offset_bottom = 272.0
+texture_normal = ExtResource("29")
+texture_pressed = ExtResource("29")
+texture_hover = ExtResource("29")
+texture_disabled = ExtResource("29")
+stretch_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="Skill_learn" type="TextureButton" parent="." unique_id=1719019526]
+offset_left = 43.0
+offset_top = 88.0
+offset_right = 102.0
+offset_bottom = 128.0
+texture_normal = ExtResource("30")
+texture_pressed = ExtResource("30")
+texture_hover = ExtResource("30")
+metadata/_edit_lock_ = true
+
+[node name="481" type="Sprite2D" parent="Skill_learn" unique_id=1479621661]
+position = Vector2(14, 32)
+texture = ExtResource("31")
+
+[node name="480" type="Sprite2D" parent="Skill_learn" unique_id=1170404785]
+position = Vector2(40, 3)
+texture = ExtResource("32")
+
+[node name="492" type="Sprite2D" parent="Skill_learn" unique_id=373920705]
+position = Vector2(20, 51)
+texture = ExtResource("33")
+
+[node name="GameAn" type="TextureButton" parent="." unique_id=824166379]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 70.0
+offset_bottom = 72.0
+texture_normal = ExtResource("34")
+texture_pressed = ExtResource("34")
+texture_hover = ExtResource("35")
+texture_disabled = ExtResource("34")
+metadata/_edit_lock_ = true
+
+[node name="BossTreasureCheckBox" type="TextureButton" parent="." unique_id=1825919740]
+offset_left = 71.0
+offset_top = 1.0
+offset_right = 140.0
+offset_bottom = 72.0
+
+[node name="Task" type="TextureButton" parent="." unique_id=1133365424]
+offset_left = 815.0
+offset_top = 11.0
+offset_right = 918.0
+offset_bottom = 113.0
+texture_normal = ExtResource("36")
+texture_pressed = ExtResource("36")
+texture_hover = ExtResource("36")
+texture_disabled = ExtResource("36")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="bg" type="Sprite2D" parent="Task" unique_id=73074930]
+position = Vector2(53, 103)
+texture = ExtResource("37")
+
+[node name="difu" type="Label" parent="Task/bg" unique_id=802238854]
+offset_left = -35.0
+offset_top = -9.99997
+offset_right = 37.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(1, 0.290196, 0, 1)
+theme_override_fonts/font = ExtResource("38")
+theme_override_font_sizes/font_size = 18
+text = "任务"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ldl2" type="Node2D" parent="." unique_id=417251588]
+position = Vector2(0, 1)
+
+[node name="turn_mainmenu" type="TextureButton" parent="." unique_id=1220120329]
+offset_left = 12.0
+offset_top = 289.0
+offset_right = 124.0
+offset_bottom = 403.0
+texture_normal = ExtResource("39")
+texture_pressed = ExtResource("39")
+texture_hover = ExtResource("39")
+texture_disabled = ExtResource("39")
+metadata/_edit_lock_ = true
+
+[node name="TEXT" type="Label" parent="turn_mainmenu" unique_id=238323628]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 86.0
+offset_right = 97.0
+offset_bottom = 111.0
+theme_override_colors/font_color = Color(1, 0.470588, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("40")
+theme_override_font_sizes/font_size = 15
+text = "返回主菜单"
+metadata/_edit_lock_ = true
+
+[node name="Level" type="AnimationPlayer" parent="." unique_id=695945965]
+libraries/ = SubResource("54")
+
+[node name="Level2" type="AnimationPlayer" parent="." unique_id=752695154]
+libraries/ = SubResource("57")
+speed_scale = 0.5
+
+[node name="level_lhhj" type="TextureButton" parent="." unique_id=1810120353]
+offset_left = 773.0
+offset_top = 182.0
+offset_right = 983.0
+offset_bottom = 302.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("42")
+texture_pressed = ExtResource("42")
+texture_hover = ExtResource("43")
+texture_disabled = ExtResource("42")
+
+[node name="bg" type="Sprite2D" parent="level_lhhj" unique_id=1335717608]
+position = Vector2(110.5, 98)
+texture = ExtResource("37")
+
+[node name="difu" type="Label" parent="level_lhhj/bg" unique_id=115170697]
+offset_left = -35.0
+offset_top = -9.99997
+offset_right = 37.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(1, 0.290196, 0, 1)
+theme_override_fonts/font = ExtResource("38")
+theme_override_font_sizes/font_size = 18
+text = "轮回幻境"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[connection signal="mouse_entered" from="level_1" to="." method="_on_level_1_mouse_entered"]
+[connection signal="mouse_exited" from="level_1" to="." method="_on_level_1_mouse_exited"]
+[connection signal="pressed" from="level_1" to="." method="_on_level_1_pressed"]
+[connection signal="mouse_entered" from="level_2" to="." method="_on_level_2_mouse_entered"]
+[connection signal="mouse_exited" from="level_2" to="." method="_on_level_2_mouse_exited"]
+[connection signal="pressed" from="level_2" to="." method="_on_level_2_pressed"]
+[connection signal="mouse_entered" from="level_3" to="." method="_on_level_3_mouse_entered"]
+[connection signal="mouse_exited" from="level_3" to="." method="_on_level_3_mouse_exited"]
+[connection signal="pressed" from="level_3" to="." method="_on_level_3_pressed"]
+[connection signal="mouse_entered" from="level_4" to="." method="_on_level_4_mouse_entered"]
+[connection signal="mouse_exited" from="level_4" to="." method="_on_level_4_mouse_exited"]
+[connection signal="pressed" from="level_4" to="." method="_on_level_4_pressed"]
+[connection signal="mouse_entered" from="level_5" to="." method="_on_level_5_mouse_entered"]
+[connection signal="mouse_exited" from="level_5" to="." method="_on_level_5_mouse_exited"]
+[connection signal="pressed" from="level_5" to="." method="_on_level_5_pressed"]
+[connection signal="mouse_entered" from="level_6" to="." method="_on_level_6_mouse_entered"]
+[connection signal="mouse_exited" from="level_6" to="." method="_on_level_6_mouse_exited"]
+[connection signal="pressed" from="level_6" to="." method="_on_level_6_pressed"]
+[connection signal="mouse_entered" from="level_7" to="." method="_on_level_7_mouse_entered"]
+[connection signal="mouse_exited" from="level_7" to="." method="_on_level_7_mouse_exited"]
+[connection signal="pressed" from="level_7" to="." method="_on_level_7_pressed"]
+[connection signal="mouse_entered" from="level_8" to="." method="_on_level_8_mouse_entered"]
+[connection signal="mouse_exited" from="level_8" to="." method="_on_level_8_mouse_exited"]
+[connection signal="pressed" from="level_8" to="." method="_on_level_8_pressed"]
+[connection signal="mouse_entered" from="Node2D2/Node2D/level_9" to="." method="_on_level_9_mouse_entered"]
+[connection signal="mouse_exited" from="Node2D2/Node2D/level_9" to="." method="_on_level_9_mouse_exited"]
+[connection signal="pressed" from="Node2D2/Node2D/level_9" to="." method="_on_level_9_pressed"]
+[connection signal="mouse_entered" from="level_10" to="." method="_on_level_10_mouse_entered"]
+[connection signal="mouse_exited" from="level_10" to="." method="_on_level_10_mouse_exited"]
+[connection signal="pressed" from="level_10" to="." method="_on_level_10_pressed"]
+[connection signal="pressed" from="ldl" to="." method="_on_ldl_pressed"]
+[connection signal="pressed" from="Shop" to="." method="_on_shop_pressed"]
+[connection signal="pressed" from="bc_game" to="." method="_on_bc_game_pressed"]
+[connection signal="pressed" from="Skill_learn" to="." method="_on_skill_learn_pressed"]
+[connection signal="pressed" from="GameAn" to="." method="_on_game_an_pressed"]
+[connection signal="pressed" from="BossTreasureCheckBox" to="." method="_on_boss_treasure_toggled"]
+[connection signal="pressed" from="Task" to="." method="_on_task_pressed"]
+[connection signal="pressed" from="turn_mainmenu" to="." method="_on_turn_mainmenu_pressed"]
+[connection signal="pressed" from="level_lhhj" to="." method="_on_level_lhhj_pressed"]

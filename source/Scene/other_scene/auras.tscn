@@ -1,0 +1,167 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scene/other_scene/auras.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/aura.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xh5v1"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5jt6"]
+atlas = ExtResource("2")
+region = Rect2(30, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dsmyk"]
+atlas = ExtResource("2")
+region = Rect2(60, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nr8el"]
+atlas = ExtResource("2")
+region = Rect2(90, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dssmp"]
+atlas = ExtResource("2")
+region = Rect2(120, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu2o2"]
+atlas = ExtResource("2")
+region = Rect2(150, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehvou"]
+atlas = ExtResource("2")
+region = Rect2(180, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8bfml"]
+atlas = ExtResource("2")
+region = Rect2(210, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c2yn6"]
+atlas = ExtResource("2")
+region = Rect2(240, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7m30"]
+atlas = ExtResource("2")
+region = Rect2(270, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8sw63"]
+atlas = ExtResource("2")
+region = Rect2(300, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ojsj"]
+atlas = ExtResource("2")
+region = Rect2(330, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtq6f"]
+atlas = ExtResource("2")
+region = Rect2(360, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_basgt"]
+atlas = ExtResource("2")
+region = Rect2(390, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vo18v"]
+atlas = ExtResource("2")
+region = Rect2(420, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ow77"]
+atlas = ExtResource("2")
+region = Rect2(450, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37a72"]
+atlas = ExtResource("2")
+region = Rect2(480, 0, 30, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dk0io"]
+atlas = ExtResource("2")
+region = Rect2(510, 0, 30, 32)
+
+[sub_resource type="SpriteFrames" id="19"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xh5v1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5jt6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dsmyk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nr8el")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dssmp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu2o2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehvou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8bfml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c2yn6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e7m30")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8sw63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ojsj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtq6f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_basgt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vo18v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ow77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37a72")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dk0io")
+}],
+"loop": 1,
+"name": &"Aura",
+"speed": 25.0
+}]
+
+[sub_resource type="CircleShape2D" id="20"]
+radius = 7.0
+
+[node name="Auras" type="Node2D" unique_id=192950019]
+scale = Vector2(1.2, 1.2)
+script = ExtResource("1")
+metadata/_edit_lock_ = true
+
+[node name="AuraSp" type="AnimatedSprite2D" parent="." unique_id=82720538]
+self_modulate = Color(1, 0.792157, 1, 1)
+sprite_frames = SubResource("19")
+animation = &"Aura"
+autoplay = "Aura"
+metadata/_edit_lock_ = true
+
+[node name="Check" type="Area2D" parent="." unique_id=532465720]
+collision_layer = 16
+collision_mask = 16
+
+[node name="Check" type="CollisionShape2D" parent="Check" unique_id=1030373277]
+shape = SubResource("20")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="Move" type="Timer" parent="." unique_id=492450746]
+
+[connection signal="body_entered" from="Check" to="." method="_on_check_body_entered"]
+[connection signal="timeout" from="Move" to="." method="_on_move_timeout"]

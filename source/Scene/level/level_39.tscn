@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_39.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_39/yg39.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_39/bg39.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(6319, 568.75)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1150.5, 1673)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(871, 1673)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(3276.5, 1673)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(683.75, 1420)
+
+[node name="Level_39" unique_id=675405939 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="thb" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1586212661]
+position = Vector2(4612.5, -346.887)
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=372152239]
+position = Vector2(3082.5, 680.375)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1709885866]
+position = Vector2(1676.5, 24.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1785984015]
+position = Vector2(2833, 22)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=483737892]
+position = Vector2(3933.5, 22)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=1842159189]
+position = Vector2(6236.75, 21)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=859293263]
+position = Vector2(3159.13, -211)
+shape = SubResource("5")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="firstbg" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1343192566]
+position = Vector2(600.587, 297.50006)
+scale = Vector2(0.8533513, 0.87101436)
+texture = ExtResource("3")
+
+[node name="Jldbg" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1774741612]
+position = Vector2(2457.9998, 255.49997)
+scale = Vector2(1.0544682, 1.1508474)
+texture = ExtResource("4")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=126306483]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4285, 316)
+metadata/_edit_lock_ = true

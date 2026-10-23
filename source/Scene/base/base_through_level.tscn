@@ -1,0 +1,260 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/base/base_through_level.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/export.png" id="2"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
+
+[sub_resource type="RectangleShape2D" id="GreenRectShape"]
+size = Vector2(930, 580)
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1922.56, 6301)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(9296.5, 529.0625)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lbbhy"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hpbb"]
+atlas = ExtResource("2")
+region = Rect2(191, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqd01"]
+atlas = ExtResource("2")
+region = Rect2(382, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4fuv"]
+atlas = ExtResource("2")
+region = Rect2(573, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmrtc"]
+atlas = ExtResource("2")
+region = Rect2(764, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dl87u"]
+atlas = ExtResource("2")
+region = Rect2(955, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0oi70"]
+atlas = ExtResource("2")
+region = Rect2(1146, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sg2m"]
+atlas = ExtResource("2")
+region = Rect2(1337, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7fhhm"]
+atlas = ExtResource("2")
+region = Rect2(1528, 0, 191, 193)
+
+[sub_resource type="SpriteFrames" id="14"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lbbhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hpbb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqd01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4fuv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmrtc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dl87u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0oi70")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0sg2m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7fhhm")
+}],
+"loop": 1,
+"name": &"exit",
+"speed": 15.0
+}]
+
+[sub_resource type="CircleShape2D" id="15"]
+radius = 85.4751
+
+[sub_resource type="Animation" id="16"]
+resource_name = "gdzm"
+length = 25.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ZM:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 24.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(941, 16), Vector2(-1300, 16)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ZM")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(24.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="17"]
+_data = {
+&"gdzm": SubResource("16")
+}
+
+[node name="BaseThoughLevel" type="Node2D" unique_id=187501059]
+position = Vector2(1, 112)
+script = ExtResource("1")
+metadata/_edit_horizontal_guides_ = [296.0]
+metadata/_edit_lock_ = true
+
+[node name="GreenDetector" type="Area2D" parent="." unique_id=764703940]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreenDetector" unique_id=902457684]
+shape = SubResource("GreenRectShape")
+
+[node name="ColorRect" type="ColorRect" parent="GreenDetector" unique_id=1358674931]
+visible = false
+z_index = 100
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -465.0
+offset_top = -290.0
+offset_right = 465.0
+offset_bottom = 290.0
+color = Color(0, 1, 0, 0.3)
+metadata/_edit_lock_ = true
+
+[node name="wall" type="StaticBody2D" parent="." unique_id=1221902799]
+
+[node name="wall_left" type="CollisionShape2D" parent="wall" unique_id=348738071]
+position = Vector2(-959.719, -419.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="thb" type="CollisionShape2D" parent="wall" unique_id=1586212661]
+position = Vector2(4612.5, -595.875)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="Monster" type="Node2D" parent="." unique_id=1898751455]
+position = Vector2(0, -110)
+
+[node name="Hero" type="Node2D" parent="." unique_id=913111874]
+position = Vector2(0, -110)
+
+[node name="Create_1" type="Node2D" parent="." unique_id=756811364]
+
+[node name="Create_2" type="Node2D" parent="." unique_id=1350951483]
+
+[node name="Create_3" type="Node2D" parent="." unique_id=564642567]
+
+[node name="Create_4" type="Node2D" parent="." unique_id=638652863]
+
+[node name="create_control" type="Timer" parent="." unique_id=1989637868]
+autostart = true
+
+[node name="fall_items" type="Node2D" parent="." unique_id=1160963530]
+position = Vector2(-1, -111)
+
+[node name="BackGround" type="ParallaxBackground" parent="." unique_id=1466504861]
+
+[node name="End" type="ParallaxLayer" parent="BackGround" unique_id=653194421]
+motion_scale = Vector2(0, 0)
+
+[node name="floor_2" type="ParallaxLayer" parent="BackGround" unique_id=458132924]
+
+[node name="floor" type="TileMap" parent="BackGround/floor_2" unique_id=643279606]
+format = 2
+
+[node name="exit" type="AnimatedSprite2D" parent="." unique_id=2115553614]
+visible = false
+position = Vector2(439, 387)
+sprite_frames = SubResource("14")
+animation = &"exit"
+autoplay = "exit"
+frame_progress = 0.699384
+
+[node name="exit2" type="Area2D" parent="exit" unique_id=1115255051]
+position = Vector2(0, 37)
+collision_layer = 16
+collision_mask = 16
+metadata/_edit_lock_ = true
+
+[node name="exit" type="CollisionShape2D" parent="exit/exit2" unique_id=1195401802]
+position = Vector2(-4, -34)
+shape = SubResource("15")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="Timer" type="Timer" parent="." unique_id=901366691]
+wait_time = 0.5
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1390746928]
+
+[node name="ZM" type="Label" parent="CanvasLayer" unique_id=656821244]
+visible = false
+texture_filter = 2
+offset_left = 941.0
+offset_top = 16.0
+offset_right = 2645.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 11
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 18
+text = "欢迎来到造梦西游——八荒湮隳篇，当前版本完全免费，请勿用于商业用途，谨防受骗上当，不足之处还请谅解，请更多支持原版造梦，感谢各位支持！！"
+metadata/_edit_lock_ = true
+
+[node name="lj_tt" type="Node2D" parent="CanvasLayer" unique_id=1029771696]
+position = Vector2(735, 240)
+metadata/_edit_lock_ = true
+
+[node name="zmPLAYER" type="AnimationPlayer" parent="CanvasLayer" unique_id=2056938348]
+libraries/ = SubResource("17")
+
+[node name="MonsterBlood" type="VBoxContainer" parent="CanvasLayer" unique_id=503565993]
+offset_left = 419.0
+offset_top = 7.0
+offset_right = 939.0
+offset_bottom = 121.0
+metadata/_edit_lock_ = true
+
+[node name="Smooth" type="Timer" parent="." unique_id=935065284]
+
+[connection signal="timeout" from="create_control" to="." method="_on_create_control_timeout"]
+[connection signal="body_entered" from="exit/exit2" to="." method="_on_exit_2_body_entered"]
+[connection signal="body_exited" from="exit/exit2" to="." method="_on_exit_2_body_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Smooth" to="." method="_on_smooth_timeout"]

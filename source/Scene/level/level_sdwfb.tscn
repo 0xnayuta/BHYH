@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_sdwfb.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/1_floor_bg9.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/259.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(3030, 937)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(2146, 2302)
+
+[node name="Level_sdwfb" unique_id=1174084156 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=571345732]
+position = Vector2(1482, 860.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=309952116]
+position = Vector2(2510, 125)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
+motion_scale = Vector2(1, 0)
+
+[node name="1FloorBg9" type="Sprite2D" parent="BackGround/End" index="0" unique_id=1142971598]
+position = Vector2(720, 246)
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="259" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1620439013]
+position = Vector2(937, 524)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=724931460]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1205, 307)
+metadata/_edit_lock_ = true

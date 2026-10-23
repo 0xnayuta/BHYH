@@ -1,0 +1,360 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/level/role_information.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/gogo/1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/gogo/13.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/gogo/67.png" id="4"]
+[ext_resource type="Script" path="res://Script/level/set_list.gd" id="5"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/479.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/486.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/465.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/472.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/500.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/ui_2_5_9_0/png/set.png" id="11"]
+[ext_resource type="Script" path="res://Script/backpack.gd" id="12"]
+
+[sub_resource type="SpriteFrames" id="1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": 1,
+"name": &"go",
+"speed": 25.0
+}]
+
+[node name="role_information" type="Node2D" unique_id=335144343]
+script = ExtResource("1")
+metadata/_edit_horizontal_guides_ = [109.0]
+
+[node name="roleLayer" type="CanvasLayer" parent="." unique_id=1440374362]
+layer = 3
+
+[node name="Control" type="Control" parent="roleLayer" unique_id=257947391]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="roleLayer/Control" unique_id=1278488050]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Gogo" type="AnimatedSprite2D" parent="roleLayer/Control/Control" unique_id=372806704]
+position = Vector2(-100, 0)
+scale = Vector2(0.6, 0.6)
+sprite_frames = SubResource("1")
+animation = &"go"
+autoplay = "go"
+centered = false
+
+[node name="Control2" type="Control" parent="roleLayer" unique_id=1815098359]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonGroup" type="HBoxContainer" parent="roleLayer" unique_id=1945758134]
+custom_minimum_size = Vector2(450, 100)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -466.0
+offset_top = -27.0
+offset_right = -16.0
+offset_bottom = 73.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 2
+script = ExtResource("5")
+
+[node name="backpack" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=654017739]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("6")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="set" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=935054806]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("7")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="skill" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=211171394]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("8")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="magic_weapon" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=525877973]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("9")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="pet" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=31455128]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("10")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="menu" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=1923689551]
+process_mode = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+focus_mode = 0
+texture_normal = ExtResource("11")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="backpack" type="Node2D" parent="roleLayer" unique_id=84033258]
+process_mode = 3
+z_index = 1
+script = ExtResource("12")
+
+[connection signal="pressed" from="roleLayer/ButtonGroup/backpack" to="roleLayer/backpack" method="_on_backpack_pressed"]
+[connection signal="pressed" from="roleLayer/ButtonGroup/set" to="roleLayer/backpack" method="_on_set_pressed"]
+[connection signal="pressed" from="roleLayer/ButtonGroup/skill" to="roleLayer/backpack" method="_on_skill_pressed"]
+[connection signal="pressed" from="roleLayer/ButtonGroup/magic_weapon" to="roleLayer/backpack" method="_on_magic_weapon_pressed"]
+[connection signal="pressed" from="roleLayer/ButtonGroup/pet" to="roleLayer/backpack" method="_on_pet_pressed"]
+[connection signal="pressed" from="roleLayer/ButtonGroup/menu" to="roleLayer/ButtonGroup" method="_on_menu_pressed"]

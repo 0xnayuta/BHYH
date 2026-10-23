@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/weiyang_palace_bullet.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="Shape_hit"]
+size = Vector2(520, 260)
+
+[node name="WeiyangBossBullet2" type="Node2D" unique_id=1266583708]
+script = ExtResource("1")
+effect_kind = 2
+frame_count = 19
+
+[node name="middle" type="Node2D" parent="." unique_id=1017098270]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1336910239]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=789035089]
+shape = SubResource("Shape_hit")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=68600758]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=817622057]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=169991778]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=1448998042]
+one_shot = true

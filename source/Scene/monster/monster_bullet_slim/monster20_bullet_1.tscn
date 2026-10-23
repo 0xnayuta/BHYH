@@ -1,0 +1,304 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_20/bullet_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lp4qn"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="1917"]
+atlas = ExtResource("2")
+region = Rect2(384, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1918"]
+atlas = ExtResource("2")
+region = Rect2(576, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1919"]
+atlas = ExtResource("2")
+region = Rect2(768, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1920"]
+atlas = ExtResource("2")
+region = Rect2(0, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1921"]
+atlas = ExtResource("2")
+region = Rect2(192, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1922"]
+atlas = ExtResource("2")
+region = Rect2(384, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1923"]
+atlas = ExtResource("2")
+region = Rect2(576, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1924"]
+atlas = ExtResource("2")
+region = Rect2(768, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1925"]
+atlas = ExtResource("2")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1926"]
+atlas = ExtResource("2")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1927"]
+atlas = ExtResource("2")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="1928"]
+atlas = ExtResource("2")
+region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a0tj7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("1917")
+}, {
+"duration": 1.0,
+"texture": SubResource("1918")
+}, {
+"duration": 1.0,
+"texture": SubResource("1919")
+}, {
+"duration": 1.0,
+"texture": SubResource("1920")
+}, {
+"duration": 1.0,
+"texture": SubResource("1921")
+}, {
+"duration": 1.0,
+"texture": SubResource("1922")
+}, {
+"duration": 1.0,
+"texture": SubResource("1923")
+}, {
+"duration": 1.0,
+"texture": SubResource("1924")
+}, {
+"duration": 1.0,
+"texture": SubResource("1925")
+}, {
+"duration": 1.0,
+"texture": SubResource("1926")
+}, {
+"duration": 1.0,
+"texture": SubResource("1927")
+}, {
+"duration": 1.0,
+"texture": SubResource("1928")
+}],
+"loop": 0,
+"name": &"Monster20Bullet_1",
+"speed": 20.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ycbis"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_10jrq"]
+radius = 70.0071
+
+[sub_resource type="Animation" id="Animation_euj8m"]
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("middle/BulletANI:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("middle/BulletANI:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("middle/BulletANI:material")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_ycbis")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("middle/BulletANI:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": ["Monster20Bullet_1"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("middle/BulletANI:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("middle/BulletANI:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("middle/BulletANI:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("middle/HitBox/Hit_Box:shape")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("CircleShape2D_10jrq")]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("middle/HitBox/Hit_Box:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("middle/HitBox/Hit_Box:disabled")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("poision:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qfn77"]
+_data = {
+&"Monster20Bullet_1": SubResource("Animation_euj8m")
+}
+
+[node name="MonsterBullet" type="Node2D" unique_id=59411823]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=552802494]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=604142191]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=78199531]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_lp4qn")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=13903973]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_a0tj7")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=113174032]
+libraries/ = SubResource("AnimationLibrary_qfn77")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=1647839906]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("3")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1607740257]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=1416483486]
+one_shot = true

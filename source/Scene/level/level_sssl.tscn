@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_sssl.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_sssl/97.jpg" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_hide/ymjssslfloor.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(4700, 553)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(17, 1786)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(4700, 553)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(101, 1420)
+
+[node name="Level_sssl" unique_id=1958690001 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1879190550]
+position = Vector2(2350, 669)
+shape = SubResource("1")
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=48446099]
+position = Vector2(1007.5, -406)
+shape = SubResource("2")
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=442672849]
+position = Vector2(4708.5, -408)
+shape = SubResource("3")
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=743721207]
+position = Vector2(-54.5, -221)
+shape = SubResource("4")
+disabled = true
+
+[node name="Bg" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1210766286]
+position = Vector2(2527.25, 341.00003)
+scale = Vector2(1.0864894, 1.1457627)
+texture = ExtResource("3")
+
+[node name="Floor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1498872623]
+position = Vector2(2350, 553.5)
+scale = Vector2(1, 1.127451)
+texture = ExtResource("4")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1461078311]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4550, 316)

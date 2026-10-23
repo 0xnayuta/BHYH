@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_45.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_jjg/jue_jing_gong_bei_jing.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(4700, 553)
+
+[sub_resource type="RectangleShape2D" id="Shape_left_wall"]
+size = Vector2(101, 1420)
+
+[sub_resource type="RectangleShape2D" id="Shape_end_wall"]
+size = Vector2(600, 1786)
+
+[sub_resource type="RectangleShape2D" id="Shape_stage_wall"]
+size = Vector2(17, 1786)
+
+[node name="Level_45" unique_id=1570489791 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1062879006]
+position = Vector2(2350, 669)
+shape = SubResource("Shape_floor")
+
+[node name="stop_left" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1459897738]
+position = Vector2(-54.5, -221)
+shape = SubResource("Shape_left_wall")
+disabled = true
+
+[node name="stop_right" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=2044564383]
+position = Vector2(5000, -408)
+shape = SubResource("Shape_end_wall")
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1727223715]
+position = Vector2(1007.5, -406)
+shape = SubResource("Shape_stage_wall")
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=1680346802]
+position = Vector2(2300, -406)
+shape = SubResource("Shape_stage_wall")
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=118005343]
+position = Vector2(3600, -406)
+shape = SubResource("Shape_stage_wall")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1811815509]
+
+[node name="Background" type="Sprite2D" parent="BackGround/front" index="0" unique_id=179008827]
+position = Vector2(2117.1526, 261)
+scale = Vector2(1.1152542, 1.179661)
+texture = ExtResource("3")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4380, 316)

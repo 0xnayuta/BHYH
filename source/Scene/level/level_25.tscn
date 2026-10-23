@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_25.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Scene/base/base_stage.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/zztw.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/floorzztw.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(888, 1208)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1066, 1208)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(883, 1208)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(1029, 1602)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(5320.5, 568)
+
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(682.75, 1420)
+
+[node name="Level_25" unique_id=749849679 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [4603.0, 2250.0, 2104.0]
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1539292803]
+position = Vector2(1542, -123)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=2061970491]
+position = Vector2(2784, -130)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=192729592]
+position = Vector2(3991.5, -126)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=269438731]
+position = Vector2(5162.5, 75)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=1522081213]
+position = Vector2(2656.75, 686)
+shape = SubResource("5")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=1319627410]
+position = Vector2(3158.63, -211)
+shape = SubResource("6")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="Stage" type="Node2D" parent="." index="5" unique_id=981487631]
+z_index = -1
+
+[node name="BaseStage" parent="Stage" index="0" unique_id=385564234 instance=ExtResource("3")]
+position = Vector2(209, 143)
+metadata/_edit_lock_ = true
+
+[node name="BaseStage2" parent="Stage" index="1" unique_id=375880518 instance=ExtResource("3")]
+position = Vector2(655, 228)
+metadata/_edit_lock_ = true
+
+[node name="BaseStage3" parent="Stage" index="2" unique_id=452806889 instance=ExtResource("3")]
+position = Vector2(2566, 166)
+
+[node name="BaseStage4" parent="Stage" index="3" unique_id=527903973 instance=ExtResource("3")]
+position = Vector2(2988, 215)
+
+[node name="BaseStage5" parent="Stage" index="4" unique_id=428986187 instance=ExtResource("3")]
+position = Vector2(3405, 100)
+
+[node name="Trap" type="Node2D" parent="." index="6" unique_id=1510931837]
+position = Vector2(236, -225)
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=109465750]
+
+[node name="Zztw" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1299407692]
+position = Vector2(2299.25, 254.24998)
+scale = Vector2(1.0220165, 1.1412859)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=458132924]
+metadata/_edit_lock_ = true
+
+[node name="Floorzztw" type="Sprite2D" parent="BackGround/floor_2" index="0" unique_id=1812306169]
+position = Vector2(2350, 545)
+texture = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="13" unique_id=2115553614]
+position = Vector2(4456, 330)
+metadata/_edit_lock_ = true

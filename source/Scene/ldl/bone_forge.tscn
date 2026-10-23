@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/ldl/divine_forge.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/ldl/bone_forge.gd" id="2"]
+
+[node name="bone_forge" unique_id=407185015 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="Title" parent="." index="7" unique_id=937866746]
+text = "装备淬骨"
+
+[node name="sz_" parent="." index="8"]
+text = "淬骨"

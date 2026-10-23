@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_42.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_10/250.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lxm/level_42_bg.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_10/230.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(3433, 553)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(17, 1786)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1596.5, 1786)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(101, 1420)
+
+[node name="Level_42" unique_id=1958657433 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [365.0, 1870.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1879190540]
+position = Vector2(1062.5, 669.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=48446098]
+position = Vector2(1007.5, -406)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=442672849]
+position = Vector2(2669.75, -408)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=743721206]
+position = Vector2(-54.5, -221)
+shape = SubResource("4")
+disabled = true
+
+[node name="create_control" parent="." index="8" unique_id=1989637868]
+wait_time = 0.5
+
+[node name="250" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1210766285]
+visible = false
+position = Vector2(716, 248)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=794252530]
+
+[node name="125" type="Sprite2D" parent="BackGround/front" index="0" unique_id=91798871]
+position = Vector2(1021, 16)
+scale = Vector2(1.07682, 1.03807)
+texture = ExtResource("4")
+
+[node name="230" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1498872622]
+visible = false
+position = Vector2(1142.25, 547)
+scale = Vector2(1.21007, 1)
+texture = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1726, 316)
+metadata/_edit_lock_ = true

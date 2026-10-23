@@ -1,0 +1,164 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_1.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Scene/level/xp.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_1/19_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_1/48.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/level_1/183.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1536, 1803)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(5318, 1564)
+
+[sub_resource type="CapsuleShape2D" id="3"]
+radius = 12.0209
+height = 131.522
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(204.5, 22)
+
+[sub_resource type="CapsuleShape2D" id="5"]
+radius = 13.4349
+height = 131.522
+
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(1143, 1296.5)
+
+[sub_resource type="RectangleShape2D" id="7"]
+size = Vector2(946.5, 1296.5)
+
+[sub_resource type="RectangleShape2D" id="8"]
+size = Vector2(1052, 1296.5)
+
+[sub_resource type="RectangleShape2D" id="9"]
+size = Vector2(1105.25, 1296.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uqvgr"]
+size = Vector2(1023.63, 1296.5)
+
+[node name="Level_1" unique_id=761534028 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [3153.0]
+
+[node name="wall" parent="." index="1" unique_id=1221902799]
+collision_mask = 0
+
+[node name="wall_left" parent="wall" index="0" unique_id=348738071]
+position = Vector2(-766, -419.5)
+shape = SubResource("1")
+
+[node name="floor2" type="CollisionShape2D" parent="wall" index="1" unique_id=952750090]
+position = Vector2(2656, 1174)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="斜坡" parent="wall" index="2" unique_id=571806971 instance=ExtResource("3")]
+position = Vector2(1178, 331)
+
+[node name="斜坡4" parent="wall" index="3" unique_id=488311103 instance=ExtResource("3")]
+position = Vector2(1656, 337)
+
+[node name="斜坡5" parent="wall" index="4" unique_id=1375686571 instance=ExtResource("3")]
+position = Vector2(4604, 337)
+
+[node name="斜坡2" type="StaticBody2D" parent="wall" index="5" unique_id=582617186]
+position = Vector2(485, 4)
+collision_mask = 0
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall/斜坡2" index="0" unique_id=1407381267]
+position = Vector2(1036, 371)
+rotation = 0.785398
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="wall/斜坡2" index="1" unique_id=2066923059]
+position = Vector2(1171.75, 333)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="wall/斜坡2" index="2" unique_id=948261177]
+position = Vector2(1307, 372)
+rotation = -0.785398
+shape = SubResource("5")
+metadata/_edit_lock_ = true
+
+[node name="斜坡3" type="StaticBody2D" parent="wall" index="6" unique_id=114399278]
+position = Vector2(3434, 4)
+collision_mask = 0
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall/斜坡3" index="0" unique_id=30755429]
+position = Vector2(1036, 371)
+rotation = 0.785398
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="wall/斜坡3" index="1" unique_id=1839667448]
+position = Vector2(1171.75, 333)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="wall/斜坡3" index="2" unique_id=562222885]
+position = Vector2(1307, 372)
+rotation = -0.785398
+shape = SubResource("5")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" index="7" unique_id=713950379]
+position = Vector2(1670.5, -250.75)
+shape = SubResource("6")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" index="8" unique_id=1474673619]
+position = Vector2(2714.75, -242)
+shape = SubResource("7")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" index="9" unique_id=1966920563]
+position = Vector2(4078, -241)
+shape = SubResource("8")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" index="10" unique_id=1642237482]
+position = Vector2(5144.38, -172)
+shape = SubResource("9")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" index="11" unique_id=504383483]
+position = Vector2(2987.19, -236)
+shape = SubResource("RectangleShape2D_uqvgr")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
+metadata/_edit_lock_ = true
+
+[node name="end2" type="Sprite2D" parent="BackGround/End" index="0" unique_id=638265580]
+position = Vector2(718, 244)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1164429011]
+position = Vector2(2014, 36)
+metadata/_edit_lock_ = true
+
+[node name="front" type="Sprite2D" parent="BackGround/front" index="0" unique_id=407592145]
+position = Vector2(438, 338)
+texture = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="floor3" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1200748593]
+metadata/_edit_lock_ = true
+
+[node name="floor2" type="Sprite2D" parent="BackGround/floor3" index="0" unique_id=2144053821]
+position = Vector2(2403, 506)
+texture = ExtResource("6")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4202, 317)
+metadata/_edit_lock_ = true

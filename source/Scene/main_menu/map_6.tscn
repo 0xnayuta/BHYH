@@ -1,0 +1,359 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/map_6.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/di_tu_bei_jing.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1047.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1052.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1029.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1034.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1066.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1057.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1042.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/1165.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/gg_1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/dy_1.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s1/frame_01.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s2/frame_01.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s3/frame_01.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s4/frame_01.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s5/frame_01.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s6/frame_01.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s7/frame_01.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s8/frame_01.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s10/frame_01.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s11/frame_01.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s12/frame_01.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s9/frame_01.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s13/frame_01.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s14/frame_01.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s15/frame_01.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/game_4/south_continent/s16/frame_01.png" id="28"]
+
+[node name="Map_6" type="Node2D" unique_id=561498560]
+script = ExtResource("1")
+
+[node name="Byg" type="Sprite2D" parent="." unique_id=560118722]
+z_index = -2
+position = Vector2(470, 295)
+texture = ExtResource("2")
+
+[node name="MemoryClass" type="TextureButton" parent="." unique_id=886440487]
+offset_top = 505.0
+offset_right = 67.0
+offset_bottom = 574.0
+texture_normal = ExtResource("3")
+texture_disabled = ExtResource("3")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1047.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1049.png"
+
+[node name="Shop" type="TextureButton" parent="." unique_id=1788131061]
+offset_left = 65.0
+offset_top = 505.0
+offset_right = 132.0
+offset_bottom = 574.0
+texture_normal = ExtResource("4")
+texture_disabled = ExtResource("4")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1052.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1054.png"
+
+[node name="LDL2" type="TextureButton" parent="." unique_id=1425391106]
+offset_left = 130.0
+offset_top = 506.0
+offset_right = 197.0
+offset_bottom = 575.0
+texture_normal = ExtResource("5")
+texture_disabled = ExtResource("5")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1029.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1031.png"
+
+[node name="Skill" type="TextureButton" parent="." unique_id=1790336751]
+offset_left = 195.0
+offset_top = 506.0
+offset_right = 262.0
+offset_bottom = 575.0
+texture_normal = ExtResource("6")
+texture_disabled = ExtResource("6")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1034.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1036.png"
+
+[node name="Activity" type="TextureButton" parent="." unique_id=1713776379]
+offset_left = 260.0
+offset_top = 506.0
+offset_right = 327.0
+offset_bottom = 575.0
+texture_normal = ExtResource("7")
+texture_disabled = ExtResource("7")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1066.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1068.png"
+
+[node name="Task" type="TextureButton" parent="." unique_id=512161724]
+offset_left = 325.0
+offset_top = 506.0
+offset_right = 392.0
+offset_bottom = 574.0
+texture_normal = ExtResource("8")
+texture_disabled = ExtResource("8")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1057.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1059.png"
+
+[node name="Return" type="TextureButton" parent="." unique_id=331686415]
+offset_left = 390.0
+offset_top = 505.0
+offset_right = 457.0
+offset_bottom = 574.0
+texture_normal = ExtResource("9")
+texture_disabled = ExtResource("9")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1042.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1044.png"
+
+[node name="GameSet" type="TextureButton" parent="." unique_id=1208017048]
+offset_top = 445.0
+offset_right = 68.0
+offset_bottom = 515.0
+texture_normal = ExtResource("10")
+texture_disabled = ExtResource("10")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/1165.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/1166.png"
+
+[node name="GameAn" type="TextureButton" parent="." unique_id=1227771218]
+offset_left = 65.0
+offset_top = 445.0
+offset_right = 134.0
+offset_bottom = 516.0
+texture_normal = ExtResource("11")
+texture_disabled = ExtResource("11")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/gg_1.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/gg_2.png"
+
+[node name="Pellet" type="TextureButton" parent="." unique_id=554658668]
+offset_left = 128.0
+offset_top = 444.0
+offset_right = 197.0
+offset_bottom = 515.0
+texture_normal = ExtResource("12")
+texture_disabled = ExtResource("12")
+ignore_texture_size = true
+stretch_mode = 3
+metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/dy_1.png"
+metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/dy_2.png"
+
+[node name="Level_47" type="TextureButton" parent="." unique_id=123936111]
+z_index = -1
+offset_left = 615.0
+offset_top = 487.0
+offset_right = 767.0
+offset_bottom = 592.0
+texture_normal = ExtResource("13")
+texture_disabled = ExtResource("13")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s1/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s1/frame_03.png"
+
+[node name="Level_48" type="TextureButton" parent="." unique_id=2050637457]
+z_index = -1
+offset_left = 736.0
+offset_top = 453.0
+offset_right = 891.0
+offset_bottom = 568.0
+texture_normal = ExtResource("14")
+texture_disabled = ExtResource("14")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s2/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s2/frame_03.png"
+
+[node name="Level_49" type="TextureButton" parent="." unique_id=1340434652]
+z_index = -1
+offset_left = 585.0
+offset_top = 414.0
+offset_right = 729.0
+offset_bottom = 516.0
+texture_normal = ExtResource("15")
+texture_disabled = ExtResource("15")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s3/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s3/frame_03.png"
+
+[node name="Level_50" type="TextureButton" parent="." unique_id=491065086]
+z_index = -1
+offset_left = 466.0
+offset_top = 346.0
+offset_right = 619.0
+offset_bottom = 493.0
+texture_normal = ExtResource("16")
+texture_disabled = ExtResource("16")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s4/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s4/frame_03.png"
+
+[node name="Level_51" type="TextureButton" parent="." unique_id=1696198801]
+z_index = -1
+offset_left = 303.0
+offset_top = 306.0
+offset_right = 458.0
+offset_bottom = 441.0
+texture_normal = ExtResource("17")
+texture_disabled = ExtResource("17")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s5/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s5/frame_03.png"
+
+[node name="Level_52" type="TextureButton" parent="." unique_id=1564699731]
+z_index = -1
+offset_left = 518.0
+offset_top = 259.0
+offset_right = 671.0
+offset_bottom = 388.0
+texture_normal = ExtResource("18")
+texture_disabled = ExtResource("18")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s6/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s6/frame_03.png"
+
+[node name="Level_53" type="TextureButton" parent="." unique_id=1422517802]
+z_index = -1
+offset_left = 657.0
+offset_top = 205.0
+offset_right = 809.0
+offset_bottom = 339.0
+texture_normal = ExtResource("19")
+texture_disabled = ExtResource("19")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s7/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s7/frame_03.png"
+
+[node name="Level_54" type="TextureButton" parent="." unique_id=1559172746]
+z_index = -1
+offset_left = 505.0
+offset_top = 167.0
+offset_right = 662.0
+offset_bottom = 313.0
+texture_normal = ExtResource("20")
+texture_disabled = ExtResource("20")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s8/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s8/frame_03.png"
+
+[node name="Level_56" type="TextureButton" parent="." unique_id=1970358766]
+z_index = -1
+offset_left = 136.0
+offset_top = 283.0
+offset_right = 289.0
+offset_bottom = 411.0
+texture_normal = ExtResource("21")
+texture_disabled = ExtResource("21")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s10/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s10/frame_03.png"
+
+[node name="Level_57" type="TextureButton" parent="." unique_id=1753184185]
+z_index = -1
+offset_left = 17.0
+offset_top = 246.0
+offset_right = 170.0
+offset_bottom = 377.0
+texture_normal = ExtResource("22")
+texture_disabled = ExtResource("22")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s11/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s11/frame_03.png"
+
+[node name="Level_58" type="TextureButton" parent="." unique_id=295129246]
+z_index = -1
+offset_left = 142.0
+offset_top = 162.0
+offset_right = 312.0
+offset_bottom = 311.0
+texture_normal = ExtResource("23")
+texture_disabled = ExtResource("23")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s12/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s12/frame_03.png"
+
+[node name="Level_55" type="TextureButton" parent="." unique_id=123298623]
+z_index = -1
+offset_left = 281.0
+offset_top = 196.0
+offset_right = 442.0
+offset_bottom = 349.0
+texture_normal = ExtResource("24")
+texture_disabled = ExtResource("24")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s9/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s9/frame_03.png"
+
+[node name="Level_59" type="TextureButton" parent="." unique_id=1114351509]
+z_index = -1
+offset_left = 285.0
+offset_top = 83.0
+offset_right = 446.0
+offset_bottom = 205.0
+texture_normal = ExtResource("25")
+texture_disabled = ExtResource("25")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s13/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s13/frame_03.png"
+
+[node name="Level_60" type="TextureButton" parent="." unique_id=1059825905]
+z_index = -1
+offset_left = 452.0
+offset_top = 50.0
+offset_right = 605.0
+offset_bottom = 192.0
+texture_normal = ExtResource("26")
+texture_disabled = ExtResource("26")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s14/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s14/frame_03.png"
+
+[node name="Level_61" type="TextureButton" parent="." unique_id=1430026674]
+z_index = -1
+offset_left = 602.0
+offset_top = 43.0
+offset_right = 755.0
+offset_bottom = 163.0
+texture_normal = ExtResource("27")
+texture_disabled = ExtResource("27")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s15/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s15/frame_03.png"
+
+[node name="Level_62" type="TextureButton" parent="." unique_id=1007568129]
+z_index = -1
+offset_left = 703.0
+offset_top = 314.0
+offset_right = 846.0
+offset_bottom = 420.0
+texture_normal = ExtResource("28")
+texture_disabled = ExtResource("28")
+metadata/lazy_texture_pressed_path = "res://Art/game_4/south_continent/s16/frame_01.png"
+metadata/lazy_texture_hover_path = "res://Art/game_4/south_continent/s16/frame_03.png"
+
+[connection signal="pressed" from="MemoryClass" to="." method="_on_memory_class_pressed"]
+[connection signal="pressed" from="Shop" to="." method="_on_shop_pressed"]
+[connection signal="pressed" from="LDL2" to="." method="_on_ldl_2_pressed"]
+[connection signal="pressed" from="Skill" to="." method="_on_skill_pressed"]
+[connection signal="pressed" from="Activity" to="." method="_on_activity_pressed"]
+[connection signal="pressed" from="Task" to="." method="_on_task_pressed"]
+[connection signal="pressed" from="Return" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="GameSet" to="." method="_on_game_set_pressed"]
+[connection signal="pressed" from="GameAn" to="." method="_on_game_an_pressed"]
+[connection signal="pressed" from="Pellet" to="." method="_on_pellet_pressed"]
+[connection signal="pressed" from="Level_47" to="." method="_on_map_level_pressed" binds= [47]]
+[connection signal="pressed" from="Level_48" to="." method="_on_map_level_pressed" binds= [48]]
+[connection signal="pressed" from="Level_49" to="." method="_on_map_level_pressed" binds= [49]]
+[connection signal="pressed" from="Level_50" to="." method="_on_map_level_pressed" binds= [50]]
+[connection signal="pressed" from="Level_51" to="." method="_on_map_level_pressed" binds= [51]]
+[connection signal="pressed" from="Level_52" to="." method="_on_map_level_pressed" binds= [52]]
+[connection signal="pressed" from="Level_53" to="." method="_on_map_level_pressed" binds= [53]]
+[connection signal="pressed" from="Level_54" to="." method="_on_map_level_pressed" binds= [54]]
+[connection signal="pressed" from="Level_56" to="." method="_on_map_level_pressed" binds= [56]]
+[connection signal="pressed" from="Level_57" to="." method="_on_map_level_pressed" binds= [57]]
+[connection signal="pressed" from="Level_58" to="." method="_on_map_level_pressed" binds= [58]]
+[connection signal="pressed" from="Level_55" to="." method="_on_map_level_pressed" binds= [55]]
+[connection signal="pressed" from="Level_59" to="." method="_on_map_level_pressed" binds= [59]]
+[connection signal="pressed" from="Level_60" to="." method="_on_map_level_pressed" binds= [60]]
+[connection signal="pressed" from="Level_61" to="." method="_on_map_level_pressed" binds= [61]]
+[connection signal="pressed" from="Level_62" to="." method="_on_map_level_pressed" binds= [62]]

@@ -1,0 +1,306 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_4/special_effet_17.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fysoi"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nyuoa"]
+atlas = ExtResource("2")
+region = Rect2(424, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_palti"]
+atlas = ExtResource("2")
+region = Rect2(848, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npuu3"]
+atlas = ExtResource("2")
+region = Rect2(1060, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qwd16"]
+atlas = ExtResource("2")
+region = Rect2(1272, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q38p8"]
+atlas = ExtResource("2")
+region = Rect2(1484, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hga0y"]
+atlas = ExtResource("2")
+region = Rect2(1696, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81wty"]
+atlas = ExtResource("2")
+region = Rect2(1908, 0, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2u053"]
+atlas = ExtResource("2")
+region = Rect2(0, 558, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oc5pv"]
+atlas = ExtResource("2")
+region = Rect2(212, 558, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66m1f"]
+atlas = ExtResource("2")
+region = Rect2(424, 558, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acptt"]
+atlas = ExtResource("2")
+region = Rect2(636, 558, 212, 558)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eth1i"]
+atlas = ExtResource("2")
+region = Rect2(1060, 558, 212, 558)
+
+[sub_resource type="SpriteFrames" id="BulletFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fysoi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nyuoa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_palti")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npuu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qwd16")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q38p8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hga0y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81wty")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2u053")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oc5pv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_66m1f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acptt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eth1i")
+}],
+"loop": 0,
+"name": &"Role4Bullet2",
+"speed": 24.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpecialFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"empty",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="979"]
+size = Vector2(116, 136)
+
+[sub_resource type="RectangleShape2D" id="1010"]
+size = Vector2(27, 113.945)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_27ep7"]
+size = Vector2(120, 120)
+
+[sub_resource type="Animation" id="Role4Bullet2Animation"]
+length = 0.416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BulletPlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 12]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BulletPlayer:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Role4Bullet2"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BulletPlayer:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BulletPlayer:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BulletPlayer:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BulletPlayer:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 160)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("HitBox/Collion:shape")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.1196),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [SubResource("1010"), SubResource("RectangleShape2D_27ep7")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitBox/Collion:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.1196, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("HitBox/Collion:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.081, 0.1196),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 19.955), Vector2(0, 319.42), Vector2(0, 350.677)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpecialEffect:animation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"empty"]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("BulletPlayers:speed_scale")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="BulletLibrary"]
+_data = {
+&"Role4Bullet2": SubResource("Role4Bullet2Animation")
+}
+
+[node name="RoleBullet" type="Node2D" unique_id=1812535748]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=1619989832]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=71373300]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(1e-05, 1e-05)
+sprite_frames = SubResource("BulletFrames")
+animation = &"Role4Bullet2"
+offset = Vector2(0, -15)
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=1005551156]
+scale = Vector2(1, 1.2)
+sprite_frames = SubResource("SpecialFrames")
+animation = &"empty"
+autoplay = "empty"
+offset = Vector2(-8, 6)
+flip_h = true
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=894175348]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=1930154046]
+position = Vector2(-33, 0)
+shape = SubResource("979")
+disabled = true
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=674043677]
+libraries/ = SubResource("BulletLibrary")
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=1579994959]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

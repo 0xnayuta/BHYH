@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_21.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/1_floor_bg4.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/zld.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/zldfloor.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(5130, 1208)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(614, 1495)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1981.5, 2136.5)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(690.75, 1420)
+
+[node name="Level_21" unique_id=211955961 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1003529558]
+position = Vector2(2025, 940)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1180670324]
+position = Vector2(1409, -225.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=18132385]
+position = Vector2(2907.25, 95.75)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=607461899]
+position = Vector2(601.625, -191)
+shape = SubResource("4")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="1FloorBg4" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=522752224]
+position = Vector2(720, 340)
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=2012905522]
+
+[node name="Zld" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1422392983]
+position = Vector2(970, 289)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="Zldfloor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=332326142]
+position = Vector2(1027, 533)
+texture = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1692, 267)
+metadata/_edit_lock_ = true

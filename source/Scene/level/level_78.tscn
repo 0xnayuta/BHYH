@@ -1,0 +1,127 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_78.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/north_continent_terrain.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/dongtian/bg10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/dongtian/bg30.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_8pcf4"]
+size = Vector2(4999.9917, 89.59015)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_c113h"]
+size = Vector2(4997, 100)
+
+[node name="Level_78" unique_id=305405367 instance=ExtResource("1")]
+position = Vector2(0, 0)
+script = ExtResource("2")
+hidden_original_room = false
+source_map = ""
+display_name = "冻天"
+stage_number = 78
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 4997.0
+background_baked = true
+spawn_position = Vector2(90, 253)
+
+[node name="Monster" parent="." index="2" unique_id=1898751455]
+position = Vector2(0, 0)
+
+[node name="Hero" parent="." index="3" unique_id=913111874]
+position = Vector2(0, 0)
+
+[node name="fall_items" parent="." index="9" unique_id=1160963530]
+position = Vector2(0, 0)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4865.5, 500.75)
+
+[node name="OriginalTerrain" type="Node2D" parent="." index="15" unique_id=1641224584]
+script = ExtResource("3")
+metadata/scene_bindings = {
+"_animation_data": {},
+"_background_copies": [{
+"name": "bg10",
+"sprite": NodePath("Background2")
+}, {
+"name": "bg10",
+"sprite": NodePath("Background3")
+}, {
+"name": "bg10",
+"sprite": NodePath("Background4")
+}, {
+"name": "bg10",
+"sprite": NodePath("Background5")
+}],
+"_backgrounds": {
+"bg10": NodePath("bg10"),
+"bg30": NodePath("FixedBackground6/bg30")
+},
+"_collapsing": [],
+"_first_space_bodies": [NodePath("Ground0")],
+"_hazards": [],
+"_hidden_platforms": [],
+"_moving": [],
+"_portals": [],
+"_source_objects": [],
+"death_region": NodePath("FallDeath/Region")
+}
+
+[node name="Ground0" type="StaticBody2D" parent="OriginalTerrain" index="0" unique_id=1674989007]
+position = Vector2(2487, 556.22253)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@362" type="CollisionShape2D" parent="OriginalTerrain/Ground0" index="0" unique_id=751218592]
+shape = SubResource("terrain_RectangleShape2D_8pcf4")
+one_way_collision = true
+
+[node name="bg10" type="Sprite2D" parent="OriginalTerrain" index="1" unique_id=433696108]
+z_index = -10
+position = Vector2(0, 395)
+texture = ExtResource("4")
+centered = false
+
+[node name="Background2" type="Sprite2D" parent="OriginalTerrain" index="2" unique_id=1560147777]
+z_index = -10
+position = Vector2(997, 395)
+texture = ExtResource("4")
+centered = false
+
+[node name="Background3" type="Sprite2D" parent="OriginalTerrain" index="3" unique_id=593671717]
+z_index = -10
+position = Vector2(1994, 395)
+texture = ExtResource("4")
+centered = false
+
+[node name="Background4" type="Sprite2D" parent="OriginalTerrain" index="4" unique_id=661054789]
+z_index = -10
+position = Vector2(2991, 395)
+texture = ExtResource("4")
+centered = false
+
+[node name="Background5" type="Sprite2D" parent="OriginalTerrain" index="5" unique_id=1741170066]
+z_index = -10
+position = Vector2(3988, 395)
+texture = ExtResource("4")
+centered = false
+
+[node name="FixedBackground6" type="CanvasLayer" parent="OriginalTerrain" index="6" unique_id=1032445481]
+layer = -10
+
+[node name="bg30" type="Sprite2D" parent="OriginalTerrain/FixedBackground6" index="0" unique_id=898417166]
+z_index = -10
+scale = Vector2(0.85714287, 1.2553192)
+texture = ExtResource("5")
+centered = false
+
+[node name="FallDeath" type="Area2D" parent="OriginalTerrain" index="7" unique_id=556009031]
+position = Vector2(2498.5, 750)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/FallDeath" index="0" unique_id=2048298220]
+shape = SubResource("terrain_RectangleShape2D_c113h")

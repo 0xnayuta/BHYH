@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_59.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/af3685bc21e8dd168766a0063f4619463bb8d0b7ef184d9fd8e378eb6a809ca2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/eebfb4e428c66ea7ae67fdb0e6e1ef7e67e144c890bffe552aaaaa8d7b252a73.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/c168c9e057549dc5490dd86d0681dcb29c7d0fc9e3165e1e14a9a3fd412a5621.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/70dcd6c97d9816305bf9a080512ad02c066250b48eb11efbee7cb803d0271f75.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/284ac434a56ce11d515bd6d14629fd9086a4fb7c039bcbe87d2b1b2d9e3b6b27.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/798451bb0ccdeae1fa5372a5abf1e5ede2c9e219aefb222cc032090fec1af190.png" id="8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_fall_death"]
+size = Vector2(4966, 23)
+
+[node name="Level_59" unique_id=554736432 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "wutaishankou_v5"
+display_name = "五台山口"
+stage_number = 59
+background_offset_y = -206.0
+fixed_layers = null
+level_width_override = 4992.0
+background_baked = true
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+disabled = true
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(5052, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="MainSlope" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1364683662]
+polygon = PackedVector2Array(0, 824.2, 64, 831.3, 128, 827.8, 192, 820.2, 256, 810.4, 320, 799, 384, 786.6, 448, 773.2, 512, 759.2, 576, 744.6, 640, 734.2, 704, 723.9, 768, 713.2, 832, 705.9, 896, 704.9, 960, 705, 1024, 705.5, 1088, 703.9, 1152, 699.3, 1216, 692, 1280, 682.5, 1344, 671, 1408, 657.9, 1472, 643.3, 1536, 627.4, 1600, 612.4, 1664, 599.6, 1728, 589, 1792, 580.6, 1856, 574.6, 1920, 570.8, 1984, 569.4, 2048, 570.4, 2112, 573.9, 2176, 574.7, 2240, 569.3, 2304, 559.4, 2368, 546, 2432, 529.8, 2496, 511.5, 2560, 494.5, 2624, 479.9, 2688, 467.8, 2752, 458.4, 2816, 452, 2880, 448.9, 2944, 449.5, 3008, 448.7, 3072, 447.6, 3136, 443.8, 3200, 435.7, 3264, 425.8, 3328, 414.9, 3392, 403.3, 3456, 391.2, 3520, 378.7, 3584, 365.9, 3648, 352.8, 3712, 339.6, 3776, 326.1, 3806.55, 319.6, 3796, 989, 1825, 1001, -1, 989)
+
+[node name="Platform11" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=685311733]
+polygon = PackedVector2Array(1438.113, 802.567, 1646.845, 802.567, 1646.845, 828.651, 1438.113, 828.651)
+
+[node name="Platform12" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=327020997]
+polygon = PackedVector2Array(2252.86, 699.617, 2405.379, 699.617, 2405.379, 725.701, 2252.86, 725.701)
+
+[node name="Platform13" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=750709328]
+polygon = PackedVector2Array(2684.364, 628.617, 2961.101, 628.617, 2961.101, 654.701, 2684.364, 654.701)
+
+[node name="Platform14" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="8" unique_id=736646742]
+polygon = PackedVector2Array(3601.556, 494.667, 3746.022, 494.667, 3746.022, 520.751, 3601.556, 520.751)
+
+[node name="FinalFloor" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="9" unique_id=1901673398]
+polygon = PackedVector2Array(3794.195, 320.7, 5006.855, 320.7, 5006.855, 358.7, 3794.195, 358.7)
+
+[node name="ImportedBackdrop" type="Polygon2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1322006542]
+z_index = -100
+position = Vector2(0, -23)
+color = Color(0.025, 0.035, 0.055, 1)
+polygon = PackedVector2Array(-1000, -1200, 6000, -1200, 6000, 1800, -1000, 1800)
+
+[node name="bg30_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=2123576542]
+position = Vector2(720, 311)
+texture = ExtResource("3")
+
+[node name="bg20_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1473172690]
+position = Vector2(1715, 576)
+texture = ExtResource("4")
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1371055551]
+position = Vector2(2501.5, 690)
+scale = Vector2(1.0036108, 1)
+texture = ExtResource("5")
+
+[node name="bg14_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=76360953]
+position = Vector2(3678.5, 622)
+texture = ExtResource("6")
+
+[node name="bg13_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=1211441457]
+position = Vector2(2823.5, 760.5)
+texture = ExtResource("7")
+
+[node name="bg12_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=888496956]
+position = Vector2(2335.5, 832)
+texture = ExtResource("6")
+
+[node name="bg11_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=1952676733]
+position = Vector2(1542.5, 932.5)
+texture = ExtResource("8")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4853, 236)
+
+[node name="FallDeath" type="Area2D" parent="." index="13" unique_id=1847743962]
+position = Vector2(2454, 1298.5)
+collision_layer = 0
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FallDeath" index="0" unique_id=1037107068]
+position = Vector2(-34, 34.5)
+shape = SubResource("RectangleShape_fall_death")
+
+[connection signal="body_entered" from="FallDeath" to="." method="_on_fall_death_body_entered"]

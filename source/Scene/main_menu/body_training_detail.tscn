@@ -1,0 +1,190 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/body_training_detail.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/lianti/detail_panel.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/lianti/zodiac_1.png" id="3"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
+[ext_resource type="Texture2D" path="res://Art/lianti/3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/lianti/7.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/lianti/5.png" id="7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page"]
+bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page_hover"]
+bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page_selected"]
+bg_color = Color(0.643137, 0.364706, 0.0901961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="BodyTrainingDetail" type="Node2D" unique_id=2003527235]
+script = ExtResource("1")
+
+[node name="InputBlocker" type="ColorRect" parent="." unique_id=1722137581]
+offset_left = -10000.0
+offset_top = -10000.0
+offset_right = 10000.0
+offset_bottom = 10000.0
+color = Color(0, 0, 0, 0)
+
+[node name="DetailPanel" type="Sprite2D" parent="." unique_id=1739270748]
+z_index = 1
+texture_filter = 1
+texture = ExtResource("2")
+
+[node name="DetailIcon" type="Sprite2D" parent="." unique_id=1061755893]
+z_index = 2
+texture_filter = 1
+position = Vector2(-3, -127)
+texture = ExtResource("3")
+
+[node name="DetailLevel" type="Label" parent="." unique_id=950505772]
+z_index = 2
+offset_left = -60.0
+offset_top = -92.0
+offset_right = 60.0
+offset_bottom = -64.0
+theme_override_colors/font_color = Color(1, 0.941176, 0.470588, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailAttribute" type="Label" parent="." unique_id=59039609]
+z_index = 2
+offset_left = -102.0
+offset_top = -45.0
+offset_right = -25.0
+offset_bottom = -17.0
+theme_override_colors/font_color = Color(0.2, 0.12, 0.07, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailAttributeNext" type="Label" parent="." unique_id=463467229]
+z_index = 2
+offset_left = 18.0
+offset_top = -45.0
+offset_right = 95.0
+offset_bottom = -17.0
+theme_override_colors/font_color = Color(0.2, 0.12, 0.07, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailProgress" type="Label" parent="." unique_id=1283074893]
+z_index = 2
+offset_left = 2.0
+offset_top = -9.0
+offset_right = 72.0
+offset_bottom = 19.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailMaterialIcon" type="Sprite2D" parent="." unique_id=1817107405]
+z_index = 2
+texture_filter = 1
+position = Vector2(-1, 70)
+
+[node name="DetailMaterial" type="Label" parent="." unique_id=172582785]
+z_index = 2
+offset_left = -48.0
+offset_top = 92.0
+offset_right = 41.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(1, 0.941176, 0.470588, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" type="TextureButton" parent="." unique_id=1871901019]
+z_index = 3
+offset_left = 169.0
+offset_top = -234.0
+offset_right = 227.0
+offset_bottom = -178.0
+focus_mode = 0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("7")
+
+[node name="TrainButton" type="Button" parent="." unique_id=1668466184]
+z_index = 3
+offset_left = -101.0
+offset_top = 151.0
+offset_right = -6.0
+offset_bottom = 189.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "修炼"
+
+[node name="TrainAllButton" type="Button" parent="." unique_id=1668466185]
+z_index = 3
+offset_left = -1.0
+offset_top = 151.0
+offset_right = 104.0
+offset_bottom = 189.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "一键修炼"
+
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="TrainButton" to="." method="_on_train_button_pressed"]
+[connection signal="pressed" from="TrainAllButton" to="." method="_on_train_all_button_pressed"]

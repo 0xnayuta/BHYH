@@ -1,0 +1,1050 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_56.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/5721bda62d4235875bf270246d3c94af426b1742bc31a5d67a25acef0e328e71.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/806f8258c4c0e3f26774de937d22feba61ee5db9c2f0e6f66dfbcb3538fff190.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/e73af5348cff89cff9be421d70202271c52423ea96527d26f679f40aa7a872ee.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8f1388211abc957d6895fd4364d59210f9c346090eca858c66b2ece3cbbc3f8e.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/46926c19bb51ef8425ee02a9d2a43e9e719cabd8e99783bd08f92788ce32c59c.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/bfee5b4a67e4cccf61cbb3d81d7e1973d6d13f0ef592f9a74da4355e0f768c58.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/fcdfd87c68c14c9eeaa91e53841da6ff709ba7fa3995c95546fcb5cdae8c6d32.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/6ce98a4dbe1bdeb706322669de348a76fc07e642826931f03521b3e19892d7eb.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/8d7077051124b55fe4b090a817d79e0857e0d491c6d571e6be8534dcd418b866.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/ae2a380a6b9e924032edb74a8900c83c77b0aa02f36c207962ec60393535eb1d.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/02655074539ce25df240cbeb64a07cb371e7050dad8ac8616fafa011b68e08fa.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/be31979f6c93ca5b7cb4a0c1b3a944341e003606da15b5df6d4d398d5bb6b57c.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/f9b1b0e637cb45978408c93ffdc973e4d484cca922a15d165826d63507539433.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/2b0253e1edb278a590eb9b39ae6e920a9b2b65089518a29bd8b91a4cc179e89a.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/09381bb3026a5d06ad01750fa86ab8cd026d48c836bd9038e1c5a3357d536e6d.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/356475f3fa3234cd1947e4e9ac8881126faa7fb713b991f9f03c9d486f9897d0.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/94e8fbe4c6dd762ee6adac19d331127f38d05da285c2fe19edec6079fc3428d8.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/c3328baaccf9de6170c3be8131e53b158629e09cabcf4652b179d234a945208a.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/64f72846500dab54947b95d77a218776e18750564d4d78cc8223c30c4a5c5c45.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/e62b912623c9f7b3dc5353a9505e0e9372fc158548b176c671730caec8b62ff0.png" id="22"]
+[ext_resource type="Script" path="res://Script/level/game4_rope_bridge.gd" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/items/emeishandao_rope.png" id="24"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(1299.208, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_2"]
+size = Vector2(613.6452, 41.735565)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_3"]
+size = Vector2(2311.9185, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17")
+}],
+"loop": 1,
+"name": &"play",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_rope_segment"]
+size = Vector2(36, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_fall_death"]
+size = Vector2(2356, 19)
+
+[node name="Level_56" unique_id=2023600328 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "emeishandao"
+display_name = "峨眉山道"
+stage_number = 56
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(625.383, 455.34998)
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(5045, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="floor_2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1592160960]
+position = Vector2(1996.5688, 422.34998)
+shape = SubResource("RectangleShape_floor_2")
+
+[node name="floor_4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=441070743]
+position = Vector2(1402.9999, 442)
+rotation = -0.06391304
+shape = SubResource("RectangleShape_floor_2")
+
+[node name="floor_5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=1005679319]
+position = Vector2(2603.0002, 441)
+rotation = 0.059788138
+shape = SubResource("RectangleShape_floor_2")
+
+[node name="floor_3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=1656570163]
+position = Vector2(3864.3499, 454.34998)
+shape = SubResource("RectangleShape_floor_3")
+
+[node name="ImportedBackdrop" type="Polygon2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1488410429]
+z_index = -100
+position = Vector2(258, -684)
+color = Color(0.025, 0.035, 0.055, 1)
+polygon = PackedVector2Array(-1000, -1200, 2500, -1200, 2500, 2200, -1000, 2200)
+
+[node name="bg30_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=466478783]
+position = Vector2(720, 349)
+texture = ExtResource("3")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
+position = Vector2(0, -196)
+
+[node name="bg31_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="0" unique_id=516080996]
+position = Vector2(413, 622.5)
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" index="1" unique_id=758971210]
+position = Vector2(2492.5, 617.5)
+texture = ExtResource("12")
+
+[node name="bg11_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="2" unique_id=752374434]
+position = Vector2(1399.5, 811.5)
+sprite_frames = SubResource("SpriteFrames_2")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg12_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="3" unique_id=1515733936]
+position = Vector2(2451.5, 811.5)
+sprite_frames = SubResource("SpriteFrames_3")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg13_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="4" unique_id=1079220781]
+position = Vector2(1575.5, 811.5)
+sprite_frames = SubResource("SpriteFrames_4")
+animation = &"play"
+autoplay = "play"
+
+[node name="bg14_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="5" unique_id=2084068838]
+position = Vector2(2593.5, 811.5)
+sprite_frames = SubResource("SpriteFrames_5")
+animation = &"play"
+autoplay = "play"
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4835, 350)
+
+[node name="RopeBridge1" type="StaticBody2D" parent="." index="12" unique_id=1191193559]
+z_index = -1
+position = Vector2(1266, 544)
+collision_mask = 0
+script = ExtResource("23")
+end_offset = Vector2(426, -28)
+segment_count = 13
+segment_size = Vector2(36, 10)
+segment_texture = ExtResource("24")
+visual_offset = Vector2(-1, -112)
+
+[node name="Sprite01" type="Sprite2D" parent="RopeBridge1" index="0" unique_id=1024581528]
+position = Vector2(15.384615, -113.07692)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision01" type="CollisionShape2D" parent="RopeBridge1" index="1" unique_id=236987767]
+position = Vector2(16.384613, -108.076904)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite02" type="Sprite2D" parent="RopeBridge1" index="2" unique_id=984072609]
+position = Vector2(48.153847, -115.23077)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision02" type="CollisionShape2D" parent="RopeBridge1" index="3" unique_id=320584182]
+position = Vector2(49.153847, -110.230774)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite03" type="Sprite2D" parent="RopeBridge1" index="4" unique_id=857534213]
+position = Vector2(80.92308, -117.38461)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision03" type="CollisionShape2D" parent="RopeBridge1" index="5" unique_id=1308017251]
+position = Vector2(81.92308, -112.38461)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite04" type="Sprite2D" parent="RopeBridge1" index="6" unique_id=1537111353]
+position = Vector2(113.69231, -119.53846)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision04" type="CollisionShape2D" parent="RopeBridge1" index="7" unique_id=540988555]
+position = Vector2(114.69231, -114.53845)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite05" type="Sprite2D" parent="RopeBridge1" index="8" unique_id=74429308]
+position = Vector2(146.46153, -121.69231)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision05" type="CollisionShape2D" parent="RopeBridge1" index="9" unique_id=1360690014]
+position = Vector2(147.46153, -116.69232)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite06" type="Sprite2D" parent="RopeBridge1" index="10" unique_id=1764226026]
+position = Vector2(179.23077, -123.84615)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision06" type="CollisionShape2D" parent="RopeBridge1" index="11" unique_id=44489542]
+position = Vector2(180.23077, -118.84616)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite07" type="Sprite2D" parent="RopeBridge1" index="12" unique_id=1675769666]
+position = Vector2(212, -126)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision07" type="CollisionShape2D" parent="RopeBridge1" index="13" unique_id=817153859]
+position = Vector2(213, -121)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite08" type="Sprite2D" parent="RopeBridge1" index="14" unique_id=101937922]
+position = Vector2(244.76923, -128.15384)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision08" type="CollisionShape2D" parent="RopeBridge1" index="15" unique_id=1640325140]
+position = Vector2(245.76923, -123.15384)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite09" type="Sprite2D" parent="RopeBridge1" index="16" unique_id=1006789258]
+position = Vector2(277.53845, -130.3077)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision09" type="CollisionShape2D" parent="RopeBridge1" index="17" unique_id=56911369]
+position = Vector2(278.53845, -125.30768)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite10" type="Sprite2D" parent="RopeBridge1" index="18" unique_id=1424483274]
+position = Vector2(310.30768, -132.46153)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision10" type="CollisionShape2D" parent="RopeBridge1" index="19" unique_id=634342148]
+position = Vector2(311.30768, -127.46155)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite11" type="Sprite2D" parent="RopeBridge1" index="20" unique_id=1403529153]
+position = Vector2(343.07693, -134.61539)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision11" type="CollisionShape2D" parent="RopeBridge1" index="21" unique_id=1367773713]
+position = Vector2(344.0769, -129.61536)
+rotation = -0.065633
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite12" type="Sprite2D" parent="RopeBridge1" index="22" unique_id=1742890231]
+position = Vector2(375.84616, -136.76923)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision12" type="CollisionShape2D" parent="RopeBridge1" index="23" unique_id=1628309204]
+position = Vector2(376.8462, -131.76923)
+rotation = -0.065633
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite13" type="Sprite2D" parent="RopeBridge1" index="24" unique_id=1146871168]
+position = Vector2(408.6154, -138.92308)
+rotation = -0.065633
+texture = ExtResource("24")
+
+[node name="Collision13" type="CollisionShape2D" parent="RopeBridge1" index="25" unique_id=604172894]
+position = Vector2(409.6154, -133.9231)
+rotation = -0.065633
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="RopeBridge2" type="StaticBody2D" parent="." index="13" unique_id=931096877]
+z_index = -1
+position = Vector2(2295, 514)
+collision_mask = 0
+script = ExtResource("23")
+end_offset = Vector2(421, 26)
+segment_count = 14
+segment_size = Vector2(36, 10)
+segment_texture = ExtResource("24")
+visual_offset = Vector2(-1, -112)
+
+[node name="Sprite01" type="Sprite2D" parent="RopeBridge2" index="0" unique_id=2012165417]
+position = Vector2(14.035714, -111.07143)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision01" type="CollisionShape2D" parent="RopeBridge2" index="1" unique_id=1707628360]
+position = Vector2(15.035714, -107.07143)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite02" type="Sprite2D" parent="RopeBridge2" index="2" unique_id=1307969682]
+position = Vector2(44.107143, -109.21429)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision02" type="CollisionShape2D" parent="RopeBridge2" index="3" unique_id=1300051050]
+position = Vector2(45.107143, -105.21429)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite03" type="Sprite2D" parent="RopeBridge2" index="4" unique_id=312758708]
+position = Vector2(74.17857, -107.35714)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision03" type="CollisionShape2D" parent="RopeBridge2" index="5" unique_id=607376439]
+position = Vector2(75.17857, -103.35715)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite04" type="Sprite2D" parent="RopeBridge2" index="6" unique_id=661720755]
+position = Vector2(104.25, -105.5)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision04" type="CollisionShape2D" parent="RopeBridge2" index="7" unique_id=1292312811]
+position = Vector2(105.25, -101.5)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite05" type="Sprite2D" parent="RopeBridge2" index="8" unique_id=20395943]
+position = Vector2(134.32143, -103.64286)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision05" type="CollisionShape2D" parent="RopeBridge2" index="9" unique_id=1863400952]
+position = Vector2(135.32143, -99.64285)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite06" type="Sprite2D" parent="RopeBridge2" index="10" unique_id=161992037]
+position = Vector2(164.39285, -101.78571)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision06" type="CollisionShape2D" parent="RopeBridge2" index="11" unique_id=358605670]
+position = Vector2(165.39285, -97.78571)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite07" type="Sprite2D" parent="RopeBridge2" index="12" unique_id=361565736]
+position = Vector2(194.46428, -99.92857)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision07" type="CollisionShape2D" parent="RopeBridge2" index="13" unique_id=436646714]
+position = Vector2(195.46428, -95.92857)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite08" type="Sprite2D" parent="RopeBridge2" index="14" unique_id=1567206236]
+position = Vector2(224.53572, -98.07143)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision08" type="CollisionShape2D" parent="RopeBridge2" index="15" unique_id=1326589008]
+position = Vector2(225.53572, -94.07143)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite09" type="Sprite2D" parent="RopeBridge2" index="16" unique_id=943081533]
+position = Vector2(254.60715, -96.21429)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision09" type="CollisionShape2D" parent="RopeBridge2" index="17" unique_id=668734116]
+position = Vector2(255.60715, -92.21429)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite10" type="Sprite2D" parent="RopeBridge2" index="18" unique_id=77759478]
+position = Vector2(284.67856, -94.35714)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision10" type="CollisionShape2D" parent="RopeBridge2" index="19" unique_id=1442933236]
+position = Vector2(285.67856, -90.35715)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite11" type="Sprite2D" parent="RopeBridge2" index="20" unique_id=1701177726]
+position = Vector2(314.75, -92.5)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision11" type="CollisionShape2D" parent="RopeBridge2" index="21" unique_id=1355257954]
+position = Vector2(315.75, -88.5)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite12" type="Sprite2D" parent="RopeBridge2" index="22" unique_id=1155931361]
+position = Vector2(344.82144, -90.64286)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision12" type="CollisionShape2D" parent="RopeBridge2" index="23" unique_id=742843509]
+position = Vector2(345.82144, -86.64285)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite13" type="Sprite2D" parent="RopeBridge2" index="24" unique_id=1010161497]
+position = Vector2(374.89285, -88.78571)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision13" type="CollisionShape2D" parent="RopeBridge2" index="25" unique_id=376570436]
+position = Vector2(375.89285, -84.78571)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="Sprite14" type="Sprite2D" parent="RopeBridge2" index="26" unique_id=92010837]
+position = Vector2(404.9643, -86.92857)
+rotation = 0.061679
+texture = ExtResource("24")
+
+[node name="Collision14" type="CollisionShape2D" parent="RopeBridge2" index="27" unique_id=1939458671]
+position = Vector2(405.9643, -82.92857)
+rotation = 0.061679
+shape = SubResource("RectangleShape_rope_segment")
+
+[node name="FallDeath" type="Area2D" parent="." index="14" unique_id=51076990]
+position = Vector2(2121, 658.5)
+collision_layer = 0
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FallDeath" index="0" unique_id=1085924519]
+shape = SubResource("RectangleShape_fall_death")
+
+[connection signal="body_entered" from="FallDeath" to="." method="_on_fall_death_body_entered"]

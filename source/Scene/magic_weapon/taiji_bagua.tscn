@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/magic_weapon/taiji_bagua.gd" id="2"]
+
+[node name="TaijiBagua" instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="HitBox" parent="HitBox" index="0"]
+disabled = true

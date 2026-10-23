@@ -1,0 +1,423 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_2/role2_skill_lxyz.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_2/role2_skill_lxyz3.png" id="3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrvtx"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_byhjs"]
+atlas = ExtResource("2")
+region = Rect2(871, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_770ca"]
+atlas = ExtResource("2")
+region = Rect2(1742, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erbdb"]
+atlas = ExtResource("2")
+region = Rect2(2613, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f85gc"]
+atlas = ExtResource("2")
+region = Rect2(3484, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ju7t"]
+atlas = ExtResource("2")
+region = Rect2(4355, 0, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n022f"]
+atlas = ExtResource("2")
+region = Rect2(0, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhet3"]
+atlas = ExtResource("2")
+region = Rect2(871, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erldr"]
+atlas = ExtResource("2")
+region = Rect2(1742, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjgm6"]
+atlas = ExtResource("2")
+region = Rect2(2613, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7avmc"]
+atlas = ExtResource("2")
+region = Rect2(3484, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nunwc"]
+atlas = ExtResource("2")
+region = Rect2(4355, 210, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1nsa"]
+atlas = ExtResource("2")
+region = Rect2(0, 420, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43owo"]
+atlas = ExtResource("2")
+region = Rect2(871, 420, 871, 210)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgb1u"]
+atlas = ExtResource("2")
+region = Rect2(1742, 420, 871, 210)
+
+[sub_resource type="SpriteFrames" id="BulletFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrvtx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byhjs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_770ca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_erbdb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f85gc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ju7t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n022f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhet3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_erldr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjgm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7avmc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nunwc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1nsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43owo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgb1u")
+}],
+"loop": 0,
+"name": &"Role2Bullet7",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3onp"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqu5a"]
+atlas = ExtResource("3")
+region = Rect2(210, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6vx8f"]
+atlas = ExtResource("3")
+region = Rect2(420, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agg8b"]
+atlas = ExtResource("3")
+region = Rect2(630, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkuhk"]
+atlas = ExtResource("3")
+region = Rect2(840, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4fit"]
+atlas = ExtResource("3")
+region = Rect2(1050, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1c5h"]
+atlas = ExtResource("3")
+region = Rect2(1260, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ih1rd"]
+atlas = ExtResource("3")
+region = Rect2(1470, 0, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7axka"]
+atlas = ExtResource("3")
+region = Rect2(0, 220, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arwt8"]
+atlas = ExtResource("3")
+region = Rect2(210, 220, 210, 220)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xso7f"]
+atlas = ExtResource("3")
+region = Rect2(420, 220, 210, 220)
+
+[sub_resource type="SpriteFrames" id="SpecialFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3onp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqu5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6vx8f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agg8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkuhk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e4fit")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1c5h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ih1rd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7axka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arwt8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xso7f")
+}],
+"loop": 0,
+"name": &"Role2Bullet7",
+"speed": 30.0
+}]
+
+[sub_resource type="RectangleShape2D" id="979"]
+size = Vector2(116, 136)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c7djd"]
+size = Vector2(850, 135)
+
+[sub_resource type="Animation" id="Role2Bullet7Animation"]
+length = 1.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BulletPlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.1, 1.3000001),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0, 0, 1, 15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BulletPlayer:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Role2Bullet7"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BulletPlayer:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BulletPlayer:offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-450, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BulletPlayer:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BulletPlayer:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BulletPlayers:speed_scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitBox/Collion:shape")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_c7djd")]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("HitBox/Collion:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-450, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("HitBox/Collion:disabled")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("..")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(1.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"free"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpecialEffect")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [&"Role2Bullet7", 1.0, false],
+"method": &"play"
+}, {
+"args": [&"empty", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpecialEffect:offset")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-50, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="BulletLibrary"]
+_data = {
+&"Role2Bullet7": SubResource("Role2Bullet7Animation")
+}
+
+[node name="RoleBullet" type="Node2D" unique_id=1226565282]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=1305670100]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=934410619]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(1e-05, 1e-05)
+sprite_frames = SubResource("BulletFrames")
+animation = &"Role2Bullet7"
+offset = Vector2(0, -15)
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=2000905384]
+scale = Vector2(1, 1.2)
+sprite_frames = SubResource("SpecialFrames")
+animation = &"Role2Bullet7"
+autoplay = "Role2Bullet7"
+offset = Vector2(-8, 6)
+flip_h = true
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=51051726]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=1521354688]
+position = Vector2(-33, 0)
+shape = SubResource("979")
+disabled = true
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=616029164]
+libraries/ = SubResource("BulletLibrary")
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=2039079241]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

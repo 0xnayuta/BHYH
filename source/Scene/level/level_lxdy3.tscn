@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_lxdy3.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/tswbg.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1992, 832)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1193, 1663)
+
+[node name="Level_lxdy3" unique_id=1506307552 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=92794698]
+position = Vector2(645, 810)
+shape = SubResource("1")
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=496604186]
+position = Vector2(1664.5, 41.5)
+shape = SubResource("2")
+
+[node name="Tzhylevel" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=820337926]
+position = Vector2(534.738, 289)
+scale = Vector2(1.07348, 1.01356)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=409083432]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(733, 317)

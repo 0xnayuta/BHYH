@@ -1,0 +1,1479 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_84.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/north_continent_terrain.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_a.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_b.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_c.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_d.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_e.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_f.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_g.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg11_h.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_b.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_d.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_e.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_f.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_g.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg12_h.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg13_a.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg13_b.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg13_c.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg13_e.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg13_f.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg14_a.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg14_b.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg14_c.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg14_d.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg15.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/suiyunjian_v3/bg30.png" id="28"]
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_rdp24"]
+size = Vector2(1175.2296, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_es0e8"]
+size = Vector2(81.51721, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_iadg5"]
+size = Vector2(537.96857, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_2k3cf"]
+size = Vector2(361.93515, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_3h7ik"]
+size = Vector2(361.93515, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_y6wss"]
+size = Vector2(361.93515, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_dcu6d"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_g532y"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_bn88e"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_l1jq1"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_5kgcn"]
+size = Vector2(178.04472, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_1f25p"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_n41b3"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_wakjd"]
+size = Vector2(187.9487, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_oyeff"]
+size = Vector2(93.902985, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_767ef"]
+size = Vector2(93.902985, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_epfsv"]
+size = Vector2(93.902985, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_8rp22"]
+size = Vector2(93.902985, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_l6tjl"]
+size = Vector2(93.902985, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_8gals"]
+size = Vector2(52, 208)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_h50v8"]
+size = Vector2(52, 208)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_dhjfr"]
+size = Vector2(52, 176)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_ojut6"]
+size = Vector2(52, 176)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_nncbp"]
+size = Vector2(52, 169)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_2ir4b"]
+size = Vector2(52, 169)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_r1h36"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_xibj8"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_cu2gh"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_tgh6a"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_pq2a3"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_eoh6v"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_x0myc"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_exiht"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_u602a"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_7c8bq"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_h4puh"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_qfqpi"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_xlehl"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_u7lrn"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_2kpoa"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_pddnv"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_k4bco"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_xmmsv"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_n7avf"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_1kar6"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_2c3xv"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_s6q7i"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_hw834"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_mjjxo"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_w44a5"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_8y1mh"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_ln6bq"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_y6oqr"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_lbbel"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_0vpob"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_da34p"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_l4waf"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_ctl8t"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_22d1x"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_q0a4h"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_wheoi"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_h4ifq"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_fy4te"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_wme8d"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_55hky"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_gqja8"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_t00a3"]
+size = Vector2(52, 156)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_vqaku"]
+size = Vector2(596, 617)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_d4l6h"]
+size = Vector2(1175, 605)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_bubon"]
+size = Vector2(4997, 100)
+
+[node name="Level_84" unique_id=187458463 instance=ExtResource("1")]
+position = Vector2(0, 0)
+script = ExtResource("2")
+hidden_original_room = false
+source_map = ""
+display_name = "钟晷极地"
+stage_number = 84
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 4997.0
+background_baked = true
+spawn_position = Vector2(90, 260)
+
+[node name="Monster" parent="." index="2" unique_id=1898751455]
+position = Vector2(0, 0)
+
+[node name="Hero" parent="." index="3" unique_id=913111874]
+position = Vector2(0, 0)
+
+[node name="fall_items" parent="." index="9" unique_id=1160963530]
+position = Vector2(0, 0)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4527.5, 500)
+
+[node name="OriginalTerrain" type="Node2D" parent="." index="15" unique_id=1445754541]
+script = ExtResource("3")
+metadata/scene_bindings = {
+"_animation_data": {},
+"_background_copies": [],
+"_backgrounds": {
+"bg11A": NodePath("bg11A"),
+"bg11B": NodePath("bg11B"),
+"bg11C": NodePath("bg11C"),
+"bg11D": NodePath("bg11D"),
+"bg11E": NodePath("bg11E"),
+"bg11F": NodePath("bg11F"),
+"bg11G": NodePath("bg11G"),
+"bg11H": NodePath("bg11H"),
+"bg12B": NodePath("bg12B"),
+"bg12D": NodePath("bg12D"),
+"bg12E": NodePath("bg12E"),
+"bg12F": NodePath("bg12F"),
+"bg12G": NodePath("bg12G"),
+"bg12H": NodePath("bg12H"),
+"bg13A": NodePath("bg13A"),
+"bg13B": NodePath("bg13B"),
+"bg13C": NodePath("bg13C"),
+"bg13E": NodePath("bg13E"),
+"bg13F": NodePath("bg13F"),
+"bg14A": NodePath("bg14A"),
+"bg14B": NodePath("bg14B"),
+"bg14C": NodePath("bg14C"),
+"bg14D": NodePath("bg14D"),
+"bg15": NodePath("bg15"),
+"bg30": NodePath("FixedBackground43/bg30")
+},
+"_collapsing": [],
+"_darkness": NodePath("@CanvasModulate@615"),
+"_first_space_bodies": [NodePath("Ground0"), NodePath("Ground1"), NodePath("Ground2"), NodePath("Ground3"), NodePath("Ground4"), NodePath("Ground5"), NodePath("Ground6"), NodePath("Ground7"), NodePath("Ground8"), NodePath("Ground9"), NodePath("Ground10"), NodePath("Ground11"), NodePath("Ground12"), NodePath("Ground13"), NodePath("Ground14"), NodePath("Ground15"), NodePath("Ground16"), NodePath("Ground17"), NodePath("Ground18")],
+"_hazards": [],
+"_hidden_platforms": [],
+"_moving": [],
+"_portals": [],
+"_source_objects": [{
+"active": false,
+"body": NodePath("NorthObject52"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(497, 328, 52, 208),
+"region": NodePath("NorthObject52/ObjectRegion0/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject53"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(608, 213, 52, 176),
+"region": NodePath("NorthObject53/ObjectRegion1/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject54"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(950, 219, 52, 169),
+"region": NodePath("NorthObject54/ObjectRegion2/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject55"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1006, 92, 52, 156),
+"region": NodePath("NorthObject55/ObjectRegion3/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject57"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1148, 92, 52, 156),
+"region": NodePath("NorthObject57/ObjectRegion4/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject58"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1234, 211, 52, 156),
+"region": NodePath("NorthObject58/ObjectRegion5/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject59"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1391, 216, 52, 156),
+"region": NodePath("NorthObject59/ObjectRegion6/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject60"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1572, 279, 52, 156),
+"region": NodePath("NorthObject60/ObjectRegion7/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject61"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1602, 39, 52, 156),
+"region": NodePath("NorthObject61/ObjectRegion8/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject62"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1761, 42, 52, 156),
+"region": NodePath("NorthObject62/ObjectRegion9/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject63"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1911, 277, 52, 156),
+"region": NodePath("NorthObject63/ObjectRegion10/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject64"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(1979, 237, 52, 156),
+"region": NodePath("NorthObject64/ObjectRegion11/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject65"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2162, 240, 52, 156),
+"region": NodePath("NorthObject65/ObjectRegion12/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject66"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2208, 327, 52, 156),
+"region": NodePath("NorthObject66/ObjectRegion13/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject67"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2384, 331, 52, 156),
+"region": NodePath("NorthObject67/ObjectRegion14/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject68"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2364, 119, 52, 156),
+"region": NodePath("NorthObject68/ObjectRegion15/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject69"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2532, 122, 52, 156),
+"region": NodePath("NorthObject69/ObjectRegion16/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject70"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(2767, 152, 52, 156),
+"region": NodePath("NorthObject70/ObjectRegion17/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject71"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3120, 150, 52, 156),
+"region": NodePath("NorthObject71/ObjectRegion18/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject72"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3318, 174, 52, 156),
+"region": NodePath("NorthObject72/ObjectRegion19/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject73"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3502, 181, 52, 156),
+"region": NodePath("NorthObject73/ObjectRegion20/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject74"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3595, 90, 52, 156),
+"region": NodePath("NorthObject74/ObjectRegion21/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject75"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3767, 90, 52, 156),
+"region": NodePath("NorthObject75/ObjectRegion22/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"body": NodePath("NorthObject76"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"campId": "0",
+"groupType": "edge",
+"scaleX": "1",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(3802, 375, 52, 156),
+"region": NodePath("NorthObject76/ObjectRegion23/Region"),
+"sprite": null,
+"type": "Trigger"
+}, {
+"active": false,
+"properties": {
+"deletedAtTriggerAfter": "1",
+"triggerJi": "ji3"
+},
+"rect": Rect2(4711.32, -11.85, 596, 617),
+"region": NodePath("ObjectRegion24/Region"),
+"type": "JITrigger"
+}, {
+"active": false,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"createBodyAtInit": "0",
+"ctype": "viewers.entitys.others.TransferEntity",
+"deletedAtTriggerAfter": "0",
+"pos": "4100,485",
+"triggerID": "230"
+},
+"rect": Rect2(2600, -5.15, 1175, 605),
+"region": NodePath("ObjectRegion25/Region"),
+"type": "JITrigger"
+}],
+"death_region": NodePath("FallDeath/Region")
+}
+
+[node name="Ground0" type="StaticBody2D" parent="OriginalTerrain" index="0" unique_id=80433207]
+position = Vector2(4418.25, 533.4)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@528" type="CollisionShape2D" parent="OriginalTerrain/Ground0" index="0" unique_id=1160375309]
+shape = SubResource("terrain_RectangleShape2D_rdp24")
+one_way_collision = true
+
+[node name="Ground1" type="StaticBody2D" parent="OriginalTerrain" index="1" unique_id=612701976]
+position = Vector2(1619.3999, 495.4)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@530" type="CollisionShape2D" parent="OriginalTerrain/Ground1" index="0" unique_id=124771923]
+shape = SubResource("terrain_RectangleShape2D_es0e8")
+one_way_collision = true
+
+[node name="Ground2" type="StaticBody2D" parent="OriginalTerrain" index="2" unique_id=494776322]
+position = Vector2(268.00558, 517.3)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@532" type="CollisionShape2D" parent="OriginalTerrain/Ground2" index="0" unique_id=536060041]
+shape = SubResource("terrain_RectangleShape2D_iadg5")
+one_way_collision = true
+
+[node name="Ground3" type="StaticBody2D" parent="OriginalTerrain" index="3" unique_id=2028906177]
+position = Vector2(806.50037, 371.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@534" type="CollisionShape2D" parent="OriginalTerrain/Ground3" index="0" unique_id=1505251415]
+shape = SubResource("terrain_RectangleShape2D_2k3cf")
+one_way_collision = true
+
+[node name="Ground4" type="StaticBody2D" parent="OriginalTerrain" index="4" unique_id=645009562]
+position = Vector2(1762.4003, 421.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@536" type="CollisionShape2D" parent="OriginalTerrain/Ground4" index="0" unique_id=357140091]
+shape = SubResource("terrain_RectangleShape2D_3h7ik")
+one_way_collision = true
+
+[node name="Ground5" type="StaticBody2D" parent="OriginalTerrain" index="5" unique_id=1948730313]
+position = Vector2(2973.3503, 295.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@538" type="CollisionShape2D" parent="OriginalTerrain/Ground5" index="0" unique_id=1817158714]
+shape = SubResource("terrain_RectangleShape2D_y6wss")
+one_way_collision = true
+
+[node name="Ground6" type="StaticBody2D" parent="OriginalTerrain" index="6" unique_id=1813391845]
+position = Vector2(1101.376, 245.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@540" type="CollisionShape2D" parent="OriginalTerrain/Ground6" index="0" unique_id=432520778]
+shape = SubResource("terrain_RectangleShape2D_dcu6d")
+one_way_collision = true
+
+[node name="Ground7" type="StaticBody2D" parent="OriginalTerrain" index="7" unique_id=2036216002]
+position = Vector2(1331.4761, 360.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@542" type="CollisionShape2D" parent="OriginalTerrain/Ground7" index="0" unique_id=98371094]
+shape = SubResource("terrain_RectangleShape2D_g532y")
+one_way_collision = true
+
+[node name="Ground8" type="StaticBody2D" parent="OriginalTerrain" index="8" unique_id=2112238906]
+position = Vector2(1704.426, 185.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@544" type="CollisionShape2D" parent="OriginalTerrain/Ground8" index="0" unique_id=1533730825]
+shape = SubResource("terrain_RectangleShape2D_bn88e")
+one_way_collision = true
+
+[node name="Ground9" type="StaticBody2D" parent="OriginalTerrain" index="9" unique_id=1730988245]
+position = Vector2(2320.426, 475.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@546" type="CollisionShape2D" parent="OriginalTerrain/Ground9" index="0" unique_id=1724656095]
+shape = SubResource("terrain_RectangleShape2D_l1jq1")
+one_way_collision = true
+
+[node name="Ground10" type="StaticBody2D" parent="OriginalTerrain" index="10" unique_id=1357781689]
+position = Vector2(2467.3347, 268.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@548" type="CollisionShape2D" parent="OriginalTerrain/Ground10" index="0" unique_id=1750285104]
+shape = SubResource("terrain_RectangleShape2D_5kgcn")
+one_way_collision = true
+
+[node name="Ground11" type="StaticBody2D" parent="OriginalTerrain" index="11" unique_id=776912947]
+position = Vector2(2096.426, 391.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@550" type="CollisionShape2D" parent="OriginalTerrain/Ground11" index="0" unique_id=1714748297]
+shape = SubResource("terrain_RectangleShape2D_1f25p")
+one_way_collision = true
+
+[node name="Ground12" type="StaticBody2D" parent="OriginalTerrain" index="12" unique_id=648335745]
+position = Vector2(3428.2761, 322.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@552" type="CollisionShape2D" parent="OriginalTerrain/Ground12" index="0" unique_id=669399988]
+shape = SubResource("terrain_RectangleShape2D_n41b3")
+one_way_collision = true
+
+[node name="Ground13" type="StaticBody2D" parent="OriginalTerrain" index="13" unique_id=1025054260]
+position = Vector2(3702.326, 235.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@554" type="CollisionShape2D" parent="OriginalTerrain/Ground13" index="0" unique_id=95840339]
+shape = SubResource("terrain_RectangleShape2D_wakjd")
+one_way_collision = true
+
+[node name="Ground14" type="StaticBody2D" parent="OriginalTerrain" index="14" unique_id=471453485]
+position = Vector2(3556.31, 469.3)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@556" type="CollisionShape2D" parent="OriginalTerrain/Ground14" index="0" unique_id=970481374]
+shape = SubResource("terrain_RectangleShape2D_oyeff")
+one_way_collision = true
+
+[node name="Ground15" type="StaticBody2D" parent="OriginalTerrain" index="15" unique_id=1808724724]
+position = Vector2(3255.31, 475.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@558" type="CollisionShape2D" parent="OriginalTerrain/Ground15" index="0" unique_id=1924048804]
+shape = SubResource("terrain_RectangleShape2D_767ef")
+one_way_collision = true
+
+[node name="Ground16" type="StaticBody2D" parent="OriginalTerrain" index="16" unique_id=1918705577]
+position = Vector2(2734.36, 391.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@560" type="CollisionShape2D" parent="OriginalTerrain/Ground16" index="0" unique_id=1452812857]
+shape = SubResource("terrain_RectangleShape2D_epfsv")
+one_way_collision = true
+
+[node name="Ground17" type="StaticBody2D" parent="OriginalTerrain" index="17" unique_id=1574468783]
+position = Vector2(2619.36, 444.9)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@562" type="CollisionShape2D" parent="OriginalTerrain/Ground17" index="0" unique_id=308192052]
+shape = SubResource("terrain_RectangleShape2D_8rp22")
+one_way_collision = true
+
+[node name="Ground18" type="StaticBody2D" parent="OriginalTerrain" index="18" unique_id=1709432136]
+position = Vector2(1527.4103, 280.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@564" type="CollisionShape2D" parent="OriginalTerrain/Ground18" index="0" unique_id=1928352723]
+shape = SubResource("terrain_RectangleShape2D_l6tjl")
+one_way_collision = true
+
+[node name="bg11A" type="Sprite2D" parent="OriginalTerrain" index="19" unique_id=1555786971]
+z_index = -10
+position = Vector2(-4, 484.9)
+texture = ExtResource("4")
+centered = false
+
+[node name="bg11B" type="Sprite2D" parent="OriginalTerrain" index="20" unique_id=1584884214]
+z_index = -10
+position = Vector2(84.5, 486.8)
+texture = ExtResource("5")
+centered = false
+
+[node name="bg11C" type="Sprite2D" parent="OriginalTerrain" index="21" unique_id=1534637758]
+z_index = -10
+position = Vector2(176.75, 486.8)
+texture = ExtResource("6")
+centered = false
+
+[node name="bg11D" type="Sprite2D" parent="OriginalTerrain" index="22" unique_id=381448280]
+z_index = -10
+position = Vector2(262.1, 486.8)
+texture = ExtResource("7")
+centered = false
+
+[node name="bg11E" type="Sprite2D" parent="OriginalTerrain" index="23" unique_id=1503798360]
+z_index = -10
+position = Vector2(350.6, 486.8)
+texture = ExtResource("8")
+centered = false
+
+[node name="bg11F" type="Sprite2D" parent="OriginalTerrain" index="24" unique_id=653200471]
+z_index = -10
+position = Vector2(442.85, 488.7)
+texture = ExtResource("9")
+centered = false
+
+[node name="bg11G" type="Sprite2D" parent="OriginalTerrain" index="25" unique_id=1922107579]
+z_index = -10
+position = Vector2(617.35, 332.9)
+texture = ExtResource("10")
+centered = false
+
+[node name="bg11H" type="Sprite2D" parent="OriginalTerrain" index="26" unique_id=851651525]
+z_index = -10
+position = Vector2(1000.35, 210.85)
+texture = ExtResource("11")
+centered = false
+
+[node name="bg12B" type="Sprite2D" parent="OriginalTerrain" index="27" unique_id=1687920694]
+z_index = -10
+position = Vector2(1235.75, 325.3)
+texture = ExtResource("12")
+centered = false
+
+[node name="bg12D" type="Sprite2D" parent="OriginalTerrain" index="28" unique_id=1770454320]
+z_index = -10
+position = Vector2(1480.9, 250.85)
+texture = ExtResource("13")
+centered = false
+
+[node name="bg12E" type="Sprite2D" parent="OriginalTerrain" index="29" unique_id=423682621]
+z_index = -10
+position = Vector2(1610.75, 150.35)
+texture = ExtResource("14")
+centered = false
+
+[node name="bg12F" type="Sprite2D" parent="OriginalTerrain" index="30" unique_id=1561185023]
+z_index = -10
+position = Vector2(1570.9, 380.8)
+texture = ExtResource("15")
+centered = false
+
+[node name="bg12G" type="Sprite2D" parent="OriginalTerrain" index="31" unique_id=938177450]
+z_index = -10
+position = Vector2(1994.9, 360.4)
+texture = ExtResource("16")
+centered = false
+
+[node name="bg12H" type="Sprite2D" parent="OriginalTerrain" index="32" unique_id=112209485]
+z_index = -10
+position = Vector2(2086.9, 360.4)
+texture = ExtResource("17")
+centered = false
+
+[node name="bg13A" type="Sprite2D" parent="OriginalTerrain" index="33" unique_id=800849373]
+z_index = -10
+position = Vector2(2221.85, 440)
+texture = ExtResource("18")
+centered = false
+
+[node name="bg13B" type="Sprite2D" parent="OriginalTerrain" index="34" unique_id=1742904317]
+z_index = -10
+position = Vector2(2364.85, 233.35)
+texture = ExtResource("19")
+centered = false
+
+[node name="bg13C" type="Sprite2D" parent="OriginalTerrain" index="35" unique_id=1843525017]
+z_index = -10
+position = Vector2(2575.2, 414.9)
+texture = ExtResource("20")
+centered = false
+
+[node name="bg13E" type="Sprite2D" parent="OriginalTerrain" index="36" unique_id=1998952647]
+z_index = -10
+position = Vector2(2683, 363.4)
+texture = ExtResource("21")
+centered = false
+
+[node name="bg13F" type="Sprite2D" parent="OriginalTerrain" index="37" unique_id=1167360237]
+z_index = -10
+position = Vector2(2773, 254.35)
+texture = ExtResource("22")
+centered = false
+
+[node name="bg14A" type="Sprite2D" parent="OriginalTerrain" index="38" unique_id=347626539]
+z_index = -10
+position = Vector2(3201.3, 442.3)
+texture = ExtResource("23")
+centered = false
+
+[node name="bg14B" type="Sprite2D" parent="OriginalTerrain" index="39" unique_id=2142652197]
+z_index = -10
+position = Vector2(3331.65, 289.85)
+texture = ExtResource("24")
+centered = false
+
+[node name="bg14C" type="Sprite2D" parent="OriginalTerrain" index="40" unique_id=1498155785]
+z_index = -10
+position = Vector2(3504.8, 441.8)
+texture = ExtResource("25")
+centered = false
+
+[node name="bg14D" type="Sprite2D" parent="OriginalTerrain" index="41" unique_id=424308016]
+z_index = -10
+position = Vector2(3598.8, 201.85)
+texture = ExtResource("26")
+centered = false
+
+[node name="bg15" type="Sprite2D" parent="OriginalTerrain" index="42" unique_id=1372736511]
+z_index = -10
+position = Vector2(3837, 486.8)
+texture = ExtResource("27")
+centered = false
+
+[node name="FixedBackground43" type="CanvasLayer" parent="OriginalTerrain" index="43" unique_id=1533032223]
+layer = -10
+
+[node name="bg30" type="Sprite2D" parent="OriginalTerrain/FixedBackground43" index="0" unique_id=271624942]
+z_index = -10
+scale = Vector2(0.85714287, 1.2553192)
+texture = ExtResource("28")
+centered = false
+
+[node name="NorthObject52" type="StaticBody2D" parent="OriginalTerrain" index="44" unique_id=960307639]
+position = Vector2(523, 432)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@591" type="CollisionShape2D" parent="OriginalTerrain/NorthObject52" index="0" unique_id=770228014]
+shape = SubResource("terrain_RectangleShape2D_8gals")
+
+[node name="ObjectRegion0" type="Area2D" parent="OriginalTerrain/NorthObject52" index="1" unique_id=1780126197]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject52/ObjectRegion0" index="0" unique_id=118559364]
+shape = SubResource("terrain_RectangleShape2D_h50v8")
+
+[node name="NorthObject53" type="StaticBody2D" parent="OriginalTerrain" index="45" unique_id=1365654815]
+position = Vector2(634, 301)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@592" type="CollisionShape2D" parent="OriginalTerrain/NorthObject53" index="0" unique_id=552070502]
+shape = SubResource("terrain_RectangleShape2D_dhjfr")
+
+[node name="ObjectRegion1" type="Area2D" parent="OriginalTerrain/NorthObject53" index="1" unique_id=1487925222]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject53/ObjectRegion1" index="0" unique_id=1203977309]
+shape = SubResource("terrain_RectangleShape2D_ojut6")
+
+[node name="NorthObject54" type="StaticBody2D" parent="OriginalTerrain" index="46" unique_id=324338311]
+position = Vector2(976, 303.5)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@593" type="CollisionShape2D" parent="OriginalTerrain/NorthObject54" index="0" unique_id=1665819123]
+shape = SubResource("terrain_RectangleShape2D_nncbp")
+
+[node name="ObjectRegion2" type="Area2D" parent="OriginalTerrain/NorthObject54" index="1" unique_id=928361068]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject54/ObjectRegion2" index="0" unique_id=410662926]
+shape = SubResource("terrain_RectangleShape2D_2ir4b")
+
+[node name="NorthObject55" type="StaticBody2D" parent="OriginalTerrain" index="47" unique_id=1580783119]
+position = Vector2(1032, 170)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@594" type="CollisionShape2D" parent="OriginalTerrain/NorthObject55" index="0" unique_id=868855126]
+shape = SubResource("terrain_RectangleShape2D_r1h36")
+
+[node name="ObjectRegion3" type="Area2D" parent="OriginalTerrain/NorthObject55" index="1" unique_id=1133984748]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject55/ObjectRegion3" index="0" unique_id=1627297098]
+shape = SubResource("terrain_RectangleShape2D_xibj8")
+
+[node name="NorthObject57" type="StaticBody2D" parent="OriginalTerrain" index="48" unique_id=835070470]
+position = Vector2(1174, 170)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@595" type="CollisionShape2D" parent="OriginalTerrain/NorthObject57" index="0" unique_id=178576600]
+shape = SubResource("terrain_RectangleShape2D_cu2gh")
+
+[node name="ObjectRegion4" type="Area2D" parent="OriginalTerrain/NorthObject57" index="1" unique_id=188895239]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject57/ObjectRegion4" index="0" unique_id=2084108781]
+shape = SubResource("terrain_RectangleShape2D_tgh6a")
+
+[node name="NorthObject58" type="StaticBody2D" parent="OriginalTerrain" index="49" unique_id=1611243774]
+position = Vector2(1260, 289)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@596" type="CollisionShape2D" parent="OriginalTerrain/NorthObject58" index="0" unique_id=1046430239]
+shape = SubResource("terrain_RectangleShape2D_pq2a3")
+
+[node name="ObjectRegion5" type="Area2D" parent="OriginalTerrain/NorthObject58" index="1" unique_id=510331724]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject58/ObjectRegion5" index="0" unique_id=2072867126]
+shape = SubResource("terrain_RectangleShape2D_eoh6v")
+
+[node name="NorthObject59" type="StaticBody2D" parent="OriginalTerrain" index="50" unique_id=977525118]
+position = Vector2(1417, 294)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@597" type="CollisionShape2D" parent="OriginalTerrain/NorthObject59" index="0" unique_id=46807357]
+shape = SubResource("terrain_RectangleShape2D_x0myc")
+
+[node name="ObjectRegion6" type="Area2D" parent="OriginalTerrain/NorthObject59" index="1" unique_id=373185490]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject59/ObjectRegion6" index="0" unique_id=817664876]
+shape = SubResource("terrain_RectangleShape2D_exiht")
+
+[node name="NorthObject60" type="StaticBody2D" parent="OriginalTerrain" index="51" unique_id=1308380973]
+position = Vector2(1598, 357)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@598" type="CollisionShape2D" parent="OriginalTerrain/NorthObject60" index="0" unique_id=263742648]
+shape = SubResource("terrain_RectangleShape2D_u602a")
+
+[node name="ObjectRegion7" type="Area2D" parent="OriginalTerrain/NorthObject60" index="1" unique_id=1898441731]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject60/ObjectRegion7" index="0" unique_id=2016152522]
+shape = SubResource("terrain_RectangleShape2D_7c8bq")
+
+[node name="NorthObject61" type="StaticBody2D" parent="OriginalTerrain" index="52" unique_id=407008447]
+position = Vector2(1628, 117)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@599" type="CollisionShape2D" parent="OriginalTerrain/NorthObject61" index="0" unique_id=747153282]
+shape = SubResource("terrain_RectangleShape2D_h4puh")
+
+[node name="ObjectRegion8" type="Area2D" parent="OriginalTerrain/NorthObject61" index="1" unique_id=594539042]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject61/ObjectRegion8" index="0" unique_id=2071719350]
+shape = SubResource("terrain_RectangleShape2D_qfqpi")
+
+[node name="NorthObject62" type="StaticBody2D" parent="OriginalTerrain" index="53" unique_id=1663193434]
+position = Vector2(1787, 120)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@600" type="CollisionShape2D" parent="OriginalTerrain/NorthObject62" index="0" unique_id=1455482232]
+shape = SubResource("terrain_RectangleShape2D_xlehl")
+
+[node name="ObjectRegion9" type="Area2D" parent="OriginalTerrain/NorthObject62" index="1" unique_id=2019816957]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject62/ObjectRegion9" index="0" unique_id=1468065770]
+shape = SubResource("terrain_RectangleShape2D_u7lrn")
+
+[node name="NorthObject63" type="StaticBody2D" parent="OriginalTerrain" index="54" unique_id=1758548382]
+position = Vector2(1937, 355)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@601" type="CollisionShape2D" parent="OriginalTerrain/NorthObject63" index="0" unique_id=2080118719]
+shape = SubResource("terrain_RectangleShape2D_2kpoa")
+
+[node name="ObjectRegion10" type="Area2D" parent="OriginalTerrain/NorthObject63" index="1" unique_id=1027650096]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject63/ObjectRegion10" index="0" unique_id=215330349]
+shape = SubResource("terrain_RectangleShape2D_pddnv")
+
+[node name="NorthObject64" type="StaticBody2D" parent="OriginalTerrain" index="55" unique_id=2038681042]
+position = Vector2(2005, 315)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@602" type="CollisionShape2D" parent="OriginalTerrain/NorthObject64" index="0" unique_id=1160110091]
+shape = SubResource("terrain_RectangleShape2D_k4bco")
+
+[node name="ObjectRegion11" type="Area2D" parent="OriginalTerrain/NorthObject64" index="1" unique_id=760302178]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject64/ObjectRegion11" index="0" unique_id=473636895]
+shape = SubResource("terrain_RectangleShape2D_xmmsv")
+
+[node name="NorthObject65" type="StaticBody2D" parent="OriginalTerrain" index="56" unique_id=1948122205]
+position = Vector2(2188, 318)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@603" type="CollisionShape2D" parent="OriginalTerrain/NorthObject65" index="0" unique_id=1613597531]
+shape = SubResource("terrain_RectangleShape2D_n7avf")
+
+[node name="ObjectRegion12" type="Area2D" parent="OriginalTerrain/NorthObject65" index="1" unique_id=1724887839]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject65/ObjectRegion12" index="0" unique_id=1002157915]
+shape = SubResource("terrain_RectangleShape2D_1kar6")
+
+[node name="NorthObject66" type="StaticBody2D" parent="OriginalTerrain" index="57" unique_id=151548037]
+position = Vector2(2234, 405)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@604" type="CollisionShape2D" parent="OriginalTerrain/NorthObject66" index="0" unique_id=537191476]
+shape = SubResource("terrain_RectangleShape2D_2c3xv")
+
+[node name="ObjectRegion13" type="Area2D" parent="OriginalTerrain/NorthObject66" index="1" unique_id=423890518]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject66/ObjectRegion13" index="0" unique_id=306349596]
+shape = SubResource("terrain_RectangleShape2D_s6q7i")
+
+[node name="NorthObject67" type="StaticBody2D" parent="OriginalTerrain" index="58" unique_id=130981884]
+position = Vector2(2410, 409)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@605" type="CollisionShape2D" parent="OriginalTerrain/NorthObject67" index="0" unique_id=1161396040]
+shape = SubResource("terrain_RectangleShape2D_hw834")
+
+[node name="ObjectRegion14" type="Area2D" parent="OriginalTerrain/NorthObject67" index="1" unique_id=1638072338]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject67/ObjectRegion14" index="0" unique_id=367674236]
+shape = SubResource("terrain_RectangleShape2D_mjjxo")
+
+[node name="NorthObject68" type="StaticBody2D" parent="OriginalTerrain" index="59" unique_id=489185467]
+position = Vector2(2390, 197)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@606" type="CollisionShape2D" parent="OriginalTerrain/NorthObject68" index="0" unique_id=356882309]
+shape = SubResource("terrain_RectangleShape2D_w44a5")
+
+[node name="ObjectRegion15" type="Area2D" parent="OriginalTerrain/NorthObject68" index="1" unique_id=1807100178]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject68/ObjectRegion15" index="0" unique_id=2103911538]
+shape = SubResource("terrain_RectangleShape2D_8y1mh")
+
+[node name="NorthObject69" type="StaticBody2D" parent="OriginalTerrain" index="60" unique_id=1528917920]
+position = Vector2(2558, 200)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@607" type="CollisionShape2D" parent="OriginalTerrain/NorthObject69" index="0" unique_id=1162388176]
+shape = SubResource("terrain_RectangleShape2D_ln6bq")
+
+[node name="ObjectRegion16" type="Area2D" parent="OriginalTerrain/NorthObject69" index="1" unique_id=1868630556]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject69/ObjectRegion16" index="0" unique_id=1701254460]
+shape = SubResource("terrain_RectangleShape2D_y6oqr")
+
+[node name="NorthObject70" type="StaticBody2D" parent="OriginalTerrain" index="61" unique_id=21331272]
+position = Vector2(2793, 230)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@608" type="CollisionShape2D" parent="OriginalTerrain/NorthObject70" index="0" unique_id=700607721]
+shape = SubResource("terrain_RectangleShape2D_lbbel")
+
+[node name="ObjectRegion17" type="Area2D" parent="OriginalTerrain/NorthObject70" index="1" unique_id=2076219147]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject70/ObjectRegion17" index="0" unique_id=1738793530]
+shape = SubResource("terrain_RectangleShape2D_0vpob")
+
+[node name="NorthObject71" type="StaticBody2D" parent="OriginalTerrain" index="62" unique_id=1507025689]
+position = Vector2(3146, 228)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@609" type="CollisionShape2D" parent="OriginalTerrain/NorthObject71" index="0" unique_id=1377451480]
+shape = SubResource("terrain_RectangleShape2D_da34p")
+
+[node name="ObjectRegion18" type="Area2D" parent="OriginalTerrain/NorthObject71" index="1" unique_id=1275390964]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject71/ObjectRegion18" index="0" unique_id=72594164]
+shape = SubResource("terrain_RectangleShape2D_l4waf")
+
+[node name="NorthObject72" type="StaticBody2D" parent="OriginalTerrain" index="63" unique_id=1626704236]
+position = Vector2(3344, 252)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@610" type="CollisionShape2D" parent="OriginalTerrain/NorthObject72" index="0" unique_id=807254839]
+shape = SubResource("terrain_RectangleShape2D_ctl8t")
+
+[node name="ObjectRegion19" type="Area2D" parent="OriginalTerrain/NorthObject72" index="1" unique_id=1053384737]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject72/ObjectRegion19" index="0" unique_id=976285636]
+shape = SubResource("terrain_RectangleShape2D_22d1x")
+
+[node name="NorthObject73" type="StaticBody2D" parent="OriginalTerrain" index="64" unique_id=820516901]
+position = Vector2(3528, 259)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@611" type="CollisionShape2D" parent="OriginalTerrain/NorthObject73" index="0" unique_id=1812516081]
+shape = SubResource("terrain_RectangleShape2D_q0a4h")
+
+[node name="ObjectRegion20" type="Area2D" parent="OriginalTerrain/NorthObject73" index="1" unique_id=1503812598]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject73/ObjectRegion20" index="0" unique_id=1252482288]
+shape = SubResource("terrain_RectangleShape2D_wheoi")
+
+[node name="NorthObject74" type="StaticBody2D" parent="OriginalTerrain" index="65" unique_id=627917706]
+position = Vector2(3621, 168)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@612" type="CollisionShape2D" parent="OriginalTerrain/NorthObject74" index="0" unique_id=1464464375]
+shape = SubResource("terrain_RectangleShape2D_h4ifq")
+
+[node name="ObjectRegion21" type="Area2D" parent="OriginalTerrain/NorthObject74" index="1" unique_id=1170822546]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject74/ObjectRegion21" index="0" unique_id=89511641]
+shape = SubResource("terrain_RectangleShape2D_fy4te")
+
+[node name="NorthObject75" type="StaticBody2D" parent="OriginalTerrain" index="66" unique_id=816297349]
+position = Vector2(3793, 168)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@613" type="CollisionShape2D" parent="OriginalTerrain/NorthObject75" index="0" unique_id=1916667725]
+shape = SubResource("terrain_RectangleShape2D_wme8d")
+
+[node name="ObjectRegion22" type="Area2D" parent="OriginalTerrain/NorthObject75" index="1" unique_id=469138408]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject75/ObjectRegion22" index="0" unique_id=353403443]
+shape = SubResource("terrain_RectangleShape2D_55hky")
+
+[node name="NorthObject76" type="StaticBody2D" parent="OriginalTerrain" index="67" unique_id=1752946249]
+position = Vector2(3828, 453)
+collision_layer = 1048576
+collision_mask = 0
+
+[node name="@CollisionShape2D@614" type="CollisionShape2D" parent="OriginalTerrain/NorthObject76" index="0" unique_id=1913119582]
+shape = SubResource("terrain_RectangleShape2D_gqja8")
+
+[node name="ObjectRegion23" type="Area2D" parent="OriginalTerrain/NorthObject76" index="1" unique_id=722272190]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject76/ObjectRegion23" index="0" unique_id=1007176482]
+shape = SubResource("terrain_RectangleShape2D_t00a3")
+
+[node name="@CanvasModulate@615" type="CanvasModulate" parent="OriginalTerrain" index="68" unique_id=41158245]
+
+[node name="ObjectRegion24" type="Area2D" parent="OriginalTerrain" index="69" unique_id=2000248766]
+position = Vector2(5009.32, 296.65)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/ObjectRegion24" index="0" unique_id=1246942881]
+shape = SubResource("terrain_RectangleShape2D_vqaku")
+
+[node name="ObjectRegion25" type="Area2D" parent="OriginalTerrain" index="70" unique_id=555442871]
+position = Vector2(3187.5, 297.35)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/ObjectRegion25" index="0" unique_id=283024417]
+shape = SubResource("terrain_RectangleShape2D_d4l6h")
+
+[node name="FallDeath" type="Area2D" parent="OriginalTerrain" index="71" unique_id=1054434250]
+position = Vector2(2498.5, 688)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/FallDeath" index="0" unique_id=1460088782]
+shape = SubResource("terrain_RectangleShape2D_bubon")

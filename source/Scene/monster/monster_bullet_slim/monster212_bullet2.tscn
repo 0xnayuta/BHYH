@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster212_bullet2.gd" id="1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 105.0
+
+[node name="Monster212Bullet2" type="Node2D" unique_id=541580640]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=630312585]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1660087471]
+collision_layer = 4
+collision_mask = 8321
+monitoring = false
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=1904850011]
+position = Vector2(0, -100)
+shape = SubResource("CircleShape2D_hit")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1287903888]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1965248497]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=2004193134]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=162011212]
+one_shot = true

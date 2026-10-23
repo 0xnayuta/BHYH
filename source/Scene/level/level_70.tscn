@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_70.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/qixingdong_v1/background/bg10.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/qixingdong_v1/background/bg11.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(5000, 300)
+
+[node name="Level_70" unique_id=900663167 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "qixingdong_v1"
+display_name = "七星洞"
+stage_number = 70
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 5000.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(2500, 555.5)
+shape = SubResource("floor_shape")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(5060, -300)
+
+[node name="bg10_0" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=2140485997]
+z_index = -1
+position = Vector2(0, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=169205832]
+z_index = -1
+position = Vector2(998, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=792580058]
+z_index = -1
+position = Vector2(1996, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_3" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=1015187818]
+z_index = -1
+position = Vector2(2994, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_4" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=1021693345]
+z_index = -1
+position = Vector2(3992, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg10_5" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="6" unique_id=1552019317]
+z_index = -1
+position = Vector2(4990, -84)
+scale = Vector2(1, 1.1999997)
+texture = ExtResource("3")
+centered = false
+
+[node name="bg11_0" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="7" unique_id=1854414148]
+z_index = -1
+position = Vector2(3984.0002, -84)
+scale = Vector2(1.1202403, 1.1999997)
+texture = ExtResource("4")
+centered = false
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4835, 350)

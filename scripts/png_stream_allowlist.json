@@ -1,0 +1,22 @@
+{
+  "description": "非 atlas、非静态资产的运行时 PNG 流 allowlist。仅允许动态/特殊效果；新增项必须评审。",
+  "allowed_files": {
+    "Script/level/level_tzsijian.gd": "挑战关卡动态背景层",
+    "Script/monster/constellation_body_stream.gd": "星座 Boss 变体流渲染器",
+    "Script/monster/constellation_boss.gd": "星座 Boss 特殊主体/特效",
+    "Script/monster/constellation_heal_aura.gd": "星座 Boss 动态治疗光环",
+    "Script/monster/hun_dun_boss.gd": "混沌 Boss 特效（主体已标准）",
+    "Script/monster/linggan_king_boss.gd": "灵感大王特殊效果",
+    "Script/monster/liu_sha_river_boss.gd": "流沙河 Boss 多层特效",
+    "Script/monster/nanhai_projectile.gd": "南海弹道特殊效果",
+    "Script/monster/sword_boss_base.gd": "剑阵 Boss 动态技能特效",
+    "Script/monster/tao_tie_boss.gd": "陶铁 Boss 特效（主体已标准）",
+    "Script/monster/tao_wu_boss.gd": "陶吴 Boss 动态技能特效",
+    "Script/monster/wutai_earth_ancestor3077.gd": "五台土祖动态技能特效",
+    "Script/monster/wutai_earth_ancestor3078.gd": "五台土祖动态技能特效",
+    "Script/monster/wutai_earth_wall3082.gd": "五台土墙动态技能特效",
+    "Script/monster/wutai_earth_wind.gd": "五台土风动态技能特效",
+    "Script/monster/wutai_minghai_projectile.gd": "五台冥海弹道特殊效果",
+    "Script/monster/zhuque_street_monster.gd": "朱雀街动态特效"
+  }
+}

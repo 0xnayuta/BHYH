@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_46.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/level46_moving_platform.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_xinshou/item1007.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_xinshou/bg10.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(2400, 553)
+
+[sub_resource type="RectangleShape2D" id="Shape_left_wall"]
+size = Vector2(27, 630)
+
+[sub_resource type="RectangleShape2D" id="Shape_right_wall"]
+size = Vector2(30, 632)
+
+[sub_resource type="RectangleShape2D" id="Shape_platform"]
+size = Vector2(751, 21)
+
+[node name="Level_46" unique_id=441318362 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1747814246]
+position = Vector2(1200, 669.5)
+shape = SubResource("Shape_floor")
+
+[node name="stop_left" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1134183645]
+position = Vector2(1414.5, 323)
+shape = SubResource("Shape_left_wall")
+disabled = true
+
+[node name="stop_right" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1972304931]
+position = Vector2(2223, 313)
+shape = SubResource("Shape_right_wall")
+
+[node name="TutorialMovingPlatform" type="AnimatableBody2D" parent="." index="10" unique_id=1273876092]
+z_index = -1
+position = Vector2(1811.5, 353)
+collision_layer = 32
+collision_mask = 32
+script = ExtResource("3")
+
+[node name="Sprite2D" type="Sprite2D" parent="TutorialMovingPlatform" index="0" unique_id=125874087]
+texture = ExtResource("4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialMovingPlatform" index="1" unique_id=74452059]
+position = Vector2(0, -10.5)
+shape = SubResource("Shape_platform")
+one_way_collision = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=378659875]
+
+[node name="Background" type="Sprite2D" parent="BackGround/front" index="0" unique_id=31263869]
+position = Vector2(601, 295)
+texture = ExtResource("5")
+
+[node name="exit" parent="." index="12" unique_id=2115553614]
+position = Vector2(1806, 259)

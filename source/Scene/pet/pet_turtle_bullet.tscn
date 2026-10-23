@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/pet/pet_turtle_bullet.gd" id="1"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pet_turtle"]
+animations = [{
+"frames": [],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PetTurtleBullet" type="Node2D" unique_id=183242732]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=231573642]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=882742890]
+collision_layer = 2
+collision_mask = 3072
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=5434908]
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=416995207]
+sprite_frames = SubResource("SpriteFrames_pet_turtle")
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=365928953]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=600314390]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=1903918699]
+one_shot = true
+
+[connection signal="area_entered" from="middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="timeout" from="queue_timer" to="." method="_on_queue_timer_timeout"]

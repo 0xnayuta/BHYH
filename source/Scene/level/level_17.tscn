@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_17.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Scene/level/boat.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/1_floor_bg3.jpg" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/wch.png" id="5"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="6"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(120, 846)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(5389, 141)
+
+[node name="Level_17" unique_id=351866641 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionPolygon2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1369150178]
+position = Vector2(4379, 357)
+polygon = PackedVector2Array(4, 1, -24, 30, -24, 169, 338, 173, 338, 2)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1335216849]
+position = Vector2(4660, 100)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="Boat" parent="." index="10" unique_id=956567312 instance=ExtResource("3")]
+position = Vector2(200, 295)
+
+[node name="HDDY" type="Area2D" parent="." index="11" unique_id=22727990]
+position = Vector2(22, 1732)
+collision_layer = 16
+collision_mask = 16
+
+[node name="check" type="CollisionShape2D" parent="HDDY" index="0" unique_id=1126857134]
+position = Vector2(2642.5, 42.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="1FloorBg3" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1273506499]
+position = Vector2(720, 248)
+texture = ExtResource("4")
+
+[node name="Wch" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=241899720]
+position = Vector2(2453, 343)
+texture = ExtResource("5")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=245569297]
+
+[node name="exit" parent="." index="13" unique_id=2115553614]
+position = Vector2(4491, 276)
+metadata/_edit_lock_ = true
+
+[node name="text" type="Label" parent="CanvasLayer" parent_id_path=PackedInt32Array(1390746928) index="1" unique_id=1064913567]
+offset_left = 402.0
+offset_top = 25.0
+offset_right = 577.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 25
+text = "当前受击次数：
+受伤越多，boss越强"
+metadata/_edit_lock_ = true
+
+[node name="text2" type="Label" parent="CanvasLayer/text" index="0" unique_id=1248417820]
+layout_mode = 0
+offset_left = 169.0
+offset_right = 344.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 25
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="text3" type="Label" parent="CanvasLayer/text" index="1" unique_id=2058651809]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 55.0
+offset_right = 329.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 18
+text = "忘川河的邪气会吞噬法力（无法回血，使用技能和法宝）"
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[connection signal="body_entered" from="HDDY" to="." method="_on_hddy_body_entered"]

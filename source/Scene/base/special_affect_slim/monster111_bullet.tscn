@@ -1,0 +1,256 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/zhenfa/senluozhen/slz_effect.png" id="1"]
+[ext_resource type="Script" path="res://Script/base/special_affect.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="117"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="118"]
+atlas = ExtResource("1")
+region = Rect2(94, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="119"]
+atlas = ExtResource("1")
+region = Rect2(188, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="120"]
+atlas = ExtResource("1")
+region = Rect2(282, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="121"]
+atlas = ExtResource("1")
+region = Rect2(376, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="122"]
+atlas = ExtResource("1")
+region = Rect2(470, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="123"]
+atlas = ExtResource("1")
+region = Rect2(564, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="124"]
+atlas = ExtResource("1")
+region = Rect2(658, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="125"]
+atlas = ExtResource("1")
+region = Rect2(752, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="126"]
+atlas = ExtResource("1")
+region = Rect2(846, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="127"]
+atlas = ExtResource("1")
+region = Rect2(940, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="128"]
+atlas = ExtResource("1")
+region = Rect2(1034, 0, 94, 172)
+
+[sub_resource type="AtlasTexture" id="129"]
+atlas = ExtResource("1")
+region = Rect2(1128, 0, 94, 172)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p58d4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("117")
+}, {
+"duration": 1.0,
+"texture": SubResource("118")
+}, {
+"duration": 1.0,
+"texture": SubResource("119")
+}, {
+"duration": 1.0,
+"texture": SubResource("120")
+}, {
+"duration": 1.0,
+"texture": SubResource("121")
+}, {
+"duration": 1.0,
+"texture": SubResource("122")
+}, {
+"duration": 1.0,
+"texture": SubResource("123")
+}, {
+"duration": 1.0,
+"texture": SubResource("124")
+}, {
+"duration": 1.0,
+"texture": SubResource("125")
+}, {
+"duration": 1.0,
+"texture": SubResource("126")
+}, {
+"duration": 1.0,
+"texture": SubResource("127")
+}, {
+"duration": 1.0,
+"texture": SubResource("128")
+}, {
+"duration": 1.0,
+"texture": SubResource("129")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Monster111Bullet",
+"speed": 14.0
+}]
+
+[sub_resource type="Animation" id="Animation_x57jq"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0714286, 0.142857, 0.214286, 0.285714, 0.357143, 0.428571, 0.5, 0.571429, 0.642857, 0.714286, 0.785714, 0.857143, 0.928571),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Monster111Bullet"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_wr0om"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Empty"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2nv3m"]
+_data = {
+&"Monster111Bullet": SubResource("Animation_x57jq"),
+&"RESET": SubResource("Animation_wr0om")
+}
+
+[node name="SpecialAffect" type="AnimatedSprite2D" unique_id=2019943588]
+sprite_frames = SubResource("SpriteFrames_p58d4")
+animation = &"Empty"
+script = ExtResource("2")
+metadata/_edit_lock_ = true
+
+[node name="SpecialAffect" type="AnimationPlayer" parent="." unique_id=869592249]
+libraries/ = SubResource("AnimationLibrary_2nv3m")

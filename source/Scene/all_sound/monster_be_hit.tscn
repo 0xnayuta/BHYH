@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/all_sound/monster_be_hit.gd" id="1"]
+
+[node name="MonsterBeHit" type="AudioStreamPlayer" unique_id=534693963]
+process_mode = 3
+script = ExtResource("1")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

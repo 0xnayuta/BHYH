@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/role_be_hit.png" id="1"]
+[ext_resource type="Script" path="res://Script/base/role_be_hit_effect.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 101, 125)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2"]
+atlas = ExtResource("1")
+region = Rect2(101, 0, 101, 125)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3"]
+atlas = ExtResource("1")
+region = Rect2(202, 0, 101, 125)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4"]
+atlas = ExtResource("1")
+region = Rect2(303, 0, 101, 125)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_role_be_hit"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4")
+}],
+"loop": 0,
+"name": &"RoleBeHit",
+"speed": 13.0
+}]
+
+[node name="RoleBeHitEffect" type="AnimatedSprite2D" unique_id=317009874]
+sprite_frames = SubResource("SpriteFrames_role_be_hit")
+animation = &"RoleBeHit"
+script = ExtResource("2")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

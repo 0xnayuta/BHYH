@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/main_game/basic_pic_cd_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/main_game/basic_pic_cd_2.png" id="2"]
+[ext_resource type="Script" path="res://Scene/other_scene/bacis_ar_button.gd" id="3"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
+[ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="5"]
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="6"]
+
+[node name="BacisArButton" type="TextureButton" unique_id=1979517620]
+custom_minimum_size = Vector2(265, 84)
+offset_right = 265.0
+offset_bottom = 84.0
+texture_normal = ExtResource("1")
+texture_pressed = ExtResource("1")
+texture_hover = ExtResource("2")
+texture_disabled = ExtResource("1")
+script = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="MyNum" type="Label" parent="." unique_id=677369328]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(1, 0.376471, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0.376471, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="InfoBox" type="VBoxContainer" parent="." unique_id=470357870]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 8.0
+offset_right = 249.0
+offset_bottom = 76.0
+theme_override_constants/separation = 0
+metadata/_edit_lock_ = true
+
+[node name="Name" type="Label" parent="InfoBox" unique_id=2000503455]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="LevelAndRole" type="Label" parent="InfoBox" unique_id=383569150]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Time" type="Label" parent="InfoBox" unique_id=1086746854]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

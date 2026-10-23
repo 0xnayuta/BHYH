@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_xtqfb.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/frist_bg.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg3.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg4.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg5.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg1.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/floor2.png" id="9"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(857, 1021)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1139, 80)
+
+[node name="Level_xtqfb" unique_id=1181459494 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [937.0]
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=137891215]
+position = Vector2(1364.5, -28.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1528175843]
+position = Vector2(560.5, 449)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="FristBg" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1343353089]
+position = Vector2(721, 345)
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="Bg3" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=234994692]
+position = Vector2(853, 766)
+texture = ExtResource("4")
+
+[node name="Bg4" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="2" unique_id=151498378]
+position = Vector2(138, 548)
+texture = ExtResource("5")
+
+[node name="Bg5" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="3" unique_id=2099539619]
+position = Vector2(621, 716)
+texture = ExtResource("6")
+metadata/_edit_lock_ = true
+
+[node name="Bg1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="4" unique_id=1238253416]
+position = Vector2(293, 1673)
+texture = ExtResource("7")
+
+[node name="Bg2" type="Sprite2D" parent="BackGround/End/Bg1" index="0" unique_id=1434592500]
+show_behind_parent = true
+position = Vector2(-21, -1359)
+texture = ExtResource("8")
+
+[node name="Floor2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1081344688]
+position = Vector2(494.5, 548)
+scale = Vector2(1.1210247, 1)
+texture = ExtResource("9")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=157808339]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(838, 330)
+metadata/_edit_lock_ = true

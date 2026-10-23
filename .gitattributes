@@ -1,0 +1,56 @@
+# ==============================================================================
+# BHYH Git Attributes & Cross-Platform Normalization Specification
+# Aligned with Godot Engine Official Best Practices
+# ==============================================================================
+
+# 1. 默认文本规则：强制所有文本文件检出与提交统一使用 LF 行尾
+* text=auto eol=lf
+
+# 2. 核心源码与引擎文本资产（强制 LF）
+*.gd text eol=lf
+*.tscn text eol=lf
+*.tres text eol=lf
+*.gdshader text eol=lf
+*.cfg text eol=lf
+*.import text eol=lf
+*.gdextension text eol=lf
+*.uid text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+
+# 3. 文档、脚本与工具链（强制 LF）
+*.md text eol=lf
+*.txt text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.editorconfig text eol=lf
+.gdlintrc text eol=lf
+
+# 4. 二进制资源文件（严禁任何文本/换行符转换）
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.mp3 binary
+*.MP3 binary
+*.ogg binary
+*.wav binary
+*.ttf binary
+*.ttc binary
+*.otf binary
+*.ogv binary
+*.mp4 binary
+*.webm binary
+*.res binary
+*.scn binary
+*.ico binary
+*.pck binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.bin binary

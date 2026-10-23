@@ -1,0 +1,44 @@
+# ==============================================================================
+# BHYH GDScript 静态代码质量检查规范 (gdlint 4.5.0)
+# 对标现代 C++ 工程中的 .clang-tidy
+# ==============================================================================
+
+# 1. 基础排版约束
+tab-characters: 1
+
+# 2. 排除目录（仅缓存与本地元数据）
+excluded_directories:
+  - .git
+  - .godot
+
+# 3. 集中防御的核心安全与排版异味规则 (主动开启)
+comparison-with-itself: null
+expression-not-assigned: null
+
+# 4. 禁用对大型移植历史代码产生无谓噪音的规则
+disable:
+  - max-file-lines
+  - max-line-length
+  - trailing-whitespace
+  - unnecessary-pass
+  - max-public-methods
+  - max-returns
+  - class-definitions-order
+  - function-name
+  - function-variable-name
+  - class-variable-name
+  - class-name
+  - sub-class-name
+  - constant-name
+  - enum-name
+  - enum-element-name
+  - function-argument-name
+  - loop-variable-name
+  - signal-name
+  - unused-argument
+  - no-else-return
+  - no-elif-return
+  - class-load-variable-name
+  - load-constant-name
+  - duplicated-load
+  - function-preload-variable-name

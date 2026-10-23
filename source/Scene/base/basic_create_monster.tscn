@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/base/basic_create_monster.gd" id="1"]
+
+[node name="BasicCreateMonster" type="Node2D" unique_id=714377417]
+script = ExtResource("1")
+MonsterIdList = [0]
+MonsterPosition = [Vector2(0, 0)]
+
+[node name="CreateMonster" type="Timer" parent="." unique_id=1139833356]
+
+[connection signal="timeout" from="CreateMonster" to="." method="_on_create_monster_timeout"]

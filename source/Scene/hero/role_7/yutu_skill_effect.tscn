@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Script/hero/yutu_skill_effect.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(180, 100)
+
+[node name="YutuSkillEffect" type="Node2D" unique_id=217010751]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=1836969104]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=272579213]
+visible = false
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=1809779237]
+visible = false
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=289718899]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=22543592]
+shape = SubResource("1")
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=1466454438]
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=1346481174]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

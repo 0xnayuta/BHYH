@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_68.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/taohuagu_v383/background/bg30.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/taohuagu_v383/background/bg10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/taohuagu_v383/background/bg11.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="side_shape"]
+size = Vector2(40, 1800)
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(1200, 300)
+
+[node name="Level_68" unique_id=297627378 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "taohuagu_v383"
+display_name = "桃花谷"
+stage_number = 68
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+spawn_position = Vector2(160, 448)
+
+[node name="wall_left" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="0" unique_id=348738071]
+position = Vector2(-20, -300)
+shape = SubResource("side_shape")
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(600, 603)
+shape = SubResource("floor_shape")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(1220, -300)
+shape = SubResource("side_shape")
+
+[node name="bg30" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1340691314]
+position = Vector2(600, -827)
+texture = ExtResource("3")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
+position = Vector2(0, -43)
+
+[node name="bg10" type="Sprite2D" parent="BackGround/floor_2" index="0" unique_id=538650099]
+position = Vector2(601.00006, 367.5)
+scale = Vector2(1.04, 1.165)
+texture = ExtResource("4")
+
+[node name="bg11" type="Sprite2D" parent="BackGround/front" index="0" unique_id=277353163]
+position = Vector2(602, -831.5)
+scale = Vector2(1.0033333, 1.0063334)
+texture = ExtResource("5")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(973, 372)

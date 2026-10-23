@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/nanhai_monster.gd" id="2"]
+[ext_resource type="Script" path="res://Script/monster/monster_scene_editor_preview.gd" id="3"]
+
+[sub_resource type="RectangleShape2D" id="hit"]
+size = Vector2(480, 100)
+
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(117.5, 75)
+
+[sub_resource type="CapsuleShape2D" id="body"]
+radius = 20.0
+height = 58.0
+
+[node name="Monster_3049" unique_id=4729617 instance=ExtResource("1")]
+script = ExtResource("2")
+monster_kind = 3049
+
+[node name="mr_ani" parent="MonsterDir" parent_id_path=PackedInt32Array(564181054) index="0" unique_id=494160359]
+position = Vector2(30.15, -26.15)
+
+[node name="HitBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="0" unique_id=145353887]
+collision_mask = 128
+
+[node name="HitBox" parent="BaseDamageBox/HitBox" index="0" unique_id=127304568]
+position = Vector2(-240, -50)
+shape = SubResource("hit")
+disabled = true
+
+[node name="HurtBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="1" unique_id=692709197]
+collision_layer = 3136
+
+[node name="HurtBox" parent="BaseDamageBox/HurtBox" index="0" unique_id=235198317]
+position = Vector2(-30.750002, -29.5)
+shape = SubResource("hurt")
+
+[node name="pz" parent="." index="4" unique_id=200057952]
+position = Vector2(0, -6)
+shape = SubResource("body")
+
+[node name="EditorModelPreview" type="Node2D" parent="." index="12" unique_id=424032702]
+script = ExtResource("3")

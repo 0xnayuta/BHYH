@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/pet/pet_yin_tiger_bullet.gd" id="1"]
+
+[sub_resource type="SpriteFrames" id="frames"]
+animations = [{
+"frames": [],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PetYinTigerBullet" type="Node2D" unique_id=1497331412]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=1804915336]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1532359716]
+collision_layer = 2
+collision_mask = 3072
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=171299609]
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=7426457]
+texture_filter = 2
+sprite_frames = SubResource("frames")
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1566290899]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1415375138]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=857304777]
+one_shot = true
+
+[connection signal="area_entered" from="middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="timeout" from="queue_timer" to="." method="_on_queue_timer_timeout"]

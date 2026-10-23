@@ -1,0 +1,402 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/body_training.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/lianti/1.png" id="2"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="3"]
+[ext_resource type="Texture2D" path="res://Art/lianti/attribute_fire.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/lianti/attribute_water.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/lianti/attribute_shield.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/lianti/attribute_sword.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/lianti/3.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/lianti/7.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/lianti/5.png" id="10"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
+
+[node name="BodyTraining" type="Node2D" unique_id=1193291846]
+script = ExtResource("1")
+
+[node name="InputBlocker" type="ColorRect" parent="." unique_id=1101677685]
+z_index = -100
+offset_left = -10000.0
+offset_top = -10000.0
+offset_right = 10000.0
+offset_bottom = 10000.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="MainPanel" type="Sprite2D" parent="." unique_id=1051776977]
+texture_filter = 1
+texture = ExtResource("2")
+
+[node name="MainAttribute" type="Label" parent="." unique_id=2009203363]
+offset_left = 295.0
+offset_top = -78.0
+offset_right = 415.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(1, 0.941176, 0.470588, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttributeIcon0" type="Sprite2D" parent="." unique_id=951294479]
+z_index = 4
+texture_filter = 1
+position = Vector2(-13, -160.5)
+texture = ExtResource("4")
+
+[node name="AttributeIcon1" type="Sprite2D" parent="." unique_id=367960366]
+z_index = 4
+texture_filter = 1
+position = Vector2(87, -141.5)
+texture = ExtResource("5")
+
+[node name="AttributeIcon2" type="Sprite2D" parent="." unique_id=1873909816]
+z_index = 4
+texture_filter = 1
+position = Vector2(158, -70.5)
+texture = ExtResource("6")
+
+[node name="AttributeIcon3" type="Sprite2D" parent="." unique_id=840204003]
+z_index = 4
+texture_filter = 1
+position = Vector2(184, 30.5)
+texture = ExtResource("7")
+
+[node name="AttributeIcon4" type="Sprite2D" parent="." unique_id=382262719]
+z_index = 4
+texture_filter = 1
+position = Vector2(158, 130.5)
+texture = ExtResource("4")
+
+[node name="AttributeIcon5" type="Sprite2D" parent="." unique_id=1594906721]
+z_index = 4
+texture_filter = 1
+position = Vector2(84.5, 202.5)
+texture = ExtResource("5")
+
+[node name="AttributeIcon6" type="Sprite2D" parent="." unique_id=1475309116]
+z_index = 4
+texture_filter = 1
+position = Vector2(-11.5, 229.5)
+texture = ExtResource("6")
+
+[node name="AttributeIcon7" type="Sprite2D" parent="." unique_id=83798185]
+z_index = 4
+texture_filter = 1
+position = Vector2(-111, 202.5)
+texture = ExtResource("7")
+
+[node name="AttributeIcon8" type="Sprite2D" parent="." unique_id=452352024]
+z_index = 4
+texture_filter = 1
+position = Vector2(-185.5, 130.5)
+texture = ExtResource("4")
+
+[node name="AttributeIcon9" type="Sprite2D" parent="." unique_id=1297663372]
+z_index = 4
+texture_filter = 1
+position = Vector2(-211.5, 30.5)
+texture = ExtResource("5")
+
+[node name="AttributeIcon10" type="Sprite2D" parent="." unique_id=179167468]
+z_index = 4
+texture_filter = 1
+position = Vector2(-185.5, -70.5)
+texture = ExtResource("6")
+
+[node name="AttributeIcon11" type="Sprite2D" parent="." unique_id=1238161853]
+z_index = 4
+texture_filter = 1
+position = Vector2(-113.5, -141.5)
+texture = ExtResource("7")
+
+[node name="MainClose" type="TextureButton" parent="." unique_id=1325884736]
+offset_left = 414.5
+offset_top = -278.5
+offset_right = 472.5
+offset_bottom = -222.5
+focus_mode = 0
+texture_normal = ExtResource("8")
+texture_pressed = ExtResource("9")
+texture_hover = ExtResource("10")
+
+[node name="BodyLevel0" type="Label" parent="." unique_id=2020433124]
+offset_left = -31.0
+offset_top = -166.0
+offset_right = 69.0
+offset_bottom = -139.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel1" type="Label" parent="." unique_id=317729060]
+offset_left = 69.0
+offset_top = -146.0
+offset_right = 169.0
+offset_bottom = -119.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel2" type="Label" parent="." unique_id=2002565571]
+offset_left = 140.0
+offset_top = -75.0
+offset_right = 240.0
+offset_bottom = -48.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel3" type="Label" parent="." unique_id=1352466154]
+offset_left = 166.0
+offset_top = 26.0
+offset_right = 266.0
+offset_bottom = 53.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel4" type="Label" parent="." unique_id=1210855177]
+offset_left = 140.0
+offset_top = 126.0
+offset_right = 240.0
+offset_bottom = 153.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel5" type="Label" parent="." unique_id=1955801880]
+offset_left = 66.5
+offset_top = 198.0
+offset_right = 166.5
+offset_bottom = 225.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel6" type="Label" parent="." unique_id=258334906]
+offset_left = -29.5
+offset_top = 225.0
+offset_right = 70.5
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel7" type="Label" parent="." unique_id=1332283915]
+offset_left = -129.0
+offset_top = 198.0
+offset_right = -29.0
+offset_bottom = 225.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel8" type="Label" parent="." unique_id=1707759149]
+offset_left = -203.5
+offset_top = 126.0
+offset_right = -103.5
+offset_bottom = 153.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel9" type="Label" parent="." unique_id=87864126]
+offset_left = -229.5
+offset_top = 26.0
+offset_right = -129.5
+offset_bottom = 53.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel10" type="Label" parent="." unique_id=262319554]
+offset_left = -203.5
+offset_top = -75.0
+offset_right = -103.5
+offset_bottom = -48.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="BodyLevel11" type="Label" parent="." unique_id=816107085]
+offset_left = -131.5
+offset_top = -149.0
+offset_right = -31.5
+offset_bottom = -122.0
+theme_override_colors/font_color = Color(1, 0.952941, 0.658824, 1)
+theme_override_colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0"
+horizontal_alignment = 1
+
+[node name="Body10001" type="Button" parent="." unique_id=785845630]
+offset_left = -22.5
+offset_top = -247.5
+offset_right = 59.5
+offset_bottom = -165.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10002" type="Button" parent="." unique_id=1403753163]
+offset_left = 77.5
+offset_top = -221.5
+offset_right = 159.5
+offset_bottom = -139.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10003" type="Button" parent="." unique_id=2129425034]
+offset_left = 149.5
+offset_top = -149.5
+offset_right = 231.5
+offset_bottom = -67.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10004" type="Button" parent="." unique_id=2133735231]
+offset_left = 175.5
+offset_top = -49.5
+offset_right = 257.5
+offset_bottom = 32.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10005" type="Button" parent="." unique_id=774096422]
+offset_left = 149.5
+offset_top = 50.5
+offset_right = 231.5
+offset_bottom = 132.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10006" type="Button" parent="." unique_id=644421146]
+offset_left = 75.5
+offset_top = 122.5
+offset_right = 157.5
+offset_bottom = 204.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10007" type="Button" parent="." unique_id=1321355195]
+offset_left = -20.5
+offset_top = 148.5
+offset_right = 61.5
+offset_bottom = 230.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10008" type="Button" parent="." unique_id=72345011]
+offset_left = -120.5
+offset_top = 122.5
+offset_right = -38.5
+offset_bottom = 204.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10009" type="Button" parent="." unique_id=463555603]
+offset_left = -194.5
+offset_top = 46.5
+offset_right = -112.5
+offset_bottom = 128.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10010" type="Button" parent="." unique_id=404989225]
+offset_left = -220.5
+offset_top = -49.5
+offset_right = -138.5
+offset_bottom = 32.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10011" type="Button" parent="." unique_id=883754112]
+offset_left = -194.5
+offset_top = -149.5
+offset_right = -112.5
+offset_bottom = -67.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[node name="Body10012" type="Button" parent="." unique_id=654371739]
+offset_left = -122.5
+offset_top = -221.5
+offset_right = -40.5
+offset_bottom = -139.5
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+
+[connection signal="pressed" from="MainClose" to="." method="_on_main_close_pressed"]

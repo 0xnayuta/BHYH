@@ -1,0 +1,43 @@
+# ==============================================================================
+# BHYH EditorConfig Specification
+# Aligned with Godot Engine Official Style Guide
+# ==============================================================================
+
+root = true
+
+# 全局默认规则
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# GDScript 源码文件：官方强制要求 Tab 键缩进（缩进宽度 4）
+[*.gd]
+indent_style = tab
+indent_size = 4
+
+# Godot 引擎配置、场景与资源文件
+[*.{tscn,tres,godot,cfg,import,gdextension}]
+indent_style = tab
+indent_size = 4
+
+# Godot Shader 源码
+[*.gdshader]
+indent_style = tab
+indent_size = 4
+
+# Python 工具链脚本：遵循 PEP 8（4 空格缩进）
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Markdown 文档：使用空行/空引用行分段，不使用行尾双空格
+[*.md]
+indent_style = space
+indent_size = 2
+
+# JSON 与 YAML 配置文件
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2

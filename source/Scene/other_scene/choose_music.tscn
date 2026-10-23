@@ -1,0 +1,140 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scene/other_scene/choose_music.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/set_menu/653.png" id="2"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
+[ext_resource type="Texture2D" path="res://Art/backpack/49.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/magic_weapon/220.png" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="1"]
+
+[sub_resource type="StyleBoxEmpty" id="3"]
+
+[sub_resource type="StyleBoxEmpty" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="4"]
+
+[sub_resource type="StyleBoxEmpty" id="5"]
+
+[sub_resource type="StyleBoxEmpty" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="8"]
+
+[sub_resource type="StyleBoxEmpty" id="7"]
+
+[sub_resource type="StyleBoxEmpty" id="9"]
+
+[sub_resource type="StyleBoxEmpty" id="10"]
+
+[sub_resource type="StyleBoxEmpty" id="11"]
+
+[sub_resource type="StyleBoxEmpty" id="13"]
+
+[sub_resource type="StyleBoxEmpty" id="12"]
+
+[sub_resource type="StyleBoxEmpty" id="14"]
+
+[sub_resource type="StyleBoxEmpty" id="15"]
+
+[sub_resource type="StyleBoxEmpty" id="16"]
+
+[sub_resource type="StyleBoxEmpty" id="18"]
+
+[sub_resource type="StyleBoxEmpty" id="17"]
+
+[sub_resource type="StyleBoxEmpty" id="19"]
+
+[sub_resource type="StyleBoxEmpty" id="20"]
+
+[node name="Choose_music" type="Control" unique_id=341679281]
+layout_mode = 3
+anchor_right = 0.123
+anchor_bottom = 0.178
+offset_right = 0.379997
+offset_bottom = -0.0200043
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+metadata/_edit_lock_ = true
+
+[node name="bg" type="Sprite2D" parent="." unique_id=1525913580]
+position = Vector2(0, -0.109388)
+scale = Vector2(0.555215, 0.510905)
+texture = ExtResource("2")
+
+[node name="con_music" type="VBoxContainer" parent="bg" unique_id=687211680]
+offset_left = -116.0
+offset_top = -123.0
+offset_right = -2.0
+offset_bottom = 23.0
+scale = Vector2(2, 2)
+theme_override_constants/separation = 6
+metadata/_edit_lock_ = true
+
+[node name="z1" type="Button" parent="bg/con_music" unique_id=1914726676]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("1")
+theme_override_styles/pressed = SubResource("3")
+theme_override_styles/hover = SubResource("2")
+theme_override_styles/disabled = SubResource("4")
+theme_override_styles/focus = SubResource("5")
+text = "造梦西游1"
+
+[node name="z2" type="Button" parent="bg/con_music" unique_id=224410960]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("6")
+theme_override_styles/pressed = SubResource("8")
+theme_override_styles/hover = SubResource("7")
+theme_override_styles/disabled = SubResource("9")
+theme_override_styles/focus = SubResource("10")
+text = "造梦西游2"
+
+[node name="z3" type="Button" parent="bg/con_music" unique_id=192855600]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("11")
+theme_override_styles/pressed = SubResource("13")
+theme_override_styles/hover = SubResource("12")
+theme_override_styles/disabled = SubResource("14")
+theme_override_styles/focus = SubResource("15")
+text = "造梦西游3"
+
+[node name="z4" type="Button" parent="bg/con_music" unique_id=1375182836]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("16")
+theme_override_styles/pressed = SubResource("18")
+theme_override_styles/hover = SubResource("17")
+theme_override_styles/disabled = SubResource("19")
+theme_override_styles/focus = SubResource("20")
+text = "造梦西游4"
+metadata/_edit_lock_ = true
+
+[node name="close" type="TextureButton" parent="bg" unique_id=1914692724]
+offset_left = 104.464
+offset_top = -164.208
+offset_right = 145.464
+offset_bottom = -123.208
+scale = Vector2(1.2, 1.2)
+size_flags_horizontal = 8
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("5")
+texture_disabled = ExtResource("6")
+
+[connection signal="pressed" from="bg/con_music/z1" to="." method="_on_z_1_pressed"]
+[connection signal="pressed" from="bg/con_music/z2" to="." method="_on_z_2_pressed"]
+[connection signal="pressed" from="bg/con_music/z3" to="." method="_on_z_3_pressed"]
+[connection signal="pressed" from="bg/con_music/z4" to="." method="_on_z_4_pressed"]
+[connection signal="pressed" from="bg/close" to="." method="_on_close_pressed"]

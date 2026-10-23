@@ -1,0 +1,290 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_72/bullet.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oo74y"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="2613"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2614"]
+atlas = ExtResource("2")
+region = Rect2(731, 0, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2615"]
+atlas = ExtResource("2")
+region = Rect2(0, 171, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2616"]
+atlas = ExtResource("2")
+region = Rect2(731, 171, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2617"]
+atlas = ExtResource("2")
+region = Rect2(0, 342, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2618"]
+atlas = ExtResource("2")
+region = Rect2(731, 342, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2619"]
+atlas = ExtResource("2")
+region = Rect2(0, 513, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2620"]
+atlas = ExtResource("2")
+region = Rect2(731, 513, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2621"]
+atlas = ExtResource("2")
+region = Rect2(0, 684, 731, 171)
+
+[sub_resource type="AtlasTexture" id="2622"]
+atlas = ExtResource("2")
+region = Rect2(731, 684, 731, 171)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_da006"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("2613")
+}, {
+"duration": 1.0,
+"texture": SubResource("2614")
+}, {
+"duration": 1.0,
+"texture": SubResource("2615")
+}, {
+"duration": 1.0,
+"texture": SubResource("2616")
+}, {
+"duration": 1.0,
+"texture": SubResource("2617")
+}, {
+"duration": 1.0,
+"texture": SubResource("2618")
+}, {
+"duration": 1.0,
+"texture": SubResource("2619")
+}, {
+"duration": 1.0,
+"texture": SubResource("2620")
+}, {
+"duration": 1.0,
+"texture": SubResource("2621")
+}, {
+"duration": 1.0,
+"texture": SubResource("2622")
+}],
+"loop": 0,
+"name": &"Monster72Bullet",
+"speed": 24.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8e772"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ewl6g"]
+size = Vector2(374, 142)
+
+[sub_resource type="Animation" id="Animation_vp472"]
+length = 0.416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("middle/BulletANI:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("middle/BulletANI:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_8e772")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("middle/BulletANI:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("middle/BulletANI:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-200, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("middle/BulletANI:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("middle/BulletANI:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": ["Monster72Bullet"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("middle/BulletANI:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0416667, 0.0833333, 0.125, 0.166667, 0.208333, 0.25, 0.291667, 0.333333, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("poision:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("middle/HitBox/Hit_Box:shape")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_ewl6g")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("middle/HitBox/Hit_Box:disabled")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("middle/HitBox/Hit_Box:position")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-42, -5), Vector2(-110, -5), Vector2(-188, -8), Vector2(-293, -9)]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1r5sv"]
+_data = {
+&"Monster72Bullet": SubResource("Animation_vp472")
+}
+
+[node name="MonsterBullet" type="Node2D" unique_id=1699909132]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=418806565]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1987364478]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=838222038]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_oo74y")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=282083050]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_da006")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1397100271]
+libraries/ = SubResource("AnimationLibrary_1r5sv")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=2091320624]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("3")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1067667133]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=509915762]
+one_shot = true

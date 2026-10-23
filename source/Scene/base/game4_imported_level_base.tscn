@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/game4_imported_level.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(1700, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[node name="Game4ImportedLevelBase" unique_id=660392840 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = ""
+display_name = ""
+stage_number = 0
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = false
+
+[node name="thb" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1586212661]
+position = Vector2(2500, -596)
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=2068771396]
+position = Vector2(600, 690.5)
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=442970453]
+position = Vector2(1260, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1282287360]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1050, 350)

@@ -1,0 +1,461 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/game_information.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="4"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="5"]
+[ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="7"]
+
+[sub_resource type="StyleBoxEmpty" id="1"]
+
+[sub_resource type="StyleBoxEmpty" id="3"]
+
+[sub_resource type="StyleBoxEmpty" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="4"]
+
+[sub_resource type="StyleBoxEmpty" id="5"]
+
+[sub_resource type="StyleBoxEmpty" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="8"]
+
+[sub_resource type="StyleBoxEmpty" id="7"]
+
+[sub_resource type="StyleBoxEmpty" id="9"]
+
+[sub_resource type="StyleBoxEmpty" id="10"]
+
+[sub_resource type="StyleBoxEmpty" id="11"]
+
+[sub_resource type="StyleBoxEmpty" id="13"]
+
+[sub_resource type="StyleBoxEmpty" id="12"]
+
+[sub_resource type="StyleBoxEmpty" id="14"]
+
+[sub_resource type="StyleBoxEmpty" id="15"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8y6hl"]
+
+[node name="Game_information" type="CanvasLayer" unique_id=1304399212]
+script = ExtResource("1")
+metadata/_edit_lock_ = true
+
+[node name="bg" type="TextureRect" parent="." unique_id=1106839577]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2")
+metadata/_edit_lock_ = true
+
+[node name="czzn" type="Button" parent="bg" unique_id=1140669282]
+layout_mode = 0
+offset_left = 63.5
+offset_top = 535.5
+offset_right = 160.5
+offset_bottom = 566.5
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_styles/normal = SubResource("1")
+theme_override_styles/pressed = SubResource("3")
+theme_override_styles/hover = SubResource("2")
+theme_override_styles/disabled = SubResource("4")
+theme_override_styles/focus = SubResource("5")
+text = "Boss技能介绍"
+
+[node name="yxxq" type="Button" parent="bg" unique_id=770976760]
+visible = false
+layout_mode = 0
+offset_left = 165.5
+offset_top = 535.5
+offset_right = 237.5
+offset_bottom = 566.5
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_styles/normal = SubResource("6")
+theme_override_styles/pressed = SubResource("8")
+theme_override_styles/hover = SubResource("7")
+theme_override_styles/disabled = SubResource("9")
+theme_override_styles/focus = SubResource("10")
+text = "游戏详情"
+
+[node name="yxgg" type="Button" parent="bg" unique_id=202676958]
+visible = false
+layout_mode = 0
+offset_left = 246.5
+offset_top = 535.5
+offset_right = 318.5
+offset_bottom = 566.5
+theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
+theme_override_styles/normal = SubResource("11")
+theme_override_styles/pressed = SubResource("13")
+theme_override_styles/hover = SubResource("12")
+theme_override_styles/disabled = SubResource("14")
+theme_override_styles/focus = SubResource("15")
+text = "游戏公告"
+
+[node name="ColorRect" type="ColorRect" parent="bg" unique_id=1484873854]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="bg/ColorRect" unique_id=774565373]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -325.0
+offset_top = -166.0
+offset_right = 325.0
+offset_bottom = 166.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="bg/ColorRect/VBoxContainer" unique_id=1520186032]
+layout_mode = 2
+
+[node name="title_pc_1" type="TextureRect" parent="bg/ColorRect/VBoxContainer/HBoxContainer" unique_id=48152467]
+layout_mode = 2
+texture = ExtResource("4")
+
+[node name="title" type="Label" parent="bg/ColorRect/VBoxContainer/HBoxContainer" unique_id=1452648720]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 30
+text = "操作指南"
+
+[node name="title_pc_2" type="TextureRect" parent="bg/ColorRect/VBoxContainer/HBoxContainer" unique_id=230804901]
+layout_mode = 2
+texture = ExtResource("4")
+
+[node name="Control" type="PanelContainer" parent="bg/ColorRect/VBoxContainer" unique_id=1986725415]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8y6hl")
+
+[node name="czzn" type="MarginContainer" parent="bg/ColorRect/VBoxContainer/Control" unique_id=75366522]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="bg/ColorRect/VBoxContainer/Control/czzn" unique_id=125052470]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 300
+
+[node name="VBoxContainer" type="VBoxContainer" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer" unique_id=1957659134]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="_1" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=1965067509]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "进传送点： W   ↑"
+
+[node name="_2" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=602499709]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "向左移动： A   ←"
+
+[node name="_3" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=949129543]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "向右移动： D   →"
+
+[node name="_4" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=2120893786]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "普通攻击： J   1"
+
+[node name="_5" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=2106669516]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "角色跳跃： K   2"
+
+[node name="_6" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=1399050907]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "二段跳跃： KK   22"
+
+[node name="_7" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=136829412]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "无双技能： 空格   0"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer" unique_id=998366327]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="_8" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=303009195]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "角色下坠：S   ↓"
+
+[node name="_9" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=2068131234]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "使用法宝：H   7"
+
+[node name="_10" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=684794574]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "开启背包：C   +"
+
+[node name="_11" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=227351278]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "设置菜单：Esc"
+
+[node name="_12" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=1511109354]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "技能菜单：V   -"
+
+[node name="_13" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=887574375]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "法宝菜单：N   *"
+
+[node name="_14" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer2" unique_id=418877475]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 20
+text = "宠物菜单： B(未开放)"
+
+[node name="yxxq" type="MarginContainer" parent="bg/ColorRect/VBoxContainer/Control" unique_id=1123550829]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="yxgg" type="MarginContainer" parent="bg/ColorRect/VBoxContainer/Control" unique_id=298487762]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="bg/ColorRect/VBoxContainer/Control/yxgg" unique_id=543434136]
+layout_mode = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer" unique_id=693351347]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_constants/separation = 11
+
+[node name="_1" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=529165560]
+layout_mode = 2
+size_flags_vertical = 3
+text = "1.游戏绝大多数元素与原版相同，部分功能为新开发。"
+
+[node name="_2" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=894711195]
+layout_mode = 2
+text = "2.玩家属性和怪物属性新增命中，韧性，暴免，吸血，幸运，破甲，破魔。"
+vertical_alignment = 1
+
+[node name="_3" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=835489167]
+layout_mode = 2
+text = "3.玩家，怪物减伤算法改变。"
+vertical_alignment = 1
+
+[node name="_4" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=1201122717]
+layout_mode = 2
+text = "4.装备属性为随机值，可以通过强化提升装备属性。"
+vertical_alignment = 1
+
+[node name="_5" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=2072002218]
+layout_mode = 2
+text = "5.回血时，超过生命上限的部分将不会显示。"
+vertical_alignment = 1
+
+[node name="_6" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=2099390264]
+layout_mode = 2
+text = "6.根据造成伤害的类型，伤害显示数字会呈现不同的颜色和样式。"
+vertical_alignment = 1
+
+[node name="_7" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=2090733366]
+layout_mode = 2
+text = "7.怪物行动逻辑发生改变，部分怪物拥有新的技能效果。"
+vertical_alignment = 1
+
+[node name="_8" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=1001648395]
+layout_mode = 2
+text = "8.新增加了装备幻化功能，快去试试吧！"
+vertical_alignment = 1
+
+[node name="_9" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=42579344]
+layout_mode = 2
+text = "9.背包的每一页可以看作一个独立的背包，批量出售时，每页内物品不会变更到其他的装备页，
+请注意！！"
+vertical_alignment = 1
+
+[node name="_10" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=963822224]
+layout_mode = 2
+text = "10.背包新增消耗品分类，类似于一些buff，可用道具，会被分到该类。"
+vertical_alignment = 1
+
+[node name="_11" type="Label" parent="bg/ColorRect/VBoxContainer/Control/yxgg/ScrollContainer/HBoxContainer" unique_id=150920582]
+layout_mode = 2
+text = "11.装备强化不再存在成功率，装备每级强化需要一定数量的强化石和灵魂，达到要求即可强化成功，当前最高强化至7级。"
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Panel" type="Panel" parent="bg" unique_id=954844176]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_bottom = 50.0
+grow_horizontal = 0
+
+[node name="close" type="TextureButton" parent="bg/Panel" unique_id=1080326028]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 27.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("6")
+texture_pressed = ExtResource("6")
+texture_hover = ExtResource("7")
+texture_disabled = ExtResource("6")
+
+[connection signal="pressed" from="bg/czzn" to="." method="_on_czzn_pressed"]
+[connection signal="pressed" from="bg/yxxq" to="." method="_on_yxxq_pressed"]
+[connection signal="pressed" from="bg/yxgg" to="." method="_on_yxgg_pressed"]
+[connection signal="pressed" from="bg/Panel/close" to="." method="_on_close_pressed"]

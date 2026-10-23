@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/xuanwu_gate_arrow.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="Shape_hit"]
+size = Vector2(120, 38)
+
+[node name="XuanwuGateArrow" type="Node2D" unique_id=1643945195]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=1570584880]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=122741702]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=1146953177]
+shape = SubResource("Shape_hit")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=582016123]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=309968454]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1364178702]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=589676747]
+one_shot = true

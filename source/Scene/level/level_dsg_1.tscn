@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_dsg_1.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_5/yc.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(6930, 1183)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1052, 1205)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1036, 1205)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(974, 1205)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(1377, 2382.5)
+
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(676.75, 2191)
+
+[node name="Level_dsg_1" unique_id=1731038161 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=2054058918]
+position = Vector2(3461, 985.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1813642893]
+position = Vector2(1626, -122.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=906691536]
+position = Vector2(2767, -119)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=830330580]
+position = Vector2(4039, -124)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=378826293]
+position = Vector2(5285.5, 462.75)
+shape = SubResource("5")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=279767056]
+position = Vector2(3155.63, 174.5)
+shape = SubResource("6")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="Yc" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1669155442]
+position = Vector2(2466, 265)
+scale = Vector2(1.0507737, 1.1820008)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1719763317]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4330, 324)
+metadata/_edit_lock_ = true

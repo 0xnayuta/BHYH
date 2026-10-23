@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_44.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_xxm/xian_xian_men_bei_jing.jpg" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(2574.75, 553)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(17, 1786)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1596.5, 1786)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(101, 1420)
+
+[node name="Level_44" unique_id=790315060 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [365.0, 1870.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=164673900]
+position = Vector2(633.375, 669.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1848001493]
+position = Vector2(1007.5, -406)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=484500443]
+position = Vector2(2199.75, -408)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=845292434]
+position = Vector2(-54.5, -221)
+shape = SubResource("4")
+disabled = true
+
+[node name="create_control" parent="." index="8" unique_id=1989637868]
+wait_time = 0.5
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1771571250]
+
+[node name="Background" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1242638676]
+position = Vector2(717.88, 126)
+scale = Vector2(1.3983579, 1.2869563)
+texture = ExtResource("3")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1294.5, 316)
+metadata/_edit_lock_ = true

@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/magic_weapon/di_kong_yu_mo_quan.gd" id="2"]
+
+[node name="DiKongYuMoQuan" unique_id=1181870610 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="FieldAnchor" type="Node2D" parent="." index="2" unique_id=928035921]
+top_level = true
+z_index = 2
+
+[node name="SpawnEffect" type="AnimatedSprite2D" parent="FieldAnchor" index="0" unique_id=1825446893]
+visible = false
+
+[node name="FieldEffect" type="AnimatedSprite2D" parent="FieldAnchor" index="1" unique_id=1078325012]
+visible = false
+
+[node name="CastFlash" type="AnimatedSprite2D" parent="." index="3" unique_id=1521769084]
+visible = false
+z_index = 3
+position = Vector2(0, -30)

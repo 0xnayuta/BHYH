@@ -1,0 +1,299 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_4/special_effet_13.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lb6vp"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ek6xq"]
+atlas = ExtResource("2")
+region = Rect2(586, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eg3i5"]
+atlas = ExtResource("2")
+region = Rect2(1172, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_458wn"]
+atlas = ExtResource("2")
+region = Rect2(1758, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy562"]
+atlas = ExtResource("2")
+region = Rect2(2344, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vohqk"]
+atlas = ExtResource("2")
+region = Rect2(2930, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vy4p"]
+atlas = ExtResource("2")
+region = Rect2(3516, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h1jsc"]
+atlas = ExtResource("2")
+region = Rect2(4102, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kspg1"]
+atlas = ExtResource("2")
+region = Rect2(4688, 0, 586, 51)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8e7v"]
+atlas = ExtResource("2")
+region = Rect2(5274, 0, 586, 51)
+
+[sub_resource type="SpriteFrames" id="BulletFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lb6vp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ek6xq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eg3i5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_458wn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy562")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vohqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8vy4p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h1jsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kspg1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8e7v")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Role4Bullet4",
+"speed": 24.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpecialFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"empty",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="979"]
+size = Vector2(116, 136)
+
+[sub_resource type="RectangleShape2D" id="1014"]
+size = Vector2(161.705, 32)
+
+[sub_resource type="Animation" id="Role4Bullet4Animation"]
+length = 0.458333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BulletPlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BulletPlayer:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Role4Bullet4"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BulletPlayer:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-200, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BulletPlayer:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BulletPlayer:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BulletPlayer:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("HitBox/Collion:shape")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("1014")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitBox/Collion:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("HitBox/Collion:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-404, 0)]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("..")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.415),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpecialEffect:animation")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"empty"]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("BulletPlayers:speed_scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="BulletLibrary"]
+_data = {
+&"Role4Bullet4": SubResource("Role4Bullet4Animation")
+}
+
+[node name="RoleBullet" type="Node2D" unique_id=2111896930]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=1375670717]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=142372473]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(1e-05, 1e-05)
+sprite_frames = SubResource("BulletFrames")
+animation = &"Role4Bullet4"
+offset = Vector2(0, -15)
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=375179724]
+scale = Vector2(1, 1.2)
+sprite_frames = SubResource("SpecialFrames")
+animation = &"empty"
+autoplay = "empty"
+offset = Vector2(-8, 6)
+flip_h = true
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=1555305253]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=1316609905]
+position = Vector2(-33, 0)
+shape = SubResource("979")
+disabled = true
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=2116339630]
+libraries/ = SubResource("BulletLibrary")
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=180081712]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

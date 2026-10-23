@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/three_prince_boss.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="hit"]
+size = Vector2(220, 150)
+
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(92, 138)
+
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(48, 102)
+
+[node name="Monster_4402" unique_id=1422723464 instance=ExtResource("1")]
+script = ExtResource("2")
+prince_kind = 1
+
+[node name="HitBox" parent="BaseDamageBox/HitBox" parent_id_path=PackedInt32Array(145353887) index="0" unique_id=127304568]
+position = Vector2(-108, -72)
+shape = SubResource("hit")
+disabled = true
+
+[node name="HurtBox" parent="BaseDamageBox/HurtBox" parent_id_path=PackedInt32Array(692709197) index="0" unique_id=235198317]
+position = Vector2(0, -72)
+shape = SubResource("hurt")
+
+[node name="pz" parent="." index="4" unique_id=200057952]
+position = Vector2(0, -49)
+shape = SubResource("body")

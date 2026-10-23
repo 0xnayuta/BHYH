@@ -1,0 +1,2460 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/pet/pet_interface.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id80_lossless_653x513.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id79_lossless_55x20.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id46_lossless_296x190.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id109_lossless_116x27.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id97_lossless_211x20.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id99_lossless_211x20.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id162_lossless_73x27.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id167_lossless_73x27.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id172_lossless_73x27.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/pet/interface/pet_ui_id92_lossless_66x31.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/pet/interface/pet_ui_id84_lossless_66x31.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id103_lossless_40x40.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id144_lossless_48x25.png" id="14"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="15"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_button_feed_normal.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_button_feed_hover.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_button_rest_normal.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_button_rest_hover.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id1_lossless_66x20.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id15_lossless_139x21.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id22_lossless_139x21.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id180_lossless_26x27.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id2_lossless_66x20.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id26_lossless_139x21.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id3_lossless_66x20.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id18_lossless_139x21.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id5_lossless_66x20.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id30_lossless_139x21.png" id="29"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id6_lossless_37x23.png" id="30"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id7_lossless_37x23.png" id="31"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id8_lossless_37x23.png" id="32"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id43_lossless_282x165.png" id="33"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id64_lossless_136x146.png" id="34"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id59_lossless_69x69.png" id="35"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id61_lossless_53x53.png" id="36"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id66_lossless_53x53.png" id="37"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id69_lossless_53x53.png" id="38"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id72_lossless_53x53.png" id="39"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id75_lossless_53x53.png" id="40"]
+[ext_resource type="PackedScene" path="res://Scene/pet/pet_backpack_slot.tscn" id="41"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id189_lossless_132x17.png" id="42"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id279_jpeg3_110x35.png" id="43"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id276_jpeg3_110x35.png" id="44"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id183_lossless_88x28.png" id="45"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id186_lossless_88x28.png" id="46"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id248_lossless_231x133.png" id="47"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id250_lossless_68x33.png" id="48"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id205_jpeg3_358x364.png" id="49"]
+[ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id202_lossless_54x54.png" id="50"]
+[ext_resource type="Texture2D" path="res://Art/pet/skillicon/smjc.png" id="51"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_stat"]
+bg_color = Color(0.290196, 0.129412, 0.0588235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.784314, 0.568627, 0.227451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page"]
+bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page_hover"]
+bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pet_page_selected"]
+bg_color = Color(0.643137, 0.364706, 0.0901961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_click"]
+
+[node name="PetInterface" type="Control" unique_id=486920265]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="symbol177" type="TextureRect" parent="." unique_id=138183327]
+layout_mode = 0
+offset_right = 653.0
+offset_bottom = 513.0
+mouse_filter = 2
+texture = ExtResource("2")
+
+[node name="shape81_id80" type="TextureRect" parent="." unique_id=1411001164]
+layout_mode = 0
+offset_right = 653.0
+offset_bottom = 513.0
+mouse_filter = 2
+texture = ExtResource("2")
+
+[node name="shape81_id79" type="TextureRect" parent="." unique_id=1258055282]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 439.0
+offset_right = 86.0
+offset_bottom = 459.0
+mouse_filter = 2
+texture = ExtResource("3")
+
+[node name="txtname" type="Label" parent="." unique_id=1879076304]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 72.0
+offset_right = 162.0
+offset_bottom = 93.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 14
+text = "宠物名"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="TigerLevelText" type="Label" parent="." unique_id=740780857]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 234.0
+offset_right = 171.0
+offset_bottom = 254.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 13
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="shape47_id46" type="TextureRect" parent="." unique_id=752009918]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 70.0
+offset_right = 470.0
+offset_bottom = 260.0
+scale = Vector2(0.39999992, 0.7888889)
+mouse_filter = 2
+texture = ExtResource("4")
+
+[node name="listtxt_frame" type="TextureRect" parent="." unique_id=249014481]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 72.0
+offset_right = 292.0
+offset_bottom = 99.0
+mouse_filter = 2
+texture = ExtResource("5")
+
+[node name="listtxt" type="Label" parent="." unique_id=2081798828]
+layout_mode = 0
+offset_left = 179.0
+offset_top = 74.0
+offset_right = 281.0
+offset_bottom = 94.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 13
+text = "宠物列表"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="PetNameScroll" type="ScrollContainer" parent="." unique_id=105135449]
+z_index = 20
+layout_mode = 0
+offset_left = 182.0
+offset_top = 101.0
+offset_right = 284.0
+offset_bottom = 216.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="PetNameList" type="VBoxContainer" parent="PetNameScroll" unique_id=714062595]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="expmc_frame" type="TextureRect" parent="." unique_id=984164418]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 440.0
+offset_right = 291.0
+offset_bottom = 460.0
+mouse_filter = 2
+texture = ExtResource("6")
+
+[node name="expmc_fill" type="TextureRect" parent="." unique_id=423851134]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 441.0
+offset_right = 226.0
+offset_bottom = 461.0
+mouse_filter = 2
+texture = ExtResource("7")
+
+[node name="expmc" type="Label" parent="." unique_id=1057984019]
+layout_mode = 0
+offset_left = 121.0
+offset_top = 441.0
+offset_right = 249.0
+offset_bottom = 459.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="atebtn" type="TextureButton" parent="." unique_id=543967151]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 80.0
+offset_right = 425.1
+offset_bottom = 107.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("8")
+texture_pressed = ExtResource("8")
+texture_hover = ExtResource("8")
+texture_disabled = ExtResource("8")
+
+[node name="eipbtn" type="TextureButton" parent="." unique_id=1306663587]
+layout_mode = 0
+offset_left = 429.1
+offset_top = 80.0
+offset_right = 502.1
+offset_bottom = 107.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("9")
+texture_pressed = ExtResource("9")
+texture_hover = ExtResource("9")
+texture_disabled = ExtResource("9")
+
+[node name="grmmc" type="TextureButton" parent="." unique_id=69035672]
+layout_mode = 0
+offset_left = 507.00003
+offset_top = 80.0
+offset_right = 580.0
+offset_bottom = 107.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("10")
+texture_pressed = ExtResource("10")
+texture_hover = ExtResource("10")
+texture_disabled = ExtResource("10")
+
+[node name="releasebtn" type="TextureButton" parent="." unique_id=2076423392]
+visible = false
+layout_mode = 0
+offset_left = 231.0
+offset_top = 253.0
+offset_right = 297.0
+offset_bottom = 284.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("11")
+texture_hover = ExtResource("11")
+texture_disabled = ExtResource("11")
+
+[node name="eatimbtn" type="TextureButton" parent="." unique_id=825296069]
+visible = false
+layout_mode = 0
+offset_left = 230.0
+offset_top = 223.0
+offset_right = 296.0
+offset_bottom = 254.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("12")
+texture_pressed = ExtResource("12")
+texture_hover = ExtResource("12")
+texture_disabled = ExtResource("12")
+
+[node name="btn_close" type="TextureButton" parent="." unique_id=1792748775]
+layout_mode = 0
+offset_left = 597.0
+offset_top = 8.0
+offset_right = 637.0
+offset_bottom = 48.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("13")
+texture_disabled = ExtResource("13")
+
+[node name="shape145" type="Control" parent="." unique_id=1097961285]
+anchors_preset = 0
+offset_left = 34.0
+offset_top = 233.0
+offset_right = 299.0
+offset_bottom = 438.9
+
+[node name="id144" type="TextureRect" parent="shape145" unique_id=925697267]
+layout_mode = 0
+offset_left = 51.8
+offset_top = -3.0
+offset_right = 99.8
+offset_bottom = 22.0
+mouse_filter = 2
+texture = ExtResource("14")
+
+[node name="PetAttributePages" type="Control" parent="." unique_id=560441844]
+anchors_preset = 0
+offset_left = 32.0
+offset_top = 257.0
+offset_right = 297.0
+offset_bottom = 415.0
+mouse_filter = 2
+
+[node name="StatRow1" type="Panel" parent="PetAttributePages" unique_id=1337937965]
+layout_mode = 0
+offset_right = 129.0
+offset_bottom = 31.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow1" unique_id=1101719622]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "生命"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow1" unique_id=1839876411]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow2" type="Panel" parent="PetAttributePages" unique_id=505944489]
+layout_mode = 0
+offset_left = 136.0
+offset_right = 265.0
+offset_bottom = 31.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow2" unique_id=1476098178]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "魔法"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow2" unique_id=166763887]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow3" type="Panel" parent="PetAttributePages" unique_id=1731683164]
+layout_mode = 0
+offset_top = 32.0
+offset_right = 129.0
+offset_bottom = 63.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow3" unique_id=1975449967]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "攻击"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow3" unique_id=537085084]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow4" type="Panel" parent="PetAttributePages" unique_id=843058137]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 32.0
+offset_right = 265.0
+offset_bottom = 63.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow4" unique_id=995071982]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "物防"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow4" unique_id=2034583020]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow5" type="Panel" parent="PetAttributePages" unique_id=2028182333]
+layout_mode = 0
+offset_top = 64.0
+offset_right = 129.0
+offset_bottom = 95.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow5" unique_id=1760020211]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "幸运"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow5" unique_id=77836284]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow6" type="Panel" parent="PetAttributePages" unique_id=2036821719]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 64.0
+offset_right = 265.0
+offset_bottom = 95.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow6" unique_id=119066737]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "魔防"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow6" unique_id=166895008]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow7" type="Panel" parent="PetAttributePages" unique_id=37420436]
+layout_mode = 0
+offset_top = 96.0
+offset_right = 129.0
+offset_bottom = 127.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow7" unique_id=18553233]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "暴击"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow7" unique_id=227806947]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow8" type="Panel" parent="PetAttributePages" unique_id=42171430]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 96.0
+offset_right = 265.0
+offset_bottom = 127.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow8" unique_id=1069592371]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "闪避"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow8" unique_id=389011213]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow9" type="Panel" parent="PetAttributePages" unique_id=1586808275]
+layout_mode = 0
+offset_top = 128.0
+offset_right = 129.0
+offset_bottom = 159.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow9" unique_id=1395042847]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "回血"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow9" unique_id=363950382]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="StatRow10" type="Panel" parent="PetAttributePages" unique_id=431079888]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 128.0
+offset_right = 265.0
+offset_bottom = 159.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Name" type="Label" parent="PetAttributePages/StatRow10" unique_id=245455432]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "回魔"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PetAttributePages/StatRow10" unique_id=812154862]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 2.0
+offset_right = 125.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="fightbtn" type="TextureButton" parent="." unique_id=493525328]
+layout_mode = 0
+offset_left = 230.0
+offset_top = 223.0
+offset_right = 296.0
+offset_bottom = 254.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("16")
+texture_pressed = ExtResource("16")
+texture_hover = ExtResource("17")
+texture_disabled = ExtResource("16")
+
+[node name="restbtn" type="TextureButton" parent="." unique_id=560850307]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 223.0
+offset_right = 236.0
+offset_bottom = 254.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("18")
+texture_pressed = ExtResource("18")
+texture_hover = ExtResource("19")
+texture_disabled = ExtResource("18")
+
+[node name="hptxt" type="Label" parent="." unique_id=367234772]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 289.09998
+offset_right = 160.0
+offset_bottom = 307.09998
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="mptxt" type="Label" parent="." unique_id=753016302]
+visible = false
+layout_mode = 0
+offset_left = 216.9
+offset_top = 288.0
+offset_right = 296.9
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="deftxt" type="Label" parent="." unique_id=1102352452]
+visible = false
+layout_mode = 0
+offset_left = 216.9
+offset_top = 320.0
+offset_right = 296.9
+offset_bottom = 338.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="atktxt" type="Label" parent="." unique_id=284852205]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 320.0
+offset_right = 160.0
+offset_bottom = 338.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="speedtxt" type="Label" parent="." unique_id=894829965]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 352.0
+offset_right = 160.0
+offset_bottom = 370.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="eamptxt" type="Label" parent="." unique_id=1365728309]
+visible = false
+layout_mode = 0
+offset_left = 216.29999
+offset_top = 416.0
+offset_right = 296.3
+offset_bottom = 434.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="mdeftxt" type="Label" parent="." unique_id=1471074242]
+visible = false
+layout_mode = 0
+offset_left = 216.6
+offset_top = 352.0
+offset_right = 296.6
+offset_bottom = 370.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="crittxt" type="Label" parent="." unique_id=482450501]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 384.0
+offset_right = 160.0
+offset_bottom = 402.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="misstxt" type="Label" parent="." unique_id=1528217279]
+visible = false
+layout_mode = 0
+offset_left = 215.9
+offset_top = 384.0
+offset_right = 295.9
+offset_bottom = 402.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="eahptxt" type="Label" parent="." unique_id=1744047475]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 416.0
+offset_right = 160.0
+offset_bottom = 434.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="PetAttributeShow" type="Control" parent="." unique_id=455633078]
+anchors_preset = 0
+offset_left = 258.0
+offset_top = 332.0
+offset_right = 550.0
+offset_bottom = 496.0
+mouse_filter = 2
+
+[node name="TigerQualityWx" type="Label" parent="PetAttributeShow" unique_id=895885325]
+layout_mode = 0
+offset_left = 96.0
+offset_top = -211.0
+offset_right = 162.0
+offset_bottom = -191.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 13
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="TigerQualityGg" type="Label" parent="PetAttributeShow" unique_id=962035469]
+layout_mode = 0
+offset_left = 182.0
+offset_top = -211.0
+offset_right = 248.0
+offset_bottom = -191.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 13
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="TigerQualityLl" type="Label" parent="PetAttributeShow" unique_id=1738801739]
+layout_mode = 0
+offset_left = 264.0
+offset_top = -211.0
+offset_right = 330.0
+offset_bottom = -191.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 13
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="shape10_魔法" type="TextureRect" parent="PetAttributeShow" unique_id=927747915]
+layout_mode = 0
+offset_left = 78.0
+offset_top = -174.0
+offset_right = 144.0
+offset_bottom = -154.0
+mouse_filter = 2
+texture = ExtResource("20")
+
+[node name="hpqualitymc_魔法资质条" type="TextureRect" parent="PetAttributeShow/shape10_魔法" unique_id=2036470001]
+layout_mode = 0
+offset_left = 76.0
+offset_top = -1.0
+offset_right = 215.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("21")
+
+[node name="mpzizhibar" type="TextureProgressBar" parent="PetAttributeShow/shape10_魔法" unique_id=1622018787]
+layout_mode = 0
+offset_left = 76.0
+offset_top = -1.0
+offset_right = 215.0
+offset_bottom = 20.0
+mouse_filter = 2
+max_value = 2000.0
+value = 1000.0
+texture_progress = ExtResource("22")
+
+[node name="mpzizhitxt" type="Label" parent="PetAttributeShow/shape10_魔法" unique_id=1028911205]
+layout_mode = 0
+offset_left = 76.0
+offset_top = -1.0
+offset_right = 215.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="mpzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_魔法" unique_id=1829598809]
+layout_mode = 0
+offset_left = 227.0
+offset_top = -3.0
+offset_right = 253.0
+offset_bottom = 24.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="shape10_攻击" type="TextureRect" parent="PetAttributeShow" unique_id=1834342653]
+layout_mode = 0
+offset_left = 79.0
+offset_top = -151.0
+offset_right = 145.0
+offset_bottom = -131.0
+mouse_filter = 2
+texture = ExtResource("24")
+
+[node name="hpqualitymc_攻击资质条2" type="TextureRect" parent="PetAttributeShow/shape10_攻击" unique_id=676923203]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+mouse_filter = 2
+texture = ExtResource("21")
+
+[node name="atkzizhibar" type="TextureProgressBar" parent="PetAttributeShow/shape10_攻击" unique_id=503125014]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+mouse_filter = 2
+max_value = 2000.0
+value = 1000.0
+texture_progress = ExtResource("25")
+
+[node name="atkzizhitxt" type="Label" parent="PetAttributeShow/shape10_攻击" unique_id=465036081]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="atkzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_攻击" unique_id=524348861]
+layout_mode = 0
+offset_left = 226.0
+offset_top = -2.0
+offset_right = 252.0
+offset_bottom = 25.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="shape10_生命" type="TextureRect" parent="PetAttributeShow" unique_id=1701088014]
+layout_mode = 0
+offset_left = 79.0
+offset_top = -129.0
+offset_right = 145.0
+offset_bottom = -109.0
+mouse_filter = 2
+texture = ExtResource("26")
+
+[node name="hpqualitymc_生命资质条" type="TextureRect" parent="PetAttributeShow/shape10_生命" unique_id=2102548821]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 2.0
+offset_right = 215.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("21")
+
+[node name="hpzizhibar" type="TextureProgressBar" parent="PetAttributeShow/shape10_生命" unique_id=683034565]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 2.0
+offset_right = 215.0
+offset_bottom = 23.0
+mouse_filter = 2
+max_value = 2000.0
+value = 1000.0
+texture_progress = ExtResource("27")
+
+[node name="hpzizhitxt" type="Label" parent="PetAttributeShow/shape10_生命" unique_id=1467773999]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 2.0
+offset_right = 215.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="hpzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_生命" unique_id=863971249]
+layout_mode = 0
+offset_left = 226.0
+offset_right = 252.0
+offset_bottom = 27.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="shape10_防御" type="TextureRect" parent="PetAttributeShow" unique_id=1661165852]
+layout_mode = 0
+offset_left = 79.0
+offset_top = -105.0
+offset_right = 145.0
+offset_bottom = -85.0
+mouse_filter = 2
+texture = ExtResource("28")
+
+[node name="hpqualitymc_防御资质条" type="TextureRect" parent="PetAttributeShow/shape10_防御" unique_id=210862446]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+mouse_filter = 2
+texture = ExtResource("21")
+
+[node name="defzizhibar" type="TextureProgressBar" parent="PetAttributeShow/shape10_防御" unique_id=1555090857]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+mouse_filter = 2
+max_value = 2000.0
+value = 1000.0
+texture_progress = ExtResource("29")
+
+[node name="defzizhitxt" type="Label" parent="PetAttributeShow/shape10_防御" unique_id=1642173562]
+layout_mode = 0
+offset_left = 76.0
+offset_right = 215.0
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="defzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_防御" unique_id=316987206]
+layout_mode = 0
+offset_left = 226.0
+offset_top = -2.0
+offset_right = 252.0
+offset_bottom = 25.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="hpqualitytxt" type="Label" parent="PetAttributeShow" unique_id=1172723324]
+layout_mode = 0
+offset_left = 151.7
+offset_top = 84.5
+offset_right = 251.7
+offset_bottom = 102.5
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="shape10_根骨" type="TextureRect" parent="PetAttributeShow" unique_id=247154702]
+layout_mode = 0
+offset_left = 167.0
+offset_top = -212.0
+offset_right = 204.0
+offset_bottom = -189.0
+mouse_filter = 2
+texture = ExtResource("30")
+
+[node name="mpzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_根骨" unique_id=296543363]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 2.0
+offset_right = 78.0
+offset_bottom = 20.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="shape10_灵力" type="TextureRect" parent="PetAttributeShow" unique_id=1265703049]
+layout_mode = 0
+offset_left = 249.0
+offset_top = -212.0
+offset_right = 286.0
+offset_bottom = -189.0
+mouse_filter = 2
+texture = ExtResource("31")
+
+[node name="mpzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_灵力" unique_id=1626797479]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 2.0
+offset_right = 78.0
+offset_bottom = 20.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="shape10_悟性" type="TextureRect" parent="PetAttributeShow" unique_id=182440336]
+layout_mode = 0
+offset_left = 79.0
+offset_top = -212.0
+offset_right = 116.0
+offset_bottom = -189.0
+mouse_filter = 2
+texture = ExtResource("32")
+
+[node name="mpzizhibtn" type="TextureButton" parent="PetAttributeShow/shape10_悟性" unique_id=1581564335]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 2.0
+offset_right = 80.0
+offset_bottom = 20.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="LearnSkillButton" type="Button" parent="PetAttributeShow" unique_id=46278365]
+z_index = 5
+layout_mode = 0
+offset_left = 167.0
+offset_top = -73.0
+offset_right = 248.0
+offset_bottom = -48.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "学习技能"
+
+[node name="PetFormationButton" type="Button" parent="PetAttributeShow" unique_id=166497218]
+z_index = 5
+layout_mode = 0
+offset_left = 77.0
+offset_top = -73.0
+offset_right = 158.0
+offset_bottom = -48.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "宠物阵法"
+
+[node name="UpgradeSkillButton" type="Button" parent="PetAttributeShow" unique_id=375925697]
+z_index = 5
+layout_mode = 0
+offset_left = 257.0
+offset_top = -73.0
+offset_right = 338.0
+offset_bottom = -48.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "升级技能"
+
+[node name="shape44_id43" type="TextureRect" parent="PetAttributeShow" unique_id=1820653422]
+layout_mode = 0
+offset_left = 67.0
+offset_top = -44.0
+offset_right = 349.0
+offset_bottom = 121.0
+mouse_filter = 2
+texture = ExtResource("33")
+
+[node name="PetBackPackShow" type="Control" parent="." unique_id=617687537]
+visible = false
+anchors_preset = 0
+offset_left = 260.0
+offset_top = 170.0
+offset_right = 556.0
+offset_bottom = 520.0
+
+[node name="bpmc" type="TextureRect" parent="PetBackPackShow" unique_id=1609481808]
+layout_mode = 0
+offset_left = 60.0
+offset_top = -63.0
+offset_right = 204.0
+offset_bottom = 86.0
+mouse_filter = 2
+texture = ExtResource("34")
+
+[node name="equipment_id59" type="TextureRect" parent="PetBackPackShow" unique_id=435227740]
+layout_mode = 0
+offset_left = 244.0
+offset_top = -17.999992
+offset_right = 313.0
+offset_bottom = 51.000008
+mouse_filter = 2
+texture = ExtResource("35")
+
+[node name="zbst_id61" type="TextureRect" parent="PetBackPackShow" unique_id=109067780]
+layout_mode = 0
+offset_left = 252.0
+offset_top = -10.0
+offset_right = 305.0
+offset_bottom = 43.0
+mouse_filter = 2
+texture = ExtResource("36")
+
+[node name="zbst" type="Button" parent="PetBackPackShow" unique_id=1091685630]
+layout_mode = 0
+offset_left = 252.0
+offset_top = -10.0
+offset_right = 305.0
+offset_bottom = 43.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="zbmz_id66" type="TextureRect" parent="PetBackPackShow" unique_id=1331505169]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 25.000008
+offset_right = 189.0
+offset_bottom = 78.00001
+mouse_filter = 2
+texture = ExtResource("37")
+
+[node name="zbmz" type="Button" parent="PetBackPackShow" unique_id=333794041]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 25.000008
+offset_right = 189.0
+offset_bottom = 78.00001
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="zbxz_id69" type="TextureRect" parent="PetBackPackShow" unique_id=1344923216]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 25.000008
+offset_right = 127.0
+offset_bottom = 78.00001
+mouse_filter = 2
+texture = ExtResource("38")
+
+[node name="zbxz" type="Button" parent="PetBackPackShow" unique_id=206330196]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 25.000008
+offset_right = 127.0
+offset_bottom = 78.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="zbyf_id72" type="TextureRect" parent="PetBackPackShow" unique_id=106489766]
+layout_mode = 0
+offset_left = 74.0
+offset_top = -34.999992
+offset_right = 127.0
+offset_bottom = 18.000008
+mouse_filter = 2
+texture = ExtResource("39")
+
+[node name="zbyf" type="Button" parent="PetBackPackShow" unique_id=1011430570]
+layout_mode = 0
+offset_left = 74.0
+offset_top = -34.999992
+offset_right = 127.0
+offset_bottom = 18.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="zbjn_id75" type="TextureRect" parent="PetBackPackShow" unique_id=66468781]
+layout_mode = 0
+offset_left = 136.0
+offset_top = -34.999992
+offset_right = 189.0
+offset_bottom = 18.000008
+mouse_filter = 2
+texture = ExtResource("40")
+
+[node name="zbjn" type="Button" parent="PetBackPackShow" unique_id=1073159592]
+layout_mode = 0
+offset_left = 136.0
+offset_top = -34.999992
+offset_right = 189.0
+offset_bottom = 18.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="shape47_id46" type="TextureRect" parent="PetBackPackShow" unique_id=397305572]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 98.0
+offset_right = 352.0
+offset_bottom = 288.0
+mouse_filter = 2
+texture = ExtResource("4")
+
+[node name="PetBatchSellButton" type="Button" parent="PetBackPackShow" unique_id=1537004217]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 62.0
+offset_right = 321.0
+offset_bottom = 87.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "批量出售"
+
+[node name="PetBackpackScroll" type="ScrollContainer" parent="PetBackPackShow" unique_id=1805268710]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 106.0
+offset_right = 344.0
+offset_bottom = 282.0
+horizontal_scroll_mode = 0
+
+[node name="PetBackpackGrid" type="GridContainer" parent="PetBackPackShow/PetBackpackScroll" unique_id=1311191744]
+custom_minimum_size = Vector2(252, 642)
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="slot_1" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1636211184 instance=ExtResource("41")]
+
+[node name="slot_2" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=836539316 instance=ExtResource("41")]
+
+[node name="slot_3" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=528150558 instance=ExtResource("41")]
+
+[node name="slot_4" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1300893587 instance=ExtResource("41")]
+
+[node name="slot_5" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1591015963 instance=ExtResource("41")]
+
+[node name="slot_6" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1325435992 instance=ExtResource("41")]
+
+[node name="slot_7" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1542110097 instance=ExtResource("41")]
+
+[node name="slot_8" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=161172607 instance=ExtResource("41")]
+
+[node name="slot_9" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=121244989 instance=ExtResource("41")]
+
+[node name="slot_10" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1724441838 instance=ExtResource("41")]
+
+[node name="slot_11" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1535120742 instance=ExtResource("41")]
+
+[node name="slot_12" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=539611516 instance=ExtResource("41")]
+
+[node name="slot_13" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=929045452 instance=ExtResource("41")]
+
+[node name="slot_14" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1596975797 instance=ExtResource("41")]
+
+[node name="slot_15" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=816731504 instance=ExtResource("41")]
+
+[node name="slot_16" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1574061390 instance=ExtResource("41")]
+
+[node name="slot_17" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=539368465 instance=ExtResource("41")]
+
+[node name="slot_18" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1827449568 instance=ExtResource("41")]
+
+[node name="slot_19" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1136814262 instance=ExtResource("41")]
+
+[node name="slot_20" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=635913866 instance=ExtResource("41")]
+
+[node name="slot_21" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=2033407558 instance=ExtResource("41")]
+
+[node name="slot_22" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1347387891 instance=ExtResource("41")]
+
+[node name="slot_23" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1010652416 instance=ExtResource("41")]
+
+[node name="slot_24" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1343800025 instance=ExtResource("41")]
+
+[node name="slot_25" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=994482437 instance=ExtResource("41")]
+
+[node name="slot_26" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1426921324 instance=ExtResource("41")]
+
+[node name="slot_27" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=211718189 instance=ExtResource("41")]
+
+[node name="slot_28" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1968854662 instance=ExtResource("41")]
+
+[node name="slot_29" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=563080365 instance=ExtResource("41")]
+
+[node name="slot_30" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1974305706 instance=ExtResource("41")]
+
+[node name="slot_31" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=388170205 instance=ExtResource("41")]
+
+[node name="slot_32" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=510713218 instance=ExtResource("41")]
+
+[node name="slot_33" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=855570829 instance=ExtResource("41")]
+
+[node name="slot_34" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1134806007 instance=ExtResource("41")]
+
+[node name="slot_35" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1912672934 instance=ExtResource("41")]
+
+[node name="slot_36" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=743651846 instance=ExtResource("41")]
+
+[node name="slot_37" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=2119385751 instance=ExtResource("41")]
+
+[node name="slot_38" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1996078640 instance=ExtResource("41")]
+
+[node name="slot_39" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1864009629 instance=ExtResource("41")]
+
+[node name="slot_40" parent="PetBackPackShow/PetBackpackScroll/PetBackpackGrid" unique_id=1662197612 instance=ExtResource("41")]
+
+[node name="PetStrengthInterface" type="Control" parent="PetBackPackShow" unique_id=391499993]
+visible = false
+anchors_preset = 0
+offset_top = 160.0
+offset_right = 296.0
+offset_bottom = 350.0
+
+[node name="zbmc" type="TextureRect" parent="PetBackPackShow/PetStrengthInterface" unique_id=937707423]
+layout_mode = 0
+offset_right = 85.0
+offset_bottom = 70.0
+mouse_filter = 2
+texture = ExtResource("4")
+
+[node name="ntxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=899959491]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 98.0
+offset_right = 257.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "宠物装备"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="etxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=2020344612]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 8.0
+offset_right = 226.9
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="dtxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=174907444]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 139.9
+offset_right = 247.0
+offset_bottom = 157.9
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="protxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=601632447]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 34.0
+offset_right = 227.9
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="ttxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=1883428578]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 77.0
+offset_right = 247.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "需要强化点：0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="atxt" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=1056618099]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 118.0
+offset_right = 247.0
+offset_bottom = 135.9
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "已有强化点：0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="expmc" type="Label" parent="PetBackPackShow/PetStrengthInterface" unique_id=999427937]
+layout_mode = 0
+offset_left = 90.8
+offset_top = 33.8
+offset_right = 270.6
+offset_bottom = 50.8
+theme_override_colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "已有珍珠：0"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="strength_bar_under_id189" type="TextureRect" parent="PetBackPackShow/PetStrengthInterface" unique_id=905854652]
+layout_mode = 0
+offset_left = 90.8
+offset_top = 33.8
+offset_right = 270.8
+offset_bottom = 50.8
+mouse_filter = 2
+texture = ExtResource("42")
+
+[node name="strbtn" type="TextureButton" parent="PetBackPackShow/PetStrengthInterface" unique_id=1632692101]
+layout_mode = 0
+offset_left = 164.2
+offset_top = 78.5
+offset_right = 274.2
+offset_bottom = 113.5
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("43")
+texture_pressed = ExtResource("43")
+texture_hover = ExtResource("43")
+texture_disabled = ExtResource("43")
+
+[node name="buyqh" type="TextureButton" parent="PetBackPackShow/PetStrengthInterface" unique_id=756918599]
+layout_mode = 0
+offset_left = 164.2
+offset_top = 121.5
+offset_right = 274.2
+offset_bottom = 156.6
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("44")
+texture_pressed = ExtResource("44")
+texture_hover = ExtResource("44")
+texture_disabled = ExtResource("44")
+
+[node name="PetDevelopInterface" type="Control" parent="." unique_id=118385744]
+visible = false
+anchors_preset = 0
+offset_left = 312.0
+offset_top = 104.0
+offset_right = 623.0
+offset_bottom = 464.0
+
+[node name="sbtn" type="TextureButton" parent="PetDevelopInterface" unique_id=2000285137]
+visible = false
+layout_mode = 0
+offset_left = 214.40002
+offset_top = 111.8
+offset_right = 302.40002
+offset_bottom = 139.8
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("45")
+texture_pressed = ExtResource("45")
+texture_hover = ExtResource("45")
+texture_disabled = ExtResource("45")
+
+[node name="nbtn" type="TextureButton" parent="PetDevelopInterface" unique_id=1642308594]
+visible = false
+layout_mode = 0
+offset_left = 214.40002
+offset_top = 111.8
+offset_right = 302.40002
+offset_bottom = 139.8
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("46")
+texture_pressed = ExtResource("46")
+texture_hover = ExtResource("46")
+texture_disabled = ExtResource("46")
+
+[node name="giveUpThisPet" type="Control" parent="." unique_id=872554227]
+visible = false
+anchors_preset = 0
+offset_left = 330.0
+offset_top = 220.0
+offset_right = 561.0
+offset_bottom = 353.0
+
+[node name="shape249_id248" type="TextureRect" parent="giveUpThisPet" unique_id=1826461490]
+layout_mode = 0
+offset_right = 231.0
+offset_bottom = 133.0
+mouse_filter = 2
+texture = ExtResource("47")
+
+[node name="okbtn" type="TextureButton" parent="giveUpThisPet" unique_id=573428730]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 82.0
+offset_right = 108.0
+offset_bottom = 115.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("10")
+texture_pressed = ExtResource("10")
+texture_hover = ExtResource("10")
+texture_disabled = ExtResource("10")
+
+[node name="nobtn" type="TextureButton" parent="giveUpThisPet" unique_id=1499602413]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 82.0
+offset_right = 196.0
+offset_bottom = 115.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("48")
+texture_pressed = ExtResource("48")
+texture_hover = ExtResource("48")
+texture_disabled = ExtResource("48")
+
+[node name="symbol261" type="TextureRect" parent="giveUpThisPet" unique_id=114899498]
+layout_mode = 0
+offset_right = 231.0
+offset_bottom = 133.0
+mouse_filter = 2
+texture = ExtResource("47")
+
+[node name="PetEatImmortality" type="Control" parent="." unique_id=397836607]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 180.0
+offset_right = 638.0
+offset_bottom = 544.0
+
+[node name="symbol247" type="TextureRect" parent="PetEatImmortality" unique_id=1727897808]
+layout_mode = 0
+offset_right = 358.0
+offset_bottom = 364.0
+mouse_filter = 2
+texture = ExtResource("49")
+
+[node name="shape206_id205" type="TextureRect" parent="PetEatImmortality" unique_id=470187315]
+layout_mode = 0
+offset_right = 358.0
+offset_bottom = 364.0
+mouse_filter = 2
+texture = ExtResource("49")
+
+[node name="btn_close" type="TextureButton" parent="PetEatImmortality" unique_id=185725713]
+layout_mode = 0
+offset_left = 312.0
+offset_top = 12.0
+offset_right = 352.0
+offset_bottom = 52.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("13")
+texture_disabled = ExtResource("13")
+
+[node name="mc1" type="Button" parent="PetEatImmortality" unique_id=716187886]
+layout_mode = 0
+offset_left = 336.9
+offset_top = 223.0
+offset_right = 391.9
+offset_bottom = 263.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc2" type="Button" parent="PetEatImmortality" unique_id=855670208]
+layout_mode = 0
+offset_left = 466.9
+offset_top = 223.0
+offset_right = 522.0
+offset_bottom = 263.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc3" type="Button" parent="PetEatImmortality" unique_id=352799745]
+layout_mode = 0
+offset_left = 337.9
+offset_top = 272.0
+offset_right = 392.9
+offset_bottom = 312.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc4" type="Button" parent="PetEatImmortality" unique_id=729751952]
+layout_mode = 0
+offset_left = 466.9
+offset_top = 272.0
+offset_right = 522.0
+offset_bottom = 312.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc5" type="Button" parent="PetEatImmortality" unique_id=72259773]
+layout_mode = 0
+offset_left = 337.9
+offset_top = 320.9
+offset_right = 392.9
+offset_bottom = 360.9
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc6" type="Button" parent="PetEatImmortality" unique_id=811276833]
+layout_mode = 0
+offset_left = 465.9
+offset_top = 319.4
+offset_right = 521.0
+offset_bottom = 359.4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc7" type="Button" parent="PetEatImmortality" unique_id=707919612]
+layout_mode = 0
+offset_left = 337.9
+offset_top = 366.4
+offset_right = 392.9
+offset_bottom = 406.4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="mc8" type="Button" parent="PetEatImmortality" unique_id=1670777243]
+layout_mode = 0
+offset_left = 465.9
+offset_top = 366.4
+offset_right = 521.0
+offset_bottom = 406.4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+
+[node name="PetStatPage1" type="Button" parent="." unique_id=122197449]
+z_index = 5
+layout_mode = 0
+offset_left = 229.0
+offset_top = 418.0
+offset_right = 257.0
+offset_bottom = 441.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+disabled = true
+text = "1"
+
+[node name="PetStatPage2" type="Button" parent="." unique_id=2103066931]
+z_index = 5
+layout_mode = 0
+offset_left = 261.0
+offset_top = 418.0
+offset_right = 289.0
+offset_bottom = 441.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "2"
+
+[node name="PetSkillLearnPopup" type="Control" parent="." unique_id=1984460951]
+visible = false
+z_index = 500
+anchors_preset = 0
+offset_right = 653.0
+offset_bottom = 513.0
+
+[node name="Window" type="Panel" parent="PetSkillLearnPopup" unique_id=1068335496]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 59.0
+offset_right = 553.0
+offset_bottom = 454.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Title" type="Label" parent="PetSkillLearnPopup/Window" unique_id=261274771]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 230.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 20
+text = "宠物技能学习"
+
+[node name="CloseButton" type="TextureButton" parent="PetSkillLearnPopup/Window" unique_id=1800802891]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 7.0
+offset_right = 440.0
+offset_bottom = 47.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("13")
+
+[node name="SkillScroll" type="ScrollContainer" parent="PetSkillLearnPopup/Window" unique_id=677274642]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 55.0
+offset_right = 436.0
+offset_bottom = 377.0
+horizontal_scroll_mode = 0
+
+[node name="SkillList" type="VBoxContainer" parent="PetSkillLearnPopup/Window/SkillScroll" unique_id=676493995]
+custom_minimum_size = Vector2(399, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="LearnRowTemplate" type="PanelContainer" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList" unique_id=1733045617]
+visible = false
+custom_minimum_size = Vector2(399, 112)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Content" type="Control" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate" unique_id=1789698815]
+layout_mode = 2
+
+[node name="Frame" type="TextureRect" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=186777059]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 23.0
+offset_right = 74.0
+offset_bottom = 89.0
+mouse_filter = 2
+texture = ExtResource("50")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=884519036]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 27.0
+offset_right = 70.0
+offset_bottom = 85.0
+mouse_filter = 2
+texture = ExtResource("51")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=1336362072]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 5.0
+offset_right = 235.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 15
+text = "技能名称"
+
+[node name="Description" type="Label" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=883911396]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 30.0
+offset_right = 303.0
+offset_bottom = 108.0
+theme_override_colors/font_color = Color(0.92, 0.92, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 11
+text = "技能效果说明"
+autowrap_mode = 2
+
+[node name="BookCount" type="Label" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=700919771]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 6.0
+offset_right = 390.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.388235, 0.780392, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "技能书：0"
+horizontal_alignment = 2
+
+[node name="LearnButton" type="Button" parent="PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate/Content" unique_id=184882125]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 70.0
+offset_right = 388.0
+offset_bottom = 104.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "学习"
+
+[node name="PetSkillUpgradePopup" type="Control" parent="." unique_id=1148178829]
+visible = false
+z_index = 500
+anchors_preset = 0
+offset_right = 653.0
+offset_bottom = 513.0
+
+[node name="Window" type="Panel" parent="PetSkillUpgradePopup" unique_id=501598375]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 64.0
+offset_right = 553.0
+offset_bottom = 459.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Title" type="Label" parent="PetSkillUpgradePopup/Window" unique_id=144018791]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 220.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 20
+text = "宠物技能升级"
+
+[node name="SoulLabel" type="Label" parent="PetSkillUpgradePopup/Window" unique_id=902096553]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 17.0
+offset_right = 393.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.388235, 0.780392, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 15
+text = "灵魂：0"
+horizontal_alignment = 2
+
+[node name="CloseButton" type="TextureButton" parent="PetSkillUpgradePopup/Window" unique_id=1740232248]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 7.0
+offset_right = 440.0
+offset_bottom = 47.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("13")
+
+[node name="SkillScroll" type="ScrollContainer" parent="PetSkillUpgradePopup/Window" unique_id=302567041]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 55.0
+offset_right = 436.0
+offset_bottom = 377.0
+horizontal_scroll_mode = 0
+
+[node name="SkillList" type="VBoxContainer" parent="PetSkillUpgradePopup/Window/SkillScroll" unique_id=845308959]
+custom_minimum_size = Vector2(399, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="SkillRowTemplate" type="PanelContainer" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList" unique_id=1498336710]
+visible = false
+custom_minimum_size = Vector2(399, 66)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Content" type="Control" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate" unique_id=966695724]
+layout_mode = 2
+
+[node name="Frame" type="TextureRect" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=172995655]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 60.0
+offset_bottom = 60.0
+mouse_filter = 2
+texture = ExtResource("50")
+
+[node name="Icon" type="TextureRect" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=75285592]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 60.0
+offset_bottom = 60.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=1521497716]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 5.0
+offset_right = 190.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 15
+text = "技能名称"
+
+[node name="Mana" type="Label" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=1445300628]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 34.0
+offset_right = 176.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.388235, 0.780392, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 13
+text = "蓝耗：0"
+
+[node name="Level" type="Label" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=931931957]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 6.0
+offset_right = 289.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+text = "Lv.1"
+horizontal_alignment = 1
+
+[node name="Need" type="Label" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=1498242211]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 34.0
+offset_right = 308.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "需：600灵魂"
+horizontal_alignment = 1
+
+[node name="UpgradeButton" type="Button" parent="PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate/Content" unique_id=1382865613]
+layout_mode = 0
+offset_left = 315.0
+offset_top = 17.0
+offset_right = 388.0
+offset_bottom = 49.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "升级"
+
+[node name="PetFormationPopup" type="Control" parent="." unique_id=822787885]
+visible = false
+z_index = 650
+anchors_preset = 0
+offset_right = 653.0
+offset_bottom = 513.0
+
+[node name="Window" type="Panel" parent="PetFormationPopup" unique_id=1855465794]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 34.0
+offset_right = 618.0
+offset_bottom = 479.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Title" type="Label" parent="PetFormationPopup/Window" unique_id=1331309346]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 250.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 20
+text = "宠物阵法"
+
+[node name="Resources" type="Label" parent="PetFormationPopup/Window" unique_id=1479177250]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 45.0
+offset_right = 470.0
+offset_bottom = 69.0
+theme_override_colors/font_color = Color(0.388235, 0.780392, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "朱雀晶石 0  晶核 0    玄武晶石 0  晶核 0"
+
+[node name="CloseButton" type="TextureButton" parent="PetFormationPopup/Window" unique_id=1482107708]
+layout_mode = 0
+offset_left = 530.0
+offset_top = 7.0
+offset_right = 570.0
+offset_bottom = 47.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("13")
+
+[node name="FormationScroll" type="ScrollContainer" parent="PetFormationPopup/Window" unique_id=417640592]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 76.0
+offset_right = 569.0
+offset_bottom = 429.0
+horizontal_scroll_mode = 0
+
+[node name="FormationList" type="VBoxContainer" parent="PetFormationPopup/Window/FormationScroll" unique_id=23407873]
+custom_minimum_size = Vector2(545, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="FormationRowTemplate" type="PanelContainer" parent="PetFormationPopup/Window/FormationScroll/FormationList" unique_id=1241010674]
+visible = false
+custom_minimum_size = Vector2(545, 64)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pet_stat")
+
+[node name="Content" type="Control" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate" unique_id=1987982611]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=1942968249]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 105.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(1, 0.956863, 0.74902, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 15
+text = "生命"
+
+[node name="Level" type="Label" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=1592826061]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 7.0
+offset_right = 190.0
+offset_bottom = 31.0
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+text = "Lv.0/100"
+
+[node name="Effect" type="Label" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=1715359790]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 34.0
+offset_right = 190.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.388235, 0.780392, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "当前 +0  下级 +400"
+
+[node name="Cost" type="Label" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=436109606]
+layout_mode = 0
+offset_left = 195.0
+offset_top = 8.0
+offset_right = 383.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 12
+text = "朱雀晶石×2
+朱雀晶核×1"
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="Button" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=912283730]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 15.0
+offset_right = 463.0
+offset_bottom = 49.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "升级"
+
+[node name="UpgradeTenButton" type="Button" parent="PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate/Content" unique_id=912283731]
+layout_mode = 0
+offset_left = 466.0
+offset_top = 15.0
+offset_right = 535.0
+offset_bottom = 49.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("15")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_pet_page")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pet_page_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pet_page_selected")
+text = "升十级"

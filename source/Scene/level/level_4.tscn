@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_4.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Scene/level/stage.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_4/246.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/level_4/64.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/level_4/219.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(5757, 465)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5dcx"]
+size = Vector2(958, 1967)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qn542"]
+size = Vector2(1258.5, 1967)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5wbgc"]
+size = Vector2(1014, 1967)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1260.5, 2014.5)
+
+[node name="Level_4" unique_id=713128922 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [351.0, 2.0, 2884.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1123314356]
+position = Vector2(2870.5, 627.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=701252100]
+position = Vector2(1577, -504.5)
+shape = SubResource("RectangleShape2D_s5dcx")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=886722440]
+position = Vector2(2871.75, -520)
+shape = SubResource("RectangleShape2D_qn542")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=166599298]
+position = Vector2(4056, -504)
+shape = SubResource("RectangleShape2D_5wbgc")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=150977861]
+position = Vector2(5235.75, -488.25)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="create_control" parent="." index="8" unique_id=1989637868]
+wait_time = 0.2
+
+[node name="stage" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=1050259479 instance=ExtResource("3")]
+visible = false
+position = Vector2(3605, 262)
+scale = Vector2(1.22222, 0.8)
+metadata/_edit_lock_ = true
+
+[node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=653194421]
+metadata/_edit_lock_ = true
+
+[node name="246" type="Sprite2D" parent="BackGround/End" index="0" unique_id=1767650326]
+position = Vector2(723, 247)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1691842681]
+position = Vector2(-2, 0)
+metadata/_edit_lock_ = true
+
+[node name="64" type="Sprite2D" parent="BackGround/front" index="0" unique_id=247949721]
+position = Vector2(2520, 244.99997)
+scale = Vector2(1.0302387, 1.2025317)
+texture = ExtResource("5")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=458132924]
+metadata/_edit_lock_ = true
+
+[node name="219" type="Sprite2D" parent="BackGround/floor_2" index="0" unique_id=370907471]
+position = Vector2(2415.25, 445)
+scale = Vector2(1.04052, 1)
+texture = ExtResource("6")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4330, 316)
+metadata/_edit_lock_ = true

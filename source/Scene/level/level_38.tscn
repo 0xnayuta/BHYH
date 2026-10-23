@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_38.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/2_floor_bg23.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/1_bg231door.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/83.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(6319, 568.75)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1150.5, 1673)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(776, 1673)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(3276.5, 1673)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(683.745, 1420)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xaw8g"]
+radius = 137.9
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cjaxp"]
+radius = 137.9
+
+[node name="Level_38" unique_id=2098164741 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=953158651]
+position = Vector2(3082.5, 680.375)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=168894938]
+position = Vector2(1676.5, 24.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1122325646]
+position = Vector2(2833, 22)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=629246999]
+position = Vector2(3934, 22)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=493449305]
+position = Vector2(6236.75, 21)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=635299617]
+position = Vector2(3159.13, -211)
+shape = SubResource("5")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="FristBg" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1567837020]
+position = Vector2(719, 344)
+texture = ExtResource("3")
+
+[node name="ycgk" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1710210531]
+position = Vector2(2592, 403)
+texture = ExtResource("4")
+
+[node name="Jldbg" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=17814380]
+position = Vector2(2346, 294)
+texture = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1902187540]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4285, 316)
+metadata/_edit_lock_ = true
+
+[node name="Check" type="Area2D" parent="." index="14" unique_id=1042502358]
+position = Vector2(2607, 287)
+collision_layer = 0
+collision_mask = 2
+
+[node name="check" type="CollisionShape2D" parent="Check" index="0" unique_id=905290753]
+position = Vector2(-17.5, -5)
+shape = SubResource("CircleShape2D_xaw8g")
+
+[node name="Tp" type="Area2D" parent="." index="15" unique_id=306787548]
+position = Vector2(2594, 308)
+collision_layer = 16
+collision_mask = 16
+
+[node name="tp" type="CollisionShape2D" parent="Tp" index="0" unique_id=1291358281]
+position = Vector2(-4, -27)
+shape = SubResource("CircleShape2D_cjaxp")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="TTP" type="Timer" parent="." index="16" unique_id=2103753979]
+one_shot = true

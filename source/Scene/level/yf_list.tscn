@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/level/yf_list.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/04.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/05.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/06.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/07.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/414.png" id="9"]
+
+[node name="yf_list" type="Node2D" unique_id=1099585188]
+position = Vector2(752, 112)
+script = ExtResource("1")
+all_images = [ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1186848969]
+texture = ExtResource("9")
+
+[node name="yf1" type="TextureRect" parent="Sprite2D" unique_id=77885405]
+offset_left = -132.0
+offset_top = -29.0
+offset_right = -102.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf2" type="TextureRect" parent="Sprite2D" unique_id=1916640238]
+offset_left = -93.0
+offset_top = -29.0
+offset_right = -63.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf3" type="TextureRect" parent="Sprite2D" unique_id=857848061]
+offset_left = -54.0
+offset_top = -29.0
+offset_right = -24.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf4" type="TextureRect" parent="Sprite2D" unique_id=1066520600]
+offset_left = -15.0
+offset_top = -29.0
+offset_right = 15.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf5" type="TextureRect" parent="Sprite2D" unique_id=1691790825]
+offset_left = 24.0
+offset_top = -29.0
+offset_right = 54.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf6" type="TextureRect" parent="Sprite2D" unique_id=447871390]
+offset_left = 63.0
+offset_top = -29.0
+offset_right = 93.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true
+
+[node name="yf7" type="TextureRect" parent="Sprite2D" unique_id=1156489966]
+offset_left = 102.0
+offset_top = -29.0
+offset_right = 132.0
+offset_bottom = 31.0
+metadata/_edit_use_anchors_ = true

@@ -1,0 +1,239 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/ldl/forge.gd" id="1"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="2"]
+[ext_resource type="Texture2D" path="res://Art/ldl/zzs.png" id="3"]
+[ext_resource type="PackedScene" path="res://Scene/ldl/forge_material_box.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://Art/ldl/bs.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/ldl/scw.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/ldl/mc.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/ldl/sxlh.png" id="8"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="9"]
+[ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="10"]
+[ext_resource type="Texture2D" path="res://Art/ldl/dz1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/ldl/dz2.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/shop/46.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/ldl/171.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/magic_weapon/68.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/magic_weapon/70.png" id="16"]
+
+[node name="Forge" type="Node2D" unique_id=1560238111]
+script = ExtResource("1")
+
+[node name="Title" type="Label" parent="." unique_id=1954203465]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 99.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.972549, 0.976471, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 32
+text = "打造"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Title2" type="Label" parent="." unique_id=1421986243]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = 51.0
+offset_right = 111.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0.976471, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 22
+text = "所需材料"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Zzs" type="TextureRect" parent="." unique_id=1853941130]
+offset_left = 132.0
+offset_top = -2.0
+offset_right = 200.0
+offset_bottom = 65.0
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="BasicMaterial" type="ScrollContainer" parent="." unique_id=2059935609]
+offset_top = 82.0
+offset_right = 339.0
+offset_bottom = 149.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BasicMaterial" type="HBoxContainer" parent="BasicMaterial" unique_id=600821837]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="ForgeMaterialBox" parent="BasicMaterial/BasicMaterial" unique_id=1511826245 instance=ExtResource("4")]
+layout_mode = 2
+texture = null
+
+[node name="ForgeMaterialBox2" parent="BasicMaterial/BasicMaterial" unique_id=927414633 instance=ExtResource("4")]
+layout_mode = 2
+texture = null
+
+[node name="ForgeMaterialBox4" parent="BasicMaterial/BasicMaterial" unique_id=1262459118 instance=ExtResource("4")]
+layout_mode = 2
+texture = null
+
+[node name="ForgeMaterialBox3" parent="BasicMaterial/BasicMaterial" unique_id=1393879474 instance=ExtResource("4")]
+layout_mode = 2
+texture = null
+
+[node name="BSBoxPic" type="HBoxContainer" parent="." unique_id=2137411905]
+offset_left = 12.0
+offset_top = 164.0
+offset_right = 336.0
+offset_bottom = 231.0
+theme_override_constants/separation = 15
+metadata/_edit_lock_ = true
+
+[node name="Bs1" type="TextureRect" parent="BSBoxPic" unique_id=415042587]
+layout_mode = 2
+texture = ExtResource("5")
+
+[node name="Bs2" type="TextureRect" parent="BSBoxPic" unique_id=1231116827]
+layout_mode = 2
+texture = ExtResource("5")
+
+[node name="Bs3" type="TextureRect" parent="BSBoxPic" unique_id=239889563]
+layout_mode = 2
+texture = ExtResource("5")
+
+[node name="Bs4" type="TextureRect" parent="BSBoxPic" unique_id=745692494]
+layout_mode = 2
+texture = ExtResource("5")
+
+[node name="BSBox" type="HBoxContainer" parent="." unique_id=304769350]
+offset_left = 20.0
+offset_top = 172.0
+offset_right = 320.0
+offset_bottom = 222.0
+theme_override_constants/separation = 32
+metadata/_edit_lock_ = true
+
+[node name="LastItem" type="TextureRect" parent="." unique_id=988079449]
+offset_left = 12.0
+offset_top = 271.0
+offset_right = 80.0
+offset_bottom = 338.0
+texture = ExtResource("6")
+metadata/_edit_lock_ = true
+
+[node name="Name" type="TextureRect" parent="LastItem" unique_id=156342755]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 5.0
+offset_right = 128.0
+offset_bottom = 45.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("7")
+expand_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="ItemName" type="Label" parent="LastItem/Name" unique_id=2079765593]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 4.0
+offset_right = 241.0
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(0.45098, 0.427451, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 27
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Need" type="TextureRect" parent="LastItem" unique_id=655504698]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 36.0
+offset_right = 173.0
+offset_bottom = 76.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8")
+expand_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="LH" type="Label" parent="LastItem/Need" unique_id=1841886354]
+layout_mode = 0
+offset_left = 106.0
+offset_top = 10.0
+offset_right = 219.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("9")
+theme_override_font_sizes/font_size = 22
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="scw" parent="LastItem" unique_id=241839311 instance=ExtResource("10")]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 58.0
+offset_bottom = 58.0
+
+[node name="Froge" type="TextureButton" parent="." unique_id=1641069977]
+offset_left = 111.0
+offset_top = 331.0
+offset_right = 251.0
+offset_bottom = 379.0
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("11")
+texture_hover = ExtResource("12")
+texture_disabled = ExtResource("11")
+metadata/_edit_lock_ = true
+
+[node name="Light" type="Sprite2D" parent="Froge" unique_id=433962812]
+show_behind_parent = true
+position = Vector2(103, 56)
+texture = ExtResource("13")
+metadata/_edit_lock_ = true
+
+[node name="Arrow" type="TextureRect" parent="." unique_id=1900044169]
+offset_left = 144.0
+offset_top = 230.0
+offset_right = 195.0
+offset_bottom = 281.0
+texture = ExtResource("14")
+metadata/_edit_lock_ = true
+
+[node name="Help" type="TextureButton" parent="." unique_id=1331329833]
+offset_left = 300.0
+offset_top = 1.0
+offset_right = 340.0
+offset_bottom = 41.0
+texture_normal = ExtResource("15")
+texture_pressed = ExtResource("15")
+texture_hover = ExtResource("16")
+texture_disabled = ExtResource("15")
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="Froge" to="." method="_on_froge_pressed"]
+[connection signal="pressed" from="Help" to="." method="_on_help_pressed"]

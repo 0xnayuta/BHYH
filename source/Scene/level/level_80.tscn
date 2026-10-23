@@ -1,0 +1,199 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_80.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/north_continent_terrain.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/huanjingge_v2/bg10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/huanjingge_v2/bg11.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/export.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_06obr"]
+size = Vector2(1247.2186, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_rs7cl"]
+size = Vector2(140, 200)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_lbbhy"]
+atlas = ExtResource("6")
+region = Rect2(0, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_0hpbb"]
+atlas = ExtResource("6")
+region = Rect2(191, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_xqd01"]
+atlas = ExtResource("6")
+region = Rect2(382, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_h4fuv"]
+atlas = ExtResource("6")
+region = Rect2(573, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_fmrtc"]
+atlas = ExtResource("6")
+region = Rect2(764, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_dl87u"]
+atlas = ExtResource("6")
+region = Rect2(955, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_0oi70"]
+atlas = ExtResource("6")
+region = Rect2(1146, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_0sg2m"]
+atlas = ExtResource("6")
+region = Rect2(1337, 0, 191, 193)
+
+[sub_resource type="AtlasTexture" id="terrain_AtlasTexture_7fhhm"]
+atlas = ExtResource("6")
+region = Rect2(1528, 0, 191, 193)
+
+[sub_resource type="SpriteFrames" id="terrain_14"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_lbbhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_0hpbb")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_xqd01")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_h4fuv")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_fmrtc")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_dl87u")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_0oi70")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_0sg2m")
+}, {
+"duration": 1.0,
+"texture": SubResource("terrain_AtlasTexture_7fhhm")
+}],
+"loop": 1,
+"name": &"exit",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_a0p3k"]
+size = Vector2(140, 200)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_p80om"]
+size = Vector2(1200, 100)
+
+[node name="Level_80" unique_id=1140015601 instance=ExtResource("1")]
+position = Vector2(0, 0)
+script = ExtResource("2")
+hidden_original_room = false
+source_map = ""
+display_name = "幻境阁"
+stage_number = 80
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 1200.0
+background_baked = true
+spawn_position = Vector2(590, 253)
+
+[node name="Monster" parent="." index="2" unique_id=1898751455]
+position = Vector2(0, 0)
+
+[node name="Hero" parent="." index="3" unique_id=913111874]
+position = Vector2(0, 0)
+
+[node name="fall_items" parent="." index="9" unique_id=1160963530]
+position = Vector2(0, 0)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(608, 471)
+
+[node name="OriginalTerrain" type="Node2D" parent="." index="15" unique_id=206209796]
+script = ExtResource("3")
+metadata/scene_bindings = {
+"_animation_data": {},
+"_background_copies": [],
+"_backgrounds": {
+"bg10": NodePath("bg10"),
+"bg11": NodePath("bg11")
+},
+"_collapsing": [],
+"_first_space_bodies": [NodePath("Ground0")],
+"_hazards": [],
+"_hidden_platforms": [],
+"_moving": [],
+"_portals": [NodePath("MazeGate3"), NodePath("MazeGate4")],
+"_source_objects": [],
+"death_region": NodePath("FallDeath/Region")
+}
+
+[node name="Ground0" type="StaticBody2D" parent="OriginalTerrain" index="0" unique_id=447446043]
+position = Vector2(594.6, 524.1)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@397" type="CollisionShape2D" parent="OriginalTerrain/Ground0" index="0" unique_id=484053806]
+shape = SubResource("terrain_RectangleShape2D_06obr")
+one_way_collision = true
+
+[node name="bg10" type="Sprite2D" parent="OriginalTerrain" index="1" unique_id=706858671]
+z_index = -10
+texture = ExtResource("4")
+centered = false
+
+[node name="bg11" type="Sprite2D" parent="OriginalTerrain" index="2" unique_id=179050811]
+visible = false
+z_index = -10
+texture = ExtResource("5")
+centered = false
+
+[node name="MazeGate3" type="Area2D" parent="OriginalTerrain" index="3" unique_id=99601447]
+visible = false
+position = Vector2(289, 379)
+collision_layer = 0
+collision_mask = 530
+
+[node name="@CollisionShape2D@400" type="CollisionShape2D" parent="OriginalTerrain/MazeGate3" index="0" unique_id=798915945]
+shape = SubResource("terrain_RectangleShape2D_rs7cl")
+
+[node name="@AnimatedSprite2D@402" type="AnimatedSprite2D" parent="OriginalTerrain/MazeGate3" index="1" unique_id=1059429488]
+z_index = -1
+
+[node name="ExitPrompt" type="AnimatedSprite2D" parent="OriginalTerrain/MazeGate3" index="2" unique_id=295821305]
+position = Vector2(0, 50)
+sprite_frames = SubResource("terrain_14")
+animation = &"exit"
+
+[node name="MazeGate4" type="Area2D" parent="OriginalTerrain" index="4" unique_id=881233665]
+visible = false
+position = Vector2(910, 379)
+collision_layer = 0
+collision_mask = 530
+
+[node name="@CollisionShape2D@403" type="CollisionShape2D" parent="OriginalTerrain/MazeGate4" index="0" unique_id=927834179]
+shape = SubResource("terrain_RectangleShape2D_a0p3k")
+
+[node name="@AnimatedSprite2D@405" type="AnimatedSprite2D" parent="OriginalTerrain/MazeGate4" index="1" unique_id=2043753266]
+z_index = -1
+
+[node name="ExitPrompt" type="AnimatedSprite2D" parent="OriginalTerrain/MazeGate4" index="2" unique_id=1635090901]
+position = Vector2(0, 50)
+sprite_frames = SubResource("terrain_14")
+animation = &"exit"
+
+[node name="FallDeath" type="Area2D" parent="OriginalTerrain" index="5" unique_id=1264553212]
+position = Vector2(600, 750)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/FallDeath" index="0" unique_id=503549394]
+shape = SubResource("terrain_RectangleShape2D_p80om")

@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_role.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/base/base_role_p2.gd" id="2"]
+
+[node name="Control" unique_id=1182606520 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="role_hp_mp_exp" parent="." index="0" unique_id=1289634453]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -267.0
+offset_right = 0.0
+offset_bottom = 94.0
+grow_horizontal = 0
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(133, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="hp_bar" parent="role_hp_mp_exp" index="0" unique_id=2006201452]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(77, 0)
+
+[node name="TextureRect" parent="role_hp_mp_exp" index="1" unique_id=2097966662]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(20, 0)
+
+[node name="mp_bar" parent="role_hp_mp_exp" index="2" unique_id=791557866]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(77, 0)
+
+[node name="exp_bar" parent="role_hp_mp_exp" index="3" unique_id=1590370377]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(76, 0)
+
+[node name="Buff_box" parent="role_hp_mp_exp" index="4" unique_id=600409278]
+offset_left = 280.0
+offset_right = 460.0
+scale = Vector2(-1, 1)
+alignment = 2
+
+[node name="h_m_e_t" parent="role_hp_mp_exp" index="5" unique_id=1503598018]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(8, 0)
+
+[node name="role_menu" parent="." index="1" unique_id=384976899]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -324.0
+offset_top = -134.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+scale = Vector2(1, 1)
+
+[node name="ws_effect" parent="role_menu/ws_wk" parent_id_path=PackedInt32Array(639498269) index="0" unique_id=926475186]
+offset_right = 140.0
+
+[node name="SkillBox" parent="role_menu" index="1" unique_id=1080155706]
+layout_mode = 1
+offset_left = 128.0
+offset_right = 329.0
+scale = Vector2(1, 1)
+
+[node name="SkillBox2" parent="role_menu" index="2" unique_id=1697939467]
+layout_mode = 1
+offset_left = 128.0
+offset_right = 340.0
+scale = Vector2(1, 1)
+
+[node name="magicIcon" parent="role_menu" index="3" unique_id=1573552429]
+scale = Vector2(1, 1)
+
+[node name="grey" parent="role_menu" index="5" unique_id=1915741407]
+position = Vector2(662, 543)

@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_bxgh.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_bxgh/bg501.png" id="3"]
+[ext_resource type="Script" path="res://Script/level/level_bxgh_boat.gd" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_bxgh/boat501.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(1803, 500)
+
+[sub_resource type="RectangleShape2D" id="wall_shape"]
+size = Vector2(80, 1400)
+
+[sub_resource type="RectangleShape2D" id="boat_shape"]
+size = Vector2(390, 20)
+
+[sub_resource type="RectangleShape2D" id="fall_death_shape"]
+size = Vector2(1703, 80)
+
+[node name="Level_bxgh" unique_id=1283519591 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1028014454]
+position = Vector2(851.5, 670)
+shape = SubResource("floor_shape")
+disabled = true
+
+[node name="left_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=455591314]
+position = Vector2(-40, -100)
+shape = SubResource("wall_shape")
+
+[node name="right_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=675495968]
+position = Vector2(1743, -100)
+shape = SubResource("wall_shape")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=2083447054]
+
+[node name="EightImmortalsSea" type="Sprite2D" parent="BackGround/front" index="0" unique_id=587623669]
+texture_filter = 1
+position = Vector2(606.25, 279)
+scale = Vector2(1.2171514, 1.1548822)
+texture = ExtResource("3")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+visible = true
+position = Vector2(195, 274)
+
+[node name="stage501Boat" type="AnimatableBody2D" parent="." index="15" unique_id=2124849840]
+z_index = -1
+position = Vector2(199, 388)
+collision_layer = 32
+collision_mask = 32
+script = ExtResource("4")
+
+[node name="Sprite2D" type="Sprite2D" parent="stage501Boat" index="0" unique_id=1806807171]
+z_index = -1
+z_as_relative = false
+texture_filter = 1
+texture = ExtResource("5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="stage501Boat" index="1" unique_id=179555354]
+position = Vector2(2, -27)
+shape = SubResource("boat_shape")
+one_way_collision = true
+
+[node name="BossFootPoint" type="Marker2D" parent="stage501Boat" index="2" unique_id=1546396404]
+position = Vector2(400, -37)
+metadata/_edit_group_ = true
+
+[node name="FallDeath" type="Area2D" parent="." index="16" unique_id=962652420]
+position = Vector2(851.5, 928)
+collision_layer = 0
+collision_mask = 22
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FallDeath" index="0" unique_id=2136875704]
+position = Vector2(-38.5, -211)
+shape = SubResource("fall_death_shape")
+
+[node name="BossFootPointPreview" type="Marker2D" parent="." index="17" unique_id=756416413]
+
+[connection signal="body_entered" from="FallDeath" to="." method="_on_fall_death_body_entered"]

@@ -1,0 +1,240 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/add_effect/fuyaodun.png" id="1"]
+[ext_resource type="Script" path="res://Script/base/special_affect.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0yis"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rktoq"]
+atlas = ExtResource("1")
+region = Rect2(202, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1hi3"]
+atlas = ExtResource("1")
+region = Rect2(404, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnt42"]
+atlas = ExtResource("1")
+region = Rect2(606, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1xp5q"]
+atlas = ExtResource("1")
+region = Rect2(808, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wa11k"]
+atlas = ExtResource("1")
+region = Rect2(1010, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4803"]
+atlas = ExtResource("1")
+region = Rect2(1212, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4fg8p"]
+atlas = ExtResource("1")
+region = Rect2(1414, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6rlm"]
+atlas = ExtResource("1")
+region = Rect2(1616, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ievkb"]
+atlas = ExtResource("1")
+region = Rect2(1818, 0, 202, 165)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_def7v"]
+atlas = ExtResource("1")
+region = Rect2(0, 165, 202, 165)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w2rnd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0yis")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rktoq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1hi3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnt42")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1xp5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wa11k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4803")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4fg8p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6rlm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ievkb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_def7v")
+}],
+"loop": 0,
+"name": &"Indestructible1",
+"speed": 11.0
+}]
+
+[sub_resource type="Animation" id="Animation_rv0a1"]
+resource_name = "Indestructible1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0909091, 0.181818, 0.272727, 0.363636, 0.454545, 0.545455, 0.636364, 0.727273, 0.818182, 0.909091),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Indestructible1"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a7xlw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Empty"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d5xcb"]
+_data = {
+&"Indestructible1": SubResource("Animation_rv0a1"),
+&"RESET": SubResource("Animation_a7xlw")
+}
+
+[node name="SpecialAffect" type="AnimatedSprite2D" unique_id=2019943588]
+sprite_frames = SubResource("SpriteFrames_w2rnd")
+animation = &"Empty"
+script = ExtResource("2")
+metadata/_edit_lock_ = true
+
+[node name="SpecialAffect" type="AnimationPlayer" parent="." unique_id=869592249]
+libraries/ = SubResource("AnimationLibrary_d5xcb")

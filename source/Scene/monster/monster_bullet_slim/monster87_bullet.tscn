@@ -1,0 +1,292 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/monster/game_3_special_effect/monster_3_3/special_effect_3.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ar3mp"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_x885f"]
+blend_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b0jq6"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjiee"]
+atlas = ExtResource("2")
+region = Rect2(361, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r43r6"]
+atlas = ExtResource("2")
+region = Rect2(722, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aypnb"]
+atlas = ExtResource("2")
+region = Rect2(1083, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypr1l"]
+atlas = ExtResource("2")
+region = Rect2(1444, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b0f0q"]
+atlas = ExtResource("2")
+region = Rect2(1805, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3tcx"]
+atlas = ExtResource("2")
+region = Rect2(2166, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iw887"]
+atlas = ExtResource("2")
+region = Rect2(2527, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amnq0"]
+atlas = ExtResource("2")
+region = Rect2(2888, 0, 361, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebh7n"]
+atlas = ExtResource("2")
+region = Rect2(3249, 0, 361, 13)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tnuo2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b0jq6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjiee")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r43r6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aypnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypr1l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b0f0q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3tcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iw887")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_amnq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebh7n")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Monster87Bullet",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_df4le"]
+size = Vector2(125, 11.5)
+
+[sub_resource type="Animation" id="Animation_hkqp1"]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("middle/BulletANI:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_x885f")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("middle/BulletANI:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("middle/BulletANI:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("middle/BulletANI:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-100, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("middle/BulletANI:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("middle/BulletANI:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": ["Monster87Bullet"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("middle/BulletANI:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("poision:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("middle/HitBox/Hit_Box:shape")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_df4le")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("middle/HitBox/Hit_Box:disabled")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("middle/HitBox/Hit_Box:position")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(17.5, 0), Vector2(-59, 0), Vector2(-138, 0.25), Vector2(-214, 0), Vector2(-214, 0)]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_odqjo"]
+_data = {
+&"Monster87Bullet": SubResource("Animation_hkqp1")
+}
+
+[node name="MonsterBullet" type="Node2D" unique_id=785283124]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=2078534533]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=823867110]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=149683028]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_ar3mp")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=644113634]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("CanvasItemMaterial_x885f")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_tnuo2")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1636026944]
+libraries/ = SubResource("AnimationLibrary_odqjo")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=650113915]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("3")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1165768898]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=1408666590]
+one_shot = true

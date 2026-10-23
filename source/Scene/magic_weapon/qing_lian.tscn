@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/magic_weapon/qing_lian.gd" id="2"]
+
+[node name="QingLian" unique_id=1310744042 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="." index="2" unique_id=520352181]
+position = Vector2(0, 105)
+
+[node name="AuraEffect" type="AnimatedSprite2D" parent="." index="3" unique_id=1803236306]
+z_index = -2
+position = Vector2(0, 105)

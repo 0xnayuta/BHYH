@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/liu_sha_river_boss_level.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/9.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(1992, 832)
+
+[sub_resource type="RectangleShape2D" id="Shape_stop"]
+size = Vector2(1193, 1663)
+
+[node name="Level_xts" unique_id=1796103865 instance=ExtResource("1")]
+script = ExtResource("2")
+boss_scene_id = 13101
+boss_spawn_y = 200
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1803744016]
+position = Vector2(645, 826)
+shape = SubResource("Shape_floor")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=912144025]
+position = Vector2(1601, 41.5)
+shape = SubResource("Shape_stop")
+
+[node name="Tzhylevel" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=2028541506]
+position = Vector2(524.01044, 247.63571)
+scale = Vector2(1.274749, 1.2314616)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=2108151687]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(733, 347)
+metadata/_edit_lock_ = true

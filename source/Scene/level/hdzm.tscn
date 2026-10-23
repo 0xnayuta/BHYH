@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/level/hdzm.gd" id="1"]
+[ext_resource type="Script" path="res://Script/level/hdzm_first_dungeon_transition.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hdzm.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/ttzs.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/tz_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/tz_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/jjtj.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cs_1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cs_2.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hdgq.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cyy_1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cyy_2.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_1.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_2.png" id="14"]
+
+[node name="HDZM" type="Node2D" unique_id=248675062]
+script = ExtResource("1")
+
+[node name="FirstDungeonTransition" type="Node" parent="." unique_id=1488984223]
+script = ExtResource("2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=866421789]
+offset_left = -292.0
+offset_top = -222.0
+offset_right = 1312.0
+offset_bottom = 769.0
+color = Color(0, 0, 0, 0.278431)
+metadata/_edit_lock_ = true
+
+[node name="Hdzm" type="Sprite2D" parent="." unique_id=993150698]
+position = Vector2(493, 260)
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="Ttzs" type="Sprite2D" parent="Hdzm" unique_id=2075849470]
+position = Vector2(-205, 15)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="ttzstz" type="TextureButton" parent="Hdzm/Ttzs" unique_id=870237034]
+offset_left = -87.0
+offset_top = -24.0
+offset_right = 81.0
+offset_bottom = 43.0
+texture_normal = ExtResource("5")
+texture_pressed = ExtResource("5")
+texture_hover = ExtResource("6")
+texture_disabled = ExtResource("5")
+metadata/_edit_lock_ = true
+
+[node name="csm" type="Sprite2D" parent="Hdzm" unique_id=612280969]
+position = Vector2(-15, 15)
+texture = ExtResource("7")
+metadata/_edit_lock_ = true
+
+[node name="csm" type="TextureButton" parent="Hdzm/csm" unique_id=211900242]
+offset_left = -87.0
+offset_top = -24.0
+offset_right = 81.0
+offset_bottom = 43.0
+texture_normal = ExtResource("8")
+texture_pressed = ExtResource("8")
+texture_hover = ExtResource("9")
+texture_disabled = ExtResource("8")
+metadata/_edit_lock_ = true
+
+[node name="Hdgq" type="Sprite2D" parent="Hdzm" unique_id=1069509937]
+position = Vector2(175, 15)
+texture = ExtResource("10")
+metadata/_edit_lock_ = true
+
+[node name="hdgq" type="TextureButton" parent="Hdzm/Hdgq" unique_id=17069493]
+offset_left = -85.0
+offset_top = -24.0
+offset_right = 84.0
+offset_bottom = 44.0
+texture_normal = ExtResource("11")
+texture_pressed = ExtResource("11")
+texture_hover = ExtResource("12")
+texture_disabled = ExtResource("11")
+metadata/_edit_lock_ = true
+
+[node name="close" type="TextureButton" parent="Hdzm" unique_id=1011240034]
+offset_left = 280.0
+offset_top = -230.0
+offset_right = 325.0
+offset_bottom = -186.0
+texture_normal = ExtResource("13")
+texture_pressed = ExtResource("13")
+texture_hover = ExtResource("14")
+texture_disabled = ExtResource("13")
+metadata/_edit_lock_ = true
+
+[connection signal="pressed" from="Hdzm/Ttzs/ttzstz" to="FirstDungeonTransition" method="_on_challenge_pressed"]
+[connection signal="pressed" from="Hdzm/csm/csm" to="." method="_on_csm_pressed"]
+[connection signal="pressed" from="Hdzm/Hdgq/hdgq" to="." method="_on_hdgq_pressed"]
+[connection signal="pressed" from="Hdzm/close" to="." method="_on_close_pressed"]

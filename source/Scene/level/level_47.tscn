@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_47.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/level_xwm/bg30.png" id="3"]
+[ext_resource type="SpriteFrames" path="res://Art/level/game_4_level/level_xwm/fire_frames.tres" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/level_xwm/bg20.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/level_xwm/bg10.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor"]
+size = Vector2(4200, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[node name="Level_47" unique_id=1590251851 instance=ExtResource("1")]
+position = Vector2(0, 112)
+script = ExtResource("2")
+
+[node name="thb" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1586212661]
+position = Vector2(2100, -596)
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=949420358]
+position = Vector2(2100, 670.5)
+shape = SubResource("RectangleShape_floor")
+
+[node name="right_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=268214421]
+position = Vector2(4260, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="far" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1608935963]
+position = Vector2(0, 55)
+motion_scale = Vector2(0.08, 0)
+
+[node name="bg30" type="Sprite2D" parent="BackGround/far" index="0" unique_id=59951704]
+position = Vector2(734, 240.50002)
+scale = Vector2(1.0277778, 1.0987203)
+texture = ExtResource("3")
+
+[node name="left_fire" type="AnimatedSprite2D" parent="BackGround/far" index="1" unique_id=692635615]
+position = Vector2(345, 359)
+sprite_frames = ExtResource("4")
+animation = &"burn"
+autoplay = "burn"
+
+[node name="right_fire" type="AnimatedSprite2D" parent="BackGround/far" index="2" unique_id=864815134]
+position = Vector2(802, 371)
+sprite_frames = ExtResource("4")
+animation = &"burn"
+autoplay = "burn"
+frame = 10
+
+[node name="middle" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=1870488276]
+position = Vector2(0, 55)
+motion_scale = Vector2(0.743333, 0)
+
+[node name="bg20" type="Sprite2D" parent="BackGround/middle" index="0" unique_id=1550555295]
+position = Vector2(1737, 299)
+scale = Vector2(1.0145773, 1)
+texture = ExtResource("5")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="4" unique_id=961264908]
+position = Vector2(0, -25)
+
+[node name="ground_1" type="Sprite2D" parent="BackGround/front" index="0" unique_id=2101864693]
+position = Vector2(498.5, 567.5)
+texture = ExtResource("6")
+
+[node name="ground_2" type="Sprite2D" parent="BackGround/front" index="1" unique_id=1078737243]
+position = Vector2(1495.5, 567.5)
+texture = ExtResource("6")
+
+[node name="ground_3" type="Sprite2D" parent="BackGround/front" index="2" unique_id=1942821867]
+position = Vector2(2492.5, 567.5)
+texture = ExtResource("6")
+
+[node name="ground_4" type="Sprite2D" parent="BackGround/front" index="3" unique_id=1258233974]
+position = Vector2(3489.5, 567.5)
+texture = ExtResource("6")
+
+[node name="ground_end" type="Sprite2D" parent="BackGround/front" index="4" unique_id=39516690]
+position = Vector2(4094, 567.5)
+texture = ExtResource("6")
+region_enabled = true
+region_rect = Rect2(0, 0, 212, 165)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4065, 339)

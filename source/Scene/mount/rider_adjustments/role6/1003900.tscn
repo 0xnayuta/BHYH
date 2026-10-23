@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/mount/runtime/mounts/1003900/idle/back_0.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/mount/rider_poses/role6_rider_body.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/mount/rider_poses/role6_rider_body_front.png" id="3"]
+
+[node name="RiderAdjustment" type="Node2D" unique_id=895001879]
+editor_description = "角色 6 × 坐骑 1003900。只调整 Pose 节点；MountGuide 仅供 2D 编辑器对位，运行时隐藏。"
+metadata/role_id = 6
+metadata/mount_id = "1003900"
+
+[node name="MountGuide" type="Node2D" parent="." unique_id=2095256621]
+modulate = Color(1, 1, 1, 0.55)
+show_behind_parent = true
+position = Vector2(8.1, 73.65)
+
+[node name="Back" type="Sprite2D" parent="MountGuide" unique_id=561863914]
+position = Vector2(14.5, -70.5)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(2, 2, 293, 165)
+
+[node name="Pose" type="Node2D" parent="." unique_id=2132825720]
+
+[node name="Body" type="Sprite2D" parent="Pose" unique_id=575124251]
+texture_filter = 2
+position = Vector2(92, 103)
+texture = ExtResource("2")
+offset = Vector2(0, -188)
+
+[node name="BodyFront" type="Sprite2D" parent="Pose" unique_id=1379130551]
+z_index = 1
+texture_filter = 2
+position = Vector2(92, 103)
+texture = ExtResource("3")
+offset = Vector2(0, -188)

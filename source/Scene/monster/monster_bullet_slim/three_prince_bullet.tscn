@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/three_prince_bullet.gd" id="1"]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 60.0
+
+[node name="ThreePrinceBullet" type="Node2D" unique_id=71387006]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=1857683490]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1327155605]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=850314745]
+shape = SubResource("1")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1123556916]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1908781655]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=278571688]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=253680036]
+one_shot = true
+
+[connection signal="area_entered" from="middle/HitBox" to="." method="_on_hit_box_area_entered"]

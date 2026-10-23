@@ -1,0 +1,375 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/zhenfa/senluozhen/slz_effect.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="648"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 624, 84)
+
+[sub_resource type="SpriteFrames" id="BulletFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("648")
+}, {
+"duration": 1.0,
+"texture": SubResource("648")
+}, {
+"duration": 1.0,
+"texture": SubResource("648")
+}, {
+"duration": 1.0,
+"texture": SubResource("648")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"TSZBullet",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="963"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 667, 241)
+
+[sub_resource type="AtlasTexture" id="964"]
+atlas = ExtResource("2")
+region = Rect2(667, 0, 667, 241)
+
+[sub_resource type="AtlasTexture" id="965"]
+atlas = ExtResource("2")
+region = Rect2(1334, 0, 667, 241)
+
+[sub_resource type="AtlasTexture" id="966"]
+atlas = ExtResource("2")
+region = Rect2(0, 241, 667, 241)
+
+[sub_resource type="AtlasTexture" id="967"]
+atlas = ExtResource("2")
+region = Rect2(667, 241, 667, 241)
+
+[sub_resource type="AtlasTexture" id="968"]
+atlas = ExtResource("2")
+region = Rect2(1334, 241, 667, 241)
+
+[sub_resource type="AtlasTexture" id="969"]
+atlas = ExtResource("2")
+region = Rect2(0, 482, 667, 241)
+
+[sub_resource type="AtlasTexture" id="970"]
+atlas = ExtResource("2")
+region = Rect2(667, 482, 667, 241)
+
+[sub_resource type="AtlasTexture" id="971"]
+atlas = ExtResource("2")
+region = Rect2(1334, 482, 667, 241)
+
+[sub_resource type="AtlasTexture" id="972"]
+atlas = ExtResource("2")
+region = Rect2(0, 723, 667, 241)
+
+[sub_resource type="AtlasTexture" id="973"]
+atlas = ExtResource("2")
+region = Rect2(667, 723, 667, 241)
+
+[sub_resource type="AtlasTexture" id="974"]
+atlas = ExtResource("2")
+region = Rect2(1334, 723, 667, 241)
+
+[sub_resource type="AtlasTexture" id="975"]
+atlas = ExtResource("2")
+region = Rect2(0, 964, 667, 241)
+
+[sub_resource type="AtlasTexture" id="976"]
+atlas = ExtResource("2")
+region = Rect2(667, 964, 667, 241)
+
+[sub_resource type="AtlasTexture" id="977"]
+atlas = ExtResource("2")
+region = Rect2(1334, 964, 667, 241)
+
+[sub_resource type="SpriteFrames" id="SpecialFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("963")
+}, {
+"duration": 1.0,
+"texture": SubResource("964")
+}, {
+"duration": 1.0,
+"texture": SubResource("965")
+}, {
+"duration": 1.0,
+"texture": SubResource("966")
+}, {
+"duration": 1.0,
+"texture": SubResource("967")
+}, {
+"duration": 1.0,
+"texture": SubResource("968")
+}, {
+"duration": 1.0,
+"texture": SubResource("969")
+}, {
+"duration": 1.0,
+"texture": SubResource("970")
+}, {
+"duration": 1.0,
+"texture": SubResource("971")
+}, {
+"duration": 1.0,
+"texture": SubResource("972")
+}, {
+"duration": 1.0,
+"texture": SubResource("973")
+}, {
+"duration": 1.0,
+"texture": SubResource("974")
+}, {
+"duration": 1.0,
+"texture": SubResource("975")
+}, {
+"duration": 1.0,
+"texture": SubResource("976")
+}, {
+"duration": 1.0,
+"texture": SubResource("977")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"tsz",
+"speed": 16.0
+}]
+
+[sub_resource type="RectangleShape2D" id="979"]
+size = Vector2(116, 136)
+
+[sub_resource type="RectangleShape2D" id="1036"]
+size = Vector2(589, 71)
+
+[sub_resource type="Animation" id="TSZBulletAnimation"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BulletPlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BulletPlayer:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["TSZBullet"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BulletPlayer:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BulletPlayer:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BulletPlayer:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BulletPlayer:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("HitBox/Collion:shape")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("1036")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitBox/Collion:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("HitBox/Collion:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpecialEffect:scale")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpecialEffect:offset")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -40)]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpecialEffect")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"tsz", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("..")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"add_tsz_buff"
+}, {
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("BulletPlayers:speed_scale")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="BulletLibrary"]
+_data = {
+&"TSZBullet": SubResource("TSZBulletAnimation")
+}
+
+[node name="RoleBullet" type="Node2D" unique_id=1347888559]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=362551491]
+
+[node name="BulletPlayer" type="AnimatedSprite2D" parent="Middle" unique_id=1057693843]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(1e-05, 1e-05)
+sprite_frames = SubResource("BulletFrames")
+animation = &"TSZBullet"
+offset = Vector2(0, -15)
+
+[node name="SpecialEffect" type="AnimatedSprite2D" parent="Middle" unique_id=1836278970]
+scale = Vector2(1, 1.2)
+sprite_frames = SubResource("SpecialFrames")
+animation = &"tsz"
+autoplay = "tsz"
+offset = Vector2(-8, 6)
+flip_h = true
+
+[node name="HitBox" type="Area2D" parent="Middle" unique_id=1455256316]
+collision_layer = 2
+collision_mask = 2064
+
+[node name="Collion" type="CollisionShape2D" parent="Middle/HitBox" unique_id=287471479]
+position = Vector2(-33, 0)
+shape = SubResource("979")
+disabled = true
+
+[node name="BulletPlayers" type="AnimationPlayer" parent="Middle" unique_id=252300870]
+libraries/ = SubResource("BulletLibrary")
+
+[node name="QueueTimer" type="Timer" parent="." unique_id=2074948693]
+one_shot = true
+
+[connection signal="area_entered" from="Middle/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="body_entered" from="Middle/HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="Middle/HitBox" to="." method="_on_hit_box_body_exited"]
+[connection signal="timeout" from="QueueTimer" to="." method="_on_queue_timer_timeout"]

@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_ghg.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_ghg/bg461.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="floor_shape"]
+size = Vector2(1803, 500)
+
+[sub_resource type="RectangleShape2D" id="wall_shape"]
+size = Vector2(80, 1400)
+
+[sub_resource type="RectangleShape2D" id="right_wall_shape"]
+size = Vector2(80, 1400)
+
+[node name="Level_ghg" unique_id=1417827417 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1843852027]
+position = Vector2(851.5, 670)
+shape = SubResource("floor_shape")
+
+[node name="left_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1823668630]
+position = Vector2(-40, -100)
+shape = SubResource("wall_shape")
+
+[node name="right_wall" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1744663180]
+position = Vector2(1743, -100)
+shape = SubResource("right_wall_shape")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1328136473]
+
+[node name="MoonPalace" type="Sprite2D" parent="BackGround/front" index="0" unique_id=634097019]
+texture_filter = 1
+position = Vector2(851.5, 295)
+texture = ExtResource("3")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1588, 340)

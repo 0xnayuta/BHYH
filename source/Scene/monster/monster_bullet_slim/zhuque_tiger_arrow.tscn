@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/zhuque_tiger_arrow.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="Shape_hit"]
+size = Vector2(105, 32)
+
+[node name="ZhuqueTigerArrow" type="Node2D" unique_id=1373882696]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=888132582]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=116496359]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=122561546]
+shape = SubResource("Shape_hit")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1129416524]
+texture_filter = 2
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=814813662]
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1882767200]
+one_shot = true
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=1339207313]
+one_shot = true

@@ -1,0 +1,292 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire.png" id="1"]
+[ext_resource type="Script" path="res://Script/base/special_affect.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i66r"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvx1b"]
+atlas = ExtResource("1")
+region = Rect2(115, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spm80"]
+atlas = ExtResource("1")
+region = Rect2(230, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hoile"]
+atlas = ExtResource("1")
+region = Rect2(345, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k320q"]
+atlas = ExtResource("1")
+region = Rect2(460, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hlgv0"]
+atlas = ExtResource("1")
+region = Rect2(575, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6mqpv"]
+atlas = ExtResource("1")
+region = Rect2(690, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovwoj"]
+atlas = ExtResource("1")
+region = Rect2(805, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hg8d5"]
+atlas = ExtResource("1")
+region = Rect2(920, 0, 115, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_byjgd"]
+atlas = ExtResource("1")
+region = Rect2(1035, 0, 115, 111)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h0can"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i66r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvx1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spm80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hoile")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k320q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hlgv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mqpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovwoj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hg8d5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byjgd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i66r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvx1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spm80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hoile")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k320q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hlgv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mqpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovwoj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hg8d5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byjgd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i66r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvx1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spm80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hoile")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k320q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hlgv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mqpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovwoj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hg8d5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byjgd")
+}],
+"loop": 0,
+"name": &"Voodoo",
+"speed": 21.0
+}]
+
+[sub_resource type="Animation" id="Animation_vrh6k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Empty"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4jdc8"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.047619, 0.0952381, 0.142857, 0.190476, 0.238095, 0.285714, 0.333333, 0.380952, 0.428571, 0.47619, 0.52381, 0.571429, 0.619048, 0.666667, 0.714286, 0.761905, 0.809524, 0.857143, 0.904762, 0.952381),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Voodoo"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a8wrb"]
+_data = {
+&"RESET": SubResource("Animation_vrh6k"),
+&"Voodoo": SubResource("Animation_4jdc8")
+}
+
+[node name="SpecialAffect" type="AnimatedSprite2D" unique_id=2019943588]
+sprite_frames = SubResource("SpriteFrames_h0can")
+animation = &"Empty"
+script = ExtResource("2")
+metadata/_edit_lock_ = true
+
+[node name="SpecialAffect" type="AnimationPlayer" parent="." unique_id=869592249]
+libraries/ = SubResource("AnimationLibrary_a8wrb")

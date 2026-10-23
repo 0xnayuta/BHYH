@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1lg76"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lvaqe"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"Empty",
+"speed": 5.0
+}]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jjsqy"]
+
+[node name="MonsterBullet" type="Node2D" unique_id=1204112625]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=989614079]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1538953931]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=2017016507]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_1lg76")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=2120908796]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_lvaqe")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=1442028366]
+libraries/ = SubResource("AnimationLibrary_jjsqy")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=124438943]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("2")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=1265365313]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=338265463]
+one_shot = true

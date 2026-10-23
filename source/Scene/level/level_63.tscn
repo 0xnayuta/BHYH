@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_63.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/jinshacun/background/bg30.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/jinshacun/background/bg10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/jinshacun/background/bg11.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="floor"]
+size = Vector2(5000, 500)
+
+[sub_resource type="RectangleShape2D" id="right"]
+size = Vector2(120, 2400)
+
+[node name="Level_63" unique_id=1767694410 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "jinshacun"
+display_name = "金沙村"
+stage_number = 63
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(2500, 655.5)
+shape = SubResource("floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(4971, -300)
+shape = SubResource("right")
+
+[node name="bg30" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=347649118]
+position = Vector2(701, 274.99997)
+scale = Vector2(1.0857143, 1.3055556)
+texture = ExtResource("3")
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1230338891]
+position = Vector2(498.5, 398)
+texture = ExtResource("4")
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=566165252]
+position = Vector2(1495.5, 397)
+texture = ExtResource("4")
+
+[node name="bg10_3" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=92571847]
+position = Vector2(2492.5, 397)
+texture = ExtResource("4")
+
+[node name="bg10_4" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=292066387]
+position = Vector2(3506.5, 397)
+scale = Vector2(1.0341023, 1)
+texture = ExtResource("4")
+
+[node name="bg11" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=1993401566]
+position = Vector2(4539, 387)
+scale = Vector2(1.037111, 1)
+texture = ExtResource("5")
+
+[node name="floor" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="5" unique_id=643279606]
+position = Vector2(0, 97)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4838, 316)

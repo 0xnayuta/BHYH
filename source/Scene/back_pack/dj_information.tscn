@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/back_pack/dj_information.gd" id="1"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="2"]
+[ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="3"]
+
+[node name="dj_information" type="Control" unique_id=527276617]
+layout_mode = 3
+anchor_right = 0.168
+anchor_bottom = 0.263
+offset_right = 0.0800018
+offset_bottom = -0.170013
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=605017245]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 3.0
+offset_right = 217.0
+offset_bottom = 228.0
+color = Color(0, 0, 0, 0.705882)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1661786683]
+custom_minimum_size = Vector2(200, 170)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 3.0
+offset_right = 217.0
+offset_bottom = 228.0
+metadata/_edit_lock_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=56060824]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer" unique_id=458428895]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="title" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=289452351]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 20
+text = "道具详情"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=2081685337]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "名称："
+
+[node name="lx" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1621932404]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "类型："
+
+[node name="fgx" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/lx" unique_id=574581109]
+position = Vector2(94.5, 26)
+scale = Vector2(0.66805, 1)
+texture = ExtResource("3")
+
+[node name="pz" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=981021209]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "品质："
+
+[node name="fgx2" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/pz" unique_id=1142057259]
+position = Vector2(94.5, 29)
+scale = Vector2(0.66805, 1)
+texture = ExtResource("3")
+
+[node name="sl" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1196374986]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "数量："
+
+[node name="fgx2" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/sl" unique_id=606992918]
+position = Vector2(94.5, 29)
+scale = Vector2(0.66805, 1)
+texture = ExtResource("3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1980566775]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ms" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=384625159]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "描述："
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="sj" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1805706074]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.768627, 0, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+text = "售价："

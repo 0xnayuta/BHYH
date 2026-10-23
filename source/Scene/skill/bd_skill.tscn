@@ -1,0 +1,402 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/skill/bd_skill.gd" id="1"]
+[ext_resource type="Script" path="res://Script/skill/passive_skill_grid_backdrop.gd" id="2"]
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="3"]
+[ext_resource type="Texture2D" path="res://Art/skill/uplevel.png" id="4"]
+
+[node name="bd_skill" type="MarginContainer" unique_id=361076914]
+offset_right = 760.0
+offset_bottom = 370.0
+script = ExtResource("1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1586201997]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PassiveSkillGridBackdrop" type="Node2D" parent="HBoxContainer" unique_id=966511068]
+script = ExtResource("2")
+
+[node name="Skill_Name" type="VBoxContainer" parent="HBoxContainer" unique_id=1746168408]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/Skill_Name" unique_id=451779502]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+text = "技能名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_1" type="Label" parent="HBoxContainer/Skill_Name" unique_id=1918738189]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "热血"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_2" type="Label" parent="HBoxContainer/Skill_Name" unique_id=659808508]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "魔泉"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_3" type="Label" parent="HBoxContainer/Skill_Name" unique_id=673973453]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "狂暴"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_4" type="Label" parent="HBoxContainer/Skill_Name" unique_id=284308619]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "永恒"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_5" type="Label" parent="HBoxContainer/Skill_Name" unique_id=76449095]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "辉煌"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_6" type="Label" parent="HBoxContainer/Skill_Name" unique_id=784168032]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "敏锐"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_7" type="Label" parent="HBoxContainer/Skill_Name" unique_id=1216540008]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "收益"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Current_e" type="VBoxContainer" parent="HBoxContainer" unique_id=576267607]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/Current_e" unique_id=602510669]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+text = "技能效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_1" type="Label" parent="HBoxContainer/Current_e" unique_id=1955919834]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "生命上限增加至 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_2" type="Label" parent="HBoxContainer/Current_e" unique_id=1281976536]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "魔法上限增加至 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_3" type="Label" parent="HBoxContainer/Current_e" unique_id=155742222]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "暴击提高至 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_4" type="Label" parent="HBoxContainer/Current_e" unique_id=1371376263]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "回血提高至 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_5" type="Label" parent="HBoxContainer/Current_e" unique_id=182164335]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "回魔提高至 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_6" type="Label" parent="HBoxContainer/Current_e" unique_id=1589998208]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "命中提高至 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_7" type="Label" parent="HBoxContainer/Current_e" unique_id=2121955157]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "杀怪灵魂获取 +5%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Next_e" type="VBoxContainer" parent="HBoxContainer" unique_id=1495076580]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/Next_e" unique_id=1993154066]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+text = "下一级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_1" type="Label" parent="HBoxContainer/Next_e" unique_id=1884478861]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "生命上限增加至 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_2" type="Label" parent="HBoxContainer/Next_e" unique_id=1238924857]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "魔法上限增加至 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_3" type="Label" parent="HBoxContainer/Next_e" unique_id=1014558406]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "暴击提高至 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_4" type="Label" parent="HBoxContainer/Next_e" unique_id=1395093994]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "回血提高至1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_5" type="Label" parent="HBoxContainer/Next_e" unique_id=676599424]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "回魔提高至 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_6" type="Label" parent="HBoxContainer/Next_e" unique_id=654599133]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "命中提高至1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_7" type="Label" parent="HBoxContainer/Next_e" unique_id=50254805]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "杀怪灵魂获取 +5%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedLh" type="VBoxContainer" parent="HBoxContainer" unique_id=495510623]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/NeedLh" unique_id=1003858388]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+text = "需要灵魂"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_1" type="Label" parent="HBoxContainer/NeedLh" unique_id=1899841337]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_2" type="Label" parent="HBoxContainer/NeedLh" unique_id=851387429]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_3" type="Label" parent="HBoxContainer/NeedLh" unique_id=1814374170]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_4" type="Label" parent="HBoxContainer/NeedLh" unique_id=1894644059]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_5" type="Label" parent="HBoxContainer/NeedLh" unique_id=2089610734]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_6" type="Label" parent="HBoxContainer/NeedLh" unique_id=1433974349]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="name_7" type="Label" parent="HBoxContainer/NeedLh" unique_id=1898322946]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "5000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Up_level" type="VBoxContainer" parent="HBoxContainer" unique_id=299914333]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/Up_level" unique_id=1179720177]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 25
+text = "升级技能"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="up_1" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=269165024]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_2" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=1320092275]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_3" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=1976495367]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_4" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=625725984]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_5" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=561198076]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_6" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=632872986]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="up_7" type="TextureButton" parent="HBoxContainer/Up_level" unique_id=1420917721]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("4")
+stretch_mode = 3
+
+[node name="OneKeyUpgradeButton" type="Button" parent="HBoxContainer/Up_level" unique_id=2011743558]
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "一键升级"
+
+[connection signal="pressed" from="HBoxContainer/Up_level/up_1" to="." method="_on_up_1_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_2" to="." method="_on_up_2_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_3" to="." method="_on_up_3_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_4" to="." method="_on_up_4_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_5" to="." method="_on_up_5_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_6" to="." method="_on_up_6_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/up_7" to="." method="_on_up_7_pressed"]
+[connection signal="pressed" from="HBoxContainer/Up_level/OneKeyUpgradeButton" to="." method="_on_one_key_upgrade_pressed"]

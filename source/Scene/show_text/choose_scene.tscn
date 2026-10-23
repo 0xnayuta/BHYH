@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scene/show_text/choose_scene.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/backpack/117.png" id="2"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
+[ext_resource type="Texture2D" path="res://Art/backpack/124.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/backpack/126.png" id="5"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="6"]
+[ext_resource type="Texture2D" path="res://Art/backpack/119.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/backpack/121.png" id="8"]
+
+[node name="choose_scene" type="Control" unique_id=1977907021]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = -1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="ColorRect" parent="." unique_id=770721941]
+layout_mode = 0
+offset_right = 938.0
+offset_bottom = 588.0
+color = Color(0, 0, 0, 0.607843)
+metadata/_edit_lock_ = true
+
+[node name="bg" type="TextureRect" parent="TextureRect" unique_id=690826263]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -155.0
+offset_top = -93.0
+offset_right = 176.0
+offset_bottom = 116.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TextureRect/bg" unique_id=762362033]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 39.0
+offset_right = 321.0
+offset_bottom = 132.0
+horizontal_scroll_mode = 0
+
+[node name="Text" type="Label" parent="TextureRect/bg/ScrollContainer" unique_id=282638879]
+texture_filter = 2
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 9
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 17
+vertical_alignment = 1
+autowrap_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="qx" type="TextureButton" parent="TextureRect/bg" unique_id=1628313186]
+layout_mode = 0
+offset_left = 206.0
+offset_top = 149.0
+offset_right = 274.0
+offset_bottom = 182.0
+scale = Vector2(1.45, 1.45)
+focus_mode = 0
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("5")
+texture_disabled = ExtResource("4")
+
+[node name="calm" type="Label" parent="TextureRect/bg/qx" unique_id=1031046040]
+layout_mode = 0
+offset_left = -59.2413
+offset_top = 6.0
+offset_right = -32.2413
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="qd" type="TextureButton" parent="TextureRect/bg" unique_id=1988063820]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 149.0
+offset_right = 93.0
+offset_bottom = 182.0
+scale = Vector2(1.45, 1.45)
+focus_mode = 0
+disabled = true
+texture_normal = ExtResource("7")
+texture_pressed = ExtResource("7")
+texture_hover = ExtResource("8")
+texture_disabled = ExtResource("7")
+metadata/_edit_lock_ = true
+
+[node name="think_time" type="Timer" parent="." unique_id=1434115405]
+wait_time = 10.0
+one_shot = true
+
+[connection signal="pressed" from="TextureRect/bg/qx" to="." method="_on_qx_pressed"]
+[connection signal="pressed" from="TextureRect/bg/qd" to="." method="_on_qd_pressed"]
+[connection signal="timeout" from="think_time" to="." method="_on_think_time_timeout"]

@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/wutai_earth_wall3082.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="hit"]
+size = Vector2(1, 1)
+
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(1, 1)
+
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(70, 1000)
+
+[node name="Monster_3082" unique_id=1527595750 instance=ExtResource("1")]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("2")
+monster_kind = 3082
+
+[node name="HitBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="0" unique_id=145353887]
+collision_mask = 128
+
+[node name="HitBox" parent="BaseDamageBox/HitBox" index="0" unique_id=127304568]
+shape = SubResource("hit")
+disabled = true
+
+[node name="HurtBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="1" unique_id=692709197]
+collision_layer = 0
+
+[node name="HurtBox" parent="BaseDamageBox/HurtBox" index="0" unique_id=235198317]
+shape = SubResource("hurt")
+disabled = true
+
+[node name="pz" parent="." index="4" unique_id=200057952]
+shape = SubResource("body")

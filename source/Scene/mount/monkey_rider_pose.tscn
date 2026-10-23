@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_1_all_equipment/role_1_body_empty.png" id="1"]
+
+[node name="Pose" type="Node2D" unique_id=1643777605]
+position = Vector2(0, -30)
+
+[node name="Body" type="Sprite2D" parent="." unique_id=526188195]
+texture_filter = 2
+position = Vector2(-15, -27)
+texture = ExtResource("1")
+hframes = 6
+vframes = 14
+frame = 49

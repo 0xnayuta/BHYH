@@ -1,0 +1,635 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/base/base_role.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/964.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/680.png" id="3"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="5"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/379.png" id="6"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="7"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/688.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/694.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_properies_box/748.png" id="10"]
+[ext_resource type="Texture2D" path="res://Spritesheet/icons_ps4_animated_buttons2.png" id="11"]
+[ext_resource type="Script" path="res://Script/base/switch_role.gd" id="12"]
+[ext_resource type="Texture2D" path="res://Art/ui_2_6_0_0/skill.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/393.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/397.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/protect_1.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/protect_2.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/416.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/418.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/420.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/422.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/424.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/426.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/428.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/430.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/role_info_icon/432.png" id="26"]
+[ext_resource type="Script" path="res://Script/base/ws_key.gd" id="27"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_462f4"]
+atlas = ExtResource("11")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ioq3h"]
+atlas = ExtResource("11")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u7cgk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}],
+"loop": 1,
+"name": &"max_ws",
+"speed": 10.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_688iy"]
+atlas = ExtResource("11")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71538"]
+atlas = ExtResource("11")
+region = Rect2(16, 0, 16, 16)
+
+[node name="Control" type="Control" unique_id=548362836]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="role_hp_mp_exp" type="TextureRect" parent="." unique_id=1289634453]
+layout_mode = 1
+offset_right = 227.0
+offset_bottom = 87.0
+texture = ExtResource("2")
+
+[node name="hp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=2006201452]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 22.0
+offset_right = 255.0
+offset_bottom = 34.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("3")
+
+[node name="hp_text" type="Label" parent="role_hp_mp_exp/hp_bar" unique_id=1275306028]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -2.0
+offset_right = 149.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_outline_size = -6
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="nature_recovery_hp" type="Label" parent="role_hp_mp_exp/hp_bar" unique_id=1844371882]
+layout_mode = 0
+offset_left = 113.0
+offset_top = -1.0
+offset_right = 150.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="role_hp_mp_exp" unique_id=2097966662]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 40.0
+offset_bottom = 120.0
+texture = ExtResource("6")
+
+[node name="role_level" type="Label" parent="role_hp_mp_exp/TextureRect" unique_id=865592430]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -10.0
+offset_right = 12.5
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7")
+text = "0
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="mp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=791557866]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 37.0
+offset_right = 255.0
+offset_bottom = 50.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("8")
+
+[node name="mp_text" type="Label" parent="role_hp_mp_exp/mp_bar" unique_id=1463624693]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 143.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="nature_recovery_mp" type="Label" parent="role_hp_mp_exp/mp_bar" unique_id=1709916974]
+layout_mode = 0
+offset_left = 111.0
+offset_top = -1.0
+offset_right = 142.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="exp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=1590370377]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 55.0
+offset_right = 255.0
+offset_bottom = 70.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("9")
+
+[node name="exp_text" type="Label" parent="role_hp_mp_exp/exp_bar" unique_id=71146837]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 148.0
+offset_bottom = 17.0
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Buff_box" type="HBoxContainer" parent="role_hp_mp_exp" unique_id=600409278]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 75.0
+offset_right = 135.0
+offset_bottom = 110.0
+
+[node name="h_m_e_t" type="TextureRect" parent="role_hp_mp_exp" unique_id=1503598018]
+texture_filter = 1
+layout_mode = 0
+offset_left = 90.0
+offset_top = 20.0
+offset_right = 107.0
+offset_bottom = 66.0
+texture = ExtResource("10")
+
+[node name="PanelContainer" type="PanelContainer" parent="role_hp_mp_exp" unique_id=553725871]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(80, 80)
+clip_contents = true
+layout_mode = 0
+offset_left = 11.0
+offset_top = 10.0
+offset_right = 91.0
+offset_bottom = 90.0
+
+[node name="Control" type="Control" parent="role_hp_mp_exp/PanelContainer" unique_id=805022517]
+custom_minimum_size = Vector2(80, 80)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="role_head" type="TextureRect" parent="role_hp_mp_exp/PanelContainer/Control" unique_id=1275016010]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+expand_mode = 1
+stretch_mode = 6
+
+[node name="switchRole" type="TouchScreenButton" parent="role_hp_mp_exp/PanelContainer/Control/role_head" unique_id=697172917]
+modulate = Color(1, 1, 1, 0.00392157)
+scale = Vector2(7, 7)
+texture_normal = SubResource("AtlasTexture_462f4")
+texture_pressed = SubResource("AtlasTexture_ioq3h")
+action = "切换"
+script = ExtResource("12")
+
+[node name="role_menu" type="TextureRect" parent="." unique_id=384976899]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 460.0
+offset_top = -136.0
+offset_right = 824.0
+offset_bottom = -2.0
+grow_vertical = 0
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(162, 0)
+texture = ExtResource("13")
+
+[node name="ws_wk" type="Sprite2D" parent="role_menu" unique_id=639498269]
+position = Vector2(92, 107)
+texture = ExtResource("14")
+centered = false
+
+[node name="ws_effect" type="TextureProgressBar" parent="role_menu/ws_wk" unique_id=926475186]
+offset_right = 265.0
+offset_bottom = 25.0
+max_value = 1.0
+step = 0.0
+fill_mode = 1
+texture_under = ExtResource("14")
+texture_progress = ExtResource("15")
+
+[node name="SkillBox" type="HBoxContainer" parent="role_menu" unique_id=1080155706]
+visible = false
+layout_mode = 0
+offset_left = 118.0
+offset_top = 70.0
+offset_right = 319.0
+offset_bottom = 115.0
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(106, 0)
+mouse_filter = 2
+theme_override_constants/separation = -5
+alignment = 2
+
+[node name="skil_1" type="TextureRect" parent="role_menu" unique_id=1856619771]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 291.0
+offset_top = 74.0
+offset_right = 326.8934
+offset_bottom = 109.78174
+metadata/_edit_lock_ = true
+
+[node name="skil_2" type="TextureRect" parent="role_menu" unique_id=1998545073]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 251.0
+offset_top = 74.0
+offset_right = 286.89343
+offset_bottom = 109.78174
+metadata/_edit_lock_ = true
+
+[node name="skil_3" type="TextureRect" parent="role_menu" unique_id=113386109]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 211.25677
+offset_top = 74.21588
+offset_right = 247.0
+offset_bottom = 110.0
+metadata/_edit_lock_ = true
+
+[node name="skil_4" type="TextureRect" parent="role_menu" unique_id=959931360]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 171.0
+offset_top = 74.0
+offset_right = 206.74323
+offset_bottom = 109.78412
+metadata/_edit_lock_ = true
+
+[node name="skil_5" type="TextureRect" parent="role_menu" unique_id=567273258]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 131.46045
+offset_top = 74.0
+offset_right = 167.0
+offset_bottom = 109.78412
+metadata/_edit_lock_ = true
+
+[node name="SkillBox2" type="HBoxContainer" parent="role_menu" unique_id=1697939467]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 15.0
+offset_right = 330.0
+offset_bottom = 60.0
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(106, 0)
+mouse_filter = 2
+theme_override_constants/separation = -3
+
+[node name="magicIcon" type="HBoxContainer" parent="role_menu" unique_id=1573552429]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.0
+offset_top = 59.0
+offset_right = 11.0
+offset_bottom = 104.0
+grow_horizontal = 0
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(22, 0)
+
+[node name="RoleProtect" type="TextureProgressBar" parent="role_menu" unique_id=513354244]
+layout_mode = 1
+offset_left = 69.0
+offset_top = 62.0
+offset_right = 393.0
+offset_bottom = 74.0
+scale = Vector2(-0.6, 1)
+pivot_offset = Vector2(162, 0)
+max_value = 1.0
+step = 0.0
+texture_under = ExtResource("16")
+texture_progress = ExtResource("17")
+texture_progress_offset = Vector2(2, 3)
+
+[node name="grey" type="Sprite2D" parent="role_menu" unique_id=1915741407]
+position = Vector2(82, 86)
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("18")
+
+[node name="max_ws" type="AnimatedSprite2D" parent="role_menu/grey" unique_id=753185513]
+visible = false
+sprite_frames = SubResource("SpriteFrames_u7cgk")
+animation = &"max_ws"
+autoplay = "max_ws"
+frame_progress = 0.55556107
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="role_menu/grey" unique_id=655374640]
+process_mode = 4
+visible = false
+modulate = Color(1, 1, 1, 0)
+position = Vector2(-40, -40)
+scale = Vector2(5, 5)
+texture_normal = SubResource("AtlasTexture_688iy")
+texture_pressed = SubResource("AtlasTexture_71538")
+script = ExtResource("27")
+
+[node name="宠物_hp_mp_exp" type="TextureRect" parent="." unique_id=2000659779]
+layout_mode = 0
+offset_top = 130.0
+offset_right = 267.0
+offset_bottom = 224.0
+scale = Vector2(0.7600006, 0.7200006)
+texture = ExtResource("2")
+
+[node name="hp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=66657986]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 22.0
+offset_right = 255.0
+offset_bottom = 34.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("3")
+
+[node name="hp_text" type="Label" parent="宠物_hp_mp_exp/hp_bar" unique_id=922418070]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -2.0
+offset_right = 149.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_outline_size = -6
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="nature_recovery_hp" type="Label" parent="宠物_hp_mp_exp/hp_bar" unique_id=706857174]
+layout_mode = 0
+offset_left = 113.0
+offset_top = -1.0
+offset_right = 150.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=521777930]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 40.0
+offset_bottom = 120.0
+texture = ExtResource("6")
+
+[node name="role_level" type="Label" parent="宠物_hp_mp_exp/TextureRect" unique_id=740808487]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -10.0
+offset_right = 12.5
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7")
+text = "0
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="mp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=1472685260]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 37.0
+offset_right = 255.0
+offset_bottom = 50.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("8")
+
+[node name="mp_text" type="Label" parent="宠物_hp_mp_exp/mp_bar" unique_id=1912811657]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 143.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="nature_recovery_mp" type="Label" parent="宠物_hp_mp_exp/mp_bar" unique_id=1164851425]
+layout_mode = 0
+offset_left = 111.0
+offset_top = -1.0
+offset_right = 142.0
+offset_bottom = 15.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="exp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=702601625]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 55.0
+offset_right = 255.0
+offset_bottom = 70.0
+max_value = 1.0
+step = 0.0
+nine_patch_stretch = true
+texture_progress = ExtResource("9")
+
+[node name="exp_text" type="Label" parent="宠物_hp_mp_exp/exp_bar" unique_id=1847185159]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 148.0
+offset_bottom = 17.0
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Buff_box" type="HBoxContainer" parent="宠物_hp_mp_exp" unique_id=480164924]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 75.0
+offset_right = 135.0
+offset_bottom = 110.0
+
+[node name="h_m_e_t" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=1045931910]
+texture_filter = 1
+layout_mode = 0
+offset_left = 90.0
+offset_top = 20.0
+offset_right = 107.0
+offset_bottom = 66.0
+texture = ExtResource("10")
+
+[node name="PanelContainer" type="PanelContainer" parent="宠物_hp_mp_exp" unique_id=1933354463]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(80, 80)
+clip_contents = true
+layout_mode = 0
+offset_left = 11.0
+offset_top = 10.0
+offset_right = 91.0
+offset_bottom = 90.0
+
+[node name="Control" type="Control" parent="宠物_hp_mp_exp/PanelContainer" unique_id=1271278037]
+custom_minimum_size = Vector2(80, 80)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="role_head" type="TextureRect" parent="宠物_hp_mp_exp/PanelContainer/Control" unique_id=925860350]
+layout_mode = 1
+offset_left = 9.6
+offset_top = -8.0
+offset_right = 89.6
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+expand_mode = 1
+
+[node name="switchRole" type="TouchScreenButton" parent="宠物_hp_mp_exp/PanelContainer/Control/role_head" unique_id=216461881]
+modulate = Color(1, 1, 1, 0.00392157)
+scale = Vector2(7, 7)
+texture_normal = SubResource("AtlasTexture_462f4")
+texture_pressed = SubResource("AtlasTexture_ioq3h")
+action = "切换"
+script = ExtResource("12")
+
+[node name="SkillBox" type="HBoxContainer" parent="宠物_hp_mp_exp" unique_id=802636941]
+layout_mode = 0
+offset_left = 59.21048
+offset_top = 109.72213
+offset_right = 290.0
+offset_bottom = 150.0
+theme_override_constants/separation = 5
+
+[node name="RoleProtect" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=525127538]
+layout_mode = 0
+offset_left = -9.2105255
+offset_top = 95.83325
+offset_right = 314.7895
+offset_bottom = 107.83325
+scale = Vector2(0.6, 1)
+pivot_offset = Vector2(162, 0)
+max_value = 1.0
+step = 0.0
+texture_under = ExtResource("16")
+texture_progress = ExtResource("17")
+texture_progress_offset = Vector2(2, 3)

@@ -1,0 +1,5 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/monster/east_continent_monster.tscn" id="1"]
+
+[node name="Monster_3159" unique_id=1056403956 instance=ExtResource("1")]

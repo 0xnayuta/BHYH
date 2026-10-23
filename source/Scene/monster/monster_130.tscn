@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/monster_130.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="hurt_shape"]
+size = Vector2(82, 126)
+
+[sub_resource type="CapsuleShape2D" id="body_shape"]
+radius = 35.0
+height = 112.0
+
+[node name="Monster_130" unique_id=669795612 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="mr_ani" parent="MonsterDir" parent_id_path=PackedInt32Array(564181054) index="0" unique_id=494160359]
+offset = Vector2(5, -56)
+
+[node name="HitBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="0" unique_id=145353887]
+collision_mask = 128
+
+[node name="HitBox" parent="BaseDamageBox/HitBox" index="0" unique_id=127304568]
+disabled = true
+
+[node name="HurtBox" parent="BaseDamageBox" parent_id_path=PackedInt32Array(1852090199) index="1" unique_id=692709197]
+collision_layer = 3136
+
+[node name="HurtBox" parent="BaseDamageBox/HurtBox" index="0" unique_id=235198317]
+position = Vector2(5, -18)
+shape = SubResource("hurt_shape")
+
+[node name="pz" parent="." index="4" unique_id=200057952]
+position = Vector2(5, -18)
+shape = SubResource("body_shape")

@@ -1,0 +1,341 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/hero/role_special_effect.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/hero_picture/role_2/role2_skill_hd.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfbyh"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uincg"]
+atlas = ExtResource("2")
+region = Rect2(293, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8efk2"]
+atlas = ExtResource("2")
+region = Rect2(586, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8woql"]
+atlas = ExtResource("2")
+region = Rect2(879, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r13xh"]
+atlas = ExtResource("2")
+region = Rect2(1172, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2bdgd"]
+atlas = ExtResource("2")
+region = Rect2(1465, 0, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmojg"]
+atlas = ExtResource("2")
+region = Rect2(0, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdtso"]
+atlas = ExtResource("2")
+region = Rect2(293, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jy8jg"]
+atlas = ExtResource("2")
+region = Rect2(586, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ep5s"]
+atlas = ExtResource("2")
+region = Rect2(879, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjpaw"]
+atlas = ExtResource("2")
+region = Rect2(1172, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqn4j"]
+atlas = ExtResource("2")
+region = Rect2(1465, 228, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svj0w"]
+atlas = ExtResource("2")
+region = Rect2(0, 456, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gju5q"]
+atlas = ExtResource("2")
+region = Rect2(293, 456, 293, 228)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fyuir"]
+atlas = ExtResource("2")
+region = Rect2(586, 456, 293, 228)
+
+[sub_resource type="SpriteFrames" id="350"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tfbyh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uincg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8efk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8woql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r13xh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2bdgd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmojg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdtso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jy8jg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ep5s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjpaw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqn4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_svj0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gju5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fyuir")
+}],
+"loop": 0,
+"name": &"tjgl_hd",
+"speed": 25.0
+}]
+
+[sub_resource type="RectangleShape2D" id="365"]
+size = Vector2(467, 195)
+
+[sub_resource type="Animation" id="tjgl_hdAnimation"]
+resource_name = "tjgl_hd"
+length = 0.7
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpecialAN:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.8, 0.8)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpecialAN:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -50)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpecialAN:animation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"tjgl_hd"]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpecialAN:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("..")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"free"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Area2D/cc:shape")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("365")]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Area2D/cc:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Area2D/cc:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-3.5, -11.5)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("SpecialAN/SpecialAN2:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SpecialAN/SpecialAN2:offset")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 50)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SpecialAN/SpecialAN2:animation")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"tjgl_hd1"]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpecialAN/SpecialAN2:frame")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpecialAN/SpecialAN2:z_index")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-1]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpecialAN:self_modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpecialAN/SpecialAN2:scale")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="EffectLibrary"]
+_data = {
+&"tjgl_hd": SubResource("tjgl_hdAnimation")
+}
+
+[sub_resource type="RectangleShape2D" id="357"]
+size = Vector2(198, 204)
+
+[node name="RoleSpecialEffect" type="Node2D" unique_id=1897806220]
+script = ExtResource("1")
+
+[node name="Middle" type="Node2D" parent="." unique_id=572058644]
+
+[node name="SpecialAN" type="AnimatedSprite2D" parent="Middle" unique_id=815868338]
+sprite_frames = SubResource("350")
+animation = &"tjgl_hd"
+
+[node name="SpecialPlayer" type="AnimationPlayer" parent="Middle" unique_id=1588936656]
+libraries/ = SubResource("EffectLibrary")
+
+[node name="Area2D" type="Area2D" parent="Middle" unique_id=1613336651]
+collision_layer = 2
+collision_mask = 2064
+monitorable = false
+
+[node name="cc" type="CollisionShape2D" parent="Middle/Area2D" unique_id=1769709776]
+position = Vector2(-1, -29)
+shape = SubResource("357")
+
+[connection signal="animation_finished" from="Middle/SpecialPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="Middle/Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Middle/Area2D" to="." method="_on_area_2d_body_exited"]

@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_hddy.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/cjwlevel.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/level_11/cjw_floor.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(2870, 458)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(608, 1085)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3v77h"]
+size = Vector2(1017, 1085)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c458m"]
+size = Vector2(690.75, 1420)
+
+[node name="Level_hddy" unique_id=1417770047 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [1110.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=1119398819]
+position = Vector2(1421, 630)
+shape = SubResource("1")
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1111682109]
+position = Vector2(1413, -66.5)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=252524514]
+position = Vector2(2348.5, -65)
+shape = SubResource("RectangleShape2D_3v77h")
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=1682081600]
+position = Vector2(594, -212)
+shape = SubResource("RectangleShape2D_c458m")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
+motion_scale = Vector2(1, 0)
+
+[node name="Cjwlevel" type="Sprite2D" parent="BackGround/End" index="0" unique_id=517570300]
+position = Vector2(940, 259)
+texture = ExtResource("3")
+metadata/_edit_lock_ = true
+
+[node name="CjwFloor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=522664102]
+position = Vector2(939.25, 543)
+scale = Vector2(1.00558, 1)
+texture = ExtResource("4")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=868351545]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1717, 324)
+metadata/_edit_lock_ = true

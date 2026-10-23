@@ -1,0 +1,270 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/main_menu/wan_ling_catalog_page.gd" id="1"]
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_stage"]
+bg_color = Color(0.067, 0.078, 0.084, 0.985)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.73, 0.58, 0.28, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.72)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_close"]
+bg_color = Color(0.28, 0.1, 0.105, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.42, 0.34, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_close_pressed"]
+bg_color = Color(0.19, 0.06, 0.065, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.6, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_close_hover"]
+bg_color = Color(0.46, 0.15, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.94, 0.72, 0.46, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_section"]
+bg_color = Color(0.105, 0.125, 0.136, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.31, 0.36, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WanLingCatalogPage" type="Control" unique_id=1124920910]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=2030460405]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.68)
+
+[node name="Stage" type="Panel" parent="." unique_id=26239757]
+layout_mode = 0
+offset_right = 940.0
+offset_bottom = 560.0
+theme_override_styles/panel = SubResource("StyleBox_stage")
+
+[node name="Title" type="Label" parent="Stage" unique_id=412778005]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 866.0
+offset_bottom = 57.0
+theme_override_colors/font_color = Color(0.96, 0.81, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.055, 0.025, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 30
+text = "万灵图录"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" type="Button" parent="Stage" unique_id=1525317102]
+layout_mode = 0
+offset_left = 878.0
+offset_top = 13.0
+offset_right = 924.0
+offset_bottom = 55.0
+tooltip_text = "关闭"
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0.91, 0.78, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBox_close")
+theme_override_styles/pressed = SubResource("StyleBox_close_pressed")
+theme_override_styles/hover = SubResource("StyleBox_close_hover")
+text = "×"
+
+[node name="HeaderLine" type="ColorRect" parent="Stage" unique_id=952981197]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 61.0
+offset_right = 922.0
+offset_bottom = 63.0
+mouse_filter = 2
+color = Color(0.73, 0.58, 0.28, 0.7)
+
+[node name="CategoryPanel" type="Panel" parent="Stage" unique_id=2107763711]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 75.0
+offset_right = 166.0
+offset_bottom = 544.0
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="CategoryMargin" type="MarginContainer" parent="Stage/CategoryPanel" unique_id=1901988986]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 10
+
+[node name="CategoryList" type="VBoxContainer" parent="Stage/CategoryPanel/CategoryMargin" unique_id=29405040]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="ContentPanel" type="Panel" parent="Stage" unique_id=419720037]
+layout_mode = 0
+offset_left = 178.0
+offset_top = 75.0
+offset_right = 700.0
+offset_bottom = 544.0
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="SectionTitle" type="Label" parent="Stage/ContentPanel" unique_id=1643311336]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 506.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0.76, 0.9, 0.83, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 23
+text = "人间"
+vertical_alignment = 1
+
+[node name="MonsterScroll" type="ScrollContainer" parent="Stage/ContentPanel" unique_id=158187659]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 48.0
+offset_right = 509.0
+offset_bottom = 457.0
+follow_focus = true
+horizontal_scroll_mode = 0
+scroll_deadzone = 16
+
+[node name="MonsterGrid" type="GridContainer" parent="Stage/ContentPanel/MonsterScroll" unique_id=1498352002]
+custom_minimum_size = Vector2(490, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 9
+columns = 3
+
+[node name="EmptyLabel" type="Label" parent="Stage/ContentPanel" unique_id=946373132]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 185.0
+offset_right = 492.0
+offset_bottom = 285.0
+theme_override_colors/font_color = Color(0.67, 0.72, 0.73, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 24
+text = "该图录暂未开放"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttributePanel" type="Panel" parent="Stage" unique_id=686793565]
+layout_mode = 0
+offset_left = 710.0
+offset_top = 75.0
+offset_right = 924.0
+offset_bottom = 544.0
+theme_override_styles/panel = SubResource("StyleBox_section")
+
+[node name="AttributeMargin" type="MarginContainer" parent="Stage/AttributePanel" unique_id=1786920535]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="AttributeContent" type="VBoxContainer" parent="Stage/AttributePanel/AttributeMargin" unique_id=1015095134]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AttributeTitle" type="Label" parent="Stage/AttributePanel/AttributeMargin/AttributeContent" unique_id=1824096041]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.81, 0.45, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 21
+text = "已获属性"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttributeLine" type="ColorRect" parent="Stage/AttributePanel/AttributeMargin/AttributeContent" unique_id=1294928192]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.73, 0.58, 0.28, 0.62)
+
+[node name="AttributeText" type="Label" parent="Stage/AttributePanel/AttributeMargin/AttributeContent" unique_id=357194855]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.89, 0.85, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 17
+text = "生命  +0
+攻击  +0
+物防  +0
+魔防  +0
+暴击  +0
+破甲  +0
+破魔  +0
+回血  +0
+回魔  +0
+伤害  +0%
+免伤  +0%
+吸血  +0%"
+vertical_alignment = 1
+
+[connection signal="gui_input" from="Overlay" to="." method="_on_overlay_gui_input"]
+[connection signal="pressed" from="Stage/CloseButton" to="." method="_on_close_pressed"]

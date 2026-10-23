@@ -1,0 +1,377 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_llbt.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llbtbg.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llbtfloor.png" id="4"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/flzdz.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/hlzdz.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llzdz.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/tlzdz.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/flz.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/hlz.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llz.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/tlz.png" id="13"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1656, 81.5)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(3072, 1204)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_usqgn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6")
+}],
+"loop": 0,
+"name": &"flzdz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7")
+}],
+"loop": 0,
+"name": &"hlzdz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": 0,
+"name": &"llzdz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9")
+}],
+"loop": 0,
+"name": &"tlzdz",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h1ghq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10")
+}],
+"loop": 0,
+"name": &"flz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11")
+}],
+"loop": 0,
+"name": &"hlz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12")
+}],
+"loop": 0,
+"name": &"llz",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": 0,
+"name": &"tlz",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s62h5"]
+radius = 35.7
+
+[sub_resource type="Animation" id="Animation_p628m"]
+resource_name = "flz"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LZDZ/LZ:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LZDZ/LZ:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"flz"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LZDZ/LZ:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LZDZ/LZ")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_usqgn"]
+resource_name = "hlz"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LZDZ/LZ:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LZDZ/LZ:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"hlz"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LZDZ/LZ:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jylf1"]
+resource_name = "llz"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LZDZ/LZ:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LZDZ/LZ:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"llz"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LZDZ/LZ:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_smuah"]
+resource_name = "tlz"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LZDZ/LZ:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LZDZ/LZ:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"tlz"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LZDZ/LZ:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_usqgn"]
+_data = {
+&"flz": SubResource("Animation_p628m"),
+&"hlz": SubResource("Animation_usqgn"),
+&"llz": SubResource("Animation_jylf1"),
+&"tlz": SubResource("Animation_smuah")
+}
+
+[node name="Level_llbt" unique_id=1846662560 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_horizontal_guides_ = [304.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=753562877]
+position = Vector2(826, 435.25)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=2043297379]
+position = Vector2(3035, -124)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=2039543296]
+
+[node name="Llbtbg" type="Sprite2D" parent="BackGround/front" index="0" unique_id=783461229]
+position = Vector2(895.25006, 259.75)
+scale = Vector2(1.1163846, 1.170339)
+texture = ExtResource("3")
+
+[node name="Llbtfloor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=2108995636]
+position = Vector2(827, 542)
+texture = ExtResource("4")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1064, 326)
+metadata/_edit_lock_ = true
+
+[node name="LevelText" type="Label" parent="." index="14" unique_id=1493937725]
+offset_left = 361.0
+offset_top = -133.0
+offset_right = 664.0
+offset_bottom = -104.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5")
+theme_override_font_sizes/font_size = 25
+text = "24"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="bbg" type="ColorRect" parent="." index="15" unique_id=1079380974]
+z_index = -1
+offset_left = -247.0
+offset_top = -222.0
+offset_right = 1902.0
+offset_bottom = 574.0
+color = Color(0, 0, 0, 0.376471)
+metadata/_edit_lock_ = true
+
+[node name="LZ" type="Node2D" parent="." index="16" unique_id=1588046545]
+metadata/_edit_lock_ = true
+
+[node name="LZDZ" type="AnimatedSprite2D" parent="LZ" index="0" unique_id=915867461]
+position = Vector2(1200, 300)
+sprite_frames = SubResource("SpriteFrames_usqgn")
+autoplay = "default"
+
+[node name="LZ" type="AnimatedSprite2D" parent="LZ/LZDZ" index="0" unique_id=1026401736]
+position = Vector2(0, -65)
+sprite_frames = SubResource("SpriteFrames_h1ghq")
+animation = &"flz"
+autoplay = "default"
+
+[node name="Area2D" type="Area2D" parent="LZ" index="1" unique_id=1562198203]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LZ/Area2D" index="0" unique_id=546502902]
+position = Vector2(1200, 235)
+shape = SubResource("CircleShape2D_s62h5")
+disabled = true
+
+[node name="LZdh" type="AnimationPlayer" parent="LZ" index="2" unique_id=198150286]
+libraries/ = SubResource("AnimationLibrary_usqgn")

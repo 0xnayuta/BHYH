@@ -1,0 +1,131 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/pet/pet_turtle_summon_base.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://Art/pet/pet_turtle/model/pet_turtle_stage4_frames.tres" id="2"]
+
+[sub_resource type="Animation" id="anim_reset"]
+resource_name = "RESET"
+
+[sub_resource type="Animation" id="anim_death"]
+resource_name = "death"
+length = 0.55
+
+[sub_resource type="Animation" id="anim_hit1"]
+resource_name = "hit1"
+length = 0.7
+
+[sub_resource type="Animation" id="anim_hit2"]
+resource_name = "hit2"
+length = 0.6
+
+[sub_resource type="Animation" id="anim_hit3"]
+resource_name = "hit3"
+length = 0.6
+
+[sub_resource type="Animation" id="anim_hurt"]
+resource_name = "hurt"
+length = 0.35
+
+[sub_resource type="Animation" id="anim_wait"]
+resource_name = "wait"
+loop_mode = 1
+
+[sub_resource type="Animation" id="anim_walk"]
+resource_name = "walk"
+loop_mode = 1
+
+[sub_resource type="AnimationLibrary" id="anim_library"]
+_data = {
+&"RESET": SubResource("anim_reset"),
+&"death": SubResource("anim_death"),
+&"hit1": SubResource("anim_hit1"),
+&"hit2": SubResource("anim_hit2"),
+&"hit3": SubResource("anim_hit3"),
+&"hurt": SubResource("anim_hurt"),
+&"wait": SubResource("anim_wait"),
+&"walk": SubResource("anim_walk")
+}
+
+[sub_resource type="CircleShape2D" id="hit_shape"]
+radius = 58.0
+
+[sub_resource type="CapsuleShape2D" id="hurt_shape"]
+radius = 46.0
+height = 110.0
+
+[sub_resource type="CapsuleShape2D" id="pz_shape"]
+radius = 40.0
+height = 95.0
+
+[node name="PetTurtleSummon4" type="CharacterBody2D" unique_id=306676888]
+collision_layer = 4
+collision_mask = 33
+script = ExtResource("1")
+turtle_stage = 4
+
+[node name="Bullet" type="Node" parent="." unique_id=784424230]
+
+[node name="MonsterDir" type="Node2D" parent="." unique_id=1693714046]
+
+[node name="mr_ani" type="AnimatedSprite2D" parent="MonsterDir" unique_id=257877898]
+texture_filter = 2
+position = Vector2(0, -55)
+sprite_frames = ExtResource("2")
+animation = &"wait"
+offset = Vector2(21, -17)
+
+[node name="mr_player" type="AnimationPlayer" parent="." unique_id=1915482984]
+libraries/ = SubResource("anim_library")
+
+[node name="BaseDamageBox" type="Node2D" parent="." unique_id=1748118428]
+
+[node name="HitBox" type="Area2D" parent="BaseDamageBox" unique_id=529113692]
+collision_layer = 2
+collision_mask = 2048
+
+[node name="HitBox" type="CollisionShape2D" parent="BaseDamageBox/HitBox" unique_id=1810962611]
+position = Vector2(0, -50)
+shape = SubResource("hit_shape")
+disabled = true
+
+[node name="HurtBox" type="Area2D" parent="BaseDamageBox" unique_id=1657254892]
+collision_layer = 128
+collision_mask = 4
+
+[node name="HurtBox" type="CollisionShape2D" parent="BaseDamageBox/HurtBox" unique_id=52606246]
+position = Vector2(0, -50)
+shape = SubResource("hurt_shape")
+disabled = true
+
+[node name="pz" type="CollisionShape2D" parent="." unique_id=1284050302]
+position = Vector2(0, -47.5)
+shape = SubResource("pz_shape")
+
+[node name="CD_REMOVE" type="Timer" parent="." unique_id=1574486665]
+autostart = true
+
+[node name="damage_text" type="Node2D" parent="." unique_id=1570611192]
+
+[node name="change_state" type="Timer" parent="." unique_id=277499435]
+wait_time = 2.0
+autostart = true
+
+[node name="spontaneous_recovery" type="Timer" parent="." unique_id=755438578]
+wait_time = 2.0
+autostart = true
+
+[node name="Buff" type="Node" parent="." unique_id=1235380107]
+
+[node name="CalmHit" type="Timer" parent="." unique_id=441909953]
+
+[node name="RemoveHurtBL" type="Timer" parent="." unique_id=343485178]
+one_shot = true
+
+[connection signal="area_entered" from="BaseDamageBox/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="area_exited" from="BaseDamageBox/HitBox" to="." method="_on_hit_box_area_exited"]
+[connection signal="area_entered" from="BaseDamageBox/HurtBox" to="." method="_on_hurt_box_area_entered"]
+[connection signal="timeout" from="CD_REMOVE" to="." method="_on_cd_remove_timeout"]
+[connection signal="timeout" from="change_state" to="." method="_on_change_state_timeout"]
+[connection signal="timeout" from="spontaneous_recovery" to="." method="_on_spontaneous_recovery_timeout"]
+[connection signal="timeout" from="CalmHit" to="." method="_on_calm_hit_timeout"]
+[connection signal="timeout" from="RemoveHurtBL" to="." method="_on_remove_hurt_bl_timeout"]

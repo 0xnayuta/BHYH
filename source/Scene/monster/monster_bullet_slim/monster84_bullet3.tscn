@@ -1,0 +1,326 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/monster/monster_bullet.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/monster/game_3_monster/monster_1405/effect4/01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/add_effect/fire/skull.png" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_57ys3"]
+radius = 121.103
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o61pf"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oiwa0"]
+atlas = ExtResource("2")
+region = Rect2(260, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nyh5u"]
+atlas = ExtResource("2")
+region = Rect2(520, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvxi1"]
+atlas = ExtResource("2")
+region = Rect2(780, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2qkn"]
+atlas = ExtResource("2")
+region = Rect2(1040, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2kcum"]
+atlas = ExtResource("2")
+region = Rect2(1300, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3dlta"]
+atlas = ExtResource("2")
+region = Rect2(1560, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dylk2"]
+atlas = ExtResource("2")
+region = Rect2(1820, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ixypu"]
+atlas = ExtResource("2")
+region = Rect2(2080, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7rh4v"]
+atlas = ExtResource("2")
+region = Rect2(2340, 0, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qu78f"]
+atlas = ExtResource("2")
+region = Rect2(0, 340, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upd24"]
+atlas = ExtResource("2")
+region = Rect2(260, 340, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hx6lu"]
+atlas = ExtResource("2")
+region = Rect2(520, 340, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkiat"]
+atlas = ExtResource("2")
+region = Rect2(780, 340, 260, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27e4u"]
+atlas = ExtResource("2")
+region = Rect2(1040, 340, 260, 340)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xn3yi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o61pf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oiwa0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nyh5u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvxi1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2qkn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2kcum")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3dlta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dylk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ixypu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rh4v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qu78f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_upd24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hx6lu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qkiat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27e4u")
+}],
+"loop": 0,
+"name": &"Monster84Bullet3",
+"speed": 15.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3h4oh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t8ywn"]
+size = Vector2(200, 250)
+
+[sub_resource type="Animation" id="Animation_biypm"]
+length = 7.0
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("middle/BulletANI:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_3h4oh")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("middle/BulletANI:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.592157, 1, 0.364706)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("middle/BulletANI:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.2, 1.2)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("middle/BulletANI:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("middle/BulletANI:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-32.155, -100)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("middle/BulletANI:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": ["Monster84Bullet3"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("middle/BulletANI:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.06667, 1.13333, 1.2, 1.26667, 1.33333, 1.4, 1.46667, 1.53333, 1.6, 1.66667, 1.73333, 1.8, 1.86667, 1.93333, 2, 2.06667, 2.13333, 2.2, 2.26667, 2.33333, 2.4, 2.46667, 2.53333, 2.6, 2.66667, 2.73333, 2.8, 2.86667, 2.93333, 3, 3.06667, 3.13333, 3.2, 3.26667, 3.33333, 3.4, 3.46667, 3.53333, 3.6, 3.66667, 3.73333, 3.8, 3.86667, 3.93333, 4, 4.06667, 4.13333, 4.2, 4.26667, 4.33333, 4.4, 4.46667, 4.53333, 4.6, 4.66667, 4.73333, 4.8, 4.86667, 4.93333, 5, 5.06667, 5.13333, 5.2, 5.26667, 5.33333, 5.4, 5.46667, 5.53333, 5.6, 5.66667, 5.73333, 5.8, 5.86667, 5.93333, 6, 6.06667, 6.13333, 6.2, 6.26667, 6.33333, 6.4, 6.46667, 6.53333, 6.6, 6.66667, 6.73333, 6.8, 6.86667, 6.93333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("middle/HitBox/Hit_Box:shape")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_t8ywn")]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("middle/HitBox/Hit_Box:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 4.75, 5, 5.25, 5.5, 5.75, 6, 6.25, 6.5, 6.75, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("middle/HitBox/Hit_Box:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-22.5, -58.5)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("poision:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fbkm7"]
+_data = {
+&"Monster84Bullet3": SubResource("Animation_biypm")
+}
+
+[node name="MonsterBullet" type="Node2D" unique_id=741127891]
+script = ExtResource("1")
+
+[node name="middle" type="Node2D" parent="." unique_id=1729296740]
+
+[node name="HitBox" type="Area2D" parent="middle" unique_id=1555170705]
+collision_layer = 4
+collision_mask = 8321
+
+[node name="Hit_Box" type="CollisionShape2D" parent="middle/HitBox" unique_id=408047413]
+position = Vector2(223, -1)
+shape = SubResource("CircleShape2D_57ys3")
+
+[node name="BulletANI" type="AnimatedSprite2D" parent="middle" unique_id=1523287299]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+position = Vector2(1432, 0)
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_xn3yi")
+animation = &"Empty"
+
+[node name="BulletPlayer" type="AnimationPlayer" parent="." unique_id=175014397]
+libraries/ = SubResource("AnimationLibrary_fbkm7")
+movie_quit_on_finish = true
+
+[node name="poision" type="Sprite2D" parent="." unique_id=1442286912]
+visible = false
+position = Vector2(0, 16)
+texture = ExtResource("3")
+
+[node name="queue_timer" type="Timer" parent="." unique_id=222927570]
+
+[node name="IsThrowClose" type="Timer" parent="." unique_id=975986272]
+one_shot = true

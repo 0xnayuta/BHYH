@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_tzsijian.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/level_10/250.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_tzsijian/level_96/1_floor_bg96.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_tzsijian/level_96/bg961_parts/base_4.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/level_10/230.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(1400, 553)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(17, 1786)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(101, 1420)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(600, 1420)
+
+[node name="Level_tzsijian" unique_id=846124540 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [365.0, 1198.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=579201075]
+position = Vector2(600, 669.5)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=927760394]
+position = Vector2(1007.5, -406)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=484155124]
+position = Vector2(-54.5, -221)
+shape = SubResource("3")
+disabled = true
+
+[node name="stop_right" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=2026958050]
+position = Vector2(1504, -221)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="create_control" parent="." index="8" unique_id=1989637868]
+wait_time = 0.5
+
+[node name="250" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1853876432]
+visible = false
+position = Vector2(716, 248)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=196410967]
+
+[node name="125" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1691409744]
+texture_filter = 1
+position = Vector2(606.5001, 179.50002)
+scale = Vector2(1.1208334, 1.2839805)
+texture = ExtResource("4")
+
+[node name="tzsijian_top" type="Sprite2D" parent="BackGround/front" index="1" unique_id=244165411]
+texture_filter = 1
+position = Vector2(600, 421)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5")
+
+[node name="tzsijian_floor" type="Sprite2D" parent="BackGround/front" index="2" unique_id=1087028596]
+visible = false
+position = Vector2(600, 100)
+
+[node name="tzsijian_array" type="Sprite2D" parent="BackGround/front" index="3" unique_id=137677409]
+visible = false
+position = Vector2(600, 516)
+
+[node name="tzsijian_fog" type="Sprite2D" parent="BackGround/front" index="4" unique_id=1044004598]
+visible = false
+position = Vector2(600, 500)
+
+[node name="230" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=304921116]
+visible = false
+position = Vector2(1142.25, 547)
+scale = Vector2(1.21007, 1)
+texture = ExtResource("6")
+metadata/_edit_lock_ = true
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1135, 316)
+metadata/_edit_lock_ = true

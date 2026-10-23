@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_61.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/59209916f5252df9e220ee72d6c65346ec1ec68dfd7ce3758a8f210cdb20be79.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/cb10692efca54908ca0f4b623cf3b00844ae9dc584c1b202240b13bdc65f1375.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/ea0ffe29b72c14ea10dac2ee232133f83c1486d65ea61631a6dd0c937cee12f6.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/pool/d760e960a22b528d7e44a1da1c03d37f8ca9408c85aa7763849964faa42fd2e5.png" id="6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_1"]
+size = Vector2(4620, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_right"]
+size = Vector2(120, 2400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_2"]
+size = Vector2(1535, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_floor_3"]
+size = Vector2(1520.5, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_fall_death"]
+size = Vector2(7308, 16)
+
+[node name="Level_61" unique_id=1691451838 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "wanfochaoge_v2"
+display_name = "万佛朝阁"
+stage_number = 61
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="wall" parent="." index="1" unique_id=1221902799]
+position = Vector2(-1, -112)
+
+[node name="floor" parent="wall" index="2"]
+position = Vector2(2060, 721.5)
+shape = SubResource("RectangleShape_floor_1")
+
+[node name="right_wall" parent="wall" index="3"]
+position = Vector2(5052, -300)
+shape = SubResource("RectangleShape_right")
+
+[node name="floor_2" type="CollisionShape2D" parent="wall" index="4" unique_id=1348264182]
+position = Vector2(2494.5, 721.5)
+shape = SubResource("RectangleShape_floor_2")
+
+[node name="floor_3" type="CollisionShape2D" parent="wall" index="5" unique_id=1062548633]
+position = Vector2(4474.75, 721.5)
+shape = SubResource("RectangleShape_floor_3")
+
+[node name="ImportedBackdrop" type="Polygon2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=609489872]
+z_index = -100
+color = Color(0.025, 0.035, 0.055, 1)
+polygon = PackedVector2Array(-1000, -1200, 2500, -1200, 2500, 2200, -1000, 2200)
+
+[node name="bg30_1" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="1" unique_id=2058856473]
+position = Vector2(720, 342.99997)
+scale = Vector2(1.1055555, 1.1466666)
+texture = ExtResource("3")
+
+[node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
+position = Vector2(0, -74)
+
+[node name="bg20_1" type="Sprite2D" parent="BackGround/floor_2" index="0" unique_id=360746749]
+position = Vector2(1672.4998, 388)
+texture = ExtResource("4")
+
+[node name="bg12_2" type="Sprite2D" parent="BackGround/floor_2" index="1" unique_id=1869637780]
+position = Vector2(3489, 380)
+texture = ExtResource("5")
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" index="2" unique_id=534097266]
+position = Vector2(1496, 380)
+texture = ExtResource("5")
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" index="3" unique_id=1350001254]
+position = Vector2(498.5, 380)
+scale = Vector2(1.002006, 1)
+texture = ExtResource("5")
+
+[node name="bg12_1" type="Sprite2D" parent="BackGround/floor_2" index="4" unique_id=1074218411]
+position = Vector2(2492.5, 380)
+texture = ExtResource("5")
+
+[node name="bg15_1" type="Sprite2D" parent="BackGround/floor_2" index="5" unique_id=1709639765]
+position = Vector2(4490, 380)
+scale = Vector2(1.0090271, 1)
+texture = ExtResource("6")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4827, 278)
+
+[node name="FallDeath" type="Area2D" parent="." index="12" unique_id=941398351]
+position = Vector2(1288, 672)
+collision_layer = 0
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FallDeath" index="0" unique_id=1920044128]
+position = Vector2(-1, -112)
+shape = SubResource("RectangleShape_fall_death")
+
+[connection signal="body_entered" from="FallDeath" to="." method="_on_fall_death_body_entered"]

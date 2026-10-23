@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="SkillUi" type="Node2D" unique_id=1267013457]
+
+[node name="Bg" type="Sprite2D" parent="." unique_id=1085568170]
+position = Vector2(470, 296)
+metadata/_edit_lock_ = true

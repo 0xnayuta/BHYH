@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_64.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/baixianyuan/background/bg30.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/baixianyuan/background/bg10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/imported/maps/baixianyuan/background/bg11.png" id="5"]
+
+[sub_resource type="RectangleShape2D" id="floor"]
+size = Vector2(5000, 500)
+
+[sub_resource type="RectangleShape2D" id="right"]
+size = Vector2(120, 2400)
+
+[node name="Level_64" unique_id=328056557 instance=ExtResource("1")]
+script = ExtResource("2")
+source_map = "baixianyuan"
+display_name = "百仙园"
+stage_number = 64
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 0.0
+background_baked = true
+spawn_position = Vector2(32, 448)
+
+[node name="floor" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2"]
+position = Vector2(2500, 655.5)
+shape = SubResource("floor")
+
+[node name="right_wall" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3"]
+position = Vector2(4971, -300)
+shape = SubResource("right")
+
+[node name="bg30" type="Sprite2D" parent="BackGround/End" parent_id_path=PackedInt32Array(653194421) index="0" unique_id=1678528396]
+position = Vector2(720, 300)
+texture = ExtResource("3")
+
+[node name="bg10_1" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=1481008935]
+position = Vector2(498.5, 300)
+texture = ExtResource("4")
+
+[node name="bg10_2" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1765190053]
+position = Vector2(1495.5, 300)
+texture = ExtResource("4")
+
+[node name="bg10_3" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=1953287]
+position = Vector2(2492.5, 300)
+texture = ExtResource("4")
+
+[node name="bg10_4" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=387666521]
+position = Vector2(3491.5, 300)
+scale = Vector2(1.004012, 1)
+texture = ExtResource("4")
+
+[node name="bg11" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=297145706]
+position = Vector2(4525.5, 300)
+scale = Vector2(1.0722166, 1)
+texture = ExtResource("5")
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(4845, 313)

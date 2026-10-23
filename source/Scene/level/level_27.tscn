@@ -1,0 +1,266 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_27.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Scene/level/trap_2_dwtw.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/dwtw.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/leftdoor.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/rightdoor.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/zz.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/floordwtw.png" id="8"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(6099, 700)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1045.5, 1196)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(1194.25, 1196)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(918, 1196)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(1777.25, 1593)
+
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(236, 34)
+
+[sub_resource type="RectangleShape2D" id="7"]
+size = Vector2(687.745, 1420)
+
+[sub_resource type="RectangleShape2D" id="8"]
+size = Vector2(67, 181)
+
+[sub_resource type="Animation" id="9"]
+resource_name = "open"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackGround/floor_2/Leftdoor:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1083.5, 115.5), Vector2(930, 115.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BackGround/floor_2/Rightdoor:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1636.015, 115.5), Vector2(1786.015, 115.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CSM/Check:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DoorCheck/Check:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="10"]
+_data = {
+&"open": SubResource("9")
+}
+
+[sub_resource type="RectangleShape2D" id="11"]
+size = Vector2(336, 336)
+
+[node name="Level_27" unique_id=1015779244 instance=ExtResource("1")]
+script = ExtResource("2")
+metadata/_edit_vertical_guides_ = [1099.0]
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=129001399]
+position = Vector2(3047.5, 750)
+shape = SubResource("1")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=445349693]
+position = Vector2(1624.25, -120)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=1504864092]
+position = Vector2(2846.88, -120)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=212785081]
+position = Vector2(4010, -114)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="stop4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="6" unique_id=2006326319]
+position = Vector2(5486.38, 77.5)
+shape = SubResource("5")
+metadata/_edit_lock_ = true
+
+[node name="stage1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="7" unique_id=868858533]
+position = Vector2(322, 251)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="8" unique_id=122410790]
+position = Vector2(598, 95)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage3" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="9" unique_id=967178843]
+position = Vector2(855, 250)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage4" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="10" unique_id=48672147]
+position = Vector2(2267, 207)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="11" unique_id=40713440]
+position = Vector2(2753, 207)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage6" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="12" unique_id=127866992]
+position = Vector2(3278, 239)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage7" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="13" unique_id=872303972]
+position = Vector2(3481, 132)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stage8" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="14" unique_id=294255352]
+position = Vector2(3710, 36)
+shape = SubResource("6")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="15" unique_id=1593813900]
+position = Vector2(3161.13, -211)
+shape = SubResource("7")
+disabled = true
+metadata/_edit_lock_ = true
+
+[node name="Trap2dwtw" parent="." index="10" unique_id=2118999372 instance=ExtResource("3")]
+position = Vector2(578, -101)
+metadata/_edit_lock_ = true
+
+[node name="Trap2dwtw2" parent="." index="11" unique_id=2021679064 instance=ExtResource("3")]
+position = Vector2(2513, -102)
+
+[node name="Trap2dwtw8" parent="." index="12" unique_id=1854650758 instance=ExtResource("3")]
+position = Vector2(3931, -100)
+
+[node name="Trap2dwtw5" parent="." index="13" unique_id=781007732 instance=ExtResource("3")]
+position = Vector2(2901, -102)
+
+[node name="Trap2dwtw3" parent="." index="14" unique_id=2060715278 instance=ExtResource("3")]
+position = Vector2(2042, 394)
+rotation = -3.14159
+
+[node name="Trap2dwtw4" parent="." index="15" unique_id=6895142 instance=ExtResource("3")]
+position = Vector2(3063, 394)
+rotation = -3.14159
+
+[node name="Trap2dwtw6" parent="." index="16" unique_id=950406602 instance=ExtResource("3")]
+position = Vector2(3338, 394)
+rotation = -3.14159
+
+[node name="Trap2dwtw7" parent="." index="17" unique_id=22769096 instance=ExtResource("3")]
+position = Vector2(3657, 396)
+rotation = -3.14159
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=2046327102]
+
+[node name="Dwtw" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1256198021]
+position = Vector2(2326.75, 263.25003)
+scale = Vector2(1.0277601, 1.175127)
+texture = ExtResource("4")
+
+[node name="Leftdoor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=785571498]
+position = Vector2(1083.5004, 115.499985)
+scale = Vector2(1.2364017, 1.1735294)
+texture = ExtResource("5")
+
+[node name="Rightdoor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1739222563]
+position = Vector2(1635.7498, 115.49999)
+scale = Vector2(1.091195, 1.1794116)
+texture = ExtResource("6")
+
+[node name="Zz" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="2" unique_id=1139186287]
+position = Vector2(1390.75, 212.50002)
+scale = Vector2(1.0966908, 1.187747)
+texture = ExtResource("7")
+metadata/_edit_lock_ = true
+
+[node name="Floordwtw" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="3" unique_id=2137673082]
+position = Vector2(2349, 357)
+texture = ExtResource("8")
+metadata/_edit_lock_ = true
+
+[node name="floor" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="4" unique_id=643279606]
+position = Vector2(79, -1)
+
+[node name="exit" parent="." index="19" unique_id=2115553614]
+position = Vector2(4520, 331)
+metadata/_edit_lock_ = true
+
+[node name="DoorCheck" type="Area2D" parent="." index="22" unique_id=520784178]
+position = Vector2(1380, 74)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Check" type="CollisionShape2D" parent="DoorCheck" index="0" unique_id=1259837554]
+position = Vector2(-12, 22)
+shape = SubResource("8")
+
+[node name="mm" type="AnimationPlayer" parent="." index="23" unique_id=263163788]
+libraries/ = SubResource("10")
+
+[node name="CSM" type="Area2D" parent="." index="24" unique_id=694134536]
+position = Vector2(1390, 76)
+collision_layer = 16
+collision_mask = 16
+
+[node name="Check" type="CollisionShape2D" parent="CSM" index="0" unique_id=635505909]
+position = Vector2(-7, 1)
+shape = SubResource("11")
+disabled = true
+
+[connection signal="area_entered" from="DoorCheck" to="." method="_on_door_check_area_entered"]
+[connection signal="body_entered" from="CSM" to="." method="_on_csm_body_entered"]
+[connection signal="body_exited" from="CSM" to="." method="_on_csm_body_exited"]

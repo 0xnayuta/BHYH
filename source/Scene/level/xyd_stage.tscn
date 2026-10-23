@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/level/xyd_stage.gd" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_35/s1.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jbyqj"]
+size = Vector2(100, 75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ngu6q"]
+size = Vector2(100, 95.25)
+
+[node name="XydStage" type="StaticBody2D" unique_id=275069075]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("1")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=868633582]
+position = Vector2(88, 390)
+texture = ExtResource("2")
+
+[node name="PhysicsCollision" type="CollisionShape2D" parent="." unique_id=1903855931]
+position = Vector2(88, 370)
+shape = SubResource("RectangleShape2D_jbyqj")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=787689802]
+position = Vector2(88, 369.75)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="DetectionArea" unique_id=821354117]
+position = Vector2(0, -10.125)
+shape = SubResource("RectangleShape2D_ngu6q")

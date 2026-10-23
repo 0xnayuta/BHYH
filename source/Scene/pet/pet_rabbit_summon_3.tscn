@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/pet/pet_rabbit_summon_base.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://Art/pet/pet_rabbit/model/pet_rabbit_stage3_frames.tres" id="2"]
+
+[sub_resource type="CircleShape2D" id="hit"]
+radius = 42.0
+
+[sub_resource type="CapsuleShape2D" id="hurt"]
+radius = 36.0
+height = 82.0
+
+[sub_resource type="CapsuleShape2D" id="ground"]
+radius = 31.0
+height = 68.0
+
+[node name="PetRabbitSummon3" type="CharacterBody2D" unique_id=1353271864]
+collision_layer = 4
+collision_mask = 33
+script = ExtResource("1")
+turtle_stage = 3
+
+[node name="Bullet" type="Node" parent="." unique_id=1255715000]
+
+[node name="MonsterDir" type="Node2D" parent="." unique_id=1475248851]
+
+[node name="mr_ani" type="AnimatedSprite2D" parent="MonsterDir" unique_id=1612864490]
+texture_filter = 2
+position = Vector2(0, -63)
+sprite_frames = ExtResource("2")
+animation = &"wait"
+offset = Vector2(1, -28)
+
+[node name="mr_player" type="AnimationPlayer" parent="." unique_id=1120127278]
+
+[node name="BaseDamageBox" type="Node2D" parent="." unique_id=740987629]
+
+[node name="HitBox" type="Area2D" parent="BaseDamageBox" unique_id=1373399204]
+collision_layer = 2
+collision_mask = 2048
+
+[node name="HitBox" type="CollisionShape2D" parent="BaseDamageBox/HitBox" unique_id=642974087]
+position = Vector2(0, -40)
+shape = SubResource("hit")
+disabled = true
+
+[node name="HurtBox" type="Area2D" parent="BaseDamageBox" unique_id=1166972199]
+collision_layer = 128
+collision_mask = 4
+
+[node name="HurtBox" type="CollisionShape2D" parent="BaseDamageBox/HurtBox" unique_id=1875839040]
+position = Vector2(0, -40)
+shape = SubResource("hurt")
+disabled = true
+
+[node name="pz" type="CollisionShape2D" parent="." unique_id=2084181700]
+position = Vector2(0, -34)
+shape = SubResource("ground")
+
+[node name="CD_REMOVE" type="Timer" parent="." unique_id=86004058]
+autostart = true
+
+[node name="damage_text" type="Node2D" parent="." unique_id=324760712]
+
+[node name="change_state" type="Timer" parent="." unique_id=2012522228]
+wait_time = 2.0
+autostart = true
+
+[node name="spontaneous_recovery" type="Timer" parent="." unique_id=210185747]
+wait_time = 2.0
+autostart = true
+
+[node name="Buff" type="Node" parent="." unique_id=393170994]
+
+[node name="CalmHit" type="Timer" parent="." unique_id=1121998671]
+
+[node name="RemoveHurtBL" type="Timer" parent="." unique_id=1794567401]
+one_shot = true
+
+[connection signal="area_entered" from="BaseDamageBox/HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="area_exited" from="BaseDamageBox/HitBox" to="." method="_on_hit_box_area_exited"]
+[connection signal="area_entered" from="BaseDamageBox/HurtBox" to="." method="_on_hurt_box_area_entered"]
+[connection signal="timeout" from="CD_REMOVE" to="." method="_on_cd_remove_timeout"]
+[connection signal="timeout" from="change_state" to="." method="_on_change_state_timeout"]
+[connection signal="timeout" from="spontaneous_recovery" to="." method="_on_spontaneous_recovery_timeout"]
+[connection signal="timeout" from="CalmHit" to="." method="_on_calm_hit_timeout"]
+[connection signal="timeout" from="RemoveHurtBL" to="." method="_on_remove_hurt_bl_timeout"]

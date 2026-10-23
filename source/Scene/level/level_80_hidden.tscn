@@ -1,0 +1,166 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/game4_imported_level_base.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_80.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/north_continent_terrain.gd" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/game_4_level/north_original/maps/huanjinggeyincang/bg10.png" id="4"]
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_2kl10"]
+size = Vector2(1247.2186, 38)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_ihsn4"]
+size = Vector2(130.39658, 31.999878)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_3n63a"]
+size = Vector2(130.39658, 31.999878)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_3qamt"]
+size = Vector2(130.39658, 31.999878)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_ncqp2"]
+size = Vector2(130.39658, 31.999878)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_j21m7"]
+size = Vector2(1386, 109)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_qc5kv"]
+size = Vector2(1386, 109)
+
+[sub_resource type="RectangleShape2D" id="terrain_RectangleShape2D_en317"]
+size = Vector2(1200, 100)
+
+[node name="Level_80_hidden" unique_id=1861911167 instance=ExtResource("1")]
+script = ExtResource("2")
+hidden_original_room = true
+source_map = ""
+display_name = "幻境阁隐藏关"
+stage_number = 80
+background_offset_y = 0.0
+fixed_layers = null
+level_width_override = 1200.0
+background_baked = true
+spawn_position = Vector2(90, 253)
+
+[node name="Monster" parent="." index="2" unique_id=1898751455]
+position = Vector2(0, 0)
+
+[node name="Hero" parent="." index="3" unique_id=913111874]
+position = Vector2(0, 0)
+
+[node name="fall_items" parent="." index="9" unique_id=1160963530]
+position = Vector2(0, 0)
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1083, 501)
+
+[node name="OriginalTerrain" type="Node2D" parent="." index="15" unique_id=2105537230]
+script = ExtResource("3")
+metadata/scene_bindings = {
+"_animation_data": {},
+"_background_copies": [],
+"_backgrounds": {
+"bg10": NodePath("bg10")
+},
+"_collapsing": [],
+"_first_space_bodies": [NodePath("Ground0"), NodePath("Ground1"), NodePath("Ground2"), NodePath("Ground3"), NodePath("Ground4")],
+"_hazards": [],
+"_hidden_platforms": [],
+"_moving": [],
+"_portals": [],
+"_source_objects": [{
+"active": false,
+"body": NodePath("NorthObject15"),
+"last_hit": -100.0,
+"properties": {
+"body": "1",
+"bodyType": "static",
+"createBodyAtInit": "0",
+"groupType": "ground",
+"triggerID": "210",
+"type": "viewers.component.Trigger"
+},
+"rect": Rect2(-67, -109.5, 1386, 109),
+"region": NodePath("NorthObject15/ObjectRegion0/Region"),
+"sprite": null,
+"type": "Trigger"
+}],
+"death_region": NodePath("FallDeath/Region")
+}
+
+[node name="Ground0" type="StaticBody2D" parent="OriginalTerrain" index="0" unique_id=982596130]
+position = Vector2(594.6, 525.1)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@408" type="CollisionShape2D" parent="OriginalTerrain/Ground0" index="0" unique_id=970069379]
+shape = SubResource("terrain_RectangleShape2D_2kl10")
+one_way_collision = true
+
+[node name="Ground1" type="StaticBody2D" parent="OriginalTerrain" index="1" unique_id=2059804833]
+position = Vector2(131.85, 371.3)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@410" type="CollisionShape2D" parent="OriginalTerrain/Ground1" index="0" unique_id=1614278561]
+shape = SubResource("terrain_RectangleShape2D_ihsn4")
+one_way_collision = true
+
+[node name="Ground2" type="StaticBody2D" parent="OriginalTerrain" index="2" unique_id=1543512845]
+position = Vector2(312.95, 286.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@412" type="CollisionShape2D" parent="OriginalTerrain/Ground2" index="0" unique_id=2137229855]
+shape = SubResource("terrain_RectangleShape2D_3n63a")
+one_way_collision = true
+
+[node name="Ground3" type="StaticBody2D" parent="OriginalTerrain" index="3" unique_id=1720564539]
+position = Vector2(887.95, 286.95)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@414" type="CollisionShape2D" parent="OriginalTerrain/Ground3" index="0" unique_id=1172004910]
+shape = SubResource("terrain_RectangleShape2D_3qamt")
+one_way_collision = true
+
+[node name="Ground4" type="StaticBody2D" parent="OriginalTerrain" index="4" unique_id=1552641807]
+position = Vector2(1069.9, 371.3)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@416" type="CollisionShape2D" parent="OriginalTerrain/Ground4" index="0" unique_id=1315624777]
+shape = SubResource("terrain_RectangleShape2D_ncqp2")
+one_way_collision = true
+
+[node name="bg10" type="Sprite2D" parent="OriginalTerrain" index="5" unique_id=17734478]
+z_index = -10
+texture = ExtResource("4")
+centered = false
+
+[node name="NorthObject15" type="StaticBody2D" parent="OriginalTerrain" index="6" unique_id=986249412]
+position = Vector2(626, -55)
+collision_layer = 32
+collision_mask = 0
+
+[node name="@CollisionShape2D@418" type="CollisionShape2D" parent="OriginalTerrain/NorthObject15" index="0" unique_id=1490968504]
+shape = SubResource("terrain_RectangleShape2D_j21m7")
+one_way_collision = true
+
+[node name="ObjectRegion0" type="Area2D" parent="OriginalTerrain/NorthObject15" index="1" unique_id=724788107]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/NorthObject15/ObjectRegion0" index="0" unique_id=229268903]
+shape = SubResource("terrain_RectangleShape2D_qc5kv")
+
+[node name="FallDeath" type="Area2D" parent="OriginalTerrain" index="7" unique_id=1419556106]
+position = Vector2(600, 750)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="Region" type="CollisionShape2D" parent="OriginalTerrain/FallDeath" index="0" unique_id=1985573359]
+shape = SubResource("terrain_RectangleShape2D_en317")

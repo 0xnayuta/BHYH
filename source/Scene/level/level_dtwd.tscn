@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/level/level_dtwd.gd" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_hide/dtwdfloor.png" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(9263, 103)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(3530, 1058)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(654, 1275.5)
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(1232, 2416.75)
+
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(781.5, 1420)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m7qgr"]
+
+[node name="Level_dtwd" unique_id=200647773 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="thb" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="1" unique_id=1586212661]
+position = Vector2(4626.5, -747.5)
+shape = SubResource("1")
+
+[node name="floor" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="2" unique_id=771430868]
+position = Vector2(1764, 925)
+shape = SubResource("2")
+metadata/_edit_lock_ = true
+
+[node name="stop1" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="3" unique_id=1388070327]
+position = Vector2(1403, -158.25)
+shape = SubResource("3")
+metadata/_edit_lock_ = true
+
+[node name="stop2" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="4" unique_id=2142769455]
+position = Vector2(2461, 410.625)
+shape = SubResource("4")
+metadata/_edit_lock_ = true
+
+[node name="stop5" type="CollisionShape2D" parent="wall" parent_id_path=PackedInt32Array(1221902799) index="5" unique_id=1517622177]
+position = Vector2(692, -258)
+scale = Vector2(0.603053, 4.375)
+shape = SubResource("5")
+disabled = true
+
+[node name="Dtwdbg" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="0" unique_id=941355392]
+position = Vector2(1018.0001, -21.999998)
+scale = Vector2(1.1255319, 1.0398306)
+texture = SubResource("CompressedTexture2D_m7qgr")
+
+[node name="Dtwdfloor" type="Sprite2D" parent="BackGround/floor_2" parent_id_path=PackedInt32Array(458132924) index="1" unique_id=1805508126]
+position = Vector2(1015.00006, 545)
+scale = Vector2(1.1365314, 1)
+texture = ExtResource("3")
+
+[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=54860853]
+
+[node name="exit" parent="." index="11" unique_id=2115553614]
+position = Vector2(1482, 328)
+metadata/_edit_lock_ = true

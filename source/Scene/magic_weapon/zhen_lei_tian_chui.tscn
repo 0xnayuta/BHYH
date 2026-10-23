@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/magic_weapon/zhen_lei_tian_chui.gd" id="2"]
+
+[node name="ZhenLeiTianChui" unique_id=644129664 instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="EffectAnchor" type="Node2D" parent="." index="2" unique_id=1046666036]
+top_level = true
+z_index = 3
+
+[node name="ThunderEffect" type="AnimatedSprite2D" parent="EffectAnchor" index="0" unique_id=1993645613]
+visible = false
+
+[node name="CastFlash" type="AnimatedSprite2D" parent="EffectAnchor" index="1" unique_id=302636503]
+visible = false
+z_index = 1

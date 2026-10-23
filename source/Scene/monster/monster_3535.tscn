@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/monster/east_continent_monster.tscn" id="1"]
+[ext_resource type="Script" path="res://Script/monster/north_continent_monster.gd" id="2"]
+
+[node name="Monster_3535" unique_id=557762602 instance=ExtResource("1")]
+script = ExtResource("2")
+monster_kind = 3535
