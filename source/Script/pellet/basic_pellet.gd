@@ -19,6 +19,15 @@ var current_pellet_type: String = "生命"
 var current_in_type = "smd_"
 
 
+func _increment_pellet_counts(stage: int) -> void:
+	var key := current_pellet_type + "丹" + str(stage)
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and coop.has_method("is_enabled") and coop.is_enabled():
+		coop.increment_pellet_count(key)
+	else:
+		PlayerData.player_data[key] = mini(5, int(PlayerData.player_data.get(key, 0)) + 1)
+
+
 func _fit_to_fullscreen() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
@@ -161,7 +170,7 @@ func _on_emp_dy_pressed() -> void:
 func _on_eat_1_pressed() -> void:
 	if PlayerData.player_data[current_pellet_type + "丹1"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "1") != 0:
-			PlayerData.player_data[current_pellet_type + "丹1"] += 1
+			_increment_pellet_counts(1)
 			PlayerData.remove_dj(str(current_in_type) + "1", PlayerData.get_dj_page(str(current_in_type) + "1"), 1)
 			Global.add_message_show(Global.windows, "成功服用一品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
 		else:
@@ -177,7 +186,7 @@ func _on_eat_2_pressed() -> void:
 		return
 	if PlayerData.player_data[current_pellet_type + "丹2"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "2") != 0:
-			PlayerData.player_data[current_pellet_type + "丹2"] += 1
+			_increment_pellet_counts(2)
 			PlayerData.remove_dj(str(current_in_type) + "2", PlayerData.get_dj_page(str(current_in_type) + "2"), 1)
 			Global.add_message_show(Global.windows, "成功服用二品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
 		else:
@@ -194,7 +203,7 @@ func _on_eat_3_pressed() -> void:
 		return
 	if PlayerData.player_data[current_pellet_type + "丹3"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "3") != 0:
-			PlayerData.player_data[current_pellet_type + "丹3"] += 1
+			_increment_pellet_counts(3)
 			PlayerData.remove_dj(str(current_in_type) + "3", PlayerData.get_dj_page(str(current_in_type) + "3"), 1)
 			Global.add_message_show(Global.windows, "成功服用三品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
 		else:
@@ -212,7 +221,7 @@ func _on_eat_4_pressed() -> void:
 
 	if PlayerData.player_data[current_pellet_type + "丹4"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "4") != 0:
-			PlayerData.player_data[current_pellet_type + "丹4"] += 1
+			_increment_pellet_counts(4)
 			PlayerData.remove_dj(str(current_in_type) + "4", PlayerData.get_dj_page(str(current_in_type) + "4"), 1)
 			Global.add_message_show(Global.windows, "成功服用四品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
 		else:
@@ -230,7 +239,7 @@ func _on_eat_5_pressed() -> void:
 
 	if PlayerData.player_data[current_pellet_type + "丹5"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "5") != 0:
-			PlayerData.player_data[current_pellet_type + "丹5"] += 1
+			_increment_pellet_counts(5)
 			PlayerData.remove_dj(str(current_in_type) + "5", PlayerData.get_dj_page(str(current_in_type) + "5"), 1)
 			Global.add_message_show(Global.windows, "成功服用五品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
 		else:
@@ -281,7 +290,7 @@ func _on_one_key_auto_eat_pressed() -> void:
 				can_continue = false
 				break
 
-			PlayerData.player_data[grade_key] += 1
+			_increment_pellet_counts(current_grade)
 			PlayerData.remove_dj(item_id, PlayerData.get_dj_page(item_id), 1)
 			total_eaten += 1
 

@@ -401,9 +401,19 @@ func settle_death_drops_and_free() -> void:
 
 
 func _try_unlock_pet_rabbit() -> void:
-	if PlayerData.has_method("is_pet_rabbit_unlocked") and PlayerData.is_pet_rabbit_unlocked():
-		return
-	if not PlayerData.has_method("unlock_pet_rabbit") or not PlayerData.unlock_pet_rabbit():
+	var unlocked := false
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and coop.is_enabled():
+		var profiles: Array[Node] = [
+			coop.canonical_profile_for_slot(1),
+			coop.canonical_profile_for_slot(2),
+		]
+		for profile in profiles:
+			if is_instance_valid(profile) and profile.has_method("unlock_pet_rabbit"):
+				unlocked = profile.unlock_pet_rabbit() or unlocked
+	elif PlayerData.has_method("unlock_pet_rabbit"):
+		unlocked = PlayerData.unlock_pet_rabbit()
+	if not unlocked:
 		return
 	Global.add_message_show(Global.windows, "击败嫦娥，成功解锁宠物月兔！", 2.0, Vector2(500, 305))
 	MemoryClass.save_game(Global.cd_path)
