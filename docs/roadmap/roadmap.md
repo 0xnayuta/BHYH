@@ -2,19 +2,28 @@
 
 > **定位**：只记录当前版本之后的工作方向，不保留历史阶段流水账。
 >
-> **当前版本**：6.9。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
+> **当前版本**：6.9。当前迭代为 **Phase 12 画布与 HUD 重构**（规划中，未实施）。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
 >
 > **迁移方法**：见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
 ---
 
-## 1. 已完成迭代：6.9 补丁回植
+## 1. 当前迭代：Phase 12 画布与 HUD 重构
 
-6.9 目标二进制的只读预检、PCK 目录校验与脚本反编译已完成。6.9 是**补丁型更新**：公告范围包含 12 项双人、自动战斗、任务与掉落修复；变更清单为 20 个生产脚本、2 个生产场景，无新增生产资源；新增的 6 个 PCK 条目均为测试探针，不进入生产工程。
+6.9 补丁回植已完成并通过收口验收，完整记录归档于 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)。当前内容版本保持 **6.9**；Phase 12 只处理画布、窗口、相机和桌面 HUD 的展示层重构。
 
-当前内容版本为 **6.9**；6.9-1 至 6.9-6 全部完成并通过收口验收：七维门禁 7/7、关卡回归 128/128 PASS + 5 SKIP、双人矩阵 15/15、Atlas 379/379 同步。实施记录、文件映射与定向验收矩阵见 [`current-iteration.md`](current-iteration.md)。
+当前方案：
 
-后续工作按技术债与设计规范方向推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
+- 设计画布 **1280×800（16:10）**；
+- 默认窗口 **1600×1000**，与画布成 **1.25×** 等比；
+- `canvas_items` + `expand`，不使用降低渲染分辨率的 `viewport` 模式；
+- 相机缩放约 **1.356**，保持原版 590 的世界可视高度；
+- 桌面 HUD 恢复左下按钮簇、无双圆盘和 Y/U/I/O/L 技能槽，图标优先使用 6.9 高清素材；
+- 移动端保留右上角/触控布局，不把 PC 布局强加给手机。
+
+Phase 12-1/12-2/12-3 的范围、实施顺序和验收矩阵见 [`current-iteration.md`](current-iteration.md)。Phase 12 尚未实施，须由用户明确确认后开始。
+
+后续技术债与设计规范方向仍按本文后续章节推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
 ---
 

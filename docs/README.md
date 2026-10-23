@@ -33,7 +33,7 @@
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | 6.9 补丁回植当前迭代：范围、文件映射、实施批次与验收；**6.9 已完成** |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **当前迭代 Phase 12**：画布 1280×800、窗口 1600×1000、相机与桌面 HUD 重构的规划与验收 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
@@ -69,6 +69,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | 入口 | 内容 |
 |:---|:---|
 | [`archive/README.md`](archive/README.md) | 归档标准、命名约定、流程与索引 |
+| [`archive/iteration_6_9_patch_backport.md`](archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植的完整范围、实施与验收记录 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 

@@ -8,10 +8,11 @@
 
 | 文档 | 内容 |
 |:---|:---|
-| [`roadmap.md`](roadmap.md) | 当前版本之后的开发路线、技术债与验收方向；6.9 已完成并记录收口结果 |
-| [`current-iteration.md`](current-iteration.md) | **当前迭代**：6.9 补丁回植的范围、文件映射、实施批次与验收入口；**6.9 已完成** |
+| [`roadmap.md`](roadmap.md) | 当前版本之后的开发路线、技术债与验收方向；当前显示层重构方向为 Phase 12 |
+| [`current-iteration.md`](current-iteration.md) | **当前迭代 Phase 12**：画布 1280×800、窗口 1600×1000、相机与桌面 HUD 重构；Phase 12-1 至 12-3 规划中 |
+| [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 
-当前内容版本为 **6.9**；6.9 已完成并通过收口验收，后续版本迁移须由用户明确确认。
+当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 是展示层重构，不改变内容版本号，实施前须由用户明确确认。
 
 ## 2. 边界
 
