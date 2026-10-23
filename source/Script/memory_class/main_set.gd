@@ -53,6 +53,8 @@ var set_data: Dictionary = {
 	"AutoBattleEnabled": false,
 	"AutoBattleSkills": [],
 	"AutoBattleSkillsByRole": {},
+	"AutoBattleSkillsBySlot": {},
+	"AutoBattlePlayerSlot": 1,
 	"AutoBattleWushuang": false,
 	"AutoBattleRetry": false,
 	"AutoBattleSkillOnly": false,
