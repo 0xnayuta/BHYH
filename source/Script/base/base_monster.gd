@@ -1513,9 +1513,10 @@ func fall_items():
 		return
 	ran_1 = randf_range(0, 1)
 	if fall_list.size() > 0 and is_fall == false:
-		var loc_4 = randi_range(0, fall_list.size() - 1)
-		var loc_2 = fall_list[loc_4]["name"]
-		var loc_3 = fall_list[loc_4]["value"]
+		var available_drops: Array = YutuEquipmentData.expand_drop_entries(fall_list)
+		var loc_4 = randi_range(0, available_drops.size() - 1)
+		var loc_2 = available_drops[loc_4]["name"]
+		var loc_3 = available_drops[loc_4]["value"]
 		var effective_fall_pro = Global.get_current_level_fall_pro(float(fall_pro))
 
 		if ran_1 <= effective_fall_pro:
@@ -1523,7 +1524,7 @@ func fall_items():
 			Global.fall_item(level_node.fall_it, Vector2(self.position.x, self.position.y - 30), loc_2, loc_3)
 			is_fall = true
 	var direct_pet_drop_added := false
-	for independent_drop in independent_fall_list:
+	for independent_drop in YutuEquipmentData.expand_drop_entries(independent_fall_list):
 		var difficulty_index := clampi(int(MainSet.set_data.get("Difficult", 0)), 0, 3)
 		var difficulty_multiplier: float = [1.0, 2.0, 3.0, 3.0][difficulty_index]
 		var drop_chance := clampf(float(independent_drop.get("chance", 0.0)) * difficulty_multiplier, 0.0, 1.0)
