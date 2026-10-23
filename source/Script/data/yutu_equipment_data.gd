@@ -93,14 +93,24 @@ static func from_nezha(item_id: String) -> String:
 
 
 static func role_drop(item_id: String) -> String:
-	if item_id in ["zqfjnzzzs", "zqwqnzzzs", "ygfjnzzzs", "ygwqnzzzs"]:
-		return item_id
-	var main_loop := Engine.get_main_loop()
-	if main_loop is SceneTree:
-		var player_data_node = main_loop.root.get_node_or_null("PlayerData")
-		if player_data_node != null and int(player_data_node.player_data.get("Myself", 1)) == 7:
-			return from_nezha(item_id)
 	return item_id
+
+
+static func expand_drop_entries(entries: Array, name_key: String = "name") -> Array:
+	var result: Array = entries.duplicate()
+	var existing: Dictionary = {}
+	for entry: Dictionary in entries:
+		existing[str(entry.get(name_key, ""))] = true
+	for entry: Dictionary in entries:
+		var source_id := str(entry.get(name_key, ""))
+		var yutu_id := from_nezha(source_id)
+		if yutu_id == source_id or existing.has(yutu_id):
+			continue
+		var extra: Dictionary = entry.duplicate(true)
+		extra[name_key] = yutu_id
+		result.append(extra)
+		existing[yutu_id] = true
+	return result
 
 
 static func appearance(item_id: String, part: String) -> String:

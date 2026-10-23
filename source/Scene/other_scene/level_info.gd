@@ -2132,21 +2132,22 @@ func _get_level_info() -> Dictionary:
 			probabilities[book_id] = 10
 		info["LevelFall"] = drops
 		info["LevelFallProbability"] = probabilities
-	if int(PlayerData.player_data.get("Myself", 1)) == 7:
-		info = info.duplicate(true)
-		var yutu_drops: Array = []
-		for item_id in info.get("LevelFall", []):
-			yutu_drops.append(preload("res://Script/data/yutu_equipment_data.gd").role_drop(str(item_id)))
-		var yutu_probabilities: Dictionary = {}
-		for item_id in info.get("LevelFallProbability", {}):
-			yutu_probabilities[preload("res://Script/data/yutu_equipment_data.gd").role_drop(str(item_id))] = info["LevelFallProbability"][item_id]
-		for drop: Dictionary in YutuEquipmentData.stage_book_drops(str(info.get("LevelName", ""))):
-			var item_id := str(drop.name)
-			if not yutu_drops.has(item_id):
-				yutu_drops.append(item_id)
-			yutu_probabilities[item_id] = int(float(drop.chance) * 100)
-		info["LevelFall"] = yutu_drops
-		info["LevelFallProbability"] = yutu_probabilities
+	info = info.duplicate(true)
+	var all_drops: Array = info.get("LevelFall", []).duplicate()
+	var all_probabilities: Dictionary = info.get("LevelFallProbability", {}).duplicate()
+	for item_id in info.get("LevelFall", []):
+		var yutu_id := YutuEquipmentData.from_nezha(str(item_id))
+		if yutu_id != str(item_id) and not all_drops.has(yutu_id):
+			all_drops.append(yutu_id)
+			if all_probabilities.has(item_id):
+				all_probabilities[yutu_id] = all_probabilities[item_id]
+	for drop: Dictionary in YutuEquipmentData.stage_book_drops(str(info.get("level_name", ""))):
+		var yutu_book := str(drop.name)
+		if not all_drops.has(yutu_book):
+			all_drops.append(yutu_book)
+		all_probabilities[yutu_book] = int(float(drop.chance) * 100)
+	info["LevelFall"] = all_drops
+	info["LevelFallProbability"] = all_probabilities
 	return info
 
 

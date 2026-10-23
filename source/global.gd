@@ -4707,10 +4707,7 @@ func add_ws_effect(parent):
 
 
 func add_choose_item(parent, position, list, _name, page):
-	if int(PlayerData.player_data.get("Myself", 1)) == 7:
-		list = list.duplicate(true)
-		for item in list:
-			item["名字"] = preload("res://Script/data/yutu_equipment_data.gd").from_nezha(str(item["名字"]))
+	list = preload("res://Script/data/yutu_equipment_data.gd").expand_drop_entries(list, "名字")
 	if not choose_item:
 		choose_item = _load_scene("res://Scene/shop/choose_item.tscn")
 	var target = instance_scene(choose_item, parent)
