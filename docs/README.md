@@ -1,6 +1,6 @@
 # 项目文档索引
 
-本目录按“参考 / 路线 / 指南 / 规范 / 报告 / 归档”分层。当前内容版本为 **6.8**，唯一活跃工程位于仓库根目录的 `source/`。
+本目录按“参考 / 路线 / 指南 / 规范 / 报告 / 归档”分层。当前内容版本为 **6.9**，唯一活跃工程位于仓库根目录的 `source/`。
 
 历史阶段报告与逐文件台账不再纳入仓库；可复用的迁移经验已蒸馏到 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 
@@ -33,7 +33,7 @@
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | 6.9 补丁回植当前迭代：范围、文件映射、实施批次与验收；6.9-1 至 6.9-5 已完成 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | 6.9 补丁回植当前迭代：范围、文件映射、实施批次与验收；**6.9 已完成** |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

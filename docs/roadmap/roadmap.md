@@ -2,25 +2,19 @@
 
 > **定位**：只记录当前版本之后的工作方向，不保留历史阶段流水账。
 >
-> **当前版本**：6.8。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
+> **当前版本**：6.9。当前工程事实、规模与门禁见 [`../reference/status.md`](../reference/status.md)。
 >
 > **迁移方法**：见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
 ---
 
-## 1. 当前迭代：6.9 补丁回植（实施中：6.9-1 至 6.9-5 已完成）
+## 1. 已完成迭代：6.9 补丁回植
 
 6.9 目标二进制的只读预检、PCK 目录校验与脚本反编译已完成。6.9 是**补丁型更新**：公告范围包含 12 项双人、自动战斗、任务与掉落修复；变更清单为 20 个生产脚本、2 个生产场景，无新增生产资源；新增的 6 个 PCK 条目均为测试探针，不进入生产工程。
 
-当前内容版本仍为 **6.8**；6.9-1 至 6.9-5 已完成，6.9-6 场景/资产/全量验收待开始。实施顺序、文件映射、风险与定向验收矩阵见 [`current-iteration.md`](current-iteration.md)。
+当前内容版本为 **6.9**；6.9-1 至 6.9-6 全部完成并通过收口验收：七维门禁 7/7、关卡回归 128/128 PASS + 5 SKIP、双人矩阵 15/15、Atlas 379/379 同步。实施记录、文件映射与定向验收矩阵见 [`current-iteration.md`](current-iteration.md)。
 
-1. 固定 6.8/6.9 参考脚本、场景与 manifest，建立临时逐文件台账；
-2. 按基础数据/任务、掉落装备、双人共享、自动战斗/UI、场景收口分批做三方语义合并；
-3. 仅合入生产文件；不复制上游 `Test/`、`.remap`、`uid_cache.bin` 或旧导入缓存；
-4. 通过静态门禁、引擎健康检查、关卡回归、双人探针与定向场景验收；
-5. 验收完成后更新 [`../reference/status.md`](../reference/status.md) 的版本、规模与基线。
-
-通用方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
+后续工作按技术债与设计规范方向推进；通用迁移方法与红线见 [`../guides/migration_playbook.md`](../guides/migration_playbook.md)。
 
 ---
 
