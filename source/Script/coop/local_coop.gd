@@ -2,9 +2,10 @@ extends Node
 
 const SAVE_KEY := "本地双人"
 const SAVE_VERSION := 2
-const BAG_KEYS := ["装备列表", "道具列表", "消耗品列表"]
+const BAG_KEYS := ["装备列表", "道具列表", "消耗品列表", "宠物背包"]
 const PLAYER_DATA_SCRIPT := preload("res://Script/memory_class/player_data.gd")
 const PROPS_SCRIPT := preload("res://Script/base/base_role_properies.gd")
+const BODY_TRAINING_DATA := preload("res://Script/data/body_training_data.gd")
 const PASSIVE_SCRIPT := preload("res://passive_skills.gd")
 const INPUT_VIEW := preload("res://Script/coop/coop_input.gd")
 const PANEL_PATHS := {
@@ -159,9 +160,77 @@ func load_profile() -> void:
 func link_bags() -> void:
 	if not is_instance_valid(secondary_data):
 		return
+	var primary_data: Node = (
+		_primary_runtime_data if _view_swapped and is_instance_valid(_primary_runtime_data) else PlayerData
+	)
 	for key: String in BAG_KEYS:
-		secondary_data.player_data[key] = (_primary_data if _view_swapped else PlayerData.player_data)[key]
+		if key != "宠物背包":
+			secondary_data.player_data[key] = primary_data.player_data[key]
+	_link_shared_pet_backpack(primary_data)
+	_link_shared_attribute_progression()
 	link_main_sword_array()
+
+
+func _link_shared_pet_backpack(primary_data: Node) -> void:
+	if not is_instance_valid(primary_data) or not is_instance_valid(secondary_data):
+		return
+	if primary_data.has_method("ensure_shared_pet_backpack"):
+		primary_data.ensure_shared_pet_backpack()
+	if secondary_data.has_method("ensure_shared_pet_backpack"):
+		secondary_data.ensure_shared_pet_backpack()
+	var primary_pack: Variant = primary_data.player_data.get("宠物背包", [])
+	var secondary_pack: Variant = secondary_data.player_data.get("宠物背包", [])
+	if not (primary_pack is Array) or not (secondary_pack is Array):
+		return
+	if primary_pack != secondary_pack:
+		var merged: Array = (primary_pack as Array).duplicate(true)
+		for item in secondary_pack:
+			if item is Dictionary:
+				merged.append((item as Dictionary).duplicate(true))
+		primary_pack = merged
+		primary_data.player_data["宠物背包"] = primary_pack
+	secondary_data.player_data["宠物背包"] = primary_pack
+
+
+func _merge_progression_dict(primary: Dictionary, secondary: Dictionary) -> Dictionary:
+	var merged: Dictionary = primary.duplicate(true)
+	for key: Variant in secondary:
+		var secondary_value: Variant = secondary[key]
+		var primary_value: Variant = merged.get(key, null)
+		if primary_value is Dictionary and secondary_value is Dictionary:
+			merged[key] = _merge_progression_dict(primary_value, secondary_value)
+		elif secondary_value is int or secondary_value is float:
+			if primary_value is int or primary_value is float:
+				merged[key] = maxi(int(primary_value), int(secondary_value))
+			elif not merged.has(key):
+				merged[key] = secondary_value
+		elif not merged.has(key):
+			merged[key] = secondary_value
+	return merged
+
+
+func _link_shared_attribute_progression() -> void:
+	if not is_instance_valid(secondary_data):
+		return
+	var primary_data: Node = (
+		_primary_runtime_data if _view_swapped and is_instance_valid(_primary_runtime_data) else PlayerData
+	)
+	var training := BODY_TRAINING_DATA.normalize_state(primary_data.player_data.get("炼体", {}))
+	var secondary_training := BODY_TRAINING_DATA.normalize_state(secondary_data.player_data.get("炼体", {}))
+	var combined_training := _merge_progression_dict(training, secondary_training)
+	var all_training: Dictionary = _merge_progression_dict(
+		combined_training.get("p1", {}), combined_training.get("p2", {})
+	)
+	combined_training["p1"] = all_training.duplicate(true)
+	combined_training["p2"] = all_training.duplicate(true)
+	primary_data.player_data["炼体"] = combined_training
+	secondary_data.player_data["炼体"] = combined_training
+	var catalog := _merge_progression_dict(
+		primary_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}),
+		secondary_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {})
+	)
+	primary_data.player_data[PlayerData.WANLING_CATALOG_LEVELS_KEY] = catalog
+	secondary_data.player_data[PlayerData.WANLING_CATALOG_LEVELS_KEY] = catalog
 
 
 func link_passive_skills() -> void:
@@ -349,6 +418,14 @@ func data_for_slot(slot: int) -> Node:
 	return _primary_runtime_data if _view_swapped else PlayerData
 
 
+func canonical_profile_for_slot(slot: int) -> Node:
+	if slot == 2 and is_instance_valid(secondary_data):
+		return secondary_data
+	if slot == 1 and _view_swapped and is_instance_valid(_primary_runtime_data):
+		return _primary_runtime_data
+	return PlayerData
+
+
 func pet_profile_for(pet: Dictionary) -> Node:
 	if is_enabled():
 		for slot in [1, 2]:
@@ -373,6 +450,30 @@ func props_for_slot(slot: int) -> Node:
 	if slot == 2:
 		return RoleProp if _view_swapped else secondary_props
 	return _primary_runtime_props if _view_swapped else RoleProp
+
+
+func refresh_pellet_props() -> void:
+	if not is_enabled():
+		return
+	for slot in [1, 2]:
+		var profile := canonical_profile_for_slot(slot)
+		var props := props_for(profile)
+		if not is_instance_valid(props):
+			continue
+		props.get_last_prop()
+		props.check_hp()
+		props.check_mp()
+
+
+func increment_pellet_count(key: String) -> void:
+	if not is_enabled():
+		return
+	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
+	primary[key] = mini(5, int(primary.get(key, 0)) + 1)
+	secondary_data.player_data[key] = mini(5, int(secondary_data.player_data.get(key, 0)) + 1)
+	if _view_swapped and is_instance_valid(_primary_runtime_data):
+		_primary_runtime_data.player_data[key] = primary[key]
+	refresh_pellet_props()
 
 
 func input_for(node: Node) -> CoopInput:

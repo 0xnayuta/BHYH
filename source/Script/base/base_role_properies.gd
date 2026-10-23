@@ -573,13 +573,25 @@ func _get_static_prop_signature() -> int:
 	values.append(PlayerData.player_data.get("主线剑阵出战", ""))
 	for sword_id in ["zhuxianjian", "xianxianjian", "luxianjian", "juexianjian", "sijianheyi"]:
 		values.append(_get_main_sword_array_level(sword_id))
-	values.append(PlayerData.player_data.get("炼体", {}))
-	values.append(PlayerData.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}))
+	var shared_data := _shared_attribute_data()
+	values.append(shared_data.player_data.get("炼体", {}))
+	values.append(shared_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}))
 	values.append(PlayerData.player_data.get(PlayerData.ACTIVE_MOUNT_KEY, ""))
 	values.append(PlayerData.is_mount_system_unlocked())
 	var active_mount := PlayerData.get_active_mount()
 	values.append(active_mount.get(DataKeys.LEVEL, 0))
 	return hash(values)
+
+
+func _body_training_profile() -> String:
+	return "p1"
+
+
+func _shared_attribute_data() -> Node:
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and coop.is_enabled():
+		return coop.canonical_profile_for_slot(1)
+	return PlayerData
 
 
 func _refresh_static_prop_cache() -> void:
@@ -610,8 +622,11 @@ func _refresh_static_prop_cache() -> void:
 		"闪避": get_main_sword_array_prop("闪避"),
 		"命中": get_main_sword_array_prop("命中")
 	}
-	_cached_body_props = BODY_TRAINING_DATA.get_attribute_totals(PlayerData.player_data.get("炼体", {}))
-	_cached_wanling_props = PlayerData.get_wanling_attribute_totals()
+	var shared_data := _shared_attribute_data()
+	_cached_body_props = BODY_TRAINING_DATA.get_attribute_totals(
+		shared_data.player_data.get("炼体", {}), _body_training_profile()
+	)
+	_cached_wanling_props = shared_data.get_wanling_attribute_totals()
 	_cached_mount_props = PlayerData.get_active_mount_attribute_bonuses()
 
 
