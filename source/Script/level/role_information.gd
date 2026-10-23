@@ -170,8 +170,8 @@ func _layout_desktop() -> void:
 	set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	set_menu_con.offset_left = 24.0
 	set_menu_con.offset_right = 80.0
-	set_menu_con.offset_top = -328.0
-	set_menu_con.offset_bottom = -24.0
+	set_menu_con.offset_top = -400.0
+	set_menu_con.offset_bottom = -96.0
 
 
 func _layout_mobile() -> void:

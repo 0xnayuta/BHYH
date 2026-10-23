@@ -12,7 +12,7 @@
 | [`current-iteration.md`](current-iteration.md) | **当前迭代 Phase 12**：Phase 12-1 画布/窗口/相机基线与 Phase 12-2 桌面 HUD 已完成；12-3 验收待开始 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 
-当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 是展示层重构，不改变内容版本号；Phase 12-2 实施前须由用户明确确认。
+当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 是展示层重构，不改变内容版本号；Phase 12-1/12-2 已完成，Phase 12-3 实施前须由用户明确确认。
 
 ## 2. 边界
 
