@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const DEFAULT_TARGET_SCENE := "res://Scene/main_menu/main_menu.tscn"
+const DEFAULT_WINDOW_SIZE := Vector2i(1600, 1000)
 const MIN_VISIBLE_SECONDS := 0.0
 const HDZM_LEVEL_SCENE := "res://Scene/level/level_hdzm.tscn"
 const MAIN_SWORD_ARRAY_WEAPON_SCRIPT := preload("res://Script/magic_weapon/main_sword_array_weapon.gd")
@@ -75,6 +76,7 @@ var tips_textlist = [
 
 
 func _ready() -> void:
+	_apply_window_policy()
 	MemoryClass.main_dq()
 	if Global.target_scene == null or Global.target_scene == "":
 		Global.target_scene = DEFAULT_TARGET_SCENE
@@ -83,6 +85,14 @@ func _ready() -> void:
 	message_tips.text = "Tips: " + str(tips_textlist[randi_range(0, tips_textlist.size() - 1)])
 	_initialize_first_launch_integrity()
 	_begin_load_after_first_frame()
+
+
+func _apply_window_policy() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var usable_rect := DisplayServer.screen_get_usable_rect()
+	if usable_rect.size.x < DEFAULT_WINDOW_SIZE.x or usable_rect.size.y < DEFAULT_WINDOW_SIZE.y:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 
 func _initialize_first_launch_integrity() -> void:

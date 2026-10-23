@@ -49,16 +49,16 @@ gdscript/warnings/narrowing_conversion=0
 
 [display]
 
-window/size/viewport_width=1200
-window/size/viewport_height=400
-window/size/window_width_override=1504
-window/size/window_height_override=944
+window/size/viewport_width=1280
+window/size/viewport_height=800
+window/size/window_width_override=1600
+window/size/window_height_override=1000
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 mouse_cursor/custom_image="res://Art/main_game/sbgb.png"
-window/size/initial_width=1504
-window/size/initial_height=944
+window/size/initial_width=1600
+window/size/initial_height=1000
 #display/window/size/width=1280
 (duplicate,keptforcompatibility)#display/window/size/height=720
 (duplicate,keptforcompatibility)#display/window/size/mode="windowed"

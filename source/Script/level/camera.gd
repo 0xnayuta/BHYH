@@ -1,9 +1,16 @@
 extends Camera2D
 
+## Phase 12-1：1280×800 画布下保持原版 590 的世界可视高度。
+const DESIGN_ZOOM := Vector2(1.3559, 1.3559)
+
 var max_right
 var max_left
 var max_top
 var max_bottom
+
+
+func _ready() -> void:
+	zoom = DESIGN_ZOOM
 
 
 func _physics_process(_delta: float) -> void:

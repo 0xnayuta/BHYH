@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-23（6.9 回植与验收收口后）
+> 最后更新：2026-10-23（Phase 12-1 显示基线完成后）
 
 ---
 
@@ -14,6 +14,7 @@
 | 当前内容版本 | **6.9**（6.5.0.0 基线 + 6.6 / 6.7 / 6.8 / 6.9 回植） |
 | `project.godot` 版本字段 | 未声明 `config/version` |
 | 引擎 | Godot **4.7.2**（Forward Mobile / gl_compatibility） |
+| 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
 | 工程根 | `source/`（可直接用 Godot 打开 `source/project.godot`） |
 
@@ -95,6 +96,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 结构整理后静态门禁 | **7/7 PASS** | `scripts/check_all.py --skip-engine` |
 | Atlas 元数据 | **379/379 同步** | `scripts/convert_atlas_metadata.py --check` |
 | 6.9 完整工作区验收基线 | 七维门禁 7/7；关卡回归 **128/128 PASS + 5 SKIP**；双人矩阵 **15/15 PASS**；Atlas **379/379** | 本地完整素材工作区；6.9 定向探针 0 failures |
+| Phase 12-1 显示基线 | 七维门禁 **7/7 PASS**；关卡回归 **128/128 PASS + 5 SKIP**；705 脚本 0 Error / 0 Warning | 1280×800 画布、1600×1000 窗口、相机缩放 1.3559；16:10 截图无底部灰带 |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 15 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
