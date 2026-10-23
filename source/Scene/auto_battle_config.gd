@@ -89,12 +89,14 @@ const PASSIVE_SKILLS := ["sx", "sjt", "rj", "mds", "yyb", YutuSkillData.PASSIVE_
 @onready var skill_only_check: CheckButton = $Panel/Content/Options/SkillOnly
 @onready var magic_weapon_check: CheckButton = $Panel/Content/Options/MagicWeapon
 @onready var sword_array_check: CheckButton = $Panel/Content/Options/SwordArray
+@onready var player_slot_option: OptionButton = $Panel/Content/Options/PlayerSlot
 @onready var skill_option: OptionButton = $Panel/Content/SkillPicker/SkillOption
 @onready var selected_list: VBoxContainer = $Panel/Content/SelectedScroll/SelectedList
 @onready var role_label: Label = $Panel/Content/RoleLabel
 @onready var hint_label: Label = $Panel/Content/Hint
 
 var role_key := "角色1"
+var player_slot := 1
 var available_skills: Array[String] = []
 var selected_skills: Array[String] = []
 var selected_skill_counts: Array[int] = []
@@ -106,6 +108,13 @@ func _ready() -> void:
 	_fit_to_window()
 	if not get_viewport().size_changed.is_connected(_fit_to_window):
 		get_viewport().size_changed.connect(_fit_to_window)
+	player_slot_option.clear()
+	player_slot_option.add_item("1P")
+	player_slot_option.add_item("2P")
+	player_slot = clampi(int(MainSet.set_data.get("AutoBattlePlayerSlot", 1)), 1, 2)
+	player_slot_option.select(player_slot - 1)
+	if not player_slot_option.item_selected.is_connected(_on_player_slot_selected):
+		player_slot_option.item_selected.connect(_on_player_slot_selected)
 	role_key = _get_role_key()
 	available_skills = _get_learned_skills()
 	selected_skills = _load_selected_skills()
@@ -114,7 +123,7 @@ func _ready() -> void:
 	skill_only_check.button_pressed = bool(MainSet.set_data.get("AutoBattleSkillOnly", false))
 	magic_weapon_check.button_pressed = bool(MainSet.set_data.get("AutoBattleMagicWeapon", false))
 	sword_array_check.button_pressed = bool(MainSet.set_data.get("AutoBattleSwordArray", false))
-	role_label.text = "当前角色：" + role_key
+	role_label.text = "自动战斗角色：%dP（%s）" % [player_slot, role_key]
 	_refresh_option()
 	_refresh_selected()
 	if available_skills.is_empty():
@@ -134,7 +143,11 @@ func _fit_to_window() -> void:
 
 
 func _get_role_key() -> String:
-	var role_id := int(PlayerData.player_data.get("Myself", 1))
+	var profile: Node = PlayerData
+	var coop := get_node_or_null("/root/LocalCoop")
+	if player_slot == 2 and coop != null and coop.has_method("data_for_slot"):
+		profile = coop.data_for_slot(2)
+	var role_id := int(profile.player_data.get("Myself", 1))
 	if role_id < 1 or role_id > 7:
 		role_id = 1
 	return "角色" + str(role_id)
@@ -155,7 +168,11 @@ func _get_skill_storage_index(index: int, skill_id: String) -> int:
 
 func _get_learned_skills() -> Array[String]:
 	var result: Array[String] = []
-	var skill_data_value: Variant = PlayerData.player_data.get(DataKeys.SKILL_LEARNED, {})
+	var profile: Node = PlayerData
+	var coop := get_node_or_null("/root/LocalCoop")
+	if player_slot == 2 and coop != null and coop.has_method("data_for_slot"):
+		profile = coop.data_for_slot(2)
+	var skill_data_value: Variant = profile.player_data.get(DataKeys.SKILL_LEARNED, {})
 	if not skill_data_value is Dictionary:
 		return result
 	var skill_data: Dictionary = skill_data_value
@@ -176,11 +193,16 @@ func _get_learned_skills() -> Array[String]:
 
 func _load_selected_skills() -> Array[String]:
 	var configured_value: Variant
-	var by_role_value: Variant = MainSet.set_data.get("AutoBattleSkillsByRole", {})
-	if by_role_value is Dictionary and (by_role_value as Dictionary).has(role_key):
-		configured_value = (by_role_value as Dictionary).get(role_key, [])
+	var by_slot_value: Variant = MainSet.set_data.get("AutoBattleSkillsBySlot", {})
+	if by_slot_value is Dictionary and (by_slot_value as Dictionary).has(str(player_slot)):
+		var slot_skills: Variant = (by_slot_value as Dictionary).get(str(player_slot), {})
+		configured_value = slot_skills.get(role_key, []) if slot_skills is Dictionary else []
 	else:
-		configured_value = MainSet.set_data.get("AutoBattleSkills", [])
+		var by_role_value: Variant = MainSet.set_data.get("AutoBattleSkillsByRole", {})
+		if by_role_value is Dictionary and (by_role_value as Dictionary).has(role_key):
+			configured_value = (by_role_value as Dictionary).get(role_key, [])
+		else:
+			configured_value = MainSet.set_data.get("AutoBattleSkills", [])
 	var result: Array[String] = []
 	var counts: Array[int] = []
 	if not configured_value is Array:
@@ -290,16 +312,38 @@ func _on_skill_count_changed(value: float, index: int) -> void:
 
 
 func _on_save_pressed() -> void:
+	_persist_current_skill_config()
+	_store_option_settings()
+	MainSet.set_auto_battle_enabled(true)
+	MemoryClass.main_bc()
+	queue_free()
+
+
+func _persist_current_skill_config() -> void:
 	var by_role_value: Variant = MainSet.set_data.get("AutoBattleSkillsByRole", {})
 	var by_role: Dictionary = by_role_value.duplicate(true) if by_role_value is Dictionary else {}
 	var configured_skills: Array[Dictionary] = _get_configured_skill_entries()
 	by_role[role_key] = configured_skills.duplicate(true)
 	MainSet.set_data["AutoBattleSkillsByRole"] = by_role
 	MainSet.set_data["AutoBattleSkills"] = configured_skills.duplicate(true)
-	_store_option_settings()
-	MainSet.set_auto_battle_enabled(true)
-	MemoryClass.main_bc()
-	queue_free()
+	var by_slot_value: Variant = MainSet.set_data.get("AutoBattleSkillsBySlot", {})
+	var by_slot: Dictionary = by_slot_value.duplicate(true) if by_slot_value is Dictionary else {}
+	var slot_skills_value: Variant = by_slot.get(str(player_slot), {})
+	var slot_skills: Dictionary = slot_skills_value if slot_skills_value is Dictionary else {}
+	slot_skills[role_key] = configured_skills.duplicate(true)
+	by_slot[str(player_slot)] = slot_skills
+	MainSet.set_data["AutoBattleSkillsBySlot"] = by_slot
+
+
+func _on_player_slot_selected(index: int) -> void:
+	_persist_current_skill_config()
+	player_slot = clampi(index + 1, 1, 2)
+	role_key = _get_role_key()
+	available_skills = _get_learned_skills()
+	selected_skills = _load_selected_skills()
+	role_label.text = "自动战斗角色：%dP（%s）" % [player_slot, role_key]
+	_refresh_option()
+	_refresh_selected()
 
 
 func _store_option_settings() -> void:
@@ -308,6 +352,7 @@ func _store_option_settings() -> void:
 	MainSet.set_data["AutoBattleSkillOnly"] = skill_only_check.button_pressed
 	MainSet.set_data["AutoBattleMagicWeapon"] = magic_weapon_check.button_pressed
 	MainSet.set_data["AutoBattleSwordArray"] = sword_array_check.button_pressed
+	MainSet.set_data["AutoBattlePlayerSlot"] = player_slot_option.selected + 1
 
 
 func _get_configured_skill_entries() -> Array[Dictionary]:

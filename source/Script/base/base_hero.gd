@@ -895,6 +895,8 @@ func _process_auto_battle(delta: float) -> void:
 		return
 	if is_death:
 		return
+	if not is_inside_tree() or get_tree().current_scene == null:
+		return
 	_process_auto_battle_equipment()
 	if _try_auto_battle_wushuang():
 		return
@@ -939,6 +941,8 @@ func _process_auto_battle(delta: float) -> void:
 		var cooldown_before := float(role1_skill_inter.get(skill_id, 0.0))
 		var action_before: String = str(get_action)
 		var using_skill_before := is_using_skills
+		if not is_inside_tree() or get_tree().current_scene == null:
+			return
 		get_skill(skill_id)
 		var cooldown_after := float(role1_skill_inter.get(skill_id, 0.0))
 		var skill_cast_started := (
@@ -1225,6 +1229,12 @@ func _get_auto_battle_skill_entries() -> Array[Dictionary]:
 	if role_id < 1 or role_id > 7:
 		role_id = 1
 	var role_key := "角色" + str(role_id)
+	var slot := int(get_meta("coop_slot", 1))
+	var by_slot_value: Variant = MainSet.set_data.get("AutoBattleSkillsBySlot", {})
+	if by_slot_value is Dictionary:
+		var slot_skills: Variant = (by_slot_value as Dictionary).get(str(slot), {})
+		if slot_skills is Dictionary and (slot_skills as Dictionary).has(role_key):
+			return _normalize_auto_battle_skill_entries((slot_skills as Dictionary).get(role_key, []))
 	var by_role_value: Variant = MainSet.set_data.get("AutoBattleSkillsByRole", {})
 	if by_role_value is Dictionary and (by_role_value as Dictionary).has(role_key):
 		var role_skills: Variant = (by_role_value as Dictionary).get(role_key, [])

@@ -136,6 +136,14 @@ theme_override_fonts/font = ExtResource("2")
 theme_override_font_sizes/font_size = 20
 text = "自动释放剑阵"
 
+[node name="PlayerSlot" type="OptionButton" parent="Panel/Content/Options" unique_id=1301035904]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+tooltip_text = "选择自动战斗控制的玩家"
+theme_override_colors/font_color = Color(1, 0.92, 0.62, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 20
+
 [node name="SkillTitle" type="Label" parent="Panel/Content" unique_id=97500001]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.92, 1, 1)
