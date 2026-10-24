@@ -37,7 +37,7 @@ func _ready() -> void:
 
 
 func _on_hc_pressed() -> void:
-	MLdl._loc = "合成"
+	MLdl.current_mode = "合成"
 	remove_xq_jm()
 	remove_qh_jm()
 	remove_fj_jm()
@@ -49,7 +49,7 @@ func _on_hc_pressed() -> void:
 
 
 func _on_qh_pressed() -> void:
-	MLdl._loc = "强化"
+	MLdl.current_mode = "强化"
 	remove_xq_jm()
 	remove_hc_jm()
 	remove_fj_jm()
@@ -62,7 +62,7 @@ func _on_qh_pressed() -> void:
 
 func _on_xq_pressed() -> void:
 	if PlayerData.player_data["南天王殿"] == 1:
-		MLdl._loc = "镶嵌"
+		MLdl.current_mode = "镶嵌"
 		remove_qh_jm()
 		remove_hc_jm()
 		remove_fj_jm()
@@ -76,7 +76,7 @@ func _on_xq_pressed() -> void:
 
 
 func _on_return_pressed() -> void:
-	MLdl._loc = "强化"
+	MLdl.current_mode = "强化"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()
@@ -90,7 +90,7 @@ func _on_return_pressed() -> void:
 
 
 func add_qh_jm():
-	MLdl._loc = "强化"
+	MLdl.current_mode = "强化"
 	if strength == null:
 		strength = Global.add_strength(bg_2, Vector2(-315, -205))
 		MemoryClass.save_game(Global.cd_path)
@@ -105,7 +105,7 @@ func remove_qh_jm():
 
 
 func add_hc_jm():
-	MLdl._loc = "合成"
+	MLdl.current_mode = "合成"
 	if synthesis == null:
 		synthesis = Global.add_synthesis(bg_2, Vector2(-315, -205))
 
@@ -118,7 +118,7 @@ func remove_hc_jm():
 
 
 func add_xq_jm():
-	MLdl._loc = "镶嵌"
+	MLdl.current_mode = "镶嵌"
 	if mosaic == null:
 		mosaic = Global.add_mosaic_instance(bg_2, Vector2(-315, -205))
 
@@ -143,7 +143,7 @@ func _on_hh_pressed() -> void:
 
 
 func _on_fj_pressed() -> void:
-	MLdl._loc = "分解"
+	MLdl.current_mode = "分解"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()
@@ -155,7 +155,7 @@ func _on_fj_pressed() -> void:
 
 
 func add_fj_jm():
-	MLdl._loc = "分解"
+	MLdl.current_mode = "分解"
 	if decompose == null:
 		decompose = Global.add_decompose_instance(bg_2, Vector2(-305, -200))
 
@@ -168,7 +168,7 @@ func remove_fj_jm():
 
 
 func _on_dz_pressed() -> void:
-	MLdl._loc = "打造"
+	MLdl.current_mode = "打造"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()
@@ -180,7 +180,7 @@ func _on_dz_pressed() -> void:
 
 
 func add_dz_jm():
-	MLdl._loc = "打造"
+	MLdl.current_mode = "打造"
 	if forge == null:
 		forge = Global.add_forges(bg_2, Vector2(-340, -200))
 
@@ -193,7 +193,7 @@ func remove_dz_jm():
 
 
 func _on_yjdy_pressed() -> void:
-	MLdl._loc = "一键合成"
+	MLdl.current_mode = "一键合成"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()
@@ -205,7 +205,7 @@ func _on_yjdy_pressed() -> void:
 
 
 func _on_sz_pressed() -> void:
-	MLdl._loc = "神铸"
+	MLdl.current_mode = "神铸"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()
@@ -217,7 +217,7 @@ func _on_sz_pressed() -> void:
 
 
 func add_sz_jm() -> void:
-	MLdl._loc = "神铸"
+	MLdl.current_mode = "神铸"
 	if divine_forge == null:
 		var scene := preload("res://Scene/ldl/divine_forge.tscn")
 		divine_forge = scene.instantiate()
@@ -227,7 +227,7 @@ func add_sz_jm() -> void:
 
 
 func _on_cg_pressed() -> void:
-	MLdl._loc = "淬骨"
+	MLdl.current_mode = "淬骨"
 	remove_qh_jm()
 	remove_hc_jm()
 	remove_xq_jm()

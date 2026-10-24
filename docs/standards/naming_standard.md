@@ -202,7 +202,7 @@ var level: int = PlayerData.player_data[DataKeys.PLAYER_LEVEL]
 1. `scripts/normalize_eol.py`：全工程 LF；
 2. `scripts/format_all.py --check`：`gdformat` 格式；
 3. `gdlint`：静态异味；
-4. `scripts/health_check.py`：Godot 4.7.2 全量编译/引用；
+4. `scripts/health_check.py`：Godot 4.7.2 全量编译/引用，并扫描 GDScript 静态分析 warning（白名单外必须为 0）；
 5. `scripts/contract_gate.py`：字面量契约、AtlasMetadata、PNG allowlist、白名单冻结；
 6. `scripts/naming_audit.py`：目录与新增文件命名；
 7. `scripts/runtime_reference_audit.py`：NodePath 与 `Global.<method>()` 静态运行时引用；

@@ -590,7 +590,7 @@ func _cast_168(action: StringName) -> void:
 	if action == &"hit1":
 		_fire(action, 21, _at_facing(40.0), {})
 	elif action == &"hit2":
-		await _cast_168_multi()
+		_cast_168_multi()
 	else:
 		_fire(action, 30, global_position + Vector2(0, 30), {})
 

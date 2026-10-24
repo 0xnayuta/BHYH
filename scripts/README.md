@@ -64,7 +64,7 @@ coop_probe_runner.py
 |:---|:---|:---|
 | `normalize_eol.py` | 全工程 LF/CRLF 归一化；增量缓存 | `.godot/eol_cache.json` |
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
-| `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译 | `docs/reports/dead_code_audit.md` |
+| `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
 | `contract_gate.py` | 契约域总门禁：契约扫描、Atlas 元数据、PNG 流、白名单 | 子脚本报告 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest 六类契约 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |

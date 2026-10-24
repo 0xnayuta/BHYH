@@ -1,5 +1,4 @@
 extends Control
-@onready var _page: LineEdit = $MarginContainer/VBoxContainer/page_
 @onready var pt: CheckBox = $MarginContainer/VBoxContainer/pt
 @onready var yx: CheckBox = $MarginContainer/VBoxContainer/yx
 @onready var jl: CheckBox = $MarginContainer/VBoxContainer/jl

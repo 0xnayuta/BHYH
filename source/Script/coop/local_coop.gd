@@ -609,7 +609,11 @@ func _create_panel(slot: int, type: String) -> void:
 
 
 func _add_player_selector(type: String) -> void:
-	var tabs: BoxContainer = HBoxContainer.new() if type in ["技能", "坐骑"] else VBoxContainer.new()
+	var tabs: BoxContainer
+	if type in ["技能", "坐骑"]:
+		tabs = HBoxContainer.new()
+	else:
+		tabs = VBoxContainer.new()
 	tabs.name = "CoopPlayerSelector"
 	tabs.add_theme_constant_override("separation", 6)
 	match type:

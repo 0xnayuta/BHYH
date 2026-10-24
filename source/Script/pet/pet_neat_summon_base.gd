@@ -399,7 +399,7 @@ func _spawn_neat_effect(
 	var offsets: Array[Vector2] = [
 		_front_offset(
 			normal_x_offset if effect_name == "pet_neat_1_bullet_1" else 0.0,
-			-30 if effect_name == "pet_neat_1_bullet_1" else 0.0
+			-30.0 if effect_name == "pet_neat_1_bullet_1" else 0.0
 		)
 	]
 	if effect_name == "pet_neat_4_bullet_3":

@@ -2499,10 +2499,14 @@ func _spawn_late_target_burst_after(
 	_spawn_late_skill_effect(attack_name, burst_config, 0, 1)
 
 
+func _nearest_target_position(origin: Vector2) -> Variant:
+	if RoleProp == null:
+		return null
+	return RoleProp.get_nearest_monster_target_position(origin)
+
+
 func _late_effect_target_data() -> Dictionary:
-	var target_value: Variant = (
-		RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
-	)
+	var target_value: Variant = _nearest_target_position(global_position)
 	var has_target := target_value is Vector2
 	var raw_position: Vector2 = (
 		target_value as Vector2
@@ -2683,9 +2687,7 @@ func attack_target() -> void:
 			is_attacking = false
 			return
 	elif monster_kind == 3161:
-		var monkey_target_value: Variant = (
-			RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
-		)
+		var monkey_target_value: Variant = _nearest_target_position(global_position)
 		var monkey_target_distance := (
 			absf((monkey_target_value as Vector2).x - global_position.x) if monkey_target_value is Vector2 else INF
 		)
@@ -2695,9 +2697,7 @@ func attack_target() -> void:
 			have_target()
 			return
 	elif monster_kind == 3179:
-		var six_ear_target_value: Variant = (
-			RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
-		)
+		var six_ear_target_value: Variant = _nearest_target_position(global_position)
 		var six_ear_target_distance := (
 			absf((six_ear_target_value as Vector2).x - global_position.x) if six_ear_target_value is Vector2 else INF
 		)
@@ -2978,9 +2978,7 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 	await get_tree().create_timer(maxf(fire_delay - charge_delay, 0.0), false).timeout
 	if not _attack_3182_is_current(serial):
 		return
-	var target_value: Variant = (
-		RoleProp.get_nearest_monster_target_position(spawn_position) if RoleProp != null else null
-	)
+	var target_value: Variant = _nearest_target_position(spawn_position)
 	if target_value == null:
 		return
 	var target_position: Vector2 = target_value
@@ -3057,9 +3055,7 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 	await get_tree().create_timer(6.0 / SOURCE_FPS, false).timeout
 	if not is_instance_valid(self) or not is_inside_tree() or death() or serial != _attack_serial:
 		return
-	var target_value: Variant = (
-		RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
-	)
+	var target_value: Variant = _nearest_target_position(global_position)
 	if target_value == null:
 		return
 	var target_position: Vector2 = target_value
@@ -3137,7 +3133,7 @@ func _spawn_ranged_effect_after_shot_frame(serial: int) -> void:
 	if not is_instance_valid(self) or not is_inside_tree() or death() or serial != _attack_serial:
 		return
 	var direction := 1.0 if monster_direction else -1.0
-	var target: Variant = RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
+	var target: Variant = _nearest_target_position(global_position)
 	if target != null:
 		direction = 1.0 if float(target.x) >= global_position.x else -1.0
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
@@ -3383,7 +3379,7 @@ func _start_3161_effect2(serial: int) -> void:
 	await get_tree().create_timer(21.0 / SOURCE_FPS, false).timeout
 	if not is_instance_valid(self) or death() or serial != _attack_serial:
 		return
-	var target: Variant = RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
+	var target: Variant = _nearest_target_position(global_position)
 	var spawn_position := global_position
 	if target != null:
 		spawn_position.x = float(target.x)
@@ -3510,7 +3506,7 @@ func _start_3120_stone_throw(serial: int) -> void:
 	await get_tree().create_timer(float(SAND_BOSS_STONE_FRAME) / SOURCE_FPS, false).timeout
 	if not is_instance_valid(self) or not is_inside_tree() or death() or serial != _attack_serial:
 		return
-	var target: Variant = RoleProp.get_nearest_monster_target_position(global_position) if RoleProp != null else null
+	var target: Variant = _nearest_target_position(global_position)
 	if target == null:
 		return
 	var target_position: Vector2 = target

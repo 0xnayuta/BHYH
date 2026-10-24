@@ -44,7 +44,8 @@ func spawn_clone():
 	clone.set_meta("is_clone", true)
 	clone.set_meta("owner_monster", self)
 
-	clone.remove_meta("_death_reported") if clone.has_meta("_death_reported") else null
+	if clone.has_meta("_death_reported"):
+		clone.remove_meta("_death_reported")
 	clone.is_boss = false
 	clone.init_monster(false)
 	clone.position = position + Vector2(randi_range(-80, 80), randi_range(-50, 50))

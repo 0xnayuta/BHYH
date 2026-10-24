@@ -287,7 +287,7 @@ func _physics_process(_delta: float) -> void:
 			)
 
 	var ws_key = key_list[8]
-	if not _dynamic_icons_initialized or ws_key._res == "":
+	if not _dynamic_icons_initialized or ws_key.resource_key == "":
 		ws_key.skill_name = ""
 		ws_key.text_key.visible = false
 		set_texture2_d(ws_key, "res://Art/role_info_icon/416.png")
@@ -320,7 +320,7 @@ func _update_mount_button() -> void:
 		mount_key.text_str = "Z"
 		mount_key.text_key.text = "Z"
 		mount_key.text_key.visible = true
-		if mount_key._res == "":
+		if mount_key.resource_key == "":
 			set_texture2_d(mount_key, "res://Art/ui_2_5_9_0/key/p.png")
 	mount_key.visible = mount_visible
 
@@ -368,21 +368,21 @@ func set_texture2_d(user_key, path: String) -> void:
 		or is_main_sword_array_icon
 	)
 	var res_key := ("frame:" + path + ":" + str(0.8)) if is_skill_icon else path
-	if user_key._res == res_key:
+	if user_key.resource_key == res_key:
 		return
-	user_key._res = res_key
+	user_key.resource_key = res_key
 	user_key.visible = false
 	if user_key.has_method("set_framed_icon") and is_skill_icon:
 		user_key.set_framed_icon(path, "res://Art/ui_2_5_9_0/key/p.png", 0.8)
 	elif user_key.has_method("set_button_texture"):
 		user_key.set_button_texture(path)
 	else:
-		var _res: Texture2D = load(path)
-		if _res == null:
-			_res = load("res://Art/ui_2_5_9_0/key/p.png")
-		user_key.texture_normal = _res
-		user_key.texture_pressed = _res
-		user_key.pic_box.texture_progress = _res
+		var texture_resource: Texture2D = load(path)
+		if texture_resource == null:
+			texture_resource = load("res://Art/ui_2_5_9_0/key/p.png")
+		user_key.texture_normal = texture_resource
+		user_key.texture_pressed = texture_resource
+		user_key.pic_box.texture_progress = texture_resource
 	user_key.visible = true
 
 
@@ -420,7 +420,7 @@ func _apply_keys_to_nodes() -> void:
 		node.text_str = obj["key"]
 		node.text_key.text = node.text_str
 		node.action = obj["ClickKey"]
-		node._res = ""
+		node.resource_key = ""
 		if node.has_method("_ensure_ws_effect"):
 			node._ensure_ws_effect()
 	set_dic(keys[JOY_CONFIG_INDEX], joy_left)

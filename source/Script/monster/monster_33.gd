@@ -179,7 +179,6 @@ func add_zd():
 
 func _on_call_zd_timeout() -> void:
 	return
-	call_wling()
 
 
 func call_wling():

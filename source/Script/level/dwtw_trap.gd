@@ -3,7 +3,6 @@ extends Node2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var hit_name
-var _get_name
 var is_hit: bool
 var is_play
 var total_hit = 0

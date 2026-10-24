@@ -15,7 +15,6 @@ var _sword_serial: int = 0
 var _dragon_sword_id: int = 1
 var _fan_entities: Array[Node2D] = []
 var _fan_serial: int = 0
-var _flute_serial: int = 0
 var _flower_serial: int = 0
 var _pet_speed_serial: int = 0
 var _effect_serial: int = 0

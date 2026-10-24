@@ -388,8 +388,8 @@ func _prewarm_stage_runtime(monster_ids: Array) -> void:
 	if not nanhai_kinds.is_empty():
 		await NANHAI_MONSTER_SCRIPT.prewarm_frames(nanhai_kinds)
 	if needs_boss:
-		await LINGGAN_BOSS_SCRIPT.prewarm_frames()
-		await LINGGAN_BOSS_SCRIPT.prewarm_effects()
+		LINGGAN_BOSS_SCRIPT.prewarm_frames()
+		LINGGAN_BOSS_SCRIPT.prewarm_effects()
 
 
 func _level_number() -> int:

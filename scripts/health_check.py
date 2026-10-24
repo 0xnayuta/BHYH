@@ -3,8 +3,8 @@
 """
 scripts/health_check.py
 
-全工程全量资源引用拓扑、GDScript 语法健康度与死代码审计门禁工具。
-用于 Phase 1 构建无损自动化安全网，防范重构中的“误杀”与动态加载引用断裂。
+全工程全量资源引用拓扑、GDScript 语法健康度、静态分析 warning 与死代码审计门禁工具。
+用于 Phase 1 构建无损自动化安全网，防范重构中的“误杀”、动态加载引用断裂与 warning 回归。
 """
 
 import os
@@ -22,6 +22,96 @@ from typing import Dict, List, Set, Tuple, Any
 # 不内置本地绝对路径；优先使用 --godot-bin 或 PATH 中的可执行文件。
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_GODOT_CANDIDATES = ("godot", "godot4")
+
+# GDScript 警告文本与警告码的映射；Godot CLI --debug 输出仅含文本，
+# 编辑器调试器输出还包含 <GDScript 错误> 警告码，因此两种格式都要兼容。
+WARNING_CODE_PATTERNS = (
+    (re.compile(r'The variable ".+" is declared below in the parent block\.'), "CONFUSABLE_LOCAL_DECLARATION"),
+    (re.compile(r'The identifier ".+" will be shadowed below in the block\.'), "CONFUSABLE_LOCAL_USAGE"),
+    (re.compile(r'Values of the ternary operator are not mutually compatible\.'), "INCOMPATIBLE_TERNARY"),
+    (
+        re.compile(r'The class variable ".+" is declared but never used in the class\.'),
+        "UNUSED_PRIVATE_CLASS_VARIABLE",
+    ),
+    (
+        re.compile(r'"await" keyword is unnecessary because the expression isn.t a coroutine nor a signal\.'),
+        "REDUNDANT_AWAIT",
+    ),
+    (re.compile(r"Standalone expression \(the line may have no effect\)\."), "STANDALONE_EXPRESSION"),
+    (re.compile(r"Standalone ternary operator \(the return value is being discarded\)\."), "STANDALONE_TERNARY"),
+    (re.compile(r"Unreachable code \(statement after return\)"), "UNREACHABLE_CODE"),
+    (re.compile(r"The built-in property \".+\" will not be modified in the assignment chain\."), "PROPERTY_WILL_BE_MODIFIED"),
+)
+
+# 仅登记已确认无需处理的引擎噪音；默认严格为 0 warning。
+WARNING_ALLOWLIST = (
+    # re.compile(r"^ERROR: [\w ]+$"),
+)
+
+
+def _warning_code_from_text(text: str) -> str:
+    for pattern, code in WARNING_CODE_PATTERNS:
+        if pattern.search(text):
+            return code
+    return "UNKNOWN"
+
+
+def _parse_warning_lines(output: str) -> List[Dict[str, str]]:
+    """解析 Godot --debug 与编辑器调试器两种警告格式。"""
+    entries: List[Dict[str, str]] = []
+    lines = output.splitlines()
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if line.startswith("WARNING:"):
+            message = line[len("WARNING:") :].strip()
+            source = ""
+            code = _warning_code_from_text(message)
+            lookahead = index + 1
+            while lookahead < len(lines):
+                stripped = lines[lookahead].strip()
+                if not stripped:
+                    break
+                if stripped.startswith("at:"):
+                    source = stripped[len("at:") :].strip()
+                elif stripped.startswith("<GDScript 错误>"):
+                    code = stripped.split(">", 1)[1].strip() or code
+                elif stripped.startswith("<GDScript 源文件>"):
+                    source = stripped.split(">", 1)[1].strip() or source
+                elif not stripped.startswith(("GDScript", "[", "VERSION")):
+                    break
+                lookahead += 1
+            entries.append({"message": message, "code": code, "source": source})
+            index = lookahead
+            continue
+
+        if re.match(r"^W\s+\d+:", line):
+            message = re.sub(r"^W\s+\d+:\d+:\d+:\d+\s*", "", line).strip()
+            source = ""
+            code = _warning_code_from_text(message)
+            lookahead = index + 1
+            while lookahead < len(lines):
+                stripped = lines[lookahead].strip()
+                if stripped.startswith("<GDScript 错误>"):
+                    code = stripped.split(">", 1)[1].strip() or code
+                elif stripped.startswith("<GDScript 源文件>"):
+                    source = stripped.split(">", 1)[1].strip() or source
+                elif re.match(r"^W\s+\d+:", lines[lookahead]):
+                    break
+                elif stripped and not stripped.startswith(("GDScript", "[", "VERSION")):
+                    break
+                lookahead += 1
+            entries.append({"message": message, "code": code, "source": source})
+            index = lookahead
+            continue
+
+        index += 1
+    return entries
+
+
+def _warning_is_allowlisted(entry: Dict[str, str]) -> bool:
+    text = f"{entry.get('message', '')} {entry.get('source', '')}"
+    return any(pattern.search(text) for pattern in WARNING_ALLOWLIST)
 
 
 class ProjectHealthChecker:
@@ -388,6 +478,7 @@ script = ExtResource("1_check")
             cmd = [
                 self.godot_bin,
                 "--headless",
+                "--debug",
                 "--path", self.project_dir,
                 "res://temp_headless_health_check.tscn"
             ]
@@ -398,8 +489,12 @@ script = ExtResource("1_check")
             out_txt = stdout.decode("utf-8", "ignore")
             err_txt = stderr.decode("utf-8", "ignore")
 
-            # 在拥有完整 Autoload 的场景运行器中，正常脚本不会出现任何 SCRIPT ERROR 或 Parse Error
+            # 在拥有完整 Autoload 的场景运行器中，正常脚本不会出现任何 SCRIPT ERROR、
+            # Parse Error 或 GDScript 静态分析警告。
+            combined_txt = out_txt + "\n" + err_txt
             parse_errors = [l for l in err_txt.splitlines() if "Parse Error" in l or "SCRIPT ERROR:" in l]
+            warnings = _parse_warning_lines(combined_txt)
+            fatal_warnings = [w for w in warnings if not _warning_is_allowlisted(w)]
             success = "ALL_SCRIPTS_COMPILED_SUCCESSFULLY" in out_txt
 
             print(f"    - Headless 扫描耗时: {cost:.2f} 秒")
@@ -407,12 +502,23 @@ script = ExtResource("1_check")
             if parse_errors:
                 for pe in parse_errors[:5]:
                     print(f"        [!] {pe}")
-            else:
-                print(f"    [√] 全量脚本全部通过 GDScript 编译与语法树解析 (0 Parse Error, 0 Error, 0 Warning)!")
+            print(f"    - GDScript 静态分析警告: {len(fatal_warnings)} 个 (白名单内 {len(warnings) - len(fatal_warnings)} 个)")
+            for warning in fatal_warnings[:100]:
+                print(
+                    f"        [!] {warning['code']} "
+                    f"{warning['source'] or '(no source)'} :: {warning['message']}"
+                )
+            if not parse_errors and not fatal_warnings:
+                print(
+                    "    [√] 全量脚本全部通过 GDScript 编译与语法树解析 "
+                    "(0 Parse Error, 0 Error, 0 Warning)!"
+                )
             return {
-                "status": "passed" if len(parse_errors) == 0 else "failed",
+                "status": "passed" if len(parse_errors) == 0 and not fatal_warnings else "failed",
                 "cost_seconds": cost,
-                "parse_errors": parse_errors
+                "parse_errors": parse_errors,
+                "warnings": warnings,
+                "fatal_warnings": fatal_warnings,
             }
         except subprocess.TimeoutExpired:
             print("[!] Headless 编译超时 (30s)，强制销毁进程树...")
@@ -460,7 +566,9 @@ script = ExtResource("1_check")
         md.append("|:---|:---|:---|:---|")
         md.append(f"| **全量场景资源断裂数** | **{len(self.broken_scene_refs)} 处** | `{'PASSED' if not self.broken_scene_refs else 'FAILED'}` | {len(self.all_scenes)} 个场景中所有外部资源全量匹配，无任何悬空或丢失引用 |")
         pe_count = len(compilation_result.get("parse_errors", []))
+        warning_count = len(compilation_result.get("fatal_warnings", []))
         md.append(f"| **GDScript 语法解析错误** | **{pe_count} 处** | `{'PASSED' if pe_count == 0 else 'FAILED'}` | 全量 {len(self.all_scripts)} 个脚本均已通过 Godot 4.7.2 核心解析树校验 |")
+        md.append(f"| **GDScript 静态分析警告** | **{warning_count} 处** | `{'PASSED' if warning_count == 0 else 'FAILED'}` | 由 Godot `--debug` 输出解析；白名单外警告必须清零 |")
         md.append(f"| **直接引用活跃脚本** | **{len(self.referenced_scripts)} 个 ({len(self.referenced_scripts)/len(self.all_scripts)*100:.1f}%)** | `HEALTHY` | 被场景、代码 `preload`/`load` 或 Autoload 明确消费 |")
         md.append(f"| **动态加载/全局符号脚本** | **{len(self.implicit_active_scripts)} 个** | `PROTECTED` | 具备动态字符串前缀或全局 `class_name`，严禁误杀 |")
         md.append(f"| **确认纯死代码 (Dead Code)** | **{len(self.dead_code_candidates)} 个** | `PENDING_CLEANUP` | 全局 0 引用、无动态前缀、无继承，可在 Phase 2 安全下线 |")
@@ -513,6 +621,7 @@ script = ExtResource("1_check")
         self.generate_markdown_report(comp_res)
         total_time = time.time() - t_start
         print(f"\n[√] Phase 1 自动化质量体检与审计全流程完成! 总耗时: {total_time:.2f} 秒\n")
+        return comp_res
 
 
 def main():
@@ -530,7 +639,9 @@ def main():
         godot_bin=args.godot_bin,
         report_path=args.report
     )
-    checker.run_all()
+    result = checker.run_all()
+    if result and result.get("status") == "failed":
+        sys.exit(1)
 
 
 if __name__ == "__main__":

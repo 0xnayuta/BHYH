@@ -189,9 +189,9 @@ func _refresh_content(mount: Dictionary) -> void:
 
 func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 	if not bool(mount.get(PlayerData.MOUNT_UNLOCKED_KEY, false)):
-		var requirement := PlayerData.get_mount_unlock_requirement(str(mount.get("ID", "")))
-		var item_id := str(requirement.get("物品", ""))
-		var needed := maxi(1, int(requirement.get(DataKeys.COUNT, 1)))
+		var unlock_requirement := PlayerData.get_mount_unlock_requirement(str(mount.get("ID", "")))
+		var item_id := str(unlock_requirement.get("物品", ""))
+		var needed := maxi(1, int(unlock_requirement.get(DataKeys.COUNT, 1)))
 		var item_data_value: Variant = AE.all_equipment.get(item_id, {})
 		var item_data: Dictionary = item_data_value if item_data_value is Dictionary else {}
 		var owned := PlayerData.get_inventory_item_count(item_id)

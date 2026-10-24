@@ -579,10 +579,6 @@ static func prewarm_active_sword_resources() -> void:
 	prewarm_sword_frames(get_active_sword_id())
 
 
-static func prewarm_active_sword_resources_async() -> void:
-	prewarm_sword_frames_async(get_active_sword_id())
-
-
 static func get_active_sword_preload_paths() -> Array[String]:
 	return get_sword_hover_preload_paths(get_active_sword_id())
 
@@ -637,13 +633,6 @@ static func _append_atlas_page_paths(paths: Array[String], folder: String) -> vo
 
 
 static func prewarm_sword_frames(target_sword_id: String) -> void:
-	if not SWORD_CONFIG.has(target_sword_id):
-		return
-	_prewarm_sword_hit_bullet_scene()
-	_prewarmed_swords[target_sword_id] = true
-
-
-static func prewarm_sword_frames_async(target_sword_id: String) -> void:
 	if not SWORD_CONFIG.has(target_sword_id):
 		return
 	_prewarm_sword_hit_bullet_scene()

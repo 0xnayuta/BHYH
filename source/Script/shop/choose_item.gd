@@ -4,7 +4,7 @@ var _list = []
 var current_choose: int = -1
 var is_set = false
 var _name: String
-var _page: int
+var page: int
 
 
 func _physics_process(_delta: float) -> void:

@@ -10,7 +10,6 @@ const VOID_ART_FLOOR_Y := 575.0
 var _first_space_bodies: Array[Node] = []
 var _darkness: CanvasModulate
 var _portals: Array[Area2D] = []
-var _background_copies: Array[Dictionary] = []
 
 
 func configure(level: Game4EastLateLevel, number: int) -> void:

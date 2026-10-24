@@ -154,21 +154,6 @@ func call_wling():
 
 func call_fl():
 	return
-	var new_list = [
-		{"Ratation": 30, "Position": Vector2(0, 0)},
-		{"Ratation": 60, "Position": Vector2(0, 0)},
-		{"Ratation": -20, "Position": Vector2(0, 0)},
-		{"Ratation": -60, "Position": Vector2(0, 0)},
-		{"Ratation": 70, "Position": Vector2(0, 0)},
-		{"Ratation": 20, "Position": Vector2(0, 0)}
-	]
-	new_list.shuffle()
-	for i in new_list:
-		var fl = Global.add_bullet(
-			"Monster33Bullet2", self.bullet, true, 1, i["Position"] + position, "wl", self.obj_attack_dict["wl"]
-		)
-		fl.rotation_degrees = i["Ratation"]
-		await get_tree().create_timer(0.7, false).timeout
 
 
 func _on_change_pl_timeout() -> void:

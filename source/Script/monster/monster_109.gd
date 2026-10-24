@@ -106,8 +106,6 @@ func _on_hit_box_area_entered(area: Area2D) -> Node2D:
 
 	return buff_target
 
-	return buff_target
-
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if is_show:

@@ -46,12 +46,12 @@ func show_pose(
 		if (part_layer & 8) != 0 and (visible_flags & 8) == 0:
 			continue
 		if used == _sprites.size():
-			var sprite := Sprite2D.new()
-			sprite.centered = false
-			sprite.region_enabled = true
-			sprite.region_filter_clip_enabled = true
-			add_child(sprite)
-			_sprites.append(sprite)
+			var new_sprite: Sprite2D = Sprite2D.new()
+			new_sprite.centered = false
+			new_sprite.region_enabled = true
+			new_sprite.region_filter_clip_enabled = true
+			add_child(new_sprite)
+			_sprites.append(new_sprite)
 		var sprite: Sprite2D = _sprites[used]
 		if sprite.texture != data.atlas:
 			sprite.texture = data.atlas

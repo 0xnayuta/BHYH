@@ -77,7 +77,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 |:---|:---|
 | `python scripts/check_all.py` | 八维总门禁（行尾、格式、lint、引擎编译、契约、命名、运行时引用、资源路径） |
 | `python scripts/check_all.py --skip-engine` | 无 Godot 环境时的静态门禁 |
-| `python scripts/health_check.py --project source --godot-bin <path>` | 场景引用拓扑、死代码与 Headless 编译 |
+| `python scripts/health_check.py --project source --godot-bin <path>` | 场景引用拓扑、死代码、Headless 编译与 GDScript warning 门禁 |
 | `python scripts/level_regression_all.py --jobs 4 --timeout 90` | 全量关卡冒烟回归；8 并发仅用于快速回归 |
 | `python scripts/level_test_runner.py --godot <path> --level res://Scene/level/level_1.tscn` | 单关冒烟夹具 |
 | `python scripts/coop_probe_runner.py --godot <path>` | 双人模式 15 探针矩阵 |
@@ -105,6 +105,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 命名大小写专项复核 | 七维门禁 **7/7 PASS**；运行时引用 **0**；命名终审 **0 违规**；`level_info` 关卡配置探针 **PASS** | 修复地图 `Level_*`→`level_*`、返回地图 `Map_*`→`map_*`；统一 `level_info`、`load_scene`、`monster_head_info`、`base_monster` 的 `Monster_` 文件名解析；修复 `base_hero` `/Level/` 与 light 场景路径判断；删除 SSSL 遗留帧路径表 |
 | 资源路径门禁基线 | `check_all.py` **8/8 PASS**；资源路径静态 8386 / 动态 165 / atlas 32 / 工厂 43；负向探针 **4/4 拦截** | `resource_path_audit.py` 覆盖静态路径大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 工厂目标；Art 缺失时自动跳过素材路径 |
 | 法宝面板空态统一 | 八维门禁 **8/8 PASS**；单/双人空态探针 **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `magic_weapon_infor` 增加 `Content` / `EmptyState`；无已装备法宝时仍打开面板，只隐藏内容区，保留背景、关闭按钮、帮助与 1P/2P 页签；P1/P2 按当前视图分别读取法宝数据；空态操作按钮隐藏并带函数级防御 |
+| GDScript 静态警告清零 | Godot `--debug` warning **53→0**；八维门禁 **8/8 PASS**；`level_1` / `level_34_1` / `level_52` / `level_58` 冒烟 **PASS**；LocalCoop 矩阵 **15/15 PASS** | 修复 4 类局部作用域命名、异步接口重复、跨脚本私有状态与 53 处存量 warning；`health_check.py` 增加 warning code 解析与白名单外失败门禁 |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 15 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 

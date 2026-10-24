@@ -465,8 +465,8 @@ func _prewarm_stage_runtime(monster_ids: Array) -> void:
 	if not small_monsters.is_empty():
 		await EMEI_MONSTER_SCRIPT.prewarm_frames(small_monsters)
 	if needs_boss:
-		await FIRE_ANCESTOR_SCRIPT.prewarm_frames()
-		await FIRE_ANCESTOR_SCRIPT.prewarm_effects()
+		FIRE_ANCESTOR_SCRIPT.prewarm_frames()
+		FIRE_ANCESTOR_SCRIPT.prewarm_effects()
 		await FIRE_ANCESTOR_ORB_SCRIPT.prewarm_frames()
 
 

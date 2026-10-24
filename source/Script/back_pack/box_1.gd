@@ -576,7 +576,7 @@ func _on_pressed() -> void:
 		if Global.is_in_ldl == false:
 			on_press_when_in_back()
 		elif Global.is_in_ldl == true:
-			match MLdl._loc:
+			match MLdl.current_mode:
 				"强化":
 					on_press_when_strength()
 				"神铸":

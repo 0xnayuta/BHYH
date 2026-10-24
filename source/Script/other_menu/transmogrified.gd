@@ -637,8 +637,7 @@ func get_page_list():
 	var current_list = get_current_type_list()
 	var page_dic = {}
 	for i in range(get_current_max_page()):
-		var num = i + 1
-		page_dic["Page_" + str(num)] = []
+		page_dic["Page_" + str(i + 1)] = []
 	var _loc_1: int = 1
 	var num: int = 1
 	var page_num: int = 1

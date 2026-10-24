@@ -67,7 +67,6 @@ var _sons: Array = []
 var _cast_generation := 0
 var _flight_height := 0.0
 var _tree: BaseMonster
-var _void_counter := 0.0
 var _stationary_origin := Vector2.ZERO
 var _sky_path: Array = []
 var _sky_origin := Vector2.ZERO
@@ -79,7 +78,7 @@ var _seek_destination := Vector2.ZERO
 var _seek_refresh := 0
 var _snow_guard_until := 0
 var _snow_guard_ratio := 0.0
-var _snow_guard_visual: WutaiMinghaiProjectile
+var snow_guard_visual: WutaiMinghaiProjectile
 
 
 func _metadata_path() -> String:
@@ -518,7 +517,7 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 			_projectile(
 				"effect2_1",
 				action,
-				source_origin + offsets[i] * Vector2(source_facing if key == "effect2" else 1, 1),
+				source_origin + offsets[i] * Vector2(source_facing if key == "effect2" else 1.0, 1.0),
 				motion,
 				_duration(skill),
 				skill,
@@ -529,10 +528,10 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 		var source_origin := global_position
 		var previous_delay := 0.0
 		for i in range(3):
-			var delay: float = [0.528, 0.627, 0.726][i]
-			if not await _delay(delay - previous_delay, generation):
+			var stage_delay: float = [0.528, 0.627, 0.726][i]
+			if not await _delay(stage_delay - previous_delay, generation):
 				return
-			previous_delay = delay
+			previous_delay = stage_delay
 			for side in [-1, 1]:
 				var origin := source_origin + Vector2(i * 80 * side, [-141, -180, -220][i])
 				var motion := Vector2(
@@ -806,9 +805,9 @@ func _duration(skill: Dictionary) -> float:
 func _standard_shot(action: StringName, skill: Dictionary) -> void:
 	var assets := str(skill.get("assetLink", "")).split(",", false)
 	if assets.is_empty():
-		var speed_x := float(skill.get("shootSpeedX", "-1"))
-		if speed_x != -1 and float(skill.get("shootTime", "-1")) > 0 and int(_raw["model"]) != 3384:
-			_body_motion = Vector2(speed_x * _facing(), float(skill.get("shootSpeedY", "0"))) * 3
+		var effect_speed_x := float(skill.get("shootSpeedX", "-1"))
+		if effect_speed_x != -1 and float(skill.get("shootTime", "-1")) > 0 and int(_raw["model"]) != 3384:
+			_body_motion = Vector2(effect_speed_x * _facing(), float(skill.get("shootSpeedY", "0"))) * 3
 			_body_motion_until = Time.get_ticks_msec() + int(skill["shootTime"])
 		return
 	var model := int(_raw["model"])
@@ -1071,10 +1070,10 @@ func _cast_snow_guard(action: StringName, skill: Dictionary) -> void:
 		ally._snow_guard_until = Time.get_ticks_msec() + int(armor["time"])
 		ally._snow_guard_ratio = float(reduction["attributeV1"])
 		ally._enforce_control_immunity_state()
-		if is_instance_valid(ally._snow_guard_visual) and not ally._snow_guard_visual._finished:
-			ally._snow_guard_visual._elapsed = 0.0
+		if is_instance_valid(ally.snow_guard_visual) and not ally.snow_guard_visual._finished:
+			ally.snow_guard_visual._elapsed = 0.0
 		else:
-			ally._snow_guard_visual = _projectile(
+			ally.snow_guard_visual = _projectile(
 				"attack1_1",
 				action,
 				ally.global_position,

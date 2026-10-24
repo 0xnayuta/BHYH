@@ -433,8 +433,8 @@ func _prewarm_stage_runtime(monster_ids: Array) -> void:
 	if not shuangxi_kinds.is_empty():
 		await SHUANGXI_MONSTER_SCRIPT.prewarm_frames(shuangxi_kinds)
 	if needs_boss:
-		await SHENGUANG_BOSS_SCRIPT.prewarm_frames()
-		await SHENGUANG_BOSS_SCRIPT.prewarm_effects()
+		SHENGUANG_BOSS_SCRIPT.prewarm_frames()
+		SHENGUANG_BOSS_SCRIPT.prewarm_effects()
 
 
 func _level_number() -> int:

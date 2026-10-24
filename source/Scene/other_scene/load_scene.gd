@@ -438,7 +438,7 @@ func _finish_loading() -> void:
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("role-specific before sword array")
-		await MAIN_SWORD_ARRAY_WEAPON_SCRIPT.prewarm_active_sword_resources_async()
+		MAIN_SWORD_ARRAY_WEAPON_SCRIPT.prewarm_active_sword_resources()
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("role-specific and sword array")

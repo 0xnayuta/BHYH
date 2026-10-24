@@ -6,8 +6,6 @@ const SOURCE_FPS := 24.0
 const BODY_SPRITE_POSITION := Vector2(-16, -78)
 const EFFECT_ROOT := "res://Art/monster/hun_dun/effects"
 const EFFECT_NAMES := ["monster_60_bullet_1", "monster_60_bullet_2", "monster_60_bullet_3"]
-static var _effect_frames_cache: Dictionary = {}
-static var _effect_prewarm_started := false
 
 var bullet1_height := -90.0
 var bullet2_height := -100.0

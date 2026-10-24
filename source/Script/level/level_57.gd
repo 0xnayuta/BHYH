@@ -447,8 +447,8 @@ func _prewarm_stage_runtime(monster_ids: Array) -> void:
 	if not small_monsters.is_empty():
 		await EMEI_MONSTER_SCRIPT.prewarm_frames(small_monsters)
 	if needs_boss:
-		await EMEI_BOSS_SCRIPT.prewarm_frames()
-		await EMEI_BOSS_SCRIPT.prewarm_effects()
+		EMEI_BOSS_SCRIPT.prewarm_frames()
+		EMEI_BOSS_SCRIPT.prewarm_effects()
 
 
 func _level_number() -> int:

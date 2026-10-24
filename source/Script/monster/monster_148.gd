@@ -146,7 +146,7 @@ func _on_portal1_timeout(portal):
 		"hit1",
 		self.obj_attack_dict["hit1"]
 	)
-	bullet_node.rotation = 0 if portal.direction < 0 else PI
+	bullet_node.rotation = 0.0 if portal.direction < 0 else PI
 	portal.count += 1
 
 

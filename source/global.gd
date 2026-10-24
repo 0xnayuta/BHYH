@@ -447,8 +447,6 @@ var damage_text = null
 var monster_blood = null
 var monster_be_hit = null
 var special_affect = null
-var _aura = null
-var _buff_icon = null
 var damage_number = null
 var miss_effect = null
 var combo = null
@@ -456,7 +454,6 @@ var combo_num = null
 var lj = null
 var moment_texxt = null
 var message_show = null
-var _base_buff = null
 var role_bullet = null
 var fly_bullet = null
 var _chase_bullet = null
@@ -4749,7 +4746,7 @@ func add_choose_item(parent, position, list, _name, page):
 		choose_item = _load_scene("res://Scene/shop/choose_item.tscn")
 	var target = instance_scene(choose_item, parent)
 	target._name = _name
-	target._page = page
+	target.page = page
 	target._list = list
 	target.z_index = 99
 	if position == Vector2.ZERO or position == Vector2(460, 260):

@@ -23,7 +23,6 @@ var abx: TextureButton
 @onready var tiaoguo_label: Label = $tiaoguo/tiaoguo_label
 
 @onready var back_ground = $background
-@onready var _name: Label = $name
 
 @onready var name_2: Label = $name/name2
 @onready var http_request: HTTPRequest = $HTTPRequest

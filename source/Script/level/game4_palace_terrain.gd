@@ -7,7 +7,6 @@ var _hidden_platforms: Array[Dictionary] = []
 var _hazards: Array[Dictionary] = []
 var _death_y := 0.0
 var _clock := 0.0
-var _animation_data: Dictionary = {}
 
 
 func configure(level: Game4EastLateLevel, level_number: int) -> void:

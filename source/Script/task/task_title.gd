@@ -84,7 +84,6 @@ func check_task_finish():
 						if PlayerData.player_data.get(key, -1) < target[key]:
 							return false
 					return true
-					return true
 
 		"DailyTask":
 			if task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:

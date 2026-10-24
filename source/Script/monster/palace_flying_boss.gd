@@ -16,7 +16,6 @@ var _palace_clock := 0.0
 var _lightning_reverse := false
 var _cast_direction := 1.0
 var _cast_position := Vector2.ZERO
-var _reappear_at := Vector2.ZERO
 var _swallow_pending := false
 var _ready_to_fight := false
 var _palace_flight_y := 0.0

@@ -35,7 +35,7 @@ func _physics_process(_delta: float) -> void:
 	if not PlayerData.player_data["ieho"]:
 		if PlayerData.check_have_zb("xczg")[0]:
 			PlayerData.player_data["ieho"] = true
-	var show_pet_backpack: bool = Global.is_in_ldl == true and str(MLdl._loc) in ["强化", "镶嵌"]
+	var show_pet_backpack: bool = Global.is_in_ldl == true and str(MLdl.current_mode) in ["强化", "镶嵌"]
 	pet_backpack_button.visible = show_pet_backpack
 	pl_sell.visible = not show_pet_backpack
 	if current_fl == 3 and not show_pet_backpack:
@@ -153,7 +153,7 @@ func _mark_box_kind(box, kind: String) -> void:
 
 func _get_ldl_equipment_entries() -> Array:
 	var entries: Array = []
-	var ldl_type_filter := "神骨" if str(MLdl._loc) == "淬骨" else ""
+	var ldl_type_filter := "神骨" if str(MLdl.current_mode) == "淬骨" else ""
 	for slot_type in LDL_EQUIPPED_SLOT_TYPES:
 		var equipped_value: Variant = PlayerData.player_data.get(slot_type, [])
 		if not (equipped_value is Array) or (equipped_value as Array).is_empty():
@@ -414,7 +414,7 @@ func _on_xhp_pressed() -> void:
 
 
 func _on_pet_backpack_pressed() -> void:
-	if not Global.is_in_ldl or str(MLdl._loc) not in ["强化", "镶嵌"]:
+	if not Global.is_in_ldl or str(MLdl.current_mode) not in ["强化", "镶嵌"]:
 		return
 	current_fl = 3
 	current_page = 1

@@ -83,11 +83,11 @@ func _preload_level_resources() -> void:
 	if Global.sss_lendless_mode:
 		await Global.preload_level_monster_scenes(SSSL_BOSS_IDS)
 		for stage in range(1, 5):
-			await _preload_sssl_boss_body_frames(SSSL_BOSS_IDS[stage - 1])
+			_preload_sssl_boss_body_frames(SSSL_BOSS_IDS[stage - 1])
 			_preloaded_sssl_stages[stage] = true
 	else:
 		await Global.preload_level_monster_scenes([150])
-		await _preload_sssl_boss_body_frames(150)
+		_preload_sssl_boss_body_frames(150)
 		_preloaded_sssl_stages[1] = true
 
 
@@ -105,7 +105,7 @@ func _preload_sssl_stage(stage: int) -> void:
 	_sssl_preloading_stage = stage
 	var monster_id := 149 + stage
 	await Global.preload_level_monster_scenes([monster_id])
-	await _preload_sssl_boss_body_frames(monster_id)
+	_preload_sssl_boss_body_frames(monster_id)
 	_preloaded_sssl_stages[stage] = true
 	if _sssl_preloading_stage == stage:
 		_sssl_preloading_stage = 0

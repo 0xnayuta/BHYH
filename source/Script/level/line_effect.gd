@@ -10,7 +10,7 @@ func _physics_process(delta: float) -> void:
 	player = RoleProp.source_player
 	if player != null and is_instance_valid(player):
 		if points.size() > 1:
-			points[1] = player.position
+			set_point_position(1, player.position)
 		elif points.size() == 1:
 			add_point(player.position)
 

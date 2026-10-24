@@ -4,7 +4,7 @@ extends TouchScreenButton
 @onready var pic_box: TextureProgressBar = $PicBox
 @onready var time_text: Label = $TimeText
 
-var _res: String = ""
+var resource_key: String = ""
 var cur_size: float = 50.0
 var skill_name: String = ""
 var max_time: float = 0.0
