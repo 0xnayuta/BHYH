@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RoleRuntimeResourceManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Script/data/role_runtime_resource_manifest.gd" id="1_manifest"]
+
+[resource]
+script = ExtResource("1_manifest")
+scene_paths = PackedStringArray()
+sprite_frames_paths = PackedStringArray()
+texture_paths = PackedStringArray()
+audio_paths = PackedStringArray("res://Music/hero/17_role1_hit6.mp3", "res://Music/hero/8_role1_hit6.mp3", "res://Music/hero/11_role1_hit7.mp3", "res://Music/hero/1_role1_hit9.mp3", "res://Music/hero/00_role1_gsrs.mp3", "res://Music/hero/36_role1_hit10_2.mp3", "res://Music/hero/37_role1_hit10_4.mp3", "res://Music/hero/35_role1_hit10_1.mp3", "res://Music/hero/44_role1_hit12_2.mp3", "res://Music/hero/40_role1_hit1_and_hit2.mp3", "res://Music/hero/39_role1_hit3_and_hit4.mp3", "res://Music/hero/38_role1_hit5.mp3", "res://Music/hero/18_role1_hit14.mp3", "res://Music/hero/45_role1_hit12_1.mp3", "res://Music/hero/42_role1_hit11.mp3", "res://Music/hero/26_role1_hit13_1.mp3")
+conditional_scene_paths = {
+	"qsez": PackedStringArray("res://Scene/hero/role_bullet_1.tscn", "res://Scene/hero/role1_s_hallow.tscn"),
+	"hyjj": PackedStringArray("res://Scene/hero/role_bullet_1.tscn"),
+	"zz": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn"),
+	"lyfb": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn"),
+	"hmz": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn", "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"),
+	"hmz_ws": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn", "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"),
+}
+conditional_texture_paths = {}

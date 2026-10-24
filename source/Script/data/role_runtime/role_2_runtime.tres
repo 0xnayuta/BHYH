@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RoleRuntimeResourceManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Script/data/role_runtime_resource_manifest.gd" id="1_manifest"]
+
+[resource]
+script = ExtResource("1_manifest")
+scene_paths = PackedStringArray("res://Scene/base/role2shallow.tscn", "res://Scene/hero/role_2/smb_effect.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet1.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet2.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet3.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet4.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet5.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet5_1.tscn", "res://Scene/hero/role_bullet_slim/role2_bullet6.tscn", "res://Scene/hero/role_special_effect_slim/zfjg_zh.tscn", "res://Scene/hero/role_special_effect_slim/tjgl.tscn", "res://Scene/hero/role_special_effect_slim/tjgl_hd.tscn", "res://Scene/hero/role_special_effect_slim/myhc.tscn", "res://Scene/hero/role_special_effect_slim/jgz.tscn", "res://Scene/hero/role_special_effect_slim/jhsj.tscn")
+sprite_frames_paths = PackedStringArray()
+texture_paths = PackedStringArray()
+audio_paths = PackedStringArray("res://Music/hero/58_role2_hit1.mp3", "res://Music/hero/59_role2_hit2.mp3", "res://Music/hero/57_role2_hit8.mp3", "res://Music/hero/60_role2_hit3.mp3", "res://Music/hero/51_role2_hit10.mp3", "res://Music/hero/11_role2_hit4.mp3", "res://Music/hero/32_role2_hit6.mp3", "res://Music/hero/40_role2_hit7.mp3", "res://Music/hero/39_role2_hit9.mp3")
+conditional_scene_paths = {}
+conditional_texture_paths = {}

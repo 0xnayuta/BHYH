@@ -2529,13 +2529,14 @@ func _role_heavy_effect_paths(role_id: int) -> Array[String]:
 
 
 func get_current_role_heavy_effect_paths() -> Array[String]:
-	var paths := _role_heavy_effect_paths(_current_role_id())
-	var fashions: Variant = PlayerData.player_data.get(DataKeys.FASHION, [])
-	if fashions is Array and not fashions.is_empty() and str(fashions[0].get(DataKeys.NAME, "")) == "shenqismsrsz":
-		_append_numbered_resource_paths(paths, "res://Art/hero_picture/smsr_shenqi_lightning/lightning/d_%05d.png", 9)
-		_append_numbered_resource_paths(
-			paths, "res://Art/hero_picture/smsr_shenqi_lightning/hit_mesh/hit_%05d.png", 10, 0, 2
-		)
+	var role_id := _current_role_id()
+	var manifest := _load_role_runtime_manifest(role_id)
+	var paths: Array[String] = []
+	if manifest != null:
+		_append_conditional_paths(paths, manifest.conditional_texture_paths, _equipped_role_skill_names())
+	else:
+		paths = _role_heavy_effect_paths(role_id)
+	paths.append_array(_fashion_texture_paths())
 	return paths
 
 
@@ -2555,6 +2556,33 @@ func _append_role_runtime_paths(out: Array[String], paths: PackedStringArray) ->
 		out.append(path)
 
 
+func _append_conditional_paths(out: Array[String], entries: Variant, equipped_skills: Array) -> void:
+	if not entries is Dictionary:
+		return
+	for skill in equipped_skills:
+		var paths: Variant = (entries as Dictionary).get(str(skill), null)
+		if not paths is PackedStringArray:
+			continue
+		for path in paths:
+			if not out.has(path):
+				out.append(path)
+
+
+func _fashion_texture_paths() -> Array[String]:
+	var paths: Array[String] = []
+	var fashions: Variant = PlayerData.player_data.get(DataKeys.FASHION, [])
+	if (
+		fashions is Array
+		and not fashions.is_empty()
+		and str((fashions as Array)[0].get(DataKeys.NAME, "")) == "shenqismsrsz"
+	):
+		_append_numbered_resource_paths(paths, "res://Art/hero_picture/smsr_shenqi_lightning/lightning/d_%05d.png", 9)
+		_append_numbered_resource_paths(
+			paths, "res://Art/hero_picture/smsr_shenqi_lightning/hit_mesh/hit_%05d.png", 10, 0, 2
+		)
+	return paths
+
+
 func prewarm_sprite_frames_paths(paths: Array[String]) -> void:
 	await _preload_paths_threaded(paths)
 
@@ -2568,11 +2596,14 @@ func get_current_role_preload_paths() -> Array[String]:
 	var manifest := _load_role_runtime_manifest(role_id)
 	if manifest != null:
 		var runtime_paths: Array[String] = []
+		var equipped_skills := _equipped_role_skill_names()
 		_append_role_runtime_paths(runtime_paths, manifest.scene_paths)
 		_append_role_runtime_paths(runtime_paths, manifest.sprite_frames_paths)
 		_append_role_runtime_paths(runtime_paths, manifest.texture_paths)
 		_append_role_runtime_paths(runtime_paths, manifest.audio_paths)
-		runtime_paths.append_array(_role_heavy_effect_paths(role_id))
+		_append_conditional_paths(runtime_paths, manifest.conditional_scene_paths, equipped_skills)
+		_append_conditional_paths(runtime_paths, manifest.conditional_texture_paths, equipped_skills)
+		runtime_paths.append_array(_fashion_texture_paths())
 		return runtime_paths
 	var paths := _role_skill_scene_paths(role_id)
 	paths.append_array(_role_skill_sound_paths(role_id))
@@ -2592,16 +2623,19 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	var texture_paths: Array[String] = []
 	var audio_paths: Array[String] = []
 	var manifest := _load_role_runtime_manifest(role_id)
+	var equipped_skills := _equipped_role_skill_names()
 	if manifest != null:
 		_append_role_runtime_paths(scene_paths, manifest.scene_paths)
 		_append_role_runtime_paths(sprite_frames_paths, manifest.sprite_frames_paths)
 		_append_role_runtime_paths(texture_paths, manifest.texture_paths)
 		_append_role_runtime_paths(audio_paths, manifest.audio_paths)
+		_append_conditional_paths(scene_paths, manifest.conditional_scene_paths, equipped_skills)
+		_append_conditional_paths(texture_paths, manifest.conditional_texture_paths, equipped_skills)
+		texture_paths.append_array(_fashion_texture_paths())
 	else:
 		scene_paths = _role_skill_scene_paths(role_id)
 		audio_paths = _role_skill_sound_paths(role_id)
 		texture_paths = _role_heavy_effect_paths(role_id)
-	var equipped_skills := _equipped_role_skill_names()
 	var preload_paths := scene_paths.duplicate()
 	preload_paths.append_array(sprite_frames_paths)
 	preload_paths.append_array(texture_paths)

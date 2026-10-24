@@ -4,7 +4,11 @@
 
 [resource]
 script = ExtResource("1_manifest")
-scene_paths = PackedStringArray("res://Scene/hero/role_6/ne_zha_skill_effect.tscn", "res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn")
+scene_paths = PackedStringArray("res://Scene/hero/role_6/ne_zha_skill_effect.tscn")
 sprite_frames_paths = PackedStringArray("res://Art/hero_picture/role_6/equipment_atlas/default_body/default_body.tres", "res://Art/hero_picture/role_6/equipment_atlas/default_body_front/default_body_front.tres", "res://Art/hero_picture/role_6/equipment_atlas/default_weapon/default_weapon.tres")
 texture_paths = PackedStringArray("res://Art/hero_picture/role_6/official_parts_trial/default/parts.png", "res://Art/hero_picture/role_6/official_parts_trial/transparent.tres")
 audio_paths = PackedStringArray()
+conditional_scene_paths = {
+	"nz_yysj": PackedStringArray("res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn"),
+}
+conditional_texture_paths = {}

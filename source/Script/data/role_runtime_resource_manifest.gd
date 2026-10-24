@@ -7,11 +7,6 @@ extends Resource
 @export var texture_paths := PackedStringArray()
 @export var audio_paths := PackedStringArray()
 
-
-func collect_paths() -> PackedStringArray:
-	var paths := PackedStringArray()
-	paths.append_array(scene_paths)
-	paths.append_array(sprite_frames_paths)
-	paths.append_array(texture_paths)
-	paths.append_array(audio_paths)
-	return paths
+## 技能键位 → 额外资源路径；仅在该技能已装备时预热。
+@export var conditional_scene_paths: Dictionary = {}
+@export var conditional_texture_paths: Dictionary = {}

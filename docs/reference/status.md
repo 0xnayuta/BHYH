@@ -108,7 +108,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | GDScript 静态警告清零 | Godot `--debug` warning **53→0**；八维门禁 **8/8 PASS**；`level_1` / `level_34_1` / `level_52` / `level_58` 冒烟 **PASS**；LocalCoop 矩阵 **15/15 PASS** | 修复 4 类局部作用域命名、异步接口重复、跨脚本私有状态与 53 处存量 warning；`health_check.py` 增加 warning code 解析与白名单外失败门禁 |
 | 双人 P1/P2 攻击归属修复 | LocalCoop 矩阵 **16/16 PASS**；新增无双归属探针覆盖 P2 近战/弹道/显式 owner；Godot `--debug` **0 warning** | 伤害来源统一由 `LocalCoop` 实际出手者解析；`cure_ws_value` 接受显式玩家 owner；P2 弹道、法宝、技能效果、特殊怪物覆盖与黄 aura 不再把无双/伤害记到 P1；P2 无双同步衰减 |
 | 哪吒启动 PackedScene 契约修复 | Nezha 预热探针 **PASS**；Godot `--debug` **0 warning**；场景加载路径仅接受 `.tscn` / `.scn` | 根因是 `_role_skill_scene_paths(6)` 把 3 个 SpriteFrames `.tres` 混入场景预热；显示层预加载列表仅保留场景，`_load_scene` 强制 `PackedScene` 类型，非场景路径返回 null 而不再触发返回值类型错误 |
-| 哪吒构建期帧与角色清单 | 哪吒关卡启动 **PASS**；Manifest 预热 **PASS**；Godot `--debug` **0 warning** | 新增 `RoleRuntimeResourceManifest` 与 `role_6_runtime.tres`，按场景/SpriteFrames/纹理/音频拆分；`convert_nezha_preview_frames.py` 从活跃 `official_parts_trial` 预览 JSON 生成 117 个构建期 SpriteFrames `.tres`；`NeZhaEquipmentVisuals` 只加载 `.tres`，保留 `parts.png`/`transparent.tres` 独立纹理预热 |
+| 全角色运行资源清单 | 角色 1~7 Manifest 全部加载；无技能/条件技能路径探针 **PASS**；哪吒关卡启动 **PASS**；Godot `--debug` **0 warning** | `role_1_runtime.tres` ~ `role_7_runtime.tres` 全部由 `RoleRuntimeResourceManifest` 驱动；场景/SpriteFrames/纹理/音频分离；角色 4/5 的重型纹理与角色 4/6 的条件场景按技能选择；`convert_nezha_preview_frames.py` 生成哪吒构建期帧，`NeZhaEquipmentVisuals` 只加载 `.tres` |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning;1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
