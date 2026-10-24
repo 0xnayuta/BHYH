@@ -196,7 +196,7 @@ func _show_idle() -> void:
 func _begin_claw_skill() -> void:
 	_show_idle()
 	_locked_claw_position = global_position
-	var role := Global.get_player as Node2D
+	var role := get_player as Node2D
 	if role != null and is_instance_valid(role):
 		_locked_claw_position = Vector2(role.global_position.x, global_position.y + GROUND_BASELINE_Y)
 	elif RoleProp.get_nearest_monster_target_position(global_position).x != null:

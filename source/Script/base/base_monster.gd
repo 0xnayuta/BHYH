@@ -1265,7 +1265,7 @@ func be_hit_back(target):
 			hero = bullet.source_weapon.player
 
 		if hero == null:
-			hero = Global.get_player
+			hero = get_player
 
 		if hero and hero is BaseHero:
 			if hero.player_dir:
@@ -1639,22 +1639,23 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if _is_summon_or_pet_hit_area(area):
 		return
 
+	var source_player: BaseHero = _get_damage_source_player(area)
+	if source_player == null or not is_instance_valid(source_player):
+		return
+	var source_target: Variant
 	if area is BaseRoleHitBox or area is RolehmzBullet:
-		var attacker: BaseHero = LocalCoop.owner_hero(area)
-		get_target = attacker if attacker != null else get_player
+		source_target = source_player
 	elif area is MagicWeaponHit:
-		get_target = area.get_parent()
+		source_target = area.get_parent()
 	elif area.get_parent() is Role1Shallow:
-		get_target = area.get_parent()
+		source_target = area.get_parent()
 	elif area is RoleBullet1:
-		get_target = area
+		source_target = area
 	elif area.get_parent().get_parent() is RoleBullet:
-		get_target = area.get_parent().get_parent()
+		source_target = area.get_parent().get_parent()
 	else:
 		return
-	apply_role_hit(
-		get_target, LocalCoop.owner_hero(area) if area is BaseRoleHitBox or area is RolehmzBullet else get_player
-	)
+	apply_role_hit(source_target, source_player)
 
 
 func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_data: Dictionary = {}) -> int:
@@ -1707,7 +1708,7 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 	hurt_received = last_hurt
 	if source_player.is_dead_link:
 		source_player.effect_reducehp(last_hurt, "real")
-	cure_ws_value()
+	cure_ws_value(source_player)
 	add_lj(last_hurt)
 	Global.total_role_hit += last_hurt
 	role5_bullet(last_hurt, source_target)
@@ -1744,6 +1745,39 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 	if not hit_data.is_empty():
 		source_target.set("hit_dic", old_hit_data)
 	return last_hurt
+
+
+func bind_role_damage_source(source_player: BaseHero) -> Dictionary:
+	"""把怪物的伤害/无双归属临时绑定到实际出手玩家，返回可恢复的上下文。"""
+	if not is_instance_valid(source_player):
+		return {}
+	var source_props: BaseRoleProperties = LocalCoop.props_for(source_player)
+	if not is_instance_valid(source_props):
+		return {}
+	var previous := {
+		"player": get_player,
+		"damage_slot": int(get_meta("coop_damage_slot", 0)),
+		"props": source_props,
+		"props_source": source_props.source_player,
+	}
+	get_player = source_player
+	set_meta("coop_damage_slot", LocalCoop.slot_for(source_player))
+	source_props.source_player = source_player
+	return previous
+
+
+func unbind_role_damage_source(previous: Dictionary) -> void:
+	if previous.is_empty():
+		return
+	get_player = previous.get("player") as BaseHero
+	var damage_slot := int(previous.get("damage_slot", 0))
+	if damage_slot == 0:
+		remove_meta("coop_damage_slot")
+	else:
+		set_meta("coop_damage_slot", damage_slot)
+	var source_props: BaseRoleProperties = previous.get("props") as BaseRoleProperties
+	if is_instance_valid(source_props):
+		source_props.source_player = previous.get("props_source")
 
 
 func _is_summon_or_pet_hit_area(area: Area2D) -> bool:
@@ -1797,9 +1831,10 @@ func _get_damage_source_player(target) -> BaseHero:
 	if target is BaseHero:
 		return target as BaseHero
 	if target is RoleBullet or target is RoleBullet1 or target is Role1Shallow:
-		var bullet_player: Variant = target.get("Player")
-		if bullet_player is BaseHero:
-			return bullet_player as BaseHero
+		for key: String in ["player", "Player", "my_owner"]:
+			var bullet_player: Variant = target.get(key)
+			if bullet_player is BaseHero and is_instance_valid(bullet_player):
+				return bullet_player as BaseHero
 		var parent_node: Node = target as Node
 		for _index in range(4):
 			if parent_node == null:
@@ -1808,15 +1843,24 @@ func _get_damage_source_player(target) -> BaseHero:
 				return parent_node as BaseHero
 			parent_node = parent_node.get_parent()
 	if target is BaseMagicWeapon:
-		var weapon_player: Variant = target.get("Player")
-		if weapon_player is BaseHero:
-			return weapon_player as BaseHero
+		for key: String in ["player", "Player"]:
+			var weapon_player: Variant = target.get(key)
+			if weapon_player is BaseHero and is_instance_valid(weapon_player):
+				return weapon_player as BaseHero
+	if target is MagicWeaponHit:
+		var weapon: Variant = target.get_parent()
+		if weapon is BaseMagicWeapon:
+			for key: String in ["player", "Player"]:
+				var weapon_player: Variant = weapon.get(key)
+				if weapon_player is BaseHero and is_instance_valid(weapon_player):
+					return weapon_player as BaseHero
 	if target is MgHit:
 		var source_weapon: Variant = target.get("source_weapon")
 		if source_weapon is BaseMagicWeapon:
-			var source_player: Variant = source_weapon.get("Player")
-			if source_player is BaseHero:
-				return source_player as BaseHero
+			for key: String in ["player", "Player"]:
+				var source_player: Variant = source_weapon.get(key)
+				if source_player is BaseHero and is_instance_valid(source_player):
+					return source_player as BaseHero
 	var resolved: BaseHero = LocalCoop.owner_hero(target) if target is Node else null
 	if resolved != null:
 		return resolved
@@ -2506,15 +2550,18 @@ func move_playerto_boss(target: Node2D, movetime: float):
 	tween.tween_property(final_target, "position", target_pos, movetime)
 
 
-func cure_ws_value():
-	if not RoleProp.is_ws_state:
-		if get_target != null:
-			if get_target.hit_dic.has("WSValue"):
-				RoleProp.ws_value += get_target.hit_dic["WSValue"]
-			else:
-				RoleProp.ws_value += 2
-		else:
-			RoleProp.ws_value += 2
+func cure_ws_value(source_player: BaseHero = null) -> void:
+	var ws_props: BaseRoleProperties = (
+		LocalCoop.props_for(source_player) if is_instance_valid(source_player) else RoleProp
+	)
+	if not is_instance_valid(ws_props) or ws_props.is_ws_state:
+		return
+	var gain := 2
+	if get_target != null and is_instance_valid(get_target):
+		var hit_data: Variant = get_target.get("hit_dic")
+		if hit_data is Dictionary and (hit_data as Dictionary).has("WSValue"):
+			gain = int((hit_data as Dictionary)["WSValue"])
+	ws_props.ws_value += gain
 
 
 func shake(strength, times, interv):

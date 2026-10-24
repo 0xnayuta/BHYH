@@ -530,9 +530,9 @@ func _process_overlapping_player_bodies() -> void:
 	var players: Array = []
 	if owner_monster != null and is_instance_valid(owner_monster) and owner_monster.has_method("_active_players"):
 		players = owner_monster.call("_active_players")
-	var global_player := Global.get_player as BaseHero
-	if global_player != null and is_instance_valid(global_player) and not players.has(global_player):
-		players.append(global_player)
+	for player: BaseHero in LocalCoop.living_players():
+		if not players.has(player):
+			players.append(player)
 	if players.is_empty():
 		var source_player := RoleProp.source_player as BaseHero
 		if source_player != null:
@@ -735,14 +735,14 @@ func _update_target_motion(delta: float) -> void:
 
 
 func _resolve_random_target() -> Node2D:
-	var candidate: Variant = Global.get_player
-	if candidate is Node2D and is_instance_valid(candidate):
-		return candidate as Node2D
 	if owner_monster != null and is_instance_valid(owner_monster):
-		candidate = owner_monster.get("get_player")
-		if candidate is Node2D and is_instance_valid(candidate):
-			return candidate as Node2D
-	return null
+		var owner_target: Variant = owner_monster.get("get_player")
+		if owner_target is Node2D and is_instance_valid(owner_target):
+			return owner_target as Node2D
+	var players: Array[BaseHero] = LocalCoop.living_players()
+	if players.is_empty():
+		return null
+	return players[randi() % players.size()]
 
 
 static func get_frame_paths(root: String, count: int) -> Array[String]:

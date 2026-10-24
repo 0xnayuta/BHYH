@@ -240,7 +240,7 @@ func call_bullet_2():
 
 
 func check_player():
-	if not is_instance_valid(Global.get_player) or RoleProp == null or not has_method("move_playerto_boss"):
+	if not is_instance_valid(get_player) or RoleProp == null or not has_method("move_playerto_boss"):
 		print("CheckPlayer：依赖节点无效/无位移方法，跳过")
 		return
 
@@ -250,11 +250,11 @@ func check_player():
 		buff_target = get_player
 
 	if self.position.x > RoleProp.get_nearest_monster_target_position(global_position).x:
-		if Global.get_player.player_dir:
+		if get_player.player_dir:
 			if not monster_direction:
 				move_playerto_boss(buff_target, 0.5)
 	else:
-		if not Global.get_player.player_dir:
+		if not get_player.player_dir:
 			if monster_direction:
 				move_playerto_boss(buff_target, 0.5)
 

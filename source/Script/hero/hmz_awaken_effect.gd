@@ -257,6 +257,7 @@ func _collect_targets(node: Node) -> void:
 func _apply_hit(target: BaseMonster) -> void:
 	if target == null or not is_instance_valid(target) or target.hp <= 0:
 		return
+	var damage_source_state := target.bind_role_damage_source(owner_player as BaseHero)
 	var old_hit_data: Dictionary = owner_player.hit_dic
 	var old_target: Variant = target.get_target
 	var old_miss: int = target.miss
@@ -289,7 +290,7 @@ func _apply_hit(target: BaseMonster) -> void:
 		)
 	)
 	target.hurt_received = damage
-	target.cure_ws_value()
+	target.cure_ws_value(owner_player as BaseHero)
 	target.hurt_reduce_hp(damage, owner_player)
 	if damage > 0:
 		target.add_lj(damage)
@@ -306,6 +307,7 @@ func _apply_hit(target: BaseMonster) -> void:
 	target.miss = old_miss
 	owner_player.hit_dic = old_hit_data
 	owner_player.tszzs = old_tszzs
+	target.unbind_role_damage_source(damage_source_state)
 	role_props.source_player = old_source_player
 
 

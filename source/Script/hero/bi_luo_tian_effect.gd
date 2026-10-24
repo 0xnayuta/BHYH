@@ -180,6 +180,7 @@ func _is_valid_target(target: Node) -> bool:
 
 
 func _apply_hit(target: BaseMonster) -> void:
+	var damage_source_state := target.bind_role_damage_source(owner_player as BaseHero)
 	var old_hit_data: Dictionary = owner_player.hit_dic
 	owner_player.hit_dic = hit_data
 	var damage := int(target.get_role_last_hurt(owner_player))
@@ -204,6 +205,7 @@ func _apply_hit(target: BaseMonster) -> void:
 		if not role_props.is_ws_state:
 			role_props.ws_value += int(hit_data.get("WSValue", 4))
 	owner_player.hit_dic = old_hit_data
+	target.unbind_role_damage_source(damage_source_state)
 
 
 func _apply_hit_stun(target: BaseMonster) -> void:

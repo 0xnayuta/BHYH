@@ -279,6 +279,7 @@ func _apply_stun(target: BaseMonster) -> void:
 func _apply_hit(target: BaseMonster) -> void:
 	if not _is_valid_target(target) or owner_player == null or not is_instance_valid(owner_player):
 		return
+	var damage_source_state := target.bind_role_damage_source(owner_player as BaseHero)
 	var old_hit_data: Dictionary = owner_player.hit_dic
 	owner_player.hit_dic = hit_data
 	var damage := int(target.get_role_last_hurt(owner_player))
@@ -307,3 +308,4 @@ func _apply_hit(target: BaseMonster) -> void:
 		Global.total_mag_hit += damage
 		Global.add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	owner_player.hit_dic = old_hit_data
+	target.unbind_role_damage_source(damage_source_state)

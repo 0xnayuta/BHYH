@@ -37,6 +37,7 @@ CASES = [
     "LocalCoopSwitchPassiveProbe",
     "LocalCoopSwordMountProbe",
     "LocalCoopCreationUIProbe",
+    "LocalCoopWushuangAttributionProbe",
 ]
 
 GODOT_CANDIDATES = ("godot", "godot4")

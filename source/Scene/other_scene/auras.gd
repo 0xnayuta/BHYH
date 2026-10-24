@@ -57,7 +57,7 @@ func _on_check_body_entered(body: Node2D) -> void:
 
 		match color_type:
 			ColorType.YELLOW:
-				RoleProp.ws_value += 5
+				hero.RoleProp.ws_value += 5
 			ColorType.BLUE:
 				hero.cure_mp(10)
 			ColorType.RED:

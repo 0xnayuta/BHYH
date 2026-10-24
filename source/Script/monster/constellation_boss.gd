@@ -1131,10 +1131,7 @@ func _monster147_restore_body() -> void:
 func _monster157_adjust_damage() -> void:
 	var total_health_ratio := 0.0
 	var count := 0
-	var players: Array = []
-	var candidate: Variant = Global.get_player
-	if candidate is Node2D and is_instance_valid(candidate):
-		players.append(candidate)
+	var players: Array[BaseHero] = LocalCoop.living_players()
 	for player_value in players:
 		var player := player_value as Node
 		var hp := float(player.get("hp")) if player != null and player.get("hp") != null else 0.0
@@ -1728,9 +1725,9 @@ func _monster149_gaze_effect(_effect_position: Vector2) -> void:
 
 func _constellation_players() -> Array[BaseHero]:
 	var players: Array[BaseHero] = []
-	var candidate: Variant = Global.get_player
-	if candidate is BaseHero and _is_alive_constellation_player(candidate):
-		players.append(candidate as BaseHero)
+	for candidate: BaseHero in LocalCoop.living_players():
+		if _is_alive_constellation_player(candidate):
+			players.append(candidate)
 	return players
 
 
@@ -1940,8 +1937,10 @@ func _spawn_monster150_fireflies(direction: float) -> void:
 
 
 func _random_player() -> Node2D:
-	var candidate: Variant = Global.get_player
-	return candidate as Node2D if candidate is Node2D and is_instance_valid(candidate) else null
+	var players: Array[BaseHero] = LocalCoop.living_players()
+	if players.is_empty():
+		return null
+	return players[randi() % players.size()]
 
 
 func _source_property_level() -> int:
@@ -2087,10 +2086,7 @@ func _spawn_monster140_skill3_effect(target: Node2D, visual_folder: String, effe
 
 
 func _monster140_random_player() -> Node2D:
-	var candidate: Variant = Global.get_player
-	if candidate is Node2D and is_instance_valid(candidate):
-		return candidate as Node2D
-	return null
+	return _random_player()
 
 
 func _monster140_hit2_3(effect_position: Vector2) -> void:
@@ -2451,15 +2447,16 @@ func _face_role() -> void:
 
 
 func _active_target_global_position() -> Variant:
-	var target: Variant = Global.get_player
-	if target is Node2D and is_instance_valid(target):
-		return (target as Node2D).global_position
-	if RoleProp.get_nearest_monster_target_position(global_position).x == null:
+	var target: BaseHero = null
+	var target_distance := INF
+	for candidate: BaseHero in LocalCoop.living_players():
+		var distance := global_position.distance_squared_to(candidate.global_position)
+		if distance < target_distance:
+			target_distance = distance
+			target = candidate
+	if target == null:
 		return null
-	var target_y := global_position.y
-	if RoleProp.get_nearest_monster_target_position(global_position).y != null:
-		target_y = float(RoleProp.get_nearest_monster_target_position(global_position).y)
-	return Vector2(float(RoleProp.get_nearest_monster_target_position(global_position).x), target_y)
+	return target.global_position
 
 
 func _set_facing_direction(direction: float) -> void:

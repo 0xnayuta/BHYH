@@ -94,6 +94,8 @@ func _run() -> void:
 			await _case_sword_mount()
 		"LocalCoopCreationUIProbe":
 			await _case_creation_ui()
+		"LocalCoopWushuangAttributionProbe":
+			await _case_wushuang_attribution()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -506,3 +508,68 @@ func _case_creation_ui() -> void:
 	await process_frame
 	stage = null
 	coop.creation_player_count = 1
+
+
+func _case_wushuang_attribution() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "WS attribution owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	var hit := {"WSValue": 7, "power": 0, "hurtBack": [0, 0], "attackKind": "real"}
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	var melee_hitbox: Area2D = p2.get_node("base_damagebox/HitBox")
+	monster.get_player = p1
+	monster._on_hurt_box_area_entered(melee_hitbox)
+	_check(p1.RoleProp.ws_value == 0, "P2 melee does not credit P1 WS")
+	_check(p2.RoleProp.ws_value > 0, "P2 melee credits P2 WS")
+
+	var bullet: Node = load("res://Script/hero/role_bullet_1.gd").new()
+	bullet._name = "probe"
+	bullet.hit_dic = hit
+	bullet.player = p2
+	bullet.is_set = true
+	var bullet_an := AnimatedSprite2D.new()
+	bullet_an.name = "BulletAN"
+	bullet.add_child(bullet_an)
+	var bullet_player := AnimationPlayer.new()
+	bullet_player.name = "BulletPlayer"
+	bullet.add_child(bullet_player)
+	bullet.set_physics_process(false)
+	p2.bullet.add_child(bullet)
+	await process_frame
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	monster.remove_meta("coop_damage_slot")
+	monster.get_player = p1
+	monster.get_target = p1
+	monster._on_hurt_box_area_entered(bullet)
+	_check(p1.RoleProp.ws_value == 0, "P2 projectile does not credit P1 WS")
+	_check(p2.RoleProp.ws_value == 7, "P2 projectile credits P2 WS")
+
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	monster.get_player = p2
+	monster.get_target = p2
+	monster.cure_ws_value(p2)
+	_check(p1.RoleProp.ws_value == 0, "explicit P2 WS owner leaves P1 unchanged")
+	_check(p2.RoleProp.ws_value > 0, "explicit P2 WS owner credits P2")
+
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	monster.get_player = p1
+	monster.get_target = p1
+	var damage_source_state: Dictionary = monster.bind_role_damage_source(p2)
+	monster.cure_ws_value()
+	monster.unbind_role_damage_source(damage_source_state)
+	_check(p1.RoleProp.ws_value == 0, "bound P2 source leaves P1 WS unchanged")
+	_check(p2.RoleProp.ws_value > 0, "bound P2 source credits P2 WS")
+	monster.queue_free()
+	await process_frame

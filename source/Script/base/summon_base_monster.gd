@@ -956,7 +956,7 @@ func _show_heal_text(level_node, po: Vector2, value: int) -> void:
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	var attacker = null
 	if area is BaseRoleHitBox or area is RolehmzBullet:
-		attacker = get_player
+		attacker = LocalCoop.owner_hero(area)
 	elif area.get_parent() is BaseMonster:
 		attacker = area.get_parent()
 	elif area.get_parent().get_parent() is BaseMonster:

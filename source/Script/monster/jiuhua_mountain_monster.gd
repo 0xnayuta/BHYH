@@ -722,19 +722,19 @@ func _get_incoming_attack_source(area: Area2D) -> Node:
 	if area == null or not is_instance_valid(area):
 		return null
 	if area is BaseRoleHitBox or area is RolehmzBullet:
-		return get_player
+		return _get_damage_source_player(area)
 	if area is MagicWeaponHit:
-		return area.get_parent()
+		return _get_damage_source_player(area)
 	var parent := area.get_parent()
 	if parent == null:
 		return null
 	if parent is Role1Shallow:
 		return parent
 	if area is RoleBullet1:
-		return area
+		return _get_damage_source_player(area)
 	var grand_parent := parent.get_parent()
 	if grand_parent is RoleBullet:
-		return grand_parent
+		return _get_damage_source_player(area)
 	return null
 
 

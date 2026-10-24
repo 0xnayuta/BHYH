@@ -1729,10 +1729,19 @@ func _on_exit_2_body_exited(body: Node2D) -> void:
 
 
 func _on_timer_timeout() -> void:
-	if role_information != null and not role_information.is_full_ws() and not RoleProp.is_ws_state:
-		RoleProp.ws_value -= 0.2
-	if RoleProp.is_ws_state:
-		RoleProp.ws_value -= 4
+	if role_information != null:
+		_decay_ws_value(RoleProp)
+	if LocalCoop.is_enabled():
+		_decay_ws_value(LocalCoop.secondary_props)
+
+
+func _decay_ws_value(props: BaseRoleProperties) -> void:
+	if not is_instance_valid(props):
+		return
+	if not props.is_ws_state and props.ws_value < props.max_ws_value:
+		props.ws_value -= 0.2
+	if props.is_ws_state:
+		props.ws_value -= 4
 
 
 func add_tg(level):

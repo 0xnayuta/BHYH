@@ -225,7 +225,7 @@ func _begin_tornado_skill() -> void:
 	_add_effect_stream("eye3", 24, Vector2(-8.75, -208.7))
 	_add_effect_stream("skill3", 13, Vector2.ZERO)
 	_locked_tornado_position = global_position
-	var role := Global.get_player as Node2D
+	var role := get_player as Node2D
 	if role != null and is_instance_valid(role):
 		_locked_tornado_position = role.global_position
 	elif (

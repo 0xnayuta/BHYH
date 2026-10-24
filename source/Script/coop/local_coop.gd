@@ -353,8 +353,11 @@ func owner_hero(node: Node, depth := 0) -> Node:
 			var fields: Array[String] = []
 			for key: String in [
 				"Player",
+				"player",
 				"owner_player",
+				"source_player",
 				"hero",
+				"my_owner",
 				"GetObj",
 				"Parent",
 				"source",

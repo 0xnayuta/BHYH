@@ -88,7 +88,7 @@ coop_probe_runner.py
 |:---|:---|:---|
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | `docs/reports`（可选）/ 临时文件 |
-| `coop_probe_runner.py` | LocalCoop 15 探针矩阵 | `docs/reports/coop_probe_matrix_report.*` |
+| `coop_probe_runner.py` | LocalCoop 16 探针矩阵 | `docs/reports/coop_probe_matrix_report.*` |
 | `coop_probes/coop_probe_matrix.gd` | 探针矩阵 GDScript 测试规格 | 仅执行期复制到工程根，结束后清理 |
 
 ### 3.5 数据文件

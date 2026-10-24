@@ -555,6 +555,7 @@ func _apply_hit(target: BaseMonster) -> void:
 	if source_player == null:
 		return
 
+	var damage_source_state := target.bind_role_damage_source(source_player)
 	var old_hit_data: Dictionary = source_player.hit_dic
 	var old_target: Variant = target.get_target
 	var old_source_player: Variant = role_props.source_player
@@ -588,7 +589,7 @@ func _apply_hit(target: BaseMonster) -> void:
 		)
 	)
 	target.hurt_received = damage
-	target.cure_ws_value()
+	target.cure_ws_value(source_player)
 	if damage > 0:
 		target.hurt_reduce_hp(damage, owner_player)
 		if target is Monster138:
@@ -604,13 +605,12 @@ func _apply_hit(target: BaseMonster) -> void:
 			_apply_hit_stun(target)
 		if not target.is_boss_protecting():
 			_apply_voodoo_if_learned(target)
-		if not role_props.is_ws_state:
-			role_props.ws_value += int(hit_data.get("WSValue", 4))
 		target.role5_bullet(damage, owner_player)
 	target.get_target = old_target
 	source_player.hit_dic = old_hit_data
 	source_player.tszzs = old_tszzs
 	role_props.source_player = old_source_player
+	target.unbind_role_damage_source(damage_source_state)
 
 
 func _apply_hit_stun(target: BaseMonster) -> void:

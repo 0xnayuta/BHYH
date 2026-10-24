@@ -774,7 +774,7 @@ func _tang_heal_resolve(origin: Vector2, _token: int) -> void:
 
 
 func _tang_pull(origin: Vector2, direction: float) -> void:
-	var player: Node2D = Global.get_player as Node2D
+	var player: Node2D = get_player as Node2D
 	if player == null or not is_instance_valid(player):
 		return
 	if origin.distance_to(player.global_position) > 240.0:

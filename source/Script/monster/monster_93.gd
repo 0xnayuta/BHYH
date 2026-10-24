@@ -222,12 +222,14 @@ func add_bullet():
 
 
 func blood_fix():
+	if not is_instance_valid(get_player):
+		return
 	if self.position.x > RoleProp.get_nearest_monster_target_position(global_position).x:
-		if Global.get_player.player_dir:
+		if get_player.player_dir:
 			if not monster_direction:
 				add_blood_fix()
 	else:
-		if not Global.get_player.player_dir:
+		if not get_player.player_dir:
 			if monster_direction:
 				add_blood_fix()
 

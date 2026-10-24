@@ -363,8 +363,10 @@ func to_sky():
 
 
 func check_player():
+	if not is_instance_valid(get_player):
+		return
 	if self.position.x > RoleProp.get_nearest_monster_target_position(global_position).x:
-		if Global.get_player.player_dir:
+		if get_player.player_dir:
 			if not monster_direction:
 				move_player_to_boss(0.5)
 				(
@@ -384,7 +386,7 @@ func check_player():
 					)
 				)
 	else:
-		if not Global.get_player.player_dir:
+		if not get_player.player_dir:
 			if monster_direction:
 				move_player_to_boss(0.5)
 				(

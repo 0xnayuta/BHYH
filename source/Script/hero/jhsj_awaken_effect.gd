@@ -174,6 +174,7 @@ func _collect_targets(node: Node) -> void:
 
 
 func _apply_target_damage(node: BaseMonster) -> void:
+	var damage_source_state := node.bind_role_damage_source(owner_player as BaseHero)
 	var old_hit_data: Dictionary = owner_player.hit_dic
 	var old_miss: int = node.miss
 	owner_player.hit_dic = hit_data
@@ -205,6 +206,7 @@ func _apply_target_damage(node: BaseMonster) -> void:
 		node.role5_bullet(damage, owner_player)
 	node.miss = old_miss
 	owner_player.hit_dic = old_hit_data
+	node.unbind_role_damage_source(damage_source_state)
 
 
 func _apply_hit_stun(target: BaseMonster) -> void:

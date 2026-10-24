@@ -75,35 +75,46 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	is_jgz = false
 	has_target = true
 
+	var source_player: BaseHero = _get_damage_source_player(area)
+	if source_player == null or not is_instance_valid(source_player):
+		return
+	var source_target: Variant
 	if area is BaseRoleHitBox or area is RolehmzBullet:
-		get_target = get_player
+		source_target = source_player
 	elif area is MagicWeaponHit:
 		return
 	elif area.get_parent() is Role1Shallow:
-		get_target = area.get_parent()
+		source_target = area.get_parent()
 	elif area is RoleBullet1:
-		get_target = area
+		source_target = area
 	elif area.get_parent().get_parent() is RoleBullet:
-		get_target = area.get_parent().get_parent()
+		source_target = area.get_parent().get_parent()
 	else:
 		return
 
-	var last_hurt = get_role_last_hurt(get_target) * RoleProp.ws_up_power
+	var old_target: Variant = get_target
+	var damage_source_state := bind_role_damage_source(source_player)
+	get_target = source_target
+	var last_hurt = get_role_last_hurt(source_target) * RoleProp.ws_up_power
 	hurt_received = last_hurt
 
-	if get_player is BaseHero:
-		if get_player.is_dead_link:
-			get_player.effect_reducehp(last_hurt, "real")
+	if source_player.is_dead_link:
+		source_player.effect_reducehp(last_hurt, "real")
 
-	cure_ws_value()
-	hurt_reduce_hp(last_hurt, get_target)
+	cure_ws_value(source_player)
+	hurt_reduce_hp(last_hurt, source_target)
 
 	if my_target != null and last_hurt > 0:
 		my_target.effect_reducehp(last_hurt, "real")
 
 	Global.total_role_hit += last_hurt
-	if get_target is BaseHero or get_target is MgHit or get_target is Role1Shallow or get_target is RoleBullet:
-		match get_target.hit_dic["attackKind"]:
+	if (
+		source_target is BaseHero
+		or source_target is MgHit
+		or source_target is Role1Shallow
+		or source_target is RoleBullet
+	):
+		match source_target.hit_dic["attackKind"]:
 			"physics":
 				Global.total_phy_hit += last_hurt
 			"magic":
@@ -118,7 +129,8 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 		Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		hurt_special_effect = Global.add_mr_hurt(pz, Vector2(0, 0))
 
-	get_target = null
+	get_target = old_target
+	unbind_role_damage_source(damage_source_state)
 
 
 func _on_death_count_timeout():
