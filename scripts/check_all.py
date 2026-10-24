@@ -87,6 +87,11 @@ def main():
         help="跳过 NodePath 与 Global.<method>() 运行时引用门禁"
     )
     parser.add_argument(
+        "--skip-resource",
+        action="store_true",
+        help="跳过资源路径大小写与动态路径工厂门禁"
+    )
+    parser.add_argument(
         "--fix",
         action="store_true",
         help="自动修复模式：若发现行尾或格式未对齐，自动执行写入修复"
@@ -163,6 +168,9 @@ def main():
     # 维度 7: 运行时引用契约
     runtime_cmd = [sys.executable, "scripts/runtime_reference_audit.py"]
 
+    # 维度 8: 资源路径大小写与动态路径工厂
+    resource_cmd = [sys.executable, "scripts/resource_path_audit.py", "--project", "source"]
+
     # 执行字典：dim_id -> (ok, elapsed, out)
     exec_results: Dict[int, Tuple[bool, float, str]] = {}
 
@@ -187,6 +195,8 @@ def main():
             tasks[6] = ("白名单外全量目录/文件命名校验 (naming_audit.py --all)", naming_cmd)
         if not args.skip_runtime:
             tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
+        if not args.skip_resource:
+            tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
             future_to_id = {executor.submit(run_step, name, cmd): dim_id for dim_id, (name, cmd) in tasks.items()}
@@ -209,6 +219,8 @@ def main():
             tasks[6] = ("白名单外全量目录/文件命名校验 (naming_audit.py --all)", naming_cmd)
         if not args.skip_runtime:
             tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
+        if not args.skip_resource:
+            tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
 
         task_total = len(tasks)
         for ordinal, (d_id, (tname, _)) in enumerate(sorted(tasks.items()), 1):
@@ -317,6 +329,17 @@ def main():
         else:
             detail = "\n".join(out.splitlines()[:12])
             results.append(("7. NodePath 与 Global 方法静态门禁", False, el, detail))
+
+    # 维度 8: 资源路径大小写与动态路径工厂
+    if args.skip_resource:
+        results.append(("8. 资源路径大小写与动态路径工厂", True, 0.0, "已跳过 (--skip-resource)"))
+    else:
+        ok, el, out = exec_results[8]
+        if ok:
+            results.append(("8. 资源路径大小写与动态路径工厂", True, el, ""))
+        else:
+            detail = "\n".join(out.splitlines()[:12])
+            results.append(("8. 资源路径大小写与动态路径工厂", False, el, detail))
 
     # --------------------------------------------------------------------------
     # 汇总质量报告仪表板

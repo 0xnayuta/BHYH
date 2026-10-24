@@ -44,6 +44,7 @@
 python scripts/check_all.py --skip-engine
 python scripts/naming_audit.py --root source --all
 python scripts/naming_compliance_audit.py --fail-on-error
+python scripts/resource_path_audit.py --project source
 python scripts/whitelist_audit.py --fail-on-error
 python scripts/convert_atlas_metadata.py --check
 ```

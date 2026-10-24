@@ -75,7 +75,7 @@ godot --path source
 python scripts/check_all.py --skip-engine
 ```
 
-覆盖：LF 行尾、`gdformat`、`gdlint`、字面量契约、命名门禁、NodePath/Global 运行时引用。
+覆盖：LF 行尾、`gdformat`、`gdlint`、字面量契约、命名门禁、NodePath/Global 运行时引用、资源路径大小写与动态路径工厂。
 
 ### 4.2 全量门禁（需要 Godot）
 
@@ -91,6 +91,7 @@ python scripts/normalize_eol.py source --dry-run
 python scripts/health_check.py --project source --godot-bin "<godot>"
 python scripts/contract_scan.py --project-dir source --fail-on-error
 python scripts/naming_audit.py --root source --all
+python scripts/resource_path_audit.py --project source
 python scripts/level_regression_all.py --jobs 8 --timeout 90
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"

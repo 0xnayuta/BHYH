@@ -31,7 +31,8 @@ check_all.py
 │   ├── png_stream_audit.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
-└── runtime_reference_audit.py
+├── runtime_reference_audit.py
+└── resource_path_audit.py
 
 level_regression_all.py
 └── level_test_runner.py（每个关卡实例）
@@ -55,7 +56,7 @@ coop_probe_runner.py
 
 | 脚本 | 作用 | 主要产物 |
 |:---|:---|:---|
-| `check_all.py` | 七维总门禁；支持 `--skip-engine`、`--skip-contract`、`--skip-naming`、`--skip-runtime`、`--godot-bin`、`--fix`、`--no-cache`、`--jobs` | 终端仪表板 |
+| `check_all.py` | 八维总门禁；支持 `--skip-engine`、`--skip-contract`、`--skip-naming`、`--skip-runtime`、`--skip-resource`、`--godot-bin`、`--fix`、`--no-cache`、`--jobs` | 终端仪表板 |
 
 ### 3.2 自动门禁子脚本
 
@@ -71,6 +72,7 @@ coop_probe_runner.py
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
 | `png_stream_audit.py` | 非 atlas 运行时 PNG 流 allowlist | 终端结果 |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
+| `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
 
 ### 3.3 人工审计与迁移工具
@@ -128,6 +130,9 @@ python scripts/format_all.py source
 # 全量命名复核
 python scripts/naming_audit.py --root source --all
 python scripts/naming_compliance_audit.py --fail-on-error
+
+# 资源路径大小写与动态工厂复核
+python scripts/resource_path_audit.py --project source
 
 # 单关冒烟
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn

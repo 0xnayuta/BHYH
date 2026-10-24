@@ -75,7 +75,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 | 命令 | 作用 |
 |:---|:---|
-| `python scripts/check_all.py` | 七维总门禁（行尾、格式、lint、引擎编译、契约、命名、运行时引用） |
+| `python scripts/check_all.py` | 八维总门禁（行尾、格式、lint、引擎编译、契约、命名、运行时引用、资源路径） |
 | `python scripts/check_all.py --skip-engine` | 无 Godot 环境时的静态门禁 |
 | `python scripts/health_check.py --project source --godot-bin <path>` | 场景引用拓扑、死代码与 Headless 编译 |
 | `python scripts/level_regression_all.py --jobs 4 --timeout 90` | 全量关卡冒烟回归；8 并发仅用于快速回归 |
@@ -103,6 +103,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | Spine Atlas 页名修复 | 全量 `.atlas` 页名与实际 PNG 文件名逐字匹配 **0 mismatch**；jhsj / lyfb 预加载 **PASS** | 修复 `role_2/jhsj_awaken`、`role_2/lyfb_awaken`、`role_4/cang_mu_long_yun` 共 9 个页名：`HeroF_*` → 实际 `hero_f_*`；atlas 声明尺寸与 PNG 实测尺寸一致 |
 | P2 普攻与子弹路径修复 | P2 小键盘 1 实机探针 **PASS**（子弹子节点 0→1，无属性错误）；七维门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `BaseHero` 暴露的是 `bullet`，清理全部 `self.Bullet` / `player.Bullet` 等大小写错误；`Global.add_role_bullet` 将语义名规范为 slim 场景文件名（如 `Role2Bullet1` → `role2_bullet1.tscn`），避免普攻进入第二步时缺场景 |
 | 命名大小写专项复核 | 七维门禁 **7/7 PASS**；运行时引用 **0**；命名终审 **0 违规**；`level_info` 关卡配置探针 **PASS** | 修复地图 `Level_*`→`level_*`、返回地图 `Map_*`→`map_*`；统一 `level_info`、`load_scene`、`monster_head_info`、`base_monster` 的 `Monster_` 文件名解析；修复 `base_hero` `/Level/` 与 light 场景路径判断；删除 SSSL 遗留帧路径表 |
+| 资源路径门禁基线 | `check_all.py` **8/8 PASS**；资源路径静态 8386 / 动态 165 / atlas 32 / 工厂 43；负向探针 **4/4 拦截** | `resource_path_audit.py` 覆盖静态路径大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 工厂目标；Art 缺失时自动跳过素材路径 |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 15 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
