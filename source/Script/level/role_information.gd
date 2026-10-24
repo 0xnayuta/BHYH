@@ -29,6 +29,9 @@ const HUD_BUTTON_SEPARATION := 5.0
 const HUD_BUTTON_BOTTOM_MARGIN := 4.0
 const SKILL_MENU_SIZE := Vector2(364.0, 134.0)
 const SKILL_MENU_SCALE := 0.85
+const WUSHUANG_POSITION_Y := 86.0
+const WUSHUANG_POSITION_X_P1 := 85.0
+const WUSHUANG_POSITION_X_P2 := 82.0
 
 
 func _ready() -> void:
@@ -154,7 +157,7 @@ func _layout_skill_menu(hud: Control, second: bool) -> void:
 		var grey := menu.get_node_or_null("grey") as Sprite2D
 		if grey != null:
 			grey.flip_h = false
-	hud.grey.position = Vector2(82, 86)
+	hud.grey.position = Vector2(WUSHUANG_POSITION_X_P2 if second else WUSHUANG_POSITION_X_P1, WUSHUANG_POSITION_Y)
 
 
 func _order_hud_buttons() -> void:
@@ -206,7 +209,7 @@ func _layout_mobile() -> void:
 
 	if role_p2 != null:
 		_show_role_hud(role_p2)
-		role_p2.grey.position = role_p1.grey.position
+		role_p2.grey.position = Vector2(WUSHUANG_POSITION_X_P2, WUSHUANG_POSITION_Y)
 
 
 func switch_role() -> void:
