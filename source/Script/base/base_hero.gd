@@ -3017,12 +3017,14 @@ func _ensure_huahao_wing_animation() -> void:
 
 
 func change_body(name1):
-	self.role_body.texture = Global.load_role1_body(name1)
+	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7)
+	self.role_body.texture = Global.load_role1_body(name1, role_id)
 	preload("res://Script/hero/moon_palace_clothes_effect.gd").sync(role_body, str(name1), true)
 
 
 func change_eq(name1):
-	self.role_eq.texture = Global.load_role1_eq(name1)
+	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7)
+	self.role_eq.texture = Global.load_role1_eq(name1, role_id)
 
 
 func add_special_effect_clothes(EqName, ClothesName):

@@ -5545,15 +5545,17 @@ func get_dis_betweem(Ob_1, Ob_2):
 	return pp_3
 
 
-func load_role1_body(_name):
-	var role_id := _current_role_id()
-	if role_id == 7:
+func load_role1_body(_name, role_id: int = 0):
+	var resolved_role_id := role_id
+	if resolved_role_id <= 0:
+		resolved_role_id = _current_role_id()
+	if resolved_role_id == 7:
 		return load("res://Art/hero_picture/role_7/preview.png")
 	var path := (
 		"res://Art/hero_picture/role_"
-		+ str(role_id)
+		+ str(resolved_role_id)
 		+ "_all_equipment/role_"
-		+ str(role_id)
+		+ str(resolved_role_id)
 		+ "_body_"
 		+ str(_name).to_lower()
 		+ ".png"
@@ -5564,15 +5566,17 @@ func load_role1_body(_name):
 	return texture
 
 
-func load_role1_eq(_name):
-	var role_id := _current_role_id()
-	if role_id == 7:
+func load_role1_eq(_name, role_id: int = 0):
+	var resolved_role_id := role_id
+	if resolved_role_id <= 0:
+		resolved_role_id = _current_role_id()
+	if resolved_role_id == 7:
 		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres")
 	var path := (
 		"res://Art/hero_picture/role_"
-		+ str(role_id)
+		+ str(resolved_role_id)
 		+ "_all_equipment/role_"
-		+ str(role_id)
+		+ str(resolved_role_id)
 		+ "_eq_"
 		+ str(_name).to_lower()
 		+ ".png"
