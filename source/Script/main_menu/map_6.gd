@@ -215,7 +215,7 @@ func _on_map_level_pressed(level_number: int) -> void:
 		var prerequisite_name: String = MAP_LEVEL_NAMES.get(level_number - 1, "前置关卡")
 		Global.add_message_show(_ui_parent(), "需要先通关%s！" % prerequisite_name, 1.5, Vector2(470, 300))
 		return
-	var level_path := "res://Scene/level/Level_%d.tscn" % level_number
+	var level_path := "res://Scene/level/level_%d.tscn" % level_number
 	if ResourceLoader.exists(level_path):
 		Global.add_level_info(_ui_parent(), level_name, Vector2.ZERO, level_path)
 		return

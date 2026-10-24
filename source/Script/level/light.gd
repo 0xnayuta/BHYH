@@ -9,9 +9,9 @@ var is_activated: bool = false
 func _ready() -> void:
 	var scene_path = get_tree().current_scene.scene_file_path if get_tree().current_scene else ""
 
-	if "Level_28" in scene_path:
+	if "level_28" in scene_path.to_lower():
 		configure_for_level("Level_28")
-	elif "Level_34" in scene_path:
+	elif "level_34" in scene_path.to_lower():
 		configure_for_level("Level_34")
 	else:
 		configure_for_level("default")

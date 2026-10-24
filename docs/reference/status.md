@@ -102,6 +102,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | Phase 12 HUD 微调 | 七维门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；双人矩阵 **15/15 PASS** | 单/双人五按钮统一底部居中（54×54、底边距 4），移除菜单按钮与收展；技能栏基尺寸 364×134 ×0.85（实际 309.4×113.9），P1 左/底 0、P2 右/底 0；P2 技能标签为小键盘 3/4/5/6/8（镜像视觉 8/6/5/4/3）；无双圆盘 P1 x=85、P2 x=82 对齐；FPS/显存双人顶部偏移 164；2P 唐僧身体/装备贴图按 2P 存档角色加载；1600×1000 单/双人截图通过 |
 | Spine Atlas 页名修复 | 全量 `.atlas` 页名与实际 PNG 文件名逐字匹配 **0 mismatch**；jhsj / lyfb 预加载 **PASS** | 修复 `role_2/jhsj_awaken`、`role_2/lyfb_awaken`、`role_4/cang_mu_long_yun` 共 9 个页名：`HeroF_*` → 实际 `hero_f_*`；atlas 声明尺寸与 PNG 实测尺寸一致 |
 | P2 普攻与子弹路径修复 | P2 小键盘 1 实机探针 **PASS**（子弹子节点 0→1，无属性错误）；七维门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `BaseHero` 暴露的是 `bullet`，清理全部 `self.Bullet` / `player.Bullet` 等大小写错误；`Global.add_role_bullet` 将语义名规范为 slim 场景文件名（如 `Role2Bullet1` → `role2_bullet1.tscn`），避免普攻进入第二步时缺场景 |
+| 命名大小写专项复核 | 七维门禁 **7/7 PASS**；运行时引用 **0**；命名终审 **0 违规**；`level_info` 关卡配置探针 **PASS** | 修复地图 `Level_*`→`level_*`、返回地图 `Map_*`→`map_*`；统一 `level_info`、`load_scene`、`monster_head_info`、`base_monster` 的 `Monster_` 文件名解析；修复 `base_hero` `/Level/` 与 light 场景路径判断；删除 SSSL 遗留帧路径表 |
 | 引擎健康检查基线 | 705 脚本 0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 15 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 

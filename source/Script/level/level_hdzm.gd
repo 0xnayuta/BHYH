@@ -12,7 +12,7 @@ func _return_to_current_map() -> void:
 	if map_num == 9 and PlayerData.player_data.get("Map_variant", "") == "Map_9_1":
 		Global.change_scene("res://Scene/main_menu/map_9_1.tscn")
 		return
-	Global.change_scene("res://Scene/main_menu/Map_" + str(map_num) + ".tscn")
+	Global.change_scene("res://Scene/main_menu/map_" + str(map_num) + ".tscn")
 
 
 func _ready() -> void:

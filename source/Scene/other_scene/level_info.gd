@@ -2651,14 +2651,14 @@ func add_monster_head():
 func _get_level_monster_config(
 	monster_scene_path: String, explicit_monster_id: int = 0, constellation_tier: int = 0
 ) -> Dictionary:
-	if not target_stage_path.begins_with("res://Scene/level/Level_"):
+	if not target_stage_path.begins_with("res://Scene/level/level_"):
 		return {}
 	var monster_id := explicit_monster_id
 	if monster_id <= 0:
-		var monster_file := monster_scene_path.get_file().get_basename()
-		if not monster_file.begins_with("Monster_"):
+		var monster_file := monster_scene_path.get_file().get_basename().to_lower()
+		if not monster_file.begins_with("monster_"):
 			return {}
-		var monster_id_text := monster_file.trim_prefix("Monster_")
+		var monster_id_text := monster_file.trim_prefix("monster_")
 		if not monster_id_text.is_valid_int():
 			return {}
 		monster_id = int(monster_id_text)
@@ -2675,7 +2675,7 @@ func _get_level_monster_config(
 		if level_provider != null:
 			level_provider.free()
 		return {}
-	var target_stage_text := target_stage_path.get_file().get_basename().trim_prefix("Level_")
+	var target_stage_text := target_stage_path.get_file().get_basename().to_lower().trim_prefix("level_")
 	if target_stage_text.is_valid_int() and int(target_stage_text) in range(69, 76):
 		level_provider.set("stage_number", int(target_stage_text))
 	if constellation_tier > 0:

@@ -154,7 +154,7 @@ func _on_map_level_pressed(level_number: int) -> void:
 		return
 	var level_name: String = MAP_LEVEL_NAMES.get(level_number, "北俱芦洲关卡")
 	var nightmare_level_name := "噩梦·%s" % level_name
-	var level_path := "res://Scene/level/Level_%d_1.tscn" % level_number
+	var level_path := "res://Scene/level/level_%d_1.tscn" % level_number
 	if ResourceLoader.exists(level_path):
 		Global.add_level_info(_ui_parent(), nightmare_level_name, Vector2.ZERO, level_path)
 		return

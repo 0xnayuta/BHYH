@@ -313,7 +313,7 @@ func _ready() -> void:
 
 func _attach_mount_runtime() -> void:
 	var current_scene := get_tree().current_scene
-	if current_scene == null or not str(current_scene.scene_file_path).contains("/Level/"):
+	if current_scene == null or not str(current_scene.scene_file_path).contains("/level/"):
 		return
 	if get_node_or_null("MountRuntime") != null:
 		return

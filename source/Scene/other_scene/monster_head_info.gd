@@ -515,7 +515,7 @@ func _physics_process(delta: float) -> void:
 func _setup_north_idle_preview() -> void:
 	if not monster_scene_path.begins_with("res://Scene/monster/monster_"):
 		return
-	var id := monster_scene_path.get_file().get_basename().trim_prefix("Monster_").to_int()
+	var id := monster_scene_path.get_file().get_basename().to_lower().trim_prefix("monster_").to_int()
 	var frames_path := "res://Art/monster/north_original/%d/north_original_%d_frames.tres" % [id, id]
 	if not ResourceLoader.exists(frames_path):
 		return

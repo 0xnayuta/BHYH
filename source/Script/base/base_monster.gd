@@ -1498,9 +1498,9 @@ func _human_soul_crystal_monster_id() -> int:
 	var monster_script := get_script() as Script
 	if monster_script != null:
 		candidates.append(str(monster_script.resource_path))
-	var id_pattern: RegEx = RegEx.create_from_string("(?:^|/)Monster_?(\\d+)(?:\\.(?:tscn|gd))?$")
+	var id_pattern: RegEx = RegEx.create_from_string("(?:^|/)monster_?(\\d+)(?:\\.(?:tscn|gd))?$")
 	for candidate in candidates:
-		var match: RegExMatch = id_pattern.search(str(candidate).replace("\\", "/"))
+		var match: RegExMatch = id_pattern.search(str(candidate).replace("\\", "/").to_lower())
 		if match != null:
 			return int(match.get_string(1))
 	return 0

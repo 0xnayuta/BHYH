@@ -394,7 +394,7 @@ func _log_battle_load_context(paths: Array[String]) -> void:
 	var map_scene_paths: Array[String] = []
 	for path_value in paths:
 		var path := str(path_value)
-		if path.contains("/Scene/Main_menu/Map_") or path.contains("/Art/main_game/"):
+		if path.contains("/Scene/main_menu/map_") or path.contains("/Art/main_game/"):
 			map_scene_paths.append(path)
 	print("[Battle VRAM] map_paths=", map_scene_paths)
 
@@ -550,9 +550,9 @@ func _prewarm_target_level_resources() -> void:
 		if not monster_ids.has(monster_id):
 			monster_ids.append(monster_id)
 	for scene_path in _get_target_first_wave_monster_scene_paths():
-		var file_name := scene_path.get_file()
-		var monster_id_text := file_name.get_basename().trim_prefix("Monster_")
-		if not (file_name.begins_with("Monster_") and monster_id_text.is_valid_int()):
+		var file_name := scene_path.get_file().to_lower()
+		var monster_id_text := file_name.get_basename().trim_prefix("monster_")
+		if not (file_name.begins_with("monster_") and monster_id_text.is_valid_int()):
 			extra_scene_paths.append(scene_path)
 	await Global.preload_level_monster_runtime_resources(monster_ids)
 	await Global.prewarm_monster_scene_paths(extra_scene_paths)
@@ -637,7 +637,7 @@ func _target_script_monster_group() -> Dictionary:
 					values.append(monster_id)
 					has_declared_monsters = true
 	var scene_regex := RegEx.new()
-	if not has_declared_monsters and scene_regex.compile("Monster_([0-9]+)\\.tscn") == OK:
+	if not has_declared_monsters and scene_regex.compile("(?i:Monster)_?([0-9]+)\\.tscn") == OK:
 		var stage_1 := result["stage_1"] as Array
 		for scene_match in scene_regex.search_all(source):
 			var monster_id := int(scene_match.get_string(1))
@@ -649,7 +649,7 @@ func _target_script_monster_group() -> Dictionary:
 func _target_level_script_path() -> String:
 	for dependency in ResourceLoader.get_dependencies(Global.target_scene):
 		var dependency_path := _dependency_resource_path(str(dependency))
-		if dependency_path.get_extension().to_lower() == "gd" and dependency_path.find("/Script/Level/") != -1:
+		if dependency_path.get_extension().to_lower() == "gd" and dependency_path.find("/Script/level/") != -1:
 			return dependency_path
 	var scene_file := FileAccess.open(Global.target_scene, FileAccess.READ)
 	if scene_file == null:
@@ -660,7 +660,7 @@ func _target_level_script_path() -> String:
 		return ""
 	for match_result in script_regex.search_all(scene_source):
 		var path := match_result.get_string(1)
-		if path.find("/Script/Level/") != -1:
+		if path.find("/Script/level/") != -1:
 			return path
 	return ""
 
