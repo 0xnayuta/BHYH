@@ -28,6 +28,7 @@ const HUD_BUTTON_SIZE := Vector2(54.0, 54.0)
 const HUD_BUTTON_SEPARATION := 5.0
 const HUD_BUTTON_BOTTOM_MARGIN := 4.0
 const SKILL_MENU_SIZE := Vector2(364.0, 134.0)
+const SKILL_MENU_SCALE := 0.85
 
 
 func _ready() -> void:
@@ -116,12 +117,12 @@ func reveal_after_scene_loaded() -> void:
 	_show_role_hud(role_p1)
 	_show_role_hud(role_p2)
 	_layout_bottom_buttons()
+	_layout_skill_menu(role_p1, false)
 	if LocalCoop.is_enabled():
-		_layout_coop_skill_menu(role_p1, false)
-		_layout_coop_skill_menu(role_p2, true)
+		_layout_skill_menu(role_p2, true)
 
 
-func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
+func _layout_skill_menu(hud: Control, second: bool) -> void:
 	if hud == null:
 		return
 	var menu: Control = hud.menu
@@ -133,9 +134,9 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 	menu.offset_bottom = 0.0
 	menu.offset_left = 0.0
 	menu.offset_right = SKILL_MENU_SIZE.x
-	menu.pivot_offset = Vector2.ZERO
+	menu.pivot_offset = Vector2(0.0, SKILL_MENU_SIZE.y)
 	if second:
-		menu.scale = Vector2(-1.0, 1.0)
+		menu.scale = Vector2(-SKILL_MENU_SCALE, SKILL_MENU_SCALE)
 		for key in ["KeyY", "KeyU", "KeyI", "KeyO", "KeyL"]:
 			var label := menu.get_node_or_null(key) as Label
 			if label != null:
@@ -145,7 +146,7 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 		if grey != null:
 			grey.flip_h = true
 	else:
-		menu.scale = Vector2.ONE
+		menu.scale = Vector2(SKILL_MENU_SCALE, SKILL_MENU_SCALE)
 		for key in ["KeyY", "KeyU", "KeyI", "KeyO", "KeyL"]:
 			var label := menu.get_node_or_null(key) as Label
 			if label != null:

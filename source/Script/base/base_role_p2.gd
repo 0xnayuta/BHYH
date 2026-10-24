@@ -1,5 +1,8 @@
 extends "res://Script/base/base_role.gd"
 
+const P1_SKILL_LABELS := ["Y", "U", "I", "O", "L"]
+const P2_SKILL_LABELS := ["3", "4", "5", "6", "8"]
+
 @onready var touch_screen_button = $role_menu/grey/TouchScreenButton
 
 
@@ -50,7 +53,7 @@ func _update_status_row_pivot(row: HBoxContainer) -> void:
 
 func _load_skill_icons() -> void:
 	super._load_skill_icons()
-	for index in range(role_skill_slots.size()):
-		for child in role_skill_slots[index].get_children():
-			if child is Label and child.text in ["Y", "U", "I", "O", "L"]:
-				child.text = ["3", "4", "5", "6", "8"][index]
+	for index in P1_SKILL_LABELS.size():
+		var label := get_node_or_null("role_menu/Key" + P1_SKILL_LABELS[index]) as Label
+		if label != null:
+			label.text = P2_SKILL_LABELS[index]
