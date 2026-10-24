@@ -89,14 +89,19 @@ def build_tres(preview: dict, png_path: str) -> str:
     return "\n".join(lines)
 
 
-def convert_source(preview_path: Path, png_path: Path, output_path: Path) -> None:
+def build_source(preview_path: Path, png_path: Path) -> str:
     preview = json.loads(preview_path.read_text(encoding="utf-8"))
     if not isinstance(preview, dict):
         raise ValueError(f"预览 JSON 顶层不是字典: {preview_path}")
     png_res_path = png_path.relative_to(SOURCE).as_posix()
+    return build_tres(preview, "res://" + png_res_path)
+
+
+def convert_source(preview_path: Path, png_path: Path, output_path: Path) -> None:
+    content = build_source(preview_path, png_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
-        build_tres(preview, "res://" + png_res_path),
+        content,
         encoding="utf-8",
         newline="\n",
     )
@@ -107,7 +112,10 @@ def run(check_only: bool) -> int:
         print(f"[FAIL] 缺少哪吒预览目录: {PREVIEW_ROOT}", file=sys.stderr)
         return 2
     converted = 0
+    validated = 0
     missing: list[str] = []
+    stale: list[str] = []
+    invalid: list[str] = []
     for set_dir in sorted(path for path in PREVIEW_ROOT.iterdir() if path.is_dir()):
         set_name = set_dir.name
         for layer_index, layer_name in LAYERS:
@@ -118,17 +126,31 @@ def run(check_only: bool) -> int:
             output_dir = FRAME_ROOT / f"{set_name}_{layer_name}"
             output_path = output_dir / f"{set_name}_{layer_name}.tres"
             if check_only:
+                try:
+                    expected = build_source(preview_path, png_path)
+                except (OSError, ValueError) as error:
+                    invalid.append(f"{preview_path.relative_to(ROOT)}: {error}")
+                    continue
                 if not output_path.is_file():
                     missing.append(str(output_path.relative_to(ROOT)))
+                elif output_path.read_text(encoding="utf-8") != expected:
+                    stale.append(str(output_path.relative_to(ROOT)))
+                else:
+                    validated += 1
                 continue
             convert_source(preview_path, png_path, output_path)
             converted += 1
     if check_only:
-        if missing:
-            for path in missing:
-                print(f"[FAIL] 缺少构建期 SpriteFrames: {path}", file=sys.stderr)
+        for path in missing:
+            print(f"[FAIL] 缺少构建期 SpriteFrames: {path}", file=sys.stderr)
+        for path in stale:
+            print(f"[FAIL] 构建期 SpriteFrames 已过期: {path}", file=sys.stderr)
+        for message in invalid:
+            print(f"[FAIL] 预览源无效: {message}", file=sys.stderr)
+        if missing or stale or invalid:
             return 1
-        print(f"[OK] 哪吒预览帧输出齐全: {len(list(PREVIEW_ROOT.glob('*/preview_0.json')))} 套")
+        set_count = len(list(PREVIEW_ROOT.glob("*/preview_0.json")))
+        print(f"[OK] 哪吒预览帧输出齐全且内容一致: {set_count} 套 / {validated} 个")
         return 0
     print(f"[OK] 已生成 {converted} 个哪吒构建期 SpriteFrames .tres")
     return 0
@@ -136,7 +158,7 @@ def run(check_only: bool) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成哪吒构建期 SpriteFrames")
-    parser.add_argument("--check", action="store_true", help="只检查输出是否存在，不写文件")
+    parser.add_argument("--check", action="store_true", help="只检查输出是否存在且内容一致，不写文件")
     args = parser.parse_args()
     return run(args.check)
 
