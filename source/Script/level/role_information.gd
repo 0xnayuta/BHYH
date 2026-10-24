@@ -23,7 +23,11 @@ var buff_box: HBoxContainer
 var is_stop: bool = false
 var cur_prop: bool = false
 const OLD_WUSHUANG_POSITION := Vector2(735, 505)
-const DESKTOP_BUTTON_ORDER := ["pet", "skill", "magic_weapon", "backpack", "set", "menu"]
+const DESKTOP_BUTTON_ORDER := ["pet", "skill", "magic_weapon", "backpack", "set"]
+const HUD_BUTTON_SIZE := Vector2(54.0, 54.0)
+const HUD_BUTTON_SEPARATION := 5.0
+const HUD_BUTTON_BOTTOM_MARGIN := 4.0
+const SKILL_MENU_SIZE := Vector2(364.0, 134.0)
 
 
 func _ready() -> void:
@@ -111,26 +115,10 @@ func _hide_role_hud(role_node: Node) -> void:
 func reveal_after_scene_loaded() -> void:
 	_show_role_hud(role_p1)
 	_show_role_hud(role_p2)
-	set_menu_con.visible = true
+	_layout_bottom_buttons()
 	if LocalCoop.is_enabled():
-		set_menu_con.columns = 6
-		set_menu_con.custom_minimum_size = Vector2(350, 72)
-		set_menu_con.add_theme_constant_override("h_separation", 5)
-		set_menu_con.add_theme_constant_override("v_separation", 5)
-		for button in set_menu_con.get_children():
-			if button is TextureButton:
-				button.custom_minimum_size = Vector2(54, 54)
-				button.visible = true
-		set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-		set_menu_con.size = Vector2(350, 72)
-		set_menu_con.position = Vector2(
-			(get_viewport_rect().size.x - set_menu_con.size.x) * 0.5,
-			get_viewport_rect().size.y - set_menu_con.size.y - 8
-		)
 		_layout_coop_skill_menu(role_p1, false)
 		_layout_coop_skill_menu(role_p2, true)
-	else:
-		_layout_desktop()
 
 
 func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
@@ -141,10 +129,13 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 	menu.anchor_right = menu.anchor_left
 	menu.anchor_top = 1.0
 	menu.anchor_bottom = 1.0
+	menu.offset_top = -SKILL_MENU_SIZE.y
+	menu.offset_bottom = 0.0
+	menu.offset_left = 0.0
+	menu.offset_right = SKILL_MENU_SIZE.x
 	menu.pivot_offset = Vector2.ZERO
 	if second:
-		menu.scale = Vector2(-0.85, 0.85)
-		menu.position = Vector2(hud.size.x, hud.size.y - 120)
+		menu.scale = Vector2(-1.0, 1.0)
 		for key in ["KeyY", "KeyU", "KeyI", "KeyO", "KeyL"]:
 			var label := menu.get_node_or_null(key) as Label
 			if label != null:
@@ -154,8 +145,14 @@ func _layout_coop_skill_menu(hud: Control, second: bool) -> void:
 		if grey != null:
 			grey.flip_h = true
 	else:
-		menu.scale = Vector2(0.85, 0.85)
-		menu.position = Vector2(0.0, hud.size.y - 120)
+		menu.scale = Vector2.ONE
+		for key in ["KeyY", "KeyU", "KeyI", "KeyO", "KeyL"]:
+			var label := menu.get_node_or_null(key) as Label
+			if label != null:
+				label.scale.x = 1.0
+		var grey := menu.get_node_or_null("grey") as Sprite2D
+		if grey != null:
+			grey.flip_h = false
 	hud.grey.position = Vector2(82, 86)
 
 
@@ -166,24 +163,27 @@ func _order_hud_buttons() -> void:
 			set_menu_con.move_child(button, index)
 
 
-func _layout_desktop() -> void:
+func _layout_bottom_buttons() -> void:
 	set_menu_con.visible = true
-	set_menu_con.columns = 1
-	set_menu_con.custom_minimum_size = Vector2(56, 304)
-	set_menu_con.add_theme_constant_override("h_separation", 0)
-	set_menu_con.add_theme_constant_override("v_separation", 6)
+	set_menu_con.columns = DESKTOP_BUTTON_ORDER.size()
+	set_menu_con.add_theme_constant_override("h_separation", HUD_BUTTON_SEPARATION)
+	set_menu_con.add_theme_constant_override("v_separation", 0)
 	for button in set_menu_con.get_children():
 		if button is TextureButton:
-			button.custom_minimum_size = Vector2(56, 56)
+			button.custom_minimum_size = HUD_BUTTON_SIZE
 			button.visible = true
-	var menu_button := set_menu_con.get_node_or_null("menu") as TextureButton
-	if menu_button != null:
-		menu_button.visible = false
-	set_menu_con.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	set_menu_con.offset_left = 24.0
-	set_menu_con.offset_right = 80.0
-	set_menu_con.offset_top = -432.0
-	set_menu_con.offset_bottom = -128.0
+	var bar_width := (
+		HUD_BUTTON_SIZE.x * DESKTOP_BUTTON_ORDER.size() + HUD_BUTTON_SEPARATION * (DESKTOP_BUTTON_ORDER.size() - 1)
+	)
+	set_menu_con.custom_minimum_size = Vector2(bar_width, HUD_BUTTON_SIZE.y)
+	set_menu_con.anchor_left = 0.5
+	set_menu_con.anchor_right = 0.5
+	set_menu_con.anchor_top = 1.0
+	set_menu_con.anchor_bottom = 1.0
+	set_menu_con.offset_left = -bar_width * 0.5
+	set_menu_con.offset_right = bar_width * 0.5
+	set_menu_con.offset_top = -HUD_BUTTON_SIZE.y - HUD_BUTTON_BOTTOM_MARGIN
+	set_menu_con.offset_bottom = -HUD_BUTTON_BOTTOM_MARGIN
 
 
 func _layout_mobile() -> void:

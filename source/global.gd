@@ -599,6 +599,7 @@ const MOBILE_SFX_VOICE_LIMIT := 24
 const DESKTOP_SFX_VOICE_LIMIT := 48
 const MOBILE_SFX_PER_SOUND_LIMIT := 4
 const DESKTOP_SFX_PER_SOUND_LIMIT := 8
+const COOP_DEBUG_TOP_MARGIN := 164.0
 var _last_mr_hurt_msec = {}
 var _pending_combo_milestones = {}
 var _debug_perf_layer: CanvasLayer = null
@@ -811,7 +812,7 @@ func _update_debug_perf_overlay() -> void:
 	var coop_node = get_node_or_null("/root/LocalCoop")
 	var top_margin := 6.0
 	if coop_node != null and coop_node.has_method("is_enabled") and coop_node.is_enabled():
-		top_margin = 116.0
+		top_margin = COOP_DEBUG_TOP_MARGIN
 	_debug_perf_label.offset_top = top_margin
 	_debug_perf_label.offset_bottom = top_margin + 48.0
 	var fps := Engine.get_frames_per_second()

@@ -1,7 +1,5 @@
 extends Node2D
 
-@onready var mobile = $"../ButtonGroup"
-
 var back_target
 var set_target
 var skill_target
@@ -94,19 +92,12 @@ func _second_role():
 	return null
 
 
-func _reset_mobile_timer() -> void:
-	if mobile != null and is_instance_valid(mobile):
-		mobile.set_cd = 0
-
-
 func _on_backpack_pressed() -> void:
-	_reset_mobile_timer()
 	if _main_role() != null:
 		_toggle_backpack(_main_role())
 
 
 func _on_set_pressed() -> void:
-	_reset_mobile_timer()
 	_cleanup_targets()
 	if _is_alive(set_target):
 		_queue_target(set_target)
@@ -126,19 +117,16 @@ func _on_set_pressed() -> void:
 
 
 func _on_skill_pressed() -> void:
-	_reset_mobile_timer()
 	if _main_role() != null:
 		_toggle_skill(_main_role())
 
 
 func _on_magic_weapon_pressed() -> void:
-	_reset_mobile_timer()
 	if _main_role() != null:
 		_toggle_magic(_main_role())
 
 
 func _on_pet_pressed() -> void:
-	_reset_mobile_timer()
 	_toggle_pet()
 
 

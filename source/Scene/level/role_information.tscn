@@ -4,13 +4,11 @@
 [ext_resource type="Texture2D" path="res://Art/level/gogo/1.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/level/gogo/13.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/gogo/67.png" id="4"]
-[ext_resource type="Script" path="res://Script/level/set_list.gd" id="5"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/479.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/486.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/465.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/472.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/500.png" id="10"]
-[ext_resource type="Texture2D" path="res://Art/ui_2_5_9_0/png/set.png" id="11"]
 [ext_resource type="Script" path="res://Script/backpack.gd" id="12"]
 
 [sub_resource type="SpriteFrames" id="1"]
@@ -280,7 +278,6 @@ mouse_filter = 2
 columns = 1
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 6
-script = ExtResource("5")
 
 [node name="backpack" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=654017739]
 process_mode = 1
@@ -342,17 +339,6 @@ texture_normal = ExtResource("10")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="menu" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=1923689551]
-process_mode = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-focus_mode = 0
-texture_normal = ExtResource("11")
-ignore_texture_size = true
-stretch_mode = 4
-
 [node name="backpack" type="Node2D" parent="roleLayer" unique_id=84033258]
 process_mode = 3
 z_index = 1
@@ -363,4 +349,3 @@ script = ExtResource("12")
 [connection signal="pressed" from="roleLayer/ButtonGroup/skill" to="roleLayer/backpack" method="_on_skill_pressed"]
 [connection signal="pressed" from="roleLayer/ButtonGroup/magic_weapon" to="roleLayer/backpack" method="_on_magic_weapon_pressed"]
 [connection signal="pressed" from="roleLayer/ButtonGroup/pet" to="roleLayer/backpack" method="_on_pet_pressed"]
-[connection signal="pressed" from="roleLayer/ButtonGroup/menu" to="roleLayer/ButtonGroup" method="_on_menu_pressed"]
