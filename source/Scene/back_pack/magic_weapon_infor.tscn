@@ -30,12 +30,14 @@ metadata/_edit_lock_ = true
 texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
-[node name="bg_2" type="Sprite2D" parent="BG" unique_id=1801748302]
+[node name="Content" type="Node2D" parent="BG" unique_id=2145000001]
+
+[node name="bg_2" type="Sprite2D" parent="BG/Content" unique_id=1801748302]
 position = Vector2(-142, -16)
 texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
-[node name="lh_bar" type="TextureProgressBar" parent="BG/bg_2" unique_id=768121703]
+[node name="lh_bar" type="TextureProgressBar" parent="BG/Content/bg_2" unique_id=768121703]
 offset_left = -88.0
 offset_top = 127.0
 offset_right = 79.0
@@ -46,7 +48,7 @@ texture_under = ExtResource("4")
 texture_progress = ExtResource("5")
 metadata/_edit_lock_ = true
 
-[node name="lh_value" type="Label" parent="BG/bg_2/lh_bar" unique_id=943746546]
+[node name="lh_value" type="Label" parent="BG/Content/bg_2/lh_bar" unique_id=943746546]
 layout_mode = 0
 offset_left = 2.0
 offset_top = -1.0
@@ -58,7 +60,7 @@ horizontal_alignment = 1
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="up_level" type="TextureButton" parent="BG/bg_2" unique_id=1265863943]
+[node name="up_level" type="TextureButton" parent="BG/Content/bg_2" unique_id=1265863943]
 offset_left = 73.0
 offset_top = 122.0
 offset_right = 141.0
@@ -69,7 +71,7 @@ texture_hover = ExtResource("8")
 texture_disabled = ExtResource("7")
 metadata/_edit_lock_ = true
 
-[node name="m_level" type="Label" parent="BG/bg_2" unique_id=1516528480]
+[node name="m_level" type="Label" parent="BG/Content/bg_2" unique_id=1516528480]
 offset_left = 44.0
 offset_top = -106.0
 offset_right = 126.0
@@ -78,7 +80,7 @@ theme_override_fonts/font = ExtResource("9")
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_czl" type="Label" parent="BG/bg_2" unique_id=1081971812]
+[node name="m_czl" type="Label" parent="BG/Content/bg_2" unique_id=1081971812]
 offset_left = 58.0
 offset_top = -58.0
 offset_right = 125.0
@@ -87,7 +89,7 @@ theme_override_fonts/font = ExtResource("9")
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_wx" type="Label" parent="BG/bg_2" unique_id=89639896]
+[node name="m_wx" type="Label" parent="BG/Content/bg_2" unique_id=89639896]
 offset_left = 44.0
 offset_top = -12.0
 offset_right = 126.0
@@ -99,7 +101,7 @@ theme_override_font_sizes/font_size = 13
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_Hp" type="Label" parent="BG/bg_2" unique_id=681891453]
+[node name="m_Hp" type="Label" parent="BG/Content/bg_2" unique_id=681891453]
 offset_left = -88.0
 offset_top = 36.0
 offset_right = -6.0
@@ -110,7 +112,7 @@ text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_Mp" type="Label" parent="BG/bg_2" unique_id=394025124]
+[node name="m_Mp" type="Label" parent="BG/Content/bg_2" unique_id=394025124]
 offset_left = 43.0
 offset_top = 36.0
 offset_right = 125.0
@@ -120,7 +122,7 @@ text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_Power" type="Label" parent="BG/bg_2" unique_id=1902768053]
+[node name="m_Power" type="Label" parent="BG/Content/bg_2" unique_id=1902768053]
 offset_left = -88.0
 offset_top = 84.0
 offset_right = -6.0
@@ -130,7 +132,7 @@ text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_Def" type="Label" parent="BG/bg_2" unique_id=1752735930]
+[node name="m_Def" type="Label" parent="BG/Content/bg_2" unique_id=1752735930]
 offset_left = 43.0
 offset_top = 84.0
 offset_right = 80.0
@@ -140,7 +142,7 @@ text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
-[node name="m_MDef" type="Label" parent="BG/bg_2" unique_id=1725095469]
+[node name="m_MDef" type="Label" parent="BG/Content/bg_2" unique_id=1725095469]
 offset_left = 81.0
 offset_top = 84.0
 offset_right = 123.0
@@ -161,24 +163,24 @@ texture_hover = ExtResource("11")
 texture_disabled = ExtResource("10")
 metadata/_edit_lock_ = true
 
-[node name="Icon" type="Sprite2D" parent="BG" unique_id=1370820530]
+[node name="Icon" type="Sprite2D" parent="BG/Content" unique_id=1370820530]
 position = Vector2(-200, -75)
 scale = Vector2(1e-05, 1e-05)
 metadata/_edit_lock_ = true
 
-[node name="Tooth" type="Sprite2D" parent="BG/Icon" unique_id=1492631375]
+[node name="Tooth" type="Sprite2D" parent="BG/Content/Icon" unique_id=1492631375]
 visible = false
 position = Vector2(25, 18)
 metadata/_edit_lock_ = true
 
-[node name="Tooth2" type="Sprite2D" parent="BG/Icon/Tooth" unique_id=630824372]
+[node name="Tooth2" type="Sprite2D" parent="BG/Content/Icon/Tooth" unique_id=630824372]
 position = Vector2(-38, -1)
 flip_h = true
 metadata/_edit_lock_ = true
 
-[node name="IconPlayer" type="AnimationPlayer" parent="BG" unique_id=1469273213]
+[node name="IconPlayer" type="AnimationPlayer" parent="BG/Content" unique_id=1469273213]
 
-[node name="MagicWeaponSkillTitle" type="Label" parent="BG" unique_id=1945734207]
+[node name="MagicWeaponSkillTitle" type="Label" parent="BG/Content" unique_id=1945734207]
 offset_left = 97.0
 offset_top = -122.0
 offset_right = 186.0
@@ -193,25 +195,25 @@ vertical_alignment = 1
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="Icon_" type="Sprite2D" parent="BG" unique_id=927100122]
+[node name="Icon_" type="Sprite2D" parent="BG/Content" unique_id=927100122]
 position = Vector2(62, -90)
 metadata/_edit_lock_ = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="BG" unique_id=1754821003]
+[node name="ScrollContainer" type="ScrollContainer" parent="BG/Content" unique_id=1754821003]
 offset_left = 28.0
 offset_top = -55.0
 offset_right = 222.0
 offset_bottom = 86.0
 metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BG/ScrollContainer" unique_id=848609022]
+[node name="VBoxContainer" type="VBoxContainer" parent="BG/Content/ScrollContainer" unique_id=848609022]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 7
 metadata/_edit_lock_ = true
 
-[node name="MagicWeaponSkill" type="Label" parent="BG/ScrollContainer/VBoxContainer" unique_id=550509959]
+[node name="MagicWeaponSkill" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=550509959]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -223,7 +225,7 @@ theme_override_constants/shadow_outline_size = 8
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="PsTitle" type="Label" parent="BG/ScrollContainer/VBoxContainer" unique_id=1457521027]
+[node name="PsTitle" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=1457521027]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
@@ -231,7 +233,7 @@ theme_override_constants/shadow_offset_y = 0
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("12")
 
-[node name="MagicWeaponSkill2" type="Label" parent="BG/ScrollContainer/VBoxContainer" unique_id=2131532858]
+[node name="MagicWeaponSkill2" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=2131532858]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
@@ -241,7 +243,7 @@ theme_override_fonts/font = ExtResource("13")
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="Name_" type="Label" parent="BG" unique_id=20511901]
+[node name="Name_" type="Label" parent="BG/Content" unique_id=20511901]
 offset_left = -271.0
 offset_top = -7.0
 offset_right = -143.0
@@ -254,7 +256,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="szfb" type="TextureButton" parent="BG" unique_id=398742012]
+[node name="szfb" type="TextureButton" parent="BG/Content" unique_id=398742012]
 offset_left = -309.0
 offset_top = -162.0
 offset_right = -275.0
@@ -265,7 +267,7 @@ texture_hover = ExtResource("15")
 texture_disabled = ExtResource("14")
 metadata/_edit_lock_ = true
 
-[node name="title" type="Sprite2D" parent="BG/szfb" unique_id=623487555]
+[node name="title" type="Sprite2D" parent="BG/Content/szfb" unique_id=623487555]
 position = Vector2(17, 45)
 texture = ExtResource("16")
 metadata/_edit_lock_ = true
@@ -280,7 +282,7 @@ texture_pressed = ExtResource("17")
 texture_hover = ExtResource("18")
 metadata/_edit_lock_ = true
 
-[node name="wxxl" type="TextureButton" parent="BG" unique_id=793068610]
+[node name="wxxl" type="TextureButton" parent="BG/Content" unique_id=793068610]
 offset_left = 84.0
 offset_top = 111.0
 offset_right = 177.0
@@ -292,7 +294,7 @@ texture_hover = ExtResource("20")
 texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
-[node name="WXXL" type="Label" parent="BG/wxxl" unique_id=300490567]
+[node name="WXXL" type="Label" parent="BG/Content/wxxl" unique_id=300490567]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -307,7 +309,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="gjwx" type="TextureButton" parent="BG" unique_id=315744925]
+[node name="gjwx" type="TextureButton" parent="BG/Content" unique_id=315744925]
 offset_left = 157.0
 offset_top = 111.0
 offset_right = 250.0
@@ -319,7 +321,7 @@ texture_hover = ExtResource("20")
 texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
-[node name="WXXL" type="Label" parent="BG/gjwx" unique_id=427623153]
+[node name="WXXL" type="Label" parent="BG/Content/gjwx" unique_id=427623153]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -334,7 +336,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="czlxl" type="TextureButton" parent="BG" unique_id=2091609692]
+[node name="czlxl" type="TextureButton" parent="BG/Content" unique_id=2091609692]
 offset_left = 10.0
 offset_top = 111.0
 offset_right = 103.0
@@ -346,7 +348,7 @@ texture_hover = ExtResource("20")
 texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
-[node name="CZLXL" type="Label" parent="BG/czlxl" unique_id=1226602499]
+[node name="CZLXL" type="Label" parent="BG/Content/czlxl" unique_id=1226602499]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
@@ -361,10 +363,22 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[connection signal="pressed" from="BG/bg_2/up_level" to="." method="_on_up_level_pressed"]
+[node name="EmptyState" type="Label" parent="BG" unique_id=2145000002]
+visible = false
+offset_left = -200.0
+offset_top = -40.0
+offset_right = 200.0
+offset_bottom = 40.0
+theme_override_fonts/font = ExtResource("6")
+theme_override_font_sizes/font_size = 24
+text = "当前角色未装备法宝"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="BG/Content/bg_2/up_level" to="." method="_on_up_level_pressed"]
 [connection signal="pressed" from="BG/Close" to="." method="_on_close_pressed"]
-[connection signal="pressed" from="BG/szfb" to="." method="_on_szfb_pressed"]
+[connection signal="pressed" from="BG/Content/szfb" to="." method="_on_szfb_pressed"]
 [connection signal="pressed" from="BG/tips" to="." method="_on_tips_pressed"]
-[connection signal="pressed" from="BG/wxxl" to="." method="_on_wxxl_pressed"]
-[connection signal="pressed" from="BG/gjwx" to="." method="_on_gjwx_pressed"]
-[connection signal="pressed" from="BG/czlxl" to="." method="_on_czlxl_pressed"]
+[connection signal="pressed" from="BG/Content/wxxl" to="." method="_on_wxxl_pressed"]
+[connection signal="pressed" from="BG/Content/gjwx" to="." method="_on_gjwx_pressed"]
+[connection signal="pressed" from="BG/Content/czlxl" to="." method="_on_czlxl_pressed"]

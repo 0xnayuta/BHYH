@@ -559,8 +559,7 @@ func open_panel(slot: int, type: String) -> void:
 	ui_slot = slot
 	_panel_was_paused = get_tree().paused
 	get_tree().paused = true
-	if slot == 2:
-		resume_player_view()
+	_activate_slot_view(slot)
 	_panel_type = type
 	_panel_scene = load(PANEL_PATHS[type]) as PackedScene
 	var layer := CanvasLayer.new()
@@ -574,6 +573,13 @@ func open_panel(slot: int, type: String) -> void:
 	shade.size = get_viewport().get_visible_rect().size
 	layer.add_child(shade)
 	_create_panel(slot, type)
+
+
+func _activate_slot_view(slot: int) -> void:
+	if slot == 2:
+		resume_player_view()
+	else:
+		suspend_player_view()
 
 
 func _create_panel(slot: int, type: String) -> void:
@@ -598,20 +604,6 @@ func _create_panel(slot: int, type: String) -> void:
 		_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 		_panel.size = Vector2(653, 513)
 		_panel.position = (get_viewport().get_visible_rect().size - _panel.size) * 0.5
-	if type == "法宝" and PlayerData.player_data.get("法宝", []).is_empty():
-		for child in _panel.get_node("BG").get_children():
-			if child is CanvasItem and child.name != "Close":
-				child.hide()
-		var empty := Label.new()
-		empty.name = "EmptyMagicWeapon"
-		empty.text = "当前角色未装备法宝"
-		empty.position = Vector2(-200, -40)
-		empty.size = Vector2(400, 80)
-		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		empty.add_theme_font_override("font", load("res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf"))
-		empty.add_theme_font_size_override("font_size", 24)
-		_panel.add_child(empty)
 	_panel.set_meta("coop_layer", _panel_layer)
 	_add_player_selector(type)
 

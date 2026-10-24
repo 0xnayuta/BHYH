@@ -196,11 +196,6 @@ func _toggle_magic(_role) -> void:
 	if LocalCoop.is_enabled():
 		LocalCoop.open_panel(LocalCoop.slot_for(_role), "法宝")
 		return
-	if PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).size() == 0:
-		var level = _active_level()
-		var message_parent: Node = level if is_instance_valid(level) else self
-		Global.add_message_show(message_parent, "您还未装备法宝！！！", 1.5, Vector2(460, 255))
-		return
 	_cleanup_targets()
 	if _is_alive(magic_weapon_target):
 		_queue_target(magic_weapon_target)
@@ -210,7 +205,6 @@ func _toggle_magic(_role) -> void:
 		return
 	magic_weapon_target = Global.add_magp_infor(self, _viewport_center())
 	if magic_weapon_target != null:
-		_set_if_has_property(magic_weapon_target, "Player", _role)
 		_track_target(magic_weapon_target, "magic")
 
 

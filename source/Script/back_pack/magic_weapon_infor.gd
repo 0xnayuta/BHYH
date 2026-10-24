@@ -1,23 +1,25 @@
 extends Node2D
 
-@onready var lh_bar: TextureProgressBar = $BG/bg_2/lh_bar
-@onready var lh_value: Label = $BG/bg_2/lh_bar/lh_value
-@onready var m_level: Label = $BG/bg_2/m_level
-@onready var m_czl: Label = $BG/bg_2/m_czl
-@onready var m_wx: Label = $BG/bg_2/m_wx
-@onready var m_hp: Label = $BG/bg_2/m_Hp
-@onready var m_mp: Label = $BG/bg_2/m_Mp
-@onready var m_power: Label = $BG/bg_2/m_Power
-@onready var m_def: Label = $BG/bg_2/m_Def
-@onready var m_m_def: Label = $BG/bg_2/m_MDef
-@onready var _name: Label = $BG/Name_
-@onready var icon: Sprite2D = $BG/Icon
-@onready var icon_player: AnimationPlayer = $BG/IconPlayer
-@onready var magic_weapon_skill_title: Label = $BG/MagicWeaponSkillTitle
-@onready var magic_weapon_skill: Label = $BG/ScrollContainer/VBoxContainer/MagicWeaponSkill
-@onready var pa_title: Label = $BG/ScrollContainer/VBoxContainer/PsTitle
-@onready var magic_weapon_skill_2: Label = $BG/ScrollContainer/VBoxContainer/MagicWeaponSkill2
-@onready var _icon: Sprite2D = $BG/Icon_
+@onready var lh_bar: TextureProgressBar = $BG/Content/bg_2/lh_bar
+@onready var lh_value: Label = $BG/Content/bg_2/lh_bar/lh_value
+@onready var m_level: Label = $BG/Content/bg_2/m_level
+@onready var m_czl: Label = $BG/Content/bg_2/m_czl
+@onready var m_wx: Label = $BG/Content/bg_2/m_wx
+@onready var m_hp: Label = $BG/Content/bg_2/m_Hp
+@onready var m_mp: Label = $BG/Content/bg_2/m_Mp
+@onready var m_power: Label = $BG/Content/bg_2/m_Power
+@onready var m_def: Label = $BG/Content/bg_2/m_Def
+@onready var m_m_def: Label = $BG/Content/bg_2/m_MDef
+@onready var _name: Label = $BG/Content/Name_
+@onready var icon: Sprite2D = $BG/Content/Icon
+@onready var icon_player: AnimationPlayer = $BG/Content/IconPlayer
+@onready var magic_weapon_skill_title: Label = $BG/Content/MagicWeaponSkillTitle
+@onready var magic_weapon_skill: Label = $BG/Content/ScrollContainer/VBoxContainer/MagicWeaponSkill
+@onready var pa_title: Label = $BG/Content/ScrollContainer/VBoxContainer/PsTitle
+@onready var magic_weapon_skill_2: Label = $BG/Content/ScrollContainer/VBoxContainer/MagicWeaponSkill2
+@onready var _icon: Sprite2D = $BG/Content/Icon_
+@onready var content: Node2D = $BG/Content
+@onready var empty_state: Label = $BG/EmptyState
 
 const PREVIEW_ICONS := {
 	"tjbg": "res://Art/magic_weapon/skill_icon/tjbg.png",
@@ -103,7 +105,9 @@ var _displayed_weapon_name: String = ""
 
 func _ready() -> void:
 	icon.texture = null
-	_refresh_weapon_visual_if_needed()
+	_refresh_weapon_state()
+	if _has_equipped_weapon():
+		_refresh_weapon_visual_if_needed()
 
 
 func _exit_tree() -> void:
@@ -111,8 +115,45 @@ func _exit_tree() -> void:
 		icon.texture = null
 
 
+func _has_equipped_weapon() -> bool:
+	return not PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).is_empty()
+
+
+func _refresh_weapon_state() -> bool:
+	var has_weapon := _has_equipped_weapon()
+	content.visible = has_weapon
+	empty_state.visible = not has_weapon
+	if not has_weapon:
+		_clear_weapon_view()
+	return has_weapon
+
+
+func _clear_weapon_view() -> void:
+	if _displayed_weapon_name == "" and icon.texture == null:
+		return
+	_displayed_weapon_name = ""
+	icon_player.stop()
+	icon.texture = null
+	_icon.texture = null
+	lh_bar.value = 0.0
+	_name.text = ""
+	lh_value.text = ""
+	m_level.text = ""
+	m_czl.text = ""
+	m_wx.text = ""
+	m_hp.text = ""
+	m_mp.text = ""
+	m_power.text = ""
+	m_def.text = ""
+	m_m_def.text = ""
+	magic_weapon_skill_title.text = ""
+	magic_weapon_skill.text = ""
+	pa_title.text = ""
+	magic_weapon_skill_2.text = ""
+
+
 func _physics_process(_delta: float) -> void:
-	if PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).is_empty():
+	if not _refresh_weapon_state():
 		return
 	_refresh_weapon_visual_if_needed()
 	lh_bar.value = float(PlayerData.get_soul()) / float(get_need_lh())
@@ -130,7 +171,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _refresh_weapon_visual_if_needed() -> void:
-	if PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).is_empty():
+	if not _has_equipped_weapon():
 		return
 	var nn_name := str(PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME])
 	if nn_name == _displayed_weapon_name:
@@ -157,6 +198,8 @@ func _load_preview_texture(path: String) -> Texture2D:
 
 
 func _on_up_level_pressed() -> void:
+	if not _has_equipped_weapon():
+		return
 	if PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL] < 15:
 		if PlayerData.get_soul() >= get_need_lh():
 			PlayerData.spend_soul(get_need_lh())
@@ -171,7 +214,7 @@ func _on_up_level_pressed() -> void:
 
 
 func set_skill_info(weapon_name: String = "") -> void:
-	if PlayerData.player_data[DataKeys.MAGIC_WEAPON].is_empty():
+	if not _has_equipped_weapon():
 		return
 	if weapon_name == "":
 		weapon_name = str(PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME])
@@ -195,6 +238,8 @@ func get_need_lh() -> int:
 
 
 func get_fb_pro(_name, need):
+	if not _has_equipped_weapon():
+		return 0.0
 	var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
 	var _level = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
 	var data = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
@@ -203,6 +248,8 @@ func get_fb_pro(_name, need):
 
 
 func get_wx() -> String:
+	if not _has_equipped_weapon():
+		return ""
 	var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
 	var a = ""
 	for i in wx:
@@ -211,6 +258,8 @@ func get_wx() -> String:
 
 
 func _on_szfb_pressed() -> void:
+	if not _has_equipped_weapon():
+		return
 	Global.add_use_magic_weapon($".", Vector2(0, 0))
 
 
@@ -219,6 +268,8 @@ func _on_tips_pressed() -> void:
 
 
 func low_wx() -> void:
+	if not _has_equipped_weapon():
+		return
 	if PlayerData.get_item_data("wxxls") >= 1:
 		PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(0)
 		PlayerData.remove_dj("wxxls", PlayerData.get_dj_page("wxxls"), 1)
@@ -228,6 +279,8 @@ func low_wx() -> void:
 
 
 func high_wx() -> void:
+	if not _has_equipped_weapon():
+		return
 	var wx_num = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS].size() * 5
 	if PlayerData.get_item_data("wxxls") >= wx_num:
 		match PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS].size():
@@ -248,6 +301,8 @@ func high_wx() -> void:
 
 
 func czl() -> void:
+	if not _has_equipped_weapon():
+		return
 	if PlayerData.get_item_data("czlxls") >= 1:
 		PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]["成长率"] = magic_weapon_czl(
 			PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
@@ -259,17 +314,23 @@ func czl() -> void:
 
 
 func _on_wxxl_pressed() -> void:
+	if not _has_equipped_weapon():
+		return
 	Signals.connect_choose_box_signal(self, "low_wx")
 	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗五行洗炼石洗炼法宝的五行吗？", 0)
 
 
 func _on_gjwx_pressed() -> void:
+	if not _has_equipped_weapon():
+		return
 	Signals.connect_choose_box_signal(self, "high_wx")
 	var wx_num = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS].size() * 5
 	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用" + str(wx_num) + "颗五行洗炼石高级洗炼一次法宝的五行吗？", 0)
 
 
 func _on_czlxl_pressed() -> void:
+	if not _has_equipped_weapon():
+		return
 	Signals.connect_choose_box_signal(self, "czl")
 	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗成长率洗炼石洗炼法宝的成长率吗？", 0)
 
