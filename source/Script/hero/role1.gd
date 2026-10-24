@@ -709,7 +709,7 @@ func do_hmz_one():
 	var abc
 	if player_dir:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet,
+			self.bullet,
 			Vector2(position.x + FRONT_OFFSET, position.y - UP_OFFSET),
 			Vector2(1.17, 1.17),
 			"hmz_1",
@@ -717,7 +717,7 @@ func do_hmz_one():
 		)
 	else:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet,
+			self.bullet,
 			Vector2(position.x - FRONT_OFFSET, position.y - UP_OFFSET),
 			Vector2(1.17, 1.17),
 			"hmz_1",
@@ -843,11 +843,11 @@ func do_hmz_two():
 		var abc
 		if player_dir:
 			abc = Global.add_special_effect_bullet(
-				self.Bullet, Vector2(position.x + 0, position.y), Vector2(sc_x, sc_y), "hmz_2", player_dir
+				self.bullet, Vector2(position.x + 0, position.y), Vector2(sc_x, sc_y), "hmz_2", player_dir
 			)
 		else:
 			abc = Global.add_special_effect_bullet(
-				self.Bullet, Vector2(position.x - 0, position.y), Vector2(sc_x, sc_y), "hmz_2", player_dir
+				self.bullet, Vector2(position.x - 0, position.y), Vector2(sc_x, sc_y), "hmz_2", player_dir
 			)
 		abc.tt = self
 
@@ -887,7 +887,7 @@ func do_hmz_pro_old():
 	var x = 0
 	if player_dir:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x + 25, position.y - 80), Vector2(1.15, 1.15), "hmz_pro", !player_dir
+			self.bullet, Vector2(position.x + 25, position.y - 80), Vector2(1.15, 1.15), "hmz_pro", !player_dir
 		)
 		if position.x < abc.position.x + 70:
 			velocity.x = 470
@@ -899,7 +899,7 @@ func do_hmz_pro_old():
 			velocity.y = 0
 	else:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x - 25, position.y - 80), Vector2(1.15, 1.15), "hmz_pro", !player_dir
+			self.bullet, Vector2(position.x - 25, position.y - 80), Vector2(1.15, 1.15), "hmz_pro", !player_dir
 		)
 		if position.x > abc.position.x - 70:
 			velocity.x = -470
@@ -934,11 +934,11 @@ func do_hmz_one_old():
 	var abc
 	if player_dir:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x - 25, position.y + 45), Vector2(1.17, 1.17), "hmz-1", player_dir
+			self.bullet, Vector2(position.x - 25, position.y + 45), Vector2(1.17, 1.17), "hmz-1", player_dir
 		)
 	else:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x + 25, position.y + 45), Vector2(1.17, 1.17), "hmz-1", player_dir
+			self.bullet, Vector2(position.x + 25, position.y + 45), Vector2(1.17, 1.17), "hmz-1", player_dir
 		)
 	abc.tt = self
 	await get_tree().create_timer(1.44, false).timeout
@@ -961,11 +961,11 @@ func do_hmz_flush_old():
 		velocity.x = walk_speed * 2.7
 	if player_dir:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x + 65, position.y + 90), Vector2(1.1, 1.1), "hmz_flush", !player_dir
+			self.bullet, Vector2(position.x + 65, position.y + 90), Vector2(1.1, 1.1), "hmz_flush", !player_dir
 		)
 	else:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x - 65, position.y + 90), Vector2(1.1, 1.1), "hmz_flush", !player_dir
+			self.bullet, Vector2(position.x - 65, position.y + 90), Vector2(1.1, 1.1), "hmz_flush", !player_dir
 		)
 	abc.tt = self
 	role_action_player.play("hmz__")
@@ -1001,11 +1001,11 @@ func do_hmz_two_old():
 		sc_y = 2.2
 	if player_dir:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x + 0, position.y), Vector2(sc_x, sc_y), "hmz-2", player_dir
+			self.bullet, Vector2(position.x + 0, position.y), Vector2(sc_x, sc_y), "hmz-2", player_dir
 		)
 	else:
 		abc = Global.add_special_effect_bullet(
-			self.Bullet, Vector2(position.x - 0, position.y), Vector2(sc_x, sc_y), "hmz-2", player_dir
+			self.bullet, Vector2(position.x - 0, position.y), Vector2(sc_x, sc_y), "hmz-2", player_dir
 		)
 	abc.tt = self
 
@@ -1059,7 +1059,7 @@ func call_hyjj():
 		if i == null:
 			hyjj.erase(i)
 	if hyjj.size() < 3:
-		hyjj.push_back(Global.add_role_bullet_1(self.Bullet, Vector2(100, 0), "hyjj", self.obj_attack_dict["hyjj"]))
+		hyjj.push_back(Global.add_role_bullet_1(self.bullet, Vector2(100, 0), "hyjj", self.obj_attack_dict["hyjj"]))
 
 
 func add_shallow():

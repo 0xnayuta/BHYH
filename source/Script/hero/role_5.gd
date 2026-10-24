@@ -620,7 +620,7 @@ func slq_fly():
 	else:
 		bullet_pos = Vector2(-100, -150)
 	var slq = Global.add_role_bullet(
-		self.Bullet, bullet_pos + position, player_dir, "Role5Bullet1", obj_attack_dict["slq"]
+		self.bullet, bullet_pos + position, player_dir, "Role5Bullet1", obj_attack_dict["slq"]
 	)
 	slq.scale = Vector2(1.4, 1.6)
 	velocity.y = -600
@@ -717,26 +717,26 @@ func call_bullet_2():
 	else:
 		bullet_pos = Vector2(-260, 180)
 	var llrd = Global.add_role_bullet(
-		self.Bullet, bullet_pos + position, false, "Role5Bullet2", obj_attack_dict["llrd"]
+		self.bullet, bullet_pos + position, false, "Role5Bullet2", obj_attack_dict["llrd"]
 	)
 	llrd.scale = Vector2(1.5, 1.5)
 
 
 func call_bullet_3():
-	var lljy = Global.add_role_bullet(self.Bullet, position, player_dir, "Role5Bullet3", obj_attack_dict["lljy"])
+	var lljy = Global.add_role_bullet(self.bullet, position, player_dir, "Role5Bullet3", obj_attack_dict["lljy"])
 
 
 func call_bullet_4():
 	if tllz != null:
 		tllz.queue_free()
 	tllz = Global.add_role_bullet(
-		self.Bullet, position - Vector2(0, 20), false, "Role5Bullet4", obj_attack_dict["tllz"]
+		self.bullet, position - Vector2(0, 20), false, "Role5Bullet4", obj_attack_dict["tllz"]
 	)
 	tllz.scale = Vector2(1.4, 1.4)
 
 
 func call_bullet_5():
-	Global.add_role_bullet(self.Bullet, position, !player_dir, "Role5Bullet5", obj_attack_dict["ygth"])
+	Global.add_role_bullet(self.bullet, position, !player_dir, "Role5Bullet5", obj_attack_dict["ygth"])
 
 
 func call_ygth_awaken_bullet():
@@ -747,7 +747,7 @@ func call_ygth_awaken_bullet():
 		awaken_hurt_back[0] = -int(awaken_hurt_back[0])
 		awaken_hit_data["hurtBack"] = awaken_hurt_back
 	var hook := (
-		Global.add_role_bullet(self.Bullet, position, !player_dir, "Role5Bullet5", awaken_hit_data) as RoleBullet
+		Global.add_role_bullet(self.bullet, position, !player_dir, "Role5Bullet5", awaken_hit_data) as RoleBullet
 	)
 	if hook == null:
 		return

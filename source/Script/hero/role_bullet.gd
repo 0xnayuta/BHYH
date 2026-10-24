@@ -231,7 +231,7 @@ func call_jhbh1():
 		if num > 11:
 			num = 0
 		var bc = Global.add_role_bullet(
-			player.Bullet, position + bullet_player.position, player.player_dir, "Role2Bullet5_1", hit_dic
+			player.bullet, position + bullet_player.position, player.player_dir, "Role2Bullet5_1", hit_dic
 		)
 		bc.rotation_degrees = bc_rotation_list[num]
 		bc.scale = Vector2(1.5, 1.5)
@@ -435,11 +435,11 @@ func _apply_tllz_awaken_effect(target: BaseMonster) -> void:
 	if _tllz_awaken_targets.has(target_id):
 		return
 	_tllz_awaken_targets[target_id] = true
-	if source_player.Bullet == null or not is_instance_valid(source_player.Bullet):
+	if source_player.bullet == null or not is_instance_valid(source_player.bullet):
 		return
 	var extra_hit_data: Dictionary = hit_dic.duplicate(true)
 	var extra_bullet = Global.add_role_bullet(
-		source_player.Bullet, target.global_position, false, "Role5Bullet4", extra_hit_data
+		source_player.bullet, target.global_position, false, "Role5Bullet4", extra_hit_data
 	)
 	if extra_bullet == null or not is_instance_valid(extra_bullet):
 		return

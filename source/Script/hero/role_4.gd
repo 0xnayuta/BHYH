@@ -485,13 +485,13 @@ func add_shovel_effect_1():
 		bullet_pos = Vector2(35, 0)
 	else:
 		bullet_pos = Vector2(-35, 0)
-	Global.add_role_bullet(self.Bullet, bullet_pos + position, !player_dir, "Role4Bullet3", obj_attack_dict["mmw"])
+	Global.add_role_bullet(self.bullet, bullet_pos + position, !player_dir, "Role4Bullet3", obj_attack_dict["mmw"])
 	if _is_skill_awakened("mmw") and _is_skill_awaken_enabled("mmw"):
-		Global.add_role_bullet(self.Bullet, bullet_pos + position, player_dir, "Role4Bullet3", obj_attack_dict["mmw"])
+		Global.add_role_bullet(self.bullet, bullet_pos + position, player_dir, "Role4Bullet3", obj_attack_dict["mmw"])
 
 
 func addmbyj():
-	Global.add_role4_bullet(self.Bullet, self, position)
+	Global.add_role4_bullet(self.bullet, self, position)
 
 
 func call_wdww():
@@ -522,7 +522,7 @@ func call_jdz():
 		return
 	if jdz != null:
 		jdz.queue_free()
-	jdz = Global.add_role_bullet(self.Bullet, position + Vector2(0, 30), false, "Role4Bullet6", obj_attack_dict["jdz"])
+	jdz = Global.add_role_bullet(self.bullet, position + Vector2(0, 30), false, "Role4Bullet6", obj_attack_dict["jdz"])
 	if jdz != null:
 		jdz.start_auto_free(10)
 		if _is_skill_awakened("jdz") and _is_skill_awaken_enabled("jdz"):
@@ -810,7 +810,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 		monster_target.total_hit += last_hit
 		if monster_target is Monster141:
 			effect_reducehp(int(RoleProp.roleprop.SHp * 0.01), "real")
-			Global.add_monster141_aura(self.Bullet, self.position, monster_target)
+			Global.add_monster141_aura(self.bullet, self.position, monster_target)
 		if self.is_wdzt:
 			if Global.check_wd(monster_target) < 7:
 				Global.add_buff(

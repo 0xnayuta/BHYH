@@ -3839,6 +3839,27 @@ func add_role_special_effect(parent, position, dir, _name):
 	return target
 
 
+func _role_bullet_slim_filename(bullet_name: String) -> String:
+	var result := ""
+	var length := bullet_name.length()
+	for index in length:
+		var character := bullet_name[index]
+		if character >= "A" and character <= "Z":
+			var previous := bullet_name[index - 1] if index > 0 else ""
+			var next_character := bullet_name[index + 1] if index + 1 < length else ""
+			var previous_breaks := (
+				(previous >= "a" and previous <= "z")
+				or (previous >= "0" and previous <= "9")
+				or (previous >= "A" and previous <= "Z" and next_character >= "a" and next_character <= "z")
+			)
+			if previous_breaks:
+				result += "_"
+			result += character.to_lower()
+		else:
+			result += character
+	return result + ".tscn"
+
+
 func add_role_bullet(parent, position, dir, _name, dic):
 	var bullet_name := str(_name)
 	var scene = null
@@ -3847,7 +3868,7 @@ func add_role_bullet(parent, position, dir, _name, dic):
 	elif bullet_name == "Role3Bullet3":
 		scene = load_scene_uncached(ROLE3_BULLET3_SLIM_PATH)
 	else:
-		var slim_path := ROLE_BULLET_SLIM_DIR.path_join(bullet_name + ".tscn")
+		var slim_path := ROLE_BULLET_SLIM_DIR.path_join(_role_bullet_slim_filename(bullet_name))
 		if not ResourceLoader.exists(slim_path):
 			push_error("Missing slim role bullet scene: " + slim_path)
 			return null

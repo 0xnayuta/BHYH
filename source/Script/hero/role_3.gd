@@ -557,7 +557,7 @@ func call_syzq():
 		pp = Vector2(64, -70) + position
 	else:
 		pp = Vector2(-64, -70) + position
-	Global.add_role_bullet(self.Bullet, pp, player_dir, "Role3Bullet1", obj_attack_dict["syzq"])
+	Global.add_role_bullet(self.bullet, pp, player_dir, "Role3Bullet1", obj_attack_dict["syzq"])
 
 
 func add_ssp():
@@ -569,7 +569,7 @@ func add_ssp():
 		bullet_spawn_positions = [Vector2(70, 15), Vector2(160, 10), Vector2(270, 0), Vector2(400, -10)]
 	for i in bullet_spawn_positions.size():
 		var xbz = Global.add_role_bullet(
-			self.Bullet, bullet_spawn_positions[i] + position, player_dir, "Role3Bullet2", obj_attack_dict["ssp"]
+			self.bullet, bullet_spawn_positions[i] + position, player_dir, "Role3Bullet2", obj_attack_dict["ssp"]
 		)
 		xbz.scale = scale_list[i]
 		await get_tree().create_timer(0.2, false).timeout
@@ -588,7 +588,7 @@ func add_tmc():
 			self.position.x + sin(float(new_rotation) * PI / 180) * 100,
 			self.position.y - 15 - cos(float(new_rotation) * PI / 180) * 100
 		)
-		var stab = Global.add_role_bullet(self.Bullet, stab_position, false, "Role3Bullet3", obj_attack_dict["tmc"])
+		var stab = Global.add_role_bullet(self.bullet, stab_position, false, "Role3Bullet3", obj_attack_dict["tmc"])
 		stab.rotation_degrees = new_rotation - 90
 		stab.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(stab, "modulate", Color(1, 1, 1, 1), 0.6)
@@ -608,7 +608,7 @@ func _process_dgq_spikes(delta: float) -> void:
 
 func _spawn_dgq_spike() -> void:
 	var spike_position := position + Vector2(0.0, -15.0)
-	var spike: Node = Global.add_role_bullet(self.Bullet, spike_position, false, "Role3Bullet3", obj_attack_dict["tmc"])
+	var spike: Node = Global.add_role_bullet(self.bullet, spike_position, false, "Role3Bullet3", obj_attack_dict["tmc"])
 	if spike != null and is_instance_valid(spike):
 		spike.rotation_degrees = _dgq_spike_angle - 90.0
 	_dgq_spike_angle = fmod(_dgq_spike_angle + DGQ_SPIKE_ANGLE_STEP, 360.0)

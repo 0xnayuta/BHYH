@@ -112,7 +112,7 @@ func skill_jhsj():
 
 
 func add_tjgl():
-	var eff = Global.add_role_special_effect(self.Bullet, position + Vector2(0, -35), false, "tjgl")
+	var eff = Global.add_role_special_effect(self.bullet, position + Vector2(0, -35), false, "tjgl")
 	if eff != null and my_owner != null:
 		eff.owner_player = my_owner
 
@@ -126,7 +126,7 @@ func add_xbz():
 		bullet_spawn_positions = [Vector2(80, -15), Vector2(175, -20), Vector2(275, -25)]
 	for i in bullet_spawn_positions.size():
 		var xbz = Global.add_role_bullet(
-			self.Bullet, bullet_spawn_positions[i] + position, dir, "Role2Bullet3", obj_attack_dict["xbz"]
+			self.bullet, bullet_spawn_positions[i] + position, dir, "Role2Bullet3", obj_attack_dict["xbz"]
 		)
 		xbz.scale = scale_list[i]
 		await get_tree().create_timer(0.2, false).timeout

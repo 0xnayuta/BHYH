@@ -509,7 +509,7 @@ func add_normal_hit_effect():
 		bullet_pos = Vector2(10, 15)
 	else:
 		bullet_pos = Vector2(-10, 15)
-	Global.add_role_bullet(self.Bullet, bullet_pos + position, player_dir, "Role2Bullet1", obj_attack_dict["hit1"])
+	Global.add_role_bullet(self.bullet, bullet_pos + position, player_dir, "Role2Bullet1", obj_attack_dict["hit1"])
 
 
 func add_blb():
@@ -520,7 +520,7 @@ func add_blb():
 		bullet_pos = Vector2(15, 0)
 	else:
 		bullet_pos = Vector2(-15, 0)
-	Global.add_role_bullet(self.Bullet, bullet_pos + position, player_dir, "Role2Bullet2", obj_attack_dict["blb"])
+	Global.add_role_bullet(self.bullet, bullet_pos + position, player_dir, "Role2Bullet2", obj_attack_dict["blb"])
 
 
 func add_sgq():
@@ -531,13 +531,13 @@ func add_sgq():
 		bullet_pos = Vector2(-35, -20)
 	if sgq == null:
 		sgq = Global.add_role_bullet(
-			self.Bullet, bullet_pos + position, player_dir, "Role2Bullet5", obj_attack_dict["sgq"]
+			self.bullet, bullet_pos + position, player_dir, "Role2Bullet5", obj_attack_dict["sgq"]
 		)
 		sgq.scale = Vector2(2, 2)
 	else:
 		sgq.queue_free()
 		sgq = Global.add_role_bullet(
-			self.Bullet, bullet_pos + position, player_dir, "Role2Bullet5", obj_attack_dict["sgq"]
+			self.bullet, bullet_pos + position, player_dir, "Role2Bullet5", obj_attack_dict["sgq"]
 		)
 		sgq.scale = Vector2(2, 2)
 
@@ -551,7 +551,7 @@ func add_xbz():
 		bullet_spawn_positions = [Vector2(80, -15), Vector2(175, -20), Vector2(275, -25)]
 	for i in bullet_spawn_positions.size():
 		var xbz = Global.add_role_bullet(
-			self.Bullet, bullet_spawn_positions[i] + position, player_dir, "Role2Bullet3", obj_attack_dict["xbz"]
+			self.bullet, bullet_spawn_positions[i] + position, player_dir, "Role2Bullet3", obj_attack_dict["xbz"]
 		)
 		xbz.scale = scale_list[i]
 		await get_tree().create_timer(0.2, false).timeout
@@ -559,18 +559,18 @@ func add_xbz():
 
 func add_smb_1():
 	if !player_dir:
-		smb1 = Global.add_smb_effect(self.Bullet, position + Vector2(-100, 25), player_dir)
+		smb1 = Global.add_smb_effect(self.bullet, position + Vector2(-100, 25), player_dir)
 	else:
-		smb1 = Global.add_smb_effect(self.Bullet, position + Vector2(100, 25), player_dir)
+		smb1 = Global.add_smb_effect(self.bullet, position + Vector2(100, 25), player_dir)
 
 
 func add_zfjg():
-	Global.add_role_special_effect(self.Bullet, position + Vector2(0, 0), false, "zfjg_zh")
+	Global.add_role_special_effect(self.bullet, position + Vector2(0, 0), false, "zfjg_zh")
 	_summon_zhw()
 
 
 func add_smb_2():
-	Global.add_role_bullet(self.Bullet, smpox + Vector2(0, -180), player_dir, "Role2Bullet4", obj_attack_dict["smb"])
+	Global.add_role_bullet(self.bullet, smpox + Vector2(0, -180), player_dir, "Role2Bullet4", obj_attack_dict["smb"])
 	if _is_skill_awakened("smb") and _is_skill_awaken_enabled("smb"):
 		_spawn_smb_awaken_extra_bursts(smpox, player_dir)
 
@@ -583,13 +583,13 @@ func _spawn_smb_awaken_extra_bursts(origin: Vector2, direction: bool) -> void:
 		if not is_instance_valid(self) or is_death:
 			return
 		Global.add_role_bullet(
-			self.Bullet, origin + Vector2(0, -180), direction, "Role2Bullet4", obj_attack_dict["smb"]
+			self.bullet, origin + Vector2(0, -180), direction, "Role2Bullet4", obj_attack_dict["smb"]
 		)
 
 
 func add_shallow():
 	if my_shallow == null:
-		my_shallow = Global.add_role2_shallow(self.Bullet, position, player_dir)
+		my_shallow = Global.add_role2_shallow(self.bullet, position, player_dir)
 		my_shallow.my_owner = self
 	else:
 		if not my_shallow.should_use_skill:
@@ -608,7 +608,7 @@ func self_cure():
 func add_tjgl():
 	if get_action == "by":
 		return
-	tjgl_effect = Global.add_role_special_effect(self.Bullet, position + Vector2(0, -35), false, "tjgl")
+	tjgl_effect = Global.add_role_special_effect(self.bullet, position + Vector2(0, -35), false, "tjgl")
 	tjgl_effect.show_behind_parent = true
 
 
@@ -623,9 +623,9 @@ func add_myhc():
 func add_jgz():
 	var effect
 	if !player_dir:
-		effect = Global.add_role_special_effect(self.Bullet, position + Vector2(-300, 0), false, "jgz")
+		effect = Global.add_role_special_effect(self.bullet, position + Vector2(-300, 0), false, "jgz")
 	else:
-		effect = Global.add_role_special_effect(self.Bullet, position + Vector2(300, 0), false, "jgz")
+		effect = Global.add_role_special_effect(self.bullet, position + Vector2(300, 0), false, "jgz")
 
 	if effect:
 		var skill_level = get_skill_level(8)

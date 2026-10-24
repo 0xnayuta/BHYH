@@ -1783,7 +1783,7 @@ func role5_bullet(last_hurt, source_target = null):
 		return
 	var hurt_value = int(last_hurt * 0.3 + (s_level * 0.02))
 	Global.add_role_bullet(
-		get_player.Bullet,
+		get_player.bullet,
 		Vector2(position.x, position.y + 30),
 		false,
 		"Role5Bullet6",
