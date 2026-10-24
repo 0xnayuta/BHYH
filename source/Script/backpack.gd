@@ -21,7 +21,19 @@ func _viewport_center() -> Vector2:
 
 
 func _ready() -> void:
+	_refresh_level()
+	if not is_instance_valid(cur_level):
+		call_deferred("_refresh_level")
+
+
+func _refresh_level() -> void:
 	cur_level = _resolve_level()
+
+
+func _active_level():
+	if not is_instance_valid(cur_level):
+		_refresh_level()
+	return cur_level
 
 
 func _get_backpack_scene() -> PackedScene:
@@ -64,8 +76,9 @@ func _physics_process(_delta: float) -> void:
 
 
 func _main_role():
-	if is_instance_valid(cur_level):
-		var level_role: Variant = cur_level.get("role_")
+	var level = _active_level()
+	if is_instance_valid(level):
+		var level_role: Variant = level.get("role_")
 		if is_instance_valid(level_role):
 			return level_role
 	var source_player: Variant = RoleProp.source_player
@@ -73,8 +86,9 @@ func _main_role():
 
 
 func _second_role():
-	if is_instance_valid(cur_level):
-		var second_role: Variant = cur_level.get("role_p2")
+	var level = _active_level()
+	if is_instance_valid(level):
+		var second_role: Variant = level.get("role_p2")
 		if is_instance_valid(second_role):
 			return second_role
 	return null
@@ -195,7 +209,9 @@ func _toggle_magic(_role) -> void:
 		LocalCoop.open_panel(LocalCoop.slot_for(_role), "法宝")
 		return
 	if PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).size() == 0:
-		Global.add_message_show(cur_level, "您还未装备法宝！！！", 1.5, Vector2(460, 255))
+		var level = _active_level()
+		var message_parent: Node = level if is_instance_valid(level) else self
+		Global.add_message_show(message_parent, "您还未装备法宝！！！", 1.5, Vector2(460, 255))
 		return
 	_cleanup_targets()
 	if _is_alive(magic_weapon_target):
@@ -220,9 +236,10 @@ func _resolve_level():
 
 
 func _can_resume_level() -> bool:
-	if cur_level == null:
+	var level = _active_level()
+	if level == null:
 		return true
-	var role_info = cur_level.get("role_information")
+	var role_info = level.get("role_information")
 	return role_info == null or not role_info.is_stop
 
 

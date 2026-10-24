@@ -746,8 +746,10 @@ func _create_debug_perf_overlay() -> void:
 	add_child(_debug_perf_layer)
 	_debug_perf_label = Label.new()
 	_debug_perf_label.name = "DebugPerfLabel"
-	_debug_perf_label.position = Vector2(8, 6)
 	_debug_perf_label.z_index = 4096
+	_debug_perf_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_debug_perf_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	_debug_perf_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_debug_perf_label.add_theme_font_size_override("font_size", 12)
 	_debug_perf_label.add_theme_color_override("font_color", Color(0.1, 1.0, 0.25, 1.0))
 	_debug_perf_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
@@ -756,6 +758,11 @@ func _create_debug_perf_overlay() -> void:
 	_debug_perf_label.add_theme_constant_override("shadow_offset_x", 0)
 	_debug_perf_label.add_theme_constant_override("shadow_offset_y", 0)
 	_debug_perf_layer.add_child(_debug_perf_label)
+	_debug_perf_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_debug_perf_label.offset_left = -244.0
+	_debug_perf_label.offset_top = 6.0
+	_debug_perf_label.offset_right = -24.0
+	_debug_perf_label.offset_bottom = 54.0
 	_debug_perf_last_ticks_msec = Time.get_ticks_msec()
 	_update_debug_perf_overlay()
 
@@ -801,6 +808,12 @@ func _parse_proc_status_kb_line(line: String) -> int:
 func _update_debug_perf_overlay() -> void:
 	if _debug_perf_label == null or not is_instance_valid(_debug_perf_label):
 		return
+	var coop_node = get_node_or_null("/root/LocalCoop")
+	var top_margin := 6.0
+	if coop_node != null and coop_node.has_method("is_enabled") and coop_node.is_enabled():
+		top_margin = 116.0
+	_debug_perf_label.offset_top = top_margin
+	_debug_perf_label.offset_bottom = top_margin + 48.0
 	var fps := Engine.get_frames_per_second()
 	var render_total_mem := int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
 	_debug_perf_label.text = "FPS: " + str(fps) + "\n显存: " + _format_debug_memory(render_total_mem)
