@@ -16,4 +16,4 @@ conditional_scene_paths = {
 	"hmz": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn", "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"),
 	"hmz_ws": PackedStringArray("res://Scene/hero/role1_s_hallow.tscn", "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"),
 }
-conditional_texture_paths = {}
+conditional_sprite_frames_paths = {}

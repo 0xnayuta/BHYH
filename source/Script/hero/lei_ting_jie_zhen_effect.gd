@@ -8,8 +8,8 @@ var role_props: BaseRoleProperties:
 	get:
 		return LocalCoop.props_for(self)
 
-const FORMATION_FRAMES := 66
-const LIGHTNING_FRAMES := 47
+const FORMATION_FRAMES_PATH := "res://Art/hero_picture/role_5/lei_ting_jie_zhen/formation_spine/formation_frames.tres"
+const LIGHTNING_FRAMES_PATH := "res://Art/hero_picture/role_5/lei_ting_jie_zhen/lightning_spine/lightning_frames.tres"
 const EFFECT_DISTANCE := 170.0
 const LIGHTNING_OFFSETS := [-70.0, 0.0, 70.0]
 const DAMAGE_HIT_FRAMES := [10, 14, 18, 22, 26, 30, 34]
@@ -41,25 +41,19 @@ static func clear_cached_frames() -> void:
 
 static func _get_formation_frames() -> SpriteFrames:
 	if _formation_frames == null:
-		_formation_frames = _build_frames("formation_spine", "formation", FORMATION_FRAMES, 30.0)
+		_formation_frames = _load_frames(FORMATION_FRAMES_PATH)
 	return _formation_frames
 
 
 static func _get_lightning_frames() -> SpriteFrames:
 	if _lightning_frames == null:
-		_lightning_frames = _build_frames("lightning_spine", "lightning", LIGHTNING_FRAMES, 30.0)
+		_lightning_frames = _load_frames(LIGHTNING_FRAMES_PATH)
 	return _lightning_frames
 
 
-static func _build_frames(folder: String, prefix: String, count: int, fps: float) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.set_animation_speed("default", fps)
-	frames.set_animation_loop("default", false)
-	for index in range(count):
-		var path := "res://Art/hero_picture/role_5/lei_ting_jie_zhen/%s/%s_%02d.png" % [folder, prefix, index]
-		var texture := load(path) as Texture2D
-		if texture != null:
-			frames.add_frame("default", texture)
+static func _load_frames(path: String) -> SpriteFrames:
+	var frames := ResourceLoader.load(path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE) as SpriteFrames
+	assert(frames != null, "缺少构建期帧资源: " + path)
 	return frames
 
 

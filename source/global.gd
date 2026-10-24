@@ -2365,7 +2365,7 @@ func get_current_role_preload_paths() -> Array[String]:
 	_append_role_runtime_paths(runtime_paths, manifest.texture_paths)
 	_append_role_runtime_paths(runtime_paths, manifest.audio_paths)
 	_append_conditional_paths(runtime_paths, manifest.conditional_scene_paths, equipped_skills)
-	_append_conditional_paths(runtime_paths, manifest.conditional_texture_paths, equipped_skills)
+	_append_conditional_paths(runtime_paths, manifest.conditional_sprite_frames_paths, equipped_skills)
 	runtime_paths.append_array(_fashion_texture_paths())
 	return runtime_paths
 
@@ -2388,7 +2388,7 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	_append_role_runtime_paths(texture_paths, manifest.texture_paths)
 	_append_role_runtime_paths(audio_paths, manifest.audio_paths)
 	_append_conditional_paths(scene_paths, manifest.conditional_scene_paths, equipped_skills)
-	_append_conditional_paths(texture_paths, manifest.conditional_texture_paths, equipped_skills)
+	_append_conditional_paths(sprite_frames_paths, manifest.conditional_sprite_frames_paths, equipped_skills)
 	texture_paths.append_array(_fashion_texture_paths())
 	var preload_paths := scene_paths.duplicate()
 	preload_paths.append_array(sprite_frames_paths)

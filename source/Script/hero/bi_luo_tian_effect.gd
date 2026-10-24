@@ -8,14 +8,10 @@ var role_props: BaseRoleProperties:
 	get:
 		return LocalCoop.props_for(self)
 
-const CAST_FRAME_COUNT := 51
-const HIT_FRAME_COUNT := 11
+const CAST_FRAMES_PATH := "res://Art/hero_picture/role_4/bi_luo_tian/cast/cast_frames.tres"
+const HIT_FRAMES_PATH := "res://Art/hero_picture/role_4/bi_luo_tian/hit/hit_frames.tres"
 const HIT_COUNT := 6
 const HIT_INTERVAL := 0.06
-const CAST_FPS := 60.0
-const HIT_FPS := 22.0
-const HIT_FAST_TAIL_START := 7
-const HIT_FAST_TAIL_DURATION := 0.35
 const FRONT_DISTANCE := 270.0
 const HIT_EFFECT_SCALE := Vector2(3.0, 3.0)
 const HIT_EFFECT_OFFSETS := [-90.0, 0.0, 90.0]
@@ -46,28 +42,19 @@ static func clear_cached_frames() -> void:
 
 static func _get_cast_frames() -> SpriteFrames:
 	if _cast_frames == null:
-		_cast_frames = _build_frames("cast", CAST_FRAME_COUNT, CAST_FPS)
+		_cast_frames = _load_frames(CAST_FRAMES_PATH)
 	return _cast_frames
 
 
 static func _get_hit_frames() -> SpriteFrames:
 	if _hit_frames == null:
-		_hit_frames = _build_frames("hit", HIT_FRAME_COUNT, HIT_FPS, HIT_FAST_TAIL_START, HIT_FAST_TAIL_DURATION)
+		_hit_frames = _load_frames(HIT_FRAMES_PATH)
 	return _hit_frames
 
 
-static func _build_frames(
-	kind: String, frame_count: int, fps: float, fast_tail_start: int = -1, fast_tail_duration: float = 1.0
-) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.set_animation_speed("default", fps)
-	frames.set_animation_loop("default", false)
-	for index in range(frame_count):
-		var path := "res://Art/hero_picture/role_4/bi_luo_tian/%s/%s_%02d.png" % [kind, kind, index]
-		var texture := load(path) as Texture2D
-		if texture != null:
-			var duration := fast_tail_duration if fast_tail_start >= 0 and index >= fast_tail_start else 1.0
-			frames.add_frame("default", texture, duration)
+static func _load_frames(path: String) -> SpriteFrames:
+	var frames := ResourceLoader.load(path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE) as SpriteFrames
+	assert(frames != null, "缺少构建期帧资源: " + path)
 	return frames
 
 

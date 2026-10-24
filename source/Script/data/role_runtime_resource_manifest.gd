@@ -9,4 +9,4 @@ extends Resource
 
 ## 技能键位 → 额外资源路径；仅在该技能已装备时预热。
 @export var conditional_scene_paths: Dictionary[String, PackedStringArray] = {}
-@export var conditional_texture_paths: Dictionary[String, PackedStringArray] = {}
+@export var conditional_sprite_frames_paths: Dictionary[String, PackedStringArray] = {}

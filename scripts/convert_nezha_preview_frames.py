@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""把哪吒 official_parts_trial 预览 JSON 转为构建期 SpriteFrames .tres。
+"""哪吒专用构建期适配器：把 official_parts_trial 预览 JSON 转为 SpriteFrames。
+
+本脚本固定读取哪吒的 preview_<layer>.json 结构、三层目录与图集输出路径，
+不是通用 SpriteFrames 转换器。通用连续编号 PNG 序列请使用
+scripts/convert_numbered_frames.py。
 
 源数据：
     source/Art/hero_picture/role_6/official_parts_trial/<set>/preview_<layer>.json

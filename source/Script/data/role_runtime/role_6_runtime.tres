@@ -11,4 +11,4 @@ audio_paths = PackedStringArray()
 conditional_scene_paths = {
 	"nz_yysj": PackedStringArray("res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn"),
 }
-conditional_texture_paths = {}
+conditional_sprite_frames_paths = {}
