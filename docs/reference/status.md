@@ -107,6 +107,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 法宝面板空态统一 | 八维门禁 **8/8 PASS**；单/双人空态探针 **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `magic_weapon_infor` 增加 `Content` / `EmptyState`；无已装备法宝时仍打开面板，只隐藏内容区，保留背景、关闭按钮、帮助与 1P/2P 页签；P1/P2 按当前视图分别读取法宝数据；空态操作按钮隐藏并带函数级防御 |
 | GDScript 静态警告清零 | Godot `--debug` warning **53→0**；八维门禁 **8/8 PASS**；`level_1` / `level_34_1` / `level_52` / `level_58` 冒烟 **PASS**；LocalCoop 矩阵 **15/15 PASS** | 修复 4 类局部作用域命名、异步接口重复、跨脚本私有状态与 53 处存量 warning；`health_check.py` 增加 warning code 解析与白名单外失败门禁 |
 | 双人 P1/P2 攻击归属修复 | LocalCoop 矩阵 **16/16 PASS**；新增无双归属探针覆盖 P2 近战/弹道/显式 owner；Godot `--debug` **0 warning** | 伤害来源统一由 `LocalCoop` 实际出手者解析；`cure_ws_value` 接受显式玩家 owner；P2 弹道、法宝、技能效果、特殊怪物覆盖与黄 aura 不再把无双/伤害记到 P1；P2 无双同步衰减 |
+| 哪吒启动 PackedScene 契约修复 | Nezha 预热探针 **PASS**；Godot `--debug` **0 warning**；场景加载路径仅接受 `.tscn` / `.scn` | 根因是 `_role_skill_scene_paths(6)` 把 3 个 SpriteFrames `.tres` 混入场景预热；显示层预加载列表仅保留场景，`_load_scene` 强制 `PackedScene` 类型，非场景路径返回 null 而不再触发返回值类型错误 |
 | 引擎健康检查基线 | 704 脚本 0 Parse / 0 Error / 0 Warning;1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 

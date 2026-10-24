@@ -858,6 +858,8 @@ func can_show_sword_hit_effect() -> bool:
 
 
 func _load_scene(path: String) -> PackedScene:
+	if not _is_scene_resource_path(path):
+		return null
 	if _permanent_small_ui_scene_cache.has(path):
 		var permanent_scene: Variant = _permanent_small_ui_scene_cache[path]
 		if _is_valid_packed_scene(permanent_scene):
@@ -869,11 +871,17 @@ func _load_scene(path: String) -> PackedScene:
 		if _is_runtime_ui_scene_path(path):
 			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
 		else:
-			_resource_cache[path] = load(path)
+			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE)
 	var cached_scene: Variant = _resource_cache.get(path)
-	if path in PERMANENT_SMALL_UI_SCENE_PATHS and _is_valid_packed_scene(cached_scene):
+	if not _is_valid_packed_scene(cached_scene):
+		return null
+	if path in PERMANENT_SMALL_UI_SCENE_PATHS:
 		_permanent_small_ui_scene_cache[path] = cached_scene
-	return _resource_cache[path]
+	return cached_scene as PackedScene
+
+
+func _is_scene_resource_path(path: String) -> bool:
+	return path.ends_with(".tscn") or path.ends_with(".scn")
 
 
 func _is_valid_packed_scene(value: Variant) -> bool:
@@ -1270,7 +1278,10 @@ func _get_threaded_preload_batch_size(request_count: int) -> int:
 func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2) -> void:
 	var warmed_this_frame := 0
 	for path in paths:
-		var scene = preload_scene_path(str(path))
+		var scene_path := str(path)
+		if not _is_scene_resource_path(scene_path):
+			continue
+		var scene = preload_scene_path(scene_path)
 		if scene != null:
 			_warm_scene_instance(scene)
 			warmed_this_frame += 1
@@ -2364,17 +2375,8 @@ func _role_skill_scene_paths(role_id: int) -> Array[String]:
 				)
 			)
 		6:
-			(
-				paths
-				. append_array(
-					[
-						"res://Art/hero_picture/role_6/equipment_atlas/default_body/default_body.tres",
-						"res://Art/hero_picture/role_6/equipment_atlas/default_body_front/default_body_front.tres",
-						"res://Art/hero_picture/role_6/equipment_atlas/default_weapon/default_weapon.tres",
-						"res://Scene/hero/role_6/ne_zha_skill_effect.tscn",
-					]
-				)
-			)
+			# 场景预热只接受 PackedScene；哪吒装备帧由 NeZhaEquipmentVisuals 按图集动态构建。
+			paths.append("res://Scene/hero/role_6/ne_zha_skill_effect.tscn")
 			if equipped_skills.has("nz_yysj"):
 				paths.append("res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn")
 	return paths
