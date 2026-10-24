@@ -562,6 +562,7 @@ var need_change_item: bool = true
 var player_dir
 
 var _resource_cache = {}
+var _sprite_frames_cache = {}
 var _audio_cache = {}
 var _texture_cache = {}
 var _current_role_body_texture_path: String = ""
@@ -1215,6 +1216,8 @@ func _cache_threaded_resource(path: String, resource: Resource) -> void:
 		return
 	if resource is PackedScene or path.ends_with(".tscn"):
 		_resource_cache[path] = resource
+	elif resource is SpriteFrames:
+		_sprite_frames_cache[path] = resource
 	elif resource is AudioStream:
 		_audio_cache[path] = resource
 	elif resource is Texture2D:
@@ -1230,7 +1233,12 @@ func _preload_paths_threaded(paths: Array) -> void:
 		var path := str(path_value)
 		if path == "":
 			continue
-		if _resource_cache.has(path) or _audio_cache.has(path) or _texture_cache.has(path):
+		if (
+			_resource_cache.has(path)
+			or _sprite_frames_cache.has(path)
+			or _audio_cache.has(path)
+			or _texture_cache.has(path)
+		):
 			continue
 		if seen_paths.has(path):
 			continue
@@ -1524,6 +1532,7 @@ func clear_level_resource_cache() -> void:
 	for path_value in _level_resource_cache_paths.keys():
 		var path := str(path_value)
 		_resource_cache.erase(path)
+		_sprite_frames_cache.erase(path)
 		_texture_cache.erase(path)
 		_audio_cache.erase(path)
 	_level_resource_cache_paths.clear()
@@ -1586,6 +1595,7 @@ func clear_combat_runtime_cache() -> void:
 		"res://Scene/pet/",
 	]
 	_erase_cached_paths_by_prefix(_resource_cache, combat_prefixes)
+	_erase_cached_paths_by_prefix(_sprite_frames_cache, combat_prefixes)
 	_erase_cached_paths_by_prefix(_texture_cache, combat_prefixes)
 	_erase_cached_paths_by_prefix(
 		_audio_cache,
@@ -1788,6 +1798,7 @@ func release_role_runtime_resources() -> void:
 	ROLE4_POISON_ARRAY_AWAKEN_EFFECT_SCRIPT.clear_cached_data()
 	STREAMING_ROLE_BULLET_SCRIPT.clear_cached_frames()
 	_erase_cached_paths_by_prefix(_resource_cache, ["res://Art/hero_picture/", "res://Scene/hero/"])
+	_erase_cached_paths_by_prefix(_sprite_frames_cache, ["res://Art/hero_picture/"])
 	_erase_cached_paths_by_prefix(_texture_cache, ["res://Art/hero_picture/"])
 	_erase_cached_paths_by_prefix(_audio_cache, ["res://Music/hero/"])
 	special_effect_bullet = null
@@ -2528,8 +2539,41 @@ func get_current_role_heavy_effect_paths() -> Array[String]:
 	return paths
 
 
+func _role_runtime_resource_path(role_id: int) -> String:
+	return "res://Script/data/role_runtime/role_%d_runtime.tres" % role_id
+
+
+func _load_role_runtime_manifest(role_id: int) -> RoleRuntimeResourceManifest:
+	var path := _role_runtime_resource_path(role_id)
+	if not ResourceLoader.exists(path):
+		return null
+	return ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_REUSE) as RoleRuntimeResourceManifest
+
+
+func _append_role_runtime_paths(out: Array[String], paths: PackedStringArray) -> void:
+	for path in paths:
+		out.append(path)
+
+
+func prewarm_sprite_frames_paths(paths: Array[String]) -> void:
+	await _preload_paths_threaded(paths)
+
+
+func prewarm_texture_paths(paths: Array[String]) -> void:
+	await _preload_paths_threaded(paths)
+
+
 func get_current_role_preload_paths() -> Array[String]:
 	var role_id := _current_role_id()
+	var manifest := _load_role_runtime_manifest(role_id)
+	if manifest != null:
+		var runtime_paths: Array[String] = []
+		_append_role_runtime_paths(runtime_paths, manifest.scene_paths)
+		_append_role_runtime_paths(runtime_paths, manifest.sprite_frames_paths)
+		_append_role_runtime_paths(runtime_paths, manifest.texture_paths)
+		_append_role_runtime_paths(runtime_paths, manifest.audio_paths)
+		runtime_paths.append_array(_role_heavy_effect_paths(role_id))
+		return runtime_paths
 	var paths := _role_skill_scene_paths(role_id)
 	paths.append_array(_role_skill_sound_paths(role_id))
 	paths.append_array(_role_heavy_effect_paths(role_id))
@@ -2543,15 +2587,30 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 		return
 	if _prewarmed_role_id > 0:
 		release_role_runtime_resources()
-	var scene_paths := _role_skill_scene_paths(role_id)
+	var scene_paths: Array[String] = []
+	var sprite_frames_paths: Array[String] = []
+	var texture_paths: Array[String] = []
+	var audio_paths: Array[String] = []
+	var manifest := _load_role_runtime_manifest(role_id)
+	if manifest != null:
+		_append_role_runtime_paths(scene_paths, manifest.scene_paths)
+		_append_role_runtime_paths(sprite_frames_paths, manifest.sprite_frames_paths)
+		_append_role_runtime_paths(texture_paths, manifest.texture_paths)
+		_append_role_runtime_paths(audio_paths, manifest.audio_paths)
+	else:
+		scene_paths = _role_skill_scene_paths(role_id)
+		audio_paths = _role_skill_sound_paths(role_id)
+		texture_paths = _role_heavy_effect_paths(role_id)
 	var equipped_skills := _equipped_role_skill_names()
-	var sound_paths := _role_skill_sound_paths(role_id)
 	var preload_paths := scene_paths.duplicate()
-	preload_paths.append_array(sound_paths)
-	preload_paths.append_array(_role_heavy_effect_paths(role_id))
+	preload_paths.append_array(sprite_frames_paths)
+	preload_paths.append_array(texture_paths)
+	preload_paths.append_array(audio_paths)
 	await _preload_paths_threaded(preload_paths)
 	await _warm_scene_paths_over_frames(scene_paths, 1)
-	await _warm_audio_streams_over_frames(sound_paths, 2)
+	await prewarm_sprite_frames_paths(sprite_frames_paths)
+	await prewarm_texture_paths(texture_paths)
+	await _warm_audio_streams_over_frames(audio_paths, 2)
 	if role_id == 2 and _equipped_role_skill_names().has("by"):
 		BING_YU_EFFECT_SCRIPT.prewarm_frames()
 		await get_tree().process_frame

@@ -9,7 +9,7 @@
 - 特效如确需循环，必须在生成命令显式传 `--loop` 或 `--loop-all`；
 - `SpriteFrames` 内部动画名、源序列名和 `--strip-prefix` 结果必须唯一；
 - 新增静态资产优先使用构建期转换器生成，不允许运行时目录扫描；
-- 当前仓库保留的构建期工具为 `scripts/convert_atlas_metadata.py`；图集 manifest / PNG 序列转换器按迁移任务引入，不进入日常工具链。
+- 当前仓库保留的构建期工具为 `scripts/convert_atlas_metadata.py`；哪吒官方部件预览帧由 `scripts/convert_nezha_preview_frames.py` 转为构建期 SpriteFrames `.tres`，运行时只加载 `.tres`，不再解析 `preview_*.json`。
 
 ## 校验
 

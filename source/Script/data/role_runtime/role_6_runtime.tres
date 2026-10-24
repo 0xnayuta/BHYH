@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RoleRuntimeResourceManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Script/data/role_runtime_resource_manifest.gd" id="1_manifest"]
+
+[resource]
+script = ExtResource("1_manifest")
+scene_paths = PackedStringArray("res://Scene/hero/role_6/ne_zha_skill_effect.tscn", "res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn")
+sprite_frames_paths = PackedStringArray("res://Art/hero_picture/role_6/equipment_atlas/default_body/default_body.tres", "res://Art/hero_picture/role_6/equipment_atlas/default_body_front/default_body_front.tres", "res://Art/hero_picture/role_6/equipment_atlas/default_weapon/default_weapon.tres")
+texture_paths = PackedStringArray("res://Art/hero_picture/role_6/official_parts_trial/default/parts.png", "res://Art/hero_picture/role_6/official_parts_trial/transparent.tres")
+audio_paths = PackedStringArray()

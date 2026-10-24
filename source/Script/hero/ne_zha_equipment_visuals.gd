@@ -3,7 +3,7 @@ class_name NeZhaEquipmentVisuals
 
 const CATALOG_SCRIPT := preload("res://Art/hero_picture/role_6/equipment_atlas/ne_zha_equipment_catalog.gd")
 const PARTS_DATA := preload("res://Script/hero/ne_zha_official_parts_data.gd")
-const ATLAS_ROOT := "res://Art/hero_picture/role_6/official_parts_trial"
+const FRAME_ROOT := "res://Art/hero_picture/role_6/equipment_atlas"
 const LEGACY_NAME_ALIASES := {
 	"莲衣": "nzly",
 	"火尖枪": "nzhjq",
@@ -55,34 +55,13 @@ static func available_item_ids() -> Array[String]:
 
 static func _get_frames(equipment_id: String, layer: String) -> SpriteFrames:
 	var set_name := resolve_set(equipment_id, layer)
-	var layer_index := ["body", "weapon", "body_front"].find(layer)
-	var directory := "%s/%s/" % [ATLAS_ROOT, set_name]
-	var cache_key := directory + str(layer_index)
-	if _frames_cache.has(cache_key):
-		return _frames_cache[cache_key] as SpriteFrames
-	var metadata: Variant = JSON.parse_string(
-		FileAccess.get_file_as_string(directory + "preview_%d.json" % layer_index)
-	)
-	if not metadata is Dictionary:
+	var frames_path := "%s/%s_%s/%s_%s.tres" % [FRAME_ROOT, set_name, layer, set_name, layer]
+	if _frames_cache.has(frames_path):
+		return _frames_cache[frames_path] as SpriteFrames
+	var frames := ResourceLoader.load(frames_path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE) as SpriteFrames
+	if frames == null:
 		return null
-	var atlas := load(directory + "preview_%d.png" % layer_index) as Texture2D
-	if atlas == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for action: String in metadata:
-		frames.add_animation(action)
-		frames.set_animation_speed(action, 30.0)
-		frames.set_animation_loop(action, action == "wait")
-		for entry: Dictionary in metadata[action]:
-			var texture := AtlasTexture.new()
-			texture.atlas = atlas
-			var region: Array = entry["region"]
-			var margin: Array = entry["margin"]
-			texture.region = Rect2(region[0], region[1], region[2], region[3])
-			texture.margin = Rect2(margin[0], margin[1], margin[2], margin[3])
-			frames.add_frame(action, texture)
-	_frames_cache[cache_key] = frames
+	_frames_cache[frames_path] = frames
 	return frames
 
 
