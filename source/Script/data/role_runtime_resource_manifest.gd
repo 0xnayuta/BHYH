@@ -8,5 +8,5 @@ extends Resource
 @export var audio_paths := PackedStringArray()
 
 ## 技能键位 → 额外资源路径；仅在该技能已装备时预热。
-@export var conditional_scene_paths: Dictionary = {}
-@export var conditional_texture_paths: Dictionary = {}
+@export var conditional_scene_paths: Dictionary[String, PackedStringArray] = {}
+@export var conditional_texture_paths: Dictionary[String, PackedStringArray] = {}

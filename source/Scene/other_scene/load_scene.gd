@@ -181,8 +181,6 @@ func _build_archive_preload_paths() -> Array[String]:
 		_append_preload_path(unique, "res://Art/constellations/background/%d.png" % constellation_level)
 	for role_path in Global.get_current_role_preload_paths():
 		_append_preload_path(unique, role_path)
-	for role_path in Global.get_current_role_heavy_effect_paths():
-		_append_preload_path(unique, role_path)
 	for pet_path in Global.get_active_pet_preload_paths():
 		_append_preload_path(unique, pet_path)
 	for sword_path in MAIN_SWORD_ARRAY_WEAPON_SCRIPT.get_active_sword_preload_paths():

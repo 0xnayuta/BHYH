@@ -7,6 +7,6 @@ script = ExtResource("1_manifest")
 scene_paths = PackedStringArray()
 sprite_frames_paths = PackedStringArray()
 texture_paths = PackedStringArray()
-audio_paths = PackedStringArray()
+audio_paths = PackedStringArray("res://Music/hero/role_7/blade/attack_1.mp3", "res://Music/hero/role_7/blade/attack_2.mp3", "res://Music/hero/role_7/blade/attack_3.mp3", "res://Music/hero/role_7/blade/attack_4.mp3", "res://Music/hero/role_7/blade/attack_5.mp3", "res://Music/hero/role_7/blade/effect_1.mp3", "res://Music/hero/role_7/blade/effect_11.mp3", "res://Music/hero/role_7/blade/effect_2.mp3", "res://Music/hero/role_7/blade/effect_3.mp3", "res://Music/hero/role_7/blade/effect_4.mp3", "res://Music/hero/role_7/blade/effect_5.mp3", "res://Music/hero/role_7/blade/hurt_stand.mp3", "res://Music/hero/role_7/blade/jump_attack.mp3", "res://Music/hero/role_7/blade/run_attack.mp3", "res://Music/hero/role_7/toxin/attack_1.mp3", "res://Music/hero/role_7/toxin/attack_2.mp3", "res://Music/hero/role_7/toxin/effect_1.mp3", "res://Music/hero/role_7/toxin/effect_2.mp3", "res://Music/hero/role_7/toxin/effect_3.mp3", "res://Music/hero/role_7/toxin/effect_4.mp3", "res://Music/hero/role_7/toxin/effect_41.mp3", "res://Music/hero/role_7/toxin/effect_5.mp3", "res://Music/hero/role_7/toxin/effect_5_2.mp3", "res://Music/hero/role_7/toxin/hurt_stand.mp3", "res://Music/hero/role_7/toxin/jump_attack.mp3")
 conditional_scene_paths = {}
 conditional_texture_paths = {}

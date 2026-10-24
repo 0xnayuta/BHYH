@@ -2296,209 +2296,14 @@ func preload_all_hero_skill_resources() -> void:
 		get_cached_audio(audio_path)
 
 
-func _equipped_role_skill_names() -> Array:
+func _equipped_role_skill_names() -> Array[String]:
 	var skill_data: Variant = PlayerData.player_data.get(DataKeys.SKILL_LEARNED, {})
 	var skill_keys: Variant = skill_data.get("技能键位", {}) if skill_data is Dictionary else {}
-	return skill_keys.values() if skill_keys is Dictionary else []
-
-
-func _role_skill_scene_paths(role_id: int) -> Array[String]:
-	var paths: Array[String] = []
-	var equipped_skills := _equipped_role_skill_names()
-
-	if _is_zlwsz_shenqi_equipped():
-		paths.append("res://Scene/hero/zlw_shenqi_gear_bullet.tscn")
-	match role_id:
-		1:
-			if equipped_skills.has("qsez") or equipped_skills.has("hyjj"):
-				paths.append("res://Scene/hero/role_bullet_1.tscn")
-			if (
-				equipped_skills.has("qsez")
-				or equipped_skills.has("zz")
-				or equipped_skills.has("lyfb")
-				or equipped_skills.has("hmz")
-				or equipped_skills.has("hmz_ws")
-			):
-				paths.append("res://Scene/hero/role1_s_hallow.tscn")
-			if equipped_skills.has("hmz") or equipped_skills.has("hmz_ws"):
-				paths.append("res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn")
-		2:
-			(
-				paths
-				. append_array(
-					[
-						"res://Scene/base/role2shallow.tscn",
-						"res://Scene/hero/role_2/smb_effect.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet1.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet2.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet3.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet4.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet5.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet5_1.tscn",
-						"res://Scene/hero/role_bullet_slim/role2_bullet6.tscn",
-						"res://Scene/hero/role_special_effect_slim/zfjg_zh.tscn",
-						"res://Scene/hero/role_special_effect_slim/tjgl.tscn",
-						"res://Scene/hero/role_special_effect_slim/tjgl_hd.tscn",
-						"res://Scene/hero/role_special_effect_slim/myhc.tscn",
-						"res://Scene/hero/role_special_effect_slim/jgz.tscn",
-						"res://Scene/hero/role_special_effect_slim/jhsj.tscn",
-					]
-				)
-			)
-		3:
-			(
-				paths
-				. append_array(
-					[
-						STREAMING_ROLE_BULLET_PATH,
-						"res://Scene/hero/role_bullet_slim/role3_bullet1.tscn",
-						ROLE3_BULLET3_SLIM_PATH,
-						ROLE3_SD_SLIM_PATH,
-						ROLE3_ZZNH_SLIM_PATH,
-					]
-				)
-			)
-		4:
-			(
-				paths
-				. append_array(
-					[
-						"res://Scene/hero/role_4/role4_bullet.tscn",
-						"res://Scene/hero/role_bullet_slim/role4_bullet3.tscn",
-						"res://Scene/hero/role_bullet_slim/role4_bullet6.tscn",
-					]
-				)
-			)
-			if equipped_skills.has("wdww"):
-				paths.append("res://Scene/monster/monster_138.tscn")
-		5:
-			(
-				paths
-				. append_array(
-					[
-						"res://Scene/hero/role_bullet_slim/role5_bullet1.tscn",
-						"res://Scene/hero/role_bullet_slim/role5_bullet2.tscn",
-						"res://Scene/hero/role_bullet_slim/role5_bullet3.tscn",
-						"res://Scene/hero/role_bullet_slim/role5_bullet4.tscn",
-						"res://Scene/hero/role_bullet_slim/role5_bullet5.tscn",
-						"res://Scene/hero/role_bullet_slim/role5_bullet6.tscn",
-					]
-				)
-			)
-		6:
-			# 场景预热只接受 PackedScene；哪吒装备帧由 NeZhaEquipmentVisuals 按图集动态构建。
-			paths.append("res://Scene/hero/role_6/ne_zha_skill_effect.tscn")
-			if equipped_skills.has("nz_yysj"):
-				paths.append("res://Scene/hero/role_6/ne_zha_yin_yang_effect.tscn")
-	return paths
-
-
-func _is_zlwsz_shenqi_equipped() -> bool:
-	var fashions: Variant = PlayerData.player_data.get(DataKeys.FASHION, [])
-	if not fashions is Array or (fashions as Array).is_empty():
-		return false
-	var fashion: Variant = (fashions as Array)[0]
-	if not fashion is Dictionary:
-		return false
-	var fashion_name := str((fashion as Dictionary).get(DataKeys.NAME, ""))
-	var base_name: String = str(get_clean_name(fashion_name))
-	return base_name == "zlwsz" and fashion_name.begins_with("shenqi")
-
-
-func _role_skill_sound_paths(role_id: int) -> Array[String]:
-	match role_id:
-		1:
-			return [
-				"res://Music/hero/17_role1_hit6.mp3",
-				"res://Music/hero/8_role1_hit6.mp3",
-				"res://Music/hero/11_role1_hit7.mp3",
-				"res://Music/hero/1_role1_hit9.mp3",
-				"res://Music/hero/00_role1_gsrs.mp3",
-				"res://Music/hero/36_role1_hit10_2.mp3",
-				"res://Music/hero/37_role1_hit10_4.mp3",
-				"res://Music/hero/35_role1_hit10_1.mp3",
-				"res://Music/hero/44_role1_hit12_2.mp3",
-				"res://Music/hero/40_role1_hit1_and_hit2.mp3",
-				"res://Music/hero/39_role1_hit3_and_hit4.mp3",
-				"res://Music/hero/38_role1_hit5.mp3",
-				"res://Music/hero/18_role1_hit14.mp3",
-				"res://Music/hero/45_role1_hit12_1.mp3",
-				"res://Music/hero/42_role1_hit11.mp3",
-				"res://Music/hero/26_role1_hit13_1.mp3",
-			]
-		2:
-			return [
-				"res://Music/hero/58_role2_hit1.mp3",
-				"res://Music/hero/59_role2_hit2.mp3",
-				"res://Music/hero/57_role2_hit8.mp3",
-				"res://Music/hero/60_role2_hit3.mp3",
-				"res://Music/hero/51_role2_hit10.mp3",
-				"res://Music/hero/11_role2_hit4.mp3",
-				"res://Music/hero/32_role2_hit6.mp3",
-				"res://Music/hero/40_role2_hit7.mp3",
-				"res://Music/hero/39_role2_hit9.mp3",
-			]
-		3:
-			return [
-				"res://Music/hero/71_role3_hit1.mp3",
-				"res://Music/hero/70_role3_hit2.mp3",
-				"res://Music/hero/69_role3_hit3.mp3",
-				"res://Music/hero/role_3/16_role3_hit5.mp3",
-				"res://Music/hero/role_3/10_role3_hit8.mp3",
-				"res://Music/hero/role_3/14_role3_hit7.mp3",
-				"res://Music/hero/role_3/31_role3_hit6.mp3",
-				"res://Music/hero/role_3/38_role3_hit9.mp3",
-				"res://Music/hero/role_3/53_role3_hit4.mp3",
-				"res://Music/hero/role_3/56_role3_hit10.mp3",
-				"res://Music/hero/role_3/67_role3_hit11.mp3",
-				"res://Music/hero/role_3/74_role3_hit12_1.mp3",
-				"res://Music/hero/role_3/52_role3_hit12_2.mp3",
-				"res://Music/hero/role_3/role3_skill_11.wav",
-			]
-		4:
-			return [
-				"res://Music/hero/role_4/shovel_hit1.mp3",
-				"res://Music/hero/role_4/shovel_hit2.mp3",
-				"res://Music/hero/role_4/shovel_hit3.mp3",
-				"res://Music/hero/role_4/arrow_hit1.mp3",
-				"res://Music/hero/role_4/arrow_hit2.mp3",
-				"res://Music/hero/role_4/shovelqlj.mp3",
-				"res://Music/hero/role_4/arrowqlj.mp3",
-				"res://Music/hero/role_4/shoveldcj.mp3",
-				"res://Music/hero/role_4/arrowdcj.mp3",
-				"res://Music/hero/role_4/shovelmmw.mp3",
-				"res://Music/hero/role_4/arrowmmw.mp3",
-				"res://Music/hero/role_4/shovelzq.mp3",
-				"res://Music/hero/role_4/arrowzq.mp3",
-				"res://Music/hero/role_4/arrowtkj.mp3",
-				"res://Music/hero/role_4/jdz.mp3",
-				"res://Music/hero/role_4/lhsq.mp3",
-				"res://Music/hero/role_4/mds.mp3",
-				"res://Music/hero/role_4/wdww.mp3",
-				"res://Music/hero/role_4/effect6_repeat.mp3",
-			]
-		5:
-			return [
-				"res://Music/hero/role_5/attack1.mp3",
-				"res://Music/hero/role_5/attack2.mp3",
-				"res://Music/hero/role_5/attack3.mp3",
-				"res://Music/hero/role_5/attack4.mp3",
-				"res://Music/hero/role_5/jump_attack.mp3",
-				"res://Music/hero/role_5/effect3.mp3",
-				"res://Music/hero/role_5/effect4.mp3",
-				"res://Music/hero/role_5/effect2.mp3",
-				"res://Music/hero/role_5/effect1_1.mp3",
-				"res://Music/hero/role_5/effect1_2.mp3",
-				"res://Music/hero/role_5/effect6.mp3",
-				"res://Music/hero/role_5/effect8_1.mp3",
-				"res://Music/hero/role_5/effect8_2.mp3",
-				"res://Music/hero/role_5/effect9_1.mp3",
-				"res://Music/hero/role_5/effect9_2.mp3",
-				"res://Music/hero/role_5/effect7_1.mp3",
-				"res://Music/hero/role_5/effect7_2.mp3",
-				"res://Music/hero/role_5/attack.mp3",
-			]
-	return []
+	var names: Array[String] = []
+	if skill_keys is Dictionary:
+		for value in (skill_keys as Dictionary).values():
+			names.append(str(value))
+	return names
 
 
 func _append_numbered_resource_paths(
@@ -2512,58 +2317,18 @@ func _append_numbered_resource_paths(
 		index += step
 
 
-func _role_heavy_effect_paths(role_id: int) -> Array[String]:
-	var equipped_skills := _equipped_role_skill_names()
-	var paths: Array[String] = []
-	if role_id == 4 and equipped_skills.has("bylt"):
-		_append_numbered_resource_paths(paths, "res://Art/hero_picture/role_4/bi_luo_tian/cast/cast_%02d.png", 51)
-		_append_numbered_resource_paths(paths, "res://Art/hero_picture/role_4/bi_luo_tian/hit/hit_%02d.png", 11)
-	elif role_id == 5 and equipped_skills.has("ltjz"):
-		_append_numbered_resource_paths(
-			paths, "res://Art/hero_picture/role_5/lei_ting_jie_zhen/formation_spine/formation_%02d.png", 66
-		)
-		_append_numbered_resource_paths(
-			paths, "res://Art/hero_picture/role_5/lei_ting_jie_zhen/lightning_spine/lightning_%02d.png", 47
-		)
-	return paths
-
-
-func get_current_role_heavy_effect_paths() -> Array[String]:
-	var role_id := _current_role_id()
-	var manifest := _load_role_runtime_manifest(role_id)
-	var paths: Array[String] = []
-	if manifest != null:
-		_append_conditional_paths(paths, manifest.conditional_texture_paths, _equipped_role_skill_names())
-	else:
-		paths = _role_heavy_effect_paths(role_id)
-	paths.append_array(_fashion_texture_paths())
-	return paths
-
-
-func _role_runtime_resource_path(role_id: int) -> String:
-	return "res://Script/data/role_runtime/role_%d_runtime.tres" % role_id
-
-
-func _load_role_runtime_manifest(role_id: int) -> RoleRuntimeResourceManifest:
-	var path := _role_runtime_resource_path(role_id)
-	if not ResourceLoader.exists(path):
-		return null
-	return ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_REUSE) as RoleRuntimeResourceManifest
-
-
 func _append_role_runtime_paths(out: Array[String], paths: PackedStringArray) -> void:
 	for path in paths:
 		out.append(path)
 
 
-func _append_conditional_paths(out: Array[String], entries: Variant, equipped_skills: Array) -> void:
-	if not entries is Dictionary:
-		return
+func _append_conditional_paths(
+	out: Array[String], entries: Dictionary[String, PackedStringArray], equipped_skills: Array[String]
+) -> void:
 	for skill in equipped_skills:
-		var paths: Variant = (entries as Dictionary).get(str(skill), null)
-		if not paths is PackedStringArray:
+		if not entries.has(skill):
 			continue
-		for path in paths:
+		for path in entries[skill]:
 			if not out.has(path):
 				out.append(path)
 
@@ -2592,23 +2357,17 @@ func prewarm_texture_paths(paths: Array[String]) -> void:
 
 
 func get_current_role_preload_paths() -> Array[String]:
-	var role_id := _current_role_id()
-	var manifest := _load_role_runtime_manifest(role_id)
-	if manifest != null:
-		var runtime_paths: Array[String] = []
-		var equipped_skills := _equipped_role_skill_names()
-		_append_role_runtime_paths(runtime_paths, manifest.scene_paths)
-		_append_role_runtime_paths(runtime_paths, manifest.sprite_frames_paths)
-		_append_role_runtime_paths(runtime_paths, manifest.texture_paths)
-		_append_role_runtime_paths(runtime_paths, manifest.audio_paths)
-		_append_conditional_paths(runtime_paths, manifest.conditional_scene_paths, equipped_skills)
-		_append_conditional_paths(runtime_paths, manifest.conditional_texture_paths, equipped_skills)
-		runtime_paths.append_array(_fashion_texture_paths())
-		return runtime_paths
-	var paths := _role_skill_scene_paths(role_id)
-	paths.append_array(_role_skill_sound_paths(role_id))
-	paths.append_array(_role_heavy_effect_paths(role_id))
-	return paths
+	var manifest := RoleRuntimeCatalog.get_manifest(_current_role_id())
+	var runtime_paths: Array[String] = []
+	var equipped_skills := _equipped_role_skill_names()
+	_append_role_runtime_paths(runtime_paths, manifest.scene_paths)
+	_append_role_runtime_paths(runtime_paths, manifest.sprite_frames_paths)
+	_append_role_runtime_paths(runtime_paths, manifest.texture_paths)
+	_append_role_runtime_paths(runtime_paths, manifest.audio_paths)
+	_append_conditional_paths(runtime_paths, manifest.conditional_scene_paths, equipped_skills)
+	_append_conditional_paths(runtime_paths, manifest.conditional_texture_paths, equipped_skills)
+	runtime_paths.append_array(_fashion_texture_paths())
+	return runtime_paths
 
 
 func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
@@ -2618,24 +2377,19 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 		return
 	if _prewarmed_role_id > 0:
 		release_role_runtime_resources()
+	var manifest := RoleRuntimeCatalog.get_manifest(role_id)
+	var equipped_skills := _equipped_role_skill_names()
 	var scene_paths: Array[String] = []
 	var sprite_frames_paths: Array[String] = []
 	var texture_paths: Array[String] = []
 	var audio_paths: Array[String] = []
-	var manifest := _load_role_runtime_manifest(role_id)
-	var equipped_skills := _equipped_role_skill_names()
-	if manifest != null:
-		_append_role_runtime_paths(scene_paths, manifest.scene_paths)
-		_append_role_runtime_paths(sprite_frames_paths, manifest.sprite_frames_paths)
-		_append_role_runtime_paths(texture_paths, manifest.texture_paths)
-		_append_role_runtime_paths(audio_paths, manifest.audio_paths)
-		_append_conditional_paths(scene_paths, manifest.conditional_scene_paths, equipped_skills)
-		_append_conditional_paths(texture_paths, manifest.conditional_texture_paths, equipped_skills)
-		texture_paths.append_array(_fashion_texture_paths())
-	else:
-		scene_paths = _role_skill_scene_paths(role_id)
-		audio_paths = _role_skill_sound_paths(role_id)
-		texture_paths = _role_heavy_effect_paths(role_id)
+	_append_role_runtime_paths(scene_paths, manifest.scene_paths)
+	_append_role_runtime_paths(sprite_frames_paths, manifest.sprite_frames_paths)
+	_append_role_runtime_paths(texture_paths, manifest.texture_paths)
+	_append_role_runtime_paths(audio_paths, manifest.audio_paths)
+	_append_conditional_paths(scene_paths, manifest.conditional_scene_paths, equipped_skills)
+	_append_conditional_paths(texture_paths, manifest.conditional_texture_paths, equipped_skills)
+	texture_paths.append_array(_fashion_texture_paths())
 	var preload_paths := scene_paths.duplicate()
 	preload_paths.append_array(sprite_frames_paths)
 	preload_paths.append_array(texture_paths)
@@ -2645,7 +2399,7 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	await prewarm_sprite_frames_paths(sprite_frames_paths)
 	await prewarm_texture_paths(texture_paths)
 	await _warm_audio_streams_over_frames(audio_paths, 2)
-	if role_id == 2 and _equipped_role_skill_names().has("by"):
+	if role_id == 2 and equipped_skills.has("by"):
 		BING_YU_EFFECT_SCRIPT.prewarm_frames()
 		await get_tree().process_frame
 	if role_id == 1 and (equipped_skills.has("hmz") or equipped_skills.has("hmz_ws")) and not special_effect_bullet:
@@ -2671,11 +2425,6 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	_prewarmed_role_id = role_id
 
 
-func preload_current_role_skill_resources(role: Variant) -> void:
-	var role_id := _role_id_from_runtime_node(role)
-	await prewarm_current_role_runtime_resources(role_id)
-
-
 func _role_id_from_runtime_node(role: Variant) -> int:
 	if is_instance_valid(role) and role is Node:
 		var role_script := (role as Node).get_script() as Script
@@ -2696,112 +2445,6 @@ func _role_id_from_runtime_node(role: Variant) -> int:
 			"res://Script/hero/yutu_hero.gd":
 				return 7
 	return clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7)
-
-
-func _legacy_preload_current_role_skill_resources(role: Variant) -> void:
-	var role_id := _role_id_from_runtime_node(role)
-	var role_scene_paths: Array[String] = []
-	if role_id == 1:
-		role_scene_paths = [
-			"res://Scene/hero/role1_s_hallow.tscn",
-			"res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn",
-			"res://Scene/hero/role_1/ws_effect.tscn",
-		]
-	elif role_id == 2:
-		role_scene_paths = ["res://Scene/hero/role_2/smb_effect.tscn"]
-	elif role_id == 4:
-		role_scene_paths = ["res://Scene/hero/role_4/role4_bullet.tscn"]
-	for scene_path in role_scene_paths:
-		_warm_scene_instance(preload_scene_path(scene_path))
-	if role_id == 1 and not special_effect_bullet:
-		special_effect_bullet = _load_scene("res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn")
-	var sounds: Array[String] = []
-	if role_id == 1:
-		sounds = [
-			"res://Music/hero/17_role1_hit6.mp3",
-			"res://Music/hero/8_role1_hit6.mp3",
-			"res://Music/hero/11_role1_hit7.mp3",
-			"res://Music/hero/1_role1_hit9.mp3",
-			"res://Music/hero/00_role1_gsrs.mp3",
-			"res://Music/hero/36_role1_hit10_2.mp3",
-			"res://Music/hero/37_role1_hit10_4.mp3",
-			"res://Music/hero/35_role1_hit10_1.mp3",
-			"res://Music/hero/44_role1_hit12_2.mp3"
-		]
-	elif role_id == 2:
-		sounds = [
-			"res://Music/hero/58_role2_hit1.mp3",
-			"res://Music/hero/59_role2_hit2.mp3",
-			"res://Music/hero/57_role2_hit8.mp3",
-			"res://Music/hero/60_role2_hit3.mp3",
-			"res://Music/hero/51_role2_hit10.mp3",
-			"res://Music/hero/11_role2_hit4.mp3",
-			"res://Music/hero/32_role2_hit6.mp3",
-			"res://Music/hero/40_role2_hit7.mp3",
-			"res://Music/hero/39_role2_hit9.mp3"
-		]
-	elif role_id == 3:
-		sounds = [
-			"res://Music/hero/71_role3_hit1.mp3",
-			"res://Music/hero/70_role3_hit2.mp3",
-			"res://Music/hero/69_role3_hit3.mp3",
-			"res://Music/hero/role_3/16_role3_hit5.mp3",
-			"res://Music/hero/role_3/10_role3_hit8.mp3",
-			"res://Music/hero/role_3/14_role3_hit7.mp3",
-			"res://Music/hero/role_3/31_role3_hit6.mp3",
-			"res://Music/hero/role_3/38_role3_hit9.mp3",
-			"res://Music/hero/role_3/53_role3_hit4.mp3",
-			"res://Music/hero/role_3/56_role3_hit10.mp3",
-			"res://Music/hero/role_3/67_role3_hit11.mp3",
-			"res://Music/hero/role_3/74_role3_hit12_1.mp3",
-			"res://Music/hero/role_3/52_role3_hit12_2.mp3",
-			"res://Music/hero/role_3/role3_skill_11.wav"
-		]
-	elif role_id == 4:
-		sounds = [
-			"res://Music/hero/role_4/shovel_hit1.mp3",
-			"res://Music/hero/role_4/shovel_hit2.mp3",
-			"res://Music/hero/role_4/shovel_hit3.mp3",
-			"res://Music/hero/role_4/arrow_hit1.mp3",
-			"res://Music/hero/role_4/arrow_hit2.mp3",
-			"res://Music/hero/role_4/shovelqlj.mp3",
-			"res://Music/hero/role_4/arrowqlj.mp3",
-			"res://Music/hero/role_4/shoveldcj.mp3",
-			"res://Music/hero/role_4/arrowdcj.mp3",
-			"res://Music/hero/role_4/shovelmmw.mp3",
-			"res://Music/hero/role_4/arrowmmw.mp3",
-			"res://Music/hero/role_4/shovelzq.mp3",
-			"res://Music/hero/role_4/arrowzq.mp3",
-			"res://Music/hero/role_4/arrowtkj.mp3",
-			"res://Music/hero/role_4/jdz.mp3",
-			"res://Music/hero/role_4/lhsq.mp3",
-			"res://Music/hero/role_4/mds.mp3",
-			"res://Music/hero/role_4/wdww.mp3",
-			"res://Music/hero/role_4/effect6_repeat.mp3"
-		]
-	elif role_id == 5:
-		sounds = [
-			"res://Music/hero/role_5/attack1.mp3",
-			"res://Music/hero/role_5/attack2.mp3",
-			"res://Music/hero/role_5/attack3.mp3",
-			"res://Music/hero/role_5/attack4.mp3",
-			"res://Music/hero/role_5/jump_attack.mp3",
-			"res://Music/hero/role_5/effect3.mp3",
-			"res://Music/hero/role_5/effect4.mp3",
-			"res://Music/hero/role_5/effect2.mp3",
-			"res://Music/hero/role_5/effect1_1.mp3",
-			"res://Music/hero/role_5/effect1_2.mp3",
-			"res://Music/hero/role_5/effect6.mp3",
-			"res://Music/hero/role_5/effect8_1.mp3",
-			"res://Music/hero/role_5/effect8_2.mp3",
-			"res://Music/hero/role_5/effect9_1.mp3",
-			"res://Music/hero/role_5/effect9_2.mp3",
-			"res://Music/hero/role_5/effect7_1.mp3",
-			"res://Music/hero/role_5/effect7_2.mp3",
-			"res://Music/hero/role_5/attack.mp3"
-		]
-	for sound_path in sounds:
-		get_cached_audio(sound_path)
 
 
 func _cached_scene(property_name: StringName, path: String) -> PackedScene:

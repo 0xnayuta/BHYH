@@ -7,6 +7,7 @@ var dikong_field_invincible_count: int = 0
 
 var smsrsz_timer: Timer
 const SMSR_SHENQI_LIGHTNING_EFFECT := preload("res://Script/hero/smsr_shenqi_lightning_effect.gd")
+const ZLWSZ_GEAR_SCENE := preload("res://Scene/hero/zlw_shenqi_gear_bullet.tscn")
 const MOUNT_RUNTIME_SCRIPT := preload("res://Script/mount/mount_runtime.gd")
 const MAIN_SWORD_ARRAY_WEAPON_SCENE_PATH := "res://Scene/magic_weapon/main_sword_array_weapon.tscn"
 const XIANYU_WING_PATHS := {
@@ -19,7 +20,6 @@ const XIANYU_WING_PATHS := {
 }
 const HUAHAO_WING_FRAME_DIR := "res://Art/hero_picture/wings/hhyq"
 var zlwsz_shenqi_timer: Timer
-var zlwsz_shenqi_gear_scene: PackedScene
 var zlwsz_shenqi_gears: Array = []
 var zcld_level: int = 0
 var has_smsrsz_fashion: bool = false
@@ -3633,12 +3633,6 @@ func set_insky():
 	is_in_sky = true
 
 
-func _prewarm_heavy_skill_resources() -> void:
-	SMSR_SHENQI_LIGHTNING_EFFECT.prewarm_frames()
-	if zlwsz_shenqi_gear_scene == null:
-		zlwsz_shenqi_gear_scene = load("res://Scene/hero/zlw_shenqi_gear_bullet.tscn")
-
-
 func addsmsr_shenqi_lightning_round() -> void:
 	if not RoleProp.is_ws_state or not has_smsrsz_fashion or current_fashion_quality != "shenqi":
 		return
@@ -3686,13 +3680,11 @@ func _on_zlwsz_shenqi_timer_timeout():
 func addzlw_shenqi_wheel_effect():
 	if not obj_attack_dict.has("zlw_shenqi_ws"):
 		return
-	if zlwsz_shenqi_gear_scene == null:
-		zlwsz_shenqi_gear_scene = load("res://Scene/hero/zlw_shenqi_gear_bullet.tscn")
 	var bullet_parent = get_tree().current_scene
 	if bullet_parent == null:
 		bullet_parent = self.bullet
 	for i in range(3):
-		var gear = zlwsz_shenqi_gear_scene.instantiate()
+		var gear = ZLWSZ_GEAR_SCENE.instantiate()
 		gear.follow_target = self
 		gear.initial_angle = TAU / 3.0 * i
 		gear.hit_dic = obj_attack_dict["zlw_shenqi_ws"]
