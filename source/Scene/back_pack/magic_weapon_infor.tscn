@@ -365,9 +365,9 @@ metadata/_edit_lock_ = true
 
 [node name="EmptyState" type="Label" parent="BG" unique_id=2145000002]
 visible = false
-offset_left = -200.0
+offset_left = -270.0
 offset_top = -40.0
-offset_right = 200.0
+offset_right = -10.0
 offset_bottom = 40.0
 theme_override_fonts/font = ExtResource("6")
 theme_override_font_sizes/font_size = 24
