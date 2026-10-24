@@ -8,6 +8,7 @@
 
 | 文档 | 内容 |
 |:---|:---|
+| [`architecture.md`](architecture.md) | **视觉资产架构契约**：构建层/资源层/运行时层、默认选型、Spine 与 AtlasMetadata 边界、迁移状态 |
 | [`status.md`](status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 
 ## 2. 边界

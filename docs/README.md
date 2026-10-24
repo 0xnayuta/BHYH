@@ -30,6 +30,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`reference/README.md`](reference/README.md) | 参考文档目录索引 |
+| [`reference/architecture.md`](reference/architecture.md) | **视觉资产架构契约**：构建层、资源层、运行时层与迁移边界 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |

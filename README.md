@@ -106,6 +106,7 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 | 入口 | 内容 |
 |:---|:---|
 | [`docs/README.md`](docs/README.md) | 文档分层与完整索引 |
+| [`docs/reference/architecture.md`](docs/reference/architecture.md) | 视觉资产架构契约：构建层、资源层、运行时层与迁移边界 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 当前版本之后的开发路线 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
