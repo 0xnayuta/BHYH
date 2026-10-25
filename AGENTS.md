@@ -54,7 +54,7 @@
 
 ## 2. 核心架构与引擎规范
 
-1. **引擎版本**：Godot **4.7.2**（Forward Mobile / gl_compatibility）；业务代码使用 GDScript 2.0，优先静态类型（`var level: int`、`-> void`）。
+1. **引擎版本**：Godot **4.7.2**（默认渲染 `mobile`，Web 使用 `forward_plus`）；业务代码使用 GDScript 2.0，优先静态类型（`var level: int`、`-> void`）。
 2. **零错误零警告**：编辑器加载与实机运行日志必须保持 **0 ERROR / 0 WARNING**；重点杜绝 `Resource file not found`、`UID duplicate detected`、未初始化 Autoload 强依赖与资源泄漏。该要求以私有完整工作区（含本地素材）为准；公开 clone 因素材目录被排除而出现缺失资源提示，属于预期，不据此判定失败。
 3. **资产 UID 与导入**：
    - 新增美术、音频、字体、场景必须具备全局唯一 `uid://`；

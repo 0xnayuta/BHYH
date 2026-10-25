@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-24（Phase 12 多分辨率验收与收口完成后）
+> 最后更新：2026-10-25（bhyh-doc-sync 文档对齐与静态门禁复验）
 
 ---
 
@@ -13,7 +13,7 @@
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
 | 当前内容版本 | **6.9**（6.5.0.0 基线 + 6.6 / 6.7 / 6.8 / 6.9 回植） |
 | `project.godot` 版本字段 | 未声明 `config/version` |
-| 引擎 | Godot **4.7.2**（Forward Mobile / gl_compatibility） |
+| 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
 | 工程根 | `source/`（可直接用 Godot 打开 `source/project.godot`） |
@@ -53,21 +53,22 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 ---
 
-## 3. 规模（2026-10-23 实测）
+## 3. 规模（2026-10-25 实测）
 
 | 指标 | 数量 |
 |:---|:---:|
-| GDScript | **741**（业务 705：`Script/` 642 + 顶层 7 + 场景内嵌 56；插件 36） |
+| GDScript | **742**（业务 706：`Script/` 643 + 顶层 7 + `Scene/` 55 + `Art/` 1；插件 36） |
 | 场景 `.tscn` | **1,137**（`Scene/` 1,136 + 插件 1） |
-| 资源 `.tres` | **979**（主要为 `Art/**/*.sprites` 图集资源） |
-| PNG | **16,709**（另有 21 个大写 `.PNG`，合计 16,730） |
-| `.import` | **17,003** |
-| `.uid` | **751** |
+| 资源 `.tres` | **993**（主要为 `Art/**/*.sprites` 图集资源与角色运行清单） |
+| PNG | **16,723**（16,702 小写 `.png` + 21 大写 `.PNG`） |
+| `.import` | **17,005** |
+| `.uid` | **775** |
 | MP3 / WAV | **170 + 8**（大写 `.MP3`）/ **1** |
 | 字体 | **13 TTF + 2 TTC** |
-| Shader | **8** |
+| Shader | **7** |
 | Autoload | **13** |
-| 仓库体积 | 约 **3.1 GB**（`Art/` 约 3.0 GB） |
+
+> 仓库体积与本地素材、`.git`、导入缓存相关，不作为发布指标；公开仓库不包含第三方素材。
 
 ---
 
@@ -80,7 +81,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 | `python scripts/health_check.py --project source --godot-bin <path>` | 场景引用拓扑、死代码、Headless 编译与 GDScript warning 门禁 |
 | `python scripts/level_regression_all.py --jobs 4 --timeout 90` | 全量关卡冒烟回归；8 并发仅用于快速回归 |
 | `python scripts/level_test_runner.py --godot <path> --level res://Scene/level/level_1.tscn` | 单关冒烟夹具 |
-| `python scripts/coop_probe_runner.py --godot <path>` | 双人模式 16 探针矩阵 |
+| `python scripts/coop_probe_runner.py --godot <path>` | LocalCoop 探针矩阵（用例清单由脚本维护） |
 | `python scripts/convert_atlas_metadata.py --check` | Atlas manifest 与 `metadata.tres` 同步校验 |
 
 Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变量指定，不写入仓库。
@@ -91,8 +92,11 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 ## 5. 验证状态
 
+> 以下为不同阶段的验证记录；历史行按当时基线保留。当前规模与最新静态复验见本页 §3 与下表首行。
+
 | 验证 | 结果 | 说明 |
 |:---|:---|:---|
+| 2026-10-25 文档同步基线 | 静态门禁 **7/7 PASS** | `scripts/check_all.py --skip-engine`；未重跑引擎编译、关卡回归与双人探针 |
 | 结构整理后静态门禁 | **7/7 PASS** | `scripts/check_all.py --skip-engine` |
 | Atlas 元数据 | **379/379 同步** | `scripts/convert_atlas_metadata.py --check` |
 | 6.9 完整工作区验收基线 | 七维门禁 7/7；关卡回归 **128/128 PASS + 5 SKIP**；双人矩阵 **15/15 PASS**；Atlas **379/379** | 本地完整素材工作区；6.9 定向探针 0 failures |
@@ -126,4 +130,4 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 6. 按项目原则不做向前兼容：旧 `user://` 存档目录、旧任务键与旧配置均不迁移；存档密钥前缀已修正为 `zmxybhyh`。
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
-9. 全量 133 关完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
+9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。

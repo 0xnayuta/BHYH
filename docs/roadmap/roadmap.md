@@ -8,9 +8,9 @@
 
 ---
 
-## 1. 当前迭代：Phase 12 画布与 HUD 重构
+## 1. 最近完成迭代：Phase 12 画布与 HUD 重构
 
-6.9 补丁回植已完成并通过收口验收，完整记录归档于 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)。当前内容版本保持 **6.9**；Phase 12 只处理画布、窗口、相机和桌面 HUD 的展示层重构。
+6.9 补丁回植已完成并通过收口验收，完整记录归档于 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)。当前内容版本保持 **6.9**，当前无活跃迭代；Phase 12 只处理画布、窗口、相机和桌面 HUD 的展示层重构。
 
 当前方案：
 

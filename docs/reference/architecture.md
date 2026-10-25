@@ -40,8 +40,8 @@ BHYH/
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
 | 最大 FPS | 150（`run/max_fps`） | `source/project.godot` |
 | Autoload | **13**：12 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
-| 输入动作 | **24** 个 | `source/project.godot` `[input]` |
-| 2D 物理层 | **17** 个具名层 | `source/project.godot` `[layer_names]` |
+| 输入动作 | 集中定义于 `source/project.godot`；数量以配置为准 | `source/project.godot` `[input]` |
+| 2D 物理层 | 具名层；名称与数量以 `source/project.godot` 为准 | `source/project.godot` `[layer_names]` |
 | 场景树分组 | `Player`、`Monster` | `source/project.godot` `[global_group]` |
 
 ### 1.3 分层视图
@@ -77,7 +77,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 8 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
 | 9 | `MainMusic` | `main_music.gd` | 主菜单 BGM 单实例 | 读取 `MainSet`、`Global` |
 | 10 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
-| 11 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象，约 5.6k 行 |
+| 11 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象 |
 | 12 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
 | 13 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
 
@@ -203,10 +203,10 @@ classDiagram
     Area2D <|-- BaseRoleHitBox
     Sprite2D <|-- Stage
     StaticBody2D <|-- StageNode
-    note for BaseHero "8 个直接子类（Role1Hero … YutuHero）"
-    note for BaseMonster "196 个业务子类"
-    note for BaseLevel "86 个业务子类"
-    note for BaseMagicWeapon "24 个业务子类"
+    note for BaseHero "包含 Role1Hero … YutuHero 等角色子类"
+    note for BaseMonster "区域怪物、Boss 与召唤物子类"
+    note for BaseLevel "关卡运行器子类"
+    note for BaseMagicWeapon "法宝运行时子类"
 ```
 
 ### 4.2 核心类职责
@@ -351,9 +351,9 @@ classDiagram
 
 仍然存在（遗留）：
 
-- **`FrameSequence` 在代码中 0 命中**：它是架构目标类型，不是当前实现；
+- **`FrameSequence` 尚未实现**：它是架构目标类型，不是当前实现；
 - `StreamedPngEffect` 仍以运行时目录扫描 + PNG 路径/区域数组工作，受 `scripts/png_stream_audit.py` 的 allowlist 限制；
-- 仍有 **73 个脚本**在运行时调用 `SpriteFrames.new()` 建帧；
+- 仍有多个脚本在运行时调用 `SpriteFrames.new()` 建帧；
 - `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界；
 - `load_scene.gd` 仍通过正则读取关卡 `.gd` 源文本提取刷怪表，属于运行时反解析源码的遗留手法。
 
@@ -387,7 +387,7 @@ classDiagram
 - 加载页线程化预载，移动端并发槽位 2、桌面 4；
 - 角色/宠物/法宝/怪物/战斗命中资源分阶段预热；
 - 关卡级缓存按轨迹精确失效（`clear_level_resource_cache`），战斗缓存按前缀清理；
-- 伤害数字、受击特效、音效播放器等使用对象池，池容量分别为 80 / 32 / 24 / 32；
+- 伤害数字、受击特效、音效播放器等使用有限容量对象池（具体上限见 `global.gd` 常量）；
 - UI 场景使用 `CACHE_MODE_IGNORE_DEEP`，避免 UI 资源长期占用缓存；
 - 战斗加载输出 `[Battle VRAM]` 日志，用于对比显存增量。
 
@@ -403,7 +403,7 @@ classDiagram
 已完成：
 
 - 角色 1~7 的运行资源清单与静态 `RoleRuntimeCatalog`；
-- 哪吒 117 个装备层构建期 `SpriteFrames`；
+- 哪吒装备层构建期 `SpriteFrames`；
 - BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 构建期 `SpriteFrames`；
 - `AtlasMetadata` 构建期转换与运行时只读加载；
 - 角色 4/5 重型帧的构建期化与预热清单收敛。
@@ -442,14 +442,14 @@ classDiagram
 
 ### 7.2 输入
 
-- 输入动作集中定义于 `project.godot`，共 24 个；
+- 输入动作集中定义于 `project.godot`，数量以实际配置为准；
 - 双人输入由 `LocalCoop._ready()` 动态注册 `p2_*`，键位表见 `P2_KEYS`；
 - 业务代码通过 `CoopInput`（`PlayerInput` 属性）读取，`slot == 2` 时自动加 `p2_` 前缀；
 - 代码不得散落裸按键字符串；新增动作必须写入 `project.godot` 并说明平台影响。
 
 ### 7.3 物理层
 
-`project.godot` 定义 17 个具名 2D 物理层：
+`project.godot` 使用具名 2D 物理层：
 
 | 层 | 名称 | 层 | 名称 |
 |:---:|:---|:---:|:---|
@@ -471,12 +471,12 @@ classDiagram
 
 | 子系统 | 位置 | 职责 | 代表文件 |
 |:---|:---|:---|:---|
-| 角色 | `Script/hero/`、`Scene/hero/` | 8 个 `BaseHero` 子类、角色专属特效、时装/翅膀/剑阵 | `role1.gd`、`role_2.gd`、`ne_zha_hero.gd`、`yutu_hero.gd` |
-| 怪物 | `Script/monster/` | 196 个 `BaseMonster` 子类、Boss、召唤物、区域怪物 | `constellation_boss.gd`、`east_continent_monster.gd`、`sword_boss_base.gd` |
-| 关卡 | `Script/level/`、`Scene/level/` | 86 个 `BaseLevel` 子类、HUD、相机、特殊副本 | `level_1.gd`、`level_tzsijian.gd`、`level_zhen_yao_tower.gd`、`victory.gd` |
-| 法宝 | `Script/magic_weapon/` | 24 个 `BaseMagicWeapon` 子类、场景映射、技能效果 | `main_sword_array_weapon.gd`、`mirror.gd`、`taiji_bagua.gd` |
+| 角色 | `Script/hero/`、`Scene/hero/` | `BaseHero` 子类、角色专属特效、时装/翅膀/剑阵 | `role1.gd`、`role_2.gd`、`ne_zha_hero.gd`、`yutu_hero.gd` |
+| 怪物 | `Script/monster/` | `BaseMonster` 子类、Boss、召唤物、区域怪物 | `constellation_boss.gd`、`east_continent_monster.gd`、`sword_boss_base.gd` |
+| 关卡 | `Script/level/`、`Scene/level/` | `BaseLevel` 子类、HUD、相机、特殊副本 | `level_1.gd`、`level_tzsijian.gd`、`level_zhen_yao_tower.gd`、`victory.gd` |
+| 法宝 | `Script/magic_weapon/` | `BaseMagicWeapon` 子类、场景映射、技能效果 | `main_sword_array_weapon.gd`、`mirror.gd`、`taiji_bagua.gd` |
 | 技能 | `Script/skill/` | 主动技能、学习、键位、觉醒 | `zd_skill.gd`、`learn_skill.gd`、`skill_key_set.gd` |
-| 宠物 | `Script/pet/`、`Scene/pet/` | 8 类宠物、进化、技能、宠物背包 | `pet_interface.gd`、`pet_*_summon_base.gd` |
+| 宠物 | `Script/pet/`、`Scene/pet/` | 多类宠物、进化、技能、宠物背包 | `pet_interface.gd`、`pet_*_summon_base.gd` |
 | 坐骑 | `Script/mount/` | 坐骑运行时、图鉴、技能效果 | `mount_runtime.gd`、`mount_catalog.gd` |
 | 丹药 | `Script/pellet/` | 丹药属性缓存与消耗 | `basic_pellet.gd` |
 | 锻造 | `Script/ldl/` | 强化、合成、镶嵌、分解、打造、神铸、淬骨 | `ldl.gd`、`strength.gd`、`divine_forge.gd` |
@@ -499,11 +499,11 @@ classDiagram
 
 | 项目 | 现状 | 约束 |
 |:---|:---|:---|
-| 13 个 Autoload、`Global` 上帝对象 | 约 5.6k 行，承担场景、UI、缓存、池、预载与业务判定 | 新功能不得继续堆积；拆分为独立立项 |
+| 13 个 Autoload、`Global` 上帝对象 | 大型遗留单例，承担场景、UI、缓存、池、预载与业务判定 | 新功能不得继续堆积；拆分为独立立项 |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
-| 运行时 `SpriteFrames.new()` | 73 个脚本 | 有限帧改为构建期资源；超大序列走目标流式方案 |
-| `StreamedPngEffect` 目录扫描 | 16 个业务引用文件 + 播放器自身；allowlist 17 条 | 不新增未登记使用；迁移到构建期 `FrameSequence` |
+| 运行时 `SpriteFrames.new()` | 多个脚本仍存在运行时建帧 | 有限帧改为构建期资源；超大序列走目标流式方案 |
+| `StreamedPngEffect` 目录扫描 | 受 allowlist 限制；清单见 `scripts/png_stream_allowlist.json` | 不新增未登记使用；迁移到构建期 `FrameSequence` |
 | 运行时正则解析 `.gd` 源码 | `load_scene.gd` 提取刷怪表 | 迁移为 Manifest/Catalog 数据源 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
@@ -530,12 +530,12 @@ classDiagram
 
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
-1. **`FrameSequence` 尚未实现**：本文与旧版架构文档把它列为目标资源类型，但代码中 0 命中；当前超大序列的真实实现是 `StreamedPngEffect`。
+1. **`FrameSequence` 尚未实现**：本文与旧版架构文档把它列为目标资源类型；当前超大序列的真实实现是 `StreamedPngEffect`。
 2. **Autoload 数量**：共 13 个注册项，其中 12 个是业务单例，`MCPGameBridge` 是调试桥；说“13 个业务 Autoload”不准确。
 3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
-4. **双人探针数量**：`coop_probe_runner.py` 当前登记 16 个用例；历史文档中的 15/15 是旧基线。
-5. **规模数字**：`status.md` 的 741/705 脚本是 2026-10-23 基线；本文抽查时磁盘计数为 742 总 / 706 业务。规模以 `status.md` 为单一事实源，本文不复制为长期承诺。
-6. **渲染后端**：`project.godot` 默认 `mobile`、Web `forward_plus`；不要把旧文档中的 `gl_compatibility` 当作当前配置。
+4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。
+5. **规模数字**：具体规模以 [`status.md`](status.md) 的当前快照为准；本文不复制脚本、场景与资源数量。
+6. **渲染后端**：`project.godot` 默认 `mobile`、Web `forward_plus`；以工程配置为准，不要沿用旧文档中的渲染后端名称。
 
 ---
 

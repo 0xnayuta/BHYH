@@ -11,13 +11,12 @@
 | 项目 | 值 |
 |:---|:---|
 | 当前版本 | **6.9**（6.5.0.0 基线 + 6.6 / 6.7 / 6.8 / 6.9 回植） |
-| 引擎 | Godot **4.7.2**（Forward Mobile / gl_compatibility） |
+| 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 工程根 | `source/` |
-| GDScript | 741（业务 705 + 插件 36） |
-| 场景 | 1,137 `.tscn` |
-| 私有工作区资源 | 979 `.tres`、16,730 PNG、178 MP3 + 1 WAV、13 TTF + 2 TTC、8 Shader |
-| Autoload | 13 |
-| 私有工作区体积 | 约 3.1 GB（`Art/` 约 3.0 GB；公开仓库不含素材） |
+| 语言与架构 | GDScript 2.0、场景/Resource 分层、构建期资源管线 |
+| 规模 | 以 [`docs/reference/status.md`](docs/reference/status.md) 为单一事实源 |
+| Autoload | 13 个注册项（12 个业务单例 + 1 个编辑器调试桥；新增需评审） |
+| 素材边界 | 公开仓库不含第三方素材；完整验收使用本地合法素材工作区 |
 
 完整版本谱系、目录职责与验证状态见 [`docs/reference/status.md`](docs/reference/status.md)。
 
@@ -93,7 +92,7 @@ python scripts/health_check.py --project source --godot-bin "<godot>"
 python scripts/contract_scan.py --project-dir source --fail-on-error
 python scripts/naming_audit.py --root source --all
 python scripts/resource_path_audit.py --project source
-python scripts/level_regression_all.py --jobs 8 --timeout 90
+python scripts/level_regression_all.py --jobs 4 --timeout 90
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"
 ```

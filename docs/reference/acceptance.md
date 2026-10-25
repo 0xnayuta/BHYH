@@ -73,7 +73,7 @@ python scripts/check_all.py --no-cache -j 6
 |:---:|:---|:---|:---|:---:|
 | 1 | 跨平台行尾 LF | `normalize_eol.py source --dry-run` | 输出含 `发现并清洗 CRLF 文件数: 0`；`--fix` 模式下只看退出码 0 | ❌ |
 | 2 | GDScript 格式化 | `format_all.py source --check` | 输出含 `所有代码完全符合代码格式规范`（或修复模式的 `代码格式化操作完成`）且退出码 0 | ❌ |
-| 3 | 静态异味 | `gdlint` 作用于 **10 个核心脚本** | 退出码 0 且输出含 `no problems found` | ❌ |
+| 3 | 静态异味 | `gdlint` 作用于核心脚本子集 | 退出码 0 且输出含 `no problems found` | ❌ |
 | 4 | 引擎静态编译 | `health_check.py [--godot-bin X]` | 退出码 0，且输出命中 `0 Parse Error`（或 `0 严重编译错误`）与 `0 处断裂引用` | ✅ |
 | 5 | 契约与资源域 | `contract_gate.py` | 退出码 0；`docs/reports/contract_audit.json` 存在且 `ERROR == 0`、`WARNING <= 1050` | ❌ |
 | 6 | 全量命名 | `naming_audit.py --all` | 退出码 0 | ❌ |
@@ -84,7 +84,7 @@ python scripts/check_all.py --no-cache -j 6
 
 1. **七维与八维是同一脚本的两种运行口径**：`--skip-engine` 跳过维度 4；`status.md` 中的“7/7 PASS”通常指此口径。
 2. **维度 1 的失败判定依赖 stdout 文本**：`normalize_eol.py` 自身永远返回 0（目标不存在时返回 2）；CRLF 未清零由 `check_all.py` 的文本匹配拦截。
-3. **维度 3 只覆盖 10 个核心脚本**：`global.gd`、`base_hit.gd`、`all_equipment.gd`、`base_role_properies.gd`、`base_hero.gd`、`base_monster.gd`、`level_1.gd`、`victory.gd`、`player_data.gd`、`memory_class.gd`。不是全量 lint。
+3. **维度 3 只覆盖核心脚本子集**：清单硬编码在 `check_all.py`；不是全量 lint。
 4. **维度 4 在没有 Godot 时不会“通过”**：`health_check.py` 在无引擎时可能返回 `skipped` 且退出码 0，但 `check_all` 找不到成功文本，仍会 FAIL。无引擎环境必须显式 `--skip-engine`。
 5. **维度 5 是双重判据**：`contract_gate` 任一子命令非零直接失败；子命令全通过后，才检查 JSON 的 ERROR 与 WARNING 预算。
 6. **WARNING 预算 1050 是棘轮**：ERROR 必须为 0；WARNING 不得超过当前预算。新增 WARNING 需要先降低存量或调整预算，不能静默增长。
@@ -163,7 +163,7 @@ python scripts/health_check.py --project source --godot-bin "<godot>"
 - 日志中检测到 `Parse Error` 或 `SCRIPT ERROR:`；
 - 检测到白名单外的 GDScript 静态分析 warning。
 
-当前 `WARNING_ALLOWLIST` 为**空**，即默认严格 0 warning；解析 9 类警告码：
+当前 `WARNING_ALLOWLIST` 为**空**，即默认严格 0 warning；解析已登记的 GDScript 警告码，未识别项记 `UNKNOWN`：
 
 `CONFUSABLE_LOCAL_DECLARATION`、`CONFUSABLE_LOCAL_USAGE`、`INCOMPATIBLE_TERNARY`、`UNUSED_PRIVATE_CLASS_VARIABLE`、`REDUNDANT_AWAIT`、`STANDALONE_EXPRESSION`、`STANDALONE_TERNARY`、`UNREACHABLE_CODE`、`PROPERTY_WILL_BE_MODIFIED`。
 
@@ -208,9 +208,9 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 
 | 项目 | 规则 |
 |:---|:---|
-| 候选发现 | `Scene/level/` 下 `level_<数字>` 为编号关；`level_*` 非纯数字与 5 个 `EXTRA_LEVELS` 为特殊关 |
-| 当前规模 | 133 个候选 = 128 个可测 + 5 个非战斗场景 SKIP |
-| SKIP | 5 个菜单/地图/交互场景直接 `passed=True, skipped=True`，**SKIP 计入通过**（这是关卡回归的既定口径；与双人探针的 SKIP 语义不同） |
+| 候选发现 | `Scene/level/` 下 `level_<数字>` 为编号关；脚本登记的 `EXTRA_LEVELS` 与非纯数字 `level_*` 场景为特殊关 |
+| 当前规模 | 候选数由当前 `Scene/level/` 清单动态发现，不在文档中硬编码 |
+| SKIP | 命中 `NON_BATTLE_SPECIALS` 的菜单/地图/交互场景直接 `passed=True, skipped=True`，**SKIP 计入通过**（这是关卡回归的既定口径；与双人探针的 SKIP 语义不同） |
 | 单关超时 | 默认 150 秒；子进程超时为 `timeout + 90` 秒 |
 | 并发 | 默认 4；8 并发仅用于快速回归，存在 Godot 启动瞬态 |
 | 重试 | 失败关串行重试 1 次 |
@@ -225,7 +225,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 python scripts/coop_probe_runner.py --godot "<godot>"
 ```
 
-- 当前登记 **16** 个用例：`LocalCoopProbe`、`LocalCoopGameplayProbe`、`LocalCoopMagicSwitchProbe`、`LocalCoopMonsterBalanceProbe`、`LocalCoopMonsterInfoProbe`、`LocalCoopNicknameProbe`、`LocalCoopPanelProbe`、`LocalCoopPerformanceProbe`、`LocalCoopPetBuffProbe`、`LocalCoopPetExperienceProbe`、`LocalCoopSharedSoulProbe`、`LocalCoopSkillKeysProbe`、`LocalCoopSwitchPassiveProbe`、`LocalCoopSwordMountProbe`、`LocalCoopCreationUIProbe`、`LocalCoopWushuangAttributionProbe`；
+- 用例清单由 `coop_probe_runner.py` 的 `CASES` 维护，覆盖状态、玩法、技能切换、怪物数值、面板、性能、宠物、共享魂、按键、被动、剑/坐骑、创建 UI 与无双归属；执行前以脚本实际列表为准；
 - 串行执行，单探针超时 **180 秒**；
 - 输出中以 `SCRIPT ERROR:` 或 `ERROR:` 开头的行判 FAIL；唯一豁免为 `resources still in use at exit`；
 - 结果取最后一条 `COOP_MATRIX_RESULT=<json>`；缺失结果或超时判 FAIL；
@@ -292,22 +292,21 @@ python scripts/convert_nezha_preview_frames.py --check
 | 项目 | 值 | 归属/说明 |
 |:---|:---|:---|
 | `check_all` 并发 | 默认 6 | 可用 `-j` 调整 |
-| `gdlint` 覆盖 | 10 个核心脚本 | 不是全量 lint |
+| `gdlint` 覆盖 | 核心脚本子集 | 不是全量 lint；清单见 `check_all.py` |
 | `health_check` 编译超时 | 30 秒 | 超时后 Windows 使用 `taskkill /F /T` |
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
-| warning 码映射 | 9 类 | 未识别记 `UNKNOWN` |
+| warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 6 类 / 12 rule_id | ERROR 才阻断 |
+| 契约规则 | 六类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
-| 冻结登记规模 | machine 120 / numeric 188 / numeric_scene 48 / third_party 1 | 2026-10-21 冻结基线 |
-| PNG 流 allowlist | 17 个文件 | 不含 `streamed_png_effect.gd` 自身 |
+| PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |
 | 关卡冒烟超时 | 300 秒 | 加载上限 45,000 ms / 20,000 帧 |
-| 关卡回归候选 | 133 | 128 可测 + 5 SKIP |
+| 关卡回归候选 | 由 `Scene/level/` 清单动态发现 | 非战斗场景按 `NON_BATTLE_SPECIALS` 跳过 |
 | 关卡回归并发 | 默认 4 | 失败重试 1 次 |
 | 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
-| 双人探针 | 16 个 | 单探针 180 秒，串行 |
-| 数字场景 | 48 | 6 角色 × 8 坐骑 ID |
+| 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
+| 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |
 
@@ -322,7 +321,7 @@ python scripts/convert_nezha_preview_frames.py --check
 - 引擎健康检查 **706 脚本 0 Parse / 0 Error / 0 Warning**；
 - **1,136 场景 0 断裂引用**。
 
-这些数字是历史记录，不是本文的实测结果。当前磁盘计数与 `status.md` 的差异见 [`architecture.md`](architecture.md) §9.3。
+这些数字是历史快照，不是本文的实测结果。当前规模与最新验证状态以 [`status.md`](status.md) 为准。
 
 ---
 
@@ -336,7 +335,7 @@ python scripts/convert_nezha_preview_frames.py --check
 | 新增/修改美术或音频 | L1 八维 + `--import` | Atlas/编号帧/哪吒 `--check`；相关关卡冒烟 | 未生成 `.import`/UID；未重建导入缓存 |
 | 存档/数据结构 | L1 八维 | 旧档读取、缺失字段补全、保存/重载、双人槽位 | 只测新档；静默回退旧结构 |
 | 输入/物理层 | L1 八维 | 单/双人按键路径；相关关卡冒烟 | 只改 `project.godot` 不实机验证 |
-| 双人/LocalCoop | L1 八维 | `coop_probe_runner` 16/16；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
+| 双人/LocalCoop | L1 八维 | `coop_probe_runner` 全部用例；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
 | UI/HUD/显示 | L1 八维 | 单/双人多分辨率截图；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
 | 关卡/玩法 | L1 八维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
 | 构建期资源管线 | L1 八维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |

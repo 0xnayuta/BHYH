@@ -16,6 +16,6 @@
 
 - `scripts/convert_atlas_metadata.py --check` 校验 manifest/metadata 同步；
 - `scripts/convert_atlas_metadata.py --self-test` 校验 `source_frames` 负向样本；
-- `scripts/convert_nezha_preview_frames.py --check` 校验 117 个输出存在且内容一致；
+- `scripts/convert_nezha_preview_frames.py --check` 校验全部输出存在且内容一致（数量以预览源清单为准）；
 - `scripts/convert_numbered_frames.py --all --check` 校验 BiLuoTian / LeiTingJieZhen 构建期帧存在且未过期；
 - `png_stream_audit.py --fail-on-error` 校验未登记的 `StreamedPngEffect`。
