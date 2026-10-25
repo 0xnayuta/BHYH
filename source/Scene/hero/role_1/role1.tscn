@@ -14449,13 +14449,6 @@ height = 98.0
 radius = 20.0
 height = 90.0
 
-[sub_resource type="Environment" id="314"]
-background_mode = 3
-glow_intensity = 2.72
-glow_strength = 2.0
-glow_hdr_threshold = 1.05
-adjustment_brightness = 0.01
-
 [node name="Role1" unique_id=604386747 instance=ExtResource("1")]
 collision_layer = 18
 script = ExtResource("2")
@@ -14568,9 +14561,6 @@ wait_time = 0.2
 autostart = true
 
 [node name="RemoveW" type="Timer" parent="." index="14" unique_id=1441494310]
-
-[node name="WorldEnvironment" parent="." index="16" unique_id=1829468768]
-environment = SubResource("314")
 
 [connection signal="timeout" from="NorMalHitInterv" to="." method="_on_nor_mal_hit_interv_timeout"]
 [connection signal="timeout" from="RemoveW" to="." method="_on_remove_w_timeout"]

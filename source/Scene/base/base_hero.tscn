@@ -2717,10 +2717,6 @@ script/source = "extends Node
 			
 "
 
-[sub_resource type="Environment" id="241"]
-background_mode = 3
-glow_enabled = true
-
 [node name="BaseHero" type="CharacterBody2D" unique_id=319564051]
 material = SubResource("1")
 collision_layer = 512
@@ -2848,9 +2844,6 @@ one_shot = true
 
 [node name="Buff" type="Node" parent="." unique_id=2063872721]
 script = SubResource("240")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1829468768]
-environment = SubResource("241")
 
 [node name="ZhenFa" type="Timer" parent="." unique_id=1558552342]
 one_shot = true
