@@ -209,10 +209,10 @@ func _projectile(
 		"hit_name": str(action),
 		"attack_data": _attack_entry(action),
 		"skill_name": "CloudBoss_" + sequence,
-		"atlas_metadata": _metadata_path(),
-		"atlas_sequence": sequence,
+		"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
 		"frames_resource": CLOUD_FRAMES_RES,
 		"frames_animation": sequence,
+		"source_masks_metadata": _metadata_path(),
 		"frame_fps": SOURCE_FPS,
 		"velocity": motion,
 		"lifetime": duration,
@@ -224,7 +224,9 @@ func _projectile(
 	}
 	config.merge(extra, true)
 	var projectile := CLOUD_PROJECTILE.new() as WutaiMinghaiProjectile
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	skill_projectile_spawned.emit(sequence, projectile)
 	return projectile

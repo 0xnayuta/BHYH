@@ -253,8 +253,6 @@ func _run_peng_skill(action: StringName, serial: int) -> void:
 				"max_hits": 3,
 				"damage_pulse_interval": 0.2,
 				"poll_overlaps_on_damage_pulse": true,
-				"impact_atlas_metadata": _metadata_path(),
-				"impact_atlas_sequence": "effect3_2",
 				"impact_frames_resource": _standard_body_frames_path(),
 				"impact_frames_animation": "effect3_2",
 				"impact_frame_count": 11,
@@ -316,8 +314,6 @@ func _run_lightning_skill(action: StringName, serial: int) -> void:
 						"acceleration": Vector2(0, 990),
 						"orient_to_motion": true,
 						"collide_terrain": true,
-						"impact_atlas_metadata": _metadata_path(),
-						"impact_atlas_sequence": "effect2_%d" % (polarity + 3),
 						"impact_frames_resource": _standard_body_frames_path(),
 						"impact_frames_animation": "effect2_%d" % (polarity + 3),
 						"impact_frame_count": 12,
@@ -375,10 +371,10 @@ func _projectile(
 		"hit_name": str(action),
 		"attack_data": _attack_entry(action),
 		"skill_name": "PalaceBoss%d_%s" % [monster_kind, sequence],
-		"atlas_metadata": _metadata_path(),
-		"atlas_sequence": sequence,
+		"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
 		"frames_resource": _standard_body_frames_path(),
 		"frames_animation": sequence,
+		"source_masks_metadata": _metadata_path(),
 		"frame_fps": SOURCE_FPS,
 		"velocity": motion,
 		"lifetime": duration,
@@ -389,10 +385,17 @@ func _projectile(
 		"track_target": false
 	}
 	config.merge(extra, true)
+	config["impact_visual_backend"] = (
+		WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+		if not str(config.get("impact_frames_resource", "")).is_empty()
+		else WutaiMinghaiProjectile.VisualBackend.NONE
+	)
 
 	if bool(config.get("orient_to_motion", false)):
 		config["visual_faces_right"] = config["right"]
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	skill_projectile_spawned.emit(sequence, projectile)
 	return projectile

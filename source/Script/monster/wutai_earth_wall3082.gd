@@ -242,7 +242,7 @@ func _fire_arrow(arrow_index: int) -> void:
 		return
 	_source_boss.obj_attack_dict[WALL_PROJECTILE_HIT] = attack_data.duplicate(true)
 	var arrow := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		arrow
 		. configure(
 			{
@@ -256,10 +256,10 @@ func _fire_arrow(arrow_index: int) -> void:
 				"hit_name": WALL_PROJECTILE_HIT,
 				"attack_data": attack_data,
 				"skill_name": "EarthAncestorStoneSpike",
-				"frame_root": ROOT.path_join("arrow"),
-				"frame_count": 1,
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
 				"frames_resource": ARROW_FRAMES_RES,
 				"frames_animation": "arrow",
+				"frame_count": 1,
 				"loop_visual": true,
 				"velocity": Vector2(_projectile_speed * _move_direction, 0.0),
 				"lifetime": _projectile_lifetime,
@@ -269,6 +269,9 @@ func _fire_arrow(arrow_index: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		arrow.free()
+		return
 	_source_boss.bullet.add_child(arrow)
 
 

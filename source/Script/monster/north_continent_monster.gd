@@ -830,11 +830,11 @@ func _standard_shot(action: StringName, skill: Dictionary) -> void:
 		var target := RoleProp.get_nearest_monster_target_position(origin)
 		velocity_source.x = absf(target.x - global_position.x) / duration * _facing()
 	if model == 3357 and assets.size() > 1:
-		extra["impact_atlas_sequence"] = assets[1]
+		extra["impact_sequence"] = assets[1]
 		extra["collide_terrain"] = true
 		extra["source_impact"] = Callable(self, "_source_impact_damage").bind(assets[1], action, skill)
 	if model == 3481 and assets[0] == "attack1_1":
-		extra["impact_atlas_sequence"] = "attack1_2"
+		extra["impact_sequence"] = "attack1_2"
 		extra["collide_terrain"] = true
 	if model == 3372 and assets[0] == "effect2_1":
 		extra["finished_callback"] = Callable(self, "_return_frost").bind(action, skill)
@@ -885,17 +885,14 @@ func _projectile(
 ) -> WutaiMinghaiProjectile:
 	if not _source["sequences"].has(sequence):
 		return null
-	var metadata := _metadata_path()
-	var impact_sequence := str(extra.get("impact_atlas_sequence", ""))
+	var frames_path := _standard_body_frames_path()
+	var impact_sequence := str(extra.get("impact_sequence", ""))
 	if not impact_sequence.is_empty() and _source["sequences"].has(impact_sequence):
 		var impact_frame_count: int = _source["sequences"][impact_sequence]["frames"].size()
-		extra["impact_atlas_metadata"] = metadata
+		extra["impact_frames_resource"] = frames_path
+		extra["impact_frames_animation"] = impact_sequence
 		extra["impact_frame_count"] = impact_frame_count
 		extra["impact_duration"] = float(impact_frame_count) / SOURCE_FPS
-		var resource_path := _standard_body_frames_path()
-		if not resource_path.is_empty():
-			extra["impact_frames_resource"] = resource_path
-			extra["impact_frames_animation"] = impact_sequence
 	var rotates: bool = skill.get("arrow", "0") == "1" and not motion.is_zero_approx()
 	var config := {
 		"owner": self,
@@ -905,10 +902,10 @@ func _projectile(
 		"hit_name": str(action),
 		"attack_data": _attack_entry(action),
 		"skill_name": "North_%s_%s" % [monster_kind, sequence],
-		"atlas_metadata": metadata,
-		"atlas_sequence": sequence,
-		"frames_resource": _standard_body_frames_path(),
+		"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+		"frames_resource": frames_path,
 		"frames_animation": sequence,
+		"source_masks_metadata": _metadata_path(),
 		"frame_fps": SOURCE_FPS,
 		"velocity": motion,
 		"lifetime": duration,
@@ -923,10 +920,17 @@ func _projectile(
 		"poll_overlaps_on_damage_pulse": true
 	}
 	config.merge(extra, true)
+	config["impact_visual_backend"] = (
+		WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+		if not str(config.get("impact_frames_resource", "")).is_empty()
+		else WutaiMinghaiProjectile.VisualBackend.NONE
+	)
 	if bool(config["orient_to_motion"]):
 		config["right"] = true
 	var projectile := NORTH_PROJECTILE.new() as WutaiMinghaiProjectile
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	if extra.has("mask_sequence"):
 		var alias := str(extra["mask_sequence"])

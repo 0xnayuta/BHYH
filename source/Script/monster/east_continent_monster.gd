@@ -27,6 +27,8 @@ const SAND_BOSS_ACTION_VISUAL_OFFSETS := {
 const FLOWER_ARROW_ROOT := "res://Art/monster/game_4_special_effect/effect_3121/arrow1"
 const AOLAIGUO_BOSS_METADATA := "res://Art/monster/swf_png/3136/atlas/metadata.tres"
 const RAIN_ANCESTOR_METADATA := "res://Art/monster/swf_png/3182/atlas/metadata.tres"
+const AOLAIGUO_BOSS_FRAMES := "res://Art/monster/swf_png/3136/atlas/swf_png_3136_frames.tres"
+const RAIN_ANCESTOR_FRAMES := "res://Art/monster/swf_png/3182/atlas/swf_png_3182_frames.tres"
 const SMALL_HURT_DURATION := 0.28
 const CORPSE_LIFETIME := 0.9
 
@@ -2585,8 +2587,9 @@ func _spawn_late_skill_effect(
 	var impact_frame_count := _seq_frame_count(metadata, impact_sequence) if not impact_sequence.is_empty() else 0
 	var orient_to_motion := bool(effect_config.get("orient_to_motion", targeted and speed > 0.0))
 	var track_target := bool(effect_config.get("track_target", targeted and speed > 0.0)) and target_node != null
+	var frames_path := _standard_body_frames_path()
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -2596,8 +2599,9 @@ func _spawn_late_skill_effect(
 				"hit_name": str(attack_name),
 				"attack_data": _attack_entry(attack_name),
 				"skill_name": "EastLate%d_%s" % [monster_kind, str(attack_name)],
-				"atlas_metadata": metadata,
-				"atlas_sequence": sequence,
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+				"frames_resource": frames_path,
+				"frames_animation": sequence,
 				"frame_count": frame_count,
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": not follow_owner,
@@ -2615,14 +2619,23 @@ func _spawn_late_skill_effect(
 				"poll_overlaps_on_damage_pulse": bool(effect_config.get("poll_overlaps_on_damage_pulse", false)),
 				"expire_on_hit": bool(effect_config.get("expire_on_hit", not impact_sequence.is_empty())),
 				"max_hits": maxi(int(effect_config.get("max_hits", 1)), 1),
-				"impact_atlas_metadata": metadata if impact_frame_count > 0 else "",
-				"impact_atlas_sequence": impact_sequence if impact_frame_count > 0 else "",
+				"impact_visual_backend":
+				(
+					WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+					if impact_frame_count > 0
+					else WutaiMinghaiProjectile.VisualBackend.NONE
+				),
+				"impact_frames_resource": frames_path if impact_frame_count > 0 else "",
+				"impact_frames_animation": impact_sequence if impact_frame_count > 0 else "",
 				"impact_frame_count": impact_frame_count,
 				"impact_duration": float(impact_frame_count) / SOURCE_FPS,
 				"finished_callback": effect_config.get("finished_callback", Callable()),
 			}
 		)
 	)
+	if not configured:
+		projectile.queue_free()
+		return
 	bullet.add_child(projectile)
 
 
@@ -2821,7 +2834,7 @@ func _spawn_official_pulse_area(
 	var y_max := float(scope[3]) if scope.size() >= 4 else 20.0
 	var facing := 1.0 if monster_direction else -1.0
 	var area := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		area
 		. configure(
 			{
@@ -2831,6 +2844,7 @@ func _spawn_official_pulse_area(
 				"hit_name": str(attack_name),
 				"attack_data": _attack_entry(attack_name),
 				"skill_name": "East%d_%sPulse" % [monster_kind, str(attack_name)],
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.NONE,
 				"collision_size": Vector2(maxf(x_max - x_min, 1.0), maxf(y_max - y_min, 1.0)),
 				"lifetime": duration + 0.05,
 				"damage_duration": duration,
@@ -2841,6 +2855,9 @@ func _spawn_official_pulse_area(
 			}
 		)
 	)
+	if not configured:
+		area.free()
+		return null
 
 	var pulse_hit_box := area.get_node("middle/HitBox") as Area2D
 	pulse_hit_box.collision_layer = 0
@@ -2877,7 +2894,7 @@ func _spawn_3182_destroying_rip(serial: int) -> void:
 		return
 	var direction := 1.0 if monster_direction else -1.0
 	var area := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		area
 		. configure(
 			{
@@ -2887,6 +2904,7 @@ func _spawn_3182_destroying_rip(serial: int) -> void:
 				"hit_name": "hit1",
 				"attack_data": _attack_entry(&"hit1"),
 				"skill_name": "RainAncestorDestroyingRip",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.NONE,
 				"collision_size": Vector2(550.0, 12000.0),
 				"damage_enabled": true,
 				"damage_duration": 0.2,
@@ -2896,6 +2914,9 @@ func _spawn_3182_destroying_rip(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		area.free()
+		return
 	bullet.add_child(area)
 
 
@@ -2915,7 +2936,7 @@ func _spawn_3182_tracking_needle_after(delay_seconds: float, serial: int) -> voi
 	var spawn_position := global_position + Vector2(125.0 * direction, -100.0)
 	var aim_position := target.global_position + Vector2(0.0, -60.0)
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -2925,8 +2946,9 @@ func _spawn_3182_tracking_needle_after(delay_seconds: float, serial: int) -> voi
 				"hit_name": "hit2",
 				"attack_data": _attack_entry(&"hit2"),
 				"skill_name": "RainAncestorRainNeedle",
-				"atlas_metadata": RAIN_ANCESTOR_METADATA,
-				"atlas_sequence": "effect2_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+				"frames_resource": RAIN_ANCESTOR_FRAMES,
+				"frames_animation": "effect2_1",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": true,
 				"velocity": spawn_position.direction_to(aim_position) * 720.0,
@@ -2937,6 +2959,9 @@ func _spawn_3182_tracking_needle_after(delay_seconds: float, serial: int) -> voi
 			}
 		)
 	)
+	if not configured:
+		projectile.free()
+		return
 	bullet.add_child(projectile)
 
 
@@ -2955,7 +2980,7 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 	var source_point: Vector2 = RAIN_ANCESTOR_BONE_POINTS[index]
 	var spawn_position := global_position + Vector2(source_point.x * facing, source_point.y)
 	var charge := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		charge
 		. configure(
 			{
@@ -2965,8 +2990,9 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 				"hit_name": "hit3",
 				"attack_data": _attack_entry(&"hit3"),
 				"skill_name": "RainAncestorBoneCharge",
-				"atlas_metadata": RAIN_ANCESTOR_METADATA,
-				"atlas_sequence": "effect3_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+				"frames_resource": RAIN_ANCESTOR_FRAMES,
+				"frames_animation": "effect3_1",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": true,
 				"damage_enabled": false,
@@ -2974,7 +3000,10 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 			}
 		)
 	)
-	bullet.add_child(charge)
+	if not configured:
+		charge.free()
+	else:
+		bullet.add_child(charge)
 	await get_tree().create_timer(maxf(fire_delay - charge_delay, 0.0), false).timeout
 	if not _attack_3182_is_current(serial):
 		return
@@ -2984,7 +3013,7 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 	var target_position: Vector2 = target_value
 	var horizontal_speed := (target_position.x - spawn_position.x) / 2.0
 	var needle := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var needle_configured := (
 		needle
 		. configure(
 			{
@@ -2994,8 +3023,9 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 				"hit_name": "hit3",
 				"attack_data": _attack_entry(&"hit3"),
 				"skill_name": "RainAncestorBoneNeedle",
-				"atlas_metadata": RAIN_ANCESTOR_METADATA,
-				"atlas_sequence": "effect3_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+				"frames_resource": RAIN_ANCESTOR_FRAMES,
+				"frames_animation": "effect3_1",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": true,
 				"velocity": Vector2(horizontal_speed, -660.0),
@@ -3009,6 +3039,9 @@ func _run_3182_bone_needle(index: int, serial: int) -> void:
 			}
 		)
 	)
+	if not needle_configured:
+		needle.free()
+		return
 	bullet.add_child(needle)
 
 
@@ -3065,7 +3098,8 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 		"right": target_position.x >= global_position.x,
 		"hit_name": str(attack_name),
 		"attack_data": _attack_entry(attack_name),
-		"atlas_metadata": AOLAIGUO_BOSS_METADATA,
+		"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+		"frames_resource": AOLAIGUO_BOSS_FRAMES,
 		"frame_fps": SOURCE_FPS,
 		"loop_visual": false,
 		"expire_on_hit": false,
@@ -3081,7 +3115,7 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 				{
 					"position": projectile_position,
 					"skill_name": "AolaiguoArrayProjectile",
-					"atlas_sequence": "effect2_1",
+					"frames_animation": "effect2_1",
 					"loop_visual": true,
 					"velocity": direction * 360.0,
 					"lifetime": 2.0,
@@ -3098,7 +3132,7 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 				{
 					"position": Vector2(target_position.x, target_position.y - burst_anchor.y),
 					"skill_name": "AolaiguoArrayBurst",
-					"atlas_sequence": "effect5_1",
+					"frames_animation": "effect5_1",
 					"lifetime": 24.0 / SOURCE_FPS,
 					"hit_delay": 8.0 / SOURCE_FPS,
 					"damage_duration": 12.0 / SOURCE_FPS,
@@ -3114,7 +3148,7 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 				{
 					"position": Vector2(target_position.x, target_position.y - pillar_anchor.y),
 					"skill_name": "AolaiguoArrayPillar",
-					"atlas_sequence": "effect1_1",
+					"frames_animation": "effect1_1",
 					"lifetime": 15.0 / SOURCE_FPS,
 					"hit_delay": 5.0 / SOURCE_FPS,
 					"damage_duration": 8.0 / SOURCE_FPS,
@@ -3122,7 +3156,9 @@ func _start_3136_attack(attack_name: StringName, serial: int) -> void:
 				true
 			)
 		)
-	effect.configure(effect_config)
+	if not effect.configure(effect_config):
+		effect.free()
+		return
 	bullet.add_child(effect)
 
 
@@ -3137,7 +3173,7 @@ func _spawn_ranged_effect_after_shot_frame(serial: int) -> void:
 	if target != null:
 		direction = 1.0 if float(target.x) >= global_position.x else -1.0
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -3147,6 +3183,7 @@ func _spawn_ranged_effect_after_shot_frame(serial: int) -> void:
 				"hit_name": "hit2",
 				"attack_data": _attack_entry(&"hit2"),
 				"skill_name": "MushroomElderEffect2_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": RANGED_EFFECT_ROOT,
 				"frame_count": 10,
 				"frame_fps": SOURCE_FPS,
@@ -3159,6 +3196,9 @@ func _spawn_ranged_effect_after_shot_frame(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		projectile.free()
+		return
 	bullet.add_child(projectile)
 
 
@@ -3178,7 +3218,7 @@ func _start_3121_arrow_burst(serial: int) -> void:
 	for base_velocity: Vector2 in velocities:
 		var arrow_velocity := Vector2(base_velocity.x * direction_scale, base_velocity.y)
 		var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-		(
+		var configured := (
 			projectile
 			. configure(
 				{
@@ -3188,6 +3228,7 @@ func _start_3121_arrow_burst(serial: int) -> void:
 					"hit_name": "hit1",
 					"attack_data": _attack_entry(&"hit1"),
 					"skill_name": "FlowerArrow1",
+					"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 					"frame_root": FLOWER_ARROW_ROOT,
 					"frame_count": 8,
 					"frame_fps": SOURCE_FPS,
@@ -3201,6 +3242,9 @@ func _start_3121_arrow_burst(serial: int) -> void:
 				}
 			)
 		)
+		if not configured:
+			projectile.free()
+			continue
 		bullet.add_child(projectile)
 
 
@@ -3300,7 +3344,7 @@ func _start_six_ear_dash(serial: int) -> void:
 	var dash_velocity := Vector2(direction * 150.0, 0.0)
 	var dash_lifetime := 31.0 / SOURCE_FPS
 	var dash := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		dash
 		. configure(
 			{
@@ -3310,6 +3354,7 @@ func _start_six_ear_dash(serial: int) -> void:
 				"hit_name": "hit5",
 				"attack_data": _attack_entry_with_multiplier(&"hit5", 0.1, [21, 33]),
 				"skill_name": "SixEarEffect5_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": SIX_EAR_DASH_ROOT,
 				"frame_count": 31,
 				"frame_fps": SOURCE_FPS,
@@ -3324,7 +3369,10 @@ func _start_six_ear_dash(serial: int) -> void:
 			}
 		)
 	)
-	bullet.add_child(dash)
+	if not configured:
+		dash.free()
+	else:
+		bullet.add_child(dash)
 	await get_tree().create_timer(dash_lifetime, false).timeout
 	if not is_instance_valid(self) or death() or serial != _attack_serial:
 		_3179_fire_slash_invincible = false
@@ -3342,7 +3390,7 @@ func _start_six_ear_dash(serial: int) -> void:
 
 func _spawn_six_ear_impact(spawn_position: Vector2, direction: float) -> void:
 	var impact := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		impact
 		. configure(
 			{
@@ -3352,6 +3400,7 @@ func _spawn_six_ear_impact(spawn_position: Vector2, direction: float) -> void:
 				"hit_name": "hit5",
 				"attack_data": _attack_entry_with_multiplier(&"hit5", 1.0, [80, 120]),
 				"skill_name": "SixEarEffect51",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": SIX_EAR_IMPACT_ROOT,
 				"frame_count": 17,
 				"frame_fps": SOURCE_FPS,
@@ -3364,6 +3413,10 @@ func _spawn_six_ear_impact(spawn_position: Vector2, direction: float) -> void:
 			}
 		)
 	)
+	if not configured:
+		impact.free()
+		_finish_six_ear_impact(spawn_position)
+		return
 	bullet.add_child(impact)
 
 
@@ -3384,7 +3437,7 @@ func _start_3161_effect2(serial: int) -> void:
 	if target != null:
 		spawn_position.x = float(target.x)
 	var effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		effect
 		. configure(
 			{
@@ -3394,6 +3447,7 @@ func _start_3161_effect2(serial: int) -> void:
 				"hit_name": "hit2",
 				"attack_data": _attack_entry(&"hit2"),
 				"skill_name": "WhiteApeEffect2_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": MONKEY_EFFECT2_ROOT,
 				"frame_count": 148,
 				"frame_fps": SOURCE_FPS,
@@ -3405,6 +3459,9 @@ func _start_3161_effect2(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		effect.free()
+		return
 	bullet.add_child(effect)
 
 
@@ -3421,7 +3478,7 @@ func _start_3161_effect3(serial: int) -> void:
 		return
 	var effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	var direction := 1.0 if monster_direction else -1.0
-	(
+	var configured := (
 		effect
 		. configure(
 			{
@@ -3431,6 +3488,7 @@ func _start_3161_effect3(serial: int) -> void:
 				"hit_name": "hit3",
 				"attack_data": _attack_entry(&"hit3"),
 				"skill_name": "WhiteApeEffect3_1",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": MONKEY_EFFECT3_1_ROOT,
 				"frame_count": 2,
 				"frame_fps": SOURCE_FPS,
@@ -3447,6 +3505,10 @@ func _start_3161_effect3(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		effect.free()
+		_finish_3161_special(global_position)
+		return
 	bullet.add_child(effect)
 
 	while (
@@ -3470,7 +3532,7 @@ func _spawn_3161_effect3_impact(spawn_position: Vector2) -> void:
 		return
 	spawn_position.y = global_position.y
 	var effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		effect
 		. configure(
 			{
@@ -3480,6 +3542,7 @@ func _spawn_3161_effect3_impact(spawn_position: Vector2) -> void:
 				"hit_name": "hit3",
 				"attack_data": _attack_entry(&"hit3"),
 				"skill_name": "WhiteApeEffect3_2",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": MONKEY_EFFECT3_2_ROOT,
 				"frame_count": 10,
 				"frame_fps": SOURCE_FPS,
@@ -3492,6 +3555,10 @@ func _spawn_3161_effect3_impact(spawn_position: Vector2) -> void:
 			}
 		)
 	)
+	if not configured:
+		effect.free()
+		_finish_3161_special(spawn_position)
+		return
 	bullet.add_child(effect)
 
 
@@ -3522,7 +3589,7 @@ func _start_3120_stone_throw(serial: int) -> void:
 	)
 	var horizontal := target_position.x - spawn_position.x
 	var stone := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		stone
 		. configure(
 			{
@@ -3532,6 +3599,7 @@ func _start_3120_stone_throw(serial: int) -> void:
 				"hit_name": "hit2",
 				"attack_data": _attack_entry(&"hit2"),
 				"skill_name": "SandBossStoneThrow",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": SAND_BOSS_STONE_ROOT,
 				"frame_count": 2,
 				"frame_fps": SOURCE_FPS,
@@ -3546,6 +3614,9 @@ func _start_3120_stone_throw(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		stone.free()
+		return
 	bullet.add_child(stone)
 
 
@@ -3554,7 +3625,7 @@ func _spawn_3120_dust(spawn_position: Vector2) -> void:
 		return
 	var direction := 1.0 if monster_direction else -1.0
 	var dust := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		dust
 		. configure(
 			{
@@ -3564,6 +3635,7 @@ func _spawn_3120_dust(spawn_position: Vector2) -> void:
 				"hit_name": "hit2",
 				"attack_data": _attack_entry(&"hit2"),
 				"skill_name": "SandBossStoneImpact",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": SAND_BOSS_DUST_ROOT,
 				"frame_count": SAND_BOSS_DUST_COUNT,
 				"frame_fps": SOURCE_FPS,
@@ -3575,6 +3647,9 @@ func _spawn_3120_dust(spawn_position: Vector2) -> void:
 			}
 		)
 	)
+	if not configured:
+		dust.free()
+		return
 	bullet.add_child(dust)
 
 
@@ -3584,7 +3659,7 @@ func _start_3120_wind_blade(serial: int) -> void:
 		return
 	var direction := 1.0 if monster_direction else -1.0
 	var wind := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		wind
 		. configure(
 			{
@@ -3594,6 +3669,7 @@ func _start_3120_wind_blade(serial: int) -> void:
 				"hit_name": "hit1",
 				"attack_data": _attack_entry(&"hit1"),
 				"skill_name": "SandBossWindBlade",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": SAND_BOSS_WIND_ROOT,
 				"frame_count": 29,
 				"frame_fps": SOURCE_FPS,
@@ -3610,6 +3686,9 @@ func _start_3120_wind_blade(serial: int) -> void:
 			}
 		)
 	)
+	if not configured:
+		wind.free()
+		return
 	bullet.add_child(wind)
 
 
@@ -3653,7 +3732,7 @@ func _start_3120_protect_teleport() -> void:
 	is_attacking = false
 	monster_dir.visible = false
 	var hide_effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		hide_effect
 		. configure(
 			{
@@ -3663,6 +3742,7 @@ func _start_3120_protect_teleport() -> void:
 				"hit_name": "protectSkill",
 				"attack_data": {},
 				"skill_name": "SandBossProtectHide",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": "res://Art/monster/game_4_special_effect/effect_3120/effect3",
 				"frame_count": 16,
 				"frame_fps": SOURCE_FPS,
@@ -3672,7 +3752,10 @@ func _start_3120_protect_teleport() -> void:
 			}
 		)
 	)
-	bullet.add_child(hide_effect)
+	if configured:
+		bullet.add_child(hide_effect)
+	else:
+		hide_effect.free()
 	await get_tree().create_timer(SAND_BOSS_PROTECT_DELAY, false).timeout
 	if not is_instance_valid(self) or not is_inside_tree() or death() or serial != _3120_protect_serial:
 		return
@@ -3681,7 +3764,7 @@ func _start_3120_protect_teleport() -> void:
 	global_position.x = bounds.x + 50.0 if move_left else bounds.y - 50.0
 	monster_dir.scale.x = -1.0 if move_left else 1.0
 	var appear_effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var appear_configured := (
 		appear_effect
 		. configure(
 			{
@@ -3691,6 +3774,7 @@ func _start_3120_protect_teleport() -> void:
 				"hit_name": "protectSkill",
 				"attack_data": {},
 				"skill_name": "SandBossProtectAppear",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": "res://Art/monster/game_4_special_effect/effect_3120/effect3_1",
 				"frame_count": 6,
 				"frame_fps": SOURCE_FPS,
@@ -3700,7 +3784,10 @@ func _start_3120_protect_teleport() -> void:
 			}
 		)
 	)
-	bullet.add_child(appear_effect)
+	if appear_configured:
+		bullet.add_child(appear_effect)
+	else:
+		appear_effect.free()
 	await get_tree().create_timer(SAND_BOSS_PROTECT_REAPPEAR_DELAY, false).timeout
 	if not is_instance_valid(self) or death() or serial != _3120_protect_serial:
 		return

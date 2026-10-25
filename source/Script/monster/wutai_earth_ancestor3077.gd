@@ -102,15 +102,17 @@ func monster_info_attack_values_include_difficulty() -> bool:
 
 
 static func prewarm_frames() -> void:
-	FrameSequenceStore.get_sequence(ROOT.path_join("idle"), SOURCE_FPS, true, false, 2)
+	var sequence := FrameSequenceStore.get_sequence(ROOT.path_join("idle"), SOURCE_FPS, true, false, 2)
+	await FrameSequenceStore.prewarm_sequence(sequence)
 
 
 static func prewarm_effects() -> void:
 	if ResourceLoader.exists(TORNADO_FRAMES):
 		ResourceLoader.load(TORNADO_FRAMES)
-	prewarm_frames()
+	await prewarm_frames()
 	for folder in ["eye12", "eye3", "skill1", "skill3"]:
-		FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, false, false, 2)
+		var sequence := FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, false, false, 2)
+		await FrameSequenceStore.prewarm_sequence(sequence)
 
 
 static func _load_standard_frames() -> SpriteFrames:
@@ -248,7 +250,7 @@ func _spawn_locked_tornado() -> void:
 	if attack_data.is_empty():
 		return
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -258,9 +260,9 @@ func _spawn_locked_tornado() -> void:
 				"hit_name": "hit3",
 				"attack_data": attack_data,
 				"skill_name": "EarthAncestorTornado",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
 				"frames_resource": TORNADO_FRAMES,
 				"frames_animation": "tornado",
-				"atlas_sequence": "tornado",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": false,
 				"visual_offset": Vector2(0.0, -136.0),
@@ -272,6 +274,9 @@ func _spawn_locked_tornado() -> void:
 			}
 		)
 	)
+	if not configured:
+		projectile.free()
+		return
 	bullet.add_child(projectile)
 
 

@@ -410,14 +410,15 @@ func _run_attack_pulses(serial: int, count: int, interval: float) -> void:
 func _spawn_projectile(config: Dictionary) -> WutaiMinghaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	config["owner"] = self
-	config["atlas_metadata"] = ATLAS_METADATA
+	config["visual_backend"] = WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
 	config["frames_resource"] = ATLAS_FRAMES
-	config["atlas_sequence"] = str(config.get("frame_root", "")).get_file()
-	if not str(config.get("impact_frame_root", "")).is_empty():
-		config["impact_atlas_sequence"] = str(config["impact_frame_root"]).get_file()
+	config["frames_animation"] = str(config.get("frame_root", "")).get_file()
+	config["frame_root"] = ""
 	if not config.has("damage_enabled"):
 		config["damage_enabled"] = not (config["attack_data"] as Dictionary).is_empty()
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	return projectile
 

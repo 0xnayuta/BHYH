@@ -182,7 +182,7 @@ func _create_damage_area() -> void:
 	var area := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	var offset := _visual_offset()
 	offset.x *= _move_direction
-	(
+	var configured := (
 		area
 		. configure(
 			{
@@ -192,6 +192,7 @@ func _create_damage_area() -> void:
 				"hit_name": projectile_hit_name,
 				"attack_data": attack_data,
 				"skill_name": "EarthAncestorSmallWind" if monster_kind == 3080 else "EarthAncestorLargeWind",
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.NONE,
 				"follow_target": true,
 				"target_node": self,
 				"collision_size": _collision_size(),
@@ -205,6 +206,9 @@ func _create_damage_area() -> void:
 			}
 		)
 	)
+	if not configured:
+		area.free()
+		return
 	_source_boss.bullet.add_child(area)
 	_damage_area = area
 

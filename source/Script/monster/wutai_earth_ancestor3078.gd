@@ -2,7 +2,7 @@ extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3078"
-const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
+const FRAMES := ROOT + "/atlas/swf_png_3078_frames.tres"
 const SOURCE_FPS := 24.0
 const WALL_ID := 3082
 const WALL_OFFSET_X := 550.0
@@ -213,7 +213,7 @@ func _spawn_locked_claw() -> void:
 	if attack_data.is_empty():
 		return
 	var claw := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		claw
 		. configure(
 			{
@@ -223,10 +223,10 @@ func _spawn_locked_claw() -> void:
 				"hit_name": "hit2",
 				"attack_data": attack_data,
 				"skill_name": "EarthAncestorStoneClaw",
-				"frame_root": ROOT.path_join("claw"),
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+				"frames_resource": FRAMES,
+				"frames_animation": "claw",
 				"frame_count": CLAW_FRAME_COUNT,
-				"atlas_metadata": ATLAS_METADATA,
-				"atlas_sequence": "claw",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": false,
 				"visual_offset": Vector2(7.0, -34.5),
@@ -238,6 +238,9 @@ func _spawn_locked_claw() -> void:
 			}
 		)
 	)
+	if not configured:
+		claw.free()
+		return
 	bullet.add_child(claw)
 
 

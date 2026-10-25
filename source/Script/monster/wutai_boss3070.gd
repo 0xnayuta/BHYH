@@ -2,7 +2,7 @@ extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3070"
-const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
+const FRAMES := ROOT + "/atlas/swf_png_3070_frames.tres"
 const SOURCE_FPS := 30.0
 const SMALL_HURT_DURATION := 0.28
 const AI_DELAY_MSEC := 1000
@@ -472,15 +472,28 @@ func _phase_two_loop() -> void:
 
 func _spawn_projectile(config: Dictionary) -> WutaiMinghaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
+	var sequence := str(config.get("frame_root", "")).get_file()
 	config["owner"] = self
-	config["atlas_metadata"] = ATLAS_METADATA
-	config["frames_resource"] = ROOT.path_join("atlas/swf_png_3070_frames.tres")
-	config["atlas_sequence"] = str(config.get("frame_root", "")).get_file()
-	if not str(config.get("impact_frame_root", "")).is_empty():
-		config["impact_atlas_sequence"] = str(config["impact_frame_root"]).get_file()
+	if sequence.is_empty():
+		config["visual_backend"] = WutaiMinghaiProjectile.VisualBackend.NONE
+	else:
+		config["visual_backend"] = WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+		config["frames_resource"] = FRAMES
+		config["frames_animation"] = sequence
+		config["frame_root"] = ""
+	var impact_sequence := str(config.get("impact_frame_root", "")).get_file()
+	if impact_sequence.is_empty():
+		config["impact_visual_backend"] = WutaiMinghaiProjectile.VisualBackend.NONE
+	else:
+		config["impact_visual_backend"] = WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+		config["impact_frames_resource"] = FRAMES
+		config["impact_frames_animation"] = impact_sequence
+		config["impact_frame_root"] = ""
 	if not config.has("damage_enabled"):
 		config["damage_enabled"] = not (config["attack_data"] as Dictionary).is_empty()
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	return projectile
 

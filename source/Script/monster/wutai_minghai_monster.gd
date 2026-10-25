@@ -3,6 +3,7 @@ extends BaseMonster
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const SOURCE_FPS := 30.0
 const ROOT := "res://Art/monster/swf_png"
+const PROJECTILE_FRAMES := ROOT + "/3065/atlas/swf_png_3065_frames.tres"
 const SMALL_HURT_DURATION := 0.28
 
 const MODEL_BY_ENTITY := {
@@ -557,8 +558,14 @@ func _finish_charge() -> void:
 func _spawn_projectile(config: Dictionary) -> WutaiMinghaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	config["owner"] = self
+	config["visual_backend"] = WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES
+	config["frames_resource"] = PROJECTILE_FRAMES
+	config["frames_animation"] = str(config.get("frame_root", "")).get_file()
+	config["frame_root"] = ""
 	config["damage_enabled"] = not (config["attack_data"] as Dictionary).is_empty()
-	projectile.configure(config)
+	if not projectile.configure(config):
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	return projectile
 

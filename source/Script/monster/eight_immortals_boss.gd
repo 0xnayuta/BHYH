@@ -634,7 +634,7 @@ func _fire(
 	var registration_value: Variant = options.get("visual_registration", _skill_visual_registration(action))
 	var resolved_registration := registration_value as Vector2 if registration_value is Vector2 else Vector2.ZERO
 	var facing_right := bool(options.get("right", monster_dir.scale.x < 0.0))
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -644,6 +644,7 @@ func _fire(
 				"hit_name": String(action),
 				"attack_data": attack_data,
 				"skill_name": "EightImmortals%d%s" % [monster_id, String(action).capitalize()],
+				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 				"frame_root": str(options.get("frame_root", _effect_root(action))),
 				"frame_count": frame_count,
 				"frame_fps": SOURCE_FPS,
@@ -674,6 +675,9 @@ func _fire(
 			}
 		)
 	)
+	if not configured:
+		projectile.free()
+		return null
 	bullet.add_child(projectile)
 	return projectile
 
