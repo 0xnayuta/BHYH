@@ -3,6 +3,7 @@ extends BaseMonster
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3117"
 const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
+const ATLAS_FRAMES := ROOT + "/atlas/swf_png_3117_frames.tres"
 const SOURCE_FPS := 30.0
 const AI_DELAY_MSEC := 1000
 const ARENA_LEFT := 100.0
@@ -119,7 +120,7 @@ static func prewarm_effects() -> void:
 
 
 static func _load_standard_frames() -> SpriteFrames:
-	var frames_path := ROOT.path_join("atlas/swf_png_3117_frames.tres")
+	var frames_path := ATLAS_FRAMES
 	if not ResourceLoader.exists(frames_path):
 		return null
 	var source := load(frames_path) as SpriteFrames
@@ -410,6 +411,7 @@ func _spawn_projectile(config: Dictionary) -> WutaiMinghaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	config["owner"] = self
 	config["atlas_metadata"] = ATLAS_METADATA
+	config["frames_resource"] = ATLAS_FRAMES
 	config["atlas_sequence"] = str(config.get("frame_root", "")).get_file()
 	if not str(config.get("impact_frame_root", "")).is_empty():
 		config["impact_atlas_sequence"] = str(config["impact_frame_root"]).get_file()
