@@ -85,6 +85,14 @@ func _on_close_pressed() -> void:
 	queue_free()
 
 
+## ESC 分层关闭：先关闭技能伤害公式浮层；主技能窗口由 HUD 协调器继续处理。
+func request_escape_close() -> bool:
+	if is_instance_valid(_formula_overlay):
+		_close_formula_overlay()
+		return true
+	return false
+
+
 func _on_damage_description_pressed() -> void:
 	if not is_zd or zd_sk == null or not is_instance_valid(zd_sk):
 		return

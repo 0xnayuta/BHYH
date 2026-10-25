@@ -767,6 +767,12 @@ func has_panel() -> bool:
 	return is_instance_valid(_panel)
 
 
+## 关闭当前协作面板；生命周期收口仍由 _on_panel_closed 统一处理。
+func close_panel() -> void:
+	if is_instance_valid(_panel):
+		_panel.queue_free()
+
+
 func nearest_player(point: Vector2) -> BaseHero:
 	var nearest: BaseHero
 	var distance := INF

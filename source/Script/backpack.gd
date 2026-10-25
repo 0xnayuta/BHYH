@@ -12,6 +12,7 @@ var _backpack_scene: PackedScene
 const BACKPACK_SCENE := "res://Scene/back_pack/back_pack.tscn"
 const SET_MENU_SCENE := "res://Scene/set_menu.tscn"
 const PET_INTERFACE_SCENE := "res://Scene/pet/pet_interface.tscn"
+const ESCAPE_CLOSE_METHOD := &"request_escape_close"
 
 
 func _viewport_center() -> Vector2:
@@ -48,6 +49,15 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("菜单"):
+		# ESC 在暂停树中仍需生效：本节点为 PROCESS_MODE_ALWAYS。
+		if not _close_topmost_window():
+			_on_set_pressed()
+		_refresh_pause_state()
+		get_viewport().set_input_as_handled()
+
+
 func _physics_process(_delta: float) -> void:
 	_cleanup_targets()
 	bp_c = get_child_count()
@@ -55,8 +65,6 @@ func _physics_process(_delta: float) -> void:
 		_toggle_backpack(_main_role())
 	if InputMap.has_action("backpack1") and Input.is_action_just_pressed("backpack1") and _second_role() != null:
 		_toggle_backpack(_second_role())
-	if Input.is_action_just_pressed("菜单"):
-		_on_set_pressed()
 	if Input.is_action_just_pressed("技能") and _main_role() != null:
 		_toggle_skill(_main_role())
 	if Input.is_action_just_pressed("法宝") and _main_role() != null:
@@ -66,11 +74,7 @@ func _physics_process(_delta: float) -> void:
 	if InputMap.has_action("法宝1") and Input.is_action_just_pressed("法宝1") and _second_role() != null:
 		_toggle_magic(_second_role())
 
-	if _has_open_child():
-		if not get_tree().paused:
-			get_tree().paused = true
-	elif get_tree().paused and _can_resume_level():
-		get_tree().paused = false
+	_refresh_pause_state()
 
 
 func _main_role():
@@ -90,6 +94,67 @@ func _second_role():
 		if is_instance_valid(second_role):
 			return second_role
 	return null
+
+
+## ESC 统一入口：协作面板优先，其次关闭当前 HUD 窗口的最上层子层。
+## 返回 true 表示已消费本次 ESC；false 表示没有可关闭的 UI，交由设置菜单处理。
+func _close_topmost_window() -> bool:
+	if LocalCoop.has_panel():
+		LocalCoop.close_panel()
+		return true
+	_cleanup_targets()
+	var window := _find_active_window()
+	if window == null:
+		return false
+	if _dispatch_escape_close(window):
+		return true
+	if window.has_method(ESCAPE_CLOSE_METHOD) and bool(window.call(ESCAPE_CLOSE_METHOD)):
+		return true
+	_close_active_window(window)
+	return true
+
+
+func _find_active_window() -> Node:
+	for window in [set_target, skill_target, magic_weapon_target, back_target, pet_target]:
+		if _is_alive(window):
+			return window
+	return null
+
+
+## 按子节点逆序递归，先处理更深的可视层，再处理当前节点；近似 Godot 的绘制顺序。
+func _dispatch_escape_close(node: Node) -> bool:
+	var children := node.get_children()
+	for index in range(children.size() - 1, -1, -1):
+		var child: Node = children[index]
+		if not _is_alive(child) or not _is_ui_layer_visible(child):
+			continue
+		if _dispatch_escape_close(child):
+			return true
+		if child.has_method(ESCAPE_CLOSE_METHOD) and bool(child.call(ESCAPE_CLOSE_METHOD)):
+			return true
+	return false
+
+
+func _is_ui_layer_visible(node: Node) -> bool:
+	if node is CanvasItem:
+		return (node as CanvasItem).is_visible_in_tree()
+	if node is CanvasLayer:
+		return (node as CanvasLayer).visible
+	return node.is_inside_tree()
+
+
+func _close_active_window(window: Node) -> void:
+	if window == back_target:
+		back_target = null
+	elif window == set_target:
+		set_target = null
+	elif window == skill_target:
+		skill_target = null
+	elif window == magic_weapon_target:
+		magic_weapon_target = null
+	elif window == pet_target:
+		pet_target = null
+	_queue_target(window)
 
 
 func _on_backpack_pressed() -> void:
@@ -225,13 +290,23 @@ func _can_resume_level() -> bool:
 	return role_info == null or not role_info.is_stop
 
 
+func _refresh_pause_state() -> void:
+	if _has_open_child():
+		if not get_tree().paused:
+			get_tree().paused = true
+	elif get_tree().paused and _can_resume_level():
+		get_tree().paused = false
+
+
 func _has_open_child() -> bool:
 	if LocalCoop.has_panel():
 		return true
 	_cleanup_targets()
+	for child in get_children():
+		if _is_alive(child):
+			return true
 	return (
-		get_child_count() > 0
-		or _is_alive(back_target)
+		_is_alive(back_target)
 		or _is_alive(set_target)
 		or _is_alive(skill_target)
 		or _is_alive(magic_weapon_target)
@@ -281,6 +356,7 @@ func _on_target_exited(slot: String) -> void:
 			magic_weapon_target = null
 		"pet":
 			pet_target = null
+	_refresh_pause_state()
 
 
 func _set_if_has_property(obj: Object, prop_name: String, value) -> void:

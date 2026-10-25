@@ -146,6 +146,12 @@ func _close() -> void:
 	queue_free()
 
 
+## ESC 分层关闭：只关闭技能觉醒浮层。
+func request_escape_close() -> bool:
+	queue_free()
+	return true
+
+
 func _on_confirm_pressed() -> void:
 	if (
 		skill_id != "jhsj"

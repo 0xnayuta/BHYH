@@ -473,3 +473,9 @@ func check_can_equipment(EquipmentName):
 				return true
 	Global.add_message_show(parent, name_str + "属于" + eq_base + "，" + role_base + "无法穿戴！！", 1.5, Vector2(485, 240))
 	return false
+
+
+## ESC 分层关闭：只关闭出售/装备确认层。
+func request_escape_close() -> bool:
+	queue_free()
+	return true

@@ -218,6 +218,12 @@ func _on_close_pressed() -> void:
 	queue_free()
 
 
+## ESC 分层关闭：只关闭批量出售面板。
+func request_escape_close() -> bool:
+	queue_free()
+	return true
+
+
 func setbutton_disabled():
 	if not Global.choose_ms:
 		pt.disabled = false

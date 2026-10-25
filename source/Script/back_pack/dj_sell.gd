@@ -101,6 +101,12 @@ func _on_close_pressed():
 	queue_free()
 
 
+## ESC 分层关闭：只关闭当前出售弹窗。
+func request_escape_close() -> bool:
+	queue_free()
+	return true
+
+
 func _on_sell_number_text_change_rejected(rejected_substring: String) -> void:
 	be_number = int(rejected_substring)
 

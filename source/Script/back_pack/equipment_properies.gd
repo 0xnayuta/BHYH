@@ -869,3 +869,9 @@ func get_wx():
 func get_fb_pro(_name, need):
 	var infomation = AE.get_fb_last_equ_pro(_name, qh_level, wx, eq_prop)[need]
 	return infomation
+
+
+## ESC 分层关闭：只关闭装备属性浮层。
+func request_escape_close() -> bool:
+	queue_free()
+	return true

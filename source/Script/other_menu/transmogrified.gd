@@ -799,6 +799,12 @@ func _on_close_pressed() -> void:
 	queue_free()
 
 
+## ESC 分层关闭：只关闭幻化窗口。
+func request_escape_close() -> bool:
+	queue_free()
+	return true
+
+
 func _on_last_pressed() -> void:
 	if currentpage > 1:
 		currentpage -= 1

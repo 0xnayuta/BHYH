@@ -368,9 +368,14 @@ func _on_bulk_sell_pressed() -> void:
 	if sell_panel == null:
 		sell_panel = Global.add_pl_sell(pl_sell, Vector2(90, 0))
 		sell_panel.main_back = self
+		sell_panel.tree_exited.connect(_on_sell_panel_exited, CONNECT_ONE_SHOT)
 	elif sell_panel != null:
 		remove_choose()
 		sell_panel.queue_free()
+
+
+func _on_sell_panel_exited() -> void:
+	sell_panel = null
 
 
 func remove_choose():
