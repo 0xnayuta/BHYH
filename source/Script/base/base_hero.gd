@@ -59,7 +59,7 @@ const AUTO_BATTLE_ATTACK_RANGE := 260.0
 const AUTO_BATTLE_JUMP_COOLDOWN := 0.8
 const AUTO_BATTLE_MOVE_SPEED_SCALE := 1.0
 ## 松开跳跃键时保留的向上速度比例；越小点按跳得越低，长按不受影响。
-const JUMP_RELEASE_SPEED_SCALE := 0.75
+const JUMP_RELEASE_SPEED_SCALE := 0.7
 
 var temp_def_bonus: int = 0
 var temp_mdef_bonus: int = 0
