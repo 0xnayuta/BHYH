@@ -45,6 +45,7 @@ var message
 var current_pro_page: int = 1
 var show_back_pack = true
 var _last_equipped_snapshot: Array = []
+var _last_preview_snapshot: Array = []
 var _props_refresh_timer: float = 0.0
 
 
@@ -80,7 +81,6 @@ func _physics_process(_delta: float) -> void:
 		wings.modulate = Color(1, 1, 1, 1)
 	else:
 		wings.modulate = Color(1, 1, 1, 0)
-	on_eqchange()
 	set_wings_offset()
 
 	_props_refresh_timer += _delta
@@ -242,8 +242,23 @@ func calculate_combat_power():
 	return int(total)
 
 
+func _refresh_preview_if_changed() -> void:
+	var snapshot := [
+		PlayerData.player_data.get(DataKeys.WEAPON, []),
+		PlayerData.player_data.get(DataKeys.ARMOR, []),
+		PlayerData.player_data.get(DataKeys.FASHION, []),
+		PlayerData.player_data.get(DataKeys.WINGS, []),
+		PlayerData.player_data.get(DataKeys.TRANSMOG_LIST, {}),
+	]
+	if snapshot == _last_preview_snapshot:
+		return
+	_last_preview_snapshot = snapshot.duplicate(true)
+	on_eqchange()
+
+
 func set_backpack_properies():
 	zdl.text = str(calculate_combat_power())
+	_refresh_preview_if_changed()
 	set_icon()
 
 	if current_pro_page == 1:
@@ -556,6 +571,8 @@ func set_role_wings():
 
 
 func on_eqchange():
+	# 角色 6/7 的装备预览由 NeZhaPreview 独占；父级只更新翅膀。
+	var role_id := int(PlayerData.player_data.get("Myself", 1))
 	var wq: String
 	var fj: String
 
@@ -566,7 +583,8 @@ func on_eqchange():
 			wq = str(PlayerData.player_data[DataKeys.WEAPON][0][DataKeys.NAME])
 	else:
 		wq = str(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON])
-	change_eq(wq)
+	if role_id >= 1 and role_id <= 5:
+		change_eq(wq)
 	if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] == "":
 		if PlayerData.player_data[DataKeys.FASHION].size() == 0:
 			if PlayerData.player_data[DataKeys.ARMOR].size() == 0:
@@ -578,7 +596,8 @@ func on_eqchange():
 	else:
 		fj = str(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR])
 	fj = Global.get_clean_name(fj)
-	change_body(fj)
+	if role_id >= 1 and role_id <= 5:
+		change_body(fj)
 	var wings_list
 
 	if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS] == "":

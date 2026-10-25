@@ -3086,6 +3086,16 @@ func configure_backpack_role_preview(page: Node, player: Variant = null) -> void
 	var role_id := _role_id_from_runtime_node(valid_player)
 	var role_body := page.get_node_or_null("background/RoleBody") as Sprite2D
 	var role_equipment := page.get_node_or_null("background/RoleEquipment") as Sprite2D
+	var role_body_front := page.get_node_or_null("background/RoleBodyFront") as Sprite2D
+	if role_id == 7:
+		preload("res://Script/hero/yutu_visuals.gd").preview(role_body, role_equipment, role_body_front, 0.0)
+		return
+	if role_id == 6:
+		if role_body != null:
+			role_body.texture = _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_body_frames("Empty"))
+		if role_equipment != null:
+			role_equipment.texture = _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_weapon_frames("Empty"))
+		return
 	if role_body != null:
 		var body_path := "res://Art/hero_picture/role_%d_all_equipment/role_%d_body_empty.png" % [role_id, role_id]
 		if ResourceLoader.exists(body_path):
@@ -5302,12 +5312,25 @@ func get_dis_betweem(Ob_1, Ob_2):
 	return pp_3
 
 
-func load_role1_body(_name, role_id: int = 0):
+func _ne_zha_static_preview_texture(frames: SpriteFrames) -> Texture2D:
+	if frames == null or not frames.has_animation(&"wait"):
+		return null
+	if frames.get_frame_count(&"wait") <= 0:
+		return null
+	return frames.get_frame_texture(&"wait", 0)
+
+
+func load_role1_body(_name, role_id: int = 0) -> Texture2D:
 	var resolved_role_id := role_id
 	if resolved_role_id <= 0:
 		resolved_role_id = _current_role_id()
 	if resolved_role_id == 7:
-		return load("res://Art/hero_picture/role_7/preview.png")
+		return load("res://Art/hero_picture/role_7/preview.png") as Texture2D
+	if resolved_role_id == 6:
+		var static_texture := _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_body_frames(str(_name)))
+		if static_texture == null:
+			push_warning("哪吒身体帧加载失败: " + str(_name))
+		return static_texture
 	var path := (
 		"res://Art/hero_picture/role_"
 		+ str(resolved_role_id)
@@ -5317,18 +5340,23 @@ func load_role1_body(_name, role_id: int = 0):
 		+ str(_name).to_lower()
 		+ ".png"
 	)
-	var texture := _load_current_role_texture(path, true)
-	if texture == null:
+	var path_texture := _load_current_role_texture(path, true)
+	if path_texture == null:
 		push_warning("角色身体贴图加载失败: " + path)
-	return texture
+	return path_texture
 
 
-func load_role1_eq(_name, role_id: int = 0):
+func load_role1_eq(_name, role_id: int = 0) -> Texture2D:
 	var resolved_role_id := role_id
 	if resolved_role_id <= 0:
 		resolved_role_id = _current_role_id()
 	if resolved_role_id == 7:
-		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres")
+		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres") as Texture2D
+	if resolved_role_id == 6:
+		var static_texture := _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_weapon_frames(str(_name)))
+		if static_texture == null:
+			push_warning("哪吒装备帧加载失败: " + str(_name))
+		return static_texture
 	var path := (
 		"res://Art/hero_picture/role_"
 		+ str(resolved_role_id)
@@ -5338,10 +5366,10 @@ func load_role1_eq(_name, role_id: int = 0):
 		+ str(_name).to_lower()
 		+ ".png"
 	)
-	var texture := _load_current_role_texture(path, false)
-	if texture == null:
+	var path_texture := _load_current_role_texture(path, false)
+	if path_texture == null:
 		push_warning("角色装备贴图加载失败: " + path)
-	return texture
+	return path_texture
 
 
 func _load_current_role_texture(path: String, is_body: bool) -> Texture2D:
