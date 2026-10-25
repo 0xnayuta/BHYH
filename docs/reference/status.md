@@ -96,7 +96,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 | 验证 | 结果 | 说明 |
 |:---|:---|:---|
-| 2026-10-25 ESC 分层关闭与可变跳跃 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**；实机 ESC 逐层关闭 **通过**；设置“返回主菜单” **0 ERROR / 0 WARNING**；角色 6 点按/长按跳高 **102.1 / 153.3 px** | HUD 统一 ESC 分发与 `request_escape_close()` 子层契约；松开跳跃键按 0.75 保留上升速度；场景树退出时跳过暂停刷新，避免 `get_tree()` 空引用 |
+| 2026-10-25 五台明海 3117 弹道图集帧修复 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**；3117 `effect2_1` 弹道帧与可视节点创建成功，运行日志 **0 ERROR** | 3117 项目配置补入构建期 `frames_resource`；弹道改用 SpriteFrames 的 AtlasTexture 帧几何，不再访问不存在的逐帧 PNG |
+| 2026-10-25 ESC 分层关闭与可变跳跃 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**；实机 ESC 逐层关闭 **通过**；设置“返回主菜单” **0 ERROR / 0 WARNING**；角色 6 点按/长按跳高 **89.4 / 153.3 px** | HUD 统一 ESC 分发与 `request_escape_close()` 子层契约；松开跳跃键按 0.7 保留上升速度；场景树退出时跳过暂停刷新，避免 `get_tree()` 空引用 |
 | 2026-10-25 2D 角色泛光清理与装备槽提示修复 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**；角色 6 实际存档悬停五按钮 + A/D 后渲染错误 **0**；已装备武器提示框创建成功 | 删除 BaseHero / Role1 的 3D WorldEnvironment 泛光；装备槽提示改用图标文件名与 `get_item_name`/`eq_prop`，移除 `AllItems` 大小写路径解析 |
 | 2026-10-25 哪吒背包预览修复 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；角色 6/7 与角色 1 实机预览验证通过 | 恢复 `Global.load_role1_body/eq` 与 `configure_backpack_role_preview` 的角色 6 分派；背包旧预览改为 10Hz 脏检查，角色 6/7 由 `NeZhaPreview` 独占；无素材变更 |
 | 2026-10-25 文档同步基线 | 静态门禁 **7/7 PASS** | `scripts/check_all.py --skip-engine`；未重跑引擎编译、关卡回归与双人探针 |
