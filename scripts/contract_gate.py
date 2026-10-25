@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""契约域总门禁：契约扫描 + AtlasMetadata 校验 + 非 atlas PNG 流 allowlist。"""
+"""契约域总门禁：契约扫描 + AtlasMetadata 校验 + FrameSequence 构建校验 + 非 atlas PNG 流 allowlist。"""
 from __future__ import annotations
 
 import concurrent.futures
@@ -20,6 +20,7 @@ COMMANDS = [
     ("contract_scan", [sys.executable, "scripts/contract_scan.py", "--fail-on-error"]),
     ("atlas_metadata_check", [sys.executable, "scripts/convert_atlas_metadata.py", "--check"]),
     ("atlas_metadata_self_test", [sys.executable, "scripts/convert_atlas_metadata.py", "--self-test"]),
+    ("frame_sequences_check", [sys.executable, "scripts/convert_frame_sequences.py", "--check"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),
     ("whitelist_audit", [sys.executable, "scripts/whitelist_audit.py", "--fail-on-error"]),
 ]
