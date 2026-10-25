@@ -69,6 +69,8 @@ python scripts/check_all.py --skip-engine
 python scripts/health_check.py --project source --godot-bin <godot>
 python scripts/level_regression_all.py --changed-only --diff-base <base>
 python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn
+python scripts/coop_probe_runner.py --godot <godot>
+python scripts/scene_probe_runner.py --godot <godot>
 python scripts/convert_atlas_metadata.py --check
 ```
 

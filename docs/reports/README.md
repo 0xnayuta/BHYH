@@ -16,5 +16,6 @@
 | `scripts/whitelist_audit.py` | `whitelist_freeze_audit.md` / `.json` |
 | `scripts/level_regression_all.py` | `level_regression_*.md` / `.json` |
 | `scripts/coop_probe_runner.py` | `coop_probe_matrix_report.md` / `.json` |
+| `scripts/scene_probe_runner.py` | `constellation_probe_report.md` / `.json` |
 
 Atlas 同步校验由 `scripts/convert_atlas_metadata.py --check` 直接执行，不生成报告文件。

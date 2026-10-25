@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-25（ESC 分层关闭与可变跳跃高度）
+> 最后更新：2026-10-26（星座运行时场景探针与 FrameSequence 全量迁移）
 
 ---
 
@@ -82,6 +82,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 | `python scripts/level_regression_all.py --jobs 4 --timeout 90` | 全量关卡冒烟回归；8 并发仅用于快速回归 |
 | `python scripts/level_test_runner.py --godot <path> --level res://Scene/level/level_1.tscn` | 单关冒烟夹具 |
 | `python scripts/coop_probe_runner.py --godot <path>` | LocalCoop 探针矩阵（用例清单由脚本维护） |
+| `python scripts/scene_probe_runner.py --godot <path>` | 星座 Boss 运行时场景探针（`--scene` 完整生命周期） |
 | `python scripts/convert_atlas_metadata.py --check` | Atlas manifest 与 `metadata.tres` 同步校验 |
 
 Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变量指定，不写入仓库。
@@ -118,8 +119,11 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | GDScript 静态警告清零 | Godot `--debug` warning **53→0**；八维门禁 **8/8 PASS**；`level_1` / `level_34_1` / `level_52` / `level_58` 冒烟 **PASS**；LocalCoop 矩阵 **15/15 PASS** | 修复 4 类局部作用域命名、异步接口重复、跨脚本私有状态与 53 处存量 warning；`health_check.py` 增加 warning code 解析与白名单外失败门禁 |
 | 双人 P1/P2 攻击归属修复 | LocalCoop 矩阵 **16/16 PASS**；新增无双归属探针覆盖 P2 近战/弹道/显式 owner；Godot `--debug` **0 warning** | 伤害来源统一由 `LocalCoop` 实际出手者解析；`cure_ws_value` 接受显式玩家 owner；P2 弹道、法宝、技能效果、特殊怪物覆盖与黄 aura 不再把无双/伤害记到 P1；P2 无双同步衰减 |
 | 哪吒启动 PackedScene 契约修复 | Nezha 预热探针 **PASS**；转换器 `--check` **39 套 / 117 个内容一致**；Godot `--debug` **0 warning**；场景加载路径仅接受 `.tscn` / `.scn` | 根因是显示层预热列表曾混入 3 个 SpriteFrames `.tres`；场景预热仅保留场景路径，`_load_scene` 强制 `PackedScene` 类型，非场景路径返回 null 而不再触发返回值类型错误 |
+| 2026-10-26 发布前 L2 固定验收 | `level_1` Stage 1~4 **PASS**（0/0）；`level_tzsijian` **PASS**（0/0）；`coop_probe_runner` **16/16 PASS / 0 SKIP / 0 FAIL**；`scene_probe_runner` **PASS**；日志均 **0 ERROR / 0 WARNING** | 固定三件套：`level_test_runner.py` + `coop_probe_runner.py` + `scene_probe_runner.py`；执行顺序与阻断规则写入 `docs/reference/acceptance.md` §6；报告由脚本生成，不提交 |
+| 2026-10-26 星座运行时场景探针 | `scene_probe_runner.py` **PASS**：body **12/12**、body 流首帧 **PASS**、`skill1~4` 标准 SpriteFrames **PASS**、`skill2_3` FrameSequence 回退 **PASS**；日志 **0 ERROR / 0 WARNING**；八维门禁 **8/8**；`convert_frame_sequences.py --check` **455 序列 PASS** | 新增 `scripts/scene_probes/constellation_probe.{gd,tscn}` 与 `scripts/scene_probe_runner.py`；用 `--scene` 启动完整 Autoload 生命周期，避免 `--script` 的编译时序问题；探针执行期复制到 `source/`，结束后清理 |
+| 2026-10-26 FrameSequence 全量迁移 | `convert_frame_sequences.py --check` **455 个序列 PASS**；四剑台背景 / 星座治疗 aura / 混沌 / 饕餮 / 流沙河 / 五台 3077 / 四剑阵 / 星座动态 body / 星座技能 / 五台弹道非 swf 探针 **PASS**；`level_tzsijian` 冒烟 **PASS**（0 ERROR / 0 WARNING）；八维门禁 **8/8**；health **709 脚本 0/0/0** | 新增 `FrameSequence`、`FrameSequenceCatalog`、`FrameSequenceStore` 与 `convert_frame_sequences.py`；`StreamedPngEffect` 只消费 `sequence`，旧数组字段删除；固定目录、四剑阵 AtlasMetadata、星座动态 body、星座技能与五台弹道非 swf 序列均由构建期 Catalog 驱动；无运行时目录扫描/路径数组 |
 | 全角色运行资源清单 | 角色 1~7 静态 Catalog **PASS**；无技能/条件路径探针 **PASS**；角色 7 音频 **25 条**；角色 4/5 重型帧构建期化 **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；Godot `--debug` **0 warning** | 新增 `RoleRuntimeCatalog` 以 typed Dictionary + `preload` 静态注册全部清单，删除 Manifest 缺失回退与旧硬编码路径；条件字段改为 `Dictionary[String, PackedStringArray]`；角色 7 动态音频进入清单；`zlw_shenqi_gear_bullet.tscn` 改为 `BaseHero` 固定 `preload`；BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 由 `convert_numbered_frames.py` 生成 4 个构建期 SpriteFrames，Manifest 改走 `conditional_sprite_frames_paths`，移除 175 条 PNG 路径与运行时建帧 |
-| 引擎健康检查基线 | 706 脚本 0 Parse / 0 Error / 0 Warning;1,136 场景 0 断裂引用 | 本地完整素材工作区 |
+| 引擎健康检查基线 | 709 脚本 0 Parse / 0 Error / 0 Warning;1,136 场景 0 断裂引用 | 本地完整素材工作区 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。

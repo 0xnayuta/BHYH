@@ -12,8 +12,10 @@
 
 1. 可长期复用的测试规格放在 `scripts/`：
    - `scripts/coop_probes/`：双人探针矩阵；
+   - `scripts/scene_probes/`：场景级运行时探针；
    - `scripts/level_test_runner.py`：单关冒烟夹具；
    - `scripts/level_regression_all.py`：批量回归；
+   - `scripts/scene_probe_runner.py`：场景探针夹具；
 2. 夹具在运行时临时复制/生成到 `source/`，执行后自动清理（含 `.uid`、日志、报告）；
 3. 上游 `Test/`、`.remap`、探针场景与脚本不进入 `source/`；
 4. 迁移中的临时探针只作为可执行规格，验收后移除或在 `scripts/` 中等价重写；
@@ -38,6 +40,7 @@
 ## 证据
 
 - [`../../scripts/README.md`](../../scripts/README.md) §4
+- [`../../scripts/scene_probes/constellation_probe.gd`](../../scripts/scene_probes/constellation_probe.gd)
 - [`../../AGENTS.md`](../../AGENTS.md) §7.6、§7.7
 - [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) §1.2
 - [`../../.gitignore`](../../.gitignore) §6

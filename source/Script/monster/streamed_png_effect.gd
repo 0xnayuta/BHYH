@@ -4,9 +4,6 @@ class_name StreamedPngEffect
 signal finished
 signal frame_ready
 
-static var _prewarmed_textures: Dictionary = {}
-static var _prewarm_mutex := Mutex.new()
-static var _prewarm_generation := 0
 static var _matte_shader: Shader
 
 
@@ -18,14 +15,8 @@ static func _get_matte_shader() -> Shader:
 	return _matte_shader
 
 
-var frame_paths: Array[String] = []
-var frame_regions: Array[Rect2] = []
-var frame_margins: Array[Rect2] = []
-var frame_has_visual: Array[bool] = []
-var fps: float = 24.0
-var loop_animation: bool = false
+var sequence: FrameSequence
 var auto_free: bool = true
-var hold_last_frame: bool = false
 var manual_frame_control: bool = false
 
 var registration_offset: Vector2 = Vector2.ZERO:
@@ -54,112 +45,45 @@ var _last_frame := -1
 var _last_path := ""
 var _pending_paths: Dictionary = {}
 var _ready_textures: Dictionary = {}
-var _prefetch_count := 2
 var _finished := false
 var _shutting_down := false
 var _has_displayed_frame := false
 
 
-static func prewarm_effect_roots(root_paths: Array, frames_per_directory: int = 3) -> void:
-	var pending_paths: Array[String] = []
-	var seen_paths: Dictionary = {}
-	var frame_limit := maxi(1, frames_per_directory)
-	for root_path_value in root_paths:
-		var root_path := str(root_path_value)
-		if root_path == "":
-			continue
-		if not DirAccess.dir_exists_absolute(root_path):
-			continue
-		for directory_name in DirAccess.get_directories_at(root_path):
-			var directory_path := root_path.path_join(directory_name)
-			var file_names: Array[String] = []
-			for file_name in DirAccess.get_files_at(directory_path):
-				if file_name.get_extension().to_lower() == "png":
-					file_names.append(file_name)
-			if file_names.is_empty():
-				_append_numbered_png_names(file_names, directory_path)
-			file_names.sort_custom(func(a: String, b: String): return a.naturalnocasecmp_to(b) < 0)
-			for index in range(mini(frame_limit, file_names.size())):
-				var path := directory_path.path_join(file_names[index])
-				if seen_paths.has(path) or _has_prewarmed_texture(path):
-					continue
-				seen_paths[path] = true
-				pending_paths.append(path)
-	if pending_paths.is_empty():
-		return
-
-	var mutex := _prewarm_mutex
-	mutex.lock()
-	var generation := _prewarm_generation
-	mutex.unlock()
-	var tree := Engine.get_main_loop() as SceneTree
-	var batch_size := 2 if OS.has_feature("mobile") else 4
-	var loaded_in_batch := 0
-	for path in pending_paths:
-		var texture: Texture2D
-		if tree == null:
-			texture = ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-		else:
-			var request_error := ResourceLoader.load_threaded_request(path, "Texture2D")
-			var status := ResourceLoader.load_threaded_get_status(path)
-			if request_error != OK and status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-				continue
-			while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-				await tree.process_frame
-				status = ResourceLoader.load_threaded_get_status(path)
-			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				texture = ResourceLoader.load_threaded_get(path) as Texture2D
-		mutex.lock()
-		var generation_changed := generation != _prewarm_generation
-		if not generation_changed and texture != null:
-			_prewarmed_textures[path] = texture
-		mutex.unlock()
-		if generation_changed:
-			return
-		loaded_in_batch += 1
-		if tree != null and loaded_in_batch >= batch_size:
-			loaded_in_batch = 0
-			await tree.process_frame
+func _active_paths() -> PackedStringArray:
+	return sequence.frame_paths
 
 
-static func clear_prewarmed_images() -> void:
-	var mutex := _prewarm_mutex
-	mutex.lock()
-	_prewarm_generation += 1
-	_prewarmed_textures.clear()
-	mutex.unlock()
+func _active_regions() -> Array[Rect2]:
+	return sequence.frame_regions
 
 
-static func _append_numbered_png_names(file_names: Array[String], directory_path: String) -> void:
-	var missing_streak := 0
-	for index in range(601):
-		var file_name := str(index) + ".png"
-		if ResourceLoader.exists(directory_path.path_join(file_name)):
-			file_names.append(file_name)
-			missing_streak = 0
-		elif not file_names.is_empty():
-			missing_streak += 1
-			if missing_streak >= 30:
-				break
+func _active_margins() -> Array[Rect2]:
+	return sequence.frame_margins
 
 
-static func _has_prewarmed_texture(path: String) -> bool:
-	var mutex := _prewarm_mutex
-	mutex.lock()
-	var has_texture := _prewarmed_textures.has(path)
-	mutex.unlock()
-	return has_texture
+func _active_has_visual() -> Array[bool]:
+	return sequence.frame_has_visual
 
 
-static func _get_prewarmed_texture(path: String) -> Texture2D:
-	var mutex := _prewarm_mutex
-	mutex.lock()
-	var texture := _prewarmed_textures.get(path) as Texture2D
-	mutex.unlock()
-	return texture
+func _active_fps() -> float:
+	return sequence.fps
+
+
+func _active_loop() -> bool:
+	return sequence.loop
+
+
+func _active_hold_last_frame() -> bool:
+	return sequence.hold_last_frame
+
+
+func _active_prefetch() -> int:
+	return maxi(sequence.prefetch_frames, 0)
 
 
 func _ready() -> void:
+	assert(sequence != null, "StreamedPngEffect 必须设置 FrameSequence")
 	_sprite = Sprite2D.new()
 	_sprite.centered = true
 	_sprite.flip_h = flip_h
@@ -195,19 +119,20 @@ func _update_registration_position() -> void:
 
 
 func _process(delta: float) -> void:
-	if frame_paths.is_empty():
+	var paths := _active_paths()
+	if paths.is_empty():
 		_finish()
 		return
 	_collect_ready_textures()
 	if manual_frame_control:
 		return
 	_time += delta
-	var frame_index := int(floor(_time * maxf(fps, 1.0)))
-	if frame_index >= frame_paths.size():
-		if loop_animation:
-			frame_index %= frame_paths.size()
-		elif hold_last_frame:
-			_show_frame(frame_paths.size() - 1)
+	var frame_index := int(floor(_time * maxf(_active_fps(), 1.0)))
+	if frame_index >= paths.size():
+		if _active_loop():
+			frame_index %= paths.size()
+		elif _active_hold_last_frame():
+			_show_frame(paths.size() - 1)
 			return
 		else:
 			_finish()
@@ -229,23 +154,25 @@ func has_displayed_frame() -> bool:
 
 
 func show_frame(frame_index: int) -> void:
-	if not manual_frame_control or frame_paths.is_empty():
+	var paths := _active_paths()
+	if not manual_frame_control or paths.is_empty():
 		return
 	_collect_ready_textures()
-	_show_frame(clampi(frame_index, 0, frame_paths.size() - 1))
+	_show_frame(clampi(frame_index, 0, paths.size() - 1))
 
 
 func _request_frame_window(frame_index: int) -> void:
-	if _shutting_down or frame_paths.is_empty():
+	var paths := _active_paths()
+	if _shutting_down or paths.is_empty():
 		return
 	var retained_paths: Dictionary = {}
-	for offset in range(_prefetch_count + 1):
+	for offset in range(_active_prefetch() + 1):
 		var request_index := frame_index + offset
-		if loop_animation:
-			request_index %= frame_paths.size()
-		elif request_index >= frame_paths.size():
+		if _active_loop():
+			request_index %= paths.size()
+		elif request_index >= paths.size():
 			break
-		var path := frame_paths[request_index]
+		var path := paths[request_index]
 		retained_paths[path] = true
 		_request_texture(path)
 	for ready_path in _ready_textures.keys():
@@ -254,14 +181,9 @@ func _request_frame_window(frame_index: int) -> void:
 
 
 func _request_texture(path: String) -> void:
-	path = path
 	if path == _last_path and _displayed_page != null:
 		return
 	if _shutting_down or _pending_paths.has(path) or _ready_textures.has(path):
-		return
-	var prewarmed_texture := _get_prewarmed_texture(path)
-	if prewarmed_texture != null:
-		_ready_textures[path] = prewarmed_texture
 		return
 	var request_error := ResourceLoader.load_threaded_request(path, "Texture2D", false, ResourceLoader.CACHE_MODE_REUSE)
 	var status := ResourceLoader.load_threaded_get_status(path)
@@ -285,13 +207,9 @@ func _collect_ready_textures() -> void:
 
 
 func _take_requested_texture(path: String, allow_sync_load: bool = false) -> Texture2D:
-	path = path
 	if path == _last_path and _displayed_page != null:
 		return _displayed_page
 	if allow_sync_load:
-		var prewarmed_texture := _get_prewarmed_texture(path)
-		if prewarmed_texture != null:
-			return prewarmed_texture
 		if _ready_textures.has(path):
 			var ready_texture := _ready_textures[path] as Texture2D
 			_ready_textures.erase(path)
@@ -307,10 +225,14 @@ func _take_requested_texture(path: String, allow_sync_load: bool = false) -> Tex
 
 
 func _show_frame(frame_index: int, allow_sync_load: bool = false) -> void:
-	if (frame_index == _last_frame and _has_displayed_frame) or frame_index < 0 or frame_index >= frame_paths.size():
+	var paths := _active_paths()
+	if (frame_index == _last_frame and _has_displayed_frame) or frame_index < 0 or frame_index >= paths.size():
 		return
-	var path := frame_paths[frame_index]
-	var uses_atlas_region := frame_regions.size() == frame_paths.size()
+	var path := paths[frame_index]
+	var regions := _active_regions()
+	var margins := _active_margins()
+	var has_visual := _active_has_visual()
+	var uses_atlas_region := regions.size() == paths.size()
 	if not uses_atlas_region and path == _last_path and _sprite != null and _sprite.texture != null:
 		_last_frame = frame_index
 		_request_frame_window(frame_index + 1)
@@ -328,14 +250,14 @@ func _show_frame(frame_index: int, allow_sync_load: bool = false) -> void:
 			_atlas_texture.filter_clip = true
 		if _atlas_texture.atlas != texture:
 			_atlas_texture.atlas = texture
-		_atlas_texture.region = frame_regions[frame_index]
-		_atlas_texture.margin = frame_margins[frame_index] if frame_margins.size() == frame_paths.size() else Rect2()
+		_atlas_texture.region = regions[frame_index]
+		_atlas_texture.margin = margins[frame_index] if margins.size() == paths.size() else Rect2()
 		_sprite.texture = _atlas_texture
 	else:
 		_sprite.texture = texture
 	var current_frame_has_visual := true
-	if frame_has_visual.size() == frame_paths.size():
-		current_frame_has_visual = frame_has_visual[frame_index]
+	if has_visual.size() == paths.size():
+		current_frame_has_visual = has_visual[frame_index]
 	_has_displayed_frame = _has_displayed_frame or current_frame_has_visual
 	if first_frame and current_frame_has_visual:
 		frame_ready.emit()
@@ -347,7 +269,7 @@ func _finish() -> void:
 		return
 	_finished = true
 	_shutdown_texture_loader()
-	if not hold_last_frame and auto_free:
+	if not _active_hold_last_frame() and auto_free:
 		clear_texture()
 	finished.emit()
 	if auto_free:

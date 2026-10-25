@@ -1027,17 +1027,9 @@ func _effect_root(effect_name: String) -> String:
 	return ORIGINAL_MONSTER172_EFFECT_ROOT
 
 
-func _effect_paths(effect_name: String) -> Array[String]:
-	var root := _effect_root(effect_name)
-	var result: Array[String] = []
-	for frame_number in range(1, 601):
-		var path := "%s/%s/%d.png" % [root, effect_name, frame_number]
-		if not FileAccess.file_exists(path) and not ResourceLoader.exists(path):
-			if not result.is_empty():
-				break
-			continue
-		result.append(path)
-	return result
+func _effect_sequence(effect_name: String) -> FrameSequence:
+	var directory := _effect_root(effect_name).path_join(effect_name)
+	return FrameSequenceStore.get_sequence(directory, SOURCE_FPS, false, false, 2)
 
 
 func _spawn_effect(
@@ -1048,8 +1040,8 @@ func _spawn_effect(
 	rotation_degrees: float = 0.0,
 	follow_boss: bool = false
 ) -> void:
-	var paths := _effect_paths(effect_name)
-	if paths.is_empty():
+	var sequence := _effect_sequence(effect_name)
+	if sequence == null:
 		push_error("流沙河 Boss 特效资源缺失: " + effect_name)
 		return
 	var origin := _make_attack_origin(hit_name_value)
@@ -1059,8 +1051,7 @@ func _spawn_effect(
 	add_child(origin)
 	origin.global_position = world_position
 	var effect := StreamedPngEffect.new()
-	effect.frame_paths = paths
-	effect.fps = SOURCE_FPS
+	effect.sequence = sequence
 	effect.auto_free = false
 	effect.flip_h = facing_right
 	effect.registration_offset = _registration_offset(effect_name)
@@ -1068,13 +1059,13 @@ func _spawn_effect(
 	var angle := -rotation_degrees if facing_right else rotation_degrees
 	effect.rotation_degrees = angle
 	_attach_hit_area(origin, effect_name, facing_right, hit_name_value, angle)
-	var lifetime := maxf(0.2, float(paths.size()) / SOURCE_FPS + 0.12)
+	var lifetime := maxf(0.2, float(sequence.count()) / SOURCE_FPS + 0.12)
 	get_tree().create_timer(lifetime, false).timeout.connect(_free_holder.bind(weakref(origin)), CONNECT_ONE_SHOT)
 
 
 func _spawn_visual_effect(effect_name: String, world_position: Vector2, facing_right: bool) -> void:
-	var paths := _effect_paths(effect_name)
-	if paths.is_empty():
+	var sequence := _effect_sequence(effect_name)
+	if sequence == null:
 		return
 	var holder := Node2D.new()
 	holder.name = "LiuShaVisual_" + effect_name
@@ -1083,13 +1074,12 @@ func _spawn_visual_effect(effect_name: String, world_position: Vector2, facing_r
 	holder.z_index = 5
 	add_child(holder)
 	var effect := StreamedPngEffect.new()
-	effect.frame_paths = paths
-	effect.fps = SOURCE_FPS
+	effect.sequence = sequence
 	effect.auto_free = false
 	effect.flip_h = facing_right
 	effect.registration_offset = _registration_offset(effect_name)
 	holder.add_child(effect)
-	var lifetime := maxf(0.2, float(paths.size()) / SOURCE_FPS + 0.12)
+	var lifetime := maxf(0.2, float(sequence.count()) / SOURCE_FPS + 0.12)
 	get_tree().create_timer(lifetime, false).timeout.connect(_free_holder.bind(weakref(holder)), CONNECT_ONE_SHOT)
 
 

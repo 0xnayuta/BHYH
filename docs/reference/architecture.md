@@ -296,6 +296,8 @@ classDiagram
 
 ## 6. 资源层与视觉资产契约
 
+> 完整目标架构、默认选型与迁移边界见 [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)。本节只记录当前运行时架构与已落地状态。
+
 ### 6.1 三层契约
 
 | 层 | 职责 | 允许的产物 |
@@ -351,8 +353,6 @@ classDiagram
 
 仍然存在（遗留）：
 
-- **`FrameSequence` 尚未实现**：它是架构目标类型，不是当前实现；
-- `StreamedPngEffect` 仍以运行时目录扫描 + PNG 路径/区域数组工作，受 `scripts/png_stream_audit.py` 的 allowlist 限制；
 - 仍有多个脚本在运行时调用 `SpriteFrames.new()` 建帧；
 - `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界；
 - `load_scene.gd` 仍通过正则读取关卡 `.gd` 源文本提取刷怪表，属于运行时反解析源码的遗留手法。
@@ -364,6 +364,7 @@ classDiagram
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期 |
+| 固定/超大帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres` + Catalog | `--check` 内容一致性 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 
 规则：
@@ -406,20 +407,21 @@ classDiagram
 - 哪吒装备层构建期 `SpriteFrames`；
 - BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 构建期 `SpriteFrames`；
 - `AtlasMetadata` 构建期转换与运行时只读加载；
-- 角色 4/5 重型帧的构建期化与预热清单收敛。
+- 角色 4/5 重型帧的构建期化与预热清单收敛；
+- `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore` 与 `convert_frame_sequences.py` 已落地；455 个序列覆盖固定目录、四剑阵 AtlasMetadata、星座动态 body、星座技能与五台弹道非 swf；`StreamedPngEffect` 只消费 `sequence`，旧数组字段已删除；
+- 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`。
 
 待迁移：
 
 | 项目 | 目标 |
 |:---|:---|
-| `StreamedPngEffect` 的目录扫描 | 改为构建期 `FrameSequence`，运行时只读资源 |
-| `sword_boss_base.gd` 等运行时建帧 | 有限帧改为构建期 `SpriteFrames` |
+| `sword_boss_base.gd` 等有限帧运行时建帧 | 有限帧改为构建期 `SpriteFrames`；技能图集序列已走 `FrameSequence` |
 | 魔法武器运行时 `_build_frames()` | 有限帧改为构建期资源；超大帧走 `FrameSequence` |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |
 | `load_scene.gd` 源码正则解析刷怪表 | 改为 Manifest/Catalog 数据源 |
 
-迁移顺序：先消除运行时目录扫描与 JSON 源解析 → 再把有限帧运行时建帧迁移到构建期 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
+迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 下一批把有限帧运行时建帧迁移到构建期 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
 
 ---
 
@@ -503,7 +505,6 @@ classDiagram
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 多个脚本仍存在运行时建帧 | 有限帧改为构建期资源；超大序列走目标流式方案 |
-| `StreamedPngEffect` 目录扫描 | 受 allowlist 限制；清单见 `scripts/png_stream_allowlist.json` | 不新增未登记使用；迁移到构建期 `FrameSequence` |
 | 运行时正则解析 `.gd` 源码 | `load_scene.gd` 提取刷怪表 | 迁移为 Manifest/Catalog 数据源 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
@@ -519,7 +520,8 @@ classDiagram
 | 角色运行资源清单 | `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`，`preload` 静态注册，缺失即失败 |
 | 图集元数据 | `AtlasMetadata` + `AtlasMetadataStore`，构建期生成、运行时只读 |
 | 字典键契约 | `DataKeys` 命名空间与安全访问器 |
-| 构建期动画资源 | `convert_numbered_frames.py`、`convert_nezha_preview_frames.py` |
+| 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_nezha_preview_frames.py` |
+| 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |
@@ -530,7 +532,7 @@ classDiagram
 
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
-1. **`FrameSequence` 尚未实现**：本文与旧版架构文档把它列为目标资源类型；当前超大序列的真实实现是 `StreamedPngEffect`。
+1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。
 2. **Autoload 数量**：共 13 个注册项，其中 12 个是业务单例，`MCPGameBridge` 是调试桥；说“13 个业务 Autoload”不准确。
 3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。

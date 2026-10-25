@@ -39,14 +39,18 @@ level_regression_all.py
 
 coop_probe_runner.py
 └── coop_probes/coop_probe_matrix.gd（执行期复制到工程根）
+
+scene_probe_runner.py
+└── scene_probes/constellation_probe.tscn/.gd（--scene 启动，执行期复制到工程根）
 ```
 
 说明：
 
-- `check_all.py` 是日常总门禁；它不运行关卡回归、双人探针或人工迁移工具；
+- `check_all.py` 是日常总门禁；它不运行关卡回归、双人探针、星座场景探针或人工迁移工具；
 - `contract_gate.py` 的独立子命令并发执行，再按固定顺序汇总输出；
 - `level_regression_all.py` 依赖 `level_test_runner.py`；
-- `coop_probe_runner.py` 依赖 `coop_probes/` 下的 GDScript 测试规格。
+- `coop_probe_runner.py` 依赖 `coop_probes/` 下的 GDScript 测试规格；
+- `scene_probe_runner.py` 依赖 `scene_probes/` 下的场景规格，使用 `--scene` 启动完整项目生命周期。
 
 ---
 
@@ -89,8 +93,10 @@ coop_probe_runner.py
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
+| `scene_probe_runner.py` | 星座 Boss 运行时场景探针；`--scene` 启动完整生命周期，验证 body 流、标准 SpriteFrames 与 FrameSequence 回退；发布前 L2 固定项之一 | `docs/reports/constellation_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado，`--check` 校验存在且未过期 | 角色 4/5 与 3077 `Art/.../*_frames.tres`（私有素材） |
+| `convert_frame_sequences.py` | 固定 PNG 目录、四剑阵 AtlasMetadata、星座动态 body/技能与五台弹道非 swf 序列 → 构建期 `FrameSequence.tres` + Catalog；`--check` 校验内容一致性 | `source/Art/frame_sequences/`（私有素材） |
 | `coop_probes/coop_probe_matrix.gd` | 探针矩阵 GDScript 测试规格 | 仅执行期复制到工程根，结束后清理 |
 
 ### 3.5 数据文件
@@ -102,7 +108,7 @@ coop_probe_runner.py
 
 ---
 
-## 4. `coop_probes/` 说明
+## 4. `coop_probes/` 与 `scene_probes/` 说明
 
 `coop_probes/` 不是生产业务代码，而是双人模式的可执行测试规格。
 
@@ -113,6 +119,8 @@ coop_probe_runner.py
 - `coop_probe_runner.py` 将其复制到 `source/_coop_probe_matrix.gd`，逐个启动 Godot，收集结果后清理。
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。
+
+`scene_probes/` 存放场景级运行时探针。`scene_probe_runner.py` 把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件。
 
 ---
 
@@ -145,6 +153,9 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 
 # 双人探针
 python scripts/coop_probe_runner.py --godot "<godot>"
+
+# 星座运行时场景探针
+python scripts/scene_probe_runner.py --godot "<godot>"
 ```
 
 ---

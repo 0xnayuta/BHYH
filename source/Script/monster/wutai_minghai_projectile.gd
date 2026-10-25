@@ -2,7 +2,6 @@ extends MonsterBullet
 class_name WutaiMinghaiProjectile
 
 const SOURCE_FPS := 30.0
-static var _frame_path_cache: Dictionary = {}
 static var _frame_geometry_cache: Dictionary = {}
 
 var owner_monster: BaseMonster
@@ -63,6 +62,7 @@ var frames_animation := ""
 var impact_frames_resource_path := ""
 var impact_frames_animation := ""
 var _visual_stream: StreamedPngEffect
+var _visual_sequence: FrameSequence
 var _standard_visual: AnimatedSprite2D
 var _standard_frames: SpriteFrames
 var _standard_animation: StringName = &""
@@ -229,6 +229,7 @@ func _ready() -> void:
 func _configure_visual(
 	root: String, count: int, offset: Vector2, looped: bool, sequence_name: String = "", metadata_path: String = ""
 ) -> bool:
+	_visual_sequence = null
 	var resolved_metadata := atlas_metadata if metadata_path.is_empty() else metadata_path
 	if not sequence_name.is_empty() and (not resolved_metadata.is_empty() or not frames_resource_path.is_empty()):
 		if _configure_atlas_visual(sequence_name, offset + visual_registration, looped, resolved_metadata):
@@ -236,6 +237,9 @@ func _configure_visual(
 	if _is_swf_png_root(root):
 		return false
 	if root.is_empty() or count <= 0:
+		return false
+	if not FrameSequenceStore.has_sequence(root, frame_fps, looped, hold_last_frame, 2):
+		push_error("缺少构建期弹道帧序列: " + root)
 		return false
 
 	var is_monster_169_absorb := root.replace("\\", "/").ends_with("/Monster_169/hit2")
@@ -245,19 +249,9 @@ func _configure_visual(
 		black_background_feather = 0.05
 	var stream := StreamedPngEffect.new()
 	stream.name = "VisualStream"
-	var source_paths := get_frame_paths(root, count)
-	for source_path in source_paths:
-		if not ResourceLoader.exists(source_path, "Texture2D"):
-			stream.free()
-			return false
-	stream.frame_paths = source_paths
-	if stream.frame_paths.is_empty():
-		stream.free()
-		return false
-	stream.fps = frame_fps
-	stream.loop_animation = looped
+	stream.sequence = FrameSequenceStore.get_sequence(root, frame_fps, looped, hold_last_frame, 2)
+	_visual_sequence = stream.sequence
 	stream.auto_free = false
-	stream.hold_last_frame = hold_last_frame
 	stream.remove_black_background = remove_black_background
 	stream.black_background_threshold = black_background_threshold
 	stream.black_background_feather = black_background_feather
@@ -390,7 +384,10 @@ func _sync_collision_to_visual_frame(force: bool = false) -> void:
 		return
 	_last_collision_frame = frame_index
 	_current_frame_has_visual = false
-	var paths := get_frame_paths(frame_root, frame_count)
+	if _visual_sequence == null:
+		_apply_collision_geometry(collision_size, Vector2.ZERO)
+		return
+	var paths := _visual_sequence.frame_paths
 	if frame_index < 0 or frame_index >= paths.size():
 		_apply_collision_geometry(Vector2.ONE, Vector2.ZERO)
 		return
@@ -691,6 +688,7 @@ func _finish() -> void:
 
 
 func _clear_visual_stream() -> void:
+	_visual_sequence = null
 	if _standard_visual != null and is_instance_valid(_standard_visual):
 		_standard_visual.stop()
 		_standard_visual.sprite_frames = null
@@ -798,15 +796,3 @@ func _resolve_random_target() -> Node2D:
 	if players.is_empty():
 		return null
 	return players[randi() % players.size()]
-
-
-static func get_frame_paths(root: String, count: int) -> Array[String]:
-	var cache_key := "%s|%d" % [root, count]
-	if _frame_path_cache.has(cache_key):
-		var cached: Array[String] = _frame_path_cache[cache_key]
-		return cached
-	var paths: Array[String] = []
-	for frame_index in range(1, count + 1):
-		paths.append(root.path_join(str(frame_index) + ".png"))
-	_frame_path_cache[cache_key] = paths
-	return paths

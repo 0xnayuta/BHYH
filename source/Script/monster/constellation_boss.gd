@@ -652,17 +652,20 @@ func _add_monster140_emit_keys(animation: Animation, skill: int) -> void:
 			_add_method_key(animation, 2.0 / SOURCE_FPS, &"_emit_monster140_skill", [4, 1])
 
 
+func _body_sequence(action: StringName) -> FrameSequence:
+	return FrameSequenceStore.get_sequence(
+		"constellation/%d/body/%s" % [source_id, action],
+		SOURCE_FPS,
+		action in [&"wait", &"walk"],
+		action not in [&"wait", &"walk"],
+		2
+	)
+
+
 func _play_body_action(action: StringName) -> void:
 	var stream := BODY_STREAM_SCRIPT.new() as StreamedPngEffect
 	stream.name = "BodyStream"
-	var source_paths := _body_action_frame_paths(action)
-	var body_textures := _body_frame_textures(source_paths)
-	stream.frame_paths = source_paths
-	if not body_textures.is_empty():
-		stream.frame_textures = body_textures
-	stream.fps = SOURCE_FPS
-	stream.loop_animation = action in [&"wait", &"walk"]
-	stream.hold_last_frame = not stream.loop_animation
+	stream.sequence = _body_sequence(action)
 	stream.auto_free = false
 	stream.call(
 		"configure_canvas",
@@ -691,91 +694,8 @@ func _standard_frames() -> SpriteFrames:
 	return _standard_frames_cache[path] as SpriteFrames
 
 
-func _body_frame_textures(source_paths: Array[String]) -> Array[Texture2D]:
-	var frames := _standard_frames()
-	if frames == null:
-		return []
-	var result: Array[Texture2D] = []
-	for path in source_paths:
-		var texture := _body_texture_for_source_path(frames, path)
-		if texture == null:
-			return []
-		result.append(texture)
-	return result
-
-
-func _body_texture_for_source_path(frames: SpriteFrames, path: String) -> Texture2D:
-	var prefix := _asset_root() + "/"
-	if not path.begins_with(prefix):
-		return null
-	var relative := path.trim_prefix(prefix)
-	var animation := StringName(relative.get_base_dir())
-	var frame_index := relative.get_file().get_basename().to_int()
-	if frame_index <= 0:
-		return null
-	if frames.has_animation(animation):
-		if frame_index > frames.get_frame_count(animation):
-			return null
-		return frames.get_frame_texture(animation, frame_index - 1)
-	var parts := relative.split("/")
-	if parts.size() == 3 and parts[0] == "body" and parts[1].is_valid_int():
-		var fallback_index := int(parts[1])
-		if frames.has_animation(&"body") and fallback_index <= frames.get_frame_count(&"body"):
-			return frames.get_frame_texture(&"body", fallback_index - 1)
-	return null
-
-
 func _body_action_duration(action: StringName) -> float:
-	return maxf(float(_body_action_frame_paths(action).size()) / SOURCE_FPS, 0.05)
-
-
-func _body_action_frame_paths(action: StringName) -> Array[String]:
-	var body_root := _asset_root().path_join("body")
-	var body_count := _body_frame_count()
-	var row := _body_action_row(action)
-	row = clampi(row, 0, maxi(body_count - 1, 0))
-	var fallback_path := body_root.path_join("%d.png" % (row + 1))
-	var row_root := body_root.path_join(str(row + 1))
-	var result: Array[String] = []
-
-	var counts_value: Variant = BODY_ACTION_COUNTS.get(source_id, [])
-	var stops_value: Variant = BODY_ACTION_STOPS.get(source_id, [])
-	var counts: Array = counts_value if counts_value is Array else []
-	var stops_by_row: Array = stops_value if stops_value is Array else []
-	if row >= counts.size() or row >= stops_by_row.size():
-		result.append(fallback_path)
-		return result
-
-	var stop_value: Variant = stops_by_row[row]
-	var row_stops: Array = stop_value if stop_value is Array else []
-	if row_stops.is_empty():
-		result.append(fallback_path)
-		return result
-
-	var keyframe_count := maxi(int(counts[row]), 1)
-	for keyframe_index in range(keyframe_count):
-		var frame_path := row_root.path_join("%d.png" % (keyframe_index + 1))
-		if not ResourceLoader.exists(frame_path, "Texture2D"):
-			frame_path = fallback_path
-		var hold_ticks := maxi(int(row_stops[keyframe_index % row_stops.size()]), 1)
-		for _hold_index in range(hold_ticks):
-			result.append(frame_path)
-	return result
-
-
-func _body_action_row(action: StringName) -> int:
-	return int(BODY_ACTION_ROWS.get(action, 0))
-
-
-func _frame_paths(root: String, count: int) -> Array[String]:
-	var result: Array[String] = []
-	for index in range(1, maxi(count, 1) + 1):
-		result.append(root.path_join("%d.png" % index))
-	return result
-
-
-func _body_frame_count() -> int:
-	return int(BODY_COUNTS.get(source_id, 1))
+	return maxf(float(_body_sequence(action).count()) / SOURCE_FPS, 0.05)
 
 
 func _asset_root() -> String:
@@ -2033,6 +1953,7 @@ func _spawn_monster140_effect(
 				"frame_root": _asset_root().path_join(visual_folder),
 				"frames_resource": _standard_frames_resource_path(),
 				"frames_animation": visual_folder,
+				"atlas_sequence": visual_folder,
 				"frame_count": frame_count,
 				"frame_fps": MONSTER140_EFFECT_FPS,
 				"loop_visual": false,
@@ -2060,8 +1981,16 @@ func _spawn_monster140_effect(
 
 
 func _skill_frame_count_from_folder(folder: String) -> int:
+	var frames := _standard_frames()
+	var animation := StringName(folder)
+	if frames != null and frames.has_animation(animation):
+		return frames.get_frame_count(animation)
 	var root := _asset_root().path_join(folder)
-	return maxi(_numbered_png_resource_count(root), 1)
+	for looped in [false, true]:
+		for hold_last in [false, true]:
+			if FrameSequenceStore.has_sequence(root, SOURCE_FPS, looped, hold_last, 2):
+				return FrameSequenceStore.get_sequence(root, SOURCE_FPS, looped, hold_last, 2).count()
+	return 1
 
 
 func _spawn_monster140_skill3() -> void:
@@ -2266,6 +2195,7 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 				"frame_root": _asset_root().path_join(folder),
 				"frames_resource": _standard_frames_resource_path(),
 				"frames_animation": folder,
+				"atlas_sequence": folder,
 				"frame_count": frame_count,
 				"frame_fps": frame_fps,
 				"loop_visual": bool(options.get("loop_visual", false)),
@@ -2349,19 +2279,23 @@ func _skill_spawn_offset(skill: int, direction: float, stage_index: int = 0) -> 
 
 
 func _skill_stage_count(skill: int) -> int:
-	var root := _asset_root()
+	var prefix := "skill%d_" % skill
 	var suffixes: Array[int] = []
-	for directory_name in DirAccess.get_directories_at(root):
-		var prefix := "skill%d_" % skill
-		if not directory_name.begins_with(prefix):
-			continue
-		var suffix := directory_name.trim_prefix(prefix)
-		if suffix.is_valid_int() and int(suffix) > 1:
-			suffixes.append(int(suffix))
-
-	for suffix in range(2, 21):
-		var stage_root := root.path_join("skill%d_%d" % [skill, suffix])
-		if ResourceLoader.exists(stage_root.path_join("1.png"), "Texture2D") and suffix not in suffixes:
+	var frames := _standard_frames()
+	if frames != null:
+		for animation in frames.get_animation_names():
+			var animation_name := String(animation)
+			if not animation_name.begins_with(prefix):
+				continue
+			var animation_suffix := animation_name.trim_prefix(prefix)
+			if animation_suffix.is_valid_int() and int(animation_suffix) > 1:
+				suffixes.append(int(animation_suffix))
+	if suffixes.is_empty():
+		var root := _asset_root()
+		for suffix in range(2, 21):
+			var stage_root := root.path_join("skill%d_%d" % [skill, suffix])
+			if not FrameSequenceStore.has_sequence(stage_root, SOURCE_FPS, false, false, 2):
+				break
 			suffixes.append(suffix)
 	suffixes.sort()
 	var expected := 2
@@ -2370,32 +2304,6 @@ func _skill_stage_count(skill: int) -> int:
 			break
 		expected += 1
 	return expected - 1
-
-
-func _skill_frame_count(skill: int, stage_index: int = 0) -> int:
-	var folder := "skill%d" % skill if stage_index <= 0 else "skill%d_%d" % [skill, stage_index]
-	var root := _asset_root().path_join(folder)
-	return maxi(_numbered_png_resource_count(root), 1)
-
-
-func _numbered_png_resource_count(root: String) -> int:
-	var count := 0
-	for file_name in DirAccess.get_files_at(root):
-		if file_name.get_extension().to_lower() == "png":
-			count += 1
-	if count > 0:
-		return count
-	var missing_streak := 0
-	for frame_index in range(1, 601):
-		var frame_path := root.path_join("%d.png" % frame_index)
-		if ResourceLoader.exists(frame_path, "Texture2D"):
-			count = frame_index
-			missing_streak = 0
-		elif count > 0:
-			missing_streak += 1
-			if missing_streak >= 30:
-				break
-	return count
 
 
 func _spawn_source_summon(project_id: int, offset: Vector2, lifetime: float) -> void:

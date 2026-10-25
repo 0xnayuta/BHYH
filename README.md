@@ -95,6 +95,7 @@ python scripts/resource_path_audit.py --project source
 python scripts/level_regression_all.py --jobs 4 --timeout 90
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"
+python scripts/scene_probe_runner.py --godot "<godot>"
 ```
 
 脚本职责、退出码与报告位置见 [`scripts/README.md`](scripts/README.md)。
@@ -117,6 +118,7 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |
+| [`docs/standards/target_architecture_contract.md`](docs/standards/target_architecture_contract.md) | 视觉资产三层架构契约：构建期转换、typed Resource 与运行时播放器 |
 | [`docs/standards/naming_whitelist.md`](docs/standards/naming_whitelist.md) | 命名白名单与冻结登记 |
 | [`docs/reports/README.md`](docs/reports/README.md) | 机器报告目录（按需生成） |
 | [`docs/archive/README.md`](docs/archive/README.md) | 长期参考文档归档规则与索引 |

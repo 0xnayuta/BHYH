@@ -45,6 +45,7 @@
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
 | [`standards/naming_standard.md`](standards/naming_standard.md) | 全工程命名规范与契约白皮书 |
 | [`standards/godot_design_standard.md`](standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |
+| [`standards/target_architecture_contract.md`](standards/target_architecture_contract.md) | 视觉资产三层架构契约：构建期转换、typed Resource、运行时播放器与迁移边界 |
 | [`standards/naming_whitelist.md`](standards/naming_whitelist.md) | 命名白名单与机器导出冻结登记 |
 | [`standards/missing_assets_registry.md`](standards/missing_assets_registry.md) | 缺失资产登记与恢复台账 |
 | [`standards/spriteframes_generation_policy.md`](standards/spriteframes_generation_policy.md) | SpriteFrames 生成策略（FPS、循环命名、speed 语义） |

@@ -226,9 +226,8 @@ func _spawn_attack_effect(
 	add_child(holder)
 
 	var sprite := StreamedPngEffect.new()
-	sprite.frame_paths = _effect_frame_paths(effect_name)
-	sprite.fps = SOURCE_FPS
-	sprite.loop_animation = effect_name == "monster_60_bullet_2"
+	var looped := effect_name == "monster_60_bullet_2"
+	sprite.sequence = FrameSequenceStore.get_sequence(EFFECT_ROOT.path_join(effect_name), SOURCE_FPS, looped, false, 2)
 	sprite.flip_h = _faces_right()
 	sprite.z_index = 5
 	holder.add_child(sprite)
@@ -274,60 +273,3 @@ func _on_effect_hurt_box_entered(hurt_area: Area2D, attack_area: Area2D, heal_on
 		if not _charge_heal_tokens.has(token):
 			_charge_heal_tokens[token] = true
 			cure_hp(int((max_hp - hp) / 60.0))
-
-
-func _new_effect_frames(effect_name: String) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"play")
-	frames.set_animation_loop(&"play", effect_name == "monster_60_bullet_2")
-	frames.set_animation_speed(&"play", SOURCE_FPS)
-	return frames
-
-
-func _effect_file_names(effect_name: String) -> Array[String]:
-	var names: Array[String] = []
-	var directory_path := EFFECT_ROOT + "/" + effect_name
-	var directory := DirAccess.open(directory_path)
-	if directory != null:
-		for file_name in directory.get_files():
-			if file_name.ends_with(".png"):
-				names.append(file_name)
-	if names.is_empty():
-		_append_numbered_effect_file_names(names, directory_path)
-	names.sort_custom(func(a: String, b: String): return a.naturalnocasecmp_to(b) < 0)
-	return names
-
-
-func _effect_frame_paths(effect_name: String) -> Array[String]:
-	var result: Array[String] = []
-	var directory_path := EFFECT_ROOT + "/" + effect_name
-	for file_name in _effect_file_names(effect_name):
-		result.append(directory_path + "/" + file_name)
-	return result
-
-
-func _append_numbered_effect_file_names(names: Array[String], directory_path: String) -> void:
-	var missing_streak := 0
-	for index in range(601):
-		var file_name := str(index) + ".png"
-		if ResourceLoader.exists(directory_path + "/" + file_name):
-			names.append(file_name)
-			missing_streak = 0
-		elif not names.is_empty():
-			missing_streak += 1
-			if missing_streak >= 30:
-				break
-
-
-func _load_effect_frames(effect_name: String) -> SpriteFrames:
-	var frames := _new_effect_frames(effect_name)
-	var directory_path: String = EFFECT_ROOT + "/" + effect_name
-	for file_name in _effect_file_names(effect_name):
-		var texture := Global.get_cached_texture(directory_path + "/" + file_name)
-		frames.add_frame(&"play", texture)
-	return frames
-
-
-func _prewarm_effect_frames() -> void:
-	pass

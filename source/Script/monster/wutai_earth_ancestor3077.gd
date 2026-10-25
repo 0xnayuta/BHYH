@@ -15,8 +15,6 @@ const TORNADO_COOLDOWN_MSEC := 6000
 
 static var _frames_cache: SpriteFrames
 
-static var _frame_path_cache: Dictionary = {}
-
 var _runtime_config: Dictionary = {}
 var _body_stream: StreamedPngEffect
 var _effect_streams: Array[StreamedPngEffect] = []
@@ -104,13 +102,15 @@ func monster_info_attack_values_include_difficulty() -> bool:
 
 
 static func prewarm_frames() -> void:
-	await StreamedPngEffect.prewarm_effect_roots([ROOT], 3)
+	FrameSequenceStore.get_sequence(ROOT.path_join("idle"), SOURCE_FPS, true, false, 2)
 
 
 static func prewarm_effects() -> void:
 	if ResourceLoader.exists(TORNADO_FRAMES):
 		ResourceLoader.load(TORNADO_FRAMES)
-	await StreamedPngEffect.prewarm_effect_roots([ROOT], 3)
+	prewarm_frames()
+	for folder in ["eye12", "eye3", "skill1", "skill3"]:
+		FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, false, false, 2)
 
 
 static func _load_standard_frames() -> SpriteFrames:
@@ -201,21 +201,21 @@ func _show_idle() -> void:
 		mr_ani.play(&"idle")
 		return
 	if _body_stream == null or not is_instance_valid(_body_stream):
-		_body_stream = _create_stream("idle", 1, body_offset, true, false)
+		_body_stream = _create_stream("idle", body_offset, true, false)
 	_body_stream.position = body_offset
 	_body_stream.visible = true
 
 
 func _begin_small_wind_skill() -> void:
 	_show_idle()
-	_add_effect_stream("eye12", 16, Vector2(-8.55, -124.25))
-	_add_effect_stream("skill1", 27, Vector2.ZERO)
+	_add_effect_stream("eye12", Vector2(-8.55, -124.25))
+	_add_effect_stream("skill1", Vector2.ZERO)
 	_spawn_wind(SMALL_WIND_ID, Vector2(550.0, 0.0), -1.0, 12.0)
 
 
 func _begin_large_wind_skill() -> void:
 	_show_idle()
-	_add_effect_stream("eye12", 16, Vector2(-8.55, -124.25))
+	_add_effect_stream("eye12", Vector2(-8.55, -124.25))
 
 
 func _spawn_large_wind() -> void:
@@ -225,8 +225,8 @@ func _spawn_large_wind() -> void:
 
 func _begin_tornado_skill() -> void:
 	_show_idle()
-	_add_effect_stream("eye3", 24, Vector2(-8.75, -208.7))
-	_add_effect_stream("skill3", 13, Vector2.ZERO)
+	_add_effect_stream("eye3", Vector2(-8.75, -208.7))
+	_add_effect_stream("skill3", Vector2.ZERO)
 	_locked_tornado_position = global_position
 	var role := get_player as Node2D
 	if role != null and is_instance_valid(role):
@@ -288,31 +288,17 @@ func _spawn_wind(monster_id: int, offset: Vector2, direction: float, lifetime: f
 	_summons.append(wind)
 
 
-func _add_effect_stream(folder: String, count: int, offset: Vector2) -> void:
-	_effect_streams.append(_create_stream(folder, count, offset, false, true))
+func _add_effect_stream(folder: String, offset: Vector2) -> void:
+	_effect_streams.append(_create_stream(folder, offset, false, true))
 
 
-func _create_stream(folder: String, count: int, offset: Vector2, looped: bool, auto_free: bool) -> StreamedPngEffect:
+func _create_stream(folder: String, offset: Vector2, looped: bool, auto_free: bool) -> StreamedPngEffect:
 	var stream := StreamedPngEffect.new()
-	stream.frame_paths = _frame_paths(folder, count)
-	stream.fps = SOURCE_FPS
-	stream.loop_animation = looped
+	stream.sequence = FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, looped, false, 2)
 	stream.auto_free = auto_free
 	stream.position = offset
 	monster_dir.add_child(stream)
 	return stream
-
-
-static func _frame_paths(folder: String, count: int) -> Array[String]:
-	var cache_key := "%s|%d" % [folder, count]
-	if _frame_path_cache.has(cache_key):
-		var cached: Array[String] = _frame_path_cache[cache_key]
-		return cached
-	var paths: Array[String] = []
-	for frame_index in range(1, count + 1):
-		paths.append(ROOT.path_join(folder).path_join(str(frame_index) + ".png"))
-	_frame_path_cache[cache_key] = paths
-	return paths
 
 
 func ai_think() -> void:

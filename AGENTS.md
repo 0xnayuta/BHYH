@@ -166,7 +166,10 @@ flowchart TD
 3. **导入对齐**：新增/重命名资产后执行 `godot --headless --path source --import`；
 4. **静态门禁**：`python scripts/check_all.py --skip-engine`；
 5. **引擎验证**：`python scripts/health_check.py --project source --godot-bin <godot>`；
-6. **实机冒烟**：`python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`；批量回归用 `level_regression_all.py`；
+6. **实机冒烟**：`python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`；批量回归用 `level_regression_all.py`；发布前 L2 固定验收必须同时执行并通过：
+   - `python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`
+   - `python scripts/coop_probe_runner.py --godot <godot>`
+   - `python scripts/scene_probe_runner.py --godot <godot>`
 7. **日志**：Godot 用户日志位于 `%APPDATA%\Godot\app_userdata\造梦西游八荒湮隳\logs\godot.log`；命令行走廊使用夹具生成的 `level_smoke_run*.log`；
 8. **提交**：门禁全绿后按中文 Conventional Commits 本地提交。
 

@@ -232,7 +232,6 @@ const MONSTER_BULLET_PATH := "res://Scene/monster/monster65bullet.tscn"
 const FLY_BULLET_PATH := "res://Scene/bullet/fly_bullet.tscn"
 const FLY_BULLET_SLIM_DIR := "res://Scene/bullet/fly_bullet_slim"
 const CHASE_BULLET_PATH := "res://Scene/bullet/chase_bullet.tscn"
-const STREAMED_PNG_EFFECT_SCRIPT = preload("res://Script/monster/streamed_png_effect.gd")
 const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet1.gd"),
 	preload("res://Script/monster/monster212_bullet2.gd"),
@@ -329,50 +328,6 @@ const DYNAMIC_MONSTER_TEXTURE_PATHS := {
 		"res://Art/hero_picture/role_3/ba_di_qian_kun_smooth",
 	],
 	4403: ["res://Art/monster/game_3_monster/three_prince/jinzha"],
-}
-const DYNAMIC_MONSTER_STREAM_EFFECT_ROOTS := {
-	150: ["res://Art/monster/qiong_qi/effects"],
-	151: ["res://Art/monster/tao_wu/Effects"],
-	152: ["res://Art/monster/hun_dun/effects"],
-	153: ["res://Art/monster/tao_tie/effects"],
-	163:
-	[
-		"res://Art/monster/game_3_monster/monster_163/hit1",
-		"res://Art/monster/game_3_monster/monster_163/hit2",
-		"res://Art/monster/game_3_monster/monster_163/hit3"
-	],
-	164:
-	[
-		"res://Art/monster/game_3_monster/monster_164/hit1",
-		"res://Art/monster/game_3_monster/monster_164/hit2",
-		"res://Art/monster/game_3_monster/monster_164/hit3"
-	],
-	165:
-	[
-		"res://Art/monster/game_3_monster/monster_165/hit1",
-		"res://Art/monster/game_3_monster/monster_165/hit2",
-		"res://Art/monster/game_3_monster/monster_165/hit3"
-	],
-	166:
-	[
-		"res://Art/monster/game_3_monster/monster_166/hit1",
-		"res://Art/monster/game_3_monster/monster_166/hit2",
-		"res://Art/monster/game_3_monster/monster_166/hit3"
-	],
-	168:
-	[
-		"res://Art/monster/game_3_monster/monster_168/hit1",
-		"res://Art/monster/game_3_monster/monster_168/hit2",
-		"res://Art/monster/game_3_monster/monster_168/hit3"
-	],
-	169: ["res://Art/monster/game_3_monster/monster_169/hit1", "res://Art/monster/game_3_monster/monster_169/hit3"],
-	174:
-	[
-		"res://Art/monster/game_3_monster/monster_174/hit1",
-		"res://Art/monster/game_3_monster/monster_174/hit2",
-		"res://Art/monster/game_3_monster/monster_174/hit3"
-	],
-	175: ["res://Art/monster/game_3_monster/monster_175/hit1", "res://Art/monster/game_3_monster/monster_175/hit3"],
 }
 const DYNAMIC_MONSTER_SCENE_PATHS := {
 	114: ["res://Scene/monster/monster_bullet_slim/monster114_bullet2.tscn"],
@@ -1144,11 +1099,6 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 			textures_per_frame = 1
 		await preload_level_texture_paths(texture_paths, textures_per_frame)
 
-	var streamed_effect_roots: Array = []
-	_append_dynamic_monster_stream_effect_roots(streamed_effect_roots, unique_monster_ids)
-	if not streamed_effect_roots.is_empty():
-		await STREAMED_PNG_EFFECT_SCRIPT.prewarm_effect_roots(streamed_effect_roots, 3)
-
 	if seen_monster_ids.has(5):
 		MonsterBullet.warm_monster5_stream_images()
 	if seen_monster_ids.has(212):
@@ -1526,7 +1476,6 @@ func _warm_scene_instance(scene: PackedScene) -> void:
 func clear_level_resource_cache() -> void:
 	_level_preload_generation += 1
 	_level_resource_preload_signature = ""
-	STREAMED_PNG_EFFECT_SCRIPT.clear_prewarmed_images()
 	for bullet_script in MONSTER_212_BULLET_SCRIPTS:
 		bullet_script.clear_cached_frames()
 	for path_value in _level_resource_cache_paths.keys():
@@ -1915,16 +1864,6 @@ func _append_dynamic_monster_textures(texture_paths: Array, monster_ids: Array) 
 				if DirAccess.open(path) == null:
 					continue
 				_append_png_files_recursive(texture_paths, path)
-
-
-func _append_dynamic_monster_stream_effect_roots(effect_roots: Array, monster_ids: Array) -> void:
-	for monster_id_value in monster_ids:
-		var monster_id := int(monster_id_value)
-		var root_paths: Variant = DYNAMIC_MONSTER_STREAM_EFFECT_ROOTS.get(monster_id, [])
-		if not root_paths is Array:
-			continue
-		for root_path_value in root_paths:
-			_append_unique_preload_path(effect_roots, str(root_path_value))
 
 
 func _append_dynamic_monster_scene_paths(scene_paths: Array, monster_ids: Array) -> void:

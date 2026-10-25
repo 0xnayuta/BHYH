@@ -7,8 +7,6 @@ const HIT_INTERVAL := 0.5
 
 @export var monster_kind := 3080
 
-static var _frame_path_cache: Dictionary = {}
-
 var _runtime_config: Dictionary = {}
 var _body_visual: Node2D
 var _source_boss: BaseMonster
@@ -108,22 +106,11 @@ static func prewarm_frames() -> void:
 		var frames_path := ROOT_BASE.path_join(str(kind)).path_join("attack").path_join(
 			"swf_png_%d_wind_frames.tres" % kind
 		)
-		if ResourceLoader.exists(frames_path):
-			ResourceLoader.load(frames_path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE)
-	await (
-		StreamedPngEffect
-		. prewarm_effect_roots(
-			[
-				ROOT_BASE.path_join("3080"),
-				ROOT_BASE.path_join("3081"),
-			],
-			2
-		)
-	)
+		ResourceLoader.load(frames_path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE)
 
 
 static func prewarm_effects() -> void:
-	await prewarm_frames()
+	prewarm_frames()
 
 
 func _build_animations() -> void:
@@ -147,29 +134,18 @@ func _show_wind() -> void:
 		_apply_direction()
 		return
 	var frames_path := _wind_frames_path()
-	if ResourceLoader.exists(frames_path):
-		var frames := load(frames_path) as SpriteFrames
-		if frames != null and frames.has_animation(&"wind"):
-			var sprite := AnimatedSprite2D.new()
-			sprite.name = "WindFrames"
-			sprite.sprite_frames = frames
-			sprite.animation = &"wind"
-			var base_speed := frames.get_animation_speed(&"wind")
-			if base_speed > 0.0:
-				sprite.speed_scale = SOURCE_FPS / base_speed
-			sprite.position = _visual_offset()
-			monster_dir.add_child(sprite)
-			_body_visual = sprite
-			_apply_direction()
-			return
-	var stream := StreamedPngEffect.new()
-	stream.frame_paths = _frame_paths()
-	stream.fps = SOURCE_FPS
-	stream.loop_animation = true
-	stream.auto_free = false
-	stream.position = _visual_offset()
-	monster_dir.add_child(stream)
-	_body_visual = stream
+	var frames := load(frames_path) as SpriteFrames
+	assert(frames != null and frames.has_animation(&"wind"), "缺少构建期帧资源: " + frames_path)
+	var sprite := AnimatedSprite2D.new()
+	sprite.name = "WindFrames"
+	sprite.sprite_frames = frames
+	sprite.animation = &"wind"
+	var base_speed := frames.get_animation_speed(&"wind")
+	if base_speed > 0.0:
+		sprite.speed_scale = SOURCE_FPS / base_speed
+	sprite.position = _visual_offset()
+	monster_dir.add_child(sprite)
+	_body_visual = sprite
 	_apply_direction()
 
 
@@ -177,18 +153,6 @@ func _wind_frames_path() -> String:
 	return ROOT_BASE.path_join(str(monster_kind)).path_join("attack").path_join(
 		"swf_png_%d_wind_frames.tres" % monster_kind
 	)
-
-
-func _frame_paths() -> Array[String]:
-	var root := ROOT_BASE.path_join(str(monster_kind)).path_join("attack")
-	if _frame_path_cache.has(root):
-		var cached: Array[String] = _frame_path_cache[root]
-		return cached
-	var paths: Array[String] = []
-	for frame_index in range(1, 16):
-		paths.append(root.path_join(str(frame_index) + ".png"))
-	_frame_path_cache[root] = paths
-	return paths
 
 
 func _visual_offset() -> Vector2:

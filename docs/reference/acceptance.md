@@ -178,6 +178,16 @@ python scripts/health_check.py --project source --godot-bin "<godot>"
 
 ## 6. L2：运行期验收
 
+发布前 L2 固定验收项为以下三条命令，必须全部 PASS；任一项 FAIL 均阻断发布：
+
+```bash
+python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
+python scripts/coop_probe_runner.py --godot "<godot>"
+python scripts/scene_probe_runner.py --godot "<godot>"
+```
+
+变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。
+
 ### 6.1 单关冒烟：`level_test_runner.py`
 
 ```bash
@@ -232,7 +242,24 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 - `SKIP` 不计为 PASS；当前矩阵的 `_skip` 没有调用点，实际只产出 PASS/FAIL；
 - 产物：`docs/reports/coop_probe_matrix_report.{md,json}`。
 
-### 6.4 构建期资源校验
+### 6.4 星座运行时场景探针：`scene_probe_runner.py`
+
+```bash
+python scripts/scene_probe_runner.py --godot "<godot>"
+```
+
+| 项目 | 规则 |
+|:---|:---|
+| 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
+| 探针规格 | `scripts/scene_probes/constellation_probe.{gd,tscn}`；运行期复制到 `source/`，结束后清理 |
+| 覆盖范围 | 星座 140 的 12 个 body 动作 Catalog、body 流首帧、`skill1~4` 标准 SpriteFrames、`skill2_3` FrameSequence 回退 |
+| 结果通道 | 最后一条 `CONSTELLATION_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
+| 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0 |
+| 超时 | 默认 90 秒；`--quit-after 600` 防止挂起 |
+| 产物 | `docs/reports/constellation_probe_report.{md,json}` |
+| 退出码 | `0` PASS；`1` 探针失败；`2` 规格/工程缺失 |
+
+### 6.5 构建期资源校验
 
 ```bash
 python scripts/convert_atlas_metadata.py --check
@@ -306,6 +333,7 @@ python scripts/convert_nezha_preview_frames.py --check
 | 关卡回归并发 | 默认 4 | 失败重试 1 次 |
 | 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
 | 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
+| 星座场景探针 | `scene_probe_runner.py` | 单次 90 秒；`--scene` 启动；日志 0/0 |
 | 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |

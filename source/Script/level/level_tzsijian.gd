@@ -32,8 +32,6 @@ const BOSS_TO_BG_SWORD := {
 	953: "sword3",
 	954: "sword4",
 }
-const PNG_PROBE_MAX_INDEX := 600
-const PNG_PROBE_MISSING_STREAK := 30
 
 static var _bg_frames_cache: Dictionary = {}
 
@@ -158,11 +156,10 @@ func _setup_tzsijian_background() -> void:
 		bg_base.z_index = 0
 	for node_name in BG_ANIMATIONS.keys():
 		var info: Dictionary = BG_ANIMATIONS[node_name]
+		var dir_name := str(info["dir"])
 		var sprite := StreamedPngEffect.new()
 		sprite.name = str(node_name)
-		sprite.frame_paths = _get_png_paths(BG_PARTS_ROOT.path_join(str(info["dir"])))
-		sprite.fps = BG_SOURCE_FPS
-		sprite.loop_animation = true
+		sprite.sequence = _background_sequence(dir_name)
 		sprite.auto_free = false
 		sprite.position = info["pos"]
 		sprite.scale = Vector2.ONE / BG_EXPORT_SCALE
@@ -171,6 +168,10 @@ func _setup_tzsijian_background() -> void:
 		_bg_anim_nodes.append(sprite)
 		if str(node_name).begins_with("sword"):
 			_bg_sword_nodes[node_name] = sprite
+
+
+static func _background_sequence(dir_name: String) -> FrameSequence:
+	return FrameSequenceStore.get_sequence(BG_PARTS_ROOT.path_join(dir_name), BG_SOURCE_FPS, true, false, 2)
 
 
 static func prewarm_background_frames_async() -> void:
@@ -198,7 +199,7 @@ static func _get_or_build_background_frames(dir_name: String) -> SpriteFrames:
 
 static func _create_background_frames_sync(dir_name: String) -> SpriteFrames:
 	var frames := _new_background_sprite_frames()
-	for path in _get_png_paths(BG_PARTS_ROOT.path_join(dir_name)):
+	for path in _background_sequence(dir_name).frame_paths:
 		_add_background_frame(frames, path)
 	if frames.get_frame_count(&"play") == 0:
 		frames.add_frame(&"play", null)
@@ -209,7 +210,7 @@ static func _create_background_frames_async(
 	dir_name: String, tree: SceneTree, built_this_frame: int, per_frame: int
 ) -> SpriteFrames:
 	var frames := _new_background_sprite_frames()
-	for path in _get_png_paths(BG_PARTS_ROOT.path_join(dir_name)):
+	for path in _background_sequence(dir_name).frame_paths:
 		_add_background_frame(frames, path)
 		built_this_frame += 1
 		if tree != null and per_frame > 0 and built_this_frame >= per_frame:
@@ -236,30 +237,6 @@ static func _add_background_frame(frames: SpriteFrames, path: String) -> void:
 	if texture != null:
 		texture.get_rid()
 		frames.add_frame(&"play", texture)
-
-
-static func _get_png_paths(dir_path: String) -> Array[String]:
-	var paths: Array[String] = []
-	for file_name in DirAccess.get_files_at(dir_path):
-		if file_name.get_extension().to_lower() == "png":
-			paths.append(dir_path.path_join(file_name))
-	if paths.is_empty():
-		_append_numbered_png_paths(paths, dir_path)
-	paths.sort_custom(func(a: String, b: String) -> bool: return a.get_file().naturalnocasecmp_to(b.get_file()) < 0)
-	return paths
-
-
-static func _append_numbered_png_paths(paths: Array[String], dir_path: String) -> void:
-	var missing_streak := 0
-	for index in range(PNG_PROBE_MAX_INDEX + 1):
-		var path := dir_path.path_join(str(index) + ".png")
-		if ResourceLoader.exists(path):
-			paths.append(path)
-			missing_streak = 0
-		elif not paths.is_empty():
-			missing_streak += 1
-			if missing_streak >= PNG_PROBE_MISSING_STREAK:
-				break
 
 
 func _update_sword_boss_sequence() -> void:

@@ -266,14 +266,6 @@ func _mirrored_offset(source_offset: Vector2) -> Vector2:
 	return result
 
 
-static func _append_last_stream_frame(stream: StreamedPngEffect) -> void:
-	if stream.frame_paths.is_empty():
-		return
-	stream.frame_paths.append(stream.frame_paths.back())
-	stream.frame_regions.append(stream.frame_regions.back())
-	stream.frame_margins.append(stream.frame_margins.back())
-
-
 func ai_think() -> void:
 	if _busy or death() or RoleProp.get_nearest_monster_target_position(global_position).x == null:
 		return

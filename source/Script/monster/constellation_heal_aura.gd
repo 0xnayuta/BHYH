@@ -3,7 +3,6 @@ class_name ConstellationHealAura
 
 const SOURCE_FPS := 24.0
 const FRAME_ROOT := "res://Art/constellations/common/aura_green"
-const FRAME_COUNT := 19
 const MAX_SOURCE_TICKS := 15 * 24
 
 var _source_monster: BaseMonster
@@ -28,9 +27,7 @@ func _ready() -> void:
 	set_as_top_level(true)
 	global_position = _spawn_position
 	var stream := StreamedPngEffect.new()
-	stream.frame_paths = _frame_paths()
-	stream.fps = SOURCE_FPS
-	stream.loop_animation = true
+	stream.sequence = FrameSequenceStore.get_sequence(FRAME_ROOT, SOURCE_FPS, true, false, 2)
 	stream.auto_free = false
 	add_child(stream)
 
@@ -93,10 +90,3 @@ func _discard() -> void:
 		return
 	_finished = true
 	queue_free()
-
-
-func _frame_paths() -> Array[String]:
-	var paths: Array[String] = []
-	for frame in range(1, FRAME_COUNT + 1):
-		paths.append(FRAME_ROOT.path_join("%d.png" % frame))
-	return paths

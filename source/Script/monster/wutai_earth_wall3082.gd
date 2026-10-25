@@ -17,8 +17,6 @@ const ARROW_FRAMES_RES := ROOT + "/arrow/swf_png_3082_arrow_frames.tres"
 
 @export var monster_kind := 3082
 
-static var _frame_path_cache: Dictionary = {}
-
 var _runtime_config: Dictionary = {}
 var _body_visual: Node2D
 var _arrow_visuals: Array[Node2D] = []
@@ -115,11 +113,12 @@ func _configure_summon(config: Dictionary) -> void:
 
 
 static func prewarm_frames() -> void:
-	await StreamedPngEffect.prewarm_effect_roots([ROOT], 2)
+	ResourceLoader.load(WALL_FRAMES_RES, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE)
+	ResourceLoader.load(ARROW_FRAMES_RES, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE)
 
 
 static func prewarm_effects() -> void:
-	await prewarm_frames()
+	prewarm_frames()
 
 
 func _build_animations() -> void:
@@ -149,46 +148,20 @@ func _show_wall() -> void:
 
 
 func _create_visual(
-	frames_path: String, animation: StringName, folder: String, count: int, offset: Vector2, looped: bool
+	frames_path: String, animation: StringName, folder: String, _count: int, offset: Vector2, _looped: bool
 ) -> Node2D:
-	if ResourceLoader.exists(frames_path):
-		var frames := load(frames_path) as SpriteFrames
-		if frames != null and frames.has_animation(animation):
-			var sprite := AnimatedSprite2D.new()
-			sprite.name = "WallFrames" if folder == "wall" else "ArrowFrames"
-			sprite.sprite_frames = frames
-			sprite.animation = animation
-			var base_speed := frames.get_animation_speed(animation)
-			if base_speed > 0.0:
-				sprite.speed_scale = SOURCE_FPS / base_speed
-			sprite.position = offset
-			monster_dir.add_child(sprite)
-			return sprite
-	return _create_stream(folder, count, offset, looped)
-
-
-func _create_stream(folder: String, count: int, offset: Vector2, looped: bool) -> StreamedPngEffect:
-	var stream := StreamedPngEffect.new()
-	stream.frame_paths = _frame_paths(folder, count)
-	stream.fps = SOURCE_FPS
-	stream.loop_animation = looped
-	stream.auto_free = false
-	stream.hold_last_frame = true
-	stream.position = offset
-	monster_dir.add_child(stream)
-	return stream
-
-
-static func _frame_paths(folder: String, count: int) -> Array[String]:
-	var cache_key := "%s|%d" % [folder, count]
-	if _frame_path_cache.has(cache_key):
-		var cached: Array[String] = _frame_path_cache[cache_key]
-		return cached
-	var paths: Array[String] = []
-	for frame_index in range(1, count + 1):
-		paths.append(ROOT.path_join(folder).path_join(str(frame_index) + ".png"))
-	_frame_path_cache[cache_key] = paths
-	return paths
+	var frames := load(frames_path) as SpriteFrames
+	assert(frames != null and frames.has_animation(animation), "缺少构建期帧资源: " + frames_path)
+	var sprite := AnimatedSprite2D.new()
+	sprite.name = "WallFrames" if folder == "wall" else "ArrowFrames"
+	sprite.sprite_frames = frames
+	sprite.animation = animation
+	var base_speed := frames.get_animation_speed(animation)
+	if base_speed > 0.0:
+		sprite.speed_scale = SOURCE_FPS / base_speed
+	sprite.position = offset
+	monster_dir.add_child(sprite)
+	return sprite
 
 
 func _apply_direction() -> void:

@@ -1,7 +1,6 @@
 extends StreamedPngEffect
 class_name ConstellationBodyStream
 
-var frame_textures: Array[Texture2D] = []
 var _canvas_size := Vector2i(250, 250)
 var _body_offset := Vector2.ZERO
 var _face_right := false
@@ -30,50 +29,6 @@ func _ready() -> void:
 	add_child(_sprite)
 	_update_registration()
 	_show_frame(0, true)
-
-
-func _show_frame(frame_index: int, allow_sync_load: bool = false) -> void:
-	if not frame_textures.is_empty():
-		if frame_index == _last_frame or frame_index < 0 or frame_index >= frame_textures.size():
-			return
-		var texture := frame_textures[frame_index]
-		if texture == null or _sprite == null:
-			return
-		_sprite.texture = texture
-		_last_frame = frame_index
-		_last_path = ""
-		_has_displayed_frame = true
-		return
-	if frame_index == _last_frame or frame_index < 0 or frame_index >= frame_paths.size():
-		return
-	var path := frame_paths[frame_index]
-	var uses_atlas_region := frame_regions.size() == frame_paths.size()
-	if not uses_atlas_region and path == _last_path and _sprite != null and _sprite.texture != null:
-		_last_frame = frame_index
-		_has_displayed_frame = true
-		_request_frame_window(frame_index + 1)
-		return
-	var source_texture: Texture2D = null
-	if uses_atlas_region and path == _last_path and _sprite != null and _sprite.texture is AtlasTexture:
-		source_texture = (_sprite.texture as AtlasTexture).atlas
-	else:
-		source_texture = _take_requested_texture(path, allow_sync_load)
-	if source_texture == null or _sprite == null:
-		return
-	_last_frame = frame_index
-	_last_path = path
-	if uses_atlas_region:
-		var atlas_texture := AtlasTexture.new()
-		atlas_texture.atlas = source_texture
-		atlas_texture.region = frame_regions[frame_index]
-		if frame_margins.size() == frame_paths.size():
-			atlas_texture.margin = frame_margins[frame_index]
-		atlas_texture.filter_clip = true
-		_sprite.texture = atlas_texture
-	else:
-		_sprite.texture = source_texture
-	_has_displayed_frame = true
-	_request_frame_window(frame_index + 1)
 
 
 func _update_registration() -> void:

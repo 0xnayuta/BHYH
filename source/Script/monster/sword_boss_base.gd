@@ -293,27 +293,26 @@ func _make_action(sprite_anim: StringName, looped: bool) -> Animation:
 
 func _get_sword_action_frame_count(sprite_anim: StringName) -> int:
 	if String(sprite_anim).begins_with("hit"):
-		return maxi(1, _get_atlas_animation_entries(sword_root, String(sprite_anim), true).size())
+		var sequence := _sword_skill_sequence(String(sprite_anim))
+		return maxi(1, sequence.count())
 	if mr_ani.sprite_frames != null and mr_ani.sprite_frames.has_animation(sprite_anim):
 		return maxi(1, mr_ani.sprite_frames.get_frame_count(sprite_anim))
 	return 1
 
 
+func _sword_skill_sequence(anim_name: String) -> FrameSequence:
+	return FrameSequenceStore.get_sequence(
+		"sword/%s/%s" % [sword_root.get_file(), anim_name], SOURCE_FPS, false, false, 2
+	)
+
+
 func _start_streamed_sword_skill(anim_name: String) -> void:
 	_stop_streamed_sword_skill()
-	var frame_entries := _get_atlas_animation_entries(sword_root, anim_name, true)
-	if frame_entries.is_empty():
+	var sequence := _sword_skill_sequence(anim_name)
+	if sequence.count() == 0:
 		return
-	var frame_paths: Array[String] = []
-	var frame_regions: Array[Rect2] = []
-	for entry_value in frame_entries:
-		var entry: Dictionary = entry_value
-		frame_paths.append(_get_atlas_page_path(sword_root, entry))
-		frame_regions.append(_get_atlas_region(entry))
 	_streamed_skill_effect = StreamedPngEffect.new()
-	_streamed_skill_effect.frame_paths = frame_paths
-	_streamed_skill_effect.frame_regions = frame_regions
-	_streamed_skill_effect.fps = SOURCE_FPS
+	_streamed_skill_effect.sequence = sequence
 	_streamed_skill_effect.z_index = mr_ani.z_index + 1
 	_streamed_skill_effect.position = mr_ani.position
 	_streamed_skill_effect.finished.connect(_on_streamed_sword_skill_finished)

@@ -13,6 +13,7 @@
 | [`naming_standard.md`](naming_standard.md) | 目录、文件、场景树、代码标识符、数据键 | 命名与契约白皮书；命名单一真源与大小写铁律 |
 | [`naming_whitelist.md`](naming_whitelist.md) | 机器导出结构、数字 ID 目录与场景 | 冻结白名单；只减不增，新增必须评审登记 |
 | [`godot_design_standard.md`](godot_design_standard.md) | 场景、Resource、Autoload、项目结构 | Godot 现代项目设计规则与遗留边界 |
+| [`target_architecture_contract.md`](target_architecture_contract.md) | 视觉资产构建、资源与运行时三层架构 | 默认选型、构建期转换、禁止运行时扫描/回退与迁移边界 |
 | [`missing_assets_registry.md`](missing_assets_registry.md) | 缺失资产 | 状态、恢复来源与处置记录；不承担命名豁免 |
 | [`spriteframes_generation_policy.md`](spriteframes_generation_policy.md) | SpriteFrames 生成 | 默认 FPS、循环命名、speed 语义与校验 |
 
@@ -47,6 +48,7 @@ python scripts/naming_compliance_audit.py --fail-on-error
 python scripts/resource_path_audit.py --project source
 python scripts/whitelist_audit.py --fail-on-error
 python scripts/convert_atlas_metadata.py --check
+python scripts/convert_frame_sequences.py --check
 ```
 
 完整引擎与关卡验证见 [`../reference/status.md`](../reference/status.md)。
