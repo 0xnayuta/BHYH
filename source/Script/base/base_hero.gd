@@ -58,6 +58,8 @@ const AUTO_BATTLE_TARGET_SEARCH_RANGE := 1800.0
 const AUTO_BATTLE_ATTACK_RANGE := 260.0
 const AUTO_BATTLE_JUMP_COOLDOWN := 0.8
 const AUTO_BATTLE_MOVE_SPEED_SCALE := 1.0
+## 松开跳跃键时保留的向上速度比例；越小点按跳得越低，长按不受影响。
+const JUMP_RELEASE_SPEED_SCALE := 0.6
 
 var temp_def_bonus: int = 0
 var temp_mdef_bonus: int = 0
@@ -158,6 +160,7 @@ var slz_calm: float
 var hmz_calm: float
 var is_stun = false
 var is_jump = false
+var _jump_release_cut_armed: bool = false
 var is_speed_down: bool
 var get_action = "wait"
 var is_immobilize = false
@@ -724,6 +727,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 	if is_on_floor() and velocity.y == 0:
 		jump_count = 0
+		_jump_release_cut_armed = false
 	if check_can_wait():
 		_play_locomotion_animation(&"wait")
 		get_action = "wait"
@@ -866,6 +870,8 @@ func noarmal_control():
 	if PlayerInput.is_action_just_pressed("jump"):
 		if not is_bound_to_the_ground:
 			jump()
+	if PlayerInput.is_action_just_released("jump"):
+		_cut_jump_on_release()
 	if PlayerInput.is_action_pressed("slz") and not is_using_skills:
 		var skill_name = PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["Y"]
 		get_skill(skill_name)
@@ -1214,7 +1220,7 @@ func _auto_battle_jump_if_blocked() -> void:
 	if is_attacking or is_be_attacking or is_using_skills:
 		return
 	_auto_battle_jump_elapsed = 0.0
-	jump()
+	jump(false)
 
 
 func _get_auto_battle_skills() -> Array:
@@ -1582,10 +1588,12 @@ func check_canuse_some_skill():
 	return not is_attacking and not is_be_attacking and velocity.y == 0 and not death()
 
 
-func jump():
+func jump(allow_release_cut: bool = true):
 	is_jump = true
+	_jump_release_cut_armed = false
 	if jump_count < 2 and is_attacking == false and is_be_attacking == false:
 		velocity.y = jump_power
+		_jump_release_cut_armed = allow_release_cut
 		if jump_count == 0:
 			jump_count = 1
 			role_action_player.play("jump1")
@@ -1601,6 +1609,18 @@ func jump():
 			role_action_player.play("drop")
 			await role_action_player.animation_finished
 	is_jump = false
+
+
+## 松开跳跃键时削减剩余上升速度，实现点按低跳、长按高跳。
+func _cut_jump_on_release() -> void:
+	if not _jump_release_cut_armed:
+		return
+	_jump_release_cut_armed = false
+	if velocity.y >= 0.0 or is_on_floor() or is_bound_to_the_ground:
+		return
+	if is_attacking or is_be_attacking or is_using_skills:
+		return
+	velocity.y *= JUMP_RELEASE_SPEED_SCALE
 
 
 func get_hit_data(_hit_name: String):
