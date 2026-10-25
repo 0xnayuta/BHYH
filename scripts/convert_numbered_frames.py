@@ -48,6 +48,16 @@ PROFILES: tuple[dict[str, object], ...] = (
         "fps": 30.0,
         "output": "res://Art/hero_picture/role_5/lei_ting_jie_zhen/lightning_spine/lightning_frames.tres",
     },
+    {
+        "name": "wutai_3077_tornado",
+        "pattern": "res://Art/monster/swf_png/3077/tornado/%d.png",
+        "count": 7,
+        "source_indices": [1, 4, 7, 10, 13, 16, 19],
+        "fps": 30.0,
+        "frame_duration": 3.0,
+        "animation": "tornado",
+        "output": "res://Art/monster/swf_png/3077/tornado/tornado_frames.tres",
+    },
 )
 
 
@@ -64,14 +74,24 @@ def build_tres(
     loop: bool,
     tail_start: int,
     tail_duration: float,
+    *,
+    source_indices: list[int] | None = None,
+    frame_duration: float | None = None,
+    animation: str = "default",
 ) -> str:
+    indices = list(source_indices) if source_indices is not None else list(range(count))
+    if not indices:
+        raise ValueError("帧索引不能为空")
     frame_paths: list[tuple[str, float]] = []
-    for index in range(count):
-        resource_path = pattern % index
+    for output_index, source_index in enumerate(indices):
+        resource_path = pattern % source_index
         path = source_path(resource_path)
         if not path.is_file():
             raise FileNotFoundError(f"缺少帧文件: {path.relative_to(ROOT)}")
-        duration = tail_duration if tail_start >= 0 and index >= tail_start else 1.0
+        if frame_duration is not None:
+            duration = frame_duration
+        else:
+            duration = tail_duration if tail_start >= 0 and output_index >= tail_start else 1.0
         frame_paths.append((resource_path, duration))
 
     lines: list[str] = [
@@ -92,7 +112,7 @@ def build_tres(
             'animations = [{',
             f'"frames": [{", ".join(frame_entries)}],',
             f'"loop": {"true" if loop else "false"},',
-            '"name": &"default",',
+            f'"name": &"{animation}",',
             f'"speed": {str(fps)}',
             "}]",
             "",
@@ -104,6 +124,10 @@ def build_tres(
 def write_profile(profile: dict[str, object], check_only: bool) -> bool:
     name = str(profile["name"])
     output = source_path(str(profile["output"]))
+    source_indices = profile.get("source_indices")
+    if source_indices is not None:
+        source_indices = [int(value) for value in source_indices]
+    frame_duration = profile.get("frame_duration")
     content = build_tres(
         pattern=str(profile["pattern"]),
         count=int(profile["count"]),
@@ -111,6 +135,9 @@ def write_profile(profile: dict[str, object], check_only: bool) -> bool:
         loop=bool(profile.get("loop", False)),
         tail_start=int(profile.get("tail_start", -1)),
         tail_duration=float(profile.get("tail_duration", 1.0)),
+        source_indices=source_indices,
+        frame_duration=float(frame_duration) if frame_duration is not None else None,
+        animation=str(profile.get("animation", "default")),
     )
     if check_only:
         if not output.is_file():
@@ -150,6 +177,9 @@ def run_single(args: argparse.Namespace) -> int:
             loop=args.loop,
             tail_start=args.tail_start,
             tail_duration=args.tail_duration,
+            source_indices=args.source_indices,
+            frame_duration=args.frame_duration,
+            animation=args.animation,
         )
     except (OSError, ValueError) as error:
         print(f"[FAIL] {error}", file=sys.stderr)
@@ -172,11 +202,18 @@ def run_single(args: argparse.Namespace) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成连续编号 PNG 序列的构建期 SpriteFrames")
-    parser.add_argument("--all", action="store_true", help="生成项目登记的 BiLuoTian/LeiTingJieZhen 帧")
+    parser.add_argument("--all", action="store_true", help="生成项目登记的 BiLuoTian/LeiTingJieZhen/Wutai3077 帧")
     parser.add_argument("--check", action="store_true", help="只校验输出是否存在且未过期")
     parser.add_argument("--pattern", help="res:// 路径模板，例如 res://.../frame_%%02d.png")
     parser.add_argument("--count", type=int, help="帧数量")
     parser.add_argument("--output", help="输出 .tres 的 res:// 路径")
+    parser.add_argument(
+        "--source-indices",
+        type=lambda value: [int(part.strip()) for part in value.split(",") if part.strip()],
+        help="源帧索引，逗号分隔；覆盖连续的 0..count-1",
+    )
+    parser.add_argument("--frame-duration", type=float, default=None, help="统一帧时长；优先于尾段设置")
+    parser.add_argument("--animation", default="default", help="SpriteFrames 动画名")
     parser.add_argument("--fps", type=float, default=30.0, help="动画速度")
     parser.add_argument("--loop", action="store_true", help="循环动画")
     parser.add_argument("--tail-start", type=int, default=-1, help="尾段起始帧；负数表示无尾段")

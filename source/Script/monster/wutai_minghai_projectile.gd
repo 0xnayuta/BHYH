@@ -360,14 +360,24 @@ func _sync_collision_to_visual_frame(force: bool = false) -> void:
 				return
 			_last_collision_frame = frame_index
 			_current_frame_has_visual = false
-			var atlas := _standard_frames.get_frame_texture(_standard_animation, frame_index) as AtlasTexture
-			if atlas != null:
+			var texture := _standard_frames.get_frame_texture(_standard_animation, frame_index)
+			if texture is AtlasTexture:
+				var atlas := texture as AtlasTexture
 				var used_size := atlas.region.size
 				var margin := atlas.margin
 				var canvas_size := used_size + margin.size
 				var frame_center := margin.position + used_size * 0.5 - canvas_size * 0.5
 				_current_frame_has_visual = used_size.x > 0.0 and used_size.y > 0.0
 				_apply_collision_geometry(used_size, frame_center)
+			elif texture is Texture2D:
+				var image := texture.get_image()
+				if image != null:
+					var used_rect := image.get_used_rect()
+					if used_rect.size != Vector2i.ZERO:
+						var used_size := Vector2(used_rect.size)
+						var frame_center := Vector2(used_rect.position) + used_size * 0.5 - texture.get_size() * 0.5
+						_current_frame_has_visual = true
+						_apply_collision_geometry(used_size, frame_center)
 			return
 	if frame_count <= 0 or frame_root.is_empty():
 		_apply_collision_geometry(collision_size, Vector2.ZERO)

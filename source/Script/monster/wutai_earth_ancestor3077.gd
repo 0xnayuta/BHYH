@@ -2,6 +2,7 @@ extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3077"
+const TORNADO_FRAMES := ROOT + "/tornado/tornado_frames.tres"
 const SOURCE_FPS := 30.0
 const NEXT_FORM_ID := 3078
 const SMALL_WIND_ID := 3080
@@ -107,6 +108,8 @@ static func prewarm_frames() -> void:
 
 
 static func prewarm_effects() -> void:
+	if ResourceLoader.exists(TORNADO_FRAMES):
+		ResourceLoader.load(TORNADO_FRAMES)
 	await StreamedPngEffect.prewarm_effect_roots([ROOT], 3)
 
 
@@ -255,8 +258,10 @@ func _spawn_locked_tornado() -> void:
 				"hit_name": "hit3",
 				"attack_data": attack_data,
 				"skill_name": "EarthAncestorTornado",
-				"frame_root": ROOT.path_join("tornado"),
-				"frame_count": 21,
+				"frames_resource": TORNADO_FRAMES,
+				"frames_animation": "tornado",
+				"atlas_sequence": "tornado",
+				"frame_fps": SOURCE_FPS,
 				"loop_visual": false,
 				"visual_offset": Vector2(0.0, -136.0),
 				"lifetime": 0.7,
