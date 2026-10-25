@@ -7,7 +7,7 @@ var _shadow_contact := 0.0
 var source_impact := Callable()
 
 
-func configure(config: Dictionary) -> void:
+func configure(config: Dictionary) -> bool:
 	if config.has("gravity"):
 		config = config.duplicate()
 		config["acceleration"] = Vector2(0, float(config["gravity"]))
@@ -15,11 +15,16 @@ func configure(config: Dictionary) -> void:
 	bounds = config.get("bounds", Rect2())
 	shadow_callback = config.get("shadow_callback", Callable())
 	source_impact = config.get("source_impact", Callable())
-	super.configure(config)
+	return super.configure(config)
 
 
 func _begin_impact() -> void:
 	if _impacting or _finished:
+		return
+	if not _has_impact_visual():
+		if source_impact.is_valid():
+			source_impact.call(global_position)
+		_finish()
 		return
 	super._begin_impact()
 

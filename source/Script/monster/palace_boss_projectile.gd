@@ -2,11 +2,33 @@ extends WutaiMinghaiProjectile
 
 var source_masks: Dictionary = {}
 var collide_terrain := false
+var _source_metadata: Dictionary = {}
 
 
-func configure(config: Dictionary) -> void:
+func configure(config: Dictionary) -> bool:
 	collide_terrain = bool(config.get("collide_terrain", false))
-	super.configure(config)
+	var metadata_path := str(config.get("source_masks_metadata", ""))
+	_source_metadata = AtlasMetadataStore.data_for(metadata_path) if not metadata_path.is_empty() else {}
+	var masks_value: Variant = _source_metadata.get("masks", {})
+	source_masks = (masks_value as Dictionary).duplicate() if masks_value is Dictionary else {}
+	return super.configure(config)
+
+
+func _standard_visual_offset(animation: StringName, offset: Vector2) -> Vector2:
+	var geometry_value: Variant = _source_metadata.get("geometry", {})
+	if not geometry_value is Dictionary:
+		return offset
+	var geometry: Dictionary = geometry_value as Dictionary
+	var entry_value: Variant = geometry.get(String(animation), {})
+	if not entry_value is Dictionary:
+		return offset
+	var center_value: Variant = (entry_value as Dictionary).get("center", [])
+	if not center_value is Array:
+		return offset
+	var center: Array = center_value as Array
+	if center.size() < 2:
+		return offset
+	return Vector2(float(center[0]), float(center[1]))
 
 
 func _physics_process(delta: float) -> void:
@@ -28,28 +50,19 @@ func _finish() -> void:
 	super._finish()
 
 
-func _configure_atlas_visual(
-	sequence_name: String, source_offset: Vector2, looped: bool, metadata_path: String = ""
-) -> bool:
-	var path := atlas_metadata if metadata_path.is_empty() else metadata_path
-	var data := AtlasMetadataStore.data_for(path)
-	source_masks = data.get("masks", {})
-	var center: Array = data.get("geometry", {}).get(sequence_name, {}).get("center", [0.0, 0.0])
-	return super._configure_atlas_visual(
-		sequence_name, Vector2(float(center[0]), float(center[1])), looped, metadata_path
-	)
-
-
 func _sync_collision_to_visual_frame(force: bool = false) -> void:
-	if not source_masks.has(atlas_sequence):
+	if not source_masks.has(frames_animation):
 		super._sync_collision_to_visual_frame(force)
 		return
-	var masks: Array = source_masks[atlas_sequence]
-	var frame := int(floor(_elapsed * frame_fps))
-	frame = frame % masks.size() if loop_visual else mini(frame, masks.size() - 1)
+	var masks: Array = source_masks[frames_animation]
+	var frame := _displayed_visual_frame()
+	if frame < 0 or masks.is_empty():
+		super._sync_collision_to_visual_frame(force)
+		return
+	frame = clampi(frame, 0, masks.size() - 1)
 	var mask: Array = masks[frame]
 	_current_frame_has_visual = not mask.is_empty()
-	if mask.is_empty():
+	if mask.size() < 4:
 		_apply_collision_geometry(Vector2.ONE, Vector2.ZERO)
 		return
 	_apply_collision_geometry(

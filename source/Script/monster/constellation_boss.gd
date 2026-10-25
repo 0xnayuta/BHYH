@@ -9,6 +9,23 @@ const SOURCE_FPS := 24.0
 const MONSTER140_EFFECT_FPS := 24.0
 const OFFICIAL_BODY_COLLISION_SIZE := Vector2(60, 130)
 const OFFICIAL_SMALL_SUMMON_COLLISION_SIZE := Vector2(32, 30)
+const FRAME_SEQUENCE_SKILLS: Dictionary[StringName, bool] = {
+	&"140/skill2_3": true,
+	&"146/skill2": true,
+	&"146/skill2_1": true,
+	&"147/skill2": true,
+	&"147/skill3": true,
+	&"147/skill3_1": true,
+	&"150/skill2": true,
+	&"150/skill2_1": true,
+	&"151/skill2_2": true,
+	&"156/skill1": true,
+	&"156/skill1_1": true,
+	&"156/skill3": true,
+	&"156/skill3_1": true,
+	&"162/skill2": true,
+	&"162/skill2_1": true,
+}
 
 const MONSTER140_EFFECT_COLLISION := {
 	"Monster140Bullet1": {"size": Vector2.ZERO, "offset": Vector2.ZERO},
@@ -1932,7 +1949,10 @@ func _spawn_monster140_effect(
 	pulse_interval: float = 0.0,
 	target_interval: float = 0.0
 ) -> WutaiMinghaiProjectile:
-	var frame_count := _skill_frame_count_from_folder(visual_folder)
+	var visual := _skill_visual_plan(visual_folder, false, hold_last, MONSTER140_EFFECT_FPS)
+	if visual.is_empty():
+		return null
+	var frame_count := int(visual["frame_count"])
 	var collision_value: Variant = MONSTER140_EFFECT_COLLISION.get(effect_name, {})
 	var collision: Dictionary = collision_value if collision_value is Dictionary else {}
 	var visual_registration := _skill_visual_registration(visual_folder)
@@ -1940,7 +1960,7 @@ func _spawn_monster140_effect(
 	if lifetime_override > 0.0:
 		lifetime = lifetime_override
 	var effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
-	(
+	var configured := (
 		effect
 		. configure(
 			{
@@ -1950,10 +1970,10 @@ func _spawn_monster140_effect(
 				"hit_name": action_name,
 				"attack_data": obj_attack_dict.get(action_name, {}),
 				"skill_name": effect_name,
-				"frame_root": _asset_root().path_join(visual_folder),
-				"frames_resource": _standard_frames_resource_path(),
-				"frames_animation": visual_folder,
-				"atlas_sequence": visual_folder,
+				"visual_backend": visual["visual_backend"],
+				"frame_root": visual.get("frame_root", ""),
+				"frames_resource": visual.get("frames_resource", ""),
+				"frames_animation": visual.get("frames_animation", ""),
 				"frame_count": frame_count,
 				"frame_fps": MONSTER140_EFFECT_FPS,
 				"loop_visual": false,
@@ -1976,21 +1996,35 @@ func _spawn_monster140_effect(
 			}
 		)
 	)
+	if not configured:
+		effect.queue_free()
+		return null
 	bullet.add_child(effect)
 	return effect
 
 
-func _skill_frame_count_from_folder(folder: String) -> int:
+func _skill_visual_plan(folder: String, looped: bool, hold_last: bool, fps: float) -> Dictionary:
+	var root := _asset_root().path_join(folder)
+	if FRAME_SEQUENCE_SKILLS.has(StringName("%d/%s" % [source_id, folder])):
+		var sequence := FrameSequenceStore.get_sequence(root, fps, looped, hold_last, 2)
+		if sequence == null:
+			return {}
+		return {
+			"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
+			"frame_count": sequence.count(),
+			"frame_root": root,
+		}
 	var frames := _standard_frames()
 	var animation := StringName(folder)
-	if frames != null and frames.has_animation(animation):
-		return frames.get_frame_count(animation)
-	var root := _asset_root().path_join(folder)
-	for looped in [false, true]:
-		for hold_last in [false, true]:
-			if FrameSequenceStore.has_sequence(root, SOURCE_FPS, looped, hold_last, 2):
-				return FrameSequenceStore.get_sequence(root, SOURCE_FPS, looped, hold_last, 2).count()
-	return 1
+	if frames == null or not frames.has_animation(animation):
+		push_error("星座声明的 SpriteFrames 动画缺失: %d/%s" % [source_id, folder])
+		return {}
+	return {
+		"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
+		"frame_count": frames.get_frame_count(animation),
+		"frames_resource": _standard_frames_resource_path(),
+		"frames_animation": folder,
+	}
 
 
 func _spawn_monster140_skill3() -> void:
@@ -2162,8 +2196,13 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 	var folder := str(folder_value)
 	if folder.is_empty():
 		folder = "skill%d" % skill if stage_index <= 0 else "skill%d_%d" % [skill, stage_index]
-	var frame_count := int(options.get("frame_count", _skill_frame_count_from_folder(folder)))
 	var frame_fps := float(options.get("frame_fps", SOURCE_FPS))
+	var resolved_loop := bool(options.get("loop_visual", false))
+	var resolved_hold_last := bool(options.get("hold_last_frame", false))
+	var visual := _skill_visual_plan(folder, resolved_loop, resolved_hold_last, frame_fps)
+	if visual.is_empty():
+		return null
+	var frame_count := int(options.get("frame_count", visual["frame_count"]))
 	var visual_offset_value: Variant = options.get("visual_offset", Vector2.ZERO)
 	var resolved_visual_offset := visual_offset_value as Vector2 if visual_offset_value is Vector2 else Vector2.ZERO
 	var visual_registration_value: Variant = options.get("visual_registration", _skill_visual_registration(folder))
@@ -2182,7 +2221,7 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 	var projectile := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	var target_value: Variant = options.get("target_node", null)
 	var right_facing := bool(options.get("right", direction > 0.0))
-	(
+	var configured := (
 		projectile
 		. configure(
 			{
@@ -2192,14 +2231,14 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 				"hit_name": resolved_hit_name,
 				"attack_data": attack_data,
 				"skill_name": str(options.get("skill_name", "Constellation%dSkill%d" % [source_id, skill])),
-				"frame_root": _asset_root().path_join(folder),
-				"frames_resource": _standard_frames_resource_path(),
-				"frames_animation": folder,
-				"atlas_sequence": folder,
+				"visual_backend": visual["visual_backend"],
+				"frame_root": visual.get("frame_root", ""),
+				"frames_resource": visual.get("frames_resource", ""),
+				"frames_animation": visual.get("frames_animation", ""),
 				"frame_count": frame_count,
 				"frame_fps": frame_fps,
-				"loop_visual": bool(options.get("loop_visual", false)),
-				"hold_last_frame": bool(options.get("hold_last_frame", false)),
+				"loop_visual": resolved_loop,
+				"hold_last_frame": resolved_hold_last,
 				"visual_offset": resolved_visual_offset,
 				"visual_registration": resolved_visual_registration,
 				"visual_faces_right": bool(options.get("visual_faces_right", false)),
@@ -2230,6 +2269,9 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 			}
 		)
 	)
+	if not configured:
+		projectile.queue_free()
+		return null
 	bullet.add_child(projectile)
 	return projectile
 

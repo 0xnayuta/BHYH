@@ -23,12 +23,11 @@ func set_face_right(value: bool) -> void:
 
 
 func _ready() -> void:
-	_sprite = Sprite2D.new()
-	_sprite.centered = false
-	_sprite.flip_h = _face_right
-	add_child(_sprite)
-	_update_registration()
-	_show_frame(0, true)
+	flip_h = _face_right
+	super._ready()
+	if is_instance_valid(_sprite):
+		_sprite.centered = false
+		_update_registration()
 
 
 func _update_registration() -> void:
