@@ -28,6 +28,7 @@ check_all.py
 ├── contract_gate.py
 │   ├── contract_scan.py
 │   ├── convert_atlas_metadata.py --check / --self-test
+│   ├── convert_frame_sequences.py --check
 │   ├── png_stream_audit.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
@@ -69,12 +70,12 @@ scene_probe_runner.py
 | `normalize_eol.py` | 全工程 LF/CRLF 归一化；增量缓存 | `.godot/eol_cache.json` |
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
-| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas 元数据、PNG 流、白名单 | 子脚本报告 |
+| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、PNG 流 guard、白名单 | 子脚本报告 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest 六类契约 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
-| `png_stream_audit.py` | 非 atlas 运行时 PNG 流 allowlist | 终端结果 |
+| `png_stream_audit.py` | 冻结 allowlist；已迁移消费者旧数组/目录扫描/编号探测回归检查 | 终端结果 |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
@@ -93,10 +94,10 @@ scene_probe_runner.py
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
-| `scene_probe_runner.py` | 星座 Boss 运行时场景探针；`--scene` 启动完整生命周期，验证 body 流、标准 SpriteFrames 与 FrameSequence 回退；发布前 L2 固定项之一 | `docs/reports/constellation_probe_report.*` |
+| `scene_probe_runner.py` | 完整场景生命周期：显式视觉后端、首帧、真实纹理预热、共享请求与退出回收；发布前 L2 固定项之一 | `docs/reports/constellation_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado，`--check` 校验存在且未过期 | 角色 4/5 与 3077 `Art/.../*_frames.tres`（私有素材） |
-| `convert_frame_sequences.py` | 固定 PNG 目录、四剑阵 AtlasMetadata、星座动态 body/技能与五台弹道非 swf 序列 → 构建期 `FrameSequence.tres` + Catalog；`--check` 校验内容一致性 | `source/Art/frame_sequences/`（私有素材） |
+| `convert_frame_sequences.py` | 固定/图集帧 → FrameSequence、Catalog、稳定 UID 与延迟纹理依赖 JSON；`--check` 进契约门禁；`--export-preset [NAME]` 只读检查现有预设声明覆盖 | `source/Art/frame_sequences/`（私有素材）；不创建导出预设，不宣称 PCK 已验证 |
 | `coop_probes/coop_probe_matrix.gd` | 探针矩阵 GDScript 测试规格 | 仅执行期复制到工程根，结束后清理 |
 
 ### 3.5 数据文件

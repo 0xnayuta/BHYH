@@ -55,7 +55,7 @@ python scripts/check_all.py --fix
 
 # 其他开关
 python scripts/check_all.py --fast            # 只跳过引擎编译，等同该维度的 --skip-engine
-python scripts/check_all.py --skip-contract   # 跳过整个契约域（5 个子门禁）
+python scripts/check_all.py --skip-contract   # 跳过整个契约域（子命令以 contract_gate.COMMANDS 为准）
 python scripts/check_all.py --skip-naming
 python scripts/check_all.py --skip-runtime
 python scripts/check_all.py --skip-resource
@@ -93,14 +93,15 @@ python scripts/check_all.py --no-cache -j 6
 
 ## 4. 契约域：`contract_gate.py`
 
-`contract_gate.py` 并发执行 5 个子门禁，任一失败即整体失败：
+`contract_gate.py` 并发执行所列子门禁，任一失败即整体失败；实现清单以 `COMMANDS` 为准：
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
 | 契约扫描 | `contract_scan.py --fail-on-error` | 六类字面量契约 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
-| PNG 流 allowlist | `png_stream_audit.py --fail-on-error` | 限制 `StreamedPngEffect` 的未登记使用 |
+| FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、UID、Catalog 与延迟纹理路径闭包；不等于导出包完整 |
+| PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
 ### 4.1 `contract_scan.py` 六类契约
@@ -252,7 +253,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
 | 探针规格 | `scripts/scene_probes/constellation_probe.{gd,tscn}`；运行期复制到 `source/`，结束后清理 |
-| 覆盖范围 | 星座 140 的 12 个 body 动作 Catalog、body 流首帧、`skill1~4` 标准 SpriteFrames、`skill2_3` FrameSequence 回退 |
+| 覆盖范围 | 星座 body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
 | 结果通道 | 最后一条 `CONSTELLATION_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
 | 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0 |
 | 超时 | 默认 90 秒；`--quit-after 600` 防止挂起 |
@@ -268,13 +269,20 @@ python scripts/convert_numbered_frames.py --all --check
 python scripts/convert_nezha_preview_frames.py --check
 ```
 
+```bash
+python scripts/convert_frame_sequences.py --check
+python scripts/convert_frame_sequences.py --export-preset "Windows Desktop"
+```
+
+`--export-preset` 只读检查现有 `source/export_presets.cfg`；不创建发布配置，缺预设明确失败。源路径闭包、预设声明覆盖和导出包实际加载是三种不同证据。
+
 判定：
 
 - Atlas：`metadata.tres` 与 `manifest.json` 重新渲染结果逐字一致，且 `source_frames` 与实际帧数一致；
-- 编号帧：4 个登记 profile 的输出存在且内容未过期；
+- 编号帧：登记 profile 的输出存在且内容未过期；
 - 哪吒：输出存在、内容与预览 JSON 一致、源 schema 合法；分类报告 `missing` / `stale` / `invalid`，任一非零即失败。
 
-这些转换器**不在** `check_all` 链路内（Atlas 的 `--check` / `--self-test` 经 `contract_gate` 间接进入），涉及资源生成时必须单独执行。
+Atlas 与 FrameSequence 检查经 `contract_gate` 进入 `check_all`；编号帧和哪吒转换器仍需在对应资源变更时单独执行。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（星座运行时场景探针与 FrameSequence 全量迁移）
+> 最后更新：2026-10-26（目标契约修订、ADR-020 与 FrameSequence 生命周期收口）
 
 ---
 
@@ -122,8 +122,10 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 发布前 L2 固定验收 | `level_1` Stage 1~4 **PASS**（0/0）；`level_tzsijian` **PASS**（0/0）；`coop_probe_runner` **16/16 PASS / 0 SKIP / 0 FAIL**；`scene_probe_runner` **PASS**；日志均 **0 ERROR / 0 WARNING** | 固定三件套：`level_test_runner.py` + `coop_probe_runner.py` + `scene_probe_runner.py`；执行顺序与阻断规则写入 `docs/reference/acceptance.md` §6；报告由脚本生成，不提交 |
 | 2026-10-26 星座运行时场景探针 | `scene_probe_runner.py` **PASS**：body **12/12**、body 流首帧 **PASS**、`skill1~4` 标准 SpriteFrames **PASS**、`skill2_3` FrameSequence 回退 **PASS**；日志 **0 ERROR / 0 WARNING**；八维门禁 **8/8**；`convert_frame_sequences.py --check` **455 序列 PASS** | 新增 `scripts/scene_probes/constellation_probe.{gd,tscn}` 与 `scripts/scene_probe_runner.py`；用 `--scene` 启动完整 Autoload 生命周期，避免 `--script` 的编译时序问题；探针执行期复制到 `source/`，结束后清理 |
 | 2026-10-26 FrameSequence 全量迁移 | `convert_frame_sequences.py --check` **455 个序列 PASS**；四剑台背景 / 星座治疗 aura / 混沌 / 饕餮 / 流沙河 / 五台 3077 / 四剑阵 / 星座动态 body / 星座技能 / 五台弹道非 swf 探针 **PASS**；`level_tzsijian` 冒烟 **PASS**（0 ERROR / 0 WARNING）；八维门禁 **8/8**；health **709 脚本 0/0/0** | 新增 `FrameSequence`、`FrameSequenceCatalog`、`FrameSequenceStore` 与 `convert_frame_sequences.py`；`StreamedPngEffect` 只消费 `sequence`，旧数组字段删除；固定目录、四剑阵 AtlasMetadata、星座动态 body、星座技能与五台弹道非 swf 序列均由构建期 Catalog 驱动；无运行时目录扫描/路径数组 |
+| 2026-10-26 FrameSequence 收口（基于 `00c3cf0` 的工作区） | 最终 `--check` **477 序列 / 2,831 条延迟纹理源闭包 PASS**；最终八维门禁 **8/8 PASS**；星座生产场景与共享请求/真实预热/末帧/跳帧/退出回收 **PASS**；LocalCoop **16/16 PASS** | 新增 `FrameTextureRequests` 去重租约与终态取回；Store/播放器接入 schema 校验；主视觉与 impact 显式后端，错误配置拒绝生成；八仙已有效果补入构建清单；生成 UID 与发布依赖 JSON，并接入契约门禁；不代表 PCK、release 或平台性能已验证 |
+| 2026-10-26 收口代表关卡与反例 | `level_1`、`level_tzsijian`、`level_61`、`level_bxgh`、`level_73`、最终 `level_74` 冒烟 **PASS，0 ERROR / 0 WARNING**；错误动画、坏清单、异步请求失败按预期拒绝；失败请求取回后引擎状态归零；生成资源 UID 实际加载有效 | 负向样本的预期 ERROR 单列，不计作常规零错误通过；早期 level_74 在并行编辑时失败，冻结后复跑通过。新常量声明曾触发 debug 编译停在断点而超时，修复后最终完整门禁通过；不删除原失败证据 |
 | 全角色运行资源清单 | 角色 1~7 静态 Catalog **PASS**；无技能/条件路径探针 **PASS**；角色 7 音频 **25 条**；角色 4/5 重型帧构建期化 **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；Godot `--debug` **0 warning** | 新增 `RoleRuntimeCatalog` 以 typed Dictionary + `preload` 静态注册全部清单，删除 Manifest 缺失回退与旧硬编码路径；条件字段改为 `Dictionary[String, PackedStringArray]`；角色 7 动态音频进入清单；`zlw_shenqi_gear_bullet.tscn` 改为 `BaseHero` 固定 `preload`；BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 由 `convert_numbered_frames.py` 生成 4 个构建期 SpriteFrames，Manifest 改走 `conditional_sprite_frames_paths`，移除 175 条 PNG 路径与运行时建帧 |
-| 引擎健康检查基线 | 709 脚本 0 Parse / 0 Error / 0 Warning;1,136 场景 0 断裂引用 | 本地完整素材工作区 |
+| 引擎健康检查基线（2026-10-26 收口工作区） | 710 脚本；最终完整门禁引擎维度 PASS，0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区；不以 health_check 超时返回 0 冒充通过 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
@@ -141,3 +143,6 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
 9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
+10. FrameSequence 已生成独立发布依赖清单并提供 `--export-preset` 只读检查；当前缺少 `source/export_presets.cfg`，检查明确失败。未验证 PCK/导出包、release、目标设备 VRAM 与首帧耗时，不创建默认发布方案。
+11. FrameSequence 仍使用现有 FPS/loop/hold/prefetch 复合 key；稳定内容 ID 与实例播放策略分离列入独立后续切换，本轮不扩展该 API、不保留兼容 wrapper。
+12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。

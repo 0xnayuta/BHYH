@@ -302,28 +302,28 @@ classDiagram
 
 | 层 | 职责 | 允许的产物 |
 |:---|:---|:---|
-| **构建层** | 把源素材转换为 Godot 资源；校验同步与过期 | 构建期生成的 `.tres`、`.import` 资源、转换器脚本 |
-| **资源层** | 以强类型 `Resource` 表达动画、图集、骨骼与静态纹理 | `SpriteFrames`、`Texture2D` / `AtlasTexture`、`AtlasMetadata`、Spine 资源 |
+| **构建层** | 确定性生成、schema/UID/依赖闭包检查 | 原生 `.tres`、独立发布依赖清单；导入配置 `.import` 与缓存分开 |
+| **资源层** | 共享只读视觉数据与预热定义 | `SpriteFrames`、`Texture2D` / `AtlasTexture`、`FrameSequence`、`AtlasMetadata`、Spine 资源 |
 | **运行时层** | 用 Godot 原生或受控第三方节点播放资源 | `AnimatedSprite2D`、`Sprite2D` / `TextureRect`、`SpineSprite`、流式帧播放器 |
 
 三层之间只通过资源引用和明确 API 交互。运行时不得反向解析源文件，也不得根据目录猜测资源。
 
 新增、重命名或恢复资源必须：
 
-- 使用全局唯一 `uid://`；
-- 附带正确的 `.import`（如适用）与伴生 `.uid`；
-- 通过 `godot --headless --path source --import` 重建导入缓存；
-- 禁止裸放未导入资源，禁止复制旧 `.import` / `.ctex` / `.remap` 作为替代。
+- 外部图片等源资源维护 `.import` 导入配置，`.godot/imported` 为可重建缓存；
+- 原生 `.tres/.tscn` 使用资源头 UID；脚本/着色器按引擎规则维护伴生 `.uid`，不伪造 `.import`；
+- 生成 FrameSequence/Catalog 已写确定性 UID，并做碰撞检查；
+- Godot 导入后再验证实际加载，不能只复制导入缓存。
 
 ### 6.2 默认选型
 
 | 内容类型 | 默认方案 | 运行时节点 |
 |:---|:---|:---|
-| 有限帧数的 2D 动画 | 构建期 `SpriteFrames.tres` | `AnimatedSprite2D` |
-| 静态图、UI、单张特效 | 直接 `Texture2D` / `AtlasTexture` | `Sprite2D` / `TextureRect` |
-| 骨骼、皮肤、附件、网格变形 | Spine | `SpineSprite` |
-| 实测超出显存/加载预算的超大序列 | **目标：`FrameSequence` + 流式播放器** | 专用流式帧播放器 |
-| 图集帧数据源 | `AtlasMetadata.tres` | 由消费者转为 SpriteFrames 或流式数据 |
+| 普通逐帧内容 | 构建期 `SpriteFrames` | `AnimatedSprite2D`，必要时配合 `AnimationPlayer` |
+| 静态图、UI、单张特效 | `Texture2D` / `AtlasTexture` | `Sprite2D` / `TextureRect` |
+| 现有 Spine 内容 | Spine 资源 | `SpineSprite`；新增原生骨骼可按目标契约评审 |
+| 按需驻留序列 | 已落地 `FrameSequence` + 流式播放器 | `StreamedPngEffect` |
+| 图集帧数据源 | `AtlasMetadata.tres` | 已有消费者仍含运行时转换，属于待收口边界 |
 
 **合法例外**：
 
@@ -346,10 +346,14 @@ classDiagram
 
 已落地：
 
-- `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`：按 `scene_paths` / `sprite_frames_paths` / `texture_paths` / `audio_paths` 与 `conditional_*` 分类登记角色 1~7 的预热资源；清单缺失在解析期 `assert`，无运行时回退；
+- `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`：静态预加载角色清单；资源缺失可在解析阶段暴露，清单查询断言仅是 debug 辅助，不冒充 release 失败处理；
 - `AtlasMetadata` + `AtlasMetadataStore`：`manifest.json` 构建期生成 `metadata.tres`，运行时只读；`AtlasMetadataStore` 只接受 `metadata.tres`；
 - 哪吒官方部件与 BiLuoTian / LeiTingJieZhen 重技能帧已迁移到构建期 `SpriteFrames`；
 - Spine 资源保持 `.atlas` / `.spine-json` 由 Spine 运行时加载，不转 SpriteFrames。
+- `FrameSequenceStore` 在接纳 Catalog 条目时校验 schema；`StreamedPngEffect` 再校验注入资源，错误时发出 `failed` 并拒绝播放；
+- `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
+- `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
+- `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE，声明错误不改走其它后端；
 
 仍然存在（遗留）：
 
@@ -364,7 +368,7 @@ classDiagram
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期 |
-| 固定/超大帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres` + Catalog | `--check` 内容一致性 |
+| 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres` + Catalog + 发布依赖 JSON | `--check` 内容、schema、UID、路径闭包；`--export-preset` 仅配置级覆盖 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 
 规则：
@@ -408,7 +412,7 @@ classDiagram
 - BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 构建期 `SpriteFrames`；
 - `AtlasMetadata` 构建期转换与运行时只读加载；
 - 角色 4/5 重型帧的构建期化与预热清单收敛；
-- `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore` 与 `convert_frame_sequences.py` 已落地；455 个序列覆盖固定目录、四剑阵 AtlasMetadata、星座动态 body、星座技能与五台弹道非 swf；`StreamedPngEffect` 只消费 `sequence`，旧数组字段已删除；
+- `FrameSequence`、Catalog、Store 与转换器已落地，序列数量以构建检查输出为准；消费者只注入 `sequence`，旧数组和目录扫描已删除；
 - 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`。
 
 待迁移：
@@ -417,6 +421,8 @@ classDiagram
 |:---|:---|
 | `sword_boss_base.gd` 等有限帧运行时建帧 | 有限帧改为构建期 `SpriteFrames`；技能图集序列已走 `FrameSequence` |
 | 魔法武器运行时 `_build_frames()` | 有限帧改为构建期资源；超大帧走 `FrameSequence` |
+| FrameSequence 策略复合 key | 目标为稳定内容 ID 与实例播放策略分离；本轮保留现有五参数 API，无兼容 wrapper |
+| 发布包实际闭包 | 已有 JSON 路径清单与预设只读检查；没有实际导出预设和 PCK 验证，不宣称已发布通过 |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |
 | `load_scene.gd` 源码正则解析刷怪表 | 改为 Manifest/Catalog 数据源 |
