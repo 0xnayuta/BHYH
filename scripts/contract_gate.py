@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import concurrent.futures
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REPORT_DIR = ROOT / "docs" / "reports"
+# 子命令的输出被按 UTF-8 解码；必须同时锁定子进程 stdout/stderr 为 UTF-8，
+# 否则 PowerShell 的 GBK 控制台会让中文以 GBK 字节写入管道，解码后变成乱码。
+CHILD_ENV = os.environ.copy()
+CHILD_ENV["PYTHONIOENCODING"] = "utf-8"
+CHILD_ENV["PYTHONUTF8"] = "1"
+CHILD_ENV.pop("PYTHONLEGACYWINDOWSSTDIO", None)
 COMMANDS = [
     ("contract_scan", [sys.executable, "scripts/contract_scan.py", "--fail-on-error"]),
     ("atlas_metadata_check", [sys.executable, "scripts/convert_atlas_metadata.py", "--check"]),
@@ -26,7 +33,8 @@ def run_command(item: tuple[str, list[str]]) -> tuple[str, subprocess.CompletedP
         capture_output=True,
         text=True,
         encoding="utf-8",
-        errors="ignore",
+        errors="replace",
+        env=CHILD_ENV,
     )
     return name, result
 
