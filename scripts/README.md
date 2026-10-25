@@ -87,7 +87,7 @@ coop_probe_runner.py
 | 脚本 | 作用 | 产物 |
 |:---|:---|:---|
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
-| `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | `docs/reports`（可选）/ 临时文件 |
+| `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 16 探针矩阵 | `docs/reports/coop_probe_matrix_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen，`--check` 校验存在且未过期 | 角色 4/5 `Art/hero_picture/.../*_frames.tres`（私有素材） |
