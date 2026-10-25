@@ -157,6 +157,24 @@ func configure(config: Dictionary) -> void:
 	impact_frame_count = int(config.get("impact_frame_count", 0))
 	impact_atlas_sequence = str(config.get("impact_atlas_sequence", ""))
 
+	if frames_resource_path.is_empty() and (not frame_root.is_empty() or not atlas_metadata.is_empty()):
+		var sequence := atlas_sequence if not atlas_sequence.is_empty() else frame_root.get_file()
+		if not sequence.is_empty():
+			frames_resource_path = _resolve_swf_png_frames_resource(frame_root, atlas_metadata, sequence)
+			if not frames_resource_path.is_empty() and atlas_sequence.is_empty():
+				atlas_sequence = sequence
+	if impact_frames_resource_path.is_empty():
+		var impact_metadata := impact_atlas_metadata if not impact_atlas_metadata.is_empty() else atlas_metadata
+		var impact_sequence := (
+			impact_atlas_sequence if not impact_atlas_sequence.is_empty() else impact_frame_root.get_file()
+		)
+		if not impact_sequence.is_empty() and (not impact_frame_root.is_empty() or not impact_metadata.is_empty()):
+			impact_frames_resource_path = _resolve_swf_png_frames_resource(
+				impact_frame_root, impact_metadata, impact_sequence
+			)
+			if not impact_frames_resource_path.is_empty() and impact_atlas_sequence.is_empty():
+				impact_atlas_sequence = impact_sequence
+
 	impact_visual_offset = config.get("impact_visual_offset", Vector2.ZERO)
 	impact_duration = maxf(float(config.get("impact_duration", 0.0)), 0.0)
 	impact_orient_to_motion = bool(config.get("impact_orient_to_motion", false))
@@ -212,7 +230,7 @@ func _configure_visual(
 	root: String, count: int, offset: Vector2, looped: bool, sequence_name: String = "", metadata_path: String = ""
 ) -> bool:
 	var resolved_metadata := atlas_metadata if metadata_path.is_empty() else metadata_path
-	if not sequence_name.is_empty() and not resolved_metadata.is_empty():
+	if not sequence_name.is_empty() and (not resolved_metadata.is_empty() or not frames_resource_path.is_empty()):
 		if _configure_atlas_visual(sequence_name, offset + visual_registration, looped, resolved_metadata):
 			return true
 	if _is_swf_png_root(root):
@@ -705,6 +723,33 @@ func _replace_visual_stream(next_stream: StreamedPngEffect) -> void:
 
 func _is_swf_png_root(root: String) -> bool:
 	return root.replace("\\", "/").begins_with("res://Art/monster/swf_png/")
+
+
+## 将 swf_png 的序列根/元数据映射到构建期 SpriteFrames；仅在帧资源确实包含该序列时返回。
+static func _resolve_swf_png_frames_resource(root: String, metadata_path: String, sequence: String) -> String:
+	if sequence.is_empty():
+		return ""
+	var model := ""
+	var normalized_metadata := metadata_path.replace("\\", "/")
+	if normalized_metadata.begins_with("res://Art/monster/swf_png/"):
+		var atlas_dir := normalized_metadata.get_base_dir()
+		if atlas_dir.get_file() == "atlas":
+			model = atlas_dir.get_base_dir().get_file()
+	if model.is_empty():
+		var normalized_root := root.replace("\\", "/")
+		var marker := "/swf_png/"
+		var marker_index := normalized_root.find(marker)
+		if marker_index >= 0:
+			model = normalized_root.substr(marker_index + marker.length()).get_slice("/", 0)
+	if model.is_empty():
+		return ""
+	var frames_path := "res://Art/monster/swf_png/%s/atlas/swf_png_%s_frames.tres" % [model, model]
+	if not ResourceLoader.exists(frames_path):
+		return ""
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null or not frames.has_animation(StringName(sequence)):
+		return ""
+	return frames_path
 
 
 func _exit_tree() -> void:
