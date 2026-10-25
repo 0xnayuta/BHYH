@@ -9,6 +9,7 @@ var hit_name := "hit1"
 var skill_name := "ShenguangBossEffect"
 var obj_attack_dict: Dictionary = {}
 var frames: SpriteFrames
+var animation_name: StringName = &"play"
 var visual_offset := Vector2.ZERO
 var collision_size := Vector2.ONE
 var collision_offset := Vector2.ZERO
@@ -27,6 +28,10 @@ func _ready() -> void:
 		queue_free()
 		return
 	obj_attack_dict = owner_boss.obj_attack_dict
+	if frames == null or not frames.has_animation(animation_name):
+		push_error("ShenguangBossEffect missing animation: " + String(animation_name))
+		queue_free()
+		return
 	_build_visual()
 	_middle = Node2D.new()
 	_middle.name = "middle"
@@ -47,21 +52,29 @@ func _build_visual() -> void:
 	_visual = AnimatedSprite2D.new()
 	_visual.name = "Visual"
 	_visual.sprite_frames = frames
-	_visual.animation = &"play"
+	_visual.animation = animation_name
 	_visual.position = visual_offset
 	_visual.z_index = 5
 	if not motion_velocity.is_zero_approx():
 		rotation = motion_velocity.angle()
 	add_child(_visual)
-	_visual.play(&"play")
-	if hold_last_frame and not loop_animation:
+	_visual.play(animation_name)
+	if loop_animation:
+		_visual.animation_finished.connect(_restart_loop)
+	elif hold_last_frame:
 		_visual.animation_finished.connect(_hold_last_frame)
+
+
+func _restart_loop() -> void:
+	if _finished or not loop_animation or _visual == null or not is_instance_valid(_visual):
+		return
+	_visual.play(animation_name)
 
 
 func _hold_last_frame() -> void:
 	if _visual == null or frames == null:
 		return
-	_visual.frame = maxi(0, frames.get_frame_count(&"play") - 1)
+	_visual.frame = maxi(0, frames.get_frame_count(animation_name) - 1)
 	_visual.pause()
 
 

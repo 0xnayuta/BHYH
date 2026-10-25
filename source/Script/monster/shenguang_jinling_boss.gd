@@ -65,9 +65,9 @@ const FEATHER_OFFSETS := {
 }
 const STAKE_SLOT_X := [-255.0, -85.0, 85.0, 255.0]
 
-static var _frames_cache: SpriteFrames
+static var _atlas_frames_cache: SpriteFrames
 
-static var _effect_frames_cache: Dictionary = {}
+static var _frames_cache: SpriteFrames
 
 var _busy := true
 var _dead_started := false
@@ -197,14 +197,25 @@ static func prewarm_frames() -> void:
 
 
 static func prewarm_effects() -> void:
-	pass
+	for effect_name: String in EFFECT_DATA:
+		_effect_frames(effect_name)
 
 
-static func _load_standard_frames() -> SpriteFrames:
+static func _load_atlas_frames() -> SpriteFrames:
+	if _atlas_frames_cache != null:
+		return _atlas_frames_cache
 	var frames_path := ROOT.path_join("atlas/swf_png_3021_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
 	var source := load(frames_path) as SpriteFrames
+	if source == null:
+		return null
+	_atlas_frames_cache = source
+	return source
+
+
+static func _load_standard_frames() -> SpriteFrames:
+	var source := _load_atlas_frames()
 	if source == null:
 		return null
 	var frames := SpriteFrames.new()
@@ -290,11 +301,12 @@ func _play_body_action(action_name: StringName) -> void:
 
 
 static func _effect_frames(effect_name: String) -> SpriteFrames:
-	if _effect_frames_cache.has(effect_name):
-		return _effect_frames_cache[effect_name] as SpriteFrames
-	var frames := _get_sprite_frames()
-	_effect_frames_cache[effect_name] = frames
-	return frames
+	var source := _load_atlas_frames()
+	var sequence_name := StringName(effect_name)
+	if source == null or not source.has_animation(sequence_name):
+		push_error("Shenguang effect animation missing: " + effect_name)
+		return null
+	return source
 
 
 func _run_appearance() -> void:
@@ -427,6 +439,7 @@ func _spawn_effect(
 	effect.effect_kind = effect_name
 	effect.hit_name = attack_name
 	effect.frames = _effect_frames(effect_name)
+	effect.animation_name = StringName(effect_name)
 	effect.visual_offset = info["offset"]
 	effect.collision_size = info["size"]
 	effect.collision_offset = info["shape_offset"]
