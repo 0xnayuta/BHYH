@@ -291,11 +291,16 @@ func _can_resume_level() -> bool:
 
 
 func _refresh_pause_state() -> void:
+	if not is_inside_tree():
+		return
+	var scene_tree := get_tree()
+	if scene_tree == null:
+		return
 	if _has_open_child():
-		if not get_tree().paused:
-			get_tree().paused = true
-	elif get_tree().paused and _can_resume_level():
-		get_tree().paused = false
+		if not scene_tree.paused:
+			scene_tree.paused = true
+	elif scene_tree.paused and _can_resume_level():
+		scene_tree.paused = false
 
 
 func _has_open_child() -> bool:
