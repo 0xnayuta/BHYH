@@ -1,6 +1,6 @@
 # ADR-009：视觉资源构建期生成，运行时只读类型资源
 
-- **状态**：Accepted
+- **状态**：Superseded by [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md)；原决策正文作为历史保留。
 - **记录日期**：2026-10-25
 - **影响范围**：动画、图集、特效、加载性能、构建工具
 

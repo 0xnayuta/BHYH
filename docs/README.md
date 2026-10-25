@@ -34,7 +34,7 @@
 | [`reference/architecture.md`](reference/architecture.md) | **运行时架构**：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
-| [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：已实际执行的 ADR 与维护规则 |
+| [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
 | [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |

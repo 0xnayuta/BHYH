@@ -1,250 +1,131 @@
-# 视觉资产架构契约 (Architecture)
+# 视觉资产目标架构契约
 
-> 状态：**活跃契约**。适用于当前 `source/` 工程及后续现代化改造。
-> 本文定义资产生产、资源表示与运行时播放的边界；具体代码规范仍以 [`../standards/`](../standards/README.md) 为准。
+> **定位**：规定视觉资产现代化的目标与验收边界，不描述当前实现或迁移进度。
+> **适用范围**：新增及主动重构的、随产品交付的固定视觉资产。
+> 当前实际架构见 [`../reference/architecture.md`](../reference/architecture.md)，验证快照见 [`../reference/status.md`](../reference/status.md)，实施计划见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
----
+## 1. 决策与效力
 
-## 1. 目的
+本项目采用构建层、资源层、运行时层三层契约。统一资源生产、数据边界与调用契约，不把所有视觉内容强制转换为同一种格式或万能播放器。
 
-本契约解决以下问题：
+本文是**项目选择**，不是 Godot 对所有项目的强制要求。相关决策见 [ADR-020](../decisions/ADR-020-typed-visual-assets-and-streaming-lifecycle.md)；现有 Spine 内容继续遵守 [ADR-010](../decisions/ADR-010-spine-runtime-boundary.md)。
 
-1. 明确 PNG、JSON、图集、Spine 与 SpriteFrames 的分层关系；
-2. 规定新资产必须采用的构建方式与运行时类型；
-3. 禁止继续扩散运行时路径拼接、目录扫描、JSON 解析和回退分支；
-4. 为后续迁移提供统一的目标架构，而不是一次性大重构。
-
-**统一的是构建契约、资源契约和调用契约，不是把所有内容强行塞进单一运行时格式。**
-
----
-
-## 2. 核心决策
-
-### 2.1 三层架构
-
-| 层 | 职责 | 允许的产物 |
+| 层 | 职责 | 边界 |
 |:---|:---|:---|
-| **构建层** | 把源素材转换为 Godot 资源；校验同步与过期 | 构建期生成的 `.tres`、`.import` 资源；转换器脚本 |
-| **资源层** | 以强类型 `Resource` 表达动画、图集、骨骼与静态纹理 | `SpriteFrames`、`Texture2D`/`AtlasTexture`、`FrameSequence`、`AtlasMetadata`、Spine 资源 |
-| **运行时层** | 用对应的 Godot 原生或受控第三方节点播放资源 | `AnimatedSprite2D`、`Sprite2D`/`TextureRect`、`SpineSprite`、流式帧播放器 |
+| 构建层 | 适配源格式，确定性生成，校验 schema、来源与发布依赖 | 源 JSON、目录发现和素材修复仅在离线工具执行 |
+| 资源层 | 保存共享只读的视觉数据及稳定标识 | 不保存播放器时间、临时加载句柄或实例可变状态 |
+| 运行时层 | 播放、预热、失败处理和请求收尾 | 消费明确资源，不猜目录、旧命名或可用后端 |
 
-三层之间只通过资源引用和明确 API 交互。运行时不得反向解析源文件，也不得根据目录猜测资源。
+资源生命周期由实际持有引用决定；清空业务字典不等于取消后台请求，也不保证释放其它持有者引用。
 
-### 2.2 默认选型
+## 2. 内容选型
 
-| 内容类型 | 默认方案 | 运行时节点 |
+| 内容/需求 | 默认选择 | 评审边界 |
 |:---|:---|:---|
-| 有限帧数的 2D 动画 | **构建期 `SpriteFrames.tres`** | `AnimatedSprite2D` |
-| 静态图、UI、单张特效 | 直接 `Texture2D` / `AtlasTexture` | `Sprite2D`、`TextureRect` |
-| 骨骼、皮肤、附件、网格变形 | **Spine** | `SpineSprite` |
-| 实测会超出显存/加载预算的超大帧序列 | **`FrameSequence` + 流式播放器** | 专用流式帧播放器 |
-| 图集帧数据源 | `AtlasMetadata.tres` | 由消费者转为 SpriteFrames 或 FrameSequence |
+| 普通逐帧动画 | 构建期 `SpriteFrames`，由 `AnimatedSprite2D` 播放 | 可使用共享 `AtlasTexture` 页；不能仅凭帧数判断内存 |
+| 规则精灵表或多属性/事件时间轴 | `Sprite2D` + `AnimationPlayer`，或 `AnimatedSprite2D` 配合 `AnimationPlayer` | 不重复驱动同一播放时钟；需要混合时评估 `AnimationTree` |
+| 静态图、UI | `Texture2D` / `AtlasTexture` + `Sprite2D` / `TextureRect` | 不增加无意义的动画包装 |
+| 现有 Spine 内容 | Spine 资源 + `SpineSprite` | 保留骨骼、皮肤、附件与变形，不为格式统一烘焙成帧 |
+| 新增骨骼内容 | 按制作链和功能选择 Spine 或原生 `Skeleton2D` / `Bone2D` / `Polygon2D` + `AnimationPlayer` | 不因“骨骼动画”自动增加第三方依赖 |
+| 需要按需驻留的逐帧内容 | `FrameSequence` + 专用流式播放器 | 记录目标平台、纹理页驻留量、并发数、首帧延迟和加载峰值的依据 |
+| 图集源元数据 | `AtlasMetadata` 或明确的源格式适配器 | 它不是播放器，也不是所有资源必须经过的中间层 |
 
-### 2.3 不允许的“统一”
-
-- 不把 Spine 动画烘焙成 SpriteFrames；
-- 不把静态 PNG/UI 强行包装成 SpriteFrames；
-- 不把所有超大序列一次性装入 SpriteFrames；
-- 不新增万能播放器，把帧动画、Spine、流式加载混在同一个类中；
-- 不为了兼容旧资产同时保留两套加载路径。
-
----
+所有预录帧序列都是有限的；不得使用“有限/超大”作为唯一后端判断。流式方案也适用于已有明确驻留需求的背景，是否高频复用不是必要条件。
 
 ## 3. 构建层契约
 
-### 3.1 构建期生成
+1. 固定视觉资产必须离线生成播放定义。不得在战斗热路径扫描目录、猜编号、解析源 manifest 或逐帧拼路径建帧。
+2. 规则精灵表、程序化内容和当前格式用户数据不属于上述固定资产禁令；不得借此恢复旧资产兼容路径。
+3. 同一资产只有一个声明的正式来源；源格式选择必须显式。缺失动画不得自动替换为单张图或其它命名。合法静态保持必须在构建定义中声明。
+4. 通用源格式使用通用转换器；专用 schema 可以使用名称明确的适配器，不预先建立万能转换器。
+5. `--check` 必须校验生成内容、schema、资源路径、唯一标识、Catalog 闭包与发布依赖；不只检查输出文件是否存在。
+6. 构建结果确定性生成，不依赖目录枚举顺序、运行时状态或随机 UID。UID 按已登记身份保持稳定；路径迁移由专用工具同步。
+7. 生成文件的陈旧清理只能作用于转换器明确拥有的输出集合，不能删除用户或其它工具的文件。
+8. 公开仓库不包含第三方素材；转换器和规格入库，私有素材及其派生产物本地生成。
 
-新增动画、图集帧与派生视觉资源必须在构建期生成，不允许在游戏运行时：
-
-- 扫描目录；
-- 猜测编号文件；
-- 解析 `manifest.json`；
-- 拼装 PNG 路径后逐帧 `load()`；
-- 用 `SpriteFrames.new()` 现场构建有限帧动画。
-
-构建产物可以是 `.tres` 或 Godot 导入后的原生资源；产物路径必须符合 [`../standards/naming_standard.md`](../standards/naming_standard.md)。
-
-### 3.2 转换器职责
-
-| 输入格式 | 工具 | 输出 |
-|:---|:---|:---|
-| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` |
-| 超大/流式固定帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres` + Catalog |
-| 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` |
-| 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` |
-| Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源，不转换为 SpriteFrames |
-
-转换器规则：
-
-1. 通用输入格式使用通用工具；角色专用 schema 可以使用角色专用适配器；
-2. 适配器名称必须反映其真实作用域，不允许把专用工具伪装成通用工具；
-3. 转换器必须支持 `--check`，至少验证输出存在；能验证内容时必须验证内容一致性；
-4. 转换器输出不进入公开仓库的内容边界不变：Art 派生资源由本地构建，脚本与契约入库；
-5. 构建产物必须可重复生成，生成顺序和输入不得依赖运行时时序。
-
-### 3.3 当前工具边界
-
-- `convert_nezha_preview_frames.py` 是角色 6 专用适配器，只处理哪吒 `official_parts_trial` 的目录、三层 schema 与输出命名；
-- `convert_numbered_frames.py` 是通用编号序列工具，当前登记 BiLuoTian 与 LeiTingJieZhen；
-- 若未来第二个角色采用相同的哪吒预览 JSON schema，再把路径、层定义参数化并升级为通用工具；当前不预先抽象。
-
----
+工具职责以 [`../../scripts/README.md`](../../scripts/README.md) 为准；资产数量不在本文固化。
 
 ## 4. 资源层契约
 
-### 4.1 强类型资源
+### 4.1 类型、标识与共享
 
-新增静态数据必须使用自定义 `Resource` 或 Godot 原生强类型资源，并通过 `@export` 暴露：
+- 设计器配置与序列化数据优先自定义或原生 `Resource`。运行时状态使用普通节点、`RefCounted` 或强类型容器；不要求所有数据都 `@export`。
+- 只向 Inspector/序列化暴露需要配置的字段。新增结构化资源使用强类型字段，不扩张裸字典边界。
+- 资产 ID 表示内容身份，不包含浮点格式化的 FPS、loop、hold 或预取参数。
+- 资源可提供播放默认值；时间、循环覆盖、末帧覆盖、速度倍率与预取窗口是实例状态，不回写共享资源。
+- Catalog 中的元数据可共享；不得通过强引用全部 `Texture2D` 来解决流式资源的导出依赖。
+- `AtlasMetadata.data` 是已登记的遗留边界；后续按消费者需要提供强类型访问，不强制把所有资产再包装成 AtlasMetadata。
 
-- 不允许继续扩大无类型 `Dictionary` 配置；
-- 条件字段、帧列表、路径表必须使用强类型字段；
-- 固定依赖优先 `preload`；
-- 大型资源允许按需加载，但必须缓存并支持显式预热/释放；
-- 资源路径由资源字段或静态注册表提供，不在业务逻辑中重复拼接。
+### 4.2 资源校验与失败
 
-### 4.2 单一事实源
+- 构建期校验完整性；运行时接纳外部资源时校验一次 schema，拒绝错误类型、空序列、数组长度不一致、非法时间或区域。
+- debug 可附加 `assert`；release 必须同样记录明确错误并拒绝启动错误消费者。不得仅依赖 `assert`。
+- 后端由资源定义或显式配置选择。指定 SpriteFrames 动画缺失时，不得改走 FrameSequence；不同资产声明不同后端是合法选型，不是兼容层。
+- 失败必须向拥有者传播；可中止该视觉或场景加载，不允许通过旧路径、猜名或空白占位掩盖错误。正常错误处理不属于被禁止的兼容层。
 
-同一份动画/资源集合只能有一个生成源：
+### 4.3 导入、UID 与发布依赖
 
-- 不允许 Manifest 与旧硬编码路径表并存；
-- 不允许运行时构建与构建期 `.tres` 同时作为同一有限帧动画的正式来源；
-- 不允许通过“文件不存在就回退旧路径”的方式保持旧行为；
-- 清单缺失、路径缺失或类型不符必须明确失败，而不是静默降级。
-
-### 4.3 资源类型
-
-| 类型 | 用途 | 约束 |
-|:---|:---|:---|
-| `SpriteFrames` | 有限帧动画 | 默认使用；构建期生成；由 `AnimatedSprite2D` 播放 |
-| `Texture2D` / `AtlasTexture` | 静态图、UI、图集页 | 不携带动画时间轴；由 `Sprite2D`/`TextureRect` 使用 |
-| `FrameSequence` | 超大流式帧序列 | 已落地；构建期生成并由 `StreamedPngEffect` 读取；包含帧路径/区域、FPS、循环、末帧策略与预取策略 |
-| `AtlasMetadata` | 图集页与帧元数据 | 构建期数据源；不是播放器；不得在运行时回写 |
-| Spine 资源 | 骨骼/皮肤/网格动画 | 保持 Spine `.atlas`/`.spine-json` 与 `SpineSprite`；不转 SpriteFrames |
-
-### 4.4 `AtlasMetadata` 的边界
-
-`AtlasMetadata` 是项目自定义的构建期图集元数据，不是 Spine 的 `.atlas`：
-
-- `manifest.json` → `AtlasMetadata.tres`；
-- 运行时通过 `AtlasMetadataStore` 读取；
-- 消费者可以选择：
-  - 有限帧：构建期转为 `SpriteFrames`；
-  - 超大帧：构建期生成 `FrameSequence`，运行时由流式播放器读取；
-- 新增字段必须逐步使用强类型结构；现有 `data: Dictionary` 是遗留过渡，不得继续扩大无类型数据面。
-
----
+- PNG/音频等外部源素材经 Godot 导入，旁置 `.import` 保存配置；`.godot/imported/` 是可重建缓存，不入库。
+- `.tres/.tscn` 是 Godot 原生资源，不要求伪造 `.import`；可序列化资源的 UID 写在资源头，脚本/着色器按引擎机制维护伴生 `.uid`。
+- 生成资源必须有可重复的稳定 UID 或明确评审的例外；不同资源不能复用同一 UID。
+- 仅存为字符串的延迟加载路径不自动构成 Godot 资源依赖。必须生成独立依赖清单，并通过显式导出规则或导出插件打包。
+- 构建检查证明源资源齐全不等于发布包齐全；发布前必须从 PCK/导出包验证路径闭包与实际加载。
 
 ## 5. 运行时层契约
 
-### 5.1 默认播放器
+### 5.1 播放与状态
 
-- 有限帧动画：`AnimatedSprite2D` + `SpriteFrames`；
-- 静态视觉：`Sprite2D` / `TextureRect` + `Texture2D`；
-- 骨骼动画：`SpineSprite`；
-- 超大序列：统一的流式帧播放器，消费 `FrameSequence`，不消费目录路径。
+- 优先采用原生节点；流式播放器只负责帧时钟、纹理窗口、区域和显示事件，不侵入战斗伤害与关卡编排。
+- 资源在启动前显式注入；通过小范围组合或必要的适配器复用，不新增万能节点或资源平台。
+- 明确顺播、循环、末帧、手动跳帧、空白帧和失败信号语义。碰撞跟随视觉时，必须使用已显示帧的几何，不使用未就绪的未来帧。
+- `.tres` 是序列化格式，不是独立播放器；不得以扩展名代替资源类型设计。
 
-### 5.2 调用边界
+### 5.2 加载、预热与退出
 
-- 业务代码不得在 `_process` / `_physics_process` 中执行磁盘 IO、运行时 JSON 解析或高频资源加载；
-- 有限帧动画不得在首次释放技能时现场构建；
-- 资源预热必须有明确的所有者和释放路径；
-- 角色、怪物、特效的资源选择由 Manifest、Catalog 或 typed Resource 驱动；
-- 如确需统一调用入口，使用工厂/适配器选择播放器，不把不同播放器合并成一个巨型节点。
+- 固定的小依赖优先 `preload`；大型资源按需加载。不要让全局脚本的 `preload` 间接常驻全部大型视觉。
+- 游戏线程允许跨帧轮询线程加载状态；禁止主线程同步磁盘 IO 和高频同步加载。流式组件依据构建清单发起受控异步请求不属于逐帧猜名禁令。
+- 每个请求必须有所有者。共享请求必须去重并计数；消费者退出后仍须在请求完成时取回并释放结果，不能仅清空本地字典。
+- 不在 `_exit_tree` 同步等待未完成请求；场景树仍运行时，由受控收尾者跨帧处理。进程退出另有明确关闭路径。
+- 预热区分：元数据就绪、纹理资源就绪、可显示首帧。命名和验收不得把 Catalog 加载冒充纹理预热。
+- 预热纹理必须保持引用直到消费者接手或预热所有者释放；规定驻留范围，避免按动画重复持有相同图集页。
+- 缓存需有可观察的命中、在途请求和释放边界；性能预算基于实际目标平台测量，不在本文编造统一阈值。
 
-### 5.3 Spine 边界
+### 5.3 Spine
 
-- Spine 是第三方骨骼运行时，不参与 SpriteFrames 统一；
-- `.atlas` 由 Spine 运行时读取，`AtlasMetadata` 不替代 Spine atlas；
-- Spine 二进制、许可证与平台支持必须单独维护；
-- 当前仓库只入库 Windows x86_64 运行库；跨平台发布前必须补齐并验证。
+Spine `.atlas` 与项目 `AtlasMetadata` 是不同格式。现有 Spine 内容不烘焙为 SpriteFrames；新增原生骨骼内容不强制 Spine。第三方库版本、许可证和目标平台二进制单独核实，不能把本机编辑器加载通过外推为跨平台发布通过。
 
----
+## 6. 验收契约
 
-## 6. 例外与禁止事项
+执行档位和命令见 [`../reference/acceptance.md`](../reference/acceptance.md)。视觉资源变更至少覆盖：
 
-### 6.1 合法例外
+1. 构建内容、schema、路径、唯一 ID/UID、Catalog key 与发布依赖闭包；
+2. 正常播放、循环、末帧、跳帧、空白帧、首次就绪和失败传播；
+3. 缺资源/错误动画/错误类型必须失败，不能切换其它来源；
+4. 多播放器共享请求、提前销毁、场景切换与结果回收；
+5. 元数据/纹理预热的不同判据，以及重复进入退出后的驻留检查；
+6. 静态门禁、引擎健康、生产消费者场景探针及相关关卡；
+7. release 失败语义、导出包实际依赖和目标平台性能（发布前）。
 
-| 场景 | 处理 |
-|:---|:---|
-| 静态图像/UI | 直接 `Texture2D`，无需 SpriteFrames |
-| 骨骼动画 | 保留 Spine，不转换 |
-| 经实测超大、频繁复用的帧序列 | 使用 `FrameSequence` + 流式播放器，并记录显存/加载依据 |
-| 舞台/关卡背景大图 | 直接纹理或 Streaming，不强制 SpriteFrames |
+首帧显示或节点存在不能代替完整动画、几何与生命周期验收。源码枚举门禁与会临时向 `source/` 安装夹具的运行探针必须串行，避免把临时夹具当生产文件。
 
-### 6.2 禁止事项
+## 7. 文档与决策维护
 
-1. 新增运行时 `DirAccess` 扫描或编号文件猜测；
-2. 新增运行时 `manifest.json` 解析；
-3. 新增运行时 PNG 路径拼接与逐帧 `load()`；
-4. 新增 Manifest 缺失回退、旧路径兼容层或“先看文件是否存在”的双轨逻辑；
-5. 把 Spine 动画烘焙成 SpriteFrames；
-6. 把静态 PNG 包装成无意义的 SpriteFrames；
-7. 在全局逻辑中继续扩散角色专属资源路径表。
+- 本文只维护目标与长期规则，不保存资源总数、迁移完成列表、耗时或 PASS 计数。
+- `reference/architecture.md` 记录当前真实实现；`status.md` 记录带日期/提交的验证快照；roadmap 记录待做工作。
+- 规范先于实现修订，实施完成再同步实际架构与验收文档；不得把目标直接写成现状。
+- Accepted ADR 的实质变更新增替代 ADR；旧 ADR 只标注替代关系，保留原结论。
+- 任何偏离须有明确范围、理由和验收，不得用兼容分支绕过契约。
 
----
+## 8. 官方依据与关联文档
 
-## 7. 迁移状态
-
-### 7.1 已完成
-
-- 角色 1~7 的运行资源清单与静态 Catalog；
-- 哪吒 117 个装备层构建期 SpriteFrames；
-- BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 构建期 SpriteFrames；
-- `convert_nezha_preview_frames.py --check` 内容级校验；
-- `AtlasMetadata` 构建期转换与运行时只读加载；
-- `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore` 已落地；`convert_frame_sequences.py` 生成 455 个序列；
-- `StreamedPngEffect` 只消费 `FrameSequence`，旧 `frame_paths` / `frame_regions` / `fps` / `loop_animation` 字段已删除；
-- 四剑台背景、星座治疗 aura、混沌、饕餮、流沙河、五台 3077 固定序列、四剑阵 hit1/hit2/hit3 AtlasMetadata 序列、星座动态 body/技能序列与五台弹道非 swf 序列已切换；
-- 五台 3082/3080/3081 的 SpriteFrames 已有构建期资源，删除流式回退与目录预扫描。
-
-### 7.2 待迁移
-
-| 项目 | 目标 |
-|:---|:---|
-| `sword_boss_base.gd` 等有限帧运行时建帧 | 有限帧改为构建期 SpriteFrames；技能图集序列已走 FrameSequence |
-| 魔法武器运行时 `_build_frames()` | 有限帧改为构建期资源；超大帧走 FrameSequence |
-| `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
-| Spine 平台库 | 按目标平台补齐并验证 |
-
-### 7.3 迁移顺序
-
-1. 已完成固定目录/固定效果序列、四剑阵 AtlasMetadata 技能序列、星座动态 body/技能序列与五台弹道非 swf 序列的 FrameSequence 切换；
-2. `StreamedPngEffect` 只保留 `sequence`，旧数组字段已删除；
-3. 下一批把有限帧运行时建帧迁移到构建期；
-4. 最后收敛 `AtlasMetadata` 类型边界与平台运行库问题。
-
----
-
-## 8. 验收要求
-
-架构改动必须同时满足：
-
-- `python scripts/check_all.py --godot-bin <godot>` 八维门禁通过；
-- 构建期转换器的 `--check` 通过；
-- `python scripts/convert_frame_sequences.py --check` 校验固定序列 Catalog 与输出内容；
-- Godot 场景加载与脚本编译保持 **0 ERROR / 0 WARNING**；
-- 新增/重构资源具有唯一 UID、正确 `.import`（如适用）与 snake_case 路径；
-- 受影响的角色/关卡冒烟或探针通过；
-- 文档、脚本索引与状态记录同步更新。
-
----
-
-## 9. 变更流程
-
-1. 先修改本文与相关 `docs/standards/`；
-2. 再修改转换器、资源与运行时；
-3. 最后更新 `docs/reference/status.md` 的验证记录；
-4. 禁止用新的兼容分支绕过本契约；
-5. 若必须偏离本契约，必须记录原因、影响范围、退出计划，并经评审。
-
----
-
-## 10. 关联文档
-
-- [`../reference/status.md`](../reference/status.md)：版本、规模与验证状态单一事实源
-- [`../reference/architecture.md`](../reference/architecture.md)：运行时架构与资源层现状
-- [`godot_design_standard.md`](godot_design_standard.md)：Resource、场景、Autoload 与项目结构规范
-- [`spriteframes_generation_policy.md`](spriteframes_generation_policy.md)：SpriteFrames 生成策略
-- [`naming_standard.md`](naming_standard.md)：命名契约
-- [`missing_assets_registry.md`](missing_assets_registry.md)：缺失资产与回退登记
-- [`../../scripts/README.md`](../../scripts/README.md)：构建、门禁与回归工具索引
+- [Godot AnimatedSprite2D](https://docs.godotengine.org/en/4.7/classes/class_animatedsprite2d.html)
+- [Godot Skeleton2D](https://docs.godotengine.org/en/4.7/classes/class_skeleton2d.html)
+- [Godot Resources](https://docs.godotengine.org/en/4.7/classes/class_resource.html)
+- [Godot 后台加载](https://docs.godotengine.org/en/4.7/tutorials/io/background_loading.html)
+- [Godot 导入流程](https://docs.godotengine.org/en/4.7/tutorials/assets_pipeline/import_process.html)
+- [Godot 导出资源](https://docs.godotengine.org/en/4.7/tutorials/export/exporting_projects.html)
+- [`godot_design_standard.md`](godot_design_standard.md)
+- [`spriteframes_generation_policy.md`](spriteframes_generation_policy.md)
+- [`../reference/architecture.md`](../reference/architecture.md)
+- [`../reference/acceptance.md`](../reference/acceptance.md)
+- [`../reference/status.md`](../reference/status.md)

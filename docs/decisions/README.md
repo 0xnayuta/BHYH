@@ -2,7 +2,7 @@
 
 > **状态**：活跃索引（2026-10-25 新建）。
 >
-> **定位**：把项目已经实际执行、并被规范/文档/代码固化的架构决策，整理为可追溯的 ADR。本文档集是**回溯记录**，不是新决策；若与规范正文或代码冲突，以规范正文/代码为准。
+> **定位**：记录项目已接受的架构选择及替代关系。历史回溯记录与后续新决策并存；Accepted 表示决策有效，不表示所有迁移工作已经完成。
 
 ---
 
@@ -10,7 +10,7 @@
 
 每个 ADR 包含：
 
-- **状态**：当前均为 `Accepted`（已在实际工程中执行）；
+- **状态**：使用 `Accepted`、`Superseded` 等明确状态，并保留替代关系；
 - **背景**：问题、约束与触发条件；
 - **决策**：明确执行的选择；
 - **后果**：收益、代价与必须遵守的约束；
@@ -33,7 +33,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-006](ADR-006-resource-first-data-and-data-keys.md) | 新结构化数据优先 Resource，存量字典走 DataKeys | Accepted | 数据模型、配置 |
 | [ADR-007](ADR-007-autoload-boundary.md) | 保留 13 个 Autoload，新增必须评审 | Accepted | 全局状态、生命周期 |
 | [ADR-008](ADR-008-type-based-directories-with-feature-subdirectories.md) | 保留类型分层目录，新功能按功能子目录聚合 | Accepted | 项目结构 |
-| [ADR-009](ADR-009-build-time-visual-asset-pipeline.md) | 视觉资源构建期生成，运行时只读类型资源 | Accepted | 动画、图集、加载 |
+| [ADR-009](ADR-009-build-time-visual-asset-pipeline.md) | 视觉资源构建期生成，运行时只读类型资源 | Superseded by ADR-020 | 历史资产管线决策 |
 | [ADR-010](ADR-010-spine-runtime-boundary.md) | Spine 保持骨骼运行时，不烘焙为 SpriteFrames | Accepted | 角色特效、平台库 |
 | [ADR-011](ADR-011-public-repository-asset-boundary.md) | 公开仓库排除第三方素材，代码 MIT | Accepted | 许可证、发布 |
 | [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md) | 零错误零警告与八维门禁为合并门槛 | Accepted | 质量流程 |
@@ -44,6 +44,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-017](ADR-017-local-coop-profile-isolation.md) | 本地双人使用独立档案实例与槽位路由 | Accepted | 双人模式、数据归属 |
 | [ADR-018](ADR-018-runtime-resource-cache-prewarm-and-pooling.md) | 运行期缓存、分阶段预热与对象池 | Accepted | 性能、加载 |
 | [ADR-019](ADR-019-test-fixtures-outside-production-source.md) | 测试探针与夹具不进入生产源码 | Accepted | 测试、发布 |
+| [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md) | 类型化视觉资产、显式后端与流式生命周期 | Accepted | 三层契约、请求回收、导出闭包 |
 
 ### 2.1 常见决策检索
 
@@ -55,7 +56,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | 新配置/数据放字典还是 Resource？ | [ADR-006](ADR-006-resource-first-data-and-data-keys.md) |
 | 能否新增 Autoload？ | [ADR-007](ADR-007-autoload-boundary.md) |
 | 新功能目录放哪里？ | [ADR-008](ADR-008-type-based-directories-with-feature-subdirectories.md) |
-| 动画帧、图集、Spine 如何生产与加载？ | [ADR-009](ADR-009-build-time-visual-asset-pipeline.md)、[ADR-010](ADR-010-spine-runtime-boundary.md) |
+| 动画帧、图集、Spine 如何生产与加载？ | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md)、[ADR-010](ADR-010-spine-runtime-boundary.md) |
 | 提交前必须跑哪些门禁？ | [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md) |
 | 版本迁移能否整包覆盖？ | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) |
 | 本地双人数据为什么不是第二个 Autoload？ | [ADR-017](ADR-017-local-coop-profile-isolation.md) |
