@@ -414,6 +414,11 @@ var fly_bullet = null
 var _chase_bullet = null
 
 
+func _exit_tree() -> void:
+	FrameSequenceStore.clear_cache()
+	FrameTextureRequests.shutdown_process()
+
+
 func _ready() -> void:
 	if MainSet != null and MainSet.has_method("apply_frame_rate"):
 		MainSet.apply_frame_rate()
@@ -1105,6 +1110,9 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 		for bullet_script in MONSTER_212_BULLET_SCRIPTS:
 			bullet_script.prewarm_frames()
 			await get_tree().process_frame
+	if seen_monster_ids.has(3077):
+		var ancestor_script: Script = load("res://Script/monster/wutai_earth_ancestor3077.gd")
+		await ancestor_script.prewarm_effects()
 
 	var tiger_stage := 0
 	for monster_id in unique_monster_ids:
@@ -1474,6 +1482,7 @@ func _warm_scene_instance(scene: PackedScene) -> void:
 
 
 func clear_level_resource_cache() -> void:
+	FrameSequenceStore.clear_cache()
 	_level_preload_generation += 1
 	_level_resource_preload_signature = ""
 	for bullet_script in MONSTER_212_BULLET_SCRIPTS:
