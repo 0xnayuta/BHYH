@@ -40,6 +40,7 @@
 │   └── project.godot       # Godot 工程配置
 ├── docs/                   # 分层文档（见 docs/README.md）
 ├── scripts/                # 质量门禁、审计、回归与迁移工具（见 scripts/README.md）
+├── .omp/skills/            # 项目本地 agent skills（仅技能目录入库）
 ├── .editorconfig           # UTF-8 / Tab / LF
 ├── .gdlintrc               # gdlint 规则
 ├── .gitattributes          # LF 归一化与二进制保护
@@ -106,8 +107,12 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 | 入口 | 内容 |
 |:---|:---|
 | [`docs/README.md`](docs/README.md) | 文档分层与完整索引 |
-| [`docs/reference/architecture.md`](docs/reference/architecture.md) | 视觉资产架构契约：构建层、资源层、运行时层与迁移边界 |
+| [`docs/reference/architecture.md`](docs/reference/architecture.md) | 运行时架构：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
+| [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
+| [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
+| [`docs/audit/README.md`](docs/audit/README.md) | 审计档案索引与只读模板入口 |
+| [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 当前版本之后的开发路线 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |

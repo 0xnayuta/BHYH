@@ -30,8 +30,10 @@
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：当前版本之后的开发路线；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
+  - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；
   - `archive/`：已完成但仍有长期参考价值的文档，入口见 `archive/README.md`；归档后原则上只读，不接收机器报告与旧路径映射。
+- `.omp/skills/`：项目本地 agent skills（`bhyh-audit`、`bhyh-doc-sync`）；仅技能目录入库，`.omp` 其他本地配置忽略。
 - `scripts/`
   - 质量门禁、审计、回归与构建工具；索引见 `scripts/README.md`；
   - `scripts/convert_atlas_metadata.py`：Atlas manifest → `metadata.tres` 构建期转换器，由 `contract_gate.py` 调用。

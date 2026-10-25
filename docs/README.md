@@ -1,6 +1,6 @@
 # 项目文档索引
 
-本目录按“参考 / 路线 / 指南 / 规范 / 报告 / 归档”分层。当前内容版本为 **6.9**，唯一活跃工程位于仓库根目录的 `source/`。
+本目录按“参考 / 决策 / 路线 / 指南 / 规范 / 审计 / 报告 / 归档”分层。当前内容版本为 **6.9**，唯一活跃工程位于仓库根目录的 `source/`。
 
 历史阶段报告与逐文件台账不再纳入仓库；可复用的迁移经验已蒸馏到 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 
@@ -11,17 +11,18 @@
 | 目录 | 定位 | 维护方式 |
 |:---|:---|:---|
 | `reference/` | 当前状态、架构、验收与项目范围 | 人工维护 |
+| `decisions/` | 架构决策记录（ADR） | 人工维护；已接受结论不直接改写 |
+| `audit/` | 人工代码质量审计模板与报告 | 只读档案；历史报告不重写，新增按编号接续 |
 | `roadmap/` | 路线图、当前迭代与后续规划 | 人工维护 |
 | `guides/` | 开发、构建、验证与迁移操作指南 | 人工维护 |
 | `standards/` | 活跃规范，约束当前代码、场景与资产 | 随工程演进人工维护 |
 | `reports/` | 脚本生成的机器报告 | 由脚本按需生成，不提交历史报告 |
 | `archive/` | 已完成但仍有长期参考价值的文档 | 归档后原则上只读；入口见 [`archive/README.md`](archive/README.md) |
 
-### 未来按需增加
+### 按需增加
 
-- `decisions/`：出现第一条 ADR 时创建；
 - `issues/`：出现正式已知问题清单时创建；
-- `reference/` 下可继续增加架构、验收、项目范围文档。
+- `reference/` 下可继续增加项目范围文档。
 
 ---
 
@@ -30,8 +31,12 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`reference/README.md`](reference/README.md) | 参考文档目录索引 |
-| [`reference/architecture.md`](reference/architecture.md) | **视觉资产架构契约**：构建层、资源层、运行时层与迁移边界 |
+| [`reference/architecture.md`](reference/architecture.md) | **运行时架构**：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
+| [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
+| [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：已实际执行的 ADR 与维护规则 |
+| [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
+| [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |
 | [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 12 已全部完成并归档**：画布、相机、单/双人 HUD 与多分辨率验收记录 |
@@ -84,4 +89,6 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 3. **文档分层**：当前事实放 `reference/`，计划放 `roadmap/`，操作步骤放 `guides/`，规范放 `standards/`；
 4. **文档归档**：已完成且有长期价值的文档移入 `archive/`；不保留旧路径映射与历史阶段原始报告；
 5. **状态单一事实源**：版本、规模与门禁结果统一维护在 `reference/status.md`；
-6. **链接可验证**：移动文档后必须同步更新相对链接并重新检查。
+6. **链接可验证**：移动文档后必须同步更新相对链接并重新检查；
+7. **决策可追溯**：架构级、跨模块、长期有效的决定写入 `decisions/`；已接受结论不直接改写，变更通过新 ADR 记录；
+8. **审计档案只读**：`audit/` 保存人工审计模板与报告，历史报告不重写；新审计按编号接续，机器报告仍只进入 `reports/`。
