@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-25（哪吒背包角色预览修复与回归）
+> 最后更新：2026-10-25（2D 角色泛光清理与装备槽提示修复）
 
 ---
 
@@ -96,6 +96,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 | 验证 | 结果 | 说明 |
 |:---|:---|:---|
+| 2026-10-25 2D 角色泛光清理与装备槽提示修复 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**；角色 6 实际存档悬停五按钮 + A/D 后渲染错误 **0**；已装备武器提示框创建成功 | 删除 BaseHero / Role1 的 3D WorldEnvironment 泛光；装备槽提示改用图标文件名与 `get_item_name`/`eq_prop`，移除 `AllItems` 大小写路径解析 |
 | 2026-10-25 哪吒背包预览修复 | 静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；角色 6/7 与角色 1 实机预览验证通过 | 恢复 `Global.load_role1_body/eq` 与 `configure_backpack_role_preview` 的角色 6 分派；背包旧预览改为 10Hz 脏检查，角色 6/7 由 `NeZhaPreview` 独占；无素材变更 |
 | 2026-10-25 文档同步基线 | 静态门禁 **7/7 PASS** | `scripts/check_all.py --skip-engine`；未重跑引擎编译、关卡回归与双人探针 |
 | 结构整理后静态门禁 | **7/7 PASS** | `scripts/check_all.py --skip-engine` |

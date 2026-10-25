@@ -41,11 +41,8 @@ func _ready() -> void:
 	elif str(get_meta("item_name", "")) != "":
 		get_item_name = str(get_meta("item_name"))
 	elif icon != null and icon is Texture2D:
-		var path_parts = icon.resource_path.split("AllItems/")
-		if path_parts.size() > 1:
-			get_item_name = str(path_parts[1].split(".")[0])
-		else:
-			get_item_name = "empty"
+		var icon_name := icon.resource_path.get_file().get_basename()
+		get_item_name = icon_name if icon_name != "" else "empty"
 	else:
 		get_item_name = "empty"
 
@@ -61,11 +58,8 @@ func _physics_process(_delta: float) -> void:
 	elif str(get_meta("item_name", "")) != "":
 		get_item_name = str(get_meta("item_name"))
 	elif icon != null and icon is Texture2D:
-		var path_parts = icon.resource_path.split("AllItems/")
-		if path_parts.size() > 1:
-			get_item_name = str(path_parts[1].split(".")[0])
-		else:
-			get_item_name = "empty"
+		var icon_name := icon.resource_path.get_file().get_basename()
+		get_item_name = icon_name if icon_name != "" else "empty"
 	else:
 		get_item_name = "empty"
 

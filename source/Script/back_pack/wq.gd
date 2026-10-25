@@ -42,14 +42,22 @@ func _sync_slot_background_style(force := false) -> void:
 		add_theme_stylebox_override(style_name, style)
 
 
-func _has_item_icon() -> bool:
+func _icon_name() -> String:
 	if icon == null or icon.resource_path == "":
-		return false
-	var path := icon.resource_path
-	if not path.contains("/AllItems/"):
-		return false
-	var icon_name := path.split("/AllItems/")[1].split(".")[0]
-	return not ["empty", "wq", "fj", "sp", "fb", "sz", "cb", "tx", "txk", "shengu"].has(icon_name)
+		return ""
+	return icon.resource_path.get_file().get_basename()
+
+
+func _has_item_icon() -> bool:
+	var icon_name := _icon_name()
+	return icon_name != "" and not ["empty", "wq", "fj", "sp", "fb", "sz", "cb", "tx", "txk", "shengu"].has(icon_name)
+
+
+func _item_id() -> String:
+	var item_name := str(get_item_name)
+	if AE.all_equipment.has(item_name):
+		return item_name
+	return _icon_name()
 
 
 func _sync_avatar_frame_equipment(force := false) -> void:
@@ -238,37 +246,15 @@ func _on_pressed() -> void:
 
 
 func _on_mouse_entered() -> void:
-	if icon == null or icon.resource_path == "" or not icon.resource_path.contains("/AllItems/"):
+	if add_equ_box != null or not _has_item_icon():
 		return
-	var path_name = icon.resource_path.split("/AllItems/")[1].split(".")[0]
-	if (
-		path_name == "sp"
-		or path_name == "wq"
-		or path_name == "fj"
-		or path_name == "fb"
-		or path_name == "sz"
-		or path_name == "cb"
-		or path_name == "tx"
-		or path_name == "txk"
-		or path_name == "shengu"
-	):
+	var item_id := _item_id()
+	if item_id == "":
 		return
-	if (
-		str(self.name) == "cb"
-		or str(self.name) == "sz"
-		or str(self.name) == "tx"
-		or str(self.name) == "txk"
-		or str(self.name) == "shengu"
-	):
-		if Global.get_ancestor(self, 3).get_icon_name(self) != "empty" and add_equ_box == null:
-			var popup_parent = Global.get_ancestor(self, 3)
-			pp = _mouse_position_for_popup(popup_parent)
-			add_equ_box = Global.add_equ_propeties_box(popup_parent, pp, get_item_name, qh_level, wx, eq_prop)
-	else:
-		if Global.get_ancestor(self, 5).get_icon_name(self) != "empty" and add_equ_box == null:
-			var popup_parent = Global.get_ancestor(self, 5)
-			pp = _mouse_position_for_popup(popup_parent)
-			add_equ_box = Global.add_equ_propeties_box(popup_parent, pp, get_item_name, qh_level, wx, eq_prop)
+	var ancestor_level := 3 if str(self.name) in ["cb", "sz", "tx", "txk", "shengu"] else 5
+	var popup_parent = Global.get_ancestor(self, ancestor_level)
+	pp = _mouse_position_for_popup(popup_parent)
+	add_equ_box = Global.add_equ_propeties_box(popup_parent, pp, item_id, qh_level, wx, eq_prop)
 
 
 func _on_mouse_exited() -> void:

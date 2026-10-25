@@ -546,11 +546,6 @@ func _on_emp_mouse_exited() -> void:
 	remove_text()
 
 
-func get_icon_name(obj):
-	var _name = str(obj.icon.resource_path.split("AllItems/")[1].split(".")[0])
-	return _name
-
-
 func _on_name_text_changed(new_text: String) -> void:
 	if int(MemoryClass.get_cd_number()) <= 6:
 		MainSet.set_data["name" + str(MemoryClass.get_cd_number())] = new_text
