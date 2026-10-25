@@ -21,7 +21,6 @@ const SMSR_EFFECT_SCRIPT := preload("res://Script/hero/smsr_shenqi_lightning_eff
 const PET_DRAGON_SUMMON_SCRIPT := preload("res://Script/pet/pet_dragon_summon_base.gd")
 const PET_TURTLE_SUMMON_SCRIPT := preload("res://Script/pet/pet_turtle_summon_base.gd")
 const PET_TURTLE_BULLET_SCRIPT := preload("res://Script/pet/pet_turtle_bullet.gd")
-const TZSIJIAN_LEVEL_SCRIPT := preload("res://Script/level/level_tzsijian.gd")
 const SWORD_BOSS_BASE_SCRIPT := preload("res://Script/monster/sword_boss_base.gd")
 const MONSTER_BULLET_SCRIPT := preload("res://Script/monster/monster_bullet.gd")
 const GUANYIN_SUMMON_SCRIPT := preload("res://Script/monster/monster_zhw/guanyin_summon.gd")
@@ -136,7 +135,6 @@ func _start_archive_preload() -> void:
 	if not _is_battle_target_scene():
 		MAIN_SWORD_ARRAY_WEAPON_SCRIPT.clear_prewarmed_sword_resources()
 		SWORD_BOSS_BASE_SCRIPT.clear_prewarmed_sword_boss_frames()
-		TZSIJIAN_LEVEL_SCRIPT.clear_prewarmed_background_frames()
 		MONSTER_BULLET_SCRIPT.clear_runtime_resource_caches()
 		PET_DRAGON_SUMMON_SCRIPT.clear_cached_scenes()
 		PET_TURTLE_SUMMON_SCRIPT.clear_cached_scenes()

@@ -33,13 +33,6 @@ const BOSS_TO_BG_SWORD := {
 	954: "sword4",
 }
 
-static var _bg_frames_cache: Dictionary = {}
-
-
-static func clear_prewarmed_background_frames() -> void:
-	_bg_frames_cache.clear()
-
-
 var is_set := false
 var _bg_anim_nodes: Array[Node] = []
 var _bg_sword_nodes: Dictionary = {}
@@ -111,7 +104,6 @@ func _exit_tree() -> void:
 	_spawned_bosses.clear()
 	_queued_boss_ids.clear()
 	_preparing_boss_ids.clear()
-	clear_prewarmed_background_frames()
 	SwordBossBase.clear_prewarmed_sword_boss_frames()
 
 
@@ -172,71 +164,6 @@ func _setup_tzsijian_background() -> void:
 
 static func _background_sequence(dir_name: String) -> FrameSequence:
 	return FrameSequenceStore.get_sequence(BG_PARTS_ROOT.path_join(dir_name), BG_SOURCE_FPS, true, false, 2)
-
-
-static func prewarm_background_frames_async() -> void:
-	var tree := Engine.get_main_loop() as SceneTree
-	var built_this_frame := 0
-	var per_frame := 8 if OS.has_feature("mobile") else 18
-	for node_name in BG_ANIMATIONS.keys():
-		var info: Dictionary = BG_ANIMATIONS[node_name]
-		var dir_name := str(info.get("dir", ""))
-		if _bg_frames_cache.has(dir_name):
-			continue
-		var frames := await _create_background_frames_async(dir_name, tree, built_this_frame, per_frame)
-		built_this_frame = int(frames.get_meta("built_this_frame", built_this_frame))
-		frames.remove_meta("built_this_frame")
-		_bg_frames_cache[dir_name] = frames
-
-
-static func _get_or_build_background_frames(dir_name: String) -> SpriteFrames:
-	if _bg_frames_cache.has(dir_name):
-		return _bg_frames_cache[dir_name] as SpriteFrames
-	var frames := _create_background_frames_sync(dir_name)
-	_bg_frames_cache[dir_name] = frames
-	return frames
-
-
-static func _create_background_frames_sync(dir_name: String) -> SpriteFrames:
-	var frames := _new_background_sprite_frames()
-	for path in _background_sequence(dir_name).frame_paths:
-		_add_background_frame(frames, path)
-	if frames.get_frame_count(&"play") == 0:
-		frames.add_frame(&"play", null)
-	return frames
-
-
-static func _create_background_frames_async(
-	dir_name: String, tree: SceneTree, built_this_frame: int, per_frame: int
-) -> SpriteFrames:
-	var frames := _new_background_sprite_frames()
-	for path in _background_sequence(dir_name).frame_paths:
-		_add_background_frame(frames, path)
-		built_this_frame += 1
-		if tree != null and per_frame > 0 and built_this_frame >= per_frame:
-			built_this_frame = 0
-			await tree.process_frame
-	if frames.get_frame_count(&"play") == 0:
-		frames.add_frame(&"play", null)
-	frames.set_meta("built_this_frame", built_this_frame)
-	return frames
-
-
-static func _new_background_sprite_frames() -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	if frames.has_animation(&"default"):
-		frames.remove_animation(&"default")
-	frames.add_animation(&"play")
-	frames.set_animation_loop(&"play", true)
-	frames.set_animation_speed(&"play", BG_SOURCE_FPS)
-	return frames
-
-
-static func _add_background_frame(frames: SpriteFrames, path: String) -> void:
-	var texture := ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-	if texture != null:
-		texture.get_rid()
-		frames.add_frame(&"play", texture)
 
 
 func _update_sword_boss_sequence() -> void:
