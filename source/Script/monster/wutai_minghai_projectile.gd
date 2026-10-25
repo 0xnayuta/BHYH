@@ -2,15 +2,19 @@ extends MonsterBullet
 class_name WutaiMinghaiProjectile
 
 const SOURCE_FPS := 30.0
+
+enum VisualBackend { NONE, SPRITE_FRAMES, FRAME_SEQUENCE }
+const VISUAL_BACKEND_UNDECLARED := -1
+const VISUAL_BACKEND_UNKNOWN := -2
+
 static var _frame_geometry_cache: Dictionary = {}
 
 var owner_monster: BaseMonster
 var spawn_global_position := Vector2.ZERO
 var frame_root := ""
 var frame_count := 0
-var atlas_metadata := ""
-var atlas_sequence := ""
-var impact_atlas_metadata := ""
+var visual_backend := VisualBackend.NONE
+var impact_visual_backend := VisualBackend.NONE
 var visual_scale := Vector2.ONE
 var frame_fps := SOURCE_FPS
 var loop_visual := true
@@ -26,7 +30,6 @@ var blue_background_threshold := 0.8
 var blue_background_feather := 0.08
 var impact_frame_root := ""
 var impact_frame_count := 0
-var impact_atlas_sequence := ""
 var impact_visual_offset := Vector2.ZERO
 var impact_duration := 0.0
 var impact_orient_to_motion := false
@@ -77,6 +80,7 @@ var _last_collision_frame := -1
 var _current_frame_has_visual := true
 var _finished := false
 var _impacting := false
+var _configuration_valid: bool = false
 var _travelled_distance := 0.0
 var target_move_interval := 0.0
 var _target_move_elapsed := 0.0
@@ -121,7 +125,9 @@ func _init() -> void:
 	add_child(throw_timer)
 
 
-func configure(config: Dictionary) -> void:
+func configure(config: Dictionary) -> bool:
+	var main_backend := _backend_from_config(config, "visual_backend")
+	var impact_backend := _backend_from_config(config, "impact_visual_backend")
 	owner_monster = config.get("owner") as BaseMonster
 	my_father = owner_monster
 	spawn_global_position = config.get("position", Vector2.ZERO)
@@ -132,13 +138,12 @@ func configure(config: Dictionary) -> void:
 	dir = bool(config.get("right", true))
 	frame_root = str(config.get("frame_root", ""))
 	frame_count = int(config.get("frame_count", 0))
-	atlas_metadata = str(config.get("atlas_metadata", ""))
-	atlas_sequence = str(config.get("atlas_sequence", ""))
 	frames_resource_path = str(config.get("frames_resource", ""))
 	frames_animation = str(config.get("frames_animation", ""))
+	impact_frame_root = str(config.get("impact_frame_root", ""))
+	impact_frame_count = int(config.get("impact_frame_count", 0))
 	impact_frames_resource_path = str(config.get("impact_frames_resource", ""))
 	impact_frames_animation = str(config.get("impact_frames_animation", ""))
-	impact_atlas_metadata = str(config.get("impact_atlas_metadata", ""))
 
 	visual_scale = config.get("visual_scale", Vector2.ONE)
 	frame_fps = float(config.get("frame_fps", SOURCE_FPS))
@@ -153,28 +158,6 @@ func configure(config: Dictionary) -> void:
 	remove_blue_background = bool(config.get("remove_blue_background", false))
 	blue_background_threshold = float(config.get("blue_background_threshold", 0.8))
 	blue_background_feather = float(config.get("blue_background_feather", 0.08))
-	impact_frame_root = str(config.get("impact_frame_root", ""))
-	impact_frame_count = int(config.get("impact_frame_count", 0))
-	impact_atlas_sequence = str(config.get("impact_atlas_sequence", ""))
-
-	if frames_resource_path.is_empty() and (not frame_root.is_empty() or not atlas_metadata.is_empty()):
-		var sequence := atlas_sequence if not atlas_sequence.is_empty() else frame_root.get_file()
-		if not sequence.is_empty():
-			frames_resource_path = _resolve_swf_png_frames_resource(frame_root, atlas_metadata, sequence)
-			if not frames_resource_path.is_empty() and atlas_sequence.is_empty():
-				atlas_sequence = sequence
-	if impact_frames_resource_path.is_empty():
-		var impact_metadata := impact_atlas_metadata if not impact_atlas_metadata.is_empty() else atlas_metadata
-		var impact_sequence := (
-			impact_atlas_sequence if not impact_atlas_sequence.is_empty() else impact_frame_root.get_file()
-		)
-		if not impact_sequence.is_empty() and (not impact_frame_root.is_empty() or not impact_metadata.is_empty()):
-			impact_frames_resource_path = _resolve_swf_png_frames_resource(
-				impact_frame_root, impact_metadata, impact_sequence
-			)
-			if not impact_frames_resource_path.is_empty() and impact_atlas_sequence.is_empty():
-				impact_atlas_sequence = impact_sequence
-
 	impact_visual_offset = config.get("impact_visual_offset", Vector2.ZERO)
 	impact_duration = maxf(float(config.get("impact_duration", 0.0)), 0.0)
 	impact_orient_to_motion = bool(config.get("impact_orient_to_motion", false))
@@ -213,29 +196,202 @@ func configure(config: Dictionary) -> void:
 	var hit_callback_value: Variant = config.get("hit_callback", Callable())
 	if hit_callback_value is Callable:
 		hit_callback = hit_callback_value
+	_configuration_valid = _validate_visual_config(main_backend, impact_backend)
+	return _configuration_valid
+
+
+func _backend_from_config(config: Dictionary, key: String) -> int:
+	if not config.has(key):
+		return VISUAL_BACKEND_UNDECLARED
+	var value: Variant = config[key]
+	if value is int and int(value) >= VisualBackend.NONE and int(value) <= VisualBackend.FRAME_SEQUENCE:
+		return int(value)
+	return VISUAL_BACKEND_UNKNOWN
+
+
+func _validate_visual_config(main_backend: int, impact_backend: int) -> bool:
+	var main_valid := _validate_backend(main_backend, false)
+	var impact_valid := _validate_backend(impact_backend, true)
+	return main_valid and impact_valid
+
+
+func _validate_backend(backend: int, is_impact: bool) -> bool:
+	var label := "impact_visual_backend" if is_impact else "visual_backend"
+	var declared := _declares_visual(is_impact)
+	if backend == VISUAL_BACKEND_UNDECLARED:
+		_set_visual_backend(is_impact, VisualBackend.NONE)
+		if declared:
+			push_error("WutaiMinghaiProjectile: %s 声明了视觉资源但缺少 %s" % [skill_name, label])
+			return false
+		return true
+	if backend == VISUAL_BACKEND_UNKNOWN:
+		_set_visual_backend(is_impact, VisualBackend.NONE)
+		push_error("WutaiMinghaiProjectile: %s 的 %s 不是有效枚举值" % [skill_name, label])
+		return false
+	if backend == VisualBackend.NONE:
+		_set_visual_backend(is_impact, VisualBackend.NONE)
+		if declared:
+			push_error("WutaiMinghaiProjectile: %s 声明了视觉资源但 %s=NONE" % [skill_name, label])
+			return false
+		return true
+	if backend == VisualBackend.SPRITE_FRAMES:
+		if not _validate_sprite_frames(is_impact, label):
+			_set_visual_backend(is_impact, VisualBackend.NONE)
+			return false
+		_set_visual_backend(is_impact, backend)
+		return true
+	if backend == VisualBackend.FRAME_SEQUENCE:
+		if not _validate_frame_sequence(is_impact, label):
+			_set_visual_backend(is_impact, VisualBackend.NONE)
+			return false
+		_set_visual_backend(is_impact, backend)
+		return true
+	push_error("WutaiMinghaiProjectile: %s 的 %s 枚举值越界" % [skill_name, label])
+	_set_visual_backend(is_impact, VisualBackend.NONE)
+	return false
+
+
+func _set_visual_backend(is_impact: bool, backend: int) -> void:
+	if is_impact:
+		impact_visual_backend = backend as VisualBackend
+	else:
+		visual_backend = backend as VisualBackend
+
+
+func _declares_visual(is_impact: bool) -> bool:
+	if is_impact:
+		return (
+			impact_frame_count > 0
+			or not impact_frame_root.is_empty()
+			or not impact_frames_resource_path.is_empty()
+			or not impact_frames_animation.is_empty()
+		)
+	return (
+		frame_count > 0
+		or not frame_root.is_empty()
+		or not frames_resource_path.is_empty()
+		or not frames_animation.is_empty()
+	)
+
+
+func _validate_sprite_frames(is_impact: bool, label: String) -> bool:
+	var root := impact_frame_root if is_impact else frame_root
+	var resource_path := impact_frames_resource_path if is_impact else frames_resource_path
+	var animation_name := impact_frames_animation if is_impact else frames_animation
+	if not root.is_empty():
+		push_error("WutaiMinghaiProjectile: %s 的 %s=SPRITE_FRAMES 不得同时声明 frame_root" % [skill_name, label])
+		return false
+	if resource_path.is_empty() or animation_name.is_empty():
+		push_error(
+			"WutaiMinghaiProjectile: %s 的 %s=SPRITE_FRAMES 缺少 frames_resource 或 frames_animation" % [skill_name, label]
+		)
+		return false
+	var looped := false if is_impact else loop_visual
+	var frames := _load_standard_frames(resource_path, StringName(animation_name), looped)
+	if frames == null:
+		push_error(
+			(
+				"WutaiMinghaiProjectile: %s 的 %s 指定 SpriteFrames 缺少动画 %s: %s"
+				% [skill_name, label, animation_name, resource_path]
+			)
+		)
+		return false
+	if is_impact and impact_frame_count <= 0:
+		impact_frame_count = frames.get_frame_count(StringName(animation_name))
+	return true
+
+
+func _validate_frame_sequence(is_impact: bool, label: String) -> bool:
+	var root := impact_frame_root if is_impact else frame_root
+	var count := impact_frame_count if is_impact else frame_count
+	var resource_path := impact_frames_resource_path if is_impact else frames_resource_path
+	var animation_name := impact_frames_animation if is_impact else frames_animation
+	if not resource_path.is_empty() or not animation_name.is_empty():
+		push_error("WutaiMinghaiProjectile: %s 的 %s=FRAME_SEQUENCE 不得同时声明 SpriteFrames 字段" % [skill_name, label])
+		return false
+	if root.is_empty() or count <= 0:
+		push_error("WutaiMinghaiProjectile: %s 的 %s=FRAME_SEQUENCE 缺少 frame_root 或 frame_count" % [skill_name, label])
+		return false
+	var looped := false if is_impact else loop_visual
+	if not FrameSequenceStore.has_sequence(root, frame_fps, looped, hold_last_frame, 2):
+		push_error(
+			(
+				"WutaiMinghaiProjectile: %s 的 %s 缺少构建期帧序列 %s"
+				% [skill_name, label, FrameSequenceStore.key_for(root, frame_fps, looped, hold_last_frame, 2)]
+			)
+		)
+		return false
+	return true
+
+
+static func _load_standard_frames(resource_path: String, animation: StringName, looped: bool) -> SpriteFrames:
+	if resource_path.is_empty() or animation == &"":
+		return null
+	var cache_key := "%s|%s|%s" % [resource_path, animation, str(looped)]
+	var cached := _standard_loop_cache.get(cache_key) as SpriteFrames
+	if cached != null:
+		return cached
+	var source := load(resource_path) as SpriteFrames
+	if source == null or not source.has_animation(animation):
+		return null
+	var frames: SpriteFrames
+	if source.get_animation_loop(animation) != looped:
+		frames = source.duplicate(true) as SpriteFrames
+		frames.set_animation_loop(animation, looped)
+	else:
+		frames = source
+	_standard_loop_cache[cache_key] = frames
+	return frames
 
 
 func _ready() -> void:
+	if not _configuration_valid:
+		_finished = true
+		set_physics_process(false)
+		queue_free()
+		return
 	super._ready()
 	set_as_top_level(true)
 	global_position = spawn_global_position
 	get_prop()
-	_configure_visual(frame_root, frame_count, visual_offset, loop_visual, atlas_sequence)
+	if visual_backend != VisualBackend.NONE:
+		if not _configure_visual(
+			visual_backend, frame_root, frame_count, visual_offset, loop_visual, frames_resource_path, frames_animation
+		):
+			push_error("WutaiMinghaiProjectile: %s 视觉初始化失败" % skill_name)
+			_finished = true
+			set_physics_process(false)
+			queue_free()
+			return
 	_configure_collision()
 	if damage_enabled and not hit_box.area_entered.is_connected(_on_streamed_hit_box_area_entered):
 		hit_box.area_entered.connect(_on_streamed_hit_box_area_entered)
 
 
 func _configure_visual(
-	root: String, count: int, offset: Vector2, looped: bool, sequence_name: String = "", metadata_path: String = ""
+	backend: int, root: String, count: int, offset: Vector2, looped: bool, resource_path: String, animation_name: String
 ) -> bool:
+	if backend == VisualBackend.NONE:
+		return true
+	if backend == VisualBackend.SPRITE_FRAMES:
+		_release_visual_stream()
+		var animation := StringName(animation_name)
+		return _configure_standard_visual(
+			resource_path, animation, _standard_visual_offset(animation, offset + visual_registration), looped
+		)
+	if backend == VisualBackend.FRAME_SEQUENCE:
+		_release_standard_visual()
+		return _configure_stream_visual(root, count, offset, looped)
+	push_error("WutaiMinghaiProjectile: %s 视觉后端无效" % skill_name)
+	return false
+
+
+func _standard_visual_offset(_animation: StringName, offset: Vector2) -> Vector2:
+	return offset
+
+
+func _configure_stream_visual(root: String, count: int, offset: Vector2, looped: bool) -> bool:
 	_visual_sequence = null
-	var resolved_metadata := atlas_metadata if metadata_path.is_empty() else metadata_path
-	if not sequence_name.is_empty() and (not resolved_metadata.is_empty() or not frames_resource_path.is_empty()):
-		if _configure_atlas_visual(sequence_name, offset + visual_registration, looped, resolved_metadata):
-			return true
-	if _is_swf_png_root(root):
-		return false
 	if root.is_empty() or count <= 0:
 		return false
 	if not FrameSequenceStore.has_sequence(root, frame_fps, looped, hold_last_frame, 2):
@@ -268,37 +424,14 @@ func _configure_visual(
 	return true
 
 
-func _configure_atlas_visual(
-	sequence_name: String, source_offset: Vector2, looped: bool, _metadata_path: String = ""
+func _configure_standard_visual(
+	resource_path: String, animation: StringName, source_offset: Vector2, looped: bool
 ) -> bool:
-	if _configure_standard_visual(sequence_name, source_offset, looped):
-		atlas_sequence = sequence_name
-		_update_motion_rotation()
-		return true
-	return false
-
-
-func _configure_standard_visual(sequence_name: String, source_offset: Vector2, looped: bool) -> bool:
-	if frames_resource_path.is_empty():
-		return false
-	var animation := StringName(frames_animation if not frames_animation.is_empty() else sequence_name)
-	var cache_key := "%s|%s|%s" % [frames_resource_path, animation, str(looped)]
-	var frames: SpriteFrames = _standard_loop_cache.get(cache_key) as SpriteFrames
+	var frames := _load_standard_frames(resource_path, animation, looped)
 	if frames == null:
-		var source := load(frames_resource_path) as SpriteFrames
-		if source == null or not source.has_animation(animation):
-			return false
-		if source.get_animation_loop(animation) != looped:
-			frames = source.duplicate(true) as SpriteFrames
-			frames.set_animation_loop(animation, looped)
-		else:
-			frames = source
-		_standard_loop_cache[cache_key] = frames
-	if _standard_visual != null and is_instance_valid(_standard_visual):
-		_standard_visual.stop()
-		_standard_visual.sprite_frames = null
-		_standard_visual.queue_free()
-	_standard_visual = null
+		push_error("WutaiMinghaiProjectile: %s 指定 SpriteFrames 缺少动画 %s: %s" % [skill_name, animation, resource_path])
+		return false
+	_release_standard_visual()
 	var overlay := AnimatedSprite2D.new()
 	overlay.name = "VisualFrames"
 	overlay.sprite_frames = frames
@@ -317,6 +450,7 @@ func _configure_standard_visual(sequence_name: String, source_offset: Vector2, l
 	_standard_visual = overlay
 	_standard_frames = frames
 	_standard_animation = animation
+	_update_motion_rotation()
 	return true
 
 
@@ -337,10 +471,7 @@ func _configure_collision() -> void:
 	_pulse_index = 0 if starts_active else -1
 
 
-func _sync_collision_to_visual_frame(force: bool = false) -> void:
-	if not _collision_tracks_visual:
-		return
-	var frame_index := int(floor(_elapsed * maxf(frame_fps, 1.0)))
+func _displayed_visual_frame() -> int:
 	if (
 		_standard_frames != null
 		and _standard_animation != &""
@@ -349,12 +480,29 @@ func _sync_collision_to_visual_frame(force: bool = false) -> void:
 	):
 		var standard_count := _standard_frames.get_frame_count(_standard_animation)
 		if standard_count > 0:
-			frame_index = clampi(_standard_visual.frame, 0, standard_count - 1)
-			if not force and frame_index == _last_collision_frame:
+			return clampi(_standard_visual.frame, 0, standard_count - 1)
+	if _visual_stream != null and is_instance_valid(_visual_stream):
+		return _visual_stream.displayed_frame()
+	return -1
+
+
+func _sync_collision_to_visual_frame(force: bool = false) -> void:
+	if not _collision_tracks_visual:
+		return
+	if (
+		_standard_frames != null
+		and _standard_animation != &""
+		and _standard_visual != null
+		and is_instance_valid(_standard_visual)
+	):
+		var standard_count := _standard_frames.get_frame_count(_standard_animation)
+		if standard_count > 0:
+			var standard_frame_index := clampi(_standard_visual.frame, 0, standard_count - 1)
+			if not force and standard_frame_index == _last_collision_frame:
 				return
-			_last_collision_frame = frame_index
+			_last_collision_frame = standard_frame_index
 			_current_frame_has_visual = false
-			var texture := _standard_frames.get_frame_texture(_standard_animation, frame_index)
+			var texture := _standard_frames.get_frame_texture(_standard_animation, standard_frame_index)
 			if texture is AtlasTexture:
 				var atlas := texture as AtlasTexture
 				var used_size := atlas.region.size
@@ -373,24 +521,22 @@ func _sync_collision_to_visual_frame(force: bool = false) -> void:
 						_current_frame_has_visual = true
 						_apply_collision_geometry(used_size, frame_center)
 			return
-	if frame_count <= 0 or frame_root.is_empty():
+	if _visual_sequence == null:
+		_current_frame_has_visual = false
 		_apply_collision_geometry(collision_size, Vector2.ZERO)
 		return
-	if loop_visual:
-		frame_index %= frame_count
-	else:
-		frame_index = mini(frame_index, frame_count - 1)
+	var displayed_frame := _displayed_visual_frame()
+	if displayed_frame < 0:
+		_last_collision_frame = -1
+		_current_frame_has_visual = false
+		_apply_collision_geometry(collision_size, Vector2.ZERO)
+		return
+	var paths := _visual_sequence.frame_paths
+	var frame_index := clampi(displayed_frame, 0, paths.size() - 1)
 	if not force and frame_index == _last_collision_frame:
 		return
 	_last_collision_frame = frame_index
 	_current_frame_has_visual = false
-	if _visual_sequence == null:
-		_apply_collision_geometry(collision_size, Vector2.ZERO)
-		return
-	var paths := _visual_sequence.frame_paths
-	if frame_index < 0 or frame_index >= paths.size():
-		_apply_collision_geometry(Vector2.ONE, Vector2.ZERO)
-		return
 	var geometry: Dictionary = _frame_geometry(paths[frame_index])
 	var size_value: Variant = geometry.get("size", Vector2.ONE)
 	var center_value: Variant = geometry.get("center", Vector2.ZERO)
@@ -641,11 +787,14 @@ func _find_role_owner(area: Area2D) -> BaseHero:
 
 
 func _has_impact_visual() -> bool:
-	return impact_frame_count > 0 and (not impact_frame_root.is_empty() or not impact_atlas_sequence.is_empty())
+	return impact_visual_backend != VisualBackend.NONE
 
 
 func _begin_impact() -> void:
 	if _impacting or _finished:
+		return
+	if not _has_impact_visual():
+		_finish()
 		return
 	_impact_elapsed = 0.0
 	motion_velocity = Vector2.ZERO
@@ -654,18 +803,17 @@ func _begin_impact() -> void:
 	_set_monitoring(false)
 	if not impact_orient_to_motion and middle != null:
 		middle.rotation = 0.0
-	var impact_metadata := impact_atlas_metadata if not impact_atlas_metadata.is_empty() else atlas_metadata
-	var main_frames_resource := frames_resource_path
-	var main_frames_animation := frames_animation
-	if not impact_frames_resource_path.is_empty():
-		frames_resource_path = impact_frames_resource_path
-		frames_animation = impact_frames_animation
 	var impact_configured := _configure_visual(
-		impact_frame_root, impact_frame_count, impact_visual_offset, false, impact_atlas_sequence, impact_metadata
+		impact_visual_backend,
+		impact_frame_root,
+		impact_frame_count,
+		impact_visual_offset,
+		false,
+		impact_frames_resource_path,
+		impact_frames_animation
 	)
-	frames_resource_path = main_frames_resource
-	frames_animation = main_frames_animation
 	if not impact_configured:
+		push_error("WutaiMinghaiProjectile: %s impact 视觉初始化失败" % skill_name)
 		_finish()
 		return
 	_impacting = true
@@ -688,25 +836,43 @@ func _finish() -> void:
 
 
 func _clear_visual_stream() -> void:
+	_release_visual_stream()
+	_release_standard_visual()
+
+
+func _release_visual_stream() -> void:
 	_visual_sequence = null
+	if _visual_stream != null and is_instance_valid(_visual_stream):
+		_visual_stream.clear_texture()
+		_visual_stream.queue_free()
+	_visual_stream = null
+
+
+func _release_standard_visual() -> void:
 	if _standard_visual != null and is_instance_valid(_standard_visual):
 		_standard_visual.stop()
 		_standard_visual.sprite_frames = null
 		_standard_visual.queue_free()
 	_standard_visual = null
-	_replace_visual_stream(null)
+	_standard_frames = null
+	_standard_animation = &""
 
 
 func _install_visual_stream(stream: StreamedPngEffect) -> void:
 	var previous_stream := _visual_stream
-
-	if is_instance_valid(previous_stream) and previous_stream.has_displayed_frame():
-		stream.allow_sync_first_frame = false
 	_visual_stream = stream
 	stream.frame_ready.connect(_on_visual_stream_frame_ready.bind(stream, previous_stream), CONNECT_ONE_SHOT)
+	stream.failed.connect(_on_visual_stream_failed.bind(stream), CONNECT_ONE_SHOT)
 	middle.add_child(stream)
 	if stream.has_displayed_frame():
 		_commit_visual_stream(stream, previous_stream)
+
+
+func _on_visual_stream_failed(message: String, stream: StreamedPngEffect) -> void:
+	if _finished or _visual_stream != stream:
+		return
+	push_error("WutaiMinghaiProjectile: %s 视觉流加载失败: %s" % [skill_name, message])
+	_finish()
 
 
 func _on_visual_stream_frame_ready(stream: StreamedPngEffect, previous_stream: StreamedPngEffect) -> void:
@@ -719,45 +885,6 @@ func _commit_visual_stream(stream: StreamedPngEffect, previous_stream: StreamedP
 	if previous_stream != null and previous_stream != stream and is_instance_valid(previous_stream):
 		previous_stream.clear_texture()
 		previous_stream.queue_free()
-
-
-func _replace_visual_stream(next_stream: StreamedPngEffect) -> void:
-	var previous_stream := _visual_stream
-	_visual_stream = next_stream
-	if previous_stream != null and previous_stream != next_stream and is_instance_valid(previous_stream):
-		previous_stream.clear_texture()
-		previous_stream.queue_free()
-
-
-func _is_swf_png_root(root: String) -> bool:
-	return root.replace("\\", "/").begins_with("res://Art/monster/swf_png/")
-
-
-## 将 swf_png 的序列根/元数据映射到构建期 SpriteFrames；仅在帧资源确实包含该序列时返回。
-static func _resolve_swf_png_frames_resource(root: String, metadata_path: String, sequence: String) -> String:
-	if sequence.is_empty():
-		return ""
-	var model := ""
-	var normalized_metadata := metadata_path.replace("\\", "/")
-	if normalized_metadata.begins_with("res://Art/monster/swf_png/"):
-		var atlas_dir := normalized_metadata.get_base_dir()
-		if atlas_dir.get_file() == "atlas":
-			model = atlas_dir.get_base_dir().get_file()
-	if model.is_empty():
-		var normalized_root := root.replace("\\", "/")
-		var marker := "/swf_png/"
-		var marker_index := normalized_root.find(marker)
-		if marker_index >= 0:
-			model = normalized_root.substr(marker_index + marker.length()).get_slice("/", 0)
-	if model.is_empty():
-		return ""
-	var frames_path := "res://Art/monster/swf_png/%s/atlas/swf_png_%s_frames.tres" % [model, model]
-	if not ResourceLoader.exists(frames_path):
-		return ""
-	var frames := load(frames_path) as SpriteFrames
-	if frames == null or not frames.has_animation(StringName(sequence)):
-		return ""
-	return frames_path
 
 
 func _exit_tree() -> void:
