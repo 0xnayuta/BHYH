@@ -76,4 +76,4 @@
 | 文档 | 主题 | 归档日期 |
 |:---|:---|:---|
 | [`iteration_6_9_patch_backport.md`](iteration_6_9_patch_backport.md) | 6.9 补丁回植：范围、文件映射、实施批次与验收结果 | 2026-10-23 |
-| [`iteration_12_display_hud.md`](iteration_12_display_hud.md) | Phase 12 画布、相机与 HUD 重构：多分辨率验收、双人探针与已知边界 | 2026-10-24 |
+| [`iteration_12_display_hud.md`](iteration_12_display_hud.md) | Phase 12 画布、相机与 HUD 重构：多分辨率验收、双人探针、已知边界，以及原计划与实施顺序存档 | 2026-10-24 |

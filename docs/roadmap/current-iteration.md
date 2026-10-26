@@ -1,253 +1,368 @@
 # BHYH Current Iteration
 
-> **历史快照**：Phase 12 已完成并验收归档；当前工程状态、规模与验证结果见 [`../reference/status.md`](../reference/status.md)。本页保留当时的范围与验收记录，不再作为活跃计划维护。
->
 > **用途**：维护当前活跃阶段的范围、依赖、实施顺序与验收入口；长期路线以 [roadmap](roadmap.md) 为准。
 >
-> **当前状态**：**Phase 12-1、12-2、12-3 已全部完成并验收归档**。6.9 补丁回植已完成并归档。
+> **当前状态**：**Phase 13 视觉资产契约收口**，规划完成，未开始实施。
 >
-> **版本边界**：内容版本保持 **6.9**；Phase 12 是画布、相机与 HUD 的展示层重构，不新增内容版本，不改变已验收的 6.9 业务行为。
+> **版本边界**：内容版本保持 **6.9**；Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容。
 >
-> **归档口径**：6.9 的完整范围、文件映射、实施批次与验收结果见 [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)；Phase 12 的最终验收记录见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
+> **上一阶段**：Phase 12 画布、相机与 HUD 重构已全部完成并归档，验收记录见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。本页不再保留 Phase 12 的实施明细。
+>
+> **依据**：[`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)（三层契约）、[`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)、[ADR-020](../decisions/ADR-020-typed-visual-assets-and-streaming-lifecycle.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)。
 
 ---
 
 ## 0. 参考入口
 
+- 目标契约：[`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)
+- 当前真实实现：[`../reference/architecture.md`](../reference/architecture.md)
+- 当前状态与规模：[`../reference/status.md`](../reference/status.md)
+- 验收命令与阈值：[`../reference/acceptance.md`](../reference/acceptance.md)
+- 规范索引：[`../standards/README.md`](../standards/README.md)
 - 迁移方法与红线：[`../guides/migration_playbook.md`](../guides/migration_playbook.md)
-- 当前工程状态与基线：[`../reference/status.md`](../reference/status.md)
-- 6.9 补丁回植归档：[`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md)
-- Phase 12 显示层验收归档：[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)
-- 命名与目录约束：[`../standards/naming_standard.md`](../standards/naming_standard.md)
-- Godot 设计约束：[`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)
-- 机器报告目录：[`../reports/README.md`](../reports/README.md)
+- 缺失资产台账：[`../standards/missing_assets_registry.md`](../standards/missing_assets_registry.md)
 
 ---
 
-## 1. 当前迭代：Phase 12 画布与 HUD 重构
+## 1. 阶段背景与排序依据
 
-### 1.1 基线、目标与边界
+Phase 12 收口后，`FrameSequence`（288 条序列）、`AtlasMetadata`（379 份）与关卡预载 Catalog 已经落地，构建层 / 资源层 / 运行时层的主干成立。按目标契约逐条比对，剩余偏离集中在四处，并且已经用落地数据量化（2026-10-26 实测）：
 
-**基线**：
+| 编号 | 契约条款 | 偏离事实 | 影响面 |
+|:---|:---|:---|:---|
+| A | §4.2 资源校验与失败 | 3 处失败被静默吞掉或仅靠 `assert` | 所有依赖该资源的战斗与 UI |
+| B | §5.2 加载与预热 | 3 处主线程同步 IO / 逐帧 `load()` | 每帧开销、卡顿、移动端 |
+| C | §3.1 构建层 | 70 个脚本仍在运行时构造 `SpriteFrames`（88 处） | 首次进入关卡、技能释放、Boss 战 |
+| D | §4.3 发布依赖 | 预载 Catalog 的 198 个怪物 ID 与 25 条弹体路径未进任何依赖清单 | 发布包可能缺资源 |
+| E | §4.2 / ADR-005 禁止兼容层 | 纹理别名表 2,313 条中 932 条目标文件不存在 | 静默回退、排查成本 |
 
-- 内容基线：已完成并验收的 **6.9** 工程；
-- 旧版 HUD 参考：1.2.0.1 / 1.3.3.2 的桌面 `Role_information` 布局（仓库外参考源码，不进入仓库）；
-- 初始基线问题（已在 Phase 12-1 修复）：旧版 `project.godot` 使用 `viewport 1200×400`、`window 1504×944`，实际可见逻辑高度约 753，下方露出默认清屏色；
-- 当前 HUD：桌面底部居中 5 按钮（宠物/技能/法宝/背包/设置，无菜单按钮）+ 左下无双圆盘/Y/U/I/O/L 技能槽；双人 P2 镜像技能栏贴右边缘；移动端保留右上角布局与自动隐藏。
+排序口径为 **契约偏离程度 × 影响面**，并叠加“是否需要人工裁定”：能一次改完且可立即回归的排前，需要素材与批量转换的排后，需要人工逐条裁定的最后。
 
-**目标**：
+**因此 Phase 13 顺序为：13-1 → 13-2 → 13-3 → 13-4。** 13-1 与 13-2 可并行准备，但 13-1 必须先合入，因为 13-2 依赖新的失败语义来判断“构建资源缺失”。
 
-1. 将设计画布恢复为 **1280×800（16:10）**；
-2. 默认窗口使用 **1600×1000**，与画布成 **1.25×** 的严格等比；
-3. Phase 12-1 保留 940×590 原始取景高度；Phase 12-2 将世界可视高度扩大到约 **667**，通过相机纵向偏移保住原下边缘；
-4. 桌面 HUD 恢复左下按钮簇 + 左下无双 + Y/U/I/O/L 技能槽；
-5. 按钮位置采用旧版布局，图标素材优先使用 6.9 的高清版本；
-6. 移动端保留现有右上角/触控布局，不把 PC 布局强加给手机。
+---
 
-**尺寸结论**：
+## 2. Phase 13-1：失败语义与热路径 IO 收口
 
-| 项目 | 值 | 说明 |
+**对应契约**：§4.2（资源校验与失败）、§5.2（加载与预热）
+**依赖**：无
+**预估**：单批次可完成，不涉及素材与构建期产物
+
+### 2.1 目标
+
+1. 资源缺失不再用空占位或空字典掩盖，改为明确失败并拒绝生成错误消费者；
+2. 消除 `_physics_process` / `_process` 内的同步 `load()` 与逐帧纹理加载；
+3. 保留现有业务行为：只有“资源确实缺失”的路径才改变，正常路径不改变可见结果。
+
+### 2.2 任务
+
+#### 2.2.1 空 `SpriteFrames` 占位改为显式失败
+
+现状（`source/Script/monster/monster_bullet.gd`）：
+
+- L280 `_get_cached_pet_bullet_frames`：`push_error` 后返回 `SpriteFrames.new()` + `add_animation`，零帧动画静默不播放；
+- L1094 `_get_pet_phoenix_frames`：同上，且不写缓存。
+
+改为：
+
+- 返回 `SpriteFrames`（null）并把调用方改为拒绝创建子弹节点，或在 `configure` 阶段返回 `false`；
+- 保留 `push_error` 文案，但不再返回可用对象；
+- 在 `COOP`/关卡探针中补一条负向用例，确认缺失时不再产生“看不见但逻辑存在”的子弹。
+
+#### 2.2.2 `AtlasMetadataStore` 缺失路径可区分
+
+现状（`source/Script/atlas/atlas_metadata_store.gd` L9-16）：
+
+- 路径为空、文件不存在、schema 不合法三种情况都返回 `{}`；
+- 调用方（`cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_*`、`sword_boss_base`、`mount_visual`、`main_sword_array_weapon`，共 9 个文件）无法区分“空配置”与“资源缺失”。
+
+改为：
+
+- 保留 `data_for()` 的返回类型（避免大范围签名变更），但在“文件不存在”与“schema 不合法”时 `push_error` 并记录一次；
+- 新增 `validate_path(path) -> Array[String]`，供构建期与探针显式断言；
+- `mount_visual` 已有 `push_error`，改为复用统一失败判定，不重复报错。
+
+#### 2.2.3 `RoleRuntimeCatalog` 的 `assert` 改为显式失败
+
+现状（`source/Script/data/role_runtime_catalog.gd` L16-18）：
+
+```gdscript
+assert(MANIFESTS.has(role_id), "未注册角色运行资源清单: %d" % role_id)
+return MANIFESTS[role_id]
+```
+
+`release` 下 `assert` 被剥离，越界会返回 `null`，随后在 `global.gd` L2153 / L2173 解引用。
+
+改为：
+
+- `push_error` + 返回 `null`；
+- 两个调用方在拿到 `null` 时中止本次预热并记录，不继续解引用。
+
+#### 2.2.4 热路径同步 IO
+
+| 位置 | 现状 | 改法 |
 |:---|:---|:---|
-| 设计画布 | **1280×800** | 16:10；Godot 设计尺寸，不是最终帧缓冲 |
-| 默认窗口 | **1600×1000** | 16:10；1.25× 画布 |
-| 窗口备选 | 1280×800、1920×1200、2560×1600 | 16:10 阶梯 |
-| 16:9 窗口 | 1920×1080、2560×1440 | 通过 `expand` 增加横向可见区域 |
-| 渲染模式 | `canvas_items` | 直接按目标窗口分辨率渲染 2D |
-| 宽高比策略 | `expand` | 16:10 窗口无额外区域；16:9 扩展横向 |
-| 相机缩放 | **1.2** | Phase 12-2；世界可视约 **1067×667**，纵向偏移保住原下边缘 |
+| `source/Script/level/hdzm.gd` L6-12 | `_physics_process` 每帧 `load()` 两张 PNG | 移到 `_ready` 一次性 `preload`/缓存，`_physics_process` 只做分支赋值 |
+| `source/Script/monster/monster_bullet.gd` L437 / L470 | `DirAccess.get_files_at` 扫描目录 | 改为构建期清单（Phase 13-3 的 `monster_bullet` 表已具备该数据，可先接入） |
+| 同上 L475 | `range(601)` 编号探测 | 同上，改为清单驱动 |
+| 同上 L459 | `range(1, 31)` 固定 30 帧拼路径 | 改为清单 |
+| `source/Script/magic_weapon/main_sword_array_weapon.gd` L94-148 | `StreamingFrameEffect._show_frame` 每帧 `ResourceLoader.load` | 该分支只服务 `AtlasStreamingFrameEffect`；基类保留接口，子类覆写为异步页加载（L319 已有 `_try_show_frame`），删除或收敛同步分支 |
 
-**边界**：
+**注意**：`monster_bullet` 的目录扫描与编号探测在 `png_stream_audit.py` 的 allowlist 之外，属于 §3.1 明确禁止项，必须在本 Phase 内消除，不能只做缓存。
 
-1. Phase 12 只处理显示、相机、HUD 布局和窗口默认值，不新增玩法、任务、掉落或数值内容；
-2. 不整体复制 1.2/1.3 的 `.tscn`/`.gd`；旧版仅作为布局、坐标和素材参考；
-3. 不切换为 `stretch/mode="viewport"`；该模式会先渲染到 1280×800 再放大，降低有效渲染分辨率；
-4. 不把窗口降为 1280×800 来“原生分辨率”；实际窗口尺寸与设计画布分离；
-5. 不把 1600×1000 硬编码给 Steam Deck 或小屏设备；启动时需要按屏幕能力选择窗口或全屏；
-6. 本地二进制路径、反编译沙盒、密钥、外部参考路径与临时台账不进入仓库。
+### 2.3 出口标准
 
-### 1.2 设计决策
+- 全工程 `grep -n 'SpriteFrames.new()' source/Script` 中不再有“`push_error` 后返回空帧”的写法；
+- `_physics_process` / `_process` 内无 `load()`、无 `ResourceLoader.load`、无 `DirAccess`；
+- `monster_bullet.gd` 无目录扫描与编号探测；
+- 八维门禁 8/8 PASS；`health_check` 0 Parse / 0 Error / 0 Warning；
+- `level_1`、`level_59`、`level_61`、`level_pty` 冒烟 PASS（0 ERROR / 0 WARNING）；
+- `coop_probe_runner` 16/16 PASS；`scene_probe_runner` 2/2 PASS。
 
-#### 1.2.1 画布与窗口分离
+### 2.4 风险
 
-- `viewport_width/height` 是设计画布，不是显示器分辨率；
-- `window_width_override/height_override` 是实际窗口尺寸；
-- 当前继续使用 `canvas_items`，实际渲染目标为 **1600×1000**；
-- 1280×800 → 1600×1000 是精确的 1.25×，不产生拉伸；
-- 原版 940×590 与 1280×800 的宽高比差异约 **0.43%**，通过相机缩放和 HUD 重排吸收，不做非等比拉伸。
-
-#### 1.2.2 相机取景
-
-- Phase 12-1 基线 `Camera2D.zoom = 1.3559`：可见世界约 **944×590**；
-- Phase 12-2 调整为 `1.2`：可见世界约 **1067×667**，画面视野增大；
-- 相机 `offset.y` 按窗口高度动态计算，保留 Phase 12-1 的屏幕下边缘，避免扩大视野后露出关卡下方清屏色；
-- 保留 `max_top=0`、`max_bottom=590` 的关卡边界，但必须逐关验证缩放后的限制、平滑和特殊相机逻辑；
-
-#### 1.2.3 HUD 布局
-
-- 桌面 PC：底部居中按钮组，包含 **宠物、技能、法宝、背包、设置**；不再提供菜单按钮与收展功能；
-- 左下/右下无双圆盘；Y/U/I/O/L 技能槽分别位于左右两侧；
-- 按钮逻辑尺寸 **54×54**，间距 5，底边距 4；
-- 使用 6.9 的高清图标素材，不使用旧版低分辨率图标直接放大；
-- 当前 6.9 图标映射已核对并修正，按钮语义一致；
-- 无双/技能栏：单机贴左下；双人 P1 贴左、P2 镜像贴右、两者贴底；
-- PC 端按钮常驻显示；移除 5 秒自动隐藏与菜单收展；
-- 双人模式 FPS/显存下移至顶部偏移 164，避开 P2 等级显示；
-
-### 1.3 实施顺序与任务
-
-顺序为 **Phase 12-1 → Phase 12-2 → Phase 12-3**。每个 Phase 单独提交，不允许把画布、HUD、验收混在同一批次。
-
-**当前进度**：
-
-| 批次 | 状态 | 说明 |
-|:---|:---|:---|
-| Phase 12-1 画布、窗口与相机基线 | 完成 | 本次提交 |
-| Phase 12-2 桌面 HUD 重构 | 完成 | 本次提交 |
-| Phase 12-3 多分辨率验收与收口 | 完成 | 本次提交；归档见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) |
-
-#### Phase 12-1：画布、窗口与相机基线 [已完成]
-
-- 记录当前 1504×944 与 940×590 的对照截图，作为回归基线；
-- 修改 `project.godot`：
-  - `viewport_width=1280`、`viewport_height=800`；
-  - `window_width_override=1600`、`window_height_override=1000`；
-  - `window/size/initial_width/height` 与 override 保持一致；
-  - 保持 `stretch/mode="canvas_items"`；
-  - 保持 `stretch/aspect="expand"`；
-- 为关卡相机加入约 1.3559 的缩放，保持原版 590 世界高度；
-- 逐关检查相机限制、Boss 场景、纵向关卡和特殊 `max_top/max_bottom`；
-- 增加窗口尺寸策略：桌面默认 1600×1000；Steam Deck/小屏使用 1280×800 或全屏；不在超出屏幕时强开大窗口；
-- 验证 1600×1000 的实际输出像素为 1600×1000，1280×800 画布只是逻辑坐标。
-
-**出口**：16:10 默认窗口下不再出现底部清屏色；可见世界高度约 590；相机、背景、角色比例与 940×590 基线一致；未开始 HUD 重排。
-
-**实施结果（2026-10-23）**：
-
-- `project.godot` 已切换为画布 **1280×800**、窗口 **1600×1000**，`initial_width/height` 同步；
-- 继续使用 `canvas_items` + `expand`，未切换到 `viewport`；
-- `camera.gd` 加入 `DESIGN_ZOOM = 1.3559`，保持约 590 的世界可视高度；
-- `load_scene.gd` 增加窗口策略：可用屏幕小于 1600×1000 时进入全屏，避免小屏强开大窗口；
-- 全量门禁 **7/7 PASS**，705 脚本 **0 Parse / 0 Error / 0 Warning**，1,136 场景 **0 断裂引用**；
-- `level_1` 冒烟 **PASS**；完整关卡回归 **128/128 PASS + 5 SKIP**；
-- 16:10 运行截图未再出现底部清屏色；当批未重排 HUD，HUD 重构已在 Phase 12-2 完成。
-
-#### Phase 12-2：桌面 HUD 重构 [已完成]
-
-- 以 1.2/1.3 的 `role_menu` 布局为参考，在 6.9 当前 `role_information` / `base_role` 架构内重建桌面 HUD；
-- 左下按钮簇：宠物、技能、法宝、背包、设置；
-- 左下无双圆盘、Y/U/I/O/L 技能槽及对应按键标签；
-- 使用 6.9 高清图标；核对并修正当前图标语义映射；
-- 桌面端常驻显示，不启用自动隐藏；移动端保留现有右上角/自动隐藏布局；
-- 保持 `LocalCoop` 的 1P/2P HUD 分支、暂停弹窗、自动战斗入口和现有输入逻辑；
-- 使用锚点/容器而非硬编码单一分辨率坐标；在 1280×800、1600×1000、1920×1200 下检查位置和缩放；
-- 不改变技能、法宝、宠物、背包、设置的实际业务行为。
-
-**出口**：桌面 HUD 位于底部中央且不遮挡中心战斗区；按钮图标与功能一致；技能键位可读；移动端和双人布局不回归。
-
-**实施结果（2026-10-23）**：
-
-- 修正图标语义映射：背包 `479`、设置 `500`、技能 `465`、法宝 `472`、宠物 `486`；
-- 按钮顺序调整为 **宠物 → 技能 → 法宝 → 背包 → 设置**；PC 端移除菜单按钮并常驻显示；
-- `ButtonGroup` 改为 `GridContainer` 底部居中 5 列布局，按钮逻辑尺寸 54×54、间距 5；
-- 桌面安全边距：HP/MP P1 左上角 **(0, 0)**、P2 右上角 **(0, 0)**；按钮组底边距 **4**；技能栏单机 **x=0**，双人 P1/P2 分别贴左右边缘且底边贴底；
-- FPS/显存 HUD 移至右上角（右边距 24），双人模式顶部偏移 **164** 避让 P2 等级显示；
-- 图标语义修正：宠物 `500`、设置 `486`、技能 `465`、法宝 `472`、背包 `479`；法宝未装备提示的父节点解析已修复；
-- 2P 角色贴图使用当前存档 `Myself` 选择 `role_N` 身体与装备资源，修复 2P 选唐僧仍显示悟空的问题；
-- 双人 P2 技能栏改为 1P 的镜像形态：P2 菜单负 X 缩放，Wushuang 使用 `flip_h`，按键标签反向子缩放以保持文字方向正常；
-- 修正无双圆盘 `grey` 节点的 180° 旋转 + Y 轴翻转叠加导致的水平镜像，恢复“无双”文字正常方向；
-- 右侧技能栏改为左下 `skill.png` 原方向，Wushuang 在左、Y/U/I/O/L 技能槽在右，并补充按键标签；
-- 相机缩放调整为 **1.2**，新增纵向取景偏移保持原屏幕下边缘，避免视野下方露出关卡外；
-- 移动端保留双列右上角布局；5 秒自动隐藏/菜单收展已移除；
-- 通过 1280×800、1600×1000、1830×1126、1920×1200 视口截图检查，HUD 位于底部/两侧且不遮挡中心战斗区；
-- 七维门禁 **7/7 PASS**，`level_1` 冒烟 **PASS**，日志 0 ERROR / 0 WARNING；`level_10`、`level_22`、`level_59` 抽检无底部清屏色。
-
-#### Phase 12-3：多分辨率验收与收口 [已完成]
-
-- 验收矩阵：
-  - 16:10：1280×800、1600×1000、1920×1200、2560×1600；
-  - 16:9：1920×1080、2560×1440；
-  - Steam Deck：1280×800 全屏/窗口；
-  - 至少一组 21:9 或超宽窗口，确认 `expand` 的横向边界；
-- 单人与双人分别验证 HUD、技能槽、无双、暂停、自动战斗入口和返回菜单；
-- 检查所有关卡的相机边界、背景、地面和灰边；
-- 执行静态门禁、引擎健康检查、关卡回归、双人矩阵、Atlas 校验；
-- 更新 [`../reference/status.md`](../reference/status.md) 的显示基线、已知边界和验证结果；
-- 将 Phase 12 的验收记录归档，并更新 roadmap 与索引。
-
-**出口**：目标分辨率下无灰边、无 HUD 遮挡、无布局溢出；1P/2P 与移动端无回归；门禁通过；文档和状态同步。
-
-**实施结果（2026-10-24）**：
-
-- 单机验收：1280×800、1600×1000、1920×1200、2560×1600、1920×1080、2560×1440、2560×1080、3440×1440 全部通过；
-- 21:9 下 `BackGround/End` 增加 1440px `motion_mirroring`，右侧默认清屏色消除；`level_1`、`level_10`、`level_22`、`level_59` 抽检无灰边；
-- 双人验收：1280×800、1600×1000、1920×1080 通过，P2 HP/MP 右上贴边、P1/P2 技能栏分别贴左右边缘，文字方向正常，按钮组底部居中 5 列；FPS/显存 HUD 下移避让 P2 等级显示；
-- 全量关卡回归 **PASS 128/128 + SKIP 5**（133 关，703.6s）；
-- 双人探针矩阵 **PASS 15 / SKIP 0 / FAIL 0**；
-- Atlas 元数据 **379/379 同步**；
-- 七维质量门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**，0 ERROR / 0 WARNING；
-- 文档链接检查 **97 条，0 缺失**；
-- 验收归档：[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
-
-**HUD 细节收口（2026-10-24 本次）**：
-
-- 单/双人统一为底部居中 5 按钮：54×54、间距 5、底边距 4；移除菜单按钮、`set_list.gd` 及自动收展逻辑；
-- 双人/单人技能栏统一使用 364×134 基尺寸 × 0.85 缩放（实际 309.4×113.9）；P1 左/底 0，P2 镜像后右/底 0；
-- P2 技能键位标签改为小键盘 3/4/5/6/8；镜像后视觉顺序为 8/6/5/4/3；
-- 无双圆盘中心修正：P1/单人 `grey.x=85`，P2 镜像 `grey.x=82`，补偿 `flip_h` 带来的贴图内容非对称偏移；
-- 双人 FPS/显存顶部偏移 **164**，与 P2 等级显示分离；
-- 1600×1000 实机截图确认：单人/双人按钮位置一致，双人技能栏左右对称，文字方向正常；
-- 七维门禁 **7/7 PASS**；`level_1` 冒烟 **PASS**，0 ERROR / 0 WARNING；双人探针 **15/15 PASS**。
-
-**已知边界**：Steam Deck 全屏与 Android 实机未在本环境运行；21:9 静态背景使用镜像重复，部分关卡可能存在轻微接缝；全量视觉抽检覆盖 4 个代表性关卡，非 133 关逐帧截图。
-
-### 1.4 验收标准
-
-- 设计画布为 **1280×800**；
-- 默认窗口为 **1600×1000**，实际输出为 1600×1000；
-- 1600×1000 与 1280×800 为精确 1.25×，无拉伸；
-- `canvas_items` 保持不变，未使用 `viewport` 模式；
-- 16:10 默认窗口无底部清屏色；
-- 相机可见世界高度约 667，角色/背景比例与 940×590 参考相比整体缩小，但画面下边缘保持原构图；
-- 桌面 HUD 为底部居中 5 按钮布局，包含宠物、技能、法宝、背包、设置；
-- 无双圆盘、P1 Y/U/I/O/L 技能槽、P2 3/4/5/6/8 技能槽和按键标签可读；
-- 图标语义正确，未沿用当前疑似错位映射；
-- PC 端按钮常驻，移动端布局不回归；
-- 1920×1080 / 2560×1440 下通过 `expand` 正常扩展，不出现纵向灰边；
-- 1P/2P、暂停、自动战斗入口和现有 6.9 业务行为无回归；
-- `source/` 无临时探针、缓存、外部路径或旧导入产物；
-- `reference/status.md`、`roadmap.md`、`current-iteration.md` 与归档索引同步。
-
-### 1.5 风险与开放问题
-
-| 风险/问题 | 处理建议 |
+| 风险 | 处理 |
 |:---|:---|
-| 相机缩放影响现有视差、Boss 镜头和特殊关卡 | 逐关回归；必要时按关卡配置缩放，不全局盲改 |
-| 1.25× 非整数缩放造成高分屏边缘发虚 | 优先使用高清素材；必要时提供 2560×1600（2×）预设，不切回 `viewport` |
-| 1600×1000 在 Steam Deck/小屏放不下 | 启动时按屏幕尺寸选择 1280×800 或全屏；提供窗口预设 |
-| 当前图标与按钮语义疑似错位 | Phase 12-2 先修正映射，再做布局 |
-| 旧 HUD 的硬编码坐标不适合 1280×800 | 以旧布局为参考重新锚定，不直接复制旧场景 |
-| 16:9 扩展横向世界暴露背景边界 | 用 1920×1080/2560×1440 实测，必要时限制相机或补充背景；不强行拉伸 |
+| 空帧占位可能被某些 Boss 当作“无动画但可运行”的合法状态 | 先加负向探针确认这些路径在实际对局中是否真会命中；命中则同步补齐构建资源，而不是恢复占位 |
+| 剑阵同步分支删除后，页加载失败会变成不可见 | 保留 `_mark_atlas_failed` 与失败信号，让上层拒绝生成而非空白显示 |
+| `monster_bullet` 清单化依赖 13-3 的产出 | 若 13-3 未就绪，本项先用 `LevelPreloadCatalog.monster_bullets` 的既有 17 条覆盖，剩余路径登记为 13-3 的出口条件 |
 
 ---
 
-## 2. 后续候选阶段（暂缓）
+## 3. Phase 13-2：怪物视觉资产构建期化
 
-Phase 12 完成前不启动新的内容版本迁移。之后按 [roadmap](roadmap.md) 的技术债与设计规范方向推进，优先顺序由用户确认：
+**对应契约**：§3.1（构建层：固定视觉资产离线生成）、§3.3（生成结果确定性）
+**依赖**：Phase 13-1（失败语义）
+**预估**：分两批，每批单独提交
 
-- `global.gd` 与字典数据向 Resource/服务/强类型入口拆分；
-- 13 个 Autoload 的耦合评估与新增准入；
-- `_bundled` 场景转原生文本场景；
-- 深层节点路径与旧导入结构的专项治理；
-- Godot 设计规范在新代码中的持续落地。
+### 3.1 目标
 
-这些项目独立排期，不与 Phase 12 的 HUD/画布重构混在同一提交。
+把 50 个在运行时构造 `SpriteFrames` 的怪物脚本，改为加载构建期生成的 `monster_<id>_frames.tres`；运行时只做“取资源 + 校验 + 播放”。
+
+### 3.2 现状数据
+
+| 指标 | 数量 |
+|:---|:---:|
+| 含 `SpriteFrames.new()` 的 Script 文件（88 处） | **70** |
+| 其中怪物脚本 | **50** |
+| 已能定位到构建期 `*_frames.tres` 或 `swf_png` 路径的怪物脚本 | **37**（其中 2 个同时依赖 `AtlasMetadata`） |
+| 依赖 `AtlasMetadata` 序列构造的怪物脚本 | 3（含上述 2 个重叠） |
+| 已生成的怪物帧资源 `*_frames.tres` | 227 |
+| `AtlasMetadata` 产物 | 379 |
+
+结论：**素材侧已基本就绪**，缺的是“元数据 → 怪物帧资源”的通用转换器与消费者切换。
+
+### 3.3 批次 13-2A：新增通用转换器
+
+新增 `scripts/convert_monster_frames.py`：
+
+- **输入**：`Art/monster/**/atlas/metadata.tres` 的 `sequences`，以及 `Art/monster/game_3_monster/<id>/**` 的目录布局；
+- **身份**：`monster/<id>/<action>`，文件名由身份派生可读 slug；
+- **输出**：`Art/monster/<...>/monster_<id>_frames.tres`（沿用现有命名与 UID 规则）；
+- **校验**：`--check` 比较内容、schema、帧路径闭包、UID 唯一性、动画名唯一性；`--all` 生成；陈旧输出只清理自己拥有的集合；
+- **稳定 UID**：与 `convert_frame_sequences.py` 相同的确定性派生规则，不复用其它转换器身份。
+
+接入 `scripts/contract_gate.py` 的 `--check` 子命令清单。
+
+### 3.4 批次 13-2B：消费者切换
+
+按“机械可批量”优先：
+
+1. **35 个仅依赖构建期帧路径的怪物脚本**：删除 `_build_animations()` 的逐帧拼装，改为 `preload` 或 `load` 对应 `*_frames.tres`；保留原有动画名与 fps 语义；
+2. **3 个 `AtlasMetadata` 驱动脚本（含 2 个与上组重叠）**：改为消费 13-2A 的产物；
+3. **剩余 12 个**：逐个人工确认帧来源，无法静态确定的登记到 `missing_assets_registry.md`，不保留运行时拼路径。
+
+**禁止**：为了少改代码而保留“先试 `.tres`，失败再回退运行时建帧”的双路径——这正是 ADR-005 与 §4.2 禁止的兼容层。
+
+### 3.5 出口标准
+
+- `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **≤ 10**，且剩余项全部登记例外（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
+- `convert_monster_frames.py --check` 通过并进入契约门禁；
+- `health_check` 0 Parse / 0 Error / 0 Warning；
+- 全量关卡回归 `level_regression_all.py --jobs 4` PASS，FAIL 0；
+- 至少 6 个代表关卡（含 5 阶段关、Boss 关、八仙、三太子）冒烟 0 ERROR / 0 WARNING。
+
+### 3.6 风险
+
+| 风险 | 处理 |
+|:---|:---|
+| 动画名迁移后与原 `AnimatedSprite2D.animation` 字符串不一致 | 转换器把动画名作为 schema 的一部分输出，消费者按同一常量引用；门禁校验名称集合 |
+| 帧几何（offset/居中/缩放）在运行时脚本里硬编码 | 迁移时把这些字段写入帧资源或保留在消费者常量中，并在探针中断言首帧可见 |
+| Atlas 页共享导致内存上升 | 复用现有 `AtlasTexture` 页引用；不新建纹理副本；必要时按 §6.5 记录驻留依据 |
 
 ---
 
-## 3. 恢复规则
+## 4. Phase 13-3：发布闭包与动态依赖收敛
 
-- 本页记录 **Phase 12-1/12-2/12-3 已全部完成并归档** 的状态。
-- Phase 12 已完成；后续内容迁移或显示优化不得自动启动，须由用户明确确认。
-- 内容版本保持 6.9；Phase 12 不产生新的内容版本号。
-- 每个 Phase 完成后单独提交，并在本页记录验证结果；未验证的截图、估算或外部参考不作为完成证据。
-- 外部 1.2.0.1 / 1.3.3.2 参考只读使用，不复制 `.gdc`、测试探针、缓存或本地路径进入仓库。
+**对应契约**：§4.3（导入、UID 与发布依赖）
+**依赖**：Phase 13-2（帧资源产出后才有完整闭包）
+
+### 4.1 目标
+
+让“字符串路径”全部变成可校验的发布依赖，使 PCK 闭包探针能覆盖玩法资源，而不只是 FrameSequence。
+
+### 4.2 现状缺口
+
+| 缺口 | 数据 |
+|:---|:---|
+| `level_preload_catalog.tres` 内怪物场景 | 198 个怪物 ID（字符串拼接后加载） |
+| 其中需要 `MONSTER_SCENE_ALIASES` 才能解析 | 5 个（3043、3126、3145、3146、3183） |
+| `level_preload_catalog.tres` 内弹体场景 | 17 个键 / 25 条唯一路径 |
+| `DYNAMIC_MONSTER_TEXTURE_PATHS` | 21 个 ID / 40 条路径（含目录） |
+| `DYNAMIC_MONSTER_SCENE_PATHS` | 17 个 ID / 37 条路径 |
+| 现有发布依赖清单 | 仅 `frame_sequence_export_dependencies.json`（288 序列 / 2,812 纹理） |
+
+### 4.3 任务
+
+1. **扩展现有清单 schema**：在 `frame_sequence_export_dependencies.json` 同级新增 `level_preload_export_dependencies.json`，记录：
+   - `catalog`：`level_preload_catalog.tres`；
+   - `monster_scenes`：198 条解析后的实际 `.tscn` 路径（**已展开别名**）；
+   - `bullet_scenes`：25 条；
+   - `dynamic_textures`：40 条（目录展开为文件列表）。
+2. **生成方**：由 `convert_level_preload_catalog.py` 同步输出，`--check` 逐字比较。
+3. **回收动态表**：`DYNAMIC_MONSTER_TEXTURE_PATHS` 与 `DYNAMIC_MONSTER_SCENE_PATHS` 并入 Catalog，删除 `global.gd` 中的两张表与 `_append_dynamic_monster_*` 两个函数。
+4. **闭包探针**：把 `frame_sequence_pack_probe.py` 的清单读取扩展为“多清单”，或新增 `scripts/level_preload_pack_probe.py`，在最小空工程挂载 PCK 后逐条 `ResourceLoader.exists()`。
+5. **别名前置**：`MONSTER_SCENE_ALIASES` 在生成期展开，运行时不再做 ID→ID 映射；若某 ID 无场景也无别名，生成器直接失败。
+
+### 4.4 出口标准
+
+- 新增清单 `--check` 通过并进入契约门禁；
+- `global.gd` 不再包含两张动态表与对应函数（净减少 ≥ 70 行）；
+- 发布包探针 PASS：Catalog + 198 怪物场景 + 25 弹体 + 40 纹理全部可达；
+- 全量关卡回归 PASS，FAIL 0；
+- `reference/architecture.md` 的“发布依赖”段落与 `scripts/README.md` 同步。
+
+### 4.5 风险
+
+| 风险 | 处理 |
+|:---|:---|
+| 目录型动态纹理展开后条目数暴增 | 只登记文件路径，不登记目录；清单体积按实际文件数增长，必要时拆分按怪物 ID 分组 |
+| 别名展开后与运行时 `_canonical_monster_scene_id` 不一致 | 以生成期展开为唯一真源，运行时删除映射；用探针逐 ID 比对 |
+| PCK 探针耗时上升 | 探针只在发布前执行，不进入日常八维门禁 |
+
+---
+
+## 5. Phase 13-4：兼容层与遗留动态表治理
+
+**对应契约**：§4.2（不得用旧路径/猜名掩盖）、ADR-005（禁止兼容层）
+**依赖**：Phase 13-3
+**预估**：需要人工逐条裁定，单独立项节奏
+
+### 5.1 目标
+
+把 `duplicate_texture_aliases.gd` 从“2313 条无差别兼容表”收敛为“有明确语义的映射”，并把无法恢复的条目按 `missing_assets_registry.md` 状态机归档。
+
+### 5.2 现状
+
+| 指标 | 数量 |
+|:---|:---:|
+| 别名条目 | **2,313** |
+| 目标文件不存在 | **932** |
+| 其中键路径也不存在（双向悬空） | 绝大多数 |
+| 解析入口 | `global.gd` L941 / L963、`ne_zha_official_parts_data.gd`、`eight_immortal_magic_weapon.gd` |
+
+932 条目标缺失意味着这些别名**不可能生效**：命中时仍会 `load()` 失败，只是把失败推迟到了运行时。
+
+### 5.3 任务
+
+1. **分类脚本**（一次性，进 `scripts/`）：把每条别名标记为
+   - `valid`：目标存在 → 保留；
+   - `recoverable`：目标缺失但原版素材可恢复 → 登记 `missing_assets_registry.md` 的“待恢复”；
+   - `obsolete`：原版不存在或已被构建期资源取代 → 删除别名与引用；
+2. **代码修复优先**：对 `MagicWeapon` 等“编号+1 映射”类别名，改为构建期序列（`convert_numbered_frames.py` / `convert_monster_frames.py`），不再靠别名凑帧；
+3. **删除悬空条目**：`valid` 之外全部移除，别名表目标规模预期降到 1,400 条以内；
+4. **入口收敛**：`TEXTURE_ALIASES.resolve` 只保留在 `Global.get_cached_texture` 一处，其它脚本走 `Global` 接口；对仍然直连的 3 处逐一评估。
+
+### 5.4 出口标准
+
+- 别名表目标缺失数 = **0**（每条都能解析到真实文件或已删除）；
+- `TEXTURE_ALIASES.resolve` 调用点收敛到 1 处；
+- `missing_assets_registry.md` 更新，新增条目均带状态与恢复来源占位；
+- 八维门禁 + 全量关卡回归 PASS；
+- `docs/reference/architecture.md` 的“遗留例外”表删除对应项或改为已收口。
+
+### 5.5 风险
+
+| 风险 | 处理 |
+|:---|:---|
+| 部分“悬空别名”实际是未使用的历史残留，删除无风险 | 先用引用扫描确认键名是否出现在代码/场景中；无引用直接删除 |
+| 删除后某些冷门角色/法宝外观缺失 | 按角色逐个实机抽检，不依赖单一关卡回归 |
+| 别名表是某些 6.8 补丁的隐含依赖 | 对 6.8/6.9 补丁涉及的角色与法宝做定向截图对比 |
+
+---
+
+## 6. 阶段顺序、依赖与提交规则
+
+```text
+Phase 13-1 失败语义与热路径 IO
+        │
+        ▼
+Phase 13-2 怪物视觉资产构建期化（13-2A 转换器 → 13-2B 消费者）
+        │
+        ▼
+Phase 13-3 发布闭包与动态依赖收敛
+        │
+        ▼
+Phase 13-4 兼容层与遗留动态表治理
+```
+
+| 批次 | 状态 | 提交粒度 |
+|:---|:---|:---|
+| Phase 13-1 | 规划完成，未开始 | 单个提交 |
+| Phase 13-2A | 规划完成，未开始 | 转换器 + `--check` 一个提交 |
+| Phase 13-2B | 规划完成，未开始 | 按怪物域分批，每批一个提交 |
+| Phase 13-3 | 规划完成，未开始 | 清单生成 + 运行时删表分开提交 |
+| Phase 13-4 | 规划完成，未开始 | 分类脚本 → 删除 → 入口收敛，分开提交 |
+
+**红线**：
+
+- 每个 Phase 单独提交，不把失败语义、资产迁移与发布闭包混在同一批次；
+- 不保留“新路径失败就回退旧路径”的双路径；
+- 13-2 与 13-3 的转换器必须支持 `--check` 并进入契约门禁，不能只校验文件存在；
+- 不修改 `source/Art` 等素材内容；素材变更走私有仓 `ASSET_CHANGE_CONTRACT.md`。
+
+---
+
+## 7. 统一验收矩阵
+
+每个 Phase 收口时至少执行：
+
+```bash
+python scripts/check_all.py --godot-bin "<godot>"
+python scripts/contract_gate.py
+python scripts/coop_probe_runner.py --godot "<godot>"
+python scripts/scene_probe_runner.py --godot "<godot>"
+python scripts/level_regression_all.py --jobs 4 --timeout 150
+```
+
+| 判据 | 阈值 |
+|:---|:---|
+| 八维门禁 | 8/8 PASS |
+| 契约门禁 | 全子命令 PASS，含新增转换器 `--check` |
+| 引擎健康 | 0 Parse / 0 Error / 0 Warning |
+| 场景探针 | 2/2 PASS（星座 + 关卡选择态） |
+| 双人探针 | 16/16 PASS，SKIP 不计 PASS |
+| 关卡回归 | FAIL 0；SKIP 仅限 5 个非战斗场景 |
+| 发布闭包 | 13-3 起为必跑项，13-1/13-2 可后置 |
+
+结果写入 [`../reference/status.md`](../reference/status.md)，报告不提交。
+
+---
+
+## 8. 已知边界与不在本阶段范围
+
+1. **不改内容版本**：Phase 13 全部为内部重构，不产生 7.0；
+2. **不处理 Spine**：现有 Spine 内容继续遵守 ADR-010，本阶段不烘焙、不替换运行时；
+3. **不处理 `global.gd` 整体拆分**：仅删除与预载/动态表相关的死代码，God 对象拆分仍是独立立项；
+4. **不做 13 个 Autoload 的合并或新增**；
+5. **不验证目标平台性能**：首帧延迟、VRAM 驻留与 release 加载仍需在真实设备测量，headless 探针不作为证据；
+6. **不迁移 `_bundled` 场景**：与视觉资产契约无关，留在技术债清单。
+
+---
+
+## 9. 恢复规则
+
+- 本页记录 **Phase 13 规划完成、尚未实施** 的状态；实施前须由用户明确确认批次。
+- 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
+- Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
+- 内容版本保持 6.9；Phase 13 不产生新的内容版本号。

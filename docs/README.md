@@ -39,7 +39,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | 当前版本之后的开发路线 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 12 已全部完成并归档**：画布、相机、单/双人 HUD 与多分辨率验收记录 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 13 视觉资产契约收口**：13-1 失败语义与热路径 IO、13-2 怪物资产构建期化、13-3 发布闭包、13-4 兼容层治理（规划完成，未开始） |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

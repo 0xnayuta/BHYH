@@ -8,12 +8,12 @@
 
 | 文档 | 内容 |
 |:---|:---|
-| [`roadmap.md`](roadmap.md) | 当前版本之后的开发路线、技术债与验收方向；Phase 12 显示层重构已完成 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 12 已全部完成并归档**：画布、相机、单/双人 HUD 与多分辨率验收记录 |
+| [`roadmap.md`](roadmap.md) | 当前版本之后的开发路线、技术债与验收方向；当前活跃迭代为 Phase 13 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 13 视觉资产契约收口**：13-1 失败语义与热路径 IO、13-2 怪物资产构建期化、13-3 发布闭包、13-4 兼容层治理 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 是展示层重构，不改变内容版本号；Phase 12-1/12-2/12-3 已全部完成并归档，后续阶段启动前须由用户明确确认。
+当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 展示层重构已全部完成并归档；Phase 13 为规划状态，尚未开始实施，启动前须由用户明确确认批次。
 
 ## 2. 边界
 

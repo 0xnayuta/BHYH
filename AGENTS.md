@@ -29,6 +29,7 @@
   - `standards/`：活跃规范，必须遵守；索引见 `standards/README.md`；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：当前版本之后的开发路线；
+  - `roadmap/current-iteration.md`：当前活跃迭代（当前为 Phase 13 规划）的范围、批次与验收；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；
