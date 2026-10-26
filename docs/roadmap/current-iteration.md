@@ -173,8 +173,8 @@ return MANIFESTS[role_id]
 1. **构建期动作视图**：`convert_monster_frames.py` 按 `scripts/monster_action_maps.json` 在既有帧资源中追加动作别名动画，复用原 `AtlasTexture` 子资源并显式声明 loop；
 2. **消费者直接加载**：删除 `_load_standard_frames()` 中的 `SpriteFrames.new()` 重建与 `add_animation` 循环，改为 `return load(frames_path) as SpriteFrames`；保留 `ACTIONS`/`MODEL_ACTIONS` 的帧数、offset、loop 用于 `AnimationPlayer` 时长与位移；
 3. **删除回退**：`_get_frames_for_model()` 的逐帧 PNG 回退分支删除，资源缺失即返回 `null`；
-4. **已完成 39 个脚本**：3040/3041/3042/3033/3034/3035/3069/3070/3076/3117/3370、3012/3007/3021/3056/3077/3078、峨眉山/五台明海/南海/双喜寺/玄武门/朱雀街/九华山、剑 Boss 基类 951~954、四头 Boss 头部与火灵珠、玄武门箭/朱雀虎箭/双喜 Boss 箭/未央宫弹体、212/215/130 编号帧弹体与九华松针；
-5. **待处理**：`east_continent_monster`（metadata 几何 + 独立 PNG 动作）、`weiyang_palace_boss`（符号层裁剪）、`tao_wu_boss`（资源异常单图兜底）、`three_prince_boss`/`eight_immortals_boss`（运行时裁剪）、`nanhai_projectile`（单序列裁剪）、`three_prince_bullet`（资源缺失逐帧回退）、`monster_130/212/215` 本体残留、`liu_sha_river_*`、`pet_tiger_boss_base`；全部在 §3.5 出口标准中按例外登记后才允许保留。
+4. **已完成 39 个脚本**：3040/3041/3042/3033/3034/3035/3069/3070/3076/3117/3370、3012/3007/3021/3056/3077/3078、峨眉山/五台明海/南海/双喜寺/玄武门/朱雀街/九华山、剑 Boss 基类 951~954、四头 Boss 头部与火灵珠、玄武门箭/朱雀虎箭/双喜 Boss 箭/未央宫弹体、212/215/130 编号帧弹体、九华松针与东胜神洲 loose 特效；
+5. **待处理**：`east_continent_monster`（仅剩标准动作重命名，loose 已构建期化；关卡配置 merge 使其无法完全静态化）、`weiyang_palace_boss`（符号层裁剪）、`tao_wu_boss`（资源异常单图兜底）、`three_prince_boss`/`eight_immortals_boss`（运行时裁剪）、`nanhai_projectile`（单序列裁剪）、`three_prince_bullet`（资源缺失逐帧回退）、`monster_130/212/215` 本体残留、`liu_sha_river_*`、`pet_tiger_boss_base`；全部在 §3.5 出口标准中按例外登记后才允许保留。
 
 **禁止**：为了少改代码而保留“先试 `.tres`，失败再回退运行时建帧”的双路径——这正是 ADR-005 与 §4.2 禁止的兼容层。
 

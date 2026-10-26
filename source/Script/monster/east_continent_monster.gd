@@ -1700,12 +1700,12 @@ func _build_animations() -> void:
 			mr_player.remove_animation_library(&"")
 		mr_player.add_animation_library(&"", cached["library"] as AnimationLibrary)
 		return
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
 	var metadata := _metadata_path()
 	var standard_frames := _load_standard_body_frames()
-	if standard_frames != null:
-		frames = standard_frames
+	if standard_frames == null:
+		push_error("EastContinent standard body frames missing: " + _standard_body_frames_path())
+		return
+	var frames := standard_frames
 	_attack_window_cache.clear()
 
 	var registration_anchor: Variant = null
@@ -1802,14 +1802,15 @@ func _add_loose_animation(
 	frames: SpriteFrames, root: String, animation_name: StringName, fps: float, looped: bool
 ) -> void:
 	var source := _load_loose_frames(root)
-	if source == null or not source.has_animation(&"play"):
+	var source_name := _loose_animation_name(source)
+	if source == null or source_name == &"":
 		push_error("EastContinent standard effect frames missing: " + root)
 		return
 	frames.add_animation(animation_name)
 	frames.set_animation_speed(animation_name, fps)
 	frames.set_animation_loop(animation_name, looped)
-	for frame_index in range(source.get_frame_count(&"play")):
-		frames.add_frame(animation_name, source.get_frame_texture(&"play", frame_index))
+	for frame_index in range(source.get_frame_count(source_name)):
+		frames.add_frame(animation_name, source.get_frame_texture(source_name, frame_index))
 
 
 func _load_loose_frames(root: String) -> SpriteFrames:
@@ -1823,14 +1824,22 @@ func _load_loose_frames(root: String) -> SpriteFrames:
 	return frames
 
 
+static func _loose_animation_name(source: SpriteFrames) -> StringName:
+	if source == null:
+		return &""
+	var names := source.get_animation_names()
+	return StringName(names[0]) if not names.is_empty() else &""
+
+
 func _loose_frame_geometry(root: String, frame_index: int) -> Dictionary:
 	var cache_key := "%s|%d" % [root, frame_index]
 	if _loose_geometry_cache.has(cache_key):
 		return _loose_geometry_cache[cache_key] as Dictionary
 	var source := _load_loose_frames(root)
+	var source_name := _loose_animation_name(source)
 	var texture: Texture2D = null
-	if source != null and source.has_animation(&"play") and frame_index < source.get_frame_count(&"play"):
-		texture = source.get_frame_texture(&"play", frame_index)
+	if source != null and frame_index < source.get_frame_count(source_name):
+		texture = source.get_frame_texture(source_name, frame_index)
 	if texture == null:
 		var missing := {"size": Vector2.ONE, "center": Vector2.ZERO, "has_visual": false}
 		_loose_geometry_cache[cache_key] = missing
