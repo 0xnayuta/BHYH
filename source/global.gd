@@ -2151,6 +2151,9 @@ func prewarm_texture_paths(paths: Array[String]) -> void:
 
 func get_current_role_preload_paths() -> Array[String]:
 	var manifest := RoleRuntimeCatalog.get_manifest(_current_role_id())
+	if manifest == null:
+		push_error("角色运行资源清单缺失，跳过预载路径收集")
+		return []
 	var runtime_paths: Array[String] = []
 	var equipped_skills := _equipped_role_skill_names()
 	_append_role_runtime_paths(runtime_paths, manifest.scene_paths)
@@ -2171,6 +2174,9 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	if _prewarmed_role_id > 0:
 		release_role_runtime_resources()
 	var manifest := RoleRuntimeCatalog.get_manifest(role_id)
+	if manifest == null:
+		push_error("角色运行资源清单缺失，跳过角色资源预热: %d" % role_id)
+		return
 	var equipped_skills := _equipped_role_skill_names()
 	var scene_paths: Array[String] = []
 	var sprite_frames_paths: Array[String] = []
