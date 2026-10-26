@@ -88,7 +88,7 @@
 - 清单、切片负责人、未审部分及理由：`<逐文件记录或报告内证据引用>`。
 - 不在实现审查范围：`source/addons/` 第三方实现、`source/bin/` Spine 运行库内部、`.godot/` 导入缓存、`docs/reports/` 机器报告；素材目录只审引用、导入与元数据，不评价美术质量。
 - 只读输入：现行 docs/ADR、`project.godot`、`scripts/` 门禁契约可用于核对实现契约与目录边界；当前契约描述错误可登记 DOC，环境故障列验证限制。
-- 工具/覆盖限制：`<codegraph/Context7/LSP/Godot MCP 实际可用性、索引/引用不完整、截断清单、降级方法>`；不能把零结果或未读部分视为已证明安全。
+- 工具/覆盖限制：`<codegraph（当前仅 Python）/Context7/LSP/Godot MCP 实际可用性、索引/引用不完整、截断清单、降级方法>`；GDScript 检索使用 `grep`/`read`/`LSP`，codegraph 空结果不构成无引用证据；不能把零结果或未读部分视为已证明安全。
 
 ### 1.2 审计输入
 

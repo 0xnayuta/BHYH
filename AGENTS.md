@@ -106,7 +106,7 @@ python scripts/whitelist_audit.py --fail-on-error
 
 ### 5.1 当前可用
 
-- **`codegraph`**：符号、依赖与调用链探索。项目没有 `.codegraph/` 索引时，回退到 `grep` / `read`，不要声称索引可用。
+- **`codegraph`**：**仅适用于 Python（`scripts/*.py`）**。当前版本（1.6.2，2026-10-26 核对）不支持 GDScript，上游 #1499/#2623 仍未合并；本地索引只含 Python。`source/**/*.gd` 的符号、引用与调用链检索必须使用 `grep` / `read`（必要时 LSP），不要调用 codegraph，也不要把空结果视为无引用。索引缺失时同样回退 `grep` / `read`，不要声称索引可用。
 - **`context7`**：第三方库与 Godot API 文档查证；禁止凭记忆猜 API 签名。
 - **`everything`**：按文件名/类型/时间快速定位资产；**禁止**用于检索文件内部文本。
 
@@ -149,7 +149,7 @@ python scripts/whitelist_audit.py --fail-on-error
 
 ```mermaid
 flowchart TD
-    A[明确需求边界] --> B[codegraph / grep 评估影响面]
+    A[明确需求边界] --> B["codegraph（仅 Python）/ grep 评估影响面"]
     B --> C[context7 / 官方文档查证 API]
     C --> D[最小化修改 source/]
     D --> E[检查 .import / UID / 命名]

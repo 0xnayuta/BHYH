@@ -92,7 +92,7 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 
 1. 检查最近提交与变更范围：`git log -20 --oneline`、`git diff --stat <base>..HEAD`、`git status --porcelain`。
 2. 梳理本阶段在 `source/` 引入的核心演进：新增/重构的 GDScript 类、场景、`project.godot` 配置、资源清单、DataKeys、转换器与门禁。
-3. 记录核心类名、函数签名、状态枚举、资源路径与门禁命令；优先使用 codegraph，索引不可用时回退 `grep`/`read`，不凭记忆猜 API。
+3. 记录核心类名、函数签名、状态枚举、资源路径与门禁命令；GDScript 使用 `grep`/`read` 检索（codegraph 当前仅覆盖 Python，不用于 `.gd`），不凭记忆猜 API。
 4. 涉及第三方 Godot API 时用 Context7/官方文档核实签名；涉及公共符号时用 LSP 查引用。
 
 ### Step 2：现行文档扫描与落后点定位（Doc Audit）
