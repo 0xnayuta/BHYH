@@ -49,6 +49,7 @@ python scripts/resource_path_audit.py --project source
 python scripts/whitelist_audit.py --fail-on-error
 python scripts/convert_atlas_metadata.py --check
 python scripts/convert_frame_sequences.py --check
+python scripts/convert_level_preload_catalog.py --check
 ```
 
 完整引擎与关卡验证见 [`../reference/status.md`](../reference/status.md)。

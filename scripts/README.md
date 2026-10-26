@@ -29,6 +29,7 @@ check_all.py
 │   ├── contract_scan.py
 │   ├── convert_atlas_metadata.py --check / --self-test
 │   ├── convert_frame_sequences.py --check
+│   └── convert_level_preload_catalog.py --check
 │   ├── png_stream_audit.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
@@ -82,6 +83,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
+| `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 → `LevelPreloadCatalog.tres`；`--check` 校验输出未过期并进入总门禁 | `source/Script/data/level_preload_catalog.tres` |
 
 ### 3.3 人工审计与迁移工具
 

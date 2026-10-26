@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（FrameSequence 身份模型 v2：`asset_id` + 实例播放策略 + 可读命名）
+> 最后更新：2026-10-26（关卡预载 Catalog：加载页停止运行时解析关卡源文本）
 
 ---
 
@@ -129,6 +129,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 FrameSequence 身份模型 v2 | `convert_frame_sequences.py --check` **288 序列 / 2,812 条延迟纹理源闭包 PASS**；输出为 `asset_id` 键的 Catalog + 可读 slug 文件；陈旧输出清理 **477 → 0**；八维门禁 **8/8 PASS**；`level_1` Stage 1~4 **PASS**、`level_tzsijian` **PASS**、`scene_probe_runner` **PASS**、`coop_probe_runner` **16/16 PASS**；日志均 **0 ERROR / 0 WARNING** | 序列身份改为稳定 `asset_id`，删除 189 个策略复合 key 冗余（477→288）；`default_fps/default_loop/default_hold_last_frame/default_prefetch_frames` 只作默认值，`StreamedPngEffect.configure_playback()` 提供实例覆盖；转换器按 `asset_id` 派生可读文件名并校验唯一性、单目录单序列与陈旧输出；`--export-preset` 在验证用 `all_resources` 预设下声明覆盖 **3,101 条** |
 | 2026-10-26 FrameSequence 发布包闭包 | `frame_sequence_pack_probe.py` **PASS**：PCK 内 **3,101 条依赖全部可达**（Catalog + 288 序列 + 2,812 延迟纹理）；约 2.74 GB | 验证用预设 `Windows Desktop (validation)`（`all_resources`）；Godot 挂载 PCK 后用 `ResourceLoader.exists()` 逐条判定，导出后 PNG 以 `.import` + `.ctex` 形式存在。PCK 为构建临时产物，sha256 随素材与构建变化，不写入本文作为稳定标识 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
+| 2026-10-26 关卡预载 Catalog 迁移 | `convert_level_preload_catalog.py --check` **153 场景 / 101 关卡条目 / 17 弹体条目 PASS**（并入契约门禁）；八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`level_1` / `level_59` / `level_61` / `level_pty` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `load_scene.gd` 与 `global.gd` 删除运行时 `.gd`/`.tscn` 源文本正则解析，改读构建期 `LevelPreloadCatalog.tres`；阶段归属按出生点还原，精确替代旧的“无刷怪表字面量则全部塞入 stage_1”回退；怪物弹体名改为磁盘真实大小写；生成器 `--check` 纳入总门禁 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

@@ -450,7 +450,6 @@ var qlsword = null
 var cucurbit2 = null
 
 var _monster_scene_cache = {}
-var _monster_script_bullet_scene_cache: Dictionary = {}
 var _last_full_monster_bullet_name := ""
 var _level_resource_preload_signature := ""
 var _last_combo_value: int = 0
@@ -1126,7 +1125,7 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 		var scene_path := _monster_scene_path(monster_id)
 		if ResourceLoader.exists(scene_path) and not monster_scene_paths.has(scene_path):
 			monster_scene_paths.append(scene_path)
-	var bullet_scene_paths := _collect_monster_script_bullet_scene_paths(monster_scene_paths)
+	var bullet_scene_paths := _collect_monster_bullet_scene_paths(monster_scene_paths)
 	_append_dynamic_monster_scene_paths(bullet_scene_paths, unique_monster_ids)
 	await prewarm_monster_bullet_scene_paths(bullet_scene_paths)
 	await prewarm_monster_scene_paths(monster_scene_paths)
@@ -1885,50 +1884,13 @@ func _append_dynamic_monster_scene_paths(scene_paths: Array, monster_ids: Array)
 			_append_unique_preload_path(scene_paths, str(scene_path_value))
 
 
-func _collect_monster_script_bullet_scene_paths(monster_scene_paths: Array) -> Array:
+func _collect_monster_bullet_scene_paths(monster_scene_paths: Array) -> Array:
 	var result: Array = []
 	for monster_scene_path_value in monster_scene_paths:
 		var monster_scene_path := str(monster_scene_path_value)
-		if _monster_script_bullet_scene_cache.has(monster_scene_path):
-			for cached_path in _monster_script_bullet_scene_cache[monster_scene_path]:
-				_append_unique_preload_path(result, str(cached_path))
-			continue
-		var scene_result: Array = []
-		var visited_scripts: Dictionary = {}
-		for dependency in ResourceLoader.get_dependencies(monster_scene_path):
-			var dependency_path := _dependency_resource_path(str(dependency))
-			if dependency_path.get_extension().to_lower() == "gd":
-				_collect_bullet_scene_paths_from_script(dependency_path, scene_result, visited_scripts)
-		_monster_script_bullet_scene_cache[monster_scene_path] = scene_result.duplicate()
-		for scene_path in scene_result:
-			_append_unique_preload_path(result, str(scene_path))
+		for bullet_scene_path in LevelPreloadStore.bullet_scenes(monster_scene_path):
+			_append_unique_preload_path(result, bullet_scene_path)
 	return result
-
-
-func _collect_bullet_scene_paths_from_script(
-	script_path: String, scene_paths: Array, visited_scripts: Dictionary
-) -> void:
-	if script_path == "" or visited_scripts.has(script_path):
-		return
-	visited_scripts[script_path] = true
-	var file := FileAccess.open(script_path, FileAccess.READ)
-	if file == null:
-		return
-	var source := file.get_as_text()
-	var string_regex := RegEx.new()
-	if string_regex.compile('"([^"]+)"') == OK:
-		for match_result in string_regex.search_all(source):
-			var bullet_name := match_result.get_string(1)
-			if bullet_name == "" or bullet_name.find("/") != -1:
-				continue
-			var bullet_scene_path := MONSTER_BULLET_SLIM_DIR.path_join(bullet_name + ".tscn")
-			if ResourceLoader.exists(bullet_scene_path):
-				_append_unique_preload_path(scene_paths, bullet_scene_path)
-	var extends_regex := RegEx.new()
-	if extends_regex.compile('extends\\s+"([^"]+\\.gd)"') == OK:
-		var extends_match := extends_regex.search(source)
-		if extends_match != null:
-			_collect_bullet_scene_paths_from_script(extends_match.get_string(1), scene_paths, visited_scripts)
 
 
 func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:

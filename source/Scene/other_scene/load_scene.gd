@@ -29,8 +29,6 @@ const GUANYIN_SKILLA_EFFECT_SCRIPT := preload("res://Script/monster/monster_zhw/
 const GUANYIN_SKILL2_EFFECT_SCRIPT := preload("res://Script/monster/monster_zhw/guanyin_skill2_effect.gd")
 const TZSIJIAN_LEVEL_SCENE := "res://Scene/level/level_tzsijian.tscn"
 const ZHENYAO_TOWER_LEVEL_SCENE := "res://Scene/level/level_zhen_yao_tower.tscn"
-const WANFO_LEVEL_SCRIPT_PATH := "res://Script/level/level_61.gd"
-const WANFO_RUNTIME_MONSTER_IDS := [3071, 3076, 3077, 3078, 3080, 3081, 3082]
 const ZHENYAO_TOWER_LEVEL_SCRIPT := preload("res://Script/level/level_zhen_yao_tower.gd")
 const TZSIJIAN_BG_ROOT := "res://Art/level/game_3_level/level_tzsijian/level_96/bg961_parts"
 const TZSIJIAN_BOSS_IDS := [951, 952, 953, 954]
@@ -231,7 +229,7 @@ func _get_tzsijian_boss_preload_paths() -> Array[String]:
 func _get_target_first_wave_monster_scene_paths() -> Array[String]:
 	var paths: Array[String] = []
 	var seen_ids := {}
-	var monster_group := _target_script_monster_group()
+	var monster_group := _target_level_stage_group()
 	var first_wave: Variant = monster_group.get("stage_1", [])
 	if first_wave is Array:
 		for monster_id_value in first_wave:
@@ -555,41 +553,11 @@ func _prewarm_target_level_resources() -> void:
 
 
 func _get_target_level_monster_ids() -> Array:
-	var result: Array = []
-	var monster_group := _target_script_monster_group()
-	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
-		var stage_ids: Variant = monster_group.get(stage_key, [])
-		if stage_ids is Array:
-			for monster_id_value in stage_ids:
-				var monster_id := int(monster_id_value)
-				if monster_id > 0 and not result.has(monster_id):
-					result.append(monster_id)
-
-	var script_path := _target_level_script_path()
-	if script_path == "":
-		return result
-	var file := FileAccess.open(script_path, FileAccess.READ)
-	if file == null:
-		return result
-	var source := file.get_as_text()
-	file.close()
-	var monster_regex := RegEx.new()
-	if monster_regex.compile('\\"monster\\"\\s*:\\s*(\\d+)') != OK:
-		return result
-	for match_result in monster_regex.search_all(source):
-		var monster_id := int(match_result.get_string(1))
-		if monster_id > 0 and not result.has(monster_id):
-			result.append(monster_id)
-
-	if script_path == WANFO_LEVEL_SCRIPT_PATH:
-		for monster_id in WANFO_RUNTIME_MONSTER_IDS:
-			if not result.has(monster_id):
-				result.append(monster_id)
-	return result
+	return Array(LevelPreloadStore.monster_ids(str(Global.target_scene)))
 
 
 func _prewarm_target_script_monsters() -> void:
-	var monster_group := _target_script_monster_group()
+	var monster_group := _target_level_stage_group()
 	var has_monsters := false
 	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
 		if monster_group.get(stage_key, []).size() > 0:
@@ -599,66 +567,8 @@ func _prewarm_target_script_monsters() -> void:
 		await Global.preload_level_monster_resources(monster_group)
 
 
-func _target_script_monster_group() -> Dictionary:
-	var result := {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	var script_path := _target_level_script_path()
-	if script_path == "":
-		return result
-	var file := FileAccess.open(script_path, FileAccess.READ)
-	if file == null:
-		return result
-	var source := file.get_as_text()
-	var group_regex := RegEx.new()
-	if group_regex.compile("monster_group\\s*=\\s*\\{([\\s\\S]*?)\\n\\s*\\}") != OK:
-		return result
-	var stage_regex := RegEx.new()
-	if stage_regex.compile('"stage_([1-4])"\\s*:\\s*\\[([^\\]]*)\\]') != OK:
-		return result
-	var number_regex := RegEx.new()
-	if number_regex.compile("\\d+") != OK:
-		return result
-	var has_declared_monsters := false
-	for group_match in group_regex.search_all(source):
-		for stage_match in stage_regex.search_all(group_match.get_string(1)):
-			var stage_key := "stage_" + stage_match.get_string(1)
-			var values := result[stage_key] as Array
-			for number_match in number_regex.search_all(stage_match.get_string(2)):
-				var monster_id := int(number_match.get_string())
-				if monster_id > 0 and not values.has(monster_id):
-					values.append(monster_id)
-					has_declared_monsters = true
-	var scene_regex := RegEx.new()
-	if not has_declared_monsters and scene_regex.compile("(?i:Monster)_?([0-9]+)\\.tscn") == OK:
-		var stage_1 := result["stage_1"] as Array
-		for scene_match in scene_regex.search_all(source):
-			var monster_id := int(scene_match.get_string(1))
-			if monster_id > 0 and not stage_1.has(monster_id):
-				stage_1.append(monster_id)
-	return result
-
-
-func _target_level_script_path() -> String:
-	for dependency in ResourceLoader.get_dependencies(Global.target_scene):
-		var dependency_path := _dependency_resource_path(str(dependency))
-		if dependency_path.get_extension().to_lower() == "gd" and dependency_path.find("/Script/level/") != -1:
-			return dependency_path
-	var scene_file := FileAccess.open(Global.target_scene, FileAccess.READ)
-	if scene_file == null:
-		return ""
-	var scene_source := scene_file.get_as_text()
-	var script_regex := RegEx.new()
-	if script_regex.compile('path="([^"]+\\.gd)"') != OK:
-		return ""
-	for match_result in script_regex.search_all(scene_source):
-		var path := match_result.get_string(1)
-		if path.find("/Script/level/") != -1:
-			return path
-	return ""
+func _target_level_stage_group() -> Dictionary:
+	return LevelPreloadStore.stage_group(str(Global.target_scene))
 
 
 func _change_to_packed_scene(packed_scene: PackedScene) -> void:

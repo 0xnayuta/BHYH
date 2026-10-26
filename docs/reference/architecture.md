@@ -141,7 +141,7 @@ flowchart TD
 
 - 窗口策略：可用屏幕小于 1600×1000 时进入全屏；
 - Android 首启完整性校验（仅 Android 且存在平台单例时）；
-- 构建预载清单：目标场景、角色/宠物/剑阵/法宝/首波怪物、必要背景与音效；
+- 构建预载清单：目标场景、角色/宠物/剑阵/法宝、首波怪物、必要背景与音效；关卡怪物与弹体场景来自构建期 `LevelPreloadCatalog`；
 - 线程化预载与分阶段预热：角色运行时清单 → 角色专属特效 → 剑阵 → 法宝 → 战斗命中资源 → 宠物 → 关卡怪物；
 - 覆盖式切换：先实例化新场景并挂到根节点，等待就绪，再释放旧场景，避免加载黑屏；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。
@@ -357,12 +357,12 @@ classDiagram
 - `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
 - `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
 - `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
+- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡刷怪表、怪物 ID 与怪物弹体场景由构建期生成，加载页不在运行时解析 `.gd` / `.tscn` 源文本。
 
 仍然存在（遗留）：
 
 - 仍有多个脚本在运行时调用 `SpriteFrames.new()` 建帧；
-- `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界；
-- `load_scene.gd` 仍通过正则读取关卡 `.gd` 源文本提取刷怪表，属于运行时反解析源码的遗留手法。
+- `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界。
 
 ### 6.4 构建期转换器
 
@@ -373,6 +373,7 @@ classDiagram
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
+| 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）与怪物脚本弹体名 | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry` / 怪物弹体表） | `--check` 逐字比较；无法静态解析的条目输出到 stderr，由关卡自身预载 |
 
 规则：
 
@@ -428,7 +429,6 @@ classDiagram
 | 发布包实际闭包 | 已入库仅用于验证的 `source/export_presets.cfg`（`all_resources`）与 `scripts/frame_sequence_pack_probe.py`（Godot 挂载 PCK + `ResourceLoader.exists()` 逐条判定）；PCK 结论以实际运行结果为准，不以源闭包代替 |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |
-| `load_scene.gd` 源码正则解析刷怪表 | 改为 Manifest/Catalog 数据源 |
 
 迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 下一批把有限帧运行时建帧迁移到构建期 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
 
@@ -514,7 +514,6 @@ classDiagram
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 多个脚本仍存在运行时建帧 | 有限帧改为构建期资源；超大序列走目标流式方案 |
-| 运行时正则解析 `.gd` 源码 | `load_scene.gd` 提取刷怪表 | 迁移为 Manifest/Catalog 数据源 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
 | `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 逐步提供 typed accessor，不扩大无类型面 |
@@ -531,6 +530,7 @@ classDiagram
 | 字典键契约 | `DataKeys` 命名空间与安全访问器 |
 | 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
+| 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |

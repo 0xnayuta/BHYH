@@ -36,7 +36,8 @@
 - `.omp/skills/`：项目本地 agent skills（`bhyh-audit`、`bhyh-doc-sync`）；仅技能目录入库，`.omp` 其他本地配置忽略。
 - `scripts/`
   - 质量门禁、审计、回归与构建工具；索引见 `scripts/README.md`；
-  - `scripts/convert_atlas_metadata.py`：Atlas manifest → `metadata.tres` 构建期转换器，由 `contract_gate.py` 调用。
+  - `scripts/convert_atlas_metadata.py`：Atlas manifest → `metadata.tres` 构建期转换器，由 `contract_gate.py` 调用；
+  - `scripts/convert_level_preload_catalog.py`：关卡脚本刷怪表/弹体名 → `level_preload_catalog.tres` 构建期转换器，由 `contract_gate.py --check` 校验。
 
 ### 1.3 公开仓库边界
 
