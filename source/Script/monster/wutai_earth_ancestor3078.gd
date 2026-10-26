@@ -113,23 +113,7 @@ static func _load_standard_frames() -> SpriteFrames:
 	var frames_path := ROOT.path_join("atlas/swf_png_3078_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null or not source.has_animation(&"idle"):
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"idle")
-	frames.set_animation_speed(&"idle", source.get_animation_speed(&"idle"))
-	frames.set_animation_loop(&"idle", true)
-	for frame_index in range(source.get_frame_count(&"idle")):
-		frames.add_frame(&"idle", source.get_frame_texture(&"idle", frame_index))
-	if source.has_animation(&"death"):
-		frames.add_animation(&"death")
-		frames.set_animation_speed(&"death", source.get_animation_speed(&"death"))
-		frames.set_animation_loop(&"death", false)
-		for frame_index in range(source.get_frame_count(&"death")):
-			frames.add_frame(&"death", source.get_frame_texture(&"death", frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _get_sprite_frames() -> SpriteFrames:

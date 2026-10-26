@@ -450,33 +450,18 @@ static func _model_fps(model: int) -> float:
 	return float(MODEL_FPS.get(model, SOURCE_FPS))
 
 
-static func _load_standard_frames(model: int, actions: Dictionary) -> SpriteFrames:
+static func _load_standard_frames(model: int) -> SpriteFrames:
 	var frames_path := ROOT.path_join(str(model)).path_join("atlas").path_join("swf_png_%d_frames.tres" % model)
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for action_name: StringName in actions:
-		var action_data: Array = actions[action_name]
-		var sequence_name := StringName(str(action_data[0]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(action_name)
-		frames.set_animation_speed(action_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(action_name, bool(action_data[2]))
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(action_name, source.get_frame_texture(sequence_name, frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _get_frames_for_model(model: int) -> SpriteFrames:
 	if _frames_cache.has(model):
 		return _frames_cache[model] as SpriteFrames
 	var actions: Dictionary = MODEL_ACTIONS[model]
-	var standard := _load_standard_frames(model, actions)
+	var standard := _load_standard_frames(model)
 	if standard != null:
 		_frames_cache[model] = standard
 		return standard

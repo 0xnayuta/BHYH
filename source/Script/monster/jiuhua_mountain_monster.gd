@@ -340,43 +340,24 @@ func _build_animations() -> void:
 	mr_player.add_animation_library(&"", library)
 
 
-func _load_standard_frames(animations: Dictionary) -> SpriteFrames:
+func _load_standard_frames() -> SpriteFrames:
 	var frames_path := FRAME_ROOT.path_join(str(monster_kind)).path_join("atlas").path_join(
 		"swf_png_%d_frames.tres" % monster_kind
 	)
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for animation_name: StringName in animations:
-		var animation_data: Array = animations[animation_name]
-		var sequence_name := StringName(str(animation_data[0]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(animation_name)
-		frames.set_animation_speed(animation_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(animation_name, bool(animation_data[2]))
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(animation_name, source.get_frame_texture(sequence_name, frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 func _get_sprite_frames() -> SpriteFrames:
 	if _frames_cache.has(monster_kind):
 		return _frames_cache[monster_kind] as SpriteFrames
 	var animations: Dictionary = DATA[monster_kind]["animations"]
-	var standard := _load_standard_frames(animations)
+	var standard := _load_standard_frames()
 	if standard != null:
 		_frames_cache[monster_kind] = standard
 		return standard
 	return null
-
-
-func _frame_path(action: String, frame_index: int) -> String:
-	return FRAME_ROOT.path_join(str(monster_kind)).path_join(action).path_join(str(frame_index) + ".png")
 
 
 func _make_animation(animation_name: StringName, frame_count: int, looped: bool) -> Animation:

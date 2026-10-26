@@ -1,0 +1,736 @@
+{
+  "swf_png/3040/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3041/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3042/atlas/metadata.tres": {
+    "actions": {
+      "appear": "appear",
+      "wait": "wait",
+      "effect1": "effect1",
+      "effect2": "effect2",
+      "effect3": "effect3",
+      "death": "death"
+    },
+    "loop": {
+      "appear": false,
+      "wait": true,
+      "effect1": false,
+      "effect2": false,
+      "effect3": false,
+      "death": false
+    }
+  },
+  "swf_png/3034/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3",
+      "skill4": "effect4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3033/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3",
+      "skill4": "effect4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3117/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3370/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "skill1": "skill1",
+      "skill2": "skill2",
+      "skill3": "skill3",
+      "death": "death"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "death": false
+    }
+  },
+  "swf_png/3035/atlas/metadata.tres": {
+    "actions": {
+      "appear": "appear",
+      "wait": "wait",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "appear": false,
+      "wait": true,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3069/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3070/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3",
+      "skill4": "effect4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3076/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "death": "death",
+      "skill1": "effect1",
+      "skill2": "effect2",
+      "skill3": "effect3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  },
+  "swf_png/3012/atlas/metadata.tres": {
+    "actions": {
+      "attack": "attack1"
+    },
+    "loop": {
+      "attack": true
+    }
+  },
+  "swf_png/3007/atlas/metadata.tres": {
+    "actions": {
+      "wait": "DefineShape_31",
+      "death": "DefineSprite_36_mc_dead",
+      "appear": "DefineSprite_70_mc_appear"
+    },
+    "loop": {
+      "wait": true,
+      "death": false,
+      "appear": false
+    }
+  },
+  "swf_png/3077/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "death": "mc_dead"
+    },
+    "loop": {
+      "idle": true,
+      "death": false
+    }
+  },
+  "swf_png/3078/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "death": "death"
+    },
+    "loop": {
+      "idle": true,
+      "death": false
+    }
+  },
+  "swf_png/3056/atlas/metadata.tres": {
+    "actions": {
+      "wait": "idle",
+      "walk": "walk",
+      "hurt": "idle",
+      "death": "dead",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": true,
+      "death": false,
+      "hit1": true
+    }
+  },
+  "swf_png/3021/atlas/metadata.tres": {
+    "actions": {
+      "appear": "appear",
+      "death": "death",
+      "wait": "idle",
+      "skill1": "wing_left",
+      "skill2": "wing_right",
+      "skill3": "effect3",
+      "skill4": "effect3"
+    },
+    "loop": {
+      "appear": false,
+      "death": false,
+      "wait": true,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3036/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3037/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1",
+      "emerge": "attack1_2"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "emerge": false
+    }
+  },
+  "swf_png/3038/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3039/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3047/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3065/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3066/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3067/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3068/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3028/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3030/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3031/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3032/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3049/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3001/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1",
+      "hit2": "attack2"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false
+    }
+  },
+  "swf_png/3003/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3004/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "wait",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3005/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "skill1",
+      "hit2": "skill2",
+      "hit3": "skill3",
+      "dash": "dash",
+      "impact": "skill2_impact"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false,
+      "dash": true,
+      "impact": false
+    }
+  },
+  "swf_png/3002/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3006/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "skill1",
+      "hit2": "skill2",
+      "hit3": "skill3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    }
+  },
+  "swf_png/3008/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3009/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false
+    }
+  },
+  "swf_png/3019/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "attack1",
+      "hit2": "attack2",
+      "hit3": "attack3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    }
+  },
+  "swf_png/3010/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "attack": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "attack": false
+    }
+  },
+  "swf_png/3011/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "attack": "attack1"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "attack": false
+    }
+  },
+  "swf_png/3020/atlas/metadata.tres": {
+    "actions": {
+      "wait": "wait",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "skill1",
+      "skill2": "skill2",
+      "skill3": "skill3"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false
+    }
+  }
+}

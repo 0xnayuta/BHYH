@@ -215,7 +215,6 @@ const VISUAL_OFFSETS := {
 	},
 }
 
-static var _boss_frames_cache: SpriteFrames
 static var _legacy_frames_cache: Dictionary = {}
 
 var _skill_busy := false
@@ -303,15 +302,7 @@ func _resolve_runtime_config() -> Dictionary:
 
 func _build_animations() -> void:
 	var animations: Dictionary = DATA[monster_kind]["animations"]
-	var standard := _load_standard_frames(animations)
-	var frames: SpriteFrames
-	if standard != null:
-		frames = standard
-	elif monster_kind == 3005:
-		frames = _get_boss_frames()
-	else:
-		frames = _build_legacy_frames(animations)
-	mr_ani.sprite_frames = frames
+	mr_ani.sprite_frames = _load_standard_frames()
 	mr_ani.centered = true
 
 	mr_ani.flip_h = true
@@ -331,31 +322,7 @@ func _build_animations() -> void:
 	mr_player.add_animation_library(&"", library)
 
 
-static func _get_boss_frames() -> SpriteFrames:
-	if _boss_frames_cache != null:
-		return _boss_frames_cache
-	var frames_path := FRAME_ROOT.path_join("3005/atlas/swf_png_3005_frames.tres")
-	if ResourceLoader.exists(frames_path):
-		var source := load(frames_path) as SpriteFrames
-		if source != null:
-			var animations: Dictionary = DATA[3005]["animations"]
-			var frames := SpriteFrames.new()
-			frames.remove_animation(&"default")
-			for animation_name: StringName in animations:
-				var animation_data: Array = animations[animation_name]
-				var sequence_name := StringName(str(animation_data[0]))
-				if source.has_animation(sequence_name):
-					frames.add_animation(animation_name)
-					frames.set_animation_speed(animation_name, source.get_animation_speed(sequence_name))
-					frames.set_animation_loop(animation_name, bool(animation_data[2]))
-					for frame_index in range(source.get_frame_count(sequence_name)):
-						frames.add_frame(animation_name, source.get_frame_texture(sequence_name, frame_index))
-			_boss_frames_cache = frames
-			return frames
-	return null
-
-
-func _load_standard_frames(animations: Dictionary) -> SpriteFrames:
+func _load_standard_frames() -> SpriteFrames:
 	if _legacy_frames_cache.has(monster_kind):
 		return _legacy_frames_cache[monster_kind] as SpriteFrames
 	var frames_path := FRAME_ROOT.path_join(str(monster_kind)).path_join("atlas").path_join(
@@ -366,24 +333,8 @@ func _load_standard_frames(animations: Dictionary) -> SpriteFrames:
 	var source := load(frames_path) as SpriteFrames
 	if source == null:
 		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for animation_name: StringName in animations:
-		var animation_data: Array = animations[animation_name]
-		var sequence_name := StringName(str(animation_data[0]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(animation_name)
-		frames.set_animation_speed(animation_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(animation_name, bool(animation_data[2]))
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(animation_name, source.get_frame_texture(sequence_name, frame_index))
-	_legacy_frames_cache[monster_kind] = frames
-	return frames
-
-
-func _build_legacy_frames(animations: Dictionary) -> SpriteFrames:
-	return _load_standard_frames(animations)
+	_legacy_frames_cache[monster_kind] = source
+	return source
 
 
 func _make_animation(animation_name: StringName, frame_count: int, looped: bool) -> Animation:

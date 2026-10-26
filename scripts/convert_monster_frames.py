@@ -41,6 +41,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source"
 MONSTER_ROOT = SOURCE / "Art/monster"
+ACTION_MAP_PATH = ROOT / "scripts/monster_action_maps.json"
 
 UID_ALPHABET = "abcdefghijklmnopqrstuvwxy012345678"
 UID_BASE = len(UID_ALPHABET)
@@ -114,6 +115,8 @@ class Target:
     metadata: Path
     frames_path: Path
     metadata_model: MetadataModel
+    action_map: dict[str, str] = field(default_factory=dict)
+    loop_overrides: dict[str, bool] = field(default_factory=dict)
 
     @property
     def label(self) -> str:
@@ -283,9 +286,28 @@ def resolve_target(metadata: Path) -> tuple[Path | None, str]:
     return None, "没有可解析的既有 *_frames.tres，且未登记推导规则"
 
 
+def load_action_maps() -> tuple[dict[str, dict[str, str]], dict[str, dict[str, bool]]]:
+    if not ACTION_MAP_PATH.is_file():
+        return {}, {}
+    data = json.loads(ACTION_MAP_PATH.read_text(encoding="utf-8"))
+    maps: dict[str, dict[str, str]] = {}
+    loops: dict[str, dict[str, bool]] = {}
+    for metadata, entry in data.items():
+        if not isinstance(entry, dict) or not isinstance(entry.get("actions"), dict):
+            raise MetadataParseError(f"{ACTION_MAP_PATH}: {metadata} 缺少 actions 映射")
+        maps[str(metadata)] = {
+            str(action): str(sequence) for action, sequence in entry["actions"].items()
+        }
+        loops[str(metadata)] = {
+            str(name): bool(value) for name, value in (entry.get("loop") or {}).items()
+        }
+    return maps, loops
+
+
 def collect_targets() -> tuple[list[Target], list[tuple[str, str]]]:
     targets: list[Target] = []
     skipped: list[tuple[str, str]] = []
+    action_maps, loop_overrides = load_action_maps()
     for metadata in sorted(MONSTER_ROOT.rglob("metadata.tres")):
         text = metadata.read_text(encoding="utf-8")
         if '"sequences"' not in text:
@@ -301,7 +323,15 @@ def collect_targets() -> tuple[list[Target], list[tuple[str, str]]]:
             skipped.append((metadata.relative_to(MONSTER_ROOT).as_posix(), reason))
             continue
         targets.append(
-            Target(metadata=metadata, frames_path=frames_path, metadata_model=model)
+            Target(
+                metadata=metadata,
+                frames_path=frames_path,
+                metadata_model=model,
+                action_map=action_maps.get(metadata.relative_to(MONSTER_ROOT).as_posix(), {}),
+                loop_overrides=loop_overrides.get(
+                    metadata.relative_to(MONSTER_ROOT).as_posix(), {}
+                ),
+            )
         )
     return targets, skipped
 
@@ -313,6 +343,7 @@ def build_expected(target: Target, existing: FramesModel | None) -> FramesModel:
     used_pages = {frame.page for _, frames in target.metadata_model.sequences for frame in frames}
     pages = [page for page in target.metadata_model.pages if page in used_pages]
     animations: list[Animation] = []
+    by_name = {name: frames for name, frames in target.metadata_model.sequences}
     for name, frames in target.metadata_model.sequences:
         previous = inherited.get(name)
         if previous is not None:
@@ -321,6 +352,21 @@ def build_expected(target: Target, existing: FramesModel | None) -> FramesModel:
             loop = 1 if name in LOOP_NAMES or name.startswith(LOOP_NAME_PREFIXES) else 0
             speed = target.metadata_model.fps or DEFAULT_SPEED
         animations.append(Animation(name=name, loop=loop, speed=speed, frames=frames))
+    for action, sequence in target.action_map.items():
+        if action in by_name:
+            continue
+        frames = by_name.get(sequence)
+        if frames is None:
+            raise MetadataParseError(
+                f"{target.label}: 动作 {action!r} 指向不存在的序列 {sequence!r}"
+            )
+        source = next((a for a in animations if a.name == sequence), None)
+        loop = source.loop if source is not None else 0
+        speed = source.speed if source is not None else (target.metadata_model.fps or DEFAULT_SPEED)
+        animations.append(Animation(name=action, loop=loop, speed=speed, frames=frames))
+    for animation in animations:
+        if animation.name in target.loop_overrides:
+            animation.loop = 1 if target.loop_overrides[animation.name] else 0
     return FramesModel(pages=pages, animations=animations)
 
 
@@ -357,6 +403,11 @@ def compare_models(expected: FramesModel, actual: FramesModel) -> list[str]:
                     f"{got.page} {got.region} {got.margin} != {want.page} {want.region} {want.margin}"
                 )
                 break
+        if actual_animation.loop != expected_animation.loop:
+            problems.append(
+                f"动画 {expected_animation.name!r} loop {actual_animation.loop} "
+                f"!= {expected_animation.loop}"
+            )
     return problems
 
 
@@ -506,6 +557,79 @@ def write_text(path: Path, content: str) -> None:
         handle.write(content)
 
 
+def parse_animation_subresources(text: str) -> dict[str, list[str]]:
+    return {
+        name: TEXTURE_REF_PATTERN.findall(frames_blob)
+        for frames_blob, _loop, name, _speed in ANIMATION_PATTERN.findall(text)
+    }
+
+
+def append_action_aliases(target: Target, existing: FramesModel) -> int:
+    """在现有资源末尾追加动作别名动画，复用原 SubResource，不改已有动画。"""
+    text = target.frames_path.read_text(encoding="utf-8")
+    subresources = parse_animation_subresources(text)
+    existing_by_name = {animation.name: animation for animation in existing.animations}
+    blocks: list[str] = []
+    for action, sequence in target.action_map.items():
+        if action in subresources:
+            continue
+        sub_ids = subresources.get(sequence)
+        source = existing_by_name.get(sequence)
+        if sub_ids is None or source is None:
+            raise MetadataParseError(
+                f"{target.label}: 动作 {action!r} 的源序列 {sequence!r} 不在现有资源中"
+            )
+        frame_blocks = ", ".join(
+            '{\n"duration": 1.0,\n"texture": SubResource("%s")\n}' % sub_id
+            for sub_id in sub_ids
+        )
+        blocks.append(
+            ', {\n"frames": [%s],\n"loop": %d,\n"name": &"%s",\n"speed": %s\n}'
+            % (frame_blocks, source.loop, action, format_float(source.speed))
+        )
+    if not blocks:
+        return 0
+    insert_at = text.rfind("]")
+    if insert_at < 0:
+        raise MetadataParseError(f"{target.frames_path}: 找不到 animations 数组结尾")
+    write_text(target.frames_path, text[:insert_at] + "".join(blocks) + text[insert_at:])
+    return len(blocks)
+
+
+def apply_loop_overrides(target: Target) -> int:
+    """按动作映射原地修正动画 loop 标志，不重写帧数据。"""
+    if not target.loop_overrides:
+        return 0
+    text = target.frames_path.read_text(encoding="utf-8")
+    updated = text
+    for name, loop in target.loop_overrides.items():
+        pattern = re.compile(
+            r'("loop": )([01])(,\n"name": &"%s")' % re.escape(name)
+        )
+        updated = pattern.sub(lambda m: m.group(1) + ("1" if loop else "0") + m.group(3), updated)
+    if updated == text:
+        return 0
+    write_text(target.frames_path, updated)
+    return 1
+
+
+def ensure_uid_header(path: Path, uid: str) -> bool:
+    """只补/修正资源头 UID，不改动帧数据；返回是否写入。"""
+    text = path.read_text(encoding="utf-8")
+    match = HEADER_UID_PATTERN.search(text[:512])
+    if match:
+        if match.group(1) == uid:
+            return False
+        updated = text[: match.start(1)] + uid + text[match.end(1) :]
+    else:
+        header_end = text.find("]")
+        if header_end < 0 or not text.startswith("[gd_resource"):
+            raise MetadataParseError(f"{path}: 资源头无法识别")
+        updated = text[:header_end] + f' uid="{uid}"' + text[header_end:]
+    write_text(path, updated)
+    return True
+
+
 def write_frames(path: Path, model: FramesModel, uid: str | None) -> None:
     """写入后立即回读，防止转换器产出自己无法解析的资源。"""
     write_text(path, render_tres(model, uid))
@@ -519,7 +643,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="怪物 AtlasMetadata → SpriteFrames 构建期转换器")
     parser.add_argument("--check", action="store_true", help="只校验，不写文件（默认）")
     parser.add_argument("--all", action="store_true", help="补齐缺失或与 metadata 不一致的目标")
-    parser.add_argument("--rewrite", action="store_true", help="强制按规范格式重写全部目标（含 UID）")
+    parser.add_argument("--rewrite", action="store_true", help="只补/修正全部目标的确定性 UID 头，不改帧数据")
     parser.add_argument("--emit", type=Path, default=None, help="把规范输出写到指定目录（只读源树）")
     parser.add_argument("--only", default=None, help="只处理路径包含该片段的模型")
     parser.add_argument("--report", type=Path, default=None, help="写出 JSON 报告")
@@ -595,12 +719,13 @@ def main(argv: list[str] | None = None) -> int:
         expected = build_expected(target, existing)
         problems = [f"{target.label}: {item}" for item in validate_model(expected, cache)]
         differences = compare_models(expected, existing) if existing is not None else []
-        problems.extend(f"{target.label}: {item}" for item in differences)
+        if not (args.all and existing is not None):
+            problems.extend(f"{target.label}: {item}" for item in differences)
         if existing is None and not (args.all or args.rewrite or args.emit is not None):
             problems.append(f"{target.label}: 目标帧资源不存在")
         failures.extend(problems)
 
-        needs_write = existing is None or bool(differences) or args.rewrite
+        needs_write = existing is None or bool(differences)
         if args.emit is not None:
             relative = target.frames_path.relative_to(SOURCE / "Art/monster").as_posix()
             destination = args.emit / relative
@@ -610,13 +735,32 @@ def main(argv: list[str] | None = None) -> int:
                 failures.append(f"{target.label}: {error}")
             else:
                 emitted.append(str(destination))
-        elif args.rewrite or (args.all and needs_write):
+        elif args.all and needs_write:
             try:
+                appended = 0
+                if existing is not None:
+                    appended = append_action_aliases(target, existing)
+                    appended += apply_loop_overrides(target)
+                    if appended:
+                        reparsed = parse_frames(target.frames_path)
+                        if not compare_models(expected, reparsed):
+                            written.append(str(target.frames_path.relative_to(ROOT)))
+                            continue
                 write_frames(target.frames_path, expected, expected_uid)
+                remaining = compare_models(expected, parse_frames(target.frames_path))
+                if remaining:
+                    failures.extend(f"{target.label}: {item}" for item in remaining)
             except MetadataParseError as error:
                 failures.append(f"{target.label}: {error}")
             else:
-                written.append(str(target.frames_path.relative_to(ROOT)))
+                if not failures or not failures[-1].startswith(target.label):
+                    written.append(str(target.frames_path.relative_to(ROOT)))
+        elif args.rewrite:
+            try:
+                if ensure_uid_header(target.frames_path, expected_uid):
+                    written.append(str(target.frames_path.relative_to(ROOT)))
+            except (OSError, MetadataParseError) as error:
+                failures.append(f"{target.label}: {error}")
         checked += 1
 
     report = {

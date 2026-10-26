@@ -337,34 +337,18 @@ func _frames() -> SpriteFrames:
 	return _frames_cache[monster_kind] as SpriteFrames
 
 
-static func _load_standard_frames(source_kind: int, names: Dictionary) -> SpriteFrames:
+static func _load_standard_frames(source_kind: int) -> SpriteFrames:
 	var frames_path := ROOT.path_join(str(source_kind)).path_join("atlas").path_join(
 		"swf_png_%d_frames.tres" % source_kind
 	)
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for key in names:
-		var action_name := StringName(str(key))
-		var sequence_name := StringName(str(names[key]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(action_name)
-		frames.set_animation_speed(action_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(action_name, action_name in [&"wait", &"walk"])
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(action_name, source.get_frame_texture(sequence_name, frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _build_frames_for_kind(kind: int) -> SpriteFrames:
 	var source_kind := 3011 if kind == 3022 else kind
-	var names: Dictionary = ACTIONS[source_kind]
-	return _load_standard_frames(source_kind, names)
+	return _load_standard_frames(source_kind)
 
 
 func ai_think() -> void:

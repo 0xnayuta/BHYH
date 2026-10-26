@@ -138,22 +138,7 @@ static func _load_standard_frames() -> SpriteFrames:
 	var frames_path := ROOT.path_join("atlas/swf_png_3041_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for action_name: StringName in ACTIONS:
-		var info: Dictionary = ACTIONS[action_name]
-		var sequence_name := StringName(str(info["folder"]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(action_name)
-		frames.set_animation_speed(action_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(action_name, bool(info["loop"]))
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(action_name, source.get_frame_texture(sequence_name, frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _get_sprite_frames() -> SpriteFrames:

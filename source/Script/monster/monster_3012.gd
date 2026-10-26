@@ -97,17 +97,7 @@ static func _load_standard_frames() -> SpriteFrames:
 	var frames_path := ROOT.path_join("atlas/swf_png_3012_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null or not source.has_animation(&"attack1"):
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"attack")
-	frames.set_animation_speed(&"attack", source.get_animation_speed(&"attack1"))
-	frames.set_animation_loop(&"attack", true)
-	for frame_index in range(source.get_frame_count(&"attack1")):
-		frames.add_frame(&"attack", source.get_frame_texture(&"attack1", frame_index))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _get_frames() -> SpriteFrames:

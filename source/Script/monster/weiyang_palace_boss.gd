@@ -220,40 +220,14 @@ static func _load_standard_frames() -> SpriteFrames:
 	var frames_path := ROOT.path_join("atlas/swf_png_3007_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null or not source.has_animation(&"DefineShape_31"):
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"wait")
-	frames.set_animation_speed(&"wait", FPS)
-	frames.set_animation_loop(&"wait", true)
-	for i in range(source.get_frame_count(&"DefineShape_31")):
-		frames.add_frame(&"wait", source.get_frame_texture(&"DefineShape_31", i))
-	if source.has_animation(&"DefineSprite_36_mc_dead"):
-		frames.add_animation(&"death")
-		frames.set_animation_speed(&"death", FPS)
-		frames.set_animation_loop(&"death", false)
-		for i in range(source.get_frame_count(&"DefineSprite_36_mc_dead")):
-			frames.add_frame(&"death", source.get_frame_texture(&"DefineSprite_36_mc_dead", i))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _load_standard_appear_frames() -> SpriteFrames:
 	var frames_path := ROOT.path_join("atlas/swf_png_3007_frames.tres")
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null or not source.has_animation(&"DefineSprite_70_mc_appear"):
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"appear")
-	frames.set_animation_speed(&"appear", FPS)
-	frames.set_animation_loop(&"appear", false)
-	for i in range(source.get_frame_count(&"DefineSprite_70_mc_appear")):
-		frames.add_frame(&"appear", source.get_frame_texture(&"DefineSprite_70_mc_appear", i))
-	return frames
+	return load(frames_path) as SpriteFrames
 
 
 static func _get_frames() -> SpriteFrames:

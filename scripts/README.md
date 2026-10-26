@@ -84,7 +84,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
-| `convert_monster_frames.py` | 怪物 `AtlasMetadata` 的 `sequences` → 既有 `*_frames.tres` 语义校验/补齐；`--check` 校验动画名集合、帧数、页闭包、region/margin、确定性 UID 与全局 UID 冲突；`--all` 只写缺失或语义不一致的目标；`--rewrite` 强制补 UID；`--emit` 输出到指定目录 | 既有 `source/Art/monster/**/*_frames.tres`（私有素材） |
+| `convert_monster_frames.py` | 怪物 `AtlasMetadata.sequences` → 既有 `*_frames.tres`；按 `monster_action_maps.json` 追加动作别名（复用 `AtlasTexture` 子资源）并修正 loop；`--check` 校验动画名集合、帧数、页闭包、region/margin、确定性 UID 与全局 UID 冲突；`--all` 只补缺失/语义不一致/别名；`--rewrite` 只补 UID 头；`--emit` 输出规范格式到指定目录 | 既有 `source/Art/monster/**/*_frames.tres`（私有素材） |
 | `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 → `LevelPreloadCatalog.tres`；`--check` 校验输出未过期并进入总门禁 | `source/Script/data/level_preload_catalog.tres` |
 
 ### 3.3 人工审计与迁移工具
@@ -114,6 +114,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 |:---|:---|
 | `contract_whitelist.json` | 命名/契约/机器导出白名单冻结清单；多个命名与契约脚本共用 |
 | `png_stream_allowlist.json` | 允许使用 `StreamedPngEffect` 的文件清单 |
+| `monster_action_maps.json` | 怪物构建期帧的动作映射：`metadata 相对路径 → {actions: action→sequence, loop: 动作循环声明}`；与脚本 `ACTIONS`/`MODEL_ACTIONS`/`DATA.animations` 对应 |
 
 ---
 

@@ -166,13 +166,15 @@ return MANIFESTS[role_id]
 
 规划原定「新建 `monster_<id>_frames.tres`」与现状冲突：148 个模型已有按既有命名生成的同源资源，消费者按现有路径引用。13-2A 改为复用现有资源，避免重复资产与 13-2B 的路径迁移开销。
 
-### 3.4 批次 13-2B：消费者切换
+### 3.4 批次 13-2B：消费者切换（进行中）
 
-按“机械可批量”优先：
+实测修正：清单虽称“35 个仅依赖构建期帧路径”，但 26 个标准加载器全部在运行时把 sequence 名重命名为动作名（如资源 `effect1` → 动作 `skill1`）。直接 `load` 会让 `AnimatedSprite2D.animation` 找不到动作。因此 13-2B 的实际路径是：
 
-1. **35 个仅依赖构建期帧路径的怪物脚本**：删除 `_build_animations()` 的逐帧拼装，改为 `preload` 或 `load` 对应 `*_frames.tres`；保留原有动画名与 fps 语义；
-2. **3 个 `AtlasMetadata` 驱动脚本（含 2 个与上组重叠）**：改为消费 13-2A 的产物；
-3. **剩余 12 个**：逐个人工确认帧来源，无法静态确定的登记到 `missing_assets_registry.md`，不保留运行时拼路径。
+1. **构建期动作视图**：`convert_monster_frames.py` 按 `scripts/monster_action_maps.json` 在既有帧资源中追加动作别名动画，复用原 `AtlasTexture` 子资源并显式声明 loop；
+2. **消费者直接加载**：删除 `_load_standard_frames()` 中的 `SpriteFrames.new()` 重建与 `add_animation` 循环，改为 `return load(frames_path) as SpriteFrames`；保留 `ACTIONS`/`MODEL_ACTIONS` 的帧数、offset、loop 用于 `AnimationPlayer` 时长与位移；
+3. **删除回退**：`_get_frames_for_model()` 的逐帧 PNG 回退分支删除，资源缺失即返回 `null`；
+4. **已完成 24 个脚本**：3040/3041/3042/3033/3034/3035/3069/3070/3076/3117/3370、3012/3007/3021/3056/3077/3078、峨眉山/五台明海/南海/双喜寺/玄武门/朱雀街/九华山；
+5. **待处理**：`east_continent_monster`（metadata 几何 + 独立 PNG 动作）、`sword_boss_base`（旧 `animations` schema）、以及 27 个拼 PNG 的弹体/特效脚本。
 
 **禁止**：为了少改代码而保留“先试 `.tres`，失败再回退运行时建帧”的双路径——这正是 ADR-005 与 §4.2 禁止的兼容层。
 
