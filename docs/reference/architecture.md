@@ -361,12 +361,17 @@ classDiagram
 
 仍然存在（遗留）：
 
-- `SpriteFrames.new()` 仍有 42 个文件（怪物 22 个）。已登记的保留类别：
-  - 运行时几何裁剪：`three_prince_boss`、`eight_immortals_boss`、`weiyang_palace_boss` 符号层；
-  - 单序列裁剪：`nanhai_projectile`（同一模型多动作均需 `play`）；
-  - 资源异常兜底：`tao_wu_boss`（单图占位，不拼路径）、`monster_bullet`（null 计时帧）；
-  - 资源缺失回退：`three_prince_bullet`（有资源走资源，缺失才逐帧）；
-  - 无构建期资源的编号帧弹体：`jiuhua_pine_arrow`、`monster*_bullet*` 等，待生成构建期 SpriteFrames；
+- 运行时建帧仍有 **34** 个文件（怪物 **14** 个），由
+  `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
+  守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
+  怪物域已评审保留：
+  - 动态配置：`east_continent_monster`（关卡配置 merge，仅剩标准动作重命名）；
+  - 几何/图集裁剪：`three_prince_boss`、`eight_immortals_boss`、`weiyang_palace_boss` 符号层、`pet_tiger_boss_base`；
+  - 单序列/子集：`nanhai_projectile`、`monster_130`/`monster_212`/`monster_215`（`play` 子集 + 逐帧 duration）；
+  - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
+  - 资源缺失回退：`three_prince_bullet`；
+  - 待迁移：`liu_sha_river_boss` / `liu_sha_river_shadow`（逐帧 PNG）。
+  非怪物 **20** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域；
 - `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界。
 
 ### 6.4 构建期转换器

@@ -24,4 +24,5 @@
 - 剑 Boss（951~954）的 `sword_boss_<name>_frames.tres` 由旧 `animations` schema 的 metadata 生成：`idle/walk/hurt/death` 为实际帧，`hit1/2/3` 固定单帧 `null`（技能视觉由 FrameSequence 流式播放），`speed` 与 `SwordBossBase.SOURCE_FPS` 一致；
 - `scripts/convert_frame_sequences.py --check` 校验内容、schema、UID、Catalog 与延迟纹理路径闭包；已接入 `contract_gate`；
 - `scripts/convert_frame_sequences.py --export-preset [NAME]` 只读检查实际导出预设；缺预设明确失败，配置通过不等于导出包通过；
-- `png_stream_audit.py --fail-on-error` 限制未登记使用，并拦截已迁移消费者恢复旧字段、目录扫描或编号探测。
+- `png_stream_audit.py --fail-on-error` 限制未登记使用，并拦截已迁移消费者恢复旧字段、目录扫描或编号探测；
+- `runtime_frames_audit.py --fail-on-error` 守恒运行时 `SpriteFrames.new()` 集合与 `scripts/runtime_frames_allowlist.json`；新增未登记文件、失效条目或空理由均失败。

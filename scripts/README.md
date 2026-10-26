@@ -32,6 +32,7 @@ check_all.py
 │   ├── convert_monster_frames.py --check
 │   ├── convert_level_preload_catalog.py --check
 │   ├── png_stream_audit.py
+│   ├── runtime_frames_audit.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
@@ -81,6 +82,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
 | `png_stream_audit.py` | 冻结 allowlist；已迁移消费者旧数组/目录扫描/编号探测回归检查 | 终端结果 |
+| `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 集合与允许清单守恒；新增/失效/空理由失败 | `scripts/runtime_frames_allowlist.json` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
@@ -115,6 +117,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `contract_whitelist.json` | 命名/契约/机器导出白名单冻结清单；多个命名与契约脚本共用 |
 | `png_stream_allowlist.json` | 允许使用 `StreamedPngEffect` 的文件清单 |
 | `monster_action_maps.json` | 怪物构建期帧的动作映射：`metadata 相对路径 → {actions: action→sequence, loop: 动作循环声明}`；与脚本 `ACTIONS`/`MODEL_ACTIONS`/`DATA.animations` 对应 |
+| `runtime_frames_allowlist.json` | 允许运行时调用 `SpriteFrames.new()` 的文件与理由；由 `runtime_frames_audit.py` 守恒 |
 
 ---
 

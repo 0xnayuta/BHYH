@@ -182,6 +182,8 @@ return MANIFESTS[role_id]
 
 - `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **≤ 10**，且剩余项全部登记例外（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
 - `convert_monster_frames.py --check` 通过并进入契约门禁；
+- `runtime_frames_audit.py --fail-on-error` 通过，运行时建帧集合与
+  `scripts/runtime_frames_allowlist.json` 守恒；迁移后条目只减不增；
 - `health_check` 0 Parse / 0 Error / 0 Warning；
 - 全量关卡回归 `level_regression_all.py --jobs 4` PASS，FAIL 0；
 - 至少 6 个代表关卡（含 5 阶段关、Boss 关、八仙、三太子）冒烟 0 ERROR / 0 WARNING。
