@@ -361,7 +361,12 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 仍有多个脚本在运行时调用 `SpriteFrames.new()` 建帧；
+- `SpriteFrames.new()` 仍有 42 个文件（怪物 22 个）。已登记的保留类别：
+  - 运行时几何裁剪：`three_prince_boss`、`eight_immortals_boss`、`weiyang_palace_boss` 符号层；
+  - 单序列裁剪：`nanhai_projectile`（同一模型多动作均需 `play`）；
+  - 资源异常兜底：`tao_wu_boss`（单图占位，不拼路径）、`monster_bullet`（null 计时帧）；
+  - 资源缺失回退：`three_prince_bullet`（有资源走资源，缺失才逐帧）；
+  - 无构建期资源的编号帧弹体：`jiuhua_pine_arrow`、`monster*_bullet*` 等，待生成构建期 SpriteFrames；
 - `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界。
 
 ### 6.4 构建期转换器
