@@ -23,18 +23,19 @@ static func level(scene_path: String) -> LevelPreloadEntry:
 	return _catalog.level(scene_path)
 
 
-static func stage_group(scene_path: String) -> Dictionary:
+static func first_wave_ids(scene_path: String) -> PackedInt32Array:
 	var entry := level(scene_path)
 	if entry == null:
-		return {"stage_1": [], "stage_2": [], "stage_3": [], "stage_4": []}
-	return entry.stage_group()
+		return PackedInt32Array()
+	return entry.first_wave_ids
 
 
 static func monster_ids(scene_path: String) -> Array[int]:
+	var result: Array[int] = []
 	var entry := level(scene_path)
-	if entry == null:
-		return []
-	return Array(entry.monster_ids)
+	if entry != null:
+		result.assign(entry.monster_ids)
+	return result
 
 
 static func bullet_scenes(monster_scene_path: String) -> PackedStringArray:

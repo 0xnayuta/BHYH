@@ -46,6 +46,7 @@ class LevelEntry:
         default_factory=lambda: {key: [] for key in STAGE_KEYS}
     )
     monster_ids: list[int] = field(default_factory=list)
+    late_stage_ids: list[int] = field(default_factory=list)
     unresolved: list[str] = field(default_factory=list)
 
 
@@ -256,13 +257,20 @@ def extract_birth_point_stages(text: str, entry: LevelEntry) -> None:
     """从出生点字典字面量（同时含 `"stage"` 与 `"monster"`）还原阶段归属。"""
     for match in re.finditer(r"\{", text):
         body = brace_block(text, match.end() - 1)
-        stage_match = re.search(r'"stage"\s*:\s*([1-4])\b', body)
+        stage_match = re.search(r'"stage"\s*:\s*([1-9])\b', body)
         monster_match = re.search(r'"monster"\s*:\s*(\d+)', body)
         if stage_match is None or monster_match is None:
             continue
-        key = "stage_" + stage_match.group(1)
         value = int(monster_match.group(1))
-        if value > 0 and value not in entry.stages[key]:
+        if value <= 0:
+            continue
+        stage_index = int(stage_match.group(1))
+        if stage_index > 4:
+            if value not in entry.late_stage_ids:
+                entry.late_stage_ids.append(value)
+            continue
+        key = "stage_%d" % stage_index
+        if value not in entry.stages[key]:
             entry.stages[key].append(value)
 
 
@@ -413,8 +421,7 @@ def catalog_content(levels: dict[str, LevelEntry], bullets: dict[str, list[str]]
     for index, (scene, entry) in enumerate(entries, 1):
         lines.append('[sub_resource type="Resource" id="entry_%d"]' % index)
         lines.append('script = ExtResource("2_entry")')
-        for key in STAGE_KEYS:
-            lines.append("%s = %s" % (key, packed(entry.stages[key])))
+        lines.append("first_wave_ids = %s" % packed(entry.stages["stage_1"]))
         lines.append("monster_ids = %s" % packed(entry.monster_ids))
         lines.append("")
     lines.extend(
@@ -453,6 +460,17 @@ def run(check_only: bool) -> int:
         print("[!] 存在无法静态解析的阶段条目（由关卡运行期自行预载）：", file=sys.stderr)
         for line in unresolved[:20]:
             print("    " + line, file=sys.stderr)
+    late_stage_missing = [
+        (scene, monster_id)
+        for scene, entry in levels.items()
+        for monster_id in entry.late_stage_ids
+        if monster_id not in entry.monster_ids
+    ]
+    if late_stage_missing:
+        print("[FAIL] stage_5+ 怪物未进入 monster_ids 完整集合:", file=sys.stderr)
+        for scene, monster_id in late_stage_missing[:20]:
+            print(f"    {scene}: {monster_id}", file=sys.stderr)
+        return 1
     populated = sum(1 for entry in levels.values() if entry.monster_ids)
     if check_only:
         if not CATALOG_PATH.is_file():

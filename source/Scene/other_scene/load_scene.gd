@@ -229,17 +229,13 @@ func _get_tzsijian_boss_preload_paths() -> Array[String]:
 func _get_target_first_wave_monster_scene_paths() -> Array[String]:
 	var paths: Array[String] = []
 	var seen_ids := {}
-	var monster_group := _target_level_stage_group()
-	var first_wave: Variant = monster_group.get("stage_1", [])
-	if first_wave is Array:
-		for monster_id_value in first_wave:
-			var monster_id := int(monster_id_value)
-			if monster_id <= 0 or seen_ids.has(monster_id):
-				continue
-			seen_ids[monster_id] = true
-			var scene_path := "res://Scene/monster/monster_%d.tscn" % monster_id
-			if ResourceLoader.exists(scene_path):
-				paths.append(scene_path)
+	for monster_id in LevelPreloadStore.first_wave_ids(str(Global.target_scene)):
+		if monster_id <= 0 or seen_ids.has(monster_id):
+			continue
+		seen_ids[monster_id] = true
+		var scene_path := "res://Scene/monster/monster_%d.tscn" % monster_id
+		if ResourceLoader.exists(scene_path):
+			paths.append(scene_path)
 	if str(Global.target_scene) == TZSIJIAN_LEVEL_SCENE:
 		for special_path in ["res://Scene/monster/monster_951.tscn", "res://Scene/monster_blood/boss_blood.tscn"]:
 			if ResourceLoader.exists(special_path) and not paths.has(special_path):
@@ -552,23 +548,8 @@ func _prewarm_target_level_resources() -> void:
 	await Global.prewarm_monster_scene_paths(extra_scene_paths)
 
 
-func _get_target_level_monster_ids() -> Array:
-	return Array(LevelPreloadStore.monster_ids(str(Global.target_scene)))
-
-
-func _prewarm_target_script_monsters() -> void:
-	var monster_group := _target_level_stage_group()
-	var has_monsters := false
-	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
-		if monster_group.get(stage_key, []).size() > 0:
-			has_monsters = true
-			break
-	if has_monsters:
-		await Global.preload_level_monster_resources(monster_group)
-
-
-func _target_level_stage_group() -> Dictionary:
-	return LevelPreloadStore.stage_group(str(Global.target_scene))
+func _get_target_level_monster_ids() -> Array[int]:
+	return LevelPreloadStore.monster_ids(str(Global.target_scene))
 
 
 func _change_to_packed_scene(packed_scene: PackedScene) -> void:

@@ -243,22 +243,25 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 - `SKIP` 不计为 PASS；当前矩阵的 `_skip` 没有调用点，实际只产出 PASS/FAIL；
 - 产物：`docs/reports/coop_probe_matrix_report.{md,json}`。
 
-### 6.4 星座运行时场景探针：`scene_probe_runner.py`
+### 6.4 场景探针套件：`scene_probe_runner.py`
 
 ```bash
 python scripts/scene_probe_runner.py --godot "<godot>"
+python scripts/scene_probe_runner.py --godot "<godot>" --probe level-selection
 ```
 
 | 项目 | 规则 |
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
-| 探针规格 | `scripts/scene_probes/constellation_probe.{gd,tscn}`；运行期复制到 `source/`，结束后清理 |
-| 覆盖范围 | 星座 body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
-| 结果通道 | 最后一条 `CONSTELLATION_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
-| 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0 |
-| 超时 | 默认 90 秒；`--quit-after 600` 防止挂起 |
-| 产物 | `docs/reports/constellation_probe_report.{md,json}` |
-| 退出码 | `0` PASS；`1` 探针失败；`2` 规格/工程缺失 |
+| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe` 与 `level_selection_probe`；运行期复制到 `source/`，结束后清理 |
+| 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
+| 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存与背景可见性 |
+| 结果通道 | 各探针最后一条 `*_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
+| 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0；唯一豁免为 `ERROR: Parameter "t" is null.` 及其缩进栈 |
+| 退出阶段 | 探针输出 `*_PROBE_TEARDOWN` 后进入引擎退出；退出期 RID/ObjectDB 清理噪声不计入门禁 |
+| 超时 | 星座 90 秒、选择态 240 秒；`--timeout` 可覆盖 |
+| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}` |
+| 退出码 | `0` PASS；`1` 任一探针失败；`2` 规格/工程缺失 |
 
 ### 6.5 构建期资源校验
 
@@ -275,6 +278,8 @@ python scripts/convert_frame_sequences.py --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
+
+`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验关卡预载 Catalog 与源脚本一致。
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 

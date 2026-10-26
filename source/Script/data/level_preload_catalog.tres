@@ -5,810 +5,507 @@
 
 [sub_resource type="Resource" id="entry_1"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(1)
-stage_2 = PackedInt32Array(2, 1)
-stage_3 = PackedInt32Array(2)
-stage_4 = PackedInt32Array(2, 3)
+first_wave_ids = PackedInt32Array(1)
 monster_ids = PackedInt32Array(1, 2, 3)
 
 [sub_resource type="Resource" id="entry_2"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(21)
-stage_2 = PackedInt32Array(22)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(21)
 monster_ids = PackedInt32Array(21, 22)
 
 [sub_resource type="Resource" id="entry_3"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(26)
-stage_2 = PackedInt32Array(27, 26)
-stage_3 = PackedInt32Array(27, 26)
-stage_4 = PackedInt32Array(27, 28)
+first_wave_ids = PackedInt32Array(26)
 monster_ids = PackedInt32Array(26, 27, 28)
 
 [sub_resource type="Resource" id="entry_4"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(26)
-stage_2 = PackedInt32Array(26, 27, 28)
-stage_3 = PackedInt32Array(27, 28)
-stage_4 = PackedInt32Array(30, 31)
+first_wave_ids = PackedInt32Array(26)
 monster_ids = PackedInt32Array(26, 27, 28, 30, 31)
 
 [sub_resource type="Resource" id="entry_5"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(27)
-stage_2 = PackedInt32Array(27, 28)
-stage_3 = PackedInt32Array(28)
-stage_4 = PackedInt32Array(33)
+first_wave_ids = PackedInt32Array(27)
 monster_ids = PackedInt32Array(27, 28, 33)
 
 [sub_resource type="Resource" id="entry_6"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(40, 39)
-stage_2 = PackedInt32Array(39, 40)
-stage_3 = PackedInt32Array(39, 40)
-stage_4 = PackedInt32Array(37)
+first_wave_ids = PackedInt32Array(40, 39)
 monster_ids = PackedInt32Array(40, 39, 37)
 
 [sub_resource type="Resource" id="entry_7"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(39, 40)
-stage_2 = PackedInt32Array(39, 40, 31, 30)
-stage_3 = PackedInt32Array(39, 40, 31, 30)
-stage_4 = PackedInt32Array(41)
+first_wave_ids = PackedInt32Array(39, 40)
 monster_ids = PackedInt32Array(39, 40, 31, 30, 41)
 
 [sub_resource type="Resource" id="entry_8"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(40, 39)
-stage_2 = PackedInt32Array(39, 40, 31, 30)
-stage_3 = PackedInt32Array(39, 40, 31, 30)
-stage_4 = PackedInt32Array(43)
+first_wave_ids = PackedInt32Array(40, 39)
 monster_ids = PackedInt32Array(40, 39, 31, 30, 43)
 
 [sub_resource type="Resource" id="entry_9"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(51, 53, 52)
-stage_2 = PackedInt32Array(51, 53, 52)
-stage_3 = PackedInt32Array(51, 53, 52)
-stage_4 = PackedInt32Array(48)
+first_wave_ids = PackedInt32Array(51, 53, 52)
 monster_ids = PackedInt32Array(51, 53, 52, 48)
 
 [sub_resource type="Resource" id="entry_10"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(51, 53, 54)
-stage_2 = PackedInt32Array(51, 53, 54, 52)
-stage_3 = PackedInt32Array(51, 53, 54, 52)
-stage_4 = PackedInt32Array(49)
+first_wave_ids = PackedInt32Array(51, 53, 54)
 monster_ids = PackedInt32Array(51, 53, 54, 52, 49)
 
 [sub_resource type="Resource" id="entry_11"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(1)
-stage_2 = PackedInt32Array(2, 3)
-stage_3 = PackedInt32Array(2, 3)
-stage_4 = PackedInt32Array(4)
+first_wave_ids = PackedInt32Array(1)
 monster_ids = PackedInt32Array(1, 2, 3, 4)
 
 [sub_resource type="Resource" id="entry_12"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array()
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array(49)
+first_wave_ids = PackedInt32Array()
 monster_ids = PackedInt32Array(49)
 
 [sub_resource type="Resource" id="entry_13"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(58)
-stage_2 = PackedInt32Array(57)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(58)
 monster_ids = PackedInt32Array(58, 57)
 
 [sub_resource type="Resource" id="entry_14"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(74, 75)
-stage_2 = PackedInt32Array(74, 75, 76)
-stage_3 = PackedInt32Array(74, 75, 76)
-stage_4 = PackedInt32Array(78, 77)
+first_wave_ids = PackedInt32Array(74, 75)
 monster_ids = PackedInt32Array(74, 75, 76, 78, 77)
 
 [sub_resource type="Resource" id="entry_15"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(74, 75)
-stage_2 = PackedInt32Array(74, 75, 76)
-stage_3 = PackedInt32Array(74, 75, 76)
-stage_4 = PackedInt32Array(79)
+first_wave_ids = PackedInt32Array(74, 75)
 monster_ids = PackedInt32Array(74, 75, 76, 79)
 
 [sub_resource type="Resource" id="entry_16"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(81)
-stage_2 = PackedInt32Array(81, 80, 82)
-stage_3 = PackedInt32Array(81, 80, 82)
-stage_4 = PackedInt32Array(83)
+first_wave_ids = PackedInt32Array(81)
 monster_ids = PackedInt32Array(81, 80, 82, 83)
 
 [sub_resource type="Resource" id="entry_17"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(81)
-stage_2 = PackedInt32Array(81, 80, 82)
-stage_3 = PackedInt32Array(81, 80, 82)
-stage_4 = PackedInt32Array(84)
+first_wave_ids = PackedInt32Array(81)
 monster_ids = PackedInt32Array(81, 80, 82, 84)
 
 [sub_resource type="Resource" id="entry_18"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(81)
-stage_2 = PackedInt32Array(81, 80, 82)
-stage_3 = PackedInt32Array(81, 80, 82)
-stage_4 = PackedInt32Array(85)
+first_wave_ids = PackedInt32Array(81)
 monster_ids = PackedInt32Array(81, 80, 82, 85)
 
 [sub_resource type="Resource" id="entry_19"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(86)
-stage_2 = PackedInt32Array(86, 87, 88)
-stage_3 = PackedInt32Array(86, 87, 88)
-stage_4 = PackedInt32Array(89)
+first_wave_ids = PackedInt32Array(86)
 monster_ids = PackedInt32Array(86, 87, 88, 89)
 
 [sub_resource type="Resource" id="entry_20"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(86, 87)
-stage_2 = PackedInt32Array(86, 87, 90, 88)
-stage_3 = PackedInt32Array(86, 87, 90, 88)
-stage_4 = PackedInt32Array(91)
+first_wave_ids = PackedInt32Array(86, 87)
 monster_ids = PackedInt32Array(86, 87, 90, 88, 91)
 
 [sub_resource type="Resource" id="entry_21"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(2, 3)
-stage_2 = PackedInt32Array(2, 3)
-stage_3 = PackedInt32Array(2, 3)
-stage_4 = PackedInt32Array(5)
+first_wave_ids = PackedInt32Array(2, 3)
 monster_ids = PackedInt32Array(2, 3, 5)
 
 [sub_resource type="Resource" id="entry_22"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(92, 87)
-stage_2 = PackedInt32Array(92, 87, 88)
-stage_3 = PackedInt32Array(92, 87, 88)
-stage_4 = PackedInt32Array(93)
+first_wave_ids = PackedInt32Array(92, 87)
 monster_ids = PackedInt32Array(92, 87, 88, 93)
 
 [sub_resource type="Resource" id="entry_23"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(115)
-stage_2 = PackedInt32Array(115)
-stage_3 = PackedInt32Array(115)
-stage_4 = PackedInt32Array(140)
+first_wave_ids = PackedInt32Array(115)
 monster_ids = PackedInt32Array(115, 140)
 
 [sub_resource type="Resource" id="entry_24"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(119)
-stage_2 = PackedInt32Array(119, 120)
-stage_3 = PackedInt32Array(119, 120)
-stage_4 = PackedInt32Array(1401)
+first_wave_ids = PackedInt32Array(119)
 monster_ids = PackedInt32Array(119, 120, 1401)
 
 [sub_resource type="Resource" id="entry_25"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(120, 122)
-stage_2 = PackedInt32Array(120, 122)
-stage_3 = PackedInt32Array(120, 122)
-stage_4 = PackedInt32Array(1402)
+first_wave_ids = PackedInt32Array(120, 122)
 monster_ids = PackedInt32Array(120, 122, 1402)
 
 [sub_resource type="Resource" id="entry_26"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118, 122)
-stage_2 = PackedInt32Array(118, 122)
-stage_3 = PackedInt32Array(118, 122)
-stage_4 = PackedInt32Array(1403)
+first_wave_ids = PackedInt32Array(118, 122)
 monster_ids = PackedInt32Array(118, 122, 1403)
 
 [sub_resource type="Resource" id="entry_27"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array()
-stage_2 = PackedInt32Array(1405)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array()
 monster_ids = PackedInt32Array(1405)
 
 [sub_resource type="Resource" id="entry_28"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(123)
-stage_2 = PackedInt32Array(1404)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(123)
 monster_ids = PackedInt32Array(123, 1404)
 
 [sub_resource type="Resource" id="entry_29"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(124)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array(1406)
+first_wave_ids = PackedInt32Array(124)
 monster_ids = PackedInt32Array(124, 1406)
 
 [sub_resource type="Resource" id="entry_30"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(124, 123)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array(1407)
+first_wave_ids = PackedInt32Array(124, 123)
 monster_ids = PackedInt32Array(124, 123, 1407)
 
 [sub_resource type="Resource" id="entry_31"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118, 119, 120, 122)
-stage_2 = PackedInt32Array(118, 119, 120, 122)
-stage_3 = PackedInt32Array(118, 119, 120, 122)
-stage_4 = PackedInt32Array(1408)
+first_wave_ids = PackedInt32Array(118, 119, 120, 122)
 monster_ids = PackedInt32Array(118, 119, 120, 122, 1408)
 
 [sub_resource type="Resource" id="entry_32"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(1409)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(1409)
 monster_ids = PackedInt32Array(1409)
 
 [sub_resource type="Resource" id="entry_33"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118, 119, 120, 122)
-stage_2 = PackedInt32Array(118, 119, 120, 122)
-stage_3 = PackedInt32Array(118, 119, 120, 122)
-stage_4 = PackedInt32Array(1410)
+first_wave_ids = PackedInt32Array(118, 119, 120, 122)
 monster_ids = PackedInt32Array(118, 119, 120, 122, 1410)
 
 [sub_resource type="Resource" id="entry_34"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(7)
-stage_2 = PackedInt32Array(7)
-stage_3 = PackedInt32Array(7)
-stage_4 = PackedInt32Array(7, 8)
+first_wave_ids = PackedInt32Array(7)
 monster_ids = PackedInt32Array(7, 8)
 
 [sub_resource type="Resource" id="entry_35"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118)
-stage_2 = PackedInt32Array(146)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(118)
 monster_ids = PackedInt32Array(118, 146)
 
 [sub_resource type="Resource" id="entry_36"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118)
-stage_2 = PackedInt32Array(118)
-stage_3 = PackedInt32Array(118)
-stage_4 = PackedInt32Array(147)
+first_wave_ids = PackedInt32Array(118)
 monster_ids = PackedInt32Array(118, 147)
 
 [sub_resource type="Resource" id="entry_37"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(148)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(148)
 monster_ids = PackedInt32Array(148)
 
 [sub_resource type="Resource" id="entry_38"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(1301)
-stage_2 = PackedInt32Array(1301)
-stage_3 = PackedInt32Array(1301)
-stage_4 = PackedInt32Array(149)
+first_wave_ids = PackedInt32Array(1301)
 monster_ids = PackedInt32Array(1301, 149)
 
 [sub_resource type="Resource" id="entry_39"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(212)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(212)
 monster_ids = PackedInt32Array(212)
 
 [sub_resource type="Resource" id="entry_40"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(118)
-stage_2 = PackedInt32Array(118)
-stage_3 = PackedInt32Array(118)
-stage_4 = PackedInt32Array(215)
+first_wave_ids = PackedInt32Array(118)
 monster_ids = PackedInt32Array(118, 215)
 
 [sub_resource type="Resource" id="entry_41"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array()
-stage_2 = PackedInt32Array(1460)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array()
 monster_ids = PackedInt32Array(1460)
 
 [sub_resource type="Resource" id="entry_42"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3003, 3001)
-stage_2 = PackedInt32Array(3003, 3001, 3004)
-stage_3 = PackedInt32Array(3003, 3004, 3001)
-stage_4 = PackedInt32Array(3005)
+first_wave_ids = PackedInt32Array(3003, 3001)
 monster_ids = PackedInt32Array(3003, 3001, 3004, 3005)
 
 [sub_resource type="Resource" id="entry_43"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3001)
-stage_2 = PackedInt32Array(3001, 3002)
-stage_3 = PackedInt32Array(3001, 3002)
-stage_4 = PackedInt32Array(3002, 3004, 3001)
+first_wave_ids = PackedInt32Array(3001)
 monster_ids = PackedInt32Array(3001, 3002, 3004, 3006)
 
 [sub_resource type="Resource" id="entry_44"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3001, 3004)
-stage_2 = PackedInt32Array(3002, 3004)
-stage_3 = PackedInt32Array(3001, 3002)
-stage_4 = PackedInt32Array(3002, 3004, 3001)
+first_wave_ids = PackedInt32Array(3001, 3004)
 monster_ids = PackedInt32Array(3001, 3004, 3002, 3007)
 
 [sub_resource type="Resource" id="entry_45"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(7, 9)
-stage_2 = PackedInt32Array(7, 9, 10)
-stage_3 = PackedInt32Array(9, 10)
-stage_4 = PackedInt32Array(11)
+first_wave_ids = PackedInt32Array(7, 9)
 monster_ids = PackedInt32Array(7, 9, 10, 11)
 
 [sub_resource type="Resource" id="entry_46"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3008)
-stage_2 = PackedInt32Array(3008, 3009)
-stage_3 = PackedInt32Array(3008, 3009)
-stage_4 = PackedInt32Array(3008, 3009)
+first_wave_ids = PackedInt32Array(3008)
 monster_ids = PackedInt32Array(3008, 3009, 3019)
 
 [sub_resource type="Resource" id="entry_47"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3008, 3011)
-stage_2 = PackedInt32Array(3011, 3008)
-stage_3 = PackedInt32Array(3010, 3008)
-stage_4 = PackedInt32Array(3010, 3008, 3011)
+first_wave_ids = PackedInt32Array(3008, 3011)
 monster_ids = PackedInt32Array(3008, 3011, 3010, 3020)
 
 [sub_resource type="Resource" id="entry_48"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3009, 3011)
-stage_2 = PackedInt32Array(3010, 3011)
-stage_3 = PackedInt32Array(3009, 3010, 3011)
-stage_4 = PackedInt32Array(3011, 3009, 3010)
+first_wave_ids = PackedInt32Array(3009, 3011)
 monster_ids = PackedInt32Array(3009, 3011, 3010, 3021)
 
 [sub_resource type="Resource" id="entry_49"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3031)
-stage_2 = PackedInt32Array(3049)
-stage_3 = PackedInt32Array(3031, 3049)
-stage_4 = PackedInt32Array(3043)
+first_wave_ids = PackedInt32Array(3031)
 monster_ids = PackedInt32Array(3031, 3049, 3043, 3033)
 
 [sub_resource type="Resource" id="entry_50"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3032)
-stage_2 = PackedInt32Array(3032, 3028, 3043)
-stage_3 = PackedInt32Array(3043, 3028, 3032)
-stage_4 = PackedInt32Array(3032, 3043, 3028)
+first_wave_ids = PackedInt32Array(3032)
 monster_ids = PackedInt32Array(3032, 3028, 3043, 3034)
 
 [sub_resource type="Resource" id="entry_51"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3030, 3032, 3035)
-stage_2 = PackedInt32Array(3028, 3030, 3032)
-stage_3 = PackedInt32Array(3028, 3030, 3032)
-stage_4 = PackedInt32Array(3032, 3030, 3028)
+first_wave_ids = PackedInt32Array(3030, 3032, 3035)
 monster_ids = PackedInt32Array(3030, 3032, 3028, 3035)
 
 [sub_resource type="Resource" id="entry_52"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3030, 3032, 3035)
-stage_2 = PackedInt32Array(3028, 3030, 3032)
-stage_3 = PackedInt32Array(3028, 3030, 3032)
-stage_4 = PackedInt32Array(3032, 3030, 3028)
+first_wave_ids = PackedInt32Array(3030, 3032, 3035)
 monster_ids = PackedInt32Array(3030, 3032, 3028, 3035)
 
 [sub_resource type="Resource" id="entry_53"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3047)
-stage_2 = PackedInt32Array(3038, 3047)
-stage_3 = PackedInt32Array(3038, 3047)
-stage_4 = PackedInt32Array(3038, 3047)
+first_wave_ids = PackedInt32Array(3047)
 monster_ids = PackedInt32Array(3047, 3038, 3040)
 
 [sub_resource type="Resource" id="entry_54"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3039, 3037)
-stage_2 = PackedInt32Array(3036, 3039)
-stage_3 = PackedInt32Array(3036, 3039)
-stage_4 = PackedInt32Array(3037, 3039)
+first_wave_ids = PackedInt32Array(3039, 3037)
 monster_ids = PackedInt32Array(3039, 3037, 3036, 3041)
 
 [sub_resource type="Resource" id="entry_55"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3038, 3047)
-stage_2 = PackedInt32Array(3039, 3036, 3038)
-stage_3 = PackedInt32Array(3036, 3039, 3038)
-stage_4 = PackedInt32Array(3036, 3047, 3038)
+first_wave_ids = PackedInt32Array(3038, 3047)
 monster_ids = PackedInt32Array(3038, 3047, 3039, 3036, 3042)
 
 [sub_resource type="Resource" id="entry_56"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3066)
-stage_2 = PackedInt32Array(3065, 3068, 3066)
-stage_3 = PackedInt32Array(3065, 3066, 3068)
-stage_4 = PackedInt32Array(3068, 3065)
+first_wave_ids = PackedInt32Array(3066)
 monster_ids = PackedInt32Array(3066, 3065, 3068, 3069)
 
 [sub_resource type="Resource" id="entry_57"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(13, 9)
-stage_2 = PackedInt32Array(13, 9, 10)
-stage_3 = PackedInt32Array(13, 9, 10)
-stage_4 = PackedInt32Array(12)
+first_wave_ids = PackedInt32Array(13, 9)
 monster_ids = PackedInt32Array(13, 9, 10, 12)
 
 [sub_resource type="Resource" id="entry_58"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3067, 3065)
-stage_2 = PackedInt32Array(3067, 3065)
-stage_3 = PackedInt32Array(3067, 3065)
-stage_4 = PackedInt32Array(3067, 3065)
+first_wave_ids = PackedInt32Array(3067, 3065)
 monster_ids = PackedInt32Array(3067, 3065, 3070)
 
 [sub_resource type="Resource" id="entry_59"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3066, 3068)
-stage_2 = PackedInt32Array(3066, 3067, 3068)
-stage_3 = PackedInt32Array(3068, 3067, 3066)
-stage_4 = PackedInt32Array(3066, 3068, 3067)
+first_wave_ids = PackedInt32Array(3066, 3068)
 monster_ids = PackedInt32Array(3066, 3068, 3067, 3071, 3076, 3077, 3078, 3080, 3081, 3082)
 
 [sub_resource type="Resource" id="entry_60"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3117)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(3117)
 monster_ids = PackedInt32Array(3117)
 
 [sub_resource type="Resource" id="entry_61"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3118)
-stage_2 = PackedInt32Array(3118, 3119)
-stage_3 = PackedInt32Array(3118, 3119)
-stage_4 = PackedInt32Array(3118, 3119)
+first_wave_ids = PackedInt32Array(3118)
 monster_ids = PackedInt32Array(3118, 3119, 3120)
 
 [sub_resource type="Resource" id="entry_62"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3121)
-stage_2 = PackedInt32Array(3122, 3121)
-stage_3 = PackedInt32Array(3121, 3122, 3126)
-stage_4 = PackedInt32Array(3122, 3126, 3121)
+first_wave_ids = PackedInt32Array(3121)
 monster_ids = PackedInt32Array(3121, 3122, 3126, 3123)
 
 [sub_resource type="Resource" id="entry_63"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3144)
-stage_2 = PackedInt32Array(3144, 3145)
-stage_3 = PackedInt32Array(3146, 3145, 3144)
-stage_4 = PackedInt32Array(3145, 3146, 3144)
+first_wave_ids = PackedInt32Array(3144)
 monster_ids = PackedInt32Array(3144, 3145, 3146, 3136)
 
 [sub_resource type="Resource" id="entry_64"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3159)
-stage_2 = PackedInt32Array(3160, 3159)
-stage_3 = PackedInt32Array(3160, 3159)
-stage_4 = PackedInt32Array(3159, 3160)
+first_wave_ids = PackedInt32Array(3159)
 monster_ids = PackedInt32Array(3159, 3160, 3161)
 
 [sub_resource type="Resource" id="entry_65"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3159)
-stage_2 = PackedInt32Array(3177, 3159)
-stage_3 = PackedInt32Array(3177, 3159)
-stage_4 = PackedInt32Array(3177, 3159)
+first_wave_ids = PackedInt32Array(3159)
 monster_ids = PackedInt32Array(3159, 3177, 3179)
 
 [sub_resource type="Resource" id="entry_66"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(3181, 3183)
-stage_2 = PackedInt32Array(3183, 3181)
-stage_3 = PackedInt32Array(3181, 3183)
-stage_4 = PackedInt32Array(3182)
+first_wave_ids = PackedInt32Array(3181, 3183)
 monster_ids = PackedInt32Array(3181, 3183, 3182)
 
 [sub_resource type="Resource" id="entry_67"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(14, 15)
-stage_2 = PackedInt32Array(14, 15)
-stage_3 = PackedInt32Array(14, 15)
-stage_4 = PackedInt32Array(17)
+first_wave_ids = PackedInt32Array(14, 15)
 monster_ids = PackedInt32Array(14, 15, 17)
 
 [sub_resource type="Resource" id="entry_68"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(16, 14, 15)
-stage_2 = PackedInt32Array(14, 16, 15)
-stage_3 = PackedInt32Array(14, 16, 15, 17)
-stage_4 = PackedInt32Array(18)
+first_wave_ids = PackedInt32Array(16, 14, 15)
 monster_ids = PackedInt32Array(16, 14, 15, 17, 18)
 
 [sub_resource type="Resource" id="entry_69"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(16, 14, 15)
-stage_2 = PackedInt32Array(14, 15, 17, 16)
-stage_3 = PackedInt32Array(14, 15, 17, 16)
-stage_4 = PackedInt32Array(20)
+first_wave_ids = PackedInt32Array(16, 14, 15)
 monster_ids = PackedInt32Array(16, 14, 15, 17, 20)
 
 [sub_resource type="Resource" id="entry_70"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(32)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(32)
 monster_ids = PackedInt32Array(32)
 
 [sub_resource type="Resource" id="entry_71"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_2 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_3 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_4 = PackedInt32Array(107)
+first_wave_ids = PackedInt32Array(104, 105, 106, 109, 111, 113)
 monster_ids = PackedInt32Array(104, 105, 106, 109, 111, 113, 107)
 
 [sub_resource type="Resource" id="entry_72"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_2 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_3 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_4 = PackedInt32Array(108)
+first_wave_ids = PackedInt32Array(104, 105, 106, 109, 111, 113)
 monster_ids = PackedInt32Array(104, 105, 106, 109, 111, 113, 108)
 
 [sub_resource type="Resource" id="entry_73"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_2 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_3 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_4 = PackedInt32Array(110)
+first_wave_ids = PackedInt32Array(104, 105, 106, 109, 111, 113)
 monster_ids = PackedInt32Array(104, 105, 106, 109, 111, 113, 110)
 
 [sub_resource type="Resource" id="entry_74"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_2 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_3 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_4 = PackedInt32Array(112)
+first_wave_ids = PackedInt32Array(104, 105, 106, 109, 111, 113)
 monster_ids = PackedInt32Array(104, 105, 106, 109, 111, 113, 112)
 
 [sub_resource type="Resource" id="entry_75"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_2 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_3 = PackedInt32Array(104, 105, 106, 109, 111, 113)
-stage_4 = PackedInt32Array(114)
+first_wave_ids = PackedInt32Array(104, 105, 106, 109, 111, 113)
 monster_ids = PackedInt32Array(104, 105, 106, 109, 111, 113, 114)
 
 [sub_resource type="Resource" id="entry_76"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(135)
-stage_2 = PackedInt32Array(137)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(135)
 monster_ids = PackedInt32Array(135, 137)
 
 [sub_resource type="Resource" id="entry_77"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(60)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(60)
 monster_ids = PackedInt32Array(60)
 
 [sub_resource type="Resource" id="entry_78"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(130)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(130)
 monster_ids = PackedInt32Array(130)
 
 [sub_resource type="Resource" id="entry_79"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(69)
-stage_2 = PackedInt32Array(67)
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(69)
 monster_ids = PackedInt32Array(69, 67)
 
 [sub_resource type="Resource" id="entry_80"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(22)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(22)
 monster_ids = PackedInt32Array(22)
 
 [sub_resource type="Resource" id="entry_81"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(57)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(57)
 monster_ids = PackedInt32Array(57)
 
 [sub_resource type="Resource" id="entry_82"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(132)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(132)
 monster_ids = PackedInt32Array(132)
 
 [sub_resource type="Resource" id="entry_83"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(97, 98, 99, 100, 101, 102, 103)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(97, 98, 99, 100, 101, 102, 103)
 monster_ids = PackedInt32Array(97, 98, 99, 100, 101, 102, 103)
 
 [sub_resource type="Resource" id="entry_84"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(61)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(61)
 monster_ids = PackedInt32Array(61)
 
 [sub_resource type="Resource" id="entry_85"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(63)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(63)
 monster_ids = PackedInt32Array(63)
 
 [sub_resource type="Resource" id="entry_86"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(64)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(64)
 monster_ids = PackedInt32Array(64)
 
 [sub_resource type="Resource" id="entry_87"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(65)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(65)
 monster_ids = PackedInt32Array(65)
 
 [sub_resource type="Resource" id="entry_88"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(6601)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(6601)
 monster_ids = PackedInt32Array(6601)
 
 [sub_resource type="Resource" id="entry_89"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(29)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(29)
 monster_ids = PackedInt32Array(29)
 
 [sub_resource type="Resource" id="entry_90"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(94, 95)
-stage_2 = PackedInt32Array(94, 95)
-stage_3 = PackedInt32Array(94, 95)
-stage_4 = PackedInt32Array(96)
+first_wave_ids = PackedInt32Array(94, 95)
 monster_ids = PackedInt32Array(94, 95, 96)
 
 [sub_resource type="Resource" id="entry_91"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(59)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(59)
 monster_ids = PackedInt32Array(59)
 
 [sub_resource type="Resource" id="entry_92"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(6)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(6)
 monster_ids = PackedInt32Array(6)
 
 [sub_resource type="Resource" id="entry_93"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(150)
-stage_2 = PackedInt32Array(151)
-stage_3 = PackedInt32Array(152)
-stage_4 = PackedInt32Array(153)
+first_wave_ids = PackedInt32Array(150)
 monster_ids = PackedInt32Array(150, 151, 152, 153)
 
 [sub_resource type="Resource" id="entry_94"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(145)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(145)
 monster_ids = PackedInt32Array(145)
 
 [sub_resource type="Resource" id="entry_95"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(14101)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(14101)
 monster_ids = PackedInt32Array(14101)
 
 [sub_resource type="Resource" id="entry_96"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(19201)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(19201)
 monster_ids = PackedInt32Array(19201)
 
 [sub_resource type="Resource" id="entry_97"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(14501)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(14501)
 monster_ids = PackedInt32Array(14501)
 
 [sub_resource type="Resource" id="entry_98"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(72)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(72)
 monster_ids = PackedInt32Array(72)
 
 [sub_resource type="Resource" id="entry_99"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(13101)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(13101)
 monster_ids = PackedInt32Array(13101)
 
 [sub_resource type="Resource" id="entry_100"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(13401)
-stage_2 = PackedInt32Array()
-stage_3 = PackedInt32Array()
-stage_4 = PackedInt32Array()
+first_wave_ids = PackedInt32Array(13401)
 monster_ids = PackedInt32Array(13401)
 
 [sub_resource type="Resource" id="entry_101"]
 script = ExtResource("2_entry")
-stage_1 = PackedInt32Array(94, 95)
-stage_2 = PackedInt32Array(94, 95)
-stage_3 = PackedInt32Array(94, 95)
-stage_4 = PackedInt32Array(134)
+first_wave_ids = PackedInt32Array(94, 95)
 monster_ids = PackedInt32Array(94, 95, 134)
 
 [resource]

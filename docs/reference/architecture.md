@@ -357,7 +357,7 @@ classDiagram
 - `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
 - `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
 - `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
-- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡刷怪表、怪物 ID 与怪物弹体场景由构建期生成，加载页不在运行时解析 `.gd` / `.tscn` 源文本。
+- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合与怪物弹体场景由构建期生成，加载页不在运行时解析 `.gd` / `.tscn` 源文本。
 
 仍然存在（遗留）：
 
@@ -374,6 +374,13 @@ classDiagram
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 | 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）与怪物脚本弹体名 | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry` / 怪物弹体表） | `--check` 逐字比较；无法静态解析的条目输出到 stderr，由关卡自身预载 |
+
+关卡预载数据契约：
+
+- `first_wave_ids` 只包含 `stage_1`，用于加载页首波优先级；
+- `monster_ids` 是完整覆盖集合，必须包含所有阶段（含 `stage_5` 及以后）与脚本内引用的怪物 ID；
+- 不建立 `stage_2`…`stage_N` 的静态优先级分层：加载页在切换场景前等待 `monster_ids` 预载完成，关卡运行期由 `_request_stage_resource_preload(current_stage + 1)` 前向预取；
+- 生成器拒绝 `stage>=5` 出生点怪物未进入 `monster_ids` 的输出。
 
 规则：
 

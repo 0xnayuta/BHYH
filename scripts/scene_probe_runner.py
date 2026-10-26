@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""运行星座 Boss 运行时场景探针。
+"""运行场景级运行时探针套件。
 
 探针规格位于 scripts/scene_probes/；运行器只在执行期间把 .gd/.tscn 复制到
 Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后清理。
@@ -8,28 +8,74 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 之所以不用 `--script`：自定义 SceneTree 会在 Autoload 全局标识注册前编译
 入口依赖，导致 `LocalCoop` 等标识在编译期不可见。`--scene` 与生产启动顺序
 一致，能真实验证 `_ready()`、资源加载与视觉节点。
+
+套件当前包含：
+
+- `constellation`：星座 Boss 视觉后端与 FrameSequence 生命周期；
+- `level-selection`：八仙过海 / 挑战三太子的运行期选择态与自预载边界。
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
 import uuid
+from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / "source"
 FIXTURE_DIR = ROOT / "scripts" / "scene_probes"
-PROBE_SOURCE = FIXTURE_DIR / "constellation_probe.gd"
-SCENE_SOURCE = FIXTURE_DIR / "constellation_probe.tscn"
-REPORT_MD = ROOT / "docs" / "reports" / "constellation_probe_report.md"
-REPORT_JSON = ROOT / "docs" / "reports" / "constellation_probe_report.json"
-RESULT_PREFIX = "CONSTELLATION_PROBE_RESULT="
+REPORT_DIR = ROOT / "docs" / "reports"
 GODOT_CANDIDATES = ("godot", "godot4")
-QUIT_AFTER_FRAMES = 600
+
+
+@dataclass(frozen=True)
+class ProbeSpec:
+    key: str
+    title: str
+    script_name: str
+    scene_name: str
+    result_prefix: str
+    report_stem: str
+    teardown_marker: str | None = None
+    quit_after_frames: int = 600
+    timeout_seconds: int = 90
+
+    @property
+    def script_path(self) -> Path:
+        return FIXTURE_DIR / self.script_name
+
+    @property
+    def scene_path(self) -> Path:
+        return FIXTURE_DIR / self.scene_name
+
+
+PROBES: tuple[ProbeSpec, ...] = (
+    ProbeSpec(
+        key="constellation",
+        title="星座 Boss 运行时探针",
+        script_name="constellation_probe.gd",
+        scene_name="constellation_probe.tscn",
+        result_prefix="CONSTELLATION_PROBE_RESULT=",
+        report_stem="constellation_probe_report",
+    ),
+    ProbeSpec(
+        key="level-selection",
+        title="关卡选择态运行时探针",
+        script_name="level_selection_probe.gd",
+        scene_name="level_selection_probe.tscn",
+        result_prefix="LEVEL_SELECTION_PROBE_RESULT=",
+        report_stem="level_selection_probe_report",
+        teardown_marker="LEVEL_SELECTION_PROBE_TEARDOWN",
+        quit_after_frames=6000,
+        timeout_seconds=240,
+    ),
+)
 
 
 def resolve_godot(explicit: str | None) -> str:
@@ -47,11 +93,11 @@ def resolve_godot(explicit: str | None) -> str:
     raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 指定。")
 
 
-def write_fixture(instance_id: str) -> tuple[Path, Path]:
-    gd_path = PROJECT / f"_constellation_probe_{instance_id}.gd"
-    scene_path = PROJECT / f"_constellation_probe_{instance_id}.tscn"
-    shutil.copy2(PROBE_SOURCE, gd_path)
-    scene_text = SCENE_SOURCE.read_text(encoding="utf-8")
+def write_fixture(spec: ProbeSpec, instance_id: str) -> tuple[Path, Path]:
+    gd_path = PROJECT / f"_{spec.key.replace('-', '_')}_probe_{instance_id}.gd"
+    scene_path = PROJECT / f"_{spec.key.replace('-', '_')}_probe_{instance_id}.tscn"
+    shutil.copy2(spec.script_path, gd_path)
+    scene_text = spec.scene_path.read_text(encoding="utf-8")
     scene_text = scene_text.replace("__PROBE_SCRIPT__", f"res://{gd_path.name}")
     scene_path.write_text(scene_text, encoding="utf-8", newline="\n")
     return gd_path, scene_path
@@ -66,12 +112,12 @@ def cleanup_temp(paths: list[Path]) -> None:
             uid_path.unlink()
 
 
-def parse_result(output: str) -> dict:
+def parse_result(output: str, spec: ProbeSpec) -> dict:
     for line in reversed(output.splitlines()):
-        if not line.startswith(RESULT_PREFIX):
+        if not line.startswith(spec.result_prefix):
             continue
         try:
-            payload = json.loads(line[len(RESULT_PREFIX) :])
+            payload = json.loads(line[len(spec.result_prefix) :])
         except json.JSONDecodeError:
             return {"ok": False, "failures": ["探针结果 JSON 无效"], "checks": {}}
         if not isinstance(payload, dict):
@@ -79,21 +125,30 @@ def parse_result(output: str) -> dict:
         payload.setdefault("failures", [])
         payload.setdefault("checks", {})
         return payload
-    return {"ok": False, "failures": ["缺少 CONSTELLATION_PROBE_RESULT 输出"], "checks": {}}
+    return {"ok": False, "failures": [f"缺少 {spec.result_prefix} 输出"], "checks": {}}
 
 
-def collect_runtime_errors(output: str) -> list[str]:
+# Godot headless dummy renderer 在纹理初始化时会产生固定的
+# `Parameter "t" is null` 引擎噪声（带 dummy texture 栈）；与
+# level_test_runner 使用同一白名单，其它 ERROR/WARNING 仍按 0/0 门禁计数。
+HEADLESS_RENDER_NOISE = re.compile(r'^ERROR: Parameter "t" is null\.\n(?:[ \t].*\n)*', re.M)
+
+
+def collect_runtime_errors(output: str, teardown_marker: str | None) -> list[str]:
+    if teardown_marker:
+        output = output.split(teardown_marker, 1)[0]
+    cleaned = HEADLESS_RENDER_NOISE.sub("", output)
     return [
         line
-        for line in output.splitlines()
+        for line in cleaned.splitlines()
         if line.startswith(("SCRIPT ERROR:", "ERROR:", "WARNING:"))
         and "resources still in use at exit" not in line
     ]
 
 
-def run_probe(godot: str, timeout: int) -> dict:
+def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict:
     instance_id = uuid.uuid4().hex[:10]
-    gd_path, scene_path = write_fixture(instance_id)
+    gd_path, scene_path = write_fixture(spec, instance_id)
     temp_paths = [gd_path, scene_path]
     command = [
         godot,
@@ -101,10 +156,11 @@ def run_probe(godot: str, timeout: int) -> dict:
         "--path",
         str(PROJECT),
         "--quit-after",
-        str(QUIT_AFTER_FRAMES),
+        str(spec.quit_after_frames),
         "--scene",
         f"res://{scene_path.name}",
     ]
+    timeout = timeout_override or spec.timeout_seconds
     result: dict = {"ok": False, "failures": [], "checks": {}}
     try:
         completed = subprocess.run(
@@ -117,9 +173,9 @@ def run_probe(godot: str, timeout: int) -> dict:
             timeout=timeout,
         )
         output = (completed.stdout or "") + (completed.stderr or "")
-        result = parse_result(output)
+        result = parse_result(output, spec)
         result["exit_code"] = completed.returncode
-        runtime_errors = collect_runtime_errors(output)
+        runtime_errors = collect_runtime_errors(output, spec.teardown_marker)
         if runtime_errors:
             result["ok"] = False
             result["failures"].extend(f"runtime: {line}" for line in runtime_errors[-5:])
@@ -139,11 +195,13 @@ def run_probe(godot: str, timeout: int) -> dict:
     return result
 
 
-def write_reports(result: dict) -> None:
-    REPORT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    REPORT_JSON.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+def write_reports(spec: ProbeSpec, result: dict) -> None:
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    report_json = REPORT_DIR / f"{spec.report_stem}.json"
+    report_md = REPORT_DIR / f"{spec.report_stem}.md"
+    report_json.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = [
-        "# 星座 Boss 运行时探针报告",
+        f"# {spec.title}报告",
         "",
         "> 由 `scripts/scene_probe_runner.py` 生成；探针只在执行期间复制到工程根目录。",
         "",
@@ -161,32 +219,46 @@ def write_reports(result: dict) -> None:
     output_tail = result.get("output_tail")
     if output_tail:
         lines.extend(["", "## 输出尾部", "", "```text", output_tail, "```"])
-    REPORT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    report_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="运行星座 Boss 运行时场景探针")
+    parser = argparse.ArgumentParser(description="运行场景级运行时探针套件")
     parser.add_argument("--godot", default=None, help="Godot 可执行文件路径")
-    parser.add_argument("--timeout", type=int, default=90, help="探针超时秒数")
+    parser.add_argument(
+        "--probe",
+        action="append",
+        choices=[spec.key for spec in PROBES],
+        help="只运行指定探针，可重复；默认运行全部",
+    )
+    parser.add_argument("--timeout", type=int, default=None, help="覆盖单个探针超时秒数")
     args = parser.parse_args()
 
-    if not PROBE_SOURCE.exists() or not SCENE_SOURCE.exists():
-        print(f"缺少探针规格: {FIXTURE_DIR}", file=sys.stderr)
-        return 2
+    for spec in PROBES:
+        if not spec.script_path.exists() or not spec.scene_path.exists():
+            print(f"缺少探针规格: {spec.key} ({FIXTURE_DIR})", file=sys.stderr)
+            return 2
     if not (PROJECT / "project.godot").exists():
         print(f"工程目录不存在或缺少 project.godot: {PROJECT}", file=sys.stderr)
         return 2
 
     godot = resolve_godot(args.godot)
-    result = run_probe(godot, args.timeout)
-    write_reports(result)
-    if result.get("ok"):
-        print("[PASS] 星座 Boss 运行时探针通过")
-        return 0
-    print("[FAIL] 星座 Boss 运行时探针失败", file=sys.stderr)
-    for failure in result.get("failures") or []:
-        print(f"  - {failure}", file=sys.stderr)
-    return 1
+    selected = [spec for spec in PROBES if not args.probe or spec.key in args.probe]
+    failures: list[tuple[ProbeSpec, dict]] = []
+    for spec in selected:
+        result = run_probe(godot, spec, args.timeout)
+        write_reports(spec, result)
+        if result.get("ok"):
+            print(f"[PASS] {spec.title}通过")
+        else:
+            print(f"[FAIL] {spec.title}失败", file=sys.stderr)
+            for failure in result.get("failures") or []:
+                print(f"  - {failure}", file=sys.stderr)
+            failures.append((spec, result))
+
+    if failures:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

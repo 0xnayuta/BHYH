@@ -451,7 +451,6 @@ var cucurbit2 = null
 
 var _monster_scene_cache = {}
 var _last_full_monster_bullet_name := ""
-var _level_resource_preload_signature := ""
 var _last_combo_value: int = 0
 var is_frist: bool
 var is_show: bool
@@ -547,7 +546,6 @@ var _prewarmed_pet_signature: String = ""
 var _level_resource_cache_paths: Dictionary = {}
 var _level_runtime_warmed_scene_paths: Dictionary = {}
 var _level_runtime_prewarmed_monster_ids: Dictionary = {}
-var _level_preload_generation: int = 0
 var _last_sound_play_msec = {}
 var _active_sound_players: Dictionary = {}
 var _last_sfx_enabled := true
@@ -1482,8 +1480,6 @@ func _warm_scene_instance(scene: PackedScene) -> void:
 
 func clear_level_resource_cache() -> void:
 	FrameSequenceStore.clear_cache()
-	_level_preload_generation += 1
-	_level_resource_preload_signature = ""
 	for bullet_script in MONSTER_212_BULLET_SCRIPTS:
 		bullet_script.clear_cached_frames()
 	for path_value in _level_resource_cache_paths.keys():
@@ -1921,119 +1917,6 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
 		var scene = _resource_cache.get(path)
 		if scene is PackedScene:
 			_level_runtime_warmed_scene_paths[path] = true
-
-
-func _level_monster_group_signature(monster_group: Dictionary) -> String:
-	var parts := PackedStringArray()
-	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
-		var values := PackedStringArray()
-		var stage_list = monster_group.get(stage_key, [])
-		if stage_list is Array:
-			for monster_id_value in stage_list:
-				values.append(str(int(monster_id_value)))
-		parts.append(stage_key + ":" + ",".join(values))
-	return "|".join(parts)
-
-
-func _preload_level_background_resources(scene_paths: Array, monster_ids: Array, generation: int) -> void:
-	if scene_paths.is_empty():
-		return
-	await get_tree().process_frame
-	if generation != _level_preload_generation:
-		return
-	_track_level_scene_dependencies(scene_paths)
-	await _preload_paths_threaded(scene_paths)
-	if generation != _level_preload_generation:
-		return
-	var texture_paths := _collect_scene_texture_dependencies(scene_paths)
-	_append_dynamic_monster_textures(texture_paths, monster_ids)
-	await _preload_paths_threaded(texture_paths)
-	if generation != _level_preload_generation:
-		return
-	var textures_per_frame := 2 if OS.has_feature("mobile") else 5
-	await _warm_texture_rids_over_frames(texture_paths, textures_per_frame)
-	if generation != _level_preload_generation:
-		return
-	await _warm_scene_paths_over_frames(scene_paths, 1)
-
-
-func preload_level_monster_resources(monster_group: Dictionary) -> void:
-	var preload_signature := _level_monster_group_signature(monster_group)
-	if preload_signature != "" and preload_signature == _level_resource_preload_signature:
-		return
-	clear_level_resource_cache()
-	var priority_scene_paths: Array = []
-	var background_scene_paths: Array = []
-	var seen_monster_ids := {}
-	var priority_monster_ids: Array = []
-	var background_monster_ids: Array = []
-	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
-		var stage_list = monster_group.get(stage_key, [])
-		if not stage_list is Array:
-			continue
-		for monster_id_value in stage_list:
-			var monster_id := int(monster_id_value)
-			if seen_monster_ids.has(monster_id):
-				continue
-			seen_monster_ids[monster_id] = true
-			var scene_path := "res://Scene/monster/monster_" + str(monster_id) + ".tscn"
-			if stage_key == "stage_1" or stage_key == "stage_2":
-				_append_unique_preload_path(priority_scene_paths, scene_path)
-				priority_monster_ids.append(monster_id)
-			else:
-				_append_unique_preload_path(background_scene_paths, scene_path)
-				background_monster_ids.append(monster_id)
-
-	var actual_level_scene_paths: Array = []
-	actual_level_scene_paths.append_array(priority_scene_paths)
-	actual_level_scene_paths.append_array(background_scene_paths)
-	_track_level_scene_dependencies(actual_level_scene_paths)
-
-	var blocking_scene_paths := priority_scene_paths.duplicate()
-	if blocking_scene_paths.is_empty():
-		blocking_scene_paths.append_array(background_scene_paths)
-		priority_monster_ids.append_array(background_monster_ids)
-		background_scene_paths.clear()
-		background_monster_ids.clear()
-	await _preload_paths_threaded(blocking_scene_paths)
-	var priority_texture_paths := _collect_scene_texture_dependencies(blocking_scene_paths)
-	_append_dynamic_monster_textures(priority_texture_paths, priority_monster_ids)
-	await _preload_paths_threaded(priority_texture_paths)
-
-	call_deferred("_preload_level_background_resources", [], [], _level_preload_generation)
-
-	var texture_paths: Array = _get_damage_number_texture_paths()
-	(
-		texture_paths
-		. append_array(
-			[
-				"res://Art/add_effect/buff_icon/poision.png",
-				"res://Art/add_effect/buff_icon/ice.png",
-				"res://Art/add_effect/buff_icon/fire.png",
-				"res://Art/add_effect/buff_icon/speed_down.png",
-				"res://Art/add_effect/buff_icon/stun.png",
-				"res://Art/add_effect/buff_icon/htsf.png",
-				"res://Art/add_effect/buff_icon/bleed.png",
-				"res://Art/add_effect/buff_icon/yxbuff.png",
-				"res://Art/item_icon/zxbx_3.png",
-				"res://Art/item_icon/peach.png",
-				"res://Art/item_icon/bble.png",
-				"res://Art/item_icon/radish.png",
-				"res://Art/item_icon/qhsbx.png",
-				"res://Art/backpack/all_items/empty.png",
-			]
-		)
-	)
-	var audio_paths: Array = [
-		"res://Music/monster_hurt/6_beattack_by_role1.mp3",
-		"res://Music/hero/9_beattack_by_role2.mp3",
-		"res://Music/hero/49_role1_be_attack.mp3",
-		"res://Music/hero/62_role2_be_attack.mp3",
-		"res://Music/hero/68_role3_be_attack.mp3",
-		"res://Music/hero/role_5/13_hurt_stand.mp3",
-	]
-
-	_level_resource_preload_signature = preload_signature
 
 
 func preload_combat_misc_resources() -> void:
