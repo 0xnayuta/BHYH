@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（Phase 13-2A 怪物帧转换器与契约门禁接入完成）
+> 最后更新：2026-10-27（Phase 13-2B 怪物帧消费者切换第一批完成）
 
 ---
 
@@ -135,6 +135,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 关卡预载 Catalog 迁移 | `convert_level_preload_catalog.py --check` **153 场景 / 101 关卡条目 / 17 弹体条目 PASS**（并入契约门禁）；八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`level_1` / `level_46` / `level_59` / `level_61` / `level_pty` / `level_xhy` / `level_tzsijian` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `load_scene.gd` 与 `global.gd` 删除运行时 `.gd`/`.tscn` 源文本正则解析，改读构建期 `LevelPreloadCatalog.tres`；数据收敛为 `first_wave_ids`（stage_1 优先级）与 `monster_ids`（完整覆盖，含 stage_5+）；删除无调用点的 `_prewarm_target_script_monsters`、`Global.preload_level_monster_resources` 及后台预载子系统；怪物弹体名改为磁盘真实大小写 |
 | 2026-10-26 Phase 13-2A 怪物帧转换器 | `convert_monster_frames.py --check` **148 目标 / 40,222 帧 PASS**；8 个样本经 Godot 探针比对「生成 vs metadata vs 生产」**6,123 帧 0 差异**（含 loop/speed）；`--all` 幂等写入 **0**；契约门禁 **8/8 PASS**，其中 `monster_frames_check` 新增并通过 | 新增 `scripts/convert_monster_frames.py` 并接入 `contract_gate`；目标解析复用既有 `*_frames.tres`（同目录优先、`atlas*` 回退父目录），`pet_tiger_boss/atlas` 因 stage 聚合名显式跳过；148 个历史目标无 UID 头，`--check` 记为已评审例外，`--rewrite` 可补确定性 UID；`--emit` 供抽样探针使用，探针目录验证后删除 |
 | 2026-10-26 关卡选择态探针 | `scene_probe_runner.py` 套件 **2/2 PASS**：星座 + 选择态；选择态覆盖 `level_bxgh` 8 个八仙/非法回退与 `level_stz` 3 个三太子/非法回退，13 项全 PASS；日志 **0 ERROR / 0 WARNING**（仅 headless dummy 纹理噪声豁免） | 新增 `scripts/scene_probes/level_selection_probe.{gd,tscn}`；断言 `monster_group["stage_1"]`、关卡自预载场景缓存与三太子背景可见性；`scene_probe_runner.py` 改为 `PROBES` 清单并支持 `--probe`；退出阶段按 `*_PROBE_TEARDOWN` 分区 |
+| 2026-10-27 Phase 13-2B 怪物帧消费者切换（第一批） | `convert_monster_frames.py --check` **152/152 PASS**；Godot 探针覆盖 17 个动作映射目标与 4 个剑 Boss，别名帧实例共享、loop/speed **0 失败**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；静态门禁 **8/8 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（726.6s，level_dsg_5 重试后通过） | 27 个怪物脚本改为直接加载构建期帧资源，删除运行时 `SpriteFrames.new()` 重建与逐帧 PNG 回退；素材分 5 批：148 个资源补确定性 UID、动作别名、多模型别名、4 个剑 Boss 新资源、四头 Boss 头部别名。`SpriteFrames.new()` 文件数 **70→46**（怪物 **50→26**）；剩余 east/weiyang/tao_wu/裁剪与弹体脚本登记为下一批 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

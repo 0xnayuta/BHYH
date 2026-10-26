@@ -836,5 +836,71 @@
       "hit3"
     ],
     "speed": 24
+  },
+  "swf_png/3048/atlas/metadata.tres": {
+    "actions": {
+      "wait": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "skill1",
+      "skill2": "skill2",
+      "skill3": "skill3",
+      "skill4": "skill4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3050/atlas/metadata.tres": {
+    "actions": {
+      "wait": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "skill1",
+      "skill2": "skill2",
+      "skill3": "skill3",
+      "skill4": "skill4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
+  },
+  "swf_png/3051/atlas/metadata.tres": {
+    "actions": {
+      "wait": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "skill1": "skill1",
+      "skill2": "skill2",
+      "skill3": "skill3",
+      "skill4": "skill4"
+    },
+    "loop": {
+      "wait": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "skill1": false,
+      "skill2": false,
+      "skill3": false,
+      "skill4": false
+    }
   }
 }

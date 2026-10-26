@@ -13,16 +13,6 @@ const HEAD_ROOTS := [
 	"res://Art/monster/swf_png/3050",
 	"res://Art/monster/swf_png/3051",
 ]
-const HEAD_ACTIONS := {
-	&"wait": {"folder": "idle", "frames": 20},
-	&"walk": {"folder": "walk", "frames": 16},
-	&"hurt": {"folder": "hurt", "frames": 35},
-	&"death": {"folder": "death", "frames": 35},
-	&"skill1": {"folder": "skill1", "frames": 45},
-	&"skill2": {"folder": "skill2", "frames": 27},
-	&"skill3": {"folder": "skill3", "frames": 39},
-	&"skill4": {"folder": "skill4", "frames": 35},
-}
 const HEAD_OFFSETS := [
 	{
 		&"wait": Vector2(-32.45, -101.4),
@@ -170,28 +160,14 @@ static var _head_frames_cache: Array = [null, null, null]
 
 
 static func _get_head_frames(index: int) -> SpriteFrames:
-	if _head_frames_cache[index] != null:
+	if _head_frames_cache.has(index):
 		return _head_frames_cache[index] as SpriteFrames
 	var head_models := [3048, 3050, 3051]
 	var head_model: int = head_models[index]
 	var frames_path := "res://Art/monster/swf_png/%d/atlas/swf_png_%d_frames.tres" % [head_model, head_model]
 	if not ResourceLoader.exists(frames_path):
 		return null
-	var source := load(frames_path) as SpriteFrames
-	if source == null:
-		return null
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for action_name: StringName in HEAD_ACTIONS:
-		var info: Dictionary = HEAD_ACTIONS[action_name]
-		var sequence_name := StringName(str(info["folder"]))
-		if not source.has_animation(sequence_name):
-			return null
-		frames.add_animation(action_name)
-		frames.set_animation_speed(action_name, source.get_animation_speed(sequence_name))
-		frames.set_animation_loop(action_name, action_name in [&"wait", &"walk"])
-		for frame_index in range(source.get_frame_count(sequence_name)):
-			frames.add_frame(action_name, source.get_frame_texture(sequence_name, frame_index))
+	var frames := load(frames_path) as SpriteFrames
 	_head_frames_cache[index] = frames
 	return frames
 

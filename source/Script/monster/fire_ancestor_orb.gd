@@ -18,7 +18,6 @@ const ACTIONS := {
 }
 
 static var _frames_cache: SpriteFrames
-static var _prepared_texture_cache: Dictionary = {}
 static var _premultiplied_material: CanvasItemMaterial
 
 @export var monster_kind := 3056
@@ -150,55 +149,7 @@ static func _get_frames() -> SpriteFrames:
 	if standard != null:
 		_frames_cache = standard
 		return standard
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for action_name: StringName in ACTIONS:
-		var action_data: Array = ACTIONS[action_name]
-		frames.add_animation(action_name)
-		frames.set_animation_loop(action_name, bool(action_data[2]))
-		frames.set_animation_speed(action_name, SOURCE_FPS)
-		for frame_index in range(1, int(action_data[1]) + 1):
-			var texture := _get_prepared_texture(str(action_data[0]), frame_index)
-			if texture != null:
-				frames.add_frame(action_name, texture)
-	_frames_cache = frames
-	return frames
-
-
-static func _get_prepared_texture(folder: String, frame_index: int) -> Texture2D:
-	var source_folder := folder
-	var source_frame := frame_index
-
-	if folder == "attack1" or folder == "walk":
-		source_folder = "attack1"
-		source_frame = 1 + int(float(frame_index - 1) / SOURCE_FRAME_HOLD) * SOURCE_FRAME_HOLD
-	var source_path := ROOT.path_join(source_folder).path_join(str(source_frame) + ".png")
-	if _prepared_texture_cache.has(source_path):
-		return _prepared_texture_cache[source_path] as Texture2D
-	var source_texture: Texture2D = Global.get_cached_texture(source_path)
-	if source_texture == null:
-		return null
-	var source_image := source_texture.get_image()
-	if source_image == null or source_image.is_empty():
-		push_error("FireAncestorOrb cannot read frame image: " + source_path)
-		return null
-	if source_image.get_format() != Image.FORMAT_RGBA8:
-		source_image.convert(Image.FORMAT_RGBA8)
-	_remove_swf_matte(source_image)
-	var padded_image := Image.create(
-		source_image.get_width() + FRAME_PADDING * 2,
-		source_image.get_height() + FRAME_PADDING * 2,
-		false,
-		Image.FORMAT_RGBA8
-	)
-	padded_image.fill(Color.TRANSPARENT)
-	padded_image.blit_rect(
-		source_image, Rect2i(Vector2i.ZERO, source_image.get_size()), Vector2i(FRAME_PADDING, FRAME_PADDING)
-	)
-	padded_image.premultiply_alpha()
-	var prepared_texture := ImageTexture.create_from_image(padded_image)
-	_prepared_texture_cache[source_path] = prepared_texture
-	return prepared_texture
+	return null
 
 
 static func _remove_swf_matte(image: Image) -> void:

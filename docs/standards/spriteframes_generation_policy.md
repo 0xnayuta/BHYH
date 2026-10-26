@@ -21,6 +21,7 @@
 - `scripts/convert_numbered_frames.py --all --check` 校验 BiLuoTian / LeiTingJieZhen / Wutai 3077 tornado 构建期帧存在且未过期；
 - `scripts/convert_monster_frames.py --check` 校验怪物 `AtlasMetadata.sequences` 与既有 `*_frames.tres` 的动画名集合、帧数与 `region`/`margin`、页路径闭包、确定性 UID 唯一性；`--all` 按 `scripts/monster_action_maps.json` 追加动作别名（共享原 `AtlasTexture` 子资源）并修正 loop，`--rewrite` 只补 UID 头；已接入 `contract_gate`；
 - 怪物消费者直接 `load` 帧资源，不再运行时 `SpriteFrames.new()` 重建动画；动作名以 `monster_action_maps.json` 为构建期契约，资源中必须同时存在 sequence 名与动作别名；
+- 剑 Boss（951~954）的 `sword_boss_<name>_frames.tres` 由旧 `animations` schema 的 metadata 生成：`idle/walk/hurt/death` 为实际帧，`hit1/2/3` 固定单帧 `null`（技能视觉由 FrameSequence 流式播放），`speed` 与 `SwordBossBase.SOURCE_FPS` 一致；
 - `scripts/convert_frame_sequences.py --check` 校验内容、schema、UID、Catalog 与延迟纹理路径闭包；已接入 `contract_gate`；
 - `scripts/convert_frame_sequences.py --export-preset [NAME]` 只读检查实际导出预设；缺预设明确失败，配置通过不等于导出包通过；
 - `png_stream_audit.py --fail-on-error` 限制未登记使用，并拦截已迁移消费者恢复旧字段、目录扫描或编号探测。
