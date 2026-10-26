@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（Phase 13-1 失败语义与热路径 IO 收口完成）
+> 最后更新：2026-10-26（Phase 13-2A 怪物帧转换器与契约门禁接入完成）
 
 ---
 
@@ -84,6 +84,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 | `python scripts/coop_probe_runner.py --godot <path>` | LocalCoop 探针矩阵（用例清单由脚本维护） |
 | `python scripts/scene_probe_runner.py --godot <path>` | 星座 Boss 运行时场景探针（`--scene` 完整生命周期） |
 | `python scripts/convert_atlas_metadata.py --check` | Atlas manifest 与 `metadata.tres` 同步校验 |
+| `python scripts/convert_monster_frames.py --check` | 怪物 `AtlasMetadata.sequences` 与既有 `*_frames.tres` 的帧几何、页闭包、动画名与 UID 校验 |
 
 Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变量指定，不写入仓库。
 
@@ -132,6 +133,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 Phase 13-1 失败语义与热路径 IO | 八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` **2/2 PASS**；`coop_probe_runner` **16/16 PASS**；`level_1` / `level_59` / `level_61` / `level_pty` / `level_bxgh` / `level_stz` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `RoleRuntimeCatalog.get_manifest` 的 `assert` 改为 `push_error + null`，两个调用方中止预热；`AtlasMetadataStore` 三种失败可区分并新增 `validate_path()`；宠物弹体空帧占位改为显式 `null` 或按时间轴长度生成纯计时帧；删除 `monster_bullet` 的 `DirAccess` 扫描与 `range(601)` 编号探测，宠物龙/虎帧改由构建期 `SpriteFrames` 驱动；`hdzm.gd` 热路径 `load()` 改为 `preload`；`StreamingFrameEffect` 基类删除逐帧同步加载 |
 | 2026-10-26 全量关卡回归（素材切换后） | `level_regression_all.py --jobs 4 --timeout 150`：**PASS 128 / 128 + SKIP 5，FAIL 0**，耗时 **732.2 秒** | 覆盖编号关 85 + 特殊关 48；SKIP 为 5 个非战斗场景（`bai_gu_level` / `boat` / `bsz` / `hdzm` / `jctfloor_1`），按既定口径计入通过。私有素材仓已推送的 FrameSequence 可读命名切换（288 新增 / 477 删除 / Catalog + 依赖清单）未引入断裂引用 |
 | 2026-10-26 关卡预载 Catalog 迁移 | `convert_level_preload_catalog.py --check` **153 场景 / 101 关卡条目 / 17 弹体条目 PASS**（并入契约门禁）；八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`level_1` / `level_46` / `level_59` / `level_61` / `level_pty` / `level_xhy` / `level_tzsijian` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `load_scene.gd` 与 `global.gd` 删除运行时 `.gd`/`.tscn` 源文本正则解析，改读构建期 `LevelPreloadCatalog.tres`；数据收敛为 `first_wave_ids`（stage_1 优先级）与 `monster_ids`（完整覆盖，含 stage_5+）；删除无调用点的 `_prewarm_target_script_monsters`、`Global.preload_level_monster_resources` 及后台预载子系统；怪物弹体名改为磁盘真实大小写 |
+| 2026-10-26 Phase 13-2A 怪物帧转换器 | `convert_monster_frames.py --check` **148 目标 / 40,222 帧 PASS**；8 个样本经 Godot 探针比对「生成 vs metadata vs 生产」**6,123 帧 0 差异**（含 loop/speed）；`--all` 幂等写入 **0**；契约门禁 **8/8 PASS**，其中 `monster_frames_check` 新增并通过 | 新增 `scripts/convert_monster_frames.py` 并接入 `contract_gate`；目标解析复用既有 `*_frames.tres`（同目录优先、`atlas*` 回退父目录），`pet_tiger_boss/atlas` 因 stage 聚合名显式跳过；148 个历史目标无 UID 头，`--check` 记为已评审例外，`--rewrite` 可补确定性 UID；`--emit` 供抽样探针使用，探针目录验证后删除 |
 | 2026-10-26 关卡选择态探针 | `scene_probe_runner.py` 套件 **2/2 PASS**：星座 + 选择态；选择态覆盖 `level_bxgh` 8 个八仙/非法回退与 `level_stz` 3 个三太子/非法回退，13 项全 PASS；日志 **0 ERROR / 0 WARNING**（仅 headless dummy 纹理噪声豁免） | 新增 `scripts/scene_probes/level_selection_probe.{gd,tscn}`；断言 `monster_group["stage_1"]`、关卡自预载场景缓存与三太子背景可见性；`scene_probe_runner.py` 改为 `PROBES` 清单并支持 `--probe`；退出阶段按 `*_PROBE_TEARDOWN` 分区 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
@@ -141,7 +143,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 ## 6. 已知边界
 
 1. 当前仓库已建立本地 Git 提交历史；尚未推送远端，工作区由本地完整备份保障。
-2. `scripts/convert_atlas_metadata.py` 是当前构建期转换器，由 `scripts/contract_gate.py` 调用。
+2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py` 与 `convert_level_preload_catalog.py`，前三个的 `--check` 由 `scripts/contract_gate.py` 调用。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
 4. 13 个 Autoload、`global.gd` 大体量全局状态、字典/JSON 数据与类型分层目录按遗留结构保留；新增代码不得继续扩张。
 5. 8 并发全量回归存在偶发的 Godot 启动瞬态；稳定复跑建议 `--jobs 4`。

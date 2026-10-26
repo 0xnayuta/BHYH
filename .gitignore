@@ -72,7 +72,13 @@ desktop.ini
 !.omp/skills/
 
 # ==========================================
-# 6. 关卡冒烟夹具临时产物
+# 6. 机器生成的报告（docs/reports/README.md 除外）
+# ==========================================
+/docs/reports/*
+!/docs/reports/README.md
+
+# ==========================================
+# 7. 关卡冒烟夹具临时产物
 # ==========================================
 level_smoke_driver*.gd
 level_smoke_driver*.gd.uid
@@ -81,7 +87,7 @@ level_smoke_driver*.tscn.uid
 level_smoke_report*.json
 
 # ==========================================
-# 7. Spine GDExtension（仅 Windows x86_64 入库）
+# 8. Spine GDExtension（仅 Windows x86_64 入库）
 # ==========================================
 !source/bin/spine_godot_extension.gdextension
 !source/bin/windows/libspine_godot.windows.editor.x86_64.dll
@@ -89,7 +95,7 @@ level_smoke_report*.json
 !source/bin/windows/libspine_godot.windows.template_release.x86_64.dll
 
 # ==========================================
-# 8. 本机 codegraph 索引，规则详见于 .codegraph/.gitignore
+# 9. 本机 codegraph 索引，规则详见于 .codegraph/.gitignore
 # ==========================================
 .codegraph/*
 !.codegraph/.gitignore

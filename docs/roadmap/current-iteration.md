@@ -2,7 +2,7 @@
 
 > **用途**：维护当前活跃阶段的范围、依赖、实施顺序与验收入口；长期路线以 [roadmap](roadmap.md) 为准。
 >
-> **当前状态**：**Phase 13 视觉资产契约收口**，规划完成，未开始实施。
+> **当前状态**：**Phase 13 视觉资产契约收口**实施中；Phase 13-1 与 13-2A 已完成，13-2B 待确认。
 >
 > **版本边界**：内容版本保持 **6.9**；Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容。
 >
@@ -152,17 +152,19 @@ return MANIFESTS[role_id]
 
 结论：**素材侧已基本就绪**，缺的是“元数据 → 怪物帧资源”的通用转换器与消费者切换。
 
-### 3.3 批次 13-2A：新增通用转换器
+### 3.3 批次 13-2A：新增通用转换器（已完成 2026-10-26）
 
 新增 `scripts/convert_monster_frames.py`：
 
-- **输入**：`Art/monster/**/atlas/metadata.tres` 的 `sequences`，以及 `Art/monster/game_3_monster/<id>/**` 的目录布局；
-- **身份**：`monster/<id>/<action>`，文件名由身份派生可读 slug；
-- **输出**：`Art/monster/<...>/monster_<id>_frames.tres`（沿用现有命名与 UID 规则）；
-- **校验**：`--check` 比较内容、schema、帧路径闭包、UID 唯一性、动画名唯一性；`--all` 生成；陈旧输出只清理自己拥有的集合；
-- **稳定 UID**：与 `convert_frame_sequences.py` 相同的确定性派生规则，不复用其它转换器身份。
+- **输入**：`Art/monster/**/metadata.tres` 的 `sequences`；
+- **目标解析**：同目录唯一 `*_frames.tres` 优先；`atlas*` 目录无同目录目标时取父目录唯一目标；其余显式跳过并登记原因（`pet_tiger_boss/atlas` 为 stage 聚合名，不是一比一投影）；
+- **输出**：沿用既有生产命名，不新建重复资源。`--all` 只写缺失或与 metadata 语义不一致的目标；`--rewrite` 才按规范格式重写并补 UID；`--emit <dir>` 输出到指定目录供探针验证；
+- **校验**：`--check` 比较动画名集合、帧数、每帧页路径 / `region` / `margin`、页文件闭包与 PNG 边界、动画名唯一性、确定性 UID 与全局 UID 冲突；
+- **稳定 UID**：由 `bhyh:monster_frames|<metadata 相对路径>` 派生；148 个历史目标无 UID 头，按已评审例外接受，`--rewrite` 可一次性补齐；
+- **实测**：148 个目标 / 40,222 帧全部与 metadata 一致；8 个样本（6,123 帧）经 Godot 探针比对「生成 vs metadata vs 生产」零差异（含 loop/speed）；`--all` 幂等写入 0 个文件；
+- **门禁**：`--check` 已并入 `scripts/contract_gate.py`。
 
-接入 `scripts/contract_gate.py` 的 `--check` 子命令清单。
+规划原定「新建 `monster_<id>_frames.tres`」与现状冲突：148 个模型已有按既有命名生成的同源资源，消费者按现有路径引用。13-2A 改为复用现有资源，避免重复资产与 13-2B 的路径迁移开销。
 
 ### 3.4 批次 13-2B：消费者切换
 
@@ -309,7 +311,7 @@ Phase 13-4 兼容层与遗留动态表治理
 | 批次 | 状态 | 提交粒度 |
 |:---|:---|:---|
 | Phase 13-1 | **已完成**（2026-10-26） | 单个提交 |
-| Phase 13-2A | 规划完成，未开始 | 转换器 + `--check` 一个提交 |
+| Phase 13-2A | **已完成**（2026-10-26） | 转换器 + `--check` 一个提交 |
 | Phase 13-2B | 规划完成，未开始 | 按怪物域分批，每批一个提交 |
 | Phase 13-3 | 规划完成，未开始 | 清单生成 + 运行时删表分开提交 |
 | Phase 13-4 | 规划完成，未开始 | 分类脚本 → 删除 → 入口收敛，分开提交 |
@@ -362,7 +364,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 150
 
 ## 9. 恢复规则
 
-- 本页记录 **Phase 13 规划完成、尚未实施** 的状态；实施前须由用户明确确认批次。
+- 本页记录 Phase 13 实施状态：13-1 与 13-2A 已完成；13-2B 起实施前须由用户明确确认批次。
 - 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
 - Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
 - 内容版本保持 6.9；Phase 13 不产生新的内容版本号。

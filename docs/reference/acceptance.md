@@ -101,6 +101,7 @@ python scripts/check_all.py --no-cache -j 6
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
+| 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
@@ -273,6 +274,7 @@ python scripts/convert_nezha_preview_frames.py --check
 ```
 
 ```bash
+python scripts/convert_monster_frames.py --check
 python scripts/convert_frame_sequences.py --check
 python scripts/convert_frame_sequences.py --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test

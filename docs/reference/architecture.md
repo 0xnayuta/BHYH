@@ -372,6 +372,7 @@ classDiagram
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
+| 怪物 `AtlasMetadata.sequences` | `scripts/convert_monster_frames.py` | 既有 `Art/monster/**/*_frames.tres` | `--check` 动画名集合、帧数、页路径闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；`--all` 只补缺失/语义不一致，`--rewrite` 才补 UID |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 | 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）与怪物脚本弹体名 | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry` / 怪物弹体表） | `--check` 逐字比较；无法静态解析的条目输出到 stderr，由关卡自身预载 |
 
@@ -535,7 +536,7 @@ classDiagram
 | 角色运行资源清单 | `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`，`preload` 静态注册，缺失即失败 |
 | 图集元数据 | `AtlasMetadata` + `AtlasMetadataStore`，构建期生成、运行时只读 |
 | 字典键契约 | `DataKeys` 命名空间与安全访问器 |
-| 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_nezha_preview_frames.py` |
+| 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由 |

@@ -19,6 +19,7 @@
 - `scripts/convert_atlas_metadata.py --self-test` 校验 `source_frames` 负向样本；
 - `scripts/convert_nezha_preview_frames.py --check` 校验全部输出存在且内容一致（数量以预览源清单为准）；
 - `scripts/convert_numbered_frames.py --all --check` 校验 BiLuoTian / LeiTingJieZhen / Wutai 3077 tornado 构建期帧存在且未过期；
+- `scripts/convert_monster_frames.py --check` 校验怪物 `AtlasMetadata.sequences` 与既有 `*_frames.tres` 的动画名集合、帧数与 `region`/`margin`、页路径闭包、确定性 UID 唯一性；`--all` 幂等补齐 148 个既有目标，`--rewrite` 才补 UID；已接入 `contract_gate`；
 - `scripts/convert_frame_sequences.py --check` 校验内容、schema、UID、Catalog 与延迟纹理路径闭包；已接入 `contract_gate`；
 - `scripts/convert_frame_sequences.py --export-preset [NAME]` 只读检查实际导出预设；缺预设明确失败，配置通过不等于导出包通过；
 - `png_stream_audit.py --fail-on-error` 限制未登记使用，并拦截已迁移消费者恢复旧字段、目录扫描或编号探测。
