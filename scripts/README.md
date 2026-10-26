@@ -43,6 +43,9 @@ coop_probe_runner.py
 
 scene_probe_runner.py
 └── scene_probes/constellation_probe.tscn/.gd（--scene 启动，执行期复制到工程根）
+
+frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中）
+└── Godot --export-pack → 最小空工程挂载 PCK → FileAccess 逐条判定
 ```
 
 说明：
@@ -97,7 +100,8 @@ scene_probe_runner.py
 | `scene_probe_runner.py` | 完整场景生命周期：显式视觉后端、首帧、真实纹理预热、共享请求与退出回收；发布前 L2 固定项之一 | `docs/reports/constellation_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado，`--check` 校验存在且未过期 | 角色 4/5 与 3077 `Art/.../*_frames.tres`（私有素材） |
-| `convert_frame_sequences.py` | 固定/图集帧 → FrameSequence、Catalog、稳定 UID 与延迟纹理依赖 JSON；`--check` 进契约门禁；`--export-preset [NAME]` 只读检查现有预设声明覆盖 | `source/Art/frame_sequences/`（私有素材）；不创建导出预设，不宣称 PCK 已验证 |
+| `convert_frame_sequences.py` | 固定/图集帧 → FrameSequence、Catalog、稳定 UID 与延迟纹理依赖 JSON；`asset_id` 为内容身份、`default_*` 为默认策略，输出按 `asset_id` 生成可读文件名并在生成时清理自己拥有的陈旧输出；`--check` 进契约门禁；`--export-preset [NAME]` 只读检查预设声明覆盖 | `source/Art/frame_sequences/`（私有素材） |
+| `frame_sequence_pack_probe.py` | 发布包闭包探针：实际 `--export-pack` 生成 PCK，在最小空工程中挂载并逐条验证 Catalog/序列/延迟纹理可达（含 `.remap`）；`--self-test` 只验证依赖清单结构 | 可选 `--report` JSON；缺模板、无 PCK 或无结果返回 2（BLOCKED），不记为通过 |
 | `coop_probes/coop_probe_matrix.gd` | 探针矩阵 GDScript 测试规格 | 仅执行期复制到工程根，结束后清理 |
 
 ### 3.5 数据文件
@@ -157,6 +161,10 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 
 # 星座运行时场景探针
 python scripts/scene_probe_runner.py --godot "<godot>"
+
+# FrameSequence 发布包闭包（需导出模板）
+python scripts/frame_sequence_pack_probe.py --self-test
+python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
 ---

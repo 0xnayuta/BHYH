@@ -301,9 +301,7 @@ func _get_sword_action_frame_count(sprite_anim: StringName) -> int:
 
 
 func _sword_skill_sequence(anim_name: String) -> FrameSequence:
-	return FrameSequenceStore.get_sequence(
-		"sword/%s/%s" % [sword_root.get_file(), anim_name], SOURCE_FPS, false, false, 2
-	)
+	return FrameSequenceStore.get_sequence(StringName("sword/%s/%s" % [sword_root.get_file(), anim_name]))
 
 
 func _start_streamed_sword_skill(anim_name: String) -> void:
@@ -313,6 +311,7 @@ func _start_streamed_sword_skill(anim_name: String) -> void:
 		return
 	_streamed_skill_effect = StreamedPngEffect.new()
 	_streamed_skill_effect.sequence = sequence
+	_streamed_skill_effect.configure_playback(SOURCE_FPS, false, false, 2)
 	_streamed_skill_effect.z_index = mr_ani.z_index + 1
 	_streamed_skill_effect.position = mr_ani.position
 	_streamed_skill_effect.finished.connect(_on_streamed_sword_skill_finished)

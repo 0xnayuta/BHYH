@@ -103,6 +103,13 @@ heroDefaultStats.tres
 
 未登记的机器导出结构、新增数字 ID 目录或新增数字 ID 场景，均视为违规。
 
+构建期生成资源（如 `source/Art/frame_sequences/*.tres`）：
+
+- 文件名由资产身份（`asset_id`）派生 `snake_case` slug，超长时截断并追加 8 位身份哈希；
+- 文件名只用于定位与检索，资产身份由 `asset_id` 与资源头 UID 承载；改文件名不改变身份；
+- 禁止用哈希、UUID 或纯序号作为生成资源文件名，除非该工具的输出格式强制要求并已登记；
+- 生成器必须断言 slug 唯一，不得靠自动加后缀静默消解冲突。
+
 ---
 
 ## 3. 场景树节点命名规范 (Scene Tree Node Naming)

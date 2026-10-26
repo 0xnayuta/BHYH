@@ -2,16 +2,13 @@ class_name FrameSequenceStore
 extends RefCounted
 
 ## Catalog 只驻留元数据；纹理预热租约按关卡显式释放。
+## 资产身份只用 asset_id；fps/loop/hold/prefetch 属于实例播放策略。
 const CATALOG_PATH := "res://Art/frame_sequences/frame_sequence_catalog.tres"
 
 static var _catalog: FrameSequenceCatalog
 static var _validated: Dictionary[int, bool] = {}
 static var _prewarmed_paths: Dictionary[String, bool] = {}
 static var _prewarm_generation: int = 0
-
-
-static func key_for(directory: String, fps: float, loop: bool, hold_last_frame: bool, prefetch: int = 2) -> StringName:
-	return StringName("%s|%.1f|%s|%s|%d" % [directory, fps, str(loop), str(hold_last_frame), prefetch])
 
 
 static func _ensure_catalog() -> bool:
@@ -24,27 +21,32 @@ static func _ensure_catalog() -> bool:
 	return true
 
 
-static func has_sequence(directory: String, fps: float, loop: bool, hold_last_frame: bool, prefetch: int = 2) -> bool:
+static func directory_asset_id(directory: String) -> StringName:
+	## 批量目录资产的登记规则：构建期与运行时使用同一确定性映射。
+	if not directory.begins_with("res://Art/"):
+		push_error("目录资产必须位于 res://Art/ 下: " + directory)
+		return &""
+	return StringName("dir/" + directory.trim_prefix("res://Art/"))
+
+
+static func has_sequence(asset_id: StringName) -> bool:
 	if not _ensure_catalog():
 		return false
-	return _catalog.sequences.has(key_for(directory, fps, loop, hold_last_frame, prefetch))
+	return _catalog.sequences.has(asset_id)
 
 
-static func get_sequence(
-	directory: String, fps: float, loop: bool, hold_last_frame: bool, prefetch: int = 2
-) -> FrameSequence:
+static func get_sequence(asset_id: StringName) -> FrameSequence:
 	if not _ensure_catalog():
 		return null
-	var key := key_for(directory, fps, loop, hold_last_frame, prefetch)
-	var sequence: FrameSequence = _catalog.sequences.get(key)
+	var sequence: FrameSequence = _catalog.sequences.get(asset_id)
 	if sequence == null:
-		push_error("缺少构建期帧序列: " + str(key))
+		push_error("缺少构建期帧序列: " + str(asset_id))
 		return null
 	var instance_id := sequence.get_instance_id()
 	if not _validated.has(instance_id):
 		var errors := sequence.validate()
 		if not errors.is_empty():
-			push_error("无效构建期帧序列 %s: %s" % [key, ", ".join(errors)])
+			push_error("无效构建期帧序列 %s: %s" % [asset_id, ", ".join(errors)])
 			return null
 		_validated[instance_id] = true
 	return sequence

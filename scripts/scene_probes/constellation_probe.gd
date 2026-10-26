@@ -13,7 +13,6 @@ const BODY_ACTIONS := [
 	"wait", "walk", "hurt", "death", "hit1", "hit2", "hit3", "hit4", "skill1", "skill2", "skill3", "skill4"
 ]
 const STANDARD_FRAMES := "res://Art/constellations/boss/140/atlas/constellation_140_frames.tres"
-const SKILL_ROOT := "res://Art/constellations/boss/140/"
 const BODY_FPS := 24.0
 const SKILL_FPS := 24.0
 const BODY_CANVAS := Vector2i(250, 250)
@@ -48,12 +47,11 @@ func _run() -> void:
 func _verify_body_catalog(checks: Dictionary) -> void:
 	var present := 0
 	for action: String in BODY_ACTIONS:
-		var looped: bool = action in ["wait", "walk"]
 		var key: String = "constellation/%d/body/%s" % [SOURCE_ID, action]
-		if not FrameSequenceStore.has_sequence(key, BODY_FPS, looped, not looped, 2):
+		if not FrameSequenceStore.has_sequence(StringName(key)):
 			_fail("缺少星座 body 序列: " + key)
 			continue
-		if FrameSequenceStore.get_sequence(key, BODY_FPS, looped, not looped, 2).count() <= 0:
+		if FrameSequenceStore.get_sequence(StringName(key)).count() <= 0:
 			_fail("星座 body 序列为空: " + key)
 			continue
 		present += 1
@@ -62,11 +60,12 @@ func _verify_body_catalog(checks: Dictionary) -> void:
 
 
 func _verify_body_stream(checks: Dictionary) -> void:
-	if not FrameSequenceStore.has_sequence(BODY_KEY, BODY_FPS, true, false, 2):
+	if not FrameSequenceStore.has_sequence(StringName(BODY_KEY)):
 		checks["body_stream"] = false
 		return
 	var stream := ConstellationBodyStream.new()
-	stream.sequence = FrameSequenceStore.get_sequence(BODY_KEY, BODY_FPS, true, false, 2)
+	stream.sequence = FrameSequenceStore.get_sequence(StringName(BODY_KEY))
+	stream.configure_playback(BODY_FPS, true, false, 2)
 	stream.auto_free = false
 	stream.configure_canvas(BODY_CANVAS, BODY_OFFSET, true)
 	add_child(stream)
@@ -88,12 +87,12 @@ func _verify_skill_visual(
 	if frames != null and frames.has_animation(animation):
 		frame_count = frames.get_frame_count(animation)
 	if expected_backend == WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE:
-		var root := SKILL_ROOT + folder
-		if not FrameSequenceStore.has_sequence(root, SKILL_FPS, false, hold_last, 2):
+		var asset_id := StringName("constellation/%d/skill/%s" % [SOURCE_ID, folder])
+		if not FrameSequenceStore.has_sequence(asset_id):
 			checks[folder + "_catalog"] = false
 			_fail(folder + " 缺少 FrameSequence")
 			return
-		frame_count = FrameSequenceStore.get_sequence(root, SKILL_FPS, false, hold_last, 2).count()
+		frame_count = FrameSequenceStore.get_sequence(asset_id).count()
 	var config := {
 		"position": Vector2.ZERO,
 		"frame_count": frame_count,
@@ -106,7 +105,7 @@ func _verify_skill_visual(
 		"lifetime": 1.0,
 	}
 	if expected_backend == WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE:
-		config["frame_root"] = SKILL_ROOT + folder
+		config["frame_asset_id"] = "constellation/%d/skill/%s" % [SOURCE_ID, folder]
 	else:
 		config["frames_resource"] = STANDARD_FRAMES
 		config["frames_animation"] = folder
@@ -146,7 +145,7 @@ func _verify_wrong_animation_rejected(checks: Dictionary) -> void:
 			"visual_backend": WutaiMinghaiProjectile.VisualBackend.SPRITE_FRAMES,
 			"frames_resource": STANDARD_FRAMES,
 			"frames_animation": "skill2_3",
-			"frame_root": SKILL_ROOT + "skill2_3",
+			"frame_asset_id": "constellation/%d/skill/skill2_3" % SOURCE_ID,
 			"frame_count": frame_count,
 			"frame_fps": SKILL_FPS,
 			"loop_visual": false,
@@ -194,7 +193,7 @@ func _verify_wrong_animation_rejected(checks: Dictionary) -> void:
 
 func _verify_sequence_lifecycle(checks: Dictionary) -> void:
 	FrameSequenceStore.clear_prewarmed_textures()
-	var source := FrameSequenceStore.get_sequence(SKILL_ROOT + "skill2_3", SKILL_FPS, false, false, 2)
+	var source := FrameSequenceStore.get_sequence(StringName("constellation/%d/skill/skill2_3" % SOURCE_ID))
 	var path: String = source.frame_paths[0]
 	await FrameSequenceStore.prewarm_sequence(source)
 	checks["texture_prewarm_ready"] = ResourceLoader.has_cached(path)
@@ -215,9 +214,10 @@ func _verify_sequence_lifecycle(checks: Dictionary) -> void:
 	b.queue_free()
 	FrameSequenceStore.clear_prewarmed_textures()
 	var held := FrameSequence.new()
+	held.asset_id = &"probe/hold_last_frame"
 	held.frame_paths = PackedStringArray([path, path])
-	held.fps = 120.0
-	held.hold_last_frame = true
+	held.default_fps = 120.0
+	held.default_hold_last_frame = true
 	var player := StreamedPngEffect.new()
 	player.sequence = held
 	player.auto_free = false

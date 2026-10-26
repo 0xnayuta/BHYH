@@ -11,7 +11,7 @@ static var _frame_geometry_cache: Dictionary = {}
 
 var owner_monster: BaseMonster
 var spawn_global_position := Vector2.ZERO
-var frame_root := ""
+var frame_asset_id := ""
 var frame_count := 0
 var visual_backend := VisualBackend.NONE
 var impact_visual_backend := VisualBackend.NONE
@@ -28,7 +28,7 @@ var black_background_feather := 0.02
 var remove_blue_background := false
 var blue_background_threshold := 0.8
 var blue_background_feather := 0.08
-var impact_frame_root := ""
+var impact_frame_asset_id := ""
 var impact_frame_count := 0
 var impact_visual_offset := Vector2.ZERO
 var impact_duration := 0.0
@@ -136,11 +136,11 @@ func configure(config: Dictionary) -> bool:
 	obj_attack_dict = {hit_name: att_list}
 	skill_name = str(config.get("skill_name", "WutaiMinghaiProjectile"))
 	dir = bool(config.get("right", true))
-	frame_root = str(config.get("frame_root", ""))
+	frame_asset_id = str(config.get("frame_asset_id", ""))
 	frame_count = int(config.get("frame_count", 0))
 	frames_resource_path = str(config.get("frames_resource", ""))
 	frames_animation = str(config.get("frames_animation", ""))
-	impact_frame_root = str(config.get("impact_frame_root", ""))
+	impact_frame_asset_id = str(config.get("impact_frame_asset_id", ""))
 	impact_frame_count = int(config.get("impact_frame_count", 0))
 	impact_frames_resource_path = str(config.get("impact_frames_resource", ""))
 	impact_frames_animation = str(config.get("impact_frames_animation", ""))
@@ -262,24 +262,24 @@ func _declares_visual(is_impact: bool) -> bool:
 	if is_impact:
 		return (
 			impact_frame_count > 0
-			or not impact_frame_root.is_empty()
+			or not impact_frame_asset_id.is_empty()
 			or not impact_frames_resource_path.is_empty()
 			or not impact_frames_animation.is_empty()
 		)
 	return (
 		frame_count > 0
-		or not frame_root.is_empty()
+		or not frame_asset_id.is_empty()
 		or not frames_resource_path.is_empty()
 		or not frames_animation.is_empty()
 	)
 
 
 func _validate_sprite_frames(is_impact: bool, label: String) -> bool:
-	var root := impact_frame_root if is_impact else frame_root
+	var asset_id := impact_frame_asset_id if is_impact else frame_asset_id
 	var resource_path := impact_frames_resource_path if is_impact else frames_resource_path
 	var animation_name := impact_frames_animation if is_impact else frames_animation
-	if not root.is_empty():
-		push_error("WutaiMinghaiProjectile: %s 的 %s=SPRITE_FRAMES 不得同时声明 frame_root" % [skill_name, label])
+	if not asset_id.is_empty():
+		push_error("WutaiMinghaiProjectile: %s 的 %s=SPRITE_FRAMES 不得同时声明 frame_asset_id" % [skill_name, label])
 		return false
 	if resource_path.is_empty() or animation_name.is_empty():
 		push_error(
@@ -302,24 +302,20 @@ func _validate_sprite_frames(is_impact: bool, label: String) -> bool:
 
 
 func _validate_frame_sequence(is_impact: bool, label: String) -> bool:
-	var root := impact_frame_root if is_impact else frame_root
+	var asset_id := impact_frame_asset_id if is_impact else frame_asset_id
 	var count := impact_frame_count if is_impact else frame_count
 	var resource_path := impact_frames_resource_path if is_impact else frames_resource_path
 	var animation_name := impact_frames_animation if is_impact else frames_animation
 	if not resource_path.is_empty() or not animation_name.is_empty():
 		push_error("WutaiMinghaiProjectile: %s 的 %s=FRAME_SEQUENCE 不得同时声明 SpriteFrames 字段" % [skill_name, label])
 		return false
-	if root.is_empty() or count <= 0:
-		push_error("WutaiMinghaiProjectile: %s 的 %s=FRAME_SEQUENCE 缺少 frame_root 或 frame_count" % [skill_name, label])
-		return false
-	var looped := false if is_impact else loop_visual
-	if not FrameSequenceStore.has_sequence(root, frame_fps, looped, hold_last_frame, 2):
+	if asset_id.is_empty() or count <= 0:
 		push_error(
-			(
-				"WutaiMinghaiProjectile: %s 的 %s 缺少构建期帧序列 %s"
-				% [skill_name, label, FrameSequenceStore.key_for(root, frame_fps, looped, hold_last_frame, 2)]
-			)
+			"WutaiMinghaiProjectile: %s 的 %s=FRAME_SEQUENCE 缺少 frame_asset_id 或 frame_count" % [skill_name, label]
 		)
+		return false
+	if not FrameSequenceStore.has_sequence(StringName(asset_id)):
+		push_error("WutaiMinghaiProjectile: %s 的 %s 缺少构建期帧序列 %s" % [skill_name, label, asset_id])
 		return false
 	return true
 
@@ -356,7 +352,14 @@ func _ready() -> void:
 	get_prop()
 	if visual_backend != VisualBackend.NONE:
 		if not _configure_visual(
-			visual_backend, frame_root, frame_count, visual_offset, loop_visual, frames_resource_path, frames_animation
+			visual_backend,
+			frame_asset_id,
+			frame_count,
+			visual_offset,
+			loop_visual,
+			frames_resource_path,
+			frames_animation,
+			false
 		):
 			push_error("WutaiMinghaiProjectile: %s 视觉初始化失败" % skill_name)
 			_finished = true
@@ -369,7 +372,14 @@ func _ready() -> void:
 
 
 func _configure_visual(
-	backend: int, root: String, count: int, offset: Vector2, looped: bool, resource_path: String, animation_name: String
+	backend: int,
+	asset_id: String,
+	count: int,
+	offset: Vector2,
+	looped: bool,
+	resource_path: String,
+	animation_name: String,
+	is_impact: bool
 ) -> bool:
 	if backend == VisualBackend.NONE:
 		return true
@@ -381,7 +391,7 @@ func _configure_visual(
 		)
 	if backend == VisualBackend.FRAME_SEQUENCE:
 		_release_standard_visual()
-		return _configure_stream_visual(root, count, offset, looped)
+		return _configure_stream_visual(asset_id, count, offset, looped, is_impact)
 	push_error("WutaiMinghaiProjectile: %s 视觉后端无效" % skill_name)
 	return false
 
@@ -390,22 +400,28 @@ func _standard_visual_offset(_animation: StringName, offset: Vector2) -> Vector2
 	return offset
 
 
-func _configure_stream_visual(root: String, count: int, offset: Vector2, looped: bool) -> bool:
+func _configure_stream_visual(asset_id: String, count: int, offset: Vector2, looped: bool, is_impact: bool) -> bool:
 	_visual_sequence = null
-	if root.is_empty() or count <= 0:
+	if asset_id.is_empty() or count <= 0:
 		return false
-	if not FrameSequenceStore.has_sequence(root, frame_fps, looped, hold_last_frame, 2):
-		push_error("缺少构建期弹道帧序列: " + root)
+	if not FrameSequenceStore.has_sequence(StringName(asset_id)):
+		push_error("缺少构建期弹道帧序列: " + asset_id)
 		return false
 
-	var is_monster_169_absorb := root.replace("\\", "/").ends_with("/Monster_169/hit2")
-	if is_monster_169_absorb:
+	var stream := StreamedPngEffect.new()
+	stream.name = "VisualStream"
+	stream.sequence = FrameSequenceStore.get_sequence(StringName(asset_id))
+	if stream.sequence == null:
+		push_error("WutaiMinghaiProjectile: %s 的帧序列加载失败: %s" % [skill_name, asset_id])
+		stream.free()
+		return false
+	var effective_loop := false if is_impact else looped
+	stream.configure_playback(frame_fps, effective_loop, hold_last_frame, 2)
+	# 九头虫吸收特效的黑底抠除是资产特性，按构建期 asset_id 判定而不是目录字符串。
+	if asset_id.ends_with("monster_169/hit2"):
 		remove_black_background = true
 		black_background_threshold = 0.14
 		black_background_feather = 0.05
-	var stream := StreamedPngEffect.new()
-	stream.name = "VisualStream"
-	stream.sequence = FrameSequenceStore.get_sequence(root, frame_fps, looped, hold_last_frame, 2)
 	_visual_sequence = stream.sequence
 	stream.auto_free = false
 	stream.remove_black_background = remove_black_background
@@ -805,12 +821,13 @@ func _begin_impact() -> void:
 		middle.rotation = 0.0
 	var impact_configured := _configure_visual(
 		impact_visual_backend,
-		impact_frame_root,
+		impact_frame_asset_id,
 		impact_frame_count,
 		impact_visual_offset,
 		false,
 		impact_frames_resource_path,
-		impact_frames_animation
+		impact_frames_animation,
+		true
 	)
 	if not impact_configured:
 		push_error("WutaiMinghaiProjectile: %s impact 视觉初始化失败" % skill_name)

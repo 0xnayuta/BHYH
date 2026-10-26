@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（目标契约修订、ADR-020 与 FrameSequence 生命周期收口）
+> 最后更新：2026-10-26（FrameSequence 身份模型 v2：`asset_id` + 实例播放策略 + 可读命名）
 
 ---
 
@@ -126,6 +126,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 收口代表关卡与反例 | `level_1`、`level_tzsijian`、`level_61`、`level_bxgh`、`level_73`、最终 `level_74` 冒烟 **PASS，0 ERROR / 0 WARNING**；错误动画、坏清单、异步请求失败按预期拒绝；失败请求取回后引擎状态归零；生成资源 UID 实际加载有效 | 负向样本的预期 ERROR 单列，不计作常规零错误通过；早期 level_74 在并行编辑时失败，冻结后复跑通过。新常量声明曾触发 debug 编译停在断点而超时，修复后最终完整门禁通过；不删除原失败证据 |
 | 全角色运行资源清单 | 角色 1~7 静态 Catalog **PASS**；无技能/条件路径探针 **PASS**；角色 7 音频 **25 条**；角色 4/5 重型帧构建期化 **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；Godot `--debug` **0 warning** | 新增 `RoleRuntimeCatalog` 以 typed Dictionary + `preload` 静态注册全部清单，删除 Manifest 缺失回退与旧硬编码路径；条件字段改为 `Dictionary[String, PackedStringArray]`；角色 7 动态音频进入清单；`zlw_shenqi_gear_bullet.tscn` 改为 `BaseHero` 固定 `preload`；BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 由 `convert_numbered_frames.py` 生成 4 个构建期 SpriteFrames，Manifest 改走 `conditional_sprite_frames_paths`，移除 175 条 PNG 路径与运行时建帧 |
 | 引擎健康检查基线（2026-10-26 收口工作区） | 710 脚本；最终完整门禁引擎维度 PASS，0 Parse / 0 Error / 0 Warning；1,136 场景 0 断裂引用 | 本地完整素材工作区；不以 health_check 超时返回 0 冒充通过 |
+| 2026-10-26 FrameSequence 身份模型 v2 | `convert_frame_sequences.py --check` **288 序列 / 2,812 条延迟纹理源闭包 PASS**；输出为 `asset_id` 键的 Catalog + 可读 slug 文件；陈旧输出清理 **477 → 0**；八维门禁 **8/8 PASS**；`level_1` Stage 1~4 **PASS**、`level_tzsijian` **PASS**、`scene_probe_runner` **PASS**、`coop_probe_runner` **16/16 PASS**；日志均 **0 ERROR / 0 WARNING** | 序列身份改为稳定 `asset_id`，删除 189 个策略复合 key 冗余（477→288）；`default_fps/default_loop/default_hold_last_frame/default_prefetch_frames` 只作默认值，`StreamedPngEffect.configure_playback()` 提供实例覆盖；转换器按 `asset_id` 派生可读文件名并校验唯一性、单目录单序列与陈旧输出；`--export-preset` 在验证用 `all_resources` 预设下声明覆盖 **3,101 条** |
+| 2026-10-26 FrameSequence 发布包闭包 | `frame_sequence_pack_probe.py` **PASS**：PCK 内 **3,101 条依赖全部可达**（Catalog + 288 序列 + 2,812 延迟纹理）；约 2.74 GB | 验证用预设 `Windows Desktop (validation)`（`all_resources`）；Godot 挂载 PCK 后用 `ResourceLoader.exists()` 逐条判定，导出后 PNG 以 `.import` + `.ctex` 形式存在。PCK 为构建临时产物，sha256 随素材与构建变化，不写入本文作为稳定标识 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
@@ -143,6 +145,6 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
 9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
-10. FrameSequence 已生成独立发布依赖清单并提供 `--export-preset` 只读检查；当前缺少 `source/export_presets.cfg`，检查明确失败。未验证 PCK/导出包、release、目标设备 VRAM 与首帧耗时，不创建默认发布方案。
-11. FrameSequence 仍使用现有 FPS/loop/hold/prefetch 复合 key；稳定内容 ID 与实例播放策略分离列入独立后续切换，本轮不扩展该 API、不保留兼容 wrapper。
+10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），并新增 `scripts/frame_sequence_pack_probe.py`；2026-10-26 实测 PCK 内 3,101 条 FrameSequence 依赖全部可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
+11. FrameSequence 已完成 `asset_id` 与实例播放策略分离；不再保留 FPS/loop/hold/prefetch 复合 key，也无双 key 兼容层。旧版生成的哈希命名文件已由转换器清理。
 12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。

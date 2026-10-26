@@ -670,19 +670,15 @@ func _add_monster140_emit_keys(animation: Animation, skill: int) -> void:
 
 
 func _body_sequence(action: StringName) -> FrameSequence:
-	return FrameSequenceStore.get_sequence(
-		"constellation/%d/body/%s" % [source_id, action],
-		SOURCE_FPS,
-		action in [&"wait", &"walk"],
-		action not in [&"wait", &"walk"],
-		2
-	)
+	return FrameSequenceStore.get_sequence(StringName("constellation/%d/body/%s" % [source_id, action]))
 
 
 func _play_body_action(action: StringName) -> void:
 	var stream := BODY_STREAM_SCRIPT.new() as StreamedPngEffect
 	stream.name = "BodyStream"
 	stream.sequence = _body_sequence(action)
+	var body_loops := action in [&"wait", &"walk"]
+	stream.configure_playback(SOURCE_FPS, body_loops, not body_loops, 2)
 	stream.auto_free = false
 	stream.call(
 		"configure_canvas",
@@ -1971,7 +1967,7 @@ func _spawn_monster140_effect(
 				"attack_data": obj_attack_dict.get(action_name, {}),
 				"skill_name": effect_name,
 				"visual_backend": visual["visual_backend"],
-				"frame_root": visual.get("frame_root", ""),
+				"frame_asset_id": visual.get("frame_asset_id", ""),
 				"frames_resource": visual.get("frames_resource", ""),
 				"frames_animation": visual.get("frames_animation", ""),
 				"frame_count": frame_count,
@@ -2004,15 +2000,15 @@ func _spawn_monster140_effect(
 
 
 func _skill_visual_plan(folder: String, looped: bool, hold_last: bool, fps: float) -> Dictionary:
-	var root := _asset_root().path_join(folder)
+	var asset_id := StringName("constellation/%d/skill/%s" % [source_id, folder])
 	if FRAME_SEQUENCE_SKILLS.has(StringName("%d/%s" % [source_id, folder])):
-		var sequence := FrameSequenceStore.get_sequence(root, fps, looped, hold_last, 2)
+		var sequence := FrameSequenceStore.get_sequence(asset_id)
 		if sequence == null:
 			return {}
 		return {
 			"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
 			"frame_count": sequence.count(),
-			"frame_root": root,
+			"frame_asset_id": String(asset_id),
 		}
 	var frames := _standard_frames()
 	var animation := StringName(folder)
@@ -2232,7 +2228,7 @@ func _spawn_projectile_for_slot(skill: int, attack_slot: int = -1, options: Dict
 				"attack_data": attack_data,
 				"skill_name": str(options.get("skill_name", "Constellation%dSkill%d" % [source_id, skill])),
 				"visual_backend": visual["visual_backend"],
-				"frame_root": visual.get("frame_root", ""),
+				"frame_asset_id": visual.get("frame_asset_id", ""),
 				"frames_resource": visual.get("frames_resource", ""),
 				"frames_animation": visual.get("frames_animation", ""),
 				"frame_count": frame_count,
@@ -2335,8 +2331,8 @@ func _skill_stage_count(skill: int) -> int:
 	if suffixes.is_empty():
 		var root := _asset_root()
 		for suffix in range(2, 21):
-			var stage_root := root.path_join("skill%d_%d" % [skill, suffix])
-			if not FrameSequenceStore.has_sequence(stage_root, SOURCE_FPS, false, false, 2):
+			var stage_asset := StringName("constellation/%d/skill/skill%d_%d" % [source_id, skill, suffix])
+			if not FrameSequenceStore.has_sequence(stage_asset):
 				break
 			suffixes.append(suffix)
 	suffixes.sort()

@@ -102,7 +102,7 @@ func monster_info_attack_values_include_difficulty() -> bool:
 
 
 static func prewarm_frames() -> void:
-	var sequence := FrameSequenceStore.get_sequence(ROOT.path_join("idle"), SOURCE_FPS, true, false, 2)
+	var sequence := FrameSequenceStore.get_sequence(FrameSequenceStore.directory_asset_id(ROOT.path_join("idle")))
 	await FrameSequenceStore.prewarm_sequence(sequence)
 
 
@@ -111,7 +111,7 @@ static func prewarm_effects() -> void:
 		ResourceLoader.load(TORNADO_FRAMES)
 	await prewarm_frames()
 	for folder in ["eye12", "eye3", "skill1", "skill3"]:
-		var sequence := FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, false, false, 2)
+		var sequence := FrameSequenceStore.get_sequence(FrameSequenceStore.directory_asset_id(ROOT.path_join(folder)))
 		await FrameSequenceStore.prewarm_sequence(sequence)
 
 
@@ -299,7 +299,8 @@ func _add_effect_stream(folder: String, offset: Vector2) -> void:
 
 func _create_stream(folder: String, offset: Vector2, looped: bool, auto_free: bool) -> StreamedPngEffect:
 	var stream := StreamedPngEffect.new()
-	stream.sequence = FrameSequenceStore.get_sequence(ROOT.path_join(folder), SOURCE_FPS, looped, false, 2)
+	stream.sequence = FrameSequenceStore.get_sequence(FrameSequenceStore.directory_asset_id(ROOT.path_join(folder)))
+	stream.configure_playback(SOURCE_FPS, looped, false, 2)
 	stream.auto_free = auto_free
 	stream.position = offset
 	monster_dir.add_child(stream)

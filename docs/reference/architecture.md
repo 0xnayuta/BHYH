@@ -351,9 +351,12 @@ classDiagram
 - 哪吒官方部件与 BiLuoTian / LeiTingJieZhen 重技能帧已迁移到构建期 `SpriteFrames`；
 - Spine 资源保持 `.atlas` / `.spine-json` 由 Spine 运行时加载，不转 SpriteFrames。
 - `FrameSequenceStore` 在接纳 Catalog 条目时校验 schema；`StreamedPngEffect` 再校验注入资源，错误时发出 `failed` 并拒绝播放；
+- `FrameSequence` 的 `asset_id` 是内容身份，`default_fps/default_loop/default_hold_last_frame/default_prefetch_frames` 只是默认播放值；`FrameSequenceCatalog` 以 `asset_id` 为键；
+- `StreamedPngEffect.configure_playback()` 允许实例覆盖 fps/loop/hold/prefetch，未设置时继承资源默认值；同一资产可被不同策略复用，不再为策略生成重复资源；
+- `FrameSequenceStore.directory_asset_id()` 固定 `dir/<Art 相对路径>` 映射，批量目录资产在构建期与运行时使用同一确定性规则；
 - `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
 - `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
-- `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE，声明错误不改走其它后端；
+- `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
 
 仍然存在（遗留）：
 
@@ -368,7 +371,7 @@ classDiagram
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期 |
-| 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres` + Catalog + 发布依赖 JSON | `--check` 内容、schema、UID、路径闭包；`--export-preset` 仅配置级覆盖 |
+| 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 
 规则：
@@ -413,6 +416,7 @@ classDiagram
 - `AtlasMetadata` 构建期转换与运行时只读加载；
 - 角色 4/5 重型帧的构建期化与预热清单收敛；
 - `FrameSequence`、Catalog、Store 与转换器已落地，序列数量以构建检查输出为准；消费者只注入 `sequence`，旧数组和目录扫描已删除；
+- 身份模型 v2：序列按 `asset_id` 登记，播放策略改为实例覆盖；转换器按 `asset_id` 生成可读文件名，并清理自己拥有的陈旧输出；
 - 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`。
 
 待迁移：
@@ -421,8 +425,7 @@ classDiagram
 |:---|:---|
 | `sword_boss_base.gd` 等有限帧运行时建帧 | 有限帧改为构建期 `SpriteFrames`；技能图集序列已走 `FrameSequence` |
 | 魔法武器运行时 `_build_frames()` | 有限帧改为构建期资源；超大帧走 `FrameSequence` |
-| FrameSequence 策略复合 key | 目标为稳定内容 ID 与实例播放策略分离；本轮保留现有五参数 API，无兼容 wrapper |
-| 发布包实际闭包 | 已有 JSON 路径清单与预设只读检查；没有实际导出预设和 PCK 验证，不宣称已发布通过 |
+| 发布包实际闭包 | 已入库仅用于验证的 `source/export_presets.cfg`（`all_resources`）与 `scripts/frame_sequence_pack_probe.py`（Godot 挂载 PCK + `ResourceLoader.exists()` 逐条判定）；PCK 结论以实际运行结果为准，不以源闭包代替 |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |
 | `load_scene.gd` 源码正则解析刷怪表 | 改为 Manifest/Catalog 数据源 |
@@ -538,7 +541,7 @@ classDiagram
 
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
-1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。
+1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。资产身份为 `asset_id`，播放策略由实例覆盖，不再是复合 key。
 2. **Autoload 数量**：共 13 个注册项，其中 12 个是业务单例，`MCPGameBridge` 是调试桥；说“13 个业务 Autoload”不准确。
 3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。

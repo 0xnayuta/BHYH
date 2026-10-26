@@ -163,7 +163,7 @@ func _setup_tzsijian_background() -> void:
 
 
 static func _background_sequence(dir_name: String) -> FrameSequence:
-	return FrameSequenceStore.get_sequence(BG_PARTS_ROOT.path_join(dir_name), BG_SOURCE_FPS, true, false, 2)
+	return FrameSequenceStore.get_sequence(StringName("tzsijian/bg/" + dir_name))
 
 
 func _update_sword_boss_sequence() -> void:

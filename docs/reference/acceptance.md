@@ -100,7 +100,7 @@ python scripts/check_all.py --no-cache -j 6
 | 契约扫描 | `contract_scan.py --fail-on-error` | 六类字面量契约 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
-| FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、UID、Catalog 与延迟纹理路径闭包；不等于导出包完整 |
+| FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
@@ -271,10 +271,22 @@ python scripts/convert_nezha_preview_frames.py --check
 
 ```bash
 python scripts/convert_frame_sequences.py --check
-python scripts/convert_frame_sequences.py --export-preset "Windows Desktop"
+python scripts/convert_frame_sequences.py --export-preset
+python scripts/frame_sequence_pack_probe.py --self-test
+python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
-`--export-preset` 只读检查现有 `source/export_presets.cfg`；不创建发布配置，缺预设明确失败。源路径闭包、预设声明覆盖和导出包实际加载是三种不同证据。
+`--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
+
+> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-10-26 实测该预设导出 PCK 内 3,101 条依赖全部可达（约 2.74 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
+
+`frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。三种证据必须分开记录：
+
+| 证据 | 命令 | 覆盖范围 |
+|:---|:---|:---|
+| 源闭包 | `convert_frame_sequences.py --check` | 源文件存在、schema、UID、Catalog 与延迟纹理清单一致 |
+| 预设声明 | `convert_frame_sequences.py --export-preset` | 预设过滤器不会排除依赖；仍是配置级 |
+| 发布包 | `frame_sequence_pack_probe.py` | 引擎挂载 PCK 后每条依赖可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
 
 判定：
 
@@ -282,7 +294,7 @@ python scripts/convert_frame_sequences.py --export-preset "Windows Desktop"
 - 编号帧：登记 profile 的输出存在且内容未过期；
 - 哪吒：输出存在、内容与预览 JSON 一致、源 schema 合法；分类报告 `missing` / `stale` / `invalid`，任一非零即失败。
 
-Atlas 与 FrameSequence 检查经 `contract_gate` 进入 `check_all`；编号帧和哪吒转换器仍需在对应资源变更时单独执行。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
+Atlas 与 FrameSequence 检查经 `contract_gate` 进入 `check_all`；编号帧和哪吒转换器仍需在对应资源变更时单独执行。`frame_sequence_pack_probe.py` 依赖本机导出模板，不进入日常门禁，发布前单独执行；缺模板时明确 BLOCKED，不得记为通过。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
 
 ---
 

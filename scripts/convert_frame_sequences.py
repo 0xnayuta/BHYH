@@ -73,179 +73,84 @@ FRAME_MARGINS_PATTERN = re.compile(r"^frame_margins = \[(.*)\]$", re.M)
 EXT_RESOURCE_TAG_PATTERN = re.compile(r"^\[ext_resource\b([^\]]*)\]$", re.M)
 TAG_ATTRIBUTE_PATTERN = re.compile(r'([A-Za-z_]\w*)="([^"]*)"')
 
+_MONSTER_HIT_DIRS: tuple[tuple[int, str], ...] = (
+    (163, "hit1"),
+    (163, "hit2"),
+    (163, "hit3"),
+    (164, "hit1"),
+    (164, "hit2"),
+    (164, "hit3"),
+    (165, "hit1"),
+    (165, "hit2"),
+    (165, "hit3"),
+    (166, "hit1"),
+    (166, "hit2"),
+    (166, "hit3"),
+    (168, "hit1"),
+    (168, "hit2"),
+    (168, "hit3"),
+    (169, "hit1"),
+    (169, "hit3"),
+    (174, "hit1"),
+    (174, "hit2"),
+    (174, "hit3"),
+    (175, "hit1"),
+    (175, "hit3"),
+)
+
 PROFILES: tuple[dict[str, object], ...] = (
     {
         "root": "res://Art/level/game_3_level/level_tzsijian/level_96/bg961_parts",
-        "variants": ((30.0, True, False),),
+        "asset_prefix": "tzsijian/bg",
+        "default": (30.0, True, False),
     },
     {
         "root": "res://Art/constellations/common/aura_green",
-        "include_root": True,
-        "variants": ((24.0, True, False),),
+        "asset_id": "constellation/common/aura_green",
+        "default": (24.0, True, False),
     },
     {
         "root": "res://Art/monster/hun_dun/effects",
-        "variants": ((24.0, False, False), (24.0, True, False)),
+        "default": (24.0, False, False),
     },
     {
         "root": "res://Art/monster/tao_tie/effects",
-        "variants": ((24.0, False, False),),
+        "default": (24.0, False, False),
     },
     {
         "root": "res://Art/monster/liu_sha_river/original_effects/role_1",
-        "variants": ((24.0, False, False),),
+        "default": (24.0, False, False),
     },
     {
         "root": "res://Art/monster/liu_sha_river/original_effects/role_2",
-        "variants": ((24.0, False, False),),
+        "default": (24.0, False, False),
     },
     {
         "root": "res://Art/monster/liu_sha_river/original_effects/monster_172",
-        "variants": ((24.0, False, False),),
+        "default": (24.0, False, False),
     },
     {
         "root": "res://Art/monster/swf_png/3077",
         "exclude": {"atlas", "pages"},
-        "variants": ((30.0, False, False), (30.0, True, False)),
+        "default": (30.0, False, False),
     },
     {
         "root": "res://Art/monster/game_4_special_effect",
         "recursive": True,
-        "variants": (
-            (24.0, False, False),
-            (24.0, True, False),
-            (24.0, False, True),
-            (24.0, True, True),
-            (30.0, False, False),
-            (30.0, True, False),
-            (30.0, False, True),
-            (30.0, True, True),
-        ),
+        "default": (30.0, False, False),
     },
     {
         "root": "res://Art/monster/game_3_monster/monster_169/hit2",
         "include_root": True,
-        "variants": (
-            (24.0, False, False),
-            (24.0, True, False),
-            (24.0, False, True),
-            (24.0, True, True),
-            (30.0, False, False),
-            (30.0, True, False),
-            (30.0, False, True),
-            (30.0, True, True),
-        ),
+        "default": (24.0, False, True),
     },
+) + tuple(
     {
-        "root": "res://Art/monster/game_3_monster/monster_163/hit1",
+        "root": f"res://Art/monster/game_3_monster/monster_{monster_id}/{hit_name}",
         "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_163/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_163/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_164/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_164/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_164/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_165/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_165/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_165/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_166/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_166/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_166/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_168/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_168/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_168/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_169/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_169/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_174/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_174/hit2",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_174/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_175/hit1",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
-    {
-        "root": "res://Art/monster/game_3_monster/monster_175/hit3",
-        "include_root": True,
-        "variants": ((24.0, False, False),),
-    },
+        "default": (24.0, False, False),
+    }
+    for monster_id, hit_name in _MONSTER_HIT_DIRS
 )
 
 SWORD_ROOT = "res://Art/monster/game_3_monster/sword_boss"
@@ -257,13 +162,20 @@ SWORD_FPS = 24.0
 
 @dataclass
 class SequenceSpec:
-    key: str
+    """一条构建期序列：asset_id 是内容身份，fps/loop/hold 只是声明的默认播放值。"""
+
+    asset_id: str
     paths: list[str]
     fps: float
     loop: bool
     hold: bool
     regions: list[tuple[float, float, float, float]] = field(default_factory=list)
     margins: list[tuple[float, float, float, float]] = field(default_factory=list)
+    source_directory: str = ""
+
+
+ASSET_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[_./][a-z0-9]+)*$")
+SLUG_MAX_LENGTH = 96
 
 
 def natural_key(path: Path) -> tuple:
@@ -293,8 +205,27 @@ def resource_path_for(path: Path) -> str:
     return "res://" + path.relative_to(SOURCE).as_posix()
 
 
-def key_for(directory: str, fps: float, loop: bool, hold: bool, prefetch: int = 2) -> str:
-    return "%s|%.1f|%s|%s|%d" % (directory, fps, str(loop).lower(), str(hold).lower(), prefetch)
+def asset_id_for_directory(directory_res: str, profile: dict[str, object]) -> str:
+    """把素材目录登记为逻辑资产身份；目录布局不直接充当身份。"""
+    explicit = profile.get("asset_id")
+    if explicit:
+        return str(explicit)
+    prefix = str(profile.get("asset_prefix", ""))
+    relative = directory_res.removeprefix(str(profile["root"])).strip("/")
+    if prefix:
+        return f"{prefix}/{relative}" if relative else prefix
+    return "dir/" + directory_res.removeprefix("res://Art/")
+
+
+def slug_for(asset_id: str) -> str:
+    """asset_id 的可读文件名投影；仅用于定位，不承担身份。"""
+    slug = re.sub(r"[^a-z0-9]+", "_", asset_id.lower()).strip("_")
+    if not slug:
+        raise ValueError(f"asset_id 无法生成文件名: {asset_id!r}")
+    if len(slug) > SLUG_MAX_LENGTH:
+        digest = hashlib.sha1(asset_id.encode("utf-8")).hexdigest()[:8]
+        slug = slug[: SLUG_MAX_LENGTH - 9].rstrip("_") + "_" + digest
+    return slug
 
 
 def escape_string(value: str) -> str:
@@ -363,8 +294,8 @@ def canonical_uid(uid: str) -> str | None:
     return uid_id_to_text(value)
 
 
-def sequence_uid(key: str) -> str:
-    return uid_for_identity("frame_sequence|" + key)
+def sequence_uid(asset_id: str) -> str:
+    return uid_for_identity("frame_sequence|" + asset_id)
 
 
 def catalog_uid() -> str:
@@ -375,20 +306,20 @@ def catalog_resource_path() -> str:
     return resource_path_for(CATALOG_PATH)
 
 
-def sequence_resource_path(key: str) -> str:
-    digest = hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
-    return f"res://Art/frame_sequences/{digest}.tres"
+def sequence_resource_path(asset_id: str) -> str:
+    return f"res://Art/frame_sequences/{slug_for(asset_id)}.tres"
 
 
 def sequence_content(spec: SequenceSpec) -> str:
     lines = [
         '[gd_resource type="Resource" script_class="FrameSequence" load_steps=2 format=3 uid="%s"]'
-        % sequence_uid(spec.key),
+        % sequence_uid(spec.asset_id),
         "",
         '[ext_resource type="Script" path="res://Script/data/frame_sequence.gd" id="1_sequence"]',
         "",
         "[resource]",
         'script = ExtResource("1_sequence")',
+        'asset_id = &"%s"' % escape_string(spec.asset_id),
         "frame_paths = PackedStringArray(%s)" % ", ".join('"' + escape_string(path) + '"' for path in spec.paths),
     ]
     if spec.regions:
@@ -412,10 +343,10 @@ def sequence_content(spec: SequenceSpec) -> str:
     lines.extend(
         [
             "frame_has_visual = []",
-            "fps = %.1f" % spec.fps,
-            "loop = %s" % ("true" if spec.loop else "false"),
-            "hold_last_frame = %s" % ("true" if spec.hold else "false"),
-            "prefetch_frames = %d" % PREFETCH_FRAMES,
+            "default_fps = %.1f" % spec.fps,
+            "default_loop = %s" % ("true" if spec.loop else "false"),
+            "default_hold_last_frame = %s" % ("true" if spec.hold else "false"),
+            "default_prefetch_frames = %d" % PREFETCH_FRAMES,
             "",
         ]
     )
@@ -429,11 +360,11 @@ def catalog_content(specs: list[tuple[str, str]]) -> str:
         "",
         '[ext_resource type="Script" path="res://Script/data/frame_sequence_catalog.gd" id="1_catalog"]',
     ]
-    for index, (_key, resource_path) in enumerate(specs, 2):
+    for index, (_asset_id, resource_path) in enumerate(specs, 2):
         lines.append(f'[ext_resource type="Resource" path="{resource_path}" id="{index}"]')
     lines.extend(["", "[resource]", 'script = ExtResource("1_catalog")', "sequences = {"])
-    for index, (key, _resource_path) in enumerate(specs, 2):
-        lines.append('\t&"%s": ExtResource("%d"),' % (escape_string(key), index))
+    for index, (asset_id, _resource_path) in enumerate(specs, 2):
+        lines.append('\t&"%s": ExtResource("%d"),' % (escape_string(asset_id), index))
     lines.extend(["}", ""])
     return "\n".join(lines)
 
@@ -469,17 +400,20 @@ def collect_directory_specs() -> list[SequenceSpec]:
     specs: list[SequenceSpec] = []
     seen: set[str] = set()
     for profile in PROFILES:
+        fps, loop, hold = profile["default"]
         for directory in collect_directories(profile):
             paths = collect_frames(directory)
             if not paths:
                 continue
-            directory_res = resource_path_for(directory)
-            for fps, loop, hold in profile["variants"]:
-                key = key_for(directory_res, float(fps), bool(loop), bool(hold))
-                if key in seen:
-                    raise ValueError(f"重复帧序列键: {key}")
-                seen.add(key)
-                specs.append(SequenceSpec(key, paths, float(fps), bool(loop), bool(hold)))
+            asset_id = asset_id_for_directory(resource_path_for(directory), profile)
+            if asset_id in seen:
+                raise ValueError(f"重复资产身份: {asset_id}")
+            seen.add(asset_id)
+            specs.append(
+                SequenceSpec(
+                    asset_id, paths, float(fps), bool(loop), bool(hold), source_directory=resource_path_for(directory)
+                )
+            )
     return specs
 
 
@@ -515,8 +449,8 @@ def collect_sword_specs() -> list[SequenceSpec]:
                 page_name = str(pages[page_index])
                 paths.append(f"{root}/atlas/{page_name}")
                 regions.append(tuple(float(value) for value in region))
-            key = key_for(f"sword/{set_name}/{animation_name}", SWORD_FPS, False, False)
-            specs.append(SequenceSpec(key, paths, SWORD_FPS, False, False, regions))
+            asset_id = f"sword/{set_name}/{animation_name}"
+            specs.append(SequenceSpec(asset_id, paths, SWORD_FPS, False, False, regions))
     return specs
 
 
@@ -636,9 +570,9 @@ def collect_constellation_specs() -> list[SequenceSpec]:
                 if region:
                     regions.extend([region] * hold)
                     margins.extend([margin] * hold)
-            sequence_key = f"constellation/{source_id}/body/{action}"
+            asset_id = f"constellation/{source_id}/body/{action}"
             loop = action in {"wait", "walk"}
-            spec = SequenceSpec(key_for(sequence_key, 24.0, loop, not loop), paths, 24.0, loop, not loop)
+            spec = SequenceSpec(asset_id, paths, 24.0, loop, not loop)
             if regions and len(regions) == len(paths):
                 spec.regions = [tuple(value) for value in regions]
                 spec.margins = [tuple(value) for value in margins]
@@ -660,10 +594,10 @@ def collect_constellation_skill_specs() -> list[SequenceSpec]:
             paths = collect_frames(directory)
             if not paths:
                 continue
-            directory_res = resource_path_for(directory)
-            for loop in (False, True):
-                for hold in (False, True):
-                    specs.append(SequenceSpec(key_for(directory_res, 24.0, loop, hold), paths, 24.0, loop, hold))
+            asset_id = "constellation/%s/skill/%s" % (boss_dir.name, directory.name)
+            specs.append(
+                SequenceSpec(asset_id, paths, 24.0, False, True, source_directory=resource_path_for(directory))
+            )
     return specs
 
 
@@ -718,25 +652,25 @@ def validate_rect(
 
 def validate_sequence_spec(spec: SequenceSpec) -> list[str]:
     errors: list[str] = []
-    if not spec.key or any(ord(char) < 32 for char in spec.key):
-        errors.append(f"序列键为空或包含控制字符: {spec.key!r}")
+    if not spec.asset_id or not ASSET_ID_PATTERN.match(spec.asset_id):
+        errors.append(f"asset_id 非法（仅小写字母/数字与 _./）: {spec.asset_id!r}")
     if not spec.paths:
-        errors.append(f"{spec.key}: frame_paths 不能为空")
+        errors.append(f"{spec.asset_id}: frame_paths 不能为空")
     else:
         for index, resource_path in enumerate(spec.paths):
-            errors.extend(validate_resource_path(resource_path, f"{spec.key} frame_paths[{index}]"))
+            errors.extend(validate_resource_path(resource_path, f"{spec.asset_id} frame_paths[{index}]"))
     if not math.isfinite(float(spec.fps)) or float(spec.fps) <= 0.0:
-        errors.append(f"{spec.key}: fps 必须为正数: {spec.fps!r}")
+        errors.append(f"{spec.asset_id}: fps 必须为正数: {spec.fps!r}")
     if spec.regions and len(spec.regions) != len(spec.paths):
-        errors.append(f"{spec.key}: frame_regions 长度 {len(spec.regions)} 与帧数 {len(spec.paths)} 不一致")
+        errors.append(f"{spec.asset_id}: frame_regions 长度 {len(spec.regions)} 与帧数 {len(spec.paths)} 不一致")
     if spec.margins and len(spec.margins) != len(spec.paths):
-        errors.append(f"{spec.key}: frame_margins 长度 {len(spec.margins)} 与帧数 {len(spec.paths)} 不一致")
+        errors.append(f"{spec.asset_id}: frame_margins 长度 {len(spec.margins)} 与帧数 {len(spec.paths)} 不一致")
     if spec.margins and not spec.regions:
-        errors.append(f"{spec.key}: frame_margins 不能在没有 frame_regions 时单独存在")
+        errors.append(f"{spec.asset_id}: frame_margins 不能在没有 frame_regions 时单独存在")
     for index, region in enumerate(spec.regions):
-        errors.extend(validate_rect(region, f"{spec.key} frame_regions[{index}]", positive_size=True))
+        errors.extend(validate_rect(region, f"{spec.asset_id} frame_regions[{index}]", positive_size=True))
     for index, margin in enumerate(spec.margins):
-        errors.extend(validate_rect(margin, f"{spec.key} frame_margins[{index}]", positive_size=False))
+        errors.extend(validate_rect(margin, f"{spec.asset_id} frame_margins[{index}]", positive_size=False))
     for index, region in enumerate(spec.regions):
         if index >= len(spec.paths) or len(region) != 4:
             continue
@@ -746,12 +680,12 @@ def validate_sequence_spec(spec: SequenceSpec) -> list[str]:
         with path.open("rb") as image:
             header = image.read(24)
         if len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
-            errors.append(f"{spec.key}: 图集页不是合法 PNG: {spec.paths[index]}")
+            errors.append(f"{spec.asset_id}: 图集页不是合法 PNG: {spec.paths[index]}")
             continue
         width, height = struct.unpack(">II", header[16:24])
         x, y, w, h = region
         if x + w > width or y + h > height:
-            errors.append(f"{spec.key}: frame_regions[{index}] 超出图集页 {width}x{height}")
+            errors.append(f"{spec.asset_id}: frame_regions[{index}] 超出图集页 {width}x{height}")
     return errors
 
 
@@ -796,26 +730,35 @@ def validate_specs(specs: list[SequenceSpec]) -> list[str]:
     if not specs:
         return ["未收集到任何 FrameSequence"]
     existing_uids = collect_existing_uids()
-    seen_keys: dict[str, int] = {}
-    seen_hashes: dict[str, str] = {}
+    seen_ids: dict[str, int] = {}
+    seen_directories: dict[str, str] = {}
+    seen_slugs: dict[str, str] = {}
     generated_uids: dict[str, str] = {}
     for spec in specs:
         errors.extend(validate_sequence_spec(spec))
-        if spec.key in seen_keys:
-            errors.append(f"重复帧序列键: {spec.key}")
+        if spec.asset_id in seen_ids:
+            errors.append(f"重复 asset_id: {spec.asset_id}")
         else:
-            seen_keys[spec.key] = len(seen_keys)
-        digest = hashlib.sha1(spec.key.encode("utf-8")).hexdigest()[:16]
-        if digest in seen_hashes:
-            errors.append(f"输出哈希冲突: {spec.key} 与 {seen_hashes[digest]} -> {digest}")
-        else:
-            seen_hashes[digest] = spec.key
-        uid = sequence_uid(spec.key)
+            seen_ids[spec.asset_id] = len(seen_ids)
+        slug = slug_for(spec.asset_id) if ASSET_ID_PATTERN.match(spec.asset_id) else ""
+        if slug and slug in seen_slugs:
+            errors.append(f"输出文件名冲突: {spec.asset_id} 与 {seen_slugs[slug]} -> {slug}.tres")
+        elif slug:
+            seen_slugs[slug] = spec.asset_id
+        uid = sequence_uid(spec.asset_id)
         if uid in generated_uids:
-            errors.append(f"UID 冲突: {spec.key} 与 {generated_uids[uid]} -> {uid}")
+            errors.append(f"UID 冲突: {spec.asset_id} 与 {generated_uids[uid]} -> {uid}")
         else:
-            generated_uids[uid] = spec.key
-        expected_owner = sequence_resource_path(spec.key)
+            generated_uids[uid] = spec.asset_id
+        if spec.source_directory:
+            if spec.source_directory in seen_directories:
+                errors.append(
+                    f"同一素材目录登记了多条序列: {spec.source_directory} -> "
+                    f"{seen_directories[spec.source_directory]} 与 {spec.asset_id}"
+                )
+            else:
+                seen_directories[spec.source_directory] = spec.asset_id
+        expected_owner = sequence_resource_path(spec.asset_id)
         owners = existing_uids.get(uid)
         if owners and owners != {expected_owner}:
             errors.append(f"UID 已被其它资源占用: {uid} -> {sorted(owners)}")
@@ -830,11 +773,11 @@ def validate_specs(specs: list[SequenceSpec]) -> list[str]:
 
 
 def build_catalog_specs(specs: list[SequenceSpec]) -> list[tuple[str, str]]:
-    return [(spec.key, sequence_resource_path(spec.key)) for spec in specs]
+    return [(spec.asset_id, sequence_resource_path(spec.asset_id)) for spec in specs]
 
 
 def build_export_manifest(specs: list[SequenceSpec]) -> dict[str, object]:
-    sequences = sorted(sequence_resource_path(spec.key) for spec in specs)
+    sequences = sorted(sequence_resource_path(spec.asset_id) for spec in specs)
     textures = sorted({resource_path for spec in specs for resource_path in spec.paths})
     return {
         "schema_id": EXPORT_MANIFEST_SCHEMA,
@@ -964,8 +907,21 @@ def validate_generated_closure(specs: list[SequenceSpec], manifest: dict[str, ob
     return errors
 
 
+def remove_stale_outputs(expected_paths: set[Path]) -> list[Path]:
+    """只清理转换器自己拥有的输出：本目录下的 *.tres，排除 Catalog。"""
+    removed: list[Path] = []
+    if not OUTPUT_ROOT.is_dir():
+        return removed
+    for path in sorted(OUTPUT_ROOT.glob("*.tres")):
+        if path == CATALOG_PATH or path in expected_paths:
+            continue
+        path.unlink()
+        removed.append(path)
+    return removed
+
+
 def write_spec(spec: SequenceSpec, check_only: bool) -> bool:
-    output_path = SOURCE / sequence_resource_path(spec.key).removeprefix("res://")
+    output_path = SOURCE / sequence_resource_path(spec.asset_id).removeprefix("res://")
     content = sequence_content(spec)
     if check_only:
         if not output_path.is_file():
@@ -1141,7 +1097,7 @@ def run_export_preset_check(required_paths: list[str], preset_filter: str) -> in
         return 1
     print(
         "[OK] export_presets.cfg 声明覆盖完成；这是配置级校验，"
-        "未验证 PCK/导出包实际路径闭包与加载。"
+        "包内路径闭包请运行 scripts/frame_sequence_pack_probe.py。"
     )
     return 0
 
@@ -1195,6 +1151,17 @@ def run(check_only: bool, preset_filter: str | None) -> int:
         elif EXPORT_MANIFEST_PATH.read_text(encoding="utf-8") != expected_manifest:
             print(f"[FAIL] 发布依赖清单已过期: {EXPORT_MANIFEST_PATH.relative_to(ROOT)}", file=sys.stderr)
             passed = False
+        expected_outputs = {SOURCE / sequence_resource_path(spec.asset_id).removeprefix("res://") for spec in specs}
+        stale_outputs = sorted(
+            path for path in OUTPUT_ROOT.glob("*.tres") if path != CATALOG_PATH and path not in expected_outputs
+        )
+        if stale_outputs:
+            passed = False
+            print(
+                f"[FAIL] 存在陈旧 FrameSequence 输出 {len(stale_outputs)} 个，例如: "
+                + ", ".join(path.name for path in stale_outputs[:5]),
+                file=sys.stderr,
+            )
         closure_errors = validate_generated_closure(specs, manifest)
         if closure_errors:
             passed = False
@@ -1221,6 +1188,7 @@ def run(check_only: bool, preset_filter: str | None) -> int:
 
     for spec in specs:
         write_spec(spec, check_only=False)
+    stale = remove_stale_outputs({SOURCE / sequence_resource_path(spec.asset_id).removeprefix("res://") for spec in specs})
     CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     CATALOG_PATH.write_text(catalog_content(catalog_specs), encoding="utf-8", newline="\n")
     EXPORT_MANIFEST_PATH.write_text(export_manifest_content(manifest), encoding="utf-8", newline="\n")
@@ -1233,7 +1201,7 @@ def run(check_only: bool, preset_filter: str | None) -> int:
         return 1
     print(
         f"[OK] FrameSequence 已生成: {len(specs)} 个序列 + Catalog + 发布依赖清单 "
-        f"({len(manifest['deferred_textures'])} 条延迟 Texture)"
+        f"({len(manifest['deferred_textures'])} 条延迟 Texture)，清理陈旧序列 {len(stale)} 个"
     )
     return 0
 

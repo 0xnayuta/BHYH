@@ -1029,7 +1029,7 @@ func _effect_root(effect_name: String) -> String:
 
 func _effect_sequence(effect_name: String) -> FrameSequence:
 	var directory := _effect_root(effect_name).path_join(effect_name)
-	return FrameSequenceStore.get_sequence(directory, SOURCE_FPS, false, false, 2)
+	return FrameSequenceStore.get_sequence(FrameSequenceStore.directory_asset_id(directory))
 
 
 func _spawn_effect(

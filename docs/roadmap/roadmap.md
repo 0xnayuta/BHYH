@@ -49,8 +49,7 @@ Phase 12 已全部完成：1280×800 画布、1600×1000 默认窗口、1.2 相�
 | 类型分层目录 | 新功能按功能子目录聚合，不做无计划全量迁移 |
 | `_bundled` 场景 | 按专项转换为原生文本场景，完成 UID 与导入缓存重建 |
 | 深层节点路径 | 新代码使用依赖注入与 `%UniqueName`，重构时同步清理 |
-| FrameSequence 内容身份 | 一次性切换稳定 asset_id 与实例播放策略，删除复合 FPS/loop/hold/prefetch key；不做双 key 兼容 |
-| 流式发布验证 | 在明确目标平台与实际 export_presets.cfg 后，验证 PCK 的延迟纹理闭包与 release 加载；不以源闭包或配置声明代替发布验收 |
+| 流式发布验证 | 验证用 `export_presets.cfg` 与 `frame_sequence_pack_probe.py` 已入库；PCK 内延迟纹理闭包已实测通过（3,101 条）。仍需在目标平台验证 release 加载、VRAM 驻留与首帧耗时，不以包内路径代替运行时性能 |
 | 视觉资产预算 | 按目标平台测量首帧延迟、纹理页驻留量及反复进出关卡后的回收，不把 headless 探针当 VRAM 证据 |
 
 ---

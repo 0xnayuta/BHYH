@@ -218,7 +218,10 @@ func _spawn_effect(
 	add_child(holder)
 
 	var sprite := StreamedPngEffect.new()
-	sprite.sequence = FrameSequenceStore.get_sequence(EFFECT_ROOT.path_join(effect_name), SOURCE_FPS, false, false, 2)
+	sprite.sequence = FrameSequenceStore.get_sequence(
+		FrameSequenceStore.directory_asset_id(EFFECT_ROOT.path_join(effect_name))
+	)
+	sprite.configure_playback(SOURCE_FPS, false, false, 2)
 	sprite.flip_h = _faces_right()
 	sprite.z_index = 5
 	holder.add_child(sprite)

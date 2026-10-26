@@ -645,7 +645,8 @@ func _fire(
 				"attack_data": attack_data,
 				"skill_name": "EightImmortals%d%s" % [monster_id, String(action).capitalize()],
 				"visual_backend": WutaiMinghaiProjectile.VisualBackend.FRAME_SEQUENCE,
-				"frame_root": str(options.get("frame_root", _effect_root(action))),
+				"frame_asset_id":
+				FrameSequenceStore.directory_asset_id(str(options.get("frame_root", _effect_root(action)))),
 				"frame_count": frame_count,
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": bool(options.get("loop_visual", false)),
@@ -896,7 +897,7 @@ func _start_absorb_state() -> void:
 		100,
 		global_position,
 		{
-			"frame_root": "res://Art/monster/game_3_monster/monster_169/hit2",
+			"frame_asset_id": "dir/monster/game_3_monster/monster_169/hit2",
 			"loop_visual": false,
 			"hold_last_frame": true,
 			"follow_owner": true,

@@ -27,7 +27,8 @@ func _ready() -> void:
 	set_as_top_level(true)
 	global_position = _spawn_position
 	var stream := StreamedPngEffect.new()
-	stream.sequence = FrameSequenceStore.get_sequence(FRAME_ROOT, SOURCE_FPS, true, false, 2)
+	stream.sequence = FrameSequenceStore.get_sequence(&"constellation/common/aura_green")
+	stream.configure_playback(SOURCE_FPS, true, false, 2)
 	stream.auto_free = false
 	add_child(stream)
 

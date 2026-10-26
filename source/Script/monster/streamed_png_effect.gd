@@ -16,7 +16,14 @@ static func _get_matte_shader() -> Shader:
 	return _matte_shader
 
 
+const POLICY_INHERIT := -1
+
 @export var sequence: FrameSequence
+## 实例播放策略；未显式设置时沿用 sequence 的 default_* 值。
+var playback_fps: float = 0.0
+var playback_loop: int = POLICY_INHERIT
+var playback_hold_last_frame: int = POLICY_INHERIT
+var playback_prefetch_frames: int = POLICY_INHERIT
 var auto_free: bool = true
 var manual_frame_control: bool = false
 var registration_offset: Vector2 = Vector2.ZERO:
@@ -86,6 +93,35 @@ func _update_registration_position() -> void:
 		_sprite.position = Vector2(-registration_offset.x if flip_h else registration_offset.x, registration_offset.y)
 
 
+func configure_playback(fps: float, loop: bool, hold_last_frame: bool, prefetch_frames: int = POLICY_INHERIT) -> void:
+	playback_fps = fps
+	playback_loop = 1 if loop else 0
+	playback_hold_last_frame = 1 if hold_last_frame else 0
+	playback_prefetch_frames = prefetch_frames
+
+
+func playback_fps_value() -> float:
+	return playback_fps if playback_fps > 0.0 else (sequence.default_fps if sequence != null else 24.0)
+
+
+func playback_loops() -> bool:
+	if playback_loop == POLICY_INHERIT:
+		return sequence != null and sequence.default_loop
+	return playback_loop == 1
+
+
+func playback_holds_last_frame() -> bool:
+	if playback_hold_last_frame == POLICY_INHERIT:
+		return sequence != null and sequence.default_hold_last_frame
+	return playback_hold_last_frame == 1
+
+
+func playback_prefetch_count() -> int:
+	if playback_prefetch_frames == POLICY_INHERIT:
+		return sequence.default_prefetch_frames if sequence != null else 2
+	return maxi(playback_prefetch_frames, 0)
+
+
 func _process(delta: float) -> void:
 	if _finished or _shutting_down:
 		return
@@ -97,11 +133,11 @@ func _process(delta: float) -> void:
 		_show_frame(_manual_frame)
 		return
 	_time += delta
-	var frame_index := int(floor(_time * sequence.fps))
+	var frame_index := int(floor(_time * playback_fps_value()))
 	if frame_index >= sequence.count():
-		if sequence.loop:
+		if playback_loops():
 			frame_index %= sequence.count()
-		elif sequence.hold_last_frame:
+		elif playback_holds_last_frame():
 			if _show_frame(sequence.count() - 1):
 				_finish()
 			return
@@ -140,9 +176,9 @@ func _request_frame_window(frame_index: int) -> void:
 	if _shutting_down:
 		return
 	var retained: Dictionary[String, bool] = {}
-	for offset in range(sequence.prefetch_frames + 1):
+	for offset in range(playback_prefetch_count() + 1):
 		var index := frame_index + offset
-		if sequence.loop:
+		if playback_loops():
 			index %= sequence.count()
 		elif index >= sequence.count():
 			break
@@ -204,10 +240,10 @@ func _finish() -> void:
 	_finished = true
 	set_process(false)
 	_shutdown_texture_loader()
-	if not sequence.hold_last_frame and auto_free:
+	if not playback_holds_last_frame() and auto_free:
 		clear_texture()
 	finished.emit()
-	if auto_free and not sequence.hold_last_frame:
+	if auto_free and not playback_holds_last_frame():
 		queue_free()
 
 
