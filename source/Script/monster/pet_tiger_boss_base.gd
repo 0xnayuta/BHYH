@@ -112,7 +112,6 @@ func _ready() -> void:
 	setup_pet_tiger(tiger_stage)
 	if hurt_box != null:
 		hurt_box.disabled = false
-	MonsterBullet.warm_pet_tiger_textures()
 	_setup_tiger_model_frames()
 	if not mr_player.animation_started.is_connected(_on_tiger_animation_started):
 		mr_player.animation_started.connect(_on_tiger_animation_started)

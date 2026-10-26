@@ -14,5 +14,7 @@ const MANIFESTS: Dictionary[int, RoleRuntimeResourceManifest] = {
 
 
 static func get_manifest(role_id: int) -> RoleRuntimeResourceManifest:
-	assert(MANIFESTS.has(role_id), "未注册角色运行资源清单: %d" % role_id)
+	if not MANIFESTS.has(role_id):
+		push_error("未注册角色运行资源清单: %d" % role_id)
+		return null
 	return MANIFESTS[role_id]

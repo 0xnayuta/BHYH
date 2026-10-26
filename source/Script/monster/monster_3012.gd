@@ -82,7 +82,12 @@ func _configure_axe() -> void:
 
 
 func _build_frames() -> void:
-	mr_ani.sprite_frames = _get_frames()
+	var frames := _get_frames()
+	if frames == null:
+		mr_ani.visible = false
+		set_physics_process(false)
+		return
+	mr_ani.sprite_frames = frames
 	mr_ani.centered = true
 	mr_ani.flip_h = false
 	mr_ani.position = FLIGHT_VISUAL_OFFSET
@@ -111,7 +116,7 @@ static func _get_frames() -> SpriteFrames:
 	var standard := _load_standard_frames()
 	if standard == null:
 		push_error("WeiyangFlyingAxe standard frames missing: " + ROOT)
-		standard = SpriteFrames.new()
+		return null
 	_frames_cache = standard
 	return standard
 

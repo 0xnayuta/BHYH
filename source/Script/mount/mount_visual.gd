@@ -466,9 +466,9 @@ func _load_animation(candidate: String) -> Dictionary:
 		return {}
 	var data: Dictionary = _metadata_cache.get(metadata_path, {})
 	if data.is_empty():
+		# 失败细节由 AtlasMetadataStore 统一记录，此处不再重复报错。
 		data = AtlasMetadataStore.data_for(metadata_path).duplicate(true)
 		if data.is_empty():
-			push_error("坐骑动画元数据无法解析: %s" % metadata_path)
 			return {}
 		data["_base_path"] = metadata_path.get_base_dir()
 		_metadata_cache[metadata_path] = data

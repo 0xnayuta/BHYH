@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-26（全量关卡回归 128/128 PASS；素材可读命名切换完成）
+> 最后更新：2026-10-26（Phase 13-1 失败语义与热路径 IO 收口完成）
 
 ---
 
@@ -129,6 +129,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-26 FrameSequence 身份模型 v2 | `convert_frame_sequences.py --check` **288 序列 / 2,812 条延迟纹理源闭包 PASS**；输出为 `asset_id` 键的 Catalog + 可读 slug 文件；陈旧输出清理 **477 → 0**；八维门禁 **8/8 PASS**；`level_1` Stage 1~4 **PASS**、`level_tzsijian` **PASS**、`scene_probe_runner` **PASS**、`coop_probe_runner` **16/16 PASS**；日志均 **0 ERROR / 0 WARNING** | 序列身份改为稳定 `asset_id`，删除 189 个策略复合 key 冗余（477→288）；`default_fps/default_loop/default_hold_last_frame/default_prefetch_frames` 只作默认值，`StreamedPngEffect.configure_playback()` 提供实例覆盖；转换器按 `asset_id` 派生可读文件名并校验唯一性、单目录单序列与陈旧输出；`--export-preset` 在验证用 `all_resources` 预设下声明覆盖 **3,101 条** |
 | 2026-10-26 FrameSequence 发布包闭包 | `frame_sequence_pack_probe.py` **PASS**：PCK 内 **3,101 条依赖全部可达**（Catalog + 288 序列 + 2,812 延迟纹理）；约 2.74 GB | 验证用预设 `Windows Desktop (validation)`（`all_resources`）；Godot 挂载 PCK 后用 `ResourceLoader.exists()` 逐条判定，导出后 PNG 以 `.import` + `.ctex` 形式存在。PCK 为构建临时产物，sha256 随素材与构建变化，不写入本文作为稳定标识 |
 | 双人探针基线 | 16 PASS / 0 SKIP / 0 FAIL | `scripts/coop_probe_runner.py` |
+| 2026-10-26 Phase 13-1 失败语义与热路径 IO | 八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` **2/2 PASS**；`coop_probe_runner` **16/16 PASS**；`level_1` / `level_59` / `level_61` / `level_pty` / `level_bxgh` / `level_stz` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `RoleRuntimeCatalog.get_manifest` 的 `assert` 改为 `push_error + null`，两个调用方中止预热；`AtlasMetadataStore` 三种失败可区分并新增 `validate_path()`；宠物弹体空帧占位改为显式 `null` 或按时间轴长度生成纯计时帧；删除 `monster_bullet` 的 `DirAccess` 扫描与 `range(601)` 编号探测，宠物龙/虎帧改由构建期 `SpriteFrames` 驱动；`hdzm.gd` 热路径 `load()` 改为 `preload`；`StreamingFrameEffect` 基类删除逐帧同步加载 |
 | 2026-10-26 全量关卡回归（素材切换后） | `level_regression_all.py --jobs 4 --timeout 150`：**PASS 128 / 128 + SKIP 5，FAIL 0**，耗时 **732.2 秒** | 覆盖编号关 85 + 特殊关 48；SKIP 为 5 个非战斗场景（`bai_gu_level` / `boat` / `bsz` / `hdzm` / `jctfloor_1`），按既定口径计入通过。私有素材仓已推送的 FrameSequence 可读命名切换（288 新增 / 477 删除 / Catalog + 依赖清单）未引入断裂引用 |
 | 2026-10-26 关卡预载 Catalog 迁移 | `convert_level_preload_catalog.py --check` **153 场景 / 101 关卡条目 / 17 弹体条目 PASS**（并入契约门禁）；八维门禁 **8/8 PASS**；`health_check` 713 脚本 **0 Parse / 0 Error / 0 Warning**；`level_1` / `level_46` / `level_59` / `level_61` / `level_pty` / `level_xhy` / `level_tzsijian` 冒烟 **PASS**（0 ERROR / 0 WARNING） | `load_scene.gd` 与 `global.gd` 删除运行时 `.gd`/`.tscn` 源文本正则解析，改读构建期 `LevelPreloadCatalog.tres`；数据收敛为 `first_wave_ids`（stage_1 优先级）与 `monster_ids`（完整覆盖，含 stage_5+）；删除无调用点的 `_prewarm_target_script_monsters`、`Global.preload_level_monster_resources` 及后台预载子系统；怪物弹体名改为磁盘真实大小写 |
 | 2026-10-26 关卡选择态探针 | `scene_probe_runner.py` 套件 **2/2 PASS**：星座 + 选择态；选择态覆盖 `level_bxgh` 8 个八仙/非法回退与 `level_stz` 3 个三太子/非法回退，13 项全 PASS；日志 **0 ERROR / 0 WARNING**（仅 headless dummy 纹理噪声豁免） | 新增 `scripts/scene_probes/level_selection_probe.{gd,tscn}`；断言 `monster_group["stage_1"]`、关卡自预载场景缓存与三太子背景可见性；`scene_probe_runner.py` 改为 `PROBES` 清单并支持 `--probe`；退出阶段按 `*_PROBE_TEARDOWN` 分区 |

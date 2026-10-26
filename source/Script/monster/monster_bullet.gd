@@ -74,7 +74,6 @@ var monster_atlas_frames_sprite: Sprite2D
 var monster_atlas_frames: SpriteFrames
 var monster_atlas_frames_animation: StringName = &""
 var pet_phoenix_hold_last_elapsed: float = 0.0
-static var pet_tiger_texture_cache: Dictionary = {}
 static var pet_dragon_texture_cache: Dictionary = {}
 static var pet_bullet_frames_cache: Dictionary = {}
 static var pet_tiger_timeline_cache: Dictionary = {}
@@ -89,7 +88,6 @@ static var _runtime_cache_generation := 0
 
 static func clear_runtime_resource_caches() -> void:
 	_runtime_cache_generation += 1
-	pet_tiger_texture_cache.clear()
 	pet_dragon_texture_cache.clear()
 	pet_bullet_frames_cache.clear()
 	pet_tiger_timeline_cache.clear()
@@ -102,26 +100,37 @@ static func clear_runtime_resource_caches() -> void:
 
 
 const PET_TIGER_BULLET_FPS := 24.0
-const PET_TIGER_EFFECT_DIR := "res://Art/monster/pet_tiger_boss/effects"
 const PET_TIGER_EFFECTS_RES := "res://Art/monster/pet_tiger_boss/effects/pet_tiger_effects.tres"
-const PET_TIGER_SHAPE_EFFECT_DIR := "res://Art/monster/pet_tiger_boss/effects/swf_shapes"
-const PET_DRAGON_EFFECT_DIR := "res://Art/pet/pet_dragon/effects"
-const PET_DRAGON_EFFECTS_RES := "res://Art/pet/pet_dragon/effects/pet_dragon_effects.tres"
-const PET_PHOENIX_EFFECT_DIR := "res://Art/pet/pet_phoenix/effects"
-const PET_PHOENIX_EFFECTS_RES := "res://Art/pet/pet_phoenix/effects/pet_phoenix_effects.tres"
-const PET_PHOENIX_EFFECT_FRAME_COUNTS := {
-	"PetPhoenix1Bullet1": 15,
-	"PetPhoenix1Bullet2_1": 25,
-	"PetPhoenix1Bullet2_2": 30,
-	"PetPhoenix2Bullet3": 30,
-	"PetPhoenix3Bullet4": 50,
-	"PetPhoenix4Bullet3_2": 18,
-	"PetPhoenix4Bullet5": 22,
-	"PetPhoenix4Bullet6": 16,
+const PET_TIGER_LAYER_ANIMATIONS: Dictionary[int, StringName] = {
+	5: &"shape6_bitmap5",
+	9: &"shape10_bitmap9",
+	12: &"shape13_bitmap12",
+	15: &"shape16_bitmap15",
+	18: &"shape19_bitmap18",
+	21: &"shape22_bitmap21",
+	24: &"shape25_bitmap24",
+	27: &"shape28_bitmap27",
+	30: &"shape31_bitmap30",
+	35: &"shape36_bitmap35",
+	38: &"shape39_bitmap38",
+	43: &"shape44_bitmap43",
+	47: &"shape48_bitmap47",
+	50: &"shape51_bitmap50",
+	54: &"shape55_bitmap54",
+	58: &"shape59_bitmap58",
+	60: &"shape61_bitmap60",
+	62: &"shape63_bitmap62",
+	64: &"shape65_bitmap64",
+	66: &"shape67_bitmap66",
+	68: &"shape69_bitmap68",
+	70: &"shape71_bitmap70",
+	72: &"shape73_bitmap72",
+	77: &"shape78_bitmap77",
 }
+const PET_DRAGON_EFFECTS_RES := "res://Art/pet/pet_dragon/effects/pet_dragon_effects.tres"
+const PET_PHOENIX_EFFECTS_RES := "res://Art/pet/pet_phoenix/effects/pet_phoenix_effects.tres"
 const PET_DRAGON_DASH_DAMAGE_INTERVAL_MS := 120
 const PET_DRAGON_KNOCKBACK_LOCK_TIME := 0.16
-const PET_DRAGON_ULTIMATE_DIR := "res://Art/pet/pet_dragon/effects/PetDragonBullet4Cropped"
 const PET_DRAGON_ULTIMATE_OFFSETS := [
 	Vector2(-6.5, 0.5),
 	Vector2(-3.5, 0.5),
@@ -175,20 +184,18 @@ const PET_DRAGON_ULTIMATE_OFFSETS := [
 
 
 static func warm_pet_dragon_ultimate_frames() -> void:
-	var generation := _runtime_cache_generation
 	var tree := Engine.get_main_loop() as SceneTree
-	if _pet_dragon_effects() != null:
-		if tree != null:
-			await tree.process_frame
+	var frames := _pet_dragon_effects()
+	if frames == null:
+		push_error("Pet dragon standard frames missing: " + PET_DRAGON_EFFECTS_RES)
 		return
-	for frame_index in range(48):
-		var path := "%s/%d.png" % [PET_DRAGON_ULTIMATE_DIR, frame_index + 1]
-		if not pet_dragon_texture_cache.has(path):
-			pet_dragon_texture_cache[path] = Global.get_cached_texture(path)
+	# 终极帧来源为构建期 PetDragonBullet4Cropped 序列，运行时只按帧计数请求纹理。
+	for frame_index in range(frames.get_frame_count(&"PetDragonBullet4Cropped")):
+		var texture := frames.get_frame_texture(&"PetDragonBullet4Cropped", frame_index)
+		if texture != null:
+			pet_dragon_texture_cache[texture] = texture
 		if tree != null:
 			await tree.process_frame
-			if generation != _runtime_cache_generation:
-				return
 
 
 const MONSTER5_BULLET_FPS := 25.0
@@ -277,33 +284,26 @@ func _get_cached_pet_tiger_timeline(_name: String) -> Array:
 	return pet_tiger_timeline_cache[_name] as Array
 
 
-func _get_cached_pet_bullet_frames(_name: String, _frame_paths: Array[String], is_dragon: bool) -> SpriteFrames:
+func _get_cached_pet_bullet_frames(_name: String, frame_count: int, is_dragon: bool) -> SpriteFrames:
 	var standard := _pet_dragon_effects() if is_dragon else _pet_tiger_effects()
 	if standard != null and standard.has_animation(_name):
 		return standard
 	var cache_key := ("dragon:" if is_dragon else "tiger:") + _name
 	if pet_bullet_frames_cache.has(cache_key):
 		return pet_bullet_frames_cache[cache_key] as SpriteFrames
-	push_error("Pet bullet standard frames missing: " + _name)
-	var empty := SpriteFrames.new()
-	empty.add_animation(_name)
-	pet_bullet_frames_cache[cache_key] = empty
-	return empty
-
-
-func _repeat_tiger_bullet_frame(path_: String, _count: int) -> Array[String]:
-	var frames: Array[String] = []
-	for i in _count:
-		frames.append(path_)
-	return frames
-
-
-func _pet_tiger_png(id_: int, symbol_: String) -> String:
-	return "%s/id%d_%s.png" % [PET_TIGER_EFFECT_DIR, id_, symbol_]
-
-
-func _pet_tiger_shape_png(shape_id: int, bitmap_id: int) -> String:
-	return "%s/shape%d_bitmap%d.png" % [PET_TIGER_SHAPE_EFFECT_DIR, shape_id, bitmap_id]
+	if frame_count <= 0:
+		push_error("Pet bullet standard frames missing and no declared timeline: " + _name)
+		return null
+	# 标准帧缺失时按已声明的时间轴长度生成纯计时 SpriteFrames；
+	# 可见画面由图层timeline负责，本资源只提供帧时钟，不拼帧路径。
+	var clock := SpriteFrames.new()
+	clock.add_animation(_name)
+	clock.set_animation_loop(_name, false)
+	clock.set_animation_speed(_name, PET_TIGER_BULLET_FPS)
+	for _frame_index in range(frame_count):
+		clock.add_frame(_name, null)
+	pet_bullet_frames_cache[cache_key] = clock
+	return clock
 
 
 static func _pet_tiger_effects() -> SpriteFrames:
@@ -312,14 +312,14 @@ static func _pet_tiger_effects() -> SpriteFrames:
 	return _pet_tiger_effects_frames
 
 
-func _get_pet_tiger_texture(texture_path: String) -> Texture2D:
-	if texture_path.is_empty():
-		return null
-	var effect_name := texture_path.get_file().get_basename()
+func _get_pet_tiger_layer_texture(layer_id: int) -> Texture2D:
 	var effects := _pet_tiger_effects()
-	if effects != null and effects.has_animation(effect_name):
-		return effects.get_frame_texture(effect_name, 0)
-	return null
+	if effects == null:
+		return null
+	var animation: StringName = PET_TIGER_LAYER_ANIMATIONS.get(layer_id, &"")
+	if animation == &"" or not effects.has_animation(animation):
+		return null
+	return effects.get_frame_texture(animation, 0)
 
 
 static func warm_monster5_stream_images() -> void:
@@ -344,200 +344,46 @@ static func wait_for_monster5_stream_images() -> void:
 	warm_monster5_stream_images()
 
 
-static func warm_pet_tiger_textures() -> void:
-	var ids := [5, 9, 12, 15, 18, 21, 24, 27, 30, 35, 38, 43, 47, 50, 54, 58, 60, 62, 64, 66, 68, 70, 72, 77]
-	for id_ in ids:
-		var path := ""
-		match id_:
-			5:
-				path = "%s/shape6_bitmap5.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			9:
-				path = "%s/shape10_bitmap9.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			12:
-				path = "%s/shape13_bitmap12.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			15:
-				path = "%s/shape16_bitmap15.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			18:
-				path = "%s/shape19_bitmap18.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			21:
-				path = "%s/shape22_bitmap21.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			24:
-				path = "%s/shape25_bitmap24.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			27:
-				path = "%s/shape28_bitmap27.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			30:
-				path = "%s/shape31_bitmap30.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			35:
-				path = "%s/shape36_bitmap35.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			38:
-				path = "%s/shape39_bitmap38.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			43:
-				path = "%s/shape44_bitmap43.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			47:
-				path = "%s/shape48_bitmap47.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			50:
-				path = "%s/shape51_bitmap50.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			54:
-				path = "%s/shape55_bitmap54.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			58:
-				path = "%s/shape59_bitmap58.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			60:
-				path = "%s/shape61_bitmap60.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			62:
-				path = "%s/shape63_bitmap62.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			64:
-				path = "%s/shape65_bitmap64.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			66:
-				path = "%s/shape67_bitmap66.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			68:
-				path = "%s/shape69_bitmap68.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			70:
-				path = "%s/shape71_bitmap70.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			72:
-				path = "%s/shape73_bitmap72.png" % PET_TIGER_SHAPE_EFFECT_DIR
-			77:
-				path = "%s/shape78_bitmap77.png" % PET_TIGER_SHAPE_EFFECT_DIR
-		if not path.is_empty() and not pet_tiger_texture_cache.has(path):
-			pet_tiger_texture_cache[path] = Global.get_cached_texture(path)
-
-
-static func _pet_dragon_png(_name: String, frame_: int) -> String:
-	if _name == "PetDragon2Bullet2":
-		frame_ = int(((frame_ - 1) % 10) / 2) * 2 + 1
-	return "%s/%s/%d.png" % [PET_DRAGON_EFFECT_DIR, _name, frame_]
-
-
-func _get_pet_dragon_texture(texture_path: String) -> Texture2D:
-	if texture_path.is_empty():
-		return null
-	if not pet_dragon_texture_cache.has(texture_path):
-		pet_dragon_texture_cache[texture_path] = Global.get_cached_texture(texture_path)
-	return pet_dragon_texture_cache[texture_path] as Texture2D
-
-
 static func warm_pet_dragon_textures(stage: int = 4) -> void:
-	var generation := _runtime_cache_generation
 	var tree := Engine.get_main_loop() as SceneTree
 	if _pet_dragon_effects() != null:
 		if tree != null:
 			await tree.process_frame
 		return
 	stage = clampi(stage, 1, 4)
-	var folders: Array[String] = [
-		"PetDragon1Bullet1" if stage == 1 else "PetDragon2Bullet1" if stage == 2 else "PetDragon3Bullet1"
-	]
-	if stage >= 2:
-		folders.append("PetDragon2Bullet2")
-	if stage >= 3:
-		folders.append("PetDragon3Bullet3")
-	for folder in folders:
-		var base := PET_DRAGON_EFFECT_DIR.path_join(folder)
-		var warmed_paths := {}
-		var source_paths: Array[String] = []
-		for png in DirAccess.get_files_at(base):
-			if png.ends_with(".png"):
-				source_paths.append(base.path_join(png))
-		for source_path in source_paths:
-			var path := source_path
-			if folder == "PetDragon2Bullet2":
-				path = _pet_dragon_png(folder, int(source_path.get_file().get_basename()))
-			if warmed_paths.has(path):
-				continue
-			warmed_paths[path] = true
-			if not pet_dragon_texture_cache.has(path):
-				pet_dragon_texture_cache[path] = Global.get_cached_texture(path)
-			if tree != null:
-				await tree.process_frame
-				if generation != _runtime_cache_generation:
-					return
+	# 帧来源由构建期 pet_dragon_effects.tres 提供，运行时只取帧纹理，不扫描目录。
+	var frames := _pet_dragon_effects()
+	if frames == null:
+		push_error("Pet dragon standard frames missing: " + PET_DRAGON_EFFECTS_RES)
+		return
+	for effect_name in _pet_dragon_effect_names(stage):
+		if not frames.has_animation(effect_name):
+			continue
+		for frame_index in range(frames.get_frame_count(effect_name)):
+			var texture := frames.get_frame_texture(effect_name, frame_index)
+			if texture != null:
+				pet_dragon_texture_cache[texture] = texture
+		if tree != null:
+			await tree.process_frame
 
 
 static func warm_pet_dragon_dash_textures() -> void:
-	if _pet_dragon_effects() != null:
+	var frames := _pet_dragon_effects()
+	if frames == null:
+		push_error("Pet dragon standard frames missing: " + PET_DRAGON_EFFECTS_RES)
 		return
-	var warmed_paths := {}
-	for frame_index in range(1, 31):
-		var path := _pet_dragon_png("PetDragon2Bullet2", frame_index)
-		if warmed_paths.has(path):
-			continue
-		warmed_paths[path] = true
-		if not pet_dragon_texture_cache.has(path):
-			pet_dragon_texture_cache[path] = Global.get_cached_texture(path)
+	for frame_index in range(frames.get_frame_count(&"PetDragon2Bullet2")):
+		var texture := frames.get_frame_texture(&"PetDragon2Bullet2", frame_index)
+		if texture != null:
+			pet_dragon_texture_cache[texture] = texture
 
 
-static func _warm_png_folder(base: String) -> void:
-	var found_paths: Array[String] = []
-	for png in DirAccess.get_files_at(base):
-		if png.ends_with(".png"):
-			found_paths.append(base.path_join(png))
-	if found_paths.is_empty():
-		var missing_streak := 0
-		for index in range(601):
-			var path := base.path_join(str(index) + ".png")
-			if ResourceLoader.exists(path):
-				found_paths.append(path)
-				missing_streak = 0
-			elif not found_paths.is_empty():
-				missing_streak += 1
-				if missing_streak >= 30:
-					break
-	for path in found_paths:
-		if not pet_tiger_texture_cache.has(path):
-			pet_tiger_texture_cache[path] = Global.get_cached_texture(path)
-
-
-func _pet_tiger_png_by_id(id_: int) -> String:
-	match id_:
-		5:
-			return _pet_tiger_shape_png(6, 5)
-		9:
-			return _pet_tiger_shape_png(10, 9)
-		12:
-			return _pet_tiger_shape_png(13, 12)
-		15:
-			return _pet_tiger_shape_png(16, 15)
-		18:
-			return _pet_tiger_shape_png(19, 18)
-		21:
-			return _pet_tiger_shape_png(22, 21)
-		24:
-			return _pet_tiger_shape_png(25, 24)
-		27:
-			return _pet_tiger_shape_png(28, 27)
-		30:
-			return _pet_tiger_shape_png(31, 30)
-		35:
-			return _pet_tiger_shape_png(36, 35)
-		38:
-			return _pet_tiger_shape_png(39, 38)
-		43:
-			return _pet_tiger_shape_png(44, 43)
-		47:
-			return _pet_tiger_shape_png(48, 47)
-		50:
-			return _pet_tiger_shape_png(51, 50)
-		54:
-			return _pet_tiger_shape_png(55, 54)
-		58:
-			return _pet_tiger_shape_png(59, 58)
-		60:
-			return _pet_tiger_shape_png(61, 60)
-		62:
-			return _pet_tiger_shape_png(63, 62)
-		64:
-			return _pet_tiger_shape_png(65, 64)
-		66:
-			return _pet_tiger_shape_png(67, 66)
-		68:
-			return _pet_tiger_shape_png(69, 68)
-		70:
-			return _pet_tiger_shape_png(71, 70)
-		72:
-			return _pet_tiger_shape_png(73, 72)
-		77:
-			return _pet_tiger_shape_png(78, 77)
-		_:
-			return ""
+static func _pet_dragon_clock_frame_count(_name: String) -> int:
+	var frames := _pet_dragon_effects()
+	if frames != null and frames.has_animation(_name):
+		return frames.get_frame_count(_name)
+	push_error("Pet dragon standard frames missing: " + _name)
+	return 0
 
 
 func _pet_tiger_layer(
@@ -771,8 +617,7 @@ func _update_pet_tiger_layers() -> void:
 			sprite.visible = false
 			continue
 		var layer: Dictionary = layers[i]
-		var texture_path := _pet_tiger_png_by_id(int(layer["id"]))
-		var texture: Texture2D = _get_pet_tiger_texture(texture_path)
+		var texture: Texture2D = _get_pet_tiger_layer_texture(int(layer["id"]))
 		sprite.texture = texture
 		sprite.position = Vector2(float(layer["x"]), float(layer["y"]))
 		sprite.scale = Vector2(float(layer["sx"]), float(layer["sy"]))
@@ -817,62 +662,6 @@ func _update_pet_tiger_hit_shape_from_rect(visual_rect: Rect2, has_visual_rect: 
 	shape.size = rect.size
 	hit_shape.shape = shape
 	hit_shape.position = rect.position + rect.size * 0.5
-
-
-func _pet_tiger_blank_frames(_count: int) -> Array[String]:
-	return _repeat_tiger_bullet_frame("", _count)
-
-
-func _pet_tiger_bullet_frame_paths(_name: String) -> Array[String]:
-	match _name:
-		"PetTiger1Bullet1":
-			var frames_0: Array[String] = _repeat_tiger_bullet_frame(_pet_tiger_png_by_id(54), 10)
-			frames_0.append_array(_pet_tiger_blank_frames(5))
-			return frames_0
-		"PetTiger1Bullet2":
-			var frames_1: Array[String] = _repeat_tiger_bullet_frame(_pet_tiger_png_by_id(47), 6)
-			frames_1.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(47), 2))
-			frames_1.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(50), 4))
-			frames_1.append_array(_pet_tiger_blank_frames(8))
-			return frames_1
-		"PetTiger2Bullet1":
-			var frames_2: Array[String] = _repeat_tiger_bullet_frame(_pet_tiger_png_by_id(43), 6)
-			frames_2.append_array(_pet_tiger_blank_frames(4))
-			return frames_2
-		"PetTiger2Bullet3_1":
-			var frames_3: Array[String] = []
-			frames_3.append(_pet_tiger_png_by_id(9))
-			frames_3.append(_pet_tiger_png_by_id(12))
-			frames_3.append(_pet_tiger_png_by_id(15))
-			frames_3.append(_pet_tiger_png_by_id(18))
-			frames_3.append(_pet_tiger_png_by_id(21))
-			frames_3.append(_pet_tiger_png_by_id(24))
-			frames_3.append(_pet_tiger_png_by_id(27))
-			frames_3.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(30), 2))
-			frames_3.append(_pet_tiger_png_by_id(35))
-			frames_3.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(38), 2))
-			frames_3.append_array(_pet_tiger_blank_frames(8))
-			return frames_3
-		"PetTiger2Bullet3_2":
-			return _repeat_tiger_bullet_frame(_pet_tiger_png_by_id(5), 30)
-		"PetTiger3Bullet4_1":
-			var frames_4: Array[String] = _repeat_tiger_bullet_frame(_pet_tiger_png_by_id(77), 9)
-			frames_4.append_array(_pet_tiger_blank_frames(1))
-			return frames_4
-		"PetTiger3Bullet4_2":
-			var frames_5: Array[String] = []
-			frames_5.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(58), 5))
-			frames_5.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(60), 2))
-			frames_5.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(62), 2))
-			frames_5.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(64), 2))
-			frames_5.append_array(_repeat_tiger_bullet_frame(_pet_tiger_png_by_id(66), 2))
-			frames_5.append(_pet_tiger_png_by_id(68))
-			frames_5.append(_pet_tiger_png_by_id(70))
-			frames_5.append(_pet_tiger_png_by_id(72))
-			frames_5.append_array(_pet_tiger_blank_frames(24))
-			return frames_5
-		_:
-			return []
 
 
 func _ready() -> void:
@@ -1082,24 +871,13 @@ func _is_pet_phoenix_bullet(_name: String) -> bool:
 	return _name.begins_with("PetPhoenix")
 
 
-static func _pet_phoenix_frame_paths(_name: String) -> Array[String]:
-	var result: Array[String] = []
-	var dir_path := PET_PHOENIX_EFFECT_DIR.path_join(_name)
-	var frame_count := int(PET_PHOENIX_EFFECT_FRAME_COUNTS.get(_name, 0))
-	for frame_index in range(1, frame_count + 1):
-		result.append(dir_path.path_join(str(frame_index) + ".png"))
-	return result
-
-
 static func _get_pet_phoenix_frames(_name: String) -> SpriteFrames:
 	if _pet_phoenix_effects_frames == null:
 		_pet_phoenix_effects_frames = load(PET_PHOENIX_EFFECTS_RES) as SpriteFrames
 	if _pet_phoenix_effects_frames != null and _pet_phoenix_effects_frames.has_animation(_name):
 		return _pet_phoenix_effects_frames
 	push_error("Pet phoenix standard frames missing: " + _name)
-	var empty := SpriteFrames.new()
-	empty.add_animation(_name)
-	return empty
+	return null
 
 
 static func warm_pet_phoenix_frames(stage: int) -> void:
@@ -1197,13 +975,14 @@ static func _pet_dragon_effect_names(stage: int) -> Array[String]:
 
 
 static func prewarm_pet_tiger_runtime(stage: int, bullet_scene: PackedScene = null) -> void:
-	warm_pet_tiger_textures()
 	var effect_names := _pet_tiger_effect_names(stage)
 	var helper := MonsterBullet.new()
 	var tree := Engine.get_main_loop() as SceneTree
 	for effect_name in effect_names:
 		helper._get_cached_pet_tiger_timeline(effect_name)
-		helper._get_cached_pet_bullet_frames(effect_name, helper._pet_tiger_bullet_frame_paths(effect_name), false)
+		helper._get_cached_pet_bullet_frames(
+			effect_name, helper._get_cached_pet_tiger_timeline(effect_name).size(), false
+		)
 		if tree != null:
 			await tree.process_frame
 	helper.free()
@@ -1218,7 +997,9 @@ static func prewarm_pet_dragon_runtime(stage: int, bullet_scene: PackedScene = n
 	var effect_names := _pet_dragon_effect_names(stage)
 	var helper := MonsterBullet.new()
 	for effect_name in effect_names:
-		helper._get_cached_pet_bullet_frames(effect_name, helper._pet_dragon_bullet_frame_paths(effect_name), true)
+		helper._get_cached_pet_bullet_frames(
+			effect_name, MonsterBullet._pet_dragon_clock_frame_count(effect_name), true
+		)
 	helper.free()
 	await _prewarm_pet_bullet_instances(bullet_scene, effect_names)
 
@@ -1264,6 +1045,9 @@ func _setup_pet_phoenix_bullet(_name: String) -> void:
 		middle.scale.x = 1
 	_setup_pet_phoenix_hit_shape()
 	var frames := _get_pet_phoenix_frames(_name)
+	if frames == null:
+		queue_free()
+		return
 	var frame_count: int = frames.get_frame_count(_name)
 	if frame_count <= 0:
 		queue_free()
@@ -1781,34 +1565,13 @@ func _pet_dragon_aoe_radius(_name: String) -> float:
 			return max(90.0, _pet_dragon_hit_radius(_name) * 1.8)
 
 
-func _pet_dragon_bullet_frame_paths(_name: String) -> Array[String]:
-	match _name:
-		"PetDragon1Bullet1":
-			var frames_0: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragon1Bullet1", 1), 11)
-			return frames_0
-		"PetDragon2Bullet1":
-			var frames_1: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragon2Bullet1", 1), 15)
-			return frames_1
-		"PetDragon2Bullet2":
-			var frames_2: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragon2Bullet2", 1), 30)
-			return frames_2
-		"PetDragon3Bullet1":
-			var frames_3: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragon3Bullet1", 1), 21)
-			return frames_3
-		"PetDragon3Bullet3":
-			var frames_4: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragon3Bullet3", 1), 10)
-			return frames_4
-		"PetDragonBullet4":
-			var frames_5: Array[String] = _repeat_tiger_bullet_frame(_pet_dragon_png("PetDragonBullet4", 1), 48)
-			return frames_5
-		_:
-			return []
-
-
 func _setup_pet_dragon_bullet(_name: String) -> void:
 	_apply_pet_dragon_direction(dir)
 	_setup_pet_dragon_hit_shape(_name)
-	var frames := _get_cached_pet_bullet_frames(_name, _pet_dragon_bullet_frame_paths(_name), true)
+	var frames := _get_cached_pet_bullet_frames(_name, _pet_dragon_clock_frame_count(_name), true)
+	if frames == null:
+		queue_free()
+		return
 	bullet_ani.sprite_frames = frames
 	bullet_ani.animation = _name
 	bullet_ani.position = Vector2.ZERO
@@ -1844,16 +1607,10 @@ func _update_pet_dragon_layers() -> void:
 	if frame_index == pet_tiger_last_frame:
 		return
 	pet_tiger_last_frame = frame_index
-	var texture: Texture2D = null
-	if skill_name == "PetDragonBullet4":
-		texture = _pet_dragon_effect_texture("PetDragonBullet4Cropped", frame_index)
-		if texture == null:
-			var ultimate_path := "%s/%d.png" % [PET_DRAGON_ULTIMATE_DIR, frame_index + 1]
-			texture = _get_pet_dragon_texture(ultimate_path)
-	else:
-		texture = _pet_dragon_effect_texture(skill_name, frame_index)
-		if texture == null:
-			texture = _get_pet_dragon_texture(_pet_dragon_png(skill_name, frame_index + 1))
+	var animation: StringName = (
+		&"PetDragonBullet4Cropped" if skill_name == "PetDragonBullet4" else StringName(skill_name)
+	)
+	var texture := _pet_dragon_effect_texture(animation, frame_index)
 	if texture != null:
 		_ensure_pet_tiger_layers(1)
 		pet_tiger_layer_sprites[0].texture = texture
@@ -2279,7 +2036,10 @@ func _setup_pet_tiger_bullet(_name: String) -> void:
 		middle.scale.x = 1
 	_setup_pet_tiger_hit_shape(_name)
 	pet_tiger_timeline = _get_cached_pet_tiger_timeline(_name)
-	var frames := _get_cached_pet_bullet_frames(_name, _pet_tiger_bullet_frame_paths(_name), false)
+	var frames := _get_cached_pet_bullet_frames(_name, pet_tiger_timeline.size(), false)
+	if frames == null:
+		queue_free()
+		return
 	bullet_ani.sprite_frames = frames
 	bullet_ani.animation = _name
 	bullet_ani.position = Vector2.ZERO

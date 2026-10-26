@@ -139,12 +139,7 @@ class StreamingFrameEffect:
 
 	func _show_frame(index: int) -> void:
 		_frame_index = index
-
-		var next_texture := (
-			ResourceLoader.load(frame_paths[index], "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-		)
-		if next_texture != null:
-			texture = next_texture
+		push_error("StreamingFrameEffect 未实现帧源：" + str(index))
 
 
 class SwordAtlasPageLoader:

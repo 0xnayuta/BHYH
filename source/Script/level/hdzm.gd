@@ -1,14 +1,22 @@
 extends Node2D
+
+const MAP3_CSM_TEXTURE := preload("res://Art/game_3/other_map_button/jjtj.png")
+const MAP4_CSM_TEXTURE := preload("res://Art/game_3/other_map_button/hdtt.png")
+
 @onready var csm: Sprite2D = $Hdzm/csm
 var parent_node
+var _applied_csm_texture: Texture2D
 
 
-func _physics_process(delta: float) -> void:
-	if parent_node != null:
-		if parent_node is Map3:
-			csm.texture = load("res://Art/game_3/other_map_button/jjtj.png")
-		elif parent_node is Map4:
-			csm.texture = load("res://Art/game_3/other_map_button/hdtt.png")
+func _physics_process(_delta: float) -> void:
+	var texture: Texture2D = null
+	if parent_node is Map3:
+		texture = MAP3_CSM_TEXTURE
+	elif parent_node is Map4:
+		texture = MAP4_CSM_TEXTURE
+	if texture != null and texture != _applied_csm_texture:
+		csm.texture = texture
+		_applied_csm_texture = texture
 
 
 func _on_ttzstz_pressed() -> void:
