@@ -2,7 +2,6 @@ extends MonsterBullet
 
 const EFFECT_FPS := 24.0
 const EFFECT_ROOT := "res://Art/monster/game_3_monster/monster_130/effects"
-const PET_RABBIT_EFFECT_ROOT := "res://Art/pet/pet_rabbit/effects"
 const EFFECT_COUNTS := {
 	"monster_130_bullet_1": 11,
 	"monster_130_bullet_2": 30,
@@ -25,7 +24,7 @@ func _ready() -> void:
 	set_meta("is_monster_bullet", true)
 	get_prop()
 	var frames := _get_effect_frames(skill_name)
-	if frames.get_frame_count(skill_name) <= 0:
+	if frames == null or frames.get_frame_count(skill_name) <= 0:
 		queue_free()
 		return
 	bullet_ani.sprite_frames = frames
@@ -39,17 +38,10 @@ func _ready() -> void:
 static func _get_effect_frames(effect_name: String) -> SpriteFrames:
 	if _frames_cache.has(effect_name):
 		return _frames_cache[effect_name] as SpriteFrames
-	var frames := SpriteFrames.new()
-	frames.add_animation(effect_name)
-	frames.set_animation_speed(effect_name, EFFECT_FPS)
-	frames.set_animation_loop(effect_name, false)
-	var count := int(EFFECT_COUNTS.get(effect_name, 0))
-	var root := PET_RABBIT_EFFECT_ROOT if effect_name == "monster_130_bullet_2" else EFFECT_ROOT
-	for frame_index in range(1, count + 1):
-		var texture_path := root.path_join(effect_name).path_join(str(frame_index) + ".png")
-		var texture := load(texture_path) as Texture2D
-		if texture != null:
-			frames.add_frame(effect_name, texture)
+	var frames_path := EFFECT_ROOT.path_join(effect_name + "_frames.tres")
+	if not ResourceLoader.exists(frames_path):
+		return null
+	var frames := load(frames_path) as SpriteFrames
 	_frames_cache[effect_name] = frames
 	return frames
 

@@ -49,14 +49,8 @@ func _sync_hit_box() -> void:
 static func _get_frames() -> SpriteFrames:
 	if _frames_cache != null:
 		return _frames_cache
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"Monster215Bullet2")
-	frames.set_animation_loop(&"Monster215Bullet2", false)
-	frames.set_animation_speed(&"Monster215Bullet2", SOURCE_FPS)
-	for index in range(1, FRAME_COUNT + 1):
-		var texture := Global.get_cached_texture(FRAME_DIR.path_join(str(index) + ".png"))
-		if texture != null:
-			frames.add_frame(&"Monster215Bullet2", texture)
-	_frames_cache = frames
+	var frames_path := FRAME_DIR.path_join("monster215_bullet2_frames.tres")
+	if not ResourceLoader.exists(frames_path):
+		return null
+	_frames_cache = load(frames_path) as SpriteFrames
 	return _frames_cache
