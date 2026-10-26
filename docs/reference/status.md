@@ -154,6 +154,6 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
 9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
-10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），并新增 `scripts/frame_sequence_pack_probe.py`；2026-10-26 实测 PCK 内 3,101 条 FrameSequence 依赖全部可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
+10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；2026-10-26 实测 PCK 内 3,101 条 FrameSequence 依赖全部可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
 11. FrameSequence 已完成 `asset_id` 与实例播放策略分离；不再保留 FPS/loop/hold/prefetch 复合 key，也无双 key 兼容层。旧版生成的哈希命名文件已由转换器清理。
 12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。
