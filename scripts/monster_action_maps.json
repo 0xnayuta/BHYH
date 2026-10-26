@@ -229,12 +229,16 @@
     "actions": {
       "wait": "DefineShape_31",
       "death": "DefineSprite_36_mc_dead",
-      "appear": "DefineSprite_70_mc_appear"
+      "appear": "DefineSprite_70_mc_appear",
+      "arrow1": "DefineSprite_12_arrow1",
+      "arrow2": "DefineSprite_21_arrow2"
     },
     "loop": {
       "wait": true,
       "death": false,
-      "appear": false
+      "appear": false,
+      "arrow1": true,
+      "arrow2": false
     }
   },
   "swf_png/3077/atlas/metadata.tres": {
@@ -559,14 +563,18 @@
       "walk": "walk",
       "hurt": "wait",
       "death": "death",
-      "hit1": "attack1"
+      "hit1": "attack1",
+      "fly": "arrow1",
+      "explode": "arrow2"
     },
     "loop": {
       "wait": true,
       "walk": true,
       "hurt": false,
       "death": false,
-      "hit1": false
+      "hit1": false,
+      "fly": true,
+      "explode": false
     }
   },
   "swf_png/3005/atlas/metadata.tres": {
@@ -599,14 +607,16 @@
       "walk": "walk",
       "hurt": "hurt",
       "death": "death",
-      "hit1": "attack1"
+      "hit1": "attack1",
+      "fly": "arrow"
     },
     "loop": {
       "wait": true,
       "walk": true,
       "hurt": false,
       "death": false,
-      "hit1": false
+      "hit1": false,
+      "fly": true
     }
   },
   "swf_png/3006/atlas/metadata.tres": {
@@ -721,7 +731,9 @@
       "death": "death",
       "skill1": "skill1",
       "skill2": "skill2",
-      "skill3": "skill3"
+      "skill3": "skill3",
+      "fly1": "arrow1",
+      "fly2": "arrow2"
     },
     "loop": {
       "wait": true,
@@ -730,7 +742,9 @@
       "death": false,
       "skill1": false,
       "skill2": false,
-      "skill3": false
+      "skill3": false,
+      "fly1": true,
+      "fly2": true
     }
   },
   "game_3_monster/sword_boss/zhuxian/atlas/metadata.tres": {

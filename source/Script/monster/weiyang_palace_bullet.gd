@@ -10,8 +10,6 @@ const END_ANIMATION := &"arrow2"
 const HIT_CLEAR_DELAY := 0.3
 const END_FRAME_COUNT := 19
 
-static var _frames_cache: Dictionary = {}
-
 enum ProjectileState {
 	FLYING,
 	HIT_WAIT,
@@ -104,21 +102,10 @@ func _on_arrow2_finished() -> void:
 	queue_free()
 
 
-static func _get_arrow_frames(animation_name: StringName, directory: String, count: int, looped: bool) -> SpriteFrames:
-	var cache_key := "%s:%d" % [directory, count]
-	if _frames_cache.has(cache_key):
-		return _frames_cache[cache_key] as SpriteFrames
+static func _get_arrow_frames(
+	_animation_name: StringName, _directory: String, _count: int, _looped: bool
+) -> SpriteFrames:
 	var frames_path := FRAME_ROOT.path_join("atlas/swf_png_3007_frames.tres")
-	if ResourceLoader.exists(frames_path):
-		var source := load(frames_path) as SpriteFrames
-		if source != null and source.has_animation(StringName(directory)):
-			var frames := SpriteFrames.new()
-			frames.remove_animation(&"default")
-			frames.add_animation(animation_name)
-			frames.set_animation_loop(animation_name, looped)
-			frames.set_animation_speed(animation_name, SOURCE_FPS)
-			for i in range(source.get_frame_count(StringName(directory))):
-				frames.add_frame(animation_name, source.get_frame_texture(StringName(directory), i))
-			_frames_cache[cache_key] = frames
-			return frames
-	return null
+	if not ResourceLoader.exists(frames_path):
+		return null
+	return load(frames_path) as SpriteFrames

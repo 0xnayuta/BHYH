@@ -67,21 +67,7 @@ static func _get_frames() -> SpriteFrames:
 	if _frames_cache != null:
 		return _frames_cache
 	var frames_path := FRAME_ROOT.path_join("atlas/swf_png_3004_frames.tres")
-	if ResourceLoader.exists(frames_path):
-		var source := load(frames_path) as SpriteFrames
-		if source != null and source.has_animation(&"arrow1") and source.has_animation(&"arrow2"):
-			var frames := SpriteFrames.new()
-			frames.remove_animation(&"default")
-			frames.add_animation(&"fly")
-			frames.set_animation_loop(&"fly", true)
-			frames.set_animation_speed(&"fly", source.get_animation_speed(&"arrow1"))
-			for i in range(source.get_frame_count(&"arrow1")):
-				frames.add_frame(&"fly", source.get_frame_texture(&"arrow1", i))
-			frames.add_animation(&"explode")
-			frames.set_animation_loop(&"explode", false)
-			frames.set_animation_speed(&"explode", source.get_animation_speed(&"arrow2"))
-			for i in range(source.get_frame_count(&"arrow2")):
-				frames.add_frame(&"explode", source.get_frame_texture(&"arrow2", i))
-			_frames_cache = frames
-			return frames
-	return null
+	if not ResourceLoader.exists(frames_path):
+		return null
+	_frames_cache = load(frames_path) as SpriteFrames
+	return _frames_cache
