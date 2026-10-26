@@ -732,5 +732,109 @@
       "skill2": false,
       "skill3": false
     }
+  },
+  "game_3_monster/sword_boss/zhuxian/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "hit1",
+      "hit2": "hit2",
+      "hit3": "hit3"
+    },
+    "loop": {
+      "idle": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    },
+    "null_frames": [
+      "hit1",
+      "hit2",
+      "hit3"
+    ],
+    "speed": 24
+  },
+  "game_3_monster/sword_boss/xianxian/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "hit1",
+      "hit2": "hit2",
+      "hit3": "hit3"
+    },
+    "loop": {
+      "idle": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    },
+    "null_frames": [
+      "hit1",
+      "hit2",
+      "hit3"
+    ],
+    "speed": 24
+  },
+  "game_3_monster/sword_boss/luxian/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "hit1",
+      "hit2": "hit2",
+      "hit3": "hit3"
+    },
+    "loop": {
+      "idle": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    },
+    "null_frames": [
+      "hit1",
+      "hit2",
+      "hit3"
+    ],
+    "speed": 24
+  },
+  "game_3_monster/sword_boss/juexian/atlas/metadata.tres": {
+    "actions": {
+      "idle": "idle",
+      "walk": "walk",
+      "hurt": "hurt",
+      "death": "death",
+      "hit1": "hit1",
+      "hit2": "hit2",
+      "hit3": "hit3"
+    },
+    "loop": {
+      "idle": true,
+      "walk": true,
+      "hurt": false,
+      "death": false,
+      "hit1": false,
+      "hit2": false,
+      "hit3": false
+    },
+    "null_frames": [
+      "hit1",
+      "hit2",
+      "hit3"
+    ],
+    "speed": 24
   }
 }

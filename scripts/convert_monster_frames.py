@@ -71,6 +71,13 @@ LOOP_NAMES = frozenset({"wait", "walk", "idle", "run"})
 DEFAULT_SPEED = 24.0
 
 # 未纳管目录的显式原因；新增条目必须写明为什么不能按 metadata 一比一投影。
+TARGET_OVERRIDES: dict[str, str] = {
+    "game_3_monster/sword_boss/zhuxian/atlas": "sword_boss_zhuxian_frames.tres",
+    "game_3_monster/sword_boss/xianxian/atlas": "sword_boss_xianxian_frames.tres",
+    "game_3_monster/sword_boss/luxian/atlas": "sword_boss_luxian_frames.tres",
+    "game_3_monster/sword_boss/juexian/atlas": "sword_boss_juexian_frames.tres",
+}
+
 SKIP_REASONS: dict[str, str] = {
     "pet_tiger_boss/atlas": (
         "metadata sequences 是 model/actions/stage*/… 的聚合名；实际帧按 stage "
@@ -92,6 +99,7 @@ class Animation:
     loop: int
     speed: float
     frames: list[Frame] = field(default_factory=list)
+    null_frames: int = 0
 
 
 @dataclass
@@ -117,6 +125,8 @@ class Target:
     metadata_model: MetadataModel
     action_map: dict[str, str] = field(default_factory=dict)
     loop_overrides: dict[str, bool] = field(default_factory=dict)
+    null_actions: set[str] = field(default_factory=set)
+    speed_override: float | None = None
 
     @property
     def label(self) -> str:
@@ -184,34 +194,64 @@ def parse_godot_dict(text: str, marker: str = "data = {") -> dict:
 def load_metadata(path: Path) -> MetadataModel:
     data = parse_godot_dict(path.read_text(encoding="utf-8"))
     pages: list[str] = []
-    for entry in data.get("pages") or []:
-        if not isinstance(entry, dict) or "path" not in entry:
-            raise MetadataParseError(f"{path}: pages 条目缺少 path")
-        pages.append(str(entry["path"]))
+    raw_pages = data.get("pages") or []
+    legacy_pages = bool(raw_pages) and all(isinstance(entry, str) for entry in raw_pages)
+    if legacy_pages:
+        base = "res://" + path.parent.relative_to(SOURCE).as_posix()
+        for entry in raw_pages:
+            pages.append(base + "/" + str(entry))
+    else:
+        for entry in raw_pages:
+            if not isinstance(entry, dict) or "path" not in entry:
+                raise MetadataParseError(f"{path}: pages 条目缺少 path")
+            pages.append(str(entry["path"]))
     sequences: list[tuple[str, list[Frame]]] = []
-    for name, sequence in (data.get("sequences") or {}).items():
-        raw_frames = sequence.get("frames") if isinstance(sequence, dict) else None
-        if not isinstance(raw_frames, list):
-            raise MetadataParseError(f"{path}: 序列 {name!r} 缺少 frames")
-        frames: list[Frame] = []
-        for raw in raw_frames:
-            if not isinstance(raw, list) or len(raw) < 10:
-                raise MetadataParseError(f"{path}: 序列 {name!r} 帧元组长度不足 10")
-            page_index, x, y, w, h, ml, mt, mr, mb = (int(v) for v in raw[1:10])
-            if not 0 <= page_index < len(pages):
-                raise MetadataParseError(
-                    f"{path}: 序列 {name!r} 页索引 {page_index} 越界 ({len(pages)} 页)"
+    if data.get("sequences"):
+        for name, sequence in data["sequences"].items():
+            raw_frames = sequence.get("frames") if isinstance(sequence, dict) else None
+            if not isinstance(raw_frames, list):
+                raise MetadataParseError(f"{path}: 序列 {name!r} 缺少 frames")
+            frames: list[Frame] = []
+            for raw in raw_frames:
+                if not isinstance(raw, list) or len(raw) < 10:
+                    raise MetadataParseError(f"{path}: 序列 {name!r} 帧元组长度不足 10")
+                page_index, x, y, w, h, ml, mt, mr, mb = (int(v) for v in raw[1:10])
+                if not 0 <= page_index < len(pages):
+                    raise MetadataParseError(
+                        f"{path}: 序列 {name!r} 页索引 {page_index} 越界 ({len(pages)} 页)"
+                    )
+                frames.append(
+                    Frame(
+                        page=pages[page_index],
+                        region=(x, y, w, h),
+                        margin=(ml, mt, mr, mb),
+                    )
                 )
-            frames.append(
-                Frame(
-                    page=pages[page_index],
-                    region=(x, y, w, h),
-                    margin=(ml, mt, mr, mb),
+            if not frames:
+                raise MetadataParseError(f"{path}: 序列 {name!r} 没有帧")
+            sequences.append((str(name), frames))
+    elif data.get("animations"):
+        for name, raw_frames in data["animations"].items():
+            frames = []
+            for raw in raw_frames or []:
+                if not isinstance(raw, dict) or "page" not in raw or "region" not in raw:
+                    raise MetadataParseError(f"{path}: 动画 {name!r} 帧结构无效")
+                page_index = int(raw["page"])
+                if not 0 <= page_index < len(pages):
+                    raise MetadataParseError(f"{path}: 动画 {name!r} 页索引越界")
+                region = raw["region"]
+                if not isinstance(region, list) or len(region) != 4:
+                    raise MetadataParseError(f"{path}: 动画 {name!r} region 无效")
+                frames.append(
+                    Frame(
+                        page=pages[page_index],
+                        region=tuple(int(v) for v in region),
+                        margin=(0, 0, 0, 0),
+                    )
                 )
-            )
-        if not frames:
-            raise MetadataParseError(f"{path}: 序列 {name!r} 没有帧")
-        sequences.append((str(name), frames))
+            if not frames:
+                raise MetadataParseError(f"{path}: 动画 {name!r} 没有帧")
+            sequences.append((str(name), frames))
     fps = data.get("fps")
     return MetadataModel(
         pages=pages,
@@ -240,15 +280,24 @@ def parse_frames(path: Path) -> FramesModel:
         )
     animations: list[Animation] = []
     for frames_blob, loop_text, name, speed_text in ANIMATION_PATTERN.findall(text):
-        refs = TEXTURE_REF_PATTERN.findall(frames_blob)
         frames: list[Frame] = []
-        for ref in refs:
+        null_frames = 0
+        for kind, ref in re.findall(r'"texture": (SubResource\("([^"]+)"\)|null)', frames_blob):
+            if kind == "null":
+                null_frames += 1
+                continue
             if ref not in subs:
                 raise MetadataParseError(f"{path}: 动画 {name!r} 引用了未定义的子资源 {ref}")
             frames.append(subs[ref])
         loop = 1 if loop_text in {"true", "1"} else 0
         animations.append(
-            Animation(name=name, loop=loop, speed=float(speed_text), frames=frames)
+            Animation(
+                name=name,
+                loop=loop,
+                speed=float(speed_text),
+                frames=frames,
+                null_frames=null_frames,
+            )
         )
     if not animations:
         raise MetadataParseError(f"{path}: 没有解析到任何动画")
@@ -280,37 +329,39 @@ def resolve_target(metadata: Path) -> tuple[Path | None, str]:
         if len(parent_dir) > 1:
             return None, f"父目录存在多个 *_frames.tres: {[p.name for p in parent_dir]}"
     relative = directory.relative_to(MONSTER_ROOT).as_posix()
+    override = TARGET_OVERRIDES.get(relative)
+    if override:
+        return directory / override, ""
     reason = SKIP_REASONS.get(relative)
     if reason:
         return None, reason
     return None, "没有可解析的既有 *_frames.tres，且未登记推导规则"
 
 
-def load_action_maps() -> tuple[dict[str, dict[str, str]], dict[str, dict[str, bool]]]:
+def load_action_maps() -> dict[str, dict]:
     if not ACTION_MAP_PATH.is_file():
-        return {}, {}
+        return {}
     data = json.loads(ACTION_MAP_PATH.read_text(encoding="utf-8"))
-    maps: dict[str, dict[str, str]] = {}
-    loops: dict[str, dict[str, bool]] = {}
+    result: dict[str, dict] = {}
     for metadata, entry in data.items():
         if not isinstance(entry, dict) or not isinstance(entry.get("actions"), dict):
             raise MetadataParseError(f"{ACTION_MAP_PATH}: {metadata} 缺少 actions 映射")
-        maps[str(metadata)] = {
-            str(action): str(sequence) for action, sequence in entry["actions"].items()
+        result[str(metadata)] = {
+            "actions": {str(action): str(seq) for action, seq in entry["actions"].items()},
+            "loop": {str(name): bool(v) for name, v in (entry.get("loop") or {}).items()},
+            "null_frames": {str(name) for name in (entry.get("null_frames") or [])},
+            "speed": float(entry["speed"]) if "speed" in entry else None,
         }
-        loops[str(metadata)] = {
-            str(name): bool(value) for name, value in (entry.get("loop") or {}).items()
-        }
-    return maps, loops
+    return result
 
 
 def collect_targets() -> tuple[list[Target], list[tuple[str, str]]]:
     targets: list[Target] = []
     skipped: list[tuple[str, str]] = []
-    action_maps, loop_overrides = load_action_maps()
+    action_maps = load_action_maps()
     for metadata in sorted(MONSTER_ROOT.rglob("metadata.tres")):
         text = metadata.read_text(encoding="utf-8")
-        if '"sequences"' not in text:
+        if '"sequences"' not in text and '"animations"' not in text:
             continue
         model = load_metadata(metadata)
         if not model.sequences:
@@ -322,15 +373,16 @@ def collect_targets() -> tuple[list[Target], list[tuple[str, str]]]:
         if frames_path is None:
             skipped.append((metadata.relative_to(MONSTER_ROOT).as_posix(), reason))
             continue
+        mapping = action_maps.get(metadata.relative_to(MONSTER_ROOT).as_posix(), {})
         targets.append(
             Target(
                 metadata=metadata,
                 frames_path=frames_path,
                 metadata_model=model,
-                action_map=action_maps.get(metadata.relative_to(MONSTER_ROOT).as_posix(), {}),
-                loop_overrides=loop_overrides.get(
-                    metadata.relative_to(MONSTER_ROOT).as_posix(), {}
-                ),
+                action_map=mapping.get("actions", {}),
+                loop_overrides=mapping.get("loop", {}),
+                null_actions=mapping.get("null_frames", set()),
+                speed_override=mapping.get("speed"),
             )
         )
     return targets, skipped
@@ -364,9 +416,16 @@ def build_expected(target: Target, existing: FramesModel | None) -> FramesModel:
         loop = source.loop if source is not None else 0
         speed = source.speed if source is not None else (target.metadata_model.fps or DEFAULT_SPEED)
         animations.append(Animation(name=action, loop=loop, speed=speed, frames=frames))
+    if target.null_actions:
+        for animation in animations:
+            if animation.name in target.null_actions:
+                animation.frames = []
+                animation.null_frames = 1
     for animation in animations:
         if animation.name in target.loop_overrides:
             animation.loop = 1 if target.loop_overrides[animation.name] else 0
+        if target.speed_override is not None:
+            animation.speed = target.speed_override
     return FramesModel(pages=pages, animations=animations)
 
 
@@ -388,6 +447,11 @@ def compare_models(expected: FramesModel, actual: FramesModel) -> list[str]:
         actual_animation = by_name.get(expected_animation.name)
         if actual_animation is None:
             continue
+        if expected_animation.null_frames != actual_animation.null_frames:
+            problems.append(
+                f"动画 {expected_animation.name!r} null 帧 {actual_animation.null_frames} "
+                f"!= {expected_animation.null_frames}"
+            )
         if len(expected_animation.frames) != len(actual_animation.frames):
             problems.append(
                 f"动画 {expected_animation.name!r} 帧数 {len(actual_animation.frames)} "
@@ -407,6 +471,11 @@ def compare_models(expected: FramesModel, actual: FramesModel) -> list[str]:
             problems.append(
                 f"动画 {expected_animation.name!r} loop {actual_animation.loop} "
                 f"!= {expected_animation.loop}"
+            )
+        if actual_animation.speed != expected_animation.speed:
+            problems.append(
+                f"动画 {expected_animation.name!r} speed {actual_animation.speed} "
+                f"!= {expected_animation.speed}"
             )
     return problems
 
@@ -473,6 +542,9 @@ def render_tres(model: FramesModel, uid: str | None) -> str:
         lines.extend(["", f'[ext_resource type="Texture2D" path="{page}" id="{ext_id}"]'])
     sub_ids: list[str] = []
     for index, animation in enumerate(model.animations):
+        if animation.null_frames:
+            sub_ids.append("")
+            continue
         for frame in animation.frames:
             sub_id = f"AtlasTexture_{len(sub_ids)}"
             sub_ids.append(sub_id)
@@ -496,6 +568,9 @@ def render_tres(model: FramesModel, uid: str | None) -> str:
             frame_blocks.append(
                 '{\n"duration": 1.0,\n"texture": SubResource("%s")\n}' % sub_ids[cursor]
             )
+            cursor += 1
+        if animation.null_frames:
+            frame_blocks = ['{\n"duration": 1.0,\n"texture": null\n}']
             cursor += 1
         animation_blocks.append(
             '{\n"frames": [%s],\n"loop": %d,\n"name": &"%s",\n"speed": %s\n}'
@@ -594,6 +669,22 @@ def append_action_aliases(target: Target, existing: FramesModel) -> int:
         raise MetadataParseError(f"{target.frames_path}: 找不到 animations 数组结尾")
     write_text(target.frames_path, text[:insert_at] + "".join(blocks) + text[insert_at:])
     return len(blocks)
+
+
+def apply_speed_overrides(target: Target) -> int:
+    if target.speed_override is None:
+        return 0
+    text = target.frames_path.read_text(encoding="utf-8")
+    updated = text
+    for name in target.loop_overrides:
+        pattern = re.compile(
+            r'("name": &"%s",\n"speed": )([\d.]+)' % re.escape(name)
+        )
+        updated = pattern.sub(lambda m: m.group(1) + format_float(target.speed_override), updated)
+    if updated == text:
+        return 0
+    write_text(target.frames_path, updated)
+    return 1
 
 
 def apply_loop_overrides(target: Target) -> int:
@@ -741,6 +832,7 @@ def main(argv: list[str] | None = None) -> int:
                 if existing is not None:
                     appended = append_action_aliases(target, existing)
                     appended += apply_loop_overrides(target)
+                    appended += apply_speed_overrides(target)
                     if appended:
                         reparsed = parse_frames(target.frames_path)
                         if not compare_models(expected, reparsed):

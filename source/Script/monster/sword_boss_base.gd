@@ -2,9 +2,7 @@ extends BaseMonster
 class_name SwordBossBase
 
 const SOURCE_FPS := 24.0
-const MAX_SKILL_FRAMES := 36
 const ATLAS_DIR := "atlas"
-const ATLAS_METADATA := "metadata.tres"
 const SWORD_BOSS_PRELOAD_CONFIG := {
 	951:
 	{
@@ -25,14 +23,10 @@ const SWORD_BOSS_PRELOAD_CONFIG := {
 }
 
 static var _sprite_frames_cache: Dictionary = {}
-static var _prewarming_boss_ids: Dictionary = {}
-static var _prewarm_generation := 0
 
 
 static func clear_prewarmed_sword_boss_frames() -> void:
-	_prewarm_generation += 1
 	_sprite_frames_cache.clear()
-	_prewarming_boss_ids.clear()
 
 
 var sword_name := "诛仙剑"
@@ -112,127 +106,51 @@ func _apply_sword_boss_stats() -> void:
 
 
 func _build_sword_frames() -> void:
-	var cache_key := sword_root + "|body"
-	if _sprite_frames_cache.has(cache_key):
-		mr_ani.sprite_frames = _sprite_frames_cache[cache_key] as SpriteFrames
-		mr_ani.animation = &"idle"
-		mr_ani.centered = true
-		return
-	var frames := SpriteFrames.new()
-	if frames.has_animation(&"default"):
-		frames.remove_animation(&"default")
-	for anim_name in ["idle", "walk", "hurt", "death", "hit1", "hit2", "hit3"]:
-		frames.add_animation(StringName(anim_name))
-		frames.set_animation_loop(StringName(anim_name), anim_name in ["idle", "walk"])
-		frames.set_animation_speed(StringName(anim_name), SOURCE_FPS)
-		if anim_name.begins_with("hit"):
-			frames.add_frame(StringName(anim_name), null)
-			continue
-		var frame_entries := _get_atlas_animation_entries(sword_root, anim_name, false)
-		for entry in frame_entries:
-			var texture := _make_atlas_texture(sword_root, entry)
-			if texture != null:
-				texture.get_rid()
-				frames.add_frame(StringName(anim_name), texture)
-
-	_sprite_frames_cache[cache_key] = frames
-	mr_ani.sprite_frames = frames
+	mr_ani.sprite_frames = _frames_for_root(sword_root)
 	mr_ani.animation = &"idle"
 	mr_ani.centered = true
 
 
-static func _get_atlas_metadata(root: String) -> Dictionary:
-	return AtlasMetadataStore.data_for(root.path_join(ATLAS_DIR).path_join(ATLAS_METADATA))
+static func _frames_path_for_root(root: String) -> String:
+	return root.path_join(ATLAS_DIR).path_join("sword_boss_%s_frames.tres" % root.get_file())
 
 
-static func _get_atlas_animation_entries(root: String, anim_name: String, sample_effect: bool) -> Array:
-	var manifest := _get_atlas_metadata(root)
-	var animations: Dictionary = manifest.get("animations", {})
-	var entries: Array = animations.get(anim_name, [])
-	if not sample_effect or entries.size() <= MAX_SKILL_FRAMES:
-		return entries.duplicate()
-	var sampled: Array = []
-	for i in range(MAX_SKILL_FRAMES):
-		var index := int(round(float(i) * float(entries.size() - 1) / float(MAX_SKILL_FRAMES - 1)))
-		sampled.append(entries[index])
-	return sampled
-
-
-static func _get_atlas_page_path(root: String, entry: Dictionary) -> String:
-	var manifest := _get_atlas_metadata(root)
-	var pages: Array = manifest.get("pages", [])
-	var page_index := int(entry.get("page", -1))
-	if page_index < 0 or page_index >= pages.size():
-		return ""
-	return root.path_join(ATLAS_DIR).path_join(str(pages[page_index]))
-
-
-static func _get_atlas_region(entry: Dictionary) -> Rect2:
-	var values: Array = entry.get("region", [])
-	if values.size() != 4:
-		return Rect2()
-	return Rect2(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
-
-
-static func _make_atlas_texture(root: String, entry: Dictionary) -> AtlasTexture:
-	var page_path := _get_atlas_page_path(root, entry)
-	var region := _get_atlas_region(entry)
-	if page_path == "" or region.size.x <= 0.0 or region.size.y <= 0.0:
+static func _frames_for_root(root: String) -> SpriteFrames:
+	if _sprite_frames_cache.has(root):
+		return _sprite_frames_cache[root] as SpriteFrames
+	var path := _frames_path_for_root(root)
+	if not ResourceLoader.exists(path):
 		return null
-	var page_texture := ResourceLoader.load(page_path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-	if page_texture == null:
-		return null
-	var texture := AtlasTexture.new()
-	texture.atlas = page_texture
-	texture.region = region
-	texture.filter_clip = true
-	return texture
+	var frames := load(path) as SpriteFrames
+	if frames != null:
+		_sprite_frames_cache[root] = frames
+	return frames
 
 
 static func prewarm_sword_boss_frames_async(boss_ids: Array = [951, 952, 953, 954]) -> void:
-	var generation := _prewarm_generation
 	var tree := Engine.get_main_loop() as SceneTree
-	var built_this_frame := 0
-	var per_frame := 6 if OS.has_feature("mobile") else 14
 	for boss_id_value in boss_ids:
-		var boss_id := int(boss_id_value)
-		if not SWORD_BOSS_PRELOAD_CONFIG.has(boss_id):
+		var config: Dictionary = SWORD_BOSS_PRELOAD_CONFIG.get(int(boss_id_value), {})
+		if config.is_empty():
 			continue
-		if _prewarming_boss_ids.has(boss_id):
-			continue
-		var config: Dictionary = SWORD_BOSS_PRELOAD_CONFIG[boss_id]
 		var root := str(config.get("root", ""))
-		var cache_key := root + "|body"
-		if _sprite_frames_cache.has(cache_key):
+		if root.is_empty() or _sprite_frames_cache.has(root):
 			continue
-		_prewarming_boss_ids[boss_id] = true
-		var frames := SpriteFrames.new()
-		if frames.has_animation(&"default"):
-			frames.remove_animation(&"default")
-		for anim_name in ["idle", "walk", "hurt", "death", "hit1", "hit2", "hit3"]:
-			frames.add_animation(StringName(anim_name))
-			frames.set_animation_loop(StringName(anim_name), anim_name in ["idle", "walk"])
-			frames.set_animation_speed(StringName(anim_name), SOURCE_FPS)
-			if str(anim_name).begins_with("hit"):
-				frames.add_frame(StringName(anim_name), null)
-				continue
-			for entry in _get_atlas_animation_entries(root, anim_name, false):
-				var texture := _make_atlas_texture(root, entry)
-				if texture != null:
-					texture.get_rid()
-					frames.add_frame(StringName(anim_name), texture)
-				built_this_frame += 1
-				if tree != null and built_this_frame >= per_frame:
-					built_this_frame = 0
-					await tree.process_frame
-					if generation != _prewarm_generation:
-						_prewarming_boss_ids.erase(boss_id)
-						return
-		if generation != _prewarm_generation:
-			_prewarming_boss_ids.erase(boss_id)
-			return
-		_sprite_frames_cache[cache_key] = frames
-		_prewarming_boss_ids.erase(boss_id)
+		var path := _frames_path_for_root(root)
+		if not ResourceLoader.exists(path):
+			continue
+		if ResourceLoader.load_threaded_request(path) != OK:
+			continue
+		while tree != null:
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var frames := ResourceLoader.load_threaded_get(path) as SpriteFrames
+				if frames != null:
+					_sprite_frames_cache[root] = frames
+				break
+			if status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				break
+			await tree.process_frame
 
 
 func _build_sword_animations() -> void:
