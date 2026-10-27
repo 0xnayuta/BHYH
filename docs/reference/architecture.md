@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 运行时建帧仍有 **19** 个文件（怪物 **9** 个，其余 10 个非怪物），由
+- 13-2B 已完成 54 个怪物脚本的消费者切换；运行时建帧仍有 **19** 个文件（怪物 **9** 个，其余 10 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -370,7 +370,6 @@ classDiagram
   - 单序列/子集：`nanhai_projectile`、`monster_130`/`monster_212`/`monster_215`（`play` 子集 + 逐帧 duration）；
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
-  - 待迁移：`liu_sha_river_boss` / `liu_sha_river_shadow`（逐帧 PNG）。
   非怪物 **10** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域：
   - `pet_neat_bullet`：`pet_neat_4_bullet_3` 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本，保留；
   - `lyfb_awaken_effect`：按效果数据 `frame_rects` 做 `AtlasTexture` 裁剪；
@@ -471,8 +470,8 @@ classDiagram
 
 | 项目 | 目标 |
 |:---|:---|
-| `sword_boss_base.gd` 等有限帧运行时建帧 | 有限帧改为构建期 `SpriteFrames`；技能图集序列已走 `FrameSequence` |
-| 魔法武器运行时 `_build_frames()` | 有限帧改为构建期资源；超大帧走 `FrameSequence` |
+| 魔法武器剩余 5 个运行时建帧 | 与 13-4 的编号帧/别名收敛合并评估；固定裁剪或调用方纹理数组保留为登记例外 |
+| 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；`level_59`、`user_key` 为合法例外 |
 | 发布包实际闭包 | 已入库仅用于验证的 `source/export_presets.cfg`（`all_resources`）与 `scripts/frame_sequence_pack_probe.py`（Godot 挂载 PCK + `ResourceLoader.exists()` 逐条判定）；PCK 结论以实际运行结果为准，不以源闭包代替 |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |

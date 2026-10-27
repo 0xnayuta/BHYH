@@ -2,7 +2,7 @@
 
 > **用途**：维护当前活跃阶段的范围、依赖、实施顺序与验收入口；长期路线以 [roadmap](roadmap.md) 为准。
 >
-> **当前状态**：**Phase 13 视觉资产契约收口**实施中；Phase 13-1 与 13-2A 已完成，13-2B 待确认。
+> **当前状态**：**Phase 13 视觉资产契约收口**实施中；Phase 13-1、13-2A 与 13-2B（怪物域）已完成，13-3 已确认按批次执行。
 >
 > **版本边界**：内容版本保持 **6.9**；Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容。
 >
@@ -166,7 +166,7 @@ return MANIFESTS[role_id]
 
 规划原定「新建 `monster_<id>_frames.tres`」与现状冲突：148 个模型已有按既有命名生成的同源资源，消费者按现有路径引用。13-2A 改为复用现有资源，避免重复资产与 13-2B 的路径迁移开销。
 
-### 3.4 批次 13-2B：消费者切换（进行中）
+### 3.4 批次 13-2B：消费者切换（已完成 2026-10-27，怪物域）
 
 实测修正：清单虽称“35 个仅依赖构建期帧路径”，但 26 个标准加载器全部在运行时把 sequence 名重命名为动作名（如资源 `effect1` → 动作 `skill1`）。直接 `load` 会让 `AnimatedSprite2D.animation` 找不到动作。因此 13-2B 的实际路径是：
 
@@ -174,13 +174,15 @@ return MANIFESTS[role_id]
 2. **消费者直接加载**：删除 `_load_standard_frames()` 中的 `SpriteFrames.new()` 重建与 `add_animation` 循环，改为 `return load(frames_path) as SpriteFrames`；保留 `ACTIONS`/`MODEL_ACTIONS` 的帧数、offset、loop 用于 `AnimationPlayer` 时长与位移；
 3. **删除回退**：`_get_frames_for_model()` 的逐帧 PNG 回退分支删除，资源缺失即返回 `null`；
 4. **已完成 54 个脚本**：3040/3041/3042/3033/3034/3035/3069/3070/3076/3117/3370、3012/3007/3021/3056/3077/3078、峨眉山/五台明海/南海/双喜寺/玄武门/朱雀街/九华山、剑 Boss 基类 951~954、四头 Boss 头部与火灵珠、玄武门箭/朱雀虎箭/双喜 Boss 箭/未央宫弹体、212/215/130 编号帧弹体、九华松针与东胜神洲 loose 特效、流沙河本体/分身、130/212/215 动作视图、遁地与震雷法宝、宠物四弹体与寅虎 stage 视图、闪电特效与关卡 46 背景；
-5. **待处理**：`east_continent_monster`（仅剩标准动作重命名，loose 已构建期化；关卡配置 merge 使其无法完全静态化）、`weiyang_palace_boss`（符号层裁剪）、`tao_wu_boss`（资源异常单图兜底）、`three_prince_boss`/`eight_immortals_boss`（运行时裁剪）、`nanhai_projectile`（单序列裁剪）、`three_prince_bullet`（资源缺失逐帧回退）、`pet_tiger_boss_base`；全部在 §3.5 出口标准中按例外登记后才允许保留。
+5. **冻结保留（怪物域 9 个）**：`east_continent_monster`（仅剩标准动作重命名，loose 已构建期化；关卡配置 merge 使其无法完全静态化）、`eight_immortals_boss`（运行时裁剪）、`monster_bullet`（标准帧缺失时的 null 计时帧）、`nanhai_projectile`（单序列裁剪）、`pet_tiger_boss_base`（图集行列裁剪）、`tao_wu_boss`（资源异常单图兜底）、`three_prince_boss`（运行时裁剪）、`three_prince_bullet`（资源缺失逐帧回退）、`weiyang_palace_boss`（符号层裁剪）；全部已登记到 `runtime_frames_allowlist.json` 并在 §3.5 出口标准中守恒。
+
+**完成结果**：54 个怪物脚本改为加载构建期帧资源；运行时建帧文件从 70 降到 **19**（怪物 9 + 非怪物 10）。非怪物 10 个不纳入 13-2 怪物域，按角色特效、法宝、宠物、关卡、工具拆批。
 
 **禁止**：为了少改代码而保留“先试 `.tres`，失败再回退运行时建帧”的双路径——这正是 ADR-005 与 §4.2 禁止的兼容层。
 
 ### 3.5 出口标准
 
-- `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **≤ 10**，且剩余项全部登记例外（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
+- `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **19**（怪物 9 + 非怪物 10）；**怪物域 ≤10 且全部登记例外**；非怪物 10 个不纳入本 Phase 计数，按域拆批（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
 - `convert_monster_frames.py --check` 通过并进入契约门禁；
 - `runtime_frames_audit.py --fail-on-error` 通过，运行时建帧集合与
   `scripts/runtime_frames_allowlist.json` 守恒；迁移后条目只减不增；
@@ -316,7 +318,7 @@ Phase 13-4 兼容层与遗留动态表治理
 |:---|:---|:---|
 | Phase 13-1 | **已完成**（2026-10-26） | 单个提交 |
 | Phase 13-2A | **已完成**（2026-10-26） | 转换器 + `--check` 一个提交 |
-| Phase 13-2B | 规划完成，未开始 | 按怪物域分批，每批一个提交 |
+| Phase 13-2B | **已完成**（2026-10-27，怪物域；非怪物按域拆批） | 按怪物域分批，每批一个提交 |
 | Phase 13-3 | 规划完成，未开始 | 清单生成 + 运行时删表分开提交 |
 | Phase 13-4 | 规划完成，未开始 | 分类脚本 → 删除 → 入口收敛，分开提交 |
 
@@ -369,7 +371,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 
 ## 9. 恢复规则
 
-- 本页记录 Phase 13 实施状态：13-1 与 13-2A 已完成；13-2B 起实施前须由用户明确确认批次。
+- 本页记录 Phase 13 实施状态：13-1、13-2A 与 13-2B（怪物域）已完成；13-3 已确认，按清单生成 → 回收动态表 → PCK/别名分批执行。
 - 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
 - Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
 - 内容版本保持 6.9；Phase 13 不产生新的内容版本号。
