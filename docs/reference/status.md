@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Spine 恢复、wings 清理、角色 2/4 技能探针完成）
+> 最后更新：2026-10-27（L2 固定项与 13-2C 非怪物域评估完成）
 
 ---
 
@@ -150,6 +150,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 wings 孤立场景清理 | `source/Scene/base/special_affect_slim/wings.tscn` 无静态/动态引用（`SPECIAL_AFFECT_SLIM_DIR` 动态加载名无 `wings`，`add_special_effect` 调用名列表无 `wings`）；已删除场景；`special_affect.gd` 仍被其它效果场景使用 | 删除前已确认无引用；独立实例化告警属于未初始化 `_scale` 的探针装载问题 |
 
 | 2026-10-27 角色 2/4 技能探针 | `scene_probe_runner.py --probe role-skills` **PASS**：角色 2 `by` 生成 `BingYuEffect`、角色 4 `cmly` 生成 `CangMuLongYunEffect`；`BingYu`/`CangMu`/`Lyfb`/`HMZ`/`JHSJ` 的 `preload_effect_data` **5/5 true**；日志 **0 ERROR / 0 WARNING** | 新增 `scripts/scene_probes/role_skill_probe.{gd,tscn}` 并接入 `PROBES`；`scene_probe_runner` 由 2 项扩为 3 项 |
+| 2026-10-27 L2 场景探针固定项 | 完整套件 **3/3 PASS**：星座 **4.02s**、关卡选择态 **14.65s**、角色 2/4 技能 **3.74s**，整轮约 **22.5s**（隔离运行快照；并行门禁负载下会升高）；日志 **0 ERROR / 0 WARNING** | `role-skills` 纳入 `scene_probe_runner` 发布前固定子项；报告新增 `duration_seconds` 与 Markdown 耗时行；耗时是本次快照，不设硬阈值 |
+| 2026-10-27 Phase 13-2C 非怪物域评估 | `runtime_frames_audit.py --fail-on-error` **19/19 PASS**；非怪物 10 个，其中法宝 5 个；未改变运行时行为 | 法宝评估结论：诛仙剑阵先删无消费者回退；青莲三组编号序列可迁构建期；青龙剑/太极需 sheet 帧资源；八仙法宝需按 8 场景生成 profile。详细批次与顺序见 `current-iteration.md` §3.7 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

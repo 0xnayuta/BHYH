@@ -186,9 +186,12 @@ python scripts/health_check.py --project source --godot-bin "<godot>"
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
+# 第三条内部固定执行 constellation / level-selection / role-skills
 ```
 
 变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。
+
+第三条固定项内部固定执行 `constellation`、`level-selection`、`role-skills` 三个探针；角色 2/4 技能探针不再作为独立第四命令重复执行。除非只修改角色技能资源，可使用 `--probe role-skills` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
 
 ### 6.1 单关冒烟：`level_test_runner.py`
 
@@ -260,6 +263,7 @@ python scripts/scene_probe_runner.py --godot "<godot>" --probe role-skills
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
 | 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe` 与 `role_skill_probe`；运行期复制到 `source/`，结束后清理 |
+| L2 固定子项 | `constellation`、`level-selection`、`role-skills` 全部执行，不提供 `SKIP`；单次耗时写入报告 |
 | 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
 | 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存与背景可见性 |
 | 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
@@ -363,10 +367,10 @@ Atlas 与 FrameSequence 检查经 `contract_gate` 进入 `check_all`；编号帧
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |
 | 关卡冒烟超时 | 300 秒 | 加载上限 45,000 ms / 20,000 帧 |
 | 关卡回归候选 | 由 `Scene/level/` 清单动态发现 | 非战斗场景按 `NON_BATTLE_SPECIALS` 跳过 |
-| 关卡回归并发 | 默认 4 | 失败重试 1 次 |
+| 关卡回归并发 | 默认 `auto`（`min(12, max(4, CPU 核数))`）；`--jobs 4` 为稳定排障口径 | 失败重试 1 次 |
 | 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
 | 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
-| 星座场景探针 | `scene_probe_runner.py` | 单次 90 秒；`--scene` 启动；日志 0/0 |
+| 场景探针套件 | `scene_probe_runner.py` | 固定 3 项（星座/关卡选择态/角色 2/4 技能）；单项 90/240/180 秒；`--scene` 启动；日志 0/0 |
 | 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |

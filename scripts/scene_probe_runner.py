@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -174,6 +175,7 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
     ]
     timeout = timeout_override or spec.timeout_seconds
     result: dict = {"ok": False, "failures": [], "checks": {}}
+    started = time.perf_counter()
     try:
         completed = subprocess.run(
             command,
@@ -204,6 +206,7 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
         }
     finally:
         cleanup_temp(temp_paths)
+        result["duration_seconds"] = round(time.perf_counter() - started, 2)
     return result
 
 
@@ -218,6 +221,7 @@ def write_reports(spec: ProbeSpec, result: dict) -> None:
         "> 由 `scripts/scene_probe_runner.py` 生成；探针只在执行期间复制到工程根目录。",
         "",
         f"**结果**：{'PASS' if result.get('ok') else 'FAIL'}",
+        f"**耗时**：{result.get('duration_seconds', 0):.2f} 秒",
         "",
         "| 检查项 | 结果 |",
         "|---|---|",
@@ -261,9 +265,9 @@ def main() -> int:
         result = run_probe(godot, spec, args.timeout)
         write_reports(spec, result)
         if result.get("ok"):
-            print(f"[PASS] {spec.title}通过")
+            print(f"[PASS] {spec.title}通过 ({result.get('duration_seconds', 0):.2f}s)")
         else:
-            print(f"[FAIL] {spec.title}失败", file=sys.stderr)
+            print(f"[FAIL] {spec.title}失败 ({result.get('duration_seconds', 0):.2f}s)", file=sys.stderr)
             for failure in result.get("failures") or []:
                 print(f"  - {failure}", file=sys.stderr)
             failures.append((spec, result))

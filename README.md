@@ -113,8 +113,9 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
 | [`docs/audit/README.md`](docs/audit/README.md) | 审计档案索引与只读模板入口 |
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
-| [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 当前版本之后的开发路线 |
+| [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | 当前候选阶段、恢复条件与实施顺序（频繁更新） |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |

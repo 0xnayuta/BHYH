@@ -21,15 +21,15 @@
   - `source/Shader/`：`.gdshader`；
   - `source/Spritesheet/`：精灵表；
   - `source/addons/`：第三方插件（`godot_mcp` 等）。**非插件维护任务严禁修改**；
-  - `source/bin/`：Spine GDExtension（当前仅 Windows x86_64 入库）。
+  - `source/bin/`：Spine GDExtension（当前仅 Windows x86_64 入库；跨平台运行时见 `roadmap.md` 独立立项）。
 
 ### 1.2 文档与工具链
 
 - `docs/`
   - `standards/`：活跃规范，必须遵守；索引见 `standards/README.md`；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
-  - `roadmap/roadmap.md`：当前版本之后的开发路线；
-  - `roadmap/current-iteration.md`：当前活跃迭代（当前为 Phase 13 规划）的范围、批次与验收；
+  - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
+  - `roadmap/current-iteration.md`：当前候选阶段（当前为 13-2C 非怪物运行时建帧）的恢复条件、实施顺序与验收；频繁更新；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；

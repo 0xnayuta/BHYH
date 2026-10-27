@@ -106,7 +106,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
-| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、角色 2/4 技能入口与 Spine 效果；发布前 L2 固定项之一 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/role_skill_probe_report.*` |
+| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、角色 2/4 技能入口与 Spine 效果；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/role_skill_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado、212/215/130 编号帧弹体（10 个）、东胜神洲 loose 特效（6 个）、两个法宝（di_kong/zhen_lei 共 7 个）、宠物弹体（mouse/rabbit/turtle/yin_tiger 共 19 个）、闪电特效与关卡 46 背景（9 个），`--check` 校验存在且未过期 | 角色 4/5、3077 与弹体 `Art/.../*_frames.tres`（私有素材） |
 | `convert_frame_sequences.py` | 固定/图集帧 → FrameSequence、Catalog、稳定 UID 与延迟纹理依赖 JSON；`asset_id` 为内容身份、`default_*` 为默认策略，输出按 `asset_id` 生成可读文件名并在生成时清理自己拥有的陈旧输出；`--check` 进契约门禁；`--export-preset [NAME]` 只读检查预设声明覆盖 | `source/Art/frame_sequences/`（私有素材） |

@@ -376,7 +376,7 @@ classDiagram
   - `ne_zha_yin_yang_effect`：图集裁剪/连续帧组合，区域由剑型与特效参数决定；
   - `level_59`：固定 `STONE_TEXTURES` 数组建帧，无路径扫描或逐帧 IO；
   - `user_key`：调试工具 UI 的固定图标序列，不进入游戏运行路径；
-  - 剩余 5 个法宝见上方裁定。
+  - 法宝 5 个已完成域级评估：`main_sword_array_weapon` 删除标准帧回退；`qing_lian` 三组编号序列可迁构建期；`taiji_bagua`/`qlsword` 需 sheet 帧资源；`eight_immortal_magic_weapon` 需按 8 个场景生成固定资源。拆分与顺序见 `roadmap/current-iteration.md` §3.7，未实施前仍登记在 allowlist。
 
 ### 6.5 13-2B 冻结裁定（怪物域 9 个）
 
@@ -474,12 +474,12 @@ classDiagram
 
 | 项目 | 目标 |
 |:---|:---|
-| 魔法武器剩余 5 个运行时建帧 | 与 13-4 的编号帧/别名收敛合并评估；固定裁剪或调用方纹理数组保留为登记例外 |
-| 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；`level_59`、`user_key` 为合法例外 |
-| `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
-| Spine 平台库 | 按目标平台补齐并验证 |
+| 魔法武器剩余 5 个运行时建帧 | 13-2C 已评估：诛仙剑阵/青莲优先，青龙剑/太极次之，八仙法宝最后；固定裁剪保留为登记例外 |
+| 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；角色特效待几何 Resource 化；`level_59`、`user_key` 为合法例外 |
+| `AtlasMetadata.data` 无类型字典 | 独立项目：typed accessor 或 typed 子资源，见 `roadmap.md` §3.1 |
+| Spine 平台库 | 独立项目：补齐目标平台库并做平台验收，见 `roadmap.md` §3.2 |
 
-迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 下一批评估剩余法宝/角色特效运行时建帧 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
+迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C 法宝/角色特效运行时建帧按域推进 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
 
 ---
 

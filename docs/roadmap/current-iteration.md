@@ -1,8 +1,8 @@
 # BHYH Current Iteration
 
-> **用途**：维护当前活跃阶段的范围、依赖、实施顺序与验收入口；长期路线以 [roadmap](roadmap.md) 为准。
+> **用途**：只维护当前候选阶段、恢复条件与实施顺序；更新频繁。项目状态、长期阶段顺序与近期重点以 [roadmap](roadmap.md) 为唯一来源。
 >
-> **当前状态**：**Phase 13 视觉资产契约收口**实施中；Phase 13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成。
+> **当前状态**：**Phase 13 视觉资产契约收口**主干完成；Phase 13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成。非怪物域 **13-2C** 已完成评估，作为当前候选批次，尚未实施。
 >
 > **版本边界**：内容版本保持 **6.9**；Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容。
 >
@@ -129,7 +129,7 @@ return MANIFESTS[role_id]
 
 ---
 
-## 3. Phase 13-2：怪物视觉资产构建期化
+## 3. Phase 13-2：视觉资产构建期化
 
 **对应契约**：§3.1（构建层：固定视觉资产离线生成）、§3.3（生成结果确定性）
 **依赖**：Phase 13-1（失败语义）
@@ -182,7 +182,7 @@ return MANIFESTS[role_id]
 
 ### 3.5 出口标准
 
-- `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **19**（怪物 9 + 非怪物 10）；**怪物域 ≤10 且全部登记例外**；非怪物 10 个不纳入本 Phase 计数，按域拆批（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
+- `grep -rl 'SpriteFrames.new()' source/Script` 的文件数从 70 降到 **19**（怪物 9 + 非怪物 10）；**怪物域 ≤10 且全部登记例外**；非怪物 10 个不纳入 13-2B 怪物域出口计数，由 13-2C 单独收口（例如运行时生成的颜色/几何占位，需在 `docs/reference/architecture.md` 的“遗留”清单中写明）；
 - `convert_monster_frames.py --check` 通过并进入契约门禁；
 - `runtime_frames_audit.py --fail-on-error` 通过，运行时建帧集合与
   `scripts/runtime_frames_allowlist.json` 守恒；迁移后条目只减不增；
@@ -197,6 +197,30 @@ return MANIFESTS[role_id]
 | 动画名迁移后与原 `AnimatedSprite2D.animation` 字符串不一致 | 转换器把动画名作为 schema 的一部分输出，消费者按同一常量引用；门禁校验名称集合 |
 | 帧几何（offset/居中/缩放）在运行时脚本里硬编码 | 迁移时把这些字段写入帧资源或保留在消费者常量中，并在探针中断言首帧可见 |
 | Atlas 页共享导致内存上升 | 复用现有 `AtlasTexture` 页引用；不新建纹理副本；必要时按 §6.5 记录驻留依据 |
+
+### 3.7 批次 13-2C：非怪物域评估（候选，未实施）
+
+**对应契约**：§3.1（构建层）、§3.3（确定性）、ADR-005（禁止回退）
+**状态**：2026-10-27 完成域级评估，等待排期；本批次不改变运行时行为。
+
+非怪物运行时建帧共 10 个文件，优先法宝 5 个：
+
+| 文件 | 当前运行时形态 | 构建期化路径 | 结论与顺序 |
+|:---|:---|:---|:---|
+| `main_sword_array_weapon.gd` | 已加载 `zhuxianjianzhen_effects.tres`；仅 `_build_frames()` / `_build_frames_async()` 在标准动画缺失时回退 | 现有资源已覆盖 5 把剑的 body/effect/projectile/impact 动画；删除无当前消费者的回退与异步构建 | **13-2C-1，低风险先行** |
+| `qing_lian.gd` | 3 组编号 PNG 已用 `preload` 固定；运行时仅包装成 `SpriteFrames` | 为 idle 24、effect 14、aura 8 帧添加 `convert_numbered_frames.py` profile，改为加载 `.tres` | **13-2C-1，低风险先行** |
+| `taiji_bagua.gd` | 22 帧编号效果序列 + 2 帧模型 sheet 裁剪 | 效果序列进编号帧转换器；模型 sheet 需新增 sheet-frame 转换器或等价资源 | **13-2C-2，拆分** |
+| `qlsword.gd` | 单张 100×300 sheet 裁剪 2 帧 | 与太极同理，需要 sheet 帧资源；无编号序列 | **13-2C-2，拆分** |
+| `eight_immortal_magic_weapon.gd` | 8 个场景分别以 `model_path` / `effect_dir` 导出，运行时扫描 1..100 并拼接路径 | 按 8 个 `weapon_id` 生成模型帧与效果序列资源；场景改引用固定资源，删除导出路径扫描 | **13-2C-3，多场景批次** |
+
+非法宝 5 个的处置：
+
+- 角色特效 2 个：保留 `frame_rects` 运行时裁剪，待特效几何转 Resource 后单独评估；
+- `pet_neat_bullet`：保留蓝底抠图例外，构建期迁移需重复去底 PNG，收益低于成本；
+- `level_59`：固定 `STONE_TEXTURES` 数组，无 IO，保留为例外；
+- `user_key`：调试工具 UI，不进入游戏运行路径，保留为例外。
+
+实施顺序：**13-2C-1（main_sword + qing_lian）→ 13-2C-2（qlsword + taiji）→ 13-2C-3（eight_immortal）**。每批只减少 `runtime_frames_allowlist.json` 条目，不新增；每批单独提交并跑对应法宝场景、`scene_probe_runner`、`runtime_frames_audit` 与全量回归。若三个批次全部完成，运行时建帧文件预计由 19 降至 14；未完成前不以估算值替代门禁结果。
 
 ---
 
@@ -325,13 +349,16 @@ return MANIFESTS[role_id]
 Phase 13-1 失败语义与热路径 IO
         │
         ▼
-Phase 13-2 怪物视觉资产构建期化（13-2A 转换器 → 13-2B 消费者）
+Phase 13-2A 转换器 → 13-2B 怪物消费者（已完成）
         │
         ▼
-Phase 13-3 发布闭包与动态依赖收敛
+Phase 13-3 发布闭包与动态依赖收敛（已完成）
         │
         ▼
-Phase 13-4 兼容层与遗留动态表治理
+Phase 13-4 兼容层与遗留动态表治理（已完成）
+        │
+        ▼
+Phase 13-2C 非怪物运行时建帧（候选，未实施）
 ```
 
 | 批次 | 状态 | 提交粒度 |
@@ -341,6 +368,7 @@ Phase 13-4 兼容层与遗留动态表治理
 | Phase 13-2B | **已完成**（2026-10-27，怪物域；非怪物按域拆批） | 按怪物域分批，每批一个提交 |
 | Phase 13-3 | **已完成**（2026-10-27） | 清单生成 + 运行时删表分开提交 |
 | Phase 13-4 | **已完成**（2026-10-27） | 分类脚本 → 删除 → 入口收敛，分开提交 |
+| Phase 13-2C | **候选**（2026-10-27 评估完成，未实施） | 按法宝子域拆三批，每批一个提交 |
 
 **红线**：
 
@@ -369,7 +397,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 | 八维门禁 | 8/8 PASS |
 | 契约门禁 | 全子命令 PASS，含新增转换器 `--check` |
 | 引擎健康 | 0 Parse / 0 Error / 0 Warning |
-| 场景探针 | 3/3 PASS（星座 + 关卡选择态 + 角色 2/4 技能） |
+| 场景探针 | 3/3 PASS（星座 + 关卡选择态 + 角色 2/4 技能）；耗时为观测值，不设硬阈值 |
 | 双人探针 | 16/16 PASS，SKIP 不计 PASS |
 | 关卡回归 | FAIL 0；SKIP 仅限 5 个非战斗场景 |
 | 发布闭包 | 13-3 起为必跑项，13-1/13-2 可后置 |
@@ -385,13 +413,15 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 3. **不处理 `global.gd` 整体拆分**：仅删除与预载/动态表相关的死代码，God 对象拆分仍是独立立项；
 4. **不做 13 个 Autoload 的合并或新增**；
 5. **不验证目标平台性能**：首帧延迟、VRAM 驻留与 release 加载仍需在真实设备测量，headless 探针不作为证据；
-6. **不迁移 `_bundled` 场景**：与视觉资产契约无关，留在技术债清单。
+6. **不迁移 `_bundled` 场景**：与视觉资产契约无关，留在技术债清单；
+7. **不启动 AtlasMetadata typed accessor 与 Spine 跨平台运行时**：两者是 `roadmap.md` 登记的独立项目，只有目标、依赖与验收明确后才进入本页。
 
 ---
 
 ## 9. 恢复规则
 
-- 本页记录 Phase 13 实施状态：13-1、13-2A、13-2B（怪物域）与 13-3 已完成；13-4 已完成；别名表已清空。
+- 本页记录 Phase 13 实施状态：13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成；别名表已清空；13-2C 为非怪物域候选批次，评估完成但未实施。
+- 长时间跨度的项目状态、阶段顺序与近期重点只在本页的上级 [`roadmap.md`](roadmap.md) 维护；本页只保留当前候选与恢复所需细节。
 - 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
 - Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
 - 内容版本保持 6.9；Phase 13 不产生新的内容版本号。
