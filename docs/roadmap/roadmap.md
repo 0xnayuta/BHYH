@@ -2,7 +2,7 @@
 
 > **定位**：项目状态、长期阶段顺序与近期重点的唯一来源。只记录当前版本之后的方向，不保留逐任务流水账。
 >
-> **当前版本**：6.9。**Phase 13 视觉资产契约收口已完成并归档**（[`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)）；当前无活跃候选阶段。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
+> **当前版本**：6.9。**Phase 13 视觉资产契约收口已完成并归档**（[`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)）；**Phase 14 数据契约与 AtlasMetadata typed accessor 已规划，未启动**。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
 >
 > **事实基线**：工程状态、规模与门禁结果以 [`../reference/status.md`](../reference/status.md) 为单一事实源；架构实现见 [`../reference/architecture.md`](../reference/architecture.md)；验收阈值见 [`../reference/acceptance.md`](../reference/acceptance.md)。
 >
@@ -29,9 +29,10 @@
 |:---|:---|:---|
 | Phase 12 画布、相机与 HUD 重构 | **已完成并归档** | 不再进入当前迭代 |
 | Phase 13 视觉资产契约收口 | **已完成并归档** | 失败语义、构建期视觉资产、发布闭包、兼容层治理与角色特效均收口；3 个非怪物例外冻结 |
-| 当前活跃候选阶段 | **无** | 下一个独立项目明确后再写入 `current-iteration.md` |
-| AtlasMetadata typed accessor | **规划，未启动** | 独立立项，见 §3.1 |
-| Spine 跨平台运行时与平台验收 | **规划，未启动** | 独立立项，见 §3.2 |
+| Phase 14 数据契约与 AtlasMetadata typed accessor | **已规划，未启动** | 当前候选，详见 `current-iteration.md` §1 |
+| Phase 15 全局状态与 Autoload 边界 | **已命名，初步规划** | Phase 14 收口后启动 |
+| Phase 16 结构与场景现代化 | **已命名，待审计** | Phase 14/15 收口后决定是否启动 |
+| Spine 跨平台运行时与平台验收 | **规划，未启动** | 独立平台项目，见 §3.2 |
 | 新内容版本 | **未确认** | 当前不把 7.0 回植写成公开路线承诺 |
 
 Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容；内容版本保持 **6.9**。
@@ -41,7 +42,7 @@ Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、�
 1. Windows release 启动、`level_1`、FPS、首帧代理与 VRAM 基线已在当前主机通过；后续补峰值 VRAM、战斗负载与跨平台验收；
 2. 保持 12 个运行时建帧例外冻结，发布前复核 `runtime_frames_audit`；
 3. 保持 L2 固定套件稳定，`scene_probe_runner` 的星座 / 关卡选择态 / 角色技能 / 法宝与角色特效覆盖不缩减；
-4. AtlasMetadata typed accessor 与 Spine 跨平台运行时按独立项目重新立项，不提前占用当前批次。
+4. Phase 14 先做消费者/schema 清单与 typed accessor；Spine 跨平台运行时按独立平台项目推进。
 
 ---
 
@@ -54,22 +55,47 @@ Phase 12 画布与 HUD（已完成，归档）
 Phase 13 视觉资产契约收口（已完成，归档）
         │
         ▼
-无活跃候选阶段
+Phase 14 数据契约与 AtlasMetadata typed accessor（已规划，未启动）
         │
         ▼
-独立项目：AtlasMetadata typed accessor / Spine 跨平台运行时
-（启动条件见 §3）
+Phase 15 全局状态与 Autoload 边界（已命名，未规划细节）
+        │
+        ▼
+Phase 16 结构与场景现代化（已命名，待审计）
+        │
+        ▼
+独立项目：Spine 跨平台运行时（启动条件见 §3.2）
 ```
 
 没有确认的新内容阶段，不新增 Phase 编号。版本回植只在目标明确后进入本页与 `current-iteration.md`，不以“未来可能”替代可执行范围。
 
+### 2.1 总体架构重构（未命名工作流）
+
+总体方向是让运行时职责与目标契约逐层对齐，但不做一次性全量重写：
+
+| 工作流 | 目标 | 边界 |
+|:---|:---|:---|
+| 数据契约 | 结构化数据优先 typed `Resource` / accessor；裸字典只保留序列化与已登记遗留边界 | Phase 14 先处理 AtlasMetadata；玩家档案字典另立专项 |
+| 全局状态 | 降低 `Global` 与 13 个 Autoload 的职责耦合，建立所有权、初始化顺序和清理边界 | Phase 15；保留 `Global.change_scene` 等 facade，不一次性改写全部调用面 |
+| 结构治理 | `Scene/Script/Art` 类型分层逐步过渡到功能子目录；清理深层路径与历史场景 | Phase 16；单模块试点、路径迁移走工具，不与玩法改动混批 |
+| 平台依赖 | Spine 跨平台运行时、目标平台 release/VRAM/首帧验收 | 独立平台项目；Windows 基线不代表跨平台 |
+| 内容演进 | 7.0 及更高内容回植 | 目标确认后按 `migration_playbook.md` §5.1 执行 |
+
+排序原则：
+
+1. 先稳定数据契约，再拆全局状态，最后做目录/场景迁移；
+2. 每一阶段必须保持已验收玩法与存档行为不变；
+3. 不为降低行数或目录统一而牺牲可测性、资源闭包与 1P/2P 语义；
+4. 大迁移必须有 ADR、分批提交、代表场景探针与全量回归；
+5. headless/L2/release 各自证明不同层面，不互相替代。
+
 ---
 
-## 3. 后续独立立项
+## 3. 已命名阶段与独立项目
 
-以下项目按独立项目推进，不混入普通功能提交，也不进入当前候选批次。启动时先补详细规划到 `current-iteration.md`，并在 `status.md` 记录前置事实。
+Phase 14 是当前候选；Phase 15/16 不进入当前批次，启动时先补详细规划到 `current-iteration.md`；Spine 按独立平台项目推进。
 
-### 3.1 AtlasMetadata typed accessor
+### 3.1 Phase 14：AtlasMetadata typed accessor
 
 **目标**：把 `AtlasMetadata.data` 的裸字典访问收敛为强类型 Resource 或类型化 accessor，统一 schema 校验、序列/帧读取与失败语义；`.data` 只保留为迁移期边界，不继续扩大。
 
@@ -82,7 +108,7 @@ Phase 13 视觉资产契约收口（已完成，归档）
 - `--check`、UID/闭包校验与代表场景探针可覆盖；
 - 明确不改变视觉效果与已验收玩法。
 
-**当前状态**：仅登记路线，未启动；不进入 6.9 或 Phase 13 的完成定义。
+**当前状态**：已规划为 **Phase 14**（见 `current-iteration.md` §1），尚未启动实现。
 
 ### 3.2 Spine 跨平台运行时与平台验收
 
@@ -97,7 +123,7 @@ Phase 13 视觉资产契约收口（已完成，归档）
 - 平台构建、Spine 加载、角色/UI 探针与发布验收可执行；
 - 若平台暂不可用，明确写入 `status.md` 与发布边界，不把 Windows-only 写成全平台通过。
 
-**当前状态**：仅登记路线，未启动；不进入 Phase 13，也不替代当前 Windows 完整工作区验收。
+**当前状态**：仅登记路线，未启动；不进入 Phase 14/15/16，也不替代当前 Windows 基线验收。
 
 ---
 
@@ -120,17 +146,17 @@ Phase 13 视觉资产契约收口（已完成，归档）
 
 | 项目 | 目标 |
 |:---|:---|
-| `global.gd` 与字典数据 | 逐步拆分为 Resource、服务节点或强类型数据入口 |
-| 13 个 Autoload | 降低耦合，新增 Autoload 需评审 |
-| 类型分层目录 | 新功能按功能子目录聚合，不做无计划全量迁移 |
-| `_bundled` 场景 | 按专项转换为原生文本场景，完成 UID 与导入缓存重建 |
-| 深层节点路径 | 新代码使用依赖注入与 `%UniqueName`，重构时同步清理 |
+| `global.gd` 与字典数据 | Phase 14 先处理 AtlasMetadata typed accessor；Phase 15 再拆 Global/Autoload |
+| 13 个 Autoload | Phase 15 建立所有权与初始化顺序；新增 Autoload 需评审 |
+| 类型分层目录 | Phase 16 先审计与试点，不做无计划全量迁移 |
+| `_bundled` 场景 | 当前 `source/` 未检索到 `*bundled*` 文件；Phase 16 先确认是否已消解，再决定是否单列 |
+| 深层节点路径 | 新代码使用依赖注入与 `%UniqueName`；触达场景时清理，不无边界批量替换 |
 | 流式发布验证 | 验证用 `export_presets.cfg` 与 `frame_sequence_pack_probe.py` 已入库；PCK 内延迟纹理闭包已实测通过。仍需在目标平台验证 release 加载、VRAM 驻留与首帧耗时，不以包内路径代替运行时性能 |
 | 视觉资产预算 | 按目标平台测量首帧延迟、纹理页驻留量及反复进出关卡后的回收，不把 headless 探针当 VRAM 证据 |
-| 运行时建帧 | 怪物域已构建期化并冻结例外；非怪物域 13-2C-1/2/3 与角色特效收口已完成；剩余宠物、关卡、工具 3 个例外冻结 |
-| 资源失败语义 | 空占位与 `assert` 掩盖缺失已在 Phase 13-1 收口；新增路径继续显式失败 |
+| 运行时建帧 | Phase 13 已构建期化并冻结 12 个例外；发布前复核 allowlist |
+| 资源失败语义 | Phase 13-1 已收口；Phase 14 typed accessor 继续显式失败 |
 | 玩法资源发布闭包 | 预载 Catalog 的怪物与弹体路径已进入发布依赖清单；变更后重跑闭包探针 |
-| 纹理别名兼容表 | 已清空并收敛入口；禁止重新建立无消费者别名表 |
+| 纹理别名兼容表 | Phase 13 已清空并收敛入口；禁止重新建立无消费者别名表 |
 
 ---
 
@@ -154,4 +180,4 @@ Phase 13 视觉资产契约收口（已完成，归档）
 - 已知边界与未完成技术债；
 - 下一次迁移的入口与前置条件。
 
-发布前 L2 固定套件与变更矩阵见 [`../reference/acceptance.md`](../reference/acceptance.md) §6；`scene_probe_runner` 的三个固定探针与耗时记录以该节为准。
+发布前 L2 固定套件与变更矩阵见 [`../reference/acceptance.md`](../reference/acceptance.md) §6；`scene_probe_runner` 的四个固定探针与耗时记录以该节为准。

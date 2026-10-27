@@ -115,7 +115,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | 当前无活跃候选阶段；保留下一阶段启动规则 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 14 数据契约与 AtlasMetadata typed accessor 详细规划 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |

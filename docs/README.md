@@ -39,7 +39,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | 当前无活跃候选阶段；只保留下一阶段启动规则 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 数据契约与 AtlasMetadata typed accessor**：当前候选详细规划；Phase 15/16 启动条件 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

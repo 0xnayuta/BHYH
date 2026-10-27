@@ -480,7 +480,7 @@ classDiagram
 |:---|:---|
 | 魔法武器/角色特效运行时建帧 | 13-2C 与角色特效收口已完成；运行时建帧固定为宠物/关卡/工具 3 个登记例外 |
 | 非怪物宠物/关卡/工具运行时建帧 | `pet_neat_bullet`、`level_59`、`user_key` 为冻结例外；新增运行时建帧由 allowlist 阻断 |
-| `AtlasMetadata.data` 无类型字典 | 独立项目：typed accessor 或 typed 子资源，见 `roadmap.md` §3.1 |
+| `AtlasMetadata.data` 无类型字典 | **Phase 14**：typed accessor 或 typed 子资源，见 `roadmap/current-iteration.md` §1 |
 | Spine 平台库 | 独立项目：补齐目标平台库并做平台验收，见 `roadmap.md` §3.2 |
 
 迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C 全部法宝与角色特效构建期化已完成 → 剩余 3 个非怪物例外冻结 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。

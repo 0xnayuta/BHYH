@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Windows release 基线验收完成）
+> 最后更新：2026-10-27（Phase 14 规划完成，未启动）
 
 ---
 
@@ -156,8 +156,9 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2C-2 青龙剑/太极 | `convert_numbered_frames.py --all --check`、`convert_sheet_frames.py --check` **PASS**；法宝探针 5 把剑 + 青莲 + 青龙剑 + 太极模型/效果 **全 PASS**；`runtime_frames_audit` **15/15 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（365.1s，level_58/level_66 重试通过） | 新增 `scripts/convert_sheet_frames.py` 与青龙剑/太极模型 `.tres`；太极 22 帧效果改由编号帧转换器生成；新增永久 `magic_weapon_probe`；allowlist 17→15 |
 | 2026-10-27 Phase 13-2C-3 八仙法宝 | `convert_sheet_frames.py --check`、`convert_numbered_frames.py --all --check` **PASS**；法宝探针覆盖 8 个八仙场景模型/效果 **全 PASS**；`runtime_frames_audit` **14/14 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（320.6s） | 8 个八仙场景改为引用模型/效果 `.tres`；删除 `model_path`/`effect_dir` 扫描与运行时建帧；新增 8 个模型 sheet、7 个效果序列；allowlist 15→14 |
 | 2026-10-27 角色特效收口 | `convert_sheet_frames.py --check` PASS；探针覆盖 Lyfb 16 帧、哪吒阴阳剑/光环/Launch 资源；`runtime_frames_audit` **12/12 PASS**；`health_check` **0/0/0**；`check_all` PASS；L2 三件套：`level_1` **PASS**、`coop_probe_runner` **16/16 PASS**、场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s） | Lyfb/哪吒改用构建期 `.tres`，删除运行时 `SpriteFrames.new()`/Atlas 裁剪；allowlist 14→12；剩余宠物/关卡/工具 3 个例外 |
-| 2026-10-27 Phase 13 收口 | `check_all --godot-bin` **8/8 PASS**；`health_check` **0/0/0**；L2：`level_1` **PASS**、`coop_probe_runner` **16/16**、场景探针 **4/4**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s）；`runtime_frames_audit` **12/12**；发布依赖自检 **4,100 条**；PCK 闭包 **4,100/4,100 可达**（2,738,628,976 字节） | Phase 13 完成并归档，见 [`archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)；剩余 3 个非怪物例外冻结；当前无活跃候选阶段 |
+| 2026-10-27 Phase 13 收口 | `check_all --godot-bin` **8/8 PASS**；`health_check` **0/0/0**；L2：`level_1` **PASS**、`coop_probe_runner` **16/16**、场景探针 **4/4**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s）；`runtime_frames_audit` **12/12**；发布依赖自检 **4,100 条**；PCK 闭包 **4,100/4,100 可达**（2,738,628,976 字节） | Phase 13 完成并归档，见 [`archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)；剩余 3 个非怪物例外冻结；Phase 14 已规划、未启动 |
 | 2026-10-27 Windows release 基线验收 | 官方 4.7.2 Windows 模板安装后导出 **PASS**：exe + PCK；主场景与 `level_1` 验证构建启动；Vulkan 1.4.315 / Forward Mobile / AMD Radeon RX 6750 XT；`level_1` **150 FPS**（引擎上限 150）；启动至首个可测帧代理 **3.22s**；专用 GPU 内存 **713,916,416 B**、共享 **103,546,880 B**；正常关窗日志干净 | 关卡级 release 验证使用临时主场景后恢复；`--quit-after` 强制退出会产生 RID/Texture 清理警告。峰值 VRAM、战斗负载与跨平台仍未验证 |
+| 2026-10-27 Phase 14 规划 | 无代码变更；完成 AtlasMetadata 6 个直接消费者、四种 schema 形态与迁移分批规划；Phase 15/16 仅登记启动条件 | 详见 [`roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1；未启动实现，门禁与 release 基线不变 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
