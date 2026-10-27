@@ -1,15 +1,17 @@
 # SpriteFrames 生成策略
 
+> 本文只规定帧资源生成与播放时序细则；内容选型、共享/实例状态、加载生命周期与发布边界见 [`项目总体目标架构契约 §7`](target_architecture_contract.md#7-资源与视觉资产子契约)。不要求全部视觉内容转成 SpriteFrames。
+
 ## 默认规则
 
 - `speed` 统一使用源素材 FPS（默认 24；30 FPS 源显式传 `--fps 30`）；
-- `AnimationPlayer` 只负责状态切换和时长，不再额外叠加速度倍率；
+- 与 `AnimatedSprite2D` 配合时，`AnimationPlayer` 可编排状态、属性、事件与时长，但不得对同一帧播放时钟重复驱动或额外叠加速度倍率；
 - 循环动画命名：`wait`、`walk`、`idle`、`run`、`Monster*`；
 - 一次性攻击/受伤/死亡/特效默认不循环；
 - 特效如确需循环，必须在生成命令显式传 `--loop` 或 `--loop-all`；
 - `SpriteFrames` 内部动画名、源序列名和 `--strip-prefix` 结果必须唯一；
 - 新增静态资产优先使用构建期转换器生成，不允许运行时目录扫描；
-- 当前仓库保留的构建期工具为 `scripts/convert_atlas_metadata.py`；哪吒官方部件预览帧由 `scripts/convert_nezha_preview_frames.py` 转为构建期 SpriteFrames `.tres`，运行时只加载 `.tres`，不再解析 `preview_*.json`；
+- Atlas 源元数据由 `scripts/convert_atlas_metadata.py` 生成；哪吒专用预览帧由 `scripts/convert_nezha_preview_frames.py` 转为构建期 SpriteFrames `.tres`，运行时不再解析 `preview_*.json`；完整工具职责见 [`scripts/README.md`](../../scripts/README.md)；
 - 连续编号 PNG 序列由通用 `scripts/convert_numbered_frames.py` 生成构建期 SpriteFrames；当前登记 BiLuoTian cast/hit、LeiTingJieZhen formation/lightning、Wutai 3077 tornado、青莲 idle/effect/aura 与法宝/宠物弹体等，运行时不再拼路径建帧；
 - 固定/按需驻留序列由 `scripts/convert_frame_sequences.py` 生成 FrameSequence、Catalog、确定性 UID 与独立发布依赖清单；构建定义显式选择图集、原始帧或静态保持来源，不在缺失时自动替代。数量以转换器检查输出和状态快照为准。
 - 单张纹理 sheet 的固定网格帧由 `scripts/convert_sheet_frames.py` 生成 `AtlasTexture` 子资源；青龙剑/太极/八仙模型、Lyfb 兼容特效与哪吒阴阳特效不再在运行时裁剪/建帧。

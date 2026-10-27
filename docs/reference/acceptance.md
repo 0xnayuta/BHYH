@@ -4,7 +4,7 @@
 >
 > **定位**：回答“一个改动凭什么算通过”。本文记录当前门禁的**实际行为**、通过判据、失败语义与分档验收矩阵。
 >
-> **事实源**：门禁规则以 `scripts/` 代码为准；版本、规模与历史验证结果以 [`status.md`](status.md) 为准；架构边界见 [`architecture.md`](architecture.md)。
+> **事实源**：门禁实际行为以 `scripts/` 为准；验证事实见 [`status.md`](status.md)，当前实现见 [`architecture.md`](architecture.md)；跨模块不变量与目标见 [`总体目标契约`](../standards/target_architecture_contract.md)。目标新增要求不代表已有自动门禁覆盖。
 >
 > **重要前提**：完整验收依赖本地合法授权的完整素材工作区。公开 clone 缺少 `source/Art/`、`Music/`、`Font/`、`Spritesheet/`，出现缺失资源提示属于预期，不据此判定失败。
 
@@ -400,14 +400,25 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 纯 GDScript（无场景/资源） | L1 八维 | 受影响关卡冒烟或定向探针 | `--skip-engine` 后宣称 8/8 |
 | 场景/节点改动 | L1 八维 | `level_test_runner` 代表关；NodePath/动画轨道契约 | 只跑 `gdlint` |
 | 新增/修改美术或音频 | L1 八维 + `--import` | Atlas/编号帧/哪吒 `--check`；相关关卡冒烟 | 未生成 `.import`/UID；未重建导入缓存 |
-| 存档/数据结构 | L1 八维 | 旧档读取、缺失字段补全、保存/重载、双人槽位 | 只测新档；静默回退旧结构 |
+| 存档/数据结构 | L1 八维 | 当前格式已有档/新档读取、缺字段补全、损坏档拒绝、备份策略、保存/重载与退出、双人槽位 | 只测新档；猜旧结构；失败空档覆盖原档；将“旧档”误作跨版本兼容 |
 | 输入/物理层 | L1 八维 | 单/双人按键路径；相关关卡冒烟 | 只改 `project.godot` 不实机验证 |
 | 双人/LocalCoop | L1 八维 | `coop_probe_runner` 全部用例；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
 | UI/HUD/显示 | L1 八维 | 单/双人多分辨率截图；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
 | 关卡/玩法 | L1 八维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
 | 构建期资源管线 | L1 八维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
+| 应用/场景编排、缓存/池/异步 | L1 八维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
+| 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存 | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源 |
+| 战斗来源/结算边界 | L1 八维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 
+
+### 9.1 总体架构收敛的验证边界
+
+- 正常路径、边界、失败与退出均以真实生产调用验证；阶段套件不能替代新增行为的定向场景。
+- 上述矩阵是变更验收义务，不声称现有 `coop_probe_runner`/`scene_probe_runner` 已覆盖全部保存竞态、过期回调和 UI 交换；缺覆盖时补定向夹具并登记。
+- 接口替换须核对生产调用方、删除旧入口；不以 deprecated facade、双实现或无法复现的只读审查充当完成。正式职责仍正确的唯一入口可保留名称。
+- 仅文档修改执行链接、行尾/空白、规范/索引与修改范围检查，不因目标范围扩大重跑引擎，也不刷新已有 release 验证时间。
+- 资源路径、类型或导出依赖变化触发实际包验证；不强制每个只读调查或 API 内部改动都重导 release。
 ---
 
 ## 10. 失败处置
@@ -461,6 +472,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 - [`status.md`](status.md)：版本、规模与历史验证结果
 - [`../standards/naming_standard.md`](../standards/naming_standard.md)：命名与契约规范
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)：Godot 设计规范
+- [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)：总体目标、所有权、生命周期与分域验收不变量
 - [`../guides/migration_playbook.md`](../guides/migration_playbook.md)：版本迁移流程与红线
 - [`../audit/README.md`](../audit/README.md)：人工代码质量审计模板、报告与证据规则
 - [`../../scripts/README.md`](../../scripts/README.md)：脚本索引、命令与产物

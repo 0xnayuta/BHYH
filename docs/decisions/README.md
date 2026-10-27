@@ -41,10 +41,11 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) | 版本迁移使用三方语义合并，禁止整包覆盖 | Accepted | 版本迁移 |
 | [ADR-015](ADR-015-documentation-layering-and-single-source-of-truth.md) | 文档分层，`status.md` 为状态单一事实源 | Accepted | 文档维护 |
 | [ADR-016](ADR-016-display-canvas-window-and-hud-baseline.md) | 1280×800 画布、1600×1000 窗口与桌面 HUD 基线 | Accepted | 显示、HUD、多分辨率 |
-| [ADR-017](ADR-017-local-coop-profile-isolation.md) | 本地双人使用独立档案实例与槽位路由 | Accepted | 双人模式、数据归属 |
+| [ADR-017](ADR-017-local-coop-profile-isolation.md) | 本地双人使用独立档案实例与槽位路由 | Accepted；§5 长期策略局部由 ADR-021 替代 | 隔离/共享规则继续有效；现有视图交换在迁移验收前仍运行 |
 | [ADR-018](ADR-018-runtime-resource-cache-prewarm-and-pooling.md) | 运行期缓存、分阶段预热与对象池 | Accepted | 性能、加载 |
 | [ADR-019](ADR-019-test-fixtures-outside-production-source.md) | 测试探针与夹具不进入生产源码 | Accepted | 测试、发布 |
 | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md) | 类型化视觉资产、显式后端与流式生命周期 | Accepted | 三层契约、请求回收、导出闭包 |
+| [ADR-021](ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与项目总体目标架构 | Accepted（目标） | 总体所有权/生命周期；局部替代 ADR-017 §5 的长期 UI 交换策略，保留 ADR-020 |
 
 ### 2.1 常见决策检索
 
@@ -60,6 +61,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | 提交前必须跑哪些门禁？ | [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md) |
 | 版本迁移能否整包覆盖？ | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) |
 | 本地双人数据为什么不是第二个 Autoload？ | [ADR-017](ADR-017-local-coop-profile-isolation.md) |
+| 项目总体目标、状态所有权和后续架构治理以什么为准？ | [ADR-021](ADR-021-project-wide-target-architecture.md)；视觉资源子契约仍见 ADR-020 |
 
 ---
 
@@ -76,6 +78,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 ## 4. 相关入口
 
 - [`../reference/architecture.md`](../reference/architecture.md)：当前运行时架构与遗留边界
+- [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)：项目总体目标与子系统契约，不是完成声明
 - [`../reference/acceptance.md`](../reference/acceptance.md)：验收命令、判据与阈值
 - [`../reference/status.md`](../reference/status.md)：版本、规模与验证状态
 - [`../standards/README.md`](../standards/README.md)：活跃规范索引

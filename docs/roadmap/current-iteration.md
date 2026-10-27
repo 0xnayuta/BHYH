@@ -1,256 +1,112 @@
-# BHYH Current Iteration
+# BHYH 当前候选迭代
 
-> **用途**：维护当前候选阶段与已命名后续阶段的启动条件、实施顺序与验收；长期路线与总体架构顺序以 [roadmap](roadmap.md) 为唯一来源。
->
-> **当前状态**：**Phase 14 数据契约与 AtlasMetadata typed accessor 已规划，未启动**。Phase 13 已完成并归档；Phase 15/16 为已命名后续候选，不进入当前批次。
->
-> **版本边界**：内容版本保持 **6.9**；以下阶段均为内部架构治理，不新增玩法、任务、掉落或数值内容。
->
-> **事实基线**：[`../reference/status.md`](../reference/status.md)、[`../reference/architecture.md`](../reference/architecture.md)、[`../reference/acceptance.md`](../reference/acceptance.md)
->
-> **Phase 13 归档**：[`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)。
+> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点），规划已修订，未启动实现**。本轮只升级总体目标契约与文档，不启动代码重构。
+> **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。
+> **职责**：本页只展开当前候选 Phase 14；后续 Phase 15~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。不再在本页复制后续阶段任务表。
+> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
+> **历史**：[Phase 13](../archive/iteration_13_visual_asset_contract.md) 已完成归档，历史不改写。
 
----
-
-## 0. 阶段队列与边界
-
-| 阶段 | 主题 | 状态 | 入口 |
-|:---|:---|:---|:---|
-| Phase 14 | 数据契约与 AtlasMetadata typed accessor | **规划完成，未启动** | 本文 §1~§3 |
-| Phase 15 | 全局状态与 Autoload 边界 | **已命名，初步规划** | Phase 14 收口后 |
-| Phase 16 | 结构与场景现代化 | **已命名，初步规划** | Phase 14/15 收口后审计 |
-| Spine 跨平台运行时 | 平台依赖与发布验收 | **独立项目** | roadmap / 平台条件满足后 |
-| 7.0 内容回植 | 内容版本迁移 | **未确认** | migration_playbook §5.1 |
-
-本文只展开当前候选 Phase 14；Phase 15/16 只保留启动条件，不提前拆任务。任一阶段启动前必须由用户确认，并先补齐该阶段的范围、批次与验收。
-
----
-
-## 1. Phase 14：数据契约与 AtlasMetadata typed accessor
-
-**对应契约**：目标架构契约 §4.1（类型、标识与共享）、§4.2（资源校验与失败）、§4.3（UID/发布依赖）
-**依据**：[`../reference/architecture.md`](../reference/architecture.md) §5 数据分层、§6 资源层、§9 遗留例外
-**依赖**：Phase 13 归档完成
-**状态**：规划完成，未启动；不改变运行时行为。
+## 1. 阶段边界与决策
 
 ### 1.1 目标
 
-把 `AtlasMetadata.data` 从“外部可直接读写的裸字典”收敛为：
+以 AtlasMetadata 为有限试点，收敛源数据、共享只读定义与消费者访问边界，为后续模块治理提供一种可验证模式，而非把所有业务数据包装成资源。
 
-1. `AtlasMetadata` 内部的序列化边界；
-2. 对外只暴露强类型 accessor/value object；
-3. 构建期校验 schema，运行时失败显式传播；
-4. 新消费者不再增长裸字符串键依赖。
+- 保留正式源数据与现有资源身份；只改变读取、验证与失败传播。
+- 构建校验覆盖真实 schema；运行时类型 API 覆盖实际消费字段，不为无消费者 schema 建完整对象体系。
+- 所有生产调用方迁移完成后删除旧字典返回入口，禁止 deprecated/public 双路径。
+- 不泄露可修改的共享容器，不复制 Texture2D/图集页；返回类型不等于自动不可变。
+- 静态可序列化定义优先 Resource；纯运行时视图可用强类型 RefCounted。由生命周期与序列化需求决定，不先造一套通用类型框架。
 
-本阶段不把 AtlasMetadata 改造成所有视觉资产必须经过的中间层，也不把现有 Spine/FrameSequence 统一成同一播放器。
+### 1.2 不在本阶段
 
-### 1.2 当前事实
+- 不重写 `player_data`，不把 JSON 存档改为 `.tres`；
+- 不抽取全部 Global、改存档/双人视图、不重构战斗继承、不搬迁顶层目录；
+- 不把 AtlasMetadata 变成所有资产中间层，不统一 Spine/SpriteFrames/FrameSequence 播放器；
+- 不更改素材内容、region/margin、动画时序、loop、页路径、UID 或后端选择；
+- 不重开 Phase 13 的冻结例外，不借类型化恢复缺资源回退。
 
-| 项目 | 当前状态 |
-|:---|:---|
-| `AtlasMetadata` | `Resource`，`data: Dictionary`，`validate()` 只做浅层 schema 检查 |
-| `AtlasMetadataStore` | 缓存并返回裸 `Dictionary`；路径缺失/schema 失败已显式报错 |
-| 已登记 schema 形态 | `pages + sequences`；`animation + frames + back/front atlases`；`files`；`__top_level=array` |
-| 直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` |
-| 已移除消费者 | `main_sword_array_weapon` 已在 Phase 13-2C 删除 Atlas 回退 |
-| 构建期入口 | `scripts/convert_atlas_metadata.py`、`metadata.tres`、Atlas manifest |
+### 1.3 当前事实与待确认范围
 
-`AtlasMetadata.data` 同时存在多种 schema，**不得用一个统一 typed model 强行覆盖全部形态**；typed accessor 必须按 schema 分派。
-
-### 1.3 批次 14-1：消费者与 schema 清单
-
-**目标**：先建立可审核的迁移账本，不改代码行为。
-
-任务：
-
-1. 枚举所有 `AtlasMetadataStore.data_for`、`AtlasMetadata.data`、`metadata.tres` 消费者与构建期生产者；
-2. 按 schema 形态分类：
-   - `pages + sequences`（图集序列）；
-   - `animation + frames + back_atlases/front_atlases`（动画元数据）；
-   - `files`（文件映射）；
-   - `__top_level=array`（顶层数组）；
-3. 记录每个消费者使用的键、动画名、页引用、region/margin 与失败分支；
-4. 建立迁移批次：boss/怪物 → palace/mount → 其余；
-5. 明确哪些键属于稳定 schema，哪些只是转换器输出细节。
-
-产物：`docs/reference/atlas_metadata_schema.md`（或在 `architecture.md` 增加可审核 schema 表）。
-
-出口：
-
-- 所有直接消费者均可归属到 schema；
-- 不存在“未知 schema”的隐式消费者；
-- 新增 ADR 草案，记录 typed accessor 与 `.data` 迁移边界。
-
-### 1.4 批次 14-2：typed accessor 与构建期校验
-
-**目标**：在保留 `.data` 序列化边界的前提下，提供强类型访问。
-
-设计原则：
-
-- `.data` 仍由 `@export` 用于 `.tres` 序列化，不直接暴露给业务消费者；
-- 新增 `AtlasMetadataStore.metadata_for(path) -> AtlasMetadata` 或等价入口；
-- 类型建议：
-  - `AtlasPage`、`AtlasFrame`、`AtlasSequence`、`AtlasAnimation`、`AtlasFileEntry`；
-  - 由 `AtlasMetadata` 提供 `pages()`, `sequences()`, `animation()`, `files()`, `items()` 等 typed accessor；
-  - 不在 accessor 内做后端选择，不返回可写共享状态；
-- schema 校验一次并在资源加载时缓存；缺失字段、错误数组长度、非法 region、未注册 schema 明确失败；
-- 页面/纹理引用保持共享，不复制 `Texture2D` 或页数据；
-- 增加负向测试：错误类型、空序列、数组长度不一致、缺失页、非法时间/区域；
-- 构建期 `convert_atlas_metadata.py --check` 校验 typed 字段与 `.data` 序列化后的等价性。
-
-出口：
-
-- typed accessor 覆盖四种 schema；
-- `--check` 与负向测试通过；
-- schema 不合法时消费者拒绝生成，不切换旧路径或空占位。
-
-### 1.5 批次 14-3：消费者迁移
-
-按域迁移，保持视觉与数值行为不变：
-
-| 批次 | 消费者 | 重点 |
+| 现有边界 | 已知事实 | 本阶段取证要求 |
 |:---|:---|:---|
-| 14-3A | `cloud_boss`、`east_continent_monster`、`north_continent_monster` | 图集序列、页引用与动画名 |
-| 14-3B | `palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | animation/frames、back/front atlases、mount 视图 |
-| 14-3C | 其余通过 `metadata.tres` 或字符串键读取的消费者 | 清零外部 `data` 访问 |
+| `AtlasMetadata` | Resource，`data: Dictionary`，有浅层 `validate()` | 列出各实际 schema 的字段与合法空值 |
+| `AtlasMetadataStore` | `data_for` 返回字典，缓存、加载及失败处理集中 | 查直接/间接调用与复制后的可变状态 |
+| 源 schema | 包含 `pages+sequences`、`animation+frames+back/front atlases`、`files`、顶层数组编码 | 不将“源格式存在”自动等同“必须有运行时模型” |
+| 已知直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 仅作调查起点，重新核对配置间接读取和生成器 |
+| 构建入口 | `convert_atlas_metadata.py --check` 与 `--self-test` 已进入契约域 | 强化既有检查，不重复规划首次接入 |
+| Phase 13 已收口路径 | `main_sword_array_weapon` 已删除 Atlas 回退 | 不将其重新列为待迁移消费者 |
 
-约束：
+具体类名与 API 在 14-1 取证后确定；不把本页中的概念名称写成现有符号。
 
-- 不修改 Atlas 资源内容；不改变 region/margin、页路径、UID；
-- 不恢复任何运行时回退；
-- 每批单独提交，保持可回滚；
-- 迁移后补一个只读访问审计，阻断新增直接 `.data` 访问。
+## 2. 批次 14-1：生产/消费边界与 schema 决策
 
-### 1.6 批次 14-4：边界冻结
+**状态**：未启动。只读调查与设计记录，不改运行时行为。
 
-- 业务代码不再直接读 `AtlasMetadata.data`；
-- `AtlasMetadataStore.data_for` 如需保留，只能作为内部/迁移适配器，并标注 deprecated 或改为私有；
-- `convert_atlas_metadata.py --check` 进入契约门禁；
-- 更新 `architecture.md`、`acceptance.md`、`scripts/README.md` 与 ADR；
-- 记录仍未 typed 化的 schema 或消费者，作为明确例外而非隐式欠债。
+1. 枚举 `AtlasMetadataStore.data_for`、资源 `.data`、`metadata.tres` 配置路径、构建期读者与生产者。
+2. 建立“源 schema → 实际消费字段 → 拥有者/是否可变 → 失败行为 → 验证路径”矩阵。区分页/帧/动画、mount 视图与仅构建数据。
+3. 核对消费者对字典的复制和修改。将消费侧配置覆盖与共享源数据区分，不能把可变对象伪装为只读 accessor。
+4. 确定最小类型边界：可序列化定义、运行时只读视图与调用方法分别放在哪里；明确允许空数据与错误资源的区别。
+5. 按实际依赖分成可运行切片。不要先固定 boss/palace 批次再强迫所有 schema 服从该分法。
 
-### 1.7 出口标准
+**产物**：在 `architecture.md` 增加简洁可审核 schema/消费者表；需要具体设计决策时新增 ADR，不改写 ADR-020/021。原始逐文件调查与机器清单不进入长期规范。
 
-- 消费者清单中不存在未登记的 `.data` 直接访问；
-- 四种 schema 均有 typed accessor 与负向测试；
-- `convert_atlas_metadata.py --check`、`contract_gate`、`check_all` 通过；
-- `health_check` 0 Parse / 0 Error / 0 Warning；
-- `scene_probe_runner` 4/4、L2 三件套、全量回归 PASS；
-- 视觉资源加载路径与 frame/region/loop 行为无变化；
-- 发布 PCK 闭包与 release 基线继续通过。
+**出口**：每个生产消费者有可追溯字段与定向验证；只构建使用的 schema 已明确；没有未调查就默认保留的调用。完成此批后才能进入 14-2。
 
-### 1.8 风险与处理
+## 3. 批次 14-2：最小类型入口与校验
 
-| 风险 | 处理 |
-|:---|:---|
-| 四种 schema 被强行统一 | 按 schema 分派 typed accessor，不为统一而丢字段 |
-| shared AtlasTexture 被复制导致内存上升 | accessor 只返回引用；不复制页/纹理 |
-| `.data` 半迁移，新代码继续读裸字典 | 增加访问审计；新代码只允许 typed accessor |
-| 构建期与运行时 schema 漂移 | `--check` 校验等价性；消费者探针断言关键字段 |
-| 迁移影响 Boss/坐骑显示 | 每批代表场景探针 + 全量回归；先只换读取方式，不改资源 |
-| release 包体积/闭包变化 | 复用现有资源；重跑 PCK 闭包与 L2 |
+**状态**：未启动；依赖 14-1。
 
-### 1.9 启动条件
+- 对真实运行时 schema 增加强类型入口；`.data` 若保留，仅供资源序列化与其拥有者实现使用，不作为业务 API。
+- accessor 不选择视觉后端，不解析源 manifest、不猜旧路径、不返回可写共享容器；纹理和页共享，实例变更保留在消费者侧。
+- 构建期校验所有源形态；运行时接纳资源时校验一次，缓存已校验结果。明确无效类型、缺必需字段、空序列、页索引、region、duration 与数组长度的失败边界。
+- 复用转换器 `--check` 和 `--self-test`；仅在行为有新增边界时补充相应负向样本，不为机械转发增加测试。
+- 按已调查职责切片同时提交新入口与该切片全部生产调用方，不先发布没有实际消费者的新 API。其余未触达能力维持原实现，不增加旧入口指向新入口的兼容转发，也不增加 typed 失败后读取字典的分支。最后一个调用方迁移时删除旧入口。
 
-- Phase 14-1 清单与 ADR 草案经用户确认；
-- 明确 typed accessor 的 API 形态（Resource 还是 RefCounted value object）；
-- 不修改素材内容，素材变更仍走私人仓契约。
+**出口**：首个真实消费者能运行；错误资源在 debug/release 都明确拒绝，失败向拥有者传播；资源身份、几何与时序不变。验证不是仅“返回非空”。
 
----
+## 4. 批次 14-3：生产消费者闭环迁移
 
-## 2. Phase 15：全局状态与 Autoload 边界
+**状态**：未启动；依赖对应类型入口已验证。
 
-**状态**：已命名，未规划细节；Phase 14 收口后启动。
-**对应契约**：目标架构契约 §4.1、§5.2；[`../reference/architecture.md`](../reference/architecture.md) §2、§9.1。
+1. 按 14-1 的真实依赖一次迁完一个职责切片；配置转发、间接读者与测试夹具一并处理。
+2. 验证关键帧/页/动画名、region/margin、loop/duration、坐骑/前后层显示与缺资源行为。
+3. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
+4. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、失效注释和测试；不保留 deprecated 别名或迁移适配层。
 
-### 2.1 目标
+**出口**：生产代码只走新正式入口；无外部 `.data` 访问；无双加载/失败回退；需要可变工作数据的消费者不修改共享定义。
 
-降低 `global.gd` 这个大型遗留单例与 13 个 Autoload 的耦合，但不做一次性全量重写：
+## 5. 批次 14-4：边界守卫与收口
 
-- 建立 Global/autoload 依赖与所有权地图；
-- 先抽出纯数据、资源路径表、缓存/池、场景切换/UI 工厂等可证明边界；
-- 保持 `Global.change_scene` 等现有入口作为 facade，避免全工程同时改动；
-- 不新增 Autoload；新增业务能力优先 Resource、服务节点、RefCounted 或静态工具类。
+**状态**：未启动。
 
-### 2.2 预设批次
+- 核对完整生产调用面，不仅搜索一个方法名；区分资源声明、构建数据与运行时访问。
+- 如需长期访问守卫，扩展现有审计的明确检查项，并登记 `scripts/README.md` 与 `acceptance.md`；未实现前不得声称已有门禁自动阻断。
+- 源/生成内容一致、UID 稳定、依赖清单不意外膨胀；转换器不得改不属于自己的输出。
+- 更新实际架构、验收覆盖与带日期状态；只在全部出口满足后标记完成。
+- 不接受“部分 schema 永远保留裸字典”作为默认缩范围；若新的调查显示超出原定义，须明确修订范围与决策，不能静默跳过生产消费者。
 
-1. **15-1 清单与 ADR**：依赖图、初始化顺序、调用面、可测边界；冻结新 Global 业务 API。
-2. **15-2 纯数据/资源表**：将常量、路径表、静态数据迁移到 typed Resource 或 Catalog；不改变场景流。
-3. **15-3 场景切换与加载编排**：引入可注入的 scene/session service，`Global.change_scene` 保留 facade；验证加载页、覆盖式切换、缓存清理。
-4. **15-4 UI/缓存/池**：逐步抽出 UI factory、transient UI 清理、缓存与对象池；保留 1P/2P 槽位语义。
-5. **15-5 Autoload 边界复核**：评估 13 个注册项的生命周期与替代方案；不新增，是否合并另立 ADR。
+## 6. 验证矩阵
 
-### 2.3 出口与风险
+既有命令与档位以 [`acceptance.md`](../reference/acceptance.md) 为准，不在本页复制或虚构参数。
 
-- 不改变已验收玩法、场景流、存档与 1P/2P 行为；
-- 新增服务有明确所有权、初始化顺序、清理路径与探针；
-- `check_all`、health、L2、全量回归、PCK 通过；
-- 高风险：启动顺序、`LocalCoop` 槽位路由、加载页缓存、UI 生命周期；必须分批与 ADR。
+| 批次/变更 | 必需证据 | 不必无差别执行 |
+|:---|:---|:---|
+| 14-1 只读调查/文档 | 源码引用、完整矩阵、链接与格式 | 引擎、全量回归、release 不因文档变更复跑 |
+| 14-2 资源 API/校验 | 转换器同步/负向样本、L1、真实消费者正常与错误资源冒烟 | 只做非空或编译检查不能代替行为 |
+| 14-3 消费者 | 定向场景与相关关卡；读取值/几何/时序；共享资源不被修改；相关 1P/2P 路径 | 不以一个通用探针替代所有被改消费者 |
+| 14-4 阶段收口 | L2 固定套件、全量回归、构建/引用/命名检查；调用面清零证据 | 包路径/序列化/导出无变化时不强制重导每批 release |
+| 影响资源类型/路径/导出 | 实际 PCK 闭包与 release 加载 | 元数据或源文件可达不等于包可加载 |
 
----
+涉及运行探针与枚举 `source/` 的门禁串行运行。临时夹具在结束后移除，不进入发布。完整私有工作区维持零错误零警告；未执行验证显式记录为未验证。
 
-## 3. Phase 16：结构与场景现代化
+## 7. 阶段出口与恢复
 
-**状态**：已命名，未规划细节；Phase 14/15 收口后先审计再决定是否启动。
-**依据**：architecture §1.3、§9.1；godot_design_standard。
+- 所有实际运行时消费者迁移，旧公共入口与兼容分支删除；未消费源 schema 保持完整构建校验。
+- 无可写共享容器泄露；页/纹理未重复常驻；行为与资源身份不变。
+- 构建、L1、定向冒烟、L2 与阶段回归满足矩阵；发布变更按触发条件验证。
+- 文档、ADR、脚本索引与状态一致，原始统计不复制到长期规范。
 
-### 3.1 方向
+中断时从 14-1 矩阵与已验证切片恢复；失败回滚该逻辑批次，不恢复旧来源回退。阶段全部完成后只归档本页的 Phase 14 记录，再重新建立下一候选计划；后续方向继续以 roadmap 为准。
 
-- 从 `Scene/Script/Art` 类型分层逐步过渡到功能子目录聚合；
-- 深层 `get_node()`/绝对路径仅在触达场景时同步清理，不做无边界批量替换；
-- `_bundled` 场景先审计：当前 `source/` 中未检索到 `*bundled*` 文件，若确认已无目标，关闭该技术债条目；若发现二进制场景，再单列转换批次；
-- 路径迁移必须走 `scripts/rename_path.py`，同步 UID、`.import`、引用、文档和回归。
-
-### 3.2 预设批次
-
-1. **16-1 审计与决策**：产出真实目录、场景、依赖、深层路径与 `_bundled` 清单；确认 `_bundled` 是否已消解，形成是否启动的 ADR。
-2. **16-2 单模块试点**：选择一个边界清晰的业务模块，迁移到功能子目录；使用 `scripts/rename_path.py`，同步 UID、`.import`、引用与文档。
-3. **16-3 触达场景清理**：只清理试点/迁移触达的深层 `get_node()` 与绝对路径；不做全工程无边界替换。
-4. **16-4 扩展决策**：试点通过后按 ADR 决定是否分域全量迁移；未通过则保留现状并记录边界。
-5. **16-5 验收**：命名/UID/断裂引用、健康、代表场景、L2、全量回归与发布闭包。
-
-### 3.3 入口条件
-
-- Phase 14/15 完成，Global/数据边界稳定；
-- 先产出一份真实目录/依赖/场景清单，不基于历史数字；
-- 单模块试点后再决定是否全量迁移；
-- 不把目录迁移与玩法改动混在同一提交。
-
-### 3.4 出口与风险
-
-- 目录与场景身份稳定，链接、UID、`.import`、预载 Catalog 与发布依赖全部同步；
-- 不把目录迁移、场景重命名与玩法重构混在同一提交；
-- 深层路径清理以触达范围为准，不承诺一次清零；
-- 高风险：全量场景、历史二进制场景、路径动态拼装、双人/关卡预载；必须先审计与试点。
-
----
-
-## 4. 统一验收与提交规则
-
-Phase 14 每批至少执行：
-
-```bash
-python scripts/check_all.py --godot-bin "<godot>"
-python scripts/contract_gate.py
-python scripts/health_check.py --project source --godot-bin "<godot>"
-python scripts/scene_probe_runner.py --godot "<godot>"
-python scripts/coop_probe_runner.py --godot "<godot>"
-python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
-python scripts/level_regression_all.py --timeout 150
-```
-
-提交规则：
-
-- 每批独立提交，先 schema/accessor，再消费者，再删除旧入口；
-- 不保留“typed accessor 失败再读 `.data`”的双路径；
-- 不修改 `source/Art` 内容；素材改动走私人仓；
-- 文档与代码同批更新，结论写入 `status.md`，报告不提交。
-
----
-
-## 5. 恢复入口
-
-- 若 Phase 14 中断：按 §1.3 清单恢复，不重新猜消费者；
-- 若某 schema 无法 typed 化：登记为明确例外，保留只读 accessor，不扩大裸字典面；
-- 若 Phase 15 改动触发启动/双人问题：回滚该批次，保留 facade，不以兼容分支继续；
-- Phase 14 收口后，将本页归档并重新评估 Phase 15 入口。
+**下一候选顺序**：Phase 15 应用编排/运行资源 → Phase 16 档案会话/持久化/槽位 → Phase 17 玩法/表现边界。该顺序是风险优先队列，不是 AtlasMetadata 对全部架构工作的强制技术前置。

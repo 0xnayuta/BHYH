@@ -15,6 +15,8 @@
 
 脚本不内置本地 Godot 绝对路径，也不应把本地二进制、解密沙盒或临时目录写入代码与文档。
 
+工具实现是门禁实际覆盖的事实源；架构要求见 [`项目总体目标契约`](../docs/standards/target_architecture_contract.md)，按变更触发的验证见 [`acceptance.md`](../docs/reference/acceptance.md)。文档中的目标要求不代表已有脚本自动检查。
+
 ---
 
 ## 2. 门禁拓扑
@@ -50,7 +52,7 @@ scene_probe_runner.py
 └── scene_probes/constellation_probe.tscn/.gd（--scene 启动，执行期复制到工程根）
 
 frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中）
-└── Godot --export-pack → 最小空工程挂载 PCK → FileAccess 逐条判定
+└── Godot --export-pack → 最小空工程挂载 PCK → FileAccess / remap / import / ResourceLoader.exists 判定路径闭包（不等于实际加载）
 ```
 
 说明：

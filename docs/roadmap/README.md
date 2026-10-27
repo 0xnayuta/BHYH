@@ -9,12 +9,12 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 14 数据契约与 AtlasMetadata typed accessor**：当前候选详细规划；Phase 15/16 启动条件 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：当前候选批次、验证与出口；后续 Phase 15~17 只在 roadmap 维护 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 展示层重构已全部完成并归档；Phase 13 已收口并归档；Phase 14 已完成规划、未启动。启动任何批次前须由用户明确确认。
+当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 修订规划、未实现。后续候选覆盖应用编排/运行资源、档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。实现启动另行确认，本轮只修文档。
 
 ## 2. 边界
 
@@ -22,6 +22,7 @@
 - `current-iteration.md` 只承担当前候选阶段、恢复条件与实施顺序；
 - 路线图不复制当前状态数字，也不复制批次内任务清单；
 - 当前版本、规模与门禁结果以 [`../reference/status.md`](../reference/status.md) 为准；
+- 架构方向见 [`总体目标契约`](../standards/target_architecture_contract.md)，视觉契约只是其中子系统；目标、现状与验收事实不能混写；
 - 已完成阶段的资料按归档规则进入 [`../archive/`](../archive/README.md)；
 - 新的当前迭代文档在本目录新增，并同步更新本页与 [`../README.md`](../README.md)。
 

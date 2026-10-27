@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 14 规划完成，未启动）
+> 最后更新：2026-10-27（总体目标架构契约升级与 Phase 14~17 规划修订；未启动运行时重构）
 
 ---
 
@@ -159,6 +159,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13 收口 | `check_all --godot-bin` **8/8 PASS**；`health_check` **0/0/0**；L2：`level_1` **PASS**、`coop_probe_runner` **16/16**、场景探针 **4/4**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s）；`runtime_frames_audit` **12/12**；发布依赖自检 **4,100 条**；PCK 闭包 **4,100/4,100 可达**（2,738,628,976 字节） | Phase 13 完成并归档，见 [`archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)；剩余 3 个非怪物例外冻结；Phase 14 已规划、未启动 |
 | 2026-10-27 Windows release 基线验收 | 官方 4.7.2 Windows 模板安装后导出 **PASS**：exe + PCK；主场景与 `level_1` 验证构建启动；Vulkan 1.4.315 / Forward Mobile / AMD Radeon RX 6750 XT；`level_1` **150 FPS**（引擎上限 150）；启动至首个可测帧代理 **3.22s**；专用 GPU 内存 **713,916,416 B**、共享 **103,546,880 B**；正常关窗日志干净 | 关卡级 release 验证使用临时主场景后恢复；`--quit-after` 强制退出会产生 RID/Texture 清理警告。峰值 VRAM、战斗负载与跨平台仍未验证 |
 | 2026-10-27 Phase 14 规划 | 无代码变更；完成 AtlasMetadata 6 个直接消费者、四种 schema 形态与迁移分批规划；Phase 15/16 仅登记启动条件 | 详见 [`roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1；未启动实现，门禁与 release 基线不变 |
+| 2026-10-27 总体目标架构修订 | 仅文档：目标扩展为应用/会话、战斗/关卡、成长/数据/存档、UI/输入、资源/平台的所有权与生命周期；新增 ADR-021。文档相对链接与锚点检查通过；本轮修改均为 Markdown，未修改生产代码、归档或机器报告 | Phase 14 为 AtlasMetadata 类型试点；Phase 15 应用编排/运行资源、Phase 16 档案会话/持久化/槽位、Phase 17 玩法/表现均为未实现候选，替代此前目录搬迁规划。既有引擎/release 结果未重验；全 docs 行尾扫描发现的 CRLF 均为既有 reports 产物，本轮修改无 CRLF |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
@@ -169,7 +170,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 1. 当前仓库已建立本地 Git 提交历史；尚未推送远端，工作区由本地完整备份保障。
 2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_liu_sha_frames.py`、`convert_monster_action_views.py`、`convert_numbered_frames.py` 与 `convert_sheet_frames.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
-4. 13 个 Autoload、`global.gd` 大体量全局状态、字典/JSON 数据与类型分层目录按遗留结构保留；新增代码不得继续扩张。
+4. 当前 Autoload、Global 与档案/双人视图交换仍有遗留耦合；总体契约是目标，不表示已抽取服务或消除交换。类型顶层继续保留，功能在内部聚合，不把目录布局本身列作必须清零的债务。
 5. 高并发全量回归存在偶发的 Godot 启动瞬态（12 并发实测 `level_lxdy1` 1 次，重试通过）；`--jobs 4` 为稳定排障口径。进程复用（同进程多关）已验证但未采用：加载屏/资源清理抵消启动节省，5 关/组实测更慢。
 6. 按项目原则不做向前兼容：旧 `user://` 存档目录、旧任务键与旧配置均不迁移；存档密钥前缀已修正为 `zmxybhyh`。
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
@@ -178,3 +179,4 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；发布闭包已扩展到 4,100 条（FrameSequence 与关卡预载清单合并）并实测可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**当前 Windows 主机已验证**：release exe 启动、`level_1` 运行、150 FPS、启动至首个可测帧代理 3.22s、专用 GPU 内存约 714 MB；峰值 VRAM、战斗负载、release 失败语义与跨平台仍未验证。`--quit-after` 强制退出会产生 RID/Texture 清理警告，正常关窗日志干净；该预设不是发布裁剪策略。
 11. FrameSequence 已完成 `asset_id` 与实例播放策略分离；不再保留 FPS/loop/hold/prefetch 复合 key，也无双 key 兼容层。旧版生成的哈希命名文件已由转换器清理。
 12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。
+13. AtlasMetadata 当前仍返回共享字典，空路径直接返回空字典；强类型访问、完整边界校验与旧入口删除属于 Phase 14 待实现范围，不因总体目标文档升级宣称完成。

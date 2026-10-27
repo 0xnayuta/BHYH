@@ -130,28 +130,28 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 | Atlas manifest | 构建期由 `scripts/convert_atlas_metadata.py` 生成 `metadata.tres`；运行时只读 `AtlasMetadata` |
 | SpriteFrames | 遵循 `docs/standards/spriteframes_generation_policy.md`；FPS、循环命名、speed 语义统一 |
 | Spine | 先安装匹配的 GDExtension，再恢复源文件并重新导入；不复制旧导入缓存 |
-| UID / `.import` | 新增资源必须带正确 `.import` 与唯一 UID；由 Godot 重新生成导入缓存 |
-| 命名 | 遵循 `docs/standards/naming_standard.md`；白名单只减不增 |
-| 数据 | 新结构化数据优先 `Resource` + `.tres`；不继续扩大 `global.gd` 与裸字典 |
+| UID / `.import` | 外部源素材维护导入配置；原生 `.tscn/.tres` 使用资源头 UID，脚本按机制维护 `.uid`；不复制缓存或伪造 `.import` |
+| 命名 | 遵循 `docs/standards/naming_standard.md`，保留类型顶层与精确冻结例外；按实际收益迁移路径 |
+| 数据 | 静态定义优先 Resource；会话/槽位状态与 JSON 持久化分离，不继续扩大 Global 与裸字典 |
 
-### 5.1 视觉资产架构下的高版本回植检查表
+### 5.1 总体目标架构下的高版本回植检查表
 
 > 适用：7.0 及更高内容版本向当前治理工程回植。目标契约见
 > [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)，
 > 当前实现见 [`../reference/architecture.md`](../reference/architecture.md)。
 
-1. **版本与 schema**：确认目标版本的视觉资产格式、Spine 版本、动画命名与当前版本差异；schema 变化由专用适配器处理，不建立万能转换器。
-2. **资产身份**：建立目标版本 `asset_id` / UID / 路径映射；禁止复用当前版本 UID，路径迁移统一走 `scripts/rename_path.py`。
-3. **构建转换**：新增/变化资产必须先经构建期转换器（AtlasMetadata、MonsterFrames、FrameSequence、编号帧、动作视图等）；所有 `--check` 必须覆盖 schema、路径、UID、闭包与确定性。
-4. **Catalog 与清单**：重新生成 `level_preload_catalog.tres`、`level_preload_export_dependencies.json`、FrameSequence Catalog 与两份发布依赖清单；PCK 闭包探针必须通过。
-5. **运行时接入**：消费者只加载明确资源；禁止新增运行时目录扫描、编号探测、`SpriteFrames.new()` 重建、空占位或双加载回退。
-6. **旧路径与别名**：纹理别名表已删除，旧路径不再静默兼容；回植时直接迁移数据/代码到规范路径，不重新建立无消费者别名表。
-7. **动作与后端**：新动作进入 `monster_action_maps.json` 或动作视图；新视觉后端/Spine 版本必须新增 ADR 并单独验收；缺失动画显式失败。
-8. **Spine 与导入**：每个 `.atlas` / `.spine-json` 必须有 `.import`、导入缓存与 `loaded=true`；不假定 `--import` 会自动为原始 Spine 源生成 `.import`。
-9. **验证**：`check_all`、`health_check`、角色/UI 交互探针、全量回归、L2、PCK 闭包；角色技能资源需单独探针覆盖。
-10. **版本与文档**：素材版本标签与内容版本一一对应；更新 `status.md`、`roadmap.md`、`architecture.md`；目标契约只维护目标，不写版本台账。
+1. **职责与依赖**：按目标契约 §2~§4 确认新增能力的拥有者、作用域和生产调用面；不把目标版本的全局依赖、场景切换旁路或深层节点路径直接复制进当前工程。
+2. **会话与双人**：逐项核对个体/共享账本、攻击来源、输入与面板操作者。触及 2P 视图时联动检查保存快照互斥，不能只改 UI 或 LocalCoop。
+3. **持久化**：维持当前加密 JSON、稳定密钥、原子写、备份与有限幂等补全；不可读档明确失败，不建立跨版本号迁移链或擅自改为 `.tres` 存档。
+4. **版本与 schema**：分别记录业务定义/传输格式与视觉源格式变化；资源 schema 用范围明确的适配器，业务状态不塞进共享 Resource，不建万能转换器。
+5. **资产身份**：同一内容身份维护稳定 UID；不同资源不得复用 UID。建立目标版本身份/路径映射，不因版本号不同无差别重发 UID；`source/` 改名走 `rename_path.py`。
+6. **构建与清单**：变化资产先经对应转换器；按受影响范围生成关卡/FrameSequence Catalog 与代码侧/素材侧依赖清单，校验内容、schema、UID、闭包与确定性。
+7. **运行时接入**：明确资源与后端；不恢复目录扫描、编号探测、空占位、旧路径别名或失败双加载。程序化内容与机读冻结例外按实际边界处理，不将一切 `SpriteFrames.new()` 一概列作禁令。
+8. **生命周期**：检查冷启动/返回/重战、输入/结算交接、信号/计时/池重置、异步结果与退出回收；清字典不代表完成后台清理。
+9. **Spine 与平台**：核对制作链、运行库、许可证和目标设备；Spine 原始源的导入配置与实际加载须验证，不假定复制旧缓存即可运行。
+10. **验证与文档**：按 `acceptance.md` 的变更矩阵执行 L1、真实生产路径、相关双人/关卡/界面探针与阶段回归；涉及发布则验证实际包与 release。更新 architecture/status/roadmap，目标契约只保留长期规则。
 
-> 视觉资产检查表不替代功能代码的三方合并；玩法、数据与场景仍按本手册 §1~§4 执行。
+本检查表覆盖总体接入边界，不替代 §1~§4 的功能代码三方语义合并。玩法、数值与显示变更单列验收，不与架构治理混写。
 
 ---
 

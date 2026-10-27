@@ -35,17 +35,18 @@
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
+| [`decisions/ADR-021-project-wide-target-architecture.md`](decisions/ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与总体目标选择；保留 ADR-020 视觉子契约，不宣称已实现 |
 | [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 数据契约与 AtlasMetadata typed accessor**：当前候选详细规划；Phase 15/16 启动条件 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：当前候选批次、触发式验收与出口；后续方向只在 roadmap 维护 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
 | [`standards/naming_standard.md`](standards/naming_standard.md) | 全工程命名规范与契约白皮书 |
 | [`standards/godot_design_standard.md`](standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |
-| [`standards/target_architecture_contract.md`](standards/target_architecture_contract.md) | 视觉资产三层架构契约：构建期转换、typed Resource、运行时播放器与迁移边界 |
+| [`standards/target_architecture_contract.md`](standards/target_architecture_contract.md) | **项目总体目标架构**：职责/依赖、应用/会话、战斗/关卡、数据/存档、UI/输入、视觉资源/平台与生命周期 |
 | [`standards/naming_whitelist.md`](standards/naming_whitelist.md) | 命名白名单与机器导出冻结登记 |
 | [`standards/missing_assets_registry.md`](standards/missing_assets_registry.md) | 缺失资产登记与恢复台账 |
 | [`standards/spriteframes_generation_policy.md`](standards/spriteframes_generation_policy.md) | SpriteFrames 生成策略（FPS、循环命名、speed 语义） |
@@ -78,6 +79,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | [`archive/README.md`](archive/README.md) | 归档标准、命名约定、流程与索引 |
 | [`archive/iteration_6_9_patch_backport.md`](archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植的完整范围、实施与验收记录 |
 | [`archive/iteration_12_display_hud.md`](archive/iteration_12_display_hud.md) | Phase 12 画布/相机/HUD 重构与多分辨率验收归档 |
+| [`archive/iteration_13_visual_asset_contract.md`](archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口与发布验证归档；保持历史原貌 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 

@@ -27,9 +27,10 @@
 
 - `docs/`
   - `standards/`：活跃规范，必须遵守；索引见 `standards/README.md`；
+  - `standards/target_architecture_contract.md`：项目总体目标架构；应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台及所有权/生命周期，视觉资产为子契约；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
-  - `roadmap/current-iteration.md`：当前 Phase 14 数据契约与 AtlasMetadata typed accessor 的详细规划；Phase 15/16 启动条件；频繁更新；
+  - `roadmap/current-iteration.md`：当前候选 Phase 14 类型化数据边界（AtlasMetadata 试点）的批次与验收；后续 Phase 15~17 方向统一见 roadmap；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；
@@ -59,9 +60,9 @@
 1. **引擎版本**：Godot **4.7.2**（默认渲染 `mobile`，Web 使用 `forward_plus`）；业务代码使用 GDScript 2.0，优先静态类型（`var level: int`、`-> void`）。
 2. **零错误零警告**：编辑器加载与实机运行日志必须保持 **0 ERROR / 0 WARNING**；重点杜绝 `Resource file not found`、`UID duplicate detected`、未初始化 Autoload 强依赖与资源泄漏。该要求以私有完整工作区（含本地素材）为准；公开 clone 因素材目录被排除而出现缺失资源提示，属于预期，不据此判定失败。
 3. **资产 UID 与导入**：
-   - 新增美术、音频、字体、场景必须具备全局唯一 `uid://`；
-   - 新增文件必须附带正确 `.import`，并通过 `godot --headless --path source --import` 重建缓存；
-   - 禁止裸放未导入资源。
+   - 外部美术、音频、字体维护 `.import` 配置并经引擎导入；`.godot/imported` 是可重建缓存；
+   - 原生 `.tscn/.tres` 使用全局唯一资源头 UID，不伪造 `.import`；脚本/着色器按引擎机制维护伴生 `.uid`；
+   - 新增/重命名资源后重建导入并验证实际加载，不裸放未导入源素材。
 4. **性能守卫**：
    - 禁止在 `_process` / `_physics_process` 中无节制 `load()`、磁盘 IO 或高频字符串拼装；
    - 复杂面板遵循三层守卫：可见性短路 → 脏标记 → 数值/文本节流（10Hz）。
@@ -71,16 +72,17 @@
 
 ## 3. Godot 现代设计规范
 
-> 摘要；完整规范、示例与遗留例外见 [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md)。
+> 摘要；总体职责/所有权见 [`目标架构契约`](docs/standards/target_architecture_contract.md)，具体设计见 [`Godot 规范`](docs/standards/godot_design_standard.md)，命名见下节。
 
 1. **场景组合**：场景视为可复用类，保持单一职责与自包含；外部依赖优先 `@export` 或父上下文注入。
 2. **节点访问**：场景内部优先 `%UniqueName` + `@onready`；新代码禁止跨场景深层 `get_node()` 与 `/root/...` 绝对路径。
 3. **父子通信**：父节点调用子节点公开方法；子节点通过 `signal` 通知父级，不反向控制父级或全局业务。
 4. **数据驱动**：新增结构化静态数据优先自定义 `Resource` + `.tres`；不继续扩大 `global.gd` 与裸字典配置。
-5. **Autoload 边界**：仅用于跨场景、广泛使用的系统；新增 Autoload 必须评审生命周期、依赖与替代方案；现有 13 个按遗留例外保留。
-6. **项目结构**：当前 `Scene/Script/Art` 类型分层为历史结构；新功能在现有顶层目录下按功能子目录聚合，不新建第二套分层。
-7. **项目设置**：输入动作集中定义于 `project.godot`；物理层使用具名层，禁止新增无注释的裸整数掩码。
+5. **Autoload 边界**：跨场景且管理自身信息才评审使用；现有注册为遗留基线，不是数量目标。按职责闭环迁移调用方，删除旧 API，不永久保留兼容 facade。
+6. **项目结构**：保留 `Scene/Script/Art` 类型顶层，内部功能聚合；不新建平行分层，不以全仓搬迁作为现代化目标。
+7. **项目设置**：基础动作在 `project.godot` 定义，`LocalCoop` 集中生成 `p2_*` 为登记例外；物理层具名，禁止无注释裸掩码。
 8. **遗留例外**：规则适用于新增与主动重构代码；现有大型全局状态、字典数据与深层路径不阻塞功能，但不得继续扩张；大规模迁移须单独立项。
+9. **数据与生命周期**：静态定义优先 Resource；实例/槽位状态与 JSON 存档分离。新 UI 显式绑定操作者；存量 2P 视图交换与存档快照互斥，不能局部删除保护。后台任务不得修改活动 SceneTree。
 
 ## 4. 命名规范与契约
 
@@ -89,7 +91,7 @@
 1. **目录**：功能目录一律 `snake_case`（根级 `source/` 除外）；数字 ID 目录仅允许出现在动态拼接白名单域。
 2. **文件**：`.tscn`、`.gd`、资源文件统一 `snake_case`；`class_name` 使用 `PascalCase`。
 3. **场景树节点**：100% `PascalCase`；`get_node()` / `$` 路径与真实节点名逐字一致，严禁反向污染为 `snake_case`。
-4. **代码标识符**：函数/变量 `snake_case`；常量/枚举 `UPPER_SNAKE_CASE`；信号 `snake_case`；`class_name` `PascalCase`。
+4. **代码标识符**：函数/变量 `snake_case`；枚举名与 `class_name` 为 `PascalCase`；常量/枚举成员 `UPPER_SNAKE_CASE`；信号 `snake_case`。
 5. **数据字典键**：严禁散落裸中文字符串键，统一通过 `DataKeys.gd` 常量访问。
 6. **机器导出白名单**：`DefineSprite_*`、`symbolClass`、`*.sprites/`、`*-assets` 与 `addons/` 不擅自改名。
 7. **命名白名单**：[`docs/standards/naming_whitelist.md`](docs/standards/naming_whitelist.md)，只减不增；新增条目必须评审并登记。

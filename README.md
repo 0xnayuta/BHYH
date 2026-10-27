@@ -115,11 +115,11 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 14 数据契约与 AtlasMetadata typed accessor 详细规划 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 14 类型化数据边界（AtlasMetadata 试点）的候选批次与验收 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |
-| [`docs/standards/target_architecture_contract.md`](docs/standards/target_architecture_contract.md) | 视觉资产三层架构契约：构建期转换、typed Resource 与运行时播放器 |
+| [`docs/standards/target_architecture_contract.md`](docs/standards/target_architecture_contract.md) | 项目总体目标架构：应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台与生命周期 |
 | [`docs/standards/naming_whitelist.md`](docs/standards/naming_whitelist.md) | 命名白名单与冻结登记 |
 | [`docs/reports/README.md`](docs/reports/README.md) | 机器报告目录（按需生成） |
 | [`docs/archive/README.md`](docs/archive/README.md) | 长期参考文档归档规则与索引 |
@@ -130,9 +130,10 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 
 1. **零错误零警告**：编辑器加载与实机运行日志必须保持 0 ERROR / 0 WARNING。
 2. **单一活跃工程**：所有业务改动仅进入 `source/`；`addons/` 仅在插件维护任务中修改。
-3. **资产规范**：新增资源必须带 `.import`、全局唯一 UID，并符合 `docs/standards/` 的命名规则。
+3. **资产规范**：外部源素材维护 `.import`；原生 `.tscn/.tres` 使用资源头 UID，脚本按机制维护 `.uid`，不伪造 `.import`；命名遵守 `docs/standards/`。
 4. **路径迁移唯一入口**：`source/` 内的文件/目录重命名必须使用 `scripts/rename_path.py`。
 5. **门禁先行**：提交前至少通过静态门禁；涉及运行时改动必须执行 Godot 健康检查或关卡冒烟。
+6. **总体架构**：Godot 原生场景组合、显式依赖与单一状态写入者；保留现有类型顶层，不以全仓搬迁、单例数量或文件行数作为完成标准。
 
 ---
 

@@ -1,10 +1,10 @@
 # BHYH 运行时架构 (Architecture)
 
-> **状态**：活跃参考文档（2026-10-25 重写）。
+> **状态**：活跃参考文档（2026-10-27 对齐总体目标契约）。
 >
 > **定位**：描述 `source/` 当前**实际运行**的工程结构、启动与场景流、对象模型、数据与资源分层、UI/输入边界，以及遗留结构与现代化模块的分界。
 >
-> **不在本文范围**：具体编码规范以 [`../standards/`](../standards/README.md) 为准；验收命令与通过判据见 [`acceptance.md`](acceptance.md)；版本、规模与历史验证结果以 [`status.md`](status.md) 为单一事实源。
+> **不在本文范围**：总体目标与跨模块不变量见 [`项目总体目标架构契约`](../standards/target_architecture_contract.md)；详细设计与命名见 [`../standards/`](../standards/README.md)；验收命令见 [`acceptance.md`](acceptance.md)；验证事实见 [`status.md`](status.md)。
 >
 > **事实口径**：本文按代码与工程配置取证，不把规划目标写成现状。标注「目标」或「未落地」的条目尚未在代码中实现。
 
@@ -48,14 +48,15 @@ BHYH/
 
 ```mermaid
 flowchart TD
-    P["表现层<br/>Scene/、HUD、面板、特效"] --> O["会话与编排层<br/>Global、LocalCoop、MemoryClass"]
-    O --> D["领域层<br/>BaseHero、BaseMonster、BaseLevel、BaseMagicWeapon"]
-    D --> S["状态层<br/>PlayerData、RoleProp、MainSet、DataKeys"]
-    S --> R["资源层<br/>SpriteFrames、AtlasMetadata、Spine、缓存/池"]
-    R --> E["引擎与平台<br/>Godot 4.7.2、Spine GDExtension、文件系统"]
+    O["Global / LocalCoop 等运行编排"] --> L["加载页与 BaseLevel 关卡上下文"]
+    L --> P["角色 怪物 HUD 面板与输入"]
+    P --> S["槽位路由 / PlayerData / RoleProp"]
+    O --> I["MemoryClass 存档与 Global 缓存/池"]
+    L --> R["Catalog / SpriteFrames / FrameSequence / Spine"]
+    I --> E["Godot 文件系统 后台线程与扩展库"]
 ```
 
-这是**运行时职责分层**，不是目录分层。当前目录仍按 `Scene/`、`Script/`、`Art/` 类型划分；新功能在同一顶层目录下按功能子目录聚合。
+这是当前主要运行依赖的简图，不是严格分层：`Global`、档案、UI 与双人会话仍有交叉依赖。目标依赖方向见总体契约 §2。当前目录保留类型顶层，新功能在内部使用功能子目录；不以全仓目录搬迁为目标。
 
 ---
 
@@ -143,7 +144,7 @@ flowchart TD
 - Android 首启完整性校验（仅 Android 且存在平台单例时）；
 - 构建预载清单：目标场景、角色/宠物/剑阵/法宝、首波怪物、必要背景与音效；关卡怪物与弹体场景来自构建期 `LevelPreloadCatalog`；
 - 线程化预载与分阶段预热：角色运行时清单 → 角色专属特效 → 剑阵 → 法宝 → 战斗命中资源 → 宠物 → 关卡怪物；
-- 覆盖式切换：先实例化新场景并挂到根节点，等待就绪，再释放旧场景，避免加载黑屏；
+- 覆盖式切换：先挂入新场景并设为 current_scene，等待实际绘制后揭示 HUD，再释放旧场景；冷启动与后续切换复用同一加载页，不只是一个独立进度界面；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。
 
 **遗留旁路**：`Script/level/hdzm.gd` 仍直接调用 `get_tree().change_scene_to_file(...)`，绕过缓存与清理；新代码不得再走旁路。
@@ -272,6 +273,7 @@ classDiagram
 - `MemoryClass.load_game`：读取加密档 → 取 `.bak` 备份 → 合并到 `player_data` → 执行 `ensure_*` / 有限的数据规范化与退役清理 → 载入双人档案；
 - `safe_write_archive`：写入 `.tmp` → 读取校验 → 备份旧档到 `.bak` → 原子替换；
 - 后台保存使用线程队列，退出前 `flush_pending_saves`；
+- `_prepare_player_save_data()` 先 `LocalCoop.suspend_player_view()` 恢复 1P 主视图，再生成快照并写入 2P profile；此前有交换时最后恢复视图。不能在 2P 视图激活时无保护地直接序列化 `PlayerData.player_data`。
 - 稳定密钥保存在 `user://.save_key`，兼容读取会依次尝试稳定密钥与历史密钥；
 - **不建立按版本号递增的通用迁移链**：旧 `user://` 目录、旧任务键与旧配置不迁移；缺失的新字段用默认值补全，非法/不可读档明确失败，不回退到“猜测结构”；
 - `load_game` 中允许存在**有限、幂等**的字段规范化/退役清理（例如道具存储迁移、已退役装备清理），但它们不是通用版本迁移框架，新增迁移必须评估幂等性与失败语义。
@@ -287,7 +289,7 @@ classDiagram
 - 存档格式：`player_data["本地双人"] = {版本, 启用, 2P: profile}`；
 - 共享项：装备/道具/消耗品/宠物背包、被动技能、主线剑阵、灵魂、炼体、万灵图录；
 - 归属解析：meta → 祖先 `coop_slot` → `owner_hero()` 反射 → 脚本路径前缀 → 默认 1；
-- 面板：2P 打开背包/技能/宠物/法宝/坐骑时，临时交换 1P/2P 数据视图，关闭后恢复；
+- 面板：2P 打开背包/技能/宠物/法宝/坐骑时，`resume_player_view()` 直接替换 `PlayerData.player_data`、`RoleProp` 属性与 `Global.get_player`；关闭时 `suspend_player_view()` 恢复。这是有保存互斥要求的遗留全局视图交换，不是已经实现的显式依赖注入；
 - 死亡判定：双人模式下只有全部玩家死亡才进入 `defeat`。
 
 **新代码约束**：不得直接假定 `/root/PlayerData` 或 `/root/RoleProp` 是当前操作者；使用 `BaseObject` / `BaseRole` 的槽位感知属性，或显式调用 `LocalCoop.data_for` / `props_for` / `input_for`。
@@ -296,7 +298,7 @@ classDiagram
 
 ## 6. 资源层与视觉资产契约
 
-> 完整目标架构、默认选型与迁移边界见 [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)。本节只记录当前运行时架构与已落地状态。
+> 视觉选型、三层资源与生命周期子契约见 [`总体目标契约 §7`](../standards/target_architecture_contract.md#7-资源与视觉资产子契约)；应用、档案、战斗与 UI 目标分别在该文档其它章节。本节只描述实际实现。
 
 ### 6.1 三层契约
 
@@ -331,7 +333,7 @@ classDiagram
 |:---|:---|
 | 静态图像/UI | 直接 `Texture2D`，无需 SpriteFrames |
 | 骨骼动画 | 保留 Spine，不转换 |
-| 经实测超大、频繁复用的帧序列 | 使用 `FrameSequence` + 流式播放器，并记录显存/加载依据 |
+| 有明确按需驻留需求的帧序列 | 使用 `FrameSequence` + 流式播放器，依据目标平台驻留、并发、首帧与加载峰值，不要求高频复用 |
 | 舞台/关卡背景大图 | 直接纹理或 Streaming，不强制 SpriteFrames |
 
 **不允许的“统一”**：
@@ -359,49 +361,14 @@ classDiagram
 - `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
 - `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合、怪物弹体场景、别名场景覆盖、动态纹理文件与额外场景由构建期生成；加载页不在运行时解析 `.gd` / `.tscn` 源文本，也不再扫描动态纹理目录或做 ID→ID 映射。
 
-仍然存在（遗留）：
+仍然存在的边界：
 
-- 13-2B 已完成 54 个怪物脚本的消费者切换；13-2C 又完成诛仙剑阵、青莲、青龙剑、太极八卦、八仙法宝与角色特效。运行时建帧仍有 **12** 个文件（怪物 **9** 个，其余 3 个非怪物），由
-  `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
-  守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
-  怪物域已评审保留：
-  - 动态配置：`east_continent_monster`（关卡配置 merge，仅剩标准动作重命名）；
-  - 几何/图集裁剪：`three_prince_boss`、`eight_immortals_boss`、`weiyang_palace_boss` 符号层、`pet_tiger_boss_base`；
-  - 单序列/子集：`nanhai_projectile`、`monster_130`/`monster_212`/`monster_215`（`play` 子集 + 逐帧 duration）；
-  - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
-  - 资源缺失回退：`three_prince_bullet`；
-  非怪物 **3** 个作为已冻结例外（宠物 1、关卡 1、工具 1），不纳入 13-2B 怪物域：
-  - `pet_neat_bullet`：`pet_neat_4_bullet_3` 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本，保留；
-  - `lyfb_awaken_effect`：按效果数据 `frame_rects` 做 `AtlasTexture` 裁剪；
-  - `ne_zha_yin_yang_effect`：图集裁剪/连续帧组合，区域由剑型与特效参数决定；
-  - `level_59`：固定 `STONE_TEXTURES` 数组建帧，无路径扫描或逐帧 IO；
-  - `user_key`：调试工具 UI 的固定图标序列，不进入游戏运行路径；
-  - 13-2C-1 已完成：`main_sword_array_weapon` 删除标准帧回退、Atlas 流式回退与页面加载器；`qing_lian` 三组编号序列已迁移为构建期 `.tres`。
-  - 13-2C-2 已完成：`qlsword` 与 `taiji_bagua` 模型 sheet 由 `convert_sheet_frames.py` 生成；太极 22 帧效果由编号帧转换器生成。
-  - 13-2C-3 已完成：`eight_immortal_magic_weapon` 的 8 个场景改为引用模型/效果资源，删除路径扫描与运行时建帧。
-  - 角色特效已收口：`lyfb_awaken_effect` 16 帧兼容特效与 `ne_zha_yin_yang_effect` 阴阳剑/光环/Launch 均改为构建期资源；剩余 `pet_neat_bullet`、`level_59`、`user_key` 为冻结例外，理由见 `archive/iteration_13_visual_asset_contract.md` §3.1。
+- `AtlasMetadata.data` 为共享 `Dictionary`；`AtlasMetadataStore.data_for()` 缓存并返回该字典，而不是类型化只读接口。缺失/类型/schema 错误会报错返回空字典；空路径目前直接返回空字典，不能宣称所有失败均已明确拒绝。
+- `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧：包含动态动作映射、图集几何/子序列、固定数组、调试图标以及已登记历史占位/回退。清单是实际范围来源，本文不复制条目计数。
+- `pet_neat_bullet`、`level_59`、`user_key` 是登记的非怪物边界；法宝与 Lyfb/哪吒特效的 Phase 13 迁移已完成，不再列为待建帧迁移。
+- allowlist 中的历史占位/缺失回退并不满足新增代码的失败语义，不能据此扩张；恢复资源或迁移相应职责时移除登记并重新验收。
+- 具体迁移经过保留在 [Phase 13 归档](../archive/iteration_13_visual_asset_contract.md)，当前实现不重复保存逐批台账。
 
-### 6.5 13-2B 冻结裁定（怪物域 9 个）
-
-判定标准：① 是否仍存在逐帧 PNG 路径拼接/扫描或磁盘 IO；② 帧是否已来自构建期资源；③ 是否依赖运行时不可静态化的配置/裁剪数据；④ 迁移收益是否大于双源漂移风险。9 个怪物文件的裁定结果：
-
-| 文件 | 保留原因 | 风险/收益判断 |
-|:---|:---|:---|
-| `east_continent_monster` | 关卡 `get_level_monster_config` 可 merge，且存在 `Fly_wait/Fly` 动态键；帧已来自构建期资源，仅剩动作名重命名 | 构建期无法穷举关卡覆盖，双源漂移风险高 |
-| `eight_immortals_boss` | 运行时 `AtlasTexture` 裁剪（monster166/168 头像） | 裁剪区域由运行时数据决定，非路径 IO |
-| `monster_bullet` | 标准帧缺失时的 `null` 计时帧占位 | 无逐帧 IO；删除会让缺失资源时无时钟 |
-| `nanhai_projectile` | 同一模型多动作均需 `play` 名，单一资源无法同时承载 | 单序列裁剪一行，迁移需改全部弹体配置 |
-| `pet_tiger_boss_base` | 图集行列裁剪（虎宠 stage/action） | 裁剪行列由 stage 数据决定 |
-| `tao_wu_boss` | 标准资源异常时单图兜底占位 | 不拼路径；保留防崩溃，不扩大 |
-| `three_prince_boss` | 运行时 `AtlasTexture` 裁剪（部件/武器图层） | 裁剪区域由运行时数据决定 |
-| `three_prince_bullet` | 有资源配置走资源，缺失才逐帧回退 | 弹体配置并非全部有图集，回退是最后一道 |
-| `weiyang_palace_boss` | 符号层单序列裁剪，播放名与源序列不同 | 裁剪只影响符号层，不影响主体 |
-
-结论：9 个文件均**不再包含逐帧 PNG 路径扫描或高频 IO**，帧已来自构建期资源；继续迁移需要把运行时裁剪/关卡覆盖数据复制到构建期，收益低于维护双源的成本。入口由 `runtime_frames_audit.py` 与 allowlist 冻结，新增扩张立即失败。
-  剩余法宝已评审保留：`main_sword_array_weapon`（图集 metadata 建帧）、
-  `eight_immortal_magic_weapon`/`qlsword`/`taiji_bagua`（图集裁剪）、
-  `qing_lian`（调用方传入纹理数组）；
-- `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界。
 
 ### 6.4 构建期转换器
 
@@ -453,37 +420,24 @@ classDiagram
 **新代码约束**：
 
 - 不在 `_process` / `_physics_process` 中执行磁盘 IO、运行时 JSON 解析或高频 `load()`；
-- 有限帧动画不得在首次释放技能时现场构建；
+- 固定视觉资产遵守构建期资源规则；程序化几何与机读登记例外不被“有限帧”一词一概禁止；
 - 资源预热必须有明确的所有者与释放路径；
 - 角色、怪物、特效的资源选择由 Manifest、Catalog 或 typed Resource 驱动。
 
-### 6.6 资源迁移状态
+### 6.6 发布依赖与待收敛边界
 
-已完成：
+- 角色资源清单、AtlasMetadata、构建帧、FrameSequence、关卡预载 Catalog 已落地；具体范围由生成器与 `--check` 决定，不在本文维护数量。
+- `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物及 `scripts/monster_dynamic_paths.json` 派生，随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
+- 怪物别名与动态来源已在构建期展开为 Catalog；运行时不再解析源码或扫描纹理目录。旧纹理别名表及其解析入口已移除，不兼容旧路径。
+- PCK 闭包与 Windows release 的已执行结果见 `status.md`；包内可达不等于目标设备加载与峰值性能通过。
 
-- 角色 1~7 的运行资源清单与静态 `RoleRuntimeCatalog`；
-- 哪吒装备层构建期 `SpriteFrames`；
-- BiLuoTian cast/hit 与 LeiTingJieZhen formation/lightning 构建期 `SpriteFrames`；
-- `AtlasMetadata` 构建期转换与运行时只读加载；
-- 角色 4/5 重型帧的构建期化与预热清单收敛；
-- `FrameSequence`、Catalog、Store 与转换器已落地，序列数量以构建检查输出为准；消费者只注入 `sequence`，旧数组和目录扫描已删除；
-- 身份模型 v2：序列按 `asset_id` 登记，播放策略改为实例覆盖；转换器按 `asset_id` 生成可读文件名，并清理自己拥有的陈旧输出；
-- 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`；
-- 关卡发布依赖清单 `source/Script/data/level_preload_export_dependencies.json` 与资产侧 `source/Art/frame_sequences/frame_sequence_export_dependencies.json` 由 `frame_sequence_pack_probe.py` 合并验证；PCK 内 **4,100 条**依赖全部可达；
-- 发布依赖清单按来源归属：`Art/frame_sequences/frame_sequence_export_dependencies.json` 由 FrameSequence Catalog 与图集页派生，属于素材侧构建产物，随私人素材仓版本化；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物脚本与 `scripts/monster_dynamic_paths.json` 派生，属于代码侧构建产物，随公共仓版本化。两者都不在运行时加载，只在发布前 PCK 闭包验证时读取。
-- 动态怪物纹理/场景表与 `MONSTER_SCENE_ALIASES` 已从 `global.gd` 迁出：别名与动态来源由 `scripts/monster_dynamic_paths.json` 在构建期展开进 Catalog 与依赖清单，运行时只读 Catalog。
-- 纹理别名表已于 2026-10-27 清空并删除空壳：2,313 条旧映射依次删除 932 条悬空、86 条静态误报、1,021 条无命中 Monster 与 274 条无命中 UI/法宝/坐骑条目；`duplicate_texture_aliases.gd`、`TEXTURE_ALIASES` preload、`Global._resolve_texture_path()` 与分类脚本均不再存在。纹理路径直接加载，旧路径不再兼容。
-
-待迁移：
-
-| 项目 | 目标 |
+| 当前边界 | 收敛方向（未实现） |
 |:---|:---|
-| 魔法武器/角色特效运行时建帧 | 13-2C 与角色特效收口已完成；运行时建帧固定为宠物/关卡/工具 3 个登记例外 |
-| 非怪物宠物/关卡/工具运行时建帧 | `pet_neat_bullet`、`level_59`、`user_key` 为冻结例外；新增运行时建帧由 allowlist 阻断 |
-| `AtlasMetadata.data` 无类型字典 | **Phase 14**：typed accessor 或 typed 子资源，见 `roadmap/current-iteration.md` §1 |
-| Spine 平台库 | 独立项目：补齐目标平台库并做平台验收，见 `roadmap.md` §3.2 |
+| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 有限试点](../roadmap/current-iteration.md)：按真实消费者类型化，删除旧公共入口 |
+| Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
+| 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
+| Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
 
-迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C 全部法宝与角色特效构建期化已完成 → 剩余 3 个非怪物例外冻结 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
 
 ---
 
@@ -563,13 +517,14 @@ classDiagram
 
 | 项目 | 现状 | 约束 |
 |:---|:---|:---|
-| 13 个 Autoload、`Global` 上帝对象 | 大型遗留单例，承担场景、UI、缓存、池、预载与业务判定 | 新功能不得继续堆积；拆分为独立立项 |
+| 13 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化 |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
-| 运行时 `SpriteFrames.new()` | 多个脚本仍存在运行时建帧 | 有限帧改为构建期资源；超大序列走目标流式方案 |
+| 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
 | `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 逐步提供 typed accessor，不扩大无类型面 |
+| 2P 面板全局视图交换 | 改写 `PlayerData`/`RoleProp`，存档前必须恢复 1P | 目标为显式槽位上下文；与快照/共享账本联动，不局部删除保护 |
 | 深层 `get_node()` / 绝对路径 | 存量场景与脚本 | 新代码禁止；重构时同步清理 |
 
 > 已登记在 [`missing_assets_registry.md`](../standards/missing_assets_registry.md) 的缺失资产回退（文本回退、atlas manifest 回退）属于**历史遗留例外**，不是新增回退的依据；资源恢复后必须移除对应回退并重新验收。
@@ -605,13 +560,13 @@ classDiagram
 
 ## 10. 架构变更流程
 
-1. 先修改本文与相关 `docs/standards/`，明确适用范围、约束强度与退出计划；
-2. 架构级、跨模块、长期有效的决定写入 [`../decisions/`](../decisions/README.md)；已接受结论不直接改写，变更通过新 ADR 记录；
-3. 再修改代码、场景与资源；
-4. 运行 [`acceptance.md`](acceptance.md) 中对应档位的门禁；
-5. 更新 [`status.md`](status.md) 的验证记录与已知边界；
-6. 禁止用新的兼容分支、回退分支或双加载路径绕过契约；
-7. 大规模迁移必须单独立项，不混入普通功能提交。
+1. 先修改总体目标契约、相关详细规范与必要 ADR；明确适用范围、不变量、调用面与退出计划。
+2. 具体阶段/批次进入 roadmap/current-iteration；不把未实现目标写成本文现状。
+3. 按职责切片实施，迁移全部受影响生产调用方，删除旧实现与过时入口；正式职责仍正确的唯一入口可保留名称。
+4. 执行 `acceptance.md` 对应门禁与生产行为验证，再更新本文的实际实现。
+5. 在 `status.md` 记录带日期的验证及未验证边界；不以目标修订刷新运行时验收。
+6. 禁止兼容/失败回退/双加载路径，回滚通过版本控制。
+7. 保留类型顶层；路径迁移按收益与依赖单独评估，不混入无关玩法。
 
 ---
 
@@ -622,6 +577,7 @@ classDiagram
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）
 - [`../audit/README.md`](../audit/README.md)：人工代码质量审计模板与报告
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)：场景、Resource、Autoload 与项目结构规范
+- [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)：项目总体目标、所有权、生命周期与各子系统契约
 - [`../standards/naming_standard.md`](../standards/naming_standard.md)：命名与契约白皮书
 - [`../standards/naming_whitelist.md`](../standards/naming_whitelist.md)：机器导出与数字 ID 冻结登记
 - [`../standards/spriteframes_generation_policy.md`](../standards/spriteframes_generation_policy.md)：SpriteFrames 生成策略
