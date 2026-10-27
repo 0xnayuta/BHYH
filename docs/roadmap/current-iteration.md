@@ -259,7 +259,7 @@ return MANIFESTS[role_id]
 
 ### 5.1 目标
 
-把 `duplicate_texture_aliases.gd` 从 2,313 条兼容表收敛为 **0 条**；`TEXTURE_ALIASES.resolve` 只保留在 `Global` 的一个私有解析点，作为未来的登记型入口。
+把 `duplicate_texture_aliases.gd` 从 2,313 条兼容表收敛为 **0 条并删除空壳**；`TEXTURE_ALIASES`、`Global._resolve_texture_path()` 与分类门禁均不再保留。
 
 ### 5.2 最终结果
 
@@ -273,7 +273,7 @@ return MANIFESTS[role_id]
 | 当前别名 | **0（已清空）** |
 | 目标缺失 | **0** |
 | 运行时命中 | **0**（全量回归 128 关 + L2 + UI 交互探针） |
-| 解析入口 | `Global._resolve_texture_path()` 唯一调用 `TEXTURE_ALIASES.resolve` |
+| 解析入口 | **无**；别名表、preload、解析函数与分类脚本均已删除 |
 
 ### 5.3 执行记录
 
@@ -286,7 +286,8 @@ return MANIFESTS[role_id]
    - 全量回归 + L2 + UI 首屏/交互探针均 **0 命中**；
    - 删除 1,021 条 Monster 无命中条目与 274 条 UI/法宝/坐骑无命中条目；
    - 覆盖：装备图鉴分类、背包装备/道具/宠物页、角色预览、法宝详情预览、八仙法宝场景、坐骑页签与 6 个坐骑、角色选择 1~7、万灵图录 9 类、诛仙剑页面刷新、哪吒/八仙/三太子选择探针；
-6. **后续代码修复**：剩余角色特效/法宝运行时建帧按域评估，不再从别名层恢复。
+6. **空壳清理（2026-10-27）**：删除 `duplicate_texture_aliases.gd`/`.uid`、`Global.TEXTURE_ALIASES` preload、`_resolve_texture_path()`、debug 命中统计与 `classify_texture_aliases.py`；纹理路径不再经过别名层。
+7. **后续代码修复**：剩余角色特效/法宝运行时建帧按域评估。
 
 ### 5.3a 删除明细
 
@@ -297,13 +298,13 @@ return MANIFESTS[role_id]
 | 静态误报删除 | 86 | 仅通用基名命中，无真实消费者 |
 | 无命中 Monster 删除 | 1,021 | 全量回归 0 命中且无静态引用 |
 | 无命中 UI/法宝/坐骑删除 | 274 | UI 交互探针 0 命中且无静态引用 |
-| **当前** | **0** | `ALIASES` 为空，`resolve` 为恒等映射 |
+| **当前** | **0** | 别名表与解析壳已删除 |
 
 ### 5.4 出口标准（已达成）
 
 - 别名表目标缺失数 = **0**（表为空）；
-- `TEXTURE_ALIASES.resolve` 调用点收敛到 **1 处**（`Global._resolve_texture_path`）；
-- `missing_assets_registry.md` 无需新增条目（无强引用缺失项）；
+- 别名表、`TEXTURE_ALIASES` preload、`Global._resolve_texture_path()` 与分类脚本均已删除；
+- 别名层无新增缺失资产；Spine 骨架导入问题已单列到 `status.md` 待处理；
 - 八维门禁 **8/8**、`health_check` **0/0/0**、全量回归 **PASS 128/128 + SKIP 5**、L2 三件套 PASS；
 - `architecture.md`、`acceptance.md` 与 `scripts/README.md` 已同步。
 
@@ -313,8 +314,8 @@ return MANIFESTS[role_id]
 |:---|:---|
 | UI 交互探针仍非全按钮组合 | 已覆盖主要页面与操作；删除前同时满足“0 命中 + 0 静态引用”；新增别名必须重新登记并受门禁约束 |
 | 未来旧版本存档可能使用旧路径 | 旧路径不再静默回退；需要恢复时按 `missing_assets_registry.md` 与 ADR-005 显式处理，不恢复无消费者别名表 |
-| debug 命中统计仅在设置环境变量时启用 | release 无额外文件 IO；统计代码由 `OS.is_debug_build()` 短路 |
-| 别名表变为空后保留解析壳 | 保留一个私有入口供未来登记型需求；真正删除文件与 preload 需单独立项 |
+| 空壳清理后无调试统计 | `duplicate_texture_aliases.gd` 与 debug 命中代码已删除；当前无别名层 |
+| 旧版本路径不再有兼容层 | 旧路径直接失败；需要恢复时按 `missing_assets_registry.md` 与 ADR-005 显式处理 |
 
 ---
 

@@ -1,6 +1,5 @@
 extends Node
 const DataKeys := preload("res://Script/base/data_keys.gd")
-const TEXTURE_ALIASES := preload("res://Script/monster/duplicate_texture_aliases.gd")
 
 signal combo_milestone_reached(milestone: int)
 signal sound_settings_changed
@@ -259,7 +258,6 @@ var _chase_bullet = null
 
 
 func _exit_tree() -> void:
-	TEXTURE_ALIASES.flush_hit_stats()
 	FrameSequenceStore.clear_cache()
 	FrameTextureRequests.shutdown_process()
 
@@ -777,17 +775,12 @@ func _standard_monster_frames_path(monster_id: int) -> String:
 	return model_root.path_join("atlas/swf_png_%d_frames.tres" % resolved_id)
 
 
-func _resolve_texture_path(path: String) -> String:
-	return TEXTURE_ALIASES.resolve(path)
-
-
 func get_cached_texture(path: String) -> Texture2D:
 	var resolved_path := path
 	if path.ends_with("/mp_poision.png"):
 		resolved_path = path.replace("mp_poision.png", "poision.png")
 	if path == "":
 		return null
-	resolved_path = _resolve_texture_path(resolved_path)
 	if not _texture_cache.has(path) or _texture_cache[path] == null:
 		var texture := load(resolved_path) as Texture2D
 		if texture != null:
@@ -809,7 +802,7 @@ func get_zhenfa_icon(zhenfa_name: String) -> Texture2D:
 func get_static_texture(path: String) -> Texture2D:
 	if path.is_empty():
 		return null
-	var resolved_path := _resolve_texture_path(path)
+	var resolved_path := path
 	if not ResourceLoader.exists(resolved_path):
 		return null
 	return ResourceLoader.load(resolved_path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D

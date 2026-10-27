@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 13-4 别名表清空与入口收敛完成）
+> 最后更新：2026-10-27（Phase 13-4 空壳清理与 Spine/wings 探针核实完成）
 
 ---
 
@@ -144,7 +144,10 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 关卡回归优化对比与最终方案 | 56 关：jobs4 **204.8s** → jobs8 **124.7s** → jobs12 **98.1s**；全量：jobs4 **690.0s** → auto（12）**275.7s**；预热+12 **120.5s**（无收益）；5 关/组进程复用 **146.8s**（更慢） | 最终采用单关进程 + auto 并发 12、`--warmup 0`、失败串行重试；进程复用已验证但回滚（每关加载屏/资源清理抵消启动节省）；日常 `--changed-only`，发布全量；`--jobs 4` 保留为稳定排障口径 |
 | 2026-10-27 Phase 13-3 发布依赖闭包 | `convert_level_preload_catalog.py --check` PASS：199 怪物场景 / 24 动态场景 / 8 弹体 / 767 动态纹理；`frame_sequence_pack_probe.py --self-test` **4,100 条**；PCK **2,738,623,739 字节**，**4,100/4,100 可达**（sha256 `f87a631c73db…`；清单迁到公共路径后复跑）；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（273.1s）；`health_check` 713 脚本 **0/0/0**；`level_bxgh` / `level_stz` / `level_64` / `level_65` 冒烟 **0/0** | 新增公共路径 `source/Script/data/level_preload_export_dependencies.json` 与 Catalog 动态字段；删除 `global.gd` 两张动态表、`MONSTER_SCENE_ALIASES` 与追加函数（5419→5241 行，净减 178）；别名与动态来源迁入 `monster_dynamic_paths.json` 构建期展开；PCK 探针合并两份清单；13-3 完成 |
 
-| 2026-10-27 Phase 13-4 别名收敛与入口收敛 | 2,313 → **0**；删除 932 悬空 + 86 静态误报 + 1,021 无命中 Monster + 274 无命中 UI/法宝/坐骑；`ALIASES` 已清空；`TEXTURE_ALIASES.resolve` 仅 `Global._resolve_texture_path()` 一处；debug 命中统计（全量回归 + L2 + UI 交互）**0 命中**；`classify_texture_aliases.py --check` PASS（0 条）；契约门禁 **12/12**；`check_all` **8/8**；`health_check` **0/0/0**；全量回归 **PASS 128/128 + SKIP 5**（302.0s，`level_58` 瞬态重试通过）；L2 三件套 PASS | 入口收敛完成；UI 交互探针覆盖装备图鉴/背包/法宝/八仙法宝/坐骑/角色选择/万灵/诛仙；未修改素材；debug 统计仅在设置 `BHYH_TEXTURE_ALIAS_HITS_DIR` 时启用 |
+| 2026-10-27 Phase 13-4 别名表清理与入口移除 | 2,313 → **0**；删除 932 悬空 + 86 静态误报 + 1,021 无命中 Monster + 274 无命中 UI/法宝/坐骑；删除 `duplicate_texture_aliases.gd`、`TEXTURE_ALIASES` preload、`Global._resolve_texture_path()`、debug 命中统计与 `classify_texture_aliases.py`；契约门禁 **11/11**；`check_all` **8/8**；`health_check` **0/0/0**；全量回归 **PASS 128/128 + SKIP 5**（310.7s，`level_40`/`level_58` 瞬态重试通过）；L2 三件套 PASS | UI 交互探针覆盖装备图鉴/背包/法宝/八仙法宝/坐骑/角色选择/万灵/诛仙；纹理路径直接加载，旧路径不再兼容；未修改素材 |
+
+| 2026-10-27 Spine 骨架导入核实 | 14 个 `.spine-json` 中 **8 个缺 `.import`**：`role_2/bing_yu/510040_attack_hit1`、`role_2/lyfb_awaken/HeroF_5012_skill` 与 gray/red、`role_2/jhsj_awaken/HeroF_6030_skill01_2_1` 与 skill08_1、`role_4/cang_mu_long_yun/HeroF_6009_skill` 与 skill01_2；headless `ResourceLoader.load` 报 `No loader found`；`guanyin_spine` 6 个带 `.import` 的正常加载；`CangMuLongYun` 有帧回退但会记录 ERROR | 与 `missing_assets_registry.md` §2.4 “GDExtension 直接加载源文件”结论冲突；需要恢复 8 个 `.import` 后复验；本轮未修改素材 |
+| 2026-10-27 wings 探针告警核实 | `source/Scene/base/special_affect_slim/wings.tscn` 无代码/场景引用；独立实例化时 `special_affect.gd` 的 `_scale` 未初始化触发告警；实际 `special_affect` 调用契约要求父级先设置 `effect_name/effect_dir/effect_speed/_scale` | 探针装载方式导致，不构成生产缺陷；未修改场景 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
