@@ -204,6 +204,7 @@ flowchart TD
 
 - 外部 PNG/音频等源素材维护 `.import`；`.godot/imported` 是可重建缓存。原生 `.tres/.tscn` 使用资源头 UID，不伪造 `.import`；脚本/着色器按引擎机制维护 `.uid`。
 - UID 身份稳定、全局唯一；路径移动使用专用迁移工具。
+- AtlasMetadata 构建产物按 [ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md) 以 `res://` 路径 + schema 标识作为明确路径身份例外，不要求 `uid://`；这是生成物边界，不扩展到编辑器手工资源。
 - 字符串延迟路径不自动构成导出依赖；生成独立依赖清单，通过显式导出规则或插件打包，不通过强引用全部纹理破坏流式驻留。
 - 构建资源齐全不等于包齐全；发布包须验证路径闭包与实际加载。
 - Spine `.atlas` 不等于 AtlasMetadata；版本、许可证、二进制与目标平台逐项核实。本机编辑器通过不能证明其它平台可交付。

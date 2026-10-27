@@ -3,6 +3,7 @@ class_name AtlasMetadata
 
 ## 构建期由 scripts/convert_atlas_metadata.py 生成。
 ## 运行时只读，禁止在游戏进程中回写。
+## data 仅作为 .tres 序列化存储；业务读取优先使用 AtlasMetadataStore.view_for()。
 const SCHEMA_ID := "atlas_metadata"
 const SCHEMA_VERSION := 1
 

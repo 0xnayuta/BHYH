@@ -406,6 +406,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | UI/HUD/显示 | L1 八维 | 单/双人多分辨率截图；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
 | 关卡/玩法 | L1 八维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
 | 构建期资源管线 | L1 八维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
+| AtlasMetadata View/消费者 | L1 八维 + 定向运行路径 | `view_for` 覆盖受影响运行时资源域；真实消费者正常/错误路径；相关关卡冒烟 | 只编译或只检查单个 API；跳过资源域/消费者 |
 | 应用/场景编排、缓存/池/异步 | L1 八维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
 | 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存 | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源 |
 | 战斗来源/结算边界 | L1 八维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
@@ -469,7 +470,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 ## 13. 关联文档
 
 - [`architecture.md`](architecture.md)：运行时架构、分层与遗留边界
-- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14-1 生产者、schema、消费者与失败矩阵
+- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 生产者、schema、消费者、只读 View 与失败矩阵
 - [`status.md`](status.md)：版本、规模与历史验证结果
 - [`../standards/naming_standard.md`](../standards/naming_standard.md)：命名与契约规范
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)：Godot 设计规范

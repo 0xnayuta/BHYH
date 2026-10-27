@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 生产/消费矩阵调查已完成（2026-10-28），14-2 未启动**。本轮只修改文档，不启动运行时重构。
+> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 矩阵完成，14-2 最小 View + PalaceBossProjectile 试点已完成（2026-10-28），14-3 未启动**。本轮只完成试点迁移，不继续迁移其它消费者。
 > **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。
 > **职责**：本页只展开当前候选 Phase 14；后续 Phase 15~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。不再在本页复制后续阶段任务表。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -31,13 +31,13 @@
 | 现有边界 | 已知事实 | 本阶段取证要求 |
 |:---|:---|:---|
 | `AtlasMetadata` | Resource，`data: Dictionary`；当前无源码直接读 `.data`，均经 Store | 14-1 已核对实际 schema 与字段 |
-| `AtlasMetadataStore` | `data_for` 返回共享字典；缓存；空路径静默返回 `{}` | 14-1 已核对 6 个直接调用与失败路径 |
+| `AtlasMetadataStore` | `data_for` 仍供 5 个消费者使用；`view_for` 已供 `PalaceBossProjectile` 使用，缓存并返回深度校验后的 View | 14-2 已完成 Palace 试点；其余入口仍待 14-3 |
 | 源 schema | 379 个 manifest，8 种顶层形态；运行时只消费 `pages+sequences` 与 `animation+frames` | 不为 `files`/旧 `animations`/数组/索引建运行时模型 |
 | 直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 已逐项记录字段、共享/复制与失败行为 |
 | 构建入口 | `convert_atlas_metadata.py` 379/379 同步；`convert_monster_frames.py` 152 目标/42 跳过 | 构建校验与运行时类型化分开 |
 | Phase 13 已收口路径 | `main_sword_array_weapon` 已删除 Atlas 回退 | 不将其重新列为待迁移消费者 |
 
-14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。以下 14-2~14-4 仍未启动；本页中的类型名称是设计候选，不是现有符号。
+14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。14-2 试点已完成；14-3~14-4 仍未启动。本页中的后续类型名称是设计候选，不是现有符号。
 
 ## 2. 批次 14-1：生产/消费边界与 schema 决策（已完成）
 
@@ -54,7 +54,7 @@
 | 非运行时形态 | `files`、旧 `animations`、顶层数组、索引/其它字典：未发现 Store 读取；4 个剑阵 `animations` 由构建期帧转换器读取 |
 | 共享与复制 | Store 缓存并返回 `AtlasMetadata.data` 同一字典；Mount 复制后加 `_base_path`，其余消费者保存共享引用 |
 | 已发现风险 | 空路径静默返回 `{}`；多个消费者未检查空数据；Palace 弹体在声明路径不可用时退回基类碰撞；schema 校验未覆盖帧元组/geometry/masks/Mount 帧 |
-| 身份 | 生成的 metadata 无资源头 `uid://`；当前以路径引用。14-2 需明确路径身份例外或另批加入确定性 UID |
+| 身份 | 生成的 metadata 无资源头 `uid://`；当前以路径引用。已按 [ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md) 登记路径身份例外，不新增 UID |
 | 惰性配置 | 4 个 `atlas_metadata` 写入方无实际读取链；`nanhai_projectile` 读入成员但未使用；2 个 `ATLAS_METADATA` 常量未使用；不作为类型化消费者 |
 | 构建期边界 | `convert_monster_frames.py`：194 个怪物 metadata 中 152 目标（148 sequences + 4 旧 animations），42 跳过；`convert_frame_sequences.py` 读取 4 个剑阵 manifest 的 `pages/animations` |
 
@@ -63,32 +63,48 @@
 1. 原“四种 schema”假设不适用于实际源数据；不能按四种模型强行统一。
 2. 运行时只需覆盖真实字段：序列帧几何、`geometry`/`masks`、Mount 动画帧与图层；`files`、旧 `animations`、顶层数组不建立运行时类型。
 3. 失败语义必须先于 consumer 迁移：声明路径缺失、类型错误、空序列和空 mask 需要区分；当前静默退化/基类回退不能原样保留。
-4. 共享字典与空路径行为属于 14-2 的边界；此时不删除 `data_for`，也不在 14-1 清理惰性配置。
+4. 14-2 已在 PalaceBossProjectile 处理声明路径失败；共享字典与空路径对其余五个消费者仍是 14-3 的边界；此时不删除 `data_for`，也不在 14-1 清理惰性配置。
 
-**出口核对**：每个直接消费者均有字段与失败路径记录；只构建使用的 schema 已列明；没有新增未调查调用。14-2 可以启动，但需用户确认 API/UID 决策。
+**出口核对**：每个直接消费者均有字段与失败路径记录；只构建使用的 schema 已列明；没有新增未调查调用。14-2 已按此矩阵完成 PalaceBossProjectile 试点。
 
-## 3. 批次 14-2：最小类型入口与校验
+## 3. 批次 14-2：最小 View 与 PalaceBossProjectile 试点（已完成）
 
-**状态**：未启动；依赖 14-1 已完成的矩阵。
+**状态**：完成（2026-10-28）；首个真实消费者已迁移，未继续迁移其它消费者。
 
-- 只为 `pages+sequences` 的真实运行时字段与 `animation+frames` 的 Mount 字段建立入口；`files`、旧 `animations`、顶层数组和索引不建通用运行时模型。
-- accessor 不选择视觉后端、不解析源 manifest、不猜旧路径、不返回可写共享容器；纹理和页共享，实例变更保留在消费者侧。
-- 构建期校验所有源形态；运行时接纳资源时校验一次，缓存已校验结果。除现有浅层检查外，补真实消费字段：序列帧元组/页索引/region、geometry、masks、Mount 帧与图层。
-- 先决定 metadata 的资源身份：以路径身份登记例外，或在独立批次加入确定性 UID；不得在消费者迁移中隐式改变 UID。
-- 复用转换器 `--check` 和 `--self-test`；仅在行为有新增边界时补充相应负向样本，不为机械转发增加测试。
-- 按已调查职责切片同时提交新入口与该切片全部生产调用方，不先发布没有实际消费者的新 API。惰性 `atlas_metadata` 配置不作为消费者，清理须另列并再次扫描。
-- 失败语义：空路径、声明但缺失、schema 错误、合法空 mask 必须区分；不得增加 typed 失败后读字典、基类静默回退或旧路径分支。
+### 3.1 实施记录
 
-**出口**：首个真实消费者能运行；错误资源在 debug/release 都明确拒绝，失败向拥有者传播；资源身份、几何与时序不变。验证不是仅“返回非空”。
+| 项目 | 结果 |
+|:---|:---|
+| View | 新增 `source/Script/atlas/atlas_metadata_view.gd`（`RefCounted`）；校验 `pages+sequences` 的页、序列帧元组/页索引、geometry、masks；提供值查询，不复制帧数据 |
+| Store | 新增 `AtlasMetadataStore.view_for(path)`；路径为空报错，非空路径缺失/类型错误/schema 错误返回 `null`；按路径缓存 View 与失败结果 |
+| 消费者 | `PalaceBossProjectile` 的 masks/geometry 改读 View；非空 metadata 路径无效时 `configure()` 返回 `false`；NorthBossProjectile 的 `source_masks` 覆盖保留为迁移期兼容 |
+| 未迁移 | East、North、Cloud、PalaceFlyingBoss、MountVisual 仍使用 `data_for`；Mount 的 `animation+frames` View 尚未实现 |
+| 身份 | 按 [ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md) 保持 metadata 路径身份，不新增 UID |
+| 范围 | 未修改 `source/Art/`、素材内容、既有 UID、数值/动画时序；未清理惰性 `atlas_metadata` 配置 |
+
+### 3.2 验证
+
+- 临时 GDScript 探针：137 个 `pages+sequences` 运行时资源建立 View，**137/137 PASS**；探针已删除。
+- `level_73`、`level_74`、`level_75` 冒烟 PASS，日志 **0 ERROR / 0 WARNING**。
+- `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。
+- 既有 Atlas 同步 **379/379**、负向自测 **4/4**、怪物帧 **152 目标/42 跳过**不变。
+
+### 3.3 出口核对
+
+- 首个真实消费者运行正常；非空声明路径失败不再静默回退。
+- View 不暴露可写共享容器；序列/mask 值返回原生值类型，不建立逐帧对象。
+- 尚未删除 `data_for`；它是其余五个消费者的迁移期入口，不能成为永久双 API。
+- Mount 视图与剩余消费者属于 14-3，不能以“14-2 试点完成”宣称整个 Phase 14 完成。
 
 ## 4. 批次 14-3：生产消费者闭环迁移
 
-**状态**：未启动；依赖对应类型入口已验证。
+**状态**：未启动。`pages+sequences` 的 View 与 PalaceBossProjectile 已可用；Mount 的 `animation+frames` View 与其余消费者尚未迁移。
 
-1. 按 14-1 的真实依赖一次迁完一个职责切片；配置转发、间接读者、惰性配置与测试夹具一并处理。
-2. 验证 East/Cloud/North/Palace 的序列帧几何与 masks、Mount 的前后图层/region/offset、缺资源行为；不改变素材/数值/时序。
-3. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
-4. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、无生产调用的 `validate_path`/`clear_cache`、失效注释与测试；不保留 deprecated 别名或迁移适配层。
+1. 先为 Mount 增补 `animation+frames` 的最小只读视图，再迁移 MountVisual；随后迁移 East、North、Cloud、PalaceFlyingBoss。
+2. 按 14-1 的真实依赖一次迁完一个职责切片；配置转发、间接读者、惰性配置与测试夹具一并处理。
+3. 验证 East/Cloud/North/Palace 的序列帧几何与 masks、Mount 的前后图层/region/offset、缺资源行为；不改变素材/数值/时序。
+4. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
+5. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、无生产调用的 `validate_path`/`clear_cache`、失效注释与测试；不保留 deprecated 别名或迁移适配层。
 
 **出口**：生产代码只走新正式入口；无外部 `.data` 访问；无双加载/失败回退；需要可变工作数据的消费者不修改共享定义。
 
@@ -115,6 +131,8 @@
 | 影响资源类型/路径/导出 | 实际 PCK 闭包与 release 加载 | 元数据或源文件可达不等于包可加载 |
 
 14-1 的已完成证据：Atlas **379/379** 同步、负向自测 **4/4**、怪物帧 **152 目标/42 跳过**；这些是 2026-10-28 的只读构建检查，不是运行时回归。
+
+14-2 的已完成证据：`pages+sequences` View **137/137**；`level_73` / `level_74` / `level_75` 冒烟 PASS；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。未执行全量关卡回归、L2 全固定套件或 release 重验；这些不因试点被宣称通过。
 
 涉及运行探针与枚举 `source/` 的门禁串行运行。临时夹具在结束后移除，不进入发布。完整私有工作区维持零错误零警告；未执行验证显式记录为未验证。
 

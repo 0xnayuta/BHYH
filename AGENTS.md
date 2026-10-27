@@ -30,8 +30,8 @@
   - `standards/target_architecture_contract.md`：项目总体目标架构；应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台及所有权/生命周期，视觉资产为子契约；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
-  - `reference/atlas_metadata_schema.md`：Phase 14-1 AtlasMetadata 生产者/schema/消费者矩阵与失败边界；
-  - `roadmap/current-iteration.md`：Phase 14 当前候选；14-1 已完成，14-2 未启动；后续 Phase 15~17 方向统一见 roadmap；
+  - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View 与失败边界；
+  - `roadmap/current-iteration.md`：Phase 14 当前候选；14-1 矩阵与 14-2 View/Palace 试点已完成，14-3 未启动；后续 Phase 15~17 方向统一见 roadmap；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；

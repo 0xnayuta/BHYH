@@ -349,7 +349,7 @@ classDiagram
 已落地：
 
 - `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`：静态预加载角色清单；资源缺失可在解析阶段暴露，清单查询断言仅是 debug 辅助，不冒充 release 失败处理；
-- `AtlasMetadata` + `AtlasMetadataStore`：`manifest.json` 构建期生成 `metadata.tres`，运行时只读；`AtlasMetadataStore` 只接受 `metadata.tres`；
+- `AtlasMetadata` + `AtlasMetadataStore`：`manifest.json` 构建期生成 `metadata.tres`；`data_for` 保留给未迁移消费者，`view_for` 为 `PalaceBossProjectile` 返回经过深度校验的只读 `AtlasMetadataView`；
 - 哪吒官方部件与 BiLuoTian / LeiTingJieZhen 重技能帧已迁移到构建期 `SpriteFrames`；
 - Spine 资源保持 `.atlas` / `.spine-json` 由 Spine 运行时加载，不转 SpriteFrames。
 - `FrameSequenceStore` 在接纳 Catalog 条目时校验 schema；`StreamedPngEffect` 再校验注入资源，错误时发出 `failed` 并拒绝播放；
@@ -363,7 +363,7 @@ classDiagram
 
 仍然存在的边界：
 
-- `AtlasMetadata.data` 为共享 `Dictionary`；`AtlasMetadataStore.data_for()` 缓存并返回该字典，而不是类型化只读接口。缺失/类型/schema 错误会报错返回空字典；空路径目前直接返回空字典，不能宣称所有失败均已明确拒绝。
+- `AtlasMetadata.data` 仍为共享 `Dictionary`；`data_for()` 继续向五个未迁移消费者缓存并返回该字典。`PalaceBossProjectile` 已改用 `view_for()`；空路径仍直接返回空字典，不能宣称所有失败均已明确拒绝。
 - `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧：包含动态动作映射、图集几何/子序列、固定数组、调试图标以及已登记历史占位/回退。清单是实际范围来源，本文不复制条目计数。
 - `pet_neat_bullet`、`level_59`、`user_key` 是登记的非怪物边界；法宝与 Lyfb/哪吒特效的 Phase 13 迁移已完成，不再列为待建帧迁移。
 - allowlist 中的历史占位/缺失回退并不满足新增代码的失败语义，不能据此扩张；恢复资源或迁移相应职责时移除登记并重新验收。
@@ -431,9 +431,9 @@ classDiagram
 - 怪物别名与动态来源已在构建期展开为 Catalog；运行时不再解析源码或扫描纹理目录。旧纹理别名表及其解析入口已移除，不兼容旧路径。
 - PCK 闭包与 Windows release 的已执行结果见 `status.md`；包内可达不等于目标设备加载与峰值性能通过。
 
-| 当前边界 | 收敛方向（未实现） |
+| 当前边界 | 收敛方向与状态 |
 |:---|:---|
-| `AtlasMetadata.data` 与字典返回入口 | [Phase 14-1 矩阵](atlas_metadata_schema.md)：6 个直接调用、267 个可达资源、运行时两类 schema；14-2 按真实字段类型化并删除旧公共入口 |
+| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：`PalaceBossProjectile` 已用只读 View；其余五个消费者待 14-3 迁移，随后删除 `data_for` |
 | Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
@@ -523,7 +523,7 @@ classDiagram
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
-| `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 逐步提供 typed accessor，不扩大无类型面 |
+| `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | `PalaceBossProjectile` 已用只读 `AtlasMetadataView`；其余消费者待迁移，不扩大无类型面 |
 | 2P 面板全局视图交换 | 改写 `PlayerData`/`RoleProp`，存档前必须恢复 1P | 目标为显式槽位上下文；与快照/共享账本联动，不局部删除保护 |
 | 深层 `get_node()` / 绝对路径 | 存量场景与脚本 | 新代码禁止；重构时同步清理 |
 
@@ -534,7 +534,7 @@ classDiagram
 | 模块 | 机制 |
 |:---|:---|
 | 角色运行资源清单 | `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`，`preload` 静态注册，缺失即失败 |
-| 图集元数据 | `AtlasMetadata` + `AtlasMetadataStore`，构建期生成、运行时只读 |
+| 图集元数据 | `AtlasMetadata` + `AtlasMetadataStore`；`view_for` 返回只读 `AtlasMetadataView`（当前覆盖 `pages+sequences`） |
 | 字典键契约 | `DataKeys` 命名空间与安全访问器 |
 | 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
@@ -573,7 +573,7 @@ classDiagram
 ## 11. 关联文档
 
 - [`acceptance.md`](acceptance.md)：验收分层、门禁命令、阈值与变更矩阵
-- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14-1 的 AtlasMetadata 生产者、schema、消费者与失败矩阵
+- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 的 AtlasMetadata 生产者、schema、消费者、只读 View 与失败矩阵
 - [`status.md`](status.md)：版本、规模与验证状态单一事实源
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）
 - [`../audit/README.md`](../audit/README.md)：人工代码质量审计模板与报告

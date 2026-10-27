@@ -46,6 +46,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-019](ADR-019-test-fixtures-outside-production-source.md) | 测试探针与夹具不进入生产源码 | Accepted | 测试、发布 |
 | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md) | 类型化视觉资产、显式后端与流式生命周期 | Accepted | 三层契约、请求回收、导出闭包 |
 | [ADR-021](ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与项目总体目标架构 | Accepted（目标） | 总体所有权/生命周期；局部替代 ADR-017 §5 的长期 UI 交换策略，保留 ADR-020 |
+| [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份与失败语义 | Accepted | 运行时 View、`.data` 边界、路径例外、迁移与失败处理 |
 
 ### 2.1 常见决策检索
 
@@ -62,6 +63,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | 版本迁移能否整包覆盖？ | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) |
 | 本地双人数据为什么不是第二个 Autoload？ | [ADR-017](ADR-017-local-coop-profile-isolation.md) |
 | 项目总体目标、状态所有权和后续架构治理以什么为准？ | [ADR-021](ADR-021-project-wide-target-architecture.md)；视觉资源子契约仍见 ADR-020 |
+| AtlasMetadata 运行时如何读取、为什么没有 UID？ | [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md)；矩阵见 [`../reference/atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) |
 
 ---
 
