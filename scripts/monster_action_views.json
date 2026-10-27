@@ -1,0 +1,313 @@
+{
+  "res://Art/monster/game_3_monster/monster_130/monster_130_action_frames.tres": {
+    "animations": {
+      "wait": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_wait_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.125,
+          0.08333333333333333,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "walk": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_wait_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.125,
+          0.08333333333333333,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "hurt": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_hurt_frames.tres",
+        "frames": [
+          0
+        ],
+        "durations": [
+          0.3333333333333333
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "death": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_death_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit1": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_hit1_frames.tres",
+        "frames": [
+          0,
+          1,
+          2
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit2": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_hit2_frames.tres",
+        "frames": [
+          0,
+          1
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit3": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_hit3_frames.tres",
+        "frames": [
+          0
+        ],
+        "durations": [
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit4": {
+        "source": "res://Art/monster/game_3_monster/monster_130/monster_130_hit4_frames.tres",
+        "frames": [
+          0
+        ],
+        "durations": [
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      }
+    }
+  },
+  "res://Art/monster/game_3_monster/monster_212/monster_212_action_frames.tres": {
+    "animations": {
+      "wait": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          0
+        ],
+        "loop": true,
+        "speed": 12.0
+      },
+      "walk": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          0,
+          1
+        ],
+        "loop": true,
+        "speed": 12.0
+      },
+      "hit1": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          5,
+          6,
+          7
+        ],
+        "loop": false,
+        "speed": 12.0
+      },
+      "hit2": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          5,
+          6,
+          7
+        ],
+        "loop": false,
+        "speed": 12.0
+      },
+      "hit3": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          5,
+          6,
+          7
+        ],
+        "loop": false,
+        "speed": 12.0
+      },
+      "hit4": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          5,
+          6,
+          7
+        ],
+        "loop": false,
+        "speed": 12.0
+      },
+      "hurt": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          2
+        ],
+        "loop": false,
+        "speed": 12.0
+      },
+      "death": {
+        "source": "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres",
+        "frames": [
+          2,
+          3,
+          4
+        ],
+        "loop": false,
+        "speed": 12.0
+      }
+    }
+  },
+  "res://Art/monster/game_3_monster/monster_215/monster_215_action_frames.tres": {
+    "animations": {
+      "wait": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_wait_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667,
+          0.1,
+          0.06666666666666667,
+          0.13333333333333333
+        ],
+        "loop": true,
+        "speed": 30.0
+      },
+      "walk": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_walk_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "durations": [
+          0.13333333333333333,
+          0.13333333333333333,
+          0.13333333333333333,
+          0.13333333333333333
+        ],
+        "loop": true,
+        "speed": 30.0
+      },
+      "hurt": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_hurt_frames.tres",
+        "frames": [
+          0
+        ],
+        "durations": [
+          0.26666666666666666
+        ],
+        "loop": false,
+        "speed": 30.0
+      },
+      "death": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_death_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667,
+          0.06666666666666667,
+          0.26666666666666666
+        ],
+        "loop": false,
+        "speed": 30.0
+      },
+      "hit1": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_hit1_frames.tres",
+        "frames": [
+          0,
+          1,
+          2
+        ],
+        "durations": [
+          0.1,
+          0.1,
+          0.3333333333333333
+        ],
+        "loop": false,
+        "speed": 30.0
+      },
+      "hit2": {
+        "source": "res://Art/monster/game_3_monster/monster_215/monster_215_hit2_frames.tres",
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "durations": [
+          0.1,
+          0.1,
+          0.1,
+          0.3333333333333333
+        ],
+        "loop": false,
+        "speed": 30.0
+      }
+    }
+  }
+}

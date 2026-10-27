@@ -23,6 +23,7 @@ COMMANDS = [
     ("frame_sequences_check", [sys.executable, "scripts/convert_frame_sequences.py", "--check"]),
     ("monster_frames_check", [sys.executable, "scripts/convert_monster_frames.py", "--check"]),
     ("liu_sha_frames_check", [sys.executable, "scripts/convert_liu_sha_frames.py", "--check"]),
+    ("action_views_check", [sys.executable, "scripts/convert_monster_action_views.py", "--check"]),
     ("level_preload_catalog_check", [sys.executable, "scripts/convert_level_preload_catalog.py", "--check"]),
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),

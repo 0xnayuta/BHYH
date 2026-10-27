@@ -1,6 +1,5 @@
 extends BaseMonster
 
-const BODY_FRAMES_PATH := "res://Art/monster/game_3_monster/monster_212/monster_212_frames.tres"
 const SOURCE_FPS := 12.0
 const LITTLE_BLOOD_OFFSET := Vector2(-30, -205)
 
@@ -82,24 +81,11 @@ func _configure_qingyang() -> void:
 
 
 func _build_body_animations() -> void:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	var textures: Array[Texture2D] = []
-	var source := load(BODY_FRAMES_PATH) as SpriteFrames
-	if source == null or not source.has_animation(&"play"):
-		push_error("Monster212 standard frames missing: " + BODY_FRAMES_PATH)
-	else:
-		for index in range(source.get_frame_count(&"play")):
-			textures.append(source.get_frame_texture(&"play", index))
-
-	_add_sprite_animation(frames, &"wait", textures, true, 0, 1)
-	_add_sprite_animation(frames, &"walk", textures, true, 0, 2)
-	_add_sprite_animation(frames, &"hit1", textures, false, 5, 3)
-	_add_sprite_animation(frames, &"hit2", textures, false, 5, 3)
-	_add_sprite_animation(frames, &"hit3", textures, false, 5, 3)
-	_add_sprite_animation(frames, &"hit4", textures, false, 5, 3)
-	_add_sprite_animation(frames, &"hurt", textures, false, 2, 1)
-	_add_sprite_animation(frames, &"death", textures, false, 2, 3)
+	var frames_path := "res://Art/monster/game_3_monster/monster_212/monster_212_action_frames.tres"
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("Monster212 action frames missing: " + frames_path)
+		return
 
 	mr_ani.sprite_frames = frames
 	mr_ani.animation = &"wait"

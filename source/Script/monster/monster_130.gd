@@ -1,26 +1,6 @@
 extends BaseMonster
 
 const MODEL_ROOT := "res://Art/monster/game_3_monster/monster_130"
-const ACTION_FRAME_DIRS := {
-	&"wait": "wait",
-	&"walk": "wait",
-	&"hurt": "hurt",
-	&"death": "death",
-	&"hit1": "hit1",
-	&"hit2": "hit2",
-	&"hit3": "hit3",
-	&"hit4": "hit4",
-}
-const ACTION_FRAME_DURATIONS := {
-	&"wait": [2.0, 2.0, 2.0, 3.0, 2.0, 4.0],
-	&"walk": [2.0, 2.0, 2.0, 3.0, 2.0, 4.0],
-	&"hurt": [8.0],
-	&"death": [2.0, 2.0, 2.0, 2.0, 10.0],
-	&"hit1": [2.0, 2.0, 10.0],
-	&"hit2": [2.0, 10.0],
-	&"hit3": [10.0],
-	&"hit4": [10.0],
-}
 var _skill_busy := false
 var _barrage_generation := 0
 
@@ -96,25 +76,13 @@ func _configure_stats() -> void:
 
 
 func _configure_visuals() -> void:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for animation_name in ACTION_FRAME_DIRS.keys():
-		frames.add_animation(animation_name)
-		frames.set_animation_loop(animation_name, animation_name in [&"wait", &"walk"])
-		frames.set_animation_speed(animation_name, 24.0)
-		var frame_durations: Array = ACTION_FRAME_DURATIONS[animation_name]
-		var action_dir := str(ACTION_FRAME_DIRS[animation_name])
-		var source := load(MODEL_ROOT.path_join("monster_130_%s_frames.tres" % action_dir)) as SpriteFrames
-		if source == null or not source.has_animation(&"play"):
-			push_error("Monster130 standard frames missing: " + action_dir)
-			continue
-		for frame_index in range(frame_durations.size()):
-			if frame_index < source.get_frame_count(&"play"):
-				frames.add_frame(
-					animation_name, source.get_frame_texture(&"play", frame_index), float(frame_durations[frame_index])
-				)
-	mr_ani.sprite_frames = frames
+	var frames_path := MODEL_ROOT.path_join("monster_130_action_frames.tres")
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("Monster130 action frames missing: " + frames_path)
+		return
 
+	mr_ani.sprite_frames = frames
 	mr_ani.offset = Vector2(5, -56)
 	mr_ani.play(&"wait")
 

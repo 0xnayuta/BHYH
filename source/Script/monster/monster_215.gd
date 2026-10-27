@@ -84,21 +84,12 @@ func _configure_boss() -> void:
 
 
 func _build_animations() -> void:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for anim_name: StringName in ANIMATION_DATA:
-		var data: Array = ANIMATION_DATA[anim_name]
-		frames.add_animation(anim_name)
-		frames.set_animation_loop(anim_name, bool(data[3]))
-		frames.set_animation_speed(anim_name, SOURCE_FPS)
-		var durations: Array = data[2]
-		var source := load(FRAME_ROOT.path_join("monster_215_%s_frames.tres" % anim_name)) as SpriteFrames
-		if source == null or not source.has_animation(&"play"):
-			push_error("Monster215 standard frames missing: " + str(anim_name))
-			continue
-		for index in range(source.get_frame_count(&"play")):
-			if index < durations.size():
-				frames.add_frame(anim_name, source.get_frame_texture(&"play", index), float(durations[index]))
+	var frames_path := FRAME_ROOT.path_join("monster_215_action_frames.tres")
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("Monster215 action frames missing: " + frames_path)
+		return
+
 	mr_ani.sprite_frames = frames
 	mr_ani.centered = true
 
