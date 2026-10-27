@@ -266,134 +266,6 @@ const MONSTER_SCENE_ALIASES := {
 	3341: 3308,
 	3342: 3309,
 }
-const DYNAMIC_MONSTER_TEXTURE_PATHS := {
-	150:
-	[
-		"res://Art/monster/qiong_qi/Monster42FramesCenteredCropped",
-		"res://Art/monster/qiong_qi/effects/buff_green.png",
-		"res://Art/monster/qiong_qi/effects/buff_blue.png",
-	],
-	151: ["res://Art/monster/tao_wu/Monster47FramesCenteredCropped"],
-	152: ["res://Art/monster/hun_dun/monster_60_frames_centered_cropped"],
-	153: ["res://Art/monster/tao_tie/monster_115_frames_centered_cropped"],
-	1460: ["res://Art/monster/tongtian_3057"],
-	212:
-	[
-		"res://Art/monster/game_3_monster/monster_212/DefineSprite_44_Monster212",
-		"res://Art/monster/game_3_monster/monster_212/DefineSprite_92_Monster212Bullet1_Cropped",
-		"res://Art/monster/game_3_monster/monster_212/DefineSprite_88_Monster212Bullet2",
-		"res://Art/monster/game_3_monster/monster_212/DefineSprite_71_Monster212Bullet3",
-		"res://Art/monster/game_3_monster/monster_212/DefineSprite_49_Monster212Bullet4_2_Cropped",
-	],
-	163:
-	["res://Art/monster/game_3_monster/monster_163/body", "res://Art/monster/game_3_monster/monster_163/body_actions"],
-	164:
-	["res://Art/monster/game_3_monster/monster_164/body", "res://Art/monster/game_3_monster/monster_164/body_actions"],
-	165:
-	["res://Art/monster/game_3_monster/monster_165/body", "res://Art/monster/game_3_monster/monster_165/body_actions"],
-	166:
-	["res://Art/monster/game_3_monster/monster_166/body", "res://Art/monster/game_3_monster/monster_166/body_actions"],
-	168:
-	["res://Art/monster/game_3_monster/monster_168/body", "res://Art/monster/game_3_monster/monster_168/body_actions"],
-	169:
-	["res://Art/monster/game_3_monster/monster_169/body", "res://Art/monster/game_3_monster/monster_169/body_actions"],
-	174:
-	["res://Art/monster/game_3_monster/monster_174/body", "res://Art/monster/game_3_monster/monster_174/body_actions"],
-	175:
-	["res://Art/monster/game_3_monster/monster_175/body", "res://Art/monster/game_3_monster/monster_175/body_actions"],
-	1501:
-	[
-		"res://Art/monster/pet_tiger_boss/model/frames/stage1",
-		"res://Art/monster/pet_tiger_boss/effects",
-	],
-	1502:
-	[
-		"res://Art/monster/pet_tiger_boss/model/frames/stage2",
-		"res://Art/monster/pet_tiger_boss/effects",
-	],
-	1503:
-	[
-		"res://Art/monster/pet_tiger_boss/model/frames/stage3",
-		"res://Art/monster/pet_tiger_boss/effects",
-	],
-	1504:
-	[
-		"res://Art/monster/pet_tiger_boss/model/frames/stage4",
-		"res://Art/monster/pet_tiger_boss/effects",
-	],
-	4401: ["res://Art/monster/game_3_monster/three_prince/nezha"],
-	4402:
-	[
-		"res://Art/monster/game_3_monster/three_prince/muzha",
-		"res://Art/hero_picture/role_3/ba_di_qian_kun_smooth",
-	],
-	4403: ["res://Art/monster/game_3_monster/three_prince/jinzha"],
-}
-const DYNAMIC_MONSTER_SCENE_PATHS := {
-	114: ["res://Scene/monster/monster_bullet_slim/monster114_bullet2.tscn"],
-	137: ["res://Scene/monster/monster_bullet_slim/monster137_bullet2.tscn"],
-	1460:
-	[
-		"res://Scene/monster/monster_bullet_slim/tongtian3057_projectile.tscn",
-		"res://Scene/monster/monster_bullet_slim/tongtian3057_beam.tscn",
-	],
-	3002: ["res://Scene/monster/monster_bullet_slim/zhuque_tiger_arrow.tscn"],
-	3004: ["res://Scene/monster/monster_bullet_slim/xuanwu_gate_arrow.tscn"],
-	3007:
-	[
-		"res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet2.tscn",
-		"res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet3.tscn",
-	],
-	3012: [],
-	3009: ["res://Scene/monster/monster_bullet_slim/jiuhua_pine_arrow.tscn"],
-	3020:
-	[
-		"res://Scene/monster/monster_bullet_slim/shuangxi_boss_arrow1.tscn",
-		"res://Scene/monster/monster_bullet_slim/shuangxi_boss_arrow2.tscn",
-	],
-	212:
-	[
-		"res://Scene/monster/monster_bullet_slim/monster212_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/monster212_bullet2.tscn",
-		"res://Scene/monster/monster_bullet_slim/monster212_bullet3.tscn",
-		"res://Scene/monster/monster_bullet_slim/monster212_bullet4.tscn",
-	],
-	1501:
-	[
-		"res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
-	],
-	1502:
-	[
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn",
-	],
-	1503:
-	[
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_2.tscn",
-	],
-	1504:
-	[
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_1.tscn",
-		"res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_2.tscn",
-	],
-	4401: ["res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"],
-	4402: ["res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"],
-	4403: ["res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"],
-}
-
 var basic_ar_button = null
 var weapon_bullet_node = null
 var bullet = null
@@ -1094,7 +966,10 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 		_collect_texture_dependencies_recursive(
 			_standard_monster_frames_path(monster_id), texture_paths, frames_visited
 		)
-	_append_dynamic_monster_textures(texture_paths, unique_monster_ids)
+	for monster_id_value in unique_monster_ids:
+		var monster_id := _canonical_monster_scene_id(int(monster_id_value))
+		for path_value in LevelPreloadStore.dynamic_monster_textures(monster_id):
+			_append_unique_preload_path(texture_paths, str(path_value))
 	if not texture_paths.is_empty():
 		var textures_per_frame := 2 if OS.has_feature("mobile") else 5
 		if seen_monster_ids.has(3343):
@@ -1124,7 +999,9 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 		if ResourceLoader.exists(scene_path) and not monster_scene_paths.has(scene_path):
 			monster_scene_paths.append(scene_path)
 	var bullet_scene_paths := _collect_monster_bullet_scene_paths(monster_scene_paths)
-	_append_dynamic_monster_scene_paths(bullet_scene_paths, unique_monster_ids)
+	for monster_id_value in unique_monster_ids:
+		for scene_path_value in LevelPreloadStore.dynamic_monster_scenes(int(monster_id_value)):
+			_append_unique_preload_path(bullet_scene_paths, str(scene_path_value))
 	await prewarm_monster_bullet_scene_paths(bullet_scene_paths)
 	await prewarm_monster_scene_paths(monster_scene_paths)
 
@@ -1851,33 +1728,6 @@ func _collect_texture_dependencies_recursive(resource_path: String, texture_path
 			_append_unique_preload_path(texture_paths, dependency_path)
 		elif extension in ["tscn", "tres", "res"]:
 			_collect_texture_dependencies_recursive(dependency_path, texture_paths, visited)
-
-
-func _append_dynamic_monster_textures(texture_paths: Array, monster_ids: Array) -> void:
-	for monster_id_value in monster_ids:
-		var monster_id := _canonical_monster_scene_id(int(monster_id_value))
-		var dynamic_paths: Variant = DYNAMIC_MONSTER_TEXTURE_PATHS.get(monster_id, [])
-		if not dynamic_paths is Array:
-			continue
-		for path_value in dynamic_paths:
-			var path := str(path_value)
-			if path.get_extension().to_lower() == "png":
-				if ResourceLoader.exists(path):
-					_append_unique_preload_path(texture_paths, path)
-			else:
-				if DirAccess.open(path) == null:
-					continue
-				_append_png_files_recursive(texture_paths, path)
-
-
-func _append_dynamic_monster_scene_paths(scene_paths: Array, monster_ids: Array) -> void:
-	for monster_id_value in monster_ids:
-		var monster_id := int(monster_id_value)
-		var dynamic_scene_paths: Variant = DYNAMIC_MONSTER_SCENE_PATHS.get(monster_id, [])
-		if not dynamic_scene_paths is Array:
-			continue
-		for scene_path_value in dynamic_scene_paths:
-			_append_unique_preload_path(scene_paths, str(scene_path_value))
 
 
 func _collect_monster_bullet_scene_paths(monster_scene_paths: Array) -> Array:
