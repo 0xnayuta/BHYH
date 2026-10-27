@@ -468,6 +468,7 @@ classDiagram
 - 关卡发布依赖清单 `source/Script/data/level_preload_export_dependencies.json` 与资产侧 `source/Art/frame_sequences/frame_sequence_export_dependencies.json` 由 `frame_sequence_pack_probe.py` 合并验证；PCK 内 **4,100 条**依赖全部可达；
 - 发布依赖清单按来源归属：`Art/frame_sequences/frame_sequence_export_dependencies.json` 由 FrameSequence Catalog 与图集页派生，属于素材侧构建产物，随私人素材仓版本化；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物脚本与 `scripts/monster_dynamic_paths.json` 派生，属于代码侧构建产物，随公共仓版本化。两者都不在运行时加载，只在发布前 PCK 闭包验证时读取。
 - 动态怪物纹理/场景表与 `MONSTER_SCENE_ALIASES` 已从 `global.gd` 迁出：别名与动态来源由 `scripts/monster_dynamic_paths.json` 在构建期展开进 Catalog 与依赖清单，运行时只读 Catalog。
+- `duplicate_texture_aliases.gd` 已从 2,313 条收敛到 **360 条**；删除 932 条悬空映射与 1,021 条全量回归未命中的 Monster 域条目，保留 86 条静态引用与 274 条 UI/法宝/坐骑域条目。`TEXTURE_ALIASES.resolve` 只在 `Global._resolve_texture_path()` 一处调用；debug 下设置 `BHYH_TEXTURE_ALIAS_HITS_DIR` 时按进程写入命中统计。
 
 待迁移：
 

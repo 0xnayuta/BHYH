@@ -1,7 +1,5 @@
 extends BaseMagicWeapon
 
-const TEXTURE_ALIASES := preload("res://Script/monster/duplicate_texture_aliases.gd")
-
 @export var weapon_id: String = ""
 @export var model_path: String = ""
 @export var model_frame_size: Vector2i = Vector2i(50, 50)
@@ -28,10 +26,9 @@ func _ready() -> void:
 
 
 func _build_model_frames() -> void:
-	var resolved_model_path := TEXTURE_ALIASES.resolve(model_path)
-	if resolved_model_path.is_empty() or not ResourceLoader.exists(resolved_model_path):
+	if model_path.is_empty():
 		return
-	var texture := load(resolved_model_path) as Texture2D
+	var texture := Global.get_static_texture(model_path)
 	if texture == null or model_frame_size.x <= 0 or model_frame_size.y <= 0:
 		return
 	var frames := SpriteFrames.new()
@@ -76,10 +73,7 @@ func _build_effect_frames() -> SpriteFrames:
 		return frames
 	for index in range(1, 101):
 		var source_path := effect_dir.path_join(str(index) + ".png")
-		var path := TEXTURE_ALIASES.resolve(source_path)
-		if not ResourceLoader.exists(path):
-			continue
-		var texture := load(path) as Texture2D
+		var texture := Global.get_static_texture(source_path)
 		if texture != null:
 			frames.add_frame("default", texture)
 	return frames

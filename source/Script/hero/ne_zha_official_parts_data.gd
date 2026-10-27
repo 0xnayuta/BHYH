@@ -1,7 +1,5 @@
 extends RefCounted
 
-const TEXTURE_ALIASES := preload("res://Script/monster/duplicate_texture_aliases.gd")
-
 const ROOT := "res://Art/hero_picture/role_6/official_parts_trial/"
 const STRIDE := 9
 const RECENT_BYTE_LIMIT := 64 * 1024 * 1024
@@ -33,7 +31,7 @@ static func get_set(name: String, root: String = ROOT) -> RefCounted:
 	var data := new()
 	data.set_name = name
 	data.poses = FileAccess.get_file_as_bytes(directory + "poses.bin").to_float32_array()
-	data.atlas = load(TEXTURE_ALIASES.resolve(str(parsed.get("atlas", directory + "parts.png")))) as Texture2D
+	data.atlas = Global.get_static_texture(str(parsed.get("atlas", directory + "parts.png")))
 	if data.atlas == null or data.poses.is_empty() or data.poses.size() % STRIDE != 0:
 		return null
 	for region: Array in parsed["regions"]:
