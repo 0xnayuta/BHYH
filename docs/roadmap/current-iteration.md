@@ -1,9 +1,9 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点），规划已修订，未启动实现**。本轮只升级总体目标契约与文档，不启动代码重构。
+> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 生产/消费矩阵调查已完成（2026-10-28），14-2 未启动**。本轮只修改文档，不启动运行时重构。
 > **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。
 > **职责**：本页只展开当前候选 Phase 14；后续 Phase 15~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。不再在本页复制后续阶段任务表。
-> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
+> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
 > **历史**：[Phase 13](../archive/iteration_13_visual_asset_contract.md) 已完成归档，历史不改写。
 
 ## 1. 阶段边界与决策
@@ -26,42 +26,58 @@
 - 不更改素材内容、region/margin、动画时序、loop、页路径、UID 或后端选择；
 - 不重开 Phase 13 的冻结例外，不借类型化恢复缺资源回退。
 
-### 1.3 当前事实与待确认范围
+### 1.3 当前事实与调查结果
 
 | 现有边界 | 已知事实 | 本阶段取证要求 |
 |:---|:---|:---|
-| `AtlasMetadata` | Resource，`data: Dictionary`，有浅层 `validate()` | 列出各实际 schema 的字段与合法空值 |
-| `AtlasMetadataStore` | `data_for` 返回字典，缓存、加载及失败处理集中 | 查直接/间接调用与复制后的可变状态 |
-| 源 schema | 包含 `pages+sequences`、`animation+frames+back/front atlases`、`files`、顶层数组编码 | 不将“源格式存在”自动等同“必须有运行时模型” |
-| 已知直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 仅作调查起点，重新核对配置间接读取和生成器 |
-| 构建入口 | `convert_atlas_metadata.py --check` 与 `--self-test` 已进入契约域 | 强化既有检查，不重复规划首次接入 |
+| `AtlasMetadata` | Resource，`data: Dictionary`；当前无源码直接读 `.data`，均经 Store | 14-1 已核对实际 schema 与字段 |
+| `AtlasMetadataStore` | `data_for` 返回共享字典；缓存；空路径静默返回 `{}` | 14-1 已核对 6 个直接调用与失败路径 |
+| 源 schema | 379 个 manifest，8 种顶层形态；运行时只消费 `pages+sequences` 与 `animation+frames` | 不为 `files`/旧 `animations`/数组/索引建运行时模型 |
+| 直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 已逐项记录字段、共享/复制与失败行为 |
+| 构建入口 | `convert_atlas_metadata.py` 379/379 同步；`convert_monster_frames.py` 152 目标/42 跳过 | 构建校验与运行时类型化分开 |
 | Phase 13 已收口路径 | `main_sword_array_weapon` 已删除 Atlas 回退 | 不将其重新列为待迁移消费者 |
 
-具体类名与 API 在 14-1 取证后确定；不把本页中的概念名称写成现有符号。
+14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。以下 14-2~14-4 仍未启动；本页中的类型名称是设计候选，不是现有符号。
 
-## 2. 批次 14-1：生产/消费边界与 schema 决策
+## 2. 批次 14-1：生产/消费边界与 schema 决策（已完成）
 
-**状态**：未启动。只读调查与设计记录，不改运行时行为。
+**状态**：完成（2026-10-28）；只读调查与文档记录，无运行时/素材改动。
 
-1. 枚举 `AtlasMetadataStore.data_for`、资源 `.data`、`metadata.tres` 配置路径、构建期读者与生产者。
-2. 建立“源 schema → 实际消费字段 → 拥有者/是否可变 → 失败行为 → 验证路径”矩阵。区分页/帧/动画、mount 视图与仅构建数据。
-3. 核对消费者对字典的复制和修改。将消费侧配置覆盖与共享源数据区分，不能把可变对象伪装为只读 accessor。
-4. 确定最小类型边界：可序列化定义、运行时只读视图与调用方法分别放在哪里；明确允许空数据与错误资源的区别。
-5. 按实际依赖分成可运行切片。不要先固定 boss/palace 批次再强迫所有 schema 服从该分法。
+### 2.1 实施记录
 
-**产物**：在 `architecture.md` 增加简洁可审核 schema/消费者表；需要具体设计决策时新增 ADR，不改写 ADR-020/021。原始逐文件调查与机器清单不进入长期规范。
+| 项目 | 结果 |
+|:---|:---|
+| 生产者 | 仓库内唯一转换器 `convert_atlas_metadata.py`，把 379 个 `manifest.json` 生成同目录 `metadata.tres`；`--check` 379/379 同步，`--self-test` 4/4 通过 |
+| 运行时入口 | 仅 6 个 `AtlasMetadataStore.data_for` 调用点；`validate_path()`/`clear_cache()` 无生产调用 |
+| 运行时资源域 | 267 个 metadata 路径可触达：East 83、North 51、Palace 2、Cloud 1、Mount 86+44；Palace 弹体复用前三域，不新增路径域 |
+| schema 实际形态 | 379 个 manifest 分 8 组顶层形态、18 种键签名；运行时只直接消费 `pages+sequences`（East/Cloud/North/Palace）与 `animation+frames`（Mount） |
+| 非运行时形态 | `files`、旧 `animations`、顶层数组、索引/其它字典：未发现 Store 读取；4 个剑阵 `animations` 由构建期帧转换器读取 |
+| 共享与复制 | Store 缓存并返回 `AtlasMetadata.data` 同一字典；Mount 复制后加 `_base_path`，其余消费者保存共享引用 |
+| 已发现风险 | 空路径静默返回 `{}`；多个消费者未检查空数据；Palace 弹体在声明路径不可用时退回基类碰撞；schema 校验未覆盖帧元组/geometry/masks/Mount 帧 |
+| 身份 | 生成的 metadata 无资源头 `uid://`；当前以路径引用。14-2 需明确路径身份例外或另批加入确定性 UID |
+| 惰性配置 | 4 个 `atlas_metadata` 写入方无实际读取链；`nanhai_projectile` 读入成员但未使用；2 个 `ATLAS_METADATA` 常量未使用；不作为类型化消费者 |
+| 构建期边界 | `convert_monster_frames.py`：194 个怪物 metadata 中 152 目标（148 sequences + 4 旧 animations），42 跳过；`convert_frame_sequences.py` 读取 4 个剑阵 manifest 的 `pages/animations` |
 
-**出口**：每个生产消费者有可追溯字段与定向验证；只构建使用的 schema 已明确；没有未调查就默认保留的调用。完成此批后才能进入 14-2。
+### 2.2 结论
+
+1. 原“四种 schema”假设不适用于实际源数据；不能按四种模型强行统一。
+2. 运行时只需覆盖真实字段：序列帧几何、`geometry`/`masks`、Mount 动画帧与图层；`files`、旧 `animations`、顶层数组不建立运行时类型。
+3. 失败语义必须先于 consumer 迁移：声明路径缺失、类型错误、空序列和空 mask 需要区分；当前静默退化/基类回退不能原样保留。
+4. 共享字典与空路径行为属于 14-2 的边界；此时不删除 `data_for`，也不在 14-1 清理惰性配置。
+
+**出口核对**：每个直接消费者均有字段与失败路径记录；只构建使用的 schema 已列明；没有新增未调查调用。14-2 可以启动，但需用户确认 API/UID 决策。
 
 ## 3. 批次 14-2：最小类型入口与校验
 
-**状态**：未启动；依赖 14-1。
+**状态**：未启动；依赖 14-1 已完成的矩阵。
 
-- 对真实运行时 schema 增加强类型入口；`.data` 若保留，仅供资源序列化与其拥有者实现使用，不作为业务 API。
-- accessor 不选择视觉后端，不解析源 manifest、不猜旧路径、不返回可写共享容器；纹理和页共享，实例变更保留在消费者侧。
-- 构建期校验所有源形态；运行时接纳资源时校验一次，缓存已校验结果。明确无效类型、缺必需字段、空序列、页索引、region、duration 与数组长度的失败边界。
+- 只为 `pages+sequences` 的真实运行时字段与 `animation+frames` 的 Mount 字段建立入口；`files`、旧 `animations`、顶层数组和索引不建通用运行时模型。
+- accessor 不选择视觉后端、不解析源 manifest、不猜旧路径、不返回可写共享容器；纹理和页共享，实例变更保留在消费者侧。
+- 构建期校验所有源形态；运行时接纳资源时校验一次，缓存已校验结果。除现有浅层检查外，补真实消费字段：序列帧元组/页索引/region、geometry、masks、Mount 帧与图层。
+- 先决定 metadata 的资源身份：以路径身份登记例外，或在独立批次加入确定性 UID；不得在消费者迁移中隐式改变 UID。
 - 复用转换器 `--check` 和 `--self-test`；仅在行为有新增边界时补充相应负向样本，不为机械转发增加测试。
-- 按已调查职责切片同时提交新入口与该切片全部生产调用方，不先发布没有实际消费者的新 API。其余未触达能力维持原实现，不增加旧入口指向新入口的兼容转发，也不增加 typed 失败后读取字典的分支。最后一个调用方迁移时删除旧入口。
+- 按已调查职责切片同时提交新入口与该切片全部生产调用方，不先发布没有实际消费者的新 API。惰性 `atlas_metadata` 配置不作为消费者，清理须另列并再次扫描。
+- 失败语义：空路径、声明但缺失、schema 错误、合法空 mask 必须区分；不得增加 typed 失败后读字典、基类静默回退或旧路径分支。
 
 **出口**：首个真实消费者能运行；错误资源在 debug/release 都明确拒绝，失败向拥有者传播；资源身份、几何与时序不变。验证不是仅“返回非空”。
 
@@ -69,10 +85,10 @@
 
 **状态**：未启动；依赖对应类型入口已验证。
 
-1. 按 14-1 的真实依赖一次迁完一个职责切片；配置转发、间接读者与测试夹具一并处理。
-2. 验证关键帧/页/动画名、region/margin、loop/duration、坐骑/前后层显示与缺资源行为。
+1. 按 14-1 的真实依赖一次迁完一个职责切片；配置转发、间接读者、惰性配置与测试夹具一并处理。
+2. 验证 East/Cloud/North/Palace 的序列帧几何与 masks、Mount 的前后图层/region/offset、缺资源行为；不改变素材/数值/时序。
 3. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
-4. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、失效注释和测试；不保留 deprecated 别名或迁移适配层。
+4. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、无生产调用的 `validate_path`/`clear_cache`、失效注释与测试；不保留 deprecated 别名或迁移适配层。
 
 **出口**：生产代码只走新正式入口；无外部 `.data` 访问；无双加载/失败回退；需要可变工作数据的消费者不修改共享定义。
 
@@ -98,6 +114,8 @@
 | 14-4 阶段收口 | L2 固定套件、全量回归、构建/引用/命名检查；调用面清零证据 | 包路径/序列化/导出无变化时不强制重导每批 release |
 | 影响资源类型/路径/导出 | 实际 PCK 闭包与 release 加载 | 元数据或源文件可达不等于包可加载 |
 
+14-1 的已完成证据：Atlas **379/379** 同步、负向自测 **4/4**、怪物帧 **152 目标/42 跳过**；这些是 2026-10-28 的只读构建检查，不是运行时回归。
+
 涉及运行探针与枚举 `source/` 的门禁串行运行。临时夹具在结束后移除，不进入发布。完整私有工作区维持零错误零警告；未执行验证显式记录为未验证。
 
 ## 7. 阶段出口与恢复
@@ -105,8 +123,10 @@
 - 所有实际运行时消费者迁移，旧公共入口与兼容分支删除；未消费源 schema 保持完整构建校验。
 - 无可写共享容器泄露；页/纹理未重复常驻；行为与资源身份不变。
 - 构建、L1、定向冒烟、L2 与阶段回归满足矩阵；发布变更按触发条件验证。
-- 文档、ADR、脚本索引与状态一致，原始统计不复制到长期规范。
+- 文档、ADR、脚本索引与状态一致；14-1 的字段矩阵保留在 reference，不复制进阶段目标。
 
 中断时从 14-1 矩阵与已验证切片恢复；失败回滚该逻辑批次，不恢复旧来源回退。阶段全部完成后只归档本页的 Phase 14 记录，再重新建立下一候选计划；后续方向继续以 roadmap 为准。
+
+**恢复入口**：14-1 已完成，不要重跑全仓 schema 猜测；从 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) 的消费者表和 14-2 决策继续。若 API/UID 未确认，只做只读设计，不改运行时代码。
 
 **下一候选顺序**：Phase 15 应用编排/运行资源 → Phase 16 档案会话/持久化/槽位 → Phase 17 玩法/表现边界。该顺序是风险优先队列，不是 AtlasMetadata 对全部架构工作的强制技术前置。

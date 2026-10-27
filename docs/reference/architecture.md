@@ -433,7 +433,7 @@ classDiagram
 
 | 当前边界 | 收敛方向（未实现） |
 |:---|:---|
-| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 有限试点](../roadmap/current-iteration.md)：按真实消费者类型化，删除旧公共入口 |
+| `AtlasMetadata.data` 与字典返回入口 | [Phase 14-1 矩阵](atlas_metadata_schema.md)：6 个直接调用、267 个可达资源、运行时两类 schema；14-2 按真实字段类型化并删除旧公共入口 |
 | Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
@@ -573,6 +573,7 @@ classDiagram
 ## 11. 关联文档
 
 - [`acceptance.md`](acceptance.md)：验收分层、门禁命令、阈值与变更矩阵
+- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14-1 的 AtlasMetadata 生产者、schema、消费者与失败矩阵
 - [`status.md`](status.md)：版本、规模与验证状态单一事实源
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）
 - [`../audit/README.md`](../audit/README.md)：人工代码质量审计模板与报告

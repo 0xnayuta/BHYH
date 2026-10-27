@@ -108,6 +108,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 |:---|:---|
 | [`docs/README.md`](docs/README.md) | 文档分层与完整索引 |
 | [`docs/reference/architecture.md`](docs/reference/architecture.md) | 运行时架构：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
+| [`docs/reference/atlas_metadata_schema.md`](docs/reference/atlas_metadata_schema.md) | Phase 14-1 AtlasMetadata 生产者/schema/消费者矩阵 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
@@ -115,7 +116,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 14 类型化数据边界（AtlasMetadata 试点）的候选批次与验收 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 14 类型化数据边界（AtlasMetadata 试点）：14-1 矩阵已完成，14-2 未启动 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |

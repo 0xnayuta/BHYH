@@ -469,6 +469,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 ## 13. 关联文档
 
 - [`architecture.md`](architecture.md)：运行时架构、分层与遗留边界
+- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14-1 生产者、schema、消费者与失败矩阵
 - [`status.md`](status.md)：版本、规模与历史验证结果
 - [`../standards/naming_standard.md`](../standards/naming_standard.md)：命名与契约规范
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)：Godot 设计规范
