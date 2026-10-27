@@ -60,18 +60,12 @@ static func warm_pet_mouse_frames(pet_level: int) -> void:
 static func _get_frames(effect_name: String) -> SpriteFrames:
 	if _frames_cache.has(effect_name):
 		return _frames_cache[effect_name] as SpriteFrames
-	var frames := SpriteFrames.new()
-	frames.add_animation(effect_name)
-	frames.set_animation_speed(effect_name, EFFECT_FPS)
-	frames.set_animation_loop(effect_name, effect_name == "pet_mouse_1_bullet_3")
-	for frame_index in range(1, int(EFFECT_COUNTS.get(effect_name, 0)) + 1):
-		var path := EFFECT_ROOT.path_join(effect_name).path_join("%d.png" % frame_index)
-		var texture := ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-		if texture != null:
-			texture.get_rid()
-			frames.add_frame(effect_name, texture)
-	if frames.get_frame_count(effect_name) > 0:
-		_frames_cache[effect_name] = frames
+	var frames_path := EFFECT_ROOT.path_join(effect_name).path_join(effect_name + "_frames.tres")
+	if not ResourceLoader.exists(frames_path):
+		push_error("Pet effect frames missing: " + frames_path)
+		return null
+	var frames := load(frames_path) as SpriteFrames
+	_frames_cache[effect_name] = frames
 	return frames
 
 

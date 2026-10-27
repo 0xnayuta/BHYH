@@ -47,19 +47,12 @@ static func _frame_paths(effect_name: String) -> Array[String]:
 static func _get_effect_frames(effect_name: String) -> SpriteFrames:
 	if _turtle_frames_cache.has(effect_name):
 		return _turtle_frames_cache[effect_name] as SpriteFrames
-	var frames := SpriteFrames.new()
-	frames.add_animation(effect_name)
-	frames.set_animation_speed(effect_name, TURTLE_EFFECT_FPS)
-	frames.set_animation_loop(effect_name, effect_name == "pet_turtle_3_bullet_3")
-	for texture_path in _frame_paths(effect_name):
-		var texture := ResourceLoader.load(texture_path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-		if texture != null:
-			texture.get_rid()
-			frames.add_frame(effect_name, texture)
-	if frames.get_frame_count(effect_name) > 0:
-		_turtle_frames_cache[effect_name] = frames
-	else:
-		push_error("Pet turtle effect has no loadable frames: %s" % effect_name)
+	var frames_path := TURTLE_EFFECT_DIR.path_join(effect_name).path_join(effect_name + "_frames.tres")
+	if not ResourceLoader.exists(frames_path):
+		push_error("Pet effect frames missing: " + frames_path)
+		return null
+	var frames := load(frames_path) as SpriteFrames
+	_turtle_frames_cache[effect_name] = frames
 	return frames
 
 
