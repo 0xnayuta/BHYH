@@ -275,8 +275,8 @@ return MANIFESTS[role_id]
 
 当前保留的 360 条：
 
-- **86 条**有代码/父目录静态引用（主要是 Monster 与 Mount）；
-- **274 条**属于 MagicWeapon / HeroPicture / Mount 等 UI 或法宝域，全量关卡回归与背包探针未覆盖，暂不删除。
+- **86 条**有代码/父目录静态引用（主要是 Monster 与 Mount）；逐条复核均为通用基名误报，待确认删除；
+- **274 条**属于 MagicWeapon / HeroPicture / Mount 等 UI 或法宝域；UI 首屏探针 0 命中，但装备切换、法宝详情、坐骑装备等交互未覆盖，暂不删除。
 
 ### 5.3 执行记录
 
@@ -285,7 +285,7 @@ return MANIFESTS[role_id]
 3. **入口收敛（2026-10-27）**：`Global` 新增私有 `_resolve_texture_path()`；`ne_zha_official_parts_data.gd` 与 `eight_immortal_magic_weapon.gd` 改用 `Global.get_static_texture()`，删除两处 `TEXTURE_ALIASES` preload；
 4. **命中统计与裁剪（2026-10-27）**：
    - debug 下设置 `BHYH_TEXTURE_ALIAS_HITS_DIR`，`resolve` 记录命中键，进程退出时按 PID 写 JSON；
-   - 全量回归 + L2 + 背包探针均 **0 命中**；
+   - 全量回归 + L2 + 背包/UI 首屏探针均 **0 命中**；
    - 删除 1,021 条 Monster 域“无运行时命中、无静态引用”的条目；
    - 保留 86 条静态引用条目与 274 条 UI/法宝/坐骑域条目，避免在未覆盖 UI 上盲删；
 5. **后续代码修复**：剩余法宝/角色特效运行时建帧按域评估，不从别名层恢复。
@@ -312,8 +312,8 @@ return MANIFESTS[role_id]
 
 | 风险 | 处理 |
 |:---|:---|
-| 全量回归未覆盖所有 UI/菜单，274 条别名可能仍被使用 | 暂不删除；后续增加背包、法宝、坐骑、角色选择 UI 的命中统计后再裁剪 |
-| 86 条静态引用多为通用基名 | 保留；逐条人工复核后再决定是否删除 |
+| 全量回归未覆盖所有 UI/菜单，274 条别名可能仍被使用 | 已补 UI 首屏探针（0 命中）；交互仍不完整，暂不删除，后续增加装备切换/法宝详情/坐骑装备/角色选择确认交互后再裁剪 |
+| 86 条静态引用均为通用基名 | 已逐条复核：67×`1.png`、18×`parts.png`、1×`preview.png`，全部为误报；待确认后删除 |
 | debug 命中统计仅在设置环境变量时启用 | release 无额外文件 IO；统计代码由 `OS.is_debug_build()` 短路 |
 | 别名表是某些 6.8 补丁的隐含依赖 | 对 6.8/6.9 补丁涉及的角色与法宝做定向截图对比 |
 
