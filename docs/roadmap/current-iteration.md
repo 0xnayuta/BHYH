@@ -339,6 +339,7 @@ python scripts/contract_gate.py
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
 python scripts/level_regression_all.py --timeout 150
+python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 ```
 
 | 判据 | 阈值 |

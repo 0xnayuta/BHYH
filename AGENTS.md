@@ -168,10 +168,15 @@ flowchart TD
 3. **导入对齐**：新增/重命名资产后执行 `godot --headless --path source --import`；
 4. **静态门禁**：`python scripts/check_all.py --skip-engine`；
 5. **引擎验证**：`python scripts/health_check.py --project source --godot-bin <godot>`；
-6. **实机冒烟**：`python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`；批量回归用 `level_regression_all.py`；发布前 L2 固定验收必须同时执行并通过：
-   - `python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`
-   - `python scripts/coop_probe_runner.py --godot <godot>`
-   - `python scripts/scene_probe_runner.py --godot <godot>`
+6. **实机冒烟**：
+   - **日常增量（提交前）**：`python scripts/level_regression_all.py --changed-only --diff-base HEAD~1`；只跑受影响的关卡，无法映射到关卡时自动回退全量；
+   - **发布前全量**：`python scripts/level_regression_all.py`；默认并发 `min(12, max(4, CPU 核数))`，实测全量 **275.7s**；`--jobs 4` 为稳定排障口径；瞬态失败自动串行重试；
+   - **单关**：`python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`；
+   - 发布前 L2 固定验收必须同时执行并通过：
+     - `python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn`
+     - `python scripts/coop_probe_runner.py --godot <godot>`
+     - `python scripts/scene_probe_runner.py --godot <godot>`
+   - 进程复用实验（同进程多关）已验证但未采用：每关加载屏/资源清理抵消启动节省，5 关/组实测 146.8s，慢于单关并发 98.1s。
 7. **日志**：Godot 用户日志位于 `%APPDATA%\Godot\app_userdata\造梦西游八荒湮隳\logs\godot.log`；命令行走廊使用夹具生成的 `level_smoke_run*.log`；
 8. **提交**：门禁全绿后按中文 Conventional Commits 本地提交。
 

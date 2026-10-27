@@ -217,6 +217,7 @@ python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/
 python scripts/level_regression_all.py
 python scripts/level_regression_all.py --jobs 4 --timeout 90
 python scripts/level_regression_all.py --changed-only --diff-base HEAD
+python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 ```
 
 | 项目 | 规则 |
@@ -228,6 +229,8 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 | 并发 | 默认 `auto = min(12, max(4, CPU 核数))`；实测 12 并发全量 275.7s，瞬态失败自动串行重试；`--jobs 4` 为稳定排障口径 |
 | 重试 | 失败关串行重试 1 次 |
 | changed-only | 关卡/脚本/Art 目录直接映射；其他源码走反向依赖；无法映射时全量回退 |
+| 日常口径 | 提交前跑 `--changed-only --diff-base HEAD~1`，只跑受影响关卡 |
+| 发布口径 | 发布前跑全量（默认 auto 并发）；`--warmup` 默认 0（实测无收益）；进程复用未采用（5 关/组实测更慢） |
 | 产物 | `docs/reports/level_regression_manifest.json` + 报告 `.md/.json` |
 
 退出码：`0` 全部通过（含 SKIP）；`1` 有 FAIL 或筛选后无候选；`2` 工程缺失/git diff 失败。
