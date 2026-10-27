@@ -67,40 +67,18 @@ func _build_frames(_foot_baseline: int) -> void:
 	_sprite.centered = true
 	_sprite.z_index = 4
 	var folder := "shadow_%d" % (1 if boss_kind == 34 else 2)
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	var config: Dictionary = ACTIONS[boss_kind]
-	for action_value in config:
-		var action := str(action_value)
-		var data: Array = config[action]
-		var holds: Array = data[1]
-		frames.add_animation(action)
-		frames.set_animation_loop(action, bool(data[2]))
-		frames.set_animation_speed(action, SOURCE_FPS)
-		for index in range(holds.size()):
-			var path := "%s/%s/%s/%d.png" % [SHADOW_ROOT, folder, action, index + 1]
-			var texture := ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-			if texture == null:
-				push_error("流沙河分身帧缺失: " + path)
-				continue
-			frames.add_frame(action, texture, float(holds[index]))
+	var frames_path := "%s/%s/liu_sha_shadow_%d_frames.tres" % [SHADOW_ROOT, folder, boss_kind]
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("流沙河分身帧资源缺失: " + frames_path)
+		queue_free()
+		return
 	_sprite.sprite_frames = frames
 	add_child(_sprite)
 
 	var source_offset := Vector2(15 if facing_right else -15, -5)
 	_sprite.position = LiuShaRiverBoss.SOURCE_ORIGIN_OFFSETS[boss_kind] + source_offset
 	_sprite.flip_h = not facing_right
-
-
-func _texture_alpha_bottom(texture: Texture2D) -> int:
-	var image := texture.get_image()
-	if image == null or image.is_empty():
-		return 0
-	for y in range(image.get_height() - 1, -1, -1):
-		for x in range(image.get_width()):
-			if image.get_pixel(x, y).a > 0.02:
-				return y
-	return 0
 
 
 func _process(delta: float) -> void:

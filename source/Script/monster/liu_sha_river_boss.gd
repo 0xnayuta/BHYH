@@ -234,7 +234,6 @@ var _chain_skill := ""
 var _skill_time := 0.0
 var _skill1_cd := 0.0
 var _skill2_cd := 0.0
-var _body_frame_offsets: Dictionary = {}
 var _body_foot_baseline := 0
 var _shadows: Array = []
 var _gxp_timer := 0.0
@@ -330,30 +329,12 @@ func _fill_attack_dictionary() -> void:
 
 func _build_original_animations() -> void:
 	var action_config: Dictionary = ACTIONS[boss_kind]
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	_body_frame_offsets.clear()
-	_body_foot_baseline = 0
-	for action_name_value in action_config:
-		var action_name := str(action_name_value)
-		var data: Array = action_config[action_name]
-		var source_name := str(data[0])
-		var holds: Array = data[1]
-		frames.add_animation(action_name)
-		frames.set_animation_loop(action_name, bool(data[2]))
-		frames.set_animation_speed(action_name, SOURCE_FPS)
-		var frame_offsets: Array[float] = []
-		for index in range(holds.size()):
-			var texture_path := _body_path(source_name, index + 1)
-			var texture := ResourceLoader.load(texture_path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-			if texture == null:
-				push_error("流沙河 Boss 动作帧缺失: " + texture_path)
-				continue
-			frames.add_frame(action_name, texture, float(holds[index]))
-			frame_offsets.append(0.0)
-			if action_name == "wait" and index == 0:
-				_body_foot_baseline = _texture_alpha_bottom(texture)
-		_body_frame_offsets[action_name] = frame_offsets
+	var frames_path := "%s/monster_%d/liu_sha_boss_%d_frames.tres" % [BODY_ROOT, boss_kind, boss_kind]
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null or not frames.has_animation(&"wait"):
+		push_error("流沙河 Boss 帧资源缺失: " + frames_path)
+		return
+	_body_foot_baseline = _texture_alpha_bottom(frames.get_frame_texture(&"wait", 0))
 	if _body_foot_baseline <= 0:
 		_body_foot_baseline = 170
 	mr_ani.sprite_frames = frames
@@ -372,10 +353,6 @@ func _build_original_animations() -> void:
 		var animation := _make_action_animation(action_name, data[1], bool(data[2]))
 		library.add_animation(action_name, animation)
 	mr_player.add_animation_library(&"", library)
-
-
-func _body_path(action_name: String, frame_number: int) -> String:
-	return "%s/monster_%d/%s/%d.png" % [BODY_ROOT, boss_kind, action_name, frame_number]
 
 
 func _make_action_animation(action_name: String, holds: Array, looped: bool) -> Animation:

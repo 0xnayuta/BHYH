@@ -16,8 +16,6 @@
     "source/Script/magic_weapon/zhen_lei_tian_chui.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
     "source/Script/monster/east_continent_monster.gd": "标准动作重命名；关卡配置 merge 使其无法完全静态化",
     "source/Script/monster/eight_immortals_boss.gd": "运行时 AtlasTexture 裁剪（monster166/168 头像）",
-    "source/Script/monster/liu_sha_river_boss.gd": "逐帧 PNG 组装；待生成构建期帧资源",
-    "source/Script/monster/liu_sha_river_shadow.gd": "逐帧 PNG 组装；待生成构建期帧资源",
     "source/Script/monster/monster_130.gd": "从 play 资源取子集并套用逐帧 duration；待构建期动作视图",
     "source/Script/monster/monster_212.gd": "从 play 资源切片为 wait/walk/hit*；待构建期动作视图",
     "source/Script/monster/monster_215.gd": "从 play 资源取子集并套用逐帧 duration；待构建期动作视图",
