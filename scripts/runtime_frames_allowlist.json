@@ -2,11 +2,9 @@
   "schema": 1,
   "description": "允许在运行时调用 SpriteFrames.new() 的文件；新增条目必须评审并写明理由",
   "allowed": {
-    "source/Script/hero/lyfb_awaken_effect.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
-    "source/Script/hero/ne_zha_yin_yang_effect.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
-    "source/Script/hero/smsr_shenqi_lightning_effect.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
-    "source/Script/level/level_46.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
-    "source/Script/level/level_59.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
+    "source/Script/hero/lyfb_awaken_effect.gd": "运行时按 frame_rects 做 AtlasTexture 裁剪，裁剪区域来自效果数据",
+    "source/Script/hero/ne_zha_yin_yang_effect.gd": "图集裁剪/连续帧组合，裁剪区域由剑型与特效参数决定",
+    "source/Script/level/level_59.gd": "固定 STONE_TEXTURES 数组建帧，无路径扫描或逐帧 IO",
     "source/Script/magic_weapon/eight_immortal_magic_weapon.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
     "source/Script/magic_weapon/main_sword_array_weapon.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
     "source/Script/magic_weapon/qing_lian.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
@@ -21,7 +19,7 @@
     "source/Script/monster/three_prince_boss.gd": "运行时 AtlasTexture 裁剪（三太子部件）",
     "source/Script/monster/three_prince_bullet.gd": "有资源走资源，缺失才逐帧回退",
     "source/Script/monster/weiyang_palace_boss.gd": "符号层单序列裁剪",
-    "source/Script/pet/pet_neat_bullet.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）",
-    "source/Script/tools/user_key.gd": "Phase 13-2 范围外，按域拆批（角色特效/法宝/宠物/关卡）"
+    "source/Script/pet/pet_neat_bullet.gd": "pet_neat_4_bullet_3 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本",
+    "source/Script/tools/user_key.gd": "调试工具 UI 的固定图标序列，不进入游戏运行路径"
   }
 }

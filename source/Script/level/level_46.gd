@@ -178,8 +178,8 @@ func _setup_tutorial_background() -> void:
 	for part in TUTORIAL_BACKGROUND_PARTS:
 		var animation := AnimatedSprite2D.new()
 		animation.name = str(part["dir"])
-		animation.sprite_frames = _build_background_frames(
-			TUTORIAL_BACKGROUND_ROOT.path_join(str(part["dir"])), float(part["fps"])
+		animation.sprite_frames = (
+			load(TUTORIAL_BACKGROUND_ROOT.path_join(str(part["dir"])).path_join("play_frames.tres")) as SpriteFrames
 		)
 		animation.animation = &"play"
 		animation.centered = true
@@ -193,28 +193,6 @@ func _setup_tutorial_background() -> void:
 		else:
 			animation.play()
 		_background_nodes.append(animation)
-
-
-func _build_background_frames(directory_path: String, fps: float) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"play")
-	frames.set_animation_loop(&"play", true)
-	frames.set_animation_speed(&"play", fps)
-	for path in _get_png_paths(directory_path):
-		var texture := ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-		if texture != null:
-			frames.add_frame(&"play", texture)
-	return frames
-
-
-func _get_png_paths(directory_path: String) -> Array[String]:
-	var paths: Array[String] = []
-	for file_name in ResourceLoader.list_directory(directory_path):
-		if file_name.get_extension().to_lower() == "png":
-			paths.append(directory_path.path_join(file_name))
-	paths.sort_custom(func(a: String, b: String) -> bool: return a.get_file().naturalnocasecmp_to(b.get_file()) < 0)
-	return paths
 
 
 func _exit_tree() -> void:

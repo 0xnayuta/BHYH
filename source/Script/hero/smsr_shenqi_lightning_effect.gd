@@ -43,30 +43,16 @@ static func clear_cached_frames() -> void:
 static func _get_lightning_frames() -> SpriteFrames:
 	if _lightning_frames != null:
 		return _lightning_frames
-	var frames := SpriteFrames.new()
-	frames.set_animation_speed("default", 60.0)
-	frames.set_animation_loop("default", false)
-	for index in range(9):
-		var path := "res://Art/hero_picture/smsr_shenqi_lightning/lightning/d_%05d.png" % index
-		var texture := load(path) as Texture2D
-		if texture != null:
-			frames.add_frame("default", texture)
-	_lightning_frames = frames
+	_lightning_frames = (
+		load("res://Art/hero_picture/smsr_shenqi_lightning/lightning/lightning_frames.tres") as SpriteFrames
+	)
 	return _lightning_frames
 
 
 static func _get_hit_frames() -> SpriteFrames:
 	if _hit_frames != null:
 		return _hit_frames
-	var frames := SpriteFrames.new()
-	frames.set_animation_speed("default", 30.0)
-	frames.set_animation_loop("default", false)
-	for index in range(0, 20, 2):
-		var path := "res://Art/hero_picture/smsr_shenqi_lightning/hit_mesh/hit_%05d.png" % index
-		var texture := load(path) as Texture2D
-		if texture != null:
-			frames.add_frame("default", texture, 2.0 if index >= 16 else 1.0)
-	_hit_frames = frames
+	_hit_frames = load("res://Art/hero_picture/smsr_shenqi_lightning/hit_mesh/hit_frames.tres") as SpriteFrames
 	return _hit_frames
 
 

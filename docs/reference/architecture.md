@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 运行时建帧仍有 **21** 个文件（怪物 **9** 个，其余 12 个非怪物），由
+- 运行时建帧仍有 **19** 个文件（怪物 **9** 个，其余 10 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -371,7 +371,13 @@ classDiagram
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
   - 待迁移：`liu_sha_river_boss` / `liu_sha_river_shadow`（逐帧 PNG）。
-  非怪物 **12** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域。
+  非怪物 **10** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域：
+  - `pet_neat_bullet`：`pet_neat_4_bullet_3` 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本，保留；
+  - `lyfb_awaken_effect`：按效果数据 `frame_rects` 做 `AtlasTexture` 裁剪；
+  - `ne_zha_yin_yang_effect`：图集裁剪/连续帧组合，区域由剑型与特效参数决定；
+  - `level_59`：固定 `STONE_TEXTURES` 数组建帧，无路径扫描或逐帧 IO；
+  - `user_key`：调试工具 UI 的固定图标序列，不进入游戏运行路径；
+  - 剩余 5 个法宝见上方裁定。
 
 ### 6.5 13-2B 冻结裁定（怪物域 9 个）
 
