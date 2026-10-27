@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 13-4 纹理别名删除完成，入口收敛待确认）
+> 最后更新：2026-10-27（13-4 删除与发布清单归属迁移完成，入口收敛待确认）
 
 ---
 
@@ -142,7 +142,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2B 宠物弹体/寅虎 stage | `convert_numbered_frames.py --all --check` **47/47 PASS**；`convert_monster_action_views.py --check` **5/5 PASS**；Godot 探针 19 个宠物弹体 + 2 个 stage 资源帧数/loop/duration **0 失败**；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（691.0s） | 四宠物弹体（mouse/rabbit/turtle/yin_tiger）与寅虎 stage1/2 改加载构建期资源；`SpriteFrames.new()` **27→21**（怪物 **9**、非怪物 **12**）；architecture §6.5 新增 9 个怪物文件的冻结裁定与判定标准；allowlist 21 条 |
 | 2026-10-27 关卡回归并发优化 | 56 关基准：`--jobs 4` **204.8s**、`--jobs 8` **124.7s**、`--jobs 12` **98.1s**、`--warmup 1`+12 **120.5s**；全量 133 关：`--jobs 4` **690.0s** → auto（12）**275.7s**，**PASS 128/128 + SKIP 5，FAIL 0**（`level_lxdy1` 1 次瞬态，重试通过） | `level_regression_all.py` 默认并发改为 `min(12, max(4, CPU 核数))`；新增 `--warmup`（默认 0，实测无收益）；保留失败关卡串行重试；`--jobs 4` 仍为稳定排障口径 |
 | 2026-10-27 关卡回归优化对比与最终方案 | 56 关：jobs4 **204.8s** → jobs8 **124.7s** → jobs12 **98.1s**；全量：jobs4 **690.0s** → auto（12）**275.7s**；预热+12 **120.5s**（无收益）；5 关/组进程复用 **146.8s**（更慢） | 最终采用单关进程 + auto 并发 12、`--warmup 0`、失败串行重试；进程复用已验证但回滚（每关加载屏/资源清理抵消启动节省）；日常 `--changed-only`，发布全量；`--jobs 4` 保留为稳定排障口径 |
-| 2026-10-27 Phase 13-3 发布依赖闭包 | `convert_level_preload_catalog.py --check` PASS：199 怪物场景 / 24 动态场景 / 8 弹体 / 767 动态纹理；`frame_sequence_pack_probe.py --self-test` **4,100 条**；PCK **2,738,645,381 字节**，**4,100/4,100 可达**（sha256 `bcb2eafbffe9…`）；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（273.1s）；`health_check` 713 脚本 **0/0/0**；`level_bxgh` / `level_stz` / `level_64` / `level_65` 冒烟 **0/0** | 新增 `level_preload_export_dependencies.json` 与 Catalog 动态字段；删除 `global.gd` 两张动态表、`MONSTER_SCENE_ALIASES` 与追加函数（5419→5241 行，净减 178）；别名与动态来源迁入 `monster_dynamic_paths.json` 构建期展开；PCK 探针合并两份清单；13-3 完成 |
+| 2026-10-27 Phase 13-3 发布依赖闭包 | `convert_level_preload_catalog.py --check` PASS：199 怪物场景 / 24 动态场景 / 8 弹体 / 767 动态纹理；`frame_sequence_pack_probe.py --self-test` **4,100 条**；PCK **2,738,623,739 字节**，**4,100/4,100 可达**（sha256 `f87a631c73db…`；清单迁到公共路径后复跑）；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（273.1s）；`health_check` 713 脚本 **0/0/0**；`level_bxgh` / `level_stz` / `level_64` / `level_65` 冒烟 **0/0** | 新增公共路径 `source/Script/data/level_preload_export_dependencies.json` 与 Catalog 动态字段；删除 `global.gd` 两张动态表、`MONSTER_SCENE_ALIASES` 与追加函数（5419→5241 行，净减 178）；别名与动态来源迁入 `monster_dynamic_paths.json` 构建期展开；PCK 探针合并两份清单；13-3 完成 |
 
 | 2026-10-27 Phase 13-4 纹理别名删除 | 2,313 → **1,381**；删除 **932**（917 无引用 + 15 仅通用基名）；1 条目标修正为 `Art/monster/monster_66_1/skill1.png`；`classify_texture_aliases.py --check` PASS；契约门禁 **12/12**；`check_all` **8/8**；`health_check` 713 脚本 **0/0/0**；全量回归 **PASS 128/128 + SKIP 5**（283.0s，`level_tzsijian` 1 次瞬态重试通过）；`level_1` / coop **16/16** / scene **2/2** | 新增 `texture_alias_targets` 契约门禁；入口收敛未执行；未修改素材；15 条弱引用均为 `preview.png` / `1.png` / `parts.png` 通用基名，父目录无引用 |
 

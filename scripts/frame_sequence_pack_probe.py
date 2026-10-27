@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source"
 MANIFEST_PATHS = (
     SOURCE / "Art/frame_sequences/frame_sequence_export_dependencies.json",
-    SOURCE / "Art/frame_sequences/level_preload_export_dependencies.json",
+    SOURCE / "Script/data/level_preload_export_dependencies.json",
 )
 EXPORT_PRESETS_PATH = SOURCE / "export_presets.cfg"
 RESULT_PREFIX = "PACK_PROBE_RESULT="

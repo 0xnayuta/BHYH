@@ -412,7 +412,7 @@ classDiagram
 | 流沙河 `ACTIONS` 动作表 | `scripts/convert_liu_sha_frames.py` | 按 boss_kind 拆分的 `liu_sha_*_frames.tres` | `--check` 逐字比较；逐帧 duration 与确定性 UID |
 | 怪物 `AtlasMetadata.sequences` + 动作映射 | `scripts/convert_monster_frames.py` | 既有 `Art/monster/**/*_frames.tres`（sequence + 动作别名） | `--check` 动画名集合、帧数、页路径闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；`--all` 追加动作别名并修正 loop；`--rewrite` 只补 UID 头 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
-| 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）、怪物脚本弹体名与 `monster_dynamic_paths.json` | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry`、弹体表、别名场景、动态纹理、额外场景）+ `source/Art/frame_sequences/level_preload_export_dependencies.json` | `--check` 逐字比较 Catalog 与依赖清单；无法静态解析的条目输出到 stderr，由关卡自身预载；动态路径缺失/悬空直接失败 |
+| 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）、怪物脚本弹体名与 `monster_dynamic_paths.json` | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry`、弹体表、别名场景、动态纹理、额外场景）+ `source/Script/data/level_preload_export_dependencies.json` | `--check` 逐字比较 Catalog 与依赖清单；无法静态解析的条目输出到 stderr，由关卡自身预载；动态路径缺失/悬空直接失败 |
 
 关卡预载数据契约：
 
@@ -465,7 +465,8 @@ classDiagram
 - `FrameSequence`、Catalog、Store 与转换器已落地，序列数量以构建检查输出为准；消费者只注入 `sequence`，旧数组和目录扫描已删除；
 - 身份模型 v2：序列按 `asset_id` 登记，播放策略改为实例覆盖；转换器按 `asset_id` 生成可读文件名，并清理自己拥有的陈旧输出；
 - 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`；
-- 关卡发布依赖清单 `level_preload_export_dependencies.json` 与 `frame_sequence_export_dependencies.json` 由 `frame_sequence_pack_probe.py` 合并验证；PCK 内 **4,100 条**依赖全部可达；
+- 关卡发布依赖清单 `source/Script/data/level_preload_export_dependencies.json` 与资产侧 `source/Art/frame_sequences/frame_sequence_export_dependencies.json` 由 `frame_sequence_pack_probe.py` 合并验证；PCK 内 **4,100 条**依赖全部可达；
+- 发布依赖清单按来源归属：`Art/frame_sequences/frame_sequence_export_dependencies.json` 由 FrameSequence Catalog 与图集页派生，属于素材侧构建产物，随私人素材仓版本化；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物脚本与 `scripts/monster_dynamic_paths.json` 派生，属于代码侧构建产物，随公共仓版本化。两者都不在运行时加载，只在发布前 PCK 闭包验证时读取。
 - 动态怪物纹理/场景表与 `MONSTER_SCENE_ALIASES` 已从 `global.gd` 迁出：别名与动态来源由 `scripts/monster_dynamic_paths.json` 在构建期展开进 Catalog 与依赖清单，运行时只读 Catalog。
 
 待迁移：

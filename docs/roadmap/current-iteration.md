@@ -222,7 +222,7 @@ return MANIFESTS[role_id]
 
 ### 4.3 任务
 
-1. **扩展现有清单 schema**：在 `frame_sequence_export_dependencies.json` 同级新增 `level_preload_export_dependencies.json`，记录：
+1. **扩展现有清单 schema**：在 `level_preload_catalog.tres` 同目录新增 `source/Script/data/level_preload_export_dependencies.json`，记录：
    - `catalog`：`level_preload_catalog.tres`；
    - `monster_scenes`：199 条解析后的实际 `.tscn` 路径（**已展开别名**）；
    - `dynamic_monster_scenes`：24 条；
@@ -237,7 +237,7 @@ return MANIFESTS[role_id]
 
 - 新增清单 `--check` 通过并进入契约门禁；
 - `global.gd` 不再包含两张动态表、别名表与对应函数（净减少 ≥ 70 行）；
-- 发布包探针 PASS：两份清单合并 **4,100 条**依赖全部可达（PCK 2,738,645,381 字节，sha256 `bcb2eafbffe9…`）；
+- 发布包探针 PASS：两份清单合并 **4,100 条**依赖全部可达（PCK 2,738,623,739 字节，sha256 `f87a631c73db…`（清单迁到公共路径后复跑））；
 - 全量关卡回归 PASS，FAIL 0；
 - `reference/architecture.md` 的“发布依赖”段落与 `scripts/README.md` 同步。
 

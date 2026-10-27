@@ -35,7 +35,7 @@ MONSTER_SCENE_DIR = SOURCE / "Scene/monster"
 BULLET_SCENE_DIR = MONSTER_SCENE_DIR / "monster_bullet_slim"
 CATALOG_PATH = SOURCE / "Script/data/level_preload_catalog.tres"
 DYNAMIC_SOURCE_PATH = ROOT / "scripts/monster_dynamic_paths.json"
-EXPORT_MANIFEST_PATH = SOURCE / "Art/frame_sequences/level_preload_export_dependencies.json"
+EXPORT_MANIFEST_PATH = SOURCE / "Script/data/level_preload_export_dependencies.json"
 EXPORT_MANIFEST_SCHEMA = "level_preload_export_dependencies"
 EXPORT_MANIFEST_VERSION = 1
 
