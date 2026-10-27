@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 13-2B 流沙河/130-215/法宝批次完成）
+> 最后更新：2026-10-27（Phase 13-2B 宠物弹体/寅虎 stage 批次完成）
 
 ---
 
@@ -139,6 +139,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2B 弹体动作别名批次 | `convert_monster_frames.py --check` **152/152 PASS**；Godot 探针覆盖 3002/3004/3007/3020 的 fly/explode/fly1/fly2/arrow1/arrow2，帧数与 loop **0 失败**；`level_ymj` / `level_51` / `level_xwk` 冒烟 **PASS**（0 ERROR / 0 WARNING）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（681.0s） | 4 个弹体脚本改为直接加载帧资源；素材提交 `3d6e8893` 追加动作别名；`SpriteFrames.new()` 文件数 **46→42**（怪物 **26→22**）；剩余 east/weiyang/tao_wu/裁剪/无资源编号弹体登记为下一批 |
 | 2026-10-27 Phase 13-2B 编号帧/loose/建帧门禁收口 | `convert_numbered_frames.py --all --check` **21/21 PASS**；Godot 探针 10/10 编号帧资源帧数/loop/fps **0 失败**；`level_ghg` / `level_66` / `level_1` 冒烟 **PASS**（0/0）；`runtime_frames_audit.py --fail-on-error` **34/34 一致**；契约门禁 **9/9 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（690.1s） | 新增 10 个编号帧弹体资源与 6 个东胜神洲 loose 特效资源；九华松针修正到 3009 图集 arrow 动画；east 建帧 2→1（仅剩动态配置标准动作重命名）；`SpriteFrames.new()` **42→34**（怪物 **22→14**）；新增 `runtime_frames_allowlist.json` 与防扩张门禁，负向样本 exit 1 |
 | 2026-10-27 Phase 13-2B 流沙河/130-215/法宝 | `convert_liu_sha_frames.py --check` **5/5 PASS**；`convert_monster_action_views.py --check` **3/3 PASS**；`convert_numbered_frames.py --all --check` **28/28 PASS**；Godot 探针流沙河 5 资源、动作视图 3 资源、法宝 7 资源帧数/loop/fps/duration **0 失败**；`level_ghg` 冒烟 **PASS**（0/0）；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（723.3s，level_58 重试通过） | 新增流沙河 5 个、130/212/215 动作视图 3 个、法宝 7 个构建期资源；8 个脚本删除运行时建帧；`SpriteFrames.new()` **34→27**，怪物 **14→9**（达到 ≤10 的怪物出口目标）；allowlist 同步删除 6 条 |
+| 2026-10-27 Phase 13-2B 宠物弹体/寅虎 stage | `convert_numbered_frames.py --all --check` **47/47 PASS**；`convert_monster_action_views.py --check` **5/5 PASS**；Godot 探针 19 个宠物弹体 + 2 个 stage 资源帧数/loop/duration **0 失败**；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（691.0s） | 四宠物弹体（mouse/rabbit/turtle/yin_tiger）与寅虎 stage1/2 改加载构建期资源；`SpriteFrames.new()` **27→21**（怪物 **9**、非怪物 **12**）；architecture §6.5 新增 9 个怪物文件的冻结裁定与判定标准；allowlist 21 条 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
