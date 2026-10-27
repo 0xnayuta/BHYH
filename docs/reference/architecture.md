@@ -357,7 +357,7 @@ classDiagram
 - `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
 - `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
 - `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
-- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合与怪物弹体场景由构建期生成，加载页不在运行时解析 `.gd` / `.tscn` 源文本。
+- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合、怪物弹体场景、别名场景覆盖、动态纹理文件与额外场景由构建期生成；加载页不在运行时解析 `.gd` / `.tscn` 源文本，也不再扫描动态纹理目录或做 ID→ID 映射。
 
 仍然存在（遗留）：
 
@@ -412,7 +412,7 @@ classDiagram
 | 流沙河 `ACTIONS` 动作表 | `scripts/convert_liu_sha_frames.py` | 按 boss_kind 拆分的 `liu_sha_*_frames.tres` | `--check` 逐字比较；逐帧 duration 与确定性 UID |
 | 怪物 `AtlasMetadata.sequences` + 动作映射 | `scripts/convert_monster_frames.py` | 既有 `Art/monster/**/*_frames.tres`（sequence + 动作别名） | `--check` 动画名集合、帧数、页路径闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；`--all` 追加动作别名并修正 loop；`--rewrite` 只补 UID 头 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
-| 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）与怪物脚本弹体名 | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry` / 怪物弹体表） | `--check` 逐字比较；无法静态解析的条目输出到 stderr，由关卡自身预载 |
+| 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）、怪物脚本弹体名与 `monster_dynamic_paths.json` | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry`、弹体表、别名场景、动态纹理、额外场景）+ `source/Art/frame_sequences/level_preload_export_dependencies.json` | `--check` 逐字比较 Catalog 与依赖清单；无法静态解析的条目输出到 stderr，由关卡自身预载；动态路径缺失/悬空直接失败 |
 
 关卡预载数据契约：
 
@@ -464,7 +464,9 @@ classDiagram
 - 角色 4/5 重型帧的构建期化与预热清单收敛；
 - `FrameSequence`、Catalog、Store 与转换器已落地，序列数量以构建检查输出为准；消费者只注入 `sequence`，旧数组和目录扫描已删除；
 - 身份模型 v2：序列按 `asset_id` 登记，播放策略改为实例覆盖；转换器按 `asset_id` 生成可读文件名，并清理自己拥有的陈旧输出；
-- 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`。
+- 五台 3082/3080/3081 删除流式回退，只使用构建期 `SpriteFrames`；
+- 关卡发布依赖清单 `level_preload_export_dependencies.json` 与 `frame_sequence_export_dependencies.json` 由 `frame_sequence_pack_probe.py` 合并验证；PCK 内 **4,100 条**依赖全部可达；
+- 动态怪物纹理/场景表与 `MONSTER_SCENE_ALIASES` 已从 `global.gd` 迁出：别名与动态来源由 `scripts/monster_dynamic_paths.json` 在构建期展开进 Catalog 与依赖清单，运行时只读 Catalog。
 
 待迁移：
 
@@ -472,11 +474,10 @@ classDiagram
 |:---|:---|
 | 魔法武器剩余 5 个运行时建帧 | 与 13-4 的编号帧/别名收敛合并评估；固定裁剪或调用方纹理数组保留为登记例外 |
 | 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；`level_59`、`user_key` 为合法例外 |
-| 发布包实际闭包 | 已入库仅用于验证的 `source/export_presets.cfg`（`all_resources`）与 `scripts/frame_sequence_pack_probe.py`（Godot 挂载 PCK + `ResourceLoader.exists()` 逐条判定）；PCK 结论以实际运行结果为准，不以源闭包代替 |
 | `AtlasMetadata.data` 无类型字典 | 逐步提供 typed accessor 或 typed 子资源 |
 | Spine 平台库 | 按目标平台补齐并验证 |
 
-迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 下一批把有限帧运行时建帧迁移到构建期 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
+迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 下一批评估剩余法宝/角色特效运行时建帧 → 再收敛 `AtlasMetadata` 类型边界 → 最后处理平台与第三方运行库。
 
 ---
 

@@ -427,16 +427,14 @@ def resolve_monster_scene_path(
     aliases: dict[int, int],
     stack: set[int] | None = None,
 ) -> str:
-    if monster_id in direct:
-        return direct[monster_id]
-    if monster_id not in aliases:
-        return ""
-    if stack is None:
-        stack = set()
-    if monster_id in stack:
-        raise ValueError(f"怪物场景别名成环: {monster_id}")
-    stack.add(monster_id)
-    return resolve_monster_scene_path(aliases[monster_id], direct, aliases, stack)
+    if monster_id in aliases:
+        if stack is None:
+            stack = set()
+        if monster_id in stack:
+            raise ValueError(f"怪物场景别名成环: {monster_id}")
+        stack.add(monster_id)
+        return resolve_monster_scene_path(aliases[monster_id], direct, aliases, stack)
+    return direct.get(monster_id, "")
 
 
 def expand_texture_entry(res_path: str, missing: list[str]) -> list[str]:

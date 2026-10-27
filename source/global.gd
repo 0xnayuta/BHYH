@@ -238,34 +238,6 @@ const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet3.gd"),
 	preload("res://Script/monster/monster212_bullet4.gd"),
 ]
-const MONSTER_SCENE_ALIASES := {
-	3043: 3031,
-	3044: 3030,
-	3045: 3032,
-	3046: 3028,
-	3053: 3047,
-	3054: 3038,
-	3055: 3036,
-	3064: 3039,
-	3072: 3065,
-	3073: 3067,
-	3074: 3068,
-	3075: 3066,
-	3178: 3159,
-	3183: 3177,
-	3126: 3119,
-	3145: 3121,
-	3146: 3122,
-	3221: 3199,
-	3226: 3198,
-	3274: 3222,
-	3275: 3198,
-	3321: 3308,
-	3322: 3309,
-	3340: 3320,
-	3341: 3308,
-	3342: 3309,
-}
 var basic_ar_button = null
 var weapon_bullet_node = null
 var bullet = null
@@ -899,23 +871,25 @@ func load_level_monster_scene(path: String) -> PackedScene:
 	return scene
 
 
-func _canonical_monster_scene_id(monster_id: int) -> int:
-	return int(MONSTER_SCENE_ALIASES.get(monster_id, monster_id))
-
-
 func _monster_scene_path(monster_id: int) -> String:
-	return "res://Scene/monster/monster_%d.tscn" % _canonical_monster_scene_id(monster_id)
+	var override := LevelPreloadStore.monster_scene_path(monster_id)
+	if not override.is_empty():
+		return override
+	return "res://Scene/monster/monster_%d.tscn" % monster_id
 
 
 func preload_level_monster_scenes(monster_ids: Array) -> void:
 	var scene_paths: Array = []
-	var seen_ids := {}
+	var seen_paths := {}
 	for monster_id_value in monster_ids:
-		var monster_id := _canonical_monster_scene_id(int(monster_id_value))
-		if monster_id <= 0 or seen_ids.has(monster_id):
+		var monster_id := int(monster_id_value)
+		if monster_id <= 0:
 			continue
-		seen_ids[monster_id] = true
-		scene_paths.append(_monster_scene_path(monster_id))
+		var scene_path := _monster_scene_path(monster_id)
+		if scene_path.is_empty() or seen_paths.has(scene_path):
+			continue
+		seen_paths[scene_path] = true
+		scene_paths.append(scene_path)
 	if scene_paths.is_empty():
 		return
 	_track_level_scene_dependencies(scene_paths)
@@ -967,8 +941,7 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 			_standard_monster_frames_path(monster_id), texture_paths, frames_visited
 		)
 	for monster_id_value in unique_monster_ids:
-		var monster_id := _canonical_monster_scene_id(int(monster_id_value))
-		for path_value in LevelPreloadStore.dynamic_monster_textures(monster_id):
+		for path_value in LevelPreloadStore.dynamic_monster_textures(int(monster_id_value)):
 			_append_unique_preload_path(texture_paths, str(path_value))
 	if not texture_paths.is_empty():
 		var textures_per_frame := 2 if OS.has_feature("mobile") else 5
@@ -4661,14 +4634,13 @@ func add_back_pack(parent, position):
 
 
 func create_monster(M_id: int, parent, _position: Vector2) -> BaseMonster:
-	var scene_id := _canonical_monster_scene_id(M_id)
-	var path := _monster_scene_path(scene_id)
+	var path := _monster_scene_path(M_id)
 	var scene = load_level_monster_scene(path)
 	if scene:
 		var target := instance_scene(scene, parent) as BaseMonster
 		if target == null:
 			return null
-		if scene_id != M_id:
+		if path != "res://Scene/monster/monster_%d.tscn" % M_id:
 			target.name = "Monster_%d" % M_id
 
 			target.set_meta("source_monster_id", M_id)

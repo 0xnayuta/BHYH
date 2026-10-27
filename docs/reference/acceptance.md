@@ -285,19 +285,19 @@ python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
-`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验关卡预载 Catalog 与源脚本一致。
+`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验关卡预载 Catalog 与 `level_preload_export_dependencies.json` 均与源脚本/动态路径数据源一致。
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 
-> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-10-26 实测该预设导出 PCK 内 3,101 条依赖全部可达（约 2.74 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
+> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-10-27 实测该预设导出 PCK 内 **4,100 条**依赖全部可达（FrameSequence 与关卡预载两份清单合并，约 2.74 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
 
 `frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。三种证据必须分开记录：
 
 | 证据 | 命令 | 覆盖范围 |
 |:---|:---|:---|
-| 源闭包 | `convert_frame_sequences.py --check` | 源文件存在、schema、UID、Catalog 与延迟纹理清单一致 |
+| 源闭包 | `convert_frame_sequences.py --check` + `convert_level_preload_catalog.py --check` | 源文件存在、schema、UID、Catalog、FrameSequence 与关卡预载依赖清单一致 |
 | 预设声明 | `convert_frame_sequences.py --export-preset` | 预设过滤器不会排除依赖；仍是配置级 |
-| 发布包 | `frame_sequence_pack_probe.py` | 引擎挂载 PCK 后每条依赖可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
+| 发布包 | `frame_sequence_pack_probe.py` | 合并两份清单后，引擎挂载 PCK 逐条判定 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
 
 判定：
 

@@ -213,30 +213,31 @@ return MANIFESTS[role_id]
 
 | 缺口 | 数据 |
 |:---|:---|
-| `level_preload_catalog.tres` 内怪物场景 | 198 个怪物 ID（字符串拼接后加载） |
-| 其中需要 `MONSTER_SCENE_ALIASES` 才能解析 | 5 个（3043、3126、3145、3146、3183） |
-| `level_preload_catalog.tres` 内弹体场景 | 17 个键 / 25 条唯一路径 |
-| `DYNAMIC_MONSTER_TEXTURE_PATHS` | 21 个 ID / 40 条路径（含目录） |
-| `DYNAMIC_MONSTER_SCENE_PATHS` | 17 个 ID / 37 条路径 |
-| 现有发布依赖清单 | 仅 `frame_sequence_export_dependencies.json`（288 序列 / 2,812 纹理） |
+| `level_preload_catalog.tres` 内怪物场景 | 199 条解析后的实际 `.tscn`（生成期展开 26 个别名） |
+| 别名来源 | `scripts/monster_dynamic_paths.json` 26 条；运行时已删除 ID→ID 映射 |
+| `level_preload_catalog.tres` 内弹体场景 | 17 个键 / 8 条唯一路径 |
+| 动态纹理来源 | 16 个 ID / 30 条来源（目录展开为 767 个文件） |
+| 动态场景来源 | 16 个 ID / 24 条唯一路径（原始 37 条去重） |
+| 现有发布依赖清单 | `frame_sequence_export_dependencies.json`（288 序列 / 2,812 纹理） |
 
 ### 4.3 任务
 
 1. **扩展现有清单 schema**：在 `frame_sequence_export_dependencies.json` 同级新增 `level_preload_export_dependencies.json`，记录：
    - `catalog`：`level_preload_catalog.tres`；
-   - `monster_scenes`：198 条解析后的实际 `.tscn` 路径（**已展开别名**）；
-   - `bullet_scenes`：25 条；
-   - `dynamic_textures`：40 条（目录展开为文件列表）。
+   - `monster_scenes`：199 条解析后的实际 `.tscn` 路径（**已展开别名**）；
+   - `dynamic_monster_scenes`：24 条；
+   - `bullet_scenes`：8 条；
+   - `dynamic_textures`：767 条（目录展开为文件列表）。
 2. **生成方**：由 `convert_level_preload_catalog.py` 同步输出，`--check` 逐字比较。
-3. **回收动态表**：`DYNAMIC_MONSTER_TEXTURE_PATHS` 与 `DYNAMIC_MONSTER_SCENE_PATHS` 并入 Catalog，删除 `global.gd` 中的两张表与 `_append_dynamic_monster_*` 两个函数。
-4. **闭包探针**：把 `frame_sequence_pack_probe.py` 的清单读取扩展为“多清单”，或新增 `scripts/level_preload_pack_probe.py`，在最小空工程挂载 PCK 后逐条 `ResourceLoader.exists()`。
-5. **别名前置**：`MONSTER_SCENE_ALIASES` 在生成期展开，运行时不再做 ID→ID 映射；若某 ID 无场景也无别名，生成器直接失败。
+3. **回收动态表**：`DYNAMIC_MONSTER_TEXTURE_PATHS` 与 `DYNAMIC_MONSTER_SCENE_PATHS` 并入 Catalog，删除 `global.gd` 中的两张表与 `_append_dynamic_monster_*` 两个函数（已完成）。
+4. **闭包探针**：`frame_sequence_pack_probe.py` 已扩展为多清单合并，在最小空工程挂载 PCK 后逐条 `ResourceLoader.exists()`（已完成）。
+5. **别名前置**：`MONSTER_SCENE_ALIASES` 迁入 `monster_dynamic_paths.json` 并在生成期展开；运行时不再做 ID→ID 映射；无场景且无别名的 Catalog ID 生成器直接失败（已完成）。
 
 ### 4.4 出口标准
 
 - 新增清单 `--check` 通过并进入契约门禁；
-- `global.gd` 不再包含两张动态表与对应函数（净减少 ≥ 70 行）；
-- 发布包探针 PASS：Catalog + 198 怪物场景 + 25 弹体 + 40 纹理全部可达；
+- `global.gd` 不再包含两张动态表、别名表与对应函数（净减少 ≥ 70 行）；
+- 发布包探针 PASS：两份清单合并 **4,100 条**依赖全部可达（PCK 2,738,645,381 字节，sha256 `bcb2eafbffe9…`）；
 - 全量关卡回归 PASS，FAIL 0；
 - `reference/architecture.md` 的“发布依赖”段落与 `scripts/README.md` 同步。
 
@@ -319,7 +320,7 @@ Phase 13-4 兼容层与遗留动态表治理
 | Phase 13-1 | **已完成**（2026-10-26） | 单个提交 |
 | Phase 13-2A | **已完成**（2026-10-26） | 转换器 + `--check` 一个提交 |
 | Phase 13-2B | **已完成**（2026-10-27，怪物域；非怪物按域拆批） | 按怪物域分批，每批一个提交 |
-| Phase 13-3 | 规划完成，未开始 | 清单生成 + 运行时删表分开提交 |
+| Phase 13-3 | **已完成**（2026-10-27） | 清单生成 + 运行时删表分开提交 |
 | Phase 13-4 | 规划完成，未开始 | 分类脚本 → 删除 → 入口收敛，分开提交 |
 
 **红线**：
@@ -371,7 +372,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 
 ## 9. 恢复规则
 
-- 本页记录 Phase 13 实施状态：13-1、13-2A 与 13-2B（怪物域）已完成；13-3 已确认，按清单生成 → 回收动态表 → PCK/别名分批执行。
+- 本页记录 Phase 13 实施状态：13-1、13-2A、13-2B（怪物域）与 13-3 已完成；13-4 待用户确认后启动。
 - 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
 - Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
 - 内容版本保持 6.9；Phase 13 不产生新的内容版本号。

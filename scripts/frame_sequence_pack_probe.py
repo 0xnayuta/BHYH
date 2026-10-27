@@ -27,7 +27,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source"
-MANIFEST_PATH = SOURCE / "Art/frame_sequences/frame_sequence_export_dependencies.json"
+MANIFEST_PATHS = (
+    SOURCE / "Art/frame_sequences/frame_sequence_export_dependencies.json",
+    SOURCE / "Art/frame_sequences/level_preload_export_dependencies.json",
+)
 EXPORT_PRESETS_PATH = SOURCE / "export_presets.cfg"
 RESULT_PREFIX = "PACK_PROBE_RESULT="
 
@@ -63,15 +66,13 @@ func _initialize() -> void:
 		return
 	var manifest: Dictionary = parsed
 	var required: Array[String] = []
-	for key in ["catalog"]:
-		var value := str(manifest.get(key, ""))
-		if not value.is_empty():
-			required.append(value)
-	for key in ["sequences", "deferred_textures"]:
-		var items: Variant = manifest.get(key, [])
-		if items is Array:
-			for item in items:
-				required.append(str(item))
+	var items: Variant = manifest.get("required", [])
+	if not items is Array:
+		print(RESULT_PREFIX + JSON.stringify({"ok": false, "error": "manifest.required is not an array"}))
+		quit(2)
+		return
+	for item in items:
+		required.append(str(item))
 	if not ProjectSettings.load_resource_pack(pck_path, true):
 		print(RESULT_PREFIX + JSON.stringify({"ok": false, "error": "load_resource_pack failed"}))
 		quit(1)
@@ -105,10 +106,22 @@ def normalize(path: str) -> str:
 
 
 def required_paths(manifest: dict[str, object]) -> list[str]:
+    paths: list[str] = []
     catalog = str(manifest.get("catalog", ""))
-    sequences = [str(item) for item in manifest.get("sequences", [])]
-    textures = [str(item) for item in manifest.get("deferred_textures", [])]
-    return [catalog] + sequences + textures
+    if catalog:
+        paths.append(catalog)
+    for key in (
+        "sequences",
+        "deferred_textures",
+        "monster_scenes",
+        "dynamic_monster_scenes",
+        "bullet_scenes",
+        "dynamic_textures",
+    ):
+        items = manifest.get(key, [])
+        if isinstance(items, list):
+            paths.extend(str(item) for item in items)
+    return paths
 
 
 def resolve_godot(explicit: str | None) -> str | None:
@@ -184,61 +197,81 @@ def run_probe(godot: str, pck: Path, manifest_copy: Path, timeout: int) -> tuple
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def load_manifest() -> dict[str, object]:
-    if not MANIFEST_PATH.is_file():
-        raise FileNotFoundError(f"缺少发布依赖清单: {MANIFEST_PATH.relative_to(ROOT)}")
-    data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        raise ValueError("发布依赖清单不是 JSON 对象")
-    return data
+def load_manifests(paths: list[Path]) -> list[dict[str, object]]:
+    manifests: list[dict[str, object]] = []
+    for path in paths:
+        if not path.is_file():
+            raise FileNotFoundError(f"缺少发布依赖清单: {path.relative_to(ROOT)}")
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError(f"发布依赖清单不是 JSON 对象: {path.relative_to(ROOT)}")
+        manifests.append(data)
+    return manifests
 
 
-def self_test() -> int:
+def combined_required(manifests: list[dict[str, object]]) -> list[str]:
+    paths = [path for manifest in manifests for path in required_paths(manifest)]
+    return list(dict.fromkeys(paths))
+
+
+def self_test(paths: list[Path] | None = None) -> int:
     """不依赖 Godot：验证清单可解析且必需路径结构正确。"""
+    manifest_paths = paths or list(MANIFEST_PATHS)
     try:
-        manifest = load_manifest()
+        manifests = load_manifests(manifest_paths)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"[FAIL] 发布依赖清单自检失败: {error}", file=sys.stderr)
         return 1
-    paths = required_paths(manifest)
+    required = combined_required(manifests)
     problems: list[str] = []
-    if not str(manifest.get("catalog", "")).startswith("res://"):
-        problems.append("catalog 不是 res:// 路径")
-    if len(paths) < 2:
+    for manifest in manifests:
+        if not str(manifest.get("catalog", "")).startswith("res://"):
+            problems.append("catalog 不是 res:// 路径")
+        raw = [normalize(path) for path in required_paths(manifest)]
+        if len(raw) != len(set(raw)):
+            problems.append("单份清单包含重复路径")
+    if len(required) < 2:
         problems.append("依赖路径数量不足")
-    if len({normalize(path) for path in paths}) != len(paths):
-        problems.append("依赖路径包含重复项")
-    bad = [path for path in paths if not path.startswith("res://")]
+    bad = [path for path in required if not path.startswith("res://")]
     if bad:
         problems.append(f"非 res:// 路径: {bad[:3]}")
     if problems:
         for problem in problems:
             print(f"[FAIL] {problem}", file=sys.stderr)
         return 1
-    print(f"[OK] 发布依赖清单自检通过: {len(paths)} 条路径（catalog + 序列 + 延迟纹理）")
+    print(
+        f"[OK] 发布依赖清单自检通过: {len(required)} 条路径"
+        f"（{len(manifests)} 份清单：FrameSequence + 关卡预载）"
+    )
     return 0
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="FrameSequence 发布包依赖闭包探针")
+    parser = argparse.ArgumentParser(description="发布包依赖闭包探针（FrameSequence + 关卡预载）")
     parser.add_argument("--godot", default=None, help="Godot 可执行文件路径（或设 GODOT_BIN）")
     parser.add_argument("--preset", default=None, help="导出预设名称；默认取第一个预设")
+    parser.add_argument("--manifest", action="append", default=None, help="依赖清单路径；可重复，默认读取两份构建清单")
     parser.add_argument("--self-test", action="store_true", help="只校验依赖清单结构")
     parser.add_argument("--report", default=None, help="可选 JSON 报告输出路径")
     parser.add_argument("--export-timeout", type=int, default=900, help="导出子进程墙钟上限（秒）")
     parser.add_argument("--probe-timeout", type=int, default=300, help="包内校验子进程墙钟上限（秒）")
     args = parser.parse_args()
+    manifest_paths = [Path(item) for item in args.manifest] if args.manifest else list(MANIFEST_PATHS)
 
     if args.self_test:
-        return self_test()
+        return self_test(manifest_paths)
 
     try:
-        manifest = load_manifest()
+        manifests = load_manifests(manifest_paths)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"[FAIL] {error}", file=sys.stderr)
-        print("[FAIL] 先运行 python scripts/convert_frame_sequences.py 生成清单", file=sys.stderr)
+        print(
+            "[FAIL] 先运行 python scripts/convert_frame_sequences.py 与 "
+            "python scripts/convert_level_preload_catalog.py 生成清单",
+            file=sys.stderr,
+        )
         return 2
-    expected = [normalize(path) for path in required_paths(manifest)]
+    expected = [normalize(path) for path in combined_required(manifests)]
 
     godot = resolve_godot(args.godot)
     if godot is None:
@@ -251,9 +284,11 @@ def main() -> int:
         return 2
 
     workdir = Path(tempfile.mkdtemp(prefix="bhyh_pack_probe_"))
-    pck_path = workdir / "frame_sequence_probe.pck"
+    pck_path = workdir / "publish_probe.pck"
     manifest_copy = workdir / "manifest.json"
-    manifest_copy.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+    manifest_copy.write_text(
+        json.dumps({"required": expected}, ensure_ascii=False), encoding="utf-8"
+    )
     try:
         failure = run_export(godot, preset, pck_path, max(args.export_timeout, 1))
         if failure is not None:
@@ -273,6 +308,7 @@ def main() -> int:
                 digest_handle.update(chunk)
         report = {
             "preset": preset,
+            "manifests": [str(path.relative_to(ROOT)) for path in manifest_paths],
             "pck_bytes": pck_path.stat().st_size,
             "pck_sha256": digest_handle.hexdigest(),
             "required_paths": len(expected),
@@ -285,13 +321,13 @@ def main() -> int:
             report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         if missing:
             print(
-                f"[FAIL] PCK 缺少 {len(missing)}/{len(expected)} 条 FrameSequence 依赖，例如: "
+                f"[FAIL] PCK 缺少 {len(missing)}/{len(expected)} 条发布依赖，例如: "
                 + ", ".join(missing[:5]),
                 file=sys.stderr,
             )
             return 1
         print(
-            f"[OK] PCK 闭包验证通过: {len(expected)} 条依赖全部在包内，"
+            f"[OK] PCK 闭包验证通过: {len(expected)} 条发布依赖全部在包内，"
             f"PCK {report['pck_bytes']} 字节，sha256 {report['pck_sha256'][:12]}"
         )
         return 0

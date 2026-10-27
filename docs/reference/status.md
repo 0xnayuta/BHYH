@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（关卡回归并发优化与进程复用对比完成）
+> 最后更新：2026-10-27（Phase 13-3 发布依赖闭包完成）
 
 ---
 
@@ -142,6 +142,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2B 宠物弹体/寅虎 stage | `convert_numbered_frames.py --all --check` **47/47 PASS**；`convert_monster_action_views.py --check` **5/5 PASS**；Godot 探针 19 个宠物弹体 + 2 个 stage 资源帧数/loop/duration **0 失败**；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（691.0s） | 四宠物弹体（mouse/rabbit/turtle/yin_tiger）与寅虎 stage1/2 改加载构建期资源；`SpriteFrames.new()` **27→21**（怪物 **9**、非怪物 **12**）；architecture §6.5 新增 9 个怪物文件的冻结裁定与判定标准；allowlist 21 条 |
 | 2026-10-27 关卡回归并发优化 | 56 关基准：`--jobs 4` **204.8s**、`--jobs 8` **124.7s**、`--jobs 12` **98.1s**、`--warmup 1`+12 **120.5s**；全量 133 关：`--jobs 4` **690.0s** → auto（12）**275.7s**，**PASS 128/128 + SKIP 5，FAIL 0**（`level_lxdy1` 1 次瞬态，重试通过） | `level_regression_all.py` 默认并发改为 `min(12, max(4, CPU 核数))`；新增 `--warmup`（默认 0，实测无收益）；保留失败关卡串行重试；`--jobs 4` 仍为稳定排障口径 |
 | 2026-10-27 关卡回归优化对比与最终方案 | 56 关：jobs4 **204.8s** → jobs8 **124.7s** → jobs12 **98.1s**；全量：jobs4 **690.0s** → auto（12）**275.7s**；预热+12 **120.5s**（无收益）；5 关/组进程复用 **146.8s**（更慢） | 最终采用单关进程 + auto 并发 12、`--warmup 0`、失败串行重试；进程复用已验证但回滚（每关加载屏/资源清理抵消启动节省）；日常 `--changed-only`，发布全量；`--jobs 4` 保留为稳定排障口径 |
+| 2026-10-27 Phase 13-3 发布依赖闭包 | `convert_level_preload_catalog.py --check` PASS：199 怪物场景 / 24 动态场景 / 8 弹体 / 767 动态纹理；`frame_sequence_pack_probe.py --self-test` **4,100 条**；PCK **2,738,645,381 字节**，**4,100/4,100 可达**（sha256 `bcb2eafbffe9…`）；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（273.1s）；`health_check` 713 脚本 **0/0/0**；`level_bxgh` / `level_stz` / `level_64` / `level_65` 冒烟 **0/0** | 新增 `level_preload_export_dependencies.json` 与 Catalog 动态字段；删除 `global.gd` 两张动态表、`MONSTER_SCENE_ALIASES` 与追加函数（5419→5241 行，净减 178）；别名与动态来源迁入 `monster_dynamic_paths.json` 构建期展开；PCK 探针合并两份清单；13-3 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
@@ -150,7 +151,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 ## 6. 已知边界
 
 1. 当前仓库已建立本地 Git 提交历史；尚未推送远端，工作区由本地完整备份保障。
-2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py` 与 `convert_level_preload_catalog.py`，前三个的 `--check` 由 `scripts/contract_gate.py` 调用。
+2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_liu_sha_frames.py` 与 `convert_monster_action_views.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用，`convert_numbered_frames.py` 按资源变更单独执行。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
 4. 13 个 Autoload、`global.gd` 大体量全局状态、字典/JSON 数据与类型分层目录按遗留结构保留；新增代码不得继续扩张。
 5. 高并发全量回归存在偶发的 Godot 启动瞬态（12 并发实测 `level_lxdy1` 1 次，重试通过）；`--jobs 4` 为稳定排障口径。进程复用（同进程多关）已验证但未采用：加载屏/资源清理抵消启动节省，5 关/组实测更慢。
