@@ -122,7 +122,7 @@
     （2 个 skeleton）、`lyfb`（gray/red）全部 `loaded=true`；
   - 例外：`HeroF_5012_skill.spine-json` 主 skeleton 的 `attackall` 动画解析失败，
     **但代码实际使用 `07-gray` / `07-red` 变体**，不影响运行；
-> **2026-10-27 复核补记**：`role_2/bing_yu/510040_attack_hit1`、`role_2/lyfb_awaken/HeroF_5012_skill`（含 gray/red）、`role_2/jhsj_awaken/HeroF_6030_skill01_2_1` 与 `skill08_1`、`role_4/cang_mu_long_yun/HeroF_6009_skill` 与 `skill01_2` 共 **8 个 `.spine-json` 没有 `.import`**；headless `ResourceLoader.load` 报 `No loader found`。`guanyin_spine` 的 6 个 `.spine-json` 有 `.import`，可正常加载。上述 8 个文件需恢复 `.import` 后复验；本节“GDExtension 直接加载源文件”的结论仅对已有 `.import` 的文件成立。`CangMuLongYun` 有帧回退但会记录 ERROR。
+> **2026-10-27 复核/恢复记录**：`role_2/bing_yu/510040_attack_hit1`、`role_2/lyfb_awaken/HeroF_5012_skill`（含 gray/red）、`role_2/jhsj_awaken/HeroF_6030_skill01_2_1` 与 `skill08_1`、`role_4/cang_mu_long_yun/HeroF_6009_skill` 与 `skill01_2` 共 **8 个 `.spine-json` 缺少 `.import`**；已恢复导入配置并由 Godot 生成 `.spjson` 缓存，`ResourceLoader.load` **8/8 成功**，`BingYu`/`Lyfb`/`HMZ`/`JHSJ`/`CangMuLongYun` 的 `preload_effect_data` **5/5 true**。`guanyin_spine` 的 6 个 `.spine-json` 保持正常。私人仓提交 `297b5707`。本节“GDExtension 直接加载源文件”仍需 `.import` 才能稳定工作。
 
 - **已处置（不阻塞）**：
   - `guanyin_summon/source/skeleton.skel`：所属 `source/` 目录零引用且与运行时资源重复，已删除；
