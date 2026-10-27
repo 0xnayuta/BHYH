@@ -91,7 +91,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `convert_monster_action_views.py` | 既有 `play` 帧资源或连续 PNG → 动作视图（帧子集 + 逐帧 duration + loop/speed），按 `scripts/monster_action_views.json` 登记；`--check` 逐字比较 | `monster_130/212/215/*_action_frames.tres`、宠物寅虎 stage 资源（私有素材） |
 | `convert_liu_sha_frames.py` | 流沙河 Boss/分身 `ACTIONS` 动作表 → 按 boss_kind 拆分的构建期 SpriteFrames（逐帧 duration、确定性 UID）；`--check` 逐字比较 | `source/Art/monster/liu_sha_river/**/liu_sha_*_frames.tres`（私有素材） |
 | `convert_monster_frames.py` | 怪物 `AtlasMetadata.sequences` → 既有 `*_frames.tres`；按 `monster_action_maps.json` 追加动作别名（复用 `AtlasTexture` 子资源）并修正 loop；`--check` 校验动画名集合、帧数、页闭包、region/margin、确定性 UID 与全局 UID 冲突；`--all` 只补缺失/语义不一致/别名/loop/speed；支持旧 `animations` schema、null 计时帧与 `TARGET_OVERRIDES` 目标推导；`--rewrite` 只补 UID 头；`--emit` 输出规范格式到指定目录 | 既有 `source/Art/monster/**/*_frames.tres`（私有素材） |
-| `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 → `LevelPreloadCatalog.tres`；`--check` 校验输出未过期并进入总门禁 | `source/Script/data/level_preload_catalog.tres` |
+| `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 + `monster_dynamic_paths.json` → `LevelPreloadCatalog.tres` 与 `level_preload_export_dependencies.json`；`--check` 同时校验两份输出并进入总门禁 | `source/Script/data/level_preload_catalog.tres`、`source/Art/frame_sequences/level_preload_export_dependencies.json`（私有素材构建产物） |
 
 ### 3.3 人工审计与迁移工具
 
@@ -122,6 +122,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `png_stream_allowlist.json` | 允许使用 `StreamedPngEffect` 的文件清单 |
 | `monster_action_maps.json` | 怪物构建期帧的动作映射：`metadata 相对路径 → {actions: action→sequence, loop: 动作循环声明}`；与脚本 `ACTIONS`/`MODEL_ACTIONS`/`DATA.animations` 对应 |
 | `monster_action_views.json` | 怪物动作视图登记：输出路径 → `{action: {source, frames, durations?, loop, speed}}` |
+| `monster_dynamic_paths.json` | 关卡预载的动态来源：`aliases`（怪物 ID → 场景 ID）、`textures`（动态纹理/目录）、`scenes`（额外弹体场景）；构建期展开进 Catalog 与发布依赖清单，运行时不再读取 |
 | `runtime_frames_allowlist.json` | 允许运行时调用 `SpriteFrames.new()` 的文件与理由；由 `runtime_frames_audit.py` 守恒 |
 
 ---

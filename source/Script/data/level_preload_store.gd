@@ -42,3 +42,21 @@ static func bullet_scenes(monster_scene_path: String) -> PackedStringArray:
 	if monster_scene_path.is_empty() or not _ensure_catalog():
 		return PackedStringArray()
 	return _catalog.bullet_scenes(monster_scene_path)
+
+
+static func monster_scene_path(monster_id: int) -> String:
+	if monster_id <= 0 or not _ensure_catalog():
+		return ""
+	return _catalog.scene_path_for(monster_id)
+
+
+static func dynamic_monster_textures(monster_id: int) -> PackedStringArray:
+	if monster_id <= 0 or not _ensure_catalog():
+		return PackedStringArray()
+	return _catalog.texture_paths_for(monster_id)
+
+
+static func dynamic_monster_scenes(monster_id: int) -> PackedStringArray:
+	if monster_id <= 0 or not _ensure_catalog():
+		return PackedStringArray()
+	return _catalog.extra_scene_paths_for(monster_id)

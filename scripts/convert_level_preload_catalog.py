@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import re
 import sys
 from dataclasses import dataclass, field
@@ -33,6 +34,10 @@ LEVEL_SCENE_DIR = SOURCE / "Scene/level"
 MONSTER_SCENE_DIR = SOURCE / "Scene/monster"
 BULLET_SCENE_DIR = MONSTER_SCENE_DIR / "monster_bullet_slim"
 CATALOG_PATH = SOURCE / "Script/data/level_preload_catalog.tres"
+DYNAMIC_SOURCE_PATH = ROOT / "scripts/monster_dynamic_paths.json"
+EXPORT_MANIFEST_PATH = SOURCE / "Art/frame_sequences/level_preload_export_dependencies.json"
+EXPORT_MANIFEST_SCHEMA = "level_preload_export_dependencies"
+EXPORT_MANIFEST_VERSION = 1
 
 STAGE_KEYS = ("stage_1", "stage_2", "stage_3", "stage_4")
 UID_ALPHABET = "abcdefghijklmnopqrstuvwxy012345678"
@@ -48,6 +53,17 @@ class LevelEntry:
     monster_ids: list[int] = field(default_factory=list)
     late_stage_ids: list[int] = field(default_factory=list)
     unresolved: list[str] = field(default_factory=list)
+
+
+@dataclass
+class DynamicPaths:
+    scene_overrides: dict[int, str] = field(default_factory=dict)
+    textures: dict[int, list[str]] = field(default_factory=dict)
+    extra_scenes: dict[int, list[str]] = field(default_factory=dict)
+    manifest_monster_scenes: list[str] = field(default_factory=list)
+    manifest_dynamic_scenes: list[str] = field(default_factory=list)
+    manifest_dynamic_textures: list[str] = field(default_factory=list)
+    missing: list[str] = field(default_factory=list)
 
 
 def strip_comments(text: str) -> str:
@@ -388,6 +404,143 @@ def collect_monster_bullets() -> dict[str, list[str]]:
     return bullets
 
 
+def source_path(res_path: str) -> Path:
+    if not res_path.startswith("res://"):
+        raise ValueError(f"不是 res:// 路径: {res_path}")
+    return SOURCE / res_path.removeprefix("res://")
+
+
+def direct_monster_scene_paths() -> dict[int, str]:
+    result: dict[int, str] = {}
+    for scene_path in sorted(MONSTER_SCENE_DIR.glob("monster_*.tscn")):
+        match = re.fullmatch(r"monster_(\d+)\.tscn", scene_path.name)
+        if match is None:
+            continue
+        monster_id = int(match.group(1))
+        result[monster_id] = "res://" + scene_path.relative_to(SOURCE).as_posix()
+    return result
+
+
+def resolve_monster_scene_path(
+    monster_id: int,
+    direct: dict[int, str],
+    aliases: dict[int, int],
+    stack: set[int] | None = None,
+) -> str:
+    if monster_id in direct:
+        return direct[monster_id]
+    if monster_id not in aliases:
+        return ""
+    if stack is None:
+        stack = set()
+    if monster_id in stack:
+        raise ValueError(f"怪物场景别名成环: {monster_id}")
+    stack.add(monster_id)
+    return resolve_monster_scene_path(aliases[monster_id], direct, aliases, stack)
+
+
+def expand_texture_entry(res_path: str, missing: list[str]) -> list[str]:
+    path = source_path(res_path)
+    if res_path.lower().endswith(".png"):
+        if not path.is_file():
+            missing.append(f"纹理文件不存在: {res_path}")
+            return []
+        return [res_path]
+    if not path.is_dir():
+        missing.append(f"纹理目录不存在: {res_path}")
+        return []
+    files = sorted(
+        "res://" + item.relative_to(SOURCE).as_posix() for item in path.rglob("*.png")
+    )
+    if not files:
+        missing.append(f"纹理目录内没有 PNG: {res_path}")
+    return files
+
+
+def build_dynamic_paths(levels: dict[str, LevelEntry]) -> DynamicPaths:
+    try:
+        raw = json.loads(DYNAMIC_SOURCE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"无法读取动态路径数据源 {DYNAMIC_SOURCE_PATH.relative_to(ROOT)}: {error}") from error
+    if not isinstance(raw, dict):
+        raise ValueError("动态路径数据源不是 JSON 对象")
+
+    aliases: dict[int, int] = {}
+    for key, value in dict(raw.get("aliases", {})).items():
+        aliases[int(key)] = int(value)
+    raw_textures: dict[int, list[str]] = {}
+    for key, values in dict(raw.get("textures", {})).items():
+        raw_textures[int(key)] = [str(item) for item in values]
+    raw_scenes: dict[int, list[str]] = {}
+    for key, values in dict(raw.get("scenes", {})).items():
+        raw_scenes[int(key)] = [str(item) for item in values]
+
+    direct = direct_monster_scene_paths()
+    dynamic = DynamicPaths()
+    for source_id in sorted(aliases):
+        path = resolve_monster_scene_path(source_id, direct, aliases)
+        if not path:
+            dynamic.missing.append(f"别名 {source_id} 无目标场景: {aliases[source_id]}")
+        else:
+            dynamic.scene_overrides[source_id] = path
+
+    # 运行时的旧逻辑按 canonical ID 查动态纹理；生成期把目标条目的文件集合展开到别名键。
+    texture_entries = {key: list(values) for key, values in raw_textures.items()}
+    for source_id, target_id in aliases.items():
+        inherited = raw_textures.get(target_id, [])
+        if inherited:
+            merged = list(dict.fromkeys([*texture_entries.get(source_id, []), *inherited]))
+            texture_entries[source_id] = merged
+    for monster_id in sorted(texture_entries):
+        files: list[str] = []
+        for entry in texture_entries[monster_id]:
+            files.extend(expand_texture_entry(entry, dynamic.missing))
+        unique = sorted(dict.fromkeys(files))
+        if unique:
+            dynamic.textures[monster_id] = unique
+
+    for monster_id in sorted(raw_scenes):
+        valid: list[str] = []
+        for res_path in raw_scenes[monster_id]:
+            if not source_path(res_path).is_file():
+                dynamic.missing.append(f"动态场景不存在: {res_path}")
+                continue
+            valid.append(res_path)
+        unique = sorted(dict.fromkeys(valid))
+        if unique:
+            dynamic.extra_scenes[monster_id] = unique
+
+    manifest_scenes = set(dynamic.scene_overrides.values())
+    for scene, entry in levels.items():
+        for monster_id in entry.monster_ids:
+            path = resolve_monster_scene_path(monster_id, direct, aliases)
+            if not path:
+                dynamic.missing.append(f"{scene}: 怪物 {monster_id} 无场景且无别名")
+                continue
+            manifest_scenes.add(path)
+    dynamic.manifest_monster_scenes = sorted(manifest_scenes)
+    dynamic.manifest_dynamic_scenes = sorted(
+        {path for paths in dynamic.extra_scenes.values() for path in paths}
+    )
+    dynamic.manifest_dynamic_textures = sorted(
+        {path for paths in dynamic.textures.values() for path in paths}
+    )
+    return dynamic
+
+
+def dependency_manifest_content(dynamic: DynamicPaths, bullets: dict[str, list[str]]) -> str:
+    payload = {
+        "schema_id": EXPORT_MANIFEST_SCHEMA,
+        "schema_version": EXPORT_MANIFEST_VERSION,
+        "catalog": "res://" + CATALOG_PATH.relative_to(SOURCE).as_posix(),
+        "monster_scenes": dynamic.manifest_monster_scenes,
+        "dynamic_monster_scenes": dynamic.manifest_dynamic_scenes,
+        "bullet_scenes": sorted({path for paths in bullets.values() for path in paths}),
+        "dynamic_textures": dynamic.manifest_dynamic_textures,
+    }
+    return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+
+
 def uid_text(value: int) -> str:
     value &= UID_MAX_VALUE
     chars: list[str] = []
@@ -408,7 +561,11 @@ def packed(values: list[int]) -> str:
     return "PackedInt32Array(%s)" % ", ".join(str(value) for value in values)
 
 
-def catalog_content(levels: dict[str, LevelEntry], bullets: dict[str, list[str]]) -> str:
+def catalog_content(
+    levels: dict[str, LevelEntry],
+    bullets: dict[str, list[str]],
+    dynamic: DynamicPaths,
+) -> str:
     entries = [(scene, entry) for scene, entry in levels.items() if entry.monster_ids]
     lines = [
         '[gd_resource type="Resource" script_class="LevelPreloadCatalog" load_steps=%d format=3 uid="%s"]'
@@ -437,6 +594,17 @@ def catalog_content(levels: dict[str, LevelEntry], bullets: dict[str, list[str]]
     for scene, paths in bullets.items():
         joined = ", ".join('"%s"' % path for path in paths)
         lines.append('\t&"%s": PackedStringArray(%s),' % (scene, joined))
+    lines.extend(["}", "monster_scene_paths = {"])
+    for monster_id, path in sorted(dynamic.scene_overrides.items()):
+        lines.append('\t%d: &"%s",' % (monster_id, path))
+    lines.extend(["}", "monster_texture_paths = {"])
+    for monster_id, paths in sorted(dynamic.textures.items()):
+        joined = ", ".join('"%s"' % path for path in paths)
+        lines.append("\t%d: PackedStringArray(%s)," % (monster_id, joined))
+    lines.extend(["}", "monster_extra_scene_paths = {"])
+    for monster_id, paths in sorted(dynamic.extra_scenes.items()):
+        joined = ", ".join('"%s"' % path for path in paths)
+        lines.append("\t%d: PackedStringArray(%s)," % (monster_id, joined))
     lines.extend(["}", ""])
     return "\n".join(lines)
 
@@ -451,7 +619,20 @@ def run(check_only: bool) -> int:
     class_index = build_class_index()
     levels = collect_levels(class_index)
     bullets = collect_monster_bullets()
-    content = catalog_content(levels, bullets)
+    try:
+        dynamic = build_dynamic_paths(levels)
+    except ValueError as error:
+        print(f"[FAIL] {error}", file=sys.stderr)
+        return 1
+    if dynamic.missing:
+        print("[FAIL] 动态路径数据源存在缺失或悬空项:", file=sys.stderr)
+        for line in dynamic.missing[:50]:
+            print("    " + line, file=sys.stderr)
+        if len(dynamic.missing) > 50:
+            print(f"    ... 其余 {len(dynamic.missing) - 50} 项", file=sys.stderr)
+        return 1
+    content = catalog_content(levels, bullets, dynamic)
+    manifest = dependency_manifest_content(dynamic, bullets)
     unresolved: list[str] = []
     for scene, entry in levels.items():
         if entry.unresolved:
@@ -472,29 +653,38 @@ def run(check_only: bool) -> int:
             print(f"    {scene}: {monster_id}", file=sys.stderr)
         return 1
     populated = sum(1 for entry in levels.values() if entry.monster_ids)
-    if check_only:
-        if not CATALOG_PATH.is_file():
-            print(f"[FAIL] 缺少关卡预载 Catalog: {CATALOG_PATH.relative_to(ROOT)}", file=sys.stderr)
-            return 1
-        if CATALOG_PATH.read_text(encoding="utf-8") != content:
-            print(f"[FAIL] 关卡预载 Catalog 已过期: {CATALOG_PATH.relative_to(ROOT)}", file=sys.stderr)
-            return 1
-        print(
-            f"[OK] 关卡预载 Catalog 校验通过: {populated} 个关卡条目，"
-            f"{len(bullets)} 个怪物弹体条目，{len(levels)} 个场景已登记"
-        )
-        return 0
-    CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    CATALOG_PATH.write_text(content, encoding="utf-8", newline="\n")
-    print(
-        f"[OK] 关卡预载 Catalog 已生成: {populated} 个关卡条目，"
-        f"{len(bullets)} 个怪物弹体条目，{len(levels)} 个场景已登记"
+    summary = (
+        f"{populated} 个关卡条目，{len(bullets)} 个怪物弹体条目，"
+        f"{len(levels)} 个场景已登记；依赖清单 {len(dynamic.manifest_monster_scenes)} 个怪物场景 / "
+        f"{len(dynamic.manifest_dynamic_scenes)} 个动态场景 / "
+        f"{len(dynamic.manifest_dynamic_textures)} 个动态纹理"
     )
+    if check_only:
+        outputs = (
+            (CATALOG_PATH, content, "关卡预载 Catalog"),
+            (EXPORT_MANIFEST_PATH, manifest, "关卡发布依赖清单"),
+        )
+        for path, expected, label in outputs:
+            if not path.is_file():
+                print(f"[FAIL] 缺少{label}: {path.relative_to(ROOT)}", file=sys.stderr)
+                return 1
+            if path.read_text(encoding="utf-8") != expected:
+                print(f"[FAIL] {label}已过期: {path.relative_to(ROOT)}", file=sys.stderr)
+                return 1
+        print(f"[OK] 关卡预载 Catalog 与依赖清单校验通过: {summary}")
+        return 0
+    for path, text in (
+        (CATALOG_PATH, content),
+        (EXPORT_MANIFEST_PATH, manifest),
+    ):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8", newline="\n")
+    print(f"[OK] 关卡预载 Catalog 与依赖清单已生成: {summary}")
     return 0
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="生成关卡预载 Catalog（场景 → 怪物 / 弹体）")
+    parser = argparse.ArgumentParser(description="生成关卡预载 Catalog 与发布依赖清单")
     parser.add_argument("--check", action="store_true", help="只校验输出是否最新，不写文件")
     args = parser.parse_args()
     return run(args.check)

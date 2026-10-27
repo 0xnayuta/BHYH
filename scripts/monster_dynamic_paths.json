@@ -1,0 +1,166 @@
+{
+  "aliases": {
+    "3043": 3031,
+    "3044": 3030,
+    "3045": 3032,
+    "3046": 3028,
+    "3053": 3047,
+    "3054": 3038,
+    "3055": 3036,
+    "3064": 3039,
+    "3072": 3065,
+    "3073": 3067,
+    "3074": 3068,
+    "3075": 3066,
+    "3126": 3119,
+    "3145": 3121,
+    "3146": 3122,
+    "3178": 3159,
+    "3183": 3177,
+    "3221": 3199,
+    "3226": 3198,
+    "3274": 3222,
+    "3275": 3198,
+    "3321": 3308,
+    "3322": 3309,
+    "3340": 3320,
+    "3341": 3308,
+    "3342": 3309
+  },
+  "scenes": {
+    "114": [
+      "res://Scene/monster/monster_bullet_slim/monster114_bullet2.tscn"
+    ],
+    "137": [
+      "res://Scene/monster/monster_bullet_slim/monster137_bullet2.tscn"
+    ],
+    "1460": [
+      "res://Scene/monster/monster_bullet_slim/tongtian3057_projectile.tscn",
+      "res://Scene/monster/monster_bullet_slim/tongtian3057_beam.tscn"
+    ],
+    "1501": [
+      "res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn"
+    ],
+    "1502": [
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn"
+    ],
+    "1503": [
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_2.tscn"
+    ],
+    "1504": [
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger1_bullet2.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger2_bullet3_2.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_1.tscn",
+      "res://Scene/monster/monster_bullet_slim/pet_tiger3_bullet4_2.tscn"
+    ],
+    "212": [
+      "res://Scene/monster/monster_bullet_slim/monster212_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/monster212_bullet2.tscn",
+      "res://Scene/monster/monster_bullet_slim/monster212_bullet3.tscn",
+      "res://Scene/monster/monster_bullet_slim/monster212_bullet4.tscn"
+    ],
+    "3002": [
+      "res://Scene/monster/monster_bullet_slim/zhuque_tiger_arrow.tscn"
+    ],
+    "3004": [
+      "res://Scene/monster/monster_bullet_slim/xuanwu_gate_arrow.tscn"
+    ],
+    "3007": [
+      "res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet1.tscn",
+      "res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet2.tscn",
+      "res://Scene/monster/monster_bullet_slim/weiyang_boss_bullet3.tscn"
+    ],
+    "3009": [
+      "res://Scene/monster/monster_bullet_slim/jiuhua_pine_arrow.tscn"
+    ],
+    "3012": [],
+    "3020": [
+      "res://Scene/monster/monster_bullet_slim/shuangxi_boss_arrow1.tscn",
+      "res://Scene/monster/monster_bullet_slim/shuangxi_boss_arrow2.tscn"
+    ],
+    "4401": [
+      "res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"
+    ],
+    "4402": [
+      "res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"
+    ],
+    "4403": [
+      "res://Scene/monster/monster_bullet_slim/three_prince_bullet.tscn"
+    ]
+  },
+  "textures": {
+    "1460": [
+      "res://Art/monster/tongtian_3057"
+    ],
+    "150": [
+      "res://Art/monster/qiong_qi/effects/buff_green.png",
+      "res://Art/monster/qiong_qi/effects/buff_blue.png"
+    ],
+    "152": [
+      "res://Art/monster/hun_dun/monster_60_frames_centered_cropped"
+    ],
+    "153": [
+      "res://Art/monster/tao_tie/monster_115_frames_centered_cropped"
+    ],
+    "163": [
+      "res://Art/monster/game_3_monster/monster_163/body",
+      "res://Art/monster/game_3_monster/monster_163/body_actions"
+    ],
+    "164": [
+      "res://Art/monster/game_3_monster/monster_164/body",
+      "res://Art/monster/game_3_monster/monster_164/body_actions"
+    ],
+    "165": [
+      "res://Art/monster/game_3_monster/monster_165/body",
+      "res://Art/monster/game_3_monster/monster_165/body_actions"
+    ],
+    "166": [
+      "res://Art/monster/game_3_monster/monster_166/body",
+      "res://Art/monster/game_3_monster/monster_166/body_actions"
+    ],
+    "168": [
+      "res://Art/monster/game_3_monster/monster_168/body",
+      "res://Art/monster/game_3_monster/monster_168/body_actions"
+    ],
+    "169": [
+      "res://Art/monster/game_3_monster/monster_169/body",
+      "res://Art/monster/game_3_monster/monster_169/body_actions"
+    ],
+    "174": [
+      "res://Art/monster/game_3_monster/monster_174/body",
+      "res://Art/monster/game_3_monster/monster_174/body_actions"
+    ],
+    "175": [
+      "res://Art/monster/game_3_monster/monster_175/body",
+      "res://Art/monster/game_3_monster/monster_175/body_actions"
+    ],
+    "212": [
+      "res://Art/monster/game_3_monster/monster_212/DefineSprite_44_Monster212",
+      "res://Art/monster/game_3_monster/monster_212/DefineSprite_92_Monster212Bullet1_Cropped",
+      "res://Art/monster/game_3_monster/monster_212/DefineSprite_88_Monster212Bullet2",
+      "res://Art/monster/game_3_monster/monster_212/DefineSprite_71_Monster212Bullet3",
+      "res://Art/monster/game_3_monster/monster_212/DefineSprite_49_Monster212Bullet4_2_Cropped"
+    ],
+    "4401": [
+      "res://Art/monster/game_3_monster/three_prince/nezha"
+    ],
+    "4402": [
+      "res://Art/monster/game_3_monster/three_prince/muzha",
+      "res://Art/hero_picture/role_3/ba_di_qian_kun_smooth"
+    ],
+    "4403": [
+      "res://Art/monster/game_3_monster/three_prince/jinzha"
+    ]
+  }
+}
