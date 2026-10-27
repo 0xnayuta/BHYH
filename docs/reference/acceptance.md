@@ -286,7 +286,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
 `convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径数据源一致。
-`classify_texture_aliases.py --check` 由 `contract_gate.py` 调用，校验 360 条纹理别名目标全部存在；完整分类报告使用 `python scripts/classify_texture_aliases.py` 生成。
+`classify_texture_aliases.py --check` 由 `contract_gate.py` 调用，校验纹理别名目标存在（当前别名表为空）；完整分类报告使用 `python scripts/classify_texture_aliases.py` 生成。
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 

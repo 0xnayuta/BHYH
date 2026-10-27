@@ -98,7 +98,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | 脚本 | 作用 | 状态 |
 |:---|:---|:---|
 | `asset_reference_audit.py` | 单遍 `rg` 扫描旧资产基名引用 | **手动**；不在自动门禁中 |
-| `classify_texture_aliases.py` | 只读分类 6.8 纹理别名：键/目标存在性、代码与资源文本引用、通用基名复核；`--check` 校验每条目标存在并进入契约门禁；`BHYH_TEXTURE_ALIAS_HITS_DIR` 存在时输出 debug 命中统计 | `--check` 自动门禁；完整报告产物 `docs/reports/texture_alias_classification.*`；命中 JSON 按 PID 写入指定目录 |
+| `classify_texture_aliases.py` | 只读分类 6.8 纹理别名：键/目标存在性、代码与资源文本引用、通用基名复核；`--check` 校验每条目标存在并进入契约门禁（当前别名表为空）；`BHYH_TEXTURE_ALIAS_HITS_DIR` 存在时输出 debug 命中统计 | `--check` 自动门禁；完整报告产物 `docs/reports/texture_alias_classification.*`；命中 JSON 按 PID 写入指定目录 |
 
 ### 3.4 回归与测试
 

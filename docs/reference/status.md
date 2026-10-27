@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 13-4 收敛完成；UI 命中统计与 86 条静态引用复核待确认）
+> 最后更新：2026-10-27（Phase 13-4 别名表清空与入口收敛完成）
 
 ---
 
@@ -144,7 +144,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 关卡回归优化对比与最终方案 | 56 关：jobs4 **204.8s** → jobs8 **124.7s** → jobs12 **98.1s**；全量：jobs4 **690.0s** → auto（12）**275.7s**；预热+12 **120.5s**（无收益）；5 关/组进程复用 **146.8s**（更慢） | 最终采用单关进程 + auto 并发 12、`--warmup 0`、失败串行重试；进程复用已验证但回滚（每关加载屏/资源清理抵消启动节省）；日常 `--changed-only`，发布全量；`--jobs 4` 保留为稳定排障口径 |
 | 2026-10-27 Phase 13-3 发布依赖闭包 | `convert_level_preload_catalog.py --check` PASS：199 怪物场景 / 24 动态场景 / 8 弹体 / 767 动态纹理；`frame_sequence_pack_probe.py --self-test` **4,100 条**；PCK **2,738,623,739 字节**，**4,100/4,100 可达**（sha256 `f87a631c73db…`；清单迁到公共路径后复跑）；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（273.1s）；`health_check` 713 脚本 **0/0/0**；`level_bxgh` / `level_stz` / `level_64` / `level_65` 冒烟 **0/0** | 新增公共路径 `source/Script/data/level_preload_export_dependencies.json` 与 Catalog 动态字段；删除 `global.gd` 两张动态表、`MONSTER_SCENE_ALIASES` 与追加函数（5419→5241 行，净减 178）；别名与动态来源迁入 `monster_dynamic_paths.json` 构建期展开；PCK 探针合并两份清单；13-3 完成 |
 
-| 2026-10-27 Phase 13-4 别名收敛与入口收敛 | 2,313 → **360**；删除 **932** 悬空条目 + **1,021** 条无命中 Monster 条目；保留 86 条静态引用 + 274 条 UI/法宝/坐骑待覆盖；`TEXTURE_ALIASES.resolve` 仅 `Global._resolve_texture_path()` 一处；debug 命中统计（全量回归 + L2 + 背包探针）**0 命中**；`classify_texture_aliases.py --check` PASS；契约门禁 **12/12**；`check_all` **8/8**；`health_check` **0/0/0**；全量回归 **PASS 128/128 + SKIP 5**（314.4s，`level_42`/`level_dsg_5` 瞬态重试通过）；L2 三件套 PASS | 入口收敛完成；UI 首屏探针（装备图鉴/坐骑/万灵/诛仙/背包/角色选择）**0 命中**；未删除 274 条未覆盖交互 UI 别名；86 条静态引用逐条复核（67×`1.png`、18×`parts.png`、1×`preview.png`）均为通用基名误报，待确认删除；未修改素材；debug 统计仅在设置 `BHYH_TEXTURE_ALIAS_HITS_DIR` 时启用 |
+| 2026-10-27 Phase 13-4 别名收敛与入口收敛 | 2,313 → **0**；删除 932 悬空 + 86 静态误报 + 1,021 无命中 Monster + 274 无命中 UI/法宝/坐骑；`ALIASES` 已清空；`TEXTURE_ALIASES.resolve` 仅 `Global._resolve_texture_path()` 一处；debug 命中统计（全量回归 + L2 + UI 交互）**0 命中**；`classify_texture_aliases.py --check` PASS（0 条）；契约门禁 **12/12**；`check_all` **8/8**；`health_check` **0/0/0**；全量回归 **PASS 128/128 + SKIP 5**（302.0s，`level_58` 瞬态重试通过）；L2 三件套 PASS | 入口收敛完成；UI 交互探针覆盖装备图鉴/背包/法宝/八仙法宝/坐骑/角色选择/万灵/诛仙；未修改素材；debug 统计仅在设置 `BHYH_TEXTURE_ALIAS_HITS_DIR` 时启用 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
