@@ -26,17 +26,17 @@ var _cast_token: int = 0
 func _ready() -> void:
 	fb_level = _get_weapon_level()
 	need_mp = 50
-	mg_action.sprite_frames = _build_frames(
-		"wait", "res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/idle_frames/%d.png", IDLE_FRAME_COUNT, true
+	mg_action.sprite_frames = (
+		load("res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/idle_frames/zhen_lei_idle_frames.tres")
+		as SpriteFrames
 	)
-	thunder_effect.sprite_frames = _build_frames(
-		"effect",
-		"res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/effect_frames/%d.png",
-		EFFECT_FRAME_COUNT,
-		false
+	thunder_effect.sprite_frames = (
+		load("res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/effect_frames/zhen_lei_effect_frames.tres")
+		as SpriteFrames
 	)
-	cast_flash.sprite_frames = _build_frames(
-		"flash", "res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/flash_frames/%d.png", FLASH_FRAME_COUNT, false
+	cast_flash.sprite_frames = (
+		load("res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/flash_frames/zhen_lei_flash_frames.tres")
+		as SpriteFrames
 	)
 	effect_anchor.top_level = true
 	thunder_effect.visible = false
@@ -52,18 +52,6 @@ func _physics_process(delta: float) -> void:
 		mg_action.visible = skill_cd.is_stopped()
 		if mg_action.visible and not mg_action.is_playing():
 			mg_action.play("wait")
-
-
-func _build_frames(animation_name: String, path_pattern: String, frame_count: int, looped: bool) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.add_animation(animation_name)
-	frames.set_animation_loop(animation_name, looped)
-	frames.set_animation_speed(animation_name, ANIMATION_SPEED)
-	for frame_index in range(1, frame_count + 1):
-		var texture := load(path_pattern % frame_index) as Texture2D
-		if texture != null:
-			frames.add_frame(animation_name, texture)
-	return frames
 
 
 func _get_weapon_level() -> int:

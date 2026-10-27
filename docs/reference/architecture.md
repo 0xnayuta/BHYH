@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 运行时建帧仍有 **34** 个文件（怪物 **14** 个），由
+- 运行时建帧仍有 **27** 个文件（怪物 **14** 个，其余 13 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -371,7 +371,10 @@ classDiagram
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
   - 待迁移：`liu_sha_river_boss` / `liu_sha_river_shadow`（逐帧 PNG）。
-  非怪物 **20** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域；
+  非怪物 **13** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域；
+  剩余法宝已评审保留：`main_sword_array_weapon`（图集 metadata 建帧）、
+  `eight_immortal_magic_weapon`/`qlsword`/`taiji_bagua`（图集裁剪）、
+  `qing_lian`（调用方传入纹理数组）；
 - `AtlasMetadata.data` 仍是 `Dictionary`，属于过渡类型边界。
 
 ### 6.4 构建期转换器
@@ -380,7 +383,7 @@ classDiagram
 |:---|:---|:---|:---|
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
-| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体与东胜神洲 loose 特效 |
+| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效与两个法宝 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | 怪物动作视图（`play` 子集 + duration） | `scripts/convert_monster_action_views.py` | `monster_130/212/215/*_action_frames.tres` | `--check` 逐字比较；帧索引、逐帧 duration、loop/speed |
 | 流沙河 `ACTIONS` 动作表 | `scripts/convert_liu_sha_frames.py` | 按 boss_kind 拆分的 `liu_sha_*_frames.tres` | `--check` 逐字比较；逐帧 duration 与确定性 UID |
