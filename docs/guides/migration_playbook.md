@@ -134,6 +134,25 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 | 命名 | 遵循 `docs/standards/naming_standard.md`；白名单只减不增 |
 | 数据 | 新结构化数据优先 `Resource` + `.tres`；不继续扩大 `global.gd` 与裸字典 |
 
+### 5.1 视觉资产架构下的高版本回植检查表
+
+> 适用：7.0 及更高内容版本向当前治理工程回植。目标契约见
+> [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)，
+> 当前实现见 [`../reference/architecture.md`](../reference/architecture.md)。
+
+1. **版本与 schema**：确认目标版本的视觉资产格式、Spine 版本、动画命名与当前版本差异；schema 变化由专用适配器处理，不建立万能转换器。
+2. **资产身份**：建立目标版本 `asset_id` / UID / 路径映射；禁止复用当前版本 UID，路径迁移统一走 `scripts/rename_path.py`。
+3. **构建转换**：新增/变化资产必须先经构建期转换器（AtlasMetadata、MonsterFrames、FrameSequence、编号帧、动作视图等）；所有 `--check` 必须覆盖 schema、路径、UID、闭包与确定性。
+4. **Catalog 与清单**：重新生成 `level_preload_catalog.tres`、`level_preload_export_dependencies.json`、FrameSequence Catalog 与两份发布依赖清单；PCK 闭包探针必须通过。
+5. **运行时接入**：消费者只加载明确资源；禁止新增运行时目录扫描、编号探测、`SpriteFrames.new()` 重建、空占位或双加载回退。
+6. **旧路径与别名**：纹理别名表已删除，旧路径不再静默兼容；回植时直接迁移数据/代码到规范路径，不重新建立无消费者别名表。
+7. **动作与后端**：新动作进入 `monster_action_maps.json` 或动作视图；新视觉后端/Spine 版本必须新增 ADR 并单独验收；缺失动画显式失败。
+8. **Spine 与导入**：每个 `.atlas` / `.spine-json` 必须有 `.import`、导入缓存与 `loaded=true`；不假定 `--import` 会自动为原始 Spine 源生成 `.import`。
+9. **验证**：`check_all`、`health_check`、角色/UI 交互探针、全量回归、L2、PCK 闭包；角色技能资源需单独探针覆盖。
+10. **版本与文档**：素材版本标签与内容版本一一对应；更新 `status.md`、`roadmap.md`、`architecture.md`；目标契约只维护目标，不写版本台账。
+
+> 视觉资产检查表不替代功能代码的三方合并；玩法、数据与场景仍按本手册 §1~§4 执行。
+
 ---
 
 ## 6. 红线

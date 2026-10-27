@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Spine 导入恢复、wings 孤立场景清理与 13-4 收口完成）
+> 最后更新：2026-10-27（Spine 恢复、wings 清理、角色 2/4 技能探针完成）
 
 ---
 
@@ -148,6 +148,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 | 2026-10-27 Spine 骨架导入恢复 | 8 个 `.spine-json` 的 `.import` 已恢复；Godot 导入生成 8 个 `.spjson` 缓存；`ResourceLoader.load` **8/8 true**（`SpineSkeletonFileResource`）；`BingYu`/`Lyfb`/`HMZ`/`JHSJ`/`CangMuLongYun` 效果 `preload_effect_data` **5/5 true**；`guanyin_spine` 保持正常 | 私人仓提交 `297b5707`；未修改公共代码；`.spine-json` 的 UID 由路径确定性派生，导入 UID 无冲突 |
 | 2026-10-27 wings 孤立场景清理 | `source/Scene/base/special_affect_slim/wings.tscn` 无静态/动态引用（`SPECIAL_AFFECT_SLIM_DIR` 动态加载名无 `wings`，`add_special_effect` 调用名列表无 `wings`）；已删除场景；`special_affect.gd` 仍被其它效果场景使用 | 删除前已确认无引用；独立实例化告警属于未初始化 `_scale` 的探针装载问题 |
+
+| 2026-10-27 角色 2/4 技能探针 | `scene_probe_runner.py --probe role-skills` **PASS**：角色 2 `by` 生成 `BingYuEffect`、角色 4 `cmly` 生成 `CangMuLongYunEffect`；`BingYu`/`CangMu`/`Lyfb`/`HMZ`/`JHSJ` 的 `preload_effect_data` **5/5 true**；日志 **0 ERROR / 0 WARNING** | 新增 `scripts/scene_probes/role_skill_probe.{gd,tscn}` 并接入 `PROBES`；`scene_probe_runner` 由 2 项扩为 3 项 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

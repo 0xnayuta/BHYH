@@ -12,7 +12,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 套件当前包含：
 
 - `constellation`：星座 Boss 视觉后端与 FrameSequence 生命周期；
-- `level-selection`：八仙过海 / 挑战三太子的运行期选择态与自预载边界。
+- `level-selection`：八仙过海 / 挑战三太子的运行期选择态与自预载边界；
+- `role-skills`：角色 2/4 技能入口、BingYu/CangMu 效果实例化与 5 个 Spine 资源预加载。
 """
 
 from __future__ import annotations
@@ -74,6 +75,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="LEVEL_SELECTION_PROBE_TEARDOWN",
         quit_after_frames=6000,
         timeout_seconds=240,
+    ),
+    ProbeSpec(
+        key="role-skills",
+        title="角色 2/4 技能运行时探针",
+        script_name="role_skill_probe.gd",
+        scene_name="role_skill_probe.tscn",
+        result_prefix="ROLE_SKILL_PROBE_RESULT=",
+        report_stem="role_skill_probe_report",
+        teardown_marker="ROLE_SKILL_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
     ),
 )
 

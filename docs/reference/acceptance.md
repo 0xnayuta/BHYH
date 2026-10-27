@@ -253,19 +253,21 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 ```bash
 python scripts/scene_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>" --probe level-selection
+python scripts/scene_probe_runner.py --godot "<godot>" --probe role-skills
 ```
 
 | 项目 | 规则 |
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
-| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe` 与 `level_selection_probe`；运行期复制到 `source/`，结束后清理 |
+| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe` 与 `role_skill_probe`；运行期复制到 `source/`，结束后清理 |
 | 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
 | 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存与背景可见性 |
+| 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
 | 结果通道 | 各探针最后一条 `*_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
 | 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0；唯一豁免为 `ERROR: Parameter "t" is null.` 及其缩进栈 |
 | 退出阶段 | 探针输出 `*_PROBE_TEARDOWN` 后进入引擎退出；退出期 RID/ObjectDB 清理噪声不计入门禁 |
-| 超时 | 星座 90 秒、选择态 240 秒；`--timeout` 可覆盖 |
-| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}` |
+| 超时 | 星座 90 秒、选择态 240 秒、角色技能 180 秒；`--timeout` 可覆盖 |
+| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}`、`docs/reports/role_skill_probe_report.{md,json}` |
 | 退出码 | `0` PASS；`1` 任一探针失败；`2` 规格/工程缺失 |
 
 ### 6.5 构建期资源校验

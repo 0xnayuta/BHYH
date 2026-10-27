@@ -369,7 +369,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 | 八维门禁 | 8/8 PASS |
 | 契约门禁 | 全子命令 PASS，含新增转换器 `--check` |
 | 引擎健康 | 0 Parse / 0 Error / 0 Warning |
-| 场景探针 | 2/2 PASS（星座 + 关卡选择态） |
+| 场景探针 | 3/3 PASS（星座 + 关卡选择态 + 角色 2/4 技能） |
 | 双人探针 | 16/16 PASS，SKIP 不计 PASS |
 | 关卡回归 | FAIL 0；SKIP 仅限 5 个非战斗场景 |
 | 发布闭包 | 13-3 起为必跑项，13-1/13-2 可后置 |
