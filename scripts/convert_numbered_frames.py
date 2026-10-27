@@ -395,6 +395,16 @@ PROFILES: tuple[dict[str, object], ...] = (
         "output": "res://Art/magic_weapon/magic_weapon_zhen_lei_tian_chui/flash_frames/zhen_lei_flash_frames.tres",
     },
     {
+        "name": "taiji_bagua_effect",
+        "pattern": "res://Art/magic_weapon/taiji_bagua/effect/effect_%02d.png",
+        "count": 22,
+        "source_indices": list(range(1, 23)),
+        "fps": 24.0,
+        "loop": False,
+        "animation": "default",
+        "output": "res://Art/magic_weapon/taiji_bagua/effect/taiji_bagua_effect_frames.tres",
+    },
+    {
         "name": "qing_lian_idle",
         "pattern": "res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/%d.png",
         "count": 24,

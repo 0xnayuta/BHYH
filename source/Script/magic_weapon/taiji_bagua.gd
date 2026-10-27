@@ -1,8 +1,8 @@
 extends BaseMagicWeapon
 class_name TaijiBagua
 
-const MODEL := "res://Art/magic_weapon/taiji_bagua/magic_bagua_bmd.png"
-const EFFECT_DIR := "res://Art/magic_weapon/taiji_bagua/effect/effect_"
+const MODEL_FRAMES_RES := "res://Art/magic_weapon/taiji_bagua/magic_bagua_frames.tres"
+const EFFECT_FRAMES_RES := "res://Art/magic_weapon/taiji_bagua/effect/taiji_bagua_effect_frames.tres"
 const SKILL_LEVEL := 6
 const COOLDOWN := 20.0
 const MONSTER_52_SCRIPT := preload("res://Script/monster/monster_52.gd")
@@ -16,24 +16,15 @@ func _ready() -> void:
 	hitbox.disabled = true
 	hit_box.monitoring = false
 	hit_box.monitorable = false
-	var sheet := Global.get_cached_texture(MODEL)
-	var frames := SpriteFrames.new()
-	for index in range(2):
-		var action: StringName = &"wait" if index == 0 else &"hit"
-		var texture := AtlasTexture.new()
-		texture.atlas = sheet
-		texture.region = Rect2(0, index * 50, 50, 50)
-		frames.add_animation(action)
-		frames.add_frame(action, texture)
-	mg_action.sprite_frames = frames
+	var model_frames := load(MODEL_FRAMES_RES) as SpriteFrames
+	var effect_frames := load(EFFECT_FRAMES_RES) as SpriteFrames
+	if model_frames == null or effect_frames == null:
+		push_error("太极八卦构建期帧资源缺失")
+		return
+	mg_action.sprite_frames = model_frames
 	mg_action.animation = &"wait"
 	mg_action.position = Vector2.ZERO
-	_effect_frames = SpriteFrames.new()
-	_effect_frames.set_animation_loop(&"default", false)
-	_effect_frames.set_animation_speed(&"default", 24.0)
-	for index in range(1, 23):
-		var frame_path := EFFECT_DIR + "%02d.png" % index
-		_effect_frames.add_frame(&"default", Global.get_cached_texture(frame_path))
+	_effect_frames = effect_frames
 
 
 func get_skill_level() -> int:

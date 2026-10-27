@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 13-2B 已完成 54 个怪物脚本的消费者切换；13-2C-1 又完成诛仙剑阵与青莲。运行时建帧仍有 **17** 个文件（怪物 **9** 个，其余 8 个非怪物），由
+- 13-2B 已完成 54 个怪物脚本的消费者切换；13-2C-1/2 又完成诛仙剑阵、青莲、青龙剑与太极八卦。运行时建帧仍有 **15** 个文件（怪物 **9** 个，其余 6 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -370,14 +370,15 @@ classDiagram
   - 单序列/子集：`nanhai_projectile`、`monster_130`/`monster_212`/`monster_215`（`play` 子集 + 逐帧 duration）；
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
-  非怪物 **8** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2B 怪物域：
+  非怪物 **6** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2B 怪物域：
   - `pet_neat_bullet`：`pet_neat_4_bullet_3` 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本，保留；
   - `lyfb_awaken_effect`：按效果数据 `frame_rects` 做 `AtlasTexture` 裁剪；
   - `ne_zha_yin_yang_effect`：图集裁剪/连续帧组合，区域由剑型与特效参数决定；
   - `level_59`：固定 `STONE_TEXTURES` 数组建帧，无路径扫描或逐帧 IO；
   - `user_key`：调试工具 UI 的固定图标序列，不进入游戏运行路径；
   - 13-2C-1 已完成：`main_sword_array_weapon` 删除标准帧回退、Atlas 流式回退与页面加载器；`qing_lian` 三组编号序列已迁移为构建期 `.tres`。
-  - 法宝剩余 3 个：`taiji_bagua`/`qlsword` 需 sheet 帧资源；`eight_immortal_magic_weapon` 需按 8 个场景生成固定资源。拆分与顺序见 `roadmap/current-iteration.md` §3.7。
+  - 13-2C-2 已完成：`qlsword` 与 `taiji_bagua` 模型 sheet 由 `convert_sheet_frames.py` 生成；太极 22 帧效果由编号帧转换器生成。
+  - 法宝剩余 1 个：`eight_immortal_magic_weapon` 需按 8 个场景生成固定资源；拆分与顺序见 `roadmap/current-iteration.md` §3.7。
 
 ### 6.5 13-2B 冻结裁定（怪物域 9 个）
 
@@ -407,7 +408,8 @@ classDiagram
 |:---|:---|:---|:---|
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
-| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效、两个法宝与宠物弹体 |
+| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效、法宝与宠物弹体 |
+| 纹理 sheet 固定网格 | `scripts/convert_sheet_frames.py` | `SpriteFrames.tres`（AtlasTexture 子资源） | `--check` 逐字比较；覆盖青龙剑/太极模型 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | 动作视图（`play` 子集或连续 PNG + duration） | `scripts/convert_monster_action_views.py` | `monster_130/212/215/*_action_frames.tres`、宠物寅虎 stage1/2 | `--check` 逐字比较；帧索引、逐帧 duration、loop/speed |
 | 流沙河 `ACTIONS` 动作表 | `scripts/convert_liu_sha_frames.py` | 按 boss_kind 拆分的 `liu_sha_*_frames.tres` | `--check` 逐字比较；逐帧 duration 与确定性 UID |
@@ -475,12 +477,12 @@ classDiagram
 
 | 项目 | 目标 |
 |:---|:---|
-| 魔法武器剩余 3 个运行时建帧 | 13-2C-1 已完成诛仙剑阵/青莲；剩余青龙剑/太极八卦/八仙法宝；固定裁剪保留为登记例外 |
+| 魔法武器剩余 1 个运行时建帧 | 13-2C-1/2 已完成诛仙剑阵/青莲/青龙剑/太极；剩余八仙法宝；固定裁剪保留为登记例外 |
 | 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；角色特效待几何 Resource 化；`level_59`、`user_key` 为合法例外 |
 | `AtlasMetadata.data` 无类型字典 | 独立项目：typed accessor 或 typed 子资源，见 `roadmap.md` §3.1 |
 | Spine 平台库 | 独立项目：补齐目标平台库并做平台验收，见 `roadmap.md` §3.2 |
 
-迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C-1 法宝构建期化已完成，C2/C3 与角色特效运行时建帧继续 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
+迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C-1/2 法宝构建期化已完成，C3 与角色特效运行时建帧继续 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
 
 ---
 

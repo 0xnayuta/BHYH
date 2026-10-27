@@ -2,7 +2,7 @@
 
 > **定位**：项目状态、长期阶段顺序与近期重点的唯一来源。只记录当前版本之后的方向，不保留逐任务流水账。
 >
-> **当前版本**：6.9。Phase 13 视觉资产契约收口的内部主干已完成；非怪物域 **13-2C** 进行中，**13-2C-1** 已完成，详细恢复条件与实施顺序见 [`current-iteration.md`](current-iteration.md)。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
+> **当前版本**：6.9。Phase 13 视觉资产契约收口的内部主干已完成；非怪物域 **13-2C** 进行中，**13-2C-1/2** 已完成，详细恢复条件与实施顺序见 [`current-iteration.md`](current-iteration.md)。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
 >
 > **事实基线**：工程状态、规模与门禁结果以 [`../reference/status.md`](../reference/status.md) 为单一事实源；架构实现见 [`../reference/architecture.md`](../reference/architecture.md)；验收阈值见 [`../reference/acceptance.md`](../reference/acceptance.md)。
 >
@@ -29,7 +29,7 @@
 |:---|:---|:---|
 | Phase 12 画布、相机与 HUD 重构 | **已完成并归档** | 不再进入当前迭代 |
 | Phase 13 视觉资产契约收口主干 | **已完成** | 失败语义、怪物视觉资产构建期化、发布闭包、兼容层治理已收口 |
-| Phase 13-2C 非怪物运行时建帧 | **进行中** | 13-2C-1（诛仙剑阵/青莲）已完成；C2/C3 候选，详见 `current-iteration.md` |
+| Phase 13-2C 非怪物运行时建帧 | **进行中** | 13-2C-1/2 已完成；C3（八仙法宝）候选，详见 `current-iteration.md` |
 | AtlasMetadata typed accessor | **规划，未启动** | 独立立项，见 §3.1 |
 | Spine 跨平台运行时与平台验收 | **规划，未启动** | 独立立项，见 §3.2 |
 | 新内容版本 | **未确认** | 当前不把 7.0 回植写成公开路线承诺 |
@@ -38,8 +38,8 @@ Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、�
 
 ### 1.2 近期重点
 
-1. 按 `current-iteration.md` 推进 13-2C-2/3，继续法宝域构建期化；
-2. 保持发布前 L2 固定套件稳定，`scene_probe_runner` 的 `constellation` / `level-selection` / `role-skills` 固定覆盖不缩减；
+1. 按 `current-iteration.md` 推进 13-2C-3（八仙法宝）构建期化；
+2. 保持发布前 L2 固定套件稳定，`scene_probe_runner` 的星座 / 关卡选择态 / 角色技能 / 法宝固定覆盖不缩减；
 3. 独立立项只在目标、依赖与验收明确后进入 `current-iteration.md`，不提前占用当前批次。
 
 ---
@@ -53,7 +53,7 @@ Phase 12 画布与 HUD（已完成，归档）
 Phase 13 视觉资产契约收口主干（已完成）
         │
         ▼
-Phase 13-2C 非怪物运行时建帧（C1 已完成，C2/C3 候选）
+Phase 13-2C 非怪物运行时建帧（C1/2 已完成，C3 候选）
         │
         ▼
 独立项目：AtlasMetadata typed accessor / Spine 跨平台运行时
@@ -126,7 +126,7 @@ Phase 13-2C 非怪物运行时建帧（C1 已完成，C2/C3 候选）
 | 深层节点路径 | 新代码使用依赖注入与 `%UniqueName`，重构时同步清理 |
 | 流式发布验证 | 验证用 `export_presets.cfg` 与 `frame_sequence_pack_probe.py` 已入库；PCK 内延迟纹理闭包已实测通过。仍需在目标平台验证 release 加载、VRAM 驻留与首帧耗时，不以包内路径代替运行时性能 |
 | 视觉资产预算 | 按目标平台测量首帧延迟、纹理页驻留量及反复进出关卡后的回收，不把 headless 探针当 VRAM 证据 |
-| 运行时建帧 | 怪物域已构建期化并冻结例外；非怪物域 13-2C-1 已完成，C2/C3 继续按法宝、角色特效、宠物、关卡、工具拆批 |
+| 运行时建帧 | 怪物域已构建期化并冻结例外；非怪物域 13-2C-1/2 已完成，C3 继续处理八仙法宝，其余按角色特效、宠物、关卡、工具拆批 |
 | 资源失败语义 | 空占位与 `assert` 掩盖缺失已在 Phase 13-1 收口；新增路径继续显式失败 |
 | 玩法资源发布闭包 | 预载 Catalog 的怪物与弹体路径已进入发布依赖清单；变更后重跑闭包探针 |
 | 纹理别名兼容表 | 已清空并收敛入口；禁止重新建立无消费者别名表 |

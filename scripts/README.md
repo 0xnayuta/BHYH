@@ -78,7 +78,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `normalize_eol.py` | 全工程 LF/CRLF 归一化；增量缓存 | `.godot/eol_cache.json` |
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
-| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、PNG 流 guard、白名单 | 子脚本报告 |
+| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest 六类契约 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
@@ -106,9 +106,10 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
-| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、角色 2/4 技能入口与 Spine 效果；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/role_skill_probe_report.*` |
+| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、角色 2/4 技能入口与 Spine 效果、法宝构建期帧；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/role_skill_probe_report.*`、`docs/reports/magic_weapon_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
-| `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado、212/215/130 编号帧弹体（10 个）、东胜神洲 loose 特效（6 个）、法宝（di_kong/zhen_lei/qing_lian）、宠物弹体（mouse/rabbit/turtle/yin_tiger 共 19 个）、闪电特效与关卡 46 背景（9 个），`--check` 校验存在且未过期 | 角色 4/5、3077 与弹体 `Art/.../*_frames.tres`（私有素材） |
+| `convert_sheet_frames.py` | 单张纹理 sheet 固定网格 → 构建期 SpriteFrames `.tres`（AtlasTexture 子资源）；`--check` 校验输出存在且内容一致；已接入 `contract_gate` | `source/Art/magic_weapon/.../*_frames.tres`（私有素材） |
+| `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado、212/215/130 编号帧弹体（10 个）、东胜神洲 loose 特效（6 个）、法宝（di_kong/zhen_lei/qing_lian/太极效果）、宠物弹体（mouse/rabbit/turtle/yin_tiger 共 19 个）、闪电特效与关卡 46 背景（9 个），`--check` 校验存在且未过期 | 角色 4/5、3077 与弹体 `Art/.../*_frames.tres`（私有素材） |
 | `convert_frame_sequences.py` | 固定/图集帧 → FrameSequence、Catalog、稳定 UID 与延迟纹理依赖 JSON；`asset_id` 为内容身份、`default_*` 为默认策略，输出按 `asset_id` 生成可读文件名并在生成时清理自己拥有的陈旧输出；`--check` 进契约门禁；`--export-preset [NAME]` 只读检查预设声明覆盖 | `source/Art/frame_sequences/`（私有素材） |
 | `frame_sequence_pack_probe.py` | 发布包闭包探针：合并 `frame_sequence_export_dependencies.json` 与 `level_preload_export_dependencies.json`，实际 `--export-pack` 生成 PCK，在最小空工程中挂载并逐条验证 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达（含 `.remap`）；`--self-test` 只验证清单结构；`--manifest` 可覆盖清单 | 可选 `--report` JSON；缺模板、无 PCK 或无结果返回 2（BLOCKED），不记为通过 |
 | `coop_probes/coop_probe_matrix.gd` | 探针矩阵 GDScript 测试规格 | 仅执行期复制到工程根，结束后清理 |
@@ -138,7 +139,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。
 
-`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`role_skill_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
+`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`role_skill_probe`、`magic_weapon_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
 
 ---
 

@@ -13,7 +13,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 
 - `constellation`：星座 Boss 视觉后端与 FrameSequence 生命周期；
 - `level-selection`：八仙过海 / 挑战三太子的运行期选择态与自预载边界；
-- `role-skills`：角色 2/4 技能入口、BingYu/CangMu 效果实例化与 5 个 Spine 资源预加载。
+- `role-skills`：角色 2/4 技能入口、BingYu/CangMu 效果实例化与 5 个 Spine 资源预加载；
+- `magic-weapons`：诛仙剑阵 5 把剑、青莲 3 组动画、青龙剑/太极模型与太极 22 帧效果。
 """
 
 from __future__ import annotations
@@ -76,6 +77,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="LEVEL_SELECTION_PROBE_TEARDOWN",
         quit_after_frames=6000,
         timeout_seconds=240,
+    ),
+    ProbeSpec(
+        key="magic-weapons",
+        title="法宝构建期帧运行时探针",
+        script_name="magic_weapon_probe.gd",
+        scene_name="magic_weapon_probe.tscn",
+        result_prefix="MAGIC_WEAPON_PROBE_RESULT=",
+        report_stem="magic_weapon_probe_report",
+        teardown_marker="MAGIC_WEAPON_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
     ),
     ProbeSpec(
         key="role-skills",

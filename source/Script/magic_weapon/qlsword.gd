@@ -2,7 +2,7 @@ extends BaseMagicWeapon
 class_name QlSword
 
 const PLATFORM := preload("res://Scene/magic_weapon/qinglong_sword_platform.tscn")
-const BODY_TEXTURE := "res://Art/magic_weapon/magic_weapon_qlsword/official/magic_big_sword_bmd.png"
+const BODY_FRAMES_RES := "res://Art/magic_weapon/magic_weapon_qlsword/official/magic_big_sword_frames.tres"
 const FLOOR_DURATION := 30.0
 const COOLDOWN := 30.0
 
@@ -16,15 +16,10 @@ func _ready() -> void:
 	hitbox.disabled = true
 	hit_box.monitoring = false
 	hit_box.monitorable = false
-	var sheet := Global.get_cached_texture(BODY_TEXTURE)
-	var frames := SpriteFrames.new()
-	for index in range(2):
-		var action: StringName = &"wait" if index == 0 else &"hit"
-		var texture := AtlasTexture.new()
-		texture.atlas = sheet
-		texture.region = Rect2(0, index * 150, 100, 150)
-		frames.add_animation(action)
-		frames.add_frame(action, texture)
+	var frames := load(BODY_FRAMES_RES) as SpriteFrames
+	if frames == null:
+		push_error("青龙剑构建期帧资源缺失")
+		return
 	mg_action.sprite_frames = frames
 	mg_action.animation = &"wait"
 	mg_action.scale = Vector2.ONE

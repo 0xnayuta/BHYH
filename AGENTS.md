@@ -29,7 +29,7 @@
   - `standards/`：活跃规范，必须遵守；索引见 `standards/README.md`；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
-  - `roadmap/current-iteration.md`：当前候选阶段（当前为 13-2C 非怪物运行时建帧，C1 已完成）的恢复条件、实施顺序与验收；频繁更新；
+  - `roadmap/current-iteration.md`：当前候选阶段（当前为 13-2C 非怪物运行时建帧，C1/2 已完成）的恢复条件、实施顺序与验收；频繁更新；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""契约域总门禁：契约扫描 + AtlasMetadata/FrameSequence/关卡预载构建校验 + 非 atlas PNG 流 allowlist。"""
+"""契约域总门禁：契约扫描 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist。"""
 from __future__ import annotations
 
 import concurrent.futures
@@ -22,6 +22,8 @@ COMMANDS = [
     ("atlas_metadata_self_test", [sys.executable, "scripts/convert_atlas_metadata.py", "--self-test"]),
     ("frame_sequences_check", [sys.executable, "scripts/convert_frame_sequences.py", "--check"]),
     ("monster_frames_check", [sys.executable, "scripts/convert_monster_frames.py", "--check"]),
+    ("numbered_frames_check", [sys.executable, "scripts/convert_numbered_frames.py", "--all", "--check"]),
+    ("sheet_frames_check", [sys.executable, "scripts/convert_sheet_frames.py", "--check"]),
     ("liu_sha_frames_check", [sys.executable, "scripts/convert_liu_sha_frames.py", "--check"]),
     ("action_views_check", [sys.executable, "scripts/convert_monster_action_views.py", "--check"]),
     ("level_preload_catalog_check", [sys.executable, "scripts/convert_level_preload_catalog.py", "--check"]),

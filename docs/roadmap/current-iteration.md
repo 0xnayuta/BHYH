@@ -2,7 +2,7 @@
 
 > **用途**：只维护当前候选阶段、恢复条件与实施顺序；更新频繁。项目状态、长期阶段顺序与近期重点以 [roadmap](roadmap.md) 为唯一来源。
 >
-> **当前状态**：**Phase 13 视觉资产契约收口**主干完成；Phase 13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成。非怪物域 **13-2C-1** 已完成，**13-2C-2/3** 为后续候选。
+> **当前状态**：**Phase 13 视觉资产契约收口**主干完成；Phase 13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成。非怪物域 **13-2C-1/2** 已完成，**13-2C-3** 为后续候选。
 >
 > **版本边界**：内容版本保持 **6.9**；Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、掉落或数值内容。
 >
@@ -198,20 +198,20 @@ return MANIFESTS[role_id]
 | 帧几何（offset/居中/缩放）在运行时脚本里硬编码 | 迁移时把这些字段写入帧资源或保留在消费者常量中，并在探针中断言首帧可见 |
 | Atlas 页共享导致内存上升 | 复用现有 `AtlasTexture` 页引用；不新建纹理副本；必要时按 §6.5 记录驻留依据 |
 
-### 3.7 批次 13-2C：非怪物运行时建帧（C1 已完成，C2/C3 候选）
+### 3.7 批次 13-2C：非怪物运行时建帧（C1/2 已完成，C3 候选）
 
 **对应契约**：§3.1（构建层）、§3.3（确定性）、ADR-005（禁止回退）
-**状态**：2026-10-27 完成 **13-2C-1**；非怪物运行时建帧由 10 降到 8，当前总计 17 个文件；C2/C3 待排期。
+**状态**：2026-10-27 完成 **13-2C-1/2**；非怪物运行时建帧由 10 降到 6，当前总计 15 个文件；C3 待排期。
 
 | 文件 | 当前运行时形态 | 构建期化路径 | 结论与顺序 |
 |:---|:---|:---|:---|
 | `main_sword_array_weapon.gd` | **已完成**：删除 `_build_frames()` / `_build_frames_async()`、Atlas 流式回退与页面加载器，只加载 `zhuxianjianzhen_effects.tres` | 标准资源覆盖 5 把剑的 body/effect/projectile/impact；缺失时显式失败 | **13-2C-1，已完成 2026-10-27** |
 | `qing_lian.gd` | **已完成**：加载 3 个构建期 `.tres`，删除 3 组 `preload` PNG 数组与 `_build_frames()` | idle 24 / effect 14 / aura 8 帧由 `convert_numbered_frames.py` 生成 | **13-2C-1，已完成 2026-10-27** |
-| `taiji_bagua.gd` | 22 帧编号效果序列 + 2 帧模型 sheet 裁剪 | 效果序列进编号帧转换器；模型 sheet 需新增 sheet-frame 转换器或等价资源 | **13-2C-2，候选** |
-| `qlsword.gd` | 单张 100×300 sheet 裁剪 2 帧 | 与太极同理，需要 sheet 帧资源；无编号序列 | **13-2C-2，候选** |
+| `taiji_bagua.gd` | **已完成**：2 个构建期资源替换模型与 22 帧效果运行时裁剪 | 模型 sheet 与效果编号序列均由构建期资源加载 | **13-2C-2，已完成 2026-10-27** |
+| `qlsword.gd` | **已完成**：加载 2 帧模型 sheet 的构建期 `.tres` | `convert_sheet_frames.py` 生成 `magic_big_sword_frames.tres` | **13-2C-2，已完成 2026-10-27** |
 | `eight_immortal_magic_weapon.gd` | 8 个场景分别以 `model_path` / `effect_dir` 导出，运行时扫描 1..100 并拼接路径 | 按 8 个 `weapon_id` 生成模型帧与效果序列资源；场景改引用固定资源，删除导出路径扫描 | **13-2C-3，候选** |
 
-非法宝 5 个的处置：
+非法宝 5 个的处置（未变）：
 
 - 角色特效 2 个：保留 `frame_rects` 运行时裁剪，待特效几何转 Resource 后单独评估；
 - `pet_neat_bullet`：保留蓝底抠图例外，构建期迁移需重复去底 PNG，收益低于成本；
@@ -220,7 +220,9 @@ return MANIFESTS[role_id]
 
 C1 验证（2026-10-27）：`convert_numbered_frames.py --all --check` PASS；Godot 探针确认 5 把剑标准动画加载、青莲 idle 24 / effect 14 / aura 8 帧与 loop/speed；`runtime_frames_audit.py --fail-on-error` **17/17 PASS**；`health_check` **0/0/0**；`check_all --skip-engine` PASS；`level_1` Stage 1~4 与场景探针 3/3 PASS；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（265.3s）。
 
-实施顺序：**13-2C-1（main_sword + qing_lian，已完成）→ 13-2C-2（qlsword + taiji）→ 13-2C-3（eight_immortal）**。每批只减少 `runtime_frames_allowlist.json` 条目，不新增；每批单独提交并跑对应法宝场景、`scene_probe_runner`、`runtime_frames_audit` 与全量回归。C1 后运行时建帧为 **17**；C2/C3 全部完成后预计降至 **14**，未完成前不以估算值替代门禁结果。
+C2 验证（2026-10-27）：`convert_numbered_frames.py --all --check` 与 `convert_sheet_frames.py --check` PASS；永久法宝探针覆盖 5 把剑、青莲、青龙剑、太极模型与 22 帧效果；`runtime_frames_audit` **15/15 PASS**；`check_all` PASS；`health_check` **0/0/0**；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（365.1s，level_58/level_66 瞬态重试后通过）。
+
+实施顺序：**13-2C-1（main_sword + qing_lian，已完成）→ 13-2C-2（qlsword + taiji，已完成）→ 13-2C-3（eight_immortal，候选）**。每批只减少 `runtime_frames_allowlist.json` 条目，不新增；每批单独提交并跑对应法宝场景、`scene_probe_runner`、`runtime_frames_audit` 与全量回归。C2 后运行时建帧为 **15**；C3 完成后预计降至 **14**，未完成前不以估算值替代门禁结果。
 
 ---
 
@@ -369,7 +371,8 @@ Phase 13-2C 非怪物运行时建帧（C1 已完成，C2/C3 候选）
 | Phase 13-3 | **已完成**（2026-10-27） | 清单生成 + 运行时删表分开提交 |
 | Phase 13-4 | **已完成**（2026-10-27） | 分类脚本 → 删除 → 入口收敛，分开提交 |
 | Phase 13-2C-1 | **已完成**（2026-10-27） | 诛仙剑阵回退删除 + 青莲构建期资源，单个提交 |
-| Phase 13-2C-2/3 | **候选**（评估完成，未实施） | 按法宝子域拆分，每批一个提交 |
+| Phase 13-2C-2 | **已完成**（2026-10-27） | 青龙剑/太极构建期资源 + 永久法宝探针，单个提交 |
+| Phase 13-2C-3 | **候选**（评估完成，未实施） | 八仙法宝 8 场景 profile，单独提交 |
 
 **红线**：
 
@@ -398,7 +401,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 | 八维门禁 | 8/8 PASS |
 | 契约门禁 | 全子命令 PASS，含新增转换器 `--check` |
 | 引擎健康 | 0 Parse / 0 Error / 0 Warning |
-| 场景探针 | 3/3 PASS（星座 + 关卡选择态 + 角色 2/4 技能）；耗时为观测值，不设硬阈值 |
+| 场景探针 | 4/4 PASS（星座 + 关卡选择态 + 角色 2/4 技能 + 法宝）；耗时为观测值，不设硬阈值 |
 | 双人探针 | 16/16 PASS，SKIP 不计 PASS |
 | 关卡回归 | FAIL 0；SKIP 仅限 5 个非战斗场景 |
 | 发布闭包 | 13-3 起为必跑项，13-1/13-2 可后置 |
@@ -421,7 +424,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 
 ## 9. 恢复规则
 
-- 本页记录 Phase 13 实施状态：13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成；别名表已清空；13-2C-1 已完成，13-2C-2/3 为后续候选。
+- 本页记录 Phase 13 实施状态：13-1、13-2A、13-2B（怪物域）、13-3 与 13-4 已完成；别名表已清空；13-2C-1/2 已完成，13-2C-3 为后续候选。
 - 长时间跨度的项目状态、阶段顺序与近期重点只在本页的上级 [`roadmap.md`](roadmap.md) 维护；本页只保留当前候选与恢复所需细节。
 - 每个 Phase 完成后在本页更新状态与实测结果，并把验收结论同步到 [`../reference/status.md`](../reference/status.md)。
 - Phase 12 的实施明细已归档，不在本页重复；如需回溯，见 [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)。
