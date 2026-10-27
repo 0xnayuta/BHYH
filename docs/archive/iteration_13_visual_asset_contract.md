@@ -137,8 +137,8 @@ Phase 13 不新增玩法、任务、掉落或数值内容；没有未完成的�
 | 全量关卡回归 | **128/128 PASS + 5 SKIP，FAIL 0**（321.6s） |
 | 发布依赖清单自检 | **4,100 条 PASS** |
 | PCK 闭包探针 | **4,100/4,100 可达**；PCK 2,738,628,976 字节 |
-| Windows release 可执行包 | **BLOCKED（2026-10-27）**：本机缺少 Godot 4.7.2 Windows export templates，`--export-release` 在模板检查阶段失败；未生成可运行 exe。官方 1.19 GB 模板下载未完成，不能用 PCK 或 headless 结果替代 |
-| 目标设备首帧 / VRAM | **未验证**：需要在安装导出模板并生成 release 包后，于目标 Windows 设备测量；当前无有效结论 |
+| Windows release 可执行包 | **PASS（2026-10-27，当前 Windows 主机）**：安装官方 4.7.2 Windows 模板后生成 exe + PCK；主场景与 `level_1` 验证构建均启动成功；Vulkan 1.4.315 / Forward Mobile / AMD Radeon RX 6750 XT；正常关窗退出日志干净。`--quit-after` 强制退出会留下 RID/Texture 清理警告，不作为运行时失败 |
+| 首帧 / VRAM | **基线通过（当前主机）**：启动至首个可测帧代理中位数 **3.22s**；`level_1` 稳定 **150 FPS**（引擎上限 150）；专用 GPU 内存 **713,916,416 B**、共享 **103,546,880 B**。峰值 VRAM、战斗负载与跨平台仍未验证 |
 
 L2 与全量回归是发布前阻断项；`SKIP` 只允许既有 5 个非战斗场景。机器报告不归档，结论以本文与 `status.md` 为准。
 
@@ -146,7 +146,7 @@ L2 与全量回归是发布前阻断项；`SKIP` 只允许既有 5 个非战斗�
 
 ## 5. 后续顺序
 
-1. **发布前平台验收**：先安装 Godot 4.7.2 Windows export templates，生成 release exe，再在目标 Windows 设备验证加载、VRAM 与首帧；当前模板缺失，release 可执行包验收为 BLOCKED；
+1. **发布前平台验收**：Windows release 启动、`level_1`、FPS、首帧代理与 VRAM 基线已在当前主机通过；后续补峰值 VRAM、战斗负载与跨平台验收；
 2. **AtlasMetadata typed accessor**：独立项目，先清单与 schema，再迁移消费者；
 3. **Spine 跨平台运行时**：独立项目，先二进制/许可证/平台矩阵；
 4. **内容版本回植**：目标明确后按 `migration_playbook.md` §5.1 执行；
@@ -161,6 +161,6 @@ Phase 13 已无待执行批次；后续工作从上述独立项目重新立项�
 - 构建期资源必须同时具备转换器 `--check`、消费者直接加载与探针；只生成 `.tres` 不足以证明运行时可用；
 - 动作别名、region、duration、loop/speed 都是资源 schema 的一部分，必须逐项校验；
 - 资源缺失应显式失败，不能用空帧或双路径回退掩盖；
-- 运行期探针只证明 headless/编辑器路径，不能替代真实平台性能；
+- 运行期探针只证明 headless/编辑器路径，不能替代真实平台性能；release 模板不提供 `--scene` 路径覆写，关卡级 release 验证需临时切换主场景后恢复；
 - 私有素材与公共代码必须按 `ASSET_CHANGE_CONTRACT.md` 分仓提交；
 - 活跃文档只保留当前事实与路线，阶段过程进入归档，避免再次形成历史流水账。

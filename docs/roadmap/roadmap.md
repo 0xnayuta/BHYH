@@ -38,7 +38,7 @@ Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、�
 
 ### 1.2 近期重点
 
-1. 安装 Godot 4.7.2 Windows export templates 后生成 release exe，完成目标平台加载、VRAM 与首帧验收；当前模板缺失，release 可执行包为 BLOCKED；
+1. Windows release 启动、`level_1`、FPS、首帧代理与 VRAM 基线已在当前主机通过；后续补峰值 VRAM、战斗负载与跨平台验收；
 2. 保持 12 个运行时建帧例外冻结，发布前复核 `runtime_frames_audit`；
 3. 保持 L2 固定套件稳定，`scene_probe_runner` 的星座 / 关卡选择态 / 角色技能 / 法宝与角色特效覆盖不缩减；
 4. AtlasMetadata typed accessor 与 Spine 跨平台运行时按独立项目重新立项，不提前占用当前批次。
