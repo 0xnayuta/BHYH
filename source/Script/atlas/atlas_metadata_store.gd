@@ -35,7 +35,7 @@ static func view_for(path: String) -> AtlasMetadataView:
 	if metadata == null:
 		_view_failures[path] = true
 		return null
-	var view := AtlasMetadataView.new(metadata)
+	var view := AtlasMetadataView.new(metadata, path)
 	if not view.is_valid():
 		_report_missing(path, "AtlasMetadata runtime schema invalid: " + view.error_message())
 		_view_failures[path] = true

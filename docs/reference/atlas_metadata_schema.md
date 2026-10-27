@@ -1,6 +1,6 @@
 # AtlasMetadata 生产者、schema 与消费者矩阵
 
-> **状态**：Phase 14-1 只读调查 + Phase 14-2 首批实现（2026-10-28）。`PalaceBossProjectile` 已迁移到 `AtlasMetadataView`；其余消费者仍使用 `data_for`，不得把本页当作全部迁移完成声明。
+> **状态**：Phase 14-1 只读调查 + Phase 14-2/14-3A 首批实现（2026-10-28）。`PalaceBossProjectile` 与 `MountVisual` 已迁移到 `AtlasMetadataView`；其余消费者仍使用 `data_for`，不得把本页当作全部迁移完成声明。
 > **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
 > **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
 > **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`current-iteration.md`](../roadmap/current-iteration.md)。
@@ -15,15 +15,15 @@ flowchart LR
     S --> SV["view_for() -> AtlasMetadataView"]
     S --> SD["data_for() -> Dictionary<br/>迁移期入口"]
     SV --> P["PalaceBossProjectile<br/>masks / geometry"]
-    SD --> E["East / North / Cloud / Palace<br/>Boss 运行时"]
-    SD --> V["MountVisual<br/>animation + frames"]
+    SV --> V["MountVisual<br/>animation + frames"]
+    SD --> E["East / North / Cloud / Palace Flying<br/>Boss 运行时"]
     M --> B1["convert_monster_frames.py"]
     M --> B2["convert_frame_sequences.py"]
     R --> B1
 ```
 
 - 仓库内唯一的 AtlasMetadata 生产者是 `scripts/convert_atlas_metadata.py`；它把每个 `manifest.json` 原样写入同目录 `metadata.tres`，只对顶层数组包装 `__top_level=array` 与 `items`。
-- 运行时入口有两个阶段形态：`AtlasMetadataStore.view_for(path)` 返回只读 `AtlasMetadataView`；迁移期 `data_for(path)` 仍返回共享 `Dictionary` 给未迁移消费者。`PalaceBossProjectile` 已走前者，其余五个消费者仍走后者。
+- 运行时入口有两个阶段形态：`AtlasMetadataStore.view_for(path)` 返回只读 `AtlasMetadataView`；迁移期 `data_for(path)` 仍返回共享 `Dictionary` 给未迁移消费者。`PalaceBossProjectile` 与 `MountVisual` 已走前者，其余四个消费者仍走后者。
 - 构建期工具直接读取 `metadata.tres` 文本或源 manifest；它们不应被误算成运行时 `AtlasMetadataStore` 消费者。
 - `manifest.json` 的生成链路不在公共仓库；本页只覆盖已入库的转换器与运行时读取边界。
 
@@ -59,7 +59,7 @@ flowchart LR
 
 ## 3. 资源域与运行时可达范围
 
-按 Store 的路径规则统计，**267** 个 metadata 资源可被当前运行时入口按路径触达；这不等于所有资源都会在每一局加载。`view_for` 当前只支持 `pages+sequences`，因此 137 个该家族资源可建立 View；Mount 的 130 个 `animation+frames` 仍走 `data_for`。
+按 Store 的路径规则统计，**267** 个 metadata 资源可被当前运行时入口按路径触达；这不等于所有资源都会在每一局加载。`view_for` 支持 `pages+sequences` 与 `animation+frames`：137 个序列资源、130 个 Mount 动画资源均可建立 View。
 
 | 资源域 | 路径规则 | 可触达数量 | 实际读取者 |
 |:---|:---|:---:|:---|
@@ -75,7 +75,7 @@ flowchart LR
 
 ## 4. 运行时消费者矩阵
 
-**直接 Store 调用点**共 6 个：5 个仍用 `data_for`，`PalaceBossProjectile` 已用 `view_for`。弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。
+**直接 Store 调用点**共 6 个：4 个仍用 `data_for`，`PalaceBossProjectile` 与 `MountVisual` 已用 `view_for`。弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。
 
 | # | 消费者 | 路径来源 | 使用字段 | 共享/复制 | 失败路径 |
 |:---:|:---|:---|:---|:---|:---|
@@ -84,7 +84,7 @@ flowchart LR
 | 3 | `Script/monster/north_continent_monster.gd` | `north_original/<model>/metadata.tres` | `sequences`、`geometry`（`center`/`size`/`origin`）、`masks`；传路径给弹体 | `_source` 保存共享字典 | 未检查空字典；缺失键会导致初始化/碰撞路径错误 |
 | 4 | `Script/monster/palace_boss_projectile.gd` | 配置键 `source_masks_metadata`，来自 Cloud/North/Palace | View 的 `masks` / `geometry`；NorthBossProjectile 仍可写 `source_masks` 覆盖 | `view_for` 返回只读 View；`source_masks` 是迁移期覆盖字典 | 非空路径 view 无效时 `configure()` 返回 false；空路径表示未请求 masks |
 | 5 | `Script/monster/palace_flying_boss.gd` | `palace_boss/<monster_kind>/metadata.tres` | `geometry`（`center`/`size`/`origin`）、`masks["hit1"]`；传路径给弹体 | `_palace_data` 保存共享字典 | 未检查空字典；直接索引，失败会进入运行时错误 |
-| 6 | `Script/mount/mount_visual.gd` | `Art/mount/runtime/mounts|effects/<mount>/<candidate>/metadata.tres` | `animation`、`fps`、`loop`、`frame_count`、`frames`、`back_atlases`、`front_atlases`；帧内 `back`/`front`/`ride`/`official_ride`；图层 `page`/`region`/`offset` | `data_for(...).duplicate(true)`，再补 `_base_path`；不修改共享源 | 路径不存在时在调用 Store 前返回 `{}`；动画播放返回 false。schema 错误由 Store 报错后返回空，但调用方只表现为无动画 |
+| 6 | `Script/mount/mount_visual.gd` | `Art/mount/runtime/mounts|effects/<mount>/<candidate>/metadata.tres` | View 的 `animation`/`fps`/`loop`/`frame_count`、帧层 `page`/`region`/`offset`、`ride`/`official_ride`；原生骨骼 parts 分支不走 metadata | `view_for` 返回只读 View；骨骼分支保留 parts 数据 | 非空路径 View 无效时 `play()` 返回 false；缺失候选在 `ResourceLoader.exists` 处返回 false |
 
 ### 4.1 字段契约
 
@@ -99,7 +99,7 @@ flowchart LR
 | `animations` | 旧动画名到帧条目的映射 | `convert_monster_frames`（剑 Boss 目标） | 不作为运行时统一 schema |
 | 顶层数组 `items` | 地图图层或装备图集条目 | 未发现 Store 消费者 | 不建立通用运行时模型 |
 
-`AtlasMetadataView` 已覆盖 `pages+sequences` 的序列帧元组、页索引、geometry 和 masks 校验；`AtlasMetadata.validate()` 仍保留浅层资源级检查。Mount 的 `animation+frames` 校验、East/North/Cloud/Palace 消费者迁移仍属于 14-3；`view_for` 当前不会接受 Mount 资源。
+`AtlasMetadataView` 已覆盖 `pages+sequences` 的序列帧元组、页索引、geometry、masks，以及 `animation+frames` 的 fps/loop/frame_count/图层/transform 校验；`AtlasMetadata.validate()` 仍保留浅层资源级检查。East/North/Cloud/PalaceFlyingBoss 消费者迁移仍属于 14-3B。
 
 ## 5. 构建期消费者
 
@@ -120,7 +120,7 @@ flowchart LR
 - `nanhai_projectile.gd` 把 `atlas_metadata`、`impact_atlas_metadata` 读入成员变量，但当前没有读取这些成员来加载 AtlasMetadata；`_configure_atlas_visual()` 直接返回 `false`；
 - `minghai_boss3117.gd`、`zhuque_street_monster.gd` 定义 `ATLAS_METADATA` 常量，但静态检索未发现其使用；
 - `source_masks_metadata` 是唯一的运行时“间接 metadata 路径”配置，读取者为 `palace_boss_projectile.gd`，来源为 Cloud/North/Palace；
-- `atlas_metadata` 配置应在 Phase 14-3 的受控清理中移除，前提是再次扫描确认无外部调用方；本次只迁移 PalaceBossProjectile，未清理源码配置。
+- `atlas_metadata` 配置应在 Phase 14-3B 的受控清理中移除，前提是再次扫描确认无外部调用方；本次迁移 PalaceBossProjectile 与 MountVisual，未清理源码配置。
 
 `AtlasMetadataStore.validate_path()` 与 `clear_cache()` 当前没有生产调用点；`data_for("")` 直接返回 `{}`，不触发 `push_error`，与其他失败路径不一致。它们作为候选死接口/待定边界记录，不据此删除。
 
@@ -128,21 +128,21 @@ flowchart LR
 
 | 问题 | 证据 | Phase 14 处理方向 |
 |:---|:---|:---|
-| 共享字典泄露可写面 | `data_for` 仍向五个未迁移消费者返回共享字典；PalaceBossProjectile 已改为 View | 后续消费者迁移后删除 `data_for`；业务不可直接改源数据 |
-| 空数据静默退化 | East 返回零/哨兵几何；PalaceFlyingBoss 直接索引；MountVisual 返回空动画 | 14-3 按消费者明确拒绝；PalaceBossProjectile 已在非空路径失败时拒绝 |
-| schema 校验浅层 | `AtlasMetadata.validate()` 未验证帧元组、页索引、geometry/masks、MountVisual 帧 | `AtlasMetadataView` 已深度校验 `pages+sequences`；Mount/后续消费者在 14-3 补 |
+| 共享字典泄露可写面 | `data_for` 仍向四个未迁移消费者返回共享字典；PalaceBossProjectile 与 MountVisual 已改为 View | 后续消费者迁移后删除 `data_for`；业务不可直接改源数据 |
+| 空数据静默退化 | East 返回零/哨兵几何；PalaceFlyingBoss 直接索引；MountVisual 缺失候选时返回 false | 14-3B 按消费者明确拒绝；PalaceBossProjectile 与 Mount metadata 已按各自入口拒绝无效声明 |
+| schema 校验浅层 | `AtlasMetadata.validate()` 未验证帧元组、页索引、geometry/masks、Mount 帧 | `AtlasMetadataView` 已深度校验 `pages+sequences` 与 `animation+frames` |
 | Store 公共 API 未使用 | `validate_path`/`clear_cache` 无生产调用 | 迁移时删除或降为内部；不保留无消费者兼容层 |
-| metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3 中加 UID |
-| 旧配置残留 | 4 个 `atlas_metadata` 写入方无实际读取方 | 14-3 确认后清理配置/常量；不把它们加入 typed 消费者清单 |
+| metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3B 中加 UID |
+| 旧配置残留 | 4 个 `atlas_metadata` 写入方无实际读取方 | 14-3B 确认后清理配置/常量；不把它们加入 typed 消费者清单 |
 
-## 8. Phase 14-2 已实现子集
+## 8. Phase 14-2/14-3A 已实现子集
 
 本次已实现：
 
-1. **只读 View**：`AtlasMetadataView` 覆盖 `pages+sequences` 的长度、帧几何、geometry、masks 与深度校验；不建立 `pages`/`files` 的通用对象图。
+1. **只读 View**：`AtlasMetadataView` 覆盖 `pages+sequences` 的长度、帧几何、geometry、masks，以及 `animation+frames` 的播放参数/图层/rider transform；不建立 `pages`/`files` 的通用对象图。
 2. **Store 入口**：`view_for(path)` 做路径、资源类型、浅层与深度 schema 校验，按路径缓存 View；失败返回 `null` 并报告。
-3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；声明路径无效时 `configure()` 失败；NorthBossProjectile 的 `source_masks` 覆盖保留为迁移期兼容。
-4. **未实现**：East/Cloud/North/PalaceFlyingBoss/MountVisual 的消费者迁移、Mount 的 `animation+frames` View、惰性配置清理，均属于 14-3。
+3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；`MountVisual` 使用 View 读取 metadata 动画，原生骨骼 parts 分支保留；NorthBossProjectile 的 `source_masks` 覆盖保留为迁移期兼容。
+4. **未实现**：East/Cloud/North/PalaceFlyingBoss 的消费者迁移与惰性配置清理，属于 14-3B。
 
 约束：
 
@@ -164,7 +164,8 @@ python scripts/convert_monster_frames.py --check
 
 运行时验证：
 
-- 临时 GDScript 探针对全部 **137** 个 `pages+sequences` 运行时资源建立 View，**137/137 PASS**；
+- 临时 GDScript 探针对全部 **267** 个运行时资源建立 View（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；
+- `MountVisual` 的 metadata 动画 `aoyi_skill` 播放与 `get_animation_visual_bounds` PASS；
 - `level_73`、`level_74`、`level_75` 冒烟 PASS，日志 **0 ERROR / 0 WARNING**；
 - `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。
 

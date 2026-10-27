@@ -18,7 +18,6 @@ const RIDER_SLOT_ORIGINS := {
 const STREAM_LOOKAHEAD_FRAMES := 45
 const STREAM_READY_LIMIT := 2
 
-static var _metadata_cache: Dictionary = {}
 static var _bone_index_cache: Dictionary = {}
 static var _stream_scope := ""
 static var _stream_generation := 0
@@ -38,6 +37,7 @@ var lightning_active := false
 
 var _elapsed := 0.0
 var _animation_data: Dictionary = {}
+var _animation_view: AtlasMetadataView = null
 var _animation_cache: Dictionary = {}
 var _bone_index: Dictionary = {}
 var _combat_parts: Array[RefCounted] = []
@@ -88,6 +88,7 @@ func setup(
 	frame_index = 0
 	_elapsed = 0.0
 	_animation_data.clear()
+	_animation_view = null
 	_animation_cache.clear()
 	_back_atlases.clear()
 	_front_atlases.clear()
@@ -256,9 +257,19 @@ func play(candidate: String, restart := false) -> bool:
 		return false
 	if candidate == animation_name and not restart:
 		return true
-	var loaded: Dictionary = _load_animation(candidate)
-	if loaded.is_empty():
+	var loaded: Variant = _load_animation(candidate)
+	if loaded == null:
 		return false
+	var view: AtlasMetadataView = null
+	if loaded is AtlasMetadataView:
+		view = loaded as AtlasMetadataView
+	var bone_data: Dictionary = {}
+	if view == null:
+		if not loaded is Dictionary:
+			return false
+		bone_data = loaded as Dictionary
+		if bone_data.is_empty():
+			return false
 	if not _has_registration_anchor:
 		var fallback_bounds := _frame_bounds(loaded, 0)
 		if fallback_bounds.size.x > 0.0 and fallback_bounds.size.y > 0.0:
@@ -268,12 +279,18 @@ func play(candidate: String, restart := false) -> bool:
 			)
 			_has_registration_anchor = true
 	animation_name = candidate
-	_animation_data = loaded
+	_animation_view = view
+	_animation_data = bone_data
 	_back_atlases.clear()
 	_front_atlases.clear()
-	_atlas_base_path = str(loaded.get("_base_path", ""))
-	_back_atlas_names = Array(loaded.get("back_atlases", [])).duplicate()
-	_front_atlas_names = Array(loaded.get("front_atlases", [])).duplicate()
+	if view != null:
+		_atlas_base_path = view.source_path.get_base_dir()
+		_back_atlas_names = view.animation_back_atlas_names()
+		_front_atlas_names = view.animation_front_atlas_names()
+	else:
+		_atlas_base_path = str(bone_data.get("_base_path", ""))
+		_back_atlas_names = Array(bone_data.get("back_atlases", [])).duplicate()
+		_front_atlas_names = Array(bone_data.get("front_atlases", [])).duplicate()
 	_back_atlases.resize(_back_atlas_names.size())
 	_front_atlases.resize(_front_atlas_names.size())
 	frame_index = 0
@@ -286,18 +303,15 @@ func play(candidate: String, restart := false) -> bool:
 
 
 func _process(delta: float) -> void:
-	if _animation_data.is_empty():
+	if not _has_animation_frames():
 		return
-	var frames_value: Variant = _animation_data.get("frames", [])
-	if not (frames_value is Array) or frames_value.is_empty():
-		return
-	var fps := maxf(1.0, float(_animation_data.get("fps", 30.0)))
+	var fps := _animation_fps()
 	if async_texture_loading:
 		_pump_stream_requests()
 		_request_lookahead_atlases(frame_index)
 	_elapsed += delta * maxf(speed_scale, 0.0)
 	var next_frame := int(floor(_elapsed * fps))
-	var frame_count := int(_animation_data.get("frame_count", frames_value.size()))
+	var frame_count := _animation_frame_count()
 	if frame_count <= 0:
 		set_process(false)
 		return
@@ -306,7 +320,7 @@ func _process(delta: float) -> void:
 			frame_index = next_frame
 			_apply_frame()
 		return
-	if force_loop or bool(_animation_data.get("loop", false)):
+	if force_loop or _animation_loop():
 		_elapsed = fmod(_elapsed, float(frame_count) / fps)
 		frame_index = mini(int(floor(_elapsed * fps)), frame_count - 1)
 		_apply_frame()
@@ -315,6 +329,33 @@ func _process(delta: float) -> void:
 	_apply_frame()
 	set_process(false)
 	animation_finished.emit(animation_name)
+
+
+func _has_animation_frames() -> bool:
+	if _animation_view != null:
+		return _animation_view.animation_frame_count() > 0
+	var frames_value: Variant = _animation_data.get("frames", null)
+	return frames_value is Array and not (frames_value as Array).is_empty()
+
+
+func _animation_fps() -> float:
+	if _animation_view != null:
+		return maxf(1.0, _animation_view.animation_fps())
+	return maxf(1.0, float(_animation_data.get("fps", 30.0)))
+
+
+func _animation_loop() -> bool:
+	if _animation_view != null:
+		return _animation_view.animation_loop()
+	return bool(_animation_data.get("loop", false))
+
+
+func _animation_frame_count() -> int:
+	if _animation_view != null:
+		return _animation_view.animation_frame_count()
+	var frames_value: Variant = _animation_data.get("frames", null)
+	var fallback := (frames_value as Array).size() if frames_value is Array else 0
+	return int(_animation_data.get("frame_count", fallback))
 
 
 func _ensure_sprites() -> void:
@@ -443,7 +484,7 @@ func _replace_rider_pose(pose_scene: PackedScene, pose_source: String) -> void:
 	_rider_pose_source = pose_source
 
 
-func _load_animation(candidate: String) -> Dictionary:
+func _load_animation(candidate: String) -> Variant:
 	if _animation_cache.has(candidate):
 		return _animation_cache[candidate]
 	if _bone_index.has(candidate):
@@ -463,20 +504,28 @@ func _load_animation(candidate: String) -> Dictionary:
 			return bone_data
 	var metadata_path := _metadata_path(candidate)
 	if not ResourceLoader.exists(metadata_path):
-		return {}
-	var data: Dictionary = _metadata_cache.get(metadata_path, {})
-	if data.is_empty():
-		# 失败细节由 AtlasMetadataStore 统一记录，此处不再重复报错。
-		data = AtlasMetadataStore.data_for(metadata_path).duplicate(true)
-		if data.is_empty():
-			return {}
-		data["_base_path"] = metadata_path.get_base_dir()
-		_metadata_cache[metadata_path] = data
-	_animation_cache[candidate] = data
-	return data
+		return null
+	var view := AtlasMetadataStore.view_for(metadata_path)
+	if view == null:
+		return null
+	_animation_cache[candidate] = view
+	return view
 
 
 func _apply_frame() -> void:
+	if _animation_view != null:
+		var view_frame_count := _animation_view.animation_frame_count()
+		if view_frame_count <= 0:
+			_back_sprite.visible = false
+			_front_sprite.visible = false
+			return
+		frame_index = clampi(frame_index, 0, view_frame_count - 1)
+		_bone_back.call("hide_parts")
+		_bone_front.call("hide_parts")
+		_apply_layer_view(_back_sprite, &"back", frame_index, _back_atlas_names, _back_atlases)
+		_apply_layer_view(_front_sprite, &"front", frame_index, _front_atlas_names, _front_atlases)
+		_apply_rider_frame()
+		return
 	var frames_value: Variant = _animation_data.get("frames", [])
 	if not (frames_value is Array) or frames_value.is_empty():
 		_back_sprite.visible = false
@@ -506,6 +555,13 @@ func _apply_frame() -> void:
 
 
 func _apply_official_rider_frame() -> void:
+	if _animation_view != null:
+		if not _animation_view.animation_has_official_ride(frame_index):
+			_rider.visible = false
+			return
+		_rider.visible = true
+		_rider.transform = _animation_view.animation_official_ride_transform(frame_index)
+		return
 	var attachment: Variant = null
 	if not _animation_data.is_empty():
 		var frames_value: Variant = _animation_data.get("frames", [])
@@ -525,6 +581,9 @@ func _apply_official_rider_frame() -> void:
 
 
 func _apply_rider_frame(ride_value: Variant = null) -> void:
+	if _animation_view != null:
+		_apply_rider_frame_view()
+		return
 	if is_instance_valid(_official_rider):
 		_apply_official_rider_frame()
 		return
@@ -562,7 +621,36 @@ func _apply_rider_frame(ride_value: Variant = null) -> void:
 	_rider.visible = true
 
 
+func _apply_rider_frame_view() -> void:
+	if is_instance_valid(_official_rider):
+		_apply_official_rider_frame()
+		return
+	if _rider == null or _rider_body == null or _rider_body.texture == null:
+		if _rider != null:
+			_rider.visible = false
+		return
+	if not _animation_view.animation_has_ride(frame_index):
+		_rider.visible = false
+		return
+	var rider_transform := _animation_view.animation_ride_transform(frame_index)
+	if _animation_view.animation_ride_has_origin(frame_index):
+		rider_transform *= _animation_view.animation_ride_origin_transform(frame_index)
+	else:
+		var slot_origin: Vector2 = RIDER_SLOT_ORIGINS.get(mount_id, Vector2.ZERO)
+		rider_transform *= Transform2D(0.0, slot_origin)
+	_rider.transform = rider_transform
+	_rider.visible = true
+
+
 func _request_lookahead_atlases(current_frame: int) -> void:
+	if _animation_view != null:
+		var view_frame_count := _animation_view.animation_frame_count()
+		if view_frame_count <= 0:
+			return
+		var safe_view_frame := clampi(current_frame, 0, view_frame_count - 1)
+		_request_layer_lookahead_view(safe_view_frame, &"back", _back_atlas_names, _back_atlases)
+		_request_layer_lookahead_view(safe_view_frame, &"front", _front_atlas_names, _front_atlases)
+		return
 	if _animation_data.has("_parts"):
 		return
 	var frames_value: Variant = _animation_data.get("frames", [])
@@ -572,6 +660,26 @@ func _request_lookahead_atlases(current_frame: int) -> void:
 	var safe_frame := clampi(current_frame, 0, frames.size() - 1)
 	_request_layer_lookahead(frames, safe_frame, "back", _back_atlas_names, _back_atlases)
 	_request_layer_lookahead(frames, safe_frame, "front", _front_atlas_names, _front_atlases)
+
+
+func _request_layer_lookahead_view(
+	safe_frame: int, layer_name: StringName, atlas_names: Array, atlases: Array[Texture2D]
+) -> void:
+	var current_page := _animation_view.animation_layer_page(safe_frame, layer_name)
+	var frame_count := _animation_view.animation_frame_count()
+	for index in range(safe_frame, mini(frame_count, safe_frame + STREAM_LOOKAHEAD_FRAMES + 1)):
+		if not _animation_view.animation_layer_has(index, layer_name):
+			continue
+		var page := _animation_view.animation_layer_page(index, layer_name)
+		if page < 0 or page >= atlas_names.size() or (index > safe_frame and page == current_page):
+			continue
+		if page < atlases.size() and atlases[page] != null:
+			if page != current_page:
+				break
+			continue
+		_request_stream_texture(_atlas_base_path.path_join(str(atlas_names[page])))
+		if page != current_page:
+			break
 
 
 func _request_layer_lookahead(
@@ -595,29 +703,42 @@ func _request_layer_lookahead(
 			break
 
 
+func _animation_source() -> Variant:
+	if _animation_view != null:
+		return _animation_view
+	return _animation_data
+
+
 func get_registration_anchor() -> Vector2:
 	return _registration_anchor
 
 
 func get_current_visual_bounds() -> Rect2:
-	if _animation_data.is_empty():
+	var source: Variant = _animation_source()
+	if source is Dictionary and (source as Dictionary).is_empty():
 		return Rect2()
-	var bounds := _frame_bounds(_animation_data, frame_index)
+	var bounds := _frame_bounds(source, frame_index)
 	if bounds.size.x > 0.0 and bounds.size.y > 0.0:
 		bounds.position -= _registration_anchor
 	return bounds
 
 
 func get_animation_visual_bounds() -> Rect2:
-	if _animation_data.is_empty():
+	var source: Variant = _animation_source()
+	if source is Dictionary and (source as Dictionary).is_empty():
 		return Rect2()
-	var frames_value: Variant = _animation_data.get("frames", [])
-	if not (frames_value is Array) or frames_value.is_empty():
+	var frame_count := _animation_view.animation_frame_count() if _animation_view != null else 0
+	if _animation_view == null:
+		var frames_value: Variant = _animation_data.get("frames", [])
+		if not (frames_value is Array) or frames_value.is_empty():
+			return Rect2()
+		frame_count = (frames_value as Array).size()
+	if frame_count <= 0:
 		return Rect2()
 	var result := Rect2()
 	var has_bounds := false
-	for index in range(frames_value.size()):
-		var frame_bounds := _frame_bounds(_animation_data, index)
+	for index in range(frame_count):
+		var frame_bounds := _frame_bounds(source, index)
 		if frame_bounds.size.x <= 0.0 or frame_bounds.size.y <= 0.0:
 			continue
 		result = frame_bounds if not has_bounds else result.merge(frame_bounds)
@@ -670,8 +791,48 @@ func _apply_layer(sprite: Sprite2D, entry_value: Variant, atlas_names: Array, at
 	sprite.visible = sprite.texture != null
 
 
-func _frame_bounds(data: Dictionary, requested_frame: int) -> Rect2:
-	var frames_value: Variant = data.get("frames", [])
+func _apply_layer_view(
+	sprite: Sprite2D, layer: StringName, frame_index: int, atlas_names: Array, atlases: Array[Texture2D]
+) -> void:
+	if not _animation_view.animation_layer_has(frame_index, layer):
+		sprite.visible = false
+		return
+	var page := _animation_view.animation_layer_page(frame_index, layer)
+	var region := _animation_view.animation_layer_region(frame_index, layer)
+	var offset := _animation_view.animation_layer_offset(frame_index, layer)
+	if page < 0 or page >= atlas_names.size() or region.size.x <= 0.0 or region.size.y <= 0.0:
+		sprite.visible = false
+		return
+	if page >= atlases.size():
+		atlases.resize(atlas_names.size())
+	if atlases[page] == null:
+		var atlas_path := _atlas_base_path.path_join(str(atlas_names[page]))
+		atlases[page] = _take_stream_texture(atlas_path)
+		if atlases[page] == null and async_texture_loading:
+			_request_stream_texture(atlas_path)
+			return
+		if atlases[page] == null:
+			atlases[page] = load(atlas_path) as Texture2D
+		if atlases[page] == null:
+			push_error("坐骑动画图集无法加载: %s" % atlas_path)
+			sprite.visible = false
+			return
+
+	for index in range(atlases.size()):
+		if index != page:
+			atlases[index] = null
+	sprite.texture = atlases[page]
+	sprite.region_rect = region
+	sprite.position = offset + region.size * 0.5 - _registration_anchor
+	sprite.visible = sprite.texture != null
+
+
+func _frame_bounds(data: Variant, requested_frame: int) -> Rect2:
+	if data is AtlasMetadataView:
+		return (data as AtlasMetadataView).animation_frame_bounds(requested_frame)
+	if not data is Dictionary:
+		return Rect2()
+	var frames_value: Variant = (data as Dictionary).get("frames", [])
 	if not (frames_value is Array) or frames_value.is_empty():
 		return Rect2()
 	var frames: Array = frames_value
