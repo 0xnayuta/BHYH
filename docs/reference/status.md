@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（角色特效收口完成）
+> 最后更新：2026-10-27（Phase 13 收口并归档）
 
 ---
 
@@ -150,12 +150,13 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 wings 孤立场景清理 | `source/Scene/base/special_affect_slim/wings.tscn` 无静态/动态引用（`SPECIAL_AFFECT_SLIM_DIR` 动态加载名无 `wings`，`add_special_effect` 调用名列表无 `wings`）；已删除场景；`special_affect.gd` 仍被其它效果场景使用 | 删除前已确认无引用；独立实例化告警属于未初始化 `_scale` 的探针装载问题 |
 
 | 2026-10-27 角色 2/4 技能探针 | `scene_probe_runner.py --probe role-skills` **PASS**：角色 2 `by` 生成 `BingYuEffect`、角色 4 `cmly` 生成 `CangMuLongYunEffect`；`BingYu`/`CangMu`/`Lyfb`/`HMZ`/`JHSJ` 的 `preload_effect_data` **5/5 true**；日志 **0 ERROR / 0 WARNING** | 新增 `scripts/scene_probes/role_skill_probe.{gd,tscn}` 并接入 `PROBES`；`scene_probe_runner` 由 2 项扩为 3 项 |
-| 2026-10-27 L2 场景探针固定项 | 完整套件 **4/4 PASS**：星座 **4.56s**、关卡选择态 **16.41s**、法宝/角色特效 **6.65s**、角色 2/4 技能 **4.40s**，整轮约 **32.2s**（并行负载快照）（并行门禁负载快照；隔离运行会降低）；日志 **0 ERROR / 0 WARNING** | `role-skills` 与 `magic-weapons` 纳入 `scene_probe_runner` 发布前固定子项；报告新增 `duration_seconds` 与 Markdown 耗时行；耗时是本次快照，不设硬阈值 |
-| 2026-10-27 Phase 13-2C 非怪物域评估 | `runtime_frames_audit.py --fail-on-error` **19/19 PASS**；非怪物 10 个，其中法宝 5 个；未改变运行时行为 | 法宝评估结论：诛仙剑阵先删无消费者回退；青莲三组编号序列可迁构建期；青龙剑/太极需 sheet 帧资源；八仙法宝需按 8 场景生成 profile。详细批次与顺序见 `current-iteration.md` §3.7 |
+| 2026-10-27 L2 场景探针固定项 | 完整套件 **4/4 PASS**：星座 **4.56s**、关卡选择态 **16.41s**、法宝/角色特效 **6.65s**、角色 2/4 技能 **4.40s**，整轮约 **32.2s**（并行负载快照；隔离运行会降低）；日志 **0 ERROR / 0 WARNING** | `role-skills` 与 `magic-weapons` 纳入 `scene_probe_runner` 发布前固定子项；报告新增 `duration_seconds` 与 Markdown 耗时行；耗时是本次快照，不设硬阈值 |
+| 2026-10-27 Phase 13-2C 非怪物域评估 | `runtime_frames_audit.py --fail-on-error` **19/19 PASS**；非怪物 10 个，其中法宝 5 个；未改变运行时行为 | 法宝评估结论：诛仙剑阵先删无消费者回退；青莲三组编号序列可迁构建期；青龙剑/太极需 sheet 帧资源；八仙法宝需按 8 场景生成 profile。详细批次与顺序见 `archive/iteration_13_visual_asset_contract.md` |
 | 2026-10-27 Phase 13-2C-1 诛仙剑阵/青莲 | `convert_numbered_frames.py --all --check` **PASS**；Godot 探针：5 把剑标准动画加载 **5/5**、青莲 idle 24/effect 14/aura 8 帧与 loop/speed **3/3**；`runtime_frames_audit` **17/17 PASS**；`health_check` **0/0/0**；`check_all` **8/8 PASS**；`level_1` Stage 1~4 **PASS**（0/0）；场景探针 **3/3 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（265.3s） | 删除诛仙剑阵 `_build_frames`/`_build_frames_async`、Atlas 流式回退与页面加载器；青莲改为加载 3 个构建期 `.tres`；allowlist 19→17，未改素材 |
 | 2026-10-27 Phase 13-2C-2 青龙剑/太极 | `convert_numbered_frames.py --all --check`、`convert_sheet_frames.py --check` **PASS**；法宝探针 5 把剑 + 青莲 + 青龙剑 + 太极模型/效果 **全 PASS**；`runtime_frames_audit` **15/15 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（365.1s，level_58/level_66 重试通过） | 新增 `scripts/convert_sheet_frames.py` 与青龙剑/太极模型 `.tres`；太极 22 帧效果改由编号帧转换器生成；新增永久 `magic_weapon_probe`；allowlist 17→15 |
 | 2026-10-27 Phase 13-2C-3 八仙法宝 | `convert_sheet_frames.py --check`、`convert_numbered_frames.py --all --check` **PASS**；法宝探针覆盖 8 个八仙场景模型/效果 **全 PASS**；`runtime_frames_audit` **14/14 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（320.6s） | 8 个八仙场景改为引用模型/效果 `.tres`；删除 `model_path`/`effect_dir` 扫描与运行时建帧；新增 8 个模型 sheet、7 个效果序列；allowlist 15→14 |
 | 2026-10-27 角色特效收口 | `convert_sheet_frames.py --check` PASS；探针覆盖 Lyfb 16 帧、哪吒阴阳剑/光环/Launch 资源；`runtime_frames_audit` **12/12 PASS**；`health_check` **0/0/0**；`check_all` PASS；L2 三件套：`level_1` **PASS**、`coop_probe_runner` **16/16 PASS**、场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s） | Lyfb/哪吒改用构建期 `.tres`，删除运行时 `SpriteFrames.new()`/Atlas 裁剪；allowlist 14→12；剩余宠物/关卡/工具 3 个例外 |
+| 2026-10-27 Phase 13 收口 | `check_all --godot-bin` **8/8 PASS**；`health_check` **0/0/0**；L2：`level_1` **PASS**、`coop_probe_runner` **16/16**、场景探针 **4/4**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s）；`runtime_frames_audit` **12/12**；发布依赖自检 **4,100 条**；PCK 闭包 **4,100/4,100 可达**（2,738,628,976 字节） | Phase 13 完成并归档，见 [`archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)；剩余 3 个非怪物例外冻结；当前无活跃候选阶段 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
@@ -164,7 +165,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 ## 6. 已知边界
 
 1. 当前仓库已建立本地 Git 提交历史；尚未推送远端，工作区由本地完整备份保障。
-2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_liu_sha_frames.py` 与 `convert_monster_action_views.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用，`convert_numbered_frames.py` 按资源变更单独执行。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
+2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_liu_sha_frames.py`、`convert_monster_action_views.py`、`convert_numbered_frames.py` 与 `convert_sheet_frames.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
 4. 13 个 Autoload、`global.gd` 大体量全局状态、字典/JSON 数据与类型分层目录按遗留结构保留；新增代码不得继续扩张。
 5. 高并发全量回归存在偶发的 Godot 启动瞬态（12 并发实测 `level_lxdy1` 1 次，重试通过）；`--jobs 4` 为稳定排障口径。进程复用（同进程多关）已验证但未采用：加载屏/资源清理抵消启动节省，5 关/组实测更慢。
@@ -172,6 +173,6 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
 9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
-10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；2026-10-26 实测 PCK 内 3,101 条 FrameSequence 依赖全部可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
+10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；发布闭包已扩展到 4,100 条（FrameSequence 与关卡预载清单合并）并实测可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
 11. FrameSequence 已完成 `asset_id` 与实例播放策略分离；不再保留 FPS/loop/hold/prefetch 复合 key，也无双 key 兼容层。旧版生成的哈希命名文件已由转换器清理。
 12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。

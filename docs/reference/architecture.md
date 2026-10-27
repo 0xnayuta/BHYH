@@ -379,7 +379,7 @@ classDiagram
   - 13-2C-1 已完成：`main_sword_array_weapon` 删除标准帧回退、Atlas 流式回退与页面加载器；`qing_lian` 三组编号序列已迁移为构建期 `.tres`。
   - 13-2C-2 已完成：`qlsword` 与 `taiji_bagua` 模型 sheet 由 `convert_sheet_frames.py` 生成；太极 22 帧效果由编号帧转换器生成。
   - 13-2C-3 已完成：`eight_immortal_magic_weapon` 的 8 个场景改为引用模型/效果资源，删除路径扫描与运行时建帧。
-  - 角色特效已收口：`lyfb_awaken_effect` 16 帧兼容特效与 `ne_zha_yin_yang_effect` 阴阳剑/光环/Launch 均改为构建期资源；剩余 `pet_neat_bullet`、`level_59`、`user_key` 为冻结例外，理由见 `roadmap/current-iteration.md` §3.7。
+  - 角色特效已收口：`lyfb_awaken_effect` 16 帧兼容特效与 `ne_zha_yin_yang_effect` 阴阳剑/光环/Launch 均改为构建期资源；剩余 `pet_neat_bullet`、`level_59`、`user_key` 为冻结例外，理由见 `archive/iteration_13_visual_asset_contract.md` §3.1。
 
 ### 6.5 13-2B 冻结裁定（怪物域 9 个）
 

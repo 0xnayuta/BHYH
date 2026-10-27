@@ -2,7 +2,7 @@
 
 > **定位**：项目状态、长期阶段顺序与近期重点的唯一来源。只记录当前版本之后的方向，不保留逐任务流水账。
 >
-> **当前版本**：6.9。Phase 13 视觉资产契约收口的内部主干已完成；非怪物域 **13-2C** 已完成（1/2/3）并收口角色特效，剩余 3 个例外按域冻结，详细收口见 [`current-iteration.md`](current-iteration.md)。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
+> **当前版本**：6.9。**Phase 13 视觉资产契约收口已完成并归档**（[`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)）；当前无活跃候选阶段。上一阶段 **Phase 12 画布与 HUD 重构已完成并归档**（[`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)）。
 >
 > **事实基线**：工程状态、规模与门禁结果以 [`../reference/status.md`](../reference/status.md) 为单一事实源；架构实现见 [`../reference/architecture.md`](../reference/architecture.md)；验收阈值见 [`../reference/acceptance.md`](../reference/acceptance.md)。
 >
@@ -28,8 +28,8 @@
 | 项目 | 状态 | 说明 |
 |:---|:---|:---|
 | Phase 12 画布、相机与 HUD 重构 | **已完成并归档** | 不再进入当前迭代 |
-| Phase 13 视觉资产契约收口主干 | **已完成** | 失败语义、怪物视觉资产构建期化、发布闭包、兼容层治理已收口 |
-| Phase 13-2C 非怪物运行时建帧 | **已完成** | 13-2C-1/2/3 与角色特效收口已完成；剩余 3 个例外冻结，详见 `current-iteration.md` |
+| Phase 13 视觉资产契约收口 | **已完成并归档** | 失败语义、构建期视觉资产、发布闭包、兼容层治理与角色特效均收口；3 个非怪物例外冻结 |
+| 当前活跃候选阶段 | **无** | 下一个独立项目明确后再写入 `current-iteration.md` |
 | AtlasMetadata typed accessor | **规划，未启动** | 独立立项，见 §3.1 |
 | Spine 跨平台运行时与平台验收 | **规划，未启动** | 独立立项，见 §3.2 |
 | 新内容版本 | **未确认** | 当前不把 7.0 回植写成公开路线承诺 |
@@ -38,9 +38,10 @@ Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、�
 
 ### 1.2 近期重点
 
-1. 保持剩余 3 个非怪物例外冻结，发布前复核 `runtime_frames_audit`；
-2. 保持发布前 L2 固定套件稳定，`scene_probe_runner` 的星座 / 关卡选择态 / 角色技能 / 法宝固定覆盖不缩减；
-3. 独立立项只在目标、依赖与验收明确后进入 `current-iteration.md`，不提前占用当前批次。
+1. 完成目标平台 release 加载、VRAM 驻留与首帧耗时验收，不以 headless 结果替代真实设备；
+2. 保持 12 个运行时建帧例外冻结，发布前复核 `runtime_frames_audit`；
+3. 保持 L2 固定套件稳定，`scene_probe_runner` 的星座 / 关卡选择态 / 角色技能 / 法宝与角色特效覆盖不缩减；
+4. AtlasMetadata typed accessor 与 Spine 跨平台运行时按独立项目重新立项，不提前占用当前批次。
 
 ---
 
@@ -50,14 +51,14 @@ Phase 13 只做内部架构与资产管线收口，不新增玩法、任务、�
 Phase 12 画布与 HUD（已完成，归档）
         │
         ▼
-Phase 13 视觉资产契约收口主干（已完成）
+Phase 13 视觉资产契约收口（已完成，归档）
         │
         ▼
-Phase 13-2C 非怪物运行时建帧（已完成，剩余例外）
+无活跃候选阶段
         │
         ▼
 独立项目：AtlasMetadata typed accessor / Spine 跨平台运行时
-（不占用 Phase 13 批次，启动条件见 §3）
+（启动条件见 §3）
 ```
 
 没有确认的新内容阶段，不新增 Phase 编号。版本回植只在目标明确后进入本页与 `current-iteration.md`，不以“未来可能”替代可执行范围。
