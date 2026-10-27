@@ -333,21 +333,13 @@ func _setup_turtle_model_frames() -> void:
 	var preserved_action := _turtle_action
 	var preserved_tick := _turtle_action_tick
 	var source_stage := int(MODEL_SOURCE_STAGE.get(turtle_stage, 1))
-	var source_map: Dictionary = MODEL_MAP[4] if source_stage == 2 else MODEL_MAP[1]
-	var frames := SpriteFrames.new()
-	for action_name in source_map.keys():
-		frames.add_animation(action_name)
-		frames.set_animation_speed(action_name, 24.0)
-		frames.set_animation_loop(action_name, action_name == "wait" or action_name == "walk")
-		var folder := MODEL_ROOT.path_join("stage%d" % source_stage).path_join(str(source_map[action_name]))
-		var count := int(MODEL_FRAME_COUNTS.get(action_name, 0))
-		for frame_index in range(count):
-			var path := folder.path_join("%d.png" % (frame_index + 1))
-			var texture := ResourceLoader.load(path, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-			if texture != null:
-				var stop_counts: Array = MODEL_STOP_COUNTS.get(action_name, [1])
-				var duration := float(stop_counts[frame_index]) if frame_index < stop_counts.size() else 1.0
-				frames.add_frame(action_name, texture, duration)
+	var frames_path := MODEL_ROOT.path_join("stage%d" % source_stage).path_join(
+		"yin_tiger_stage%d_frames.tres" % source_stage
+	)
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("Yin tiger stage frames missing: " + frames_path)
+		return
 	turtle_sprite.sprite_frames = frames
 	turtle_sprite.offset = Vector2(1, -23)
 	if not preserved_action.is_empty() and frames.has_animation(preserved_action):

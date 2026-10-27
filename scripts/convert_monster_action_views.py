@@ -77,20 +77,31 @@ def build_tres(view_path: str, spec: dict) -> str:
     animations: list[tuple[str, bool, float, list[tuple[str, float]]]] = []
     unique_paths: list[str] = []
     for action, config in spec["animations"].items():
-        source_frames = parse_source_frames(config["source"])
         indices = [int(index) for index in config["frames"]]
         durations = config.get("durations")
         if durations is not None and len(durations) != len(indices):
             raise ValueError(f"{action}: frames 与 durations 长度不一致")
         frames: list[tuple[str, float]] = []
-        for position, index in enumerate(indices):
-            if not 0 <= index < len(source_frames):
-                raise ValueError(f"{action}: 帧索引 {index} 越界 ({len(source_frames)} 帧)")
-            path, source_duration = source_frames[index]
-            duration = float(durations[position]) if durations is not None else source_duration
-            frames.append((path, duration))
-            if path not in unique_paths:
-                unique_paths.append(path)
+        if "pattern" in config:
+            pattern = str(config["pattern"])
+            for position, index in enumerate(indices):
+                path = pattern % index
+                if not source_path(path).is_file():
+                    raise ValueError(f"{action}: 缺少帧文件 {path}")
+                duration = float(durations[position]) if durations is not None else 1.0
+                frames.append((path, duration))
+                if path not in unique_paths:
+                    unique_paths.append(path)
+        else:
+            source_frames = parse_source_frames(config["source"])
+            for position, index in enumerate(indices):
+                if not 0 <= index < len(source_frames):
+                    raise ValueError(f"{action}: 帧索引 {index} 越界 ({len(source_frames)} 帧)")
+                path, source_duration = source_frames[index]
+                duration = float(durations[position]) if durations is not None else source_duration
+                frames.append((path, duration))
+                if path not in unique_paths:
+                    unique_paths.append(path)
         animations.append((action, bool(config["loop"]), float(config["speed"]), frames))
 
     uid = uid_for_identity("monster_action_view|" + view_path)

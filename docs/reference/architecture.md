@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 运行时建帧仍有 **23** 个文件（怪物 **9** 个，其余 14 个非怪物），由
+- 运行时建帧仍有 **21** 个文件（怪物 **9** 个，其余 12 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -371,7 +371,25 @@ classDiagram
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
   - 待迁移：`liu_sha_river_boss` / `liu_sha_river_shadow`（逐帧 PNG）。
-  非怪物 **13** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域；
+  非怪物 **12** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域。
+
+### 6.5 13-2B 冻结裁定（怪物域 9 个）
+
+判定标准：① 是否仍存在逐帧 PNG 路径拼接/扫描或磁盘 IO；② 帧是否已来自构建期资源；③ 是否依赖运行时不可静态化的配置/裁剪数据；④ 迁移收益是否大于双源漂移风险。9 个怪物文件的裁定结果：
+
+| 文件 | 保留原因 | 风险/收益判断 |
+|:---|:---|:---|
+| `east_continent_monster` | 关卡 `get_level_monster_config` 可 merge，且存在 `Fly_wait/Fly` 动态键；帧已来自构建期资源，仅剩动作名重命名 | 构建期无法穷举关卡覆盖，双源漂移风险高 |
+| `eight_immortals_boss` | 运行时 `AtlasTexture` 裁剪（monster166/168 头像） | 裁剪区域由运行时数据决定，非路径 IO |
+| `monster_bullet` | 标准帧缺失时的 `null` 计时帧占位 | 无逐帧 IO；删除会让缺失资源时无时钟 |
+| `nanhai_projectile` | 同一模型多动作均需 `play` 名，单一资源无法同时承载 | 单序列裁剪一行，迁移需改全部弹体配置 |
+| `pet_tiger_boss_base` | 图集行列裁剪（虎宠 stage/action） | 裁剪行列由 stage 数据决定 |
+| `tao_wu_boss` | 标准资源异常时单图兜底占位 | 不拼路径；保留防崩溃，不扩大 |
+| `three_prince_boss` | 运行时 `AtlasTexture` 裁剪（部件/武器图层） | 裁剪区域由运行时数据决定 |
+| `three_prince_bullet` | 有资源配置走资源，缺失才逐帧回退 | 弹体配置并非全部有图集，回退是最后一道 |
+| `weiyang_palace_boss` | 符号层单序列裁剪，播放名与源序列不同 | 裁剪只影响符号层，不影响主体 |
+
+结论：9 个文件均**不再包含逐帧 PNG 路径扫描或高频 IO**，帧已来自构建期资源；继续迁移需要把运行时裁剪/关卡覆盖数据复制到构建期，收益低于维护双源的成本。入口由 `runtime_frames_audit.py` 与 allowlist 冻结，新增扩张立即失败。
   剩余法宝已评审保留：`main_sword_array_weapon`（图集 metadata 建帧）、
   `eight_immortal_magic_weapon`/`qlsword`/`taiji_bagua`（图集裁剪）、
   `qing_lian`（调用方传入纹理数组）；
@@ -385,7 +403,7 @@ classDiagram
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
 | 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效、两个法宝与宠物弹体 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
-| 怪物动作视图（`play` 子集 + duration） | `scripts/convert_monster_action_views.py` | `monster_130/212/215/*_action_frames.tres` | `--check` 逐字比较；帧索引、逐帧 duration、loop/speed |
+| 动作视图（`play` 子集或连续 PNG + duration） | `scripts/convert_monster_action_views.py` | `monster_130/212/215/*_action_frames.tres`、宠物寅虎 stage1/2 | `--check` 逐字比较；帧索引、逐帧 duration、loop/speed |
 | 流沙河 `ACTIONS` 动作表 | `scripts/convert_liu_sha_frames.py` | 按 boss_kind 拆分的 `liu_sha_*_frames.tres` | `--check` 逐字比较；逐帧 duration 与确定性 UID |
 | 怪物 `AtlasMetadata.sequences` + 动作映射 | `scripts/convert_monster_frames.py` | 既有 `Art/monster/**/*_frames.tres`（sequence + 动作别名） | `--check` 动画名集合、帧数、页路径闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；`--all` 追加动作别名并修正 loop；`--rewrite` 只补 UID 头 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |

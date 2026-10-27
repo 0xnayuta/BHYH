@@ -4983,16 +4983,12 @@ func _refresh_pet_model_preview(pet: Dictionary) -> void:
 
 func _build_yin_tiger_preview_frames(stage: int) -> SpriteFrames:
 	var source_stage := 2 if stage >= 4 else 1
-	var frames := SpriteFrames.new()
-	frames.add_animation("wait")
-	frames.set_animation_speed("wait", 24.0)
-	frames.set_animation_loop("wait", true)
-	var root := "res://Art/pet/pet_yin_tiger/model/actions/stage%d/wait" % source_stage
-	var stop_counts := [2.0, 2.0, 2.0, 3.0, 2.0, 4.0]
-	for frame_index in range(1, 7):
-		var texture := load(root.path_join("%d.png" % frame_index)) as Texture2D
-		if texture != null:
-			frames.add_frame("wait", texture, stop_counts[frame_index - 1])
+	var frames_path := (
+		"res://Art/pet/pet_yin_tiger/model/actions/stage%d/yin_tiger_stage%d_frames.tres" % [source_stage, source_stage]
+	)
+	var frames := load(frames_path) as SpriteFrames
+	if frames == null:
+		push_error("Yin tiger preview frames missing: " + frames_path)
 	return frames
 
 

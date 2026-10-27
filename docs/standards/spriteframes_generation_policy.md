@@ -19,7 +19,7 @@
 - `scripts/convert_atlas_metadata.py --self-test` 校验 `source_frames` 负向样本；
 - `scripts/convert_nezha_preview_frames.py --check` 校验全部输出存在且内容一致（数量以预览源清单为准）；
 - `scripts/convert_numbered_frames.py --all --check` 校验 BiLuoTian / LeiTingJieZhen / Wutai 3077 tornado 构建期帧存在且未过期；
-- `scripts/convert_monster_action_views.py --check` 校验 `play` 帧资源到怪物动作视图的帧子集、逐帧 duration、loop/speed 与确定性 UID；已接入 `contract_gate`；
+- `scripts/convert_monster_action_views.py --check` 校验 `play` 帧资源或连续 PNG 到动作视图的帧子集、逐帧 duration、loop/speed 与确定性 UID（含宠物寅虎 stage1/2）；已接入 `contract_gate`；
 - `scripts/convert_liu_sha_frames.py --check` 校验流沙河 Boss/分身动作表与构建期 SpriteFrames 逐字一致（逐帧 duration、确定性 UID）；已接入 `contract_gate`；
 - `scripts/convert_monster_frames.py --check` 校验怪物 `AtlasMetadata.sequences` 与既有 `*_frames.tres` 的动画名集合、帧数与 `region`/`margin`、页路径闭包、确定性 UID 唯一性；`--all` 按 `scripts/monster_action_maps.json` 追加动作别名（共享原 `AtlasTexture` 子资源）并修正 loop，`--rewrite` 只补 UID 头；已接入 `contract_gate`；
 - 怪物消费者直接 `load` 帧资源，不再运行时 `SpriteFrames.new()` 重建动画；动作名以 `monster_action_maps.json` 为构建期契约，资源中必须同时存在 sequence 名与动作别名；

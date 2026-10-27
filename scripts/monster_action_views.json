@@ -309,5 +309,238 @@
         "speed": 30.0
       }
     }
+  },
+  "res://Art/pet/pet_yin_tiger/model/actions/stage1/yin_tiger_stage1_frames.tres": {
+    "animations": {
+      "wait": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/wait/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.125,
+          0.08333333333333333,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "walk": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/walk/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "durations": [
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "hurt": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/hurt/%d.png",
+        "frames": [
+          1
+        ],
+        "durations": [
+          0.3333333333333333
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "death": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/death/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit1": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/hit1/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.125,
+          0.125,
+          0.125,
+          0.125,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit2": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage1/hit2/%d.png",
+        "frames": [
+          1,
+          2,
+          3
+        ],
+        "durations": [
+          0.125,
+          0.125,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      }
+    }
+  },
+  "res://Art/pet/pet_yin_tiger/model/actions/stage2/yin_tiger_stage2_frames.tres": {
+    "animations": {
+      "wait": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/wait/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.125,
+          0.08333333333333333,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "walk": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/walk/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "durations": [
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "loop": true,
+        "speed": 24.0
+      },
+      "hurt": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/hurt/%d.png",
+        "frames": [
+          1
+        ],
+        "durations": [
+          0.3333333333333333
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "death": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/death/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "durations": [
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.08333333333333333,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit1": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/hit1/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "durations": [
+          0.125,
+          0.125,
+          0.125,
+          0.125,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit2": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/hit2/%d.png",
+        "frames": [
+          1,
+          2,
+          3
+        ],
+        "durations": [
+          0.125,
+          0.125,
+          0.4166666666666667
+        ],
+        "loop": false,
+        "speed": 24.0
+      },
+      "hit3": {
+        "pattern": "res://Art/pet/pet_yin_tiger/model/actions/stage2/hit3/%d.png",
+        "frames": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "durations": [
+          0.125,
+          0.125,
+          0.125,
+          0.8333333333333334
+        ],
+        "loop": false,
+        "speed": 24.0
+      }
+    }
   }
 }
