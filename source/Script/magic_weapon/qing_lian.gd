@@ -1,58 +1,9 @@
 extends BaseMagicWeapon
 class_name QingLian
 
-const IDLE_FRAMES = [
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/1.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/2.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/3.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/4.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/5.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/6.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/7.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/8.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/9.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/10.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/11.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/12.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/13.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/14.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/15.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/16.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/17.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/18.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/19.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/20.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/21.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/22.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/23.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/24.png"),
-]
-const EFFECT_FRAMES = [
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/1.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/2.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/3.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/4.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/5.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/6.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/7.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/8.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/9.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/10.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/11.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/12.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/13.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/14.png"),
-]
-const AURA_FRAMES = [
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/1.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/2.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/3.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/4.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/5.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/6.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/7.png"),
-	preload("res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/8.png"),
-]
+const IDLE_FRAMES_RES := "res://Art/magic_weapon/magic_weapon_qing_lian/idle_frames/qing_lian_idle_frames.tres"
+const EFFECT_FRAMES_RES := "res://Art/magic_weapon/magic_weapon_qing_lian/ef_effect1_frames/qing_lian_effect_frames.tres"
+const AURA_FRAMES_RES := "res://Art/magic_weapon/magic_weapon_qing_lian/aura_frames/qing_lian_aura_frames.tres"
 @onready var special_effect: AnimatedSprite2D = $SpecialEffect
 @onready var aura_effect: AnimatedSprite2D = $AuraEffect
 
@@ -67,9 +18,15 @@ var _texture_bounds_cache: Dictionary = {}
 
 func _ready() -> void:
 	fb_level = clampi(PlayerData.get_most_level("dzyl"), 1, 10)
-	mg_action.sprite_frames = _build_frames("wait", IDLE_FRAMES, true, 12.0)
-	special_effect.sprite_frames = _build_frames("effect", EFFECT_FRAMES, false, 30.0)
-	aura_effect.sprite_frames = _build_frames("effect", AURA_FRAMES, true, 10.0)
+	var idle_frames := load(IDLE_FRAMES_RES) as SpriteFrames
+	var effect_frames := load(EFFECT_FRAMES_RES) as SpriteFrames
+	var aura_frames := load(AURA_FRAMES_RES) as SpriteFrames
+	if idle_frames == null or effect_frames == null or aura_frames == null:
+		push_error("青莲构建期帧资源缺失")
+		return
+	mg_action.sprite_frames = idle_frames
+	special_effect.sprite_frames = effect_frames
+	aura_effect.sprite_frames = aura_frames
 	mg_action.play("wait")
 	special_effect.visible = false
 	aura_effect.visible = false
@@ -106,16 +63,6 @@ func _follow_hero_during_skill() -> void:
 		scale.x = 1
 		self_dir = false
 		position = hero_position - Vector2(-100, 180)
-
-
-func _build_frames(animation_name: String, textures: Array, looped: bool, speed: float) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.add_animation(animation_name)
-	frames.set_animation_loop(animation_name, looped)
-	frames.set_animation_speed(animation_name, speed)
-	for texture in textures:
-		frames.add_frame(animation_name, texture)
-	return frames
 
 
 func _update_effect_positions() -> void:

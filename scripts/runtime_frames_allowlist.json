@@ -6,8 +6,6 @@
     "source/Script/hero/ne_zha_yin_yang_effect.gd": "图集裁剪/连续帧组合，裁剪区域由剑型与特效参数决定",
     "source/Script/level/level_59.gd": "固定 STONE_TEXTURES 数组建帧，无路径扫描或逐帧 IO",
     "source/Script/magic_weapon/eight_immortal_magic_weapon.gd": "13-2C 评估：8 个场景由 @export 路径驱动模型/效果；需 profile 映射转换为固定资源",
-    "source/Script/magic_weapon/main_sword_array_weapon.gd": "13-2C 评估：标准帧资源已覆盖 5 把剑；仅剩标准动画缺失时的回退与异步构建，候选删除",
-    "source/Script/magic_weapon/qing_lian.gd": "13-2C 评估：3 组编号序列已静态 preload；可迁移为构建期 .tres",
     "source/Script/magic_weapon/qlsword.gd": "13-2C 评估：单张 100x300 sheet 裁剪 2 帧；需 sheet 帧资源",
     "source/Script/magic_weapon/taiji_bagua.gd": "13-2C 评估：22 帧效果编号序列 + 2 帧模型 sheet；需拆分转换",
     "source/Script/monster/east_continent_monster.gd": "标准动作重命名；关卡配置 merge 使其无法完全静态化",

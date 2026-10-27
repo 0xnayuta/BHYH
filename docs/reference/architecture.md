@@ -361,7 +361,7 @@ classDiagram
 
 仍然存在（遗留）：
 
-- 13-2B 已完成 54 个怪物脚本的消费者切换；运行时建帧仍有 **19** 个文件（怪物 **9** 个，其余 10 个非怪物），由
+- 13-2B 已完成 54 个怪物脚本的消费者切换；13-2C-1 又完成诛仙剑阵与青莲。运行时建帧仍有 **17** 个文件（怪物 **9** 个，其余 8 个非怪物），由
   `scripts/runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json`
   守恒：新增未登记文件、失效条目或空理由均失败，迁移后必须同步删除条目。
   怪物域已评审保留：
@@ -370,13 +370,14 @@ classDiagram
   - 单序列/子集：`nanhai_projectile`、`monster_130`/`monster_212`/`monster_215`（`play` 子集 + 逐帧 duration）；
   - 占位/兜底：`monster_bullet`（null 计时帧）、`tao_wu_boss`（单图占位）；
   - 资源缺失回退：`three_prince_bullet`；
-  非怪物 **10** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2 怪物域：
+  非怪物 **8** 个按域拆批（角色特效、法宝、宠物、关卡、工具），不纳入 13-2B 怪物域：
   - `pet_neat_bullet`：`pet_neat_4_bullet_3` 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG 与图像编解码步骤，收益低于素材重复成本，保留；
   - `lyfb_awaken_effect`：按效果数据 `frame_rects` 做 `AtlasTexture` 裁剪；
   - `ne_zha_yin_yang_effect`：图集裁剪/连续帧组合，区域由剑型与特效参数决定；
   - `level_59`：固定 `STONE_TEXTURES` 数组建帧，无路径扫描或逐帧 IO；
   - `user_key`：调试工具 UI 的固定图标序列，不进入游戏运行路径；
-  - 法宝 5 个已完成域级评估：`main_sword_array_weapon` 删除标准帧回退；`qing_lian` 三组编号序列可迁构建期；`taiji_bagua`/`qlsword` 需 sheet 帧资源；`eight_immortal_magic_weapon` 需按 8 个场景生成固定资源。拆分与顺序见 `roadmap/current-iteration.md` §3.7，未实施前仍登记在 allowlist。
+  - 13-2C-1 已完成：`main_sword_array_weapon` 删除标准帧回退、Atlas 流式回退与页面加载器；`qing_lian` 三组编号序列已迁移为构建期 `.tres`。
+  - 法宝剩余 3 个：`taiji_bagua`/`qlsword` 需 sheet 帧资源；`eight_immortal_magic_weapon` 需按 8 个场景生成固定资源。拆分与顺序见 `roadmap/current-iteration.md` §3.7。
 
 ### 6.5 13-2B 冻结裁定（怪物域 9 个）
 
@@ -474,12 +475,12 @@ classDiagram
 
 | 项目 | 目标 |
 |:---|:---|
-| 魔法武器剩余 5 个运行时建帧 | 13-2C 已评估：诛仙剑阵/青莲优先，青龙剑/太极次之，八仙法宝最后；固定裁剪保留为登记例外 |
+| 魔法武器剩余 3 个运行时建帧 | 13-2C-1 已完成诛仙剑阵/青莲；剩余青龙剑/太极八卦/八仙法宝；固定裁剪保留为登记例外 |
 | 非怪物角色特效/宠物/关卡运行时建帧 | 按域拆批；角色特效待几何 Resource 化；`level_59`、`user_key` 为合法例外 |
 | `AtlasMetadata.data` 无类型字典 | 独立项目：typed accessor 或 typed 子资源，见 `roadmap.md` §3.1 |
 | Spine 平台库 | 独立项目：补齐目标平台库并做平台验收，见 `roadmap.md` §3.2 |
 
-迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C 法宝/角色特效运行时建帧按域推进 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
+迁移顺序：固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列已完成 → 怪物帧消费者与关卡发布依赖已构建期化 → 13-2C-1 法宝构建期化已完成，C2/C3 与角色特效运行时建帧继续 → `AtlasMetadata` typed accessor 与 Spine 跨平台运行时按独立项目启动。
 
 ---
 

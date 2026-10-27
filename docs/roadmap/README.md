@@ -13,7 +13,7 @@
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 展示层重构已全部完成并归档；Phase 13 内部主干已收口，13-2C 为评估完成但未实施的候选批次。启动任何新批次前须由用户明确确认。
+当前内容版本为 **6.9**；6.9 已完成并归档。Phase 12 展示层重构已全部完成并归档；Phase 13 内部主干已收口，13-2C-1 已完成，13-2C-2/3 为后续候选。启动任何新批次前须由用户明确确认。
 
 ## 2. 边界
 
