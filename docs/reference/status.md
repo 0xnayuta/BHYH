@@ -79,7 +79,7 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 | `python scripts/check_all.py` | 八维总门禁（行尾、格式、lint、引擎编译、契约、命名、运行时引用、资源路径） |
 | `python scripts/check_all.py --skip-engine` | 无 Godot 环境时的静态门禁 |
 | `python scripts/health_check.py --project source --godot-bin <path>` | 场景引用拓扑、死代码、Headless 编译与 GDScript warning 门禁 |
-| `python scripts/level_regression_all.py --jobs 4 --timeout 90` | 全量关卡冒烟回归；8 并发仅用于快速回归 |
+| `python scripts/level_regression_all.py` | 全量关卡冒烟回归；默认 auto 并发（最高 12），`--jobs 4` 为稳定排障口径 |
 | `python scripts/level_test_runner.py --godot <path> --level res://Scene/level/level_1.tscn` | 单关冒烟夹具 |
 | `python scripts/coop_probe_runner.py --godot <path>` | LocalCoop 探针矩阵（用例清单由脚本维护） |
 | `python scripts/scene_probe_runner.py --godot <path>` | 星座 Boss 运行时场景探针（`--scene` 完整生命周期） |
@@ -140,6 +140,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2B 编号帧/loose/建帧门禁收口 | `convert_numbered_frames.py --all --check` **21/21 PASS**；Godot 探针 10/10 编号帧资源帧数/loop/fps **0 失败**；`level_ghg` / `level_66` / `level_1` 冒烟 **PASS**（0/0）；`runtime_frames_audit.py --fail-on-error` **34/34 一致**；契约门禁 **9/9 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（690.1s） | 新增 10 个编号帧弹体资源与 6 个东胜神洲 loose 特效资源；九华松针修正到 3009 图集 arrow 动画；east 建帧 2→1（仅剩动态配置标准动作重命名）；`SpriteFrames.new()` **42→34**（怪物 **22→14**）；新增 `runtime_frames_allowlist.json` 与防扩张门禁，负向样本 exit 1 |
 | 2026-10-27 Phase 13-2B 流沙河/130-215/法宝 | `convert_liu_sha_frames.py --check` **5/5 PASS**；`convert_monster_action_views.py --check` **3/3 PASS**；`convert_numbered_frames.py --all --check` **28/28 PASS**；Godot 探针流沙河 5 资源、动作视图 3 资源、法宝 7 资源帧数/loop/fps/duration **0 失败**；`level_ghg` 冒烟 **PASS**（0/0）；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（723.3s，level_58 重试通过） | 新增流沙河 5 个、130/212/215 动作视图 3 个、法宝 7 个构建期资源；8 个脚本删除运行时建帧；`SpriteFrames.new()` **34→27**，怪物 **14→9**（达到 ≤10 的怪物出口目标）；allowlist 同步删除 6 条 |
 | 2026-10-27 Phase 13-2B 宠物弹体/寅虎 stage | `convert_numbered_frames.py --all --check` **47/47 PASS**；`convert_monster_action_views.py --check` **5/5 PASS**；Godot 探针 19 个宠物弹体 + 2 个 stage 资源帧数/loop/duration **0 失败**；契约门禁 **11/11**；`health_check` **0/0/0**；静态门禁 **8/8**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（691.0s） | 四宠物弹体（mouse/rabbit/turtle/yin_tiger）与寅虎 stage1/2 改加载构建期资源；`SpriteFrames.new()` **27→21**（怪物 **9**、非怪物 **12**）；architecture §6.5 新增 9 个怪物文件的冻结裁定与判定标准；allowlist 21 条 |
+| 2026-10-27 关卡回归并发优化 | 56 关基准：`--jobs 4` **204.8s**、`--jobs 8` **124.7s**、`--jobs 12` **98.1s**、`--warmup 1`+12 **120.5s**；全量 133 关：`--jobs 4` **690.0s** → auto（12）**275.7s**，**PASS 128/128 + SKIP 5，FAIL 0**（`level_lxdy1` 1 次瞬态，重试通过） | `level_regression_all.py` 默认并发改为 `min(12, max(4, CPU 核数))`；新增 `--warmup`（默认 0，实测无收益）；保留失败关卡串行重试；`--jobs 4` 仍为稳定排障口径 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
@@ -151,7 +152,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py` 与 `convert_level_preload_catalog.py`，前三个的 `--check` 由 `scripts/contract_gate.py` 调用。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
 4. 13 个 Autoload、`global.gd` 大体量全局状态、字典/JSON 数据与类型分层目录按遗留结构保留；新增代码不得继续扩张。
-5. 8 并发全量回归存在偶发的 Godot 启动瞬态；稳定复跑建议 `--jobs 4`。
+5. 高并发全量回归存在偶发的 Godot 启动瞬态（12 并发实测 `level_lxdy1` 1 次，重试通过）；`--jobs 4` 为稳定排障口径。
 6. 按项目原则不做向前兼容：旧 `user://` 存档目录、旧任务键与旧配置均不迁移；存档密钥前缀已修正为 `zmxybhyh`。
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。

@@ -185,7 +185,7 @@ return MANIFESTS[role_id]
 - `runtime_frames_audit.py --fail-on-error` 通过，运行时建帧集合与
   `scripts/runtime_frames_allowlist.json` 守恒；迁移后条目只减不增；
 - `health_check` 0 Parse / 0 Error / 0 Warning；
-- 全量关卡回归 `level_regression_all.py --jobs 4` PASS，FAIL 0；
+- 全量关卡回归 `level_regression_all.py`（默认 auto 并发）PASS，FAIL 0；
 - 至少 6 个代表关卡（含 5 阶段关、Boss 关、八仙、三太子）冒烟 0 ERROR / 0 WARNING。
 
 ### 3.6 风险
@@ -338,7 +338,7 @@ python scripts/check_all.py --godot-bin "<godot>"
 python scripts/contract_gate.py
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
-python scripts/level_regression_all.py --jobs 4 --timeout 150
+python scripts/level_regression_all.py --timeout 150
 ```
 
 | 判据 | 阈值 |

@@ -165,7 +165,8 @@ python scripts/resource_path_audit.py --project source
 # 单关冒烟
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 
-# 关卡回归（默认 4 并发；8 并发仅用于快速回归）
+# 关卡回归（默认 auto：min(12, max(4, CPU 核数))；--jobs 4 为稳定排障口径）
+python scripts/level_regression_all.py
 python scripts/level_regression_all.py --jobs 4 --timeout 90
 python scripts/level_regression_all.py --changed-only --diff-base HEAD
 

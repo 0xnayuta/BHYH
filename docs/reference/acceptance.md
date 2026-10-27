@@ -214,6 +214,7 @@ python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/
 ### 6.2 关卡回归：`level_regression_all.py`
 
 ```bash
+python scripts/level_regression_all.py
 python scripts/level_regression_all.py --jobs 4 --timeout 90
 python scripts/level_regression_all.py --changed-only --diff-base HEAD
 ```
@@ -224,7 +225,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 | 当前规模 | 候选数由当前 `Scene/level/` 清单动态发现，不在文档中硬编码 |
 | SKIP | 命中 `NON_BATTLE_SPECIALS` 的菜单/地图/交互场景直接 `passed=True, skipped=True`，**SKIP 计入通过**（这是关卡回归的既定口径；与双人探针的 SKIP 语义不同） |
 | 单关超时 | 默认 150 秒；子进程超时为 `timeout + 90` 秒 |
-| 并发 | 默认 4；8 并发仅用于快速回归，存在 Godot 启动瞬态 |
+| 并发 | 默认 `auto = min(12, max(4, CPU 核数))`；实测 12 并发全量 275.7s，瞬态失败自动串行重试；`--jobs 4` 为稳定排障口径 |
 | 重试 | 失败关串行重试 1 次 |
 | changed-only | 关卡/脚本/Art 目录直接映射；其他源码走反向依赖；无法映射时全量回退 |
 | 产物 | `docs/reports/level_regression_manifest.json` + 报告 `.md/.json` |

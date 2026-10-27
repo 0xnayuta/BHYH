@@ -350,7 +350,13 @@ def write_reports(
 def main() -> int:
     parser = argparse.ArgumentParser(description="全量关卡冒烟回归（并发）")
     parser.add_argument("--timeout", type=int, default=150, help="单关超时（秒）")
-    parser.add_argument("--jobs", type=int, default=4, help="并发关卡数（默认 4；1=串行）")
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=0,
+        help="并发关卡数；0=auto（min(12, max(4, CPU 核数))），1=串行",
+    )
+    parser.add_argument("--warmup", type=int, default=0, help="并发前串行预热的关卡数（默认 0；实测无收益，保留用于对照）")
     parser.add_argument("--start", type=int, default=1, help="编号关卡起始（仅编号关）")
     parser.add_argument("--end", type=int, default=9999, help="编号关卡结束（仅编号关）")
     parser.add_argument("--special-only", action="store_true", help="只跑特殊关卡")
@@ -371,8 +377,9 @@ def main() -> int:
         help="只打印本次将运行的关卡，不执行 Godot、不写报告",
     )
     args = parser.parse_args()
-    if args.jobs < 1:
-        parser.error("--jobs 必须 >= 1（1 表示串行）")
+    if args.jobs < 0:
+        parser.error("--jobs 必须 >= 0（0=auto，1=串行）")
+    jobs = args.jobs if args.jobs > 0 else min(12, max(4, os.cpu_count() or 4))
     if not os.path.isdir(SOURCE_ROOT):
         print(f"[!] 工程目录不存在: {SOURCE_ROOT}", file=sys.stderr)
         return 2
@@ -434,14 +441,23 @@ def main() -> int:
 
     write_manifest(numbered, special)
     if scope == "full":
-        print(f"[*] 全量关卡回归：{len(targets)} 个场景（并发 {args.jobs}，单关超时 {args.timeout}s）")
+        print(f"[*] 全量关卡回归：{len(targets)} 个场景（并发 {jobs}，单关超时 {args.timeout}s）")
     else:
-        print(f"[*] {scope} 关卡回归：{len(targets)} 个场景（并发 {args.jobs}，单关超时 {args.timeout}s）")
+        print(f"[*] {scope} 关卡回归：{len(targets)} 个场景（并发 {jobs}，单关超时 {args.timeout}s）")
     results_by_scene: Dict[str, Dict[str, Any]] = {}
     started = time.time()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, args.jobs)) as executor:
-        futures = {executor.submit(run_one, stem, args.timeout): stem for stem in targets}
-        for index, future in enumerate(concurrent.futures.as_completed(futures), 1):
+    warmup = targets[: max(0, args.warmup)]
+    for stem in warmup:
+        result = run_one(stem, args.timeout)
+        results_by_scene[stem] = result
+        label = "SKIP" if result.get("skipped") else ("PASS" if result["passed"] else "FAIL")
+        print(f"[warmup] {stem}: {label} ({result['elapsed']}s)", flush=True)
+    remaining = [stem for stem in targets if stem not in results_by_scene]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, jobs)) as executor:
+        futures = {executor.submit(run_one, stem, args.timeout): stem for stem in remaining}
+        for index, future in enumerate(
+            concurrent.futures.as_completed(futures), len(warmup) + 1
+        ):
             stem = futures[future]
             try:
                 result = future.result()
