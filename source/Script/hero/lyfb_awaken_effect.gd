@@ -11,7 +11,7 @@ var role_props: BaseRoleProperties:
 const ATLAS_PATH := "res://Art/hero_picture/role_2/lyfb_awaken/runtime/HeroF_5012_skill.atlas"
 const SKELETON_PATH := "res://Art/hero_picture/role_2/lyfb_awaken/runtime/HeroF_5012_skill07-gray.spine-json"
 const RED_SKELETON_PATH := "res://Art/hero_picture/role_2/lyfb_awaken/runtime/HeroF_5012_skill07-red.spine-json"
-const FALLBACK_TEXTURE_PATH := "res://Art/hero_picture/role_2/lyfb_awaken/runtime/hero_f_5012_skill.png"
+const FALLBACK_FRAMES_PATH := "res://Art/hero_picture/role_2/lyfb_awaken/runtime/lyfb_awaken_skill07_frames.tres"
 const SPINE_SCALE := Vector2(0.2, 0.2)
 const SPINE_DURATION := 1.05
 
@@ -39,6 +39,7 @@ static var _shared_red_data: Variant = null
 static var _normal_material: CanvasItemMaterial
 static var _additive_material: CanvasItemMaterial
 static var _multiply_material: CanvasItemMaterial
+static var _fallback_frames: SpriteFrames
 
 
 func setup(player: Node2D, is_facing_right: bool, data: Dictionary = {}) -> void:
@@ -122,30 +123,12 @@ func _spawn_spine_visual() -> bool:
 
 
 func _spawn_fallback_visual() -> void:
-	var texture := load(FALLBACK_TEXTURE_PATH) as Texture2D
-	if texture == null:
-		push_error("LyfbAwakenEffect: 无法加载兼容特效图集纹理: " + FALLBACK_TEXTURE_PATH)
+	var frames := _get_fallback_frames()
+	if frames == null:
+		push_error("LyfbAwakenEffect: 无法加载兼容特效帧资源: " + FALLBACK_FRAMES_PATH)
 		return
 	scale.x = 1.0 if face_right else -1.0
 	z_index = 99
-	const FRAME_RECTS := [
-		Rect2(503, 2005, 113, 38),
-		Rect2(1878, 1976, 160, 67),
-		Rect2(1783, 1839, 210, 71),
-		Rect2(938, 1793, 220, 73),
-		Rect2(512, 1724, 236, 78),
-		Rect2(854, 1627, 230, 82),
-		Rect2(1255, 1698, 238, 79),
-		Rect2(1238, 1613, 218, 83),
-		Rect2(750, 1722, 183, 80),
-		Rect2(1838, 1758, 180, 79),
-		Rect2(1160, 1791, 165, 75),
-		Rect2(2, 1821, 167, 71),
-		Rect2(1790, 1912, 169, 62),
-		Rect2(167, 2022, 168, 21),
-		Rect2(106, 2027, 59, 16),
-		Rect2(2, 2030, 42, 13)
-	]
 	const BLADE_TRANSFORMS := [
 		{"time": 0.0333, "position": Vector2(44.0, 32.6), "rotation": 8.71, "scale": Vector2(1.646, 1.646)},
 		{"time": 0.0667, "position": Vector2(47.0, 36.3), "rotation": 160.27, "scale": Vector2(1.582, 1.582)},
@@ -156,24 +139,15 @@ func _spawn_fallback_visual() -> void:
 		{"time": 0.4667, "position": Vector2(6.8, 26.0), "rotation": -8.96, "scale": Vector2(-1.0, 1.0)}
 	]
 	for blade_data in BLADE_TRANSFORMS:
-		_spawn_fallback_blade_after(texture, FRAME_RECTS, blade_data)
+		_spawn_fallback_blade_after(frames, blade_data)
 
 
-func _spawn_fallback_blade_after(texture: Texture2D, frame_rects: Array, blade_data: Dictionary) -> void:
+func _spawn_fallback_blade_after(frames: SpriteFrames, blade_data: Dictionary) -> void:
 	var delay := float(blade_data["time"])
 	if delay > 0.0:
 		await get_tree().create_timer(delay, false).timeout
 	if not is_inside_tree():
 		return
-	var frames := SpriteFrames.new()
-	frames.add_animation("skill07")
-	frames.set_animation_speed("skill07", 30.0)
-	frames.set_animation_loop("skill07", false)
-	for frame_rect in frame_rects:
-		var atlas_texture := AtlasTexture.new()
-		atlas_texture.atlas = texture
-		atlas_texture.region = frame_rect
-		frames.add_frame("skill07", atlas_texture)
 	var sprite := AnimatedSprite2D.new()
 	sprite.sprite_frames = frames
 	sprite.animation = "skill07"
@@ -186,6 +160,12 @@ func _spawn_fallback_blade_after(texture: Texture2D, frame_rects: Array, blade_d
 	add_child(sprite)
 	_fallback_sprites.append(sprite)
 	sprite.play("skill07")
+
+
+static func _get_fallback_frames() -> SpriteFrames:
+	if _fallback_frames == null:
+		_fallback_frames = load(FALLBACK_FRAMES_PATH) as SpriteFrames
+	return _fallback_frames
 
 
 func _finish_after(duration: float) -> void:

@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（13-2C-2 青龙剑与太极八卦迁移完成）
+> 最后更新：2026-10-27（角色特效收口完成）
 
 ---
 
@@ -150,10 +150,12 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 wings 孤立场景清理 | `source/Scene/base/special_affect_slim/wings.tscn` 无静态/动态引用（`SPECIAL_AFFECT_SLIM_DIR` 动态加载名无 `wings`，`add_special_effect` 调用名列表无 `wings`）；已删除场景；`special_affect.gd` 仍被其它效果场景使用 | 删除前已确认无引用；独立实例化告警属于未初始化 `_scale` 的探针装载问题 |
 
 | 2026-10-27 角色 2/4 技能探针 | `scene_probe_runner.py --probe role-skills` **PASS**：角色 2 `by` 生成 `BingYuEffect`、角色 4 `cmly` 生成 `CangMuLongYunEffect`；`BingYu`/`CangMu`/`Lyfb`/`HMZ`/`JHSJ` 的 `preload_effect_data` **5/5 true**；日志 **0 ERROR / 0 WARNING** | 新增 `scripts/scene_probes/role_skill_probe.{gd,tscn}` 并接入 `PROBES`；`scene_probe_runner` 由 2 项扩为 3 项 |
-| 2026-10-27 L2 场景探针固定项 | 完整套件 **4/4 PASS**：星座 **4.77s**、关卡选择态 **16.55s**、法宝 **5.04s**、角色 2/4 技能 **4.41s**，整轮约 **30.9s**（并行门禁负载快照；隔离运行会降低）；日志 **0 ERROR / 0 WARNING** | `role-skills` 与 `magic-weapons` 纳入 `scene_probe_runner` 发布前固定子项；报告新增 `duration_seconds` 与 Markdown 耗时行；耗时是本次快照，不设硬阈值 |
+| 2026-10-27 L2 场景探针固定项 | 完整套件 **4/4 PASS**：星座 **4.56s**、关卡选择态 **16.41s**、法宝/角色特效 **6.65s**、角色 2/4 技能 **4.40s**，整轮约 **32.2s**（并行负载快照）（并行门禁负载快照；隔离运行会降低）；日志 **0 ERROR / 0 WARNING** | `role-skills` 与 `magic-weapons` 纳入 `scene_probe_runner` 发布前固定子项；报告新增 `duration_seconds` 与 Markdown 耗时行；耗时是本次快照，不设硬阈值 |
 | 2026-10-27 Phase 13-2C 非怪物域评估 | `runtime_frames_audit.py --fail-on-error` **19/19 PASS**；非怪物 10 个，其中法宝 5 个；未改变运行时行为 | 法宝评估结论：诛仙剑阵先删无消费者回退；青莲三组编号序列可迁构建期；青龙剑/太极需 sheet 帧资源；八仙法宝需按 8 场景生成 profile。详细批次与顺序见 `current-iteration.md` §3.7 |
 | 2026-10-27 Phase 13-2C-1 诛仙剑阵/青莲 | `convert_numbered_frames.py --all --check` **PASS**；Godot 探针：5 把剑标准动画加载 **5/5**、青莲 idle 24/effect 14/aura 8 帧与 loop/speed **3/3**；`runtime_frames_audit` **17/17 PASS**；`health_check` **0/0/0**；`check_all` **8/8 PASS**；`level_1` Stage 1~4 **PASS**（0/0）；场景探针 **3/3 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（265.3s） | 删除诛仙剑阵 `_build_frames`/`_build_frames_async`、Atlas 流式回退与页面加载器；青莲改为加载 3 个构建期 `.tres`；allowlist 19→17，未改素材 |
 | 2026-10-27 Phase 13-2C-2 青龙剑/太极 | `convert_numbered_frames.py --all --check`、`convert_sheet_frames.py --check` **PASS**；法宝探针 5 把剑 + 青莲 + 青龙剑 + 太极模型/效果 **全 PASS**；`runtime_frames_audit` **15/15 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（365.1s，level_58/level_66 重试通过） | 新增 `scripts/convert_sheet_frames.py` 与青龙剑/太极模型 `.tres`；太极 22 帧效果改由编号帧转换器生成；新增永久 `magic_weapon_probe`；allowlist 17→15 |
+| 2026-10-27 Phase 13-2C-3 八仙法宝 | `convert_sheet_frames.py --check`、`convert_numbered_frames.py --all --check` **PASS**；法宝探针覆盖 8 个八仙场景模型/效果 **全 PASS**；`runtime_frames_audit` **14/14 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（320.6s） | 8 个八仙场景改为引用模型/效果 `.tres`；删除 `model_path`/`effect_dir` 扫描与运行时建帧；新增 8 个模型 sheet、7 个效果序列；allowlist 15→14 |
+| 2026-10-27 角色特效收口 | `convert_sheet_frames.py --check` PASS；探针覆盖 Lyfb 16 帧、哪吒阴阳剑/光环/Launch 资源；`runtime_frames_audit` **12/12 PASS**；`health_check` **0/0/0**；`check_all` PASS；L2 三件套：`level_1` **PASS**、`coop_probe_runner` **16/16 PASS**、场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s） | Lyfb/哪吒改用构建期 `.tres`，删除运行时 `SpriteFrames.new()`/Atlas 裁剪；allowlist 14→12；剩余宠物/关卡/工具 3 个例外 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

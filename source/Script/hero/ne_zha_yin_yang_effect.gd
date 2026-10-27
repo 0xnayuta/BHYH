@@ -1,13 +1,11 @@
 extends NeZhaSkillEffect
 class_name NeZhaYinYangEffect
 
-const SWORD_ATLAS_PATH := "res://Art/hero_picture/role_6/effects/yin_yang_swords.png"
-const AURA_ATLAS_PATH := "res://Art/hero_picture/role_6/effects/yin_yang_aura.png"
-const LAUNCH_ATLAS_PATH := "res://Art/hero_picture/role_6/effects/yin_yang_launch.png"
-const SWORD_REGIONS := {
-	"yin": Rect2(0, 0, 154, 53),
-	"yang": Rect2(154, 0, 154, 53),
-}
+const SWORD_YIN_FRAMES_PATH := "res://Art/hero_picture/role_6/effects/nezha_yin_yang_sword_yin_frames.tres"
+const SWORD_YANG_FRAMES_PATH := "res://Art/hero_picture/role_6/effects/nezha_yin_yang_sword_yang_frames.tres"
+const AURA_FRAMES_PATH := "res://Art/hero_picture/role_6/effects/nezha_yin_yang_aura_frames.tres"
+const LAUNCH_YIN_FRAMES_PATH := "res://Art/hero_picture/role_6/effects/nezha_yin_yang_launch_yin_frames.tres"
+const LAUNCH_YANG_FRAMES_PATH := "res://Art/hero_picture/role_6/effects/nezha_yin_yang_launch_yang_frames.tres"
 const SWORD_OFFSET := Vector2(-3.0, 1.0)
 const SWORD_LIFETIME := 0.7
 const SWORD_TRAVEL_DISTANCE := 909.0
@@ -34,72 +32,20 @@ func _ready() -> void:
 
 func _build_sprite_frames() -> SpriteFrames:
 	match effect_kind:
-		"aura_toggle":
-			return _build_aura_frames(0, 8, &"yinYang_aura_toggle", false)
-		"aura_yin":
-			return _build_aura_frames(0, 4, &"yinYang_aura_yin", false)
-		"aura_yang":
-			return _build_aura_frames(4, 4, &"yinYang_aura_yang", false)
+		"aura_toggle", "aura_yin", "aura_yang":
+			return _load_frames(AURA_FRAMES_PATH)
 		"launch_yin":
-			return _build_launch_frames(0)
+			return _load_frames(LAUNCH_YIN_FRAMES_PATH)
 		"launch_yang":
-			return _build_launch_frames(6)
+			return _load_frames(LAUNCH_YANG_FRAMES_PATH)
 		_:
-			return _build_sword_frames()
+			return _load_frames(SWORD_YIN_FRAMES_PATH if sword_type == "yin" else SWORD_YANG_FRAMES_PATH)
 
 
-func _build_sword_frames() -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"yinYang_sword")
-	frames.set_animation_speed(&"yinYang_sword", 1.0)
-	frames.set_animation_loop(&"yinYang_sword", false)
-	var sword_atlas := ResourceLoader.load(SWORD_ATLAS_PATH, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-	if sword_atlas == null:
-		return frames
-	var atlas_frame := AtlasTexture.new()
-	atlas_frame.atlas = sword_atlas
-	atlas_frame.region = SWORD_REGIONS.get(sword_type, SWORD_REGIONS["yin"])
-	frames.add_frame(&"yinYang_sword", atlas_frame)
-	return frames
-
-
-func _build_aura_frames(start_index: int, frame_count: int, animation_name: StringName, loop: bool) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(animation_name)
-	frames.set_animation_speed(animation_name, 30.0)
-	frames.set_animation_loop(animation_name, loop)
-	var aura_atlas := ResourceLoader.load(AURA_ATLAS_PATH, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-	if aura_atlas == null:
-		return frames
-	for local_index in range(frame_count):
-		var index := start_index + local_index
-		var atlas_frame := AtlasTexture.new()
-		atlas_frame.atlas = aura_atlas
-		atlas_frame.region = Rect2((index % 4) * 300, floori(float(index) / 4.0) * 150, 300, 150)
-		frames.add_frame(animation_name, atlas_frame, 2.0)
-	return frames
-
-
-func _build_launch_frames(start_index: int) -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	frames.add_animation(&"yinYang_launch")
-	frames.set_animation_speed(&"yinYang_launch", 30.0)
-	frames.set_animation_loop(&"yinYang_launch", false)
-	var launch_atlas := (
-		ResourceLoader.load(LAUNCH_ATLAS_PATH, "Texture2D", ResourceLoader.CACHE_MODE_REUSE) as Texture2D
-	)
-	if launch_atlas == null:
-		return frames
-	var durations := [1.0, 1.0, 2.0, 2.0, 2.0, 2.0]
-	for local_index in range(6):
-		var index := start_index + local_index
-		var atlas_frame := AtlasTexture.new()
-		atlas_frame.atlas = launch_atlas
-		atlas_frame.region = Rect2((index % 3) * 256, floori(float(index) / 3.0) * 180, 256, 180)
-		frames.add_frame(&"yinYang_launch", atlas_frame, durations[local_index])
+func _load_frames(path: String) -> SpriteFrames:
+	var frames := load(path) as SpriteFrames
+	if frames == null:
+		push_error("NeZhaYinYangEffect: 构建期帧资源缺失: " + path)
 	return frames
 
 

@@ -12,7 +12,7 @@
 - 当前仓库保留的构建期工具为 `scripts/convert_atlas_metadata.py`；哪吒官方部件预览帧由 `scripts/convert_nezha_preview_frames.py` 转为构建期 SpriteFrames `.tres`，运行时只加载 `.tres`，不再解析 `preview_*.json`；
 - 连续编号 PNG 序列由通用 `scripts/convert_numbered_frames.py` 生成构建期 SpriteFrames；当前登记 BiLuoTian cast/hit、LeiTingJieZhen formation/lightning、Wutai 3077 tornado、青莲 idle/effect/aura 与法宝/宠物弹体等，运行时不再拼路径建帧；
 - 固定/按需驻留序列由 `scripts/convert_frame_sequences.py` 生成 FrameSequence、Catalog、确定性 UID 与独立发布依赖清单；构建定义显式选择图集、原始帧或静态保持来源，不在缺失时自动替代。数量以转换器检查输出和状态快照为准。
-- 单张纹理 sheet 的固定网格帧由 `scripts/convert_sheet_frames.py` 生成 `AtlasTexture` 子资源；青龙剑/太极模型不再在运行时裁剪。
+- 单张纹理 sheet 的固定网格帧由 `scripts/convert_sheet_frames.py` 生成 `AtlasTexture` 子资源；青龙剑/太极/八仙模型、Lyfb 兼容特效与哪吒阴阳特效不再在运行时裁剪/建帧。
 
 ## 校验
 

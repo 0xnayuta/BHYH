@@ -1,13 +1,14 @@
-[gd_scene format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/magic_weapon/eight_immortal_magic_weapon.gd" id="2"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/bjs/model_frames.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/bjs/effect/effect_frames.tres" id="4"]
 
 [node name="bjs" unique_id=1236894664 instance=ExtResource("1")]
 script = ExtResource("2")
 weapon_id = "bjs"
-model_path = "res://Art/magic_weapon/eight_immortal/bjs/model.png"
-model_frame_size = Vector2i(60, 60)
-effect_dir = "res://Art/magic_weapon/eight_immortal/bjs/effect"
+model_frames = ExtResource("3")
+effect_frames = ExtResource("4")
 skill_cost = 10
 skill_cooldown = 0.1

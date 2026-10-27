@@ -1,13 +1,14 @@
-[gd_scene format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/magic_weapon/eight_immortal_magic_weapon.gd" id="2"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/dkhl/model_frames.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/dkhl/effect/effect_frames.tres" id="4"]
 
 [node name="dkhl" unique_id=764223928 instance=ExtResource("1")]
 script = ExtResource("2")
 weapon_id = "dkhl"
-model_path = "res://Art/magic_weapon/eight_immortal/dkhl/model.png"
-model_frame_size = Vector2i(50, 50)
-effect_dir = "res://Art/magic_weapon/eight_immortal/dkhl/effect"
+model_frames = ExtResource("3")
+effect_frames = ExtResource("4")
 skill_cost = 10
 skill_cooldown = 10.0

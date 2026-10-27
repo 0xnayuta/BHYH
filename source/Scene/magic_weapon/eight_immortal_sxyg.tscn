@@ -1,13 +1,14 @@
-[gd_scene format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_magic_weapon.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/magic_weapon/eight_immortal_magic_weapon.gd" id="2"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/sxyg/model_frames.tres" id="3"]
+[ext_resource type="SpriteFrames" path="res://Art/magic_weapon/eight_immortal/sxyg/effect/effect_frames.tres" id="4"]
 
 [node name="sxyg" unique_id=2100195860 instance=ExtResource("1")]
 script = ExtResource("2")
 weapon_id = "sxyg"
-model_path = "res://Art/magic_weapon/eight_immortal/sxyg/model.png"
-model_frame_size = Vector2i(50, 80)
-effect_dir = "res://Art/magic_weapon/eight_immortal/sxyg/effect"
+model_frames = ExtResource("3")
+effect_frames = ExtResource("4")
 skill_cost = 10
 skill_cooldown = 10.0

@@ -1,9 +1,8 @@
 extends BaseMagicWeapon
 
 @export var weapon_id: String = ""
-@export var model_path: String = ""
-@export var model_frame_size: Vector2i = Vector2i(50, 50)
-@export var effect_dir: String = ""
+@export var model_frames: SpriteFrames
+@export var effect_frames: SpriteFrames
 @export var skill_cost: int = 10
 @export var skill_cooldown: float = 10.0
 
@@ -21,62 +20,13 @@ const DRAGON_SWORD_COOLDOWN := 0.1
 
 
 func _ready() -> void:
-	_build_model_frames()
-	obj_attack_dict["hit1"] = {"power": 0, "hurtBack": [0, 0], "attackKind": "magic"}
-
-
-func _build_model_frames() -> void:
-	if model_path.is_empty():
+	if model_frames == null:
+		push_error("八仙法宝模型帧资源缺失: %s" % weapon_id)
 		return
-	var texture := Global.get_static_texture(model_path)
-	if texture == null or model_frame_size.x <= 0 or model_frame_size.y <= 0:
-		return
-	var frames := SpriteFrames.new()
-	frames.remove_animation("default")
-	frames.add_animation("wait")
-	frames.set_animation_loop("wait", true)
-	frames.set_animation_speed("wait", 1.0)
-	frames.add_frame("wait", _atlas_frame(texture, 0))
-	var frame_count := maxi(1, int(texture.get_height() / model_frame_size.y))
-	if weapon_id == "yyzlj" and frame_count >= 4:
-		frames.add_animation("hit1")
-		frames.add_animation("hit2")
-		frames.add_animation("hit3")
-		frames.add_frame("hit1", _atlas_frame(texture, 1))
-		frames.add_frame("hit2", _atlas_frame(texture, 2))
-		frames.add_frame("hit3", _atlas_frame(texture, 3))
-	else:
-		frames.add_animation("hit")
-		frames.set_animation_loop("hit", false)
-		frames.set_animation_speed("hit", 12.0)
-		for index in range(frame_count):
-			frames.add_frame("hit", _atlas_frame(texture, index))
-	mg_action.sprite_frames = frames
+	mg_action.sprite_frames = model_frames
 	mg_action.animation = &"wait"
 	mg_action.play()
-
-
-func _atlas_frame(texture: Texture2D, index: int) -> AtlasTexture:
-	var frame := AtlasTexture.new()
-	frame.atlas = texture
-	frame.region = Rect2(0, index * model_frame_size.y, model_frame_size.x, model_frame_size.y)
-	return frame
-
-
-func _build_effect_frames() -> SpriteFrames:
-	var frames := SpriteFrames.new()
-	frames.remove_animation("default")
-	frames.add_animation("default")
-	frames.set_animation_loop("default", false)
-	frames.set_animation_speed("default", 24.0)
-	if effect_dir.is_empty():
-		return frames
-	for index in range(1, 101):
-		var source_path := effect_dir.path_join(str(index) + ".png")
-		var texture := Global.get_static_texture(source_path)
-		if texture != null:
-			frames.add_frame("default", texture)
-	return frames
+	obj_attack_dict["hit1"] = {"power": 0, "hurtBack": [0, 0], "attackKind": "magic"}
 
 
 func _physics_process(delta: float) -> void:
@@ -186,7 +136,7 @@ func _use_dragon_sword() -> void:
 	sword.set_meta("damage", _role_attack_damage())
 	sword.set_meta("hit_interval_msec", 2147483647)
 	sword.set_meta("hit", {})
-	var sword_visual: AnimatedSprite2D = _add_visual_to_entity(sword, true)
+	var sword_visual: AnimatedSprite2D = _add_visual_to_entity(sword)
 	if sword_visual != null:
 		sword_visual.flip_h = float(sword.get_meta("speed", 0.0)) < 0.0
 	var scene := get_tree().current_scene
@@ -278,7 +228,7 @@ func _use_fan() -> void:
 	fan_entity.set_meta("damage", _role_attack_damage(2.0 if _has_wood() else 1.0))
 	fan_entity.set_meta("hit_interval_msec", 1000)
 	fan_entity.set_meta("hit", {})
-	_add_visual_to_entity(fan_entity, true)
+	_add_visual_to_entity(fan_entity)
 	var scene := get_tree().current_scene
 	if scene == null:
 		fan_entity.queue_free()
@@ -464,13 +414,11 @@ func _remove_sword(sword: Node2D) -> void:
 		sword.free()
 
 
-func _add_visual_to_entity(entity: Node2D, loop: bool):
-	var frames := _build_effect_frames()
-	if frames.get_frame_count("default") == 0:
+func _add_visual_to_entity(entity: Node2D):
+	if effect_frames == null or effect_frames.get_frame_count("default") == 0:
 		return null
-	frames.set_animation_loop("default", loop)
 	var sprite := AnimatedSprite2D.new()
-	sprite.sprite_frames = frames
+	sprite.sprite_frames = effect_frames
 	sprite.animation = &"default"
 	sprite.z_index = 1
 	_configure_effect_visual(sprite)
@@ -479,21 +427,15 @@ func _add_visual_to_entity(entity: Node2D, loop: bool):
 	return sprite
 
 
-func _spawn_effect() -> void:
-	if effect_dir.is_empty():
-		return
-	_spawn_effect_for_duration(0.0)
-
-
 func _spawn_effect_for_duration(duration: float) -> void:
-	if effect_dir.is_empty():
+	if effect_frames == null or effect_frames.get_frame_count("default") == 0:
 		return
 	_effect_serial += 1
 	var token := _effect_serial
 	if _effect != null and is_instance_valid(_effect):
 		_effect.queue_free()
 	_effect = AnimatedSprite2D.new()
-	_effect.sprite_frames = _build_effect_frames()
+	_effect.sprite_frames = effect_frames
 	_effect.animation = &"default"
 	_effect.z_index = 1
 	_configure_effect_visual(_effect)
@@ -507,10 +449,7 @@ func _spawn_effect_for_duration(duration: float) -> void:
 		_effect.global_position = global_position + Vector2(0, -20)
 	_effect.play()
 	if duration > 0.0:
-		_effect.sprite_frames.set_animation_loop("default", true)
 		get_tree().create_timer(duration).timeout.connect(_on_effect_finished.bind(token), CONNECT_ONE_SHOT)
-	else:
-		_effect.animation_finished.connect(_on_effect_finished.bind(token), CONNECT_ONE_SHOT)
 
 
 func _on_effect_finished(token: int) -> void:
