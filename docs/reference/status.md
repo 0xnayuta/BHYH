@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-27（Phase 13 收口并归档）
+> 最后更新：2026-10-27（Phase 13 收口归档；Windows release 导出模板阻塞）
 
 ---
 
@@ -157,6 +157,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-27 Phase 13-2C-3 八仙法宝 | `convert_sheet_frames.py --check`、`convert_numbered_frames.py --all --check` **PASS**；法宝探针覆盖 8 个八仙场景模型/效果 **全 PASS**；`runtime_frames_audit` **14/14 PASS**；`health_check` **0/0/0**；`check_all` PASS；场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（320.6s） | 8 个八仙场景改为引用模型/效果 `.tres`；删除 `model_path`/`effect_dir` 扫描与运行时建帧；新增 8 个模型 sheet、7 个效果序列；allowlist 15→14 |
 | 2026-10-27 角色特效收口 | `convert_sheet_frames.py --check` PASS；探针覆盖 Lyfb 16 帧、哪吒阴阳剑/光环/Launch 资源；`runtime_frames_audit` **12/12 PASS**；`health_check` **0/0/0**；`check_all` PASS；L2 三件套：`level_1` **PASS**、`coop_probe_runner` **16/16 PASS**、场景探针 **4/4 PASS**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s） | Lyfb/哪吒改用构建期 `.tres`，删除运行时 `SpriteFrames.new()`/Atlas 裁剪；allowlist 14→12；剩余宠物/关卡/工具 3 个例外 |
 | 2026-10-27 Phase 13 收口 | `check_all --godot-bin` **8/8 PASS**；`health_check` **0/0/0**；L2：`level_1` **PASS**、`coop_probe_runner` **16/16**、场景探针 **4/4**；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（321.6s）；`runtime_frames_audit` **12/12**；发布依赖自检 **4,100 条**；PCK 闭包 **4,100/4,100 可达**（2,738,628,976 字节） | Phase 13 完成并归档，见 [`archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md)；剩余 3 个非怪物例外冻结；当前无活跃候选阶段 |
+| 2026-10-27 Windows release 可执行包验收 | **BLOCKED**：`--export-release "Windows Desktop (validation)"` 因缺少 `4.7.2.stable/windows_release_x86_64.exe` 导出模板失败；未生成可运行 exe，未取得首帧/VRAM 数据 | 官方 1.19 GB 模板下载在约 26 MB 处中断；需安装完整模板后重试。PCK 闭包与 L2 通过不等于 release 可执行包通过，不以 headless/PCK 代替目标设备验收 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
@@ -173,6 +174,6 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 7. Phase 12 已验证 1280×800 窗口模式；Steam Deck 全屏与 Android 实机未在当前硬件环境运行，移动端分支仅做代码路径与静态检查。
 8. 21:9 使用 `BackGround/End` 的 1440px `motion_mirroring` 消除默认清屏色；部分静态背景可能存在轻微镜像接缝，后续可通过美术资源加宽优化。
 9. 全量关卡清单完成功能回归；21:9 视觉抽检覆盖 `level_1`、`level_10`、`level_22`、`level_59`，未对全部关卡逐帧截图。
-10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；发布闭包已扩展到 4,100 条（FrameSequence 与关卡预载清单合并）并实测可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；该预设不是发布裁剪策略。
+10. 已入库仅用于验证的 `source/export_presets.cfg`（单预设、`all_resources`），其 `[preset.0.options]` 必须至少包含一个合法键：Godot 的 `ConfigFile` 不会把无键 section 计入 `get_sections()`，空 section 仍会触发 `Cannot get keys from nonexistent section "preset.0.options"`。当前使用默认键 `custom_template/debug=""`，不改变导出行为。并新增 `scripts/frame_sequence_pack_probe.py`；发布闭包已扩展到 4,100 条（FrameSequence 与关卡预载清单合并）并实测可达。导出包内 PNG 以 `.import` 与 `.ctex` 形式存在，判定必须走 `ResourceLoader.exists()` 而非 `FileAccess`。**仍未验证**：release 失败语义、目标设备 VRAM、首帧耗时与实际加载路径下的运行时表现；2026-10-27 再次尝试 `--export-release` 时本机缺少 Windows 导出模板，release exe 生成 BLOCKED；该预设不是发布裁剪策略。
 11. FrameSequence 已完成 `asset_id` 与实例播放策略分离；不再保留 FPS/loop/hold/prefetch 复合 key，也无双 key 兼容层。旧版生成的哈希命名文件已由转换器清理。
 12. `--import` 出现已打开编辑器占用 godot-mcp 端口的环境 ERROR；不视为零错误导入。正式游戏场景探针、代表关卡和最终编译门禁分别验证，不把导入退出码 0 等同完整验收。

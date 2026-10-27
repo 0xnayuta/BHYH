@@ -137,6 +137,8 @@ Phase 13 不新增玩法、任务、掉落或数值内容；没有未完成的�
 | 全量关卡回归 | **128/128 PASS + 5 SKIP，FAIL 0**（321.6s） |
 | 发布依赖清单自检 | **4,100 条 PASS** |
 | PCK 闭包探针 | **4,100/4,100 可达**；PCK 2,738,628,976 字节 |
+| Windows release 可执行包 | **BLOCKED（2026-10-27）**：本机缺少 Godot 4.7.2 Windows export templates，`--export-release` 在模板检查阶段失败；未生成可运行 exe。官方 1.19 GB 模板下载未完成，不能用 PCK 或 headless 结果替代 |
+| 目标设备首帧 / VRAM | **未验证**：需要在安装导出模板并生成 release 包后，于目标 Windows 设备测量；当前无有效结论 |
 
 L2 与全量回归是发布前阻断项；`SKIP` 只允许既有 5 个非战斗场景。机器报告不归档，结论以本文与 `status.md` 为准。
 
@@ -144,7 +146,7 @@ L2 与全量回归是发布前阻断项；`SKIP` 只允许既有 5 个非战斗�
 
 ## 5. 后续顺序
 
-1. **发布前平台验收**：目标平台 release 加载、VRAM 驻留、首帧耗时与真实设备冒烟；不以 PCK 路径存在代替运行时性能；
+1. **发布前平台验收**：先安装 Godot 4.7.2 Windows export templates，生成 release exe，再在目标 Windows 设备验证加载、VRAM 与首帧；当前模板缺失，release 可执行包验收为 BLOCKED；
 2. **AtlasMetadata typed accessor**：独立项目，先清单与 schema，再迁移消费者；
 3. **Spine 跨平台运行时**：独立项目，先二进制/许可证/平台矩阵；
 4. **内容版本回植**：目标明确后按 `migration_playbook.md` §5.1 执行；
