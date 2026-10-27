@@ -98,7 +98,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | 脚本 | 作用 | 状态 |
 |:---|:---|:---|
 | `asset_reference_audit.py` | 单遍 `rg` 扫描旧资产基名引用 | **手动**；不在自动门禁中 |
-| `classify_texture_aliases.py` | 只读分类 6.8 纹理别名：键/目标存在性、代码与资源文本引用、通用基名复核；输出 JSON/MD，不删除条目 | 手动；产物 `docs/reports/texture_alias_classification.*` |
+| `classify_texture_aliases.py` | 只读分类 6.8 纹理别名：键/目标存在性、代码与资源文本引用、通用基名复核；`--check` 校验每条目标存在并进入契约门禁；分类报告不删除条目 | `--check` 自动门禁；完整报告产物 `docs/reports/texture_alias_classification.*` |
 
 ### 3.4 回归与测试
 

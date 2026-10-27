@@ -332,9 +332,19 @@ def render_markdown(result: dict[str, object]) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="只读分类 6.8 纹理别名表")
     parser.add_argument("--out-dir", default=str(REPORT_DIR), help="报告输出目录")
+    parser.add_argument("--check", action="store_true", help="只校验每条别名目标存在，不生成报告")
     args = parser.parse_args()
     aliases = parse_aliases()
     files = collect_art_files()
+    if args.check:
+        missing = [(key, target) for key, target in aliases.items() if target not in files]
+        if missing:
+            print(f"[FAIL] 别名目标缺失 {len(missing)}/{len(aliases)} 条:", file=sys.stderr)
+            for key, target in missing[:20]:
+                print(f"    {key} -> {target}", file=sys.stderr)
+            return 1
+        print(f"[OK] 纹理别名目标存在校验通过: {len(aliases)} 条全部可达")
+        return 0
     code_literals, asset_literals = collect_literals()
     registry_text = REGISTRY_PATH.read_text(encoding="utf-8", errors="ignore") if REGISTRY_PATH.is_file() else ""
     result = classify(aliases, files, code_literals, asset_literals, registry_text)
