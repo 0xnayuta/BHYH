@@ -5,22 +5,9 @@ class_name AtlasMetadataStore
 ## 只接受 metadata.tres 路径，不再兼容 manifest.json 逻辑路径。
 ## 路径为空、文件缺失与 schema 失败均通过 push_error 明确记录，不再静默返回空字典。
 
-static var _cache: Dictionary = {}
 static var _view_cache: Dictionary = {}
 static var _view_failures: Dictionary = {}
 static var _missing_paths: Dictionary = {}
-
-
-static func data_for(path: String) -> Dictionary:
-	if path.is_empty():
-		return {}
-	if _cache.has(path):
-		return _cache[path]
-	var metadata := _load_metadata(path)
-	if metadata == null:
-		return {}
-	_cache[path] = metadata.data
-	return metadata.data
 
 
 static func view_for(path: String) -> AtlasMetadataView:
@@ -44,29 +31,6 @@ static func view_for(path: String) -> AtlasMetadataView:
 	return view
 
 
-static func validate_path(path: String) -> Array[String]:
-	var errors: Array[String] = []
-	if path.is_empty():
-		errors.append("metadata path is empty")
-		return errors
-	if not ResourceLoader.exists(path):
-		errors.append("metadata file not found: " + path)
-		return errors
-	var resource := ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_REUSE)
-	if not resource is AtlasMetadata:
-		errors.append("resource is not AtlasMetadata: " + path)
-		return errors
-	errors.append_array((resource as AtlasMetadata).validate())
-	return errors
-
-
-static func clear_cache() -> void:
-	_cache.clear()
-	_view_cache.clear()
-	_view_failures.clear()
-	_missing_paths.clear()
-
-
 static func _load_metadata(path: String) -> AtlasMetadata:
 	if not ResourceLoader.exists(path):
 		_report_missing(path, "AtlasMetadata 文件不存在")
@@ -84,7 +48,7 @@ static func _load_metadata(path: String) -> AtlasMetadata:
 
 
 static func _report_missing(path: String, detail: String) -> void:
-	# 同一路径只报一次，避免逐帧调用刷屏；清理缓存后重新可报。
+	# 同一路径只报一次，避免逐帧调用刷屏；失败状态在进程生命周期内保持。
 	if _missing_paths.has(path):
 		return
 	_missing_paths[path] = true

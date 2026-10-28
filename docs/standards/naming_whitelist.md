@@ -344,7 +344,7 @@ set_skeleton_data_res, set_skin_by_name, set_slots_to_setup_pose, set_animation,
   （每个 `manifest.json` 同目录生成 `metadata.tres`，共 379 个；数组型 manifest 包装为
   `{"__top_level": "array", "items": [...]}`）；
 - 运行时入口：`Script/atlas/atlas_metadata_store.gd`
-  （`AtlasMetadataStore.data_for(path)`，只接受 `metadata.tres` 路径，不再兼容 manifest.json）；
+  （`AtlasMetadataStore.view_for(path)`，只接受 `metadata.tres` 路径，不再兼容 manifest.json）；
 - 已迁移消费者：东胜神洲/北俱芦洲/云 Boss/天宫 Boss/天宫弹道/五台明海弹道/
   诛仙剑阵/剑阵 Boss/坐骑视觉/关卡拉怪预热；
 - 已删除：`MonsterAtlasSequence`、`atlas_manifest_registry.json`、

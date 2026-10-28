@@ -1,6 +1,6 @@
 # AtlasMetadata 生产者、schema 与消费者矩阵
 
-> **状态**：Phase 14-1 只读调查 + Phase 14-2/14-3A/14-3B-1/14-3B-2 实现（2026-10-28）。`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、`EastContinentMonster` 与 `CloudBoss` 已迁移到 `AtlasMetadataView`；仅 North 仍使用 `data_for`，不得把本页当作全部迁移完成声明。
+> **状态**：Phase 14-1 只读调查 + Phase 14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 实现（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache` 与 `NorthBossProjectile.source_masks` 已删除。本页仍记录惰性配置与 14-4 收口边界。
 > **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
 > **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
 > **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`current-iteration.md`](../roadmap/current-iteration.md)。
@@ -13,19 +13,18 @@ flowchart LR
     C --> R["同目录 metadata.tres<br/>AtlasMetadata.data 原始 JSON"]
     R --> S["AtlasMetadataStore"]
     S --> SV["view_for() -> AtlasMetadataView"]
-    S --> SD["data_for() -> Dictionary<br/>迁移期入口"]
     SV --> P["PalaceBossProjectile<br/>masks / geometry"]
     SV --> V["MountVisual<br/>animation + frames"]
     SV --> PF["PalaceFlyingBoss<br/>geometry / masks"]
     SV --> E["East / Cloud<br/>sequences"]
-    SD --> N["North"]
+    SV --> N["North<br/>sequences / geometry / masks"]
     M --> B1["convert_monster_frames.py"]
     M --> B2["convert_frame_sequences.py"]
     R --> B1
 ```
 
 - 仓库内唯一的 AtlasMetadata 生产者是 `scripts/convert_atlas_metadata.py`；它把每个 `manifest.json` 原样写入同目录 `metadata.tres`，只对顶层数组包装 `__top_level=array` 与 `items`。
-- 运行时入口有两个阶段形态：`AtlasMetadataStore.view_for(path)` 返回只读 `AtlasMetadataView`；迁移期 `data_for(path)` 仍返回共享 `Dictionary` 给未迁移消费者。除 North 外，`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、`EastContinentMonster` 与 `CloudBoss` 均已走前者；North 仍走后者。
+- 运行时入口只有 `AtlasMetadataStore.view_for(path)`，返回只读 `AtlasMetadataView`；`data_for` 已删除。六个直接消费者均走该入口，空路径与无效 path 由 Store 报告并返回 `null`。
 - 构建期工具直接读取 `metadata.tres` 文本或源 manifest；它们不应被误算成运行时 `AtlasMetadataStore` 消费者。
 - `manifest.json` 的生成链路不在公共仓库；本页只覆盖已入库的转换器与运行时读取边界。
 
@@ -77,14 +76,14 @@ flowchart LR
 
 ## 4. 运行时消费者矩阵
 
-**直接 Store 调用点**共 6 个：仅 North 仍用 `data_for`，`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、`EastContinentMonster` 与 `CloudBoss` 已用 `view_for`。弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。
+**直接 Store 调用点**共 6 个，全部使用 `view_for`：Cloud、East、North、PalaceBossProjectile、PalaceFlyingBoss 与 MountVisual。`data_for` 已删除；弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。
 
 | # | 消费者 | 路径来源 | 使用字段 | 共享/复制 | 失败路径 |
 |:---:|:---|:---|:---|:---|:---|
 | 1 | `Script/monster/cloud_boss.gd` | 固定 `cloud_boss/model_3352/metadata.tres` | View 的 `geometry[sequence].center`；继承 East 读取 `sequences`；向 `PalaceBossProjectile` 传同一路径 | `_cloud_view` 为只读 View，不再保存共享字典 | View 无效时视觉偏移为零；Store 报告失败 |
 | 2 | `Script/monster/east_continent_monster.gd` | `swf_png/<monster_kind>/atlas/metadata.tres`，不存在时返回空路径；PalaceFlyingBoss/CloudBoss 继承此路径 | View 的 `sequence_frame_count`、`frame_reg_anchor`、`frame_size`、`frame_center` | Store 按路径缓存只读 View；删除 `_east_metadata_cache` | View 无效或路径为空时帧数为 0、anchor 为零、帧几何为哨兵；不直接索引裸字典 |
-| 3 | `Script/monster/north_continent_monster.gd` | `north_original/<model>/metadata.tres` | `sequences`、`geometry`（`center`/`size`/`origin`）、`masks`；传路径给弹体 | `_source` 保存共享字典 | 未检查空字典；缺失键会导致初始化/碰撞路径错误 |
-| 4 | `Script/monster/palace_boss_projectile.gd` | 配置键 `source_masks_metadata`，来自 Cloud/North/Palace | View 的 `masks` / `geometry`；NorthBossProjectile 仍可写 `source_masks` 覆盖 | `view_for` 返回只读 View；`source_masks` 是迁移期覆盖字典 | 非空路径 view 无效时 `configure()` 返回 false；空路径表示未请求 masks |
+| 3 | `Script/monster/north_continent_monster.gd` | `north_original/<model>/metadata.tres` | View 的 `sequences`、`geometry`（`center`/`size`/`origin`）、`masks`；传路径给弹体 | `_north_view` 为只读 View；`source_masks` 已删除，mask alias 由 `mask_sequence` + View 处理 | View 无效时序列为 0/哨兵、几何为零；`NorthBossProjectile` 无 View 时拒绝配置 |
+| 4 | `Script/monster/palace_boss_projectile.gd` | 配置键 `source_masks_metadata`，来自 Cloud/North/Palace | View 的 `masks` / `geometry`；NorthBossProjectile 使用 `mask_sequence` 别名选择 mask，不再写 `source_masks` | `view_for` 返回只读 View；无额外覆盖字典 | 非空路径 view 无效时 `configure()` 返回 false；空路径表示未请求 masks |
 | 5 | `Script/monster/palace_flying_boss.gd` | `palace_boss/<monster_kind>/metadata.tres` | View 的 `geometry`（`center`/`size`/`origin`）与 `masks["hit1"]`；`sequences` 仍经 East 继承；传路径给弹体 | `_palace_view` 为只读 View，不再保存共享字典 | View 无效时自有几何为零、hit1 碰撞禁用；Store 报告失败；继承 East 序列仍为迁移期行为 |
 | 6 | `Script/mount/mount_visual.gd` | `Art/mount/runtime/mounts|effects/<mount>/<candidate>/metadata.tres` | View 的 `animation`/`fps`/`loop`/`frame_count`、帧层 `page`/`region`/`offset`、`ride`/`official_ride`；原生骨骼 parts 分支不走 metadata | `view_for` 返回只读 View；骨骼分支保留 parts 数据 | 非空路径 View 无效时 `play()` 返回 false；缺失候选在 `ResourceLoader.exists` 处返回 false |
 
@@ -101,7 +100,7 @@ flowchart LR
 | `animations` | 旧动画名到帧条目的映射 | `convert_monster_frames`（剑 Boss 目标） | 不作为运行时统一 schema |
 | 顶层数组 `items` | 地图图层或装备图集条目 | 未发现 Store 消费者 | 不建立通用运行时模型 |
 
-`AtlasMetadataView` 已覆盖 `pages+sequences` 的序列帧元组、页索引、geometry、masks，以及 `animation+frames` 的 fps/loop/frame_count/图层/transform 校验；`AtlasMetadata.validate()` 仍保留浅层资源级检查。East、Cloud、PalaceFlyingBoss 与 East 继承序列路径已在 14-3B-2 迁移；North 仍属于 14-3B-3。
+`AtlasMetadataView` 已覆盖 `pages+sequences` 的序列帧元组、页索引、geometry、masks，以及 `animation+frames` 的 fps/loop/frame_count/图层/transform 校验；`AtlasMetadata.validate()` 仍保留浅层资源级检查。East、Cloud、PalaceFlyingBoss、East 继承序列路径与 North 已在 14-3B-2/14-3B-3 迁移；六个直接消费者均使用 View。
 
 ## 5. 构建期消费者
 
@@ -122,20 +121,20 @@ flowchart LR
 - `nanhai_projectile.gd` 把 `atlas_metadata`、`impact_atlas_metadata` 读入成员变量，但当前没有读取这些成员来加载 AtlasMetadata；`_configure_atlas_visual()` 直接返回 `false`；
 - `minghai_boss3117.gd`、`zhuque_street_monster.gd` 定义 `ATLAS_METADATA` 常量，但静态检索未发现其使用；
 - `source_masks_metadata` 是唯一的运行时“间接 metadata 路径”配置，读取者为 `palace_boss_projectile.gd`，来源为 Cloud/North/Palace；
-- `atlas_metadata` 配置应在 Phase 14-3B-3 的受控清理中移除，前提是再次扫描确认无外部调用方；本次迁移 PalaceBossProjectile、MountVisual、PalaceFlyingBoss、East 与 Cloud，未清理源码配置。
+- `atlas_metadata` 配置应在 Phase 14-4 的受控清理中移除，前提是再次扫描确认无外部调用方；本次迁移未清理源码配置。
 
-`AtlasMetadataStore.validate_path()` 与 `clear_cache()` 当前没有生产调用点；`data_for("")` 直接返回 `{}`，不触发 `push_error`，与其他失败路径不一致。它们作为候选死接口/待定边界记录，不据此删除。
+`AtlasMetadataStore.validate_path()`、`clear_cache()` 与 `data_for()` 已删除；`view_for("")` 统一报告空路径并返回 `null`，不再存在静默空字典入口。
 
 ## 7. 失败、缓存与身份风险
 
 | 问题 | 证据 | Phase 14 处理方向 |
 |:---|:---|:---|
-| 共享字典泄露可写面 | `data_for` 仅向 North 返回共享字典；其余直接消费者已改为 View | North 迁移后删除 `data_for`；业务不可直接改源数据 |
-| 空数据静默退化 | East 的 View 无效时帧数为 0、anchor 为零、帧几何为哨兵；Cloud 视觉偏移为零；Palace 自有 geometry/masks 退化为零并禁用碰撞；MountVisual 缺失候选时返回 false | 14-3B-3 继续按消费者明确拒绝；其余已按各自入口处理无效声明 |
+| 共享字典泄露可写面 | `data_for` 已删除，六个直接消费者均只读 View；`AtlasMetadata.data` 仍为序列化内部字段 | 业务不可直接读 `.data`；保留序列化拥有者内部边界 |
+| 空数据静默退化 | 各 View 消费者在无效路径下返回零/哨兵或拒绝配置；North 的 View 无效时同样退化且 `NorthBossProjectile` 拒绝配置 | 14-4 继续核对失败语义与边界守卫；不再保留裸字典回退 |
 | schema 校验浅层 | `AtlasMetadata.validate()` 未验证帧元组、页索引、geometry/masks、Mount 帧 | `AtlasMetadataView` 已深度校验 `pages+sequences` 与 `animation+frames` |
-| Store 公共 API 未使用 | `validate_path`/`clear_cache` 无生产调用 | 迁移时删除或降为内部；不保留无消费者兼容层 |
+| Store 公共 API 未使用 | `validate_path`/`clear_cache` 已删除 | 保留 `view_for` 作为唯一公开入口 |
 | metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3B-3 中加 UID |
-| 旧配置残留 | 4 个 `atlas_metadata` 写入方无实际读取方 | 14-3B-3 确认后清理配置/常量；不把它们加入 typed 消费者清单 |
+| 旧配置残留 | 4 个 `atlas_metadata` 写入方无实际读取方；2 个 `ATLAS_METADATA` 常量未使用 | 14-4 确认后清理配置/常量；不把它们加入 typed 消费者清单 |
 
 ## 8. Phase 14-2/14-3A/14-3B-1 已实现子集
 
@@ -143,8 +142,8 @@ flowchart LR
 
 1. **只读 View**：`AtlasMetadataView` 覆盖 `pages+sequences` 的长度、帧几何、geometry、masks，以及 `animation+frames` 的播放参数/图层/rider transform；不建立 `pages`/`files` 的通用对象图。
 2. **Store 入口**：`view_for(path)` 做路径、资源类型、浅层与深度 schema 校验，按路径缓存 View；失败返回 `null` 并报告。
-3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；`MountVisual` 使用 View 读取 metadata 动画；`PalaceFlyingBoss` 使用 View 读取自有 `geometry`（`center`/`size`/`origin`）与 `masks`；East/Cloud 使用 View 读取序列几何；NorthBossProjectile 的 `source_masks` 覆盖保留为迁移期兼容。
-4. **未实现**：North 的消费者迁移、NorthBossProjectile 的 `source_masks` 清理与惰性配置清理，属于 14-3B-3。
+3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；`MountVisual` 使用 View 读取 metadata 动画；`PalaceFlyingBoss` 使用 View 读取自有 `geometry`（`center`/`size`/`origin`）与 `masks`；East/Cloud/North 使用 View 读取序列/几何；`NorthBossProjectile` 的 `source_masks` 已删除，mask alias 通过 `mask_sequence` 选择。
+4. **未实现**：4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 的惰性成员清理，归入 14-4；不把它们加入 typed 消费者清单。
 
 约束：
 
@@ -170,7 +169,8 @@ python scripts/convert_monster_frames.py --check
 - `MountVisual` 的 metadata 动画 `aoyi_skill` 播放与 `get_animation_visual_bounds` PASS；
 - 临时 GDScript 探针对 Palace 3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 逐值比对原始 `.data`，**PASS**；
 - East/Cloud 辅助探针覆盖 **149** 个序列资源、**1310** 个序列、**40222** 帧，逐帧比较帧数、registration anchor、center/size/has_visual，**PASS**；
-- `level_72`、`level_75` 定向冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（682.3s），日志门禁 **0 ERROR / 0 WARNING**；
+- North View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比较 **PASS**；
+- `level_72`、`level_75` 定向冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s），日志门禁 **0 ERROR / 0 WARNING**；
 - `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。
 
 临时探针已删除；未修改素材、既有 UID 或归档。再次调查时应从当前源码、资源与命令输出重新生成，不把本页数量当作长期 SLA。

@@ -5,6 +5,7 @@ var bounds := Rect2()
 var shadow_callback := Callable()
 var _shadow_contact := 0.0
 var source_impact := Callable()
+var mask_sequence_override := ""
 
 
 func configure(config: Dictionary) -> bool:
@@ -15,6 +16,7 @@ func configure(config: Dictionary) -> bool:
 	bounds = config.get("bounds", Rect2())
 	shadow_callback = config.get("shadow_callback", Callable())
 	source_impact = config.get("source_impact", Callable())
+	mask_sequence_override = str(config.get("mask_sequence", ""))
 	return super.configure(config)
 
 
@@ -30,6 +32,18 @@ func _begin_impact() -> void:
 
 	if source_impact.is_valid():
 		source_impact.call(global_position)
+
+
+func _sync_collision_to_visual_frame(force: bool = false) -> void:
+	var mask_sequence := _collision_mask_sequence()
+	if _metadata_view != null and _metadata_view.has_mask_sequence(mask_sequence):
+		_sync_collision_from_view(force, mask_sequence)
+		return
+	super._sync_collision_to_visual_frame(force)
+
+
+func _collision_mask_sequence() -> StringName:
+	return StringName(mask_sequence_override) if not mask_sequence_override.is_empty() else StringName(frames_animation)
 
 
 func _physics_process(delta: float) -> void:

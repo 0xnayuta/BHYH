@@ -10,7 +10,7 @@
 AtlasMetadata 由 `manifest.json` 构建为同目录 `metadata.tres`，`AtlasMetadata.data` 完整保存源结构。Phase 14-1 调查确认：
 
 - 379 个 manifest 分为 8 种顶层形态，运行时只实际消费 `pages+sequences` 与 `animation+frames`；
-- 仅 6 个 `AtlasMetadataStore.data_for` 直接调用点；
+- Phase 14-1 调查时仅 6 个 `AtlasMetadataStore.data_for` 直接调用点；迁移完成后该入口已删除；
 - `data_for` 返回共享 `Dictionary`，多个消费者保存同一引用；
 - 空路径静默返回空字典；
 - 多个消费者在资源缺失时退化或回退，而不是拒绝；
@@ -37,15 +37,15 @@ AtlasMetadata 由 `manifest.json` 构建为同目录 `metadata.tres`，`AtlasMet
 ## 后果
 
 - 业务只接收值或只读查询，不再能修改共享 metadata；
-- `data_for` 在迁移期保留给未迁移消费者，不能成为永久双 API；
-- 旧 `atlas_metadata` 配置和 `validate_path`/`clear_cache` 等无消费者入口不能作为新消费者保留；
+- `data_for`、`validate_path`、`clear_cache` 已删除，`view_for` 是唯一运行时入口；
+- 旧 `atlas_metadata` 配置仍待 14-4 清理，不得作为新消费者入口；
 - 资源身份是路径；任何路径变化必须由迁移工具同步，构建 `--check` 必须保持确定性；
 - 不为 `files`、旧 `animations`、顶层数组建立“万能 accessor”；
 - 失败会更早暴露，原先静默退化路径可能在迁移时表现为拒绝创建，这是预期行为。
 
 ## 本次实施范围
 
-Phase 14-2 / 14-3A / 14-3B-1 / 14-3B-2 已实现：
+Phase 14-2 / 14-3A / 14-3B-1 / 14-3B-2 / 14-3B-3 已实现：
 
 - `AtlasMetadataView`（`source/Script/atlas/atlas_metadata_view.gd`）提供 `pages+sequences` 与 `animation+frames` 的只读查询；
 - `AtlasMetadataStore.view_for()` 按路径缓存并返回经过 schema 校验的 View；失败返回 `null`；
@@ -53,12 +53,13 @@ Phase 14-2 / 14-3A / 14-3B-1 / 14-3B-2 已实现：
 - `MountVisual` 的 metadata 动画读取迁移到 View；原生骨骼 `_bone_index` 分支继续使用既有 parts 数据，不伪造 metadata；
 - `PalaceFlyingBoss` 自有 `geometry`（`center`/`size`/`origin`）与 `masks` 迁移到 View；继承 East 的序列辅助已在 14-3B-2 切换到 View；
 - `EastContinentMonster` 的序列长度、registration anchor 与帧几何改走 View；`CloudBoss` 的 `geometry.center` 改走 View；
-- `data_for` 仅继续服务 North；`source_masks` 保留给 NorthBossProjectile 迁移期覆盖；
+- `NorthContinentMonster` 的序列/geometry/masks 改走 View；`NorthBossProjectile` 删除 `source_masks`，通过 `mask_sequence` 别名选择 View mask；
+- `AtlasMetadataStore.data_for`、`validate_path`、`clear_cache` 已删除；
 - 未修改 `source/Art/`、素材内容或既有 UID。
 
-验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；East/Cloud 序列辅助探针覆盖 **149** 个资源、**1310** 个序列、**40222** 帧并逐帧比对 PASS；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；Palace 3323/3343 的 geometry 与 `hit1` masks 逐值比对 PASS；`level_72`、`level_75` 与 Palace 继承关冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（682.3s）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
+验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；East/Cloud 序列辅助探针覆盖 **149** 个资源、**1310** 个序列、**40222** 帧并逐帧比对 PASS；North 的 View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比对 PASS；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；Palace 3323/3343 的 geometry 与 `hit1` masks 逐值比对 PASS；`level_72`、`level_75`、`level_76`、`level_81` 与 Palace 继承关冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
 
-后续消费者按 `current-iteration.md` 的切片迁移；North 属于 14-3B-3，不在本次范围。禁止以本 ADR 为依据开展全量重写。
+剩余 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 成员属于 14-4 收口；禁止以本 ADR 为依据开展全量重写。
 
 ## 备选方案
 

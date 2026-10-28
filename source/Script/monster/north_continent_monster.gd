@@ -58,7 +58,7 @@ const STANDARD_FRAMES_MODELS := [
 	3539,
 ]
 var _raw: Dictionary = {}
-var _source: Dictionary = {}
+var _north_view: AtlasMetadataView = null
 var _skill_actions: Dictionary = {}
 var _skill_cursor := 0
 var _next_cast := 0
@@ -85,6 +85,30 @@ func _metadata_path() -> String:
 	return NorthOriginalData.metadata(monster_kind)
 
 
+func _has_sequence(sequence: String) -> bool:
+	return _north_view != null and _north_view.has_sequence(StringName(sequence))
+
+
+func _has_mask_sequence(sequence: String) -> bool:
+	return _north_view != null and _north_view.has_mask_sequence(StringName(sequence))
+
+
+func _sequence_frame_count(sequence: String) -> int:
+	return _north_view.sequence_frame_count(StringName(sequence)) if _north_view != null else 0
+
+
+func _geometry_center(sequence: String) -> Vector2:
+	return _north_view.geometry_center(StringName(sequence)) if _north_view != null else Vector2.ZERO
+
+
+func _geometry_origin(sequence: String) -> Vector2:
+	return _north_view.geometry_origin(StringName(sequence)) if _north_view != null else Vector2.ZERO
+
+
+func _geometry_size(sequence: String) -> Vector2:
+	return _north_view.geometry_size(StringName(sequence)) if _north_view != null else Vector2.ZERO
+
+
 func _standard_body_frames_path() -> String:
 	# 资源目录以 metadata 的 model 为准：monsters.json 存在多 id 共用同一 model
 	# 的情况（如 3386/3367、3426/3411/3399），按 monster_kind 取值会取到不存在的路径。
@@ -96,7 +120,8 @@ func _standard_body_frames_path() -> String:
 
 func _resolve_runtime_config() -> Dictionary:
 	_raw = NorthOriginalData.monster_record(monster_kind)
-	_source = AtlasMetadataStore.data_for(_metadata_path())
+	var metadata_path := _metadata_path()
+	_north_view = AtlasMetadataStore.view_for(metadata_path) if not metadata_path.is_empty() else null
 	var config := NorthOriginalData.monster_config(monster_kind)
 	var animations := {
 		&"wait": ["wait", true], &"walk": ["walk", true], &"hurt": ["hurt", false], &"death": ["death", false]
@@ -119,8 +144,8 @@ func _resolve_runtime_config() -> Dictionary:
 		if data.is_empty():
 			continue
 		var body: String = "effect4" if key == "protectSkill" else key
-		var sequence: String = "mc_" + body if _source["sequences"].has("mc_" + body) else body
-		if not _source["sequences"].has(sequence):
+		var sequence: String = "mc_" + body if _has_sequence("mc_" + body) else body
+		if not _has_sequence(sequence):
 			sequence = "wait"
 		var action := StringName("hit%d" % index)
 		animations[action] = [sequence, false]
@@ -190,18 +215,17 @@ func _run_birth_event(model: int) -> void:
 
 func _visual_offset(action: StringName) -> Vector2:
 	var sequence := str(_config["animations"][action][0])
-	var center: Array = _source["geometry"][sequence]["center"]
-	return Vector2(-float(center[0]) if mr_ani.flip_h else float(center[0]), float(center[1]))
+	var center := _geometry_center(sequence)
+	return Vector2(-center.x if mr_ani.flip_h else center.x, center.y)
 
 
 func _configure_entity_collision_boxes() -> void:
-	var geometry: Dictionary = _source["geometry"]["wait"]
-	var origin: Array = geometry["origin"]
-	var size: Array = geometry["size"]
+	var origin := _geometry_origin("wait")
+	var size := _geometry_size("wait")
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(maxf(float(size[0]) * 0.65, 35), maxf(float(size[1]) * 0.8, 35))
+	shape.size = Vector2(maxf(size.x * 0.65, 35), maxf(size.y * 0.8, 35))
 	hurt_box.shape = shape
-	hurt_box.position = Vector2(float(origin[0]) + float(size[0]) / 2, float(origin[1]) + float(size[1]) / 2)
+	hurt_box.position = origin + size / 2
 	var body_shape := RectangleShape2D.new()
 	body_shape.size = Vector2(minf(shape.size.x, 80), minf(shape.size.y, 90))
 	pz.shape = body_shape
@@ -254,7 +278,7 @@ func _physics_process(delta: float) -> void:
 	if level is NorthContinentLevel and not level.in_void_space:
 		var room: Rect2 = level.source_battle_bounds()
 		if room.has_area() and not death():
-			var half_width := minf(float(_source["geometry"]["wait"]["size"][0]) / 2 + 10, room.size.x / 3)
+			var half_width := minf(_geometry_size("wait").x / 2 + 10, room.size.x / 3)
 			global_position.x = clampf(
 				global_position.x,
 				level.global_position.x + room.position.x + half_width,
@@ -267,12 +291,12 @@ func _keep_in_view() -> void:
 		var level := get_level_node()
 		if level is NorthContinentLevel and level.source_battle_bounds().has_area():
 			_flight_bounds = level.source_battle_bounds()
-		var size: Array = _source["geometry"]["wait"]["size"]
-		var margin_x := minf(float(size[0]) / 2 + 15, _flight_bounds.size.x / 3)
+		var size := _geometry_size("wait")
+		var margin_x := minf(size.x / 2 + 15, _flight_bounds.size.x / 3)
 		global_position.x = clampf(
 			global_position.x, _flight_bounds.position.x + margin_x, _flight_bounds.end.x - margin_x
 		)
-		var margin_y := minf(float(size[1]) / 2 + 15, _flight_bounds.size.y / 3)
+		var margin_y := minf(size.y / 2 + 15, _flight_bounds.size.y / 3)
 		global_position.y = clampf(global_position.y, _flight_bounds.position.y + margin_y, _flight_bounds.end.y - 40)
 
 
@@ -443,7 +467,7 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 
 	var mask_key := body_sequence.trim_prefix("mc_")
 	var contact: WutaiMinghaiProjectile
-	if _source.get("masks", {}).has(mask_key):
+	if _has_mask_sequence(mask_key):
 		contact = _projectile(
 			body_sequence,
 			action,
@@ -455,7 +479,7 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 		)
 		if contact != null:
 			contact.visible = false
-	if _source["sequences"].has(body_sequence + "_overlay"):
+	if _has_sequence(body_sequence + "_overlay"):
 		_projectile(
 			body_sequence + "_overlay",
 			action,
@@ -658,14 +682,7 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 		if not await _delay(1.0 / 30, generation):
 			return
 		var sequence := key + "_1"
-		_projectile(
-			sequence,
-			action,
-			global_position,
-			Vector2.ZERO,
-			float(_source["sequences"][sequence]["frames"].size()) / 30,
-			skill
-		)
+		_projectile(sequence, action, global_position, Vector2.ZERO, float(_sequence_frame_count(sequence)) / 30, skill)
 		return
 	if model == 3528 and key == "effect1":
 		if not await _delay(1.0, generation):
@@ -700,7 +717,7 @@ func _run_source_skill(action: StringName, generation: int) -> void:
 		if not await _delay(0.627, generation):
 			return
 		var sequence := "mc_effect1_1"
-		var duration := float(_source["sequences"][sequence]["frames"].size()) / 30
+		var duration := float(_sequence_frame_count(sequence)) / 30
 		_projectile(
 			sequence,
 			action,
@@ -853,8 +870,8 @@ func _standard_shot(action: StringName, skill: Dictionary) -> void:
 			origin.x = RoleProp.get_nearest_monster_target_position(origin).x
 			velocity_source = Vector2.ZERO
 			_rain_weapons(action, skill, origin, duration)
-	if int(skill.get("shootTime", "0")) < 0 and _source["sequences"].has(assets[0]):
-		duration = float(_source["sequences"][assets[0]]["frames"].size()) / 30
+	if int(skill.get("shootTime", "0")) < 0 and _has_sequence(assets[0]):
+		duration = float(_sequence_frame_count(assets[0])) / 30
 	_projectile(assets[0], action, origin, velocity_source, duration, skill, extra)
 
 
@@ -868,7 +885,7 @@ func _aimed_shot(sequence: String, action: StringName, origin: Vector2, skill: D
 func _source_impact_damage(origin: Vector2, sequence: String, action: StringName, skill: Dictionary) -> void:
 	if not is_inside_tree() or death():
 		return
-	var duration := float(_source["sequences"][sequence]["frames"].size()) / 30
+	var duration := float(_sequence_frame_count(sequence)) / 30
 	var damage := _projectile(sequence, action, origin, Vector2.ZERO, duration, skill, {"loop_visual": false})
 	if damage != null:
 		damage.visible = false
@@ -883,12 +900,12 @@ func _projectile(
 	skill: Dictionary,
 	extra: Dictionary = {}
 ) -> WutaiMinghaiProjectile:
-	if not _source["sequences"].has(sequence):
+	if not _has_sequence(sequence):
 		return null
 	var frames_path := _standard_body_frames_path()
 	var impact_sequence := str(extra.get("impact_sequence", ""))
-	if not impact_sequence.is_empty() and _source["sequences"].has(impact_sequence):
-		var impact_frame_count: int = _source["sequences"][impact_sequence]["frames"].size()
+	if not impact_sequence.is_empty() and _has_sequence(impact_sequence):
+		var impact_frame_count := _sequence_frame_count(impact_sequence)
 		extra["impact_frames_resource"] = frames_path
 		extra["impact_frames_animation"] = impact_sequence
 		extra["impact_frame_count"] = impact_frame_count
@@ -932,9 +949,6 @@ func _projectile(
 		projectile.free()
 		return null
 	bullet.add_child(projectile)
-	if extra.has("mask_sequence"):
-		var alias := str(extra["mask_sequence"])
-		projectile.source_masks[sequence] = _source["masks"][alias]
 	source_projectile_spawned.emit(sequence, projectile)
 	return projectile
 

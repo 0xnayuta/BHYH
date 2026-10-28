@@ -8,7 +8,7 @@ scripts/convert_atlas_metadata.py
 设计约定
 --------
 - 每个 manifest.json 在**同目录**生成 metadata.tres，运行时通过
-  `AtlasMetadataStore.data_for()` 读取，不再解析 JSON；
+  `AtlasMetadataStore.view_for()` 读取，不再解析 JSON；
 - manifest.json 保留为构建期源数据，不参与运行时加载；
 - 输出为 `AtlasMetadata` 自定义 Resource，`data` 字段完整保留原 JSON 结构。
 
