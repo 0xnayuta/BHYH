@@ -80,7 +80,7 @@ func _on_return_map_pressed() -> void:
 	Global.is_dead_link = false
 	if Global.current_level == "镇妖塔":
 		Global.change_scene("res://Scene/main_menu/map_0.tscn")
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("level_defeat_return")
 		return
 	match int(PlayerData.player_data["Map_num"]):
 		1:
@@ -109,7 +109,7 @@ func _on_return_map_pressed() -> void:
 				Global.change_scene("res://Scene/main_menu/map_9.tscn")
 		_:
 			Global.change_scene("res://Scene/main_menu/map_0.tscn")
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_defeat_return")
 
 
 var _is_rechallenging := false
@@ -144,13 +144,13 @@ func load_item_icon(_name):
 func _on_js_pressed() -> void:
 	text.text = str(textlist4[randi_range(0, textlist4.size() - 1)])
 	PlayerData.add_zb("xczg", 0, {})
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_defeat_reward")
 	player.play("dh_2")
 
 
 func _on_yjjj_pressed() -> void:
 	PlayerData.player_data["zyforever"] = true
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_defeat_reward")
 	text.text = str(textlist3[randi_range(0, textlist3.size() - 1)])
 	player.play("dh_3")
 

@@ -76,7 +76,7 @@ func _on_return_map_pressed() -> void:
 	RoleProp.ws_value = 0
 	if Global.current_level == "镇妖塔":
 		Global.change_scene("res://Scene/main_menu/map_0.tscn")
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("level_victory_return")
 		return
 	match int(PlayerData.player_data["Map_num"]):
 		1:
@@ -120,7 +120,7 @@ func _on_return_map_pressed() -> void:
 				Global.change_scene("res://Scene/main_menu/map_9.tscn")
 		_:
 			Global.change_scene("res://Scene/main_menu/map_1.tscn")
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_victory_return")
 
 
 func get_lasttime(Num):

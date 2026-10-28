@@ -293,7 +293,7 @@ func on_constellation_boss_defeated(boss: BaseMonster) -> void:
 	var progress_changed := PlayerData.record_constellation_defeated_tier(selected_level, best)
 	Global.constellation_best_tier[key] = best
 	if progress_changed and str(Global.cd_path).contains("Ar_"):
-		MemoryClass.save_game(str(Global.cd_path))
+		MemoryClass.request_save("level_esbxx_tier")
 	if current_tier >= 10:
 		completed = not Global.constellation_endless_mode
 	else:

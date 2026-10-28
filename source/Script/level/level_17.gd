@@ -45,7 +45,7 @@ func _on_hddy_body_entered(body: Node2D) -> void:
 		var props: Node = LocalCoop.props_for(body) if LocalCoop.is_enabled() else RoleProp
 		if profile.get_item_data("bsz") > 0:
 			profile.remove_dj("bsz", profile.get_dj_page("bsz"), 1)
-			MemoryClass.save_game(Global.cd_path)
+			MemoryClass.request_save("level_17_gate")
 			Global.change_scene("res://Scene/level/level_hddy.tscn")
 		else:
 			props.roleprop.Hp = 0

@@ -58,7 +58,7 @@ func _on_csm_pressed() -> void:
 func challenge():
 	PlayerData.player_data["FristJiejiao"] = false
 	Global.change_scene("res://Scene/main_menu/map_4.tscn")
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_hdzm_challenge")
 
 
 func _on_hdgq_pressed() -> void:

@@ -481,7 +481,7 @@ func _advance_tower_floor() -> void:
 		RoleProp.current_hp = RoleProp.roleprop.Hp
 		RoleProp.current_mp = RoleProp.roleprop.Mp
 	prepare_floor_plan(next_floor)
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("tower_floor_advance")
 	Global.change_scene(TOWER_LEVEL_SCENE_PATH, true)
 
 
