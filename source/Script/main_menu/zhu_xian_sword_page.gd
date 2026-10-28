@@ -361,7 +361,7 @@ func _apply_role_prop() -> void:
 func _save_if_possible() -> void:
 	var save_path := str(Global.cd_path)
 	if save_path != "" and save_path.contains("Ar_"):
-		MemoryClass.save_game(save_path)
+		MemoryClass.request_save("zhu_xian_sword")
 	else:
 		MemoryClass.main_bc()
 

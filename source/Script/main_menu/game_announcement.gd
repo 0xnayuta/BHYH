@@ -1194,7 +1194,7 @@ func _save_secret_progress() -> void:
 	if str(Global.cd_path).is_empty():
 		MemoryClass.main_bc()
 		return
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("game_announcement")
 
 
 func _show_secret_status(message: String) -> void:

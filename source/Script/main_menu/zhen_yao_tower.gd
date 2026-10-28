@@ -230,7 +230,7 @@ func _on_floor_selected(floor_number: int) -> void:
 	PlayerData.player_data[TOWER_RUN_POINTS_KEY] = 0
 	PlayerData.player_data["Map_num"] = 0
 	TOWER_LEVEL_SCRIPT.prepare_floor_plan(int(PlayerData.player_data[TOWER_CURRENT_FLOOR_KEY]))
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("tower_floor_select")
 	Global.change_scene(TOWER_LEVEL_SCENE_PATH)
 
 
@@ -680,7 +680,7 @@ func _show_shop_message(message: String) -> void:
 func _save_tower_data() -> void:
 	var save_path := str(Global.cd_path)
 	if save_path != "" and save_path.contains("Ar_"):
-		MemoryClass.save_game(save_path)
+		MemoryClass.request_save("tower_data")
 
 
 func _close_shop() -> void:

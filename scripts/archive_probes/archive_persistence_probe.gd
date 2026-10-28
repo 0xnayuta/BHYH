@@ -253,6 +253,63 @@ func _test_panel_saves() -> void:
 	synthesis.queue_free()
 	await get_tree().process_frame
 
+	await _check_main_menu_saves()
+
+
+## 主菜单批次：直接调用地图页与各功能页的真实保存处理器，回读加密档案确认已落盘。
+func _check_main_menu_saves() -> void:
+	_reset_profile(1, 5)
+	Global.cd_path = PANEL_ARCHIVE_PATH
+	MemoryClass.request_save("probe_main_seed")
+	var popup_layer := CanvasLayer.new()
+	add_child(popup_layer)
+	Global.windows = popup_layer
+	var global_popup := Global.get_ui_popup_layer()
+	await get_tree().process_frame
+	var cases := [
+		["map_0", "res://Scene/main_menu/map_0.tscn", "_save_if_possible"],
+		["map_1", "res://Scene/main_menu/map_1.tscn", "_on_bc_game_pressed"],
+		["map_2", "res://Scene/main_menu/map_2.tscn", "_on_memory_game_pressed"],
+		["map_3", "res://Scene/main_menu/map_3.tscn", "_on_memory_game_pressed"],
+		["map_3_special", "res://Scene/main_menu/map_3.tscn", "_sync_special_button_layer"],
+		["map_4", "res://Scene/main_menu/map_4.tscn", "_on_memory_class_pressed"],
+		["map_5", "res://Scene/main_menu/map_5.tscn", "_on_memory_class_pressed"],
+		["map_6", "res://Scene/main_menu/map_6.tscn", "_on_memory_class_pressed"],
+		["map_7", "res://Scene/main_menu/map_7.tscn", "_on_memory_class_pressed"],
+		["map_8", "res://Scene/main_menu/map_8.tscn", "_on_memory_class_pressed"],
+		["map_8_1", "res://Scene/main_menu/map_8_1.tscn", "_on_memory_class_pressed"],
+		["map_9", "res://Scene/main_menu/map_9.tscn", "_on_memory_class_pressed"],
+		["map_9_1", "res://Scene/main_menu/map_9_1.tscn", "_on_memory_class_pressed"],
+		["tower_data", "res://Scene/main_menu/zhen_yao_tower.tscn", "_save_tower_data"],
+		["sword", "res://Scene/main_menu/zhu_xian_sword_page.tscn", "_save_if_possible"],
+		["wanling", "res://Scene/main_menu/wan_ling_catalog_page.tscn", "_save_if_possible"],
+		["announcement", "res://Scene/main_menu/game_announcement.tscn", "_save_secret_progress"],
+		["training", "res://Scene/main_menu/body_training_detail.tscn", "_save_if_possible"],
+	]
+	for entry in cases:
+		var label := str(entry[0])
+		var scene_path := str(entry[1])
+		var handler := str(entry[2])
+		var page: Node = (load(scene_path) as PackedScene).instantiate()
+		page.process_mode = Node.PROCESS_MODE_DISABLED
+		add_child(page)
+		await get_tree().process_frame
+		_mark_archive_time_old(PANEL_ARCHIVE_PATH)
+		page.call(handler)
+		await get_tree().process_frame
+		_check(
+			"panel_main_%s_saved" % label,
+			_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+			"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+		)
+		page.queue_free()
+		await get_tree().process_frame
+	global_popup.queue_free()
+	popup_layer.queue_free()
+	Global.windows = null
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 
 func _mark_archive_time_old(path: String) -> void:
 	var data := MemoryClass.peek_archive_data(path)

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 首批 17 处与第二批 58 处、16-2C 已完成；16-2A 其余 43 处、16-2B/16-2D 与 16-3~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 首批 17 处、第二批 58 处与第三批 19 处、16-2C 已完成；16-2A 其余 24 处、16-2B/16-2D 与 16-3~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -32,7 +32,7 @@
 
 | 边界 | 当前事实 | 本阶段取证要求 |
 |:---|:---|:---|
-| 存档写入面 | `MemoryClass.request_save(reason)` **75 处 / 37 文件**（统一入口）；`save_game(path)` 余 **43 处、35 个文件、41 个函数**；`Global.cd_path` 有 **72 行 / 75 次出现、39 个文件**（写入 3 行）；`request_background_save` 仅 `base_monster.gd` 1 处调用 | 16-1 枚举全部写入者、调用场景、失败处理与重复保存风险 |
+| 存档写入面 | `MemoryClass.request_save(reason)` **94 处 / 43 文件**（统一入口）；`save_game(path)` 余 **24 处、18 个文件、22 个函数**；`Global.cd_path` 有 **58 行 / 61 次出现、36 个文件**（写入 3 行）；`request_background_save` 仅 `base_monster.gd` 1 处调用 | 16-1 枚举全部写入者、调用场景、失败处理与重复保存风险 |
 | 档案路径身份 | 唯一格式为 `user://MyAr_<n>.json`；路径字符串 `Global.cd_path` 是事实上的会话标识，没有独立会话对象 | 16-2/16-3 定义会话身份、保存顺序与过期写入拒绝 |
 | 直接数据访问 | `PlayerData.player_data` 有 **1,288 行引用、119 个文件**；直接写入 **141 行、44 个文件**（129 赋值 + 12 复合赋值 + 1 删除；27 行 `==` 比较不计入） | 16-4/16-5 按业务域收口；不建立一次性全量重写前置；明细见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) |
 | 存档校验 | 本地/云/运行时均通过 `MemoryClass.is_valid_role_id` 校验 `Myself` 为 **1..7**；非空非法档在 `load_game` 合并前拒绝；缺失/空文件仍返回成功 | 16-2C 已完成定向夹具；空档语义留给 16-3 |
@@ -89,7 +89,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 ### 3.1 切片
 
-1. **Phase 16-2A 写入入口收口（进行中）**：新增 `MemoryClass.request_save(reason)`；首批迁移 17 处（5 处判读点、11 个地图页 `_ready`、`LocalCoop._on_panel_closed`），第二批迁移 58 处（`back_pack` 25、`skill` 18、`ldl` 15）；余 43 处按主菜单→关卡→其余业务分批继续迁移；业务侧只提交“请求保存”，不拼路径、不判断文件系统结果；
+1. **Phase 16-2A 写入入口收口（进行中）**：新增 `MemoryClass.request_save(reason)`；首批迁移 17 处（5 处判读点、11 个地图页 `_ready`、`LocalCoop._on_panel_closed`），第二批迁移 58 处（`back_pack` 25、`skill` 18、`ldl` 15），第三批迁移 19 处（`main_menu`）；余 24 处按关卡→其余业务分批继续迁移；业务侧只提交“请求保存”，不拼路径、不判断文件系统结果；
 2. **Phase 16-2B 会话身份与保存顺序（规划）**：保存请求携带档案身份与序号；快照生成后若档案身份变化，回写必须被拒绝；后台队列按档案分组，切档/退档前 flush 或明确失败；
 3. **Phase 16-2C 失败语义与校验（已完成）**：本地/云/运行时统一 `Myself` 1..7；`load_game` 拒绝非空非法档；新增 `archive_probe_runner.py`，覆盖缺失/空/损坏档、`.bak` 恢复、`.tmp` 清理、角色 1/7/0/8、`request_save` 空档/成功/拒绝与空档不覆盖原档（27/27 PASS）；
 4. **Phase 16-2D 规范化补全边界（规划）**：`ensure_*`/`migrate_*` 保持幂等；补全失败必须阻止保存并返回原因，不允许“补全异常但写入成功”；不新增跨版本迁移链。
@@ -102,7 +102,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 - 后台保存失败后的重试与退出 flush；
 - 双人档案保存时共享键与个体键的写入结果。
 
-**结果（2026-10-29）**：16-2A 首批、第二批与 16-2C 已完成；`save_game` 余 43 处，`request_save` 75 处。第二批按 `back_pack` → `skill` → `ldl` 分三段实施，每段后运行档案夹具与对应面板探针；最终验证：档案夹具 **34/34 PASS**（新增背包/技能键位/炼体/合成面板真实写盘用例）、`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）、`coop_probe_runner` **16/16 PASS**、`check_all --skip-engine` **8/8 PASS**、`health_check` **0 Parse / 0 Error / 0 Warning**。
+**结果（2026-10-29）**：16-2A 首批、第二批、第三批与 16-2C 已完成；`save_game` 余 24 处，`request_save` 94 处。第三批迁移 `main_menu` 19 处，迁移后运行 `level_selection` 场景探针 **PASS**（16.50s）与扩展档案夹具；最终验证：档案夹具 **52/52 PASS**（新增 18 个主菜单真实保存处理器用例）、`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）、`coop_probe_runner` **16/16 PASS**、`check_all --skip-engine` **8/8 PASS**、`health_check` **0 Parse / 0 Error / 0 Warning**。
 
 ### 3.3 出口
 
@@ -219,7 +219,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
 | Phase 16-1 调用面矩阵 | 已完成：全量引用、owner/写入者/失败表、链接与格式；结果见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) | 引擎、关卡回归不因只读调查复跑 |
-| Phase 16-2 存档 IO | 已完成首批与第二批：当前格式读写、损坏档拒绝、备份恢复、角色范围、`request_save` 与面板真实写盘（`archive_probe_runner.py` 34/34）；16-2B 保存顺序与退出 flush 待补 | 只测新档或只编译不等于持久化正确 |
+| Phase 16-2 存档 IO | 已完成首批至第三批：当前格式读写、损坏档拒绝、备份恢复、角色范围、`request_save`、面板/地图页真实写盘（`archive_probe_runner.py` 52/52）与 `level_selection` 场景探针；16-2B 保存顺序与退出 flush 待补 | 只测新档或只编译不等于持久化正确 |
 | Phase 16-3 会话上下文 | 切档、角色变化、不可读档拒绝、会话结束重入、退出清理 | 只改一个入口不覆盖全部读档路径 |
 | Phase 16-4 槽位与共享账本 | `coop_probe_runner` 全部用例；共享/个体写入归属；切档后无残留 | 单测 1P 或只测 UI 不等于双人正确 |
 | Phase 16-5 面板与快照 | 五类面板的 1P/2P 读写、保存快照互斥、ESC/暂停/退出、焦点恢复 | 只改 `LocalCoop` 或只改 UI 都不算完成 |

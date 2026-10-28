@@ -233,7 +233,7 @@ func _sync_special_button_layer() -> void:
 		if node != null:
 			node.z_index = 0
 	if not Global.cd_path.is_empty() and Global.cd_path.contains("Ar_"):
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("map_3_special")
 	Global.is_mpo = false
 	Global.is_ice = false
 	Global.is_poision = false
@@ -468,7 +468,7 @@ func _on_tzhy_pressed() -> void:
 
 
 func _on_memory_game_pressed() -> void:
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("map_save")
 	Global.add_message_show(get_parent(), "保存成功！本作品完全免费，谨防受骗上当！", 1.5, Vector2(470, 300))
 
 

@@ -597,7 +597,7 @@ func _on_overlay_gui_input(event: InputEvent) -> void:
 func _save_if_possible() -> void:
 	var save_path := str(Global.cd_path)
 	if save_path != "" and save_path.contains("Ar_") and FileAccess.file_exists(save_path):
-		MemoryClass.save_game(save_path)
+		MemoryClass.request_save("wan_ling_catalog")
 
 
 func _show_message(message: String) -> void:

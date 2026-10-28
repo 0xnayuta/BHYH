@@ -287,7 +287,7 @@ func _on_hdzm_pressed() -> void:
 
 
 func _on_memory_class_pressed() -> void:
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("map_save")
 	Global.add_message_show(get_parent(), "保存成功！本作品完全免费，谨防受骗上当！", 1.5, Vector2(470, 300))
 
 

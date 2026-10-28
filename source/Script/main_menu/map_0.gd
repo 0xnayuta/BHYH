@@ -62,7 +62,7 @@ func _exit_tree() -> void:
 func _save_if_possible() -> void:
 	var save_path := str(Global.cd_path)
 	if save_path != "" and save_path.contains("Ar_") and FileAccess.file_exists(save_path):
-		MemoryClass.save_game(save_path)
+		MemoryClass.request_save("map_0_save")
 
 
 func _update_player_head() -> void:
