@@ -73,7 +73,7 @@ static func retained_count() -> int:
 
 
 static func _schedule_poll() -> void:
-	if _poll_scheduled:
+	if _poll_scheduled or _closing:
 		return
 	var tree := Engine.get_main_loop() as SceneTree
 	if tree == null:
@@ -85,6 +85,8 @@ static func _schedule_poll() -> void:
 
 static func _poll() -> void:
 	_poll_scheduled = false
+	if _closing:
+		return
 	var still_pending := false
 	for path: String in _requests.keys():
 		var request: Request = _requests[path]

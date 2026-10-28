@@ -547,6 +547,8 @@ func _prewarm_target_level_resources() -> void:
 		if not (file_name.begins_with("monster_") and monster_id_text.is_valid_int()):
 			extra_scene_paths.append(scene_path)
 	await Global.preload_level_monster_runtime_resources(monster_ids)
+	if not _is_request_current():
+		return
 	await Global.prewarm_monster_scene_paths(extra_scene_paths)
 
 
@@ -648,6 +650,7 @@ func _cancel_pending_requests() -> void:
 
 
 func _exit_tree() -> void:
+	_finishing = true
 	_cancel_pending_requests()
 
 

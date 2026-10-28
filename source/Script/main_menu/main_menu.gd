@@ -89,6 +89,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(http_request):
+		http_request.cancel_request()
 	back_ground.texture = null
 	Global.release_cached_texture(_active_main_menu_background_path)
 	_active_main_menu_background_path = ""
@@ -225,6 +227,8 @@ func _on_body_received(request, body):
 func _on_http_request_request_completed(
 	result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray
 ) -> void:
+	if not is_inside_tree():
+		return
 	if _on_body_received(result, body) != null:
 		var abc = str(_on_body_received(result, body)).split()
 		var data_list = {

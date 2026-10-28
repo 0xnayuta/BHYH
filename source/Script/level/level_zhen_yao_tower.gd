@@ -202,6 +202,8 @@ func _preload_level_resources() -> void:
 func _prepare_level_runtime_resources() -> void:
 	_apply_monster_count_multiplier()
 	await _preload_level_resources()
+	if not is_inside_tree():
+		return
 	_runtime_ready = true
 	_load_tower_floor(_read_current_floor(), false)
 	if create_control != null and is_instance_valid(create_control):

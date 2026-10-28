@@ -43,7 +43,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池与 Phase 15-4C 临时 UI 已完成，Phase 15-4D/15-4E 未启动 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI 与 Phase 15-4D 退出与后台已完成，Phase 15-4E 未启动 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

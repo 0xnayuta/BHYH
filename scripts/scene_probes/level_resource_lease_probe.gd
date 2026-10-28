@@ -10,6 +10,7 @@ const TARGET_SCENE := "res://Scene/level/__lease_probe_target.tscn"
 const TARGET_SCENE_2 := "res://Scene/level/__lease_probe_target_2.tscn"
 const OWNED_TEXTURE := "res://Art/__lease_probe_owned.png"
 const SHARED_TEXTURE := "res://Art/__lease_probe_shared.png"
+const STALE_TEXTURE := "res://Art/__lease_probe_stale.png"
 const MONSTER_SCENE := "res://Scene/monster/__lease_probe_monster.tscn"
 const BULLET_SCENE := "res://Scene/monster/monster_bullet_slim/__lease_probe_bullet.tscn"
 
@@ -122,7 +123,11 @@ func _run() -> void:
 	var exit_shared := PlaceholderTexture2D.new()
 	Global.handoff_loaded_resource(OWNED_TEXTURE, exit_owned, true)
 	Global.handoff_loaded_resource(SHARED_TEXTURE, exit_shared, false)
+	var generation_before_end := Global.get_runtime_generation()
 	Global.end_archive_session()
+	checks["runtime_generation_invalidated"] = not Global.is_runtime_generation_current(generation_before_end)
+	Global._preload_paths_threaded([STALE_TEXTURE], generation_before_end)
+	checks["stale_async_skipped"] = not Global.is_resource_cached(STALE_TEXTURE)
 	checks["exit_owned_released"] = not Global.is_resource_cached(OWNED_TEXTURE)
 	checks["exit_shared_preserved"] = Global.is_resource_cached(SHARED_TEXTURE)
 	checks["exit_lease_cleared"] = not bool(Global.get_level_resource_lease_snapshot().get("active", true))

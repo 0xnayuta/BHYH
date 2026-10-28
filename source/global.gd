@@ -258,8 +258,48 @@ var _chase_bullet = null
 
 
 func _exit_tree() -> void:
+	_shutting_down = true
+	_advance_runtime_generation()
+	_scene_request_generation += 1
+	_archive_session_generation += 1
+	archive_session_active = false
+	archive_session_role_id = 0
+	_archive_session_prewarm_in_progress = false
+	_archive_session_prewarm_role_id = 0
+	_prewarmed_role_id = 0
+	_prewarmed_pet_signature = ""
+	_permanent_ui_prewarm_in_progress = false
+	release_role_runtime_resources()
+	clear_combat_runtime_cache()
+	release_ui_runtime_cache(true)
+	_transient_ui_instances.clear()
+	_ui_runtime_instance_paths.clear()
+	_ui_runtime_instance_counts.clear()
+	_cleanup_transient_ui_active = false
+	clear_preloaded_scene_slot()
+	_resource_cache.clear()
+	_sprite_frames_cache.clear()
+	_audio_cache.clear()
+	_texture_cache.clear()
+	_monster_scene_cache.clear()
+	_last_sound_play_msec.clear()
+	_active_sound_players.clear()
+	_pending_combo_milestones.clear()
 	FrameSequenceStore.clear_cache()
 	FrameTextureRequests.shutdown_process()
+
+
+func _advance_runtime_generation() -> int:
+	_runtime_generation += 1
+	return _runtime_generation
+
+
+func get_runtime_generation() -> int:
+	return _runtime_generation
+
+
+func is_runtime_generation_current(generation: int) -> bool:
+	return not _shutting_down and generation == _runtime_generation
 
 
 func _ready() -> void:
@@ -373,7 +413,10 @@ var _prewarmed_role_id: int = 0
 var archive_session_active: bool = false
 var archive_session_role_id: int = 0
 var _archive_session_prewarm_in_progress: bool = false
+var _archive_session_prewarm_role_id: int = 0
 var _archive_session_generation: int = 0
+var _runtime_generation: int = 0
+var _shutting_down := false
 var _ui_runtime_instance_paths: Dictionary = {}
 var _ui_runtime_instance_counts: Dictionary = {}
 var _transient_ui_instances: Dictionary = {}
@@ -700,15 +743,27 @@ func load_ui_scene(path: String) -> PackedScene:
 	return _load_scene(path) as PackedScene
 
 
-func prewarm_permanent_small_ui_scenes() -> void:
+func prewarm_permanent_small_ui_scenes(generation: int = -1) -> void:
 	if _permanent_ui_prewarm_in_progress or _permanent_ui_prewarmed:
+		return
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
 		return
 	_permanent_ui_prewarm_in_progress = true
 	for scene_path in PERMANENT_SMALL_UI_SCENE_PATHS:
+		if not is_runtime_generation_current(request_generation):
+			_permanent_ui_prewarm_in_progress = false
+			return
 		if not _permanent_small_ui_scene_cache.has(scene_path):
 			_load_scene(scene_path)
-		await get_tree().process_frame
+		var tree := get_tree()
+		if tree == null:
+			_permanent_ui_prewarm_in_progress = false
+			return
+		await tree.process_frame
 	_permanent_ui_prewarm_in_progress = false
+	if not is_runtime_generation_current(request_generation):
+		return
 	_permanent_ui_prewarmed = true
 
 
@@ -856,7 +911,10 @@ func preload_scene_path(path: String) -> PackedScene:
 	return _load_scene(path) as PackedScene
 
 
-func prewarm_skill_page_resources() -> void:
+func prewarm_skill_page_resources(generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var paths: Array = [
 		"res://Scene/skill/learn_skill.tscn",
 		"res://Scene/skill/zd_skill.tscn",
@@ -874,7 +932,9 @@ func prewarm_skill_page_resources() -> void:
 	}
 	for icon_name in role_skill_icons[role_id]:
 		paths.append("res://Art/skill/skill_icon/%s.png" % icon_name)
-	await _preload_paths_threaded(paths)
+	await _preload_paths_threaded(paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	skill_learn = _resource_cache.get("res://Scene/skill/learn_skill.tscn") as PackedScene
 	zd_skill = _resource_cache.get("res://Scene/skill/zd_skill.tscn") as PackedScene
 	bd_skill = _resource_cache.get("res://Scene/skill/bd_skill.tscn") as PackedScene
@@ -912,6 +972,9 @@ func _monster_scene_path(monster_id: int) -> String:
 
 
 func preload_level_monster_scenes(monster_ids: Array) -> void:
+	var request_generation := _runtime_generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var scene_paths: Array = []
 	var seen_paths := {}
 	for monster_id_value in monster_ids:
@@ -926,7 +989,9 @@ func preload_level_monster_scenes(monster_ids: Array) -> void:
 	if scene_paths.is_empty():
 		return
 	_track_level_scene_dependencies(scene_paths)
-	await _preload_paths_threaded(scene_paths)
+	await _preload_paths_threaded(scene_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	for path_value in scene_paths:
 		var path := str(path_value)
 		var scene = _resource_cache.get(path)
@@ -934,7 +999,10 @@ func preload_level_monster_scenes(monster_ids: Array) -> void:
 			_monster_scene_cache[path] = scene
 
 
-func prewarm_monster_scene_paths(scene_paths: Array) -> void:
+func prewarm_monster_scene_paths(scene_paths: Array, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var pending_paths: Array[String] = []
 	for path_value in scene_paths:
 		var path := str(path_value)
@@ -944,8 +1012,12 @@ func prewarm_monster_scene_paths(scene_paths: Array) -> void:
 	if pending_paths.is_empty():
 		return
 	_track_level_scene_dependencies(pending_paths)
-	await _preload_paths_threaded(pending_paths)
-	await _warm_scene_paths_over_frames(pending_paths, 1)
+	await _preload_paths_threaded(pending_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await _warm_scene_paths_over_frames(pending_paths, 1, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	for path in pending_paths:
 		var scene = _resource_cache.get(path)
 		if scene is PackedScene:
@@ -954,6 +1026,9 @@ func prewarm_monster_scene_paths(scene_paths: Array) -> void:
 
 
 func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
+	var request_generation := _runtime_generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var requested_monster_ids: Array = monster_ids.duplicate()
 
 	var unique_monster_ids: Array = []
@@ -980,17 +1055,28 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 		var textures_per_frame := 2 if OS.has_feature("mobile") else 5
 		if seen_monster_ids.has(3343):
 			textures_per_frame = 1
-		await preload_level_texture_paths(texture_paths, textures_per_frame)
+		await preload_level_texture_paths(texture_paths, textures_per_frame, request_generation)
+		if not is_runtime_generation_current(request_generation):
+			return
 
 	if seen_monster_ids.has(5):
 		MonsterBullet.warm_monster5_stream_images()
 	if seen_monster_ids.has(212):
 		for bullet_script in MONSTER_212_BULLET_SCRIPTS:
+			if not is_runtime_generation_current(request_generation):
+				return
 			bullet_script.prewarm_frames()
-			await get_tree().process_frame
+			var tree := get_tree()
+			if tree == null:
+				return
+			await tree.process_frame
+			if not is_runtime_generation_current(request_generation):
+				return
 	if seen_monster_ids.has(3077):
 		var ancestor_script: Script = load("res://Script/monster/wutai_earth_ancestor3077.gd")
 		await ancestor_script.prewarm_effects()
+		if not is_runtime_generation_current(request_generation):
+			return
 
 	var tiger_stage := 0
 	for monster_id in unique_monster_ids:
@@ -998,6 +1084,8 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 			tiger_stage = maxi(tiger_stage, monster_id - 1500)
 	if tiger_stage > 0:
 		await MonsterBullet.prewarm_pet_tiger_runtime(tiger_stage)
+		if not is_runtime_generation_current(request_generation):
+			return
 
 	var monster_scene_paths: Array[String] = []
 	for monster_id in unique_monster_ids:
@@ -1008,14 +1096,21 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 	for monster_id_value in unique_monster_ids:
 		for scene_path_value in LevelPreloadStore.dynamic_monster_scenes(int(monster_id_value)):
 			_append_unique_preload_path(bullet_scene_paths, str(scene_path_value))
-	await prewarm_monster_bullet_scene_paths(bullet_scene_paths)
-	await prewarm_monster_scene_paths(monster_scene_paths)
+	await prewarm_monster_bullet_scene_paths(bullet_scene_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await prewarm_monster_scene_paths(monster_scene_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 
 	for monster_id in unique_monster_ids:
 		_mark_level_monster_prewarmed(monster_id)
 
 
-func preload_level_texture_paths(texture_paths: Array, textures_per_frame: int = 5) -> void:
+func preload_level_texture_paths(texture_paths: Array, textures_per_frame: int = 5, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var unique_paths: Array = []
 	for path_value in texture_paths:
 		var path := str(path_value)
@@ -1025,8 +1120,10 @@ func preload_level_texture_paths(texture_paths: Array, textures_per_frame: int =
 		_track_level_resource(path)
 	if unique_paths.is_empty():
 		return
-	await _preload_paths_threaded(unique_paths)
-	await _warm_texture_rids_over_frames(unique_paths, maxi(1, textures_per_frame))
+	await _preload_paths_threaded(unique_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await _warm_texture_rids_over_frames(unique_paths, maxi(1, textures_per_frame), request_generation)
 
 
 func load_monster_bullet_scene(bullet_name: String) -> PackedScene:
@@ -1064,7 +1161,10 @@ func _cache_threaded_resource(path: String, resource: Resource) -> void:
 		_resource_cache[path] = resource
 
 
-func _preload_paths_threaded(paths: Array) -> void:
+func _preload_paths_threaded(paths: Array, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var request_paths: Array[String] = []
 	var seen_paths: Dictionary = {}
 	for path_value in paths:
@@ -1086,6 +1186,8 @@ func _preload_paths_threaded(paths: Array) -> void:
 	var batch_size := _get_threaded_preload_batch_size(request_paths.size())
 	var batch_start := 0
 	while batch_start < request_paths.size():
+		if not is_runtime_generation_current(request_generation):
+			return
 		var pending: Array[String] = []
 		var batch_end := mini(batch_start + batch_size, request_paths.size())
 		for index in range(batch_start, batch_end):
@@ -1102,6 +1204,8 @@ func _preload_paths_threaded(paths: Array) -> void:
 				var path := pending[i]
 				var status = ResourceLoader.load_threaded_get_status(path)
 				if status == ResourceLoader.THREAD_LOAD_LOADED:
+					if not is_runtime_generation_current(request_generation):
+						return
 					var resource = ResourceLoader.load_threaded_get(path)
 					_cache_threaded_resource(path, resource)
 					pending.remove_at(i)
@@ -1111,7 +1215,12 @@ func _preload_paths_threaded(paths: Array) -> void:
 					pending.remove_at(i)
 				i -= 1
 			if not pending.is_empty():
-				await get_tree().process_frame
+				var tree := get_tree()
+				if tree == null:
+					return
+				await tree.process_frame
+				if not is_runtime_generation_current(request_generation):
+					return
 		batch_start = batch_end
 
 
@@ -1121,9 +1230,14 @@ func _get_threaded_preload_batch_size(request_count: int) -> int:
 	return mini(request_count, 2 if OS.has_feature("mobile") else 4)
 
 
-func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2) -> void:
+func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var warmed_this_frame := 0
 	for path in paths:
+		if not is_runtime_generation_current(request_generation):
+			return
 		var scene_path := str(path)
 		if not _is_scene_resource_path(scene_path):
 			continue
@@ -1133,7 +1247,12 @@ func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2) -> void:
 			warmed_this_frame += 1
 			if warmed_this_frame >= per_frame:
 				warmed_this_frame = 0
-				await get_tree().process_frame
+				var tree := get_tree()
+				if tree == null:
+					return
+				await tree.process_frame
+				if not is_runtime_generation_current(request_generation):
+					return
 
 
 func _release_warm_audio_players(players: Array[AudioStreamPlayer]) -> void:
@@ -1146,10 +1265,16 @@ func _release_warm_audio_players(players: Array[AudioStreamPlayer]) -> void:
 	players.clear()
 
 
-func _warm_audio_streams_over_frames(paths: Array, per_frame: int = 2) -> void:
+func _warm_audio_streams_over_frames(paths: Array, per_frame: int = 2, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var players: Array[AudioStreamPlayer] = []
 	var batch_size := maxi(1, per_frame)
 	for path_value in paths:
+		if not is_runtime_generation_current(request_generation):
+			_release_warm_audio_players(players)
+			return
 		var stream := get_cached_audio(str(path_value))
 		if stream == null:
 			continue
@@ -1160,16 +1285,31 @@ func _warm_audio_streams_over_frames(paths: Array, per_frame: int = 2) -> void:
 		player.play()
 		players.append(player)
 		if players.size() >= batch_size:
-			await get_tree().process_frame
+			var tree := get_tree()
+			if tree == null:
+				_release_warm_audio_players(players)
+				return
+			await tree.process_frame
 			_release_warm_audio_players(players)
+			if not is_runtime_generation_current(request_generation):
+				return
 	if not players.is_empty():
-		await get_tree().process_frame
+		var tree := get_tree()
+		if tree == null:
+			_release_warm_audio_players(players)
+			return
+		await tree.process_frame
 		_release_warm_audio_players(players)
 
 
-func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6) -> void:
+func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var warmed_this_frame := 0
 	for path in paths:
+		if not is_runtime_generation_current(request_generation):
+			return
 		var texture := get_cached_texture(str(path))
 		if texture == null:
 			continue
@@ -1178,9 +1318,14 @@ func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6) -> void:
 		if warmed_this_frame >= per_frame:
 			warmed_this_frame = 0
 			if DisplayServer.get_name() == "headless":
-				await get_tree().process_frame
+				var tree := get_tree()
+				if tree == null:
+					return
+				await tree.process_frame
 			else:
 				await RenderingServer.frame_post_draw
+			if not is_runtime_generation_current(request_generation):
+				return
 
 
 func _get_damage_number_texture_paths() -> Array:
@@ -1207,6 +1352,9 @@ func _get_damage_number_texture_paths() -> Array:
 
 
 func preload_combat_hit_resources() -> void:
+	var request_generation := _runtime_generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	preload_damage_number_textures()
 	_cached_scene(&"hit_text", HIT_TEXT_PATH)
 	var damage_scene := _cached_scene(&"damage_text", DAMAGE_TEXT_PATH)
@@ -1225,7 +1373,7 @@ func preload_combat_hit_resources() -> void:
 	_seed_runtime_pool("mr_hurt", monster_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("role_be_hit", role_be_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("sound_player", sound_scene, COMBAT_HIT_SOUND_POOL_SIZE)
-	await _prewarm_combat_hit_rendering(monster_blood_scene)
+	await _prewarm_combat_hit_rendering(monster_blood_scene, request_generation)
 
 
 func _seed_runtime_pool(
@@ -1248,7 +1396,10 @@ func _seed_runtime_pool(
 		pool.append(node)
 
 
-func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene) -> void:
+func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var tree := get_tree()
 	if tree == null:
 		return
@@ -1330,6 +1481,10 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene) -> void:
 	await tree.process_frame
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
+	if not is_runtime_generation_current(request_generation):
+		if is_instance_valid(warm_root):
+			warm_root.queue_free()
+		return
 
 	if role_hit != null and is_instance_valid(role_hit):
 		role_hit.modulate = Color.WHITE
@@ -1449,38 +1604,70 @@ func is_archive_exit_scene(scene_path: String) -> bool:
 
 func begin_archive_session() -> void:
 	var role_id := _current_role_id()
-	if archive_session_active and archive_session_role_id == role_id:
+	if (
+		archive_session_active
+		and archive_session_role_id == role_id
+		and _archive_session_prewarm_in_progress
+		and _archive_session_prewarm_role_id != role_id
+	):
+		call_deferred("begin_archive_session")
+		return
+	if archive_session_active and archive_session_role_id == role_id and _archive_session_prewarm_role_id == role_id:
 		return
 	if archive_session_active and archive_session_role_id != role_id:
 		release_role_runtime_resources()
 	archive_session_active = true
 	archive_session_role_id = role_id
 	_archive_session_generation += 1
+	_advance_runtime_generation()
 	if _archive_session_prewarm_in_progress:
 		call_deferred("begin_archive_session")
 		return
 	_archive_session_prewarm_in_progress = true
+	_archive_session_prewarm_role_id = role_id
 	var generation := _archive_session_generation
-	await prewarm_permanent_small_ui_scenes()
-	if generation != _archive_session_generation or not archive_session_active:
+	var runtime_generation := _runtime_generation
+	await prewarm_permanent_small_ui_scenes(runtime_generation)
+	if (
+		generation != _archive_session_generation
+		or not archive_session_active
+		or not is_runtime_generation_current(runtime_generation)
+	):
 		_archive_session_prewarm_in_progress = false
+		_archive_session_prewarm_role_id = 0
 		return
-	await prewarm_skill_page_resources()
-	if generation != _archive_session_generation or not archive_session_active:
+	await prewarm_skill_page_resources(runtime_generation)
+	if (
+		generation != _archive_session_generation
+		or not archive_session_active
+		or not is_runtime_generation_current(runtime_generation)
+	):
 		_archive_session_prewarm_in_progress = false
+		_archive_session_prewarm_role_id = 0
 		return
-	await _prewarm_archive_role_resources(role_id)
-	if generation != _archive_session_generation or not archive_session_active:
+	await _prewarm_archive_role_resources(role_id, runtime_generation)
+	if (
+		generation != _archive_session_generation
+		or not archive_session_active
+		or not is_runtime_generation_current(runtime_generation)
+	):
 		_archive_session_prewarm_in_progress = false
+		_archive_session_prewarm_role_id = 0
 		return
 	_archive_session_prewarm_in_progress = false
+	_archive_session_prewarm_role_id = role_id
 
 
-func _prewarm_archive_role_resources(role_id: int) -> void:
+func _prewarm_archive_role_resources(role_id: int, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var role_paths: Array[String] = []
 	role_paths.append_array(get_current_role_equipment_preload_paths(role_id))
-	await _preload_paths_threaded(role_paths)
-	await prewarm_current_role_runtime_resources(role_id)
+	await _preload_paths_threaded(role_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await prewarm_current_role_runtime_resources(role_id, request_generation)
 
 
 func _role_scene_path(role_id: int) -> String:
@@ -1545,6 +1732,7 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 
 
 func end_archive_session() -> void:
+	_advance_runtime_generation()
 	if not archive_session_active and archive_session_role_id == 0:
 		return
 	_archive_session_generation += 1
@@ -1560,6 +1748,7 @@ func end_archive_session() -> void:
 	archive_session_active = false
 	archive_session_role_id = 0
 	_archive_session_prewarm_in_progress = false
+	_archive_session_prewarm_role_id = 0
 
 
 func _clear_runtime_pools() -> void:
@@ -1937,7 +2126,10 @@ func _collect_monster_bullet_scene_paths(monster_scene_paths: Array) -> Array:
 	return result
 
 
-func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
+func prewarm_monster_bullet_scene_paths(scene_paths: Array, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var pending_paths: Array[String] = []
 	for path_value in scene_paths:
 		var path := str(path_value)
@@ -1947,7 +2139,9 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
 	if pending_paths.is_empty():
 		return
 	_track_level_scene_dependencies(pending_paths)
-	await _preload_paths_threaded(pending_paths)
+	await _preload_paths_threaded(pending_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	var texture_paths: Array = []
 	var priority_texture_paths: Array = []
 	for scene_path in pending_paths:
@@ -1957,10 +2151,16 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
 			_track_level_resource(str(texture_path))
 		for index in range(mini(4, scene_texture_paths.size())):
 			_append_unique_preload_path(priority_texture_paths, str(scene_texture_paths[index]))
-	await _preload_paths_threaded(texture_paths)
+	await _preload_paths_threaded(texture_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	var textures_per_frame := 2 if OS.has_feature("mobile") else 5
-	await _warm_texture_rids_over_frames(priority_texture_paths, textures_per_frame)
-	await _warm_scene_paths_over_frames(pending_paths, 1)
+	await _warm_texture_rids_over_frames(priority_texture_paths, textures_per_frame, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await _warm_scene_paths_over_frames(pending_paths, 1, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	for path in pending_paths:
 		var scene = _resource_cache.get(path)
 		if scene is PackedScene:
@@ -2189,12 +2389,12 @@ func _fashion_texture_paths() -> Array[String]:
 	return paths
 
 
-func prewarm_sprite_frames_paths(paths: Array[String]) -> void:
-	await _preload_paths_threaded(paths)
+func prewarm_sprite_frames_paths(paths: Array[String], generation: int = -1) -> void:
+	await _preload_paths_threaded(paths, generation)
 
 
-func prewarm_texture_paths(paths: Array[String]) -> void:
-	await _preload_paths_threaded(paths)
+func prewarm_texture_paths(paths: Array[String], generation: int = -1) -> void:
+	await _preload_paths_threaded(paths, generation)
 
 
 func get_current_role_preload_paths() -> Array[String]:
@@ -2214,7 +2414,10 @@ func get_current_role_preload_paths() -> Array[String]:
 	return runtime_paths
 
 
-func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
+func prewarm_current_role_runtime_resources(role_id: int = 0, generation: int = -1) -> void:
+	var request_generation := _runtime_generation if generation < 0 else generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	if role_id <= 0:
 		role_id = _current_role_id()
 	if _prewarmed_role_id == role_id:
@@ -2241,14 +2444,29 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 	preload_paths.append_array(sprite_frames_paths)
 	preload_paths.append_array(texture_paths)
 	preload_paths.append_array(audio_paths)
-	await _preload_paths_threaded(preload_paths)
-	await _warm_scene_paths_over_frames(scene_paths, 1)
-	await prewarm_sprite_frames_paths(sprite_frames_paths)
-	await prewarm_texture_paths(texture_paths)
-	await _warm_audio_streams_over_frames(audio_paths, 2)
+	await _preload_paths_threaded(preload_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await _warm_scene_paths_over_frames(scene_paths, 1, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await prewarm_sprite_frames_paths(sprite_frames_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await prewarm_texture_paths(texture_paths, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
+	await _warm_audio_streams_over_frames(audio_paths, 2, request_generation)
+	if not is_runtime_generation_current(request_generation):
+		return
 	if role_id == 2 and equipped_skills.has("by"):
 		BING_YU_EFFECT_SCRIPT.prewarm_frames()
-		await get_tree().process_frame
+		var tree := get_tree()
+		if tree == null:
+			return
+		await tree.process_frame
+		if not is_runtime_generation_current(request_generation):
+			return
 	if role_id == 1 and (equipped_skills.has("hmz") or equipped_skills.has("hmz_ws")) and not special_effect_bullet:
 		special_effect_bullet = _load_scene("res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn")
 	var awakened: Dictionary = PlayerData.player_data.get(DataKeys.Skill.AWAKENED, {})
@@ -2267,8 +2485,10 @@ func prewarm_current_role_runtime_resources(role_id: int = 0) -> void:
 			CANG_MU_LONG_YUN_EFFECT_SCRIPT.preload_effect_data()
 		if equipped_skills.has("bylt"):
 			BI_LUO_TIAN_EFFECT_SCRIPT.prewarm_frames()
-	elif role_id == 5 and equipped_skills.has("ltjz"):
+	if role_id == 5 and equipped_skills.has("ltjz"):
 		LEI_TING_JIE_ZHEN_EFFECT_SCRIPT.prewarm_frames()
+	if not is_runtime_generation_current(request_generation):
+		return
 	_prewarmed_role_id = role_id
 
 
@@ -4252,6 +4472,9 @@ func _preload_sprite_frames_resource(path: String) -> void:
 
 
 func prewarm_active_pet_runtime_resources() -> void:
+	var request_generation := _runtime_generation
+	if not is_runtime_generation_current(request_generation):
+		return
 	var pet_info := get_active_pet_preload_data()
 	var pet_type := str(pet_info.get("type", ""))
 	if pet_type == "":
@@ -4317,6 +4540,8 @@ func prewarm_active_pet_runtime_resources() -> void:
 		PET_RABBIT_BULLET_SCRIPT.warm_pet_rabbit_frames(stage)
 	else:
 		await MonsterBullet.prewarm_pet_dragon_runtime(stage, bullet_scene)
+	if not is_runtime_generation_current(request_generation):
+		return
 	_prewarmed_pet_signature = pet_signature
 
 
@@ -4834,6 +5059,7 @@ func change_scene(target, force_loading_screen: bool = false) -> bool:
 		return false
 
 	_scene_request_generation += 1
+	_advance_runtime_generation()
 	var exiting_archive := is_archive_exit_scene(target_path)
 	if exiting_archive:
 		end_archive_session()
@@ -5243,7 +5469,12 @@ func check_combo_milestone(current_combo: int):
 
 
 func _emit_combo_milestone_deferred(current_combo: int) -> void:
-	await get_tree().process_frame
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree():
+		return
 	_pending_combo_milestones.erase(current_combo)
 	combo_milestone_reached.emit(current_combo)
 

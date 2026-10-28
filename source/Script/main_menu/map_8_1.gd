@@ -86,6 +86,11 @@ func _align_right_side_buttons(fit_scale: float) -> void:
 		)
 
 
+func _exit_tree() -> void:
+	_cleanup_map_shadow_rects()
+	Global.release_map_visual_resources(self)
+
+
 func _cleanup_map_shadow_rects() -> void:
 	var parent := get_parent()
 	if parent == null:

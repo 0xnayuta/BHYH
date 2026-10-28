@@ -134,7 +134,7 @@ flowchart TD
 `Global.change_scene(target, force_loading_screen=false) -> bool` 是规范场景切换入口：
 
 1. 先校验目标：非空、`.tscn`/`.scn`，且 `ResourceLoader.exists` 为真；空目标或缺失目标直接返回 `false`，不清理缓存、不写 `target_scene`；
-2. 校验通过后递增 `_scene_request_generation`，使旧加载页/预载回调失效；`ResourceLoader` 无公开线程取消 API，取消语义是停止轮询、写回与提交，后台结果丢弃；
+2. 校验通过后递增 `_scene_request_generation` 与 `_runtime_generation`，使旧加载页/预载回调失效；`ResourceLoader` 无公开线程取消 API，取消语义是停止轮询、写回与提交，后台结果丢弃；
 3. 若目标是“退出存档”场景，结束存档会话；
 4. 清理临时 UI、UI 运行时缓存与关卡资源缓存；
 5. 若目标是已预载且缓存的 `res://Scene/level/*`（`level_hdzm.tscn` 除外），写入 `target_scene = target` 后直接 `change_scene_to_packed`，返回引擎调用结果；
@@ -367,10 +367,11 @@ classDiagram
 - `FrameSequence` 的 `asset_id` 是内容身份，`default_fps/default_loop/default_hold_last_frame/default_prefetch_frames` 只是默认播放值；`FrameSequenceCatalog` 以 `asset_id` 为键；
 - `StreamedPngEffect.configure_playback()` 允许实例覆盖 fps/loop/hold/prefetch，未设置时继承资源默认值；同一资产可被不同策略复用，不再为策略生成重复资源；
 - `FrameSequenceStore.directory_asset_id()` 固定 `dir/<Art 相对路径>` 映射，批量目录资产在构建期与运行时使用同一确定性规则；
-- `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；进程关闭由 `Global._exit_tree` 做最终收尾；
+- `FrameTextureRequests` 对纹理请求去重并持有租约，播放器销毁后跨帧取回未完成请求结果；`_closing` 阻止进程关闭后继续轮询；进程关闭由 `Global._exit_tree` 做最终收尾；
 - `prewarm_sequence` 预热真实纹理并保持引用，关卡缓存清理释放预热租约；Catalog 元数据加载不再称为纹理预热；
 - `WutaiMinghaiProjectile` 主视觉与 impact 显式声明 SpriteFrames/FrameSequence/NONE；FrameSequence 只接受 `frame_asset_id`/`impact_frame_asset_id`，声明错误不改走其它后端；
-- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合、怪物弹体场景、别名场景覆盖、动态纹理文件与额外场景由构建期生成；加载页不在运行时解析 `.gd` / `.tscn` 源文本，也不再扫描动态纹理目录或做 ID→ID 映射。
+- `LevelPreloadCatalog` + `LevelPreloadStore`：关卡首波、完整怪物 ID 集合、怪物弹体场景、别名场景覆盖、动态纹理文件与额外场景由构建期生成；加载页不在运行时解析 `.gd` / `.tscn` 源文本，也不再扫描动态纹理目录或做 ID→ID 映射；
+- `Global._runtime_generation`：场景切换、档案会话开始/结束与应用退出递增；角色/关卡/纹理/UI 异步预热在写回缓存前检查代次，过期结果丢弃；`_exit_tree` 统一结束档案、角色/战斗/UI 缓存、对象池、预载槽与纹理请求；
 
 仍然存在的边界：
 
@@ -458,7 +459,7 @@ classDiagram
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | [Phase 15 当前计划](../roadmap/current-iteration.md)：先完成调用面/所有权矩阵，再收敛场景入口、预载交接与退出生命周期 |
+| Global 缓存/池/场景流与资源请求交织 | [Phase 15 当前计划](../roadmap/current-iteration.md)：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期已收口到 15-4D；15-4E 补静态守卫 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
 

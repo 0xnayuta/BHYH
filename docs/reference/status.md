@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15-4C 临时 UI 完成；Phase 15-4D/15-4E 未启动）
+> 最后更新：2026-10-28（Phase 15-4D 退出与后台完成；Phase 15-4E 未启动）
 
 ---
 
@@ -178,6 +178,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 15-4A 缓存作用域 | 定义构建期只读、永久、关卡、战斗、UI、共享运行时六个作用域，登记所有者、容量/驻留依据、清理事件与观测键；新增 `Global.get_cache_scope_snapshot()`（租约/预载槽/资源计数/永久 UI/角色宠物标记/池大小与上限/UI 实例计数）；租约探针验证快照、容量元数据、租约与战斗池清理，加载守卫验证 UI 实例登记/释放与 Catalog 副本。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.12s / 选择态 14.67s / 租约 2.91s / 加载守卫 4.30s / 法宝 6.99s / 角色技能 3.84s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（694.3s，`level_1` 23.38s） | Phase 15-4A 完成，Phase 15-4B/15-4C/15-4D/15-4E 未启动；六类作用域均有 owner/容量依据/清理事件/观测键。未执行 release 与切换中退出验证 |
 | 2026-10-28 Phase 15-4B 对象池 | 确认 `RuntimePool` 池根属于 `Global`，跨关卡/重战保留、档案结束清空；容量 80/32/24/32、预置 12/16/16/6，池满释放；`_get_pool_root`/`_take_pooled_node`/`_store_pooled_node` 拒绝排队删除节点；退出清空活动音效映射；`get_cache_scope_snapshot().combat` 增加池根/活动计数。租约探针验证池容量、池根与退出清理。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.32s / 选择态 15.07s / 租约 2.91s / 加载守卫 4.33s / 法宝 7.43s / 角色技能 3.87s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（687.2s，`level_1` 25.35s） | Phase 15-4B 完成，Phase 15-4C/15-4D/15-4E 未启动；池根、容量、复用重置与关卡/重战/档案退出作用域已登记。未执行 release 与切换中退出验证 |
 | 2026-10-28 Phase 15-4C 临时 UI | 新增 `_transient_ui_instances` 与 `register_transient_ui(node, close_method, scene_path)`；基础任务、神秘商店、游戏公告工厂显式登记 `_on_close_pressed`；`cleanup_transient_ui` 先执行关闭回调，再清理弹出层/未登记名称兜底；永久小 UI 路径跳过，递归清理有 active 守卫；`get_cache_scope_snapshot().ui` 增加 `transient_instance_count`。`load-guard` 验证关闭回调、注册释放、名称兜底与永久 UI 保留。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.04s / 选择态 15.02s / 租约 2.81s / 加载守卫 4.63s / 法宝 6.95s / 角色技能 3.86s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（730.7s，`level_1` 24.58s；`level_51` 单次瞬态失败后重试通过） | Phase 15-4C 完成，Phase 15-4D/15-4E 未启动；显式登记优先、名称兜底保留、永久 UI 不清理。未执行 release 与切换中退出验证 |
+| 2026-10-28 Phase 15-4D 退出与后台 | 新增 `_runtime_generation` 与 `is_runtime_generation_current`；`change_scene`、档案会话开始/结束与 `_exit_tree` 递增代次；角色/关卡/纹理/UI 异步预热在写回缓存前检查代次，过期结果丢弃。`Global._exit_tree` 统一结束档案、角色/战斗/UI 缓存、对象池、预载槽，并关闭 `FrameSequenceStore`/`FrameTextureRequests`；`FrameTextureRequests._closing` 阻止退出后轮询。`main_menu` 与读取存档界面的 HTTPRequest 退出取消并增加 `is_inside_tree` 守卫；`map_6` 至 `map_9_1` 补齐地图视觉释放。租约探针新增运行时代次失效与过期预载跳过检查。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.88s / 选择态 16.82s / 租约 3.59s / 加载守卫 5.71s / 法宝 7.58s / 角色技能 4.80s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（723.1s，`level_1` 25.08s）；后续 2/4 并发复跑命中 `level_58` 夹具 45s 加载阈值（48~50s），`level_58` 单关冒烟 PASS（28.45s，0/0） | Phase 15-4D 完成，Phase 15-4E 未启动；过期异步停止写回、退出清理与 HTTP 取消已落地。未执行 release 重验与切换中退出验证 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

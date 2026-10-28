@@ -44,6 +44,12 @@ func _ready() -> void:
 	_update_cloud_auth_buttons()
 
 
+func _exit_tree() -> void:
+	if is_instance_valid(cloud_request):
+		cloud_request.cancel_request()
+	_cleanup_cloud_upload_files()
+
+
 func _restore_cloud_session() -> void:
 	cloud_user_id = Global.cloud_save_user_id
 	cloud_access_token = Global.cloud_save_access_token
@@ -170,6 +176,8 @@ func _update_cloud_auth_buttons() -> void:
 func _on_cloud_request_completed(
 	result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray
 ) -> void:
+	if not is_inside_tree():
+		return
 	var action := cloud_request_action
 	cloud_request_action = ""
 	if action == "upload":

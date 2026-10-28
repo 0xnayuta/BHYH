@@ -1494,6 +1494,8 @@ func _preload_level_resources() -> void:
 func _prepare_level_runtime_resources() -> void:
 	_apply_monster_count_multiplier()
 	await _preload_level_resources()
+	if not is_inside_tree():
+		return
 	_request_stage_resource_preload(2)
 	if create_control != null and is_instance_valid(create_control):
 		create_control.start()
