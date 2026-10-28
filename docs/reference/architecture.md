@@ -135,7 +135,7 @@ flowchart TD
 
 1. 先校验目标：非空、`.tscn`/`.scn`，且 `ResourceLoader.exists` 为真；空目标或缺失目标直接返回 `false`，不清理缓存、不写 `target_scene`；
 2. 校验通过后递增 `_scene_request_generation` 与 `_runtime_generation`，使旧加载页/预载回调失效；`ResourceLoader` 无公开线程取消 API，取消语义是停止轮询、写回与提交，后台结果丢弃；
-3. 若目标是“退出存档”场景，结束存档会话；
+3. 先关闭临时 UI（让面板关闭保存走完），若目标是“退出存档”场景再结束存档会话；
 4. 清理临时 UI、UI 运行时缓存与关卡资源缓存；
 5. 若目标是已预载且缓存的 `res://Scene/level/*`（`level_hdzm.tscn` 除外），写入 `target_scene = target` 后直接 `change_scene_to_packed`，返回引擎调用结果；
 6. 否则写入 `target_scene = target`，切换到 `load_scene.tscn`，返回引擎调用结果。
@@ -281,7 +281,7 @@ classDiagram
 
 ### 5.3 存档读写
 
-- `MemoryClass.load_game`：读取加密档 → 取 `.bak` 备份 → 合并到 `player_data` → 执行 `ensure_*` / 有限的数据规范化与退役清理 → 载入双人档案；
+- `MemoryClass.load_game`：读取加密档 → 取 `.bak` 备份 → 按 `status` 拒绝缺失/空/损坏/无效档 → 重置内存档 → 合并到 `player_data` → 执行 `ensure_*` / 有限的数据规范化与退役清理 → 载入双人档案；返回 `{ok, status, archive_number, message}`；
 - `safe_write_archive`：写入 `.tmp` → 读取校验 → 备份旧档到 `.bak` → 原子替换；
 - 后台保存使用线程队列，退出前 `flush_pending_saves`；
 - `_prepare_player_save_data()` 先 `LocalCoop.suspend_player_view()` 恢复 1P 主视图，再生成快照并写入 2P profile；此前有交换时最后恢复视图。不能在 2P 视图激活时无保护地直接序列化 `PlayerData.player_data`。

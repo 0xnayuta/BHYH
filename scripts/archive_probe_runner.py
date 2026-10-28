@@ -37,6 +37,7 @@ EXPECTED_ERROR_MARKERS = (
     "拒绝保存过期档案身份",
     "保存前补全后置条件不满足",
     "magic != 0x43454447",
+    "change_scene rejected level target without archive session",
 )
 
 

@@ -1191,7 +1191,7 @@ func _move_equipped_item_to_backpack(slot_name: String) -> void:
 
 
 func _save_secret_progress() -> void:
-	if str(Global.cd_path).is_empty():
+	if not Global.is_archive_session_active():
 		MemoryClass.main_bc()
 		return
 	MemoryClass.request_save("game_announcement")

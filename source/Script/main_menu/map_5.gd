@@ -182,7 +182,7 @@ func _ready() -> void:
 		PlayerData.ensure_special_dungeon_progress()
 	PlayerData.player_data["Map_num"] = 5
 	PlayerData.player_data["HeavenMap_num"] = 5
-	if not Global.cd_path.is_empty():
+	if Global.is_archive_session_active():
 		MemoryClass.request_save("map_enter")
 
 	Global.is_mpo = false

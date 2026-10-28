@@ -43,7 +43,7 @@ func _run() -> void:
 	RoleProp.set_basic_prop()
 	RoleProp.roleprop.Hp = 999999999
 	RoleProp.current_hp = 999999999
-	Global.cd_path = ""
+	Global.set_cd_path("")
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INVINCIBLE, true)
 	await _check_bxgh(checks)
 	await _check_stz(checks)
@@ -76,7 +76,7 @@ func _check_stz(checks: Dictionary) -> void:
 
 func _check_selection(scene_path: String, expected_id: int, background_name: String = "") -> bool:
 	var label := "%s/%d" % [scene_path.get_file(), expected_id]
-	Global.change_scene(scene_path)
+	Global.change_scene(scene_path, false, false)
 	var level: Node = await _await_level(scene_path)
 	if level == null:
 		_fail(label + ": 关卡加载超时")

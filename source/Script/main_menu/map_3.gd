@@ -223,7 +223,7 @@ func _ready():
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = 3
 	PlayerData.player_data["HeavenMap_num"] = 3
-	if not Global.cd_path.is_empty():
+	if Global.is_archive_session_active():
 		MemoryClass.request_save("map_enter")
 
 
@@ -232,7 +232,7 @@ func _sync_special_button_layer() -> void:
 		var node := get_node_or_null(node_path) as CanvasItem
 		if node != null:
 			node.z_index = 0
-	if not Global.cd_path.is_empty() and Global.cd_path.contains("Ar_"):
+	if Global.is_archive_session_active():
 		MemoryClass.request_save("map_3_special")
 	Global.is_mpo = false
 	Global.is_ice = false

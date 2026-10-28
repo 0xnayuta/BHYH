@@ -116,8 +116,9 @@ func _run() -> void:
 	checks["refight_lease_cleared"] = not bool(Global.get_level_resource_lease_snapshot().get("active", true))
 	Global.release_cached_texture(SHARED_TEXTURE)
 
-	Global.archive_session_active = true
-	Global.archive_session_role_id = 1
+	Global.set_cd_path("user://MyAr_1.json")
+	PlayerData.player_data["Myself"] = 1
+	checks["session_bound"] = Global.bind_archive_session()
 	var exit_lease := Global.begin_level_resource_lease(TARGET_SCENE_2)
 	var exit_owned := PlaceholderTexture2D.new()
 	var exit_shared := PlaceholderTexture2D.new()

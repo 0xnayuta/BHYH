@@ -262,8 +262,8 @@ func _exit_tree() -> void:
 	_advance_runtime_generation()
 	_scene_request_generation += 1
 	_archive_session_generation += 1
-	archive_session_active = false
-	archive_session_role_id = 0
+	_archive_session_prewarm_token += 1
+	_archive_session = ArchiveSession.new()
 	_archive_session_prewarm_in_progress = false
 	_archive_session_prewarm_role_id = 0
 	_prewarmed_role_id = 0
@@ -359,19 +359,22 @@ var most_lianji: int = 0
 var last_prop_hp: float
 var total_role_hurt: int
 var last_level_path: String
-var cd_path: String = ""
+var _cd_path: String = ""
 
 
-## 档案身份唯一写入口：切换档案时先 flush 待写任务，再递增会话代次。
+## 档案身份唯一写入口：切换档案时先 flush 待写任务，再结束旧会话并递增身份纪元。
 ## 返回 flush 是否成功；调用方可用返回值提示用户，但路径切换本身仍然生效。
 func set_cd_path(path: String) -> bool:
 	var next_path: String = str(path).strip_edges()
-	if next_path == cd_path:
+	if next_path == _cd_path:
 		return true
 	var flushed := true
 	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
 		flushed = bool(MemoryClass.flush_pending_saves())
-	cd_path = next_path
+	if is_archive_session_active():
+		# 路径与会话不允许并存不同档案：切换路径即撤销旧会话上下文。
+		end_archive_session()
+	_cd_path = next_path
 	# 身份纪元只随档案路径变化；会话开始/结束不应让同一档案的待写任务失效。
 	_archive_identity_epoch += 1
 	_advance_runtime_generation()
@@ -379,7 +382,28 @@ func set_cd_path(path: String) -> bool:
 
 
 func get_cd_path() -> String:
-	return cd_path
+	return _cd_path
+
+
+## 当前档案会话的只读快照；未建立时返回 inactive 对象。
+func get_archive_session() -> ArchiveSession:
+	return _archive_session
+
+
+func is_archive_session_active() -> bool:
+	return _archive_session != null and _archive_session.is_active()
+
+
+func get_archive_session_path() -> String:
+	return _archive_session.get_archive_path() if is_archive_session_active() else ""
+
+
+func get_archive_session_archive_number() -> int:
+	return _archive_session.get_archive_number() if is_archive_session_active() else 0
+
+
+func get_archive_session_role_id() -> int:
+	return _archive_session.get_role_id() if is_archive_session_active() else 0
 
 
 func get_archive_session_generation() -> int:
@@ -440,10 +464,10 @@ var _current_role_body_texture_path: String = ""
 var _current_role_equipment_texture_path: String = ""
 var _all_hero_skill_resources_preloaded: bool = false
 var _prewarmed_role_id: int = 0
-var archive_session_active: bool = false
-var archive_session_role_id: int = 0
+var _archive_session: ArchiveSession = ArchiveSession.new()
 var _archive_session_prewarm_in_progress: bool = false
 var _archive_session_prewarm_role_id: int = 0
+var _archive_session_prewarm_token: int = 0
 var _archive_session_generation: int = 0
 var _archive_identity_epoch: int = 0
 var _runtime_generation: int = 0
@@ -1633,60 +1657,91 @@ func is_archive_exit_scene(scene_path: String) -> bool:
 	)
 
 
-func begin_archive_session() -> void:
+## 同步建立会话：校验当前路径与角色，路径或角色变化时递增会话代次。
+## 不预热资源；需要预热的入口使用 begin_archive_session()。
+func bind_archive_session() -> bool:
+	var path: String = _cd_path.strip_edges()
+	var archive_number := 0
+	if MemoryClass != null:
+		archive_number = MemoryClass.archive_number_from_path(path)
+	if archive_number <= 0:
+		# 前置条件不满足属正常调用结果：由调用方决定提示，不产生运行期告警。
+		return false
 	var role_id := _current_role_id()
-	if (
-		archive_session_active
-		and archive_session_role_id == role_id
-		and _archive_session_prewarm_in_progress
-		and _archive_session_prewarm_role_id != role_id
-	):
-		call_deferred("begin_archive_session")
-		return
-	if archive_session_active and archive_session_role_id == role_id and _archive_session_prewarm_role_id == role_id:
-		return
-	if archive_session_active and archive_session_role_id != role_id:
+	if role_id < 1 or role_id > 7:
+		return false
+	if _archive_session.matches(path, role_id):
+		return true
+	if is_archive_session_active() and _archive_session.get_role_id() != role_id:
 		release_role_runtime_resources()
-	archive_session_active = true
-	archive_session_role_id = role_id
 	_archive_session_generation += 1
+	_archive_session = ArchiveSession.new(_archive_session_generation, archive_number, role_id, path)
 	_advance_runtime_generation()
+	return true
+
+
+## 建立会话并按需预热；prewarm=false 时只绑定会话（夹具与无渲染入口使用）。
+func begin_archive_session(prewarm: bool = true) -> bool:
+	if not bind_archive_session():
+		return false
+	if not prewarm:
+		return true
 	if _archive_session_prewarm_in_progress:
-		call_deferred("begin_archive_session")
-		return
+		if _archive_session_prewarm_role_id == _archive_session.get_role_id():
+			return true
+		# 等待进行中的预热结束，避免两个协程同时写缓存；最多等 600 帧。
+		var waited := 0
+		while _archive_session_prewarm_in_progress and waited < 600:
+			if get_tree() == null:
+				return false
+			await get_tree().process_frame
+			waited += 1
+			if not is_archive_session_active():
+				return false
+		if not is_archive_session_active():
+			return false
+	if _archive_session_prewarm_role_id == _archive_session.get_role_id():
+		return true
+	_archive_session_prewarm_token += 1
+	var prewarm_token := _archive_session_prewarm_token
 	_archive_session_prewarm_in_progress = true
-	_archive_session_prewarm_role_id = role_id
+	_archive_session_prewarm_role_id = _archive_session.get_role_id()
 	var generation := _archive_session_generation
+	var role_id := _archive_session.get_role_id()
 	var runtime_generation := _runtime_generation
 	await prewarm_permanent_small_ui_scenes(runtime_generation)
-	if (
-		generation != _archive_session_generation
-		or not archive_session_active
-		or not is_runtime_generation_current(runtime_generation)
-	):
-		_archive_session_prewarm_in_progress = false
-		_archive_session_prewarm_role_id = 0
-		return
+	if not _is_archive_session_current(generation, role_id, runtime_generation):
+		_finish_archive_prewarm(prewarm_token)
+		return false
 	await prewarm_skill_page_resources(runtime_generation)
-	if (
-		generation != _archive_session_generation
-		or not archive_session_active
-		or not is_runtime_generation_current(runtime_generation)
-	):
-		_archive_session_prewarm_in_progress = false
-		_archive_session_prewarm_role_id = 0
-		return
+	if not _is_archive_session_current(generation, role_id, runtime_generation):
+		_finish_archive_prewarm(prewarm_token)
+		return false
 	await _prewarm_archive_role_resources(role_id, runtime_generation)
-	if (
-		generation != _archive_session_generation
-		or not archive_session_active
-		or not is_runtime_generation_current(runtime_generation)
-	):
+	if not _is_archive_session_current(generation, role_id, runtime_generation):
+		_finish_archive_prewarm(prewarm_token)
+		return false
+	if prewarm_token == _archive_session_prewarm_token:
 		_archive_session_prewarm_in_progress = false
-		_archive_session_prewarm_role_id = 0
+		_archive_session_prewarm_role_id = role_id
+	return true
+
+
+func _is_archive_session_current(generation: int, role_id: int, runtime_generation: int) -> bool:
+	return (
+		generation == _archive_session_generation
+		and is_archive_session_active()
+		and _archive_session.get_role_id() == role_id
+		and is_runtime_generation_current(runtime_generation)
+	)
+
+
+func _finish_archive_prewarm(prewarm_token: int) -> void:
+	# 仅清理本次预热的标记，避免取消中的旧协程清掉新会话的预热状态。
+	if prewarm_token != _archive_session_prewarm_token:
 		return
 	_archive_session_prewarm_in_progress = false
-	_archive_session_prewarm_role_id = role_id
+	_archive_session_prewarm_role_id = 0
 
 
 func _prewarm_archive_role_resources(role_id: int, generation: int = -1) -> void:
@@ -1764,9 +1819,13 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 
 func end_archive_session() -> void:
 	_advance_runtime_generation()
-	if not archive_session_active and archive_session_role_id == 0:
+	if not is_archive_session_active():
 		return
 	_archive_session_generation += 1
+	_archive_session_prewarm_token += 1
+	_archive_session = ArchiveSession.new()
+	_archive_session_prewarm_in_progress = false
+	_archive_session_prewarm_role_id = 0
 	clear_combat_runtime_cache()
 
 	HMZ_AWAKEN_EFFECT_SCRIPT.clear_cached_data()
@@ -1776,10 +1835,6 @@ func end_archive_session() -> void:
 	ROLE4_POISON_ARRAY_AWAKEN_EFFECT_SCRIPT.clear_cached_data()
 	STREAMING_ROLE_BULLET_SCRIPT.clear_cached_frames()
 	MIRROR_SCRIPT.clear_cached_frames()
-	archive_session_active = false
-	archive_session_role_id = 0
-	_archive_session_prewarm_in_progress = false
-	_archive_session_prewarm_role_id = 0
 
 
 func _clear_runtime_pools() -> void:
@@ -3336,7 +3391,7 @@ func release_ui_runtime_cache(release_permanent: bool = false) -> void:
 			and (release_permanent or (value as PackedScene).resource_path not in PERMANENT_SMALL_UI_SCENE_PATHS)
 		):
 			set(property_name, null)
-	if release_permanent or not archive_session_active:
+	if release_permanent or not is_archive_session_active():
 		_erase_cached_paths_by_prefix(
 			_texture_cache,
 			[
@@ -3598,6 +3653,9 @@ func sync_level_drop_pro_data(level_info: Dictionary) -> void:
 
 
 func _enter_level_without_info(parent, path):
+	if str(path).begins_with("res://Scene/level/") and not is_archive_session_active():
+		add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
+		return null
 	if path == "res://Scene/level/level_llbt.tscn":
 		return addllbt_challenge(parent, Vector2(0, 0))
 	if not str(path).begins_with("res://"):
@@ -3607,6 +3665,9 @@ func _enter_level_without_info(parent, path):
 
 
 func add_level_info(parent, Name, position, path):
+	if not is_archive_session_active():
+		add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
+		return null
 	current_level = Name
 	var show_level_info := bool(MainSet.set_data.get("LevelInfo", true))
 	if (
@@ -5079,10 +5140,13 @@ func add_main_backpack(parent, position):
 	return target
 
 
-func change_scene(target, force_loading_screen: bool = false) -> bool:
+func change_scene(target, force_loading_screen: bool = false, require_archive_session: bool = true) -> bool:
 	var target_path := str(target)
 	if not _is_valid_scene_change_target(target_path):
 		push_warning("change_scene rejected invalid target: %s" % target_path)
+		return false
+	if require_archive_session and target_path.begins_with("res://Scene/level/") and not is_archive_session_active():
+		push_warning("change_scene rejected level target without archive session: %s" % target_path)
 		return false
 
 	var tree := get_tree()
@@ -5092,9 +5156,10 @@ func change_scene(target, force_loading_screen: bool = false) -> bool:
 	_scene_request_generation += 1
 	_advance_runtime_generation()
 	var exiting_archive := is_archive_exit_scene(target_path)
+	# 先让面板关闭保存走完，再撤销会话上下文；end 之后的保存请求一律拒绝。
+	cleanup_transient_ui()
 	if exiting_archive:
 		end_archive_session()
-	cleanup_transient_ui()
 	release_ui_runtime_cache(exiting_archive)
 
 	clear_level_resource_cache()

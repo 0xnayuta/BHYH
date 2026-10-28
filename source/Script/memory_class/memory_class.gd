@@ -34,11 +34,20 @@ var _failed_background_saves: Dictionary = {}
 var _save_flush_in_progress := false
 
 
-func request_background_save(path: String) -> bool:
-	if _archive_number_from_path(path) <= 0:
+## 后台保存：路径缺省取当前会话档案；调用方不能借路径参数越过会话身份。
+func request_background_save(path: String = "") -> bool:
+	if not Global.is_archive_session_active():
+		last_save_error = "no_archive_session"
+		return false
+	var session_path: String = Global.get_archive_session_path().strip_edges()
+	var archive_path: String = session_path if str(path).strip_edges() == "" else str(path).strip_edges()
+	if archive_path != session_path:
+		last_save_error = "stale_archive_identity"
+		return false
+	if archive_number_from_path(archive_path) <= 0:
 		last_save_error = "invalid_archive_path"
 		return false
-	if not is_archive_identity_current(path, Global.get_archive_identity_epoch()):
+	if not is_archive_identity_current(archive_path, Global.get_archive_identity_epoch()):
 		last_save_error = "stale_archive_identity"
 		return false
 	var snapshot := _prepare_player_save_data()
@@ -48,14 +57,14 @@ func request_background_save(path: String) -> bool:
 	if password.is_empty():
 		return false
 	var job := {
-		"path": path,
+		"path": archive_path,
 		"data": snapshot,
 		"password": password,
 		"generation": Global.get_archive_identity_epoch(),
 	}
-	_failed_background_saves.erase(path)
+	_failed_background_saves.erase(archive_path)
 
-	_pending_background_saves[path] = job
+	_pending_background_saves[archive_path] = job
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process(true)
 	_start_next_background_save()
@@ -103,7 +112,7 @@ func _complete_background_save(job: Dictionary, success: bool) -> void:
 	if success:
 		_failed_background_saves.erase(path)
 		if is_instance_valid(MainSet):
-			_set_archive_time(_archive_number_from_path(path), str(job["data"][ARCHIVE_TIME_KEY]))
+			_set_archive_time(archive_number_from_path(path), str(job["data"][ARCHIVE_TIME_KEY]))
 
 	elif not _pending_background_saves.has(path):
 		_failed_background_saves[path] = job
@@ -194,23 +203,32 @@ func check_out_time():
 						return true
 
 
-func load_game(路径) -> bool:
+## 读档入口：返回显式结果，调用方不再用 bool 推断“空档/损坏/成功”。
+## status: loaded / missing / empty / unreadable / invalid / invalid_path
+func load_game(路径) -> Dictionary:
 	var path: String = str(路径)
+	var archive_number := archive_number_from_path(path)
+	if archive_number <= 0:
+		return _archive_load_result(false, "invalid_path", archive_number)
 	var read_result: Dictionary = _read_encrypted_dictionary_compatible(path, keys)
 	if not bool(read_result.get("ok", false)):
-		return false
+		return _archive_load_result(false, "unreadable", archive_number)
 	var archive_data_value: Variant = read_result.get("data", {})
-	if archive_data_value is Dictionary:
-		var archive_data: Dictionary = archive_data_value.duplicate(true)
-		if not archive_data.is_empty():
-			if not _is_valid_player_archive_data(archive_data):
-				push_error("拒绝读取无效的玩家存档数据：%s" % path)
-				return false
-			archive_data.erase(ARCHIVE_TIME_KEY)
-			player_data["已获取装备列表"] = []
-			LocalCoop.clear_runtime()
-			player_data.erase(LocalCoop.SAVE_KEY)
-			_player.merge(archive_data, true)
+	var archive_data: Dictionary = archive_data_value if archive_data_value is Dictionary else {}
+	if archive_data.is_empty():
+		var empty_status := "missing" if bool(read_result.get("missing", false)) else "empty"
+		return _archive_load_result(false, empty_status, archive_number)
+	if not _is_valid_player_archive_data(archive_data):
+		push_error("拒绝读取无效的玩家存档数据：%s" % path)
+		return _archive_load_result(false, "invalid", archive_number)
+	var clean_data: Dictionary = archive_data.duplicate(true)
+	clean_data.erase(ARCHIVE_TIME_KEY)
+	# 读档前重置内存档，避免同一进程连续读两档时残留上一档的键。
+	remove_play_data()
+	player_data["已获取装备列表"] = []
+	LocalCoop.clear_runtime()
+	player_data.erase(LocalCoop.SAVE_KEY)
+	_player.merge(clean_data, true)
 	PlayerData.normalize_soul()
 	PlayerData.migrate_consumables_from_dj_to_xhp()
 	PlayerData.ensure_shengu_slot()
@@ -234,7 +252,26 @@ func load_game(路径) -> bool:
 	if PlayerData.has_method("ensure_shared_pet_backpack"):
 		PlayerData.ensure_shared_pet_backpack()
 	LocalCoop.load_profile()
-	return true
+	var result := _archive_load_result(true, "loaded", archive_number)
+	if bool(read_result.get("recovered_from_backup", false)):
+		result["recovered_from_backup"] = true
+	return result
+
+
+func _archive_load_result(ok: bool, status: String, archive_number: int) -> Dictionary:
+	var message := ""
+	match status:
+		"missing":
+			message = "存档不存在，请新建存档。"
+		"empty":
+			message = "存档内容为空，请新建存档。"
+		"unreadable":
+			message = "存档读取失败，文件可能已损坏。"
+		"invalid":
+			message = "存档数据不完整或版本不兼容，无法读取。"
+		"invalid_path":
+			message = "存档路径无效。"
+	return {"ok": ok, "status": status, "archive_number": archive_number, "message": message}
 
 
 func peek_archive_data(路径) -> Dictionary:
@@ -280,9 +317,15 @@ var keys = "zmxybhyh" + OS.get_unique_id() + "v1.1"
 ## 统一保存入口：业务只提交保存意图，路径与失败结果由持久化边界处理。
 ## reason 仅用于失败诊断，不参与路径解析或档案内容。
 func request_save(reason: String = "") -> bool:
-	var archive_path: String = Global.get_cd_path().strip_edges()
-	if _archive_number_from_path(archive_path) <= 0:
+	if not Global.is_archive_session_active():
+		last_save_error = "no_archive_session"
+		return false
+	var archive_path: String = Global.get_archive_session_path().strip_edges()
+	if archive_number_from_path(archive_path) <= 0:
 		last_save_error = "invalid_archive_path"
+		return false
+	if archive_path != Global.get_cd_path().strip_edges():
+		last_save_error = "stale_archive_identity"
 		return false
 	if save_game(archive_path):
 		return true
@@ -290,17 +333,17 @@ func request_save(reason: String = "") -> bool:
 	return false
 
 
-## 会话身份是否仍然有效：路径、档案编号与会话代次必须同时匹配。
+## 会话身份是否仍然有效：路径与身份纪元必须同时匹配。
 func is_archive_identity_current(path: String, generation: int) -> bool:
 	if generation < 0 or generation != Global.get_archive_identity_epoch():
 		return false
-	return _archive_number_from_path(Global.get_cd_path().strip_edges()) == _archive_number_from_path(path)
+	return Global.get_cd_path().strip_edges() == str(path).strip_edges()
 
 
 func save_game(path: String) -> bool:
 	flush_pending_saves()
 	var archive_path: String = str(path)
-	var archive_number: int = _archive_number_from_path(archive_path)
+	var archive_number: int = archive_number_from_path(archive_path)
 	if archive_number <= 0:
 		last_save_error = "invalid_archive_path"
 		return false
@@ -337,6 +380,8 @@ func describe_save_error() -> String:
 			return ""
 		"invalid_archive_path":
 			return "当前没有可写入的档案，请先进入存档。"
+		"no_archive_session":
+			return "尚未进入档案会话，本次保存已取消。"
 		"stale_archive_identity":
 			return "档案已切换，本次保存已取消。"
 		"invalid_archive_data":
@@ -687,7 +732,8 @@ func _ensure_stable_key() -> String:
 	return _stable_key
 
 
-func _archive_number_from_path(path: String) -> int:
+## 档案路径的唯一权威解析：user://MyAr_<正整数>.json 之外一律返回 0。
+func archive_number_from_path(path: String) -> int:
 	var prefix: String = "user://MyAr_"
 	if not path.begins_with(prefix) or not path.ends_with(".json"):
 		return 0
@@ -726,14 +772,14 @@ func get_time():
 	return last_time
 
 
-func get_cd_number() -> String:
-	var number: int = _archive_number_from_path(Global.get_cd_path())
-	return str(number) if number > 0 else "1"
+## 当前会话档案号；未进入会话时为 0（消费者必须显式处理）。
+func get_cd_number() -> int:
+	return Global.get_archive_session_archive_number()
 
 
 func remove_data():
 	initialized_data = PlayerData.initialized_data.duplicate(true)
-	remove_main_data(int(get_cd_number()))
+	remove_main_data(get_cd_number())
 
 	MemoryClass.main_bc()
 
@@ -750,13 +796,17 @@ func remove():
 	Global.add_message_show(Global.windows, "数据不正常哦，拜拜啦~", 4, Vector2(485, 295))
 	remove_data()
 	MainSet.set_data["xg"] = true
-	safe_write_archive(str(Global.cd_path), initialized_data)
+	safe_write_archive(Global.get_archive_session_path(), initialized_data)
 
 
 func remove_main_data(Num: int):
+	if Num <= 0:
+		return
 	if Num <= 6:
 		MainSet.set_data["name" + str(Num)] = ""
 		MainSet.set_data["time" + str(Num)] = ""
-	else:
-		MainSet.set_data["其他存档"][str(Num)]["name"] = ""
-		MainSet.set_data["其他存档"][str(Num)]["time"] = ""
+		return
+	var other: Dictionary = MainSet.set_data.get("其他存档", {})
+	if other is Dictionary and other.has(str(Num)):
+		other[str(Num)]["name"] = ""
+		other[str(Num)]["time"] = ""

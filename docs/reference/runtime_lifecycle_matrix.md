@@ -236,8 +236,8 @@ flowchart TD
 
 | 对象 | 所有者 | 生命周期 | 失败边界 |
 |:---|:---|:---|:---|
-| `archive_session_active`、`archive_session_role_id` | `Global` | `begin_archive_session` 建立；`end_archive_session`、角色变化或 `_exit_tree` 释放 | 退出场景仅 `main_menu.tscn` 与 `choose_player.tscn`；victory/defeat/maps 不结束会话 |
-| `_archive_session_generation` | `Global` | `begin_archive_session`、`end_archive_session` 与 `_exit_tree` 递增；档案预热协程检查 | 与 `_runtime_generation` 同时约束档案预热；加载页使用自己的请求代次 |
+| `_archive_session`（`ArchiveSession`） | `Global` | `bind_archive_session` 建立；`end_archive_session`、`set_cd_path` 切换、角色变化或 `_exit_tree` 释放 | 退出场景仅 `main_menu.tscn` 与 `choose_player.tscn`；victory/defeat/maps 不结束会话；无会话时保存与关卡入口被拒绝 |
+| `_archive_session_generation` | `Global` | `bind_archive_session`、`end_archive_session` 与 `_exit_tree` 递增；档案预热协程检查 | 与 `_runtime_generation` 和 `_archive_session_prewarm_token` 同时约束档案预热；加载页使用自己的请求代次 |
 | `FrameSequenceStore` | `Script/data/frame_sequence_store.gd` | `Global._exit_tree` 与 `clear_level_resource_cache` 清理 | 运行时帧序列缓存，不是声明数据 |
 | `FrameTextureRequests` | `Script/data/frame_texture_requests.gd` | `Global._exit_tree` 调用 `shutdown_process`；`_closing` 阻止退出后轮询 | 场景切换由帧序列 generation 与 `_closing` 停止写回 |
 | 特效/剑阵/宠物/怪物弹体静态缓存 | 各模块 | 由 `clear_level_resource_cache`、`clear_combat_runtime_cache`、`release_role_runtime_resources` 或加载页非战斗清理触发 | 模块局部缓存；未经过 `Global` 的调用面不在本阶段逐项展开 |
@@ -257,8 +257,8 @@ flowchart TD
 | `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 当前租约路径、FrameSequence、212 帧缓存 | 只释放租约登记路径；不清理池、UI 或未登记路径 |
 | `clear_combat_runtime_cache` | `Global` | 仅 `end_archive_session` | 当前租约、池、NeZha 帧缓存、召唤物 | 不再按战斗资源前缀批量删除缓存；不在普通关卡切换触发 |
 | `_clear_runtime_pools` | `Global` | `clear_combat_runtime_cache` | 四个池与池根 | 只随档案结束 |
-| `end_archive_session` | `Global` | `Global.change_scene` 进入 `main_menu`/`choose_player` | 运行时代次、档案 generation、战斗缓存、角色特效缓存 | 应用退出由 `_exit_tree` 清理；victory/defeat 不结束 |
-| `release_role_runtime_resources` | `Global` | `begin_archive_session` 角色变化、`prewarm_current_role_runtime_resources` 切换角色 | 角色相关缓存与特效静态数据 | 普通关卡切换不调用 |
+| `end_archive_session` | `Global` | `Global.change_scene` 进入 `main_menu`/`choose_player`（在 `cleanup_transient_ui()` 之后）与 `set_cd_path` 切换档案 | 运行时代次、档案 generation、预热令牌、战斗缓存、角色特效缓存 | 应用退出由 `_exit_tree` 清理；victory/defeat 不结束 |
+| `release_role_runtime_resources` | `Global` | `bind_archive_session` 角色变化、`prewarm_current_role_runtime_resources` 切换角色 | 角色相关缓存与特效静态数据 | 普通关卡切换不调用 |
 | `release_map_visual_resources` | 地图脚本 + `Global` | `map_0` 至 `map_9_1` 的 `_exit_tree` | 递归清空 Sprite/TextureRect/按钮/进度条/AnimatedSprite/NinePatch 纹理并清理地图阴影 | 全部地图入口已覆盖 |
 | `MemoryClass._exit_tree` / `_notification` | `MemoryClass` | 引擎退出、暂停、关窗 | 存档后台任务 flush | 与运行时缓存/池清理分开 |
 | `Global._exit_tree` | `Global` | 引擎退出 | 结束档案会话、角色/战斗/UI 缓存、对象池、预载槽、`FrameSequenceStore` 与 `FrameTextureRequests` | 先递增运行时代次并置 `_shutting_down`，再清理；存档线程仍由 `MemoryClass` 独立 flush |
@@ -274,7 +274,7 @@ flowchart TD
 | 关卡资源租约 | `Global._level_resource_lease` | `Global.change_scene`、加载页、BaseLevel 预载函数 | 每次切换/战斗清理，只释放本租约 | 未登记路径不释放；目标场景不登记 | Phase 15-3B 已完成 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4B 已完成 |
 | 临时 UI | `Global._transient_ui_instances` + 名称兜底 | UI 工厂/各面板 | 树退出、切换、手动清理 | 注册实例优先关闭；未登记名称仍可能冲突 | Phase 15-4C 已完成 |
-| 档案会话 | `Global` | 存档入口/选角 | 主菜单/选角 | 普通切场不结束；应用退出由 `_exit_tree` 清空 | Phase 16 会话/持久化 |
+| 档案会话 | `Global` | 存档入口/选角（`bind_archive_session`） | 主菜单/选角/切档 | 普通切场不结束；应用退出由 `_exit_tree` 清空 | Phase 16-3 已完成 |
 | 退出与后台 | `Global` + `MemoryClass` | 引擎 | 应用退出 | `Global._exit_tree` 清理运行时代次、档案/角色/战斗/UI 缓存与池；存档线程单独 flush | Phase 15-4D 已完成；Phase 16 持久化边界 |
 | 地图视觉释放 | 地图脚本 | `map_0` 至 `map_9_1` | 地图退出 | 全部地图入口覆盖 | Phase 15-4D 已完成 |
 
@@ -343,7 +343,7 @@ flowchart TD
 
 ### Phase 15-4D 已完成
 
-1. 新增 `_runtime_generation` 与 `is_runtime_generation_current`；`change_scene`、`begin_archive_session`、`end_archive_session` 与 `_exit_tree` 递增代次。
+1. 新增 `_runtime_generation` 与 `is_runtime_generation_current`；`change_scene`、`bind_archive_session`、`end_archive_session` 与 `_exit_tree` 递增代次。
 2. 角色/关卡/纹理/UI 预热及 `_preload_paths_threaded` 在写回缓存前检查代次；档案预热与永久 UI 预热同样中止，过期后台结果丢弃。
 3. `Global._exit_tree` 统一结束档案会话、角色/战斗/UI 缓存、对象池、预载槽与纹理请求；`FrameTextureRequests` 的轮询在 `_closing` 后停止。
 4. `main_menu` 与读取存档界面的 HTTPRequest 在退出时取消请求，回调增加 `is_inside_tree` 守卫；`map_6` 至 `map_9_1` 补齐地图视觉释放。

@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12、Phase 13、Phase 14 与 Phase 15 均已完成并归档；当前候选为 **Phase 16：档案会话、持久化与玩家槽位**（16-1 矩阵、16-2A 全部 118 处、16-2B 身份与顺序、16-2C、16-2D 补全边界已完成；16-3~16-6 规划中）；Phase 17 玩法与表现模块边界仍为候选方向。
+> **当前版本**：6.9。Phase 12、Phase 13、Phase 14 与 Phase 15 均已完成并归档；当前候选为 **Phase 16：档案会话、持久化与玩家槽位**（16-1 矩阵、16-2A 全部 118 处、16-2B 身份与顺序、16-2C、16-2D 补全边界、16-3 档案会话上下文已完成；16-4~16-6 规划中）；Phase 17 玩法与表现模块边界仍为候选方向。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -12,7 +12,7 @@
 | [Phase 13 视觉资产契约](../archive/iteration_13_visual_asset_contract.md) | 完成、归档 | 保留构建/共享/失败/流式/导出成果及机读登记例外，不重开历史阶段 |
 | [Phase 14 类型化数据边界（AtlasMetadata 试点）](../archive/iteration_14_atlas_metadata_boundary.md) | 完成、归档 | 六个直接消费者均使用只读 View；旧入口、`source_masks` 与惰性配置已清除；边界守卫进入 `contract_scan.py` |
 | [Phase 15 应用编排与运行资源生命周期](../archive/iteration_15_app_orchestration_lifecycle.md) | 完成、归档 | 场景切换、加载、缓存/池/临时 UI 与退出生命周期；边界守卫进入 `contract_scan.py`；矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
-| Phase 16 档案会话、持久化与玩家槽位 | 当前候选；16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D 已完成，余下未启动 | 共享/独立状态、保存快照、切档、2P 面板上下文；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，详细计划见 [`current-iteration.md`](current-iteration.md) |
+| Phase 16 档案会话、持久化与玩家槽位 | 当前候选；16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D 与 16-3 已完成，余下未启动 | 共享/独立状态、保存快照、切档、2P 面板上下文；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，详细计划见 [`current-iteration.md`](current-iteration.md) |
 | Phase 17 玩法与表现模块边界 | 候选方向，未实现 | 命中归属、关卡结算、按需组合、HUD/输入与模块 API |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |

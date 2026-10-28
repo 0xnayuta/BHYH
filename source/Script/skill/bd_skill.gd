@@ -235,7 +235,7 @@ func _on_one_key_upgrade_pressed() -> void:
 	if upgraded_count <= 0:
 		Global.add_moment_text(get_parent(), Vector2.ZERO, "灵魂不足或已达当前等级上限", 1)
 		return
-	if Global.cd_path != null and not str(Global.cd_path).is_empty():
+	if Global.is_archive_session_active():
 		MemoryClass.request_save("skill_passive_upgrade_all")
 	Global.add_moment_text(get_parent(), Vector2.ZERO, "一键升级完成，共提升%d级" % upgraded_count, 1)
 

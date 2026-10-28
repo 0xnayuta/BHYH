@@ -678,8 +678,7 @@ func _show_shop_message(message: String) -> void:
 
 
 func _save_tower_data() -> void:
-	var save_path := str(Global.cd_path)
-	if save_path != "" and save_path.contains("Ar_"):
+	if Global.is_archive_session_active():
 		MemoryClass.request_save("tower_data")
 
 

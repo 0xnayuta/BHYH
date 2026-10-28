@@ -87,8 +87,16 @@ func _role_name(role_id: int) -> String:
 
 
 func _on_pressed() -> void:
-	Global.set_cd_path("user://MyAr_" + str(archive_num) + ".json")
-	if not MemoryClass.load_game(Global.get_cd_path()):
+	var archive_path := "user://MyAr_" + str(archive_num) + ".json"
+	Global.set_cd_path(archive_path)
+	var load_result: Dictionary = MemoryClass.load_game(archive_path)
+	var load_status := str(load_result.get("status", ""))
+	if not bool(load_result.get("ok", false)):
+		if load_status != "missing" and load_status != "empty":
+			Global.add_message_show(get_parent(), str(load_result.get("message", "")), 1.5, Vector2(470, 340))
+			return
+		# 空档/缺档：保留当前路径作为新建目标槽位，进入创建模式选角后写回该槽。
+		_open_creation_mode()
 		return
 	if PlayerData.player_data.has("FileValue"):
 		if float(PlayerData.player_data["FileValue"]) <= float(Global.file_num):
@@ -96,11 +104,10 @@ func _on_pressed() -> void:
 		else:
 			Global.add_message_show(get_parent(), "当前游戏不是最新版本，请使用最新版本游戏！！！", 1.5, Vector2(470, 340))
 			return
-	if level_and_role.text == "空存档":
-		_open_creation_mode()
-	else:
-		await Global.begin_archive_session()
-		change_to_map()
+	if not await Global.begin_archive_session():
+		Global.add_message_show(get_parent(), "档案会话建立失败，请重试。", 1.5, Vector2(470, 340))
+		return
+	change_to_map()
 
 
 func _open_creation_mode() -> void:

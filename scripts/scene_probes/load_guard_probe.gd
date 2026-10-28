@@ -105,10 +105,10 @@ func _run() -> void:
 		and not bool(cleared_slot.get("ready", true))
 	)
 
-	Global.change_scene(LEVEL_1)
+	Global.change_scene(LEVEL_1, false, false)
 	var first_page: Node = await _await_scene(LOAD_SCENE, 120)
 	checks["cancel_page_started"] = first_page != null
-	Global.change_scene(LEVEL_2)
+	Global.change_scene(LEVEL_2, false, false)
 	var level_two: Node = await _await_scene(LEVEL_2, WAIT_FRAMES)
 	checks["cancel_latest_wins"] = level_two != null
 	var current_after_cancel := get_tree().current_scene
@@ -117,7 +117,7 @@ func _run() -> void:
 	)
 
 	ProjectSettings.set_setting("application/run/load_timeout_msec", 0)
-	Global.change_scene(LEVEL_3, true)
+	Global.change_scene(LEVEL_3, true, false)
 	var timeout_page: Node = await _await_scene(LOAD_SCENE, 120)
 	var timeout_failed := false
 	for _frame in range(120):

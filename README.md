@@ -118,7 +118,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 16 档案会话、持久化与玩家槽位：16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D 已完成；16-3~16-6 规划中 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 16 档案会话、持久化与玩家槽位：16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D 与 16-3 已完成；16-4~16-6 规划中 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |

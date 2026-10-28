@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界已完成；16-3~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文已完成；16-4~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -117,9 +117,9 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 ### 4.1 切片
 
-1. **Phase 16-3A 会话身份（规划）**：为当前档案建立只读会话标识（档案编号/路径、角色、会话代次）；`Global.cd_path` 的字符串用法收窄为持久化边界内部表示；
-2. **Phase 16-3B 会话生命周期（规划）**：`begin_archive_session` 与 `end_archive_session` 的触发条件、重复调用、角色变化与退出语义固定；会话结束撤销借用上下文，不残留上一档案的缓存与标记；
-3. **Phase 16-3C 会话失败边界（规划）**：读档失败、档案不可读、会话未建立时禁止保存与进入关卡；加载页与场景入口返回明确失败，不进入半初始化状态。
+1. **Phase 16-3A 会话身份（已完成）**：新增 `ArchiveSession` 只读值对象（档案号/角色/路径/代次）与 `Global.get_archive_session()`；`cd_path` 改为私有 `_cd_path`，业务侧 0 处引用；
+2. **Phase 16-3B 会话生命周期（已完成）**：拆分 `bind_archive_session()`（同步绑定）与 `begin_archive_session(prewarm)`；重复绑定幂等、角色变化重建会话并保留档案号、`set_cd_path` 切换前先结束旧会话；预热以 `_archive_session_prewarm_token` 认领，旧协程不清理新会话状态；`change_scene` 先 `cleanup_transient_ui()` 再结束会话；
+3. **Phase 16-3C 会话失败边界（已完成）**：`load_game` 返回 `{ok, status, message}`（`loaded`/`missing`/`empty`/`unreadable`/`invalid`/`invalid_path`）；读档前先 `remove_play_data()` 重置内存档；会话未建立时 `request_save`/`request_background_save` 返回 `no_archive_session`，`change_scene`/`add_level_info` 拒绝关卡目标并提示；`get_cd_number()` 无会话返回 0。
 
 ### 4.2 必须验证
 
@@ -134,7 +134,8 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 - 当前档案会话只有一个权威表示，禁止并列的路径字符串与布尔标志各自判定；
 - 会话代次可观测，供保存与异步回调校验；
 - 会话失败返回明确结果，不进入可玩场景；
-- 不新增 Autoload，不改变存档格式。
+- 不新增 Autoload，不改变存档格式；
+- 业务代码禁止读写 `Global.cd_path`（已私有化），仅允许会话查询方法。
 
 ## 5. Phase 16-4：玩家槽位与共享账本
 

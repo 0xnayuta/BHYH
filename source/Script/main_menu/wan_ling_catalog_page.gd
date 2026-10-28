@@ -595,8 +595,7 @@ func _on_overlay_gui_input(event: InputEvent) -> void:
 
 
 func _save_if_possible() -> void:
-	var save_path := str(Global.cd_path)
-	if save_path != "" and save_path.contains("Ar_") and FileAccess.file_exists(save_path):
+	if Global.is_archive_session_active() and FileAccess.file_exists(Global.get_archive_session_path()):
 		MemoryClass.request_save("wan_ling_catalog")
 
 

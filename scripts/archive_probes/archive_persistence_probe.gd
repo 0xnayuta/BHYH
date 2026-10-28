@@ -32,7 +32,13 @@ func _reset_profile(role_id: int = 1, level: int = 1) -> void:
 	PlayerData.player_data.merge(PlayerData.initialized_data.duplicate(true))
 	PlayerData.player_data["Myself"] = role_id
 	PlayerData.player_data["玩家等级"] = level
-	Global.cd_path = ""
+	Global.set_cd_path("")
+
+
+## 建立会话并把指定路径登记为当前档案；等价于业务侧“点开存档”之后的状态。
+func _open_session(path: String) -> void:
+	Global.set_cd_path(path)
+	Global.bind_archive_session()
 
 
 func _archive_data(role_id: int, level: int) -> Dictionary:
@@ -56,29 +62,33 @@ func _run() -> void:
 	_test_role_range()
 	_test_cloud_validation()
 	_test_request_save()
+	_test_archive_session()
 	await _test_panel_saves()
 
 
 func _test_missing_and_empty() -> void:
 	var missing_path := TEST_ARCHIVE_PREFIX + "001.json"
 	_reset_profile(1, 3)
-	var missing_ok := MemoryClass.load_game(missing_path)
-	_check("missing_archive_loads", missing_ok, "load_game=%s" % missing_ok)
+	var missing_result: Dictionary = MemoryClass.load_game(missing_path)
+	_check("missing_archive_reported", missing_result.get("status") == "missing", "status=%s" % missing_result.get("status"))
+	_check("missing_archive_not_loaded", not bool(missing_result.get("ok", true)))
 	_check("missing_archive_not_created", not FileAccess.file_exists(missing_path))
 
 	var empty_path := TEST_ARCHIVE_PREFIX + "002.json"
 	_write_plain(empty_path, "")
 	_reset_profile(1, 4)
-	var empty_ok := MemoryClass.load_game(empty_path)
-	_check("empty_archive_loads", empty_ok, "load_game=%s" % empty_ok)
+	var empty_result: Dictionary = MemoryClass.load_game(empty_path)
+	_check("empty_archive_reported", empty_result.get("status") == "empty", "status=%s" % empty_result.get("status"))
+	_check("empty_archive_not_loaded", not bool(empty_result.get("ok", true)))
 
 
 func _test_corrupt_archive() -> void:
 	var path := TEST_ARCHIVE_PREFIX + "003.json"
 	_write_plain(path, "not-a-valid-archive")
 	_reset_profile(1, 1)
-	var ok := MemoryClass.load_game(path)
-	_check("corrupt_archive_rejected", not ok, "load_game=%s" % ok)
+	var result: Dictionary = MemoryClass.load_game(path)
+	_check("corrupt_archive_rejected", result.get("status") == "unreadable", "status=%s" % result.get("status"))
+	_check("corrupt_archive_not_loaded", not bool(result.get("ok", true)))
 
 
 func _test_backup_recovery() -> void:
@@ -108,14 +118,14 @@ func _test_role_range() -> void:
 	var invalid_path := TEST_ARCHIVE_PREFIX + "005.json"
 	MemoryClass.safe_write_archive(invalid_path, _archive_data(8, 1))
 	_reset_profile(1, 1)
-	var invalid_loaded := MemoryClass.load_game(invalid_path)
-	_check("invalid_role_load_rejected", not invalid_loaded, "load_game=%s" % invalid_loaded)
+	var invalid_loaded: Dictionary = MemoryClass.load_game(invalid_path)
+	_check("invalid_role_load_rejected", invalid_loaded.get("status") == "invalid", "status=%s" % invalid_loaded.get("status"))
 
 	var valid_path := TEST_ARCHIVE_PREFIX + "006.json"
 	MemoryClass.safe_write_archive(valid_path, _archive_data(7, 5))
 	_reset_profile(1, 1)
-	var valid_loaded := MemoryClass.load_game(valid_path)
-	_check("role_7_load_accepted", valid_loaded, "load_game=%s" % valid_loaded)
+	var valid_loaded: Dictionary = MemoryClass.load_game(valid_path)
+	_check("role_7_load_accepted", bool(valid_loaded.get("ok", false)), "status=%s" % valid_loaded.get("status"))
 
 
 func _test_cloud_validation() -> void:
@@ -127,36 +137,36 @@ func _test_cloud_validation() -> void:
 
 func _test_request_save() -> void:
 	_reset_profile(1, 1)
-	Global.cd_path = ""
+	Global.set_cd_path("")
 	_check("request_save_without_session", not MemoryClass.request_save("probe_empty"))
 
 	_reset_profile(7, 12)
-	Global.cd_path = TEST_ARCHIVE_PREFIX + "009.json"
+	_open_session(TEST_ARCHIVE_PREFIX + "009.json")
 	var saved := MemoryClass.request_save("probe_save")
-	_check("request_save_writes", saved and FileAccess.file_exists(Global.cd_path), "saved=%s" % saved)
-	_check("request_save_no_temp", not FileAccess.file_exists(Global.cd_path + ".tmp"))
-	_check("request_save_level", MemoryClass.get_archive_level(Global.cd_path) == 12)
+	_check("request_save_writes", saved and FileAccess.file_exists(Global.get_cd_path()), "saved=%s" % saved)
+	_check("request_save_no_temp", not FileAccess.file_exists(Global.get_cd_path() + ".tmp"))
+	_check("request_save_level", MemoryClass.get_archive_level(Global.get_cd_path()) == 12)
 
-	var saved_path := Global.cd_path
+	var saved_path := Global.get_cd_path()
 	_reset_profile(1, 1)
-	var reloaded := MemoryClass.load_game(saved_path)
+	var reloaded: Dictionary = MemoryClass.load_game(saved_path)
 	_check(
 		"request_save_reloads",
-		reloaded and int(PlayerData.player_data.get("Myself", 0)) == 7 and int(PlayerData.player_data.get("玩家等级", 0)) == 12,
-		"loaded=%s role=%s level=%s" % [reloaded, PlayerData.player_data.get("Myself"), PlayerData.player_data.get("玩家等级")]
+		bool(reloaded.get("ok", false)) and int(PlayerData.player_data.get("Myself", 0)) == 7 and int(PlayerData.player_data.get("玩家等级", 0)) == 12,
+		"status=%s role=%s level=%s" % [reloaded.get("status"), PlayerData.player_data.get("Myself"), PlayerData.player_data.get("玩家等级")]
 	)
 
 	_reset_profile(8, 1)
-	Global.cd_path = TEST_ARCHIVE_PREFIX + "010.json"
+	_open_session(TEST_ARCHIVE_PREFIX + "010.json")
 	var rejected := MemoryClass.request_save("probe_invalid")
 	_check("request_save_rejects_invalid_role", not rejected, "saved=%s" % rejected)
-	_check("request_save_invalid_not_written", not FileAccess.file_exists(Global.cd_path))
+	_check("request_save_invalid_not_written", not FileAccess.file_exists(Global.get_cd_path()))
 
 	_reset_profile(1, 9)
-	Global.cd_path = TEST_ARCHIVE_PREFIX + "011.json"
+	_open_session(TEST_ARCHIVE_PREFIX + "011.json")
 	var seeded := MemoryClass.request_save("probe_seed")
-	var seeded_level := MemoryClass.get_archive_level(Global.cd_path)
-	var seeded_path := Global.cd_path
+	var seeded_level := MemoryClass.get_archive_level(Global.get_cd_path())
+	var seeded_path := Global.get_cd_path()
 	PlayerData.player_data.clear()
 	var empty_blocked := MemoryClass.request_save("probe_empty_profile")
 	_reset_profile(1, 1)
@@ -168,10 +178,97 @@ func _test_request_save() -> void:
 	)
 
 
+## 16-3：档案会话上下文。会话是保存与关卡入口的唯一权威表示。
+func _test_archive_session() -> void:
+	_reset_profile(1, 4)
+	_check("session_initially_inactive", not Global.is_archive_session_active())
+	_check("session_bind_requires_path", not Global.bind_archive_session())
+	_check("session_active_blocks_nothing_when_inactive", Global.get_archive_session_path() == "")
+
+	Global.set_cd_path(TEST_ARCHIVE_PREFIX + "031.json")
+	var bound := Global.bind_archive_session()
+	_check("session_bind_ok", bound)
+	_check("session_active_after_bind", Global.is_archive_session_active())
+	_check("session_archive_number", Global.get_archive_session_archive_number() == 9031, "%d" % Global.get_archive_session_archive_number())
+	_check("session_role_id", Global.get_archive_session_role_id() == 1, "%d" % Global.get_archive_session_role_id())
+	_check("session_path_matches_cd_path", Global.get_archive_session_path() == Global.get_cd_path())
+	var generation := Global.get_archive_session_generation()
+	_check("session_rebind_is_idempotent", Global.bind_archive_session() and Global.get_archive_session_generation() == generation)
+
+	# 会话未建立时保存与后台保存都必须拒绝。
+	Global.set_cd_path("")
+	_check("session_ended_by_path_switch", not Global.is_archive_session_active())
+	var no_session_save := MemoryClass.request_save("probe_no_session")
+	_check("session_absent_blocks_save", not no_session_save)
+	_check("session_absent_save_reason", MemoryClass.last_save_error == "no_archive_session", MemoryClass.last_save_error)
+	var no_session_background := MemoryClass.request_background_save()
+	_check("session_absent_blocks_background_save", not no_session_background)
+
+	# 会话结束必须使 save/后台保存同时失效，且不残留上一档的编号。
+	_open_session(TEST_ARCHIVE_PREFIX + "032.json")
+	var session_generation := Global.get_archive_session_generation()
+	Global.end_archive_session()
+	_check("session_end_advances_generation", Global.get_archive_session_generation() > session_generation)
+	_check("session_end_clears_number", Global.get_archive_session_archive_number() == 0)
+	Global.end_archive_session()
+	_check("session_end_idempotent", not Global.is_archive_session_active())
+
+	# 角色变化：同一路径下切换 My 字号必须重建会话并保留当前档案编号。
+	_open_session(TEST_ARCHIVE_PREFIX + "033.json")
+	var role_change_generation := Global.get_archive_session_generation()
+	PlayerData.player_data["Myself"] = 3
+	_check("session_role_change_rebinds", Global.bind_archive_session())
+	_check("session_role_change_generation", Global.get_archive_session_generation() > role_change_generation)
+	_check("session_role_change_role_id", Global.get_archive_session_role_id() == 3, "%d" % Global.get_archive_session_role_id())
+	_check(
+		"session_role_change_number_kept",
+		Global.get_archive_session_archive_number() == 9033,
+		"%d" % Global.get_archive_session_archive_number()
+	)
+	Global.end_archive_session()
+
+	# 冷启动 -> 读档 -> 建立会话 -> 退出会话 -> 再进同一档案：内容保持一致，代次递增。
+	var reentry_path := TEST_ARCHIVE_PREFIX + "034.json"
+	_reset_profile(1, 6)
+	MemoryClass.safe_write_archive(reentry_path, _archive_data(1, 6))
+	_reset_profile(1, 1)
+	Global.set_cd_path(reentry_path)
+	var first_load: Dictionary = MemoryClass.load_game(reentry_path)
+	var first_bound := Global.bind_archive_session()
+	var first_generation := Global.get_archive_session_generation()
+	_check("session_reentry_first_load", bool(first_load.get("ok", false)) and first_bound)
+	Global.end_archive_session()
+	Global.set_cd_path(reentry_path)
+	var second_load: Dictionary = MemoryClass.load_game(reentry_path)
+	var second_bound := Global.bind_archive_session()
+	_check("session_reentry_second_load", bool(second_load.get("ok", false)) and second_bound)
+	_check(
+		"session_reentry_generation_advances",
+		Global.get_archive_session_generation() > first_generation,
+		"%d -> %d" % [first_generation, Global.get_archive_session_generation()]
+	)
+	_check(
+		"session_reentry_level_kept",
+		int(PlayerData.player_data.get("玩家等级", 0)) == 6,
+		"level=%s" % PlayerData.player_data.get("玩家等级")
+	)
+
+	# 关卡入口守卫：无会话时拒绝进入关卡，且不改变目标场景。
+	Global.set_cd_path("")
+	Global.end_archive_session()
+	var blocked_level := Global.change_scene("res://Scene/level/level_1.tscn")
+	_check("session_level_entry_blocked", not blocked_level)
+	_check("session_level_entry_no_target", Global.target_scene != "res://Scene/level/level_1.tscn")
+	_open_session(reentry_path)
+	_check("session_level_entry_allowed", Global._is_valid_scene_change_target("res://Scene/level/level_1.tscn"))
+	Global.end_archive_session()
+	_reset_profile(1, 1)
+
+
 ## 直接调用背包/技能/炼体面板的真实保存处理器，验证界面路径确实经 request_save 落盘。
 func _test_panel_saves() -> void:
 	_reset_profile(1, 5)
-	Global.cd_path = PANEL_ARCHIVE_PATH
+	_open_session(PANEL_ARCHIVE_PATH)
 	PlayerData.player_data["翅膀显示"] = true
 	PlayerData.player_data["头衔显示"] = true
 	PlayerData.player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"] = "old"
@@ -261,7 +358,7 @@ func _test_panel_saves() -> void:
 ## 主菜单批次：直接调用地图页与各功能页的真实保存处理器，回读加密档案确认已落盘。
 func _check_main_menu_saves() -> void:
 	_reset_profile(1, 5)
-	Global.cd_path = PANEL_ARCHIVE_PATH
+	_open_session(PANEL_ARCHIVE_PATH)
 	MemoryClass.request_save("probe_main_seed")
 	var popup_layer := CanvasLayer.new()
 	add_child(popup_layer)
@@ -319,10 +416,11 @@ func _check_save_identity_and_normalization() -> void:
 	var path_a := TEST_ARCHIVE_PREFIX + "021.json"
 	var path_b := TEST_ARCHIVE_PREFIX + "022.json"
 	_reset_profile(1, 7)
-	Global.set_cd_path(path_a)
+	_open_session(path_a)
 	_check("identity_save_a", MemoryClass.request_save("probe_identity_a"))
 	var epoch_a := Global.get_archive_identity_epoch()
 	Global.set_cd_path(path_b)
+	Global.bind_archive_session()
 	var epoch_b := Global.get_archive_identity_epoch()
 	_check("identity_epoch_advances", epoch_b > epoch_a, "%d -> %d" % [epoch_a, epoch_b])
 	_check("identity_current_for_b", MemoryClass.is_archive_identity_current(path_b, epoch_b))
@@ -334,8 +432,8 @@ func _check_save_identity_and_normalization() -> void:
 
 	# 切档前 flush：旧档案的待写任务在身份切换前落盘。
 	_reset_profile(1, 8)
-	Global.set_cd_path(path_a)
-	_check("identity_flush_queue_enqueued", MemoryClass.request_background_save(path_a))
+	_open_session(path_a)
+	_check("identity_flush_queue_enqueued", MemoryClass.request_background_save())
 	Global.set_cd_path(path_b)
 	_check(
 		"identity_switch_flushed_old_archive",
@@ -345,7 +443,7 @@ func _check_save_identity_and_normalization() -> void:
 
 	# 16-2D 幂等：连续两次准备快照，除时间外内容一致。
 	_reset_profile(1, 5)
-	Global.set_cd_path(path_b)
+	_open_session(path_b)
 	var first := MemoryClass._prepare_player_save_data()
 	var second := MemoryClass._prepare_player_save_data()
 	first.erase(MemoryClass.ARCHIVE_TIME_KEY)
@@ -376,7 +474,7 @@ func _check_save_identity_and_normalization() -> void:
 
 	# 16-2D 后置条件：宠物列表混入非字典元素时补全无法修复，保存必须被阻止。
 	_reset_profile(1, 5)
-	Global.set_cd_path(path_b)
+	_open_session(path_b)
 	_check("normalize_baseline_saved", MemoryClass.request_save("probe_normalize_baseline"))
 	PlayerData.player_data[PlayerData.PET_LIST_KEY].append("garbage")
 	var blocked := MemoryClass.request_save("probe_normalize_fail")
@@ -393,7 +491,7 @@ func _check_save_identity_and_normalization() -> void:
 ## 关卡与收尾批次：验证结算界面与其余业务保存处理器确实经 request_save 落盘。
 func _check_reward_and_menu_saves() -> void:
 	_reset_profile(1, 5)
-	Global.cd_path = PANEL_ARCHIVE_PATH
+	_open_session(PANEL_ARCHIVE_PATH)
 	MemoryClass.request_save("probe_reward_seed")
 	_set_archive_time_value(PANEL_ARCHIVE_PATH, "2000-01-01 00:00:00")
 	var reward: Node = (load("res://Scene/other_scene/reward_interface.tscn") as PackedScene).instantiate()

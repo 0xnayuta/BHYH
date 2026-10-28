@@ -64,10 +64,7 @@ func _ready() -> void:
 			$background/Player.play("wait5")
 	Global.is_in_ldl = false
 	MemoryClass.main_dq()
-	if int(MemoryClass.get_cd_number()) <= 6:
-		name_1.text = str(MainSet.set_data["name" + str(MemoryClass.get_cd_number())])
-	else:
-		name_1.text = str(MainSet.set_data["其他存档"][str(MemoryClass.get_cd_number())]["name"])
+	name_1.text = _archive_display_name()
 	$background/gy.self_modulate = Color(1, 1, 1, 1)
 	get_level()
 	set_backpack_properies()
@@ -546,11 +543,26 @@ func _on_emp_mouse_exited() -> void:
 	remove_text()
 
 
+func _archive_display_name() -> String:
+	var archive_number := MemoryClass.get_cd_number()
+	if archive_number <= 0:
+		return ""
+	if archive_number <= 6:
+		return str(MainSet.set_data.get("name" + str(archive_number), ""))
+	var other: Dictionary = MainSet.set_data.get("其他存档", {})
+	var meta: Dictionary = other.get(str(archive_number), {}) if other is Dictionary else {}
+	return str(meta.get("name", ""))
+
+
 func _on_name_text_changed(new_text: String) -> void:
-	if int(MemoryClass.get_cd_number()) <= 6:
-		MainSet.set_data["name" + str(MemoryClass.get_cd_number())] = new_text
+	# 无会话时不写存档列表元数据，避免把昵称写到不存在的档号。
+	var archive_number := MemoryClass.get_cd_number()
+	if archive_number <= 0:
+		return
+	if archive_number <= 6:
+		MainSet.set_data["name" + str(archive_number)] = new_text
 	else:
-		MainSet.set_data["其他存档"][str(MemoryClass.get_cd_number())]["name"] = new_text
+		MainSet.set_data["其他存档"][str(archive_number)]["name"] = new_text
 	MemoryClass.main_bc()
 
 

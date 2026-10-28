@@ -166,14 +166,15 @@ func _run_all() -> void:
 	RoleProp.roleprop.SHp = 999999999
 	RoleProp.current_hp = 999999999
 	RoleProp.current_mp = 999999999
-	Global.cd_path = ""
+	Global.set_cd_path("")
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INVINCIBLE, true)
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INSTANT_KILL, true)
 	Engine.time_scale = TIME_SCALE
 
 	# 2. 切入目标关卡（Global.change_scene 走异步加载屏，需等待加载器完成切换）
 	var load_started_msec := Time.get_ticks_msec()
-	Global.change_scene(TARGET_LEVEL)
+	# 冒烟夹具不建立档案会话，显式跳过会话前置校验（仍走真实切场链路）。
+	Global.change_scene(TARGET_LEVEL, false, false)
 	var loaded_scene: Node = await _await_level_ready(report)
 	report["load_elapsed_seconds"] = snapped(float(Time.get_ticks_msec() - load_started_msec) / 1000.0, 0.001)
 	if loaded_scene == null:
@@ -346,7 +347,7 @@ func _run_all() -> void:
 	Engine.time_scale = 1.0
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INVINCIBLE, false)
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INSTANT_KILL, false)
-	Global.cd_path = ""
+	Global.set_cd_path("")
 
 	report["ok"] = all_ok and report["errors"].is_empty()
 	await _finish(report, 0 if report["ok"] else 1)

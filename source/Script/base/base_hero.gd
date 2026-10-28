@@ -650,14 +650,19 @@ func _physics_process(delta: float) -> void:
 		player_dir = true
 	else:
 		player_dir = false
-	var archive_number := int(MemoryClass.get_cd_number())
-	var archive_name: String
+	# 档号为 0 表示未进入档案会话（夹具/无档场景），此时不读取存档列表元数据。
+	var archive_number := MemoryClass.get_cd_number()
+	var archive_name: String = ""
 	if LocalCoop.is_enabled() and (PlayerData.player_data.has("角色昵称") or LocalCoop.slot_for(self) == 2):
 		archive_name = str(PlayerData.player_data.get("角色昵称", ""))
+	elif archive_number <= 0:
+		archive_name = ""
 	elif archive_number <= 6:
-		archive_name = str(MainSet.set_data["name" + str(archive_number)])
+		archive_name = str(MainSet.set_data.get("name" + str(archive_number), ""))
 	else:
-		archive_name = str(MainSet.set_data["其他存档"][str(archive_number)]["name"])
+		var other: Dictionary = MainSet.set_data.get("其他存档", {})
+		var meta: Dictionary = other.get(str(archive_number), {}) if other is Dictionary else {}
+		archive_name = str(meta.get("name", ""))
 	if archive_name != _last_archive_name:
 		_last_archive_name = archive_name
 		_name.text = archive_name

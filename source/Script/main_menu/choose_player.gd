@@ -251,10 +251,15 @@ func _on_qued_pressed() -> void:
 	else:
 		LocalCoop.clear_runtime()
 		PlayerData.player_data.erase(LocalCoop.SAVE_KEY)
+	if not Global.bind_archive_session():
+		Global.add_message_show(self, "存档槽位无效，请返回主菜单重新选择。", 2.0, Vector2(470, 340))
+		return
 	if not MemoryClass.request_save("choose_player"):
 		Global.add_message_show(self, MemoryClass.describe_save_error(), 2.0, Vector2(470, 340))
 		return
-	await Global.begin_archive_session()
+	if not await Global.begin_archive_session():
+		Global.add_message_show(self, "档案会话建立失败，请返回主菜单重试。", 2.0, Vector2(470, 340))
+		return
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 
@@ -314,6 +319,4 @@ func _update_archive_time() -> void:
 
 
 func _archive_num() -> int:
-	if Global.cd_path.find("Ar_") == -1:
-		return 0
-	return int(Global.cd_path.split("Ar_")[1].split(".")[0])
+	return MemoryClass.archive_number_from_path(Global.get_cd_path())

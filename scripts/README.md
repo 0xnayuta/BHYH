@@ -111,7 +111,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
-| `archive_probe_runner.py` | 档案持久化定向夹具：缺失/空/损坏档、`.bak` 恢复、`.tmp` 清理、`Myself` 1..7、`request_save` 空档/成功/拒绝、空档不覆盖原档；临时 `user://` 隔离，不触碰本机存档 | `docs/reports/archive_persistence_probe_report.json` |
+| `archive_probe_runner.py` | 档案持久化定向夹具：缺失/空/损坏档的显式 `status`、`.bak` 恢复、`.tmp` 清理、`Myself` 1..7、`request_save` 空档/成功/拒绝、空档不覆盖原档、档案会话绑定/结束/角色变化/重进同档、无会话拒绝保存与关卡入口；临时 `user://` 隔离，不触碰本机存档 | `docs/reports/archive_persistence_probe_report.json` |
 | `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、关卡资源租约释放边界与运行时代次失效、加载失败/取消/超时与单槽清理、角色 2/4 技能入口与 Spine 效果、法宝/八仙/角色特效构建期帧；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/level_resource_lease_probe_report.*`、`docs/reports/load_guard_probe_report.*`、`docs/reports/role_skill_probe_report.*`、`docs/reports/magic_weapon_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_sheet_frames.py` | 单张纹理 sheet 固定网格 → 构建期 SpriteFrames `.tres`（AtlasTexture 子资源）；覆盖青龙剑/太极/八仙模型与 Lyfb/哪吒特效区域；`--check` 校验输出存在且内容一致；已接入 `contract_gate` | `source/Art/magic_weapon/.../*_frames.tres`（私有素材） |
@@ -145,7 +145,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。
 
-`archive_probes/` 存放档案持久化定向探针（缺失/空/损坏档、备份恢复、原子写、角色范围、`request_save`、面板/地图页/结算真实写盘、身份 epoch 与过期回写拒绝、补全后置条件）。`archive_probe_runner.py` 用 `--scene` 启动并把 `APPDATA`/`XDG_DATA_HOME` 指向临时目录，探针退出后删除 fixture 与临时用户目录；探针主动触发的校验拒绝日志在 runner 中按白名单排除，其它 ERROR/WARNING 仍判失败。
+`archive_probes/` 存放档案持久化定向探针（缺失/空/损坏档的显式 `status`、备份恢复、原子写、角色范围、`request_save`、面板/地图页/结算真实写盘、身份 epoch 与过期回写拒绝、补全后置条件、档案会话生命周期）。`archive_probe_runner.py` 用 `--scene` 启动并把 `APPDATA`/`XDG_DATA_HOME` 指向临时目录，探针退出后删除 fixture 与临时用户目录；探针主动触发的校验拒绝日志在 runner 中按白名单排除，其它 ERROR/WARNING 仍判失败。
 
 `scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
 

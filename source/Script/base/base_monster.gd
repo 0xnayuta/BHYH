@@ -1579,7 +1579,7 @@ func _add_direct_pet_backpack_drop(drop: Dictionary, amount: int) -> bool:
 
 
 func _save_direct_pet_backpack_drop() -> void:
-	if not MemoryClass.request_background_save(str(Global.cd_path)):
+	if not MemoryClass.request_background_save():
 		MemoryClass.request_save("pet_backpack_drop")
 
 
