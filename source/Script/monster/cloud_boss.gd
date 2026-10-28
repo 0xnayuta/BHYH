@@ -4,7 +4,7 @@ signal skill_projectile_spawned(sequence: String, projectile: WutaiMinghaiProjec
 
 const CLOUD_PROJECTILE := preload("res://Script/monster/palace_boss_projectile.gd")
 const CLOUD_FRAMES_RES := "res://Art/monster/cloud_boss/model_3352/cloud_boss_frames.tres"
-var _source: Dictionary = {}
+var _cloud_view: AtlasMetadataView = null
 var _dash_active := false
 var _flight_y := 300.0
 var _skill_cursor := 0
@@ -21,7 +21,7 @@ func _standard_body_frames_path() -> String:
 
 func _resolve_runtime_config() -> Dictionary:
 	var config := super._resolve_runtime_config()
-	_source = AtlasMetadataStore.data_for(_metadata_path())
+	_cloud_view = AtlasMetadataStore.view_for(_metadata_path())
 	config["is_flying"] = true
 	config["attacks"] = {
 		"hit1": {"multiplier": 0.25, "kind": "physics", "source_target_move": [120, 42], "protect": 1112},
@@ -40,9 +40,11 @@ func _ready() -> void:
 
 
 func _visual_offset(action: StringName) -> Vector2:
+	if _cloud_view == null:
+		return Vector2.ZERO
 	var sequence := str(_config["animations"][action][0])
-	var center: Array = _source["geometry"][sequence]["center"]
-	return Vector2(-float(center[0]) if mr_ani.flip_h else float(center[0]), float(center[1]))
+	var center := _cloud_view.geometry_center(StringName(sequence))
+	return Vector2(-center.x if mr_ani.flip_h else center.x, center.y)
 
 
 func _configure_entity_collision_boxes() -> void:

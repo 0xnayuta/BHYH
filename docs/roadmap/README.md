@@ -9,12 +9,12 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：14-1/14-2/14-3A/14-3B-1 已完成；14-3B-2/3 未启动 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：14-1/14-2/14-3A/14-3B-1/14-3B-2 已完成；14-3B-3 未启动 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 **14-1/14-2/14-3A/14-3B-1 完成，14-3B-2/3 未启动**。后续候选覆盖应用编排/运行资源、档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 **14-1/14-2/14-3A/14-3B-1/14-3B-2 完成，14-3B-3 未启动**。后续候选覆盖应用编排/运行资源、档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

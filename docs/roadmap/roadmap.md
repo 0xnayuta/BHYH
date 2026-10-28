@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12 与 Phase 13 均已完成并归档；当前候选为 **Phase 14：类型化数据边界（AtlasMetadata 试点），14-1/14-2/14-3A/14-3B-1 已完成，14-3B-2/3 未启动**。
+> **当前版本**：6.9。Phase 12 与 Phase 13 均已完成并归档；当前候选为 **Phase 14：类型化数据边界（AtlasMetadata 试点），14-1/14-2/14-3A/14-3B-1/14-3B-2 已完成，14-3B-3 未启动**。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -10,7 +10,7 @@
 |:---|:---|:---|
 | [Phase 12 显示/HUD](../archive/iteration_12_display_hud.md) | 完成、归档 | 保留已接受显示基线 |
 | [Phase 13 视觉资产契约](../archive/iteration_13_visual_asset_contract.md) | 完成、归档 | 保留构建/共享/失败/流式/导出成果及机读登记例外，不重开历史阶段 |
-| Phase 14 类型化数据边界（AtlasMetadata 试点） | 14-1/14-2/14-3A/14-3B-1 完成，14-3B-2/3 未启动 | 当前有限候选；View、PalaceBossProjectile、MountVisual 与 PalaceFlyingBoss 自有读取已迁移，矩阵见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) |
+| Phase 14 类型化数据边界（AtlasMetadata 试点） | 14-1/14-2/14-3A/14-3B-1/14-3B-2 完成，14-3B-3 未启动 | 当前有限候选；View、PalaceBossProjectile、MountVisual、PalaceFlyingBoss、East 与 Cloud 已迁移，矩阵见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) |
 | Phase 15 应用编排与运行资源生命周期 | 候选方向，未实现 | 场景切换、加载、Global 职责与缓存/池/临时 UI 的所有权 |
 | Phase 16 档案会话、持久化与玩家槽位 | 候选方向，未实现 | 共享/独立状态、保存快照、切档、2P 面板上下文 |
 | Phase 17 玩法与表现模块边界 | 候选方向，未实现 | 命中归属、关卡结算、按需组合、HUD/输入与模块 API |
@@ -64,7 +64,7 @@ flowchart TD
 范围是 `AtlasMetadata` 的真实运行时消费边界与构建校验，不是完成全部档案、装备或成长数据的类型化。
 
 - 14-1 已完成生产者、schema、直接/间接消费者与构建边界矩阵：379 个 manifest、8 种顶层形态，运行时只需 `pages+sequences` 与 `animation+frames`；不按旧“四种 schema”建立统一模型。
-- 14-2 已实现只读 `AtlasMetadataView` / `view_for` 并迁移 `PalaceBossProjectile`；14-3A 已扩展 Mount `animation+frames` 并迁移 `MountVisual`；14-3B-1 已迁移 `PalaceFlyingBoss` 自有 geometry/masks。East/Cloud、North 与 Palace 继承 East 序列路径属于 14-3B-2/3，完成后删除 `data_for`。
+- 14-2 已实现只读 `AtlasMetadataView` / `view_for` 并迁移 `PalaceBossProjectile`；14-3A 已扩展 Mount `animation+frames` 并迁移 `MountVisual`；14-3B-1 已迁移 `PalaceFlyingBoss` 自有 geometry/masks；14-3B-2 已迁移 East/Cloud 与 Palace 继承序列路径。North 属于 14-3B-3，完成后删除 `data_for`。
 - 静态序列化数据仍可使用 Resource；纯运行时只读视图可使用强类型 `RefCounted`。按需求选，不要求用户先在两者中盲选。
 - 校验完整源格式，但仅为实际消费字段提供类型 API；不泄露可写共享集合、不复制纹理页。
 - 全部生产调用方切换后删除旧 `data_for` 入口，不保留 deprecated 兼容层；`.data` 如仍是序列化存储，只允许拥有者内部使用。

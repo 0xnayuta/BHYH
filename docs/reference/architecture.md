@@ -349,7 +349,7 @@ classDiagram
 已落地：
 
 - `RoleRuntimeCatalog` + `RoleRuntimeResourceManifest`：静态预加载角色清单；资源缺失可在解析阶段暴露，清单查询断言仅是 debug 辅助，不冒充 release 失败处理；
-- `AtlasMetadata` + `AtlasMetadataStore`：`manifest.json` 构建期生成 `metadata.tres`；`data_for` 保留给 East/North/Cloud 与 PalaceFlyingBoss 的继承序列辅助，`view_for` 为 `PalaceBossProjectile`、`MountVisual` 与 `PalaceFlyingBoss` 返回经过深度校验的只读 `AtlasMetadataView`；
+- `AtlasMetadata` + `AtlasMetadataStore`：`manifest.json` 构建期生成 `metadata.tres`；`data_for` 仅保留给 North，`view_for` 为 `PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、East 与 Cloud 返回经过深度校验的只读 `AtlasMetadataView`；
 - 哪吒官方部件与 BiLuoTian / LeiTingJieZhen 重技能帧已迁移到构建期 `SpriteFrames`；
 - Spine 资源保持 `.atlas` / `.spine-json` 由 Spine 运行时加载，不转 SpriteFrames。
 - `FrameSequenceStore` 在接纳 Catalog 条目时校验 schema；`StreamedPngEffect` 再校验注入资源，错误时发出 `failed` 并拒绝播放；
@@ -363,7 +363,7 @@ classDiagram
 
 仍然存在的边界：
 
-- `AtlasMetadata.data` 仍为共享 `Dictionary`；`data_for()` 继续向 East/North/Cloud 缓存并返回该字典，PalaceFlyingBoss 继承 East 的序列辅助也经此路径。`PalaceBossProjectile`、`MountVisual` 与 `PalaceFlyingBoss` 的自有 geometry/masks 已改用 `view_for()`；空路径仍直接返回空字典，不能宣称所有失败均已明确拒绝。
+- `AtlasMetadata.data` 仍为共享 `Dictionary`；`data_for()` 仅继续向 North 缓存并返回该字典。`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、East 与 Cloud 已改用 `view_for()`；空路径仍直接返回空字典，不能宣称所有失败均已明确拒绝。
 - `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧：包含动态动作映射、图集几何/子序列、固定数组、调试图标以及已登记历史占位/回退。清单是实际范围来源，本文不复制条目计数。
 - `pet_neat_bullet`、`level_59`、`user_key` 是登记的非怪物边界；法宝与 Lyfb/哪吒特效的 Phase 13 迁移已完成，不再列为待建帧迁移。
 - allowlist 中的历史占位/缺失回退并不满足新增代码的失败语义，不能据此扩张；恢复资源或迁移相应职责时移除登记并重新验收。
@@ -433,7 +433,7 @@ classDiagram
 
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
-| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss` 自有读取已用只读 View；East/Cloud/North 与 Palace 继承序列路径待 14-3B-2/3 迁移，随后删除 `data_for` |
+| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：`PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、East 与 Cloud 已用只读 View；North 待 14-3B-3 迁移，随后删除 `data_for` |
 | Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
@@ -523,7 +523,7 @@ classDiagram
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
 | 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
-| `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | `PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss` 自有读取已用只读 `AtlasMetadataView`；East/Cloud/North 与 Palace 继承序列路径待迁移，不扩大无类型面 |
+| `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | `PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、East 与 Cloud 已用只读 `AtlasMetadataView`；North 待迁移，不扩大无类型面 |
 | 2P 面板全局视图交换 | 改写 `PlayerData`/`RoleProp`，存档前必须恢复 1P | 目标为显式槽位上下文；与快照/共享账本联动，不局部删除保护 |
 | 深层 `get_node()` / 绝对路径 | 存量场景与脚本 | 新代码禁止；重构时同步清理 |
 

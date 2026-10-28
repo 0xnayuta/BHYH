@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 矩阵、14-2 Palace 试点、14-3A Mount 试点与 14-3B-1 PalaceFlyingBoss 已完成（2026-10-28），14-3B-2/3 未启动**。本轮只完成 PalaceFlyingBoss 自有 geometry/masks 迁移，不继续迁移其它消费者。
+> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 矩阵、14-2 Palace 试点、14-3A Mount 试点、14-3B-1 PalaceFlyingBoss 与 14-3B-2 East+Cloud 已完成（2026-10-28），14-3B-3 未启动**。本轮只完成 East+Cloud 与 Palace 继承序列路径迁移，不继续迁移 North。
 > **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。
 > **职责**：本页只展开当前候选 Phase 14；后续 Phase 15~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。不再在本页复制后续阶段任务表。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -31,13 +31,13 @@
 | 现有边界 | 已知事实 | 本阶段取证要求 |
 |:---|:---|:---|
 | `AtlasMetadata` | Resource，`data: Dictionary`；当前无源码直接读 `.data`，均经 Store | 14-1 已核对实际 schema 与字段 |
-| `AtlasMetadataStore` | `data_for` 仍供 East/North/Cloud 使用（PalaceFlyingBoss 的继承 East 序列辅助也经此路径）；`view_for` 已供 `PalaceBossProjectile`、`MountVisual` 与 `PalaceFlyingBoss` 使用，缓存并返回深度校验后的 View | 14-2/14-3A/14-3B-1 已完成；East/Cloud 与 North 待 14-3B-2/3 |
+| `AtlasMetadataStore` | `data_for` 仅剩 North 使用；`view_for` 已供 `PalaceBossProjectile`、`MountVisual`、`PalaceFlyingBoss`、`EastContinentMonster` 与 `CloudBoss` 使用，缓存并返回深度校验后的 View | 14-2/14-3A/14-3B-1/14-3B-2 已完成；North 待 14-3B-3 |
 | 源 schema | 379 个 manifest，8 种顶层形态；运行时只消费 `pages+sequences` 与 `animation+frames` | 不为 `files`/旧 `animations`/数组/索引建运行时模型 |
 | 直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 已逐项记录字段、共享/复制与失败行为 |
 | 构建入口 | `convert_atlas_metadata.py` 379/379 同步；`convert_monster_frames.py` 152 目标/42 跳过 | 构建校验与运行时类型化分开 |
 | Phase 13 已收口路径 | `main_sword_array_weapon` 已删除 Atlas 回退 | 不将其重新列为待迁移消费者 |
 
-14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。14-2/14-3A/14-3B-1 已完成；14-3B-2/3 与 14-4 仍未启动。本页中的后续类型名称是设计候选，不是现有符号。
+14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。14-2/14-3A/14-3B-1/14-3B-2 已完成；14-3B-3 与 14-4 仍未启动。本页中的后续类型名称是设计候选，不是现有符号。
 
 ## 2. 批次 14-1：生产/消费边界与 schema 决策（已完成）
 
@@ -63,7 +63,7 @@
 1. 原“四种 schema”假设不适用于实际源数据；不能按四种模型强行统一。
 2. 运行时只需覆盖真实字段：序列帧几何、`geometry`/`masks`、Mount 动画帧与图层；`files`、旧 `animations`、顶层数组不建立运行时类型。
 3. 失败语义必须先于 consumer 迁移：声明路径缺失、类型错误、空序列和空 mask 需要区分；当前静默退化/基类回退不能原样保留。
-4. 14-2 已在 PalaceBossProjectile 处理声明路径失败；14-3B-1 已将 PalaceFlyingBoss 自有 geometry/masks 迁到 View。共享字典与空路径对 East/Cloud/North 仍是 14-3B-2/3 的边界；此时不删除 `data_for`，也不在 14-1 清理惰性配置。
+4. 14-2 已在 PalaceBossProjectile 处理声明路径失败；14-3B-1 已将 PalaceFlyingBoss 自有 geometry/masks 迁到 View；14-3B-2 已将 East/Cloud 与 Palace 继承序列路径迁到 View。共享字典与空路径当前只剩 North 的 14-3B-3 边界；此时不删除 `data_for`，也不在 14-1 清理惰性配置。
 
 **出口核对**：每个直接消费者均有字段与失败路径记录；只构建使用的 schema 已列明；没有新增未调查调用。14-2 已按此矩阵完成 PalaceBossProjectile 试点。
 
@@ -78,7 +78,7 @@
 | View | 新增 `source/Script/atlas/atlas_metadata_view.gd`（`RefCounted`）；校验 `pages+sequences` 的页、序列帧元组/页索引、geometry、masks；提供值查询，不复制帧数据 |
 | Store | 新增 `AtlasMetadataStore.view_for(path)`；路径为空报错，非空路径缺失/类型错误/schema 错误返回 `null`；按路径缓存 View 与失败结果 |
 | 消费者 | `PalaceBossProjectile` 的 masks/geometry 改读 View；非空 metadata 路径无效时 `configure()` 返回 `false`；NorthBossProjectile 的 `source_masks` 覆盖保留为迁移期兼容 |
-| 未迁移 | East、North、Cloud、PalaceFlyingBoss、MountVisual 在 14-2 当时仍使用 `data_for`；Mount 已在 14-3A 完成，PalaceFlyingBoss 自有 geometry/masks 已在 14-3B-1 完成 |
+| 未迁移 | East、North、Cloud、PalaceFlyingBoss、MountVisual 在 14-2 当时仍使用 `data_for`；Mount 已在 14-3A 完成，PalaceFlyingBoss 自有 geometry/masks 已在 14-3B-1 完成，East/Cloud 已在 14-3B-2 完成；North 仍待 14-3B-3 |
 | 身份 | 按 [ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md) 保持 metadata 路径身份，不新增 UID |
 | 范围 | 未修改 `source/Art/`、素材内容、既有 UID、数值/动画时序；未清理惰性 `atlas_metadata` 配置 |
 
@@ -93,12 +93,12 @@
 
 - 首个真实消费者运行正常；非空声明路径失败不再静默回退。
 - View 不暴露可写共享容器；序列/mask 值返回原生值类型，不建立逐帧对象。
-- 尚未删除 `data_for`；它是 East/Cloud/North 及 PalaceFlyingBoss 继承 East 序列辅助的迁移期入口，不能成为永久双 API。
-- Mount 与 PalaceFlyingBoss 已分别由 14-3A、14-3B-1 完成；East/Cloud/North 仍属于后续切片，不能以试点完成宣称整个 Phase 14 完成。
+- 尚未删除 `data_for`；它当前只剩 North 的迁移期入口，不能成为永久双 API。
+- Mount、PalaceFlyingBoss、East 与 Cloud 已分别由 14-3A、14-3B-1、14-3B-2 完成；North 仍属于 14-3B-3，不能以试点完成宣称整个 Phase 14 完成。
 
 ## 4. 批次 14-3A/14-3B：生产消费者闭环迁移
 
-**状态**：14-3A 已完成；14-3B-1 已完成；14-3B-2/3 未启动。
+**状态**：14-3A、14-3B-1、14-3B-2 已完成；14-3B-3 未启动。
 
 ### 4.1 14-3A：Mount（已完成）
 
@@ -113,16 +113,24 @@
 - `AtlasMetadataView` 增加 `geometry_origin` / `geometry_size`；`geometry_center`、`geometry_origin`、`geometry_size` 统一走同一个已校验 geometry 入口；
 - View 无效时 PalaceFlyingBoss 自有几何退化为零值并禁用 hit1 碰撞，不再直接索引裸字典；
 - 验证覆盖 3323/3343 的 `wait` geometry 与 `hit1` masks，并与原始 `AtlasMetadata.data` 逐值比较；`level_73` / `level_74` 冒烟 PASS；
-- 继承 East 的序列辅助（`_get_east_metadata`）仍走 `data_for`，归入 14-3B-2；不得把本次切片描述为 PalaceFlyingBoss 已完全脱离 `data_for`；
+- 继承 East 的序列辅助在 14-3B-2 已切换到 View；本切片本身只覆盖 PalaceFlyingBoss 自有读取；
 - 未修改素材、UID 或动画时序。
 
-### 4.3 14-3B-2/14-3B-3：剩余消费者（未启动）
+### 4.3 14-3B-2：East + Cloud（已完成）
 
-1. **14-3B-2：East + Cloud。** 迁移 `EastContinentMonster._get_east_metadata` 与 `CloudBoss._source`；East 基类切换后同时关闭 PalaceFlyingBoss 的继承序列路径。先验证普通 East 序列几何，再验证 Cloud 的 `center` 与继承行为。
-2. **14-3B-3：North。** 迁移 `NorthContinentMonster._source` 的 `sequences` / `geometry` / `masks`，处理 `source_masks` 覆盖与弹体路径。
-3. 验证序列帧几何与 masks、前后图层/region/offset、缺资源行为；不改变素材/数值/时序。
-4. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
-5. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、无生产调用的 `validate_path`/`clear_cache`、失效注释与测试；不保留 deprecated 别名或迁移适配层。
+- `EastContinentMonster._get_east_metadata` 改为 `_east_metadata_view`，删除 `_east_metadata_cache`；`_seq_frame_count`、`_seq_reg_anchor`、`_frame_geom` 改用 View 的值查询；
+- `CloudBoss._source` 改为 `_cloud_view`，`_visual_offset` 只用 `geometry_center`；
+- 该切片同时关闭 PalaceFlyingBoss 的继承 East 序列路径；`data_for` 只剩 North；
+- 临时探针遍历 **149** 个 `pages+sequences` 资源、**1310** 个序列、**40222** 帧，逐帧比较长度、registration anchor、center/size/has_visual，**PASS**；
+- `level_72`（East）、`level_75`（Cloud）冒烟 PASS；`level_73` / `level_74`（Palace 继承路径）在最终验证中复跑；
+- 未修改素材、UID 或动画时序。
+
+### 4.4 14-3B-3：North（未启动）
+
+1. 迁移 `NorthContinentMonster._source` 的 `sequences` / `geometry` / `masks`，处理 `source_masks` 覆盖与弹体路径。
+2. 验证序列帧几何与 masks、前后图层/region/offset、缺资源行为；不改变素材/数值/时序。
+3. 每个切片单独验证、可独立回滚；不同时调整素材或业务规则。
+4. 最后一个调用方切换后删除 `AtlasMetadataStore.data_for` 等被替代公共入口、无生产调用的 `validate_path`/`clear_cache`、失效注释与测试；不保留 deprecated 别名或迁移适配层。
 
 **出口**：生产代码只走新正式入口；无外部 `.data` 访问；无双加载/失败回退；需要可变工作数据的消费者不修改共享定义。
 
@@ -152,7 +160,9 @@
 
 14-2/14-3A 的已完成证据：View **267/267**（137 `pages+sequences` + 130 `animation+frames`）；`MountVisual` metadata 动画与边界 PASS；`level_73` / `level_74` / `level_75` 冒烟 PASS；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。未执行全量关卡回归、L2 全固定套件或 release 重验；这些不因试点被宣称通过。
 
-14-3B-1 的已完成证据：3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 从 View 读取并与原始 `.data` 逐值比较 **PASS**；`level_73` / `level_74` 冒烟 PASS（0 ERROR / 0 WARNING）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。继承 East 序列辅助仍走 `data_for`，未在本切片验证为完全脱离。
+14-3B-1 的已完成证据：3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 从 View 读取并与原始 `.data` 逐值比较 **PASS**；`level_73` / `level_74` 冒烟 PASS（0 ERROR / 0 WARNING）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。继承 East 序列辅助已在 14-3B-2 切换到 View。
+
+14-3B-2 的已完成证据：East/Cloud 辅助探针覆盖 **149** 个序列资源、**1310** 个序列、**40222** 帧，逐帧比较帧数、registration anchor、center/size/has_visual **PASS**；`level_72`（East）与 `level_75`（Cloud）冒烟 PASS（0 ERROR / 0 WARNING）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（682.3s），覆盖 `level_73`/`level_74` 的 Palace 继承路径。
 
 涉及运行探针与枚举 `source/` 的门禁串行运行。临时夹具在结束后移除，不进入发布。完整私有工作区维持零错误零警告；未执行验证显式记录为未验证。
 
@@ -161,10 +171,10 @@
 - 所有实际运行时消费者迁移，旧公共入口与兼容分支删除；未消费源 schema 保持完整构建校验。
 - 无可写共享容器泄露；页/纹理未重复常驻；行为与资源身份不变。
 - 构建、L1、定向冒烟、L2 与阶段回归满足矩阵；发布变更按触发条件验证。
-- 文档、ADR、脚本索引与状态一致；14-1/14-2/14-3A/14-3B-1 的字段矩阵保留在 reference，不复制进阶段目标。
+- 文档、ADR、脚本索引与状态一致；14-1/14-2/14-3A/14-3B-1/14-3B-2 的字段矩阵保留在 reference，不复制进阶段目标。
 
 中断时从 14-1 矩阵与已验证切片恢复；失败回滚该逻辑批次，不恢复旧来源回退。阶段全部完成后只归档本页的 Phase 14 记录，再重新建立下一候选计划；后续方向继续以 roadmap 为准。
 
-**恢复入口**：14-1/14-2/14-3A/14-3B-1 已完成，不要重跑全仓 schema 猜测；从 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) 的消费者表和 14-3B-2/3 切片继续。
+**恢复入口**：14-1/14-2/14-3A/14-3B-1/14-3B-2 已完成，不要重跑全仓 schema 猜测；从 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) 的消费者表和 14-3B-3 切片继续。
 
 **下一候选顺序**：Phase 15 应用编排/运行资源 → Phase 16 档案会话/持久化/槽位 → Phase 17 玩法/表现边界。该顺序是风险优先队列，不是 AtlasMetadata 对全部架构工作的强制技术前置。

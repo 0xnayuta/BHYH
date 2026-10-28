@@ -1310,7 +1310,6 @@ const DATA := {
 		}
 	},
 }
-static var _east_metadata_cache: Dictionary = {}
 static var _east_animation_bundle_cache: Dictionary = {}
 static var _east_geometry_cache: Dictionary = {}
 static var _east_loose_frames_cache: Dictionary = {}
@@ -1321,62 +1320,43 @@ static func _metadata_for_model(model_id: int) -> String:
 	return path if ResourceLoader.exists(path) else ""
 
 
-static func _get_east_metadata(metadata_path: String) -> Dictionary:
-	if _east_metadata_cache.has(metadata_path):
-		return _east_metadata_cache[metadata_path] as Dictionary
-	var data := AtlasMetadataStore.data_for(metadata_path)
-	if not data.is_empty():
-		_east_metadata_cache[metadata_path] = data
-	return data
+static func _east_metadata_view(metadata_path: String) -> AtlasMetadataView:
+	if metadata_path.is_empty():
+		return null
+	return AtlasMetadataStore.view_for(metadata_path)
 
 
 static func _seq_frame_count(metadata_path: String, sequence_name: String) -> int:
-	var metadata := _get_east_metadata(metadata_path)
-	var sequences: Dictionary = metadata.get("sequences", {})
-	var sequence: Dictionary = sequences.get(sequence_name, {})
-	return Array(sequence.get("frames", [])).size()
+	var view := _east_metadata_view(metadata_path)
+	return view.sequence_frame_count(StringName(sequence_name)) if view != null else 0
 
 
 static func _seq_reg_anchor(metadata_path: String, sequence_name: String, frame_index: int = 0) -> Vector2:
-	var metadata := _get_east_metadata(metadata_path)
-	var sequences: Dictionary = metadata.get("sequences", {})
-	var sequence: Dictionary = sequences.get(sequence_name, {})
-	var frames: Array = sequence.get("frames", [])
-	if frame_index < 0 or frame_index >= frames.size() or not frames[frame_index] is Array:
+	var view := _east_metadata_view(metadata_path)
+	if view == null:
 		return Vector2.ZERO
-	var entry: Array = frames[frame_index]
-	if entry.size() < 10:
-		return Vector2.ZERO
-	var used_size := Vector2(float(entry[4]), float(entry[5]))
-	var margin := Rect2(float(entry[6]), float(entry[7]), float(entry[8]), float(entry[9]))
-	var canvas_size := used_size + margin.size
-	var center_x := margin.position.x + used_size.x * 0.5 - canvas_size.x * 0.5
-	var bottom_y := margin.position.y + used_size.y - canvas_size.y * 0.5
-	return Vector2(center_x, bottom_y)
+	return view.frame_reg_anchor(StringName(sequence_name), frame_index)
 
 
 static func _frame_geom(metadata_path: String, sequence_name: String, frame_index: int) -> Dictionary:
 	var cache_key := "%s|%s|%d" % [metadata_path, sequence_name, frame_index]
 	if _east_geometry_cache.has(cache_key):
 		return _east_geometry_cache[cache_key] as Dictionary
-	var metadata := _get_east_metadata(metadata_path)
-	var sequences: Dictionary = metadata.get("sequences", {})
-	var sequence: Dictionary = sequences.get(sequence_name, {})
-	var frames: Array = sequence.get("frames", [])
-	if frame_index < 0 or frame_index >= frames.size() or not frames[frame_index] is Array:
-		var missing := {"size": Vector2.ONE, "center": Vector2.ZERO, "has_visual": false}
+	var view := _east_metadata_view(metadata_path)
+	var sequence := StringName(sequence_name)
+	var missing := {"size": Vector2.ONE, "center": Vector2.ZERO, "has_visual": false}
+	if (
+		view == null
+		or not view.has_sequence(sequence)
+		or frame_index < 0
+		or frame_index >= view.sequence_frame_count(sequence)
+	):
 		_east_geometry_cache[cache_key] = missing
 		return missing
-	var entry: Array = frames[frame_index]
-	if entry.size() < 10:
-		var invalid := {"size": Vector2.ONE, "center": Vector2.ZERO, "has_visual": false}
-		_east_geometry_cache[cache_key] = invalid
-		return invalid
-	var used_size := Vector2(float(entry[4]), float(entry[5]))
-	var original_size := used_size + Vector2(float(entry[8]), float(entry[9]))
+	var used_size := view.frame_size(sequence, frame_index)
 	var geom := {
 		"size": used_size,
-		"center": Vector2(float(entry[6]), float(entry[7])) + used_size * 0.5 - original_size * 0.5,
+		"center": view.frame_center(sequence, frame_index),
 		"has_visual": used_size.x > 0.0 and used_size.y > 0.0,
 	}
 	_east_geometry_cache[cache_key] = geom
