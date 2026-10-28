@@ -568,7 +568,7 @@ classDiagram
 | 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
-| 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由 |
+| 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由；`slot_snapshot()` 枚举槽位所有者，`shared_keys()` 登记共享账本键，`save_profile` 剥离 2P 档案的共享副本 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |
 | 存档 | 加密 JSON、`.tmp`/`.bak` 原子写、后台保存、稳定密钥 |

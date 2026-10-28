@@ -2908,7 +2908,8 @@ func set_exp():
 	if add_exp <= 0:
 		return
 	var exp_value: int = add_exp
-	var primary_props: BaseRoleProperties = get_node("/root/RoleProp")
+	# 经验按槽位归属：1P 走槽位查询，不再硬编码 /root/RoleProp。
+	var primary_props: BaseRoleProperties = LocalCoop.props_for_slot(1)
 	if primary_props.baseroleprop.Level < int(PlayerData.PLAYER_MAX_LEVEL):
 		primary_props.cure_exp(exp_value)
 	_cure_active_pet_exp(exp_value, 1)

@@ -1,18 +1,19 @@
 extends Node2D
 class_name BaseMagicWeapon
 
+## 数据/属性经槽位查询解析：无持有者时退回 1 号槽位，不直接引用 /root 单例。
 var PlayerData: PlayerDataStore:
 	get:
-		if not is_instance_valid(player):
-			return get_node("/root/PlayerData")
 		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.data_for(player) if coop != null else get_node("/root/PlayerData")
+		if coop != null:
+			return coop.data_for(player) if is_instance_valid(player) else coop.data_for_slot(1)
+		return get_node("/root/PlayerData")
 var RoleProp: BaseRoleProperties:
 	get:
-		if not is_instance_valid(player):
-			return get_node("/root/RoleProp")
 		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.props_for(player) if coop != null else get_node("/root/RoleProp")
+		if coop != null:
+			return coop.props_for(player) if is_instance_valid(player) else coop.props_for_slot(1)
+		return get_node("/root/RoleProp")
 
 @onready var mg_action: AnimatedSprite2D = $MgAction
 @onready var mg_player: AnimationPlayer = $MgPlayer

@@ -140,7 +140,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 `coop_probe_matrix.gd`：
 
 - 继承 `SceneTree`，通过 `--case` 运行单个探针；
-- 覆盖核心状态、玩法、技能切换、怪物数值、面板、性能、宠物、共享魂、按键、被动、剑/坐骑与创建 UI；
+- 覆盖核心状态、玩法、技能切换、怪物数值、面板、性能、宠物、共享魂、槽位账本、按键、被动、剑/坐骑、创建 UI 与无双归属；
 - `coop_probe_runner.py` 将其复制到 `source/_coop_probe_matrix.gd`，逐个启动 Godot，收集结果后清理。
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。

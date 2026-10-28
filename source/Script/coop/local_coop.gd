@@ -1,7 +1,10 @@
 extends Node
 
 const SAVE_KEY := "本地双人"
-const SAVE_VERSION := 2
+## 档案形状版本：3 起 2P 档案不再携带共享键副本；旧档在读档时按最大值合并，不丢数据。
+const SAVE_VERSION := 3
+## 灵魂共享引入版本：早于该版本的 2P 档内 coin_num 仍计入共享账本。
+const SHARED_SOUL_VERSION := 2
 const BAG_KEYS := ["装备列表", "道具列表", "消耗品列表", "宠物背包"]
 const PLAYER_DATA_SCRIPT := preload("res://Script/memory_class/player_data.gd")
 const PROPS_SCRIPT := preload("res://Script/base/base_role_properies.gd")
@@ -135,7 +138,7 @@ func load_profile() -> void:
 	link_main_sword_array()
 	PlayerData.ensure_main_sword_array()
 	var initial_soul := clampi(int(PlayerData.player_data.get("coin_num", 0)), PlayerData.SOUL_MIN, PlayerData.SOUL_MAX)
-	if int(saved.get("版本", 1)) < SAVE_VERSION:
+	if int(saved.get("版本", 1)) < SHARED_SOUL_VERSION:
 		initial_soul += clampi(int(profile.get("coin_num", 0)), PlayerData.SOUL_MIN, PlayerData.SOUL_MAX)
 	set_shared_soul(initial_soul)
 	saved["版本"] = SAVE_VERSION
@@ -275,18 +278,62 @@ func refresh_main_sword_array() -> void:
 			props.source_player.jsfzsy()
 
 
+## 共享账本键：由 1P 档案唯一持有，2P 仅在运行期引用同一容器。
+## 新增共享项必须在此登记，否则会重新出现两套可写真源。
+func shared_keys() -> Array[String]:
+	var keys: Array[String] = []
+	keys.append_array(BAG_KEYS)
+	keys.append("被动技能")
+	keys.append(PlayerData.MAIN_SWORD_ARRAY_KEY)
+	keys.append(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY)
+	keys.append("炼体")
+	keys.append(PlayerData.WANLING_CATALOG_LEVELS_KEY)
+	keys.append("coin_num")
+	return keys
+
+
+## 共享账本一致性：逐键报告 1P/2P 是否同一容器且值相等，供探针与调试验证。
+func shared_ledger_report() -> Dictionary:
+	var report: Dictionary = {}
+	if not is_instance_valid(secondary_data):
+		return report
+	var primary := canonical_profile_for_slot(1)
+	for key: String in shared_keys():
+		var primary_value: Variant = primary.player_data.get(key, null)
+		var secondary_value: Variant = secondary_data.player_data.get(key, null)
+		report[key] = {
+			"same_container": is_same(primary_value, secondary_value),
+			"equal": JSON.stringify(primary_value) == JSON.stringify(secondary_value),
+		}
+	return report
+
+
+## 槽位查询的可枚举快照：确认每个槽位的数据/属性所有者与角色。
+func slot_snapshot() -> Dictionary:
+	var result: Dictionary = {}
+	for slot in [1, 2]:
+		var profile := data_for_slot(slot)
+		var props := props_for_slot(slot)
+		var active: bool = slot == 1 or is_instance_valid(secondary_data)
+		result[slot] = {
+			"slot": slot,
+			"active": active,
+			"data_is_secondary": is_instance_valid(secondary_data) and profile == secondary_data,
+			"props_is_secondary": is_instance_valid(secondary_props) and props == secondary_props,
+			"role_id": int(profile.player_data.get("Myself", 1)) if profile != null and active else 0,
+		}
+	return result
+
+
 func save_profile(snapshot: Dictionary) -> void:
 	if not is_instance_valid(secondary_data):
 		return
 	var profile: Dictionary = secondary_data.player_data.duplicate(true)
-	for key: String in BAG_KEYS:
+	# 共享项只由 1P 档案持有：2P 档案不写任何共享副本。
+	for key: String in shared_keys():
 		profile.erase(key)
-	profile.erase(PlayerData.MAIN_SWORD_ARRAY_KEY)
-	profile.erase(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY)
-	profile.erase("被动技能")
 	profile.erase(SAVE_KEY)
 	snapshot["coin_num"] = normalize_shared_soul()
-	profile.erase("coin_num")
 	snapshot[SAVE_KEY] = {
 		"版本": SAVE_VERSION,
 		"启用": bool(PlayerData.player_data.get(SAVE_KEY, {}).get("启用", false)),
@@ -378,6 +425,15 @@ func owner_hero(node: Node, depth := 0) -> Node:
 	return null
 
 
+## 槽位解析顺序（遗留边界，新增代码不得依赖后两项）：
+## 1. 全局别名（`PlayerData`/`RoleProp`，随视图交换切换）→ 当前视图槽位；
+## 2. 节点 meta `coop_damage_slot`（伤害归属快照）；
+## 3. 怪物 → `get_player` 的 `coop_slot`；
+## 4. 祖先链 meta `coop_slot`；
+## 5. `owner_hero()` 沿持有者字段回溯到 BaseHero 的 `coop_slot`；
+## 6. 弹体/召唤物经 `MyFather`/`owner_monster`/`source_monster` 回溯；
+## 7. 脚本路径前缀（`back_pack`/`skill`/`other_scene`/`magic_weapon`）→ `ui_slot`；
+## 8. 默认 1。
 func slot_for(node: Node) -> int:
 	if not is_instance_valid(node) or not is_enabled():
 		return 1

@@ -1,5 +1,7 @@
 extends SceneTree
 
+const DataKeys := preload("res://Script/base/data_keys.gd")
+
 var data: Node
 var coop: Node
 var memory: Node
@@ -86,6 +88,8 @@ func _run() -> void:
 			await _case_pet_experience()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
+		"LocalCoopSlotLedgerProbe":
+			await _case_slot_ledger()
 		"LocalCoopSkillKeysProbe":
 			await _case_skill_keys()
 		"LocalCoopSwitchPassiveProbe":
@@ -459,6 +463,140 @@ func _case_shared_soul() -> void:
 	_check(data.get_soul() == 150 and coop.secondary_data.get_soul() == 150, "shared soul gain")
 	_check(data.spend_soul(100) and coop.secondary_data.get_soul() == 50, "shared soul spend")
 	_check(not coop.secondary_data.spend_soul(51), "shared soul insufficient")
+
+
+## 16-4：槽位查询可枚举、共享账本单写入者、个体状态按槽位归属。
+func _case_slot_ledger() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "slot ledger heroes instantiated")
+	if p1 == null or p2 == null:
+		return
+
+	# 16-4A：槽位查询可枚举且指向唯一所有者。
+	var slots: Dictionary = coop.slot_snapshot()
+	_check(int(slots.get(1, {}).get("role_id", 0)) == 1, "slot 1 role id")
+	_check(int(slots.get(2, {}).get("role_id", 0)) == 7, "slot 2 role id")
+	_check(bool(slots.get(1, {}).get("active", false)), "slot 1 active")
+	_check(bool(slots.get(2, {}).get("active", false)), "slot 2 active")
+	_check(not bool(slots.get(1, {}).get("data_is_secondary", true)), "slot 1 data is primary")
+	_check(bool(slots.get(2, {}).get("data_is_secondary", false)), "slot 2 data is secondary")
+	_check(bool(slots.get(2, {}).get("props_is_secondary", false)), "slot 2 props is secondary")
+	_check(coop.slot_for(p1) == 1 and coop.slot_for(p2) == 2, "hero slot resolution")
+	_check(coop.data_for(p2) == coop.secondary_data, "data_for hero slot")
+	_check(coop.props_for(p1) == root.get_node("RoleProp"), "props_for 1P hero")
+	_check(coop.props_for(p2) == coop.secondary_props, "props_for 2P hero")
+	_check(coop.data_for_slot(1) == data and coop.data_for_slot(2) == coop.secondary_data, "slot data owners")
+
+	# 16-4B：共享账本同一容器，写入只发生一次。
+	var report: Dictionary = coop.shared_ledger_report()
+	for key in coop.shared_keys():
+		var entry: Dictionary = report.get(key, {})
+		_check(bool(entry.get("same_container", false)), "shared container " + key)
+		_check(bool(entry.get("equal", false)), "shared value " + key)
+	data.player_data["道具列表"]["页码1"].append({"Name": "shared_probe"})
+	_check(
+		coop.secondary_data.player_data["道具列表"]["页码1"].size() == 1,
+		"bag write visible to 2P"
+	)
+	coop.secondary_data.player_data["装备列表"]["页码1"].append({"Name": "shared_probe_2"})
+	_check(
+		data.player_data["装备列表"]["页码1"].size() == 1,
+		"equipment write visible to 1P"
+	)
+	data.set_soul(200)
+	coop.secondary_data.spend_soul(50)
+	_check(data.get_soul() == 150 and coop.secondary_data.get_soul() == 150, "shared soul single ledger")
+	coop.increment_pellet_count("培元丹1")
+	_check(int(data.player_data.get("培元丹1", 0)) == 1, "pellet counted once for 1P")
+	_check(int(coop.secondary_data.player_data.get("培元丹1", 0)) == 1, "pellet counted once for 2P")
+	data.player_data["被动技能"]["热血"] = 3
+	coop.link_passive_skills()
+	_check(int(coop.secondary_data.player_data["被动技能"]["热血"]) == 3, "passive shared")
+	var training: Dictionary = coop.BODY_TRAINING_DATA.normalize_state(data.player_data.get("炼体", {}))
+	training["p1"]["10001"]["level"] = 4
+	data.player_data["炼体"] = training
+	coop.link_bags()
+	_check(
+		int(coop.secondary_data.player_data["炼体"]["p2"]["10001"]["level"]) == 4,
+		"body training shared"
+	)
+	_check(
+		int(coop.secondary_data.player_data["炼体"]["p1"]["10001"]["level"]) == 4,
+		"body training copy kept in sync"
+	)
+	# 合并规则：两侧按 max 归并，再同步到 p1/p2 两个视图。
+	var secondary_training: Dictionary = coop.BODY_TRAINING_DATA.normalize_state(
+		coop.secondary_data.player_data.get("炼体", {})
+	)
+	secondary_training["p2"]["10001"]["level"] = 7
+	coop.secondary_data.player_data["炼体"] = secondary_training
+	coop.link_bags()
+	var merged_training: Dictionary = data.player_data["炼体"]
+	_check(int(merged_training["p1"]["10001"]["level"]) == 7, "body training merges by max")
+	_check(int(merged_training["p2"]["10001"]["level"]) == 7, "body training p2 view synced")
+	_check(
+		is_same(data.player_data["炼体"], coop.secondary_data.player_data["炼体"]),
+		"body training single container"
+	)
+	# 重复链接不得重复追加共享容器内容。
+	var pack_size: int = data.player_data["宠物背包"].size()
+	coop.link_bags()
+	coop.link_bags()
+	_check(data.player_data["宠物背包"].size() == pack_size, "shared pet backpack stable on relink")
+
+	# 16-4C：个体状态按槽位归属，且 2P 档案不携带共享副本。
+	data.player_data["玩家等级"] = 30
+	coop.secondary_data.player_data["玩家等级"] = 12
+	_check(int(coop.data_for_slot(1).player_data.get("玩家等级", 0)) == 30, "1P level independent")
+	_check(int(coop.data_for_slot(2).player_data.get("玩家等级", 0)) == 12, "2P level independent")
+	coop.secondary_props.baseroleprop.Level = 12
+	coop.secondary_props.cure_exp(10)
+	_check(int(data.player_data.get("玩家当前经验", -1)) == 0, "2P exp does not leak to 1P")
+	_check(int(coop.secondary_data.player_data.get("玩家当前经验", -1)) == 10, "2P exp written to 2P")
+	# 个体项：装备穿戴、出战宠物、技能键位互不串槽。
+	_check(
+		not is_same(data.player_data["武器"], coop.secondary_data.player_data["武器"]),
+		"weapon slots are distinct containers"
+	)
+	_check(
+		not is_same(data.player_data[DataKeys.SKILL_LEARNED], coop.secondary_data.player_data[DataKeys.SKILL_LEARNED]),
+		"skill learned slots are distinct containers"
+	)
+	data.player_data["出战宠物"] = "PetTiger"
+	coop.secondary_data.player_data["出战宠物"] = "PetTurtle"
+	_check(
+		str(coop.data_for_slot(1).player_data.get("出战宠物", "")) == "PetTiger"
+		and str(coop.data_for_slot(2).player_data.get("出战宠物", "")) == "PetTurtle",
+		"active pet individually owned"
+	)
+	data.player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"] = "p1_bind"
+	coop.secondary_data.player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"] = "p2_bind"
+	_check(
+		str(coop.data_for_slot(1).player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"]) == "p1_bind",
+		"1P skill keybind individually owned"
+	)
+	_check(
+		str(coop.data_for_slot(2).player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"]) == "p2_bind",
+		"2P skill keybind individually owned"
+	)
+	var snapshot: Dictionary = memory._prepare_player_save_data()
+	var saved_2p: Dictionary = snapshot.get(coop.SAVE_KEY, {}).get("2P", {})
+	for key in coop.shared_keys():
+		_check(not saved_2p.has(key), "2P archive strips shared key " + key)
+	_check(int(saved_2p.get("玩家等级", 0)) == 12, "2P archive keeps individual level")
+
+	# 16-4D：清空运行期后不残留上一会话槽位。
+	coop.clear_runtime()
+	_check(coop.data_for_slot(2) == data, "cleared slot 2 falls back to slot 1")
+	var cleared: Dictionary = coop.slot_snapshot()
+	_check(not bool(cleared.get(2, {}).get("active", true)), "cleared slot 2 inactive")
+	_check(coop.shared_ledger_report().is_empty(), "cleared ledger report empty")
+	p1.queue_free()
+	p2.queue_free()
+	await process_frame
 
 
 func _case_skill_keys() -> void:

@@ -2012,12 +2012,11 @@ func is_mount_system_unlocked() -> bool:
 	if int(player_data.get("通天教主", 0)) == 1:
 		return true
 	var coop := get_node_or_null("/root/LocalCoop")
-	if (
-		coop != null
-		and coop.is_enabled()
-		and self in [get_node("/root/PlayerData"), coop.data_for_slot(1), coop.data_for_slot(2)]
-	):
-		return int(coop.data_for_slot(1).player_data.get("通天教主", 0)) == 1
+	if coop != null and coop.is_enabled():
+		var slot_one: Node = coop.canonical_profile_for_slot(1)
+		# 本 Autoload 节点与两个槽位档案共享同一解锁开关；视图交换期间仍按 1 号槽位判定。
+		if self == slot_one or self == coop.data_for_slot(2) or self == get_node_or_null("/root/PlayerData"):
+			return int(slot_one.player_data.get("通天教主", 0)) == 1
 	return false
 
 

@@ -1248,8 +1248,11 @@ func _is_pet_tiger_data(pet: Dictionary) -> bool:
 	return name == "虎丸" or name == "白灵虎" or name == "白虎将军" or name == "白虎战神" or name == "白虎"
 
 
-func _get_active_pet_data(profile: Node = null) -> Dictionary:
-	var PlayerData: Node = profile if profile != null else get_node("/root/PlayerData")
+## 宠物数据必须由调用方按槽位提供档案；不再回落到 /root/PlayerData（隐含 1P）。
+func _get_active_pet_data(profile: Node) -> Dictionary:
+	if profile == null:
+		return {}
+	var PlayerData: Node = profile
 	if PlayerData.has_method("ensure_pet_tiger"):
 		PlayerData.ensure_pet_tiger()
 	if PlayerData.has_method("ensure_pet_dragon"):

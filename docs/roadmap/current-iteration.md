@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文已完成；16-4~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本已完成；16-5~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -143,10 +143,10 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 ### 5.1 切片
 
-1. **Phase 16-4A 槽位查询收口（规划）**：`LocalCoop.slot_for`/`data_for`/`props_for`/`canonical_profile_for_slot` 成为业务读取的唯一入口；清除仍假定 `/root/PlayerData` 即当前操作者的新增代码路径；
-2. **Phase 16-4B 共享账本（规划）**：装备/道具/消耗品/宠物背包、被动技能、主线剑阵、灵魂、炼体、万灵图录的共享写入只经共享账本入口；`link_bags`、`normalize_shared_soul`、`_merge_progression_dict` 的合并规则保持并补定向用例；
-3. **Phase 16-4C 个体状态（规划）**：等级/属性/技能/装备穿戴/宠物出战的个体写入按槽位归属；`save_profile` 继续剥离共享键，禁止 2P 档案携带共享副本；
-4. **Phase 16-4D 槽位解析与遗留路径（规划）**：`meta → 祖先 coop_slot → owner_hero() → 脚本路径前缀 → 默认 1` 的解析顺序保留并记录为遗留边界；新增代码不得依赖脚本路径前缀推断。
+1. **Phase 16-4A 槽位查询收口（已完成）**：`slot_for`/`data_for`/`data_for_slot`/`props_for`/`props_for_slot`/`canonical_profile_for_slot` 为业务读取唯一入口；新增 `slot_snapshot()` 枚举槽位所有者；`base_monster.set_exp`、`PlayerData.is_mount_system_unlocked`、`BaseMagicWeapon` 的 `/root` 硬编码回落改为槽位查询；`BaseLevel._get_active_pet_data` 取消缺省档案；
+2. **Phase 16-4B 共享账本（已完成）**：新增 `shared_keys()` 作为共享键唯一登记（三个背包 + 宠物背包 + 被动技能 + 主线剑阵 + 剑阵等级 + 炼体 + 万灵图录 + 灵魂）与 `shared_ledger_report()` 一致性报告；`save_profile` 按登记剥离全部共享副本（补齐此前遗漏的炼体与万灵图录）；`SAVE_VERSION` 升至 3，灵魂计入判定独立为 `SHARED_SOUL_VERSION=2`；`link_bags`/`_merge_progression_dict` 合并规则不变并补定向用例；
+3. **Phase 16-4C 个体状态（已完成）**：等级/属性/技能/装备穿戴/宠物出战/技能键位的个体写入按槽位归属，跨槽写入用例覆盖；2P 档案不携带任何共享副本；
+4. **Phase 16-4D 槽位解析与遗留路径（已完成）**：`slot_for` 的八级解析顺序（全局别名 → `coop_damage_slot` → 怪物 `get_player` → 祖先 `coop_slot` → `owner_hero()` → 弹体来源 → 脚本路径前缀 → 默认 1）已就地记录为遗留边界；新增代码不得依赖脚本路径前缀推断。
 
 ### 5.2 必须验证
 
@@ -161,7 +161,8 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 - 共享项与个体项各有唯一写入者，运行中不存在两套可写真源；
 - 槽位查询可枚举、可验证，新增代码不假定 1P；
 - 共享/个体业务语义与数值不变；
-- 不复制 Autoload、不新增第二组全局单例。
+- 不复制 Autoload、不新增第二组全局单例；
+- 新增共享项必须登记到 `LocalCoop.shared_keys()`，否则视为两套可写真源。
 
 ## 6. Phase 16-5：面板显式操作者与保存快照互斥
 
