@@ -42,7 +42,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：Phase 14 完成，待归档；14-1~14-4 全部完成 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：规划中，尚未启动实现 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
@@ -82,6 +82,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | [`archive/iteration_6_9_patch_backport.md`](archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植的完整范围、实施与验收记录 |
 | [`archive/iteration_12_display_hud.md`](archive/iteration_12_display_hud.md) | Phase 12 画布/相机/HUD 重构与多分辨率验收归档 |
 | [`archive/iteration_13_visual_asset_contract.md`](archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口与发布验证归档；保持历史原貌 |
+| [`archive/iteration_14_atlas_metadata_boundary.md`](archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界、View 迁移、守卫与验证归档 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 

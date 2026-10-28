@@ -42,7 +42,6 @@
 
 ## 证据
 
-- [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.2
 - [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md)
 - [`../../source/project.godot`](../../source/project.godot) `[display]`
 - [`../../source/Script/level/role_information.gd`](../../source/Script/level/role_information.gd)

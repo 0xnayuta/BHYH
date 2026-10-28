@@ -1,9 +1,9 @@
 # AtlasMetadata 生产者、schema 与消费者矩阵
 
-> **状态**：Phase 14 已完成（2026-10-28，待归档）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。
+> **状态**：Phase 14 已完成并归档（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。
 > **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
 > **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
-> **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`current-iteration.md`](../roadmap/current-iteration.md)。
+> **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)。
 
 ## 1. 数据流与职责
 

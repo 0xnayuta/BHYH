@@ -434,7 +434,7 @@ classDiagram
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
+| Global 缓存/池/场景流与资源请求交织 | [Phase 15 当前计划](../roadmap/current-iteration.md)：先完成调用面/所有权矩阵，再收敛场景入口、预载交接与退出生命周期 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
 

@@ -76,4 +76,4 @@ Phase 14-2 / 14-3A / 14-3B-1 / 14-3B-2 / 14-3B-3 已实现：
 - [验收标准](../reference/acceptance.md)
 - [总体目标契约](../standards/target_architecture_contract.md) §5、§7、§11
 - [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md)
-- [Phase 14 当前迭代](../roadmap/current-iteration.md)
+- [Phase 14 归档](../archive/iteration_14_atlas_metadata_boundary.md)
