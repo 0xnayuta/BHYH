@@ -91,19 +91,19 @@ func frame_reg_anchor(animation: StringName, frame_index: int) -> Vector2:
 
 
 func has_geometry(animation: StringName) -> bool:
-	var entry: Variant = _geometry.get(String(animation), null)
-	return entry is Dictionary and _valid_geometry_entry(entry as Dictionary)
+	return not _geometry_entry(animation).is_empty()
 
 
 func geometry_center(animation: StringName) -> Vector2:
-	var entry: Variant = _geometry.get(String(animation), null)
-	if not entry is Dictionary:
-		return Vector2.ZERO
-	var center_value: Variant = (entry as Dictionary).get("center", null)
-	if not center_value is Array:
-		return Vector2.ZERO
-	var center: Array = center_value as Array
-	return Vector2(float(center[0]), float(center[1])) if center.size() >= 2 else Vector2.ZERO
+	return _vec2(_geometry_entry(animation).get("center", null))
+
+
+func geometry_origin(animation: StringName) -> Vector2:
+	return _vec2(_geometry_entry(animation).get("origin", null))
+
+
+func geometry_size(animation: StringName) -> Vector2:
+	return _vec2(_geometry_entry(animation).get("size", null))
 
 
 func has_mask_sequence(animation: StringName) -> bool:
@@ -257,6 +257,14 @@ func _frame_entry(animation: StringName, frame_index: int) -> Array:
 		return []
 	var frame: Variant = frames[frame_index]
 	return frame as Array if frame is Array else []
+
+
+func _geometry_entry(animation: StringName) -> Dictionary:
+	var entry: Variant = _geometry.get(String(animation), null)
+	if not entry is Dictionary:
+		return {}
+	var geometry: Dictionary = entry as Dictionary
+	return geometry if _valid_geometry_entry(geometry) else {}
 
 
 func _animation_frame(frame_index: int) -> Dictionary:
@@ -531,6 +539,13 @@ func _valid_vec2(value: Variant) -> bool:
 		and _is_number((value as Array)[0])
 		and _is_number((value as Array)[1])
 	)
+
+
+static func _vec2(value: Variant) -> Vector2:
+	if not value is Array:
+		return Vector2.ZERO
+	var values: Array = value as Array
+	return Vector2(float(values[0]), float(values[1])) if values.size() >= 2 else Vector2.ZERO
 
 
 static func _is_number(value: Variant) -> bool:

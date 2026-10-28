@@ -8,7 +8,7 @@ const SCOPES := {
 	3343: [[0, 160, -100, -20], [0, 900, -300, 300], [-85, 455, -300, 300], [205, 745, -300, 300], [0, 900, -300, 300]],
 }
 const MULTIPLIERS := {3323: [0.3, 0.2, 0.33, 0.67], 3343: [0.75, 0.67, 1.25, 1.25, 0.67]}
-var _palace_data: Dictionary = {}
+var _palace_view: AtlasMetadataView = null
 var _skill_cursor := 0
 var _body_hit_count := 0
 var _last_body_hit := -10000.0
@@ -32,7 +32,7 @@ func _standard_body_frames_path() -> String:
 
 func _resolve_runtime_config() -> Dictionary:
 	var config := super._resolve_runtime_config()
-	_palace_data = AtlasMetadataStore.data_for(_metadata_path())
+	_palace_view = AtlasMetadataStore.view_for(_metadata_path())
 	var animations: Dictionary = {
 		&"wait": ["wait", true],
 		&"walk": ["walk", true],
@@ -101,9 +101,11 @@ func _configure_entity_collision_boxes() -> void:
 
 
 func _visual_offset(animation_name: StringName) -> Vector2:
+	if _palace_view == null:
+		return Vector2.ZERO
 	var sequence := str(_config["animations"][animation_name][0])
-	var center: Array = _palace_data["geometry"][sequence]["center"]
-	return Vector2(-float(center[0]) if mr_ani.flip_h else float(center[0]), float(center[1]))
+	var center := _palace_view.geometry_center(StringName(sequence))
+	return Vector2(-center.x if mr_ani.flip_h else center.x, center.y)
 
 
 func _physics_process(delta: float) -> void:
@@ -142,19 +144,27 @@ func _enable_attack_box(_attack_name: StringName = &"") -> void:
 
 
 func _sync_attack_collision(_force: bool = false) -> void:
-	if not is_attacking or _active_attack_name != &"hit1":
+	if not is_attacking or _active_attack_name != &"hit1" or _palace_view == null:
 		_disable_attack_box()
 		return
-	var masks: Array = _palace_data["masks"]["hit1"]
-	var mask: Array = masks[mini(mr_ani.frame, masks.size() - 1)]
+	var mask_count := _palace_view.mask_frame_count(&"hit1")
+	if mask_count <= 0:
+		_disable_attack_box()
+		return
+	var mask_index := mini(mr_ani.frame, mask_count - 1)
 	var interval := 0.267 if monster_kind == 3323 else 0.6
 	var maximum := 5 if monster_kind == 3323 else 2
-	if mask.is_empty() or _body_hit_count >= maximum or _palace_clock - _last_body_hit < interval:
+	if (
+		_palace_view.mask_frame_is_empty(&"hit1", mask_index)
+		or _body_hit_count >= maximum
+		or _palace_clock - _last_body_hit < interval
+	):
 		_disable_attack_box()
 		return
+	var mask := _palace_view.mask_frame_rect(&"hit1", mask_index)
 	var shape := hit_box.shape as RectangleShape2D
-	shape.size = Vector2(float(mask[2]), float(mask[3]))
-	hit_box.position = Vector2(-(float(mask[0]) + float(mask[2]) * 0.5), float(mask[1]) + float(mask[3]) * 0.5)
+	shape.size = mask.size
+	hit_box.position = Vector2(-(mask.position.x + mask.size.x * 0.5), mask.position.y + mask.size.y * 0.5)
 	hit_name = "hit1"
 	hit_box.set_deferred("disabled", false)
 
@@ -410,21 +420,24 @@ func visible_battle_rect() -> Rect2:
 
 
 func _keep_in_view() -> void:
+	if _palace_view == null:
+		return
+	var idle_size := _palace_view.geometry_size(&"wait")
+	if idle_size.x <= 0.0 or idle_size.y <= 0.0:
+		return
 	var view := visible_battle_rect()
-	var idle: Dictionary = _palace_data["geometry"]["wait"]
-	var size: Array = idle["size"]
-	var origin: Array = idle["origin"]
-	var fit := minf(1.0, minf((view.size.y - 32.0) / float(size[1]), (view.size.x - 80.0) / float(size[0])))
+	var idle_origin := _palace_view.geometry_origin(&"wait")
+	var fit := minf(1.0, minf((view.size.y - 32.0) / idle_size.y, (view.size.x - 80.0) / idle_size.x))
 	scale = Vector2.ONE * maxf(fit, 0.25)
-	var left_extent := -float(origin[0]) * scale.x
-	var right_extent := (float(origin[0]) + float(size[0])) * scale.x
+	var left_extent := -idle_origin.x * scale.x
+	var right_extent := (idle_origin.x + idle_size.x) * scale.x
 	if monster_direction:
 		var old_left := left_extent
 		left_extent = right_extent
 		right_extent = old_left
 	global_position.x = clampf(global_position.x, view.position.x + left_extent + 16, view.end.x - right_extent - 16)
-	var minimum_y := view.position.y - float(origin[1]) * scale.y + 16
-	var maximum_y := view.end.y - (float(origin[1]) + float(size[1])) * scale.y - 16
+	var minimum_y := view.position.y - idle_origin.y * scale.y + 16
+	var maximum_y := view.end.y - (idle_origin.y + idle_size.y) * scale.y - 16
 	if not _palace_flight_height_ready:
 		_palace_flight_y = global_position.y
 		_palace_flight_height_ready = true

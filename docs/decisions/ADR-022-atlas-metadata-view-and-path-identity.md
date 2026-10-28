@@ -45,18 +45,19 @@ AtlasMetadata 由 `manifest.json` 构建为同目录 `metadata.tres`，`AtlasMet
 
 ## 本次实施范围
 
-Phase 14-2 / 14-3A 已实现：
+Phase 14-2 / 14-3A / 14-3B-1 已实现：
 
 - `AtlasMetadataView`（`source/Script/atlas/atlas_metadata_view.gd`）提供 `pages+sequences` 与 `animation+frames` 的只读查询；
 - `AtlasMetadataStore.view_for()` 按路径缓存并返回经过 schema 校验的 View；失败返回 `null`；
 - `PalaceBossProjectile` 的 masks/geometry 读取迁移到 View；声明路径失效时 `configure()` 返回失败；
 - `MountVisual` 的 metadata 动画读取迁移到 View；原生骨骼 `_bone_index` 分支继续使用既有 parts 数据，不伪造 metadata；
-- `data_for` 继续服务 East、North、Cloud、PalaceFlyingBoss 等未迁移消费者；`source_masks` 保留给 NorthBossProjectile 迁移期覆盖；
+- `PalaceFlyingBoss` 自有 `geometry`（`center`/`size`/`origin`）与 `masks` 迁移到 View；继承 East 的序列辅助仍走 `data_for`，归入 14-3B-2；
+- `data_for` 继续服务 East、North、Cloud 及 PalaceFlyingBoss 的继承序列辅助；`source_masks` 保留给 NorthBossProjectile 迁移期覆盖；
 - 未修改 `source/Art/`、素材内容或既有 UID。
 
-验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；`level_73`、`level_74`、`level_75` 冒烟 PASS（0 ERROR / 0 WARNING）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
+验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；Palace 3323/3343 的 geometry 与 `hit1` masks 逐值比对 PASS；`level_73`、`level_74`、`level_75` 冒烟 PASS（0 ERROR / 0 WARNING）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
 
-后续消费者按 `current-iteration.md` 的切片迁移；East/North/Cloud/PalaceFlyingBoss 属于 14-3B，不在本次范围。禁止以本 ADR 为依据开展全量重写。
+后续消费者按 `current-iteration.md` 的切片迁移；East/Cloud/North 与 PalaceFlyingBoss 的继承序列路径属于 14-3B-2/3，不在本次范围。禁止以本 ADR 为依据开展全量重写。
 
 ## 备选方案
 
