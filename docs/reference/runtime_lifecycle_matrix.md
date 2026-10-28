@@ -1,6 +1,6 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B、Phase 15-3C 与 Phase 15-3D 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-4 的目标写成已实现。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B、Phase 15-3C、Phase 15-3D 与 Phase 15-4A 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-4B/15-4C/15-4D/15-4E 的目标写成已实现。
 >
 > **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约；2026-10-28 Phase 15-3A/15-3B 更新交接与租约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
@@ -167,6 +167,19 @@ flowchart TD
 
 ## 4. 缓存与租约所有权
 
+### 4.0 缓存作用域契约（Phase 15-4A）
+
+| 作用域 | 所有者 | 容量/驻留依据 | 清理事件 | 观测键 |
+|:---|:---|:---|:---|:---|
+| 构建期只读 | `scripts/convert_level_preload_catalog.py` 等构建转换器；`LevelPreloadStore`/`LevelPreloadCatalog` 只是只读视图 | 构建期生成；运行时无写入、无增长 | 无（不参与运行时清理） | `build_read_only` |
+| 永久 | `Global` | 4 条永久小 UI；角色/宠物预热标记各 1；无常规增长 | `release_ui_runtime_cache(release_permanent=true)`、角色切换、`end_archive_session` | `permanent` |
+| 关卡 | `Global._level_resource_lease` + `_monster_scene_cache` | 按当前关卡加载路径；无固定上限，随租约释放 | `change_scene` → `release_level_resource_lease`；`clear_level_resource_cache` | `level` |
+| 战斗 | `Global` | 池上限 80/32/24/32（预置 12/16/16/6）；模块静态帧缓存随模块 | `end_archive_session` → `clear_combat_runtime_cache`；不随普通关卡切换 | `combat` |
+| UI | `Global` 的实例登记/计数、永久 UI 与 UI 纹理前缀 | 按运行时实例与场景路径；无固定上限 | 实例退出、`release_ui_runtime_cache`、切换/退出 | `ui` |
+| 共享运行时 | `Global` 四类资源缓存 | 按租约/UI/永久所有权驻留；无固定上限 | 租约释放、UI 释放、角色资源释放 | `shared_runtime` |
+
+`Global.get_cache_scope_snapshot()` 返回上述键的只读快照；`level-resource-lease` 探针验证租约/战斗池清理与容量元数据，`load-guard` 探针验证 UI 实例登记与释放、Catalog 只读副本。永久 UI 常量当前为 `PERMANENT_SMALL_UI_SCENE_PATHS`，是所有权边界，不是容量建议值。
+
 ### 4.1 编排层缓存
 
 | 对象 | 当前所有者 | 写入方 | 读取方 | 释放/失效 | 失败边界 |
@@ -305,7 +318,13 @@ flowchart TD
 2. `LevelPreloadStore` 只读 Catalog；数组返回值复制，`level()` 收窄为内部读取；`LevelPreloadCatalog` 的数组查询返回副本。
 3. `contract_scan.py` 新增第八类 `preload_boundary` 门禁与负向自测；加载页重新引入目录扫描/清单解析会阻断。
 
-### Phase 15-4
+### Phase 15-4A 已完成
+
+1. 定义构建期只读、永久、关卡、战斗、UI、共享运行时六个作用域；每类登记所有者、容量/驻留依据、清理事件与观测键。
+2. 新增 `Global.get_cache_scope_snapshot()` 只读快照；包含租约、预载单槽、四类资源缓存计数、永久 UI/角色/宠物标记、对象池大小与上限、UI 实例计数。
+3. `level-resource-lease` 探针验证作用域键、容量元数据、租约/战斗池清理；`load-guard` 探针验证 UI 实例登记/释放与 Catalog 只读副本。
+
+### Phase 15-4B/15-4C/15-4D/15-4E
 
 1. 对象池清理只在档案结束时发生；需要确认关卡切换、重战与退出是否应保留、部分清理或重建。
 2. `cleanup_transient_ui` 的硬编码名称列表与 51 处显式调用需要收束为实例登记/关闭回调；不能按名称误删其他场景节点。
@@ -316,7 +335,7 @@ flowchart TD
 
 ---
 
-## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C/15-3D 出口核对
+## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C/15-3D/15-4A 出口核对
 
 - [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、2 处低层内部调用、业务与加载页旁路均为 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；加载页已改走窄交接 API；
@@ -328,7 +347,8 @@ flowchart TD
 - [x] Phase 15-3B：关卡资源按租约记录与释放；`clear_combat_runtime_cache` 不再按宽泛前缀删除共享缓存；租约快照可枚举。
 - [x] Phase 15-3C：请求代次、目标路径、超时、失败/取消/销毁路径与 `_preloaded_scene` 单槽均已收口；`ResourceLoader` 无公开取消 API，取消为停止轮询与提交并丢弃后台结果。
 - [x] Phase 15-3D：加载页目录扫描/依赖清单解析为 0；`LevelPreloadStore`/Catalog 只读副本；`contract_scan` 第八类门禁与负向自测通过。
+- [x] Phase 15-4A：六个缓存作用域均有所有者、容量依据、清理事件与 `get_cache_scope_snapshot` 观测键；租约/战斗池/UI 实例作用域验证通过。
 
-**验证**：Phase 15-3A/15-3B/15-3C/15-3D 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，23.18s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.67s / 选择态 16.18s / 租约 3.31s / 加载守卫 5.35s / 法宝 8.10s / 角色技能 4.32s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，696.8s）、`contract_scan --self-test`（预载边界坏样本 4/4、好样本 3/3）。加载守卫同时验证 Catalog 返回值副本；未执行 release 重验与切换中退出验证。
+**验证**：Phase 15-3A/15-3B/15-3C/15-3D/15-4A 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.12s / 选择态 14.67s / 租约 2.91s / 加载守卫 4.30s / 法宝 6.99s / 角色技能 3.84s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，694.3s）、`contract_scan --self-test`（预载边界坏样本 4/4、好样本 3/3）。`level_1` 随全量回归 PASS（23.38s）；租约/守卫探针验证六作用域快照、容量元数据、租约/战斗池/UI 实例清理与 Catalog 副本。未执行 release 重验与切换中退出验证。
 
 **下一入口**：Phase 15-4 缓存、池、UI 与退出生命周期。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-4 切片。

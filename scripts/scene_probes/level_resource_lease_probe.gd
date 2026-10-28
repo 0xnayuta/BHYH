@@ -42,6 +42,29 @@ func _run() -> void:
 	checks["bullet_category"] = (snapshot.get("bullet_scene_paths", []) as Array).has(BULLET_SCENE)
 	checks["shared_not_owned"] = not (snapshot.get("owned_paths", []) as Array).has(SHARED_TEXTURE)
 
+	var scope := Global.get_cache_scope_snapshot()
+	var scope_level: Dictionary = scope.get("level", {})
+	var scope_lease: Dictionary = scope_level.get("lease", {})
+	var scope_combat: Dictionary = scope.get("combat", {})
+	var scope_build: Dictionary = scope.get("build_read_only", {})
+	checks["scope_has_keys"] = (
+		scope.has("build_read_only")
+		and scope.has("shared_runtime")
+		and scope.has("permanent")
+		and scope.has("level")
+		and scope.has("combat")
+		and scope.has("ui")
+	)
+	checks["scope_level_count"] = int(scope_lease.get("owned_path_count", 0)) == 3
+	checks["scope_build_read_only"] = (
+		str(scope_build.get("cleanup", "")) == "none" and str(scope_build.get("owner", "")) != ""
+	)
+	checks["scope_combat_limits"] = (
+		int(scope_combat.get("pool_limits", {}).get("damage_text", 0)) == 80
+		and int(scope_combat.get("pool_limits", {}).get("sound_player", 0)) == 32
+	)
+	checks["scope_ui_owner"] = str(scope.get("ui", {}).get("owner", "")) == "Global"
+
 	var released := Global.release_level_resource_lease(first_lease)
 	checks["released_owned_count"] = released == 3
 	checks["owned_texture_released"] = not Global.is_resource_cached(OWNED_TEXTURE)
@@ -88,6 +111,17 @@ func _run() -> void:
 	checks["exit_lease_cleared"] = not bool(Global.get_level_resource_lease_snapshot().get("active", true))
 	Global.release_cached_texture(SHARED_TEXTURE)
 	checks["exit_lease_ids"] = refight_lease > 0 and exit_lease > refight_lease
+	var exit_scope := Global.get_cache_scope_snapshot()
+	var exit_level: Dictionary = exit_scope.get("level", {})
+	var exit_lease_snapshot: Dictionary = exit_level.get("lease", {})
+	var exit_combat: Dictionary = exit_scope.get("combat", {})
+	var exit_pool_sizes: Dictionary = exit_combat.get("pool_sizes", {})
+	var pools_cleared := true
+	for pool_size_value in exit_pool_sizes.values():
+		if int(pool_size_value) != 0:
+			pools_cleared = false
+	checks["scope_exit_level_cleared"] = int(exit_lease_snapshot.get("owned_path_count", -1)) == 0
+	checks["scope_exit_pools_cleared"] = pools_cleared
 
 	for check_name in checks:
 		if not bool(checks[check_name]):

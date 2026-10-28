@@ -39,6 +39,19 @@ func _run() -> void:
 	var monster_ids_reloaded := LevelPreloadStore.monster_ids(LEVEL_1)
 	checks["catalog_monster_ids_copy"] = not monster_ids_reloaded.has(999999)
 
+	var ui_node := Control.new()
+	get_tree().root.add_child(ui_node)
+	Global.register_ui_runtime_instance(ui_node, "res://Scene/back_pack/back_pack.tscn")
+	var ui_scope := Global.get_cache_scope_snapshot()
+	var ui_section: Dictionary = ui_scope.get("ui", {})
+	checks["scope_ui_registered"] = int(ui_section.get("runtime_instance_count", 0)) >= 1
+	ui_node.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var ui_scope_after := Global.get_cache_scope_snapshot()
+	var ui_section_after: Dictionary = ui_scope_after.get("ui", {})
+	checks["scope_ui_released"] = int(ui_section_after.get("runtime_instance_count", 1)) == 0
+
 	Global.preload_next(MISSING_SCENE)
 	await get_tree().process_frame
 	var missing_slot := Global.get_preloaded_scene_slot_snapshot()

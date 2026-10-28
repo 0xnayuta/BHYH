@@ -419,12 +419,25 @@ classDiagram
 - `_audio_cache`：`AudioStream`；
 - `_texture_cache`：`Texture2D`。
 
+作用域与清理：
+
+| 作用域 | 所有者 | 容量/驻留依据 | 清理事件 |
+|:---|:---|:---|:---|
+| 构建期只读 | 构建转换器 + `LevelPreloadStore` | 构建期生成；运行时无增长 | 无 |
+| 永久 | `Global` | 4 条永久小 UI；角色/宠物预热标记各 1 | 退出档案、角色切换、`release_ui_runtime_cache(true)` |
+| 关卡 | `Global._level_resource_lease` + `_monster_scene_cache` | 按当前关卡路径；无固定上限 | `change_scene` / `clear_level_resource_cache` |
+| 战斗 | `Global` | 池上限 80/32/24/32；预置 12/16/16/6 | `end_archive_session` → `clear_combat_runtime_cache` |
+| UI | `Global` 实例登记与 UI 纹理前缀 | 按运行时实例/场景；无固定上限 | 实例退出、切换、`release_ui_runtime_cache` |
+| 共享运行时 | `Global` 四类资源缓存 | 按租约/UI/永久所有权；无固定上限 | 租约/UI/角色资源释放 |
+
+`Global.get_cache_scope_snapshot()` 返回六类作用域的只读计数与容量元数据；`level-resource-lease` 与 `load-guard` 探针分别验证租约/战斗池和 UI 实例清理。
+
 配套机制：
 
 - 加载页线程化预载，移动端并发槽位 2、桌面 4；
 - 角色/宠物/法宝/怪物/战斗命中资源分阶段预热；
-- 关卡级缓存按轨迹精确失效（`clear_level_resource_cache`），战斗缓存按前缀清理；
-- 伤害数字、受击特效、音效播放器等使用有限容量对象池（具体上限见 `global.gd` 常量）；
+- 关卡级缓存按租约精确失效，战斗缓存不再按宽泛前缀删除；
+- 伤害数字、受击特效、音效播放器等使用有限容量对象池（上限 80/32/24/32）；
 - UI 场景使用 `CACHE_MODE_IGNORE_DEEP`，避免 UI 资源长期占用缓存；
 - 战斗加载输出 `[Battle VRAM]` 日志，用于对比显存增量。
 

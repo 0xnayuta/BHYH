@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15-3D 预载清单边界完成；Phase 15-4 未启动）
+> 最后更新：2026-10-28（Phase 15-4A 缓存作用域完成；Phase 15-4B/15-4C/15-4D/15-4E 未启动）
 
 ---
 
@@ -175,6 +175,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 15-3B 关卡资源租约 | `_level_resource_lease` 记录目标、租约 ID、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；`change_scene` 建立新租约，`release_level_resource_lease` 只释放本租约，永久 UI/未登记路径保留；`clear_combat_runtime_cache` 移除宽泛前缀删除；新增只读快照。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.59s，日志 0/0）；`scene_probe_runner` 完整套件 **5/5 PASS**（星座 4.71s / 选择态 15.11s / 租约 2.91s / 法宝 6.33s / 角色技能 4.15s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（725.5s） | Phase 15-3B 完成，Phase 15-3C/15-3D 未启动；租约路径分类、共享缓存保留、旧租约 ID 拒绝、重战清理与退出归档清理已验证。未执行 release、底层线程显式取消与切换中退出验证 |
 | 2026-10-28 Phase 15-3C 失败与取消 | 加载页固定目标/请求代次与目标 PackedScene 路径；加载页销毁、失败、换目标后停止轮询、缓存写入与提交；新增 120 秒看门狗（`application/run/load_timeout_msec` 可覆盖）；`_preloaded_scene` 单槽增加路径绑定、失败/换目标/显式清理与只读快照；过期目标已加入树时释放本次场景而不恢复旧关卡。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（22.13s，日志 0/0）；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.06s / 选择态 14.88s / 租约 2.83s / 加载守卫 4.23s / 法宝 6.26s / 角色技能 3.75s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（683.1s） | Phase 15-3C 完成，Phase 15-3D 未启动；失败/取消/超时与单槽清理已验证。`ResourceLoader` 无公开线程取消 API，后台请求完成后丢弃；未执行 release 与切换中退出验证 |
 | 2026-10-28 Phase 15-3D 预载清单边界 | 移除加载页 `DirAccess` 目录扫描、`ResourceLoader.get_dependencies` 递归清单解析、`FileAccess`/manifest 解析与相关死函数；`LevelPreloadStore`/`LevelPreloadCatalog` 保持只读，数组查询返回副本、`level()` 收窄为内部读取；`contract_scan.py` 新增第八类 `preload_boundary` 门禁与负向自测（坏样本 **4/4**、好样本 **3/3**）；`load-guard` 增加 Catalog 返回值副本校验。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.18s，日志 0/0）；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.67s / 选择态 16.18s / 租约 3.31s / 加载守卫 5.35s / 法宝 8.10s / 角色技能 4.32s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.8s） | Phase 15-3D 完成，Phase 15-4 未启动；加载页目录扫描/依赖清单解析为 0，Catalog 只读副本已验证。未执行 release 与切换中退出验证 |
+| 2026-10-28 Phase 15-4A 缓存作用域 | 定义构建期只读、永久、关卡、战斗、UI、共享运行时六个作用域，登记所有者、容量/驻留依据、清理事件与观测键；新增 `Global.get_cache_scope_snapshot()`（租约/预载槽/资源计数/永久 UI/角色宠物标记/池大小与上限/UI 实例计数）；租约探针验证快照、容量元数据、租约与战斗池清理，加载守卫验证 UI 实例登记/释放与 Catalog 副本。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.12s / 选择态 14.67s / 租约 2.91s / 加载守卫 4.30s / 法宝 6.99s / 角色技能 3.84s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（694.3s，`level_1` 23.38s） | Phase 15-4A 完成，Phase 15-4B/15-4C/15-4D/15-4E 未启动；六类作用域均有 owner/容量依据/清理事件/观测键。未执行 release 与切换中退出验证 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

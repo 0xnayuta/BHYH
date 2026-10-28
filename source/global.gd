@@ -1699,6 +1699,78 @@ func get_level_resource_lease_snapshot() -> Dictionary:
 	}
 
 
+func get_cache_scope_snapshot() -> Dictionary:
+	var pool_limits := {
+		"damage_text": DAMAGE_TEXT_POOL_LIMIT,
+		"mr_hurt": MR_HURT_POOL_LIMIT,
+		"role_be_hit": ROLE_BE_HIT_POOL_LIMIT,
+		"sound_player": SOUND_PLAYER_POOL_LIMIT,
+	}
+	var pool_sizes: Dictionary = {}
+	for pool_name in pool_limits:
+		var pool_value: Variant = _pool_data.get(pool_name, [])
+		pool_sizes[pool_name] = (pool_value as Array).size() if pool_value is Array else 0
+	return {
+		"build_read_only":
+		{
+			"owner": "scripts/convert_level_preload_catalog.py + LevelPreloadStore",
+			"capacity": "构建期生成；运行时只读，无运行时增长",
+			"cleanup": "none",
+			"catalog_path": LevelPreloadStore.CATALOG_PATH,
+			"catalog_loaded": LevelPreloadStore.is_catalog_loaded(),
+		},
+		"shared_runtime":
+		{
+			"owner": "Global",
+			"capacity": "按租约/UI/永久所有权驻留；无固定上限",
+			"cleanup": "release_level_resource_lease / release_ui_runtime_cache / release_role_runtime_resources",
+			"resource_entries": _resource_cache.size(),
+			"sprite_frames_entries": _sprite_frames_cache.size(),
+			"audio_entries": _audio_cache.size(),
+			"texture_entries": _texture_cache.size(),
+		},
+		"permanent":
+		{
+			"owner": "Global",
+			"capacity": "永久小 UI 4 条；角色/宠物预热标记各 1",
+			"cleanup": "release_ui_runtime_cache(release_permanent=true) / end_archive_session",
+			"small_ui_scene_count": _permanent_small_ui_scene_cache.size(),
+			"small_ui_prewarm_in_progress": _permanent_ui_prewarm_in_progress,
+			"small_ui_prewarmed": _permanent_ui_prewarmed,
+			"role_prewarmed_id": _prewarmed_role_id,
+			"pet_signature": _prewarmed_pet_signature,
+		},
+		"level":
+		{
+			"owner": "Global._level_resource_lease",
+			"capacity": "按当前关卡加载路径；无固定上限",
+			"cleanup": "change_scene / clear_level_resource_cache",
+			"lease": get_level_resource_lease_snapshot(),
+			"monster_scene_count": _monster_scene_cache.size(),
+			"preloaded_slot": get_preloaded_scene_slot_snapshot(),
+		},
+		"combat":
+		{
+			"owner": "Global",
+			"capacity": "池上限 80/32/24/32；静态帧缓存随模块",
+			"cleanup": "end_archive_session -> clear_combat_runtime_cache",
+			"pool_sizes": pool_sizes,
+			"pool_limits": pool_limits,
+			"all_hero_skill_resources_preloaded": _all_hero_skill_resources_preloaded,
+		},
+		"ui":
+		{
+			"owner": "Global",
+			"capacity": "按运行时实例登记；无固定上限",
+			"cleanup": "release_ui_runtime_cache / _release_ui_scene_cache_if_unused",
+			"runtime_instance_count": _ui_runtime_instance_paths.size(),
+			"runtime_scene_count": _ui_runtime_instance_counts.size(),
+			"runtime_scene_counts": _ui_runtime_instance_counts.duplicate(true),
+			"permanent_scene_count": _permanent_small_ui_scene_cache.size(),
+		},
+	}
+
+
 func _lease_path_list(value: Variant) -> Array:
 	var result: Array = []
 	if value is Dictionary:

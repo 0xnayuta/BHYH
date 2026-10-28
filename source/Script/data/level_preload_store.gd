@@ -8,6 +8,10 @@ const CATALOG_PATH := "res://Script/data/level_preload_catalog.tres"
 static var _catalog: LevelPreloadCatalog
 
 
+static func is_catalog_loaded() -> bool:
+	return _catalog != null
+
+
 static func _ensure_catalog() -> bool:
 	if _catalog != null:
 		return true
