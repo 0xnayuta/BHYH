@@ -131,12 +131,15 @@ flowchart TD
 
 ### 3.2 `Global.change_scene` 与加载页
 
-`Global.change_scene(target, force_loading_screen=false)` 是规范场景切换入口：
+`Global.change_scene(target, force_loading_screen=false) -> bool` 是规范场景切换入口：
 
-1. 若目标是“退出存档”场景，结束存档会话；
-2. 清理临时 UI、UI 运行时缓存与关卡资源缓存；
-3. 若目标是已预载且缓存的 `res://Scene/level/*`（`level_hdzm.tscn` 除外），直接 `change_scene_to_packed`；
-4. 否则写入 `Global.target_scene`，切换到 `load_scene.tscn`。
+1. 先校验目标：非空、`.tscn`/`.scn`，且 `ResourceLoader.exists` 为真；空目标或缺失目标直接返回 `false`，不清理缓存、不写 `target_scene`；
+2. 若目标是“退出存档”场景，结束存档会话；
+3. 清理临时 UI、UI 运行时缓存与关卡资源缓存；
+4. 若目标是已预载且缓存的 `res://Scene/level/*`（`level_hdzm.tscn` 除外），写入 `target_scene = target` 后直接 `change_scene_to_packed`，返回引擎调用结果；
+5. 否则写入 `target_scene = target`，切换到 `load_scene.tscn`，返回引擎调用结果。
+
+返回值只表示**请求已接受并已提交场景切换**，不表示加载页最终完成；加载页内部的预载失败/取消语义属于 Phase 15-3。
 
 加载页 `Scene/other_scene/load_scene.gd` 负责：
 
@@ -147,7 +150,7 @@ flowchart TD
 - 覆盖式切换：先挂入新场景并设为 current_scene，等待实际绘制后揭示 HUD，再释放旧场景；冷启动与后续切换复用同一加载页，不只是一个独立进度界面；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。
 
-**遗留旁路**：`Script/level/hdzm.gd` 仍直接调用 `get_tree().change_scene_to_file(...)`，绕过缓存与清理；新代码不得再走旁路。
+**入口边界**：`Script/level/hdzm.gd` 的 4 处直接切换已迁入 `Global.change_scene`；当前业务代码不再直接调用 `change_scene_to_file/packed`。加载页内部的兜底切换仍由 `load_scene.gd` 唯一持有，Phase 15-2C 继续收束其交接接口。
 
 ### 3.3 关卡进入判定
 
@@ -521,7 +524,7 @@ classDiagram
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
-| 场景切换旁路 | `hdzm.gd` 直接 `change_scene_to_file` | 新代码只走 `Global.change_scene` |
+| 场景切换入口 | `Global.change_scene` 统一校验、清理与切换；加载页内部保留兜底切换 | 新代码只走 `Global.change_scene`；内部兜底不得复制到业务层 |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
 | `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 六个直接消费者已用只读 `AtlasMetadataView`；`.data` 仅为序列化内部字段，不扩大无类型面 |
 | 2P 面板全局视图交换 | 改写 `PlayerData`/`RoleProp`，存档前必须恢复 1P | 目标为显式槽位上下文；与快照/共享账本联动，不局部删除保护 |

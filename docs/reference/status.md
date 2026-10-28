@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15-1 调用面与所有权矩阵完成；Phase 15-2 未启动）
+> 最后更新：2026-10-28（Phase 15-2A/15-2B 入口收口完成；Phase 15-2C 未启动）
 
 ---
 
@@ -168,7 +168,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 14-3B-3 North | `NorthContinentMonster._source` 改为 `_north_view`；序列/geometry/masks 改走 View；`NorthBossProjectile` 删除 `source_masks`，改由 `mask_sequence` 选择 View mask；删除 `AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`；探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask **PASS**；`level_76`/`level_81` 冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 六个直接消费者均使用 `view_for`；旧 Store 入口与 `source_masks` 已删除。剩余 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 成员归入 14-4。未修改素材/既有 UID；未跑 L2 全固定套件或 release 重验 |
 | 2026-10-28 Phase 14-4 收口 | 清理 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员；`contract_scan.py` 新增第七类 `atlas_boundary` 门禁与负向自测（坏样本 **5/5**、好样本 **4/4**）；L2：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 单次瞬态 FAIL 后重试 PASS）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | Phase 14 完成并归档；旧入口/裸字典/`source_masks` 与惰性配置清零；未执行 release 重验 |
 | 2026-10-28 Phase 14 归档 / Phase 15 规划 | 仅文档：Phase 14 收口记录归档到 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)，当前迭代替换为 Phase 15 应用编排与运行资源生命周期规划；未修改生产代码、素材或既有 UID | Phase 14 完成并归档；Phase 15 当时尚未启动；新计划只定义阶段、所有权矩阵、失败边界与验收，不宣称已实现 |
-| 2026-10-28 Phase 15-1 调用面矩阵 | 仅文档/静态调查：`Global.change_scene` 135 处、48 个文件；低层切换 9 处，其中 `hdzm.gd` 业务旁路 4 处；`target_scene` 写入 2 处，预览槽 `preload_next` 4 处；加载页、缓存/池/UI/档案会话与退出清理的当前所有者、释放事件和失败边界已登记；未修改 `source/`、素材或 UID | 详细矩阵见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)；Phase 15-1 完成，Phase 15-2 未启动。本阶段未运行引擎、关卡回归或 L2，因为按计划只读调查不触发运行门禁 |
+| 2026-10-28 Phase 15-1 调用面矩阵 | 仅文档/静态调查：`Global.change_scene` 135 处、48 个文件；低层切换 9 处，其中 `hdzm.gd` 业务旁路 4 处；`target_scene` 写入 2 处，预览槽 `preload_next` 4 处；加载页、缓存/池/UI/档案会话与退出清理的当前所有者、释放事件和失败边界已登记；未修改 `source/`、素材或 UID | 详细矩阵见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)；Phase 15-1 完成；随后 Phase 15-2A/15-2B 已完成，Phase 15-2C 未启动。本阶段未运行引擎、关卡回归或 L2，因为按计划只读调查不触发运行门禁 |
+| 2026-10-28 Phase 15-2A/15-2B 入口收口 | `Global.change_scene` 增加空/非场景/缺失目标校验与 `bool` 返回，拒绝时不清缓存、不写 `target_scene`；快速路径同步写目标；删除 `_deferred_change_scene`；`hdzm.gd` 4 处直接切换迁入正式入口。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.67s，日志 0/0）；`scene_probe_runner --probe level-selection` **PASS**（16.17s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（709.0s）；临时契约探针空/缺失目标拒绝、`target_scene` 未变、有效目标接受 | Phase 15-2A/15-2B 完成，Phase 15-2C 未启动；业务代码低层切换为 0。未执行 release、加载失败/取消与切换中退出验证 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

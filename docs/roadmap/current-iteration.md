@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面与所有权矩阵已完成，Phase 15-2 未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
+> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面与所有权矩阵、Phase 15-2A 旁路收口与 Phase 15-2B 入口契约已完成，Phase 15-2C 未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 15；Phase 16~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -30,7 +30,7 @@
 
 | 边界 | 当前事实 | 本阶段取证要求 |
 |:---|:---|:---|
-| 场景入口 | `Global.change_scene(target, force_loading_screen)` 是规范入口；`load_scene.tscn` 内部会调用 `change_scene_to_file/packed`；`hdzm.gd` 仍有直接 `change_scene_to_file` 旁路 | Phase 15-1 列出全部调用、调用者和差异；区分加载页内部实现与业务旁路 |
+| 场景入口 | `Global.change_scene(target, force_loading_screen)` 是规范入口；`load_scene.tscn` 内部保留 `change_scene_to_file/packed` 兜底；`hdzm.gd` 的 4 处直接切换已迁入正式入口 | Phase 15-1 列出全部调用、调用者和差异；Phase 15-2A/15-2B 已完成入口与失败返回契约 |
 | 加载页 | `load_scene.gd` 构建目标场景、角色、宠物、剑阵、法宝、怪物与关卡依赖；使用线程请求、槽位填充与覆盖式切换 | Phase 15-1/Phase 15-3 记录请求、缓存写入、完成与失败回调 |
 | `Global` 职责 | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定与关卡上下文混合；当前有多个缓存字典和池集合 | Phase 15-1 按职责与生命周期拆分，不以文件行数或字段数量作为目标 |
 | 资源交接 | 加载页通过 `Global._cache_threaded_resource`、`Global._track_level_resource` 与 `Global._get_preloaded` 接触缓存/预载状态 | Phase 15-3 明确缓存所有者、允许的交接 API 与失败/取消语义 |
@@ -59,7 +59,7 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 
 | 能力 | 当前所有者 | 允许调用方 | 释放/失效事件 | 当前失败语义 |
 |:---|:---|:---|:---|:---|
-| 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务入口；加载页消费 | 切换完成/失败 | 空目标回落主菜单；非空无效目标未拒绝 |
+| 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务入口；加载页消费 | 切换完成/失败 | 空目标或缺失目标返回 `false`；快速路径同步写 `target_scene` |
 | 线程预载 | `load_scene` 请求 + `Global` 缓存 | 加载页 | 完成、加载页释放 | 失败继续进度，无显式取消 |
 | 关卡资源租约 | `Global._level_resource_cache_paths` | 加载页、关卡 | 每次切换/战斗清理 | 全局集合，不是按关卡租约 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现层 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 |
@@ -71,17 +71,17 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 - 直接旁路与加载页内部调用分开记录；
 - 编排层缓存写入、线程回调与清理入口已登记；模块局部静态缓存的作用域边界单独标出；
 - 仅文档与只读报告，不改生产代码；结果见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)。
-- 当前矩阵确认：正式入口 135 处静态调用/48 个文件；加载页内部低层切换 2 处；`hdzm.gd` 旁路 4 处；`_deferred_change_scene` 无调用方。
+- 当前矩阵确认：正式入口 139 处静态调用/49 个文件；`hdzm.gd` 4 处旁路已迁入；业务低层切换为 0；加载页内部兜底 2 处；`_deferred_change_scene` 已删除。
 
-## 3. Phase 15-2：场景流转单入口（未启动）
+## 3. Phase 15-2：场景流转单入口（15-2A/15-2B 完成，15-2C 未启动）
 
 **目标**：保留一个正式场景切换入口，先清理业务旁路，再稳定加载页与调用方契约。
 
 ### 3.1 切片
 
-1. **Phase 15-2A 旁路收口**：把 `hdzm.gd` 的直接 `change_scene_to_file` 迁移到正式入口；如该关卡的返回/重战语义特殊，增加明确的场景命令，而不是保留裸 `change_scene_to_file`。
-2. **Phase 15-2B 入口契约**：明确 `Global.change_scene` 的 `target`、强制加载页、缓存命中、`level_hdzm` 例外、返回/重战与失败返回值；调用方不再依赖 `target_scene` 的中间写入。
-3. **Phase 15-2C 加载页交接**：加载页继续拥有线程加载与覆盖式切换，但对目标场景、预载结果和 HUD 揭幕只通过约定接口交接；不在业务场景复制加载逻辑。
+1. **Phase 15-2A 旁路收口（已完成）**：`hdzm.gd` 的 4 处直接 `change_scene_to_file` 已迁入 `Global.change_scene`；业务代码不再保留裸切换。
+2. **Phase 15-2B 入口契约（已完成）**：`Global.change_scene` 现在校验空目标/非场景/缺失目标，拒绝时返回 `false` 且不清理状态；快速路径同步写 `target_scene`；接受时返回引擎提交结果。加载页最终完成/失败仍归 Phase 15-3。
+3. **Phase 15-2C 加载页交接（未启动）**：加载页继续拥有线程加载与覆盖式切换，但对目标场景、预载结果和 HUD 揭幕只通过约定接口交接；不在业务场景复制加载逻辑。
 
 ### 3.2 必须验证
 
@@ -98,6 +98,8 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 - 加载页内部切换调用有明确注释和唯一所有者；
 - 调用方不依赖旧的延迟切换旁路；
 - 相关 L2/场景冒烟通过后再删除旧代码。
+
+**当前 15-2A/15-2B 证据**：`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）、`scene_probe_runner --probe level-selection` PASS、全量关卡回归 PASS 128/128 + SKIP 5；临时契约探针验证空/缺失目标拒绝、`target_scene` 未变、有效目标接受。冷启动返回、重战、强制加载、重复切换与切换中退出仍属 Phase 15-2C/15-3 待验证项。
 
 ## 4. Phase 15-3：加载页预载与资源交接（未启动）
 
@@ -159,7 +161,8 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
 | Phase 15-1 调用面矩阵 | 全量引用、owner/清理/失败表、链接与格式；结果见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) | 引擎、关卡回归不因只读调查复跑 |
-| Phase 15-2 场景流转 | 冷启动/返回/重战/强制加载/失败/重复切换；相关场景与关卡冒烟 | 不以单个 L1 场景替代所有入口 |
+| Phase 15-2A/15-2B 入口契约 | `hdzm.gd` 旁路清零；空/缺失目标拒绝；快速路径目标一致；`level_1` 与关卡选择探针通过 | 不以单个 L1 场景替代所有入口 |
+| Phase 15-2C 加载页交接 | 冷启动/返回/重战/强制加载/失败/重复切换；相关场景与关卡冒烟 | 不以单个 L1 场景替代所有入口 |
 | Phase 15-3 预载交接 | 成功/失败/取消/提前退出；缓存写入与租约释放；相关关卡与 L2 | 只编译或只检查请求数不等于行为正确 |
 | Phase 15-4 生命周期收口 | L2、全量回归、退出/重复进出、守卫正负样本、构建/引用/命名检查 | 包路径/导出无变化时不强制重导 release |
 | 影响资源/输入/物理 | 实际运行路径与 release 触发条件 | 文档或只读矩阵不触发 release |

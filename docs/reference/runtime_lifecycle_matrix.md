@@ -1,8 +1,8 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2 尚未启动。本页只记录当前事实、候选所有者与待收口边界，不宣称任何运行时改造已完成。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B 已落地，Phase 15-2C 未启动。本页保留当前调用面与所有权事实，不把未完成切片写成已实现。
 >
-> **调查基线**：`238a7a6`（2026-10-28），仓库只有一个活跃工程 `source/`；本次没有修改 `source/`、素材、场景或 UID。
+> **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为事实源，使用 `grep`/`read` 做静态调用面调查。下文的调用次数是静态出现次数，可能包含条件分支、重复调用或暂时不可达路径，不等同于运行期调用次数。
 >
@@ -12,9 +12,9 @@
 
 ## 1. 结论摘要
 
-1. **场景切换入口已存在，但没有完全收口**：`Global.change_scene` 是正式入口，静态发现 **135 处调用、48 个文件**；`hdzm.gd` 仍有 **4 处** 直接 `change_scene_to_file`，绕开 `Global.change_scene` 的清理与加载流程。
-2. **低层切换有两类调用**：`Global` 内部 3 处、加载页内部 2 处、`hdzm.gd` 4 处；其中 `Global._deferred_change_scene` 没有调用方，是历史旁路。
-3. **目标状态是全局可变单槽**：`Global.target_scene` 只有两个写入点，加载页在空值时回落主菜单；非空无效目标不会被拒绝，最终直接交给 `change_scene_to_file`。
+1. **业务场景入口已收口**：`Global.change_scene` 是正式入口，Phase 15-2A 后静态发现 **139 处调用、49 个文件**；`hdzm.gd` 的 4 处直接 `change_scene_to_file` 已迁入正式入口，业务代码不再保留低层切换。
+2. **低层切换只保留内部实现**：`Global` 内部 2 处、加载页内部 2 处；`hdzm.gd` 旁路为 0，`Global._deferred_change_scene` 已删除。
+3. **目标状态是全局可变单槽**：`Global.target_scene` 由正式入口与加载页冷启动默认值写入；Phase 15-2B 后空目标/非场景/缺失目标返回 `false`，快速路径也同步写入 `target_scene`。
 4. **缓存所有权集中在 `Global`**：`_resource_cache`、`_monster_scene_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、关卡路径集合与预览槽均由 `Global` 持有；加载页直接读取 `_resource_cache`、`_audio_cache`、`_texture_cache`，并通过 `_cache_threaded_resource`、`_track_level_resource` 写回。
 5. **关卡资源不是按关卡租约**：`_level_resource_cache_paths` 是一个全局路径集合，每次 `change_scene` 清空；目标场景本身走 `_target_packed_scene`，不登记为关卡资源。
 6. **对象池只在档案结束时整体清空**：池根、伤害文本、受击、角色受击与音效池由 `Global` 持有；关卡切换不清理，复用前重置依赖各消费者。
@@ -31,15 +31,10 @@
 
 | 位置 | 调用 | 所有者 | 分类 |
 |:---|:---|:---|:---|
-| `source/global.gd:4531` | 缓存命中时 `change_scene_to_packed` | `Global` | 正式入口的快速路径 |
-| `source/global.gd:4535` | 切换到 `load_scene.tscn` | `Global` | 正式入口的加载页路径 |
-| `source/global.gd:4539` | `_deferred_change_scene` 直接切到 `target_scene` | `Global` | 历史旁路；当前无调用方 |
+| `source/global.gd:4540` | 缓存命中时 `change_scene_to_packed` | `Global` | 正式入口的快速路径 |
+| `source/global.gd:4543` | 切换到 `load_scene.tscn` | `Global` | 正式入口的加载页路径 |
 | `source/Scene/other_scene/load_scene.gd:577` | 目标 `PackedScene` 为空时直切文件 | `load_scene` | 加载页内部兜底 |
 | `source/Scene/other_scene/load_scene.gd:587` | 新场景实例为空时直切 `PackedScene` | `load_scene` | 覆盖式切换兜底 |
-| `source/Script/level/hdzm.gd:35` | 直接切 `level_hdzm.tscn` | `hdzm.gd` | 业务旁路 |
-| `source/Script/level/hdzm.gd:53` | 直接切 `map_4.tscn` | `hdzm.gd` | 业务旁路 |
-| `source/Script/level/hdzm.gd:55` | 直接切 `map_3.tscn` | `hdzm.gd` | 业务旁路 |
-| `source/Script/level/hdzm.gd:60` | `challenge()` 直接切 `map_4.tscn` | `hdzm.gd` | 业务旁路；先切场景后存档 |
 
 ### 2.2 `Global.change_scene` 调用方清单
 
@@ -70,6 +65,7 @@
 | `source/Script/level/level_55.gd` | 1 |
 | `source/Script/level/level_hdgqnmg.gd` | 1 |
 | `source/Script/level/level_hdgqzld.gd` | 1 |
+| `source/Script/level/hdzm.gd` | 4 |
 | `source/Script/level/level_hdzm.gd` | 3 |
 | `source/Script/level/level_llbt.gd` | 5 |
 | `source/Script/level/level_tzhy.gd` | 1 |
@@ -96,7 +92,7 @@
 | `source/Script/main_menu/zhen_yao_tower.gd` | 1 |
 | `source/Script/memory_class/player_data.gd` | 1 |
 
-合计：**48 个文件、135 处静态调用**。其中 `force_loading_screen=true` 只有 `source/Script/level/level_zhen_yao_tower.gd:483` 一处。
+合计：**49 个文件、139 处静态调用**。其中 `force_loading_screen=true` 只有 `source/Script/level/level_zhen_yao_tower.gd:483` 一处。
 
 ### 2.3 预载下一场景
 
@@ -109,23 +105,23 @@
 | `source/Script/base/base_through_level.gd:1339` | `victory.tscn` | 双场景路径的出口预载 |
 | `source/Script/level/level_55.gd:524` | `BOSS_SCENE_PATH` | Boss 前预载 |
 
-`Global.change_scene` 只在缓存命中、目标属于 `res://Scene/level/`、不是 `level_hdzm.tscn` 且未强制加载页时，使用这个预览槽直接 `change_scene_to_packed`。快速路径不写入 `target_scene`，也不经过加载页。
+`Global.change_scene` 只在缓存命中、目标属于 `res://Scene/level/`、不是 `level_hdzm.tscn` 且未强制加载页时，使用这个预览槽直接 `change_scene_to_packed`。Phase 15-2B 后快速路径同步写入 `target_scene`，仍不经过加载页。
 
 ### 2.4 目标状态与失败语义
 
-| 场景 | 当前行为 | Phase 15-2 需要明确的边界 |
+| 场景 | 当前行为 | 后续边界 |
 |:---|:---|:---|
-| 空字符串目标 | `Global.change_scene` 将 `target_scene` 写为空；加载页启动时回落 `main_menu.tscn` | 继续回落还是明确拒绝，需要固定 |
-| 非空但不存在目标 | 加载页不加入预载清单；完成阶段 `load` 失败后直接 `change_scene_to_file`，没有失败返回 | 目标缺失时必须拒绝并保留当前场景 |
-| 缓存命中 | 关卡目标直接 `change_scene_to_packed`；不更新 `target_scene` | 快速路径与加载页路径的观察状态要一致 |
+| 空字符串目标 | `Global.change_scene` 返回 `false` 并发出 warning；不清理缓存、不写 `target_scene` | 加载页冷启动仍可在空值时回落 `main_menu.tscn`；业务调用不得传空 |
+| 非空但不存在目标 | 返回 `false` 并发出 warning；不清理缓存、不进入加载页 | 目标缺失由 15-2B 拒绝；异步加载失败仍属 15-3 |
+| 缓存命中 | 关卡目标写 `target_scene` 后 `change_scene_to_packed`，返回引擎调用结果 | 快速路径与加载页路径的观察状态已一致；加载页失败语义仍属 15-3 |
 | 强制加载页 | `force_loading_screen=true` 跳过快速路径，仍写 `target_scene` 并切加载页 | 仅保留有明确理由的调用方 |
-| 切换中再次切换 | `load_scene` 只有 `_changing_scene` 守卫，没有目标 generation；旧的线程请求不会按目标取消 | 需要目标快照/取消/过期回调语义 |
-| 直接旁路 | `hdzm.gd` 跳过 `Global.change_scene`，不执行临时 UI、UI 缓存、关卡缓存清理 | 全部迁入正式入口，或提供明确的场景命令 |
+| 切换中再次切换 | `load_scene` 只有 `_changing_scene` 守卫，没有目标 generation；旧的线程请求不会按目标取消 | 15-2C/15-3 需要目标快照/取消/过期回调语义 |
+| 直接旁路 | 业务旁路为 0；`hdzm.gd` 已迁入 `Global.change_scene` | 加载页内部兜底仍由 `load_scene.gd` 唯一持有 |
 
 目标状态写入点只有：
 
-- `source/global.gd:4534`：正式入口写入 `target_scene`；
-- `source/Scene/other_scene/load_scene.gd:79`：加载页在冷启动空值时写入 `DEFAULT_TARGET_SCENE`。
+- `Global.change_scene`：正式入口在目标通过校验后写入 `target_scene`（快速路径同样写入）；
+- `source/Scene/other_scene/load_scene.gd:_ready`：加载页在冷启动空值时写入 `DEFAULT_TARGET_SCENE`。
 
 加载页的 `target_scene` 读取用于战斗判定、预载清单、缓存命中和完成切换；没有独立的目标 token 或版本号。
 
@@ -158,6 +154,7 @@ flowchart TD
 
 ### 3.2 失败与取消
 
+- 目标校验失败：`Global.change_scene` 返回 `false`，不清理缓存、不写 `target_scene`、不进入加载页；空目标与缺失目标均在此层拒绝。
 - 线程请求 `THREAD_LOAD_FAILED` / `THREAD_LOAD_INVALID_RESOURCE`：移除请求、打印 `preload failed`、仍增加完成数；没有失败聚合状态。
 - 同步 `load` 失败：`_cache_resource` 收到 `null` 时直接返回；进度仍前进。
 - 目标 `PackedScene` 为 `null`：`_change_to_target_scene_file` 直接调用 `change_scene_to_file(Global.target_scene)`，没有前置 `ResourceLoader.exists`。
@@ -231,7 +228,7 @@ flowchart TD
 
 | 入口 | 实际所有者 | 调用方 | 覆盖范围 | 失败/边界 |
 |:---|:---|:---|:---|:---|
-| `Global.change_scene` | `Global` | 135 处业务调用 | 档案退出、临时 UI、UI 缓存、关卡缓存、快速路径/加载页 | 目标无效不拒绝；直接旁路绕过 |
+| `Global.change_scene` | `Global` | 139 处业务调用 | 目标校验、档案退出、临时 UI、UI 缓存、关卡缓存、快速路径/加载页 | 空/缺失目标拒绝并返回 `false`；业务旁路已清零 |
 | `cleanup_transient_ui` | `Global` | `Global.change_scene` + 18 个文件的 51 处显式调用 | 硬编码节点名、弹出层、hover popup | 名称冲突误删；不是节点注册表 |
 | `release_ui_runtime_cache` | `Global` | 仅 `Global.change_scene` | UI 场景缓存、永久 UI、UI 纹理前缀 | 只清缓存，不释放仍在树的 UI 节点 |
 | `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 关卡路径集合、monster cache、预热集合、FrameSequence、212 帧缓存 | 全局一次清空；不清理池和 UI |
@@ -249,7 +246,7 @@ flowchart TD
 
 | 能力 | 当前所有者 | 允许调用方 | 释放/失效事件 | 失败语义 | Phase 交接 |
 |:---|:---|:---|:---|:---|:---|
-| 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务 UI/关卡；加载页只消费 | 切换完成/失败 | 空目标回落，非空无效目标未拒绝 | Phase 15-2 固定入口契约 |
+| 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务 UI/关卡；加载页只消费 | 切换完成/失败 | 空/缺失目标 `false`；快速路径同步目标 | Phase 15-2A/15-2B 已完成；15-2C 继续加载页交接 |
 | 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放 | 失败继续进度，无取消 | Phase 15-3 窄接口与取消 |
 | 关卡资源租约 | `Global._level_resource_cache_paths` | 加载页、BaseLevel 预载函数 | 每次切换/战斗清理 | 全局集合，不是按关卡 | Phase 15-3 改为可枚举租约 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4 作用域与清理 |
@@ -266,13 +263,16 @@ flowchart TD
 
 以下均是当前事实与风险，不是本阶段已修复内容：
 
-### Phase 15-2
+### Phase 15-2A/15-2B 已完成
 
-1. `hdzm.gd` 的 4 处直接 `change_scene_to_file` 需要迁入正式入口；`level_hdzm.tscn` 已明确保留为加载页例外，不能继续直接切换。
-2. `Global.change_scene` 需要返回明确的成功/拒绝结果；空目标与非空无效目标分开处理。
-3. 加载页兜底的 `change_scene_to_file` 和 `change_scene_to_packed` 需要标记为内部唯一实现，并定义失败保留当前场景。
-4. 快速路径与加载页路径需要统一 `target_scene` 的观察语义；避免快速路径后目标状态停留在旧关卡。
-5. 切换中重复调用需要目标快照与过期请求处理，不能只依赖 `_changing_scene`。
+1. `hdzm.gd` 的 4 处直接 `change_scene_to_file` 已迁入 `Global.change_scene`；业务代码低层切换为 0。
+2. `Global.change_scene` 已返回 `bool`：空目标、非 `.tscn/.scn`、`ResourceLoader.exists` 失败均返回 `false`，且不清理缓存、不写 `target_scene`；接受时返回引擎提交结果。
+3. 快速路径同步写入 `target_scene`，与加载页路径的观察状态一致。
+
+### Phase 15-2C 待处理
+
+1. 加载页兜底的 `change_scene_to_file` 和 `change_scene_to_packed` 仍是内部实现；需要定义加载失败时保留当前场景的返回值/状态。
+2. 切换中重复调用需要目标快照与过期请求处理，不能只依赖 `_changing_scene`。
 
 ### Phase 15-3
 
@@ -293,15 +293,15 @@ flowchart TD
 
 ---
 
-## 8. Phase 15-1 出口核对
+## 8. Phase 15-1/15-2A/15-2B 出口核对
 
-- [x] 场景切换调用点已枚举：135 处 `Global.change_scene`（48 文件）、9 处低层调用、4 处业务旁路；
+- [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、4 处低层内部调用、业务旁路 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；
 - [x] `Global` 主要缓存、关卡路径集合、预览槽、永久 UI、对象池与 UI 注册表已登记 owner/写者/释放事件；
 - [x] `clear_level_resource_cache`、`clear_combat_runtime_cache`、`end_archive_session`、`release_ui_runtime_cache`、`release_role_runtime_resources`、`release_map_visual_resources`、`_exit_tree` 的调用方已记录；
 - [x] 只读 Catalog/声明与运行时缓存已分开；
-- [x] 仅新增/更新文档，未修改 `source/` 生产代码、素材或 UID。
+- [x] `hdzm.gd` 的 4 处业务旁路已迁入正式入口，`Global.change_scene` 已固定空/缺失目标拒绝、快速路径目标一致与布尔返回。
 
-**验证边界**：本阶段只做静态调用面调查；按 [`acceptance.md`](acceptance.md)，只读矩阵不因调查复跑引擎、关卡回归或 L2。未运行加载失败、切换中退出、重复切换等运行期反例，相关行为标为待验证，不据此宣称缺陷已确认或已修复。
+**验证**：Phase 15-2A/15-2B 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，日志 0 ERROR / 0 WARNING）、`scene_probe_runner --probe level-selection`（PASS）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，709.0s），以及临时契约探针（空/缺失目标拒绝、`target_scene` 未变、有效目标接受）。未执行 release 重验、加载失败/取消与切换中退出，这些仍属待验证或 Phase 15-2C/15-3 范围。
 
-**下一入口**：Phase 15-2 场景流转单入口。恢复时先读本页 §2、§6、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-2 切片。
+**下一入口**：Phase 15-2C 加载页交接。恢复时先读本页 §2、§6、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-2C 切片。

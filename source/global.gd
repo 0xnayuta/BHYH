@@ -4510,8 +4510,16 @@ func add_main_backpack(parent, position):
 	return target
 
 
-func change_scene(target, force_loading_screen: bool = false):
+func change_scene(target, force_loading_screen: bool = false) -> bool:
 	var target_path := str(target)
+	if not _is_valid_scene_change_target(target_path):
+		push_warning("change_scene rejected invalid target: %s" % target_path)
+		return false
+
+	var tree := get_tree()
+	if tree == null:
+		return false
+
 	var exiting_archive := is_archive_exit_scene(target_path)
 	if exiting_archive:
 		end_archive_session()
@@ -4521,6 +4529,7 @@ func change_scene(target, force_loading_screen: bool = false):
 	clear_level_resource_cache()
 
 	var cached = _get_preloaded(target_path)
+	target_scene = target_path
 
 	if (
 		not force_loading_screen
@@ -4528,15 +4537,19 @@ func change_scene(target, force_loading_screen: bool = false):
 		and target_path.begins_with("res://Scene/level/")
 		and target_path != "res://Scene/level/level_hdzm.tscn"
 	):
-		get_tree().change_scene_to_packed(cached)
-		return
+		var fast_err := tree.change_scene_to_packed(cached)
+		return fast_err == OK
 
-	target_scene = target_path
-	get_tree().change_scene_to_file("res://Scene/other_scene/load_scene.tscn")
+	var load_err := tree.change_scene_to_file("res://Scene/other_scene/load_scene.tscn")
+	return load_err == OK
 
 
-func _deferred_change_scene():
-	get_tree().change_scene_to_file(target_scene)
+func _is_valid_scene_change_target(target_path: String) -> bool:
+	if target_path.is_empty():
+		return false
+	if not (target_path.ends_with(".tscn") or target_path.ends_with(".scn")):
+		return false
+	return ResourceLoader.exists(target_path)
 
 
 func add_music_set(parent, position):
