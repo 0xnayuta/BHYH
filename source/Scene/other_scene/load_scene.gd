@@ -354,14 +354,11 @@ func _cache_resource(path: String, resource: Resource) -> void:
 	if path == _target_scene and resource is PackedScene:
 		_target_packed_scene = resource as PackedScene
 		return
-	if Global.has_method("_cache_threaded_resource"):
-		Global._cache_threaded_resource(path, resource)
-		if _is_battle_target_scene():
-			Global._track_level_resource(path)
+	Global.handoff_loaded_resource(path, resource, _is_battle_target_scene())
 
 
 func _is_cached(path: String) -> bool:
-	return Global._resource_cache.has(path) or Global._audio_cache.has(path) or Global._texture_cache.has(path)
+	return Global.is_resource_cached(path)
 
 
 func _is_uncached_target_scene(path: String) -> bool:
@@ -529,8 +526,8 @@ func _finish_loading() -> void:
 	if _target_packed_scene != null:
 		_change_to_packed_scene(_target_packed_scene)
 	else:
-		var cached = Global._resource_cache.get(_target_scene, null)
-		if cached is PackedScene:
+		var cached := Global.get_cached_packed_scene(_target_scene)
+		if cached != null:
 			_change_to_packed_scene(cached)
 		else:
 			_change_to_target_scene_file()

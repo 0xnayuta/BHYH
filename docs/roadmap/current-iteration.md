@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约与 Phase 15-2C 加载页交接已完成，Phase 15-3 未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
+> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接与 Phase 15-3A 窄交接接口已完成，Phase 15-3B/15-3C 未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 15；Phase 16~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -99,15 +99,15 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 - 调用方不依赖旧的延迟切换旁路；
 - 相关 L2/场景冒烟已通过；冷启动返回、重战、强制加载与切换中退出仍需补验。
 
-**当前 15-2 证据**：`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）、`scene_probe_runner --probe level-selection` PASS（14.67s）、全量关卡回归 PASS 128/128 + SKIP 5（735.6s，`level_58` 单次瞬态失败后重试通过）；临时契约探针验证空/缺失目标拒绝、`target_scene` 未变、有效目标接受；重复切换探针验证最新目标获胜；目标加载后失效探针验证 current_scene 保留加载页且未提交失败目标。冷启动返回、重战、强制加载、切换中退出仍属 Phase 15-3/后续运行验证。
+**当前 15-2/15-3A 证据**：`level_1` 冒烟 PASS（23.47s，0 ERROR / 0 WARNING）、`scene_probe_runner --probe level-selection` PASS（16.28s）、全量关卡回归 PASS 128/128 + SKIP 5（756.6s，`level_58` 单次瞬态失败后重试通过）；临时契约探针验证空/缺失目标拒绝、`target_scene` 未变、有效目标接受；重复切换探针验证最新目标获胜；目标加载后失效探针验证 current_scene 保留加载页且未提交失败目标。加载页私有缓存访问已清零。冷启动返回、重战、强制加载、切换中退出仍属 Phase 15-3B/15-3C/后续运行验证。
 
-## 4. Phase 15-3：加载页预载与资源交接（未启动）
+## 4. Phase 15-3：加载页预载与资源交接（15-3A 完成，15-3B/15-3C 未启动）
 
 **目标**：让加载页只负责“请求与编排”，资源缓存由明确所有者持有；切换、取消和失败不留下陈旧回调或跨关卡资源。
 
 ### 4.1 切片
 
-1. **Phase 15-3A 交接 API**：把加载页对 `_cache_threaded_resource`、`_track_level_resource`、`_get_preloaded` 的私有访问收束为窄接口；接口返回成功/失败/取消，不暴露可写缓存字典。
+1. **Phase 15-3A 交接 API（已完成）**：加载页只使用 `Global.is_resource_cached`、`Global.get_cached_packed_scene` 与 `Global.handoff_loaded_resource`；不再直接读写 `_resource_cache` / `_audio_cache` / `_texture_cache`，也不调用 `_cache_threaded_resource` / `_track_level_resource`。
 2. **Phase 15-3B 关卡资源租约**：按关卡记录本次加载拥有的路径、怪物/弹体/纹理与热身标记；退出或重战只释放本租约，不按宽泛前缀误删共享资源。
 3. **Phase 15-3C 失败与取消**：线程失败、目标切换、提前退出、重复请求和加载页销毁时，取消/使过期回调失效；失败不进入可玩场景。
 4. **Phase 15-3D 预载清单边界**：`LevelPreloadStore` 与构建期 Catalog 保持只读；不在加载页重新扫描脚本、目录或解析 manifest。
@@ -122,9 +122,9 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 
 ### 4.3 出口
 
-- 缓存只有一个写入所有者；
-- 加载页不直接修改私有缓存字典；
-- 租约释放可枚举、可观测、可回滚；
+- 缓存只有一个写入所有者；加载页只通过 `handoff_loaded_resource` 提交结果；
+- 租约释放可枚举、可观测、可回滚（Phase 15-3B）；
+- 线程失败/取消不留下过期回调（Phase 15-3C）；
 - 加载失败不落入可玩场景或半初始化状态。
 
 ## 5. Phase 15-4：缓存、池、UI 与退出生命周期（未启动）
@@ -163,7 +163,8 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 | Phase 15-1 调用面矩阵 | 全量引用、owner/清理/失败表、链接与格式；结果见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) | 引擎、关卡回归不因只读调查复跑 |
 | Phase 15-2A/15-2B 入口契约 | `hdzm.gd` 旁路清零；空/缺失目标拒绝；快速路径目标一致；`level_1` 与关卡选择探针通过 | 不以单个 L1 场景替代所有入口 |
 | Phase 15-2C 加载页交接 | 目标快照、重复切换、失败不提交目标、缓存代次守卫；`level_1`/关卡选择探针/全量回归通过 | 冷启动返回、重战、强制加载和切换中退出仍需按受影响入口补验 |
-| Phase 15-3 预载交接 | 成功/失败/取消/提前退出；缓存写入与租约释放；相关关卡与 L2 | 只编译或只检查请求数不等于行为正确 |
+| Phase 15-3A 交接 API | 加载页私有字段/方法访问为 0；查询/提交/场景读取接口调用；`level_1` 与关卡选择探针 | 接口改名/转发本身不等于租约或取消完成 |
+| Phase 15-3B/15-3C 预载交接 | 成功/失败/取消/提前退出；缓存写入与租约释放；相关关卡与 L2 | 只编译或只检查请求数不等于行为正确 |
 | Phase 15-4 生命周期收口 | L2、全量回归、退出/重复进出、守卫正负样本、构建/引用/命名检查 | 包路径/导出无变化时不强制重导 release |
 | 影响资源/输入/物理 | 实际运行路径与 release 触发条件 | 文档或只读矩阵不触发 release |
 

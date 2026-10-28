@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15-2C 加载页交接完成；Phase 15-3 未启动）
+> 最后更新：2026-10-28（Phase 15-3A 窄交接接口完成；Phase 15-3B/15-3C 未启动）
 
 ---
 
@@ -171,6 +171,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 15-1 调用面矩阵 | 仅文档/静态调查：`Global.change_scene` 135 处、48 个文件；低层切换 9 处，其中 `hdzm.gd` 业务旁路 4 处；`target_scene` 写入 2 处，预览槽 `preload_next` 4 处；加载页、缓存/池/UI/档案会话与退出清理的当前所有者、释放事件和失败边界已登记；未修改 `source/`、素材或 UID | 详细矩阵见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)；Phase 15-1 完成；随后 Phase 15-2A/15-2B/15-2C 已完成。本阶段未运行引擎、关卡回归或 L2，因为按计划只读调查不触发运行门禁 |
 | 2026-10-28 Phase 15-2A/15-2B 入口收口 | `Global.change_scene` 增加空/非场景/缺失目标校验与 `bool` 返回，拒绝时不清缓存、不写 `target_scene`；快速路径同步写目标；删除 `_deferred_change_scene`；`hdzm.gd` 4 处直接切换迁入正式入口。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.67s，日志 0/0）；`scene_probe_runner --probe level-selection` **PASS**（16.17s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（709.0s）；临时契约探针空/缺失目标拒绝、`target_scene` 未变、有效目标接受 | Phase 15-2A/15-2B 完成；Phase 15-2C 后续完成；业务代码低层切换为 0。未执行 release、加载失败/取消与切换中退出验证 |
 | 2026-10-28 Phase 15-2C 加载页交接 | `load_scene` 固定 `_target_scene` 与 `_request_generation`；预载/缓存/切换使用目标快照；旧代次停止轮询与缓存写入；移除加载页 `change_scene_to_file/packed` 兜底；目标加载/实例化/加入后失效时保留加载页并显示失败。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner --probe level-selection` **PASS**（14.67s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（735.6s，`level_58` 单次瞬态失败后重试通过）；临时探针最新目标获胜、失败目标不提交、current_scene 保留加载页 | Phase 15-2A/15-2B/15-2C 完成，Phase 15-3 未启动。未执行 release、底层线程显式取消与切换中退出验证；失败时保留的是当前加载页，进入加载页时已释放的上一场景不恢复 |
+| 2026-10-28 Phase 15-3A 窄交接接口 | 加载页不再访问 `_resource_cache`/`_audio_cache`/`_texture_cache` 或调用 `_cache_threaded_resource`/`_track_level_resource`；新增 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 三个窄接口。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.47s，日志 0/0）；`scene_probe_runner --probe level-selection` **PASS**（16.28s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（756.6s，`level_58` 单次瞬态失败后重试通过） | Phase 15-3A 完成，Phase 15-3B/15-3C 未启动；加载页私有缓存访问为 0。未执行 release、租约释放与底层线程显式取消验证 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

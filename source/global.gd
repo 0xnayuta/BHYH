@@ -749,6 +749,38 @@ func get_level_info_monster_ids(level_name: String) -> Array:
 	return result
 
 
+# 加载页只读查询：不暴露缓存字典，也不触发加载。
+func is_resource_cached(path: String) -> bool:
+	if path.is_empty():
+		return false
+	return (
+		_resource_cache.has(path)
+		or _sprite_frames_cache.has(path)
+		or _audio_cache.has(path)
+		or _texture_cache.has(path)
+	)
+
+
+# 返回已缓存的场景；未命中或无效时返回 null，不写入缓存。
+func get_cached_packed_scene(path: String) -> PackedScene:
+	if path.is_empty():
+		return null
+	var value: Variant = _resource_cache.get(path)
+	if not _is_valid_packed_scene(value):
+		return null
+	return value as PackedScene
+
+
+# 加载页唯一写入口：按资源类型写入缓存；track_level 只登记本次加载拥有的路径。
+func handoff_loaded_resource(path: String, resource: Resource, track_level: bool = false) -> bool:
+	if path.is_empty() or resource == null:
+		return false
+	_cache_threaded_resource(path, resource)
+	if track_level:
+		_track_level_resource(path)
+	return true
+
+
 func get_cached_audio(path: String) -> AudioStream:
 	var resolved_path := path
 	if path.ends_with("/effect4.mp3") and not path.begins_with("res://Music/hero/role_7/"):
