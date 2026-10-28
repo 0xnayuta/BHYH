@@ -13,6 +13,7 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 
 - `constellation`：星座 Boss 视觉后端与 FrameSequence 生命周期；
 - `level-selection`：八仙过海 / 挑战三太子的运行期选择态与自预载边界；
+- `level-resource-lease`：关卡资源租约的路径分类、按租约释放与共享缓存保留；
 - `role-skills`：角色 2/4 技能入口、BingYu/CangMu 效果实例化与 5 个 Spine 资源预加载；
 - `magic-weapons`：法宝与角色特效构建期帧（诛仙剑阵、青莲、青龙剑/太极、八仙、Lyfb、哪吒阴阳）。
 """
@@ -77,6 +78,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="LEVEL_SELECTION_PROBE_TEARDOWN",
         quit_after_frames=6000,
         timeout_seconds=240,
+    ),
+    ProbeSpec(
+        key="level-resource-lease",
+        title="关卡资源租约运行时探针",
+        script_name="level_resource_lease_probe.gd",
+        scene_name="level_resource_lease_probe.tscn",
+        result_prefix="LEVEL_RESOURCE_LEASE_PROBE_RESULT=",
+        report_stem="level_resource_lease_probe_report",
+        teardown_marker="LEVEL_RESOURCE_LEASE_PROBE_TEARDOWN",
+        quit_after_frames=120,
+        timeout_seconds=60,
     ),
     ProbeSpec(
         key="magic-weapons",

@@ -9,13 +9,13 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接与 Phase 15-3A 窄交接接口已完成，Phase 15-3B/15-3C 未启动 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口与 Phase 15-3B 关卡资源租约已完成，Phase 15-3C/15-3D 未启动 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 已归档；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接与 Phase 15-3A 窄交接接口已完成，Phase 15-3B/15-3C 未启动。后续候选覆盖应用编排/运行资源、档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 已归档；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口与 Phase 15-3B 关卡资源租约已完成，Phase 15-3C/15-3D 未启动。后续候选覆盖应用编排/运行资源、档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

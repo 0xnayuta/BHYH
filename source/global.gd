@@ -386,9 +386,8 @@ var _permanent_small_ui_scene_cache: Dictionary = {}
 var _permanent_ui_prewarm_in_progress := false
 var _permanent_ui_prewarmed := false
 var _prewarmed_pet_signature: String = ""
-var _level_resource_cache_paths: Dictionary = {}
-var _level_runtime_warmed_scene_paths: Dictionary = {}
-var _level_runtime_prewarmed_monster_ids: Dictionary = {}
+var _level_resource_lease: Dictionary = {}
+var _level_resource_lease_id: int = 0
 var _last_sound_play_msec = {}
 var _active_sound_players: Dictionary = {}
 var _last_sfx_enabled := true
@@ -935,7 +934,7 @@ func prewarm_monster_scene_paths(scene_paths: Array) -> void:
 	var pending_paths: Array[String] = []
 	for path_value in scene_paths:
 		var path := str(path_value)
-		if path == "" or _level_runtime_warmed_scene_paths.has(path) or pending_paths.has(path):
+		if path == "" or _is_level_scene_warmed(path) or pending_paths.has(path):
 			continue
 		pending_paths.append(path)
 	if pending_paths.is_empty():
@@ -947,7 +946,7 @@ func prewarm_monster_scene_paths(scene_paths: Array) -> void:
 		var scene = _resource_cache.get(path)
 		if scene is PackedScene:
 			_monster_scene_cache[path] = scene
-			_level_runtime_warmed_scene_paths[path] = true
+			_mark_level_scene_warmed(path)
 
 
 func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
@@ -957,7 +956,7 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 	var seen_monster_ids: Dictionary = {}
 	for monster_id_value in requested_monster_ids:
 		var monster_id := int(monster_id_value)
-		if monster_id <= 0 or seen_monster_ids.has(monster_id) or _level_runtime_prewarmed_monster_ids.has(monster_id):
+		if monster_id <= 0 or seen_monster_ids.has(monster_id) or _is_level_monster_prewarmed(monster_id):
 			continue
 		seen_monster_ids[monster_id] = true
 		unique_monster_ids.append(monster_id)
@@ -1009,7 +1008,7 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 	await prewarm_monster_scene_paths(monster_scene_paths)
 
 	for monster_id in unique_monster_ids:
-		_level_runtime_prewarmed_monster_ids[monster_id] = true
+		_mark_level_monster_prewarmed(monster_id)
 
 
 func preload_level_texture_paths(texture_paths: Array, textures_per_frame: int = 5) -> void:
@@ -1359,19 +1358,10 @@ func _warm_scene_instance(scene: PackedScene) -> void:
 
 
 func clear_level_resource_cache() -> void:
+	release_level_resource_lease()
 	FrameSequenceStore.clear_cache()
 	for bullet_script in MONSTER_212_BULLET_SCRIPTS:
 		bullet_script.clear_cached_frames()
-	for path_value in _level_resource_cache_paths.keys():
-		var path := str(path_value)
-		_resource_cache.erase(path)
-		_sprite_frames_cache.erase(path)
-		_texture_cache.erase(path)
-		_audio_cache.erase(path)
-	_level_resource_cache_paths.clear()
-	_level_runtime_warmed_scene_paths.clear()
-	_level_runtime_prewarmed_monster_ids.clear()
-	_monster_scene_cache.clear()
 
 
 func release_map_visual_resources(root: Node) -> void:
@@ -1413,31 +1403,6 @@ func clear_combat_runtime_cache() -> void:
 	_prewarmed_pet_signature = ""
 	_current_role_body_texture_path = ""
 	_current_role_equipment_texture_path = ""
-	var combat_prefixes := [
-		"res://Art/hero_picture/",
-		"res://Art/monster/",
-		"res://Art/level/",
-		"res://Art/pet/",
-		"res://Art/magic_weapon/",
-		"res://Art/zhuxianjianzhen/",
-		"res://Art/add_effect/",
-		"res://Art/all_number/",
-		"res://Scene/hero/",
-		"res://Scene/monster/",
-		"res://Scene/magic_weapon/",
-		"res://Scene/pet/",
-	]
-	_erase_cached_paths_by_prefix(_resource_cache, combat_prefixes)
-	_erase_cached_paths_by_prefix(_sprite_frames_cache, combat_prefixes)
-	_erase_cached_paths_by_prefix(_texture_cache, combat_prefixes)
-	_erase_cached_paths_by_prefix(
-		_audio_cache,
-		[
-			"res://Music/hero/",
-			"res://Music/monster_hurt/",
-			"res://Music/level/",
-		]
-	)
 
 	hit_text = null
 	damage_text = null
@@ -1656,9 +1621,158 @@ func _erase_cached_paths_by_prefix(cache: Dictionary, prefixes: Array) -> void:
 				break
 
 
+# 为下一次关卡加载建立租约；目标场景只记录，不作为租约拥有的资源释放。
+func begin_level_resource_lease(target_scene: String) -> int:
+	release_level_resource_lease()
+	_level_resource_lease_id += 1
+	_level_resource_lease = {
+		"id": _level_resource_lease_id,
+		"target_scene": target_scene,
+		"paths": {},
+		"scene_paths": {},
+		"monster_scene_paths": {},
+		"bullet_scene_paths": {},
+		"texture_paths": {},
+		"audio_paths": {},
+		"warmed_scene_paths": {},
+		"prewarmed_monster_ids": {},
+	}
+	return _level_resource_lease_id
+
+
+# 只释放本租约登记的路径；永久 UI 和未登记路径保持原缓存。
+func release_level_resource_lease(lease_id: int = -1) -> int:
+	if _level_resource_lease.is_empty():
+		return 0
+	if lease_id >= 0 and int(_level_resource_lease.get("id", 0)) != lease_id:
+		return 0
+	var target_scene := str(_level_resource_lease.get("target_scene", ""))
+	var paths: Dictionary = _level_resource_lease.get("paths", {})
+	var released := 0
+	for path_value in paths.keys():
+		var path := str(path_value)
+		if path.is_empty() or path == target_scene:
+			continue
+		if path in PERMANENT_SMALL_UI_SCENE_PATHS or _permanent_small_ui_scene_cache.has(path):
+			continue
+		_resource_cache.erase(path)
+		_sprite_frames_cache.erase(path)
+		_texture_cache.erase(path)
+		_audio_cache.erase(path)
+		_monster_scene_cache.erase(path)
+		released += 1
+	_level_resource_lease = {}
+	return released
+
+
+# 只读快照；数组为副本，调用方不能借此修改租约。
+func get_level_resource_lease_snapshot() -> Dictionary:
+	if _level_resource_lease.is_empty():
+		return {
+			"active": false,
+			"id": 0,
+			"target_scene": "",
+			"owned_path_count": 0,
+			"owned_paths": [],
+			"scene_paths": [],
+			"monster_scene_paths": [],
+			"bullet_scene_paths": [],
+			"texture_paths": [],
+			"audio_paths": [],
+			"warmed_scene_paths": [],
+			"prewarmed_monster_ids": [],
+		}
+	var lease := _level_resource_lease
+	return {
+		"active": true,
+		"id": int(lease.get("id", 0)),
+		"target_scene": str(lease.get("target_scene", "")),
+		"owned_path_count": (lease.get("paths", {}) as Dictionary).size(),
+		"owned_paths": _lease_path_list(lease.get("paths", {})),
+		"scene_paths": _lease_path_list(lease.get("scene_paths", {})),
+		"monster_scene_paths": _lease_path_list(lease.get("monster_scene_paths", {})),
+		"bullet_scene_paths": _lease_path_list(lease.get("bullet_scene_paths", {})),
+		"texture_paths": _lease_path_list(lease.get("texture_paths", {})),
+		"audio_paths": _lease_path_list(lease.get("audio_paths", {})),
+		"warmed_scene_paths": _lease_path_list(lease.get("warmed_scene_paths", {})),
+		"prewarmed_monster_ids": _lease_int_list(lease.get("prewarmed_monster_ids", {})),
+	}
+
+
+func _lease_path_list(value: Variant) -> Array:
+	var result: Array = []
+	if value is Dictionary:
+		for path_value in (value as Dictionary).keys():
+			result.append(str(path_value))
+	result.sort()
+	return result
+
+
+func _lease_int_list(value: Variant) -> Array:
+	var result: Array = []
+	if value is Dictionary:
+		for key_value in (value as Dictionary).keys():
+			result.append(int(key_value))
+	result.sort()
+	return result
+
+
+func _is_level_scene_warmed(path: String) -> bool:
+	if _level_resource_lease.is_empty():
+		return false
+	var warmed: Dictionary = _level_resource_lease.get("warmed_scene_paths", {})
+	return warmed.has(path)
+
+
+func _mark_level_scene_warmed(path: String) -> void:
+	if _level_resource_lease.is_empty():
+		return
+	var warmed: Dictionary = _level_resource_lease.get("warmed_scene_paths", {})
+	warmed[path] = true
+
+
+func _is_level_monster_prewarmed(monster_id: int) -> bool:
+	if _level_resource_lease.is_empty():
+		return false
+	var prewarmed: Dictionary = _level_resource_lease.get("prewarmed_monster_ids", {})
+	return prewarmed.has(monster_id)
+
+
+func _mark_level_monster_prewarmed(monster_id: int) -> void:
+	if _level_resource_lease.is_empty():
+		return
+	var prewarmed: Dictionary = _level_resource_lease.get("prewarmed_monster_ids", {})
+	prewarmed[monster_id] = true
+
+
 func _track_level_resource(path: String) -> void:
-	if path != "":
-		_level_resource_cache_paths[path] = true
+	if path.is_empty() or _level_resource_lease.is_empty():
+		return
+	var target_scene := str(_level_resource_lease.get("target_scene", ""))
+	if path == target_scene:
+		return
+	var paths: Dictionary = _level_resource_lease.get("paths", {})
+	paths[path] = true
+	var extension := path.get_extension().to_lower()
+	if extension in ["tscn", "scn"]:
+		var scene_paths: Dictionary = _level_resource_lease.get("scene_paths", {})
+		scene_paths[path] = true
+		if path.begins_with("res://Scene/monster/") or path.begins_with("res://Scene/bullet/"):
+			var monster_scene_paths: Dictionary = _level_resource_lease.get("monster_scene_paths", {})
+			monster_scene_paths[path] = true
+			if (
+				path.begins_with("res://Scene/bullet/")
+				or path.contains("/monster_bullet")
+				or path.get_file().to_lower().contains("bullet")
+			):
+				var bullet_scene_paths: Dictionary = _level_resource_lease.get("bullet_scene_paths", {})
+				bullet_scene_paths[path] = true
+	elif extension in ["png", "jpg", "jpeg", "webp", "svg"]:
+		var texture_paths: Dictionary = _level_resource_lease.get("texture_paths", {})
+		texture_paths[path] = true
+	elif extension in ["mp3", "ogg", "wav"]:
+		var audio_paths: Dictionary = _level_resource_lease.get("audio_paths", {})
+		audio_paths[path] = true
 
 
 func _dependency_resource_path(dependency: String) -> String:
@@ -1746,7 +1860,7 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
 	var pending_paths: Array[String] = []
 	for path_value in scene_paths:
 		var path := str(path_value)
-		if path == "" or _level_runtime_warmed_scene_paths.has(path) or pending_paths.has(path):
+		if path == "" or _is_level_scene_warmed(path) or pending_paths.has(path):
 			continue
 		pending_paths.append(path)
 	if pending_paths.is_empty():
@@ -1769,7 +1883,7 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array) -> void:
 	for path in pending_paths:
 		var scene = _resource_cache.get(path)
 		if scene is PackedScene:
-			_level_runtime_warmed_scene_paths[path] = true
+			_mark_level_scene_warmed(path)
 
 
 func preload_combat_misc_resources() -> void:
@@ -4561,6 +4675,7 @@ func change_scene(target, force_loading_screen: bool = false) -> bool:
 	release_ui_runtime_cache(exiting_archive)
 
 	clear_level_resource_cache()
+	begin_level_resource_lease(target_path)
 
 	var cached = _get_preloaded(target_path)
 	target_scene = target_path

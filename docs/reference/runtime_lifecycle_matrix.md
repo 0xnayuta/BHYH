@@ -1,8 +1,8 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-3/15-4 的目标写成已实现。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A 与 Phase 15-3B 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-3C/15-4 的目标写成已实现。
 >
-> **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
+> **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约；2026-10-28 Phase 15-3A/15-3B 更新交接与租约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为事实源，使用 `grep`/`read` 做静态调用面调查。下文的调用次数是静态出现次数，可能包含条件分支、重复调用或暂时不可达路径，不等同于运行期调用次数。
 >
@@ -15,8 +15,8 @@
 1. **业务场景入口已收口**：`Global.change_scene` 是正式入口，Phase 15-2A 后静态发现 **139 处调用、49 个文件**；`hdzm.gd` 的 4 处直接 `change_scene_to_file` 已迁入正式入口，业务代码不再保留低层切换。
 2. **低层切换只保留正式入口内部实现**：`Global.change_scene` 2 处（快速路径与加载页入口）；`load_scene.gd` 业务兜底为 0；`hdzm.gd` 旁路为 0，`Global._deferred_change_scene` 已删除。
 3. **目标状态在加载页被快照**：`Global.target_scene` 仍作为入口交接值；`load_scene` 在 `_ready` 固定 `_target_scene` 与请求代次，后续不再读取可变的全局目标；空/非场景/缺失目标由正式入口返回 `false`。
-4. **缓存所有权集中在 `Global`**：`_resource_cache`、`_monster_scene_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、关卡路径集合与预览槽均由 `Global` 持有；加载页 Phase 15-3A 后只通过 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 交接，不直接读写私有缓存字典。
-5. **关卡资源不是按关卡租约**：`_level_resource_cache_paths` 是一个全局路径集合，每次 `change_scene` 清空；目标场景本身走 `_target_packed_scene`，不登记为关卡资源。
+4. **缓存所有权集中在 `Global`**：`_resource_cache`、`_monster_scene_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、关卡资源租约与预览槽均由 `Global` 持有；加载页 Phase 15-3A 后只通过 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 交接，不直接读写私有缓存字典。
+5. **关卡资源按租约释放**：`_level_resource_lease` 记录目标场景、本次加载拥有的路径、怪物/弹体/纹理/音频分类、热身场景与已预热怪物 ID；每次 `change_scene` 释放上一租约并建立新租约；目标场景本身走 `_target_packed_scene`，不登记为租约资源。未登记路径、永久 UI 保留。
 6. **对象池只在档案结束时整体清空**：池根、伤害文本、受击、角色受击与音效池由 `Global` 持有；关卡切换不清理，复用前重置依赖各消费者。
 7. **临时 UI 仍按硬编码节点名清理**：`cleanup_transient_ui` 遍历当前场景和根节点，按名称列表移除节点；51 处显式调用来自 18 个文件，另有 `Global.change_scene` 内部调用。
 8. **退出清理不完整**：`Global._exit_tree` 只清理 `FrameSequenceStore` 与 `FrameTextureRequests`；对象池、UI 注册、关卡缓存与档案会话没有在应用退出路径统一结束。`MemoryClass._exit_tree` 负责存档线程 flush，是独立所有者。
@@ -171,22 +171,22 @@ flowchart TD
 
 | 对象 | 当前所有者 | 写入方 | 读取方 | 释放/失效 | 失败边界 |
 |:---|:---|:---|:---|:---|:---|
-| `_resource_cache` | `Global` | `_load_scene`、`_cache_threaded_resource`、`load_scene_uncached`、部分预载函数、`instance_scene` 相关 UI 缓存 | `Global`、`load_scene` 经 `is_resource_cached` / `get_cached_packed_scene` | `clear_level_resource_cache`、`clear_combat_runtime_cache`、`release_role_runtime_resources`、`release_ui_runtime_cache`、`_release_ui_scene_cache_if_unused` | `null` 资源不入缓存；资源预载失败继续进度，目标场景失败停止切换 |
-| `_monster_scene_cache` | `Global` | `load_level_monster_scene`、`preload_level_monster_scenes`、`prewarm_monster_scene_paths` | `load_level_monster_scene` | `clear_level_resource_cache` | 空路径返回 `null`；未命中时重新加载 |
-| `_sprite_frames_cache` | `Global` | `_cache_threaded_resource`、`prewarm_sprite_frames_paths` 经 `_preload_paths_threaded` | `_preload_paths_threaded`、`_preload_sprite_frames_resource`、`is_resource_cached` | 关卡清理、战斗清理、角色资源释放、UI 纹理前缀清理 | 没有外部直接读取；缓存查询包含此表 |
-| `_audio_cache` | `Global` | `get_cached_audio`、`_cache_threaded_resource` | `get_cached_audio`、`is_resource_cached` | 关卡清理、战斗清理、角色资源释放、UI 前缀清理 | 路径别名解析；空路径返回 `null` |
-| `_texture_cache` | `Global` | `get_cached_texture`、`_cache_threaded_resource` | `get_cached_texture`、`is_resource_cached` | 关卡清理、战斗清理、角色资源释放、UI 前缀清理、`release_cached_texture` | 加载失败时删除条目并返回 `null` |
+| `_resource_cache` | `Global` | `_load_scene`、`_cache_threaded_resource`、`load_scene_uncached`、部分预载函数、`instance_scene` 相关 UI 缓存 | `Global`、`load_scene` 经 `is_resource_cached` / `get_cached_packed_scene` | `release_level_resource_lease`（经 `clear_level_resource_cache` / `clear_combat_runtime_cache`）、`release_role_runtime_resources`、`release_ui_runtime_cache`、`_release_ui_scene_cache_if_unused` | `null` 资源不入缓存；资源预载失败继续进度，目标场景失败停止切换 |
+| `_monster_scene_cache` | `Global` | `load_level_monster_scene`、`preload_level_monster_scenes`、`prewarm_monster_scene_paths` | `load_level_monster_scene` | 只删除当前租约登记的怪物场景路径 | 空路径返回 `null`；未命中时重新加载；未登记路径保留 |
+| `_sprite_frames_cache` | `Global` | `_cache_threaded_resource`、`prewarm_sprite_frames_paths` 经 `_preload_paths_threaded` | `_preload_paths_threaded`、`_preload_sprite_frames_resource`、`is_resource_cached` | 租约路径释放、角色资源释放、UI 纹理前缀清理；不再按战斗资源前缀批量删除 | 没有外部直接读取；缓存查询包含此表 |
+| `_audio_cache` | `Global` | `get_cached_audio`、`_cache_threaded_resource` | `get_cached_audio`、`is_resource_cached` | 租约路径释放、角色资源释放、UI 前缀清理；不再按战斗资源前缀批量删除 | 路径别名解析；空路径返回 `null` |
+| `_texture_cache` | `Global` | `get_cached_texture`、`_cache_threaded_resource` | `get_cached_texture`、`is_resource_cached` | 租约路径释放、角色资源释放、UI 前缀清理、`release_cached_texture`；不再按战斗资源前缀批量删除 | 加载失败时删除条目并返回 `null` |
 
 ### 4.2 关卡资源与预览槽
 
 | 对象 | 当前所有者 | 写入方 | 读取方 | 释放/失效 | 失败边界 |
 |:---|:---|:---|:---|:---|:---|
-| `_level_resource_cache_paths` | `Global` | `_track_level_resource`；加载页经 `handoff_loaded_resource` 登记，其他触发点包括 `load_scene_uncached`、`load_level_monster_scene`、`preload_level_texture_paths`、`_track_level_scene_dependencies`、`prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` | `clear_level_resource_cache` | 每次 `Global.change_scene` 与 `clear_combat_runtime_cache` 清空 | 全局一个集合，不是按关卡租约；目标场景本身不登记 |
-| `_level_runtime_warmed_scene_paths` | `Global` | `prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` | 预载去重 | `clear_level_resource_cache` | 只记录已预热场景，不记录请求失败 |
-| `_level_runtime_prewarmed_monster_ids` | `Global` | `preload_level_monster_runtime_resources` | 预载去重 | `clear_level_resource_cache` | 失败仍可能标记为已处理，取决于调用路径 |
+| `_level_resource_lease` | `Global` | `begin_level_resource_lease`；`_track_level_resource` 由加载页 `handoff_loaded_resource`、`load_scene_uncached`、`load_level_monster_scene`、`preload_level_monster_scenes`、`preload_level_texture_paths`、`_track_level_scene_dependencies`、`prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` 触发 | `release_level_resource_lease`、`get_level_resource_lease_snapshot`、预载去重 | `release_level_resource_lease`；`clear_level_resource_cache` 间接调用 | 只记录目标场景、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；目标场景和未登记路径不释放 |
+| `_level_resource_lease["warmed_scene_paths"]` | `Global` | `prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` | 预载去重 | 随租约释放 | 只记录已预热场景，不记录请求失败 |
+| `_level_resource_lease["prewarmed_monster_ids"]` | `Global` | `preload_level_monster_runtime_resources` | 预载去重 | 随租约释放 | 失败仍可能标记为已处理，取决于调用路径 |
 | `_preloaded_scene`、`_preloading_path` | `Global` | `preload_next`、`_get_preloaded` | `Global.change_scene` | 消费后清空；失败不清理 | 单槽；失败后 `_preloading_path` 可能保留，未验证重试语义 |
 
-**Phase 15-3A 窄交接 API**：`is_resource_cached(path) -> bool` 只读查询四个运行时缓存；`get_cached_packed_scene(path) -> PackedScene` 返回已缓存的场景或 `null`；`handoff_loaded_resource(path, resource, track_level=false) -> bool` 是加载页唯一写入入口，内部决定缓存表并按需登记关卡路径。加载页不再接触私有字段或私有方法。
+**Phase 15-3A/15-3B API**：`is_resource_cached(path) -> bool` 只读查询四个运行时缓存；`get_cached_packed_scene(path) -> PackedScene` 返回已缓存的场景或 `null`；`handoff_loaded_resource(path, resource, track_level=false) -> bool` 是加载页唯一写入入口，内部决定缓存表并按需登记关卡路径。`begin_level_resource_lease(target_scene) -> int` 建立新租约；`release_level_resource_lease(lease_id=-1) -> int` 只释放指定租约的路径并返回释放数；`get_level_resource_lease_snapshot() -> Dictionary` 返回只读分类快照。加载页不再接触私有字段或私有方法。
 
 **不属于缓存的对象**：`LevelPreloadStore`、`LevelPreloadCatalog`、`RoleRuntimeCatalog`、AtlasMetadata 的只读 View、`.tres` 声明与脚本 `preload` 常量。它们是声明/构建数据或引擎资源，不按本页的运行时缓存清理规则处理。
 
@@ -225,7 +225,7 @@ flowchart TD
 | 特效/剑阵/宠物/怪物弹体静态缓存 | 各模块 | 由 `clear_level_resource_cache`、`clear_combat_runtime_cache`、`release_role_runtime_resources` 或加载页非战斗清理触发 | 模块局部缓存；未经过 `Global` 的调用面不在本阶段逐项展开 |
 | 怪物帧/几何等模块静态缓存 | 各怪物脚本 | 当前未见统一场景切换清理入口 | 可能在关卡切换后保留；Phase 15-4 评估作用域，不在本阶段修改 |
 
-`clear_level_resource_cache` 会清理 `FrameSequenceStore`、`MONSTER_212_BULLET_SCRIPTS` 的帧缓存、关卡路径集合、预热集合与 `_monster_scene_cache`。`clear_combat_runtime_cache` 在此基础上清理对象池、NeZha 帧缓存、伤害/角色/怪物/法宝等前缀缓存，并释放当前法宝召唤物。`end_archive_session` 再清理五个角色特效静态数据和流式子弹/镜缓存。
+`clear_level_resource_cache` 会释放当前 `_level_resource_lease` 登记的路径，并清理 `FrameSequenceStore`、`MONSTER_212_BULLET_SCRIPTS` 的帧缓存；不再整体清空 `_monster_scene_cache`。`clear_combat_runtime_cache` 在此基础上清理对象池、NeZha 帧缓存，并释放当前法宝召唤物；不再按 `Art`/`Scene`/`Music` 前缀批量删除缓存。`end_archive_session` 再清理五个角色特效静态数据和流式子弹/镜缓存。
 
 ---
 
@@ -233,11 +233,11 @@ flowchart TD
 
 | 入口 | 实际所有者 | 调用方 | 覆盖范围 | 失败/边界 |
 |:---|:---|:---|:---|:---|
-| `Global.change_scene` | `Global` | 139 处业务调用 | 目标校验、请求代次、档案退出、临时 UI、UI 缓存、关卡缓存、快速路径/加载页 | 空/缺失目标拒绝并返回 `false`；加载页失败不提交目标 |
+| `Global.change_scene` | `Global` | 139 处业务调用 | 目标校验、请求代次、档案退出、临时 UI、UI 缓存、上一关卡租约释放、新租约建立、快速路径/加载页 | 空/缺失目标拒绝并返回 `false`；加载页失败不提交目标 |
 | `cleanup_transient_ui` | `Global` | `Global.change_scene` + 18 个文件的 51 处显式调用 | 硬编码节点名、弹出层、hover popup | 名称冲突误删；不是节点注册表 |
 | `release_ui_runtime_cache` | `Global` | 仅 `Global.change_scene` | UI 场景缓存、永久 UI、UI 纹理前缀 | 只清缓存，不释放仍在树的 UI 节点 |
-| `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 关卡路径集合、monster cache、预热集合、FrameSequence、212 帧缓存 | 全局一次清空；不清理池和 UI |
-| `clear_combat_runtime_cache` | `Global` | 仅 `end_archive_session` | 关卡缓存、池、战斗/角色/法宝前缀缓存、召唤物 | 不在普通关卡切换触发 |
+| `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 当前租约路径、FrameSequence、212 帧缓存 | 只释放租约登记路径；不清理池、UI 或未登记路径 |
+| `clear_combat_runtime_cache` | `Global` | 仅 `end_archive_session` | 当前租约、池、NeZha 帧缓存、召唤物 | 不再按战斗资源前缀批量删除缓存；不在普通关卡切换触发 |
 | `_clear_runtime_pools` | `Global` | `clear_combat_runtime_cache` | 四个池与池根 | 只随档案结束 |
 | `end_archive_session` | `Global` | `Global.change_scene` 进入 `main_menu`/`choose_player` | 档案 generation、战斗缓存、角色特效缓存 | 应用退出不调用；victory/defeat 不结束 |
 | `release_role_runtime_resources` | `Global` | `begin_archive_session` 角色变化、`prewarm_current_role_runtime_resources` 切换角色 | 角色相关缓存与特效静态数据 | 普通关卡切换不调用 |
@@ -252,8 +252,8 @@ flowchart TD
 | 能力 | 当前所有者 | 允许调用方 | 释放/失效事件 | 失败语义 | Phase 交接 |
 |:---|:---|:---|:---|:---|:---|
 | 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务 UI/关卡；加载页消费目标快照 | 切换完成/失败 | 空/缺失目标 `false`；加载页代次过期不提交 | Phase 15-2A/15-2B/15-2C 已完成 |
-| 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放 | 失败继续进度，无取消 | Phase 15-3 窄接口与取消 |
-| 关卡资源租约 | `Global._level_resource_cache_paths` | 加载页、BaseLevel 预载函数 | 每次切换/战斗清理 | 全局集合，不是按关卡 | Phase 15-3 改为可枚举租约 |
+| 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放 | 代次阻止旧回调写回；底层线程取消未实现 | Phase 15-3C |
+| 关卡资源租约 | `Global._level_resource_lease` | `Global.change_scene`、加载页、BaseLevel 预载函数 | 每次切换/战斗清理，只释放本租约 | 未登记路径不释放；目标场景不登记 | Phase 15-3B 已完成 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4 作用域与清理 |
 | 临时 UI | `Global` 注册表 + 硬编码清理 | UI 工厂/各面板 | 树退出、切换、手动清理 | 名称冲突；永久 UI 异步预载 | Phase 15-4 注册/关闭回调 |
 | 档案会话 | `Global` | 存档入口/选角 | 主菜单/选角 | 退出路径不结束 | Phase 16 会话/持久化 |
@@ -284,12 +284,18 @@ flowchart TD
 
 1. 加载页只通过 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 交接；不直接读写 `_resource_cache`、`_audio_cache`、`_texture_cache`，不直接调用 `_cache_threaded_resource` 与 `_track_level_resource`。
 
-### Phase 15-3B/15-3C 待处理
+### Phase 15-3B 已完成
 
-1. `_level_resource_cache_paths` 需要按本次关卡加载形成租约，记录目标场景、首波/阶段怪物、弹体、纹理与预热标记；释放只处理本租约。
-2. 线程请求失败/取消/超时、目标切换、加载页销毁时需要使旧回调失效；失败不能进入可玩场景。
-3. `_target_packed_scene` 需要绑定目标路径或 generation，完成阶段不能使用过期目标。
-4. `_preloaded_scene` / `_preloading_path` 需要明确失败清理和重复请求语义；不能让失败路径永久占用单槽。
+1. `_level_resource_lease` 记录目标场景、租约 ID、拥有路径、场景/怪物/弹体/纹理/音频分类、已预热场景与已预热怪物 ID；`begin_level_resource_lease` 在每次 `change_scene` 建立新租约，`release_level_resource_lease` 只释放本租约路径，永久 UI 与未登记路径保留。
+2. `clear_level_resource_cache` 通过租约释放关卡缓存，不再整体清空 `_monster_scene_cache`；`clear_combat_runtime_cache` 不再按 `Art`/`Scene`/`Music` 前缀批量删除缓存。
+3. `get_level_resource_lease_snapshot` 提供只读分类快照；旧租约 ID 不能释放新租约。
+4. 场景探针 `level-resource-lease` 验证租约分类、按租约释放、共享缓存保留、旧 ID 拒绝、重战清理与 `end_archive_session` 退出清理；连续切关探针仍通过。
+
+### Phase 15-3C 待处理
+
+1. 线程请求失败/取消/超时、目标切换、加载页销毁时需要使旧回调失效；失败不能进入可玩场景。
+2. `_target_packed_scene` 需要绑定目标路径或 generation，完成阶段不能使用过期目标。
+3. `_preloaded_scene` / `_preloading_path` 需要明确失败清理和重复请求语义；不能让失败路径永久占用单槽。
 
 ### Phase 15-4
 
@@ -302,16 +308,17 @@ flowchart TD
 
 ---
 
-## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A 出口核对
+## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B 出口核对
 
 - [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、2 处低层内部调用、业务与加载页旁路均为 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；加载页已改走窄交接 API；
-- [x] `Global` 主要缓存、关卡路径集合、预览槽、永久 UI、对象池与 UI 注册表已登记 owner/写者/释放事件；
+- [x] `Global` 主要缓存、关卡资源租约、预览槽、永久 UI、对象池与 UI 注册表已登记 owner/写者/释放事件；
 - [x] `clear_level_resource_cache`、`clear_combat_runtime_cache`、`end_archive_session`、`release_ui_runtime_cache`、`release_role_runtime_resources`、`release_map_visual_resources`、`_exit_tree` 的调用方已记录；
 - [x] 只读 Catalog/声明与运行时缓存已分开；
 - [x] `hdzm.gd` 的 4 处业务旁路已迁入正式入口；`Global.change_scene` 已固定目标校验/代次/快速路径；加载页使用目标快照并在失败时保留当前加载页。
-- [x] Phase 15-3A：加载页通过 `is_resource_cached` / `get_cached_packed_scene` / `handoff_loaded_resource` 交接，私有缓存字段/方法访问为 0；租约与显式线程取消留给 Phase 15-3B/15-3C。
+- [x] Phase 15-3A：加载页通过 `is_resource_cached` / `get_cached_packed_scene` / `handoff_loaded_resource` 交接，私有缓存字段/方法访问为 0。
+- [x] Phase 15-3B：关卡资源按租约记录与释放；`clear_combat_runtime_cache` 不再按宽泛前缀删除共享缓存；租约快照可枚举；显式线程取消仍留给 Phase 15-3C。
 
-**验证**：Phase 15-3A 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，23.47s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner --probe level-selection`（PASS，16.28s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，756.6s；`level_58` 单次瞬态失败后重试通过）。Phase 15-2 的临时探针结果保留在历史记录中。未执行 release 重验、租约释放、底层线程显式取消与切换中退出，这些仍属 Phase 15-3B/15-3C 范围。
+**验证**：Phase 15-3A/15-3B 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，23.59s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**5/5 PASS**，星座 4.71s / 选择态 15.11s / 租约 2.91s / 法宝 6.33s / 角色技能 4.15s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，725.5s）。租约探针覆盖分类、按租约释放、共享缓存保留与旧租约 ID 拒绝。未执行 release 重验、底层线程显式取消与切换中退出，这些仍属 Phase 15-3C/后续范围。
 
-**下一入口**：Phase 15-3B 关卡资源租约与 Phase 15-3C 失败/取消。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-3 切片。
+**下一入口**：Phase 15-3C 失败/取消。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-3 切片。

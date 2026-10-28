@@ -150,6 +150,7 @@ flowchart TD
 - 线程化预载与分阶段预热：角色运行时清单 → 角色专属特效 → 剑阵 → 法宝 → 战斗命中资源 → 宠物 → 关卡怪物；
 - 目标快照：`load_scene` 在 `_ready` 固定 `_target_scene` 与 `_request_generation`，后续预载、缓存写入与完成切换都使用快照，不再读取可变的 `Global.target_scene`；
 - 窄交接 API：加载页只使用 `Global.is_resource_cached` 查询、`Global.get_cached_packed_scene` 读取已完成场景、`Global.handoff_loaded_resource` 提交加载结果；不直接读写 `_resource_cache` / `_audio_cache` / `_texture_cache`，也不调用 `_cache_threaded_resource` / `_track_level_resource`；
+- 关卡资源租约：`Global.change_scene` 先释放上一租约，再为当前目标建立租约；加载交接、怪物/弹体/纹理预载与热身标记只登记到当前租约。释放只删除本租约拥有的路径，永久 UI 与未登记路径保留；`clear_combat_runtime_cache` 不再按资源前缀批量删除；
 - 覆盖式切换：先挂入新场景并设为 current_scene，等待实际绘制后揭示 HUD，再释放旧场景；冷启动与后续切换复用同一加载页，不只是一个独立进度界面；
 - 目标场景无法加载、实例化、加入场景树或加载后失效时，加载页不调用任何 `change_scene_to_*`，保留当前加载页并显示失败文本；不会把未完成目标设为 current_scene；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。

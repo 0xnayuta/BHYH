@@ -49,7 +49,7 @@ coop_probe_runner.py
 └── coop_probes/coop_probe_matrix.gd（执行期复制到工程根）
 
 scene_probe_runner.py
-└── scene_probes/constellation_probe.tscn/.gd（--scene 启动，执行期复制到工程根）
+└── scene_probes/*.tscn/.gd（--scene 启动，执行期复制到工程根；含关卡资源租约探针）
 
 frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中）
 └── Godot --export-pack → 最小空工程挂载 PCK → FileAccess / remap / import / ResourceLoader.exists 判定路径闭包（不等于实际加载）
@@ -108,7 +108,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `level_regression_all.py` | 全量/变更影响关卡冒烟回归；`--dry-run` 仅打印计划 | `docs/reports/level_regression_*.{md,json}` |
 | `level_test_runner.py` | 单关命令行冒烟夹具；沙盒、倍速、阶段断言、日志 0/0 门禁、自动清理 | 临时 `source/level_smoke_report_*.json` 与日志，运行后删除 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵（用例清单由脚本维护） | `docs/reports/coop_probe_matrix_report.*` |
-| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、角色 2/4 技能入口与 Spine 效果、法宝/八仙/角色特效构建期帧；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/role_skill_probe_report.*`、`docs/reports/magic_weapon_probe_report.*` |
+| `scene_probe_runner.py` | 场景探针套件：星座视觉后端/预热/请求回收、八仙与三太子选择态与自预载边界、关卡资源租约释放边界、角色 2/4 技能入口与 Spine 效果、法宝/八仙/角色特效构建期帧；发布前 L2 固定项之一；报告记录每项实际耗时 | `docs/reports/constellation_probe_report.*`、`docs/reports/level_selection_probe_report.*`、`docs/reports/level_resource_lease_probe_report.*`、`docs/reports/role_skill_probe_report.*`、`docs/reports/magic_weapon_probe_report.*` |
 | `convert_nezha_preview_frames.py` | 哪吒专用适配器：将 `official_parts_trial` 预览 JSON 转为构建期 SpriteFrames `.tres`；`--check` 校验输出存在且内容一致 | `source/Art/hero_picture/role_6/equipment_atlas/`（私有素材） |
 | `convert_sheet_frames.py` | 单张纹理 sheet 固定网格 → 构建期 SpriteFrames `.tres`（AtlasTexture 子资源）；覆盖青龙剑/太极/八仙模型与 Lyfb/哪吒特效区域；`--check` 校验输出存在且内容一致；已接入 `contract_gate` | `source/Art/magic_weapon/.../*_frames.tres`（私有素材） |
 | `convert_numbered_frames.py` | 通用连续编号 PNG 序列 → 构建期 SpriteFrames `.tres`；`--all` 生成 BiLuoTian/LeiTingJieZhen/Wutai 3077 tornado、212/215/130 编号帧弹体（10 个）、东胜神洲 loose 特效（6 个）、法宝（di_kong/zhen_lei/qing_lian/太极效果）、宠物弹体（mouse/rabbit/turtle/yin_tiger 共 19 个）、闪电特效与关卡 46 背景（9 个），`--check` 校验存在且未过期 | 角色 4/5、3077 与弹体 `Art/.../*_frames.tres`（私有素材） |
@@ -141,7 +141,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。
 
-`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`role_skill_probe`、`magic_weapon_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
+`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`role_skill_probe`、`magic_weapon_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
 
 ---
 
@@ -176,7 +176,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 # 双人探针
 python scripts/coop_probe_runner.py --godot "<godot>"
 
-# 场景探针套件（星座 + 关卡选择态）
+# 场景探针套件（星座 + 关卡选择态 + 关卡租约）
 python scripts/scene_probe_runner.py --godot "<godot>"
 
 # FrameSequence 发布包闭包（需导出模板）
