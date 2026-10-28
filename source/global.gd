@@ -414,7 +414,7 @@ var secondary_magic_summon: Node = null
 
 func _get_pool_root() -> Node:
 	var root = _pool_data.get("root")
-	if root != null and is_instance_valid(root):
+	if root != null and is_instance_valid(root) and not root.is_queued_for_deletion():
 		return root
 	root = Node.new()
 	root.name = "RuntimePool"
@@ -426,7 +426,7 @@ func _get_pool_root() -> Node:
 func _take_pooled_node(pool, scene_path: String) -> Node:
 	while pool.size() > 0:
 		var node = pool.pop_back()
-		if is_instance_valid(node):
+		if is_instance_valid(node) and not node.is_queued_for_deletion():
 			return node
 	var scene = preload_scene_path(scene_path)
 	if scene == null:
@@ -444,6 +444,8 @@ func _attach_pooled_node(node: Node, parent: Node) -> void:
 
 
 func _store_pooled_node(node: Node, pool: Array, max_size: int) -> void:
+	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
+		return
 	var old_parent = node.get_parent()
 	if old_parent != null:
 		old_parent.remove_child(node)
@@ -1575,6 +1577,7 @@ func _clear_runtime_pools() -> void:
 		pool_root.queue_free()
 	_pool_data["root"] = null
 	_active_damage_texts.clear()
+	_active_sound_players.clear()
 	_damage_text_count = 0
 
 
@@ -1756,6 +1759,9 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"cleanup": "end_archive_session -> clear_combat_runtime_cache",
 			"pool_sizes": pool_sizes,
 			"pool_limits": pool_limits,
+			"pool_root_valid": _pool_data.get("root") != null and is_instance_valid(_pool_data.get("root")),
+			"active_damage_texts": _active_damage_texts.size(),
+			"active_sound_players": _active_sound_players.size(),
 			"all_hero_skill_resources_preloaded": _all_hero_skill_resources_preloaded,
 		},
 		"ui":

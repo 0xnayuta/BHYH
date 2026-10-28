@@ -1,6 +1,6 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B、Phase 15-3C、Phase 15-3D 与 Phase 15-4A 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-4B/15-4C/15-4D/15-4E 的目标写成已实现。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B、Phase 15-3C、Phase 15-3D、Phase 15-4A 与 Phase 15-4B 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-4C/15-4D/15-4E 的目标写成已实现。
 >
 > **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约；2026-10-28 Phase 15-3A/15-3B 更新交接与租约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
@@ -204,17 +204,20 @@ flowchart TD
 
 **不属于缓存的对象**：`LevelPreloadStore`、`LevelPreloadCatalog`、`RoleRuntimeCatalog`、AtlasMetadata 的只读 View、`.tres` 声明与脚本 `preload` 常量。它们是声明/构建数据或引擎资源，不按本页的运行时缓存清理规则处理。
 
-### 4.3 对象池
+### 4.3 对象池（Phase 15-4B）
 
-| 对象 | 所有者 | 取出/回收 | 重置语义 | 清理事件 | 边界 |
+| 对象 | 所有者/池根 | 取出/回收 | 重置语义 | 清理事件 | 容量与作用域 |
 |:---|:---|:---|:---|:---|:---|
-| `_pool_data["damage_text"]` | `Global` | `_take_pooled_node` / `recycle_damage_text` | `prepare_for_pool` + `setup` | 仅 `clear_combat_runtime_cache` → `end_archive_session` | 上限 80；活动计数 80；关卡切换不清空 |
-| `_pool_data["mr_hurt"]` | `Global` | `_take_pooled_node` / `recycle_mr_hurt` | 消费者 `recycle` 停止动画并隐藏 | 同上 | 上限 32；关卡切换不清空 |
-| `_pool_data["role_be_hit"]` | `Global` | `_take_pooled_node` / `recycle_role_be_hit` | `setup` 重置帧/翻转/缩放；`recycle` 停止 | 同上 | 上限 24 |
-| `_pool_data["sound_player"]` | `Global` | `_take_pooled_node` / `recycle_sound_player` | `setup` 绑定音频并播放；回收停止并清空 stream | 同上 | 上限 32；另有移动/桌面声部与单音限制 |
-| `_pool_data["root"]` | `Global` | `_get_pool_root` | 无 | `_clear_runtime_pools` | 退出路径未统一清理 |
+| `_pool_data["root"]` | `Global`，`RuntimePool` 挂在 `Global` 下 | `_get_pool_root` | 无 | `_clear_runtime_pools` | 跨关卡/重战保留；档案结束清空；应用退出清理归 Phase 15-4D |
+| `_pool_data["damage_text"]` | `Global` | `_take_pooled_node` / `recycle_damage_text` | `prepare_for_pool` + `setup` | 同上 | 池上限 80；预置 12；活动计数上限 80 |
+| `_pool_data["mr_hurt"]` | `Global` | `_take_pooled_node` / `recycle_mr_hurt` | 消费者 `recycle` 停止动画并隐藏；`_play_hurt_animation` 重新开始 | 同上 | 池上限 32；预置 16 |
+| `_pool_data["role_be_hit"]` | `Global` | `_take_pooled_node` / `recycle_role_be_hit` | `setup` 重置帧/翻转/缩放；`recycle` 停止 | 同上 | 池上限 24；预置 16 |
+| `_pool_data["sound_player"]` | `Global` | `_take_pooled_node` / `recycle_sound_player` | `setup` 绑定音频并播放；回收停止并清空 stream | 同上 | 池上限 32；预置 6；另有移动/桌面声部与单音限制 |
+| `_active_damage_texts` / `_active_sound_players` | `Global` | 取出时登记；回收/树退出时移除 | 不适用 | `_clear_runtime_pools` 清空 | 活动计数用于上限与声部仲裁；不跨档案保留 |
 
-`preload_combat_hit_resources` 在战斗加载完成时预置池：伤害文本 12、受击 16、角色受击 16、音效 6。池节点由 `_take_pooled_node` 返回后由消费者 `setup` 重置；`_store_pooled_node` 只负责移出当前父节点、挂到池根并计入上限，不负责统一状态重置。
+`preload_combat_hit_resources` 在战斗加载完成时预置池：伤害文本 12、受击 16、角色受击 16、音效 6。`_store_pooled_node` 先移除父节点，池满则 `queue_free`；池根或取出节点已排队删除时不会复用。池节点由消费者 `setup`/`recycle` 重置，`_store_pooled_node` 不负责统一状态重置。
+
+`get_cache_scope_snapshot().combat` 暴露 `pool_sizes`、`pool_limits`、`pool_root_valid`、`active_damage_texts` 与 `active_sound_players`；租约探针验证池容量、池根和退出清理。关卡切换与重战只释放资源租约，不清池；`end_archive_session` 经 `clear_combat_runtime_cache` 清空池与活动映射。
 
 ### 4.4 UI 与永久小 UI
 
@@ -324,18 +327,24 @@ flowchart TD
 2. 新增 `Global.get_cache_scope_snapshot()` 只读快照；包含租约、预载单槽、四类资源缓存计数、永久 UI/角色/宠物标记、对象池大小与上限、UI 实例计数。
 3. `level-resource-lease` 探针验证作用域键、容量元数据、租约/战斗池清理；`load-guard` 探针验证 UI 实例登记/释放与 Catalog 只读副本。
 
-### Phase 15-4B/15-4C/15-4D/15-4E
+### Phase 15-4B 已完成
 
-1. 对象池清理只在档案结束时发生；需要确认关卡切换、重战与退出是否应保留、部分清理或重建。
-2. `cleanup_transient_ui` 的硬编码名称列表与 51 处显式调用需要收束为实例登记/关闭回调；不能按名称误删其他场景节点。
-3. `prewarm_permanent_small_ui_scenes` 没有 generation；异步预载可能在永久 UI 缓存清空后继续写入。
-4. `map_6` 至 `map_9_1` 没有 `release_map_visual_resources` 的 `_exit_tree` 调用；需要确认是否有意省略。
-5. `Global._exit_tree` 只清理帧缓存/纹理请求，不清理池、UI 注册、关卡缓存或结束档案会话；应用退出路径需要与普通场景切换区分。
-6. 模块局部静态帧缓存（怪物、特效、宠物）未统一走 `Global` 清理；需要按作用域决定保留、按关卡释放或进程生命周期持有。
+1. 确认 `RuntimePool` 池根属于 `Global`；跨关卡/重战保留，档案结束清空。
+2. 容量上限 80/32/24/32、预置 12/16/16/6；`_store_pooled_node` 池满释放，取出/根节点排队删除时不复用。
+3. 复用前由各消费者 `setup`/`recycle` 重置；退出清理补充活动音效映射清空。
+4. 租约探针验证池容量、池根、活动音效与档案退出清理；全量回归覆盖实战复用。
+
+### Phase 15-4C/15-4D/15-4E
+
+1. `cleanup_transient_ui` 的硬编码名称列表与 51 处显式调用需要收束为实例登记/关闭回调；不能按名称误删其他场景节点。
+2. `prewarm_permanent_small_ui_scenes` 没有 generation；异步预载可能在永久 UI 缓存清空后继续写入。
+3. `map_6` 至 `map_9_1` 没有 `release_map_visual_resources` 的 `_exit_tree` 调用；需要确认是否有意省略。
+4. `Global._exit_tree` 只清理帧缓存/纹理请求，不清理池、UI 注册、关卡缓存或结束档案会话；应用退出路径需要与普通场景切换区分。
+5. 模块局部静态帧缓存（怪物、特效、宠物）未统一走 `Global` 清理；需要按作用域决定保留、按关卡释放或进程生命周期持有。
 
 ---
 
-## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C/15-3D/15-4A 出口核对
+## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C/15-3D/15-4A/15-4B 出口核对
 
 - [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、2 处低层内部调用、业务与加载页旁路均为 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；加载页已改走窄交接 API；
@@ -348,7 +357,8 @@ flowchart TD
 - [x] Phase 15-3C：请求代次、目标路径、超时、失败/取消/销毁路径与 `_preloaded_scene` 单槽均已收口；`ResourceLoader` 无公开取消 API，取消为停止轮询与提交并丢弃后台结果。
 - [x] Phase 15-3D：加载页目录扫描/依赖清单解析为 0；`LevelPreloadStore`/Catalog 只读副本；`contract_scan` 第八类门禁与负向自测通过。
 - [x] Phase 15-4A：六个缓存作用域均有所有者、容量依据、清理事件与 `get_cache_scope_snapshot` 观测键；租约/战斗池/UI 实例作用域验证通过。
+- [x] Phase 15-4B：池根/容量/复用重置/清理事件已确认；池容量、池根、活动音效与档案退出清理通过探针。
 
-**验证**：Phase 15-3A/15-3B/15-3C/15-3D/15-4A 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.12s / 选择态 14.67s / 租约 2.91s / 加载守卫 4.30s / 法宝 6.99s / 角色技能 3.84s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，694.3s）、`contract_scan --self-test`（预载边界坏样本 4/4、好样本 3/3）。`level_1` 随全量回归 PASS（23.38s）；租约/守卫探针验证六作用域快照、容量元数据、租约/战斗池/UI 实例清理与 Catalog 副本。未执行 release 重验与切换中退出验证。
+**验证**：Phase 15-3A/15-3B/15-3C/15-3D/15-4A/15-4B 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.32s / 选择态 15.07s / 租约 2.91s / 加载守卫 4.33s / 法宝 7.43s / 角色技能 3.87s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，687.2s）、`contract_scan --self-test`（预载边界坏样本 4/4、好样本 3/3）。`level_1` 随全量回归 PASS（25.35s）；租约/守卫探针验证六作用域快照、池容量/池根/活动音效、租约/战斗池/UI 实例清理与 Catalog 副本。未执行 release 重验与切换中退出验证。
 
 **下一入口**：Phase 15-4 缓存、池、UI 与退出生命周期。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-4 切片。

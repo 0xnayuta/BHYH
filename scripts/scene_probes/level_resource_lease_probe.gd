@@ -16,12 +16,29 @@ const BULLET_SCENE := "res://Scene/monster/monster_bullet_slim/__lease_probe_bul
 var _failures: Array[String] = []
 
 
+func _check_pool_scope(checks: Dictionary) -> void:
+	var pool: Array = Global._pool_data["damage_text"]
+	var first := Node.new()
+	first.name = "PoolCapacityProbe"
+	Global._store_pooled_node(first, pool, 1)
+	var second := Node.new()
+	Global._store_pooled_node(second, pool, 1)
+	checks["pool_capacity"] = pool.size() == 1
+	var pool_scope: Dictionary = Global.get_cache_scope_snapshot().get("combat", {})
+	checks["pool_root"] = bool(pool_scope.get("pool_root_valid", false))
+	Global._clear_runtime_pools()
+	checks["pool_clear"] = pool.is_empty() and not bool(
+		Global.get_cache_scope_snapshot().get("combat", {}).get("pool_root_valid", true)
+	)
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
 	var checks: Dictionary = {}
+	_check_pool_scope(checks)
 	var first_lease := Global.begin_level_resource_lease(TARGET_SCENE)
 	checks["lease_started"] = first_lease > 0
 
@@ -122,6 +139,8 @@ func _run() -> void:
 			pools_cleared = false
 	checks["scope_exit_level_cleared"] = int(exit_lease_snapshot.get("owned_path_count", -1)) == 0
 	checks["scope_exit_pools_cleared"] = pools_cleared
+	checks["scope_exit_pool_root_cleared"] = not bool(exit_combat.get("pool_root_valid", true))
+	checks["scope_exit_active_sound_cleared"] = int(exit_combat.get("active_sound_players", -1)) == 0
 
 	for check_name in checks:
 		if not bool(checks[check_name]):

@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12、Phase 13 与 Phase 14 均已完成并归档；当前候选为 **Phase 15：应用编排与运行资源生命周期**；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域已完成，Phase 15-4B/15-4C/15-4D/15-4E 未启动。
+> **当前版本**：6.9。Phase 12、Phase 13 与 Phase 14 均已完成并归档；当前候选为 **Phase 15：应用编排与运行资源生命周期**；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域与 Phase 15-4B 对象池已完成，Phase 15-4C/15-4D/15-4E 未启动。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -11,7 +11,7 @@
 | [Phase 12 显示/HUD](../archive/iteration_12_display_hud.md) | 完成、归档 | 保留已接受显示基线 |
 | [Phase 13 视觉资产契约](../archive/iteration_13_visual_asset_contract.md) | 完成、归档 | 保留构建/共享/失败/流式/导出成果及机读登记例外，不重开历史阶段 |
 | [Phase 14 类型化数据边界（AtlasMetadata 试点）](../archive/iteration_14_atlas_metadata_boundary.md) | 完成、归档 | 六个直接消费者均使用只读 View；旧入口、`source_masks` 与惰性配置已清除；边界守卫进入 `contract_scan.py` |
-| Phase 15 应用编排与运行资源生命周期 | 当前候选；Phase 15-1、15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D 与 15-4A 完成，Phase 15-4B/15-4C/15-4D/15-4E 未启动 | 场景切换、加载、Global 职责与缓存/池/临时 UI 的所有权；详细计划见 [`current-iteration.md`](current-iteration.md)，当前矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
+| Phase 15 应用编排与运行资源生命周期 | 当前候选；Phase 15-1、15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A 与 15-4B 完成，Phase 15-4C/15-4D/15-4E 未启动 | 场景切换、加载、Global 职责与缓存/池/临时 UI 的所有权；详细计划见 [`current-iteration.md`](current-iteration.md)，当前矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
 | Phase 16 档案会话、持久化与玩家槽位 | 候选方向，未实现 | 共享/独立状态、保存快照、切档、2P 面板上下文 |
 | Phase 17 玩法与表现模块边界 | 候选方向，未实现 | 命中归属、关卡结算、按需组合、HUD/输入与模块 API |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
@@ -116,5 +116,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15 为当前候选，Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D 与 15-4A 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域，Phase 15-4B/15-4C/15-4D/15-4E 未启动；Phase 16~17 仍为候选方向。
+- 架构目标与进度分开。Phase 15 为当前候选，Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A 与 15-4B 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域/对象池，Phase 15-4C/15-4D/15-4E 未启动；Phase 16~17 仍为候选方向。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。
