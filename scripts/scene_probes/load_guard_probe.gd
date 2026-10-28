@@ -29,6 +29,16 @@ func _ready() -> void:
 
 func _run() -> void:
 	var checks: Dictionary = {}
+	var first_wave := LevelPreloadStore.first_wave_ids(LEVEL_1)
+	checks["catalog_first_wave_present"] = not first_wave.is_empty()
+	first_wave.append(999999)
+	var first_wave_reloaded := LevelPreloadStore.first_wave_ids(LEVEL_1)
+	checks["catalog_first_wave_copy"] = not first_wave_reloaded.has(999999)
+	var monster_ids := LevelPreloadStore.monster_ids(LEVEL_1)
+	monster_ids.append(999999)
+	var monster_ids_reloaded := LevelPreloadStore.monster_ids(LEVEL_1)
+	checks["catalog_monster_ids_copy"] = not monster_ids_reloaded.has(999999)
+
 	Global.preload_next(MISSING_SCENE)
 	await get_tree().process_frame
 	var missing_slot := Global.get_preloaded_scene_slot_snapshot()

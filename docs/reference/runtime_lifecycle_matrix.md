@@ -1,6 +1,6 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B 与 Phase 15-3C 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-3D/15-4 的目标写成已实现。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B、Phase 15-3C 与 Phase 15-3D 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-4 的目标写成已实现。
 >
 > **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约；2026-10-28 Phase 15-3A/15-3B 更新交接与租约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
@@ -299,9 +299,11 @@ flowchart TD
 3. `_preloaded_scene` 单槽增加显式路径、失败/换目标/消费清理与只读快照；缺失、失败和重复请求不会永久占用单槽。
 4. 加载页新增过期场景释放：旧目标已加入树但在完成前被取代时，不恢复旧可玩关卡；失败/取消不进入目标场景。
 
-### Phase 15-3D 待处理
+### Phase 15-3D 已完成
 
-1. `LevelPreloadStore` 与构建期 Catalog 保持只读；不在加载页重新扫描脚本、目录或解析 manifest。
+1. 移除加载页 `DirAccess` 目录扫描、`ResourceLoader.get_dependencies` 递归清单解析、`FileAccess`/manifest 解析与相关死函数；`load_scene.gd` 不再扫描目录或解析依赖清单。
+2. `LevelPreloadStore` 只读 Catalog；数组返回值复制，`level()` 收窄为内部读取；`LevelPreloadCatalog` 的数组查询返回副本。
+3. `contract_scan.py` 新增第八类 `preload_boundary` 门禁与负向自测；加载页重新引入目录扫描/清单解析会阻断。
 
 ### Phase 15-4
 
@@ -314,7 +316,7 @@ flowchart TD
 
 ---
 
-## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C 出口核对
+## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C/15-3D 出口核对
 
 - [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、2 处低层内部调用、业务与加载页旁路均为 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；加载页已改走窄交接 API；
@@ -325,7 +327,8 @@ flowchart TD
 - [x] Phase 15-3A：加载页通过 `is_resource_cached` / `get_cached_packed_scene` / `handoff_loaded_resource` 交接，私有缓存字段/方法访问为 0。
 - [x] Phase 15-3B：关卡资源按租约记录与释放；`clear_combat_runtime_cache` 不再按宽泛前缀删除共享缓存；租约快照可枚举。
 - [x] Phase 15-3C：请求代次、目标路径、超时、失败/取消/销毁路径与 `_preloaded_scene` 单槽均已收口；`ResourceLoader` 无公开取消 API，取消为停止轮询与提交并丢弃后台结果。
+- [x] Phase 15-3D：加载页目录扫描/依赖清单解析为 0；`LevelPreloadStore`/Catalog 只读副本；`contract_scan` 第八类门禁与负向自测通过。
 
-**验证**：Phase 15-3A/15-3B/15-3C 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，22.13s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.06s / 选择态 14.88s / 租约 2.83s / 加载守卫 4.23s / 法宝 6.26s / 角色技能 3.75s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，683.1s）。租约探针覆盖分类与按租约释放；加载守卫覆盖单槽失败清理、重复切换、超时与失败不提交。未执行 release 重验与切换中退出验证。
+**验证**：Phase 15-3A/15-3B/15-3C/15-3D 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，23.18s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.67s / 选择态 16.18s / 租约 3.31s / 加载守卫 5.35s / 法宝 8.10s / 角色技能 4.32s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，696.8s）、`contract_scan --self-test`（预载边界坏样本 4/4、好样本 3/3）。加载守卫同时验证 Catalog 返回值副本；未执行 release 重验与切换中退出验证。
 
-**下一入口**：Phase 15-3D 预载清单边界。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-3 切片。
+**下一入口**：Phase 15-4 缓存、池、UI 与退出生命周期。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-4 切片。

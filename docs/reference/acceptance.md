@@ -97,7 +97,7 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 七类字面量契约与 AtlasMetadata 边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 八类字面量契约与 AtlasMetadata/关卡预载边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
@@ -105,7 +105,7 @@ python scripts/check_all.py --no-cache -j 6
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 七类契约
+### 4.1 `contract_scan.py` 八类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -118,6 +118,7 @@ python scripts/check_all.py --no-cache -j 6
 | 字典键 | `.gd` 中的中文键字面量 | 已收录 `DataKeys` → WARNING；未收录 → INFO |
 | 运行时 manifest | 同时使用 `FileAccess` / `JSON` 与 manifest 标识的脚本 | ERROR（`RUNTIME_MANIFEST_FORBIDDEN`） |
 | AtlasMetadata 边界 | 旧 `data_for`/`validate_path`/`clear_cache` 入口、非 View 的 `.data` 读取、`source_masks` 覆盖 | ERROR（`ATLAS_BOUNDARY_FORBIDDEN`） |
+| 关卡预载边界 | `load_scene.gd` 中的目录扫描、`ResourceLoader.get_dependencies`、`FileAccess`/JSON manifest 解析 | ERROR（`PRELOAD_BOUNDARY_FORBIDDEN`） |
 
 只有 **ERROR** 参与 `--fail-on-error` 的退出判定；WARNING 与 INFO 进入报告但不阻断。
 
@@ -134,7 +135,7 @@ python scripts/check_all.py --no-cache -j 6
 ### 4.3 `--self-test` 的边界
 
 - `convert_atlas_metadata.py --self-test` 在 `contract_gate` 内；
-- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest 与 AtlasMetadata 边界负向样本；
+- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata 与关卡预载边界负向样本；
 - 涉及契约扫描规则变更时，应单独执行 `python scripts/contract_scan.py --self-test`。
 
 ---
@@ -368,7 +369,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
 | warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 七类契约 | ERROR 才阻断 |
+| 契约规则 | 八类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
 | PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |

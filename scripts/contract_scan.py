@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中七大契约与真源的一致性：
+用于全量扫描并比对工程中八大契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -13,6 +13,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 5. 字典键契约 (Dictionary Key Contract): 中文字典键字面量与 DataKeys 常量契约映射比对
 6. 运行时 manifest 门禁 (Runtime Manifest Gate): 新增代码禁止在运行时直接加载 atlas manifest
 7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary): 禁止旧入口、直接 .data 读取与 source_masks 覆盖
+8. 关卡预载边界门禁 (Preload Boundary): 加载页禁止目录扫描或依赖清单解析
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -915,6 +916,14 @@ class ContractScanner:
         "Script/atlas/atlas_metadata.gd",
         "Script/atlas/atlas_metadata_view.gd",
     }
+    PRELOAD_BOUNDARY_FILE = "Scene/other_scene/load_scene.gd"
+    PRELOAD_BOUNDARY_PATTERNS = (
+        "DirAccess.",
+        "ResourceLoader.get_dependencies(",
+        "FileAccess.",
+        "JSON.parse",
+        "manifest",
+    )
     ATLAS_BOUNDARY_LEGACY_PATTERNS = (
         "AtlasMetadataStore.data_for",
         "AtlasMetadataStore.validate_path",
@@ -957,6 +966,18 @@ class ContractScanner:
                 continue
             for pattern in cls.RUNTIME_MANIFEST_PATTERNS:
                 if pattern in line:
+                    return (lineno, pattern)
+        return (0, "")
+
+    @classmethod
+    def preload_boundary_violation(cls, content: str):
+        """加载页禁止目录扫描/依赖清单解析；返回 (行号, 命中标识)。"""
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.PRELOAD_BOUNDARY_PATTERNS:
+                if pattern in clean:
                     return (lineno, pattern)
         return (0, "")
 
@@ -1010,8 +1031,34 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def scan_preload_boundary(self):
+        print(f"[*] 扫描关卡预载清单边界门禁...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            if rel_p != self.PRELOAD_BOUNDARY_FILE:
+                continue
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = self.preload_boundary_violation(content)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category="preload_boundary",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message="加载页禁止目录扫描或依赖清单解析",
+                suggested_fix="改读 LevelPreloadStore/构建期 Catalog，构建期展开由转换器负责",
+                rule_id="PRELOAD_BOUNDARY_FORBIDDEN",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
     def run_all_checks(self):
-        """执行完整七大契约扫描流水线"""
+        """执行完整八类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1023,6 +1070,7 @@ class ContractScanner:
         self.scan_dict_keys()
         self.scan_runtime_manifest_loading()
         self.scan_atlas_boundary()
+        self.scan_preload_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1078,7 +1126,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、七大契约健康看板")
+        lines.append("## 一、八大契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1091,6 +1139,7 @@ class ContractScanner:
             "dict_key": "5. 中文字典键契约 (Dict Key)",
             "runtime_manifest": "6. 运行时 manifest 门禁 (Runtime Manifest)",
             "atlas_boundary": "7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary)",
+            "preload_boundary": "8. 关卡预载边界门禁 (Preload Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -1240,6 +1289,43 @@ def run_atlas_boundary_self_test() -> bool:
     return passed
 
 
+def run_preload_boundary_self_test() -> bool:
+    """关卡预载边界门禁负向自测：目录扫描/依赖清单解析必须拦截。"""
+    print("[*] 关卡预载边界门禁负向自测...")
+    bad_samples = {
+        "目录扫描": "for file_name in DirAccess.get_files_at(dir_path):\n",
+        "依赖清单解析": "for dependency in ResourceLoader.get_dependencies(path):\n",
+        "文件读取": "var text := FileAccess.get_file_as_string(path)\n",
+        "manifest 解析": "var data := JSON.parse_string(text)\n",
+    }
+    good_samples = {
+        "Catalog 只读入口": "var ids := LevelPreloadStore.first_wave_ids(scene_path)\n",
+        "资源存在性检查": "if ResourceLoader.exists(path):\n",
+        "注释中的扫描说明": "# DirAccess.get_files_at 只允许构建期\n",
+    }
+    passed = True
+    for label, content in bad_samples.items():
+        line, pattern = ContractScanner.preload_boundary_violation(content)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, content in good_samples.items():
+        line, pattern = ContractScanner.preload_boundary_violation(content)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 关卡预载边界门禁负向自测通过 "
+              f"(坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 关卡预载边界门禁负向自测失败！", file=sys.stderr)
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -1247,14 +1333,15 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="运行时 manifest 与 AtlasMetadata 边界门禁负向自测（不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="运行时 manifest、AtlasMetadata 与关卡预载边界门禁负向自测（不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
     if args.self_test:
         manifest_ok = run_runtime_manifest_self_test()
         atlas_ok = run_atlas_boundary_self_test()
-        sys.exit(0 if manifest_ok and atlas_ok else 1)
+        preload_ok = run_preload_boundary_self_test()
+        sys.exit(0 if manifest_ok and atlas_ok and preload_ok else 1)
 
     if not os.path.isdir(args.project_dir):
         print(f"[FAIL] 工程目录不存在: {args.project_dir}", file=sys.stderr)

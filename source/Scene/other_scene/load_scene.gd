@@ -31,8 +31,6 @@ const GUANYIN_SKILL2_EFFECT_SCRIPT := preload("res://Script/monster/monster_zhw/
 const TZSIJIAN_LEVEL_SCENE := "res://Scene/level/level_tzsijian.tscn"
 const ZHENYAO_TOWER_LEVEL_SCENE := "res://Scene/level/level_zhen_yao_tower.tscn"
 const ZHENYAO_TOWER_LEVEL_SCRIPT := preload("res://Script/level/level_zhen_yao_tower.gd")
-const TZSIJIAN_BG_ROOT := "res://Art/level/game_3_level/level_tzsijian/level_96/bg961_parts"
-const TZSIJIAN_BOSS_IDS := [951, 952, 953, 954]
 
 const EXTRA_PRELOAD_PATHS := [
 	"res://Art/pet/skillicon/hy.png",
@@ -237,25 +235,6 @@ func _is_battle_target_scene() -> bool:
 	return target_path.begins_with("res://Scene/level/")
 
 
-func _get_tzsijian_bg_preload_paths() -> Array[String]:
-	var paths: Array[String] = [TZSIJIAN_BG_ROOT.path_join("base_4.png")]
-	for dir_name in ["role", "sword1", "sword2", "sword3", "sword4"]:
-		var dir_path := TZSIJIAN_BG_ROOT.path_join(dir_name)
-		for file_name in DirAccess.get_files_at(dir_path):
-			if file_name.get_extension().to_lower() == "png":
-				paths.append(dir_path.path_join(file_name))
-	return paths
-
-
-func _get_tzsijian_boss_preload_paths() -> Array[String]:
-	var paths: Array[String] = [
-		"res://Scene/monster_blood/boss_blood.tscn",
-	]
-	for boss_id in TZSIJIAN_BOSS_IDS:
-		paths.append("res://Scene/monster/monster_" + str(boss_id) + ".tscn")
-	return paths
-
-
 func _get_target_first_wave_monster_scene_paths() -> Array[String]:
 	var paths: Array[String] = []
 	var seen_ids := {}
@@ -278,32 +257,6 @@ func _append_preload_path(unique: Dictionary, path: String) -> void:
 		return
 	if ResourceLoader.exists(path):
 		unique[path] = true
-
-
-func _append_scene_dependency_paths(unique: Dictionary, scene_path: String) -> void:
-	if scene_path == "":
-		return
-	var visited := {}
-	_append_scene_dependency_paths_recursive(unique, scene_path, visited)
-
-
-func _append_scene_dependency_paths_recursive(unique: Dictionary, resource_path: String, visited: Dictionary) -> void:
-	if resource_path == "" or visited.has(resource_path) or not ResourceLoader.exists(resource_path):
-		return
-	visited[resource_path] = true
-	for dependency in ResourceLoader.get_dependencies(resource_path):
-		var dependency_path := _dependency_resource_path(str(dependency))
-		if dependency_path.get_extension().to_lower() in ["png", "jpg", "jpeg", "webp", "svg", "tres", "res", "tscn"]:
-			_append_preload_path(unique, dependency_path)
-		if dependency_path.get_extension().to_lower() in ["tres", "res", "tscn"]:
-			_append_scene_dependency_paths_recursive(unique, dependency_path, visited)
-
-
-func _dependency_resource_path(dependency: String) -> String:
-	var resource_path_start := dependency.find("res://")
-	if resource_path_start >= 0:
-		return dependency.substr(resource_path_start)
-	return dependency
 
 
 func _request_preload_path(path: String) -> void:

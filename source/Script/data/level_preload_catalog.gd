@@ -17,7 +17,7 @@ func level(scene_path: String) -> LevelPreloadEntry:
 
 
 func bullet_scenes(monster_scene_path: String) -> PackedStringArray:
-	return monster_bullets.get(StringName(monster_scene_path), PackedStringArray())
+	return monster_bullets.get(StringName(monster_scene_path), PackedStringArray()).duplicate()
 
 
 func scene_path_for(monster_id: int) -> String:
@@ -25,8 +25,8 @@ func scene_path_for(monster_id: int) -> String:
 
 
 func texture_paths_for(monster_id: int) -> PackedStringArray:
-	return monster_texture_paths.get(monster_id, PackedStringArray())
+	return monster_texture_paths.get(monster_id, PackedStringArray()).duplicate()
 
 
 func extra_scene_paths_for(monster_id: int) -> PackedStringArray:
-	return monster_extra_scene_paths.get(monster_id, PackedStringArray())
+	return monster_extra_scene_paths.get(monster_id, PackedStringArray()).duplicate()

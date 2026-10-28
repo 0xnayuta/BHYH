@@ -81,7 +81,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
 | `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
-| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest 与 AtlasMetadata 边界七类契约 | `docs/reports/contract_audit.md/.json` |
+| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界与关卡预载边界八类契约 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |

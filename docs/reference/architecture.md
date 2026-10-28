@@ -155,6 +155,7 @@ flowchart TD
 - 目标场景无法加载、实例化、加入场景树或加载后失效时，加载页不调用任何 `change_scene_to_*`，保留当前加载页并显示失败文本；不会把未完成目标设为 current_scene；
 - 失败/取消/超时：`_target_packed_scene` 绑定目标路径，完成阶段校验目标与请求代次；120 秒看门狗（`application/run/load_timeout_msec` 可覆盖）只置失败态；`_exit_tree` 清除待处理队列；过期目标已加入树时释放本次场景，不恢复旧可玩关卡；
 - 预载单槽：`Global._preloaded_scene` 绑定 `_preloaded_scene_path`，消费、失败、换目标或 `clear_preloaded_scene_slot` 时清空；缺失路径不占用单槽；
+- 预载清单边界：加载页只读 `LevelPreloadStore` / 构建期 `LevelPreloadCatalog`；不在运行时扫描目录、调用 `ResourceLoader.get_dependencies` 或解析 manifest；Store 返回数组副本，`level()` 入口收窄为内部读取；目录与依赖展开由构建期转换器负责；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。
 
 **入口边界**：`Script/level/hdzm.gd` 的 4 处直接切换已迁入 `Global.change_scene`；业务代码与 `load_scene.gd` 均不再直接调用 `change_scene_to_file/packed`。低层切换只保留 `Global.change_scene` 的快速路径；加载页通过 `_target_scene` 快照与 `Global` 请求代次完成交接。
