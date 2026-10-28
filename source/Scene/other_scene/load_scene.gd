@@ -58,6 +58,9 @@ var _request_limit := 2
 var _total_paths := 0
 var _completed_paths := 0
 var _target_packed_scene: PackedScene = null
+var _target_scene: String = ""
+var _request_generation: int = 0
+var _failure_reported := false
 var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
 var _battle_vram_baseline_bytes: int = -1
@@ -75,8 +78,11 @@ var tips_textlist = [
 func _ready() -> void:
 	_apply_window_policy()
 	MemoryClass.main_dq()
+	# 固定本次加载的目标与代次；后续不再读取可变的 Global.target_scene。
 	if Global.target_scene == null or Global.target_scene == "":
 		Global.target_scene = DEFAULT_TARGET_SCENE
+	_target_scene = str(Global.target_scene)
+	_request_generation = Global.get_scene_request_generation()
 	loading_bar.value = 0.0
 	loading_text.text = "0%"
 	message_tips.text = "Tips: " + str(tips_textlist[randi_range(0, tips_textlist.size() - 1)])
@@ -117,18 +123,26 @@ func _show_integrity_failure() -> void:
 
 func _begin_load_after_first_frame() -> void:
 	await get_tree().process_frame
+	if not _is_request_current():
+		return
 	# headless（无渲染循环）下 frame_post_draw 永不触发，会挂死加载流程
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
+	if not _is_request_current():
+		return
 	_visible_since_msec = Time.get_ticks_msec()
 	await _start_archive_preload()
 
 
 func _start_archive_preload() -> void:
+	if not _is_request_current():
+		return
 	if _is_battle_target_scene():
 		_battle_vram_baseline_bytes = -1
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
+		if not _is_request_current():
+			return
 		_log_battle_vram("battle loading page")
 	if not _is_battle_target_scene():
 		MAIN_SWORD_ARRAY_WEAPON_SCRIPT.clear_prewarmed_sword_resources()
@@ -156,14 +170,14 @@ func _start_archive_preload() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not _load_started or _changing_scene:
+	if not _load_started or _changing_scene or not _is_request_current():
 		return
 	_poll_pending_paths()
 
 
 func _build_archive_preload_paths() -> Array[String]:
 	var unique := {}
-	_append_preload_path(unique, Global.target_scene)
+	_append_preload_path(unique, _target_scene)
 	if not _is_battle_target_scene():
 		var light_paths: Array[String] = []
 		for unique_path in unique.keys():
@@ -172,7 +186,7 @@ func _build_archive_preload_paths() -> Array[String]:
 
 	for extra_path in EXTRA_PRELOAD_PATHS:
 		_append_preload_path(unique, str(extra_path))
-	if str(Global.target_scene) == "res://Scene/level/level_esbxx.tscn":
+	if str(_target_scene) == "res://Scene/level/level_esbxx.tscn":
 		var constellation_level := clampi(int(Global.selected_constellation_level), 1, 14)
 		_append_preload_path(unique, "res://Art/constellations/background/%d.png" % constellation_level)
 	for role_path in Global.get_current_role_preload_paths():
@@ -195,7 +209,7 @@ func _build_archive_preload_paths() -> Array[String]:
 
 
 func _is_battle_target_scene() -> bool:
-	var target_path := str(Global.target_scene)
+	var target_path := str(_target_scene)
 	if (
 		target_path
 		in [
@@ -229,14 +243,14 @@ func _get_tzsijian_boss_preload_paths() -> Array[String]:
 func _get_target_first_wave_monster_scene_paths() -> Array[String]:
 	var paths: Array[String] = []
 	var seen_ids := {}
-	for monster_id in LevelPreloadStore.first_wave_ids(str(Global.target_scene)):
+	for monster_id in LevelPreloadStore.first_wave_ids(str(_target_scene)):
 		if monster_id <= 0 or seen_ids.has(monster_id):
 			continue
 		seen_ids[monster_id] = true
 		var scene_path := "res://Scene/monster/monster_%d.tscn" % monster_id
 		if ResourceLoader.exists(scene_path):
 			paths.append(scene_path)
-	if str(Global.target_scene) == TZSIJIAN_LEVEL_SCENE:
+	if str(_target_scene) == TZSIJIAN_LEVEL_SCENE:
 		for special_path in ["res://Scene/monster/monster_951.tscn", "res://Scene/monster_blood/boss_blood.tscn"]:
 			if ResourceLoader.exists(special_path) and not paths.has(special_path):
 				paths.append(special_path)
@@ -277,6 +291,8 @@ func _dependency_resource_path(dependency: String) -> String:
 
 
 func _request_preload_path(path: String) -> void:
+	if not _is_request_current():
+		return
 	if _is_cached(path):
 		_completed_paths += 1
 		_set_progress(float(_completed_paths) / float(_total_paths))
@@ -301,6 +317,11 @@ func _fill_preload_slots() -> void:
 
 
 func _poll_pending_paths() -> void:
+	if not _is_request_current():
+		_pending_paths.clear()
+		_queued_paths.clear()
+		_load_started = false
+		return
 	var changed := false
 	var i := _pending_paths.size() - 1
 	while i >= 0:
@@ -326,9 +347,11 @@ func _poll_pending_paths() -> void:
 
 
 func _cache_resource(path: String, resource: Resource) -> void:
+	if not _is_request_current():
+		return
 	if resource == null:
 		return
-	if path == Global.target_scene and resource is PackedScene:
+	if path == _target_scene and resource is PackedScene:
 		_target_packed_scene = resource as PackedScene
 		return
 	if Global.has_method("_cache_threaded_resource"):
@@ -342,7 +365,7 @@ func _is_cached(path: String) -> bool:
 
 
 func _is_uncached_target_scene(path: String) -> bool:
-	return path == str(Global.target_scene) and path.ends_with(".tscn")
+	return path == str(_target_scene) and path.ends_with(".tscn")
 
 
 func _set_progress(value: float) -> void:
@@ -369,7 +392,7 @@ func _log_battle_load_context(paths: Array[String]) -> void:
 	var pet_info: Dictionary = Global.get_active_pet_preload_data()
 	print(
 		"[Battle VRAM] target=",
-		str(Global.target_scene),
+		str(_target_scene),
 		" role=",
 		role_id,
 		" role_paths=",
@@ -390,7 +413,7 @@ func _log_battle_load_context(paths: Array[String]) -> void:
 
 
 func _finish_loading() -> void:
-	if _finishing or _changing_scene:
+	if _finishing or _changing_scene or not _is_request_current():
 		return
 	_finishing = true
 	var equipped_magic_weapon := str(PlayerData.player_data.get("实战法宝", ""))
@@ -408,6 +431,8 @@ func _finish_loading() -> void:
 		loading_text.text = "正在准备角色技能资源..."
 		_set_progress(0.91)
 		await Global.prewarm_current_role_runtime_resources(role_id)
+		if not _is_request_current():
+			return
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("role runtime resources")
@@ -450,11 +475,15 @@ func _finish_loading() -> void:
 		await get_tree().process_frame
 	if is_battle_target:
 		await Global.preload_combat_hit_resources()
+		if not _is_request_current():
+			return
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("combat hit resources")
 		await get_tree().process_frame
 		await Global.prewarm_active_pet_runtime_resources()
+		if not _is_request_current():
+			return
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("active pet")
@@ -476,6 +505,8 @@ func _finish_loading() -> void:
 		loading_text.text = "正在准备副本怪物资源..."
 		_set_progress(0.94)
 		await _prewarm_target_level_resources()
+		if not _is_request_current():
+			return
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("target level monsters")
@@ -488,15 +519,17 @@ func _finish_loading() -> void:
 	_set_progress(1.0)
 	var elapsed_seconds := float(Time.get_ticks_msec() - _visible_since_msec) / 1000.0
 
-	var minimum_visible_seconds := 0.5 if str(Global.target_scene) == HDZM_LEVEL_SCENE else MIN_VISIBLE_SECONDS
+	var minimum_visible_seconds := 0.5 if str(_target_scene) == HDZM_LEVEL_SCENE else MIN_VISIBLE_SECONDS
 	var remaining_seconds := maxf(minimum_visible_seconds - elapsed_seconds, 0.0)
 	if remaining_seconds > 0.0:
 		await get_tree().create_timer(remaining_seconds, true, false, true).timeout
 	await get_tree().process_frame
+	if not _is_request_current():
+		return
 	if _target_packed_scene != null:
 		_change_to_packed_scene(_target_packed_scene)
 	else:
-		var cached = Global._resource_cache.get(Global.target_scene, null)
+		var cached = Global._resource_cache.get(_target_scene, null)
 		if cached is PackedScene:
 			_change_to_packed_scene(cached)
 		else:
@@ -527,7 +560,7 @@ func _has_active_ttzssz_fashion() -> bool:
 
 
 func _prewarm_target_level_resources() -> void:
-	if str(Global.target_scene) == ZHENYAO_TOWER_LEVEL_SCENE:
+	if str(_target_scene) == ZHENYAO_TOWER_LEVEL_SCENE:
 		var floor_number := maxi(1, int(PlayerData.player_data.get("镇妖塔当前层数", 1)))
 		await Global.preload_level_monster_runtime_resources(
 			ZHENYAO_TOWER_LEVEL_SCRIPT.get_floor_monster_ids(floor_number)
@@ -549,44 +582,48 @@ func _prewarm_target_level_resources() -> void:
 
 
 func _get_target_level_monster_ids() -> Array[int]:
-	return LevelPreloadStore.monster_ids(str(Global.target_scene))
+	return LevelPreloadStore.monster_ids(str(_target_scene))
 
 
 func _change_to_packed_scene(packed_scene: PackedScene) -> void:
-	if _changing_scene:
+	if _changing_scene or not _is_request_current():
 		return
 	_changing_scene = true
 	await _covered_change_to_packed_scene(packed_scene)
 
 
 func _change_to_target_scene_file() -> void:
-	if _changing_scene:
+	if _changing_scene or not _is_request_current():
 		return
 	_changing_scene = true
 	var packed_scene: PackedScene
-	if _is_uncached_target_scene(str(Global.target_scene)):
+	if _is_uncached_target_scene(str(_target_scene)):
 		packed_scene = (
-			ResourceLoader.load(str(Global.target_scene), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
-			as PackedScene
+			ResourceLoader.load(str(_target_scene), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 		)
 	else:
-		packed_scene = load(Global.target_scene) as PackedScene
+		packed_scene = load(_target_scene) as PackedScene
 	if packed_scene != null:
 		await _covered_change_to_packed_scene(packed_scene)
 	else:
-		get_tree().change_scene_to_file(Global.target_scene)
+		_fail_scene_load("目标场景资源无法加载")
 
 
 func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 	var tree := get_tree()
-	if tree == null or packed_scene == null:
+	if tree == null or packed_scene == null or not _is_request_current():
 		return
 	var old_scene := tree.current_scene
 	var new_scene := packed_scene.instantiate()
 	if new_scene == null:
-		get_tree().change_scene_to_packed(packed_scene)
+		_fail_scene_load("目标场景实例化失败")
 		return
 	tree.root.add_child(new_scene)
+	if not is_instance_valid(new_scene) or not new_scene.is_inside_tree():
+		if is_instance_valid(new_scene):
+			new_scene.queue_free()
+		_fail_scene_load("目标场景加入场景树失败")
+		return
 	tree.current_scene = new_scene
 	await tree.process_frame
 	if DisplayServer.get_name() != "headless":
@@ -597,12 +634,37 @@ func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 	if new_scene == null or not is_instance_valid(new_scene) or not new_scene.is_inside_tree():
+		tree.current_scene = old_scene if old_scene != null and is_instance_valid(old_scene) else self
+		if is_instance_valid(new_scene):
+			new_scene.queue_free()
+		_fail_scene_load("目标场景加载后失效")
+		return
+	if not _is_request_current():
 		return
 	var role_information := new_scene.get_tree().get_first_node_in_group("RoleInformation")
 	if role_information != null and role_information.has_method("reveal_after_scene_loaded"):
 		role_information.reveal_after_scene_loaded()
 	if old_scene != null and is_instance_valid(old_scene) and old_scene != new_scene:
 		old_scene.queue_free()
+
+
+# 旧加载页在目标变化或已失败后不得再写缓存或切换场景。
+func _is_request_current() -> bool:
+	return not _failure_reported and Global.is_scene_request_current(_request_generation)
+
+
+# 失败只更新加载页状态，不调用 change_scene_to_*，避免提交未完成目标。
+func _fail_scene_load(reason: String) -> void:
+	if _failure_reported or not Global.is_scene_request_current(_request_generation):
+		return
+	_failure_reported = true
+	_load_started = false
+	_pending_paths.clear()
+	_queued_paths.clear()
+	loading_bar.value = 0.99
+	loading_text.text = "资源加载失败"
+	message_tips.text = reason
+	push_warning("scene load failed: %s (%s)" % [_target_scene, reason])
 
 
 func _on_tips_change_timeout() -> void:

@@ -2085,6 +2085,7 @@ var set_menu = null
 var mycamera = null
 var music_set = null
 var target_scene: String = ""
+var _scene_request_generation: int = 0
 var four_swords_endless_mode: bool = false
 var sss_lendless_mode: bool = false
 var constellation_endless_mode: bool = false
@@ -4520,6 +4521,7 @@ func change_scene(target, force_loading_screen: bool = false) -> bool:
 	if tree == null:
 		return false
 
+	_scene_request_generation += 1
 	var exiting_archive := is_archive_exit_scene(target_path)
 	if exiting_archive:
 		end_archive_session()
@@ -4550,6 +4552,14 @@ func _is_valid_scene_change_target(target_path: String) -> bool:
 	if not (target_path.ends_with(".tscn") or target_path.ends_with(".scn")):
 		return false
 	return ResourceLoader.exists(target_path)
+
+
+func get_scene_request_generation() -> int:
+	return _scene_request_generation
+
+
+func is_scene_request_current(generation: int) -> bool:
+	return generation == _scene_request_generation
 
 
 func add_music_set(parent, position):
