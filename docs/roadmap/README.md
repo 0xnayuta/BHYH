@@ -9,13 +9,14 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 15 应用编排与运行资源生命周期**：Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI、Phase 15-4D 退出与后台与 Phase 15-4E 边界守卫已完成 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 16 档案会话、持久化与玩家槽位**：16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口；规划中 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
+| [`../archive/iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本 **6.9**。Phase 12/13 已完成归档；Phase 14 已归档；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI、Phase 15-4D 退出与后台与 Phase 15-4E 边界守卫已完成，Phase 15 完成待归档。后续候选覆盖档案会话/持久化/槽位、玩法/表现边界；目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12/13/14/15 已完成并归档；当前候选为 Phase 16 档案会话、持久化与玩家槽位（16-1 至 16-6 已规划，尚未启动）；Phase 17 玩法/表现边界仍为候选方向。目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

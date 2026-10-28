@@ -79,3 +79,4 @@
 | [`iteration_12_display_hud.md`](iteration_12_display_hud.md) | Phase 12 画布、相机与 HUD 重构：多分辨率验收、双人探针、已知边界，以及原计划与实施顺序存档 | 2026-10-24 |
 | [`iteration_13_visual_asset_contract.md`](iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口：阶段回顾、运行时建帧例外、发布闭包、兼容层治理、冻结项与后续顺序 | 2026-10-27 |
 | [`iteration_14_atlas_metadata_boundary.md`](iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化数据边界：生产者/消费者矩阵、View 迁移、边界守卫、验证与恢复 | 2026-10-28 |
+| [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页交接、资源租约、缓存/池/UI、退出与后台、边界守卫、验证与恢复 | 2026-10-28 |

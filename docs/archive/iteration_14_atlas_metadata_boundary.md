@@ -2,7 +2,7 @@
 
 > **归档日期**：2026-10-28
 > **状态**：Archived
-> **关联**：[Phase 15 当前计划](../roadmap/current-iteration.md)、[AtlasMetadata 矩阵](../reference/atlas_metadata_schema.md)、[ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md)
+> **关联**：[Phase 15 归档](iteration_15_app_orchestration_lifecycle.md)、[AtlasMetadata 矩阵](../reference/atlas_metadata_schema.md)、[ADR-022](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md)
 >
 > Phase 14 已完成：14-1~14-4 全部完成；六个直接消费者已走只读 View，旧 `data_for`/`validate_path`/`clear_cache`、`source_masks` 与惰性 atlas 配置已删除，`contract_scan.py` 已加入 AtlasMetadata 边界守卫。
 > **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。

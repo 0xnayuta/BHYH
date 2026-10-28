@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12、Phase 13 与 Phase 14 均已完成并归档；**Phase 15：应用编排与运行资源生命周期** 已完成，归档待执行；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消与 Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI、Phase 15-4D 退出与后台与 Phase 15-4E 边界守卫已完成。
+> **当前版本**：6.9。Phase 12、Phase 13、Phase 14 与 Phase 15 均已完成并归档；当前候选为 **Phase 16：档案会话、持久化与玩家槽位**（16-1 至 16-6 已规划，尚未启动）；Phase 17 玩法与表现模块边界仍为候选方向。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -11,8 +11,8 @@
 | [Phase 12 显示/HUD](../archive/iteration_12_display_hud.md) | 完成、归档 | 保留已接受显示基线 |
 | [Phase 13 视觉资产契约](../archive/iteration_13_visual_asset_contract.md) | 完成、归档 | 保留构建/共享/失败/流式/导出成果及机读登记例外，不重开历史阶段 |
 | [Phase 14 类型化数据边界（AtlasMetadata 试点）](../archive/iteration_14_atlas_metadata_boundary.md) | 完成、归档 | 六个直接消费者均使用只读 View；旧入口、`source_masks` 与惰性配置已清除；边界守卫进入 `contract_scan.py` |
-| Phase 15 应用编排与运行资源生命周期 | 完成，归档待执行；Phase 15-1、15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A、15-4B、15-4C、15-4D 与 15-4E 完成 | 场景切换、加载、Global 职责与缓存/池/临时 UI 的所有权；详细计划见 [`current-iteration.md`](current-iteration.md)，当前矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
-| Phase 16 档案会话、持久化与玩家槽位 | 候选方向，未实现 | 共享/独立状态、保存快照、切档、2P 面板上下文 |
+| [Phase 15 应用编排与运行资源生命周期](../archive/iteration_15_app_orchestration_lifecycle.md) | 完成、归档 | 场景切换、加载、缓存/池/临时 UI 与退出生命周期；边界守卫进入 `contract_scan.py`；矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
+| Phase 16 档案会话、持久化与玩家槽位 | 当前候选，未实现；Phase 16-1 至 16-6 已规划 | 共享/独立状态、保存快照、切档、2P 面板上下文；详细计划见 [`current-iteration.md`](current-iteration.md) |
 | Phase 17 玩法与表现模块边界 | 候选方向，未实现 | 命中归属、关卡结算、按需组合、HUD/输入与模块 API |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
@@ -71,9 +71,9 @@ flowchart TD
 - Atlas 转换器同步与自测已在契约域；本阶段强化既有检查，不重复规划“首次加入门禁”。
 - 详细矩阵、批次、触发式验证与恢复条件见 [Phase 14 归档](../archive/iteration_14_atlas_metadata_boundary.md) 与 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。
 
-### 3.2 Phase 15：应用编排与运行资源生命周期
+### 3.2 Phase 15：应用编排与运行资源生命周期（已完成、归档）
 
-详细阶段、验收条件见 [`current-iteration.md`](current-iteration.md)；Phase 15-1 调用面与所有权矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)；本节只保留阶段职责。
+阶段记录见 [`iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md)；Phase 15-1 调用面与所有权矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)；本节只保留阶段职责。
 
 - 先核对启动、加载页、切换旁路、缓存/池/UI 所有权与退出依赖；先完成一个可运行职责切片。
 - 单一场景流转能力覆盖冷启动、覆盖式切换、返回/重战与失败；保留首帧/HUD 防黑屏语义。
@@ -88,6 +88,7 @@ flowchart TD
 - 2P 面板改为显式操作者/数据视图时，必须同时处理保存快照的视图互斥；不能只改 LocalCoop 或只改 UI。
 - 迁移共享账本与界面绑定按业务域闭环，移除被替代的全局交换入口；运行中不能并存两套可写真源。
 - 玩家档案按域类型化另列具体批次，不把整个 `player_data` 改成 Resource 作为目标。
+- 当前候选批次：16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口；详细任务见 [`current-iteration.md`](current-iteration.md)。
 
 ### 3.4 Phase 17：玩法与表现模块边界
 
@@ -116,5 +117,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15 已全部完成，归档待执行；Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A、15-4B、15-4C、15-4D 与 15-4E 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域/对象池/临时 UI/退出与后台/边界守卫；Phase 16~17 仍为候选方向。
+- 架构目标与进度分开。Phase 15 已全部完成并归档；Phase 16 为当前候选，Phase 16-1 至 16-6 只定义计划；Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A、15-4B、15-4C、15-4D 与 15-4E 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域/对象池/临时 UI/退出与后台/边界守卫；Phase 17 仍为候选方向。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。
