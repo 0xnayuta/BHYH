@@ -140,7 +140,7 @@ func _ready() -> void:
 	RoleProp.ws_value = 0
 
 	if not Global.cd_path.is_empty():
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("map_enter")
 	MemoryClass.main_dq()
 
 

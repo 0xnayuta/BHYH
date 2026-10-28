@@ -69,13 +69,7 @@ func _ready() -> void:
 
 
 func _save_completed_level() -> bool:
-	var archive_path := str(Global.cd_path).strip_edges()
-	if archive_path == "":
-		return false
-	var saved := MemoryClass.save_game(archive_path)
-	if not saved:
-		push_warning("通关自动保存失败：%s" % archive_path)
-	return saved
+	return MemoryClass.request_save("level_victory")
 
 
 func _on_return_map_pressed() -> void:

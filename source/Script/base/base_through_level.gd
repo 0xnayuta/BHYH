@@ -1410,11 +1410,7 @@ func _restart_level_for_auto_battle() -> bool:
 		return false
 	if Global.last_level_path == "":
 		return false
-	var archive_path := str(Global.cd_path).strip_edges()
-	if archive_path == "":
-		push_warning("自动重战保存失败：当前存档路径为空")
-	elif not MemoryClass.save_game(archive_path):
-		push_warning("自动重战保存失败：%s" % archive_path)
+	MemoryClass.request_save("auto_battle_retry")
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()
 	RoleProp.current_hp = int(RoleProp.roleprop.Hp)

@@ -194,7 +194,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 # 第三条内部固定执行 constellation / level-selection / level-resource-lease / load-guard / role-skills / magic-weapons
 ```
 
-变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。
+变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。存档 IO、档案校验、保存入口或角色范围变更时，另跑档案持久化定向夹具 `python scripts/archive_probe_runner.py --godot "<godot>"`。
 
 第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
 
@@ -382,6 +382,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
 | 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
 | 场景探针套件 | `scene_probe_runner.py` | 固定 6 项（星座/关卡选择态/关卡资源租约/加载守卫/角色 2/4 技能/法宝）；单项 90/240/60/180/180/180 秒；`--scene` 启动；日志 0/0 |
+| 档案持久化夹具 | `archive_probe_runner.py` | 独立临时 `user://`；缺失/空/损坏档、备份恢复、角色 1/7/0/8、`request_save`；单次 120 秒 |
 | 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |

@@ -251,7 +251,7 @@ func _on_qued_pressed() -> void:
 	else:
 		LocalCoop.clear_runtime()
 		PlayerData.player_data.erase(LocalCoop.SAVE_KEY)
-	if not MemoryClass.save_game(Global.cd_path):
+	if not MemoryClass.request_save("choose_player"):
 		Global.add_message_show(self, "存档保存失败，请重试", 1.5, Vector2(470, 340))
 		return
 	await Global.begin_archive_session()

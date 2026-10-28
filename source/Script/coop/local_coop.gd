@@ -698,8 +698,7 @@ func _on_panel_closed() -> void:
 		secondary_props.get_equ_last_pro()
 		secondary_props.get_last_prop()
 	get_tree().paused = _panel_was_paused
-	if Global.cd_path != "":
-		MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("coop_panel_close")
 
 
 func suspend_player_view() -> bool:

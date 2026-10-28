@@ -224,7 +224,7 @@ func _ready():
 	PlayerData.player_data["Map_num"] = 3
 	PlayerData.player_data["HeavenMap_num"] = 3
 	if not Global.cd_path.is_empty():
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("map_enter")
 
 
 func _sync_special_button_layer() -> void:

@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15 已完成并归档；Phase 16-1 调用面矩阵已完成，16-2 起未启动）
+> 最后更新：2026-10-29（Phase 16-1 矩阵、16-2A 首批与 16-2C 已完成；16-2A 其余、16-2B/2D 未启动）
 
 ---
 
@@ -182,6 +182,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 15-4E 边界守卫 | `contract_scan.py` 新增 `scene_entry`、`load_cache`、`pool_ui` 三类 ERROR 门禁：业务 `change_scene_to_*` 仅 `global.gd` 豁免；加载页禁止私有缓存/租约访问；池/UI 清理仅 Global 与 18 个已登记 UI 调用方。`--self-test` 新增场景入口坏样本 3/好样本 3、加载页缓存坏样本 3/好样本 2、池/UI 清理坏样本 4/好样本 4；`--fail-on-error` 全量扫描 ERROR=0。`level_58` 并发预算实测（1/2/4/6/8 并发，每组全通过）：加载 **3.724s / 3.826~3.837s / 4.096~4.100s / 4.911~4.957s / 5.391~5.565s**，墙钟 **27.4 / 28.65 / 29.58 / 31.71 / 34.67s**；定位为 `fire_ancestor_boss.gd` 在加载线程内 `preload` 含 @tool 预览的 `monster_3056.tscn`，改为运行时 `ResourceLoader.load` 按需加载；**不调整 45s 夹具阈值**。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner` **6/6 PASS**（星座 4.24s / 选择态 15.32s / 租约 3.01s / 加载守卫 4.80s / 法宝 7.07s / 角色技能 4.11s）；changed-only 回归 **PASS 128/128 + SKIP 1，FAIL 0**（696.7s，`level_58` 28.29s） | Phase 15-4E 完成，Phase 15 已归档；未执行 release 重验 |
 | 2026-10-28 Phase 15 归档 / Phase 16 规划 | 仅文档：Phase 15 收口记录归档到 [`iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md)，`current-iteration.md` 替换为 Phase 16 档案会话、持久化与玩家槽位规划（16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫）；`roadmap.md`、`docs/README.md`、`archive/README.md`、`README.md`、`AGENTS.md` 索引同步；未修改生产代码、素材或既有 UID | Phase 15 完成并归档；Phase 16 尚未启动，计划只定义批次、所有权、失败边界与验收；本轮为纯文档，未重跑引擎/回归/release |
 | 2026-10-28 Phase 16-1 调用面矩阵 | 仅文档：新建 [`archive_session_matrix.md`](archive_session_matrix.md)，记录 118 处保存点 / 60 文件、`Global.cd_path` 3 个写点与 149 次读取（146 行）、`PlayerData.player_data` 直接写入 141 行 / 44 文件（129 赋值 + 12 复合赋值 + 1 删除）、21 个补全入口、8 处视图交换调用、20 个未槽位感知面板与 18 项失败边界；更正规划页早期口径（156 行 / 40 文件含 27 行 `==` 比较）；同步 `current-iteration.md`、`roadmap.md`、`docs/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 与 `acceptance.md` 链接；未修改生产代码、素材或既有 UID | Phase 16-1 完成；只读调查，未运行引擎、关卡回归或 release；文档相对链接与行尾检查通过 |
+| 2026-10-29 Phase 16-2A 首批 / 16-2C | 新增 `MemoryClass.request_save(reason)` 统一保存入口，首批迁移 17 处（5 处判读点、11 个地图页 `_ready`、`LocalCoop._on_panel_closed`），`save_game` 余 101 处；新增 `MemoryClass.is_valid_role_id` 统一本地/云/运行时 `Myself` 1..7，`load_game` 在合并前拒绝非空非法档；修复 `AE` 懒加载 `_data` 退出泄漏。新增 `scripts/archive_probe_runner.py` + `scripts/archive_probes/`（隔离临时 `user://`，27/27 PASS，含空档不覆盖原档）。`level_1` 冒烟 **PASS**（23.05s，0 ERROR / 0 WARNING）；`LocalCoopPanelProbe` **PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 16-2A 其余 101 处、16-2B 会话身份/保存顺序、16-2D 补全失败语义与 16-3~16-6 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

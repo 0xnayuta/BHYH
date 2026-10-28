@@ -89,6 +89,12 @@ func get_wx():
 	return _get_data().get_wx()
 
 
+func _exit_tree() -> void:
+	if is_instance_valid(_data):
+		_data.free()
+		_data = null
+
+
 func _get_data() -> Node:
 	if _data == null:
 		_data = load(DATA_SCRIPT).new()

@@ -174,6 +174,9 @@ func load_game(路径) -> bool:
 	if archive_data_value is Dictionary:
 		var archive_data: Dictionary = archive_data_value.duplicate(true)
 		if not archive_data.is_empty():
+			if not _is_valid_player_archive_data(archive_data):
+				push_error("拒绝读取无效的玩家存档数据：%s" % path)
+				return false
 			archive_data.erase(ARCHIVE_TIME_KEY)
 			player_data["已获取装备列表"] = []
 			LocalCoop.clear_runtime()
@@ -243,6 +246,18 @@ func read_archive_time(路径) -> String:
 
 
 var keys = "zmxybhyh" + OS.get_unique_id() + "v1.1"
+
+
+## 统一保存入口：业务只提交保存意图，路径与失败结果由持久化边界处理。
+## reason 仅用于失败诊断，不参与路径解析或档案内容。
+func request_save(reason: String = "") -> bool:
+	var archive_path: String = str(Global.cd_path).strip_edges()
+	if _archive_number_from_path(archive_path) <= 0:
+		return false
+	if save_game(archive_path):
+		return true
+	push_warning("存档保存失败（%s）：%s" % [reason, archive_path])
+	return false
 
 
 func save_game(path: String) -> bool:
@@ -348,8 +363,17 @@ func safe_write_archive(path: String, data: Dictionary) -> bool:
 	return success
 
 
+func is_valid_role_id(value: Variant) -> bool:
+	if not (value is int or value is float):
+		return false
+	var role_id: int = int(value)
+	return role_id >= 1 and role_id <= 7
+
+
 func _is_valid_player_archive_data(data: Dictionary) -> bool:
 	if data.is_empty() or not data.has(DataKeys.PLAYER_LEVEL) or not data.has("Myself"):
+		return false
+	if not is_valid_role_id(data.get("Myself")):
 		return false
 	for key in ARCHIVE_CONTAINER_KEYS:
 		var container_value: Variant = data.get(key, null)

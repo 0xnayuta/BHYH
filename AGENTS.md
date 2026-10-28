@@ -33,7 +33,7 @@
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：118 处保存点、档案身份与会话字段、直接写入分域、补全清单、双人槽位与面板视图交换；
-  - `roadmap/current-iteration.md`：Phase 16 档案会话、持久化与玩家槽位规划：16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口；16-1 已完成，16-2 起未启动；Phase 15 归档见 `archive/iteration_15_app_orchestration_lifecycle.md`；Phase 17 方向见 roadmap；
+  - `roadmap/current-iteration.md`：Phase 16 档案会话、持久化与玩家槽位规划：16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口；16-1 矩阵、16-2A 首批与 16-2C 已完成；16-2A 其余与 16-2B/2D 未启动；Phase 15 归档见 `archive/iteration_15_app_orchestration_lifecycle.md`；Phase 17 方向见 roadmap；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；

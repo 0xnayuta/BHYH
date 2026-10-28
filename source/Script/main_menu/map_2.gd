@@ -167,7 +167,7 @@ func _ready():
 
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = 2
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("map_enter")
 	Global.is_mpo = false
 	Global.is_ice = false
 	Global.is_poision = false

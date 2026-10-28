@@ -351,8 +351,7 @@ func _collect_local_cloud_archives() -> Array[Dictionary]:
 			continue
 		var archive_path := "user://" + file_name
 		var archive_data: Dictionary = MemoryClass.peek_archive_data(archive_path)
-		var role_id := int(archive_data.get("Myself", 0))
-		if role_id < 1 or role_id > 6:
+		if not MemoryClass.is_valid_role_id(archive_data.get("Myself", 0)):
 			continue
 		(
 			archives
@@ -603,8 +602,7 @@ func _import_cloud_save_zip(path: String) -> Dictionary:
 
 
 func _is_valid_cloud_archive_data(data: Dictionary) -> bool:
-	var role_id := int(data.get("Myself", 0))
-	if role_id < 1 or role_id > 6 or not data.has(DataKeys.PLAYER_LEVEL):
+	if not MemoryClass.is_valid_role_id(data.get("Myself", 0)) or not data.has(DataKeys.PLAYER_LEVEL):
 		return false
 	for key in ["装备列表", "道具列表", "消耗品列表"]:
 		var container_value = data.get(key)

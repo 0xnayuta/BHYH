@@ -224,14 +224,7 @@ func _leave_level_from_exit() -> void:
 
 
 func _save_auto_battle_progress() -> bool:
-	var archive_path := str(Global.cd_path).strip_edges()
-	if archive_path == "":
-		push_warning("自动战斗保存失败：当前存档路径为空")
-		return false
-	var saved := MemoryClass.save_game(archive_path)
-	if not saved:
-		push_warning("自动战斗保存失败：%s" % archive_path)
-	return saved
+	return MemoryClass.request_save("level_auto_battle")
 
 
 func set_through():
