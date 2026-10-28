@@ -1,6 +1,6 @@
 # 运行时调用面与所有权矩阵（Phase 15-1）
 
-> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A 与 Phase 15-3B 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-3C/15-4 的目标写成已实现。
+> **状态**：Phase 15-1 调查完成；Phase 15-2A/15-2B/15-2C、Phase 15-3A、Phase 15-3B 与 Phase 15-3C 已落地。本页保留当前调用面与所有权事实，不把后续 Phase 15-3D/15-4 的目标写成已实现。
 >
 > **调查基线**：`238a7a6`（2026-10-28 Phase 15-1）；2026-10-28 Phase 15-2A/15-2B 更新调用面与入口契约；2026-10-28 Phase 15-3A/15-3B 更新交接与租约。仓库只有一个活跃工程 `source/`；矩阵中的旧计数保留调查日期语境，当前计数以本页更新后的表格为准。
 >
@@ -160,7 +160,7 @@ flowchart TD
 - 线程请求 `THREAD_LOAD_FAILED` / `THREAD_LOAD_INVALID_RESOURCE`：移除请求、打印 `preload failed`、仍增加完成数；没有失败聚合状态。
 - 同步 `load` 失败：`_cache_resource` 收到 `null` 时直接返回；进度仍前进。
 - 目标 `PackedScene` 为 `null`：`_change_to_target_scene_file` 调用 `_fail_scene_load`，不直接切换场景；目标路径缺失已在 `Global.change_scene` 入口拒绝。
-- 重复切换：正式入口递增请求代次；旧加载页的代次与当前不一致时停止轮询、缓存写入和场景提交。直接测试“最新目标获胜”通过；底层线程请求的显式取消仍归 Phase 15-3。
+- 重复切换：正式入口递增请求代次；旧加载页的代次与当前不一致时停止轮询、缓存写入和场景提交。直接测试“最新目标获胜”通过；加载页用请求代次停止轮询与提交，`ResourceLoader` 无公开取消 API，后台请求完成后丢弃；超时由 120 秒看门狗与 `application/run/load_timeout_msec` 覆盖。
 - 目标场景失败：目标无法加载、实例化、加入场景树或加载后失效时，`_fail_scene_load` 只更新加载页文本并停止切换；不调用 `change_scene_to_file/packed`。当前 `current_scene` 保留为加载页，失败目标不会成为当前场景。
 
 ---
@@ -184,7 +184,8 @@ flowchart TD
 | `_level_resource_lease` | `Global` | `begin_level_resource_lease`；`_track_level_resource` 由加载页 `handoff_loaded_resource`、`load_scene_uncached`、`load_level_monster_scene`、`preload_level_monster_scenes`、`preload_level_texture_paths`、`_track_level_scene_dependencies`、`prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` 触发 | `release_level_resource_lease`、`get_level_resource_lease_snapshot`、预载去重 | `release_level_resource_lease`；`clear_level_resource_cache` 间接调用 | 只记录目标场景、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；目标场景和未登记路径不释放 |
 | `_level_resource_lease["warmed_scene_paths"]` | `Global` | `prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` | 预载去重 | 随租约释放 | 只记录已预热场景，不记录请求失败 |
 | `_level_resource_lease["prewarmed_monster_ids"]` | `Global` | `preload_level_monster_runtime_resources` | 预载去重 | 随租约释放 | 失败仍可能标记为已处理，取决于调用路径 |
-| `_preloaded_scene`、`_preloading_path` | `Global` | `preload_next`、`_get_preloaded` | `Global.change_scene` | 消费后清空；失败不清理 | 单槽；失败后 `_preloading_path` 可能保留，未验证重试语义 |
+| `load_scene._target_packed_scene`、`_target_packed_scene_path` | 加载页 | `_cache_resource` 仅在路径等于 `_target_scene` 时写入 | `_finish_loading` | 消费后清空；失败/取消/退出清空 | 目标路径必须匹配；过期代次不提交 |
+| `_preloaded_scene`、`_preloaded_scene_path`、`_preloading_path` | `Global` | `preload_next`、`_get_preloaded`；`clear_preloaded_scene_slot` | `Global.change_scene`、`get_preloaded_scene_slot_snapshot` | 消费、失败、换目标或显式清理时清空 | 单槽；失败路径不会永久占用；后台线程无公开取消 API |
 
 **Phase 15-3A/15-3B API**：`is_resource_cached(path) -> bool` 只读查询四个运行时缓存；`get_cached_packed_scene(path) -> PackedScene` 返回已缓存的场景或 `null`；`handoff_loaded_resource(path, resource, track_level=false) -> bool` 是加载页唯一写入入口，内部决定缓存表并按需登记关卡路径。`begin_level_resource_lease(target_scene) -> int` 建立新租约；`release_level_resource_lease(lease_id=-1) -> int` 只释放指定租约的路径并返回释放数；`get_level_resource_lease_snapshot() -> Dictionary` 返回只读分类快照。加载页不再接触私有字段或私有方法。
 
@@ -252,7 +253,7 @@ flowchart TD
 | 能力 | 当前所有者 | 允许调用方 | 释放/失效事件 | 失败语义 | Phase 交接 |
 |:---|:---|:---|:---|:---|:---|
 | 场景目标选择 | `Global.target_scene` + `Global.change_scene` | 业务 UI/关卡；加载页消费目标快照 | 切换完成/失败 | 空/缺失目标 `false`；加载页代次过期不提交 | Phase 15-2A/15-2B/15-2C 已完成 |
-| 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放 | 代次阻止旧回调写回；底层线程取消未实现 | Phase 15-3C |
+| 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放/超时 | 代次阻止旧回调写回；取消为停止轮询并丢弃后台结果 | Phase 15-3C 已完成 |
 | 关卡资源租约 | `Global._level_resource_lease` | `Global.change_scene`、加载页、BaseLevel 预载函数 | 每次切换/战斗清理，只释放本租约 | 未登记路径不释放；目标场景不登记 | Phase 15-3B 已完成 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4 作用域与清理 |
 | 临时 UI | `Global` 注册表 + 硬编码清理 | UI 工厂/各面板 | 树退出、切换、手动清理 | 名称冲突；永久 UI 异步预载 | Phase 15-4 注册/关闭回调 |
@@ -291,11 +292,16 @@ flowchart TD
 3. `get_level_resource_lease_snapshot` 提供只读分类快照；旧租约 ID 不能释放新租约。
 4. 场景探针 `level-resource-lease` 验证租约分类、按租约释放、共享缓存保留、旧 ID 拒绝、重战清理与 `end_archive_session` 退出清理；连续切关探针仍通过。
 
-### Phase 15-3C 待处理
+### Phase 15-3C 已完成
 
-1. 线程请求失败/取消/超时、目标切换、加载页销毁时需要使旧回调失效；失败不能进入可玩场景。
-2. `_target_packed_scene` 需要绑定目标路径或 generation，完成阶段不能使用过期目标。
-3. `_preloaded_scene` / `_preloading_path` 需要明确失败清理和重复请求语义；不能让失败路径永久占用单槽。
+1. 加载页固定 `_target_scene`、`_request_generation` 与 `_target_packed_scene_path`；目标切换、加载页销毁或失败后 `_is_request_current()` 阻止轮询、缓存写入与场景提交。
+2. 新增 120 秒加载看门狗与 `application/run/load_timeout_msec` 覆盖；超时只显示失败并保留加载页，不提交目标。
+3. `_preloaded_scene` 单槽增加显式路径、失败/换目标/消费清理与只读快照；缺失、失败和重复请求不会永久占用单槽。
+4. 加载页新增过期场景释放：旧目标已加入树但在完成前被取代时，不恢复旧可玩关卡；失败/取消不进入目标场景。
+
+### Phase 15-3D 待处理
+
+1. `LevelPreloadStore` 与构建期 Catalog 保持只读；不在加载页重新扫描脚本、目录或解析 manifest。
 
 ### Phase 15-4
 
@@ -308,7 +314,7 @@ flowchart TD
 
 ---
 
-## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B 出口核对
+## 8. Phase 15-1/15-2A/15-2B/15-2C/15-3A/15-3B/15-3C 出口核对
 
 - [x] 场景切换调用点已枚举并更新：139 处 `Global.change_scene`（49 文件）、2 处低层内部调用、业务与加载页旁路均为 0；
 - [x] 加载页线程请求、缓存读取/写入、目标 PackedScene 与完成/失败路径已记录；加载页已改走窄交接 API；
@@ -317,8 +323,9 @@ flowchart TD
 - [x] 只读 Catalog/声明与运行时缓存已分开；
 - [x] `hdzm.gd` 的 4 处业务旁路已迁入正式入口；`Global.change_scene` 已固定目标校验/代次/快速路径；加载页使用目标快照并在失败时保留当前加载页。
 - [x] Phase 15-3A：加载页通过 `is_resource_cached` / `get_cached_packed_scene` / `handoff_loaded_resource` 交接，私有缓存字段/方法访问为 0。
-- [x] Phase 15-3B：关卡资源按租约记录与释放；`clear_combat_runtime_cache` 不再按宽泛前缀删除共享缓存；租约快照可枚举；显式线程取消仍留给 Phase 15-3C。
+- [x] Phase 15-3B：关卡资源按租约记录与释放；`clear_combat_runtime_cache` 不再按宽泛前缀删除共享缓存；租约快照可枚举。
+- [x] Phase 15-3C：请求代次、目标路径、超时、失败/取消/销毁路径与 `_preloaded_scene` 单槽均已收口；`ResourceLoader` 无公开取消 API，取消为停止轮询与提交并丢弃后台结果。
 
-**验证**：Phase 15-3A/15-3B 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，23.59s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**5/5 PASS**，星座 4.71s / 选择态 15.11s / 租约 2.91s / 法宝 6.33s / 角色技能 4.15s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，725.5s）。租约探针覆盖分类、按租约释放、共享缓存保留与旧租约 ID 拒绝。未执行 release 重验、底层线程显式取消与切换中退出，这些仍属 Phase 15-3C/后续范围。
+**验证**：Phase 15-3A/15-3B/15-3C 已执行 `check_all --godot-bin`（8/8 PASS）、`health_check`（0 Parse / 0 Error / 0 Warning）、`level_1` 冒烟（PASS，22.13s，日志 0 ERROR / 0 WARNING）、`scene_probe_runner` 完整套件（**6/6 PASS**，星座 4.06s / 选择态 14.88s / 租约 2.83s / 加载守卫 4.23s / 法宝 6.26s / 角色技能 3.75s）、全量关卡回归（**PASS 128/128 + SKIP 5，FAIL 0**，683.1s）。租约探针覆盖分类与按租约释放；加载守卫覆盖单槽失败清理、重复切换、超时与失败不提交。未执行 release 重验与切换中退出验证。
 
-**下一入口**：Phase 15-3C 失败/取消。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-3 切片。
+**下一入口**：Phase 15-3D 预载清单边界。恢复时先读本页 §2、§4、§7 与 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 15-3 切片。

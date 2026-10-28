@@ -2238,35 +2238,70 @@ var constellation_endless_mode: bool = false
 var three_prince_endless_mode: bool = false
 
 var _preloaded_scene: PackedScene = null
+var _preloaded_scene_path: String = ""
 var _preloading_path: String = ""
 
 
 func preload_next(path: String):
 	"Start preloading a scene for instant transition later."
-	if path == "" or _preloading_path == path:
+	if path == "" or (_preloaded_scene != null and _preloaded_scene_path == path):
+		return
+	if _preloading_path == path:
+		var existing_status := ResourceLoader.load_threaded_get_status(path)
+		if (
+			existing_status == ResourceLoader.THREAD_LOAD_FAILED
+			or existing_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+		):
+			clear_preloaded_scene_slot()
+		else:
+			return
+	clear_preloaded_scene_slot()
+	if not ResourceLoader.exists(path):
 		return
 	if _resource_cache.has(path):
-		_preloaded_scene = _resource_cache[path] as PackedScene
-		_preloading_path = path
-		return
+		var cached: Variant = _resource_cache[path]
+		if cached is PackedScene:
+			_preloaded_scene = cached as PackedScene
+			_preloaded_scene_path = path
+			return
 	_preloading_path = path
-	ResourceLoader.load_threaded_request(path)
+	var err := ResourceLoader.load_threaded_request(path)
+	if err != OK and err != ERR_BUSY:
+		# 请求未启动时不能留下永久占用单槽的路径。
+		clear_preloaded_scene_slot()
+
+
+func clear_preloaded_scene_slot() -> void:
+	_preloaded_scene = null
+	_preloaded_scene_path = ""
+	_preloading_path = ""
+
+
+func get_preloaded_scene_slot_snapshot() -> Dictionary:
+	return {
+		"path": _preloading_path,
+		"ready_path": _preloaded_scene_path,
+		"ready": _preloaded_scene != null,
+	}
 
 
 func _get_preloaded(path: String) -> PackedScene:
 	"Check if a preloaded scene is ready, return it or null."
-	if _preloaded_scene != null and _preloaded_scene.resource_path == path:
-		var ps = _preloaded_scene
+	if _preloaded_scene != null:
+		if _preloaded_scene_path == path:
+			var ps = _preloaded_scene
+			clear_preloaded_scene_slot()
+			return ps
 		_preloaded_scene = null
-		_preloading_path = ""
-		return ps
+		_preloaded_scene_path = ""
 	if _preloading_path == path:
 		var status = ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var ps = ResourceLoader.load_threaded_get(path) as PackedScene
-			_preloaded_scene = null
-			_preloading_path = ""
+			clear_preloaded_scene_slot()
 			return ps
+		if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			clear_preloaded_scene_slot()
 	return null
 
 
@@ -4678,6 +4713,8 @@ func change_scene(target, force_loading_screen: bool = false) -> bool:
 	begin_level_resource_lease(target_path)
 
 	var cached = _get_preloaded(target_path)
+	if cached == null:
+		clear_preloaded_scene_slot()
 	target_scene = target_path
 
 	if (

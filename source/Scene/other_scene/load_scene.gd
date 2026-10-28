@@ -3,6 +3,7 @@ extends CanvasLayer
 const DEFAULT_TARGET_SCENE := "res://Scene/main_menu/main_menu.tscn"
 const DEFAULT_WINDOW_SIZE := Vector2i(1600, 1000)
 const MIN_VISIBLE_SECONDS := 0.0
+const LOAD_TIMEOUT_MSEC := 120_000
 const HDZM_LEVEL_SCENE := "res://Scene/level/level_hdzm.tscn"
 const MAIN_SWORD_ARRAY_WEAPON_SCRIPT := preload("res://Script/magic_weapon/main_sword_array_weapon.gd")
 const BADI_EFFECT_SCRIPT := preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -58,8 +59,10 @@ var _request_limit := 2
 var _total_paths := 0
 var _completed_paths := 0
 var _target_packed_scene: PackedScene = null
+var _target_packed_scene_path: String = ""
 var _target_scene: String = ""
 var _request_generation: int = 0
+var _load_started_msec: int = 0
 var _failure_reported := false
 var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
@@ -118,7 +121,7 @@ func _show_integrity_failure() -> void:
 	loading_bar.value = 0.99
 	loading_text.text = "99%"
 	message_tips.text = "资源加载失败，请重新安装。"
-	_load_started = false
+	_cancel_pending_requests()
 
 
 func _begin_load_after_first_frame() -> void:
@@ -159,6 +162,8 @@ func _start_archive_preload() -> void:
 	_pending_paths.clear()
 	_queued_paths.clear()
 	_target_packed_scene = null
+	_target_packed_scene_path = ""
+	_load_started_msec = Time.get_ticks_msec()
 	_set_progress(0.0)
 	for path in paths:
 		_queued_paths.append(path)
@@ -172,7 +177,18 @@ func _start_archive_preload() -> void:
 func _process(_delta: float) -> void:
 	if not _load_started or _changing_scene or not _is_request_current():
 		return
+	if Time.get_ticks_msec() - _load_started_msec > _get_load_timeout_msec():
+		_fail_scene_load("加载超时")
+		return
 	_poll_pending_paths()
+
+
+func _get_load_timeout_msec() -> int:
+	return maxi(0, int(ProjectSettings.get_setting("application/run/load_timeout_msec", LOAD_TIMEOUT_MSEC)))
+
+
+func is_load_failed() -> bool:
+	return _failure_reported
 
 
 func _build_archive_preload_paths() -> Array[String]:
@@ -353,6 +369,7 @@ func _cache_resource(path: String, resource: Resource) -> void:
 		return
 	if path == _target_scene and resource is PackedScene:
 		_target_packed_scene = resource as PackedScene
+		_target_packed_scene_path = path
 		return
 	Global.handoff_loaded_resource(path, resource, _is_battle_target_scene())
 
@@ -523,12 +540,14 @@ func _finish_loading() -> void:
 	await get_tree().process_frame
 	if not _is_request_current():
 		return
-	if _target_packed_scene != null:
-		_change_to_packed_scene(_target_packed_scene)
+	if _target_packed_scene != null and _target_packed_scene_path == _target_scene:
+		_change_to_packed_scene(_target_packed_scene, _target_packed_scene_path)
 	else:
+		_target_packed_scene = null
+		_target_packed_scene_path = ""
 		var cached := Global.get_cached_packed_scene(_target_scene)
 		if cached != null:
-			_change_to_packed_scene(cached)
+			_change_to_packed_scene(cached, _target_scene)
 		else:
 			_change_to_target_scene_file()
 
@@ -582,8 +601,10 @@ func _get_target_level_monster_ids() -> Array[int]:
 	return LevelPreloadStore.monster_ids(str(_target_scene))
 
 
-func _change_to_packed_scene(packed_scene: PackedScene) -> void:
+func _change_to_packed_scene(packed_scene: PackedScene, source_path: String = "") -> void:
 	if _changing_scene or not _is_request_current():
+		return
+	if source_path != "" and source_path != _target_scene:
 		return
 	_changing_scene = true
 	await _covered_change_to_packed_scene(packed_scene)
@@ -621,6 +642,9 @@ func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 			new_scene.queue_free()
 		_fail_scene_load("目标场景加入场景树失败")
 		return
+	if not _is_request_current():
+		_release_stale_new_scene(tree, new_scene)
+		return
 	tree.current_scene = new_scene
 	await tree.process_frame
 	if DisplayServer.get_name() != "headless":
@@ -630,13 +654,14 @@ func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 	await tree.process_frame
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
+	if not _is_request_current():
+		_release_stale_new_scene(tree, new_scene)
+		return
 	if new_scene == null or not is_instance_valid(new_scene) or not new_scene.is_inside_tree():
 		tree.current_scene = old_scene if old_scene != null and is_instance_valid(old_scene) else self
 		if is_instance_valid(new_scene):
 			new_scene.queue_free()
 		_fail_scene_load("目标场景加载后失效")
-		return
-	if not _is_request_current():
 		return
 	var role_information := new_scene.get_tree().get_first_node_in_group("RoleInformation")
 	if role_information != null and role_information.has_method("reveal_after_scene_loaded"):
@@ -645,9 +670,32 @@ func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 		old_scene.queue_free()
 
 
-# 旧加载页在目标变化或已失败后不得再写缓存或切换场景。
+# 目标代次已过期时只清理本次加入的场景，不把旧关卡恢复为可玩场景。
+func _release_stale_new_scene(tree: SceneTree, new_scene: Node) -> void:
+	if new_scene == null or not is_instance_valid(new_scene):
+		return
+	if tree.current_scene == new_scene:
+		tree.current_scene = self if is_instance_valid(self) and self.is_inside_tree() else null
+	new_scene.queue_free()
+
+
+# 旧加载页在目标变化、退出或已失败后不得再写缓存或切换场景。
 func _is_request_current() -> bool:
-	return not _failure_reported and Global.is_scene_request_current(_request_generation)
+	return not _failure_reported and is_inside_tree() and Global.is_scene_request_current(_request_generation)
+
+
+# 取消只停止轮询与提交；ResourceLoader 没有公开的线程取消 API，后台请求完成后丢弃。
+func _cancel_pending_requests() -> void:
+	_pending_paths.clear()
+	_queued_paths.clear()
+	_load_started = false
+	_load_started_msec = 0
+	_target_packed_scene = null
+	_target_packed_scene_path = ""
+
+
+func _exit_tree() -> void:
+	_cancel_pending_requests()
 
 
 # 失败只更新加载页状态，不调用 change_scene_to_*，避免提交未完成目标。
@@ -655,9 +703,7 @@ func _fail_scene_load(reason: String) -> void:
 	if _failure_reported or not Global.is_scene_request_current(_request_generation):
 		return
 	_failure_reported = true
-	_load_started = false
-	_pending_paths.clear()
-	_queued_paths.clear()
+	_cancel_pending_requests()
 	loading_bar.value = 0.99
 	loading_text.text = "资源加载失败"
 	message_tips.text = reason

@@ -187,12 +187,12 @@ python scripts/health_check.py --project source --godot-bin "<godot>"
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
-# 第三条内部固定执行 constellation / level-selection / level-resource-lease / role-skills / magic-weapons
+# 第三条内部固定执行 constellation / level-selection / level-resource-lease / load-guard / role-skills / magic-weapons
 ```
 
 变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。
 
-第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`role-skills`、`magic-weapons` 五个探针；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
+第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
 
 ### 6.1 单关冒烟：`level_test_runner.py`
 
@@ -258,6 +258,7 @@ python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>" --probe level-selection
 python scripts/scene_probe_runner.py --godot "<godot>" --probe level-resource-lease
+python scripts/scene_probe_runner.py --godot "<godot>" --probe load-guard
 python scripts/scene_probe_runner.py --godot "<godot>" --probe role-skills
 python scripts/scene_probe_runner.py --godot "<godot>" --probe magic-weapons
 ```
@@ -265,18 +266,19 @@ python scripts/scene_probe_runner.py --godot "<godot>" --probe magic-weapons
 | 项目 | 规则 |
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
-| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`role_skill_probe` 与 `magic_weapon_probe`；运行期复制到 `source/`，结束后清理 |
-| L2 固定子项 | `constellation`、`level-selection`、`level-resource-lease`、`role-skills`、`magic-weapons` 全部执行，不提供 `SKIP`；单次耗时写入报告 |
+| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe` 与 `magic_weapon_probe`；运行期复制到 `source/`，结束后清理 |
+| L2 固定子项 | `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 全部执行，不提供 `SKIP`；单次耗时写入报告 |
 | 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
 | 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存、租约目标与背景可见性 |
 | 租约覆盖 | 目标/ID/路径/怪物/弹体/纹理分类；只释放本租约路径；未登记共享缓存保留；旧租约 ID 不能释放新租约；重战清理与 `end_archive_session` 退出清理不误删共享缓存 |
+| 加载守卫覆盖 | 预载单槽缺失/显式清理；重复切换只提交最新目标；超时置失败态并保留加载页；失败/取消不进入目标场景 |
 | 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
 | 法宝/角色特效覆盖 | 诛仙剑阵、青莲、青龙剑/太极、八仙 8 场景；Lyfb 兼容特效与哪吒阴阳剑/光环/Launch；校验构建期 `.tres` 加载、动画名、帧数、duration、loop/speed |
 | 结果通道 | 各探针最后一条 `*_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
 | 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0；唯一豁免为 `ERROR: Parameter "t" is null.` 及其缩进栈 |
 | 退出阶段 | 探针输出 `*_PROBE_TEARDOWN` 后进入引擎退出；退出期 RID/ObjectDB 清理噪声不计入门禁 |
-| 超时 | 星座 90 秒、选择态 240 秒、角色技能 180 秒、法宝 180 秒；`--timeout` 可覆盖 |
-| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}`、`docs/reports/role_skill_probe_report.{md,json}`、`docs/reports/magic_weapon_probe_report.{md,json}` |
+| 超时 | 星座 90 秒、选择态 240 秒、租约 60 秒、加载守卫 180 秒、角色技能 180 秒、法宝 180 秒；`--timeout` 可覆盖 |
+| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}`、`docs/reports/level_resource_lease_probe_report.{md,json}`、`docs/reports/load_guard_probe_report.{md,json}`、`docs/reports/role_skill_probe_report.{md,json}`、`docs/reports/magic_weapon_probe_report.{md,json}` |
 | 退出码 | `0` PASS；`1` 任一探针失败；`2` 规格/工程缺失 |
 
 ### 6.5 构建期资源校验
@@ -375,7 +377,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 关卡回归并发 | 默认 `auto`（`min(12, max(4, CPU 核数))`）；`--jobs 4` 为稳定排障口径 | 失败重试 1 次 |
 | 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
 | 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
-| 场景探针套件 | `scene_probe_runner.py` | 固定 5 项（星座/关卡选择态/关卡资源租约/角色 2/4 技能/法宝）；单项 90/240/60/180/180 秒；`--scene` 启动；日志 0/0 |
+| 场景探针套件 | `scene_probe_runner.py` | 固定 6 项（星座/关卡选择态/关卡资源租约/加载守卫/角色 2/4 技能/法宝）；单项 90/240/60/180/180/180 秒；`--scene` 启动；日志 0/0 |
 | 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |

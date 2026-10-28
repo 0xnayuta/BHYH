@@ -134,13 +134,13 @@ flowchart TD
 `Global.change_scene(target, force_loading_screen=false) -> bool` 是规范场景切换入口：
 
 1. 先校验目标：非空、`.tscn`/`.scn`，且 `ResourceLoader.exists` 为真；空目标或缺失目标直接返回 `false`，不清理缓存、不写 `target_scene`；
-2. 校验通过后递增 `_scene_request_generation`，并在任何跳转前取消旧请求的过期回调；
+2. 校验通过后递增 `_scene_request_generation`，使旧加载页/预载回调失效；`ResourceLoader` 无公开线程取消 API，取消语义是停止轮询、写回与提交，后台结果丢弃；
 3. 若目标是“退出存档”场景，结束存档会话；
 4. 清理临时 UI、UI 运行时缓存与关卡资源缓存；
 5. 若目标是已预载且缓存的 `res://Scene/level/*`（`level_hdzm.tscn` 除外），写入 `target_scene = target` 后直接 `change_scene_to_packed`，返回引擎调用结果；
 6. 否则写入 `target_scene = target`，切换到 `load_scene.tscn`，返回引擎调用结果。
 
-返回值只表示**请求已接受并已提交场景切换**，不表示加载页最终完成；异步预载失败通过加载页失败状态处理（Phase 15-2C），返回上一场景/恢复已释放场景不在本入口承诺。
+返回值只表示**请求已接受并已提交场景切换**，不表示加载页最终完成；异步预载失败通过加载页失败状态处理（Phase 15-2C/15-3C），失败/取消/超时保留加载页，不提交未完成目标。
 
 加载页 `Scene/other_scene/load_scene.gd` 负责：
 
@@ -153,6 +153,8 @@ flowchart TD
 - 关卡资源租约：`Global.change_scene` 先释放上一租约，再为当前目标建立租约；加载交接、怪物/弹体/纹理预载与热身标记只登记到当前租约。释放只删除本租约拥有的路径，永久 UI 与未登记路径保留；`clear_combat_runtime_cache` 不再按资源前缀批量删除；
 - 覆盖式切换：先挂入新场景并设为 current_scene，等待实际绘制后揭示 HUD，再释放旧场景；冷启动与后续切换复用同一加载页，不只是一个独立进度界面；
 - 目标场景无法加载、实例化、加入场景树或加载后失效时，加载页不调用任何 `change_scene_to_*`，保留当前加载页并显示失败文本；不会把未完成目标设为 current_scene；
+- 失败/取消/超时：`_target_packed_scene` 绑定目标路径，完成阶段校验目标与请求代次；120 秒看门狗（`application/run/load_timeout_msec` 可覆盖）只置失败态；`_exit_tree` 清除待处理队列；过期目标已加入树时释放本次场景，不恢复旧可玩关卡；
+- 预载单槽：`Global._preloaded_scene` 绑定 `_preloaded_scene_path`，消费、失败、换目标或 `clear_preloaded_scene_slot` 时清空；缺失路径不占用单槽；
 - 战斗加载时输出 VRAM 基线日志，供性能回归对照。
 
 **入口边界**：`Script/level/hdzm.gd` 的 4 处直接切换已迁入 `Global.change_scene`；业务代码与 `load_scene.gd` 均不再直接调用 `change_scene_to_file/packed`。低层切换只保留 `Global.change_scene` 的快速路径；加载页通过 `_target_scene` 快照与 `Global` 请求代次完成交接。

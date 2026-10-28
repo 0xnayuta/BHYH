@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 15-3B 关卡资源租约完成；Phase 15-3C/15-3D 未启动）
+> 最后更新：2026-10-28（Phase 15-3C 失败与取消完成；Phase 15-3D 未启动）
 
 ---
 
@@ -173,6 +173,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 15-2C 加载页交接 | `load_scene` 固定 `_target_scene` 与 `_request_generation`；预载/缓存/切换使用目标快照；旧代次停止轮询与缓存写入；移除加载页 `change_scene_to_file/packed` 兜底；目标加载/实例化/加入后失效时保留加载页并显示失败。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`scene_probe_runner --probe level-selection` **PASS**（14.67s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（735.6s，`level_58` 单次瞬态失败后重试通过）；临时探针最新目标获胜、失败目标不提交、current_scene 保留加载页 | Phase 15-2A/15-2B/15-2C 完成，Phase 15-3 未启动。未执行 release、底层线程显式取消与切换中退出验证；失败时保留的是当前加载页，进入加载页时已释放的上一场景不恢复 |
 | 2026-10-28 Phase 15-3A 窄交接接口 | 加载页不再访问 `_resource_cache`/`_audio_cache`/`_texture_cache` 或调用 `_cache_threaded_resource`/`_track_level_resource`；新增 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 三个窄接口。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.47s，日志 0/0）；`scene_probe_runner --probe level-selection` **PASS**（16.28s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（756.6s，`level_58` 单次瞬态失败后重试通过） | Phase 15-3A 完成，Phase 15-3B/15-3C 未启动；加载页私有缓存访问为 0。未执行 release、租约释放与底层线程显式取消验证 |
 | 2026-10-28 Phase 15-3B 关卡资源租约 | `_level_resource_lease` 记录目标、租约 ID、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；`change_scene` 建立新租约，`release_level_resource_lease` 只释放本租约，永久 UI/未登记路径保留；`clear_combat_runtime_cache` 移除宽泛前缀删除；新增只读快照。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（23.59s，日志 0/0）；`scene_probe_runner` 完整套件 **5/5 PASS**（星座 4.71s / 选择态 15.11s / 租约 2.91s / 法宝 6.33s / 角色技能 4.15s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（725.5s） | Phase 15-3B 完成，Phase 15-3C/15-3D 未启动；租约路径分类、共享缓存保留、旧租约 ID 拒绝、重战清理与退出归档清理已验证。未执行 release、底层线程显式取消与切换中退出验证 |
+| 2026-10-28 Phase 15-3C 失败与取消 | 加载页固定目标/请求代次与目标 PackedScene 路径；加载页销毁、失败、换目标后停止轮询、缓存写入与提交；新增 120 秒看门狗（`application/run/load_timeout_msec` 可覆盖）；`_preloaded_scene` 单槽增加路径绑定、失败/换目标/显式清理与只读快照；过期目标已加入树时释放本次场景而不恢复旧关卡。`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS**（22.13s，日志 0/0）；`scene_probe_runner` 完整套件 **6/6 PASS**（星座 4.06s / 选择态 14.88s / 租约 2.83s / 加载守卫 4.23s / 法宝 6.26s / 角色技能 3.75s）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（683.1s） | Phase 15-3C 完成，Phase 15-3D 未启动；失败/取消/超时与单槽清理已验证。`ResourceLoader` 无公开线程取消 API，后台请求完成后丢弃；未执行 release 与切换中退出验证 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 
