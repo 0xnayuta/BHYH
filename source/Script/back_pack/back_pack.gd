@@ -634,12 +634,12 @@ func init_show_wing_tx_button():
 func _on_wings_show_pressed() -> void:
 	if PlayerData.player_data["翅膀显示"]:
 		PlayerData.player_data["翅膀显示"] = false
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("back_pack_wings_show")
 		wings_show_button.set_button_icon(load("res://Art/backpack/no_choose.png"))
 		wing_show.text = "不显示"
 	else:
 		PlayerData.player_data["翅膀显示"] = true
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("back_pack_wings_show")
 		wing_show.text = "显示"
 		wings_show_button.set_button_icon(load("res://Art/backpack/is_choose.png"))
 
@@ -648,13 +648,13 @@ func _on_head_show_pressed() -> void:
 	if PlayerData.player_data["头衔显示"]:
 		head_show_button.set_button_icon(load("res://Art/backpack/no_choose.png"))
 		PlayerData.player_data["头衔显示"] = false
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("back_pack_head_show")
 		head_show.text = "不显示"
 
 	else:
 		head_show_button.set_button_icon(load("res://Art/backpack/is_choose.png"))
 		PlayerData.player_data["头衔显示"] = true
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("back_pack_head_show")
 		head_show.text = "显示"
 
 

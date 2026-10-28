@@ -124,7 +124,7 @@ func _on_sz_pressed() -> void:
 			RoleProp.source_player.on_eqchange()
 	_show_message("神铸成功！")
 	_refresh_backpack()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("ldl_divine_forge")
 
 
 func _get_selected_slot() -> Dictionary:

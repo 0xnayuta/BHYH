@@ -6,6 +6,8 @@ extends Node
 
 const RESULT_PREFIX := "ARCHIVE_PERSISTENCE_PROBE_RESULT="
 const TEST_ARCHIVE_PREFIX := "user://MyAr_9"
+const PANEL_ARCHIVE_PATH := "user://MyAr_1.json"
+const OLD_ARCHIVE_TIME := "2000-01-01 00:00:00"
 
 var failures: Array[String] = []
 var checks: Dictionary = {}
@@ -13,7 +15,7 @@ var checks: Dictionary = {}
 
 func _ready() -> void:
 	print("USER_DIR=", OS.get_data_dir())
-	_run()
+	await _run()
 	var ok := failures.is_empty()
 	print(RESULT_PREFIX, JSON.stringify({"ok": ok, "failures": failures, "checks": checks}))
 	get_tree().quit(0 if ok else 1)
@@ -54,6 +56,7 @@ func _run() -> void:
 	_test_role_range()
 	_test_cloud_validation()
 	_test_request_save()
+	await _test_panel_saves()
 
 
 func _test_missing_and_empty() -> void:
@@ -163,3 +166,99 @@ func _test_request_save() -> void:
 		seeded and not empty_blocked and seeded_level == 9 and after_level == 9,
 		"seed=%s blocked=%s before=%s after=%s" % [seeded, empty_blocked, seeded_level, after_level]
 	)
+
+
+## 直接调用背包/技能/炼体面板的真实保存处理器，验证界面路径确实经 request_save 落盘。
+func _test_panel_saves() -> void:
+	_reset_profile(1, 5)
+	Global.cd_path = PANEL_ARCHIVE_PATH
+	PlayerData.player_data["翅膀显示"] = true
+	PlayerData.player_data["头衔显示"] = true
+	PlayerData.player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"] = "old"
+	var seeded := MemoryClass.request_save("probe_panel_seed")
+	_check("panel_seed_saved", seeded)
+
+	var bag: Node = (load("res://Scene/back_pack/back_pack.tscn") as PackedScene).instantiate()
+	bag.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(bag)
+	await get_tree().process_frame
+	bag.call("_on_wings_show_pressed")
+	bag.call("_on_head_show_pressed")
+	var bag_data := MemoryClass.peek_archive_data(PANEL_ARCHIVE_PATH)
+	_check(
+		"panel_backpack_wings_saved",
+		bag_data.get("翅膀显示") == false,
+		"wings=%s" % bag_data.get("翅膀显示")
+	)
+	_check(
+		"panel_backpack_head_saved",
+		bag_data.get("头衔显示") == false,
+		"head=%s" % bag_data.get("头衔显示")
+	)
+	bag.queue_free()
+	await get_tree().process_frame
+
+	var keys: Node = (load("res://Scene/skill/skill_key_set.tscn") as PackedScene).instantiate()
+	keys.process_mode = Node.PROCESS_MODE_DISABLED
+	keys.set("need_name", "slz")
+	add_child(keys)
+	keys.call("_on_y_pressed")
+	await get_tree().process_frame
+	var key_data := MemoryClass.peek_archive_data(PANEL_ARCHIVE_PATH)
+	var learned: Dictionary = key_data.get(DataKeys.SKILL_LEARNED, {})
+	var keymap: Dictionary = learned.get(DataKeys.Skill.KEYMAP, {})
+	var bound_key := str(keymap.get("Y", ""))
+	_check("panel_skill_key_saved", bound_key == "slz", "Y=%s" % bound_key)
+
+	_mark_archive_time_old(PANEL_ARCHIVE_PATH)
+	var strength: Node = (load("res://Scene/ldl/strength.tscn") as PackedScene).instantiate()
+	strength.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(strength)
+	await get_tree().process_frame
+	strength.call("remove_infomation")
+	await get_tree().process_frame
+	_check(
+		"panel_strength_saved",
+		_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+		"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+	)
+	strength.queue_free()
+	await get_tree().process_frame
+
+	_mark_archive_time_old(PANEL_ARCHIVE_PATH)
+	var ldl: Node = (load("res://Scene/ldl/ldl.tscn") as PackedScene).instantiate()
+	ldl.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(ldl)
+	await get_tree().process_frame
+	_check(
+		"panel_ldl_saved",
+		_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+		"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+	)
+	ldl.queue_free()
+	await get_tree().process_frame
+
+	_mark_archive_time_old(PANEL_ARCHIVE_PATH)
+	var synthesis: Node = (load("res://Scene/ldl/synthesis.tscn") as PackedScene).instantiate()
+	synthesis.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(synthesis)
+	await get_tree().process_frame
+	synthesis.call("remove_infomation")
+	await get_tree().process_frame
+	_check(
+		"panel_synthesis_saved",
+		_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+		"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+	)
+	synthesis.queue_free()
+	await get_tree().process_frame
+
+
+func _mark_archive_time_old(path: String) -> void:
+	var data := MemoryClass.peek_archive_data(path)
+	data[MemoryClass.ARCHIVE_TIME_KEY] = OLD_ARCHIVE_TIME
+	MemoryClass.safe_write_archive(path, data)
+
+
+func _archive_time(path: String) -> String:
+	return str(MemoryClass.peek_archive_data(path).get(MemoryClass.ARCHIVE_TIME_KEY, ""))

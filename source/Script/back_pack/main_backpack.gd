@@ -391,7 +391,7 @@ func _on_sort_pressed() -> void:
 	remove_choose()
 	current_page = 1
 	set_box_data()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_sort")
 
 
 func _on_zb_pressed() -> void:

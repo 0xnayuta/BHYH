@@ -93,14 +93,14 @@ func add_qh_jm():
 	MLdl.current_mode = "强化"
 	if strength == null:
 		strength = Global.add_strength(bg_2, Vector2(-315, -205))
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_strength_panel")
 		strength.remove_infomation()
 
 
 func remove_qh_jm():
 	if strength != null:
 		strength.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_strength_panel")
 		strength.queue_free()
 
 
@@ -113,7 +113,7 @@ func add_hc_jm():
 func remove_hc_jm():
 	if synthesis != null:
 		synthesis.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_synthesis_panel")
 		synthesis.queue_free()
 
 
@@ -126,7 +126,7 @@ func add_xq_jm():
 func remove_xq_jm():
 	if mosaic != null:
 		mosaic.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_mosaic_panel")
 		mosaic.queue_free()
 
 
@@ -163,7 +163,7 @@ func add_fj_jm():
 func remove_fj_jm():
 	if decompose != null:
 		decompose.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_decompose_panel")
 		decompose.queue_free()
 
 
@@ -188,7 +188,7 @@ func add_dz_jm():
 func remove_dz_jm():
 	if forge != null:
 		forge.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_forge_panel")
 		forge.queue_free()
 
 
@@ -261,7 +261,7 @@ func remove_cg_jm() -> void:
 func remove_sz_jm() -> void:
 	if is_instance_valid(divine_forge):
 		divine_forge.remove_infomation()
-		MemoryClass.save_game(Global.cd_path)
+		MemoryClass.request_save("ldl_divine_panel")
 		divine_forge.queue_free()
 	divine_forge = null
 

@@ -290,7 +290,7 @@ func on_press_when_synthesis():
 			elif get_tt == "法宝":
 				return
 			PlayerData.player_data["放入列表"]["物品" + str(num)].clear()
-			MemoryClass.save_game(Global.cd_path)
+			MemoryClass.request_save("back_pack_box_synthesis")
 			return
 
 
@@ -586,7 +586,7 @@ func _on_pressed() -> void:
 					on_press_whenfj()
 				"打造":
 					on_press_when_dz()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_box_action")
 
 
 func _on_mouse_entered() -> void:

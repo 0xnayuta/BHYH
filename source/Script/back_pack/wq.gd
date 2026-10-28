@@ -242,7 +242,7 @@ func _on_pressed() -> void:
 	RoleProp.get_last_prop()
 	if is_instance_valid(RoleProp.source_player):
 		RoleProp.source_player.on_eqchange()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_magic_change")
 
 
 func _on_mouse_entered() -> void:

@@ -278,7 +278,7 @@ func remove_infomation():
 		if item_name != "" and AE.all_equipment.has(item_name):
 			PlayerData.add_dj(item_name, 1)
 	bz_list.clear()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("ldl_forge_remove")
 
 
 func remove_all_bspic():

@@ -200,8 +200,7 @@ func _on_confirm_pressed() -> void:
 		enabled_data = enabled_value.duplicate(true)
 	enabled_data[skill_id] = true
 	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled_data
-	if str(Global.cd_path) != "":
-		MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("skill_awaken_confirm")
 	_refresh_awaken_state()
 	var skill_display_name := (
 		"雷霆劫阵"
@@ -341,5 +340,4 @@ func _on_awaken_enabled_toggled(enabled: bool) -> void:
 		enabled_data = enabled_value.duplicate(true)
 	enabled_data[skill_id] = enabled
 	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled_data
-	if str(Global.cd_path) != "":
-		MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("skill_awaken_toggle")

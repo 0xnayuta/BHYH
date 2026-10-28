@@ -287,7 +287,7 @@ classDiagram
 - `_prepare_player_save_data()` 先 `LocalCoop.suspend_player_view()` 恢复 1P 主视图，再生成快照并写入 2P profile；此前有交换时最后恢复视图。不能在 2P 视图激活时无保护地直接序列化 `PlayerData.player_data`。
 - 稳定密钥保存在 `user://.save_key`，兼容读取会依次尝试稳定密钥与历史密钥；
 - **不建立按版本号递增的通用迁移链**：旧 `user://` 目录、旧任务键与旧配置不迁移；缺失的新字段用默认值补全，非法/不可读档明确失败，不回退到“猜测结构”；
-- 业务保存优先使用 `MemoryClass.request_save(reason)`：路径由持久化边界从 `Global.cd_path` 解析，业务不再拼路径；16-2A 首批已迁移 17 处，剩余 `save_game` 调用随面板回调批次继续迁移；
+- 业务保存优先使用 `MemoryClass.request_save(reason)`：路径由持久化边界从 `Global.cd_path` 解析，业务不再拼路径；16-2A 首批与第二批合计迁移 75 处（面板三批：`back_pack` 25、`skill` 18、`ldl` 15），剩余 43 处 `save_game` 按主菜单、关卡与其余业务分批继续迁移；
 - `load_game` 中允许存在**有限、幂等**的字段规范化/退役清理（例如道具存储迁移、已退役装备清理），但它们不是通用版本迁移框架，新增迁移必须评估幂等性与失败语义。
 - Phase 16-1 的保存入口、档案身份、会话字段、直接写入分域、补全清单与视图交换事实见 [`archive_session_matrix.md`](archive_session_matrix.md)。
 

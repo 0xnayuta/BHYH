@@ -232,7 +232,7 @@ func perform_onekey_synthesis(target_dan_name: String, times: int):
 			return
 
 	PlayerData.add_dj(target_dan_name, times)
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("ldl_one_key_synthesis")
 	Global.add_message_show(
 		Global.windows,
 		"一键合成成功！获得 " + AE.all_equipment[target_dan_name][DataKeys.NAME] + " x" + str(times),

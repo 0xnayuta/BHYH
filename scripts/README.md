@@ -145,7 +145,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 
 该目录只服务于回归测试，不应移入 `source/`，也不应加入日常生产构建。
 
-`archive_probes/` 存放档案持久化定向探针（缺失/空/损坏档、备份恢复、原子写、角色范围与 `request_save`）。`archive_probe_runner.py` 用 `--scene` 启动并把 `APPDATA`/`XDG_DATA_HOME` 指向临时目录，探针退出后删除 fixture 与临时用户目录；探针主动触发的校验拒绝日志在 runner 中按白名单排除，其它 ERROR/WARNING 仍判失败。
+`archive_probes/` 存放档案持久化定向探针（缺失/空/损坏档、备份恢复、原子写、角色范围、`request_save` 与背包/技能/炼体/合成面板真实写盘）。`archive_probe_runner.py` 用 `--scene` 启动并把 `APPDATA`/`XDG_DATA_HOME` 指向临时目录，探针退出后删除 fixture 与临时用户目录；探针主动触发的校验拒绝日志在 runner 中按白名单排除，其它 ERROR/WARNING 仍判失败。
 
 `scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`）。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
 

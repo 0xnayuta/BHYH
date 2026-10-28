@@ -98,7 +98,7 @@ func _on_lock_pressed() -> void:
 		return
 	(data as Dictionary)["锁定"] = not bool((data as Dictionary).get("锁定", false))
 	eq_prop = data
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_lock")
 	_refresh_lock_button()
 
 
@@ -309,7 +309,7 @@ func _on_equ_pressed() -> void:
 	RoleProp.get_last_prop()
 	if is_instance_valid(RoleProp.source_player):
 		RoleProp.source_player.on_eqchange()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_equip")
 	queue_free()
 
 
@@ -355,7 +355,7 @@ func _on_sell_pressed() -> void:
 
 	var get_value = AE.all_equipment[_get_name]["售价"]
 	PlayerData.add_soul(get_value)
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_sell")
 	PlayerData.remove_zb(page, number)
 	PlayerData.zl_zb()
 	queue_free()
@@ -407,7 +407,7 @@ func sell():
 		return
 	var get_value = AE.all_equipment[_get_name]["售价"]
 	PlayerData.add_soul(get_value)
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_sell")
 	PlayerData.remove_zb(page, number)
 	PlayerData.zl_zb()
 

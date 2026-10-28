@@ -149,7 +149,7 @@ func _on_sz_pressed() -> void:
 	else:
 		_show_message("淬骨失败，材料已消耗。")
 	_refresh_backpack()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("ldl_bone_forge")
 
 
 func _read_selected_equipment(selected: Dictionary) -> Dictionary:

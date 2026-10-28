@@ -737,7 +737,7 @@ func refresh_infor():
 	set_skill_level()
 	set_skill_lh()
 	set_skill_mp_cost()
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("skill_refresh")
 
 
 func skill10_xz(Level):
@@ -1085,7 +1085,7 @@ func _on_hmz_version_selected(id: int):
 		return
 
 	PlayerData.player_data[data_key] = id
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("skill_variant_select")
 
 	current_variant[skill_internal] = id
 

@@ -66,7 +66,7 @@ func _on_qd_pressed() -> void:
 				coin_number += value
 	if coin_number > 0:
 		Global.add_message_show(get_parent(), "卖出成功！!获得：" + str(coin_number) + "灵魂。", 1.5, Vector2(-240, 150))
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_sell")
 
 
 func _on_pt_pressed() -> void:
@@ -211,7 +211,7 @@ func _on_sell_all_pressed():
 	else:
 		Global.add_message_show(get_parent(), "没有可出售的装备", 1.5, Vector2(-240, 150))
 
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("back_pack_sell_all")
 
 
 func _on_close_pressed() -> void:
