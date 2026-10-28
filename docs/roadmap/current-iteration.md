@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；Phase 16-1 至 Phase 16-6 规划中，尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；Phase 16-1 调用面矩阵已完成，Phase 16-2 至 16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -32,11 +32,11 @@
 
 | 边界 | 当前事实 | 本阶段取证要求 |
 |:---|:---|:---|
-| 存档写入面 | `MemoryClass.save_game(path)` 有 **118 处调用、60 个文件**；`Global.cd_path` 有 **149 处引用、62 个文件**；`request_background_save` 仅 `base_monster.gd` 1 处调用 | 16-1 枚举全部写入者、调用场景、失败处理与重复保存风险 |
+| 存档写入面 | `MemoryClass.save_game(path)` 有 **118 处调用、60 个文件**；`Global.cd_path` 有 **149 行 / 152 次出现、62 个文件**（写入 3 行）；`request_background_save` 仅 `base_monster.gd` 1 处调用 | 16-1 枚举全部写入者、调用场景、失败处理与重复保存风险 |
 | 档案路径身份 | 唯一格式为 `user://MyAr_<n>.json`；路径字符串 `Global.cd_path` 是事实上的会话标识，没有独立会话对象 | 16-2/16-3 定义会话身份、保存顺序与过期写入拒绝 |
-| 直接数据访问 | `PlayerData.player_data` 有 **1,288 行引用、119 个文件**，其中 **156 行直接下标写入、40 个文件** | 16-4/16-5 按业务域收口；不建立一次性全量重写前置 |
+| 直接数据访问 | `PlayerData.player_data` 有 **1,288 行引用、119 个文件**；直接写入 **141 行、44 个文件**（129 赋值 + 12 复合赋值 + 1 删除；27 行 `==` 比较不计入） | 16-4/16-5 按业务域收口；不建立一次性全量重写前置；明细见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) |
 | 存档校验 | `_is_valid_player_archive_data` 只要求 `玩家等级`、`Myself` 与三个容器首页；云导入校验 `Myself` 为 **1..6**，运行时角色支持 **1..7**（含玉兔） | 16-2 记录该不一致并按现有实现评审，不在本阶段静默改格式 |
-| 规范化补全 | `PlayerData` 有 **20 个 `ensure_*` / `normalize_*` / `migrate_*` 入口**，由 `_prepare_primary_player_save_data` 串行调用 | 16-2 明确幂等边界与失败可见性，禁止把补全失败当成功 |
+| 规范化补全 | `PlayerData` 有 **20 个 `ensure_*` / `normalize_*` / `migrate_*` 入口**（另有 `enforce_level_caps`），由 `_prepare_primary_player_save_data` 串行调用 | 16-2 明确幂等边界与失败可见性，禁止把补全失败当成功 |
 | 后台保存 | `_save_thread` 单线程 + 待写队列 + 失败保留快照；`flush_pending_saves` 在 `_notification` 与 `_exit_tree` 调用 | 16-2 验证顺序、切档、退出与失败重试；不允许静默丢写 |
 | 档案会话 | `archive_session_active`、`archive_session_role_id`、`_archive_session_generation`、`_runtime_generation` 由 `Global` 持有；退出场景仅 `main_menu.tscn` 与 `choose_player.tscn` | 16-3 定义会话上下文与存档身份校验，保留现有退出语义 |
 | 双人槽位 | `LocalCoop` 提供 `slot_for`/`data_for`/`props_for`/`canonical_profile_for_slot`；`BAG_KEYS` 共享、`save_profile` 剥离共享键；槽位解析顺序 meta → 祖先 `coop_slot` → `owner_hero()` → 脚本前缀 → 1 | 16-4 校验共享/个体边界与冲突合并规则，保留业务语义 |
@@ -45,7 +45,7 @@
 
 Phase 16 的前置调查只确认现状，不把目标语义写成已实现。共享/个体规则、存档格式与可靠性策略是**不变量**，任何变更需另立 ADR。
 
-## 2. Phase 16-1：档案、持久化与槽位调用面矩阵（只读调查）
+## 2. Phase 16-1：档案、持久化与槽位调用面矩阵（只读调查，已完成）
 
 **目标**：在不改运行时代码的前提下，建立存档读写、档案会话、玩家槽位与面板数据视图的完整调用面，确定每个状态的所有者、写入者、失败边界与迁移批次。
 
@@ -80,6 +80,8 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 - 直接写入按业务域分类，标出迁移候选与不迁移理由；
 - 视图交换的调用面完整，保存快照与面板生命周期的互斥关系可验证；
 - 仅文档与只读报告，不改生产代码；结果进入 `docs/reference/archive_session_matrix.md` 与 `docs/reference/status.md`。
+
+**结果**：已完成（2026-10-28），见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)。调查同时更正了本页 §1.3 的直接写入口径：实际为 141 行 / 44 文件。
 
 ## 3. Phase 16-2：存档 IO 边界与保存顺序
 
@@ -214,7 +216,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
-| Phase 16-1 调用面矩阵 | 全量引用、owner/写入者/失败表、链接与格式；结果见 `archive_session_matrix.md` | 引擎、关卡回归不因只读调查复跑 |
+| Phase 16-1 调用面矩阵 | 已完成：全量引用、owner/写入者/失败表、链接与格式；结果见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) | 引擎、关卡回归不因只读调查复跑 |
 | Phase 16-2 存档 IO | 当前格式读写、缺字段补全、损坏档拒绝、备份恢复、保存顺序与退出 flush；定向存档夹具 | 只测新档或只编译不等于持久化正确 |
 | Phase 16-3 会话上下文 | 切档、角色变化、不可读档拒绝、会话结束重入、退出清理 | 只改一个入口不覆盖全部读档路径 |
 | Phase 16-4 槽位与共享账本 | `coop_probe_runner` 全部用例；共享/个体写入归属；切档后无残留 | 单测 1P 或只测 UI 不等于双人正确 |

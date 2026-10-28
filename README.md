@@ -110,6 +110,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/reference/architecture.md`](docs/reference/architecture.md) | 运行时架构：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
 | [`docs/reference/atlas_metadata_schema.md`](docs/reference/atlas_metadata_schema.md) | Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View 与边界守卫 |
 | [`docs/reference/runtime_lifecycle_matrix.md`](docs/reference/runtime_lifecycle_matrix.md) | Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理 |
+| [`docs/reference/archive_session_matrix.md`](docs/reference/archive_session_matrix.md) | Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份、会话字段、直接写入分域、补全清单与面板视图交换 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
@@ -117,7 +118,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 16 档案会话、持久化与玩家槽位：16-1 调用面矩阵、16-2 存档 IO 边界与保存顺序、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口；规划中 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 16 档案会话、持久化与玩家槽位：16-1 调用面矩阵已完成；16-2 至 16-6 规划中 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |

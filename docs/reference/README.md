@@ -9,6 +9,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`architecture.md`](architecture.md) | **当前运行时架构**：应用/Autoload、场景流、战斗、档案/双人、资源、UI/输入及与目标的遗留差距 |
+| [`archive_session_matrix.md`](archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位与面板视图交换的当前所有者与失败边界 |
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
 | [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | **Phase 14 矩阵与试点**：AtlasMetadata 生产者、源形态、消费者、View 与失败边界 |
 | [`acceptance.md`](acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具、阈值与分变更矩阵 |
