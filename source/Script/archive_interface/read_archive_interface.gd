@@ -659,7 +659,7 @@ func _on_delete_pressed() -> void:
 
 func _remove_save_data():
 	remove_data()
-	var archive_path: String = "user://MyAr_" + cd_number.text + ".json"
+	var archive_path: String = "user://MyAr_" + str(int(cd_number.text)) + ".json"
 	if not MemoryClass.safe_write_archive(archive_path, initialized_data):
 		Global.add_message_show(self, "存档重置失败，请重试", 1.5, Vector2(470, 300))
 		return

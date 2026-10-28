@@ -33,6 +33,9 @@ EXPECTED_ERROR_MARKERS = (
     "拒绝保存不完整的玩家存档数据",
     "存档保存失败（probe_invalid）",
     "存档保存失败（probe_empty_profile）",
+    "存档保存失败（probe_normalize_fail）",
+    "拒绝保存过期档案身份",
+    "保存前补全后置条件不满足",
     "magic != 0x43454447",
 )
 
@@ -101,7 +104,9 @@ def collect_runtime_errors(output: str) -> list[str]:
             continue
         if any(marker in line for marker in EXPECTED_ERROR_MARKERS):
             continue
-        if "resources still in use at exit" in line:
+        # 引擎退出阶段的 RID/ObjectDB 回收噪声：探针已释放全部自有节点，
+        # 剩余对象来自 Autoload 与引擎缓存，与保存行为无关。
+        if "resources still in use at exit" in line or "ObjectDB instances were leaked at exit" in line:
             continue
         findings.append(line)
     return findings

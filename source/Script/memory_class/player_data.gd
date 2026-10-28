@@ -3459,6 +3459,7 @@ func ensure_pet_tiger() -> bool:
 	if not has_tiger:
 		var tiger := PET_TIGER_PET.duplicate(true)
 		_normalize_pet_passives(tiger)
+		_normalize_pet_tiger(tiger)
 		pets.append(tiger)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3525,6 +3526,7 @@ func ensure_pet_dragon() -> bool:
 	if not has_dragon:
 		var dragon := PET_DRAGON_PET.duplicate(true)
 		_normalize_pet_passives(dragon)
+		_normalize_pet_dragon(dragon)
 		pets.append(dragon)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3593,6 +3595,7 @@ func ensure_pet_turtle() -> bool:
 	if not has_turtle:
 		var turtle := PET_TURTLE_PET.duplicate(true)
 		_normalize_pet_passives(turtle)
+		_normalize_pet_turtle(turtle)
 		pets.append(turtle)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3662,6 +3665,7 @@ func ensure_pet_rabbit() -> bool:
 	elif bool(player_data.get(PET_RABBIT_UNLOCK_KEY, false)):
 		var rabbit := PET_RABBIT_PET.duplicate(true)
 		_normalize_pet_passives(rabbit)
+		_normalize_pet_rabbit(rabbit)
 		pets.append(rabbit)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3812,6 +3816,7 @@ func ensure_pet_neat() -> bool:
 	if not found:
 		var neat := PET_NEAT_PET.duplicate(true)
 		_normalize_pet_passives(neat)
+		_normalize_pet_neat(neat)
 		pets.append(neat)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3833,6 +3838,7 @@ func ensure_pet_yin_tiger() -> bool:
 	if not found:
 		var yin_tiger := PET_YIN_TIGER_PET.duplicate(true)
 		_normalize_pet_passives(yin_tiger)
+		_normalize_pet_yin_tiger(yin_tiger)
 		pets.append(yin_tiger)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
@@ -3925,6 +3931,7 @@ func ensure_pet_phoenix() -> bool:
 	if not has_phoenix:
 		var phoenix := PET_PHOENIX_PET.duplicate(true)
 		_normalize_pet_passives(phoenix)
+		_normalize_pet_phoenix(phoenix)
 		pets.append(phoenix)
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""

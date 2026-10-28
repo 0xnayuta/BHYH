@@ -68,7 +68,7 @@ func _ready() -> void:
 	if MainSet.set_data.has("FileValue"):
 		if float(MainSet.set_data["FileValue"]) < float(Global.file_num):
 			MainSet.set_data["FileValue"] = Global.file_num
-	Global.cd_path = ""
+	Global.set_cd_path("")
 	Global.collect_num = 0
 	Global.llbt_level = 1
 	Global.llbtbossms = false

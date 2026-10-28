@@ -235,7 +235,7 @@ func _on_role_card_mouse_exited(role_id: int) -> void:
 
 
 func _on_return_main_menu_pressed() -> void:
-	Global.cd_path = ""
+	Global.set_cd_path("")
 	Global.change_scene("res://Scene/main_menu/main_menu.tscn")
 
 
@@ -252,7 +252,7 @@ func _on_qued_pressed() -> void:
 		LocalCoop.clear_runtime()
 		PlayerData.player_data.erase(LocalCoop.SAVE_KEY)
 	if not MemoryClass.request_save("choose_player"):
-		Global.add_message_show(self, "存档保存失败，请重试", 1.5, Vector2(470, 340))
+		Global.add_message_show(self, MemoryClass.describe_save_error(), 2.0, Vector2(470, 340))
 		return
 	await Global.begin_archive_session()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")

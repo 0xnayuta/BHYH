@@ -37,7 +37,7 @@ func _reset_state() -> void:
 	data.player_data.clear()
 	data.player_data.merge(data.initialized_data.duplicate(true))
 	data.player_data["Myself"] = 1
-	global.cd_path = ""
+	global.set_cd_path("")
 
 
 func _make_stage() -> void:

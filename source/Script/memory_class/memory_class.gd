@@ -24,6 +24,9 @@ const ARCHIVE_CONTAINER_KEYS := ["装备列表", "道具列表", "消耗品列�
 const ARCHIVE_TIME_KEY: String = "存档时间"
 
 signal background_save_finished(path: String, success: bool)
+## 最近一次保存失败的程序化原因（"" 表示最近一次成功或尚未保存）。
+## 取值：invalid_archive_path / stale_archive_identity / normalize_failed:<键> / invalid_archive_data / write_failed
+var last_save_error: String = ""
 var _save_thread: Thread
 var _active_save_job: Dictionary = {}
 var _pending_background_saves: Dictionary = {}
@@ -33,6 +36,10 @@ var _save_flush_in_progress := false
 
 func request_background_save(path: String) -> bool:
 	if _archive_number_from_path(path) <= 0:
+		last_save_error = "invalid_archive_path"
+		return false
+	if not is_archive_identity_current(path, Global.get_archive_identity_epoch()):
+		last_save_error = "stale_archive_identity"
 		return false
 	var snapshot := _prepare_player_save_data()
 	if snapshot.is_empty():
@@ -40,7 +47,12 @@ func request_background_save(path: String) -> bool:
 	var password := _ensure_stable_key()
 	if password.is_empty():
 		return false
-	var job := {"path": path, "data": snapshot, "password": password}
+	var job := {
+		"path": path,
+		"data": snapshot,
+		"password": password,
+		"generation": Global.get_archive_identity_epoch(),
+	}
 	_failed_background_saves.erase(path)
 
 	_pending_background_saves[path] = job
@@ -57,9 +69,10 @@ static func _write_background_save(job: Dictionary) -> bool:
 func _start_next_background_save() -> void:
 	if _save_thread != null or _pending_background_saves.is_empty() or _save_flush_in_progress:
 		return
-	var path := str(_pending_background_saves.keys()[0])
-	_active_save_job = _pending_background_saves[path]
-	_pending_background_saves.erase(path)
+	var job := _take_current_background_job()
+	if job.is_empty():
+		return
+	_active_save_job = job
 	_save_thread = Thread.new()
 	var error := _save_thread.start(_write_background_save.bind(_active_save_job))
 	if error != OK:
@@ -69,8 +82,24 @@ func _start_next_background_save() -> void:
 		_complete_background_save(failed_job, false)
 
 
+## 取出第一个仍属于当前档案身份的任务；过期任务直接丢弃，不回写旧档案。
+func _take_current_background_job() -> Dictionary:
+	while not _pending_background_saves.is_empty():
+		var path := str(_pending_background_saves.keys()[0])
+		var job: Dictionary = _pending_background_saves[path]
+		_pending_background_saves.erase(path)
+		if is_archive_identity_current(path, int(job.get("generation", -1))):
+			return job
+	return {}
+
+
 func _complete_background_save(job: Dictionary, success: bool) -> void:
 	var path := str(job["path"])
+	var identity_current := is_archive_identity_current(path, int(job.get("generation", -1)))
+	if not identity_current:
+		# 切档后旧任务到达：拒绝回写元数据，也不进入失败重试队列。
+		background_save_finished.emit(path, false)
+		return
 	if success:
 		_failed_background_saves.erase(path)
 		if is_instance_valid(MainSet):
@@ -106,9 +135,9 @@ func flush_pending_saves() -> bool:
 	_save_flush_in_progress = true
 	_collect_background_save()
 	while not _pending_background_saves.is_empty():
-		var path := str(_pending_background_saves.keys()[0])
-		var job: Dictionary = _pending_background_saves[path]
-		_pending_background_saves.erase(path)
+		var job := _take_current_background_job()
+		if job.is_empty():
+			break
 		_complete_background_save(job, _write_background_save(job))
 
 	for path in _failed_background_saves.keys():
@@ -251,8 +280,9 @@ var keys = "zmxybhyh" + OS.get_unique_id() + "v1.1"
 ## 统一保存入口：业务只提交保存意图，路径与失败结果由持久化边界处理。
 ## reason 仅用于失败诊断，不参与路径解析或档案内容。
 func request_save(reason: String = "") -> bool:
-	var archive_path: String = str(Global.cd_path).strip_edges()
+	var archive_path: String = Global.get_cd_path().strip_edges()
 	if _archive_number_from_path(archive_path) <= 0:
+		last_save_error = "invalid_archive_path"
 		return false
 	if save_game(archive_path):
 		return true
@@ -260,17 +290,39 @@ func request_save(reason: String = "") -> bool:
 	return false
 
 
+## 会话身份是否仍然有效：路径、档案编号与会话代次必须同时匹配。
+func is_archive_identity_current(path: String, generation: int) -> bool:
+	if generation < 0 or generation != Global.get_archive_identity_epoch():
+		return false
+	return _archive_number_from_path(Global.get_cd_path().strip_edges()) == _archive_number_from_path(path)
+
+
 func save_game(path: String) -> bool:
 	flush_pending_saves()
 	var archive_path: String = str(path)
 	var archive_number: int = _archive_number_from_path(archive_path)
 	if archive_number <= 0:
+		last_save_error = "invalid_archive_path"
+		return false
+	var generation: int = Global.get_archive_identity_epoch()
+	if not is_archive_identity_current(archive_path, generation):
+		# 调用方持有的路径已不是当前档案：拒绝回写，避免切档后覆盖新档。
+		last_save_error = "stale_archive_identity"
+		push_warning("拒绝保存过期档案身份：%s" % archive_path)
 		return false
 	var save_data := _prepare_player_save_data()
 	if save_data.is_empty():
+		if last_save_error == "":
+			last_save_error = "invalid_archive_data"
+		return false
+	if not is_archive_identity_current(archive_path, generation):
+		last_save_error = "stale_archive_identity"
+		push_warning("快照生成期间档案身份变化，放弃写入：%s" % archive_path)
 		return false
 	if not safe_write_archive(archive_path, save_data):
+		last_save_error = "write_failed"
 		return false
+	last_save_error = ""
 	_failed_background_saves.erase(archive_path)
 	_set_archive_time(archive_number, str(save_data[ARCHIVE_TIME_KEY]))
 	if not main_bc():
@@ -278,7 +330,27 @@ func save_game(path: String) -> bool:
 	return true
 
 
+## 保存失败的可读描述：供 UI 直接展示，不需要解析日志。
+func describe_save_error() -> String:
+	match last_save_error:
+		"":
+			return ""
+		"invalid_archive_path":
+			return "当前没有可写入的档案，请先进入存档。"
+		"stale_archive_identity":
+			return "档案已切换，本次保存已取消。"
+		"invalid_archive_data":
+			return "当前数据不完整，已拒绝保存。"
+		"write_failed":
+			return "写入存档失败，请检查磁盘空间后重试。"
+		_:
+			if last_save_error.begins_with("normalize_failed:"):
+				return "数据补全失败（%s），已拒绝保存。" % last_save_error.trim_prefix("normalize_failed:")
+			return "保存失败：%s" % last_save_error
+
+
 func _prepare_player_save_data() -> Dictionary:
+	last_save_error = ""
 	var swapped := LocalCoop.suspend_player_view()
 	var snapshot := _prepare_primary_player_save_data()
 	if not snapshot.is_empty():
@@ -289,39 +361,105 @@ func _prepare_player_save_data() -> Dictionary:
 	return snapshot
 
 
+## 规范化补全步骤：名字 -> 可调用对象。补全必须幂等；任一步抛错或返回
+## 显式失败时阻止保存，避免"补全失败但写入成功"。
+func _normalization_steps() -> Array:
+	return [
+		["normalize_soul", PlayerData],
+		["ensure_acquired_equipment_data", PlayerData],
+		["migrate_consumables_from_dj_to_xhp", PlayerData],
+		["ensure_player_passive_skills", PlayerData],
+		["_remove_retired_wudu_magic_weapons", PlayerData],
+		["ensure_special_dungeon_progress", PlayerData],
+		["ensure_main_sword_array", PlayerData],
+		["ensure_wanling_catalog_data", PlayerData],
+		["ensure_mount_data", PlayerData],
+		["ensure_pet_tiger", PlayerData],
+		["ensure_pet_dragon", PlayerData],
+		["ensure_pet_phoenix", PlayerData],
+		["ensure_pet_turtle", PlayerData],
+		["ensure_pet_rabbit", PlayerData],
+		["ensure_pet_neat", PlayerData],
+		["ensure_pet_yin_tiger", PlayerData],
+		["ensure_shared_pet_backpack", PlayerData],
+		# 等级上限必须最后执行：ensure_pet_* 会补出新宠物，
+		# 先钳制会让这些宠物在第一次保存时保留未钳制的等级/经验，破坏幂等。
+		["enforce_level_caps", PlayerData],
+	]
+
+
+## 补全是否可用只由返回值之外的**后置条件**判定：补全入口多为 void 或
+## "是否新增"语义（`ensure_pet_*` 返回 false 表示已存在），返回值无法表达失败。
+## 因此这里只检查方法存在性，正确性交给 `_normalization_postcondition_error()`。
+func _run_normalization_step(step_name: String, target: Object) -> bool:
+	if target == null or not target.has_method(step_name):
+		last_save_error = "normalize_failed:" + step_name
+		push_error("保存前补全缺少入口：%s" % step_name)
+		return false
+	target.call(step_name)
+	return true
+
+
+## 补全后的结构后置条件。任一项不满足即视为补全失败，保存必须被阻止。
+func _normalization_postcondition_error() -> String:
+	var data: Dictionary = PlayerData.player_data
+	for key in ARCHIVE_CONTAINER_KEYS:
+		var container = data.get(key, null)
+		if not (container is Dictionary) or not ((container as Dictionary).get("页码1", null) is Array):
+			return "containers"
+	var pets = data.get(PlayerData.PET_LIST_KEY, null)
+	if not (pets is Array):
+		return "pets"
+	var player_level := int(data.get(DataKeys.PLAYER_LEVEL, 1))
+	for pet in pets:
+		if not (pet is Dictionary):
+			return "pets"
+		if int((pet as Dictionary).get(DataKeys.LEVEL, 1)) > player_level:
+			return "pets"
+	var pet_backpack = data.get(PlayerData.PET_BACKPACK_KEY, null)
+	if not (pet_backpack is Array):
+		return "pet_backpack"
+	var mounts = data.get(PlayerData.MOUNT_LIST_KEY, null)
+	if not (mounts is Array) or (mounts as Array).is_empty():
+		return "mounts"
+	var passives = data.get(DataKeys.Skill.PASSIVE, null)
+	if not (passives is Dictionary):
+		return "passives"
+	for skill_name in PlayerData.PLAYER_PASSIVE_SKILL_KEYS:
+		if not (passives as Dictionary).has(skill_name):
+			return "passives"
+	var sword_levels = data.get(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY, null)
+	if not (sword_levels is Dictionary):
+		return "main_sword_array"
+	var catalog = data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, null)
+	if not (catalog is Dictionary) or (catalog as Dictionary).is_empty():
+		return "wanling_catalog"
+	if not (data.get("已获取装备列表", null) is Array):
+		return "acquired_equipment"
+	if int(data.get(DataKeys.PLAYER_LEVEL, -1)) < 1:
+		return "player_level"
+	return ""
+
+
 func _prepare_primary_player_save_data() -> Dictionary:
 	if not _is_valid_player_archive_data(PlayerData.player_data):
 		push_error("拒绝保存无效的玩家存档数据")
+		last_save_error = "invalid_archive_data"
 		return {}
-	PlayerData.normalize_soul()
-	PlayerData.ensure_acquired_equipment_data()
-	PlayerData.migrate_consumables_from_dj_to_xhp()
-	PlayerData.ensure_player_passive_skills()
-	PlayerData._remove_retired_wudu_magic_weapons()
-	if PlayerData.has_method("ensure_special_dungeon_progress"):
-		PlayerData.ensure_special_dungeon_progress()
-	if PlayerData.has_method("ensure_main_sword_array"):
-		PlayerData.ensure_main_sword_array()
-	if PlayerData.has_method("ensure_wanling_catalog_data"):
-		PlayerData.ensure_wanling_catalog_data()
-	if PlayerData.has_method("ensure_mount_data"):
-		PlayerData.ensure_mount_data()
-	PlayerData.enforce_level_caps()
-	PlayerData.ensure_pet_tiger()
-	PlayerData.ensure_pet_dragon()
-	PlayerData.ensure_pet_phoenix()
-	PlayerData.ensure_pet_turtle()
-	PlayerData.ensure_pet_rabbit()
-	if PlayerData.has_method("ensure_pet_neat"):
-		PlayerData.ensure_pet_neat()
-	if PlayerData.has_method("ensure_pet_yin_tiger"):
-		PlayerData.ensure_pet_yin_tiger()
-	if PlayerData.has_method("ensure_shared_pet_backpack"):
-		PlayerData.ensure_shared_pet_backpack()
+	for step in _normalization_steps():
+		if not _run_normalization_step(str(step[0]), step[1]):
+			push_error("保存前补全失败，已阻止写入：%s" % step[0])
+			return {}
+	var postcondition_error := _normalization_postcondition_error()
+	if postcondition_error != "":
+		last_save_error = "normalize_failed:" + postcondition_error
+		push_error("保存前补全后置条件不满足，已阻止写入：%s" % postcondition_error)
+		return {}
 
 	var save_data: Dictionary = PlayerData.player_data.duplicate(true)
 	if not _is_valid_player_archive_data(save_data):
 		push_error("拒绝保存不完整的玩家存档数据")
+		last_save_error = "invalid_archive_data"
 		return {}
 	save_data[ARCHIVE_TIME_KEY] = get_time()
 	return save_data
@@ -588,16 +726,14 @@ func get_time():
 	return last_time
 
 
-func get_cd_number():
-	if Global.cd_path == null:
-		return "1"
-	var number: int = _archive_number_from_path(str(Global.cd_path))
+func get_cd_number() -> String:
+	var number: int = _archive_number_from_path(Global.get_cd_path())
 	return str(number) if number > 0 else "1"
 
 
 func remove_data():
 	initialized_data = PlayerData.initialized_data.duplicate(true)
-	remove_main_data(get_cd_number())
+	remove_main_data(int(get_cd_number()))
 
 	MemoryClass.main_bc()
 

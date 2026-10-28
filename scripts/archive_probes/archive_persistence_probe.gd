@@ -254,6 +254,8 @@ func _test_panel_saves() -> void:
 	await get_tree().process_frame
 
 	await _check_main_menu_saves()
+	await _check_save_identity_and_normalization()
+	await _check_reward_and_menu_saves()
 
 
 ## 主菜单批次：直接调用地图页与各功能页的真实保存处理器，回读加密档案确认已落盘。
@@ -261,7 +263,6 @@ func _check_main_menu_saves() -> void:
 	_reset_profile(1, 5)
 	Global.cd_path = PANEL_ARCHIVE_PATH
 	MemoryClass.request_save("probe_main_seed")
-	await _check_reward_and_menu_saves()
 	var popup_layer := CanvasLayer.new()
 	add_child(popup_layer)
 	Global.windows = popup_layer
@@ -310,6 +311,83 @@ func _check_main_menu_saves() -> void:
 	Global.windows = null
 	await get_tree().process_frame
 	await get_tree().process_frame
+
+
+## 16-2B：保存身份纪元、切档前 flush 与过期回写拒绝。
+## 16-2D：规范化补全幂等，后置条件不满足时阻止写入。
+func _check_save_identity_and_normalization() -> void:
+	var path_a := TEST_ARCHIVE_PREFIX + "021.json"
+	var path_b := TEST_ARCHIVE_PREFIX + "022.json"
+	_reset_profile(1, 7)
+	Global.set_cd_path(path_a)
+	_check("identity_save_a", MemoryClass.request_save("probe_identity_a"))
+	var epoch_a := Global.get_archive_identity_epoch()
+	Global.set_cd_path(path_b)
+	var epoch_b := Global.get_archive_identity_epoch()
+	_check("identity_epoch_advances", epoch_b > epoch_a, "%d -> %d" % [epoch_a, epoch_b])
+	_check("identity_current_for_b", MemoryClass.is_archive_identity_current(path_b, epoch_b))
+	_check("identity_stale_for_a", not MemoryClass.is_archive_identity_current(path_a, epoch_b))
+	var stale_written := MemoryClass.save_game(path_a)
+	_check("identity_stale_write_rejected", not stale_written, "written=%s" % stale_written)
+	_check("identity_error_reason", MemoryClass.last_save_error == "stale_archive_identity", MemoryClass.last_save_error)
+	_check("identity_error_readable", MemoryClass.describe_save_error() != "")
+
+	# 切档前 flush：旧档案的待写任务在身份切换前落盘。
+	_reset_profile(1, 8)
+	Global.set_cd_path(path_a)
+	_check("identity_flush_queue_enqueued", MemoryClass.request_background_save(path_a))
+	Global.set_cd_path(path_b)
+	_check(
+		"identity_switch_flushed_old_archive",
+		MemoryClass.get_archive_level(path_a) == 8,
+		"level=%s" % MemoryClass.get_archive_level(path_a)
+	)
+
+	# 16-2D 幂等：连续两次准备快照，除时间外内容一致。
+	_reset_profile(1, 5)
+	Global.set_cd_path(path_b)
+	var first := MemoryClass._prepare_player_save_data()
+	var second := MemoryClass._prepare_player_save_data()
+	first.erase(MemoryClass.ARCHIVE_TIME_KEY)
+	second.erase(MemoryClass.ARCHIVE_TIME_KEY)
+	var diff_keys := []
+	for key in first.keys():
+		if JSON.stringify(first[key]) != JSON.stringify(second.get(key)):
+			diff_keys.append(str(key))
+	for key in second.keys():
+		if not first.has(key):
+			diff_keys.append(str(key))
+	var pet_diff := ""
+	if not diff_keys.is_empty():
+		var pets_a: Array = first.get("宠物列表", [])
+		var pets_b: Array = second.get("宠物列表", [])
+		pet_diff += "size=%d/%d " % [pets_a.size(), pets_b.size()]
+		for index in mini(pets_a.size(), pets_b.size()):
+			var pet_a: Dictionary = pets_a[index]
+			var pet_b: Dictionary = pets_b[index]
+			for key in pet_a.keys():
+				if JSON.stringify(pet_a[key]) != JSON.stringify(pet_b.get(key)):
+					pet_diff += "[%d].%s(%s/%s) " % [index, key, str(pet_a[key]), str(pet_b.get(key))]
+			for key in pet_b.keys():
+				if not pet_a.has(key):
+					pet_diff += "[%d].+%s " % [index, key]
+	_check("normalize_idempotent", diff_keys.is_empty(), "diff=%s %s" % [str(diff_keys), pet_diff])
+	_check("normalize_ok_no_error", MemoryClass.last_save_error == "", MemoryClass.last_save_error)
+
+	# 16-2D 后置条件：宠物列表混入非字典元素时补全无法修复，保存必须被阻止。
+	_reset_profile(1, 5)
+	Global.set_cd_path(path_b)
+	_check("normalize_baseline_saved", MemoryClass.request_save("probe_normalize_baseline"))
+	PlayerData.player_data[PlayerData.PET_LIST_KEY].append("garbage")
+	var blocked := MemoryClass.request_save("probe_normalize_fail")
+	_check("normalize_failure_blocks_save", not blocked)
+	_check(
+		"normalize_failure_reason",
+		MemoryClass.last_save_error.begins_with("normalize_failed:"),
+		MemoryClass.last_save_error
+	)
+	_check("normalize_failure_not_written", MemoryClass.get_archive_level(path_b) == 5)
+	_reset_profile(1, 5)
 
 
 ## 关卡与收尾批次：验证结算界面与其余业务保存处理器确实经 request_save 落盘。

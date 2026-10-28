@@ -87,8 +87,8 @@ func _role_name(role_id: int) -> String:
 
 
 func _on_pressed() -> void:
-	Global.cd_path = "user://MyAr_" + str(archive_num) + ".json"
-	if not MemoryClass.load_game(Global.cd_path):
+	Global.set_cd_path("user://MyAr_" + str(archive_num) + ".json")
+	if not MemoryClass.load_game(Global.get_cd_path()):
 		return
 	if PlayerData.player_data.has("FileValue"):
 		if float(PlayerData.player_data["FileValue"]) <= float(Global.file_num):

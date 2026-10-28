@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16-1 矩阵、16-2A 全部 118 处、16-2C 已完成；16-2B/2D 未启动）
+> 最后更新：2026-10-29（Phase 16-1 矩阵、16-2A 全部 118 处、16-2B 身份与顺序、16-2C 校验、16-2D 补全边界已完成；16-3~16-6 未启动）
 
 ---
 
@@ -187,6 +187,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 16-2A 第三批（main_menu）/ 16-2C | `MemoryClass.request_save(reason)` 统一入口扩至 **94 处 / 43 文件**：第三批迁移 **19 处**（地图页手动保存 11、主城 1、地图 3 特殊按钮 1、真妖塔 2、主线剑阵 1、万灵图录 1、公告 1、挂机详情 1），`save_game` 由 43 降至 **24 处 / 18 文件 / 22 函数**。`level_selection` 场景探针 **PASS**（16.50s）；档案夹具新增 18 个主菜单真实处理器用例，总计 **52/52 PASS**；`coop_probe_runner` **16/16 PASS**；`level_1` **PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 16-2A 其余 24 处（关卡 11、Scene 3、其余 10）、16-2B 会话身份与保存顺序、16-2D 补全失败语义、16-3~16-6 未启动 |
 | 2026-10-29 Phase 16-2A 第四批（level）/ 16-2C | `MemoryClass.request_save(reason)` 统一入口扩至 **105 处 / 49 文件**：第四批迁移 **11 处**（`defeat` 4、`victory` 2、`hdzm` 1、`level_17` 1、`level_bxgh` 1、`level_esbxx` 1、`level_zhen_yao_tower` 1），`save_game` 由 24 降至 **13 处 / 11 文件 / 13 函数**。核实 `defeat`/`victory` 的 `_on_return_map_pressed` 两处保存为**互斥分支**（镇妖塔早返回 vs 地图末尾），每次点击只写一次，不需要去重；更正矩阵中原"重复保存"描述。`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **52/52 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 16-2A 其余 13 处（`Scene/other_scene` 3、`base` 2、`pet` 2、`shop` 2、`memory_class`/`monster`/`other_menu`/`task` 各 1）、16-2B 会话身份与保存顺序、16-2D 补全失败语义、16-3~16-6 未启动 |
 | 2026-10-29 Phase 16-2A 收尾批次 / 16-2C | 迁移剩余 **13 处** 业务 `save_game`：`reward_interface`、`transmogtified_box`、`base_monster`（后台失败兜底）、`base_role_properies`、`monster_130`、`c_hange_clothes_jm`、`pet_interface` 2、`cure_times_box`、`mystery_shop_item_box`、`basic_task`。业务侧 `save_game` 直调**归零**，`request_save` 达 **116 处 / 59 文件**。两处判定：`MemoryClass.remove()` 属持久化边界内部，末尾覆盖初始档的 `save_game` 直接删除（重置只写初始档，AS-09 关闭）；`reward_interface` 的 `_process` 与 `add_item_to_backpack` 重复保存合并为一次。`Global.cd_path` 降至 34 行 / 36 次 / 21 文件。档案夹具 **56/56 PASS**（新增奖励单次发放与升级落盘用例）；`level_1` **PASS**；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 16-2A 完成；16-2B 会话身份与保存顺序、16-2D 补全失败语义、16-3~16-6 未启动 |
+| 2026-10-29 Phase 16-2B 会话身份与顺序 / 16-2D 补全边界 | **16-2B**：新增 `Global.set_cd_path()` 唯一身份写入口与 `_archive_identity_epoch`（3 处直接赋值迁移）；`save_game` 快照前后校验「档案号 + epoch」，过期回写返回 `stale_archive_identity`；后台任务携带入队 epoch，切档后到达即丢弃；`set_cd_path` 切换前 `flush_pending_saves()`；存档界面删档路径整数归一化；新增 `MemoryClass.last_save_error` 与 `describe_save_error()`，`choose_player`/`forge` 展示具体原因。**16-2D**：保存侧固定 19 步补全清单，补全后执行 `_normalization_postcondition_error()` 校验容器/宠物/宠物背包/坐骑/被动全键/剑阵/万灵/已获取装备/等级，失败拒绝写入并返回 `normalize_failed:<键>`；修复新建宠物未即时规范化与 `enforce_level_caps` 顺序两处非幂等。**验证**：档案夹具 **71/71 PASS**（新增 `identity_*` 9 项、`normalize_*` 6 项）；`level_selection` **PASS**；`level_1` **PASS**（0 ERROR / 0 WARNING）；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 16-3 档案会话上下文、16-4 槽位与共享账本、16-5 面板操作者与快照互斥、16-6 边界守卫未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

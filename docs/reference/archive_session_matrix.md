@@ -14,16 +14,17 @@
 
 1. **存档文件只有一个写入边界，入口收敛为三层**：`MemoryClass.request_save`（**116 处 / 59 文件**，统一入口）、`MemoryClass.save_game`（**仅持久化边界内部 1 处委托**，业务侧 0 处）与 `MemoryClass.safe_write_archive`（3 处外部调用，全部在存档界面）。除这两个入口外，全仓没有第三处写**档案路径** `user://MyAr_*.json` 的代码；云存档的临时 ZIP 与加密分片由存档界面自行写入 `user://cloud_save_upload|import`，不进入本地档案命名空间。`request_background_save` 仅 `base_monster.gd` 1 处调用。
 2. **保存点已全部收口**：16-2A 前 118 处 / 60 文件 / 109 函数；经首批 17 处、第二批 58 处（`back_pack` 25、`skill` 18、`ldl` 15）、第三批 19 处（`main_menu`）、第四批 11 处（`level`）与收尾批次 13 处迁移后，业务侧 `save_game` 调用为 **0**；仅 `MemoryClass.request_save` 内部保留 1 处 `save_game(archive_path)` 委托。地图页 `_ready`、关卡结算与全部业务面板均改为提交保存请求。
-3. **保存结果判读仍不足**：16-2A 前仅 5/118 处检查返回值；这 5 处已全部迁移到 `request_save`。收尾后仍有大量 UI 调用丢弃 `request_save` 的 `bool`；失败由 `MemoryClass` 内部 `push_error`/`push_warning` 暴露，界面多数无提示。16-2C 的夹具已覆盖失败分支，UI 反馈留给 16-5。
-4. **档案身份仍是裸字符串**：`Global.cd_path` 现为 **36 次出现 / 34 行 / 21 个文件**，写点仅 3 行；17 处空值守卫、3 处格式守卫（`contains("Ar_")`）、1 处 `find`、1 处 `split`、1 处 `load_game`、1 处 `safe_write_archive`，其余为派生用法。`request_save` 116 处不再显式传路径。
-5. **`load_game` 对空档仍返回成功，但对非法档已拒绝**：文件缺失或长度为 0 时底层返回 `ok=true`，`load_game` 继续执行 `ensure_*` 并返回 `true`（AS-01 保留）；非空但结构或 `Myself` 非法的档案在合并前返回 `false`（16-2C）。
-6. **`load_game` 使用合并而非替换**：`_player.merge(archive_data, true)` 只覆盖存档中存在的键；未回主菜单连续读取两个档案会残留上一档的进度键。当前依赖 `main_menu._ready()` 的 `remove_play_data()` 清空来兜底。
-7. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。
-8. **规范化补全入口 21 个**（20 个 `ensure_*`/`normalize_*`/`migrate_*` + `enforce_level_caps`）；读档串行调用 17 个、保存串行调用 18 个，两侧清单不对称。除 `ensure_pet_*` 返回 `bool` 外多为 `void`，且所有调用点都忽略返回值；`has_method` 守卫在方法缺失时静默跳过。
-9. **槽位 API 已有单一入口，但使用率极低**：`slot_for` 20 次 / 7 文件、`data_for` 19 次 / 19 文件、`data_for_slot` 5 次 / 3 文件、`props_for` 22 次 / 20 文件、`pet_profile_for` 16 次 / 1 文件、`pet_meta_key` 32 次 / 5 文件、`input_for` 2 次 / 2 文件；`canonical_profile_for_slot` 仅 3 次、`props_for_slot` 仅 1 次（均在 `BaseRoleProperties` 内部）。
-10. **面板仍整体依赖全局视图交换**：20 个面板目录脚本共 354 处直接读 `PlayerData.player_data`，没有任何槽位感知；`suspend/resume_player_view` 共 8 处调用（6 处在本类、2 处在 `MemoryClass`）+ 2 处定义。`Global.get_player` 仍有 19 次 / 10 个文件引用，混合 1P 假设。
-11. **会话字段没有外部读取者**：`archive_session_active`、`archive_session_role_id` 只被 `Global` 自身的预热、缓存释放与退出逻辑读写；业务与 UI 通过 `Global.cd_path` 与 `PlayerData.player_data` 推断会话状态，这正是 16-3 要收口的核心。
-12. **角色范围已统一为 1..7**：本地校验、云上传/导入收集与运行时共用 `MemoryClass.is_valid_role_id`；`0/8/非数值` 一律拒绝，玉兔档可上传/导入。
+3. **保存结果判读仍不足**：16-2A 前仅 5/118 处检查返回值；这 5 处已全部迁移到 `request_save`。收尾后仅 4 处判读 `request_save` 返回值（`choose_player`、`forge`、`victory._save_completed_level`、`level_llbt`），其余 UI 丢弃 `bool`。`last_save_error` 与 `describe_save_error()` 已提供可读原因，`choose_player`/`forge` 已接入；其余面板反馈留给 16-5。
+4. **档案身份已收口到唯一写入口**：`Global.set_cd_path()` 是唯一写入点（原 3 处直接赋值已迁移），赋值时先 `flush_pending_saves()` 再递增 `_archive_identity_epoch`；`Global.cd_path` 现为 40 行 / 42 次出现 / 22 个文件，9 处经 `get_cd_path()`/`set_cd_path()`，3 处格式守卫、1 处 `find`、1 处 `split`，其余为空值守卫。
+5. **保存与读档身份/顺序已可校验（16-2B）**：`save_game` 在快照前后各校验一次「路径的档案号 + `_archive_identity_epoch`」；后台任务携带入队时的 epoch，切档后到达的旧任务被丢弃，不写盘也不更新元数据。`Global.set_cd_path` 在切换前 flush 待写队列。`last_save_error` / `describe_save_error()` 提供程序化与可读失败原因。
+6. **补全失败会阻止保存（16-2D）**：`_prepare_primary_player_save_data` 按固定 19 步执行补全，随后用 `_normalization_postcondition_error()` 校验容器、宠物、坐骑、被动、剑阵、万灵、已获取装备与等级；任一不满足即拒绝写入，不再"补全异常但保存成功"。补全顺序调整为 `enforce_level_caps` 最后，新建宠物立即执行自身规范化，保证首次保存即幂等。
+7. **`load_game` 使用合并而非替换**：`_player.merge(archive_data, true)` 只覆盖存档中存在的键；未回主菜单连续读取两个档案会残留上一档的进度键。当前依赖 `main_menu._ready()` 的 `remove_play_data()` 清空来兜底。
+8. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。
+9. **规范化补全入口 21 个**（20 个 `ensure_*`/`normalize_*`/`migrate_*` + `enforce_level_caps`）；保存侧执行 19 个步骤（16-2D 后统一为固定清单，`enforce_level_caps` 最后执行）；读档侧另行维护 17 个调用，两侧仍不完全对称。补全返回值多为 `void`/“是否新增”，不能表达失败，因此保存侧改用**后置条件**判定（见 §8.4）。
+10. **槽位 API 已有单一入口，但使用率极低**：`slot_for` 20 次 / 7 文件、`data_for` 19 次 / 19 文件、`data_for_slot` 5 次 / 3 文件、`props_for` 22 次 / 20 文件、`pet_profile_for` 16 次 / 1 文件、`pet_meta_key` 32 次 / 5 文件、`input_for` 2 次 / 2 文件；`canonical_profile_for_slot` 仅 3 次、`props_for_slot` 仅 1 次（均在 `BaseRoleProperties` 内部）。
+11. **面板仍整体依赖全局视图交换**：20 个面板目录脚本共 354 处直接读 `PlayerData.player_data`，没有任何槽位感知；`suspend/resume_player_view` 共 8 处调用（6 处在本类、2 处在 `MemoryClass`）+ 2 处定义。`Global.get_player` 仍有 19 次 / 10 个文件引用，混合 1P 假设。
+12. **会话字段没有外部读取者**：`archive_session_active`、`archive_session_role_id` 只被 `Global` 自身的预热、缓存释放与退出逻辑读写；业务与 UI 通过 `Global.cd_path` 与 `PlayerData.player_data` 推断会话状态，这正是 16-3 要收口的核心。
+13. **角色范围已统一为 1..7**：本地校验、云上传/导入收集与运行时共用 `MemoryClass.is_valid_role_id`；`0/8/非数值` 一律拒绝，玉兔档可上传/导入。
 
 ---
 
@@ -55,7 +56,7 @@
 | 稳定密钥 `user://.save_key` | `MemoryClass` | `_ensure_stable_key` | `_load_stable_key`、兼容读取 | 首次保存创建；进程内缓存 | 读不到文件时回退内置 `keys`；写密钥失败仍返回内置密钥（不阻断保存） |
 | 会话设置 `user://MainGame.json` | `MainSet` + `MemoryClass` | `main_bc`（74 处调用 / 28 文件） | `main_dq`（16 处调用 / 15 文件） | 设置变更、存档时间/名称回写、退出 flush | `main_bc` 返回 `bool`，74 处调用**全部忽略**；`save_game` 内失败只 `push_warning` |
 | 档案元数据（名称/时间/`CdNum`/`其他存档`） | `MainSet.set_data` | `MemoryClass._set_archive_time`/`repair_archive_time`、`back_pack._on_name_text_changed`、`choose_player._update_archive_time`、存档界面增删槽 | 存档列表卡片、`base_hero` 名字显示、`back_pack` 名称栏 | 保存成功、删档、槽位增减 | 与档案文件非原子：文件写成功而元数据失败时只告警，读档时间会回退到文件 mtime |
-| 档案身份 `Global.cd_path` | `Global` | `bacis_ar_button._on_pressed`（设置）、`main_menu._ready` / `choose_player._on_return_main_menu_pressed`（清空） | 21 个文件（17 处空值守卫、3 处格式守卫、1 处 `find`/`split`、1 处 `load_game`、1 处 `safe_write_archive`） | 回主菜单、返回选角 | 空字符串表示无档案；读档失败不回滚，仍指向失败档；无独立会话校验 |
+| 档案身份 `Global.cd_path` | `Global` | **唯一写入口 `Global.set_cd_path()`**：存档卡片选择、主菜单 `_ready`、选角返回（均先 flush 待写队列再递增 `_archive_identity_epoch`） | 23 个文件（18 处经 `get_cd_path()`、3 处格式守卫、1 处 `find`/`split`，其余空值守卫） | 回主菜单、返回选角、切换档案 | 空字符串表示无档案；`save_game` 以「档案号 + epoch」拒绝过期回写；`last_save_error` 给出原因 |
 | 档案会话 `archive_session_*` | `Global` | `begin_archive_session` / `end_archive_session` / `_exit_tree` | **仅 `Global` 内部**（预热、`release_ui_runtime_cache`） | 进入主菜单/选角（`is_archive_exit_scene`）、应用退出 | `end_archive_session` 无返回值；重复调用靠 `_archive_session_generation` 与 active 判断吸收 |
 | 1P 档案 `PlayerData.player_data` | `PlayerData`（`PlayerDataStore`） | 44 个文件、141 行直接写入 + 少量 API 写入 | 119 个文件 | 读档 merge、`remove_play_data`、切档/退出 | 依赖 `ensure_*` 补全；无效数据靠 `_is_valid_player_archive_data` 拒绝保存 |
 | 2P 档案 `LocalCoop.secondary_data` | `LocalCoop` | `create_secondary`、`load_profile`、`save_profile`、共享键回写 | 槽位感知调用方（`data_for_slot` 等） | `clear_runtime`、切档、`load_game` 开头 | 2P 不存在时 `data_for_slot(2)` 回落 1P；`is_enabled()` 要求 `本地双人.启用` |
@@ -159,49 +160,54 @@
 |:---|:---|
 | 入口 | `request_background_save(path)`，仅 `base_monster.gd:1584` 调用 |
 | 快照 | 与同步保存共用 `_prepare_player_save_data()`（含视图挂起/恢复与 2P profile 写入） |
-| 队列 | `_pending_background_saves` 以 **path 为键**，同档重复请求覆盖为最新快照；`_failed_background_saves` 保留失败快照 |
+| 队列 | `_pending_background_saves` 以 **path 为键**，同档重复请求覆盖为最新快照；任务携带 `generation`（`_archive_identity_epoch`）与快照，`_failed_background_saves` 保留失败快照 |
 | 线程 | `_save_thread` 单线程，`_start_next_background_save()` 串行；同一时刻只有一个写任务 |
-| 完成 | `_process` 轮询 `is_alive()`；`background_save_finished(path, success)` 信号**全仓无接收者** |
+| 完成 | `_process` 轮询 `is_alive()`；`background_save_finished(path, success)` 信号**全仓无接收者**；完成时校验身份，切档后到达的旧任务直接丢弃（不写盘、不重试、不更新元数据） |
 | flush | `flush_pending_saves()` 在 `save_game`、`safe_write_archive`、读档兼容读取、`_notification`（暂停/关窗）与 `_exit_tree` 调用；重入由 `_save_flush_in_progress` 拒绝 |
 | 失败 | 失败任务进入 `_failed_background_saves`，下次 flush 重试；`_complete_background_save` 只 `push_error` |
-| 缺口 | 任务无档案身份/代次字段；切档后旧任务仍按旧 path 写回；`background_save_finished` 无人消费 |
+| 缺口 | `background_save_finished` 仍无人消费；任务无保存序号，同档乱序覆盖由「单线程 + 同档覆盖」队列保证，尚未做跨队列排序 |
 
 ---
 
 ## 5. 档案身份 `Global.cd_path`
 
-### 5.1 写点（全部 3 行）
+### 5.1 写点（唯一入口）
 
 | 位置 | 写入值 | 场景 |
 |:---|:---|:---|
-| `Scene/other_scene/bacis_ar_button.gd:90` | `"user://MyAr_" + str(archive_num) + ".json"` | 点击存档卡片，**先设身份再读档**；读档失败不回滚 |
-| `Script/main_menu/main_menu.gd:71` | `""` | 主菜单 `_ready`，同时 `remove_play_data()` 清空内存档 |
-| `Script/main_menu/choose_player.gd:238` | `""` | 选角界面"返回主菜单" |
+| `bacis_ar_button._on_pressed` → `Global.set_cd_path("user://MyAr_<n>.json")` | 目标档案路径 | 点击存档卡片，**先设身份再读档**；读档失败不回滚 |
+| `main_menu._ready` → `Global.set_cd_path("")` | 空字符串 | 主菜单 `_ready`，同时 `remove_play_data()` 清空内存档 |
+| `choose_player._on_return_main_menu_pressed` → `Global.set_cd_path("")` | 空字符串 | 选角界面"返回主菜单" |
 
-### 5.2 读写点分类（132 行 / 135 次出现 / 59 文件；其中 3 行为写入）
+`set_cd_path` 是唯一写入口：路径规范化（`strip_edges`）→ 不一致时 `MemoryClass.flush_pending_saves()` → 写入 → `_archive_identity_epoch += 1` → `_advance_runtime_generation()`。返回值表示 flush 是否成功；身份切换本身始终生效。
+
+### 5.2 读写点分类（40 行 / 42 次出现 / 22 个文件）
 
 | 用法 | 处数 | 说明 |
 |:---|:---:|:---|
-| 直接作为 `save_game` 参数 | 92 | 未迁移的保存入口 |
-| 先赋局部变量再使用（`save_path` / `archive_path`） | 8 | 其中 5 处附加 `FileAccess.file_exists` 检查 |
-| `load_game` 参数 | 1 | `bacis_ar_button._on_pressed` |
-| `safe_write_archive` 参数（`remove()` 内） | 1 | 当前为死路径 |
-| 空值 / `is_empty()` / `null` 守卫 | 20 | 背包、宠物、地图、技能、公告、双人面板 |
-| 格式守卫（`contains("Ar_")` / `find("Ar_")`） | 3 行（`contains` 共 10 处出现于 10 个文件，多数与空值守卫同行） | 同文件常有空值 + 格式双重守卫 |
-| 路径解析（`split("Ar_")`） | 1 | `choose_player._archive_num()` |
-| 写入身份 | 3 | 见 5.1 |
-| `str(Global.cd_path)` 形式 | 3 | `level_esbxx` 保存、`request_save` 解析、`get_cd_number` 解析 |
+| `get_cd_path()` / `set_cd_path()` | 9 | 身份唯一入口；`save_game`/`request_save` 内部经此解析 |
+| 空值 / `is_empty()` 守卫 | 17 | `map_3`~`map_9_1` 的返回/记忆按钮、公告、训练、剑阵页 |
+| 格式守卫（`contains("Ar_")`） | 3 | `level_esbxx`、`zhu_xian_sword`、`body_training`、`map_3_special` 的残留前置判断 |
+| `find("Ar_")` / `split("Ar_")` | 2 | `choose_player._archive_num()` 解析档案号 |
+| `safe_write_archive` 参数 | 1 | `MemoryClass.remove()`（死路径） |
 
-另有 17 处 `request_save` 调用不显式引用 `cd_path`，路径在持久化边界内部解析。
+### 5.3 身份纪元与过期回写
 
-### 5.3 路径字符串进入业务逻辑的位置
+| 场景 | 行为 |
+|:---|:---|
+| 同步保存 | `save_game` 在快照前与快照后各校验一次「档案号 + epoch」；不一致返回 `stale_archive_identity`，不写盘 |
+| 后台保存 | 任务记录入队 epoch；`_take_current_background_job()` 与 `_complete_background_save()` 校验，切档后到达的旧任务直接丢弃并 emit `background_save_finished(path, false)` |
+| 切档/退档 | `Global.set_cd_path` 先 `flush_pending_saves()`，再递增 epoch 与运行时代次；旧档案的待写任务在身份仍有效时落盘 |
+| 失败原因 | `last_save_error` 取 `invalid_archive_path` / `stale_archive_identity` / `normalize_failed:<键>` / `invalid_archive_data` / `write_failed`；`describe_save_error()` 返回中文可读文本 |
+
+### 5.4 路径字符串进入业务逻辑的位置
 
 | 位置 | 形态 | 风险 |
 |:---|:---|:---|
-| `contains("Ar_")` 10 处（10 个文件）、`find("Ar_")` 1 处 | 以子串判断"是否在档案中" | 非路径语义，无法区分合法档与任意含 `Ar_` 的字符串 |
+| `contains("Ar_")` 3 处 | 以子串判断"是否在档案中" | 与 `request_save` 的权威校验重复，属 16-3/16-6 清理候选 |
 | `choose_player._archive_num()` | `split("Ar_")[1].split(".")[0]` | 仅用于元数据时间回写；非数字时 `int()` 异常 |
 | `MemoryClass.get_cd_number()` | 解析失败回退 `"1"` | 无档时会把操作归到 1 号档（`remove` 死路径仍受影响） |
-| `read_archive_interface._remove_save_data()` | `"user://MyAr_" + cd_number.text + ".json"` | `LineEdit` 原文拼路径，仅 `int()` 前缀校验 |
+| `read_archive_interface._remove_save_data()` | `"user://MyAr_" + str(int(cd_number.text)) + ".json"` | 16-2B 已改为整数归一化后再拼接，非数字输入在入口被拒绝 |
 | `MemoryClass._archive_number_from_path()` | 前缀 `user://MyAr_` + 后缀 `.json` + 正整数 | 唯一权威格式校验；不匹配即拒绝写入 |
 
 ---
@@ -234,9 +240,9 @@
 
 | 路径 | 当前行为 |
 |:---|:---|
-| 切档（读另一档） | `load_game` 开头 `_read_encrypted_dictionary_compatible` → `flush_pending_saves()`，即读档前先写完待写队列 |
-| 回主菜单 | `change_scene` 先 `end_archive_session()`，再 `cleanup_transient_ui()`；面板关闭回调若触发保存，发生在会话结束**之后**（见 AS-11） |
-| 应用退出 | `MemoryClass._notification`（`WM_CLOSE_REQUEST`/`APPLICATION_PAUSED`）与 `_exit_tree` flush；`Global._exit_tree` 只管运行时缓存，不写档 |
+| 切档（读另一档） | `Global.set_cd_path()` 先 `flush_pending_saves()` 再切换身份与 epoch；`load_game` 读档前的兼容读取也会 flush |
+| 回主菜单 | `change_scene` 先 `end_archive_session()`，再 `cleanup_transient_ui()`；主菜单 `_ready` 通过 `set_cd_path("")` flush 并切换身份。面板关闭保存发生在会话结束之后，但身份 epoch 只在路径变化时递增，因此仍写入同一档案（AS-11 已解除） |
+| 应用退出 | `MemoryClass._notification`（`WM_CLOSE_REQUEST`/`APPLICATION_PAUSED`）与 `_exit_tree` flush；`Global._exit_tree` 只管运行时缓存，不写档；退出时身份 epoch 未变，待写任务按原档案落盘 |
 | 保存中退出 | `flush_pending_saves` 会等待线程完成；无超时、无失败上报给用户 |
 
 ---
@@ -347,17 +353,18 @@
 - 读档独有：`ensure_shengu_slot`；
 - 保存独有：`ensure_main_sword_array`、`ensure_wanling_catalog_data`；
 - 读档与保存都不调用：`ensure_avatar_frame_slot`、`ensure_skill_data`、`ensure_pet_mouse`（仅启动补全/其他模块调用）；
-- `load_game` 在合并后调用 `LocalCoop.load_profile()`，而 `load_profile` 自身又调用 `ensure_main_sword_array`/`ensure_player_passive_skills`，形成一次重复补全。
+- `load_game` 在合并后调用 `LocalCoop.load_profile()`，而 `load_profile` 自身又调用 `ensure_main_sword_array`/`ensure_player_passive_skills`，形成一次重复补全；
+- 保存侧自 16-2D 起使用**固定 19 步清单**（`_normalization_steps()`），`enforce_level_caps` 最后执行；读档侧仍为手写序列，统一留给 16-3。
 
 ### 8.4 失败可见性
 
-| 问题 | 事实 |
+| 问题 | 事实（16-2D 后） |
 |:---|:---|
-| 返回值语义 | `ensure_pet_*` 返回 `not has_tiger` 之类"是否新增"，不是"是否成功"；调用方全部忽略 |
-| 静默跳过 | `has_method` 守卫在方法缺失时直接跳过，不记录日志 |
-| 补全失败当成功 | `_prepare_primary_player_save_data` 只在补全后做一次结构校验（等级、`Myself`、三个容器首页）；补全过程中部分字段未写入但结构仍合法时会照常保存 |
-| 幂等性 | 各 `ensure_*` 以"缺则补、非法则夹取"实现，重复调用不改变合法数据；未发现追加型无守卫逻辑（`ensure_shared_pet_backpack` 的合并按数组去重后追加） |
-| 异常中断 | 任一 `ensure_*` 抛出脚本错误会中断保存并返回 `{}`，`save_game` 返回 `false`；但界面通常不判读 |
+| 返回值语义 | `ensure_pet_*` 返回"是否新增"，不是"是否成功"；因此保存侧不依赖返回值，改用后置条件判定 |
+| 静默跳过 | `_run_normalization_step()` 在方法缺失时记录 `normalize_failed:<步骤>` 并阻止保存，`has_method` 守卫不再静默通过 |
+| 补全失败当成功 | `_normalization_postcondition_error()` 校验容器、宠物（含等级不超玩家）、宠物背包、坐骑、被动技能全键、剑阵等级、万灵图录、已获取装备与玩家等级；任一不满足即拒绝写入，并设置 `last_save_error=normalize_failed:<键>` |
+| 幂等性 | 已修复两处非幂等：新建宠物只做 `_normalize_pet_passives` 而未执行自身规范化，导致第二次保存才补齐 `名字`/资质上限；`enforce_level_caps` 原先在 `ensure_pet_*` 之前执行，导致新建宠物首次保存未被钳制。现改为创建即规范化 + 等级钳制最后执行，夹具 `normalize_idempotent` 逐键比对两次快照 |
+| 异常中断 | 补全步骤抛错会中断 `_prepare_primary_player_save_data` 并返回 `{}`，`save_game` 返回 `false`；`last_save_error`/`describe_save_error()` 可用于 UI |
 
 ---
 
@@ -451,12 +458,12 @@ close_panel() -> queue_free -> _on_panel_closed
 | AS-07 | **已修复入口（16-2A 完成）**：116 处全部由 `request_save` 统一解析与空档拒绝；残留 `cd_path` 守卫仅作业务前置判断 | 无档时静默 `false`；UI 无反馈 | 16-2A 完成 |
 | AS-08 | 11 个地图页 `_ready` 即保存 | 每次进城一次完整加密写 + 设置写；首帧 IO 放大 | 16-2 |
 | AS-09 | **已修复（16-2A 收尾）**：删除 `remove()` 末尾覆盖初始档的 `save_game`，重置只写初始档；入口仍为死路径 | 重置不再退化为普通保存 | 16-2A 完成 |
-| AS-10 | 面板内保存依赖同步 suspend/resume | 若 `_prepare_player_save_data` 将来引入 `await`，2P 面板视图会停留在 1P | 16-5 |
-| AS-11 | 退出场景先 `end_archive_session()`，面板关闭保存随后发生 | 保存发生在会话结束之后，会话代次无法校验该写入 | 16-3/16-5 |
-| AS-12 | 删档用 `LineEdit` 原文拼路径，仅 `int()` 前缀校验 | 路径未规范化；异常文本可能命中非预期路径（写失败即返回） | 16-2 |
-| AS-13 | 21 个补全入口返回值全部忽略，`has_method` 静默跳过 | "补全异常但写入成功"无法从结果判断 | 16-2 |
-| AS-14 | 后台保存任务只含 `path/data/password`，无身份/代次；信号无接收者 | 切档后旧任务仍写旧 path；失败不可观测 | 16-2 |
-| AS-15 | 会话字段无外部读取者，UI 用 `cd_path` + `PlayerData` 推断 | 无单一会话真源 | 16-3 |
+| AS-10 | 面板内保存依赖同步 suspend/resume | 若 `_prepare_player_save_data` 将来引入 `await`，2P 面板视图会停留在 1P；16-2B 已在其后校验身份 epoch，可拦截跨档写入 | 16-5 |
+| AS-11 | **已解除（16-2B）**：保存身份改用 `_archive_identity_epoch`（仅路径变化时递增），退出场景 `end_archive_session()` 不再使面板关闭保存失效 | 面板关闭仍可写入同一档案 | 16-2B 完成 |
+| AS-12 | **已修复（16-2B）**：`_remove_save_data` 先 `int(cd_number.text)` 归一化再拼路径，入口已校验正整数范围 | 不会命中非预期路径 | 16-2B 完成 |
+| AS-13 | **已修复（16-2D，保存侧）**：19 步补全改为固定清单，方法缺失即失败；补全后执行后置条件校验，失败拒绝写入并给出 `normalize_failed:<键>`；读档侧仍为手写序列 | 保存不再把补全失败当成功 | 16-2D 完成；读档统一留给 16-3 |
+| AS-14 | **部分修复（16-2B）**：任务增加 `generation`（身份 epoch），切档后到达的任务被丢弃；切档前 `set_cd_path` 先 flush。信号仍无接收者 | 旧任务不再回写；失败仍靠日志与 `last_save_error` | 16-2B 完成；信号消费留给 16-5 |
+| AS-15 | 会话字段无外部读取者；UI 仍用 `get_cd_path()` + `PlayerData` 推断 | 身份 epoch 已提供保存校验，但无完整会话对象 | 16-3 |
 | AS-16 | 20 个面板脚本 354 处直接读 `PlayerData`，无槽位感知 | 2P 面板必须依赖全局视图交换 | 16-5 |
 | AS-17 | `Global.get_player` 19 次 / 10 文件，语义混合 | 部分战斗/回血逻辑默认 1P | 16-4 |
 | AS-18 | `get_cd_number()` 在空值/解析失败时回退 `"1"` | 无档时把操作归到 1 号档（元数据删除路径） | 16-3 |
@@ -536,6 +543,10 @@ grep -rn "suspend_player_view\|resume_player_view" source --include='*.gd'
 | 收尾批次迁移 | 13 处：`reward_interface`、`transmogtified_box`、`base_monster`（后台失败兜底）、`base_role_properies`、`monster_130`、`c_hange_clothes_jm`、`pet_interface` 2、`cure_times_box`、`mystery_shop_item_box`、`basic_task`；`MemoryClass.remove()` 的覆盖式 `save_game` 直接删除 |
 | 收尾重复保存处理 | `reward_interface` 的 `_process` 与 `add_item_to_backpack` 各保存一次，合并为 `_process` 单次；夹具 `batch_reward_item_granted_once` 断言纹章只入包 1 个 |
 | 收尾验证 | 档案夹具 **56/56 PASS**（新增奖励入包单次发放、升级落盘）；`level_1` 冒烟 **PASS**；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
+| 16-2B 身份与顺序 | 新增 `Global.set_cd_path()` 唯一写入口（3 处直接赋值迁移）与 `_archive_identity_epoch`；`save_game` 快照前后校验「档案号 + epoch」，失败返回 `stale_archive_identity`；后台任务携带 epoch，切档后旧任务丢弃；`set_cd_path` 切换前 flush；存档界面删档路径整数归一化 |
+| 16-2B 失败可见性 | `MemoryClass.last_save_error` + `describe_save_error()`；`choose_player` 与 `forge` 展示具体失败原因 |
+| 16-2D 补全边界 | 保存侧 19 步固定补全清单；`_normalization_postcondition_error()` 校验容器/宠物/背包/坐骑/被动/剑阵/万灵/已获取装备/等级；方法缺失或后置条件不满足即阻止写入。修复两处非幂等：新建宠物立即执行自身规范化；`enforce_level_caps` 移至补全最后 |
+| 16-2B/2D 验证 | 档案夹具 **71/71 PASS**（新增 `identity_*` 9 项、`normalize_*` 6 项）；`level_selection` **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | `defeat` / `victory` 双写评估 | 两个调用点**互斥**：镇妖塔分支 `change_scene` 后保存并 `return`，末尾保存只在地图分支执行。每次点击只写一次，无需去重；原"同函数重复保存"描述已更正 |
 | 第四批验证 | `level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **52/52 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 

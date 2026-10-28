@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2C 已完成；16-2B/16-2D 与 16-3~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界已完成；16-3~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -90,9 +90,9 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 ### 3.1 切片
 
 1. **Phase 16-2A 写入入口收口（已完成）**：新增 `MemoryClass.request_save(reason)`；五批合计迁移 118 处（首批 17、`back_pack`/`skill`/`ldl` 58、`main_menu` 19、`level` 11、收尾 13），业务侧 `save_game` 调用归零；收尾批次同时删除 `MemoryClass.remove()` 覆盖初始档的写入、合并 `reward_interface` 的重复保存；业务侧只提交“请求保存”，不拼路径、不判断文件系统结果；
-2. **Phase 16-2B 会话身份与保存顺序（规划）**：保存请求携带档案身份与序号；快照生成后若档案身份变化，回写必须被拒绝；后台队列按档案分组，切档/退档前 flush 或明确失败；
+2. **Phase 16-2B 会话身份与保存顺序（已完成）**：新增 `Global.set_cd_path()` 唯一写入口与 `_archive_identity_epoch`；`save_game` 在快照前后校验「档案号 + epoch」，过期回写返回 `stale_archive_identity`；后台任务携带入队 epoch，切档后到达即丢弃；`set_cd_path` 切换前 flush；`last_save_error`/`describe_save_error()` 暴露原因，`choose_player` 与 `forge` 已接入；
 3. **Phase 16-2C 失败语义与校验（已完成）**：本地/云/运行时统一 `Myself` 1..7；`load_game` 拒绝非空非法档；新增 `archive_probe_runner.py`，覆盖缺失/空/损坏档、`.bak` 恢复、`.tmp` 清理、角色 1/7/0/8、`request_save` 空档/成功/拒绝与空档不覆盖原档（27/27 PASS）；
-4. **Phase 16-2D 规范化补全边界（规划）**：`ensure_*`/`migrate_*` 保持幂等；补全失败必须阻止保存并返回原因，不允许“补全异常但写入成功”；不新增跨版本迁移链。
+4. **Phase 16-2D 规范化补全边界（已完成）**：保存侧固定 19 步补全清单；补全后执行 `_normalization_postcondition_error()`（容器/宠物/宠物背包/坐骑/被动全键/剑阵/万灵/已获取装备/等级），失败阻止写入并返回 `normalize_failed:<键>`；修复新建宠物未即时规范化、`enforce_level_caps` 顺序错误两处非幂等问题；不新增跨版本迁移链。
 
 ### 3.2 必须验证
 
@@ -102,7 +102,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 - 后台保存失败后的重试与退出 flush；
 - 双人档案保存时共享键与个体键的写入结果。
 
-**结果（2026-10-29）**：16-2A 五个批次与 16-2C 已完成；业务侧 `save_game` 归零，`request_save` 116 处 / 59 文件。第四批核实 `defeat`/`victory` 的两处保存为互斥分支（非重复写入）；收尾批次删除 `MemoryClass.remove()` 的覆盖式写出并合并 `reward_interface` 的重复保存。最终验证：档案夹具 **56/56 PASS**、`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）、`coop_probe_runner` **16/16 PASS**、`check_all --skip-engine` **8/8 PASS**、`health_check` **0 Parse / 0 Error / 0 Warning**。
+**结果（2026-10-29）**：16-2A 五个批次、16-2B、16-2C 与 16-2D 已完成；业务侧 `save_game` 归零，`request_save` 116 处 / 59 文件。16-2B 收口 `Global.cd_path` 唯一写入口与身份 epoch，后台过期任务不再回写；16-2D 以固定补全清单 + 后置条件阻止「补全失败但保存成功」。最终验证：档案夹具 **71/71 PASS**（含 `identity_*` 与 `normalize_*` 用例）、`level_selection` **PASS**、`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）、`coop_probe_runner` **16/16 PASS**、`check_all --skip-engine` **8/8 PASS**、`health_check` **0 Parse / 0 Error / 0 Warning**。
 
 ### 3.3 出口
 
@@ -219,7 +219,7 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
 | Phase 16-1 调用面矩阵 | 已完成：全量引用、owner/写入者/失败表、链接与格式；结果见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) | 引擎、关卡回归不因只读调查复跑 |
-| Phase 16-2 存档 IO | 已完成全部批次：当前格式读写、损坏档拒绝、备份恢复、角色范围、`request_save`、面板/地图页/结算真实写盘（`archive_probe_runner.py` 56/56）、`level_selection` 场景探针与关卡冒烟；16-2B 保存顺序与退出 flush 待补 | 只测新档或只编译不等于持久化正确 |
+| Phase 16-2 存档 IO | 已完成全部切片：当前格式读写、损坏档拒绝、备份恢复、角色范围、`request_save`、面板/地图页/结算真实写盘（`archive_probe_runner.py` 71/71）、身份 epoch 与过期回写拒绝、补全后置条件、`level_selection` 与关卡冒烟 | 只测新档或只编译不等于持久化正确 |
 | Phase 16-3 会话上下文 | 切档、角色变化、不可读档拒绝、会话结束重入、退出清理 | 只改一个入口不覆盖全部读档路径 |
 | Phase 16-4 槽位与共享账本 | `coop_probe_runner` 全部用例；共享/个体写入归属；切档后无残留 | 单测 1P 或只测 UI 不等于双人正确 |
 | Phase 16-5 面板与快照 | 五类面板的 1P/2P 读写、保存快照互斥、ESC/暂停/退出、焦点恢复 | 只改 `LocalCoop` 或只改 UI 都不算完成 |

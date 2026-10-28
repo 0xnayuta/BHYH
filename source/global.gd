@@ -361,6 +361,36 @@ var total_role_hurt: int
 var last_level_path: String
 var cd_path: String = ""
 
+
+## 档案身份唯一写入口：切换档案时先 flush 待写任务，再递增会话代次。
+## 返回 flush 是否成功；调用方可用返回值提示用户，但路径切换本身仍然生效。
+func set_cd_path(path: String) -> bool:
+	var next_path: String = str(path).strip_edges()
+	if next_path == cd_path:
+		return true
+	var flushed := true
+	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
+		flushed = bool(MemoryClass.flush_pending_saves())
+	cd_path = next_path
+	# 身份纪元只随档案路径变化；会话开始/结束不应让同一档案的待写任务失效。
+	_archive_identity_epoch += 1
+	_advance_runtime_generation()
+	return flushed
+
+
+func get_cd_path() -> String:
+	return cd_path
+
+
+func get_archive_session_generation() -> int:
+	return _archive_session_generation
+
+
+## 档案身份纪元：仅在档案路径变更时递增，供保存快照与后台任务校验。
+func get_archive_identity_epoch() -> int:
+	return _archive_identity_epoch
+
+
 var total_role_hit: int
 var total_cure_hp: int
 var total_phy_hit: int
@@ -415,6 +445,7 @@ var archive_session_role_id: int = 0
 var _archive_session_prewarm_in_progress: bool = false
 var _archive_session_prewarm_role_id: int = 0
 var _archive_session_generation: int = 0
+var _archive_identity_epoch: int = 0
 var _runtime_generation: int = 0
 var _shutting_down := false
 var _ui_runtime_instance_paths: Dictionary = {}

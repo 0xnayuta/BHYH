@@ -622,7 +622,9 @@ func _on_froge_pressed() -> void:
 		return
 	if not MemoryClass.request_save("forge"):
 		_restore_forge_state(snapshot, book_name, book_level, book_props)
-		Global.add_message_show(Global.windows, "存档保存失败，本次打造已撤销！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.windows, "存档保存失败，本次打造已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(500, 305)
+		)
 		return
 	Global.add_message_show(Global.windows, "打造成功！！", 1.5, Vector2(500, 305))
 
