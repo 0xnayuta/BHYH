@@ -2,7 +2,7 @@ extends BaseMonster
 class_name FireAncestorBoss
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/nanhai_projectile.gd")
-const FIRE_ORB_SCENE := preload("res://Scene/monster/monster_3056.tscn")
+const FIRE_ORB_SCENE_PATH := "res://Scene/monster/monster_3056.tscn"
 const ROOT := "res://Art/monster/swf_png/3042"
 const SOURCE_FPS := 30.0
 const SOURCE_AI_DELAY_MSEC := 2000
@@ -299,7 +299,12 @@ func _summon_fire_orb() -> void:
 	var parent := get_parent() as Node2D
 	if parent == null:
 		return
-	var orb := FIRE_ORB_SCENE.instantiate() as FireAncestorOrb
+	var orb_scene := (
+		ResourceLoader.load(FIRE_ORB_SCENE_PATH, "PackedScene", ResourceLoader.CACHE_MODE_REUSE) as PackedScene
+	)
+	if orb_scene == null:
+		return
+	var orb := orb_scene.instantiate() as FireAncestorOrb
 	if orb == null:
 		return
 	orb.position = parent.to_local(global_position + FIRE_ORB_SPAWN_OFFSET)

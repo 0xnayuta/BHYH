@@ -172,8 +172,10 @@ func _run_all() -> void:
 	Engine.time_scale = TIME_SCALE
 
 	# 2. 切入目标关卡（Global.change_scene 走异步加载屏，需等待加载器完成切换）
+	var load_started_msec := Time.get_ticks_msec()
 	Global.change_scene(TARGET_LEVEL)
 	var loaded_scene: Node = await _await_level_ready(report)
+	report["load_elapsed_seconds"] = snapped(float(Time.get_ticks_msec() - load_started_msec) / 1000.0, 0.001)
 	if loaded_scene == null:
 		await _finish(report, 1)
 		return

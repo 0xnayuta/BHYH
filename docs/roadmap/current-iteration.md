@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消、Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI 与 Phase 15-4D 退出与后台已完成，Phase 15-4E 未启动**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
+> **状态**：**Phase 15：应用编排与运行资源生命周期；Phase 15-1 调用面矩阵、Phase 15-2A 旁路收口、Phase 15-2B 入口契约、Phase 15-2C 加载页交接、Phase 15-3A 窄交接接口、Phase 15-3B 关卡资源租约、Phase 15-3C 失败/取消、Phase 15-3D 预载清单边界、Phase 15-4A 缓存作用域、Phase 15-4B 对象池、Phase 15-4C 临时 UI、Phase 15-4D 退出与后台与 Phase 15-4E 边界守卫已完成**。本页记录候选边界、阶段顺序与验收条件，不把目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 15；Phase 16~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -36,7 +36,7 @@
 | 资源交接 | 加载页通过 `Global.is_resource_cached`、`Global.get_cached_packed_scene` 与 `Global.handoff_loaded_resource` 交接缓存，不再接触私有字段/方法 | Phase 15-3 明确缓存所有者、允许的交接 API 与失败/取消语义 |
 | 缓存与池 | `_resource_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、怪物场景缓存、`_level_resource_lease` 租约，以及伤害文本/受击/音效等对象池 | Phase 15-3/Phase 15-4 建立作用域、容量依据、清理事件与观测入口 |
 | UI 生命周期 | `Global` 维护运行时 UI 实例登记、永久小 UI 预载与按名称清理；`cleanup_transient_ui` 依赖硬编码节点名 | Phase 15-4 改用显式注册/释放或受控清理，并保留当前面板行为 |
-| 退出与后台 | `Global._exit_tree` 已统一结束档案、角色/战斗/UI 缓存、对象池、预载槽与纹理请求；运行时代次阻止过期异步写回 | Phase 15-4D 已完成；Phase 15-4E 继续补静态守卫 |
+| 退出与后台 | `Global._exit_tree` 已统一结束档案、角色/战斗/UI 缓存、对象池、预载槽与纹理请求；运行时代次阻止过期异步写回 | Phase 15-4D/15-4E 已完成 |
 | 既有验收 | L2 固定套件与全量回归的档位见 [`acceptance.md`](../reference/acceptance.md)；历史结果只以 [`status.md`](../reference/status.md) 为准 | Phase 15-1 只读；Phase 15-2 至 Phase 15-4 按受影响边界触发运行验证 |
 
 Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修复；后续阶段据此决定哪些职责保留在 `Global`、哪些需要独立所有者。
@@ -99,7 +99,7 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 - 调用方不依赖旧的延迟切换旁路；
 - 相关 L2/场景冒烟已通过；冷启动返回、重战、强制加载与切换中退出仍需补验。
 
-**当前 15-2/15-3A/15-3B/15-3C/15-3D/15-4A/15-4B/15-4C/15-4D 证据**：`level_1` 随全量回归 PASS（25.08s）、`scene_probe_runner` 完整套件 PASS 6/6（星座 4.88s、选择态 16.82s、租约 3.59s、加载守卫 5.71s、法宝 7.58s、角色技能 4.80s）、全量关卡回归 PASS 128/128 + SKIP 5（723.1s；后续 2/4 并发复跑 `level_58` 命中夹具 45s 加载阈值，单关 28.45s PASS）、`contract_scan --self-test` 预载边界坏样本 4/4 + 好样本 3/3；临时契约探针验证空/缺失目标拒绝、`target_scene` 未变、有效目标接受；重复切换探针验证最新目标获胜；目标加载后失效探针验证 current_scene 保留加载页且未提交失败目标。租约探针验证按租约释放、共享缓存保留、旧租约 ID 拒绝、重战清理与退出归档清理；加载守卫探针验证单槽失败清理、重复切换只提交最新目标、超时失败态、失败不提交、Catalog 返回值副本与 UI 实例登记/释放；租约探针验证池容量、池根与退出清理；加载守卫验证临时 UI 关闭回调、永久 UI 跳过与名称兜底；租约探针新增运行时代次失效与过期预载跳过；加载页私有缓存访问已清零。冷启动返回、重战、强制加载、切换中退出仍需后续运行补验。
+**当前 15-2/15-3A/15-3B/15-3C/15-3D/15-4A/15-4B/15-4C/15-4D/15-4E 证据**：`level_1` 随全量回归 PASS（25.08s）、`scene_probe_runner` 完整套件 PASS 6/6（星座 4.24s、选择态 15.32s、租约 3.01s、加载守卫 4.80s、法宝 7.07s、角色技能 4.11s）、全量关卡回归 PASS 128/128 + SKIP 5（723.1s；该次 2/4 并发复跑曾命中夹具 45s 加载阈值，根因已修复）、`contract_scan --self-test` 全部通过（预载 4/4+3/3、场景入口 3/3+3/3、加载页缓存 3/3+2/2、池/UI 清理 4/4+4/4）；`contract_scan --fail-on-error` ERROR=0；`level_58` 并发预算 1/2/4/6/8 并发全通过，加载 3.724 / 3.826~3.837 / 4.096~4.100 / 4.911~4.957 / 5.391~5.565s，墙钟 27.4/28.65/29.58/31.71/34.67s；定位并修复加载线程内 `fire_ancestor_boss.gd` 预载 @tool 场景，45s 夹具阈值保持不变；changed-only 回归 PASS 128/128 + SKIP 1，FAIL 0（696.7s）；临时契约探针验证空/缺失目标拒绝、`target_scene` 未变、有效目标接受；重复切换探针验证最新目标获胜；目标加载后失效探针验证 current_scene 保留加载页且未提交失败目标。租约探针验证按租约释放、共享缓存保留、旧租约 ID 拒绝、重战清理与退出归档清理；加载守卫探针验证单槽失败清理、重复切换只提交最新目标、超时失败态、失败不提交、Catalog 返回值副本与 UI 实例登记/释放；租约探针验证池容量、池根与退出清理；加载守卫验证临时 UI 关闭回调、永久 UI 跳过与名称兜底；租约探针新增运行时代次失效与过期预载跳过；加载页私有缓存访问已清零。冷启动返回、重战、强制加载、切换中退出仍需后续运行补验。
 
 ## 4. Phase 15-3：加载页预载与资源交接（15-3A/15-3B/15-3C/15-3D 完成）
 
@@ -127,7 +127,7 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 - 线程失败/取消不留下过期回调（Phase 15-3C 已完成）：失败页不提交、过期代次不写缓存、`_preloaded_scene` 失败槽可清理；
 - 加载失败不落入可玩场景或半初始化状态。
 
-## 5. Phase 15-4：缓存、池、UI 与退出生命周期（15-4A/15-4B/15-4C/15-4D 完成，15-4E 未启动）
+## 5. Phase 15-4：缓存、池、UI 与退出生命周期（15-4A/15-4B/15-4C/15-4D/15-4E 完成）
 
 **目标**：把缓存/池/UI 的作用域、清理入口和退出语义闭合；增加边界守卫后才标记 Phase 15 完成。
 
@@ -137,7 +137,7 @@ Phase 15-1 已完成调用面与所有权矩阵，边界事实不视为已经修
 2. **Phase 15-4B 对象池（已完成）**：确认 `RuntimePool` 池根属于 `Global`，跨关卡/重战保留、档案结束清空；容量 80/32/24/32、预置 12/16/16/6；池满释放，排队删除节点不复用；消费者 `setup`/`recycle` 重置；退出清空活动音效映射。
 3. **Phase 15-4C 临时 UI（已完成）**：新增 `_transient_ui_instances` 与 `register_transient_ui(node, close_method, scene_path)`；基础任务、神秘商店与游戏公告工厂已显式登记关闭回调，其余未登记 UI 保留名称兜底；`cleanup_transient_ui` 先关闭登记实例再清理，永久小 UI 路径跳过，递归清理有 active 守卫。
 4. **Phase 15-4D 退出与后台（已完成）**：新增 `_runtime_generation` 与 `is_runtime_generation_current`；`change_scene`、档案会话开始/结束与 `_exit_tree` 递增代次；角色/关卡/纹理/UI 预热在写回前检查代次，过期结果丢弃。`Global._exit_tree` 统一清理档案、角色/战斗/UI 缓存、对象池、预载槽与纹理请求；`FrameTextureRequests` 在 `_closing` 后停止轮询；HTTPRequest 退出取消；`map_6` 至 `map_9_1` 补齐地图视觉释放。
-5. **Phase 15-4E 边界守卫**：扩展现有静态审计，阻断业务旁路 `change_scene_to_*`、加载页对私有缓存字段的直接访问、未登记的池/UI 清理入口；规则与自测登记到 `scripts/README.md` 与 `acceptance.md`。
+5. **Phase 15-4E 边界守卫（已完成）**：`contract_scan.py` 新增 `scene_entry`、`load_cache`、`pool_ui` 三类 ERROR 门禁；`change_scene_to_*` 仅 `global.gd` 豁免，加载页禁止私有缓存/租约访问，池/UI 清理仅 Global 与 18 个已登记 UI 调用方。新增正负样本并同步 `scripts/README.md`、`acceptance.md` 为十一类契约。
 
 ### 5.2 必须验证
 

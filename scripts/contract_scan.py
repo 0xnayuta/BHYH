@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中八大契约与真源的一致性：
+用于全量扫描并比对工程中十一大契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -14,6 +14,9 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 6. 运行时 manifest 门禁 (Runtime Manifest Gate): 新增代码禁止在运行时直接加载 atlas manifest
 7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary): 禁止旧入口、直接 .data 读取与 source_masks 覆盖
 8. 关卡预载边界门禁 (Preload Boundary): 加载页禁止目录扫描或依赖清单解析
+9. 场景入口边界门禁 (Scene Entry Boundary): 业务代码禁止绕过 Global.change_scene
+10. 加载页私有缓存门禁 (Load Cache Boundary): 加载页只能使用窄交接 API
+11. 池/UI 清理入口门禁 (Pool/UI Boundary): 未登记清理入口阻断
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -924,6 +927,51 @@ class ContractScanner:
         "JSON.parse",
         "manifest",
     )
+    SCENE_ENTRY_BOUNDARY_FILE = "global.gd"
+    SCENE_ENTRY_BYPASS_PATTERNS = (
+        "change_scene_to_file(",
+        "change_scene_to_packed(",
+    )
+    LOAD_CACHE_BOUNDARY_FILE = "Scene/other_scene/load_scene.gd"
+    LOAD_CACHE_PRIVATE_PATTERNS = (
+        "Global._resource_cache",
+        "Global._sprite_frames_cache",
+        "Global._audio_cache",
+        "Global._texture_cache",
+        "Global._monster_scene_cache",
+        "Global._cache_threaded_resource",
+        "Global._track_level_resource",
+        "Global._level_resource_lease",
+    )
+    REGISTERED_UI_CLEANUP_FILES = {
+        "Scene/other_scene/level_info.gd",
+        "Scene/other_scene/lhhj.gd",
+        "Scene/other_scene/lsh.gd",
+        "Scene/other_scene/lxdy.gd",
+        "Script/back_pack/dj_sell.gd",
+        "Script/level/dsg_choose.gd",
+        "Script/level/llbt_challenge.gd",
+        "Script/main_menu/map_1.gd",
+        "Script/main_menu/map_2.gd",
+        "Script/main_menu/map_3.gd",
+        "Script/main_menu/map_4.gd",
+        "Script/main_menu/map_5.gd",
+        "Script/main_menu/map_6.gd",
+        "Script/main_menu/map_7.gd",
+        "Script/main_menu/map_8.gd",
+        "Script/main_menu/map_8_1.gd",
+        "Script/main_menu/map_9.gd",
+        "Script/main_menu/map_9_1.gd",
+    }
+    POOL_UI_PRIVATE_PATTERNS = (
+        "Global._clear_runtime_pools",
+        "Global._pool_data",
+        "Global._transient_ui_instances",
+        "Global._ui_runtime_instance_paths",
+        "Global._ui_runtime_instance_counts",
+        "Global._cleanup_transient_ui_under",
+        "Global.release_ui_runtime_cache",
+    )
     ATLAS_BOUNDARY_LEGACY_PATTERNS = (
         "AtlasMetadataStore.data_for",
         "AtlasMetadataStore.validate_path",
@@ -977,6 +1025,51 @@ class ContractScanner:
             if not clean.strip():
                 continue
             for pattern in cls.PRELOAD_BOUNDARY_PATTERNS:
+                if pattern in clean:
+                    return (lineno, pattern)
+        return (0, "")
+
+
+    @classmethod
+    def scene_entry_boundary_violation(cls, content: str, rel_path: str):
+        """仅 Global 允许直接调用 change_scene_to_*；返回 (行号, 命中标识)。"""
+        if rel_path.startswith("addons/") or rel_path == cls.SCENE_ENTRY_BOUNDARY_FILE:
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.SCENE_ENTRY_BYPASS_PATTERNS:
+                if pattern in clean:
+                    return (lineno, pattern)
+        return (0, "")
+
+    @classmethod
+    def load_cache_boundary_violation(cls, content: str, rel_path: str):
+        """加载页只能通过窄交接 API 读写缓存；返回 (行号, 命中标识)。"""
+        if rel_path != cls.LOAD_CACHE_BOUNDARY_FILE:
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.LOAD_CACHE_PRIVATE_PATTERNS:
+                if pattern in clean:
+                    return (lineno, pattern)
+        return (0, "")
+
+    @classmethod
+    def pool_ui_boundary_violation(cls, content: str, rel_path: str):
+        """池/UI 清理只允许 Global 或已登记的 UI 调用方；返回 (行号, 命中标识)。"""
+        if rel_path.startswith("addons/") or rel_path == "global.gd":
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            if "Global.cleanup_transient_ui" in clean and rel_path not in cls.REGISTERED_UI_CLEANUP_FILES:
+                return (lineno, "Global.cleanup_transient_ui")
+            for pattern in cls.POOL_UI_PRIVATE_PATTERNS:
                 if pattern in clean:
                     return (lineno, pattern)
         return (0, "")
@@ -1057,8 +1150,80 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def scan_scene_entry_boundary(self):
+        print(f"[*] 扫描场景入口边界门禁...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = self.scene_entry_boundary_violation(content, rel_p)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category="scene_entry",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message="业务代码禁止绕过 Global.change_scene 直接切换场景",
+                suggested_fix="改用 Global.change_scene(target, force_loading_screen)",
+                rule_id="SCENE_ENTRY_BYPASS",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
+    def scan_load_cache_boundary(self):
+        print(f"[*] 扫描加载页私有缓存访问门禁...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = self.load_cache_boundary_violation(content, rel_p)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category="load_cache",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message="加载页禁止直接访问 Global 私有缓存/租约字段",
+                suggested_fix="改用 is_resource_cached/get_cached_packed_scene/handoff_loaded_resource",
+                rule_id="LOAD_CACHE_PRIVATE_ACCESS",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
+    def scan_pool_ui_boundary(self):
+        print(f"[*] 扫描池/UI 清理入口登记门禁...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = self.pool_ui_boundary_violation(content, rel_p)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category="pool_ui",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message="池/UI 清理入口未登记：只允许 Global 或已登记的 UI 调用方",
+                suggested_fix="改用 Global.change_scene/cleanup_transient_ui 的登记入口；新增 UI 调用方需评审并加入 REGISTERED_UI_CLEANUP_FILES",
+                rule_id="POOL_UI_CLEANUP_UNREGISTERED",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
     def run_all_checks(self):
-        """执行完整八类契约扫描流水线"""
+        """执行完整十一类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1071,6 +1236,9 @@ class ContractScanner:
         self.scan_runtime_manifest_loading()
         self.scan_atlas_boundary()
         self.scan_preload_boundary()
+        self.scan_scene_entry_boundary()
+        self.scan_load_cache_boundary()
+        self.scan_pool_ui_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1126,7 +1294,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、八大契约健康看板")
+        lines.append("## 一、十一大契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1140,6 +1308,9 @@ class ContractScanner:
             "runtime_manifest": "6. 运行时 manifest 门禁 (Runtime Manifest)",
             "atlas_boundary": "7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary)",
             "preload_boundary": "8. 关卡预载边界门禁 (Preload Boundary)",
+            "scene_entry": "9. 场景入口边界门禁 (Scene Entry Boundary)",
+            "load_cache": "10. 加载页私有缓存门禁 (Load Cache Boundary)",
+            "pool_ui": "11. 池/UI 清理入口门禁 (Pool/UI Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -1326,6 +1497,112 @@ def run_preload_boundary_self_test() -> bool:
     return passed
 
 
+def run_scene_entry_boundary_self_test() -> bool:
+    """场景入口边界自测：业务绕过必须拦截，Global 入口必须放行。"""
+    print("[*] 场景入口边界门禁负向自测...")
+    bad_samples = {
+        "业务直接 change_scene_to_file": ("get_tree().change_scene_to_file(path)\n", "Script/level/sample.gd"),
+        "业务直接 change_scene_to_packed": ("get_tree().change_scene_to_packed(scene)\n", "Script/main_menu/sample.gd"),
+        "字符串前含缩进调用": ("\tget_tree().change_scene_to_file(path)\n", "Scene/other_scene/sample.gd"),
+    }
+    good_samples = {
+        "Global 正式入口": ("Global.change_scene(path)\n", "Script/level/sample.gd"),
+        "Global 自身低层实现": ("var err := tree.change_scene_to_file(path)\n", "global.gd"),
+        "注释中的低层调用": ("# tree.change_scene_to_file(path) legacy note\n", "Script/level/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.scene_entry_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.scene_entry_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 场景入口边界门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 场景入口边界门禁自测失败！", file=sys.stderr)
+    return passed
+
+
+def run_load_cache_boundary_self_test() -> bool:
+    """加载页私有缓存自测：私有字段必须拦截，窄交接 API 必须放行。"""
+    print("[*] 加载页私有缓存门禁负向自测...")
+    bad_samples = {
+        "直接读 _resource_cache": ("var hit = Global._resource_cache.has(path)\n", "Scene/other_scene/load_scene.gd"),
+        "直接写 _texture_cache": ("Global._texture_cache[path] = resource\n", "Scene/other_scene/load_scene.gd"),
+        "直接调用私有写入": ("Global._cache_threaded_resource(path, resource)\n", "Scene/other_scene/load_scene.gd"),
+    }
+    good_samples = {
+        "窄交接提交": ("Global.handoff_loaded_resource(path, resource, true)\n", "Scene/other_scene/load_scene.gd"),
+        "其他文件访问约定 API": ("var hit = Global.is_resource_cached(path)\n", "Script/level/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.load_cache_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.load_cache_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 加载页私有缓存门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 加载页私有缓存门禁自测失败！", file=sys.stderr)
+    return passed
+
+
+def run_pool_ui_boundary_self_test() -> bool:
+    """池/UI 清理入口自测：未登记调用与私有字段必须拦截，登记调用必须放行。"""
+    print("[*] 池/UI 清理入口门禁负向自测...")
+    bad_samples = {
+        "未登记 UI 清理": ("Global.cleanup_transient_ui()\n", "Script/new_ui.gd"),
+        "直接池清理": ("Global._clear_runtime_pools()\n", "Script/new_ui.gd"),
+        "直接池数据访问": ("var pool = Global._pool_data[\"damage_text\"]\n", "Script/level/sample.gd"),
+        "直接 UI 实例表访问": ("var count = Global._transient_ui_instances.size()\n", "Script/main_menu/new_menu.gd"),
+    }
+    good_samples = {
+        "已登记地图清理": ("Global.cleanup_transient_ui()\n", "Script/main_menu/map_1.gd"),
+        "Global 自身清理": ("_clear_runtime_pools()\n", "global.gd"),
+        "已登记关卡清理": ("Global.cleanup_transient_ui()\n", "Scene/other_scene/level_info.gd"),
+        "注释中的私有入口": ("# Global._clear_runtime_pools() legacy note\n", "Script/new_ui.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.pool_ui_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.pool_ui_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 池/UI 清理入口门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 池/UI 清理入口门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -1333,7 +1610,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="运行时 manifest、AtlasMetadata 与关卡预载边界门禁负向自测（不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页缓存与池/UI 清理边界自测（不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -1341,7 +1618,14 @@ def main():
         manifest_ok = run_runtime_manifest_self_test()
         atlas_ok = run_atlas_boundary_self_test()
         preload_ok = run_preload_boundary_self_test()
-        sys.exit(0 if manifest_ok and atlas_ok and preload_ok else 1)
+        scene_ok = run_scene_entry_boundary_self_test()
+        load_cache_ok = run_load_cache_boundary_self_test()
+        pool_ui_ok = run_pool_ui_boundary_self_test()
+        sys.exit(
+            0
+            if manifest_ok and atlas_ok and preload_ok and scene_ok and load_cache_ok and pool_ui_ok
+            else 1
+        )
 
     if not os.path.isdir(args.project_dir):
         print(f"[FAIL] 工程目录不存在: {args.project_dir}", file=sys.stderr)
