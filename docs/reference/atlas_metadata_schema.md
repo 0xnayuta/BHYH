@@ -1,6 +1,6 @@
 # AtlasMetadata 生产者、schema 与消费者矩阵
 
-> **状态**：Phase 14-1 只读调查 + Phase 14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 实现（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache` 与 `NorthBossProjectile.source_masks` 已删除。本页仍记录惰性配置与 14-4 收口边界。
+> **状态**：Phase 14 已完成（2026-10-28，待归档）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。
 > **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
 > **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
 > **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`current-iteration.md`](../roadmap/current-iteration.md)。
@@ -121,7 +121,7 @@ flowchart LR
 - `nanhai_projectile.gd` 把 `atlas_metadata`、`impact_atlas_metadata` 读入成员变量，但当前没有读取这些成员来加载 AtlasMetadata；`_configure_atlas_visual()` 直接返回 `false`；
 - `minghai_boss3117.gd`、`zhuque_street_monster.gd` 定义 `ATLAS_METADATA` 常量，但静态检索未发现其使用；
 - `source_masks_metadata` 是唯一的运行时“间接 metadata 路径”配置，读取者为 `palace_boss_projectile.gd`，来源为 Cloud/North/Palace；
-- `atlas_metadata` 配置应在 Phase 14-4 的受控清理中移除，前提是再次扫描确认无外部调用方；本次迁移未清理源码配置。
+- 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已在 Phase 14-4 清理；`contract_scan.py` 守卫旧入口。
 
 `AtlasMetadataStore.validate_path()`、`clear_cache()` 与 `data_for()` 已删除；`view_for("")` 统一报告空路径并返回 `null`，不再存在静默空字典入口。
 
@@ -134,7 +134,7 @@ flowchart LR
 | schema 校验浅层 | `AtlasMetadata.validate()` 未验证帧元组、页索引、geometry/masks、Mount 帧 | `AtlasMetadataView` 已深度校验 `pages+sequences` 与 `animation+frames` |
 | Store 公共 API 未使用 | `validate_path`/`clear_cache` 已删除 | 保留 `view_for` 作为唯一公开入口 |
 | metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3B-3 中加 UID |
-| 旧配置残留 | 4 个 `atlas_metadata` 写入方无实际读取方；2 个 `ATLAS_METADATA` 常量未使用 | 14-4 确认后清理配置/常量；不把它们加入 typed 消费者清单 |
+| 旧配置残留 | 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已清理 | 不把它们加入 typed 消费者清单；由 `contract_scan.py` 守卫旧入口与 `.data`/`source_masks` |
 
 ## 8. Phase 14-2/14-3A/14-3B-1 已实现子集
 
@@ -143,7 +143,7 @@ flowchart LR
 1. **只读 View**：`AtlasMetadataView` 覆盖 `pages+sequences` 的长度、帧几何、geometry、masks，以及 `animation+frames` 的播放参数/图层/rider transform；不建立 `pages`/`files` 的通用对象图。
 2. **Store 入口**：`view_for(path)` 做路径、资源类型、浅层与深度 schema 校验，按路径缓存 View；失败返回 `null` 并报告。
 3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；`MountVisual` 使用 View 读取 metadata 动画；`PalaceFlyingBoss` 使用 View 读取自有 `geometry`（`center`/`size`/`origin`）与 `masks`；East/Cloud/North 使用 View 读取序列/几何；`NorthBossProjectile` 的 `source_masks` 已删除，mask alias 通过 `mask_sequence` 选择。
-4. **未实现**：4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 的惰性成员清理，归入 14-4；不把它们加入 typed 消费者清单。
+4. **14-4 收口**：清理 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员；新增 `contract_scan.py` 的 `atlas_boundary` 规则，阻断旧 `data_for`/`validate_path`/`clear_cache`、非 View `.data` 读取与 `source_masks` 覆盖。
 
 约束：
 
@@ -170,7 +170,8 @@ python scripts/convert_monster_frames.py --check
 - 临时 GDScript 探针对 Palace 3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 逐值比对原始 `.data`，**PASS**；
 - East/Cloud 辅助探针覆盖 **149** 个序列资源、**1310** 个序列、**40222** 帧，逐帧比较帧数、registration anchor、center/size/has_visual，**PASS**；
 - North View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比较 **PASS**；
-- `level_72`、`level_75` 定向冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s），日志门禁 **0 ERROR / 0 WARNING**；
+- `level_72`、`level_75`、`level_76`、`level_81` 定向冒烟 PASS；L2：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 单次瞬态重试通过），日志门禁 **0 ERROR / 0 WARNING**；
+- `contract_scan.py --self-test` 的 AtlasMetadata 边界坏样本 **5/5** 拦截、好样本 **4/4** 放行；
 - `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。
 
 临时探针已删除；未修改素材、既有 UID 或归档。再次调查时应从当前源码、资源与命令输出重新生成，不把本页数量当作长期 SLA。

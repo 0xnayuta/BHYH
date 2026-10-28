@@ -3,7 +3,6 @@ class_name EmeiBoss3040
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/nanhai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3040"
-const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
 const SOURCE_FPS := 30.0
 const AI_DELAY_MSEC := 1000
 
@@ -398,10 +397,6 @@ func _finish_skill3_dash() -> void:
 func _spawn_projectile(config: Dictionary) -> NanhaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as NanhaiProjectile
 	config["owner"] = self
-	config["atlas_metadata"] = ATLAS_METADATA
-	config["atlas_sequence"] = str(config.get("frame_root", "")).get_file()
-	if not str(config.get("impact_frame_root", "")).is_empty():
-		config["impact_atlas_sequence"] = str(config["impact_frame_root"]).get_file()
 	config["damage_enabled"] = not (config["attack_data"] as Dictionary).is_empty()
 	projectile.configure(config)
 	bullet.add_child(projectile)

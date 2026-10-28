@@ -363,7 +363,7 @@ classDiagram
 
 仍然存在的边界：
 
-- `AtlasMetadata.data` 仅作为 `.tres` 序列化内部字段；六个直接消费者均改用 `view_for()`；`data_for()`、`validate_path()` 与 `clear_cache()` 已删除。空路径与无效 path 由 `view_for()` 报告并返回 `null`。
+- `AtlasMetadata.data` 仅作为 `.tres` 序列化内部字段；六个直接消费者均改用 `view_for()`；`data_for()`、`validate_path()` 与 `clear_cache()` 已删除。空路径与无效 path 由 `view_for()` 报告并返回 `null`；`contract_scan.py` 的 `atlas_boundary` 规则阻断旧入口、非 View `.data` 读取与 `source_masks` 覆盖。
 - `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧：包含动态动作映射、图集几何/子序列、固定数组、调试图标以及已登记历史占位/回退。清单是实际范围来源，本文不复制条目计数。
 - `pet_neat_bullet`、`level_59`、`user_key` 是登记的非怪物边界；法宝与 Lyfb/哪吒特效的 Phase 13 迁移已完成，不再列为待建帧迁移。
 - allowlist 中的历史占位/缺失回退并不满足新增代码的失败语义，不能据此扩张；恢复资源或迁移相应职责时移除登记并重新验收。
@@ -433,7 +433,7 @@ classDiagram
 
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
-| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 已删除；剩余惰性配置归入 14-4 |
+| `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
 | Global 缓存/池/场景流与资源请求交织 | [Phase 15 候选](../roadmap/roadmap.md#32-phase-15应用编排与运行资源生命周期)：明确所有者、退出和正式入口 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |

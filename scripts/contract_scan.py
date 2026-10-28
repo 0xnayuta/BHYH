@@ -5,13 +5,14 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中六大字面量契约与真源的一致性：
+用于全量扫描并比对工程中七大契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
 4. 动画轨道契约 (Animation Track Contract): method 轨道与 value 属性轨道的方法与节点大小写比对
 5. 字典键契约 (Dictionary Key Contract): 中文字典键字面量与 DataKeys 常量契约映射比对
 6. 运行时 manifest 门禁 (Runtime Manifest Gate): 新增代码禁止在运行时直接加载 atlas manifest
+7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary): 禁止旧入口、直接 .data 读取与 source_masks 覆盖
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -910,6 +911,37 @@ class ContractScanner:
         "_manifest_for_model(",
         "_manifest_path(",
     )
+    ATLAS_BOUNDARY_ALLOWLIST = {
+        "Script/atlas/atlas_metadata.gd",
+        "Script/atlas/atlas_metadata_view.gd",
+    }
+    ATLAS_BOUNDARY_LEGACY_PATTERNS = (
+        "AtlasMetadataStore.data_for",
+        "AtlasMetadataStore.validate_path",
+        "AtlasMetadataStore.clear_cache",
+    )
+    ATLAS_DATA_ACCESS_PATTERN = re.compile(r"\b(?:AtlasMetadata|metadata|atlas_metadata|resource)\b[^\n]*\.\s*data\b")
+    ATLAS_SOURCE_MASKS_PATTERN = re.compile(r"\bsource_masks\b")
+
+    @classmethod
+    def atlas_boundary_violation(cls, content: str, rel_path: str):
+        """返回 (行号, 命中标识)；无违规返回 (0, "")。
+
+        仅检查代码行，注释行除外；View/资源自身允许读取 `.data`。
+        """
+        allow_data = rel_path in cls.ATLAS_BOUNDARY_ALLOWLIST
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.ATLAS_BOUNDARY_LEGACY_PATTERNS:
+                if pattern in clean:
+                    return (lineno, pattern)
+            if not allow_data and cls.ATLAS_DATA_ACCESS_PATTERN.search(clean):
+                return (lineno, ".data")
+            if cls.ATLAS_SOURCE_MASKS_PATTERN.search(clean):
+                return (lineno, "source_masks")
+        return (0, "")
 
     @classmethod
     def runtime_manifest_violation(cls, content: str):
@@ -954,8 +986,32 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def scan_atlas_boundary(self):
+        print(f"[*] 扫描 AtlasMetadata 运行时边界门禁...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = self.atlas_boundary_violation(content, rel_p)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category="atlas_boundary",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message="禁止旧 AtlasMetadataStore 入口、直接 .data 读取或 source_masks 覆盖",
+                suggested_fix="改用 AtlasMetadataStore.view_for() 与其只读值查询",
+                rule_id="ATLAS_BOUNDARY_FORBIDDEN",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
     def run_all_checks(self):
-        """执行完整六大契约扫描流水线"""
+        """执行完整七大契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -966,6 +1022,7 @@ class ContractScanner:
         self.scan_animation_tracks()
         self.scan_dict_keys()
         self.scan_runtime_manifest_loading()
+        self.scan_atlas_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1021,7 +1078,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、六大字面量契约健康看板")
+        lines.append("## 一、七大契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1033,6 +1090,7 @@ class ContractScanner:
             "anim_track": "4. 动画轨道契约 (Anim Track)",
             "dict_key": "5. 中文字典键契约 (Dict Key)",
             "runtime_manifest": "6. 运行时 manifest 门禁 (Runtime Manifest)",
+            "atlas_boundary": "7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -1142,6 +1200,46 @@ def run_runtime_manifest_self_test() -> bool:
     return passed
 
 
+def run_atlas_boundary_self_test() -> bool:
+    """AtlasMetadata 边界门禁负向自测：旧入口、直接 data 与 source_masks 必须拦截。"""
+    print("[*] AtlasMetadata 边界门禁负向自测...")
+    scanner = ContractScanner.__new__(ContractScanner)
+    bad_samples = {
+        "旧 data_for 入口": ("var data := AtlasMetadataStore.data_for(path)\n", "Script/monster/sample.gd"),
+        "旧 validate_path 入口": ("var errors := AtlasMetadataStore.validate_path(path)\n", "Script/monster/sample.gd"),
+        "旧 clear_cache 入口": ("AtlasMetadataStore.clear_cache()\n", "Script/monster/sample.gd"),
+        "直接 data 读取": ("var payload: Dictionary = metadata.data\n", "Script/monster/sample.gd"),
+        "source_masks 覆盖": ("projectile.source_masks[sequence] = []\n", "Script/monster/sample.gd"),
+    }
+    good_samples = {
+        "view_for 正式入口": ("var view := AtlasMetadataStore.view_for(path)\n", "Script/monster/sample.gd"),
+        "注释中的旧入口": ("# AtlasMetadataStore.data_for(path) legacy note\nvar view := AtlasMetadataStore.view_for(path)\n", "Script/monster/sample.gd"),
+        "View 内部 data 读取": ("_data = metadata.data\n", "Script/atlas/atlas_metadata_view.gd"),
+        "source_masks_metadata 配置键": ('var key := "source_masks_metadata"\n', "Script/monster/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.atlas_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.atlas_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] AtlasMetadata 边界门禁负向自测通过 "
+              f"(坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] AtlasMetadata 边界门禁负向自测失败！", file=sys.stderr)
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -1149,12 +1247,14 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="运行时 manifest 门禁负向自测（不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="运行时 manifest 与 AtlasMetadata 边界门禁负向自测（不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
     if args.self_test:
-        sys.exit(0 if run_runtime_manifest_self_test() else 1)
+        manifest_ok = run_runtime_manifest_self_test()
+        atlas_ok = run_atlas_boundary_self_test()
+        sys.exit(0 if manifest_ok and atlas_ok else 1)
 
     if not os.path.isdir(args.project_dir):
         print(f"[FAIL] 工程目录不存在: {args.project_dir}", file=sys.stderr)

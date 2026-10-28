@@ -8,8 +8,6 @@ var owner_monster: BaseMonster
 var spawn_global_position := Vector2.ZERO
 var frame_root := ""
 var frame_count := 0
-var atlas_metadata := ""
-var atlas_sequence := ""
 var visual_scale := Vector2.ONE
 var frame_fps := SOURCE_FPS
 var loop_visual := true
@@ -17,8 +15,6 @@ var visual_offset := Vector2.ZERO
 var visual_faces_right := true
 var impact_frame_root := ""
 var impact_frame_count := 0
-var impact_atlas_metadata := ""
-var impact_atlas_sequence := ""
 var impact_visual_faces_right := true
 var impact_visual_offset := Vector2.ZERO
 var impact_duration := 0.0
@@ -96,8 +92,6 @@ func configure(config: Dictionary) -> void:
 	dir = bool(config.get("right", true))
 	frame_root = str(config.get("frame_root", ""))
 	frame_count = int(config.get("frame_count", 0))
-	atlas_metadata = str(config.get("atlas_metadata", ""))
-	atlas_sequence = str(config.get("atlas_sequence", ""))
 	visual_scale = config.get("visual_scale", Vector2.ONE)
 	frame_fps = float(config.get("frame_fps", SOURCE_FPS))
 	loop_visual = bool(config.get("loop_visual", true))
@@ -105,8 +99,6 @@ func configure(config: Dictionary) -> void:
 	visual_faces_right = bool(config.get("visual_faces_right", true))
 	impact_frame_root = str(config.get("impact_frame_root", ""))
 	impact_frame_count = int(config.get("impact_frame_count", 0))
-	impact_atlas_metadata = str(config.get("impact_atlas_metadata", ""))
-	impact_atlas_sequence = str(config.get("impact_atlas_sequence", ""))
 
 	impact_visual_faces_right = bool(config.get("impact_visual_faces_right", visual_faces_right))
 	impact_visual_offset = config.get("impact_visual_offset", Vector2.ZERO)

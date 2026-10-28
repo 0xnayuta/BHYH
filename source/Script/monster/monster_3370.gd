@@ -1,7 +1,6 @@
 extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/nanhai_projectile.gd")
-const ATLAS_METADATA := "res://Art/monster/swf_png/3370/atlas/metadata.tres"
 const SOURCE_FPS := 30.0
 const AI_DELAY_MSEC := 1000
 const SKILL1_DASH_FRAME := 25
@@ -283,8 +282,6 @@ func _spawn_skill3_field() -> void:
 				"hit_name": "hit3",
 				"attack_data": (obj_attack_dict["hit3"] as Dictionary).duplicate(true),
 				"skill_name": "Monster3370Effect3Field",
-				"atlas_metadata": ATLAS_METADATA,
-				"atlas_sequence": "effect3_1",
 				"frame_fps": SOURCE_FPS,
 				"loop_visual": false,
 				"visual_offset": Vector2(0.0, -58.0),

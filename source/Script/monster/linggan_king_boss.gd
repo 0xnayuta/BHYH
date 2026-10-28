@@ -3,7 +3,6 @@ class_name LingganKingBoss
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/nanhai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3033"
-const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
 const SOURCE_FPS := 30.0
 const BASE_ATTACK := 32000
 const SKILL2_DASH_SPEED := 360.0
@@ -441,10 +440,6 @@ func _finish_fish_leap(end_position: Vector2) -> void:
 func _spawn_projectile(config: Dictionary) -> NanhaiProjectile:
 	var projectile := PROJECTILE_SCRIPT.new() as NanhaiProjectile
 	config["owner"] = self
-	config["atlas_metadata"] = ATLAS_METADATA
-	config["atlas_sequence"] = str(config.get("frame_root", "")).get_file()
-	if config.has("impact_frame_root"):
-		config["impact_atlas_sequence"] = str(config["impact_frame_root"]).get_file()
 	projectile.configure(config)
 	bullet.add_child(projectile)
 	return projectile

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）；14-1 矩阵、14-2 Palace 试点、14-3A Mount 试点、14-3B-1 PalaceFlyingBoss、14-3B-2 East+Cloud 与 14-3B-3 North 已完成（2026-10-28），14-4 未启动**。六个直接消费者已走只读 View，旧 `data_for`/`validate_path`/`clear_cache` 与 `source_masks` 已删除；剩余惰性配置归入 14-4。
+> **状态**：**Phase 14：类型化数据边界（AtlasMetadata 试点）已完成（2026-10-28），待归档**。14-1~14-4 全部完成；六个直接消费者已走只读 View，旧 `data_for`/`validate_path`/`clear_cache`、`source_masks` 与惰性 atlas 配置已删除，`contract_scan.py` 已加入 AtlasMetadata 边界守卫。
 > **版本**：6.9；不新增玩法、任务、掉落，不改变数值、存档格式或本地双人共享规则。
 > **职责**：本页只展开当前候选 Phase 14；后续 Phase 15~17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。不再在本页复制后续阶段任务表。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`architecture.md`](../reference/architecture.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -31,13 +31,13 @@
 | 现有边界 | 已知事实 | 本阶段取证要求 |
 |:---|:---|:---|
 | `AtlasMetadata` | Resource，`data: Dictionary`；当前无源码直接读 `.data`，均经 Store | 14-1 已核对实际 schema 与字段 |
-| `AtlasMetadataStore` | 唯一公开入口为 `view_for`，缓存并返回深度校验后的 View；`data_for`、`validate_path`、`clear_cache` 已删除。Cloud、East、North、PalaceBossProjectile、PalaceFlyingBoss、MountVisual 均已接入 | 14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 已完成 |
+| `AtlasMetadataStore` | 唯一公开入口为 `view_for`，缓存并返回深度校验后的 View；`data_for`、`validate_path`、`clear_cache` 已删除。Cloud、East、North、PalaceBossProjectile、PalaceFlyingBoss、MountVisual 均已接入 | 14-2/14-3A/14-3B-1/14-3B-2/14-3B-3/14-4 已完成 |
 | 源 schema | 379 个 manifest，8 种顶层形态；运行时只消费 `pages+sequences` 与 `animation+frames` | 不为 `files`/旧 `animations`/数组/索引建运行时模型 |
 | 直接消费者 | `cloud_boss`、`east_continent_monster`、`north_continent_monster`、`palace_boss_projectile`、`palace_flying_boss`、`mount_visual` | 已逐项记录字段、共享/复制与失败行为 |
 | 构建入口 | `convert_atlas_metadata.py` 379/379 同步；`convert_monster_frames.py` 152 目标/42 跳过 | 构建校验与运行时类型化分开 |
 | Phase 13 已收口路径 | `main_sword_array_weapon` 已删除 Atlas 回退 | 不将其重新列为待迁移消费者 |
 
-14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 已完成；14-4 仍未启动。本页中的后续类型名称是设计候选，不是现有符号。
+14-1 的详细证据、资源域和构建期边界见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)。14-1~14-4 已完成；本页保留 Phase 14 收口记录，后续候选由 [`roadmap.md`](roadmap.md) 维护。本页中的后续类型名称是设计候选，不是现有符号。
 
 ## 2. 批次 14-1：生产/消费边界与 schema 决策（已完成）
 
@@ -48,7 +48,7 @@
 | 项目 | 结果 |
 |:---|:---|
 | 生产者 | 仓库内唯一转换器 `convert_atlas_metadata.py`，把 379 个 `manifest.json` 生成同目录 `metadata.tres`；`--check` 379/379 同步，`--self-test` 4/4 通过 |
-| 运行时入口 | 仅 6 个 `AtlasMetadataStore.data_for` 调用点；`validate_path()`/`clear_cache()` 无生产调用 |
+| 运行时入口 | 14-1 调查时 6 个 `AtlasMetadataStore.data_for` 调用点；迁移后旧入口与 `validate_path()`/`clear_cache()` 已删除 |
 | 运行时资源域 | 267 个 metadata 路径可触达：East 83、North 51、Palace 2、Cloud 1、Mount 86+44；Palace 弹体复用前三域，不新增路径域 |
 | schema 实际形态 | 379 个 manifest 分 8 组顶层形态、18 种键签名；运行时只直接消费 `pages+sequences`（East/Cloud/North/Palace）与 `animation+frames`（Mount） |
 | 非运行时形态 | `files`、旧 `animations`、顶层数组、索引/其它字典：未发现 Store 读取；4 个剑阵 `animations` 由构建期帧转换器读取 |
@@ -63,7 +63,7 @@
 1. 原“四种 schema”假设不适用于实际源数据；不能按四种模型强行统一。
 2. 运行时只需覆盖真实字段：序列帧几何、`geometry`/`masks`、Mount 动画帧与图层；`files`、旧 `animations`、顶层数组不建立运行时类型。
 3. 失败语义必须先于 consumer 迁移：声明路径缺失、类型错误、空序列和空 mask 需要区分；当前静默退化/基类回退不能原样保留。
-4. 14-2 已在 PalaceBossProjectile 处理声明路径失败；14-3B-1 已将 PalaceFlyingBoss 自有 geometry/masks 迁到 View；14-3B-2 已将 East/Cloud 与 Palace 继承序列路径迁到 View；14-3B-3 已迁移 North 并删除旧入口。空路径与失败语义已由 `view_for` 统一报告；惰性配置归入 14-4。
+4. 14-2 已在 PalaceBossProjectile 处理声明路径失败；14-3B-1 已将 PalaceFlyingBoss 自有 geometry/masks 迁到 View；14-3B-2 已将 East/Cloud 与 Palace 继承序列路径迁到 View；14-3B-3 已迁移 North 并删除旧入口。空路径与失败语义由 `view_for` 统一报告；14-4 清理惰性配置并加入边界守卫。
 
 **出口核对**：每个直接消费者均有字段与失败路径记录；只构建使用的 schema 已列明；没有新增未调查调用。14-2 已按此矩阵完成 PalaceBossProjectile 试点。
 
@@ -98,7 +98,7 @@
 
 ## 4. 批次 14-3A/14-3B：生产消费者闭环迁移
 
-**状态**：14-3A、14-3B-1、14-3B-2、14-3B-3 已完成；14-4 未启动。
+**状态**：14-3A、14-3B-1、14-3B-2、14-3B-3、14-4 已完成。
 
 ### 4.1 14-3A：Mount（已完成）
 
@@ -138,13 +138,18 @@
 
 ## 5. 批次 14-4：边界守卫与收口
 
-**状态**：未启动。
+**状态**：已完成（2026-10-28）。
 
 - 核对完整生产调用面，不仅搜索一个方法名；区分资源声明、构建数据与运行时访问。
 - 如需长期访问守卫，扩展现有审计的明确检查项，并登记 `scripts/README.md` 与 `acceptance.md`；未实现前不得声称已有门禁自动阻断。
 - 源/生成内容一致、UID 稳定、依赖清单不意外膨胀；转换器不得改不属于自己的输出。
 - 更新实际架构、验收覆盖与带日期状态；只在全部出口满足后标记完成。
-- 不接受“部分 schema 永远保留裸字典”作为默认缩范围；若新的调查显示超出原定义，须明确修订范围与决策，不能静默跳过生产消费者。
+- 已删除 4 个无读取方的 `atlas_metadata` 写入方、2 个未使用 `ATLAS_METADATA` 常量与 `nanhai_projectile` 的惰性成员；
+- `contract_scan.py` 新增第七类 `atlas_boundary` 门禁与负向自测：旧 `data_for`/`validate_path`/`clear_cache`、非 View `.data` 读取、`source_masks` 覆盖均阻断；
+- `scripts/README.md`、`acceptance.md` 与 `docs/reference/atlas_metadata_schema.md` 已登记守卫与失败边界；
+- L2 固定套件：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；
+- 全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 首次瞬态 FAIL，单关重试 PASS）；
+- `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；未执行 release 重验。
 
 ## 6. 验证矩阵
 
@@ -168,6 +173,8 @@
 
 14-3B-3 的已完成证据：North View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比较 **PASS**；`level_76`、`level_81` 冒烟 PASS（0 ERROR / 0 WARNING）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s）。
 
+14-4 的已完成证据：`contract_scan.py --self-test` 的 AtlasMetadata 边界坏样本 **5/5** 拦截、好样本 **4/4** 放行；L2：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s，`level_dsg_1` 单次瞬态重试通过）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；未执行 release 重验。
+
 涉及运行探针与枚举 `source/` 的门禁串行运行。临时夹具在结束后移除，不进入发布。完整私有工作区维持零错误零警告；未执行验证显式记录为未验证。
 
 ## 7. 阶段出口与恢复
@@ -175,10 +182,10 @@
 - 所有实际运行时消费者迁移，旧公共入口与兼容分支删除；未消费源 schema 保持完整构建校验。
 - 无可写共享容器泄露；页/纹理未重复常驻；行为与资源身份不变。
 - 构建、L1、定向冒烟、L2 与阶段回归满足矩阵；发布变更按触发条件验证。
-- 文档、ADR、脚本索引与状态一致；14-1/14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 的字段矩阵保留在 reference，不复制进阶段目标。
+- 文档、ADR、脚本索引与状态一致；14-1/14-2/14-3A/14-3B-1/14-3B-2/14-3B-3/14-4 的字段矩阵保留在 reference，不复制进阶段目标。
 
 中断时从 14-1 矩阵与已验证切片恢复；失败回滚该逻辑批次，不恢复旧来源回退。阶段全部完成后只归档本页的 Phase 14 记录，再重新建立下一候选计划；后续方向继续以 roadmap 为准。
 
-**恢复入口**：14-1/14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 已完成，不要重跑全仓 schema 猜测；从 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) 的消费者表和 14-4 收口切片继续。
+**恢复入口**：Phase 14 已完成；如需复核，从 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) 的消费者表与 `contract_scan.py` 的 `atlas_boundary` 规则继续；归档后本页转为历史记录。
 
 **下一候选顺序**：Phase 15 应用编排/运行资源 → Phase 16 档案会话/持久化/槽位 → Phase 17 玩法/表现边界。该顺序是风险优先队列，不是 AtlasMetadata 对全部架构工作的强制技术前置。

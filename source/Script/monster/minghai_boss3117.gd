@@ -2,7 +2,6 @@ extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
 const ROOT := "res://Art/monster/swf_png/3117"
-const ATLAS_METADATA := ROOT + "/atlas/metadata.tres"
 const ATLAS_FRAMES := ROOT + "/atlas/swf_png_3117_frames.tres"
 const SOURCE_FPS := 30.0
 const AI_DELAY_MSEC := 1000

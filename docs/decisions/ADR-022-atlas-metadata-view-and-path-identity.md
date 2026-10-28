@@ -54,12 +54,12 @@ Phase 14-2 / 14-3A / 14-3B-1 / 14-3B-2 / 14-3B-3 已实现：
 - `PalaceFlyingBoss` 自有 `geometry`（`center`/`size`/`origin`）与 `masks` 迁移到 View；继承 East 的序列辅助已在 14-3B-2 切换到 View；
 - `EastContinentMonster` 的序列长度、registration anchor 与帧几何改走 View；`CloudBoss` 的 `geometry.center` 改走 View；
 - `NorthContinentMonster` 的序列/geometry/masks 改走 View；`NorthBossProjectile` 删除 `source_masks`，通过 `mask_sequence` 别名选择 View mask；
-- `AtlasMetadataStore.data_for`、`validate_path`、`clear_cache` 已删除；
+- `AtlasMetadataStore.data_for`、`validate_path`、`clear_cache` 已删除；4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已清理；
 - 未修改 `source/Art/`、素材内容或既有 UID。
 
-验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；East/Cloud 序列辅助探针覆盖 **149** 个资源、**1310** 个序列、**40222** 帧并逐帧比对 PASS；North 的 View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比对 PASS；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；Palace 3323/3343 的 geometry 与 `hit1` masks 逐值比对 PASS；`level_72`、`level_75`、`level_76`、`level_81` 与 Palace 继承关冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
+验证：View 覆盖 267 个运行时资源（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；East/Cloud 序列辅助探针覆盖 **149** 个资源、**1310** 个序列、**40222** 帧并逐帧比对 PASS；North 的 View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比对 PASS；`contract_scan.py --self-test` 的 AtlasMetadata 边界坏样本 5 / 好样本 4 通过；`MountVisual` metadata 动画 `aoyi_skill` 播放与视觉边界 PASS；Palace 3323/3343 的 geometry 与 `hit1` masks 逐值比对 PASS；`level_72`、`level_75`、`level_76`、`level_81` 与 Palace 继承关冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 单次瞬态重试通过）；`check_all --godot-bin` **8/8 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning。
 
-剩余 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 成员属于 14-4 收口；禁止以本 ADR 为依据开展全量重写。
+14-4 已增加 `contract_scan.py` 的 `atlas_boundary` 规则，并完成惰性配置清理；禁止以本 ADR 为依据开展全量重写。
 
 ## 备选方案
 

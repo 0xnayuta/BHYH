@@ -32,7 +32,7 @@
 |:---|:---|
 | [`reference/README.md`](reference/README.md) | 参考文档目录索引 |
 | [`reference/architecture.md`](reference/architecture.md) | **运行时架构**：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
-| [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与试点**：AtlasMetadata 生产者、源形态、消费者、View 与失败边界 |
+| [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与收口**：AtlasMetadata 生产者、源形态、消费者、View、守卫与失败边界 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
@@ -42,7 +42,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：14-1/14-2/14-3A/14-3B-1/14-3B-2/14-3B-3 完成，14-4 未启动 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 14 类型化数据边界（AtlasMetadata 试点）**：Phase 14 完成，待归档；14-1~14-4 全部完成 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
