@@ -480,6 +480,8 @@ classDiagram
 - 由 `Global.add_*` 工厂延迟实例化，挂到 `Global.windows` 或 `GlobalUiPopupLayer`；
 - `Global.windows` 由当前场景设置；`LocalCoop` 打开 2P 面板时临时替换并恢复；
 - 确认框统一通过 `Signals.choose_pressed` 回调；
+- 临时 UI 通过 `Global.register_transient_ui(node, close_method, scene_path)` 显式登记；基础任务、神秘商店与游戏公告工厂已迁移。`cleanup_transient_ui` 先执行关闭回调，再清理弹出层/名称兜底；永久小 UI 路径跳过，递归清理有 active 守卫；
+
 - 新 UI 优先场景组合、`@export` 注入与 `%UniqueName`，不新增跨场景深层 `get_node()`。
 
 ### 7.2 输入

@@ -13,6 +13,15 @@ const LEVEL_3 := "res://Scene/level/level_3.tscn"
 const MISSING_SCENE := "res://Scene/level/__load_guard_missing.tscn"
 const WAIT_FRAMES := 1800
 
+
+class ProbeTransientUI:
+	extends Control
+	var closed := false
+
+	func close() -> void:
+		closed = true
+
+
 var _failures: Array[String] = []
 var _is_worker := false
 
@@ -51,6 +60,33 @@ func _run() -> void:
 	var ui_scope_after := Global.get_cache_scope_snapshot()
 	var ui_section_after: Dictionary = ui_scope_after.get("ui", {})
 	checks["scope_ui_released"] = int(ui_section_after.get("runtime_instance_count", 1)) == 0
+
+	var transient_ui := ProbeTransientUI.new()
+	get_tree().root.add_child(transient_ui)
+	Global.register_transient_ui(transient_ui, &"close")
+	var transient_scope := Global.get_cache_scope_snapshot()
+	checks["scope_transient_registered"] = int(transient_scope.get("ui", {}).get("transient_instance_count", 0)) >= 1
+	Global.cleanup_transient_ui()
+	checks["transient_close_called"] = transient_ui.closed
+	await get_tree().process_frame
+	checks["transient_removed"] = not is_instance_valid(transient_ui)
+
+	var legacy_ui := Control.new()
+	legacy_ui.name = "LevelInfo"
+	get_tree().root.add_child(legacy_ui)
+	await get_tree().process_frame
+	Global.cleanup_transient_ui()
+	await get_tree().process_frame
+	checks["legacy_name_fallback"] = not is_instance_valid(legacy_ui)
+
+	var permanent_ui := (load("res://Scene/skill/learn_skill.tscn") as PackedScene).instantiate()
+	permanent_ui.name = "Learn_skill"
+	get_tree().root.add_child(permanent_ui)
+	await get_tree().process_frame
+	Global.register_transient_ui(permanent_ui, &"close")
+	Global.cleanup_transient_ui()
+	checks["permanent_ui_preserved"] = is_instance_valid(permanent_ui)
+	permanent_ui.queue_free()
 
 	Global.preload_next(MISSING_SCENE)
 	await get_tree().process_frame

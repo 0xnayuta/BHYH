@@ -376,6 +376,8 @@ var _archive_session_prewarm_in_progress: bool = false
 var _archive_session_generation: int = 0
 var _ui_runtime_instance_paths: Dictionary = {}
 var _ui_runtime_instance_counts: Dictionary = {}
+var _transient_ui_instances: Dictionary = {}
+var _cleanup_transient_ui_active := false
 const PERMANENT_SMALL_UI_SCENE_PATHS := [
 	"res://Scene/back_pack/back_pack.tscn",
 	"res://Scene/skill/learn_skill.tscn",
@@ -1772,6 +1774,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"runtime_instance_count": _ui_runtime_instance_paths.size(),
 			"runtime_scene_count": _ui_runtime_instance_counts.size(),
 			"runtime_scene_counts": _ui_runtime_instance_counts.duplicate(true),
+			"transient_instance_count": _transient_ui_instances.size(),
 			"permanent_scene_count": _permanent_small_ui_scene_cache.size(),
 		},
 	}
@@ -2677,6 +2680,7 @@ func add_mystery_shop(parent, position):
 	if not mystery_shop:
 		mystery_shop = _load_scene("res://Scene/shop/mystery_shop.tscn")
 	var target = instance_scene(mystery_shop, parent)
+	register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(0, 0):
 		target.position = viewport_center_for_parent(parent) - Vector2(458, 293)
 	else:
@@ -2816,6 +2820,7 @@ func add_game_announcement(parent, position):
 	if not game_announcement:
 		game_announcement = _load_scene("res://Scene/main_menu/game_announcement.tscn")
 	var target = instance_scene(game_announcement, parent)
+	register_transient_ui(target, &"_on_close_pressed")
 	if target is CanvasLayer:
 		target.offset = position
 	elif target is Node2D or target is Control:
@@ -2853,6 +2858,7 @@ func add_basic_task(parent, position):
 	if not basic_task:
 		basic_task = _load_scene("res://Scene/task/basic_task.tscn")
 	var target = instance_scene(basic_task, parent)
+	register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(0, 0):
 		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
 	else:
@@ -2887,13 +2893,21 @@ func clear_hover_popup() -> void:
 	_active_hover_popup = null
 
 
+func _is_permanent_ui_path(scene_path: String) -> bool:
+	return scene_path in PERMANENT_SMALL_UI_SCENE_PATHS
+
+
 func _cleanup_transient_ui_under(root: Node, names: Array) -> void:
 	if root == null:
 		return
 	for child in root.get_children():
-		if child == null or not is_instance_valid(child):
+		if child == null or not is_instance_valid(child) or child.is_queued_for_deletion():
+			continue
+		if _is_permanent_ui_path(str(child.scene_file_path)):
 			continue
 		_cleanup_transient_ui_under(child, names)
+		if child.is_queued_for_deletion():
+			continue
 		if child.name in names:
 			if child is CanvasItem:
 				(child as CanvasItem).visible = false
@@ -2904,10 +2918,14 @@ func _cleanup_transient_ui_under(root: Node, names: Array) -> void:
 
 
 func cleanup_transient_ui() -> void:
+	if _cleanup_transient_ui_active:
+		return
+	_cleanup_transient_ui_active = true
 	clear_hover_popup()
+	_close_registered_transient_ui()
 	if _ui_popup_layer != null and is_instance_valid(_ui_popup_layer):
 		for child in _ui_popup_layer.get_children():
-			if child != null and is_instance_valid(child):
+			if child != null and is_instance_valid(child) and not child.is_queued_for_deletion():
 				child.queue_free()
 	var names = [
 		"MapShadowTop",
@@ -2946,6 +2964,41 @@ func cleanup_transient_ui() -> void:
 	if scene_root != null:
 		_cleanup_transient_ui_under(scene_root, names)
 	_cleanup_transient_ui_under(get_tree().root, names)
+	_cleanup_transient_ui_active = false
+
+
+func register_transient_ui(node: Node, close_method: StringName = &"", scene_path: String = "") -> void:
+	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
+		return
+	var resolved_path := scene_path
+	if resolved_path == "":
+		resolved_path = str(node.scene_file_path)
+	if _is_permanent_ui_path(resolved_path):
+		return
+	var instance_id := node.get_instance_id()
+	if _transient_ui_instances.has(instance_id):
+		return
+	_transient_ui_instances[instance_id] = {"node": node, "close_method": close_method}
+	node.tree_exited.connect(_on_transient_ui_exited.bind(instance_id), CONNECT_ONE_SHOT)
+
+
+func _on_transient_ui_exited(instance_id: int) -> void:
+	_transient_ui_instances.erase(instance_id)
+
+
+func _close_registered_transient_ui() -> void:
+	for instance_id in _transient_ui_instances.keys():
+		var entry: Dictionary = _transient_ui_instances[instance_id]
+		var node: Variant = entry.get("node")
+		if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
+			_transient_ui_instances.erase(instance_id)
+			continue
+		var close_method: StringName = entry.get("close_method", &"")
+		if close_method != &"" and node.has_method(close_method):
+			node.call(close_method)
+		if is_instance_valid(node) and not node.is_queued_for_deletion():
+			node.queue_free()
+		_transient_ui_instances.erase(instance_id)
 
 
 func register_ui_runtime_instance(node: Node, scene_path: String) -> void:
