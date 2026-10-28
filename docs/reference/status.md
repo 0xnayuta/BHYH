@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-28（Phase 14 归档；Phase 15 应用编排与运行资源生命周期规划写入当前迭代）
+> 最后更新：2026-10-28（Phase 15-1 调用面与所有权矩阵完成；Phase 15-2 未启动）
 
 ---
 
@@ -167,7 +167,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-28 Phase 14-3B-2 East+Cloud | `EastContinentMonster._get_east_metadata` 改为 View，删除 `_east_metadata_cache`；`_seq_frame_count`/`_seq_reg_anchor`/`_frame_geom` 使用 View；`CloudBoss._source` 改为 `_cloud_view`；`data_for` 仅剩 North；探针覆盖 **149** 个序列资源、**1310** 个序列、**40222** 帧并逐帧比对 **PASS**；`level_72`（East）/`level_75`（Cloud）冒烟 PASS（0 ERROR / 0 WARNING）；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（682.3s）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | PalaceFlyingBoss 继承序列路径已关闭；North 仍使用 `data_for`，归入 14-3B-3。未修改素材/既有 UID；未跑 L2 全固定套件或 release 重验 |
 | 2026-10-28 Phase 14-3B-3 North | `NorthContinentMonster._source` 改为 `_north_view`；序列/geometry/masks 改走 View；`NorthBossProjectile` 删除 `source_masks`，改由 `mask_sequence` 选择 View mask；删除 `AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`；探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask **PASS**；`level_76`/`level_81` 冒烟 PASS；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（696.2s）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | 六个直接消费者均使用 `view_for`；旧 Store 入口与 `source_masks` 已删除。剩余 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 成员归入 14-4。未修改素材/既有 UID；未跑 L2 全固定套件或 release 重验 |
 | 2026-10-28 Phase 14-4 收口 | 清理 4 个惰性 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员；`contract_scan.py` 新增第七类 `atlas_boundary` 门禁与负向自测（坏样本 **5/5**、好样本 **4/4**）；L2：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 单次瞬态 FAIL 后重试 PASS）；`check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** | Phase 14 完成并归档；旧入口/裸字典/`source_masks` 与惰性配置清零；未执行 release 重验 |
-| 2026-10-28 Phase 14 归档 / Phase 15 规划 | 仅文档：Phase 14 收口记录归档到 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)，当前迭代替换为 Phase 15 应用编排与运行资源生命周期规划；未修改生产代码、素材或既有 UID | Phase 14 完成并归档；Phase 15 尚未启动；新计划只定义批次、所有权矩阵、失败边界与验收，不宣称已实现 |
+| 2026-10-28 Phase 14 归档 / Phase 15 规划 | 仅文档：Phase 14 收口记录归档到 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)，当前迭代替换为 Phase 15 应用编排与运行资源生命周期规划；未修改生产代码、素材或既有 UID | Phase 14 完成并归档；Phase 15 当时尚未启动；新计划只定义阶段、所有权矩阵、失败边界与验收，不宣称已实现 |
+| 2026-10-28 Phase 15-1 调用面矩阵 | 仅文档/静态调查：`Global.change_scene` 135 处、48 个文件；低层切换 9 处，其中 `hdzm.gd` 业务旁路 4 处；`target_scene` 写入 2 处，预览槽 `preload_next` 4 处；加载页、缓存/池/UI/档案会话与退出清理的当前所有者、释放事件和失败边界已登记；未修改 `source/`、素材或 UID | 详细矩阵见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)；Phase 15-1 完成，Phase 15-2 未启动。本阶段未运行引擎、关卡回归或 L2，因为按计划只读调查不触发运行门禁 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

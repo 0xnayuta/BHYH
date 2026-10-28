@@ -31,7 +31,8 @@
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；
-  - `roadmap/current-iteration.md`：Phase 15 应用编排与运行资源生命周期规划；Phase 14 已完成并归档，后续 Phase 16~17 方向见 roadmap；
+  - `reference/runtime_lifecycle_matrix.md`：Phase 15-1 场景切换、加载页、缓存/池/UI、档案会话与退出清理的所有权矩阵；
+  - `roadmap/current-iteration.md`：Phase 15 应用编排与运行资源生命周期规划；Phase 15-1 调用面矩阵已完成，Phase 15-2 未启动；Phase 16~17 方向见 roadmap；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；
