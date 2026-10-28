@@ -261,6 +261,7 @@ func _check_main_menu_saves() -> void:
 	_reset_profile(1, 5)
 	Global.cd_path = PANEL_ARCHIVE_PATH
 	MemoryClass.request_save("probe_main_seed")
+	await _check_reward_and_menu_saves()
 	var popup_layer := CanvasLayer.new()
 	add_child(popup_layer)
 	Global.windows = popup_layer
@@ -309,6 +310,55 @@ func _check_main_menu_saves() -> void:
 	Global.windows = null
 	await get_tree().process_frame
 	await get_tree().process_frame
+
+
+## 关卡与收尾批次：验证结算界面与其余业务保存处理器确实经 request_save 落盘。
+func _check_reward_and_menu_saves() -> void:
+	_reset_profile(1, 5)
+	Global.cd_path = PANEL_ARCHIVE_PATH
+	MemoryClass.request_save("probe_reward_seed")
+	_set_archive_time_value(PANEL_ARCHIVE_PATH, "2000-01-01 00:00:00")
+	var reward: Node = (load("res://Scene/other_scene/reward_interface.tscn") as PackedScene).instantiate()
+	reward.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(reward)
+	await get_tree().process_frame
+	reward.set("reward_items", [{"Name": "qhs_1", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}])
+	reward.call("_process", 0.016)
+	await get_tree().process_frame
+	_check(
+		"batch_reward_interface_saved",
+		_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+		"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+	)
+	_check(
+		"batch_reward_item_granted_once",
+		int(PlayerData.get_item_data("qhs_1")) == 1,
+		"count=%s" % PlayerData.get_item_data("qhs_1")
+	)
+	reward.queue_free()
+	await get_tree().process_frame
+
+	_set_archive_time_value(PANEL_ARCHIVE_PATH, "2000-01-01 00:00:00")
+	RoleProp.baseroleprop.Level = 1
+	RoleProp.baseroleprop.exp = 0
+	RoleProp.cure_level()
+	await get_tree().process_frame
+	_check(
+		"batch_level_up_saved",
+		_archive_time(PANEL_ARCHIVE_PATH) != OLD_ARCHIVE_TIME,
+		"time=%s" % _archive_time(PANEL_ARCHIVE_PATH)
+	)
+	_check(
+		"batch_level_up_persisted_level",
+		int(MemoryClass.peek_archive_data(PANEL_ARCHIVE_PATH).get(DataKeys.PLAYER_LEVEL, 0)) == 2,
+		"level=%s" % MemoryClass.peek_archive_data(PANEL_ARCHIVE_PATH).get(DataKeys.PLAYER_LEVEL)
+	)
+
+
+func _set_archive_time_value(path: String, value: String) -> void:
+	var data := MemoryClass.peek_archive_data(path)
+	data[MemoryClass.ARCHIVE_TIME_KEY] = value
+	MemoryClass.safe_write_archive(path, data)
 
 
 func _mark_archive_time_old(path: String) -> void:

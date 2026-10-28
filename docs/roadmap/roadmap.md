@@ -12,7 +12,7 @@
 | [Phase 13 视觉资产契约](../archive/iteration_13_visual_asset_contract.md) | 完成、归档 | 保留构建/共享/失败/流式/导出成果及机读登记例外，不重开历史阶段 |
 | [Phase 14 类型化数据边界（AtlasMetadata 试点）](../archive/iteration_14_atlas_metadata_boundary.md) | 完成、归档 | 六个直接消费者均使用只读 View；旧入口、`source_masks` 与惰性配置已清除；边界守卫进入 `contract_scan.py` |
 | [Phase 15 应用编排与运行资源生命周期](../archive/iteration_15_app_orchestration_lifecycle.md) | 完成、归档 | 场景切换、加载、缓存/池/临时 UI 与退出生命周期；边界守卫进入 `contract_scan.py`；矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
-| Phase 16 档案会话、持久化与玩家槽位 | 当前候选；16-1 矩阵、16-2A 首批 17 处、第二批 58 处与第三批 19 处、16-2C 已完成，余下未启动 | 共享/独立状态、保存快照、切档、2P 面板上下文；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，详细计划见 [`current-iteration.md`](current-iteration.md) |
+| Phase 16 档案会话、持久化与玩家槽位 | 当前候选；16-1 矩阵、16-2A 全部 118 处、16-2C 已完成，余下未启动 | 共享/独立状态、保存快照、切档、2P 面板上下文；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，详细计划见 [`current-iteration.md`](current-iteration.md) |
 | Phase 17 玩法与表现模块边界 | 候选方向，未实现 | 命中归属、关卡结算、按需组合、HUD/输入与模块 API |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
@@ -117,5 +117,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15 已全部完成并归档；Phase 16 为当前候选，16-1 只读矩阵、16-2A 首批 17 处、第二批 58 处与第三批 19 处、16-2C 已完成，16-2A 其余 24 处与 16-2B/2D 只定义计划；Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A、15-4B、15-4C、15-4D 与 15-4E 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域/对象池/临时 UI/退出与后台/边界守卫；Phase 17 仍为候选方向。
+- 架构目标与进度分开。Phase 15 已全部完成并归档；Phase 16 为当前候选，16-1 只读矩阵、16-2A 全部 118 处、16-2C 已完成，16-2B/2D 只定义计划；Phase 15-1 完成静态矩阵，15-2A/15-2B/15-2C、15-3A、15-3B、15-3C、15-3D、15-4A、15-4B、15-4C、15-4D 与 15-4E 已完成入口/加载页/窄接口/租约/失败取消/清单边界/缓存作用域/对象池/临时 UI/退出与后台/边界守卫；Phase 17 仍为候选方向。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

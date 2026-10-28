@@ -615,7 +615,6 @@ func remove():
 	remove_data()
 	MainSet.set_data["xg"] = true
 	safe_write_archive(str(Global.cd_path), initialized_data)
-	MemoryClass.save_game(Global.cd_path)
 
 
 func remove_main_data(Num: int):

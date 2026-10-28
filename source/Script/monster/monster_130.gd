@@ -384,4 +384,4 @@ func _try_unlock_pet_rabbit() -> void:
 	if not unlocked:
 		return
 	Global.add_message_show(Global.windows, "击败嫦娥，成功解锁宠物月兔！", 2.0, Vector2(500, 305))
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("monster_unlock_pet_rabbit")

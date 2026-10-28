@@ -1,8 +1,8 @@
 # 档案会话、持久化与玩家槽位调用面矩阵（Phase 16-1）
 
-> **状态**：Phase 16-1 只读调查完成（2026-10-28）；2026-10-29 已实施 Phase 16-2A 首批 17 处、第二批 58 处（back_pack / skill / ldl）、第三批 19 处（main_menu）与 Phase 16-2C 角色范围/损坏档校验。本页记录**当前实现事实**与失败边界，未实施的 16-2B/16-2D 与 16-3~16-6 目标不写成已实现。
+> **状态**：Phase 16-1 只读调查完成（2026-10-28）；2026-10-29 已实施 Phase 16-2A 首批 17 处、第二批 58 处（back_pack / skill / ldl）、第三批 19 处（main_menu）、第四批 11 处（level）与收尾批次 13 处与 Phase 16-2C 角色范围/损坏档校验。本页记录**当前实现事实**与失败边界，未实施的 16-2B/16-2D 与 16-3~16-6 目标不写成已实现。
 >
-> **调查基线**：`f7f7a2c`（2026-10-28 Phase 15 归档 / Phase 16 规划）；2026-10-29 更新 16-2A 首批/第二批/第三批与 16-2C 实施结果。仓库只有一个活跃工程 `source/`。
+> **调查基线**：`f7f7a2c`（2026-10-28 Phase 15 归档 / Phase 16 规划）；2026-10-29 更新 16-2A 五个批次与 16-2C 实施结果。仓库只有一个活跃工程 `source/`。
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为唯一事实源，使用静态扫描（`grep` 等价的正则统计）与关键函数逐行阅读。下文计数是**静态行数/出现次数**，可能包含条件分支、重复调用与暂时不可达路径，不等同于运行期次数；口径在每张表标题处注明。
 >
@@ -12,10 +12,10 @@
 
 ## 1. 结论摘要
 
-1. **存档文件只有一个写入边界，入口收敛为三层**：`MemoryClass.request_save`（**94 处 / 43 文件**，统一入口）、`MemoryClass.save_game`（16-2A 第三批后余 **24 处 / 18 文件 / 22 函数**）与 `MemoryClass.safe_write_archive`（3 处外部调用，全部在存档界面）。除这两个入口外，全仓没有第三处写**档案路径** `user://MyAr_*.json` 的代码；云存档的临时 ZIP 与加密分片由存档界面自行写入 `user://cloud_save_upload|import`，不进入本地档案命名空间。`request_background_save` 仅 `base_monster.gd` 1 处调用。
-2. **保存点已收口约八成**：16-2A 前 118 处 / 60 文件 / 109 函数；经首批 17 处、第二批 58 处（`back_pack` 25、`skill` 18、`ldl` 15）与第三批 19 处（`main_menu`）迁移后余 **24 处 / 18 文件 / 22 函数**。余量按目录为 `Script/level` 11、`Scene` 3、`Script/base` 2、`Script/pet` 2、`Script/shop` 2，`Script/memory_class`、`monster`、`other_menu`、`task` 各 1。12 处位于 `_on_*` 事件回调，11 处在业务函数，1 处在 `_process`；地图页 `_ready` 已全部迁移。
-3. **保存结果判读仍不足**：16-2A 前仅 5/118 处检查返回值；这 5 处已全部迁移到 `request_save`。剩余 24 处均丢弃 `bool`；失败由 `MemoryClass` 内部 `push_error`/`push_warning` 暴露，界面多数无提示。
-4. **档案身份仍是裸字符串**：`Global.cd_path` 现为 **61 次出现 / 58 行 / 36 个文件**，其中写点仅 3 行；22 处出现在 `save_game` 参数行，19 处空值守卫，3 处格式守卫（`contains("Ar_")`），1 处 `find("Ar_")`、1 处 `split("Ar_")`，1 处 `safe_write_archive`。`request_save` 94 处不再显式传路径。
+1. **存档文件只有一个写入边界，入口收敛为三层**：`MemoryClass.request_save`（**116 处 / 59 文件**，统一入口）、`MemoryClass.save_game`（**仅持久化边界内部 1 处委托**，业务侧 0 处）与 `MemoryClass.safe_write_archive`（3 处外部调用，全部在存档界面）。除这两个入口外，全仓没有第三处写**档案路径** `user://MyAr_*.json` 的代码；云存档的临时 ZIP 与加密分片由存档界面自行写入 `user://cloud_save_upload|import`，不进入本地档案命名空间。`request_background_save` 仅 `base_monster.gd` 1 处调用。
+2. **保存点已全部收口**：16-2A 前 118 处 / 60 文件 / 109 函数；经首批 17 处、第二批 58 处（`back_pack` 25、`skill` 18、`ldl` 15）、第三批 19 处（`main_menu`）、第四批 11 处（`level`）与收尾批次 13 处迁移后，业务侧 `save_game` 调用为 **0**；仅 `MemoryClass.request_save` 内部保留 1 处 `save_game(archive_path)` 委托。地图页 `_ready`、关卡结算与全部业务面板均改为提交保存请求。
+3. **保存结果判读仍不足**：16-2A 前仅 5/118 处检查返回值；这 5 处已全部迁移到 `request_save`。收尾后仍有大量 UI 调用丢弃 `request_save` 的 `bool`；失败由 `MemoryClass` 内部 `push_error`/`push_warning` 暴露，界面多数无提示。16-2C 的夹具已覆盖失败分支，UI 反馈留给 16-5。
+4. **档案身份仍是裸字符串**：`Global.cd_path` 现为 **36 次出现 / 34 行 / 21 个文件**，写点仅 3 行；17 处空值守卫、3 处格式守卫（`contains("Ar_")`）、1 处 `find`、1 处 `split`、1 处 `load_game`、1 处 `safe_write_archive`，其余为派生用法。`request_save` 116 处不再显式传路径。
 5. **`load_game` 对空档仍返回成功，但对非法档已拒绝**：文件缺失或长度为 0 时底层返回 `ok=true`，`load_game` 继续执行 `ensure_*` 并返回 `true`（AS-01 保留）；非空但结构或 `Myself` 非法的档案在合并前返回 `false`（16-2C）。
 6. **`load_game` 使用合并而非替换**：`_player.merge(archive_data, true)` 只覆盖存档中存在的键；未回主菜单连续读取两个档案会残留上一档的进度键。当前依赖 `main_menu._ready()` 的 `remove_play_data()` 清空来兜底。
 7. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。
@@ -55,7 +55,7 @@
 | 稳定密钥 `user://.save_key` | `MemoryClass` | `_ensure_stable_key` | `_load_stable_key`、兼容读取 | 首次保存创建；进程内缓存 | 读不到文件时回退内置 `keys`；写密钥失败仍返回内置密钥（不阻断保存） |
 | 会话设置 `user://MainGame.json` | `MainSet` + `MemoryClass` | `main_bc`（74 处调用 / 28 文件） | `main_dq`（16 处调用 / 15 文件） | 设置变更、存档时间/名称回写、退出 flush | `main_bc` 返回 `bool`，74 处调用**全部忽略**；`save_game` 内失败只 `push_warning` |
 | 档案元数据（名称/时间/`CdNum`/`其他存档`） | `MainSet.set_data` | `MemoryClass._set_archive_time`/`repair_archive_time`、`back_pack._on_name_text_changed`、`choose_player._update_archive_time`、存档界面增删槽 | 存档列表卡片、`base_hero` 名字显示、`back_pack` 名称栏 | 保存成功、删档、槽位增减 | 与档案文件非原子：文件写成功而元数据失败时只告警，读档时间会回退到文件 mtime |
-| 档案身份 `Global.cd_path` | `Global` | `bacis_ar_button._on_pressed`（设置）、`main_menu._ready` / `choose_player._on_return_main_menu_pressed`（清空） | 36 个文件（22 处直接作为 `save_game` 参数、19 处空值守卫、3 处格式守卫、1 处 `find`/`split`、1 处 `safe_write_archive`） | 回主菜单、返回选角 | 空字符串表示无档案；读档失败不回滚，仍指向失败档；无独立会话校验 |
+| 档案身份 `Global.cd_path` | `Global` | `bacis_ar_button._on_pressed`（设置）、`main_menu._ready` / `choose_player._on_return_main_menu_pressed`（清空） | 21 个文件（17 处空值守卫、3 处格式守卫、1 处 `find`/`split`、1 处 `load_game`、1 处 `safe_write_archive`） | 回主菜单、返回选角 | 空字符串表示无档案；读档失败不回滚，仍指向失败档；无独立会话校验 |
 | 档案会话 `archive_session_*` | `Global` | `begin_archive_session` / `end_archive_session` / `_exit_tree` | **仅 `Global` 内部**（预热、`release_ui_runtime_cache`） | 进入主菜单/选角（`is_archive_exit_scene`）、应用退出 | `end_archive_session` 无返回值；重复调用靠 `_archive_session_generation` 与 active 判断吸收 |
 | 1P 档案 `PlayerData.player_data` | `PlayerData`（`PlayerDataStore`） | 44 个文件、141 行直接写入 + 少量 API 写入 | 119 个文件 | 读档 merge、`remove_play_data`、切档/退出 | 依赖 `ensure_*` 补全；无效数据靠 `_is_valid_player_archive_data` 拒绝保存 |
 | 2P 档案 `LocalCoop.secondary_data` | `LocalCoop` | `create_secondary`、`load_profile`、`save_profile`、共享键回写 | 槽位感知调用方（`data_for_slot` 等） | `clear_runtime`、切档、`load_game` 开头 | 2P 不存在时 `data_for_slot(2)` 回落 1P；`is_enabled()` 要求 `本地双人.启用` |
@@ -69,28 +69,28 @@
 
 ### 4.1 `MemoryClass.save_game` 调用面
 
-统计口径：`source/**/*.gd` 中包含 `MemoryClass.save_game(` 的物理行（排除 `request_save` 内部委托与 `save_game` 定义）。16-2A 第三批后为 **24 行 / 18 个文件 / 22 个不同函数**；另有 `request_save` 94 处（见 4.2）。
+统计口径：`source/**/*.gd` 中包含 `MemoryClass.save_game(` 的业务物理行（排除 `save_game` 定义与 `request_save` 内部委托）。16-2A 收尾后为 **0 行**；全仓仅 `memory_class.request_save` 内部保留 1 处委托。`request_save` 共 116 处（见 4.2）。
 
 | 分类 | 数量 | 说明 |
 |:---|:---:|:---|
 | `Script/main_menu`（地图页、面板、公告、选角） | 0 | 第三批 19 处全部迁移到 `request_save` |
-| `Script/level`（关卡内、结算、失败） | 11 | 胜利/失败界面返回地图前重复保存 |
-| `Scene/other_scene` | 3 | 奖励界面、幻化箱 |
-| `Script/base` | 2 | `base_monster`、`base_role_properies` |
-| `Script/pet` / `Script/shop` | 2 / 2 | 宠物面板、商店购买 |
-| `Script/memory_class` | 1 | `remove()` 的重置双写 |
-| 其他（`monster_130`、`c_hange_clothes_jm`、`basic_task`） | 3 | 月兔解锁、换装、任务领奖 |
+| `Scene/other_scene` | 0 | 收尾批次已迁移（奖励界面、幻化箱） |
+| `Script/base` | 0 | 收尾批次已迁移（`base_monster`、`base_role_properies`） |
+| `Script/pet` / `Script/shop` | 0 / 0 | 收尾批次已迁移（宠物面板、商店购买） |
+| `Script/memory_class` | 0 | `remove()` 的清档改为只写初始档，删除覆盖式 `save_game` |
+| 其他（`monster_130`、`c_hange_clothes_jm`、`basic_task`） | 0 | 收尾批次已迁移（月兔解锁、换装、任务领奖） |
 | **已迁移** `Script/back_pack` / `Script/skill` / `Script/ldl` | **0** | 第二批 58 处全部改为 `request_save` |
 | **已迁移** `Script/main_menu` | **0** | 第三批 19 处全部改为 `request_save` |
+| **已迁移** `Script/level` | **0** | 第四批 11 处全部改为 `request_save` |
 
 按调用上下文：
 
 | 上下文 | 数量 |
 |:---|:---:|
-| `_on_*_pressed` / `_on_*_toggled` / `_on_*_selected` 回调 | 12 |
+| `_on_*_pressed` / `_on_*_toggled` / `_on_*_selected` 回调 | 0 |
 | 场景 `_ready` | 0（11 个地图页已迁移到 `request_save`） |
-| `_process` / `_physics_process` | 1（`reward_interface`） |
-| 其他业务函数（升级、合成、挑战、结算、开箱等） | 11 |
+| `_process` / `_physics_process` | 0（`reward_interface` 已改为单次 `request_save`） |
+| 其他业务函数（升级、合成、挑战、结算、开箱等） | 0 |
 
 ### 4.2 `request_save` 统一入口（Phase 16-2A）
 
@@ -101,42 +101,45 @@
 | `map_enter` | 11 | `map_1`~`map_9_1` 的 `_ready` |
 | `map_save` / `map_0_save` / `map_3_special` | 11 / 1 / 1 | 地图页手动保存、主城保存、特殊按钮同步 |
 | `tower_floor_select` / `tower_data` / `zhu_xian_sword` / `wan_ling_catalog` / `game_announcement` / `body_training` | 6 | 真妖塔、主线剑阵、万灵图录、公告、挂机详情 |
+| `level_*` | 11 | 失败/胜利界面返回与领奖、截教挑战、关卡门禁、八仙击杀、星座层数、镇妖塔推进 |
 | `back_pack_*` / `magic_weapon_enhance` | 22 / 3 | 背包显示/整理/出售/丢弃/锁定/法宝选择与更换、宠物背包拾取、法宝强化 |
 | `skill_*` | 18 | 被动升级、觉醒、键位、主动技能刷新与版本选择 |
 | `ldl_*` | 15 | 强化、合成、锻造、神铸、淬骨、一键合成与面板重置 |
 | `choose_player` / `forge` / `level_victory` / `level_auto_battle` / `auto_battle_retry` / `coop_panel_close` | 6 | 首批判读点、地图入口、2P 面板关闭 |
-| **合计** | **94** | 43 个文件 |
+| `reward_interface` / `transmogrified_box` / `pet_backpack_drop` / `level_up` | 4 | 奖励入包、幻化箱、掉落后台失败兜底、升级 |
+| `monster_unlock_pet_rabbit` / `change_clothes` / `pet_passive_upgrade` / `pet_changes` / `shop_cure_times` / `shop_mystery_purchase` / `task_claim_reward` | 7 | 收尾批次业务保存 |
+| **合计** | **116** | 59 个文件 |
 
 ### 4.3 返回值处理
 
 | 处理方式 | 处数 | 代表位置 |
 |:---|:---:|:---|
-| 丢弃返回值 | 24 | 剩余 UI/业务回调 |
-| 判读 `save_game` 返回值 | 0 | 原 5 处判读点已迁移到 `request_save` |
+| 判读 `request_save` 返回值 | 4 | `choose_player`、`forge`、`victory._save_completed_level`、`level_llbt`；`base_monster` 另有后台保存失败兜底 |
+| 丢弃返回值 | 110 | 其余 UI/业务调用 |
 
-结论：剩余 24 处仍无法区分"保存成功/失败"，界面多数没有用户可见失败提示；16-2A 后续批次继续迁移。
+结论：业务侧已无 `save_game` 直调，保存失败统一由 `request_save` 的 `push_warning` 暴露；多数 UI 仍不判读返回的 `bool`，用户可见失败提示留给 16-5。
 
 ### 4.4 保存前守卫与写放大
 
 | 守卫写法 | 处数 |
 |:---|:---:|
-| 无局部守卫（直接传 `Global.cd_path`，依赖 `save_game` 内部解析） | 20 |
-| `cd_path` 非空 / `contains("Ar_")` / `str(Global.cd_path)` 检查 | 2 |
-| 局部路径 + `FileAccess.file_exists` 检查 | 2 |
+| 无局部守卫（直接调 `request_save`，路径由持久化边界解析） | 决定性多数 |
+| `cd_path` 非空 / `contains("Ar_")` 业务守卫 | 少量（`map_3`、`zhu_xian_sword`、`body_training`、`level_esbxx`、`game_announcement` 等） |
+| 后台保存前 `FileAccess.file_exists` 检查 | 0（`base_monster` 改由边界校验） |
 
 - 11 个地图页在 `_ready` 中先写 `Map_num` 再保存；每次进入地图页都会产生一次完整档案序列化 + 加密写 + `MainGame.json` 写。
 - `save_game` 自身在开头和 `safe_write_archive` 内各调用一次 `flush_pending_saves()`，即一次同步保存最多两次 flush 检查。
 - `save_game` 成功后调用 `main_bc()` 回写元数据；`main_bc` 失败只告警，不回滚档案文件。
 
-### 4.5 重置与双写路径
+### 4.5 重置与多写路径
 
 | 入口 | 行为 | 可达性 |
 |:---|:---|:---|
-| `MemoryClass.remove()` | `remove_data()` 清元数据 → `MainSet.xg = true` → `safe_write_archive(cd_path, initialized_data)` → 立即 `save_game(cd_path)` | 仅被 `PlayerData.removedata()` 调用；后者全仓无调用者（当前为死路径） |
+| `MemoryClass.remove()` | `remove_data()` 清元数据 → `MainSet.xg = true` → `safe_write_archive(cd_path, initialized_data)` → **曾再调用 `save_game(cd_path)`** | 仅被 `PlayerData.removedata()` 调用；后者全仓无调用者（当前为死路径） |
 | `MemoryClass.remove_play_data()` | `_player.clear()` + `merge(initialized_data)`，仅内存 | `main_menu._ready` 唯一调用 |
 | `read_archive_interface._remove_save_data()` | 直接用 `initialized_data` 覆盖目标档，不经过 `_prepare_player_save_data` | 存档界面"删除/重置" |
 
-`remove()` 的顺序是"写初始档 → 再保存当前数据"，若将来恢复该路径，第二次保存会把当前内存数据写回，覆盖刚写入的初始档；本阶段只登记，不修复。
+`remove()` 的顺序是"写初始档 → 再保存当前数据"，第二次保存会把当前内存数据写回，覆盖刚写入的初始档，使"重置"退化为普通保存；当前为死路径，收尾批次处理。
 
 ### 4.6 `safe_write_archive` 与云存档
 
@@ -444,10 +447,10 @@ close_panel() -> queue_free -> _on_panel_closed
 | AS-03 | `bacis_ar_button` 先写 `Global.cd_path` 再读档，失败不回滚 | 失败后身份仍指向不可读档，后续保存可能命中该路径 | 16-3 |
 | AS-04 | **已修复（16-2C）**：本地 `_is_valid_player_archive_data` 现校验 `Myself` 1..7；非空非法档在 `load_game` 合并前被拒绝 | 越界文件不再被当作可玩档案读取 | 16-2C 完成 |
 | AS-05 | **已修复（16-2C）**：云收集/导入与本地校验共用 `MemoryClass.is_valid_role_id`（1..7） | 玉兔档可上传/导入；0/8/非数值拒绝 | 16-2C 完成 |
-| AS-06 | **部分修复（16-2A 前三批）**：5 处判读点已迁移 `request_save`；余 24 处均丢弃 | 未迁移 UI 失败仍无提示 | 16-2A 后续批次 |
-| AS-07 | **部分修复（16-2A 前三批）**：94 处改由 `request_save` 统一处理空档；余 24 处中 20 处仍无局部守卫 | 无档时静默 `false`；UI 无反馈 | 16-2A 后续批次 |
+| AS-06 | **已修复入口（16-2A 完成）**：业务侧无 `save_game` 直调；4 处判读 `request_save`，其余 112 处丢弃 | UI 失败仍无提示，属 16-5 面板反馈范围 | 16-2A 完成 |
+| AS-07 | **已修复入口（16-2A 完成）**：116 处全部由 `request_save` 统一解析与空档拒绝；残留 `cd_path` 守卫仅作业务前置判断 | 无档时静默 `false`；UI 无反馈 | 16-2A 完成 |
 | AS-08 | 11 个地图页 `_ready` 即保存 | 每次进城一次完整加密写 + 设置写；首帧 IO 放大 | 16-2 |
-| AS-09 | `MemoryClass.remove()` 先写初始档再 `save_game` 覆盖 | 若恢复该入口会把当前数据写回；当前为死路径 | 16-2 |
+| AS-09 | **已修复（16-2A 收尾）**：删除 `remove()` 末尾覆盖初始档的 `save_game`，重置只写初始档；入口仍为死路径 | 重置不再退化为普通保存 | 16-2A 完成 |
 | AS-10 | 面板内保存依赖同步 suspend/resume | 若 `_prepare_player_save_data` 将来引入 `await`，2P 面板视图会停留在 1P | 16-5 |
 | AS-11 | 退出场景先 `end_archive_session()`，面板关闭保存随后发生 | 保存发生在会话结束之后，会话代次无法校验该写入 | 16-3/16-5 |
 | AS-12 | 删档用 `LineEdit` 原文拼路径，仅 `int()` 前缀校验 | 路径未规范化；异常文本可能命中非预期路径（写失败即返回） | 16-2 |
@@ -464,7 +467,7 @@ close_panel() -> queue_free -> _on_panel_closed
 
 | 批次 | 本页提供的输入 |
 |:---|:---|
-| 16-2 存档 IO 边界 | 94 处 `request_save` 与 24 处余量清单（附录 A）、返回值处理分布、`safe_write_archive` 3 处外部调用、后台队列事实、元数据 `main_bc` 74 处；AS-04/AS-05 已修复，AS-06/AS-07 部分修复，AS-08/AS-09/AS-12~AS-14 待办 |
+| 16-2 存档 IO 边界 | 116 处 `request_save`、业务 `save_game` 归零（附录 A）、返回值处理分布、`safe_write_archive` 3 处外部调用、后台队列事实、元数据 `main_bc` 74 处；AS-04/AS-05 已修复，AS-06/AS-07 部分修复，AS-08/AS-09/AS-12~AS-14 待办 |
 | 16-3 会话上下文 | `cd_path` 3 写点与 149 读行分类、会话字段无外部读取者、`begin`/`end` 触发点、AS-01~AS-03/AS-11/AS-15/AS-18 |
 | 16-4 槽位与共享账本 | 槽位 API 调用表、20 个未槽位感知面板、`Global.get_player` 19 处、域分布与迁移候选、AS-16/AS-17 |
 | 16-5 面板与快照 | 8 处视图交换调用、面板生命周期时序、互斥缺口、AS-10/AS-11/AS-16 |
@@ -529,32 +532,34 @@ grep -rn "suspend_player_view\|resume_player_view" source --include='*.gd'
 | 首批夹具结果 | **27/27 PASS**；`level_1` 冒烟 **PASS**（23.05s，0 ERROR / 0 WARNING）；`LocalCoopPanelProbe` **PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 第二批夹具结果 | **34/34 PASS**：新增 `panel_backpack_wings_saved`、`panel_backpack_head_saved`、`panel_skill_key_saved`、`panel_strength_saved`、`panel_ldl_saved`、`panel_synthesis_saved` 与 `panel_seed_saved`，直接调用面板处理器并回读加密档案 |
 | 第三批夹具结果 | **52/52 PASS**：新增 18 个主菜单用例（`map_0`、`map_1`~`map_9_1`、`map_3_special`、`tower_data`、`zhu_xian_sword`、`wan_ling_catalog`、`game_announcement`、`body_training`），实例化真实场景并调用保存处理器后回读加密档案 |
+| 第四批迁移 | 11 处：`defeat` 4、`hdzm` 1、`level_17` 1、`level_bxgh` 1、`level_esbxx` 1、`level_zhen_yao_tower` 1、`victory` 2；`save_game` 余 13 处 / 11 文件 / 13 函数 |
+| 收尾批次迁移 | 13 处：`reward_interface`、`transmogtified_box`、`base_monster`（后台失败兜底）、`base_role_properies`、`monster_130`、`c_hange_clothes_jm`、`pet_interface` 2、`cure_times_box`、`mystery_shop_item_box`、`basic_task`；`MemoryClass.remove()` 的覆盖式 `save_game` 直接删除 |
+| 收尾重复保存处理 | `reward_interface` 的 `_process` 与 `add_item_to_backpack` 各保存一次，合并为 `_process` 单次；夹具 `batch_reward_item_granted_once` 断言纹章只入包 1 个 |
+| 收尾验证 | 档案夹具 **56/56 PASS**（新增奖励入包单次发放、升级落盘）；`level_1` 冒烟 **PASS**；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
+| `defeat` / `victory` 双写评估 | 两个调用点**互斥**：镇妖塔分支 `change_scene` 后保存并 `return`，末尾保存只在地图分支执行。每次点击只写一次，无需去重；原"同函数重复保存"描述已更正 |
+| 第四批验证 | `level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **52/52 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 
-**未完成**：16-2A 其余 24 处 `save_game` 迁移（关卡 11、Scene 3、其余 10）；16-2B 会话身份与保存顺序；16-2D 补全失败语义；16-3~16-6。
+**未完成**：16-2B 会话身份与保存顺序；16-2D 补全失败语义；16-3~16-6。16-2A 已收口：业务侧 `save_game` 调用为 0。
 
 ---
 
-## 附录 A：`MemoryClass.save_game` 调用点全表（16-2A 第三批后）
+## 附录 A：业务 `save_game` 调用点全表（16-2A 收尾后）
 
-| 文件 | 次数 | 所在函数数 | 检查返回值 | 同函数多次调用 |
-|:---|:---:|:---:|:---:|:---|
-| `source/Scene/other_scene/reward_interface.gd` | 2 | 2 | 否 | — |
-| `source/Scene/other_scene/transmogtified_box.gd` | 1 | 1 | 否 | — |
-| `source/Script/base/base_monster.gd` | 1 | 1 | 否 | — |
-| `source/Script/base/base_role_properies.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/defeat.gd` | 4 | 3 | 否 | `_on_return_map_pressed`×2 |
-| `source/Script/level/hdzm.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/level_17.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/level_bxgh.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/level_esbxx.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/level_zhen_yao_tower.gd` | 1 | 1 | 否 | — |
-| `source/Script/level/victory.gd` | 2 | 1 | 否 | `_on_return_map_pressed`×2 |
-| `source/Script/memory_class/memory_class.gd` | 1 | 1 | 否 | — |
-| `source/Script/monster/monster_130.gd` | 1 | 1 | 否 | — |
-| `source/Script/other_menu/c_hange_clothes_jm.gd` | 1 | 1 | 否 | — |
-| `source/Script/pet/pet_interface.gd` | 2 | 2 | 否 | — |
-| `source/Script/shop/cure_times_box.gd` | 1 | 1 | 否 | — |
-| `source/Script/shop/mystery_shop_item_box.gd` | 1 | 1 | 否 | — |
-| `source/Script/task/basic_task.gd` | 1 | 1 | 否 | — |
+业务侧 `MemoryClass.save_game(...)` 调用为 **0**。全仓仅保留 `source/Script/memory_class/memory_class.gd` 中 `request_save` 内部的 1 处委托：
 
-合计 **24 处 / 18 个文件 / 22 个函数**；检查返回值 **0 处**。另有 `request_save` 94 处（见 4.2）。
+| 位置 | 说明 |
+|:---|:---|
+| `memory_class.request_save` | `if save_game(archive_path):` —— 持久化边界内部委托，非业务调用 |
+
+历史迁移批次：
+
+| 批次 | 范围 | 处数 |
+|:---|:---|:---:|
+| 首批 | 5 处判读点 + 11 个地图页 `_ready` + `LocalCoop._on_panel_closed` | 17 |
+| 第二批 | `Script/back_pack` / `Script/skill` / `Script/ldl` | 58 |
+| 第三批 | `Script/main_menu` | 19 |
+| 第四批 | `Script/level` | 11 |
+| 收尾批次 | `Scene/other_scene` 3、`base` 2、`pet` 2、`shop` 2、`monster`/`other_menu`/`task` 各 1、`memory_class.remove` 删除双写 | 13 |
+| **合计** | 业务调用全部改为 `request_save` | **118** |
+
+`request_save` 共 **116** 处 / 59 个文件。118 → 116 的差额来自收尾批次的两处合并/删除：`reward_interface` 原 `_process` 与 `add_item_to_backpack` 各保存一次，合并为 1 次；`MemoryClass.remove()` 末尾会覆盖初始档的 `save_game` 被删除，未替换为 `request_save`。

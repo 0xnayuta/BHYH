@@ -79,5 +79,5 @@ func _on_change_pressed() -> void:
 	for i in transmogrified.list:
 		if i != null:
 			i.set_physics_process(true)
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("change_clothes")
 	set_physics_process(true)

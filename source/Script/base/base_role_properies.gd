@@ -1425,5 +1425,5 @@ func cure_level():
 	PlayerData.player_data.玩家等级 = baseroleprop.Level
 	baseroleprop.exp = 0
 	PlayerData.player_data.玩家当前经验 = 0
-	MemoryClass.save_game(Global.cd_path)
+	MemoryClass.request_save("level_up")
 	set_basic_prop()

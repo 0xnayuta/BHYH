@@ -1579,10 +1579,8 @@ func _add_direct_pet_backpack_drop(drop: Dictionary, amount: int) -> bool:
 
 
 func _save_direct_pet_backpack_drop() -> void:
-	var save_path := str(Global.cd_path)
-	if save_path != "" and save_path.contains("Ar_") and FileAccess.file_exists(save_path):
-		if not MemoryClass.request_background_save(save_path):
-			MemoryClass.save_game(save_path)
+	if not MemoryClass.request_background_save(str(Global.cd_path)):
+		MemoryClass.request_save("pet_backpack_drop")
 
 
 func fall_medicine():
