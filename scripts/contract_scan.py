@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中十一大契约与真源的一致性：
+用于全量扫描并比对工程中十五类契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -17,6 +17,10 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 9. 场景入口边界门禁 (Scene Entry Boundary): 业务代码禁止绕过 Global.change_scene
 10. 加载页私有缓存门禁 (Load Cache Boundary): 加载页只能使用窄交接 API
 11. 池/UI 清理入口门禁 (Pool/UI Boundary): 未登记清理入口阻断
+12. 档案边界门禁 (Archive Boundary): 禁止业务拼接档案路径或绕过 request_save 直接读写档
+13. 槽位边界门禁 (Slot Boundary): 禁止业务硬编码 /root 单例，禁止重新引入全局视图交换
+14. 面板操作者门禁 (Panel Operator): 面板域脚本必须按槽位解析 PlayerData/RoleProp
+15. 共享账本与快照互斥门禁 (Shared Ledger): 共享键登记、2P 剥离与快照互斥必须同源
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -972,6 +976,59 @@ class ContractScanner:
         "Global._cleanup_transient_ui_under",
         "Global.release_ui_runtime_cache",
     )
+    ARCHIVE_PATH_LITERAL = "user://MyAr_"
+    ARCHIVE_PATH_LITERAL_ALLOWLIST = {
+        "Scene/other_scene/bacis_ar_button.gd",
+        "Script/archive_interface/read_archive_interface.gd",
+        "Script/memory_class/memory_class.gd",
+    }
+    ARCHIVE_ENTRY_ALLOWLIST = {
+        "load_game": {"Scene/other_scene/bacis_ar_button.gd", "Script/memory_class/memory_class.gd"},
+        "save_game": {"Script/memory_class/memory_class.gd"},
+        "safe_write_archive": {
+            "Script/archive_interface/read_archive_interface.gd",
+            "Script/memory_class/memory_class.gd",
+        },
+    }
+    ARCHIVE_ENTRY_CALL_RE = re.compile(r"(?<![A-Za-z0-9_])(load_game|save_game|safe_write_archive)\s*\(")
+    SLOT_ROOT_PATTERNS = (
+        'get_node("/root/PlayerData")',
+        'get_node("/root/RoleProp")',
+        'get_node_or_null("/root/PlayerData")',
+        'get_node_or_null("/root/RoleProp")',
+    )
+    SLOT_ROOT_ALLOWLIST = {
+        "Scene/other_scene/skill_icon.gd",
+        "Script/base/base_magic_weapon.gd",
+        "Script/base/base_role.gd",
+        "Script/base/base_role_properies.gd",
+        "Script/memory_class/player_data.gd",
+    }
+    VIEW_SWAP_CALL_RE = re.compile(r"(?:func\s+)?(suspend_player_view|resume_player_view)\s*\(")
+    PANEL_OPERATOR_DIRS = (
+        "Script/back_pack/",
+        "Script/skill/",
+        "Script/pet/",
+        "Script/mount/",
+        "Script/ldl/",
+    )
+    PANEL_OPERATOR_OPS = ("PlayerData", "RoleProp")
+    COOP_SESSION_FILE = "Script/coop/local_coop.gd"
+    COOP_SESSION_REQUIRED_TOKENS = (
+        "func shared_keys()",
+        "for key: String in shared_keys()",
+        "is_save_snapshot_in_progress",
+    )
+    # 共享键族登记：四个背包键由 BAG_KEYS 统一登记，其余为显式族名。
+    SHARED_LEDGER_REQUIRED_TOKENS = (
+        "BAG_KEYS",
+        "被动技能",
+        "MAIN_SWORD_ARRAY_KEY",
+        "MAIN_SWORD_ARRAY_LEVEL_KEY",
+        "炼体",
+        "WANLING_CATALOG_LEVELS_KEY",
+        "coin_num",
+    )
     ATLAS_BOUNDARY_LEGACY_PATTERNS = (
         "AtlasMetadataStore.data_for",
         "AtlasMetadataStore.validate_path",
@@ -1073,6 +1130,141 @@ class ContractScanner:
                 if pattern in clean:
                     return (lineno, pattern)
         return (0, "")
+
+    @classmethod
+    def archive_boundary_violation(cls, content: str, rel_path: str):
+        """档案边界：禁止业务拼接档案路径或绕过 request_save；返回 (行号, 命中标识)。"""
+        if rel_path.startswith("addons/"):
+            return (0, "")
+        allow_literal = rel_path in cls.ARCHIVE_PATH_LITERAL_ALLOWLIST
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            if not allow_literal and cls.ARCHIVE_PATH_LITERAL in clean:
+                return (lineno, cls.ARCHIVE_PATH_LITERAL)
+            for match in cls.ARCHIVE_ENTRY_CALL_RE.finditer(clean):
+                entry = match.group(1)
+                if rel_path not in cls.ARCHIVE_ENTRY_ALLOWLIST.get(entry, set()):
+                    return (lineno, entry + "(")
+        return (0, "")
+
+    @classmethod
+    def slot_boundary_violation(cls, content: str, rel_path: str):
+        """槽位边界：禁止硬编码 /root 单例与重新引入全局视图交换；返回 (行号, 命中标识)。"""
+        if rel_path.startswith("addons/"):
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.SLOT_ROOT_PATTERNS:
+                if pattern in clean and rel_path not in cls.SLOT_ROOT_ALLOWLIST:
+                    return (lineno, pattern)
+            view_swap = cls.VIEW_SWAP_CALL_RE.search(clean)
+            if view_swap:
+                return (lineno, view_swap.group(1))
+        return (0, "")
+
+    @classmethod
+    def shared_ledger_boundary_violation(cls, content: str, rel_path: str):
+        """共享账本与快照互斥：登记、剥离与互斥入口必须同源；返回 (行号, 命中标识)。"""
+        if rel_path != cls.COOP_SESSION_FILE:
+            return (0, "")
+        for token in cls.COOP_SESSION_REQUIRED_TOKENS:
+            if token not in content:
+                return (1, token)
+        start = content.find("func shared_keys()")
+        end = content.find("\nfunc ", start + 1)
+        body = content[start:end if end != -1 else len(content)]
+        for key in cls.SHARED_LEDGER_REQUIRED_TOKENS:
+            if key not in body:
+                return (1, key)
+        return (0, "")
+
+    def _operator_declaration_index(self):
+        """构建 extends 链与显式操作者声明索引（惰性，仅面板操作者门禁使用）。"""
+        if hasattr(self, "_operator_index"):
+            return self._operator_index
+        extends_map: Dict[str, str] = {}
+        declares: Dict[str, Set[str]] = {}
+        op_re = {
+            "PlayerData": re.compile(r"^\s*var\s+PlayerData\s*:\s*PlayerDataStore", re.M),
+            "RoleProp": re.compile(r"^\s*var\s+RoleProp\s*:\s*BaseRoleProperties", re.M),
+        }
+        extends_re = re.compile(r"^\s*extends\s+(.+?)\s*$", re.M)
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                text = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            match = extends_re.search(text)
+            extends_map[rel_p] = match.group(1).strip().strip('"') if match else ""
+            declares[rel_p] = {op for op, pattern in op_re.items() if pattern.search(text)}
+        self._operator_index = (extends_map, declares)
+        return self._operator_index
+
+    def _resolves_operator(self, rel_path: str, operator: str, depth: int = 0) -> bool:
+        extends_map, declares = self._operator_declaration_index()
+        if depth > 8 or rel_path not in extends_map:
+            return False
+        if operator in declares.get(rel_path, set()):
+            return True
+        target = extends_map.get(rel_path, "")
+        if not target:
+            return False
+        target_rel = ""
+        if target.startswith("res://"):
+            target_rel = target.replace("res://", "", 1)
+        elif target in self.symbol_index.class_names:
+            target_rel = self.symbol_index.class_names[target].replace("res://", "", 1)
+        if not target_rel:
+            return False
+        return self._resolves_operator(target_rel, operator, depth + 1)
+
+    @classmethod
+    def panel_operator_usage(cls, content: str):
+        """返回首个未带前缀的 PlayerData/RoleProp 使用位置 (行号, 操作者)。"""
+        usage_re = {
+            "PlayerData": re.compile(r"(?<![A-Za-z0-9_.])PlayerData\b"),
+            "RoleProp": re.compile(r"(?<![A-Za-z0-9_.])RoleProp\b"),
+        }
+        string_re = re.compile(r"\"[^\"]*\"|'[^']*'")
+        for operator, pattern in usage_re.items():
+            for lineno, line in enumerate(content.splitlines(), 1):
+                clean = string_re.sub('""', line.split("#", 1)[0])
+                if clean.strip() and pattern.search(clean):
+                    return (lineno, operator)
+        return (0, "")
+
+    def scan_panel_operator(self):
+        print(f"[*] 扫描面板操作者绑定门禁 (Phase 16-5)...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            if not rel_p.startswith(self.PANEL_OPERATOR_DIRS):
+                continue
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_op = self.panel_operator_usage(content)
+            if hit_line and self._resolves_operator(rel_p, hit_op):
+                hit_line, hit_op = 0, ""
+            if not hit_line:
+                continue
+            finding = ContractFinding(
+                category="panel_operator",
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_op,
+                message="面板域脚本使用 PlayerData/RoleProp 但未按槽位声明操作者",
+                suggested_fix="声明 var PlayerData: PlayerDataStore / var RoleProp: BaseRoleProperties，getter 走 LocalCoop.data_for/props_for",
+                rule_id="PANEL_OPERATOR_UNBOUND",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
 
     def scan_runtime_manifest_loading(self):
         print(f"[*] 扫描运行时 manifest 加载门禁 (Phase 10.5 阶段 3)...")
@@ -1222,8 +1414,61 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def scan_archive_boundary(self):
+        print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
+        self._scan_rule(
+            category="archive_boundary",
+            violation=self.archive_boundary_violation,
+            message="业务代码禁止拼接档案路径或绕过 MemoryClass.request_save 直接读写档",
+            suggested_fix="改用 MemoryClass.request_save/request_background_save 与 Global 会话查询；路径解析只留在持久化边界",
+            rule_id="ARCHIVE_BOUNDARY_FORBIDDEN",
+        )
+
+    def scan_slot_boundary(self):
+        print(f"[*] 扫描槽位边界门禁 (Phase 16-4/16-5)...")
+        self._scan_rule(
+            category="slot_boundary",
+            violation=self.slot_boundary_violation,
+            message="业务代码禁止硬编码 /root/PlayerData、/root/RoleProp 或重新引入全局视图交换",
+            suggested_fix="改用 LocalCoop.data_for/props_for 或 BaseObject/BaseRole 的槽位感知属性",
+            rule_id="SLOT_BOUNDARY_FORBIDDEN",
+        )
+
+    def scan_shared_ledger_boundary(self):
+        print(f"[*] 扫描共享账本与快照互斥门禁 (Phase 16-4/16-5)...")
+        self._scan_rule(
+            category="shared_ledger",
+            violation=self.shared_ledger_boundary_violation,
+            message="共享账本登记、2P 档案剥离与快照互斥入口必须同源",
+            suggested_fix="在 LocalCoop.shared_keys() 登记共享键，并让 save_profile 与快照互斥读取同一登记",
+            rule_id="SHARED_LEDGER_UNREGISTERED",
+        )
+
+    def _scan_rule(self, category, violation, message, suggested_fix, rule_id):
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            hit_line, hit_pattern = violation(content, rel_p)
+            if hit_line == 0:
+                continue
+            finding = ContractFinding(
+                category=category,
+                severity="ERROR",
+                file_path=rel_p,
+                line=hit_line,
+                literal=hit_pattern,
+                message=message,
+                suggested_fix=suggested_fix,
+                rule_id=rule_id,
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
     def run_all_checks(self):
-        """执行完整十一类契约扫描流水线"""
+        """执行完整十五类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1239,6 +1484,10 @@ class ContractScanner:
         self.scan_scene_entry_boundary()
         self.scan_load_cache_boundary()
         self.scan_pool_ui_boundary()
+        self.scan_archive_boundary()
+        self.scan_slot_boundary()
+        self.scan_panel_operator()
+        self.scan_shared_ledger_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1294,7 +1543,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、十一大契约健康看板")
+        lines.append("## 一、十五类契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1311,6 +1560,10 @@ class ContractScanner:
             "scene_entry": "9. 场景入口边界门禁 (Scene Entry Boundary)",
             "load_cache": "10. 加载页私有缓存门禁 (Load Cache Boundary)",
             "pool_ui": "11. 池/UI 清理入口门禁 (Pool/UI Boundary)",
+            "archive_boundary": "12. 档案边界门禁 (Archive Boundary)",
+            "slot_boundary": "13. 槽位边界门禁 (Slot Boundary)",
+            "panel_operator": "14. 面板操作者门禁 (Panel Operator)",
+            "shared_ledger": "15. 共享账本登记门禁 (Shared Ledger)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -1603,6 +1856,188 @@ def run_pool_ui_boundary_self_test() -> bool:
     return passed
 
 
+def run_archive_boundary_self_test() -> bool:
+    """档案边界门禁自测：路径拼接与绕过 request_save 必须拦截，登记入口必须放行。"""
+    print("[*] 档案边界门禁负向自测...")
+    bad_samples = {
+        "业务拼接档案路径": ('var p := "user://MyAr_" + str(n) + ".json"\n', "Script/main_menu/sample.gd"),
+        "业务直调 save_game": ("MemoryClass.save_game(path)\n", "Script/level/sample.gd"),
+        "业务直调 safe_write_archive": ("MemoryClass.safe_write_archive(path, data)\n", "Script/level/sample.gd"),
+        "业务直调 load_game": ("var r = MemoryClass.load_game(path)\n", "Script/level/sample.gd"),
+    }
+    good_samples = {
+        "存档卡片登记入口": ('var p := "user://MyAr_" + str(n) + ".json"\nMemoryClass.load_game(p)\n', "Scene/other_scene/bacis_ar_button.gd"),
+        "存档界面登记写入": ('var p := "user://MyAr_" + str(n) + ".json"\nMemoryClass.safe_write_archive(p, data)\n', "Script/archive_interface/read_archive_interface.gd"),
+        "持久化边界内部": ('var prefix := "user://MyAr_"\nif save_game(p):\n\tpass\n', "Script/memory_class/memory_class.gd"),
+        "业务提交保存请求": ('MemoryClass.request_save("panel")\n', "Script/level/sample.gd"),
+        "注释中的路径字面量": ('# "user://MyAr_1.json" legacy\nvar x := 1\n', "Script/level/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.archive_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.archive_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 档案边界门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 档案边界门禁自测失败！", file=sys.stderr)
+    return passed
+
+
+def run_slot_boundary_self_test() -> bool:
+    """槽位边界门禁自测：硬编码 /root 单例与视图交换必须拦截。"""
+    print("[*] 槽位边界门禁负向自测...")
+    bad_samples = {
+        "业务硬编码 PlayerData": ('var p = get_node("/root/PlayerData")\n', "Script/main_menu/sample.gd"),
+        "业务硬编码 RoleProp": ('var r = get_node_or_null("/root/RoleProp")\n', "Script/level/sample.gd"),
+        "重新引入视图交换": ("LocalCoop.suspend_player_view()\n", "Script/coop/sample.gd"),
+    }
+    good_samples = {
+        "槽位查询": ("var p = LocalCoop.data_for(self)\n", "Script/back_pack/sample.gd"),
+        "BaseRole 属性回落": ('if coop == null:\n\treturn get_node("/root/RoleProp")\n', "Script/base/base_role.gd"),
+        "注释中的视图交换": ("# LocalCoop.resume_player_view() legacy note\n", "Script/coop/sample.gd"),
+        "文本提示中的字样": ('var msg := "suspend_player_view is gone"\n', "Script/coop/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.slot_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.slot_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 槽位边界门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 槽位边界门禁自测失败！", file=sys.stderr)
+    return passed
+
+
+def run_shared_ledger_self_test() -> bool:
+    """共享账本与快照互斥自测：登记缺失必须拦截。"""
+    print("[*] 共享账本与快照互斥门禁负向自测...")
+    complete = (
+        "func shared_keys() -> Array[String]:\n"
+        "\tvar keys: Array[String] = []\n"
+        "\tkeys.append_array(BAG_KEYS)\n"
+        "\tkeys.append(\"被动技能\")\n"
+        "\tkeys.append(PlayerData.MAIN_SWORD_ARRAY_KEY)\n"
+        "\tkeys.append(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY)\n"
+        "\tkeys.append(\"炼体\")\n"
+        "\tkeys.append(PlayerData.WANLING_CATALOG_LEVELS_KEY)\n"
+        "\tkeys.append(\"coin_num\")\n"
+        "\treturn keys\n\n\n"
+        "func save_profile(snapshot: Dictionary) -> void:\n"
+        "\tfor key: String in shared_keys():\n\t\tprofile.erase(key)\n\n"
+        "func open_panel(slot: int, type: String) -> void:\n"
+        "\tif is_save_snapshot_in_progress():\n\t\treturn\n"
+    )
+    bad_samples = {
+        "缺少共享键登记": (complete.replace('keys.append("炼体")\n', ""), "Script/coop/local_coop.gd"),
+        "缺少 2P 剥离": (complete.replace("for key: String in shared_keys():", "for key: String in BAG_KEYS:"), "Script/coop/local_coop.gd"),
+        "缺少快照互斥": (complete.replace("is_save_snapshot_in_progress", "snapshot_flag"), "Script/coop/local_coop.gd"),
+    }
+    good_samples = {
+        "完整登记与剥离": (complete, "Script/coop/local_coop.gd"),
+        "非目标文件": ("func shared_keys() -> void:\n\tpass\n", "Script/other.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.shared_ledger_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.shared_ledger_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 共享账本与快照互斥门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 共享账本与快照互斥门禁自测失败！", file=sys.stderr)
+    return passed
+
+
+def run_panel_operator_self_test() -> bool:
+    """面板操作者门禁自测：声明/继承必须放行，未绑定必须拦截。"""
+    print("[*] 面板操作者门禁负向自测...")
+
+    class _StubSymbols:
+        class_names = {"BaseThing": "res://Script/base/base_thing.gd"}
+
+    scanner = ContractScanner.__new__(ContractScanner)
+    scanner.project_dir = ""
+    scanner.script_files = []
+    scanner.symbol_index = _StubSymbols()
+    scanner._operator_index = (
+        {
+            "Script/back_pack/declared.gd": "Node2D",
+            "Script/back_pack/inherited.gd": "BaseThing",
+            "Script/back_pack/unbound.gd": "Node2D",
+            "Script/base/base_thing.gd": "Node2D",
+        },
+        {
+            "Script/back_pack/declared.gd": {"PlayerData", "RoleProp"},
+            "Script/back_pack/inherited.gd": set(),
+            "Script/back_pack/unbound.gd": set(),
+            "Script/base/base_thing.gd": {"PlayerData"},
+        },
+    )
+    cases = (
+        ("自身声明", "Script/back_pack/declared.gd", "PlayerData", True),
+        ("继承声明", "Script/back_pack/inherited.gd", "PlayerData", True),
+        ("未绑定", "Script/back_pack/unbound.gd", "PlayerData", False),
+        ("继承未声明的属性", "Script/back_pack/inherited.gd", "RoleProp", False),
+    )
+    passed = True
+    for label, rel_path, operator, expected in cases:
+        resolved = scanner._resolves_operator(rel_path, operator)
+        if resolved != expected:
+            print(f"    [X] 判定错误: {label} (期望 {expected}, 实际 {resolved})", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 判定正确: {label} -> {operator}={resolved}")
+    usage_bad = "func f() -> void:\n\tPlayerData.player_data[\"x\"] = 1\n"
+    usage_good = "func f() -> void:\n\tLocalCoop.data_for(self)\n"
+    if ContractScanner.panel_operator_usage(usage_bad)[0] == 0:
+        print("    [X] 坏样本未被识别: 未加前缀的 PlayerData 使用", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 坏样本已识别: 未加前缀的 PlayerData 使用")
+    if ContractScanner.panel_operator_usage(usage_good)[0] != 0:
+        print("    [X] 好样本被误报: 槽位查询", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 好样本已放行: 槽位查询")
+    if passed:
+        print("\n[SUCCESS] 面板操作者门禁自测通过")
+    else:
+        print("\n[FAIL] 面板操作者门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -1610,7 +2045,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页缓存与池/UI 清理边界自测（不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -1621,9 +2056,22 @@ def main():
         scene_ok = run_scene_entry_boundary_self_test()
         load_cache_ok = run_load_cache_boundary_self_test()
         pool_ui_ok = run_pool_ui_boundary_self_test()
+        archive_ok = run_archive_boundary_self_test()
+        slot_ok = run_slot_boundary_self_test()
+        shared_ledger_ok = run_shared_ledger_self_test()
+        panel_operator_ok = run_panel_operator_self_test()
         sys.exit(
             0
-            if manifest_ok and atlas_ok and preload_ok and scene_ok and load_cache_ok and pool_ui_ok
+            if manifest_ok
+            and atlas_ok
+            and preload_ok
+            and scene_ok
+            and load_cache_ok
+            and pool_ui_ok
+            and archive_ok
+            and slot_ok
+            and shared_ledger_ok
+            and panel_operator_ok
             else 1
         )
 

@@ -97,7 +97,7 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 十一类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI 边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 十五类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/档案/槽位/面板操作者/共享账本边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
@@ -105,7 +105,7 @@ python scripts/check_all.py --no-cache -j 6
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 十一类契约
+### 4.1 `contract_scan.py` 十五类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -122,6 +122,10 @@ python scripts/check_all.py --no-cache -j 6
 | 场景入口边界 | 业务脚本直接调用 `change_scene_to_file/packed`，仅 `global.gd` 豁免 | ERROR（`SCENE_ENTRY_BYPASS`） |
 | 加载页私有缓存 | `load_scene.gd` 访问 `Global._resource_cache` 等私有缓存/租约/写入函数 | ERROR（`LOAD_CACHE_PRIVATE_ACCESS`） |
 | 池/UI 清理入口 | 未登记的 `Global.cleanup_transient_ui`、`Global._clear_runtime_pools`、私有池/UI 表访问 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
+| 档案边界 | 业务拼接 `user://MyAr_`；业务直调 `load_game`/`save_game`/`safe_write_archive`（登记入口豁免） | ERROR（`ARCHIVE_BOUNDARY_FORBIDDEN`） |
+| 槽位边界 | 业务硬编码 `/root/PlayerData`/`/root/RoleProp`；重新引入 `suspend/resume_player_view` | ERROR（`SLOT_BOUNDARY_FORBIDDEN`） |
+| 面板操作者 | 面板域脚本使用 `PlayerData`/`RoleProp` 但自身与祖先均未声明槽位操作者 | ERROR（`PANEL_OPERATOR_UNBOUND`） |
+| 共享账本与快照互斥 | `LocalCoop` 缺少 `shared_keys()` 登记、`save_profile` 同源剥离或 `is_save_snapshot_in_progress()` 互斥 | ERROR（`SHARED_LEDGER_UNREGISTERED`） |
 
 只有 **ERROR** 参与 `--fail-on-error` 的退出判定；WARNING 与 INFO 进入报告但不阻断。
 
@@ -138,7 +142,7 @@ python scripts/check_all.py --no-cache -j 6
 ### 4.3 `--self-test` 的边界
 
 - `convert_atlas_metadata.py --self-test` 在 `contract_gate` 内；
-- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存与池/UI 清理边界负向样本；
+- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、档案、槽位、共享账本与面板操作者的正负样本；
 - 涉及契约扫描规则变更时，应单独执行 `python scripts/contract_scan.py --self-test`。
 
 ---
@@ -372,7 +376,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
 | warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 十一类契约 | ERROR 才阻断 |
+| 契约规则 | 十五类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
 | PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |

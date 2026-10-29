@@ -74,7 +74,7 @@ def main():
     parser.add_argument(
         "--skip-contract",
         action="store_true",
-        help="跳过十一类字面量契约与命名规范检查 (contract_scan.py)"
+        help="跳过十五类字面量契约与命名规范检查 (contract_scan.py)"
     )
     parser.add_argument(
         "--skip-naming",

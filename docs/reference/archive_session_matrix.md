@@ -484,7 +484,7 @@ close_panel() -> queue_free -> _on_panel_closed
 | 16-3 会话上下文 | **已完成**：`ArchiveSession` 会话对象、`bind_archive_session`/`begin_archive_session(prewarm)`/`end_archive_session`、`load_game` 显式状态、无会话拒绝保存与关卡入口；AS-01/02/03/13/15/18 关闭 |
 | 16-4 槽位与共享账本 | **已完成**：`shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；2P 档案剥离全部共享键且 `SAVE_VERSION=3`；`/root/PlayerData`、`/root/RoleProp` 硬编码回落改为槽位查询；`LocalCoopSlotLedgerProbe` 17/17 覆盖槽位枚举、共享单写入、个体归属、合并规则与清理 |
 | 16-5 面板与快照 | **已完成**：显式操作者注入（31 脚本）、视图交换删除、快照互斥入口、`LocalCoopPanelOperatorProbe` 18/18 覆盖 2P/1P 操作者、快照拒绝、关闭恢复；AS-10/AS-16 关闭 |
-| 16-6 边界守卫 | 可直接转成规则的静态特征：`user://MyAr_` 拼接、`save_game`/`safe_write_archive` 调用方白名单、未经槽位解析的 `PlayerData.player_data[` 写入点登记、面板脚本缺少 `coop_slot` 解析、快照互斥入口调用点 |
+| 16-6 边界守卫 | **已完成**：`contract_scan.py` 新增 `archive_boundary`、`slot_boundary`、`panel_operator`、`shared_ledger` 四类 ERROR 门禁与正负样本；三处边界违规（`mount_panel`/`mount_skill_effect` 的 `/root/RoleProp`、`role_attribute_integer_format` 未绑定操作者）已改为槽位查询；`contract_scan --fail-on-error` ERROR=0 |
 
 ---
 
@@ -557,13 +557,16 @@ grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 | 16-3 验证 | 档案夹具 **101/101 PASS**（新增 `session_*` 20 项）；`level_1` 冒烟 **PASS**；`scene_probe_runner` **6/6 PASS**；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-4 槽位与共享账本 | **已完成**：`shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；2P 档案剥离全部共享键且 `SAVE_VERSION=3`；`/root/PlayerData`、`/root/RoleProp` 硬编码回落改为槽位查询；`LocalCoopSlotLedgerProbe` 17/17 覆盖槽位枚举、共享单写入、个体归属、合并规则与清理 |
 | 16-5 显式操作者 | 删除 `suspend/resume_player_view`、`_view_swapped` 与 `_primary_*`；31 个面板域脚本注入 `PlayerData`/`RoleProp` 属性（按 `coop_slot` 解析）；弹出层携带 `coop_slot` 供子面板与弹窗继承；`open_panel` 在快照生成期间拒绝打开/切换；`MemoryClass.is_save_snapshot_in_progress()` 为唯一互斥入口 |
+| 16-6 静态守卫 | `contract_scan.py` 扩展至十五类契约：档案边界（路径拼接与底层读写入口白名单）、槽位边界（`/root` 单例与视图交换）、面板操作者（声明或继承校验）、共享账本与快照互斥（登记/剥离/标志同源）；`--self-test` 覆盖四类正负样本 |
+| 16-6 修复 | `mount_panel`、`mount_skill_effect` 的 `/root/RoleProp` 改为槽位属性；`role_attribute_integer_format` 注入显式操作者；全仓扫描 ERROR=0 |
+| 16-6 验证 | `contract_scan --fail-on-error` **ERROR=0**、`--self-test` **10/10 组通过**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`coop_probe_runner` **18/18 PASS**；`archive_probe_runner` **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`level_1` 冒烟 **PASS** |
 | 16-5 验证 | `coop_probe_runner` **18/18 PASS**（新增 `LocalCoopPanelOperatorProbe`：2P/1P 操作者、全局别名不交换、面板写入归属、槽位 meta、快照拒绝、暂停与 `Global.windows` 恢复）；`level_1` 冒烟 **PASS**；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-4 验证 | `coop_probe_runner` **17/17 PASS**（新增 `LocalCoopSlotLedgerProbe`：槽位枚举、共享单写入、个体归属、合并规则、清理后回落）；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-2B/2D 验证 | 档案夹具 **71/71 PASS**（新增 `identity_*` 9 项、`normalize_*` 6 项）；`level_selection` **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | `defeat` / `victory` 双写评估 | 两个调用点**互斥**：镇妖塔分支 `change_scene` 后保存并 `return`，末尾保存只在地图分支执行。每次点击只写一次，无需去重；原"同函数重复保存"描述已更正 |
 | 第四批验证 | `level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **52/52 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 
-**未完成**：16-6 边界守卫。16-2A~16-5 已收口：业务侧 `save_game` 调用为 0，`cd_path` 无业务引用，共享账本单一写入者，面板显式操作者。
+**Phase 16 全部切片已完成**：16-1 矩阵、16-2A~D、16-3、16-4、16-5 与 16-6 边界守卫。业务侧 `save_game` 调用为 0，`cd_path` 无业务引用，共享账本单一写入者，面板显式操作者，契约扫描 ERROR=0。
 
 ---
 

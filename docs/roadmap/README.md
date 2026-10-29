@@ -9,14 +9,14 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 16 档案会话、持久化与玩家槽位**：16-1 矩阵与 16-2A 全部批次、16-2B 身份与顺序、16-2C、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥已完成；16-6 边界守卫与阶段收口规划中 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 16 档案会话、持久化与玩家槽位**：16-1 矩阵与 16-2A 全部批次、16-2B 身份与顺序、16-2C、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口已完成；待归档 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`../archive/iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
 
-当前内容版本 **6.9**。Phase 12/13/14/15 已完成并归档；当前候选为 Phase 16 档案会话、持久化与玩家槽位（16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D、16-3、16-4 与 16-5 已完成；16-6 规划中）；Phase 17 玩法/表现边界仍为候选方向。目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12/13/14/15 已完成并归档；当前候选为 Phase 16 档案会话、持久化与玩家槽位（16-1 矩阵、16-2A 全部 118 处、16-2B/2C/2D、16-3、16-4、16-5 与 16-6 已完成）；Phase 17 玩法/表现边界仍为候选方向。目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

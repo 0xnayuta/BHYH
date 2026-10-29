@@ -1,5 +1,13 @@
 extends Control
 
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 const MOUNT_VISUAL := preload("res://Script/mount/mount_visual.gd")
 const UI_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
@@ -504,7 +512,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	else:
 		var current_multiplier := PlayerData.get_mount_skill_damage_multiplier(selected_mount_id, skill_id, skill_level)
 		var next_multiplier := PlayerData.get_mount_skill_damage_multiplier(selected_mount_id, skill_id, next_level)
-		var role_prop := get_node_or_null("/root/RoleProp")
+		var role_prop: Node = RoleProp
 		var role_data_value: Variant = role_prop.get("roleprop") if role_prop != null else {}
 		var role_data: Dictionary = role_data_value if role_data_value is Dictionary else {}
 		var attack_value := maxi(0, int(role_data.get("power", 0)))

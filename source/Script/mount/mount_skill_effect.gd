@@ -1096,7 +1096,7 @@ func _apply_hit(target: BaseMonster, hit_combat: Dictionary = {}) -> void:
 	var active_combat := hit_combat if not hit_combat.is_empty() else combat
 	var multiplier := float(active_combat.get("power", skill.get("power", 2.0)))
 	multiplier += float(active_combat.get("add", 0.0)) * float(_get_official_skill_level())
-	var role_prop := get_node_or_null("/root/RoleProp")
+	var role_prop: Node = RoleProp
 	var role_data_value: Variant = role_prop.get("roleprop") if role_prop != null else {}
 	var role_data: Dictionary = role_data_value if role_data_value is Dictionary else {}
 	var hit_data := {
@@ -1217,7 +1217,7 @@ func _apply_buff() -> void:
 	if skill_id != "3111100" and skill_id != "3107300":
 		_buff_power_rate = clampf(float(skill.get("power", 1.25)) - 1.0, 0.15, 0.45)
 		hero.temp_power_bonus_rate += _buff_power_rate
-		var role_prop := get_node_or_null("/root/RoleProp")
+		var role_prop: Node = RoleProp
 		if role_prop != null and role_prop.has_method("get_last_prop"):
 			role_prop.call("get_last_prop")
 	if skill_id == "3111100":
@@ -1231,7 +1231,7 @@ func _remove_buff_later() -> void:
 	if hero != null and is_instance_valid(hero):
 		if _buff_power_rate > 0.0:
 			hero.temp_power_bonus_rate = maxf(0.0, hero.temp_power_bonus_rate - _buff_power_rate)
-			var role_prop := get_node_or_null("/root/RoleProp")
+			var role_prop: Node = RoleProp
 			if role_prop != null and role_prop.has_method("get_last_prop"):
 				role_prop.call("get_last_prop")
 		if _buff_expires_msec > 0 and int(hero.get_meta("mount_claw_lightning_until", 0)) == _buff_expires_msec:

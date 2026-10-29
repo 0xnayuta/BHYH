@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥已完成；16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫已完成**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -196,16 +196,17 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 ### 7.1 切片
 
-1. **Phase 16-6A 静态守卫（规划）**：扩展 `contract_scan.py`，新增档案边界类别（禁止业务拼接 `user://MyAr_`、禁止业务调用底层写文件函数、禁止新增 `PlayerData.player_data` 直接下标写入的登记外文件、禁止登记外 `suspend/resume_player_view` 调用）；规则与正负样本登记到 `scripts/README.md` 与 `acceptance.md`；
-2. **Phase 16-6B 清理与索引（规划）**：删除被替代的旧入口与惰性字段；同步 `architecture.md`、`archive_session_matrix.md`、`acceptance.md`、`status.md` 与脚本索引；
-3. **Phase 16-6C 阶段验收（规划）**：L2 固定套件（含 `coop_probe_runner` 全用例）、全量关卡回归、`check_all --godot-bin`、`health_check` 与契约自测；需要时补 release 重验。
+1. **Phase 16-6A 静态守卫（已完成）**：`contract_scan.py` 新增 `archive_boundary`（禁止拼接 `user://MyAr_`、`load_game`/`save_game`/`safe_write_archive` 入口白名单）、`slot_boundary`（禁止 `/root/PlayerData`/`/root/RoleProp` 与 `suspend/resume_player_view`）、`panel_operator`（面板域脚本必须声明或继承槽位操作者）、`shared_ledger`（`shared_keys()` 登记、`save_profile` 同源剥离、快照互斥标志）四类 ERROR 门禁；全部规则配坏样本拦截/好样本放行自测，并登记到 `scripts/README.md` 与 `acceptance.md`；
+2. **Phase 16-6B 清理与索引（已完成）**：三处新门禁检出的边界违规（`mount_panel`/`mount_skill_effect` 的 `/root/RoleProp`、`role_attribute_integer_format` 未绑定操作者）已改为槽位查询/显式操作者；同步 `architecture.md`、`archive_session_matrix.md`、`acceptance.md`、`status.md` 与脚本索引；契约类别计数统一为十五类；
+3. **Phase 16-6C 阶段验收（已完成）**：`check_all --skip-engine`、`health_check`、`contract_scan --self-test` 与 `--fail-on-error`、`coop_probe_runner` 全用例、`archive_probe_runner`、`scene_probe_runner` 与 `level_1` 冒烟均通过；全量关卡回归与 release 重验按发布窗口执行，不在本切片内无差别重跑；
 
 ### 7.2 必须验证
 
 - 静态守卫正负样本通过，全仓无新增误报；
 - 直接写档、路径拼接与未登记视图交换为 0；
 - 双人矩阵与全量回归通过；
-- 文档、矩阵、验收、状态与脚本索引一致。
+- 文档、矩阵、验收、状态与脚本索引一致；
+- `contract_scan.py --self-test` 覆盖全部边界规则正负样本，新增边界必须同时补规则、样本与登记。
 
 ### 7.3 出口
 
