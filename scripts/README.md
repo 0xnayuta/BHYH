@@ -84,7 +84,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
 | `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
-| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者与共享账本/快照互斥十五类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
+| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者、共享账本/快照互斥与 Phase 17 边界十六类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
@@ -201,11 +201,12 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 | 类别 | 规则 | 放行白名单 |
 |:---|:---|:---|
 | `archive_boundary` | 禁止业务拼接 `user://MyAr_`；`load_game`/`save_game`/`safe_write_archive` 仅限登记入口 | 存档卡片、存档界面、`MemoryClass` |
-| `slot_boundary` | 禁止 `get_node*("/root/PlayerData"/"/root/RoleProp")`；禁止新增 `suspend/resume_player_view` | 五个提供槽位回落的基类/界面 |
+| `slot_boundary` | 禁止 `get_node*("/root/PlayerData"/"/root/RoleProp")`；禁止新增 `suspend/resume_player_view` | `skill_icon`、`base_role_properies`、`player_data` 三个登记回落点 |
 | `panel_operator` | 面板域（`back_pack`/`skill`/`pet`/`mount`/`ldl`）使用 `PlayerData`/`RoleProp` 必须自身声明或经继承声明 | 无 |
 | `shared_ledger` | `LocalCoop` 必须保留 `shared_keys()` 登记、`save_profile` 同源剥离与 `is_save_snapshot_in_progress()` 互斥 | 无 |
+| `phase17_boundary` | 结算必须 `LevelSettlement` 且不直写保存；命令必须 `snapshot_state/restore_state`；表现层不写档；四试点禁 `/root` 且路径预算不超 | 见 `contract_scan.py` 常量 |
 
-`python scripts/contract_scan.py --self-test` 对以上四类与前十一类边界执行坏样本拦截与好样本放行；`check_all.py` 中的契约门禁按 `--fail-on-error` 调用全量扫描。
+`python scripts/contract_scan.py --self-test` 对以上五类与前十一类边界执行坏样本拦截与好样本放行；`contract_gate.py` 同时执行该自测；`check_all.py` 中的契约门禁按 `--fail-on-error` 调用全量扫描。
 
 ---
 

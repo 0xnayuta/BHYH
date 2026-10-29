@@ -9,7 +9,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现边界、17-6 模块 API 与场景依赖治理已完成；17-7 边界守卫与阶段收口未启动 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 18 玩法/表现遗留缺口**：18-1 双人归属、18-2 成长/奖励命令、18-3 表现/路径/音频、18-4 档案/运行时/Atlas、18-5 守卫扩面未启动；Phase 17 已归档 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`../archive/iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |

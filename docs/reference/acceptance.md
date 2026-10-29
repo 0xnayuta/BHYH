@@ -97,7 +97,8 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 十五类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/档案/槽位/面板操作者/共享账本边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 十六类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/档案/槽位/面板操作者/共享账本/Phase 17 边界 |
+| 契约自测 | `contract_scan.py --self-test` | 边界规则正负样本；含 Phase 17 结算/命令/表现层/路径预算 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
@@ -105,7 +106,7 @@ python scripts/check_all.py --no-cache -j 6
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 十五类契约
+### 4.1 `contract_scan.py` 十六类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -376,7 +377,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
 | warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 十五类契约 | ERROR 才阻断 |
+| 契约规则 | 十六类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
 | PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |
@@ -425,6 +426,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；面板显式操作者、快照互斥与关闭恢复由 `LocalCoopPanelOperatorProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
 | 战斗来源/结算边界 | L1 八维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
 | 玩法/表现模块边界（Phase 17） | L1 八维 + 定向运行路径 | 归属探针（普攻/技能/弹体/召唤/法宝）、池化复用两轮、阶段推进与结算一次、成长命令失败无副作用、HUD/输入/音频残留；写入者/失败边界见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 只改基类或只改 UI；来源默认 1P；重复发奖；表现层写档 |
+| Phase 17 边界守卫 | L1 八维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 
 

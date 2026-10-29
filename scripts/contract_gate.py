@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""契约域总门禁：契约扫描 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist。"""
+"""契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist。"""
 from __future__ import annotations
 
 import concurrent.futures
@@ -18,6 +18,7 @@ CHILD_ENV["PYTHONUTF8"] = "1"
 CHILD_ENV.pop("PYTHONLEGACYWINDOWSSTDIO", None)
 COMMANDS = [
     ("contract_scan", [sys.executable, "scripts/contract_scan.py", "--fail-on-error"]),
+    ("contract_self_test", [sys.executable, "scripts/contract_scan.py", "--self-test"]),
     ("atlas_metadata_check", [sys.executable, "scripts/convert_atlas_metadata.py", "--check"]),
     ("atlas_metadata_self_test", [sys.executable, "scripts/convert_atlas_metadata.py", "--self-test"]),
     ("frame_sequences_check", [sys.executable, "scripts/convert_frame_sequences.py", "--check"]),

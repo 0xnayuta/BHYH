@@ -1,330 +1,197 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现边界与 17-6 模块 API/场景依赖治理已完成（2026-10-29），17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17 已完成并归档；当前候选 Phase 18：玩法/表现遗留缺口收尾。18-1 双人归属与全局别名、18-2 成长与奖励命令、18-3 表现/路径/音频、18-4 档案/运行时/Atlas、18-5 守卫扩面与阶段收口均未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
-> **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
-> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
-> **历史**：[Phase 16 已归档](../archive/iteration_16_archive_session_slots.md)；[Phase 15](../archive/iteration_15_app_orchestration_lifecycle.md)、[Phase 14](../archive/iteration_14_atlas_metadata_boundary.md)、[Phase 13](../archive/iteration_13_visual_asset_contract.md) 与更早归档见 [`archive/README.md`](../archive/README.md)。
+> **职责**：本页展开 Phase 18；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 16 见 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)。
+> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
+> **历史**：Phase 17、16、15、14、13 归档见 [`archive/README.md`](../archive/README.md)。
 
 ## 1. 阶段边界与决策
 
 ### 1.1 目标
 
-收敛玩法与表现模块边界：让攻击/弹体/召唤/法宝的来源与归属、关卡阶段与结算、成长系统提交、HUD/输入/音频以及模块公开依赖各自有明确的所有者、正式入口和失败边界；保留现有玩法、数值、动画时序与显示基线。
+收尾 Phase 17 矩阵中仍未关闭的跨域缺口：1P/2P 归属别名、成长与奖励命令、表现层直接写入、试点路径、音频生命周期、档案/运行时/Atlas 遗留，以及把 17-7 的静态守卫扩到剩余域。每个切片必须有唯一所有者、正式入口、可判断失败语义。
 
-- 根据热点与实际耦合选择试点，不为缩短基类而大拆继承；
-- 攻击/弹体/召唤/法宝显式携带来源，池化复用清除旧状态；伤害、Buff、吸血与无双归属不漂移；
-- 关卡阶段与胜败/重战提交保持唯一所有者；通关与保存不重复执行；
-- HUD/面板使用只读查询与明确命令，输入与音频表现不拥有领域规则；
-- 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架；
-- 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换；
-- 不新增 Autoload；Autoload 增删/合并必须先评审；一个职责边界迁移时同步迁移全部生产调用方，删除旧入口，不保留永久 facade。
+- 先关“会写错档/发错奖/归属漂移”的缺口，再关只读路径与清理；
+- 不把遗留缺口混成通用事务框架、事件总线或第二套全局单例；
+- 试点域先读矩阵与现有探针，再改代码；每批删除被替代入口，不保留兼容 facade；
+- 深层路径、静态缓存与档案 IO 只在登记边界内处理，不全仓替换。
 
 ### 1.2 不在本阶段
 
-- 不重写 `base_hero`/`base_monster`/`base_through_level` 的继承结构，不做“基类瘦身”作为目标；只在试点的调用面内拆分；
-- 不改变伤害公式、Buff 数值、掉落规则、关卡时序、输入映射、物理层与动画帧率；
-- 不引入通用事务框架、事件总线或第二套全局单例；成功/失败语义由各域命令显式返回；
-- 不把整个 `PlayerData.player_data` 改成 Resource，不重做存档格式；档案会话与槽位边界沿用 Phase 16 结论；
-- 不全仓替换 `get_node()`/绝对路径，不重排顶层目录；深层路径只清受试点影响的边界；
-- 不新增玩法模块、任务、掉落或平台承诺；平台与发布验证按独立工作流推进。
+- 不重写 `base_hero`/`base_monster`/`base_through_level` 继承结构；
+- 不改变伤害公式、Buff 数值、掉落、关卡时序、输入映射、物理层、存档格式或共享规则；
+- 不新增平台承诺、发布验证或内容回植；
+- 不把 `PlayerData.player_data` 整体改成 Resource，不重做档案格式；
+- 不清理 Phase 18 未登记的模块与无关目录。
 
-### 1.3 当前事实与调查结果
+### 1.3 复核基线（2026-10-29）
 
-| 边界 | 当前事实（2026-10-29 统计） | 本阶段取证要求 |
+| 边界 | 当前事实 | 后续归属 |
 |:---|:---|:---|
-| 命中/归属 | `coop_damage_slot` 11 处（`base_monster`/`local_coop`）；`Global.get_player` 15 次 / 9 文件；`source_player` 360 次 / 61 文件 | 17-1 枚举攻击者、弹体、召唤、法宝的来源字段与回退路径，标出仍假定 1P 的入口 |
-| 攻击/弹体/召唤/法宝 | 153 个关卡场景、163 个关卡脚本；`role_bullet*.gd` 2 个；`Script/monster` 中 155 个文件涉及 bullet；`SummonBaseMonster` 子类 12 个；`BaseMagicWeapon` 相关 26 个 | 17-2 明确来源载体、池化复用清理与归属快照；补归属回归夹具 |
-| 池化 | `Global._pool_data` 四类（`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`），上限 80/32/24/32 | 17-2 验证复用节点不携带上一次的来源与战斗状态 |
-| 关卡阶段 | `current_stage` 535 行 / 97 文件；`base_through_level.gd` 1951 行；`victory.gd` 251 行、`defeat.gd` 178 行 | 17-3 枚举阶段推进、胜败判定、重战与结算保存的全部写入者 |
-| 结算保存 | 关卡域 `request_save` 10 处；`victory` 1、`defeat` 3（经 `LevelSettlement`） | 17-3 验证通关/失败/重战每次只保存一次，失败不半提交 |
-| 数据写入 | `PlayerData.player_data` 下标赋值 **145 行 / 42 文件**（含属性赋值 197 行 / 44 文件）；热点 `base_through_level` 29、`game_announcement` 14、`base_monster` 13；分布见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) §7.3 | 17-3/17-4 只迁移试点域的写入，不一次性全量改写 |
-| 成长系统 | `Script/ldl` 16 个脚本、`Script/shop` 6 个、`Script/skill` 9 个；奖励结算涉及 `reward_interface` 等 2 个入口 | 17-4 枚举校验、扣除、产出的顺序与失败分支，找部分扣费/重复领取点 |
-| HUD/输入/音频 | `base_role.gd` 1254 行；`Input.is_action` 63 行 / 20 文件；`Global.add_sound` 138 次 / 34 文件；`Global.add_bgm` 125 次 / 94 文件 | 17-5 区分只读展示、输入映射与表现副作用，禁止表现层提交领域状态 |
-| 模块依赖 | `get_node`/`get_node_or_null` 共 699 处（168 + 531），字面深层路径 279 处 / 66 文件，`/root` 34 处 / 13 文件；无统一模块公开 API 清单 | 17-6 产出受影响模块的公开 API 与依赖方向；深层路径只清试点边界 |
+| 1P/2P 归属 | `Global.get_player` 16 处 / 10 文件；`wd_hurt`/`_is_mds_awaken_active` 读全局 `RoleProp`/`PlayerData`；`RoleProp.source_player` 仍是非归属路径全局别名 | 18-1 |
+| 伤害/召唤 | `_apply_role_damage_vs_reduction` 仍读全局 `damage_bonus`；`SummonBaseMonster.find_player_reference` 对无持有者非英雄来源仍回落全局 | 18-1 |
+| 双人死亡 | 两个死亡分支各自等待后切换（GM-25），未统一全灭提交 | 18-1 |
+| 关卡进度写入 | `base_through_level.add_tg` 仍直接写 29 行进度键（GM-26），victory/分支保存顺序已收口但写入未抽取 | 18-4 |
+| 成长命令 | 神铸/淬骨/合成/任务奖励未原子化；`forge._on_froge_pressed_legacy` 仅定义无调用；`zd_skill` 仍直接写技能等级/变体 | 18-2 |
+| 奖励/商店 | 普通/神秘商店、强化、主动/被动技能已命令化；奖励界面已命令化；2P 打开商店的操作者与并发点击未验证 | 18-2 |
+| 表现层 | 幻化/奖励已命令化；任务领取、部分面板仍可能先置标志/发奖后保存 | 18-2/18-3 |
+| 路径 | 17-6 后四试点深层字面路径 159→30：`pet_interface` 22、`base_role` 8、`zd_skill` 0、`base_magic_weapon` 0 | 18-3 |
+| 音频 | `stop_bgm()` 当前无调用方；BGM 跨父节点复用边界、音效节流表/活动计数清理未覆盖 | 18-3 |
+| 档案/运行时 | `background_save_finished` 仅 emit、无消费者；任务保存序号/信号未收口；地图页 `_ready` 保存 IO 未评估；`cleanup_transient_ui` 硬编码清单与模块静态帧缓存仍保留 | 18-4 |
+| Atlas | 112 个 metadata 未被 Store 触达；惰性 `atlas_metadata` 写入方与未使用常量仍为 Phase 14 遗留 | 18-4 |
+| 守卫 | `phase17_boundary` 仅覆盖结算、两个命令、两个表现文件、四试点路径预算；其他面板/路径/运行时未接入 | 18-5 |
 
-Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Phase 16 的档案会话、共享账本、槽位查询与契约门禁是**不变量**，任何变更需回到对应验收。
+矩阵计数口径见各参考页；本页不复制历史行数。Phase 16/17 的会话、槽位、保存请求与已有关闭项是**不变量**。
 
-## 2. Phase 17-1：玩法与表现调用面矩阵（只读调查，已完成）
+## 2. Phase 18-1：双人归属与全局别名
 
-**目标**：在不改运行时代码的前提下，建立命中归属、关卡阶段/结算、成长提交、HUD/输入/音频与模块依赖的完整调用面，确定每个状态的所有者、写入者、失败边界与试点顺序。
+**目标**：所有攻击/效果/提示读取按显式槽位或显式来源解析；不再因全局 1P 别名改变 2P 行为。
 
-### 2.1 调查内容
+### 2.1 切片
 
-1. 枚举攻击、弹体、召唤物与法宝的创建入口、来源字段（`player`/`source_player`/`get_player`/`coop_damage_slot`）与回退路径，标出仍假定 1P 的代码；
-2. 枚举对象池的取出/归还入口、复用前清理项与残留状态（`damage_text_active`、来源、目标、暴击/闪避标记）；
-3. 枚举关卡阶段的推进函数、`current_stage` 写入点、刷怪表/弹体表解析与阶段跳转条件；
-4. 枚举胜败判定、重战入口、通关/失败结算与 `request_save` 调用，标出可能重复保存或半提交的分支；
-5. 枚举成长系统（购买/锻造/学习/奖励）的校验、扣除、产出与失败回滚点，按业务域分类；
-6. 枚举 HUD/面板的只读查询、输入映射与音频播放副作用，区分“展示”与“提交”；
-7. 枚举试点模块的公开方法、信号与场景依赖，区分模块内部实现与对外契约；
-8. 区分静态定义、实例状态与表现资源，禁止把只读 Catalog/配置误算为运行时状态。
+1. **18-1A `wd_hurt`/觉醒**：决定角色 4 毒伤在 2P 的语义（每个 Role4 独立触发或仅 1P），从 `RoleProp`/`PlayerData` 改为按实际 Role4 槽位读取；补 1P/2P 毒伤用例；
+2. **18-1B `Global.get_player`**：逐文件清理 16 处引用（`dj_sell`、`level_23`、`level_38`、`monster_14501_wdww`、`monster_zhw*`、`weiyang_palace_boss`、`base_monster` 等），改为目标/槽位/显式 owner；
+3. **18-1C 召唤与减伤**：`find_player_reference` 无 owner 的非英雄来源明确拒绝或按槽位；`_apply_role_damage_vs_reduction` 改读出手者 `damage_bonus`；
+4. **18-1D 全灭提交**：统一两个死亡分支的等待与场景提交，保证双人同时死亡只切一次；补 `coop_probe_runner` 全灭断言。
 
-### 2.2 交付矩阵（已完成）
+### 2.2 必须验证
 
-交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)。结论摘要：
+- 2P 角色 4 毒伤/觉醒不读 1P 技能或属性；1P 行为不变；
+- `Global.get_player` 试点文件调用为 0，或剩余项有登记且不影响 2P；无来源命中仍返回 0；
+- 召唤无持有者时不借用 1P；减伤按出手者；
+- 双人同时死亡只产生一次结算场景请求。
 
-| 状态/能力 | 所有者 | 写入者 | 读取者 | 失效/清理事件 | 当前失败语义 |
-|:---|:---|:---|:---|:---|:---|
-| 攻击者/归属 | `BaseMonster.apply_role_hit` + 载体字段 | 攻击创建入口、`coop_damage_slot` 快照 | 伤害、Buff、吸血、无双、掉落 | 命中结束恢复、实体释放 | 缺失来源回落 `RoleProp.source_player`（1P），无告警 |
-| 对象池实例 | `Global._pool_data` | `_take/_store` + `recycle_*` | 伤害文本、受击、音效 | 节点 `setup/recycle`、退出清理 | 取出不重置；容量满新建/超限释放 |
-| 关卡阶段 | `BaseLevel.current_stage` | `_on_create_control_timeout` + 子类/怪物 22 处直接赋值 | 刷怪、HUD、结算 | 关卡释放、重战 | 子类可绕过阶段表；无统一推进守卫 |
-| 胜败/结算 | `BaseLevel._leave_level_from_exit` + 结算场景 | 出口/死亡/结算 `_ready` | HUD、地图、存档 | 返回地图、重战 | 重复切换；保存 bool 丢弃；奖励无回滚 |
-| 成长提交 | 各域脚本 | 购买/锻造/学习/奖励 | 面板、背包、属性 | 面板关闭、失败回滚 | 扣费与产出顺序不一致；`forge` 之外无回滚 |
-| HUD/表现 | `BaseRole`/`RoleInformation`、面板 | 显式 `player` 注入、命令 | 玩家 | 面板关闭、场景退出 | `RoleProp.source_player` 兜底；表现场景可写档 |
-| 模块 API | 各模块脚本 | 模块作者 | 调用方 | 重构/迁移 | 无公开清单；深层路径 279 处；基础类无信号 |
+### 2.3 出口
 
-### 2.3 出口（已完成 2026-10-29）
+- 归属/提示/召唤/减伤均有槽位或显式来源；
+- 未登记 `Global.get_player` 与 `RoleProp.source_player` 回落为 0；
+- 全灭提交唯一。
 
-- [x] 每个试点边界都有所有者、写入者、失败处理与是否可能重复提交的记录；
-- [x] 归属/阶段/成长写入按业务域分类，标出迁移候选与不迁移理由；
-- [x] 对象池复用清理项与残留风险可验证；
-- [x] 仅文档与只读报告，不改生产代码；结果进入 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) 与 [`status.md`](../reference/status.md)。
+## 3. Phase 18-2：成长、奖励与任务命令
 
-**17-1 结论对 17-2 的前置**：`apply_role_hit` 的快照恢复已存在；17-2 的优先修复点是 `RoleProp.source_player` 兜底、吸血/腾蛇阵/角色 5 的 1P 读取，以及弹体在根节点创建时的来源缺失。详见矩阵 §4.3、§11.2。
-
-## 3. Phase 17-2：命中与效果归属
-
-**目标**：让攻击、弹体、召唤与法宝在创建时显式携带来源，伤害/Buff/吸血/无双归属只读该来源；池化复用前清除旧状态，归属不随复用漂移。
+**目标**：剩余成长与奖励域复用 17-4 的“校验→快照→扣除→产出→保存→回滚”模式；先置标志/先发奖的顺序全部消除。
 
 ### 3.1 切片
 
-1. **Phase 17-2A 来源显式化（已完成 2026-10-29）**：删除 `_get_damage_source_player` 的 `RoleProp.source_player` 回落；根节点/技能弹体与浅影显式携带来源；吸血、腾蛇阵与角色 5 等级改读实际出手者；详见 §3.4；
-2. **Phase 17-2B 池化复用清理（已完成 2026-10-29）**：四类池节点统一 `prepare_for_pool()`，在归还/预热入口清理；`_take_pooled_node` 不重置；新增 `LocalCoopPoolReuseProbe`；详见 §3.5；
-3. **Phase 17-2C 归属回归（已完成 2026-10-29）**：`get_role_last_hurt` 的暴击/护甲/等级改读实际出手者；新增 1P/2P 伤害数值分离断言；召唤非英雄来源优先回溯持有者；详见 §3.6；
+1. **18-2A 神铸/淬骨/合成**：为 `divine_forge.gd`、`bone_forge.gd`、`synthesis.gd` 增加快照/恢复与保存判读；失败无部分扣材料；淬骨“失败也扣材料”作为明确设计保留并加注释/用例；
+2. **18-2B 任务奖励**：修 `basic_task.gd` 先置已领取/立即保存、延迟发奖的顺序；改为奖励命令提交后置领取标志；补重进/保存失败用例；
+3. **18-2C 技能直写**：`zd_skill` 的技能等级/变体直接 `PlayerData.player_data` 写入收敛到 `PlayerData` 技能命令；删除旧入口；
+4. **18-2D 死代码与 2P**：删除 `forge._on_froge_pressed_legacy`；验证 2P 打开商店/奖励时操作者与共享账本一致；补并发/重复点击断言；
+5. **18-2E 奖励表现**：确定奖励命令失败时是否隐藏奖励盒；保持“失败不发奖、错误可见”，不把表现反馈当成发放成功。
 
 ### 3.2 必须验证
 
-- 1P/2P 分别出手时，伤害、Buff、吸血与无双记到实际出手者；
-- 弹体/召唤/法宝在命中、穿透、反弹与销毁路径上归属一致；
-- 池化节点连续复用两轮后不携带上一轮来源与战斗标记；
-- 试点外调用方行为不变；`coop_probe_runner` 全用例通过。
+- 材料/灵魂/次数不足不产生扣除、不写背包、不发奖；
+- 成功只扣一次、只发一次；保存失败恢复；
+- 任务奖励重进不重复领取，保存失败不静默丢奖；
+- 技能升级/变体与 Phase 17-4 的主动/被动技能保存语义一致；
+- 2P 操作者与 Phase 16 槽位结论一致。
 
 ### 3.3 出口
 
-- 试点路径的来源只有一个权威字段，归属计算只读该字段；
-- 池化复用清理有单一入口与定向用例；
-- 无新增第二套伤害/归属通道；数值与命中时序不变。
+- 试点成长/奖励域各有单一提交命令；
+- 旧直接写入与死代码删除；
+- 失败路径可判断且无部分副作用。
 
-### 3.4 17-2A 实施记录（2026-10-29）
+## 4. Phase 18-3：表现层、路径与音频遗留
 
-| 项 | 内容 |
-|:---|:---|
-| 来源解析 | `BaseMonster._get_damage_source_player` 删除全局别名回落；无来源命中返回 `null`，伤害为 0 |
-| 攻击载体 | `Global._assign_attack_source` 统一写 `player` 与 meta `coop_slot`；`add_role_bullet`/`add_role_bullet_1`/`_safe`/`add_role1_shallow` 增加可选来源；根节点 `Role2Bullet7_tx`/`_1` 显式传 `player`；英雄召唤写 meta `coop_slot` |
-| 效果归属 | 新增 `_get_vampirism_rate`/`_get_tszz_level`/`_get_role5_skill_level`，按 `LocalCoop.props_for/data_for(source_player)` 读取 |
-| 夹具 | 新增 `LocalCoopAttributionSourcesProbe`：无源不回落、P2 普攻/技能/根节点弹体/法宝无双归属、P2 弹体 addeffect 落到目标、命中后来源字段恢复、召唤来源与槽位、吸血/腾蛇阵/角色 5 读 P2、P1/P2 交替不串、`damage_text` 池两轮复用清理 |
-| 验证 | `coop_probe_runner` 19/19 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s）；`check_all --godot-bin` 8/8 PASS |
-| 残留 | `get_role_last_hurt` 的暴击/护甲/等级、`wd_hurt` 与 `SummonBaseMonster.find_player_reference` 仍读 1P，留给 17-2B/17-2C |
-
-17-2A 只迁移归属入口与三类效果读取，不改伤害公式、命中时序、输入或存档格式。
-
-### 3.5 17-2B 实施记录（2026-10-29）
-
-| 项 | 内容 |
-|:---|:---|
-| 清理边界 | `_take_pooled_node` 不重置；`_store_pooled_node` 与 `_seed_runtime_pool` 调用 `prepare_for_pool()`；节点 `recycle()` 只做重入守卫并委托 |
-| 池节点 | `damage_text`（原有钩子改为委托）、`mr_hurt`、`role_be_hit`、`sound_player` 全部实现 `prepare_for_pool()` |
-| 夹具 | 新增 `LocalCoopPoolReuseProbe`：三类节点归还后不可见/停止/清空，再次取出同一节点并重新初始化 |
-| 验证 | `coop_probe_runner` 20/20 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.0s）；`check_all --godot-bin` 8/8 PASS |
-| 理由 | 取出后必须用新数据调用 `setup()`；通用重置无法知道目标/文本/音量，统一清理放在池边界 |
-
-### 3.6 17-2C 实施记录（2026-10-29）
-
-| 项 | 内容 |
-|:---|:---|
-| 伤害属性 | `get_role_last_hurt` 增加可选 `source_player`；按 `get_player` → `_get_damage_source_player` → `RoleProp` 解析来源，暴击/护甲/魔抗/等级/幸运读 `LocalCoop.props_for(attack_source)` |
-| 伤害数值 | 新增 `LocalCoopDamageStatsProbe`：P2 暴击/护甲穿透/等级压制分别与 P1 分离，1P 保持基线 |
-| 召唤回落 | `find_player_reference` 在非英雄 `summoner` 时先 `LocalCoop.owner_hero(summoner)`，再回落全局别名；探针覆盖法宝持有召唤跟随 P2 |
-| 评估未改 | `wd_hurt` 是每物理帧的全局环境检查，不绑定单次命中来源；2P 角色 4 毒伤语义需玩法决策，留 17-3/17-5 |
-| 验证 | `coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 2 SKIP（314.1s，`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS |
-
-## 4. Phase 17-3：关卡阶段与结算所有权
-
-**目标**：关卡阶段推进与胜败/重战提交保持唯一所有者；通关/失败只保存一次，失败不半提交。
+**目标**：表现层只读/命令；清完试点深层路径；音频生命周期在切换、清理与复用边界可预测。
 
 ### 4.1 切片
 
-1. **Phase 17-3A 阶段状态（已完成 2026-10-29）**：`current_stage` 只经 `advance_stage()` 单调推进；基础关卡与 `game4_imported_level` 共用入口；
-2. **Phase 17-3B 胜败与重战（已完成 2026-10-29）**：`LevelSettlement` 统一保存、离开、重战与失败提示；胜利/失败按钮加去重守卫，奖励保存失败回滚；
-3. **Phase 17-3C 保存一次（已完成 2026-10-29）**：结算、返回与奖励收敛到 `LevelSettlement` 提交点；`lqjl` 增加持久领取标志与整批发放回滚；详见 §4.4。
+1. **18-3A 面板扫描**：按矩阵 §9.4 逐个检查任务/奖励/幻化/宠物/技能面板，禁止 `_process`/`_physics_process`/按钮回调直接写 `PlayerData.player_data` 或直接 `request_save`；合法命令保留；
+2. **18-3B 路径**：`pet_interface` 22 条、`base_role` 8 条深层路径按场景唯一名或模块访问器继续清理；`skill_icon.gd` 的 `/root` 回落迁移到 `LocalCoop`；路径预算同步收紧；
+3. **18-3C 音频**：在场景/档案退出调用 `stop_bgm()` 或定义明确停止策略；处理同曲跨父节点 pending 边界；清理音效节流表/活动计数与模块静态缓存；
+4. **18-3D 输入**：用 `coop_probe_runner`/场景探针覆盖 `p2_*` 隔离、键位修改即时生效与恢复默认；无新增输入写入。
 
 ### 4.2 必须验证
 
-- 阶段推进只发生一次，跳阶段/重战/返回地图后不残留旧阶段；
-- 通关与失败分别只保存一次，重复点击返回/重战不重复发奖；
-- 结算保存失败时界面可感知，不伪报成功；
-- `level_1` 冒烟与相关关卡回归通过。
+- 面板绘制回调无档案写入；命令失败有提示；
+- 试点路径数量不超过新预算，`/root` 回落为零或登记；
+- BGM 同曲复用、切曲停旧、退出停止；音效池无旧流；
+- 1P/2P 输入不串槽。
 
 ### 4.3 出口
 
-- 阶段、胜败与结算各有唯一所有者与正式入口；
-- 结算保存与发奖顺序固定，失败可判断；
-- 不改变关卡数值、刷怪表与通关条件。
+- 表现层无直接领域写入；
+- 路径预算与矩阵一致；
+- 音频在切场景/退出/复用边界确定。
 
-### 4.4 17-3 实施记录（2026-10-29）
+## 5. Phase 18-4：档案、运行时与 Atlas 遗留
 
-| 项 | 内容 |
-|:---|:---|
-| 阶段 | `base_through_level.advance_stage()` 拒绝回退/跳阶；基础关卡与 `game4_imported_level._start_stage()` 改用同一入口 |
-| 结算基类 | `LevelSettlement` 持有保存提交、待提交重试、离开/重战守卫、失败提示与场景请求；`victory`/`defeat` 不再各自实现 |
-| 胜利 | `_ready` 只提交一次；返回/重战不再额外保存；保存失败保留待提交，返回时重试，失败则中止离开 |
-| 失败 | 返回不重复保存；`js`/`yjjj`/`lqjl` 各自守卫并判读保存；保存失败回滚装备/道具/标志 |
-| `lqjl` | 整批发放 `PlayerData.add_dj_batch()`；新增持久标志 `失败奖励已领取`；重载/重进不再重复领取 |
-| 关卡保存点 | 塔层、17 门、八仙 Boss、星宿层、玲珑塔与 hdzm 判读保存结果并提示；塔层/hdzm/17 门失败回滚 |
-| 验证 | `archive_probe_runner` 118 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS |
-
-## 5. Phase 17-4：成长系统命令边界
-
-**目标**：购买、锻造、学习与奖励按业务域提供显式命令：先校验，再提交扣除与产出；保留共同账本与个体分配，失败无部分扣费、无重复领取。
+**目标**：关闭 Phase 15/16/14 矩阵中仍有长期价值的运行时缺口，不重开已归档阶段。
 
 ### 5.1 切片
 
-1. **Phase 17-4A 命令盘点（已完成 2026-10-29）**：矩阵 §8 登记商店、锻造、神铸、淬骨、强化、合成、技能与奖励的校验/扣除/产出/保存；
-2. **Phase 17-4B 单域试点（已完成 2026-10-29）**：普通商店收敛为 `ShopPurchaseCommand.execute`，神秘商店复用 `execute_mystery`；校验→快照→扣除→产出→保存；
-3. **Phase 17-4C 共享/个体分配（已完成 2026-10-29）**：`PlayerData.snapshot_state/restore_state` 同时覆盖 1P/2P 并重连共享容器；商店扣费走共享灵魂；
-4. **Phase 17-4D 失败用例（已完成 2026-10-29）**：余额不足、背包满、购买次数不足、保存失败、强化材料不足各有断言；重复领取由 17-3 `lqjl` 覆盖。
+1. **18-4A 后台保存信号**：决定 `background_save_finished` 的消费者（UI 反馈/日志/失败重试）；任务保存序号与信号顺序收口；
+2. **18-4B 保存 IO 复核**：评估地图页 `_ready` 即保存（AS-08）的必要性与首帧 IO；只在有证据时合并，不改变保存语义；
+3. **18-4C 运行时清理**：处理 `cleanup_transient_ui` 硬编码清单/51 处调用与模块静态帧缓存；补退出/切档/面板残留用例；
+4. **18-4D Atlas 遗留**：分类 112 个未被 Store 触达 metadata、惰性 `atlas_metadata` 写入方与未使用常量；只处理有消费证据的条目，不重开构建器；
+5. **18-4E 关卡进度**：将 `base_through_level.add_tg` 的进度键写入收敛到单一进度命令/数据表，核对胜利与非胜利分支的保存一次；补通关/重战/退出用例。
 
 ### 5.2 必须验证
 
-- 校验失败不产生扣除、不写背包、不发奖；
-- 成功提交只扣一次、只发一次，重进面板/重开界面不重复领取；
-- 共享与个体分配与 Phase 16 结论一致；
-- 面板关闭保存与命令提交不互相覆盖。
+- 后台保存失败可观察，任务奖励不因信号顺序丢失；
+- `add_tg` 进度写入单一所有者，非胜利分支也保存一次；
+- 地图保存不造成明显首帧卡顿，或明确保留理由；
+- 切档/退出后无 UI 注册残留、无旧帧缓存被读取；
+- Atlas 条目分类有依据，未消费者不误删。
 
 ### 5.3 出口
 
-- 试点域只有一个提交命令，校验与产出顺序固定；
-- 失败路径可判断且无副作用；
-- 不引入通用事务框架、不改变数值与掉落概率。
+- 运行时/档案/Atlas 遗留每项有“修复/保留/删除”结论；
+- 保留项有 owner、理由与门禁；
+- 不重开 Phase 14/15/16 已归档范围。
 
-### 5.4 17-4 实施记录（2026-10-29）
+## 6. Phase 18-5：守卫扩面与阶段收口
 
-| 项 | 内容 |
-|:---|:---|
-| 普通商店 | `ShopPurchaseCommand.execute`：容量/灵魂校验 → `PlayerData.snapshot_state` → `spend_soul` → 判读产出 → 保存；保存失败恢复 1P/2P 与共享容器 |
-| 神秘商店 | `execute_mystery`：购买次数、容量、灵魂校验；次数扣减、产出、保存同一快照；失败恢复次数/物品/灵魂 |
-| 强化 | `strength._on_qh_pressed` 只在成功时保存；保存失败恢复装备等级/灵魂/强化石并提示；材料不足直接返回 |
-| 主动技能 | `zd_skill.up_level` 成功才刷新保存；保存失败恢复技能书/灵魂/等级；失败路径不再保存 |
-| 被动技能 | 单技能与一键升级各自快照；保存失败恢复等级/灵魂；按钮与长按不再重复保存 |
-| 数据原语 | `PlayerData.add_dj/add_xhp` 返回 `bool`；新增 `snapshot_state/restore_state` 覆盖 1P/2P 共享账本 |
-| 验证 | `archive_probe_runner` 137 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s，`level_dsg_5`/`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS |
-
-## 6. Phase 17-5：HUD/输入/音频表现边界
-
-**目标**：HUD 与面板只读查询并发送明确命令；输入映射与音频表现不拥有领域规则，不直接提交成长或关卡状态。
+**目标**：把 17-7 的静态守卫从四试点扩到 Phase 18 改动域；完成验证与归档准备。
 
 ### 6.1 切片
 
-1. **Phase 17-5A 只读 HUD（已完成 2026-10-29）**：`BaseRole` 按注入 `player`/槽位解析属性；幻化与奖励面板改为命令调用，不再在回调/`_process` 直接写档案；
-2. **Phase 17-5B 输入边界（已完成 2026-10-29）**：复核 `p2_*` 集中登记与输入读取面；未新增输入写入路径；
-3. **Phase 17-5C 音频表现（已完成 2026-10-29）**：BGM 同一曲复用、切曲停旧；音效缓存检查前置于声部预留；池回收统一停止并清流。
+1. **18-5A 守卫扩面**：为 `basic_task`、`divine_forge`、`bone_forge`、`synthesis`、`skill_icon`、`pet_interface`、`base_role`、音频入口登记规则；保存一次/命令快照/表现层不写档/路径预算按域配置；
+2. **18-5B 运行时夹具**：将 `archive_probe_runner`、`coop_probe_runner` 的关键用例纳入验收矩阵；补失败样本与负向断言；
+3. **18-5C 收口**：`check_all --godot-bin`、L2、相关关卡回归、`contract_scan --self-test`；更新 `status.md`、矩阵、脚本索引与归档。
 
 ### 6.2 必须验证
 
-- HUD 在暂停、切档、面板开关与场景退出后不残留监听或写入；
-- 1P/2P 输入互不串槽，键位修改即时生效且可恢复默认；
-- 音效复用不重叠播放、不残留旧流；关闭面板后音频停止策略一致。
+- 新增规则正负样本通过，无新增误报；
+- 全仓零 ERROR/WARNING 与全量门禁；
+- 双人矩阵、结算/成长/音频夹具、相关关卡回归；
+- 文档、矩阵、验收与脚本索引一致。
 
 ### 6.3 出口
 
-- 表现层只读查询与命令调用，不直接写领域状态；
-- 输入与音频无新增全局单例，设置仍由既有 `MainSet`/`Music` 承载；
-- 显示基线与动画时序不变。
+- Phase 18 缺口全部关闭或明确保留；
+- 守卫覆盖 Phase 18 改动域；
+- 阶段文档归档，另立下一候选。
 
-### 6.4 17-5 实施记录（2026-10-29）
+## 7. 阶段顺序与恢复
 
-| 项 | 内容 |
-|:---|:---|
-| 幻化面板 | `_on_change_pressed` 改调 `PlayerData.change_transmog`；命令校验槽位/已解锁，快照后保存，失败恢复并提示 |
-| 奖励界面 | `_process` 改调 `RewardGrantCommand.execute`；校验奖励/使用物，快照后发放、扣除使用物、保存；失败全量恢复 |
-| HUD | `BaseRole.RoleProp` 按注入 `player` 解析槽位；P1/P2 HUD 不再读全局 1P 属性；绘制回调无档案写入 |
-| BGM | `Global.add_bgm` 记录活动实例：同曲复用并重挂父节点，切曲先 `stop()` 再释放；新增 `stop_bgm()` |
-| 音效池 | `add_sound` 先检查缓存再预留声部，避免无音频时驱逐正常声部；池回收沿用 `prepare_for_pool()` 停止并清流 |
-| 验证 | `archive_probe_runner` 145 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS |
+推荐顺序：**18-1 → 18-2 → 18-3 → 18-4 → 18-5**。18-1 先消除会改变 2P 战斗行为的全局别名；18-2 再处理会写档/发奖的成长命令；18-3 处理表现与路径；18-4 处理运行时/Atlas；18-5 扩面守卫并收口。
 
-## 7. Phase 17-6：模块 API 与场景依赖治理
+中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档或死代码。Phase 18 完成后归档本页，再建立下一候选。
 
-**目标**：为受影响模块建立公开 API 与依赖方向清单；深层路径只在试点边界清理，不进行全仓替换。
+**恢复入口**：`gameplay_module_matrix.md`、`module_api_matrix.md`、`archive_session_matrix.md`、`runtime_lifecycle_matrix.md`、`atlas_metadata_schema.md`、`acceptance.md`、`scripts/coop_probe_runner.py`、`scripts/archive_probe_runner.py`。
 
-### 7.1 切片
-
-1. **Phase 17-6A API 清单（已完成 2026-10-29）**：`module_api_matrix.md` 登记四个试点模块的公开方法、注入字段、场景依赖与内部回调；
-2. **Phase 17-6B 依赖方向（已完成 2026-10-29）**：明确父场景注入、槽位查询、档案命令与禁止的 `/root`/跨模块私有访问；
-3. **Phase 17-6C 路径清理（已完成 2026-10-29）**：四文件深层字面路径 159→30；`zd_skill`/`base_magic_weapon` 归零，`base_role` 去 `/root`，`pet_interface` 根节点经统一访问器。
-
-### 7.2 必须验证
-
-- 试点模块的公开 API 清单与调用方一致，无未登记的外部入口；
-- 迁移后场景加载、依赖注入与既有玩法回归通过；
-- 不新增跨模块私有访问；深层路径在试点外零改动。
-
-### 7.3 出口
-
-- 试点模块有可评审的公开 API 与依赖方向；
-- 被替代的入口与调用方同批删除，不保留 facade；
-- 不重排顶层目录、不搬迁无关模块。
-
-### 7.4 17-6 实施记录（2026-10-29）
-
-| 项 | 内容 |
-|:---|:---|
-| API 清单 | 新建 [`module_api_matrix.md`](../reference/module_api_matrix.md)：`BaseRole`、`BaseMagicWeapon`、`zd_skill`、`pet_interface` 的公开方法/字段/场景依赖/内部回调 |
-| 依赖方向 | 父场景注入 `player`/`pet_panel`；模块经 `LocalCoop.data_for/props_for` 取槽位；跨模块调用经公开方法 |
-| 绝对路径 | `base_role`/`base_magic_weapon` 删除 `/root/LocalCoop`、`/root/PlayerData`、`/root/RoleProp`，改用 `LocalCoop` 槽位查询 |
-| 技能路径 | `zd_skill` 新增 `SKILL_UI_ROOT` 与列/孙节点访问器；26 条深层字面路径归零 |
-| 宠物路径 | `pet_interface` 新增 `_pet_ui_node` 根访问器；117→22，剩余均为模块自身场景子节点 |
-| 验证 | `archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS |
-
-## 8. Phase 17-7：边界守卫与阶段收口
-
-**目标**：把本阶段新增边界纳入静态审计与回归套件，阻断新的未登记归属、重复结算与表现层写入。
-
-### 8.1 切片
-
-1. **Phase 17-7A 静态守卫（规划）**：扩展 `contract_scan.py`，新增试点域规则（禁止未登记归属来源回退、禁止 UI 回调直接发奖/推进阶段、禁止表现层写档案）；规则与正负样本登记到 `scripts/README.md` 与 `acceptance.md`；
-2. **Phase 17-7B 清理与索引（规划）**：删除被替代入口与惰性字段，同步 `architecture.md`、`gameplay_module_matrix.md`、`acceptance.md`、`status.md` 与脚本索引；
-3. **Phase 17-7C 阶段验收（规划）**：L2 固定套件（含 `coop_probe_runner`）、相关关卡回归、`check_all --godot-bin`、`health_check` 与契约自测；需要时补 release 重验。
-
-### 8.2 必须验证
-
-- 静态守卫正负样本通过，全仓无新增误报；
-- 试点域未登记归属回退、重复结算与表现层写入为 0；
-- 双人矩阵、相关关卡回归与全量门禁通过；
-- 文档、矩阵、验收、状态与脚本索引一致。
-
-### 8.3 出口
-
-- 玩法/表现边界均有 owner、正式入口与失败语义；
-- 不再存在未登记的归属回退、重复发奖或表现层直接写档；
-- 旧入口与兼容分支删除；
-- Phase 17 完成后归档本页，再建立下一候选计划。
-
-## 9. 验证矩阵
+## 8. 验证矩阵
 
 既有命令与档位以 [`acceptance.md`](../reference/acceptance.md) 为准，不在本页复制历史数字。
 
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
-| Phase 17-1 调用面矩阵 | 全量引用、owner/写入者/失败表、链接与格式；结果见 `gameplay_module_matrix.md` | 引擎、关卡回归不因只读调查复跑 |
-| Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、1P/2P 伤害数值分离、相关关卡冒烟；17-2A/2B/2C 分别由 `LocalCoopAttributionSourcesProbe`/`LocalCoopPoolReuseProbe`/`LocalCoopDamageStatsProbe` 覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
-| Phase 17-3 阶段与结算 | `archive_probe_runner` 的胜败/重战/奖励/保存失败用例（118 项）、`level_1` 冒烟、变更关卡回归 | 只改结算 UI 或只改基类都不算完成 |
-| Phase 17-4 成长命令 | `archive_probe_runner` 的商店/神秘商店/强化/主动/被动技能成功、余额不足、容量不足、材料不足、保存失败回滚用例（137 项）；`level_1` 冒烟；相关关卡回归 | 只改 UI 或只改保存调用不算完成 |
-| Phase 17-5 HUD/输入/音频 | `archive_probe_runner` 的幻化/奖励/BGM/音效池用例（145 项）、`coop_probe_runner`、`level_1` 冒烟、变更关卡回归 | 只改 HUD 绘制或只改输入映射都不算完成 |
-| Phase 17-6 模块 API | `module_api_matrix.md` 公开 API/依赖方向；四文件路径清理 159→30；`archive_probe_runner`、`coop_probe_runner`、`level_1` 与变更回归 | 不做全仓路径替换 |
-| Phase 17-7 边界守卫 | 静态守卫正负样本、全仓零 ERROR、L2、相关回归 | 包路径/导出无变化时不强制重导 release |
+| Phase 18-1 归属 | `coop_probe_runner` 2P 毒伤/觉醒/减伤/召唤/全灭用例，相关关卡冒烟 | 不重跑全量归属矩阵 |
+| Phase 18-2 成长 | `archive_probe_runner` 神铸/淬骨/合成/任务/技能成功与失败回滚；2P 商店用例 | 不引入通用事务框架 |
+| Phase 18-3 表现/路径/音频 | 面板扫描、路径预算、`stop_bgm`/音效池用例、`coop_probe_runner` 输入隔离 | 只改 HUD 或只改路径不算完成 |
+| Phase 18-4 档案/运行时/Atlas | 后台保存信号、切档/退出残留、Atlas 分类报告；按变更触发 L2/回归 | 不重开已归档构建器 |
+| Phase 18-5 守卫 | `contract_scan --self-test`、`check_all --godot-bin`、L2、相关回归 | 包路径/导出无变化时不强制 release 重验 |
 
-## 10. 阶段出口与恢复
+## 9. 阶段出口
 
-- 归属、阶段与结算、成长提交、表现层与模块 API 均有唯一所有者与明确失败语义；
-- 来源缺失时行为明确，不静默回退到 1P；池化复用不携带旧状态；
-- 通关/失败/重战只提交一次，失败不半提交；
-- 表现层不直接写领域状态，输入与音频不拥有领域规则；
-- 旧入口与兼容分支删除，不保留永久 facade；
-- 文档、ADR、脚本索引与状态一致；需要长期保留的结论进入 `reference/`，历史实施细节归档。
+- 18-1~18-4 每项有修复/保留/删除结论与验证；
+- 不再存在未登记的 1P 回落、表现层直接写档、成长半提交或重复领取；
+- 守卫覆盖 Phase 18 改动域，全仓 ERROR=0；
+- 文档、矩阵、脚本索引与状态一致；阶段归档后建立下一候选。
 
-中断时从 Phase 17-1 的调用面矩阵与最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的归属回退、重复结算或表现层写入路径。Phase 17 完成后归档本页，再建立下一候选计划。
-
-**恢复入口**：`gameplay_module_matrix.md`、[`architecture.md`](../reference/architecture.md) 的战斗/关卡/UI 章节、[`acceptance.md`](../reference/acceptance.md) 的 L2 档位、[`archive_session_matrix.md`](../reference/archive_session_matrix.md) 的档案/槽位结论、`scripts/coop_probe_runner.py` 的 18 项用例。
-
-**下一候选顺序**：Phase 17 玩法/表现边界 → 面板保存反馈与 `background_save_finished` 消费 → 平台与发布验证按独立工作流推进。平台目标未验证前不得宣传可用。
+**下一候选**：Phase 18 收口后，按独立工作流处理平台/发布验证；不把未验证平台写成承诺。

@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中十五类契约与真源的一致性：
+用于全量扫描并比对工程中十六类契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -999,8 +999,6 @@ class ContractScanner:
     )
     SLOT_ROOT_ALLOWLIST = {
         "Scene/other_scene/skill_icon.gd",
-        "Script/base/base_magic_weapon.gd",
-        "Script/base/base_role.gd",
         "Script/base/base_role_properies.gd",
         "Script/memory_class/player_data.gd",
     }
@@ -1029,6 +1027,33 @@ class ContractScanner:
         "WANLING_CATALOG_LEVELS_KEY",
         "coin_num",
     )
+
+    # Phase 17-7：保存一次、命令原子性、表现层不写档、试点路径预算。
+    PHASE17_SETTLEMENT_FILES = {
+        "Script/level/victory.gd",
+        "Script/level/defeat.gd",
+    }
+    PHASE17_COMMAND_FILES = {
+        "Script/shop/shop_purchase_command.gd",
+        "Script/other_menu/reward_grant_command.gd",
+    }
+    PHASE17_PRESENTATION_FILES = {
+        "Scene/other_scene/transmogtified_box.gd",
+        "Scene/other_scene/reward_interface.gd",
+    }
+    PHASE17_ROOT_FORBIDDEN_FILES = {
+        "Script/base/base_role.gd",
+        "Script/base/base_magic_weapon.gd",
+        "Script/pet/pet_interface.gd",
+        "Script/skill/zd_skill.gd",
+    }
+    PHASE17_DEEP_PATH_BUDGETS = {
+        "Script/pet/pet_interface.gd": 22,
+        "Script/skill/zd_skill.gd": 0,
+        "Script/base/base_role.gd": 8,
+        "Script/base/base_magic_weapon.gd": 0,
+    }
+    PHASE17_DEEP_PATH_RE = re.compile(r'get_node(?:_or_null)?\("([^"]*)"')
     ATLAS_BOUNDARY_LEGACY_PATTERNS = (
         "AtlasMetadataStore.data_for",
         "AtlasMetadataStore.validate_path",
@@ -1390,6 +1415,51 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    @classmethod
+    def phase17_boundary_violation(cls, content: str, rel_path: str):
+        """Phase 17 边界：保存一次、命令快照、表现层不写档、试点路径预算。"""
+        if rel_path in cls.PHASE17_SETTLEMENT_FILES:
+            if "extends LevelSettlement" not in content:
+                return (1, "extends LevelSettlement")
+            if "MemoryClass.request_save" in content:
+                return (1, "MemoryClass.request_save")
+        if rel_path in cls.PHASE17_COMMAND_FILES:
+            for token in ("snapshot_state(", "restore_state("):
+                if token not in content:
+                    return (1, token)
+        if rel_path in cls.PHASE17_PRESENTATION_FILES:
+            for lineno, line in enumerate(content.splitlines(), 1):
+                clean = line.split("#", 1)[0]
+                if re.search(r"PlayerData\.player_data\s*\[[^\n=]*\]\s*=", clean):
+                    return (lineno, "PlayerData.player_data[...] =")
+                if re.search(r"PlayerData\.player_data\.[A-Za-z_\u4e00-\u9fff]+\s*=", clean):
+                    return (lineno, "PlayerData.player_data.attr =")
+                if "MemoryClass.request_save" in clean:
+                    return (lineno, "MemoryClass.request_save")
+        if rel_path in cls.PHASE17_ROOT_FORBIDDEN_FILES and '"/root/' in content:
+            return (1, '"/root/')
+        if rel_path in cls.PHASE17_DEEP_PATH_BUDGETS:
+            count = 0
+            for line in content.splitlines():
+                for match in cls.PHASE17_DEEP_PATH_RE.finditer(line):
+                    path = match.group(1)
+                    if "/" in path or path.startswith("/root"):
+                        count += 1
+            budget = cls.PHASE17_DEEP_PATH_BUDGETS[rel_path]
+            if count > budget:
+                return (1, f"deep_paths:{count}>{budget}")
+        return (0, "")
+
+    def scan_phase17_boundary(self):
+        print("[*] 扫描 Phase 17 边界门禁 (保存一次/命令原子性/表现层/路径预算)...")
+        self._scan_rule(
+            category="phase17_boundary",
+            violation=self.phase17_boundary_violation,
+            message="Phase 17 边界回退：结算重复保存、命令缺少快照、表现层直接写档或试点深层路径超预算",
+            suggested_fix="结算改用 LevelSettlement；命令使用 snapshot_state/restore_state；表现层调用命令；路径预算见 module_api_matrix.md",
+            rule_id="PHASE17_BOUNDARY_FORBIDDEN",
+        )
+
     def scan_pool_ui_boundary(self):
         print(f"[*] 扫描池/UI 清理入口登记门禁...")
         for abs_p in self.script_files:
@@ -1468,7 +1538,7 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整十五类契约扫描流水线"""
+        """执行完整十六类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1488,6 +1558,7 @@ class ContractScanner:
         self.scan_slot_boundary()
         self.scan_panel_operator()
         self.scan_shared_ledger_boundary()
+        self.scan_phase17_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1543,7 +1614,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、十五类契约健康看板")
+        lines.append("## 一、十六类契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1901,10 +1972,10 @@ def run_slot_boundary_self_test() -> bool:
         "业务硬编码 PlayerData": ('var p = get_node("/root/PlayerData")\n', "Script/main_menu/sample.gd"),
         "业务硬编码 RoleProp": ('var r = get_node_or_null("/root/RoleProp")\n', "Script/level/sample.gd"),
         "重新引入视图交换": ("LocalCoop.suspend_player_view()\n", "Script/coop/sample.gd"),
+        "BaseRole 重新引入绝对回落": ('if coop == null:\n\treturn get_node("/root/RoleProp")\n', "Script/base/base_role.gd"),
     }
     good_samples = {
         "槽位查询": ("var p = LocalCoop.data_for(self)\n", "Script/back_pack/sample.gd"),
-        "BaseRole 属性回落": ('if coop == null:\n\treturn get_node("/root/RoleProp")\n', "Script/base/base_role.gd"),
         "注释中的视图交换": ("# LocalCoop.resume_player_view() legacy note\n", "Script/coop/sample.gd"),
         "文本提示中的字样": ('var msg := "suspend_player_view is gone"\n', "Script/coop/sample.gd"),
     }
@@ -1980,6 +2051,44 @@ def run_shared_ledger_self_test() -> bool:
     return passed
 
 
+def run_phase17_boundary_self_test() -> bool:
+    """Phase 17 边界自测：结算/命令/表现层/路径预算的负向样本必须拦截。"""
+    print("[*] Phase 17 边界门禁负向自测...")
+    good = {
+        "Script/level/victory.gd": "extends LevelSettlement\nfunc _ready():\n\tpass\n",
+        "Script/shop/shop_purchase_command.gd": "func execute():\n\tvar s = PlayerData.snapshot_state()\n\tPlayerData.restore_state(s)\n",
+        "Scene/other_scene/reward_interface.gd": "func _process(_delta):\n\tvar x = PlayerData.player_data.get(\"x\", 0)\n",
+        "Script/base/base_role.gd": "var target = LocalCoop.data_for(self)\n",
+    }
+    bad = (
+        ("Script/level/defeat.gd", "extends LevelSettlement\nfunc _ready():\n\tMemoryClass.request_save(\"x\")\n"),
+        ("Script/shop/shop_purchase_command.gd", "func execute():\n\tvar s = PlayerData.snapshot_state()\n"),
+        ("Scene/other_scene/transmogtified_box.gd", "func f():\n\tPlayerData.player_data[DataKeys.TRANSMOG_LIST][\"x\"] = 1\n"),
+        ("Script/base/base_magic_weapon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
+    )
+    passed = True
+    for rel_path, content in good.items():
+        line, pattern = ContractScanner.phase17_boundary_violation(content, rel_path)
+        if line != 0:
+            passed = False
+            print(f"  [FAIL] 正当样本被拦截: {rel_path} {pattern}")
+    for rel_path, content in bad:
+        line, pattern = ContractScanner.phase17_boundary_violation(content, rel_path)
+        if line == 0:
+            passed = False
+            print(f"  [FAIL] 负向样本未拦截: {rel_path}")
+    deep_ok = "\n".join(f'var n{i} = get_node("a/{i}")\n' for i in range(22))
+    if ContractScanner.phase17_boundary_violation(deep_ok, "Script/pet/pet_interface.gd")[0] != 0:
+        passed = False
+        print("  [FAIL] 路径预算边界样本未放行")
+    deep_bad = deep_ok + "\nvar extra = get_node(\"a/b\")\n"
+    if ContractScanner.phase17_boundary_violation(deep_bad, "Script/pet/pet_interface.gd")[0] == 0:
+        passed = False
+        print("  [FAIL] 路径预算超限未拦截")
+    print("[OK] Phase 17 边界门禁自测通过" if passed else "[FAIL] Phase 17 边界门禁自测失败")
+    return passed
+
+
 def run_panel_operator_self_test() -> bool:
     """面板操作者门禁自测：声明/继承必须放行，未绑定必须拦截。"""
     print("[*] 面板操作者门禁负向自测...")
@@ -2045,7 +2154,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/Phase 17 边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2059,6 +2168,7 @@ def main():
         archive_ok = run_archive_boundary_self_test()
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
+        phase17_ok = run_phase17_boundary_self_test()
         panel_operator_ok = run_panel_operator_self_test()
         sys.exit(
             0
@@ -2071,6 +2181,7 @@ def main():
             and archive_ok
             and slot_ok
             and shared_ledger_ok
+            and phase17_ok
             and panel_operator_ok
             else 1
         )

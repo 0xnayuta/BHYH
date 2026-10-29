@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算、17-4 成长命令、17-5 HUD/输入/音频边界与 17-6 模块 API/场景依赖治理已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A~17-6 的修复与剩余差距见 §12~§18。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算、17-4 成长命令、17-5 HUD/输入/音频边界、17-6 模块 API/场景依赖治理与 17-7 边界守卫已实施（2026-10-29），Phase 17 已归档。§1~§11 保留 17-1 基线与失败边界，17-2A~17-7 的修复与剩余差距见 §12~§19。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -680,3 +680,25 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 18.4 验证
 
 `archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 19. 17-7 边界守卫（2026-10-29）
+
+### 19.1 固化规则
+
+`scripts/contract_scan.py` 新增 `phase17_boundary` ERROR 规则：
+
+1. `victory.gd`/`defeat.gd` 必须 `extends LevelSettlement`，且不得直接调用 `MemoryClass.request_save`；
+2. `ShopPurchaseCommand`/`RewardGrantCommand` 必须包含 `snapshot_state()` 与 `restore_state(`；
+3. 幻化/奖励表现层禁止 `PlayerData.player_data[...] =`、`PlayerData.player_data.attr =` 与直接 `request_save`；
+4. `base_role`/`base_magic_weapon`/`pet_interface`/`zd_skill` 禁止 `"/root/"`；
+5. 四试点深层字面路径预算：`pet_interface` 22、`zd_skill` 0、`base_role` 8、`base_magic_weapon` 0。
+
+`contract_gate.py` 增加 `contract_scan --self-test`；自测覆盖正当样本、重复保存、缺快照、表现层写档、绝对路径与路径超预算负样本。`slot_boundary` 的 BaseRole `/root` 回落样本已转为负样本，策略与 17-6 一致。
+
+### 19.2 验证
+
+`contract_scan --fail-on-error` ERROR=0；`contract_scan --self-test` PASS；`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。
+
+Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)；剩余缺口进入 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 18-1~18-5。
