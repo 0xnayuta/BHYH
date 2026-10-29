@@ -43,41 +43,41 @@ func load_item_icon(_name):
 func _on_change_pressed() -> void:
 	var lx = AE.all_equipment[self_name][DataKeys.TYPE]
 	var item_name = AE.all_equipment[self_name][DataKeys.NAME]
-
-	if cdorxx.text == "穿戴":
-		if PlayerData.has_acquired_equipment(self_name):
-			if lx == "武器":
-				PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON] = self_name
-				Global.add_message_show(Global.windows, "武器幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-			elif lx == "防具":
-				PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] = self_name
-				Global.add_message_show(Global.windows, "防具幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-			elif lx == "时装":
-				PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] = self_name
-				Global.add_message_show(Global.windows, "时装幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-			elif lx == "翅膀":
-				PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS] = self_name
-				Global.add_message_show(Global.windows, "翅膀幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-		else:
-			Global.add_message_show(Global.windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-	elif cdorxx.text == "卸下":
-		if lx == "武器":
-			PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON] = ""
-			Global.add_message_show(Global.windows, "取消武器：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295))
-		elif lx == "防具":
-			PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] = ""
-			Global.add_message_show(Global.windows, "取消防具：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295))
-		elif lx == "时装":
-			PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] = ""
-			Global.add_message_show(Global.windows, "取消时装：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295))
-		elif lx == "翅膀":
-			PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS] = ""
-			Global.add_message_show(Global.windows, "取消翅膀：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295))
+	var slot_type := ""
+	var type_label := ""
+	match lx:
+		"武器":
+			slot_type = DataKeys.WEAPON
+			type_label = "武器"
+		"防具":
+			slot_type = DataKeys.ARMOR
+			type_label = "防具"
+		"时装":
+			slot_type = DataKeys.ARMOR
+			type_label = "时装"
+		"翅膀":
+			slot_type = DataKeys.WINGS
+			type_label = "翅膀"
+		_:
+			return
+	var wearing := cdorxx.text == "穿戴"
+	if wearing and not PlayerData.has_acquired_equipment(self_name):
+		Global.add_message_show(Global.windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295))
+		return
+	if not PlayerData.change_transmog(slot_type, self_name if wearing else ""):
+		Global.add_message_show(Global.windows, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 295))
+		set_physics_process(true)
+		return
+	if wearing:
+		Global.add_message_show(Global.windows, type_label + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
+	else:
+		Global.add_message_show(
+			Global.windows, "取消" + type_label + "：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
+		)
 	transmogrified.on_eqchange()
 	if is_instance_valid(RoleProp.source_player) and RoleProp.source_player.has_method("on_eqchange"):
 		RoleProp.source_player.on_eqchange()
 	for i in transmogrified.list:
 		if i != null:
 			i.set_physics_process(true)
-	MemoryClass.request_save("change_clothes")
 	set_physics_process(true)

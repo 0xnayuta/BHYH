@@ -214,33 +214,41 @@ func set_infor():
 
 func _upgrade_all_passives() -> int:
 	PlayerData.ensure_player_passive_skills()
-	var snapshot: Dictionary = PlayerData.snapshot_state()
 	var target: Dictionary = PlayerData.player_data["被动技能"]
 	var max_level := get_current_max_level()
-	var upgraded_count := 0
-	while true:
-		var upgraded_this_round := false
-		for skill_name in PASSIVE_SKILL_NAMES:
-			var level := int(target.get(skill_name, 0))
+	var levels := {}
+	for skill_name in PASSIVE_SKILL_NAMES:
+		levels[skill_name] = int(target.get(skill_name, 0))
+	var built := _build_passive_upgrade_plan(PASSIVE_SKILL_NAMES, levels, max_level, PlayerData.get_soul())
+	var plan: Array = built["plan"]
+	if plan.is_empty():
+		return 0
+	if not PlayerData.apply_passive_skill_upgrades(plan, int(built["total"]), "skill_passive_upgrade_all"):
+		return -1
+	return plan.size()
+
+
+func _build_passive_upgrade_plan(
+	skill_names: Array, starting_levels: Dictionary, max_level: int, budget: int
+) -> Dictionary:
+	var plan: Array = []
+	var levels := starting_levels.duplicate(true)
+	var total_cost := 0
+	var upgraded := true
+	while upgraded:
+		upgraded = false
+		for skill_name in skill_names:
+			var level := int(levels.get(skill_name, 0))
 			if level >= max_level:
 				continue
-			var cost := int(PaSkill.get_lh(skill_name))
-			if PlayerData.get_soul() < cost:
+			var cost := PaSkill.get_lh_for_level(str(skill_name), level)
+			if total_cost + cost > budget:
 				continue
-			PlayerData.spend_soul(cost)
-			target[skill_name] = level + 1
-			upgraded_count += 1
-			upgraded_this_round = true
-		if not upgraded_this_round:
-			break
-	if (
-		upgraded_count > 0
-		and Global.is_archive_session_active()
-		and not MemoryClass.request_save("skill_passive_upgrade_all", false)
-	):
-		PlayerData.restore_state(snapshot)
-		return -1
-	return upgraded_count
+			total_cost += cost
+			levels[skill_name] = level + 1
+			plan.append({"name": str(skill_name), "level": level + 1})
+			upgraded = true
+	return {"plan": plan, "total": total_cost}
 
 
 func _on_one_key_upgrade_pressed() -> void:
@@ -257,22 +265,18 @@ func _on_one_key_upgrade_pressed() -> void:
 
 func up_level(_name) -> bool:
 	PlayerData.ensure_player_passive_skills()
-	var target = PlayerData.player_data["被动技能"]
-	var need_lh = PaSkill.get_lh(_name)
-	if target[_name] >= get_current_max_level():
+	var target: Dictionary = PlayerData.player_data["被动技能"]
+	var level := int(target.get(_name, 0))
+	var max_level := get_current_max_level()
+	if level >= max_level:
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "已经无法再升级了！！", 1)
 		return false
-	if PlayerData.get_soul() < need_lh:
+	var cost := PaSkill.get_lh_for_level(str(_name), level)
+	if PlayerData.get_soul() < cost:
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
 		return false
-	var snapshot: Dictionary = PlayerData.snapshot_state()
-	if not PlayerData.spend_soul(need_lh):
-		PlayerData.restore_state(snapshot)
-		Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
-		return false
-	target[_name] += 1
-	if not MemoryClass.request_save("skill_passive_upgrade", false):
-		PlayerData.restore_state(snapshot)
+	var plan := [{"name": str(_name), "level": level + 1}]
+	if not PlayerData.apply_passive_skill_upgrades(plan, cost):
 		set_infor()
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 1)
 		return false

@@ -472,9 +472,7 @@ func _on_lqjl_pressed() -> void:
 		claim_callable = Callable(PlayerData, "claim_eight_immortal_daily")
 	elif not bool(task_data.get("UnlimitedClaim", false)):
 		var task_name := current_task_name
-		claim_callable = func() -> bool:
-			PlayerData.player_data[task_name] = true
-			return true
+		claim_callable = func() -> bool: return PlayerData.claim_task(task_name)
 	var list = task_data["task_reward"]
 	Global.add_reward_info(Global.get_ancestor(self, 1), Vector2(0, 0), list, null, null, claim_callable)
 

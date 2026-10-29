@@ -2681,7 +2681,8 @@ func _upgrade_pet_passive(skill_name: String) -> bool:
 	_refresh_live_pet_passives(pet)
 	_refresh_current_pet()
 	_refresh_pet_passive_panel(pet)
-	MemoryClass.request_save("pet_passive_upgrade")
+	if not Global.request_save_with_feedback("pet_passive_upgrade", self):
+		return false
 	return true
 
 
@@ -3948,8 +3949,8 @@ func _pet_item_base_stat(item: Dictionary, key: String) -> int:
 	return 0
 
 
-func _save_pet_changes() -> void:
-	MemoryClass.request_save("pet_changes")
+func _save_pet_changes() -> bool:
+	return Global.request_save_with_feedback("pet_changes", self)
 
 
 func _refresh_strength() -> void:

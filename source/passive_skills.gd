@@ -96,7 +96,11 @@ func get_passive_skill_properties():
 
 
 func get_lh(_name):
-	var get_level = int(PlayerData.player_data["被动技能"].get(_name, 0))
+	return get_lh_for_level(_name, int(PlayerData.player_data["被动技能"].get(_name, 0)))
+
+
+func get_lh_for_level(_name: String, level: int) -> int:
+	var get_level := maxi(0, level)
 	if get_level < need_lh_list.size():
 		return need_lh_list[get_level]
 	return 5000 * (get_level + 1)

@@ -574,8 +574,7 @@ func push_eq_to_list():
 		if not _is_transmog_item_visible(str(i)):
 			continue
 		if PlayerData.has_acquired_equipment(str(i)):
-			if not PlayerData.player_data["幻化拥有列表"].has(i):
-				PlayerData.player_data["幻化拥有列表"].push_back(i)
+			PlayerData.record_transmog_owned(str(i))
 
 
 func get_current_role_list():

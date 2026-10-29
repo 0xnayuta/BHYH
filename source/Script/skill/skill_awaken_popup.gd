@@ -195,20 +195,12 @@ func _on_confirm_pressed() -> void:
 		return
 	if _is_skill_awakened(skill_id):
 		return
-	if not _consume_awaken_stones(15):
+	if PlayerData.count_item_amount("tjs") < 15:
 		Global.add_message_show(self, "一阶觉醒石不足15个", 1.5, Vector2(470, 270))
 		return
-	var awaken_data_value: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED, {})
-	var awaken_data: Dictionary = awaken_data_value if awaken_data_value is Dictionary else {}
-	awaken_data[skill_id] = true
-	PlayerData.player_data[DataKeys.Skill.AWAKENED] = awaken_data
-	var enabled_data: Dictionary = {}
-	var enabled_value: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
-	if enabled_value is Dictionary:
-		enabled_data = enabled_value.duplicate(true)
-	enabled_data[skill_id] = true
-	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled_data
-	MemoryClass.request_save("skill_awaken_confirm")
+	if not PlayerData.awaken_skill(skill_id):
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		return
 	_refresh_awaken_state()
 	var skill_display_name := (
 		"雷霆劫阵"
@@ -298,47 +290,6 @@ func _on_confirm_pressed() -> void:
 	Global.add_message_show(self, skill_display_name + "觉醒成功", 1.5, Vector2(470, 270))
 
 
-func _count_awaken_stones() -> int:
-	var total := 0
-	var pages: Variant = PlayerData.player_data.get(DataKeys.ITEM_LIST, {})
-	if not pages is Dictionary:
-		return 0
-	for page in pages.values():
-		if not page is Array:
-			continue
-		for item in page:
-			if item is Dictionary and str(item.get(DataKeys.NAME, "")) == "tjs":
-				total += int(item.get(DataKeys.COUNT, 0))
-	return total
-
-
-func _consume_awaken_stones(amount: int) -> bool:
-	if _count_awaken_stones() < amount:
-		return false
-	var remaining := amount
-	var pages: Variant = PlayerData.player_data.get(DataKeys.ITEM_LIST, {})
-	if not pages is Dictionary:
-		return false
-	for page_key in pages.keys():
-		if remaining <= 0:
-			break
-		var page: Variant = pages[page_key]
-		if not page is Array:
-			continue
-		for index in range(page.size() - 1, -1, -1):
-			if remaining <= 0:
-				break
-			var item: Variant = page[index]
-			if not item is Dictionary or str(item.get(DataKeys.NAME, "")) != "tjs":
-				continue
-			var taken := mini(int(item.get(DataKeys.COUNT, 0)), remaining)
-			item[DataKeys.COUNT] = int(item.get(DataKeys.COUNT, 0)) - taken
-			remaining -= taken
-			if int(item.get(DataKeys.COUNT, 0)) <= 0:
-				page.remove_at(index)
-	return remaining == 0
-
-
 func _on_awaken_enabled_toggled(enabled: bool) -> void:
 	if skill_id == "" or not _is_skill_awakened(skill_id):
 		return
@@ -346,6 +297,6 @@ func _on_awaken_enabled_toggled(enabled: bool) -> void:
 	var enabled_value: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
 	if enabled_value is Dictionary:
 		enabled_data = enabled_value.duplicate(true)
-	enabled_data[skill_id] = enabled
-	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled_data
-	MemoryClass.request_save("skill_awaken_toggle")
+	if not PlayerData.set_skill_awakened_enabled(skill_id, enabled):
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		_refresh_awaken_state()

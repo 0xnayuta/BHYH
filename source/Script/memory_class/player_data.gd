@@ -1512,6 +1512,20 @@ func change_transmog(slot_type: String, item_name: String) -> bool:
 	return true
 
 
+func record_transmog_owned(item_id: String) -> bool:
+	if item_id.strip_edges() == "":
+		return false
+	var owned_value: Variant = player_data.get("幻化拥有列表", [])
+	if not owned_value is Array:
+		return false
+	var owned: Array = owned_value
+	if item_id in owned:
+		return false
+	owned.append(item_id)
+	player_data["幻化拥有列表"] = owned
+	return true
+
+
 func get_soul() -> int:
 	return normalize_soul()
 
@@ -2359,6 +2373,36 @@ func ensure_player_passive_skills() -> void:
 	var passive_levels: Dictionary = passive_value
 	for skill_name in PLAYER_PASSIVE_SKILL_KEYS:
 		passive_levels[skill_name] = max(0, int(passive_levels.get(skill_name, 0)))
+
+
+## 被动技能批量升级命令：plan 为 [{name, level}]，一次性扣灵魂并保存。
+func apply_passive_skill_upgrades(plan: Array, total_cost: int, save_reason: String = "skill_passive_upgrade") -> bool:
+	if plan.is_empty():
+		return true
+	if total_cost < 0 or get_soul() < total_cost:
+		return false
+	for entry_value in plan:
+		if not entry_value is Dictionary:
+			return false
+		var skill_name := str(entry_value.get("name", ""))
+		if skill_name not in PLAYER_PASSIVE_SKILL_KEYS or int(entry_value.get("level", -1)) < 0:
+			return false
+	var snapshot := snapshot_state()
+	if not spend_soul(total_cost):
+		restore_state(snapshot)
+		return false
+	var passive_value: Variant = player_data.get("被动技能", {})
+	if not passive_value is Dictionary:
+		restore_state(snapshot)
+		return false
+	var passive: Dictionary = passive_value
+	for entry_value in plan:
+		var entry: Dictionary = entry_value
+		passive[str(entry["name"])] = int(entry["level"])
+	if not MemoryClass.request_save(save_reason, false):
+		restore_state(snapshot)
+		return false
+	return true
 
 
 func ensure_wanling_catalog_data() -> Dictionary:
@@ -3328,6 +3372,107 @@ func select_skill_variant(data_key: String, variant_id: int, save_reason: String
 	return true
 
 
+func set_skill_key(key_name: String, skill_id: String) -> bool:
+	if key_name not in ["Y", "U", "I", "O", "L"] or skill_id.strip_edges() == "":
+		return false
+	var skills: Variant = player_data.get(DataKeys.SKILL_LEARNED, {})
+	if not skills is Dictionary:
+		return false
+	var keymap_value: Variant = (skills as Dictionary).get(DataKeys.Skill.KEYMAP, null)
+	if not keymap_value is Dictionary:
+		return false
+	var snapshot := snapshot_state()
+	(keymap_value as Dictionary)[key_name] = skill_id
+	if not MemoryClass.request_save("skill_key_bind", false):
+		restore_state(snapshot)
+		return false
+	return true
+
+
+func count_item_amount(item_name: String) -> int:
+	var total := 0
+	var pages: Variant = player_data.get(DataKeys.ITEM_LIST, {})
+	if not pages is Dictionary:
+		return 0
+	for page_value in (pages as Dictionary).values():
+		if not page_value is Array:
+			continue
+		for item in page_value:
+			if item is Dictionary and str(item.get(DataKeys.NAME, "")) == item_name:
+				total += int(item.get(DataKeys.COUNT, 0))
+	return total
+
+
+func consume_item_amount(item_name: String, amount: int) -> bool:
+	if amount <= 0:
+		return true
+	if count_item_amount(item_name) < amount:
+		return false
+	var remaining := amount
+	var pages: Variant = player_data.get(DataKeys.ITEM_LIST, {})
+	if not pages is Dictionary:
+		return false
+	for page_key in (pages as Dictionary).keys():
+		if remaining <= 0:
+			break
+		var page_value: Variant = (pages as Dictionary)[page_key]
+		if not page_value is Array:
+			continue
+		var page: Array = page_value
+		for index in range(page.size() - 1, -1, -1):
+			if remaining <= 0:
+				break
+			var item: Variant = page[index]
+			if not item is Dictionary or str(item.get(DataKeys.NAME, "")) != item_name:
+				continue
+			var taken := mini(int(item.get(DataKeys.COUNT, 0)), remaining)
+			item[DataKeys.COUNT] = int(item.get(DataKeys.COUNT, 0)) - taken
+			remaining -= taken
+			if int(item.get(DataKeys.COUNT, 0)) <= 0:
+				page.remove_at(index)
+	return remaining == 0
+
+
+## 技能觉醒命令：消耗觉醒石、写入觉醒/启用状态并保存；失败全量回滚。
+func awaken_skill(skill_id: String, stone_cost: int = 15) -> bool:
+	if skill_id.strip_edges() == "":
+		return false
+	var awakened_value: Variant = player_data.get(DataKeys.Skill.AWAKENED, {})
+	var awakened: Dictionary = awakened_value if awakened_value is Dictionary else {}
+	if bool(awakened.get(skill_id, false)):
+		return false
+	if count_item_amount("tjs") < stone_cost:
+		return false
+	var snapshot := snapshot_state()
+	if not consume_item_amount("tjs", stone_cost):
+		return false
+	awakened[skill_id] = true
+	player_data[DataKeys.Skill.AWAKENED] = awakened
+	var enabled_value: Variant = player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
+	var enabled: Dictionary = enabled_value.duplicate(true) if enabled_value is Dictionary else {}
+	enabled[skill_id] = true
+	player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled
+	if not MemoryClass.request_save("skill_awaken_confirm", false):
+		restore_state(snapshot)
+		return false
+	return true
+
+
+func set_skill_awakened_enabled(skill_id: String, enabled: bool) -> bool:
+	var awakened_value: Variant = player_data.get(DataKeys.Skill.AWAKENED, {})
+	if not awakened_value is Dictionary or not bool((awakened_value as Dictionary).get(skill_id, false)):
+		return false
+	var enabled_value: Variant = player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
+	var enabled_data: Dictionary = enabled_value.duplicate(true) if enabled_value is Dictionary else {}
+	var snapshot := snapshot_state()
+	enabled_data[skill_id] = enabled
+	player_data[DataKeys.Skill.AWAKENED_ENABLED] = enabled_data
+	if not MemoryClass.request_save("skill_awaken_toggle", false):
+		restore_state(snapshot)
+		return false
+	return true
+
+
 func ensure_skill_data() -> void:
 	var skill_data: Variant = player_data.get(DataKeys.SKILL_LEARNED, {})
 	if not (skill_data is Dictionary):
@@ -3342,8 +3487,8 @@ func ensure_skill_data() -> void:
 				skill_data[skill_key]["学习"] = 0
 			if not skill_data[skill_key].has(DataKeys.LEVEL):
 				skill_data[skill_key][DataKeys.LEVEL] = 0
-	if not skill_data.has("技能键位") or not (skill_data["技能键位"] is Dictionary):
-		skill_data["技能键位"] = {"Y": "", "U": "", "I": "", "O": "", "L": ""}
+	if not skill_data.has(DataKeys.Skill.KEYMAP) or not (skill_data[DataKeys.Skill.KEYMAP] is Dictionary):
+		skill_data[DataKeys.Skill.KEYMAP] = {"Y": "", "U": "", "I": "", "O": "", "L": ""}
 
 
 func ensure_special_dungeon_progress() -> void:
@@ -4856,6 +5001,13 @@ func claim_eight_immortal_daily() -> bool:
 	# 6.9 起每完成一轮即可领取，领取后清空本轮击败进度。
 	progress[DataKeys.Daily.CLAIMED] = false
 	progress[DataKeys.Daily.DEFEATED] = []
+	return true
+
+
+func claim_task(task_name: String) -> bool:
+	if task_name.strip_edges() == "":
+		return false
+	player_data[task_name] = true
 	return true
 
 

@@ -89,34 +89,31 @@ func _physics_process(delta: float) -> void:
 	label.text = "设置技能 “" + str(name_list[need_name]) + "” 按键"
 
 
-func _on_y_pressed() -> void:
-	PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["Y"] = str(need_name)
-	MemoryClass.request_save("skill_key_bind")
+func _bind_key(key_name: String) -> void:
+	if not PlayerData.set_skill_key(key_name, need_name):
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		return
 	queue_free()
+
+
+func _on_y_pressed() -> void:
+	_bind_key("Y")
 
 
 func _on_u_pressed() -> void:
-	PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["U"] = str(need_name)
-	MemoryClass.request_save("skill_key_bind")
-	queue_free()
+	_bind_key("U")
 
 
 func _on_i_pressed() -> void:
-	PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["I"] = str(need_name)
-	MemoryClass.request_save("skill_key_bind")
-	queue_free()
+	_bind_key("I")
 
 
 func _on_o_pressed() -> void:
-	PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["O"] = str(need_name)
-	MemoryClass.request_save("skill_key_bind")
-	queue_free()
+	_bind_key("O")
 
 
 func _on_l_pressed() -> void:
-	PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["L"] = str(need_name)
-	MemoryClass.request_save("skill_key_bind")
-	queue_free()
+	_bind_key("L")
 
 
 func _on_close_pressed() -> void:

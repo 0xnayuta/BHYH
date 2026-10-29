@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D 已完成、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A 已完成、19-1B/19-1C 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -216,6 +216,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 18-3B 地图首帧保存 | **评估**：11 个地图页 `_ready` 均在写 `Map_num`/`HeavenMap_num` 后保存，是进入城市后的唯一持久化点；删除会丢失崩溃/立即退出时的当前地图，故保留同步语义。**合并**：删除 `map_3._sync_special_button_layer` 的第二次保存（只改 z-index，且在 `Map_num=3` 前）。**IO**：稳态保存约 4.7ms；独立冷启动微基准首档密钥创建约 108ms（一次性），地图页保存通常复用已创建密钥。**验证**：档案持久化 193 项 PASS；`level_1` 冒烟 PASS；`check_all --godot-bin` 8/8 PASS。 | 18-3B 完成 |
 | 2026-10-29 Phase 18-3C 关卡进度 | **数据表**：新增 `LevelProgressCommand`，覆盖 1~48 关、23 个区域名、导入关卡 63~75 与北俱芦洲动态键；`base_through_level.add_tg` 的 48 分支 match 与 `north_continent_level.add_tg` 直写删除。**保存**：`add_tg` 只写字典；胜利由 `victory._ready` 单次提交；Level17/22、Level19 非胜利、Level20、Level10/21 剧情跳过关闭分支转场前调用 `_commit_progress_before_transition` 单次保存，失败保持关卡并解除退出锁；自动重战沿用 `auto_battle_retry` 单次保存。**验证**：档案持久化 256 项 PASS（含 63 项进度表检查）；`level_progress_exit_probe` 6/6 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.7s）；`check_all --godot-bin` 8/8 PASS。 | 18-3C 完成 |
 | 2026-10-29 Phase 18-3D 会话失败反馈 | **结果**：`MemoryClass.request_save_result` 返回 `ok/reason/error/message/path/notify`，并写入 `last_save_outcome`；`save_failed` 信号让丢弃 bool 的调用也可观察。**反馈**：`Global` 消费信号，`notify=false` 仅计数；其余在可见 UI 层提示且同错误 1.5s 去重；`request_save_with_feedback` 抑制兜底后只提示一次。**覆盖**：无会话/身份过期/非法路径/写失败均返回结构化错误；22 处自处理调用传 `notify=false`。**验证**：档案持久化 267 项 PASS（新增 11 项结果/信号/消费者断言）；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（268.1s）；`check_all --godot-bin` 8/8 PASS。 | 18-3D 完成 |
+| 2026-10-29 Phase 19-1A 面板扫描 | **任务**：`basic_task` 领取标记改用 `PlayerData.claim_task`。**幻化**：`c_hange_clothes_jm` 穿戴/卸下改用 `change_transmog`；`transmogrified` 拥有列表改用 `record_transmog_owned`。**技能**：`skill_key_set` 改用 `set_skill_key`；`skill_awaken_popup` 改用 `awaken_skill`/`set_skill_awakened_enabled`；`bd_skill` 被动升级改用 `apply_passive_skill_upgrades`，删除面板内直接写与直接保存。**宠物**：`pet_interface` 保存改走 `Global.request_save_with_feedback`。目标目录直接 `PlayerData.player_data` 赋值/`MemoryClass.request_save` 清零；`reward_grant_command`/`zd_skill.refresh_infor` 作为合法命令入口保留。**验证**：档案持久化 275 项 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（267.7s）；`check_all --godot-bin` 8/8 PASS。 | 19-1A 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

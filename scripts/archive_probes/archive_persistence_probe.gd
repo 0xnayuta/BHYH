@@ -91,6 +91,7 @@ func _run() -> void:
 	_test_mystery_shop_command()
 	await _test_passive_skill_command()
 	await _test_active_skill_command()
+	_test_awaken_command()
 	await _test_strength_command()
 	await _test_audio_boundaries()
 	_test_transmog_command()
@@ -584,6 +585,34 @@ func _test_passive_skill_command() -> void:
 	)
 	failed_bd.queue_free()
 	await get_tree().process_frame
+
+
+func _test_awaken_command() -> void:
+	_reset_profile(1, 30)
+	PlayerData.player_data[DataKeys.Skill.AWAKENED] = {}
+	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = {}
+	_check("awaken_seed_stones", PlayerData.add_dj("tjs", 15), "stones=%d" % PlayerData.count_item_amount("tjs"))
+	_open_session(TEST_ARCHIVE_PREFIX + "055.json")
+	_check("awaken_command_ok", PlayerData.awaken_skill("ltjz"), "error=%s" % MemoryClass.last_save_error)
+	_check("awaken_stones_consumed", PlayerData.count_item_amount("tjs") == 0, "stones=%d" % PlayerData.count_item_amount("tjs"))
+	_check("awaken_state_written", bool(PlayerData.player_data[DataKeys.Skill.AWAKENED].get("ltjz", false)))
+	var saved_path := Global.get_cd_path()
+	_reset_profile(1, 30)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	_check(
+		"awaken_reloads",
+		bool(loaded.get("ok", false)) and bool(PlayerData.player_data[DataKeys.Skill.AWAKENED].get("ltjz", false)),
+		"status=%s" % loaded.get("status")
+	)
+
+	_reset_profile(1, 30)
+	PlayerData.player_data[DataKeys.Skill.AWAKENED] = {}
+	PlayerData.player_data[DataKeys.Skill.AWAKENED_ENABLED] = {}
+	PlayerData.add_dj("tjs", 15)
+	Global.end_archive_session()
+	_check("awaken_save_failure_rolls_back", not PlayerData.awaken_skill("ltjz"))
+	_check("awaken_failure_keeps_stones", PlayerData.count_item_amount("tjs") == 15, "stones=%d" % PlayerData.count_item_amount("tjs"))
+	_check("awaken_failure_keeps_state", not bool(PlayerData.player_data[DataKeys.Skill.AWAKENED].get("ltjz", false)))
 
 
 func _test_active_skill_command() -> void:

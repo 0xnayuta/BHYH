@@ -393,6 +393,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-39 | `transmogtified_box.gd` | **17-5 已改为 `PlayerData.change_transmog`**；失败回滚 |
 | GM-40 | `victory.gd:24` | 结算 UI 在 `_ready` 写评价/解锁标志 |
 | GM-41 | `defeat.gd` 奖励分支 | **17-3 已迁入 `LevelSettlement` 命令边界**；失败回滚 |
+| GM-42 | 任务/幻化/技能/宠物面板 | **19-1A 已收敛**：任务领取 `PlayerData.claim_task`；幻化 `change_transmog`/`record_transmog_owned`；技能键位 `set_skill_key`、觉醒 `awaken_skill`/`set_skill_awakened_enabled`、被动 `apply_passive_skill_upgrades`；宠物保存走 `Global.request_save_with_feedback`。目标目录清零直接 `player_data` 赋值/直接 `request_save`；`reward_grant_command`、`zd_skill.refresh_infor` 为合法命令入口 |
 
 上述点中，GM-39/GM-40 属于「面板命令」而非纯展示；17-5 的目标是区分只读展示与显式命令，不是禁止面板提交。
 
