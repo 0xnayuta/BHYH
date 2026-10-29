@@ -350,9 +350,7 @@ func ai_think() -> void:
 func _get_ai_target() -> BaseHero:
 	if get_player != null and is_instance_valid(get_player):
 		return get_player
-	if Global.get_player is BaseHero and is_instance_valid(Global.get_player):
-		return Global.get_player as BaseHero
-	return null
+	return LocalCoop.nearest_player(self.global_position)
 
 
 func _start_skill(skill_name: StringName, locked_target_position: Vector2) -> void:

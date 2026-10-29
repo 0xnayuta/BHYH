@@ -16,7 +16,7 @@
 2. **归属字段分散在 6 类载体**：`BaseHero`、`RoleBullet`/`RoleBullet1`/`Role1Shallow`/`RolehmzBullet`、`BaseMagicWeapon`/`MagicWeaponHit`/`MgHit`、`SummonBaseMonster`、`MonsterBullet`、`BaseMonster`。英雄侧字段名为 `player`，召唤侧为 `summoner`/`player_reference`，怪物侧为 `get_player`，弹体还依赖祖先链与 `coop_damage_slot` 快照。
 3. **`coop_damage_slot` 是唯一显式归属快照**：共 11 处 / 2 文件，只在 `BaseMonster.apply_role_hit` 与 `bind_role_damage_source` 中写入并在结束时恢复；`LocalCoop.slot_for` 优先读取该 meta（`local_coop.gd:426`）。
 4. **`RoleProp.source_player` 仍是最大 1P 假设**：121 次 / 47 文件；每个 `BaseHero._ready` 都会覆盖它（`base_hero.gd:297`），2P 与 1P 的 `_ready` 顺序决定值；47 个文件中包含 5 个 `Scene` 表现脚本。
-5. **`Global.get_player` 只指向 1P**：15 次 / 9 文件；只在 `Global.call_hero` 的 `player_slot == 1` 分支赋值（`global.gd:5258`），2P 永不写入。用于提示、怪物目标与 `dj_sell` 的全局状态写入。
+5. **`Global.get_player` 已删除（18-1B）**：原 13 次引用 / 9 文件；`base_monster` 目标改 `LocalCoop.nearest_player(...)`，提示改进入的 `body`，面板改 `RoleProp.source_player`，未央宫/召唤改最近玩家或 `player_reference`；全仓引用 0。
 6. **效果归属存在跨槽位读取**：吸血倍率取自全局 `RoleProp.roleprop`（`base_monster.gd:1867`，17-2A 已改为按出手者），腾蛇阵等级取自 1P `PlayerData`（`:1876`，17-2A 已改为按出手者），角色 5 被动等级取自 1P `PlayerData`（`:1886`，17-2A 已改为按出手者）；治疗/无双入账已使用实际 `source_player`。
 7. **对象池只有 4 类**：`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`，上限 80/32/24/32（`global.gd:119-123`）。取出入口不重置节点；重置由各节点自己的 `setup()`/`recycle()` 完成。`damage_text` 另有 `prepare_for_pool()` 仅用于预热。
 8. **关卡阶段由 `BaseLevel.current_stage` 单一持有，但写入面分散**：535 行 / 97 文件引用，31 行含声明（30 处赋值）；`BaseLevel` 8 处按角色 x 坐标推进，关卡子类/怪物脚本 22 处直接赋值。阶段推进、刷怪与出口判定都在 `BaseThroughLevel`，但子类可绕过。
@@ -73,7 +73,7 @@
 | 法宝 | `BaseMagicWeapon`（24 个子类）、`MagicWeaponHit`、`MgHit` | `player` / `source_weapon` | `Global.add_magic_weapon` 2（均传 `self`；另有 4 处 `BaseHero.add_magic_weapon()` 本地包装） | 载体字段 → `owner_hero` → `RoleProp.source_player` |
 | 召唤物 | `SummonBaseMonster`（5 个子类） | `summoner`、`player_reference`、meta `is_summon` | 4 处直接 `instantiate()` + `set_summon_properties` | `summoner` → `RoleProp.source_player` → 场景 `Hero` 下第一个 `BaseHero` |
 | 怪物弹体 | `MonsterBullet`（17 个子类） | `my_father`、祖父节点、`RoleProp.source_player` | `Global.add_bullet` 300、`add_weapon_bullet` 22（武器弹体）、`add_special_effect_bullet` 12、`load_monster_bullet_scene` 2 | 怪物侧伤害目标是英雄；`my_father` 用于伤害加成 |
-| 怪物 | `BaseMonster` | `get_player`（默认 `Global.get_player`） | 关卡刷怪表、召唤、分裂 | 受击时按 §4.2 解析 |
+| 怪物 | `BaseMonster` | `get_player`（`LocalCoop.nearest_player` 最近存活玩家） | 关卡刷怪表、召唤、分裂 | 受击时按 §4.2 解析 |
 
 补充：
 
@@ -110,14 +110,14 @@
 | ID | 位置 | 事实 | 影响 |
 |:---|:---|:---|:---|
 | GM-01 | `base_hero.gd:297` | 每个英雄 `_ready` 写 `RoleProp.source_player = self` | 2P 后加载会覆盖 1P；所有读全局别名的代码按最后加载者归属 |
-| GM-02 | `global.gd:5258` | `Global.get_player` 仅在 `player_slot == 1` 时赋值 | 2P 目标、提示、`dj_sell` 永远拿到 1P |
+| GM-02 | `global.gd:5258` | **18-1B 已删除 `Global.get_player`**；不再存在全局 1P 别名 | 已修复 |
 | GM-03 | `base_monster.gd:1865`（17-1） | `_get_damage_source_player` 最后回落 `RoleProp.source_player`；**17-2A 已删除** | 无来源时伤害为 0，不再归 1P |
 | GM-04 | `role_bullet.gd:165`、`:409` | `player` 由祖先链回填；觉醒效果再回落 `role_props.source_player`；**17-2A 已删除回落，根节点弹体显式传源** | 无来源弹体不再借用 1P |
 | GM-05 | `summon_base_monster.gd:239` | `find_player_reference` 在 `summoner` 非英雄时回落全局别名，再取场景 `Hero` 第一个子节点 | 非英雄召唤（怪物/法宝）跟随 1P |
-| GM-06 | `base_monster.gd:544` | 怪物生成后 `get_player = Global.get_player` | 未绑定来源的怪物默认 1P |
+| GM-06 | `base_monster.gd:544` | **18-1B 已改为 `LocalCoop.nearest_player(self.global_position)`**；每帧仅补空，协作层按 0.15s 更新最近存活玩家 | 已修复 |
 | GM-07 | `base_monster.gd:1867`、`:1876`、`:1886` | 吸血倍率读 `RoleProp.roleprop`；腾蛇阵等级读 1P `PlayerData`；角色 5 被动等级读 1P `PlayerData`；**17-2A 已改为 `LocalCoop.props_for/data_for(source_player)`** | 2P 使用自身吸血/技能等级 |
 | GM-08 | `base_role.gd:82`、`:98`、`:202` | HUD 在 `player == null` 时回落 `RoleProp.source_player`；`_set_values` 直接读全局 `RoleProp` | 正常路径由 `RoleInformation` 注入；P2 血蓝/经验/无双仍显示 1P 值 |
-| GM-09 | `dj_sell.gd:690`、`:945` | 面板用 `Global.get_player` 判空，随后写全局 `PlayerData`/`RoleProp` | 2P 操作时作用到 1P |
+| GM-09 | `dj_sell.gd:690`、`:941` | **18-1B 已改用面板槽位 `RoleProp.source_player`**；道具 Buff 与升级满血/MP/HUD 都按操作者 | 已修复 |
 | GM-10 | `monster_bullet.gd:769`、`:2579` | 敌方弹体读取 `RoleProp.source_player` 决定效果/目标 | 2P 场景下目标可能落到 1P |
 
 ### 4.4 效果归属
@@ -491,7 +491,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | `base_monster.wd_hurt`/`_is_mds_awaken_active` | **18-1A 已修复**：毒层记录 `source_player`，按来源分组独立触发；技能等级/属性/觉醒读来源槽位档案，不再读全局 `RoleProp`/`PlayerData` | 已修复 |
 | `RoleProp.source_player` 由 `BaseHero._ready` 覆盖 | 仍是非归属路径（HUD/怪物提示）的全局别名 | 保留，Phase 17-5/17-6 处理 |
 | `SummonBaseMonster.find_player_reference` | **17-2C 已优先 `LocalCoop.owner_hero(summoner)`**；无持有者时仍回落全局别名 | 部分修复 |
-| `Global.get_player` | 仍只指向 1P | 17-5/17-6 |
+| `Global.get_player` | **18-1B 已删除**；全仓引用 0 | 已修复 |
 
 ### 12.3 回归
 
@@ -736,4 +736,26 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 
 ### 20.3 验证
 
-新增 `LocalCoopRole4PoisonProbe`：P1/P2 双 Role4、混合 6+1 层不触发、P1 第 7 层只结算 P1 且保留 P2 层、P2 第 7 层只结算 P2、P1/P2 觉醒按来源档案判断；`coop_probe_runner` 全量 22 例 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS。`Global.get_player`、`_apply_role_damage_vs_reduction` 与无 owner 召唤仍未在本批处理，见 18-1B/18-1C。
+新增 `LocalCoopRole4PoisonProbe`：P1/P2 双 Role4、混合 6+1 层不触发、P1 第 7 层只结算 P1 且保留 P2 层、P2 第 7 层只结算 P2、P1/P2 觉醒按来源档案判断；`coop_probe_runner` 全量 22 例 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS。`_apply_role_damage_vs_reduction` 与无 owner 召唤仍未在本批处理，见 18-1C；`Global.get_player` 已由 18-1B 删除。
+
+
+---
+
+## 21. 18-1B 全局 1P 别名清理（2026-10-29）
+
+### 21.1 结果
+
+`Global.get_player` 变量与 `call_hero` 中的赋值已删除；全仓源码引用 0。原调用面按语义改为：
+
+| 位置 | 新归属 |
+|:---|:---|
+| `base_monster.gd` | 每物理帧仅在 `get_player == null` 时取 `LocalCoop.nearest_player(self.global_position)`；`LocalCoop` 每 0.15s 按最近存活玩家更新 |
+| `dj_sell.gd` | 道具 Buff、升级满血/MP 与 HUD 刷新改用面板槽位 `RoleProp.source_player` |
+| `level_23.gd` / `level_38.gd` | 传送提示改用进入区域的 `body`（BaseHero） |
+| `monster_14501_wdww.gd` | 目标改用 `LocalCoop.nearest_player(self.global_position)` |
+| `weiyang_palace_boss.gd` | `get_player` 无效时改用最近存活玩家 |
+| `monster_zhw*` | 攻击力来源优先 `player_reference`，无效时取最近存活玩家 |
+
+### 21.2 验证
+
+`coop_probe_runner` 22/22 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 128/128 PASS + 5 SKIP（354.3s，level_dsg_2/level_dsg_5 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS。`Global.get_player` 全仓引用 0。

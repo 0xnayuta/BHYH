@@ -541,14 +541,9 @@ func _physics_process(delta: float) -> void:
 	if players.is_empty():
 		return
 	for monster: BaseMonster in level.get_active_monsters():
-		var nearest: BaseHero = players[0]
-		for player: BaseHero in players:
-			if (
-				monster.global_position.distance_squared_to(player.global_position)
-				< monster.global_position.distance_squared_to(nearest.global_position)
-			):
-				nearest = player
-		monster.get_player = nearest
+		var nearest := nearest_player(monster.global_position)
+		if nearest != null:
+			monster.get_player = nearest
 
 
 func _on_scene_changed() -> void:

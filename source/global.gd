@@ -452,7 +452,6 @@ var lj_count: int
 
 var remove_jq
 var wait_time: float = 0.8
-var get_player
 var need_change_item: bool = true
 var player_dir
 
@@ -5287,8 +5286,6 @@ func call_hero(who: String, parent, position: Vector2, _dir: bool, player_slot: 
 			target.set_meta("coop_slot", player_slot)
 			parent.add_child(target)
 			target.position = position
-			if player_slot == 1:
-				get_player = target
 			return target
 	push_error("Failed to create hero: " + clean_who)
 	return null

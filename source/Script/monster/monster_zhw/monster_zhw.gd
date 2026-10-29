@@ -18,7 +18,9 @@ func fetch_player_power():
 	if RoleProp and RoleProp.roleprop:
 		player_power = RoleProp.roleprop.power
 	else:
-		var hero = Global.get_player
+		var hero: BaseHero = player_reference
+		if not is_instance_valid(hero):
+			hero = LocalCoop.nearest_player(self.global_position)
 		if hero and hero.has_method("get_power"):
 			player_power = hero.get_power()
 		else:

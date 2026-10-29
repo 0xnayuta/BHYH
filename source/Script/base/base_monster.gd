@@ -541,7 +541,8 @@ func _physics_process(delta: float) -> void:
 		monster_direction = false
 	else:
 		monster_direction = true
-	get_player = Global.get_player
+	if get_player == null:
+		get_player = LocalCoop.nearest_player(self.global_position)
 	count += 1
 	if death():
 		state = State.DEATH

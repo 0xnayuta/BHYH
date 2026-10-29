@@ -22,9 +22,7 @@ func _physics_process(delta: float) -> void:
 		mr_player.play("death")
 		return
 	if my_target == null:
-		var living_players := LocalCoop.living_players()
-		my_target = living_players[0] if not living_players.is_empty() else Global.get_player
-		pass
+		my_target = LocalCoop.nearest_player(self.global_position)
 	else:
 		if self.position.x >= my_target.position.x:
 			move_left()

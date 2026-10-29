@@ -687,9 +687,10 @@ func use_xhp():
 
 			var target_buff_name = "life_mana_lock"
 
-			if Global.get_player != null and Global.get_player.buff != null:
-				var player = Global.get_player
-
+			var player: BaseHero = null
+			if is_instance_valid(RoleProp) and is_instance_valid(RoleProp.source_player):
+				player = RoleProp.source_player as BaseHero
+			if player != null and player.buff != null:
 				PlayerData.remove_xhp(my_name, my_page, 1)
 
 				var buff_data = {
@@ -937,12 +938,15 @@ func use_xhp():
 			PlayerData.player_data["玩家当前经验"] = current_exp
 			PlayerData.player_data[DataKeys.PLAYER_LEVEL] = current_level
 
+			var source_player: BaseHero = null
+			if is_instance_valid(RoleProp) and is_instance_valid(RoleProp.source_player):
+				source_player = RoleProp.source_player as BaseHero
 			if RoleProp and RoleProp.baseroleprop:
 				RoleProp.baseroleprop.Level = current_level
 				RoleProp.baseroleprop.exp = current_exp
 				RoleProp.baseroleprop.max_exp = max_exp
 				RoleProp.set_basic_prop()
-				if Global.get_player != null:
+				if source_player != null:
 					RoleProp.roleprop.Hp = RoleProp.roleprop.SHp
 					RoleProp.roleprop.Mp = RoleProp.roleprop.SMp
 
@@ -951,7 +955,7 @@ func use_xhp():
 				role_info.exp_bar.value = float(current_exp) / max_exp
 				role_info.exp_text.text = str(current_exp) + "/" + str(max_exp)
 				role_info.role_level.text = str(current_level)
-				if Global.get_player != null:
+				if source_player != null:
 					role_info.hp_bar.value = float(RoleProp.roleprop.Hp) / RoleProp.roleprop.SHp
 					role_info.hp_text.text = str(int(RoleProp.roleprop.Hp)) + "/" + str(int(RoleProp.roleprop.SHp))
 					role_info.mp_bar.value = float(RoleProp.roleprop.Mp) / RoleProp.roleprop.SMp
