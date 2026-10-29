@@ -3116,14 +3116,14 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 			var monster = area.get_parent().get_parent()
 			if monster != null:
 				if monster is BaseMonster and not _is_summon_or_pet_target(monster):
-					if self is Role4Hero:
-						if obj_attack_dict[get_action]["addeffect"]["Name"] == "Voodoo":
-							if Global.check_wd(monster) < 10:
-								Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
-						else:
-							Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
+					var effect: Dictionary = obj_attack_dict[get_action]["addeffect"]
+					if self is Role4Hero and str(effect.get("Name", "")) == "Voodoo":
+						if Global.check_wd(monster, self) < 10:
+							var sourced_effect := effect.duplicate(true)
+							sourced_effect["source_player"] = self
+							Global.add_buff(monster.buff, sourced_effect)
 					else:
-						Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
+						Global.add_buff(monster.buff, effect)
 	if self is Role1Hero:
 		if get_action == "qsez":
 			velocity.x = 0

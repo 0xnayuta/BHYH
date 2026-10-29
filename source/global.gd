@@ -5883,20 +5883,28 @@ func on_fresh():
 				return false
 
 
-func check_wd(OBJ):
+## 统计 Voodoo 层；传入 source_player 时只统计该 Role4 施加的层。
+func check_wd(OBJ, source_player: BaseHero = null) -> int:
 	var count: int = 0
 	for i in OBJ.buff.get_children():
-		if i != null:
-			if i.buff_info["Name"] == "Voodoo":
-				count += 1
+		if i == null or i.is_queued_for_deletion():
+			continue
+		if str(i.buff_info.get("Name", "")) != "Voodoo":
+			continue
+		if source_player == null or i.buff_info.get("source_player") == source_player:
+			count += 1
 	return count
 
 
-func remove_wd(OBJ):
+## 移除 Voodoo 层；传入 source_player 时只移除该来源，保留队友层。
+func remove_wd(OBJ, source_player: BaseHero = null) -> void:
 	for i in OBJ.buff.get_children():
-		if i != null:
-			if i.buff_info["Name"] == "Voodoo":
-				i.queue_free()
+		if i == null or i.is_queued_for_deletion():
+			continue
+		if str(i.buff_info.get("Name", "")) != "Voodoo":
+			continue
+		if source_player == null or i.buff_info.get("source_player") == source_player:
+			i.queue_free()
 
 
 func get_clean_name(Name: String):

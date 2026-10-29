@@ -108,6 +108,8 @@ func _run() -> void:
 			await _case_damage_stats()
 		"LocalCoopWushuangAttributionProbe":
 			await _case_wushuang_attribution()
+		"LocalCoopRole4PoisonProbe":
+			await _case_role4_poison()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -1063,3 +1065,95 @@ func _case_wushuang_attribution() -> void:
 	_check(p2.RoleProp.ws_value > 0, "bound P2 source credits P2 WS")
 	monster.queue_free()
 	await process_frame
+
+
+func _case_role4_poison() -> void:
+	coop.create_secondary(4)
+	await _make_stage()
+	var p1: Node = _make_hero(4, 1)
+	var p2: Node = _make_hero(4, 2)
+	await process_frame
+	_check(p1 != null and p2 != null, "role4 poison owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	_set_role4_poison_stats(p1, 100, 1)
+	_set_role4_poison_stats(p2, 300, 1)
+	if not p1.PlayerData.player_data.has(DataKeys.Skill.AWAKENED):
+		p1.PlayerData.player_data[DataKeys.Skill.AWAKENED] = {}
+	if not p2.PlayerData.player_data.has(DataKeys.Skill.AWAKENED):
+		p2.PlayerData.player_data[DataKeys.Skill.AWAKENED] = {}
+	var p1_awaken: Dictionary = p1.PlayerData.player_data[DataKeys.Skill.AWAKENED]
+	var p2_awaken: Dictionary = p2.PlayerData.player_data[DataKeys.Skill.AWAKENED]
+	p1_awaken["mds"] = false
+	p2_awaken["mds"] = true
+
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.hp = 100000
+	monster.max_hp = 100000
+	monster.hd = 0
+	monster.ws_hd = true
+	monster.damage_reduction = 0
+	monster.def = 0
+	monster.mdef = 0
+	monster.is_boss = false
+	monster.boss_protect_active = false
+	_check(not monster._is_mds_awaken_active(p1), "P1 MDS awakening is source-local")
+	_check(monster._is_mds_awaken_active(p2), "P2 MDS awakening is source-local")
+
+	await _add_voodoo_stacks(monster, p1, 6)
+	await _add_voodoo_stacks(monster, p2, 1)
+	monster.wd_hurt()
+	_check(monster.hp == 100000, "mixed stacks below seven do not burst")
+	await _add_voodoo_stacks(monster, p1, 1)
+	p1.RoleProp.roleprop.power = 100
+	p2.RoleProp.roleprop.power = 300
+	monster.wd_hurt()
+	var reduction: float = 1.0 - float(monster.damage_reduction)
+	var p1_expected := int(int(7 * (int(p1.RoleProp.roleprop.power) * 0.55)) * reduction)
+	_check(monster.hp == 100000 - p1_expected, "P1 poison burst uses P1 power")
+	_check(_probe_check_wd(monster, p1) == 0, "P1 burst removes only P1 stacks")
+	_check(_probe_check_wd(monster, p2) == 1, "P2 stack survives P1 burst")
+
+	await _add_voodoo_stacks(monster, p2, 6)
+	p1.RoleProp.roleprop.power = 100
+	p2.RoleProp.roleprop.power = 300
+	monster.wd_hurt()
+	var p2_expected := int(int(7 * (int(p2.RoleProp.roleprop.power) * 0.55)) * reduction)
+	_check(monster.hp == 100000 - p1_expected - p2_expected, "P2 poison burst uses P2 power")
+	_check(_probe_check_wd(monster, p2) == 0, "P2 burst removes only P2 stacks")
+
+	monster.queue_free()
+	await process_frame
+
+
+func _set_role4_poison_stats(hero: Node, power: int, skill_level: int) -> void:
+	hero.PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL] = skill_level
+	hero.RoleProp.roleprop.power = power
+	hero.RoleProp.roleprop.damage_bonus = 0
+
+
+func _add_voodoo_stacks(monster: Node, source_player: Node, count: int) -> void:
+	for _index in range(count):
+		var added: Variant = global.add_buff(
+			monster.buff,
+			{
+				"Name": "Voodoo",
+				"AddTime": 5,
+				"reduce_interval": 1,
+				"value": 0,
+				"CanAdd": true,
+				"AttackKind": "real",
+				"DeBuff": true,
+				"source_player": source_player
+			}
+		)
+		_check(added != null, "voodoo buff created")
+	await process_frame
+
+
+func _probe_check_wd(monster: Node, source_player: Node) -> int:
+	return int(global.call("check_wd", monster, source_player))

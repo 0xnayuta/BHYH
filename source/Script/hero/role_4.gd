@@ -812,7 +812,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 			effect_reducehp(int(RoleProp.roleprop.SHp * 0.01), "real")
 			Global.add_monster141_aura(self.bullet, self.position, monster_target)
 		if self.is_wdzt:
-			if Global.check_wd(monster_target) < 7:
+			if Global.check_wd(monster_target, self) < 7:
 				Global.add_buff(
 					monster_target.buff,
 					{
@@ -823,7 +823,8 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 						"CanAdd": true,
 						"CanRemove": false,
 						"AttackKind": "real",
-						"DeBuff": true
+						"DeBuff": true,
+						"source_player": self
 					}
 				)
 	Global.total_role_hurt += int(last_hit)
@@ -867,11 +868,14 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 			var monster = area.get_parent().get_parent()
 			if monster != null:
 				if monster is BaseMonster and not _is_summon_or_pet_target(monster):
-					if obj_attack_dict[get_action]["addeffect"]["Name"] == "Voodoo":
-						if Global.check_wd(monster) < 7:
-							Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
+					var effect: Dictionary = obj_attack_dict[get_action]["addeffect"]
+					if str(effect.get("Name", "")) == "Voodoo":
+						if Global.check_wd(monster, self) < 7:
+							var sourced_effect := effect.duplicate(true)
+							sourced_effect["source_player"] = self
+							Global.add_buff(monster.buff, sourced_effect)
 					else:
-						Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
+						Global.add_buff(monster.buff, effect)
 
 
 func _is_skill_awakened(skill_id: String) -> bool:

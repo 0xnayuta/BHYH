@@ -488,7 +488,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 位置 | 事实 | 后续 |
 |:---|:---|:---|
 | `base_monster.get_role_last_hurt` | **17-2C 已改为按 `get_player`/`_get_damage_source_player` 解析出手者属性**；无来源时才回落 `RoleProp` | 已修复 |
-| `base_monster.wd_hurt`/`_is_mds_awaken_active` | 角色 4 毒伤/觉醒读全局 `RoleProp`/`PlayerData`；`wd_hurt` 是每物理帧环境检查，不绑定单次命中 | 17-3/17-5 按 2P 玩法语义处理 |
+| `base_monster.wd_hurt`/`_is_mds_awaken_active` | **18-1A 已修复**：毒层记录 `source_player`，按来源分组独立触发；技能等级/属性/觉醒读来源槽位档案，不再读全局 `RoleProp`/`PlayerData` | 已修复 |
 | `RoleProp.source_player` 由 `BaseHero._ready` 覆盖 | 仍是非归属路径（HUD/怪物提示）的全局别名 | 保留，Phase 17-5/17-6 处理 |
 | `SummonBaseMonster.find_player_reference` | **17-2C 已优先 `LocalCoop.owner_hero(summoner)`**；无持有者时仍回落全局别名 | 部分修复 |
 | `Global.get_player` | 仍只指向 1P | 17-5/17-6 |
@@ -567,8 +567,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 14.3 召唤回落与 `wd_hurt`
 
 - `SummonBaseMonster.find_player_reference`：非英雄 `summoner` 先 `LocalCoop.owner_hero(summoner)`，再回落 `RoleProp.source_player`，最后取场景 `Hero` 首个子节点；`LocalCoopAttributionSourcesProbe` 覆盖“法宝持有召唤跟随 P2”。
-- `wd_hurt` 未改：它在 `BaseMonster._physics_process` 每帧检查全局 `RoleProp.source_player`/`PlayerData` 技能 10，不绑定单次命中；2P 角色 4 毒伤是持续环境效果，是否按每个 Role4 独立触发属于玩法决策，留 17-3/17-5。
-- `_apply_role_damage_vs_reduction` 仍读全局 `RoleProp.damage_bonus`；本次未改，登记为残余 1P 读取。
+- `wd_hurt` **18-1A 已修复**：不再每帧读全局 `RoleProp.source_player`/`PlayerData`。Voodoo 层记录实际施加者，按 `source_player` 分组；每组达到 7 层独立结算，读取该来源的档案技能 10、属性与觉醒，只移除该来源的层。1P 行为不变，2P 不再借用 1P。
+- `_apply_role_damage_vs_reduction` 仍读全局 `RoleProp.damage_bonus`；18-1A 未改，继续登记为 18-1C 残余 1P 读取。
 
 ### 14.4 回归
 
@@ -702,3 +702,38 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 `contract_scan --fail-on-error` ERROR=0；`contract_scan --self-test` PASS；`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。
 
 Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)；剩余缺口连同 Phase 13~16 遗留进入 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 18-1~20-3。
+
+
+---
+
+## 20. 18-1A 角色 4 毒伤归属（2026-10-29）
+
+### 20.1 语义决策
+
+角色 4 的 `Voodoo` 层是**按来源独立结算**，不是全队共享一次毒爆，也不是仅 1P 可用：
+
+- 每个 Role4 施加的层记录 `source_player`；同一怪物的不同来源层分别计数；
+- 每个来源达到 7 层时独立触发一次毒爆；多层超过 7 时按该来源当前层数结算；
+- 毒爆读取该来源的槽位档案/属性（技能 10 等级、`roleprop.power`、`mds` 觉醒与启用），不读 1P 或最后 ready 的 `RoleProp.source_player`；
+- 只移除该来源的层，保留其他 Role4 的层；
+- 1P 单人和原有 1P 数值不变；2P 两名 Role4 各自可触发。
+
+选择该语义的原因：`Voodoo` 已按怪物 Buff 共享展示，但来源层可由施加者区分；按来源独立结算既消除 1P 别名，又不需要为每个玩家复制怪物 Buff 容器或改动 UI 总层数。
+
+### 20.2 实现
+
+| 位置 | 变化 |
+|:---|:---|
+| `Global.check_wd`/`remove_wd` | 增加可选 `source_player`；按来源过滤，仍保留无参全量语义 |
+| `BaseHero._on_hit_box_area_entered` | Role4 普通攻击 `Voodoo` 复制后写入 `source_player`；上限按本来源计数 |
+| `Role4Hero._on_hurt_box_area_entered`/`_on_hit_box_area_entered` | 毒体受击层与命中层写入 `source_player`；上限按自身计数 |
+| `RoleBullet` Role4Bullet3/6 | 毒弹层写入 `player`；上限按 `player` 计数 |
+| `Role4Bullet`/`BiLuoTianEffect`/`CangMuLongYunEffect`/`Role4PoisonArrayAwakenEffect` | 直接生成的 `Voodoo` 层写入实际 owner/player |
+| `BaseMonster.wd_hurt` | 按 `source_player` 分组；每组 ≥7 调用 `_trigger_wd_burst` |
+| `BaseMonster._trigger_wd_burst` | 读来源槽位 `props_for`/`data_for`；按来源层数、技能 10、觉醒结算；只移除来源层 |
+| `BaseMonster._is_mds_awaken_active` | 可选来源；有来源读来源档案，无来源保留旧回落 |
+| `BaseMonster.hurt_reduce_hp` | `Voodoo` 直接伤害的觉醒跳过读 Buff 来源 |
+
+### 20.3 验证
+
+新增 `LocalCoopRole4PoisonProbe`：P1/P2 双 Role4、混合 6+1 层不触发、P1 第 7 层只结算 P1 且保留 P2 层、P2 第 7 层只结算 P2、P1/P2 觉醒按来源档案判断；`coop_probe_runner` 全量 22 例 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS。`Global.get_player`、`_apply_role_damage_vs_reduction` 与无 owner 召唤仍未在本批处理，见 18-1B/18-1C。

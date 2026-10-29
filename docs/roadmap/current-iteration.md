@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1 双人归属/全局别名、18-2 成长与奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目处置、20-2 平台/发布验证、20-3 守卫扩面与阶段收口均未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A 已完成；18-1B/18-1C/18-1D、18-2、18-3、19-1、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -31,7 +31,7 @@
 
 | 来源 | 已核实事实 | 归属 |
 |:---|:---|:---|
-| Phase 17 / 16 归属 | `Global.get_player` 16 处 / 10 文件；`wd_hurt`/`_is_mds_awaken_active` 读全局 `RoleProp`/`PlayerData`；`RoleProp.source_player` 仍是非归属路径全局别名；`_apply_role_damage_vs_reduction` 读全局 `damage_bonus`；无 owner 的召唤仍可回落全局 | 18-1 |
+| Phase 17 / 16 归属 | **18-1A 已修复** `wd_hurt`/`_is_mds_awaken_active`：毒层按 `source_player` 分组，各自读取槽位档案/属性；`Global.get_player` 16 处 / 10 文件、`RoleProp.source_player` 非归属别名、`_apply_role_damage_vs_reduction` 全局 `damage_bonus`、无 owner 召唤回落仍在 | 18-1B/18-1C |
 | Phase 17 双人死亡 | 两个死亡分支各自等待后切换（GM-25），双人同时死亡可能重复切换 | 18-1 |
 | Phase 17 成长 | 神铸/淬骨/合成/任务奖励未原子化；`forge._on_froge_pressed_legacy` 仅定义无调用；`zd_skill` 仍直接写技能等级/变体；2P 打开商店与并发点击未验证 | 18-2 |
 | Phase 16 保存反馈 | AS-06/AS-07：矩阵登记大量 `request_save` 返回值被丢弃、无会话静默 `false`，UI 失败反馈未系统性收口；当前调用点与返回值分布需重新统计 | 18-2/18-3 |
@@ -55,12 +55,12 @@
 
 **切片**
 
-1. **18-1A `wd_hurt`/觉醒**：决定角色 4 毒伤在 2P 的语义（每个 Role4 独立触发或仅 1P），从全局 `RoleProp`/`PlayerData` 改为按实际 Role4 槽位读取；补 1P/2P 用例；
+1. **18-1A `wd_hurt`/觉醒（已完成，2026-10-29）**：语义定为**每个 Role4 独立触发**；Voodoo 层记录 `source_player`，按来源分组计数、各自读取槽位档案/属性结算，只移除本来源层；1P 行为不变，2P 不再读 1P；探针 `LocalCoopRole4PoisonProbe` 覆盖 1P、2P、混合层与觉醒；`coop_probe_runner` 22/22 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s），`check_all --godot-bin` 8/8 PASS；
 2. **18-1B `Global.get_player`**：逐文件清理 16 处引用（`dj_sell`、`level_23`、`level_38`、`monster_14501_wdww`、`monster_zhw*`、`weiyang_palace_boss`、`base_monster` 等），改为目标/槽位/显式 owner；
 3. **18-1C 召唤与减伤**：无 owner 的非英雄召唤来源明确拒绝或按槽位；`_apply_role_damage_vs_reduction` 改读出手者 `damage_bonus`；`RoleProp.source_player` 非归属回落逐项登记/删除；
 4. **18-1D 全灭提交**：统一两个死亡分支的等待与场景提交，双人同时死亡只切一次；补 `coop_probe_runner` 全灭断言。
 
-**必须验证**：2P 角色 4 毒伤/觉醒不读 1P；`Global.get_player` 试点调用归零或有登记；无来源命中仍为 0；召唤无 owner 不借用 1P；双人全灭只请求一次结算。
+**必须验证**：2P 角色 4 毒伤/觉醒不读 1P（18-1A 已由探针覆盖）；`Global.get_player` 试点调用归零或有登记；无来源命中仍为 0；召唤无 owner 不借用 1P；双人全灭只请求一次结算。
 
 **出口**：归属/减伤/召唤/全灭均有槽位或显式来源；未登记全局回落为 0。
 

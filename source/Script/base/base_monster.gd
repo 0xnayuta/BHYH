@@ -1884,6 +1884,10 @@ func _get_tszz_level(source_player: BaseHero) -> int:
 
 
 func _get_role5_skill_level(source_player: BaseHero) -> int:
+	return _get_skill_level_for(source_player, "技能10")
+
+
+func _get_skill_level_for(source_player: BaseHero, skill_id: String) -> int:
 	if not is_instance_valid(source_player):
 		return 0
 	var profile: Node = LocalCoop.data_for(source_player)
@@ -1892,10 +1896,10 @@ func _get_role5_skill_level(source_player: BaseHero) -> int:
 	var skills: Variant = profile.player_data.get(DataKeys.SKILL_LEARNED, {})
 	if not skills is Dictionary:
 		return 0
-	var skill10: Variant = (skills as Dictionary).get("技能10", {})
-	if not skill10 is Dictionary:
+	var skill: Variant = (skills as Dictionary).get(skill_id, {})
+	if not skill is Dictionary:
 		return 0
-	return int((skill10 as Dictionary).get(DataKeys.LEVEL, 0))
+	return int((skill as Dictionary).get(DataKeys.LEVEL, 0))
 
 
 func _apply_damage_vampirism(target, effective_damage: int) -> void:
@@ -2220,11 +2224,14 @@ func receive_reflected_damage(base_damage: int, attack_kind: String, penetration
 func hurt_reduce_hp(value, target):
 	if death() or is_death or is_spawn_damage_protected():
 		return 0
+	var voodoo_source: BaseHero = null
+	if target is BaseBuff and str(target.buff_info.get("Name", "")) == "Voodoo":
+		voodoo_source = target.buff_info.get("source_player") as BaseHero
 	var skip_mds_combo: bool = (
 		value > 0
 		and target is BaseBuff
 		and str(target.buff_info.get("Name", "")) == "Voodoo"
-		and _is_mds_awaken_active()
+		and _is_mds_awaken_active(voodoo_source)
 	)
 	if Global.is_hidden_feature_enabled(Global.HIDDEN_FEATURE_INSTANT_KILL) and value > 0:
 		value = maxi(int(value), hp)
@@ -3592,29 +3599,64 @@ func check_player_have_debuff(target):
 
 
 func wd_hurt():
-	if RoleProp.source_player is Role4Hero:
-		if PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL] > 0:
-			var voodoo_counts = Global.check_wd(self)
-			if voodoo_counts >= 7:
-				var skill_level = PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL]
-				var power = int(RoleProp.roleprop.power) * (0.5 + skill_level * 0.05)
-				var skill_power = int(voodoo_counts * power)
-				if skill_power > 0:
-					Global.add_sound(self, "res://Music/hero/role_4/mds.mp3")
-					Global.add_special_effect(self, Vector2(0, -25), "mds", Vector2(1, 1), false, 1)
-					if _is_mds_awaken_active():
-						set_meta("mds_awaken_skip_combo", true)
-					reduce_hp(skill_power)
-					if has_meta("mds_awaken_skip_combo"):
-						remove_meta("mds_awaken_skip_combo")
-				Global.remove_wd(self)
+	# 每个 Role4 的毒层独立计数；同一怪物上的其他来源层不参与本次结算。
+	var groups: Dictionary = {}
+	for child in buff.get_children():
+		if child == null or child.is_queued_for_deletion():
+			continue
+		var info: Variant = child.get("buff_info")
+		if not info is Dictionary:
+			continue
+		if str((info as Dictionary).get("Name", "")) != "Voodoo":
+			continue
+		var source: Variant = (info as Dictionary).get("source_player")
+		if not source is Role4Hero or not is_instance_valid(source):
+			continue
+		if not groups.has(source):
+			groups[source] = []
+		(groups[source] as Array).append(child)
+	for source in groups:
+		var source_player := source as Role4Hero
+		if source_player == null or not is_instance_valid(source_player):
+			continue
+		var stacks: Array = groups[source]
+		if stacks.size() >= 7:
+			_trigger_wd_burst(source_player, stacks)
 
 
-func _is_mds_awaken_active() -> bool:
-	if not RoleProp.source_player is Role4Hero:
+func _trigger_wd_burst(source_player: Role4Hero, stacks: Array) -> void:
+	if death() or is_death:
+		return
+	var skill_level := _get_skill_level_for(source_player, "技能10")
+	if skill_level <= 0:
+		return
+	var source_props := LocalCoop.props_for(source_player) as BaseRoleProperties
+	if not is_instance_valid(source_props):
+		return
+	var power := int(source_props.roleprop.power) * (0.5 + skill_level * 0.05)
+	var skill_power := int(stacks.size() * power)
+	if skill_power <= 0:
+		return
+	Global.add_sound(self, "res://Music/hero/role_4/mds.mp3")
+	Global.add_special_effect(self, Vector2(0, -25), "mds", Vector2(1, 1), false, 1)
+	if _is_mds_awaken_active(source_player):
+		set_meta("mds_awaken_skip_combo", true)
+	reduce_hp(skill_power)
+	if has_meta("mds_awaken_skip_combo"):
+		remove_meta("mds_awaken_skip_combo")
+	# 只移除本次来源的层，保留队友仍有用的毒层。
+	Global.remove_wd(self, source_player)
+
+
+func _is_mds_awaken_active(source_player: BaseHero = null) -> bool:
+	var resolved: BaseHero = source_player if is_instance_valid(source_player) else RoleProp.source_player as BaseHero
+	if not resolved is Role4Hero:
 		return false
-	var awaken_data: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED, {})
-	var enabled_data: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
+	var profile: Node = LocalCoop.data_for(resolved)
+	if not is_instance_valid(profile):
+		return false
+	var awaken_data: Variant = profile.player_data.get(DataKeys.Skill.AWAKENED, {})
+	var enabled_data: Variant = profile.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
 	var awakened := awaken_data is Dictionary and bool(awaken_data.get("mds", false))
 	var enabled := not enabled_data is Dictionary or bool(enabled_data.get("mds", true))
 	return awakened and enabled

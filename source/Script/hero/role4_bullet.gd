@@ -73,6 +73,7 @@ func _on_check_body_entered(body: Node2D) -> void:
 						"value": 0,
 						"CanAdd": true,
 						"AttackKind": "real",
+						"source_player": player,
 					}
 				)
 			)

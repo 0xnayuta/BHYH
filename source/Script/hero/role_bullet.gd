@@ -301,8 +301,10 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 				if hit_dic.has("addeffect"):
 					Global.add_buff(target.buff, hit_dic["addeffect"])
 			"Role4Bullet6":
-				if Global.check_wd(target) < 7 and hit_dic.has("addeffect"):
-					Global.add_buff(target.buff, hit_dic["addeffect"])
+				if Global.check_wd(target, player) < 7 and hit_dic.has("addeffect"):
+					var voodoo_effect: Dictionary = hit_dic["addeffect"].duplicate(true)
+					voodoo_effect["source_player"] = player
+					Global.add_buff(target.buff, voodoo_effect)
 				Global.add_buff(
 					target.buff,
 					{
@@ -316,8 +318,10 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 					}
 				)
 			"Role4Bullet3":
-				if Global.check_wd(target) < 10 and hit_dic.has("addeffect"):
-					Global.add_buff(target.buff, hit_dic["addeffect"])
+				if Global.check_wd(target, player) < 10 and hit_dic.has("addeffect"):
+					var voodoo_effect_3: Dictionary = hit_dic["addeffect"].duplicate(true)
+					voodoo_effect_3["source_player"] = player
+					Global.add_buff(target.buff, voodoo_effect_3)
 			"ZLWBullet":
 				if hit_dic.has("addeffect"):
 					Global.add_buff(target.buff, hit_dic["addeffect"])

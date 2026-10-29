@@ -46,7 +46,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 18~20 综合收尾**：18-1 双人归属、18-2 成长/奖励命令、18-3 档案提交与进度、19-1 表现/路径、19-2 音频/运行时、19-3 资源/Atlas、19-4 输入/HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 18~20 综合收尾**：18-1A 已完成、18-1B/18-1C/18-1D 未启动、18-2 成长/奖励命令、18-3 档案提交与进度、19-1 表现/路径、19-2 音频/运行时、19-3 资源/Atlas、19-4 输入/HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

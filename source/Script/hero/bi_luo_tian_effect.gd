@@ -217,7 +217,8 @@ func _release_hit_stun(target: BaseMonster, token: int) -> void:
 
 func _apply_voodoo_if_learned(target: Node) -> void:
 	var skill_level := int(player_data.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL])
-	if skill_level <= 0 or Global.check_wd(target) >= 7:
+	var source_player := owner_player as BaseHero
+	if skill_level <= 0 or Global.check_wd(target, source_player) >= 7:
 		return
 	Global.add_buff(
 		target.buff,
@@ -228,6 +229,7 @@ func _apply_voodoo_if_learned(target: Node) -> void:
 			"value": int(role_props.roleprop.power * 0.1),
 			"CanAdd": true,
 			"AttackKind": "real",
-			"DeBuff": true
+			"DeBuff": true,
+			"source_player": source_player
 		}
 	)

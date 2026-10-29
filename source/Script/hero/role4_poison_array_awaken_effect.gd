@@ -247,7 +247,7 @@ func _apply_voodoo_if_learned(target: BaseMonster) -> void:
 		return
 	if (
 		int(player_data.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL]) <= 0
-		or Global.check_wd(target) >= 7
+		or Global.check_wd(target, owner_player) >= 7
 	):
 		return
 	Global.add_buff(
@@ -259,6 +259,7 @@ func _apply_voodoo_if_learned(target: BaseMonster) -> void:
 			"value": int(role_props.roleprop.power * 0.1),
 			"CanAdd": true,
 			"AttackKind": "real",
-			"DeBuff": true
+			"DeBuff": true,
+			"source_player": owner_player
 		}
 	)
