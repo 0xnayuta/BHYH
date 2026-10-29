@@ -1918,7 +1918,7 @@ func _apply_damage_vampirism(target, effective_damage: int) -> void:
 	source_player.cure_hp(heal_value)
 
 
-func get_role_last_hurt(target):
+func get_role_last_hurt(target, source_player: BaseHero = null):
 	is_crit = false
 	is_miss = false
 	var hurt = 0
@@ -1929,6 +1929,14 @@ func get_role_last_hurt(target):
 	var cur_level: int = 0
 	var lucky = 0
 	var hurt_lx: String = "real"
+	var attack_source: BaseHero = source_player
+	if not is_instance_valid(attack_source):
+		attack_source = get_player if is_instance_valid(get_player) else _get_damage_source_player(target)
+	var source_props: BaseRoleProperties = RoleProp
+	if is_instance_valid(attack_source):
+		var resolved_props: BaseRoleProperties = LocalCoop.props_for(attack_source)
+		if is_instance_valid(resolved_props):
+			source_props = resolved_props
 	if (
 		target is BaseHero
 		or target is BaseMagicWeapon
@@ -1937,19 +1945,19 @@ func get_role_last_hurt(target):
 		or target is MgHit
 		or target is Role1Shallow
 	):
-		miss = miss - RoleProp.roleprop.htarget
-		crit = RoleProp.roleprop.Crit - crit_reduce
-		last_def = def - RoleProp.roleprop.ar - _yutu_moon_defense_reduction()
-		last_mdef = mdef - RoleProp.roleprop.sp
-		cur_level = RoleProp.baseroleprop.Level
-		lucky = RoleProp.roleprop.Lucky - toughness
+		miss = miss - source_props.roleprop.htarget
+		crit = source_props.roleprop.Crit - crit_reduce
+		last_def = def - source_props.roleprop.ar - _yutu_moon_defense_reduction()
+		last_mdef = mdef - source_props.roleprop.sp
+		cur_level = source_props.baseroleprop.Level
+		lucky = source_props.roleprop.Lucky - toughness
 	elif target is BaseBuff:
-		miss = miss - RoleProp.roleprop.htarget
-		crit = RoleProp.roleprop.Crit - crit_reduce
-		last_def = def - RoleProp.roleprop.ar - _yutu_moon_defense_reduction()
-		last_mdef = mdef - RoleProp.roleprop.sp
-		cur_level = RoleProp.baseroleprop.Level
-		lucky = RoleProp.roleprop.Lucky - toughness
+		miss = miss - source_props.roleprop.htarget
+		crit = source_props.roleprop.Crit - crit_reduce
+		last_def = def - source_props.roleprop.ar - _yutu_moon_defense_reduction()
+		last_mdef = mdef - source_props.roleprop.sp
+		cur_level = source_props.baseroleprop.Level
+		lucky = source_props.roleprop.Lucky - toughness
 	else:
 		return 0
 
@@ -1959,16 +1967,15 @@ func get_role_last_hurt(target):
 	else:
 		hurt = target.last_value
 		hurt_lx = str(target.buff_info.get("AttackKind", ""))
-	var source_player := RoleProp.source_player as BaseHero
-	if source_player != null and is_instance_valid(source_player):
-		var monster149_buff_until := int(source_player.get_meta("monster149_buff_until", 0))
+	if is_instance_valid(attack_source):
+		var monster149_buff_until := int(attack_source.get_meta("monster149_buff_until", 0))
 		if monster149_buff_until > 0:
 			if Time.get_ticks_msec() < monster149_buff_until:
 				hurt = int(float(hurt) / 2.0)
 			else:
-				source_player.remove_meta("monster149_buff_until")
-	if RoleProp.source_player.is_xr:
-		hurt *= RoleProp.source_player.xrbl
+				attack_source.remove_meta("monster149_buff_until")
+	if is_instance_valid(attack_source) and attack_source.is_xr:
+		hurt *= attack_source.xrbl
 	if miss <= 0:
 		miss = 0
 	else:

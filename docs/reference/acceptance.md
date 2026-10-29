@@ -253,7 +253,7 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 python scripts/coop_probe_runner.py --godot "<godot>"
 ```
 
-- 用例清单由 `coop_probe_runner.py` 的 `CASES` 维护，覆盖状态、玩法、技能切换、怪物数值、面板、性能、宠物、共享魂、按键、被动、剑/坐骑、创建 UI、归属来源、池复用与无双归属；执行前以脚本实际列表为准；
+- 用例清单由 `coop_probe_runner.py` 的 `CASES` 维护，覆盖状态、玩法、技能切换、怪物数值、面板、性能、宠物、共享魂、按键、被动、剑/坐骑、创建 UI、归属来源、池复用、伤害数值分离与无双归属；执行前以脚本实际列表为准；
 - 串行执行，单探针超时 **180 秒**；
 - 输出中以 `SCRIPT ERROR:` 或 `ERROR:` 开头的行判 FAIL；唯一豁免为 `resources still in use at exit`；
 - 结果取最后一条 `COOP_MATRIX_RESULT=<json>`；缺失结果或超时判 FAIL；

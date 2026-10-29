@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化与 17-2B 池化复用清理已实施（2026-10-29），17-2C 未启动。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B 的修复与剩余差距见 §12/§13。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理与 17-2C 归属回归已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C 的修复与剩余差距见 §12/§13/§14。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -124,7 +124,7 @@
 
 | 效果 | 读取/写入位置 | 归属判定 | 失败/漂移点 |
 |:---|:---|:---|:---|
-| 伤害 | `apply_role_hit`（`base_monster.gd:1659`） | 显式 `source_player` + `coop_damage_slot` 快照 | 来源为空 → 伤害 0 |
+| 伤害 | `apply_role_hit`（`base_monster.gd:1659`）→ `get_role_last_hurt` | 显式 `source_player` + `coop_damage_slot` 快照；暴击/护甲/等级按出手者（17-2C） | 来源为空 → 伤害 0 |
 | Buff | `apply_role_hit` 内的 `Global.add_buff`、弹体 `addeffect` | Buff 挂在目标；来源只用于数值 | 来源不影响 Buff 所有 |
 | 吸血 | `_apply_damage_vampirism`（`:1901`）→ `_get_vampirism_rate`（`:1867`） | 治疗给 `source_player`，倍率读该英雄属性（17-2A） | 无来源时不吸血 |
 | 无双 | `cure_ws_value`（`:2581`） | `LocalCoop.props_for(source_player)` | 归属正确；入口在 `apply_role_hit` |
@@ -490,10 +490,10 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 位置 | 事实 | 后续 |
 |:---|:---|:---|
-| `base_monster.get_role_last_hurt` | 暴击/护甲/等级等仍读全局 `RoleProp`；2P 伤害数值会使用 1P 面板属性 | 17-2C 评估按 `get_player` 读取 |
-| `base_monster.wd_hurt`/`_is_mds_awaken_active` | 角色 4 毒伤/觉醒读全局 `RoleProp`/`PlayerData` | 17-2C |
+| `base_monster.get_role_last_hurt` | **17-2C 已改为按 `get_player`/`_get_damage_source_player` 解析出手者属性**；无来源时才回落 `RoleProp` | 已修复 |
+| `base_monster.wd_hurt`/`_is_mds_awaken_active` | 角色 4 毒伤/觉醒读全局 `RoleProp`/`PlayerData`；`wd_hurt` 是每物理帧环境检查，不绑定单次命中 | 17-3/17-5 按 2P 玩法语义处理 |
 | `RoleProp.source_player` 由 `BaseHero._ready` 覆盖 | 仍是非归属路径（HUD/怪物提示）的全局别名 | 保留，Phase 17-5/17-6 处理 |
-| `SummonBaseMonster.find_player_reference` | `summoner` 非英雄时回落全局别名 | 17-2B 试点 |
+| `SummonBaseMonster.find_player_reference` | **17-2C 已优先 `LocalCoop.owner_hero(summoner)`**；无持有者时仍回落全局别名 | 部分修复 |
 | `Global.get_player` | 仍只指向 1P | 17-5/17-6 |
 
 ### 12.3 回归
@@ -539,3 +539,40 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 - `_take_pooled_node` 不校验节点类型与场景路径；四类池各自固定场景，暂未出现交叉入池。
 - `mr_hurt`/`sound_player` 的节流键与活动计数在归还后仍保留，但下一次取出会覆盖；不属于节点状态。
 - 池复用清理不改变伤害/归属，17-2C 继续处理伤害数值的 1P 读取。
+
+---
+
+## 14. 17-2C 归属回归（2026-10-29）
+
+### 14.1 伤害属性按出手者
+
+`get_role_last_hurt(target, source_player = null)` 的来源解析顺序：
+
+1. 显式 `source_player`；
+2. `get_player`（命中期间由 `apply_role_hit`/`bind_role_damage_source` 设置）；
+3. `_get_damage_source_player(target)`；
+4. 仍为空 → `RoleProp` 兜底。
+
+命中期间的 `miss`/`crit`/`ar`/`sp`/`Level`/`Lucky` 全部读 `LocalCoop.props_for(attack_source)`；`monster149` 与 `xr` 判定也改用同一 `attack_source`。
+
+### 14.2 伤害数值分离断言
+
+`LocalCoopDamageStatsProbe` 固定 `monster.level=1`、`def=100`、无减伤，设置 P1/P2 不同属性：
+
+| 断言 | P1 | P2 | 结果 |
+|:---|:---|:---|:---|
+| 暴击 | `Crit=0` | `Crit=1000000000` | P1 100、P2 200；P2 `is_crit=true` |
+| 护甲穿透 | `ar=0` | `ar=100` | P1 50、P2 100 |
+| 等级压制 | `Level=1` | `Level=100` | P1 100、P2 110 |
+
+说明：P2 `Crit` 经 `snapped(crit/(crit+100),0.001)` 达到 1.0，因此暴击断言确定；其余两项无随机分支。
+
+### 14.3 召唤回落与 `wd_hurt`
+
+- `SummonBaseMonster.find_player_reference`：非英雄 `summoner` 先 `LocalCoop.owner_hero(summoner)`，再回落 `RoleProp.source_player`，最后取场景 `Hero` 首个子节点；`LocalCoopAttributionSourcesProbe` 覆盖“法宝持有召唤跟随 P2”。
+- `wd_hurt` 未改：它在 `BaseMonster._physics_process` 每帧检查全局 `RoleProp.source_player`/`PlayerData` 技能 10，不绑定单次命中；2P 角色 4 毒伤是持续环境效果，是否按每个 Role4 独立触发属于玩法决策，留 17-3/17-5。
+- `_apply_role_damage_vs_reduction` 仍读全局 `RoleProp.damage_bonus`；本次未改，登记为残余 1P 读取。
+
+### 14.4 回归
+
+- `coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；`level_regression_all --changed-only` 128/128 PASS + 2 SKIP（314.1s，`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS。

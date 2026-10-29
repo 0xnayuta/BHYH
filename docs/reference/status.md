@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化与 17-2B 池化复用清理已完成，17-2C 与 17-3~17-7 未启动）
+> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理与 17-2C 归属回归已完成，17-3~17-7 未启动）
 
 ---
 
@@ -196,6 +196,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 17-1 玩法与表现调用面矩阵 | 仅文档：新建 [`gameplay_module_matrix.md`](gameplay_module_matrix.md)，登记攻击/弹体/召唤/法宝来源字段与 `apply_role_hit` 解析链、`coop_damage_slot` 快照、4 类对象池（80/32/24/32）与复用清理、`current_stage` 535 行/97 文件与 31 行含声明（30 处赋值）、13 处关卡域保存点、成长域校验/扣除/产出/保存/回滚、HUD/输入/音频调用面、模块公开方法与 699 处节点访问（深层 279 处/66 文件、`/root` 34 处/13 文件）、`PlayerData.player_data` 下标写入 145 行/42 文件（含属性 197/44）；`current-iteration.md` 标记 17-1 完成并回填事实，`roadmap.md`、`docs/README.md`、`roadmap/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 索引同步；未修改生产代码、素材或 UID | 17-1 只读调查完成；17-2~17-7 未启动 |
 | 2026-10-29 Phase 17-2A 来源显式化 | **归属**：`_get_damage_source_player` 删除 `RoleProp.source_player` 回落，无来源命中返回 0；`Global._assign_attack_source` 统一写 `player`/`coop_slot`，`add_role_bullet`/`add_role_bullet_1`/`_safe`/`add_role1_shallow` 支持显式来源，根节点 `Role2Bullet7_tx`/`_1` 传 `player`。**效果**：新增 `_get_vampirism_rate`/`_get_tszz_level`/`_get_role5_skill_level`，按 `LocalCoop.props_for/data_for(source_player)` 读取。**夹具**：新增 `LocalCoopAttributionSourcesProbe`（无源不回落、P2 普攻/技能/根节点弹体/法宝无双、召唤来源、吸血/腾蛇阵/角色5 读 P2、P1/P2 交替）。**验证**：`coop_probe_runner` 19/19 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s），`check_all --godot-bin` 8/8 PASS；残留 `get_role_last_hurt`/`wd_hurt`/召唤回落留给 17-2B/2C | 17-2A 完成；17-2B/2C 未启动 |
 | 2026-10-29 Phase 17-2B 池化复用清理 | **边界**：`_take_pooled_node` 不重置；`_store_pooled_node` 与 `_seed_runtime_pool` 调用 `prepare_for_pool()`；节点 `recycle()` 仅做重入守卫并委托。**节点**：`damage_text`（原有钩子改为委托）、`mr_hurt`、`role_be_hit`、`sound_player` 全部实现清理钩子。**夹具**：新增 `LocalCoopPoolReuseProbe`（mr_hurt/role_be_hit/sound_player 归还后不可见/停止/清空，再次取出同一节点并重新初始化）。**验证**：`coop_probe_runner` 20/20 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.0s）；`check_all --godot-bin` 8/8 PASS | 17-2B 完成；17-2C 未启动 |
+| 2026-10-29 Phase 17-2C 归属回归 | **伤害属性**：`get_role_last_hurt` 增加可选 `source_player`，按 `get_player` → `_get_damage_source_player` → `RoleProp` 解析；暴击/护甲/魔抗/等级/幸运读实际出手者。**数值分离**：新增 `LocalCoopDamageStatsProbe`，P2 暴击 200 vs P1 100、护甲穿透 100 vs 50、等级压制 110 vs 100。**召唤回落**：非英雄 `summoner` 先 `LocalCoop.owner_hero`，探针覆盖法宝召唤跟随 P2；`wd_hurt` 每帧环境检查留 17-3/17-5。**验证**：`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 2 SKIP（314.1s，`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS | 17-2C 完成；17-3~17-7 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

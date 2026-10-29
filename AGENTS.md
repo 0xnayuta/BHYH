@@ -34,7 +34,7 @@
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
-  - `roadmap/current-iteration.md`：Phase 17 玩法与表现模块边界规划：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理已完成；17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动；Phase 16 归档见 `archive/iteration_16_archive_session_slots.md`；
+  - `roadmap/current-iteration.md`：Phase 17 玩法与表现模块边界规划：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归已完成；17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动；Phase 16 归档见 `archive/iteration_16_archive_session_slots.md`；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
   - `reports/`：脚本按需生成的报告，不提交历史报告，不手工编辑；

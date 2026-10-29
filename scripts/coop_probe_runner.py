@@ -41,6 +41,7 @@ CASES = [
     "LocalCoopCreationUIProbe",
     "LocalCoopAttributionSourcesProbe",
     "LocalCoopPoolReuseProbe",
+    "LocalCoopDamageStatsProbe",
     "LocalCoopWushuangAttributionProbe",
 ]
 

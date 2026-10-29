@@ -119,7 +119,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 17 玩法与表现模块边界：17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理已完成；17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长命令、17-5 HUD/输入/音频、17-6 模块 API、17-7 边界守卫未启动 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 17 玩法与表现模块边界：17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归已完成；17-3 关卡阶段与结算、17-4 成长命令、17-5 HUD/输入/音频、17-6 模块 API、17-7 边界守卫未启动 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |

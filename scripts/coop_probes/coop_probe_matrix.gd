@@ -104,6 +104,8 @@ func _run() -> void:
 			await _case_attribution_sources()
 		"LocalCoopPoolReuseProbe":
 			await _case_pool_reuse()
+		"LocalCoopDamageStatsProbe":
+			await _case_damage_stats()
 		"LocalCoopWushuangAttributionProbe":
 			await _case_wushuang_attribution()
 		_:
@@ -847,6 +849,14 @@ func _case_attribution_sources() -> void:
 		monster.apply_role_hit(weapon)
 		_check(p1.RoleProp.ws_value == 0, "P2 magic weapon leaves P1 WS unchanged")
 		_check(p2.RoleProp.ws_value > 0, "P2 magic weapon credits P2 WS")
+		var weapon_summon: Node = load("res://Scene/monster/monster_zhw/monster_143_zhw.tscn").instantiate()
+		weapon_summon.process_mode = Node.PROCESS_MODE_DISABLED
+		stage.add_child(weapon_summon)
+		await process_frame
+		weapon_summon.set_physics_process(false)
+		weapon_summon.set_summon_properties(weapon, 0.0)
+		_check(weapon_summon.player_reference == p2, "non-hero summon follows weapon owner P2")
+		weapon_summon.queue_free()
 
 	var shallow: Node = global.add_role1_shallow(stage, Vector2(220, 340), 1, 1, p2)
 	_check(shallow != null and shallow.player == p2, "shallow carries P2 source")
@@ -862,6 +872,68 @@ func _case_attribution_sources() -> void:
 
 	root_bullet = null
 	summon.queue_free()
+	monster.queue_free()
+	await process_frame
+
+
+func _set_probe_attack(hero: Node, crit: int, ar: int, level: int, attack_kind: String) -> void:
+	hero.RoleProp.roleprop["htarget"] = 0
+	hero.RoleProp.roleprop["Crit"] = crit
+	hero.RoleProp.roleprop["ar"] = ar
+	hero.RoleProp.roleprop["sp"] = 0
+	hero.RoleProp.roleprop["Lucky"] = 0
+	hero.RoleProp.baseroleprop.Level = level
+	hero.hit_dic = {"power": 100, "hurtBack": [0, 0], "attackKind": attack_kind}
+
+
+func _case_damage_stats() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "damage stats owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.level = 1
+	monster.def = 100
+	monster.mdef = 100
+	monster.crit_reduce = 0
+	monster.toughness = 0
+	monster.is_defe_reduce = false
+	monster.hp = 1000000
+	monster.max_hp = 1000000
+
+	_set_probe_attack(p1, 0, 0, 1, "real")
+	monster.get_player = p1
+	var p1_real: int = monster.get_role_last_hurt(p1)
+	_check(p1_real == 100 and not monster.is_crit, "P1 real damage baseline")
+	_set_probe_attack(p2, 1000000000, 0, 1, "real")
+	monster.get_player = p2
+	var p2_crit: int = monster.get_role_last_hurt(p2)
+	_check(monster.is_crit, "P2 crit uses P2 Crit")
+	_check(p2_crit >= 190, "P2 crit damage separated")
+
+	_set_probe_attack(p1, 0, 0, 1, "physics")
+	monster.get_player = p1
+	var p1_armor: int = monster.get_role_last_hurt(p1)
+	_set_probe_attack(p2, 0, 100, 1, "physics")
+	monster.get_player = p2
+	var p2_armor: int = monster.get_role_last_hurt(p2)
+	_check(p1_armor == 50 and p2_armor == 100, "P2 armor penetration uses P2 ar")
+
+	_set_probe_attack(p1, 0, 0, 1, "real")
+	monster.get_player = p1
+	var p1_level: int = monster.get_role_last_hurt(p1)
+	_set_probe_attack(p2, 0, 0, 100, "real")
+	monster.get_player = p2
+	var p2_level: int = monster.get_role_last_hurt(p2)
+	_check(p1_level == 100 and p2_level == 110, "P2 level suppression uses P2 level")
+
 	monster.queue_free()
 	await process_frame
 

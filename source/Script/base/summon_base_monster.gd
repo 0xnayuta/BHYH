@@ -240,6 +240,11 @@ func find_player_reference() -> void:
 	if is_instance_valid(summoner) and summoner is BaseHero:
 		player_reference = summoner
 		return
+	if is_instance_valid(summoner):
+		var summoner_owner: BaseHero = LocalCoop.owner_hero(summoner) as BaseHero
+		if is_instance_valid(summoner_owner):
+			player_reference = summoner_owner
+			return
 	if is_instance_valid(RoleProp.source_player):
 		player_reference = RoleProp.source_player
 		return
