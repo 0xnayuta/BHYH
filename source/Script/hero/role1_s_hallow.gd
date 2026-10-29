@@ -3,6 +3,7 @@ class_name Role1Shallow
 var direction: int
 var action: String
 var iniaction: int
+var player: BaseHero
 var is_set = false
 var is_attacking = false
 var dir: int

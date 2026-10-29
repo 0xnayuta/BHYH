@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）。17-2~17-7 均未启动；本页记录**当前实现事实**、所有者、写入者与失败边界，不把目标语义写成已实现。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化已实施（2026-10-29），17-2B/17-2C 未启动。§1~§11 保留 17-1 基线与失败边界，17-2A 的修复与剩余差距见 §12。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -15,9 +15,9 @@
 1. **伤害归属有唯一入口，但有 1P 兜底**：怪物受击统一进入 `BaseMonster.apply_role_hit`（`base_monster.gd:1659`），解析顺序为「显式 `source_player` → 载体字段/祖先 → `LocalCoop.owner_hero` → `RoleProp.source_player`」。前四级可归属到 2P；最后一级是全局别名，命中后无法区分槽位。
 2. **归属字段分散在 6 类载体**：`BaseHero`、`RoleBullet`/`RoleBullet1`/`Role1Shallow`/`RolehmzBullet`、`BaseMagicWeapon`/`MagicWeaponHit`/`MgHit`、`SummonBaseMonster`、`MonsterBullet`、`BaseMonster`。英雄侧字段名为 `player`，召唤侧为 `summoner`/`player_reference`，怪物侧为 `get_player`，弹体还依赖祖先链与 `coop_damage_slot` 快照。
 3. **`coop_damage_slot` 是唯一显式归属快照**：共 11 处 / 2 文件，只在 `BaseMonster.apply_role_hit` 与 `bind_role_damage_source` 中写入并在结束时恢复；`LocalCoop.slot_for` 优先读取该 meta（`local_coop.gd:426`）。
-4. **`RoleProp.source_player` 仍是最大 1P 假设**：122 次 / 47 文件；每个 `BaseHero._ready` 都会覆盖它（`base_hero.gd:297`），2P 与 1P 的 `_ready` 顺序决定值；47 个文件中包含 5 个 `Scene` 表现脚本。
-5. **`Global.get_player` 只指向 1P**：15 次 / 9 文件；只在 `Global.call_hero` 的 `player_slot == 1` 分支赋值（`global.gd:5241`），2P 永不写入。用于提示、怪物目标与 `dj_sell` 的全局状态写入。
-6. **效果归属存在跨槽位读取**：吸血倍率取自全局 `RoleProp.roleprop`（`base_monster.gd:1884`），腾蛇阵等级取自 1P `PlayerData`（`:1688`），角色 5 被动等级取自 1P `PlayerData`（`:1806`）；治疗/无双入账已使用实际 `source_player`。
+4. **`RoleProp.source_player` 仍是最大 1P 假设**：121 次 / 47 文件；每个 `BaseHero._ready` 都会覆盖它（`base_hero.gd:297`），2P 与 1P 的 `_ready` 顺序决定值；47 个文件中包含 5 个 `Scene` 表现脚本。
+5. **`Global.get_player` 只指向 1P**：15 次 / 9 文件；只在 `Global.call_hero` 的 `player_slot == 1` 分支赋值（`global.gd:5258`），2P 永不写入。用于提示、怪物目标与 `dj_sell` 的全局状态写入。
+6. **效果归属存在跨槽位读取**：吸血倍率取自全局 `RoleProp.roleprop`（`base_monster.gd:1867`，17-2A 已改为按出手者），腾蛇阵等级取自 1P `PlayerData`（`:1876`，17-2A 已改为按出手者），角色 5 被动等级取自 1P `PlayerData`（`:1886`，17-2A 已改为按出手者）；治疗/无双入账已使用实际 `source_player`。
 7. **对象池只有 4 类**：`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`，上限 80/32/24/32（`global.gd:119-123`）。取出入口不重置节点；重置由各节点自己的 `setup()`/`recycle()` 完成。`damage_text` 另有 `prepare_for_pool()` 仅用于预热。
 8. **关卡阶段由 `BaseLevel.current_stage` 单一持有，但写入面分散**：535 行 / 97 文件引用，31 行含声明（30 处赋值）；`BaseLevel` 8 处按角色 x 坐标推进，关卡子类/怪物脚本 22 处直接赋值。阶段推进、刷怪与出口判定都在 `BaseThroughLevel`，但子类可绕过。
 9. **胜败切换有两套入口**：出口离开走 `_leave_level_from_exit`（`base_through_level.gd:1366`），死亡走 `BaseHero` 两个死亡分支（`base_hero.gd:716`、`:1680`）；两者都可能在 1.5s 等待后重复调用 `change_scene(defeat)`。
@@ -79,12 +79,12 @@
 
 - `Global.add_new_bullet` 只有定义（`global.gd:3782`），无调用方；`add_role_bullet_1` 仅 1 处调用，`add_role_bullet_1_safe` 2 处。
 - `Global.add_role_bullet` 只设置 `_name`/`hit_dic`/`direction`，不设置 `player`；`RoleBullet._physics_process` 首次运行时从祖先链回填 `player`。
-- `Global.add_magic_weapon` 在 `source_player != null` 时设置 meta `coop_slot` 与 `player`（`global.gd:4689-4690`）；生产调用均传 `self`。
+- `Global.add_magic_weapon` 在 `source_player != null` 时设置 meta `coop_slot` 与 `player`（`global.gd:4706-4707`）；生产调用均传 `self`。
 - `SummonBaseMonster` 的召唤弹体带 `is_summon_bullet` 与 `summoner` meta（`summon_base_monster.gd:1284-1287`）。
 
 ### 4.2 解析顺序与回退
 
-`BaseMonster._get_damage_source_player`（`base_monster.gd:1828`）：
+`BaseMonster._get_damage_source_player`（`base_monster.gd:1827`）：
 
 1. `target is BaseHero` → 直接返回；
 2. `RoleBullet`/`RoleBullet1`/`Role1Shallow` → `player`/`Player`/`my_owner` → 祖先 4 层；
@@ -92,8 +92,7 @@
 4. `MagicWeaponHit` → 父节点 `BaseMagicWeapon.player`；
 5. `MgHit` → `source_weapon.player`；
 6. `LocalCoop.owner_hero(target)` → 沿持有者字段回溯；
-7. **回落** `RoleProp.source_player`；
-8. 仍为空 → 返回 `null`，本次伤害被丢弃（`apply_role_hit` 直接返回 0）。
+7. 仍为空 → 返回 `null`，本次伤害被丢弃（`apply_role_hit` 直接返回 0）。17-2A 已删除原第 7 步的 `RoleProp.source_player` 回落。
 
 `LocalCoop.slot_for`（`local_coop.gd:421`）的遗留解析顺序：
 
@@ -106,17 +105,17 @@
 7. 脚本路径前缀（`back_pack`/`skill`/`other_scene`/`magic_weapon`）→ `ui_slot`；
 8. 默认 1。
 
-### 4.3 仍假定 1P 的入口
+### 4.3 仍假定 1P 的入口（17-1 基线；17-2A 状态见 §12）
 
 | ID | 位置 | 事实 | 影响 |
 |:---|:---|:---|:---|
 | GM-01 | `base_hero.gd:297` | 每个英雄 `_ready` 写 `RoleProp.source_player = self` | 2P 后加载会覆盖 1P；所有读全局别名的代码按最后加载者归属 |
-| GM-02 | `global.gd:5241` | `Global.get_player` 仅在 `player_slot == 1` 时赋值 | 2P 目标、提示、`dj_sell` 永远拿到 1P |
-| GM-03 | `base_monster.gd:1865` | `_get_damage_source_player` 最后回落 `RoleProp.source_player` | 弹体在根节点/无祖先时归 1P |
-| GM-04 | `role_bullet.gd:165`、`:405` | `player` 由祖先链回填；觉醒效果再回落 `role_props.source_player` | 脱离英雄节点的弹体归属不稳定 |
+| GM-02 | `global.gd:5258` | `Global.get_player` 仅在 `player_slot == 1` 时赋值 | 2P 目标、提示、`dj_sell` 永远拿到 1P |
+| GM-03 | `base_monster.gd:1865`（17-1） | `_get_damage_source_player` 最后回落 `RoleProp.source_player`；**17-2A 已删除** | 无来源时伤害为 0，不再归 1P |
+| GM-04 | `role_bullet.gd:165`、`:409` | `player` 由祖先链回填；觉醒效果再回落 `role_props.source_player`；**17-2A 已删除回落，根节点弹体显式传源** | 无来源弹体不再借用 1P |
 | GM-05 | `summon_base_monster.gd:239` | `find_player_reference` 在 `summoner` 非英雄时回落全局别名，再取场景 `Hero` 第一个子节点 | 非英雄召唤（怪物/法宝）跟随 1P |
 | GM-06 | `base_monster.gd:544` | 怪物生成后 `get_player = Global.get_player` | 未绑定来源的怪物默认 1P |
-| GM-07 | `base_monster.gd:1884`、`:1688`、`:1806` | 吸血倍率读 `RoleProp.roleprop`；腾蛇阵等级读 1P `PlayerData`；角色 5 被动等级读 1P `PlayerData` | 2P 的攻击使用 1P 的吸血/技能等级 |
+| GM-07 | `base_monster.gd:1867`、`:1876`、`:1886` | 吸血倍率读 `RoleProp.roleprop`；腾蛇阵等级读 1P `PlayerData`；角色 5 被动等级读 1P `PlayerData`；**17-2A 已改为 `LocalCoop.props_for/data_for(source_player)`** | 2P 使用自身吸血/技能等级 |
 | GM-08 | `base_role.gd:82`、`:98`、`:202` | HUD 在 `player == null` 时回落 `RoleProp.source_player`；`_set_values` 直接读全局 `RoleProp` | 正常路径由 `RoleInformation` 注入；P2 血蓝/经验/无双仍显示 1P 值 |
 | GM-09 | `dj_sell.gd:690`、`:945` | 面板用 `Global.get_player` 判空，随后写全局 `PlayerData`/`RoleProp` | 2P 操作时作用到 1P |
 | GM-10 | `monster_bullet.gd:769`、`:2579` | 敌方弹体读取 `RoleProp.source_player` 决定效果/目标 | 2P 场景下目标可能落到 1P |
@@ -127,10 +126,10 @@
 |:---|:---|:---|:---|
 | 伤害 | `apply_role_hit`（`base_monster.gd:1659`） | 显式 `source_player` + `coop_damage_slot` 快照 | 来源为空 → 伤害 0 |
 | Buff | `apply_role_hit` 内的 `Global.add_buff`、弹体 `addeffect` | Buff 挂在目标；来源只用于数值 | 来源不影响 Buff 所有 |
-| 吸血 | `_apply_damage_vampirism`（`:1871`） | 治疗给 `source_player`，倍率读全局 `RoleProp` | 2P 用 1P 倍率（GM-07） |
-| 无双 | `cure_ws_value`（`:2551`） | `LocalCoop.props_for(source_player)` | 归属正确；入口在 `apply_role_hit` |
-| 腾蛇阵 | `apply_role_hit`（`:1688`） | 等级读 `PlayerData`，增伤写 `source_player.tszzs` | 2P 用 1P 等级（GM-07） |
-| 角色 5 被动 | `role5_bullet`（`:1797`） | 目标/治疗用 `get_player`，等级读 `PlayerData` | 2P 用 1P 技能等级（GM-07） |
+| 吸血 | `_apply_damage_vampirism`（`:1901`）→ `_get_vampirism_rate`（`:1867`） | 治疗给 `source_player`，倍率读该英雄属性（17-2A） | 无来源时不吸血 |
+| 无双 | `cure_ws_value`（`:2581`） | `LocalCoop.props_for(source_player)` | 归属正确；入口在 `apply_role_hit` |
+| 腾蛇阵 | `apply_role_hit`（`:1688`）→ `_get_tszz_level`（`:1876`） | 等级读 `LocalCoop.data_for(source_player)`，增伤写 `source_player.tszzs` | 2P 用自身等级（17-2A） |
+| 角色 5 被动 | `role5_bullet`（`:1796`）→ `_get_role5_skill_level`（`:1886`） | 目标/治疗用 `get_player`，等级读 `LocalCoop.data_for(get_player)` | 2P 用自身技能等级（17-2A） |
 | 掉落/结算 | `Global.total_*_hit`、`Global.most_lianji`（连击统计） | 全局聚合 | 统计不区分槽位；不属于结算入账 |
 
 ---
@@ -465,3 +464,38 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 5. 池化节点连续复用两轮后不携带上一轮目标/类型/暴击标记。
 
 **下一入口**：17-2 命中与效果归属；本页作为调用面基线，17-2 实施后回填差异。
+
+---
+
+## 12. 17-2A 实施差异（2026-10-29）
+
+### 12.1 已修改
+
+| 位置 | 变更 | 结果 |
+|:---|:---|:---|
+| `base_monster.gd:_get_damage_source_player` | 删除 `RoleProp.source_player` 回落 | 无来源命中返回 `null`，`apply_role_hit` 返回 0；不再借用 1P |
+| `base_monster.gd:_get_vampirism_rate` | 新增；读 `LocalCoop.props_for(source_player).roleprop.vampirism` | 吸血倍率按出手者 |
+| `base_monster.gd:_get_tszz_level` | 新增；读 `LocalCoop.data_for(source_player).player_data["腾蛇阵"]["Level"]` | 腾蛇阵增伤按出手者 |
+| `base_monster.gd:_get_role5_skill_level` | 新增；读 `LocalCoop.data_for(get_player)` 的技能 10 等级 | 角色 5 被动按出手者 |
+| `global.gd:_assign_attack_source` | 新增；显式来源优先，否则 `LocalCoop.owner_hero(parent)`；写 `player` 与 meta `coop_slot` | 角色侧攻击载体统一来源 |
+| `global.gd:add_role_bullet` | 增加可选 `source_player`；调用 `_assign_attack_source` | 根节点弹体由调用方传源 |
+| `global.gd:add_role_bullet_1`/`_safe`/`add_role1_shallow` | 增加可选 `source_player` 并赋值 | 技能弹体/浅影来源显式 |
+| `summon_base_monster.gd:set_summon_properties` | 英雄召唤时写 meta `coop_slot` | 召唤物槽位显式 |
+| `role_bullet.gd` | 根节点 `Role2Bullet7_tx`/`_1` 传入 `player`；显式来源不被祖先覆盖；删除觉醒效果的 `role_props.source_player` 回落 | 根节点弹体归属稳定 |
+| `role_bullet_1.gd` | `player` 仅在缺失时从祖先回填；浅影创建传入 `player` | 技能弹体不覆盖显式来源 |
+| `role1_s_hallow.gd` | 新增 `player` 字段 | 浅影可被 `_get_damage_source_player` 解析 |
+
+### 12.2 仍保留的 1P 读取
+
+| 位置 | 事实 | 后续 |
+|:---|:---|:---|
+| `base_monster.get_role_last_hurt` | 暴击/护甲/等级等仍读全局 `RoleProp`；2P 伤害数值会使用 1P 面板属性 | 17-2B/17-2C 评估按 `get_player` 读取 |
+| `base_monster.wd_hurt`/`_is_mds_awaken_active` | 角色 4 毒伤/觉醒读全局 `RoleProp`/`PlayerData` | 17-2C |
+| `RoleProp.source_player` 由 `BaseHero._ready` 覆盖 | 仍是非归属路径（HUD/怪物提示）的全局别名 | 保留，Phase 17-5/17-6 处理 |
+| `SummonBaseMonster.find_player_reference` | `summoner` 非英雄时回落全局别名 | 17-2B 试点 |
+| `Global.get_player` | 仍只指向 1P | 17-5/17-6 |
+
+### 12.3 回归
+
+- 新增 `LocalCoopAttributionSourcesProbe`：无源命中不回落；P2 普攻/技能弹体/根节点弹体/法宝记 P2 无双且不动 P1；P2 弹体 `addeffect` 落到目标；命中后 `get_player`/`coop_damage_slot`/`source_props.source_player` 恢复；召唤 `owner_hero`/`slot_for`/meta/`_get_damage_source_player` 均为 P2；P1/P2 交替出手不串；吸血/腾蛇阵/角色 5 读取 P2 档案；`damage_text` 池连续复用两轮重置值/类型/暴击/目标。
+- `coop_probe_runner` 全 19 例 PASS；`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s）；`check_all --godot-bin` 8/8 PASS。

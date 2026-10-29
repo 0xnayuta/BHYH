@@ -64,7 +64,7 @@ func _exit_tree() -> void:
 
 
 func spawn_reflect_effect(pos: Vector2, dir_velocity: Vector2, hit_dic: Dictionary) -> void:
-	var effect_bullet = Global.add_role_bullet(get_tree().root, pos, direction, "Role2Bullet7_tx", hit_dic)
+	var effect_bullet = Global.add_role_bullet(get_tree().root, pos, direction, "Role2Bullet7_tx", hit_dic, player)
 	if effect_bullet:
 		var anim_player = effect_bullet.get_node("Middle/BulletPlayers")
 		if anim_player:
@@ -162,10 +162,11 @@ func _physics_process(_delta: float) -> void:
 	check_count += 1
 
 	if not is_set:
-		if Global.get_ancestor(self, 2) is BaseHero:
-			player = Global.get_ancestor(self, 2)
-		elif Global.get_ancestor(self, 1) is BaseHero:
-			player = Global.get_ancestor(self, 1)
+		if not is_instance_valid(player):
+			if Global.get_ancestor(self, 2) is BaseHero:
+				player = Global.get_ancestor(self, 2)
+			elif Global.get_ancestor(self, 1) is BaseHero:
+				player = Global.get_ancestor(self, 1)
 		bullet_players.play(_name)
 		if direction:
 			middle.scale.x = -1
@@ -256,7 +257,7 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 			if not is_inside_tree() or is_queued_for_deletion():
 				return
 			if is_instance_valid(target):
-				Global.add_role_bullet(tree.root, target.global_position, direction, "Role2Bullet7_1", hit_dic)
+				Global.add_role_bullet(tree.root, target.global_position, direction, "Role2Bullet7_1", hit_dic, player)
 
 		match _name:
 			"SwordArrayHit":
@@ -402,11 +403,7 @@ func _apply_tllz_awaken_effect(target: BaseMonster) -> void:
 	if target == null or not is_instance_valid(target):
 		return
 	var source_player: BaseHero = player
-	if source_player == null or not is_instance_valid(source_player):
-		var source_candidate: Variant = role_props.source_player
-		if source_candidate is BaseHero and is_instance_valid(source_candidate):
-			source_player = source_candidate as BaseHero
-	if source_player == null or not is_instance_valid(source_player):
+	if not is_instance_valid(source_player):
 		return
 	if not source_player.has_method("_is_skill_awakened") or not source_player.has_method("_is_skill_awaken_enabled"):
 		return

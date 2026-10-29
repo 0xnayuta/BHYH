@@ -100,6 +100,8 @@ func _run() -> void:
 			await _case_sword_mount()
 		"LocalCoopCreationUIProbe":
 			await _case_creation_ui()
+		"LocalCoopAttributionSourcesProbe":
+			await _case_attribution_sources()
 		"LocalCoopWushuangAttributionProbe":
 			await _case_wushuang_attribution()
 		_:
@@ -130,14 +132,19 @@ func _case_core() -> void:
 	_check(data.player_data["道具列表"]["页码1"].size() == 1, "bag is shared")
 	var snapshot: Dictionary = memory._prepare_player_save_data()
 	_check(int(snapshot.get("Myself", 0)) == 1, "save keeps primary profile")
-	_check(int(snapshot.get(coop.SAVE_KEY, {}).get("2P", {}).get("玩家等级", 0)) == primary_level + 11, "save keeps 2P profile")
+	_check(
+		int(snapshot.get(coop.SAVE_KEY, {}).get("2P", {}).get("玩家等级", 0)) == primary_level + 11, "save keeps 2P profile"
+	)
 	await _make_stage()
 	var first: Node = _make_hero(1, 1)
 	var second: Node = _make_hero(7, 2)
 	_check(first != null and second != null, "both heroes instantiated")
 	if first != null and second != null:
 		_check(first.PlayerData == data and second.PlayerData == coop.secondary_data, "hero profiles isolated")
-		_check(first.RoleProp == root.get_node("RoleProp") and second.RoleProp == coop.secondary_props, "hero props isolated")
+		_check(
+			first.RoleProp == root.get_node("RoleProp") and second.RoleProp == coop.secondary_props,
+			"hero props isolated"
+		)
 		_check(first.PlayerInput != second.PlayerInput, "input views isolated")
 	coop.clear_runtime()
 
@@ -499,15 +506,9 @@ func _case_slot_ledger() -> void:
 		_check(bool(entry.get("same_container", false)), "shared container " + key)
 		_check(bool(entry.get("equal", false)), "shared value " + key)
 	data.player_data["道具列表"]["页码1"].append({"Name": "shared_probe"})
-	_check(
-		coop.secondary_data.player_data["道具列表"]["页码1"].size() == 1,
-		"bag write visible to 2P"
-	)
+	_check(coop.secondary_data.player_data["道具列表"]["页码1"].size() == 1, "bag write visible to 2P")
 	coop.secondary_data.player_data["装备列表"]["页码1"].append({"Name": "shared_probe_2"})
-	_check(
-		data.player_data["装备列表"]["页码1"].size() == 1,
-		"equipment write visible to 1P"
-	)
+	_check(data.player_data["装备列表"]["页码1"].size() == 1, "equipment write visible to 1P")
 	data.set_soul(200)
 	coop.secondary_data.spend_soul(50)
 	_check(data.get_soul() == 150 and coop.secondary_data.get_soul() == 150, "shared soul single ledger")
@@ -521,14 +522,8 @@ func _case_slot_ledger() -> void:
 	training["p1"]["10001"]["level"] = 4
 	data.player_data["炼体"] = training
 	coop.link_bags()
-	_check(
-		int(coop.secondary_data.player_data["炼体"]["p2"]["10001"]["level"]) == 4,
-		"body training shared"
-	)
-	_check(
-		int(coop.secondary_data.player_data["炼体"]["p1"]["10001"]["level"]) == 4,
-		"body training copy kept in sync"
-	)
+	_check(int(coop.secondary_data.player_data["炼体"]["p2"]["10001"]["level"]) == 4, "body training shared")
+	_check(int(coop.secondary_data.player_data["炼体"]["p1"]["10001"]["level"]) == 4, "body training copy kept in sync")
 	# 合并规则：两侧按 max 归并，再同步到 p1/p2 两个视图。
 	var secondary_training: Dictionary = coop.BODY_TRAINING_DATA.normalize_state(
 		coop.secondary_data.player_data.get("炼体", {})
@@ -539,10 +534,7 @@ func _case_slot_ledger() -> void:
 	var merged_training: Dictionary = data.player_data["炼体"]
 	_check(int(merged_training["p1"]["10001"]["level"]) == 7, "body training merges by max")
 	_check(int(merged_training["p2"]["10001"]["level"]) == 7, "body training p2 view synced")
-	_check(
-		is_same(data.player_data["炼体"], coop.secondary_data.player_data["炼体"]),
-		"body training single container"
-	)
+	_check(is_same(data.player_data["炼体"], coop.secondary_data.player_data["炼体"]), "body training single container")
 	# 重复链接不得重复追加共享容器内容。
 	var pack_size: int = data.player_data["宠物背包"].size()
 	coop.link_bags()
@@ -570,8 +562,10 @@ func _case_slot_ledger() -> void:
 	data.player_data["出战宠物"] = "PetTiger"
 	coop.secondary_data.player_data["出战宠物"] = "PetTurtle"
 	_check(
-		str(coop.data_for_slot(1).player_data.get("出战宠物", "")) == "PetTiger"
-		and str(coop.data_for_slot(2).player_data.get("出战宠物", "")) == "PetTurtle",
+		(
+			str(coop.data_for_slot(1).player_data.get("出战宠物", "")) == "PetTiger"
+			and str(coop.data_for_slot(2).player_data.get("出战宠物", "")) == "PetTurtle"
+		),
 		"active pet individually owned"
 	)
 	data.player_data[DataKeys.SKILL_LEARNED][DataKeys.Skill.KEYMAP]["Y"] = "p1_bind"
@@ -618,10 +612,7 @@ func _case_panel_operator() -> void:
 	_check(coop.ui_slot == 2, "panel slot is 2P")
 	_check(panel.PlayerData == coop.secondary_data, "panel operator is 2P")
 	_check(panel.RoleProp == coop.secondary_props, "panel props operator is 2P")
-	_check(
-		not is_same(data.player_data, coop.secondary_data.player_data),
-		"global alias not swapped during 2P panel"
-	)
+	_check(not is_same(data.player_data, coop.secondary_data.player_data), "global alias not swapped during 2P panel")
 	panel.PlayerData.player_data["角色昵称"] = "P2_PANEL"
 	_check(str(coop.secondary_data.player_data.get("角色昵称", "")) == "P2_PANEL", "panel write hits 2P")
 	_check(str(data.player_data.get("角色昵称", "")) != "P2_PANEL", "panel write does not hit 1P")
@@ -708,6 +699,169 @@ func _case_creation_ui() -> void:
 	await process_frame
 	stage = null
 	coop.creation_player_count = 1
+
+
+func _case_attribution_sources() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "attribution owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.hp = 1000000
+	monster.max_hp = 1000000
+	monster.get_player = p1
+	monster.get_target = p1
+	var role_prop: Node = root.get_node("RoleProp")
+	role_prop.source_player = p1
+	var orphan := Area2D.new()
+	_check(monster._get_damage_source_player(orphan) == null, "source-less hit does not fall back to global P1")
+	orphan.free()
+
+	data.player_data["腾蛇阵"]["Level"] = 1
+	coop.secondary_data.player_data["腾蛇阵"]["Level"] = 4
+	data.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL] = 1
+	coop.secondary_data.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL] = 6
+	p1.RoleProp.roleprop["vampirism"] = 0.1
+	p2.RoleProp.roleprop["vampirism"] = 0.5
+	_check(is_equal_approx(monster._get_vampirism_rate(p2), 0.5), "vampirism reads P2 props")
+	_check(monster._get_tszz_level(p2) == 4, "tsz reads P2 profile")
+	_check(monster._get_role5_skill_level(p2) == 6, "role5 skill reads P2 profile")
+
+	var hit := {"WSValue": 7, "power": 0, "hurtBack": [0, 0], "attackKind": "real"}
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	var melee_hitbox: Area2D = p2.get_node("base_damagebox/HitBox")
+	var old_get_player: Node = monster.get_player
+	var old_damage_slot := int(monster.get_meta("coop_damage_slot", 0))
+	var old_props_source: Variant = p2.RoleProp.source_player
+	monster._on_hurt_box_area_entered(melee_hitbox)
+	_check(p1.RoleProp.ws_value == 0, "P2 melee leaves P1 WS unchanged")
+	_check(p2.RoleProp.ws_value > 0, "P2 melee credits P2 WS")
+	_check(monster.get_player == old_get_player, "hit restores monster get_player")
+	_check(int(monster.get_meta("coop_damage_slot", 0)) == old_damage_slot, "hit restores damage slot")
+	_check(p2.RoleProp.source_player == old_props_source, "hit restores source props")
+
+	var settings: Node = root.get_node("MainSet")
+	settings.set_data["ShowDamageText"] = true
+	var old_text: Node = global.add_damage_text(stage, Vector2.ZERO, 111, "physics", false, p1)
+	_check(old_text != null, "damage text pooled node created")
+	if old_text != null:
+		old_text.recycle()
+		var new_text: Node = global.add_damage_text(stage, Vector2.ZERO, 222, "magic", true, p2)
+		_check(new_text != null, "damage text reused from pool")
+		if new_text != null:
+			_check(new_text.damage_value == 222, "pooled text resets value")
+			_check(new_text.type == "magic", "pooled text resets type")
+			_check(new_text.is_crit, "pooled text resets crit flag")
+			_check(new_text.target == p2, "pooled text resets target")
+			new_text.recycle()
+
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	var skill_bullet: Node = global.add_role_bullet_1(p2.bullet, Vector2.ZERO, "probe_skill", hit.duplicate(true))
+	_check(skill_bullet != null and skill_bullet.player == p2, "skill bullet carries P2 source")
+	if skill_bullet != null:
+		skill_bullet.is_set = true
+		skill_bullet.set_physics_process(false)
+		await process_frame
+		monster._on_hurt_box_area_entered(skill_bullet)
+		_check(p1.RoleProp.ws_value == 0, "P2 skill leaves P1 WS unchanged")
+		_check(p2.RoleProp.ws_value > 0, "P2 skill credits P2 WS")
+
+	var buff_area := Area2D.new()
+	monster.add_child(buff_area)
+	var buff_bullet: Node = (
+		global
+		. add_role_bullet(
+			stage,
+			Vector2(180, 340),
+			false,
+			"SMSRBullet",
+			{
+				"power": 0,
+				"hurtBack": [0, 0],
+				"attackKind": "real",
+				"addeffect": {"Name": "probe_coop_buff", "AddTime": 5.0, "reduce_interval": 0, "value": 0.0},
+			},
+			p2
+		)
+	)
+	_check(buff_bullet != null and buff_bullet.player == p2, "buff bullet carries P2 source")
+	if buff_bullet != null:
+		await process_frame
+		buff_bullet._on_hit_box_area_entered(buff_area)
+		await process_frame
+		var has_buff := false
+		for buff_child in monster.buff.get_children():
+			var info: Variant = buff_child.get("buff_info")
+			if info is Dictionary and str(info.get("Name", "")) == "probe_coop_buff":
+				has_buff = true
+				break
+		_check(has_buff, "P2 bullet addeffect lands on target")
+	buff_area.queue_free()
+
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	var root_bullet: Node = global.add_role_bullet(
+		stage, Vector2(200, 340), false, "Role2Bullet1", hit.duplicate(true), p2
+	)
+	_check(root_bullet != null, "root bullet created with explicit source")
+	if root_bullet != null:
+		_check(root_bullet.player == p2, "root bullet carries P2 source")
+		_check(int(root_bullet.get_meta("coop_slot", 0)) == 2, "root bullet carries P2 slot")
+		await process_frame
+		var root_hit_area: Area2D = root_bullet.get_node("Middle/HitBox")
+		monster._on_hurt_box_area_entered(root_hit_area)
+		_check(p1.RoleProp.ws_value == 0, "root bullet leaves P1 WS unchanged")
+		_check(p2.RoleProp.ws_value > 0, "root bullet credits P2 WS")
+
+	var summon: Node = load("res://Scene/monster/monster_zhw/monster_143_zhw.tscn").instantiate()
+	summon.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(summon)
+	await process_frame
+	summon.set_physics_process(false)
+	summon.set_summon_properties(p2, 0.0)
+	_check(coop.owner_hero(summon) == p2, "summon owner resolves to P2")
+	_check(coop.slot_for(summon) == 2, "summon slot resolves to P2")
+	_check(int(summon.get_meta("coop_slot", 0)) == 2, "summon carries P2 slot")
+	_check(monster._get_damage_source_player(summon) == p2, "summon damage source resolves to P2")
+
+	var weapon: Node = global.add_magic_weapon(stage, "qlsword", Vector2(300, 340), p2)
+	_check(weapon != null, "magic weapon created with explicit source")
+	if weapon != null:
+		_check(weapon.player == p2, "magic weapon carries P2 source")
+		_check(int(weapon.get_meta("coop_slot", 0)) == 2, "magic weapon carries P2 slot")
+		_check(monster._get_damage_source_player(weapon) == p2, "magic weapon damage source resolves to P2")
+		p1.RoleProp.ws_value = 0
+		p2.RoleProp.ws_value = 0
+		weapon.hit_dic = {"power": 10, "hurtBack": [0, 0], "attackKind": "real", "WSValue": 3}
+		monster.apply_role_hit(weapon)
+		_check(p1.RoleProp.ws_value == 0, "P2 magic weapon leaves P1 WS unchanged")
+		_check(p2.RoleProp.ws_value > 0, "P2 magic weapon credits P2 WS")
+
+	var shallow: Node = global.add_role1_shallow(stage, Vector2(220, 340), 1, 1, p2)
+	_check(shallow != null and shallow.player == p2, "shallow carries P2 source")
+	if shallow != null:
+		_check(monster._get_damage_source_player(shallow) == p2, "shallow damage source resolves to P2")
+
+	p1.RoleProp.ws_value = 0
+	p2.RoleProp.ws_value = 0
+	var p1_hitbox: Area2D = p1.get_node("base_damagebox/HitBox")
+	monster._on_hurt_box_area_entered(p1_hitbox)
+	_check(p1.RoleProp.ws_value > 0, "P1 melee credits P1 WS")
+	_check(p2.RoleProp.ws_value == 0, "P1 melee leaves P2 WS unchanged")
+
+	root_bullet = null
+	summon.queue_free()
+	monster.queue_free()
+	await process_frame
 
 
 func _case_wushuang_attribution() -> void:

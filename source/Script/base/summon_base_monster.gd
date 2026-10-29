@@ -1303,6 +1303,7 @@ func set_summon_properties(summoner_node: Node, duration: float = 60.0) -> void:
 	is_summon = true
 	if summoner_node is BaseHero:
 		player_reference = summoner_node
+		set_meta("coop_slot", LocalCoop.slot_for(summoner_node))
 		var summoner_level = summoner_node.get("level")
 		level = (
 			int(summoner_level)

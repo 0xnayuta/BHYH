@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 玩法与表现调用面矩阵已完成，17-2~17-7 未启动）
+> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 调用面矩阵与 17-2A 来源显式化已完成，17-2B/2C 与 17-3~17-7 未启动）
 
 ---
 
@@ -194,6 +194,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 16-6 边界守卫与阶段收口 | **16-6A**：`contract_scan.py` 扩展至十五类契约，新增 `archive_boundary`（禁止业务拼接 `user://MyAr_`；`load_game`/`save_game`/`safe_write_archive` 入口白名单）、`slot_boundary`（禁止 `/root/PlayerData`/`/root/RoleProp` 与重新引入 `suspend/resume_player_view`）、`panel_operator`（面板域脚本必须声明或经继承声明 `PlayerData`/`RoleProp`）、`shared_ledger`（`shared_keys()` 登记、`save_profile` 同源剥离、`is_save_snapshot_in_progress()` 互斥）四类 ERROR 门禁；`--self-test` 增至 10 组正负样本。**16-6B**：门禁检出的三处真实违规已修复：`mount_panel`/`mount_skill_effect` 的 `/root/RoleProp` 改槽位属性，`role_attribute_integer_format` 注入显式操作者；契约类别计数、`check_all` 帮助文本与 `scripts/README.md`/`acceptance.md` 同步。**16-6C**：`contract_scan --fail-on-error` **ERROR=0**、`--self-test` **10/10 组通过**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`coop_probe_runner` **18/18 PASS**；`archive_probe_runner` **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）。全量关卡回归与 release 重验按发布窗口执行 | Phase 16 全部切片完成；待归档本页并建立下一候选 |
 | 2026-10-29 Phase 16 归档 / Phase 17 规划 | 仅文档：`current-iteration.md` 的 Phase 16 计划与实施记录归档到 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md) 并登记 `archive/README.md`；`current-iteration.md` 重写为 Phase 17 玩法与表现模块边界（17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫），保留“阶段边界 → 切片 → 必须验证 → 出口 → 验证矩阵 → 恢复”骨架；`roadmap.md` 将 Phase 16 标记完成归档、Phase 17 设为当前候选并补批次指针；`archive_session_matrix.md` 状态改为 Phase 16 收口；`docs/README.md`、`roadmap/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 与 `architecture.md` 索引同步；未修改生产代码、素材或既有 UID | Phase 17 只定义计划，未启动 |
 | 2026-10-29 Phase 17-1 玩法与表现调用面矩阵 | 仅文档：新建 [`gameplay_module_matrix.md`](gameplay_module_matrix.md)，登记攻击/弹体/召唤/法宝来源字段与 `apply_role_hit` 解析链、`coop_damage_slot` 快照、4 类对象池（80/32/24/32）与复用清理、`current_stage` 535 行/97 文件与 31 行含声明（30 处赋值）、13 处关卡域保存点、成长域校验/扣除/产出/保存/回滚、HUD/输入/音频调用面、模块公开方法与 699 处节点访问（深层 279 处/66 文件、`/root` 34 处/13 文件）、`PlayerData.player_data` 下标写入 145 行/42 文件（含属性 197/44）；`current-iteration.md` 标记 17-1 完成并回填事实，`roadmap.md`、`docs/README.md`、`roadmap/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 索引同步；未修改生产代码、素材或 UID | 17-1 只读调查完成；17-2~17-7 未启动 |
+| 2026-10-29 Phase 17-2A 来源显式化 | **归属**：`_get_damage_source_player` 删除 `RoleProp.source_player` 回落，无来源命中返回 0；`Global._assign_attack_source` 统一写 `player`/`coop_slot`，`add_role_bullet`/`add_role_bullet_1`/`_safe`/`add_role1_shallow` 支持显式来源，根节点 `Role2Bullet7_tx`/`_1` 传 `player`。**效果**：新增 `_get_vampirism_rate`/`_get_tszz_level`/`_get_role5_skill_level`，按 `LocalCoop.props_for/data_for(source_player)` 读取。**夹具**：新增 `LocalCoopAttributionSourcesProbe`（无源不回落、P2 普攻/技能/根节点弹体/法宝无双、召唤来源、吸血/腾蛇阵/角色5 读 P2、P1/P2 交替）。**验证**：`coop_probe_runner` 19/19 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s），`check_all --godot-bin` 8/8 PASS；残留 `get_role_last_hurt`/`wd_hurt`/召唤回落留给 17-2B/2C | 17-2A 完成；17-2B/2C 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

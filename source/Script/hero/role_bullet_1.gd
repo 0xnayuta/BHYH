@@ -20,7 +20,12 @@ var first_hyjj: bool = true
 
 func _physics_process(_delta: float) -> void:
 	if not is_set:
-		player = get_parent().get_parent()
+		if not is_instance_valid(player):
+			var candidate: Node = get_parent().get_parent()
+			if candidate is BaseHero:
+				player = candidate
+		if not is_instance_valid(player):
+			return
 		if _name == "hyjj":
 			call_hyjj()
 		else:
@@ -97,11 +102,13 @@ func _on_area_entered(_area: Area2D) -> void:
 			for i in range(get_max_min_shallow_num()[0]):
 				if player.shallow_list.size() > get_max_min_shallow_num()[1]:
 					return
-				Global.add_role1_shallow(player.get_parent(), player.position, player.action.scale.x, num)
+				Global.add_role1_shallow(player.get_parent(), player.position, player.action.scale.x, num, player)
 		if player.shallow_list.size() >= get_max_min_shallow_num()[1]:
 			return
 		if randi_range(0, 100) < 45 + (player_data.player_data[DataKeys.SKILL_LEARNED]["技能7"][DataKeys.LEVEL] + 1) * 3:
-			Global.add_role1_shallow(player.get_parent(), player.position + Vector2(0, -20), player.action.scale.x, num)
+			Global.add_role1_shallow(
+				player.get_parent(), player.position + Vector2(0, -20), player.action.scale.x, num, player
+			)
 
 
 func get_max_min_shallow_num():

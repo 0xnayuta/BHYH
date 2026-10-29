@@ -1685,8 +1685,7 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 	has_target = true
 	Global.total_hit_count += 1
 	if source_player.istsz:
-		var tsz_level := int(PlayerData.player_data["腾蛇阵"]["Level"])
-		source_player.tszzs = tsz_level * 0.015
+		source_player.tszzs = _get_tszz_level(source_player) * 0.015
 	else:
 		source_player.tszzs = 0.0
 
@@ -1803,7 +1802,7 @@ func role5_bullet(last_hurt, source_target = null):
 			return
 	if passive_source is MgHit:
 		return
-	var s_level = PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能10"][DataKeys.LEVEL]
+	var s_level = _get_role5_skill_level(get_player)
 	if s_level <= 0:
 		return
 	if get_player == null or last_hurt <= 0:
@@ -1862,10 +1861,41 @@ func _get_damage_source_player(target) -> BaseHero:
 	var resolved: BaseHero = LocalCoop.owner_hero(target) if target is Node else null
 	if resolved != null:
 		return resolved
-	var current_player: Variant = RoleProp.source_player
-	if current_player is BaseHero and is_instance_valid(current_player):
-		return current_player as BaseHero
 	return null
+
+
+func _get_vampirism_rate(source_player: BaseHero) -> float:
+	if not is_instance_valid(source_player):
+		return 0.0
+	var source_props: BaseRoleProperties = LocalCoop.props_for(source_player)
+	if not is_instance_valid(source_props):
+		return 0.0
+	return maxf(0.0, float(source_props.roleprop.get("vampirism", 0.0)))
+
+
+func _get_tszz_level(source_player: BaseHero) -> int:
+	var profile: Node = LocalCoop.data_for(source_player)
+	if not is_instance_valid(profile):
+		return 0
+	var formation: Variant = profile.player_data.get("腾蛇阵", {})
+	if not formation is Dictionary:
+		return 0
+	return int((formation as Dictionary).get("Level", 0))
+
+
+func _get_role5_skill_level(source_player: BaseHero) -> int:
+	if not is_instance_valid(source_player):
+		return 0
+	var profile: Node = LocalCoop.data_for(source_player)
+	if not is_instance_valid(profile):
+		return 0
+	var skills: Variant = profile.player_data.get(DataKeys.SKILL_LEARNED, {})
+	if not skills is Dictionary:
+		return 0
+	var skill10: Variant = (skills as Dictionary).get("技能10", {})
+	if not skill10 is Dictionary:
+		return 0
+	return int((skill10 as Dictionary).get(DataKeys.LEVEL, 0))
 
 
 func _apply_damage_vampirism(target, effective_damage: int) -> void:
@@ -1881,7 +1911,7 @@ func _apply_damage_vampirism(target, effective_damage: int) -> void:
 	var source_player := _get_damage_source_player(target)
 	if source_player == null or not is_instance_valid(source_player):
 		return
-	var vampirism_rate := maxf(0.0, float(RoleProp.roleprop.get("vampirism", 0.0)))
+	var vampirism_rate := _get_vampirism_rate(source_player)
 	if vampirism_rate <= 0.0:
 		return
 	var heal_value := maxi(1, int(float(effective_damage) * vampirism_rate))

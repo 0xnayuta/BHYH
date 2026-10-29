@@ -3850,7 +3850,21 @@ func _role_bullet_slim_filename(bullet_name: String) -> String:
 	return result + ".tscn"
 
 
-func add_role_bullet(parent, position, dir, _name, dic):
+## 角色侧攻击载体统一写来源：显式来源优先，其次沿父级持有者回溯。
+## 根节点创建的弹体（如反弹爆炸）必须由调用方传入来源，不能再依赖全局 1P 别名。
+func _assign_attack_source(target: Node, parent: Node, source_player: BaseHero = null) -> void:
+	if target == null or not is_instance_valid(target):
+		return
+	var resolved: BaseHero = source_player
+	if not is_instance_valid(resolved):
+		resolved = LocalCoop.owner_hero(parent) as BaseHero
+	if not is_instance_valid(resolved):
+		return
+	target.set("player", resolved)
+	target.set_meta("coop_slot", LocalCoop.slot_for(resolved))
+
+
+func add_role_bullet(parent, position, dir, _name, dic, source_player: BaseHero = null):
 	var bullet_name := str(_name)
 	var scene = null
 	if bullet_name in ["Role3Bullet2", "TtzsszBullet"]:
@@ -3870,6 +3884,7 @@ func add_role_bullet(parent, position, dir, _name, dic):
 	target._name = _name
 	target.hit_dic = dic
 	target.direction = dir
+	_assign_attack_source(target, parent, source_player)
 	return target
 
 
@@ -4213,23 +4228,25 @@ func _on_damage_text_freed():
 		_damage_text_count = 0
 
 
-func add_role1_shallow(parent, position, dir, int_action):
+func add_role1_shallow(parent, position, dir, int_action, source_player: BaseHero = null):
 	if not role1_shallow:
 		role1_shallow = _load_scene("res://Scene/hero/role1_s_hallow.tscn")
 	var target = instance_scene(role1_shallow, parent)
 	target.position = position
 	target.iniaction = int_action
 	target.direction = dir
+	_assign_attack_source(target, parent, source_player)
 	return target
 
 
-func add_role_bullet_1(parent, position, _name, dic):
+func add_role_bullet_1(parent, position, _name, dic, source_player: BaseHero = null):
 	if not role_bullet_1:
 		role_bullet_1 = _load_scene("res://Scene/hero/role_bullet_1.tscn")
 	var target = instance_scene(role_bullet_1, parent)
 	target.position = position
 	target._name = _name
 	target.hit_dic = dic
+	_assign_attack_source(target, parent, source_player)
 	return target
 
 
@@ -5459,13 +5476,14 @@ func instance_scene_safe(target_scene_, parent):
 	return target
 
 
-func add_role_bullet_1_safe(parent, position, _name, dic):
+func add_role_bullet_1_safe(parent, position, _name, dic, source_player: BaseHero = null):
 	if not role_bullet_1:
 		role_bullet_1 = _load_scene("res://Scene/hero/role_bullet_1.tscn")
 	var target = role_bullet_1.instantiate()
 	target.position = position
 	target._name = _name
 	target.hit_dic = dic
+	_assign_attack_source(target, parent, source_player)
 	parent.call_deferred("add_child", target)
 	return target
 
