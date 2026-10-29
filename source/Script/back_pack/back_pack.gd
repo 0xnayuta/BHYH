@@ -652,30 +652,39 @@ func init_show_wing_tx_button():
 
 
 func _on_wings_show_pressed() -> void:
-	if PlayerData.player_data["翅膀显示"]:
-		PlayerData.player_data["翅膀显示"] = false
-		MemoryClass.request_save("back_pack_wings_show")
-		wings_show_button.set_button_icon(load("res://Art/backpack/no_choose.png"))
-		wing_show.text = "不显示"
-	else:
-		PlayerData.player_data["翅膀显示"] = true
-		MemoryClass.request_save("back_pack_wings_show")
-		wing_show.text = "显示"
-		wings_show_button.set_button_icon(load("res://Art/backpack/is_choose.png"))
+	var previous := bool(PlayerData.player_data["翅膀显示"])
+	PlayerData.player_data["翅膀显示"] = not previous
+	if not Global.request_save_with_feedback("back_pack_wings_show", Global.get_ui_popup_layer(), "显示设置保存失败："):
+		PlayerData.player_data["翅膀显示"] = previous
+		return
+	wings_show_button.set_button_icon(
+		load(
+			(
+				"res://Art/backpack/no_choose.png"
+				if not bool(PlayerData.player_data["翅膀显示"])
+				else "res://Art/backpack/is_choose.png"
+			)
+		)
+	)
+	wing_show.text = "不显示" if not bool(PlayerData.player_data["翅膀显示"]) else "显示"
 
 
 func _on_head_show_pressed() -> void:
-	if PlayerData.player_data["头衔显示"]:
-		head_show_button.set_button_icon(load("res://Art/backpack/no_choose.png"))
-		PlayerData.player_data["头衔显示"] = false
-		MemoryClass.request_save("back_pack_head_show")
-		head_show.text = "不显示"
-
-	else:
-		head_show_button.set_button_icon(load("res://Art/backpack/is_choose.png"))
-		PlayerData.player_data["头衔显示"] = true
-		MemoryClass.request_save("back_pack_head_show")
-		head_show.text = "显示"
+	var previous := bool(PlayerData.player_data["头衔显示"])
+	PlayerData.player_data["头衔显示"] = not previous
+	if not Global.request_save_with_feedback("back_pack_head_show", Global.get_ui_popup_layer(), "显示设置保存失败："):
+		PlayerData.player_data["头衔显示"] = previous
+		return
+	head_show_button.set_button_icon(
+		load(
+			(
+				"res://Art/backpack/no_choose.png"
+				if not bool(PlayerData.player_data["头衔显示"])
+				else "res://Art/backpack/is_choose.png"
+			)
+		)
+	)
+	head_show.text = "不显示" if not bool(PlayerData.player_data["头衔显示"]) else "显示"
 
 
 func set_wings_offset():

@@ -3292,6 +3292,42 @@ func can_main_sword_array_battle(sword_id: String) -> bool:
 	return get_main_sword_array_level(sword_id) >= 1
 
 
+func get_skill_level(skill_key: String) -> int:
+	var skills: Variant = player_data.get(DataKeys.SKILL_LEARNED, {})
+	if not skills is Dictionary:
+		return 0
+	var entry: Variant = (skills as Dictionary).get(skill_key, {})
+	if not entry is Dictionary:
+		return 0
+	return int((entry as Dictionary).get(DataKeys.LEVEL, 0))
+
+
+## 技能等级唯一写入入口；调用方负责快照/保存/回滚。
+func set_skill_level(skill_key: String, level: int) -> bool:
+	if skill_key.strip_edges() == "":
+		return false
+	var skills: Variant = player_data.get(DataKeys.SKILL_LEARNED, {})
+	if not skills is Dictionary:
+		return false
+	var entry: Variant = (skills as Dictionary).get(skill_key, null)
+	if not entry is Dictionary:
+		return false
+	(entry as Dictionary)[DataKeys.LEVEL] = maxi(0, level)
+	return true
+
+
+## 技能变体选择命令：快照、写入、保存；保存失败恢复旧变体。
+func select_skill_variant(data_key: String, variant_id: int, save_reason: String = "skill_variant_select") -> bool:
+	if data_key.strip_edges() == "":
+		return false
+	var snapshot := snapshot_state()
+	player_data[data_key] = variant_id
+	if not MemoryClass.request_save(save_reason):
+		restore_state(snapshot)
+		return false
+	return true
+
+
 func ensure_skill_data() -> void:
 	var skill_data: Variant = player_data.get(DataKeys.SKILL_LEARNED, {})
 	if not (skill_data is Dictionary):

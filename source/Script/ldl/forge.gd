@@ -494,61 +494,6 @@ func _clear_children_now(parent: Node) -> void:
 			child.queue_free()
 
 
-func _on_froge_pressed_legacy() -> void:
-	if zzs.get_children().size() == 0:
-		Global.add_message_show(Global.windows, "请先放入制作书！！", 1.5, Vector2(500, 305))
-		return
-	if PlayerData.get_soul() < 5000:
-		Global.add_message_show(Global.windows, "灵魂不足！！", 1.5, Vector2(500, 305))
-		return
-
-	if check_full_material():
-		add_item_box()
-		var item_name: String
-		if zzs.get_children().size() == 1:
-			item_name = str(zzs.get_children()[0].get_item_name).split("zzs")[0]
-
-		var new_equip_data = AE.all_equipment[item_name].duplicate(true)
-		var legacy_jewels_value: Variant = PlayerData.player_data.get("宝珠列表", [])
-		if not legacy_jewels_value is Array:
-			return
-		for jewel_value in legacy_jewels_value as Array:
-			if not jewel_value is Dictionary:
-				return
-			var jewel: Dictionary = jewel_value
-			var jewel_name := str(jewel.get(DataKeys.NAME, ""))
-			var jewel_data_value: Variant = AE.all_equipment.get(jewel_name, {})
-			if jewel_name == "" or not jewel_data_value is Dictionary:
-				return
-			var jewel_data: Dictionary = jewel_data_value
-
-			for prop in AE.prop_list_name:
-				if jewel_data.has(prop):
-					new_equip_data[prop] += jewel_data[prop]
-
-			if jewel_data.has(DataKeys.ENHANCE_PROP):
-				for key in jewel_data[DataKeys.ENHANCE_PROP]:
-					if new_equip_data[DataKeys.ENHANCE_PROP].has(key):
-						new_equip_data[DataKeys.ENHANCE_PROP][key] += jewel_data[DataKeys.ENHANCE_PROP][key]
-					else:
-						new_equip_data[DataKeys.ENHANCE_PROP][key] = jewel_data[DataKeys.ENHANCE_PROP][key]
-
-		print("保存前 new_equip_data.power = ", new_equip_data.power)
-		print("宝珠列表长度 = ", PlayerData.player_data["宝珠列表"].size())
-
-		match AE.all_equipment[item_name][DataKeys.TYPE]:
-			"法宝":
-				PlayerData.add_fb(item_name, 0, AE.get_wx(), new_equip_data)
-			"武器", "防具", "饰品", "时装", "头衔", "翅膀":
-				PlayerData.add_zb(item_name, 0, new_equip_data)
-
-		remove_all()
-		PlayerData.spend_soul(5000)
-		Global.add_message_show(Global.windows, "打造成功！！", 1.5, Vector2(500, 305))
-	else:
-		Global.add_message_show(Global.windows, "材料不足！！", 1.5, Vector2(500, 305))
-
-
 func _on_froge_pressed() -> void:
 	if zzs == null or zzs.get_child_count() != 1:
 		Global.add_message_show(Global.windows, "请先放入制作书！！", 1.5, Vector2(500, 305))

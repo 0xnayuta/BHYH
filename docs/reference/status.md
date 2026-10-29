@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B 已完成；18-2C/18-2D/18-2E 成长/奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E 已完成、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -209,6 +209,9 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 18-1D 双人全灭提交 | **统一**：两个 `BaseHero` 死亡分支调用 `LocalCoop.request_defeat_if_all_players_dead()`；`_defeat_requested` 去重，场景切换失败复位可重试，`clear_runtime`/`_on_scene_changed` 重置；新增 `LocalCoopAllDeadProbe` 覆盖单死/双死/重复/失败重试。**验证**：`coop_probe_runner` **23/23 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（261.0s）；`check_all --godot-bin` 8/8 PASS | 18-1D 完成 |
 | 2026-10-29 Phase 18-2A 神铸/淬骨/合成原子提交 | **顺序**：三域在扣除/产出前快照，产出 bool 判读，仅成功保存；保存失败恢复档案与 `MLdl.qh_list`。淬骨保留“失败也扣神火”设计，`success_chance` 供分支测试；统一装备/选中快照 `Data` 键。**探针**：档案持久化 163 项 PASS，覆盖神铸/淬骨/合成成功与保存失败、淬骨失败扣材料。**验证**：`level_1` PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（261.0s）；`check_all --godot-bin` 8/8 PASS | 18-2A 完成 |
 | 2026-10-29 Phase 18-2B 任务奖励原子提交 | **顺序**：`BasicTask._on_lqjl_pressed` 不再先置已领取/直接 `request_save`；`RewardGrantCommand.execute` 新增 `claim: Callable`，在快照后、发奖前执行，失败统一恢复；`reward_interface`/`Global.add_reward_info` 透传回调。普通任务闭包写领取键；八仙日常清空本轮进度。**探针**：档案持久化 155 项 PASS，覆盖成功后置标记、重进不重复、保存失败回滚、八仙进度回滚。**验证**：`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（322.7s，两关瞬态重试通过）；`check_all --godot-bin` 8/8 PASS | 18-2B 完成 |
+| 2026-10-29 Phase 18-2C 技能直写收敛 | **等级**：`PlayerData.get_skill_level`/`set_skill_level` 成为唯一读写入口；`zd_skill.up_level` 删除 `skill_entry` 直写。**变体**：`PlayerData.select_skill_variant` 快照→写入→保存，失败恢复；`zd_skill` 删除变体直写与直接保存。**探针**：技能等级成功/保存失败继续通过；变体成功/重载/保存失败 4 项 PASS；档案持久化 171 项 PASS；`coop_probe_runner` 23/23 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2C 完成 |
+| 2026-10-29 Phase 18-2D 死代码与 2P | 删除 `forge._on_froge_pressed_legacy` 整段无调用代码。**2P**：档案探针验证 2P 商店共享灵魂同步扣减、共享背包各只记一次；失败重复购买无副作用；2P 奖励只入包一次。**验证**：档案持久化 171 项 PASS；`coop_probe_runner` 23/23 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2D 完成 |
+| 2026-10-29 Phase 18-2E 保存反馈 | 新增 `Global.request_save_with_feedback`：失败提示并返回 false。接入面板关闭、背包翅膀/头衔显示（失败回滚）、物品锁定（失败回滚）；奖励/商店沿用命令结果。当前 `request_save` 约 98 处 / 57 文件，未迁移项登记为地图首帧/低风险动作。**验证**：档案持久化 171 项 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2E 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

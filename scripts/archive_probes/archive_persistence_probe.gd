@@ -234,6 +234,49 @@ func _test_shop_purchase_command() -> void:
 		"%s soul=%d qhs=%d" % [unsaved, PlayerData.get_soul(), _item_count("qhs_1")]
 	)
 
+	# 2P 商店操作：共享灵魂与共享背包各只记一次，失败不追加。
+	_open_session(TEST_ARCHIVE_PREFIX + "052.json")
+	var coop: Node = get_node_or_null("/root/LocalCoop")
+	coop.create_secondary(7)
+	coop.link_bags()
+	PlayerData.set_soul(500)
+	var shared_before := int(PlayerData.get_item_data("qhs_1"))
+	var shared_buy: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
+	_check(
+		"shop_purchase_2p_shared_ledger",
+		bool(shared_buy.get("ok", false))
+		and PlayerData.get_soul() == 490
+		and coop.secondary_data.get_soul() == 490
+		and int(PlayerData.get_item_data("qhs_1")) == shared_before + 1
+		and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 1,
+		"%s p1soul=%d p2soul=%d p1qhs=%d p2qhs=%d" % [
+			shared_buy,
+			PlayerData.get_soul(),
+			coop.secondary_data.get_soul(),
+			PlayerData.get_item_data("qhs_1"),
+			coop.secondary_data.get_item_data("qhs_1"),
+		]
+	)
+	var repeat: Dictionary = ShopPurchaseCommand.execute("qhs_1", 100, 10)
+	_check(
+		"shop_purchase_2p_repeat_no_side_effect",
+		not bool(repeat.get("ok", true)) and PlayerData.get_soul() == 490,
+		"%s soul=%d" % [repeat, PlayerData.get_soul()]
+	)
+	var reward: Dictionary = RewardGrantCommand.execute(
+		[{"Name": "qhs_1", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}], "", 0
+	)
+	_check(
+		"reward_2p_shared_bag_once",
+		bool(reward.get("ok", false))
+		and int(PlayerData.get_item_data("qhs_1")) == shared_before + 2
+		and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 2,
+		"%s p1qhs=%d p2qhs=%d" % [
+			reward, PlayerData.get_item_data("qhs_1"), coop.secondary_data.get_item_data("qhs_1")
+		]
+	)
+	coop.clear_runtime()
+
 
 func _test_shop_capacity_failure() -> void:
 	_reset_profile(1, 1)
@@ -406,6 +449,28 @@ func _test_active_skill_command() -> void:
 	)
 	failed_zd.queue_free()
 	await get_tree().process_frame
+
+	# 技能变体：PlayerData 命令提交并保存；失败回滚旧变体。
+	_reset_profile(1, 30)
+	PlayerData.player_data["技能5版本"] = 0
+	_open_session(TEST_ARCHIVE_PREFIX + "056.json")
+	_check("skill_variant_command_ok", PlayerData.select_skill_variant("技能5版本", 1), "command failed")
+	_check("skill_variant_written", int(PlayerData.player_data.get("技能5版本", -1)) == 1, str(PlayerData.player_data.get("技能5版本")))
+	var variant_path := Global.get_cd_path()
+	_reset_profile(1, 30)
+	var variant_loaded: Dictionary = MemoryClass.load_game(variant_path)
+	_check(
+		"skill_variant_reloads",
+		bool(variant_loaded.get("ok", false)) and int(PlayerData.player_data.get("技能5版本", -1)) == 1,
+		"status=%s variant=%s" % [variant_loaded.get("status"), PlayerData.player_data.get("技能5版本")]
+	)
+	Global.end_archive_session()
+	_check(
+		"skill_variant_save_failure_rolls_back",
+		not PlayerData.select_skill_variant("技能5版本", 0)
+		and int(PlayerData.player_data.get("技能5版本", -1)) == 1,
+		"variant=%s" % PlayerData.player_data.get("技能5版本")
+	)
 
 
 func _test_strength_command() -> void:
@@ -878,6 +943,15 @@ func _test_panel_saves() -> void:
 		bag_data.get("头衔显示") == false,
 		"head=%s" % bag_data.get("头衔显示")
 	)
+	var wings_before_fail: bool = bool(PlayerData.player_data["翅膀显示"])
+	Global.end_archive_session()
+	bag.call("_on_wings_show_pressed")
+	_check(
+		"panel_backpack_save_failure_rolls_back",
+		bool(PlayerData.player_data["翅膀显示"]) == wings_before_fail,
+		"wings=%s" % PlayerData.player_data["翅膀显示"]
+	)
+	_open_session(PANEL_ARCHIVE_PATH)
 	bag.queue_free()
 	await get_tree().process_frame
 

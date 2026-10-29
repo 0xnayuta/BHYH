@@ -4781,6 +4781,16 @@ func add_message_show(parent_node, need_text: String, time: float, target_pos: V
 	return target
 
 
+## 统一保存反馈：失败时在可见 UI 层提示，并返回 false 供调用方回滚。
+func request_save_with_feedback(reason: String, parent: Node = null, failure_prefix: String = "保存失败：") -> bool:
+	var saved := MemoryClass.request_save(reason)
+	if saved:
+		return true
+	var target: Node = parent if is_instance_valid(parent) else get_ui_popup_layer()
+	add_message_show(target, failure_prefix + MemoryClass.describe_save_error(), 2.0, Vector2.ZERO)
+	return false
+
+
 func add_ws_effect(parent):
 	if not ws_effect:
 		ws_effect = _load_scene("res://Scene/hero/role_1/ws_effect.tscn")

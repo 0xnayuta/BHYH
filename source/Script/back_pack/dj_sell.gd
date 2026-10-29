@@ -101,8 +101,11 @@ func _on_lock_pressed() -> void:
 	var item := _get_inventory_entry()
 	if item.is_empty():
 		return
-	item["锁定"] = not bool(item.get("锁定", false))
-	MemoryClass.request_save("back_pack_lock")
+	var previous := bool(item.get("锁定", false))
+	item["锁定"] = not previous
+	if not Global.request_save_with_feedback("back_pack_lock", Global.get_ui_popup_layer(), "锁定设置保存失败："):
+		item["锁定"] = previous
+		return
 	_refresh_lock_button()
 
 

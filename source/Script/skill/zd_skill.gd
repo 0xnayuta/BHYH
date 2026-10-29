@@ -305,7 +305,7 @@ func get_level_storage_index(index: int) -> int:
 
 func get_skill_level_by_index(index: int) -> int:
 	var storage_index = get_level_storage_index(index)
-	return PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(storage_index)][DataKeys.LEVEL]
+	return PlayerData.get_skill_level("技能" + str(storage_index))
 
 
 func get_skill_max_level(skill_internal: String) -> int:
@@ -693,8 +693,8 @@ func up_level():
 
 	var target_internal: String = str(skill_list[target_skill - 1])
 	var target_storage_index = get_level_storage_index(target_skill - 1)
-	var skill_entry: Dictionary = PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)]
-	var level: int = int(skill_entry[DataKeys.LEVEL])
+	var skill_key := "技能" + str(target_storage_index)
+	var level := PlayerData.get_skill_level(skill_key)
 
 	if level >= get_skill_max_level(target_internal):
 		Global.add_message_show(self, "技能已经满级！！", 1.5, Vector2(395, 180))
@@ -708,7 +708,6 @@ func up_level():
 				self, get_skill_book_name(level) + "不足，需" + str(book_need) + "个！！", 1.5, Vector2(395, 180)
 			)
 			return
-		skill_entry[DataKeys.LEVEL] = level + 1
 	elif target_internal in PASSIVE_SKILLS:
 		var need_level = skill10_xz(level)
 		if RoleProp.baseroleprop["Level"] < need_level:
@@ -718,15 +717,17 @@ func up_level():
 		if not PlayerData.spend_soul(need):
 			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
 			return
-		skill_entry[DataKeys.LEVEL] = level + 1
 	else:
 		var i = target_skill - 1
 		var need = 100 + (i * 300) + 500 * level
 		if not PlayerData.spend_soul(need):
 			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
 			return
-		skill_entry[DataKeys.LEVEL] = level + 1
 
+	if not PlayerData.set_skill_level(skill_key, level + 1):
+		PlayerData.restore_state(snapshot)
+		Global.add_message_show(self, "技能数据异常，本次升级已撤销！！", 1.5, Vector2(395, 180))
+		return
 	if not refresh_infor():
 		PlayerData.restore_state(snapshot)
 		refresh_infor(false)
@@ -1086,8 +1087,17 @@ func _on_hmz_version_selected(id: int):
 	if current_id == id:
 		return
 
-	PlayerData.player_data[data_key] = id
-	MemoryClass.request_save("skill_variant_select")
+	if not PlayerData.select_skill_variant(data_key, id):
+		(
+			Global
+			. add_message_show(
+				self,
+				"技能变体保存失败，本次切换已撤销：%s" % MemoryClass.describe_save_error(),
+				2.0,
+				Vector2(395, 180),
+			)
+		)
+		return
 
 	current_variant[skill_internal] = id
 

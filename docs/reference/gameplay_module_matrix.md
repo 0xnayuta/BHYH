@@ -324,12 +324,12 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 普通商店 | `shop_item.gd` `add_item_toplayer` → `ShopPurchaseCommand.execute` | 商品、灵魂、装备/宠物空位、道具/消耗品堆叠或空位 | `spend_soul` | 判读 `add_zb`/`add_fb`/`add_dj`/`add_xhp`/宠物装备 | 1 次 `shop_purchase` | **有**：1P/2P 快照，失败全量恢复 |
 | 神秘商店 | `mystery_shop_item_box.gd:_on_purchase_pressed` → `execute_mystery` | 购买次数、灵魂、容量 | `spend_soul` + 次数减 1 | 按类型判读产出 | 1 次 `shop_mystery_purchase` | **有**：次数/物品/灵魂全量恢复 |
 | 锻造（当前） | `forge.gd:558` `_on_froge_pressed` | 制作书、灵魂、材料、宝珠数据、装备类型 | `remove_all()` + `spend_soul` | 先 `add_zb`/`add_fb` 并判读 bool | 1 次，失败恢复 | **有**：`player_data` 快照 + `_restore_forge_state` |
-| 锻造（遗留） | `forge.gd:497` `_on_froge_pressed_legacy` | 同上 | 先产出、后 `remove_all` + `spend_soul` | 忽略 bool | 无 | 无；**无调用方** |
+| 锻造（遗留） | `forge.gd:497` `_on_froge_pressed_legacy` | **18-2D 已删除** | - | - | - | 无调用方死代码已移除 |
 | 神铸 | `divine_forge.gd:_on_sz_pressed` | 品质、阶段、石头数量 | `_consume_item_all_pages` | 修改装备 `神铸阶段` | 仅成功 1 次 `ldl_divine_forge` | **有**：快照恢复石头/装备/`MLdl.qh_list` |
 | 淬骨 | `bone_forge.gd:_on_sz_pressed` | 神骨、阶段、神火数量 | 先扣 3 个神火 | 随机成功/失败；成功改属性 | 仅成功 1 次 `ldl_bone_forge` | **有**：保存失败恢复；普通失败材料照扣（保留设计） |
 | 强化 | `strength.gd:_on_qh_pressed` | 装备、上限、双材料、灵魂 | `spend_soul` + `remove_dj` ×2 | 等级 +1、属性刷新 | 仅成功 1 次 `ldl_strength` | **有**：保存失败恢复装备/灵魂/材料 |
 | 合成 | `synthesis.gd:_on_syn_pressed` | 配方、灵魂 | `spend_soul` 判读 | `add_zb`/`add_dj`/`add_fb` 判读 | 仅成功 1 次 `ldl_synthesis` | **有**：快照恢复灵魂/放入列表/装备 |
-| 主动技能 | `zd_skill.gd:up_level` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | 仅成功 1 次 `skill_refresh` | **有**：保存失败恢复书/灵魂/等级；失败路径不保存 |
+| 主动技能 | `zd_skill.gd:up_level` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | `PlayerData.set_skill_level` | 仅成功 1 次 `skill_refresh` | **有**：保存失败恢复书/灵魂/等级；失败路径不保存 |
 | 被动技能 | `bd_skill.gd:up_level` / `_upgrade_all_passives` | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 单次/一键各 1 次，仅成功 | **有**：保存失败恢复等级/灵魂 |
 | 奖励发放 | `reward_interface.gd:12` `_process` → `RewardGrantCommand.execute` | 奖励物品/类型/使用物数量；容量由 `add_*` bool 判读 | 可选使用物品 | 逐项 `add_*`，失败恢复 | 1 次（首帧后） | **有**：`PlayerData.snapshot_state` + `restore_state` |
 | 任务领取 | `basic_task.gd:_on_lqjl_pressed` | 完成状态/已领取/日常 | 无 | `add_reward_info` 延迟发放；**18-2B 领取标记改由奖励命令 `claim` 回调提交** | 1 次 `reward_interface`（奖励与标记同批） | **有**：快照恢复标记/八仙进度与物品 |
@@ -347,7 +347,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-33 | 奖励界面由表现场景直接发物品并保存 | **已修**：`RewardGrantCommand` 校验→快照→发放→保存，失败恢复并提示 |
 | GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | **18-2B 已修**：领取标记/八仙进度由奖励命令 `claim` 回调在快照内提交；失败恢复 |
 | GM-35 | `defeat._on_lqjl_pressed` 无保存 | 重进重复领取 |
-| GM-36 | `forge._on_froge_pressed_legacy` 无调用方 | 死代码；迁移时删除或明确保留理由 |
+| GM-36 | `forge._on_froge_pressed_legacy` 无调用方 | **18-2D 已删除** |
 
 ---
 
@@ -827,3 +827,30 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 ### 24.3 验证
 
 `coop_probe_runner` **23/23 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 128/128 PASS + 5 SKIP（261.0s）；`check_all --godot-bin` 8/8 PASS。
+
+
+---
+
+## 25. 18-2C/18-2D/18-2E 收口（2026-10-29）
+
+### 25.1 18-2C 技能命令
+
+- `PlayerData.get_skill_level`/`set_skill_level` 成为技能等级唯一读写入口；`zd_skill.up_level` 不再持有 `skill_entry` 或写 `[DataKeys.LEVEL]`。
+- `PlayerData.select_skill_variant` 负责技能变体的快照、写入、保存与失败恢复；`zd_skill` 不再直接写变体键或直接 `request_save("skill_variant_select")`。
+- 档案探针新增变体成功、重载、保存失败回滚断言；技能等级原有成功/保存失败用例继续通过。
+
+### 25.2 18-2D 死代码与 2P
+
+- 删除 `forge._on_froge_pressed_legacy` 整段无调用旧入口。
+- 档案探针覆盖 2P 商店：共享灵魂 P1/P2 同步扣减、共享背包各只记一次；失败重复购买不改账本；2P 奖励只入包一次。
+
+### 25.3 18-2E 保存反馈
+
+- 新增 `Global.request_save_with_feedback(reason, parent, prefix)`：失败时在可见 UI 层提示并返回 false。
+- 接入面板关闭（`LocalCoop._on_panel_closed`）、背包翅膀/头衔显示（失败回滚）、物品锁定（失败回滚）。
+- 奖励/商店已有命令返回文案；已原子化域不重复包装。
+- 当前源码 `request_save` 调用约 98 处 / 57 文件；未迁移项主要是地图首帧/退出保存（18-3B）与低风险整理动作，登记不伪装为已反馈。
+
+### 25.4 验证
+
+档案持久化 **171 项 PASS**；`coop_probe_runner` **23/23 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 **128/128 PASS + 5 SKIP**（259.8s）；`check_all --godot-bin` 8/8 PASS。

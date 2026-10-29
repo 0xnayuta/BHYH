@@ -741,7 +741,9 @@ func _on_panel_closed() -> void:
 		secondary_props.get_equ_last_pro()
 		secondary_props.get_last_prop()
 	get_tree().paused = _panel_was_paused
-	MemoryClass.request_save("coop_panel_close")
+	Global.request_save_with_feedback(
+		"coop_panel_close", Global.windows if is_instance_valid(Global.windows) else self, "面板关闭保存失败："
+	)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
