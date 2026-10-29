@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长命令已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3/17-4 的修复与剩余差距见 §12~§16。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算、17-4 成长命令与 17-5 HUD/输入/音频边界已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3/17-4/17-5 的修复与剩余差距见 §12~§17。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -358,10 +358,10 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 入口 | 读写 | 归属 | 事实 |
 |:---|:---|:---|:---|
 | `role_information.gd:37` | 注入 `player`/`player_p2` | 显式槽位 | P1/P2 HUD 各自注入；meta `coop_slot` 1/2 |
-| `base_role.gd:82`、`:98` | 读 `RoleProp.source_player` | 兜底 1P | 仅在未注入时生效 |
-| `base_role.gd:202` `_set_values` | 读 `RoleProp` | 全局 1P | P2 HUD 继承该方法，HP/MP/经验/无双仍显示 1P 值；`player` 只用于护盾/治疗/技能图标 |
-| `transmogtified_box.gd:59` | 写 `PlayerData.player_data[TRANSMOG_LIST]` + 保存 | 面板命令 | 表现场景提交领域状态（合法面板操作） |
-| `reward_interface.gd:12` | `_process` 发奖 + 保存 | 表现场景 | 表现层直接发放奖励（GM-33） |
+| `base_role.gd` `RoleProp` getter | 读注入 `player` / `LocalCoop.props_for` | 显式槽位 | P1/P2 HUD 按槽位读取；未注入时回落 `RoleProp.source_player` |
+| `base_role.gd:_set_values` | 读槽位 `RoleProp` | 显式槽位 | HP/MP/经验/无双按注入 `player` 的槽位属性；不在绘制回调写档案 |
+| `transmogtified_box.gd:_on_change_pressed` | 调 `PlayerData.change_transmog` | 面板命令 | 命令校验/快照/保存；失败恢复，不在回调直接写档案 |
+| `reward_interface.gd:_process` | 调 `RewardGrantCommand.execute` | 面板命令 | 命令校验/快照/发放/保存；失败全量恢复（GM-33 已修） |
 | `skill_icon.gd:5` | 经 `LocalCoop.data_for/props_for` 解析槽位；缺失时读 `/root/PlayerData`/`/root/RoleProp` | 面板查询 | 正常路径按槽位；回落为 1P Autoload |
 
 ### 9.2 输入
@@ -379,18 +379,18 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 项 | 事实 |
 |:---|:---|
 | 受击音效 | `Global.add_sound` 138 次 / 34 文件；池上限 32；45ms 节流；同音效 4/8、总声部 24/48 |
-| BGM | `Global.add_bgm` 125 次 / 94 文件；每次实例化 `bgm.tscn`，不停止旧实例 |
+| BGM | `Global.add_bgm` 121 处；同一曲复用活动实例，切曲先 `stop()` 再释放；`stop_bgm()` 显式收口 |
 | 热点 | `role_4` 20、`role_5` 19、`role1` 18、`role_3` 16、`role_2` 10 |
 | 音量/开关 | `MainSet.set_data["MusicFB_2"]`、`RoleOrMonsterHit`；由 `game_set.gd` 写入 |
-| 边界 | 音效是纯表现；不参与伤害/归属；BGM 重叠需在 17-5 决定是否收口 |
+| 边界 | 音效是纯表现；`add_sound` 先查缓存再预留声部；池回收 `prepare_for_pool()` 停止并清流 |
 
 ### 9.4 表现层提交领域状态点
 
 | ID | 位置 | 事实 |
 |:---|:---|:---|
-| GM-37 | `reward_interface.gd:12` | 表现场景在 `_process` 发奖励并保存 |
-| GM-38 | `choose_item.gd:91` | 选择界面创建奖励场景后自身 `queue_free` |
-| GM-39 | `transmogtified_box.gd:59` | 幻化面板直接写 `PlayerData` 并保存 |
+| GM-37 | `reward_interface.gd:_process` | **17-5 已改为 `RewardGrantCommand`**；失败回滚 |
+| GM-38 | `choose_item.gd` | 选择界面创建奖励场景后自身 `queue_free`；奖励提交已归命令 |
+| GM-39 | `transmogtified_box.gd` | **17-5 已改为 `PlayerData.change_transmog`**；失败回滚 |
 | GM-40 | `victory.gd:24` | 结算 UI 在 `_ready` 写评价/解锁标志 |
 | GM-41 | `defeat.gd` 奖励分支 | **17-3 已迁入 `LevelSettlement` 命令边界**；失败回滚 |
 
@@ -624,3 +624,23 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 16.3 验证
 
 `archive_probe_runner` 137 项 PASS，覆盖：普通商店成功/余额不足/背包满/保存失败回滚、神秘商店成功/次数不足/保存失败回滚、强化成功/材料不足/保存失败回滚、主动技能成功/保存失败回滚、被动技能成功/保存失败回滚。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 17. 17-5 HUD/输入/音频（2026-10-29）
+
+### 17.1 表现层命令
+
+- `transmogtified_box._on_change_pressed` 只负责按钮语义与提示；写入/保存由 `PlayerData.change_transmog(slot, item)` 完成。命令校验槽位与已解锁状态，失败恢复快照。
+- `reward_interface._process` 只调用 `RewardGrantCommand.execute(reward_items, use_item, use_num)`；命令校验奖励与使用物、快照、发放、扣除使用物、保存，失败全量恢复。
+- `BaseRole` 的 `RoleProp`/`PlayerData` getter 按注入 `player` 解析 `LocalCoop.props_for/data_for`；P1/P2 HUD 读取各自槽位，不写档案。
+
+### 17.2 音频
+
+- `Global.add_bgm` 维护 `_active_bgm_instance`：同曲同父复用；同曲异父重挂；切曲先停止旧实例再创建。`stop_bgm()` 提供显式收口。
+- `Global.add_sound` 将缓存检查移到声部预留之前；无音频时不再驱逐已有声部。
+- `monster_be_hit.prepare_for_pool()` 保持 `stop()` + `stream = null`，池回收不残留旧流。
+
+### 17.3 验证
+
+`archive_probe_runner` 145 项 PASS，新增：幻化命令成功/重载/保存失败回滚、奖励界面保存与单次发放、BGM 同曲复用/切曲停旧/停止清空、音效池播放与回收清流。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS。

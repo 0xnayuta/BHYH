@@ -55,19 +55,28 @@ func _on_change_pressed() -> void:
 		lx = "防具"
 	var item_name = AE.all_equipment[self_name][DataKeys.NAME]
 	if cdorxx.text == "穿戴":
-		if already_have(self_name):
-			PlayerData.player_data[DataKeys.TRANSMOG_LIST][lx] = self_name
-			Global.add_message_show(Global.windows, str(lx) + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
-		else:
+		if not already_have(self_name):
 			Global.add_message_show(Global.windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295))
+			return
+		if not PlayerData.change_transmog(lx, self_name):
+			Global.add_message_show(
+				Global.windows, "存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(470, 295)
+			)
+			return
+		Global.add_message_show(Global.windows, str(lx) + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
 	elif cdorxx.text == "卸下":
-		PlayerData.player_data[DataKeys.TRANSMOG_LIST][lx] = ""
+		if not PlayerData.change_transmog(lx, ""):
+			Global.add_message_show(
+				Global.windows, "存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(470, 295)
+			)
+			return
 		Global.add_message_show(Global.windows, "取消" + str(lx) + ":" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295))
+	else:
+		return
 	transmogrified.on_eqchange()
 	if is_instance_valid(RoleProp.source_player) and RoleProp.source_player.has_method("on_eqchange"):
 		RoleProp.source_player.on_eqchange()
 	for i in transmogrified.box_list.get_children():
 		if i != null:
 			i.set_physics_process(true)
-	MemoryClass.request_save("transmogrified_box")
 	set_physics_process(true)

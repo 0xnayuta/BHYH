@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长系统命令边界已完成，17-5~17-7 未启动）
+> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长系统命令边界与 17-5 HUD/输入/音频表现边界已完成，17-6~17-7 未启动）
 
 ---
 
@@ -199,6 +199,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 17-2C 归属回归 | **伤害属性**：`get_role_last_hurt` 增加可选 `source_player`，按 `get_player` → `_get_damage_source_player` → `RoleProp` 解析；暴击/护甲/魔抗/等级/幸运读实际出手者。**数值分离**：新增 `LocalCoopDamageStatsProbe`，P2 暴击 200 vs P1 100、护甲穿透 100 vs 50、等级压制 110 vs 100。**召唤回落**：非英雄 `summoner` 先 `LocalCoop.owner_hero`，探针覆盖法宝召唤跟随 P2；`wd_hurt` 每帧环境检查留 17-3/17-5。**验证**：`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 2 SKIP（314.1s，`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS | 17-2C 完成；17-3~17-7 未启动 |
 | 2026-10-29 Phase 17-3 关卡阶段与结算 | **阶段**：`advance_stage()` 单调推进，基础关卡与 `game4_imported_level` 共用；支持 5~19 阶段关卡。**结算**：`LevelSettlement` 统一保存/待提交/离开/重战/失败提示；胜败返回移除 4 次冗余保存。**失败奖励**：`lqjl` 整批发放 + 持久 `失败奖励已领取`，保存失败回滚；装备奖励回滚装备与获取记录。**关卡保存点**：塔层、17 门、八仙 Boss、星宿层、玲珑塔、hdzm 判读结果，塔层/17 门/hdzm 失败回滚。**验证**：`archive_probe_runner` 118 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS | 17-3 完成；17-4~17-7 未启动 |
 | 2026-10-29 Phase 17-4 成长系统命令边界 | **普通商店**：`ShopPurchaseCommand.execute` 校验容量/灵魂后快照、扣费、判读产出、保存；失败恢复 1P/2P 与共享容器。**神秘商店**：`execute_mystery` 覆盖购买次数/容量/灵魂/保存失败回滚。**强化**：仅成功保存，失败恢复装备等级/灵魂/强化石；材料不足直接返回。**技能**：主动/被动仅成功保存，保存失败恢复书/灵魂/等级；一键升级整体快照。**数据原语**：`add_dj/add_xhp` 返回 bool，新增 `snapshot_state/restore_state`。**验证**：`archive_probe_runner` 137 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s）；`check_all --godot-bin` 8/8 PASS | 17-4 完成；17-5~17-7 未启动 |
+| 2026-10-29 Phase 17-5 HUD/输入/音频表现边界 | **面板命令**：幻化改 `PlayerData.change_transmog`，奖励改 `RewardGrantCommand`；校验/快照/保存失败回滚，绘制回调不直接写档案。**HUD**：`BaseRole` 按注入 `player` 读取槽位属性。**BGM**：同曲复用、切曲停旧、`stop_bgm()` 收口。**音效池**：缓存检查前置于声部预留，回收 `prepare_for_pool()` 停止并清流。**验证**：`archive_probe_runner` 145 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS | 17-5 完成；17-6~17-7 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

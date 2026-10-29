@@ -1499,6 +1499,19 @@ func restore_state(snapshot: Dictionary) -> void:
 		coop.call("set_shared_soul", int(player_data.get("coin_num", 0)))
 
 
+func change_transmog(slot_type: String, item_name: String) -> bool:
+	if slot_type not in [DataKeys.WEAPON, DataKeys.ARMOR, DataKeys.WINGS, DataKeys.TITLE]:
+		return false
+	if item_name != "" and (not AE.all_equipment.has(item_name) or not has_acquired_equipment(item_name)):
+		return false
+	var snapshot := snapshot_state()
+	player_data[DataKeys.TRANSMOG_LIST][slot_type] = item_name
+	if not MemoryClass.request_save("transmogrified_box"):
+		restore_state(snapshot)
+		return false
+	return true
+
+
 func get_soul() -> int:
 	return normalize_soul()
 

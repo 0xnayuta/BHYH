@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算与 17-4 成长系统命令边界已完成（2026-10-29），17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界与 17-5 HUD/输入/音频表现边界已完成（2026-10-29），17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -216,9 +216,9 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 
 ### 6.1 切片
 
-1. **Phase 17-5A 只读 HUD（规划）**：HUD 数值来自只读查询/快照，不在绘制回调写档案或推进关卡；
-2. **Phase 17-5B 输入边界（规划）**：输入只产生意图（移动/技能/面板），业务判定留在领域入口；`p2_*` 映射保持集中登记；
-3. **Phase 17-5C 音频表现（规划）**：音效播放归表现层，不携带存档/结算提交；池化音效复用前停止并清空流。
+1. **Phase 17-5A 只读 HUD（已完成 2026-10-29）**：`BaseRole` 按注入 `player`/槽位解析属性；幻化与奖励面板改为命令调用，不再在回调/`_process` 直接写档案；
+2. **Phase 17-5B 输入边界（已完成 2026-10-29）**：复核 `p2_*` 集中登记与输入读取面；未新增输入写入路径；
+3. **Phase 17-5C 音频表现（已完成 2026-10-29）**：BGM 同一曲复用、切曲停旧；音效缓存检查前置于声部预留；池回收统一停止并清流。
 
 ### 6.2 必须验证
 
@@ -231,6 +231,17 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 - 表现层只读查询与命令调用，不直接写领域状态；
 - 输入与音频无新增全局单例，设置仍由既有 `MainSet`/`Music` 承载；
 - 显示基线与动画时序不变。
+
+### 6.4 17-5 实施记录（2026-10-29）
+
+| 项 | 内容 |
+|:---|:---|
+| 幻化面板 | `_on_change_pressed` 改调 `PlayerData.change_transmog`；命令校验槽位/已解锁，快照后保存，失败恢复并提示 |
+| 奖励界面 | `_process` 改调 `RewardGrantCommand.execute`；校验奖励/使用物，快照后发放、扣除使用物、保存；失败全量恢复 |
+| HUD | `BaseRole.RoleProp` 按注入 `player` 解析槽位；P1/P2 HUD 不再读全局 1P 属性；绘制回调无档案写入 |
+| BGM | `Global.add_bgm` 记录活动实例：同曲复用并重挂父节点，切曲先 `stop()` 再释放；新增 `stop_bgm()` |
+| 音效池 | `add_sound` 先检查缓存再预留声部，避免无音频时驱逐正常声部；池回收沿用 `prepare_for_pool()` 停止并清流 |
+| 验证 | `archive_probe_runner` 145 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS |
 
 ## 7. Phase 17-6：模块 API 与场景依赖治理
 
@@ -288,7 +299,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 | Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、1P/2P 伤害数值分离、相关关卡冒烟；17-2A/2B/2C 分别由 `LocalCoopAttributionSourcesProbe`/`LocalCoopPoolReuseProbe`/`LocalCoopDamageStatsProbe` 覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
 | Phase 17-3 阶段与结算 | `archive_probe_runner` 的胜败/重战/奖励/保存失败用例（118 项）、`level_1` 冒烟、变更关卡回归 | 只改结算 UI 或只改基类都不算完成 |
 | Phase 17-4 成长命令 | `archive_probe_runner` 的商店/神秘商店/强化/主动/被动技能成功、余额不足、容量不足、材料不足、保存失败回滚用例（137 项）；`level_1` 冒烟；相关关卡回归 | 只改 UI 或只改保存调用不算完成 |
-| Phase 17-5 HUD/输入/音频 | 暂停/切档/面板/退出后的监听与残留；1P/2P 输入隔离；音效复用 | 只改 HUD 绘制或只改输入映射都不算完成 |
+| Phase 17-5 HUD/输入/音频 | `archive_probe_runner` 的幻化/奖励/BGM/音效池用例（145 项）、`coop_probe_runner`、`level_1` 冒烟、变更关卡回归 | 只改 HUD 绘制或只改输入映射都不算完成 |
 | Phase 17-6 模块 API | 公开 API 清单、依赖方向、试点边界路径清理与场景加载回归 | 不做全仓路径替换 |
 | Phase 17-7 边界守卫 | 静态守卫正负样本、全仓零 ERROR、L2、相关回归 | 包路径/导出无变化时不强制重导 release |
 

@@ -70,6 +70,8 @@ func _run() -> void:
 	await _test_passive_skill_command()
 	await _test_active_skill_command()
 	await _test_strength_command()
+	await _test_audio_boundaries()
+	_test_transmog_command()
 	await _test_panel_saves()
 
 
@@ -517,6 +519,71 @@ func _prepare_strength_state(with_materials: bool = true) -> Dictionary:
 
 func _setup_strength_state() -> Dictionary:
 	return _prepare_strength_state()
+
+
+func _test_audio_boundaries() -> void:
+	var parent := Node2D.new()
+	add_child(parent)
+	var first_bgm = Global.add_bgm(parent, "res://Music/level/1_music.mp3")
+	var same_bgm = Global.add_bgm(parent, "res://Music/level/1_music.mp3")
+	_check("bgm_same_track_reuses_instance", first_bgm != null and same_bgm == first_bgm, "%s/%s" % [first_bgm, same_bgm])
+	var second_bgm = Global.add_bgm(parent, "res://Music/level/2_music.mp3")
+	await get_tree().process_frame
+	_check(
+		"bgm_switch_stops_previous",
+		second_bgm != null and second_bgm != first_bgm and not is_instance_valid(first_bgm),
+		"%s/%s" % [second_bgm, first_bgm]
+	)
+	Global.stop_bgm()
+	await get_tree().process_frame
+	_check("bgm_stop_clears_instance", not is_instance_valid(Global.get("_active_bgm_instance")), str(Global.get("_active_bgm_instance")))
+	parent.queue_free()
+	await get_tree().process_frame
+
+	var sound_parent := Node2D.new()
+	add_child(sound_parent)
+	var sound = Global.add_sound(sound_parent, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+	_check("sound_pool_plays", sound != null and sound.stream != null, str(sound))
+	if sound != null:
+		Global.recycle_sound_player(sound)
+		_check(
+			"sound_pool_recycles_and_clears",
+			sound.stream == null and not sound.playing,
+			"stream=%s playing=%s" % [sound.stream, sound.playing]
+		)
+	sound_parent.queue_free()
+	await get_tree().process_frame
+
+
+func _test_transmog_command() -> void:
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "056.json")
+	PlayerData.add_zb("ptxzg", 0, {})
+	var changed := PlayerData.change_transmog(DataKeys.WEAPON, "ptxzg")
+	_check(
+		"transmog_command_ok",
+		changed and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == "ptxzg",
+		str(PlayerData.player_data[DataKeys.TRANSMOG_LIST])
+	)
+	var saved_path := Global.get_cd_path()
+	_reset_profile(1, 1)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	_check(
+		"transmog_command_reloads",
+		bool(loaded.get("ok", false)) and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == "ptxzg",
+		"status=%s slot=%s" % [loaded.get("status"), str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))]
+	)
+
+	_reset_profile(1, 1)
+	PlayerData.add_zb("ptxzg", 0, {})
+	Global.end_archive_session()
+	var before := str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))
+	var failed := PlayerData.change_transmog(DataKeys.WEAPON, "ptxzg")
+	_check(
+		"transmog_save_failure_rolls_back",
+		not failed and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == before,
+		"changed=%s slot=%s" % [failed, str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))]
+	)
 
 
 func _test_settlement_ownership() -> void:

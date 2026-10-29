@@ -2731,6 +2731,7 @@ var magic_help = null
 var sound = null
 var mosaic = null
 var bgm = null
+var _active_bgm_instance: Node = null
 var role4_bullet = null
 var game_set = null
 var skill_key_set = null
@@ -4280,11 +4281,40 @@ func add_game_set(parent, position):
 
 
 func add_bgm(parent, target_):
+	if not is_instance_valid(parent) or parent.is_queued_for_deletion():
+		return null
+	var bgm_key := str(target_)
+	if is_instance_valid(_active_bgm_instance):
+		if str(_active_bgm_instance.get("target")) == bgm_key:
+			var active_parent = _active_bgm_instance.get_parent()
+			if active_parent == null:
+				# 首次 instance_scene 的 add_child 仍在 deferred 队列中。
+				return _active_bgm_instance
+			if active_parent != parent:
+				_attach_pooled_node(_active_bgm_instance, parent)
+			return _active_bgm_instance
+		if _active_bgm_instance is AudioStreamPlayer:
+			(_active_bgm_instance as AudioStreamPlayer).stop()
+		_active_bgm_instance.queue_free()
+		_active_bgm_instance = null
 	if not bgm:
 		bgm = _load_scene("res://Scene/all_sound/bgm.tscn")
 	var target = instance_scene(bgm, parent)
+	if target == null:
+		return null
 	target.target = target_
+	_active_bgm_instance = target
 	return target
+
+
+func stop_bgm() -> void:
+	if not is_instance_valid(_active_bgm_instance):
+		_active_bgm_instance = null
+		return
+	if _active_bgm_instance is AudioStreamPlayer:
+		(_active_bgm_instance as AudioStreamPlayer).stop()
+	_active_bgm_instance.queue_free()
+	_active_bgm_instance = null
 
 
 func add_mosaic_instance(parent, position):
@@ -4305,9 +4335,9 @@ func add_sound(parent, target_, priority: int = 0):
 	var last_msec := int(_last_sound_play_msec.get(sound_key, -45))
 	if now_msec - last_msec < 45:
 		return null
-	if not _reserve_sound_voice(sound_key, priority):
-		return null
 	if get_cached_audio(sound_key) == null:
+		return null
+	if not _reserve_sound_voice(sound_key, priority):
 		return null
 	var target = _take_pooled_node(_pool_data["sound_player"], "res://Scene/all_sound/monster_be_hit.tscn")
 	if target == null:
