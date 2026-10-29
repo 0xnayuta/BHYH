@@ -1,6 +1,6 @@
 # 试点模块 API 与依赖方向（Phase 17-6）
 
-> **状态**：17-6A/17-6B/17-6C 已完成（2026-10-29）。范围仅 `pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon`；未重排顶层目录，未全仓替换深层路径。
+> **状态**：17-6A/17-6B/17-6C 已完成，Phase 17 已归档；Phase 18 起见 [`current-iteration.md`](../roadmap/current-iteration.md)。范围仅 `pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon`；未重排顶层目录，未全仓替换深层路径。
 >
 > **事实源**：`source/Script/pet/pet_interface.gd`、`source/Script/skill/zd_skill.gd`、`source/Script/base/base_role.gd`、`source/Script/base/base_magic_weapon.gd`。公开方法指供场景脚本、父节点或跨模块调用的方法；下划线开头方法默认是内部实现，除非本节显式列为回调。
 

@@ -50,4 +50,4 @@ Phase 17 收敛了玩法与表现模块的所有权与失败边界：
 - Atlas：112 个 metadata 未被 Store 触达；惰性 `atlas_metadata` 写入方与未使用常量仍登记在 Phase 14 归档。
 - 守卫扩面：当前只覆盖四个试点文件与结算/奖励命令，其他面板、路径与运行时边界尚未纳入同类静态/运行期守卫。
 
-这些缺口已拆入 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 18-1 ~ 18-5。
+这些缺口已连同 Phase 13~16 遗留拆入 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 18-1 ~ 20-3。
