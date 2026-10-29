@@ -884,10 +884,60 @@ func _test_audio_boundaries() -> void:
 	parent.queue_free()
 	await get_tree().process_frame
 
+	# 同曲跨父节点必须在同步挂载前完成重挂，不能落回第一个父节点。
+	var first_parent := Node2D.new()
+	add_child(first_parent)
+	var next_parent := Node2D.new()
+	add_child(next_parent)
+	var pending_bgm = Global.add_bgm(first_parent, "res://Music/level/1_music.mp3")
+	var moved_bgm = Global.add_bgm(next_parent, "res://Music/level/1_music.mp3")
+	_check(
+		"bgm_same_track_moves_parent",
+		pending_bgm != null and moved_bgm == pending_bgm and pending_bgm.get_parent() == next_parent,
+		"%s/%s parent=%s" % [pending_bgm, moved_bgm, pending_bgm.get_parent() if pending_bgm != null else null]
+	)
+	_check(
+		"bgm_same_track_single_parent",
+		first_parent.get_child_count() == 0 and next_parent.get_child_count() == 1,
+		"first=%d next=%d" % [first_parent.get_child_count(), next_parent.get_child_count()]
+	)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	_check(
+		"bgm_same_track_keeps_playing",
+		moved_bgm != null and moved_bgm.playing,
+		"playing=%s" % [moved_bgm.playing if moved_bgm != null else null]
+	)
+	Global.stop_bgm()
+	await get_tree().process_frame
+	first_parent.queue_free()
+	next_parent.queue_free()
+	await get_tree().process_frame
+
+	# 生产退出路径 end_archive_session 必须停止 BGM，而不是依赖场景释放。
+	var exit_parent := Node2D.new()
+	add_child(exit_parent)
+	var exit_bgm = Global.add_bgm(exit_parent, "res://Music/level/1_music.mp3")
+	var exit_bgm_created := exit_bgm != null
+	Global.end_archive_session()
+	await get_tree().process_frame
+	_check(
+		"bgm_archive_exit_stops",
+		exit_bgm_created and not is_instance_valid(Global.get("_active_bgm_instance")),
+		"created=%s active=%s" % [exit_bgm_created, Global.get("_active_bgm_instance")]
+	)
+	exit_parent.queue_free()
+	await get_tree().process_frame
+
 	var sound_parent := Node2D.new()
 	add_child(sound_parent)
 	var sound = Global.add_sound(sound_parent, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	_check("sound_pool_plays", sound != null and sound.stream != null, str(sound))
+	_check(
+		"sound_pool_active_count",
+		int((Global.get("_active_sound_players") as Dictionary).size()) == 1,
+		str(Global.get("_active_sound_players"))
+	)
 	if sound != null:
 		Global.recycle_sound_player(sound)
 		_check(
@@ -895,6 +945,33 @@ func _test_audio_boundaries() -> void:
 			sound.stream == null and not sound.playing,
 			"stream=%s playing=%s" % [sound.stream, sound.playing]
 		)
+		_check(
+			"sound_pool_recycle_clears_count",
+			(Global.get("_active_sound_players") as Dictionary).is_empty(),
+			str(Global.get("_active_sound_players"))
+		)
+
+	var residue = Global.add_sound(sound_parent, "res://Music/hero/00_role1_gsrs.mp3")
+	_check(
+		"sound_pool_teardown_has_active",
+		residue != null and int((Global.get("_active_sound_players") as Dictionary).size()) == 1,
+		"residue=%s active=%s" % [residue, Global.get("_active_sound_players")]
+	)
+	Global.clear_combat_runtime_cache()
+	await get_tree().process_frame
+	var residue_cleared := not is_instance_valid(residue)
+	if not residue_cleared:
+		residue_cleared = residue.stream == null and not residue.playing
+	_check(
+		"sound_pool_teardown_clears_active",
+		(Global.get("_active_sound_players") as Dictionary).is_empty() and residue_cleared,
+		"residue=%s active=%s" % [residue, Global.get("_active_sound_players")]
+	)
+	_check(
+		"sound_pool_teardown_clears_throttle",
+		(Global.get("_last_sound_play_msec") as Dictionary).is_empty(),
+		str(Global.get("_last_sound_play_msec"))
+	)
 	sound_parent.queue_free()
 	await get_tree().process_frame
 

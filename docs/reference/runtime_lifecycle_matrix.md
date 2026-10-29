@@ -17,9 +17,9 @@
 3. **目标状态在加载页被快照**：`Global.target_scene` 仍作为入口交接值；`load_scene` 在 `_ready` 固定 `_target_scene` 与请求代次，后续不再读取可变的全局目标；空/非场景/缺失目标由正式入口返回 `false`。
 4. **缓存所有权集中在 `Global`**：`_resource_cache`、`_monster_scene_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、关卡资源租约与预览槽均由 `Global` 持有；加载页 Phase 15-3A 后只通过 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 交接，不直接读写私有缓存字典。
 5. **关卡资源按租约释放**：`_level_resource_lease` 记录目标场景、本次加载拥有的路径、怪物/弹体/纹理/音频分类、热身场景与已预热怪物 ID；每次 `change_scene` 释放上一租约并建立新租约；目标场景本身走 `_target_packed_scene`，不登记为租约资源。未登记路径、永久 UI 保留。
-6. **对象池只在档案结束时整体清空**：池根、伤害文本、受击、角色受击与音效池由 `Global` 持有；关卡切换不清理，复用前重置依赖各消费者。
+6. **对象池只在档案结束时整体清空**：池根、伤害文本、受击、角色受击与音效池由 `Global` 持有；关卡切换不清理，复用前重置依赖各消费者。**19-2B**：清池前停止并释放活动声部、清空流与 45ms 节流表，活动计数归零。
 7. **临时 UI 采用显式登记 + 名称兜底**：关键 UI 工厂调用 `register_transient_ui` 显式登记并提供可选关闭回调；`cleanup_transient_ui` 先关闭登记实例，再对未登记节点按名称兜底；51 处显式调用保留，永久小 UI 跳过清理。
-8. **退出与后台已收口**：应用退出由 `Global._exit_tree` 统一结束档案会话、角色/战斗/UI 缓存与对象池，并关闭纹理请求；场景切换与档案结束递增运行时代次，异步预载在写回前检查代次。`MemoryClass._exit_tree` 仍独立负责存档线程 flush。
+8. **退出与后台已收口**：应用退出由 `Global._exit_tree` 统一结束档案会话、角色/战斗/UI 缓存与对象池，并关闭纹理请求；场景切换与档案结束递增运行时代次，异步预载在写回前检查代次。**19-2A**：`end_archive_session()` 调用 `stop_bgm()`，档案退出不再依赖场景释放停止 BGM。`MemoryClass._exit_tree` 仍独立负责存档线程 flush。
 
 ---
 

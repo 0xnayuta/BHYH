@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C 已完成；19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B 已完成；19-2C/19-2D、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -117,12 +117,12 @@
 
 **切片**
 
-1. **19-2A BGM**：在场景/档案退出调用 `stop_bgm()` 或定义明确停止策略；处理同曲跨父节点 pending 边界；
-2. **19-2B 音效池**：复核节流表、活动计数、池满/回收后的旧流与音量设置；
+1. **19-2A BGM（已完成，2026-10-30）**：`end_archive_session()` 调用 `stop_bgm()`，档案退出停止 BGM；`add_bgm` 改为先设置 `target` 再同步 `add_child`，消除 deferred pending 窗口；同曲异父同步重挂并在重挂后按开关状态恢复播放；queued/invalid 实例不参与复用；档案探针新增同曲跨父节点、单父节点、退出停止、重挂后播放断言（289 项 PASS）；
+2. **19-2B 音效池（已完成，2026-10-30）**：`_clear_runtime_pools` 新增 `_release_active_sound_players()`：停止活动声部、清空 `stream`、`queue_free`，随后清空 `_active_sound_players` 与 `_last_sound_play_msec`；回收仍保持 `prepare_for_pool()` 的停流/清流；档案探针新增活动计数、回收计数、teardown 清流与节流表清空断言；验证：档案探针 289 项 PASS，协作探针 23/23，场景探针 7/7，`level_1` 冒烟 PASS，全量回归 128/128 PASS + 5 SKIP（334.5s），`check_all --godot-bin` 8/8 PASS；
 3. **19-2C 临时 UI**：处理 `cleanup_transient_ui` 硬编码清单与显式调用（矩阵 51/18 基线）；未登记节点登记或明确保留；
 4. **19-2D 静态帧缓存**：处理模块局部静态帧缓存（Phase 15-4E 保留项）；退出/切档后不读取旧缓存。
 
-**必须验证**：BGM 同曲复用、切曲停旧、退出停止；音效池无旧流；切档/退出无 UI 注册残留；静态缓存有清理/保留结论。
+**必须验证**：BGM 同曲复用、跨父节点同步重挂、切曲停旧、退出停止；音效池无旧流且活动计数/节流表归零；切档/退出无 UI 注册残留；静态缓存有清理/保留结论。
 
 **出口**：音频与运行时清理有明确 owner 与保留清单。
 

@@ -671,6 +671,21 @@ func recycle_sound_player(node: Node) -> void:
 		_store_pooled_node(node, _pool_data["sound_player"], SOUND_PLAYER_POOL_LIMIT)
 
 
+func _release_active_sound_players() -> void:
+	for entry_value in _active_sound_players.values():
+		if not (entry_value is Dictionary):
+			continue
+		var node: Variant = (entry_value as Dictionary).get("node")
+		if not (node is Node) or not is_instance_valid(node):
+			continue
+		if node is AudioStreamPlayer:
+			(node as AudioStreamPlayer).stop()
+			(node as AudioStreamPlayer).stream = null
+		(node as Node).queue_free()
+	_active_sound_players.clear()
+	_last_sound_play_msec.clear()
+
+
 func _on_sound_player_tree_exiting(instance_id: int) -> void:
 	_active_sound_players.erase(instance_id)
 
@@ -1891,6 +1906,7 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 
 
 func end_archive_session() -> void:
+	stop_bgm()
 	# 退出/切档前先落盘未决后台任务；flush 失败时任务仍留在重试队列。
 	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
 		MemoryClass.flush_pending_saves()
@@ -1930,7 +1946,7 @@ func _clear_runtime_pools() -> void:
 		pool_root.queue_free()
 	_pool_data["root"] = null
 	_active_damage_texts.clear()
-	_active_sound_players.clear()
+	_release_active_sound_players()
 	_damage_text_count = 0
 
 
@@ -4358,14 +4374,16 @@ func add_bgm(parent, target_):
 	if not is_instance_valid(parent) or parent.is_queued_for_deletion():
 		return null
 	var bgm_key := str(target_)
-	if is_instance_valid(_active_bgm_instance):
+	if (
+		_active_bgm_instance != null
+		and (not is_instance_valid(_active_bgm_instance) or _active_bgm_instance.is_queued_for_deletion())
+	):
+		_active_bgm_instance = null
+	if _active_bgm_instance != null:
 		if str(_active_bgm_instance.get("target")) == bgm_key:
-			var active_parent = _active_bgm_instance.get_parent()
-			if active_parent == null:
-				# 首次 instance_scene 的 add_child 仍在 deferred 队列中。
-				return _active_bgm_instance
-			if active_parent != parent:
+			if _active_bgm_instance.get_parent() != parent:
 				_attach_pooled_node(_active_bgm_instance, parent)
+				_resume_bgm_after_reparent(_active_bgm_instance)
 			return _active_bgm_instance
 		if _active_bgm_instance is AudioStreamPlayer:
 			(_active_bgm_instance as AudioStreamPlayer).stop()
@@ -4373,22 +4391,37 @@ func add_bgm(parent, target_):
 		_active_bgm_instance = null
 	if not bgm:
 		bgm = _load_scene("res://Scene/all_sound/bgm.tscn")
-	var target = instance_scene(bgm, parent)
+	if bgm == null:
+		return null
+	var target = bgm.instantiate()
 	if target == null:
 		return null
+	# 同步挂载，避免同曲在 deferred add_child 前被第二个父节点复用而挂错父节点。
 	target.target = target_
+	parent.add_child(target)
 	_active_bgm_instance = target
 	return target
+
+
+func _resume_bgm_after_reparent(node: Node) -> void:
+	if not (node is AudioStreamPlayer):
+		return
+	var player := node as AudioStreamPlayer
+	if not bool(MainSet.set_data.get("BackGroundMusic", true)):
+		return
+	if player.stream != null and not player.playing and not player.stream_paused:
+		player.play()
 
 
 func stop_bgm() -> void:
 	if not is_instance_valid(_active_bgm_instance):
 		_active_bgm_instance = null
 		return
-	if _active_bgm_instance is AudioStreamPlayer:
-		(_active_bgm_instance as AudioStreamPlayer).stop()
-	_active_bgm_instance.queue_free()
+	var target := _active_bgm_instance
 	_active_bgm_instance = null
+	if target is AudioStreamPlayer:
+		(target as AudioStreamPlayer).stop()
+	target.queue_free()
 
 
 func add_mosaic_instance(parent, position):

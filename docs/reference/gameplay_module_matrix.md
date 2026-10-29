@@ -379,10 +379,10 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 项 | 事实 |
 |:---|:---|
 | 受击音效 | `Global.add_sound` 138 次 / 34 文件；池上限 32；45ms 节流；同音效 4/8、总声部 24/48 |
-| BGM | `Global.add_bgm` 121 处；同一曲复用活动实例，切曲先 `stop()` 再释放；`stop_bgm()` 显式收口 |
+| BGM | `Global.add_bgm` 121 处；**19-2A 改为同步挂载**：先设 `target` 再 `add_child`，消除同曲跨父节点 pending；同曲异父同步重挂并按开关恢复；queued/invalid 不复用；切曲先 `stop()` 再释放；`end_archive_session()` 调用 `stop_bgm()` |
 | 热点 | `role_4` 20、`role_5` 19、`role1` 18、`role_3` 16、`role_2` 10 |
 | 音量/开关 | `MainSet.set_data["MusicFB_2"]`、`RoleOrMonsterHit`；由 `game_set.gd` 写入 |
-| 边界 | 音效是纯表现；`add_sound` 先查缓存再预留声部；池回收 `prepare_for_pool()` 停止并清流 |
+| 边界 | 音效是纯表现；`add_sound` 先查缓存再预留声部；池回收 `prepare_for_pool()` 停止并清流；**19-2B `_clear_runtime_pools` 停止/清流/释放活动声部，并清空活动计数与 45ms 节流表** |
 
 ### 9.4 表现层提交领域状态点
 
@@ -641,6 +641,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 - `Global.add_bgm` 维护 `_active_bgm_instance`：同曲同父复用；同曲异父重挂；切曲先停止旧实例再创建。`stop_bgm()` 提供显式收口。
 - `Global.add_sound` 将缓存检查移到声部预留之前；无音频时不再驱逐已有声部。
 - `monster_be_hit.prepare_for_pool()` 保持 `stop()` + `stream = null`，池回收不残留旧流。
+- **19-2A/B（2026-10-30）**：`add_bgm` 同步挂载并处理同曲跨父节点；`end_archive_session` 停止 BGM；`_clear_runtime_pools` 释放活动声部并清空节流表。验证：档案探针 289 项 PASS；协作探针 23/23；场景探针 7/7；`level_1` 冒烟 PASS；全量回归 128/128 PASS + 5 SKIP（334.5s，2 个瞬态失败串行重试通过）；`check_all --godot-bin` 8/8 PASS。
 
 ### 17.3 验证
 
