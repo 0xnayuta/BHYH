@@ -1,4 +1,4 @@
-extends Node2D
+extends LevelSettlement
 @onready var grades_s_how: AnimationPlayer = $GradesSHow
 @onready var begin_time: Label = $GameUseTime/BeginTime
 @onready var end_time: Label = $GameUseTime2/EndTime
@@ -62,65 +62,61 @@ func _ready() -> void:
 		if PlayerData.player_data["关卡评价"].has(Global.current_level):
 			if pj >= PlayerData.player_data["关卡评价"][Global.current_level]:
 				PlayerData.player_data["关卡评价"][Global.current_level] = pj
-	_save_completed_level()
+	_commit_settlement("level_victory")
 	grades_s_how.play("Show")
 	if MainSet.is_auto_battle_enabled() and bool(MainSet.set_data.get("AutoBattleRetry", false)):
 		call_deferred("_auto_rechallenge")
 
 
-func _save_completed_level() -> bool:
-	return MemoryClass.request_save("level_victory")
+func _return_map_path() -> String:
+	if Global.current_level == "镇妖塔":
+		return "res://Scene/main_menu/map_0.tscn"
+	match int(PlayerData.player_data["Map_num"]):
+		1:
+			return "res://Scene/main_menu/map_1.tscn"
+		2:
+			if PlayerData.player_data["地府"]:
+				return "res://Scene/main_menu/map_2.tscn"
+			return "res://Scene/main_menu/map_1.tscn"
+		3:
+			if PlayerData.player_data["天庭"]:
+				return "res://Scene/main_menu/map_3.tscn"
+			return "res://Scene/main_menu/map_1.tscn"
+		4:
+			if PlayerData.player_data["截教天镜"]:
+				return "res://Scene/main_menu/map_4.tscn"
+			return "res://Scene/main_menu/map_1.tscn"
+		5:
+			if PlayerData.player_data.has("碧游宫") and PlayerData.player_data["碧游宫"]:
+				return "res://Scene/main_menu/map_5.tscn"
+			return "res://Scene/main_menu/map_1.tscn"
+		6:
+			if int(PlayerData.player_data.get("通天教主", 0)) == 1:
+				return "res://Scene/main_menu/map_6.tscn"
+			return "res://Scene/main_menu/map_1.tscn"
+		7:
+			return "res://Scene/main_menu/map_7.tscn"
+		8:
+			if PlayerData.player_data.get("Map_variant", "") == "Map_8_1":
+				return "res://Scene/main_menu/map_8_1.tscn"
+			return "res://Scene/main_menu/map_8.tscn"
+		9:
+			if PlayerData.player_data.get("Map_variant", "") == "Map_9_1":
+				return "res://Scene/main_menu/map_9_1.tscn"
+			return "res://Scene/main_menu/map_9.tscn"
+		_:
+			return "res://Scene/main_menu/map_1.tscn"
 
 
 func _on_return_map_pressed() -> void:
-	RoleProp.ws_value = 0
-	if Global.current_level == "镇妖塔":
-		Global.change_scene("res://Scene/main_menu/map_0.tscn")
-		MemoryClass.request_save("level_victory_return")
+	if not _begin_leave():
 		return
-	match int(PlayerData.player_data["Map_num"]):
-		1:
-			Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		2:
-			if PlayerData.player_data["地府"]:
-				Global.change_scene("res://Scene/main_menu/map_2.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		3:
-			if PlayerData.player_data["天庭"]:
-				Global.change_scene("res://Scene/main_menu/map_3.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		4:
-			if PlayerData.player_data["截教天镜"]:
-				Global.change_scene("res://Scene/main_menu/map_4.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		5:
-			if PlayerData.player_data.has("碧游宫") and PlayerData.player_data["碧游宫"]:
-				Global.change_scene("res://Scene/main_menu/map_5.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		6:
-			if int(PlayerData.player_data.get("通天教主", 0)) == 1:
-				Global.change_scene("res://Scene/main_menu/map_6.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_1.tscn")
-		7:
-			Global.change_scene("res://Scene/main_menu/map_7.tscn")
-		8:
-			if PlayerData.player_data.get("Map_variant", "") == "Map_8_1":
-				Global.change_scene("res://Scene/main_menu/map_8_1.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_8.tscn")
-		9:
-			if PlayerData.player_data.get("Map_variant", "") == "Map_9_1":
-				Global.change_scene("res://Scene/main_menu/map_9_1.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_9.tscn")
-		_:
-			Global.change_scene("res://Scene/main_menu/map_1.tscn")
-	MemoryClass.request_save("level_victory_return")
+	if not _flush_pending_settlement():
+		_abort_leave()
+		return
+	RoleProp.ws_value = 0
+	if not _request_scene_change(_return_map_path()):
+		_abort_leave()
 
 
 func get_lasttime(Num):
@@ -138,28 +134,18 @@ func _on_more_informaition_pressed() -> void:
 	Global.add_after_level_end(self, Vector2(0, 0))
 
 
-var _is_rechallenging := false
-
-
-func _reset_role_state_for_rechallenge() -> void:
-	RoleProp.set_full_hp()
-	RoleProp.set_full_mp()
-	RoleProp.current_hp = int(RoleProp.roleprop.Hp)
-	RoleProp.current_mp = int(RoleProp.roleprop.Mp)
-	RoleProp.ws_value = 0
-	RoleProp.is_ws_state = false
-	Global.is_dead_link = false
-
-
 func _on_rechallenge_pressed() -> void:
-	if _is_rechallenging:
-		return
 	if Global.last_level_path == "":
 		Global.add_message_show(Global.windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 		return
-	_is_rechallenging = true
+	if not _begin_rechallenge():
+		return
+	if not _flush_pending_settlement():
+		_abort_rechallenge()
+		return
 	_reset_role_state_for_rechallenge()
-	Global.change_scene(Global.last_level_path)
+	if not _request_scene_change(Global.last_level_path):
+		_abort_rechallenge()
 
 
 func _auto_rechallenge() -> void:

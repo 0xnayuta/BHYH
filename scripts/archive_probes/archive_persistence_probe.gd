@@ -63,6 +63,7 @@ func _run() -> void:
 	_test_cloud_validation()
 	_test_request_save()
 	_test_archive_session()
+	await _test_settlement_ownership()
 	await _test_panel_saves()
 
 
@@ -176,6 +177,155 @@ func _test_request_save() -> void:
 		seeded and not empty_blocked and seeded_level == 9 and after_level == 9,
 		"seed=%s blocked=%s before=%s after=%s" % [seeded, empty_blocked, seeded_level, after_level]
 	)
+
+
+func _test_settlement_ownership() -> void:
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "041.json")
+	Global.current_level = "花果山"
+	Global.level_begin_time = "2026-10-29 00:00:00"
+	Global.last_level_path = "res://Scene/level/level_1.tscn"
+	RoleProp.roleprop.Hp = 100
+	RoleProp.roleprop.SHp = 100
+	RoleProp.roleprop.Mp = 100
+	RoleProp.roleprop.SMp = 100
+	PlayerData.player_data["Map_num"] = 1
+	PlayerData.player_data["zyforever"] = false
+	PlayerData.player_data["ieho"] = false
+
+	var victory_saves: Array = []
+	var victory_scenes: Array = []
+	var victory: Node = load("res://Scene/level/victory.tscn").instantiate()
+	victory.save_request_override = func(reason: String) -> bool:
+		victory_saves.append(reason)
+		return true
+	victory.scene_change_override = func(path: String) -> bool:
+		victory_scenes.append(path)
+		return true
+	add_child(victory)
+	await get_tree().process_frame
+	_check("victory_ready_saves_once", victory_saves == ["level_victory"], str(victory_saves))
+	victory._on_return_map_pressed()
+	victory._on_return_map_pressed()
+	_check("victory_return_scene_once", victory_scenes.size() == 1, str(victory_scenes))
+	_check("victory_return_no_extra_save", victory_saves.size() == 1, str(victory_saves))
+	victory.queue_free()
+	await get_tree().process_frame
+
+	var rechallenge_saves: Array = []
+	var rechallenge_scenes: Array = []
+	var rechallenge: Node = load("res://Scene/level/victory.tscn").instantiate()
+	rechallenge.save_request_override = func(reason: String) -> bool:
+		rechallenge_saves.append(reason)
+		return true
+	rechallenge.scene_change_override = func(path: String) -> bool:
+		rechallenge_scenes.append(path)
+		return true
+	add_child(rechallenge)
+	await get_tree().process_frame
+	rechallenge._on_rechallenge_pressed()
+	rechallenge._on_rechallenge_pressed()
+	_check("victory_rechallenge_scene_once", rechallenge_scenes.size() == 1, str(rechallenge_scenes))
+	_check("victory_rechallenge_no_extra_save", rechallenge_saves.size() == 1, str(rechallenge_saves))
+	rechallenge.queue_free()
+	await get_tree().process_frame
+
+	var retry_attempts: Array = []
+	var retry_scenes: Array = []
+	var retry_victory: Node = load("res://Scene/level/victory.tscn").instantiate()
+	retry_victory.save_request_override = func(reason: String) -> bool:
+		retry_attempts.append(reason)
+		return retry_attempts.size() > 1
+	retry_victory.scene_change_override = func(path: String) -> bool:
+		retry_scenes.append(path)
+		return true
+	add_child(retry_victory)
+	await get_tree().process_frame
+	retry_victory._on_return_map_pressed()
+	_check("victory_retry_save_after_failure", retry_attempts.size() == 2 and retry_scenes.size() == 1, "%s/%s" % [retry_attempts, retry_scenes])
+	retry_victory.queue_free()
+	await get_tree().process_frame
+
+	var items_before_batch: Dictionary = PlayerData.player_data[DataKeys.ITEM_LIST].duplicate(true)
+	var invalid_batch := PlayerData.add_dj_batch([{"name": "__missing_reward__", "number": 1}])
+	_check("defeat_batch_rejects_invalid_atomically", not invalid_batch and PlayerData.player_data[DataKeys.ITEM_LIST] == items_before_batch)
+
+	PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = false
+	var defeat_saves: Array = []
+	var defeat_scenes: Array = []
+	var defeat: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	defeat.save_request_override = func(reason: String) -> bool:
+		defeat_saves.append(reason)
+		return true
+	defeat.scene_change_override = func(path: String) -> bool:
+		defeat_scenes.append(path)
+		return true
+	add_child(defeat)
+	await get_tree().process_frame
+	var bsd_before := _item_count("bsd_5")
+	defeat._on_lqjl_pressed()
+	defeat._on_lqjl_pressed()
+	_check("defeat_items_once", defeat_saves == ["level_defeat_reward"], str(defeat_saves))
+	_check("defeat_items_granted", _item_count("bsd_5") == bsd_before + 1 and _item_count("qhs_1") == 8, "bsd=%d qhs1=%d" % [_item_count("bsd_5"), _item_count("qhs_1")])
+	_check("defeat_items_claim_persisted", bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false)))
+	defeat._on_return_map_pressed()
+	defeat._on_return_map_pressed()
+	_check("defeat_return_scene_once", defeat_scenes.size() == 1, str(defeat_scenes))
+	_check("defeat_return_no_extra_save", defeat_saves.size() == 1, str(defeat_saves))
+	defeat.queue_free()
+	await get_tree().process_frame
+
+	var reentry_saves: Array = []
+	var reentry: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	reentry.save_request_override = func(reason: String) -> bool:
+		reentry_saves.append(reason)
+		return true
+	add_child(reentry)
+	await get_tree().process_frame
+	var reentry_qhs := _item_count("qhs_1")
+	reentry._on_lqjl_pressed()
+	_check("defeat_reentry_no_regrant", _item_count("qhs_1") == reentry_qhs and reentry_saves.is_empty(), "qhs=%d saves=%s" % [_item_count("qhs_1"), str(reentry_saves)])
+	reentry.queue_free()
+	await get_tree().process_frame
+
+	PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = false
+	var failed_saves: Array = []
+	var failed: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	failed.save_request_override = func(reason: String) -> bool:
+		failed_saves.append(reason)
+		return false
+	add_child(failed)
+	await get_tree().process_frame
+	var qhs_before := _item_count("qhs_1")
+	failed._on_lqjl_pressed()
+	_check("defeat_items_save_failure_rolls_back", _item_count("qhs_1") == qhs_before and not bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false)), "qhs=%d" % _item_count("qhs_1"))
+	_check("defeat_items_failure_attempted", failed_saves == ["level_defeat_reward"], str(failed_saves))
+	failed.queue_free()
+	await get_tree().process_frame
+
+	var equipment_saves: Array = []
+	var equipment_failed: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	equipment_failed.save_request_override = func(reason: String) -> bool:
+		equipment_saves.append(reason)
+		return false
+	add_child(equipment_failed)
+	await get_tree().process_frame
+	equipment_failed._on_js_pressed()
+	_check("defeat_equipment_save_failure_rolls_back", not PlayerData.has_acquired_equipment("xczg"), str(PlayerData.player_data.get(DataKeys.ACQUIRED_EQUIPMENT_LIST, [])))
+	_check("defeat_equipment_failure_attempted", equipment_saves == ["level_defeat_reward"], str(equipment_saves))
+	equipment_failed.queue_free()
+	await get_tree().process_frame
+
+
+func _item_count(item_name: String) -> int:
+	var total := 0
+	for page in PlayerData.player_data[DataKeys.ITEM_LIST].values():
+		if not page is Array:
+			continue
+		for item in page:
+			if item is Dictionary and str((item as Dictionary).get(DataKeys.NAME, "")) == item_name:
+				total += int((item as Dictionary).get(DataKeys.COUNT, 0))
+	return total
 
 
 ## 16-3：档案会话上下文。会话是保存与关卡入口的唯一权威表示。

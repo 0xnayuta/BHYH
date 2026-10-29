@@ -45,7 +45,10 @@ func _on_hddy_body_entered(body: Node2D) -> void:
 		var props: Node = LocalCoop.props_for(body) if LocalCoop.is_enabled() else RoleProp
 		if profile.get_item_data("bsz") > 0:
 			profile.remove_dj("bsz", profile.get_dj_page("bsz"), 1)
-			MemoryClass.request_save("level_17_gate")
+			if not MemoryClass.request_save("level_17_gate"):
+				profile.add_dj("bsz", 1)
+				Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+				return
 			Global.change_scene("res://Scene/level/level_hddy.tscn")
 		else:
 			props.roleprop.Hp = 0

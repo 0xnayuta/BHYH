@@ -895,6 +895,7 @@ var initialized_data: Dictionary = {
 	"勇闯八荒": false,
 	"初始Buff": [],
 	"ieho": false,
+	"失败奖励已领取": false,
 	"猕猴王": 0,
 	"水帘洞天": false,
 	"禺狨王": 0,
@@ -1319,6 +1320,7 @@ var player_data: Dictionary = {
 	"勇闯八荒": false,
 	"初始Buff": [],
 	"ieho": false,
+	"失败奖励已领取": false,
 	"猕猴王": 0,
 	"水帘洞天": false,
 	"禺狨王": 0,
@@ -4424,6 +4426,42 @@ func add_dj(_name, number, locked := false):
 	player_data[DataKeys.ITEM_LIST]["页码" + str(usable_page)].push_back(
 		{"名字": _name, "数量": number, "Data": data, "锁定": bool(locked)}
 	)
+
+
+func add_dj_batch(entries: Array) -> bool:
+	# 批量发放按整批成功/失败：任一名称无效或容量不足时恢复道具页快照。
+	if entries.is_empty():
+		return true
+	var before: Dictionary = player_data[DataKeys.ITEM_LIST].duplicate(true)
+	var expected: Dictionary = {}
+	for entry in entries:
+		if not entry is Dictionary:
+			player_data[DataKeys.ITEM_LIST] = before
+			return false
+		var item_name := str((entry as Dictionary).get("name", ""))
+		var item_number := int((entry as Dictionary).get("number", 0))
+		if item_name == "" or item_number <= 0 or not AE.all_equipment.has(item_name):
+			player_data[DataKeys.ITEM_LIST] = before
+			return false
+		expected[item_name] = int(expected.get(item_name, 0)) + item_number
+		add_dj(item_name, item_number, bool((entry as Dictionary).get("locked", false)))
+	for item_name in expected:
+		var before_count := _count_dj_in(before, item_name)
+		if _count_dj_in(player_data[DataKeys.ITEM_LIST], item_name) != before_count + int(expected[item_name]):
+			player_data[DataKeys.ITEM_LIST] = before
+			return false
+	return true
+
+
+func _count_dj_in(item_pages: Dictionary, item_name: String) -> int:
+	var total := 0
+	for page in item_pages.values():
+		if not page is Array:
+			continue
+		for item in page:
+			if item is Dictionary and str((item as Dictionary).get(DataKeys.NAME, "")) == item_name:
+				total += int((item as Dictionary).get(DataKeys.COUNT, 0))
+	return total
 
 
 func zl_dj():

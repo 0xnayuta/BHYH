@@ -101,6 +101,13 @@ class Skill:
 
 
 ## 日常任务与跨日进度契约
+class Settlement:
+	const DEFEAT_REWARD_CLAIMED = "失败奖励已领取"
+
+
+const ACQUIRED_EQUIPMENT_LIST = "已获取装备列表"
+
+
 class Daily:
 	const EIGHT_IMMORTAL_TASK = "八仙尽伏"
 	const EIGHT_IMMORTAL_PROGRESS = "八仙日常"
@@ -131,6 +138,7 @@ const GEM = "宝石"
 const DEPLOYED = "出战"
 const EQUIPMENT_LIST = "装备列表"
 const ITEM_LIST = "道具列表"
+const DEFEAT_REWARD_CLAIMED = "失败奖励已领取"
 const CONSUMABLE_LIST = "消耗品列表"
 const TRANSMOG_LIST = "幻化列表"
 const ENHANCE_LEVEL = "强化等级"

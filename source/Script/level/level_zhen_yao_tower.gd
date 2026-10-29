@@ -472,16 +472,25 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _advance_tower_floor() -> void:
 	var next_floor := _tower_floor + 1
+	var previous_progress := {
+		TOWER_CURRENT_FLOOR_KEY: PlayerData.player_data.get(TOWER_CURRENT_FLOOR_KEY, 1),
+		TOWER_MAX_FLOOR_KEY: PlayerData.player_data.get(TOWER_MAX_FLOOR_KEY, 1),
+		TOWER_POINTS_KEY: PlayerData.player_data.get(TOWER_POINTS_KEY, 0),
+	}
+	_save_floor_progress(next_floor)
+	if not MemoryClass.request_save("tower_floor_advance"):
+		for key in previous_progress:
+			PlayerData.player_data[key] = previous_progress[key]
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		return
 	_runtime_ready = false
 	_tower_exit_can_use = false
 	if create_control != null and is_instance_valid(create_control):
 		create_control.stop()
-	_save_floor_progress(next_floor)
 	if RoleProp.roleprop != null:
 		RoleProp.current_hp = RoleProp.roleprop.Hp
 		RoleProp.current_mp = RoleProp.roleprop.Mp
 	prepare_floor_plan(next_floor)
-	MemoryClass.request_save("tower_floor_advance")
 	Global.change_scene(TOWER_LEVEL_SCENE_PATH, true)
 
 

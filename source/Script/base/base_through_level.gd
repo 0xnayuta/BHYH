@@ -1413,7 +1413,9 @@ func _restart_level_for_auto_battle() -> bool:
 		return false
 	if Global.last_level_path == "":
 		return false
-	MemoryClass.request_save("auto_battle_retry")
+	if not MemoryClass.request_save("auto_battle_retry"):
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		return false
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()
 	RoleProp.current_hp = int(RoleProp.roleprop.Hp)
@@ -1631,6 +1633,15 @@ func _get_alive_stage_monster_count() -> int:
 	return count
 
 
+func advance_stage(next_stage: int) -> bool:
+	# 阶段只允许单调前进；所有调用方共用同一入口，避免跳阶段或回退。
+	var stage_limit := maxi(4, _stage_count())
+	if next_stage < 1 or next_stage > stage_limit or next_stage <= current_stage:
+		return false
+	current_stage = next_stage
+	return true
+
+
 func check_can_create(stage):
 	if stage < 1 or stage > 4:
 		return false
@@ -1647,23 +1658,23 @@ func check_can_create(stage):
 func _on_create_control_timeout() -> void:
 	if _role != null:
 		if not is_two_scene:
-			if _role.position.x < 1600 and current_stage == 0:
-				current_stage = 1
-			if _role.position.x >= 1600 and _role.position.x < 2700 and current_stage == 1:
-				current_stage = 2
-			if _role.position.x >= 2700 and _role.position.x < 4000 and current_stage == 2:
-				current_stage = 3
-			if _role.position.x >= 4000 and current_stage == 3:
-				current_stage = 4
+			if _role.position.x < 1600:
+				advance_stage(1)
+			if _role.position.x >= 1600 and _role.position.x < 2700:
+				advance_stage(2)
+			if _role.position.x >= 2700 and _role.position.x < 4000:
+				advance_stage(3)
+			if _role.position.x >= 4000:
+				advance_stage(4)
 		else:
-			if _role.position.x < 1000 and current_stage == 0:
-				current_stage = 1
-			if _role.position.x >= 1300 and _role.position.x < 2700 and current_stage == 1:
-				current_stage = 2
-			if _role.position.x >= 2700 and _role.position.x < 4000 and current_stage == 2:
-				current_stage = 3
-			if _role.position.x >= 4000 and current_stage == 3:
-				current_stage = 4
+			if _role.position.x < 1000:
+				advance_stage(1)
+			if _role.position.x >= 1300 and _role.position.x < 2700:
+				advance_stage(2)
+			if _role.position.x >= 2700 and _role.position.x < 4000:
+				advance_stage(3)
+			if _role.position.x >= 4000:
+				advance_stage(4)
 
 	if current_stage >= 1 and current_stage <= 4:
 		_request_stage_resource_preload(current_stage + 1)

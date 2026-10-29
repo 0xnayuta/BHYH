@@ -4,7 +4,8 @@
 
 探针位于 scripts/archive_probes/；运行时复制到 Godot 工程根目录，以
 `--scene` 启动完整项目生命周期，并使用独立的临时 user:// 目录，避免触碰
-本机真实存档与 MainGame.json。结束后清理临时 fixture 与用户目录。
+本机真实存档与 MainGame.json。除档案读写外，同时验证胜败结算的保存一次、
+返回/重战去重、奖励持久化与保存失败回滚。结束后清理临时 fixture 与用户目录。
 """
 
 from __future__ import annotations

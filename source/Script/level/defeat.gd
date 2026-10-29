@@ -1,4 +1,4 @@
-extends Node2D
+extends LevelSettlement
 @onready var box_1: Button = $text/box_1
 @onready var text: Label = $text
 @onready var player: AnimationPlayer = $player
@@ -49,6 +49,7 @@ var textlist4 = [
 
 
 func _ready() -> void:
+	lq = bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false))
 	_fit_to_window()
 	if not get_viewport().size_changed.is_connected(_fit_to_window):
 		get_viewport().size_changed.connect(_fit_to_window)
@@ -75,65 +76,57 @@ func _auto_rechallenge() -> void:
 		_on_re_challenge_pressed()
 
 
-func _on_return_map_pressed() -> void:
-	RoleProp.ws_value = 0
-	Global.is_dead_link = false
+func _return_map_path() -> String:
 	if Global.current_level == "镇妖塔":
-		Global.change_scene("res://Scene/main_menu/map_0.tscn")
-		MemoryClass.request_save("level_defeat_return")
-		return
+		return "res://Scene/main_menu/map_0.tscn"
 	match int(PlayerData.player_data["Map_num"]):
 		1:
-			Global.change_scene("res://Scene/main_menu/map_1.tscn")
+			return "res://Scene/main_menu/map_1.tscn"
 		2:
-			Global.change_scene("res://Scene/main_menu/map_2.tscn")
+			return "res://Scene/main_menu/map_2.tscn"
 		3:
-			Global.change_scene("res://Scene/main_menu/map_3.tscn")
+			return "res://Scene/main_menu/map_3.tscn"
 		4:
-			Global.change_scene("res://Scene/main_menu/map_4.tscn")
+			return "res://Scene/main_menu/map_4.tscn"
 		5:
-			Global.change_scene("res://Scene/main_menu/map_5.tscn")
+			return "res://Scene/main_menu/map_5.tscn"
 		6:
-			Global.change_scene("res://Scene/main_menu/map_6.tscn")
+			return "res://Scene/main_menu/map_6.tscn"
 		7:
-			Global.change_scene("res://Scene/main_menu/map_7.tscn")
+			return "res://Scene/main_menu/map_7.tscn"
 		8:
 			if PlayerData.player_data.get("Map_variant", "") == "Map_8_1":
-				Global.change_scene("res://Scene/main_menu/map_8_1.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_8.tscn")
+				return "res://Scene/main_menu/map_8_1.tscn"
+			return "res://Scene/main_menu/map_8.tscn"
 		9:
 			if PlayerData.player_data.get("Map_variant", "") == "Map_9_1":
-				Global.change_scene("res://Scene/main_menu/map_9_1.tscn")
-			else:
-				Global.change_scene("res://Scene/main_menu/map_9.tscn")
+				return "res://Scene/main_menu/map_9_1.tscn"
+			return "res://Scene/main_menu/map_9.tscn"
 		_:
-			Global.change_scene("res://Scene/main_menu/map_0.tscn")
-	MemoryClass.request_save("level_defeat_return")
+			return "res://Scene/main_menu/map_0.tscn"
 
 
-var _is_rechallenging := false
-
-
-func _reset_role_state_for_rechallenge() -> void:
-	RoleProp.set_full_hp()
-	RoleProp.set_full_mp()
-	RoleProp.current_hp = int(RoleProp.roleprop.Hp)
-	RoleProp.current_mp = int(RoleProp.roleprop.Mp)
+func _on_return_map_pressed() -> void:
+	if not _begin_leave():
+		return
 	RoleProp.ws_value = 0
-	RoleProp.is_ws_state = false
 	Global.is_dead_link = false
+	if not _request_scene_change(_return_map_path()):
+		_abort_leave()
 
 
 func _on_re_challenge_pressed() -> void:
-	if _is_rechallenging:
-		return
 	if Global.last_level_path == "":
 		Global.add_message_show(Global.windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 		return
-	_is_rechallenging = true
+	if not _begin_rechallenge():
+		return
+	if not _flush_pending_settlement():
+		_abort_rechallenge()
+		return
 	_reset_role_state_for_rechallenge()
-	Global.change_scene(Global.last_level_path)
+	if not _request_scene_change(Global.last_level_path):
+		_abort_rechallenge()
 
 
 func load_item_icon(_name):
@@ -141,16 +134,46 @@ func load_item_icon(_name):
 	return abc
 
 
+var _equipment_reward_claimed: bool = false
+var _forever_refusal_committed: bool = false
+
+
 func _on_js_pressed() -> void:
+	if _equipment_reward_claimed:
+		return
+	if PlayerData.has_acquired_equipment("xczg"):
+		_equipment_reward_claimed = true
+		text.text = str(textlist4[randi_range(0, textlist4.size() - 1)])
+		player.play("dh_2")
+		return
+	var equipment_before: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST].duplicate(true)
+	var acquired_before: Array = PlayerData.player_data.get(DataKeys.ACQUIRED_EQUIPMENT_LIST, []).duplicate(true)
+	if not PlayerData.add_zb("xczg", 0, {}):
+		Global.add_message_show(self, "装备背包已满，无法领取黑暗力量", 2.0, Vector2(470, 300))
+		return
+	if not _request_settlement_save("level_defeat_reward"):
+		PlayerData.player_data[DataKeys.EQUIPMENT_LIST] = equipment_before
+		PlayerData.player_data[DataKeys.ACQUIRED_EQUIPMENT_LIST] = acquired_before
+		return
+	_equipment_reward_claimed = true
 	text.text = str(textlist4[randi_range(0, textlist4.size() - 1)])
-	PlayerData.add_zb("xczg", 0, {})
-	MemoryClass.request_save("level_defeat_reward")
 	player.play("dh_2")
 
 
 func _on_yjjj_pressed() -> void:
+	if _forever_refusal_committed:
+		return
+	if PlayerData.player_data["zyforever"]:
+		_forever_refusal_committed = true
+		text.text = str(textlist3[randi_range(0, textlist3.size() - 1)])
+		player.play("dh_3")
+		return
+	var forever_before: Variant = PlayerData.player_data["zyforever"]
 	PlayerData.player_data["zyforever"] = true
-	MemoryClass.request_save("level_defeat_reward")
+	if not _request_settlement_save("level_defeat_reward"):
+		PlayerData.player_data["zyforever"] = forever_before
+		return
+	_forever_refusal_committed = true
 	text.text = str(textlist3[randi_range(0, textlist3.size() - 1)])
 	player.play("dh_3")
 
@@ -163,13 +186,24 @@ func _on_jj_pressed() -> void:
 func _on_lqjl_pressed() -> void:
 	if lq:
 		return
-	PlayerData.add_dj("bsd_5", 1)
-	PlayerData.add_dj("mpyj", 1)
-	PlayerData.add_dj("xydxq", 3)
-	PlayerData.add_dj("qhs_4", 8)
-	PlayerData.add_dj("qhs_3", 8)
-	PlayerData.add_dj("qhs_2", 8)
-	PlayerData.add_dj("qhs_1", 8)
+	var entries: Array = [
+		{"name": "bsd_5", "number": 1},
+		{"name": "mpyj", "number": 1},
+		{"name": "xydxq", "number": 3},
+		{"name": "qhs_4", "number": 8},
+		{"name": "qhs_3", "number": 8},
+		{"name": "qhs_2", "number": 8},
+		{"name": "qhs_1", "number": 8},
+	]
+	var items_before: Dictionary = PlayerData.player_data[DataKeys.ITEM_LIST].duplicate(true)
+	if not PlayerData.add_dj_batch(entries):
+		Global.add_message_show(self, "道具背包空间不足，无法领取通关奖励", 2.0, Vector2(470, 300))
+		return
+	PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = true
+	if not _request_settlement_save("level_defeat_reward"):
+		PlayerData.player_data[DataKeys.ITEM_LIST] = items_before
+		PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = false
+		return
 	lq = true
 
 

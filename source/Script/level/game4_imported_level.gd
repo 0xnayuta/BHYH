@@ -190,9 +190,8 @@ func _update_stage_progression() -> void:
 
 
 func _start_stage(stage: int) -> void:
-	if stage < 1 or stage > _stage_count() or _stage_started.has(stage):
+	if _stage_started.has(stage) or not advance_stage(stage):
 		return
-	current_stage = stage
 	_stage_started[stage] = true
 	_request_stage_resource_preload(stage + 1)
 

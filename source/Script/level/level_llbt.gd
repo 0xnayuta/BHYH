@@ -216,15 +216,24 @@ func _leave_level_from_exit() -> void:
 		else:
 			if Global.llbt_level < 24:
 				Global.llbt_level += 1
-			_save_auto_battle_progress()
+			if not _commit_auto_battle_progress():
+				return
 			Global.change_scene("res://Scene/level/level_llbt.tscn")
 	elif Global.llbtwxms:
-		_save_auto_battle_progress()
+		if not _commit_auto_battle_progress():
+			return
 		Global.change_scene("res://Scene/level/level_llbt.tscn")
 
 
 func _save_auto_battle_progress() -> bool:
 	return MemoryClass.request_save("level_auto_battle")
+
+
+func _commit_auto_battle_progress() -> bool:
+	if _save_auto_battle_progress():
+		return true
+	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+	return false
 
 
 func set_through():

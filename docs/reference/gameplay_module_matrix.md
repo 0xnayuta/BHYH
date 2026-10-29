@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理与 17-2C 归属回归已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C 的修复与剩余差距见 §12/§13/§14。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归与 17-3 关卡阶段/结算已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3 的修复与剩余差距见 §12~§15。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -21,7 +21,7 @@
 7. **对象池只有 4 类**：`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`，上限 80/32/24/32（`global.gd:119-123`）。取出入口不重置节点；重置由各节点自己的 `setup()`/`recycle()` 完成。`damage_text` 另有 `prepare_for_pool()` 仅用于预热。
 8. **关卡阶段由 `BaseLevel.current_stage` 单一持有，但写入面分散**：535 行 / 97 文件引用，31 行含声明（30 处赋值）；`BaseLevel` 8 处按角色 x 坐标推进，关卡子类/怪物脚本 22 处直接赋值。阶段推进、刷怪与出口判定都在 `BaseThroughLevel`，但子类可绕过。
 9. **胜败切换有两套入口**：出口离开走 `_leave_level_from_exit`（`base_through_level.gd:1366`），死亡走 `BaseHero` 两个死亡分支（`base_hero.gd:716`、`:1680`）；两者都可能在 1.5s 等待后重复调用 `change_scene(defeat)`。
-10. **关卡域保存点 13 处**：`victory` 3、`defeat` 4、`hdzm` 1、`level_17` 1、`level_bxgh` 1、`level_esbxx` 1、`level_llbt` 1、`level_zhen_yao_tower` 1。`victory._ready` 与 `defeat` 的奖励分支**丢弃 `request_save` 返回值**；`defeat._on_lqjl_pressed` 只在内存置 `lq`，不保存。
+10. **关卡域保存点 10 处**：`victory` 1、`defeat` 3、`hdzm` 1、`level_17` 1、`level_bxgh` 1、`level_esbxx` 1、`level_llbt` 1、`level_zhen_yao_tower` 1。17-3 后结算保存经 `LevelSettlement` 判读；返回按钮不再重复保存，`defeat._on_lqjl_pressed` 已保存并持久领取标志。
 11. **成长系统已有可参考的事务实现**：`forge.gd` 采用「快照 → 先加产物并检查 bool → 扣材料 → 保存 → 失败恢复」；其余商店/合成/神铸/淬骨/强化/技能仍为「先扣费/先提交，再产出」或无回滚。
 12. **`PlayerData` 原语失败语义不一致**：`spend_soul`、`add_zb`、`add_fb` 返回 `bool`；`add_dj`、`add_xhp` 返回 `void` 且容量不足时静默丢弃。商店对可选堆叠物没有容量前置校验，扣费后可能拿不到道具。
 13. **HUD 已显式注入玩家**：`RoleInformation` 为 P1/P2 分别设置 `role_p1.player`/`role_p2.player`（`role_information.gd:47-60`）；`BaseRole` 仍保留 `RoleProp.source_player` 兜底（`base_role.gd:82`、`:98`）；其 `_set_values` 直接读全局 `RoleProp`，P2 HUD 的血蓝/经验/无双因此仍显示 1P 值。
@@ -239,34 +239,31 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 场景/入口 | 写入 | 保存 | 守卫 | 失败语义 |
 |:---|:---|:---|:---|:---|
-| `victory.gd:_ready`（`:24`） | `PlayerData.player_data["关卡评价"]`、`MainSet` 一次性解锁标志、BGM/UI | `_save_completed_level()`（`:72`）→ `request_save("level_victory")` | 无重复 `_ready` 重入 | 返回值被丢弃；保存失败无提示 |
-| `victory.gd:_on_return_map_pressed`（`:75`） | 无领域写入 | `request_save("level_victory_return")` 在 `change_scene` 后 | 无按钮重入守卫 | 第二次点击可再次切换/保存 |
-| `victory.gd:_on_rechallenge_pressed`（`:154`） | 重置 HP/MP/无双 | 无 | `_is_rechallenging` | 关卡路径为空时提示 |
-| `defeat.gd:_on_return_map_pressed`（`:78`） | 无领域写入 | `request_save("level_defeat_return")` | 无按钮重入守卫 | 第二次点击可再次切换/保存 |
-| `defeat.gd:_on_js_pressed`（`:144`） | `PlayerData.add_zb("xczg", ...)` | `request_save("level_defeat_reward")` | 无重复领取守卫 | 可能重复发放；保存 bool 丢弃 |
-| `defeat.gd:_on_yjjj_pressed`（`:151`） | `zyforever = true` | `request_save("level_defeat_reward")` | 幂等赋值 | 保存 bool 丢弃 |
-| `defeat.gd:_on_lqjl_pressed`（`:163`） | 7 种道具入包 | **无保存** | 仅内存 `lq` | 重载/重进可再次领取；道具满时静默丢失 |
-| `defeat.gd:_on_jj_pressed`（`:158`） | 无 | 无 | 无 | 纯文本分支 |
+| `victory.gd:_ready` | `PlayerData.player_data["关卡评价"]`、`MainSet` 一次性解锁标志、BGM/UI | `LevelSettlement._commit_settlement("level_victory")` | 每实例一次；待提交状态可重试 | 失败提示；待提交保留，返回/重战时重试 |
+| `victory.gd:_on_return_map_pressed` | 清零无双 | 不重复保存；仅冲刷待提交 | `_begin_leave()` | 待提交失败则中止离开 |
+| `victory.gd:_on_rechallenge_pressed` | 重置 HP/MP/无双 | 不重复保存；仅冲刷待提交 | `_begin_rechallenge()` | 待提交失败则中止重战 |
+| `defeat.gd:_on_return_map_pressed` | 清零无双/死亡链 | 不保存 | `_begin_leave()` | 双击不重复切换 |
+| `defeat.gd:_on_js_pressed` | `add_zb("xczg")` | `_request_settlement_save("level_defeat_reward")` | `_equipment_reward_claimed` + 已获取检查 | 失败回滚装备与获取记录 |
+| `defeat.gd:_on_yjjj_pressed` | `zyforever = true` | `_request_settlement_save("level_defeat_reward")` | `_forever_refusal_committed` | 失败回滚标志 |
+| `defeat.gd:_on_lqjl_pressed` | 7 种道具入包 | `_request_settlement_save("level_defeat_reward")` | 持久 `失败奖励已领取` + 整批校验 | 容量不足或保存失败整批回滚 |
+| `defeat.gd:_on_jj_pressed` | 无 | 无 | 无 | 纯文本分支 |
 
-### 7.2 关卡域保存点（13 处）
+### 7.2 关卡域保存点（10 处）
 
 | # | 文件 | reason | 触发 | 守卫/顺序 |
 |:---|:---|:---|:---|:---|
-| 1 | `victory.gd:72` | `level_victory` | 胜利 `_ready` | 无返回值判读 |
-| 2 | `victory.gd:79` | `level_victory_return` | 镇妖塔返回 | `change_scene` 后保存 |
-| 3 | `victory.gd:123` | `level_victory_return` | 普通地图返回 | `change_scene` 后保存 |
-| 4 | `defeat.gd:83` | `level_defeat_return` | 镇妖塔返回 | `change_scene` 后保存 |
-| 5 | `defeat.gd:112` | `level_defeat_return` | 普通地图返回 | `change_scene` 后保存 |
-| 6 | `defeat.gd:147` | `level_defeat_reward` | 接受黑暗力量（装备） | 无重复领取守卫 |
-| 7 | `defeat.gd:153` | `level_defeat_reward` | 永久拒绝 | 幂等标志 |
-| 8 | `level_zhen_yao_tower.gd:484` | `tower_floor_advance` | 进入下一层 | `prepare_floor_plan` 后、切场景前 |
-| 9 | `level_17.gd:48` | `level_17_gate` | 消耗 `bsz` 过门 | 扣除后、切场景前 |
-| 10 | `level_bxgh.gd:402` | `level_bxgh_boss` | Boss 死亡 | `_boss_death_handled` |
-| 11 | `level_esbxx.gd:296` | `level_esbxx_tier` | 星宿层进度变化 | `progress_changed` |
-| 12 | `level_llbt.gd:227` | `level_auto_battle` | 自动战斗重开 | 返回 bool 未被调用方判读 |
-| 13 | `hdzm.gd:61` | `level_hdzm_challenge` | 挑战入口 | `change_scene` 后保存 |
+| 1 | `victory.gd:_ready` | `level_victory` | 胜利 `_ready` | `_commit_settlement` 判读并保留待提交 |
+| 2 | `defeat.gd:_on_js_pressed` | `level_defeat_reward` | 接受黑暗力量 | 领取守卫 + 失败回滚 |
+| 3 | `defeat.gd:_on_yjjj_pressed` | `level_defeat_reward` | 永久拒绝 | 提交守卫 + 失败回滚 |
+| 4 | `defeat.gd:_on_lqjl_pressed` | `level_defeat_reward` | 领取 7 种道具 | 持久标志 + 整批发放 + 失败回滚 |
+| 5 | `level_zhen_yao_tower.gd` | `tower_floor_advance` | 进入下一层 | 先保存，失败恢复层数/积分并停留 |
+| 6 | `level_17.gd` | `level_17_gate` | 消耗 `bsz` 过门 | 保存失败返还 `bsz` |
+| 7 | `level_bxgh.gd` | `level_bxgh_boss` | Boss 死亡 | `_boss_death_handled`；失败提示 |
+| 8 | `level_esbxx.gd` | `level_esbxx_tier` | 星宿层进度变化 | `progress_changed`；失败提示 |
+| 9 | `level_llbt.gd` | `level_auto_battle` | 自动战斗重开 | 调用方判读，失败停留 |
+| 10 | `hdzm.gd` | `level_hdzm_challenge` | 挑战入口 | 先保存后切场景，失败回滚标志 |
 
-全仓 `request_save` 当前 **117 处 / 60 文件**（Phase 16 收口时为 116 / 59）。
+全仓 `request_save` 当前 **111 处 / 59 文件**；胜败返回的 4 次冗余保存已移除。
 
 ### 7.3 直接数据写入（Phase 17 范围）
 
@@ -296,12 +293,12 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | ID | 事实 | 风险 | 17-3 验证 |
 |:---|:---|:---|:---|
-| GM-21 | `victory._ready` 先写评价/解锁标志再保存，返回值丢弃 | 保存失败时本轮进度只在内存；退出即丢 | 注入写失败，确认提示与状态 |
-| GM-22 | `defeat` 奖励先发物品再保存，无回滚 | 保存失败时物品只在内存；重复进入可再领 | 两次进入失败场景对比背包 |
-| GM-23 | `defeat._on_lqjl_pressed` 不保存 | 重载后重复领取；`lq` 不持久 | 领取后重载/重进 |
-| GM-24 | `victory`/`defeat` 返回按钮无重入守卫 | 双击触发两次 `change_scene` 与两次保存 | 连续点击两次 |
-| GM-25 | 两个死亡分支各自等待后切换 | 双人同时死亡可能重复切换 | `coop_probe_runner` 全灭用例 |
-| GM-26 | `base_through_level.gd` 直接写 29 行关卡进度（含 `add_tg`） | 通关进度在多处写；失败无回滚 | 通关/重战/退出各一次 |
+| GM-21 | `victory._ready` 保存失败无提示 | 保存失败时本轮进度只在内存 | **已修**：`LevelSettlement` 提示并保留待提交，返回/重战重试 |
+| GM-22 | `defeat` 奖励先发物品再保存，无回滚 | 保存失败时物品只在内存 | **已修**：保存失败回滚装备/道具/标志 |
+| GM-23 | `defeat._on_lqjl_pressed` 不保存 | 重载后重复领取 | **已修**：持久 `失败奖励已领取` + 关闭前保存 |
+| GM-24 | `victory`/`defeat` 返回按钮无重入守卫 | 双击触发两次 `change_scene` 与两次保存 | **已修**：`_begin_leave()`/`_begin_rechallenge()`；探针连续点击 |
+| GM-25 | 两个死亡分支各自等待后切换 | 双人同时死亡可能重复切换 | 未改；`coop_probe_runner` 全灭用例仍为回归门禁 |
+| GM-26 | `base_through_level.gd` 直接写 29 行关卡进度（含 `add_tg`） | 通关进度写入仍集中在该文件；保存由胜利或关卡分支提交 | 阶段推进已收敛；`add_tg` 写入未改，保存失败路径已收口 |
 
 ---
 
@@ -395,7 +392,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-38 | `choose_item.gd:91` | 选择界面创建奖励场景后自身 `queue_free` |
 | GM-39 | `transmogtified_box.gd:59` | 幻化面板直接写 `PlayerData` 并保存 |
 | GM-40 | `victory.gd:24` | 结算 UI 在 `_ready` 写评价/解锁标志 |
-| GM-41 | `defeat.gd:144`、`:163` | 失败 UI 直接发装备/道具 |
+| GM-41 | `defeat.gd` 奖励分支 | **17-3 已迁入 `LevelSettlement` 命令边界**；失败回滚 |
 
 上述点中，GM-39/GM-40 属于「面板命令」而非纯展示；17-5 的目标是区分只读展示与显式命令，不是禁止面板提交。
 
@@ -576,3 +573,30 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 14.4 回归
 
 - `coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；`level_regression_all --changed-only` 128/128 PASS + 2 SKIP（314.1s，`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 15. 17-3 阶段与结算（2026-10-29）
+
+### 15.1 阶段推进
+
+`base_through_level.advance_stage(next_stage)` 是 `current_stage` 的唯一写入入口：只接受 `1..4` 且严格大于当前值；基础关卡按 x 阈值调用，`game4_imported_level._start_stage()` 复用同一入口。回退/跳阶请求直接返回 `false`。
+
+### 15.2 结算所有权
+
+`LevelSettlement`（`source/Script/level/level_settlement.gd`）持有：
+
+- `_commit_settlement(reason)`：保存成功清空待提交；失败提示并保留待提交；
+- `_flush_pending_settlement()`：返回/重战前重试；
+- `_begin_leave()` / `_begin_rechallenge()`：按钮去重；
+- `_request_settlement_save()` 与 `_request_scene_change()`：生产走 `MemoryClass`/`Global`，探针可注入。
+
+`victory` 与 `defeat` 的返回不再各自保存；胜利 `_ready` 是唯一通关保存，失败奖励保存仅在三个奖励入口。
+
+### 15.3 失败奖励
+
+`PlayerData.add_dj_batch()` 先快照道具页，逐项发放后核对数量；任一失败恢复快照。`defeat._on_lqjl_pressed` 在保存失败时恢复道具页并把 `失败奖励已领取` 复位；`_ready` 读取该标志，重进后 `lq` 为真，不再发放。
+
+### 15.4 验证
+
+`archive_probe_runner` 118 项全部 PASS，覆盖：胜利保存一次、胜利返回/重战场景一次、保存失败后返回重试、失败领取一次、领取持久标志、返回一次、道具/装备保存失败回滚。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS。

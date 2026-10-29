@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理与 17-2C 归属回归已完成（2026-10-29），17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归与 17-3 关卡阶段与结算已完成（2026-10-29），17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -37,7 +37,7 @@
 | 攻击/弹体/召唤/法宝 | 153 个关卡场景、163 个关卡脚本；`role_bullet*.gd` 2 个；`Script/monster` 中 155 个文件涉及 bullet；`SummonBaseMonster` 子类 12 个；`BaseMagicWeapon` 相关 26 个 | 17-2 明确来源载体、池化复用清理与归属快照；补归属回归夹具 |
 | 池化 | `Global._pool_data` 四类（`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`），上限 80/32/24/32 | 17-2 验证复用节点不携带上一次的来源与战斗状态 |
 | 关卡阶段 | `current_stage` 535 行 / 97 文件；`base_through_level.gd` 1951 行；`victory.gd` 251 行、`defeat.gd` 178 行 | 17-3 枚举阶段推进、胜败判定、重战与结算保存的全部写入者 |
-| 结算保存 | 关卡域 `request_save` 13 处；`victory.gd` 3 处、`defeat.gd` 4 处（含互斥分支） | 17-3 验证通关/失败/重战每次只保存一次，失败不半提交 |
+| 结算保存 | 关卡域 `request_save` 10 处；`victory` 1、`defeat` 3（经 `LevelSettlement`） | 17-3 验证通关/失败/重战每次只保存一次，失败不半提交 |
 | 数据写入 | `PlayerData.player_data` 下标赋值 **145 行 / 42 文件**（含属性赋值 197 行 / 44 文件）；热点 `base_through_level` 29、`game_announcement` 14、`base_monster` 13；分布见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) §7.3 | 17-3/17-4 只迁移试点域的写入，不一次性全量改写 |
 | 成长系统 | `Script/ldl` 16 个脚本、`Script/shop` 6 个、`Script/skill` 9 个；奖励结算涉及 `reward_interface` 等 2 个入口 | 17-4 枚举校验、扣除、产出的顺序与失败分支，找部分扣费/重复领取点 |
 | HUD/输入/音频 | `base_role.gd` 1254 行；`Input.is_action` 63 行 / 20 文件；`Global.add_sound` 138 次 / 34 文件；`Global.add_bgm` 125 次 / 94 文件 | 17-5 区分只读展示、输入映射与表现副作用，禁止表现层提交领域状态 |
@@ -145,9 +145,9 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 
 ### 4.1 切片
 
-1. **Phase 17-3A 阶段状态（规划）**：`current_stage` 的推进只经单一入口，刷怪表/弹体表与 HUD 读取同一阶段快照；
-2. **Phase 17-3B 胜败与重战（规划）**：胜败判定、结算场景与重战入口的提交各由一个函数负责，禁止在 UI 回调内重复发奖或重复跳转；
-3. **Phase 17-3C 保存一次（规划）**：结算保存收敛到唯一提交点，复用 Phase 16 的 `request_save` 与档案会话校验；补“通关/失败/重战各一次”用例。
+1. **Phase 17-3A 阶段状态（已完成 2026-10-29）**：`current_stage` 只经 `advance_stage()` 单调推进；基础关卡与 `game4_imported_level` 共用入口；
+2. **Phase 17-3B 胜败与重战（已完成 2026-10-29）**：`LevelSettlement` 统一保存、离开、重战与失败提示；胜利/失败按钮加去重守卫，奖励保存失败回滚；
+3. **Phase 17-3C 保存一次（已完成 2026-10-29）**：结算、返回与奖励收敛到 `LevelSettlement` 提交点；`lqjl` 增加持久领取标志与整批发放回滚；详见 §4.4。
 
 ### 4.2 必须验证
 
@@ -161,6 +161,18 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 - 阶段、胜败与结算各有唯一所有者与正式入口；
 - 结算保存与发奖顺序固定，失败可判断；
 - 不改变关卡数值、刷怪表与通关条件。
+
+### 4.4 17-3 实施记录（2026-10-29）
+
+| 项 | 内容 |
+|:---|:---|
+| 阶段 | `base_through_level.advance_stage()` 拒绝回退/跳阶；基础关卡与 `game4_imported_level._start_stage()` 改用同一入口 |
+| 结算基类 | `LevelSettlement` 持有保存提交、待提交重试、离开/重战守卫、失败提示与场景请求；`victory`/`defeat` 不再各自实现 |
+| 胜利 | `_ready` 只提交一次；返回/重战不再额外保存；保存失败保留待提交，返回时重试，失败则中止离开 |
+| 失败 | 返回不重复保存；`js`/`yjjj`/`lqjl` 各自守卫并判读保存；保存失败回滚装备/道具/标志 |
+| `lqjl` | 整批发放 `PlayerData.add_dj_batch()`；新增持久标志 `失败奖励已领取`；重载/重进不再重复领取 |
+| 关卡保存点 | 塔层、17 门、八仙 Boss、星宿层、玲珑塔与 hdzm 判读保存结果并提示；塔层/hdzm/17 门失败回滚 |
+| 验证 | `archive_probe_runner` 118 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS |
 
 ## 5. Phase 17-4：成长系统命令边界
 
@@ -262,7 +274,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 |:---|:---|:---|
 | Phase 17-1 调用面矩阵 | 全量引用、owner/写入者/失败表、链接与格式；结果见 `gameplay_module_matrix.md` | 引擎、关卡回归不因只读调查复跑 |
 | Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、1P/2P 伤害数值分离、相关关卡冒烟；17-2A/2B/2C 分别由 `LocalCoopAttributionSourcesProbe`/`LocalCoopPoolReuseProbe`/`LocalCoopDamageStatsProbe` 覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
-| Phase 17-3 阶段与结算 | 阶段推进、胜败、重战与保存一次的分支用例；`level_1` 冒烟；相关关卡回归 | 只改结算 UI 或只改基类都不算完成 |
+| Phase 17-3 阶段与结算 | `archive_probe_runner` 的胜败/重战/奖励/保存失败用例（118 项）、`level_1` 冒烟、变更关卡回归 | 只改结算 UI 或只改基类都不算完成 |
 | Phase 17-4 成长命令 | 校验失败无扣除、成功只提交一次、重复领取与并发点击用例；共享/个体分配 | 不要求引入通用事务框架 |
 | Phase 17-5 HUD/输入/音频 | 暂停/切档/面板/退出后的监听与残留；1P/2P 输入隔离；音效复用 | 只改 HUD 绘制或只改输入映射都不算完成 |
 | Phase 17-6 模块 API | 公开 API 清单、依赖方向、试点边界路径清理与场景加载回归 | 不做全仓路径替换 |
