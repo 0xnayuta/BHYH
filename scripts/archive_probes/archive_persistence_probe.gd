@@ -15,6 +15,8 @@ var checks: Dictionary = {}
 
 
 func _ready() -> void:
+	# 探针主动触发无会话/写失败；关闭兜底 UI 提示，仍验证信号与状态。
+	Global.set_save_failure_feedback_enabled(false)
 	print("USER_DIR=", OS.get_data_dir())
 	await _run()
 	var ok := failures.is_empty()
@@ -276,12 +278,40 @@ func _test_cloud_validation() -> void:
 func _test_request_save() -> void:
 	_reset_profile(1, 1)
 	Global.set_cd_path("")
-	_check("request_save_without_session", not MemoryClass.request_save("probe_empty"))
+	var save_events: Array = []
+	var on_save_failed := func(reason: String, error: String, message: String, notify: bool) -> void:
+		save_events.append({"reason": reason, "error": error, "message": message, "notify": notify})
+	MemoryClass.save_failed.connect(on_save_failed)
+	var failures_before := int(Global.get_save_failure_status().get("count", 0))
+	var no_session_outcome := MemoryClass.request_save_result("probe_empty")
+	_check(
+		"request_save_without_session",
+		not bool(no_session_outcome.get("ok", true)) and str(no_session_outcome.get("error", "")) == "no_archive_session",
+		str(no_session_outcome)
+	)
+	_check("request_save_outcome_message", str(no_session_outcome.get("message", "")) != "", str(no_session_outcome))
+	_check(
+		"request_save_last_outcome",
+		MemoryClass.get_last_save_outcome().get("error") == "no_archive_session",
+		str(MemoryClass.get_last_save_outcome())
+	)
+	_check("request_save_failure_event", not save_events.is_empty() and str(save_events[0].get("error", "")) == "no_archive_session", str(save_events))
+	_check(
+		"request_save_failure_consumer",
+		int(Global.get_save_failure_status().get("count", 0)) > failures_before,
+		str(Global.get_save_failure_status())
+	)
+	MemoryClass.save_failed.disconnect(on_save_failed)
 
 	_reset_profile(7, 12)
 	_open_session(TEST_ARCHIVE_PREFIX + "009.json")
 	var saved := MemoryClass.request_save("probe_save")
 	_check("request_save_writes", saved and FileAccess.file_exists(Global.get_cd_path()), "saved=%s" % saved)
+	_check(
+		"request_save_success_outcome",
+		bool(MemoryClass.get_last_save_outcome().get("ok", false)) and str(MemoryClass.get_last_save_outcome().get("error", "x")) == "",
+		str(MemoryClass.get_last_save_outcome())
+	)
 	_check("request_save_no_temp", not FileAccess.file_exists(Global.get_cd_path() + ".tmp"))
 	_check("request_save_level", MemoryClass.get_archive_level(Global.get_cd_path()) == 12)
 
@@ -314,6 +344,37 @@ func _test_request_save() -> void:
 		seeded and not empty_blocked and seeded_level == 9 and after_level == 9,
 		"seed=%s blocked=%s before=%s after=%s" % [seeded, empty_blocked, seeded_level, after_level]
 	)
+
+	# 同步写入失败也必须有结构化结果、信号与兜底消费者计数。
+	var write_fail_path := TEST_ARCHIVE_PREFIX + "012.json"
+	_reset_profile(1, 2)
+	_open_session(write_fail_path)
+	_check("request_save_write_failure_clean", _remove_empty_directory(write_fail_path))
+	_check("request_save_write_failure_fixture", DirAccess.make_dir_absolute(ProjectSettings.globalize_path(write_fail_path)) == OK)
+	var write_failure_events: Array = []
+	var on_write_failed := func(_reason: String, error: String, _message: String, notify: bool) -> void:
+		write_failure_events.append({"error": error, "notify": notify})
+	MemoryClass.save_failed.connect(on_write_failed)
+	var write_failure_count := int(Global.get_save_failure_status().get("count", 0))
+	var write_failure := MemoryClass.request_save_result("probe_sync_write_fail")
+	_check(
+		"request_save_write_failure_result",
+		not bool(write_failure.get("ok", true)) and str(write_failure.get("error", "")) == "write_failed",
+		str(write_failure)
+	)
+	_check(
+		"request_save_write_failure_event",
+		not write_failure_events.is_empty() and str(write_failure_events[0].get("error", "")) == "write_failed",
+		str(write_failure_events)
+	)
+	_check(
+		"request_save_write_failure_consumer",
+		int(Global.get_save_failure_status().get("count", 0)) > write_failure_count,
+		str(Global.get_save_failure_status())
+	)
+	MemoryClass.save_failed.disconnect(on_write_failed)
+	_check("request_save_write_failure_cleanup", _remove_empty_directory(write_fail_path))
+	_reset_profile(1, 1)
 
 
 func _test_shop_purchase_command() -> void:

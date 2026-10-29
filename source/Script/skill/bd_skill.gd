@@ -236,7 +236,7 @@ func _upgrade_all_passives() -> int:
 	if (
 		upgraded_count > 0
 		and Global.is_archive_session_active()
-		and not MemoryClass.request_save("skill_passive_upgrade_all")
+		and not MemoryClass.request_save("skill_passive_upgrade_all", false)
 	):
 		PlayerData.restore_state(snapshot)
 		return -1
@@ -271,7 +271,7 @@ func up_level(_name) -> bool:
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
 		return false
 	target[_name] += 1
-	if not MemoryClass.request_save("skill_passive_upgrade"):
+	if not MemoryClass.request_save("skill_passive_upgrade", false):
 		PlayerData.restore_state(snapshot)
 		set_infor()
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 1)

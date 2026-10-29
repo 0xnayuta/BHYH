@@ -58,7 +58,7 @@ func _on_csm_pressed() -> void:
 func challenge():
 	var first_jiejiao_before: Variant = PlayerData.player_data["FristJiejiao"]
 	PlayerData.player_data["FristJiejiao"] = false
-	if not MemoryClass.request_save("level_hdzm_challenge"):
+	if not MemoryClass.request_save("level_hdzm_challenge", false):
 		PlayerData.player_data["FristJiejiao"] = first_jiejiao_before
 		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
 		return

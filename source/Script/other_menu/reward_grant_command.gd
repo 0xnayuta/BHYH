@@ -61,7 +61,7 @@ static func execute(
 	if use_item_name != "" and not PlayerData.remove_item(use_item_name, use_num):
 		PlayerData.restore_state(snapshot)
 		return _failure("使用道具数量不足，本次奖励已撤销")
-	if not MemoryClass.request_save(SAVE_REASON):
+	if not MemoryClass.request_save(SAVE_REASON, false):
 		PlayerData.restore_state(snapshot)
 		return _failure("存档保存失败，本次奖励已撤销：%s" % MemoryClass.describe_save_error())
 	return {"ok": true}

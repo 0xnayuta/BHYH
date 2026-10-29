@@ -35,6 +35,7 @@ EXPECTED_ERROR_MARKERS = (
     "存档保存失败（probe_invalid）",
     "存档保存失败（probe_empty_profile）",
     "存档保存失败（probe_normalize_fail）",
+    "存档保存失败（probe_sync_write_fail）",
     "拒绝保存过期档案身份",
     "保存前补全后置条件不满足",
     "magic != 0x43454447",

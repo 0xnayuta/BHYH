@@ -226,7 +226,7 @@ func _leave_level_from_exit() -> void:
 
 
 func _save_auto_battle_progress() -> bool:
-	return MemoryClass.request_save("level_auto_battle")
+	return MemoryClass.request_save("level_auto_battle", false)
 
 
 func _commit_auto_battle_progress() -> bool:

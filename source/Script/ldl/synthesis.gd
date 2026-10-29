@@ -162,7 +162,7 @@ func _on_syn_pressed() -> void:
 	PlayerData.player_data["放入列表"]["物品1"].clear()
 	PlayerData.player_data["放入列表"]["物品2"].clear()
 	PlayerData.player_data["放入列表"]["物品3"].clear()
-	if not MemoryClass.request_save("ldl_synthesis"):
+	if not MemoryClass.request_save("ldl_synthesis", false):
 		PlayerData.restore_state(snapshot)
 		Global.add_message_show(
 			get_parent(), "存档保存失败，合成已撤销：" + MemoryClass.describe_save_error(), 1.5, Vector2(15, -45)

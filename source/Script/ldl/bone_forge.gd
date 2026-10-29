@@ -150,7 +150,7 @@ func _on_sz_pressed() -> void:
 		else:
 			_update_selected_equipment(selected, item_name, upgraded_data, int(current.get(DataKeys.ENHANCE_LEVEL, 0)))
 		_refresh_equipped_state()
-	if not MemoryClass.request_save("ldl_bone_forge"):
+	if not MemoryClass.request_save("ldl_bone_forge", false):
 		PlayerData.restore_state(snapshot)
 		MLdl.qh_list["Data"] = previous_data
 		_refresh_equipped_state()

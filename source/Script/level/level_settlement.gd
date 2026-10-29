@@ -17,7 +17,7 @@ func _request_settlement_save(reason: String) -> bool:
 	if save_request_override.is_valid():
 		saved = bool(save_request_override.call(reason))
 	else:
-		saved = MemoryClass.request_save(reason)
+		saved = MemoryClass.request_save(reason, false)
 	if saved:
 		_save_failure_notified = false
 	else:

@@ -311,6 +311,8 @@ func _ready() -> void:
 		_create_debug_perf_overlay()
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
+	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
+		MemoryClass.save_failed.connect(_on_save_failed)
 	call_deferred("prewarm_permanent_small_ui_scenes")
 
 
@@ -442,6 +444,36 @@ func get_background_save_status() -> Dictionary:
 	}
 
 
+## 同步保存失败兜底消费者：调用方已处理时 notify=false，不重复弹窗。
+func _on_save_failed(reason: String, error: String, message: String, notify: bool) -> void:
+	_save_failure_count += 1
+	_save_failure_last = {"reason": reason, "error": error, "message": message}
+	if not notify or not _save_failure_feedback_enabled or _suppress_save_failure_feedback:
+		return
+	if not is_inside_tree() or get_tree() == null:
+		return
+	var now := Time.get_ticks_msec()
+	var key := error + ":" + message
+	if key == _save_failure_notify_key and now - _save_failure_notify_msec < 1500:
+		return
+	_save_failure_notify_key = key
+	_save_failure_notify_msec = now
+	add_message_show(get_ui_popup_layer(), message, 2.0, Vector2.ZERO)
+
+
+func set_save_failure_feedback_enabled(enabled: bool) -> void:
+	_save_failure_feedback_enabled = enabled
+
+
+func get_save_failure_status() -> Dictionary:
+	return {
+		"count": _save_failure_count,
+		"last": _save_failure_last.duplicate(true),
+		"last_outcome": MemoryClass.get_last_save_outcome() if MemoryClass != null else {},
+		"feedback_enabled": _save_failure_feedback_enabled,
+	}
+
+
 var total_role_hit: int
 var total_cure_hp: int
 var total_phy_hit: int
@@ -501,6 +533,13 @@ var _background_save_last_serial: int = 0
 var _background_save_last_success: bool = true
 var _background_save_last_path: String = ""
 var _background_save_failure_count: int = 0
+## 同步保存失败反馈：命令/面板自处理时用 notify=false 抑制兜底提示。
+var _save_failure_count: int = 0
+var _save_failure_last: Dictionary = {}
+var _save_failure_feedback_enabled: bool = true
+var _suppress_save_failure_feedback: bool = false
+var _save_failure_notify_msec: int = 0
+var _save_failure_notify_key: String = ""
 var _runtime_generation: int = 0
 var _shutting_down := false
 var _ui_runtime_instance_paths: Dictionary = {}
@@ -4818,11 +4857,13 @@ func add_message_show(parent_node, need_text: String, time: float, target_pos: V
 
 ## 统一保存反馈：失败时在可见 UI 层提示，并返回 false 供调用方回滚。
 func request_save_with_feedback(reason: String, parent: Node = null, failure_prefix: String = "保存失败：") -> bool:
-	var saved := MemoryClass.request_save(reason)
-	if saved:
+	_suppress_save_failure_feedback = true
+	var outcome := MemoryClass.request_save_result(reason, false)
+	_suppress_save_failure_feedback = false
+	if bool(outcome.get("ok", false)):
 		return true
 	var target: Node = parent if is_instance_valid(parent) else get_ui_popup_layer()
-	add_message_show(target, failure_prefix + MemoryClass.describe_save_error(), 2.0, Vector2.ZERO)
+	add_message_show(target, failure_prefix + str(outcome.get("message", "")), 2.0, Vector2.ZERO)
 	return false
 
 

@@ -24,6 +24,8 @@ const ARCHIVE_CONTAINER_KEYS := ["装备列表", "道具列表", "消耗品列�
 const ARCHIVE_TIME_KEY: String = "存档时间"
 
 signal background_save_finished(path: String, success: bool, serial: int)
+## 同步保存失败信号：即使调用方丢弃 bool，Global 也能记录并给出反馈。
+signal save_failed(reason: String, error: String, message: String, notify: bool)
 ## 最近一次保存失败的程序化原因（"" 表示最近一次成功或尚未保存）。
 ## 取值：invalid_archive_path / stale_archive_identity / normalize_failed:<键> / invalid_archive_data / write_failed
 var last_save_error: String = ""
@@ -33,6 +35,8 @@ var _pending_background_saves: Dictionary = {}
 var _failed_background_saves: Dictionary = {}
 var _save_flush_in_progress := false
 var _save_snapshot_in_progress := false
+## 最近一次同步保存结果；入口可观察，不依赖调用方是否判读 bool。
+var last_save_outcome: Dictionary = {}
 ## 后台写任务序号：每次入队递增；完成信号携带同一序号，消费方可判定信号顺序。
 var _background_save_serial: int = 0
 var _last_background_save_serial: int = 0
@@ -348,21 +352,49 @@ var keys = "zmxybhyh" + OS.get_unique_id() + "v1.1"
 
 ## 统一保存入口：业务只提交保存意图，路径与失败结果由持久化边界处理。
 ## reason 仅用于失败诊断，不参与路径解析或档案内容。
-func request_save(reason: String = "") -> bool:
+## notify=false 供已自行展示失败文案的命令/面板使用，避免重复提示。
+func request_save(reason: String = "", notify: bool = true) -> bool:
+	return bool(request_save_result(reason, notify).get("ok", false))
+
+
+## 同步保存的结构化结果：ok/reason/error/message/path/notify。
+## 失败时更新 last_save_outcome 并发出 save_failed；调用方丢弃 bool 也不会静默。
+func request_save_result(reason: String = "", notify: bool = true) -> Dictionary:
+	last_save_error = ""
 	if not Global.is_archive_session_active():
 		last_save_error = "no_archive_session"
-		return false
+		return _finish_save_result(reason, false, notify, "")
 	var archive_path: String = Global.get_archive_session_path().strip_edges()
 	if archive_number_from_path(archive_path) <= 0:
 		last_save_error = "invalid_archive_path"
-		return false
+		return _finish_save_result(reason, false, notify, archive_path)
 	if archive_path != Global.get_cd_path().strip_edges():
 		last_save_error = "stale_archive_identity"
-		return false
+		return _finish_save_result(reason, false, notify, archive_path)
 	if save_game(archive_path):
-		return true
+		return _finish_save_result(reason, true, notify, archive_path)
 	push_warning("存档保存失败（%s）：%s" % [reason, archive_path])
-	return false
+	return _finish_save_result(reason, false, notify, archive_path)
+
+
+func _finish_save_result(reason: String, ok: bool, notify: bool, archive_path: String) -> Dictionary:
+	var result := {
+		"ok": ok,
+		"reason": reason,
+		"error": last_save_error,
+		"message": describe_save_error(),
+		"path": archive_path,
+		"notify": notify,
+	}
+	last_save_outcome = result
+	if not ok:
+		save_failed.emit(reason, last_save_error, str(result["message"]), notify)
+	return result
+
+
+## 最近一次同步保存结果快照；未保存过时为空字典。
+func get_last_save_outcome() -> Dictionary:
+	return last_save_outcome.duplicate(true)
 
 
 ## 会话身份是否仍然有效：路径与身份纪元必须同时匹配。

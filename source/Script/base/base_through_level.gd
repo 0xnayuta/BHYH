@@ -1426,7 +1426,7 @@ func _commit_progress_before_transition() -> bool:
 	if progress_save_override.is_valid():
 		saved = bool(progress_save_override.call("level_progress_transition"))
 	else:
-		saved = MemoryClass.request_save("level_progress_transition")
+		saved = MemoryClass.request_save("level_progress_transition", false)
 	if saved:
 		return true
 	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
@@ -1448,7 +1448,7 @@ func _restart_level_for_auto_battle() -> bool:
 		return false
 	if Global.last_level_path == "":
 		return false
-	if not MemoryClass.request_save("auto_battle_retry"):
+	if not MemoryClass.request_save("auto_battle_retry", false):
 		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
 		return false
 	RoleProp.set_full_hp()

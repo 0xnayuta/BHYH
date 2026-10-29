@@ -740,7 +740,7 @@ func refresh_infor(save_state: bool = true) -> bool:
 	set_skill_mp_cost()
 	if not save_state:
 		return true
-	return MemoryClass.request_save("skill_refresh")
+	return MemoryClass.request_save("skill_refresh", false)
 
 
 func skill10_xz(Level):

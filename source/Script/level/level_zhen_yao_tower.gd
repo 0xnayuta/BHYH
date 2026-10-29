@@ -478,7 +478,7 @@ func _advance_tower_floor() -> void:
 		TOWER_POINTS_KEY: PlayerData.player_data.get(TOWER_POINTS_KEY, 0),
 	}
 	_save_floor_progress(next_floor)
-	if not MemoryClass.request_save("tower_floor_advance"):
+	if not MemoryClass.request_save("tower_floor_advance", false):
 		for key in previous_progress:
 			PlayerData.player_data[key] = previous_progress[key]
 		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))

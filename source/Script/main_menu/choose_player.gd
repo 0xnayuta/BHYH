@@ -254,7 +254,7 @@ func _on_qued_pressed() -> void:
 	if not Global.bind_archive_session():
 		Global.add_message_show(self, "存档槽位无效，请返回主菜单重新选择。", 2.0, Vector2(470, 340))
 		return
-	if not MemoryClass.request_save("choose_player"):
+	if not MemoryClass.request_save("choose_player", false):
 		Global.add_message_show(self, MemoryClass.describe_save_error(), 2.0, Vector2(470, 340))
 		return
 	if not await Global.begin_archive_session():

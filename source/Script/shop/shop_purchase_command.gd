@@ -57,7 +57,7 @@ static func _execute(
 	if not _grant_items(item_name, item_type, count, item_level, item_wx):
 		PlayerData.restore_state(snapshot)
 		return _failure("背包已满，本次购买已撤销！")
-	if not MemoryClass.request_save(save_reason):
+	if not MemoryClass.request_save(save_reason, false):
 		PlayerData.restore_state(snapshot)
 		return _failure("存档保存失败，本次购买已撤销：%s" % MemoryClass.describe_save_error())
 	return {"ok": true, "count": count, "cost": cost}

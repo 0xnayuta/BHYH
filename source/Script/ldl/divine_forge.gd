@@ -120,7 +120,7 @@ func _on_sz_pressed() -> void:
 	equipment["Data"] = upgraded_data
 	MLdl.qh_list["Data"] = upgraded_data
 	_refresh_equipped_state()
-	if not MemoryClass.request_save("ldl_divine_forge"):
+	if not MemoryClass.request_save("ldl_divine_forge", false):
 		PlayerData.restore_state(snapshot)
 		MLdl.qh_list["Data"] = previous_data
 		_refresh_equipped_state()

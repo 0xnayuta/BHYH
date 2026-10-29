@@ -1506,7 +1506,7 @@ func change_transmog(slot_type: String, item_name: String) -> bool:
 		return false
 	var snapshot := snapshot_state()
 	player_data[DataKeys.TRANSMOG_LIST][slot_type] = item_name
-	if not MemoryClass.request_save("transmogrified_box"):
+	if not MemoryClass.request_save("transmogrified_box", false):
 		restore_state(snapshot)
 		return false
 	return true
@@ -3322,7 +3322,7 @@ func select_skill_variant(data_key: String, variant_id: int, save_reason: String
 		return false
 	var snapshot := snapshot_state()
 	player_data[data_key] = variant_id
-	if not MemoryClass.request_save(save_reason):
+	if not MemoryClass.request_save(save_reason, false):
 		restore_state(snapshot)
 		return false
 	return true

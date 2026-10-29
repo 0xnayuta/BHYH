@@ -181,7 +181,7 @@ func _on_qh_pressed() -> void:
 	get_qhs_name()
 	set_str_info()
 	_refresh_equipped_strength()
-	if not MemoryClass.request_save("ldl_strength"):
+	if not MemoryClass.request_save("ldl_strength", false):
 		PlayerData.restore_state(snapshot)
 		get_qhs_name()
 		set_str_info()
