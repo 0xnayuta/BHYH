@@ -298,7 +298,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-23 | `defeat._on_lqjl_pressed` 不保存 | 重载后重复领取 | **已修**：持久 `失败奖励已领取` + 关闭前保存 |
 | GM-24 | `victory`/`defeat` 返回按钮无重入守卫 | 双击触发两次 `change_scene` 与两次保存 | **已修**：`_begin_leave()`/`_begin_rechallenge()`；探针连续点击 |
 | GM-25 | 两个死亡分支各自等待后切换 | **18-1D 已统一** `LocalCoop.request_defeat_if_all_players_dead()`；`_defeat_requested` 去重，失败可重试 | 已修复 |
-| GM-26 | `base_through_level.gd` 直接写 29 行关卡进度（含 `add_tg`） | 通关进度写入仍集中在该文件；保存由胜利或关卡分支提交 | 阶段推进已收敛；`add_tg` 写入未改，保存失败路径已收口 |
+| GM-26 | **18-3C 已修复 `add_tg` 写入面**：48 关/23 区域/导入 63~75/北俱芦洲动态键收敛到 `LevelProgressCommand`；`add_tg` 只写字典，不保存。地图页 `Map_num`、镇妖塔层/积分、GM 工具仍直接写 | 通关进度键名/值类型不变；非胜利转场新增 `level_progress_transition` 单次保存 | 18-3C 完成；剩余进度域后续批次 |
 
 ---
 

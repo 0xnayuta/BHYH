@@ -19,7 +19,7 @@
 5. **保存与读档身份/顺序已可校验（16-2B）**：`save_game` 在快照前后各校验一次「路径的档案号 + `_archive_identity_epoch`」；后台任务携带入队时的 epoch，切档后到达的旧任务被丢弃，不写盘也不更新元数据。`Global.set_cd_path` 在切换前 flush 待写队列。`last_save_error` / `describe_save_error()` 提供程序化与可读失败原因。
 6. **补全失败会阻止保存（16-2D）**：`_prepare_primary_player_save_data` 按固定 19 步执行补全，随后用 `_normalization_postcondition_error()` 校验容器、宠物、坐骑、被动、剑阵、万灵、已获取装备与等级；任一不满足即拒绝写入，不再"补全异常但保存成功"。补全顺序调整为 `enforce_level_caps` 最后，新建宠物立即执行自身规范化，保证首次保存即幂等。
 7. **`load_game` 使用合并而非替换**：`_player.merge(archive_data, true)` 只覆盖存档中存在的键；未回主菜单连续读取两个档案会残留上一档的进度键。当前依赖 `main_menu._ready()` 的 `remove_play_data()` 清空来兜底。
-8. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。
+8. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。18-3C 已将 `add_tg` 的关卡进度直写收敛到 `LevelProgressCommand` 数据表，地图页/镇妖塔/GM 工具写入仍按原域保留。
 9. **规范化补全入口 21 个**（20 个 `ensure_*`/`normalize_*`/`migrate_*` + `enforce_level_caps`）；保存侧执行 19 个步骤（16-2D 后统一为固定清单，`enforce_level_caps` 最后执行）；读档侧另行维护 17 个调用，两侧仍不完全对称。补全返回值多为 `void`/“是否新增”，不能表达失败，因此保存侧改用**后置条件**判定（见 §8.4）。
 10. **槽位查询是可枚举唯一入口（16-4）**：`slot_for` 20 次 / 7 文件、`data_for` 19 次 / 19 文件、`data_for_slot` 5 次 / 3 文件、`props_for` 22 次 / 20 文件、`props_for_slot` 2 次、`canonical_profile_for_slot` 2 次、`pet_profile_for` 16 次 / 1 文件、`pet_meta_key` 32 次 / 5 文件、`input_for` 2 次。新增 `slot_snapshot()` 与 `shared_ledger_report()` 供探针枚举校验；`base_monster.set_exp`、`PlayerData.is_mount_system_unlocked`、`BaseMagicWeapon` 的 `/root` 硬编码回落已改为槽位查询；`BaseLevel._get_active_pet_data` 不再接受缺省档案。
 11. **共享账本与面板操作者均已收口（16-4/16-5）**：`shared_keys()` 登记全部共享键，`save_profile` 按登记剥离 2P 档案的共享副本（`SAVE_VERSION=3`），`shared_ledger_report()` 可逐键验证；面板不再改写全局别名，31 个面板域脚本通过 `PlayerData`/`RoleProp` 属性按 `coop_slot` 解析操作者，`suspend/resume_player_view` 与 `_primary_*` 已删除；保存快照以 `is_save_snapshot_in_progress()` 阻止面板打开/切换。`Global.get_player` 仍 16 次 / 10 文件，用于提示、目标与部分怪物逻辑。
@@ -310,7 +310,7 @@
 | 技能/被动（4/2） | 迁移到共享账本入口 | 被动技能为共享项，觉醒启停属于共享状态 |
 | 炼体/万灵（4/3） | 保留直接写入，补共享账本查询 | 已有 `BODY_TRAINING_DATA.normalize_state` 与 `_merge_progression_dict` 归并；本阶段不重写 |
 | 背包/装备/法宝（6/5） | 保留，改为槽位查询 | 共享容器由 `link_bags` 统一同步；`实战法宝` 属个体，需按槽位写 |
-| 关卡进度（58/19） | **不迁移**（本阶段） | 分布在地图页与关卡脚本，改动面大于本阶段收益；只登记为后续域批次 |
+| 关卡进度（58/19） | **18-3C 部分迁移**：`add_tg` 的 48 关、23 个区域名、导入关卡 63~75 与北俱芦洲动态键收敛到 `LevelProgressCommand` 数据表；地图页 `Map_num`、镇妖塔层/积分、GM 工具仍直接写，留后续域批次 | `add_tg` 只写字典不保存；保存由胜利或非胜利转场分支一次提交；旧存档键名与值类型不变 |
 | 设置/外观开关（5/2） | 不迁移 | 属于档案内的按角色显示偏好，不是 `MainSet` 全局设置；改名会改存档格式 |
 | 其他/杂项（3/3） | 逐项评审 | `ieho`/`zyforever` 等为历史标记，清除需另立格式变更 |
 

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B 已完成；18-3C、18-3D、19-1、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C 已完成；18-3D、19-1、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -36,7 +36,7 @@
 | Phase 17 成长 | **18-2A/18-2B 已修复神铸/淬骨/合成/任务奖励**：成长三域增加快照/保存判读/失败恢复，任务领取由 `RewardGrantCommand` 在保存快照内提交；`forge._on_froge_pressed_legacy` 已删除；`zd_skill` 等级/变体经 `PlayerData` 命令；2P 商店/奖励共享账本与重复购买无副作用已由档案/合作探针覆盖 | 18-2A/18-2C/18-2D |
 | Phase 16 保存反馈 | AS-06/AS-07：矩阵登记大量 `request_save` 返回值被丢弃、无会话静默 `false`，UI 失败反馈未系统性收口；当前调用点与返回值分布需重新统计 | 18-2/18-3 |
 | Phase 16 档案顺序 | **18-3A 已关闭 AS-14**：后台任务带 serial，`Global` 消费信号并记录失败；切档/退出先 flush。**18-3B 已评估 AS-08**：11 个地图页保留一次同步保存（当前地图唯一持久化点）；仅删除 `map_3` 无数据变更的重复保存 | 18-3A/18-3B 完成 |
-| Phase 16 进度写入 | `base_through_level.add_tg` 仍直接写 29 行进度键（GM-26）；关卡进度写入未迁出 | 18-3 |
+| Phase 16 进度写入 | **18-3C 已修复 `add_tg` 写入面**：48 关/23 区域/导入 63~75/北俱芦洲动态键收敛到 `LevelProgressCommand` 数据表；`add_tg` 只写字典，不保存；非胜利转场新增单次 `level_progress_transition` 保存。地图页 `Map_num`、镇妖塔层/积分、GM 工具仍直接写 | 18-3C 完成 |
 | Phase 17 表现/路径 | `pet_interface` 22 条、`base_role` 8 条深层字面路径；`skill_icon` 仍有 `/root` 回落；任务/宠物/技能等面板仍可能先置标志/直接写档 | 19-1 |
 | Phase 17 音频 | `stop_bgm()` 无调用方；BGM 同曲跨父节点 pending 边界、音效节流表/活动计数清理未覆盖 | 19-2 |
 | Phase 15 运行时 | `cleanup_transient_ui` 硬编码清单与 51 处显式调用（矩阵基线 18 文件）；模块局部静态帧缓存按 15-4E 保留 | 19-2 |
@@ -88,10 +88,10 @@
 
 1. **18-3A 后台保存信号（已完成，2026-10-29）**：`background_save_finished` 增加 `serial`；`Global._on_background_save_finished` 为唯一消费者，记录最后序号/路径/成功态/失败次数，失败通过 `last_save_error`、`push_error` 与 `Global.get_background_save_status()` 可观察，不弹战斗内 UI；`end_archive_session`/`set_cd_path` 先 flush；档案探针新增序号单调、失败可观察、重试与退出 flush 用例（总 193 项 PASS）；`level_1` 冒烟 PASS；
 2. **18-3B 地图首帧保存（已完成，2026-10-29）**：11 个地图页均在更新 `Map_num`/`HeavenMap_num` 后保存，是进入城市后的唯一持久化点，删除会丢失崩溃/立即退出时的当前地图，故保留同步语义；仅删除 `map_3._sync_special_button_layer` 的重复保存（只改 z-index、且在 `Map_num=3` 前）。稳态保存实测约 4.7ms；独立冷启动微基准首档密钥创建约 108ms（一次性），地图页保存通常复用已创建密钥；无证据表明城市首帧存在明显卡顿；档案探针 193 项 PASS，`level_1` 冒烟 PASS；
-3. **18-3C 关卡进度**：将 `base_through_level.add_tg` 的 29 行进度键与 Phase 16 登记未迁移的关卡进度（矩阵 58/19 分域）收敛到单一进度命令/数据表；核对胜利/非胜利/重战/退出分支保存一次；
+3. **18-3C 关卡进度（已完成，2026-10-29）**：新增 `LevelProgressCommand` 数据表，覆盖 1~48 关、23 个区域名、导入关卡 63~75 与北俱芦洲动态键；`base_through_level.add_tg`/`north_continent_level.add_tg` 只调用命令，删除 48 分支 match。`add_tg` 只写字典不保存；Level17/22、Level19 非胜利、Level20、Level10/21 剧情跳过关闭分支在转场前调用 `_commit_progress_before_transition` 单次保存，失败保持当前关卡并解除退出锁；胜利仍由 `victory._ready` 单次提交。档案探针新增 63 项进度表检查（总 256 项 PASS），场景探针新增 6 个特殊关卡分支，`level_progress_exit_probe` 6/6 PASS；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.7s），`check_all --godot-bin` 8/8 PASS；
 4. **18-3D 会话失败反馈**：无会话/身份过期/写失败的状态在入口可观察，不再静默 `false`。
 
-**必须验证**：后台保存失败可观察，任务奖励不因信号顺序丢失（18-3A 已覆盖）；地图保存不造成明显首帧卡顿或明确保留理由（18-3B 已覆盖，保留理由为当前地图唯一持久化点）；`add_tg` 写入单一所有者，非胜利分支也保存一次（18-3C 待做）。
+**必须验证**：后台保存失败可观察，任务奖励不因信号顺序丢失（18-3A 已覆盖）；地图保存不造成明显首帧卡顿或明确保留理由（18-3B 已覆盖，保留理由为当前地图唯一持久化点）；`add_tg` 写入单一所有者，非胜利分支也保存一次（18-3C 已覆盖）。
 
 **出口**：档案/进度顺序固定；保留的首帧保存有 owner/理由；无静默失败。
 

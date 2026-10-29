@@ -4,6 +4,7 @@ extends Node
 ## Myself 范围、云存档收集与 request_save 行为。
 ## 由 scripts/archive_probe_runner.py 以独立 user:// 目录运行。
 
+const LEVEL_PROGRESS_COMMAND := preload("res://Script/base/level_progress_command.gd")
 const RESULT_PREFIX := "ARCHIVE_PERSISTENCE_PROBE_RESULT="
 const TEST_ARCHIVE_PREFIX := "user://MyAr_9"
 const PANEL_ARCHIVE_PATH := "user://MyAr_1.json"
@@ -81,6 +82,7 @@ func _run() -> void:
 	_test_request_save()
 	_test_archive_session()
 	_test_background_save_order()
+	_test_level_progress_command()
 	await _test_settlement_ownership()
 	_test_shop_purchase_command()
 	_test_shop_capacity_failure()
@@ -97,6 +99,44 @@ func _run() -> void:
 
 
 ## 18-3A：后台保存序号、信号顺序、失败可观察与退出前 flush。
+## 18-3C：关卡进度命令表覆盖 1~48 关、区域名、导入关卡与北俱芦洲动态键。
+func _test_level_progress_command() -> void:
+	for level in range(1, 49):
+		var entries := LEVEL_PROGRESS_COMMAND.resolve_entries(level, "", false, false)
+		_check("level_progress_table_%02d" % level, entries.size() == 1, str(entries))
+	_check("level_progress_1", LEVEL_PROGRESS_COMMAND.resolve_entries(1, "", false, false).get("水帘洞") == 1)
+	_check("level_progress_10_bool", LEVEL_PROGRESS_COMMAND.resolve_entries(10, "", false, false).get("地府") == true)
+	_check("level_progress_20", LEVEL_PROGRESS_COMMAND.resolve_entries(20, "", false, false).get("天庭") == true)
+	var nightmare := LEVEL_PROGRESS_COMMAND.resolve_entries(20, "", false, true)
+	_check("level_progress_20_nightmare", nightmare.get("地府噩梦") == true and nightmare.size() == 2, str(nightmare))
+	_check("level_progress_35_bool", LEVEL_PROGRESS_COMMAND.resolve_entries(35, "", false, false).get("截教天镜") == true)
+	_check("level_progress_45_bool", LEVEL_PROGRESS_COMMAND.resolve_entries(45, "", false, false).get("碧游宫") == true)
+	_check("level_progress_48", LEVEL_PROGRESS_COMMAND.resolve_entries(48, "", false, false).get("通天教主") == 1)
+	var region := LEVEL_PROGRESS_COMMAND.resolve_entries(1, "绝仙门", false, false)
+	_check("level_progress_region_precedence", region.keys() == ["绝仙门"] and region.get("绝仙门") == 1, str(region))
+	_check("level_progress_region_ming", LEVEL_PROGRESS_COMMAND.resolve_entries(1, "冥海", false, false).get("冥海") == 1)
+	_check("level_progress_unknown", LEVEL_PROGRESS_COMMAND.resolve_entries(49, "", false, false).is_empty())
+	_check("level_progress_imported_below", LEVEL_PROGRESS_COMMAND.resolve_entries(62, "", true, false).is_empty())
+	var imported := LEVEL_PROGRESS_COMMAND.resolve_entries(63, "", true, false)
+	_check("level_progress_imported_63", imported.get("东胜神州通关_63") == 1, str(imported))
+	var imported_last := LEVEL_PROGRESS_COMMAND.resolve_entries(75, "", true, false)
+	_check(
+		"level_progress_imported_75",
+		imported_last.get("东胜神州通关_75") == 1 and imported_last.get("云川") == 1,
+		str(imported_last)
+	)
+	var target := {}
+	var written := LEVEL_PROGRESS_COMMAND.apply(target, 20, "", false, true)
+	_check("level_progress_apply", target.get("天庭") == true and target.get("地府噩梦") == true and written.size() == 2, str(target))
+	var north := {}
+	LEVEL_PROGRESS_COMMAND.apply_north_continent(north, 80, "北俱芦洲·测试")
+	_check(
+		"level_progress_north",
+		north.get("北俱芦洲通关_80") == 1 and north.get("北俱芦洲·测试") == 1,
+		str(north)
+	)
+
+
 func _test_background_save_order() -> void:
 	var path := TEST_ARCHIVE_PREFIX + "041.json"
 	_reset_profile(1, 5)

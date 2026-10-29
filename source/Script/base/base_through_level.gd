@@ -1,5 +1,6 @@
 extends Node2D
 class_name BaseLevel
+const LEVEL_PROGRESS_COMMAND := preload("res://Script/base/level_progress_command.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 var is_two_scene
@@ -34,6 +35,9 @@ var level_stage
 var can_exit = false
 var _exit_players: Dictionary = {}
 var _auto_exit_settling := false
+## 测试注入：关卡退出保存与转场；生产路径为空。
+var progress_save_override: Callable
+var exit_scene_change_override: Callable
 var current_stage = 0
 var back_target
 var monster_group = {
@@ -1377,33 +1381,64 @@ func _leave_level_from_exit() -> void:
 	else:
 		add_tg(level_stage)
 	if self is Level17:
-		Global.change_scene("res://Scene/level/level_sdwfb.tscn")
+		if not _commit_progress_before_transition():
+			return
+		_change_scene_from_exit("res://Scene/level/level_sdwfb.tscn")
 		return
 	if self is Level22:
-		Global.change_scene("res://Scene/level/level_xtqfb.tscn")
+		if not _commit_progress_before_transition():
+			return
+		_change_scene_from_exit("res://Scene/level/level_xtqfb.tscn")
 		return
 	if self is Level10 or self is Level21:
 		if _restart_level_for_auto_battle():
 			return
 		if MainSet.set_data["剧情跳过"]:
-			Global.change_scene("res://Scene/level/victory.tscn")
+			_change_scene_from_exit("res://Scene/level/victory.tscn")
 		else:
-			Global.change_scene("res://Scene/main_menu/game_over_1.tscn")
+			if not _commit_progress_before_transition():
+				return
+			_change_scene_from_exit("res://Scene/main_menu/game_over_1.tscn")
 	elif self is Level19:
 		if self.canthro:
 			if not _restart_level_for_auto_battle():
-				Global.change_scene("res://Scene/level/victory.tscn")
+				_change_scene_from_exit("res://Scene/level/victory.tscn")
 		else:
+			if not _commit_progress_before_transition():
+				return
 			RoleProp.current_hp = RoleProp.roleprop.Hp
 			RoleProp.current_mp = RoleProp.roleprop.Mp
-			Global.change_scene("res://Scene/level/level_20.tscn")
+			_change_scene_from_exit("res://Scene/level/level_20.tscn")
 	elif self is Level20:
+		if not _commit_progress_before_transition():
+			return
 		RoleProp.current_hp = RoleProp.roleprop.Hp
 		RoleProp.current_mp = RoleProp.roleprop.Mp
-		Global.change_scene("res://Scene/level/level_20.tscn")
+		_change_scene_from_exit("res://Scene/level/level_20.tscn")
 	else:
 		if not _restart_level_for_auto_battle():
-			Global.change_scene("res://Scene/level/victory.tscn")
+			_change_scene_from_exit("res://Scene/level/victory.tscn")
+
+
+## 非胜利转场前的唯一保存点；失败保持当前关卡并解除退出锁，允许重试。
+func _commit_progress_before_transition() -> bool:
+	var saved: bool
+	if progress_save_override.is_valid():
+		saved = bool(progress_save_override.call("level_progress_transition"))
+	else:
+		saved = MemoryClass.request_save("level_progress_transition")
+	if saved:
+		return true
+	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+	_auto_exit_settling = false
+	return false
+
+
+func _change_scene_from_exit(path: String) -> void:
+	if exit_scene_change_override.is_valid():
+		exit_scene_change_override.call(path)
+		return
+	Global.change_scene(path)
 
 
 func _restart_level_for_auto_battle() -> bool:
@@ -1757,143 +1792,11 @@ func _decay_ws_value(props: BaseRoleProperties) -> void:
 
 
 func add_tg(level):
-	if self is Game4ImportedLevel and int(level) >= 63 and int(level) <= 75:
-		PlayerData.player_data["东胜神州通关_%d" % int(level)] = 1
-		if int(level) == 75:
-			PlayerData.player_data["云川"] = 1
-		return
-
-	var progression_level_name := str(Global.current_level)
-	if (
-		progression_level_name
-		in [
-			"绝仙门",
-			"紫晶门",
-			"戮仙门",
-			"指景宫",
-			"陷仙门",
-			"绝境宫",
-			"通天教主",
-			"玄武门",
-			"朱雀街",
-			"未央宫",
-			"九华山麓",
-			"双溪寺",
-			"神光金岭",
-			"普陀山脚",
-			"九龙宝殿",
-			"法华灵洞",
-			"峨眉山道",
-			"清音阁",
-			"金顶云海",
-			"五台山口",
-			"锦绣峰",
-			"万佛朝阁",
-			"冥海",
-		]
-	):
-		PlayerData.player_data[progression_level_name] = 1
-		return
-	match level:
-		1:
-			PlayerData.player_data.水帘洞 = 1
-		2:
-			PlayerData.player_data.桃花源 = 1
-		3:
-			PlayerData.player_data.蝙蝠窟 = 1
-		4:
-			PlayerData.player_data.七星洞 = 1
-		5:
-			PlayerData.player_data.迦楼罗之穴 = 1
-		6:
-			PlayerData.player_data.浅岸 = 1
-		7:
-			PlayerData.player_data.东海 = 1
-		8:
-			PlayerData.player_data.鲨之涡流 = 1
-		9:
-			PlayerData.player_data.牛魔谷 = 1
-		10:
-			PlayerData.player_data["地府"] = true
-		11:
-			PlayerData.player_data.无常巷 = 1
-		12:
-			PlayerData.player_data.鬼门关 = 1
-		13:
-			PlayerData.player_data.接引院 = 1
-		14:
-			PlayerData.player_data.判官府 = 1
-		15:
-			PlayerData.player_data.阎罗殿 = 1
-		16:
-			PlayerData.player_data.忘川河 = 1
-		17:
-			PlayerData.player_data.奈何桥 = 1
-		18:
-			PlayerData.player_data.望乡台 = 1
-		19:
-			PlayerData.player_data.转轮殿 = 1
-		20:
-			PlayerData.player_data["天庭"] = true
-			if int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY:
-				PlayerData.player_data["地府噩梦"] = true
-		21:
-			PlayerData.player_data.天宫道 = 1
-		22:
-			PlayerData.player_data.南天门 = 1
-		23:
-			PlayerData.player_data.南天王殿 = 1
-		24:
-			PlayerData.player_data.西天王殿 = 1
-		25:
-			PlayerData.player_data.北天王殿 = 1
-		26:
-			PlayerData.player_data.彩虹楼 = 1
-		27:
-			PlayerData.player_data.朝会殿 = 1
-		28:
-			PlayerData.player_data.凌霄宝殿 = 1
-		29:
-			PlayerData.player_data.玲珑宝塔 = 1
-		30:
-			PlayerData.player_data.兜率宫 = 1
-		31:
-			PlayerData.player_data.兜率宫1 = 1
-		32:
-			PlayerData.player_data.兜率宫2 = 1
-		33:
-			PlayerData.player_data.兜率宫3 = 1
-		34:
-			PlayerData.player_data.兜率宫4 = 1
-		35:
-			PlayerData.player_data["截教天镜"] = true
-
-		36:
-			PlayerData.player_data.火龙岛 = 1
-		37:
-			PlayerData.player_data.九龙岛 = 1
-		38:
-			PlayerData.player_data.龙脊山 = 1
-		39:
-			PlayerData.player_data.尾妖林 = 1
-		40:
-			PlayerData.player_data.仙音岛 = 1
-		41:
-			PlayerData.player_data.仙幻岛 = 1
-		42:
-			PlayerData.player_data.仙树岛 = 1
-		43:
-			PlayerData.player_data.蓬莱岛 = 1
-		44:
-			PlayerData.player_data.蓬莱仙境 = 1
-		45:
-			PlayerData.player_data["碧游宫"] = true
-		46:
-			PlayerData.player_data["陷仙门"] = 1
-		47:
-			PlayerData.player_data["绝境宫"] = 1
-		48:
-			PlayerData.player_data["通天教主"] = 1
+	var current_level_name := str(Global.current_level)
+	var nightmare := int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY
+	LEVEL_PROGRESS_COMMAND.apply(
+		PlayerData.player_data, int(level), current_level_name, self is Game4ImportedLevel, nightmare
+	)
 
 
 func _shake_screen(strength: float, times: int, inte: float):

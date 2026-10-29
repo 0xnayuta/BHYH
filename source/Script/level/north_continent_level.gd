@@ -470,8 +470,7 @@ func leave_void_space() -> void:
 
 
 func add_tg(_number) -> void:
-	PlayerData.player_data["北俱芦洲通关_%d" % stage_number] = 1
-	PlayerData.player_data[display_name] = 1
+	LEVEL_PROGRESS_COMMAND.apply_north_continent(PlayerData.player_data, stage_number, display_name)
 
 
 func _on_exit_2_body_entered(body: Node2D) -> void:
