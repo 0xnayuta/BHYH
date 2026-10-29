@@ -3532,7 +3532,7 @@ func viewport_center_for_parent(parent_node: Node) -> Vector2:
 	return center
 
 
-func add_reward_info(parent, position, list, use_item_name, use_num):
+func add_reward_info(parent, position, list, use_item_name, use_num, claim_callable: Callable = Callable()):
 	if not reward_info:
 		reward_info = _load_scene("res://Scene/other_scene/reward_interface.tscn")
 	var target = instance_scene(reward_info, parent)
@@ -3543,6 +3543,7 @@ func add_reward_info(parent, position, list, use_item_name, use_num):
 	target.use_num = use_num
 	target.use_item_name = use_item_name
 	target.reward_items = list
+	target.claim_callable = claim_callable
 	target.z_index = 99
 	return target
 

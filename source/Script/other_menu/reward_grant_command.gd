@@ -8,7 +8,9 @@ const SAVE_REASON := "reward_interface"
 const ALL_TYPES := ["武器", "防具", "饰品", "神骨", "翅膀", "头衔", "时装", "法宝", "道具", "消耗品", "宠物装备"]
 
 
-static func execute(reward_items: Array, use_item_name: String, use_num: int) -> Dictionary:
+static func execute(
+	reward_items: Array, use_item_name: String, use_num: int, claim: Callable = Callable()
+) -> Dictionary:
 	var normalized: Array = []
 	for entry in reward_items:
 		if not entry is Dictionary:
@@ -46,6 +48,12 @@ static func execute(reward_items: Array, use_item_name: String, use_num: int) ->
 			return _failure("使用道具数量不足，未发放")
 
 	var snapshot := PlayerData.snapshot_state()
+	# 领取标记与奖励同批提交；保存失败时由 snapshot 恢复，避免“已领取但未发奖”。
+	if claim.is_valid():
+		var claim_result: Variant = claim.call()
+		if claim_result is bool and not claim_result:
+			PlayerData.restore_state(snapshot)
+			return _failure("领取条件已变化，本次奖励未发放")
 	for reward in normalized:
 		if not _grant(reward):
 			PlayerData.restore_state(snapshot)

@@ -6,6 +6,7 @@ extends Node2D
 var use_item_name
 var use_num
 var reward_items: Array = []
+var claim_callable: Callable
 var item_info = {"Name": "ryjgb", "Value": 4, "Prop": {}, "WX": [], "strength_value": 0}
 
 var _reward_committed := false
@@ -17,7 +18,10 @@ func _process(_delta: float) -> void:
 		return
 	_reward_committed = true
 	var result: Dictionary = RewardGrantCommand.execute(
-		reward_items, str(use_item_name) if use_item_name != null else "", int(use_num) if use_num != null else 0
+		reward_items,
+		str(use_item_name) if use_item_name != null else "",
+		int(use_num) if use_num != null else 0,
+		claim_callable
 	)
 	if not bool(result.get("ok", false)):
 		Global.add_message_show(self, str(result.get("message", "奖励发放失败")), 2.0, Vector2(470, 300))

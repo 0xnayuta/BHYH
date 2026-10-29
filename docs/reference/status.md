@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B 已完成；18-1C/18-1D、18-2 成长/奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-2B 已完成；18-1C/18-1D、18-2A/18-2C/18-2D/18-2E 成长/奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -202,9 +202,10 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 17-5 HUD/输入/音频表现边界 | **面板命令**：幻化改 `PlayerData.change_transmog`，奖励改 `RewardGrantCommand`；校验/快照/保存失败回滚，绘制回调不直接写档案。**HUD**：`BaseRole` 按注入 `player` 读取槽位属性。**BGM**：同曲复用、切曲停旧、`stop_bgm()` 收口。**音效池**：缓存检查前置于声部预留，回收 `prepare_for_pool()` 停止并清流。**验证**：`archive_probe_runner` 145 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS | 17-5 完成 |
 | 2026-10-29 Phase 17-6 模块 API 与场景依赖治理 | **API**：新建 `module_api_matrix.md`，登记 `BaseRole`/`BaseMagicWeapon`/`zd_skill`/`pet_interface` 公开方法、注入字段、场景依赖与内部回调。**依赖方向**：父场景注入、`LocalCoop` 槽位查询、跨模块公开方法；禁止新增 `/root`、HUD 写档与私有字段访问。**路径**：四文件深层字面路径 159→30（pet 117→22、zd 26→0、base_role 12→8、magic 4→0）。**验证**：`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS | 17-6 完成 |
 | 2026-10-29 Phase 17-7 边界守卫与阶段收口 | **静态守卫**：`contract_scan.py` 新增 `phase17_boundary`，覆盖结算 `LevelSettlement`/禁止重复保存、命令快照、表现层不写档、四试点禁止 `"/root/"` 与路径预算（pet 22、zd 0、base_role 8、magic 0）。**自测**：`contract_scan --self-test` 正负样本 PASS，`contract_gate` 接入自测。**验证**：`contract_scan --fail-on-error` ERROR=0；`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。Phase 17 已归档到 `archive/iteration_17_gameplay_module_boundaries.md` | 17-7 完成；Phase 17 归档 |
-| 2026-10-29 Phase 18~20 规划 | 仅文档：`current-iteration.md` 重写为 Phase 18~20 综合收尾，覆盖 Phase 13 冻结例外/独立项目/平台、Phase 14 112 metadata 与 typed accessor、Phase 15 临时 UI/静态缓存、Phase 16 AS-06/07/08/14/17/26 与 Phase 17 归属/成长/表现/路径/音频剩余；每批保留目标/切片/验证/出口骨架 | 18-1~20-3 未启动 |
+| 2026-10-29 Phase 18~20 规划 | 仅文档：`current-iteration.md` 重写为 Phase 18~20 综合收尾，覆盖 Phase 13 冻结例外/独立项目/平台、Phase 14 112 metadata 与 typed accessor、Phase 15 临时 UI/静态缓存、Phase 16 AS-06/07/08/14/17/26 与 Phase 17 归属/成长/表现/路径/音频剩余；每批保留目标/切片/验证/出口骨架 | 规划建立；批次状态见下表 |
 | 2026-10-29 Phase 18-1A 角色4毒伤归属 | **语义**：Voodoo 层按 `source_player` 独立计数/触发，每个 Role4 读自身槽位技能10、攻击与觉醒，只移除自身层；1P 不变。**实现**：`Global.check_wd/remove_wd` 来源过滤；BaseHero/Role4/RoleBullet/Role4Bullet/BiLuoTian/CangMu/毒阵生成层写来源；`wd_hurt` 分组结算；`_is_mds_awaken_active`/`hurt_reduce_hp` 读来源档案。**探针**：新增 `LocalCoopRole4PoisonProbe`，覆盖 1P/2P/混合层/觉醒；`coop_probe_runner` 22/22 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS | 18-1A 完成 |
 | 2026-10-29 Phase 18-1B 全局 1P 别名清理 | **删除** `Global.get_player` 变量与 `call_hero` 赋值，全仓引用 **0**。**目标**：`BaseMonster` 改 `LocalCoop.nearest_player`，协作层按最近存活玩家更新；`dj_sell` 改面板槽位 `RoleProp.source_player`；`level_23/38` 提示改 `body`；`monster_14501_wdww`/`weiyang_palace_boss` 改最近玩家；`monster_zhw*` 改 `player_reference`/最近玩家。**验证**：`coop_probe_runner` 22/22 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（354.3s，level_dsg_2/level_dsg_5 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS | 18-1B 完成 |
+| 2026-10-29 Phase 18-2B 任务奖励原子提交 | **顺序**：`BasicTask._on_lqjl_pressed` 不再先置已领取/直接 `request_save`；`RewardGrantCommand.execute` 新增 `claim: Callable`，在快照后、发奖前执行，失败统一恢复；`reward_interface`/`Global.add_reward_info` 透传回调。普通任务闭包写领取键；八仙日常清空本轮进度。**探针**：档案持久化 155 项 PASS，覆盖成功后置标记、重进不重复、保存失败回滚、八仙进度回滚。**验证**：`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（322.7s，两关瞬态重试通过）；`check_all --godot-bin` 8/8 PASS | 18-2B 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

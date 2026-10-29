@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 17 均已完成并归档；当前候选为 **Phase 18~20 综合收尾**（18-1A/18-1B 已完成、18-1C/18-1D 未启动、18-2 成长与奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面均未启动）；平台与发布验证按独立工作流推进。
+> **当前版本**：6.9。Phase 12~Phase 17 均已完成并归档；当前候选为 **Phase 18~20 综合收尾**（18-1A/18-1B/18-2B 已完成、18-1C/18-1D 未启动、18-2A/18-2C/18-2D/18-2E 成长与奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面均未启动）；平台与发布验证按独立工作流推进。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -14,7 +14,7 @@
 | [Phase 15 应用编排与运行资源生命周期](../archive/iteration_15_app_orchestration_lifecycle.md) | 完成、归档 | 场景切换、加载、缓存/池/临时 UI 与退出生命周期；边界守卫进入 `contract_scan.py`；矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
-| Phase 18~20 综合收尾 | 当前候选；18-1A/18-1B 已完成，18-1C~20-3 未启动 | 归属/成长/档案/表现/运行时/资源/Atlas/平台与守卫；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 18~20 综合收尾 | 当前候选；18-1A/18-1B/18-2B 已完成，18-1C~20-3 未启动 | 归属/成长/档案/表现/运行时/资源/Atlas/平台与守卫；详细批次见 [`current-iteration.md`](current-iteration.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -99,7 +99,7 @@ flowchart TD
 - HUD/面板用只读查询与明确命令，输入与音频表现不拥有领域规则。
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
-- 当前候选批次：18-1A/18-1B 已完成；18-1C/18-1D、18-2 成长与奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档，详细任务见 [`current-iteration.md`](current-iteration.md)。
+- 当前候选批次：18-1A/18-1B/18-2B 已完成；18-1C/18-1D、18-2A/18-2C/18-2D/18-2E 成长与奖励命令、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档，详细任务见 [`current-iteration.md`](current-iteration.md)。
 
 ## 4. 独立平台与内容工作
 

@@ -111,6 +111,8 @@
 | `monster_unlock_pet_rabbit` / `change_clothes` / `pet_passive_upgrade` / `pet_changes` / `shop_cure_times` / `shop_mystery_purchase` / `task_claim_reward` | 7 | 收尾批次业务保存 |
 | **合计** | **116** | 59 个文件 |
 
+> 本表保留 Phase 16 当时口径；18-2B 起 `basic_task` 不再直接保存，任务领取并入 `RewardGrantCommand`（reason `reward_interface`）。
+
 ### 4.3 返回值处理
 
 | 处理方式 | 处数 | 代表位置 |

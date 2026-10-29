@@ -331,8 +331,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 合成 | `synthesis.gd:121` | 配方、灵魂 | `spend_soul` | `add_zb`/`add_dj`/`add_fb`（忽略失败） | 1 次 | 无 |
 | 主动技能 | `zd_skill.gd:up_level` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | 仅成功 1 次 `skill_refresh` | **有**：保存失败恢复书/灵魂/等级；失败路径不保存 |
 | 被动技能 | `bd_skill.gd:up_level` / `_upgrade_all_passives` | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 单次/一键各 1 次，仅成功 | **有**：保存失败恢复等级/灵魂 |
-| 奖励发放 | `reward_interface.gd:12` `_process` | **无容量校验** | 可选使用物品 | 逐项 `add_*` | 1 次（首帧后） | 无 |
-| 任务领取 | `basic_task.gd:458` `_on_lqjl_pressed` | 完成状态/已领取/日常 | 无 | `add_reward_info` 延迟发放 | 1 次，**先于发放** | 无 |
+| 奖励发放 | `reward_interface.gd:12` `_process` → `RewardGrantCommand.execute` | 奖励物品/类型/使用物数量；容量由 `add_*` bool 判读 | 可选使用物品 | 逐项 `add_*`，失败恢复 | 1 次（首帧后） | **有**：`PlayerData.snapshot_state` + `restore_state` |
+| 任务领取 | `basic_task.gd:_on_lqjl_pressed` | 完成状态/已领取/日常 | 无 | `add_reward_info` 延迟发放；**18-2B 领取标记改由奖励命令 `claim` 回调提交** | 1 次 `reward_interface`（奖励与标记同批） | **有**：快照恢复标记/八仙进度与物品 |
 
 ### 8.3 失败模式
 
@@ -344,8 +344,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | 未改；17-4 只覆盖强化/商店/技能 |
 | GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | 未改；17-4 试点范围外 |
 | GM-32 | 技能书/灵魂先扣再升级；`refresh_infor` 无视失败保存 | **已修**：主动/被动技能仅成功保存，失败恢复快照 |
-| GM-33 | 奖励界面由表现场景直接发物品并保存 | 容量满时部分/全部丢失；无提示 |
-| GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | 保存调用先于奖励场景 `_process` 发奖；二次保存失败则奖励丢失 |
+| GM-33 | 奖励界面由表现场景直接发物品并保存 | **已修**：`RewardGrantCommand` 校验→快照→发放→保存，失败恢复并提示 |
+| GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | **18-2B 已修**：领取标记/八仙进度由奖励命令 `claim` 回调在快照内提交；失败恢复 |
 | GM-35 | `defeat._on_lqjl_pressed` 无保存 | 重进重复领取 |
 | GM-36 | `forge._on_froge_pressed_legacy` 无调用方 | 死代码；迁移时删除或明确保留理由 |
 
@@ -759,3 +759,26 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 ### 21.2 验证
 
 `coop_probe_runner` 22/22 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 128/128 PASS + 5 SKIP（354.3s，level_dsg_2/level_dsg_5 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS。`Global.get_player` 全仓引用 0。
+
+
+---
+
+## 22. 18-2B 任务奖励原子提交（2026-10-29）
+
+### 22.1 变更
+
+- `BasicTask._on_lqjl_pressed` 不再在打开奖励界面之前写 `PlayerData.player_data[current_task_name] = true`，也不再直接 `request_save("task_claim_reward")`。
+- `RewardGrantCommand.execute` 增加可选 `claim: Callable`：在 `PlayerData.snapshot_state()` 之后、奖励发放与保存之前执行；回调返回 false、任一奖励发放失败或保存失败时，统一 `restore_state`。
+- `reward_interface.gd` 增加 `claim_callable` 并在首帧传给命令；`Global.add_reward_info` 增加可选第六参数，既有调用方不变。
+- 普通任务以闭包写入领取键；八仙日常以 `Callable(PlayerData, "claim_eight_immortal_daily")` 清空本轮进度。两者都与奖励同批保存，重进不会重复领取，保存失败不会留下“已领取”或清空进度。
+
+### 22.2 验证
+
+档案持久化探针新增 7 项断言，总计 **155 项 PASS**：
+
+- `task_claim_flag_after_reward` / `task_claim_reward_once`：奖励成功后置领取标记且只发一次；
+- `task_claim_reentry_flag` / `task_claim_reentry_no_duplicate`：从档案重进后标记仍在，再次点击不重复发奖；
+- `task_claim_save_failure_keeps_flag_false` / `task_claim_save_failure_no_reward`：无会话保存失败时标记与物品均恢复；
+- `task_eight_daily_claim_clears_progress` / `task_eight_daily_reward_once` / `task_eight_daily_save_failure_restores_progress`：八仙进度清理与回滚。
+
+全量验证：`archive_probe_runner` **155/155 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 **128/128 PASS + 5 SKIP**（322.7s，`level_85`/`level_eighteenth_hell` 瞬态重试通过）；`check_all --godot-bin` **8/8 PASS**。

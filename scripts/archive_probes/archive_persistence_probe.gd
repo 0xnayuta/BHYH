@@ -72,6 +72,7 @@ func _run() -> void:
 	await _test_strength_command()
 	await _test_audio_boundaries()
 	_test_transmog_command()
+	await _test_task_claim_command()
 	await _test_pet_interface_paths()
 	await _test_panel_saves()
 
@@ -1071,6 +1072,134 @@ func _check_save_identity_and_normalization() -> void:
 	_check("normalize_failure_not_written", MemoryClass.get_archive_level(path_b) == 5)
 	_reset_profile(1, 5)
 
+
+
+
+## 任务领取：奖励命令成功后置领取标记；重进不重复发奖；保存失败回滚标记与物品。
+func _test_task_claim_command() -> void:
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	MemoryClass.request_save("probe_task_claim_seed")
+	PlayerData.player_data["小有所藏"] = false
+	var task: Node = (load("res://Scene/task/basic_task.tscn") as PackedScene).instantiate()
+	add_child(task)
+	await get_tree().process_frame
+	task.set_physics_process(false)
+	task.current_task_type = 1
+	task.current_task_name = "小有所藏"
+	task.task_is_finish = true
+	var before := int(PlayerData.get_xhp_data("qhsbx"))
+	task.call("_on_lqjl_pressed")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_check(
+		"task_claim_flag_after_reward",
+		bool(PlayerData.player_data.get("小有所藏", false)),
+		"flag=%s qhsbx=%d" % [PlayerData.player_data.get("小有所藏"), PlayerData.get_xhp_data("qhsbx")]
+	)
+	_check(
+		"task_claim_reward_once",
+		int(PlayerData.get_xhp_data("qhsbx")) == before + 1,
+		"qhsbx=%d expected=%d" % [PlayerData.get_xhp_data("qhsbx"), before + 1]
+	)
+
+	# 重进：从已保存档案恢复，领取标记与奖励仍在，再次点击不得重复发奖。
+	_reset_profile(1, 5)
+	var loaded: Dictionary = MemoryClass.load_game(PANEL_ARCHIVE_PATH)
+	_check(
+		"task_claim_reentry_flag",
+		bool(loaded.get("ok", false)) and bool(PlayerData.player_data.get("小有所藏", false)),
+		"status=%s flag=%s" % [loaded.get("status"), PlayerData.player_data.get("小有所藏")]
+	)
+	var before_reentry := int(PlayerData.get_xhp_data("qhsbx"))
+	task.call("_on_lqjl_pressed")
+	await get_tree().process_frame
+	_check(
+		"task_claim_reentry_no_duplicate",
+		int(PlayerData.get_xhp_data("qhsbx")) == before_reentry,
+		"qhsbx=%d expected=%d" % [PlayerData.get_xhp_data("qhsbx"), before_reentry]
+	)
+
+	_clear_task_probe_nodes(task)
+	await get_tree().process_frame
+
+	# 保存失败：命令恢复快照，领取标记与奖励都不得留下。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	PlayerData.player_data["小有所藏"] = false
+	task = (load("res://Scene/task/basic_task.tscn") as PackedScene).instantiate()
+	add_child(task)
+	await get_tree().process_frame
+	task.set_physics_process(false)
+	task.current_task_type = 1
+	task.current_task_name = "小有所藏"
+	task.task_is_finish = true
+	var before_fail := int(PlayerData.get_xhp_data("qhsbx"))
+	Global.end_archive_session()
+	task.call("_on_lqjl_pressed")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_check(
+		"task_claim_save_failure_keeps_flag_false",
+		not bool(PlayerData.player_data.get("小有所藏", false)),
+		"flag=%s" % PlayerData.player_data.get("小有所藏")
+	)
+	_check(
+		"task_claim_save_failure_no_reward",
+		int(PlayerData.get_xhp_data("qhsbx")) == before_fail,
+		"qhsbx=%d expected=%d" % [PlayerData.get_xhp_data("qhsbx"), before_fail]
+	)
+	_clear_task_probe_nodes(task)
+	await get_tree().process_frame
+
+	# 八仙日常：领取回调在命令快照内清空进度；保存失败恢复本轮进度。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	var today := Time.get_date_string_from_system()
+	var defeated_all: Array = PlayerData.EIGHT_IMMORTAL_DAILY_IDS.duplicate()
+	PlayerData.player_data[DataKeys.Daily.EIGHT_IMMORTAL_PROGRESS] = {
+		DataKeys.Daily.DATE: today,
+		DataKeys.Daily.DEFEATED: defeated_all.duplicate(),
+		DataKeys.Daily.CLAIMED: false,
+	}
+	var daily_claim := Callable(PlayerData, "claim_eight_immortal_daily")
+	var daily_reward := [{"Name": "kly3", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}]
+	var daily_result: Dictionary = RewardGrantCommand.execute(daily_reward, "", 0, daily_claim)
+	var daily_progress := PlayerData.get_eight_immortal_daily_progress()
+	_check(
+		"task_eight_daily_claim_clears_progress",
+		bool(daily_result.get("ok", false)) and (daily_progress.get(DataKeys.Daily.DEFEATED, []) as Array).is_empty(),
+		"%s defeated=%s" % [daily_result, daily_progress.get(DataKeys.Daily.DEFEATED)]
+	)
+	_check("task_eight_daily_reward_once", int(PlayerData.get_item_data("kly3")) == 1, "kly3=%d" % PlayerData.get_item_data("kly3"))
+
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	PlayerData.player_data[DataKeys.Daily.EIGHT_IMMORTAL_PROGRESS] = {
+		DataKeys.Daily.DATE: today,
+		DataKeys.Daily.DEFEATED: defeated_all.duplicate(),
+		DataKeys.Daily.CLAIMED: false,
+	}
+	Global.end_archive_session()
+	var daily_failed: Dictionary = RewardGrantCommand.execute(daily_reward, "", 0, daily_claim)
+	var failed_progress := PlayerData.get_eight_immortal_daily_progress()
+	_check(
+		"task_eight_daily_save_failure_restores_progress",
+		not bool(daily_failed.get("ok", true))
+		and (failed_progress.get(DataKeys.Daily.DEFEATED, []) as Array).size() == defeated_all.size()
+		and int(PlayerData.get_item_data("kly3")) == 0,
+		"%s defeated=%s kly3=%d" % [daily_failed, failed_progress.get(DataKeys.Daily.DEFEATED), PlayerData.get_item_data("kly3")]
+	)
+
+
+func _clear_task_probe_nodes(task: Node) -> void:
+	if is_instance_valid(task):
+		task.queue_free()
+	for child in get_children():
+		if child != task and child.has_method("_on_close_pressed"):
+			child.queue_free()
 
 ## 关卡与收尾批次：验证结算界面与其余业务保存处理器确实经 request_save 落盘。
 func _check_reward_and_menu_saves() -> void:

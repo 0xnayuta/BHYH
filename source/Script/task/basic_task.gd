@@ -460,22 +460,23 @@ func _on_lqjl_pressed() -> void:
 	if task_data.is_empty():
 		_disable_claim_button()
 		return
-	if current_task_type == 2 and current_task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
-		if not PlayerData.claim_eight_immortal_daily():
-			_disable_claim_button()
-			return
-		task_is_finish = true
 	if not task_is_finish:
 		_disable_claim_button()
 		return
 	if current_task_type == 1 and PlayerData.player_data.get(current_task_name, false):
 		_disable_claim_button()
 		return
-	if current_task_name != DataKeys.Daily.EIGHT_IMMORTAL_TASK and not task_data.get("UnlimitedClaim", false):
-		PlayerData.player_data[current_task_name] = true
+	# 领取标记/八仙进度由奖励命令在保存批次内提交；失败时命令恢复快照。
+	var claim_callable := Callable()
+	if current_task_type == 2 and current_task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
+		claim_callable = Callable(PlayerData, "claim_eight_immortal_daily")
+	elif not bool(task_data.get("UnlimitedClaim", false)):
+		var task_name := current_task_name
+		claim_callable = func() -> bool:
+			PlayerData.player_data[task_name] = true
+			return true
 	var list = task_data["task_reward"]
-	Global.add_reward_info(Global.get_ancestor(self, 1), Vector2(0, 0), list, null, null)
-	MemoryClass.request_save("task_claim_reward")
+	Global.add_reward_info(Global.get_ancestor(self, 1), Vector2(0, 0), list, null, null, claim_callable)
 
 
 func _get_current_task_data() -> Dictionary:
