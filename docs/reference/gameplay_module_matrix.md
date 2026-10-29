@@ -849,7 +849,7 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 - 新增 `Global.request_save_with_feedback(reason, parent, prefix)`：失败时在可见 UI 层提示并返回 false。
 - 接入面板关闭（`LocalCoop._on_panel_closed`）、背包翅膀/头衔显示（失败回滚）、物品锁定（失败回滚）。
 - 奖励/商店已有命令返回文案；已原子化域不重复包装。
-- 当前源码 `request_save` 调用约 98 处 / 57 文件；未迁移项主要是地图首帧/退出保存（18-3B）与低风险整理动作，登记不伪装为已反馈。
+- 当前源码 `request_save` 调用约 98 处 / 57 文件；未迁移项主要是地图首帧/退出保存（18-3B 已评估保留同步语义）与低风险整理动作，登记不伪装为已反馈。
 
 ### 25.4 验证
 

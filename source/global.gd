@@ -309,6 +309,8 @@ func _ready() -> void:
 		Engine.max_fps = TARGET_MAX_FPS
 	if SHOW_DEBUG_PERF_OVERLAY:
 		_create_debug_perf_overlay()
+	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
+		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	call_deferred("prewarm_permanent_small_ui_scenes")
 
 
@@ -415,6 +417,31 @@ func get_archive_identity_epoch() -> int:
 	return _archive_identity_epoch
 
 
+## 后台保存唯一消费者：记录最后完成序号与失败次数。
+## 后台写入由 MemoryClass 自动重试，战斗内不弹 UI，避免瞬时失败误报；
+## 失败仍通过 last_save_error、push_error 与本状态快照可观察。
+func _on_background_save_finished(path: String, success: bool, serial: int) -> void:
+	if serial <= 0 or serial < _background_save_last_serial:
+		return
+	_background_save_last_serial = serial
+	_background_save_last_success = success
+	_background_save_last_path = path
+	# 切档后到达的旧任务是预期取消，不计入失败次数。
+	if not success and MemoryClass.last_save_error != "stale_archive_identity":
+		_background_save_failure_count += 1
+
+
+## 诊断快照：测试与调试面板可读取，不驱动业务状态。
+func get_background_save_status() -> Dictionary:
+	return {
+		"serial": _background_save_last_serial,
+		"success": _background_save_last_success,
+		"path": _background_save_last_path,
+		"failure_count": _background_save_failure_count,
+		"last_error": MemoryClass.last_save_error if MemoryClass != null else "",
+	}
+
+
 var total_role_hit: int
 var total_cure_hp: int
 var total_phy_hit: int
@@ -469,6 +496,11 @@ var _archive_session_prewarm_role_id: int = 0
 var _archive_session_prewarm_token: int = 0
 var _archive_session_generation: int = 0
 var _archive_identity_epoch: int = 0
+## 后台保存信号消费者状态：只做诊断与失败可观察，不弹出战斗内提示。
+var _background_save_last_serial: int = 0
+var _background_save_last_success: bool = true
+var _background_save_last_path: String = ""
+var _background_save_failure_count: int = 0
 var _runtime_generation: int = 0
 var _shutting_down := false
 var _ui_runtime_instance_paths: Dictionary = {}
@@ -1820,6 +1852,9 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 
 
 func end_archive_session() -> void:
+	# 退出/切档前先落盘未决后台任务；flush 失败时任务仍留在重试队列。
+	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
+		MemoryClass.flush_pending_saves()
 	_advance_runtime_generation()
 	if not is_archive_session_active():
 		return

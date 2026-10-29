@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E 已完成、18-3 档案提交与进度、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B 已完成、18-3C 关卡进度与 18-3D 会话失败反馈、19-1 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -212,6 +212,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 18-2C 技能直写收敛 | **等级**：`PlayerData.get_skill_level`/`set_skill_level` 成为唯一读写入口；`zd_skill.up_level` 删除 `skill_entry` 直写。**变体**：`PlayerData.select_skill_variant` 快照→写入→保存，失败恢复；`zd_skill` 删除变体直写与直接保存。**探针**：技能等级成功/保存失败继续通过；变体成功/重载/保存失败 4 项 PASS；档案持久化 171 项 PASS；`coop_probe_runner` 23/23 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2C 完成 |
 | 2026-10-29 Phase 18-2D 死代码与 2P | 删除 `forge._on_froge_pressed_legacy` 整段无调用代码。**2P**：档案探针验证 2P 商店共享灵魂同步扣减、共享背包各只记一次；失败重复购买无副作用；2P 奖励只入包一次。**验证**：档案持久化 171 项 PASS；`coop_probe_runner` 23/23 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2D 完成 |
 | 2026-10-29 Phase 18-2E 保存反馈 | 新增 `Global.request_save_with_feedback`：失败提示并返回 false。接入面板关闭、背包翅膀/头衔显示（失败回滚）、物品锁定（失败回滚）；奖励/商店沿用命令结果。当前 `request_save` 约 98 处 / 57 文件，未迁移项登记为地图首帧/低风险动作。**验证**：档案持久化 171 项 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s）；`check_all --godot-bin` 8/8 PASS。 | 18-2E 完成 |
+| 2026-10-29 Phase 18-3A 后台保存信号 | **信号**：`background_save_finished(path, success, serial)`；每次入队递增 serial，完成时按序发出。**消费**：`Global._on_background_save_finished` 记录最后序号/路径/成功态/失败次数；stale 不计失败；不弹战斗内 UI。**失败反馈**：`last_save_error=write_failed`、`push_error`、`Global.get_background_save_status()`；失败快照进入重试队列。**退出**：`end_archive_session` 与 `set_cd_path` 先 flush。**探针**：档案持久化 193 项 PASS，覆盖 serial 单调、失败可观察、重试成功与退出 flush。**验证**：`level_1` 冒烟 PASS；`check_all --godot-bin` 8/8 PASS。 | 18-3A 完成 |
+| 2026-10-29 Phase 18-3B 地图首帧保存 | **评估**：11 个地图页 `_ready` 均在写 `Map_num`/`HeavenMap_num` 后保存，是进入城市后的唯一持久化点；删除会丢失崩溃/立即退出时的当前地图，故保留同步语义。**合并**：删除 `map_3._sync_special_button_layer` 的第二次保存（只改 z-index，且在 `Map_num=3` 前）。**IO**：稳态保存约 4.7ms；独立冷启动微基准首档密钥创建约 108ms（一次性），地图页保存通常复用已创建密钥。**验证**：档案持久化 193 项 PASS；`level_1` 冒烟 PASS；`check_all --godot-bin` 8/8 PASS。 | 18-3B 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

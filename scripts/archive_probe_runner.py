@@ -39,6 +39,7 @@ EXPECTED_ERROR_MARKERS = (
     "保存前补全后置条件不满足",
     "magic != 0x43454447",
     "change_scene rejected level target without archive session",
+    "后台存档写入失败，已保留快照",
 )
 
 

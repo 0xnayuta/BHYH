@@ -23,7 +23,7 @@ const MAIN_SETTINGS_PATH: String = "user://MainGame.json"
 const ARCHIVE_CONTAINER_KEYS := ["装备列表", "道具列表", "消耗品列表"]
 const ARCHIVE_TIME_KEY: String = "存档时间"
 
-signal background_save_finished(path: String, success: bool)
+signal background_save_finished(path: String, success: bool, serial: int)
 ## 最近一次保存失败的程序化原因（"" 表示最近一次成功或尚未保存）。
 ## 取值：invalid_archive_path / stale_archive_identity / normalize_failed:<键> / invalid_archive_data / write_failed
 var last_save_error: String = ""
@@ -33,6 +33,9 @@ var _pending_background_saves: Dictionary = {}
 var _failed_background_saves: Dictionary = {}
 var _save_flush_in_progress := false
 var _save_snapshot_in_progress := false
+## 后台写任务序号：每次入队递增；完成信号携带同一序号，消费方可判定信号顺序。
+var _background_save_serial: int = 0
+var _last_background_save_serial: int = 0
 
 
 ## 后台保存：路径缺省取当前会话档案；调用方不能借路径参数越过会话身份。
@@ -57,11 +60,13 @@ func request_background_save(path: String = "") -> bool:
 	var password := _ensure_stable_key()
 	if password.is_empty():
 		return false
+	_background_save_serial += 1
 	var job := {
 		"path": archive_path,
 		"data": snapshot,
 		"password": password,
 		"generation": Global.get_archive_identity_epoch(),
+		"serial": _background_save_serial,
 	}
 	_failed_background_saves.erase(archive_path)
 
@@ -105,20 +110,25 @@ func _take_current_background_job() -> Dictionary:
 
 func _complete_background_save(job: Dictionary, success: bool) -> void:
 	var path := str(job["path"])
+	var serial := int(job.get("serial", 0))
+	_last_background_save_serial = maxi(_last_background_save_serial, serial)
 	var identity_current := is_archive_identity_current(path, int(job.get("generation", -1)))
 	if not identity_current:
 		# 切档后旧任务到达：拒绝回写元数据，也不进入失败重试队列。
-		background_save_finished.emit(path, false)
+		last_save_error = "stale_archive_identity"
+		background_save_finished.emit(path, false, serial)
 		return
 	if success:
+		last_save_error = ""
 		_failed_background_saves.erase(path)
 		if is_instance_valid(MainSet):
 			_set_archive_time(archive_number_from_path(path), str(job["data"][ARCHIVE_TIME_KEY]))
 
 	elif not _pending_background_saves.has(path):
+		last_save_error = "write_failed"
 		_failed_background_saves[path] = job
 		push_error("后台存档写入失败，已保留快照，退出/下次同步保存时重试：" + path)
-	background_save_finished.emit(path, success)
+	background_save_finished.emit(path, success, serial)
 
 
 func _collect_background_save() -> void:
@@ -137,6 +147,27 @@ func _process(_delta: float) -> void:
 	_start_next_background_save()
 	if _save_thread == null and _pending_background_saves.is_empty():
 		set_process(false)
+
+
+## 当前是否有后台写任务或待写任务；path 为空时查询全部。
+func has_pending_background_save(path: String = "") -> bool:
+	var target := str(path).strip_edges()
+	if target == "":
+		return _save_thread != null or not _pending_background_saves.is_empty()
+	if _save_thread != null and str(_active_save_job.get("path", "")) == target:
+		return true
+	return _pending_background_saves.has(target)
+
+
+func has_failed_background_save(path: String = "") -> bool:
+	var target := str(path).strip_edges()
+	if target == "":
+		return not _failed_background_saves.is_empty()
+	return _failed_background_saves.has(target)
+
+
+func get_last_background_save_serial() -> int:
+	return _last_background_save_serial
 
 
 func flush_pending_saves() -> bool:

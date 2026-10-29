@@ -48,6 +48,23 @@ func _archive_data(role_id: int, level: int) -> Dictionary:
 	return data
 
 
+func _wait_background_idle(max_frames: int = 300) -> bool:
+	for _frame in range(max_frames):
+		if not MemoryClass.has_pending_background_save():
+			return true
+		await get_tree().process_frame
+	return false
+
+
+func _remove_empty_directory(path: String) -> bool:
+	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(path)):
+		return true
+	var parent := DirAccess.open(path.get_base_dir())
+	if parent == null:
+		return false
+	return parent.remove(path.get_file()) == OK and not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(path))
+
+
 func _write_plain(path: String, text: String) -> void:
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file != null:
@@ -63,6 +80,7 @@ func _run() -> void:
 	_test_cloud_validation()
 	_test_request_save()
 	_test_archive_session()
+	_test_background_save_order()
 	await _test_settlement_ownership()
 	_test_shop_purchase_command()
 	_test_shop_capacity_failure()
@@ -77,6 +95,74 @@ func _run() -> void:
 	await _test_pet_interface_paths()
 	await _test_panel_saves()
 
+
+## 18-3A：后台保存序号、信号顺序、失败可观察与退出前 flush。
+func _test_background_save_order() -> void:
+	var path := TEST_ARCHIVE_PREFIX + "041.json"
+	_reset_profile(1, 5)
+	_open_session(path)
+	var events: Array = []
+	var on_finished := func(_path: String, success: bool, serial: int) -> void:
+		events.append({"success": success, "serial": serial})
+	MemoryClass.background_save_finished.connect(on_finished)
+	_check("background_serial_request_1", MemoryClass.request_background_save())
+	PlayerData.player_data["玩家等级"] = 6
+	_check("background_serial_request_2", MemoryClass.request_background_save())
+	_check("background_serial_idle", await _wait_background_idle())
+	var serials: Array[int] = []
+	for event in events:
+		serials.append(int(event["serial"]))
+	var monotonic := not serials.is_empty()
+	for index in range(1, serials.size()):
+		if serials[index] <= serials[index - 1]:
+			monotonic = false
+	_check("background_signal_serial_monotonic", monotonic, str(serials))
+	_check("background_signal_last_serial", not serials.is_empty() and serials[-1] == MemoryClass.get_last_background_save_serial(), str(serials))
+	var status: Dictionary = Global.get_background_save_status()
+	_check("background_consumer_serial", int(status.get("serial", -1)) == MemoryClass.get_last_background_save_serial(), str(status))
+	_check("background_written_latest", MemoryClass.get_archive_level(path) == 6, "level=%s" % MemoryClass.get_archive_level(path))
+	_check("background_last_error_clear", MemoryClass.last_save_error == "", MemoryClass.last_save_error)
+	MemoryClass.background_save_finished.disconnect(on_finished)
+
+	# 写入目标被目录占用时，失败必须经信号/状态可观察，快照进入重试队列。
+	var fail_path := TEST_ARCHIVE_PREFIX + "042.json"
+	_reset_profile(1, 7)
+	_open_session(fail_path)
+	_check("background_failure_fixture_clean", _remove_empty_directory(fail_path))
+	_check("background_failure_fixture", DirAccess.make_dir_absolute(ProjectSettings.globalize_path(fail_path)) == OK)
+	var failure_events: Array = []
+	var on_failed := func(_path: String, success: bool, serial: int) -> void:
+		failure_events.append({"success": success, "serial": serial})
+	MemoryClass.background_save_finished.connect(on_failed)
+	var failures_before := int(Global.get_background_save_status().get("failure_count", 0))
+	_check("background_failure_request", MemoryClass.request_background_save())
+	_check("background_failure_idle", await _wait_background_idle())
+	var failed_signal := false
+	for event in failure_events:
+		if not bool(event["success"]):
+			failed_signal = true
+	_check("background_failure_signal", failed_signal, str(failure_events))
+	_check(
+		"background_failure_consumer",
+		int(Global.get_background_save_status().get("failure_count", 0)) > failures_before,
+		str(Global.get_background_save_status())
+	)
+	_check("background_failure_retry_queued", MemoryClass.has_failed_background_save(fail_path))
+	_check("background_failure_flush_keeps_retry", not MemoryClass.flush_pending_saves())
+	_check("background_failure_cleanup", _remove_empty_directory(fail_path))
+	_check("background_failure_retry_success", MemoryClass.flush_pending_saves())
+	_check("background_failure_retry_cleared", not MemoryClass.has_failed_background_save(fail_path))
+	_check("background_failure_retry_written", MemoryClass.get_archive_level(fail_path) == 7, "level=%s" % MemoryClass.get_archive_level(fail_path))
+	MemoryClass.background_save_finished.disconnect(on_failed)
+
+	# 退出会话前必须 flush 未决后台任务，不能留下旧档快照。
+	var exit_path := TEST_ARCHIVE_PREFIX + "043.json"
+	_reset_profile(1, 8)
+	_open_session(exit_path)
+	_check("background_exit_request", MemoryClass.request_background_save())
+	Global.end_archive_session()
+	_check("background_exit_inactive", not Global.is_archive_session_active())
+	_check("background_exit_flushed", MemoryClass.get_archive_level(exit_path) == 8, "level=%s" % MemoryClass.get_archive_level(exit_path))
 
 func _test_missing_and_empty() -> void:
 	var missing_path := TEST_ARCHIVE_PREFIX + "001.json"
@@ -1030,7 +1116,6 @@ func _check_main_menu_saves() -> void:
 		["map_1", "res://Scene/main_menu/map_1.tscn", "_on_bc_game_pressed"],
 		["map_2", "res://Scene/main_menu/map_2.tscn", "_on_memory_game_pressed"],
 		["map_3", "res://Scene/main_menu/map_3.tscn", "_on_memory_game_pressed"],
-		["map_3_special", "res://Scene/main_menu/map_3.tscn", "_sync_special_button_layer"],
 		["map_4", "res://Scene/main_menu/map_4.tscn", "_on_memory_class_pressed"],
 		["map_5", "res://Scene/main_menu/map_5.tscn", "_on_memory_class_pressed"],
 		["map_6", "res://Scene/main_menu/map_6.tscn", "_on_memory_class_pressed"],

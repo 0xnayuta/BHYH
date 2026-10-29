@@ -232,8 +232,6 @@ func _sync_special_button_layer() -> void:
 		var node := get_node_or_null(node_path) as CanvasItem
 		if node != null:
 			node.z_index = 0
-	if Global.is_archive_session_active():
-		MemoryClass.request_save("map_3_special")
 	Global.is_mpo = false
 	Global.is_ice = false
 	Global.is_poision = false
