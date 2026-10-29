@@ -71,7 +71,7 @@
 | 英雄近战 | `BaseHero` / `base_hero.gd` | 自身即来源 | 场景实例；`Global.call_hero` | 直接传入 `apply_role_hit` |
 | 英雄弹体 | `RoleBullet`（4 个子类）、`RoleBullet1`、`Role1Shallow`、`RolehmzBullet` | `player` | `Global.add_role_bullet` 36、`add_role_bullet_1` 1、`add_role_bullet_1_safe` 2、`call_chase_bullet` 20、`call_fly_bullet` 36 | `player`；否则祖先 1~4 层；否则 `owner_hero`；否则 `RoleProp.source_player` |
 | 法宝 | `BaseMagicWeapon`（24 个子类）、`MagicWeaponHit`、`MgHit` | `player` / `source_weapon` | `Global.add_magic_weapon` 2（均传 `self`；另有 4 处 `BaseHero.add_magic_weapon()` 本地包装） | 载体字段 → `owner_hero` → `RoleProp.source_player` |
-| 召唤物 | `SummonBaseMonster`（5 个子类） | `summoner`、`player_reference`、meta `is_summon` | 4 处直接 `instantiate()` + `set_summon_properties` | `summoner` → `RoleProp.source_player` → 场景 `Hero` 下第一个 `BaseHero` |
+| 召唤物 | `SummonBaseMonster`（5 个子类） | `summoner`、`player_reference`、meta `is_summon` | 4 处直接 `instantiate()` + `set_summon_properties` | `summoner`/`owner_hero`；无 owner 返回 null，不回落 1P |
 | 怪物弹体 | `MonsterBullet`（17 个子类） | `my_father`、祖父节点、`RoleProp.source_player` | `Global.add_bullet` 300、`add_weapon_bullet` 22（武器弹体）、`add_special_effect_bullet` 12、`load_monster_bullet_scene` 2 | 怪物侧伤害目标是英雄；`my_father` 用于伤害加成 |
 | 怪物 | `BaseMonster` | `get_player`（`LocalCoop.nearest_player` 最近存活玩家） | 关卡刷怪表、召唤、分裂 | 受击时按 §4.2 解析 |
 
@@ -113,7 +113,7 @@
 | GM-02 | `global.gd:5258` | **18-1B 已删除 `Global.get_player`**；不再存在全局 1P 别名 | 已修复 |
 | GM-03 | `base_monster.gd:1865`（17-1） | `_get_damage_source_player` 最后回落 `RoleProp.source_player`；**17-2A 已删除** | 无来源时伤害为 0，不再归 1P |
 | GM-04 | `role_bullet.gd:165`、`:409` | `player` 由祖先链回填；觉醒效果再回落 `role_props.source_player`；**17-2A 已删除回落，根节点弹体显式传源** | 无来源弹体不再借用 1P |
-| GM-05 | `summon_base_monster.gd:239` | `find_player_reference` 在 `summoner` 非英雄时回落全局别名，再取场景 `Hero` 第一个子节点 | 非英雄召唤（怪物/法宝）跟随 1P |
+| GM-05 | `summon_base_monster.gd:239` | **18-1C 已删除** `RoleProp.source_player` 与场景第一个 `BaseHero` 回落；无显式 owner 返回 null | 已修复 |
 | GM-06 | `base_monster.gd:544` | **18-1B 已改为 `LocalCoop.nearest_player(self.global_position)`**；每帧仅补空，协作层按 0.15s 更新最近存活玩家 | 已修复 |
 | GM-07 | `base_monster.gd:1867`、`:1876`、`:1886` | 吸血倍率读 `RoleProp.roleprop`；腾蛇阵等级读 1P `PlayerData`；角色 5 被动等级读 1P `PlayerData`；**17-2A 已改为 `LocalCoop.props_for/data_for(source_player)`** | 2P 使用自身吸血/技能等级 |
 | GM-08 | `base_role.gd:82`、`:98`、`:202` | HUD 在 `player == null` 时回落 `RoleProp.source_player`；`_set_values` 直接读全局 `RoleProp` | 正常路径由 `RoleInformation` 注入；P2 血蓝/经验/无双仍显示 1P 值 |
@@ -297,7 +297,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-22 | `defeat` 奖励先发物品再保存，无回滚 | 保存失败时物品只在内存 | **已修**：保存失败回滚装备/道具/标志 |
 | GM-23 | `defeat._on_lqjl_pressed` 不保存 | 重载后重复领取 | **已修**：持久 `失败奖励已领取` + 关闭前保存 |
 | GM-24 | `victory`/`defeat` 返回按钮无重入守卫 | 双击触发两次 `change_scene` 与两次保存 | **已修**：`_begin_leave()`/`_begin_rechallenge()`；探针连续点击 |
-| GM-25 | 两个死亡分支各自等待后切换 | 双人同时死亡可能重复切换 | 未改；`coop_probe_runner` 全灭用例仍为回归门禁 |
+| GM-25 | 两个死亡分支各自等待后切换 | **18-1D 已统一** `LocalCoop.request_defeat_if_all_players_dead()`；`_defeat_requested` 去重，失败可重试 | 已修复 |
 | GM-26 | `base_through_level.gd` 直接写 29 行关卡进度（含 `add_tg`） | 通关进度写入仍集中在该文件；保存由胜利或关卡分支提交 | 阶段推进已收敛；`add_tg` 写入未改，保存失败路径已收口 |
 
 ---
@@ -566,9 +566,9 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 ### 14.3 召唤回落与 `wd_hurt`
 
-- `SummonBaseMonster.find_player_reference`：非英雄 `summoner` 先 `LocalCoop.owner_hero(summoner)`，再回落 `RoleProp.source_player`，最后取场景 `Hero` 首个子节点；`LocalCoopAttributionSourcesProbe` 覆盖“法宝持有召唤跟随 P2”。
+- `SummonBaseMonster.find_player_reference`：**18-1C** 只认显式 `summoner`/`owner_hero`；无 owner 返回 null，不再回落 1P 或场景首个英雄；`LocalCoopAttributionSourcesProbe` 覆盖法宝持有召唤跟随 P2 与无 owner 拒绝。
 - `wd_hurt` **18-1A 已修复**：不再每帧读全局 `RoleProp.source_player`/`PlayerData`。Voodoo 层记录实际施加者，按 `source_player` 分组；每组达到 7 层独立结算，读取该来源的档案技能 10、属性与觉醒，只移除该来源的层。1P 行为不变，2P 不再借用 1P。
-- `_apply_role_damage_vs_reduction` 仍读全局 `RoleProp.damage_bonus`；18-1A 未改，继续登记为 18-1C 残余 1P 读取。
+- `_apply_role_damage_vs_reduction`：**18-1C** 通过 `_damage_bonus_source` 读取实际出手者 `damage_bonus`，不再读全局；`LocalCoopDamageStatsProbe` 覆盖 P1 0 / P2 0.5 的 75 vs 125。
 
 ### 14.4 回归
 
@@ -736,7 +736,7 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 
 ### 20.3 验证
 
-新增 `LocalCoopRole4PoisonProbe`：P1/P2 双 Role4、混合 6+1 层不触发、P1 第 7 层只结算 P1 且保留 P2 层、P2 第 7 层只结算 P2、P1/P2 觉醒按来源档案判断；`coop_probe_runner` 全量 22 例 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS。`_apply_role_damage_vs_reduction` 与无 owner 召唤仍未在本批处理，见 18-1C；`Global.get_player` 已由 18-1B 删除。
+新增 `LocalCoopRole4PoisonProbe`：P1/P2 双 Role4、混合 6+1 层不触发、P1 第 7 层只结算 P1 且保留 P2 层、P2 第 7 层只结算 P2、P1/P2 觉醒按来源档案判断；`coop_probe_runner` 全量 22 例 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s）；`check_all --godot-bin` 8/8 PASS。`_apply_role_damage_vs_reduction` 与无 owner 召唤已由 18-1C 处理；`Global.get_player` 已由 18-1B 删除。
 
 
 ---
@@ -803,4 +803,27 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 - `bone_forge_success_up` / `bone_forge_failure_consumes_fire` / `bone_forge_save_failure_rolls_back`；
 - `synthesis_success_once` / `synthesis_save_failure_rolls_back`。
 
-`check_all --godot-bin` 8/8 PASS；全量关卡回归在 18-1C/18-1D 后统一复跑。
+`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 128/128 PASS + 5 SKIP（261.0s）；`check_all --godot-bin` 8/8 PASS。
+
+
+---
+
+## 24. 18-1C 召唤与减伤、18-1D 全灭提交（2026-10-29）
+
+### 24.1 18-1C
+
+- `SummonBaseMonster.find_player_reference` 开头清空 `player_reference`；只接受显式 `summoner`（英雄）或其 `LocalCoop.owner_hero`。无 owner 的非英雄召唤返回 null，不再回落 `RoleProp.source_player` 或场景首个 BaseHero。
+- `BaseMonster` 新增 `_damage_bonus_source` 临时上下文；`hurt_reduce_hp` 从实际 `target`（或 Voodoo Buff 的 `source_player`）解析出手者，`_trigger_wd_burst` 显式传入毒爆来源；`_apply_role_damage_vs_reduction` 读该来源的 `damage_bonus`，无来源按 0。
+- `Monster139` 的 `hurt_reduce_hp` 覆盖同步绑定来源，避免绕过基类上下文。
+- `_is_mds_awaken_active` 删除全局 `RoleProp.source_player` 回落；无来源返回 false。
+- 剩余 `RoleProp.source_player` 读取集中在 HUD/UI/视图别名与掉落展示，不再作为伤害/召唤归属；未在本批全删。
+
+### 24.2 18-1D
+
+- `LocalCoop.request_defeat_if_all_players_dead()` 统一判定；`_defeat_requested` 保证双人同时死亡只请求一次，场景切换失败复位以允许重试，`clear_runtime`/`_on_scene_changed` 重置。
+- `BaseHero` 两个死亡分支（`_physics_process` 与 `state_behit`）均改调用该方法。
+- 新增 `LocalCoopAllDeadProbe`：单人死亡不请求、双人死亡请求一次、重复请求忽略、场景切换失败后可重试且只成功一次。
+
+### 24.3 验证
+
+`coop_probe_runner` **23/23 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 128/128 PASS + 5 SKIP（261.0s）；`check_all --godot-bin` 8/8 PASS。

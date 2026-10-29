@@ -237,6 +237,7 @@ func try_play_fallback_animation() -> void:
 
 
 func find_player_reference() -> void:
+	player_reference = null
 	if is_instance_valid(summoner) and summoner is BaseHero:
 		player_reference = summoner
 		return
@@ -244,22 +245,7 @@ func find_player_reference() -> void:
 		var summoner_owner: BaseHero = LocalCoop.owner_hero(summoner) as BaseHero
 		if is_instance_valid(summoner_owner):
 			player_reference = summoner_owner
-			return
-	if is_instance_valid(RoleProp.source_player):
-		player_reference = RoleProp.source_player
-		return
-	var tree = get_tree()
-	if not tree:
-		return
-	var current_scene = tree.current_scene
-	if not current_scene or not current_scene.has_node("Hero"):
-		return
-	var hero_node = current_scene.get_node("Hero")
-	if hero_node:
-		for child in hero_node.get_children():
-			if child is BaseHero:
-				player_reference = child
-				break
+	# 无显式 owner 的非英雄召唤不再回落到 1P 或场景首个英雄。
 
 
 func follow_player_when_idle() -> void:

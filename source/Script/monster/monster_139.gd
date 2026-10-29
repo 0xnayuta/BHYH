@@ -182,8 +182,11 @@ func _on_buttonlist_mouse_exited() -> void:
 
 func hurt_reduce_hp(value, target):
 	attack_active = true
+	var mds_source: BaseHero = null
+	if target is BaseBuff and str(target.buff_info.get("Name", "")) == "Voodoo":
+		mds_source = target.buff_info.get("source_player") as BaseHero
 	var skip_mds_combo: bool = (
-		target is BaseBuff and str(target.buff_info.get("Name", "")) == "Voodoo" and _is_mds_awaken_active()
+		target is BaseBuff and str(target.buff_info.get("Name", "")) == "Voodoo" and _is_mds_awaken_active(mds_source)
 	)
 	if value > 0:
 		remove_all_hurt.start(4)
@@ -198,7 +201,10 @@ func hurt_reduce_hp(value, target):
 			return 0
 	if skip_mds_combo:
 		set_meta("mds_awaken_skip_combo", true)
+	var previous_bonus_source := _damage_bonus_source
+	_damage_bonus_source = _get_damage_source_player(target)
 	var last_value = hd_reduce(value)
+	_damage_bonus_source = previous_bonus_source
 	if skip_mds_combo:
 		remove_meta("mds_awaken_skip_combo")
 	hp -= last_value

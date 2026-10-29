@@ -44,6 +44,10 @@ var secondary_props: Node
 var secondary_passives: Node
 var inputs: Array[CoopInput] = []
 var ui_slot := 1
+## 双人死亡只提交一次；由场景切换或 clear_runtime 重置。
+var _defeat_requested := false
+## 测试可注入场景切换；生产走 Global.change_scene。
+var scene_change_override: Callable
 var creation_player_count := 1
 var _property_cache: Dictionary = {}
 var _owner_fields_cache: Dictionary = {}
@@ -349,6 +353,7 @@ func set_shared_soul(value: int) -> int:
 
 func clear_runtime() -> void:
 	ui_slot = 1
+	_defeat_requested = false
 	for node in [secondary_passives, secondary_props, secondary_data]:
 		if is_instance_valid(node):
 			node.free()
@@ -527,6 +532,24 @@ func all_players_dead() -> bool:
 	return is_enabled() and living_players().is_empty()
 
 
+## 单人或双人均死亡后请求一次败北场景；未全灭或已请求时返回 false。
+func request_defeat_if_all_players_dead() -> bool:
+	if is_enabled() and not all_players_dead():
+		return false
+	if _defeat_requested:
+		return false
+	_defeat_requested = true
+	var target := "res://Scene/level/defeat.tscn"
+	var changed := false
+	if scene_change_override.is_valid():
+		changed = bool(scene_change_override.call(target))
+	else:
+		changed = Global.change_scene(target)
+	if not changed:
+		_defeat_requested = false
+	return changed
+
+
 func _physics_process(delta: float) -> void:
 	if not is_enabled() or get_tree().paused:
 		return
@@ -547,6 +570,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_scene_changed() -> void:
+	_defeat_requested = false
 	if is_instance_valid(_session_buttons):
 		_session_buttons.queue_free()
 	ui_slot = 1

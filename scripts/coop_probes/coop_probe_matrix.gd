@@ -110,6 +110,8 @@ func _run() -> void:
 			await _case_wushuang_attribution()
 		"LocalCoopRole4PoisonProbe":
 			await _case_role4_poison()
+		"LocalCoopAllDeadProbe":
+			await _case_all_dead()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -839,6 +841,18 @@ func _case_attribution_sources() -> void:
 	_check(int(summon.get_meta("coop_slot", 0)) == 2, "summon carries P2 slot")
 	_check(monster._get_damage_source_player(summon) == p2, "summon damage source resolves to P2")
 
+	var ownerless_host := Node2D.new()
+	stage.add_child(ownerless_host)
+	var ownerless_summon: Node = load("res://Scene/monster/monster_zhw/monster_143_zhw.tscn").instantiate()
+	ownerless_summon.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(ownerless_summon)
+	await process_frame
+	ownerless_summon.set_physics_process(false)
+	ownerless_summon.set_summon_properties(ownerless_host, 0.0)
+	_check(ownerless_summon.player_reference == null, "ownerless summon does not borrow 1P")
+	ownerless_summon.queue_free()
+	ownerless_host.queue_free()
+
 	var weapon: Node = global.add_magic_weapon(stage, "qlsword", Vector2(300, 340), p2)
 	_check(weapon != null, "magic weapon created with explicit source")
 	if weapon != null:
@@ -935,6 +949,16 @@ func _case_damage_stats() -> void:
 	monster.get_player = p2
 	var p2_level: int = monster.get_role_last_hurt(p2)
 	_check(p1_level == 100 and p2_level == 110, "P2 level suppression uses P2 level")
+
+	p1.RoleProp.roleprop.damage_bonus = 0.0
+	p2.RoleProp.roleprop.damage_bonus = 0.5
+	monster.hp = 1000000
+	monster.hd = 0
+	monster.ws_hd = true
+	monster.damage_reduction = 0.0
+	var p1_damage: int = monster.hurt_reduce_hp(100, p1)
+	var p2_damage: int = monster.hurt_reduce_hp(100, p2)
+	_check(p1_damage == 75 and p2_damage == 125, "damage_bonus reads actual attacker")
 
 	monster.queue_free()
 	await process_frame
@@ -1157,3 +1181,40 @@ func _add_voodoo_stacks(monster: Node, source_player: Node, count: int) -> void:
 
 func _probe_check_wd(monster: Node, source_player: Node) -> int:
 	return int(global.call("check_wd", monster, source_player))
+
+
+func _case_all_dead() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "all-dead owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	var paths: Array[String] = []
+	p1.is_death = true
+	coop.scene_change_override = func(path: String) -> bool:
+		paths.append(path)
+		return true
+	_check(not coop.request_defeat_if_all_players_dead(), "one death does not request defeat")
+	p2.is_death = true
+	_check(coop.request_defeat_if_all_players_dead(), "both deaths request defeat")
+	_check(not coop.request_defeat_if_all_players_dead(), "duplicate all-dead request is ignored")
+	_check(paths.size() == 1 and paths[0] == "res://Scene/level/defeat.tscn", "defeat scene requested once")
+
+	coop.clear_runtime()
+	await _make_stage()
+	p1 = _make_hero(1, 1)
+	p2 = _make_hero(7, 2)
+	paths.clear()
+	p1.is_death = true
+	p2.is_death = true
+	coop.scene_change_override = func(_path: String) -> bool:
+		return false
+	_check(not coop.request_defeat_if_all_players_dead(), "failed scene change is not committed")
+	coop.scene_change_override = func(path: String) -> bool:
+		paths.append(path)
+		return true
+	_check(coop.request_defeat_if_all_players_dead(), "failed request can retry")
+	_check(paths.size() == 1, "retry requests scene once")
+	coop.scene_change_override = Callable()

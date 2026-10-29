@@ -712,8 +712,7 @@ func _physics_process(delta: float) -> void:
 		set_process_input(false)
 		set_process_unhandled_input(false)
 		await get_tree().create_timer(1.5).timeout
-		if not LocalCoop.is_enabled() or LocalCoop.all_players_dead():
-			Global.change_scene("res://Scene/level/defeat.tscn")
+		LocalCoop.request_defeat_if_all_players_dead()
 		return
 	RoleProp.up_level()
 	RoleProp.role_pos_x = position.x
@@ -1676,8 +1675,7 @@ func state_behit():
 			get_action = "death"
 			role_action_player.play("death")
 			await get_tree().create_timer(1.5).timeout
-			if not LocalCoop.is_enabled() or LocalCoop.all_players_dead():
-				Global.change_scene("res://Scene/level/defeat.tscn")
+			LocalCoop.request_defeat_if_all_players_dead()
 		return
 
 	_prepare_hit_reaction()

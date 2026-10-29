@@ -44,6 +44,7 @@ CASES = [
     "LocalCoopDamageStatsProbe",
     "LocalCoopWushuangAttributionProbe",
     "LocalCoopRole4PoisonProbe",
+    "LocalCoopAllDeadProbe",
 ]
 
 GODOT_CANDIDATES = ("godot", "godot4")

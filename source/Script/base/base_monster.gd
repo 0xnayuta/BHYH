@@ -151,6 +151,8 @@ var hurt_special_effect: Node2D
 var is_smart_monster: bool
 var is_bt
 var damage_bonus: float = 0.0
+## hurt_reduce_hp 内临时记录实际出手者，供 _apply_role_damage_vs_reduction 读取其 damage_bonus。
+var _damage_bonus_source: BaseHero = null
 var damage_reduction: float = 0.0:
 	get:
 		return damage_reduction + (0.25 if LocalCoop.is_enabled() else 0.0)
@@ -2052,7 +2054,11 @@ func get_role_last_hurt(target, source_player: BaseHero = null):
 func _apply_role_damage_vs_reduction(value: int) -> int:
 	if value <= 0:
 		return value
-	var bonus := maxf(0.0, float(RoleProp.roleprop.get("damage_bonus", 0.0)))
+	var bonus := 0.0
+	if is_instance_valid(_damage_bonus_source):
+		var source_props := LocalCoop.props_for(_damage_bonus_source) as BaseRoleProperties
+		if is_instance_valid(source_props):
+			bonus = maxf(0.0, float(source_props.roleprop.get("damage_bonus", 0.0)))
 	var reduction := maxf(0.0, damage_reduction)
 	return int(float(value) * maxf(0.0, 1.0 + bonus - reduction))
 
@@ -2247,7 +2253,12 @@ func hurt_reduce_hp(value, target):
 			return 0
 	if skip_mds_combo:
 		set_meta("mds_awaken_skip_combo", true)
+	var previous_bonus_source := _damage_bonus_source
+	_damage_bonus_source = _get_damage_source_player(target)
+	if _damage_bonus_source == null and target is BaseBuff:
+		_damage_bonus_source = target.buff_info.get("source_player") as BaseHero
 	var last_value = hd_reduce(value)
+	_damage_bonus_source = previous_bonus_source
 	if skip_mds_combo:
 		remove_meta("mds_awaken_skip_combo")
 	hp -= last_value
@@ -3642,7 +3653,10 @@ func _trigger_wd_burst(source_player: Role4Hero, stacks: Array) -> void:
 	Global.add_special_effect(self, Vector2(0, -25), "mds", Vector2(1, 1), false, 1)
 	if _is_mds_awaken_active(source_player):
 		set_meta("mds_awaken_skip_combo", true)
+	var previous_bonus_source := _damage_bonus_source
+	_damage_bonus_source = source_player
 	reduce_hp(skill_power)
+	_damage_bonus_source = previous_bonus_source
 	if has_meta("mds_awaken_skip_combo"):
 		remove_meta("mds_awaken_skip_combo")
 	# 只移除本次来源的层，保留队友仍有用的毒层。
@@ -3650,10 +3664,9 @@ func _trigger_wd_burst(source_player: Role4Hero, stacks: Array) -> void:
 
 
 func _is_mds_awaken_active(source_player: BaseHero = null) -> bool:
-	var resolved: BaseHero = source_player if is_instance_valid(source_player) else RoleProp.source_player as BaseHero
-	if not resolved is Role4Hero:
+	if not source_player is Role4Hero or not is_instance_valid(source_player):
 		return false
-	var profile: Node = LocalCoop.data_for(resolved)
+	var profile: Node = LocalCoop.data_for(source_player)
 	if not is_instance_valid(profile):
 		return false
 	var awaken_data: Variant = profile.player_data.get(DataKeys.Skill.AWAKENED, {})
