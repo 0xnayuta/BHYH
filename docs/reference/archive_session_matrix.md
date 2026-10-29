@@ -1,8 +1,8 @@
 # 档案会话、持久化与玩家槽位调用面矩阵（Phase 16-1）
 
-> **状态**：Phase 16-1 只读调查完成（2026-10-28）；2026-10-29 已实施 Phase 16-2A 全部 118 处、16-2B 会话身份与保存顺序、16-2C 角色范围/损坏档校验、16-2D 补全边界与 16-3 档案会话上下文。本页记录**当前实现事实**与失败边界，未实施的 16-4/16-5/16-6 目标不写成已实现。
+> **状态**：Phase 16 已完成并归档（2026-10-29）：16-1 调查、16-2A 全部 118 处、16-2B 身份与顺序、16-2C 校验、16-2D 补全边界、16-3 会话上下文、16-4 槽位与共享账本、16-5 面板显式操作者、16-6 边界守卫。本页作为档案/槽位调用面与失败边界的长期参考保留；阶段计划与实施记录见 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)。
 >
-> **调查基线**：`f7f7a2c`（2026-10-28 Phase 15 归档 / Phase 16 规划）；2026-10-29 更新 16-2A 五个批次与 16-2C 实施结果。仓库只有一个活跃工程 `source/`。
+> **调查基线**：`f7f7a2c`（2026-10-28 Phase 15 归档 / Phase 16 规划）；2026-10-29 更新至 16-6 收口。仓库只有一个活跃工程 `source/`。
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为唯一事实源，使用静态扫描（`grep` 等价的正则统计）与关键函数逐行阅读。下文计数是**静态行数/出现次数**，可能包含条件分支、重复调用与暂时不可达路径，不等同于运行期次数；口径在每张表标题处注明。
 >
@@ -523,7 +523,7 @@ grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 - [x] 静态定义、档案传输格式与实例状态已分开；
 - [x] 仅文档与只读报告，未修改生产代码；结果进入本页与 [`status.md`](status.md)。
 
-**下一入口**：Phase 16-1 完成；16-2 存档 IO 边界与保存顺序见 [`current-iteration.md`](../roadmap/current-iteration.md)。
+**下一入口**：Phase 16 已完成并归档，阶段计划与实施记录见 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)；当前候选 Phase 17 见 [`current-iteration.md`](../roadmap/current-iteration.md)。
 
 ---
 

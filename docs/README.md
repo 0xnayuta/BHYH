@@ -44,7 +44,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 16 档案会话、持久化与玩家槽位**：16-1 矩阵、16-2A 全部批次、16-2B 身份与顺序、16-2C、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥、16-6 边界守卫与阶段收口已完成 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫；均未启动 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
@@ -86,6 +86,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | [`archive/iteration_13_visual_asset_contract.md`](archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口与发布验证归档；保持历史原貌 |
 | [`archive/iteration_14_atlas_metadata_boundary.md`](archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界、View 迁移、守卫与验证归档 |
 | [`archive/iteration_15_app_orchestration_lifecycle.md`](archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页、缓存/池/UI、退出与边界守卫归档 |
+| [`archive/iteration_16_archive_session_slots.md`](archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位：调用面矩阵、保存 IO、会话上下文、共享账本、面板显式操作者、契约门禁与恢复归档 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 
