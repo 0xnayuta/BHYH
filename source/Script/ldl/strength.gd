@@ -29,7 +29,7 @@ var need_lh: int
 
 
 func _get_strength_max_level(item_name: String) -> int:
-	var item: Dictionary = MLdl.qh_list.get("data", {}) if MLdl.qh_list.get("data", {}) is Dictionary else {}
+	var item: Dictionary = MLdl.qh_list.get("Data", {}) if MLdl.qh_list.get("Data", {}) is Dictionary else {}
 	return PlayerData.get_equipment_strength_max_level(item, item_name)
 
 
@@ -48,7 +48,7 @@ func _physics_process(_delta: float) -> void:
 	if MLdl.qh_list[DataKeys.NAME] != "":
 		old_zb_name = MLdl.qh_list[DataKeys.NAME]
 	qh_level = MLdl.qh_list[DataKeys.ENHANCE_LEVEL]
-	data = MLdl.qh_list["data"]
+	data = MLdl.qh_list["Data"]
 	get_qhs_name()
 	set_color()
 	set_str_info()
@@ -130,7 +130,7 @@ func set_color():
 
 func _on_qh_pressed() -> void:
 	var selected_name: String = str(MLdl.qh_list.get(DataKeys.NAME, ""))
-	var selected_data: Dictionary = MLdl.qh_list.get("data", {}) if MLdl.qh_list.get("data", {}) is Dictionary else {}
+	var selected_data: Dictionary = MLdl.qh_list.get("Data", {}) if MLdl.qh_list.get("Data", {}) is Dictionary else {}
 	var template_data: Dictionary = AE.all_equipment.get(selected_name, {})
 	if (
 		bool(selected_data.get("不可强化", template_data.get("不可强化", false)))
@@ -227,7 +227,7 @@ func _get_selected_equipment(position_index: int) -> Variant:
 	if not (equipment is Dictionary):
 		return null
 	if source == "宠物背包":
-		if not is_same(equipment, MLdl.qh_list.get("data", {})):
+		if not is_same(equipment, MLdl.qh_list.get("Data", {})):
 			return null
 	elif str(equipment.get(DataKeys.NAME, "")) != str(MLdl.qh_list.get(DataKeys.NAME, "")):
 		return null
@@ -304,5 +304,5 @@ func remove_infomation():
 	MLdl.qh_list["位置"] = 0
 	MLdl.qh_list["来源"] = "装备背包"
 	MLdl.qh_list["穿戴栏"] = ""
-	MLdl.qh_list["data"] = {}
+	MLdl.qh_list["Data"] = {}
 	MemoryClass.request_save("ldl_strength_remove")

@@ -133,34 +133,44 @@ func _on_syn_pressed() -> void:
 		name_3 = list_3[0]
 
 	var recipe_info = get_recipe(name_1, name_2, name_3)
-	if recipe_info[0]:
-		var nn_lh = recipe_info[2]
-		if PlayerData.get_soul() >= nn_lh:
-			PlayerData.spend_soul(nn_lh)
-			var _item = recipe_info[1]
-			var get_tt = AE.all_equipment[_item][DataKeys.TYPE]
-
-			if get_tt == "武器" or get_tt == "防具" or get_tt == "饰品" or get_tt == "时装" or get_tt == "头衔" or get_tt == "翅膀":
-				PlayerData.add_zb(_item, 0, item_4.eq_prop)
-			elif get_tt == "道具" or get_tt == "消耗品":
-				PlayerData.add_dj(_item, 1)
-			elif get_tt == "法宝":
-				PlayerData.add_fb(_item, 0, AE.get_wx(), item_4.eq_prop)
-
-			PlayerData.player_data["放入列表"]["物品1"].clear()
-			PlayerData.player_data["放入列表"]["物品2"].clear()
-			PlayerData.player_data["放入列表"]["物品3"].clear()
-			Global.add_message_show(
-				get_parent(),
-				"合成成功！获得：" + str(AE.all_equipment[_item][DataKeys.NAME]) + " * 1 !!",
-				1.5,
-				Vector2(15, -45)
-			)
-		else:
-			Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
-	else:
+	if not recipe_info[0]:
 		Global.add_message_show(get_parent(), "合成公式错误！", 1.5, Vector2(15, -45))
-	MemoryClass.request_save("ldl_synthesis")
+		return
+	var nn_lh = recipe_info[2]
+	if PlayerData.get_soul() < nn_lh:
+		Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
+		return
+	var snapshot := PlayerData.snapshot_state()
+	if not PlayerData.spend_soul(nn_lh):
+		PlayerData.restore_state(snapshot)
+		Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
+		return
+	var _item = recipe_info[1]
+	var get_tt = AE.all_equipment[_item][DataKeys.TYPE]
+	var granted := false
+	if get_tt == "武器" or get_tt == "防具" or get_tt == "饰品" or get_tt == "时装" or get_tt == "头衔" or get_tt == "翅膀":
+		granted = PlayerData.add_zb(_item, 0, item_4.eq_prop)
+	elif get_tt == "道具" or get_tt == "消耗品":
+		granted = PlayerData.add_dj(_item, 1)
+	elif get_tt == "法宝":
+		granted = PlayerData.add_fb(_item, 0, AE.get_wx(), item_4.eq_prop)
+	if not granted:
+		PlayerData.restore_state(snapshot)
+		Global.add_message_show(get_parent(), "背包已满，合成已撤销！", 1.5, Vector2(15, -45))
+		return
+
+	PlayerData.player_data["放入列表"]["物品1"].clear()
+	PlayerData.player_data["放入列表"]["物品2"].clear()
+	PlayerData.player_data["放入列表"]["物品3"].clear()
+	if not MemoryClass.request_save("ldl_synthesis"):
+		PlayerData.restore_state(snapshot)
+		Global.add_message_show(
+			get_parent(), "存档保存失败，合成已撤销：" + MemoryClass.describe_save_error(), 1.5, Vector2(15, -45)
+		)
+		return
+	Global.add_message_show(
+		get_parent(), "合成成功！获得：" + str(AE.all_equipment[_item][DataKeys.NAME]) + " * 1 !!", 1.5, Vector2(15, -45)
+	)
 
 
 func _on_help_pressed() -> void:

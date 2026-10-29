@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-2B 已完成；18-1C/18-1D、18-2A/18-2C/18-2D/18-2E、18-3、19-1、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-2A/18-2B 已完成；18-1C/18-1D、18-2C/18-2D/18-2E、18-3、19-1、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -33,7 +33,7 @@
 |:---|:---|:---|
 | Phase 17 / 16 归属 | **18-1A 已修复** `wd_hurt`/`_is_mds_awaken_active`；**18-1B 已清零并删除** `Global.get_player`（原 13 引用 / 9 文件）：怪物目标改用 `LocalCoop.nearest_player`，提示/面板/未央宫/召唤改显式 owner 或最近玩家；`RoleProp.source_player` 非归属别名、`_apply_role_damage_vs_reduction` 全局 `damage_bonus`、无 owner 召唤回落仍在 | 18-1C |
 | Phase 17 双人死亡 | 两个死亡分支各自等待后切换（GM-25），双人同时死亡可能重复切换 | 18-1 |
-| Phase 17 成长 | **18-2B 已修复任务奖励**：领取标记/八仙进度由 `RewardGrantCommand` 在保存快照内提交；神铸/淬骨/合成仍未原子化；`forge._on_froge_pressed_legacy` 仅定义无调用；`zd_skill` 仍直接写技能等级/变体；2P 打开商店与并发点击未验证 | 18-2A/18-2C/18-2D |
+| Phase 17 成长 | **18-2A/18-2B 已修复神铸/淬骨/合成/任务奖励**：成长三域增加快照/保存判读/失败恢复，任务领取由 `RewardGrantCommand` 在保存快照内提交；`forge._on_froge_pressed_legacy` 仅定义无调用；`zd_skill` 仍直接写技能等级/变体；2P 打开商店与并发点击未验证 | 18-2A/18-2C/18-2D |
 | Phase 16 保存反馈 | AS-06/AS-07：矩阵登记大量 `request_save` 返回值被丢弃、无会话静默 `false`，UI 失败反馈未系统性收口；当前调用点与返回值分布需重新统计 | 18-2/18-3 |
 | Phase 16 档案顺序 | AS-08：11 个地图页 `_ready` 即保存；AS-14：`background_save_finished` 仅 emit、无消费者，任务保存序号/信号顺序未收口 | 18-3 |
 | Phase 16 进度写入 | `base_through_level.add_tg` 仍直接写 29 行进度键（GM-26）；关卡进度写入未迁出 | 18-3 |
@@ -70,13 +70,13 @@
 
 **切片**
 
-1. **18-2A 神铸/淬骨/合成**：`divine_forge.gd`、`bone_forge.gd`、`synthesis.gd` 增加快照/恢复与保存判读；失败无部分扣材料；淬骨“失败也扣材料”明确为设计并补用例；
+1. **18-2A 神铸/淬骨/合成（已完成，2026-10-29）**：三域增加 `PlayerData.snapshot_state`/`restore_state`、产出 bool 判读与仅成功保存；淬骨保留“失败也扣材料”设计并补用例；同时统一 `MLdl.qh_list`/装备 `Data` 键，档案探针新增 8 项成功/失败/回滚断言（总 163 项 PASS）；
 2. **18-2B 任务奖励（已完成，2026-10-29）**：`basic_task` 不再先置已领取/直接保存；领取标记与八仙进度作为 `RewardGrantCommand` 的 `claim` 回调，在快照后、保存前提交，失败恢复；`reward_interface` 透传回调；档案探针新增普通任务重进/保存失败与八仙进度回滚用例，**155 项 PASS**；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（322.7s，两关瞬态重试通过），`check_all --godot-bin` 8/8 PASS；
 3. **18-2C 技能直写**：`zd_skill` 的技能等级/变体直接 `PlayerData.player_data` 写入收敛到 `PlayerData` 技能命令；删除旧入口；
 4. **18-2D 死代码与 2P**：删除 `forge._on_froge_pressed_legacy`；验证 2P 打开商店/奖励时操作者与共享账本一致；补并发/重复点击断言；
 5. **18-2E 保存反馈**：按 AS-06/AS-07 重新统计 `request_save` 返回值；面板关闭/奖励/购买失败必须有可见反馈；保留已原子化域不重复包装。
 
-**必须验证**：材料/灵魂/次数不足不产生扣除、不写背包、不发奖；成功只扣一次、只发一次；保存失败恢复；任务重进不重复领取（18-2B 已由档案探针覆盖）；2P 操作者一致；剩余丢弃返回值有登记。
+**必须验证**：材料/灵魂/次数不足不产生扣除、不写背包、不发奖（18-2A 已覆盖）；成功只扣一次、只发一次；保存失败恢复（18-2A/18-2B 已覆盖）；任务重进不重复领取（18-2B 已覆盖）；2P 操作者一致；剩余丢弃返回值有登记。
 
 **出口**：试点成长/奖励/任务域单一命令；旧直写与死代码删除；失败可判断且无部分副作用。
 

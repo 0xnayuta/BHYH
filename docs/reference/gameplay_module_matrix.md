@@ -325,10 +325,10 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 神秘商店 | `mystery_shop_item_box.gd:_on_purchase_pressed` → `execute_mystery` | 购买次数、灵魂、容量 | `spend_soul` + 次数减 1 | 按类型判读产出 | 1 次 `shop_mystery_purchase` | **有**：次数/物品/灵魂全量恢复 |
 | 锻造（当前） | `forge.gd:558` `_on_froge_pressed` | 制作书、灵魂、材料、宝珠数据、装备类型 | `remove_all()` + `spend_soul` | 先 `add_zb`/`add_fb` 并判读 bool | 1 次，失败恢复 | **有**：`player_data` 快照 + `_restore_forge_state` |
 | 锻造（遗留） | `forge.gd:497` `_on_froge_pressed_legacy` | 同上 | 先产出、后 `remove_all` + `spend_soul` | 忽略 bool | 无 | 无；**无调用方** |
-| 神铸 | `divine_forge.gd:95` | 品质、阶段、石头数量 | `_consume_item_all_pages` 先扣 | 修改装备 `神铸阶段` | 1 次 | 无 |
-| 淬骨 | `bone_forge.gd:108` | 神骨、阶段、神火数量 | 先扣 3 个神火 | 随机成功/失败；成功改属性 | 1 次 | 无（失败材料照扣，符合设计） |
+| 神铸 | `divine_forge.gd:_on_sz_pressed` | 品质、阶段、石头数量 | `_consume_item_all_pages` | 修改装备 `神铸阶段` | 仅成功 1 次 `ldl_divine_forge` | **有**：快照恢复石头/装备/`MLdl.qh_list` |
+| 淬骨 | `bone_forge.gd:_on_sz_pressed` | 神骨、阶段、神火数量 | 先扣 3 个神火 | 随机成功/失败；成功改属性 | 仅成功 1 次 `ldl_bone_forge` | **有**：保存失败恢复；普通失败材料照扣（保留设计） |
 | 强化 | `strength.gd:_on_qh_pressed` | 装备、上限、双材料、灵魂 | `spend_soul` + `remove_dj` ×2 | 等级 +1、属性刷新 | 仅成功 1 次 `ldl_strength` | **有**：保存失败恢复装备/灵魂/材料 |
-| 合成 | `synthesis.gd:121` | 配方、灵魂 | `spend_soul` | `add_zb`/`add_dj`/`add_fb`（忽略失败） | 1 次 | 无 |
+| 合成 | `synthesis.gd:_on_syn_pressed` | 配方、灵魂 | `spend_soul` 判读 | `add_zb`/`add_dj`/`add_fb` 判读 | 仅成功 1 次 `ldl_synthesis` | **有**：快照恢复灵魂/放入列表/装备 |
 | 主动技能 | `zd_skill.gd:up_level` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | 仅成功 1 次 `skill_refresh` | **有**：保存失败恢复书/灵魂/等级；失败路径不保存 |
 | 被动技能 | `bd_skill.gd:up_level` / `_upgrade_all_passives` | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 单次/一键各 1 次，仅成功 | **有**：保存失败恢复等级/灵魂 |
 | 奖励发放 | `reward_interface.gd:12` `_process` → `RewardGrantCommand.execute` | 奖励物品/类型/使用物数量；容量由 `add_*` bool 判读 | 可选使用物品 | 逐项 `add_*`，失败恢复 | 1 次（首帧后） | **有**：`PlayerData.snapshot_state` + `restore_state` |
@@ -341,8 +341,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | GM-27 | 商店对道具/消耗品不校验页容量；`add_dj`/`add_xhp` 静默失败 | **已修**：`ShopPurchaseCommand` 校验堆叠/空位，`add_dj/add_xhp` 返回 bool |
 | GM-28 | 神秘商店扣费/次数后产出失败无回滚 | **已修**：`execute_mystery` 快照覆盖次数/物品/灵魂 |
 | GM-29 | 强化在失败分支也 `request_save` | **已修**：仅成功保存 |
-| GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | 未改；17-4 只覆盖强化/商店/技能 |
-| GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | 未改；17-4 试点范围外 |
+| GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | **18-2A 已修**：快照/恢复；淬骨失败仍扣材料（保留设计） |
+| GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | **18-2A 已修**：产出 bool 判读 + 快照/恢复 |
 | GM-32 | 技能书/灵魂先扣再升级；`refresh_infor` 无视失败保存 | **已修**：主动/被动技能仅成功保存，失败恢复快照 |
 | GM-33 | 奖励界面由表现场景直接发物品并保存 | **已修**：`RewardGrantCommand` 校验→快照→发放→保存，失败恢复并提示 |
 | GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | **18-2B 已修**：领取标记/八仙进度由奖励命令 `claim` 回调在快照内提交；失败恢复 |
@@ -782,3 +782,25 @@ Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/
 - `task_eight_daily_claim_clears_progress` / `task_eight_daily_reward_once` / `task_eight_daily_save_failure_restores_progress`：八仙进度清理与回滚。
 
 全量验证：`archive_probe_runner` **155/155 PASS**；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 全量回退 **128/128 PASS + 5 SKIP**（322.7s，`level_85`/`level_eighteenth_hell` 瞬态重试通过）；`check_all --godot-bin` **8/8 PASS**。
+
+
+---
+
+## 23. 18-2A 神铸/淬骨/合成原子提交（2026-10-29）
+
+### 23.1 语义与实现
+
+- 神铸：快照后扣神石、写装备 `Data["神铸阶段"]` 与 `MLdl.qh_list["Data"]`；保存失败恢复装备/石头/选中快照，成功才显示“神铸成功”。
+- 淬骨：**保留原设计“失败也扣 3 个神火”**；无论成功/失败都只保存一次。保存失败恢复神火、装备与选中快照。`success_chance` 为 0.5，探针可设为 0/1 验证分支。
+- 合成：校验配方与灵魂；快照后扣灵魂、按产出类型判读 `add_zb`/`add_dj`/`add_fb`，成功后才清空放入列表并保存；产出失败或保存失败都恢复灵魂/列表/物品。
+- 统一 `MLdl.qh_list` 与装备字典的 `Data` 键，修正此前 `data` 小写读取导致选中数据为空的问题。
+
+### 23.2 验证
+
+档案持久化探针新增 8 项断言，总计 **163 项 PASS**：
+
+- `divine_forge_stage_up` / `divine_forge_stone_consumed` / `divine_forge_save_failure_rolls_back`；
+- `bone_forge_success_up` / `bone_forge_failure_consumes_fire` / `bone_forge_save_failure_rolls_back`；
+- `synthesis_success_once` / `synthesis_save_failure_rolls_back`。
+
+`check_all --godot-bin` 8/8 PASS；全量关卡回归在 18-1C/18-1D 后统一复跑。

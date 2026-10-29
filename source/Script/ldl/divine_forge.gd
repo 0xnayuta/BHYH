@@ -30,7 +30,7 @@ func _physics_process(_delta: float) -> void:
 
 	var equipment: Dictionary = selected.get("item", {})
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
-	var item_data: Dictionary = equipment.get("data", {})
+	var item_data: Dictionary = equipment.get("Data", {})
 	var selected_source := str(selected.get("source", MLdl.qh_list.get("来源", "装备背包")))
 	var selected_page := int(selected.get("page", 0))
 	var selected_index := int(selected.get("index", -1))
@@ -99,7 +99,7 @@ func _on_sz_pressed() -> void:
 		return
 	var equipment: Dictionary = selected["item"]
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
-	var item_data: Dictionary = equipment.get("data", {})
+	var item_data: Dictionary = equipment.get("Data", {})
 	if not AE.can_divine_forge(item_name, item_data):
 		_show_message("只有神器及以上品质的武器、防具和饰品可以神铸！")
 		return
@@ -112,19 +112,31 @@ func _on_sz_pressed() -> void:
 	if _count_item_all_pages(stone_id) < STONES_PER_STAGE:
 		_show_message(str(AE.all_equipment[stone_id][DataKeys.NAME]) + "不足，需要20颗！")
 		return
+	var snapshot := PlayerData.snapshot_state()
+	var previous_data: Variant = MLdl.qh_list.get("Data", {})
 	_consume_item_all_pages(stone_id, STONES_PER_STAGE)
 	var upgraded_data := item_data.duplicate(true)
 	upgraded_data["神铸阶段"] = target_stage
-	equipment["data"] = upgraded_data
-	MLdl.qh_list["data"] = upgraded_data
-	if str(selected["source"]) == "人物穿戴":
+	equipment["Data"] = upgraded_data
+	MLdl.qh_list["Data"] = upgraded_data
+	_refresh_equipped_state()
+	if not MemoryClass.request_save("ldl_divine_forge"):
+		PlayerData.restore_state(snapshot)
+		MLdl.qh_list["Data"] = previous_data
+		_refresh_equipped_state()
+		_show_message("存档保存失败，神铸已撤销：" + MemoryClass.describe_save_error())
+		_refresh_backpack()
+		return
+	_show_message("神铸成功！")
+	_refresh_backpack()
+
+
+func _refresh_equipped_state() -> void:
+	if str(MLdl.qh_list.get("来源", "装备背包")) == "人物穿戴":
 		RoleProp.get_equ_last_pro()
 		RoleProp.get_last_prop()
 		if is_instance_valid(RoleProp.source_player):
 			RoleProp.source_player.on_eqchange()
-	_show_message("神铸成功！")
-	_refresh_backpack()
-	MemoryClass.request_save("ldl_divine_forge")
 
 
 func _get_selected_slot() -> Dictionary:
@@ -229,4 +241,4 @@ func remove_infomation() -> void:
 	MLdl.qh_list["位置"] = 0
 	MLdl.qh_list["来源"] = "装备背包"
 	MLdl.qh_list["穿戴栏"] = ""
-	MLdl.qh_list["data"] = {}
+	MLdl.qh_list["Data"] = {}

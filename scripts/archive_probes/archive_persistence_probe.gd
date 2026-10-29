@@ -72,6 +72,7 @@ func _run() -> void:
 	await _test_strength_command()
 	await _test_audio_boundaries()
 	_test_transmog_command()
+	await _test_growth_commands()
 	await _test_task_claim_command()
 	await _test_pet_interface_paths()
 	await _test_panel_saves()
@@ -1073,6 +1074,186 @@ func _check_save_identity_and_normalization() -> void:
 	_reset_profile(1, 5)
 
 
+
+
+
+
+## 成长三域：神铸/淬骨/合成的快照、保存判读与失败回滚。
+func _test_growth_commands() -> void:
+	# 神铸：成功扣 20 颗神石并提升阶段；保存失败恢复装备与石头。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	var divine_data: Dictionary = AE.all_equipment["xyfjwk"].duplicate(true)
+	divine_data["神铸阶段"] = 0
+	_seed_forge_equipment("xyfjwk", divine_data)
+	PlayerData.add_dj("pgs", 20)
+	var divine: Node = (load("res://Scene/ldl/divine_forge.tscn") as PackedScene).instantiate()
+	divine.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(divine)
+	await get_tree().process_frame
+	divine.call("_on_sz_pressed")
+	await get_tree().process_frame
+	_check(
+		"divine_forge_stage_up",
+		int(_forge_equipment_data().get("神铸阶段", -1)) == 1,
+		"stage=%s" % _forge_equipment_data().get("神铸阶段")
+	)
+	_check("divine_forge_stone_consumed", _item_count("pgs") == 0, "pgs=%d" % _item_count("pgs"))
+	divine.queue_free()
+	await get_tree().process_frame
+
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	_seed_forge_equipment("xyfjwk", divine_data)
+	PlayerData.add_dj("pgs", 20)
+	divine = (load("res://Scene/ldl/divine_forge.tscn") as PackedScene).instantiate()
+	divine.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(divine)
+	await get_tree().process_frame
+	Global.end_archive_session()
+	divine.call("_on_sz_pressed")
+	await get_tree().process_frame
+	_check(
+		"divine_forge_save_failure_rolls_back",
+		int(_forge_equipment_data().get("神铸阶段", -1)) == 0 and _item_count("pgs") == 20,
+		"stage=%s pgs=%d" % [_forge_equipment_data().get("神铸阶段"), _item_count("pgs")]
+	)
+	divine.queue_free()
+	await get_tree().process_frame
+
+	# 淬骨：失败也扣 3 个神火（保留原设计）；成功升级；保存失败全部恢复。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	var bone_data: Dictionary = AE.all_equipment["psdzzg"].duplicate(true)
+	bone_data["淬骨次数"] = 0
+	_seed_forge_equipment("psdzzg", bone_data)
+	PlayerData.add_dj("shenhuo_1", 3)
+	var bone: Node = (load("res://Scene/ldl/bone_forge.tscn") as PackedScene).instantiate()
+	bone.process_mode = Node.PROCESS_MODE_DISABLED
+	bone.set("success_chance", 0.0)
+	add_child(bone)
+	await get_tree().process_frame
+	bone.call("_on_sz_pressed")
+	await get_tree().process_frame
+	_check(
+		"bone_forge_failure_consumes_fire",
+		int(_forge_equipment_data().get("淬骨次数", -1)) == 0 and _item_count("shenhuo_1") == 0,
+		"stage=%s fire=%d" % [_forge_equipment_data().get("淬骨次数"), _item_count("shenhuo_1")]
+	)
+	bone.queue_free()
+	await get_tree().process_frame
+
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	_seed_forge_equipment("psdzzg", bone_data)
+	PlayerData.add_dj("shenhuo_1", 3)
+	bone = (load("res://Scene/ldl/bone_forge.tscn") as PackedScene).instantiate()
+	bone.process_mode = Node.PROCESS_MODE_DISABLED
+	bone.set("success_chance", 1.0)
+	add_child(bone)
+	await get_tree().process_frame
+	bone.call("_on_sz_pressed")
+	await get_tree().process_frame
+	_check(
+		"bone_forge_success_up",
+		int(_forge_equipment_data().get("淬骨次数", -1)) == 1 and _item_count("shenhuo_1") == 0,
+		"stage=%s fire=%d" % [_forge_equipment_data().get("淬骨次数"), _item_count("shenhuo_1")]
+	)
+	bone.queue_free()
+	await get_tree().process_frame
+
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	_seed_forge_equipment("psdzzg", bone_data)
+	PlayerData.add_dj("shenhuo_1", 3)
+	bone = (load("res://Scene/ldl/bone_forge.tscn") as PackedScene).instantiate()
+	bone.process_mode = Node.PROCESS_MODE_DISABLED
+	bone.set("success_chance", 1.0)
+	add_child(bone)
+	await get_tree().process_frame
+	Global.end_archive_session()
+	bone.call("_on_sz_pressed")
+	await get_tree().process_frame
+	_check(
+		"bone_forge_save_failure_rolls_back",
+		int(_forge_equipment_data().get("淬骨次数", -1)) == 0 and _item_count("shenhuo_1") == 3,
+		"stage=%s fire=%d" % [_forge_equipment_data().get("淬骨次数"), _item_count("shenhuo_1")]
+	)
+	bone.queue_free()
+	await get_tree().process_frame
+
+	# 合成：扣灵魂/清空放入列表后保存失败恢复；成功产出一次。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	PlayerData.set_soul(100)
+	_seed_synthesis_inputs("qhs_1")
+	var synthesis: Node = (load("res://Scene/ldl/synthesis.tscn") as PackedScene).instantiate()
+	synthesis.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(synthesis)
+	await get_tree().process_frame
+	Global.end_archive_session()
+	synthesis.call("_on_syn_pressed")
+	await get_tree().process_frame
+	_check(
+		"synthesis_save_failure_rolls_back",
+		PlayerData.get_soul() == 100 and int(PlayerData.get_item_data("qhs_2")) == 0
+		and PlayerData.player_data["放入列表"]["物品1"].size() == 1,
+		"soul=%d qhs2=%d input=%d" % [
+			PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()
+		]
+	)
+	synthesis.queue_free()
+	await get_tree().process_frame
+
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	PlayerData.set_soul(100)
+	_seed_synthesis_inputs("qhs_1")
+	synthesis = (load("res://Scene/ldl/synthesis.tscn") as PackedScene).instantiate()
+	synthesis.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(synthesis)
+	await get_tree().process_frame
+	synthesis.call("_on_syn_pressed")
+	await get_tree().process_frame
+	_check(
+		"synthesis_success_once",
+		PlayerData.get_soul() == 0 and int(PlayerData.get_item_data("qhs_2")) == 1
+		and PlayerData.player_data["放入列表"]["物品1"].is_empty(),
+		"soul=%d qhs2=%d input=%d" % [
+			PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()
+		]
+	)
+	synthesis.queue_free()
+	await get_tree().process_frame
+
+
+func _seed_forge_equipment(item_id: String, data: Dictionary) -> void:
+	var page: Array = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"]
+	page.clear()
+	page.append({"名字": item_id, "强化等级": 0, "Data": data.duplicate(true)})
+	MLdl.qh_list = {
+		"名字": item_id,
+		"强化等级": 0,
+		"页码": 1,
+		"位置": 0,
+		"来源": "装备背包",
+		"穿戴栏": "",
+		"Data": data.duplicate(true),
+	}
+
+
+func _forge_equipment_data() -> Dictionary:
+	var page: Array = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"]
+	if page.is_empty() or not page[0] is Dictionary:
+		return {}
+	var item: Dictionary = page[0]
+	var data: Variant = item.get("Data", {})
+	return data if data is Dictionary else {}
+
+
+func _seed_synthesis_inputs(item_id: String) -> void:
+	for key in ["物品1", "物品2", "物品3"]:
+		PlayerData.player_data["放入列表"][key] = [item_id]
 
 
 ## 任务领取：奖励命令成功后置领取标记；重进不重复发奖；保存失败回滚标记与物品。

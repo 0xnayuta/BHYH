@@ -3,6 +3,8 @@ class_name BoneForge
 
 const BONE_FIRE_IDS := ["shenhuo_1", "shenhuo_2", "shenhuo_3"]
 const BONE_MAX_COUNT := 3
+## 保留原设计：淬骨失败也消耗神火；存档失败时仍回滚材料。
+var success_chance: float = 0.5
 
 
 func _ready() -> void:
@@ -26,7 +28,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	var equipment: Dictionary = selected.get("item", {})
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
-	var data: Dictionary = equipment.get("data", {}) if equipment.get("data", {}) is Dictionary else {}
+	var data: Dictionary = equipment.get("Data", {}) if equipment.get("Data", {}) is Dictionary else {}
 	var template: Dictionary = AE.all_equipment.get(item_name, {})
 	var stage := int(data.get("淬骨次数", 0))
 	var next_id := str(data.get("下一阶段", template.get("下一阶段", "")))
@@ -112,7 +114,7 @@ func _on_sz_pressed() -> void:
 		return
 	var equipment: Dictionary = selected.get("item", {})
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
-	var data: Dictionary = equipment.get("data", {}) if equipment.get("data", {}) is Dictionary else {}
+	var data: Dictionary = equipment.get("Data", {}) if equipment.get("Data", {}) is Dictionary else {}
 	var template: Dictionary = AE.all_equipment.get(item_name, {})
 	var next_id := str(data.get("下一阶段", template.get("下一阶段", "")))
 	var stage := int(data.get("淬骨次数", 0))
@@ -130,10 +132,13 @@ func _on_sz_pressed() -> void:
 	if current.is_empty():
 		_show_message("装备位置已变化，请重新选择装备！")
 		return
+	var snapshot := PlayerData.snapshot_state()
+	var previous_data: Variant = MLdl.qh_list.get("Data", {})
 	_consume_item_all_pages(fire_id, 3)
-	var upgraded_data: Dictionary = current.get("data", {}).duplicate(true)
+	var upgraded_data: Dictionary = current.get("Data", {}).duplicate(true)
 	_ensure_bone_strength_data(upgraded_data, item_name)
-	if randf() < 0.5:
+	var success := randf() < success_chance
+	if success:
 		upgraded_data["淬骨次数"] = stage + 1
 		upgraded_data["下一阶段"] = next_id
 		_scale_bone_attributes(upgraded_data, 1.2)
@@ -142,14 +147,24 @@ func _on_sz_pressed() -> void:
 				upgraded_data, next_id, item_name, int(current.get(DataKeys.ENHANCE_LEVEL, 0))
 			)
 			_update_selected_equipment(selected, next_id, upgraded_data, 0)
-			_show_message("淬骨成功，已进阶为完整的至尊骨！")
 		else:
 			_update_selected_equipment(selected, item_name, upgraded_data, int(current.get(DataKeys.ENHANCE_LEVEL, 0)))
+		_refresh_equipped_state()
+	if not MemoryClass.request_save("ldl_bone_forge"):
+		PlayerData.restore_state(snapshot)
+		MLdl.qh_list["Data"] = previous_data
+		_refresh_equipped_state()
+		_show_message("存档保存失败，淬骨已撤销：" + MemoryClass.describe_save_error())
+		_refresh_backpack()
+		return
+	if success:
+		if stage + 1 >= BONE_MAX_COUNT:
+			_show_message("淬骨成功，已进阶为完整的至尊骨！")
+		else:
 			_show_message("淬骨成功！")
 	else:
 		_show_message("淬骨失败，材料已消耗。")
 	_refresh_backpack()
-	MemoryClass.request_save("ldl_bone_forge")
 
 
 func _read_selected_equipment(selected: Dictionary) -> Dictionary:
@@ -176,7 +191,7 @@ func _update_selected_equipment(selected: Dictionary, item_name: String, data: D
 			var item: Dictionary = equipped[0]
 			item[DataKeys.NAME] = item_name
 			item[DataKeys.ENHANCE_LEVEL] = level
-			item["data"] = data
+			item["Data"] = data
 			equipped[0] = item
 			PlayerData.player_data[slot_type] = equipped
 		RoleProp.get_equ_last_pro()
@@ -189,7 +204,7 @@ func _update_selected_equipment(selected: Dictionary, item_name: String, data: D
 		MLdl.qh_list["位置"] = int(selected.get("index", -1))
 		MLdl.qh_list["来源"] = str(selected.get("source", "装备背包"))
 		MLdl.qh_list["穿戴栏"] = str(selected.get("穿戴栏", ""))
-		MLdl.qh_list["data"] = data
+		MLdl.qh_list["Data"] = data
 		return
 	var pages: Dictionary = PlayerData.player_data.get(DataKeys.EQUIPMENT_LIST, {})
 	var page_key := "页码" + str(int(selected.get("page", 0)))
@@ -199,7 +214,7 @@ func _update_selected_equipment(selected: Dictionary, item_name: String, data: D
 		var item: Dictionary = (page as Array)[index]
 		item[DataKeys.NAME] = item_name
 		item[DataKeys.ENHANCE_LEVEL] = level
-		item["data"] = data
+		item["Data"] = data
 		(page as Array)[index] = item
 		MLdl.qh_list[DataKeys.NAME] = item_name
 		MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = level
@@ -207,7 +222,7 @@ func _update_selected_equipment(selected: Dictionary, item_name: String, data: D
 		MLdl.qh_list["位置"] = index
 		MLdl.qh_list["来源"] = "装备背包"
 		MLdl.qh_list["穿戴栏"] = ""
-		MLdl.qh_list["data"] = data
+		MLdl.qh_list["Data"] = data
 
 
 func _scale_bone_attributes(data: Dictionary, multiplier: float) -> void:
