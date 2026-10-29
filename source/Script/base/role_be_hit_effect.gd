@@ -15,12 +15,16 @@ func setup(scale_value: Vector2, direction: bool, speed_value: float) -> void:
 	play(&"RoleBeHit")
 
 
+func prepare_for_pool() -> void:
+	_recycled = true
+	stop()
+	visible = false
+
+
 func recycle() -> void:
 	if _recycled:
 		return
 	_recycled = true
-	stop()
-	visible = false
 	if Global != null and Global.has_method("recycle_role_be_hit"):
 		Global.recycle_role_be_hit(self)
 	else:

@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化已实施（2026-10-29），17-2B/17-2C 未启动。§1~§11 保留 17-1 基线与失败边界，17-2A 的修复与剩余差距见 §12。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化与 17-2B 池化复用清理已实施（2026-10-29），17-2C 未启动。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B 的修复与剩余差距见 §12/§13。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -159,7 +159,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 - `add_damage_text` 另有 80 个活动节点上限与按物理帧重算（`global.gd:4171-4200`）；
 - `add_sound` 有 45ms 同音效节流、同音效 4/8、总声部 24/48 上限（`global.gd:495-498`、`:4278`）；
 - `add_mr_hurt` 按目标实例 55ms 节流（`global.gd:5332`）；
-- 池根节点 `RuntimePool` 挂在 `Global` 下，随 `_clear_runtime_pools` 释放。
+- 池根节点 `RuntimePool` 挂在 `Global` 下，随 `_clear_runtime_pools` 释放；
+- 17-2B 后，四类池节点统一实现 `prepare_for_pool()`；`_store_pooled_node` 与 `_seed_runtime_pool` 调用该钩子，`_take_pooled_node` 不做重置。
 
 ### 5.3 残留状态与验证点
 
@@ -489,7 +490,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 位置 | 事实 | 后续 |
 |:---|:---|:---|
-| `base_monster.get_role_last_hurt` | 暴击/护甲/等级等仍读全局 `RoleProp`；2P 伤害数值会使用 1P 面板属性 | 17-2B/17-2C 评估按 `get_player` 读取 |
+| `base_monster.get_role_last_hurt` | 暴击/护甲/等级等仍读全局 `RoleProp`；2P 伤害数值会使用 1P 面板属性 | 17-2C 评估按 `get_player` 读取 |
 | `base_monster.wd_hurt`/`_is_mds_awaken_active` | 角色 4 毒伤/觉醒读全局 `RoleProp`/`PlayerData` | 17-2C |
 | `RoleProp.source_player` 由 `BaseHero._ready` 覆盖 | 仍是非归属路径（HUD/怪物提示）的全局别名 | 保留，Phase 17-5/17-6 处理 |
 | `SummonBaseMonster.find_player_reference` | `summoner` 非英雄时回落全局别名 | 17-2B 试点 |
@@ -499,3 +500,42 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 - 新增 `LocalCoopAttributionSourcesProbe`：无源命中不回落；P2 普攻/技能弹体/根节点弹体/法宝记 P2 无双且不动 P1；P2 弹体 `addeffect` 落到目标；命中后 `get_player`/`coop_damage_slot`/`source_props.source_player` 恢复；召唤 `owner_hero`/`slot_for`/meta/`_get_damage_source_player` 均为 P2；P1/P2 交替出手不串；吸血/腾蛇阵/角色 5 读取 P2 档案；`damage_text` 池连续复用两轮重置值/类型/暴击/目标。
 - `coop_probe_runner` 全 19 例 PASS；`level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 13. 17-2B 池化复用清理（2026-10-29）
+
+### 13.1 决策：清理放在归还/预热，不放在取出
+
+| 位置 | 行为 |
+|:---|:---|
+| `_take_pooled_node` | **不重置**。池内节点已由归还/预热清理；取出后调用方必须用新数据调用 `setup()`/播放入口 |
+| `_store_pooled_node` | 归还前调用 `prepare_for_pool()`；池满时直接释放 |
+| `_seed_runtime_pool` | 新建预热节点后调用 `prepare_for_pool()` |
+| 节点 `recycle()` | 只做重入守卫并委托 `Global.recycle_*`；具体状态清理在 `prepare_for_pool()` |
+
+理由：取出后的节点必须接收新的文本/目标/动画/音量参数，通用 `_take` 重置无法知道该写什么；统一清理放在池边界可保证“池内存放的一定是干净节点”，且只有一份实现。
+
+### 13.2 新增清理钩子
+
+| 池 | 脚本 | `prepare_for_pool()` 清理项 |
+|:---|:---|:---|
+| `damage_text` | `Script/hittext/damage_text.gd` | 可见性、目标、类型、暴击、动画、数字节点（原有钩子，recycle 改为委托） |
+| `mr_hurt` | `Scene/monster_damage/monster_be_hit.gd` | `_recycled`、可见性、动画停止 |
+| `role_be_hit` | `Script/base/role_be_hit_effect.gd` | `_recycled`、停止、可见性 |
+| `sound_player` | `Script/all_sound/monster_be_hit.gd` | `is_set`、停止、`stream`、`target`、物理处理 |
+
+### 13.3 夹具
+
+`LocalCoopPoolReuseProbe` 逐池断言：
+
+- `mr_hurt`：取出活动、归还后不可见/停止、再次取出同一节点并重新播放；
+- `role_be_hit`：取出播放、归还后停止/不可见、再次取出同一节点并重新播放；
+- `sound_player`：取出播放、`_on_finished` 清空 target/stream、再次取出同一节点并绑定新 target；
+- `damage_text`：由 `LocalCoopAttributionSourcesProbe` 覆盖两轮值/类型/暴击/目标重置。
+
+### 13.4 剩余风险
+
+- `_take_pooled_node` 不校验节点类型与场景路径；四类池各自固定场景，暂未出现交叉入池。
+- `mr_hurt`/`sound_player` 的节流键与活动计数在归还后仍保留，但下一次取出会覆盖；不属于节点状态。
+- 池复用清理不改变伤害/归属，17-2C 继续处理伤害数值的 1P 读取。

@@ -103,11 +103,6 @@ func recycle() -> void:
 	if _recycled:
 		return
 	_recycled = true
-	visible = false
-	target = null
-	if show_player != null:
-		show_player.stop()
-	_hide_digit_nodes()
 	if Global != null and Global.has_method("recycle_damage_text"):
 		Global.recycle_damage_text(self)
 	else:

@@ -523,6 +523,8 @@ func _get_pool_root() -> Node:
 	return root
 
 
+## 取出不重置：池内节点在归还/预热时已由 prepare_for_pool() 清理，
+## 调用方必须用新数据调用 setup() 或播放入口；场景类型校验由各池固定场景保证。
 func _take_pooled_node(pool, scene_path: String) -> Node:
 	while pool.size() > 0:
 		var node = pool.pop_back()
@@ -546,6 +548,9 @@ func _attach_pooled_node(node: Node, parent: Node) -> void:
 func _store_pooled_node(node: Node, pool: Array, max_size: int) -> void:
 	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
 		return
+	# 归还前统一清理：取出时不重置，调用方必须用新数据调用 setup()/播放入口。
+	if node.has_method("prepare_for_pool"):
+		node.call("prepare_for_pool")
 	var old_parent = node.get_parent()
 	if old_parent != null:
 		old_parent.remove_child(node)
@@ -1424,16 +1429,14 @@ func preload_combat_hit_resources() -> void:
 	get_cached_audio("res://Music/hero/49_role1_be_attack.mp3")
 	get_cached_audio("res://Music/hero/62_role2_be_attack.mp3")
 	get_cached_audio("res://Music/hero/68_role3_be_attack.mp3")
-	_seed_runtime_pool("damage_text", damage_scene, COMBAT_HIT_DAMAGE_POOL_SIZE, &"prepare_for_pool")
+	_seed_runtime_pool("damage_text", damage_scene, COMBAT_HIT_DAMAGE_POOL_SIZE)
 	_seed_runtime_pool("mr_hurt", monster_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("role_be_hit", role_be_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("sound_player", sound_scene, COMBAT_HIT_SOUND_POOL_SIZE)
 	await _prewarm_combat_hit_rendering(monster_blood_scene, request_generation)
 
 
-func _seed_runtime_pool(
-	pool_name: String, scene: PackedScene, target_size: int, prepare_method: StringName = &""
-) -> void:
+func _seed_runtime_pool(pool_name: String, scene: PackedScene, target_size: int) -> void:
 	if scene == null:
 		return
 	var pool: Array = _pool_data[pool_name]
@@ -1442,8 +1445,8 @@ func _seed_runtime_pool(
 		if node == null:
 			return
 		_get_pool_root().add_child(node)
-		if prepare_method != &"" and node.has_method(prepare_method):
-			node.call(prepare_method)
+		if node.has_method("prepare_for_pool"):
+			node.call("prepare_for_pool")
 		if node is CanvasItem:
 			(node as CanvasItem).visible = false
 		if node is AudioStreamPlayer:

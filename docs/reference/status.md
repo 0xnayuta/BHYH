@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 调用面矩阵与 17-2A 来源显式化已完成，17-2B/2C 与 17-3~17-7 未启动）
+> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化与 17-2B 池化复用清理已完成，17-2C 与 17-3~17-7 未启动）
 
 ---
 
@@ -195,6 +195,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 16 归档 / Phase 17 规划 | 仅文档：`current-iteration.md` 的 Phase 16 计划与实施记录归档到 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md) 并登记 `archive/README.md`；`current-iteration.md` 重写为 Phase 17 玩法与表现模块边界（17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫），保留“阶段边界 → 切片 → 必须验证 → 出口 → 验证矩阵 → 恢复”骨架；`roadmap.md` 将 Phase 16 标记完成归档、Phase 17 设为当前候选并补批次指针；`archive_session_matrix.md` 状态改为 Phase 16 收口；`docs/README.md`、`roadmap/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 与 `architecture.md` 索引同步；未修改生产代码、素材或既有 UID | Phase 17 只定义计划，未启动 |
 | 2026-10-29 Phase 17-1 玩法与表现调用面矩阵 | 仅文档：新建 [`gameplay_module_matrix.md`](gameplay_module_matrix.md)，登记攻击/弹体/召唤/法宝来源字段与 `apply_role_hit` 解析链、`coop_damage_slot` 快照、4 类对象池（80/32/24/32）与复用清理、`current_stage` 535 行/97 文件与 31 行含声明（30 处赋值）、13 处关卡域保存点、成长域校验/扣除/产出/保存/回滚、HUD/输入/音频调用面、模块公开方法与 699 处节点访问（深层 279 处/66 文件、`/root` 34 处/13 文件）、`PlayerData.player_data` 下标写入 145 行/42 文件（含属性 197/44）；`current-iteration.md` 标记 17-1 完成并回填事实，`roadmap.md`、`docs/README.md`、`roadmap/README.md`、`reference/README.md`、`README.md`、`AGENTS.md` 索引同步；未修改生产代码、素材或 UID | 17-1 只读调查完成；17-2~17-7 未启动 |
 | 2026-10-29 Phase 17-2A 来源显式化 | **归属**：`_get_damage_source_player` 删除 `RoleProp.source_player` 回落，无来源命中返回 0；`Global._assign_attack_source` 统一写 `player`/`coop_slot`，`add_role_bullet`/`add_role_bullet_1`/`_safe`/`add_role1_shallow` 支持显式来源，根节点 `Role2Bullet7_tx`/`_1` 传 `player`。**效果**：新增 `_get_vampirism_rate`/`_get_tszz_level`/`_get_role5_skill_level`，按 `LocalCoop.props_for/data_for(source_player)` 读取。**夹具**：新增 `LocalCoopAttributionSourcesProbe`（无源不回落、P2 普攻/技能/根节点弹体/法宝无双、召唤来源、吸血/腾蛇阵/角色5 读 P2、P1/P2 交替）。**验证**：`coop_probe_runner` 19/19 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（276.3s），`check_all --godot-bin` 8/8 PASS；残留 `get_role_last_hurt`/`wd_hurt`/召唤回落留给 17-2B/2C | 17-2A 完成；17-2B/2C 未启动 |
+| 2026-10-29 Phase 17-2B 池化复用清理 | **边界**：`_take_pooled_node` 不重置；`_store_pooled_node` 与 `_seed_runtime_pool` 调用 `prepare_for_pool()`；节点 `recycle()` 仅做重入守卫并委托。**节点**：`damage_text`（原有钩子改为委托）、`mr_hurt`、`role_be_hit`、`sound_player` 全部实现清理钩子。**夹具**：新增 `LocalCoopPoolReuseProbe`（mr_hurt/role_be_hit/sound_player 归还后不可见/停止/清空，再次取出同一节点并重新初始化）。**验证**：`coop_probe_runner` 20/20 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.0s）；`check_all --godot-bin` 8/8 PASS | 17-2B 完成；17-2C 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

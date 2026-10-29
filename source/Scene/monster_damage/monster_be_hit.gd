@@ -18,13 +18,17 @@ func _play_hurt_animation():
 		animation_player.play("hurt_2")
 
 
-func recycle():
-	if _recycled:
-		return
+func prepare_for_pool() -> void:
 	_recycled = true
 	visible = false
 	if animation_player != null:
 		animation_player.stop()
+
+
+func recycle():
+	if _recycled:
+		return
+	_recycled = true
 	if Global != null and Global.has_method("recycle_mr_hurt"):
 		Global.recycle_mr_hurt(self)
 	else:

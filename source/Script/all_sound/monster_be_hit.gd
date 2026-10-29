@@ -40,14 +40,18 @@ func _on_sound_settings_changed() -> void:
 		_apply_current_volume()
 
 
-func _on_finished() -> void:
-	if not is_set:
-		return
+func prepare_for_pool() -> void:
+	is_set = false
 	stop()
 	stream = null
 	target = null
-	is_set = false
 	set_physics_process(false)
+
+
+func _on_finished() -> void:
+	if not is_set:
+		return
+	is_set = false
 	if Global != null and Global.has_method("recycle_sound_player"):
 		Global.recycle_sound_player(self)
 	else:

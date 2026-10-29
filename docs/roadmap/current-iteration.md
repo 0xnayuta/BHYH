@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化已完成（2026-10-29），17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化与 17-2B 池化复用清理已完成（2026-10-29），17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -90,7 +90,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 ### 3.1 切片
 
 1. **Phase 17-2A 来源显式化（已完成 2026-10-29）**：删除 `_get_damage_source_player` 的 `RoleProp.source_player` 回落；根节点/技能弹体与浅影显式携带来源；吸血、腾蛇阵与角色 5 等级改读实际出手者；详见 §3.4；
-2. **Phase 17-2B 池化复用清理（规划）**：取出/归还入口统一清理来源、目标、暴击/闪避标记与计时字段，补充复用两轮后的归属断言；
+2. **Phase 17-2B 池化复用清理（已完成 2026-10-29）**：四类池节点统一 `prepare_for_pool()`，在归还/预热入口清理；`_take_pooled_node` 不重置；新增 `LocalCoopPoolReuseProbe`；详见 §3.5；
 3. **Phase 17-2C 归属回归（规划）**：扩展 `coop_probe_runner` 的无双归属用例，覆盖普攻、技能、弹体、召唤与法宝；1P/2P 交替出手时归属不串。
 
 ### 3.2 必须验证
@@ -118,6 +118,16 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 | 残留 | `get_role_last_hurt` 的暴击/护甲/等级、`wd_hurt` 与 `SummonBaseMonster.find_player_reference` 仍读 1P，留给 17-2B/17-2C |
 
 17-2A 只迁移归属入口与三类效果读取，不改伤害公式、命中时序、输入或存档格式。
+
+### 3.5 17-2B 实施记录（2026-10-29）
+
+| 项 | 内容 |
+|:---|:---|
+| 清理边界 | `_take_pooled_node` 不重置；`_store_pooled_node` 与 `_seed_runtime_pool` 调用 `prepare_for_pool()`；节点 `recycle()` 只做重入守卫并委托 |
+| 池节点 | `damage_text`（原有钩子改为委托）、`mr_hurt`、`role_be_hit`、`sound_player` 全部实现 `prepare_for_pool()` |
+| 夹具 | 新增 `LocalCoopPoolReuseProbe`：三类节点归还后不可见/停止/清空，再次取出同一节点并重新初始化 |
+| 验证 | `coop_probe_runner` 20/20 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.0s）；`check_all --godot-bin` 8/8 PASS |
+| 理由 | 取出后必须用新数据调用 `setup()`；通用重置无法知道目标/文本/音量，统一清理放在池边界 |
 
 ## 4. Phase 17-3：关卡阶段与结算所有权
 
@@ -241,7 +251,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 | Phase/变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
 | Phase 17-1 调用面矩阵 | 全量引用、owner/写入者/失败表、链接与格式；结果见 `gameplay_module_matrix.md` | 引擎、关卡回归不因只读调查复跑 |
-| Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、相关关卡冒烟；17-2A 已由 `LocalCoopAttributionSourcesProbe` + 全 19 例覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
+| Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、相关关卡冒烟；17-2A 由 `LocalCoopAttributionSourcesProbe` 覆盖，17-2B 由 `LocalCoopPoolReuseProbe` 覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
 | Phase 17-3 阶段与结算 | 阶段推进、胜败、重战与保存一次的分支用例；`level_1` 冒烟；相关关卡回归 | 只改结算 UI 或只改基类都不算完成 |
 | Phase 17-4 成长命令 | 校验失败无扣除、成功只提交一次、重复领取与并发点击用例；共享/个体分配 | 不要求引入通用事务框架 |
 | Phase 17-5 HUD/输入/音频 | 暂停/切档/面板/退出后的监听与残留；1P/2P 输入隔离；音效复用 | 只改 HUD 绘制或只改输入映射都不算完成 |

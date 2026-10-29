@@ -102,6 +102,8 @@ func _run() -> void:
 			await _case_creation_ui()
 		"LocalCoopAttributionSourcesProbe":
 			await _case_attribution_sources()
+		"LocalCoopPoolReuseProbe":
+			await _case_pool_reuse()
 		"LocalCoopWushuangAttributionProbe":
 			await _case_wushuang_attribution()
 		_:
@@ -860,6 +862,68 @@ func _case_attribution_sources() -> void:
 
 	root_bullet = null
 	summon.queue_free()
+	monster.queue_free()
+	await process_frame
+
+
+func _case_pool_reuse() -> void:
+	await _make_stage()
+	var settings: Node = root.get_node("MainSet")
+	settings.set_data["ShowDamageText"] = true
+	settings.set_data["RoleOrMonsterHit"] = true
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+
+	var mr: Node = global.add_mr_hurt(monster, Vector2.ZERO)
+	_check(mr != null, "mr_hurt taken from pool")
+	if mr != null:
+		_check(not mr._recycled and mr.visible, "mr_hurt active")
+		mr.recycle()
+		_check(mr._recycled and not mr.visible and not mr.animation_player.is_playing(), "mr_hurt cleaned on return")
+		await create_timer(0.06).timeout
+		var mr2: Node = global.add_mr_hurt(monster, Vector2.ZERO)
+		_check(mr2 == mr, "mr_hurt reused from pool")
+		if mr2 != null:
+			_check(
+				not mr2._recycled and mr2.visible and mr2.animation_player.is_playing(), "mr_hurt replayed after reuse"
+			)
+			mr2.recycle()
+
+	var rh: Node = global.add_special_effect(monster, Vector2.ZERO, "RoleBeHit", Vector2.ONE, false, 1.0)
+	_check(rh != null, "role_be_hit taken from pool")
+	if rh != null:
+		_check(not rh._recycled and rh.visible and rh.is_playing(), "role_be_hit active")
+		rh.recycle()
+		_check(rh._recycled and not rh.visible and not rh.is_playing(), "role_be_hit cleaned on return")
+		var rh2: Node = global.add_special_effect(monster, Vector2.ZERO, "RoleBeHit", Vector2.ONE, false, 1.0)
+		_check(rh2 == rh, "role_be_hit reused from pool")
+		if rh2 != null:
+			_check(not rh2._recycled and rh2.visible and rh2.is_playing(), "role_be_hit replayed after reuse")
+			rh2.recycle()
+
+	var path_one := "res://Music/monster_hurt/6_beattack_by_role1.mp3"
+	var path_two := "res://Music/hero/9_beattack_by_role2.mp3"
+	var sound_one: Node = global.add_sound(monster, path_one)
+	_check(sound_one != null, "sound_player taken from pool")
+	if sound_one != null:
+		_check(sound_one.is_set and sound_one.stream != null and sound_one.playing, "sound_player active")
+		sound_one._on_finished()
+		_check(
+			not sound_one.is_set and sound_one.stream == null and sound_one.target == null,
+			"sound_player cleaned on finish"
+		)
+		var sound_two: Node = global.add_sound(monster, path_two)
+		_check(sound_two == sound_one, "sound_player reused from pool")
+		if sound_two != null:
+			_check(
+				sound_two.is_set and sound_two.target == path_two and sound_two.stream != null,
+				"sound_player setup with new target"
+			)
+			sound_two._on_finished()
+
 	monster.queue_free()
 	await process_frame
 
