@@ -1475,6 +1475,30 @@ func normalize_soul() -> int:
 	return normalized
 
 
+func snapshot_state() -> Dictionary:
+	# 成长命令的提交快照：1P 与 2P 档案同时保存，恢复后重新链接共享容器。
+	var snapshot := {"primary": player_data.duplicate(true)}
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and bool(coop.call("is_enabled")) and is_instance_valid(coop.get("secondary_data")):
+		snapshot["secondary"] = coop.get("secondary_data").player_data.duplicate(true)
+	return snapshot
+
+
+func restore_state(snapshot: Dictionary) -> void:
+	var primary: Dictionary = snapshot.get("primary", {})
+	player_data.clear()
+	player_data.merge(primary.duplicate(true), true)
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and bool(coop.call("is_enabled")) and is_instance_valid(coop.get("secondary_data")):
+		var secondary_value: Variant = snapshot.get("secondary", null)
+		if secondary_value is Dictionary:
+			var secondary_data: Node = coop.get("secondary_data")
+			secondary_data.player_data.clear()
+			secondary_data.player_data.merge((secondary_value as Dictionary).duplicate(true), true)
+		coop.call("link_bags")
+		coop.call("set_shared_soul", int(player_data.get("coin_num", 0)))
+
+
 func get_soul() -> int:
 	return normalize_soul()
 
@@ -4403,11 +4427,11 @@ func get_total_dj_list():
 	return list
 
 
-func add_dj(_name, number, locked := false):
+func add_dj(_name, number, locked := false) -> bool:
 	if number <= 0:
-		return
+		return false
 	if not AE.all_equipment.has(_name):
-		return
+		return false
 
 	var existing_page = get_dj_page(_name)
 	if existing_page != 0:
@@ -4416,16 +4440,17 @@ func add_dj(_name, number, locked := false):
 			if _name == i[DataKeys.NAME]:
 				i[DataKeys.COUNT] += number
 				i["锁定"] = bool(i.get("锁定", false)) or bool(locked)
-				return
+				return true
 
 	var usable_page = check_can_use_page("道具列表")
 	if usable_page == 0:
-		return
+		return false
 
 	var data = AE.all_equipment[_name]
 	player_data[DataKeys.ITEM_LIST]["页码" + str(usable_page)].push_back(
 		{"名字": _name, "数量": number, "Data": data, "锁定": bool(locked)}
 	)
+	return true
 
 
 func add_dj_batch(entries: Array) -> bool:
@@ -4444,7 +4469,9 @@ func add_dj_batch(entries: Array) -> bool:
 			player_data[DataKeys.ITEM_LIST] = before
 			return false
 		expected[item_name] = int(expected.get(item_name, 0)) + item_number
-		add_dj(item_name, item_number, bool((entry as Dictionary).get("locked", false)))
+		if not add_dj(item_name, item_number, bool((entry as Dictionary).get("locked", false))):
+			player_data[DataKeys.ITEM_LIST] = before
+			return false
 	for item_name in expected:
 		var before_count := _count_dj_in(before, item_name)
 		if _count_dj_in(player_data[DataKeys.ITEM_LIST], item_name) != before_count + int(expected[item_name]):
@@ -4574,9 +4601,9 @@ func get_total_xhp_list():
 	return list
 
 
-func add_xhp(_name: String, number: int, locked := false) -> void:
+func add_xhp(_name: String, number: int, locked := false) -> bool:
 	if number <= 0:
-		return
+		return false
 
 	var page_num = get_xhp_page(_name)
 	if page_num != 0:
@@ -4585,14 +4612,15 @@ func add_xhp(_name: String, number: int, locked := false) -> void:
 			if i[DataKeys.NAME] == _name:
 				i[DataKeys.COUNT] += number
 				i["锁定"] = bool(i.get("锁定", false)) or bool(locked)
-				return
+				return true
 
 	var new_page = check_can_use_page("消耗品列表")
 	if new_page == 0:
-		return
+		return false
 	player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(new_page)].push_back(
 		{"名字": _name, "数量": number, "锁定": bool(locked)}
 	)
+	return true
 
 
 func get_xhp_page(need_name):

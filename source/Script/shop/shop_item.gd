@@ -67,33 +67,6 @@ func _can_pay_for_count(buy_num: int) -> bool:
 	return buy_num <= int(coin_num / unit_price)
 
 
-func _get_backpack_list_name(item_type: String) -> String:
-	match item_type:
-		"武器", "防具", "饰品", "翅膀", "头衔", "时装", "法宝":
-			return "装备列表"
-		"道具":
-			return "道具列表"
-		"消耗品":
-			return "消耗品列表"
-		"宠物装备":
-			return PlayerData.PET_BACKPACK_KEY
-		_:
-			return "装备列表"
-
-
-func _get_free_item_capacity(item_type: String, list_name: String) -> int:
-	if item_type == "宠物装备":
-		return maxi(0, 40 - PlayerData.ensure_shared_pet_backpack().size())
-	var pages_value: Variant = PlayerData.player_data.get(list_name, {})
-	if not pages_value is Dictionary:
-		return 0
-	var free_slots := 0
-	for page_value: Variant in (pages_value as Dictionary).values():
-		if page_value is Array:
-			free_slots += maxi(0, 25 - page_value.size())
-	return free_slots
-
-
 func _on_cure_num_pressed() -> void:
 	_set_total_num(total_num + 1)
 
@@ -131,47 +104,12 @@ func _on_goumai_pressed() -> void:
 
 func add_item_toplayer(times):
 	var _parent = Global.get_ancestor(self, 3)
-	if _item_name == "" or not AE.all_equipment.has(_item_name):
-		Global.add_message_show(_parent, "商品信息错误！", 1.5, Vector2(485, 295))
-		return
-
 	var buy_num := clampi(int(times), 1, MAX_SHOP_BUY_NUM)
 	_set_total_num(buy_num)
-	var item_data: Dictionary = AE.all_equipment[_item_name]
-	var lx = str(item_data.get(DataKeys.TYPE, ""))
-	var cklb := _get_backpack_list_name(lx)
-
-	if not _can_pay_for_count(buy_num):
-		Global.add_message_show(_parent, "灵魂不足！", 1.5, Vector2(485, 295))
+	var result: Dictionary = ShopPurchaseCommand.execute(_item_name, buy_num, _effective_price())
+	if not bool(result.get("ok", false)):
+		Global.add_message_show(_parent, str(result.get("message", "购买失败！")), 2.0, Vector2(485, 295))
 		return
-
-	var free_slot_count := _get_free_item_capacity(lx, cklb)
-	if free_slot_count == 0:
-		Global.add_message_show(_parent, "背包已满！", 1.5, Vector2(485, 295))
-		return
-	if lx in ["武器", "防具", "饰品", "翅膀", "头衔", "时装", "法宝", "宠物装备"] and buy_num > free_slot_count:
-		Global.add_message_show(_parent, "背包空位不足！", 1.5, Vector2(485, 295))
-		return
-
-	PlayerData.spend_soul(_get_safe_total_cost(buy_num))
-
-	match lx:
-		"武器", "防具", "饰品", "翅膀", "头衔", "时装":
-			for i in range(buy_num):
-				PlayerData.add_zb(_item_name, 0, {})
-		"法宝":
-			for i in range(buy_num):
-				PlayerData.add_fb(_item_name, 0, AE.get_wx(), {})
-		"道具":
-			PlayerData.add_dj(_item_name, buy_num)
-		"消耗品":
-			PlayerData.add_xhp(_item_name, buy_num)
-		"宠物装备":
-			PlayerData.add_pet_backpack_item(_item_name, buy_num)
-		_:
-			for i in range(buy_num):
-				PlayerData.add_zb(_item_name, 0, {})
-
 	Global.add_message_show(_parent, "购买成功！", 1.5, Vector2(485, 295))
 
 

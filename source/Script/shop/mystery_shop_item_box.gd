@@ -148,31 +148,29 @@ func set_box():
 
 
 func _on_purchase_pressed() -> void:
-	if PlayerData.player_data["购买次数"] <= 0:
-		Global.add_message_show(Global.windows, "购买次数不足！！", 1.5, Vector2(470, 300))
+	if new_list.is_empty():
+		Global.add_message_show(Global.windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
-	var need: int = new_list["Need"]
-	if PlayerData.get_soul() < need:
-		Global.add_message_show(Global.windows, "灵魂不足！！", 1.5, Vector2(470, 300))
+	var item_name := str(new_list.get("Name", ""))
+	var item_data_value: Variant = AE.all_equipment.get(item_name, {})
+	if not item_data_value is Dictionary:
+		Global.add_message_show(Global.windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
-	PlayerData.spend_soul(need)
-	PlayerData.player_data["购买次数"] -= 1
-	var type = AE.all_equipment[new_list["Name"]][DataKeys.TYPE]
-	match type:
-		"武器", "饰品", "防具", "时装", "头衔":
-			PlayerData.add_zb(new_list["Name"], new_list["Level"], {})
-		"法宝":
-			if new_list["WX"] == []:
-				PlayerData.add_fb(new_list["Name"], 0, Global.get_wx(0), {})
-			else:
-				PlayerData.add_fb(new_list["Name"], 0, new_list["WX"], {})
-		"道具":
-			PlayerData.add_dj(new_list["Name"], new_list["Value"])
-		"消耗品":
-			PlayerData.add_xhp(new_list["Name"], new_list["Value"])
+	var item_data: Dictionary = item_data_value
+	var item_type := str(item_data.get(DataKeys.TYPE, ""))
+	var quantity := 1 if item_type in ["武器", "饰品", "防具", "时装", "头衔", "法宝"] else int(new_list.get("Value", 1))
+	var result: Dictionary = ShopPurchaseCommand.execute_mystery(
+		item_name,
+		quantity,
+		int(new_list.get("Need", 0)),
+		int(new_list.get("Level", 0)),
+		new_list.get("WX", []) if new_list.get("WX", []) is Array else []
+	)
+	if not bool(result.get("ok", false)):
+		Global.add_message_show(Global.windows, str(result.get("message", "购买失败！！")), 2.0, Vector2(520, 340))
+		return
 	Global.add_message_show(Global.windows, "购买成功", 1.5, Vector2(520, 340))
 	open_and_close_box()
-	MemoryClass.request_save("shop_mystery_purchase")
 
 
 func open_and_close_box():

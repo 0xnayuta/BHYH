@@ -155,27 +155,51 @@ func _on_qh_pressed() -> void:
 		Global.add_message_show(get_parent(), str(type) + "品质装备最高强化" + str(max_level) + "级！！", 1.5, Vector2(15, -45))
 		return
 	old_zb_name = MLdl.qh_list[DataKeys.NAME]
-	if PlayerData.get_item_data(qhs_1_name) >= qhs_1_num and PlayerData.get_item_data(qhs_2_name) >= qhs_2_num:
-		if PlayerData.get_soul() >= need_lh:
-			equipment[DataKeys.ENHANCE_LEVEL] = current_level + 1
-			MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = current_level + 1
-			qh_level = current_level + 1
-			PlayerData.spend_soul(need_lh)
-			PlayerData.remove_dj(qhs_1_name, PlayerData.get_dj_page(qhs_1_name), qhs_1_num)
-			PlayerData.remove_dj(qhs_2_name, PlayerData.get_dj_page(qhs_2_name), qhs_2_num)
-			get_qhs_name()
-			set_str_info()
-			if str(MLdl.qh_list.get("来源", "装备背包")) == "人物穿戴":
-				RoleProp.get_equ_last_pro()
-				RoleProp.get_last_prop()
-				if is_instance_valid(RoleProp.source_player):
-					RoleProp.source_player.on_eqchange()
-			Global.add_message_show(get_parent(), "强化成功！！", 1.5, Vector2(15, -45))
-		else:
-			Global.add_message_show(get_parent(), "灵魂不足！无法强化！！", 1.5, Vector2(15, -45))
-	else:
+	if PlayerData.get_item_data(qhs_1_name) < qhs_1_num or PlayerData.get_item_data(qhs_2_name) < qhs_2_num:
 		Global.add_message_show(get_parent(), "强化石数量不足！！", 1.5, Vector2(15, -45))
-	MemoryClass.request_save("ldl_strength")
+		return
+	if PlayerData.get_soul() < need_lh:
+		Global.add_message_show(get_parent(), "灵魂不足！无法强化！！", 1.5, Vector2(15, -45))
+		return
+
+	var snapshot: Dictionary = PlayerData.snapshot_state()
+	equipment[DataKeys.ENHANCE_LEVEL] = current_level + 1
+	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = current_level + 1
+	qh_level = current_level + 1
+	if not PlayerData.spend_soul(need_lh):
+		PlayerData.restore_state(snapshot)
+		Global.add_message_show(get_parent(), "灵魂不足！无法强化！！", 1.5, Vector2(15, -45))
+		return
+	var removed_1: Dictionary = PlayerData.remove_dj(qhs_1_name, PlayerData.get_dj_page(qhs_1_name), qhs_1_num)
+	var removed_2: Dictionary = PlayerData.remove_dj(qhs_2_name, PlayerData.get_dj_page(qhs_2_name), qhs_2_num)
+	if int(removed_1.get("卖出数量", 0)) < qhs_1_num or int(removed_2.get("卖出数量", 0)) < qhs_2_num:
+		PlayerData.restore_state(snapshot)
+		get_qhs_name()
+		set_str_info()
+		Global.add_message_show(get_parent(), "强化石数量不足！！", 1.5, Vector2(15, -45))
+		return
+	get_qhs_name()
+	set_str_info()
+	_refresh_equipped_strength()
+	if not MemoryClass.request_save("ldl_strength"):
+		PlayerData.restore_state(snapshot)
+		get_qhs_name()
+		set_str_info()
+		_refresh_equipped_strength()
+		Global.add_message_show(
+			get_parent(), "存档保存失败，本次强化已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(15, -45)
+		)
+		return
+	Global.add_message_show(get_parent(), "强化成功！！", 1.5, Vector2(15, -45))
+
+
+func _refresh_equipped_strength() -> void:
+	if str(MLdl.qh_list.get("来源", "装备背包")) != "人物穿戴":
+		return
+	RoleProp.get_equ_last_pro()
+	RoleProp.get_last_prop()
+	if is_instance_valid(RoleProp.source_player):
+		RoleProp.source_player.on_eqchange()
 
 
 func _get_selected_equipment(position_index: int) -> Variant:

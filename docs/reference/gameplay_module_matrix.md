@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归与 17-3 关卡阶段/结算已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3 的修复与剩余差距见 §12~§15。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长命令已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3/17-4 的修复与剩余差距见 §12~§16。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -312,8 +312,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | `add_soul(value)` | `int` | 上限钳制 | 不适用 |
 | `add_zb(name, level, data)` | `bool` | 装备页满返回 `false` | 打造/锻造判读；商店循环忽略 |
 | `add_fb(name, level, wx, data)` | `bool` | 装备页满返回 `false` | 同上 |
-| `add_dj(name, number)` | `void` | 道具页满**静默丢弃** | 无法判读 |
-| `add_xhp(name, number)` | `void` | 消耗品页满**静默丢弃** | 无法判读 |
+| `add_dj(name, number)` | `bool` | 道具页满返回 `false`，不写入 | 17-4 起可判读 |
+| `add_xhp(name, number)` | `bool` | 消耗品页满返回 `false`，不写入 | 17-4 起可判读 |
 | `remove_dj(name, page, num)` | `Dictionary` | 页/数量不足时返回 0 数量 | 多数忽略 |
 | `remove_xhp(name, page, num)` | `Dictionary` | 只处理指定页首个堆叠；不足时按可用数量截断 | 多数忽略 |
 
@@ -321,16 +321,16 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 域 | 入口 | 校验 | 扣除 | 产出 | 保存 | 回滚 |
 |:---|:---|:---|:---|:---|:---|:---|
-| 普通商店 | `shop_item.gd:132` `add_item_toplayer` | 灵魂、装备/宠物装备空位；道具/消耗品**不校验容量** | `spend_soul` | `add_zb`/`add_fb` 循环、`add_dj`、`add_xhp`、`add_pet_backpack_item` | **无** | 无 |
-| 神秘商店 | `mystery_shop_item_box.gd:150` | 购买次数、灵魂 | `spend_soul` + 次数减 1 | 按类型 `add_zb`/`add_fb`/`add_dj`/`add_xhp` | 1 次 | 无 |
+| 普通商店 | `shop_item.gd` `add_item_toplayer` → `ShopPurchaseCommand.execute` | 商品、灵魂、装备/宠物空位、道具/消耗品堆叠或空位 | `spend_soul` | 判读 `add_zb`/`add_fb`/`add_dj`/`add_xhp`/宠物装备 | 1 次 `shop_purchase` | **有**：1P/2P 快照，失败全量恢复 |
+| 神秘商店 | `mystery_shop_item_box.gd:_on_purchase_pressed` → `execute_mystery` | 购买次数、灵魂、容量 | `spend_soul` + 次数减 1 | 按类型判读产出 | 1 次 `shop_mystery_purchase` | **有**：次数/物品/灵魂全量恢复 |
 | 锻造（当前） | `forge.gd:558` `_on_froge_pressed` | 制作书、灵魂、材料、宝珠数据、装备类型 | `remove_all()` + `spend_soul` | 先 `add_zb`/`add_fb` 并判读 bool | 1 次，失败恢复 | **有**：`player_data` 快照 + `_restore_forge_state` |
 | 锻造（遗留） | `forge.gd:497` `_on_froge_pressed_legacy` | 同上 | 先产出、后 `remove_all` + `spend_soul` | 忽略 bool | 无 | 无；**无调用方** |
 | 神铸 | `divine_forge.gd:95` | 品质、阶段、石头数量 | `_consume_item_all_pages` 先扣 | 修改装备 `神铸阶段` | 1 次 | 无 |
 | 淬骨 | `bone_forge.gd:108` | 神骨、阶段、神火数量 | 先扣 3 个神火 | 随机成功/失败；成功改属性 | 1 次 | 无（失败材料照扣，符合设计） |
-| 强化 | `strength.gd:131` | 装备、上限、双材料、灵魂 | `spend_soul` + `remove_dj` ×2 | 等级 +1、属性刷新 | 1 次，**失败分支也保存** | 无 |
+| 强化 | `strength.gd:_on_qh_pressed` | 装备、上限、双材料、灵魂 | `spend_soul` + `remove_dj` ×2 | 等级 +1、属性刷新 | 仅成功 1 次 `ldl_strength` | **有**：保存失败恢复装备/灵魂/材料 |
 | 合成 | `synthesis.gd:121` | 配方、灵魂 | `spend_soul` | `add_zb`/`add_dj`/`add_fb`（忽略失败） | 1 次 | 无 |
-| 主动技能 | `zd_skill.gd:675` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | `refresh_infor` 内 1 次 | 无 |
-| 被动技能 | `bd_skill.gd:252` `up_level`（单技能按钮）；`:218` 一键 | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 每次按钮 1 次 | 无 |
+| 主动技能 | `zd_skill.gd:up_level` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | 仅成功 1 次 `skill_refresh` | **有**：保存失败恢复书/灵魂/等级；失败路径不保存 |
+| 被动技能 | `bd_skill.gd:up_level` / `_upgrade_all_passives` | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 单次/一键各 1 次，仅成功 | **有**：保存失败恢复等级/灵魂 |
 | 奖励发放 | `reward_interface.gd:12` `_process` | **无容量校验** | 可选使用物品 | 逐项 `add_*` | 1 次（首帧后） | 无 |
 | 任务领取 | `basic_task.gd:458` `_on_lqjl_pressed` | 完成状态/已领取/日常 | 无 | `add_reward_info` 延迟发放 | 1 次，**先于发放** | 无 |
 
@@ -338,12 +338,12 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | ID | 事实 | 风险 |
 |:---|:---|:---|
-| GM-27 | 商店对道具/消耗品不校验页容量；`add_dj`/`add_xhp` 静默失败 | 扣灵魂后道具丢失 |
-| GM-28 | 神秘商店扣费/次数后产出失败无回滚 | 同上；次数也损失 |
-| GM-29 | 强化在失败分支也 `request_save` | 失败也写盘；无状态变化 |
-| GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | 保存失败时内存已变，重载回退；无提示 |
-| GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | 材料/灵魂损失 |
-| GM-32 | 技能书/灵魂先扣再升级；`refresh_infor` 无视失败保存 | 失败也写盘；书扣除后升级失败无回滚 |
+| GM-27 | 商店对道具/消耗品不校验页容量；`add_dj`/`add_xhp` 静默失败 | **已修**：`ShopPurchaseCommand` 校验堆叠/空位，`add_dj/add_xhp` 返回 bool |
+| GM-28 | 神秘商店扣费/次数后产出失败无回滚 | **已修**：`execute_mystery` 快照覆盖次数/物品/灵魂 |
+| GM-29 | 强化在失败分支也 `request_save` | **已修**：仅成功保存 |
+| GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | 未改；17-4 只覆盖强化/商店/技能 |
+| GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | 未改；17-4 试点范围外 |
+| GM-32 | 技能书/灵魂先扣再升级；`refresh_infor` 无视失败保存 | **已修**：主动/被动技能仅成功保存，失败恢复快照 |
 | GM-33 | 奖励界面由表现场景直接发物品并保存 | 容量满时部分/全部丢失；无提示 |
 | GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | 保存调用先于奖励场景 `_process` 发奖；二次保存失败则奖励丢失 |
 | GM-35 | `defeat._on_lqjl_pressed` 无保存 | 重进重复领取 |
@@ -600,3 +600,27 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 15.4 验证
 
 `archive_probe_runner` 118 项全部 PASS，覆盖：胜利保存一次、胜利返回/重战场景一次、保存失败后返回重试、失败领取一次、领取持久标志、返回一次、道具/装备保存失败回滚。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 16. 17-4 成长命令（2026-10-29）
+
+### 16.1 普通与神秘商店
+
+- `ShopPurchaseCommand.execute(item_name, buy_num, unit_price)`：校验商品/容量/灵魂 → `PlayerData.snapshot_state()` → `spend_soul` → 逐项判读产出 → `request_save("shop_purchase")`；任一步失败 `restore_state()`。
+- `execute_mystery(item_name, quantity, unit_price, level, wx)`：额外校验并扣减 `购买次数`，保存 reason 为 `shop_mystery_purchase`；快照同时覆盖次数。
+- `PlayerData.add_dj/add_xhp` 改为返回 `bool`；`add_dj_batch` 继续整批回滚。
+- `PlayerData.snapshot_state/restore_state` 同时保存 1P/2P `player_data`，恢复后 `LocalCoop.link_bags()` 并重设共享灵魂。
+
+### 16.2 强化与技能
+
+| 域 | 成功保存 | 失败回滚 | 失败路径 |
+|:---|:---|:---|:---|
+| 强化 | `ldl_strength` | 装备等级/灵魂/强化石快照 | 材料/灵魂不足直接返回，不保存 |
+| 主动技能 | `skill_refresh` | 技能书/灵魂/等级快照 | 校验失败不保存；保存失败恢复并刷新 UI |
+| 被动技能单个 | `skill_passive_upgrade` | 等级/灵魂快照 | 上限/灵魂不足不保存 |
+| 被动技能一键 | `skill_passive_upgrade_all` | 全部等级/灵魂快照 | 保存失败返回 -1 并提示 |
+
+### 16.3 验证
+
+`archive_probe_runner` 137 项 PASS，覆盖：普通商店成功/余额不足/背包满/保存失败回滚、神秘商店成功/次数不足/保存失败回滚、强化成功/材料不足/保存失败回滚、主动技能成功/保存失败回滚、被动技能成功/保存失败回滚。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s）；`check_all --godot-bin` 8/8 PASS。

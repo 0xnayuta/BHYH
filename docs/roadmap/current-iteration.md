@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归与 17-3 关卡阶段与结算已完成（2026-10-29），17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算与 17-4 成长系统命令边界已完成（2026-10-29），17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -180,10 +180,10 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 
 ### 5.1 切片
 
-1. **Phase 17-4A 命令盘点（规划）**：按域列出校验、扣除、产出与保存调用，标出跨域写入与重复领取点；
-2. **Phase 17-4B 单域试点（规划）**：选择一个域（优先锻造或商店）实现 `校验 → 扣除 → 产出 → 提交` 的单一命令，失败在扣除前返回；
-3. **Phase 17-4C 共享/个体分配（规划）**：购买与奖励明确写入共享账本或个体槽位，复用 `LocalCoop.shared_keys()` 与槽位查询，不新增第二组写入者；
-4. **Phase 17-4D 失败用例（规划）**：余额不足、背包满、材料不足、重复领取与并发点击各有一条用例，断言无部分扣费。
+1. **Phase 17-4A 命令盘点（已完成 2026-10-29）**：矩阵 §8 登记商店、锻造、神铸、淬骨、强化、合成、技能与奖励的校验/扣除/产出/保存；
+2. **Phase 17-4B 单域试点（已完成 2026-10-29）**：普通商店收敛为 `ShopPurchaseCommand.execute`，神秘商店复用 `execute_mystery`；校验→快照→扣除→产出→保存；
+3. **Phase 17-4C 共享/个体分配（已完成 2026-10-29）**：`PlayerData.snapshot_state/restore_state` 同时覆盖 1P/2P 并重连共享容器；商店扣费走共享灵魂；
+4. **Phase 17-4D 失败用例（已完成 2026-10-29）**：余额不足、背包满、购买次数不足、保存失败、强化材料不足各有断言；重复领取由 17-3 `lqjl` 覆盖。
 
 ### 5.2 必须验证
 
@@ -197,6 +197,18 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 - 试点域只有一个提交命令，校验与产出顺序固定；
 - 失败路径可判断且无副作用；
 - 不引入通用事务框架、不改变数值与掉落概率。
+
+### 5.4 17-4 实施记录（2026-10-29）
+
+| 项 | 内容 |
+|:---|:---|
+| 普通商店 | `ShopPurchaseCommand.execute`：容量/灵魂校验 → `PlayerData.snapshot_state` → `spend_soul` → 判读产出 → 保存；保存失败恢复 1P/2P 与共享容器 |
+| 神秘商店 | `execute_mystery`：购买次数、容量、灵魂校验；次数扣减、产出、保存同一快照；失败恢复次数/物品/灵魂 |
+| 强化 | `strength._on_qh_pressed` 只在成功时保存；保存失败恢复装备等级/灵魂/强化石并提示；材料不足直接返回 |
+| 主动技能 | `zd_skill.up_level` 成功才刷新保存；保存失败恢复技能书/灵魂/等级；失败路径不再保存 |
+| 被动技能 | 单技能与一键升级各自快照；保存失败恢复等级/灵魂；按钮与长按不再重复保存 |
+| 数据原语 | `PlayerData.add_dj/add_xhp` 返回 `bool`；新增 `snapshot_state/restore_state` 覆盖 1P/2P 共享账本 |
+| 验证 | `archive_probe_runner` 137 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s，`level_dsg_5`/`level_ghg` 瞬态重试通过）；`check_all --godot-bin` 8/8 PASS |
 
 ## 6. Phase 17-5：HUD/输入/音频表现边界
 
@@ -275,7 +287,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 | Phase 17-1 调用面矩阵 | 全量引用、owner/写入者/失败表、链接与格式；结果见 `gameplay_module_matrix.md` | 引擎、关卡回归不因只读调查复跑 |
 | Phase 17-2 命中归属 | `coop_probe_runner` 归属用例（普攻/技能/弹体/召唤/法宝）、池化复用两轮断言、1P/2P 伤害数值分离、相关关卡冒烟；17-2A/2B/2C 分别由 `LocalCoopAttributionSourcesProbe`/`LocalCoopPoolReuseProbe`/`LocalCoopDamageStatsProbe` 覆盖 | 只测 1P 或只改 `base_monster` 不算完成 |
 | Phase 17-3 阶段与结算 | `archive_probe_runner` 的胜败/重战/奖励/保存失败用例（118 项）、`level_1` 冒烟、变更关卡回归 | 只改结算 UI 或只改基类都不算完成 |
-| Phase 17-4 成长命令 | 校验失败无扣除、成功只提交一次、重复领取与并发点击用例；共享/个体分配 | 不要求引入通用事务框架 |
+| Phase 17-4 成长命令 | `archive_probe_runner` 的商店/神秘商店/强化/主动/被动技能成功、余额不足、容量不足、材料不足、保存失败回滚用例（137 项）；`level_1` 冒烟；相关关卡回归 | 只改 UI 或只改保存调用不算完成 |
 | Phase 17-5 HUD/输入/音频 | 暂停/切档/面板/退出后的监听与残留；1P/2P 输入隔离；音效复用 | 只改 HUD 绘制或只改输入映射都不算完成 |
 | Phase 17-6 模块 API | 公开 API 清单、依赖方向、试点边界路径清理与场景加载回归 | 不做全仓路径替换 |
 | Phase 17-7 边界守卫 | 静态守卫正负样本、全仓零 ERROR、L2、相关回归 | 包路径/导出无变化时不强制重导 release |

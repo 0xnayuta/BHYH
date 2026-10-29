@@ -64,6 +64,12 @@ func _run() -> void:
 	_test_request_save()
 	_test_archive_session()
 	await _test_settlement_ownership()
+	_test_shop_purchase_command()
+	_test_shop_capacity_failure()
+	_test_mystery_shop_command()
+	await _test_passive_skill_command()
+	await _test_active_skill_command()
+	await _test_strength_command()
 	await _test_panel_saves()
 
 
@@ -177,6 +183,340 @@ func _test_request_save() -> void:
 		seeded and not empty_blocked and seeded_level == 9 and after_level == 9,
 		"seed=%s blocked=%s before=%s after=%s" % [seeded, empty_blocked, seeded_level, after_level]
 	)
+
+
+func _test_shop_purchase_command() -> void:
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "051.json")
+	PlayerData.set_soul(1000)
+	var before_count := _item_count("qhs_1")
+	var bought: Dictionary = ShopPurchaseCommand.execute("qhs_1", 2, 10)
+	_check(
+		"shop_purchase_ok",
+		bool(bought.get("ok", false)) and PlayerData.get_soul() == 980 and _item_count("qhs_1") == before_count + 2,
+		"%s soul=%d qhs=%d" % [bought, PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+	var saved_path := Global.get_cd_path()
+	_check("shop_purchase_saved", FileAccess.file_exists(saved_path), saved_path)
+	_reset_profile(1, 1)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	_check(
+		"shop_purchase_reloads",
+		bool(loaded.get("ok", false)) and PlayerData.get_soul() == 980 and _item_count("qhs_1") == before_count + 2,
+		"status=%s soul=%d qhs=%d" % [loaded.get("status"), PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+
+	_reset_profile(1, 1)
+	PlayerData.set_soul(5)
+	var count_before_fail := _item_count("qhs_1")
+	var poor: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
+	_check(
+		"shop_purchase_insufficient_no_side_effect",
+		not bool(poor.get("ok", true)) and PlayerData.get_soul() == 5 and _item_count("qhs_1") == count_before_fail,
+		"%s soul=%d qhs=%d" % [poor, PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+
+	_reset_profile(1, 1)
+	PlayerData.set_soul(1000)
+	var count_before_save_fail := _item_count("qhs_1")
+	Global.end_archive_session()
+	var unsaved: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
+	_check(
+		"shop_purchase_save_failure_rolls_back",
+		not bool(unsaved.get("ok", true))
+		and PlayerData.get_soul() == 1000
+		and _item_count("qhs_1") == count_before_save_fail,
+		"%s soul=%d qhs=%d" % [unsaved, PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+
+
+func _test_shop_capacity_failure() -> void:
+	_reset_profile(1, 1)
+	PlayerData.set_soul(1000)
+	var pages: Dictionary = PlayerData.player_data[DataKeys.ITEM_LIST]
+	for page_key in pages.keys():
+		var page: Array = pages[page_key]
+		page.clear()
+		for _index in range(25):
+			page.append({"名字": "filler", "数量": 1})
+	var count_before := _item_count("qhs_1")
+	var blocked: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
+	_check(
+		"shop_purchase_backpack_full_no_side_effect",
+		not bool(blocked.get("ok", true)) and PlayerData.get_soul() == 1000 and _item_count("qhs_1") == count_before,
+		"%s soul=%d qhs=%d" % [blocked, PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+
+
+func _test_mystery_shop_command() -> void:
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "052.json")
+	PlayerData.set_soul(1000)
+	PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT] = 1
+	var before_count := _item_count("qhs_1")
+	var bought: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
+	_check(
+		"mystery_purchase_ok",
+		bool(bought.get("ok", false))
+		and PlayerData.get_soul() == 990
+		and _item_count("qhs_1") == before_count + 1
+		and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 0,
+		"%s soul=%d qhs=%d times=%d" % [
+			bought,
+			PlayerData.get_soul(),
+			_item_count("qhs_1"),
+			int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
+		]
+	)
+
+	_reset_profile(1, 1)
+	PlayerData.set_soul(1000)
+	PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT] = 0
+	var count_before_limit := _item_count("qhs_1")
+	var limited: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
+	_check(
+		"mystery_purchase_count_blocks",
+		not bool(limited.get("ok", true))
+		and PlayerData.get_soul() == 1000
+		and _item_count("qhs_1") == count_before_limit,
+		"%s soul=%d qhs=%d" % [limited, PlayerData.get_soul(), _item_count("qhs_1")]
+	)
+
+	_reset_profile(1, 1)
+	PlayerData.set_soul(1000)
+	PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT] = 1
+	Global.end_archive_session()
+	var count_before_save_fail := _item_count("qhs_1")
+	var unsaved: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
+	_check(
+		"mystery_purchase_save_failure_rolls_back",
+		not bool(unsaved.get("ok", true))
+		and PlayerData.get_soul() == 1000
+		and _item_count("qhs_1") == count_before_save_fail
+		and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 1,
+		"%s soul=%d qhs=%d times=%d" % [
+			unsaved,
+			PlayerData.get_soul(),
+			_item_count("qhs_1"),
+			int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
+		]
+	)
+
+
+func _test_passive_skill_command() -> void:
+	_reset_profile(1, 30)
+	PlayerData.player_data[DataKeys.PLAYER_LEVEL] = 30
+	PlayerData.set_soul(20000)
+	_open_session(TEST_ARCHIVE_PREFIX + "053.json")
+	var bd: Node = load("res://Scene/skill/bd_skill.tscn").instantiate()
+	add_child(bd)
+	await get_tree().process_frame
+	var level_before := int(PlayerData.player_data["被动技能"]["热血"])
+	var upgraded: bool = bd.up_level("热血")
+	_check(
+		"passive_skill_upgrade_ok",
+		upgraded and PlayerData.get_soul() == 15000 and int(PlayerData.player_data["被动技能"]["热血"]) == level_before + 1,
+		"ok=%s soul=%d level=%d" % [upgraded, PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
+	)
+	var saved_path := Global.get_cd_path()
+	bd.queue_free()
+	await get_tree().process_frame
+	_reset_profile(1, 30)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	_check(
+		"passive_skill_upgrade_reloads",
+		bool(loaded.get("ok", false))
+		and PlayerData.get_soul() == 15000
+		and int(PlayerData.player_data["被动技能"]["热血"]) == level_before + 1,
+		"status=%s soul=%d level=%d" % [loaded.get("status"), PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
+	)
+
+	_reset_profile(1, 30)
+	PlayerData.player_data[DataKeys.PLAYER_LEVEL] = 30
+	PlayerData.set_soul(20000)
+	Global.end_archive_session()
+	var failed_bd: Node = load("res://Scene/skill/bd_skill.tscn").instantiate()
+	add_child(failed_bd)
+	await get_tree().process_frame
+	var failed_level := int(PlayerData.player_data["被动技能"]["热血"])
+	var failed_upgrade: bool = failed_bd.up_level("热血")
+	_check(
+		"passive_skill_save_failure_rolls_back",
+		not failed_upgrade
+		and PlayerData.get_soul() == 20000
+		and int(PlayerData.player_data["被动技能"]["热血"]) == failed_level,
+		"ok=%s soul=%d level=%d" % [failed_upgrade, PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
+	)
+	failed_bd.queue_free()
+	await get_tree().process_frame
+
+
+func _test_active_skill_command() -> void:
+	_reset_profile(1, 30)
+	PlayerData.set_soul(1000)
+	_open_session(TEST_ARCHIVE_PREFIX + "054.json")
+	var zd: Node = load("res://Scene/skill/zd_skill.tscn").instantiate()
+	add_child(zd)
+	await get_tree().process_frame
+	zd.target_skill = 1
+	var level_before := int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])
+	zd.up_level()
+	_check(
+		"active_skill_upgrade_ok",
+		PlayerData.get_soul() == 900
+		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1,
+		"soul=%d level=%d" % [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+	)
+	var saved_path := Global.get_cd_path()
+	zd.queue_free()
+	await get_tree().process_frame
+	_reset_profile(1, 30)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	_check(
+		"active_skill_upgrade_reloads",
+		bool(loaded.get("ok", false))
+		and PlayerData.get_soul() == 900
+		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1,
+		"status=%s soul=%d level=%d" % [
+			loaded.get("status"),
+			PlayerData.get_soul(),
+			int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]),
+		]
+	)
+
+	_reset_profile(1, 30)
+	PlayerData.set_soul(1000)
+	Global.end_archive_session()
+	var failed_zd: Node = load("res://Scene/skill/zd_skill.tscn").instantiate()
+	add_child(failed_zd)
+	await get_tree().process_frame
+	failed_zd.target_skill = 1
+	var failed_level := int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])
+	failed_zd.up_level()
+	_check(
+		"active_skill_save_failure_rolls_back",
+		PlayerData.get_soul() == 1000
+		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == failed_level,
+		"soul=%d level=%d" % [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+	)
+	failed_zd.queue_free()
+	await get_tree().process_frame
+
+
+func _test_strength_command() -> void:
+	Global.is_in_ldl = true
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "055.json")
+	var setup := _prepare_strength_state()
+	var strength: Node = load("res://Scene/ldl/strength.tscn").instantiate()
+	add_child(strength)
+	await get_tree().process_frame
+	strength.qh_level = 1
+	strength.old_zb_name = "ptxzg"
+	strength.new_zb_name = "ptxzg"
+	strength.get_qhs_name()
+	strength.set_str_info()
+	strength._on_qh_pressed()
+	var entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
+	_check(
+		"strength_upgrade_ok",
+		int(entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
+		and PlayerData.get_soul() == 700
+		and PlayerData.get_item_data("qhs_1") == 4
+		and PlayerData.get_item_data("qhs_2") == 6,
+		"level=%d soul=%d qhs1=%d qhs2=%d" % [
+			int(entry.get(DataKeys.ENHANCE_LEVEL, 0)),
+			PlayerData.get_soul(),
+			PlayerData.get_item_data("qhs_1"),
+			PlayerData.get_item_data("qhs_2"),
+		]
+	)
+	var saved_path := Global.get_cd_path()
+	strength.queue_free()
+	await get_tree().process_frame
+	_reset_profile(1, 1)
+	var loaded: Dictionary = MemoryClass.load_game(saved_path)
+	var loaded_entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
+	_check(
+		"strength_upgrade_reloads",
+		bool(loaded.get("ok", false))
+		and int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
+		and PlayerData.get_soul() == 700,
+		"status=%s level=%d soul=%d" % [loaded.get("status"), int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)), PlayerData.get_soul()]
+	)
+
+	_reset_profile(1, 1)
+	_prepare_strength_state(false)
+	var missing_material_strength: Node = load("res://Scene/ldl/strength.tscn").instantiate()
+	add_child(missing_material_strength)
+	await get_tree().process_frame
+	missing_material_strength.qh_level = 1
+	missing_material_strength.old_zb_name = "ptxzg"
+	missing_material_strength.new_zb_name = "ptxzg"
+	missing_material_strength.get_qhs_name()
+	missing_material_strength.set_str_info()
+	missing_material_strength._on_qh_pressed()
+	var missing_entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
+	_check(
+		"strength_material_insufficient_no_side_effect",
+		int(missing_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 1 and PlayerData.get_soul() == 1000,
+		"level=%d soul=%d" % [int(missing_entry.get(DataKeys.ENHANCE_LEVEL, 0)), PlayerData.get_soul()]
+	)
+	missing_material_strength.queue_free()
+	await get_tree().process_frame
+
+	_reset_profile(1, 1)
+	_setup_strength_state()
+	Global.end_archive_session()
+	var failed_strength: Node = load("res://Scene/ldl/strength.tscn").instantiate()
+	add_child(failed_strength)
+	await get_tree().process_frame
+	failed_strength.qh_level = 1
+	failed_strength.old_zb_name = "ptxzg"
+	failed_strength.new_zb_name = "ptxzg"
+	failed_strength.get_qhs_name()
+	failed_strength.set_str_info()
+	failed_strength._on_qh_pressed()
+	var failed_entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
+	_check(
+		"strength_save_failure_rolls_back",
+		int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 1
+		and PlayerData.get_soul() == 1000
+		and PlayerData.get_item_data("qhs_1") == 10
+		and PlayerData.get_item_data("qhs_2") == 10,
+		"level=%d soul=%d qhs1=%d qhs2=%d" % [
+			int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)),
+			PlayerData.get_soul(),
+			PlayerData.get_item_data("qhs_1"),
+			PlayerData.get_item_data("qhs_2"),
+		]
+	)
+	failed_strength.queue_free()
+	await get_tree().process_frame
+	Global.is_in_ldl = false
+
+
+func _prepare_strength_state(with_materials: bool = true) -> Dictionary:
+	PlayerData.set_soul(1000)
+	if with_materials:
+		PlayerData.add_dj("qhs_1", 10)
+		PlayerData.add_dj("qhs_2", 10)
+	var data: Dictionary = AE.all_equipment["ptxzg"].duplicate(true)
+	var entry := {"名字": "ptxzg", "强化等级": 1, "Data": data}
+	PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"].append(entry)
+	MLdl.qh_list["名字"] = "ptxzg"
+	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = 1
+	MLdl.qh_list["页码"] = 1
+	MLdl.qh_list["位置"] = 0
+	MLdl.qh_list["来源"] = "装备背包"
+	MLdl.qh_list["穿戴栏"] = ""
+	MLdl.qh_list["data"] = entry
+	MLdl.qh_list["Data"] = data
+	return entry
+
+
+func _setup_strength_state() -> Dictionary:
+	return _prepare_strength_state()
 
 
 func _test_settlement_ownership() -> void:

@@ -106,6 +106,7 @@ class Settlement:
 
 
 const ACQUIRED_EQUIPMENT_LIST = "已获取装备列表"
+const SHOP_PURCHASE_COUNT = "购买次数"
 
 
 class Daily:

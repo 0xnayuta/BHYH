@@ -45,7 +45,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算已完成；17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界已完成；17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

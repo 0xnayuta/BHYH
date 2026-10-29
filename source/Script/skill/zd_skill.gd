@@ -697,15 +697,14 @@ func up_level():
 
 	var target_internal: String = str(skill_list[target_skill - 1])
 	var target_storage_index = get_level_storage_index(target_skill - 1)
-
-	var level: int = int(
-		PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)][DataKeys.LEVEL]
-	)
+	var skill_entry: Dictionary = PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)]
+	var level: int = int(skill_entry[DataKeys.LEVEL])
 
 	if level >= get_skill_max_level(target_internal):
 		Global.add_message_show(self, "技能已经满级！！", 1.5, Vector2(395, 180))
 		return
 
+	var snapshot: Dictionary = PlayerData.snapshot_state()
 	if _uses_standard_upgrades(target_internal) and level >= SKILL_BOOK_START_LEVEL:
 		var book_need := get_skill_book_need(level)
 		if not _consume_skill_book(level):
@@ -713,39 +712,38 @@ func up_level():
 				self, get_skill_book_name(level) + "不足，需" + str(book_need) + "个！！", 1.5, Vector2(395, 180)
 			)
 			return
-		PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)][DataKeys.LEVEL] += 1
-		refresh_infor()
-		return
-
-	if target_internal in PASSIVE_SKILLS:
+		skill_entry[DataKeys.LEVEL] = level + 1
+	elif target_internal in PASSIVE_SKILLS:
 		var need_level = skill10_xz(level)
-		if RoleProp.baseroleprop["Level"] >= need_level:
-			var need = 500 + 500 * level
-			if PlayerData.get_soul() >= need:
-				PlayerData.spend_soul(need)
-				PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)][DataKeys.LEVEL] += 1
-			else:
-				Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
-		else:
+		if RoleProp.baseroleprop["Level"] < need_level:
 			Global.add_message_show(self, "等级不足，需达到：" + str(need_level) + "级！！", 1.5, Vector2(395, 180))
-
+			return
+		var need = 500 + 500 * level
+		if not PlayerData.spend_soul(need):
+			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
+			return
+		skill_entry[DataKeys.LEVEL] = level + 1
 	else:
 		var i = target_skill - 1
 		var need = 100 + (i * 300) + 500 * level
-		if PlayerData.get_soul() >= need:
-			PlayerData.spend_soul(need)
-			PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能" + str(target_storage_index)][DataKeys.LEVEL] += 1
-		else:
+		if not PlayerData.spend_soul(need):
 			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
+			return
+		skill_entry[DataKeys.LEVEL] = level + 1
 
-	refresh_infor()
+	if not refresh_infor():
+		PlayerData.restore_state(snapshot)
+		refresh_infor(false)
+		Global.add_message_show(self, "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(395, 180))
 
 
-func refresh_infor():
+func refresh_infor(save_state: bool = true) -> bool:
 	set_skill_level()
 	set_skill_lh()
 	set_skill_mp_cost()
-	MemoryClass.request_save("skill_refresh")
+	if not save_state:
+		return true
+	return MemoryClass.request_save("skill_refresh")
 
 
 func skill10_xz(Level):

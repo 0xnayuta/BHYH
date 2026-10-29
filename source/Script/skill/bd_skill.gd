@@ -116,10 +116,7 @@ func _on_passive_button_up(button: BaseButton) -> void:
 
 
 func _upgrade_passive_for_hold(skill_name: String) -> bool:
-	var upgraded := up_level(skill_name)
-	if upgraded:
-		MemoryClass.request_save("skill_passive_upgrade")
-	return upgraded
+	return up_level(skill_name)
 
 
 func _apply_table_layout() -> void:
@@ -217,6 +214,7 @@ func set_infor():
 
 func _upgrade_all_passives() -> int:
 	PlayerData.ensure_player_passive_skills()
+	var snapshot: Dictionary = PlayerData.snapshot_state()
 	var target: Dictionary = PlayerData.player_data["被动技能"]
 	var max_level := get_current_max_level()
 	var upgraded_count := 0
@@ -235,36 +233,51 @@ func _upgrade_all_passives() -> int:
 			upgraded_this_round = true
 		if not upgraded_this_round:
 			break
+	if (
+		upgraded_count > 0
+		and Global.is_archive_session_active()
+		and not MemoryClass.request_save("skill_passive_upgrade_all")
+	):
+		PlayerData.restore_state(snapshot)
+		return -1
 	return upgraded_count
 
 
 func _on_one_key_upgrade_pressed() -> void:
 	var upgraded_count := _upgrade_all_passives()
 	set_infor()
-	if upgraded_count <= 0:
+	if upgraded_count < 0:
+		Global.add_moment_text(get_parent(), Vector2.ZERO, "存档保存失败，本次升级已撤销", 1)
+		return
+	if upgraded_count == 0:
 		Global.add_moment_text(get_parent(), Vector2.ZERO, "灵魂不足或已达当前等级上限", 1)
 		return
-	if Global.is_archive_session_active():
-		MemoryClass.request_save("skill_passive_upgrade_all")
 	Global.add_moment_text(get_parent(), Vector2.ZERO, "一键升级完成，共提升%d级" % upgraded_count, 1)
 
 
 func up_level(_name) -> bool:
 	PlayerData.ensure_player_passive_skills()
 	var target = PlayerData.player_data["被动技能"]
-	var have_lh = PlayerData.get_soul()
 	var need_lh = PaSkill.get_lh(_name)
-	if target[_name] < get_current_max_level():
-		if need_lh <= have_lh:
-			PlayerData.spend_soul(need_lh)
-			target[_name] += 1
-			set_infor()
-			return true
-		else:
-			Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
-	else:
+	if target[_name] >= get_current_max_level():
 		Global.add_moment_text(get_parent(), Vector2(0, 0), "已经无法再升级了！！", 1)
-	return false
+		return false
+	if PlayerData.get_soul() < need_lh:
+		Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
+		return false
+	var snapshot: Dictionary = PlayerData.snapshot_state()
+	if not PlayerData.spend_soul(need_lh):
+		PlayerData.restore_state(snapshot)
+		Global.add_moment_text(get_parent(), Vector2(0, 0), "灵魂不足！！", 1)
+		return false
+	target[_name] += 1
+	if not MemoryClass.request_save("skill_passive_upgrade"):
+		PlayerData.restore_state(snapshot)
+		set_infor()
+		Global.add_moment_text(get_parent(), Vector2(0, 0), "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 1)
+		return false
+	set_infor()
+	return true
 
 
 func _on_up_1_pressed() -> void:
@@ -272,7 +285,6 @@ func _on_up_1_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("热血")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_2_pressed() -> void:
@@ -280,7 +292,6 @@ func _on_up_2_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("魔泉")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_3_pressed() -> void:
@@ -288,7 +299,6 @@ func _on_up_3_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("狂暴")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_4_pressed() -> void:
@@ -296,7 +306,6 @@ func _on_up_4_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("永恒")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_5_pressed() -> void:
@@ -304,7 +313,6 @@ func _on_up_5_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("辉煌")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_6_pressed() -> void:
@@ -312,7 +320,6 @@ func _on_up_6_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("敏锐")
-	MemoryClass.request_save("skill_passive_upgrade")
 
 
 func _on_up_7_pressed() -> void:
@@ -320,4 +327,3 @@ func _on_up_7_pressed() -> void:
 		_passive_suppress_click_skill = ""
 		return
 	up_level("收益")
-	MemoryClass.request_save("skill_passive_upgrade")
