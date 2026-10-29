@@ -6,7 +6,7 @@
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为唯一事实源，使用静态扫描（`grep` 等价的正则统计）与关键函数逐行阅读。下文计数是**静态行数/出现次数**，可能包含条件分支、重复调用与暂时不可达路径，不等同于运行期次数；口径在每张表标题处注明。
 >
-> **范围**：`MemoryClass` 的档案读写与后台保存、`Global` 的档案身份与会话字段、`PlayerData` 的档案字典写入、`LocalCoop` 的槽位与面板视图交换、存档界面的云存档与删档路径。战斗数值、掉落规则、素材质量与 Phase 15 已收口的场景/缓存/池生命周期不在本页范围。
+> **范围**：`MemoryClass` 的档案读写与后台保存、`Global` 的档案身份与会话字段、`PlayerData` 的档案字典写入、`LocalCoop` 的槽位与面板显式操作者、存档界面的云存档与删档路径。战斗数值、掉落规则、素材质量与 Phase 15 已收口的场景/缓存/池生命周期不在本页范围。
 
 ---
 
@@ -22,7 +22,7 @@
 8. **直接数据写入 141 行 / 44 个文件**（`=` 129 行 / 39 文件 + `+=` 12 行 / 7 文件），另有 1 处 `erase`；`PlayerData.player_data` 共 1,288 行引用、119 个文件、1,335 次出现。按业务域以关卡进度 58、宠物 32 为主，6 个文件跨域写入。
 9. **规范化补全入口 21 个**（20 个 `ensure_*`/`normalize_*`/`migrate_*` + `enforce_level_caps`）；保存侧执行 19 个步骤（16-2D 后统一为固定清单，`enforce_level_caps` 最后执行）；读档侧另行维护 17 个调用，两侧仍不完全对称。补全返回值多为 `void`/“是否新增”，不能表达失败，因此保存侧改用**后置条件**判定（见 §8.4）。
 10. **槽位查询是可枚举唯一入口（16-4）**：`slot_for` 20 次 / 7 文件、`data_for` 19 次 / 19 文件、`data_for_slot` 5 次 / 3 文件、`props_for` 22 次 / 20 文件、`props_for_slot` 2 次、`canonical_profile_for_slot` 2 次、`pet_profile_for` 16 次 / 1 文件、`pet_meta_key` 32 次 / 5 文件、`input_for` 2 次。新增 `slot_snapshot()` 与 `shared_ledger_report()` 供探针枚举校验；`base_monster.set_exp`、`PlayerData.is_mount_system_unlocked`、`BaseMagicWeapon` 的 `/root` 硬编码回落已改为槽位查询；`BaseLevel._get_active_pet_data` 不再接受缺省档案。
-11. **共享账本已收口到单一写入者（16-4）**：`LocalCoop.shared_keys()` 登记全部共享键（三个背包 + 宠物背包 + 被动技能 + 主线剑阵 + 剑阵等级 + 炼体 + 万灵图录 + 灵魂）；`save_profile` 按该登记剥离 2P 档案的全部共享副本（此前遗漏炼体与万灵图录），`SAVE_VERSION` 升至 3，旧档按 `SHARED_SOUL_VERSION=2` 判定灵魂是否计入。运行期 1P/2P 共享键保持同一容器，`shared_ledger_report()` 可逐键验证。面板仍整体依赖全局视图交换：20 个面板目录脚本共 354 处直接读 `PlayerData.player_data`；`suspend/resume_player_view` 8 处调用 + 2 处定义；`Global.get_player` 16 次 / 10 文件。
+11. **共享账本与面板操作者均已收口（16-4/16-5）**：`shared_keys()` 登记全部共享键，`save_profile` 按登记剥离 2P 档案的共享副本（`SAVE_VERSION=3`），`shared_ledger_report()` 可逐键验证；面板不再改写全局别名，31 个面板域脚本通过 `PlayerData`/`RoleProp` 属性按 `coop_slot` 解析操作者，`suspend/resume_player_view` 与 `_primary_*` 已删除；保存快照以 `is_save_snapshot_in_progress()` 阻止面板打开/切换。`Global.get_player` 仍 16 次 / 10 文件，用于提示、目标与部分怪物逻辑。
 12. **档案会话已成为唯一上下文（16-3）**：`Global._archive_session`（`ArchiveSession` 只读值对象）持有档案号、角色、路径与会话代次；`is_archive_session_active()`/`get_archive_session_path()`/`get_archive_session_archive_number()`/`get_archive_session_role_id()` 是唯一查询面。业务侧不再出现 `cd_path` 引用，也不再用 `contains("Ar_")` 推断会话状态；`request_save`、`request_background_save` 与关卡入口在无会话时一律拒绝。
 13. **角色范围已统一为 1..7**：本地校验、云上传/导入收集与运行时共用 `MemoryClass.is_valid_role_id`；`0/8/非数值` 一律拒绝，玉兔档可上传/导入。
 
@@ -43,7 +43,7 @@
 - 档案业务格式、字段语义、加密算法、稳定密钥、`.tmp`/`.bak` 原子替换与 `ensure_*` 补全策略不变；
 - 共享项：装备/道具/消耗品/宠物背包、被动技能、主线剑阵、灵魂、炼体、万灵图录；个体项：等级/属性/技能/装备穿戴/宠物出战；划分不变；
 - 不新增 Autoload；`LocalCoop` 仍为最后注册的业务单例（`source/project.godot` 第 24~38 行）；
-- 迁移完成前保留现有视图交换与保存前挂起保护，不得先删保护再迁面板（16-5 明确）。
+- 16-5 已完成面板显式操作者迁移，全局视图交换与保存前挂起保护同批删除；快照互斥改由 `is_save_snapshot_in_progress()` 单一入口保证。
 
 ---
 
@@ -61,7 +61,7 @@
 | 1P 档案 `PlayerData.player_data` | `PlayerData`（`PlayerDataStore`） | 44 个文件、141 行直接写入 + 少量 API 写入 | 119 个文件 | 读档 merge、`remove_play_data`、切档/退出 | 依赖 `ensure_*` 补全；无效数据靠 `_is_valid_player_archive_data` 拒绝保存 |
 | 2P 档案 `LocalCoop.secondary_data` | `LocalCoop` | `create_secondary`、`load_profile`、`save_profile` | 槽位感知调用方（`data_for_slot`/`slot_snapshot`） | `clear_runtime`、切档、`load_game` 开头 | 2P 不存在时 `data_for_slot(2)` 回落 1P；`is_enabled()` 要求 `本地双人.启用` |
 | 共享账本 | `PlayerData` 共享键 + `LocalCoop._shared_soul` | `link_bags`、`_link_shared_pet_backpack`、`_link_shared_attribute_progression`、`normalize/set_shared_soul` | 面板、战斗、属性计算；`shared_ledger_report()` 校验 | `link_bags`、保存快照 | **键登记为 `shared_keys()` 单一来源**；运行期 1P/2P 同一容器；`save_profile` 按登记剥离全部共享副本（`SAVE_VERSION=3`）；合并冲突按 `maxi`，宠物背包追加一次后共享同一数组 |
-| 面板数据视图 | `LocalCoop._view_swapped` + `_primary_*` | `suspend_player_view` / `resume_player_view` | 面板脚本（经全局 `PlayerData`/`RoleProp` 别名） | 面板关闭、切换、`clear_runtime`、保存快照 | 全局别名切换，非显式绑定；异常路径可能留下 2P 视图 |
+| 面板数据视图 | 面板根节点 `coop_slot` meta + `Coop` 弹出层 meta | `LocalCoop._create_panel` / `open_panel` | 面板脚本的 `PlayerData`/`RoleProp` 属性 getter | 面板关闭、切换、`clear_runtime`、保存快照 | 显式按槽位解析；全局 `PlayerData` 恒为 1P，无交换残留 |
 | 云存档 ZIP 绑定 | `read_archive_interface` | `_write_cloud_encrypted_archive`（独立密钥，非 `MemoryClass`） | 上传/导入流程 | 上传临时目录清理、导入临时目录清理 | 导入写回统一走 `safe_write_archive`；`uid` 不匹配即拒绝 |
 
 ---
@@ -402,50 +402,50 @@
 
 `Global.get_player` 仍有 **19 次 / 10 个文件**引用（`dj_sell` 5、`local_coop` 4、`weiyang_palace_boss` 3、其余各 1），其中 `dj_sell` 的 Buff/回血逻辑直接使用"当前全局玩家"。
 
-结论：槽位 API 已存在且被战斗侧使用，但**面板侧整体依赖"把 2P 数据临时换进 `PlayerData` 全局别名"**，这是 16-5 的主要迁移面。
+结论：槽位 API 已被战斗侧与面板侧共同使用；面板侧在 16-5 迁移为显式操作者，全局别名交换已移除。
 
 ---
 
-## 10. 面板视图交换与保存互斥
+## 10. 面板显式操作者与保存互斥
 
-### 10.1 全部调用点
+### 10.1 显式操作者
 
-| 位置 | 调用 | 触发场景 |
-|:---|:---|:---|
-| `local_coop.gd:317`（`clear_runtime`） | `suspend_player_view()` | 释放 2P 运行时前恢复 1P 视图 |
-| `local_coop.gd:583`（`_activate_slot_view`，slot==2） | `resume_player_view()` | 打开 2P 面板 |
-| `local_coop.gd:585`（`_activate_slot_view`，slot==1） | `suspend_player_view()` | 打开 1P 面板 |
-| `local_coop.gd:676`（`_replace_panel`） | `suspend_player_view()` | 面板内切槽前恢复 1P |
-| `local_coop.gd:680`（`_replace_panel`） | `resume_player_view()` | 切到 2P 后换入 2P 视图 |
-| `local_coop.gd:691`（`_on_panel_closed`） | `suspend_player_view()` | 关闭面板恢复 1P |
-| `memory_class.gd:267`（`_prepare_player_save_data`） | `suspend_player_view()` | 保存快照前恢复 1P 视图 |
-| `memory_class.gd:273`（`_prepare_player_save_data`） | `resume_player_view()` | 快照后恢复原视图（仅当此前发生交换） |
-| 定义 | `local_coop.gd:705` / `:719` | — |
+面板不再改写全局 `PlayerData`/`RoleProp` 别名，而是按所在槽位解析操作者：
+
+| 层 | 实现 |
+|:---|:---|
+| 面板根节点 | `LocalCoop._create_panel` 设置 `coop_slot` meta |
+| 弹出层 | `open_panel` 在 `CanvasLayer` 上设置 `coop_slot`，`Global.windows` 下的子面板与弹窗经祖先链继承 |
+| 面板脚本 | 声明 `PlayerData`/`RoleProp` 属性，getter 走 `LocalCoop.data_for(self)` / `props_for(self)` |
+| 槽位解析 | 复用 `slot_for` 的 meta → 祖先 → `owner_hero` → 遗留前缀顺序，默认 1 |
+
+已注入显式操作者的 31 个脚本：`Script/back_pack/` 15、`Script/skill/` 5、`Script/pet/pet_interface.gd`、`Script/mount/` 2、`Script/ldl/` 8（`strength` 基类覆盖 `divine_forge`/`bone_forge`）。`coop_backpack.gd` 继承 `back_pack.gd`，`pet_*_summon_base` 继承 `BaseObject`，均自动获得槽位解析。
 
 ### 10.2 面板生命周期时序
 
 ```text
 open_panel(slot, type)
-  -> ui_slot = slot
-  -> _activate_slot_view(slot) : slot==2 时 resume_player_view()
-  -> 加载面板场景，set_meta("coop_slot", slot)，注册 UI 运行时实例
+  -> 快照互斥检查（is_save_snapshot_in_progress 时拒绝）
+  -> ui_slot = slot，暂停场景
+  -> 创建 CanvasLayer，set_meta("coop_slot", slot)，接管 Global.windows
+  -> 实例化面板，set_meta("coop_slot", slot)，注册 UI 运行时实例
 _switch_panel(slot) -> _replace_panel(slot)
-  -> 释放旧面板 -> suspend -> link_bags -> ui_slot = slot -> slot==2 时 resume -> 重建面板
+  -> 释放旧面板 -> link_bags -> ui_slot = slot -> 层 meta 更新 -> 重建面板
 close_panel() -> queue_free -> _on_panel_closed
-  -> 释放层、恢复 Global.windows -> suspend -> link_bags -> refresh_passive_skills
-  -> 恢复暂停态 -> MemoryClass.request_save("coop_panel_close")（路径失效时在 flush 前返回）
+  -> 释放层、恢复 Global.windows -> ui_slot = 1 -> link_bags -> refresh_passive_skills
+  -> 恢复暂停态 -> MemoryClass.request_save("coop_panel_close")
 ```
 
-### 10.3 互斥现状
+### 10.3 保存互斥
 
 | 断言 | 当前事实 |
 |:---|:---|
-| 保存快照期间不处于 2P 视图 | 成立：`_prepare_player_save_data` 先 suspend，再取快照 |
-| 快照生成期间禁止面板切换 | **无显式锁**；仅因快照全程同步（无 `await`）才未被插入 |
-| 面板关闭即保存 | 成立，但前提是 `cd_path != ""` |
-| 场景切换时面板关闭顺序 | `change_scene` 先 `end_archive_session()` 再 `cleanup_transient_ui()`；面板 `_on_panel_closed` 的保存落在会话结束之后 |
-| 异常退出恢复视图 | `clear_runtime` 会 suspend；面板随场景释放时由 `tree_exited` → `_on_panel_closed` 触发（`LocalCoop` 为 Autoload，`is_inside_tree()` 恒为真）。2P 面板登记在 `_ui_runtime_instances`，不在 `cleanup_transient_ui` 的临时 UI 注册表 |
-| 快照失败 | `_prepare_primary_player_save_data` 返回 `{}` 时跳过 `save_profile`/`link_bags`，但仍恢复视图；本次不写入 2P profile |
+| 全局别名在 2P 面板期间不被改写 | 成立：`suspend/resume_player_view` 已删除，`PlayerData.player_data` 恒为 1P |
+| 快照生成期间禁止打开/切换面板 | 成立：`MemoryClass.is_save_snapshot_in_progress()` 由 `_prepare_player_save_data` 置位，`open_panel` 直接拒绝 |
+| 面板关闭即保存 | 成立，前提是档案会话有效（`request_save` 要求会话） |
+| 面板操作者 | 由 `coop_slot` meta 与槽位查询决定，与 `Global.windows` 无关 |
+| 异常退出 | 面板随场景释放时由 `tree_exited` → `_on_panel_closed` 收尾；`clear_runtime` 只释放 2P 运行时 |
+| 快照失败 | `_prepare_primary_player_save_data` 返回 `{}` 时跳过 `save_profile`/`link_bags`，快照标志仍复位 |
 
 ---
 
@@ -464,14 +464,14 @@ close_panel() -> queue_free -> _on_panel_closed
 | AS-07 | **已修复入口（16-2A 完成）**：116 处全部由 `request_save` 统一解析与空档拒绝；残留 `cd_path` 守卫仅作业务前置判断 | 无档时静默 `false`；UI 无反馈 | 16-2A 完成 |
 | AS-08 | 11 个地图页 `_ready` 即保存 | 每次进城一次完整加密写 + 设置写；首帧 IO 放大 | 16-2 |
 | AS-09 | **已修复（16-2A 收尾）**：删除 `remove()` 末尾覆盖初始档的 `save_game`，重置只写初始档；入口仍为死路径 | 重置不再退化为普通保存 | 16-2A 完成 |
-| AS-10 | 面板内保存依赖同步 suspend/resume | 若 `_prepare_player_save_data` 将来引入 `await`，2P 面板视图会停留在 1P；16-2B 已在其后校验身份 epoch，可拦截跨档写入 | 16-5 |
+| AS-10 | **已修复（16-5）**：全局视图交换删除，快照不再需要 suspend/resume；`_prepare_player_save_data` 以 `is_save_snapshot_in_progress()` 阻止面板打开/切换，快照与面板互斥有单一入口 | 面板数据不依赖视图状态 | 16-5 完成 |
 | AS-11 | **已解除（16-2B）**：保存身份改用 `_archive_identity_epoch`（仅路径变化时递增），退出场景 `end_archive_session()` 不再使面板关闭保存失效 | 面板关闭仍可写入同一档案 | 16-2B 完成 |
 | AS-12 | **已修复（16-2B）**：`_remove_save_data` 先 `int(cd_number.text)` 归一化再拼路径，入口已校验正整数范围 | 不会命中非预期路径 | 16-2B 完成 |
 | AS-13 | **已修复（16-2D 保存侧 / 16-3 读档侧）**：19 步补全改为固定清单，方法缺失即失败；补全后执行后置条件校验，失败拒绝写入并给出 `normalize_failed:<键>`；读档改为先重置再合并 | 保存与读档都不再把补全失败当成功 | 16-3 完成 |
 | AS-14 | **部分修复（16-2B）**：任务增加 `generation`（身份 epoch），切档后到达的任务被丢弃；切档前 `set_cd_path` 先 flush。信号仍无接收者 | 旧任务不再回写；失败仍靠日志与 `last_save_error` | 16-2B 完成；信号消费留给 16-5 |
 | AS-15 | **已修复（16-3）**：`ArchiveSession` 提供档案号/角色/路径/代次；业务侧 0 处引用 `cd_path`，保存与关卡入口统一读会话 | 会话是唯一权威表示 | 16-3 完成 |
-| AS-16 | **部分修复（16-4）**：槽位查询与共享账本已具备枚举与校验能力，2P 档案不再携带共享副本；20 个面板脚本 354 处直接读 `PlayerData` 仍依赖全局视图交换 | 面板显式操作者留给 16-5 | 16-5 |
-| AS-17 | **部分修复（16-4）**：经验结算、坐骑解锁、法宝数据源改走槽位查询；`Global.get_player` 仍有 16 次 / 10 文件用于提示、目标与部分怪物逻辑 | 剩余 1P 假设随面板与怪物逻辑分批收敛 | 16-5 |
+| AS-16 | **已修复（16-5）**：31 个面板域脚本声明 `PlayerData`/`RoleProp` 属性，按 `coop_slot` 显式解析操作者；全局 `PlayerData` 恒为 1P，无视图交换残留 | 面板读写按槽位归属 | 16-5 完成 |
+| AS-17 | **部分修复（16-4/16-5）**：经验结算、坐骑解锁、法宝数据源与面板操作者已改槽位查询；`Global.get_player` 仍有 16 次 / 10 文件，用于提示、目标与部分怪物逻辑 | 剩余 1P 假设随怪物逻辑分批收敛 | 后续批次 |
 | AS-18 | **已修复（16-3）**：`get_cd_number()` 返回 `int`，无会话时为 `0`；`base_hero`/`back_pack` 对 0 显式处理，`remove_main_data` 拒绝非正档号 | 无档操作不再落到 1 号档 | 16-3 完成 |
 
 ---
@@ -482,9 +482,9 @@ close_panel() -> queue_free -> _on_panel_closed
 |:---|:---|
 | 16-2 存档 IO 边界 | 116 处 `request_save`、业务 `save_game` 归零（附录 A）、返回值处理分布、`safe_write_archive` 3 处外部调用、后台队列事实、元数据 `main_bc` 74 处；AS-04/AS-05 已修复，AS-06/AS-07 部分修复，AS-08/AS-09/AS-12~AS-14 待办 |
 | 16-3 会话上下文 | **已完成**：`ArchiveSession` 会话对象、`bind_archive_session`/`begin_archive_session(prewarm)`/`end_archive_session`、`load_game` 显式状态、无会话拒绝保存与关卡入口；AS-01/02/03/13/15/18 关闭 |
-| 16-4 槽位与共享账本 | **已完成**：`shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；2P 档案剥离全部共享键且 `SAVE_VERSION=3`；`/root/PlayerData`、`/root/RoleProp` 硬编码回落改为槽位查询；`LocalCoopSlotLedgerProbe` 17/17 覆盖槽位枚举、共享单写入、个体归属、合并规则与清理。面板视图交换留给 16-5（AS-16/AS-17 部分收口） |
-| 16-5 面板与快照 | 8 处视图交换调用、面板生命周期时序、互斥缺口、AS-10/AS-11/AS-16 |
-| 16-6 边界守卫 | 可直接转成规则的静态特征：`contains("Ar_")`、`user://MyAr_` 拼接、`save_game`/`safe_write_archive` 调用方白名单、`suspend/resume_player_view` 调用点、`PlayerData.player_data[` 写入点登记 |
+| 16-4 槽位与共享账本 | **已完成**：`shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；2P 档案剥离全部共享键且 `SAVE_VERSION=3`；`/root/PlayerData`、`/root/RoleProp` 硬编码回落改为槽位查询；`LocalCoopSlotLedgerProbe` 17/17 覆盖槽位枚举、共享单写入、个体归属、合并规则与清理 |
+| 16-5 面板与快照 | **已完成**：显式操作者注入（31 脚本）、视图交换删除、快照互斥入口、`LocalCoopPanelOperatorProbe` 18/18 覆盖 2P/1P 操作者、快照拒绝、关闭恢复；AS-10/AS-16 关闭 |
+| 16-6 边界守卫 | 可直接转成规则的静态特征：`user://MyAr_` 拼接、`save_game`/`safe_write_archive` 调用方白名单、未经槽位解析的 `PlayerData.player_data[` 写入点登记、面板脚本缺少 `coop_slot` 解析、快照互斥入口调用点 |
 
 ---
 
@@ -496,14 +496,15 @@ close_panel() -> queue_free -> _on_panel_closed
 # 保存点
 grep -rn "MemoryClass.save_game(" source --include='*.gd'
 # 路径身份
-grep -rn "Global.cd_path" source --include='*.gd'
+grep -rn "get_cd_path()\|set_cd_path(" source --include='*.gd'
 # 直接写入（排除比较）
 grep -rnE 'PlayerData\.player_data\[[^]]*\]\s*(=|\+=)(?!=)' source --include='*.gd'
 # 会话
 grep -rn "archive_session" source --include='*.gd'
-# 槽位与视图交换
-grep -rnE "LocalCoop\.(slot_for|data_for|data_for_slot|props_for|props_for_slot|canonical_profile_for_slot|pet_profile_for|pet_meta_key|input_for)\(" source --include='*.gd'
-grep -rn "suspend_player_view\|resume_player_view" source --include='*.gd'
+# 槽位与面板操作者
+grep -rnE "LocalCoop\.(slot_for|data_for|data_for_slot|props_for|props_for_slot|canonical_profile_for_slot|pet_profile_for|pet_meta_key|input_for|shared_keys|shared_ledger_report|slot_snapshot)\(" source --include='*.gd'
+grep -rn "coop_slot" source --include='*.gd'
+grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 ```
 
 统计脚本以"物理行计数"为准；同一行多次出现只计一次（除特别注明"出现次数"的 `cd_path` 与 `player_data` 总量）。临时统计文件未入库。
@@ -554,13 +555,15 @@ grep -rn "suspend_player_view\|resume_player_view" source --include='*.gd'
 | 16-2D 补全边界 | 保存侧 19 步固定补全清单；`_normalization_postcondition_error()` 校验容器/宠物/背包/坐骑/被动/剑阵/万灵/已获取装备/等级；方法缺失或后置条件不满足即阻止写入。修复两处非幂等：新建宠物立即执行自身规范化；`enforce_level_caps` 移至补全最后 |
 | 16-3 会话上下文 | 新增 `ArchiveSession` 只读值对象与 `bind_archive_session()`；`cd_path` 私有化，业务 0 引用；`load_game` 返回显式 `status`；无会话拒绝保存与关卡入口；`get_cd_number()` 返回 `int` |
 | 16-3 验证 | 档案夹具 **101/101 PASS**（新增 `session_*` 20 项）；`level_1` 冒烟 **PASS**；`scene_probe_runner` **6/6 PASS**；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
-| 16-4 槽位与共享账本 | 新增 `shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；`save_profile` 按登记剥离全部共享副本（补上遗漏的炼体与万灵图录），`SAVE_VERSION=3` 与 `SHARED_SOUL_VERSION=2` 分离；`base_monster.set_exp`、`PlayerData.is_mount_system_unlocked`、`BaseMagicWeapon` 的 `/root` 硬编码改槽位查询；`BaseLevel._get_active_pet_data` 取消缺省档案 |
+| 16-4 槽位与共享账本 | **已完成**：`shared_keys()`/`shared_ledger_report()`/`slot_snapshot()`；2P 档案剥离全部共享键且 `SAVE_VERSION=3`；`/root/PlayerData`、`/root/RoleProp` 硬编码回落改为槽位查询；`LocalCoopSlotLedgerProbe` 17/17 覆盖槽位枚举、共享单写入、个体归属、合并规则与清理 |
+| 16-5 显式操作者 | 删除 `suspend/resume_player_view`、`_view_swapped` 与 `_primary_*`；31 个面板域脚本注入 `PlayerData`/`RoleProp` 属性（按 `coop_slot` 解析）；弹出层携带 `coop_slot` 供子面板与弹窗继承；`open_panel` 在快照生成期间拒绝打开/切换；`MemoryClass.is_save_snapshot_in_progress()` 为唯一互斥入口 |
+| 16-5 验证 | `coop_probe_runner` **18/18 PASS**（新增 `LocalCoopPanelOperatorProbe`：2P/1P 操作者、全局别名不交换、面板写入归属、槽位 meta、快照拒绝、暂停与 `Global.windows` 恢复）；`level_1` 冒烟 **PASS**；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-4 验证 | `coop_probe_runner` **17/17 PASS**（新增 `LocalCoopSlotLedgerProbe`：槽位枚举、共享单写入、个体归属、合并规则、清理后回落）；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-2B/2D 验证 | 档案夹具 **71/71 PASS**（新增 `identity_*` 9 项、`normalize_*` 6 项）；`level_selection` **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | `defeat` / `victory` 双写评估 | 两个调用点**互斥**：镇妖塔分支 `change_scene` 后保存并 `return`，末尾保存只在地图分支执行。每次点击只写一次，无需去重；原"同函数重复保存"描述已更正 |
 | 第四批验证 | `level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **52/52 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 
-**未完成**：16-5 面板显式操作者与保存快照互斥、16-6 边界守卫。16-2A~16-4 已收口：业务侧 `save_game` 调用为 0，`cd_path` 无业务引用，共享账本单一写入者。
+**未完成**：16-6 边界守卫。16-2A~16-5 已收口：业务侧 `save_game` 调用为 0，`cd_path` 无业务引用，共享账本单一写入者，面板显式操作者。
 
 ---
 

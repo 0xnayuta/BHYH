@@ -284,7 +284,7 @@ classDiagram
 - `MemoryClass.load_game`：读取加密档 → 取 `.bak` 备份 → 按 `status` 拒绝缺失/空/损坏/无效档 → 重置内存档 → 合并到 `player_data` → 执行 `ensure_*` / 有限的数据规范化与退役清理 → 载入双人档案；返回 `{ok, status, archive_number, message}`；
 - `safe_write_archive`：写入 `.tmp` → 读取校验 → 备份旧档到 `.bak` → 原子替换；
 - 后台保存使用线程队列，退出前 `flush_pending_saves`；
-- `_prepare_player_save_data()` 先 `LocalCoop.suspend_player_view()` 恢复 1P 主视图，再生成快照并写入 2P profile；此前有交换时最后恢复视图。不能在 2P 视图激活时无保护地直接序列化 `PlayerData.player_data`。
+- `_prepare_player_save_data()` 直接序列化 1P 档案并写入 2P profile；全局别名不再交换，快照期间以 `is_save_snapshot_in_progress()` 拒绝面板打开/切换，互斥由单一入口保证。
 - 稳定密钥保存在 `user://.save_key`，兼容读取会依次尝试稳定密钥与历史密钥；
 - **不建立按版本号递增的通用迁移链**：旧 `user://` 目录、旧任务键与旧配置不迁移；缺失的新字段用默认值补全，非法/不可读档明确失败，不回退到“猜测结构”；
 - 业务保存优先使用 `MemoryClass.request_save(reason)`：路径由持久化边界从 `Global.cd_path` 解析，业务不再拼路径；16-2A 五批合计迁移 118 处（`back_pack` 25、`skill` 18、`ldl` 15、`main_menu` 19、`level` 11、收尾 13），业务侧 `save_game` 直调归零；16-2B 起 `Global.set_cd_path()` 为唯一身份写入口，`save_game` 以「档案号 + `_archive_identity_epoch`」拒绝过期回写；16-2D 以固定补全清单与后置条件阻止「补全失败但保存成功」；
@@ -302,7 +302,7 @@ classDiagram
 - 存档格式：`player_data["本地双人"] = {版本, 启用, 2P: profile}`；
 - 共享项：装备/道具/消耗品/宠物背包、被动技能、主线剑阵、灵魂、炼体、万灵图录；
 - 归属解析：meta → 祖先 `coop_slot` → `owner_hero()` 反射 → 脚本路径前缀 → 默认 1；
-- 面板：2P 打开背包/技能/宠物/法宝/坐骑时，`resume_player_view()` 直接替换 `PlayerData.player_data`、`RoleProp` 属性与 `Global.get_player`；关闭时 `suspend_player_view()` 恢复。这是有保存互斥要求的遗留全局视图交换，不是已经实现的显式依赖注入；
+- 面板：2P 打开背包/技能/宠物/法宝/坐骑时，面板根节点与弹出层携带 `coop_slot`，面板脚本的 `PlayerData`/`RoleProp` 属性按槽位解析；全局别名恒为 1P，不存在视图交换；保存快照期间 `open_panel` 拒绝打开/切换；
 - 死亡判定：双人模式下只有全部玩家死亡才进入 `defeat`。
 
 **新代码约束**：不得直接假定 `/root/PlayerData` 或 `/root/RoleProp` 是当前操作者；使用 `BaseObject` / `BaseRole` 的槽位感知属性，或显式调用 `LocalCoop.data_for` / `props_for` / `input_for`。
@@ -553,7 +553,7 @@ classDiagram
 | 场景切换入口 | `Global.change_scene` 统一校验、清理、代次与切换；加载页用目标快照完成交接 | 新代码只走 `Global.change_scene`；加载页不直接切场景 |
 | 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
 | `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 六个直接消费者已用只读 `AtlasMetadataView`；`.data` 仅为序列化内部字段，不扩大无类型面 |
-| 2P 面板全局视图交换 | 改写 `PlayerData`/`RoleProp`，存档前必须恢复 1P | 目标为显式槽位上下文；与快照/共享账本联动，不局部删除保护 |
+| 2P 面板操作者 | 面板根节点/弹出层 `coop_slot` meta + 脚本属性 getter | 新增面板必须沿用槽位解析；不得改写全局 `PlayerData`/`RoleProp` |
 | 深层 `get_node()` / 绝对路径 | 存量场景与脚本 | 新代码禁止；重构时同步清理 |
 
 > 已登记在 [`missing_assets_registry.md`](../standards/missing_assets_registry.md) 的缺失资产回退（文本回退、atlas manifest 回退）属于**历史遗留例外**，不是新增回退的依据；资源恢复后必须移除对应回退并重新验收。

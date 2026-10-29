@@ -1,5 +1,13 @@
 extends Node
 
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 const MOUNT_SKILL_EFFECT := preload("res://Script/mount/mount_skill_effect.gd")
 const MOUNT_VISUAL := preload("res://Script/mount/mount_visual.gd")

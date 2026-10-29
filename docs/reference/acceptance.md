@@ -418,7 +418,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 构建期资源管线 | L1 八维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
 | AtlasMetadata View/消费者 | L1 八维 + 定向运行路径 | `view_for` 覆盖受影响运行时资源域；真实消费者正常/错误路径；相关关卡冒烟 | 只编译或只检查单个 API；跳过资源域/消费者 |
 | 应用/场景编排、缓存/池/异步 | L1 八维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
-| 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
+| 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；面板显式操作者、快照互斥与关闭恢复由 `LocalCoopPanelOperatorProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
 | 战斗来源/结算边界 | L1 八维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 

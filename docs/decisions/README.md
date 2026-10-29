@@ -41,7 +41,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) | 版本迁移使用三方语义合并，禁止整包覆盖 | Accepted | 版本迁移 |
 | [ADR-015](ADR-015-documentation-layering-and-single-source-of-truth.md) | 文档分层，`status.md` 为状态单一事实源 | Accepted | 文档维护 |
 | [ADR-016](ADR-016-display-canvas-window-and-hud-baseline.md) | 1280×800 画布、1600×1000 窗口与桌面 HUD 基线 | Accepted | 显示、HUD、多分辨率 |
-| [ADR-017](ADR-017-local-coop-profile-isolation.md) | 本地双人使用独立档案实例与槽位路由 | Accepted；§5 长期策略局部由 ADR-021 替代 | 隔离/共享规则继续有效；现有视图交换在迁移验收前仍运行 |
+| [ADR-017](ADR-017-local-coop-profile-isolation.md) | 本地双人使用独立档案实例与槽位路由 | Accepted；§5 长期策略由 ADR-021 替代并已迁移 | 隔离/共享规则继续有效；16-5 已删除全局视图交换 |
 | [ADR-018](ADR-018-runtime-resource-cache-prewarm-and-pooling.md) | 运行期缓存、分阶段预热与对象池 | Accepted | 性能、加载 |
 | [ADR-019](ADR-019-test-fixtures-outside-production-source.md) | 测试探针与夹具不进入生产源码 | Accepted | 测试、发布 |
 | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md) | 类型化视觉资产、显式后端与流式生命周期 | Accepted | 三层契约、请求回收、导出闭包 |

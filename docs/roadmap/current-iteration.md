@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本已完成；16-5~16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 16：档案会话、持久化与玩家槽位；16-1 矩阵、16-2A 全部 118 处已完成（业务侧 `save_game` 归零）、16-2B 会话身份与保存顺序、16-2C 校验、16-2D 补全边界、16-3 档案会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者与保存快照互斥已完成；16-6 尚未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 16；Phase 17 的方向、启动依赖与独立平台项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§6、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -170,10 +170,10 @@ Phase 16 的前置调查只确认现状，不把目标语义写成已实现。�
 
 ### 6.1 切片
 
-1. **Phase 16-5A 面板操作者绑定（规划）**：面板由打开者传入槽位、数据视图与容器依赖；面板不再通过 `PlayerData` 全局别名读取当前操作者；
-2. **Phase 16-5B 视图交换收口（规划）**：`suspend_player_view`/`resume_player_view` 的调用点随面板迁移同步删除；迁移完成前保留现有交换与保存前挂起保护，不得先移除；
-3. **Phase 16-5C 保存快照互斥（规划）**：保存快照生成期间禁止面板切换视图；快照与视图交换的互斥由单一入口保证；关闭/暂停/场景退出时恢复焦点、输入占用与连接；
-4. **Phase 16-5D ESC 与生命周期（规划）**：复用 `request_escape_close() -> bool` 与关卡 HUD 分发；面板关闭只关闭一层，不重复释放；面板释放后不残留信号与全局窗口引用。
+1. **Phase 16-5A 面板操作者绑定（已完成）**：面板根节点与 `CanvasLayer` 携带 `coop_slot`，31 个面板域脚本声明 `PlayerData`/`RoleProp` 属性并按槽位解析操作者；`Global.windows` 下的子面板与弹窗经祖先链继承槽位；
+2. **Phase 16-5B 视图交换收口（已完成）**：`suspend_player_view`/`resume_player_view`、`_view_swapped` 与 `_primary_*` 同批删除；`clear_runtime`、面板切换与关闭不再改写全局别名；`Global.get_player` 不再被视图交换改写；
+3. **Phase 16-5C 保存快照互斥（已完成）**：`MemoryClass.is_save_snapshot_in_progress()` 为唯一互斥入口，`open_panel` 在快照生成期间直接拒绝；快照不再需要视图挂起；关闭面板恢复暂停态与 `Global.windows`；
+4. **Phase 16-5D ESC 与生命周期（已完成）**：沿用 `request_escape_close()` 与关卡 HUD 分发；`close_panel` 只 `queue_free` 一次，`_on_panel_closed` 以 `CONNECT_ONE_SHOT` 收尾，释放层并恢复 `Global.windows` 与 `ui_slot`。
 
 ### 6.2 必须验证
 

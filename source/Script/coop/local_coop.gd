@@ -56,12 +56,6 @@ var _panel_scene: PackedScene
 var _switching_panel := false
 var _panel_was_paused := false
 var _session_buttons: CanvasLayer
-var _primary_runtime_data: Node
-var _primary_runtime_props: Node
-var _primary_hero: Node
-var _primary_data: Dictionary = {}
-var _primary_properties: Dictionary = {}
-var _view_swapped := false
 var _shared_soul := 0
 
 
@@ -83,11 +77,10 @@ func _ready() -> void:
 
 
 func is_enabled() -> bool:
-	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
 	return (
 		not OS.has_feature("mobile")
 		and is_instance_valid(secondary_data)
-		and bool(primary.get(SAVE_KEY, {}).get("启用", false))
+		and bool(PlayerData.player_data.get(SAVE_KEY, {}).get("启用", false))
 	)
 
 
@@ -163,13 +156,10 @@ func load_profile() -> void:
 func link_bags() -> void:
 	if not is_instance_valid(secondary_data):
 		return
-	var primary_data: Node = (
-		_primary_runtime_data if _view_swapped and is_instance_valid(_primary_runtime_data) else PlayerData
-	)
 	for key: String in BAG_KEYS:
 		if key != "宠物背包":
-			secondary_data.player_data[key] = primary_data.player_data[key]
-	_link_shared_pet_backpack(primary_data)
+			secondary_data.player_data[key] = PlayerData.player_data[key]
+	_link_shared_pet_backpack(PlayerData)
 	_link_shared_attribute_progression()
 	link_main_sword_array()
 
@@ -215,10 +205,7 @@ func _merge_progression_dict(primary: Dictionary, secondary: Dictionary) -> Dict
 func _link_shared_attribute_progression() -> void:
 	if not is_instance_valid(secondary_data):
 		return
-	var primary_data: Node = (
-		_primary_runtime_data if _view_swapped and is_instance_valid(_primary_runtime_data) else PlayerData
-	)
-	var training := BODY_TRAINING_DATA.normalize_state(primary_data.player_data.get("炼体", {}))
+	var training := BODY_TRAINING_DATA.normalize_state(PlayerData.player_data.get("炼体", {}))
 	var secondary_training := BODY_TRAINING_DATA.normalize_state(secondary_data.player_data.get("炼体", {}))
 	var combined_training := _merge_progression_dict(training, secondary_training)
 	var all_training: Dictionary = _merge_progression_dict(
@@ -226,13 +213,13 @@ func _link_shared_attribute_progression() -> void:
 	)
 	combined_training["p1"] = all_training.duplicate(true)
 	combined_training["p2"] = all_training.duplicate(true)
-	primary_data.player_data["炼体"] = combined_training
+	PlayerData.player_data["炼体"] = combined_training
 	secondary_data.player_data["炼体"] = combined_training
 	var catalog := _merge_progression_dict(
-		primary_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}),
+		PlayerData.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}),
 		secondary_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {})
 	)
-	primary_data.player_data[PlayerData.WANLING_CATALOG_LEVELS_KEY] = catalog
+	PlayerData.player_data[PlayerData.WANLING_CATALOG_LEVELS_KEY] = catalog
 	secondary_data.player_data[PlayerData.WANLING_CATALOG_LEVELS_KEY] = catalog
 
 
@@ -258,16 +245,18 @@ func refresh_passive_skills() -> void:
 func link_main_sword_array() -> void:
 	if not is_enabled():
 		return
-	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
-	secondary_data.player_data[PlayerData.MAIN_SWORD_ARRAY_KEY] = primary.get(PlayerData.MAIN_SWORD_ARRAY_KEY, "")
-	secondary_data.player_data[PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY] = primary[PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY]
+	secondary_data.player_data[PlayerData.MAIN_SWORD_ARRAY_KEY] = PlayerData.player_data.get(
+		PlayerData.MAIN_SWORD_ARRAY_KEY, ""
+	)
+	secondary_data.player_data[PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY] = PlayerData.player_data[
+		PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY
+	]
 
 
 func refresh_main_sword_array() -> void:
 	link_main_sword_array()
-	for props: Node in [
-		_primary_runtime_props if _view_swapped else RoleProp, RoleProp if _view_swapped else secondary_props
-	]:
+	for slot in [1, 2]:
+		var props: Node = props_for_slot(slot)
 		if not is_instance_valid(props):
 			continue
 		props.set_basic_prop()
@@ -342,35 +331,30 @@ func save_profile(snapshot: Dictionary) -> void:
 
 
 func shares_soul_with(profile: Node) -> bool:
-	return is_enabled() and (profile == PlayerData or profile == secondary_data or profile == _primary_runtime_data)
+	return is_enabled() and (profile == PlayerData or profile == secondary_data)
 
 
 func normalize_shared_soul() -> int:
-	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
-	var value := int(primary.get("coin_num", _shared_soul))
+	var value := int(PlayerData.player_data.get("coin_num", _shared_soul))
 	value += int(secondary_data.player_data.get("coin_num", _shared_soul)) - _shared_soul
 	return set_shared_soul(value)
 
 
 func set_shared_soul(value: int) -> int:
 	_shared_soul = clampi(value, PlayerData.SOUL_MIN, PlayerData.SOUL_MAX)
-	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
-	primary["coin_num"] = _shared_soul
+	PlayerData.player_data["coin_num"] = _shared_soul
 	secondary_data.player_data["coin_num"] = _shared_soul
 	return _shared_soul
 
 
 func clear_runtime() -> void:
-	suspend_player_view()
 	ui_slot = 1
-	for node in [secondary_passives, secondary_props, secondary_data, _primary_runtime_data, _primary_runtime_props]:
+	for node in [secondary_passives, secondary_props, secondary_data]:
 		if is_instance_valid(node):
 			node.free()
 	secondary_passives = null
 	secondary_props = null
 	secondary_data = null
-	_primary_runtime_data = null
-	_primary_runtime_props = null
 	_shared_soul = 0
 
 
@@ -438,7 +422,7 @@ func slot_for(node: Node) -> int:
 	if not is_instance_valid(node) or not is_enabled():
 		return 1
 	if node == PlayerData or node == RoleProp:
-		return 2 if _view_swapped else 1
+		return 1
 	if node.has_meta("coop_damage_slot"):
 		return int(node.get_meta("coop_damage_slot"))
 	if node is BaseMonster:
@@ -472,16 +456,13 @@ func data_for(node: Node) -> Node:
 
 
 func data_for_slot(slot: int) -> Node:
-	if slot == 2 and is_instance_valid(secondary_data):
-		return secondary_data
-	return _primary_runtime_data if _view_swapped else PlayerData
+	return canonical_profile_for_slot(slot)
 
 
+## 槽位权威档案：1P 恒为 Autoload，2P 仅在会话内有效；与视图状态无关。
 func canonical_profile_for_slot(slot: int) -> Node:
 	if slot == 2 and is_instance_valid(secondary_data):
 		return secondary_data
-	if slot == 1 and _view_swapped and is_instance_valid(_primary_runtime_data):
-		return _primary_runtime_data
 	return PlayerData
 
 
@@ -500,23 +481,20 @@ func pet_meta_key(key: String, slot: int) -> String:
 
 
 func props_for(node: Node) -> Node:
-	if slot_for(node) == 2:
-		return RoleProp if _view_swapped else secondary_props
-	return _primary_runtime_props if _view_swapped else RoleProp
+	return props_for_slot(slot_for(node))
 
 
 func props_for_slot(slot: int) -> Node:
-	if slot == 2:
-		return RoleProp if _view_swapped else secondary_props
-	return _primary_runtime_props if _view_swapped else RoleProp
+	if slot == 2 and is_instance_valid(secondary_props):
+		return secondary_props
+	return RoleProp
 
 
 func refresh_pellet_props() -> void:
 	if not is_enabled():
 		return
 	for slot in [1, 2]:
-		var profile := canonical_profile_for_slot(slot)
-		var props := props_for(profile)
+		var props := props_for_slot(slot)
 		if not is_instance_valid(props):
 			continue
 		props.get_last_prop()
@@ -527,11 +505,8 @@ func refresh_pellet_props() -> void:
 func increment_pellet_count(key: String) -> void:
 	if not is_enabled():
 		return
-	var primary: Dictionary = _primary_data if _view_swapped else PlayerData.player_data
-	primary[key] = mini(5, int(primary.get(key, 0)) + 1)
+	PlayerData.player_data[key] = mini(5, int(PlayerData.player_data.get(key, 0)) + 1)
 	secondary_data.player_data[key] = mini(5, int(secondary_data.player_data.get(key, 0)) + 1)
-	if _view_swapped and is_instance_valid(_primary_runtime_data):
-		_primary_runtime_data.player_data[key] = primary[key]
 	refresh_pellet_props()
 
 
@@ -541,9 +516,8 @@ func input_for(node: Node) -> CoopInput:
 
 func living_players() -> Array[BaseHero]:
 	var result: Array[BaseHero] = []
-	for props in [
-		_primary_runtime_props if _view_swapped else RoleProp, RoleProp if _view_swapped else secondary_props
-	]:
+	for slot in [1, 2]:
+		var props: Node = props_for_slot(slot)
 		if is_instance_valid(props) and is_instance_valid(props.source_player) and not props.source_player.is_death:
 			result.append(props.source_player)
 	return result
@@ -615,14 +589,18 @@ func _on_scene_changed() -> void:
 func open_panel(slot: int, type: String) -> void:
 	if is_instance_valid(_panel) or _switching_panel or not is_enabled() or not PANEL_PATHS.has(type):
 		return
+	if MemoryClass != null and MemoryClass.has_method("is_save_snapshot_in_progress"):
+		if bool(MemoryClass.is_save_snapshot_in_progress()):
+			return
 	ui_slot = slot
 	_panel_was_paused = get_tree().paused
 	get_tree().paused = true
-	_activate_slot_view(slot)
 	_panel_type = type
 	_panel_scene = load(PANEL_PATHS[type]) as PackedScene
 	var layer := CanvasLayer.new()
 	layer.layer = 30
+	# 弹出层携带槽位，供 Global.windows 下的子面板与弹窗解析操作者。
+	layer.set_meta("coop_slot", slot)
 	get_tree().current_scene.add_child(layer)
 	_panel_layer = layer
 	_previous_windows = Global.windows
@@ -634,13 +612,6 @@ func open_panel(slot: int, type: String) -> void:
 	_create_panel(slot, type)
 
 
-func _activate_slot_view(slot: int) -> void:
-	if slot == 2:
-		resume_player_view()
-	else:
-		suspend_player_view()
-
-
 func _create_panel(slot: int, type: String) -> void:
 	var path: String = PANEL_PATHS[type]
 	_panel = _panel_scene.instantiate()
@@ -649,7 +620,7 @@ func _create_panel(slot: int, type: String) -> void:
 	_panel.set_meta("coop_slot", slot)
 	_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 	if type == "背包":
-		var player: Variant = RoleProp.source_player
+		var player: Variant = props_for_slot(slot).source_player
 		if _has_property(_panel, "Player"):
 			_panel.set("Player", player if is_instance_valid(player) else null)
 		Global.configure_backpack_role_preview(_panel, player)
@@ -729,11 +700,9 @@ func _replace_panel(slot: int) -> void:
 	old_panel.tree_exited.disconnect(_on_panel_closed)
 	Global.clear_hover_popup()
 	old_panel.free()
-	suspend_player_view()
 	link_bags()
 	ui_slot = slot
-	if slot == 2:
-		resume_player_view()
+	_panel_layer.set_meta("coop_slot", slot)
 	_create_panel(slot, _panel_type)
 	_switching_panel = false
 
@@ -744,7 +713,6 @@ func _on_panel_closed() -> void:
 	if is_instance_valid(_panel_layer):
 		_panel_layer.queue_free()
 	Global.windows = _previous_windows if is_instance_valid(_previous_windows) else null
-	suspend_player_view()
 	ui_slot = 1
 	_panel = null
 	_panel_scene = null
@@ -755,48 +723,6 @@ func _on_panel_closed() -> void:
 		secondary_props.get_last_prop()
 	get_tree().paused = _panel_was_paused
 	MemoryClass.request_save("coop_panel_close")
-
-
-func suspend_player_view() -> bool:
-	if not _view_swapped:
-		return false
-	normalize_shared_soul()
-	secondary_data.player_data = PlayerData.player_data
-	for key: String in _primary_properties:
-		secondary_props.set(key, RoleProp.get(key))
-		RoleProp.set(key, _primary_runtime_props.get(key))
-	PlayerData.player_data = _primary_data
-	Global.get_player = _primary_hero if is_instance_valid(_primary_hero) else null
-	_view_swapped = false
-	return true
-
-
-func resume_player_view() -> void:
-	if _view_swapped or not is_instance_valid(secondary_data):
-		return
-	normalize_shared_soul()
-	_primary_data = PlayerData.player_data
-	if not is_instance_valid(_primary_runtime_data):
-		_primary_runtime_data = PLAYER_DATA_SCRIPT.new()
-		_primary_runtime_data.set_meta("coop_slot", 1)
-		_primary_runtime_data.player_data = _primary_data
-		_primary_runtime_data.process_mode = Node.PROCESS_MODE_DISABLED
-		add_child(_primary_runtime_data)
-		_primary_runtime_props = PROPS_SCRIPT.new()
-		_primary_runtime_props.set_meta("coop_slot", 1)
-		_primary_runtime_props.process_mode = Node.PROCESS_MODE_DISABLED
-		add_child(_primary_runtime_props)
-	_primary_runtime_data.player_data = _primary_data
-	_primary_hero = Global.get_player if is_instance_valid(Global.get_player) else null
-	Global.get_player = secondary_props.source_player if is_instance_valid(secondary_props.source_player) else null
-	_primary_properties.clear()
-	for info: Dictionary in RoleProp.get_property_list():
-		if (int(info.usage) & PROPERTY_USAGE_SCRIPT_VARIABLE) != 0 and str(info.name) not in ["PlayerData", "RoleProp"]:
-			_primary_properties[str(info.name)] = true
-			_primary_runtime_props.set(info.name, RoleProp.get(info.name))
-			RoleProp.set(info.name, secondary_props.get(info.name))
-	PlayerData.player_data = secondary_data.player_data
-	_view_swapped = true
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

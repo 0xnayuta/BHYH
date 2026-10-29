@@ -32,6 +32,7 @@ var _active_save_job: Dictionary = {}
 var _pending_background_saves: Dictionary = {}
 var _failed_background_saves: Dictionary = {}
 var _save_flush_in_progress := false
+var _save_snapshot_in_progress := false
 
 
 ## 后台保存：路径缺省取当前会话档案；调用方不能借路径参数越过会话身份。
@@ -396,14 +397,19 @@ func describe_save_error() -> String:
 
 func _prepare_player_save_data() -> Dictionary:
 	last_save_error = ""
-	var swapped := LocalCoop.suspend_player_view()
+	# 快照期间禁止打开/切换协作面板，保证共享账本与个体数据同批读取。
+	_save_snapshot_in_progress = true
 	var snapshot := _prepare_primary_player_save_data()
 	if not snapshot.is_empty():
 		LocalCoop.save_profile(snapshot)
 		LocalCoop.link_bags()
-	if swapped:
-		LocalCoop.resume_player_view()
+	_save_snapshot_in_progress = false
 	return snapshot
+
+
+## 快照互斥入口：面板打开/切换在快照生成期间必须拒绝。
+func is_save_snapshot_in_progress() -> bool:
+	return _save_snapshot_in_progress
 
 
 ## 规范化补全步骤：名字 -> 可调用对象。补全必须幂等；任一步抛错或返回

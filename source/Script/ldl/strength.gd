@@ -1,5 +1,14 @@
 extends Node2D
 class_name Strength
+
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const PET_GENERIC_EQUIPMENT_ICON := preload("res://Art/pet/pet_page_resources/pet_interfacev1270_id267_jpeg3_64x64.png")
 @onready var lh_text = $need_lh/lh
 @onready var old_zb = $old_zb/old_zb

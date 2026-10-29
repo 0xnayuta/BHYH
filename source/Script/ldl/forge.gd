@@ -1,6 +1,14 @@
 extends Node2D
 class_name Forge
 
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const FORGE_ITEM_BOX_SCENE: PackedScene = preload("res://Scene/back_pack/box_1.tscn")
 const FORGE_MATERIAL_BOX_SCENE: PackedScene = preload("res://Scene/ldl/forge_material_box.tscn")
 @onready var scw: Button = $LastItem/scw

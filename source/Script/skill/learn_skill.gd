@@ -1,4 +1,13 @@
 extends Node2D
+
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const FULLSCREEN_DESIGN_SIZE := Vector2(940, 590)
 const SKILL_FORMULA_DATA = preload("res://Script/skill/skill_damage_formula_data.gd")
 const FORMULA_FONT = preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")

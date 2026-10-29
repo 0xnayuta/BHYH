@@ -1,5 +1,14 @@
 extends Node2D
 class_name Decompose
+
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 @onready var remove_items: Button = $scw/RemoveItems
 @onready var item_list: GridContainer = $ScrollContainer/ItemList
 @onready var lh: Label = $DecomposeButton/need_lh/lh

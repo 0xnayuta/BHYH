@@ -1,5 +1,14 @@
 extends Node2D
 class_name Mosaic
+
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 @onready var bs_1: Button = $bs_1/bs_1
 @onready var bs_2: Button = $bs_2/bs_2
 @onready var bs_3: Button = $bs_3/bs_3

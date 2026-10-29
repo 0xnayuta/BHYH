@@ -90,6 +90,8 @@ func _run() -> void:
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
 			await _case_slot_ledger()
+		"LocalCoopPanelOperatorProbe":
+			await _case_panel_operator()
 		"LocalCoopSkillKeysProbe":
 			await _case_skill_keys()
 		"LocalCoopSwitchPassiveProbe":
@@ -597,6 +599,66 @@ func _case_slot_ledger() -> void:
 	p1.queue_free()
 	p2.queue_free()
 	await process_frame
+
+
+## 16-5：面板显式操作者、快照互斥与关闭/暂停恢复。
+func _case_panel_operator() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	_check(not coop.has_method("suspend_player_view"), "view swap entry removed")
+	_check(not coop.has_method("resume_player_view"), "view swap restore removed")
+
+	coop.open_panel(2, "背包")
+	await process_frame
+	await process_frame
+	_check(coop.has_panel(), "2P panel opens")
+	if not coop.has_panel():
+		return
+	var panel: Node = coop._panel
+	_check(coop.ui_slot == 2, "panel slot is 2P")
+	_check(panel.PlayerData == coop.secondary_data, "panel operator is 2P")
+	_check(panel.RoleProp == coop.secondary_props, "panel props operator is 2P")
+	_check(
+		not is_same(data.player_data, coop.secondary_data.player_data),
+		"global alias not swapped during 2P panel"
+	)
+	panel.PlayerData.player_data["角色昵称"] = "P2_PANEL"
+	_check(str(coop.secondary_data.player_data.get("角色昵称", "")) == "P2_PANEL", "panel write hits 2P")
+	_check(str(data.player_data.get("角色昵称", "")) != "P2_PANEL", "panel write does not hit 1P")
+	_check(int(coop._panel_layer.get_meta("coop_slot", 0)) == 2, "panel layer carries slot")
+
+	coop._switch_panel(1)
+	await process_frame
+	await process_frame
+	_check(coop.ui_slot == 1, "panel switches to 1P")
+	_check(coop.has_panel() and coop._panel.PlayerData == data, "1P panel operator is 1P")
+
+	# 快照互斥：快照生成期间拒绝打开/切换面板。
+	memory._save_snapshot_in_progress = true
+	coop.close_panel()
+	await process_frame
+	await process_frame
+	coop.open_panel(1, "背包")
+	await process_frame
+	_check(not coop.has_panel(), "panel open blocked during snapshot")
+	memory._save_snapshot_in_progress = false
+	_check(not memory.is_save_snapshot_in_progress(), "snapshot flag cleared")
+
+	coop.open_panel(1, "背包")
+	await process_frame
+	await process_frame
+	_check(coop.has_panel(), "panel reopens after snapshot")
+	_check(paused, "panel pauses tree")
+	var layer: Node = coop._panel_layer
+	_check(global.windows == layer, "windows points to panel layer")
+	coop.close_panel()
+	await process_frame
+	await process_frame
+	_check(not coop.has_panel(), "panel closed")
+	_check(not paused, "tree unpaused after close")
+	_check(global.windows == null, "windows restored after close [" + str(global.windows) + "]")
+	_check(coop.ui_slot == 1, "ui slot reset after close")
+	coop.clear_runtime()
 
 
 func _case_skill_keys() -> void:

@@ -1,4 +1,13 @@
 extends Node2D
+
+## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+var RoleProp: BaseRoleProperties:
+	get:
+		return LocalCoop.props_for(self) as BaseRoleProperties
+
 const FULLSCREEN_DESIGN_SIZE := Vector2(940, 590)
 @onready var bg: Sprite2D = $bg
 @onready var bg_2: Sprite2D = $bg/bg2
