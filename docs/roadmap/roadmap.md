@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 16 均已完成并归档；当前候选为 **Phase 17：玩法与表现模块边界**（17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫均未启动）；平台与发布验证按独立工作流推进。
+> **当前版本**：6.9。Phase 12~Phase 16 均已完成并归档；当前候选为 **Phase 17：玩法与表现模块边界**（17-1 调用面矩阵已完成，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)；17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动）；平台与发布验证按独立工作流推进。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -13,7 +13,7 @@
 | [Phase 14 类型化数据边界（AtlasMetadata 试点）](../archive/iteration_14_atlas_metadata_boundary.md) | 完成、归档 | 六个直接消费者均使用只读 View；旧入口、`source_masks` 与惰性配置已清除；边界守卫进入 `contract_scan.py` |
 | [Phase 15 应用编排与运行资源生命周期](../archive/iteration_15_app_orchestration_lifecycle.md) | 完成、归档 | 场景切换、加载、缓存/池/临时 UI 与退出生命周期；边界守卫进入 `contract_scan.py`；矩阵见 [`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md) |
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
-| Phase 17 玩法与表现模块边界 | 当前候选，未实现 | 命中归属、关卡阶段/结算、成长命令、HUD/输入/音频表现与模块 API；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 17 玩法与表现模块边界 | 当前候选；17-1 调用面矩阵已完成 | 命中归属、关卡阶段/结算、成长命令、HUD/输入/音频表现与模块 API；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -98,7 +98,7 @@ flowchart TD
 - HUD/面板用只读查询与明确命令，输入与音频表现不拥有领域规则。
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
-- 当前候选批次：17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫与阶段收口；详细任务见 [`current-iteration.md`](current-iteration.md)。
+- 当前候选批次：17-1 调用面矩阵（已完成）、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫与阶段收口；详细任务见 [`current-iteration.md`](current-iteration.md)。
 
 ## 4. 独立平台与内容工作
 
@@ -118,5 +118,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15 与 Phase 16 已全部完成并归档；当前候选为 Phase 17，批次只定义计划，未实施；Phase 17 的归属/阶段/成长/表现边界以 [`current-iteration.md`](current-iteration.md) 为准。
+- 架构目标与进度分开。Phase 15 与 Phase 16 已全部完成并归档；当前候选为 Phase 17，17-1 调用面矩阵已完成，其余批次未实施；Phase 17 的归属/阶段/成长/表现边界以 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) 与 [`current-iteration.md`](current-iteration.md) 为准。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

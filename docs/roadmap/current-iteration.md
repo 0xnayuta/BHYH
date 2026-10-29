@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵、17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫均未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2 命中与效果归属、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现、17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -33,19 +33,19 @@
 
 | 边界 | 当前事实（2026-10-29 统计） | 本阶段取证要求 |
 |:---|:---|:---|
-| 命中/归属 | `coop_damage_slot` 11 处（`base_monster`/`local_coop`）；`Global.get_player` 15 处 / 9 文件；`source_player` 314 处 | 17-1 枚举攻击者、弹体、召唤、法宝的来源字段与回退路径，标出仍假定 1P 的入口 |
+| 命中/归属 | `coop_damage_slot` 11 处（`base_monster`/`local_coop`）；`Global.get_player` 15 次 / 9 文件；`source_player` 360 次 / 61 文件 | 17-1 枚举攻击者、弹体、召唤、法宝的来源字段与回退路径，标出仍假定 1P 的入口 |
 | 攻击/弹体/召唤/法宝 | 153 个关卡场景、163 个关卡脚本；`role_bullet*.gd` 2 个；`Script/monster` 中 155 个文件涉及 bullet；`SummonBaseMonster` 子类 12 个；`BaseMagicWeapon` 相关 26 个 | 17-2 明确来源载体、池化复用清理与归属快照；补归属回归夹具 |
 | 池化 | `Global._pool_data` 四类（`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`），上限 80/32/24/32 | 17-2 验证复用节点不携带上一次的来源与战斗状态 |
 | 关卡阶段 | `current_stage` 535 行 / 97 文件；`base_through_level.gd` 1951 行；`victory.gd` 251 行、`defeat.gd` 178 行 | 17-3 枚举阶段推进、胜败判定、重战与结算保存的全部写入者 |
 | 结算保存 | 关卡域 `request_save` 13 处；`victory.gd` 3 处、`defeat.gd` 4 处（含互斥分支） | 17-3 验证通关/失败/重战每次只保存一次，失败不半提交 |
-| 数据写入 | `PlayerData.player_data` 直接写入 **145 行 / 44 文件**；域分布见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md) §7.2（关卡进度 58、宠物 32 为前两位） | 17-3/17-4 只迁移试点域的写入，不一次性全量改写 |
+| 数据写入 | `PlayerData.player_data` 下标赋值 **145 行 / 42 文件**（含属性赋值 197 行 / 44 文件）；热点 `base_through_level` 29、`game_announcement` 14、`base_monster` 13；分布见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) §7.3 | 17-3/17-4 只迁移试点域的写入，不一次性全量改写 |
 | 成长系统 | `Script/ldl` 16 个脚本、`Script/shop` 6 个、`Script/skill` 9 个；奖励结算涉及 `reward_interface` 等 2 个入口 | 17-4 枚举校验、扣除、产出的顺序与失败分支，找部分扣费/重复领取点 |
-| HUD/输入/音频 | `base_role.gd` 1254 行；`Input.is_action` 63 处 / 20 文件；`Global.add_sound` 139 处 / 35 文件 | 17-5 区分只读展示、输入映射与表现副作用，禁止表现层提交领域状态 |
-| 模块依赖 | `get_node`/`get_node_or_null` 共 698 处，其中字面深层路径 279 处；无统一模块公开 API 清单 | 17-6 产出受影响模块的公开 API 与依赖方向；深层路径只清试点边界 |
+| HUD/输入/音频 | `base_role.gd` 1254 行；`Input.is_action` 63 行 / 20 文件；`Global.add_sound` 138 次 / 34 文件；`Global.add_bgm` 125 次 / 94 文件 | 17-5 区分只读展示、输入映射与表现副作用，禁止表现层提交领域状态 |
+| 模块依赖 | `get_node`/`get_node_or_null` 共 699 处（168 + 531），字面深层路径 279 处 / 66 文件，`/root` 34 处 / 13 文件；无统一模块公开 API 清单 | 17-6 产出受影响模块的公开 API 与依赖方向；深层路径只清试点边界 |
 
 Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Phase 16 的档案会话、共享账本、槽位查询与契约门禁是**不变量**，任何变更需回到对应验收。
 
-## 2. Phase 17-1：玩法与表现调用面矩阵（只读调查）
+## 2. Phase 17-1：玩法与表现调用面矩阵（只读调查，已完成）
 
 **目标**：在不改运行时代码的前提下，建立命中归属、关卡阶段/结算、成长提交、HUD/输入/音频与模块依赖的完整调用面，确定每个状态的所有者、写入者、失败边界与试点顺序。
 
@@ -60,26 +60,28 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 7. 枚举试点模块的公开方法、信号与场景依赖，区分模块内部实现与对外契约；
 8. 区分静态定义、实例状态与表现资源，禁止把只读 Catalog/配置误算为运行时状态。
 
-### 2.2 交付矩阵
+### 2.2 交付矩阵（已完成）
 
-产出 `docs/reference/gameplay_module_matrix.md`（新建），至少包含：
+交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)。结论摘要：
 
 | 状态/能力 | 所有者 | 写入者 | 读取者 | 失效/清理事件 | 当前失败语义 |
 |:---|:---|:---|:---|:---|:---|
-| 攻击者/归属 | 待调查（英雄/弹体/召唤/法宝） | 攻击创建入口 | 伤害、Buff、吸血、无双、掉落 | 实体释放、池化归还 | 待调查：来源缺失时的回退 |
-| 对象池实例 | `Global` | 池化取出/归还 | 伤害文本、受击、音效 | 归还前清理、战斗结束 | 待调查：残留状态 |
-| 关卡阶段 | `BaseLevel` | 阶段推进函数 | 刷怪、HUD、结算 | 关卡释放、重战 | 待调查：重复推进 |
-| 胜败/结算 | `BaseThroughLevel` 与结算场景 | 判定入口 | HUD、地图、存档 | 返回地图、重战 | 待调查：重复保存/半提交 |
-| 成长提交 | 各域脚本 | 购买/锻造/学习/奖励 | 面板、背包、属性 | 面板关闭、失败回滚 | 待调查：部分扣费/重复领取 |
-| HUD/表现 | 面板与 HUD 脚本 | 查询命令 | 玩家 | 面板关闭、场景退出 | 待调查：表现层写领域状态 |
-| 模块 API | 待调查 | 模块作者 | 调用方 | 重构/迁移 | 待调查：无公开清单 |
+| 攻击者/归属 | `BaseMonster.apply_role_hit` + 载体字段 | 攻击创建入口、`coop_damage_slot` 快照 | 伤害、Buff、吸血、无双、掉落 | 命中结束恢复、实体释放 | 缺失来源回落 `RoleProp.source_player`（1P），无告警 |
+| 对象池实例 | `Global._pool_data` | `_take/_store` + `recycle_*` | 伤害文本、受击、音效 | 节点 `setup/recycle`、退出清理 | 取出不重置；容量满新建/超限释放 |
+| 关卡阶段 | `BaseLevel.current_stage` | `_on_create_control_timeout` + 子类/怪物 22 处直接赋值 | 刷怪、HUD、结算 | 关卡释放、重战 | 子类可绕过阶段表；无统一推进守卫 |
+| 胜败/结算 | `BaseLevel._leave_level_from_exit` + 结算场景 | 出口/死亡/结算 `_ready` | HUD、地图、存档 | 返回地图、重战 | 重复切换；保存 bool 丢弃；奖励无回滚 |
+| 成长提交 | 各域脚本 | 购买/锻造/学习/奖励 | 面板、背包、属性 | 面板关闭、失败回滚 | 扣费与产出顺序不一致；`forge` 之外无回滚 |
+| HUD/表现 | `BaseRole`/`RoleInformation`、面板 | 显式 `player` 注入、命令 | 玩家 | 面板关闭、场景退出 | `RoleProp.source_player` 兜底；表现场景可写档 |
+| 模块 API | 各模块脚本 | 模块作者 | 调用方 | 重构/迁移 | 无公开清单；深层路径 279 处；基础类无信号 |
 
-### 2.3 出口
+### 2.3 出口（已完成 2026-10-29）
 
-- 每个试点边界都有所有者、写入者、失败处理与是否可能重复提交的记录；
-- 归属/阶段/成长写入按业务域分类，标出迁移候选与不迁移理由；
-- 对象池复用清理项与残留风险可验证；
-- 仅文档与只读报告，不改生产代码；结果进入 `docs/reference/gameplay_module_matrix.md` 与 `docs/reference/status.md`。
+- [x] 每个试点边界都有所有者、写入者、失败处理与是否可能重复提交的记录；
+- [x] 归属/阶段/成长写入按业务域分类，标出迁移候选与不迁移理由；
+- [x] 对象池复用清理项与残留风险可验证；
+- [x] 仅文档与只读报告，不改生产代码；结果进入 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) 与 [`status.md`](../reference/status.md)。
+
+**17-1 结论对 17-2 的前置**：`apply_role_hit` 的快照恢复已存在；17-2 的优先修复点是 `RoleProp.source_player` 兜底、吸血/腾蛇阵/角色 5 的 1P 读取，以及弹体在根节点创建时的来源缺失。详见矩阵 §4.3、§11.2。
 
 ## 3. Phase 17-2：命中与效果归属
 

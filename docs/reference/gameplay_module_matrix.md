@@ -1,0 +1,467 @@
+# 玩法与表现调用面矩阵（Phase 17-1）
+
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）。17-2~17-7 均未启动；本页记录**当前实现事实**、所有者、写入者与失败边界，不把目标语义写成已实现。
+>
+> **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
+>
+> **方法**：以 `source/**/*.gd`、`source/*.gd`、`source/project.godot` 与 `source/Scene/**/*.tscn` 为唯一事实源，使用静态扫描（正则计数）与关键函数逐行阅读。下文计数是**静态行数/出现次数**，可能包含条件分支、重复调用与暂时不可达路径，不等同于运行期次数；口径在每张表标题处注明。
+>
+> **范围**：命中归属、弹体/召唤/法宝来源、对象池复用、关卡阶段与结算、成长系统提交、HUD/输入/音频表现、模块公开 API 与场景依赖。数值公式、动画帧率、掉落表、输入映射内容、存档格式与 Phase 16 已收口的档案/槽位边界不在本页改写范围。
+
+---
+
+## 1. 结论摘要
+
+1. **伤害归属有唯一入口，但有 1P 兜底**：怪物受击统一进入 `BaseMonster.apply_role_hit`（`base_monster.gd:1659`），解析顺序为「显式 `source_player` → 载体字段/祖先 → `LocalCoop.owner_hero` → `RoleProp.source_player`」。前四级可归属到 2P；最后一级是全局别名，命中后无法区分槽位。
+2. **归属字段分散在 6 类载体**：`BaseHero`、`RoleBullet`/`RoleBullet1`/`Role1Shallow`/`RolehmzBullet`、`BaseMagicWeapon`/`MagicWeaponHit`/`MgHit`、`SummonBaseMonster`、`MonsterBullet`、`BaseMonster`。英雄侧字段名为 `player`，召唤侧为 `summoner`/`player_reference`，怪物侧为 `get_player`，弹体还依赖祖先链与 `coop_damage_slot` 快照。
+3. **`coop_damage_slot` 是唯一显式归属快照**：共 11 处 / 2 文件，只在 `BaseMonster.apply_role_hit` 与 `bind_role_damage_source` 中写入并在结束时恢复；`LocalCoop.slot_for` 优先读取该 meta（`local_coop.gd:426`）。
+4. **`RoleProp.source_player` 仍是最大 1P 假设**：122 次 / 47 文件；每个 `BaseHero._ready` 都会覆盖它（`base_hero.gd:297`），2P 与 1P 的 `_ready` 顺序决定值；47 个文件中包含 5 个 `Scene` 表现脚本。
+5. **`Global.get_player` 只指向 1P**：15 次 / 9 文件；只在 `Global.call_hero` 的 `player_slot == 1` 分支赋值（`global.gd:5241`），2P 永不写入。用于提示、怪物目标与 `dj_sell` 的全局状态写入。
+6. **效果归属存在跨槽位读取**：吸血倍率取自全局 `RoleProp.roleprop`（`base_monster.gd:1884`），腾蛇阵等级取自 1P `PlayerData`（`:1688`），角色 5 被动等级取自 1P `PlayerData`（`:1806`）；治疗/无双入账已使用实际 `source_player`。
+7. **对象池只有 4 类**：`damage_text`/`mr_hurt`/`role_be_hit`/`sound_player`，上限 80/32/24/32（`global.gd:119-123`）。取出入口不重置节点；重置由各节点自己的 `setup()`/`recycle()` 完成。`damage_text` 另有 `prepare_for_pool()` 仅用于预热。
+8. **关卡阶段由 `BaseLevel.current_stage` 单一持有，但写入面分散**：535 行 / 97 文件引用，31 行含声明（30 处赋值）；`BaseLevel` 8 处按角色 x 坐标推进，关卡子类/怪物脚本 22 处直接赋值。阶段推进、刷怪与出口判定都在 `BaseThroughLevel`，但子类可绕过。
+9. **胜败切换有两套入口**：出口离开走 `_leave_level_from_exit`（`base_through_level.gd:1366`），死亡走 `BaseHero` 两个死亡分支（`base_hero.gd:716`、`:1680`）；两者都可能在 1.5s 等待后重复调用 `change_scene(defeat)`。
+10. **关卡域保存点 13 处**：`victory` 3、`defeat` 4、`hdzm` 1、`level_17` 1、`level_bxgh` 1、`level_esbxx` 1、`level_llbt` 1、`level_zhen_yao_tower` 1。`victory._ready` 与 `defeat` 的奖励分支**丢弃 `request_save` 返回值**；`defeat._on_lqjl_pressed` 只在内存置 `lq`，不保存。
+11. **成长系统已有可参考的事务实现**：`forge.gd` 采用「快照 → 先加产物并检查 bool → 扣材料 → 保存 → 失败恢复」；其余商店/合成/神铸/淬骨/强化/技能仍为「先扣费/先提交，再产出」或无回滚。
+12. **`PlayerData` 原语失败语义不一致**：`spend_soul`、`add_zb`、`add_fb` 返回 `bool`；`add_dj`、`add_xhp` 返回 `void` 且容量不足时静默丢弃。商店对可选堆叠物没有容量前置校验，扣费后可能拿不到道具。
+13. **HUD 已显式注入玩家**：`RoleInformation` 为 P1/P2 分别设置 `role_p1.player`/`role_p2.player`（`role_information.gd:47-60`）；`BaseRole` 仍保留 `RoleProp.source_player` 兜底（`base_role.gd:82`、`:98`）；其 `_set_values` 直接读全局 `RoleProp`，P2 HUD 的血蓝/经验/无双因此仍显示 1P 值。
+14. **输入与音频是表现层调用面**：`Input.is_action*` 63 行 / 20 文件；`CoopInput` 通过 `p2_` 前缀生成 2P 动作。`Global.add_sound` 138 次 / 34 文件，带 45ms 节流、每音效 4/8 与总声部 24/48 上限；`Global.add_bgm` 125 次 / 94 文件，每次实例化且不停止旧 BGM。
+15. **模块公开 API 无清单**：`BaseHero` 128、`BaseMonster` 103、`SummonBaseMonster` 69、`PlayerData` 124、`Global` 265 个公开方法；基础类没有自定义信号，模块间以直接调用为主。节点访问共 699 处（`get_node` 168 + `get_node_or_null` 531），其中字面深层路径 279 处 / 66 文件，`/root` 34 处 / 13 文件。
+16. **直接数据写入集中在关卡进度与菜单状态**：`PlayerData.player_data` 下标赋值 **145 行 / 42 文件**（含属性赋值 197 行 / 44 文件）；热点 `base_through_level.gd` 29、`game_announcement.gd` 14、`base_monster.gd` 13、`c_hange_clothes_jm.gd` 8、`zhen_yao_tower.gd` 8、`local_coop.gd` 6。按目录：`main_menu` 51、`base` 46、`level` 12、`back_pack` 8、`other_menu` 8、`coop` 6、`Scene` 5、`skill` 4。
+
+---
+
+## 2. 数据三分类与不变量
+
+| 类别 | 载体 | 所有者 | 本阶段边界 |
+|:---|:---|:---|:---|
+| **静态定义** | `AE.all_equipment`、`DataKeys`、技能/材料表、关卡刷怪表、场景路径常量 | 各模块常量与 `Resource` | 只读；不得在运行时改写 |
+| **实例状态** | `BaseLevel.current_stage`、`monster_group`、`BaseHero`/`BaseMonster` 字段、`LocalCoop` 槽位、`PlayerData.player_data` | `BaseLevel`、实体自身、`LocalCoop`、`PlayerData` | 本页只登记所有者/写入者；迁移按试点域闭环 |
+| **表现资源** | 对象池节点、伤害文本、受击特效、音效、BGM、HUD 控件 | `Global` 与各场景脚本 | 表现层不得提交领域状态；池化必须清理旧状态 |
+
+不变量：
+
+- 不改变伤害公式、Buff 数值、掉落规则、关卡时序、输入映射内容与动画帧率；
+- 不新增 Autoload，不重写 `base_hero`/`base_monster`/`base_through_level` 继承结构；
+- 档案会话、共享账本、槽位查询与 `request_save` 边界沿用 Phase 16 结论；
+- 一个职责迁移时同步迁移全部生产调用方，不保留永久 facade。
+
+---
+
+## 3. 总览矩阵
+
+| 状态/能力 | 所有者 | 写入者 | 读取者 | 失效/清理事件 | 当前失败语义 |
+|:---|:---|:---|:---|:---|:---|
+| 攻击者/归属 | `BaseMonster.apply_role_hit`（伤害侧）；各载体自身字段（来源侧） | 攻击创建入口、命中解析、`coop_damage_slot` 快照 | 伤害、Buff、吸血、无双、掉落、HUD | 命中结束恢复字段；实体释放；槽位切换 | 缺失来源时回落 `RoleProp.source_player` → 1P；无告警 |
+| 对象池实例 | `Global._pool_data` | `_take_pooled_node` / `_store_pooled_node` / 各 `recycle_*` | 伤害文本、受击特效、受击音效 | 归还前节点自清理；战斗结束；退出清理 | 取出不重置；容量满时新建；池上限满时 `queue_free` |
+| 关卡阶段 | `BaseLevel.current_stage` | `BaseLevel._on_create_control_timeout`（8 处）；关卡子类/怪物脚本 22 处直接赋值；`monster_14501` 跨节点写 | 刷怪、HUD、相机、出口判定、怪物 AI | 关卡释放；重战；切场景 | 子类可绕过阶段表；无统一 `advance_stage()` 守卫 |
+| 胜败/结算 | `BaseLevel._leave_level_from_exit`（胜）；`BaseHero` 死亡分支（败） | 出口输入/自动战斗、死亡等待、结算场景 `_ready` | HUD、地图、存档、重战 | 返回地图、重战、自动重试 | 重复 `change_scene`；保存 bool 被丢弃；奖励无回滚 |
+| 成长提交 | 各域脚本（商店/锻造/强化/合成/技能/奖励） | 购买、锻造、学习、领取按钮 | 面板、背包、属性、存档 | 面板关闭、失败回滚、场景退出 | 扣费与产出顺序不一致；部分域无回滚 |
+| HUD/表现 | `BaseRole`/`RoleInformation`、面板脚本 | 查询命令、显式 `player` 注入 | 玩家 | 面板关闭、场景退出 | `RoleProp.source_player` 兜底；表现场景可直接写档 |
+| 模块 API | 各模块脚本 | 模块作者 | 调用方 | 重构/迁移 | 无公开清单；深层路径 279 处；基础类无信号 |
+
+---
+
+## 4. 攻击者与归属
+
+### 4.1 载体、来源字段与创建入口
+
+| 载体 | 类/文件 | 来源字段 | 创建入口（静态调用数） | 归属解析 |
+|:---|:---|:---|:---|:---|
+| 英雄近战 | `BaseHero` / `base_hero.gd` | 自身即来源 | 场景实例；`Global.call_hero` | 直接传入 `apply_role_hit` |
+| 英雄弹体 | `RoleBullet`（4 个子类）、`RoleBullet1`、`Role1Shallow`、`RolehmzBullet` | `player` | `Global.add_role_bullet` 36、`add_role_bullet_1` 1、`add_role_bullet_1_safe` 2、`call_chase_bullet` 20、`call_fly_bullet` 36 | `player`；否则祖先 1~4 层；否则 `owner_hero`；否则 `RoleProp.source_player` |
+| 法宝 | `BaseMagicWeapon`（24 个子类）、`MagicWeaponHit`、`MgHit` | `player` / `source_weapon` | `Global.add_magic_weapon` 2（均传 `self`；另有 4 处 `BaseHero.add_magic_weapon()` 本地包装） | 载体字段 → `owner_hero` → `RoleProp.source_player` |
+| 召唤物 | `SummonBaseMonster`（5 个子类） | `summoner`、`player_reference`、meta `is_summon` | 4 处直接 `instantiate()` + `set_summon_properties` | `summoner` → `RoleProp.source_player` → 场景 `Hero` 下第一个 `BaseHero` |
+| 怪物弹体 | `MonsterBullet`（17 个子类） | `my_father`、祖父节点、`RoleProp.source_player` | `Global.add_bullet` 300、`add_weapon_bullet` 22（武器弹体）、`add_special_effect_bullet` 12、`load_monster_bullet_scene` 2 | 怪物侧伤害目标是英雄；`my_father` 用于伤害加成 |
+| 怪物 | `BaseMonster` | `get_player`（默认 `Global.get_player`） | 关卡刷怪表、召唤、分裂 | 受击时按 §4.2 解析 |
+
+补充：
+
+- `Global.add_new_bullet` 只有定义（`global.gd:3782`），无调用方；`add_role_bullet_1` 仅 1 处调用，`add_role_bullet_1_safe` 2 处。
+- `Global.add_role_bullet` 只设置 `_name`/`hit_dic`/`direction`，不设置 `player`；`RoleBullet._physics_process` 首次运行时从祖先链回填 `player`。
+- `Global.add_magic_weapon` 在 `source_player != null` 时设置 meta `coop_slot` 与 `player`（`global.gd:4689-4690`）；生产调用均传 `self`。
+- `SummonBaseMonster` 的召唤弹体带 `is_summon_bullet` 与 `summoner` meta（`summon_base_monster.gd:1284-1287`）。
+
+### 4.2 解析顺序与回退
+
+`BaseMonster._get_damage_source_player`（`base_monster.gd:1828`）：
+
+1. `target is BaseHero` → 直接返回；
+2. `RoleBullet`/`RoleBullet1`/`Role1Shallow` → `player`/`Player`/`my_owner` → 祖先 4 层；
+3. `BaseMagicWeapon` → `player`/`Player`；
+4. `MagicWeaponHit` → 父节点 `BaseMagicWeapon.player`；
+5. `MgHit` → `source_weapon.player`；
+6. `LocalCoop.owner_hero(target)` → 沿持有者字段回溯；
+7. **回落** `RoleProp.source_player`；
+8. 仍为空 → 返回 `null`，本次伤害被丢弃（`apply_role_hit` 直接返回 0）。
+
+`LocalCoop.slot_for`（`local_coop.gd:421`）的遗留解析顺序：
+
+1. 全局别名 `PlayerData`/`RoleProp` → 1；
+2. meta `coop_damage_slot`；
+3. `BaseMonster.get_player.coop_slot`；
+4. 祖先链 meta `coop_slot`；
+5. `owner_hero()` 回溯 `BaseHero.coop_slot`；
+6. `MyFather`/`owner_monster`/`source_monster` 回溯；
+7. 脚本路径前缀（`back_pack`/`skill`/`other_scene`/`magic_weapon`）→ `ui_slot`；
+8. 默认 1。
+
+### 4.3 仍假定 1P 的入口
+
+| ID | 位置 | 事实 | 影响 |
+|:---|:---|:---|:---|
+| GM-01 | `base_hero.gd:297` | 每个英雄 `_ready` 写 `RoleProp.source_player = self` | 2P 后加载会覆盖 1P；所有读全局别名的代码按最后加载者归属 |
+| GM-02 | `global.gd:5241` | `Global.get_player` 仅在 `player_slot == 1` 时赋值 | 2P 目标、提示、`dj_sell` 永远拿到 1P |
+| GM-03 | `base_monster.gd:1865` | `_get_damage_source_player` 最后回落 `RoleProp.source_player` | 弹体在根节点/无祖先时归 1P |
+| GM-04 | `role_bullet.gd:165`、`:405` | `player` 由祖先链回填；觉醒效果再回落 `role_props.source_player` | 脱离英雄节点的弹体归属不稳定 |
+| GM-05 | `summon_base_monster.gd:239` | `find_player_reference` 在 `summoner` 非英雄时回落全局别名，再取场景 `Hero` 第一个子节点 | 非英雄召唤（怪物/法宝）跟随 1P |
+| GM-06 | `base_monster.gd:544` | 怪物生成后 `get_player = Global.get_player` | 未绑定来源的怪物默认 1P |
+| GM-07 | `base_monster.gd:1884`、`:1688`、`:1806` | 吸血倍率读 `RoleProp.roleprop`；腾蛇阵等级读 1P `PlayerData`；角色 5 被动等级读 1P `PlayerData` | 2P 的攻击使用 1P 的吸血/技能等级 |
+| GM-08 | `base_role.gd:82`、`:98`、`:202` | HUD 在 `player == null` 时回落 `RoleProp.source_player`；`_set_values` 直接读全局 `RoleProp` | 正常路径由 `RoleInformation` 注入；P2 血蓝/经验/无双仍显示 1P 值 |
+| GM-09 | `dj_sell.gd:690`、`:945` | 面板用 `Global.get_player` 判空，随后写全局 `PlayerData`/`RoleProp` | 2P 操作时作用到 1P |
+| GM-10 | `monster_bullet.gd:769`、`:2579` | 敌方弹体读取 `RoleProp.source_player` 决定效果/目标 | 2P 场景下目标可能落到 1P |
+
+### 4.4 效果归属
+
+| 效果 | 读取/写入位置 | 归属判定 | 失败/漂移点 |
+|:---|:---|:---|:---|
+| 伤害 | `apply_role_hit`（`base_monster.gd:1659`） | 显式 `source_player` + `coop_damage_slot` 快照 | 来源为空 → 伤害 0 |
+| Buff | `apply_role_hit` 内的 `Global.add_buff`、弹体 `addeffect` | Buff 挂在目标；来源只用于数值 | 来源不影响 Buff 所有 |
+| 吸血 | `_apply_damage_vampirism`（`:1871`） | 治疗给 `source_player`，倍率读全局 `RoleProp` | 2P 用 1P 倍率（GM-07） |
+| 无双 | `cure_ws_value`（`:2551`） | `LocalCoop.props_for(source_player)` | 归属正确；入口在 `apply_role_hit` |
+| 腾蛇阵 | `apply_role_hit`（`:1688`） | 等级读 `PlayerData`，增伤写 `source_player.tszzs` | 2P 用 1P 等级（GM-07） |
+| 角色 5 被动 | `role5_bullet`（`:1797`） | 目标/治疗用 `get_player`，等级读 `PlayerData` | 2P 用 1P 技能等级（GM-07） |
+| 掉落/结算 | `Global.total_*_hit`、`Global.most_lianji`（连击统计） | 全局聚合 | 统计不区分槽位；不属于结算入账 |
+
+---
+
+## 5. 对象池
+
+### 5.1 四类池
+
+| 池 | 上限 | 预热数量 | 取出入口 | 归还入口 | 复用前清理 |
+|:---|:---|:---|:---|:---|:---|
+| `damage_text` | 80 | 12 | `Global.add_damage_text` | `damage_text.recycle` → `Global.recycle_damage_text` | `setup()` 重置数值/类型/暴击/目标/透明度；`prepare_for_pool()` 仅预热 |
+| `mr_hurt` | 32 | 16 | `Global.add_mr_hurt` | `monster_be_hit.recycle` → `Global.recycle_mr_hurt` | `_play_hurt_animation()` 重置可见/动画；`modulate` 在取出时置白 |
+| `role_be_hit` | 24 | 16 | `Global` 受击效果入口 | `role_be_hit_effect.recycle` → `Global.recycle_role_be_hit` | `setup()` 重置帧/可见/颜色/翻转/速度 |
+| `sound_player` | 32 | 6 | `Global.add_sound` | `_on_finished` → `Global.recycle_sound_player` | `setup()` 重置目标/流/音量；`finished` 时清空 |
+
+### 5.2 取出/归还路径
+
+```text
+_take_pooled_node(pool, scene_path)       # 弹出有效节点，否则 instantiate
+  └─ 不重置节点；不校验场景类型
+_attach_pooled_node(node, parent)         # 先 remove_child 再 add_child
+_store_pooled_node(node, pool, max_size)  # 超过上限直接 queue_free
+  └─ 节点自身 recycle()/setup() 负责状态清理
+_clear_runtime_pools()                    # 退出/重载：stop、stream=null、queue_free
+```
+
+- `add_damage_text` 另有 80 个活动节点上限与按物理帧重算（`global.gd:4171-4200`）；
+- `add_sound` 有 45ms 同音效节流、同音效 4/8、总声部 24/48 上限（`global.gd:495-498`、`:4278`）；
+- `add_mr_hurt` 按目标实例 55ms 节流（`global.gd:5332`）；
+- 池根节点 `RuntimePool` 挂在 `Global` 下，随 `_clear_runtime_pools` 释放。
+
+### 5.3 残留状态与验证点
+
+| ID | 事实 | 风险 | 17-2 验证 |
+|:---|:---|:---|:---|
+| GM-11 | `_take_pooled_node` 不调用 `prepare_for_pool`、不校验类型 | 节点未经过 `recycle()` 就回到池时携带旧文本/目标/动画 | 两轮复用后断言 `target`/`type`/`is_crit`/`visible` |
+| GM-12 | `damage_text` 的 `target` 是 `BaseObject` 弱引用 | 目标释放后仍被旧节点引用 | 目标 `queue_free` 后复用一轮 |
+| GM-13 | `mr_hurt` 的 `recycle()` 未清 `modulate` | 复用节点颜色由取出方重置；漏设时继承上一轮 | 连续受击两轮截图/属性 |
+| GM-14 | `role_be_hit`/`sound_player` 依赖自身 `_recycled` 守卫 | 双重归还被忽略，但节点可能已被 `queue_free` | 连续调用 `recycle()` 两次 |
+| GM-15 | 池内节点没有攻击者/来源字段 | 归属不因池化漂移；残留风险集中在显示状态 | 归属回归与池复用分开验证 |
+
+---
+
+## 6. 关卡阶段
+
+### 6.1 所有者与写入者
+
+- 所有者：`BaseLevel.current_stage`（`base_through_level.gd:37`），初值 0，合法阶段 1~4；
+- 引用面：535 行 / 97 文件；
+- 赋值点：31 行含声明（30 处赋值），`BaseLevel` 8 处 + 关卡子类/怪物脚本 22 处。
+
+| 写入者 | 位置 | 方式 |
+|:---|:---|:---|
+| `BaseLevel._on_create_control_timeout` | `base_through_level.gd:1647` | 按 `_role.position.x` 阈值推进；普通/双子场景两套阈值 |
+| `Level20` | `level_20.gd:24` | `_ready` 直接置 4 |
+| `Level35` | `level_35.gd:231` | 直接置 2 |
+| `Level46` | `level_46.gd:58`、`:99` | 置 1 / `BOSS_STAGE` |
+| `Level47` | `level_47.gd:261` | 置 1 |
+| `Level48` | `level_48.gd:471` | 置 `stage` 参数 |
+| `Level59` | `level_59.gd:497` | 置 `stage` 参数 |
+| `LevelBxgh` | `level_bxgh.gd:319` | 置 1 |
+| `LevelEsbxx` | `level_esbxx.gd:210` | 置 1 |
+| `LevelLhhj` | `level_lhhj.gd:64` | 置 1 |
+| `LevelLlbt` | `level_llbt.gd:239`、`:248` | 置 1 |
+| `LevelSssl` | `level_sssl.gd:137-151` | 按分支置 1~4 |
+| `LevelZhenYaoTower` | `level_zhen_yao_tower.gd:342` | 置 1 |
+| `NorthContinentLevel` | `north_continent_level.gd:203`、`:419` | `index + 1` / 重置 0 |
+| `game4_imported_level` | `game4_imported_level.gd:195` | 置 `stage` 参数 |
+| `monster_14501` | `monster_14501.gd:350` | 给 `next_boss.current_stage` 写 `+1`（跨节点写） |
+
+### 6.2 推进与刷怪
+
+| 能力 | 入口 | 行为 | 失败边界 |
+|:---|:---|:---|:---|
+| 阶段推进 | `_on_create_control_timeout` | x 阈值逐级 0→1→2→3→4；每次定时器触发也预载与刷怪 | 无统一 `advance_stage`；只前进不后退；瞬移时逐次触发补齐 |
+| 刷怪前置 | `check_can_create(stage)` | 阶段 1~4、`monster_group` 有剩余、存活怪 < `6 * CreateMonsterCount` | 表缺失/坐标为空 → `push_error` 并清空该阶段 |
+| 刷怪 | `level_create_monster(stage)` | 从 `monster_group`/`monster_position_x/y` 队首取一条并 `Global.create_monster` | 数组为空直接返回；不补位 |
+| 资源预载 | `_request_stage_resource_preload(stage + 1)` | 预载下一阶段 | 阶段越界不预载 |
+| 相机 | `change_mysee` | 按 `current_stage` 调 `max_right` | 子类可覆写 |
+| 阶段完成 | `check_can_pass` | 当前阶段表空且存活怪 0 | 只对 1~4 有效 |
+| 出口 | `check_can_exit`/`one_check_can_exit` | 当前阶段为最后阶段且清空 | `one_check_can_exit` 为快速路径 |
+| 全部完成 | `always_can_pass` | 恒真，供特殊关卡覆写 | 子类可绕过清怪条件 |
+
+### 6.3 胜败与出口切换
+
+- 胜：`_physics_process` 在出口条件满足时 `preload_next(victory.tscn)` 并启用 `exit`/`exit_2`；玩家按 `Exit` 或 `p2_Exit`，或自动战斗开启时，调用 `_leave_level_from_exit`（`base_through_level.gd:1366`）。
+- `_leave_level_from_exit` 先 `add_tg(level_stage)` 写入通关进度，再按关卡类型切换（`victory.tscn`、剧情场景或重战）。
+- 败：`BaseHero` 两条死亡分支在 1.5s 后检查 `LocalCoop.all_players_dead()`，然后 `change_scene(defeat.tscn)`（`base_hero.gd:716`、`:1680`）。
+- 自动重试：胜利场景 `_auto_rechallenge` 与失败场景 `_auto_rechallenge` 都调用带 `_is_rechallenging` 守卫的重战入口；关卡侧 `_restart_level_for_auto_battle` 直接保存并重载。
+
+### 6.4 重复推进/切换候选
+
+| ID | 事实 | 风险 |
+|:---|:---|:---|
+| GM-16 | 两个死亡分支各自 `await 1.5s` 后调用 `change_scene(defeat)` | 双人同时死亡可触发两次切换 |
+| GM-17 | `change_scene` 无「切换中」早退守卫 | 出口/自动战斗/死亡路径并发时重复加载 |
+| GM-18 | 子类/怪物 22 处直接写 `current_stage` | 绕过阶段表与完成判定，可能跳过 `monster_group` 清理 |
+| GM-19 | `monster_14501` 跨节点写 `next_boss.current_stage` | 阶段所有权越界；Boss 自身状态可能未初始化 |
+| GM-20 | `_on_create_control_timeout` 只前进不后退；`NorthContinentLevel` 可重置 0 | 重开/传送后阶段与已清怪物不一致 |
+
+---
+
+## 7. 胜败与结算
+
+### 7.1 结算场景提交
+
+| 场景/入口 | 写入 | 保存 | 守卫 | 失败语义 |
+|:---|:---|:---|:---|:---|
+| `victory.gd:_ready`（`:24`） | `PlayerData.player_data["关卡评价"]`、`MainSet` 一次性解锁标志、BGM/UI | `_save_completed_level()`（`:72`）→ `request_save("level_victory")` | 无重复 `_ready` 重入 | 返回值被丢弃；保存失败无提示 |
+| `victory.gd:_on_return_map_pressed`（`:75`） | 无领域写入 | `request_save("level_victory_return")` 在 `change_scene` 后 | 无按钮重入守卫 | 第二次点击可再次切换/保存 |
+| `victory.gd:_on_rechallenge_pressed`（`:154`） | 重置 HP/MP/无双 | 无 | `_is_rechallenging` | 关卡路径为空时提示 |
+| `defeat.gd:_on_return_map_pressed`（`:78`） | 无领域写入 | `request_save("level_defeat_return")` | 无按钮重入守卫 | 第二次点击可再次切换/保存 |
+| `defeat.gd:_on_js_pressed`（`:144`） | `PlayerData.add_zb("xczg", ...)` | `request_save("level_defeat_reward")` | 无重复领取守卫 | 可能重复发放；保存 bool 丢弃 |
+| `defeat.gd:_on_yjjj_pressed`（`:151`） | `zyforever = true` | `request_save("level_defeat_reward")` | 幂等赋值 | 保存 bool 丢弃 |
+| `defeat.gd:_on_lqjl_pressed`（`:163`） | 7 种道具入包 | **无保存** | 仅内存 `lq` | 重载/重进可再次领取；道具满时静默丢失 |
+| `defeat.gd:_on_jj_pressed`（`:158`） | 无 | 无 | 无 | 纯文本分支 |
+
+### 7.2 关卡域保存点（13 处）
+
+| # | 文件 | reason | 触发 | 守卫/顺序 |
+|:---|:---|:---|:---|:---|
+| 1 | `victory.gd:72` | `level_victory` | 胜利 `_ready` | 无返回值判读 |
+| 2 | `victory.gd:79` | `level_victory_return` | 镇妖塔返回 | `change_scene` 后保存 |
+| 3 | `victory.gd:123` | `level_victory_return` | 普通地图返回 | `change_scene` 后保存 |
+| 4 | `defeat.gd:83` | `level_defeat_return` | 镇妖塔返回 | `change_scene` 后保存 |
+| 5 | `defeat.gd:112` | `level_defeat_return` | 普通地图返回 | `change_scene` 后保存 |
+| 6 | `defeat.gd:147` | `level_defeat_reward` | 接受黑暗力量（装备） | 无重复领取守卫 |
+| 7 | `defeat.gd:153` | `level_defeat_reward` | 永久拒绝 | 幂等标志 |
+| 8 | `level_zhen_yao_tower.gd:484` | `tower_floor_advance` | 进入下一层 | `prepare_floor_plan` 后、切场景前 |
+| 9 | `level_17.gd:48` | `level_17_gate` | 消耗 `bsz` 过门 | 扣除后、切场景前 |
+| 10 | `level_bxgh.gd:402` | `level_bxgh_boss` | Boss 死亡 | `_boss_death_handled` |
+| 11 | `level_esbxx.gd:296` | `level_esbxx_tier` | 星宿层进度变化 | `progress_changed` |
+| 12 | `level_llbt.gd:227` | `level_auto_battle` | 自动战斗重开 | 返回 bool 未被调用方判读 |
+| 13 | `hdzm.gd:61` | `level_hdzm_challenge` | 挑战入口 | `change_scene` 后保存 |
+
+全仓 `request_save` 当前 **117 处 / 60 文件**（Phase 16 收口时为 116 / 59）。
+
+### 7.3 直接数据写入（Phase 17 范围）
+
+`PlayerData.player_data` 的静态赋值口径：
+
+| 口径 | 行数 | 文件数 | 说明 |
+|:---|:---|:---|:---|
+| 下标赋值 `player_data[...] =` | 145 | 42 | Phase 16 归档记录为 141 行 / 44 文件（含 `+=` 与 `erase`）；口径不同，不直接做差 |
+| 含属性赋值 `player_data.attr =` | 197 | 44 | 属性赋值多见于关卡进度键 |
+
+| 文件 | 下标写入行 | 迁移归属 |
+|:---|:---|:---|
+| `base_through_level.gd` | 29 | 17-3：关卡进度；`add_tg` 一族 |
+| `game_announcement.gd` | 14 | 不在 17 试点；公告/版本标志 |
+| `base_monster.gd` | 13 | 17-2/17-3：怪物与掉落 |
+| `c_hange_clothes_jm.gd` | 8 | 面板域；Phase 16 已审操作者 |
+| `zhen_yao_tower.gd` | 8 | 17-3：镇妖塔进度 |
+| `local_coop.gd` | 6 | Phase 16 边界，不重开 |
+| `zhu_xian_sword_page.gd` | 5 | 面板域 |
+| `level_zhen_yao_tower.gd` | 5 | 17-3：镇妖塔关卡进度 |
+| `base_hero.gd` | 4 | 17-2/17-3 |
+| `back_pack.gd` | 4 | 面板域 |
+
+按目录分布：`main_menu` 51、`base` 46、`level` 12、`back_pack` 8、`other_menu` 8、`coop` 6、`Scene` 5、`skill` 4、`ldl` 1。17-3 只迁移 `base_through_level`/`level` 的进度写入；17-4 只迁移成长域已识别脚本；不以「把 145 行改成统一 API」为目标。
+
+### 7.4 半提交/重复保存候选
+
+| ID | 事实 | 风险 | 17-3 验证 |
+|:---|:---|:---|:---|
+| GM-21 | `victory._ready` 先写评价/解锁标志再保存，返回值丢弃 | 保存失败时本轮进度只在内存；退出即丢 | 注入写失败，确认提示与状态 |
+| GM-22 | `defeat` 奖励先发物品再保存，无回滚 | 保存失败时物品只在内存；重复进入可再领 | 两次进入失败场景对比背包 |
+| GM-23 | `defeat._on_lqjl_pressed` 不保存 | 重载后重复领取；`lq` 不持久 | 领取后重载/重进 |
+| GM-24 | `victory`/`defeat` 返回按钮无重入守卫 | 双击触发两次 `change_scene` 与两次保存 | 连续点击两次 |
+| GM-25 | 两个死亡分支各自等待后切换 | 双人同时死亡可能重复切换 | `coop_probe_runner` 全灭用例 |
+| GM-26 | `base_through_level.gd` 直接写 29 行关卡进度（含 `add_tg`） | 通关进度在多处写；失败无回滚 | 通关/重战/退出各一次 |
+
+---
+
+## 8. 成长提交
+
+### 8.1 `PlayerData` 原语语义
+
+| 原语 | 返回 | 不足/失败行为 | 调用方是否普遍判读 |
+|:---|:---|:---|:---|
+| `spend_soul(value)` | `bool` | 不足返回 `false`，不扣 | 否；多数先 `get_soul()` 预检 |
+| `add_soul(value)` | `int` | 上限钳制 | 不适用 |
+| `add_zb(name, level, data)` | `bool` | 装备页满返回 `false` | 打造/锻造判读；商店循环忽略 |
+| `add_fb(name, level, wx, data)` | `bool` | 装备页满返回 `false` | 同上 |
+| `add_dj(name, number)` | `void` | 道具页满**静默丢弃** | 无法判读 |
+| `add_xhp(name, number)` | `void` | 消耗品页满**静默丢弃** | 无法判读 |
+| `remove_dj(name, page, num)` | `Dictionary` | 页/数量不足时返回 0 数量 | 多数忽略 |
+| `remove_xhp(name, page, num)` | `Dictionary` | 只处理指定页首个堆叠；不足时按可用数量截断 | 多数忽略 |
+
+### 8.2 各域提交流程
+
+| 域 | 入口 | 校验 | 扣除 | 产出 | 保存 | 回滚 |
+|:---|:---|:---|:---|:---|:---|:---|
+| 普通商店 | `shop_item.gd:132` `add_item_toplayer` | 灵魂、装备/宠物装备空位；道具/消耗品**不校验容量** | `spend_soul` | `add_zb`/`add_fb` 循环、`add_dj`、`add_xhp`、`add_pet_backpack_item` | **无** | 无 |
+| 神秘商店 | `mystery_shop_item_box.gd:150` | 购买次数、灵魂 | `spend_soul` + 次数减 1 | 按类型 `add_zb`/`add_fb`/`add_dj`/`add_xhp` | 1 次 | 无 |
+| 锻造（当前） | `forge.gd:558` `_on_froge_pressed` | 制作书、灵魂、材料、宝珠数据、装备类型 | `remove_all()` + `spend_soul` | 先 `add_zb`/`add_fb` 并判读 bool | 1 次，失败恢复 | **有**：`player_data` 快照 + `_restore_forge_state` |
+| 锻造（遗留） | `forge.gd:497` `_on_froge_pressed_legacy` | 同上 | 先产出、后 `remove_all` + `spend_soul` | 忽略 bool | 无 | 无；**无调用方** |
+| 神铸 | `divine_forge.gd:95` | 品质、阶段、石头数量 | `_consume_item_all_pages` 先扣 | 修改装备 `神铸阶段` | 1 次 | 无 |
+| 淬骨 | `bone_forge.gd:108` | 神骨、阶段、神火数量 | 先扣 3 个神火 | 随机成功/失败；成功改属性 | 1 次 | 无（失败材料照扣，符合设计） |
+| 强化 | `strength.gd:131` | 装备、上限、双材料、灵魂 | `spend_soul` + `remove_dj` ×2 | 等级 +1、属性刷新 | 1 次，**失败分支也保存** | 无 |
+| 合成 | `synthesis.gd:121` | 配方、灵魂 | `spend_soul` | `add_zb`/`add_dj`/`add_fb`（忽略失败） | 1 次 | 无 |
+| 主动技能 | `zd_skill.gd:675` | 技能、等级、书/灵魂 | `_consume_skill_book` 或 `spend_soul` | 技能等级 +1 | `refresh_infor` 内 1 次 | 无 |
+| 被动技能 | `bd_skill.gd:252` `up_level`（单技能按钮）；`:218` 一键 | 等级上限、灵魂 | `spend_soul` | 被动等级 +1 | 每次按钮 1 次 | 无 |
+| 奖励发放 | `reward_interface.gd:12` `_process` | **无容量校验** | 可选使用物品 | 逐项 `add_*` | 1 次（首帧后） | 无 |
+| 任务领取 | `basic_task.gd:458` `_on_lqjl_pressed` | 完成状态/已领取/日常 | 无 | `add_reward_info` 延迟发放 | 1 次，**先于发放** | 无 |
+
+### 8.3 失败模式
+
+| ID | 事实 | 风险 |
+|:---|:---|:---|
+| GM-27 | 商店对道具/消耗品不校验页容量；`add_dj`/`add_xhp` 静默失败 | 扣灵魂后道具丢失 |
+| GM-28 | 神秘商店扣费/次数后产出失败无回滚 | 同上；次数也损失 |
+| GM-29 | 强化在失败分支也 `request_save` | 失败也写盘；无状态变化 |
+| GM-30 | 神铸/淬骨先扣材料后改装备；保存失败不回滚 | 保存失败时内存已变，重载回退；无提示 |
+| GM-31 | 合成扣灵魂、清空放入列表后产出失败无回滚 | 材料/灵魂损失 |
+| GM-32 | 技能书/灵魂先扣再升级；`refresh_infor` 无视失败保存 | 失败也写盘；书扣除后升级失败无回滚 |
+| GM-33 | 奖励界面由表现场景直接发物品并保存 | 容量满时部分/全部丢失；无提示 |
+| GM-34 | 任务领取先置已领取标志，再延迟发奖，并立即保存 | 保存调用先于奖励场景 `_process` 发奖；二次保存失败则奖励丢失 |
+| GM-35 | `defeat._on_lqjl_pressed` 无保存 | 重进重复领取 |
+| GM-36 | `forge._on_froge_pressed_legacy` 无调用方 | 死代码；迁移时删除或明确保留理由 |
+
+---
+
+## 9. HUD/输入/音频
+
+### 9.1 HUD/面板
+
+| 入口 | 读写 | 归属 | 事实 |
+|:---|:---|:---|:---|
+| `role_information.gd:37` | 注入 `player`/`player_p2` | 显式槽位 | P1/P2 HUD 各自注入；meta `coop_slot` 1/2 |
+| `base_role.gd:82`、`:98` | 读 `RoleProp.source_player` | 兜底 1P | 仅在未注入时生效 |
+| `base_role.gd:202` `_set_values` | 读 `RoleProp` | 全局 1P | P2 HUD 继承该方法，HP/MP/经验/无双仍显示 1P 值；`player` 只用于护盾/治疗/技能图标 |
+| `transmogtified_box.gd:59` | 写 `PlayerData.player_data[TRANSMOG_LIST]` + 保存 | 面板命令 | 表现场景提交领域状态（合法面板操作） |
+| `reward_interface.gd:12` | `_process` 发奖 + 保存 | 表现场景 | 表现层直接发放奖励（GM-33） |
+| `skill_icon.gd:5` | 经 `LocalCoop.data_for/props_for` 解析槽位；缺失时读 `/root/PlayerData`/`/root/RoleProp` | 面板查询 | 正常路径按槽位；回落为 1P Autoload |
+
+### 9.2 输入
+
+| 项 | 事实 |
+|:---|:---|
+| 基础动作 | `project.godot` `[input]` 共 24 个动作（含调试动作） |
+| 2P 映射 | `CoopInput.action_name` 在 2P 时加 `p2_` 前缀（`coop_input.gd:9`）；`LocalCoop` 生成对应 action |
+| 读取面 | `Input.is_action*` 63 行 / 20 文件；热点 `base_hero` 16、`role1` 9、`backpack` 6、`ne_zha_hero` 4 |
+| 领域读取 | `base_through_level` 读 `Exit`/`p2_Exit` 决定离开关卡；`base_hero` 读技能/移动动作 |
+| 边界 | 输入读取只作为条件；保存由出口/结算/进度函数显式调用（§7.2），未在输入读取行内写档 |
+
+### 9.3 音频
+
+| 项 | 事实 |
+|:---|:---|
+| 受击音效 | `Global.add_sound` 138 次 / 34 文件；池上限 32；45ms 节流；同音效 4/8、总声部 24/48 |
+| BGM | `Global.add_bgm` 125 次 / 94 文件；每次实例化 `bgm.tscn`，不停止旧实例 |
+| 热点 | `role_4` 20、`role_5` 19、`role1` 18、`role_3` 16、`role_2` 10 |
+| 音量/开关 | `MainSet.set_data["MusicFB_2"]`、`RoleOrMonsterHit`；由 `game_set.gd` 写入 |
+| 边界 | 音效是纯表现；不参与伤害/归属；BGM 重叠需在 17-5 决定是否收口 |
+
+### 9.4 表现层提交领域状态点
+
+| ID | 位置 | 事实 |
+|:---|:---|:---|
+| GM-37 | `reward_interface.gd:12` | 表现场景在 `_process` 发奖励并保存 |
+| GM-38 | `choose_item.gd:91` | 选择界面创建奖励场景后自身 `queue_free` |
+| GM-39 | `transmogtified_box.gd:59` | 幻化面板直接写 `PlayerData` 并保存 |
+| GM-40 | `victory.gd:24` | 结算 UI 在 `_ready` 写评价/解锁标志 |
+| GM-41 | `defeat.gd:144`、`:163` | 失败 UI 直接发装备/道具 |
+
+上述点中，GM-39/GM-40 属于「面板命令」而非纯展示；17-5 的目标是区分只读展示与显式命令，不是禁止面板提交。
+
+---
+
+## 10. 模块 API 与场景依赖
+
+### 10.1 公开面
+
+| 模块 | 公开方法数 | 关键公开方法 | 调用方 |
+|:---|:---|:---|:---|
+| `BaseLevel`（`base_through_level.gd`） | 14 | `get_active_monsters`、`check_can_create/pass/exit`、`level_create_monster`、`change_mysee`、`add_tg`、`set_through` | 86 个关卡脚本 `extends BaseLevel`；HUD/怪物/相机 |
+| `BaseHero` | 128 | 移动、攻击、技能、法宝、宠物、HUD 查询 | 输入、关卡、怪物、面板 |
+| `BaseMonster` | 103 | 受击、AI、掉落、Buff、无双 | 关卡、弹体、召唤、技能 |
+| `SummonBaseMonster` | 69 | `set_summon_properties`、目标搜索、伤害、跟随 | 法宝、英雄技能、宠物 |
+| `BaseMagicWeapon` | 7 | `set_magic_weapon_player`、`get_attack_snapshot`、`use_skill` | 英雄、法宝子类 |
+| `LocalCoop` | 35 | `slot_for`、`data_for`、`props_for`、`all_players_dead`、`open_panel` | 全局、面板、战斗 |
+| `PlayerData` | 124 | 背包/灵魂/技能/任务/存档原语 | 全仓 |
+| `Global` | 265 | 场景、资源、池、音效、实体工厂 | 全仓 |
+
+- 基础类均无自定义 `signal`；模块间以直接方法调用为主，确认对话框使用 `Signals.choose_pressed`（11 处）。
+- `BaseLevel.set_through()` 是空钩子（`base_through_level.gd:1517`），子类用于相机/出口扩展。
+- `BaseMagicWeapon` 有 24 个子类；`RoleBullet` 4 个、`MonsterBullet` 17 个、`SummonBaseMonster` 5 个。
+
+### 10.2 依赖方向与深层路径
+
+| 项 | 事实 |
+|:---|:---|
+| 节点访问 | `get_node` 168 + `get_node_or_null` 531 = **699 处 / 144 文件** |
+| 字面深层路径 | **279 处 / 66 文件**；热点 `pet_interface` 117、`zd_skill` 26、`base_role` 12、`player_data` 7、`global` 6 |
+| `/root` 单例 | **34 处 / 13 文件**；热点 `player_data` 7、`base_role_properies` 6、`base_magic_weapon` 4 |
+| 场景规模 | 153 个关卡 `.tscn`、163 个关卡 `.gd`；86 个脚本直接 `extends BaseLevel` |
+| 场景依赖 | 关卡场景固定 `Hero`/`Monster`/`CanvasLayer` 等节点；`BaseLevel` 用 `@onready` 直接取 |
+| 通信 | 父调用子公开方法；子节点回写父级字段（如 `next_boss.current_stage`），无信号解耦 |
+
+### 10.3 试点边界
+
+| 批次 | 试点文件 | 理由 | 不迁移 |
+|:---|:---|:---|:---|
+| 17-2 | `role_bullet.gd`、`monster_bullet.gd`、`summon_base_monster.gd`、`base_magic_weapon.gd`、`base_monster._get_damage_source_player`/`apply_role_hit` | 归属字段集中，已有 `coop_damage_slot` 快照 | 不重写弹体/召唤继承 |
+| 17-3 | `base_through_level.gd`、`victory.gd`、`defeat.gd`、`level_zhen_yao_tower.gd` | 阶段/结算所有者清晰，失败边界可枚举 | 不改关卡时序/数值 |
+| 17-4 | `shop_item.gd`、`mystery_shop_item_box.gd`、`forge.gd`、`divine_forge.gd`、`bone_forge.gd`、`strength.gd`、`synthesis.gd`、`zd_skill.gd`、`bd_skill.gd`、`reward_interface.gd`、`basic_task.gd` | 已有 `forge` 参考事务；失败模式集中 | 不引入通用事务框架 |
+| 17-5 | `base_role.gd`、`role_information.gd`、`reward_interface.gd`、`transmogtified_box.gd`、`Global.add_bgm`/`add_sound` | 表现层与命令边界可区分 | 不改输入映射/HUD 布局 |
+| 17-6 | `pet_interface.gd`、`zd_skill.gd`、`base_role.gd`、`base_magic_weapon.gd` 的深层路径 | 279 处中前三文件占 155 处 | 不全仓替换 `get_node` |
+
+---
+
+## 11. 17-1 出口与 17-2 入口
+
+### 11.1 出口检查
+
+- [x] 攻击/弹体/召唤/法宝的创建入口、来源字段与回退路径已登记（§4）；
+- [x] 对象池取出/归还/清理与残留状态已登记（§5）；
+- [x] 关卡阶段推进、`current_stage` 写入点与完成判定已登记（§6）；
+- [x] 胜败判定、重战、结算保存与重复保存/半提交候选已登记（§7）；
+- [x] 成长系统校验/扣除/产出/保存/回滚已按域登记（§8）；
+- [x] HUD/输入/音频的展示与提交已区分（§9）；
+- [x] 试点模块公开方法、场景依赖与深层路径热点已登记（§10）；
+- [x] 仅文档与静态调查，未修改生产代码、素材或 UID。
+
+### 11.2 17-2 首先验证的断言
+
+1. 弹体在英雄节点下与在场景根下两种创建方式，`player` 归属一致；
+2. `apply_role_hit` 结束后 `get_player`/`coop_damage_slot`/`source_props.source_player` 全部恢复；
+3. 2P 攻击时吸血/腾蛇阵/角色 5 被动使用 2P 数据，而不是 `RoleProp`/`PlayerData` 的 1P 值；
+4. 召唤物在 `summoner` 为英雄/法宝/怪物三种来源时，`player_reference` 与 `slot_for` 一致；
+5. 池化节点连续复用两轮后不携带上一轮目标/类型/暴击标记。
+
+**下一入口**：17-2 命中与效果归属；本页作为调用面基线，17-2 实施后回填差异。
