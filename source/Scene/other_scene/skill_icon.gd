@@ -2,12 +2,10 @@ extends TextureRect
 
 var PlayerData: PlayerDataStore:
 	get:
-		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.data_for(self) if coop != null else get_node("/root/PlayerData")
+		return LocalCoop.data_for(self) as PlayerDataStore
 var RoleProp: BaseRoleProperties:
 	get:
-		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.props_for(self) if coop != null else get_node("/root/RoleProp")
+		return LocalCoop.props_for(self) as BaseRoleProperties
 
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 

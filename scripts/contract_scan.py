@@ -998,7 +998,6 @@ class ContractScanner:
         'get_node_or_null("/root/RoleProp")',
     )
     SLOT_ROOT_ALLOWLIST = {
-        "Scene/other_scene/skill_icon.gd",
         "Script/base/base_role_properies.gd",
         "Script/memory_class/player_data.gd",
     }
@@ -1046,11 +1045,12 @@ class ContractScanner:
         "Script/base/base_magic_weapon.gd",
         "Script/pet/pet_interface.gd",
         "Script/skill/zd_skill.gd",
+        "Scene/other_scene/skill_icon.gd",
     }
     PHASE17_DEEP_PATH_BUDGETS = {
-        "Script/pet/pet_interface.gd": 22,
+        "Script/pet/pet_interface.gd": 0,
         "Script/skill/zd_skill.gd": 0,
-        "Script/base/base_role.gd": 8,
+        "Script/base/base_role.gd": 0,
         "Script/base/base_magic_weapon.gd": 0,
     }
     PHASE17_DEEP_PATH_RE = re.compile(r'get_node(?:_or_null)?\("([^"]*)"')
@@ -2065,6 +2065,7 @@ def run_phase17_boundary_self_test() -> bool:
         ("Script/shop/shop_purchase_command.gd", "func execute():\n\tvar s = PlayerData.snapshot_state()\n"),
         ("Scene/other_scene/transmogtified_box.gd", "func f():\n\tPlayerData.player_data[DataKeys.TRANSMOG_LIST][\"x\"] = 1\n"),
         ("Script/base/base_magic_weapon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
+        ("Scene/other_scene/skill_icon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
     )
     passed = True
     for rel_path, content in good.items():
@@ -2077,11 +2078,11 @@ def run_phase17_boundary_self_test() -> bool:
         if line == 0:
             passed = False
             print(f"  [FAIL] 负向样本未拦截: {rel_path}")
-    deep_ok = "\n".join(f'var n{i} = get_node("a/{i}")\n' for i in range(22))
+    deep_ok = 'var n = get_node("a")\n'
     if ContractScanner.phase17_boundary_violation(deep_ok, "Script/pet/pet_interface.gd")[0] != 0:
         passed = False
         print("  [FAIL] 路径预算边界样本未放行")
-    deep_bad = deep_ok + "\nvar extra = get_node(\"a/b\")\n"
+    deep_bad = 'var n = get_node("a/b")\n'
     if ContractScanner.phase17_boundary_violation(deep_bad, "Script/pet/pet_interface.gd")[0] == 0:
         passed = False
         print("  [FAIL] 路径预算超限未拦截")

@@ -362,7 +362,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | `base_role.gd:_set_values` | 读槽位 `RoleProp` | 显式槽位 | HP/MP/经验/无双按注入 `player` 的槽位属性；不在绘制回调写档案 |
 | `transmogtified_box.gd:_on_change_pressed` | 调 `PlayerData.change_transmog` | 面板命令 | 命令校验/快照/保存；失败恢复，不在回调直接写档案 |
 | `reward_interface.gd:_process` | 调 `RewardGrantCommand.execute` | 面板命令 | 命令校验/快照/发放/保存；失败全量恢复（GM-33 已修） |
-| `skill_icon.gd:5` | 经 `LocalCoop.data_for/props_for` 解析槽位；缺失时读 `/root/PlayerData`/`/root/RoleProp` | 面板查询 | 正常路径按槽位；回落为 1P Autoload |
+| `skill_icon.gd:5` | **19-1B 已删除 `/root` 回落**：直接 `LocalCoop.data_for/props_for` 解析槽位 | 面板查询 | 无 1P Autoload 回落 |
 
 ### 9.2 输入
 
@@ -423,8 +423,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 项 | 事实 |
 |:---|:---|
 | 节点访问 | `get_node` 168 + `get_node_or_null` 531 = **699 处 / 144 文件** |
-| 字面深层路径 | 17-1 基线 **279 处 / 66 文件**；17-6 四试点 159→30（`pet_interface` 117→22、`zd_skill` 26→0、`base_role` 12→8、`base_magic_weapon` 4→0）；未全仓复算 |
-| `/root` 单例 | 17-1 基线 **34 处 / 13 文件**；17-6 删除 `base_role`/`base_magic_weapon` 的 `/root` 访问，改用 `LocalCoop` 槽位查询 |
+| 字面深层路径 | 17-1 基线 **279 处 / 66 文件**；17-6 四试点 159→30；**19-1B 后 `pet_interface` 0、`zd_skill` 0、`base_role` 0、`base_magic_weapon` 0**；全仓未复算 |
+| `/root` 单例 | 17-1 基线 **34 处 / 13 文件**；17-6 删除 `base_role`/`base_magic_weapon`；**19-1B 删除 `skill_icon` 的 `/root` 回落**，改直接 `LocalCoop` 槽位查询 |
 | 场景规模 | 153 个关卡 `.tscn`、163 个关卡 `.gd`；86 个脚本直接 `extends BaseLevel` |
 | 场景依赖 | 关卡场景固定 `Hero`/`Monster`/`CanvasLayer` 等节点；`BaseLevel` 用 `@onready` 直接取 |
 | 通信 | 父调用子公开方法；子节点回写父级字段（如 `next_boss.current_stage`），无信号解耦 |
@@ -671,16 +671,17 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 文件 | 前 | 后 | 方式 |
 |:---|:---:|:---:|:---|
-| `pet_interface.gd` | 117 | 22 | `_pet_ui_node(root, child)` |
+| `pet_interface.gd` | 117 | 0 | `_pet_ui_node` + `Content` 中间节点访问 |
 | `zd_skill.gd` | 26 | 0 | `SKILL_UI_ROOT` + 列/孙节点访问器 |
-| `base_role.gd` | 12 | 8 | 删除 `/root`，改用 `LocalCoop` |
+| `base_role.gd` | 12 | 0 | 删除 `/root`；HUD 先取各 bar 再取子节点 |
 | `base_magic_weapon.gd` | 4 | 0 | 同上 |
+| `Scene/other_scene/skill_icon.gd` | 2 处 `/root` | 0 | 直接 `LocalCoop.data_for/props_for` |
 
-剩余 30 条均为模块自身场景子节点，未改场景名或 `%UniqueName`。**未做全仓替换。**
+剩余 0 条试点深层字面路径；未改场景名或 `%UniqueName`。**未做全仓替换。**
 
 ### 18.4 验证
 
-`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。
+`archive_probe_runner` 275 项 PASS；`coop_probe_runner` 23/23 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s）；`check_all --godot-bin` 8/8 PASS。
 
 ---
 
@@ -693,8 +694,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 1. `victory.gd`/`defeat.gd` 必须 `extends LevelSettlement`，且不得直接调用 `MemoryClass.request_save`；
 2. `ShopPurchaseCommand`/`RewardGrantCommand` 必须包含 `snapshot_state()` 与 `restore_state(`；
 3. 幻化/奖励表现层禁止 `PlayerData.player_data[...] =`、`PlayerData.player_data.attr =` 与直接 `request_save`；
-4. `base_role`/`base_magic_weapon`/`pet_interface`/`zd_skill` 禁止 `"/root/"`；
-5. 四试点深层字面路径预算：`pet_interface` 22、`zd_skill` 0、`base_role` 8、`base_magic_weapon` 0。
+4. `base_role`/`base_magic_weapon`/`pet_interface`/`zd_skill`/`skill_icon` 禁止 `"/root/"`；
+5. 五试点深层字面路径预算：`pet_interface` 0、`zd_skill` 0、`base_role` 0、`base_magic_weapon` 0、`skill_icon` 0。
 
 `contract_gate.py` 增加 `contract_scan --self-test`；自测覆盖正当样本、重复保存、缺快照、表现层写档、绝对路径与路径超预算负样本。`slot_boundary` 的 BaseRole `/root` 回落样本已转为负样本，策略与 17-6 一致。
 

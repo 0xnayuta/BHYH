@@ -67,23 +67,24 @@
 
 | 文件 | 清理前深层字面路径 | 清理后 | 方式 |
 |:---|:---:|:---:|:---|
-| `pet_interface.gd` | 117 | 22 | 新增 `_pet_ui_node(root, child)`；根节点只解析一次，直接子节点路径由 helper 拼接 |
+| `pet_interface.gd` | 117 | 0 | 保留 `_pet_ui_node(root, child)`；动态行先取 `Content`，再取直接子节点，消除剩余 `Content/*` 与嵌套字面路径 |
 | `zd_skill.gd` | 26 | 0 | 新增 `SKILL_UI_ROOT`、`_skill_root_node`、`_skill_column_node`、`_skill_grandchild`、`_skill_column_path` |
-| `base_role.gd` | 12 | 8 | 删除 `/root/LocalCoop`、`/root/PlayerData`、`/root/RoleProp`，改用 `LocalCoop.data_for/props_for`；剩余为宠物面板自身子路径 |
+| `base_role.gd` | 12 | 0 | 删除 `/root` 回落；宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer`，再取子节点，深层字面路径清零 |
 | `base_magic_weapon.gd` | 4 | 0 | 同上；法宝数据/属性改由 `LocalCoop` 槽位查询 |
+| `Scene/other_scene/skill_icon.gd` | 2 处 `/root` | 0 | 删除 `/root/LocalCoop` 与 `/root/PlayerData`/`RoleProp` 回落，直接 `LocalCoop.data_for/props_for` |
 
 统计口径：`get_node()`/`get_node_or_null()` 字符串参数中包含 `/` 或 `/root` 的字面路径；不含动态拼接后的运行时结果。
 
 ## 4. 验证
 
-- `archive_probe_runner` 146 项 PASS（含 `zd_skill` 主动技能成功/保存失败回滚、`pet_interface` 根节点解析）；
-- `coop_probe_runner` 21/21 PASS（P1/P2 HUD 与宠物 HUD）；
+- `archive_probe_runner` 275 项 PASS（含 `zd_skill` 主动技能成功/保存失败回滚、`pet_interface` 根节点解析）；
+- `coop_probe_runner` 23/23 PASS（P1/P2 HUD 与宠物 HUD）；
 - `level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；
-- `level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；
+- `level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s）；
 - `check_all --godot-bin` 8/8 PASS。
 
 ## 5. 未迁移项
 
-- `pet_interface` 剩余 22 条深层路径为模块自身场景子节点，未改成 `%UniqueName`（场景未登记唯一名，改名会扩大范围）；
-- `base_role` 剩余 8 条为宠物面板子节点，属于 HUD 读取路径；
+- `pet_interface`/`base_role` 深层字面路径为 **0**；未改场景节点名或 `%UniqueName`，以中间节点访问器消除字面深层路径；
+- `skill_icon.gd` 的 `/root` 回落为 **0**，`SLOT_ROOT_ALLOWLIST` 移除该文件并加入 Phase 17 绝对路径禁入清单；
 - 本批未移动任何文件、未重排目录、未修改场景节点名或输入映射。

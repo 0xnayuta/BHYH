@@ -234,25 +234,29 @@ func _bind_pet_panel_nodes() -> void:
 	pet_panel = _find_pet_panel()
 	if pet_panel == null:
 		return
-	pet_level = pet_panel.get_node_or_null("TextureRect/role_level") as Label
-	pet_hp_bar = pet_panel.get_node_or_null("hp_bar") as TextureProgressBar
-	pet_hp_text = pet_panel.get_node_or_null("hp_bar/hp_text") as Label
-	pet_hp_recovery = pet_panel.get_node_or_null("hp_bar/nature_recovery_hp") as Label
-	pet_mp_bar = pet_panel.get_node_or_null("mp_bar") as TextureProgressBar
-	pet_mp_text = pet_panel.get_node_or_null("mp_bar/mp_text") as Label
-	pet_mp_recovery = pet_panel.get_node_or_null("mp_bar/nature_recovery_mp") as Label
-	pet_exp_bar = pet_panel.get_node_or_null("exp_bar") as TextureProgressBar
+	var texture_rect := pet_panel.get_node_or_null("TextureRect")
+	pet_level = texture_rect.get_node_or_null("role_level") as Label if texture_rect != null else null
+	var hp_bar := pet_panel.get_node_or_null("hp_bar")
+	pet_hp_bar = hp_bar as TextureProgressBar
+	pet_hp_text = hp_bar.get_node_or_null("hp_text") as Label if hp_bar != null else null
+	pet_hp_recovery = hp_bar.get_node_or_null("nature_recovery_hp") as Label if hp_bar != null else null
+	var mp_bar := pet_panel.get_node_or_null("mp_bar")
+	pet_mp_bar = mp_bar as TextureProgressBar
+	pet_mp_text = mp_bar.get_node_or_null("mp_text") as Label if mp_bar != null else null
+	pet_mp_recovery = mp_bar.get_node_or_null("nature_recovery_mp") as Label if mp_bar != null else null
+	var exp_bar := pet_panel.get_node_or_null("exp_bar")
+	pet_exp_bar = exp_bar as TextureProgressBar
+	pet_exp_text = exp_bar.get_node_or_null("exp_text") as Label if exp_bar != null else null
 	pet_protect_bar = pet_panel.get_node_or_null("RoleProtect") as TextureProgressBar
-	pet_exp_text = pet_panel.get_node_or_null("exp_bar/exp_text") as Label
 	pet_skill_box = pet_panel.get_node_or_null("SkillBox") as HBoxContainer
 	var pet_head_panel := pet_panel.get_node_or_null("PanelContainer") as Control
-	var pet_head_control := pet_panel.get_node_or_null("PanelContainer/Control") as Control
+	var pet_head_control := pet_head_panel.get_node_or_null("Control") as Control if pet_head_panel != null else null
 	if pet_head_panel != null:
 		pet_head_panel.clip_contents = true
 	if pet_head_control != null:
 		pet_head_control.clip_contents = true
 		pet_head_control.custom_minimum_size = Vector2(80, 80)
-	pet_head = pet_panel.get_node_or_null("PanelContainer/Control/role_head") as TextureRect
+	pet_head = pet_head_control.get_node_or_null("role_head") as TextureRect if pet_head_control != null else null
 	if pet_head != null:
 		pet_head.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pet_head.stretch_mode = TextureRect.STRETCH_SCALE

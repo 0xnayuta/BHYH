@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A 已完成；19-1B/19-1C、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B 已完成；19-1C、19-2、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -104,7 +104,7 @@
 **切片**
 
 1. **19-1A 面板扫描（已完成，2026-10-29）**：任务领取改用 `PlayerData.claim_task`；幻化穿戴/卸下改用 `change_transmog`，拥有列表改用 `record_transmog_owned`；技能键位改用 `set_skill_key`，觉醒/启停改用 `awaken_skill`/`set_skill_awakened_enabled`，被动技能改用 `apply_passive_skill_upgrades`；宠物面板存档改走 `Global.request_save_with_feedback`。目标目录不再有直接 `PlayerData.player_data` 赋值或直接 `MemoryClass.request_save`；`reward_grant_command` 与 `zd_skill.refresh_infor` 作为合法命令入口保留。档案探针 275 项 PASS；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（267.7s），`check_all --godot-bin` 8/8 PASS；
-2. **19-1B 路径**：`pet_interface` 22 条、`base_role` 8 条深层路径按场景唯一名或模块访问器继续清理；`skill_icon.gd` 的 `/root` 回落迁移到 `LocalCoop`；路径预算同步收紧；
+2. **19-1B 路径（已完成，2026-10-29）**：`pet_interface` 动态行先取 `Content` 再取直接子节点，深层字面路径 22→0；`base_role` 宠物 HUD 先取各 bar/PanelContainer 再取子节点，8→0；`skill_icon.gd` 删除 `/root` 回落，直接 `LocalCoop.data_for/props_for`；`contract_scan` 将三文件深层预算收紧到 0，并把 `skill_icon` 加入 `/root` 禁入与移除 root 白名单；档案探针 275 项 PASS，`coop_probe_runner` 23/23 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s），`check_all --godot-bin` 8/8 PASS；
 3. **19-1C 奖励表现**：确定奖励命令失败时是否隐藏奖励盒；保持“失败不发奖、错误可见”。
 
 **必须验证**：绘制/回调无档案写入（19-1A 已覆盖目标面板）；路径不超预算，`/root` 回落为零或登记；奖励失败不显示成功假象。

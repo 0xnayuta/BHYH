@@ -746,8 +746,14 @@ var pet_formation_list := _pet_ui_node("PetFormationPopup", "Window/FormationScr
 @onready var pet_eat_close := _pet_ui_node("PetDevelopInterface", "PetEatImmortality/btn_close") as BaseButton
 
 @onready var give_up_this_pet := get_node_or_null("giveUpThisPet") as CanvasItem
-@onready var give_up_okbtn := get_node_or_null("giveUpThisPet/okbtn") as BaseButton
-@onready var give_up_nobtn := get_node_or_null("giveUpThisPet/nobtn") as BaseButton
+@onready var give_up_okbtn := (
+	(get_node_or_null("giveUpThisPet").get_node_or_null("okbtn") if get_node_or_null("giveUpThisPet") != null else null)
+	as BaseButton
+)
+@onready var give_up_nobtn := (
+	(get_node_or_null("giveUpThisPet").get_node_or_null("nobtn") if get_node_or_null("giveUpThisPet") != null else null)
+	as BaseButton
+)
 
 var current_page: PetPage = PetPage.ATTRIBUTE
 var current_pet_index: int = -1
@@ -1175,9 +1181,10 @@ func _setup_pet_formation_popup() -> void:
 		row.visible = true
 		pet_formation_list.add_child(row)
 		var stat_name := str(definition["stat"])
-		var upgrade_button := row.get_node_or_null("Content/UpgradeButton") as Button
+		var content := row.get_node_or_null("Content")
+		var upgrade_button := content.get_node_or_null("UpgradeButton") as Button if content != null else null
 		_connect_button(upgrade_button, _upgrade_pet_formation.bind(stat_name))
-		var upgrade_ten_button := row.get_node_or_null("Content/UpgradeTenButton") as Button
+		var upgrade_ten_button := content.get_node_or_null("UpgradeTenButton") as Button if content != null else null
 		_connect_button(upgrade_ten_button, _upgrade_pet_formation_ten.bind(stat_name))
 		pet_formation_rows[stat_name] = row
 
@@ -1241,10 +1248,14 @@ func _refresh_pet_formation_popup() -> void:
 		var cost := _pet_formation_cost(level)
 		var current_value := _pet_formation_stat_value(level, gain)
 		var next_value := _pet_formation_stat_value(mini(level + 1, PET_FORMATION_MAX_LEVEL), gain)
-		_set_label(row.get_node_or_null("Content/Name") as Label, stat_name)
-		_set_label(row.get_node_or_null("Content/Level") as Label, "Lv.%d/%d" % [level, PET_FORMATION_MAX_LEVEL])
+		var content := row.get_node_or_null("Content")
+		_set_label(content.get_node_or_null("Name") as Label if content != null else null, stat_name)
 		_set_label(
-			row.get_node_or_null("Content/Effect") as Label,
+			content.get_node_or_null("Level") as Label if content != null else null,
+			"Lv.%d/%d" % [level, PET_FORMATION_MAX_LEVEL]
+		)
+		_set_label(
+			content.get_node_or_null("Effect") as Label if content != null else null,
 			(
 				"当前 +%d" % current_value
 				if level >= PET_FORMATION_MAX_LEVEL
@@ -1252,18 +1263,18 @@ func _refresh_pet_formation_popup() -> void:
 			)
 		)
 		_set_label(
-			row.get_node_or_null("Content/Cost") as Label,
+			content.get_node_or_null("Cost") as Label if content != null else null,
 			(
 				"已达等级上限"
 				if level >= PET_FORMATION_MAX_LEVEL
 				else "%s×%d\n%s×%d" % [str(definition["stone_name"]), cost.x, str(definition["core_name"]), cost.y]
 			)
 		)
-		var upgrade_button := row.get_node_or_null("Content/UpgradeButton") as Button
+		var upgrade_button := content.get_node_or_null("UpgradeButton") as Button if content != null else null
 		if upgrade_button != null:
 			upgrade_button.disabled = level >= PET_FORMATION_MAX_LEVEL
 			upgrade_button.text = "满级" if level >= PET_FORMATION_MAX_LEVEL else "升级"
-		var upgrade_ten_button := row.get_node_or_null("Content/UpgradeTenButton") as Button
+		var upgrade_ten_button := content.get_node_or_null("UpgradeTenButton") as Button if content != null else null
 		if upgrade_ten_button != null:
 			upgrade_ten_button.disabled = level >= PET_FORMATION_MAX_LEVEL
 			upgrade_ten_button.text = "满级" if level >= PET_FORMATION_MAX_LEVEL else "升十级"
@@ -1364,11 +1375,12 @@ func _refresh_pet_skill_learn_popup() -> void:
 		row.name = "LearnRow_%d" % index
 		row.visible = true
 		pet_skill_learn_list.add_child(row)
-		var icon := row.get_node_or_null("Content/Icon") as TextureRect
-		var name_label := row.get_node_or_null("Content/Name") as Label
-		var description_label := row.get_node_or_null("Content/Description") as Label
-		var book_label := row.get_node_or_null("Content/BookCount") as Label
-		var learn_button := row.get_node_or_null("Content/LearnButton") as Button
+		var content := row.get_node_or_null("Content")
+		var icon := content.get_node_or_null("Icon") as TextureRect if content != null else null
+		var name_label := content.get_node_or_null("Name") as Label if content != null else null
+		var description_label := content.get_node_or_null("Description") as Label if content != null else null
+		var book_label := content.get_node_or_null("BookCount") as Label if content != null else null
+		var learn_button := content.get_node_or_null("LearnButton") as Button if content != null else null
 		if icon != null:
 			icon.texture = load("res://Art/pet/skillicon/%s.png" % str(definition["icon"])) as Texture2D
 		_set_label(name_label, skill_name)
@@ -1504,12 +1516,13 @@ func _refresh_pet_skill_upgrade_popup() -> void:
 		row.name = "SkillRow_%d" % index
 		row.visible = true
 		pet_skill_upgrade_list.add_child(row)
-		var icon := row.get_node_or_null("Content/Icon") as TextureRect
-		var name_label := row.get_node_or_null("Content/Name") as Label
-		var mana_label := row.get_node_or_null("Content/Mana") as Label
-		var level_label := row.get_node_or_null("Content/Level") as Label
-		var need_label := row.get_node_or_null("Content/Need") as Label
-		var upgrade_button := row.get_node_or_null("Content/UpgradeButton") as Button
+		var content := row.get_node_or_null("Content")
+		var icon := content.get_node_or_null("Icon") as TextureRect if content != null else null
+		var name_label := content.get_node_or_null("Name") as Label if content != null else null
+		var mana_label := content.get_node_or_null("Mana") as Label if content != null else null
+		var level_label := content.get_node_or_null("Level") as Label if content != null else null
+		var need_label := content.get_node_or_null("Need") as Label if content != null else null
+		var upgrade_button := content.get_node_or_null("UpgradeButton") as Button if content != null else null
 		var level := clampi(int(levels.get(skill_name, 1)), 1, PET_SKILL_PROGRESSION.MAX_LEVEL)
 		var icon_path := _pet_skill_icon_path(skill_name, pet)
 		if icon != null:
@@ -5142,7 +5155,7 @@ func _add_tip(message: String) -> Control:
 			tip.size = Vector2.ZERO
 			tip.position = local_center
 			var background := tip.get_node_or_null("background") as TextureRect
-			var tip_label := tip.get_node_or_null("background/text_tt") as Label
+			var tip_label := background.get_node_or_null("text_tt") as Label if background != null else null
 			var tip_width := clampf(float(message.length() * 30 + 48), 220.0, 380.0)
 			if background != null:
 				background.offset_left = -tip_width * 0.5
