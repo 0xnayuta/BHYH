@@ -412,3 +412,8 @@ func _clear_effect_streams() -> void:
 func _exit_tree() -> void:
 	_clear_walls()
 	_clear_effect_streams()
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache = null

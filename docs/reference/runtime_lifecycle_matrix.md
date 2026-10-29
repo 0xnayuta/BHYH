@@ -18,7 +18,7 @@
 4. **缓存所有权集中在 `Global`**：`_resource_cache`、`_monster_scene_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、关卡资源租约与预览槽均由 `Global` 持有；加载页 Phase 15-3A 后只通过 `is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource` 交接，不直接读写私有缓存字典。
 5. **关卡资源按租约释放**：`_level_resource_lease` 记录目标场景、本次加载拥有的路径、怪物/弹体/纹理/音频分类、热身场景与已预热怪物 ID；每次 `change_scene` 释放上一租约并建立新租约；目标场景本身走 `_target_packed_scene`，不登记为租约资源。未登记路径、永久 UI 保留。
 6. **对象池只在档案结束时整体清空**：池根、伤害文本、受击、角色受击与音效池由 `Global` 持有；关卡切换不清理，复用前重置依赖各消费者。**19-2B**：清池前停止并释放活动声部、清空流与 45ms 节流表，活动计数归零。
-7. **临时 UI 采用显式登记 + 名称兜底**：关键 UI 工厂调用 `register_transient_ui` 显式登记并提供可选关闭回调；`cleanup_transient_ui` 先关闭登记实例，再对未登记节点按名称兜底；51 处显式调用保留，永久小 UI 跳过清理。
+7. **临时 UI 只采用显式登记**：临时 UI 工厂调用 `register_transient_ui` 登记并提供可选关闭回调；`cleanup_transient_ui` 只关闭登记实例并清弹出层，名称兜底与 51 处业务显式调用已删除；永久小 UI 跳过清理。
 8. **退出与后台已收口**：应用退出由 `Global._exit_tree` 统一结束档案会话、角色/战斗/UI 缓存与对象池，并关闭纹理请求；场景切换与档案结束递增运行时代次，异步预载在写回前检查代次。**19-2A**：`end_archive_session()` 调用 `stop_bgm()`，档案退出不再依赖场景释放停止 BGM。`MemoryClass._exit_tree` 仍独立负责存档线程 flush。
 
 ---
@@ -228,9 +228,18 @@ flowchart TD
 | `_transient_ui_instances` | `Global` | `register_transient_ui` 由关键 UI 工厂显式调用；`_on_transient_ui_exited` 移除 | `cleanup_transient_ui` 调用关闭回调并释放；实例退出自动移除 | 只登记非永久 UI；可选零参数关闭回调 |
 | `_ui_popup_layer` | `Global` | `get_ui_popup_layer` | `cleanup_transient_ui` 清子节点，不清 layer 本身 | `Global` 为 Autoload，layer 随进程存活 |
 | `_active_hover_popup` | `Global` | `register_hover_popup` | `clear_hover_popup` / `cleanup_transient_ui` | 只保留一个 |
-| 临时 UI 节点 | 各 UI 调用方 | `instance_scene`、`load_ui_scene`、具体 UI 脚本 | `cleanup_transient_ui` 先处理 `_transient_ui_instances` 的关闭回调，再按名称兜底；永久 UI 路径跳过；`release_ui_runtime_cache` 只清缓存/属性 | 注册实例可显式关闭；未登记节点仍依赖名称兜底；51 处显式调用来自 18 个文件 |
+| 临时 UI 节点 | 各 UI 工厂 | `instance_scene`、`register_transient_ui` | `cleanup_transient_ui` 关闭 `_transient_ui_instances` 并清弹出层；永久 UI 路径跳过；`release_ui_runtime_cache` 只清缓存/属性 | 只登记非永久 UI；业务不得直接调用清理入口；场景自有阴影/按钮与自动消失 `message_show` 不登记 |
 
 `PERMANENT_SMALL_UI_SCENE_PATHS` 当前为 `back_pack.tscn`、`learn_skill.tscn`、`pet_interface.tscn`、`magic_weapon_infor.tscn`。这是实现常量，不是建议上限。
+
+#### 19-2C 节点分类
+
+| 类别 | 对象 | 处理 |
+|:---|:---|:---|
+| 应登记 | LevelInfo、GameSet、LDL、Shop、mystery_shop、Learn_Skill、RewardInterface、ChooseItem、choose_scene、BasicTask、game_announcement、HDZM、lsh、lxdy、lhhj、return_back_map、TwentyEightConstellations | 工厂调用 `register_transient_ui`；LevelInfo 以无关闭方法登记，避免关闭回调重置四剑模式；GameSet/LDL 使用 `_on_return_pressed` |
+| 应保留 | MapShadowTop/Bottom/Left/Right、ShopShadowTop/Bottom/Left/Right、地图 Shop 按钮、`message_show` | 前两类是地图/商店场景自有装饰，随所属节点释放；地图 Shop 是地图按钮；`message_show` 自计时并由父节点释放 |
+| 应删除 | 29 项硬编码名称、递归名称兜底、18 个文件的 51 处业务显式调用 | 已删除；清理只由 `Global.change_scene` 调用登记表 |
+
 
 ### 4.5 档案会话与外围静态缓存
 
@@ -240,8 +249,10 @@ flowchart TD
 | `_archive_session_generation` | `Global` | `bind_archive_session`、`end_archive_session` 与 `_exit_tree` 递增；档案预热协程检查 | 与 `_runtime_generation` 和 `_archive_session_prewarm_token` 同时约束档案预热；加载页使用自己的请求代次 |
 | `FrameSequenceStore` | `Script/data/frame_sequence_store.gd` | `Global._exit_tree` 与 `clear_level_resource_cache` 清理 | 运行时帧序列缓存，不是声明数据 |
 | `FrameTextureRequests` | `Script/data/frame_texture_requests.gd` | `Global._exit_tree` 调用 `shutdown_process`；`_closing` 阻止退出后轮询 | 场景切换由帧序列 generation 与 `_closing` 停止写回 |
-| 特效/剑阵/宠物/怪物弹体静态缓存 | 各模块 | 由 `clear_level_resource_cache`、`clear_combat_runtime_cache`、`release_role_runtime_resources` 或加载页非战斗清理触发 | 模块局部缓存；未经过 `Global` 的调用面不在本阶段逐项展开 |
-| 怪物帧/几何等模块静态缓存 | 各怪物脚本 | 当前未见统一场景切换清理入口 | 可能在关卡切换后保留；Phase 15-4E 已登记为后续单独立项，本阶段不改 |
+| 特效/剑阵/宠物/怪物弹体静态缓存 | 各模块 | 由 `clear_level_resource_cache`、`clear_combat_runtime_cache`、`release_role_runtime_resources` 或加载页非战斗清理触发；19-2D 增加怪物帧注册表 | 模块局部缓存；跨档案由注册表清空 |
+| 怪物帧/几何等模块静态缓存 | 各怪物脚本 + `MonsterFrameCacheRegistry` | `clear_combat_runtime_cache` 在档案退出/应用退出调用 `clear_all()`；同一档案内关卡切换保留不可变帧缓存 | 跨档案不读取旧缓存；44 个帧/几何脚本 + `MonsterBullet`/`SwordBossBase`/观音效果统一清理；编辑预览缓存保留 |
+| 静态缓存保留清单 | `MonsterFrameCacheRegistry` | `clear_level_resource_cache` 仍按关卡清 212 弹体帧；`clear_combat_runtime_cache` 清 44 个模块帧/几何脚本、`MonsterBullet`、`SwordBossBase`、四个观音效果 | 编辑预览 `monster_scene_editor_preview` 不进入运行时清理；不可变帧缓存仅在档案内跨关复用 |
+
 
 `clear_level_resource_cache` 会释放当前 `_level_resource_lease` 登记的路径，并清理 `FrameSequenceStore`、`MONSTER_212_BULLET_SCRIPTS` 的帧缓存；不再整体清空 `_monster_scene_cache`。`clear_combat_runtime_cache` 在此基础上清理对象池、NeZha 帧缓存，并释放当前法宝召唤物；不再按 `Art`/`Scene`/`Music` 前缀批量删除缓存。`end_archive_session` 再清理五个角色特效静态数据和流式子弹/镜缓存。
 
@@ -252,7 +263,7 @@ flowchart TD
 | 入口 | 实际所有者 | 调用方 | 覆盖范围 | 失败/边界 |
 |:---|:---|:---|:---|:---|
 | `Global.change_scene` | `Global` | 139 处业务调用 | 目标校验、请求代次、档案退出、临时 UI、UI 缓存、上一关卡租约释放、新租约建立、快速路径/加载页 | 空/缺失目标拒绝并返回 `false`；加载页失败不提交目标 |
-| `cleanup_transient_ui` | `Global` | `Global.change_scene` + 18 个文件的 51 处显式调用 | 注册实例关闭回调、弹出层、hover popup、未登记名称兜底 | 永久小 UI 跳过；清理期间递归调用有 active 守卫 |
+| `cleanup_transient_ui` | `Global` | 仅 `Global.change_scene` | 注册实例关闭回调、弹出层、hover popup | 永久小 UI 跳过；清理期间 active 守卫；业务直接调用由 `POOL_UI_CLEANUP_UNREGISTERED` 阻断 |
 | `release_ui_runtime_cache` | `Global` | 仅 `Global.change_scene` | UI 场景缓存、永久 UI、UI 纹理前缀 | 只清缓存，不释放仍在树的 UI 节点 |
 | `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 当前租约路径、FrameSequence、212 帧缓存 | 只释放租约登记路径；不清理池、UI 或未登记路径 |
 | `clear_combat_runtime_cache` | `Global` | 仅 `end_archive_session` | 当前租约、池、NeZha 帧缓存、召唤物 | 不再按战斗资源前缀批量删除缓存；不在普通关卡切换触发 |
@@ -273,7 +284,7 @@ flowchart TD
 | 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放/超时 | 代次阻止旧回调写回；取消为停止轮询并丢弃后台结果 | Phase 15-3C 已完成 |
 | 关卡资源租约 | `Global._level_resource_lease` | `Global.change_scene`、加载页、BaseLevel 预载函数 | 每次切换/战斗清理，只释放本租约 | 未登记路径不释放；目标场景不登记 | Phase 15-3B 已完成 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4B 已完成 |
-| 临时 UI | `Global._transient_ui_instances` + 名称兜底 | UI 工厂/各面板 | 树退出、切换、手动清理 | 注册实例优先关闭；未登记名称仍可能冲突 | Phase 15-4C 已完成 |
+| 临时 UI | `Global._transient_ui_instances` | UI 工厂/各面板 | 树退出、切换、Global 清理 | 只登记非永久 UI；名称兜底已删除；业务不得直接调用 | 19-2C 完成 |
 | 档案会话 | `Global` | 存档入口/选角（`bind_archive_session`） | 主菜单/选角/切档 | 普通切场不结束；应用退出由 `_exit_tree` 清空 | Phase 16-3 已完成 |
 | 退出与后台 | `Global` + `MemoryClass` | 引擎 | 应用退出 | `Global._exit_tree` 清理运行时代次、档案/角色/战斗/UI 缓存与池；存档线程单独 flush | Phase 15-4D 已完成；Phase 16 持久化边界 |
 | 地图视觉释放 | 地图脚本 | `map_0` 至 `map_9_1` | 地图退出 | 全部地图入口覆盖 | Phase 15-4D 已完成 |
@@ -337,9 +348,9 @@ flowchart TD
 
 ### Phase 15-4C 已完成
 
-1. 新增 `_transient_ui_instances`、`register_transient_ui(node, close_method, scene_path)` 与 `cleanup_transient_ui` 的关闭回调阶段；基础任务、神秘商店与游戏公告工厂已显式登记 `_on_close_pressed`，其余 UI 保留名称兜底。
-2. 清理顺序为注册实例关闭回调 → 弹出层/hover → 未登记名称兜底；永久小 UI 路径跳过，清理递归有 active 守卫；未登记节点保持兼容。
-3. `load-guard` 探针验证显式关闭回调、注册实例释放、未登记名称兜底与永久小 UI 保留；`get_cache_scope_snapshot().ui` 增加 `transient_instance_count`。
+1. 新增 `_transient_ui_instances`、`register_transient_ui(node, close_method, scene_path)` 与 `cleanup_transient_ui` 的关闭回调阶段；基础任务、神秘商店与游戏公告工厂已显式登记 `_on_close_pressed`，当时其余 UI 保留名称兜底（19-2C 已删除）。
+2. 清理顺序为注册实例关闭回调 → 弹出层/hover；永久小 UI 路径跳过，清理有 active 守卫；名称兜底已由 19-2C 删除。
+3. `load-guard` 探针验证显式关闭回调、注册实例释放、未登记名称不误删、真实工厂登记与永久小 UI 保留；`get_cache_scope_snapshot().ui` 增加 `transient_instance_count`。
 
 ### Phase 15-4D 已完成
 
@@ -350,10 +361,10 @@ flowchart TD
 
 ### Phase 15-4E 已完成
 
-1. `contract_scan.py` 新增 `scene_entry`、`load_cache`、`pool_ui` 三类 ERROR 门禁：`change_scene_to_*` 仅 `global.gd` 豁免；加载页禁止私有缓存/租约访问；池/UI 清理仅 Global 与 18 个已登记 UI 调用方。
+1. `contract_scan.py` 新增 `scene_entry`、`load_cache`、`pool_ui` 三类 ERROR 门禁：`change_scene_to_*` 仅 `global.gd` 豁免；加载页禁止私有缓存/租约访问；池/UI 清理仅 Global（19-2C 后业务直接调用一律阻断，不再保留 18 文件白名单）。
 2. 新增负向/正向自测：场景入口坏样本 3/好样本 3、加载页私有缓存坏样本 3/好样本 2、池/UI 清理坏样本 4/好样本 4；注释与正式入口不误报。
 3. `scripts/README.md`、`acceptance.md` 与状态/矩阵同步为十一类契约；`contract_scan --fail-on-error` 当前 ERROR=0。
-4. `cleanup_transient_ui` 的硬编码名称列表与 51 处显式调用仍在 18 个登记文件中，后续收束需继续评审；模块局部静态帧缓存仍按 Phase 15-4E 边界保留。
+4. `cleanup_transient_ui` 的硬编码名称列表与 51 处业务显式调用已由 19-2C 删除；19-2D 增加 `MonsterFrameCacheRegistry`，档案退出统一清理模块静态帧/几何缓存。
 
 ---
 
@@ -371,7 +382,7 @@ flowchart TD
 - [x] Phase 15-3D：加载页目录扫描/依赖清单解析为 0；`LevelPreloadStore`/Catalog 只读副本；`contract_scan` 第八类门禁与负向自测通过。
 - [x] Phase 15-4A：六个缓存作用域均有所有者、容量依据、清理事件与 `get_cache_scope_snapshot` 观测键；租约/战斗池/UI 实例作用域验证通过。
 - [x] Phase 15-4B：池根/容量/复用重置/清理事件已确认；池容量、池根、活动音效与档案退出清理通过探针。
-- [x] Phase 15-4C：非永久 UI 显式登记/关闭回调、永久 UI 跳过、未登记名称兜底与 active 守卫通过探针。
+- [x] Phase 15-4C：非永久 UI 显式登记/关闭回调、永久 UI 跳过、名称兜底与 active 守卫当时通过探针；19-2C 已删除名称兜底并改为登记表清理。
 - [x] Phase 15-4D：`_runtime_generation` 覆盖切换、档案开始/结束与退出；异步预载写回前检查代次；`_exit_tree` 清理档案/角色/战斗/UI 缓存、池、预载槽与纹理请求；HTTP 退出取消；`map_6` 至 `map_9_1` 地图视觉释放补齐。
 - [x] Phase 15-4E：`contract_scan.py` 新增 `scene_entry`、`load_cache`、`pool_ui` 三类门禁与正负样本；业务 `change_scene_to_*`、加载页私有缓存、未登记池/UI 清理入口阻断；`contract_scan --self-test` 全部通过，全量扫描 ERROR=0。
 

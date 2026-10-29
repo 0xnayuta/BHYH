@@ -2816,7 +2816,6 @@ func _on_challenge_pressed() -> void:
 		Global.four_swords_endless_mode = false
 		Global.sss_lendless_mode = false
 		Global.constellation_endless_mode = false
-		Global.cleanup_transient_ui()
 		Global.change_scene(target_stage_path)
 		process_mode = Node.PROCESS_MODE_DISABLED
 		visible = false
@@ -2862,7 +2861,6 @@ func _enter_four_swords_mode(endless_mode: bool) -> void:
 	Global.sss_lendless_mode = target_stage_path == "res://Scene/level/level_sssl.tscn" and endless_mode
 	Global.constellation_endless_mode = target_stage_path == "res://Scene/level/level_esbxx.tscn" and endless_mode
 	four_swords_mode_dialog.visible = false
-	Global.cleanup_transient_ui()
 	Global.change_scene(target_stage_path)
 	process_mode = Node.PROCESS_MODE_DISABLED
 	visible = false

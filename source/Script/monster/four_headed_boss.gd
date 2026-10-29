@@ -543,6 +543,13 @@ func _exit_tree() -> void:
 		if head != null and is_instance_valid(head) and head.has_method("clear_texture"):
 			head.clear_texture()
 
+
 # ==============================================================================
 # Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
 # ==============================================================================
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache = null
+	_head_frames_cache = [null, null, null]

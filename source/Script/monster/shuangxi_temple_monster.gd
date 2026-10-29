@@ -490,3 +490,8 @@ func _cancel_attack_motion() -> void:
 
 func _attack_facing() -> float:
 	return 1.0 if monster_dir.scale.x < 0.0 else -1.0
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache.clear()

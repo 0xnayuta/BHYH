@@ -613,3 +613,8 @@ func get_ice_effect_offset() -> Vector2:
 		3068:
 			return Vector2(0.0, 5.0)
 	return Vector2.ZERO
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache.clear()

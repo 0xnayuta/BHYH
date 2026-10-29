@@ -55,7 +55,6 @@ func _enter_dsg_level(path: String) -> void:
 		push_error("当前节点不在场景树中，无法进入兜率宫关卡：%s" % path)
 		return
 	_close_popup_chain()
-	Global.cleanup_transient_ui()
 	Global.call_deferred("change_scene", path)
 
 

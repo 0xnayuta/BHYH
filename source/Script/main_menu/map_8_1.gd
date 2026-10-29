@@ -167,7 +167,6 @@ func _on_map_level_pressed(level_number: int) -> void:
 
 
 func _on_mainline_portal_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_8.tscn")
 
 
@@ -201,7 +200,6 @@ func _on_task_pressed() -> void:
 
 
 func _on_return_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 
@@ -218,5 +216,4 @@ func _on_pellet_pressed() -> void:
 
 
 func _on_jjtj_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_7.tscn")

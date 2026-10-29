@@ -315,7 +315,6 @@ func _on_task_pressed() -> void:
 
 
 func _on_return_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 
@@ -332,12 +331,10 @@ func _on_pellet_pressed() -> void:
 
 
 func _on_jjtj_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_4.tscn")
 
 
 func _on_south_continent_pressed() -> void:
 	if not _require_map5_prerequisite("通天教主", "通关通天教主后开启南瞻部洲！"):
 		return
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_6.tscn")

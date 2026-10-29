@@ -531,3 +531,8 @@ func little_blood_bar_control() -> void:
 	super.little_blood_bar_control()
 	if monster_blood_bar != null:
 		monster_blood_bar.position = Vector2(-30.0, -190.0 if is_boss else -140.0)
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache.clear()

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B 已完成；19-2C/19-2D、19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D 已完成；19-3、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -37,9 +37,9 @@
 | Phase 16 保存反馈 | **18-3D 已修复**：`request_save_result` 返回 `{ok, reason, error, message, path, notify}`，`last_save_outcome` 与 `save_failed` 信号让丢弃 bool 的调用也可观察；22 处自行提示调用传 `notify=false`，其余由 `Global` 兜底提示（1.5s 去重）；后台保存仍走独立串行/重试路径 | 18-3D 完成 |
 | Phase 16 档案顺序 | **18-3A 已关闭 AS-14**：后台任务带 serial，`Global` 消费信号并记录失败；切档/退出先 flush。**18-3B 已评估 AS-08**：11 个地图页保留一次同步保存（当前地图唯一持久化点）；仅删除 `map_3` 无数据变更的重复保存 | 18-3A/18-3B 完成 |
 | Phase 16 进度写入 | **18-3C 已修复 `add_tg` 写入面**：48 关/23 区域/导入 63~75/北俱芦洲动态键收敛到 `LevelProgressCommand` 数据表；`add_tg` 只写字典，不保存；非胜利转场新增单次 `level_progress_transition` 保存。地图页 `Map_num`、镇妖塔层/积分、GM 工具仍直接写 | 18-3C 完成 |
-| Phase 17 表现/路径 | `pet_interface` 22 条、`base_role` 8 条深层字面路径；`skill_icon` 仍有 `/root` 回落；任务/宠物/技能等面板仍可能先置标志/直接写档 | 19-1 |
-| Phase 17 音频 | `stop_bgm()` 无调用方；BGM 同曲跨父节点 pending 边界、音效节流表/活动计数清理未覆盖 | 19-2 |
-| Phase 15 运行时 | `cleanup_transient_ui` 硬编码清单与 51 处显式调用（矩阵基线 18 文件）；模块局部静态帧缓存按 15-4E 保留 | 19-2 |
+| Phase 17 表现/路径 | **19-1A/19-1B/19-1C 已收口**：面板命令化、路径预算清零、奖励失败隐藏；19-1 完成 | 19-1 |
+| Phase 17 音频 | **19-2A/19-2B 已收口**：`stop_bgm()` 接入档案退出；同曲跨父节点同步重挂；音效活动声部/节流表清理 | 19-2 完成 |
+| Phase 15 运行时 | **19-2C/19-2D 已收口**：删除名称兜底与 51 处业务显式调用；UI 只按登记表清理；`MonsterFrameCacheRegistry` 在档案退出统一清理模块静态帧/几何缓存 | 19-2 完成 |
 | Phase 14 Atlas | 112 个 metadata 未被 `AtlasMetadataStore` 规则触达；类型化 `.data` accessor 仍是独立立项 | 19-3/20-1 |
 | Phase 13 资源 | 12 个运行时建帧冻结例外（9 怪物 + 3 非怪物）；`runtime_frames_allowlist` 只减不增；PCK 快照随资源变化需重跑 | 19-3 |
 | Phase 13 独立项目 | `Spine` 跨平台运行时仅 Windows x86_64；`global.gd`+13 Autoload 上帝对象；`_bundled` 历史二进制场景；目标平台 VRAM/首帧/release 未测 | 20-1/20-2 |
@@ -119,8 +119,8 @@
 
 1. **19-2A BGM（已完成，2026-10-30）**：`end_archive_session()` 调用 `stop_bgm()`，档案退出停止 BGM；`add_bgm` 改为先设置 `target` 再同步 `add_child`，消除 deferred pending 窗口；同曲异父同步重挂并在重挂后按开关状态恢复播放；queued/invalid 实例不参与复用；档案探针新增同曲跨父节点、单父节点、退出停止、重挂后播放断言（289 项 PASS）；
 2. **19-2B 音效池（已完成，2026-10-30）**：`_clear_runtime_pools` 新增 `_release_active_sound_players()`：停止活动声部、清空 `stream`、`queue_free`，随后清空 `_active_sound_players` 与 `_last_sound_play_msec`；回收仍保持 `prepare_for_pool()` 的停流/清流；档案探针新增活动计数、回收计数、teardown 清流与节流表清空断言；验证：档案探针 289 项 PASS，协作探针 23/23，场景探针 7/7，`level_1` 冒烟 PASS，全量回归 128/128 PASS + 5 SKIP（334.5s），`check_all --godot-bin` 8/8 PASS；
-3. **19-2C 临时 UI**：处理 `cleanup_transient_ui` 硬编码清单与显式调用（矩阵 51/18 基线）；未登记节点登记或明确保留；
-4. **19-2D 静态帧缓存**：处理模块局部静态帧缓存（Phase 15-4E 保留项）；退出/切档后不读取旧缓存。
+3. **19-2C 临时 UI（已完成，2026-10-30）**：删除 `cleanup_transient_ui` 的 29 项硬编码名称与递归名称兜底；14 个 UI 工厂补齐 `register_transient_ui`（LevelInfo 不调用关闭方法以保留四剑模式，GameSet/LDL 用 `_on_return_pressed`，其余按各自关闭方法）；删除 18 个文件中的 51 处业务显式调用，清理入口收敛为 `Global.change_scene`；`contract_scan` 删除登记文件白名单，业务直接调用一律阻断；`load-guard` 覆盖未登记名称不误删、无关闭方法登记实例释放、真实 `add_choose_text` 工厂登记/清理；地图/商店阴影、地图 Shop 按钮与自动消失 `message_show` 明确保留为场景/父节点所有；
+4. **19-2D 静态帧缓存（已完成，2026-10-30）**：新增 `MonsterFrameCacheRegistry`，集中持有 44 个怪物帧/几何缓存脚本与 `MonsterBullet`、`SwordBossBase`、四个观音效果缓存；`clear_combat_runtime_cache()` 在档案退出/应用退出统一调用 `clear_all()`。同一档案内关卡切换保留不可变帧缓存，跨档案不保留；编辑预览缓存明确保留。`load-guard` 新增注册表清空断言；场景探针 7/7 PASS，协作探针 23/23，全量回归 128/128 PASS + 5 SKIP（279.9s），`check_all --godot-bin` 8/8 PASS；
 
 **必须验证**：BGM 同曲复用、跨父节点同步重挂、切曲停旧、退出停止；音效池无旧流且活动计数/节流表归零；切档/退出无 UI 注册残留；静态缓存有清理/保留结论。
 

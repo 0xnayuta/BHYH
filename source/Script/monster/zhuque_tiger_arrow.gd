@@ -36,3 +36,8 @@ static func _get_frames() -> SpriteFrames:
 		return null
 	_frames_cache = load(frames_path) as SpriteFrames
 	return _frames_cache
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache = null

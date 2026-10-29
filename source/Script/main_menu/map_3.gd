@@ -445,7 +445,6 @@ func _on_lsh_pressed() -> void:
 
 
 func _on_kls_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/level/level_kls.tscn")
 
 
@@ -494,7 +493,6 @@ func _on_task_pressed() -> void:
 
 
 func _on_return_to_main_menu_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 
@@ -503,17 +501,14 @@ func _on_game_set_pressed() -> void:
 
 
 func _on_next_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_1.tscn")
 
 
 func _on_button_cs() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/level/level_39.tscn")
 
 
 func _on_button_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_2.tscn")
 
 

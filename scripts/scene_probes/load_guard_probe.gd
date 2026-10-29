@@ -12,6 +12,8 @@ const LEVEL_2 := "res://Scene/level/level_2.tscn"
 const LEVEL_3 := "res://Scene/level/level_3.tscn"
 const MISSING_SCENE := "res://Scene/level/__load_guard_missing.tscn"
 const WAIT_FRAMES := 1800
+const CONSTELLATION_BOSS_SCRIPT := preload("res://Script/monster/constellation_boss.gd")
+const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_frame_cache_registry.gd")
 
 
 class ProbeTransientUI:
@@ -48,6 +50,12 @@ func _run() -> void:
 	var monster_ids_reloaded := LevelPreloadStore.monster_ids(LEVEL_1)
 	checks["catalog_monster_ids_copy"] = not monster_ids_reloaded.has(999999)
 
+	CONSTELLATION_BOSS_SCRIPT._standard_frames_cache["probe"] = true
+	var cleared_cache_count := MONSTER_FRAME_CACHE_REGISTRY.clear_all()
+	checks["monster_cache_registry_clear"] = (
+		cleared_cache_count > 0 and CONSTELLATION_BOSS_SCRIPT._standard_frames_cache.is_empty()
+	)
+
 	var ui_node := Control.new()
 	get_tree().root.add_child(ui_node)
 	Global.register_ui_runtime_instance(ui_node, "res://Scene/back_pack/back_pack.tscn")
@@ -71,13 +79,32 @@ func _run() -> void:
 	await get_tree().process_frame
 	checks["transient_removed"] = not is_instance_valid(transient_ui)
 
-	var legacy_ui := Control.new()
-	legacy_ui.name = "LevelInfo"
-	get_tree().root.add_child(legacy_ui)
+	var unregistered_ui := Control.new()
+	unregistered_ui.name = "LevelInfo"
+	get_tree().root.add_child(unregistered_ui)
 	await get_tree().process_frame
 	Global.cleanup_transient_ui()
 	await get_tree().process_frame
-	checks["legacy_name_fallback"] = not is_instance_valid(legacy_ui)
+	checks["unregistered_name_ignored"] = is_instance_valid(unregistered_ui)
+	unregistered_ui.queue_free()
+
+	var silent_ui := Control.new()
+	get_tree().root.add_child(silent_ui)
+	Global.register_transient_ui(silent_ui)
+	Global.cleanup_transient_ui()
+	await get_tree().process_frame
+	checks["registered_without_close_removed"] = not is_instance_valid(silent_ui)
+
+	var factory_ui: Node = Global.add_choose_text(get_tree().root, Vector2.ZERO, "probe", 0.0)
+	var factory_ui_created := factory_ui != null
+	await get_tree().process_frame
+	checks["factory_ui_registered"] = factory_ui_created and int(
+		Global.get_cache_scope_snapshot().get("ui", {}).get("transient_instance_count", 0)
+	) >= 1
+	Global.cleanup_transient_ui()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	checks["factory_ui_cleaned"] = factory_ui_created and not is_instance_valid(factory_ui)
 
 	var permanent_ui := (load("res://Scene/skill/learn_skill.tscn") as PackedScene).instantiate()
 	permanent_ui.name = "Learn_skill"

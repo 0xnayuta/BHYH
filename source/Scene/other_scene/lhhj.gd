@@ -175,7 +175,6 @@ func _on_challenge_pressed() -> void:
 	if scene_tree == null:
 		push_error("当前节点不在场景树中，无法进入轮回幻境")
 		return
-	Global.cleanup_transient_ui()
 	Global.call_deferred("change_scene", "res://Scene/level/level_lhhj.tscn")
 
 

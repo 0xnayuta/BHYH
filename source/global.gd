@@ -237,6 +237,7 @@ const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet3.gd"),
 	preload("res://Script/monster/monster212_bullet4.gd"),
 ]
+const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_frame_cache_registry.gd")
 var basic_ar_button = null
 var weapon_bullet_node = null
 var bullet = null
@@ -1700,6 +1701,7 @@ func release_map_visual_resources(root: Node) -> void:
 func clear_combat_runtime_cache() -> void:
 	clear_level_resource_cache()
 	_clear_runtime_pools()
+	MONSTER_FRAME_CACHE_REGISTRY.clear_all()
 	NeZhaEquipmentVisuals.clear_cached_frames()
 	_prewarmed_role_id = 0
 	_prewarmed_pet_signature = ""
@@ -2956,6 +2958,7 @@ func addui_28(parent, position):
 		ui_28 = _load_scene("res://Scene/other_scene/twenty_eight_constellations.tscn")
 	var target = instance_scene(ui_28, parent)
 	target.position = position
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2990,6 +2993,7 @@ func addhdgqmap(parent, position):
 		return_back_map = _load_scene("res://Scene/other_scene/return_back_map.tscn")
 	var target = instance_scene(return_back_map, parent)
 	target.position = position
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3029,6 +3033,7 @@ func addlhhj(parent, position):
 		target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
 	else:
 		target.position = position
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3130,6 +3135,7 @@ func add_hdzm(parent, parent_node):
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(493, 260)
 	target.parent_node = parent_node
+	register_transient_ui(target, &"_on_close_pressed")
 	var guard_script = load("res://Script/level/hdzm_window_guard.gd")
 	if guard_script != null:
 		var guard = guard_script.new()
@@ -3144,6 +3150,7 @@ func add_lsh(parent, parent_node):
 	var target = instance_scene(_lsh, parent)
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(492, 254)
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3153,6 +3160,7 @@ func add_lxdy(parent, parent_node):
 	var target = instance_scene(_lxdy, parent)
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3296,26 +3304,8 @@ func _is_permanent_ui_path(scene_path: String) -> bool:
 	return scene_path in PERMANENT_SMALL_UI_SCENE_PATHS
 
 
-func _cleanup_transient_ui_under(root: Node, names: Array) -> void:
-	if root == null:
-		return
-	for child in root.get_children():
-		if child == null or not is_instance_valid(child) or child.is_queued_for_deletion():
-			continue
-		if _is_permanent_ui_path(str(child.scene_file_path)):
-			continue
-		_cleanup_transient_ui_under(child, names)
-		if child.is_queued_for_deletion():
-			continue
-		if child.name in names:
-			if child is CanvasItem:
-				(child as CanvasItem).visible = false
-			var child_parent := child.get_parent()
-			if child_parent != null:
-				child_parent.remove_child(child)
-			child.queue_free()
-
-
+## 清理已登记的临时 UI 与弹出层。地图/商店阴影、地图 Shop 按钮等场景自有节点
+## 不登记，由所属场景释放；message_show 由父节点/自身计时释放，也不进入登记表。
 func cleanup_transient_ui() -> void:
 	if _cleanup_transient_ui_active:
 		return
@@ -3326,43 +3316,6 @@ func cleanup_transient_ui() -> void:
 		for child in _ui_popup_layer.get_children():
 			if child != null and is_instance_valid(child) and not child.is_queued_for_deletion():
 				child.queue_free()
-	var names = [
-		"MapShadowTop",
-		"MapShadowBottom",
-		"MapShadowLeft",
-		"MapShadowRight",
-		"ShopShadowTop",
-		"ShopShadowBottom",
-		"ShopShadowLeft",
-		"ShopShadowRight",
-		"LevelInfo",
-		"level_info",
-		"BasicTask",
-		"Shop",
-		"mystery_shop",
-		"LDL",
-		"ldl",
-		"lxdy",
-		"lsh",
-		"lhhj",
-		"LXDY",
-		"LSH",
-		"LHHJ",
-		"Learn_skill",
-		"HDZM",
-		"return_back_map",
-		"game_announcement",
-		"GameSet",
-		"RewardInterface",
-		"Choose_item",
-		"choose_scene",
-		"message_show",
-		"TwentyEightConstellations"
-	]
-	var scene_root = get_tree().current_scene
-	if scene_root != null:
-		_cleanup_transient_ui_under(scene_root, names)
-	_cleanup_transient_ui_under(get_tree().root, names)
 	_cleanup_transient_ui_active = false
 
 
@@ -3635,6 +3588,7 @@ func add_reward_info(parent, position, list, use_item_name, use_num, claim_calla
 	target.reward_items = list
 	target.claim_callable = claim_callable
 	target.z_index = 99
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3811,6 +3765,7 @@ func add_level_info(parent, Name, position, path):
 		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
 	else:
 		target.position = position
+	register_transient_ui(target)
 	return target
 
 
@@ -4359,6 +4314,7 @@ func add_game_set(parent, position):
 	var target = instance_scene(game_set, parent)
 	if target == null:
 		return null
+	register_transient_ui(target, &"_on_return_pressed")
 	var design_size := Vector2(942, 589)
 	var viewport_size = get_viewport().get_visible_rect().size
 	var fit_scale = min(viewport_size.x / design_size.x, viewport_size.y / design_size.y)
@@ -4916,6 +4872,7 @@ func add_choose_item(parent, position, list, _name, page):
 	target.page = page
 	target._list = list
 	target.z_index = 99
+	register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(460, 260):
 		target.position = viewport_center_for_parent(parent)
 	else:
@@ -4940,6 +4897,7 @@ func add_shop(parent, position):
 	var target = instance_scene(s_hop, parent)
 	target.z_index = 99
 	target.position = position
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -5102,6 +5060,7 @@ func add_choose_text(parent, _position, text_, calm_time):
 	target.position = _position
 	target.my_text = text_
 	target.calm_time = calm_time
+	register_transient_ui(target)
 	if is_instance_valid(target) and get_tree().paused:
 		target.process_mode = Node.PROCESS_MODE_ALWAYS
 	return target
@@ -5140,6 +5099,7 @@ func add_learn_skill(parent, position):
 	var target = instance_scene(skill_learn, parent)
 	target.z_index = 99
 	target.position = position
+	register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -5176,6 +5136,7 @@ func add_ldl(parent, position):
 	var target = instance_scene(ldl, parent)
 	target.z_index = 99
 	target.position = position
+	register_transient_ui(target, &"_on_return_pressed")
 	return target
 
 

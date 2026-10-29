@@ -947,33 +947,12 @@ class ContractScanner:
         "Global._track_level_resource",
         "Global._level_resource_lease",
     )
-    REGISTERED_UI_CLEANUP_FILES = {
-        "Scene/other_scene/level_info.gd",
-        "Scene/other_scene/lhhj.gd",
-        "Scene/other_scene/lsh.gd",
-        "Scene/other_scene/lxdy.gd",
-        "Script/back_pack/dj_sell.gd",
-        "Script/level/dsg_choose.gd",
-        "Script/level/llbt_challenge.gd",
-        "Script/main_menu/map_1.gd",
-        "Script/main_menu/map_2.gd",
-        "Script/main_menu/map_3.gd",
-        "Script/main_menu/map_4.gd",
-        "Script/main_menu/map_5.gd",
-        "Script/main_menu/map_6.gd",
-        "Script/main_menu/map_7.gd",
-        "Script/main_menu/map_8.gd",
-        "Script/main_menu/map_8_1.gd",
-        "Script/main_menu/map_9.gd",
-        "Script/main_menu/map_9_1.gd",
-    }
     POOL_UI_PRIVATE_PATTERNS = (
         "Global._clear_runtime_pools",
         "Global._pool_data",
         "Global._transient_ui_instances",
         "Global._ui_runtime_instance_paths",
         "Global._ui_runtime_instance_counts",
-        "Global._cleanup_transient_ui_under",
         "Global.release_ui_runtime_cache",
     )
     ARCHIVE_PATH_LITERAL = "user://MyAr_"
@@ -1149,7 +1128,7 @@ class ContractScanner:
             clean = line.split("#", 1)[0]
             if not clean.strip():
                 continue
-            if "Global.cleanup_transient_ui" in clean and rel_path not in cls.REGISTERED_UI_CLEANUP_FILES:
+            if "Global.cleanup_transient_ui" in clean:
                 return (lineno, "Global.cleanup_transient_ui")
             for pattern in cls.POOL_UI_PRIVATE_PATTERNS:
                 if pattern in clean:
@@ -1478,7 +1457,7 @@ class ContractScanner:
                 line=hit_line,
                 literal=hit_pattern,
                 message="池/UI 清理入口未登记：只允许 Global 或已登记的 UI 调用方",
-                suggested_fix="改用 Global.change_scene/cleanup_transient_ui 的登记入口；新增 UI 调用方需评审并加入 REGISTERED_UI_CLEANUP_FILES",
+                suggested_fix="改用 Global.change_scene；临时 UI 由工厂 register_transient_ui 登记，业务不得直接调用 cleanup_transient_ui",
                 rule_id="POOL_UI_CLEANUP_UNREGISTERED",
             )
             if not self.whitelist.is_suppressed(finding):
@@ -1891,7 +1870,7 @@ def run_load_cache_boundary_self_test() -> bool:
 
 
 def run_pool_ui_boundary_self_test() -> bool:
-    """池/UI 清理入口自测：未登记调用与私有字段必须拦截，登记调用必须放行。"""
+    """池/UI 清理入口自测：业务直接调用与私有字段必须拦截。"""
     print("[*] 池/UI 清理入口门禁负向自测...")
     bad_samples = {
         "未登记 UI 清理": ("Global.cleanup_transient_ui()\n", "Script/new_ui.gd"),
@@ -1900,9 +1879,7 @@ def run_pool_ui_boundary_self_test() -> bool:
         "直接 UI 实例表访问": ("var count = Global._transient_ui_instances.size()\n", "Script/main_menu/new_menu.gd"),
     }
     good_samples = {
-        "已登记地图清理": ("Global.cleanup_transient_ui()\n", "Script/main_menu/map_1.gd"),
         "Global 自身清理": ("_clear_runtime_pools()\n", "global.gd"),
-        "已登记关卡清理": ("Global.cleanup_transient_ui()\n", "Scene/other_scene/level_info.gd"),
         "注释中的私有入口": ("# Global._clear_runtime_pools() legacy note\n", "Script/new_ui.gd"),
     }
     passed = True

@@ -25,31 +25,26 @@ func _ready() -> void:
 
 
 func _on_return_xss_pressed() -> void:
-	Global.cleanup_transient_ui()
 	queue_free()
 	Global.change_scene("res://Scene/level/level_xss.tscn")
 
 
 func _on_return_xbj_pressed() -> void:
-	Global.cleanup_transient_ui()
 	queue_free()
 	Global.change_scene("res://Scene/level/level_xbj.tscn")
 
 
 func _on_return_xts_pressed() -> void:
-	Global.cleanup_transient_ui()
 	queue_free()
 	Global.change_scene("res://Scene/level/level_xts.tscn")
 
 
 func _on_return_xwk_pressed() -> void:
-	Global.cleanup_transient_ui()
 	queue_free()
 	Global.change_scene("res://Scene/level/level_xwk.tscn")
 
 
 func _on_return_xhy_pressed() -> void:
-	Global.cleanup_transient_ui()
 	queue_free()
 	Global.change_scene("res://Scene/level/level_xhy.tscn")
 

@@ -907,3 +907,8 @@ func is_control_immune() -> bool:
 	if _guard_active and _guard_mode == &"fortify":
 		return true
 	return super.is_control_immune()
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_body_frames_cache.clear()

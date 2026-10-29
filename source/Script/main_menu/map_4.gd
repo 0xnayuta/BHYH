@@ -236,7 +236,6 @@ func _on_level_39_pressed() -> void:
 
 func _on_level_byg_pressed() -> void:
 	if PlayerData.check_pass("碧游宫"):
-		Global.cleanup_transient_ui()
 		Global.change_scene("res://Scene/main_menu/map_5.tscn")
 	else:
 		if PlayerData.player_data["蓬莱仙境"] != 1:
@@ -247,7 +246,6 @@ func _on_level_byg_pressed() -> void:
 			Global.add_message_show(get_parent(), "需要通天赦令！！", 1.5, Vector2(470, 300))
 		else:
 			PlayerData.player_data["碧游宫"] = true
-			Global.cleanup_transient_ui()
 			Global.change_scene("res://Scene/main_menu/map_5.tscn")
 
 
@@ -300,7 +298,6 @@ func _on_task_pressed() -> void:
 
 
 func _on_return_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 

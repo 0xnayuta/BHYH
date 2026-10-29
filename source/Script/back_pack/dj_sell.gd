@@ -196,7 +196,6 @@ func use_xhp():
 		"yll":
 			if PlayerData.player_data["望乡台"] == 1:
 				PlayerData.remove_xhp(my_name, my_page, 1)
-				Global.cleanup_transient_ui()
 				Global.change_scene("res://Scene/level/level_eighteenth_hell.tscn")
 				return
 			else:

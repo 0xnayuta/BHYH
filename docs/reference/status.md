@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B 已完成、19-2C/19-2D、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D 已完成、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -220,6 +220,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 19-1B 路径清理 | **pet_interface**：动态行先取 `Content` 再取直接子节点，`giveUpThisPet`/tooltip 同样中间节点访问，深层字面路径 22→0。**base_role**：宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer` 再取子节点，8→0。**skill_icon**：删除 `/root/LocalCoop`/`/root/PlayerData`/`/root/RoleProp` 回落，直接 `LocalCoop.data_for/props_for`。**门禁**：`contract_scan` 三文件深层预算收紧到 0，`skill_icon` 加入 `/root` 禁入并从 root 白名单移除。**验证**：档案持久化 275 项 PASS；`coop_probe_runner` 23/23 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s）；`check_all --godot-bin` 8/8 PASS。 | 19-1B 完成 |
 | 2026-10-30 Phase 19-1C 奖励表现 | **失败**：`reward_interface` 在 `RewardGrantCommand` 返回失败时隐藏奖励盒容器、释放盒子、标题改为“奖励发放失败”，错误提示保留；奖励盒 Tween 先 kill，空奖励不再创建空 Tween。**成功**：奖励盒保留。**不变量**：命令失败已恢复物品/使用物/领取标记，不显示成功假象。**验证**：档案持久化 280 项 PASS（新增失败隐藏/成功保留/失败不发奖断言）；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.5s）；`check_all --godot-bin` 8/8 PASS。 | 19-1C 完成 |
 | 2026-10-30 Phase 19-2A/19-2B 音频清理 | **BGM**：`add_bgm` 先设 `target` 再同步 `add_child`，消除同曲跨父节点 deferred pending；同曲异父同步重挂并按开关恢复；queued/invalid 不复用；`end_archive_session()` 调用 `stop_bgm()`。**音效池**：`_clear_runtime_pools` 停止/清流/释放活动声部，清空 `_active_sound_players` 与 45ms 节流表；回收仍走 `prepare_for_pool()`。**验证**：档案探针 289 项 PASS；协作探针 23/23；场景探针 7/7；`level_1` 冒烟 PASS；全量回归 128/128 PASS + 5 SKIP（334.5s，2 个瞬态失败串行重试通过）；`check_all --godot-bin` 8/8 PASS。 | 19-2A/19-2B 完成 |
+| 2026-10-30 Phase 19-2C 临时 UI | 删除 `cleanup_transient_ui` 的 29 项硬编码名称与递归名称兜底；14 个 UI 工厂补齐 `register_transient_ui`，LevelInfo 以无关闭方法登记以保留四剑模式，GameSet/LDL 使用 `_on_return_pressed`；删除 18 个文件的 51 处业务显式调用，`cleanup_transient_ui` 仅由 `Global.change_scene` 调用。`contract_scan` 删除 `REGISTERED_UI_CLEANUP_FILES` 白名单，业务直接调用一律阻断；`load-guard` 新增未登记名称不误删、无关闭方法释放、真实 `add_choose_text` 工厂登记/清理断言。**验证**：`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；场景探针 7/7 PASS；协作探针 23/23；全量回归 128/128 PASS + 5 SKIP（279.9s）；`check_all --godot-bin` 8/8 PASS。 | 19-2C 完成 |
+| 2026-10-30 Phase 19-2D 静态帧缓存 | 新增 `MonsterFrameCacheRegistry`，集中清理 44 个怪物帧/几何脚本、`MonsterBullet`、`SwordBossBase` 与 4 个观音效果缓存；`clear_combat_runtime_cache()` 在档案退出/应用退出调用，跨档案不保留；同一档案内关卡切换保留不可变帧缓存，编辑预览缓存明确保留。`load-guard` 新增注册表清空断言。**验证**：场景探针 7/7 PASS；协作探针 23/23；全量回归 128/128 PASS + 5 SKIP（279.9s）；`check_all --godot-bin` 8/8 PASS。 | 19-2D 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

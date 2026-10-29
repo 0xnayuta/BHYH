@@ -301,3 +301,8 @@ func call_wang():
 func call_zz():
 	for i in range(randi_range(2, 4)):
 		Global.create_monster(66, get_parent(), position + Vector2(randi_range(-200, 200), 0))
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_body_frames_resource = null

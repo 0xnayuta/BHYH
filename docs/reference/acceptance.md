@@ -122,7 +122,7 @@ python scripts/check_all.py --no-cache -j 6
 | 关卡预载边界 | `load_scene.gd` 中的目录扫描、`ResourceLoader.get_dependencies`、`FileAccess`/JSON manifest 解析 | ERROR（`PRELOAD_BOUNDARY_FORBIDDEN`） |
 | 场景入口边界 | 业务脚本直接调用 `change_scene_to_file/packed`，仅 `global.gd` 豁免 | ERROR（`SCENE_ENTRY_BYPASS`） |
 | 加载页私有缓存 | `load_scene.gd` 访问 `Global._resource_cache` 等私有缓存/租约/写入函数 | ERROR（`LOAD_CACHE_PRIVATE_ACCESS`） |
-| 池/UI 清理入口 | 未登记的 `Global.cleanup_transient_ui`、`Global._clear_runtime_pools`、私有池/UI 表访问 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
+| 池/UI 清理入口 | 业务直接调用 `Global.cleanup_transient_ui`、`Global._clear_runtime_pools` 或私有池/UI 表访问 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
 | 档案边界 | 业务拼接 `user://MyAr_`；业务直调 `load_game`/`save_game`/`safe_write_archive`（登记入口豁免） | ERROR（`ARCHIVE_BOUNDARY_FORBIDDEN`） |
 | 槽位边界 | 业务硬编码 `/root/PlayerData`/`/root/RoleProp`；重新引入 `suspend/resume_player_view` | ERROR（`SLOT_BOUNDARY_FORBIDDEN`） |
 | 面板操作者 | 面板域脚本使用 `PlayerData`/`RoleProp` 但自身与祖先均未声明槽位操作者 | ERROR（`PANEL_OPERATOR_UNBOUND`） |

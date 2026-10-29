@@ -250,3 +250,9 @@ func state_death() -> void:
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	super.state_death()
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frames_cache = null
+	_premultiplied_material = null

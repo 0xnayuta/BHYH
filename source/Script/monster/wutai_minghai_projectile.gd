@@ -940,3 +940,9 @@ func _resolve_random_target() -> Node2D:
 	if players.is_empty():
 		return null
 	return players[randi() % players.size()]
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_frame_geometry_cache.clear()
+	_standard_loop_cache.clear()

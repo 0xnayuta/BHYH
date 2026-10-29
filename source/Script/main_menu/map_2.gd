@@ -211,7 +211,6 @@ func _on_boss_treasure_toggled():
 
 
 func _on_changetomain_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 
@@ -301,7 +300,6 @@ func check_pass_level():
 
 
 func _on_button_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_1.tscn")
 
 
@@ -430,7 +428,6 @@ func play_an(Level):
 
 func _on_changetott_pressed() -> void:
 	if PlayerData.check_pass("天庭"):
-		Global.cleanup_transient_ui()
 		Global.change_scene("res://Scene/main_menu/map_3.tscn")
 	else:
 		if PlayerData.player_data.转轮殿 != 1:

@@ -58,7 +58,6 @@ func _enter_llbt_level() -> void:
 		push_error("当前节点不在场景树中，无法进入玲珑宝塔")
 		return
 	_close_popup_chain()
-	Global.cleanup_transient_ui()
 	Global.call_deferred("change_scene", "res://Scene/level/level_llbt.tscn")
 
 

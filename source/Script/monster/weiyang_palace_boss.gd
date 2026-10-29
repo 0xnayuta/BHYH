@@ -489,3 +489,9 @@ func monster_info_base_attack() -> int:
 
 func monster_info_attack_values_include_difficulty() -> bool:
 	return false
+
+
+# 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。
+static func clear_cached_frames() -> void:
+	_cache = null
+	_appear_cache = null

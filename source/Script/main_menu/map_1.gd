@@ -342,12 +342,10 @@ func _on_ldl_pressed() -> void:
 
 
 func _on_next_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_2.tscn")
 
 
 func _on_turn_mainmenu_pressed() -> void:
-	Global.cleanup_transient_ui()
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 
 

@@ -483,7 +483,7 @@ classDiagram
 - 由 `Global.add_*` 工厂延迟实例化，挂到 `Global.windows` 或 `GlobalUiPopupLayer`；
 - `Global.windows` 由当前场景设置；`LocalCoop` 打开 2P 面板时临时替换并恢复；
 - 确认框统一通过 `Signals.choose_pressed` 回调；
-- 临时 UI 通过 `Global.register_transient_ui(node, close_method, scene_path)` 显式登记；基础任务、神秘商店与游戏公告工厂已迁移。`cleanup_transient_ui` 先执行关闭回调，再清理弹出层/名称兜底；永久小 UI 路径跳过，递归清理有 active 守卫；
+- 临时 UI 通过 `Global.register_transient_ui(node, close_method, scene_path)` 显式登记；LevelInfo、GameSet、LDL、商店、技能、奖励、选择框、轮回/星座/返回地图等工厂均已登记。`cleanup_transient_ui` 只关闭登记实例并清理弹出层；永久小 UI 路径跳过，active 守卫保留。名称兜底和 51 处业务显式调用已删除；地图/商店阴影与 `message_show` 由所属场景/父节点释放；
 
 - 新 UI 优先场景组合、`@export` 注入与 `%UniqueName`，不新增跨场景深层 `get_node()`。
 
@@ -551,7 +551,7 @@ classDiagram
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
 | 场景切换入口 | `Global.change_scene` 统一校验、清理、代次与切换；加载页用目标快照完成交接 | 新代码只走 `Global.change_scene`；加载页不直接切场景 |
-| 按硬编码节点名清理 UI | `Global.cleanup_transient_ui` | 新增 UI 必须注册/释放自身资源 |
+| 临时 UI 登记 | `Global.register_transient_ui` 与 `Global.cleanup_transient_ui` | 新增工厂必须登记；业务不得直接调用 `cleanup_transient_ui`；永久小 UI 跳过 |
 | `AtlasMetadata.data: Dictionary` | 图集元数据弱类型 | 六个直接消费者已用只读 `AtlasMetadataView`；`.data` 仅为序列化内部字段，不扩大无类型面 |
 | 2P 面板操作者 | 面板根节点/弹出层 `coop_slot` meta + 脚本属性 getter | 新增面板必须沿用槽位解析；不得改写全局 `PlayerData`/`RoleProp` |
 | 深层 `get_node()` / 绝对路径 | 存量场景与脚本 | 新代码禁止；重构时同步清理 |
