@@ -1,6 +1,6 @@
 # 玩法与表现调用面矩阵（Phase 17-1）
 
-> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算、17-4 成长命令与 17-5 HUD/输入/音频边界已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A/17-2B/17-2C/17-3/17-4/17-5 的修复与剩余差距见 §12~§17。
+> **状态**：Phase 17-1 只读调查完成（2026-10-29）；17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算、17-4 成长命令、17-5 HUD/输入/音频边界与 17-6 模块 API/场景依赖治理已实施（2026-10-29）。§1~§11 保留 17-1 基线与失败边界，17-2A~17-6 的修复与剩余差距见 §12~§18。
 >
 > **调查基线**：Phase 16 归档后的 `4e4c311`（2026-10-29）；仓库只有一个活跃工程 `source/`。
 >
@@ -422,8 +422,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 项 | 事实 |
 |:---|:---|
 | 节点访问 | `get_node` 168 + `get_node_or_null` 531 = **699 处 / 144 文件** |
-| 字面深层路径 | **279 处 / 66 文件**；热点 `pet_interface` 117、`zd_skill` 26、`base_role` 12、`player_data` 7、`global` 6 |
-| `/root` 单例 | **34 处 / 13 文件**；热点 `player_data` 7、`base_role_properies` 6、`base_magic_weapon` 4 |
+| 字面深层路径 | 17-1 基线 **279 处 / 66 文件**；17-6 四试点 159→30（`pet_interface` 117→22、`zd_skill` 26→0、`base_role` 12→8、`base_magic_weapon` 4→0）；未全仓复算 |
+| `/root` 单例 | 17-1 基线 **34 处 / 13 文件**；17-6 删除 `base_role`/`base_magic_weapon` 的 `/root` 访问，改用 `LocalCoop` 槽位查询 |
 | 场景规模 | 153 个关卡 `.tscn`、163 个关卡 `.gd`；86 个脚本直接 `extends BaseLevel` |
 | 场景依赖 | 关卡场景固定 `Hero`/`Monster`/`CanvasLayer` 等节点；`BaseLevel` 用 `@onready` 直接取 |
 | 通信 | 父调用子公开方法；子节点回写父级字段（如 `next_boss.current_stage`），无信号解耦 |
@@ -436,7 +436,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 17-3 | `base_through_level.gd`、`victory.gd`、`defeat.gd`、`level_zhen_yao_tower.gd` | 阶段/结算所有者清晰，失败边界可枚举 | 不改关卡时序/数值 |
 | 17-4 | `shop_item.gd`、`mystery_shop_item_box.gd`、`forge.gd`、`divine_forge.gd`、`bone_forge.gd`、`strength.gd`、`synthesis.gd`、`zd_skill.gd`、`bd_skill.gd`、`reward_interface.gd`、`basic_task.gd` | 已有 `forge` 参考事务；失败模式集中 | 不引入通用事务框架 |
 | 17-5 | `base_role.gd`、`role_information.gd`、`reward_interface.gd`、`transmogtified_box.gd`、`Global.add_bgm`/`add_sound` | 表现层与命令边界可区分 | 不改输入映射/HUD 布局 |
-| 17-6 | `pet_interface.gd`、`zd_skill.gd`、`base_role.gd`、`base_magic_weapon.gd` 的深层路径 | 279 处中前三文件占 155 处 | 不全仓替换 `get_node` |
+| 17-6 | `pet_interface.gd`、`zd_skill.gd`、`base_role.gd`、`base_magic_weapon.gd` | 四文件 159 条深层字面路径，路径/依赖集中 | 不全仓替换 `get_node` |
 
 ---
 
@@ -644,3 +644,39 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 ### 17.3 验证
 
 `archive_probe_runner` 145 项 PASS，新增：幻化命令成功/重载/保存失败回滚、奖励界面保存与单次发放、BGM 同曲复用/切曲停旧/停止清空、音效池播放与回收清流。`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS。
+
+---
+
+## 18. 17-6 模块 API 与场景依赖（2026-10-29）
+
+### 18.1 公开 API
+
+四个试点的公开方法、注入字段、场景节点与外部依赖见 [`module_api_matrix.md`](module_api_matrix.md)。摘要：
+
+| 模块 | 稳定公开面 | 内部回调 |
+|:---|:---|:---|
+| `BaseRole` | `player`、`pet_panel`、`is_full_ws()`、`reveal_after_scene_loaded()` | `_set_values`/`_set_pet_values` 等渲染 |
+| `BaseMagicWeapon` | `player`、`set_magic_weapon_player`、`get_attack_snapshot`、`use_skill`、`enough_mp`、`show_skill`、`fix_hero`、`use_over` | `_physics_process`、`_on_skill_cd_timeout` |
+| `zd_skill` | `up_level`、`refresh_infor`、`init_skill_variants`、`update_skill_name_and_icon`、`setup_variant_menu` 与查询方法 | `_on_skill_*`/`_on_ski_*` 场景连接 |
+| `pet_interface` | `*_click`/`eat_immor`/`push_pet_*` 等面板命令 | `_on_*`/`_feed_*`/`_refresh_*` |
+
+### 18.2 依赖方向
+
+- 父场景负责实例化与注入 `player`/`pet_panel`；模块不反向控制父级业务字段。
+- 模块通过 `LocalCoop.data_for/props_for` 解析槽位；跨模块写经 `PlayerData` 命令。
+- 禁止新增 `/root/<Autoload>`、HUD 绘制回调写档、跨模块私有字段/节点访问。
+
+### 18.3 路径清理
+
+| 文件 | 前 | 后 | 方式 |
+|:---|:---:|:---:|:---|
+| `pet_interface.gd` | 117 | 22 | `_pet_ui_node(root, child)` |
+| `zd_skill.gd` | 26 | 0 | `SKILL_UI_ROOT` + 列/孙节点访问器 |
+| `base_role.gd` | 12 | 8 | 删除 `/root`，改用 `LocalCoop` |
+| `base_magic_weapon.gd` | 4 | 0 | 同上 |
+
+剩余 30 条均为模块自身场景子节点，未改场景名或 `%UniqueName`。**未做全仓替换。**
+
+### 18.4 验证
+
+`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。

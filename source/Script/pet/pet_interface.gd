@@ -627,9 +627,9 @@ const PET_YIN_TIGER_PET := {
 @onready var pre_page := get_node_or_null("prePage") as BaseButton
 @onready var txtname := get_node_or_null("txtname") as Label
 @onready var tiger_level_text := get_node_or_null("TigerLevelText") as Label
-@onready var tiger_quality_wx := get_node_or_null("PetAttributeShow/TigerQualityWx") as Label
-@onready var tiger_quality_gg := get_node_or_null("PetAttributeShow/TigerQualityGg") as Label
-@onready var tiger_quality_ll := get_node_or_null("PetAttributeShow/TigerQualityLl") as Label
+@onready var tiger_quality_wx := _pet_ui_node("PetAttributeShow", "TigerQualityWx") as Label
+@onready var tiger_quality_gg := _pet_ui_node("PetAttributeShow", "TigerQualityGg") as Label
+@onready var tiger_quality_ll := _pet_ui_node("PetAttributeShow", "TigerQualityLl") as Label
 @onready var listtxt := get_node_or_null("listtxt") as Label
 @onready var qualitymc := get_node_or_null("qualitymc") as CanvasItem
 @onready var leveltxt := get_node_or_null("leveltxt") as Label
@@ -648,102 +648,102 @@ const PET_YIN_TIGER_PET := {
 
 @onready var pet_attribute_show := get_node_or_null("PetAttributeShow") as CanvasItem
 @onready var pet_attribute_pages := get_node_or_null("PetAttributePages") as CanvasItem
-@onready var learn_skill_button := get_node_or_null("PetAttributeShow/LearnSkillButton") as Button
-@onready var pet_formation_button := get_node_or_null("PetAttributeShow/PetFormationButton") as Button
-@onready var upgrade_skill_button := get_node_or_null("PetAttributeShow/UpgradeSkillButton") as Button
+@onready var learn_skill_button := _pet_ui_node("PetAttributeShow", "LearnSkillButton") as Button
+@onready var pet_formation_button := _pet_ui_node("PetAttributeShow", "PetFormationButton") as Button
+@onready var upgrade_skill_button := _pet_ui_node("PetAttributeShow", "UpgradeSkillButton") as Button
 @onready var pet_skill_learn_popup := get_node_or_null("PetSkillLearnPopup") as Control
-@onready var pet_skill_learn_close := get_node_or_null("PetSkillLearnPopup/Window/CloseButton") as BaseButton
-@onready var pet_skill_learn_list := get_node_or_null("PetSkillLearnPopup/Window/SkillScroll/SkillList") as VBoxContainer
+@onready var pet_skill_learn_close := _pet_ui_node("PetSkillLearnPopup", "Window/CloseButton") as BaseButton
+@onready var pet_skill_learn_list := _pet_ui_node("PetSkillLearnPopup", "Window/SkillScroll/SkillList") as VBoxContainer
 @onready var pet_skill_learn_template := (
-	get_node_or_null("PetSkillLearnPopup/Window/SkillScroll/SkillList/LearnRowTemplate") as PanelContainer
+	_pet_ui_node("PetSkillLearnPopup", "Window/SkillScroll/SkillList/LearnRowTemplate") as PanelContainer
 )
 @onready var pet_skill_upgrade_popup := get_node_or_null("PetSkillUpgradePopup") as Control
-@onready var pet_skill_upgrade_window := get_node_or_null("PetSkillUpgradePopup/Window") as Control
-@onready var pet_skill_upgrade_close := get_node_or_null("PetSkillUpgradePopup/Window/CloseButton") as BaseButton
-@onready var pet_skill_upgrade_soul := get_node_or_null("PetSkillUpgradePopup/Window/SoulLabel") as Label
+@onready var pet_skill_upgrade_window := _pet_ui_node("PetSkillUpgradePopup", "Window") as Control
+@onready var pet_skill_upgrade_close := _pet_ui_node("PetSkillUpgradePopup", "Window/CloseButton") as BaseButton
+@onready var pet_skill_upgrade_soul := _pet_ui_node("PetSkillUpgradePopup", "Window/SoulLabel") as Label
 @onready
-var pet_skill_upgrade_list := get_node_or_null("PetSkillUpgradePopup/Window/SkillScroll/SkillList") as VBoxContainer
+var pet_skill_upgrade_list := _pet_ui_node("PetSkillUpgradePopup", "Window/SkillScroll/SkillList") as VBoxContainer
 @onready var pet_skill_upgrade_template := (
-	get_node_or_null("PetSkillUpgradePopup/Window/SkillScroll/SkillList/SkillRowTemplate") as PanelContainer
+	_pet_ui_node("PetSkillUpgradePopup", "Window/SkillScroll/SkillList/SkillRowTemplate") as PanelContainer
 )
 @onready var pet_formation_popup := get_node_or_null("PetFormationPopup") as Control
-@onready var pet_formation_close := get_node_or_null("PetFormationPopup/Window/CloseButton") as BaseButton
-@onready var pet_formation_resources := get_node_or_null("PetFormationPopup/Window/Resources") as Label
+@onready var pet_formation_close := _pet_ui_node("PetFormationPopup", "Window/CloseButton") as BaseButton
+@onready var pet_formation_resources := _pet_ui_node("PetFormationPopup", "Window/Resources") as Label
 @onready
-var pet_formation_list := get_node_or_null("PetFormationPopup/Window/FormationScroll/FormationList") as VBoxContainer
+var pet_formation_list := _pet_ui_node("PetFormationPopup", "Window/FormationScroll/FormationList") as VBoxContainer
 @onready var pet_formation_template := (
-	get_node_or_null("PetFormationPopup/Window/FormationScroll/FormationList/FormationRowTemplate") as PanelContainer
+	_pet_ui_node("PetFormationPopup", "Window/FormationScroll/FormationList/FormationRowTemplate") as PanelContainer
 )
-@onready var hpqualitytxt := get_node_or_null("PetAttributeShow/hpqualitytxt") as Label
-@onready var mpqualitytxt := get_node_or_null("PetAttributeShow/mpqualitytxt") as Label
-@onready var atkqualitytxt := get_node_or_null("PetAttributeShow/atkqualitytxt") as Label
-@onready var defqualitytxt := get_node_or_null("PetAttributeShow/defqualitytxt") as Label
-@onready var warpowertxt := get_node_or_null("PetAttributeShow/warpowertxt") as Label
-@onready var perceptiontxt := get_node_or_null("PetAttributeShow/perceptiontxt") as Label
-@onready var techniquetxt := get_node_or_null("PetAttributeShow/techniquetxt") as Label
-@onready var lifetimetxt := get_node_or_null("PetAttributeShow/lifetimetxt") as Label
-@onready var skilltxt := get_node_or_null("PetAttributeShow/skilltxt") as Label
-@onready var wuxingvaluetxt := get_node_or_null("PetAttributeShow/wuxingvaluetxt") as Label
-@onready var genguvaluetxt := get_node_or_null("PetAttributeShow/genguvaluetxt") as Label
-@onready var linglivaluext := get_node_or_null("PetAttributeShow/linglivaluext") as Label
-@onready var hpzizhitxt := get_node_or_null("PetAttributeShow/shape10_生命/hpzizhitxt") as Label
-@onready var mpzizhitxt := get_node_or_null("PetAttributeShow/shape10_魔法/mpzizhitxt") as Label
-@onready var atkzizhitxt := get_node_or_null("PetAttributeShow/shape10_攻击/atkzizhitxt") as Label
-@onready var defzizhitxt := get_node_or_null("PetAttributeShow/shape10_防御/defzizhitxt") as Label
-@onready var hpzizhibar := get_node_or_null("PetAttributeShow/shape10_生命/hpzizhibar") as TextureProgressBar
-@onready var mpzizhibar := get_node_or_null("PetAttributeShow/shape10_魔法/mpzizhibar") as TextureProgressBar
-@onready var atkzizhibar := get_node_or_null("PetAttributeShow/shape10_攻击/atkzizhibar") as TextureProgressBar
-@onready var defzizhibar := get_node_or_null("PetAttributeShow/shape10_防御/defzizhibar") as TextureProgressBar
-@onready var hpzizhibtn := get_node_or_null("PetAttributeShow/shape10_生命/hpzizhibtn") as BaseButton
-@onready var mpzizhibtn := get_node_or_null("PetAttributeShow/shape10_魔法/mpzizhibtn") as BaseButton
-@onready var atkzizhibtn := get_node_or_null("PetAttributeShow/shape10_攻击/atkzizhibtn") as BaseButton
-@onready var defzizhibtn := get_node_or_null("PetAttributeShow/shape10_防御/defzizhibtn") as BaseButton
-@onready var wuxingbtn := get_node_or_null("PetAttributeShow/shape10_悟性/mpzizhibtn") as BaseButton
-@onready var gengubtn := get_node_or_null("PetAttributeShow/shape10_根骨/mpzizhibtn") as BaseButton
-@onready var linglibtn := get_node_or_null("PetAttributeShow/shape10_灵力/mpzizhibtn") as BaseButton
+@onready var hpqualitytxt := _pet_ui_node("PetAttributeShow", "hpqualitytxt") as Label
+@onready var mpqualitytxt := _pet_ui_node("PetAttributeShow", "mpqualitytxt") as Label
+@onready var atkqualitytxt := _pet_ui_node("PetAttributeShow", "atkqualitytxt") as Label
+@onready var defqualitytxt := _pet_ui_node("PetAttributeShow", "defqualitytxt") as Label
+@onready var warpowertxt := _pet_ui_node("PetAttributeShow", "warpowertxt") as Label
+@onready var perceptiontxt := _pet_ui_node("PetAttributeShow", "perceptiontxt") as Label
+@onready var techniquetxt := _pet_ui_node("PetAttributeShow", "techniquetxt") as Label
+@onready var lifetimetxt := _pet_ui_node("PetAttributeShow", "lifetimetxt") as Label
+@onready var skilltxt := _pet_ui_node("PetAttributeShow", "skilltxt") as Label
+@onready var wuxingvaluetxt := _pet_ui_node("PetAttributeShow", "wuxingvaluetxt") as Label
+@onready var genguvaluetxt := _pet_ui_node("PetAttributeShow", "genguvaluetxt") as Label
+@onready var linglivaluext := _pet_ui_node("PetAttributeShow", "linglivaluext") as Label
+@onready var hpzizhitxt := _pet_ui_node("PetAttributeShow", "shape10_生命/hpzizhitxt") as Label
+@onready var mpzizhitxt := _pet_ui_node("PetAttributeShow", "shape10_魔法/mpzizhitxt") as Label
+@onready var atkzizhitxt := _pet_ui_node("PetAttributeShow", "shape10_攻击/atkzizhitxt") as Label
+@onready var defzizhitxt := _pet_ui_node("PetAttributeShow", "shape10_防御/defzizhitxt") as Label
+@onready var hpzizhibar := _pet_ui_node("PetAttributeShow", "shape10_生命/hpzizhibar") as TextureProgressBar
+@onready var mpzizhibar := _pet_ui_node("PetAttributeShow", "shape10_魔法/mpzizhibar") as TextureProgressBar
+@onready var atkzizhibar := _pet_ui_node("PetAttributeShow", "shape10_攻击/atkzizhibar") as TextureProgressBar
+@onready var defzizhibar := _pet_ui_node("PetAttributeShow", "shape10_防御/defzizhibar") as TextureProgressBar
+@onready var hpzizhibtn := _pet_ui_node("PetAttributeShow", "shape10_生命/hpzizhibtn") as BaseButton
+@onready var mpzizhibtn := _pet_ui_node("PetAttributeShow", "shape10_魔法/mpzizhibtn") as BaseButton
+@onready var atkzizhibtn := _pet_ui_node("PetAttributeShow", "shape10_攻击/atkzizhibtn") as BaseButton
+@onready var defzizhibtn := _pet_ui_node("PetAttributeShow", "shape10_防御/defzizhibtn") as BaseButton
+@onready var wuxingbtn := _pet_ui_node("PetAttributeShow", "shape10_悟性/mpzizhibtn") as BaseButton
+@onready var gengubtn := _pet_ui_node("PetAttributeShow", "shape10_根骨/mpzizhibtn") as BaseButton
+@onready var linglibtn := _pet_ui_node("PetAttributeShow", "shape10_灵力/mpzizhibtn") as BaseButton
 
 @onready var pet_backpack_show := get_node_or_null("PetBackPackShow") as CanvasItem
-@onready var pbpbtn := get_node_or_null("PetBackPackShow/pbpbtn") as BaseButton
-@onready var pstrbtn := get_node_or_null("PetBackPackShow/pstrbtn") as BaseButton
-@onready var zbst := get_node_or_null("PetBackPackShow/zbst") as BaseButton
-@onready var zbmz := get_node_or_null("PetBackPackShow/zbmz") as BaseButton
-@onready var zbxz := get_node_or_null("PetBackPackShow/zbxz") as BaseButton
-@onready var zbyf := get_node_or_null("PetBackPackShow/zbyf") as BaseButton
-@onready var zbjn := get_node_or_null("PetBackPackShow/zbjn") as BaseButton
-@onready var pet_backpack_grid := get_node_or_null("PetBackPackShow/PetBackpackScroll/PetBackpackGrid") as GridContainer
-@onready var pet_batch_sell_button := get_node_or_null("PetBackPackShow/PetBatchSellButton") as BaseButton
-@onready var pet_strength_interface := get_node_or_null("PetBackPackShow/PetStrengthInterface") as CanvasItem
-@onready var str_ntxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/ntxt") as Label
-@onready var str_atxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/atxt") as Label
-@onready var str_protxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/protxt") as Label
-@onready var str_ttxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/ttxt") as Label
-@onready var str_expmc := get_node_or_null("PetBackPackShow/PetStrengthInterface/expmc") as Label
-@onready var str_dtxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/dtxt") as Label
-@onready var str_etxt := get_node_or_null("PetBackPackShow/PetStrengthInterface/etxt") as Label
-@onready var buyqh := get_node_or_null("PetBackPackShow/PetStrengthInterface/buyqh") as BaseButton
-@onready var strbtn := get_node_or_null("PetBackPackShow/PetStrengthInterface/strbtn") as BaseButton
+@onready var pbpbtn := _pet_ui_node("PetBackPackShow", "pbpbtn") as BaseButton
+@onready var pstrbtn := _pet_ui_node("PetBackPackShow", "pstrbtn") as BaseButton
+@onready var zbst := _pet_ui_node("PetBackPackShow", "zbst") as BaseButton
+@onready var zbmz := _pet_ui_node("PetBackPackShow", "zbmz") as BaseButton
+@onready var zbxz := _pet_ui_node("PetBackPackShow", "zbxz") as BaseButton
+@onready var zbyf := _pet_ui_node("PetBackPackShow", "zbyf") as BaseButton
+@onready var zbjn := _pet_ui_node("PetBackPackShow", "zbjn") as BaseButton
+@onready var pet_backpack_grid := _pet_ui_node("PetBackPackShow", "PetBackpackScroll/PetBackpackGrid") as GridContainer
+@onready var pet_batch_sell_button := _pet_ui_node("PetBackPackShow", "PetBatchSellButton") as BaseButton
+@onready var pet_strength_interface := _pet_ui_node("PetBackPackShow", "PetStrengthInterface") as CanvasItem
+@onready var str_ntxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/ntxt") as Label
+@onready var str_atxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/atxt") as Label
+@onready var str_protxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/protxt") as Label
+@onready var str_ttxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/ttxt") as Label
+@onready var str_expmc := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/expmc") as Label
+@onready var str_dtxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/dtxt") as Label
+@onready var str_etxt := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/etxt") as Label
+@onready var buyqh := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/buyqh") as BaseButton
+@onready var strbtn := _pet_ui_node("PetBackPackShow", "PetStrengthInterface/strbtn") as BaseButton
 
 @onready var pet_develop_interface := get_node_or_null("PetDevelopInterface") as CanvasItem
-@onready var qltxt := get_node_or_null("PetDevelopInterface/qltxt") as Label
-@onready var wxbar := get_node_or_null("PetDevelopInterface/wxmc") as TextureProgressBar
-@onready var wxtxt := get_node_or_null("PetDevelopInterface/wxtxt") as Label
-@onready var ggbar := get_node_or_null("PetDevelopInterface/ggmc") as TextureProgressBar
-@onready var ggtxt := get_node_or_null("PetDevelopInterface/ggtxt") as Label
-@onready var llbar := get_node_or_null("PetDevelopInterface/llmc") as TextureProgressBar
-@onready var lltxt := get_node_or_null("PetDevelopInterface/lltxt") as Label
-@onready var qlbar := get_node_or_null("PetDevelopInterface/qlmc") as TextureProgressBar
-@onready var qljxtxt := get_node_or_null("PetDevelopInterface/qljxtxt") as Label
-@onready var wxplus := get_node_or_null("PetDevelopInterface/wxplus") as BaseButton
-@onready var ggplus := get_node_or_null("PetDevelopInterface/ggplus") as BaseButton
-@onready var llplus := get_node_or_null("PetDevelopInterface/llplus") as BaseButton
-@onready var qplus := get_node_or_null("PetDevelopInterface/qplus") as BaseButton
-@onready var sbtn := get_node_or_null("PetDevelopInterface/sbtn") as BaseButton
-@onready var nbtn := get_node_or_null("PetDevelopInterface/nbtn") as BaseButton
-@onready var ntxt := get_node_or_null("PetDevelopInterface/ntxt") as Label
-@onready var etxt := get_node_or_null("PetDevelopInterface/etxt") as Label
-@onready var dtxt := get_node_or_null("PetDevelopInterface/dtxt") as Label
-@onready var pet_eat_immortality := get_node_or_null("PetDevelopInterface/PetEatImmortality") as CanvasItem
-@onready var pet_eat_close := get_node_or_null("PetDevelopInterface/PetEatImmortality/btn_close") as BaseButton
+@onready var qltxt := _pet_ui_node("PetDevelopInterface", "qltxt") as Label
+@onready var wxbar := _pet_ui_node("PetDevelopInterface", "wxmc") as TextureProgressBar
+@onready var wxtxt := _pet_ui_node("PetDevelopInterface", "wxtxt") as Label
+@onready var ggbar := _pet_ui_node("PetDevelopInterface", "ggmc") as TextureProgressBar
+@onready var ggtxt := _pet_ui_node("PetDevelopInterface", "ggtxt") as Label
+@onready var llbar := _pet_ui_node("PetDevelopInterface", "llmc") as TextureProgressBar
+@onready var lltxt := _pet_ui_node("PetDevelopInterface", "lltxt") as Label
+@onready var qlbar := _pet_ui_node("PetDevelopInterface", "qlmc") as TextureProgressBar
+@onready var qljxtxt := _pet_ui_node("PetDevelopInterface", "qljxtxt") as Label
+@onready var wxplus := _pet_ui_node("PetDevelopInterface", "wxplus") as BaseButton
+@onready var ggplus := _pet_ui_node("PetDevelopInterface", "ggplus") as BaseButton
+@onready var llplus := _pet_ui_node("PetDevelopInterface", "llplus") as BaseButton
+@onready var qplus := _pet_ui_node("PetDevelopInterface", "qplus") as BaseButton
+@onready var sbtn := _pet_ui_node("PetDevelopInterface", "sbtn") as BaseButton
+@onready var nbtn := _pet_ui_node("PetDevelopInterface", "nbtn") as BaseButton
+@onready var ntxt := _pet_ui_node("PetDevelopInterface", "ntxt") as Label
+@onready var etxt := _pet_ui_node("PetDevelopInterface", "etxt") as Label
+@onready var dtxt := _pet_ui_node("PetDevelopInterface", "dtxt") as Label
+@onready var pet_eat_immortality := _pet_ui_node("PetDevelopInterface", "PetEatImmortality") as CanvasItem
+@onready var pet_eat_close := _pet_ui_node("PetDevelopInterface", "PetEatImmortality/btn_close") as BaseButton
 
 @onready var give_up_this_pet := get_node_or_null("giveUpThisPet") as CanvasItem
 @onready var give_up_okbtn := get_node_or_null("giveUpThisPet/okbtn") as BaseButton
@@ -802,6 +802,13 @@ var _pet_passive_hold_elapsed := 0.0
 var _pet_passive_repeat_elapsed := 0.0
 var _pet_passive_repeating := false
 var _pet_passive_suppress_click := false
+
+
+func _pet_ui_node(root_name: String, child_path: String = "") -> Node:
+	var root := get_node_or_null(root_name)
+	if root == null or child_path == "":
+		return root
+	return root.get_node_or_null(child_path)
 
 
 func _ready() -> void:
@@ -867,7 +874,7 @@ func _ready() -> void:
 	_connect_button(buyqh, _on_buy_strength_pressed)
 	for i in range(1, 9):
 		_connect_button(
-			get_node_or_null("PetDevelopInterface/PetEatImmortality/mc%d" % i) as BaseButton,
+			_pet_ui_node("PetDevelopInterface", "PetEatImmortality/mc%d" % i) as BaseButton,
 			_on_eat_item_pressed.bind(i)
 		)
 	ate_click()
@@ -1135,9 +1142,9 @@ func _setup_pet_attribute_pages() -> void:
 	pet_attribute_stat_values.clear()
 	pet_attribute_page_buttons.clear()
 	for index in range(10):
-		var row := get_node_or_null("PetAttributePages/StatRow%d" % (index + 1)) as Control
-		var stat_name := get_node_or_null("PetAttributePages/StatRow%d/Name" % (index + 1)) as Label
-		var stat_value := get_node_or_null("PetAttributePages/StatRow%d/Value" % (index + 1)) as Label
+		var row := _pet_ui_node("PetAttributePages", "StatRow%d" % (index + 1)) as Control
+		var stat_name := _pet_ui_node("PetAttributePages", "StatRow%d/Name" % (index + 1)) as Label
+		var stat_value := _pet_ui_node("PetAttributePages", "StatRow%d/Value" % (index + 1)) as Label
 		if row == null or stat_name == null or stat_value == null:
 			continue
 		pet_attribute_stat_rows.append(row)
@@ -2080,7 +2087,7 @@ func _update_quality_bar(bar: TextureProgressBar, current_value: int, maximum_va
 
 
 func _setup_pet_skill_icons() -> void:
-	var container := get_node_or_null("PetAttributeShow/shape44_id43") as TextureRect
+	var container := _pet_ui_node("PetAttributeShow", "shape44_id43") as TextureRect
 	if container == null:
 		return
 	var existing_scroll := container.get_node_or_null("PetSkillScroll") as ScrollContainer
@@ -2855,7 +2862,7 @@ func _refresh_pet_equipment_slots(pet: Variant) -> void:
 	if pet is Dictionary and pet.get("装备", {}) is Dictionary:
 		equipment = pet["装备"]
 	for slot_type in PET_EQUIPMENT_SLOT_TYPES:
-		var button := get_node_or_null("PetBackPackShow/%s" % slot_type) as Button
+		var button := _pet_ui_node("PetBackPackShow", "%s" % slot_type) as Button
 		if button == null:
 			continue
 		var item: Variant = equipment.get(slot_type, {})
@@ -3697,7 +3704,7 @@ func _on_pet_equipment_mouse_entered(slot_type: String) -> void:
 	var equipment: Dictionary = _ensure_pet_equipment_slots(pet)
 	var item: Variant = equipment.get(slot_type, {})
 	if item is Dictionary and not item.is_empty():
-		_show_pet_item_properties(item as Dictionary, get_node_or_null("PetBackPackShow/%s" % slot_type) as Control)
+		_show_pet_item_properties(item as Dictionary, _pet_ui_node("PetBackPackShow", "%s" % slot_type) as Control)
 
 
 func _on_pet_equipment_mouse_exited() -> void:
@@ -4861,9 +4868,9 @@ func _set_tab_state(page: int) -> void:
 
 func _setup_tiger_quality_preview() -> void:
 	tiger_quality_labels.clear()
-	tiger_quality_wx = get_node_or_null("PetAttributeShow/TigerQualityWx") as Label
-	tiger_quality_gg = get_node_or_null("PetAttributeShow/TigerQualityGg") as Label
-	tiger_quality_ll = get_node_or_null("PetAttributeShow/TigerQualityLl") as Label
+	tiger_quality_wx = _pet_ui_node("PetAttributeShow", "TigerQualityWx") as Label
+	tiger_quality_gg = _pet_ui_node("PetAttributeShow", "TigerQualityGg") as Label
+	tiger_quality_ll = _pet_ui_node("PetAttributeShow", "TigerQualityLl") as Label
 	if tiger_quality_wx == null:
 		tiger_quality_wx = get_node_or_null("TigerQualityWx") as Label
 	if tiger_quality_gg == null:
@@ -4880,7 +4887,7 @@ func _setup_tiger_quality_preview() -> void:
 		var old_label := get_node_or_null(old_name) as Label
 		if old_label != null and old_label.get_parent() != pet_attribute_show:
 			old_label.visible = false
-	var old_potential := get_node_or_null("PetAttributeShow/TigerQualityQl") as Label
+	var old_potential := _pet_ui_node("PetAttributeShow", "TigerQualityQl") as Label
 	if old_potential != null:
 		old_potential.visible = false
 

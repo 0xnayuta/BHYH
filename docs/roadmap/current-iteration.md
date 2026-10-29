@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界与 17-5 HUD/输入/音频表现边界已完成（2026-10-29），17-6 模块 API 与场景依赖、17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
+> **状态**：**Phase 17：玩法与表现模块边界；17-1 调用面矩阵已完成（2026-10-29，交付 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)），17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现边界与 17-6 模块 API/场景依赖治理已完成（2026-10-29），17-7 边界守卫未启动**。本页记录候选边界、阶段顺序与验收条件，不把未实施目标写成现状。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开当前候选 Phase 17；Phase 16 已完成并归档，独立平台与内容回植项目统一见 [`roadmap.md`](roadmap.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md) §3、§5、§7、§10~§11；[`godot_design_standard.md`](../standards/godot_design_standard.md) §3.2~§3.4、§8；[`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`ADR-007`](../decisions/ADR-007-autoload-boundary.md)、[`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md)、[`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md)；[`architecture.md`](../reference/architecture.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)。
@@ -249,9 +249,9 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 
 ### 7.1 切片
 
-1. **Phase 17-6A API 清单（规划）**：列出试点模块的公开方法、信号、必需场景与外部依赖，区分稳定契约与内部实现；
-2. **Phase 17-6B 依赖方向（规划）**：禁止表现层反向控制领域层、禁止模块直接访问其他模块私有字段；跨模块调用经公开方法；
-3. **Phase 17-6C 路径清理（规划）**：只清理试点边界内的深层 `get_node()`/绝对路径，补命名与契约门禁。
+1. **Phase 17-6A API 清单（已完成 2026-10-29）**：`module_api_matrix.md` 登记四个试点模块的公开方法、注入字段、场景依赖与内部回调；
+2. **Phase 17-6B 依赖方向（已完成 2026-10-29）**：明确父场景注入、槽位查询、档案命令与禁止的 `/root`/跨模块私有访问；
+3. **Phase 17-6C 路径清理（已完成 2026-10-29）**：四文件深层字面路径 159→30；`zd_skill`/`base_magic_weapon` 归零，`base_role` 去 `/root`，`pet_interface` 根节点经统一访问器。
 
 ### 7.2 必须验证
 
@@ -264,6 +264,17 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 - 试点模块有可评审的公开 API 与依赖方向；
 - 被替代的入口与调用方同批删除，不保留 facade；
 - 不重排顶层目录、不搬迁无关模块。
+
+### 7.4 17-6 实施记录（2026-10-29）
+
+| 项 | 内容 |
+|:---|:---|
+| API 清单 | 新建 [`module_api_matrix.md`](../reference/module_api_matrix.md)：`BaseRole`、`BaseMagicWeapon`、`zd_skill`、`pet_interface` 的公开方法/字段/场景依赖/内部回调 |
+| 依赖方向 | 父场景注入 `player`/`pet_panel`；模块经 `LocalCoop.data_for/props_for` 取槽位；跨模块调用经公开方法 |
+| 绝对路径 | `base_role`/`base_magic_weapon` 删除 `/root/LocalCoop`、`/root/PlayerData`、`/root/RoleProp`，改用 `LocalCoop` 槽位查询 |
+| 技能路径 | `zd_skill` 新增 `SKILL_UI_ROOT` 与列/孙节点访问器；26 条深层字面路径归零 |
+| 宠物路径 | `pet_interface` 新增 `_pet_ui_node` 根访问器；117→22，剩余均为模块自身场景子节点 |
+| 验证 | `archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS |
 
 ## 8. Phase 17-7：边界守卫与阶段收口
 
@@ -300,7 +311,7 @@ Phase 17 的前置调查只确认现状，不把目标语义写成已实现。Ph
 | Phase 17-3 阶段与结算 | `archive_probe_runner` 的胜败/重战/奖励/保存失败用例（118 项）、`level_1` 冒烟、变更关卡回归 | 只改结算 UI 或只改基类都不算完成 |
 | Phase 17-4 成长命令 | `archive_probe_runner` 的商店/神秘商店/强化/主动/被动技能成功、余额不足、容量不足、材料不足、保存失败回滚用例（137 项）；`level_1` 冒烟；相关关卡回归 | 只改 UI 或只改保存调用不算完成 |
 | Phase 17-5 HUD/输入/音频 | `archive_probe_runner` 的幻化/奖励/BGM/音效池用例（145 项）、`coop_probe_runner`、`level_1` 冒烟、变更关卡回归 | 只改 HUD 绘制或只改输入映射都不算完成 |
-| Phase 17-6 模块 API | 公开 API 清单、依赖方向、试点边界路径清理与场景加载回归 | 不做全仓路径替换 |
+| Phase 17-6 模块 API | `module_api_matrix.md` 公开 API/依赖方向；四文件路径清理 159→30；`archive_probe_runner`、`coop_probe_runner`、`level_1` 与变更回归 | 不做全仓路径替换 |
 | Phase 17-7 边界守卫 | 静态守卫正负样本、全仓零 ERROR、L2、相关回归 | 包路径/导出无变化时不强制重导 release |
 
 ## 10. 阶段出口与恢复

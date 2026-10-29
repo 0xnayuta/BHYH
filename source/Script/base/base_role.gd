@@ -3,14 +3,12 @@ extends Control
 
 var PlayerData: PlayerDataStore:
 	get:
-		var coop := get_node_or_null("/root/LocalCoop")
 		var target: Node = player if is_instance_valid(player) else self
-		return coop.data_for(target) if coop != null else get_node("/root/PlayerData")
+		return LocalCoop.data_for(target)
 var RoleProp: BaseRoleProperties:
 	get:
-		var coop := get_node_or_null("/root/LocalCoop")
 		var target: Node = player if is_instance_valid(player) else self
-		return coop.props_for(target) if coop != null else get_node("/root/RoleProp")
+		return LocalCoop.props_for(target)
 
 @onready var menu: TextureRect = $role_menu
 @onready var head: TextureRect = $role_hp_mp_exp

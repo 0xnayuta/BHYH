@@ -72,6 +72,7 @@ func _run() -> void:
 	await _test_strength_command()
 	await _test_audio_boundaries()
 	_test_transmog_command()
+	await _test_pet_interface_paths()
 	await _test_panel_saves()
 
 
@@ -584,6 +585,32 @@ func _test_transmog_command() -> void:
 		not failed and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == before,
 		"changed=%s slot=%s" % [failed, str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))]
 	)
+
+
+func _test_pet_interface_paths() -> void:
+	_reset_profile(1, 1)
+	var pet_ui: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	add_child(pet_ui)
+	await get_tree().process_frame
+	_check(
+		"pet_interface_roots_resolved",
+		pet_ui.get("pet_attribute_show") != null
+		and pet_ui.get("pet_backpack_show") != null
+		and pet_ui.get("pet_develop_interface") != null
+		and pet_ui.get("pet_skill_learn_popup") != null
+		and pet_ui.get("pet_skill_upgrade_popup") != null
+		and pet_ui.get("pet_formation_popup") != null,
+		"roots=%s/%s/%s/%s/%s/%s" % [
+			pet_ui.get("pet_attribute_show"),
+			pet_ui.get("pet_backpack_show"),
+			pet_ui.get("pet_develop_interface"),
+			pet_ui.get("pet_skill_learn_popup"),
+			pet_ui.get("pet_skill_upgrade_popup"),
+			pet_ui.get("pet_formation_popup"),
+		]
+	)
+	pet_ui.queue_free()
+	await get_tree().process_frame
 
 
 func _test_settlement_ownership() -> void:

@@ -35,6 +35,7 @@
 | [`reference/runtime_lifecycle_matrix.md`](reference/runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
 | [`reference/archive_session_matrix.md`](reference/archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者 |
 | [`reference/gameplay_module_matrix.md`](reference/gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖 |
+| [`reference/module_api_matrix.md`](reference/module_api_matrix.md) | **Phase 17-6 试点模块 API 与依赖方向（已完成）**：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开 API、场景依赖、路径清理与剩余项 |
 | [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与收口**：AtlasMetadata 生产者、源形态、消费者、View、守卫与失败边界 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
@@ -45,7 +46,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现边界已完成；17-6 模块 API 与场景依赖、17-7 边界守卫未启动 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 17 玩法与表现模块边界**：17-1 调用面矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段与结算、17-4 成长系统命令边界、17-5 HUD/输入/音频表现边界、17-6 模块 API 与场景依赖治理已完成；17-7 边界守卫未启动 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长系统命令边界与 17-5 HUD/输入/音频表现边界已完成，17-6~17-7 未启动）
+> 最后更新：2026-10-29（Phase 16 全部切片已完成并归档；Phase 17-1 矩阵、17-2A 来源显式化、17-2B 池化复用清理、17-2C 归属回归、17-3 关卡阶段/结算与 17-4 成长系统命令边界与 17-5 HUD/输入/音频表现边界与 17-6 模块 API/场景依赖治理已完成，17-7 未启动）
 
 ---
 
@@ -200,6 +200,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 17-3 关卡阶段与结算 | **阶段**：`advance_stage()` 单调推进，基础关卡与 `game4_imported_level` 共用；支持 5~19 阶段关卡。**结算**：`LevelSettlement` 统一保存/待提交/离开/重战/失败提示；胜败返回移除 4 次冗余保存。**失败奖励**：`lqjl` 整批发放 + 持久 `失败奖励已领取`，保存失败回滚；装备奖励回滚装备与获取记录。**关卡保存点**：塔层、17 门、八仙 Boss、星宿层、玲珑塔、hdzm 判读结果，塔层/17 门/hdzm 失败回滚。**验证**：`archive_probe_runner` 118 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.7s）；`check_all --godot-bin` 8/8 PASS | 17-3 完成；17-4~17-7 未启动 |
 | 2026-10-29 Phase 17-4 成长系统命令边界 | **普通商店**：`ShopPurchaseCommand.execute` 校验容量/灵魂后快照、扣费、判读产出、保存；失败恢复 1P/2P 与共享容器。**神秘商店**：`execute_mystery` 覆盖购买次数/容量/灵魂/保存失败回滚。**强化**：仅成功保存，失败恢复装备等级/灵魂/强化石；材料不足直接返回。**技能**：主动/被动仅成功保存，保存失败恢复书/灵魂/等级；一键升级整体快照。**数据原语**：`add_dj/add_xhp` 返回 bool，新增 `snapshot_state/restore_state`。**验证**：`archive_probe_runner` 137 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（344.9s）；`check_all --godot-bin` 8/8 PASS | 17-4 完成；17-5~17-7 未启动 |
 | 2026-10-29 Phase 17-5 HUD/输入/音频表现边界 | **面板命令**：幻化改 `PlayerData.change_transmog`，奖励改 `RewardGrantCommand`；校验/快照/保存失败回滚，绘制回调不直接写档案。**HUD**：`BaseRole` 按注入 `player` 读取槽位属性。**BGM**：同曲复用、切曲停旧、`stop_bgm()` 收口。**音效池**：缓存检查前置于声部预留，回收 `prepare_for_pool()` 停止并清流。**验证**：`archive_probe_runner` 145 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（282.9s）；`check_all --godot-bin` 8/8 PASS | 17-5 完成；17-6~17-7 未启动 |
+| 2026-10-29 Phase 17-6 模块 API 与场景依赖治理 | **API**：新建 `module_api_matrix.md`，登记 `BaseRole`/`BaseMagicWeapon`/`zd_skill`/`pet_interface` 公开方法、注入字段、场景依赖与内部回调。**依赖方向**：父场景注入、`LocalCoop` 槽位查询、跨模块公开方法；禁止新增 `/root`、HUD 写档与私有字段访问。**路径**：四文件深层字面路径 159→30（pet 117→22、zd 26→0、base_role 12→8、magic 4→0）。**验证**：`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS | 17-6 完成；17-7 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

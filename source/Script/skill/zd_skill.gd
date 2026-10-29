@@ -8,25 +8,48 @@ var RoleProp: BaseRoleProperties:
 	get:
 		return LocalCoop.props_for(self) as BaseRoleProperties
 
+const SKILL_UI_ROOT := "ScrollContainer/HBoxContainer"
+
+
+func _skill_root_node() -> Node:
+	return get_node_or_null(SKILL_UI_ROOT)
+
+
+func _skill_column_node(column: String, child_name: String = "") -> Node:
+	var column_node := get_node_or_null(SKILL_UI_ROOT + "/" + column)
+	if column_node == null or child_name == "":
+		return column_node
+	return column_node.get_node_or_null(child_name)
+
+
+func _skill_grandchild(column: String, parent_name: String, child_name: String) -> Node:
+	var parent_node := _skill_column_node(column, parent_name)
+	return parent_node.get_node_or_null(child_name) if parent_node != null else null
+
+
+func _skill_column_path(column: String) -> String:
+	return SKILL_UI_ROOT + "/" + column
+
+
 const SKILL_AWAKEN_NORMAL = preload("res://Art/skill/awaken/skill_awaken_normal.png")
 const SKILL_AWAKEN_HOVER = preload("res://Art/skill/awaken/skill_awaken_hover.png")
 const SKILL_AWAKEN_PRESSED = preload("res://Art/skill/awaken/skill_awaken_pressed.png")
 const SKILL_AWAKEN_POPUP = preload("res://Scene/skill/skill_awaken_popup.tscn")
 
-@onready var skill_11_label = $ScrollContainer/HBoxContainer/Sk_na/skill_11
-@onready var ski_11_btn = $ScrollContainer/HBoxContainer/sk_pi/ski_11
-@onready var skill_11_upbtn = $ScrollContainer/HBoxContainer/sk_lv/Skill_11
-@onready var sk_11_level = $ScrollContainer/HBoxContainer/sk_le/sk_11
-@onready var s_11_desc = $ScrollContainer/HBoxContainer/sk_ms/s_11
+@onready var skill_11_label = _skill_column_node("Sk_na", "skill_11")
+@onready var ski_11_btn = _skill_column_node("sk_pi", "ski_11")
+@onready var skill_11_upbtn = _skill_column_node("sk_lv", "Skill_11")
+@onready var sk_11_level = _skill_column_node("sk_le", "sk_11")
+@onready var s_11_desc = _skill_column_node("sk_ms", "s_11")
 
-@onready var skill5_button: Button = $ScrollContainer/HBoxContainer/Sk_na/skill_5
-@onready var hmz_version_menu: PopupMenu = $ScrollContainer/HBoxContainer/Sk_na/skill_5/hmz_version_menu
+@onready var skill5_button: Button = _skill_column_node("Sk_na", "skill_5") as Button
+@onready var hmz_version_menu: PopupMenu = _skill_grandchild("Sk_na", "skill_5", "hmz_version_menu") as PopupMenu
 
-@onready var skill_1_le = $ScrollContainer/HBoxContainer/sk_le/sk_1
-@onready var skill_2_le = $ScrollContainer/HBoxContainer/sk_le/sk_2
-@onready var skill_3_le = $ScrollContainer/HBoxContainer/sk_le/sk_3
-@onready var skill_4_le = $ScrollContainer/HBoxContainer/sk_le/sk_4
-@onready var skill_5_le = $ScrollContainer/HBoxContainer/sk_le/sk_5
+@onready var skill_1_le = _skill_column_node("sk_le", "sk_1")
+@onready var skill_2_le = _skill_column_node("sk_le", "sk_2")
+@onready var skill_3_le = _skill_column_node("sk_le", "sk_3")
+@onready var skill_4_le = _skill_column_node("sk_le", "sk_4")
+@onready var skill_5_le = _skill_column_node("sk_le", "sk_5")
 
 const MAX_SKILL_LEVEL := 30
 const PASSIVE_SKILL_MAX_LEVEL := 10
@@ -172,23 +195,23 @@ func ensure_extra_skill_slots():
 	var role_key := get_role_key()
 	if role_key != "角色1" and role_key != "角色2" and role_key != "角色4":
 		return
-	var list_body = get_node_or_null("ScrollContainer/HBoxContainer")
+	var list_body = _skill_root_node()
 	if list_body:
 		var required_height := 1015.0 if role_key == "角色1" else 940.0
 		list_body.custom_minimum_size = Vector2(
 			max(list_body.custom_minimum_size.x, 760.0), max(list_body.custom_minimum_size.y, required_height)
 		)
-	_ensure_extra_node("ScrollContainer/HBoxContainer/Sk_na", "skill_11", "skill_12", 74.0)
-	_ensure_extra_node("ScrollContainer/HBoxContainer/sk_pi", "ski_11", "ski_12", 74.0)
-	_ensure_extra_node("ScrollContainer/HBoxContainer/sk_lv", "Skill_11", "Skill_12", 75.0)
-	_ensure_extra_node("ScrollContainer/HBoxContainer/sk_le", "sk_11", "sk_12", 75.0)
-	_ensure_extra_node("ScrollContainer/HBoxContainer/sk_ms", "s_11", "s_12", 76.0)
+	_ensure_extra_node(_skill_column_path("Sk_na"), "skill_11", "skill_12", 74.0)
+	_ensure_extra_node(_skill_column_path("sk_pi"), "ski_11", "ski_12", 74.0)
+	_ensure_extra_node(_skill_column_path("sk_lv"), "Skill_11", "Skill_12", 75.0)
+	_ensure_extra_node(_skill_column_path("sk_le"), "sk_11", "sk_12", 75.0)
+	_ensure_extra_node(_skill_column_path("sk_ms"), "s_11", "s_12", 76.0)
 	if role_key == "角色1":
-		_ensure_extra_node("ScrollContainer/HBoxContainer/Sk_na", "skill_12", "skill_13", 74.0)
-		_ensure_extra_node("ScrollContainer/HBoxContainer/sk_pi", "ski_12", "ski_13", 74.0)
-		_ensure_extra_node("ScrollContainer/HBoxContainer/sk_lv", "Skill_12", "Skill_13", 75.0)
-		_ensure_extra_node("ScrollContainer/HBoxContainer/sk_le", "sk_12", "sk_13", 75.0)
-		_ensure_extra_node("ScrollContainer/HBoxContainer/sk_ms", "s_12", "s_13", 76.0)
+		_ensure_extra_node(_skill_column_path("Sk_na"), "skill_12", "skill_13", 74.0)
+		_ensure_extra_node(_skill_column_path("sk_pi"), "ski_12", "ski_13", 74.0)
+		_ensure_extra_node(_skill_column_path("sk_lv"), "Skill_12", "Skill_13", 75.0)
+		_ensure_extra_node(_skill_column_path("sk_le"), "sk_12", "sk_13", 75.0)
+		_ensure_extra_node(_skill_column_path("sk_ms"), "s_12", "s_13", 76.0)
 		_normalize_skill_rows(13)
 	else:
 		_normalize_skill_rows(12)
@@ -196,7 +219,7 @@ func ensure_extra_skill_slots():
 
 func _center_upgrade_controls(row_count: int) -> void:
 	for i in range(1, row_count + 1):
-		var upgrade_button = get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(i))
+		var upgrade_button = _skill_column_node("sk_lv", "Skill_" + str(i))
 		if upgrade_button == null:
 			continue
 		upgrade_button.offset_left = 296.0
@@ -208,13 +231,13 @@ func _center_upgrade_controls(row_count: int) -> void:
 
 
 func _resize_skill_columns(row_count: int) -> void:
-	var upgrade_title = get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/skill_uplevel")
+	var upgrade_title = _skill_column_node("sk_lv", "skill_uplevel")
 	if upgrade_title != null:
 		upgrade_title.offset_left = 246.0
 		upgrade_title.offset_right = 394.0
 		upgrade_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	var level_title = get_node_or_null("ScrollContainer/HBoxContainer/sk_le/skill_level")
+	var level_title = _skill_column_node("sk_le", "skill_level")
 	if level_title != null:
 		level_title.clip_text = true
 		level_title.offset_left = 388.0
@@ -222,7 +245,7 @@ func _resize_skill_columns(row_count: int) -> void:
 		level_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 	for i in range(1, row_count + 1):
-		var level_label = get_node_or_null("ScrollContainer/HBoxContainer/sk_le/sk_" + str(i))
+		var level_label = _skill_column_node("sk_le", "sk_" + str(i))
 		if level_label != null:
 			level_label.offset_left = 388.0
 			level_label.offset_right = 494.0
@@ -259,25 +282,11 @@ func _set_row_offsets(node, top: float, bottom: float):
 func _normalize_skill_rows(row_count: int):
 	for i in range(1, row_count + 1):
 		var idx = i - 1
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/Sk_na/skill_" + str(i)),
-			65.0 + 74.0 * idx,
-			95.0 + 74.0 * idx
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(i)), 44.0 + 74.0 * idx, 110.0 + 74.0 * idx
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(i)),
-			65.0 + 74.0 * idx,
-			88.0 + 74.0 * idx
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_le/sk_" + str(i)), 55.0 + 75.0 * idx, 93.0 + 75.0 * idx
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_ms/s_" + str(i)), 32.0 + 74.0 * idx, 123.0 + 74.0 * idx
-		)
+		_set_row_offsets(_skill_column_node("Sk_na", "skill_" + str(i)), 65.0 + 74.0 * idx, 95.0 + 74.0 * idx)
+		_set_row_offsets(_skill_column_node("sk_pi", "ski_" + str(i)), 44.0 + 74.0 * idx, 110.0 + 74.0 * idx)
+		_set_row_offsets(_skill_column_node("sk_lv", "Skill_" + str(i)), 65.0 + 74.0 * idx, 88.0 + 74.0 * idx)
+		_set_row_offsets(_skill_column_node("sk_le", "sk_" + str(i)), 55.0 + 75.0 * idx, 93.0 + 75.0 * idx)
+		_set_row_offsets(_skill_column_node("sk_ms", "s_" + str(i)), 32.0 + 74.0 * idx, 123.0 + 74.0 * idx)
 
 
 func get_level_storage_index(index: int) -> int:
@@ -368,7 +377,7 @@ func _ready() -> void:
 	_set_skill_slot_visibility(skill_ids_by_role.get(role_key, []).size())
 	var max_slot = skill_ids_by_role.get(get_role_key(), []).size()
 	for i in range(1, max_slot + 1):
-		var ski_btn = get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(i))
+		var ski_btn = _skill_column_node("sk_pi", "ski_" + str(i))
 		if ski_btn and ski_btn is Button:
 			var ski_fn = "_on_ski_" + str(i) + "_pressed"
 			var ski_cb = Callable(self, ski_fn)
@@ -382,7 +391,7 @@ func _ready() -> void:
 			var mx_cb = Callable(self, mx_fn)
 			if not ski_btn.mouse_exited.is_connected(mx_cb):
 				ski_btn.mouse_exited.connect(mx_cb)
-		var up_btn = get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(i))
+		var up_btn = _skill_column_node("sk_lv", "Skill_" + str(i))
 		if up_btn and up_btn is Button:
 			var up_fn = "_on_skill_" + str(i) + "_pressed"
 			var up_cb = Callable(self, up_fn)
@@ -407,14 +416,13 @@ func _ready() -> void:
 func _set_skill_slot_visibility(skill_count: int) -> void:
 	for index in range(1, 14):
 		var should_show := index <= skill_count
-		for node_path in [
-			"ScrollContainer/HBoxContainer/Sk_na/skill_" + str(index),
-			"ScrollContainer/HBoxContainer/sk_pi/ski_" + str(index),
-			"ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(index),
-			"ScrollContainer/HBoxContainer/sk_le/sk_" + str(index),
-			"ScrollContainer/HBoxContainer/sk_ms/s_" + str(index),
+		for slot_node in [
+			_skill_column_node("Sk_na", "skill_" + str(index)),
+			_skill_column_node("sk_pi", "ski_" + str(index)),
+			_skill_column_node("sk_lv", "Skill_" + str(index)),
+			_skill_column_node("sk_le", "sk_" + str(index)),
+			_skill_column_node("sk_ms", "s_" + str(index)),
 		]:
-			var slot_node := get_node_or_null(node_path)
 			if slot_node != null:
 				slot_node.visible = should_show
 
@@ -424,33 +432,23 @@ func _fit_skill_descriptions_to_grid() -> void:
 	_skill_row_heights.clear()
 	var row_top := 40.0
 	for i in range(1, skill_count + 1):
-		var description := get_node_or_null("ScrollContainer/HBoxContainer/sk_ms/s_" + str(i)) as Label
+		var description := _skill_column_node("sk_ms", "s_" + str(i)) as Label
 		if description == null:
 			continue
 		var row_height := maxf(96.0, ceilf(description.get_minimum_size().y) + 16.0)
 		_skill_row_heights.append(row_height)
 		var row_center := row_top + row_height / 2.0
 		_set_row_offsets(description, row_top + 8.0, row_top + row_height - 8.0)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/Sk_na/skill_" + str(i)),
-			row_center - 15.0,
-			row_center + 15.0
-		)
+		_set_row_offsets(_skill_column_node("Sk_na", "skill_" + str(i)), row_center - 15.0, row_center + 15.0)
 
 		var icon_top := row_top + (row_height - 81.0) / 2.0
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(i)), icon_top, icon_top + 66.0
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(i)), row_center - 24.0, row_center - 1.0
-		)
-		_set_row_offsets(
-			get_node_or_null("ScrollContainer/HBoxContainer/sk_le/sk_" + str(i)), row_center - 19.0, row_center + 19.0
-		)
+		_set_row_offsets(_skill_column_node("sk_pi", "ski_" + str(i)), icon_top, icon_top + 66.0)
+		_set_row_offsets(_skill_column_node("sk_lv", "Skill_" + str(i)), row_center - 24.0, row_center - 1.0)
+		_set_row_offsets(_skill_column_node("sk_le", "sk_" + str(i)), row_center - 19.0, row_center + 19.0)
 		row_top += row_height
-	var list_body := $ScrollContainer/HBoxContainer as HBoxContainer
+	var list_body := _skill_root_node() as HBoxContainer
 	list_body.custom_minimum_size.y = row_top
-	$ScrollContainer/HBoxContainer/SkillGridBackdrop.queue_redraw()
+	_skill_column_node("SkillGridBackdrop").queue_redraw()
 
 
 func get_skill_row_heights() -> Array[float]:
@@ -462,7 +460,7 @@ func _setup_skill_awaken_buttons() -> void:
 	for skill_index in range(skill_list.size()):
 		if get_role_key() == "角色7" and skill_list[skill_index] not in ["yt_mds", "yt_xdz", "yt_ldmw", "yt_yl"]:
 			continue
-		var icon_parent = get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(skill_index + 1))
+		var icon_parent = _skill_column_node("sk_pi", "ski_" + str(skill_index + 1))
 		if icon_parent == null:
 			continue
 
@@ -500,8 +498,8 @@ func _on_skill_awaken_pressed(skill_index: int) -> void:
 	if existing_popup != null:
 		return
 
-	var icon_button = get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(skill_index + 1))
-	var name_label = get_node_or_null("ScrollContainer/HBoxContainer/Sk_na/skill_" + str(skill_index + 1))
+	var icon_button = _skill_column_node("sk_pi", "ski_" + str(skill_index + 1))
+	var name_label = _skill_column_node("Sk_na", "skill_" + str(skill_index + 1))
 	var skill_list = skill_ids_by_role.get(get_role_key(), [])
 	var display_name := "技能"
 	var display_icon: Texture2D = null
@@ -562,13 +560,11 @@ func update_skill_name_and_icon(skill_num: int, skill_internal: String, variant_
 	if not variant:
 		return
 
-	var name_node_path = "ScrollContainer/HBoxContainer/Sk_na/skill_" + str(skill_num)
-	var name_node = get_node(name_node_path)
+	var name_node = _skill_column_node("Sk_na", "skill_" + str(skill_num))
 	if name_node:
 		name_node.text = variant["display"]
 
-	var icon_node_path = "ScrollContainer/HBoxContainer/sk_pi/ski_" + str(skill_num)
-	var icon_node = get_node(icon_node_path)
+	var icon_node = _skill_column_node("sk_pi", "ski_" + str(skill_num))
 	if icon_node and icon_node is Button:
 		var icon_suffix = variant["icon_suffix"]
 		var icon_name = skill_internal + icon_suffix
@@ -618,7 +614,7 @@ func set_skill_icon():
 	var role_key = get_role_key()
 	var skill_list = skill_ids_by_role[role_key]
 	for i in range(skill_list.size()):
-		var target = get_node("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(i + 1))
+		var target = _skill_column_node("sk_pi", "ski_" + str(i + 1))
 		var skill_nbname = skill_list[i]
 		if skill_nbname == "hmz_ws":
 			skill_nbname = "hmz_ws"
@@ -629,7 +625,7 @@ func set_skill_name():
 	var role_key = get_role_key()
 	var skill_name_list = skill_name[role_key]
 	for i in range(skill_name_list.size()):
-		var target = get_node("ScrollContainer/HBoxContainer/Sk_na/skill_" + str(i + 1))
+		var target = _skill_column_node("Sk_na", "skill_" + str(i + 1))
 		target.text = skill_name_list[i]
 
 
@@ -637,7 +633,7 @@ func set_skill_level():
 	var role_key = get_role_key()
 	var skill_list = skill_ids_by_role[role_key]
 	for i in range(skill_list.size()):
-		var target = get_node("ScrollContainer/HBoxContainer/sk_le/sk_" + str(i + 1))
+		var target = _skill_column_node("sk_le", "sk_" + str(i + 1))
 		var skill_level = get_skill_level_by_index(i)
 		target.text = "Lv:" + str(skill_level)
 
@@ -646,7 +642,7 @@ func set_skill_infor():
 	var role_key = get_role_key()
 	var skill_infor_list = skill_infor[role_key]
 	for i in range(skill_infor_list.size()):
-		var target = get_node("ScrollContainer/HBoxContainer/sk_ms/s_" + str(i + 1))
+		var target = _skill_column_node("sk_ms", "s_" + str(i + 1))
 		target.text = skill_infor_list[i]
 
 
@@ -654,7 +650,7 @@ func set_skill_lh():
 	var role_key = get_role_key()
 	var skill_list = skill_ids_by_role[role_key]
 	for i in range(skill_list.size()):
-		var target = get_node_or_null("ScrollContainer/HBoxContainer/sk_lv/Skill_" + str(i + 1) + "/Need")
+		var target = _skill_grandchild("sk_lv", "Skill_" + str(i + 1), "Need")
 		if target == null:
 			continue
 		var skill_level = get_skill_level_by_index(i)
@@ -1258,7 +1254,7 @@ func set_skill_mp_cost():
 	var role_key = get_role_key()
 	var skill_list = skill_ids_by_role[role_key]
 	for i in range(skill_list.size()):
-		var icon_btn = get_node("ScrollContainer/HBoxContainer/sk_pi/ski_" + str(i + 1))
+		var icon_btn = _skill_column_node("sk_pi", "ski_" + str(i + 1))
 		if not icon_btn:
 			continue
 
