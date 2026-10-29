@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-29（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B 已完成、19-1C 表现与路径、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C 已完成、19-2 音频与运行时、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -218,6 +218,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-29 Phase 18-3D 会话失败反馈 | **结果**：`MemoryClass.request_save_result` 返回 `ok/reason/error/message/path/notify`，并写入 `last_save_outcome`；`save_failed` 信号让丢弃 bool 的调用也可观察。**反馈**：`Global` 消费信号，`notify=false` 仅计数；其余在可见 UI 层提示且同错误 1.5s 去重；`request_save_with_feedback` 抑制兜底后只提示一次。**覆盖**：无会话/身份过期/非法路径/写失败均返回结构化错误；22 处自处理调用传 `notify=false`。**验证**：档案持久化 267 项 PASS（新增 11 项结果/信号/消费者断言）；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（268.1s）；`check_all --godot-bin` 8/8 PASS。 | 18-3D 完成 |
 | 2026-10-29 Phase 19-1A 面板扫描 | **任务**：`basic_task` 领取标记改用 `PlayerData.claim_task`。**幻化**：`c_hange_clothes_jm` 穿戴/卸下改用 `change_transmog`；`transmogrified` 拥有列表改用 `record_transmog_owned`。**技能**：`skill_key_set` 改用 `set_skill_key`；`skill_awaken_popup` 改用 `awaken_skill`/`set_skill_awakened_enabled`；`bd_skill` 被动升级改用 `apply_passive_skill_upgrades`，删除面板内直接写与直接保存。**宠物**：`pet_interface` 保存改走 `Global.request_save_with_feedback`。目标目录直接 `PlayerData.player_data` 赋值/`MemoryClass.request_save` 清零；`reward_grant_command`/`zd_skill.refresh_infor` 作为合法命令入口保留。**验证**：档案持久化 275 项 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（267.7s）；`check_all --godot-bin` 8/8 PASS。 | 19-1A 完成 |
 | 2026-10-29 Phase 19-1B 路径清理 | **pet_interface**：动态行先取 `Content` 再取直接子节点，`giveUpThisPet`/tooltip 同样中间节点访问，深层字面路径 22→0。**base_role**：宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer` 再取子节点，8→0。**skill_icon**：删除 `/root/LocalCoop`/`/root/PlayerData`/`/root/RoleProp` 回落，直接 `LocalCoop.data_for/props_for`。**门禁**：`contract_scan` 三文件深层预算收紧到 0，`skill_icon` 加入 `/root` 禁入并从 root 白名单移除。**验证**：档案持久化 275 项 PASS；`coop_probe_runner` 23/23 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s）；`check_all --godot-bin` 8/8 PASS。 | 19-1B 完成 |
+| 2026-10-30 Phase 19-1C 奖励表现 | **失败**：`reward_interface` 在 `RewardGrantCommand` 返回失败时隐藏奖励盒容器、释放盒子、标题改为“奖励发放失败”，错误提示保留；奖励盒 Tween 先 kill，空奖励不再创建空 Tween。**成功**：奖励盒保留。**不变量**：命令失败已恢复物品/使用物/领取标记，不显示成功假象。**验证**：档案持久化 280 项 PASS（新增失败隐藏/成功保留/失败不发奖断言）；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.5s）；`check_all --godot-bin` 8/8 PASS。 | 19-1C 完成 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

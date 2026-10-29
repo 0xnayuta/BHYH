@@ -388,7 +388,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | ID | 位置 | 事实 |
 |:---|:---|:---|
-| GM-37 | `reward_interface.gd:_process` | **17-5 已改为 `RewardGrantCommand`**；失败回滚 |
+| GM-37 | `reward_interface.gd:_process` | **17-5 改为 `RewardGrantCommand`**；**19-1C 失败时隐藏/释放奖励盒、标题“奖励发放失败”、错误提示保留**；成功保留奖励盒 |
 | GM-38 | `choose_item.gd` | 选择界面创建奖励场景后自身 `queue_free`；奖励提交已归命令 |
 | GM-39 | `transmogtified_box.gd` | **17-5 已改为 `PlayerData.change_transmog`**；失败回滚 |
 | GM-40 | `victory.gd:24` | 结算 UI 在 `_ready` 写评价/解锁标志 |

@@ -92,6 +92,7 @@ func _run() -> void:
 	await _test_passive_skill_command()
 	await _test_active_skill_command()
 	_test_awaken_command()
+	await _test_reward_interface_visual()
 	await _test_strength_command()
 	await _test_audio_boundaries()
 	_test_transmog_command()
@@ -376,6 +377,65 @@ func _test_request_save() -> void:
 	MemoryClass.save_failed.disconnect(on_write_failed)
 	_check("request_save_write_failure_cleanup", _remove_empty_directory(write_fail_path))
 	_reset_profile(1, 1)
+
+
+func _test_reward_interface_visual() -> void:
+	# 无会话：命令失败后奖励盒必须隐藏，错误标题可见。
+	_reset_profile(1, 1)
+	Global.end_archive_session()
+	var failed_reward: Node = load("res://Scene/other_scene/reward_interface.tscn").instantiate()
+	failed_reward.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(failed_reward)
+	await get_tree().process_frame
+	var failed_item_before: int = int(PlayerData.get_item_data("qhs_1"))
+	failed_reward.set("reward_items", [{"Name": "qhs_1", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}])
+	failed_reward.call("add_box")
+	failed_reward.call("_process", 0.0)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var failed_grid := failed_reward.get("item_grid_container") as GridContainer
+	var failed_title := failed_reward.get("title") as Label
+	_check(
+		"reward_failure_hides_boxes",
+		not failed_grid.visible,
+		"visible=%s children=%d" % [failed_grid.visible, failed_grid.get_child_count()]
+	)
+	_check("reward_failure_title", failed_title.text == "奖励发放失败", failed_title.text)
+	_check(
+		"reward_failure_no_grant",
+		PlayerData.get_item_data("qhs_1") == failed_item_before,
+		"before=%s after=%s" % [failed_item_before, PlayerData.get_item_data("qhs_1")]
+	)
+	failed_reward.queue_free()
+	await get_tree().process_frame
+
+	# 有会话：成功时奖励盒保留。
+	_reset_profile(1, 1)
+	_open_session(TEST_ARCHIVE_PREFIX + "056.json")
+	var success_reward: Node = load("res://Scene/other_scene/reward_interface.tscn").instantiate()
+	success_reward.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(success_reward)
+	await get_tree().process_frame
+	success_reward.set("reward_items", [{"Name": "qhs_1", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}])
+	success_reward.call("add_box")
+	success_reward.call("_process", 0.0)
+	await get_tree().process_frame
+	var success_grid := success_reward.get("item_grid_container") as GridContainer
+	_check("reward_success_granted", PlayerData.get_item_data("qhs_1") > 0, "qhs_1=%s" % PlayerData.get_item_data("qhs_1"))
+	_check(
+		"reward_success_keeps_boxes",
+		success_grid.visible and success_grid.get_child_count() > 0,
+		"visible=%s children=%d title=%s succeeded=%s error=%s"
+		% [
+			success_grid.visible,
+			success_grid.get_child_count(),
+			success_reward.get("title").text,
+			success_reward.get("_reward_succeeded"),
+			MemoryClass.last_save_error,
+		]
+	)
+	success_reward.queue_free()
+	await get_tree().process_frame
 
 
 func _test_shop_purchase_command() -> void:
