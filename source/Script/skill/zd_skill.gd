@@ -866,7 +866,7 @@ func _show_tip():
 			var book_need := get_skill_book_need(level)
 			var book_id := get_skill_book_id(level)
 			tip += " 消耗：%sx%s（持有%s）" % [get_skill_book_name(level), book_need, PlayerData.get_item_data(book_id)]
-	Global.add_choose_text(Global.get_ancestor(self, 4), Vector2(0, 0), tip, 0)
+	Global.add_choose_text(NodeUtils.ancestor(self, 4), Vector2(0, 0), tip, 0)
 
 
 func _on_ski_1_pressed() -> void:

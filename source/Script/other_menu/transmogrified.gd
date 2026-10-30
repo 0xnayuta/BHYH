@@ -838,7 +838,7 @@ func on_eqchange():
 			fj = str(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
 	else:
 		fj = str(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR])
-	fj = Global.get_clean_name(fj)
+	fj = ItemUtils.clean_fashion_name(fj)
 	change_body(fj)
 	var wings_list
 	if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS] == "":

@@ -156,7 +156,7 @@ func _physics_process(_delta: float) -> void:
 
 func _on_pressed() -> void:
 	if PlayerData.check_can_use_page("装备列表") == 0:
-		Global.add_message_show(Global.get_ancestor(self, 5), "背包已满，无法卸下！！", 1.5, Vector2(80, 0))
+		Global.add_message_show(NodeUtils.ancestor(self, 5), "背包已满，无法卸下！！", 1.5, Vector2(80, 0))
 		return
 	match str(self.name):
 		"wq":
@@ -245,7 +245,7 @@ func _on_pressed() -> void:
 					set_button_icon(load("res://Art/backpack/fb.png"))
 				PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
 			else:
-				Global.add_message_show(Global.get_ancestor(self, 5), "当前法宝正在使用，无法更换！！", 1.5, Vector2(80, 0))
+				Global.add_message_show(NodeUtils.ancestor(self, 5), "当前法宝正在使用，无法更换！！", 1.5, Vector2(80, 0))
 	qh_level = 0
 	RoleProp.get_equ_last_pro()
 	RoleProp.get_last_prop()
@@ -261,7 +261,7 @@ func _on_mouse_entered() -> void:
 	if item_id == "":
 		return
 	var ancestor_level := 3 if str(self.name) in ["cb", "sz", "tx", "txk", "shengu"] else 5
-	var popup_parent = Global.get_ancestor(self, ancestor_level)
+	var popup_parent = NodeUtils.ancestor(self, ancestor_level)
 	pp = _mouse_position_for_popup(popup_parent)
 	add_equ_box = Global.add_equ_propeties_box(popup_parent, pp, item_id, qh_level, wx, eq_prop)
 

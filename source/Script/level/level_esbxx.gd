@@ -201,7 +201,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	Global.constellation_endless_mode = false
+	Global.clear_special_dungeon_endless()
 
 
 func _prepare_level_runtime_resources() -> void:
@@ -296,7 +296,7 @@ func on_constellation_boss_defeated(boss: BaseMonster) -> void:
 		if not MemoryClass.request_save("level_esbxx_tier", false):
 			Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
 	if current_tier >= 10:
-		completed = not Global.constellation_endless_mode
+		completed = not Global.is_special_dungeon_endless("res://Scene/level/level_esbxx.tscn")
 	else:
 		current_tier += 1
 	call_deferred("_advance_after_boss")

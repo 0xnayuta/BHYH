@@ -92,7 +92,7 @@ func _preload_level_resources() -> void:
 
 
 func _exit_tree() -> void:
-	Global.four_swords_endless_mode = false
+	Global.clear_special_dungeon_endless()
 	for bg_node in _bg_anim_nodes:
 		if is_instance_valid(bg_node):
 			if bg_node is StreamedPngEffect:
@@ -237,7 +237,7 @@ func one_check_can_exit():
 	var round_cleared: bool = bool(super.one_check_can_exit())
 	if not round_cleared or not _queued_boss_ids.has(954) or not _preparing_boss_ids.is_empty():
 		return false
-	if not Global.four_swords_endless_mode:
+	if not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn"):
 		return true
 	if not _endless_restart_pending:
 		_endless_restart_pending = true
@@ -246,11 +246,11 @@ func one_check_can_exit():
 
 
 func _restart_endless_round() -> void:
-	if not is_inside_tree() or not Global.four_swords_endless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn"):
 		_endless_restart_pending = false
 		return
 	await get_tree().process_frame
-	if not is_inside_tree() or not Global.four_swords_endless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn"):
 		_endless_restart_pending = false
 		return
 	_trim_endless_round_loot()
@@ -262,7 +262,7 @@ func _restart_endless_round() -> void:
 	_queued_boss_ids.clear()
 	_preparing_boss_ids.clear()
 	await get_tree().create_timer(ENDLESS_ROUND_DELAY, false).timeout
-	if not is_inside_tree() or not Global.four_swords_endless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn"):
 		_endless_restart_pending = false
 		return
 	for sword_node in _bg_sword_nodes.values():

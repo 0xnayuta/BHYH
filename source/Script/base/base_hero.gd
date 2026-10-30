@@ -484,7 +484,7 @@ func ws_skill() -> bool:
 	if not fashion is Dictionary:
 		return true
 	var fashion_id := str(fashion.get(DataKeys.NAME, ""))
-	var sz_name: String = str(Global.get_clean_name(fashion_id))
+	var sz_name: String = str(ItemUtils.clean_fashion_name(fashion_id))
 	var pz := fashion_id.split(sz_name)[0]
 	if pz == "putong":
 		return true
@@ -2813,7 +2813,7 @@ func on_eqchange():
 			fj = str(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
 	else:
 		fj = str(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR])
-	fj = Global.get_clean_name(fj)
+	fj = ItemUtils.clean_fashion_name(fj)
 
 	change_body(fj)
 	var mount_runtime := get_node_or_null("MountRuntime")
@@ -3746,7 +3746,7 @@ func addnmw_effect():
 			Vector2(385, 500)
 		],
 	}
-	var sz_name = Global.get_clean_name(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
+	var sz_name = ItemUtils.clean_fashion_name(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
 	var pz = str(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME]).split(sz_name)[0]
 	var count: int = 1
 	match pz:
@@ -3765,7 +3765,7 @@ func set_sz_value():
 	current_fashion_quality = ""
 	if PlayerData.player_data[DataKeys.FASHION].size() <= 0:
 		return
-	var sz_name = Global.get_clean_name(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
+	var sz_name = ItemUtils.clean_fashion_name(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
 	var pz = str(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME]).split(sz_name)[0]
 	var bl = 1
 	match sz_name:

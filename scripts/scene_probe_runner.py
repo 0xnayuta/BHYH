@@ -169,6 +169,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=600,
         timeout_seconds=180,
     ),
+    ProbeSpec(
+        key="utils",
+        title="通用工具与角色贴图运行时探针",
+        script_name="utils_probe.gd",
+        scene_name="utils_probe.tscn",
+        result_prefix="UTILS_PROBE_RESULT=",
+        report_stem="utils_probe_report",
+        teardown_marker="UTILS_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+    ),
 )
 
 

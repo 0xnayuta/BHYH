@@ -57,11 +57,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
-	Global.three_prince_endless_mode = false
+	Global.clear_special_dungeon_endless()
 
 
 func _restart_endless_round() -> void:
-	if not is_inside_tree() or not Global.three_prince_endless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_stz.tscn"):
 		_endless_restart_pending = false
 		return
 	for _index in range(_monster_count_multiplier):
@@ -87,7 +87,7 @@ func one_check_can_exit() -> bool:
 		return false
 	if _get_alive_stage_monster_count() != 0:
 		return false
-	if Global.three_prince_endless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_stz.tscn"):
 		if not _endless_restart_pending:
 			_endless_restart_pending = true
 			call_deferred("_restart_endless_round")

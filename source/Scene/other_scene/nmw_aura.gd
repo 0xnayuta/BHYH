@@ -20,7 +20,7 @@ func _physics_process(delta: float) -> void:
 		await get_tree().create_timer(0.6, false).timeout
 		idle = false
 	if not idle:
-		self.position += Global.get_position_between(self, target_monster) * speed * 0.5
+		self.position += NodeUtils.position_between(self, target_monster) * speed * 0.5
 		chekc.disabled = false
 		if target_monster == null:
 			self.queue_free()

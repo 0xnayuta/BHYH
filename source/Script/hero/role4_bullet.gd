@@ -14,7 +14,7 @@ func _physics_process(delta: float) -> void:
 		old_monster = target_monster
 		is_set = true
 	if target_monster != null:
-		self.position += Global.get_position_between(self, target_monster) * speed
+		self.position += NodeUtils.position_between(self, target_monster) * speed
 	else:
 		queue_free()
 	if target_monster == null or old_monster == null:

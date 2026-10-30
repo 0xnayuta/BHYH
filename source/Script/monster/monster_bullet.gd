@@ -753,12 +753,12 @@ func _physics_process(_delta: float) -> void:
 
 	match _runtime_kind:
 		RuntimeKind.MONSTER_90:
-			self.position += Global.get_position_between(self, RoleProp.source_player) * fly_speed * 0.5
+			self.position += NodeUtils.position_between(self, RoleProp.source_player) * fly_speed * 0.5
 			fly_speed += 2
 			if fly_speed >= 10:
 				fly_speed = 10
 		RuntimeKind.MONSTER_101_2:
-			self.position += Global.get_position_between(self, RoleProp.source_player) * fly_speed * 0.5
+			self.position += NodeUtils.position_between(self, RoleProp.source_player) * fly_speed * 0.5
 			fly_speed += 0.1
 			if fly_speed >= 5:
 				fly_speed = 5

@@ -523,7 +523,7 @@ func _has_active_ttzssz_fashion() -> bool:
 	if not fashion is Dictionary:
 		return false
 	return (
-		Global.get_clean_name(str((fashion as Dictionary).get(DataKeys.NAME, ""))) == "ttzssz"
+		ItemUtils.clean_fashion_name(str((fashion as Dictionary).get(DataKeys.NAME, ""))) == "ttzssz"
 		and str((fashion as Dictionary).get(DataKeys.NAME, "")) != "putongttzssz"
 	)
 

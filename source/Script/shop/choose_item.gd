@@ -96,7 +96,7 @@ func _on_qd_pressed() -> void:
 		var get_num = get_item_num(current_choose)
 		var _roll_element = get_wx(current_choose)
 		var list = [{"Name": names, "Value": get_num, "Prop": {}, "WX": Global.get_wx(0), "strength_value": 0}]
-		Global.add_reward_info(Global.get_ancestor(self, 1), Vector2(0, 0), list, _name, 1)
+		Global.add_reward_info(NodeUtils.ancestor(self, 1), Vector2(0, 0), list, _name, 1)
 
 	queue_free()
 

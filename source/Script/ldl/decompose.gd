@@ -228,10 +228,10 @@ func _on_decompose_button_pressed() -> void:
 		var item_name = AE.all_equipment[name_str][DataKeys.NAME]
 		if cur_level > 0:
 			Global.add_choose_text(
-				Global.get_ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（该装备包含强化等级！）", 0
+				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（该装备包含强化等级！）", 0
 			)
 		else:
-			Global.add_choose_text(Global.get_ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0)
+			Global.add_choose_text(NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0)
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧~", 1.5, Vector2(500, 305))
 
@@ -276,7 +276,7 @@ func fj():
 									}
 								)
 								PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
-					Global.add_reward_info(Global.get_ancestor(self, 3), Vector2(0, 0), list, null, null)
+					Global.add_reward_info(NodeUtils.ancestor(self, 3), Vector2(0, 0), list, null, null)
 					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5, Vector2(500, 305))
 					PlayerData.spend_soul(need_lh)
 				else:
@@ -304,7 +304,7 @@ func fj():
 						list.push_back(
 							{"Name": loop_item_name, "Value": target_count, "Prop": [], "WX": [], "strength_value": 0}
 						)
-					Global.add_reward_info(Global.get_ancestor(self, 3), Vector2(0, 0), list, null, null)
+					Global.add_reward_info(NodeUtils.ancestor(self, 3), Vector2(0, 0), list, null, null)
 					PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
 					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5, Vector2(500, 305))
 
@@ -331,7 +331,7 @@ func load_item_icon(_name):
 
 
 func _on_help_pressed() -> void:
-	Global.add_decompose_help(Global.get_ancestor(self, 3), Vector2(485, 290))
+	Global.add_decompose_help(NodeUtils.ancestor(self, 3), Vector2(485, 290))
 
 
 func _on_wait_timeout() -> void:

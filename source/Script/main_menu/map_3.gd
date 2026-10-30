@@ -444,7 +444,7 @@ func _on_ghg_pressed() -> void:
 
 
 func _on_bxgh_pressed() -> void:
-	Global.selected_eight_immortal_id = 0
+	Global.set_selected_eight_immortal_id(0)
 	Global.add_level_info(_ui_parent(), "八仙过海", Vector2(0, 0), "res://Scene/level/level_bxgh.tscn")
 
 

@@ -73,27 +73,32 @@ func _run() -> void:
 	Global.set_current_level_name("未登记关卡")
 	checks["fall_pro_default"] = is_equal_approx(Global.get_current_level_fall_pro(0.1), 0.1)
 
-	# 模式复位：四个无尽标志与八仙选择由单一入口清除。
-	Global.four_swords_endless_mode = true
-	Global.three_prince_endless_mode = true
-	Global.sss_lendless_mode = true
-	Global.constellation_endless_mode = true
-	Global.selected_eight_immortal_id = 8
+	# 无尽模式：同一时刻至多一个副本为真；切换副本会清掉上一个。
+	Global.set_special_dungeon_endless("res://Scene/level/level_sssl.tscn", true)
+	checks["endless_sssl_on"] = Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn")
+	checks["endless_others_off"] = (
+		not Global.is_special_dungeon_endless("res://Scene/level/level_stz.tscn")
+		and not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn")
+		and not Global.is_special_dungeon_endless("res://Scene/level/level_esbxx.tscn")
+	)
+	Global.set_special_dungeon_endless("res://Scene/level/level_esbxx.tscn", true)
+	checks["endless_switch_clears_previous"] = (
+		not Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn")
+		and Global.is_special_dungeon_endless("res://Scene/level/level_esbxx.tscn")
+	)
+	Global.clear_special_dungeon_endless()
+	checks["endless_clear"] = not Global.is_special_dungeon_endless("res://Scene/level/level_esbxx.tscn")
+
+	# 模式复位：进入副本时清掉自身无尽模式；八仙入口同时清空已选仙君。
+	Global.set_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn", true)
 	Global.apply_level_entry_mode_reset("res://Scene/level/level_tzsijian.tscn")
-	checks["reset_four_swords"] = not Global.four_swords_endless_mode
-	Global.apply_level_entry_mode_reset("res://Scene/level/level_stz.tscn")
-	checks["reset_three_prince"] = not Global.three_prince_endless_mode
-	Global.apply_level_entry_mode_reset("res://Scene/level/level_sssl.tscn")
-	checks["reset_sssl"] = not Global.sss_lendless_mode
-	Global.apply_level_entry_mode_reset("res://Scene/level/level_esbxx.tscn")
-	checks["reset_constellation"] = not Global.constellation_endless_mode
+	checks["reset_four_swords"] = not Global.is_special_dungeon_endless("res://Scene/level/level_tzsijian.tscn")
+	Global.set_selected_eight_immortal_id(8)
+	Global.set_special_dungeon_endless("res://Scene/level/level_bxgh.tscn", true)
 	Global.apply_level_entry_mode_reset("res://Scene/level/level_bxgh.tscn")
-	checks["reset_eight_immortal"] = Global.selected_eight_immortal_id == 0
-	Global.four_swords_endless_mode = false
-	Global.three_prince_endless_mode = false
-	Global.sss_lendless_mode = false
-	Global.constellation_endless_mode = false
-	Global.selected_eight_immortal_id = 0
+	checks["reset_eight_immortal"] = Global.get_selected_eight_immortal_id() == 0
+	Global.clear_special_dungeon_endless()
+	Global.set_selected_eight_immortal_id(0)
 
 	# 怪物生成：默认命名路径不改名，别名路径写 source_monster_id。
 	var spawn := Global.get_monster_spawn_runtime()

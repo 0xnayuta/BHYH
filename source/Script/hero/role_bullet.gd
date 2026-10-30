@@ -163,10 +163,10 @@ func _physics_process(_delta: float) -> void:
 
 	if not is_set:
 		if not is_instance_valid(player):
-			if Global.get_ancestor(self, 2) is BaseHero:
-				player = Global.get_ancestor(self, 2)
-			elif Global.get_ancestor(self, 1) is BaseHero:
-				player = Global.get_ancestor(self, 1)
+			if NodeUtils.ancestor(self, 2) is BaseHero:
+				player = NodeUtils.ancestor(self, 2)
+			elif NodeUtils.ancestor(self, 1) is BaseHero:
+				player = NodeUtils.ancestor(self, 1)
 		bullet_players.play(_name)
 		if direction:
 			middle.scale.x = -1

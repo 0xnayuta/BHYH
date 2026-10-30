@@ -5,8 +5,20 @@ extends RefCounted
 ## 由 Global 持有唯一实例；统计字段只读消费，写入必须经过 add_*/count_* 与 reset_combat_stats()。
 ## 本类不做场景树操作、不读写存档；关卡入口与结算面板通过 Global 薄访问器或 get_run_context() 使用。
 
+const THREE_PRINCE_LEVEL_PATH := "res://Scene/level/level_stz.tscn"
+const FOUR_SWORDS_LEVEL_PATH := "res://Scene/level/level_tzsijian.tscn"
+const SSS_LEVEL_PATH := "res://Scene/level/level_sssl.tscn"
+const CONSTELLATION_LEVEL_PATH := "res://Scene/level/level_esbxx.tscn"
+
 var level_display_name: String = ""
 var tower_floor: int = 1
+
+# 特殊副本无尽模式：同一时刻至多一个为真；按关卡场景路径读写，禁止逐个字段直接赋值。
+var three_prince_endless: bool = false
+var four_swords_endless: bool = false
+var sss_endless: bool = false
+var constellation_endless: bool = false
+var selected_eight_immortal_id: int = 0
 
 # 战斗统计：结算面板只读消费，写入走本类方法。
 var damage_dealt: int = 0
@@ -42,6 +54,39 @@ func set_tower_floor(value: int) -> void:
 
 func advance_tower_floor() -> void:
 	tower_floor += 1
+
+
+## 无尽模式写入是整体赋值：enabled 时只有 target_path 对应的副本为真，其余一律清零。
+func set_special_dungeon_endless(target_path: String, enabled: bool) -> void:
+	three_prince_endless = enabled and target_path == THREE_PRINCE_LEVEL_PATH
+	four_swords_endless = enabled and target_path == FOUR_SWORDS_LEVEL_PATH
+	sss_endless = enabled and target_path == SSS_LEVEL_PATH
+	constellation_endless = enabled and target_path == CONSTELLATION_LEVEL_PATH
+
+
+func clear_special_dungeon_endless() -> void:
+	set_special_dungeon_endless("", false)
+
+
+func is_special_dungeon_endless(target_path: String) -> bool:
+	match target_path:
+		THREE_PRINCE_LEVEL_PATH:
+			return three_prince_endless
+		FOUR_SWORDS_LEVEL_PATH:
+			return four_swords_endless
+		SSS_LEVEL_PATH:
+			return sss_endless
+		CONSTELLATION_LEVEL_PATH:
+			return constellation_endless
+	return false
+
+
+func get_selected_eight_immortal_id() -> int:
+	return selected_eight_immortal_id
+
+
+func set_selected_eight_immortal_id(value: int) -> void:
+	selected_eight_immortal_id = value
 
 
 ## 累计造成伤害总量。分类型累计单独调用 add_damage_dealt_by_type，避免两套口径被合并。

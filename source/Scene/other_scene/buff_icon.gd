@@ -39,7 +39,7 @@ func start_duration(seconds: float) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	var p_parent = Global.get_ancestor(self, 2)
+	var p_parent = NodeUtils.ancestor(self, 2)
 	if parent_node != null:
 		if p_parent != null and p_parent.get("get_obj") != null:
 			parent_node = p_parent.get("get_obj")

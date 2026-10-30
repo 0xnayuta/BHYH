@@ -234,7 +234,7 @@ func call_bullet_1():
 
 
 func call_bullet_alt2():
-	var dis = int(Global.get_dis_betweem(self, RoleProp.source_player))
+	var dis = int(NodeUtils.distance_between(self, RoleProp.source_player))
 	if dis < attack_range:
 		return
 	var bb

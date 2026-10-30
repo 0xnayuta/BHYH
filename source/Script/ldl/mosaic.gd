@@ -120,4 +120,4 @@ func load_item_icon(_name):
 
 
 func _on_help_pressed() -> void:
-	Global.add_mosaic_help(Global.get_ancestor(self, 3), Vector2(0, 0))
+	Global.add_mosaic_help(NodeUtils.ancestor(self, 3), Vector2(0, 0))

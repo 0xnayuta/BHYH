@@ -2482,7 +2482,7 @@ func _get_human_nightmare_soul_items(level_info: Dictionary) -> Array:
 
 func _get_eight_immortal_fall_preview() -> Dictionary:
 	var result := {"items": [], "probabilities": {}}
-	var selected_id := int(Global.selected_eight_immortal_id)
+	var selected_id := Global.get_selected_eight_immortal_id()
 	if selected_id not in EIGHT_IMMORTAL_IDS:
 		return result
 	var config := _get_level_monster_config("", selected_id, 1)
@@ -2709,7 +2709,7 @@ func _on_eight_immortal_head_selected(head: Node) -> void:
 	var select_id := int(head.get_meta("eight_immortal_id", 0))
 	if select_id not in EIGHT_IMMORTAL_IDS:
 		return
-	Global.selected_eight_immortal_id = select_id
+	Global.set_selected_eight_immortal_id(select_id)
 	for child in monster_list.get_children():
 		if child.has_method("set_selected"):
 			child.set_selected(child == head)
@@ -2791,7 +2791,7 @@ func _on_challenge_pressed() -> void:
 			return
 		if (
 			target_stage_path == "res://Scene/level/level_bxgh.tscn"
-			and Global.selected_eight_immortal_id not in EIGHT_IMMORTAL_IDS
+			and Global.get_selected_eight_immortal_id() not in EIGHT_IMMORTAL_IDS
 		):
 			Global.add_message_show(_popup_parent(), "请选择要挑战的八仙 Boss！", 1.5, Vector2(470, 300))
 			return
@@ -2816,10 +2816,7 @@ func _on_challenge_pressed() -> void:
 				four_swords_mode_dialog.get_node("BG/Title").text = "副本模式"
 			four_swords_mode_dialog.visible = true
 			return
-		Global.three_prince_endless_mode = false
-		Global.four_swords_endless_mode = false
-		Global.sss_lendless_mode = false
-		Global.constellation_endless_mode = false
+		Global.clear_special_dungeon_endless()
 		Global.change_scene(target_stage_path)
 		process_mode = Node.PROCESS_MODE_DISABLED
 		visible = false
@@ -2842,10 +2839,7 @@ func _on_close_pressed() -> void:
 			"res://Scene/level/level_esbxx.tscn"
 		]
 	):
-		Global.three_prince_endless_mode = false
-		Global.four_swords_endless_mode = false
-		Global.sss_lendless_mode = false
-		Global.constellation_endless_mode = false
+		Global.clear_special_dungeon_endless()
 	self.queue_free()
 
 
@@ -2860,10 +2854,7 @@ func _enter_four_swords_mode(endless_mode: bool) -> void:
 		]
 	):
 		return
-	Global.three_prince_endless_mode = target_stage_path == "res://Scene/level/level_stz.tscn" and endless_mode
-	Global.four_swords_endless_mode = target_stage_path == "res://Scene/level/level_tzsijian.tscn" and endless_mode
-	Global.sss_lendless_mode = target_stage_path == "res://Scene/level/level_sssl.tscn" and endless_mode
-	Global.constellation_endless_mode = target_stage_path == "res://Scene/level/level_esbxx.tscn" and endless_mode
+	Global.set_special_dungeon_endless(str(target_stage_path), bool(endless_mode))
 	four_swords_mode_dialog.visible = false
 	Global.change_scene(target_stage_path)
 	process_mode = Node.PROCESS_MODE_DISABLED

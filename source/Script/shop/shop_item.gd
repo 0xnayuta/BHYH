@@ -88,7 +88,7 @@ func _on_num_editing_toggled(toggled_on: bool) -> void:
 
 
 func _on_goumai_pressed() -> void:
-	var _parent = Global.get_ancestor(self, 3)
+	var _parent = NodeUtils.ancestor(self, 3)
 	var buy_num := _get_safe_buy_num()
 	if not _can_pay_for_count(buy_num):
 		Global.add_message_show(_parent, "灵魂不足！", 1.5, Vector2(485, 295))
@@ -103,7 +103,7 @@ func _on_goumai_pressed() -> void:
 
 
 func add_item_toplayer(times):
-	var _parent = Global.get_ancestor(self, 3)
+	var _parent = NodeUtils.ancestor(self, 3)
 	var buy_num := clampi(int(times), 1, MAX_SHOP_BUY_NUM)
 	_set_total_num(buy_num)
 	var result: Dictionary = ShopPurchaseCommand.execute(_item_name, buy_num, _effective_price())

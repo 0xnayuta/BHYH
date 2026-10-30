@@ -610,7 +610,7 @@ func on_eqchange():
 			fj = str(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
 	else:
 		fj = str(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR])
-	fj = Global.get_clean_name(fj)
+	fj = ItemUtils.clean_fashion_name(fj)
 	if role_id >= 1 and role_id <= 5:
 		change_body(fj)
 	var wings_list

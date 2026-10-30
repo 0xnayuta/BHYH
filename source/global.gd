@@ -18,6 +18,7 @@ const COMBAT_POOL_RUNTIME_SCRIPT := preload("res://Script/runtime/combat_pool_ru
 const MAGIC_WEAPON_RUNTIME_SCRIPT := preload("res://Script/runtime/magic_weapon_runtime.gd")
 const LEVEL_ENTRY_RUNTIME_SCRIPT := preload("res://Script/runtime/level_entry_runtime.gd")
 const MONSTER_SPAWN_RUNTIME_SCRIPT := preload("res://Script/runtime/monster_spawn_runtime.gd")
+const ROLE_VISUAL_RUNTIME_SCRIPT := preload("res://Script/runtime/role_visual_runtime.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -350,6 +351,10 @@ func _ready() -> void:
 	_monster_spawn.name = "MonsterSpawnRuntime"
 	_monster_spawn.setup(self)
 	add_child(_monster_spawn)
+	_role_visual = ROLE_VISUAL_RUNTIME_SCRIPT.new()
+	_role_visual.name = "RoleVisualRuntime"
+	_role_visual.setup(self)
+	add_child(_role_visual)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -413,6 +418,10 @@ func get_monster_spawn_runtime() -> MonsterSpawnRuntime:
 	return _monster_spawn
 
 
+func get_role_visual_runtime() -> RoleVisualRuntime:
+	return _role_visual
+
+
 var cloud_sword = null
 var purple_gold_bell = null
 var zcld = null
@@ -447,7 +456,6 @@ var box_count: int = 0
 
 var infinite_level_multiplier: float = 0.0
 var selected_three_prince_id: int = 0
-var selected_eight_immortal_id: int = 0
 var selected_constellation_level: int = 1
 var constellation_best_tier: Dictionary = {}
 var level_begin_time = ""
@@ -540,6 +548,27 @@ func advance_tower_floor() -> void:
 	_run_context.advance_tower_floor()
 
 
+## 特殊副本无尽模式：同一时刻至多一个为真，写入走 RunContext 整体赋值。
+func is_special_dungeon_endless(target_path: String) -> bool:
+	return _run_context.is_special_dungeon_endless(target_path)
+
+
+func set_special_dungeon_endless(target_path: String, enabled: bool) -> void:
+	_run_context.set_special_dungeon_endless(target_path, enabled)
+
+
+func clear_special_dungeon_endless() -> void:
+	_run_context.clear_special_dungeon_endless()
+
+
+func get_selected_eight_immortal_id() -> int:
+	return _run_context.get_selected_eight_immortal_id()
+
+
+func set_selected_eight_immortal_id(value: int) -> void:
+	_run_context.set_selected_eight_immortal_id(value)
+
+
 ## 后台保存唯一消费者：记录最后完成序号与失败次数。
 ## 后台写入由 MemoryClass 自动重试，战斗内不弹 UI，避免瞬时失败误报；
 ## 失败仍通过 last_save_error、push_error 与本状态快照可观察。
@@ -593,8 +622,6 @@ var wait_time: float = 0.8
 var need_change_item: bool = true
 var player_dir
 
-var _current_role_body_texture_path: String = ""
-var _current_role_equipment_texture_path: String = ""
 var _all_hero_skill_resources_preloaded: bool = false
 var _prewarmed_role_id: int = 0
 var _archive_session: ArchiveSession = ArchiveSession.new()
@@ -630,6 +657,7 @@ var _combat_pool: CombatPoolRuntime = null
 var _magic_weapon_runtime: MagicWeaponRuntime = null
 var _level_entry: LevelEntryRuntime = null
 var _monster_spawn: MonsterSpawnRuntime = null
+var _role_visual: RoleVisualRuntime = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -1242,8 +1270,7 @@ func clear_combat_runtime_cache() -> void:
 	NeZhaEquipmentVisuals.clear_cached_frames()
 	_prewarmed_role_id = 0
 	_prewarmed_pet_signature = ""
-	_current_role_body_texture_path = ""
-	_current_role_equipment_texture_path = ""
+	_role_visual.reset()
 
 	damage_text = null
 	monster_be_hit = null
@@ -1285,7 +1312,7 @@ func bind_archive_session() -> bool:
 	if archive_number <= 0:
 		# 前置条件不满足属正常调用结果：由调用方决定提示，不产生运行期告警。
 		return false
-	var role_id := _current_role_id()
+	var role_id := _role_visual.current_role_id()
 	if role_id < 1 or role_id > 7:
 		return false
 	if _archive_session.matches(path, role_id):
@@ -1412,7 +1439,7 @@ func _current_visual_equipment_names() -> Dictionary:
 
 func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]:
 	if role_id <= 0:
-		role_id = _current_role_id()
+		role_id = _role_visual.current_role_id()
 	var names := _current_visual_equipment_names()
 	var paths: Array[String] = []
 	if role_id == 7:
@@ -1422,7 +1449,7 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 		NeZhaEquipmentVisuals.get_body_front_frames(str(names.get("body", "Empty")))
 		NeZhaEquipmentVisuals.get_weapon_frames(str(names.get("weapon", "Empty")))
 		return paths
-	var body_name: String = str(get_clean_name(str(names.get("body", "Empty")))).to_lower()
+	var body_name: String = str(ItemUtils.clean_fashion_name(str(names.get("body", "Empty")))).to_lower()
 	var weapon_name: String = str(names.get("weapon", "Empty")).to_lower()
 	var body_path := "res://Art/hero_picture/role_%d_all_equipment/role_%d_body_%s.png" % [role_id, role_id, body_name]
 	var weapon_path := (
@@ -1468,8 +1495,7 @@ func _clear_runtime_pools() -> void:
 
 func release_role_runtime_resources() -> void:
 	_prewarmed_role_id = 0
-	_current_role_body_texture_path = ""
-	_current_role_equipment_texture_path = ""
+	_role_visual.reset()
 	NeZhaEquipmentVisuals.clear_cached_frames()
 	WUSHUANG_HUOYAN_EFFECT_SCRIPT.clear_cached_frames()
 	BING_YU_EFFECT_SCRIPT.clear_cached_data()
@@ -1872,7 +1898,7 @@ func prewarm_texture_paths(paths: Array[String], generation: int = -1) -> void:
 
 
 func get_current_role_preload_paths() -> Array[String]:
-	var manifest := RoleRuntimeCatalog.get_manifest(_current_role_id())
+	var manifest := RoleRuntimeCatalog.get_manifest(_role_visual.current_role_id())
 	if manifest == null:
 		push_error("角色运行资源清单缺失，跳过预载路径收集")
 		return []
@@ -1893,7 +1919,7 @@ func prewarm_current_role_runtime_resources(role_id: int = 0, generation: int = 
 	if not is_runtime_generation_current(request_generation):
 		return
 	if role_id <= 0:
-		role_id = _current_role_id()
+		role_id = _role_visual.current_role_id()
 	if _prewarmed_role_id == role_id:
 		return
 	if _prewarmed_role_id > 0:
@@ -2009,11 +2035,6 @@ var target_scene: String:
 	set(value):
 		if _scene_flow != null:
 			_scene_flow.target_scene = value
-
-var four_swords_endless_mode: bool = false
-var sss_lendless_mode: bool = false
-var constellation_endless_mode: bool = false
-var three_prince_endless_mode: bool = false
 
 
 func preload_next(path: String) -> void:
@@ -2489,9 +2510,11 @@ func configure_backpack_role_preview(page: Node, player: Variant = null) -> void
 		return
 	if role_id == 6:
 		if role_body != null:
-			role_body.texture = _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_body_frames("Empty"))
+			role_body.texture = RoleVisualRuntime.static_preview_texture(NeZhaEquipmentVisuals.get_body_frames("Empty"))
 		if role_equipment != null:
-			role_equipment.texture = _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_weapon_frames("Empty"))
+			role_equipment.texture = RoleVisualRuntime.static_preview_texture(
+				NeZhaEquipmentVisuals.get_weapon_frames("Empty")
+			)
 		return
 	if role_body != null:
 		var body_path := "res://Art/hero_picture/role_%d_all_equipment/role_%d_body_empty.png" % [role_id, role_id]
@@ -2637,16 +2660,9 @@ func sync_level_drop_pro_data(level_info: Dictionary) -> void:
 ## 关卡进入前的模式复位：四个无尽模式标志与八仙选择。
 ## 标志仍归 Global 所有（关卡脚本直接读取），此处保持单一写入口。
 func apply_level_entry_mode_reset(target_path: String) -> void:
-	if target_path == "res://Scene/level/level_tzsijian.tscn":
-		four_swords_endless_mode = false
-	if target_path == "res://Scene/level/level_stz.tscn":
-		three_prince_endless_mode = false
-	if target_path == "res://Scene/level/level_sssl.tscn":
-		sss_lendless_mode = false
-	if target_path == "res://Scene/level/level_esbxx.tscn":
-		constellation_endless_mode = false
+	_run_context.set_special_dungeon_endless(target_path, false)
 	if target_path == "res://Scene/level/level_bxgh.tscn":
-		selected_eight_immortal_id = 0
+		_run_context.set_selected_eight_immortal_id(0)
 
 
 func add_level_info(parent, Name, position, path):
@@ -3633,14 +3649,6 @@ func add_dj_sell(parent, position, _name, _page):
 	return _backpack_factory.add_dj_sell(parent, position, _name, _page)
 
 
-func get_ancestor(self_, times):
-	var i = 0
-	while i < times:
-		self_ = self_.get_parent()
-		i = i + 1
-	return self_
-
-
 func add_equ_propeties_box(parent, position, _name, qh_level, wx, Data):
 	return _backpack_factory.add_equ_propeties_box(parent, position, _name, qh_level, wx, Data)
 
@@ -3946,106 +3954,12 @@ func _emit_combo_milestone_deferred(current_combo: int) -> void:
 	combo_milestone_reached.emit(current_combo)
 
 
-func get_position_between(Ob_1, Ob_2):
-	if Ob_1 == null or Ob_2 == null:
-		return Vector2(0, 0)
-	var pp_1 = Ob_2.position.x - Ob_1.position.x
-	var pp_2 = Ob_2.position.y - Ob_1.position.y
-	if pp_1 == 0 or pp_2 == 0:
-		return Vector2(0, 0)
-	var pp_3 = sqrt(pp_1 * pp_1 + pp_2 * pp_2)
-	var pp_4: Vector2 = Vector2(pp_1 / pp_3, pp_2 / pp_3)
-	return pp_4
-
-
-func get_dis_betweem(Ob_1, Ob_2):
-	if Ob_1 == null or Ob_2 == null:
-		return 0
-	var pp_1 = Ob_2.position.x - Ob_1.position.x
-	var pp_2 = Ob_2.position.y - Ob_1.position.y
-	var pp_3 = sqrt(pp_1 * pp_1 + pp_2 * pp_2)
-	return pp_3
-
-
-func _ne_zha_static_preview_texture(frames: SpriteFrames) -> Texture2D:
-	if frames == null or not frames.has_animation(&"wait"):
-		return null
-	if frames.get_frame_count(&"wait") <= 0:
-		return null
-	return frames.get_frame_texture(&"wait", 0)
-
-
 func load_role1_body(_name, role_id: int = 0) -> Texture2D:
-	var resolved_role_id := role_id
-	if resolved_role_id <= 0:
-		resolved_role_id = _current_role_id()
-	if resolved_role_id == 7:
-		return load("res://Art/hero_picture/role_7/preview.png") as Texture2D
-	if resolved_role_id == 6:
-		var static_texture := _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_body_frames(str(_name)))
-		if static_texture == null:
-			push_warning("哪吒身体帧加载失败: " + str(_name))
-		return static_texture
-	var path := (
-		"res://Art/hero_picture/role_"
-		+ str(resolved_role_id)
-		+ "_all_equipment/role_"
-		+ str(resolved_role_id)
-		+ "_body_"
-		+ str(_name).to_lower()
-		+ ".png"
-	)
-	var path_texture := _load_current_role_texture(path, true)
-	if path_texture == null:
-		push_warning("角色身体贴图加载失败: " + path)
-	return path_texture
+	return _role_visual.load_body(_name, role_id)
 
 
 func load_role1_eq(_name, role_id: int = 0) -> Texture2D:
-	var resolved_role_id := role_id
-	if resolved_role_id <= 0:
-		resolved_role_id = _current_role_id()
-	if resolved_role_id == 7:
-		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres") as Texture2D
-	if resolved_role_id == 6:
-		var static_texture := _ne_zha_static_preview_texture(NeZhaEquipmentVisuals.get_weapon_frames(str(_name)))
-		if static_texture == null:
-			push_warning("哪吒装备帧加载失败: " + str(_name))
-		return static_texture
-	var path := (
-		"res://Art/hero_picture/role_"
-		+ str(resolved_role_id)
-		+ "_all_equipment/role_"
-		+ str(resolved_role_id)
-		+ "_eq_"
-		+ str(_name).to_lower()
-		+ ".png"
-	)
-	var path_texture := _load_current_role_texture(path, false)
-	if path_texture == null:
-		push_warning("角色装备贴图加载失败: " + path)
-	return path_texture
-
-
-func _load_current_role_texture(path: String, is_body: bool) -> Texture2D:
-	var texture := get_cached_texture(path)
-	if texture == null:
-		return null
-	var previous_path := _current_role_body_texture_path if is_body else _current_role_equipment_texture_path
-	if previous_path != "" and previous_path != path:
-		_resource_runtime.release_cached_texture(previous_path)
-	if is_body:
-		_current_role_body_texture_path = path
-	else:
-		_current_role_equipment_texture_path = path
-	return texture
-
-
-func _current_role_id() -> int:
-	var role_id := int(PlayerData.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
-		return 1
-	return role_id
+	return _role_visual.load_equipment(_name, role_id)
 
 
 func get_wx(num):
@@ -4100,55 +4014,6 @@ func check_dir_between_two_obj(Player, Monster):
 
 func remove_all_buff():
 	RoleProp.ws_value = 0
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name).to_lower() + ".png")
-	return abc
-
-
-func add_all_item_num(list, Num, NumRange):
-	randomize()
-	var dic = {}
-	for i in list:
-		dic[i] = {"Name": i, "Num": 0}
-	for i in range(Num):
-		var item_name = list[randi_range(0, list.size() - 1)]
-		dic[item_name]["Num"] += NumRange
-	var list_temp = []
-	for i in dic:
-		if int(dic[i]["Num"]) == 0:
-			list_temp.push_back(i)
-	for i in list_temp:
-		dic.erase(i)
-	for i in dic:
-		var num = dic[i]["Num"]
-		PlayerData.add_dj(i, num)
-	return dic
-
-
-func get_all_item_num(list, Num, NumRange):
-	randomize()
-	var dic = {}
-	for i in list:
-		dic[i] = {"Name": i, "Num": 0}
-	for i in range(Num):
-		var item_name = list[randi_range(0, list.size() - 1)]
-		dic[item_name]["Num"] += NumRange
-	var list_temp = []
-	for i in dic:
-		if int(dic[i]["Num"]) == 0:
-			list_temp.push_back(i)
-	for i in list_temp:
-		dic.erase(i)
-	for i in dic:
-		var item_name = i
-		var num = dic[i]["Num"]
-		dic[i] = {"Name": item_name, "Value": num, "Prop": {}, "WX": [], "strength_value": 0}
-	var ll = []
-	for i in dic:
-		ll.push_back(dic[i])
-	return ll
 
 
 func remove_all_active_buffs():
@@ -4216,35 +4081,6 @@ func remove_wd(OBJ, source_player: BaseHero = null) -> void:
 			continue
 		if source_player == null or i.buff_info.get("source_player") == source_player:
 			i.queue_free()
-
-
-func get_clean_name(Name: String):
-	var xianyu_body_name_map := {
-		"xyfjwk": "wkxysz",
-		"xyfjts": "tsxysz",
-		"xyfjbj": "bjxysz",
-		"xyfjss": "ssxysz",
-		"xyfjbl": "blxyfj",
-	}
-	if xianyu_body_name_map.has(Name):
-		return xianyu_body_name_map[Name]
-	if Name.get_slice("shishi", 1) != Name:
-		return Name.get_slice("shishi", 1)
-	elif Name.get_slice("youxiu", 1) != Name:
-		return Name.get_slice("youxiu", 1)
-	elif Name.get_slice("jingliang", 1) != Name:
-		return Name.get_slice("jingliang", 1)
-	elif Name.get_slice("putong", 1) != Name:
-		return Name.get_slice("putong", 1)
-	elif Name.get_slice("xieling", 1) != Name:
-		return Name.get_slice("xieling", 1)
-	elif Name.get_slice("hunqi", 1) != Name:
-		return Name.get_slice("hunqi", 1)
-	elif Name.get_slice("chuanshuo", 1) != Name:
-		return Name.get_slice("chuanshuo", 1)
-	elif Name.get_slice("shenqi", 1) != Name:
-		return Name.get_slice("shenqi", 1)
-	return Name
 
 
 func normal_face_player(OBJ, dir, Player):

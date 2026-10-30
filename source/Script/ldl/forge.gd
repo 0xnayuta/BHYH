@@ -674,4 +674,4 @@ func get_eq_prop():
 
 
 func _on_help_pressed() -> void:
-	Global.add_forge_help(Global.get_ancestor(self, 3), Vector2(455, 265))
+	Global.add_forge_help(NodeUtils.ancestor(self, 3), Vector2(455, 265))

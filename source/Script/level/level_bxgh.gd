@@ -291,7 +291,7 @@ var _boss_death_handled := false
 
 
 func _ready() -> void:
-	selected_boss_id = int(Global.selected_eight_immortal_id)
+	selected_boss_id = Global.get_selected_eight_immortal_id()
 	if selected_boss_id not in BOSS_ORDER:
 		selected_boss_id = BOSS_ORDER[0]
 	monster_group = {

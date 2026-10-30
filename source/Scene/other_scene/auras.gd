@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 		idle = false
 
 	if not idle:
-		self.position += Global.get_position_between(self, RoleProp.source_player) * speed * 0.5
+		self.position += NodeUtils.position_between(self, RoleProp.source_player) * speed * 0.5
 		check.disabled = false
 		speed += 0.2
 		if speed >= 20:

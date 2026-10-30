@@ -153,5 +153,5 @@ func load_item_icon(_name):
 
 func _on_monster_name_pressed() -> void:
 	if monster_info == null:
-		monster_info = Global.add_monster_info(Global.get_ancestor(self, 0), monster_name, Vector2(550, 450))
+		monster_info = Global.add_monster_info(NodeUtils.ancestor(self, 0), monster_name, Vector2(550, 450))
 		monster_info.z_index = 999

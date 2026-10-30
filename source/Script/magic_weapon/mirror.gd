@@ -276,7 +276,7 @@ func show_skill():
 		if monster_2 == null:
 			a_2 += 1
 			continue
-		a_3 = Global.get_dis_betweem(player, monster_2)
+		a_3 = NodeUtils.distance_between(player, monster_2)
 		if a_3 <= closest_dist:
 			closest_dist = a_3
 		if monster_2 is Monster49 or monster_2 is Monster50:

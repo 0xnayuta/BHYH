@@ -93,7 +93,7 @@ func show_skill():
 		if monster_2 is Monster138:
 			a_2 += 1
 			continue
-		a_3 = Global.get_dis_betweem(player, monster_2)
+		a_3 = NodeUtils.distance_between(player, monster_2)
 		if a_3 <= a_1:
 			a_1 = a_3
 			if monster_2 is Monster48:
@@ -135,7 +135,7 @@ func get_target():
 		if monster_2 is Monster138:
 			a_2 += 1
 			continue
-		a_3 = Global.get_dis_betweem(player, monster_2)
+		a_3 = NodeUtils.distance_between(player, monster_2)
 		if a_3 <= a_1:
 			a_1 = a_3
 			if monster_2 is Monster48:

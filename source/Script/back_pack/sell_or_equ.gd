@@ -312,7 +312,7 @@ func _on_equ_pressed() -> void:
 				var wx = new_list[DataKeys.FIVE_ELEMENTS]
 				eq_prop = new_list["Data"]
 				PlayerData.add_fb(mz, ql, wx, eq_prop)
-				var parent = Global.get_ancestor(self, 3)
+				var parent = NodeUtils.ancestor(self, 3)
 				Global.add_message_show(parent, "当前法宝正在使用，无法更换！！", 1.5, Vector2(485, 240))
 	RoleProp.get_equ_last_pro()
 	RoleProp.get_last_prop()
@@ -344,7 +344,7 @@ func _on_sell_pressed() -> void:
 			if eq_prop[DataKeys.GEM].size() == 0:
 				pass
 			else:
-				var parent = Global.get_ancestor(self, 3)
+				var parent = NodeUtils.ancestor(self, 3)
 				Global.add_message_show(parent, "请先卸下该装备上的宝石！！", 1.5, Vector2(485, 240))
 				return
 	var abc = PlayerData.get_zb_data(page, number)
@@ -445,7 +445,7 @@ func _on_panel_mouse_exited() -> void:
 
 func check_can_equipment(EquipmentName):
 	var role_id: int = PlayerData.player_data["Myself"]
-	var parent = Global.get_ancestor(self, 3)
+	var parent = NodeUtils.ancestor(self, 3)
 	var eq_base = AE.all_equipment[EquipmentName]["所属"]
 	var name_str = AE.all_equipment[EquipmentName][DataKeys.NAME] as String
 	var role_base: String

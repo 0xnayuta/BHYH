@@ -23,7 +23,7 @@ func _ready() -> void:
 		end_wall_shape.size = Vector2(END_WALL_THICKNESS, 1786)
 		stop_2.shape = end_wall_shape
 		stop_2.disabled = false
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		monster_group = {"stage_1": [SSSL_BOSS_IDS[0]], "stage_2": [], "stage_3": [], "stage_4": []}
 		monster_position_x = {"stage_1": [ENDLESS_BOSS_POSITION.x], "stage_2": [], "stage_3": [], "stage_4": []}
 		monster_position_y = {"stage_1": [ENDLESS_BOSS_POSITION.y], "stage_2": [], "stage_3": [], "stage_4": []}
@@ -69,7 +69,7 @@ func _create_stage_walls() -> void:
 
 
 func _exit_tree() -> void:
-	Global.sss_lendless_mode = false
+	Global.clear_special_dungeon_endless()
 
 
 func _update_stage_walls() -> void:
@@ -80,7 +80,7 @@ func _update_stage_walls() -> void:
 
 
 func _preload_level_resources() -> void:
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		await Global.preload_level_monster_scenes(SSSL_BOSS_IDS)
 		for stage in range(1, 5):
 			_preload_sssl_boss_body_frames(SSSL_BOSS_IDS[stage - 1])
@@ -133,7 +133,7 @@ func level_create_monster(stage):
 func _on_create_control_timeout() -> void:
 	if _role == null:
 		return
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		current_stage = 1
 		_set_endless_camera_limits()
 		if not _preloaded_sssl_stages.has(_endless_boss_index + 1):
@@ -158,7 +158,7 @@ func _on_create_control_timeout() -> void:
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		_set_endless_camera_limits()
 	check_monster_death()
 	_update_stage_walls()
@@ -170,7 +170,7 @@ func _physics_process(delta: float) -> void:
 
 
 func set_through():
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		_set_endless_camera_limits()
 		stop_1.disabled = true
 		stop_5.disabled = true
@@ -192,7 +192,7 @@ func set_through():
 
 
 func check_can_pass():
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		return monster_group.get("stage_1", []).is_empty() and _get_alive_stage_monster_count() == 0
 	if current_stage < 1 or current_stage > 4:
 		return false
@@ -203,13 +203,13 @@ func check_can_pass():
 
 
 func check_can_exit():
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		return false
 	return current_stage == 4 and check_can_pass()
 
 
 func one_check_can_exit():
-	if Global.sss_lendless_mode:
+	if Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		if check_can_pass() and not _endless_restart_pending:
 			_endless_restart_pending = true
 			call_deferred("_queue_next_endless_boss")
@@ -227,11 +227,11 @@ func _set_endless_camera_limits() -> void:
 
 
 func _queue_next_endless_boss() -> void:
-	if not is_inside_tree() or not Global.sss_lendless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		_endless_restart_pending = false
 		return
 	await get_tree().process_frame
-	if not is_inside_tree() or not Global.sss_lendless_mode:
+	if not is_inside_tree() or not Global.is_special_dungeon_endless("res://Scene/level/level_sssl.tscn"):
 		_endless_restart_pending = false
 		return
 	_endless_boss_index = (_endless_boss_index + 1) % SSSL_BOSS_IDS.size()
