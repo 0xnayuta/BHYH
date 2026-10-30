@@ -89,7 +89,7 @@ func _on_body_pressed(index: int) -> void:
 		_show_message("体魄修炼页面加载失败")
 		return
 	detail_page = detail_scene.instantiate()
-	Global.register_ui_runtime_instance(detail_page, DETAIL_SCENE_PATH)
+	Global.get_ui_runtime().register_ui_runtime_instance(detail_page, DETAIL_SCENE_PATH)
 	if detail_page.has_method("setup"):
 		detail_page.setup(self, index)
 	var parent := _ui_parent()
@@ -113,9 +113,9 @@ func _on_main_close_pressed() -> void:
 
 func _ui_parent() -> Node:
 	if Global.has_method("get_ui_popup_layer"):
-		return Global.get_ui_popup_layer()
-	if Global.windows != null:
-		return Global.windows
+		return Global.get_ui_runtime().get_popup_layer()
+	if Global.get_ui_runtime().windows != null:
+		return Global.get_ui_runtime().windows
 	return get_parent() if get_parent() != null else self
 
 

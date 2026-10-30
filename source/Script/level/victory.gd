@@ -43,7 +43,7 @@ func _ready() -> void:
 		if not MainSet.set_data["LevelHYS"]:
 			MainSet.set_data["LevelHYS"] = true
 			MemoryClass.main_bc()
-			Global.add_message_show(Global.windows, "恭喜通关火焰山，解锁角色“猪八戒”！！", 1.5, Vector2(470, 300))
+			Global.add_message_show(Global.get_ui_runtime().windows, "恭喜通关火焰山，解锁角色“猪八戒”！！", 1.5, Vector2(470, 300))
 	begin_time.text = "开始时间：" + Global.level_begin_time
 	end_time.text = "结束时间：" + Global.level_end_time
 	use_time.text = (
@@ -56,7 +56,7 @@ func _ready() -> void:
 			if p_dpj() >= 4:
 				MainSet.set_data["Music4"] = true
 				MemoryClass.main_bc()
-				Global.add_message_show(Global.windows, "触发彩蛋，恭喜开启图四音乐！！！", 1.5, Vector2(470, 300))
+				Global.add_message_show(Global.get_ui_runtime().windows, "触发彩蛋，恭喜开启图四音乐！！！", 1.5, Vector2(470, 300))
 	if Global.current_level != "":
 		var pj = p_dpj()
 		if PlayerData.player_data["关卡评价"].has(Global.current_level):
@@ -136,7 +136,7 @@ func _on_more_informaition_pressed() -> void:
 
 func _on_rechallenge_pressed() -> void:
 	if Global.last_level_path == "":
-		Global.add_message_show(Global.windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 		return
 	if not _begin_rechallenge():
 		return

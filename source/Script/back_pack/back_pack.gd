@@ -654,7 +654,9 @@ func init_show_wing_tx_button():
 func _on_wings_show_pressed() -> void:
 	var previous := bool(PlayerData.player_data["翅膀显示"])
 	PlayerData.player_data["翅膀显示"] = not previous
-	if not Global.request_save_with_feedback("back_pack_wings_show", Global.get_ui_popup_layer(), "显示设置保存失败："):
+	if not Global.request_save_with_feedback(
+		"back_pack_wings_show", Global.get_ui_runtime().get_popup_layer(), "显示设置保存失败："
+	):
 		PlayerData.player_data["翅膀显示"] = previous
 		return
 	wings_show_button.set_button_icon(
@@ -672,7 +674,9 @@ func _on_wings_show_pressed() -> void:
 func _on_head_show_pressed() -> void:
 	var previous := bool(PlayerData.player_data["头衔显示"])
 	PlayerData.player_data["头衔显示"] = not previous
-	if not Global.request_save_with_feedback("back_pack_head_show", Global.get_ui_popup_layer(), "显示设置保存失败："):
+	if not Global.request_save_with_feedback(
+		"back_pack_head_show", Global.get_ui_runtime().get_popup_layer(), "显示设置保存失败："
+	):
 		PlayerData.player_data["头衔显示"] = previous
 		return
 	head_show_button.set_button_icon(

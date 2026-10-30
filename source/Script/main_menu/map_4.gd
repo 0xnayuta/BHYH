@@ -154,7 +154,7 @@ func _ready() -> void:
 		get_viewport().size_changed.connect(_fit_to_fullscreen)
 	if not MainSet.set_data["LevelTT"]:
 		MainSet.set_data["LevelTT"] = true
-		Global.add_message_show(Global.windows, "恭喜通到达天庭，解锁角色“沙悟净”！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "恭喜通到达天庭，解锁角色“沙悟净”！！", 1.5, Vector2(470, 300))
 		MemoryClass.main_bc()
 	Global.llbt_level = 1
 	Global.llbtbossms = false
@@ -175,7 +175,7 @@ func _ready() -> void:
 		MainMusic.add_music()
 	Global.current_level = ""
 	if not Global.is_frist:
-		Global.add_message_show(Global.windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
 	Global.player_be_hit_count = 0
 	Global.last_level_path = ""

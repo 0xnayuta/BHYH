@@ -5,6 +5,7 @@ signal combo_milestone_reached(milestone: int)
 signal sound_settings_changed
 
 const TARGET_MAX_FPS := 150
+const UI_RUNTIME_SCRIPT := preload("res://Script/runtime/ui_runtime.gd")
 const RUNTIME_DIAGNOSTICS_SCRIPT := preload("res://Script/runtime/runtime_diagnostics.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
@@ -113,8 +114,6 @@ var all_buff_list = [
 	"SMSRSZ_CD"
 ]
 var buff_list = []
-var _ui_popup_layer
-var _active_hover_popup
 
 var _pool_data = {"root": null, "damage_text": [], "mr_hurt": [], "role_be_hit": [], "sound_player": []}
 const DAMAGE_TEXT_POOL_LIMIT := 80
@@ -272,11 +271,9 @@ func _exit_tree() -> void:
 	_permanent_ui_prewarm_in_progress = false
 	release_role_runtime_resources()
 	clear_combat_runtime_cache()
-	release_ui_runtime_cache(true)
-	_transient_ui_instances.clear()
-	_ui_runtime_instance_paths.clear()
-	_ui_runtime_instance_counts.clear()
-	_cleanup_transient_ui_active = false
+	if _ui_runtime != null:
+		_ui_runtime.release_ui_runtime_cache(true)
+		_ui_runtime.clear_runtime_state()
 	clear_preloaded_scene_slot()
 	_resource_cache.clear()
 	_sprite_frames_cache.clear()
@@ -304,6 +301,10 @@ func _ready() -> void:
 		MainSet.apply_frame_rate()
 	else:
 		Engine.max_fps = TARGET_MAX_FPS
+	_ui_runtime = UI_RUNTIME_SCRIPT.new()
+	_ui_runtime.name = "UiRuntime"
+	_ui_runtime.setup(self)
+	add_child(_ui_runtime)
 	_runtime_diagnostics = RUNTIME_DIAGNOSTICS_SCRIPT.new()
 	_runtime_diagnostics.name = "RuntimeDiagnostics"
 	_runtime_diagnostics.setup(self)
@@ -317,6 +318,10 @@ func _ready() -> void:
 
 func get_runtime_diagnostics() -> RuntimeDiagnostics:
 	return _runtime_diagnostics
+
+
+func get_ui_runtime() -> UiRuntime:
+	return _ui_runtime
 
 
 var cloud_sword = null
@@ -450,7 +455,7 @@ func _on_save_failed(reason: String, error: String, message: String, notify: boo
 		return
 	_save_failure_notify_key = key
 	_save_failure_notify_msec = now
-	add_message_show(get_ui_popup_layer(), message, 2.0, Vector2.ZERO)
+	add_message_show(_ui_runtime.get_popup_layer(), message, 2.0, Vector2.ZERO)
 
 
 func set_save_failure_feedback_enabled(enabled: bool) -> void:
@@ -469,7 +474,6 @@ var total_hurt_count: int
 var total_hit_count: int
 var total_crit_count: int
 var total_miss_count: int
-var windows
 var file_num = 1.201
 var mytime
 var player_pos_x
@@ -525,10 +529,6 @@ var _save_failure_notify_msec: int = 0
 var _save_failure_notify_key: String = ""
 var _runtime_generation: int = 0
 var _shutting_down := false
-var _ui_runtime_instance_paths: Dictionary = {}
-var _ui_runtime_instance_counts: Dictionary = {}
-var _transient_ui_instances: Dictionary = {}
-var _cleanup_transient_ui_active := false
 const PERMANENT_SMALL_UI_SCENE_PATHS := [
 	"res://Scene/back_pack/back_pack.tscn",
 	"res://Scene/skill/learn_skill.tscn",
@@ -551,6 +551,7 @@ const MOBILE_SFX_PER_SOUND_LIMIT := 4
 const DESKTOP_SFX_PER_SOUND_LIMIT := 8
 var _last_mr_hurt_msec = {}
 var _pending_combo_milestones = {}
+var _ui_runtime: UiRuntime = null
 var _runtime_diagnostics: RuntimeDiagnostics = null
 var _sword_damage_text_frame: int = -1
 var _sword_damage_text_count: int = 0
@@ -740,7 +741,7 @@ func _load_scene(path: String) -> PackedScene:
 	if _resource_cache.has(path) and not _is_valid_packed_scene(_resource_cache[path]):
 		_resource_cache.erase(path)
 	if not _resource_cache.has(path):
-		if _is_runtime_ui_scene_path(path):
+		if _ui_runtime.is_runtime_ui_scene_path(path):
 			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
 		else:
 			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE)
@@ -763,7 +764,7 @@ func _is_valid_packed_scene(value: Variant) -> bool:
 
 
 func load_ui_scene(path: String) -> PackedScene:
-	if not _is_runtime_ui_scene_path(path):
+	if not _ui_runtime.is_runtime_ui_scene_path(path):
 		return load(path) as PackedScene
 	return _load_scene(path) as PackedScene
 
@@ -2701,7 +2702,7 @@ func addui_28(parent, position):
 		ui_28 = _load_scene("res://Scene/other_scene/twenty_eight_constellations.tscn")
 	var target = instance_scene(ui_28, parent)
 	target.position = position
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2736,7 +2737,7 @@ func addhdgqmap(parent, position):
 		return_back_map = _load_scene("res://Scene/other_scene/return_back_map.tscn")
 	var target = instance_scene(return_back_map, parent)
 	target.position = position
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2776,7 +2777,7 @@ func addlhhj(parent, position):
 		target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
 	else:
 		target.position = position
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2827,7 +2828,7 @@ func add_mystery_shop(parent, position):
 	if not mystery_shop:
 		mystery_shop = _load_scene("res://Scene/shop/mystery_shop.tscn")
 	var target = instance_scene(mystery_shop, parent)
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(0, 0):
 		target.position = viewport_center_for_parent(parent) - Vector2(458, 293)
 	else:
@@ -2878,7 +2879,7 @@ func add_hdzm(parent, parent_node):
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(493, 260)
 	target.parent_node = parent_node
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	var guard_script = load("res://Script/level/hdzm_window_guard.gd")
 	if guard_script != null:
 		var guard = guard_script.new()
@@ -2893,7 +2894,7 @@ func add_lsh(parent, parent_node):
 	var target = instance_scene(_lsh, parent)
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(492, 254)
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2903,7 +2904,7 @@ func add_lxdy(parent, parent_node):
 	var target = instance_scene(_lxdy, parent)
 	target.scale = Vector2.ONE
 	target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -2970,7 +2971,7 @@ func add_game_announcement(parent, position):
 	if not game_announcement:
 		game_announcement = _load_scene("res://Scene/main_menu/game_announcement.tscn")
 	var target = instance_scene(game_announcement, parent)
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	if target is CanvasLayer:
 		target.offset = position
 	elif target is Node2D or target is Control:
@@ -3008,7 +3009,7 @@ func add_basic_task(parent, position):
 	if not basic_task:
 		basic_task = _load_scene("res://Scene/task/basic_task.tscn")
 	var target = instance_scene(basic_task, parent)
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(0, 0):
 		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
 	else:
@@ -3025,86 +3026,6 @@ func add_task_title(parent, task_type, task_name, my_father):
 	target.my_father = my_father
 	target.z_index = 99
 	return target
-
-
-func get_ui_popup_layer() -> CanvasLayer:
-	if _ui_popup_layer != null and is_instance_valid(_ui_popup_layer):
-		return _ui_popup_layer
-	_ui_popup_layer = CanvasLayer.new()
-	_ui_popup_layer.name = "GlobalUiPopupLayer"
-	_ui_popup_layer.layer = 4096
-	get_tree().root.add_child(_ui_popup_layer)
-	return _ui_popup_layer
-
-
-func clear_hover_popup() -> void:
-	if _active_hover_popup != null and is_instance_valid(_active_hover_popup):
-		_active_hover_popup.queue_free()
-	_active_hover_popup = null
-
-
-func _is_permanent_ui_path(scene_path: String) -> bool:
-	return scene_path in PERMANENT_SMALL_UI_SCENE_PATHS
-
-
-## 清理已登记的临时 UI 与弹出层。地图/商店阴影、地图 Shop 按钮等场景自有节点
-## 不登记，由所属场景释放；message_show 由父节点/自身计时释放，也不进入登记表。
-func cleanup_transient_ui() -> void:
-	if _cleanup_transient_ui_active:
-		return
-	_cleanup_transient_ui_active = true
-	clear_hover_popup()
-	_close_registered_transient_ui()
-	if _ui_popup_layer != null and is_instance_valid(_ui_popup_layer):
-		for child in _ui_popup_layer.get_children():
-			if child != null and is_instance_valid(child) and not child.is_queued_for_deletion():
-				child.queue_free()
-	_cleanup_transient_ui_active = false
-
-
-func register_transient_ui(node: Node, close_method: StringName = &"", scene_path: String = "") -> void:
-	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
-		return
-	var resolved_path := scene_path
-	if resolved_path == "":
-		resolved_path = str(node.scene_file_path)
-	if _is_permanent_ui_path(resolved_path):
-		return
-	var instance_id := node.get_instance_id()
-	if _transient_ui_instances.has(instance_id):
-		return
-	_transient_ui_instances[instance_id] = {"node": node, "close_method": close_method}
-	node.tree_exited.connect(_on_transient_ui_exited.bind(instance_id), CONNECT_ONE_SHOT)
-
-
-func _on_transient_ui_exited(instance_id: int) -> void:
-	_transient_ui_instances.erase(instance_id)
-
-
-func _close_registered_transient_ui() -> void:
-	for instance_id in _transient_ui_instances.keys():
-		var entry: Dictionary = _transient_ui_instances[instance_id]
-		var node: Variant = entry.get("node")
-		if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
-			_transient_ui_instances.erase(instance_id)
-			continue
-		var close_method: StringName = entry.get("close_method", &"")
-		if close_method != &"" and node.has_method(close_method):
-			node.call(close_method)
-		if is_instance_valid(node) and not node.is_queued_for_deletion():
-			node.queue_free()
-		_transient_ui_instances.erase(instance_id)
-
-
-func register_ui_runtime_instance(node: Node, scene_path: String) -> void:
-	if node == null or not is_instance_valid(node) or not _is_runtime_ui_scene_path(scene_path):
-		return
-	var instance_id := node.get_instance_id()
-	if _ui_runtime_instance_paths.has(instance_id):
-		return
-	_ui_runtime_instance_paths[instance_id] = scene_path
-	_ui_runtime_instance_counts[scene_path] = int(_ui_runtime_instance_counts.get(scene_path, 0)) + 1
-	node.tree_exited.connect(_on_ui_runtime_instance_exited.bind(instance_id), CONNECT_ONE_SHOT)
 
 
 func configure_backpack_role_preview(page: Node, player: Variant = null) -> void:
@@ -3136,139 +3057,6 @@ func configure_backpack_role_preview(page: Node, player: Variant = null) -> void
 			role_equipment.texture = (
 				ResourceLoader.load(equipment_path, "Texture2D", ResourceLoader.CACHE_MODE_IGNORE) as Texture2D
 			)
-
-
-func _on_ui_runtime_instance_exited(instance_id: int) -> void:
-	if not _ui_runtime_instance_paths.has(instance_id):
-		return
-	var scene_path := str(_ui_runtime_instance_paths[instance_id])
-	_ui_runtime_instance_paths.erase(instance_id)
-	var remaining := maxi(0, int(_ui_runtime_instance_counts.get(scene_path, 1)) - 1)
-	if remaining > 0:
-		_ui_runtime_instance_counts[scene_path] = remaining
-		return
-	_ui_runtime_instance_counts.erase(scene_path)
-	call_deferred("_release_ui_scene_cache_if_unused", scene_path)
-
-
-func _release_ui_scene_cache_if_unused(scene_path: String) -> void:
-	if int(_ui_runtime_instance_counts.get(scene_path, 0)) > 0:
-		return
-	if scene_path in PERMANENT_SMALL_UI_SCENE_PATHS:
-		return
-	_resource_cache.erase(scene_path)
-	_clear_packed_scene_members_for_path(scene_path)
-	_erase_cached_paths_by_prefix(_texture_cache, _ui_art_prefixes_for_scene(scene_path))
-
-
-func release_ui_runtime_cache(release_permanent: bool = false) -> void:
-	_ui_runtime_instance_paths.clear()
-	_ui_runtime_instance_counts.clear()
-	for path_value in _resource_cache.keys():
-		var scene_path := str(path_value)
-		if (
-			_is_runtime_ui_scene_path(scene_path)
-			and (release_permanent or scene_path not in PERMANENT_SMALL_UI_SCENE_PATHS)
-		):
-			_resource_cache.erase(scene_path)
-	for property_info in get_property_list():
-		var property_name := StringName(property_info.get("name", ""))
-		var value: Variant = get(property_name)
-		if (
-			_is_valid_packed_scene(value)
-			and _is_runtime_ui_scene_path((value as PackedScene).resource_path)
-			and (release_permanent or (value as PackedScene).resource_path not in PERMANENT_SMALL_UI_SCENE_PATHS)
-		):
-			set(property_name, null)
-	if release_permanent or not is_archive_session_active():
-		_erase_cached_paths_by_prefix(
-			_texture_cache,
-			[
-				"res://Art/backpack/",
-				"res://Art/skill/",
-				"res://Art/shop/",
-				"res://Art/ldl/",
-				"res://Art/pet/pet_page_resources/",
-				"res://Art/main_menu/BodyTraining/",
-				"res://Art/lianti/",
-				"res://Art/zhenyaota/",
-			]
-		)
-	if release_permanent:
-		_permanent_small_ui_scene_cache.clear()
-		_permanent_ui_prewarmed = false
-
-
-func _clear_packed_scene_members_for_path(scene_path: String) -> void:
-	for property_info in get_property_list():
-		var property_name := StringName(property_info.get("name", ""))
-		var value: Variant = get(property_name)
-		if _is_valid_packed_scene(value) and (value as PackedScene).resource_path == scene_path:
-			set(property_name, null)
-
-
-func _is_runtime_ui_scene_path(scene_path: String) -> bool:
-	if scene_path == "res://Scene/set_menu.tscn" or scene_path == "res://Scene/pet/pet_interface.tscn":
-		return true
-	for prefix in [
-		"res://Scene/back_pack/",
-		"res://Scene/skill/",
-		"res://Scene/shop/",
-		"res://Scene/ldl/",
-		"res://Scene/task/",
-		"res://Scene/pellet/",
-		"res://Scene/archive_interface/",
-	]:
-		if scene_path.begins_with(prefix):
-			return true
-	return (
-		scene_path
-		in [
-			"res://Scene/main_menu/body_training.tscn",
-			"res://Scene/main_menu/body_training_detail.tscn",
-			"res://Scene/main_menu/zhu_xian_sword_page.tscn",
-			"res://Scene/main_menu/zhen_yao_tower.tscn",
-			"res://Scene/main_menu/game_set.tscn",
-			"res://Scene/main_menu/game_announcement.tscn",
-			"res://Scene/main_menu/game_information.tscn",
-			"res://Scene/other_scene/choose_music.tscn",
-			"res://Scene/other_scene/twenty_eight_constellations.tscn",
-			"res://Scene/other_scene/zhen_fa_ui.tscn",
-			"res://Scene/other_scene/transmogtified_box.tscn",
-			"res://Scene/other_scene/transmogrified.tscn",
-			"res://Scene/other_scene/change_back_ground.tscn",
-			"res://Scene/magic_weapon/magic_help.tscn",
-		]
-	)
-
-
-func _ui_art_prefixes_for_scene(scene_path: String) -> Array:
-	if scene_path.begins_with("res://Scene/skill/"):
-		return ["res://Art/skill/"]
-	if scene_path.begins_with("res://Scene/back_pack/"):
-		return ["res://Art/backpack/"]
-	if scene_path == "res://Scene/pet/pet_interface.tscn":
-		return ["res://Art/pet/pet_page_resources/"]
-	if scene_path.begins_with("res://Scene/ldl/"):
-		return ["res://Art/ldl/"]
-	if (
-		scene_path == "res://Scene/main_menu/body_training.tscn"
-		or scene_path == "res://Scene/main_menu/body_training_detail.tscn"
-	):
-		return ["res://Art/lianti/"]
-	if scene_path == "res://Scene/main_menu/zhen_yao_tower.tscn":
-		return ["res://Art/zhenyaota/"]
-	return []
-
-
-func register_hover_popup(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		clear_hover_popup()
-		return
-	if _active_hover_popup == node:
-		return
-	clear_hover_popup()
-	_active_hover_popup = node
 
 
 func screen_popup_position(offset := Vector2(25, 20)) -> Vector2:
@@ -3331,7 +3119,7 @@ func add_reward_info(parent, position, list, use_item_name, use_num, claim_calla
 	target.reward_items = list
 	target.claim_callable = claim_callable
 	target.z_index = 99
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -3508,7 +3296,7 @@ func add_level_info(parent, Name, position, path):
 		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
 	else:
 		target.position = position
-	register_transient_ui(target)
+	_ui_runtime.register_transient_ui(target)
 	return target
 
 
@@ -4057,7 +3845,7 @@ func add_game_set(parent, position):
 	var target = instance_scene(game_set, parent)
 	if target == null:
 		return null
-	register_transient_ui(target, &"_on_return_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_return_pressed")
 	var design_size := Vector2(942, 589)
 	var viewport_size = get_viewport().get_visible_rect().size
 	var fit_scale = min(viewport_size.x / design_size.x, viewport_size.y / design_size.y)
@@ -4594,7 +4382,7 @@ func request_save_with_feedback(reason: String, parent: Node = null, failure_pre
 	_suppress_save_failure_feedback = false
 	if bool(outcome.get("ok", false)):
 		return true
-	var target: Node = parent if is_instance_valid(parent) else get_ui_popup_layer()
+	var target: Node = parent if is_instance_valid(parent) else _ui_runtime.get_popup_layer()
 	add_message_show(target, failure_prefix + str(outcome.get("message", "")), 2.0, Vector2.ZERO)
 	return false
 
@@ -4615,7 +4403,7 @@ func add_choose_item(parent, position, list, _name, page):
 	target.page = page
 	target._list = list
 	target.z_index = 99
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	if position == Vector2.ZERO or position == Vector2(460, 260):
 		target.position = viewport_center_for_parent(parent)
 	else:
@@ -4640,7 +4428,7 @@ func add_shop(parent, position):
 	var target = instance_scene(s_hop, parent)
 	target.z_index = 99
 	target.position = position
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -4803,7 +4591,7 @@ func add_choose_text(parent, _position, text_, calm_time):
 	target.position = _position
 	target.my_text = text_
 	target.calm_time = calm_time
-	register_transient_ui(target)
+	_ui_runtime.register_transient_ui(target)
 	if is_instance_valid(target) and get_tree().paused:
 		target.process_mode = Node.PROCESS_MODE_ALWAYS
 	return target
@@ -4842,7 +4630,7 @@ func add_learn_skill(parent, position):
 	var target = instance_scene(skill_learn, parent)
 	target.z_index = 99
 	target.position = position
-	register_transient_ui(target, &"_on_close_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
 	return target
 
 
@@ -4879,7 +4667,7 @@ func add_ldl(parent, position):
 	var target = instance_scene(ldl, parent)
 	target.z_index = 99
 	target.position = position
-	register_transient_ui(target, &"_on_return_pressed")
+	_ui_runtime.register_transient_ui(target, &"_on_return_pressed")
 	return target
 
 
@@ -5030,10 +4818,10 @@ func change_scene(target, force_loading_screen: bool = false, require_archive_se
 	_advance_runtime_generation()
 	var exiting_archive := is_archive_exit_scene(target_path)
 	# 先让面板关闭保存走完，再撤销会话上下文；end 之后的保存请求一律拒绝。
-	cleanup_transient_ui()
+	_ui_runtime.cleanup_transient_ui()
 	if exiting_archive:
 		end_archive_session()
-	release_ui_runtime_cache(exiting_archive)
+	_ui_runtime.release_ui_runtime_cache(exiting_archive)
 
 	clear_level_resource_cache()
 	begin_level_resource_lease(target_path)
@@ -5223,7 +5011,7 @@ func add_mr_hurt(parent, _position):
 func promote_popup_without_moving(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
-	var in_popup_layer := node.get_parent() == get_ui_popup_layer()
+	var in_popup_layer := node.get_parent() == _ui_runtime.get_popup_layer()
 	if node is Control:
 		var control := node as Control
 		var old_position := control.global_position
@@ -5259,7 +5047,7 @@ func set_popup_screen_position(node: Node, screen_position: Vector2) -> void:
 func promote_popup_to_global_layer_without_moving(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
-	var popup_layer := get_ui_popup_layer()
+	var popup_layer := _ui_runtime.get_popup_layer()
 	if popup_layer == null or not is_instance_valid(popup_layer):
 		promote_popup_without_moving(node)
 		return
@@ -5301,12 +5089,12 @@ func prepare_hover_info_popup(target: Node, use_top_level := false) -> void:
 	if target is CanvasItem:
 		(target as CanvasItem).z_as_relative = false
 	if use_top_level and target is CanvasItem:
-		(target as CanvasItem).top_level = target.get_parent() != get_ui_popup_layer()
+		(target as CanvasItem).top_level = target.get_parent() != _ui_runtime.get_popup_layer()
 	if target is Control:
 		(target as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
 	left_align_popup_texts(target)
 	if use_top_level:
-		register_hover_popup(target)
+		_ui_runtime.register_hover_popup(target)
 
 
 func center_popup_texts(root: Node) -> void:
@@ -5373,7 +5161,7 @@ func instance_scene(target_scene_, parent):
 	var target = target_scene_.instantiate()
 	if target == null:
 		return null
-	register_ui_runtime_instance(target, str(target_scene_.resource_path))
+	_ui_runtime.register_ui_runtime_instance(target, str(target_scene_.resource_path))
 	parent.call_deferred("add_child", target)
 	center_popup_texts(target)
 	return target

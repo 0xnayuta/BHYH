@@ -4911,7 +4911,7 @@ func _process(_delta: float) -> void:
 	if MainSet.set_data["xg"] and not _invalid_data_exit_started:
 		_invalid_data_exit_started = true
 		if Global != null:
-			Global.add_message_show(Global.windows, "数据不正常哦，我退出啦~", 4, Vector2(485, 295))
+			Global.add_message_show(Global.get_ui_runtime().windows, "数据不正常哦，我退出啦~", 4, Vector2(485, 295))
 		await get_tree().create_timer(2, false).timeout
 		get_tree().quit()
 

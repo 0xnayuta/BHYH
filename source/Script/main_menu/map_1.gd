@@ -177,7 +177,7 @@ func _ready():
 		MemoryClass.main_bc()
 	Global.current_level = ""
 	if not Global.is_frist:
-		Global.add_message_show(Global.windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
 	Global.player_be_hit_count = 0
 	Global.last_level_path = ""
@@ -224,7 +224,7 @@ func _on_boss_treasure_toggled():
 	MemoryClass.main_bc()
 
 	var mode_text = "普通掉落模式" if not is_chest_mode else "宝箱掉落模式（Boss 将掉落自选宝箱）"
-	Global.add_message_show(Global.windows, mode_text, 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
 
 
 func _on_level_1_pressed() -> void:

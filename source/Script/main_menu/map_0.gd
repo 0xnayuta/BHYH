@@ -44,7 +44,7 @@ var zhenyao_tower_page: Node = null
 
 
 func _ready() -> void:
-	Global.windows = _ui_parent()
+	Global.get_ui_runtime().windows = _ui_parent()
 	_update_player_head()
 	_update_player_level()
 	_fit_to_fullscreen()
@@ -101,7 +101,7 @@ func _center_pet_page() -> void:
 
 func _ui_parent() -> Node:
 	if Global.has_method("get_ui_popup_layer"):
-		return Global.get_ui_popup_layer()
+		return Global.get_ui_runtime().get_popup_layer()
 	var parent := get_parent()
 	return parent if parent != null else self
 
@@ -131,7 +131,7 @@ func _toggle_scene(current_page: Variant, scene_path: String, setup_backpack := 
 		Global.add_message_show(_ui_parent(), "页面加载失败", 1.5, Vector2(470, 300))
 		return null
 	var page := page_scene.instantiate()
-	Global.register_ui_runtime_instance(page, scene_path)
+	Global.get_ui_runtime().register_ui_runtime_instance(page, scene_path)
 	if setup_backpack:
 		var player: Variant = _current_preview_player()
 		_set_if_has_property(page, &"Player", player)

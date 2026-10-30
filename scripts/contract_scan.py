@@ -952,10 +952,10 @@ class ContractScanner:
     POOL_UI_PRIVATE_PATTERNS = (
         "Global._clear_runtime_pools",
         "Global._pool_data",
-        "Global._transient_ui_instances",
-        "Global._ui_runtime_instance_paths",
-        "Global._ui_runtime_instance_counts",
-        "Global.release_ui_runtime_cache",
+        "Global.get_ui_runtime()._transient_ui_instances",
+        "Global.get_ui_runtime()._ui_runtime_instance_paths",
+        "Global.get_ui_runtime()._ui_runtime_instance_counts",
+        "Global.get_ui_runtime().release_ui_runtime_cache",
     )
     ARCHIVE_PATH_LITERAL = "user://MyAr_"
     ARCHIVE_PATH_LITERAL_ALLOWLIST = {
@@ -1136,8 +1136,8 @@ class ContractScanner:
             clean = line.split("#", 1)[0]
             if not clean.strip():
                 continue
-            if "Global.cleanup_transient_ui" in clean:
-                return (lineno, "Global.cleanup_transient_ui")
+            if "Global.get_ui_runtime().cleanup_transient_ui" in clean:
+                return (lineno, "Global.get_ui_runtime().cleanup_transient_ui")
             for pattern in cls.POOL_UI_PRIVATE_PATTERNS:
                 if pattern in clean:
                     return (lineno, pattern)
@@ -1490,7 +1490,7 @@ class ContractScanner:
                 line=hit_line,
                 literal=hit_pattern,
                 message="池/UI 清理入口未登记：只允许 Global 或已登记的 UI 调用方",
-                suggested_fix="改用 Global.change_scene；临时 UI 由工厂 register_transient_ui 登记，业务不得直接调用 cleanup_transient_ui",
+                suggested_fix="改用 Global.change_scene；临时 UI 由工厂 register_transient_ui 登记，业务不得直接调用 UiRuntime.cleanup_transient_ui",
                 rule_id="POOL_UI_CLEANUP_UNREGISTERED",
             )
             if not self.whitelist.is_suppressed(finding):
@@ -1909,10 +1909,13 @@ def run_pool_ui_boundary_self_test() -> bool:
     """池/UI 清理入口自测：业务直接调用与私有字段必须拦截。"""
     print("[*] 池/UI 清理入口门禁负向自测...")
     bad_samples = {
-        "未登记 UI 清理": ("Global.cleanup_transient_ui()\n", "Script/new_ui.gd"),
+        "未登记 UI 清理": ("Global.get_ui_runtime().cleanup_transient_ui()\n", "Script/new_ui.gd"),
         "直接池清理": ("Global._clear_runtime_pools()\n", "Script/new_ui.gd"),
         "直接池数据访问": ("var pool = Global._pool_data[\"damage_text\"]\n", "Script/level/sample.gd"),
-        "直接 UI 实例表访问": ("var count = Global._transient_ui_instances.size()\n", "Script/main_menu/new_menu.gd"),
+        "直接 UI 实例表访问": (
+            "var count = Global.get_ui_runtime()._transient_ui_instances.size()\n",
+            "Script/main_menu/new_menu.gd",
+        ),
     }
     good_samples = {
         "Global 自身清理": ("_clear_runtime_pools()\n", "global.gd"),

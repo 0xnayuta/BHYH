@@ -172,80 +172,118 @@ func _on_eat_1_pressed() -> void:
 		if PlayerData.get_dj_page(str(current_in_type) + "1") != 0:
 			_increment_pellet_counts(1)
 			PlayerData.remove_dj(str(current_in_type) + "1", PlayerData.get_dj_page(str(current_in_type) + "1"), 1)
-			Global.add_message_show(Global.windows, "成功服用一品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "成功服用一品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, "一品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "一品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305)
+			)
 	else:
-		Global.add_message_show(Global.windows, "一品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "一品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305)
+		)
 	set_info()
 
 
 func _on_eat_2_pressed() -> void:
 	if PlayerData.player_data[current_pellet_type + "丹1"] < 5:
-		Global.add_message_show(Global.windows, "请先服用完一品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "请先服用完一品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+		)
 		return
 	if PlayerData.player_data[current_pellet_type + "丹2"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "2") != 0:
 			_increment_pellet_counts(2)
 			PlayerData.remove_dj(str(current_in_type) + "2", PlayerData.get_dj_page(str(current_in_type) + "2"), 1)
-			Global.add_message_show(Global.windows, "成功服用二品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "成功服用二品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, "二品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "二品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305)
+			)
 	else:
-		Global.add_message_show(Global.windows, "二品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "二品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305)
+		)
 
 	set_info()
 
 
 func _on_eat_3_pressed() -> void:
 	if PlayerData.player_data[current_pellet_type + "丹2"] < 5:
-		Global.add_message_show(Global.windows, "请先服用完二品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "请先服用完二品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+		)
 		return
 	if PlayerData.player_data[current_pellet_type + "丹3"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "3") != 0:
 			_increment_pellet_counts(3)
 			PlayerData.remove_dj(str(current_in_type) + "3", PlayerData.get_dj_page(str(current_in_type) + "3"), 1)
-			Global.add_message_show(Global.windows, "成功服用三品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "成功服用三品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, "三品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "三品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305)
+			)
 	else:
-		Global.add_message_show(Global.windows, "三品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "三品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305)
+		)
 
 	set_info()
 
 
 func _on_eat_4_pressed() -> void:
 	if PlayerData.player_data[current_pellet_type + "丹3"] < 5:
-		Global.add_message_show(Global.windows, "请先服用完三品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "请先服用完三品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+		)
 		return
 
 	if PlayerData.player_data[current_pellet_type + "丹4"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "4") != 0:
 			_increment_pellet_counts(4)
 			PlayerData.remove_dj(str(current_in_type) + "4", PlayerData.get_dj_page(str(current_in_type) + "4"), 1)
-			Global.add_message_show(Global.windows, "成功服用四品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "成功服用四品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, "四品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "四品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305)
+			)
 	else:
-		Global.add_message_show(Global.windows, "四品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "四品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305)
+		)
 
 	set_info()
 
 
 func _on_eat_5_pressed() -> void:
 	if PlayerData.player_data[current_pellet_type + "丹4"] < 5:
-		Global.add_message_show(Global.windows, "请先服用完四品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "请先服用完四品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+		)
 		return
 
 	if PlayerData.player_data[current_pellet_type + "丹5"] < 5:
 		if PlayerData.get_dj_page(str(current_in_type) + "5") != 0:
 			_increment_pellet_counts(5)
 			PlayerData.remove_dj(str(current_in_type) + "5", PlayerData.get_dj_page(str(current_in_type) + "5"), 1)
-			Global.add_message_show(Global.windows, "成功服用五品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "成功服用五品" + str(current_pellet_type) + "丹！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, "五品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "五品" + str(current_pellet_type) + "丹不足！！", 1.5, Vector2(500, 305)
+			)
 	else:
-		Global.add_message_show(Global.windows, "五品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "五品" + str(current_pellet_type) + "丹已达服用上限！！", 1.5, Vector2(500, 305)
+		)
 
 	set_info()
 
@@ -277,7 +315,7 @@ func _on_one_key_auto_eat_pressed() -> void:
 			if PlayerData.player_data[prev_grade_key] < 5:
 				can_continue = false
 				Global.add_message_show(
-					Global.windows,
+					Global.get_ui_runtime().windows,
 					"无法继续：请先服用完" + str(current_grade - 1) + "品" + current_pellet_type + "丹",
 					1.5,
 					Vector2(500, 305)
@@ -304,9 +342,11 @@ func _on_one_key_auto_eat_pressed() -> void:
 		else:
 			message = "已服用" + str(total_eaten) + "颗" + current_pellet_type + "丹"
 
-		Global.add_message_show(Global.windows, message, 2.0, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, message, 2.0, Vector2(500, 305))
 		set_info()
 	elif total_eaten == 0 and not can_continue:
 		pass
 	else:
-		Global.add_message_show(Global.windows, "没有可服用的" + current_pellet_type + "丹", 1.5, Vector2(500, 305))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "没有可服用的" + current_pellet_type + "丹", 1.5, Vector2(500, 305)
+		)

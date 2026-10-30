@@ -600,7 +600,9 @@ func _save_if_possible() -> void:
 
 
 func _show_message(message: String) -> void:
-	var parent_node: Node = Global.get_ui_popup_layer() if Global.has_method("get_ui_popup_layer") else get_parent()
+	var parent_node: Node = (
+		Global.get_ui_runtime().get_popup_layer() if Global.has_method("get_ui_popup_layer") else get_parent()
+	)
 	Global.add_message_show(parent_node, message, 1.5, Vector2.ZERO)
 
 

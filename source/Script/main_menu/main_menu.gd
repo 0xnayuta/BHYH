@@ -74,7 +74,7 @@ func _ready() -> void:
 	Global.llbtbossms = false
 	Global.llbtcgms = false
 	Global.llbtwxms = false
-	Global.windows = get_parent()
+	Global.get_ui_runtime().windows = get_parent()
 	Global.fb_cd = 0
 	Global.is_eye_fix = false
 	Global.is_dead_link = false

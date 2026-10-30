@@ -655,13 +655,16 @@ func _case_panel_operator() -> void:
 	_check(coop.has_panel(), "panel reopens after snapshot")
 	_check(paused, "panel pauses tree")
 	var layer: Node = coop._panel_layer
-	_check(global.windows == layer, "windows points to panel layer")
+	_check(global.get_ui_runtime().windows == layer, "windows points to panel layer")
 	coop.close_panel()
 	await process_frame
 	await process_frame
 	_check(not coop.has_panel(), "panel closed")
 	_check(not paused, "tree unpaused after close")
-	_check(global.windows == null, "windows restored after close [" + str(global.windows) + "]")
+	_check(
+		global.get_ui_runtime().windows == null,
+		"windows restored after close [" + str(global.get_ui_runtime().windows) + "]"
+	)
 	_check(coop.ui_slot == 1, "ui slot reset after close")
 	coop.clear_runtime()
 

@@ -105,7 +105,7 @@ func _show_buff_info() -> void:
 		return
 	if buff_info == null or not is_instance_valid(buff_info):
 		buff_info = Global.add_buffinfor(
-			Global.get_ui_popup_layer(), Global.screen_popup_position(Vector2(18, 22)), data_list
+			Global.get_ui_runtime().get_popup_layer(), Global.screen_popup_position(Vector2(18, 22)), data_list
 		)
 		if buff_info == null:
 			return

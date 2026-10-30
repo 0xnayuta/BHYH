@@ -62,7 +62,7 @@ func _run() -> void:
 
 	var ui_node := Control.new()
 	get_tree().root.add_child(ui_node)
-	Global.register_ui_runtime_instance(ui_node, "res://Scene/back_pack/back_pack.tscn")
+	Global.get_ui_runtime().register_ui_runtime_instance(ui_node, "res://Scene/back_pack/back_pack.tscn")
 	var ui_scope := _diagnostics().get_cache_scope_snapshot()
 	var ui_section: Dictionary = ui_scope.get("ui", {})
 	checks["scope_ui_registered"] = int(ui_section.get("runtime_instance_count", 0)) >= 1
@@ -75,10 +75,10 @@ func _run() -> void:
 
 	var transient_ui := ProbeTransientUI.new()
 	get_tree().root.add_child(transient_ui)
-	Global.register_transient_ui(transient_ui, &"close")
+	Global.get_ui_runtime().register_transient_ui(transient_ui, &"close")
 	var transient_scope := _diagnostics().get_cache_scope_snapshot()
 	checks["scope_transient_registered"] = int(transient_scope.get("ui", {}).get("transient_instance_count", 0)) >= 1
-	Global.cleanup_transient_ui()
+	Global.get_ui_runtime().cleanup_transient_ui()
 	checks["transient_close_called"] = transient_ui.closed
 	await get_tree().process_frame
 	checks["transient_removed"] = not is_instance_valid(transient_ui)
@@ -87,15 +87,15 @@ func _run() -> void:
 	unregistered_ui.name = "LevelInfo"
 	get_tree().root.add_child(unregistered_ui)
 	await get_tree().process_frame
-	Global.cleanup_transient_ui()
+	Global.get_ui_runtime().cleanup_transient_ui()
 	await get_tree().process_frame
 	checks["unregistered_name_ignored"] = is_instance_valid(unregistered_ui)
 	unregistered_ui.queue_free()
 
 	var silent_ui := Control.new()
 	get_tree().root.add_child(silent_ui)
-	Global.register_transient_ui(silent_ui)
-	Global.cleanup_transient_ui()
+	Global.get_ui_runtime().register_transient_ui(silent_ui)
+	Global.get_ui_runtime().cleanup_transient_ui()
 	await get_tree().process_frame
 	checks["registered_without_close_removed"] = not is_instance_valid(silent_ui)
 
@@ -105,7 +105,7 @@ func _run() -> void:
 	checks["factory_ui_registered"] = factory_ui_created and int(
 		_diagnostics().get_cache_scope_snapshot().get("ui", {}).get("transient_instance_count", 0)
 	) >= 1
-	Global.cleanup_transient_ui()
+	Global.get_ui_runtime().cleanup_transient_ui()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	checks["factory_ui_cleaned"] = factory_ui_created and not is_instance_valid(factory_ui)
@@ -114,8 +114,8 @@ func _run() -> void:
 	permanent_ui.name = "Learn_skill"
 	get_tree().root.add_child(permanent_ui)
 	await get_tree().process_frame
-	Global.register_transient_ui(permanent_ui, &"close")
-	Global.cleanup_transient_ui()
+	Global.get_ui_runtime().register_transient_ui(permanent_ui, &"close")
+	Global.get_ui_runtime().cleanup_transient_ui()
 	checks["permanent_ui_preserved"] = is_instance_valid(permanent_ui)
 	permanent_ui.queue_free()
 

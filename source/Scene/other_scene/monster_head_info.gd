@@ -617,19 +617,19 @@ func _process(_delta: float) -> void:
 
 func _hide_monster_attr_panel() -> void:
 	if hover_attr_panel != null and is_instance_valid(hover_attr_panel):
-		Global.clear_hover_popup()
+		Global.get_ui_runtime().clear_hover_popup()
 	hover_attr_panel = null
 	_hover_exit_grace_frames = 0
 
 
 func _show_monster_attr_panel() -> void:
 	_hide_monster_attr_panel()
-	var parent_node = Global.get_ui_popup_layer()
+	var parent_node = Global.get_ui_runtime().get_popup_layer()
 	hover_attr_panel = _create_monster_attr_panel()
 	_hover_exit_grace_frames = 2
 	hover_attr_panel.position = Global.screen_popup_position(Vector2(18, 18))
 	parent_node.add_child(hover_attr_panel)
-	Global.register_hover_popup(hover_attr_panel)
+	Global.get_ui_runtime().register_hover_popup(hover_attr_panel)
 	hover_attr_panel.z_index = 4096
 	call_deferred("_fit_hover_panel_to_screen")
 

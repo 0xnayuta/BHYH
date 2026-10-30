@@ -193,9 +193,9 @@ func _on_close_pressed() -> void:
 
 func _ui_parent() -> Node:
 	if Global.has_method("get_ui_popup_layer"):
-		return Global.get_ui_popup_layer()
-	if Global.windows != null:
-		return Global.windows
+		return Global.get_ui_runtime().get_popup_layer()
+	if Global.get_ui_runtime().windows != null:
+		return Global.get_ui_runtime().windows
 	return get_parent() if get_parent() != null else self
 
 

@@ -105,7 +105,7 @@ func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_fit_to_fullscreen):
 		get_viewport().size_changed.connect(_fit_to_fullscreen)
 
-	Global.windows = _ui_parent()
+	Global.get_ui_runtime().windows = _ui_parent()
 	Global.llbt_level = 1
 	Global.llbtbossms = false
 	Global.llbtcgms = false
@@ -123,7 +123,7 @@ func _ready() -> void:
 		MainMusic.add_music()
 	Global.current_level = ""
 	if not Global.is_frist:
-		Global.add_message_show(Global.windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
 	Global.player_be_hit_count = 0
 	Global.last_level_path = ""

@@ -329,7 +329,7 @@ func _on_sell_pressed() -> void:
 		return
 	if _is_locked():
 		lock_button.grab_focus()
-		Global.add_message_show(Global.get_ui_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
+		Global.add_message_show(Global.get_ui_runtime().get_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
 		return
 	if eq_prop == null:
 		PlayerData.remove_zb(page, number)
@@ -373,7 +373,7 @@ func _on_sell_pressed() -> void:
 func _show_sell_confirm(confirm_text: String) -> void:
 	self.visible = false
 	Signals.connect_choose_box_signal(self, "sell")
-	jm = Global.add_choose_text(Global.get_ui_popup_layer(), Vector2.ZERO, confirm_text, 0)
+	jm = Global.add_choose_text(Global.get_ui_runtime().get_popup_layer(), Vector2.ZERO, confirm_text, 0)
 	if jm == null:
 		return
 	var popup := jm as Control

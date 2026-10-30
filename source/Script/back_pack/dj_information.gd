@@ -35,7 +35,7 @@ func _physics_process(_delta: float) -> void:
 	if get_parent().get_script() != null and get_parent().get_script().resource_path.ends_with("BackPack.gdc"):
 		if self.position.y + color_rect.size.y >= 320:
 			self.position.y = 320 - color_rect.size.y
-	elif get_parent() == Global.windows:
+	elif get_parent() == Global.get_ui_runtime().windows:
 		var viewport_size := get_viewport().get_visible_rect().size
 		if self.position.y + color_rect.size.y >= viewport_size.y:
 			self.position.y = viewport_size.y - color_rect.size.y - 8.0

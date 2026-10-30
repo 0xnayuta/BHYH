@@ -211,10 +211,10 @@ func _ready():
 	if MainMusic.my_main_music == null:
 		MainMusic.add_music()
 	Global.current_level = ""
-	if Global.windows == null:
-		Global.windows = _ui_parent()
+	if Global.get_ui_runtime().windows == null:
+		Global.get_ui_runtime().windows = _ui_parent()
 	if not Global.is_frist:
-		Global.add_message_show(Global.windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
 	Global.player_be_hit_count = 0
 	Global.last_level_path = ""
@@ -270,7 +270,7 @@ func _on_boss_treasure_toggled():
 	MemoryClass.main_bc()
 
 	var mode_text = "普通掉落模式" if not is_chest_mode else "宝箱掉落模式（Boss 将掉落自选宝箱）"
-	Global.add_message_show(Global.windows, mode_text, 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
 
 
 func check_music():
@@ -530,7 +530,9 @@ func _on_zhu_xian_sword_pressed() -> void:
 		Global.add_message_show(_ui_parent(), "诛仙剑阵页面加载失败", 1.5, Vector2(470, 300))
 		return
 	zhuxian_sword_page = page_scene.instantiate()
-	var popup_parent := Global.get_ui_popup_layer() if Global.has_method("get_ui_popup_layer") else _ui_parent()
+	var popup_parent := (
+		Global.get_ui_runtime().get_popup_layer() if Global.has_method("get_ui_popup_layer") else _ui_parent()
+	)
 	popup_parent.add_child(zhuxian_sword_page)
 
 

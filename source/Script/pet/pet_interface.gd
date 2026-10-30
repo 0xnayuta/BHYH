@@ -3151,7 +3151,7 @@ func _show_pet_batch_sell_options() -> void:
 	popup.position = Vector2.ZERO
 	popup.size = get_viewport().get_visible_rect().size
 	popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	var popup_layer := Global.get_ui_popup_layer()
+	var popup_layer := Global.get_ui_runtime().get_popup_layer()
 	if popup_layer == null:
 		add_child(popup)
 	else:
@@ -3441,7 +3441,7 @@ func _show_pet_batch_sell_confirm_text(confirm_text: String, confirm_callback: C
 	popup.position = Vector2.ZERO
 	popup.size = get_viewport().get_visible_rect().size
 	popup.mouse_filter = Control.MOUSE_FILTER_STOP
-	var popup_layer := Global.get_ui_popup_layer()
+	var popup_layer := Global.get_ui_runtime().get_popup_layer()
 	if popup_layer == null:
 		add_child(popup)
 	else:

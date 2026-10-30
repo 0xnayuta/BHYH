@@ -149,12 +149,12 @@ func set_box():
 
 func _on_purchase_pressed() -> void:
 	if new_list.is_empty():
-		Global.add_message_show(Global.windows, "商品信息错误！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
 	var item_name := str(new_list.get("Name", ""))
 	var item_data_value: Variant = AE.all_equipment.get(item_name, {})
 	if not item_data_value is Dictionary:
-		Global.add_message_show(Global.windows, "商品信息错误！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
 	var item_data: Dictionary = item_data_value
 	var item_type := str(item_data.get(DataKeys.TYPE, ""))
@@ -167,9 +167,11 @@ func _on_purchase_pressed() -> void:
 		new_list.get("WX", []) if new_list.get("WX", []) is Array else []
 	)
 	if not bool(result.get("ok", false)):
-		Global.add_message_show(Global.windows, str(result.get("message", "购买失败！！")), 2.0, Vector2(520, 340))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, str(result.get("message", "购买失败！！")), 2.0, Vector2(520, 340)
+		)
 		return
-	Global.add_message_show(Global.windows, "购买成功", 1.5, Vector2(520, 340))
+	Global.add_message_show(Global.get_ui_runtime().windows, "购买成功", 1.5, Vector2(520, 340))
 	open_and_close_box()
 
 
@@ -246,7 +248,7 @@ func _show_item_info(item_box) -> void:
 		item_name = str(item_box.get_meta("item_name"))
 	if item_name == "" or item_name == "empty" or not AE.all_equipment.has(item_name):
 		return
-	var parent_node = Global.get_ui_popup_layer()
+	var parent_node = Global.get_ui_runtime().get_popup_layer()
 	var popup_pos = Global.screen_popup_position()
 	var eq_prop = item_box.eq_prop
 	if eq_prop != null and eq_prop.size() > 0 and item_box.item_menu_kind != "item":
@@ -256,12 +258,12 @@ func _show_item_info(item_box) -> void:
 	else:
 		_item_hover_popup = Global.add_dj_infor(parent_node, popup_pos, item_name)
 	if _item_hover_popup != null:
-		Global.register_hover_popup(_item_hover_popup)
+		Global.get_ui_runtime().register_hover_popup(_item_hover_popup)
 		_item_hover_popup.top_level = true
 		_item_hover_popup.z_index = 9999
 		_item_hover_popup.visible = true
 
 
 func _hide_item_info() -> void:
-	Global.clear_hover_popup()
+	Global.get_ui_runtime().clear_hover_popup()
 	_item_hover_popup = null

@@ -264,7 +264,7 @@ func _on_g_mzm_2_pressed() -> void:
 		MemoryClass.main_bc()
 		music_is_change = true
 	else:
-		Global.add_message_show(Global.windows, "到达二图解锁二图背景音乐", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "到达二图解锁二图背景音乐", 1.5, Vector2(470, 300))
 
 
 func _on_g_mzm_3_pressed() -> void:
@@ -273,7 +273,7 @@ func _on_g_mzm_3_pressed() -> void:
 		MemoryClass.main_bc()
 		music_is_change = true
 	else:
-		Global.add_message_show(Global.windows, "到达三图解锁三图背景音乐", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "到达三图解锁三图背景音乐", 1.5, Vector2(470, 300))
 
 
 func _on_gm_2_zm_1_pressed() -> void:
@@ -286,7 +286,7 @@ func _on_gm_2_zm_2_pressed() -> void:
 		MainSet.set_data["MainMenuBG"] = 2
 		MemoryClass.main_bc()
 	else:
-		Global.add_message_show(Global.windows, "到达二图解锁二图封面", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "到达二图解锁二图封面", 1.5, Vector2(470, 300))
 
 
 func _on_gm_2_zm_3_pressed() -> void:
@@ -294,7 +294,7 @@ func _on_gm_2_zm_3_pressed() -> void:
 		MainSet.set_data["MainMenuBG"] = 3
 		MemoryClass.main_bc()
 	else:
-		Global.add_message_show(Global.windows, "到达三图解锁三图封面", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "到达三图解锁三图封面", 1.5, Vector2(470, 300))
 
 
 func _on_yes_or_no_pressed() -> void:
@@ -327,7 +327,7 @@ func _on_g_mzm_4_pressed() -> void:
 		MemoryClass.main_bc()
 		music_is_change = true
 	else:
-		Global.add_message_show(Global.windows, "还未开启四图音乐哦，快去游戏中寻找一下吧~", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "还未开启四图音乐哦，快去游戏中寻找一下吧~", 1.5, Vector2(470, 300))
 
 
 func _on_ornot_pressed() -> void:

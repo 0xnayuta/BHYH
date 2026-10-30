@@ -85,7 +85,7 @@ func _run() -> void:
 		int(scope_combat.get("pool_limits", {}).get("damage_text", 0)) == 80
 		and int(scope_combat.get("pool_limits", {}).get("sound_player", 0)) == 32
 	)
-	checks["scope_ui_owner"] = str(scope.get("ui", {}).get("owner", "")) == "Global"
+	checks["scope_ui_owner"] = str(scope.get("ui", {}).get("owner", "")) == "UiRuntime"
 
 	var released := Global.release_level_resource_lease(first_lease)
 	checks["released_owned_count"] = released == 3

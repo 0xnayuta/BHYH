@@ -428,7 +428,7 @@
 | 层 | 实现 |
 |:---|:---|
 | 面板根节点 | `LocalCoop._create_panel` 设置 `coop_slot` meta |
-| 弹出层 | `open_panel` 在 `CanvasLayer` 上设置 `coop_slot`，`Global.windows` 下的子面板与弹窗经祖先链继承 |
+| 弹出层 | `open_panel` 在 `CanvasLayer` 上设置 `coop_slot`，通过 `Global.get_ui_runtime().push_windows(layer)` 成为当前 UI 宿主，子面板与弹窗经祖先链继承 |
 | 面板脚本 | 声明 `PlayerData`/`RoleProp` 属性，getter 走 `LocalCoop.data_for(self)` / `props_for(self)` |
 | 槽位解析 | 复用 `slot_for` 的 meta → 祖先 → `owner_hero` → 遗留前缀顺序，默认 1 |
 
@@ -440,12 +440,12 @@
 open_panel(slot, type)
   -> 快照互斥检查（is_save_snapshot_in_progress 时拒绝）
   -> ui_slot = slot，暂停场景
-  -> 创建 CanvasLayer，set_meta("coop_slot", slot)，接管 Global.windows
+  -> 创建 CanvasLayer，set_meta("coop_slot", slot)，push_windows(layer)
   -> 实例化面板，set_meta("coop_slot", slot)，注册 UI 运行时实例
 _switch_panel(slot) -> _replace_panel(slot)
   -> 释放旧面板 -> link_bags -> ui_slot = slot -> 层 meta 更新 -> 重建面板
 close_panel() -> queue_free -> _on_panel_closed
-  -> 释放层、恢复 Global.windows -> ui_slot = 1 -> link_bags -> refresh_passive_skills
+  -> 释放层、pop_windows() -> ui_slot = 1 -> link_bags -> refresh_passive_skills
   -> 恢复暂停态 -> MemoryClass.request_save("coop_panel_close")
 ```
 
@@ -456,7 +456,7 @@ close_panel() -> queue_free -> _on_panel_closed
 | 全局别名在 2P 面板期间不被改写 | 成立：`suspend/resume_player_view` 已删除，`PlayerData.player_data` 恒为 1P |
 | 快照生成期间禁止打开/切换面板 | 成立：`MemoryClass.is_save_snapshot_in_progress()` 由 `_prepare_player_save_data` 置位，`open_panel` 直接拒绝 |
 | 面板关闭即保存 | 成立，前提是档案会话有效（`request_save` 要求会话） |
-| 面板操作者 | 由 `coop_slot` meta 与槽位查询决定，与 `Global.windows` 无关 |
+| 面板操作者 | 由 `coop_slot` meta 与槽位查询决定，与 `UiRuntime.windows` 无关 |
 | 异常退出 | 面板随场景释放时由 `tree_exited` → `_on_panel_closed` 收尾；`clear_runtime` 只释放 2P 运行时 |
 | 快照失败 | `_prepare_primary_player_save_data` 返回 `{}` 时跳过 `save_profile`/`link_bags`，快照标志仍复位 |
 
@@ -573,7 +573,7 @@ grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 | 16-6 静态守卫 | `contract_scan.py` 扩展至十五类契约：档案边界（路径拼接与底层读写入口白名单）、槽位边界（`/root` 单例与视图交换）、面板操作者（声明或继承校验）、共享账本与快照互斥（登记/剥离/标志同源）；`--self-test` 覆盖四类正负样本 |
 | 16-6 修复 | `mount_panel`、`mount_skill_effect` 的 `/root/RoleProp` 改为槽位属性；`role_attribute_integer_format` 注入显式操作者；全仓扫描 ERROR=0 |
 | 16-6 验证 | `contract_scan --fail-on-error` **ERROR=0**、`--self-test` **10/10 组通过**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`coop_probe_runner` **18/18 PASS**；`archive_probe_runner` **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`level_1` 冒烟 **PASS** |
-| 16-5 验证 | `coop_probe_runner` **18/18 PASS**（新增 `LocalCoopPanelOperatorProbe`：2P/1P 操作者、全局别名不交换、面板写入归属、槽位 meta、快照拒绝、暂停与 `Global.windows` 恢复）；`level_1` 冒烟 **PASS**；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
+| 16-5 验证 | `coop_probe_runner` **18/18 PASS**（新增 `LocalCoopPanelOperatorProbe`：2P/1P 操作者、全局别名不交换、面板写入归属、槽位 meta、快照拒绝、暂停与 UI 宿主恢复）；`level_1` 冒烟 **PASS**；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-4 验证 | `coop_probe_runner` **17/17 PASS**（新增 `LocalCoopSlotLedgerProbe`：槽位枚举、共享单写入、个体归属、合并规则、清理后回落）；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；档案夹具 **101/101 PASS**；`scene_probe_runner` **6/6 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 16-2B/2D 验证 | 档案夹具 **71/71 PASS**（新增 `identity_*` 9 项、`normalize_*` 6 项）；`level_selection` **PASS**；`level_1` 冒烟 **PASS**（0 ERROR / 0 WARNING）；`coop_probe_runner` **16/16 PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | `defeat` / `victory` 双写评估 | 两个调用点**互斥**：镇妖塔分支 `change_scene` 后保存并 `return`，末尾保存只在地图分支执行。每次点击只写一次，无需去重；原"同函数重复保存"描述已更正 |

@@ -139,7 +139,7 @@ func _on_qh_pressed() -> void:
 		Global.add_message_show(get_parent(), "该装备无法强化！", 1.5, Vector2(15, -45))
 		return
 	if old_zb_name == "empty" or new_zb_name == "empty" or selected_name == "":
-		Global.add_message_show(Global.windows, "请先选择一件装备！！！", 1.5, Vector2(470, 295))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先选择一件装备！！！", 1.5, Vector2(470, 295))
 		return
 	var position_index: int = int(MLdl.qh_list.get("位置", -1))
 	var equipment: Variant = _get_selected_equipment(position_index)
@@ -235,7 +235,7 @@ func _get_selected_equipment(position_index: int) -> Variant:
 
 
 func _show_invalid_strength_selection() -> void:
-	Global.add_message_show(Global.windows, "装备位置已变化，请重新选择装备！", 1.5, Vector2(470, 295))
+	Global.add_message_show(Global.get_ui_runtime().windows, "装备位置已变化，请重新选择装备！", 1.5, Vector2(470, 295))
 	remove_infomation()
 
 

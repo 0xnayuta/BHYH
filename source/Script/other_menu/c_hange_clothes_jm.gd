@@ -62,17 +62,23 @@ func _on_change_pressed() -> void:
 			return
 	var wearing := cdorxx.text == "穿戴"
 	if wearing and not PlayerData.has_acquired_equipment(self_name):
-		Global.add_message_show(Global.windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295)
+		)
 		return
 	if not PlayerData.change_transmog(slot_type, self_name if wearing else ""):
-		Global.add_message_show(Global.windows, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 295))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 295)
+		)
 		set_physics_process(true)
 		return
 	if wearing:
-		Global.add_message_show(Global.windows, type_label + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, type_label + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295)
+		)
 	else:
 		Global.add_message_show(
-			Global.windows, "取消" + type_label + "：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
+			Global.get_ui_runtime().windows, "取消" + type_label + "：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
 		)
 	transmogrified.on_eqchange()
 	if is_instance_valid(RoleProp.source_player) and RoleProp.source_player.has_method("on_eqchange"):

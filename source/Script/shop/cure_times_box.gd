@@ -75,18 +75,20 @@ func _on_dh_pressed() -> void:
 	total_times = lh_times + lp_times
 	if total_times > 0:
 		if int(PlayerData.get_item_data("smlp")) < lp_times:
-			Global.add_message_show(Global.windows, "令牌不足！！", 1.5, Vector2(470, 300))
+			Global.add_message_show(Global.get_ui_runtime().windows, "令牌不足！！", 1.5, Vector2(470, 300))
 			return
 		if lh_times > _get_max_lh_times():
-			Global.add_message_show(Global.windows, "灵魂不足！！", 1.5, Vector2(470, 300))
+			Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！！", 1.5, Vector2(470, 300))
 			return
 		PlayerData.remove_dj("smlp", PlayerData.get_dj_page("smlp"), lp_times)
 		PlayerData.spend_soul(lhdhvalue * lh_times)
 		PlayerData.player_data["购买次数"] += total_times
 		MemoryClass.request_save("shop_cure_times")
-		Global.add_message_show(Global.windows, "成功兑换" + str(total_times) + "次购买次数！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(
+			Global.get_ui_runtime().windows, "成功兑换" + str(total_times) + "次购买次数！！", 1.5, Vector2(470, 300)
+		)
 	else:
-		Global.add_message_show(Global.windows, "兑换次数为0！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "兑换次数为0！！", 1.5, Vector2(470, 300))
 
 
 func _on_close_pressed() -> void:

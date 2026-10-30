@@ -53,7 +53,6 @@ var _property_cache: Dictionary = {}
 var _owner_fields_cache: Dictionary = {}
 var _target_elapsed := 0.0
 var _panel_layer: CanvasLayer
-var _previous_windows: Node
 var _panel: Node
 var _panel_type := ""
 var _panel_scene: PackedScene
@@ -618,12 +617,11 @@ func open_panel(slot: int, type: String) -> void:
 	_panel_scene = load(PANEL_PATHS[type]) as PackedScene
 	var layer := CanvasLayer.new()
 	layer.layer = 30
-	# 弹出层携带槽位，供 Global.windows 下的子面板与弹窗解析操作者。
+	# 弹出层携带槽位，供当前 UI 宿主下的子面板与弹窗解析操作者。
 	layer.set_meta("coop_slot", slot)
 	get_tree().current_scene.add_child(layer)
 	_panel_layer = layer
-	_previous_windows = Global.windows
-	Global.windows = layer
+	Global.get_ui_runtime().push_windows(layer)
 	var shade := ColorRect.new()
 	shade.color = Color(0, 0, 0, 0.25)
 	shade.size = get_viewport().get_visible_rect().size
@@ -643,7 +641,7 @@ func _create_panel(slot: int, type: String) -> void:
 		if _has_property(_panel, "Player"):
 			_panel.set("Player", player if is_instance_valid(player) else null)
 		Global.configure_backpack_role_preview(_panel, player)
-	Global.register_ui_runtime_instance(_panel, path)
+	Global.get_ui_runtime().register_ui_runtime_instance(_panel, path)
 	_panel.tree_exited.connect(_on_panel_closed, CONNECT_ONE_SHOT)
 	_panel_layer.add_child(_panel)
 	get_tree().paused = true
@@ -717,7 +715,7 @@ func _replace_panel(slot: int) -> void:
 		return
 	var old_panel := _panel
 	old_panel.tree_exited.disconnect(_on_panel_closed)
-	Global.clear_hover_popup()
+	Global.get_ui_runtime().clear_hover_popup()
 	old_panel.free()
 	link_bags()
 	ui_slot = slot
@@ -731,7 +729,7 @@ func _on_panel_closed() -> void:
 		return
 	if is_instance_valid(_panel_layer):
 		_panel_layer.queue_free()
-	Global.windows = _previous_windows if is_instance_valid(_previous_windows) else null
+	Global.get_ui_runtime().pop_windows()
 	ui_slot = 1
 	_panel = null
 	_panel_scene = null
@@ -742,7 +740,9 @@ func _on_panel_closed() -> void:
 		secondary_props.get_last_prop()
 	get_tree().paused = _panel_was_paused
 	Global.request_save_with_feedback(
-		"coop_panel_close", Global.windows if is_instance_valid(Global.windows) else self, "面板关闭保存失败："
+		"coop_panel_close",
+		Global.get_ui_runtime().windows if is_instance_valid(Global.get_ui_runtime().windows) else self,
+		"面板关闭保存失败："
 	)
 
 

@@ -205,7 +205,9 @@ func _set_requirement_color(label: Label, enough: bool) -> void:
 
 
 func _show_message(message: String) -> void:
-	var parent_node: Node = Global.windows if is_instance_valid(Global.windows) else get_parent()
+	var parent_node: Node = (
+		Global.get_ui_runtime().windows if is_instance_valid(Global.get_ui_runtime().windows) else get_parent()
+	)
 	Global.add_message_show(parent_node, message, 1.5, Vector2(470, 295))
 
 

@@ -174,7 +174,7 @@ func _on_set_pressed() -> void:
 	if scene == null:
 		return
 	set_target = scene.instantiate()
-	Global.register_ui_runtime_instance(set_target, SET_MENU_SCENE)
+	Global.get_ui_runtime().register_ui_runtime_instance(set_target, SET_MENU_SCENE)
 	if set_target is CanvasLayer:
 		set_target.layer = 4
 	_track_target(set_target, "set")
@@ -210,7 +210,7 @@ func _toggle_backpack(_role) -> void:
 	if scene == null:
 		return
 	back_target = scene.instantiate()
-	Global.register_ui_runtime_instance(back_target, BACKPACK_SCENE)
+	Global.get_ui_runtime().register_ui_runtime_instance(back_target, BACKPACK_SCENE)
 	_set_if_has_property(back_target, "Player", _role)
 	_set_if_has_property(back_target, "boxObj", self)
 	Global.configure_backpack_role_preview(back_target, _role)
@@ -251,7 +251,7 @@ func _toggle_pet() -> void:
 	if scene == null:
 		return
 	pet_target = scene.instantiate()
-	Global.register_ui_runtime_instance(pet_target, PET_INTERFACE_SCENE)
+	Global.get_ui_runtime().register_ui_runtime_instance(pet_target, PET_INTERFACE_SCENE)
 	_track_target(pet_target, "pet")
 	add_child(pet_target)
 	pet_target.position = _viewport_center() - Vector2(326.5, 256.5)

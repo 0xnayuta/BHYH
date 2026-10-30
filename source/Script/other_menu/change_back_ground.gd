@@ -44,7 +44,10 @@ func _select_background(index: int) -> void:
 		set_bg_image(index)
 		return
 	Global.add_message_show(
-		Global.get_ui_popup_layer(), str(BACKGROUND_LOCK_HINTS.get(index, "该背景尚未解锁")), 1.5, Vector2(470, 300)
+		Global.get_ui_runtime().get_popup_layer(),
+		str(BACKGROUND_LOCK_HINTS.get(index, "该背景尚未解锁")),
+		1.5,
+		Vector2(470, 300)
 	)
 
 

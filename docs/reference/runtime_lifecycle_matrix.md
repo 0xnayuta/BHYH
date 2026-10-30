@@ -174,10 +174,10 @@ flowchart TD
 | 作用域 | 所有者 | 容量/驻留依据 | 清理事件 | 观测键 |
 |:---|:---|:---|:---|:---|
 | 构建期只读 | `scripts/convert_level_preload_catalog.py` 等构建转换器；`LevelPreloadStore`/`LevelPreloadCatalog` 只是只读视图 | 构建期生成；运行时无写入、无增长 | 无（不参与运行时清理） | `build_read_only` |
-| 永久 | `Global` | 4 条永久小 UI；角色/宠物预热标记各 1；无常规增长 | `release_ui_runtime_cache(release_permanent=true)`、角色切换、`end_archive_session` | `permanent` |
+| 永久 | `Global` | 4 条永久小 UI；角色/宠物预热标记各 1；无常规增长 | `UiRuntime.release_ui_runtime_cache(release_permanent=true)`、角色切换、`end_archive_session` | `permanent` |
 | 关卡 | `Global._level_resource_lease` + `_monster_scene_cache` | 按当前关卡加载路径；无固定上限，随租约释放 | `change_scene` → `release_level_resource_lease`；`clear_level_resource_cache` | `level` |
 | 战斗 | `Global` | 池上限 80/32/24/32（预置 12/16/16/6）；模块静态帧缓存随模块 | `end_archive_session` → `clear_combat_runtime_cache`；不随普通关卡切换 | `combat` |
-| UI | `Global` 的临时实例登记、实例计数、永久 UI 与 UI 纹理前缀 | 按运行时实例与场景路径；无固定上限 | 实例退出、关闭回调、`release_ui_runtime_cache`、切换/退出 | `ui` |
+| UI | `UiRuntime` 的实例登记/计数与 `Global` 的永久 UI/UI 纹理前缀 | 按运行时实例与场景路径；无固定上限 | 实例退出、关闭回调、`UiRuntime.release_ui_runtime_cache`、切换/退出 | `ui` |
 | 共享运行时 | `Global` 四类资源缓存 | 按租约/UI/永久所有权驻留；无固定上限 | 租约释放、UI 释放、角色资源释放 | `shared_runtime` |
 
 `Global.get_runtime_diagnostics().get_cache_scope_snapshot()` 返回上述键的只读快照；`ui.transient_instance_count` 暴露显式临时 UI 登记数；`level-resource-lease` 探针验证租约/战斗池清理与容量元数据，`load-guard` 探针验证 UI 实例登记与释放、Catalog 只读副本。永久 UI 常量当前为 `PERMANENT_SMALL_UI_SCENE_PATHS`，是所有权边界，不是容量建议值。
@@ -186,7 +186,7 @@ flowchart TD
 
 | 对象 | 当前所有者 | 写入方 | 读取方 | 释放/失效 | 失败边界 |
 |:---|:---|:---|:---|:---|:---|
-| `_resource_cache` | `Global` | `_load_scene`、`_cache_threaded_resource`、`load_scene_uncached`、部分预载函数、`instance_scene` 相关 UI 缓存 | `Global`、`load_scene` 经 `is_resource_cached` / `get_cached_packed_scene` | `release_level_resource_lease`（经 `clear_level_resource_cache` / `clear_combat_runtime_cache`）、`release_role_runtime_resources`、`release_ui_runtime_cache`、`_release_ui_scene_cache_if_unused` | `null` 资源不入缓存；资源预载失败继续进度，目标场景失败停止切换 |
+| `_resource_cache` | `Global` | `_load_scene`、`_cache_threaded_resource`、`load_scene_uncached`、部分预载函数、`instance_scene` 相关 UI 缓存 | `Global`、`load_scene` 经 `is_resource_cached` / `get_cached_packed_scene` | `release_level_resource_lease`（经 `clear_level_resource_cache` / `clear_combat_runtime_cache`）、`release_role_runtime_resources`、`UiRuntime.release_ui_runtime_cache`、`UiRuntime._release_ui_scene_cache_if_unused` | `null` 资源不入缓存；资源预载失败继续进度，目标场景失败停止切换 |
 | `_monster_scene_cache` | `Global` | `load_level_monster_scene`、`preload_level_monster_scenes`、`prewarm_monster_scene_paths` | `load_level_monster_scene` | 只删除当前租约登记的怪物场景路径 | 空路径返回 `null`；未命中时重新加载；未登记路径保留 |
 | `_sprite_frames_cache` | `Global` | `_cache_threaded_resource`、`prewarm_sprite_frames_paths` 经 `_preload_paths_threaded` | `_preload_paths_threaded`、`_preload_sprite_frames_resource`、`is_resource_cached` | 租约路径释放、角色资源释放、UI 纹理前缀清理；不再按战斗资源前缀批量删除 | 没有外部直接读取；缓存查询包含此表 |
 | `_audio_cache` | `Global` | `get_cached_audio`、`_cache_threaded_resource` | `get_cached_audio`、`is_resource_cached` | 租约路径释放、角色资源释放、UI 前缀清理；不再按战斗资源前缀批量删除 | 路径别名解析；空路径返回 `null` |
@@ -225,11 +225,11 @@ flowchart TD
 
 | 对象 | 所有者 | 写入方 | 释放/失效 | 边界 |
 |:---|:---|:---|:---|:---|
-| `_permanent_small_ui_scene_cache` | `Global` | `_load_scene` 对 `PERMANENT_SMALL_UI_SCENE_PATHS` 的缓存；`prewarm_permanent_small_ui_scenes` | `release_ui_runtime_cache(release_permanent=true)` | 只在退出档案时整体清空；预载协程按运行时代次中止 |
-| `_ui_runtime_instance_paths` / `_ui_runtime_instance_counts` | `Global` | `register_ui_runtime_instance`；`_on_ui_runtime_instance_exited` 递减 | `release_ui_runtime_cache` 清空登记 | 树退出后延迟释放场景缓存；永久 UI 不按实例释放 |
-| `_transient_ui_instances` | `Global` | `register_transient_ui` 由关键 UI 工厂显式调用；`_on_transient_ui_exited` 移除 | `cleanup_transient_ui` 调用关闭回调并释放；实例退出自动移除 | 只登记非永久 UI；可选零参数关闭回调 |
-| `_ui_popup_layer` | `Global` | `get_ui_popup_layer` | `cleanup_transient_ui` 清子节点，不清 layer 本身 | `Global` 为 Autoload，layer 随进程存活 |
-| `_active_hover_popup` | `Global` | `register_hover_popup` | `clear_hover_popup` / `cleanup_transient_ui` | 只保留一个 |
+| `_permanent_small_ui_scene_cache` | `Global` | `_load_scene` 对 `PERMANENT_SMALL_UI_SCENE_PATHS` 的缓存；`prewarm_permanent_small_ui_scenes` | `UiRuntime.release_ui_runtime_cache(release_permanent=true)` | 只在退出档案时整体清空；预载协程按运行时代次中止 |
+| `_ui_runtime_instance_paths` / `_ui_runtime_instance_counts` | `UiRuntime` | `register_ui_runtime_instance`；`_on_ui_runtime_instance_exited` 递减 | `release_ui_runtime_cache` 清空登记 | 树退出后延迟释放场景缓存；永久 UI 不按实例释放 |
+| `_transient_ui_instances` | `UiRuntime` | `register_transient_ui` 由关键 UI 工厂显式调用；`_on_transient_ui_exited` 移除 | `cleanup_transient_ui` 调用关闭回调并释放；实例退出自动移除 | 只登记非永久 UI；可选零参数关闭回调 |
+| `_ui_popup_layer` | `UiRuntime` | `get_popup_layer` | `cleanup_transient_ui` 清子节点，不清 layer 本身 | `UiRuntime` 为 Global 普通子节点，layer 随进程存活 |
+| `_active_hover_popup` | `UiRuntime` | `register_hover_popup` | `clear_hover_popup` / `cleanup_transient_ui` | 只保留一个 |
 | 临时 UI 节点 | 各 UI 工厂 | `instance_scene`、`register_transient_ui` | `cleanup_transient_ui` 关闭 `_transient_ui_instances` 并清弹出层；永久 UI 路径跳过；`release_ui_runtime_cache` 只清缓存/属性 | 只登记非永久 UI；业务不得直接调用清理入口；场景自有阴影/按钮与自动消失 `message_show` 不登记 |
 
 `PERMANENT_SMALL_UI_SCENE_PATHS` 当前为 `back_pack.tscn`、`learn_skill.tscn`、`pet_interface.tscn`、`magic_weapon_infor.tscn`。这是实现常量，不是建议上限。
@@ -265,12 +265,12 @@ flowchart TD
 | 入口 | 实际所有者 | 调用方 | 覆盖范围 | 失败/边界 |
 |:---|:---|:---|:---|:---|
 | `Global.change_scene` | `Global` | 139 处业务调用 | 目标校验、请求代次、档案退出、临时 UI、UI 缓存、上一关卡租约释放、新租约建立、快速路径/加载页 | 空/缺失目标拒绝并返回 `false`；加载页失败不提交目标 |
-| `cleanup_transient_ui` | `Global` | 仅 `Global.change_scene` | 注册实例关闭回调、弹出层、hover popup | 永久小 UI 跳过；清理期间 active 守卫；业务直接调用由 `POOL_UI_CLEANUP_UNREGISTERED` 阻断 |
-| `release_ui_runtime_cache` | `Global` | 仅 `Global.change_scene` | UI 场景缓存、永久 UI、UI 纹理前缀 | 只清缓存，不释放仍在树的 UI 节点 |
+| `UiRuntime.cleanup_transient_ui` | `UiRuntime` | 仅 `Global.change_scene` | 注册实例关闭回调、弹出层、hover popup | 永久小 UI 跳过；清理期间 active 守卫；业务直接调用由 `POOL_UI_CLEANUP_UNREGISTERED` 阻断 |
+| `UiRuntime.release_ui_runtime_cache` | `UiRuntime` | 仅 `Global.change_scene` | UI 场景缓存、永久 UI、UI 纹理前缀 | 只清缓存，不释放仍在树的 UI 节点 |
 | `clear_level_resource_cache` | `Global` | `Global.change_scene`、`clear_combat_runtime_cache` | 当前租约路径、FrameSequence、212 帧缓存 | 只释放租约登记路径；不清理池、UI 或未登记路径 |
 | `clear_combat_runtime_cache` | `Global` | 仅 `end_archive_session` | 当前租约、池、NeZha 帧缓存、召唤物 | 不再按战斗资源前缀批量删除缓存；不在普通关卡切换触发 |
 | `_clear_runtime_pools` | `Global` | `clear_combat_runtime_cache` | 四个池与池根 | 只随档案结束 |
-| `end_archive_session` | `Global` | `Global.change_scene` 进入 `main_menu`/`choose_player`（在 `cleanup_transient_ui()` 之后）与 `set_cd_path` 切换档案 | 运行时代次、档案 generation、预热令牌、战斗缓存、角色特效缓存 | 应用退出由 `_exit_tree` 清理；victory/defeat 不结束 |
+| `end_archive_session` | `Global` | `Global.change_scene` 进入 `main_menu`/`choose_player`（在 `UiRuntime.cleanup_transient_ui()` 之后）与 `set_cd_path` 切换档案 | 运行时代次、档案 generation、预热令牌、战斗缓存、角色特效缓存 | 应用退出由 `_exit_tree` 清理；victory/defeat 不结束 |
 | `release_role_runtime_resources` | `Global` | `bind_archive_session` 角色变化、`prewarm_current_role_runtime_resources` 切换角色 | 角色相关缓存与特效静态数据 | 普通关卡切换不调用 |
 | `release_map_visual_resources` | 地图脚本 + `Global` | `map_0` 至 `map_9_1` 的 `_exit_tree` | 递归清空 Sprite/TextureRect/按钮/进度条/AnimatedSprite/NinePatch 纹理并清理地图阴影 | 全部地图入口已覆盖 |
 | `MemoryClass._exit_tree` / `_notification` | `MemoryClass` | 引擎退出、暂停、关窗 | 存档后台任务 flush | 与运行时缓存/池清理分开 |
@@ -286,7 +286,7 @@ flowchart TD
 | 线程预载 | `load_scene` 请求 + `Global` 缓存 | 仅加载页 | 完成/加载页释放/超时 | 代次阻止旧回调写回；取消为停止轮询并丢弃后台结果 | Phase 15-3C 已完成 |
 | 关卡资源租约 | `Global._level_resource_lease` | `Global.change_scene`、加载页、BaseLevel 预载函数 | 每次切换/战斗清理，只释放本租约 | 未登记路径不释放；目标场景不登记 | Phase 15-3B 已完成 |
 | 战斗对象池 | `Global._pool_data` | 战斗表现消费者回收 | 档案结束 | 关卡切换不清理；复用重置依赖消费者 | Phase 15-4B 已完成 |
-| 临时 UI | `Global._transient_ui_instances` | UI 工厂/各面板 | 树退出、切换、Global 清理 | 只登记非永久 UI；名称兜底已删除；业务不得直接调用 | 19-2C 完成 |
+| 临时 UI | `UiRuntime._transient_ui_instances` | UI 工厂/各面板 | 树退出、切换、Global 清理 | 只登记非永久 UI；名称兜底已删除；业务不得直接调用 | 19-2C 完成 |
 | 档案会话 | `Global` | 存档入口/选角（`bind_archive_session`） | 主菜单/选角/切档 | 普通切场不结束；应用退出由 `_exit_tree` 清空 | Phase 16-3 已完成 |
 | 退出与后台 | `Global` + `MemoryClass` | 引擎 | 应用退出 | `Global._exit_tree` 清理运行时代次、档案/角色/战斗/UI 缓存与池；存档线程单独 flush | Phase 15-4D 已完成；Phase 16 持久化边界 |
 | 地图视觉释放 | 地图脚本 | `map_0` 至 `map_9_1` | 地图退出 | 全部地图入口覆盖 | Phase 15-4D 已完成 |

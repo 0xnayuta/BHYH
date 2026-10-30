@@ -103,7 +103,7 @@ func _on_lock_pressed() -> void:
 		return
 	var previous := bool(item.get("锁定", false))
 	item["锁定"] = not previous
-	if not Global.request_save_with_feedback("back_pack_lock", Global.get_ui_popup_layer(), "锁定设置保存失败："):
+	if not Global.request_save_with_feedback("back_pack_lock", Global.get_ui_runtime().get_popup_layer(), "锁定设置保存失败："):
 		item["锁定"] = previous
 		return
 	_refresh_lock_button()
@@ -132,7 +132,7 @@ func _get_sell_count() -> int:
 
 func _on_sell_pressed() -> void:
 	if _is_locked():
-		Global.add_message_show(Global.get_ui_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
+		Global.add_message_show(Global.get_ui_runtime().get_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
 		return
 	be_number = _get_sell_count()
 	var type = AE.all_equipment[my_name][DataKeys.TYPE]

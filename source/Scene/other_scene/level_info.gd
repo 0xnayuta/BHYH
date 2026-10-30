@@ -2034,8 +2034,12 @@ func _popup_parent() -> Node:
 	var parent_node := get_parent()
 	if parent_node != null and is_instance_valid(parent_node) and not parent_node.is_queued_for_deletion():
 		return parent_node
-	if Global.windows != null and is_instance_valid(Global.windows) and not Global.windows.is_queued_for_deletion():
-		return Global.windows
+	if (
+		Global.get_ui_runtime().windows != null
+		and is_instance_valid(Global.get_ui_runtime().windows)
+		and not Global.get_ui_runtime().windows.is_queued_for_deletion()
+	):
+		return Global.get_ui_runtime().windows
 	var current_scene := get_tree().current_scene
 	if current_scene != null and is_instance_valid(current_scene):
 		return current_scene
@@ -2821,7 +2825,7 @@ func _on_challenge_pressed() -> void:
 		visible = false
 		queue_free()
 	else:
-		Global.add_message_show(Global.windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 
 
 func _on_boss_self_select_check_box_toggled(_toggled_on: bool) -> void:

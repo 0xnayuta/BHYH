@@ -635,7 +635,7 @@ func _get_equipment_source_index() -> int:
 func _get_window_parent():
 	var last_parent
 	if is_in_hh or is_in_hhgz or is_in_shop or is_in_ldl_gz or is_in_ldl:
-		last_parent = Global.windows
+		last_parent = Global.get_ui_runtime().windows
 	else:
 		last_parent = Global.get_ancestor(self, 7)
 	return last_parent

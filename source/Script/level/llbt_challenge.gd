@@ -92,7 +92,7 @@ func _on_tztxs_pressed() -> void:
 		Global.llbtcgms = false
 		_enter_llbt_level()
 	else:
-		Global.add_message_show(Global.windows, "请先至少到达第7层！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第7层！！", 1.5, Vector2(470, 300))
 
 
 func _on_tslzz_pressed() -> void:
@@ -103,7 +103,7 @@ func _on_tslzz_pressed() -> void:
 		Global.llbtcgms = false
 		_enter_llbt_level()
 	else:
-		Global.add_message_show(Global.windows, "请先至少到达第13层！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第13层！！", 1.5, Vector2(470, 300))
 
 
 func _on_tznz_pressed() -> void:
@@ -114,7 +114,7 @@ func _on_tznz_pressed() -> void:
 		Global.llbtcgms = false
 		_enter_llbt_level()
 	else:
-		Global.add_message_show(Global.windows, "请先至少到达第19层！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第19层！！", 1.5, Vector2(470, 300))
 
 
 func _on_tztttw_pressed() -> void:
@@ -125,7 +125,7 @@ func _on_tztttw_pressed() -> void:
 		Global.llbtcgms = false
 		_enter_llbt_level()
 	else:
-		Global.add_message_show(Global.windows, "请先通关玲珑塔！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先通关玲珑塔！！", 1.5, Vector2(470, 300))
 
 
 func _on_close_pressed() -> void:
@@ -133,30 +133,30 @@ func _on_close_pressed() -> void:
 
 
 func _on_help_pressed() -> void:
-	Global.add_message_show(Global.windows, "玲珑塔帮助还没做！！", 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, "玲珑塔帮助还没做！！", 1.5, Vector2(470, 300))
 	pass
 
 
 func _on_cure_pressed() -> void:
 	if current_ceng_shu >= _llbt_reached_level() or current_ceng_shu >= 24:
-		Global.add_message_show(Global.windows, "已达当前通关最高层数！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "已达当前通关最高层数！！", 1.5, Vector2(470, 300))
 		return
 	current_ceng_shu += 1
 
 
 func _on_reduce_pressed() -> void:
 	if current_ceng_shu <= 1:
-		Global.add_message_show(Global.windows, "最低传送至1层！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "最低传送至1层！！", 1.5, Vector2(470, 300))
 		return
 	current_ceng_shu -= 1
 
 
 func _on_change_pressed() -> void:
 	if current_ceng_shu > _llbt_reached_level():
-		Global.add_message_show(Global.windows, "超出最高限制层数！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "超出最高限制层数！！", 1.5, Vector2(470, 300))
 		return
 	if current_ceng_shu < 1:
-		Global.add_message_show(Global.windows, "低于最低限制层数！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "低于最低限制层数！！", 1.5, Vector2(470, 300))
 		return
 	Global.llbtcgms = true
 	Global.llbt_level = current_ceng_shu

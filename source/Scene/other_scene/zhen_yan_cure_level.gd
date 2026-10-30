@@ -77,15 +77,15 @@ func _on_cure_level_pressed() -> void:
 	var need_lh = int(cur_level / 5) * 1000 + 1000
 	var current_num := int(PlayerData.get_item_data(item_name))
 	if cur_level >= 50:
-		Global.add_message_show(Global.windows, "已满级！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "已满级！！", 1.5, Vector2(500, 305))
 		return
 	if current_num < material_need_value:
-		Global.add_message_show(Global.windows, "材料不足！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "材料不足！！", 1.5, Vector2(500, 305))
 		return
 	if PlayerData.get_soul() < need_lh:
-		Global.add_message_show(Global.windows, "灵魂不足！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！！", 1.5, Vector2(500, 305))
 		return
 	PlayerData.spend_soul(need_lh)
 	PlayerData.remove_dj(item_name, PlayerData.get_dj_page(item_name), material_need_value)
 	PlayerData.player_data[real_name][str(father.current_num)]["Level"] += 1
-	Global.add_message_show(Global.windows, "升级成功！！", 1.5, Vector2(500, 305))
+	Global.add_message_show(Global.get_ui_runtime().windows, "升级成功！！", 1.5, Vector2(500, 305))

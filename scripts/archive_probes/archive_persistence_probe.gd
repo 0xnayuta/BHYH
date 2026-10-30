@@ -1379,8 +1379,8 @@ func _check_main_menu_saves() -> void:
 	MemoryClass.request_save("probe_main_seed")
 	var popup_layer := CanvasLayer.new()
 	add_child(popup_layer)
-	Global.windows = popup_layer
-	var global_popup := Global.get_ui_popup_layer()
+	Global.get_ui_runtime().push_windows(popup_layer)
+	var global_popup := Global.get_ui_runtime().get_popup_layer()
 	await get_tree().process_frame
 	var cases := [
 		["map_0", "res://Scene/main_menu/map_0.tscn", "_save_if_possible"],
@@ -1421,7 +1421,7 @@ func _check_main_menu_saves() -> void:
 		await get_tree().process_frame
 	global_popup.queue_free()
 	popup_layer.queue_free()
-	Global.windows = null
+	Global.get_ui_runtime().pop_windows()
 	await get_tree().process_frame
 	await get_tree().process_frame
 

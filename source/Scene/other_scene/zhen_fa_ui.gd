@@ -148,13 +148,17 @@ func _on_use_pressed() -> void:
 			name_str = ""
 	if PlayerData.player_data["已佩戴阵法"] == current_zhen_fa_name:
 		PlayerData.player_data["已佩戴阵法"] = ""
-		Global.add_message_show(Global.windows, "取消佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "取消佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305))
 	else:
 		if PlayerData.player_data[name_str]["Level"] > 0:
 			PlayerData.player_data["已佩戴阵法"] = current_zhen_fa_name
-			Global.add_message_show(Global.windows, "佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, "佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305)
+			)
 		else:
-			Global.add_message_show(Global.windows, str(name_str) + "等级不足，无法激活！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(
+				Global.get_ui_runtime().windows, str(name_str) + "等级不足，无法激活！！", 1.5, Vector2(500, 305)
+			)
 			return
 	var pd = str(PlayerData.player_data["已佩戴阵法"])
 	match pd:

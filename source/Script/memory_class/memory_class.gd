@@ -862,7 +862,7 @@ func remove_play_data():
 
 
 func remove():
-	Global.add_message_show(Global.windows, "数据不正常哦，拜拜啦~", 4, Vector2(485, 295))
+	Global.add_message_show(Global.get_ui_runtime().windows, "数据不正常哦，拜拜啦~", 4, Vector2(485, 295))
 	remove_data()
 	MainSet.set_data["xg"] = true
 	safe_write_archive(Global.get_archive_session_path(), initialized_data)

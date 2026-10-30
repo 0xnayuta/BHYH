@@ -113,7 +113,8 @@ func get_cache_scope_snapshot() -> Dictionary:
 		{
 			"owner": "Global",
 			"capacity": "按租约/UI/永久所有权驻留；无固定上限",
-			"cleanup": "release_level_resource_lease / release_ui_runtime_cache / release_role_runtime_resources",
+			"cleanup":
+			"release_level_resource_lease / UiRuntime.release_ui_runtime_cache / release_role_runtime_resources",
 			"resource_entries": _host._resource_cache.size(),
 			"sprite_frames_entries": _host._sprite_frames_cache.size(),
 			"audio_entries": _host._audio_cache.size(),
@@ -123,7 +124,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 		{
 			"owner": "Global",
 			"capacity": "永久小 UI 4 条；角色/宠物预热标记各 1",
-			"cleanup": "release_ui_runtime_cache(release_permanent=true) / end_archive_session",
+			"cleanup": "UiRuntime.release_ui_runtime_cache(release_permanent=true) / end_archive_session",
 			"small_ui_scene_count": _host._permanent_small_ui_scene_cache.size(),
 			"small_ui_prewarm_in_progress": _host._permanent_ui_prewarm_in_progress,
 			"small_ui_prewarmed": _host._permanent_ui_prewarmed,
@@ -151,17 +152,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"active_sound_players": _host._active_sound_players.size(),
 			"all_hero_skill_resources_preloaded": _host._all_hero_skill_resources_preloaded,
 		},
-		"ui":
-		{
-			"owner": "Global",
-			"capacity": "按运行时实例登记；无固定上限",
-			"cleanup": "release_ui_runtime_cache / _release_ui_scene_cache_if_unused",
-			"runtime_instance_count": _host._ui_runtime_instance_paths.size(),
-			"runtime_scene_count": _host._ui_runtime_instance_counts.size(),
-			"runtime_scene_counts": _host._ui_runtime_instance_counts.duplicate(true),
-			"transient_instance_count": _host._transient_ui_instances.size(),
-			"permanent_scene_count": _host._permanent_small_ui_scene_cache.size(),
-		},
+		"ui": _host.get_ui_runtime().get_scope_snapshot(),
 	}
 
 
