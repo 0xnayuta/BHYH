@@ -137,37 +137,41 @@ func _on_ui_runtime_instance_exited(instance_id: int) -> void:
 func _release_ui_scene_cache_if_unused(scene_path: String) -> void:
 	if int(_ui_runtime_instance_counts.get(scene_path, 0)) > 0:
 		return
-	if scene_path in _host.PERMANENT_SMALL_UI_SCENE_PATHS:
+	if _host.get_resource_runtime().is_permanent_small_ui_scene_path(scene_path):
 		return
-	_host._resource_cache.erase(scene_path)
+	_host.get_resource_runtime().erase_cached_scene(scene_path)
 	_clear_packed_scene_members_for_path(scene_path)
-	_host._erase_cached_paths_by_prefix(_host._texture_cache, _ui_art_prefixes_for_scene(scene_path))
+	_host.get_resource_runtime().erase_cached_texture_paths_by_prefix(_ui_art_prefixes_for_scene(scene_path))
 
 
 func release_ui_runtime_cache(release_permanent: bool = false) -> void:
 	_ui_runtime_instance_paths.clear()
 	_ui_runtime_instance_counts.clear()
-	for path_value in _host._resource_cache.keys():
-		var scene_path := str(path_value)
+	for scene_path in _host.get_resource_runtime().get_cached_scene_paths():
 		if (
 			is_runtime_ui_scene_path(scene_path)
-			and (release_permanent or scene_path not in _host.PERMANENT_SMALL_UI_SCENE_PATHS)
+			and (release_permanent or not _host.get_resource_runtime().is_permanent_small_ui_scene_path(scene_path))
 		):
-			_host._resource_cache.erase(scene_path)
+			_host.get_resource_runtime().erase_cached_scene(scene_path)
 	for property_info in _host.get_property_list():
 		var property_name := StringName(property_info.get("name", ""))
 		var value: Variant = _host.get(property_name)
 		if (
-			_host._is_valid_packed_scene(value)
+			_host.get_resource_runtime().is_valid_packed_scene(value)
 			and is_runtime_ui_scene_path((value as PackedScene).resource_path)
-			and (release_permanent or (value as PackedScene).resource_path not in _host.PERMANENT_SMALL_UI_SCENE_PATHS)
+			and (
+				release_permanent
+				or not _host.get_resource_runtime().is_permanent_small_ui_scene_path(
+					(value as PackedScene).resource_path
+				)
+			)
 		):
 			_host.set(property_name, null)
 	if release_permanent or not _host.is_archive_session_active():
 		(
 			_host
-			. _erase_cached_paths_by_prefix(
-				_host._texture_cache,
+			. get_resource_runtime()
+			. erase_cached_texture_paths_by_prefix(
 				[
 					"res://Art/backpack/",
 					"res://Art/skill/",
@@ -181,8 +185,7 @@ func release_ui_runtime_cache(release_permanent: bool = false) -> void:
 			)
 		)
 	if release_permanent:
-		_host._permanent_small_ui_scene_cache.clear()
-		_host._permanent_ui_prewarmed = false
+		_host.get_resource_runtime().clear_permanent_small_ui_scene_cache()
 
 
 func clear_runtime_state() -> void:
@@ -204,19 +207,22 @@ func get_scope_snapshot() -> Dictionary:
 		"runtime_scene_count": _ui_runtime_instance_counts.size(),
 		"runtime_scene_counts": _ui_runtime_instance_counts.duplicate(true),
 		"transient_instance_count": _transient_ui_instances.size(),
-		"permanent_scene_count": _host._permanent_small_ui_scene_cache.size(),
+		"permanent_scene_count": _host.get_resource_runtime().get_permanent_small_ui_scene_count(),
 	}
 
 
 func _is_permanent_ui_path(scene_path: String) -> bool:
-	return scene_path in _host.PERMANENT_SMALL_UI_SCENE_PATHS
+	return _host.get_resource_runtime().is_permanent_small_ui_scene_path(scene_path)
 
 
 func _clear_packed_scene_members_for_path(scene_path: String) -> void:
 	for property_info in _host.get_property_list():
 		var property_name := StringName(property_info.get("name", ""))
 		var value: Variant = _host.get(property_name)
-		if _host._is_valid_packed_scene(value) and (value as PackedScene).resource_path == scene_path:
+		if (
+			_host.get_resource_runtime().is_valid_packed_scene(value)
+			and (value as PackedScene).resource_path == scene_path
+		):
 			_host.set(property_name, null)
 
 

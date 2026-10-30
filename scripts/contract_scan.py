@@ -933,7 +933,10 @@ class ContractScanner:
         "JSON.parse",
         "manifest",
     )
-    SCENE_ENTRY_BOUNDARY_FILE = "global.gd"
+    SCENE_ENTRY_BOUNDARY_FILES = (
+        "global.gd",
+        "Script/runtime/scene_flow.gd",
+    )
     SCENE_ENTRY_BYPASS_PATTERNS = (
         "change_scene_to_file(",
         "change_scene_to_packed(",
@@ -1102,7 +1105,7 @@ class ContractScanner:
     @classmethod
     def scene_entry_boundary_violation(cls, content: str, rel_path: str):
         """仅 Global 允许直接调用 change_scene_to_*；返回 (行号, 命中标识)。"""
-        if rel_path.startswith("addons/") or rel_path == cls.SCENE_ENTRY_BOUNDARY_FILE:
+        if rel_path.startswith("addons/") or rel_path in cls.SCENE_ENTRY_BOUNDARY_FILES:
             return (0, "")
         for lineno, line in enumerate(content.splitlines(), 1):
             clean = line.split("#", 1)[0]
@@ -1848,6 +1851,7 @@ def run_scene_entry_boundary_self_test() -> bool:
         "Global 正式入口": ("Global.change_scene(path)\n", "Script/level/sample.gd"),
         "Global 自身低层实现": ("var err := tree.change_scene_to_file(path)\n", "global.gd"),
         "注释中的低层调用": ("# tree.change_scene_to_file(path) legacy note\n", "Script/level/sample.gd"),
+        "SceneFlow 自身低层实现": ("var err := tree.change_scene_to_file(path)\n", "Script/runtime/scene_flow.gd"),
     }
     passed = True
     for label, (content, rel_path) in bad_samples.items():

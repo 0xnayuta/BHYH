@@ -7,6 +7,8 @@ const TARGET_MAX_FPS := 150
 const AUDIO_RUNTIME_SCRIPT := preload("res://Script/runtime/audio_runtime.gd")
 const UI_RUNTIME_SCRIPT := preload("res://Script/runtime/ui_runtime.gd")
 const RUNTIME_DIAGNOSTICS_SCRIPT := preload("res://Script/runtime/runtime_diagnostics.gd")
+const RESOURCE_RUNTIME_SCRIPT := preload("res://Script/runtime/resource_runtime.gd")
+const SCENE_FLOW_SCRIPT := preload("res://Script/runtime/scene_flow.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -260,7 +262,8 @@ var _chase_bullet = null
 func _exit_tree() -> void:
 	_shutting_down = true
 	_advance_runtime_generation()
-	_scene_request_generation += 1
+	if _scene_flow != null:
+		_scene_flow.clear_runtime_state()
 	_archive_session_generation += 1
 	_archive_session_prewarm_token += 1
 	_archive_session = ArchiveSession.new()
@@ -268,18 +271,13 @@ func _exit_tree() -> void:
 	_archive_session_prewarm_role_id = 0
 	_prewarmed_role_id = 0
 	_prewarmed_pet_signature = ""
-	_permanent_ui_prewarm_in_progress = false
 	release_role_runtime_resources()
 	clear_combat_runtime_cache()
 	if _ui_runtime != null:
 		_ui_runtime.release_ui_runtime_cache(true)
 		_ui_runtime.clear_runtime_state()
-	clear_preloaded_scene_slot()
-	_resource_cache.clear()
-	_sprite_frames_cache.clear()
-	_audio_cache.clear()
-	_texture_cache.clear()
-	_monster_scene_cache.clear()
+	if _resource_runtime != null:
+		_resource_runtime.clear_runtime_state()
 	if _audio_runtime != null:
 		_audio_runtime.clear_runtime_state()
 	_pending_combo_milestones.clear()
@@ -313,6 +311,14 @@ func _ready() -> void:
 	_runtime_diagnostics.name = "RuntimeDiagnostics"
 	_runtime_diagnostics.setup(self)
 	add_child(_runtime_diagnostics)
+	_resource_runtime = RESOURCE_RUNTIME_SCRIPT.new()
+	_resource_runtime.name = "ResourceRuntime"
+	_resource_runtime.setup(self)
+	add_child(_resource_runtime)
+	_scene_flow = SCENE_FLOW_SCRIPT.new()
+	_scene_flow.name = "SceneFlow"
+	_scene_flow.setup(self)
+	add_child(_scene_flow)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -330,6 +336,14 @@ func get_ui_runtime() -> UiRuntime:
 
 func get_audio_runtime() -> AudioRuntime:
 	return _audio_runtime
+
+
+func get_resource_runtime() -> ResourceRuntime:
+	return _resource_runtime
+
+
+func get_scene_flow() -> SceneFlow:
+	return _scene_flow
 
 
 var cloud_sword = null
@@ -352,7 +366,6 @@ var yx = null
 var qlsword = null
 var cucurbit2 = null
 
-var _monster_scene_cache = {}
 var _last_full_monster_bullet_name := ""
 var _last_combo_value: int = 0
 var is_frist: bool
@@ -509,10 +522,6 @@ var wait_time: float = 0.8
 var need_change_item: bool = true
 var player_dir
 
-var _resource_cache = {}
-var _sprite_frames_cache = {}
-var _audio_cache = {}
-var _texture_cache = {}
 var _current_role_body_texture_path: String = ""
 var _current_role_equipment_texture_path: String = ""
 var _all_hero_skill_resources_preloaded: bool = false
@@ -537,18 +546,9 @@ var _save_failure_notify_msec: int = 0
 var _save_failure_notify_key: String = ""
 var _runtime_generation: int = 0
 var _shutting_down := false
-const PERMANENT_SMALL_UI_SCENE_PATHS := [
-	"res://Scene/back_pack/back_pack.tscn",
-	"res://Scene/skill/learn_skill.tscn",
-	"res://Scene/pet/pet_interface.tscn",
-	"res://Scene/back_pack/magic_weapon_infor.tscn",
-]
-var _permanent_small_ui_scene_cache: Dictionary = {}
-var _permanent_ui_prewarm_in_progress := false
-var _permanent_ui_prewarmed := false
 var _prewarmed_pet_signature: String = ""
-var _level_resource_lease: Dictionary = {}
-var _level_resource_lease_id: int = 0
+var _resource_runtime: ResourceRuntime = null
+var _scene_flow: SceneFlow = null
 var _last_mr_hurt_msec = {}
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
@@ -668,66 +668,25 @@ func can_show_sword_hit_effect() -> bool:
 
 
 func _load_scene(path: String) -> PackedScene:
-	if not _is_scene_resource_path(path):
-		return null
-	if _permanent_small_ui_scene_cache.has(path):
-		var permanent_scene: Variant = _permanent_small_ui_scene_cache[path]
-		if _is_valid_packed_scene(permanent_scene):
-			return permanent_scene
-		_permanent_small_ui_scene_cache.erase(path)
-	if _resource_cache.has(path) and not _is_valid_packed_scene(_resource_cache[path]):
-		_resource_cache.erase(path)
-	if not _resource_cache.has(path):
-		if _ui_runtime.is_runtime_ui_scene_path(path):
-			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
-		else:
-			_resource_cache[path] = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE)
-	var cached_scene: Variant = _resource_cache.get(path)
-	if not _is_valid_packed_scene(cached_scene):
-		return null
-	if path in PERMANENT_SMALL_UI_SCENE_PATHS:
-		_permanent_small_ui_scene_cache[path] = cached_scene
-	return cached_scene as PackedScene
+	return _resource_runtime.load_scene(path)
 
 
 func _is_scene_resource_path(path: String) -> bool:
-	return path.ends_with(".tscn") or path.ends_with(".scn")
+	return _resource_runtime.is_scene_resource_path(path)
 
 
 func _is_valid_packed_scene(value: Variant) -> bool:
-	if not is_instance_valid(value):
-		return false
-	return value is PackedScene
+	return _resource_runtime.is_valid_packed_scene(value)
 
 
 func load_ui_scene(path: String) -> PackedScene:
 	if not _ui_runtime.is_runtime_ui_scene_path(path):
 		return load(path) as PackedScene
-	return _load_scene(path) as PackedScene
+	return _resource_runtime.load_scene(path)
 
 
 func prewarm_permanent_small_ui_scenes(generation: int = -1) -> void:
-	if _permanent_ui_prewarm_in_progress or _permanent_ui_prewarmed:
-		return
-	var request_generation := _runtime_generation if generation < 0 else generation
-	if not is_runtime_generation_current(request_generation):
-		return
-	_permanent_ui_prewarm_in_progress = true
-	for scene_path in PERMANENT_SMALL_UI_SCENE_PATHS:
-		if not is_runtime_generation_current(request_generation):
-			_permanent_ui_prewarm_in_progress = false
-			return
-		if not _permanent_small_ui_scene_cache.has(scene_path):
-			_load_scene(scene_path)
-		var tree := get_tree()
-		if tree == null:
-			_permanent_ui_prewarm_in_progress = false
-			return
-		await tree.process_frame
-	_permanent_ui_prewarm_in_progress = false
-	if not is_runtime_generation_current(request_generation):
-		return
-	_permanent_ui_prewarmed = true
+	await _resource_runtime.prewarm_permanent_small_ui_scenes(generation)
 
 
 func get_level_info_monster_ids(level_name: String) -> Array:
@@ -772,45 +731,21 @@ func get_level_info_monster_ids(level_name: String) -> Array:
 
 # 加载页只读查询：不暴露缓存字典，也不触发加载。
 func is_resource_cached(path: String) -> bool:
-	if path.is_empty():
-		return false
-	return (
-		_resource_cache.has(path)
-		or _sprite_frames_cache.has(path)
-		or _audio_cache.has(path)
-		or _texture_cache.has(path)
-	)
+	return _resource_runtime.is_resource_cached(path)
 
 
 # 返回已缓存的场景；未命中或无效时返回 null，不写入缓存。
 func get_cached_packed_scene(path: String) -> PackedScene:
-	if path.is_empty():
-		return null
-	var value: Variant = _resource_cache.get(path)
-	if not _is_valid_packed_scene(value):
-		return null
-	return value as PackedScene
+	return _resource_runtime.get_cached_packed_scene(path)
 
 
 # 加载页唯一写入口：按资源类型写入缓存；track_level 只登记本次加载拥有的路径。
 func handoff_loaded_resource(path: String, resource: Resource, track_level: bool = false) -> bool:
-	if path.is_empty() or resource == null:
-		return false
-	_cache_threaded_resource(path, resource)
-	if track_level:
-		_track_level_resource(path)
-	return true
+	return _resource_runtime.handoff_loaded_resource(path, resource, track_level)
 
 
 func get_cached_audio(path: String) -> AudioStream:
-	var resolved_path := path
-	if path.ends_with("/effect4.mp3") and not path.begins_with("res://Music/hero/role_7/"):
-		resolved_path = path.replace("effect4.mp3", "effect3.mp3")
-	if path == "":
-		return null
-	if not _audio_cache.has(path):
-		_audio_cache[path] = load(resolved_path)
-	return _audio_cache[path] as AudioStream
+	return _resource_runtime.get_cached_audio(path)
 
 
 func _standard_monster_frames_path(monster_id: int) -> String:
@@ -829,19 +764,7 @@ func _standard_monster_frames_path(monster_id: int) -> String:
 
 
 func get_cached_texture(path: String) -> Texture2D:
-	var resolved_path := path
-	if path.ends_with("/mp_poision.png"):
-		resolved_path = path.replace("mp_poision.png", "poision.png")
-	if path == "":
-		return null
-	if not _texture_cache.has(path) or _texture_cache[path] == null:
-		var texture := load(resolved_path) as Texture2D
-		if texture != null:
-			_texture_cache[path] = texture
-		else:
-			_texture_cache.erase(path)
-		return texture
-	return _texture_cache[path] as Texture2D
+	return _resource_runtime.get_cached_texture(path)
 
 
 func get_zhenfa_icon_path(zhenfa_name: String) -> String:
@@ -862,16 +785,11 @@ func get_static_texture(path: String) -> Texture2D:
 
 
 func release_cached_texture(path: String) -> void:
-	if path == "":
-		return
-	_texture_cache.erase(path)
-	var resolved_path := path
-	if resolved_path != path:
-		_texture_cache.erase(resolved_path)
+	_resource_runtime.release_cached_texture(path)
 
 
 func preload_scene_path(path: String) -> PackedScene:
-	return _load_scene(path) as PackedScene
+	return _resource_runtime.load_scene(path)
 
 
 func prewarm_skill_page_resources(generation: int = -1) -> void:
@@ -898,33 +816,17 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 	await _preload_paths_threaded(paths, request_generation)
 	if not is_runtime_generation_current(request_generation):
 		return
-	skill_learn = _resource_cache.get("res://Scene/skill/learn_skill.tscn") as PackedScene
-	zd_skill = _resource_cache.get("res://Scene/skill/zd_skill.tscn") as PackedScene
-	bd_skill = _resource_cache.get("res://Scene/skill/bd_skill.tscn") as PackedScene
+	skill_learn = _resource_runtime.get_cached_packed_scene("res://Scene/skill/learn_skill.tscn")
+	zd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/zd_skill.tscn")
+	bd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/bd_skill.tscn")
 
 
 func load_scene_uncached(path: String) -> PackedScene:
-	if path == "":
-		return null
-	if _resource_cache.has(path):
-		return _resource_cache[path] as PackedScene
-	var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE) as PackedScene
-	if scene != null:
-		_resource_cache[path] = scene
-		_track_level_resource(path)
-	return scene
+	return _resource_runtime.load_scene_uncached(path)
 
 
 func load_level_monster_scene(path: String) -> PackedScene:
-	if path == "":
-		return null
-	if _monster_scene_cache.has(path):
-		return _monster_scene_cache[path] as PackedScene
-	var scene := _load_scene(path) as PackedScene
-	if scene != null:
-		_monster_scene_cache[path] = scene
-		_track_level_resource(path)
-	return scene
+	return _resource_runtime.load_level_monster_scene(path)
 
 
 func _monster_scene_path(monster_id: int) -> String:
@@ -957,9 +859,9 @@ func preload_level_monster_scenes(monster_ids: Array) -> void:
 		return
 	for path_value in scene_paths:
 		var path := str(path_value)
-		var scene = _resource_cache.get(path)
+		var scene := _resource_runtime.get_cached_packed_scene(path)
 		if scene is PackedScene:
-			_monster_scene_cache[path] = scene
+			_resource_runtime.cache_monster_scene(path, scene)
 
 
 func prewarm_monster_scene_paths(scene_paths: Array, generation: int = -1) -> void:
@@ -982,10 +884,10 @@ func prewarm_monster_scene_paths(scene_paths: Array, generation: int = -1) -> vo
 	if not is_runtime_generation_current(request_generation):
 		return
 	for path in pending_paths:
-		var scene = _resource_cache.get(path)
+		var scene := _resource_runtime.get_cached_packed_scene(path)
 		if scene is PackedScene:
-			_monster_scene_cache[path] = scene
-			_mark_level_scene_warmed(path)
+			_resource_runtime.cache_monster_scene(path, scene)
+			_resource_runtime.mark_level_scene_warmed(path)
 
 
 func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
@@ -1110,185 +1012,27 @@ func load_fly_bullet_scene(bullet_name: String) -> PackedScene:
 
 
 func _cache_threaded_resource(path: String, resource: Resource) -> void:
-	if resource == null:
-		return
-	if resource is PackedScene or path.ends_with(".tscn"):
-		_resource_cache[path] = resource
-	elif resource is SpriteFrames:
-		_sprite_frames_cache[path] = resource
-	elif resource is AudioStream:
-		_audio_cache[path] = resource
-	elif resource is Texture2D:
-		_texture_cache[path] = resource
-	else:
-		_resource_cache[path] = resource
+	_resource_runtime.cache_threaded_resource(path, resource)
 
 
 func _preload_paths_threaded(paths: Array, generation: int = -1) -> void:
-	var request_generation := _runtime_generation if generation < 0 else generation
-	if not is_runtime_generation_current(request_generation):
-		return
-	var request_paths: Array[String] = []
-	var seen_paths: Dictionary = {}
-	for path_value in paths:
-		var path := str(path_value)
-		if path == "":
-			continue
-		if (
-			_resource_cache.has(path)
-			or _sprite_frames_cache.has(path)
-			or _audio_cache.has(path)
-			or _texture_cache.has(path)
-		):
-			continue
-		if seen_paths.has(path):
-			continue
-		seen_paths[path] = true
-		request_paths.append(path)
-
-	var batch_size := _get_threaded_preload_batch_size(request_paths.size())
-	var batch_start := 0
-	while batch_start < request_paths.size():
-		if not is_runtime_generation_current(request_generation):
-			return
-		var pending: Array[String] = []
-		var batch_end := mini(batch_start + batch_size, request_paths.size())
-		for index in range(batch_start, batch_end):
-			var path := request_paths[index]
-			var err = ResourceLoader.load_threaded_request(path)
-			if err == OK or err == ERR_BUSY:
-				pending.append(path)
-			else:
-				var resource = load(path)
-				_cache_threaded_resource(path, resource)
-		while not pending.is_empty():
-			var i := pending.size() - 1
-			while i >= 0:
-				var path := pending[i]
-				var status = ResourceLoader.load_threaded_get_status(path)
-				if status == ResourceLoader.THREAD_LOAD_LOADED:
-					if not is_runtime_generation_current(request_generation):
-						return
-					var resource = ResourceLoader.load_threaded_get(path)
-					_cache_threaded_resource(path, resource)
-					pending.remove_at(i)
-				elif (
-					status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-				):
-					pending.remove_at(i)
-				i -= 1
-			if not pending.is_empty():
-				var tree := get_tree()
-				if tree == null:
-					return
-				await tree.process_frame
-				if not is_runtime_generation_current(request_generation):
-					return
-		batch_start = batch_end
+	await _resource_runtime.preload_paths_threaded(paths, generation)
 
 
 func _get_threaded_preload_batch_size(request_count: int) -> int:
-	if request_count <= 0:
-		return 1
-	return mini(request_count, 2 if OS.has_feature("mobile") else 4)
+	return _resource_runtime.get_threaded_preload_batch_size(request_count)
 
 
 func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2, generation: int = -1) -> void:
-	var request_generation := _runtime_generation if generation < 0 else generation
-	if not is_runtime_generation_current(request_generation):
-		return
-	var warmed_this_frame := 0
-	for path in paths:
-		if not is_runtime_generation_current(request_generation):
-			return
-		var scene_path := str(path)
-		if not _is_scene_resource_path(scene_path):
-			continue
-		var scene = preload_scene_path(scene_path)
-		if scene != null:
-			_warm_scene_instance(scene)
-			warmed_this_frame += 1
-			if warmed_this_frame >= per_frame:
-				warmed_this_frame = 0
-				var tree := get_tree()
-				if tree == null:
-					return
-				await tree.process_frame
-				if not is_runtime_generation_current(request_generation):
-					return
-
-
-func _release_warm_audio_players(players: Array[AudioStreamPlayer]) -> void:
-	for player in players:
-		if player == null or not is_instance_valid(player):
-			continue
-		player.stop()
-		player.stream = null
-		player.free()
-	players.clear()
+	await _resource_runtime.warm_scene_paths_over_frames(paths, per_frame, generation)
 
 
 func _warm_audio_streams_over_frames(paths: Array, per_frame: int = 2, generation: int = -1) -> void:
-	var request_generation := _runtime_generation if generation < 0 else generation
-	if not is_runtime_generation_current(request_generation):
-		return
-	var players: Array[AudioStreamPlayer] = []
-	var batch_size := maxi(1, per_frame)
-	for path_value in paths:
-		if not is_runtime_generation_current(request_generation):
-			_release_warm_audio_players(players)
-			return
-		var stream := get_cached_audio(str(path_value))
-		if stream == null:
-			continue
-		var player := AudioStreamPlayer.new()
-		player.volume_db = -80.0
-		player.stream = stream
-		add_child(player)
-		player.play()
-		players.append(player)
-		if players.size() >= batch_size:
-			var tree := get_tree()
-			if tree == null:
-				_release_warm_audio_players(players)
-				return
-			await tree.process_frame
-			_release_warm_audio_players(players)
-			if not is_runtime_generation_current(request_generation):
-				return
-	if not players.is_empty():
-		var tree := get_tree()
-		if tree == null:
-			_release_warm_audio_players(players)
-			return
-		await tree.process_frame
-		_release_warm_audio_players(players)
+	await _resource_runtime.warm_audio_streams_over_frames(paths, per_frame, generation)
 
 
 func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6, generation: int = -1) -> void:
-	var request_generation := _runtime_generation if generation < 0 else generation
-	if not is_runtime_generation_current(request_generation):
-		return
-	var warmed_this_frame := 0
-	for path in paths:
-		if not is_runtime_generation_current(request_generation):
-			return
-		var texture := get_cached_texture(str(path))
-		if texture == null:
-			continue
-		texture.get_rid()
-		warmed_this_frame += 1
-		if warmed_this_frame >= per_frame:
-			warmed_this_frame = 0
-			if DisplayServer.get_name() == "headless":
-				var tree := get_tree()
-				if tree == null:
-					return
-				await tree.process_frame
-			else:
-				await RenderingServer.frame_post_draw
-			if not is_runtime_generation_current(request_generation):
-				return
+	await _resource_runtime.warm_texture_rids_over_frames(paths, per_frame, generation)
 
 
 func _get_damage_number_texture_paths() -> Array:
@@ -1470,11 +1214,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 
 
 func _warm_scene_instance(scene: PackedScene) -> void:
-	if scene == null:
-		return
-	var node := scene.instantiate()
-	if node != null:
-		node.free()
+	_resource_runtime.warm_scene_instance(scene)
 
 
 func clear_level_resource_cache() -> void:
@@ -1786,10 +1526,7 @@ func release_role_runtime_resources() -> void:
 	CANG_MU_LONG_YUN_EFFECT_SCRIPT.clear_cached_data()
 	ROLE4_POISON_ARRAY_AWAKEN_EFFECT_SCRIPT.clear_cached_data()
 	STREAMING_ROLE_BULLET_SCRIPT.clear_cached_frames()
-	_erase_cached_paths_by_prefix(_resource_cache, ["res://Art/hero_picture/", "res://Scene/hero/"])
-	_erase_cached_paths_by_prefix(_sprite_frames_cache, ["res://Art/hero_picture/"])
-	_erase_cached_paths_by_prefix(_texture_cache, ["res://Art/hero_picture/"])
-	_erase_cached_paths_by_prefix(_audio_cache, ["res://Music/hero/"])
+	_resource_runtime.release_role_cached_resources()
 	special_effect_bullet = null
 	role_bullet = null
 	fly_bullet = null
@@ -1803,131 +1540,38 @@ func release_role_runtime_resources() -> void:
 	new_bullet = null
 
 
-func _erase_cached_paths_by_prefix(cache: Dictionary, prefixes: Array) -> void:
-	for path_value in cache.keys():
-		var path := str(path_value)
-		for prefix in prefixes:
-			if path.begins_with(str(prefix)):
-				cache.erase(path)
-				break
-
-
 # 为下一次关卡加载建立租约；目标场景只记录，不作为租约拥有的资源释放。
 func begin_level_resource_lease(target_scene: String) -> int:
-	release_level_resource_lease()
-	_level_resource_lease_id += 1
-	_level_resource_lease = {
-		"id": _level_resource_lease_id,
-		"target_scene": target_scene,
-		"paths": {},
-		"scene_paths": {},
-		"monster_scene_paths": {},
-		"bullet_scene_paths": {},
-		"texture_paths": {},
-		"audio_paths": {},
-		"warmed_scene_paths": {},
-		"prewarmed_monster_ids": {},
-	}
-	return _level_resource_lease_id
+	return _resource_runtime.begin_level_resource_lease(target_scene)
 
 
 # 只释放本租约登记的路径；永久 UI 和未登记路径保持原缓存。
 func release_level_resource_lease(lease_id: int = -1) -> int:
-	if _level_resource_lease.is_empty():
-		return 0
-	if lease_id >= 0 and int(_level_resource_lease.get("id", 0)) != lease_id:
-		return 0
-	var target_scene := str(_level_resource_lease.get("target_scene", ""))
-	var paths: Dictionary = _level_resource_lease.get("paths", {})
-	var released := 0
-	for path_value in paths.keys():
-		var path := str(path_value)
-		if path.is_empty() or path == target_scene:
-			continue
-		if path in PERMANENT_SMALL_UI_SCENE_PATHS or _permanent_small_ui_scene_cache.has(path):
-			continue
-		_resource_cache.erase(path)
-		_sprite_frames_cache.erase(path)
-		_texture_cache.erase(path)
-		_audio_cache.erase(path)
-		_monster_scene_cache.erase(path)
-		released += 1
-	_level_resource_lease = {}
-	return released
+	return _resource_runtime.release_level_resource_lease(lease_id)
 
 
 func _is_level_scene_warmed(path: String) -> bool:
-	if _level_resource_lease.is_empty():
-		return false
-	var warmed: Dictionary = _level_resource_lease.get("warmed_scene_paths", {})
-	return warmed.has(path)
+	return _resource_runtime.is_level_scene_warmed(path)
 
 
 func _mark_level_scene_warmed(path: String) -> void:
-	if _level_resource_lease.is_empty():
-		return
-	var warmed: Dictionary = _level_resource_lease.get("warmed_scene_paths", {})
-	warmed[path] = true
+	_resource_runtime.mark_level_scene_warmed(path)
 
 
 func _is_level_monster_prewarmed(monster_id: int) -> bool:
-	if _level_resource_lease.is_empty():
-		return false
-	var prewarmed: Dictionary = _level_resource_lease.get("prewarmed_monster_ids", {})
-	return prewarmed.has(monster_id)
+	return _resource_runtime.is_level_monster_prewarmed(monster_id)
 
 
 func _mark_level_monster_prewarmed(monster_id: int) -> void:
-	if _level_resource_lease.is_empty():
-		return
-	var prewarmed: Dictionary = _level_resource_lease.get("prewarmed_monster_ids", {})
-	prewarmed[monster_id] = true
+	_resource_runtime.mark_level_monster_prewarmed(monster_id)
 
 
 func _track_level_resource(path: String) -> void:
-	if path.is_empty() or _level_resource_lease.is_empty():
-		return
-	var target_scene := str(_level_resource_lease.get("target_scene", ""))
-	if path == target_scene:
-		return
-	var paths: Dictionary = _level_resource_lease.get("paths", {})
-	paths[path] = true
-	var extension := path.get_extension().to_lower()
-	if extension in ["tscn", "scn"]:
-		var scene_paths: Dictionary = _level_resource_lease.get("scene_paths", {})
-		scene_paths[path] = true
-		if path.begins_with("res://Scene/monster/") or path.begins_with("res://Scene/bullet/"):
-			var monster_scene_paths: Dictionary = _level_resource_lease.get("monster_scene_paths", {})
-			monster_scene_paths[path] = true
-			if (
-				path.begins_with("res://Scene/bullet/")
-				or path.contains("/monster_bullet")
-				or path.get_file().to_lower().contains("bullet")
-			):
-				var bullet_scene_paths: Dictionary = _level_resource_lease.get("bullet_scene_paths", {})
-				bullet_scene_paths[path] = true
-	elif extension in ["png", "jpg", "jpeg", "webp", "svg"]:
-		var texture_paths: Dictionary = _level_resource_lease.get("texture_paths", {})
-		texture_paths[path] = true
-	elif extension in ["mp3", "ogg", "wav"]:
-		var audio_paths: Dictionary = _level_resource_lease.get("audio_paths", {})
-		audio_paths[path] = true
-
-
-func _dependency_resource_path(dependency: String) -> String:
-	var resource_path_start := dependency.find("res://")
-	if resource_path_start >= 0:
-		return dependency.substr(resource_path_start)
-	return dependency
+	_resource_runtime.track_level_resource(path)
 
 
 func _track_level_scene_dependencies(scene_paths: Array) -> void:
-	for scene_path_value in scene_paths:
-		var scene_path := str(scene_path_value)
-		_track_level_resource(scene_path)
-		for dependency in ResourceLoader.get_dependencies(scene_path):
-			var dependency_path := _dependency_resource_path(str(dependency))
-			_track_level_resource(dependency_path)
+	_resource_runtime.track_level_scene_dependencies(scene_paths)
 
 
 func _append_png_files_recursive(paths: Array, root_path: String) -> void:
@@ -1971,6 +1615,10 @@ func _collect_scene_texture_dependencies(scene_paths: Array) -> Array:
 	for scene_path_value in scene_paths:
 		_collect_texture_dependencies_recursive(str(scene_path_value), texture_paths, visited)
 	return texture_paths
+
+
+func _dependency_resource_path(dependency: String) -> String:
+	return _resource_runtime.get_dependency_resource_path(dependency)
 
 
 func _collect_texture_dependencies_recursive(resource_path: String, texture_paths: Array, visited: Dictionary) -> void:
@@ -2031,7 +1679,7 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array, generation: int = -1
 	if not is_runtime_generation_current(request_generation):
 		return
 	for path in pending_paths:
-		var scene = _resource_cache.get(path)
+		var scene := _resource_runtime.get_cached_packed_scene(path)
 		if scene is PackedScene:
 			_mark_level_scene_warmed(path)
 
@@ -2400,71 +2048,29 @@ var set_menu = null
 
 var mycamera = null
 var music_set = null
-var target_scene: String = ""
-var _scene_request_generation: int = 0
+var target_scene: String:
+	get:
+		return _scene_flow.target_scene if _scene_flow != null else ""
+	set(value):
+		if _scene_flow != null:
+			_scene_flow.target_scene = value
+
 var four_swords_endless_mode: bool = false
 var sss_lendless_mode: bool = false
 var constellation_endless_mode: bool = false
 var three_prince_endless_mode: bool = false
 
-var _preloaded_scene: PackedScene = null
-var _preloaded_scene_path: String = ""
-var _preloading_path: String = ""
 
-
-func preload_next(path: String):
-	"Start preloading a scene for instant transition later."
-	if path == "" or (_preloaded_scene != null and _preloaded_scene_path == path):
-		return
-	if _preloading_path == path:
-		var existing_status := ResourceLoader.load_threaded_get_status(path)
-		if (
-			existing_status == ResourceLoader.THREAD_LOAD_FAILED
-			or existing_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-		):
-			clear_preloaded_scene_slot()
-		else:
-			return
-	clear_preloaded_scene_slot()
-	if not ResourceLoader.exists(path):
-		return
-	if _resource_cache.has(path):
-		var cached: Variant = _resource_cache[path]
-		if cached is PackedScene:
-			_preloaded_scene = cached as PackedScene
-			_preloaded_scene_path = path
-			return
-	_preloading_path = path
-	var err := ResourceLoader.load_threaded_request(path)
-	if err != OK and err != ERR_BUSY:
-		# 请求未启动时不能留下永久占用单槽的路径。
-		clear_preloaded_scene_slot()
+func preload_next(path: String) -> void:
+	_resource_runtime.preload_next(path)
 
 
 func clear_preloaded_scene_slot() -> void:
-	_preloaded_scene = null
-	_preloaded_scene_path = ""
-	_preloading_path = ""
+	_resource_runtime.clear_preloaded_scene_slot()
 
 
 func _get_preloaded(path: String) -> PackedScene:
-	"Check if a preloaded scene is ready, return it or null."
-	if _preloaded_scene != null:
-		if _preloaded_scene_path == path:
-			var ps = _preloaded_scene
-			clear_preloaded_scene_slot()
-			return ps
-		_preloaded_scene = null
-		_preloaded_scene_path = ""
-	if _preloading_path == path:
-		var status = ResourceLoader.load_threaded_get_status(path)
-		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var ps = ResourceLoader.load_threaded_get(path) as PackedScene
-			clear_preloaded_scene_slot()
-			return ps
-		if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			clear_preloaded_scene_slot()
-	return null
+	return _resource_runtime.take_preloaded_scene(path)
 
 
 var main_backpack = null
@@ -4050,11 +3656,11 @@ func get_active_pet_preload_paths() -> Array[String]:
 
 
 func _preload_sprite_frames_resource(path: String) -> void:
-	var frames := _resource_cache.get(path) as SpriteFrames
+	var frames := _resource_runtime.get_cached_sprite_frames(path)
 	if frames == null:
 		frames = ResourceLoader.load(path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE) as SpriteFrames
 		if frames != null:
-			_resource_cache[path] = frames
+			_resource_runtime.cache_threaded_resource(path, frames)
 
 
 func prewarm_active_pet_runtime_resources() -> void:
@@ -4159,9 +3765,9 @@ func prewarm_magic_weapon_runtime_resources(_name) -> void:
 
 func prepare_magic_weapon_resources(_name) -> void:
 	var scene_path := str(MAGIC_WEAPON_SCENE_PATHS.get(str(_name), ""))
-	if scene_path == "" or _resource_cache.has(scene_path):
+	if scene_path == "" or _resource_runtime.is_resource_cached(scene_path):
 		return
-	await _preload_paths_threaded([scene_path])
+	await _resource_runtime.preload_paths_threaded([scene_path])
 
 
 func add_magic_weapon(parent, _name, position, source_player: BaseHero = null):
@@ -4652,62 +4258,19 @@ func add_main_backpack(parent, position):
 
 
 func change_scene(target, force_loading_screen: bool = false, require_archive_session: bool = true) -> bool:
-	var target_path := str(target)
-	if not _is_valid_scene_change_target(target_path):
-		push_warning("change_scene rejected invalid target: %s" % target_path)
-		return false
-	if require_archive_session and target_path.begins_with("res://Scene/level/") and not is_archive_session_active():
-		push_warning("change_scene rejected level target without archive session: %s" % target_path)
-		return false
-
-	var tree := get_tree()
-	if tree == null:
-		return false
-
-	_scene_request_generation += 1
-	_advance_runtime_generation()
-	var exiting_archive := is_archive_exit_scene(target_path)
-	# 先让面板关闭保存走完，再撤销会话上下文；end 之后的保存请求一律拒绝。
-	_ui_runtime.cleanup_transient_ui()
-	if exiting_archive:
-		end_archive_session()
-	_ui_runtime.release_ui_runtime_cache(exiting_archive)
-
-	clear_level_resource_cache()
-	begin_level_resource_lease(target_path)
-
-	var cached = _get_preloaded(target_path)
-	if cached == null:
-		clear_preloaded_scene_slot()
-	target_scene = target_path
-
-	if (
-		not force_loading_screen
-		and cached != null
-		and target_path.begins_with("res://Scene/level/")
-		and target_path != "res://Scene/level/level_hdzm.tscn"
-	):
-		var fast_err := tree.change_scene_to_packed(cached)
-		return fast_err == OK
-
-	var load_err := tree.change_scene_to_file("res://Scene/other_scene/load_scene.tscn")
-	return load_err == OK
+	return _scene_flow.change_scene(target, force_loading_screen, require_archive_session)
 
 
 func _is_valid_scene_change_target(target_path: String) -> bool:
-	if target_path.is_empty():
-		return false
-	if not (target_path.ends_with(".tscn") or target_path.ends_with(".scn")):
-		return false
-	return ResourceLoader.exists(target_path)
+	return _scene_flow.is_valid_scene_change_target(target_path)
 
 
 func get_scene_request_generation() -> int:
-	return _scene_request_generation
+	return _scene_flow.get_scene_request_generation()
 
 
 func is_scene_request_current(generation: int) -> bool:
-	return generation == _scene_request_generation
+	return _scene_flow.is_scene_request_current(generation)
 
 
 func add_music_set(parent, position):
@@ -5157,7 +4720,7 @@ func _load_current_role_texture(path: String, is_body: bool) -> Texture2D:
 		return null
 	var previous_path := _current_role_body_texture_path if is_body else _current_role_equipment_texture_path
 	if previous_path != "" and previous_path != path:
-		_texture_cache.erase(previous_path)
+		_resource_runtime.release_cached_texture(previous_path)
 	if is_body:
 		_current_role_body_texture_path = path
 	else:

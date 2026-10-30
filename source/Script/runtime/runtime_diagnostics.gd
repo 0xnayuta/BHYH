@@ -57,8 +57,7 @@ func get_save_failure_status() -> Dictionary:
 
 ## 只读快照；数组为副本，调用方不能借此修改租约。
 func get_level_resource_lease_snapshot() -> Dictionary:
-	var lease: Dictionary = _host._level_resource_lease
-	if lease.is_empty():
+	if _host == null or _host.get_resource_runtime() == null:
 		return {
 			"active": false,
 			"id": 0,
@@ -73,20 +72,7 @@ func get_level_resource_lease_snapshot() -> Dictionary:
 			"warmed_scene_paths": [],
 			"prewarmed_monster_ids": [],
 		}
-	return {
-		"active": true,
-		"id": int(lease.get("id", 0)),
-		"target_scene": str(lease.get("target_scene", "")),
-		"owned_path_count": (lease.get("paths", {}) as Dictionary).size(),
-		"owned_paths": _lease_path_list(lease.get("paths", {})),
-		"scene_paths": _lease_path_list(lease.get("scene_paths", {})),
-		"monster_scene_paths": _lease_path_list(lease.get("monster_scene_paths", {})),
-		"bullet_scene_paths": _lease_path_list(lease.get("bullet_scene_paths", {})),
-		"texture_paths": _lease_path_list(lease.get("texture_paths", {})),
-		"audio_paths": _lease_path_list(lease.get("audio_paths", {})),
-		"warmed_scene_paths": _lease_path_list(lease.get("warmed_scene_paths", {})),
-		"prewarmed_monster_ids": _lease_int_list(lease.get("prewarmed_monster_ids", {})),
-	}
+	return _host.get_resource_runtime().get_lease_snapshot()
 
 
 func get_cache_scope_snapshot() -> Dictionary:
@@ -115,19 +101,19 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"capacity": "按租约/UI/永久所有权驻留；无固定上限",
 			"cleanup":
 			"release_level_resource_lease / UiRuntime.release_ui_runtime_cache / release_role_runtime_resources",
-			"resource_entries": _host._resource_cache.size(),
-			"sprite_frames_entries": _host._sprite_frames_cache.size(),
-			"audio_entries": _host._audio_cache.size(),
-			"texture_entries": _host._texture_cache.size(),
+			"resource_entries": _host.get_resource_runtime().get_resource_cache_size(),
+			"sprite_frames_entries": _host.get_resource_runtime().get_sprite_frames_cache_size(),
+			"audio_entries": _host.get_resource_runtime().get_audio_cache_size(),
+			"texture_entries": _host.get_resource_runtime().get_texture_cache_size(),
 		},
 		"permanent":
 		{
 			"owner": "Global",
 			"capacity": "永久小 UI 4 条；角色/宠物预热标记各 1",
 			"cleanup": "UiRuntime.release_ui_runtime_cache(release_permanent=true) / end_archive_session",
-			"small_ui_scene_count": _host._permanent_small_ui_scene_cache.size(),
-			"small_ui_prewarm_in_progress": _host._permanent_ui_prewarm_in_progress,
-			"small_ui_prewarmed": _host._permanent_ui_prewarmed,
+			"small_ui_scene_count": _host.get_resource_runtime().get_permanent_small_ui_scene_count(),
+			"small_ui_prewarm_in_progress": _host.get_resource_runtime().is_permanent_ui_prewarm_in_progress(),
+			"small_ui_prewarmed": _host.get_resource_runtime().is_permanent_ui_prewarmed(),
 			"role_prewarmed_id": _host._prewarmed_role_id,
 			"pet_signature": _host._prewarmed_pet_signature,
 		},
@@ -137,7 +123,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"capacity": "按当前关卡加载路径；无固定上限",
 			"cleanup": "change_scene / clear_level_resource_cache",
 			"lease": get_level_resource_lease_snapshot(),
-			"monster_scene_count": _host._monster_scene_cache.size(),
+			"monster_scene_count": _host.get_resource_runtime().get_monster_scene_cache_size(),
 			"preloaded_slot": get_preloaded_scene_slot_snapshot(),
 		},
 		"combat":
@@ -157,29 +143,13 @@ func get_cache_scope_snapshot() -> Dictionary:
 
 
 func get_preloaded_scene_slot_snapshot() -> Dictionary:
-	return {
-		"path": _host._preloading_path,
-		"ready_path": _host._preloaded_scene_path,
-		"ready": _host._preloaded_scene != null,
-	}
-
-
-func _lease_path_list(value: Variant) -> Array:
-	var result: Array = []
-	if value is Dictionary:
-		for path_value in (value as Dictionary).keys():
-			result.append(str(path_value))
-	result.sort()
-	return result
-
-
-func _lease_int_list(value: Variant) -> Array:
-	var result: Array = []
-	if value is Dictionary:
-		for int_value in (value as Dictionary).keys():
-			result.append(int(int_value))
-	result.sort()
-	return result
+	if _host == null or _host.get_resource_runtime() == null:
+		return {
+			"path": "",
+			"ready_path": "",
+			"ready": false,
+		}
+	return _host.get_resource_runtime().get_preloaded_slot_snapshot()
 
 
 func _create_debug_perf_overlay() -> void:
