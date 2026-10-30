@@ -162,7 +162,7 @@ func _ready():
 		MemoryClass.main_bc()
 
 	update_button_texture()
-	Global.llbt_level = 1
+	Global.set_tower_floor(1)
 	Global.llbtbossms = false
 	Global.llbtcgms = false
 	Global.llbtwxms = false
@@ -175,7 +175,7 @@ func _ready():
 	if MainSet.set_data["CurrentLevelPage"] <= max_page:
 		MainSet.set_data["CurrentLevelPage"] = max_page
 		MemoryClass.main_bc()
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	if not Global.is_frist:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
@@ -185,15 +185,6 @@ func _ready():
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = 1
 	MemoryClass.request_save("map_enter")
-	Global.is_mpo = false
-	Global.is_ice = false
-	Global.is_poision = false
-	Global.is_fire = false
-	Global.is_speed_down = false
-	Global.is_stun = false
-	Global.is_bleed = false
-	Global.is_eye_fix = false
-	Global.is_dead_link = false
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()
 	if not Global.get_audio_runtime().has_main_menu_music():

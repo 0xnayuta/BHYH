@@ -50,7 +50,7 @@ var _spawn_runtime_ready := false
 func _ready() -> void:
 	_play_level_bgm(_level_bgm_path())
 	_read_level_width_from_scene()
-	Global.current_level = display_name
+	Global.set_current_level_name(display_name)
 	level_stage = stage_number
 	Global.game_over = 1
 	if is_two_scene == null:

@@ -147,6 +147,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=600,
         timeout_seconds=180,
     ),
+    ProbeSpec(
+        key="run-context",
+        title="运行上下文与结算读取探针",
+        script_name="run_context_probe.gd",
+        scene_name="run_context_probe.tscn",
+        result_prefix="RUN_CONTEXT_PROBE_RESULT=",
+        report_stem="run_context_probe_report",
+        teardown_marker="RUN_CONTEXT_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+    ),
 )
 
 

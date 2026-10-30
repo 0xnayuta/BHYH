@@ -39,7 +39,7 @@ func _ready() -> void:
 	var last_num = (num_1 + num_2 + num_3) - (num_4 + num_5 + num_6)
 
 	last_time = get_lasttime(last_num)
-	if Global.current_level == "火焰山":
+	if Global.get_current_level_name() == "火焰山":
 		if not MainSet.set_data["LevelHYS"]:
 			MainSet.set_data["LevelHYS"] = true
 			MemoryClass.main_bc()
@@ -57,11 +57,11 @@ func _ready() -> void:
 				MainSet.set_data["Music4"] = true
 				MemoryClass.main_bc()
 				Global.add_message_show(Global.get_ui_runtime().windows, "触发彩蛋，恭喜开启图四音乐！！！", 1.5, Vector2(470, 300))
-	if Global.current_level != "":
+	if Global.get_current_level_name() != "":
 		var pj = p_dpj()
-		if PlayerData.player_data["关卡评价"].has(Global.current_level):
-			if pj >= PlayerData.player_data["关卡评价"][Global.current_level]:
-				PlayerData.player_data["关卡评价"][Global.current_level] = pj
+		if PlayerData.player_data["关卡评价"].has(Global.get_current_level_name()):
+			if pj >= PlayerData.player_data["关卡评价"][Global.get_current_level_name()]:
+				PlayerData.player_data["关卡评价"][Global.get_current_level_name()] = pj
 	_commit_settlement("level_victory")
 	grades_s_how.play("Show")
 	if MainSet.is_auto_battle_enabled() and bool(MainSet.set_data.get("AutoBattleRetry", false)):
@@ -69,7 +69,7 @@ func _ready() -> void:
 
 
 func _return_map_path() -> String:
-	if Global.current_level == "镇妖塔":
+	if Global.get_current_level_name() == "镇妖塔":
 		return "res://Scene/main_menu/map_0.tscn"
 	match int(PlayerData.player_data["Map_num"]):
 		1:
@@ -156,7 +156,7 @@ func _auto_rechallenge() -> void:
 
 func p_dpj():
 	var current_zt = int(snapped(float(RoleProp.roleprop.Hp) / float(RoleProp.roleprop.SHp) * 100, 0.01))
-	if last_time["分钟"] <= 2 and Global.total_hurt_count == 0 and current_zt >= 95:
+	if last_time["分钟"] <= 2 and Global.get_run_context().hurt_count == 0 and current_zt >= 95:
 		return 5
 	else:
 		match int(last_time["分钟"]):

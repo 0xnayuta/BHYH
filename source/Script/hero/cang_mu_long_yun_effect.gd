@@ -595,9 +595,9 @@ func _apply_hit(target: BaseMonster) -> void:
 		if target is Monster138:
 			target.transfer_linked_damage(damage)
 		target.add_lj(damage)
-		Global.total_role_hit += damage
+		Global.get_run_context().add_damage_dealt(damage)
 		if str(hit_data.get("attackKind", "")) == "magic":
-			Global.total_mag_hit += damage
+			Global.get_run_context().add_damage_dealt_by_type("magic", damage)
 		Global.get_audio_runtime().add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		if not target.is_miss and not target.is_boss_protecting():
 			target.hurt_special_effect = Global.add_mr_hurt(target.pz, Vector2(0, 0))

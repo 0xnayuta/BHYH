@@ -70,14 +70,12 @@ func _ready() -> void:
 			MainSet.set_data["FileValue"] = Global.file_num
 	Global.set_cd_path("")
 	Global.collect_num = 0
-	Global.llbt_level = 1
+	Global.set_tower_floor(1)
 	Global.llbtbossms = false
 	Global.llbtcgms = false
 	Global.llbtwxms = false
 	Global.get_ui_runtime().windows = get_parent()
 	Global.fb_cd = 0
-	Global.is_eye_fix = false
-	Global.is_dead_link = false
 	MemoryClass.remove_play_data()
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()

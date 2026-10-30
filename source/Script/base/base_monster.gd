@@ -1686,7 +1686,7 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 	get_player = source_player
 	source_props.source_player = source_player
 	has_target = true
-	Global.total_hit_count += 1
+	Global.get_run_context().count_hit()
 	if source_player.istsz:
 		source_player.tszzs = _get_tszz_level(source_player) * 0.015
 	else:
@@ -1710,17 +1710,17 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 		source_player.effect_reducehp(last_hurt, "real")
 	cure_ws_value(source_player)
 	add_lj(last_hurt)
-	Global.total_role_hit += last_hurt
+	Global.get_run_context().add_damage_dealt(last_hurt)
 	role5_bullet(last_hurt, source_target)
 	var attack_data: Variant = source_target.get("hit_dic")
 	if attack_data is Dictionary:
 		match str(attack_data.get("attackKind", "")):
 			"physics":
-				Global.total_phy_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("physics", last_hurt)
 			"magic":
-				Global.total_mag_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("magic", last_hurt)
 			"real":
-				Global.total_real_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("real", last_hurt)
 	if last_hurt > 0 and not death() and not is_death:
 		if MainSet.set_data["MonsterLittleBlood"]:
 			if monster_blood_bar == null:
@@ -2035,7 +2035,7 @@ func get_role_last_hurt(target, source_player: BaseHero = null):
 	if randf_range(0, 1) <= crit:
 		bl = 2 + snapped(lucky / float(lucky + 100), 0.001) + tqzbs
 		hurt = hurt * bl
-		Global.total_crit_count += 1
+		Global.get_run_context().count_crit()
 		is_crit = true
 
 	match hurt_lx:
@@ -2081,8 +2081,8 @@ func reduce_hp(value: int):
 	hp -= last_value
 	if not bool(get_meta("mds_awaken_skip_combo", false)):
 		total_hurt += last_value
-	Global.total_role_hit += last_value
-	Global.total_real_hit += last_value
+	Global.get_run_context().add_damage_dealt(last_value)
+	Global.get_run_context().add_damage_dealt_by_type("real", last_value)
 	var level_node = get_level_node()
 	var po = Vector2(self.position.x - 20, self.position.y - 240)
 	if last_value > 0:
@@ -2108,14 +2108,14 @@ func reduce_pet_hp(value: int, attack_kind: String) -> int:
 	var last_value := int(hd_reduce(value))
 	hp -= last_value
 	total_hurt += last_value
-	Global.total_role_hit += last_value
+	Global.get_run_context().add_damage_dealt(last_value)
 	match damage_kind:
 		"physics":
-			Global.total_phy_hit += last_value
+			Global.get_run_context().add_damage_dealt_by_type("physics", last_value)
 		"magic":
-			Global.total_mag_hit += last_value
+			Global.get_run_context().add_damage_dealt_by_type("magic", last_value)
 		_:
-			Global.total_real_hit += last_value
+			Global.get_run_context().add_damage_dealt_by_type("real", last_value)
 	if last_value > 0:
 		var level_node := get_level_node()
 		if level_node != null:
@@ -2181,7 +2181,7 @@ func resolve_friendly_damage(base_damage: int, attack_kind: String, attacker: No
 		)
 		resolved_damage = int(float(base_damage) * crit_multiplier)
 		is_crit = true
-		Global.total_crit_count += 1
+		Global.get_run_context().count_crit()
 	if attack_kind in ["physics", "magic"]:
 		var penetration_name := "ar" if attack_kind == "physics" else "sp"
 		var penetration := (

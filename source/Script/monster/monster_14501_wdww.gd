@@ -36,7 +36,7 @@ func ai_think():
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
-	Global.total_hurt_count += 1
+	Global.get_run_context().count_hurt()
 	var target = area.get_parent().get_parent()
 	var monster_target: BaseMonster
 	monster_target = entity
@@ -55,7 +55,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 		last_hit = int(last_hit * 0.7)
 	if monster_target != null:
 		monster_target.total_hit += last_hit
-	Global.total_role_hurt += int(last_hit)
+	Global.get_run_context().add_damage_taken(int(last_hit))
 
 	if source_player is Role1Hero:
 		Global.get_audio_runtime().add_sound(self, "res://Music/hero/49_role1_be_attack.mp3")

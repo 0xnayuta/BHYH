@@ -46,7 +46,7 @@ func _ready() -> void:
 			"stage_3": [340],
 			"stage_4": [340],
 		}
-	Global.current_level = "神兽森林"
+	Global.set_current_level_name("神兽森林")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/music_emsd.mp3")
 	self.level_stage = 45
 	super._ready()

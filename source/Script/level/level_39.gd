@@ -25,7 +25,7 @@ func _ready() -> void:
 	load("res://Scene/monster/monster_118.tscn")
 	load("res://Scene/monster/monster_120.tscn")
 	load("res://Scene/monster/monster_122.tscn")
-	Global.current_level = "蓬莱仙境"
+	Global.set_current_level_name("蓬莱仙境")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/34_bg5.mp3")
 	self.level_stage = 44
 	super._ready()

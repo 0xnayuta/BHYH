@@ -23,7 +23,7 @@ var has_shown_start_hint: bool = false
 func _ready() -> void:
 	load("res://Scene/monster/monster_123.tscn")
 	load("res://Scene/monster/monster_1404.tscn")
-	Global.current_level = "仙音岛"
+	Global.set_current_level_name("仙音岛")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/floor1_3.mp3")
 	self.level_stage = 40
 	self.is_two_scene = true

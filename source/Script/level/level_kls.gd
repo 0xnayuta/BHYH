@@ -5,7 +5,7 @@ var wang_wang: Monster144
 
 func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_normal.mp3")
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	self.level_stage = 0
 	super._ready()
 	monster_group = {

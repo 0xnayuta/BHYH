@@ -91,7 +91,7 @@ func _physics_process(delta: float) -> void:
 			and PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() == 0
 		):
 			if PlayerData.get_dj_page("ttlp1") != 0 and PlayerData.get_dj_page("ttlp2") != 0:
-				if Global.total_hurt_count == 0 and PlayerData.player_data["天庭"]:
+				if Global.get_run_context().hurt_count == 0 and PlayerData.player_data["天庭"]:
 					self.fall_list = [
 						{"name": "ttlp3", "value": 1},
 					]

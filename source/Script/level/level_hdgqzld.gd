@@ -10,7 +10,7 @@ func _ready() -> void:
 	load("res://Scene/monster/monster_55.tscn")
 	load("res://Scene/monster/monster_36.tscn")
 	load("res://Scene/monster/monster_57.tscn")
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	self.level_stage = 1
 	super._ready()
 	monster_group = {

@@ -1040,7 +1040,7 @@ func _test_pet_interface_paths() -> void:
 func _test_settlement_ownership() -> void:
 	_reset_profile(1, 1)
 	_open_session(TEST_ARCHIVE_PREFIX + "041.json")
-	Global.current_level = "花果山"
+	Global.set_current_level_name("花果山")
 	Global.level_begin_time = "2026-10-29 00:00:00"
 	Global.last_level_path = "res://Scene/level/level_1.tscn"
 	RoleProp.roleprop.Hp = 100

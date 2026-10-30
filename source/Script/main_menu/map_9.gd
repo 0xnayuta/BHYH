@@ -102,7 +102,7 @@ func _ready() -> void:
 		get_viewport().size_changed.connect(_fit_to_fullscreen)
 
 	Global.get_ui_runtime().windows = _ui_parent()
-	Global.llbt_level = 1
+	Global.set_tower_floor(1)
 	Global.llbtbossms = false
 	Global.llbtcgms = false
 	Global.llbtwxms = false
@@ -117,7 +117,7 @@ func _ready() -> void:
 
 	if not Global.get_audio_runtime().has_main_menu_music():
 		Global.get_audio_runtime().add_main_menu_music()
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	if not Global.is_frist:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
@@ -128,15 +128,6 @@ func _ready() -> void:
 	PlayerData.player_data["Map_num"] = max_page
 	PlayerData.player_data["Map_variant"] = ""
 
-	Global.is_mpo = false
-	Global.is_ice = false
-	Global.is_poision = false
-	Global.is_fire = false
-	Global.is_speed_down = false
-	Global.is_stun = false
-	Global.is_bleed = false
-	Global.is_eye_fix = false
-	Global.is_dead_link = false
 	RoleProp.ws_value = 0
 
 	if Global.is_archive_session_active():

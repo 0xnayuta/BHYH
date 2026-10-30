@@ -426,10 +426,8 @@ var llbtwxms: bool = false
 var llbtcgms: bool = true
 var llbtbossms: bool
 var box_count: int = 0
-var llbt_level: int = 1
 
 var infinite_level_multiplier: float = 0.0
-var current_level: String
 var selected_three_prince_id: int = 0
 var selected_eight_immortal_id: int = 0
 var selected_constellation_level: int = 1
@@ -497,6 +495,34 @@ func get_archive_identity_epoch() -> int:
 	return _archive_identity_epoch
 
 
+## ---------------------------------------------------------------------------
+## 运行上下文：关卡显示名、玲珑宝塔层数与战斗统计的唯一读写入口。
+## 写入必须经 set_*/advance_* 或 RunContext 的统计方法；读取固定走 accessor。
+## ---------------------------------------------------------------------------
+func get_run_context() -> RunContext:
+	return _run_context
+
+
+func get_current_level_name() -> String:
+	return _run_context.get_level_display_name()
+
+
+func set_current_level_name(value: String) -> void:
+	_run_context.set_level_display_name(value)
+
+
+func get_tower_floor() -> int:
+	return _run_context.get_tower_floor()
+
+
+func set_tower_floor(value: int) -> void:
+	_run_context.set_tower_floor(value)
+
+
+func advance_tower_floor() -> void:
+	_run_context.advance_tower_floor()
+
+
 ## 后台保存唯一消费者：记录最后完成序号与失败次数。
 ## 后台写入由 MemoryClass 自动重试，战斗内不弹 UI，避免瞬时失败误报；
 ## 失败仍通过 last_save_error、push_error 与本状态快照可观察。
@@ -532,18 +558,6 @@ func set_save_failure_feedback_enabled(enabled: bool) -> void:
 	_save_failure_feedback_enabled = enabled
 
 
-var total_role_hit: int
-var total_cure_hp: int
-var total_phy_hit: int
-var total_mag_hit: int
-var total_real_hit: int
-var total_phy_hurt: int
-var total_mag_hurt: int
-var total_real_hurt: int
-var total_hurt_count: int
-var total_hit_count: int
-var total_crit_count: int
-var total_miss_count: int
 var file_num = 1.201
 var mytime
 var player_pos_x
@@ -554,15 +568,6 @@ var forge
 var fb_cd: int
 var is_in_ldl
 var get_target
-var is_mpo
-var is_ice
-var is_poision
-var is_fire
-var is_speed_down
-var is_stun
-var is_bleed
-var is_eye_fix
-var is_dead_link
 var lj_times: int
 var lj_count: int
 
@@ -576,6 +581,7 @@ var _current_role_equipment_texture_path: String = ""
 var _all_hero_skill_resources_preloaded: bool = false
 var _prewarmed_role_id: int = 0
 var _archive_session: ArchiveSession = ArchiveSession.new()
+var _run_context: RunContext = RunContext.new()
 var _archive_session_prewarm_in_progress: bool = false
 var _archive_session_prewarm_role_id: int = 0
 var _archive_session_prewarm_token: int = 0
@@ -2619,7 +2625,7 @@ func get_current_level_fall_pro(default_pro: float) -> float:
 			if probe != null:
 				sync_level_drop_pro_data(probe.level_info)
 				probe.queue_free()
-	var level_name = str(current_level)
+	var level_name := _run_context.get_level_display_name()
 	var base_pro = -1.0
 	if level_name != "" and level_drop_pro_data.has(level_name):
 		base_pro = float(level_drop_pro_data[level_name])
@@ -2656,7 +2662,7 @@ func add_level_info(parent, Name, position, path):
 	if not is_archive_session_active():
 		add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
 		return null
-	current_level = Name
+	_run_context.set_level_display_name(str(Name))
 	var show_level_info := bool(MainSet.set_data.get("LevelInfo", true))
 	if (
 		str(path)
@@ -4167,15 +4173,6 @@ func check_dir_between_two_obj(Player, Monster):
 
 
 func remove_all_buff():
-	Global.is_mpo = false
-	Global.is_ice = false
-	Global.is_poision = false
-	Global.is_fire = false
-	Global.is_speed_down = false
-	Global.is_stun = false
-	Global.is_bleed = false
-	Global.is_eye_fix = false
-	Global.is_dead_link = false
 	RoleProp.ws_value = 0
 
 

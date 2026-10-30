@@ -32,7 +32,7 @@ var _boss_background: AnimatedSprite2D = null
 
 
 func _ready() -> void:
-	Global.current_level = "通天教主"
+	Global.set_current_level_name("通天教主")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 	level_stage = 48
 	is_two_scene = false

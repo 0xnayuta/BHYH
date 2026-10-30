@@ -1127,6 +1127,7 @@ func _resolve_attr_value(value):
 		return "随受击次数变化"
 	if expr in ["128 + BeHitCount * 25", "333 + BeHitCount * 20"]:
 		return "随受击次数变化"
+	# 下列字符串是属性表公式数据（见 monster_attr_data.gd）中的历史文本令牌，不是可执行属性引用。
 	if expr.find("Global.llbt_level") >= 0:
 		return _resolve_llbt_value(expr)
 	if expr.find("RoleProp.roleprop.SHp") >= 0:
@@ -1139,7 +1140,7 @@ func _resolve_attr_value(value):
 
 
 func _resolve_llbt_value(expr: String):
-	var level = float(Global.llbt_level)
+	var level = float(Global.get_tower_floor())
 	if expr == "8000 + Global.llbt_level * 350":
 		return int(8000 + level * 350)
 	if expr == "7000 + Global.llbt_level * 400":

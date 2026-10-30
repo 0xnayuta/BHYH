@@ -4,7 +4,7 @@ class_name Level17
 
 
 func _ready() -> void:
-	Global.current_level = "忘川河"
+	Global.set_current_level_name("忘川河")
 	Global.player_be_hit_count = 0
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/9_bg3.mp3")
 	self.level_stage = 1

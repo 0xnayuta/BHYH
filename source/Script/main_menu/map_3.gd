@@ -195,7 +195,7 @@ func _ready():
 	MemoryClass.main_bc()
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()
-	Global.llbt_level = 1
+	Global.set_tower_floor(1)
 	Global.llbtbossms = false
 	Global.llbtcgms = false
 	Global.llbtwxms = false
@@ -210,7 +210,7 @@ func _ready():
 		MemoryClass.main_bc()
 	if not Global.get_audio_runtime().has_main_menu_music():
 		Global.get_audio_runtime().add_main_menu_music()
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	if Global.get_ui_runtime().windows == null:
 		Global.get_ui_runtime().windows = _ui_parent()
 	if not Global.is_frist:
@@ -232,15 +232,6 @@ func _sync_special_button_layer() -> void:
 		var node := get_node_or_null(node_path) as CanvasItem
 		if node != null:
 			node.z_index = 0
-	Global.is_mpo = false
-	Global.is_ice = false
-	Global.is_poision = false
-	Global.is_fire = false
-	Global.is_speed_down = false
-	Global.is_stun = false
-	Global.is_bleed = false
-	Global.is_eye_fix = false
-	Global.is_dead_link = false
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()
 

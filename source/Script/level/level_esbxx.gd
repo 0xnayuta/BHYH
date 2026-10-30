@@ -187,7 +187,7 @@ func _ready() -> void:
 	monster_group = {"stage_1": [], "stage_2": [], "stage_3": [], "stage_4": []}
 	monster_position_x = {"stage_1": [], "stage_2": [], "stage_3": [], "stage_4": []}
 	monster_position_y = {"stage_1": [], "stage_2": [], "stage_3": [], "stage_4": []}
-	Global.current_level = "挑战28星宿阵"
+	Global.set_current_level_name("挑战28星宿阵")
 	Global.game_over = 1
 	level_stage = 47
 	is_two_scene = false

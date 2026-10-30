@@ -7,7 +7,7 @@ class_name Level1
 
 
 func _ready() -> void:
-	Global.current_level = "花果山"
+	Global.set_current_level_name("花果山")
 	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/1_music.mp3")
 	self.level_stage = 1
 	super._ready()

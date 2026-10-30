@@ -231,9 +231,9 @@ func _apply_hit(target: BaseMonster) -> void:
 		if target is Monster138:
 			target.transfer_linked_damage(damage)
 		target.add_lj(damage)
-		Global.total_role_hit += damage
+		Global.get_run_context().add_damage_dealt(damage)
 		if str(hit_data.get("attackKind", "")) == "magic":
-			Global.total_mag_hit += damage
+			Global.get_run_context().add_damage_dealt_by_type("magic", damage)
 		_apply_voodoo_if_learned(target)
 		target.role5_bullet(damage, owner_player)
 	target.get_target = old_target

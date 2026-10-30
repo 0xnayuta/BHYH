@@ -56,7 +56,7 @@ var _game4_level_config_providers: Dictionary = {}
 
 
 func _ready() -> void:
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/szzw.mp3")
 
 	self.level_stage = 1

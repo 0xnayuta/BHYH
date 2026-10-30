@@ -21,7 +21,7 @@ var can_notpass = false
 
 
 func _ready() -> void:
-	Global.current_level = "望乡台"
+	Global.set_current_level_name("望乡台")
 	var ppx = [1685, 2160, 2640]
 	check_hero.position = Vector2(ppx[randi_num], 35)
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/9_bg3.mp3")

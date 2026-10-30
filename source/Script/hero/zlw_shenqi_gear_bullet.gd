@@ -137,7 +137,7 @@ func _hurt_monster(monster: BaseMonster) -> void:
 		var crit_power = 2 + snapped(lucky_value / float(lucky_value + 100), 0.001)
 		hurt = int(hurt * crit_power)
 		is_crit = true
-		Global.total_crit_count += 1
+		Global.get_run_context().count_crit()
 	if attack_kind == "physics":
 		var reduce = snapped(monster.def / float(monster.def + 100), 0.001)
 		hurt = int(hurt * (1 - reduce))
@@ -152,13 +152,13 @@ func _hurt_monster(monster: BaseMonster) -> void:
 	monster.hp -= hurt
 	monster.total_hurt += hurt
 	Global.get_audio_runtime().add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
-	Global.total_role_hit += hurt
+	Global.get_run_context().add_damage_dealt(hurt)
 	if attack_kind == "physics":
-		Global.total_phy_hit += hurt
+		Global.get_run_context().add_damage_dealt_by_type("physics", hurt)
 	elif attack_kind == "magic":
-		Global.total_mag_hit += hurt
+		Global.get_run_context().add_damage_dealt_by_type("magic", hurt)
 	else:
-		Global.total_real_hit += hurt
+		Global.get_run_context().add_damage_dealt_by_type("real", hurt)
 	var level_node = monster.get_level_node()
 	if level_node != null:
 		Global.add_damage_text(

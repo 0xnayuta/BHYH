@@ -25,7 +25,7 @@ func _ready() -> void:
 		"stage_3": [],
 		"stage_4": [],
 	}
-	Global.current_level = "广寒宫"
+	Global.set_current_level_name("广寒宫")
 	Global.game_over = 1
 	level_stage = 0
 	is_two_scene = false

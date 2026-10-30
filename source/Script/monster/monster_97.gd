@@ -6,17 +6,17 @@ func monster_97():
 	self.my_mr_name = "巨盾护卫"
 	self.attack_in = 60
 	self.level = 40
-	self.max_hp = 9000 + Global.llbt_level * 500
+	self.max_hp = 9000 + Global.get_tower_floor() * 500
 	self.hp = self.max_hp
-	self.def = 140 + Global.llbt_level * 2
-	self.mdef = 140 + Global.llbt_level * 2
-	self.crit = 0 + Global.llbt_level * 1.5
-	self.miss = 0 + Global.llbt_level * 1
-	self.lucky = 0 + Global.llbt_level * 3
-	self.htarget = 0 + Global.llbt_level * 1.5
+	self.def = 140 + Global.get_tower_floor() * 2
+	self.mdef = 140 + Global.get_tower_floor() * 2
+	self.crit = 0 + Global.get_tower_floor() * 1.5
+	self.miss = 0 + Global.get_tower_floor() * 1
+	self.lucky = 0 + Global.get_tower_floor() * 3
+	self.htarget = 0 + Global.get_tower_floor() * 1.5
 	self.toughness = 0
-	self.ar = 6 + Global.llbt_level * 1
-	self.sp = 6 + Global.llbt_level * 1
+	self.ar = 6 + Global.get_tower_floor() * 1
+	self.sp = 6 + Global.get_tower_floor() * 1
 	self.crit_reduce = 0
 	self.speed = 8
 	self.mysee = 500
@@ -24,10 +24,10 @@ func monster_97():
 	self.attack_desire = 100
 	self.behit_calmtime = 0
 	self.self_rhp = 0
-	self.add_exp = 60 + Global.llbt_level * 5
-	self.fall_coin = 70 + Global.llbt_level * 6
+	self.add_exp = 60 + Global.get_tower_floor() * 5
+	self.fall_coin = 70 + Global.get_tower_floor() * 6
 	self.obj_attack_dict["hit1"] = {
-		"power": 330 + Global.llbt_level * 6,
+		"power": 330 + Global.get_tower_floor() * 6,
 		"hurtBack": [-8, -12],
 		"attackKind": "magic",
 		"HitProtect": 10,

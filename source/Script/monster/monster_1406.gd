@@ -97,7 +97,7 @@ func monster_1406():
 		{"name": "tanmu", "value": randi_range(1, 2)},
 	]
 
-	if Global.current_level == "仙幻岛":
+	if Global.get_current_level_name() == "仙幻岛":
 		independent_fall_list = YutuEquipmentData.stage_book_drops("仙幻岛")
 
 

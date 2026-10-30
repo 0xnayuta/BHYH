@@ -36,7 +36,7 @@ func _ready() -> void:
 		"stage_3": [],
 		"stage_4": [],
 	}
-	Global.current_level = "挑战三太子"
+	Global.set_current_level_name("挑战三太子")
 	Global.game_over = 1
 	level_stage = 44
 	_set_selected_background()

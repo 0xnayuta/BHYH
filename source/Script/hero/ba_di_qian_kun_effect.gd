@@ -306,8 +306,8 @@ func _apply_hit(target: BaseMonster, damage_multiplier: float = 1.0) -> void:
 		target.add_lj(damage)
 		if not target.is_control_immune():
 			_apply_hit_stun(target)
-		Global.total_role_hit += damage
-		Global.total_phy_hit += damage
+		Global.get_run_context().add_damage_dealt(damage)
+		Global.get_run_context().add_damage_dealt_by_type("physics", damage)
 		Global.get_audio_runtime().add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		if not target.is_miss and not target.is_boss_protecting():
 			target.hurt_special_effect = Global.add_mr_hurt(target.pz, Vector2(0, 0))

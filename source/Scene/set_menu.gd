@@ -59,7 +59,7 @@ func _on_continue_game_pressed() -> void:
 
 func _on_continue_game_2_pressed() -> void:
 	tree.paused = false
-	if Global.current_level == "镇妖塔":
+	if Global.get_current_level_name() == "镇妖塔":
 		Global.change_scene("res://Scene/main_menu/map_0.tscn")
 		return
 	var target_map := "res://Scene/main_menu/map_1.tscn"

@@ -9,7 +9,7 @@ var can_pass = false
 
 
 func _ready() -> void:
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	var role_id = PlayerData.player_data["Myself"]
 	_role = Global.call_hero("role_" + str(role_id), hero, Vector2(4100, 340), false)
 	self.modulate = Color(1, 1, 1, 1)

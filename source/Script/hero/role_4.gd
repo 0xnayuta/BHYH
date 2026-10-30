@@ -780,7 +780,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	cure_value = 1
 	idle_count = 0
 
-	Global.total_hurt_count += 1
+	Global.get_run_context().count_hurt()
 	var target = area.get_parent().get_parent()
 	var monster_target: BaseMonster
 	monster_target = check_monster(area)
@@ -827,7 +827,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 						"source_player": self
 					}
 				)
-	Global.total_role_hurt += int(last_hit)
+	Global.get_run_context().add_damage_taken(int(last_hit))
 	if not is_miss:
 		Global.get_audio_runtime().add_sound(self, "res://Music/hero/68_role3_be_attack.mp3")
 		Global.add_mr_hurt(pz, Vector2(5, -20))

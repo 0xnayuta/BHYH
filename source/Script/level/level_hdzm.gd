@@ -16,7 +16,7 @@ func _return_to_current_map() -> void:
 
 
 func _ready() -> void:
-	Global.current_level = ""
+	Global.set_current_level_name("")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/17_bg6.mp3")
 	self.level_stage = 1
 	super._ready()

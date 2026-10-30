@@ -1457,7 +1457,6 @@ func _restart_level_for_auto_battle() -> bool:
 	RoleProp.current_mp = int(RoleProp.roleprop.Mp)
 	RoleProp.ws_value = 0
 	RoleProp.is_ws_state = false
-	Global.is_dead_link = false
 	Global.remove_all_buff()
 	Global.change_scene(Global.last_level_path)
 	return true
@@ -1792,7 +1791,7 @@ func _decay_ws_value(props: BaseRoleProperties) -> void:
 
 
 func add_tg(level):
-	var current_level_name := str(Global.current_level)
+	var current_level_name := str(Global.get_current_level_name())
 	var nightmare := int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY
 	LEVEL_PROGRESS_COMMAND.apply(
 		PlayerData.player_data, int(level), current_level_name, self is Game4ImportedLevel, nightmare
@@ -1808,19 +1807,7 @@ func remove_all_records():
 	Global.level_begin_time = ""
 	Global.most_lianji = 0
 	Global.last_prop_hp = 0
-	Global.total_role_hurt = 0
-	Global.total_cure_hp = 0
-	Global.total_phy_hit = 0
-	Global.total_mag_hit = 0
-	Global.total_real_hit = 0
-	Global.total_phy_hurt = 0
-	Global.total_mag_hurt = 0
-	Global.total_real_hurt = 0
-	Global.total_hurt_count = 0
-	Global.total_hit_count = 0
-	Global.total_role_hit = 0
-	Global.total_crit_count = 0
-	Global.total_miss_count = 0
+	Global.get_run_context().reset_combat_stats()
 
 
 ## ---------------------------------------------------------------------------

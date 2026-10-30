@@ -86,7 +86,7 @@ func _on_cgms_pressed() -> void:
 
 func _on_tztxs_pressed() -> void:
 	if _llbt_reached_level() > 6:
-		Global.llbt_level = 6
+		Global.set_tower_floor(6)
 		Global.llbtbossms = true
 		Global.llbtwxms = false
 		Global.llbtcgms = false
@@ -97,7 +97,7 @@ func _on_tztxs_pressed() -> void:
 
 func _on_tslzz_pressed() -> void:
 	if _llbt_reached_level() > 12:
-		Global.llbt_level = 12
+		Global.set_tower_floor(12)
 		Global.llbtbossms = true
 		Global.llbtwxms = false
 		Global.llbtcgms = false
@@ -108,7 +108,7 @@ func _on_tslzz_pressed() -> void:
 
 func _on_tznz_pressed() -> void:
 	if _llbt_reached_level() > 18:
-		Global.llbt_level = 18
+		Global.set_tower_floor(18)
 		Global.llbtbossms = true
 		Global.llbtwxms = false
 		Global.llbtcgms = false
@@ -119,7 +119,7 @@ func _on_tznz_pressed() -> void:
 
 func _on_tztttw_pressed() -> void:
 	if _llbt_reached_level() >= 25:
-		Global.llbt_level = 24
+		Global.set_tower_floor(24)
 		Global.llbtbossms = true
 		Global.llbtwxms = false
 		Global.llbtcgms = false
@@ -159,5 +159,5 @@ func _on_change_pressed() -> void:
 		Global.add_message_show(Global.get_ui_runtime().windows, "低于最低限制层数！！", 1.5, Vector2(470, 300))
 		return
 	Global.llbtcgms = true
-	Global.llbt_level = current_ceng_shu
+	Global.set_tower_floor(current_ceng_shu)
 	_enter_llbt_level()

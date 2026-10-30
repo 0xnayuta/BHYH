@@ -19,26 +19,31 @@ func _ready() -> void:
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()
 	if Global.llbtwxms:
-		Global.llbt_level = 25
+		Global.set_tower_floor(25)
 		Global.infinite_level_multiplier = 0.0
-		print("无限模式当前实际层数固定为: ", Global.llbt_level)
+		print("无限模式当前实际层数固定为: ", Global.get_tower_floor())
 	var reached_level := int(PlayerData.player_data.get("玲珑宝塔层数", 0))
-	if Global.llbt_level >= reached_level:
+	if Global.get_tower_floor() >= reached_level:
 		if not Global.llbtwxms:
-			PlayerData.player_data["玲珑宝塔层数"] = Global.llbt_level
-	if Global.llbt_level == 24 or Global.llbt_level == 6 or Global.llbt_level == 12 or Global.llbt_level == 18:
+			PlayerData.player_data["玲珑宝塔层数"] = Global.get_tower_floor()
+	if (
+		Global.get_tower_floor() == 24
+		or Global.get_tower_floor() == 6
+		or Global.get_tower_floor() == 12
+		or Global.get_tower_floor() == 18
+	):
 		bbg.modulate = Color(1, 1, 1, 1)
 	else:
 		bbg.modulate = Color(1, 1, 1, 0)
 	if Global.llbtwxms:
-		Global.llbt_level = 25
+		Global.set_tower_floor(25)
 		level_text.text = "∞"
 		self.level_stage = 1
 	else:
-		level_text.text = str(Global.llbt_level)
-		if Global.llbt_level == 24:
+		level_text.text = str(Global.get_tower_floor())
+		if Global.get_tower_floor() == 24:
 			self.level_stage = 30
-	Global.current_level = "玲珑宝塔"
+	Global.set_current_level_name("玲珑宝塔")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/music_emsd.mp3")
 
 	lz_node.visible = false
@@ -52,7 +57,7 @@ func _ready() -> void:
 	super._ready()
 	set_through()
 	if Global.llbtcgms:
-		if Global.llbt_level != 1:
+		if Global.get_tower_floor() != 1:
 			RoleProp.roleprop.Hp = RoleProp.current_hp
 			RoleProp.roleprop.Mp = RoleProp.current_mp
 
@@ -61,9 +66,9 @@ func show_lz_mechanism() -> void:
 	if lz_mechanism_shown:
 		return
 	lz_mechanism_shown = true
-	print("显示 LZ 机关，当前层数：", Global.llbt_level)
+	print("显示 LZ 机关，当前层数：", Global.get_tower_floor())
 
-	var level = Global.llbt_level
+	var level = Global.get_tower_floor()
 	var lzdz_anim: String = ""
 	var lz_anim: String = ""
 
@@ -109,7 +114,7 @@ func _on_lz_area_entered(area: Area2D) -> void:
 		lz_collision.set_deferred("disabled", true)
 		lz_area.set_deferred("monitoring", false)
 
-		var level = Global.llbt_level
+		var level = Global.get_tower_floor()
 		var anim_name: String = ""
 		var item_name: String = ""
 		match level:
@@ -156,7 +161,7 @@ func _physics_process(_delta: float) -> void:
 						exit_2.disabled = false
 						add_tg(level_stage)
 
-						var level = Global.llbt_level
+						var level = Global.get_tower_floor()
 						if level in [6, 12, 18, 24]:
 							show_lz_mechanism()
 	if can_exit:
@@ -184,7 +189,6 @@ func _restart_level_for_auto_battle() -> bool:
 	RoleProp.current_mp = int(RoleProp.roleprop.Mp)
 	RoleProp.ws_value = 0
 	RoleProp.is_ws_state = false
-	Global.is_dead_link = false
 	Global.remove_all_buff()
 	Global.change_scene(Global.last_level_path)
 	return true
@@ -207,15 +211,15 @@ func _leave_level_from_exit() -> void:
 		if not _restart_level_for_auto_battle():
 			Global.change_scene("res://Scene/level/victory.tscn")
 	elif Global.llbtcgms:
-		if Global.llbt_level == 24:
+		if Global.get_tower_floor() == 24:
 			if PlayerData.has_method("ensure_special_dungeon_progress"):
 				PlayerData.ensure_special_dungeon_progress()
 			PlayerData.player_data["玲珑宝塔层数"] = 25
 			if not _restart_level_for_auto_battle():
 				Global.change_scene("res://Scene/level/victory.tscn")
 		else:
-			if Global.llbt_level < 24:
-				Global.llbt_level += 1
+			if Global.get_tower_floor() < 24:
+				Global.advance_tower_floor()
 			if not _commit_auto_battle_progress():
 				return
 			Global.change_scene("res://Scene/level/level_llbt.tscn")
@@ -242,14 +246,14 @@ func set_through():
 
 
 func _restart_infinite_monster_wave() -> void:
-	Global.llbt_level = 25
+	Global.set_tower_floor(25)
 	Global.infinite_level_multiplier = 0.0
 	monster_list()
 	current_stage = 1
 	can_exit = false
 	exit.visible = false
 	exit_2.disabled = true
-	print("无限模式刷新小怪波次，当前实际层数固定为: ", Global.llbt_level)
+	print("无限模式刷新小怪波次，当前实际层数固定为: ", Global.get_tower_floor())
 
 
 func _on_create_control_timeout() -> void:
@@ -1136,7 +1140,7 @@ func monster_list():
 			"stage_4": [],
 		}
 		return
-	match Global.llbt_level:
+	match Global.get_tower_floor():
 		6:
 			monster_group = {
 				"stage_1": [100],

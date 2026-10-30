@@ -85,4 +85,3 @@ func _reset_role_state_for_rechallenge() -> void:
 	RoleProp.current_mp = int(RoleProp.roleprop.Mp)
 	RoleProp.ws_value = 0
 	RoleProp.is_ws_state = false
-	Global.is_dead_link = false

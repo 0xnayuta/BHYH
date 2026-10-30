@@ -32,7 +32,7 @@ var hit_count: int = 0
 
 
 func _ready() -> void:
-	Global.current_level = "七星洞"
+	Global.set_current_level_name("七星洞")
 	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/7_bg2.mp3")
 
 	add_trap_sky()

@@ -107,7 +107,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if my_target != null and last_hurt > 0:
 		my_target.effect_reducehp(last_hurt, "real")
 
-	Global.total_role_hit += last_hurt
+	Global.get_run_context().add_damage_dealt(last_hurt)
 	if (
 		source_target is BaseHero
 		or source_target is MgHit
@@ -116,11 +116,11 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	):
 		match source_target.hit_dic["attackKind"]:
 			"physics":
-				Global.total_phy_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("physics", last_hurt)
 			"magic":
-				Global.total_mag_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("magic", last_hurt)
 			"real":
-				Global.total_real_hit += last_hurt
+				Global.get_run_context().add_damage_dealt_by_type("real", last_hurt)
 
 	if not is_miss and last_hurt > 0:
 		if MainSet.set_data["MonsterLittleBlood"]:

@@ -313,7 +313,7 @@ func _ready() -> void:
 		"stage_4": [],
 	}
 	_align_boss_spawn_height()
-	Global.current_level = "八仙过海"
+	Global.set_current_level_name("八仙过海")
 	Global.game_over = 1
 	level_stage = 0
 	current_stage = 1

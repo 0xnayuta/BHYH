@@ -153,5 +153,4 @@ func call_wdww():
 
 
 func _on_add_deadlink_timeout() -> void:
-	if not Global.is_dead_link:
-		Global.add_buff(get_player.buff, obj_attack_dict["Dead"]["addeffect"])
+	Global.add_buff(get_player.buff, obj_attack_dict["Dead"]["addeffect"])

@@ -77,7 +77,7 @@ func _auto_rechallenge() -> void:
 
 
 func _return_map_path() -> String:
-	if Global.current_level == "镇妖塔":
+	if Global.get_current_level_name() == "镇妖塔":
 		return "res://Scene/main_menu/map_0.tscn"
 	match int(PlayerData.player_data["Map_num"]):
 		1:
@@ -110,7 +110,6 @@ func _on_return_map_pressed() -> void:
 	if not _begin_leave():
 		return
 	RoleProp.ws_value = 0
-	Global.is_dead_link = false
 	if not _request_scene_change(_return_map_path()):
 		_abort_leave()
 

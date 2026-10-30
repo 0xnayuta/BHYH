@@ -15,7 +15,7 @@ var trap_sky_10
 
 
 func _ready() -> void:
-	Global.current_level = "蝙蝠窟"
+	Global.set_current_level_name("蝙蝠窟")
 	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/7_bg2.mp3")
 	add_trap_sky()
 	set_trap_floor()

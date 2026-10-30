@@ -1721,7 +1721,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	cure_value = 1
 	idle_count = 0
 
-	Global.total_hurt_count += 1
+	Global.get_run_context().count_hurt()
 	var target = area.get_parent().get_parent()
 	var monster_target: BaseMonster
 	monster_target = check_monster(area)
@@ -1762,7 +1762,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 		if monster_target is Monster141:
 			effect_reducehp(int(RoleProp.roleprop.SHp * 0.01), "real")
 			Global.add_monster141_aura(self.bullet, self.position, monster_target)
-	Global.total_role_hurt += int(last_hit)
+	Global.get_run_context().add_damage_taken(int(last_hit))
 	if not is_miss:
 		if self is Role1Hero:
 			Global.get_audio_runtime().add_sound(self, "res://Music/hero/49_role1_be_attack.mp3")
@@ -1944,13 +1944,13 @@ func effect_reducehp(value, atkKind):
 	if atkKind == "physics":
 		var reduce_rate = snapped(RoleProp.roleprop.Def / float(RoleProp.roleprop.Def + 250), 0.001)
 		value = int(value * (1 - reduce_rate))
-		Global.total_phy_hurt += value
+		Global.get_run_context().add_damage_taken_by_type("physics", value)
 	elif atkKind == "magic":
 		var reduce_rate = snapped(RoleProp.roleprop.Mdef / float(RoleProp.roleprop.Mdef + 250), 0.001)
 		value = int(value * (1 - reduce_rate))
-		Global.total_mag_hurt += value
+		Global.get_run_context().add_damage_taken_by_type("magic", value)
 	elif atkKind == "real":
-		Global.total_real_hurt += value
+		Global.get_run_context().add_damage_taken_by_type("real", value)
 
 	value = _apply_damage_vs_reduction(value)
 
@@ -1959,7 +1959,7 @@ func effect_reducehp(value, atkKind):
 		return
 
 	RoleProp.roleprop.Hp -= value
-	Global.total_role_hurt += int(value)
+	Global.get_run_context().add_damage_taken(int(value))
 
 	if value > 0:
 		var pp = get_parent().get_parent()
@@ -2041,7 +2041,7 @@ func get_monster_last_hurt(target_boss, target_obj):
 	miss = snapped(miss / float(miss + 100), 0.001)
 	randomize()
 	if randf_range(0, 1) <= miss:
-		Global.total_miss_count += 1
+		Global.get_run_context().count_miss()
 		is_miss = true
 		return 0
 	if randf_range(0, 1) <= crit:
@@ -2051,13 +2051,13 @@ func get_monster_last_hurt(target_boss, target_obj):
 	if lx == "physics":
 		var damage_reduction_rate = snapped(last_def / float(last_def + 250), 0.001)
 		hurt = int(hurt * (1 - damage_reduction_rate))
-		Global.total_phy_hurt += hurt
+		Global.get_run_context().add_damage_taken_by_type("physics", hurt)
 	elif lx == "magic":
 		var damage_reduction_rate = snapped(last_mdef / float(last_mdef + 250), 0.001)
 		hurt = int(hurt * (1 - damage_reduction_rate))
-		Global.total_mag_hurt += hurt
+		Global.get_run_context().add_damage_taken_by_type("magic", hurt)
 	elif lx == "real":
-		Global.total_real_hurt += hurt
+		Global.get_run_context().add_damage_taken_by_type("real", hurt)
 
 	if is_indestructible or is_indestructible1:
 		if hurt >= RoleProp.roleprop.Hp:
@@ -2267,7 +2267,7 @@ func cure_hp(value: int = 0):
 	_apply_pet_turtle_link_heal(int(effective))
 	is_cure_hp = true
 	cure_hp_value = int(effective)
-	Global.total_cure_hp += int(effective)
+	Global.get_run_context().add_healing(int(effective))
 
 	var le = get_parent().get_parent() as BaseLevel
 	for i in le.get_node("Monster").get_children():
@@ -2375,7 +2375,7 @@ func _on_spontaneous_recovery_timeout() -> void:
 
 	if RoleProp.roleprop.Hp < RoleProp.roleprop.SHp and RoleProp.roleprop.Hp > 0:
 		if not sxyr_cannot_cure:
-			Global.total_cure_hp += int(RoleProp.roleprop.R_hp * cure_value)
+			Global.get_run_context().add_healing(int(RoleProp.roleprop.R_hp * cure_value))
 			RoleProp.roleprop.Hp += int(RoleProp.roleprop.R_hp * cure_value)
 
 	if RoleProp.roleprop.Mp < RoleProp.roleprop.SMp:

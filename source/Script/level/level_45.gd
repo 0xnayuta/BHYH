@@ -8,7 +8,7 @@ extends BaseLevel
 
 
 func _ready() -> void:
-	Global.current_level = "绝境宫"
+	Global.set_current_level_name("绝境宫")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 	self.level_stage = 47
 	Global.game_over = 1

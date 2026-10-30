@@ -114,10 +114,8 @@ func ai_think():
 		mr_ani.rotation = 0
 	if is_eggs:
 		return
-	if Global.is_fire:
-		self.self_rhp = 200
-	else:
-		self.self_rhp = 0
+	# 历史全局 is_fire 标志从未被置真，self_rhp 恒为 0；标志已随运行状态收敛删除。
+	self.self_rhp = 0
 	if abs(RoleProp.get_nearest_monster_target_position(global_position).x - position.x) < mysee:
 		has_target = true
 	if not is_ice and not is_sleep and not is_stun and not cannotchangestatewhenattorbeatt():

@@ -243,8 +243,8 @@ func reduce_hp(value: int):
 		total_hurt += last_value
 	all_hurt += last_value
 	every_hurt += last_value
-	Global.total_role_hit += last_value
-	Global.total_real_hit += last_value
+	Global.get_run_context().add_damage_dealt(last_value)
+	Global.get_run_context().add_damage_dealt_by_type("real", last_value)
 	var pp = get_parent().get_parent()
 	var po = Vector2(self.position.x - 20, self.position.y - 240)
 	if last_value > 0:

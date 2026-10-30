@@ -6,7 +6,7 @@ var is_cc = false
 func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/17_bg6.mp3")
 	load("res://Scene/monster/monster_29.tscn")
-	Global.current_level = "火焰山"
+	Global.set_current_level_name("火焰山")
 	self.level_stage = 10
 	super._ready()
 	monster_group = {

@@ -6,7 +6,7 @@ extends BaseLevel
 
 
 func _ready() -> void:
-	Global.current_level = "朝会殿"
+	Global.set_current_level_name("朝会殿")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/floor_7_10.mp3")
 	self.level_stage = 28
 	super._ready()

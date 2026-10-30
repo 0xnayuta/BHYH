@@ -6,7 +6,7 @@ extends BaseLevel
 
 
 func _ready() -> void:
-	Global.current_level = "兜率宫5"
+	Global.set_current_level_name("兜率宫5")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/12_bg7.mp3")
 	self.level_stage = 35
 	monster_group = {
