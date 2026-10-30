@@ -98,6 +98,16 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新功能不得以“方便访问”为理由塞进全局单例。
 - 12 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除，其余实施延期）。
 
+### 2.4 运行时诊断
+
+`Global` 在 `_ready` 创建普通子节点 `RuntimeDiagnostics`（`class_name RuntimeDiagnostics`，不是 Autoload），持有调试性能浮层与只读诊断快照：
+
+- 运行时代次、后台保存/失败状态；
+- 缓存作用域、关卡资源租约、预载单槽快照；
+- 调试性能浮层（FPS/显存）。
+
+业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。探针通过 `Global.get_runtime_diagnostics()` 访问；旧 `Global.get_cache_scope_snapshot()` 等入口已删除。
+
 ---
 
 ## 3. 启动、场景流转与加载管线
@@ -433,7 +443,7 @@ classDiagram
 | UI | `Global` 实例登记与 UI 纹理前缀 | 按运行时实例/场景；无固定上限 | 实例退出、切换、`release_ui_runtime_cache` |
 | 共享运行时 | `Global` 四类资源缓存 | 按租约/UI/永久所有权；无固定上限 | 租约/UI/角色资源释放 |
 
-`Global.get_cache_scope_snapshot()` 返回六类作用域的只读计数与容量元数据；`level-resource-lease` 与 `load-guard` 探针分别验证租约/战斗池和 UI 实例清理。
+`Global.get_runtime_diagnostics().get_cache_scope_snapshot()` 返回六类作用域的只读计数与容量元数据；`level-resource-lease` 与 `load-guard` 探针分别验证租约/战斗池和 UI 实例清理。
 
 配套机制：
 

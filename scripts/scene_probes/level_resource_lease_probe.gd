@@ -17,6 +17,10 @@ const BULLET_SCENE := "res://Scene/monster/monster_bullet_slim/__lease_probe_bul
 var _failures: Array[String] = []
 
 
+func _diagnostics() -> RuntimeDiagnostics:
+	return Global.get_runtime_diagnostics()
+
+
 func _check_pool_scope(checks: Dictionary) -> void:
 	var pool: Array = Global._pool_data["damage_text"]
 	var first := Node.new()
@@ -25,11 +29,11 @@ func _check_pool_scope(checks: Dictionary) -> void:
 	var second := Node.new()
 	Global._store_pooled_node(second, pool, 1)
 	checks["pool_capacity"] = pool.size() == 1
-	var pool_scope: Dictionary = Global.get_cache_scope_snapshot().get("combat", {})
+	var pool_scope: Dictionary = _diagnostics().get_cache_scope_snapshot().get("combat", {})
 	checks["pool_root"] = bool(pool_scope.get("pool_root_valid", false))
 	Global._clear_runtime_pools()
 	checks["pool_clear"] = pool.is_empty() and not bool(
-		Global.get_cache_scope_snapshot().get("combat", {}).get("pool_root_valid", true)
+		_diagnostics().get_cache_scope_snapshot().get("combat", {}).get("pool_root_valid", true)
 	)
 
 
@@ -52,7 +56,7 @@ func _run() -> void:
 	checks["handoff_monster_scene"] = Global.handoff_loaded_resource(MONSTER_SCENE, monster_scene, true)
 	checks["handoff_bullet_scene"] = Global.handoff_loaded_resource(BULLET_SCENE, bullet_scene, true)
 
-	var snapshot := Global.get_level_resource_lease_snapshot()
+	var snapshot := _diagnostics().get_level_resource_lease_snapshot()
 	checks["target_recorded"] = str(snapshot.get("target_scene", "")) == TARGET_SCENE
 	checks["owned_path_count"] = int(snapshot.get("owned_path_count", 0)) == 3
 	checks["texture_category"] = (snapshot.get("texture_paths", []) as Array).has(OWNED_TEXTURE)
@@ -60,7 +64,7 @@ func _run() -> void:
 	checks["bullet_category"] = (snapshot.get("bullet_scene_paths", []) as Array).has(BULLET_SCENE)
 	checks["shared_not_owned"] = not (snapshot.get("owned_paths", []) as Array).has(SHARED_TEXTURE)
 
-	var scope := Global.get_cache_scope_snapshot()
+	var scope := _diagnostics().get_cache_scope_snapshot()
 	var scope_level: Dictionary = scope.get("level", {})
 	var scope_lease: Dictionary = scope_level.get("lease", {})
 	var scope_combat: Dictionary = scope.get("combat", {})
@@ -90,14 +94,14 @@ func _run() -> void:
 	checks["bullet_scene_released"] = not Global.is_resource_cached(BULLET_SCENE)
 	checks["shared_texture_preserved"] = Global.is_resource_cached(SHARED_TEXTURE)
 
-	var empty_snapshot := Global.get_level_resource_lease_snapshot()
+	var empty_snapshot := _diagnostics().get_level_resource_lease_snapshot()
 	checks["lease_cleared"] = not bool(empty_snapshot.get("active", true))
 	checks["empty_snapshot"] = int(empty_snapshot.get("owned_path_count", -1)) == 0
 
 	var second_lease := Global.begin_level_resource_lease(TARGET_SCENE_2)
 	var stale_release := Global.release_level_resource_lease(first_lease)
 	checks["stale_release_ignored"] = stale_release == 0
-	var second_snapshot := Global.get_level_resource_lease_snapshot()
+	var second_snapshot := _diagnostics().get_level_resource_lease_snapshot()
 	checks["second_lease_active"] = bool(second_snapshot.get("active", false))
 	checks["second_lease_id"] = int(second_snapshot.get("id", 0)) == second_lease
 	checks["second_lease_released"] = Global.release_level_resource_lease(second_lease) == 0
@@ -113,7 +117,7 @@ func _run() -> void:
 	Global.clear_level_resource_cache()
 	checks["refight_owned_released"] = not Global.is_resource_cached(OWNED_TEXTURE)
 	checks["refight_shared_preserved"] = Global.is_resource_cached(SHARED_TEXTURE)
-	checks["refight_lease_cleared"] = not bool(Global.get_level_resource_lease_snapshot().get("active", true))
+	checks["refight_lease_cleared"] = not bool(_diagnostics().get_level_resource_lease_snapshot().get("active", true))
 	Global.release_cached_texture(SHARED_TEXTURE)
 
 	Global.set_cd_path("user://MyAr_1.json")
@@ -124,17 +128,17 @@ func _run() -> void:
 	var exit_shared := PlaceholderTexture2D.new()
 	Global.handoff_loaded_resource(OWNED_TEXTURE, exit_owned, true)
 	Global.handoff_loaded_resource(SHARED_TEXTURE, exit_shared, false)
-	var generation_before_end := Global.get_runtime_generation()
+	var generation_before_end := _diagnostics().get_runtime_generation()
 	Global.end_archive_session()
 	checks["runtime_generation_invalidated"] = not Global.is_runtime_generation_current(generation_before_end)
 	Global._preload_paths_threaded([STALE_TEXTURE], generation_before_end)
 	checks["stale_async_skipped"] = not Global.is_resource_cached(STALE_TEXTURE)
 	checks["exit_owned_released"] = not Global.is_resource_cached(OWNED_TEXTURE)
 	checks["exit_shared_preserved"] = Global.is_resource_cached(SHARED_TEXTURE)
-	checks["exit_lease_cleared"] = not bool(Global.get_level_resource_lease_snapshot().get("active", true))
+	checks["exit_lease_cleared"] = not bool(_diagnostics().get_level_resource_lease_snapshot().get("active", true))
 	Global.release_cached_texture(SHARED_TEXTURE)
 	checks["exit_lease_ids"] = refight_lease > 0 and exit_lease > refight_lease
-	var exit_scope := Global.get_cache_scope_snapshot()
+	var exit_scope := _diagnostics().get_cache_scope_snapshot()
 	var exit_level: Dictionary = exit_scope.get("level", {})
 	var exit_lease_snapshot: Dictionary = exit_level.get("lease", {})
 	var exit_combat: Dictionary = exit_scope.get("combat", {})

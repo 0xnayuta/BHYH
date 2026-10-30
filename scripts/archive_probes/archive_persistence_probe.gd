@@ -30,6 +30,10 @@ func _check(name: String, condition: bool, detail: String = "") -> void:
 		failures.append("%s: %s" % [name, detail])
 
 
+func _diagnostics() -> RuntimeDiagnostics:
+	return Global.get_runtime_diagnostics()
+
+
 func _reset_profile(role_id: int = 1, level: int = 1) -> void:
 	PlayerData.player_data.clear()
 	PlayerData.player_data.merge(PlayerData.initialized_data.duplicate(true))
@@ -162,7 +166,7 @@ func _test_background_save_order() -> void:
 			monotonic = false
 	_check("background_signal_serial_monotonic", monotonic, str(serials))
 	_check("background_signal_last_serial", not serials.is_empty() and serials[-1] == MemoryClass.get_last_background_save_serial(), str(serials))
-	var status: Dictionary = Global.get_background_save_status()
+	var status: Dictionary = _diagnostics().get_background_save_status()
 	_check("background_consumer_serial", int(status.get("serial", -1)) == MemoryClass.get_last_background_save_serial(), str(status))
 	_check("background_written_latest", MemoryClass.get_archive_level(path) == 6, "level=%s" % MemoryClass.get_archive_level(path))
 	_check("background_last_error_clear", MemoryClass.last_save_error == "", MemoryClass.last_save_error)
@@ -178,7 +182,7 @@ func _test_background_save_order() -> void:
 	var on_failed := func(_path: String, success: bool, serial: int) -> void:
 		failure_events.append({"success": success, "serial": serial})
 	MemoryClass.background_save_finished.connect(on_failed)
-	var failures_before := int(Global.get_background_save_status().get("failure_count", 0))
+	var failures_before := int(_diagnostics().get_background_save_status().get("failure_count", 0))
 	_check("background_failure_request", MemoryClass.request_background_save())
 	_check("background_failure_idle", await _wait_background_idle())
 	var failed_signal := false
@@ -188,8 +192,8 @@ func _test_background_save_order() -> void:
 	_check("background_failure_signal", failed_signal, str(failure_events))
 	_check(
 		"background_failure_consumer",
-		int(Global.get_background_save_status().get("failure_count", 0)) > failures_before,
-		str(Global.get_background_save_status())
+		int(_diagnostics().get_background_save_status().get("failure_count", 0)) > failures_before,
+		str(_diagnostics().get_background_save_status())
 	)
 	_check("background_failure_retry_queued", MemoryClass.has_failed_background_save(fail_path))
 	_check("background_failure_flush_keeps_retry", not MemoryClass.flush_pending_saves())
@@ -284,7 +288,7 @@ func _test_request_save() -> void:
 	var on_save_failed := func(reason: String, error: String, message: String, notify: bool) -> void:
 		save_events.append({"reason": reason, "error": error, "message": message, "notify": notify})
 	MemoryClass.save_failed.connect(on_save_failed)
-	var failures_before := int(Global.get_save_failure_status().get("count", 0))
+	var failures_before := int(_diagnostics().get_save_failure_status().get("count", 0))
 	var no_session_outcome := MemoryClass.request_save_result("probe_empty")
 	_check(
 		"request_save_without_session",
@@ -300,8 +304,8 @@ func _test_request_save() -> void:
 	_check("request_save_failure_event", not save_events.is_empty() and str(save_events[0].get("error", "")) == "no_archive_session", str(save_events))
 	_check(
 		"request_save_failure_consumer",
-		int(Global.get_save_failure_status().get("count", 0)) > failures_before,
-		str(Global.get_save_failure_status())
+		int(_diagnostics().get_save_failure_status().get("count", 0)) > failures_before,
+		str(_diagnostics().get_save_failure_status())
 	)
 	MemoryClass.save_failed.disconnect(on_save_failed)
 
@@ -357,7 +361,7 @@ func _test_request_save() -> void:
 	var on_write_failed := func(_reason: String, error: String, _message: String, notify: bool) -> void:
 		write_failure_events.append({"error": error, "notify": notify})
 	MemoryClass.save_failed.connect(on_write_failed)
-	var write_failure_count := int(Global.get_save_failure_status().get("count", 0))
+	var write_failure_count := int(_diagnostics().get_save_failure_status().get("count", 0))
 	var write_failure := MemoryClass.request_save_result("probe_sync_write_fail")
 	_check(
 		"request_save_write_failure_result",
@@ -371,8 +375,8 @@ func _test_request_save() -> void:
 	)
 	_check(
 		"request_save_write_failure_consumer",
-		int(Global.get_save_failure_status().get("count", 0)) > write_failure_count,
-		str(Global.get_save_failure_status())
+		int(_diagnostics().get_save_failure_status().get("count", 0)) > write_failure_count,
+		str(_diagnostics().get_save_failure_status())
 	)
 	MemoryClass.save_failed.disconnect(on_write_failed)
 	_check("request_save_write_failure_cleanup", _remove_empty_directory(write_fail_path))

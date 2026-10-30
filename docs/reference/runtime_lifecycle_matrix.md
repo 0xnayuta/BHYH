@@ -6,6 +6,8 @@
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为事实源，使用 `grep`/`read` 做静态调用面调查。下文的调用次数是静态出现次数，可能包含条件分支、重复调用或暂时不可达路径，不等同于运行期调用次数。
 >
+> **P2 更新（2026-10-30）**：诊断快照入口迁至 `Global.get_runtime_diagnostics()`；缓存、租约、池与 UI 的所有权不变，旧 `Global.get_*_snapshot()` 入口已删除。
+>
 > **范围**：`Global` 的场景/加载/缓存/池/UI 编排，`load_scene.gd` 的加载状态，关卡入口与地图释放，档案会话清理，退出与后台请求。`source/addons/`、`source/bin/`、战斗业务规则与素材质量不在本阶段范围。
 
 ---
@@ -178,7 +180,7 @@ flowchart TD
 | UI | `Global` 的临时实例登记、实例计数、永久 UI 与 UI 纹理前缀 | 按运行时实例与场景路径；无固定上限 | 实例退出、关闭回调、`release_ui_runtime_cache`、切换/退出 | `ui` |
 | 共享运行时 | `Global` 四类资源缓存 | 按租约/UI/永久所有权驻留；无固定上限 | 租约释放、UI 释放、角色资源释放 | `shared_runtime` |
 
-`Global.get_cache_scope_snapshot()` 返回上述键的只读快照；`ui.transient_instance_count` 暴露显式临时 UI 登记数；`level-resource-lease` 探针验证租约/战斗池清理与容量元数据，`load-guard` 探针验证 UI 实例登记与释放、Catalog 只读副本。永久 UI 常量当前为 `PERMANENT_SMALL_UI_SCENE_PATHS`，是所有权边界，不是容量建议值。
+`Global.get_runtime_diagnostics().get_cache_scope_snapshot()` 返回上述键的只读快照；`ui.transient_instance_count` 暴露显式临时 UI 登记数；`level-resource-lease` 探针验证租约/战斗池清理与容量元数据，`load-guard` 探针验证 UI 实例登记与释放、Catalog 只读副本。永久 UI 常量当前为 `PERMANENT_SMALL_UI_SCENE_PATHS`，是所有权边界，不是容量建议值。
 
 ### 4.1 编排层缓存
 
@@ -194,13 +196,13 @@ flowchart TD
 
 | 对象 | 当前所有者 | 写入方 | 读取方 | 释放/失效 | 失败边界 |
 |:---|:---|:---|:---|:---|:---|
-| `_level_resource_lease` | `Global` | `begin_level_resource_lease`；`_track_level_resource` 由加载页 `handoff_loaded_resource`、`load_scene_uncached`、`load_level_monster_scene`、`preload_level_monster_scenes`、`preload_level_texture_paths`、`_track_level_scene_dependencies`、`prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` 触发 | `release_level_resource_lease`、`get_level_resource_lease_snapshot`、预载去重 | `release_level_resource_lease`；`clear_level_resource_cache` 间接调用 | 只记录目标场景、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；目标场景和未登记路径不释放 |
+| `_level_resource_lease` | `Global` | `begin_level_resource_lease`；`_track_level_resource` 由加载页 `handoff_loaded_resource`、`load_scene_uncached`、`load_level_monster_scene`、`preload_level_monster_scenes`、`preload_level_texture_paths`、`_track_level_scene_dependencies`、`prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` 触发 | `release_level_resource_lease`、`Global.get_runtime_diagnostics().get_level_resource_lease_snapshot`、预载去重 | `release_level_resource_lease`；`clear_level_resource_cache` 间接调用 | 只记录目标场景、路径、怪物/弹体/纹理/音频分类、热身场景与预热怪物 ID；目标场景和未登记路径不释放 |
 | `_level_resource_lease["warmed_scene_paths"]` | `Global` | `prewarm_monster_scene_paths`、`prewarm_monster_bullet_scene_paths` | 预载去重 | 随租约释放 | 只记录已预热场景，不记录请求失败 |
 | `_level_resource_lease["prewarmed_monster_ids"]` | `Global` | `preload_level_monster_runtime_resources` | 预载去重 | 随租约释放 | 失败仍可能标记为已处理，取决于调用路径 |
 | `load_scene._target_packed_scene`、`_target_packed_scene_path` | 加载页 | `_cache_resource` 仅在路径等于 `_target_scene` 时写入 | `_finish_loading` | 消费后清空；失败/取消/退出清空 | 目标路径必须匹配；过期代次不提交 |
-| `_preloaded_scene`、`_preloaded_scene_path`、`_preloading_path` | `Global` | `preload_next`、`_get_preloaded`；`clear_preloaded_scene_slot` | `Global.change_scene`、`get_preloaded_scene_slot_snapshot` | 消费、失败、换目标或显式清理时清空 | 单槽；失败路径不会永久占用；后台线程无公开取消 API |
+| `_preloaded_scene`、`_preloaded_scene_path`、`_preloading_path` | `Global` | `preload_next`、`_get_preloaded`；`clear_preloaded_scene_slot` | `Global.change_scene`、`Global.get_runtime_diagnostics().get_preloaded_scene_slot_snapshot` | 消费、失败、换目标或显式清理时清空 | 单槽；失败路径不会永久占用；后台线程无公开取消 API |
 
-**Phase 15-3A/15-3B API**：`is_resource_cached(path) -> bool` 只读查询四个运行时缓存；`get_cached_packed_scene(path) -> PackedScene` 返回已缓存的场景或 `null`；`handoff_loaded_resource(path, resource, track_level=false) -> bool` 是加载页唯一写入入口，内部决定缓存表并按需登记关卡路径。`begin_level_resource_lease(target_scene) -> int` 建立新租约；`release_level_resource_lease(lease_id=-1) -> int` 只释放指定租约的路径并返回释放数；`get_level_resource_lease_snapshot() -> Dictionary` 返回只读分类快照。加载页不再接触私有字段或私有方法。
+**Phase 15-3A/15-3B API**：`is_resource_cached(path) -> bool` 只读查询四个运行时缓存；`get_cached_packed_scene(path) -> PackedScene` 返回已缓存的场景或 `null`；`handoff_loaded_resource(path, resource, track_level=false) -> bool` 是加载页唯一写入入口，内部决定缓存表并按需登记关卡路径。`begin_level_resource_lease(target_scene) -> int` 建立新租约；`release_level_resource_lease(lease_id=-1) -> int` 只释放指定租约的路径并返回释放数；`Global.get_runtime_diagnostics().get_level_resource_lease_snapshot() -> Dictionary` 返回只读分类快照。加载页不再接触私有字段或私有方法。
 
 **不属于缓存的对象**：`LevelPreloadStore`、`LevelPreloadCatalog`、`RoleRuntimeCatalog`、AtlasMetadata 的只读 View、`.tres` 声明与脚本 `preload` 常量。它们是声明/构建数据或引擎资源，不按本页的运行时缓存清理规则处理。
 
@@ -217,7 +219,7 @@ flowchart TD
 
 `preload_combat_hit_resources` 在战斗加载完成时预置池：伤害文本 12、受击 16、角色受击 16、音效 6。`_store_pooled_node` 先移除父节点，池满则 `queue_free`；池根或取出节点已排队删除时不会复用。池节点由消费者 `setup`/`recycle` 重置，`_store_pooled_node` 不负责统一状态重置。
 
-`get_cache_scope_snapshot().combat` 暴露 `pool_sizes`、`pool_limits`、`pool_root_valid`、`active_damage_texts` 与 `active_sound_players`；租约探针验证池容量、池根和退出清理。关卡切换与重战只释放资源租约，不清池；`end_archive_session` 经 `clear_combat_runtime_cache` 清空池与活动映射。
+`Global.get_runtime_diagnostics().get_cache_scope_snapshot().combat` 暴露 `pool_sizes`、`pool_limits`、`pool_root_valid`、`active_damage_texts` 与 `active_sound_players`；租约探针验证池容量、池根和退出清理。关卡切换与重战只释放资源租约，不清池；`end_archive_session` 经 `clear_combat_runtime_cache` 清空池与活动映射。
 
 ### 4.4 UI 与永久小 UI
 
@@ -317,7 +319,7 @@ flowchart TD
 
 1. `_level_resource_lease` 记录目标场景、租约 ID、拥有路径、场景/怪物/弹体/纹理/音频分类、已预热场景与已预热怪物 ID；`begin_level_resource_lease` 在每次 `change_scene` 建立新租约，`release_level_resource_lease` 只释放本租约路径，永久 UI 与未登记路径保留。
 2. `clear_level_resource_cache` 通过租约释放关卡缓存，不再整体清空 `_monster_scene_cache`；`clear_combat_runtime_cache` 不再按 `Art`/`Scene`/`Music` 前缀批量删除缓存。
-3. `get_level_resource_lease_snapshot` 提供只读分类快照；旧租约 ID 不能释放新租约。
+3. `Global.get_runtime_diagnostics().get_level_resource_lease_snapshot` 提供只读分类快照；旧租约 ID 不能释放新租约。
 4. 场景探针 `level-resource-lease` 验证租约分类、按租约释放、共享缓存保留、旧 ID 拒绝、重战清理与 `end_archive_session` 退出清理；连续切关探针仍通过。
 
 ### Phase 15-3C 已完成
@@ -336,7 +338,7 @@ flowchart TD
 ### Phase 15-4A 已完成
 
 1. 定义构建期只读、永久、关卡、战斗、UI、共享运行时六个作用域；每类登记所有者、容量/驻留依据、清理事件与观测键。
-2. 新增 `Global.get_cache_scope_snapshot()` 只读快照；包含租约、预载单槽、四类资源缓存计数、永久 UI/角色/宠物标记、对象池大小与上限、UI 实例计数。
+2. 新增 `Global.get_runtime_diagnostics().get_cache_scope_snapshot()` 只读快照；包含租约、预载单槽、四类资源缓存计数、永久 UI/角色/宠物标记、对象池大小与上限、UI 实例计数。
 3. `level-resource-lease` 探针验证作用域键、容量元数据、租约/战斗池清理；`load-guard` 探针验证 UI 实例登记/释放与 Catalog 只读副本。
 
 ### Phase 15-4B 已完成

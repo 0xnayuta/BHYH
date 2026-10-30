@@ -89,7 +89,7 @@ func _check_selection(scene_path: String, expected_id: int, background_name: Str
 	if not await _await_monster_scene_cached(expected_id):
 		_fail("%s: 关卡自身预载未缓存怪物场景 %d" % [label, expected_id])
 		ok = false
-	var lease := Global.get_level_resource_lease_snapshot()
+	var lease := Global.get_runtime_diagnostics().get_level_resource_lease_snapshot()
 	if not bool(lease.get("active", false)) or str(lease.get("target_scene", "")) != scene_path:
 		_fail("%s: 关卡租约未绑定当前目标" % label)
 		ok = false

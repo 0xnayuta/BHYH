@@ -28,6 +28,10 @@ var _failures: Array[String] = []
 var _is_worker := false
 
 
+func _diagnostics() -> RuntimeDiagnostics:
+	return Global.get_runtime_diagnostics()
+
+
 func _ready() -> void:
 	if not _is_worker:
 		var worker: Node = duplicate()
@@ -59,20 +63,20 @@ func _run() -> void:
 	var ui_node := Control.new()
 	get_tree().root.add_child(ui_node)
 	Global.register_ui_runtime_instance(ui_node, "res://Scene/back_pack/back_pack.tscn")
-	var ui_scope := Global.get_cache_scope_snapshot()
+	var ui_scope := _diagnostics().get_cache_scope_snapshot()
 	var ui_section: Dictionary = ui_scope.get("ui", {})
 	checks["scope_ui_registered"] = int(ui_section.get("runtime_instance_count", 0)) >= 1
 	ui_node.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var ui_scope_after := Global.get_cache_scope_snapshot()
+	var ui_scope_after := _diagnostics().get_cache_scope_snapshot()
 	var ui_section_after: Dictionary = ui_scope_after.get("ui", {})
 	checks["scope_ui_released"] = int(ui_section_after.get("runtime_instance_count", 1)) == 0
 
 	var transient_ui := ProbeTransientUI.new()
 	get_tree().root.add_child(transient_ui)
 	Global.register_transient_ui(transient_ui, &"close")
-	var transient_scope := Global.get_cache_scope_snapshot()
+	var transient_scope := _diagnostics().get_cache_scope_snapshot()
 	checks["scope_transient_registered"] = int(transient_scope.get("ui", {}).get("transient_instance_count", 0)) >= 1
 	Global.cleanup_transient_ui()
 	checks["transient_close_called"] = transient_ui.closed
@@ -99,7 +103,7 @@ func _run() -> void:
 	var factory_ui_created := factory_ui != null
 	await get_tree().process_frame
 	checks["factory_ui_registered"] = factory_ui_created and int(
-		Global.get_cache_scope_snapshot().get("ui", {}).get("transient_instance_count", 0)
+		_diagnostics().get_cache_scope_snapshot().get("ui", {}).get("transient_instance_count", 0)
 	) >= 1
 	Global.cleanup_transient_ui()
 	await get_tree().process_frame
@@ -117,7 +121,7 @@ func _run() -> void:
 
 	Global.preload_next(MISSING_SCENE)
 	await get_tree().process_frame
-	var missing_slot := Global.get_preloaded_scene_slot_snapshot()
+	var missing_slot := _diagnostics().get_preloaded_scene_slot_snapshot()
 	checks["slot_missing_cleared"] = (
 		str(missing_slot.get("path", "")) == "" and not bool(missing_slot.get("ready", true))
 	)
@@ -125,7 +129,7 @@ func _run() -> void:
 	Global.preload_next(LEVEL_1)
 	await get_tree().process_frame
 	Global.clear_preloaded_scene_slot()
-	var cleared_slot := Global.get_preloaded_scene_slot_snapshot()
+	var cleared_slot := _diagnostics().get_preloaded_scene_slot_snapshot()
 	checks["slot_explicit_clear"] = (
 		str(cleared_slot.get("path", "")) == ""
 		and str(cleared_slot.get("ready_path", "")) == ""

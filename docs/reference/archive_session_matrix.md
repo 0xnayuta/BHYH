@@ -6,6 +6,8 @@
 >
 > **方法**：以 `source/**/*.gd`、`source/project.godot` 与当前 Markdown 为唯一事实源，使用静态扫描（`grep` 等价的正则统计）与关键函数逐行阅读。下文计数是**静态行数/出现次数**，可能包含条件分支、重复调用与暂时不可达路径，不等同于运行期次数；口径在每张表标题处注明。
 >
+> **P2 更新（2026-10-30）**：后台保存/失败状态快照迁至 `Global.get_runtime_diagnostics()`；保存入口、信号与身份 epoch 的所有权不变。
+>
 > **范围**：`MemoryClass` 的档案读写与后台保存、`Global` 的档案身份与会话字段、`PlayerData` 的档案字典写入、`LocalCoop` 的槽位与面板显式操作者、存档界面的云存档与删档路径。战斗数值、掉落规则、素材质量与 Phase 15 已收口的场景/缓存/池生命周期不在本页范围。
 
 ---
@@ -14,7 +16,7 @@
 
 1. **存档文件只有一个写入边界，入口收敛为三层**：`MemoryClass.request_save`（16-2A 口径 **116 处 / 59 文件**，当前 **98 处 / 57 文件**，统一入口）、`MemoryClass.save_game`（**仅持久化边界内部 1 处委托**，业务侧 0 处）与 `MemoryClass.safe_write_archive`（3 处外部调用，全部在存档界面）。除这两个入口外，全仓没有第三处写**档案路径** `user://MyAr_*.json` 的代码；云存档的临时 ZIP 与加密分片由存档界面自行写入 `user://cloud_save_upload|import`，不进入本地档案命名空间。`request_background_save` 仅 `base_monster.gd` 1 处调用。
 2. **保存点已全部收口**：16-2A 前 118 处 / 60 文件 / 109 函数；经首批 17 处、第二批 58 处（`back_pack` 25、`skill` 18、`ldl` 15）、第三批 19 处（`main_menu`）、第四批 11 处（`level`）与收尾批次 13 处迁移后，业务侧 `save_game` 调用为 **0**；仅 `MemoryClass.request_save` 内部保留 1 处 `save_game(archive_path)` 委托。地图页 `_ready`、关卡结算与全部业务面板均改为提交保存请求。
-3. **保存结果判读（18-3D 收口）**：`request_save` 仍返回 bool，但新增 `request_save_result`、`last_save_outcome` 与 `save_failed` 信号，丢弃 bool 的调用也可观察；22 处自行提示的调用传 `notify=false`，其余失败由 `Global` 兜底提示（1.5s 去重）。`last_save_error`、`describe_save_error()` 与 `Global.get_save_failure_status()` 提供可读原因/最后结果。
+3. **保存结果判读（18-3D 收口）**：`request_save` 仍返回 bool，但新增 `request_save_result`、`last_save_outcome` 与 `save_failed` 信号，丢弃 bool 的调用也可观察；22 处自行提示的调用传 `notify=false`，其余失败由 `Global` 兜底提示（1.5s 去重）。`last_save_error`、`describe_save_error()` 与 `Global.get_runtime_diagnostics().get_save_failure_status()` 提供可读原因/最后结果。
 4. **档案身份已收口到唯一写入口**：`Global.set_cd_path()` 是唯一写入点（原 3 处直接赋值已迁移），赋值时先 `flush_pending_saves()` 再递增 `_archive_identity_epoch`；`Global.cd_path` 现为 40 行 / 42 次出现 / 22 个文件，9 处经 `get_cd_path()`/`set_cd_path()`，3 处格式守卫、1 处 `find`、1 处 `split`，其余为空值守卫。
 5. **保存与读档身份/顺序已可校验（16-2B）**：`save_game` 在快照前后各校验一次「路径的档案号 + `_archive_identity_epoch`」；后台任务携带入队时的 epoch，切档后到达的旧任务被丢弃，不写盘也不更新元数据。`Global.set_cd_path` 在切换前 flush 待写队列。`last_save_error` / `describe_save_error()` 提供程序化与可读失败原因。
 6. **补全失败会阻止保存（16-2D）**：`_prepare_primary_player_save_data` 按固定 19 步执行补全，随后用 `_normalization_postcondition_error()` 校验容器、宠物、坐骑、被动、剑阵、万灵、已获取装备与等级；任一不满足即拒绝写入，不再"补全异常但保存成功"。补全顺序调整为 `enforce_level_caps` 最后，新建宠物立即执行自身规范化，保证首次保存即幂等。
@@ -166,7 +168,7 @@
 | 线程 | `_save_thread` 单线程，`_start_next_background_save()` 串行；同一时刻只有一个写任务 |
 | 完成 | `_process` 轮询 `is_alive()`；完成后按 `serial` 顺序 emit `background_save_finished(path, success, serial)`；`Global._on_background_save_finished` 是唯一消费者，记录最后序号/路径/成功态/失败次数；切档后到达的旧任务直接丢弃（不写盘、不重试、不更新元数据，`last_save_error=stale_archive_identity`） |
 | flush | `flush_pending_saves()` 在 `save_game`、`safe_write_archive`、读档兼容读取、`_notification`（暂停/关窗）与 `_exit_tree` 调用；重入由 `_save_flush_in_progress` 拒绝 |
-| 失败 | 当前身份写入失败时 `last_save_error=write_failed`，任务进入 `_failed_background_saves` 并在 flush/退出时重试；`push_error` 保留日志，`Global.get_background_save_status()` 提供失败次数与最后序号 |
+| 失败 | 当前身份写入失败时 `last_save_error=write_failed`，任务进入 `_failed_background_saves` 并在 flush/退出时重试；`push_error` 保留日志，`Global.get_runtime_diagnostics().get_background_save_status()` 提供失败次数与最后序号 |
 | 顺序 | **18-3A 完成**：信号携带入队 `serial`；消费者只接受不小于已见序号的信号；同档覆盖与单线程保证写盘顺序，退出/切档由 `end_archive_session`/`set_cd_path` 先 flush |
 
 ### 4.8 同步保存结果与反馈
@@ -260,7 +262,7 @@
 | 回主菜单 | `change_scene` 先 `cleanup_transient_ui()` 让面板关闭保存走完，再 `end_archive_session()`；`end_archive_session` 自身先 `flush_pending_saves()`，主菜单 `_ready` 再通过 `set_cd_path("")` 切换身份。会话结束后的保存请求被拒绝（16-3），不再依赖 epoch 兜底 |
 | 会话结束后的保存 | `request_save`/`request_background_save` 返回 `no_archive_session`，不写盘；面板已在会话结束前完成关闭保存 |
 | 应用退出 | `MemoryClass._notification`（`WM_CLOSE_REQUEST`/`APPLICATION_PAUSED`）与 `_exit_tree` flush；`Global._exit_tree` 只管运行时缓存，不写档；退出时身份 epoch 未变，待写任务按原档案落盘 |
-| 保存中退出 | `flush_pending_saves` 会等待线程完成；无超时。失败经 `last_save_error`、`background_save_finished` 与 `Global.get_background_save_status()` 可观察，后台保存不弹战斗内 UI |
+| 保存中退出 | `flush_pending_saves` 会等待线程完成；无超时。失败经 `last_save_error`、`background_save_finished` 与 `Global.get_runtime_diagnostics().get_background_save_status()` 可观察，后台保存不弹战斗内 UI |
 
 ---
 
@@ -472,14 +474,14 @@ close_panel() -> queue_free -> _on_panel_closed
 | AS-04 | **已修复（16-2C）**：本地 `_is_valid_player_archive_data` 现校验 `Myself` 1..7；非空非法档在 `load_game` 合并前被拒绝 | 越界文件不再被当作可玩档案读取 | 16-2C 完成 |
 | AS-05 | **已修复（16-2C）**：云收集/导入与本地校验共用 `MemoryClass.is_valid_role_id`（1..7） | 玉兔档可上传/导入；0/8/非数值拒绝 | 16-2C 完成 |
 | AS-06 | **已修复（18-3D）**：`request_save` 保留 bool 兼容，新增 `request_save_result`、`last_save_outcome` 与 `save_failed` 信号；失败含 `reason/error/message/path/notify`。22 处自行提示的调用传 `notify=false`；其余调用失败由 `Global` 兜底提示（同错误 1.5s 去重） | 调用方不再依赖判读 bool 才可观察失败 | 18-3D 完成 |
-| AS-07 | **已修复（18-3D）**：无会话/身份过期/非法路径/写失败均在 `request_save_result` 返回结构化错误并发出 `save_failed`；`Global.get_save_failure_status()` 可读最后结果与失败计数；后台保存仍走独立信号 | 无档/切档不再静默 `false`；无 UI 时仍有日志与状态 | 18-3D 完成 |
+| AS-07 | **已修复（18-3D）**：无会话/身份过期/非法路径/写失败均在 `request_save_result` 返回结构化错误并发出 `save_failed`；`Global.get_runtime_diagnostics().get_save_failure_status()` 可读最后结果与失败计数；后台保存仍走独立信号 | 无档/切档不再静默 `false`；无 UI 时仍有日志与状态 | 18-3D 完成 |
 | AS-08 | **18-3B 评估保留**：11 个地图页在更新 `Map_num`/`HeavenMap_num` 后各保存 1 次，是进入城市后的唯一持久化点；删除会丢失崩溃/立即退出时的当前地图，故保留。`map_3._sync_special_button_layer` 的第二次保存（z-index 无数据变更，且在 `Map_num=3` 前）已删除。稳态加密写实测约 4.7ms；独立冷启动微基准首档密钥创建约 108ms（一次性），地图页保存通常复用已创建密钥 | 保留同步语义；仅合并无数据变更的重复写 | 18-3B 完成 |
 | AS-09 | **已修复（16-2A 收尾）**：删除 `remove()` 末尾覆盖初始档的 `save_game`，重置只写初始档；入口仍为死路径 | 重置不再退化为普通保存 | 16-2A 完成 |
 | AS-10 | **已修复（16-5）**：全局视图交换删除，快照不再需要 suspend/resume；`_prepare_player_save_data` 以 `is_save_snapshot_in_progress()` 阻止面板打开/切换，快照与面板互斥有单一入口 | 面板数据不依赖视图状态 | 16-5 完成 |
 | AS-11 | **已解除（16-2B）**：保存身份改用 `_archive_identity_epoch`（仅路径变化时递增），退出场景 `end_archive_session()` 不再使面板关闭保存失效 | 面板关闭仍可写入同一档案 | 16-2B 完成 |
 | AS-12 | **已修复（16-2B）**：`_remove_save_data` 先 `int(cd_number.text)` 归一化再拼路径，入口已校验正整数范围 | 不会命中非预期路径 | 16-2B 完成 |
 | AS-13 | **已修复（16-2D 保存侧 / 16-3 读档侧）**：19 步补全改为固定清单，方法缺失即失败；补全后执行后置条件校验，失败拒绝写入并给出 `normalize_failed:<键>`；读档改为先重置再合并 | 保存与读档都不再把补全失败当成功 | 16-3 完成 |
-| AS-14 | **已修复（18-3A）**：任务增加 `generation` 与 `serial`；切档/退出前 `set_cd_path`/`end_archive_session` 先 flush；`background_save_finished(path, success, serial)` 由 `Global` 消费，失败可通过 `get_background_save_status()` 与 `last_save_error` 观察，失败任务自动重试 | 旧任务不回写、不计失败；信号顺序可判定 | 18-3A 完成 |
+| AS-14 | **已修复（18-3A）**：任务增加 `generation` 与 `serial`；切档/退出前 `set_cd_path`/`end_archive_session` 先 flush；`background_save_finished(path, success, serial)` 由 `Global` 消费，失败可通过 `Global.get_runtime_diagnostics().get_background_save_status()` 与 `last_save_error` 观察，失败任务自动重试 | 旧任务不回写、不计失败；信号顺序可判定 | 18-3A 完成 |
 | AS-15 | **已修复（16-3）**：`ArchiveSession` 提供档案号/角色/路径/代次；业务侧 0 处引用 `cd_path`，保存与关卡入口统一读会话 | 会话是唯一权威表示 | 16-3 完成 |
 | AS-16 | **已修复（16-5）**：31 个面板域脚本声明 `PlayerData`/`RoleProp` 属性，按 `coop_slot` 显式解析操作者；全局 `PlayerData` 恒为 1P，无视图交换残留 | 面板读写按槽位归属 | 16-5 完成 |
 | AS-17 | **部分修复（16-4/16-5）**：经验结算、坐骑解锁、法宝数据源与面板操作者已改槽位查询；`Global.get_player` 仍有 16 次 / 10 文件，用于提示、目标与部分怪物逻辑 | 剩余 1P 假设随怪物逻辑分批收敛 | 后续批次 |
