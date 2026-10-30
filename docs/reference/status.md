@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成；20-1A/20-1C/20-1D、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`，当前 12 个 Autoload）；20-1A/20-1C/20-1D、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -45,7 +45,7 @@ source/                     # 唯一活跃 Godot 工程
 ├── Spritesheet/            # 精灵表
 ├── addons/                 # godot_mcp 等第三方插件（非维护任务不改）
 ├── bin/                    # Spine GDExtension（Windows x86_64）
-└── project.godot           # 工程配置（13 个 Autoload）
+└── project.godot           # 工程配置（12 个 Autoload）
 
 docs/                       # 文档（见 docs/README.md）
 scripts/                    # 门禁、审计、回归与构建工具（见 scripts/README.md）
@@ -228,7 +228,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 19-4A 输入隔离 | 新增 `LocalCoopInputIsolationProbe`：18 个 `p2_*` 动作与物理键逐项匹配；P1 `move_right`/`normalhit`/`jump` 保持 D/J/K；P1/P2 输入视图互不串槽；禁用双人后 P2 视图回落基础映射，重新启用恢复 `p2_*`。新增 `LocalCoopKeyConfigProbe`：`set_com` 键位布局修改即时应用、保存，`_on_reset_layout_pressed` 恢复默认；临时 `user://KeyConfig.json` 备份/恢复。**验证**：`coop_probe_runner` **25/25 PASS**；`check_all --godot-bin` 8/8 PASS。 | 19-4A 完成；19-4B/19-4C 未启动 |
 | 2026-10-30 Phase 19-4B HUD 只读 | 新增 `LocalCoopHudReadOnlyProbe`：P1/P2 HP/MP/经验/等级/无双/护盾与宠物经验/HP 均取自槽位查询；HUD 帧前后 `PlayerData`/2P 档案 JSON 快照一致；面板打开/关闭与暂停期间 HUD 值不变、数据无残留写入；HUD 释放与 `clear_runtime` 不写 1P 档案。面板首次打开会补默认 `角色昵称`（既有补全行为），探针在快照前预置昵称以隔离 HUD 写入。**验证**：`coop_probe_runner` **26/26 PASS**；`check_all --godot-bin` 8/8 PASS。 | 19-4B 完成；19-4C 未启动 |
 | 2026-10-30 Phase 19-4C 输入写入守卫 | `contract_scan.py` 新增第十七类 `input_boundary`：`Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save`；`INPUT_BOUNDARY_ALLOWLIST` 当前为空。新增正负样本自测；全量扫描 ERROR=0，无现有违规；契约看板补上 `phase17_boundary` 与 `input_boundary` 两类。**验证**：`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --godot-bin` 8/8 PASS。 | 19-4C 完成；19-4 完成 |
-| 2026-10-30 Phase 20-1B Autoload 边界 | 新增 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：13 个注册项（12 业务 + 1 调试桥）逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`Global` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，给出 W0~W8 顺序；试点为删除 `BaseHit` 与抽取 `RuntimeDiagnostics`。事实基线：`global.gd` **6,041 行 / 360 函数 / 295 变量 / 76 常量 / 2 信号**；生产代码 `Global.` **427 文件 / 3,372 调用 / 273 成员**；外部直接写入 **494 次 / 64 变量**；含探针为 432 文件 / 3,586 调用 / 298 成员。**验证**：文档链接可达；`check_all --skip-engine` PASS。本轮只决策，未修改运行代码、未新增/移除 Autoload、未批量改名。 | 20-1B 完成；20-1A/20-1C/20-1D 未启动 |
+| 2026-10-30 Phase 20-1B Autoload 边界 | 新增 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：决策时 13 个注册项（12 业务 + 1 调试桥）逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`Global` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，给出 W0~W8 顺序；试点为删除 `BaseHit` 与抽取 `RuntimeDiagnostics`。事实基线：`global.gd` **6,041 行 / 360 函数 / 295 变量 / 76 常量 / 2 信号**；生产代码 `Global.` **427 文件 / 3,372 调用 / 273 成员**；外部直接写入 **494 次 / 64 变量**；含探针为 432 文件 / 3,586 调用 / 298 成员。**验证**：文档链接可达；`check_all --skip-engine` PASS。本轮只决策，未修改运行代码、未新增/移除 Autoload、未批量改名。 | 20-1B 完成；20-1A/20-1C/20-1D 未启动 |
+| 2026-10-30 Phase 20-1B P1 `BaseHit` 删除 | 删除 `project.godot` 的 `BaseHit` 注册、`source/base_hit.gd`/`.uid`、`hit_bullet.gd` 的 `remove_infor()` 与 4 个弹体场景中 6 个 `remove_infor` 动画方法键；命中数值逻辑未变。Autoload **13→12**（11 业务 + 1 调试桥）。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（718 脚本）；`level_1` 冒烟 **PASS**（4 Stage，日志 0/0/0）；`scene_probe_runner --probe magic-weapons` **PASS**；4 个改动场景加载/实例化/方法轨道临时探针 **PASS**；`check_all --godot-bin` **8/8 PASS**。 | 20-1B P1 完成；P2 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

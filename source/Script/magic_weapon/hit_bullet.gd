@@ -150,13 +150,6 @@ func update_attraction(_delta: float):
 		monster.velocity = Vector2.ZERO
 
 
-func remove_infor():
-	BaseHit.mg_hit = 0
-	BaseHit.mghitbakc_x = 0
-	BaseHit.mghitbakc_y = 0
-	BaseHit.mg_hit_lx = ""
-
-
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	var target = area.get_parent().get_parent()
 

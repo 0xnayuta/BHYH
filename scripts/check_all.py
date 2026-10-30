@@ -142,7 +142,6 @@ def main():
     # 维度 3: 静态异味
     core_scripts = [
         "source/global.gd",
-        "source/base_hit.gd",
         "source/all_equipment.gd",
         "source/Script/base/base_role_properies.gd",
         "source/Script/base/base_hero.gd",

@@ -1,17 +1,17 @@
-# ADR-007：保留 13 个 Autoload，新增必须评审
+# ADR-007：保留 Autoload 注册基线，新增必须评审
 
-- **状态**：Accepted
+- **状态**：Accepted（2026-10-30 修订：`BaseHit` 已删除，当前 12 个注册项）
 - **记录日期**：2026-10-25
 - **影响范围**：全局状态、初始化顺序、生命周期、测试
 
 ## 背景
 
-当前有 13 个 Autoload 注册项，承担存档、属性、设置、装备、锻造、被动、音乐、信号、全局工厂、双人等职责。它们与业务代码深度耦合，立即移除会破坏启动流程与双人模型；但继续新增“方便访问”的单例会让耦合进一步失控。
+当前有 12 个 Autoload 注册项（Phase 20-1B P1 删除 `BaseHit` 前为 13 个），承担存档、属性、设置、装备、锻造、被动、音乐、信号、全局工厂、双人等职责。它们与业务代码深度耦合，立即移除会破坏启动流程与双人模型；但继续新增“方便访问”的单例会让耦合进一步失控。
 
 ## 决策
 
-1. 现有 13 个注册项按遗留例外保留：
-   - 12 个业务单例；
+1. 现有 12 个注册项按遗留例外保留：
+   - 11 个业务单例；
    - `MCPGameBridge` 是编辑器调试桥，不参与业务依赖；
 2. 新增 Autoload 前必须说明：
    - 为什么不能用普通场景节点；
@@ -43,4 +43,5 @@
 - [`../../source/project.godot`](../../source/project.godot) `[autoload]`
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md) §4
 - [`../reference/architecture.md`](../reference/architecture.md) §2
+- [`../reference/autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)
 - [`../../AGENTS.md`](../../AGENTS.md) §3.5

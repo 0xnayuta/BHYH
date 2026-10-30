@@ -2732,14 +2732,11 @@ tracks/6/path = NodePath(".")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.8, 0.8001),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"queue_free"
-}, {
-"args": [],
-"method": &"remove_infor"
 }]
 }
 tracks/7/type = "value"
@@ -2836,12 +2833,9 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
 "values": [{
-"args": [],
-"method": &"remove_infor"
-}, {
 "args": [],
 "method": &"queue_free"
 }]
@@ -3937,12 +3931,9 @@ tracks/9/path = NodePath(".")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(1.4, 1.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(1.5),
+"transitions": PackedFloat32Array(1),
 "values": [{
-"args": [],
-"method": &"remove_infor"
-}, {
 "args": [],
 "method": &"queue_free"
 }]

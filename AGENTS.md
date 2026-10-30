@@ -12,7 +12,7 @@
 
 - `source/`
   - **当前唯一的活跃开发工程**。所有新增特性、Bug 修复、UI 调整、性能优化与重构**必须且仅能**在该目录下进行；
-  - `source/project.godot`：Godot 4.7.2 工程配置（主场景、13 个 Autoload、输入映射、物理层、窗口平台）；
+  - `source/project.godot`：Godot 4.7.2 工程配置（主场景、12 个 Autoload、输入映射、物理层、窗口平台）；
   - `source/Scene/`：场景节点树（`.tscn`）；
   - `source/Script/`：GDScript 业务逻辑（`.gd`）；
   - `source/Art/`：贴图、精灵帧、图集、Spine 与特效资源；

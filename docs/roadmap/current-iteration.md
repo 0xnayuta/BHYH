@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成；20-1A/20-1C/20-1D、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 已删除 `BaseHit`）；20-1A/20-1C/20-1D、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -42,7 +42,7 @@
 | Phase 15 运行时 | **19-2C/19-2D 已收口**：删除名称兜底与 51 处业务显式调用；UI 只按登记表清理；`MonsterFrameCacheRegistry` 在档案退出统一清理模块静态帧/几何缓存 | 19-2 完成 |
 | Phase 14 Atlas | 112 个 metadata 未被 `AtlasMetadataStore` 规则触达；类型化 `.data` accessor 仍是独立立项 | 19-3/20-1 |
 | Phase 13 资源 | 12 个运行时建帧冻结例外（9 怪物 + 3 非怪物）；`runtime_frames_allowlist` 只减不增；PCK 快照随资源变化需重跑 | 19-3 |
-| Phase 13 独立项目 | `Spine` 跨平台运行时仅 Windows x86_64；`global.gd`+13 Autoload 上帝对象；`_bundled` 历史二进制场景；目标平台 VRAM/首帧/release 未测 | 20-1/20-2 |
+| Phase 13 独立项目 | `Spine` 跨平台运行时仅 Windows x86_64；`global.gd`+12 Autoload 上帝对象（P1 后）；`_bundled` 历史二进制场景；目标平台 VRAM/首帧/release 未测 | 20-1/20-2 |
 | 守卫 | `phase17_boundary` 只覆盖结算、两个命令、两个表现文件、四试点路径预算；其他域未接入 | 20-3 |
 
 矩阵计数口径见各参考页；本页不复制历史行数。Phase 16/17 的会话、槽位、保存请求、原子命令与已关闭项是**不变量**。
@@ -163,7 +163,7 @@
 **切片**
 
 1. **20-1A Spine 跨平台**：确定目标平台、Spine 运行时版本与许可证；补二进制/`.gdextension` 并做目标平台加载验收；
-2. **20-1B `global.gd` + 13 Autoload（完成决策，2026-10-30）**：产出 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)。13 个注册项（12 业务 + 1 调试桥）逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`global.gd` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，并给出 W0~W8 迁移顺序；试点定为删除 `BaseHit` 与抽取 `RuntimeDiagnostics`。本轮只决策，不修改运行代码、不新增/移除 Autoload、不批量改名。事实基线：`global.gd` 6,041 行/360 函数/295 变量/76 常量/2 信号；生产代码 `Global.` 427 文件/3,372 调用/273 成员；494 次外部直接写入涉及 64 个变量。
+2. **20-1B `global.gd` + Autoload（完成决策与 P1，2026-10-30）**：产出 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)。决策时 13 个注册项（12 业务 + 1 调试桥），逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`global.gd` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，并给出 W0~W8 迁移顺序。**P1 已执行**：删除 `BaseHit` 注册、脚本、`remove_infor()` 与 6 个动画方法键，Autoload 13→12；命中数值逻辑未变。**P2 待办**：抽取 `RuntimeDiagnostics`。事实基线：`global.gd` 6,041 行/360 函数/295 变量/76 常量/2 信号；生产代码 `Global.` 427 文件/3,372 调用/273 成员；494 次外部直接写入涉及 64 个变量。
 3. **20-1C `_bundled` 历史场景**：单独立项评估转换、UID/导入缓存与回归；
 4. **20-1D 类型化 Atlas accessor**：基于 Phase 14 消费清单评估 typed schema；不改变视觉结果。
 

@@ -39,7 +39,7 @@ BHYH/
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
 | 最大 FPS | 150（`run/max_fps`） | `source/project.godot` |
-| Autoload | **13**：12 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
+| Autoload | **12**：11 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
 | 输入动作 | 集中定义于 `source/project.godot`；数量以配置为准 | `source/project.godot` `[input]` |
 | 2D 物理层 | 具名层；名称与数量以 `source/project.godot` 为准 | `source/project.godot` `[layer_names]` |
 | 场景树分组 | `Player`、`Monster` | `source/project.godot` `[global_group]` |
@@ -68,19 +68,18 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 | # | 名称 | 脚本 | 职责 | 备注 |
 |:---:|:---|:---|:---|:---|
-| 1 | `BaseHit` | `base_hit.gd` | 上一次命中的数值、类型与击退向量中转 | 纯数据单例 |
-| 2 | `RoleProp` | `Script/base/base_role_properies.gd` | 角色属性聚合器的单例形态 | 同时提供 `BaseRoleProperties` 类型 |
-| 3 | `PlayerData` | `Script/memory_class/player_data.gd` | 存档数据仓库与 `ensure_*` 补全 | `class_name PlayerDataStore` |
-| 4 | `MemoryClass` | `Script/memory_class/memory_class.gd` | 本地存档加密读写、备份、后台保存、设置文件 | 本地存档 IO 主入口；云存档导入/导出在归档界面单独加密读写 |
-| 5 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
-| 6 | `AE` | `all_equipment.gd` | 装备数值门面，懒加载大体量装备表 | 无业务依赖 |
-| 7 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
-| 8 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
-| 9 | `MainMusic` | `main_music.gd` | 主菜单 BGM 单实例 | 读取 `MainSet`、`Global` |
-| 10 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
-| 11 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
-| 12 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
-| 13 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
+| 1 | `RoleProp` | `Script/base/base_role_properies.gd` | 角色属性聚合器的单例形态 | 同时提供 `BaseRoleProperties` 类型 |
+| 2 | `PlayerData` | `Script/memory_class/player_data.gd` | 存档数据仓库与 `ensure_*` 补全 | `class_name PlayerDataStore` |
+| 3 | `MemoryClass` | `Script/memory_class/memory_class.gd` | 本地存档加密读写、备份、后台保存、设置文件 | 本地存档 IO 主入口；云存档导入/导出在归档界面单独加密读写 |
+| 4 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
+| 5 | `AE` | `all_equipment.gd` | 装备数值门面，懒加载大体量装备表 | 无业务依赖 |
+| 6 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
+| 7 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
+| 8 | `MainMusic` | `main_music.gd` | 主菜单 BGM 单实例 | 读取 `MainSet`、`Global` |
+| 9 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
+| 10 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 11 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
+| 12 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
 
 ### 2.2 依赖与初始化约束
 
@@ -91,13 +90,13 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 ### 2.3 边界
 
-13 个 Autoload 是历史结构，登记为遗留例外：
+12 个 Autoload 是历史结构，登记为遗留例外：
 
 - `global.gd` 不得继续扩张为新的业务数据仓库；
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 13 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B，决策完成、实施延期）。
+- 12 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除，其余实施延期）。
 
 ---
 
@@ -547,7 +546,7 @@ classDiagram
 
 | 项目 | 现状 | 约束 |
 |:---|:---|:---|
-| 13 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 12 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
@@ -580,7 +579,7 @@ classDiagram
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
 1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。资产身份为 `asset_id`，播放策略由实例覆盖，不再是复合 key。
-2. **Autoload 数量**：共 13 个注册项，其中 12 个是业务单例，`MCPGameBridge` 是调试桥；说“13 个业务 Autoload”不准确。
+2. **Autoload 数量**：共 12 个注册项，其中 11 个是业务单例，`MCPGameBridge` 是调试桥；说“12 个业务 Autoload”不准确。
 3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。
 5. **规模数字**：具体规模以 [`status.md`](status.md) 的当前快照为准；本文不复制脚本、场景与资源数量。
@@ -603,7 +602,7 @@ classDiagram
 ## 11. 关联文档
 
 - [`acceptance.md`](acceptance.md)：验收分层、门禁命令、阈值与变更矩阵
-- [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：Phase 20-1B 的 13 个 Autoload 处置、`Global` 切面与迁移顺序
+- [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：Phase 20-1B 的 12 个当前 Autoload 处置（决策时 13）、`Global` 切面与迁移顺序
 - [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 的 AtlasMetadata 生产者、schema、消费者、只读 View 与失败矩阵
 - [`status.md`](status.md)：版本、规模与验证状态单一事实源
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）

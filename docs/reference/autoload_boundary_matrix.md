@@ -1,8 +1,8 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
-> **状态**：2026-10-30 完成 20-1B 决策。本页只记录当前边界、逐项结论与迁移顺序，**不代表拆分已实施**；本轮未修改运行代码，未新增或移除 Autoload。
-> **范围**：`source/project.godot` 的 13 个注册项：12 个业务单例 + `MCPGameBridge` 编辑器调试桥；重点为 `global.gd` 的职责切分。
-> **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
+> **状态**：2026-10-30 完成 20-1B 决策，并完成试点 P1（删除 `BaseHit`）。本页记录当前边界、逐项结论与迁移顺序；P1 之外的拆分尚未实施。当前 `project.godot` 为 **12 个注册项：11 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 已删除 `BaseHit` 及其 4 处写零调用与动画方法轨道。
+> **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 754 个文件（P1 前 755 个）；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
 ## 1. 决策摘要
@@ -20,7 +20,7 @@ Phase 20-1 其余切片保持未启动：
 | 切片 | 本轮结论 | 说明 |
 |:---|:---|:---|
 | 20-1A Spine 跨平台 | 未启动 | 需先定目标平台、Spine 运行时版本与许可证；不在本页替其作结论 |
-| 20-1B `global.gd` + 13 Autoload | **采用边界清单，延期实施** | 本页；只决策，不大拆 |
+| 20-1B `global.gd` + Autoload | **采用边界清单；P1 已执行，其余延期** | 本页；决策时 13 个注册项，P1 后 12 个 |
 | 20-1C `_bundled` 历史场景 | 未启动 | 需私有素材、UID/导入缓存与格式取证 |
 | 20-1D 类型化 Atlas accessor | 未启动 | 依赖 19-3B 的 41 项未迁移图集范围 |
 
@@ -84,11 +84,11 @@ Phase 20-1 其余切片保持未启动：
 
 ## 3. 逐项决策
 
-Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；表中“战斗/法宝”“UI/双人”等是批次审查责任域，不虚构人员姓名。
+Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；表中“战斗/法宝”“UI/双人”等是批次审查责任域，不虚构人员姓名。表保留 20-1B 决策时的 13 项编号；`BaseHit` 已删除，当前 12 项。
 
 | # | Autoload | 当前职责 | 决策 | 证据与边界 | Owner / 前置条件 |
 |:---:|:---|:---|:---|:---|:---|
-| 1 | `BaseHit` | 上一次命中数值、类型与击退向量中转 | **删除候选（拒绝作为服务）** | 仅 `hit_bullet.gd` 的 4 处重置写入；全仓无读取、无场景/动态引用 | 战斗/法宝；静态复核后删除 Autoload 与 4 行写入，见试点 P1 |
+| 1 | `BaseHit` | 上一次命中数值、类型与击退向量中转 | **已删除（P1，2026-10-30）** | 原有 4 处重置写入、全仓无读取；已删除 Autoload 注册、`base_hit.gd`/`.uid`、`remove_infor()` 与 6 个动画方法键 | 战斗/法宝；P1 验收见第 6 节 |
 | 2 | `RoleProp` | `BaseRoleProperties` 单例形态与启动回退 | **保留，延期迁移** | 大量文本引用是实例属性；真正的根回退位于 `BaseRoleProperties` / `PlayerDataStore` 的 getter | 角色/存档；先证明 `LocalCoop` 在启动与无槽位路径始终可用，再移除根回退 |
 | 3 | `PlayerData` | 1P 档案数据仓库与补全 | **保留（1P 档案仓库）** | 菜单/地图可直接读取；新代码应走 `BaseObject.PlayerData`、`BaseRole.PlayerData` 或 `LocalCoop.data_for()` | 存档/1P UI；禁止新增直接 Autoload 读写；数据 schema 拆分延期 |
 | 4 | `MemoryClass` | 本地存档加密读写、备份、后台保存、设置文件 | **保留（持久化边界）** | 230 处/72 文件；已有后台保存、补全、失败反馈与快照互斥 | 存档；不把存档 IO 搬进 `Global`，不再增加第二套保存入口 |
@@ -121,7 +121,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | 波次 | 范围 | Owner | 前置条件 | 验证 | 回滚 |
 |:---|:---|:---|:---|:---|:---|
 | W0 | 冻结：本页边界；不新增 `Global` 职责/字段 | 项目维护者 | 无 | 文档与链接检查；后续 20-3 守卫 | 文档回退 |
-| W1 | 死代码/低风险：删除 `BaseHit`；删除已确认 0 引用的 `add_*` 辅助 | 战斗/UI | 静态扫描 `.gd`/`.tscn`/动态 `call`；确认无读取 | `health_check`、`level_1`、法宝命中冒烟、`contract_scan` | 版本控制 |
+| W1 | 死代码/低风险：**`BaseHit` 已删除（P1）**；其余已确认 0 引用的 `add_*` 辅助待办 | 战斗/UI | P1 完成；其余静态扫描 `.gd`/`.tscn`/动态 `call` | P1：`health_check` 0/0、`level_1` PASS、`magic-weapons` 探针 PASS、场景加载探针 PASS、`check_all --godot-bin` 8/8 | 版本控制 |
 | W2 | S1 诊断/快照 | 资源/工具 | 探针调用点清单 | `scene_probes` 的租约/加载守卫、`archive_probes` 保存状态 | 恢复快照 API |
 | W3 | S2 UI 宿主/运行时 | UI/双人 | `LocalCoop` 面板 push/pop 语义；临时 UI 登记清单 | `coop_probe_runner`、`scene_probe_runner`、面板开关/暂停 | 恢复 `Global.windows` |
 | W4 | S3 音频 + `MainMusic` | 音频 | BGM 同曲/切曲/退出用例；SFX 池上限 | 主菜单/关卡 BGM 切换、SFX 音量/开关、退出清理 | 恢复 `MainMusic` |
@@ -132,18 +132,18 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 
 **顺序理由**：先处理无行为或低行为风险的诊断/死代码，再迁移叶子服务（UI 宿主、音频），然后处理中心资源运行时，最后迁移高频工厂与运行状态。`Global._exit_tree` 与 `change_scene` 是资源释放和场景流的正式入口，迁移时必须保留其可观察清理语义，不能用“搬字段”代替所有权迁移。
 
-## 6. 试点建议
+## 6. 试点
 
-本轮不执行代码；下一轮可从以下两个试点开始，二者都不新增 Autoload。
+P1 已执行；P2 仍为待办，二者都不新增 Autoload。
 
-### P1：删除 `BaseHit`
+### P1：删除 `BaseHit`（完成，2026-10-30）
 
-- 现状：4 处写入全在 `source/Script/magic_weapon/hit_bullet.gd`，全仓无读取、无 `.tscn`/动态引用。
-- 动作：删除 `project.godot` 的 `BaseHit` 注册与 4 行重置；不动命中数值逻辑。
-- 验收：`health_check` 0/0；`level_1` 与法宝命中冒烟；`contract_scan`；确认 Autoload 数 13→12、无启动顺序回归。
+- 已删除 `project.godot` 的 `BaseHit` 注册、`source/base_hit.gd` 与 `.uid`、`hit_bullet.gd` 的 `remove_infor()`，以及 4 个法宝弹体场景中 6 个 `remove_infor` 动画方法键；未改命中数值逻辑。
+- 当前 Autoload 为 **12** 个（11 业务 + 1 调试桥），`global.gd` 未变。
+- 验收：`health_check` 0 Parse / 0 Error / 0 Warning；`level_1` 冒烟 PASS（4 Stage，0/0/0）；`scene_probe_runner --probe magic-weapons` PASS；4 个改动场景的加载/实例化/方法轨道探针 PASS；`check_all --godot-bin` 8/8 PASS。
 - Owner：战斗/法宝。
 
-### P2：抽取 `RuntimeDiagnostics`
+### P2：抽取 `RuntimeDiagnostics`（待办）
 
 - 现状：调试浮层与快照 API 生产调用少，探针依赖明确。
 - 动作：新建 `RefCounted` 诊断服务；由 `Global` 或调试节点持有；迁移探针调用；删除 `Global` 中对应函数与调试状态。
@@ -154,7 +154,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 
 20-1B 决策本身的验收：
 
-- 本页覆盖 13 个 Autoload，每项有结论、owner 与前置条件；
+- 本页覆盖决策时 13 个 Autoload（当前 12 个；`BaseHit` 已删除），每项有结论、owner 与前置条件；
 - 明确“不新增 Autoload、不设数量目标、不批量改名”的边界；
 - 文档链接可达；`check_all --skip-engine` 通过；
 - 本轮不改运行代码，因此不以引擎/关卡回归替代文档验收。

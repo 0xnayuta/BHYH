@@ -23,7 +23,6 @@ config/windows_native_icon="res://Art/main_game/bhico.ico"
 
 [autoload]
 
-BaseHit="*res://base_hit.gd"
 RoleProp="*res://Script/base/base_role_properies.gd"
 PlayerData="*res://Script/memory_class/player_data.gd"
 MemoryClass="*res://Script/memory_class/memory_class.gd"

@@ -31,7 +31,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-004](ADR-004-naming-contract-and-frozen-whitelist.md) | 全工程命名契约与冻结白名单 | Accepted | 目录、文件、节点、标识符 |
 | [ADR-005](ADR-005-no-compatibility-or-fallback-layers.md) | 不保留兼容层、回退层与跨版本迁移链 | Accepted | 资源加载、存档、配置 |
 | [ADR-006](ADR-006-resource-first-data-and-data-keys.md) | 新结构化数据优先 Resource，存量字典走 DataKeys | Accepted | 数据模型、配置 |
-| [ADR-007](ADR-007-autoload-boundary.md) | 保留 13 个 Autoload，新增必须评审 | Accepted | 全局状态、生命周期 |
+| [ADR-007](ADR-007-autoload-boundary.md) | 保留 Autoload 注册基线，新增必须评审（当前 12 个） | Accepted | 全局状态、生命周期 |
 | [ADR-008](ADR-008-type-based-directories-with-feature-subdirectories.md) | 保留类型分层目录，新功能按功能子目录聚合 | Accepted | 项目结构 |
 | [ADR-009](ADR-009-build-time-visual-asset-pipeline.md) | 视觉资源构建期生成，运行时只读类型资源 | Superseded by ADR-020 | 历史资产管线决策 |
 | [ADR-010](ADR-010-spine-runtime-boundary.md) | Spine 保持骨骼运行时，不烘焙为 SpriteFrames | Accepted | 角色特效、平台库 |
