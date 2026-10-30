@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A 完成；19-4B/19-4C、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成；20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -147,8 +147,8 @@
 **切片**
 
 1. **19-4A 输入隔离（完成，2026-10-30）**：新增 `LocalCoopInputIsolationProbe`，逐项校验 18 个 `p2_*` 动作与 `P2_KEYS` 物理键、P1 `move_right`/`normalhit`/`jump` 保持 D/J/K、P1/P2 输入视图互不串槽、禁用双人后 P2 视图回落基础映射且重新启用恢复 `p2_*`；新增 `LocalCoopKeyConfigProbe`，验证 `set_com` 键位布局修改即时应用、保存与 `_on_reset_layout_pressed` 恢复默认，测试期间临时 `user://KeyConfig.json` 备份/恢复。`coop_probe_runner` 25/25 PASS；`check_all --godot-bin` 8/8 PASS。
-2. **19-4B HUD 只读**：确认 P1/P2 HP/MP/经验/无双/宠物来自槽位查询，暂停/切档/面板开关后无监听或写入残留；
-3. **19-4C 输入写入守卫**：静态扫描输入读取行不得出现 `PlayerData`/`request_save`；例外登记。
+2. **19-4B HUD 只读（完成，2026-10-30）**：新增 `LocalCoopHudReadOnlyProbe`，验证 P1/P2 HP/MP/经验/等级/无双/护盾与宠物经验/HP 均来自槽位查询；HUD 帧前后档案 JSON 快照一致；面板打开/关闭与暂停期间 HUD 值不变、数据无残留写入；HUD 释放与 `clear_runtime` 不写 1P 档案。面板首次打开会补默认 `角色昵称`（既有补全行为），探针在快照前预置昵称以隔离 HUD 写入。`coop_probe_runner` 26/26 PASS；`check_all --godot-bin` 8/8 PASS。
+3. **19-4C 输入写入守卫（完成，2026-10-30）**：`contract_scan.py` 新增第十七类 `input_boundary`：`Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save`；`INPUT_BOUNDARY_ALLOWLIST` 当前为空。新增正负样本自测；全量扫描 ERROR=0，无现有违规；契约看板补上 `phase17_boundary` 与 `input_boundary` 两类。`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --godot-bin` 8/8 PASS。
 
 **必须验证**：1P/2P 不串槽；HUD 不写档；切档/退出无残留监听。
 

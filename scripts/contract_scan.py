@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中十六类契约与真源的一致性：
+用于全量扫描并比对工程中十七类契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -21,6 +21,8 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 13. 槽位边界门禁 (Slot Boundary): 禁止业务硬编码 /root 单例，禁止重新引入全局视图交换
 14. 面板操作者门禁 (Panel Operator): 面板域脚本必须按槽位解析 PlayerData/RoleProp
 15. 共享账本与快照互斥门禁 (Shared Ledger): 共享键登记、2P 剥离与快照互斥必须同源
+16. Phase 17 边界门禁 (Phase 17 Boundary): 结算一次、命令快照、表现层不写档与试点路径预算
+17. 输入写入边界门禁 (Input Boundary): 输入读取行不得夹带 PlayerData 或 request_save
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1033,6 +1035,12 @@ class ContractScanner:
         "Script/base/base_magic_weapon.gd": 0,
     }
     PHASE17_DEEP_PATH_RE = re.compile(r'get_node(?:_or_null)?\("([^"]*)"')
+    # 19-4C：输入读取行不得同时操作档案或保存。
+    INPUT_READ_PATTERN = re.compile(
+        r"\b(?:Input|PlayerInput)\.(?:is_action_pressed|is_action_just_pressed|is_action_just_released|"
+        r"get_axis|get_vector|is_physical_key_pressed|is_key_pressed)\s*\("
+    )
+    INPUT_BOUNDARY_ALLOWLIST: Set[str] = set()
     ATLAS_BOUNDARY_LEGACY_PATTERNS = (
         "AtlasMetadataStore.data_for",
         "AtlasMetadataStore.validate_path",
@@ -1439,6 +1447,31 @@ class ContractScanner:
             rule_id="PHASE17_BOUNDARY_FORBIDDEN",
         )
 
+    @classmethod
+    def input_boundary_violation(cls, content: str, rel_path: str):
+        """19-4C：输入读取行不得同时出现 PlayerData 或 request_save。"""
+        if rel_path in cls.INPUT_BOUNDARY_ALLOWLIST:
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not cls.INPUT_READ_PATTERN.search(clean):
+                continue
+            if "PlayerData" in clean:
+                return (lineno, "input_read_with_PlayerData")
+            if "request_save" in clean:
+                return (lineno, "input_read_with_request_save")
+        return (0, "")
+
+    def scan_input_boundary(self):
+        print("[*] 扫描输入写入边界门禁 (输入读取行禁止夹带 PlayerData/request_save)...")
+        self._scan_rule(
+            category="input_boundary",
+            violation=self.input_boundary_violation,
+            message="输入读取与档案/保存混写：输入处理不得在同一行读取 PlayerData 或调用 request_save",
+            suggested_fix="先由 LocalCoop/命令解析槽位与档案；输入层只读取动作，不直接写档",
+            rule_id="INPUT_BOUNDARY_STATE_WRITE",
+        )
+
     def scan_pool_ui_boundary(self):
         print(f"[*] 扫描池/UI 清理入口登记门禁...")
         for abs_p in self.script_files:
@@ -1517,7 +1550,7 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整十六类契约扫描流水线"""
+        """执行完整十七类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1538,6 +1571,7 @@ class ContractScanner:
         self.scan_panel_operator()
         self.scan_shared_ledger_boundary()
         self.scan_phase17_boundary()
+        self.scan_input_boundary()
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
@@ -1593,7 +1627,7 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、十六类契约健康看板")
+        lines.append("## 一、十七类契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
@@ -1614,6 +1648,8 @@ class ContractScanner:
             "slot_boundary": "13. 槽位边界门禁 (Slot Boundary)",
             "panel_operator": "14. 面板操作者门禁 (Panel Operator)",
             "shared_ledger": "15. 共享账本登记门禁 (Shared Ledger)",
+            "phase17_boundary": "16. Phase 17 边界门禁 (Phase 17 Boundary)",
+            "input_boundary": "17. 输入写入边界门禁 (Input Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -2067,6 +2103,40 @@ def run_phase17_boundary_self_test() -> bool:
     return passed
 
 
+def run_input_boundary_self_test() -> bool:
+    """19-4C 输入写入边界自测：输入读取行夹带档案/保存必须拦截。"""
+    print("[*] 输入写入边界门禁负向自测...")
+    good = (
+        ('var pressed = PlayerInput.is_action_pressed("jump")\n', "Script/base/base_hero.gd"),
+        ('var value = PlayerData.player_data.get("x", 0)\n', "Script/base/base_role.gd"),
+        ('var axis = Input.get_axis("move_left", "move_right")\n', "Script/base/base_object.gd"),
+        ('# var pressed = Input.is_action_pressed("jump") and PlayerData.player_data["x"]\n', "Script/base/base_hero.gd"),
+    )
+    bad = (
+        (
+            'var pressed = PlayerInput.is_action_pressed("jump") and PlayerData.player_data["x"]\n',
+            "Script/base/base_hero.gd",
+        ),
+        (
+            'var pressed = Input.is_action_pressed("jump"); MemoryClass.request_save("x")\n',
+            "Script/base/base_hero.gd",
+        ),
+    )
+    passed = True
+    for content, rel_path in good:
+        line, pattern = ContractScanner.input_boundary_violation(content, rel_path)
+        if line != 0:
+            passed = False
+            print(f"  [FAIL] 正当样本被拦截: {rel_path} {pattern}")
+    for content, rel_path in bad:
+        line, pattern = ContractScanner.input_boundary_violation(content, rel_path)
+        if line == 0:
+            passed = False
+            print(f"  [FAIL] 负向样本未拦截: {rel_path}")
+    print("[OK] 输入写入边界门禁自测通过" if passed else "[FAIL] 输入写入边界门禁自测失败")
+    return passed
+
+
 def run_panel_operator_self_test() -> bool:
     """面板操作者门禁自测：声明/继承必须放行，未绑定必须拦截。"""
     print("[*] 面板操作者门禁负向自测...")
@@ -2132,7 +2202,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/Phase 17 边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2147,6 +2217,7 @@ def main():
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
         phase17_ok = run_phase17_boundary_self_test()
+        input_ok = run_input_boundary_self_test()
         panel_operator_ok = run_panel_operator_self_test()
         sys.exit(
             0
@@ -2160,6 +2231,7 @@ def main():
             and slot_ok
             and shared_ledger_ok
             and phase17_ok
+            and input_ok
             and panel_operator_ok
             else 1
         )
