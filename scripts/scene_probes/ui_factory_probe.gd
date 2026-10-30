@@ -74,6 +74,9 @@ const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
 const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
 const BASIC_PELLET_PATH := "res://Scene/pellet/basic_pellet.tscn"
 const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
+const ROLE1_SHALLOW_PATH := "res://Scene/hero/role1_s_hallow.tscn"
+const ROLE2_SHALLOW_PATH := "res://Scene/base/role2shallow.tscn"
+const CAMERA_PATH := "res://Scene/level/camera.tscn"
 
 var _failures: Array[String] = []
 
@@ -852,12 +855,34 @@ func _check_effect_family(checks: Dictionary) -> void:
 	checks["line_effect_fields"] = line != null and str(line.type) == "probe_line" and line.position == Vector2.ZERO
 	if line != null:
 		created.append(line)
+	var role1_shallow: Node = Global.add_role1_shallow(host, Vector2(11, 12), -1, 7, null)
+	await _settle()
+	checks["role1_shallow_created"] = role1_shallow != null and role1_shallow.get_parent() == host
+	checks["role1_shallow_fields"] = (
+		role1_shallow != null
+		and role1_shallow.position == Vector2(11, 12)
+		and int(role1_shallow.iniaction) == 7
+		and int(role1_shallow.direction) == -1
+		and role1_shallow.player == null
+	)
+	if role1_shallow != null:
+		created.append(role1_shallow)
+	var role2_shallow: Node = Global.add_role2_shallow(host, Vector2(13, 14), true)
+	await _settle()
+	checks["role2_shallow_created"] = role2_shallow != null and role2_shallow.get_parent() == host
+	checks["role2_shallow_fields"] = (
+		role2_shallow != null and role2_shallow.position == Vector2(13, 14) and bool(role2_shallow.dir)
+	)
+	if role2_shallow != null:
+		created.append(role2_shallow)
 	checks["effect_scenes_cached"] = (
 		Global.is_resource_cached(MONSTER141_AURA_PATH)
 		and Global.is_resource_cached(SMB_EFFECT_PATH)
 		and Global.is_resource_cached(ROLE_SPECIAL_EFFECT_PATH)
 		and Global.is_resource_cached(WS_EFFECT_PATH)
 		and Global.is_resource_cached(LINE_EFFECT_PATH)
+		and Global.is_resource_cached(ROLE1_SHALLOW_PATH)
+		and Global.is_resource_cached(ROLE2_SHALLOW_PATH)
 	)
 	_cleanup(created, host)
 
@@ -998,11 +1023,18 @@ func _check_level_scene_family(checks: Dictionary) -> void:
 	# 选择面板在 _ready 中按视口自行居中，传入坐标不是最终位置。
 	if dsg != null:
 		created.append(dsg)
+	var camera: Node = Global.add_camera(host, Vector2(25, 26), 1200)
+	await _settle()
+	checks["camera_created"] = camera != null and camera.get_parent() == host
+	checks["camera_fields"] = (camera != null and camera.position == Vector2(25, 26) and int(camera.max_right) == 1200)
+	if camera != null:
+		created.append(camera)
 	checks["level_scene_scenes_cached"] = (
 		Global.is_resource_cached(STAGE_PATH)
 		and Global.is_resource_cached(FLY_STAGE_PATH)
 		and Global.is_resource_cached(ZZ_TW_TRAP_PATH)
 		and Global.is_resource_cached(DSG_CHOOSE_PATH)
+		and Global.is_resource_cached(CAMERA_PATH)
 	)
 	_cleanup(created, host)
 

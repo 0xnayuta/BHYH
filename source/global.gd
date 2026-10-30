@@ -1358,8 +1358,6 @@ func clear_combat_runtime_cache() -> void:
 	_combat_factory.clear_scene_caches()
 	_projectile_factory.clear_scene_caches()
 	_effect_factory.clear_scene_caches()
-	role1_shallow = null
-	role2_shallow = null
 	_all_hero_skill_resources_preloaded = false
 	if _magic_weapon_runtime != null:
 		_magic_weapon_runtime.clear_runtime_state()
@@ -1589,8 +1587,6 @@ func release_role_runtime_resources() -> void:
 	_chase_bullet = null
 	_projectile_factory.clear_scene_caches()
 	_effect_factory.clear_scene_caches()
-	role1_shallow = null
-	role2_shallow = null
 
 
 # 为下一次关卡加载建立租约；目标场景只记录，不作为租约拥有的资源释放。
@@ -2094,7 +2090,6 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 
 var lhhjbutton = null
 
-var mycamera = null
 var target_scene: String:
 	get:
 		return _scene_flow.target_scene if _scene_flow != null else ""
@@ -2120,8 +2115,6 @@ var fall_equ = null
 var nmw_hands = null
 
 var sound = null
-var role1_shallow = null
-var role2_shallow = null
 var llbt_challenge = null
 var lhhj = null
 var listbutton = null
@@ -2476,12 +2469,7 @@ func add_smb_effect(parent, position, dir):
 
 
 func add_role2_shallow(parent, position, dir):
-	if not role2_shallow:
-		role2_shallow = _load_scene("res://Scene/base/role2shallow.tscn")
-	var target = instance_scene(role2_shallow, parent)
-	target.position = position
-	target.dir = dir
-	return target
+	return _effect_factory.add_role2_shallow(parent, position, dir)
 
 
 func add_role_special_effect(parent, position, dir, _name):
@@ -2586,14 +2574,7 @@ func add_damage_text(parent, position, value, type_: String, is_crit: bool, tar)
 
 
 func add_role1_shallow(parent, position, dir, int_action, source_player: BaseHero = null):
-	if not role1_shallow:
-		role1_shallow = _load_scene("res://Scene/hero/role1_s_hallow.tscn")
-	var target = instance_scene(role1_shallow, parent)
-	target.position = position
-	target.iniaction = int_action
-	target.direction = dir
-	_assign_attack_source(target, parent, source_player)
-	return target
+	return _effect_factory.add_role1_shallow(parent, position, dir, int_action, source_player)
 
 
 func add_role_bullet_1(parent, position, _name, dic, source_player: BaseHero = null):
@@ -3194,12 +3175,7 @@ func add_music_set(parent, position):
 
 
 func add_camera(parent, position, right):
-	if not mycamera:
-		mycamera = _load_scene("res://Scene/level/camera.tscn")
-	var target = instance_scene(mycamera, parent)
-	target.position = position
-	target.max_right = right
-	return target
+	return _level_scene_factory.add_camera(parent, position, right)
 
 
 func call_hero(who: String, parent, position: Vector2, _dir: bool, player_slot: int = 1):
