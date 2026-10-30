@@ -114,7 +114,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/reference/archive_session_matrix.md`](docs/reference/archive_session_matrix.md) | Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份、会话字段、直接写入分域、补全清单、共享账本与面板显式操作者 |
 | [`docs/reference/gameplay_module_matrix.md`](docs/reference/gameplay_module_matrix.md) | Phase 17-1 玩法与表现调用面矩阵：归属来源、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API |
 | [`docs/reference/module_api_matrix.md`](docs/reference/module_api_matrix.md) | Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` |
-| [`docs/reference/runtime_frames_exceptions.md`](docs/reference/runtime_frames_exceptions.md) | Phase 19-3A 运行时建帧例外决策：保留/补资源/删除回退结论与后续边界 |
+| [`docs/reference/runtime_frames_exceptions.md`](docs/reference/runtime_frames_exceptions.md) | Phase 19-3A/21-4A 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |

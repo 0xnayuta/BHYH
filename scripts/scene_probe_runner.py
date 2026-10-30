@@ -18,6 +18,7 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `role-skills`：角色 2/4 技能入口、BingYu/CangMu 效果实例化与 5 个 Spine 资源预加载；
 - `level-progress-exit`：Level10/17/19/20/21/22 非胜利转场只保存一次进度；
 - `magic-weapons`：法宝与角色特效构建期帧（诛仙剑阵、青莲、青龙剑/太极、八仙、Lyfb、哪吒阴阳）；
+- `action-frames`：八仙 Boss 与三太子（木吒/金吒）构建期动作帧、裁剪区域与实例化后帧绑定；
 - `weiyang-symbol`：未央宫 Boss 嘴/眼符号层帧构建、初始帧与发射时间轴可达。
 """
 
@@ -124,6 +125,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="MAGIC_WEAPON_PROBE_TEARDOWN",
         quit_after_frames=600,
         timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="action-frames",
+        title="八仙与三太子动作帧探针",
+        script_name="action_frames_probe.gd",
+        scene_name="action_frames_probe.tscn",
+        result_prefix="ACTION_FRAMES_PROBE_RESULT=",
+        report_stem="action_frames_probe_report",
+        teardown_marker="ACTION_FRAMES_PROBE_TEARDOWN",
+        quit_after_frames=900,
+        timeout_seconds=120,
     ),
     ProbeSpec(
         key="weiyang-symbol",

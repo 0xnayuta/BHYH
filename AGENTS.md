@@ -33,7 +33,7 @@
   - `reference/architecture.md`：当前运行时架构：Autoload 与 `Global` 普通子节点运行时、场景流、战斗、档案/双人、资源、UI/输入及遗留差距；
   - `reference/acceptance.md`：验收分层、八维门禁、契约域、运行期夹具与阈值；
   - `reference/autoload_boundary_matrix.md`：Phase 20-1B Autoload 与 `Global` 拆分边界：11 个注册项处置、普通子节点运行时、场景工厂族、迁移顺序与剩余候选；
-  - `reference/runtime_frames_exceptions.md`：Phase 19-3A 运行时建帧例外决策：保留/补资源/删除回退结论与后续边界；
+  - `reference/runtime_frames_exceptions.md`：Phase 19-3A/21-4A 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界；
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；

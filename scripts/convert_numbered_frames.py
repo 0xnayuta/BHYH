@@ -3,7 +3,10 @@
 """把连续编号 PNG 序列转换为构建期 SpriteFrames .tres。
 
 本工具与具体角色无关：既可通过 --pattern/--count/--output 处理任意序列，
-也可用 --all 生成项目当前登记的技能帧。
+也可用 --all 生成项目当前登记的单动画与多动作帧。
+
+多动作登记（21-4A）用于原本在运行期逐目录扫描建帧的家族：每个 profile
+声明同一输出的多个动画与可选裁剪规则，源目录必须从 1 连续编号。
 
 源路径与输出路径均使用 res:// 形式；源 PNG 位于 Art 私有目录，输出也
 不进入公开仓库。生成后由角色 Manifest 预热，运行时只加载 SpriteFrames。
@@ -11,6 +14,7 @@
 from __future__ import annotations
 
 import argparse
+import struct
 import sys
 from pathlib import Path
 
@@ -662,6 +666,176 @@ PROFILES: tuple[dict[str, object], ...] = (
 )
 
 
+# 21-4A 运行时建帧收口：多目录/多动作 PNG 序列 → 单个构建期 SpriteFrames。
+# 只有源结构满足“目录内从 1 连续编号、尺寸与裁剪规则可判定”时才登记；
+# 不满足的家族继续保留运行期构建，见 runtime_frames_exceptions.md。
+
+EIGHT_IMMORTALS_IDS: tuple[int, ...] = (163, 164, 165, 166, 168, 169, 174, 175)
+EIGHT_IMMORTALS_STATES: tuple[str, ...] = ("wait", "walk", "hurt", "death", "hit1", "hit2", "hit3")
+EIGHT_IMMORTALS_CROPS: dict[tuple[int, str], dict[str, object]] = {
+    # 166 hit2 帧 250x286，运行期裁为 250x250（左上锚点）。
+    (166, "hit2"): {"when": (250, 286), "region": (0, 0, 250, 250)},
+    # 168 hit2 帧 330x200，运行期裁为 250x200（x 偏移 40）。
+    (168, "hit2"): {"when": (330, 200), "region": (40, 0, 250, 200)},
+}
+PRINCE_ROOTS: tuple[tuple[str, int, int, dict[str, int]], ...] = (
+    (
+        "jinzha",
+        300,
+        300,
+        {"idle": 6, "walk": 4, "hurt": 1, "death": 5, "hit1": 4, "hit2": 3, "hit3": 4, "hit4": 1},
+    ),
+    (
+        "muzha",
+        250,
+        250,
+        {"idle": 6, "walk": 4, "hurt": 1, "death": 5, "hit1": 6, "hit2": 4, "hit3": 6, "hit4": 6},
+    ),
+)
+MULTI_ANIMATION_PROFILES: tuple[dict[str, object], ...] = (
+    *(
+        {
+            "name": "eight_immortals_%d_body" % monster_id,
+            "output": (
+                "res://Art/monster/game_3_monster/monster_%d/body_actions/body_frames.tres"
+                % monster_id
+            ),
+            "animations": [
+                {
+                    "name": state,
+                    "loop": state in ("wait", "walk"),
+                    "speed": 24.0,
+                    "pattern": (
+                        "res://Art/monster/game_3_monster/monster_%d/body_actions/%s/%%d.png"
+                        % (monster_id, state)
+                    ),
+                    "crop": EIGHT_IMMORTALS_CROPS.get((monster_id, state)),
+                }
+                for state in EIGHT_IMMORTALS_STATES
+            ],
+        }
+        for monster_id in EIGHT_IMMORTALS_IDS
+    ),
+    *(
+        {
+            "name": "three_prince_%s_body" % root_name,
+            "output": (
+                "res://Art/monster/game_3_monster/three_prince/%s/body_frames.tres" % root_name
+            ),
+            "animations": [
+                {
+                    "name": action,
+                    "loop": action in ("idle", "walk"),
+                    "speed": 24.0,
+                    "pattern": (
+                        "res://Art/monster/game_3_monster/three_prince/%s/%s/%%d.png"
+                        % (root_name, action)
+                    ),
+                    "count": declared_count,
+                    "crop": {"center": (frame_width, frame_height)},
+                }
+                for action, declared_count in counts.items()
+            ],
+        }
+        for root_name, frame_width, frame_height, counts in PRINCE_ROOTS
+    ),
+)
+
+
+def png_size(path: Path) -> tuple[int, int]:
+    with path.open("rb") as handle:
+        header = handle.read(24)
+    if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError(f"不是 PNG 文件: {path}")
+    return struct.unpack(">II", header[16:24])
+
+
+def discovered_frame_count(pattern: str) -> int:
+    # 与运行期 while ResourceLoader.exists(...) 一致：从 1 连续编号，遇到缺失即停止。
+    count = 0
+    while (SOURCE / (pattern % (count + 1)).removeprefix("res://")).is_file():
+        count += 1
+    return count
+
+
+def crop_region_for(size: tuple[int, int], crop: dict[str, object] | None) -> tuple[int, int, int, int] | None:
+    if not crop:
+        return None
+    if "center" in crop:
+        width, height = (int(value) for value in crop["center"])  # type: ignore[index]
+        if size[0] > width or size[1] > height:
+            origin_x = max(0, (size[0] - width) // 2)
+            origin_y = max(0, (size[1] - height) // 2)
+            return (origin_x, origin_y, width, height)
+        return None
+    expected = tuple(int(value) for value in crop["when"])  # type: ignore[index]
+    if size != expected:
+        raise ValueError(f"帧尺寸 {size} 与登记的裁剪条件 {expected} 不符")
+    region = crop["region"]
+    return tuple(int(value) for value in region)  # type: ignore[index]
+
+
+def build_multi_animation_tres(profile: dict[str, object]) -> str:
+    ext_lines: list[str] = []
+    sub_lines: list[str] = []
+    animation_blocks: list[str] = []
+    texture_index = 0
+    crop_index = 0
+    for animation in profile["animations"]:  # type: ignore[index]
+        pattern = str(animation["pattern"])
+        declared = animation.get("count")
+        discovered = discovered_frame_count(pattern)
+        if declared is not None and int(declared) != discovered:
+            raise ValueError(f"{pattern} 实际 {discovered} 帧，登记 {declared} 帧")
+        if discovered == 0:
+            raise ValueError(f"缺少帧目录: {pattern}")
+        frame_entries: list[str] = []
+        for source_index in range(1, discovered + 1):
+            resource_path = pattern % source_index
+            path = SOURCE / resource_path.removeprefix("res://")
+            if not path.is_file():
+                raise FileNotFoundError(f"缺少帧文件: {path.relative_to(ROOT)}")
+            texture_index += 1
+            texture_id = f"tex_{texture_index}"
+            ext_lines.append(f'[ext_resource type="Texture2D" path="{resource_path}" id="{texture_id}"]')
+            region = crop_region_for(png_size(path), animation.get("crop"))
+            if region is None:
+                texture_ref = f'ExtResource("{texture_id}")'
+            else:
+                crop_index += 1
+                crop_id = f"crop_{crop_index}"
+                sub_lines.extend(
+                    [
+                        f'[sub_resource type="AtlasTexture" id="{crop_id}"]',
+                        f'atlas = ExtResource("{texture_id}")',
+                        "region = Rect2(%d, %d, %d, %d)" % region,
+                        "",
+                    ]
+                )
+                texture_ref = f'SubResource("{crop_id}")'
+            frame_entries.append('{\n"duration": 1.0,\n"texture": %s\n}' % texture_ref)
+        animation_blocks.append(
+            '{\n"frames": [%s],\n"loop": %s,\n"name": &"%s",\n"speed": %s\n}'
+            % (
+                ", ".join(frame_entries),
+                "true" if animation.get("loop") else "false",
+                str(animation["name"]),
+                str(animation.get("speed", 30.0)),
+            )
+        )
+    lines: list[str] = [
+        f'[gd_resource type="SpriteFrames" load_steps={texture_index + crop_index + 1} format=3]',
+        "",
+        *ext_lines,
+        "",
+        *sub_lines,
+        "[resource]",
+        "animations = [%s]" % ", ".join(animation_blocks),
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def source_path(resource_path: str) -> Path:
     if not resource_path.startswith("res://"):
         raise ValueError(f"路径必须是 res:// 形式: {resource_path}")
@@ -755,11 +929,36 @@ def write_profile(profile: dict[str, object], check_only: bool) -> bool:
     return True
 
 
+def write_multi_profile(profile: dict[str, object], check_only: bool) -> bool:
+    name = str(profile["name"])
+    output = source_path(str(profile["output"]))
+    content = build_multi_animation_tres(profile)
+    if check_only:
+        if not output.is_file():
+            print(f"[FAIL] 缺少构建期 SpriteFrames: {output.relative_to(ROOT)}", file=sys.stderr)
+            return False
+        if output.read_text(encoding="utf-8") != content:
+            print(f"[FAIL] 构建期 SpriteFrames 已过期: {output.relative_to(ROOT)}", file=sys.stderr)
+            return False
+        print(f"[OK] {name}: {output.relative_to(ROOT)}")
+        return True
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(content, encoding="utf-8", newline="\n")
+    print(f"[OK] {name}: {output.relative_to(ROOT)}")
+    return True
+
+
 def run_all(check_only: bool) -> int:
     passed = True
     for profile in PROFILES:
         try:
             passed = write_profile(profile, check_only) and passed
+        except (OSError, ValueError) as error:
+            print(f"[FAIL] {profile['name']}: {error}", file=sys.stderr)
+            passed = False
+    for profile in MULTI_ANIMATION_PROFILES:
+        try:
+            passed = write_multi_profile(profile, check_only) and passed
         except (OSError, ValueError) as error:
             print(f"[FAIL] {profile['name']}: {error}", file=sys.stderr)
             passed = False
@@ -803,7 +1002,7 @@ def run_single(args: argparse.Namespace) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成连续编号 PNG 序列的构建期 SpriteFrames")
-    parser.add_argument("--all", action="store_true", help="生成项目登记的 BiLuoTian/LeiTingJieZhen/Wutai3077 帧")
+    parser.add_argument("--all", action="store_true", help="生成全部登记的单动画与多动作 SpriteFrames")
     parser.add_argument("--check", action="store_true", help="只校验输出是否存在且未过期")
     parser.add_argument("--pattern", help="res:// 路径模板，例如 res://.../frame_%%02d.png")
     parser.add_argument("--count", type=int, help="帧数量")

@@ -299,33 +299,12 @@ func _build_body_frames() -> void:
 			mr_ani.position = _config["visual_position"]
 			mr_ani.animation = &"idle"
 			return
-	var frames := SpriteFrames.new()
-	if frames.has_animation(&"default"):
-		frames.remove_animation(&"default")
-	var counts: Dictionary = _config["counts"]
-	var frame_size: Vector2i = _config["frame_size"]
-	for animation_name in ["idle", "walk", "hurt", "death", "hit1", "hit2", "hit3", "hit4"]:
-		var name_key := StringName(animation_name)
-		frames.add_animation(name_key)
-		frames.set_animation_loop(name_key, animation_name in ["idle", "walk"])
-		frames.set_animation_speed(name_key, SOURCE_FPS)
-		var action_root := root.path_join(animation_name)
-		for frame_index in range(1, int(counts[animation_name]) + 1):
-			var texture_path := action_root.path_join(str(frame_index) + ".png")
-			var texture := Global.get_cached_texture(texture_path)
-			if texture != null:
-				if texture.get_width() > frame_size.x or texture.get_height() > frame_size.y:
-					var clipped_texture := AtlasTexture.new()
-					clipped_texture.atlas = texture
-
-					var crop_origin := Vector2i(
-						maxi(0, (texture.get_width() - frame_size.x) / 2),
-						maxi(0, (texture.get_height() - frame_size.y) / 2)
-					)
-					clipped_texture.region = Rect2(Vector2(crop_origin), Vector2(frame_size))
-					frames.add_frame(name_key, clipped_texture)
-				else:
-					frames.add_frame(name_key, texture)
+	# 21-4A：木吒/金吒动作帧由 convert_numbered_frames.py 输出到 body_frames.tres，
+	# 超大帧的居中裁剪同样在构建期固化；哪吒继续走既有 atlas 帧资源。
+	var frames := load(root.path_join("body_frames.tres")) as SpriteFrames
+	if frames == null:
+		push_error("Missing Three Prince body frames: " + root)
+		return
 	_body_frames_cache[root] = frames
 	mr_ani.sprite_frames = frames
 	mr_ani.position = _config["visual_position"]

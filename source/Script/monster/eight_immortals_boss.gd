@@ -310,45 +310,22 @@ func _reset_source_skill_cooldowns() -> void:
 
 
 func _configure_visuals() -> void:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	var state_names: Array[StringName] = [&"wait", &"walk", &"hurt", &"death", &"hit1", &"hit2", &"hit3"]
-	for state_name in state_names:
-		var animation_name := state_name
-		frames.add_animation(animation_name)
-		frames.set_animation_loop(animation_name, animation_name in [&"wait", &"walk"])
-		frames.set_animation_speed(animation_name, SOURCE_FPS)
-		var frame_index := 1
-		while ResourceLoader.exists(_body_action_path(state_name, frame_index)):
-			var texture := Global.get_cached_texture(_body_action_path(state_name, frame_index)) as Texture2D
-			if texture != null:
-				if (
-					monster_id == 166
-					and state_name == &"hit2"
-					and texture.get_width() == 250
-					and texture.get_height() >= 250
-				):
-					var monster166_crop := AtlasTexture.new()
-					monster166_crop.atlas = texture
-					monster166_crop.region = Rect2(0, 0, 250, 250)
-					frames.add_frame(animation_name, monster166_crop)
-
-				elif monster_id == 168 and texture.get_width() == 330 and texture.get_height() == 200:
-					var monster168_crop := AtlasTexture.new()
-					monster168_crop.atlas = texture
-					monster168_crop.region = Rect2(40, 0, 250, 200)
-					frames.add_frame(animation_name, monster168_crop)
-				else:
-					frames.add_frame(animation_name, texture)
-			frame_index += 1
-		if frames.get_frame_count(animation_name) == 0:
-			push_error("Missing Eight Immortals body action: Monster_%d/%s" % [monster_id, state_name])
+	# 21-4A：七段动作已由 convert_numbered_frames.py 输出到 body_frames.tres，
+	# 帧序列与 166/168 的裁剪规则在构建期固化，运行期不再扫描目录。
+	var frames := load(_body_frames_path()) as SpriteFrames
+	if frames == null:
+		push_error("Missing Eight Immortals body frames: Monster_%d" % monster_id)
+		return
 	mr_ani.sprite_frames = frames
 	mr_ani.animation = &"wait"
 
 	mr_ani.centered = false
 	mr_ani.offset = _body_registration_offset()
 	mr_ani.frame = 0
+
+
+func _body_frames_path() -> String:
+	return "res://Art/monster/game_3_monster/monster_%d/body_actions/body_frames.tres" % monster_id
 
 
 func _body_registration_offset() -> Vector2:

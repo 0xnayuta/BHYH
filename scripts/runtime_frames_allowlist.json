@@ -4,13 +4,11 @@
   "allowed": {
     "source/Script/level/level_59.gd": "保留：固定 STONE_TEXTURES preload 数组建帧，无路径扫描或逐帧 IO",
     "source/Script/monster/east_continent_monster.gd": "保留：只复制已加载的标准帧并重命名动作；关卡配置 merge 使动作名无法完全静态化，无逐帧 IO",
-    "source/Script/monster/eight_immortals_boss.gd": "补资源待办：8 个 Boss 的 body_actions 逐帧 PNG + monster166/168 裁剪；现有转换器不覆盖多目录动作集，暂保留运行期构建",
     "source/Script/monster/monster_bullet.gd": "保留：标准帧缺失时生成 null 计时帧，只提供时间轴，不拼帧路径",
     "source/Script/monster/nanhai_projectile.gd": "保留：同一模型多动作复用标准帧并重命名；无标准资源的模型仍走逐帧回退",
-    "source/Script/monster/pet_tiger_boss_base.gd": "补资源待办：stage 1~3 的 r<row>_c<col> 固定网格；现有转换器不覆盖多纹理网格，暂保留运行期构建",
-    "source/Script/monster/three_prince_boss.gd": "补资源待办：4 个根目录 × 8 动作逐帧 PNG + 裁剪；需现有转换器扩展，暂保留运行期构建",
+    "source/Script/monster/pet_tiger_boss_base.gd": "补资源待办：声明的 stage1~4/r<row>_c<col>.png 网格资源缺失，预构建 pet_tiger_stage*_frames.tres 缺 hit5/hit6；源结构不满足转换条件，保留运行期构建",
     "source/Script/monster/three_prince_bullet.gd": "保留：Nezha 特效走构建期资源，非 Nezha 特效仍依赖逐帧回退",
-    "source/Script/monster/weiyang_palace_boss.gd": "补资源待办：符号层重命名；当前路径指向不存在的 3010 资源，分支不可达；修复涉及技能时序，需单独验收",
+    "source/Script/monster/weiyang_palace_boss.gd": "保留：符号层从 3007 帧资源复制并重命名（21-4B 已修复路径）；只复制已加载帧，无逐帧 IO",
     "source/Script/pet/pet_neat_bullet.gd": "保留：pet_neat_4_bullet_3 需运行时蓝底抠图；构建期迁移需 22 张去底重复 PNG",
     "source/Script/tools/user_key.gd": "保留：调试工具 UI 固定图标序列，不进入游戏运行路径"
   }
