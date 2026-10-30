@@ -3107,6 +3107,22 @@ func restore_mosaic_equipment() -> bool:
 	return true
 
 
+## 强化/洗练后写回人物穿戴栏：只替换该槽位首件装备，字典写入由 PlayerData 独占。
+## 槽位为空或首件不是字典时返回 false，调用方按原有表现处理。
+func update_equipped_item(slot_type: String, item: Dictionary) -> bool:
+	if slot_type == "":
+		return false
+	var equipped_value: Variant = player_data.get(slot_type, [])
+	if not (equipped_value is Array) or (equipped_value as Array).is_empty():
+		return false
+	var equipped: Array = equipped_value
+	if not (equipped[0] is Dictionary):
+		return false
+	equipped[0] = item
+	player_data[slot_type] = equipped
+	return true
+
+
 func _pet_equipment_random_stats_from_sources(sources: Array) -> Array:
 	for source_value in sources:
 		if not (source_value is Dictionary):

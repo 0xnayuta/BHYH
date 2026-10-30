@@ -20,6 +20,7 @@ const LEVEL_ENTRY_RUNTIME_SCRIPT := preload("res://Script/runtime/level_entry_ru
 const MONSTER_SPAWN_RUNTIME_SCRIPT := preload("res://Script/runtime/monster_spawn_runtime.gd")
 const ROLE_VISUAL_RUNTIME_SCRIPT := preload("res://Script/runtime/role_visual_runtime.gd")
 const MONSTER_DISPLAY_FACTORY_SCRIPT := preload("res://Script/runtime/monster_display_factory.gd")
+const LEVEL_HINT_FACTORY_SCRIPT := preload("res://Script/runtime/level_hint_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -360,6 +361,10 @@ func _ready() -> void:
 	_monster_display.name = "MonsterDisplayFactory"
 	_monster_display.setup(self)
 	add_child(_monster_display)
+	_level_hint = LEVEL_HINT_FACTORY_SCRIPT.new()
+	_level_hint.name = "LevelHintFactory"
+	_level_hint.setup(self)
+	add_child(_level_hint)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -429,6 +434,10 @@ func get_role_visual_runtime() -> RoleVisualRuntime:
 
 func get_monster_display_factory() -> MonsterDisplayFactory:
 	return _monster_display
+
+
+func get_level_hint_factory() -> LevelHintFactory:
+	return _level_hint
 
 
 var cloud_sword = null
@@ -668,6 +677,7 @@ var _level_entry: LevelEntryRuntime = null
 var _monster_spawn: MonsterSpawnRuntime = null
 var _role_visual: RoleVisualRuntime = null
 var _monster_display: MonsterDisplayFactory = null
+var _level_hint: LevelHintFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -2092,11 +2102,7 @@ var role2_shallow = null
 var smb_effect = null
 var new_bullet = null
 var role_magic_need = null
-var game_need_know = null
-var level_fall_box = null
 var pj = null
-var help_thing = null
-var hc_help = null
 var stage = null
 var decompose = null
 var decompose_help = null
@@ -2621,20 +2627,11 @@ func add_boss_blood_instance(parent, Obj):
 
 
 func add_hc_help(parent, position):
-	if not hc_help:
-		hc_help = _load_scene("res://Scene/other_scene/hc_help.tscn")
-	var target = instance_scene(hc_help, parent)
-	target.position = position
-	return target
+	return _level_hint.add_hc_help(parent, position)
 
 
 func add_help_thing(parent, position, item_info):
-	if not help_thing:
-		help_thing = _load_scene("res://Scene/other_scene/help_things.tscn")
-	var target = instance_scene(help_thing, parent)
-	target.item_info = item_info
-	target.position = position
-	return target
+	return _level_hint.add_help_thing(parent, position, item_info)
 
 
 func add_pj(parent, position, Num):
@@ -2671,41 +2668,15 @@ func add_monster_head(parent, Name, is_boss, ScenePath := ""):
 
 
 func add_level_fall_box(parent, Inldl, Inhhgz, Name, qh_level, wx, EqProp):
-	if not level_fall_box:
-		level_fall_box = _load_scene("res://Scene/back_pack/box_1.tscn")
-	var target = instance_scene(level_fall_box, parent)
-	target.is_in_ldl_gz = Inldl
-	target.is_in_hhgz = Inhhgz
-	target.qh_level = qh_level
-	target.wx = wx
-	target.eq_prop = EqProp
-	target.get_item_name = Name
-	target.set_meta("item_name", Name)
-	target.set_meta("level_fall_box", true)
-	return target
+	return _level_hint.add_level_fall_box(parent, Inldl, Inhhgz, Name, qh_level, wx, EqProp)
 
 
 func add_item_box(parent, Inldl, Inhhgz, Name, qh_level, num, wx, EqProp):
-	if not level_fall_box:
-		level_fall_box = _load_scene("res://Scene/back_pack/box_1.tscn")
-	var target = instance_scene(level_fall_box, parent)
-	target.is_in_ldl_gz = Inldl
-	target.is_in_hhgz = Inhhgz
-	target.qh_level = qh_level
-	target.total_number = num
-	target.wx = wx
-	target.eq_prop = EqProp
-	target.get_item_name = Name
-	target.set_meta("item_name", Name)
-	return target
+	return _level_hint.add_item_box(parent, Inldl, Inhhgz, Name, qh_level, num, wx, EqProp)
 
 
 func add_game_need_know(parent, position):
-	if not game_need_know:
-		game_need_know = _load_scene("res://Scene/other_scene/game_need_know.tscn")
-	var target = instance_scene(game_need_know, parent)
-	target.position = position
-	return target
+	return _level_hint.add_game_need_know(parent, position)
 
 
 func add_role_magic_need(parent, position, _name, old, new):

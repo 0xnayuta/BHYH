@@ -192,8 +192,7 @@ func _update_selected_equipment(selected: Dictionary, item_name: String, data: D
 			item[DataKeys.NAME] = item_name
 			item[DataKeys.ENHANCE_LEVEL] = level
 			item["Data"] = data
-			equipped[0] = item
-			PlayerData.player_data[slot_type] = equipped
+			PlayerData.update_equipped_item(slot_type, item)
 		RoleProp.get_equ_last_pro()
 		RoleProp.get_last_prop()
 		if is_instance_valid(RoleProp.source_player):

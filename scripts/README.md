@@ -147,7 +147,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 
 `archive_probes/` 存放档案持久化定向探针（缺失/空/损坏档的显式 `status`、备份恢复、原子写、角色范围、`request_save`、面板/地图页/结算真实写盘、身份 epoch 与过期回写拒绝、补全后置条件、档案会话生命周期）。`archive_probe_runner.py` 用 `--scene` 启动并把 `APPDATA`/`XDG_DATA_HOME` 指向临时目录，探针退出后删除 fixture 与临时用户目录；探针主动触发的校验拒绝日志在 runner 中按白名单排除，其它 ERROR/WARNING 仍判失败。
 
-`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`、`level_progress_exit_probe`、`ui_factory_probe`、`run_context_probe`、`level_entry_probe`、`utils_probe`）。`ui_factory_probe` 覆盖 `Global` 的 6 个场景工厂族入口（含 `MonsterDisplayFactory`）、族节点归属、返回形状与清缓存后重取景；`run_context_probe` 覆盖 `RunContext` 统计分桶隔离、未知类型忽略、宝塔层数与关卡显示名往返、结算面板 `after_level_end` 读取同一上下文；`level_entry_probe` 覆盖关卡进入拒绝语义、信息面板与临时 UI 登记、直进分支、掉落概率表、模式复位（含无尽模式唯一性）与怪物生成（含别名路径）；`utils_probe` 覆盖 `NodeUtils`/`ItemUtils` 语义与 `RoleVisualRuntime` 的角色贴图加载和旧贴图释放。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
+`scene_probes/` 存放场景级运行时探针（`constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`、`level_progress_exit_probe`、`ui_factory_probe`、`run_context_probe`、`level_entry_probe`、`utils_probe`）。`ui_factory_probe` 覆盖 7 个场景工厂族（`Popup`/`Shop`/`Backpack`/`Reward`/`CombatPresentation`/`MonsterDisplay`/`LevelHint`）的 `Global` 入口、族节点归属、返回形状与清缓存后重取景；`run_context_probe` 覆盖 `RunContext` 统计分桶隔离、未知类型忽略、宝塔层数与关卡显示名往返、结算面板 `after_level_end` 读取同一上下文；`level_entry_probe` 覆盖关卡进入拒绝语义、信息面板与临时 UI 登记、直进分支、掉落概率表、模式复位（含无尽模式唯一性）与怪物生成（含别名路径）；`utils_probe` 覆盖 `NodeUtils`/`ItemUtils` 语义与 `RoleVisualRuntime` 的角色贴图加载和旧贴图释放。`scene_probe_runner.py` 按 `PROBES` 清单把 `.gd` 与 `.tscn` 复制到工程根目录，用 `--scene` 启动；不使用 `--script`，因为自定义 `SceneTree` 会在 Autoload 全局标识注册前编译入口依赖，无法可靠验证生产启动顺序。执行后自动清理临时文件；`--probe` 可只运行其中一项。
 
 ---
 
@@ -207,7 +207,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 | `phase17_boundary` | 结算必须 `LevelSettlement` 且不直写保存；命令必须 `snapshot_state/restore_state`；表现层不写档；四试点禁 `/root` 且路径预算不超 | 见 `contract_scan.py` 常量 |
 | `input_boundary` | `Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save` | `INPUT_BOUNDARY_ALLOWLIST`（当前为空） |
 | `run_state_boundary` | 禁止直写已迁移的运行状态字段（`current_level`/`llbt_level`/`total_*`/`is_*` 减益标志/无尽模式/八仙选择/贴图槽位），禁止调用已删除的 `Global.get_ancestor` 等旧工具入口；改用 `RunContext`/accessor 与 `NodeUtils`/`ItemUtils` | 无（`addons/` 除外） |
-| `hud_panel_boundary` | `skill_icon`/`pet_interface`/`base_role` 禁止直接档案 IO 与 `PlayerData.player_data` 字典直写；保存只经 `request_save` 入口 | 无（仅这三个文件受限） |
+| `hud_panel_boundary` | `skill_icon`/`pet_interface`/`base_role` 与 `basic_task`/`divine_forge`/`synthesis`/`bone_forge` 禁止直接档案 IO 与 `PlayerData.player_data` 字典直写；保存只经 `request_save`，装备写回只经 `PlayerData.update_equipped_item` | 无（仅上述七个文件受限） |
 
 `python scripts/contract_scan.py --self-test` 对以上八类与前十一类边界执行坏样本拦截与好样本放行；`contract_gate.py` 同时执行该自测；`check_all.py` 中的契约门禁按 `--fail-on-error` 调用全量扫描。
 

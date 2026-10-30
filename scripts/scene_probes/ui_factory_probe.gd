@@ -16,6 +16,10 @@ const HIT_TEXT_PATH := "res://Scene/hittext/hit_text.tscn"
 const MONSTER_HEAD_INFO_PATH := "res://Scene/other_scene/monster_head_info.tscn"
 const BOSS_INFO_PATH := "res://Scene/monster/boss_info.tscn"
 const BASIC_MOMENT_INFO_PATH := "res://Scene/other_scene/basic_monment_info.tscn"
+const BOX_SCENE_PATH := "res://Scene/back_pack/box_1.tscn"
+const GAME_NEED_KNOW_PATH := "res://Scene/other_scene/game_need_know.tscn"
+const HC_HELP_PATH := "res://Scene/other_scene/hc_help.tscn"
+const HELP_THING_PATH := "res://Scene/other_scene/help_things.tscn"
 
 var _failures: Array[String] = []
 
@@ -38,6 +42,7 @@ func _run() -> void:
 	await _check_combat_cache_release(checks)
 	await _check_combat_pool(checks)
 	await _check_monster_display_family(checks)
+	await _check_level_hint_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -57,6 +62,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["reward_factory_node"] = _has_child_node("RewardFactory")
 	checks["combat_factory_node"] = _has_child_node("CombatPresentationFactory")
 	checks["monster_display_factory_node"] = _has_child_node("MonsterDisplayFactory")
+	checks["level_hint_factory_node"] = _has_child_node("LevelHintFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -64,6 +70,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_reward_factory().get_parent() == Global
 		and Global.get_combat_factory().get_parent() == Global
 		and Global.get_monster_display_factory().get_parent() == Global
+		and Global.get_level_hint_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -380,6 +387,64 @@ func _check_monster_display_family(checks: Dictionary) -> void:
 		Global.is_resource_cached(MONSTER_HEAD_INFO_PATH)
 		and Global.is_resource_cached(BOSS_INFO_PATH)
 		and Global.is_resource_cached(BASIC_MOMENT_INFO_PATH)
+	)
+	_cleanup(created, host)
+
+
+func _check_level_hint_family(checks: Dictionary) -> void:
+	# 关卡提示族：掉落箱与道具箱共用同一场景槽位，但元数据与字段不同。
+	var host := _make_host("LevelHintProbeHost")
+	var created: Array[Node] = []
+	var fall_box: Node = Global.add_level_fall_box(
+		host, true, false, "probe_drop", 2, ["金"], {"Def": 1}
+	)
+	await _settle()
+	checks["level_fall_box_created"] = fall_box != null and fall_box.get_parent() == host
+	checks["level_fall_box_flags"] = (
+		fall_box != null and bool(fall_box.is_in_ldl_gz) and not bool(fall_box.is_in_hhgz)
+	)
+	checks["level_fall_box_quality"] = fall_box != null and int(fall_box.qh_level) == 2
+	checks["level_fall_box_name"] = (
+		fall_box != null
+		and str(fall_box.get_item_name) == "probe_drop"
+		and str(fall_box.get_meta("item_name", "")) == "probe_drop"
+	)
+	checks["level_fall_box_meta"] = fall_box != null and bool(fall_box.get_meta("level_fall_box", false))
+	if fall_box != null:
+		created.append(fall_box)
+	var item_box: Node = Global.add_item_box(host, false, true, "probe_item", 3, 5, ["木"], {})
+	await _settle()
+	checks["item_box_created"] = item_box != null and item_box.get_parent() == host
+	checks["item_box_total_number"] = item_box != null and int(item_box.total_number) == 5
+	checks["item_box_no_fall_meta"] = item_box != null and not item_box.has_meta("level_fall_box")
+	if item_box != null:
+		created.append(item_box)
+	var know: Node = Global.add_game_need_know(host, Vector2(21, 22))
+	await _settle()
+	checks["game_need_know_created"] = know != null and know.get_parent() == host
+	checks["game_need_know_position"] = know != null and know.position == Vector2(21, 22)
+	if know != null:
+		created.append(know)
+	var hc_help: Node = Global.add_hc_help(host, Vector2(31, 32))
+	await _settle()
+	checks["hc_help_created"] = hc_help != null and hc_help.get_parent() == host
+	checks["hc_help_position"] = hc_help != null and hc_help.position == Vector2(31, 32)
+	if hc_help != null:
+		created.append(hc_help)
+	var help_thing: Node = Global.add_help_thing(host, Vector2(41, 42), {"Name": "probe"})
+	await _settle()
+	checks["help_thing_created"] = help_thing != null and help_thing.get_parent() == host
+	checks["help_thing_info"] = (
+		help_thing != null and str(help_thing.item_info.get("Name", "")) == "probe"
+	)
+	checks["help_thing_position"] = help_thing != null and help_thing.position == Vector2(41, 42)
+	if help_thing != null:
+		created.append(help_thing)
+	checks["level_hint_scenes_cached"] = (
+		Global.is_resource_cached(BOX_SCENE_PATH)
+		and Global.is_resource_cached(GAME_NEED_KNOW_PATH)
+		and Global.is_resource_cached(HC_HELP_PATH)
+		and Global.is_resource_cached(HELP_THING_PATH)
 	)
 	_cleanup(created, host)
 

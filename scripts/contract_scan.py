@@ -1058,11 +1058,16 @@ class ContractScanner:
         "Script/base/base_magic_weapon.gd": 0,
     }
     PHASE17_DEEP_PATH_RE = re.compile(r'get_node(?:_or_null)?\("([^"]*)"')
-    # 20-3A：HUD/面板只读域——禁止直接档案 IO 与 PlayerData 字典直写。
+    # 20-3A：HUD/面板域只读——禁止直接档案 IO 与 PlayerData 字典直写；
+    # 面板与命令面板都必须经 request_save 与 PlayerData 写入口方法。
     HUD_PANEL_FILES = {
         "Scene/other_scene/skill_icon.gd",
         "Script/pet/pet_interface.gd",
         "Script/base/base_role.gd",
+        "Script/task/basic_task.gd",
+        "Script/ldl/divine_forge.gd",
+        "Script/ldl/synthesis.gd",
+        "Script/ldl/bone_forge.gd",
     }
     HUD_PANEL_ARCHIVE_IO = (
         "MemoryClass.save_game(",
@@ -2226,6 +2231,8 @@ def run_hud_panel_boundary_self_test() -> bool:
         "技能图标读档": ("var d = MemoryClass.load_game(path)\n", "Scene/other_scene/skill_icon.gd"),
         "HUD 字典下标直写": ('PlayerData.player_data["技能"][0] = 1\n', "Script/base/base_role.gd"),
         "面板字典属性直写": ("PlayerData.player_data.技能 = 1\n", "Script/pet/pet_interface.gd"),
+        "任务面板直写进度": ('PlayerData.player_data["天庭"] = 1\n', "Script/task/basic_task.gd"),
+        "锻造面板写回槽位": ("PlayerData.player_data[slot_type] = equipped\n", "Script/ldl/bone_forge.gd"),
     }
     good_samples = {
         "面板提交保存请求": ('Global.request_save_with_feedback("pet_changes", self)\n', "Script/pet/pet_interface.gd"),
@@ -2233,6 +2240,8 @@ def run_hud_panel_boundary_self_test() -> bool:
         "只读查询": ('var v = PlayerData.player_data["技能"]\n', "Script/base/base_role.gd"),
         "比较而非赋值": ('if PlayerData.player_data["技能"] == 1:\n', "Script/base/base_role.gd"),
         "非目标文件写档": ("MemoryClass.save_game(path)\n", "Script/level/victory.gd"),
+        "合成面板原地清空列表": ('PlayerData.player_data["放入列表"]["物品1"].clear()\n', "Script/ldl/synthesis.gd"),
+        "锻造面板提交保存": ('MemoryClass.request_save("ldl_bone_forge", false)\n', "Script/ldl/bone_forge.gd"),
         "注释中的直写": ('# PlayerData.player_data["x"] = 1 legacy\n', "Script/base/base_role.gd"),
     }
     passed = True
