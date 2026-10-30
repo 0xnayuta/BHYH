@@ -8,6 +8,7 @@ extends Node
 ## 通过 Global.get_combat_pool() 取还节点；池状态由 CombatPoolRuntime 持有。
 
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
+const BUFF_ICON_PATH := "res://Scene/other_scene/buff_icon.tscn"
 const TRAP_PATH := "res://Scene/level/trap.tscn"
 const SPECIAL_EFFECT_BULLET_PATH := "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"
 const HIT_TEXT_PATH := "res://Scene/hittext/hit_text.tscn"
@@ -314,6 +315,24 @@ func add_special_effect(parent, _position, _name, _scale, direction, _speed):
 	target.effect_speed = _speed
 	target.effect_dir = direction
 	target.position = _position
+	return target
+
+
+func add_buff_icon(parent, data):
+	if parent == null or not is_instance_valid(parent) or parent.is_queued_for_deletion():
+		return null
+	var buff_scene := _scene(BUFF_ICON_PATH)
+	if buff_scene == null:
+		return null
+	var target = buff_scene.instantiate()
+	if target == null:
+		return null
+	parent.add_child(target)
+	target.data_list = data
+	var buff_name := str(data.get("Name", "")) if data is Dictionary else ""
+	if not buff_name.is_empty():
+		target.name = buff_name
+		target.buff_name = buff_name
 	return target
 
 

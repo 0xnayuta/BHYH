@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A/21-3B/21-3C/21-3D 与 21-4B 已完成**；21-1A/21-1B/21-1C、21-2、21-4A 与剩余工厂族未启动。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A/21-3B/21-3C/21-3D/21-3E 与 21-4B 已完成**；21-1A/21-1B/21-1C、21-2、21-4A 与剩余 30 个工厂族入口未启动。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -27,7 +27,7 @@
 | 项 | 事实 |
 |:---|:---|
 | Autoload | 11 个（10 业务 + 1 编辑器调试桥）；`Global` 持有 18 个普通子节点与 1 个 `RunContext` |
-| `Global` 规模 | 3,753 行 / 330 函数 / 172 变量；`add_*` 118 个，82 个为薄转发 |
+| `Global` 规模 | 3,715 行 / 331 函数 / 168 变量；`add_*` 118 个，88 个为薄转发 |
 | 静态守卫 | `contract_scan.py` 20 类；`check_all` 八维；契约 ERROR=0、WARNING ≤ 预算 |
 | 运行时夹具 | `archive_probe_runner` 293 项、`coop_probe_runner` 26 例、`scene_probe_runner` 11 套 |
 | 资源闭包 | 19-3C 的 PCK 快照只在资源未变化时有效；资源变更后必须重跑 |
@@ -62,9 +62,11 @@
 2. **21-3B 角色/怪物弹体族（完成，2026-10-30）**：7 个弹体入口迁入 `ProjectileFactory`，slim/streaming 路径解析与法宝弹体路径表迁入；来源写入仍经 `Global._assign_attack_source`；
 3. **21-3C 效果族（完成，2026-10-30）**：6 个效果入口迁入 `EffectFactory`，灵魄加成仍由 `PaSkill` 计算；
 4. **21-3D 菜单/设置族（完成，2026-10-30）**：`add_game_set`、`add_skill_key_set`、`add_music_set`、`add_ldl`、`add_gm_infor`、`add_learn_skill` 迁入 `MenuPanelFactory`；`add_set_menu` 全仓 0 调用方，随槽位删除；`add_skill_select` 已是 `BackpackFactory` 薄转发；顺带修复 `add_gm_infor` 在 `CanvasLayer` 上写 `z_index` 的运行时错误；
-5. 其余 36 个 `add_*` 按 `autoload_boundary_matrix.md` §8 候选清单继续，不建总工厂、不新增 Autoload。
+5. **21-3E buff 族（完成，2026-10-30）**：`add_buffinfor` 并入 `PopupFactory`，`add_buff_icon` 并入 `CombatPresentationFactory`；`add_buff`/`add_buff_info`/`add_buff_icon_text`/`add_magp_infor` 已是既有薄转发；
+6. **21-3E 关卡场景族（完成，2026-10-30）**：`add_stage`、`add_z_lw_stage`、`add_zztw_trap`、`add_dsg_choose` 迁入 `LevelSceneFactory`；
+7. 其余 30 个 `add_*` 按 `autoload_boundary_matrix.md` §8 候选清单继续，不建总工厂、不新增 Autoload。
 
-**必须验证**：每次迁移删除被替代的槽位字段，保留同名薄转发；`ui-factories` 或对应运行时探针覆盖返回形状与缓存；战斗相关族追加 `level_1` 冒烟与全量回归。**21-3A/B/C/D 验证**：`ui-factories` 189 项 PASS（含清缓存重载、`CanvasLayer` 语义与死入口断言）；`check_all --godot-bin` 8/8；`level_1` PASS；全量回归 128/128 PASS + 5 SKIP；存档探针 293/293。
+**必须验证**：每次迁移删除被替代的槽位字段，保留同名薄转发；`ui-factories` 或对应运行时探针覆盖返回形状与缓存；战斗相关族追加 `level_1` 冒烟与全量回归。**21-3A~E 验证**：`ui-factories` 206 项 PASS（含清缓存重载、`CanvasLayer` 语义、buff 拒绝语义与死入口断言）；`check_all --godot-bin` 8/8；`level_1` PASS；全量回归 128/128 PASS + 5 SKIP；存档探针 293/293。
 
 ## 5. Phase 21-4：资源转换器与建帧遗留
 

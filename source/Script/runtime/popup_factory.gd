@@ -12,6 +12,7 @@ const COMBO_PATH := "res://Scene/show_text/combo.tscn"
 const COMBO_NUM_PATH := "res://Scene/show_text/combo_num.tscn"
 const CHOOSE_TEXT_PATH := "res://Scene/show_text/choose_scene.tscn"
 const TOUCH_TEXT_PATH := "res://Scene/show_text/touch_text.tscn"
+const BUFF_INFOR_PATH := "res://Scene/other_scene/buff_information.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}
@@ -59,6 +60,16 @@ func add_message_show(parent_node, need_text: String, time: float, target_pos: V
 
 func add_buff_info(parent, _position, message_text: String):
 	return add_message_show(parent, message_text, 1.5, _position)
+
+
+func add_buff_information(parent, position, data):
+	var target = _host.instance_scene(_scene(BUFF_INFOR_PATH), parent)
+	if target == null:
+		return null
+	target.data_list = data
+	_host.apply_popup_screen_layout(target, position, Vector2(320, 120))
+	_host.prepare_hover_info_popup(target, true)
+	return target
 
 
 func add_choose_text(parent, _position, text_, calm_time):

@@ -46,6 +46,12 @@ const MUSIC_SET_PATH := "res://Scene/other_scene/choose_music.tscn"
 const LDL_PATH := "res://Scene/ldl/ldl.tscn"
 const GAME_INFORMATION_PATH := "res://Scene/main_menu/game_information.tscn"
 const LEARN_SKILL_PATH := "res://Scene/skill/learn_skill.tscn"
+const BUFF_INFORMATION_PATH := "res://Scene/other_scene/buff_information.tscn"
+const BUFF_ICON_PATH := "res://Scene/other_scene/buff_icon.tscn"
+const STAGE_PATH := "res://Scene/level/jctfloor_1.tscn"
+const FLY_STAGE_PATH := "res://Scene/level/zlw_fly_floor.tscn"
+const ZZ_TW_TRAP_PATH := "res://Scene/level/zztw_trap.tscn"
+const DSG_CHOOSE_PATH := "res://Scene/level/dsg_choose.tscn"
 
 var _failures: Array[String] = []
 
@@ -74,6 +80,7 @@ func _run() -> void:
 	await _check_projectile_family(checks)
 	await _check_effect_family(checks)
 	await _check_menu_panel_family(checks)
+	await _check_level_scene_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -99,6 +106,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["projectile_factory_node"] = _has_child_node("ProjectileFactory")
 	checks["effect_factory_node"] = _has_child_node("EffectFactory")
 	checks["menu_panel_factory_node"] = _has_child_node("MenuPanelFactory")
+	checks["level_scene_factory_node"] = _has_child_node("LevelSceneFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -112,6 +120,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_projectile_factory().get_parent() == Global
 		and Global.get_effect_factory().get_parent() == Global
 		and Global.get_menu_panel_factory().get_parent() == Global
+		and Global.get_level_scene_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -135,6 +144,15 @@ func _check_popup_family(checks: Dictionary) -> void:
 	)
 	if buff_info != null:
 		created.append(buff_info)
+	var buff_data := {"Name": "probe_buff", "Level": 2}
+	var buff_infor: Node = Global.add_buffinfor(host, Vector2(300, 200), buff_data)
+	await _settle()
+	checks["popup_buff_infor_created"] = buff_infor != null and buff_infor.get_parent() == host
+	checks["popup_buff_infor_data"] = buff_infor != null and buff_infor.data_list == buff_data
+	checks["popup_buff_infor_hover_layer"] = buff_infor != null and buff_infor.z_index == 4095
+	checks["popup_buff_infor_cached"] = Global.is_resource_cached(BUFF_INFORMATION_PATH)
+	if buff_infor != null:
+		created.append(buff_infor)
 	var touch: Node = Global.add_touch_text(host, Vector2(40, 40), "触摸")
 	await _settle()
 	checks["popup_touch_created"] = touch != null and str(touch.tt) == "触摸"
@@ -305,6 +323,21 @@ func _check_combat_family(checks: Dictionary) -> void:
 	checks["combat_buff_rejects_null"] = Global.add_buff(null, {"Name": "Voodoo"}) == null
 	checks["combat_buff_rejects_empty_name"] = Global.add_buff(host, {"Name": ""}) == null
 	checks["combat_buff_rejects_non_dictionary"] = Global.add_buff(host, "bad") == null
+	var icon_data := {"Name": "probe_icon", "Level": 1}
+	var buff_icon: Node = Global.add_buff_icon(host, icon_data)
+	await _settle()
+	checks["combat_buff_icon_created"] = buff_icon != null and buff_icon.get_parent() == host
+	checks["combat_buff_icon_fields"] = (
+		buff_icon != null
+		and str(buff_icon.buff_name) == "probe_icon"
+		and str(buff_icon.name) == "probe_icon"
+		and buff_icon.data_list == icon_data
+	)
+	checks["combat_buff_icon_cached"] = Global.is_resource_cached(BUFF_ICON_PATH)
+	# 负向断言：无效父节点返回 null，不创建节点。
+	checks["combat_buff_icon_rejects_null_parent"] = Global.add_buff_icon(null, icon_data) == null
+	if buff_icon != null:
+		created.append(buff_icon)
 	var trap: Node = Global.add_trap(host, Vector2(11, 11), "probe_trap")
 	await _settle()
 	checks["combat_trap_created"] = trap != null and str(trap._get_name) == "probe_trap"
@@ -801,6 +834,50 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	)
 	# 负向断言：已删除的死入口不得复活。
 	checks["set_menu_entry_removed"] = not Global.has_method("add_set_menu")
+	_cleanup(created, host)
+
+
+func _check_level_scene_family(checks: Dictionary) -> void:
+	# 关卡场景族：地板/飞行地板/陷阱/选择面板的字段与坐标各自独立。
+	var host := _make_host("LevelSceneProbeHost")
+	var created: Array[Node] = []
+	var stage: Node = Global.add_stage(host, "probe_stage", Vector2(1, 2))
+	await _settle()
+	checks["stage_created"] = stage != null and stage.get_parent() == host
+	checks["stage_fields"] = stage != null and str(stage.type) == "probe_stage" and stage.position == Vector2(1, 2)
+	if stage != null:
+		created.append(stage)
+	var fly_stage: Node = Global.add_z_lw_stage(host, Vector2(3, 4), 5, 1, 30, true)
+	await _settle()
+	checks["fly_stage_created"] = fly_stage != null and fly_stage.get_parent() == host
+	checks["fly_stage_fields"] = (
+		fly_stage != null
+		and fly_stage.position == Vector2(3, 4)
+		and int(fly_stage.direction) == 1
+		and int(fly_stage.speed) == 5
+		and int(fly_stage.max_position_x) == 30
+		and bool(fly_stage.pd)
+	)
+	if fly_stage != null:
+		created.append(fly_stage)
+	var trap: Node = Global.add_zztw_trap(host, "probe_zztw", Vector2(5, 6))
+	await _settle()
+	checks["zztw_trap_created"] = trap != null and trap.get_parent() == host
+	checks["zztw_trap_fields"] = trap != null and str(trap.my_name) == "probe_zztw" and trap.position == Vector2(5, 6)
+	if trap != null:
+		created.append(trap)
+	var dsg: Node = Global.add_dsg_choose(host)
+	await _settle()
+	checks["dsg_choose_created"] = dsg != null and dsg.get_parent() == host
+	# 选择面板在 _ready 中按视口自行居中，传入坐标不是最终位置。
+	if dsg != null:
+		created.append(dsg)
+	checks["level_scene_scenes_cached"] = (
+		Global.is_resource_cached(STAGE_PATH)
+		and Global.is_resource_cached(FLY_STAGE_PATH)
+		and Global.is_resource_cached(ZZ_TW_TRAP_PATH)
+		and Global.is_resource_cached(DSG_CHOOSE_PATH)
+	)
 	_cleanup(created, host)
 
 

@@ -26,6 +26,7 @@ const FORGE_FACTORY_SCRIPT := preload("res://Script/runtime/forge_factory.gd")
 const PROJECTILE_FACTORY_SCRIPT := preload("res://Script/runtime/projectile_factory.gd")
 const EFFECT_FACTORY_SCRIPT := preload("res://Script/runtime/effect_factory.gd")
 const MENU_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/menu_panel_factory.gd")
+const LEVEL_SCENE_FACTORY_SCRIPT := preload("res://Script/runtime/level_scene_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -186,7 +187,6 @@ const BOSS_BLOOD_PATH := "res://Scene/monster_blood/boss_blood.tscn"
 const MONSTER_BE_HIT_PATH := "res://Scene/monster_damage/monster_be_hit.tscn"
 const SPECIAL_AFFECT_SLIM_DIR := "res://Scene/base/special_affect_slim"
 const ROLE_BE_HIT_EFFECT_PATH := "res://Scene/base/role_be_hit_effect.tscn"
-const BUFF_ICON_PATH := "res://Scene/other_scene/buff_icon.tscn"
 const DAMAGE_NUMBER_PATH := "res://Scene/hittext/damage_number.tscn"
 const MISS_EFFECT_PATH := "res://Scene/hittext/miss_effect.tscn"
 const COMBO_PATH := "res://Scene/show_text/combo.tscn"
@@ -361,6 +361,10 @@ func _ready() -> void:
 	_menu_panel_factory.name = "MenuPanelFactory"
 	_menu_panel_factory.setup(self)
 	add_child(_menu_panel_factory)
+	_level_scene_factory = LEVEL_SCENE_FACTORY_SCRIPT.new()
+	_level_scene_factory.name = "LevelSceneFactory"
+	_level_scene_factory.setup(self)
+	add_child(_level_scene_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -454,6 +458,10 @@ func get_effect_factory() -> EffectFactory:
 
 func get_menu_panel_factory() -> MenuPanelFactory:
 	return _menu_panel_factory
+
+
+func get_level_scene_factory() -> LevelSceneFactory:
+	return _level_scene_factory
 
 
 var cloud_sword = null
@@ -699,6 +707,7 @@ var _forge_factory: ForgeFactory = null
 var _projectile_factory: ProjectileFactory = null
 var _effect_factory: EffectFactory = null
 var _menu_panel_factory: MenuPanelFactory = null
+var _level_scene_factory: LevelSceneFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -2085,7 +2094,6 @@ var sell_or_equ = null
 var fall_equ = null
 var zd_skill = null
 var role_information = null
-var zztwtrap = null
 var bd_skill = null
 var nmw_hands = null
 var change_background = null
@@ -2097,13 +2105,10 @@ var mosaic = null
 var role1_shallow = null
 var change_clothes_jm = null
 var h_hjm = null
-var z_lw_stage = null
-var buffinfor = null
 var choose_player = null
 var role2_shallow = null
 var role_magic_need = null
 var pj = null
-var stage = null
 var task_title = null
 var add_font = null
 var game_announcement = null
@@ -2113,7 +2118,6 @@ var llbt_challenge = null
 var _hdzm = null
 var _lsh = null
 var _lxdy = null
-var dsg_choose = null
 var cure_times_box = null
 var letter_for_player = null
 var some_monster_help = null
@@ -2284,11 +2288,7 @@ func add_line(parent, Monster, Type):
 
 
 func add_dsg_choose(parent):
-	if not dsg_choose:
-		dsg_choose = _load_scene("res://Scene/level/dsg_choose.tscn")
-	var target = instance_scene(dsg_choose, parent)
-	target.position = Vector2(0, 0)
-	return target
+	return _level_scene_factory.add_dsg_choose(parent)
 
 
 func add_hdzm(parent, parent_node):
@@ -2503,21 +2503,11 @@ func add_decompose_instance(parent, position):
 
 
 func add_zztw_trap(parent, Name, position):
-	if not zztwtrap:
-		zztwtrap = _load_scene("res://Scene/level/zztw_trap.tscn")
-	var target = instance_scene(zztwtrap, parent)
-	target.my_name = Name
-	target.position = position
-	return target
+	return _level_scene_factory.add_trap(parent, Name, position)
 
 
 func add_stage(parent, stage_type: String, position: Vector2):
-	if not stage:
-		stage = _load_scene("res://Scene/level/jctfloor_1.tscn")
-	var target = instance_scene(stage, parent)
-	target.type = stage_type
-	target.position = position
-	return target
+	return _level_scene_factory.add_stage(parent, stage_type, position)
 
 
 func add_boss_blood_instance(parent, Obj):
@@ -2644,31 +2634,11 @@ func add_aura(parent, _position, value_in, color_type = 0):
 
 
 func add_buffinfor(parent, _position, Data):
-	if not buffinfor:
-		buffinfor = _load_scene("res://Scene/other_scene/buff_information.tscn")
-	var target = instance_scene(buffinfor, parent)
-	target.data_list = Data
-	apply_popup_screen_layout(target, _position, Vector2(320, 120))
-	prepare_hover_info_popup(target, true)
-	return target
+	return _popup_factory.add_buff_information(parent, _position, Data)
 
 
 func add_buff_icon(parent, Data):
-	if parent == null or not is_instance_valid(parent) or parent.is_queued_for_deletion():
-		return null
-	var buff_scene := load_cached_scene(BUFF_ICON_PATH)
-	if buff_scene == null:
-		return null
-	var target = buff_scene.instantiate()
-	if target == null:
-		return null
-	parent.add_child(target)
-	target.data_list = Data
-	var buff_name := str(Data.get("Name", "")) if Data is Dictionary else ""
-	if not buff_name.is_empty():
-		target.name = buff_name
-		target.buff_name = buff_name
-	return target
+	return _combat_factory.add_buff_icon(parent, Data)
 
 
 func is_monster_control_buff(buff_name: Variant) -> bool:
@@ -2708,15 +2678,7 @@ func add_combo_num(parent, combo_num_):
 
 
 func add_z_lw_stage(parent, position, speed, dir, max_num, pd):
-	if not z_lw_stage:
-		z_lw_stage = _load_scene("res://Scene/level/zlw_fly_floor.tscn")
-	var target = instance_scene(z_lw_stage, parent)
-	target.position = position
-	target.direction = dir
-	target.speed = speed
-	target.max_position_x = max_num
-	target.pd = pd
-	return target
+	return _level_scene_factory.add_fly_stage(parent, position, speed, dir, max_num, pd)
 
 
 func add_h_hjm(parent, position):
