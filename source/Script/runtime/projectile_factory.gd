@@ -1,7 +1,7 @@
 class_name ProjectileFactory
 extends Node
 
-## 角色/怪物弹体场景工厂：Role4 弹体、通用弹体、角色 slim 弹体与法宝弹体。
+## 角色/怪物弹体场景工厂：Role4 弹体、通用弹体、角色 slim 弹体、法宝弹体与基础丹药。
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 缓存槽位与迁移前的 Global.role4_bullet/new_bullet/role_bullet_1/monster65_bullet 一致。
 ## 来源写入仍由 Global._assign_attack_source 统一处理，避免两套归属规则。
@@ -10,6 +10,7 @@ const ROLE4_BULLET_SCENE_PATH := "res://Scene/hero/role_4/role4_bullet.tscn"
 const NEW_BULLET_SCENE_PATH := "res://Scene/hero/bullet_bullet.tscn"
 const ROLE_BULLET_1_SCENE_PATH := "res://Scene/hero/role_bullet_1.tscn"
 const MONSTER65_BULLET_SCENE_PATH := "res://Scene/monster/monster65bullet.tscn"
+const BASIC_PELLET_SCENE_PATH := "res://Scene/pellet/basic_pellet.tscn"
 const ROLE_BULLET_SLIM_DIR := "res://Scene/hero/role_bullet_slim"
 const STREAMING_ROLE_BULLET_PATH := "res://Scene/hero/streaming_role_bullet.tscn"
 const ROLE3_BULLET3_SLIM_PATH := "res://Scene/hero/role3_bullet3_slim.tscn"
@@ -41,6 +42,7 @@ var _role4_bullet_scene: PackedScene = null
 var _new_bullet_scene: PackedScene = null
 var _role_bullet_1_scene: PackedScene = null
 var _monster65_bullet_scene: PackedScene = null
+var _basic_pellet_scene: PackedScene = null
 
 
 func setup(host: Node) -> void:
@@ -52,6 +54,7 @@ func clear_scene_caches() -> void:
 	_new_bullet_scene = null
 	_role_bullet_1_scene = null
 	_monster65_bullet_scene = null
+	_basic_pellet_scene = null
 
 
 func get_role4_bullet_scene() -> PackedScene:
@@ -146,6 +149,20 @@ func add_role_bullet_1_safe(parent, position, bullet_name, dic, source_player: B
 	target.hit_dic = dic
 	_host._assign_attack_source(target, parent, source_player)
 	parent.call_deferred("add_child", target)
+	return target
+
+
+func get_basic_pellet_scene() -> PackedScene:
+	if _basic_pellet_scene == null:
+		_basic_pellet_scene = _host.load_cached_scene(BASIC_PELLET_SCENE_PATH)
+	return _basic_pellet_scene
+
+
+func add_basic_pellet(parent, position):
+	var target = _host.instance_scene(get_basic_pellet_scene(), parent)
+	if target == null:
+		return null
+	target.position = position
 	return target
 
 

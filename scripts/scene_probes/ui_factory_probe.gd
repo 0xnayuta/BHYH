@@ -72,6 +72,8 @@ const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
 const CHANGE_BG_PATH := "res://Scene/other_scene/change_back_ground.tscn"
 const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
 const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
+const BASIC_PELLET_PATH := "res://Scene/pellet/basic_pellet.tscn"
+const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
 
 var _failures: Array[String] = []
 
@@ -87,6 +89,7 @@ func _run() -> void:
 	var checks: Dictionary = {}
 	await _check_factory_wiring(checks)
 	await _check_popup_family(checks)
+	await _check_popup_announcement(checks)
 	await _check_shop_family(checks)
 	await _check_backpack_family(checks)
 	await _check_reward_family(checks)
@@ -98,6 +101,7 @@ func _run() -> void:
 	await _check_zhen_fa_family(checks)
 	await _check_forge_family(checks)
 	await _check_projectile_family(checks)
+	await _check_basic_pellet(checks)
 	await _check_effect_family(checks)
 	await _check_menu_panel_family(checks)
 	await _check_level_scene_family(checks)
@@ -217,6 +221,19 @@ func _check_popup_family(checks: Dictionary) -> void:
 	var scene_cached := Global.is_resource_cached(MESSAGE_SHOW_PATH)
 	checks["popup_scene_cached"] = scene_cached
 	_cleanup(created, host)
+
+
+func _check_popup_announcement(checks: Dictionary) -> void:
+	var host := _make_host("AnnouncementProbeHost")
+	var announcement: Node = Global.add_game_announcement(host, Vector2(37, 38))
+	await _settle()
+	checks["popup_announcement_created"] = announcement != null and announcement.get_parent() == host
+	checks["popup_announcement_canvaslayer"] = announcement != null and announcement is CanvasLayer
+	checks["popup_announcement_offset"] = announcement != null and announcement.offset == Vector2(37, 38)
+	checks["popup_announcement_registered"] = (
+		announcement != null and Global.get_ui_runtime().is_transient_ui_registered(announcement)
+	)
+	_cleanup([announcement] as Array[Node], host)
 
 
 func _check_shop_family(checks: Dictionary) -> void:
@@ -685,6 +702,17 @@ func _check_forge_family(checks: Dictionary) -> void:
 	_cleanup(created, host)
 
 
+func _check_basic_pellet(checks: Dictionary) -> void:
+	var host := _make_host("PelletProbeHost")
+	var pellet: Node = Global.add_basic_pellet(host, Vector2(19, 20))
+	await _settle()
+	checks["basic_pellet_created"] = pellet != null and pellet.get_parent() == host
+	# 场景在 _ready 中按视口重排；只断言可见缩放，不锁定传入坐标。
+	checks["basic_pellet_scaled"] = pellet != null and pellet.scale.x > 0.0
+	checks["basic_pellet_cached"] = Global.is_resource_cached(BASIC_PELLET_PATH)
+	_cleanup([pellet] as Array[Node], host)
+
+
 func _check_projectile_family(checks: Dictionary) -> void:
 	# 弹体族：七个入口共用父节点，缓存槽位与返回字段各自独立。
 	var host := _make_host("ProjectileProbeHost")
@@ -765,6 +793,7 @@ func _check_projectile_family(checks: Dictionary) -> void:
 		and projectile_factory._new_bullet_scene == null
 		and projectile_factory._role_bullet_1_scene == null
 		and projectile_factory._monster65_bullet_scene == null
+		and projectile_factory._basic_pellet_scene == null
 	)
 	checks["projectile_cache_reloads"] = projectile_factory.get_role4_bullet_scene() != null
 	_cleanup(created, host)

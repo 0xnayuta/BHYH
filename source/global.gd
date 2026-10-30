@@ -2122,8 +2122,6 @@ var nmw_hands = null
 var sound = null
 var role1_shallow = null
 var role2_shallow = null
-var game_announcement = null
-var basic_pellet = null
 var llbt_challenge = null
 var lhhj = null
 var listbutton = null
@@ -2288,23 +2286,11 @@ func addllbt_challenge(parent, position):
 
 
 func add_basic_pellet(parent, position):
-	if not basic_pellet:
-		basic_pellet = _load_scene("res://Scene/pellet/basic_pellet.tscn")
-	var target = instance_scene(basic_pellet, parent)
-	target.position = position
-	return target
+	return _projectile_factory.add_basic_pellet(parent, position)
 
 
 func add_game_announcement(parent, position):
-	if not game_announcement:
-		game_announcement = _load_scene("res://Scene/main_menu/game_announcement.tscn")
-	var target = instance_scene(game_announcement, parent)
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	if target is CanvasLayer:
-		target.offset = position
-	elif target is Node2D or target is Control:
-		target.position = position
-	return target
+	return _popup_factory.add_game_announcement(parent, position)
 
 
 func add_font_instance(parent, show_text, font, font_size, font_color, out_line_size, out_line_color):

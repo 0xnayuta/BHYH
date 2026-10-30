@@ -116,7 +116,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `LevelHintFactory`：掉落箱与道具箱（共用 `box_1.tscn`，元数据不同）、进入条件提示、回收提示与物品悬浮提示四个常驻场景槽位；通过 `Global.get_level_hint_factory()` 访问，业务侧仍用 `Global.add_level_fall_box` / `add_item_box` / `add_game_need_know` / `add_hc_help` / `add_help_thing`。
 - `ZhenFaFactory`：阵法说明、突破提示、阵眼疗伤等级、阵法信息、阵法类型按钮与阵眼按钮六个常驻场景槽位；通过 `Global.get_zhen_fa_factory()` 访问，业务侧仍用 `Global.add_zhen_fa_help` / `add_zhen_fa_tu_po` / `add_zhen_yan_cure_level` / `add_zhen_fa_info` / `add_zhenfalxbutton` / `addzhenyanbutton`。
 - `ForgeFactory`：锻造说明、锻造主面板、分解说明与分解主面板四个常驻场景槽位；通过 `Global.get_forge_factory()` 访问，业务侧仍用 `Global.add_forge_help` / `add_forges` / `add_decompose_help` / `add_decompose_instance`。
-- `ProjectileFactory`：Role4 弹体、通用弹体、角色 slim 弹体、怪物弹体与法宝弹体；slim/streaming 路径按名称解析，来源写入仍经 `Global._assign_attack_source`；通过 `Global.get_projectile_factory()` 访问。
+- `ProjectileFactory`：Role4 弹体、通用弹体、角色 slim 弹体、怪物弹体、法宝弹体与基础丹药；slim/streaming 路径按名称解析，来源写入仍经 `Global._assign_attack_source`；通过 `Global.get_projectile_factory()` 访问。
 - `EffectFactory`：灵魄光效、灵魄获取提示、技能特效、Boss 光环、无双特效与线性特效；灵魄加成仍由 `PaSkill` 计算；通过 `Global.get_effect_factory()` 访问。
 - `ShowTextFactory`：任务标题、评分文字、自定义字体文本、怪物帮助与玩家信件五个常驻场景槽位；通过 `Global.get_show_text_factory()` 访问，业务侧仍用 `Global.add_font_instance` / `add_task_title` / `add_pj` / `add_some_monster_help` / `add_letter_for_player`。
 - `SkillPanelFactory`：角色/变身技能面板与法宝说明三个常驻场景槽位；预热经 `prime_skill_scenes()` 接管已缓存场景；通过 `Global.get_skill_panel_factory()` 访问，业务侧仍用 `Global.add_zd_skillscene` / `add_bd_skillscene` / `add_magic_help`。

@@ -2,7 +2,7 @@ class_name PopupFactory
 extends Node
 
 ## 弹窗/文本提示族的场景工厂：持有 message_show、choose_text、moment_text、
-## touch_text、liji、combo 的运行时场景缓存。由 Global 作为普通子节点持有，
+## touch_text、liji、combo 与游戏公告的运行时场景缓存。由 Global 作为普通子节点持有，
 ## 不是 Autoload；业务代码仍通过 Global.add_* 正式入口调用。
 
 const MESSAGE_SHOW_PATH := "res://Scene/show_text/message_show.tscn"
@@ -13,6 +13,7 @@ const COMBO_NUM_PATH := "res://Scene/show_text/combo_num.tscn"
 const CHOOSE_TEXT_PATH := "res://Scene/show_text/choose_scene.tscn"
 const TOUCH_TEXT_PATH := "res://Scene/show_text/touch_text.tscn"
 const BUFF_INFOR_PATH := "res://Scene/other_scene/buff_information.tscn"
+const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}
@@ -60,6 +61,18 @@ func add_message_show(parent_node, need_text: String, time: float, target_pos: V
 
 func add_buff_info(parent, _position, message_text: String):
 	return add_message_show(parent, message_text, 1.5, _position)
+
+
+func add_game_announcement(parent, position):
+	var target = _host.instance_scene(_scene(GAME_ANNOUNCEMENT_PATH), parent)
+	if target == null:
+		return null
+	_host.get_ui_runtime().register_transient_ui(target, &"_on_close_pressed")
+	if target is CanvasLayer:
+		target.offset = position
+	elif target is Node2D or target is Control:
+		target.position = position
+	return target
 
 
 func add_buff_information(parent, position, data):
