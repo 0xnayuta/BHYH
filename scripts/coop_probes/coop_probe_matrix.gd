@@ -112,6 +112,10 @@ func _run() -> void:
 			await _case_role4_poison()
 		"LocalCoopAllDeadProbe":
 			await _case_all_dead()
+		"LocalCoopInputIsolationProbe":
+			await _case_input_isolation()
+		"LocalCoopKeyConfigProbe":
+			await _case_key_config()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -1218,3 +1222,100 @@ func _case_all_dead() -> void:
 	_check(coop.request_defeat_if_all_players_dead(), "failed request can retry")
 	_check(paths.size() == 1, "retry requests scene once")
 	coop.scene_change_override = Callable()
+
+
+func _action_has_physical_key(action: StringName, key: int) -> bool:
+	if not InputMap.has_action(action):
+		return false
+	for event in InputMap.action_get_events(action):
+		if event is InputEventKey and int(event.physical_keycode) == key:
+			return true
+	return false
+
+
+func _case_input_isolation() -> void:
+	coop.create_secondary(7)
+	var p2_keys: Dictionary = coop.P2_KEYS
+	for action: String in p2_keys.keys():
+		var action_name := "p2_" + action
+		_check(InputMap.has_action(action_name), "P2 action exists: " + action_name)
+		_check(
+			_action_has_physical_key(StringName(action_name), int(p2_keys[action])),
+			"P2 key matches: " + action_name
+		)
+	_check(_action_has_physical_key(&"move_right", KEY_D), "P1 move_right remains D")
+	_check(_action_has_physical_key(&"normalhit", KEY_J), "P1 normalhit remains J")
+	_check(_action_has_physical_key(&"jump", KEY_K), "P1 jump remains K")
+
+	var p1_input: Object = coop.input_for(data)
+	var p2_input: Object = coop.input_for(coop.secondary_data)
+	_check(p1_input.action_name(&"move_right") == &"move_right", "P1 view uses base mapping")
+	_check(p2_input.action_name(&"move_right") == &"p2_move_right", "P2 view uses p2 mapping")
+
+	Input.action_press("p2_move_right")
+	_check(p2_input.is_action_pressed("move_right"), "P2 move action reaches P2 view")
+	_check(not p1_input.is_action_pressed("move_right"), "P2 move action does not reach P1 view")
+	Input.action_release("p2_move_right")
+
+	Input.action_press("move_right")
+	_check(p1_input.is_action_pressed("move_right"), "P1 move action reaches P1 view")
+	_check(not p2_input.is_action_pressed("move_right"), "P1 move action does not reach P2 view")
+	Input.action_release("move_right")
+
+	Input.action_press("p2_normalhit")
+	_check(p2_input.is_action_pressed("normalhit"), "P2 attack action reaches P2 view")
+	_check(not p1_input.is_action_pressed("normalhit"), "P2 attack action does not reach P1 view")
+	Input.action_release("p2_normalhit")
+
+	var enabled_value: Variant = data.player_data["本地双人"].get("启用", true)
+	data.player_data["本地双人"]["启用"] = false
+	_check(not coop.is_enabled(), "coop disabled for fallback check")
+	_check(p2_input.action_name(&"move_right") == &"move_right", "disabled P2 view falls back to base")
+	_check(p2_input.action_name(&"normalhit") == &"normalhit", "disabled P2 attack falls back to base")
+	data.player_data["本地双人"]["启用"] = enabled_value
+	_check(coop.is_enabled(), "coop re-enabled")
+	_check(p2_input.action_name(&"move_right") == &"p2_move_right", "re-enabled P2 view restores p2 mapping")
+
+
+func _case_key_config() -> void:
+	var config_path := "user://KeyConfig.json"
+	var had_config := FileAccess.file_exists(config_path)
+	var backup := FileAccess.get_file_as_string(config_path) if had_config else ""
+	await _make_stage()
+	var packed: PackedScene = load("res://Scene/tools/set_com.tscn")
+	var config: Node = packed.instantiate()
+	config.set("is_set", true)
+	stage.add_child(config)
+	await process_frame
+	await process_frame
+
+	var keys: Array = config.get("keys")
+	var defaults: Array = config.get("default_keys")
+	var key_nodes: Array = config.get("key_list")
+	_check(keys.size() == 12 and defaults.size() == 12 and key_nodes.size() == 11, "key config nodes initialized")
+	if keys.size() > 0 and key_nodes.size() > 0:
+		var first_key: Dictionary = keys[0]
+		var first_node: Node = key_nodes[0]
+		var original_x := float(first_key["position"]["x"])
+		first_key["key"] = "Z"
+		first_key["position"]["x"] = original_x + 10.0
+		config.call("_apply_keys_to_nodes")
+		_check(first_node.get("text_key").text == "Z", "key label applies immediately")
+		_check(is_equal_approx(first_node.position.x, original_x + 10.0), "key position applies immediately")
+		config.call("_save_keys_config")
+		_check(FileAccess.file_exists(config_path), "key config saved")
+		config.call("_on_reset_layout_pressed")
+		var reset_keys: Array = config.get("keys")
+		_check(str(reset_keys[0]["key"]) == str(defaults[0]["key"]), "reset restores default key label")
+		_check(first_node.get("text_key").text == str(defaults[0]["key"]), "reset applies default label immediately")
+		_check(is_equal_approx(first_node.position.x, float(defaults[0]["position"]["x"])), "reset restores default position")
+
+	config.queue_free()
+	await process_frame
+	if had_config:
+		var out := FileAccess.open(config_path, FileAccess.WRITE)
+		if out != null:
+			out.store_string(backup)
+			out.close()
+	else:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(config_path))
