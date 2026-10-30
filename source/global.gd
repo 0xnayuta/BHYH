@@ -19,6 +19,7 @@ const MAGIC_WEAPON_RUNTIME_SCRIPT := preload("res://Script/runtime/magic_weapon_
 const LEVEL_ENTRY_RUNTIME_SCRIPT := preload("res://Script/runtime/level_entry_runtime.gd")
 const MONSTER_SPAWN_RUNTIME_SCRIPT := preload("res://Script/runtime/monster_spawn_runtime.gd")
 const ROLE_VISUAL_RUNTIME_SCRIPT := preload("res://Script/runtime/role_visual_runtime.gd")
+const MONSTER_DISPLAY_FACTORY_SCRIPT := preload("res://Script/runtime/monster_display_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -355,6 +356,10 @@ func _ready() -> void:
 	_role_visual.name = "RoleVisualRuntime"
 	_role_visual.setup(self)
 	add_child(_role_visual)
+	_monster_display = MONSTER_DISPLAY_FACTORY_SCRIPT.new()
+	_monster_display.name = "MonsterDisplayFactory"
+	_monster_display.setup(self)
+	add_child(_monster_display)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -420,6 +425,10 @@ func get_monster_spawn_runtime() -> MonsterSpawnRuntime:
 
 func get_role_visual_runtime() -> RoleVisualRuntime:
 	return _role_visual
+
+
+func get_monster_display_factory() -> MonsterDisplayFactory:
+	return _monster_display
 
 
 var cloud_sword = null
@@ -658,6 +667,7 @@ var _magic_weapon_runtime: MagicWeaponRuntime = null
 var _level_entry: LevelEntryRuntime = null
 var _monster_spawn: MonsterSpawnRuntime = null
 var _role_visual: RoleVisualRuntime = null
+var _monster_display: MonsterDisplayFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -2083,7 +2093,6 @@ var smb_effect = null
 var new_bullet = null
 var role_magic_need = null
 var game_need_know = null
-var monster_head = null
 var level_fall_box = null
 var pj = null
 var help_thing = null
@@ -2100,8 +2109,6 @@ var llbt_challenge = null
 var forges = null
 var forge_box = null
 var forge_help = null
-var basic_monment_info = null
-var monster_info = null
 var _hdzm = null
 var _lsh = null
 var _lxdy = null
@@ -2392,21 +2399,11 @@ func add_lxdy(parent, parent_node):
 
 
 func add_monster_info(parent, monster_name, position):
-	if not monster_info:
-		monster_info = _load_scene("res://Scene/monster/boss_info.tscn")
-	var target = instance_scene(monster_info, parent)
-	target.monster_name = monster_name
-	target.position = position
-	return target
+	return _monster_display.add_monster_info(parent, monster_name, position)
 
 
 func add_basic_monment_info(parent, show_text, position):
-	if not basic_monment_info:
-		basic_monment_info = _load_scene("res://Scene/other_scene/basic_monment_info.tscn")
-	var target = instance_scene(basic_monment_info, parent)
-	target.show_text = show_text
-	target.position = position
-	return target
+	return _monster_display.add_basic_moment_info(parent, show_text, position)
 
 
 func add_forge_help(parent, position):
@@ -2670,13 +2667,7 @@ func add_level_info(parent, Name, position, path):
 
 
 func add_monster_head(parent, Name, is_boss, ScenePath := ""):
-	if not monster_head:
-		monster_head = _load_scene("res://Scene/other_scene/monster_head_info.tscn")
-	var target = instance_scene(monster_head, parent)
-	target.monster_name = Name
-	target.is_boss = is_boss
-	target.monster_scene_path = ScenePath
-	return target
+	return _monster_display.add_monster_head(parent, Name, is_boss, ScenePath)
 
 
 func add_level_fall_box(parent, Inldl, Inhhgz, Name, qh_level, wx, EqProp):

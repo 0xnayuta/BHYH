@@ -99,7 +99,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 ### 2.4 运行时服务
 
-`Global` 在 `_ready` 创建 15 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
+`Global` 在 `_ready` 创建 16 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
 
 - `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
 - `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
@@ -112,9 +112,10 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `LevelEntryRuntime`：关卡信息面板常驻场景槽位、关卡掉落概率表与进入编排（面板分支、非 res:// 直进分支、强制信息面板关卡）；通过 `Global.get_level_entry_runtime()` 访问，业务侧仍用 `Global.add_level_info` / `get_current_level_fall_pro` / `sync_level_drop_pro_data`。
 - `MonsterSpawnRuntime`：怪物 ID 到场景路径的解析（预载覆盖优先）与 `create_monster`；通过 `Global.get_monster_spawn_runtime()` 访问，业务侧仍用 `Global.create_monster`。
 - `RoleVisualRuntime`：角色身体/装备静态贴图加载、当前角色 ID 与同槽位上一张贴图释放；通过 `Global.get_role_visual_runtime()` 访问，业务侧仍用 `Global.load_role1_body` / `load_role1_eq`。
+- `MonsterDisplayFactory`：怪物头像属性面板、Boss 信息面板与通用提示文本三个常驻场景槽位；通过 `Global.get_monster_display_factory()` 访问，业务侧仍用 `Global.add_monster_head` / `add_monster_info` / `add_basic_monment_info`。
 - `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_current_level_name` / `set_tower_floor` / `advance_tower_floor` 与 `RunContext` 的 `add_*` / `count_*` / `reset_combat_stats`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 只读同一实例。
 
-业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段、9 个写多读零的 `Global.is_*` 减益标志、四个无尽模式标志、`selected_eight_immortal_id`、两个角色贴图槽位字段，以及 `get_ancestor`/`get_position_between`/`get_dis_betweem`/`get_clean_name`/`get_all_item_num`/`load_item_icon` 等工具函数已删除；无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
+业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段、9 个写多读零的 `Global.is_*` 减益标志、四个无尽模式标志、`selected_eight_immortal_id`、两个角色贴图槽位字段，以及 `get_ancestor`/`get_position_between`/`get_dis_betweem`/`get_clean_name`/`get_all_item_num`/`load_item_icon` 等工具函数与 `monster_head`/`monster_info`/`basic_monment_info` 三个怪物展示场景槽位已删除；无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
 
 ---
 

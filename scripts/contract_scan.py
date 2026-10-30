@@ -24,6 +24,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 16. Phase 17 边界门禁 (Phase 17 Boundary): 结算一次、命令快照、表现层不写档与试点路径预算
 17. 输入写入边界门禁 (Input Boundary): 输入读取行不得夹带 PlayerData 或 request_save
 18. 运行状态边界门禁 (Run State Boundary): 禁止重新直写已迁移的运行状态字段或调用已删除的工具入口
+19. HUD/面板只读门禁 (HUD Panel Boundary): HUD 与面板域禁止直接档案 IO 与 PlayerData 字典直写
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1057,6 +1058,17 @@ class ContractScanner:
         "Script/base/base_magic_weapon.gd": 0,
     }
     PHASE17_DEEP_PATH_RE = re.compile(r'get_node(?:_or_null)?\("([^"]*)"')
+    # 20-3A：HUD/面板只读域——禁止直接档案 IO 与 PlayerData 字典直写。
+    HUD_PANEL_FILES = {
+        "Scene/other_scene/skill_icon.gd",
+        "Script/pet/pet_interface.gd",
+        "Script/base/base_role.gd",
+    }
+    HUD_PANEL_ARCHIVE_IO = (
+        "MemoryClass.save_game(",
+        "MemoryClass.safe_write_archive(",
+        "MemoryClass.load_game(",
+    )
     # 19-4C：输入读取行不得同时操作档案或保存。
     INPUT_READ_PATTERN = re.compile(
         r"\b(?:Input|PlayerInput)\.(?:is_action_pressed|is_action_just_pressed|is_action_just_released|"
@@ -1445,6 +1457,26 @@ class ContractScanner:
                 self.findings.append(finding)
 
     @classmethod
+    def hud_panel_boundary_violation(cls, content: str, rel_path: str):
+        """HUD/面板只读：禁止直接档案 IO 与 PlayerData 字典直写；保存只经 request_save 入口。"""
+        if rel_path not in cls.HUD_PANEL_FILES:
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for token in cls.HUD_PANEL_ARCHIVE_IO:
+                if token in clean:
+                    return (lineno, token)
+            if "PlayerData.player_data" in clean and re.search(r"\]\s*(?<![=<>!])=(?!=)", clean):
+                return (lineno, "PlayerData.player_data[...] =")
+            if re.search(
+                r"PlayerData\.player_data\.[A-Za-z_\u4e00-\u9fff]+\s*(?<![=<>!])=(?!=)", clean
+            ):
+                return (lineno, "PlayerData.player_data.attr =")
+        return (0, "")
+
+    @classmethod
     def phase17_boundary_violation(cls, content: str, rel_path: str):
         """Phase 17 边界：保存一次、命令快照、表现层不写档、试点路径预算。"""
         if rel_path in cls.PHASE17_SETTLEMENT_FILES:
@@ -1478,6 +1510,16 @@ class ContractScanner:
             if count > budget:
                 return (1, f"deep_paths:{count}>{budget}")
         return (0, "")
+
+    def scan_hud_panel_boundary(self):
+        print(f"[*] 扫描 HUD/面板只读门禁 (Phase 20-3A)...")
+        self._scan_rule(
+            category="hud_panel_boundary",
+            violation=self.hud_panel_boundary_violation,
+            message="HUD/面板域只读：禁止直接档案 IO 与 PlayerData 字典直写",
+            suggested_fix="保存改调 Global.request_save_with_feedback 或 MemoryClass.request_save；装备/技能变更走 PlayerData 的写入口方法",
+            rule_id="HUD_PANEL_WRITE_FORBIDDEN",
+        )
 
     def scan_phase17_boundary(self):
         print("[*] 扫描 Phase 17 边界门禁 (保存一次/命令原子性/表现层/路径预算)...")
@@ -1602,7 +1644,7 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整十八类契约扫描流水线"""
+        """执行完整十九类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1623,6 +1665,7 @@ class ContractScanner:
         self.scan_slot_boundary()
         self.scan_panel_operator()
         self.scan_shared_ledger_boundary()
+        self.scan_hud_panel_boundary()
         self.scan_phase17_boundary()
         self.scan_input_boundary()
 
@@ -2174,6 +2217,46 @@ def run_shared_ledger_self_test() -> bool:
     return passed
 
 
+def run_hud_panel_boundary_self_test() -> bool:
+    """HUD/面板只读自测：直接档案 IO 与字典直写必须拦截，request_save 必须放行。"""
+    print("[*] HUD/面板只读门禁负向自测...")
+    bad_samples = {
+        "HUD 直写档案": ("MemoryClass.save_game(path)\n", "Script/base/base_role.gd"),
+        "面板直接写盘": ("MemoryClass.safe_write_archive(path, data)\n", "Script/pet/pet_interface.gd"),
+        "技能图标读档": ("var d = MemoryClass.load_game(path)\n", "Scene/other_scene/skill_icon.gd"),
+        "HUD 字典下标直写": ('PlayerData.player_data["技能"][0] = 1\n', "Script/base/base_role.gd"),
+        "面板字典属性直写": ("PlayerData.player_data.技能 = 1\n", "Script/pet/pet_interface.gd"),
+    }
+    good_samples = {
+        "面板提交保存请求": ('Global.request_save_with_feedback("pet_changes", self)\n', "Script/pet/pet_interface.gd"),
+        "队列保存请求": ('MemoryClass.request_save("panel")\n', "Script/base/base_role.gd"),
+        "只读查询": ('var v = PlayerData.player_data["技能"]\n', "Script/base/base_role.gd"),
+        "比较而非赋值": ('if PlayerData.player_data["技能"] == 1:\n', "Script/base/base_role.gd"),
+        "非目标文件写档": ("MemoryClass.save_game(path)\n", "Script/level/victory.gd"),
+        "注释中的直写": ('# PlayerData.player_data["x"] = 1 legacy\n', "Script/base/base_role.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.hud_panel_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.hud_panel_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] HUD/面板只读门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] HUD/面板只读门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def run_phase17_boundary_self_test() -> bool:
     """Phase 17 边界自测：结算/命令/表现层/路径预算的负向样本必须拦截。"""
     print("[*] Phase 17 边界门禁负向自测...")
@@ -2312,7 +2395,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/HUD 面板只读/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2327,6 +2410,7 @@ def main():
         archive_ok = run_archive_boundary_self_test()
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
+        hud_panel_ok = run_hud_panel_boundary_self_test()
         phase17_ok = run_phase17_boundary_self_test()
         input_ok = run_input_boundary_self_test()
         panel_operator_ok = run_panel_operator_self_test()
@@ -2343,6 +2427,7 @@ def main():
             and slot_ok
             and shared_ledger_ok
             and phase17_ok
+            and hud_panel_ok
             and input_ok
             and panel_operator_ok
             else 1

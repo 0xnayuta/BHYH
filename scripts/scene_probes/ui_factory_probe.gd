@@ -13,6 +13,9 @@ const BACK_PACK_PATH := "res://Scene/back_pack/back_pack.tscn"
 const REWARD_BOX_PATH := "res://Scene/other_scene/reward_box_2.tscn"
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
 const HIT_TEXT_PATH := "res://Scene/hittext/hit_text.tscn"
+const MONSTER_HEAD_INFO_PATH := "res://Scene/other_scene/monster_head_info.tscn"
+const BOSS_INFO_PATH := "res://Scene/monster/boss_info.tscn"
+const BASIC_MOMENT_INFO_PATH := "res://Scene/other_scene/basic_monment_info.tscn"
 
 var _failures: Array[String] = []
 
@@ -34,6 +37,7 @@ func _run() -> void:
 	await _check_combat_family(checks)
 	await _check_combat_cache_release(checks)
 	await _check_combat_pool(checks)
+	await _check_monster_display_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -52,12 +56,14 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["backpack_factory_node"] = _has_child_node("BackpackFactory")
 	checks["reward_factory_node"] = _has_child_node("RewardFactory")
 	checks["combat_factory_node"] = _has_child_node("CombatPresentationFactory")
+	checks["monster_display_factory_node"] = _has_child_node("MonsterDisplayFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
 		and Global.get_backpack_factory().get_parent() == Global
 		and Global.get_reward_factory().get_parent() == Global
 		and Global.get_combat_factory().get_parent() == Global
+		and Global.get_monster_display_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -335,6 +341,47 @@ func _check_combat_pool(checks: Dictionary) -> void:
 	checks["sword_hit_effect_throttle"] = bool(Global.can_show_sword_hit_effect())
 	pool.clear_runtime_pools()
 	_cleanup([slim], host)
+
+
+func _check_monster_display_family(checks: Dictionary) -> void:
+	# 怪物展示族：三个场景槽位常驻，重复调用共用同一 PackedScene 但实例彼此独立。
+	var host := _make_host("MonsterDisplayProbeHost")
+	var created: Array[Node] = []
+	var head: Node = Global.add_monster_head(host, "ProbeBoss", true, "res://Scene/level/level_1.tscn")
+	await _settle()
+	checks["monster_head_created"] = head != null and head.get_parent() == host
+	checks["monster_head_name"] = head != null and str(head.monster_name) == "ProbeBoss"
+	checks["monster_head_is_boss"] = head != null and bool(head.is_boss)
+	checks["monster_head_scene_path"] = (
+		head != null and str(head.monster_scene_path) == "res://Scene/level/level_1.tscn"
+	)
+	if head != null:
+		created.append(head)
+	var second_head: Node = Global.add_monster_head(host, "ProbeBoss2", false)
+	await _settle()
+	checks["monster_head_second_instance"] = second_head != null and second_head != head
+	if second_head != null:
+		created.append(second_head)
+	var info: Node = Global.add_monster_info(host, "ProbeBoss", Vector2(31, 32))
+	await _settle()
+	checks["monster_info_created"] = info != null and info.get_parent() == host
+	checks["monster_info_name"] = info != null and str(info.monster_name) == "ProbeBoss"
+	checks["monster_info_position"] = info != null and info.position == Vector2(31, 32)
+	if info != null:
+		created.append(info)
+	var moment: Node = Global.add_basic_monment_info(host, "探针提示", Vector2(41, 42))
+	await _settle()
+	checks["basic_moment_created"] = moment != null and moment.get_parent() == host
+	checks["basic_moment_text"] = moment != null and str(moment.show_text) == "探针提示"
+	checks["basic_moment_position"] = moment != null and moment.position == Vector2(41, 42)
+	if moment != null:
+		created.append(moment)
+	checks["monster_display_scenes_cached"] = (
+		Global.is_resource_cached(MONSTER_HEAD_INFO_PATH)
+		and Global.is_resource_cached(BOSS_INFO_PATH)
+		and Global.is_resource_cached(BASIC_MOMENT_INFO_PATH)
+	)
+	_cleanup(created, host)
 
 
 func _check_magic_weapon(checks: Dictionary) -> void:
