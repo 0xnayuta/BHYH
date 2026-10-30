@@ -99,7 +99,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 ### 2.4 运行时服务
 
-`Global` 在 `_ready` 创建 10 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
+`Global` 在 `_ready` 创建 12 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
 
 - `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
 - `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
@@ -109,6 +109,8 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `PopupFactory` / `ShopFactory` / `BackpackFactory` / `RewardFactory` / `CombatPresentationFactory`：按功能族的场景工厂，各自持有本族场景缓存；`Global.add_*` 保留同名签名并转发到族级 API，分别通过 `Global.get_popup_factory()` / `get_shop_factory()` / `get_backpack_factory()` / `get_reward_factory()` / `get_combat_factory()` 访问。
 - `CombatPoolRuntime`：伤害数字/怪物受击/角色受击/命中音效四池、池根、伤害数字 80 上限计数、受击 55ms 节流与剑阵按帧限流；通过 `Global.get_combat_pool()` 访问，业务侧仍用 `Global.recycle_damage_text` / `recycle_mr_hurt` / `recycle_role_be_hit` / `can_show_sword_*`。
 - `MagicWeaponRuntime`：两个槽位的当前法宝召唤物与创建/替换/清理；通过 `Global.get_magic_weapon_runtime()` 访问，业务侧仍用 `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for`。
+- `LevelEntryRuntime`：关卡信息面板常驻场景槽位、关卡掉落概率表与进入编排（面板分支、非 res:// 直进分支、强制信息面板关卡）；通过 `Global.get_level_entry_runtime()` 访问，业务侧仍用 `Global.add_level_info` / `get_current_level_fall_pro` / `sync_level_drop_pro_data`。
+- `MonsterSpawnRuntime`：怪物 ID 到场景路径的解析（预载覆盖优先）与 `create_monster`；通过 `Global.get_monster_spawn_runtime()` 访问，业务侧仍用 `Global.create_monster`。
 - `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_current_level_name` / `set_tower_floor` / `advance_tower_floor` 与 `RunContext` 的 `add_*` / `count_*` / `reset_combat_stats`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；结算面板 `after_level_end` 只读同一实例。
 
 业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段与 9 个写多读零的 `Global.is_*` 减益标志已删除。
@@ -177,7 +179,7 @@ flowchart TD
 
 ### 3.3 关卡进入判定
 
-- `Global.add_level_info` 通过 `Global.set_current_level_name` 记录关卡显示名，并按 `MainSet.set_data["LevelInfo"]` 决定显示信息弹窗还是直进；
+- `Global.add_level_info` 转发到 `LevelEntryRuntime`：经 `Global.set_current_level_name` 记录关卡显示名，并按 `MainSet.set_data["LevelInfo"]` 决定显示信息弹窗还是直进；四类特殊副本强制显示信息，无尽模式复位收敛为 `Global.apply_level_entry_mode_reset(target_path)`；
 - 三太子、四剑、二十八星宿、八仙尽伏等特殊副本强制显示信息或模式对话框；
 - 挑战按钮先校验模式选择，再调用 `Global.change_scene`；
 - 部分特殊关卡使用 `force_loading_screen=true`，确保走加载页与资源预热。

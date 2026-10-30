@@ -1,7 +1,7 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
-> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取 5 个场景工厂）、W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）与 W8 S7A/S7B（抽取 `RunContext` 并删除写多读零的运行状态字段）。本页记录当前边界、逐项结论与迁移顺序；S7C（`add_level_info`/`create_monster` 归属）与 S8 未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
-> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`（以上全部是 `Global` 的普通子节点或它持有的 `RefCounted`，不是 Autoload）。
+> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取 5 个场景工厂）、W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）、W8 S7A/S7B（抽取 `RunContext` 并删除写多读零的运行状态字段）与 W8 S7C（`LevelEntryRuntime` 与 `MonsterSpawnRuntime`）。本页记录当前边界、逐项结论与迁移顺序；S8 未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`；S7C 迁出关卡进入编排与怪物生成（以上全部是 `Global` 的普通子节点或它持有的 `RefCounted`，不是 Autoload）。
 > **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
@@ -30,13 +30,13 @@ Phase 20-1 其余切片保持未启动：
 
 | 指标 | 决策时 | P2 后 | S2 后 | W4 后 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 行数 | **6,041** | **5,775** | **5,563** | **4,349** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7 4,349 |
-| 顶层函数 | **360** | **347** | **333** | **335** | 含私有函数；`add_*` 工厂仍为薄转发（W7 新增池/法宝转发，S7 新增 6 个运行上下文 accessor） |
+| 行数 | **6,041** | **5,775** | **5,563** | **4,275** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7A/S7B 4,349 → S7C 4,275 |
+| 顶层函数 | **360** | **347** | **333** | **336** | 含私有函数；`add_*` 工厂仍为薄转发（W7 新增池/法宝转发，S7 新增 6 个运行上下文 accessor 与 2 个运行时 getter） |
 | 顶层变量 | **295** | **291** | **285** | **206** | 含运行状态、UI 引用与跨帧标记；缓存/池/召唤/统计/死标志字段已迁出或删除 |
 | 顶层常量 | **76** | **75** | **76** | **73** | 含场景路径表、弹体路径表、怪物别名与特效脚本预载 |
 | 信号 | **2** | **2** | **2** | **1** | `sound_settings_changed` 已迁至 `AudioRuntime`，仅余 `combo_milestone_reached` |
 
-`RuntimeDiagnostics` 为 230 行、`UiRuntime` 为 274 行、`AudioRuntime` 为 233 行普通 `Node`，均由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 113 行 `RefCounted`，由 `Global` 持有单一实例。Autoload 从 13 降到 **11**。
+`RuntimeDiagnostics` 为 230 行、`UiRuntime` 为 274 行、`AudioRuntime` 为 233 行普通 `Node`，均由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 113 行 `RefCounted`，`LevelEntryRuntime` 116 行、`MonsterSpawnRuntime` 39 行普通 `Node`，均由 `Global` 创建/持有。Autoload 从 13 降到 **11**。
 
 ### 2.2 调用面
 
@@ -116,7 +116,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | S4 场景/资源运行时 | `change_scene`（101 处）、缓存四表、单槽预载、线程预热、关卡租约、释放 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | **已拆（W5 S4）**；`Global.change_scene` 仍是唯一正式入口；无 Autoload 新增 |
 | S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **首批已拆（W6 S5）**：`PopupFactory`/`ShopFactory`/`BackpackFactory`/`RewardFactory`/`CombatPresentationFactory` 五族 41 个工厂；`add_*` 正式入口保留为薄转发；不建总工厂 |
 | S6 战斗表现 | `add_bullet`、`add_buff`、`add_trap`、`add_special_effect`、`add_damage_text`、`add_mr_hurt`、伤害数字/受击四池 | `CombatPresentationFactory` + `CombatPoolRuntime`（`Global` 组合持有） | **已拆（W7 S6）**：弹体/buff/陷阱/特效/伤害数字/受击/血条与对象池；`create_monster` 与生成服务按 S7 运行状态后续处理 |
-| S7 运行状态 | `current_level`、`llbt_level`、13 个 `total_*` 统计、9 个 `is_*` 减益标志；64 个变量、494 次外部写入 | `RunContext`（`RefCounted`，`Global` 持有） | **部分已拆（W8 S7A/S7B）**：关卡显示名、宝塔层数与 13 项战斗统计迁入 `RunContext`，写入全部改为 `set_*`/`advance_*`/`add_*`/`count_*`，旧字段删除；9 个减益标志经证据确认写多读零后删除；`add_level_info`/`create_monster` 归属留 S7C；禁止直接搬进新 Autoload |
+| S7 运行状态 | `current_level`、`llbt_level`、13 个 `total_*` 统计、9 个 `is_*` 减益标志、关卡进入编排、怪物生成 | `RunContext`（`RefCounted`）+ `LevelEntryRuntime` + `MonsterSpawnRuntime`（`Global` 持有） | **已拆（W8 S7）**：关卡显示名、宝塔层数与 13 项战斗统计迁入 `RunContext`；9 个减益标志经证据确认写多读零后删除；`add_level_info`/`get_current_level_fall_pro`/`sync_level_drop_pro_data` 与非 res:// 直进分支迁入 `LevelEntryRuntime`，`create_monster`/路径解析迁入 `MonsterSpawnRuntime`；四个无尽模式标志与 `selected_eight_immortal_id` 仍归 `Global`，复位收敛为 `apply_level_entry_mode_reset()` |
 | S8 通用工具 | `get_ancestor` 95/16、`get_position_between`、`get_dis_betweem`、`get_clean_name`、物品计数、角色纹理加载 | 静态 `class_name` 工具类 | 可与 S1 并行；无状态、低风险，逐函数迁移 |
 | S9 法宝/召唤 | `current_magic_summon`、`secondary_magic_summon`、`add_magic_weapon`、`get/set_magic_summon_for`、法宝预载 | `MagicWeaponRuntime`（场景/槽位持有） | **已拆（W7 S9）**；槽位归属以 `LocalCoop.slot_for` 为准，禁止回落 1P；场景路径表仍归 `Global` |
 
@@ -132,7 +132,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | W5 | S4 场景/资源内部实现：**已拆（W5 S4）** | 资源/场景 | W5 完成 | `load_guard`、`level_resource_lease`、`level_selection` **7/7 PASS**；`archive_probes` 289/289；`coop_probes` 26/26；`level_1` PASS；`check_all --godot-bin` 8/8 | 保留 `Global.change_scene` 入口并回退两个运行时 |
 | W6 | S5 UI 工厂，按功能族：**首批已拆（W6 S5）** | UI | W6 首批完成：五族 41 个工厂；`add_level_info`、`add_damage_text`、`add_mr_hurt`、`add_special_effect` 因依赖运行状态/对象池延期 | `ui-factories` 探针 59 项 PASS（含族归属、缓存持有、入口转发、工厂拒绝语义）；`scene_probe_runner` 8/8；`archive_probes` 289/289；`coop_probes` 26/26；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP** | 按族回退 |
 | W7 | S6 战斗表现 + S9 法宝/召唤：**已拆（W7 S6/S9）** | 战斗/法宝 | W7 完成 | `ui-factories` 探针 77 项 PASS（含池容量/节流/归还、法宝替换与清空）；`coop_probe_runner` **26/26**；`scene_probe_runner` **8/8**；`archive_probes` 289/289；`level_1` PASS；`level_regression_all --changed-only` 回归通过 | 恢复 `Global._pool_data` 与召唤字段 |
-| W8 | S7 运行状态：**S7A/S7B 已拆**；S7C 未启动 | 玩法/关卡 | 运行状态字段已有 accessor；S7C 需迁移 `add_level_info`/`create_monster` | `run-context` 探针 18 项、全量 `level_regression_all` **128/128 + 5 SKIP**、档案探针 289/289、`level_1` | 版本控制（字段已删除，无只读一版） |
+| W8 | S7 运行状态：**已拆（S7A/S7B/S7C）** | 玩法/关卡 | 运行状态 accessor 与关卡进入/生成归属完成 | `run-context` 18 项 + `level-entry` 24 项、全量 `level_regression_all` **128/128 + 5 SKIP**、档案探针 289/289、`level_1` | 版本控制（字段已删除，无只读一版） |
 
 **顺序理由**：先处理无行为或低行为风险的诊断/死代码，再迁移叶子服务（UI 宿主、音频），然后处理中心资源运行时，最后迁移高频工厂与运行状态。`Global._exit_tree` 与 `change_scene` 是资源释放和场景流的正式入口，迁移时必须保留其可观察清理语义，不能用“搬字段”代替所有权迁移。
 
@@ -229,6 +229,17 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - 验收：`health_check` 0 Parse / 0 Error / 0 Warning；`scene_probe_runner` **9/9**；`archive_probe_runner` 289/289；`coop_probe_runner` **26/26**；`level_1` PASS（0/0/0）；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（277.1s）；`check_all --godot-bin` 8/8。
 - Owner：玩法/关卡。
 
+### W8 S7C：关卡进入与怪物生成归属（完成，2026-10-30）
+
+- 新增 `source/Script/runtime/level_entry_runtime.gd`（`class_name LevelEntryRuntime`，116 行）：持有 `level_info.tscn` 常驻场景槽位与关卡掉落概率表；接管 `add_level_info`、`enter_level_without_info`、`get_current_level_fall_pro`、`sync_drop_pro_data`。`Global` 保留 `add_level_info`/`get_current_level_fall_pro`/`sync_level_drop_pro_data` 同名薄转发与 `get_level_entry_runtime()`。
+- 新增 `source/Script/runtime/monster_spawn_runtime.gd`（`class_name MonsterSpawnRuntime`，39 行）：怪物 ID → 场景路径（预载覆盖表优先）与 `create_monster`；`preload_level_monster_scenes` 等预载路径解析改调运行时。`Global` 保留 `create_monster` 薄转发与 `get_monster_spawn_runtime()`。
+- `Global` 删除 `level_info` 场景槽位、`level_drop_pro_data`、`_enter_level_without_info`、`_monster_scene_path`；`get_level_info_monster_ids` 改用运行时场景槽位。
+- 无尽模式复位：四个标志与 `selected_eight_immortal_id` 仍归 `Global`（关卡脚本直接读取），复位收敛为 `Global.apply_level_entry_mode_reset(target_path)`，由 `LevelEntryRuntime` 调用，避免把全局标志的控制流留在进入编排里。
+- 修正：`add_level_info` 在 `level_info.tscn` 加载失败时由 `.instantiate()` 空引用崩溃改为提前返回 `null`；正常素材路径行为不变。
+- 新增探针 `scripts/scene_probes/level_entry_probe.{gd,tscn}`（`level-entry`，24 项）：无会话拒绝与直进守卫、信息面板创建/名称/目标路径/临时 UI 登记、设置关闭时非 res:// 目标落到兜率宫选择面板、强制信息面板关卡、掉落概率表与难度系数、模式复位五个标志、默认与别名怪物生成的命名/元数据/坐标。
+- 验收：`check_all --godot-bin` 8/8；`scene_probe_runner` **10/10**；`level_1` 冒烟 PASS；全量 `level_regression_all` 128/128 PASS + 5 SKIP；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26。
+- Owner：玩法/关卡。
+
 ## 7. 守卫与验收
 
 20-1B 决策本身的验收：
@@ -252,6 +263,7 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - **拒绝**：为每个切面新增 Autoload；把 `Global` 拆成多个 Manager 后继续全局访问；把存档 IO 搬出 `MemoryClass`；批量重命名 `PlayerData` / `RoleProp`；在未迁移调用方时保留永久兼容 facade。
 - **已决（W8 S7A，2026-10-30 取证）**：`Global.is_ice`/`is_stun`/`is_mpo`/`is_poision`/`is_bleed`/`is_fire`/`is_speed_down`/`is_eye_fix`/`is_dead_link` 共 9 个减益标志在全仓只有 `= false` 写入（`grep` 全仓 `= true` 命中 0 处），仅 `monster_12`（`self_rhp`）与 `monster_37`（死亡链接 buff 守卫）各有一处读取，读取分支因此恒为常量。据此删除字段、116 处复位写与两处读取分支；`monster_12` 的 `self_rhp` 恒为 0、`monster_37` 恒加 buff，与删除前行为一致。证据与结论一并记录，不再作为拒绝项。
 - **未决**：`RoleProp` 根回退的移除时机、`MLdl` 场景化、`Signals` 退出、`PlayerData` schema 类型化、`Global` 运行状态 accessor 的具体形状；均在对应波次立项。
-- **未决（S5/S6 剩余）**：`add_level_info`（运行状态，随 S7）、`create_monster`/生成服务（随 S7）与其余约 81 个 `add_*` 未族化；按 W8 顺序推进，不一次性搬迁。
+- **已决（W8 S7C）**：`add_level_info`、`get_current_level_fall_pro`、`sync_level_drop_pro_data` 与非 res:// 直进分支迁入 `LevelEntryRuntime`；`create_monster` 与怪物路径解析迁入 `MonsterSpawnRuntime`；`Global` 保留同名薄转发与 `get_level_entry_runtime` / `get_monster_spawn_runtime`。四个无尽模式标志与 `selected_eight_immortal_id` 仍归 `Global`（关卡脚本直接读取），复位收敛为 `apply_level_entry_mode_reset()`，不谎报为已迁出。
+- **未决（S5 剩余）**：其余约 81 个 `add_*` 未族化；按 W8 顺序推进，不一次性搬迁。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
 - **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。

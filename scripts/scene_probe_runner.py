@@ -158,6 +158,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=600,
         timeout_seconds=180,
     ),
+    ProbeSpec(
+        key="level-entry",
+        title="关卡进入与怪物生成探针",
+        script_name="level_entry_probe.gd",
+        scene_name="level_entry_probe.tscn",
+        result_prefix="LEVEL_ENTRY_PROBE_RESULT=",
+        report_stem="level_entry_probe_report",
+        teardown_marker="LEVEL_ENTRY_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+    ),
 )
 
 

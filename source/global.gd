@@ -16,6 +16,8 @@ const REWARD_FACTORY_SCRIPT := preload("res://Script/runtime/reward_factory.gd")
 const COMBAT_PRESENTATION_FACTORY_SCRIPT := preload("res://Script/runtime/combat_presentation_factory.gd")
 const COMBAT_POOL_RUNTIME_SCRIPT := preload("res://Script/runtime/combat_pool_runtime.gd")
 const MAGIC_WEAPON_RUNTIME_SCRIPT := preload("res://Script/runtime/magic_weapon_runtime.gd")
+const LEVEL_ENTRY_RUNTIME_SCRIPT := preload("res://Script/runtime/level_entry_runtime.gd")
+const MONSTER_SPAWN_RUNTIME_SCRIPT := preload("res://Script/runtime/monster_spawn_runtime.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -340,6 +342,14 @@ func _ready() -> void:
 	_magic_weapon_runtime.name = "MagicWeaponRuntime"
 	_magic_weapon_runtime.setup(self)
 	add_child(_magic_weapon_runtime)
+	_level_entry = LEVEL_ENTRY_RUNTIME_SCRIPT.new()
+	_level_entry.name = "LevelEntryRuntime"
+	_level_entry.setup(self)
+	add_child(_level_entry)
+	_monster_spawn = MONSTER_SPAWN_RUNTIME_SCRIPT.new()
+	_monster_spawn.name = "MonsterSpawnRuntime"
+	_monster_spawn.setup(self)
+	add_child(_monster_spawn)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -395,6 +405,14 @@ func get_magic_weapon_runtime() -> MagicWeaponRuntime:
 	return _magic_weapon_runtime
 
 
+func get_level_entry_runtime() -> LevelEntryRuntime:
+	return _level_entry
+
+
+func get_monster_spawn_runtime() -> MonsterSpawnRuntime:
+	return _monster_spawn
+
+
 var cloud_sword = null
 var purple_gold_bell = null
 var zcld = null
@@ -432,7 +450,6 @@ var selected_three_prince_id: int = 0
 var selected_eight_immortal_id: int = 0
 var selected_constellation_level: int = 1
 var constellation_best_tier: Dictionary = {}
-var level_drop_pro_data = {}
 var level_begin_time = ""
 var level_end_time = ""
 var most_lianji: int = 0
@@ -611,6 +628,8 @@ var _reward_factory: RewardFactory = null
 var _combat_factory: CombatPresentationFactory = null
 var _combat_pool: CombatPoolRuntime = null
 var _magic_weapon_runtime: MagicWeaponRuntime = null
+var _level_entry: LevelEntryRuntime = null
+var _monster_spawn: MonsterSpawnRuntime = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -677,9 +696,7 @@ func prewarm_permanent_small_ui_scenes(generation: int = -1) -> void:
 func get_level_info_monster_ids(level_name: String) -> Array:
 	if level_name == "":
 		return []
-	var level_info_scene: PackedScene = level_info as PackedScene
-	if level_info_scene == null:
-		level_info_scene = _load_scene("res://Scene/other_scene/level_info.tscn") as PackedScene
+	var level_info_scene := _level_entry.get_level_info_scene()
 	if level_info_scene == null:
 		return []
 	var probe := level_info_scene.instantiate()
@@ -814,13 +831,6 @@ func load_level_monster_scene(path: String) -> PackedScene:
 	return _resource_runtime.load_level_monster_scene(path)
 
 
-func _monster_scene_path(monster_id: int) -> String:
-	var override := LevelPreloadStore.monster_scene_path(monster_id)
-	if not override.is_empty():
-		return override
-	return "res://Scene/monster/monster_%d.tscn" % monster_id
-
-
 func preload_level_monster_scenes(monster_ids: Array) -> void:
 	var request_generation := _runtime_generation
 	if not is_runtime_generation_current(request_generation):
@@ -831,7 +841,7 @@ func preload_level_monster_scenes(monster_ids: Array) -> void:
 		var monster_id := int(monster_id_value)
 		if monster_id <= 0:
 			continue
-		var scene_path := _monster_scene_path(monster_id)
+		var scene_path := _monster_spawn.monster_scene_path(monster_id)
 		if scene_path.is_empty() or seen_paths.has(scene_path):
 			continue
 		seen_paths[scene_path] = true
@@ -939,7 +949,7 @@ func preload_level_monster_runtime_resources(monster_ids: Array) -> void:
 
 	var monster_scene_paths: Array[String] = []
 	for monster_id in unique_monster_ids:
-		var scene_path := _monster_scene_path(monster_id)
+		var scene_path := _monster_spawn.monster_scene_path(monster_id)
 		if ResourceLoader.exists(scene_path) and not monster_scene_paths.has(scene_path):
 			monster_scene_paths.append(scene_path)
 	var bullet_scene_paths := _collect_monster_bullet_scene_paths(monster_scene_paths)
@@ -2054,7 +2064,6 @@ var role_magic_need = null
 var game_need_know = null
 var monster_head = null
 var level_fall_box = null
-var level_info = null
 var pj = null
 var help_thing = null
 var hc_help = null
@@ -2618,101 +2627,30 @@ func add_pj(parent, position, Num):
 
 
 func get_current_level_fall_pro(default_pro: float) -> float:
-	if level_drop_pro_data.is_empty():
-		var level_info_scene = _load_scene("res://Scene/other_scene/level_info.tscn")
-		if level_info_scene != null:
-			var probe = level_info_scene.instantiate()
-			if probe != null:
-				sync_level_drop_pro_data(probe.level_info)
-				probe.queue_free()
-	var level_name := _run_context.get_level_display_name()
-	var base_pro = -1.0
-	if level_name != "" and level_drop_pro_data.has(level_name):
-		base_pro = float(level_drop_pro_data[level_name])
-	var effective_pro = default_pro
-	if base_pro >= 0.0:
-		var diff = int(MainSet.set_data.get("Difficult", 0))
-		var multipliers = [1.0, 2.0, 3.0, 3.0]
-		diff = clampi(diff, 0, multipliers.size() - 1)
-		effective_pro = base_pro * multipliers[diff] / 100.0
-	if RoleProp.source_player != null and RoleProp.source_player.is_double_fall_pro:
-		effective_pro *= 2.0
-	return clampf(effective_pro, 0.0, 1.0)
+	return _level_entry.get_current_level_fall_pro(default_pro)
 
 
 func sync_level_drop_pro_data(level_info: Dictionary) -> void:
-	level_drop_pro_data.clear()
-	for level_name in level_info.keys():
-		level_drop_pro_data[level_name] = level_info[level_name].get("fall_pro", 0)
+	_level_entry.sync_drop_pro_data(level_info)
 
 
-func _enter_level_without_info(parent, path):
-	if str(path).begins_with("res://Scene/level/") and not is_archive_session_active():
-		add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
-		return null
-	if path == "res://Scene/level/level_llbt.tscn":
-		return addllbt_challenge(parent, Vector2(0, 0))
-	if not str(path).begins_with("res://"):
-		return add_dsg_choose(parent)
-	change_scene(path)
-	return null
+## 关卡进入前的模式复位：四个无尽模式标志与八仙选择。
+## 标志仍归 Global 所有（关卡脚本直接读取），此处保持单一写入口。
+func apply_level_entry_mode_reset(target_path: String) -> void:
+	if target_path == "res://Scene/level/level_tzsijian.tscn":
+		four_swords_endless_mode = false
+	if target_path == "res://Scene/level/level_stz.tscn":
+		three_prince_endless_mode = false
+	if target_path == "res://Scene/level/level_sssl.tscn":
+		sss_lendless_mode = false
+	if target_path == "res://Scene/level/level_esbxx.tscn":
+		constellation_endless_mode = false
+	if target_path == "res://Scene/level/level_bxgh.tscn":
+		selected_eight_immortal_id = 0
 
 
 func add_level_info(parent, Name, position, path):
-	if not is_archive_session_active():
-		add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
-		return null
-	_run_context.set_level_display_name(str(Name))
-	var show_level_info := bool(MainSet.set_data.get("LevelInfo", true))
-	if (
-		str(path)
-		in [
-			"res://Scene/level/level_stz.tscn",
-			"res://Scene/level/level_esbxx.tscn",
-			"res://Scene/level/level_tzsijian.tscn",
-			"res://Scene/level/level_sssl.tscn",
-			"res://Scene/level/level_bxgh.tscn"
-		]
-	):
-		show_level_info = true
-	if str(path) == "res://Scene/level/level_tzsijian.tscn":
-		four_swords_endless_mode = false
-	if str(path) == "res://Scene/level/level_stz.tscn":
-		three_prince_endless_mode = false
-	if str(path) == "res://Scene/level/level_sssl.tscn":
-		sss_lendless_mode = false
-	if str(path) == "res://Scene/level/level_esbxx.tscn":
-		constellation_endless_mode = false
-	if str(path) == "res://Scene/level/level_bxgh.tscn":
-		selected_eight_immortal_id = 0
-	if not level_info:
-		level_info = _load_scene("res://Scene/other_scene/level_info.tscn")
-	if not show_level_info:
-		var probe = level_info.instantiate()
-		if probe != null:
-			probe.level_name = Name
-			probe.target_stage_path = path
-			sync_level_drop_pro_data(probe.level_info)
-			var nightmare_block_message := ""
-			if probe.has_method("_get_nightmare_entry_block_message"):
-				nightmare_block_message = str(probe.call("_get_nightmare_entry_block_message"))
-			probe.free()
-			if nightmare_block_message != "":
-				add_message_show(parent, nightmare_block_message, 1.5, Vector2(470, 300))
-				return null
-		return _enter_level_without_info(parent, path)
-	var target = instance_scene(level_info, parent)
-	if target == null:
-		return null
-	sync_level_drop_pro_data(target.level_info)
-	target.level_name = Name
-	target.target_stage_path = path
-	if position == Vector2.ZERO or position == Vector2(0, 0):
-		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
-	else:
-		target.position = position
-	_ui_runtime.register_transient_ui(target)
-	return target
+	return _level_entry.add_level_info(parent, Name, position, path)
 
 
 func add_monster_head(parent, Name, is_boss, ScenePath := ""):
@@ -3803,19 +3741,7 @@ func add_back_pack(parent, position):
 
 
 func create_monster(M_id: int, parent, _position: Vector2) -> BaseMonster:
-	var path := _monster_scene_path(M_id)
-	var scene = load_level_monster_scene(path)
-	if scene:
-		var target := instance_scene(scene, parent) as BaseMonster
-		if target == null:
-			return null
-		if path != "res://Scene/monster/monster_%d.tscn" % M_id:
-			target.name = "Monster_%d" % M_id
-
-			target.set_meta("source_monster_id", M_id)
-		target.position = _position
-		return target
-	return null
+	return _monster_spawn.create_monster(M_id, parent, _position)
 
 
 func add_hit_text(parent, _position, value, lx, crit, miss):
