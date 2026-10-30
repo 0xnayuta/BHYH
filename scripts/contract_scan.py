@@ -25,6 +25,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 17. 输入写入边界门禁 (Input Boundary): 输入读取行不得夹带 PlayerData 或 request_save
 18. 运行状态边界门禁 (Run State Boundary): 禁止重新直写已迁移的运行状态字段或调用已删除的工具入口
 19. HUD/面板只读门禁 (HUD Panel Boundary): HUD 与面板域禁止直接档案 IO 与 PlayerData 字典直写
+20. 音频入口门禁 (Audio Entry Boundary): BGM/SFX 只经 AudioRuntime，业务禁止自建播放器或直读其私有状态
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1074,6 +1075,18 @@ class ContractScanner:
         "MemoryClass.safe_write_archive(",
         "MemoryClass.load_game(",
     )
+    # 20-3A：音频入口——BGM/SFX 只经 AudioRuntime；业务不得自建播放器或直读其私有状态。
+    AUDIO_ENTRY_ALLOWED_DIRS = ("Script/runtime/",)
+    AUDIO_ENTRY_ALLOWED_FILES = {"global.gd"}
+    AUDIO_ENTRY_FORBIDDEN_PATTERNS = (
+        "AudioStreamPlayer.new(",
+        "Scene/all_sound/",
+        ".get_audio_runtime()._active_bgm_instance",
+        ".get_audio_runtime()._active_sound_players",
+        ".get_audio_runtime()._last_sound_play_msec",
+        ".get_audio_runtime()._reserve_sound_voice",
+        ".get_audio_runtime()._pick_sound_victim",
+    )
     # 19-4C：输入读取行不得同时操作档案或保存。
     INPUT_READ_PATTERN = re.compile(
         r"\b(?:Input|PlayerInput)\.(?:is_action_pressed|is_action_just_pressed|is_action_just_released|"
@@ -1462,6 +1475,22 @@ class ContractScanner:
                 self.findings.append(finding)
 
     @classmethod
+    def audio_entry_boundary_violation(cls, content: str, rel_path: str):
+        """音频入口：BGM/SFX 只经 AudioRuntime；业务自建播放器或直读私有状态必须拦截。"""
+        if rel_path.startswith("addons/") or rel_path in cls.AUDIO_ENTRY_ALLOWED_FILES:
+            return (0, "")
+        if any(rel_path.startswith(prefix) for prefix in cls.AUDIO_ENTRY_ALLOWED_DIRS):
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.AUDIO_ENTRY_FORBIDDEN_PATTERNS:
+                if pattern in clean:
+                    return (lineno, pattern)
+        return (0, "")
+
+    @classmethod
     def hud_panel_boundary_violation(cls, content: str, rel_path: str):
         """HUD/面板只读：禁止直接档案 IO 与 PlayerData 字典直写；保存只经 request_save 入口。"""
         if rel_path not in cls.HUD_PANEL_FILES:
@@ -1515,6 +1544,16 @@ class ContractScanner:
             if count > budget:
                 return (1, f"deep_paths:{count}>{budget}")
         return (0, "")
+
+    def scan_audio_entry_boundary(self):
+        print(f"[*] 扫描音频入口门禁 (Phase 20-3A)...")
+        self._scan_rule(
+            category="audio_entry_boundary",
+            violation=self.audio_entry_boundary_violation,
+            message="音频入口回退：BGM/SFX 必须经 AudioRuntime，业务不得自建 AudioStreamPlayer 或直读其私有状态",
+            suggested_fix="改用 Global.add_bgm/add_sound 或 Global.get_audio_runtime() 的公开入口；播放器池由 AudioRuntime 与 CombatPoolRuntime 持有",
+            rule_id="AUDIO_ENTRY_BYPASS",
+        )
 
     def scan_hud_panel_boundary(self):
         print(f"[*] 扫描 HUD/面板只读门禁 (Phase 20-3A)...")
@@ -1649,7 +1688,7 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整十九类契约扫描流水线"""
+        """执行完整二十类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1670,6 +1709,7 @@ class ContractScanner:
         self.scan_slot_boundary()
         self.scan_panel_operator()
         self.scan_shared_ledger_boundary()
+        self.scan_audio_entry_boundary()
         self.scan_hud_panel_boundary()
         self.scan_phase17_boundary()
         self.scan_input_boundary()
@@ -2222,6 +2262,45 @@ def run_shared_ledger_self_test() -> bool:
     return passed
 
 
+def run_audio_entry_boundary_self_test() -> bool:
+    """音频入口自测：自建播放器、直引 all_sound 场景与私有状态必须拦截。"""
+    print("[*] 音频入口门禁负向自测...")
+    bad_samples = {
+        "业务自建播放器": ("var p := AudioStreamPlayer.new()\n", "Script/level/sample.gd"),
+        "业务直引音效场景": ('var s = load("res://Scene/all_sound/monster_be_hit.tscn")\n', "Script/base/base_hero.gd"),
+        "业务直读 BGM 实例": ("var b = Global.get_audio_runtime()._active_bgm_instance\n", "Script/main_menu/map_1.gd"),
+        "业务直调声部预留": ("Global.get_audio_runtime()._reserve_sound_voice(key, 1)\n", "Script/base/base_monster.gd"),
+    }
+    good_samples = {
+        "正式音效入口": ('Global.add_sound(self, "res://Music/level/86_pickup.mp3")\n', "Script/back_pack/equipment_fall.gd"),
+        "运行时公开入口": ('Global.get_audio_runtime().add_sound(self, path)\n', "Script/base/base_hero.gd"),
+        "BGM 正式入口": ('Global.add_bgm(self, path)\n', "Script/level/level_1.gd"),
+        "AudioRuntime 内部": ("var p := AudioStreamPlayer.new()\n", "Script/runtime/audio_runtime.gd"),
+        "Global 预热": ('var s := preload_scene_path("res://Scene/all_sound/monster_be_hit.tscn")\n', "global.gd"),
+        "注释中的自建播放器": ("# var p := AudioStreamPlayer.new() legacy\n", "Script/level/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.audio_entry_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.audio_entry_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 音频入口门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 音频入口门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def run_hud_panel_boundary_self_test() -> bool:
     """HUD/面板只读自测：直接档案 IO 与字典直写必须拦截，request_save 必须放行。"""
     print("[*] HUD/面板只读门禁负向自测...")
@@ -2404,7 +2483,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/HUD 面板只读/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2419,6 +2498,7 @@ def main():
         archive_ok = run_archive_boundary_self_test()
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
+        audio_entry_ok = run_audio_entry_boundary_self_test()
         hud_panel_ok = run_hud_panel_boundary_self_test()
         phase17_ok = run_phase17_boundary_self_test()
         input_ok = run_input_boundary_self_test()
@@ -2437,6 +2517,7 @@ def main():
             and shared_ledger_ok
             and phase17_ok
             and hud_panel_ok
+            and audio_entry_ok
             and input_ok
             and panel_operator_ok
             else 1

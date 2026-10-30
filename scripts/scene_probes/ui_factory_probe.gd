@@ -20,6 +20,12 @@ const BOX_SCENE_PATH := "res://Scene/back_pack/box_1.tscn"
 const GAME_NEED_KNOW_PATH := "res://Scene/other_scene/game_need_know.tscn"
 const HC_HELP_PATH := "res://Scene/other_scene/hc_help.tscn"
 const HELP_THING_PATH := "res://Scene/other_scene/help_things.tscn"
+const ZHEN_FA_HELP_PATH := "res://Scene/other_scene/zhen_fa_help.tscn"
+const ZHEN_FA_TU_PO_PATH := "res://Scene/other_scene/zhen_fa_tu_po.tscn"
+const ZHEN_YAN_CURE_LEVEL_PATH := "res://Scene/other_scene/zhen_yan_cure_level.tscn"
+const ZHEN_FA_INFO_PATH := "res://Scene/other_scene/zhenfainfo.tscn"
+const ZHENFA_LX_BUTTON_PATH := "res://Scene/other_scene/zhenfalxbutton.tscn"
+const ZHENYAN_BUTTON_PATH := "res://Scene/other_scene/zhenyanbutton.tscn"
 
 var _failures: Array[String] = []
 
@@ -43,6 +49,7 @@ func _run() -> void:
 	await _check_combat_pool(checks)
 	await _check_monster_display_family(checks)
 	await _check_level_hint_family(checks)
+	await _check_zhen_fa_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -63,6 +70,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["combat_factory_node"] = _has_child_node("CombatPresentationFactory")
 	checks["monster_display_factory_node"] = _has_child_node("MonsterDisplayFactory")
 	checks["level_hint_factory_node"] = _has_child_node("LevelHintFactory")
+	checks["zhen_fa_factory_node"] = _has_child_node("ZhenFaFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -71,6 +79,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_combat_factory().get_parent() == Global
 		and Global.get_monster_display_factory().get_parent() == Global
 		and Global.get_level_hint_factory().get_parent() == Global
+		and Global.get_zhen_fa_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -447,6 +456,64 @@ func _check_level_hint_family(checks: Dictionary) -> void:
 		and Global.is_resource_cached(HELP_THING_PATH)
 	)
 	_cleanup(created, host)
+
+
+func _check_zhen_fa_family(checks: Dictionary) -> void:
+	# 阵法面板族：六个入口共用父节点与父面板引用，返回形状各自独立。
+	var host := _make_host("ZhenFaProbeHost")
+	var created: Array[Node] = []
+	var help: Node = Global.add_zhen_fa_help(host, Vector2(11, 12))
+	await _settle()
+	checks["zhen_fa_help_created"] = help != null and help.get_parent() == host
+	checks["zhen_fa_help_position"] = help != null and help.position == Vector2(11, 12)
+	if help != null:
+		created.append(help)
+	var father := Node2D.new()
+	father.name = "ZhenFaProbeFather"
+	add_child(father)
+	var tu_po: Node = Global.add_zhen_fa_tu_po(host, Vector2(21, 22), father)
+	await _settle()
+	checks["zhen_fa_tu_po_created"] = tu_po != null and tu_po.get_parent() == host
+	checks["zhen_fa_tu_po_father"] = tu_po != null and tu_po.father == father
+	if tu_po != null:
+		created.append(tu_po)
+	var cure: Node = Global.add_zhen_yan_cure_level(host, Vector2(31, 32), father)
+	await _settle()
+	checks["zhen_yan_cure_created"] = cure != null and cure.get_parent() == host
+	checks["zhen_yan_cure_father"] = cure != null and cure.father == father
+	if cure != null:
+		created.append(cure)
+	var info: Node = Global.add_zhen_fa_info(host, Vector2(41, 42), father)
+	await _settle()
+	checks["zhen_fa_info_created"] = info != null and info.get_parent() == host
+	checks["zhen_fa_info_father"] = info != null and info.father == father
+	if info != null:
+		created.append(info)
+	var lx_button: Node = Global.add_zhenfalxbutton(host, "probe_zhenfa", father)
+	await _settle()
+	checks["zhen_fa_lx_created"] = lx_button != null and lx_button.get_parent() == host
+	checks["zhen_fa_lx_name"] = lx_button != null and str(lx_button.zhenfa_name) == "probe_zhenfa"
+	checks["zhen_fa_lx_father"] = lx_button != null and lx_button.father == father
+	if lx_button != null:
+		created.append(lx_button)
+	var eye: Node = Global.addzhenyanbutton(host, Vector2(51, 52), 3, father)
+	await _settle()
+	checks["zhen_yan_button_created"] = eye != null and eye.get_parent() == host
+	checks["zhen_yan_button_loc"] = eye != null and int(eye.loc_num) == 3
+	checks["zhen_yan_button_father"] = eye != null and eye.father == father
+	if eye != null:
+		created.append(eye)
+	checks["zhen_fa_scenes_cached"] = (
+		Global.is_resource_cached(ZHEN_FA_HELP_PATH)
+		and Global.is_resource_cached(ZHEN_FA_TU_PO_PATH)
+		and Global.is_resource_cached(ZHEN_YAN_CURE_LEVEL_PATH)
+		and Global.is_resource_cached(ZHEN_FA_INFO_PATH)
+		and Global.is_resource_cached(ZHENFA_LX_BUTTON_PATH)
+		and Global.is_resource_cached(ZHENYAN_BUTTON_PATH)
+	)
+	_cleanup(created, host)
+	if is_instance_valid(father):
+		father.queue_free()
 
 
 func _check_magic_weapon(checks: Dictionary) -> void:

@@ -21,6 +21,7 @@ const MONSTER_SPAWN_RUNTIME_SCRIPT := preload("res://Script/runtime/monster_spaw
 const ROLE_VISUAL_RUNTIME_SCRIPT := preload("res://Script/runtime/role_visual_runtime.gd")
 const MONSTER_DISPLAY_FACTORY_SCRIPT := preload("res://Script/runtime/monster_display_factory.gd")
 const LEVEL_HINT_FACTORY_SCRIPT := preload("res://Script/runtime/level_hint_factory.gd")
+const ZHEN_FA_FACTORY_SCRIPT := preload("res://Script/runtime/zhen_fa_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -365,6 +366,10 @@ func _ready() -> void:
 	_level_hint.name = "LevelHintFactory"
 	_level_hint.setup(self)
 	add_child(_level_hint)
+	_zhen_fa = ZHEN_FA_FACTORY_SCRIPT.new()
+	_zhen_fa.name = "ZhenFaFactory"
+	_zhen_fa.setup(self)
+	add_child(_zhen_fa)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -438,6 +443,10 @@ func get_monster_display_factory() -> MonsterDisplayFactory:
 
 func get_level_hint_factory() -> LevelHintFactory:
 	return _level_hint
+
+
+func get_zhen_fa_factory() -> ZhenFaFactory:
+	return _zhen_fa
 
 
 var cloud_sword = null
@@ -678,6 +687,7 @@ var _monster_spawn: MonsterSpawnRuntime = null
 var _role_visual: RoleVisualRuntime = null
 var _monster_display: MonsterDisplayFactory = null
 var _level_hint: LevelHintFactory = null
+var _zhen_fa: ZhenFaFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -2128,14 +2138,7 @@ var listbutton = null
 var lhhjhelp = null
 var monster141_aura = null
 var return_back_map = null
-var zhenfalxbutton = null
-var zhen_fa_info = null
-var zhen_fa_ui = null
 var ui_28 = null
-var zhenyanbutton = null
-var zhen_yan_cure_level = null
-var zhen_fa_tu_po = null
-var zhen_fa_help = null
 var role_button = null
 var star = null
 
@@ -2166,74 +2169,27 @@ func add_basic_ar_button(parent, Num):
 
 
 func add_zhen_fa_help(parent, position):
-	if not zhen_fa_help:
-		zhen_fa_help = _load_scene("res://Scene/other_scene/zhen_fa_help.tscn")
-	var target = instance_scene(zhen_fa_help, parent)
-	target.position = position
-	return target
+	return _zhen_fa.add_help(parent, position)
 
 
 func add_zhen_fa_tu_po(parent, position, father):
-	if not zhen_fa_tu_po:
-		zhen_fa_tu_po = _load_scene("res://Scene/other_scene/zhen_fa_tu_po.tscn")
-	var target = instance_scene(zhen_fa_tu_po, parent)
-	target.position = position
-	target.father = father
-	return target
+	return _zhen_fa.add_tu_po(parent, position, father)
 
 
 func add_zhen_yan_cure_level(parent, position, father):
-	if not zhen_yan_cure_level:
-		zhen_yan_cure_level = _load_scene("res://Scene/other_scene/zhen_yan_cure_level.tscn")
-	var target = instance_scene(zhen_yan_cure_level, parent)
-	target.position = position
-	target.father = father
-	return target
+	return _zhen_fa.add_cure_level(parent, position, father)
 
 
 func addzhenyanbutton(parent, position, loc_num, father):
-	if not zhenyanbutton:
-		zhenyanbutton = _load_scene("res://Scene/other_scene/zhenyanbutton.tscn")
-	var target = instance_scene(zhenyanbutton, parent)
-	target.position = position
-	target.loc_num = loc_num
-	target.father = father
-	return target
-
-
-func addui_28(parent, position):
-	if not ui_28:
-		ui_28 = _load_scene("res://Scene/other_scene/twenty_eight_constellations.tscn")
-	var target = instance_scene(ui_28, parent)
-	target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
-
-
-func add_zhen_fa_ui(parent, position):
-	if not zhen_fa_ui:
-		zhen_fa_ui = _load_scene("res://Scene/other_scene/zhen_fa_ui.tscn")
-	var target = instance_scene(zhen_fa_ui, parent)
-	target.position = position
-	return target
+	return _zhen_fa.add_eye_button(parent, position, loc_num, father)
 
 
 func add_zhen_fa_info(parent, position, father):
-	if not zhen_fa_info:
-		zhen_fa_info = _load_scene("res://Scene/other_scene/zhenfainfo.tscn")
-	var target = instance_scene(zhen_fa_info, parent)
-	target.position = position
-	target.father = father
-	return target
+	return _zhen_fa.add_info(parent, position, father)
 
 
 func add_zhenfalxbutton(parent, zhenfa_name, father):
-	if not zhenfalxbutton:
-		zhenfalxbutton = _load_scene("res://Scene/other_scene/zhenfalxbutton.tscn")
-	var target = instance_scene(zhenfalxbutton, parent)
-	target.zhenfa_name = zhenfa_name
-	target.father = father
-	return target
+	return _zhen_fa.add_lx_button(parent, zhenfa_name, father)
 
 
 func addhdgqmap(parent, position):
