@@ -40,6 +40,12 @@ const SMB_EFFECT_PATH := "res://Scene/hero/role_2/smb_effect.tscn"
 const ROLE_SPECIAL_EFFECT_PATH := "res://Scene/hero/role_special_effect.tscn"
 const WS_EFFECT_PATH := "res://Scene/hero/role_1/ws_effect.tscn"
 const LINE_EFFECT_PATH := "res://Scene/level/line_effect.tscn"
+const GAME_SET_PATH := "res://Scene/main_menu/game_set.tscn"
+const SKILL_KEY_SET_PATH := "res://Scene/skill/skill_key_set.tscn"
+const MUSIC_SET_PATH := "res://Scene/other_scene/choose_music.tscn"
+const LDL_PATH := "res://Scene/ldl/ldl.tscn"
+const GAME_INFORMATION_PATH := "res://Scene/main_menu/game_information.tscn"
+const LEARN_SKILL_PATH := "res://Scene/skill/learn_skill.tscn"
 
 var _failures: Array[String] = []
 
@@ -67,6 +73,7 @@ func _run() -> void:
 	await _check_forge_family(checks)
 	await _check_projectile_family(checks)
 	await _check_effect_family(checks)
+	await _check_menu_panel_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -91,6 +98,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["forge_factory_node"] = _has_child_node("ForgeFactory")
 	checks["projectile_factory_node"] = _has_child_node("ProjectileFactory")
 	checks["effect_factory_node"] = _has_child_node("EffectFactory")
+	checks["menu_panel_factory_node"] = _has_child_node("MenuPanelFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -103,6 +111,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_forge_factory().get_parent() == Global
 		and Global.get_projectile_factory().get_parent() == Global
 		and Global.get_effect_factory().get_parent() == Global
+		and Global.get_menu_panel_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -725,6 +734,73 @@ func _check_effect_family(checks: Dictionary) -> void:
 		and Global.is_resource_cached(WS_EFFECT_PATH)
 		and Global.is_resource_cached(LINE_EFFECT_PATH)
 	)
+	_cleanup(created, host)
+
+
+func _check_menu_panel_family(checks: Dictionary) -> void:
+	# 菜单/设置族：六个入口共用父节点；设置/炼丹炉/学习技能登记为临时 UI。
+	var host := _make_host("MenuPanelProbeHost")
+	var created: Array[Node] = []
+	var ui_runtime := Global.get_ui_runtime()
+	var game_set: Node = Global.add_game_set(host, Vector2.ZERO)
+	await _settle()
+	checks["game_set_created"] = game_set != null and game_set.get_parent() == host
+	checks["game_set_scaled"] = game_set != null and game_set.scale.x > 0.0 and game_set.scale.x == game_set.scale.y
+	checks["game_set_registered"] = (
+		game_set != null and ui_runtime.is_transient_ui_registered(game_set)
+	)
+	if game_set != null:
+		created.append(game_set)
+	var key_set: Node = Global.add_skill_key_set(host, Vector2(3, 4), "probe_key")
+	await _settle()
+	checks["skill_key_set_created"] = key_set != null and key_set.get_parent() == host
+	checks["skill_key_set_fields"] = (
+		key_set != null and key_set.position == Vector2(3, 4) and str(key_set.need_name) == "probe_key"
+	)
+	if key_set != null:
+		created.append(key_set)
+	var music_set: Node = Global.add_music_set(host, Vector2(5, 6))
+	await _settle()
+	checks["music_set_created"] = music_set != null and music_set.get_parent() == host
+	checks["music_set_position"] = music_set != null and music_set.position == Vector2(5, 6)
+	if music_set != null:
+		created.append(music_set)
+	var ldl: Node = Global.add_ldl(host, Vector2(7, 8))
+	await _settle()
+	checks["ldl_created"] = ldl != null and ldl.get_parent() == host
+	# ldl/learn_skill 在 _ready 中按视口自行居中，传入坐标会被覆盖；只断言层级与登记。
+	checks["ldl_fields"] = ldl != null and ldl.z_index == 99
+	checks["ldl_registered"] = ldl != null and ui_runtime.is_transient_ui_registered(ldl)
+	if ldl != null:
+		created.append(ldl)
+	var gm_infor: Node = Global.add_gm_infor(host, Vector2(9, 10))
+	await _settle()
+	checks["gm_infor_created"] = gm_infor != null and gm_infor.get_parent() == host
+	# 根节点为 CanvasLayer：position/z_index 无对应属性，赋值保持迁移前的无效语义。
+	checks["gm_infor_canvaslayer_root"] = gm_infor != null and gm_infor is CanvasLayer
+	checks["gm_infor_position_noop"] = gm_infor != null and gm_infor.get("position") == null
+	if gm_infor != null:
+		created.append(gm_infor)
+	var learn_skill: Node = Global.add_learn_skill(host, Vector2(11, 12))
+	await _settle()
+	checks["learn_skill_created"] = learn_skill != null and learn_skill.get_parent() == host
+	checks["learn_skill_fields"] = learn_skill != null and learn_skill.z_index == 99
+	# learn_skill 属常驻小 UI 路径，register_transient_ui 按设计跳过登记。
+	checks["learn_skill_permanent_not_registered"] = (
+		learn_skill != null and not ui_runtime.is_transient_ui_registered(learn_skill)
+	)
+	if learn_skill != null:
+		created.append(learn_skill)
+	checks["menu_panel_scenes_cached"] = (
+		Global.is_resource_cached(GAME_SET_PATH)
+		and Global.is_resource_cached(SKILL_KEY_SET_PATH)
+		and Global.is_resource_cached(MUSIC_SET_PATH)
+		and Global.is_resource_cached(LDL_PATH)
+		and Global.is_resource_cached(GAME_INFORMATION_PATH)
+		and Global.is_resource_cached(LEARN_SKILL_PATH)
+	)
+	# 负向断言：已删除的死入口不得复活。
+	checks["set_menu_entry_removed"] = not Global.has_method("add_set_menu")
 	_cleanup(created, host)
 
 

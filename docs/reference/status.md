@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；当前候选 Phase 21：21-3A/21-3B/21-3C 已完成，21-1A/21-1B/21-1C、21-2、21-4 未启动；当前 11 个 Autoload）
+> 最后更新：2026-10-30（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；当前候选 Phase 21：21-3A/21-3B/21-3C/21-3D 已完成，21-1A/21-1B/21-1C、21-2、21-4 未启动；当前 11 个 Autoload）
 
 ---
 
@@ -57,12 +57,12 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 | 指标 | 数量 |
 |:---|:---:|
-| GDScript | **777**（业务 741：`Script/` 680 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36） |
+| GDScript | **778**（业务 742：`Script/` 681 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36） |
 | 场景 `.tscn` | **1,136**（`Scene/` 1,135 + 插件 1） |
 | 资源 `.tres` | **1,370**（`Art/` 1,361、`Script/` 8、`Scene/` 1） |
 | PNG | **16,723**（16,702 小写 `.png` + 21 大写 `.PNG`） |
 | `.import` | **17,013** |
-| `.uid` | **810** |
+| `.uid` | **811** |
 | MP3 / WAV | **170 + 8**（大写 `.MP3`）/ **1** |
 | 字体 | **13 TTF + 2 TTC** |
 | Shader | **7** |
@@ -247,6 +247,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 20-3A 音频入口 + S5 阵法族 | `contract_scan` 新增第 20 类 `audio_entry_boundary`：业务禁止 `AudioStreamPlayer.new(`、直引 `Scene/all_sound/` 与直读 `AudioRuntime` 私有状态；`Script/runtime/` 与 `global.gd` 放行；自测 4 坏样本/6 好样本，全量扫描 ERROR=0。该规则补上 Phase 17 登记的最后空洞。新增 `ZhenFaFactory`（104 行）：阵法说明/突破提示/阵眼疗伤等级/阵法信息/阵法类型按钮/阵眼按钮六个常驻槽位，接管六个入口（含同域 `addzhenyanbutton`）；`Global` 删除 6 个槽位字段，保留转发与 getter；`add_zhen_fa_ui` 全仓 0 调用方，随函数与槽位删除。`ui-factories` 探针扩到 **123 项**（六入口坐标/father/阵法名/阵眼位号与六场景进入缓存）。`Global` 4,015→**3,971 行、329 函数、189 变量**；`add_*` 120 个，59 个为薄转发。**验证**：`contract_scan --self-test` 全 20 类通过、`--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8；`scene_probe_runner` 11/11；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26；`level_1` PASS（0/0/0）；全量 `level_regression_all` **128/128 PASS + 5 SKIP**。 | 20-3A 全部域完成；S5 剩余 61 个 `add_*` |
 | 2026-10-30 Phase 20-3B/20-3C 收口 | 20-3B：`archive_probe_runner` 补音频负向断言（`sound_invalid_parent_rejected`/`sound_empty_key_rejected`/`bgm_invalid_parent_rejected`/`bgm_stop_idempotent`），检查项 289→**293** PASS。20-3C：L2 固定组合 `level_1` PASS、`coop_probe_runner` 26/26、`scene_probe_runner` 11/11；`contract_scan --self-test` 二十类通过、ERROR=0；`check_all --godot-bin` 8/8；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（289.0s）。文档同步 `acceptance`/`scripts/README`/矩阵索引；Phase 18~20 归档到 `docs/archive/iteration_18_20_comprehensive_closeout.md`，当前候选改为 Phase 21。 | 20-3C 完成；20-1A/20-1C/20-1D、20-2 与 S5 剩余族转入 Phase 21 |
 | 2026-10-30 Phase 21-3A/B/C S5 三族 | 新增 `ForgeFactory`（4 槽位）：`add_forge_help`/`add_forges`/`add_decompose_help`/`add_decompose_instance`；`add_forge_box` 全仓 0 调用方，随 `forge_box` 槽位删除。新增 `ProjectileFactory`：7 个弹体入口，slim/streaming 路径解析与法宝弹体路径表迁入，来源写入仍经 `Global._assign_attack_source`。新增 `EffectFactory`：6 个效果入口，`AURA_PATH` 与三个 slim 路径常量迁入，灵魄加成仍由 `PaSkill` 计算。两个清理入口改调工厂 `clear_scene_caches()`。`Global` 3,971→**3,798 行、330 函数、178 变量**；`add_*` 119 个，76 个为薄转发。`ui-factories` 探针扩到 **170 项**（含清缓存重载与 `add_forge_box` 已删除断言）。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；存档探针 293/293；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（319.8s）。 | 21-3A/B/C 完成；剩余 43 个 `add_*` |
+| 2026-10-30 Phase 21-3D 菜单/设置族 | 新增 `MenuPanelFactory`（142 行，6 个常驻场景槽位）：`add_game_set`/`add_skill_key_set`/`add_music_set`/`add_ldl`/`add_gm_infor`/`add_learn_skill`；`Global` 删除 6 个槽位字段并保留薄转发与 `get_menu_panel_factory()`。`add_set_menu` 全仓 0 调用方（`set_menu.tscn` 无其它引用），随 `set_menu` 槽位删除；`add_skill_select` 已是 `BackpackFactory` 薄转发。技能图标预热改调 `prime_learn_skill_scene()`。**修复**：`add_gm_infor` 根节点为 `CanvasLayer`，原实现写 `z_index` 触发 `SCRIPT ERROR` 并中断返回；改为仅对 `CanvasItem` 写入。`Global` 3,798→**3,753 行、330 函数、172 变量**；`add_*` 118 个，82 个为薄转发。`ui-factories` 探针扩到 **189 项**。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；存档探针 293/293；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（286.2s）。 | 21-3D 完成；剩余 36 个 `add_*` |
 
 ---
 

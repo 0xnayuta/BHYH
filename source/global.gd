@@ -25,6 +25,7 @@ const ZHEN_FA_FACTORY_SCRIPT := preload("res://Script/runtime/zhen_fa_factory.gd
 const FORGE_FACTORY_SCRIPT := preload("res://Script/runtime/forge_factory.gd")
 const PROJECTILE_FACTORY_SCRIPT := preload("res://Script/runtime/projectile_factory.gd")
 const EFFECT_FACTORY_SCRIPT := preload("res://Script/runtime/effect_factory.gd")
+const MENU_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/menu_panel_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -356,6 +357,10 @@ func _ready() -> void:
 	_effect_factory.name = "EffectFactory"
 	_effect_factory.setup(self)
 	add_child(_effect_factory)
+	_menu_panel_factory = MENU_PANEL_FACTORY_SCRIPT.new()
+	_menu_panel_factory.name = "MenuPanelFactory"
+	_menu_panel_factory.setup(self)
+	add_child(_menu_panel_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -445,6 +450,10 @@ func get_projectile_factory() -> ProjectileFactory:
 
 func get_effect_factory() -> EffectFactory:
 	return _effect_factory
+
+
+func get_menu_panel_factory() -> MenuPanelFactory:
+	return _menu_panel_factory
 
 
 var cloud_sword = null
@@ -689,6 +698,7 @@ var _zhen_fa: ZhenFaFactory = null
 var _forge_factory: ForgeFactory = null
 var _projectile_factory: ProjectileFactory = null
 var _effect_factory: EffectFactory = null
+var _menu_panel_factory: MenuPanelFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -877,7 +887,7 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 	await _preload_paths_threaded(paths, request_generation)
 	if not is_runtime_generation_current(request_generation):
 		return
-	skill_learn = _resource_runtime.get_cached_packed_scene("res://Scene/skill/learn_skill.tscn")
+	_menu_panel_factory.prime_learn_skill_scene()
 	zd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/zd_skill.tscn")
 	bd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/bd_skill.tscn")
 
@@ -2049,10 +2059,8 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 var lhhjbutton = null
 var mosaic_help = null
 var cd_jm = null
-var set_menu = null
 
 var mycamera = null
-var music_set = null
 var target_scene: String:
 	get:
 		return _scene_flow.target_scene if _scene_flow != null else ""
@@ -2075,10 +2083,7 @@ func _get_preloaded(path: String) -> PackedScene:
 
 var sell_or_equ = null
 var fall_equ = null
-var ldl = null
-var game_information = null
 var zd_skill = null
-var skill_learn = null
 var role_information = null
 var zztwtrap = null
 var bd_skill = null
@@ -2089,8 +2094,6 @@ var magic_help = null
 
 var sound = null
 var mosaic = null
-var game_set = null
-var skill_key_set = null
 var role1_shallow = null
 var change_clothes_jm = null
 var h_hjm = null
@@ -2769,30 +2772,11 @@ func add_role_bullet_1(parent, position, _name, dic, source_player: BaseHero = n
 
 
 func add_skill_key_set(parent, position, _name):
-	if not skill_key_set:
-		skill_key_set = _load_scene("res://Scene/skill/skill_key_set.tscn")
-	var target = instance_scene(skill_key_set, parent)
-	target.position = position
-	target.need_name = _name
-	return target
+	return _menu_panel_factory.add_skill_key_set(parent, position, _name)
 
 
 func add_game_set(parent, position):
-	if not game_set:
-		game_set = _load_scene("res://Scene/main_menu/game_set.tscn")
-	var target = instance_scene(game_set, parent)
-	if target == null:
-		return null
-	_ui_runtime.register_transient_ui(target, &"_on_return_pressed")
-	var design_size := Vector2(942, 589)
-	var viewport_size = get_viewport().get_visible_rect().size
-	var fit_scale = min(viewport_size.x / design_size.x, viewport_size.y / design_size.y)
-	if target is Node2D:
-		target.scale = Vector2(fit_scale, fit_scale)
-		target.position = viewport_center_for_parent(parent) - design_size * fit_scale * 0.5
-	else:
-		target.position = position
-	return target
+	return _menu_panel_factory.add_game_set(parent, position)
 
 
 func add_mosaic_instance(parent, position):
@@ -3308,13 +3292,7 @@ func add_role_information(parent, position):
 
 
 func add_learn_skill(parent, position):
-	if not skill_learn:
-		skill_learn = _load_scene("res://Scene/skill/learn_skill.tscn")
-	var target = instance_scene(skill_learn, parent)
-	target.z_index = 99
-	target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _menu_panel_factory.add_learn_skill(parent, position)
 
 
 func add_zd_skillscene(parent, position):
@@ -3336,22 +3314,11 @@ func add_bd_skillscene(parent, position):
 
 
 func add_gm_infor(parent, position):
-	if not game_information:
-		game_information = _load_scene("res://Scene/main_menu/game_information.tscn")
-	var target = instance_scene(game_information, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _menu_panel_factory.add_gm_infor(parent, position)
 
 
 func add_ldl(parent, position):
-	if not ldl:
-		ldl = _load_scene("res://Scene/ldl/ldl.tscn")
-	var target = instance_scene(ldl, parent)
-	target.z_index = 99
-	target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_return_pressed")
-	return target
+	return _menu_panel_factory.add_ldl(parent, position)
 
 
 func add_pl_sell(parent, position):
@@ -3431,11 +3398,7 @@ func is_scene_request_current(generation: int) -> bool:
 
 
 func add_music_set(parent, position):
-	if not music_set:
-		music_set = _load_scene("res://Scene/other_scene/choose_music.tscn")
-	var target = instance_scene(music_set, parent)
-	target.position = position
-	return target
+	return _menu_panel_factory.add_music_set(parent, position)
 
 
 func add_camera(parent, position, right):
@@ -3471,14 +3434,6 @@ func call_hero(who: String, parent, position: Vector2, _dir: bool, player_slot: 
 			return target
 	push_error("Failed to create hero: " + clean_who)
 	return null
-
-
-func add_set_menu(parent, position):
-	if not set_menu:
-		set_menu = _load_scene("res://Scene/set_menu.tscn")
-	var target = instance_scene(set_menu, parent)
-	target.position = position
-	return target
 
 
 func add_cd_jm(parent, position):
