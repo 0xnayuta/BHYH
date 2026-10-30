@@ -27,6 +27,8 @@ const PROJECTILE_FACTORY_SCRIPT := preload("res://Script/runtime/projectile_fact
 const EFFECT_FACTORY_SCRIPT := preload("res://Script/runtime/effect_factory.gd")
 const MENU_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/menu_panel_factory.gd")
 const LEVEL_SCENE_FACTORY_SCRIPT := preload("res://Script/runtime/level_scene_factory.gd")
+const SHOW_TEXT_FACTORY_SCRIPT := preload("res://Script/runtime/show_text_factory.gd")
+const SKILL_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/skill_panel_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -365,6 +367,14 @@ func _ready() -> void:
 	_level_scene_factory.name = "LevelSceneFactory"
 	_level_scene_factory.setup(self)
 	add_child(_level_scene_factory)
+	_show_text_factory = SHOW_TEXT_FACTORY_SCRIPT.new()
+	_show_text_factory.name = "ShowTextFactory"
+	_show_text_factory.setup(self)
+	add_child(_show_text_factory)
+	_skill_panel_factory = SKILL_PANEL_FACTORY_SCRIPT.new()
+	_skill_panel_factory.name = "SkillPanelFactory"
+	_skill_panel_factory.setup(self)
+	add_child(_skill_panel_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -462,6 +472,14 @@ func get_menu_panel_factory() -> MenuPanelFactory:
 
 func get_level_scene_factory() -> LevelSceneFactory:
 	return _level_scene_factory
+
+
+func get_show_text_factory() -> ShowTextFactory:
+	return _show_text_factory
+
+
+func get_skill_panel_factory() -> SkillPanelFactory:
+	return _skill_panel_factory
 
 
 var cloud_sword = null
@@ -708,6 +726,8 @@ var _projectile_factory: ProjectileFactory = null
 var _effect_factory: EffectFactory = null
 var _menu_panel_factory: MenuPanelFactory = null
 var _level_scene_factory: LevelSceneFactory = null
+var _show_text_factory: ShowTextFactory = null
+var _skill_panel_factory: SkillPanelFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -897,8 +917,7 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 	if not is_runtime_generation_current(request_generation):
 		return
 	_menu_panel_factory.prime_learn_skill_scene()
-	zd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/zd_skill.tscn")
-	bd_skill = _resource_runtime.get_cached_packed_scene("res://Scene/skill/bd_skill.tscn")
+	_skill_panel_factory.prime_skill_scenes()
 
 
 func load_scene_uncached(path: String) -> PackedScene:
@@ -2092,13 +2111,9 @@ func _get_preloaded(path: String) -> PackedScene:
 
 var sell_or_equ = null
 var fall_equ = null
-var zd_skill = null
 var role_information = null
-var bd_skill = null
 var nmw_hands = null
 var change_background = null
-
-var magic_help = null
 
 var sound = null
 var mosaic = null
@@ -2107,10 +2122,6 @@ var change_clothes_jm = null
 var h_hjm = null
 var choose_player = null
 var role2_shallow = null
-var role_magic_need = null
-var pj = null
-var task_title = null
-var add_font = null
 var game_announcement = null
 var basic_pellet = null
 var trans_box = null
@@ -2127,15 +2138,6 @@ var lhhjhelp = null
 var return_back_map = null
 var ui_28 = null
 var role_button = null
-var star = null
-
-
-func add_star(parent, type_id: int):
-	if not star:
-		star = _load_scene("res://Scene/other_scene/star.tscn")
-	var target = instance_scene(star, parent)
-	target.type = type_id
-	return target
 
 
 func add_role_button(parent, my_name, my_father):
@@ -2372,19 +2374,9 @@ func add_game_announcement(parent, position):
 
 
 func add_font_instance(parent, show_text, font, font_size, font_color, out_line_size, out_line_color):
-	if not add_font:
-		add_font = _load_scene("res://Scene/show_text/message_info.tscn")
-	var target = instance_scene(add_font, parent)
-	if font == null:
-		target.font = null
-	else:
-		target.font = load(font)
-	target.show_text = show_text
-	target.font_color = font_color
-	target.out_line_size = out_line_size
-	target.out_line_color = out_line_color
-	target.font_size = font_size
-	return target
+	return _show_text_factory.add_font_instance(
+		parent, show_text, font, font_size, font_color, out_line_size, out_line_color
+	)
 
 
 func add_task_reward(parent, ItemName, total_num):
@@ -2396,14 +2388,7 @@ func add_basic_task(parent, position):
 
 
 func add_task_title(parent, task_type, task_name, my_father):
-	if not task_title:
-		task_title = _load_scene("res://Scene/task/task_title.tscn")
-	var target = instance_scene(task_title, parent)
-	target.task_name = task_name
-	target.task_type = task_type
-	target.my_father = my_father
-	target.z_index = 99
-	return target
+	return _show_text_factory.add_task_title(parent, task_type, task_name, my_father)
 
 
 func configure_backpack_role_preview(page: Node, player: Variant = null) -> void:
@@ -2523,12 +2508,7 @@ func add_help_thing(parent, position, item_info):
 
 
 func add_pj(parent, position, Num):
-	if not pj:
-		pj = _load_scene("res://Scene/other_scene/ping_jia.tscn")
-	var target = instance_scene(pj, parent)
-	target.num = Num
-	target.position = position
-	return target
+	return _show_text_factory.add_ping_jia(parent, position, Num)
 
 
 func get_current_level_fall_pro(default_pro: float) -> float:
@@ -2565,17 +2545,6 @@ func add_item_box(parent, Inldl, Inhhgz, Name, qh_level, num, wx, EqProp):
 
 func add_game_need_know(parent, position):
 	return _level_hint.add_game_need_know(parent, position)
-
-
-func add_role_magic_need(parent, position, _name, old, new):
-	if not role_magic_need:
-		role_magic_need = _load_scene("res://Scene/skill/role_magic_need.tscn")
-	var target = instance_scene(role_magic_need, parent)
-	target.position = position
-	target.skill_name = _name
-	target.current_need = old
-	target.next_need = new
-	return target
 
 
 func add_new_bullet(parent, position, dir, _name, dic):
@@ -2750,12 +2719,7 @@ func add_mosaic_instance(parent, position):
 
 
 func add_magic_help(parent, position):
-	if not magic_help:
-		magic_help = _load_scene("res://Scene/magic_weapon/magic_help.tscn")
-	var target = instance_scene(magic_help, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _skill_panel_factory.add_magic_help(parent, position)
 
 
 func _get_viewport_center_position() -> Vector2:
@@ -3258,21 +3222,11 @@ func add_learn_skill(parent, position):
 
 
 func add_zd_skillscene(parent, position):
-	if not zd_skill:
-		zd_skill = _load_scene("res://Scene/skill/zd_skill.tscn")
-	var target = instance_scene(zd_skill, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _skill_panel_factory.add_zd_skill(parent, position)
 
 
 func add_bd_skillscene(parent, position):
-	if not bd_skill:
-		bd_skill = _load_scene("res://Scene/skill/bd_skill.tscn")
-	var target = instance_scene(bd_skill, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _skill_panel_factory.add_bd_skill(parent, position)
 
 
 func add_gm_infor(parent, position):

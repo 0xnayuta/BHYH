@@ -52,6 +52,12 @@ const STAGE_PATH := "res://Scene/level/jctfloor_1.tscn"
 const FLY_STAGE_PATH := "res://Scene/level/zlw_fly_floor.tscn"
 const ZZ_TW_TRAP_PATH := "res://Scene/level/zztw_trap.tscn"
 const DSG_CHOOSE_PATH := "res://Scene/level/dsg_choose.tscn"
+const TASK_TITLE_PATH := "res://Scene/task/task_title.tscn"
+const PING_JIA_PATH := "res://Scene/other_scene/ping_jia.tscn"
+const MESSAGE_INFO_PATH := "res://Scene/show_text/message_info.tscn"
+const ZD_SKILL_PATH := "res://Scene/skill/zd_skill.tscn"
+const BD_SKILL_PATH := "res://Scene/skill/bd_skill.tscn"
+const MAGIC_HELP_PATH := "res://Scene/magic_weapon/magic_help.tscn"
 
 var _failures: Array[String] = []
 
@@ -81,6 +87,8 @@ func _run() -> void:
 	await _check_effect_family(checks)
 	await _check_menu_panel_family(checks)
 	await _check_level_scene_family(checks)
+	await _check_show_text_family(checks)
+	await _check_skill_panel_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -107,6 +115,8 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["effect_factory_node"] = _has_child_node("EffectFactory")
 	checks["menu_panel_factory_node"] = _has_child_node("MenuPanelFactory")
 	checks["level_scene_factory_node"] = _has_child_node("LevelSceneFactory")
+	checks["show_text_factory_node"] = _has_child_node("ShowTextFactory")
+	checks["skill_panel_factory_node"] = _has_child_node("SkillPanelFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -121,6 +131,8 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_effect_factory().get_parent() == Global
 		and Global.get_menu_panel_factory().get_parent() == Global
 		and Global.get_level_scene_factory().get_parent() == Global
+		and Global.get_show_text_factory().get_parent() == Global
+		and Global.get_skill_panel_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -877,6 +889,90 @@ func _check_level_scene_family(checks: Dictionary) -> void:
 		and Global.is_resource_cached(FLY_STAGE_PATH)
 		and Global.is_resource_cached(ZZ_TW_TRAP_PATH)
 		and Global.is_resource_cached(DSG_CHOOSE_PATH)
+	)
+	_cleanup(created, host)
+
+
+func _check_show_text_family(checks: Dictionary) -> void:
+	# 展示文本族：字体文本、任务标题与评分文字；已删除的死入口不得复活。
+	var host := _make_host("ShowTextProbeHost")
+	var created: Array[Node] = []
+	var text: Node = Global.add_font_instance(host, "探针文本", null, 18, Color(1, 0, 0), 2, Color(0, 0, 0))
+	await _settle()
+	checks["show_text_font_created"] = text != null and text.get_parent() == host
+	checks["show_text_font_fields"] = (
+		text != null
+		and str(text.show_text) == "探针文本"
+		and text.font == null
+		and int(text.font_size) == 18
+		and int(text.out_line_size) == 2
+		and text.font_color == Color(1, 0, 0)
+	)
+	if text != null:
+		created.append(text)
+	var title: Node = Global.add_task_title(host, "probe_type", "probe_task", null)
+	await _settle()
+	checks["show_text_task_title_created"] = title != null and title.get_parent() == host
+	checks["show_text_task_title_fields"] = (
+		title != null
+		and str(title.task_type) == "probe_type"
+		and str(title.task_name) == "probe_task"
+		and title.my_father == null
+		and int(title.z_index) == 99
+	)
+	if title != null:
+		created.append(title)
+	var ping_jia: Node = Global.add_pj(host, Vector2(7, 8), 3)
+	await _settle()
+	checks["show_text_ping_jia_created"] = ping_jia != null and ping_jia.get_parent() == host
+	checks["show_text_ping_jia_fields"] = (
+		ping_jia != null and int(ping_jia.num) == 3 and ping_jia.position == Vector2(7, 8)
+	)
+	if ping_jia != null:
+		created.append(ping_jia)
+	# 这些场景属于运行期 UI 路径：最后一个实例退出后 UiRuntime 会释放场景缓存，
+	# 工厂槽位仍持有强引用，因此断言取用可用而不是 is_resource_cached。
+	var show_text_factory := Global.get_show_text_factory()
+	checks["show_text_scenes_reusable"] = (
+		show_text_factory.get_task_title_scene() != null
+		and show_text_factory.get_ping_jia_scene() != null
+		and show_text_factory.get_message_info_scene() != null
+	)
+	checks["show_text_dead_entries_removed"] = (
+		not Global.has_method("add_star") and not Global.has_method("add_role_magic_need")
+	)
+	_cleanup(created, host)
+
+
+func _check_skill_panel_family(checks: Dictionary) -> void:
+	# 技能面板族：角色/变身技能面板与法宝说明，层级固定为 99。
+	var host := _make_host("SkillPanelProbeHost")
+	var created: Array[Node] = []
+	var zd: Node = Global.add_zd_skillscene(host, Vector2(9, 10))
+	await _settle()
+	checks["skill_panel_zd_created"] = zd != null and zd.get_parent() == host
+	checks["skill_panel_zd_fields"] = zd != null and zd.z_index == 99 and zd.position == Vector2(9, 10)
+	if zd != null:
+		created.append(zd)
+	var bd: Node = Global.add_bd_skillscene(host, Vector2(11, 12))
+	await _settle()
+	checks["skill_panel_bd_created"] = bd != null and bd.get_parent() == host
+	checks["skill_panel_bd_fields"] = bd != null and bd.z_index == 99 and bd.position == Vector2(11, 12)
+	if bd != null:
+		created.append(bd)
+	var magic_help: Node = Global.add_magic_help(host, Vector2(13, 14))
+	await _settle()
+	checks["skill_panel_magic_help_created"] = magic_help != null and magic_help.get_parent() == host
+	checks["skill_panel_magic_help_fields"] = (
+		magic_help != null and magic_help.z_index == 99 and magic_help.position == Vector2(13, 14)
+	)
+	if magic_help != null:
+		created.append(magic_help)
+	var skill_panel_factory := Global.get_skill_panel_factory()
+	checks["skill_panel_scenes_reusable"] = (
+		skill_panel_factory.get_zd_skill_scene() != null
+		and skill_panel_factory.get_bd_skill_scene() != null
+		and skill_panel_factory.get_magic_help_scene() != null
 	)
 	_cleanup(created, host)
 

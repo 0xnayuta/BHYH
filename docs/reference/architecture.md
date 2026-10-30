@@ -95,11 +95,11 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 13 族，剩余清单见矩阵 §8）；Spine 跨平台、`_bundled` 与类型化 Atlas accessor 仍延期）。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 15 族，剩余清单见矩阵 §8）；Spine 跨平台、`_bundled` 与类型化 Atlas accessor 仍延期）。
 
 ### 2.4 运行时服务
 
-`Global` 在 `_ready` 创建 23 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
+`Global` 在 `_ready` 创建 25 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
 
 - `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
 - `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
@@ -118,6 +118,8 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `ForgeFactory`：锻造说明、锻造主面板、分解说明与分解主面板四个常驻场景槽位；通过 `Global.get_forge_factory()` 访问，业务侧仍用 `Global.add_forge_help` / `add_forges` / `add_decompose_help` / `add_decompose_instance`。
 - `ProjectileFactory`：Role4 弹体、通用弹体、角色 slim 弹体、怪物弹体与法宝弹体；slim/streaming 路径按名称解析，来源写入仍经 `Global._assign_attack_source`；通过 `Global.get_projectile_factory()` 访问。
 - `EffectFactory`：灵魄光效、灵魄获取提示、技能特效、Boss 光环、无双特效与线性特效；灵魄加成仍由 `PaSkill` 计算；通过 `Global.get_effect_factory()` 访问。
+- `ShowTextFactory`：任务标题、评分文字与自定义字体文本三个常驻场景槽位；通过 `Global.get_show_text_factory()` 访问，业务侧仍用 `Global.add_font_instance` / `add_task_title` / `add_pj`。
+- `SkillPanelFactory`：角色/变身技能面板与法宝说明三个常驻场景槽位；预热经 `prime_skill_scenes()` 接管已缓存场景；通过 `Global.get_skill_panel_factory()` 访问，业务侧仍用 `Global.add_zd_skillscene` / `add_bd_skillscene` / `add_magic_help`。
 - `LevelSceneFactory`：极彩天地板、逐浪飞行地板、招照镜台陷阱与关卡选择面板四个常驻场景槽位；通过 `Global.get_level_scene_factory()` 访问，业务侧仍用 `Global.add_stage` / `add_z_lw_stage` / `add_zztw_trap` / `add_dsg_choose`。
 - `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明与学习技能六个常驻场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；通过 `Global.get_menu_panel_factory()` 访问。
 - `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_current_level_name` / `set_tower_floor` / `advance_tower_floor` 与 `RunContext` 的 `add_*` / `count_*` / `reset_combat_stats`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 只读同一实例。

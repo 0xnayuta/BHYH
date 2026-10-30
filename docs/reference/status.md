@@ -57,12 +57,12 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 | 指标 | 数量 |
 |:---|:---:|
-| GDScript | **779**（业务 743：`Script/` 682 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36） |
+| GDScript | **781**（业务 745：`Script/` 684 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36） |
 | 场景 `.tscn` | **1,136**（`Scene/` 1,135 + 插件 1） |
 | 资源 `.tres` | **1,380**（`Art/` 1,371、`Script/` 8、`Scene/` 1；含 21-4A 生成的 10 个动作帧） |
 | PNG | **16,723**（16,702 小写 `.png` + 21 大写 `.PNG`） |
 | `.import` | **17,013** |
-| `.uid` | **812** |
+| `.uid` | **814** |
 | MP3 / WAV | **170 + 8**（大写 `.MP3`）/ **1** |
 | 字体 | **13 TTF + 2 TTC** |
 | Shader | **7** |
@@ -251,6 +251,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 21-4B 未央宫符号层 | `weiyang_palace_boss._build_symbol_frames` 路径由不存在的 `swf_png/3007/atlas/swf_png_3010_frames.tres` 修正为 `swf_png/3007/atlas/swf_png_3007_frames.tres`；嘴/眼符号层恢复（78/17/55 帧），初始帧 0/16/54、镜像正确，嘴部可推进到第 50 帧发射；运行期复制保留在 allowlist，不新增条目。新增 `weiyang-symbol` 场景探针 **23 项 PASS**（帧数、循环、速度、发射帧纹理、初始帧、镜像、时间轴可达）。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；`scene_probe_runner` **12/12**；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（316.8s，`level_dsg_3` 一次瞬态重试通过）。 | 21-4B 完成；21-4A 转换器扩展未启动 |
 | 2026-10-30 Phase 21-3E buff 与关卡场景族 | buff：`add_buffinfor` 并入 `PopupFactory.add_buff_information`（屏幕布局 + hover 弹层），`add_buff_icon` 并入 `CombatPresentationFactory.add_buff_icon`（节点名/buff_name 取 `Name`）；`add_buff`/`add_buff_info`/`add_buff_icon_text`/`add_magp_infor` 已是薄转发；`Global` 删除 `buffinfor` 槽位与 `BUFF_ICON_PATH`。关卡场景：新增 `LevelSceneFactory`（90 行，4 槽位）接管 `add_stage`/`add_z_lw_stage`/`add_zztw_trap`/`add_dsg_choose`。`Global` 3,753→**3,715 行、331 函数、168 变量**；`add_*` 118 个，88 个为薄转发。`ui-factories` 探针扩到 **206 项**。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；存档探针 293/293；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（354.7s）。 | 21-3E 两批完成；剩余 30 个 `add_*` |
 | 2026-10-30 Phase 21-4A 运行时建帧转换 | 扩展 `convert_numbered_frames.py` 多动作 profile（每动画可选 `count` 与裁剪规则，源目录必须 1..N 连续）。`eight_immortals_boss` 8 个 Boss × 7 状态迁移到 `body_actions/body_frames.tres`（166 hit2 裁 250×250、168 hit2 裁 250×200 在构建期固化）；`three_prince_boss` 木吒/金吒迁移到 `three_prince/{root}/body_frames.tres`（木吒 hit3 292×250 居中裁 250×250），哪吒保持 atlas。`pet_tiger_boss_base` **拒绝转换**：声明的 `model/frames/stage1~4/r*_c*.png` 在工作区 0 个文件，预构建 `pet_tiger_stage*_frames.tres` 只有 9 个动画、缺 hit5/hit6；保留运行期构建并登记资产缺失。`runtime_frames_allowlist` **11→9**；新增 `action-frames` 探针 **65 项 PASS**。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；`scene_probe_runner` **13/13**；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（299.0s，`level_lxdy4` 一次瞬态重试通过）。 | 21-4A 完成；tiger 源缺失待素材或删除决策 |
+| 2026-10-30 Phase 21-3F 展示文本与技能面板族 | 新增 `ShowTextFactory`（3 槽位）：`add_font_instance`（`message_info.tscn`，空字体保持 null）/`add_task_title`（层级 99）/`add_pj`；`add_star` 全仓 0 调用方，随 `star` 槽位删除。新增 `SkillPanelFactory`（3 槽位）：`add_zd_skillscene`/`add_bd_skillscene`/`add_magic_help`（层级均 99）；技能图标线程预热改调 `prime_skill_scenes()`；`add_role_magic_need` 全仓 0 调用方，随槽位删除。`Global` 3,715→**3,669 行、331 函数、162 变量**；`add_*` 116 个，93 个为薄转发。`ui-factories` 探针扩到 **223 项**（含运行期 UI 槽位在缓存释放后仍可复用与死入口断言）。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；存档探针 293/293；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（317.9s）。 | 21-3F 完成；剩余 23 个 `add_*` |
 
 ---
 
