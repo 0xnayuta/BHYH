@@ -76,16 +76,9 @@ func get_level_resource_lease_snapshot() -> Dictionary:
 
 
 func get_cache_scope_snapshot() -> Dictionary:
-	var pool_limits := {
-		"damage_text": _host.DAMAGE_TEXT_POOL_LIMIT,
-		"mr_hurt": _host.MR_HURT_POOL_LIMIT,
-		"role_be_hit": _host.ROLE_BE_HIT_POOL_LIMIT,
-		"sound_player": _host.SOUND_PLAYER_POOL_LIMIT,
-	}
-	var pool_sizes: Dictionary = {}
-	for pool_name in pool_limits:
-		var pool_value: Variant = _host._pool_data.get(pool_name, [])
-		pool_sizes[pool_name] = (pool_value as Array).size() if pool_value is Array else 0
+	var pool_scope: Dictionary = _host.get_combat_pool().get_scope_snapshot() if _host.get_combat_pool() != null else {}
+	var pool_limits: Dictionary = pool_scope.get("pool_limits", {})
+	var pool_sizes: Dictionary = pool_scope.get("pool_sizes", {})
 	return {
 		"build_read_only":
 		{
@@ -133,8 +126,8 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"cleanup": "end_archive_session -> clear_combat_runtime_cache",
 			"pool_sizes": pool_sizes,
 			"pool_limits": pool_limits,
-			"pool_root_valid": _host._pool_data.get("root") != null and is_instance_valid(_host._pool_data.get("root")),
-			"active_damage_texts": _host._active_damage_texts.size(),
+			"pool_root_valid": bool(pool_scope.get("pool_root_valid", false)),
+			"active_damage_texts": int(pool_scope.get("active_damage_texts", 0)),
 			"active_sound_players": int(_host.get_audio_runtime().get_snapshot().get("active_sound_players", 0)),
 			"all_hero_skill_resources_preloaded": _host._all_hero_skill_resources_preloaded,
 		},

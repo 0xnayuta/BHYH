@@ -99,7 +99,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 ### 2.4 运行时服务
 
-`Global` 在 `_ready` 创建 8 个普通子节点，均不是 Autoload：
+`Global` 在 `_ready` 创建 10 个普通子节点，均不是 Autoload：
 
 - `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
 - `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
@@ -107,8 +107,10 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `ResourceRuntime`：场景/精灵帧/音频/纹理四类缓存、怪物场景缓存、常驻小 UI 场景缓存、关卡资源租约、单槽预载与线程/分帧预热；通过 `Global.get_resource_runtime()` 访问，业务侧仍用 `Global.is_resource_cached` / `handoff_loaded_resource` / `begin_level_resource_lease` 等窄入口。
 - `SceneFlow`：场景切换流、请求代次守卫与 `target_scene`；通过 `Global.get_scene_flow()` 读取代次，`Global.change_scene` 是唯一正式切换入口。
 - `PopupFactory` / `ShopFactory` / `BackpackFactory` / `RewardFactory` / `CombatPresentationFactory`：按功能族的场景工厂，各自持有本族场景缓存；`Global.add_*` 保留同名签名并转发到族级 API，分别通过 `Global.get_popup_factory()` / `get_shop_factory()` / `get_backpack_factory()` / `get_reward_factory()` / `get_combat_factory()` 访问。
+- `CombatPoolRuntime`：伤害数字/怪物受击/角色受击/命中音效四池、池根、伤害数字 80 上限计数、受击 55ms 节流与剑阵按帧限流；通过 `Global.get_combat_pool()` 访问，业务侧仍用 `Global.recycle_damage_text` / `recycle_mr_hurt` / `recycle_role_be_hit` / `can_show_sword_*`。
+- `MagicWeaponRuntime`：两个槽位的当前法宝召唤物与创建/替换/清理；通过 `Global.get_magic_weapon_runtime()` 访问，业务侧仍用 `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for`。
 
-业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段与 `Global._level_resource_lease` 已删除。
+业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts` 与 `Global.current_magic_summon` 已删除。
 
 ---
 

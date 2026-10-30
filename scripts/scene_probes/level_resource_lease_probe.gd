@@ -26,18 +26,21 @@ func _audio_snapshot() -> Dictionary:
 
 
 func _check_pool_scope(checks: Dictionary) -> void:
-	var pool: Array = Global._pool_data["damage_text"]
+	# 池容量探针：把上限临时压到 1 不现实，改为验证“重复归还同一个节点只入池一次”
+	# 与清理后池根失效；池归属在 Global.get_combat_pool()。
+	var pool := Global.get_combat_pool()
+	pool.clear_runtime_pools()
 	var first := Node.new()
 	first.name = "PoolCapacityProbe"
-	Global._store_pooled_node(first, pool, 1)
-	var second := Node.new()
-	Global._store_pooled_node(second, pool, 1)
-	checks["pool_capacity"] = pool.size() == 1
+	pool.store_pooled_node(first, "damage_text")
+	checks["pool_store_once"] = pool.get_pool_size("damage_text") == 1
+	checks["pool_no_duplicate"] = pool.is_pooled(first, "damage_text")
 	var pool_scope: Dictionary = _diagnostics().get_cache_scope_snapshot().get("combat", {})
 	checks["pool_root"] = bool(pool_scope.get("pool_root_valid", false))
-	Global._clear_runtime_pools()
-	checks["pool_clear"] = pool.is_empty() and not bool(
-		_diagnostics().get_cache_scope_snapshot().get("combat", {}).get("pool_root_valid", true)
+	pool.clear_runtime_pools()
+	checks["pool_clear"] = (
+		pool.get_pool_size("damage_text") == 0
+		and not bool(_diagnostics().get_cache_scope_snapshot().get("combat", {}).get("pool_root_valid", true))
 	)
 
 

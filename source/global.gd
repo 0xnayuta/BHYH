@@ -14,6 +14,8 @@ const SHOP_FACTORY_SCRIPT := preload("res://Script/runtime/shop_factory.gd")
 const BACKPACK_FACTORY_SCRIPT := preload("res://Script/runtime/backpack_factory.gd")
 const REWARD_FACTORY_SCRIPT := preload("res://Script/runtime/reward_factory.gd")
 const COMBAT_PRESENTATION_FACTORY_SCRIPT := preload("res://Script/runtime/combat_presentation_factory.gd")
+const COMBAT_POOL_RUNTIME_SCRIPT := preload("res://Script/runtime/combat_pool_runtime.gd")
+const MAGIC_WEAPON_RUNTIME_SCRIPT := preload("res://Script/runtime/magic_weapon_runtime.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -122,11 +124,6 @@ var all_buff_list = [
 ]
 var buff_list = []
 
-var _pool_data = {"root": null, "damage_text": [], "mr_hurt": [], "role_be_hit": [], "sound_player": []}
-const DAMAGE_TEXT_POOL_LIMIT := 80
-const MR_HURT_POOL_LIMIT := 32
-const ROLE_BE_HIT_POOL_LIMIT := 24
-const SOUND_PLAYER_POOL_LIMIT := 32
 const COMBAT_HIT_DAMAGE_POOL_SIZE := 12
 const COMBAT_HIT_EFFECT_POOL_SIZE := 16
 const COMBAT_HIT_SOUND_POOL_SIZE := 6
@@ -335,6 +332,14 @@ func _ready() -> void:
 	_combat_factory.name = "CombatPresentationFactory"
 	_combat_factory.setup(self)
 	add_child(_combat_factory)
+	_combat_pool = COMBAT_POOL_RUNTIME_SCRIPT.new()
+	_combat_pool.name = "CombatPoolRuntime"
+	_combat_pool.setup(self)
+	add_child(_combat_pool)
+	_magic_weapon_runtime = MAGIC_WEAPON_RUNTIME_SCRIPT.new()
+	_magic_weapon_runtime.name = "MagicWeaponRuntime"
+	_magic_weapon_runtime.setup(self)
+	add_child(_magic_weapon_runtime)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -380,6 +385,14 @@ func get_reward_factory() -> RewardFactory:
 
 func get_combat_factory() -> CombatPresentationFactory:
 	return _combat_factory
+
+
+func get_combat_pool() -> CombatPoolRuntime:
+	return _combat_pool
+
+
+func get_magic_weapon_runtime() -> MagicWeaponRuntime:
+	return _magic_weapon_runtime
 
 
 var cloud_sword = null
@@ -590,122 +603,42 @@ var _shop_factory: ShopFactory = null
 var _backpack_factory: BackpackFactory = null
 var _reward_factory: RewardFactory = null
 var _combat_factory: CombatPresentationFactory = null
-var _last_mr_hurt_msec = {}
+var _combat_pool: CombatPoolRuntime = null
+var _magic_weapon_runtime: MagicWeaponRuntime = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
 var _runtime_diagnostics: RuntimeDiagnostics = null
-var _sword_damage_text_frame: int = -1
-var _sword_damage_text_count: int = 0
-var _sword_hit_effect_frame: int = -1
-var _sword_hit_effect_count: int = 0
-var current_magic_summon: Node = null
-var secondary_magic_summon: Node = null
-
-
-func _get_pool_root() -> Node:
-	var root = _pool_data.get("root")
-	if root != null and is_instance_valid(root) and not root.is_queued_for_deletion():
-		return root
-	root = Node.new()
-	root.name = "RuntimePool"
-	add_child(root)
-	_pool_data["root"] = root
-	return root
 
 
 ## 取出不重置：池内节点在归还/预热时已由 prepare_for_pool() 清理，
 ## 调用方必须用新数据调用 setup() 或播放入口；场景类型校验由各池固定场景保证。
-func _take_pooled_node(pool, scene_path: String) -> Node:
-	while pool.size() > 0:
-		var node = pool.pop_back()
-		if is_instance_valid(node) and not node.is_queued_for_deletion():
-			return node
-	var scene = preload_scene_path(scene_path)
-	if scene == null:
-		return null
-	return scene.instantiate()
+func _take_pooled_node(pool_name: String, scene_path: String) -> Node:
+	return _combat_pool.take_pooled_node(pool_name, scene_path)
 
 
 func _attach_pooled_node(node: Node, parent: Node) -> void:
-	if node == null or parent == null:
-		return
-	var old_parent = node.get_parent()
-	if old_parent != null:
-		old_parent.remove_child(node)
-	parent.add_child(node)
-
-
-func _store_pooled_node(node: Node, pool: Array, max_size: int) -> void:
-	if node == null or not is_instance_valid(node) or node.is_queued_for_deletion():
-		return
-	# 归还前统一清理：取出时不重置，调用方必须用新数据调用 setup()/播放入口。
-	if node.has_method("prepare_for_pool"):
-		node.call("prepare_for_pool")
-	var old_parent = node.get_parent()
-	if old_parent != null:
-		old_parent.remove_child(node)
-	if pool.size() >= max_size:
-		node.queue_free()
-		return
-	_get_pool_root().add_child(node)
-	pool.append(node)
+	_combat_pool.attach_pooled_node(node, parent)
 
 
 func recycle_damage_text(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	_release_damage_text_count(node)
-	_store_pooled_node(node, _pool_data["damage_text"], DAMAGE_TEXT_POOL_LIMIT)
-
-
-func _release_damage_text_count(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	_active_damage_texts.erase(node.get_instance_id())
-	if bool(node.get_meta("damage_text_active", false)):
-		node.set_meta("damage_text_active", false)
-		_on_damage_text_freed()
-
-
-func _on_damage_text_tree_exited(node: Node) -> void:
-	_release_damage_text_count(node)
+	_combat_pool.recycle_damage_text(node)
 
 
 func recycle_mr_hurt(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	_store_pooled_node(node, _pool_data["mr_hurt"], MR_HURT_POOL_LIMIT)
+	_combat_pool.recycle_mr_hurt(node)
 
 
 func recycle_role_be_hit(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	_store_pooled_node(node, _pool_data["role_be_hit"], ROLE_BE_HIT_POOL_LIMIT)
+	_combat_pool.recycle_role_be_hit(node)
 
 
 func can_show_sword_damage_text() -> bool:
-	var frame := int(Engine.get_process_frames())
-	if _sword_damage_text_frame != frame:
-		_sword_damage_text_frame = frame
-		_sword_damage_text_count = 0
-	var limit := 3 if OS.has_feature("mobile") else 6
-	if _sword_damage_text_count >= limit:
-		return false
-	_sword_damage_text_count += 1
-	return true
+	return _combat_pool.can_show_sword_damage_text()
 
 
 func can_show_sword_hit_effect() -> bool:
-	var frame := int(Engine.get_process_frames())
-	if _sword_hit_effect_frame != frame:
-		_sword_hit_effect_frame = frame
-		_sword_hit_effect_count = 0
-	var limit := 2 if OS.has_feature("mobile") else 4
-	if _sword_hit_effect_count >= limit:
-		return false
-	_sword_hit_effect_count += 1
-	return true
+	return _combat_pool.can_show_sword_hit_effect()
 
 
 func _load_scene(path: String) -> PackedScene:
@@ -1130,21 +1063,7 @@ func preload_combat_hit_resources() -> void:
 
 
 func _seed_runtime_pool(pool_name: String, scene: PackedScene, target_size: int) -> void:
-	if scene == null:
-		return
-	var pool: Array = _pool_data[pool_name]
-	while pool.size() < target_size:
-		var node := scene.instantiate()
-		if node == null:
-			return
-		_get_pool_root().add_child(node)
-		if node.has_method("prepare_for_pool"):
-			node.call("prepare_for_pool")
-		if node is CanvasItem:
-			(node as CanvasItem).visible = false
-		if node is AudioStreamPlayer:
-			node.set_physics_process(false)
-		pool.append(node)
+	_combat_pool.seed_pool(pool_name, scene, target_size)
 
 
 func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation: int = -1) -> void:
@@ -1160,13 +1079,13 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 	warm_root.position = get_viewport().get_visible_rect().get_center()
 	add_child(warm_root)
 
-	var role_hit = _take_pooled_node(_pool_data["role_be_hit"], ROLE_BE_HIT_EFFECT_PATH)
+	var role_hit = _take_pooled_node("role_be_hit", ROLE_BE_HIT_EFFECT_PATH)
 	if role_hit != null:
 		_attach_pooled_node(role_hit, warm_root)
 		role_hit.setup(Vector2.ONE, false, 1.0)
 		role_hit.modulate.a = 0.001
 
-	var damage_sample = _take_pooled_node(_pool_data["damage_text"], DAMAGE_TEXT_PATH)
+	var damage_sample = _take_pooled_node("damage_text", DAMAGE_TEXT_PATH)
 	if damage_sample != null:
 		_attach_pooled_node(damage_sample, warm_root)
 		damage_sample.setup(88888888, "physics", false, null)
@@ -1177,7 +1096,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 
 	var monster_hits: Array[Node] = []
 	for animation_name in [&"hurt_1", &"hurt_2"]:
-		var monster_hit = _take_pooled_node(_pool_data["mr_hurt"], MONSTER_BE_HIT_PATH)
+		var monster_hit = _take_pooled_node("mr_hurt", MONSTER_BE_HIT_PATH)
 		if monster_hit == null:
 			continue
 		_attach_pooled_node(monster_hit, warm_root)
@@ -1217,8 +1136,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 		"res://Music/hero/9_beattack_by_role2.mp3",
 	]:
 		var sound_player = (
-			_take_pooled_node(_pool_data["sound_player"], "res://Scene/all_sound/monster_be_hit.tscn")
-			as AudioStreamPlayer
+			_take_pooled_node("sound_player", "res://Scene/all_sound/monster_be_hit.tscn") as AudioStreamPlayer
 		)
 		if sound_player == null:
 			continue
@@ -1253,7 +1171,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 		sound_player.stop()
 		sound_player.stream = null
 		sound_player.set_physics_process(false)
-		if not _pool_data["sound_player"].has(sound_player):
+		if not _combat_pool.is_pooled(sound_player, "sound_player"):
 			_audio_runtime.recycle_sound_player(sound_player)
 	if is_instance_valid(warm_root):
 		warm_root.free()
@@ -1327,12 +1245,8 @@ func clear_combat_runtime_cache() -> void:
 	smb_effect = null
 	new_bullet = null
 	_all_hero_skill_resources_preloaded = false
-	if current_magic_summon != null and is_instance_valid(current_magic_summon):
-		current_magic_summon.queue_free()
-	current_magic_summon = null
-	if is_instance_valid(secondary_magic_summon):
-		secondary_magic_summon.queue_free()
-	secondary_magic_summon = null
+	if _magic_weapon_runtime != null:
+		_magic_weapon_runtime.clear_runtime_state()
 
 
 func is_archive_exit_scene(scene_path: String) -> bool:
@@ -1530,24 +1444,10 @@ func end_archive_session() -> void:
 
 
 func _clear_runtime_pools() -> void:
-	for pool_name in ["damage_text", "mr_hurt", "role_be_hit", "sound_player"]:
-		var pool: Array = _pool_data[pool_name]
-		for node_value in pool:
-			var node := node_value as Node
-			if node == null or not is_instance_valid(node):
-				continue
-			if node is AudioStreamPlayer:
-				(node as AudioStreamPlayer).stop()
-				(node as AudioStreamPlayer).stream = null
-			node.queue_free()
-		pool.clear()
-	var pool_root := _pool_data.get("root") as Node
-	if pool_root != null and is_instance_valid(pool_root):
-		pool_root.queue_free()
-	_pool_data["root"] = null
-	_active_damage_texts.clear()
-	_audio_runtime.release_active_sound_players()
-	_damage_text_count = 0
+	if _combat_pool != null:
+		_combat_pool.clear_runtime_pools()
+	if _audio_runtime != null:
+		_audio_runtime.release_active_sound_players()
 
 
 func release_role_runtime_resources() -> void:
@@ -3110,68 +3010,11 @@ func set_damage_text_enabled(enabled: bool) -> void:
 	MainSet.set_data["ShowDamageText"] = enabled
 	if enabled:
 		return
-	var active_nodes: Array = _active_damage_texts.values()
-	for node_value in active_nodes:
-		if not is_instance_valid(node_value):
-			continue
-		var node: Node = node_value as Node
-		if node == null:
-			continue
-		if node.has_method("recycle"):
-			node.call("recycle")
-		else:
-			_release_damage_text_count(node)
-			node.queue_free()
-
-
-var _damage_text_count: int = 0
-var _active_damage_texts: Dictionary = {}
-var _damage_text_recount_frame: int = -1
+	_combat_pool.release_all_damage_texts()
 
 
 func add_damage_text(parent, position, value, type_: String, is_crit: bool, tar):
-	if not bool(MainSet.set_data.get("ShowDamageText", true)):
-		return null
-	if _damage_text_count >= 80:
-		if _damage_text_recount_frame != Engine.get_physics_frames():
-			_recount_active_damage_texts()
-		if _damage_text_count >= 80:
-			return null
-	_damage_text_count += 1
-	var target = _take_pooled_node(_pool_data["damage_text"], DAMAGE_TEXT_PATH)
-	if target == null:
-		_on_damage_text_freed()
-		return null
-	_attach_pooled_node(target, parent)
-	target.set_meta("damage_text_active", true)
-	_active_damage_texts[target.get_instance_id()] = target
-	var exit_callback := _on_damage_text_tree_exited.bind(target)
-	if not target.tree_exited.is_connected(exit_callback):
-		target.tree_exited.connect(exit_callback)
-	target.position = position
-	if target.has_method("setup"):
-		target.setup(value, type_, is_crit, tar)
-	else:
-		target.target = tar
-		target.type = type_
-		target.damage_value = value
-		target.is_crit = is_crit
-	return target
-
-
-func _recount_active_damage_texts() -> void:
-	_damage_text_recount_frame = Engine.get_physics_frames()
-	for instance_id in _active_damage_texts.keys():
-		var node = _active_damage_texts[instance_id]
-		if node == null or not is_instance_valid(node) or not bool(node.get_meta("damage_text_active", false)):
-			_active_damage_texts.erase(instance_id)
-	_damage_text_count = _active_damage_texts.size()
-
-
-func _on_damage_text_freed():
-	_damage_text_count -= 1
-	if _damage_text_count < 0:
-		_damage_text_count = 0
+	return _combat_factory.add_damage_text(parent, position, value, type_, is_crit, tar)
 
 
 func add_role1_shallow(parent, position, dir, int_action, source_player: BaseHero = null):
@@ -3550,6 +3393,10 @@ func prewarm_active_pet_runtime_resources() -> void:
 	_prewarmed_pet_signature = pet_signature
 
 
+func get_magic_weapon_scene_path(weapon_name: String) -> String:
+	return str(MAGIC_WEAPON_SCENE_PATHS.get(weapon_name, ""))
+
+
 func get_magic_weapon_preload_paths(_name) -> Array[String]:
 	var weapon_name := str(_name)
 	var paths: Array[String] = []
@@ -3584,49 +3431,15 @@ func prepare_magic_weapon_resources(_name) -> void:
 
 
 func add_magic_weapon(parent, _name, position, source_player: BaseHero = null):
-	var weapon_name := str(_name)
-	if weapon_name in PlayerData.RETIRED_WUDU_MAGIC_WEAPONS:
-		return null
-	var previous_summon: Node = get_magic_summon_for(source_player)
-	if is_instance_valid(previous_summon):
-		previous_summon.queue_free()
-		set_magic_summon_for(source_player, null)
-	var scene_path := str(MAGIC_WEAPON_SCENE_PATHS.get(weapon_name, ""))
-	if scene_path == "":
-		return null
-	var scene := load_scene_uncached(scene_path)
-	if scene == null:
-		return null
-	var target := scene.instantiate()
-	if source_player != null:
-		target.set_meta("coop_slot", LocalCoop.slot_for(source_player))
-		target.set("player", source_player)
-	parent.add_child(target)
-	if target:
-		target.position = position
-		if target.has_method("set_magic_weapon_name"):
-			target.set_magic_weapon_name(weapon_name)
-		set_magic_summon_for(source_player, target)
-	return target
+	return _magic_weapon_runtime.add_magic_weapon(parent, str(_name), position, source_player)
 
 
 func get_magic_summon_for(player: Node) -> Node:
-	var summon: Node = (
-		secondary_magic_summon
-		if is_instance_valid(player) and LocalCoop.slot_for(player) == 2
-		else current_magic_summon
-	)
-	return summon if is_instance_valid(summon) else null
+	return _magic_weapon_runtime.get_magic_summon_for(player)
 
 
 func set_magic_summon_for(player: Node, summon: Node) -> void:
-	var slot := LocalCoop.slot_for(player) if is_instance_valid(player) else 1
-	if slot == 2:
-		secondary_magic_summon = summon
-	else:
-		current_magic_summon = summon
-	if is_instance_valid(summon):
-		summon.set_meta("coop_slot", slot)
+	_magic_weapon_runtime.set_magic_summon_for(player, summon)
 
 
 func add_message_show(parent_node, need_text: String, time: float, target_pos: Vector2):
@@ -3755,30 +3568,7 @@ func add_buff_icon_text(parent, text_):
 
 
 func add_special_effect(parent, _position, _name, _scale, direction, _speed):
-	var effect_name := str(_name)
-	if effect_name == "RoleBeHit" or effect_name == "role_be_hit":
-		var role_hit = _take_pooled_node(_pool_data["role_be_hit"], ROLE_BE_HIT_EFFECT_PATH)
-		if role_hit == null:
-			return null
-		_attach_pooled_node(role_hit, parent)
-		role_hit.z_index = 99
-		role_hit.position = _position
-		role_hit.setup(_scale, direction, _speed)
-		return role_hit
-	var scene_path := SPECIAL_AFFECT_SLIM_DIR.path_join(effect_name + ".tscn")
-	if not ResourceLoader.exists(scene_path):
-		push_error("Missing slim special effect scene: " + scene_path)
-		return null
-	var target = instance_scene(_cached_scene(StringName("SpecialAffect_" + effect_name), scene_path), parent)
-	if target == null:
-		return null
-	target.z_index = 99
-	target.effect_name = _name
-	target._scale = _scale
-	target.effect_speed = _speed
-	target.effect_dir = direction
-	target.position = _position
-	return target
+	return _combat_factory.add_special_effect(parent, _position, _name, _scale, direction, _speed)
 
 
 func add_choose_text(parent, _position, text_, calm_time):
@@ -4031,23 +3821,7 @@ func add_monster_blood(parent, _position, value, text):
 
 
 func add_mr_hurt(parent, _position):
-	if parent == null:
-		return null
-	var now_msec := Time.get_ticks_msec()
-	var key := str(parent.get_instance_id())
-	var last_msec := int(_last_mr_hurt_msec.get(key, 0))
-	if now_msec - last_msec < 55:
-		return null
-	_last_mr_hurt_msec[key] = now_msec
-	var target = _take_pooled_node(_pool_data["mr_hurt"], MONSTER_BE_HIT_PATH)
-	if target == null:
-		return null
-	_attach_pooled_node(target, parent)
-	target.modulate = Color.WHITE
-	target.position = _position
-	if target.has_method("_play_hurt_animation"):
-		target._play_hurt_animation()
-	return target
+	return _combat_factory.add_mr_hurt(parent, _position)
 
 
 func promote_popup_without_moving(node: Node) -> void:

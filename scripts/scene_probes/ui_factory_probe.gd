@@ -33,6 +33,8 @@ func _run() -> void:
 	await _check_reward_family(checks)
 	await _check_combat_family(checks)
 	await _check_combat_cache_release(checks)
+	await _check_combat_pool(checks)
+	await _check_magic_weapon(checks)
 
 	for check_name in checks:
 		if not bool(checks[check_name]):
@@ -295,6 +297,65 @@ func _check_combat_family(checks: Dictionary) -> void:
 		created.append(effect_bullet)
 	checks["combat_scene_cached"] = Global.is_resource_cached(HIT_TEXT_PATH)
 	_cleanup(created, host)
+
+
+func _check_combat_pool(checks: Dictionary) -> void:
+	var pool := Global.get_combat_pool()
+	checks["combat_pool_node"] = pool != null and pool.get_parent() == Global
+	checks["combat_pool_limits"] = (
+		int(pool.get_pool_limits().get("damage_text", 0)) == 80
+		and int(pool.get_pool_limits().get("mr_hurt", 0)) == 32
+		and int(pool.get_pool_limits().get("role_be_hit", 0)) == 24
+		and int(pool.get_pool_limits().get("sound_player", 0)) == 32
+	)
+	var host := _make_host("CombatPoolProbeHost")
+	pool.clear_runtime_pools()
+	var first: Node = Global.add_damage_text(host, Vector2(1, 1), 111, "physics", false, null)
+	var second: Node = Global.add_damage_text(host, Vector2(2, 2), 222, "magic", true, null)
+	await _settle()
+	checks["damage_text_created"] = first != null and second != null
+	checks["damage_text_counted"] = pool.get_active_damage_text_count() == 2
+	Global.recycle_damage_text(first)
+	checks["damage_text_recycled"] = pool.get_active_damage_text_count() == 1
+	checks["damage_text_pooled"] = pool.get_pool_size("damage_text") >= 1
+	var mr_first: Node = Global.add_mr_hurt(host, Vector2(3, 3))
+	var mr_second: Node = Global.add_mr_hurt(host, Vector2(4, 4))
+	await _settle()
+	checks["mr_hurt_created"] = mr_first != null
+	checks["mr_hurt_throttled"] = mr_second == null
+	var role_hit: Node = Global.add_special_effect(host, Vector2(5, 5), "RoleBeHit", Vector2.ONE, false, 1.0)
+	await _settle()
+	checks["role_be_hit_created"] = role_hit != null
+	Global.recycle_role_be_hit(role_hit)
+	checks["role_be_hit_pooled"] = pool.get_pool_size("role_be_hit") >= 1
+	var slim: Node = Global.add_special_effect(host, Vector2(6, 6), "blood_reduce", Vector2.ONE, false, 1.0)
+	await _settle()
+	checks["special_effect_slim_created"] = slim != null and str(slim.effect_name) == "blood_reduce"
+	checks["sword_damage_text_throttle"] = bool(Global.can_show_sword_damage_text())
+	checks["sword_hit_effect_throttle"] = bool(Global.can_show_sword_hit_effect())
+	pool.clear_runtime_pools()
+	_cleanup([slim], host)
+
+
+func _check_magic_weapon(checks: Dictionary) -> void:
+	var runtime := Global.get_magic_weapon_runtime()
+	checks["magic_runtime_node"] = runtime != null and runtime.get_parent() == Global
+	checks["magic_scene_path_known"] = Global.get_magic_weapon_scene_path("qlsword") != ""
+	checks["magic_scene_path_unknown"] = Global.get_magic_weapon_scene_path("__missing_weapon") == ""
+	var host := _make_host("MagicWeaponProbeHost")
+	runtime.clear_runtime_state()
+	var weapon: Node = Global.add_magic_weapon(host, "qlsword", Vector2(10, 10), null)
+	await _settle()
+	checks["magic_weapon_created"] = weapon != null and weapon.get_parent() == host
+	checks["magic_summon_bound"] = Global.get_magic_summon_for(null) == weapon
+	var replacement: Node = Global.add_magic_weapon(host, "qlsword", Vector2(20, 20), null)
+	await _settle()
+	checks["magic_weapon_replaced"] = (
+		replacement != null and replacement != weapon and Global.get_magic_summon_for(null) == replacement
+	)
+	runtime.clear_runtime_state()
+	checks["magic_summon_cleared"] = Global.get_magic_summon_for(null) == null
+	_cleanup([replacement], host)
 
 
 func _check_combat_cache_release(checks: Dictionary) -> void:

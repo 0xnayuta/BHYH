@@ -117,11 +117,12 @@ func add_sound(parent: Node, target_: Variant, priority: int = 0):
 		return null
 	if not _reserve_sound_voice(sound_key, priority):
 		return null
-	var target = _host._take_pooled_node(_host._pool_data["sound_player"], SFX_SCENE_PATH)
+	var pool: CombatPoolRuntime = _host.get_combat_pool()
+	var target = pool.take_pooled_node("sound_player", SFX_SCENE_PATH)
 	if target == null:
 		return null
 	_last_sound_play_msec[sound_key] = now_msec
-	_host._attach_pooled_node(target, parent)
+	pool.attach_pooled_node(target, parent)
 	var instance_id: int = target.get_instance_id()
 	var exit_callback := _on_sound_player_tree_exiting.bind(instance_id)
 	if not target.tree_exiting.is_connected(exit_callback):
@@ -138,8 +139,9 @@ func recycle_sound_player(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
 	_active_sound_players.erase(node.get_instance_id())
-	if not _host._pool_data["sound_player"].has(node):
-		_host._store_pooled_node(node, _host._pool_data["sound_player"], _host.SOUND_PLAYER_POOL_LIMIT)
+	var pool: CombatPoolRuntime = _host.get_combat_pool()
+	if pool != null and not pool.is_pooled(node, "sound_player"):
+		pool.store_pooled_node(node, "sound_player")
 
 
 func release_active_sound_players() -> void:

@@ -1,7 +1,7 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
-> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）与 W6 S5（按功能族抽取 5 个场景工厂）。本页记录当前边界、逐项结论与迁移顺序；其余拆分尚未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
-> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂（以上全部是 `Global` 的普通子节点，不是 Autoload）。
+> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取 5 个场景工厂）与 W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）。本页记录当前边界、逐项结论与迁移顺序；S7/S8 未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂；S6/S9 迁出对象池与法宝/召唤（以上全部是 `Global` 的普通子节点，不是 Autoload）。
 > **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
@@ -30,9 +30,9 @@ Phase 20-1 其余切片保持未启动：
 
 | 指标 | 决策时 | P2 后 | S2 后 | W4 后 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 行数 | **6,041** | **5,775** | **5,563** | **4,578** | `source/global.gd`；W4 为 5,407，W5 S4 后 4,971，W6 S5 后 4,578 |
-| 顶层函数 | **360** | **347** | **333** | **332** | 含私有函数；`add_*` 工厂 **122** 个（W6 S5 保留同名薄转发） |
-| 顶层变量 | **295** | **291** | **285** | **237** | 含运行状态、缓存、UI 引用与跨帧标记 |
+| 行数 | **6,041** | **5,775** | **5,563** | **4,352** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 |
+| 顶层函数 | **360** | **347** | **333** | **329** | 含私有函数；`add_*` 工厂仍为薄转发（W7 新增池/法宝转发） |
+| 顶层变量 | **295** | **291** | **285** | **228** | 含运行状态、UI 引用与跨帧标记；缓存/池/召唤字段已迁出 |
 | 顶层常量 | **76** | **75** | **76** | **73** | 含场景路径表、弹体路径表、怪物别名与特效脚本预载 |
 | 信号 | **2** | **2** | **2** | **1** | `sound_settings_changed` 已迁至 `AudioRuntime`，仅余 `combo_milestone_reached` |
 
@@ -102,7 +102,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | 8 | `PaSkill` | 被动技能数值表与灵魂收益 | **保留（被动数值）** | 52 处/8 文件；纯查表 | 被动/成长；不新增全局状态；静态化单独立项 |
 | 9 | `MainMusic` | 主菜单 BGM 单实例 | **已删除（W4，2026-10-30）** | 原 27 处/13 文件、自身又调用 `Global.add_bgm`；现合并为 `AudioRuntime.add_main_menu_music()` / `remove_main_menu_music()` / `has_main_menu_music()`，Autoload 注册与 `main_music.gd` 已删除 | 音频；BGM 同曲/切曲/退出与主菜单切换已验证 |
 | 10 | `Signals` | 全局确认框信号 | **保留，禁止新增全局信号** | 11 处/9 文件；`choose_pressed` 会清空旧连接 | UI；选择框迁移到显式信号后删除，需确认框流程验证 |
-| 11 | `Global` | 场景流入口、UI 工厂入口、池、预载入口、运行状态 | **拆分（本页边界）** | 决策时 6,041 行/360 函数/427 文件/3,372 调用；W6 S5 后 4,578 行/332 函数/237 变量，诊断、UI、音频、场景/资源运行时与 5 族场景工厂已移出 | 项目维护者（架构）；按第 4~5 节分波推进 |
+| 11 | `Global` | 场景流入口、UI 工厂入口、预载入口、运行状态 | **拆分（本页边界）** | 决策时 6,041 行/360 函数/427 文件/3,372 调用；W7 后 4,352 行/329 函数/228 变量，诊断、UI、音频、场景/资源运行时、5 族场景工厂、对象池与法宝召唤已移出 | 项目维护者（架构）；按第 4~5 节分波推进 |
 | 12 | `LocalCoop` | 本地双人会话、槽位数据/属性/输入/面板 | **保留（双人会话）** | 285 处/78 文件；Phase 16/17 已建立槽位与面板边界 | 双人；不建第二组 Autoload；继续由显式槽位 API 服务 |
 | 13 | `MCPGameBridge` | 编辑器调试桥 | **保留（调试桥，不计业务）** | 业务 `MCPGameBridge.` 引用为 0；`_ready` 在 `EngineDebugger.is_active()` 为假时退出 | 工具链；20-2 release 时验证 addon 路径、调试器门控与导出行为 |
 
@@ -115,10 +115,10 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | S3 音频 | `AudioRuntime` 持有 BGM 单实例、主菜单 BGM、SFX 声部/节流/上限与设置变化信号；`add_*` 音频入口统一为 `Global.get_audio_runtime()` | `AudioRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W4）**；`MainMusic` 已合并删除；无 Autoload 新增 |
 | S4 场景/资源运行时 | `change_scene`（101 处）、缓存四表、单槽预载、线程预热、关卡租约、释放 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | **已拆（W5 S4）**；`Global.change_scene` 仍是唯一正式入口；无 Autoload 新增 |
 | S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **首批已拆（W6 S5）**：`PopupFactory`/`ShopFactory`/`BackpackFactory`/`RewardFactory`/`CombatPresentationFactory` 五族 41 个工厂；`add_*` 正式入口保留为薄转发；不建总工厂 |
-| S6 战斗表现 | `add_bullet` 300/96、`add_buff` 108/66、`add_trap` 103/3、`add_special_effect` 81/20、`create_monster` 65/51、伤害数字/受击/池 | `CombatPresentation` / `SpawnService`（场景服务） | 第六；按弹体、buff、伤害数字、生成分批；需战斗探针与关卡回归 |
+| S6 战斗表现 | `add_bullet`、`add_buff`、`add_trap`、`add_special_effect`、`add_damage_text`、`add_mr_hurt`、伤害数字/受击四池 | `CombatPresentationFactory` + `CombatPoolRuntime`（`Global` 组合持有） | **已拆（W7 S6）**：弹体/buff/陷阱/特效/伤害数字/受击/血条与对象池；`create_monster` 与生成服务按 S7 运行状态后续处理 |
 | S7 运行状态 | `current_level` 106 读/94 写、`llbt_level` 119 读/21 写、`total_*`、`is_*` 减益标志、`windows` 之外的运行标记；64 个变量、494 次外部写入 | `RunContext`（`Resource`）或 `BaseLevel` 持有；槽位状态走 `LocalCoop` | **最后**；先把写入改为显式 accessor/关卡上下文，再删字段；禁止直接搬进新 Autoload |
 | S8 通用工具 | `get_ancestor` 95/16、`get_position_between`、`get_dis_betweem`、`get_clean_name`、物品计数、角色纹理加载 | 静态 `class_name` 工具类 | 可与 S1 并行；无状态、低风险，逐函数迁移 |
-| S9 法宝/召唤 | `current_magic_summon`、`secondary_magic_summon`、`add_magic_weapon`、`get/set_magic_summon_for`、法宝预载 | `MagicWeaponRuntime`（场景/槽位持有） | 与 S6 同波或之后；需双人法宝归属验证，禁止回落 1P |
+| S9 法宝/召唤 | `current_magic_summon`、`secondary_magic_summon`、`add_magic_weapon`、`get/set_magic_summon_for`、法宝预载 | `MagicWeaponRuntime`（场景/槽位持有） | **已拆（W7 S9）**；槽位归属以 `LocalCoop.slot_for` 为准，禁止回落 1P；场景路径表仍归 `Global` |
 
 ## 5. 迁移顺序
 
@@ -131,7 +131,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | W4 | S3 音频 + `MainMusic`：**已拆（W4）** | 音频 | W4 完成 | `archive_probes` 的 BGM/SFX 14 项 PASS（289/289 总）；主菜单 BGM 与关卡切曲、退出清理经档案探针；`scene_probe_runner` 7/7；`coop_probe_runner` 26/26；`check_all --godot-bin` 8/8 | 恢复 `MainMusic` 与 `Global.add_bgm/add_sound` |
 | W5 | S4 场景/资源内部实现：**已拆（W5 S4）** | 资源/场景 | W5 完成 | `load_guard`、`level_resource_lease`、`level_selection` **7/7 PASS**；`archive_probes` 289/289；`coop_probes` 26/26；`level_1` PASS；`check_all --godot-bin` 8/8 | 保留 `Global.change_scene` 入口并回退两个运行时 |
 | W6 | S5 UI 工厂，按功能族：**首批已拆（W6 S5）** | UI | W6 首批完成：五族 41 个工厂；`add_level_info`、`add_damage_text`、`add_mr_hurt`、`add_special_effect` 因依赖运行状态/对象池延期 | `ui-factories` 探针 59 项 PASS（含族归属、缓存持有、入口转发、工厂拒绝语义）；`scene_probe_runner` 8/8；`archive_probes` 289/289；`coop_probes` 26/26；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP** | 按族回退 |
-| W7 | S6 战斗表现 + S9 法宝/召唤 | 战斗/法宝 | 弹体/buff/伤害/生成/双人归属用例 | 战斗探针、`coop_probe_runner`、受影响关卡回归 | 按族回退 |
+| W7 | S6 战斗表现 + S9 法宝/召唤：**已拆（W7 S6/S9）** | 战斗/法宝 | W7 完成 | `ui-factories` 探针 77 项 PASS（含池容量/节流/归还、法宝替换与清空）；`coop_probe_runner` **26/26**；`scene_probe_runner` **8/8**；`archive_probes` 289/289；`level_1` PASS；`level_regression_all --changed-only` 回归通过 | 恢复 `Global._pool_data` 与召唤字段 |
 | W8 | S7 运行状态 | 玩法/关卡 | 64 个变量、494 次写入的 accessor 迁移完成 | 全量 `level_regression_all`、档案探针、结算/重战 | 保留旧字段只读一版后删除 |
 
 **顺序理由**：先处理无行为或低行为风险的诊断/死代码，再迁移叶子服务（UI 宿主、音频），然后处理中心资源运行时，最后迁移高频工厂与运行状态。`Global._exit_tree` 与 `change_scene` 是资源释放和场景流的正式入口，迁移时必须保留其可观察清理语义，不能用“搬字段”代替所有权迁移。
@@ -206,6 +206,17 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - 验收：`scene_probe_runner` **8/8 PASS**；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26；`level_1` PASS；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP**；`contract_scan --self-test` PASS 且 `--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8。
 - Owner：UI。
 
+### W7 S6/S9：战斗表现池化与法宝/召唤（完成，2026-10-30）
+
+- 新增 `source/Script/runtime/combat_pool_runtime.gd`（`class_name CombatPoolRuntime`，322 行）：持有 `damage_text`/`mr_hurt`/`role_be_hit`/`sound_player` 四池、池根、伤害数字活跃计数（80 上限，按物理帧重算）、怪物受击 55ms 节流、剑阵伤害数字与命中特效按帧限流，以及 `seed_pool` / `clear_runtime_pools` / `recycle_*` / 作用域快照。
+- 新增 `source/Script/runtime/magic_weapon_runtime.gd`（`class_name MagicWeaponRuntime`，70 行）：持有两个槽位的当前法宝召唤物、创建/替换/清理；槽位归属走 `LocalCoop.slot_for`，禁止回落 1P。场景路径表仍归 `Global`（`MAGIC_WEAPON_SCENE_PATHS` + 新增只读查询 `get_magic_weapon_scene_path`）。
+- `CombatPresentationFactory` 追加池化工厂：`add_damage_text`、`add_mr_hurt`、`add_special_effect`（含 RoleBeHit 池分支与特殊效果 slim 场景缓存）。`Global` 侧 3 个 `add_*` 与 `set_damage_text_enabled` 保留签名转发。
+- `Global` 删除：`_pool_data`、`DAMAGE_TEXT_POOL_LIMIT`/`MR_HURT_POOL_LIMIT`/`ROLE_BE_HIT_POOL_LIMIT`/`SOUND_PLAYER_POOL_LIMIT`、`_active_damage_texts`、`_damage_text_count`、`_damage_text_recount_frame`、`_last_mr_hurt_msec`、`_sword_*` 四个限流字段、`current_magic_summon`、`secondary_magic_summon`。池操作与归还入口转为 `_combat_pool` 薄转发（19 处）。
+- `AudioRuntime` 的 SFX 池改用 `Global.get_combat_pool()`；`runtime_diagnostics` 的战斗作用域快照改读池运行时快照；`level_resource_lease_probe` 的池断言改用新 API（容量/单次入池/清理后池根失效）。
+- `Global` 4,578 → **4,352 行、237 → 228 变量**；同时删除迁走后无调用方的 6 个私有转发（`_get_pool_root`、`_store_pooled_node`、`_release_damage_text_count`、`_on_damage_text_tree_exited`、`_recount_active_damage_texts`、`_on_damage_text_freed`）。
+- 验收：`health_check` 0 Parse / 0 Error / 0 Warning；`scene_probe_runner` **8/8**（`ui-factories` 扩到 **77 项**，含池容量/节流/归还、法宝替换与清空）；`archive_probe_runner` 289/289；`coop_probe_runner` **26/26**；`level_1` PASS（4 Stage，0/0/0）；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP**；`contract_scan --self-test` PASS 且 `--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8。
+- Owner：战斗/法宝。
+
 ## 7. 守卫与验收
 
 20-1B 决策本身的验收：
@@ -229,6 +240,6 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - **拒绝**：为每个切面新增 Autoload；把 `Global` 拆成多个 Manager 后继续全局访问；把存档 IO 搬出 `MemoryClass`；批量重命名 `PlayerData` / `RoleProp`；在未迁移调用方时保留永久兼容 facade。
 - **拒绝**：把 `Global.is_ice` 等写多读少的旧标志直接当作可删除死代码；`monster_12` / `monster_37` 仍有读取，删除会改变行为，需单独行为验证。
 - **未决**：`RoleProp` 根回退的移除时机、`MLdl` 场景化、`Signals` 退出、`PlayerData` schema 类型化、`Global` 运行状态 accessor 的具体形状；均在对应波次立项。
-- **未决（S5 剩余）**：`add_level_info`（运行状态）、`add_damage_text` / `add_mr_hurt` / `add_special_effect`（对象池与限流）与其余约 81 个 `add_*` 仍未族化；按 W8/W7 顺序推进，不一次性搬迁。
+- **未决（S5/S6 剩余）**：`add_level_info`（运行状态，随 S7）、`create_monster`/生成服务（随 S7）与其余约 81 个 `add_*` 未族化；按 W8 顺序推进，不一次性搬迁。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
 - **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。

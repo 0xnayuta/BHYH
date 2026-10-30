@@ -4,8 +4,8 @@ extends Node
 ## 战斗表现族的场景工厂：持有 buff、陷阱、弹体、伤害数字、命中文字、血条与
 ## Miss 特效的运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务代码仍通过 Global.add_* 正式入口调用。
-## 依赖对象池的工厂（add_damage_text / add_mr_hurt / add_special_effect 的
-## RoleBeHit 分支）仍留在 Global，本族只接管纯场景构建路径。
+## 池化工厂（add_damage_text / add_mr_hurt / add_special_effect 的 RoleBeHit 分支）
+## 通过 Global.get_combat_pool() 取还节点；池状态由 CombatPoolRuntime 持有。
 
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
 const TRAP_PATH := "res://Scene/level/trap.tscn"
@@ -15,6 +15,10 @@ const DAMAGE_NUMBER_PATH := "res://Scene/hittext/damage_number.tscn"
 const MONSTER_BLOOD_PATH := "res://Scene/monster_blood/monster_blood_bar.tscn"
 const BOSS_BLOOD_PATH := "res://Scene/monster_blood/boss_blood.tscn"
 const MISS_EFFECT_PATH := "res://Scene/hittext/miss_effect.tscn"
+const DAMAGE_TEXT_PATH := "res://Scene/hittext/damage_text.tscn"
+const MONSTER_BE_HIT_PATH := "res://Scene/monster_damage/monster_be_hit.tscn"
+const ROLE_BE_HIT_EFFECT_PATH := "res://Scene/base/role_be_hit_effect.tscn"
+const SPECIAL_AFFECT_SLIM_DIR := "res://Scene/base/special_affect_slim"
 
 const UNIQUE_BUFF_NAMES := [
 	"Ice",
@@ -241,6 +245,74 @@ func add_monster_blood(parent, _position, value, text):
 		return null
 	target.bar_value = value
 	target.bar_text = text
+	target.position = _position
+	return target
+
+
+func add_damage_text(parent, position, value, type_: String, is_crit: bool, tar):
+	if not bool(MainSet.set_data.get("ShowDamageText", true)):
+		return null
+	var pool: CombatPoolRuntime = _host.get_combat_pool()
+	if not pool.reserve_damage_text_slot():
+		return null
+	var target: Node = pool.take_pooled_node("damage_text", DAMAGE_TEXT_PATH)
+	if target == null:
+		pool.refund_damage_text_slot()
+		return null
+	pool.attach_pooled_node(target, parent)
+	pool.track_damage_text(target)
+	target.position = position
+	if target.has_method("setup"):
+		target.setup(value, type_, is_crit, tar)
+	else:
+		target.target = tar
+		target.type = type_
+		target.damage_value = value
+		target.is_crit = is_crit
+	return target
+
+
+func add_mr_hurt(parent, _position):
+	if parent == null:
+		return null
+	var pool: CombatPoolRuntime = _host.get_combat_pool()
+	if pool.throttle_mr_hurt(parent):
+		return null
+	var target: Node = pool.take_pooled_node("mr_hurt", MONSTER_BE_HIT_PATH)
+	if target == null:
+		return null
+	pool.attach_pooled_node(target, parent)
+	target.modulate = Color.WHITE
+	target.position = _position
+	if target.has_method("_play_hurt_animation"):
+		target._play_hurt_animation()
+	return target
+
+
+func add_special_effect(parent, _position, _name, _scale, direction, _speed):
+	var effect_name := str(_name)
+	if effect_name == "RoleBeHit" or effect_name == "role_be_hit":
+		var pool: CombatPoolRuntime = _host.get_combat_pool()
+		var role_hit: Node = pool.take_pooled_node("role_be_hit", ROLE_BE_HIT_EFFECT_PATH)
+		if role_hit == null:
+			return null
+		pool.attach_pooled_node(role_hit, parent)
+		role_hit.z_index = 99
+		role_hit.position = _position
+		role_hit.setup(_scale, direction, _speed)
+		return role_hit
+	var scene_path := SPECIAL_AFFECT_SLIM_DIR.path_join(effect_name + ".tscn")
+	if not ResourceLoader.exists(scene_path):
+		push_error("Missing slim special effect scene: " + scene_path)
+		return null
+	var target = _host.instance_scene(_scene(scene_path), parent)
+	if target == null:
+		return null
+	target.z_index = 99
+	target.effect_name = _name
+	target._scale = _scale
+	target.effect_speed = _speed
+	target.effect_dir = direction
 	target.position = _position
 	return target
 
