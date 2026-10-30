@@ -9,6 +9,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`architecture.md`](architecture.md) | **当前运行时架构**：应用/Autoload、场景流、战斗、档案/双人、资源、UI/输入及与目标的遗留差距 |
+| [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | **Phase 19-3A 运行时建帧例外决策**：12 个冻结例外的保留/补资源/删除回退结论、证据与后续边界 |
 | [`archive_session_matrix.md`](archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者的当前所有者与失败边界 |
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖的所有者、写入者与失败边界 |
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |

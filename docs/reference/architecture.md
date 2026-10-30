@@ -378,9 +378,9 @@ classDiagram
 仍然存在的边界：
 
 - `AtlasMetadata.data` 仅作为 `.tres` 序列化内部字段；六个直接消费者均改用 `view_for()`；`data_for()`、`validate_path()` 与 `clear_cache()` 已删除。空路径与无效 path 由 `view_for()` 报告并返回 `null`；`contract_scan.py` 的 `atlas_boundary` 规则阻断旧入口、非 View `.data` 读取与 `source_masks` 覆盖。
-- `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧：包含动态动作映射、图集几何/子序列、固定数组、调试图标以及已登记历史占位/回退。清单是实际范围来源，本文不复制条目计数。
-- `pet_neat_bullet`、`level_59`、`user_key` 是登记的非怪物边界；法宝与 Lyfb/哪吒特效的 Phase 13 迁移已完成，不再列为待建帧迁移。
-- allowlist 中的历史占位/缺失回退并不满足新增代码的失败语义，不能据此扩张；恢复资源或迁移相应职责时移除登记并重新验收。
+- `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧；清单是实际范围来源，本文不复制条目计数。
+- 19-3A 已逐项复核 12 个例外：`tao_wu_boss` 单图回退已删除，其余按 [运行时建帧例外决策](runtime_frames_exceptions.md) 登记为保留或补资源待办；`weiyang_palace_boss` 的符号层路径不匹配登记为已知缺陷。
+- allowlist 只减不增；保留项不得作为新增运行时建帧的先例。恢复资源或迁移相应职责时移除登记并重新验收。
 - 具体迁移经过保留在 [Phase 13 归档](../archive/iteration_13_visual_asset_contract.md)，当前实现不重复保存逐批台账。
 
 

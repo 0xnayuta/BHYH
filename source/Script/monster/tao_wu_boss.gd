@@ -3,7 +3,6 @@ extends BaseMonster
 const BODY_FRAMES_PATH := "res://Art/monster/tao_wu/tao_wu_frames.tres"
 const BODY_ANIMATION := &"Monster47FramesCenteredCropped"
 const BODY_FRAME_COLUMNS := 6
-const FALLBACK_BODY_TEXTURE := "res://Art/monster/tao_wu/monster47.png"
 const SOURCE_FPS := 24.0
 
 const BODY_SPRITE_POSITION := Vector2(2, -104)
@@ -111,20 +110,13 @@ func _configure_taowu() -> void:
 
 
 func _build_original_animations() -> void:
+	# 标准帧资源是唯一正常路径；缺失时直接报错，不再用单图伪造动画。
 	var frames := load(BODY_FRAMES_PATH) as SpriteFrames
 	if frames == null or not frames.has_animation(BODY_ANIMATION):
-		# 标准资源异常时仅保留单图兜底；正常路径始终使用预生成 SpriteFrames。
-		frames = SpriteFrames.new()
-		frames.remove_animation(&"default")
-		frames.add_animation(&"atlas")
-		frames.set_animation_loop(&"atlas", false)
-		var sheet := load(FALLBACK_BODY_TEXTURE) as Texture2D
-		if sheet != null:
-			frames.add_frame(&"atlas", sheet)
-		if frames.get_frame_count(&"atlas") == 0:
-			push_warning("SSSL boss body frames failed to load: " + BODY_FRAMES_PATH)
+		push_error("TaoWuBoss standard body frames missing: " + BODY_FRAMES_PATH)
+		return
 	mr_ani.sprite_frames = frames
-	mr_ani.animation = BODY_ANIMATION if frames.has_animation(BODY_ANIMATION) else &"atlas"
+	mr_ani.animation = BODY_ANIMATION
 	mr_ani.frame = 0
 	mr_ani.centered = true
 	mr_ani.position = BODY_SPRITE_POSITION
