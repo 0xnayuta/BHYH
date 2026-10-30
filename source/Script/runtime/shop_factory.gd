@@ -1,8 +1,8 @@
 class_name ShopFactory
 extends Node
 
-## 商店与合成族的场景工厂：持有商店、神秘商店、购买选择、合成、强化与
-## 确认提示的运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
+## 商店、合成与物品格的场景工厂：持有商店、神秘商店、购买选择、合成、强化、
+## 确认提示、治疗次数与幻化物品格的运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务代码仍通过 Global.add_* 正式入口调用。
 
 const SHOP_PATH := "res://Scene/shop/shop.tscn"
@@ -12,6 +12,8 @@ const CHOOSE_ITEM_PATH := "res://Scene/shop/choose_item.tscn"
 const SYNTHESIS_PATH := "res://Scene/ldl/synthesis.tscn"
 const STRENGTH_PATH := "res://Scene/ldl/strength.tscn"
 const YES_NO_HELP_PATH := "res://Scene/ldl/s_yn_help.tscn"
+const CURE_TIMES_BOX_PATH := "res://Scene/shop/cure_times_box.tscn"
+const TRANS_BOX_PATH := "res://Scene/other_scene/transmogtified_box.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}
@@ -71,6 +73,23 @@ func add_mystery_shop(parent, position):
 		target.position = _host.viewport_center_for_parent(parent) - Vector2(458, 293)
 	else:
 		target.position = position
+	return target
+
+
+func add_cure_times_box(parent, position):
+	var target = _host.instance_scene(_scene(CURE_TIMES_BOX_PATH), parent)
+	if target == null:
+		return null
+	target.position = position
+	return target
+
+
+func add_trans_box(parent, _name, transmogrified):
+	var target = _host.instance_scene(_scene(TRANS_BOX_PATH), parent)
+	if target == null:
+		return null
+	target.self_name = _name
+	target.transmogrified = transmogrified
 	return target
 
 

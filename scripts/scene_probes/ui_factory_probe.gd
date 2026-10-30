@@ -58,6 +58,15 @@ const MESSAGE_INFO_PATH := "res://Scene/show_text/message_info.tscn"
 const ZD_SKILL_PATH := "res://Scene/skill/zd_skill.tscn"
 const BD_SKILL_PATH := "res://Scene/skill/bd_skill.tscn"
 const MAGIC_HELP_PATH := "res://Scene/magic_weapon/magic_help.tscn"
+const SOME_MONSTER_HELP_PATH := "res://Scene/monster/some_monster_help.tscn"
+const LETTER_FOR_PLAYER_PATH := "res://Scene/other_scene/a_letter_for_all_players.tscn"
+const CURE_TIMES_BOX_PATH := "res://Scene/shop/cure_times_box.tscn"
+const TRANS_BOX_PATH := "res://Scene/other_scene/transmogtified_box.tscn"
+const MOSAIC_HELP_PATH := "res://Scene/ldl/mosaic_help.tscn"
+const MOSAIC_PATH := "res://Scene/ldl/mosaic.tscn"
+const HDZM_PATH := "res://Scene/level/hdzm.tscn"
+const LSH_PATH := "res://Scene/other_scene/lsh.tscn"
+const LXDY_PATH := "res://Scene/other_scene/lxdy.tscn"
 
 var _failures: Array[String] = []
 
@@ -89,6 +98,7 @@ func _run() -> void:
 	await _check_level_scene_family(checks)
 	await _check_show_text_family(checks)
 	await _check_skill_panel_family(checks)
+	await _check_map_overlay_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -117,6 +127,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["level_scene_factory_node"] = _has_child_node("LevelSceneFactory")
 	checks["show_text_factory_node"] = _has_child_node("ShowTextFactory")
 	checks["skill_panel_factory_node"] = _has_child_node("SkillPanelFactory")
+	checks["map_overlay_factory_node"] = _has_child_node("MapOverlayFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -133,6 +144,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_level_scene_factory().get_parent() == Global
 		and Global.get_show_text_factory().get_parent() == Global
 		and Global.get_skill_panel_factory().get_parent() == Global
+		and Global.get_map_overlay_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -240,6 +252,20 @@ func _check_shop_family(checks: Dictionary) -> void:
 	checks["shop_yes_no_created"] = yes_no != null
 	if yes_no != null:
 		created.append(yes_no)
+	var cure: Node = Global.add_cure_times_box(host, Vector2(60, 70))
+	await _settle()
+	checks["shop_cure_box_created"] = cure != null and cure.get_parent() == host
+	checks["shop_cure_box_position"] = cure != null and cure.position == Vector2(60, 70)
+	if cure != null:
+		created.append(cure)
+	var trans: Node = Global.add_trans_box(host, "probe_trans", null)
+	await _settle()
+	checks["shop_trans_box_created"] = trans != null and trans.get_parent() == host
+	checks["shop_trans_box_fields"] = (
+		trans != null and str(trans.self_name) == "probe_trans" and trans.transmogrified == null
+	)
+	if trans != null:
+		created.append(trans)
 	checks["shop_scene_cached"] = Global.is_resource_cached(SHOP_PATH)
 	_cleanup(created, host)
 
@@ -836,6 +862,18 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	)
 	if learn_skill != null:
 		created.append(learn_skill)
+	var mosaic_help: Node = Global.add_mosaic_help(host, Vector2(21, 22))
+	await _settle()
+	checks["menu_mosaic_help_created"] = mosaic_help != null and mosaic_help.get_parent() == host
+	checks["menu_mosaic_help_position"] = mosaic_help != null and mosaic_help.position == Vector2(21, 22)
+	if mosaic_help != null:
+		created.append(mosaic_help)
+	var mosaic: Node = Global.add_mosaic_instance(host, Vector2(23, 24))
+	await _settle()
+	checks["menu_mosaic_created"] = mosaic != null and mosaic.get_parent() == host
+	checks["menu_mosaic_position"] = mosaic != null and mosaic.position == Vector2(23, 24)
+	if mosaic != null:
+		created.append(mosaic)
 	checks["menu_panel_scenes_cached"] = (
 		Global.is_resource_cached(GAME_SET_PATH)
 		and Global.is_resource_cached(SKILL_KEY_SET_PATH)
@@ -930,6 +968,18 @@ func _check_show_text_family(checks: Dictionary) -> void:
 	)
 	if ping_jia != null:
 		created.append(ping_jia)
+	var monster_help: Node = Global.add_some_monster_help(host, Vector2(15, 16))
+	await _settle()
+	checks["show_text_monster_help_created"] = monster_help != null and monster_help.get_parent() == host
+	checks["show_text_monster_help_position"] = monster_help != null and monster_help.position == Vector2(15, 16)
+	if monster_help != null:
+		created.append(monster_help)
+	var letter: Node = Global.add_letter_for_player(host, Vector2(17, 18))
+	await _settle()
+	checks["show_text_letter_created"] = letter != null and letter.get_parent() == host
+	checks["show_text_letter_position"] = letter != null and letter.position == Vector2(17, 18)
+	if letter != null:
+		created.append(letter)
 	# 这些场景属于运行期 UI 路径：最后一个实例退出后 UiRuntime 会释放场景缓存，
 	# 工厂槽位仍持有强引用，因此断言取用可用而不是 is_resource_cached。
 	var show_text_factory := Global.get_show_text_factory()
@@ -937,6 +987,8 @@ func _check_show_text_family(checks: Dictionary) -> void:
 		show_text_factory.get_task_title_scene() != null
 		and show_text_factory.get_ping_jia_scene() != null
 		and show_text_factory.get_message_info_scene() != null
+		and show_text_factory.get_some_monster_help_scene() != null
+		and show_text_factory.get_letter_for_player_scene() != null
 	)
 	checks["show_text_dead_entries_removed"] = (
 		not Global.has_method("add_star") and not Global.has_method("add_role_magic_need")
@@ -973,6 +1025,52 @@ func _check_skill_panel_family(checks: Dictionary) -> void:
 		skill_panel_factory.get_zd_skill_scene() != null
 		and skill_panel_factory.get_bd_skill_scene() != null
 		and skill_panel_factory.get_magic_help_scene() != null
+	)
+	_cleanup(created, host)
+
+
+func _check_map_overlay_family(checks: Dictionary) -> void:
+	# 地图浮层族：三个入口均登记为临时 UI；lsh/lxdy 在 _ready 中按视口重排。
+	var host := _make_host("MapOverlayProbeHost")
+	var created: Array[Node] = []
+	var ui_runtime := Global.get_ui_runtime()
+	var hdzm: Node = Global.add_hdzm(host, host)
+	await _settle()
+	checks["map_overlay_hdzm_created"] = hdzm != null and hdzm.get_parent() == host
+	checks["map_overlay_hdzm_fields"] = (
+		hdzm != null
+		and hdzm.parent_node == host
+		and hdzm.scale == Vector2.ONE
+		and hdzm.position == Global.viewport_center_for_parent(host) - Vector2(493, 260)
+	)
+	checks["map_overlay_hdzm_registered"] = (
+		hdzm != null and ui_runtime.is_transient_ui_registered(hdzm)
+	)
+	if hdzm != null:
+		created.append(hdzm)
+	var lsh: Node = Global.add_lsh(host, host)
+	await _settle()
+	checks["map_overlay_lsh_created"] = lsh != null and lsh.get_parent() == host
+	checks["map_overlay_lsh_scaled"] = lsh != null and lsh.scale.x > 0.0
+	checks["map_overlay_lsh_registered"] = (
+		lsh != null and ui_runtime.is_transient_ui_registered(lsh)
+	)
+	if lsh != null:
+		created.append(lsh)
+	var lxdy: Node = Global.add_lxdy(host, host)
+	await _settle()
+	checks["map_overlay_lxdy_created"] = lxdy != null and lxdy.get_parent() == host
+	checks["map_overlay_lxdy_scaled"] = lxdy != null and lxdy.scale.x > 0.0
+	checks["map_overlay_lxdy_registered"] = (
+		lxdy != null and ui_runtime.is_transient_ui_registered(lxdy)
+	)
+	if lxdy != null:
+		created.append(lxdy)
+	var map_overlay_factory := Global.get_map_overlay_factory()
+	checks["map_overlay_scenes_reusable"] = (
+		map_overlay_factory.get_hdzm_scene() != null
+		and map_overlay_factory.get_lsh_scene() != null
+		and map_overlay_factory.get_lxdy_scene() != null
 	)
 	_cleanup(created, host)
 

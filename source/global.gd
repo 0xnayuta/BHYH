@@ -29,6 +29,7 @@ const MENU_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/menu_panel_fact
 const LEVEL_SCENE_FACTORY_SCRIPT := preload("res://Script/runtime/level_scene_factory.gd")
 const SHOW_TEXT_FACTORY_SCRIPT := preload("res://Script/runtime/show_text_factory.gd")
 const SKILL_PANEL_FACTORY_SCRIPT := preload("res://Script/runtime/skill_panel_factory.gd")
+const MAP_OVERLAY_FACTORY_SCRIPT := preload("res://Script/runtime/map_overlay_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -375,6 +376,10 @@ func _ready() -> void:
 	_skill_panel_factory.name = "SkillPanelFactory"
 	_skill_panel_factory.setup(self)
 	add_child(_skill_panel_factory)
+	_map_overlay_factory = MAP_OVERLAY_FACTORY_SCRIPT.new()
+	_map_overlay_factory.name = "MapOverlayFactory"
+	_map_overlay_factory.setup(self)
+	add_child(_map_overlay_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -480,6 +485,10 @@ func get_show_text_factory() -> ShowTextFactory:
 
 func get_skill_panel_factory() -> SkillPanelFactory:
 	return _skill_panel_factory
+
+
+func get_map_overlay_factory() -> MapOverlayFactory:
+	return _map_overlay_factory
 
 
 var cloud_sword = null
@@ -728,6 +737,7 @@ var _menu_panel_factory: MenuPanelFactory = null
 var _level_scene_factory: LevelSceneFactory = null
 var _show_text_factory: ShowTextFactory = null
 var _skill_panel_factory: SkillPanelFactory = null
+var _map_overlay_factory: MapOverlayFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -2085,7 +2095,6 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 
 
 var lhhjbutton = null
-var mosaic_help = null
 var cd_jm = null
 
 var mycamera = null
@@ -2116,7 +2125,6 @@ var nmw_hands = null
 var change_background = null
 
 var sound = null
-var mosaic = null
 var role1_shallow = null
 var change_clothes_jm = null
 var h_hjm = null
@@ -2124,14 +2132,7 @@ var choose_player = null
 var role2_shallow = null
 var game_announcement = null
 var basic_pellet = null
-var trans_box = null
 var llbt_challenge = null
-var _hdzm = null
-var _lsh = null
-var _lxdy = null
-var cure_times_box = null
-var letter_for_player = null
-var some_monster_help = null
 var lhhj = null
 var listbutton = null
 var lhhjhelp = null
@@ -2237,35 +2238,19 @@ func addlhhjbutton(parent, self_name, father):
 
 
 func add_some_monster_help(parent, position):
-	if not some_monster_help:
-		some_monster_help = _load_scene("res://Scene/monster/some_monster_help.tscn")
-	var target = instance_scene(some_monster_help, parent)
-	target.position = position
-	return target
+	return _show_text_factory.add_some_monster_help(parent, position)
 
 
 func add_mosaic_help(parent, position):
-	if not mosaic_help:
-		mosaic_help = _load_scene("res://Scene/ldl/mosaic_help.tscn")
-	var target = instance_scene(mosaic_help, parent)
-	target.position = position
-	return target
+	return _menu_panel_factory.add_mosaic_help(parent, position)
 
 
 func add_letter_for_player(parent, position):
-	if not letter_for_player:
-		letter_for_player = _load_scene("res://Scene/other_scene/a_letter_for_all_players.tscn")
-	var target = instance_scene(letter_for_player, parent)
-	target.position = position
-	return target
+	return _show_text_factory.add_letter_for_player(parent, position)
 
 
 func add_cure_times_box(parent, position):
-	if not cure_times_box:
-		cure_times_box = _load_scene("res://Scene/shop/cure_times_box.tscn")
-	var target = instance_scene(cure_times_box, parent)
-	target.position = position
-	return target
+	return _shop_factory.add_cure_times_box(parent, position)
 
 
 func add_mystery_shop(parent, position):
@@ -2273,12 +2258,7 @@ func add_mystery_shop(parent, position):
 
 
 func add_trans_box(parent, _name, transmogrified):
-	if not trans_box:
-		trans_box = _load_scene("res://Scene/other_scene/transmogtified_box.tscn")
-	var target = instance_scene(trans_box, parent)
-	target.self_name = _name
-	target.transmogrified = transmogrified
-	return target
+	return _shop_factory.add_trans_box(parent, _name, transmogrified)
 
 
 func add_role4_bullet(parent, Player, position: Vector2):
@@ -2294,39 +2274,15 @@ func add_dsg_choose(parent):
 
 
 func add_hdzm(parent, parent_node):
-	if not _hdzm:
-		_hdzm = _load_scene("res://Scene/level/hdzm.tscn")
-	var target = instance_scene(_hdzm, parent)
-	target.scale = Vector2.ONE
-	target.position = viewport_center_for_parent(parent) - Vector2(493, 260)
-	target.parent_node = parent_node
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	var guard_script = load("res://Script/level/hdzm_window_guard.gd")
-	if guard_script != null:
-		var guard = guard_script.new()
-		get_tree().root.add_child(guard)
-		guard.setup(target)
-	return target
+	return _map_overlay_factory.add_hdzm(parent, parent_node)
 
 
 func add_lsh(parent, parent_node):
-	if not _lsh:
-		_lsh = _load_scene("res://Scene/other_scene/lsh.tscn")
-	var target = instance_scene(_lsh, parent)
-	target.scale = Vector2.ONE
-	target.position = viewport_center_for_parent(parent) - Vector2(492, 254)
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _map_overlay_factory.add_lsh(parent, parent_node)
 
 
 func add_lxdy(parent, parent_node):
-	if not _lxdy:
-		_lxdy = _load_scene("res://Scene/other_scene/lxdy.tscn")
-	var target = instance_scene(_lxdy, parent)
-	target.scale = Vector2.ONE
-	target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _map_overlay_factory.add_lxdy(parent, parent_node)
 
 
 func add_monster_info(parent, monster_name, position):
@@ -2711,11 +2667,7 @@ func add_game_set(parent, position):
 
 
 func add_mosaic_instance(parent, position):
-	if not mosaic:
-		mosaic = _load_scene("res://Scene/ldl/mosaic.tscn")
-	var target = instance_scene(mosaic, parent)
-	target.position = position
-	return target
+	return _menu_panel_factory.add_mosaic_instance(parent, position)
 
 
 func add_magic_help(parent, position):

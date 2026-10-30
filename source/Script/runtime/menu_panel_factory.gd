@@ -1,7 +1,8 @@
 class_name MenuPanelFactory
 extends Node
 
-## 菜单与设置面板族场景工厂：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明与学习技能。
+## 菜单与设置面板族场景工厂：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能
+## 与镶嵌帮助/镶嵌面板。
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 缓存槽位与迁移前的 Global.game_set/skill_key_set/music_set/ldl/game_information/skill_learn 一致。
 ## 临时 UI 登记仍经 UiRuntime；游戏说明根节点是 CanvasLayer，position/z_index 的赋值与迁移前一致（无效属性不生效）。
@@ -12,6 +13,8 @@ const MUSIC_SET_SCENE_PATH := "res://Scene/other_scene/choose_music.tscn"
 const LDL_SCENE_PATH := "res://Scene/ldl/ldl.tscn"
 const GAME_INFORMATION_SCENE_PATH := "res://Scene/main_menu/game_information.tscn"
 const LEARN_SKILL_SCENE_PATH := "res://Scene/skill/learn_skill.tscn"
+const MOSAIC_HELP_SCENE_PATH := "res://Scene/ldl/mosaic_help.tscn"
+const MOSAIC_SCENE_PATH := "res://Scene/ldl/mosaic.tscn"
 
 const GAME_SET_DESIGN_SIZE := Vector2(942, 589)
 
@@ -22,6 +25,8 @@ var _music_set_scene: PackedScene = null
 var _ldl_scene: PackedScene = null
 var _game_information_scene: PackedScene = null
 var _learn_skill_scene: PackedScene = null
+var _mosaic_help_scene: PackedScene = null
+var _mosaic_scene: PackedScene = null
 
 
 func setup(host: Node) -> void:
@@ -35,6 +40,8 @@ func clear_scene_caches() -> void:
 	_ldl_scene = null
 	_game_information_scene = null
 	_learn_skill_scene = null
+	_mosaic_help_scene = null
+	_mosaic_scene = null
 
 
 func get_game_set_scene() -> PackedScene:
@@ -71,6 +78,18 @@ func get_learn_skill_scene() -> PackedScene:
 	if _learn_skill_scene == null:
 		_learn_skill_scene = _host.load_cached_scene(LEARN_SKILL_SCENE_PATH)
 	return _learn_skill_scene
+
+
+func get_mosaic_help_scene() -> PackedScene:
+	if _mosaic_help_scene == null:
+		_mosaic_help_scene = _host.load_cached_scene(MOSAIC_HELP_SCENE_PATH)
+	return _mosaic_help_scene
+
+
+func get_mosaic_scene() -> PackedScene:
+	if _mosaic_scene == null:
+		_mosaic_scene = _host.load_cached_scene(MOSAIC_SCENE_PATH)
+	return _mosaic_scene
 
 
 ## 角色技能图标线程预热完成后调用：只接受已缓存场景，未命中时保持为空，由入口按需加载。
@@ -117,6 +136,22 @@ func add_ldl(parent, position):
 	target.z_index = 99
 	target.position = position
 	_host.get_ui_runtime().register_transient_ui(target, &"_on_return_pressed")
+	return target
+
+
+func add_mosaic_help(parent, position):
+	var target = _host.instance_scene(get_mosaic_help_scene(), parent)
+	if target == null:
+		return null
+	target.position = position
+	return target
+
+
+func add_mosaic_instance(parent, position):
+	var target = _host.instance_scene(get_mosaic_scene(), parent)
+	if target == null:
+		return null
+	target.position = position
 	return target
 
 
