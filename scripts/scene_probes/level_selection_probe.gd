@@ -56,9 +56,9 @@ func _run() -> void:
 
 func _check_bxgh(checks: Dictionary) -> void:
 	for boss_id: int in BXGH_IDS:
-		Global.selected_eight_immortal_id = boss_id
+		Global.set_selected_eight_immortal_id(boss_id)
 		checks["bxgh_%d" % boss_id] = await _check_selection(BXGH_SCENE, boss_id)
-	Global.selected_eight_immortal_id = 0
+	Global.set_selected_eight_immortal_id(0)
 	checks["bxgh_invalid_fallback"] = await _check_selection(BXGH_SCENE, BXGH_FALLBACK_ID)
 
 

@@ -279,7 +279,7 @@ func low_wx() -> void:
 	if not _has_equipped_weapon():
 		return
 	if PlayerData.get_item_data("wxxls") >= 1:
-		PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(0)
+		PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(0)
 		PlayerData.remove_dj("wxxls", PlayerData.get_dj_page("wxxls"), 1)
 		Global.add_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
 	else:
@@ -293,15 +293,25 @@ func high_wx() -> void:
 	if PlayerData.get_item_data("wxxls") >= wx_num:
 		match PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS].size():
 			0:
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(0)
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(
+					0
+				)
 			1:
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(2)
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(
+					2
+				)
 			2:
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(3)
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(
+					3
+				)
 			3:
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(4)
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(
+					4
+				)
 			4:
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = Global.get_wx(5)
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(
+					5
+				)
 		PlayerData.remove_dj("wxxls", PlayerData.get_dj_page("wxxls"), wx_num)
 		Global.add_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
 	else:

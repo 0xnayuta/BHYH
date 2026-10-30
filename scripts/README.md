@@ -64,7 +64,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 - `contract_gate.py` 的独立子命令并发执行，再按固定顺序汇总输出；
 - `level_regression_all.py` 依赖 `level_test_runner.py`；
 - `coop_probe_runner.py` 依赖 `coop_probes/` 下的 GDScript 测试规格；
-- `scene_probe_runner.py` 依赖 `scene_probes/` 下的场景规格，使用 `--scene` 启动完整项目生命周期。
+- `scene_probe_runner.py` 依赖 `scene_probes/` 下的场景规格，使用 `--scene` 启动完整项目生命周期。日志门禁扫描完整 stdout+stderr（不再按收尾标记截断，标记仅用于校验探针是否走到收尾），探针主动构造的失败日志通过 `ProbeSpec.expected_noise` 逐条登记；引擎退出期 RID/ObjectDB 泄漏噪声统一排除。
 
 ---
 
@@ -84,7 +84,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
 | `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
-| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者、共享账本/快照互斥、Phase 17 边界与输入写入边界十七类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
+| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者、共享账本/快照互斥、Phase 17 边界、输入写入边界与运行状态边界十八类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
@@ -206,8 +206,9 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 | `shared_ledger` | `LocalCoop` 必须保留 `shared_keys()` 登记、`save_profile` 同源剥离与 `is_save_snapshot_in_progress()` 互斥 | 无 |
 | `phase17_boundary` | 结算必须 `LevelSettlement` 且不直写保存；命令必须 `snapshot_state/restore_state`；表现层不写档；四试点禁 `/root` 且路径预算不超 | 见 `contract_scan.py` 常量 |
 | `input_boundary` | `Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save` | `INPUT_BOUNDARY_ALLOWLIST`（当前为空） |
+| `run_state_boundary` | 禁止直写已迁移的运行状态字段（`current_level`/`llbt_level`/`total_*`/`is_*` 减益标志/无尽模式/八仙选择/贴图槽位），禁止调用已删除的 `Global.get_ancestor` 等旧工具入口；改用 `RunContext`/accessor 与 `NodeUtils`/`ItemUtils` | 无（`addons/` 除外） |
 
-`python scripts/contract_scan.py --self-test` 对以上六类与前十一类边界执行坏样本拦截与好样本放行；`contract_gate.py` 同时执行该自测；`check_all.py` 中的契约门禁按 `--fail-on-error` 调用全量扫描。
+`python scripts/contract_scan.py --self-test` 对以上七类与前十一类边界执行坏样本拦截与好样本放行；`contract_gate.py` 同时执行该自测；`check_all.py` 中的契约门禁按 `--fail-on-error` 调用全量扫描。
 
 ---
 

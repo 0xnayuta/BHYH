@@ -30,13 +30,13 @@ Phase 20-1 其余切片保持未启动：
 
 | 指标 | 决策时 | P2 后 | S2 后 | W4 后 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 行数 | **6,041** | **5,775** | **5,563** | **4,111** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7 4,275 → S8 4,111 |
-| 顶层函数 | **360** | **347** | **333** | **332** | 含私有函数；`add_*` 工厂仍为薄转发（S8 删除 7 个工具函数，新增 4 个转发/getter） |
+| 行数 | **6,041** | **5,775** | **5,563** | **4,053** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7 4,275 → S8 4,111 → 20-3 守卫批次 4,053 |
+| 顶层函数 | **360** | **347** | **333** | **328** | 含私有函数；`add_*` 工厂仍为薄转发（S8 及 20-3 守卫批次删除 11 个工具/死函数，新增 4 个转发/getter） |
 | 顶层变量 | **295** | **291** | **285** | **200** | 含运行状态、UI 引用与跨帧标记；缓存/池/召唤/统计/无尽模式/贴图槽位字段已迁出或删除 |
 | 顶层常量 | **76** | **75** | **76** | **80** | 含场景路径表、弹体路径表、怪物别名与运行时脚本预载 |
 | 信号 | **2** | **2** | **2** | **1** | `sound_settings_changed` 已迁至 `AudioRuntime`，仅余 `combo_milestone_reached` |
 
-`RuntimeDiagnostics` 为 230 行、`UiRuntime` 为 274 行、`AudioRuntime` 为 233 行普通 `Node`，均由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 158 行 `RefCounted`，`LevelEntryRuntime` 116 行、`MonsterSpawnRuntime` 39 行、`RoleVisualRuntime` 104 行普通 `Node`，`NodeUtils` 39 行、`ItemUtils` 53 行静态工具类，均由 `Global` 创建/持有或被静态调用。Autoload 从 13 降到 **11**。
+`RuntimeDiagnostics` 为 230 行、`UiRuntime` 为 274 行、`AudioRuntime` 为 233 行普通 `Node`，均由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 158 行 `RefCounted`，`LevelEntryRuntime` 116 行、`MonsterSpawnRuntime` 39 行、`RoleVisualRuntime` 104 行普通 `Node`，`NodeUtils` 39 行、`ItemUtils` 95 行静态工具类，均由 `Global` 创建/持有或被静态调用。Autoload 从 13 降到 **11**。
 
 ### 2.2 调用面
 
@@ -114,7 +114,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | S2 UI 宿主/运行时 | `UiRuntime` 持有 `windows`、popup 层、hover popup、`register_transient_ui` / `cleanup_transient_ui`、UI 实例登记与缓存；`LocalCoop` 使用 `push_windows` / `pop_windows` | `UiRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W3 S2）**；`add_*` 工厂仍留 `Global`，只迁移生命周期；无 Autoload 新增 |
 | S3 音频 | `AudioRuntime` 持有 BGM 单实例、主菜单 BGM、SFX 声部/节流/上限与设置变化信号；`add_*` 音频入口统一为 `Global.get_audio_runtime()` | `AudioRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W4）**；`MainMusic` 已合并删除；无 Autoload 新增 |
 | S4 场景/资源运行时 | `change_scene`（101 处）、缓存四表、单槽预载、线程预热、关卡租约、释放 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | **已拆（W5 S4）**；`Global.change_scene` 仍是唯一正式入口；无 Autoload 新增 |
-| S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **首批已拆（W6 S5）**：`PopupFactory`/`ShopFactory`/`BackpackFactory`/`RewardFactory`/`CombatPresentationFactory` 五族 41 个工厂；`add_*` 正式入口保留为薄转发；不建总工厂 |
+| S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **部分已拆**：W6 S5 五族 41 个工厂 + W7 S6 战斗三入口 + S7C `add_level_info`；`Global` 现 121 个 `add_*`，41 个为 4 行薄转发，其余约 80 个按族推进（见 §8 下一批候选）；不建总工厂 |
 | S6 战斗表现 | `add_bullet`、`add_buff`、`add_trap`、`add_special_effect`、`add_damage_text`、`add_mr_hurt`、伤害数字/受击四池 | `CombatPresentationFactory` + `CombatPoolRuntime`（`Global` 组合持有） | **已拆（W7 S6）**：弹体/buff/陷阱/特效/伤害数字/受击/血条与对象池；`create_monster` 与生成服务按 S7 运行状态后续处理 |
 | S7 运行状态 | `current_level`、`llbt_level`、13 个 `total_*` 统计、9 个 `is_*` 减益标志、关卡进入编排、怪物生成 | `RunContext`（`RefCounted`）+ `LevelEntryRuntime` + `MonsterSpawnRuntime`（`Global` 持有） | **已拆（W8 S7）**：关卡显示名、宝塔层数与 13 项战斗统计迁入 `RunContext`；9 个减益标志经证据确认写多读零后删除；`add_level_info`/`get_current_level_fall_pro`/`sync_level_drop_pro_data` 与非 res:// 直进分支迁入 `LevelEntryRuntime`，`create_monster`/路径解析迁入 `MonsterSpawnRuntime`；四个无尽模式标志与 `selected_eight_immortal_id` 收进 `RunContext`（整体赋值 API，同一时刻至多一个副本为真），`Global` 暴露 `is/set/clear_special_dungeon_endless` 与八仙选择读写 |
 | S8 通用工具 | `get_ancestor` 95/16、`get_position_between`、`get_dis_betweem`、`get_clean_name`、物品计数、角色纹理加载 | `NodeUtils` / `ItemUtils` 静态类 + `RoleVisualRuntime` | **已拆（W8 S8）**：祖先/向量工具与品质名清理迁入静态类；随机物品条目迁入 `ItemUtils`；角色身体/装备贴图与同槽位旧贴图释放迁入 `RoleVisualRuntime`；`Global` 只保留 `load_role1_body`/`load_role1_eq` 薄转发 |
@@ -277,7 +277,11 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - **已决（W8 S7A，2026-10-30 取证）**：`Global.is_ice`/`is_stun`/`is_mpo`/`is_poision`/`is_bleed`/`is_fire`/`is_speed_down`/`is_eye_fix`/`is_dead_link` 共 9 个减益标志在全仓只有 `= false` 写入（`grep` 全仓 `= true` 命中 0 处），仅 `monster_12`（`self_rhp`）与 `monster_37`（死亡链接 buff 守卫）各有一处读取，读取分支因此恒为常量。据此删除字段、116 处复位写与两处读取分支；`monster_12` 的 `self_rhp` 恒为 0、`monster_37` 恒加 buff，与删除前行为一致。证据与结论一并记录，不再作为拒绝项。
 - **未决**：`RoleProp` 根回退的移除时机、`MLdl` 场景化、`Signals` 退出、`PlayerData` schema 类型化；均在对应波次立项。`Global` 运行状态 accessor 形状已在 W8 S7 定型。
 - **已决（W8 S7C）**：`add_level_info`、`get_current_level_fall_pro`、`sync_level_drop_pro_data` 与非 res:// 直进分支迁入 `LevelEntryRuntime`；`create_monster` 与怪物路径解析迁入 `MonsterSpawnRuntime`；`Global` 保留同名薄转发与 `get_level_entry_runtime` / `get_monster_spawn_runtime`。四个无尽模式标志与 `selected_eight_immortal_id` 仍归 `Global`（关卡脚本直接读取），复位收敛为 `apply_level_entry_mode_reset()`，不谎报为已迁出。
-- **未决（S5 剩余）**：其余约 81 个 `add_*` 未族化；按 W8 顺序推进，不一次性搬迁。
-- **已决（W8 S8）**：`get_ancestor`/`get_position_between`/`get_dis_betweem` 迁入 `NodeUtils.ancestor/position_between/distance_between`；`get_clean_name` 与 `get_all_item_num` 迁入 `ItemUtils.clean_fashion_name/random_item_entries`；`load_item_icon`、`add_all_item_num` 全仓无调用方，直接删除；角色身体/装备贴图加载迁入 `RoleVisualRuntime`，`Global` 保留 `load_role1_body`/`load_role1_eq` 薄转发。`get_wx`（7 处）未迁移，留给后续无状态工具批次。
+- **未决（S5 剩余）**：`Global` 现有 121 个 `add_*`，其中 41 个已是五族工厂的 4 行薄转发；其余约 80 个仍持有场景槽位或实例化逻辑。按族推进，不一次性搬迁。下一批候选（按缓存归属价值排序，每批一族并各自补探针）：
+  - 怪物展示族：`add_monster_head`、`add_monster_info`、`add_basic_monment_info`、`add_boss_blood_instance`（`Global.monster_head` 等场景槽位随族迁出）；
+  - 关卡提示族：`add_level_fall_box`、`add_game_need_know`、`add_hc_help`、`add_help_thing`；
+  - 阵法族：`add_zhen_fa_help`、`add_zhen_fa_tu_po`、`add_zhen_yan_cure_level`、`add_zhen_fa_ui`、`add_zhen_fa_info`、`add_zhenfalxbutton`；
+  - 锻造/分解族：`add_forge_help`、`add_forge_box`、`add_forges`、`add_decompose_help`、`add_decompose_instance`。
+- **已决（W8 S8 + 20-3 守卫批次）**：`get_ancestor`/`get_position_between`/`get_dis_betweem` 迁入 `NodeUtils.ancestor/position_between/distance_between`；`get_clean_name`、`get_all_item_num`、`get_wx` 迁入 `ItemUtils.clean_fashion_name/random_item_entries/random_element_set`（`get_random_wx` 降为 `ItemUtils` 私有）；`load_item_icon`、`add_all_item_num`、`check_dir_between_two_obj`、`normal_face_player` 全仓 0 调用方，直接删除；角色身体/装备贴图加载迁入 `RoleVisualRuntime`，`Global` 保留 `load_role1_body`/`load_role1_eq` 薄转发。运行状态字段直写与上述旧入口由 `contract_scan` 的 `run_state_boundary` 规则阻断。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
 - **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`、P2 抽取 `RuntimeDiagnostics`、W3 S2 抽取 `UiRuntime`、W4 抽取 `AudioRuntime` 并合并 `MainMusic`、W5 S4 抽取 `ResourceRuntime` 与 `SceneFlow`、W6 S5 首批 5 族场景工厂、W7 抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`、W8 S7/S8 抽取 `RunContext`/`LevelEntryRuntime`/`MonsterSpawnRuntime`/`RoleVisualRuntime` 与 `NodeUtils`/`ItemUtils`）；20-1A/20-1C/20-1D、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`、P2 抽取 `RuntimeDiagnostics`、W3 S2 抽取 `UiRuntime`、W4 抽取 `AudioRuntime` 并合并 `MainMusic`、W5 S4 抽取 `ResourceRuntime` 与 `SceneFlow`、W6 S5 首批 5 族场景工厂、W7 抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`、W8 S7/S8 抽取 `RunContext`/`LevelEntryRuntime`/`MonsterSpawnRuntime`/`RoleVisualRuntime` 与 `NodeUtils`/`ItemUtils`、20-3A/3B 探针日志门禁与运行状态边界规则）；20-1A/20-1C/20-1D、20-2、20-3 其余批次未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -194,6 +194,8 @@
 1. **20-3A 守卫扩面**：为 `basic_task`、`divine_forge`、`bone_forge`、`synthesis`、`skill_icon`、`pet_interface`、`base_role`、音频入口登记规则；保存一次/命令快照/表现层不写档/路径预算按域配置；
 2. **20-3B 运行时夹具**：把 `archive_probe_runner`、`coop_probe_runner`、场景探针的关键用例纳入验收矩阵；补失败/负向断言；
 3. **20-3C 收口**：`check_all --godot-bin`、L2、相关关卡回归、`contract_scan --self-test`；更新 `status.md`、矩阵、脚本索引与归档。
+
+**已完成（2026-10-30，20-3A/3B 首片）**：场景探针日志门禁改为扫描完整输出并校验收尾标记，探针预期噪声逐条登记（`ProbeSpec.expected_noise`）；门禁开启后修复三处真实缺陷（加载取消路径对已释放实例的类型标注、商店两条不可达条目的每次开店警告、关卡选择探针直写已删除字段）；`archive_probe_runner` 的 BGM 重挂断言改为按帧轮询；`contract_scan` 增加第 18 类 `run_state_boundary`（运行状态字段直写与已删除工具入口）。上述域之外的 20-3A 规则与 20-3C 收口仍未启动。
 
 **必须验证**：守卫正负样本通过、无新增误报；全仓零 ERROR/WARNING；双人/档案/成长/音频/关卡回归；文档一致。
 

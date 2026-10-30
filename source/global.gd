@@ -3962,56 +3962,6 @@ func load_role1_eq(_name, role_id: int = 0) -> Texture2D:
 	return _role_visual.load_equipment(_name, role_id)
 
 
-func get_wx(num):
-	var all_wx = ["金", "木", "水", "火", "土"]
-	match num:
-		0:
-			var rr = randi_range(0, 100)
-			if rr <= 4:
-				return get_random_wx(3, all_wx)
-			elif rr > 4 and rr < 10:
-				return get_random_wx(2, all_wx)
-			else:
-				return get_random_wx(1, all_wx)
-		1:
-			return get_random_wx(1, all_wx)
-		2:
-			return get_random_wx(2, all_wx)
-		3:
-			return get_random_wx(3, all_wx)
-		4:
-			var temp_list = all_wx.duplicate()
-			var remove_index = randi_range(0, temp_list.size() - 1)
-			temp_list.remove_at(remove_index)
-			return temp_list
-		5:
-			return all_wx
-		_:
-			return []
-
-
-func get_random_wx(count, source_list):
-	var result = []
-	var temp_list = source_list.duplicate()
-	for i in range(count):
-		if temp_list.size() == 0:
-			break
-		var random_index = randi_range(0, temp_list.size() - 1)
-		result.append(temp_list[random_index])
-		temp_list.remove_at(random_index)
-	return result
-
-
-func check_dir_between_two_obj(Player, Monster):
-	if Player.position.x >= Monster.position.x:
-		if not Player.player_dir:
-			return true
-	elif Player.position.x < Monster.position.x:
-		if Player.player_dir:
-			return true
-	return false
-
-
 func remove_all_buff():
 	RoleProp.ws_value = 0
 
@@ -4081,14 +4031,6 @@ func remove_wd(OBJ, source_player: BaseHero = null) -> void:
 			continue
 		if source_player == null or i.buff_info.get("source_player") == source_player:
 			i.queue_free()
-
-
-func normal_face_player(OBJ, dir, Player):
-	if dir:
-		OBJ.look_at(Player.position)
-	else:
-		OBJ.look_at(Player.position)
-		OBJ.bullet_ani.flip_v = true
 
 
 var _monsters_to_track = []

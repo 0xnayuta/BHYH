@@ -51,6 +51,8 @@ class ProbeSpec:
     teardown_marker: str | None = None
     quit_after_frames: int = 600
     timeout_seconds: int = 90
+    # 探针主动构造的失败场景会打印固定日志；必须逐条给出理由，禁止泛化匹配。
+    expected_noise: tuple[str, ...] = ()
 
     @property
     def script_path(self) -> Path:
@@ -102,6 +104,14 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="LOAD_GUARD_PROBE_TEARDOWN",
         quit_after_frames=5000,
         timeout_seconds=180,
+        # 本探针故意把 load_timeout_msec 压到 0 触发加载超时并取消在途解析：
+        # 加载页按契约打印失败警告，被中断的解析器对正在加载的两个场景报空消息 Parse Error。
+        expected_noise=(
+            "scene load failed: ",
+            " - Parse Error: .",
+            "Failed loading resource: res://Scene/base/base_through_level.tscn",
+            "Failed loading resource: res://Scene/level/level_3.tscn",
+        ),
     ),
     ProbeSpec(
         key="magic-weapons",
@@ -239,16 +249,30 @@ def parse_result(output: str, spec: ProbeSpec) -> dict:
 HEADLESS_RENDER_NOISE = re.compile(r'^ERROR: Parameter "t" is null\.\n(?:[ \t].*\n)*', re.M)
 
 
-def collect_runtime_errors(output: str, teardown_marker: str | None) -> list[str]:
-    if teardown_marker:
-        output = output.split(teardown_marker, 1)[0]
+def collect_runtime_errors(output: str, expected_noise: tuple[str, ...] = ()) -> list[str]:
+    # 扫描完整输出：stdout 与 stderr 分开拼接，结果标记必然先于 stderr 出现，
+    # 按标记截断会漏掉全部运行期 ERROR/WARNING，因此这里不做阶段截断。
     cleaned = HEADLESS_RENDER_NOISE.sub("", output)
-    return [
-        line
-        for line in cleaned.splitlines()
-        if line.startswith(("SCRIPT ERROR:", "ERROR:", "WARNING:"))
-        and "resources still in use at exit" not in line
-    ]
+    findings = []
+    for line in cleaned.splitlines():
+        if not line.startswith(("SCRIPT ERROR:", "ERROR:", "WARNING:")):
+            continue
+        # 引擎退出阶段的 RID/ObjectDB 回收噪声：探针已释放自有节点，
+        # 剩余对象来自 Autoload 与引擎缓存。
+        if any(
+            marker in line
+            for marker in ("resources still in use at exit", "instances were leaked at exit", "allocations of type")
+        ):
+            continue
+        if any(marker in line for marker in expected_noise):
+            continue
+        findings.append(line)
+    return findings
+
+
+def has_teardown_marker(output: str, teardown_marker: str | None) -> bool:
+    # 标记缺失说明探针未走到收尾（早退、崩溃或被 --quit-after 截断），与日志门禁互补。
+    return not teardown_marker or teardown_marker in output
 
 
 def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict:
@@ -281,10 +305,13 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
         output = (completed.stdout or "") + (completed.stderr or "")
         result = parse_result(output, spec)
         result["exit_code"] = completed.returncode
-        runtime_errors = collect_runtime_errors(output, spec.teardown_marker)
+        runtime_errors = collect_runtime_errors(output, spec.expected_noise)
         if runtime_errors:
             result["ok"] = False
-            result["failures"].extend(f"runtime: {line}" for line in runtime_errors[-5:])
+            result["failures"].extend(f"runtime: {line}" for line in runtime_errors[:8])
+        if not has_teardown_marker(output, spec.teardown_marker):
+            result["ok"] = False
+            result["failures"].append(f"缺少收尾标记 {spec.teardown_marker}")
         if completed.returncode != 0:
             result["ok"] = False
             result["failures"].append(f"Godot 退出码 {completed.returncode}")

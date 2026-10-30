@@ -905,12 +905,22 @@ func _test_audio_boundaries() -> void:
 		first_parent.get_child_count() == 0 and next_parent.get_child_count() == 1,
 		"first=%d next=%d" % [first_parent.get_child_count(), next_parent.get_child_count()]
 	)
-	await get_tree().process_frame
-	await get_tree().physics_frame
+	# 重挂后恢复播放由 AudioRuntime 在 add_bgm 内触发；headless dummy 音频驱动
+	# 不保证下一帧就反映 playing，按帧轮询到上限再判定，避免时序抖动误报。
+	var same_track_playing := false
+	var waited_frames := 0
+	for _frame in range(30):
+		waited_frames = _frame
+		if moved_bgm == null or not is_instance_valid(moved_bgm):
+			break
+		if moved_bgm.playing:
+			same_track_playing = true
+			break
+		await get_tree().process_frame
 	_check(
 		"bgm_same_track_keeps_playing",
-		moved_bgm != null and moved_bgm.playing,
-		"playing=%s" % [moved_bgm.playing if moved_bgm != null else null]
+		same_track_playing,
+		"playing=%s frames=%d" % [moved_bgm.playing if moved_bgm != null else null, waited_frames]
 	)
 	Global.get_audio_runtime().stop_bgm()
 	await get_tree().process_frame

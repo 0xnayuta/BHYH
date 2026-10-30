@@ -78,6 +78,32 @@ func _run() -> void:
 	checks["entries_total"] = total_value == 50
 	checks["entries_source"] = source_ok
 
+	# 五行组合：个数正确、元素取自五行、互不重复、越界返回空。
+	var elements: Array = ItemUtils.FIVE_ELEMENTS
+	var set_one := ItemUtils.random_element_set(1)
+	var set_three := ItemUtils.random_element_set(3)
+	var set_four := ItemUtils.random_element_set(4)
+	var set_all := ItemUtils.random_element_set(5)
+	var set_zero := ItemUtils.random_element_set(0)
+	var set_invalid := ItemUtils.random_element_set(99)
+	checks["element_set_sizes"] = (
+		set_one.size() == 1
+		and set_three.size() == 3
+		and set_four.size() == 4
+		and set_all.size() == 5
+	)
+	checks["element_set_full"] = set_all == elements
+	checks["element_set_invalid_empty"] = set_invalid.is_empty()
+	checks["element_set_weighted_range"] = set_zero.size() >= 1 and set_zero.size() <= 3
+	var distinct_ok := true
+	for candidate_set in [set_one, set_three, set_four, set_all, set_zero]:
+		var seen := {}
+		for element in candidate_set:
+			if str(element) not in elements or seen.has(element):
+				distinct_ok = false
+			seen[element] = true
+	checks["element_set_distinct_in_domain"] = distinct_ok
+
 	# 角色贴图：同一槽位连续换贴图时释放上一张，缓存只保留当前一张。
 	var role_visual := Global.get_role_visual_runtime()
 	checks["role_runtime_present"] = role_visual != null

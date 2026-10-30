@@ -202,7 +202,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 
 变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。存档 IO、档案校验、保存入口或角色范围变更时，另跑档案持久化定向夹具 `python scripts/archive_probe_runner.py --godot "<godot>"`。
 
-第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针（`scene_probe_runner.py` 套件另含 `level-progress-exit`、`ui-factories`、`run-context`、`level-entry`、`utils`）；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
+第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针（`scene_probe_runner.py` 套件另含 `level-progress-exit`、`ui-factories`、`run-context`、`level-entry`、`utils`）；探针日志门禁扫描完整输出（不按收尾标记截断），并校验收尾标记存在；探针主动构造的失败日志必须在 `ProbeSpec.expected_noise` 逐条登记理由，禁止泛化匹配；`archive_probe_runner` 的 BGM 重挂断言按帧轮询播放状态，避免 headless 音频驱动时序抖动误报；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
 
 ### 6.1 单关冒烟：`level_test_runner.py`
 

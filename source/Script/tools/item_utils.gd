@@ -23,6 +23,48 @@ static func clean_fashion_name(item_name: String) -> String:
 	return item_name
 
 
+const FIVE_ELEMENTS := ["金", "木", "水", "火", "土"]
+
+
+## 法宝五行组合：0 按权重抽 1~3 个，1~3 抽固定个数，4 抽四行（缺一），5 全五行，其它返回空。
+static func random_element_set(mode: int) -> Array:
+	match mode:
+		0:
+			var roll := randi_range(0, 100)
+			if roll <= 4:
+				return _pick_distinct(3, FIVE_ELEMENTS)
+			if roll > 4 and roll < 10:
+				return _pick_distinct(2, FIVE_ELEMENTS)
+			return _pick_distinct(1, FIVE_ELEMENTS)
+		1:
+			return _pick_distinct(1, FIVE_ELEMENTS)
+		2:
+			return _pick_distinct(2, FIVE_ELEMENTS)
+		3:
+			return _pick_distinct(3, FIVE_ELEMENTS)
+		4:
+			var remaining: Array = FIVE_ELEMENTS.duplicate()
+			remaining.remove_at(randi_range(0, remaining.size() - 1))
+			return remaining
+		5:
+			return FIVE_ELEMENTS.duplicate()
+		_:
+			return []
+
+
+## 不放回抽 count 个；候选不足时按剩余数量返回。
+static func _pick_distinct(count: int, source: Array) -> Array:
+	var result: Array = []
+	var pool: Array = source.duplicate()
+	for _i in range(count):
+		if pool.is_empty():
+			break
+		var index := randi_range(0, pool.size() - 1)
+		result.append(pool[index])
+		pool.remove_at(index)
+	return result
+
+
 ## 从候选表随机抽取 rolls 次，每次累加 value_range；返回 [{Name, Value, Prop, WX, strength_value}]，未抽中的条目被剔除。
 static func random_item_entries(item_ids, rolls: int, value_range: int) -> Array:
 	randomize()

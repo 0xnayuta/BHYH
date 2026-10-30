@@ -23,6 +23,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 15. 共享账本与快照互斥门禁 (Shared Ledger): 共享键登记、2P 剥离与快照互斥必须同源
 16. Phase 17 边界门禁 (Phase 17 Boundary): 结算一次、命令快照、表现层不写档与试点路径预算
 17. 输入写入边界门禁 (Input Boundary): 输入读取行不得夹带 PlayerData 或 request_save
+18. 运行状态边界门禁 (Run State Boundary): 禁止重新直写已迁移的运行状态字段或调用已删除的工具入口
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -960,6 +961,24 @@ class ContractScanner:
         "Global.get_ui_runtime()._ui_runtime_instance_counts",
         "Global.get_ui_runtime().release_ui_runtime_cache",
     )
+    # 运行状态边界（W8 S7/S8）：已删除的旧字段/工具入口禁止回归。
+    RUNTIME_STATE_RETIRED_CALLS = (
+        "Global.get_ancestor(",
+        "Global.get_position_between(",
+        "Global.get_dis_betweem(",
+        "Global.get_clean_name(",
+        "Global.get_all_item_num(",
+        "Global.load_item_icon(",
+        "Global.add_all_item_num(",
+    )
+    RUNTIME_STATE_ASSIGN_RE = re.compile(
+        r"\bGlobal\.(?:current_level|llbt_level|four_swords_endless_mode|three_prince_endless_mode"
+        r"|sss_lendless_mode|constellation_endless_mode|selected_eight_immortal_id"
+        r"|is_ice|is_stun|is_mpo|is_poision|is_bleed|is_fire|is_speed_down|is_eye_fix|is_dead_link"
+        r"|_current_role_body_texture_path|_current_role_equipment_texture_path)\b\s*(?:=|\+=|-=|\*=|/=)"
+    )
+    RUNTIME_STATE_TOTAL_RE = re.compile(r"\bGlobal\.total_[A-Za-z0-9_]*\b")
+
     ARCHIVE_PATH_LITERAL = "user://MyAr_"
     ARCHIVE_PATH_LITERAL_ALLOWLIST = {
         "Scene/other_scene/bacis_ar_button.gd",
@@ -1144,6 +1163,26 @@ class ContractScanner:
             for pattern in cls.POOL_UI_PRIVATE_PATTERNS:
                 if pattern in clean:
                     return (lineno, pattern)
+        return (0, "")
+
+    @classmethod
+    def run_state_boundary_violation(cls, content: str, rel_path: str):
+        """运行状态边界：旧字段直写与已删除工具入口禁止回归；返回 (行号, 命中标识)。"""
+        if rel_path.startswith("addons/"):
+            return (0, "")
+        for lineno, line in enumerate(content.splitlines(), 1):
+            clean = line.split("#", 1)[0]
+            if not clean.strip():
+                continue
+            for pattern in cls.RUNTIME_STATE_RETIRED_CALLS:
+                if pattern in clean:
+                    return (lineno, pattern)
+            assign = cls.RUNTIME_STATE_ASSIGN_RE.search(clean)
+            if assign:
+                return (lineno, assign.group(0).strip())
+            total = cls.RUNTIME_STATE_TOTAL_RE.search(clean)
+            if total:
+                return (lineno, total.group(0))
         return (0, "")
 
     @classmethod
@@ -1499,6 +1538,16 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def scan_run_state_boundary(self):
+        print(f"[*] 扫描运行状态边界门禁 (Phase 20-1B W8 S7/S8)...")
+        self._scan_rule(
+            category="run_state_boundary",
+            violation=self.run_state_boundary_violation,
+            message="运行状态与无状态工具已迁移：禁止重新直写 Global 旧字段或调用已删除的 Global 工具入口",
+            suggested_fix="关卡名/塔层/统计/无尽模式改走 Global.get_run_context() 或对应 accessor；祖先与向量工具用 NodeUtils，品质名与随机条目用 ItemUtils",
+            rule_id="RUN_STATE_RETIRED_ENTRY",
+        )
+
     def scan_archive_boundary(self):
         print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
         self._scan_rule(
@@ -1553,7 +1602,7 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整十七类契约扫描流水线"""
+        """执行完整十八类契约扫描流水线"""
         t0 = time.time()
         self.collect_project_files()
         self.build_indexes()
@@ -1569,6 +1618,7 @@ class ContractScanner:
         self.scan_scene_entry_boundary()
         self.scan_load_cache_boundary()
         self.scan_pool_ui_boundary()
+        self.scan_run_state_boundary()
         self.scan_archive_boundary()
         self.scan_slot_boundary()
         self.scan_panel_operator()
@@ -1947,6 +1997,59 @@ def run_pool_ui_boundary_self_test() -> bool:
     return passed
 
 
+def run_run_state_boundary_self_test() -> bool:
+    """运行状态边界自测：旧字段直写与已删除工具入口必须拦截。"""
+    print("[*] 运行状态边界门禁负向自测...")
+    bad_samples = {
+        "旧关卡名直写": ("Global.current_level = \"花果山\"\n", "Script/level/sample.gd"),
+        "旧塔层自增": ("Global.llbt_level += 1\n", "Script/level/level_llbt.gd"),
+        "统计字段自增": ("Global.total_role_hit += 5\n", "Script/base/base_monster.gd"),
+        "统计字段读取": ("var v = Global.total_cure_hp\n", "Scene/other_scene/after_level_end.gd"),
+        "无尽模式直写": ("Global.sss_lendless_mode = false\n", "Script/level/level_sssl.gd"),
+        "八仙选择直写": ("Global.selected_eight_immortal_id = 3\n", "Scene/other_scene/level_info.gd"),
+        "死减益标志直写": ("Global.is_stun = false\n", "Script/main_menu/map_1.gd"),
+        "旧祖先工具": ("var a = Global.get_ancestor(node, 2)\n", "Script/hero/sample.gd"),
+        "旧品质名工具": ("var n = Global.get_clean_name(item_id)\n", "Script/back_pack/sample.gd"),
+        "贴图槽位直写": ("Global._current_role_body_texture_path = \"\"\n", "Script/hero/sample.gd"),
+    }
+    good_samples = {
+        "运行上下文 accessor": ("Global.set_current_level_name(\"花果山\")\n", "Script/level/sample.gd"),
+        "塔层 accessor": ("Global.set_tower_floor(8)\n", "Script/level/level_llbt.gd"),
+        "统计方法": ("Global.get_run_context().add_damage_dealt(5)\n", "Script/base/base_monster.gd"),
+        "统计读取": ("var v = Global.get_run_context().healing\n", "Scene/other_scene/after_level_end.gd"),
+        "无尽模式整体赋值": (
+            "Global.set_special_dungeon_endless(path, true)\n",
+            "Scene/other_scene/level_info.gd",
+        ),
+        "八仙选择 accessor": ("Global.set_selected_eight_immortal_id(3)\n", "Scene/other_scene/level_info.gd"),
+        "NodeUtils 工具": ("var a = NodeUtils.ancestor(node, 2)\n", "Script/hero/sample.gd"),
+        "ItemUtils 工具": ("var n = ItemUtils.clean_fashion_name(item_id)\n", "Script/back_pack/sample.gd"),
+        "注释中的旧入口": ("# Global.current_level = \"x\" legacy note\n", "Script/level/sample.gd"),
+        "同名字段不加 Global 前缀": ("is_stun = false\ncurrent_level = \"\"\n", "Script/base/base_hero.gd"),
+        "插件目录": ("Global.current_level = \"x\"\n", "addons/some_plugin/plugin.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        line, pattern = ContractScanner.run_state_boundary_violation(content, rel_path)
+        if line == 0:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (行 {line}, 标识 '{pattern}')")
+    for label, (content, rel_path) in good_samples.items():
+        line, pattern = ContractScanner.run_state_boundary_violation(content, rel_path)
+        if line != 0:
+            print(f"    [X] 好样本被误报: {label} (行 {line}, 标识 '{pattern}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] 运行状态边界门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] 运行状态边界门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def run_archive_boundary_self_test() -> bool:
     """档案边界门禁自测：路径拼接与绕过 request_save 必须拦截，登记入口必须放行。"""
     print("[*] 档案边界门禁负向自测...")
@@ -2209,7 +2312,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/档案/槽位/共享账本/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2220,6 +2323,7 @@ def main():
         scene_ok = run_scene_entry_boundary_self_test()
         load_cache_ok = run_load_cache_boundary_self_test()
         pool_ui_ok = run_pool_ui_boundary_self_test()
+        run_state_ok = run_run_state_boundary_self_test()
         archive_ok = run_archive_boundary_self_test()
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
@@ -2234,6 +2338,7 @@ def main():
             and scene_ok
             and load_cache_ok
             and pool_ui_ok
+            and run_state_ok
             and archive_ok
             and slot_ok
             and shared_ledger_ok

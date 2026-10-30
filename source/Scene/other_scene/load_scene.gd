@@ -626,7 +626,9 @@ func _covered_change_to_packed_scene(packed_scene: PackedScene) -> void:
 
 
 # 目标代次已过期时只清理本次加入的场景，不把旧关卡恢复为可玩场景。
-func _release_stale_new_scene(tree: SceneTree, new_scene: Node) -> void:
+# new_scene 故意不加 Node 类型标注：取消路径上实例可能已被释放，
+# 类型标注会在进入函数体前抛 "previously freed" 的 SCRIPT ERROR。
+func _release_stale_new_scene(tree: SceneTree, new_scene) -> void:
 	if new_scene == null or not is_instance_valid(new_scene):
 		return
 	if tree.current_scene == new_scene:
