@@ -116,6 +116,8 @@ func _run() -> void:
 			await _case_input_isolation()
 		"LocalCoopKeyConfigProbe":
 			await _case_key_config()
+		"LocalCoopHudReadOnlyProbe":
+			await _case_hud_read_only()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -1319,3 +1321,141 @@ func _case_key_config() -> void:
 			out.close()
 	else:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(config_path))
+
+
+func _set_hud_stats(
+	hero: Node,
+	hp: int,
+	max_hp: int,
+	mp: int,
+	max_mp: int,
+	exp_value: int,
+	max_exp: int,
+	ws: int,
+	protect: int,
+	max_protect: int
+) -> void:
+	hero.RoleProp.baseroleprop.SHp = max_hp
+	hero.RoleProp.baseroleprop.SMp = max_mp
+	hero.RoleProp.roleprop.Hp = hp
+	hero.RoleProp.roleprop.Mp = mp
+	hero.RoleProp.roleprop.R_hp = 0
+	hero.RoleProp.roleprop.R_mp = 0
+	hero.RoleProp.baseroleprop.exp = exp_value
+	hero.RoleProp.baseroleprop.max_exp = max_exp
+	hero.RoleProp.ws_value = ws
+	hero.RoleProp.max_ws_value = 100
+	hero.current_protect = protect
+	hero.max_protect = max_protect
+	hero.cure_value = 0
+	hero.RoleProp.get_last_prop()
+
+
+func _hud_snapshot(profile: Node) -> String:
+	return JSON.stringify(profile.player_data)
+
+
+func _hud_diff(before: String, after: String) -> String:
+	var before_data: Variant = JSON.parse_string(before)
+	var after_data: Variant = JSON.parse_string(after)
+	if not before_data is Dictionary or not after_data is Dictionary:
+		return "snapshot parse failed"
+	var changed: Array[String] = []
+	for key: Variant in before_data.keys():
+		if not after_data.has(key) or JSON.stringify(before_data[key]) != JSON.stringify(after_data[key]):
+			changed.append(str(key))
+	for key: Variant in after_data.keys():
+		if not before_data.has(key):
+			changed.append("+" + str(key))
+	return ",".join(changed)
+
+
+func _case_hud_read_only() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "HUD owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	await process_frame
+	await process_frame
+	await process_frame
+	p1.set_physics_process(false)
+	p2.set_physics_process(false)
+	p1.set_process(false)
+	p2.set_process(false)
+	_set_hud_stats(p1, 111, 222, 33, 44, 55, 66, 25, 10, 20)
+	_set_hud_stats(p2, 333, 444, 55, 66, 77, 88, 50, 5, 10)
+	_check(int(p1.RoleProp.roleprop.Hp) == 111 and int(p1.RoleProp.roleprop.SHp) == 222, "P1 stats set immediately actual=" + str(p1.RoleProp.roleprop.Hp) + "/" + str(p1.RoleProp.roleprop.SHp))
+	_check(int(p2.RoleProp.roleprop.Hp) == 333 and int(p2.RoleProp.roleprop.SHp) == 444, "P2 stats set immediately actual=" + str(p2.RoleProp.roleprop.Hp) + "/" + str(p2.RoleProp.roleprop.SHp))
+	p1.RoleProp.baseroleprop.Level = 11
+	p2.RoleProp.baseroleprop.Level = 22
+	data.player_data["宠物列表"] = [_pet_probe_data("PetTurtle", "龟布", 1000, 5)]
+	coop.secondary_data.player_data["宠物列表"] = [_pet_probe_data("PetTurtle", "龟布", 1000, 7)]
+	data.player_data["出战宠物"] = "龟布"
+	coop.secondary_data.player_data["出战宠物"] = "龟布"
+	data.player_data["角色昵称"] = "HUD_P1"
+	coop.secondary_data.player_data["角色昵称"] = "HUD_P2"
+	var p1_before := _hud_snapshot(data)
+	var p2_before := _hud_snapshot(coop.secondary_data)
+
+	var hud1: Node = load("res://Scene/base/base_role.tscn").instantiate()
+	hud1.player = p1
+	hud1.set_meta("coop_slot", 1)
+	hud1.set("_cached_level", stage)
+	stage.add_child(hud1)
+	var hud2: Node = load("res://Scene/base/base_role_p2.tscn").instantiate()
+	hud2.player = p2
+	hud2.set_meta("coop_slot", 2)
+	hud2.set("_cached_level", stage)
+	stage.add_child(hud2)
+	await process_frame
+	await process_frame
+	await process_frame
+
+	_check(hud1.hp_text.text == "111/222", "P1 HUD HP from slot actual=" + hud1.hp_text.text + " prop=" + str(p1.RoleProp.roleprop.Hp) + "/" + str(p1.RoleProp.roleprop.SHp))
+	_check(hud2.hp_text.text == "333/444", "P2 HUD HP from slot actual=" + hud2.hp_text.text + " prop=" + str(p2.RoleProp.roleprop.Hp) + "/" + str(p2.RoleProp.roleprop.SHp))
+	_check(hud1.mp_text.text == "33/44", "P1 HUD MP from slot actual=" + hud1.mp_text.text + " prop=" + str(p1.RoleProp.roleprop.Mp) + "/" + str(p1.RoleProp.roleprop.SMp))
+	_check(hud2.mp_text.text == "55/66", "P2 HUD MP from slot actual=" + hud2.mp_text.text + " prop=" + str(p2.RoleProp.roleprop.Mp) + "/" + str(p2.RoleProp.roleprop.SMp))
+	_check(hud1.exp_text.text == "55/66", "P1 HUD experience from slot")
+	_check(hud2.exp_text.text == "77/88", "P2 HUD experience from slot")
+	_check(hud1.role_level.text == "11", "P1 HUD level from slot")
+	_check(hud2.role_level.text == "22", "P2 HUD level from slot")
+	_check(is_equal_approx(hud1.ws_effect.value, 0.25), "P1 HUD wushuang from slot")
+	_check(is_equal_approx(hud2.ws_effect.value, 0.5), "P2 HUD wushuang from slot")
+	_check(is_equal_approx(hud1.role_protect.value, 0.5), "P1 HUD protect from slot")
+	_check(is_equal_approx(hud2.role_protect.value, 0.5), "P2 HUD protect from slot")
+	_check(hud1.pet_panel != null and hud1.pet_panel.visible, "P1 pet HUD visible")
+	_check(hud2.pet_panel != null and hud2.pet_panel.visible, "P2 pet HUD visible")
+	_check(hud1.pet_exp_text != null and hud1.pet_exp_text.text == "5/84", "P1 pet HUD experience")
+	_check(hud2.pet_exp_text != null and hud2.pet_exp_text.text == "7/84", "P2 pet HUD experience")
+	_check(hud1.pet_hp_text != null and hud1.pet_hp_text.text == "1000/1000", "P1 pet HUD HP")
+	_check(hud2.pet_hp_text != null and hud2.pet_hp_text.text == "1000/1000", "P2 pet HUD HP")
+	_check(_hud_snapshot(data) == p1_before, "P1 HUD frame is read-only")
+	_check(_hud_snapshot(coop.secondary_data) == p2_before, "P2 HUD frame is read-only")
+
+	coop.open_panel(2, "背包")
+	await process_frame
+	await process_frame
+	_check(coop.has_panel(), "HUD panel opens")
+	_check(_hud_snapshot(data) == p1_before, "P1 data unchanged while panel open diff=" + _hud_diff(p1_before, _hud_snapshot(data)))
+	_check(
+		_hud_snapshot(coop.secondary_data) == p2_before,
+		"P2 data unchanged while panel open diff=" + _hud_diff(p2_before, _hud_snapshot(coop.secondary_data))
+	)
+	_check(hud1.hp_text.text == "111/222" and hud2.hp_text.text == "333/444", "HUD values survive pause/panel")
+	coop.close_panel()
+	await process_frame
+	await process_frame
+	_check(not coop.has_panel(), "HUD panel closes")
+	_check(_hud_snapshot(data) == p1_before, "P1 data unchanged after panel close")
+	_check(_hud_snapshot(coop.secondary_data) == p2_before, "P2 data unchanged after panel close")
+
+	hud1.queue_free()
+	hud2.queue_free()
+	await process_frame
+	coop.clear_runtime()
+	await process_frame
+	_check(coop.secondary_data == null, "HUD teardown clears secondary profile")
+	_check(_hud_snapshot(data) == p1_before, "HUD teardown does not write P1 data")

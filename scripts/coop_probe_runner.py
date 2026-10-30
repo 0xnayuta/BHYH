@@ -47,6 +47,7 @@ CASES = [
     "LocalCoopAllDeadProbe",
     "LocalCoopInputIsolationProbe",
     "LocalCoopKeyConfigProbe",
+    "LocalCoopHudReadOnlyProbe",
 ]
 
 GODOT_CANDIDATES = ("godot", "godot4")
