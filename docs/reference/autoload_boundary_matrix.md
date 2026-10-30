@@ -1,7 +1,7 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
 > **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取 5 个场景工厂）、W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）、W8 S7A/S7B（抽取 `RunContext` 并删除写多读零的运行状态字段）、W8 S7C（`LevelEntryRuntime` 与 `MonsterSpawnRuntime`）与 W8 S8（`NodeUtils`/`ItemUtils` 静态工具类、`RoleVisualRuntime`），并把四个无尽模式标志与 `selected_eight_immortal_id` 收进 `RunContext`。本页记录当前边界、逐项结论与迁移顺序。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
-> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`；S7C 迁出关卡进入编排与怪物生成；S8 迁出无状态工具与角色贴图加载（以上全部是 `Global` 的普通子节点、静态工具类或它持有的 `RefCounted`，不是 Autoload）。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 8 个功能族工厂（`Popup`/`Shop`/`Backpack`/`Reward`/`CombatPresentation`/`MonsterDisplay`/`LevelHint`/`ZhenFa`）；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`；S7C 迁出关卡进入编排与怪物生成；S8 迁出无状态工具与角色贴图加载（以上全部是 `Global` 的普通子节点、静态工具类或它持有的 `RefCounted`，不是 Autoload）。
 > **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
@@ -20,7 +20,7 @@ Phase 20-1 其余切片保持未启动：
 | 切片 | 本轮结论 | 说明 |
 |:---|:---|:---|
 | 20-1A Spine 跨平台 | 未启动 | 需先定目标平台、Spine 运行时版本与许可证；不在本页替其作结论 |
-| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2/W3 S2/W4 已执行，其余延期** | 本页；决策时 13 个注册项，W4 后 11 个 |
+| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2、W3~W8 与 S5 已执行；20-1A/20-1C/20-1D 延期** | 本页；决策时 13 个注册项，W4 合并 `MainMusic` 后 11 个 |
 | 20-1C `_bundled` 历史场景 | 未启动 | 需私有素材、UID/导入缓存与格式取证 |
 | 20-1D 类型化 Atlas accessor | 未启动 | 依赖 19-3B 的 41 项未迁移图集范围 |
 
@@ -138,12 +138,12 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 
 ## 6. 试点
 
-P1、P2 均已执行；二者都不新增 Autoload。
+P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 
 ### P1：删除 `BaseHit`（完成，2026-10-30）
 
 - 已删除 `project.godot` 的 `BaseHit` 注册、`source/base_hit.gd` 与 `.uid`、`hit_bullet.gd` 的 `remove_infor()`，以及 4 个法宝弹体场景中 6 个 `remove_infor` 动画方法键；未改命中数值逻辑。
-- 当前 Autoload 为 **12** 个（11 业务 + 1 调试桥）；P1 时 `global.gd` 未变。
+- P1 时 Autoload 为 12 个（11 业务 + 1 调试桥）；W4 合并 `MainMusic` 后为 **11** 个（10 业务 + 1 调试桥）。P1 时 `global.gd` 未变。
 - 验收：`health_check` 0 Parse / 0 Error / 0 Warning；`level_1` 冒烟 PASS（4 Stage，0/0/0）；`scene_probe_runner --probe magic-weapons` PASS；4 个改动场景的加载/实例化/方法轨道探针 PASS；`check_all --godot-bin` 8/8 PASS。
 - Owner：战斗/法宝。
 
@@ -283,7 +283,7 @@ P1、P2 均已执行；二者都不新增 Autoload。
 
 20-1B 决策本身的验收：
 
-- 本页覆盖决策时 13 个 Autoload（当前 12 个；`BaseHit` 已删除），每项有结论、owner 与前置条件；
+- 本页覆盖决策时 13 个 Autoload（当前 11 个；`BaseHit` 已删除、`MainMusic` 已并入 `AudioRuntime`），每项有结论、owner 与前置条件；
 - 明确“不新增 Autoload、不设数量目标、不批量改名”的边界；
 - 文档链接可达；`check_all --skip-engine` 通过；
 - P1/P2 已按“迁移调用方、删除旧入口、同步探针”闭环；其余波次未执行。

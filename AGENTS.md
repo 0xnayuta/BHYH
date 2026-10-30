@@ -30,12 +30,16 @@
   - `standards/target_architecture_contract.md`：项目总体目标架构；应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台及所有权/生命周期，视觉资产为子契约；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
+  - `reference/architecture.md`：当前运行时架构：Autoload 与 `Global` 普通子节点运行时、场景流、战斗、档案/双人、资源、UI/输入及遗留差距；
+  - `reference/acceptance.md`：验收分层、八维门禁、契约域、运行期夹具与阈值；
+  - `reference/autoload_boundary_matrix.md`：Phase 20-1B Autoload 与 `Global` 拆分边界：11 个注册项处置、普通子节点运行时、场景工厂族、迁移顺序与剩余候选；
+  - `reference/runtime_frames_exceptions.md`：Phase 19-3A 运行时建帧例外决策：保留/补资源/删除回退结论与后续边界；
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
   - `reference/module_api_matrix.md`：Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项；
-  - `roadmap/current-iteration.md`：Phase 18~20 综合收尾：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D 已完成、19-3 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`；
+  - `roadmap/current-iteration.md`：Phase 18~20 综合收尾：18-1/18-2/18-3/19-1/19-2/19-3/19-4 全部完成、20-1B 与 20-3A/3B 已落地；20-1A/20-1C/20-1D、20-2 与 20-3C 收口未启动，状态以该页为准；Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；

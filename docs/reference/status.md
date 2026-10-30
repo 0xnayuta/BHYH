@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`、P2 抽取 `RuntimeDiagnostics`、W3 S2 抽取 `UiRuntime`、W4 抽取 `AudioRuntime` 并合并 `MainMusic`、W5 S4 抽取 `ResourceRuntime` 与 `SceneFlow`、W6 S5 首批 5 族场景工厂、W7 抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`、W8 S7/S8 抽取 `RunContext`/`LevelEntryRuntime`/`MonsterSpawnRuntime`/`RoleVisualRuntime` 与 `NodeUtils`/`ItemUtils`、20-3A/3B 探针日志门禁与运行状态边界、20-3A HUD/面板只读规则（7 域）、S5 怪物展示族、关卡提示族与阵法族、20-3A 音频入口，当前 11 个 Autoload）；20-1A/20-1C/20-1D、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（W1~W8 与 S5 八族场景工厂，逐项见 `autoload_boundary_matrix.md`）、20-3A 守卫扩面全部登记域（含音频入口）与 20-3B 首片；当前 11 个 Autoload）；20-1A/20-1C/20-1D、20-2 平台/发布、20-3B 收尾与 20-3C 收口未启动）
 
 ---
 
@@ -57,18 +57,18 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 | 指标 | 数量 |
 |:---|:---:|
-| GDScript | **749**（业务 713：`Script/` 650 + 顶层 7 + `Scene/` 55 + `Art/` 1；插件 36） |
-| 场景 `.tscn` | **1,137**（`Scene/` 1,136 + 插件 1） |
-| 资源 `.tres` | **1,284**（`Art/**/*.sprites`、FrameSequence、角色与关卡预载清单） |
+| GDScript | **774**（业务 738：`Script/` 677 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36） |
+| 场景 `.tscn` | **1,136**（`Scene/` 1,135 + 插件 1） |
+| 资源 `.tres` | **1,370**（`Art/` 1,361、`Script/` 8、`Scene/` 1） |
 | PNG | **16,723**（16,702 小写 `.png` + 21 大写 `.PNG`） |
-| `.import` | **17,005** |
-| `.uid` | **782** |
+| `.import` | **17,013** |
+| `.uid` | **807** |
 | MP3 / WAV | **170 + 8**（大写 `.MP3`）/ **1** |
 | 字体 | **13 TTF + 2 TTC** |
 | Shader | **7** |
-| Autoload | **13** |
+| Autoload | **11**（10 业务 + 1 编辑器调试桥；运行时职责由 `Global` 的普通子节点承担） |
 
-> 仓库体积与本地素材、`.git`、导入缓存相关，不作为发布指标；公开仓库不包含第三方素材。
+> 统计日期 2026-10-30（私有完整素材工作区实测）；数字随迭代变动，更新时须重新实测。仓库体积与本地素材、`.git`、导入缓存相关，不作为发布指标；公开仓库不包含第三方素材。
 
 ---
 
@@ -227,7 +227,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 19-3C PCK/资源闭包 | 重跑当前 Catalog/依赖清单与真实 PCK 闭包：`convert_level_preload_catalog --check` 101 关卡 / 17 弹体 / 153 场景，199 怪物场景 / 24 动态场景 / 767 动态纹理；`frame_sequence_pack_probe --self-test` 4100 条；PCK **2,738,706,658 字节**，**4100/4100 可达**，`missing_count=0`，sha256 `ee9a28ad2ece…`，导出+包内校验 112.01s。预设 `Windows Desktop (validation)`（`all_resources`）。 | 19-3C 完成；19-3 完成；闭合结论仅证明清单路径在包内可加载，不代表最小发布闭包、release 包策略或平台性能 |
 | 2026-10-30 Phase 19-4A 输入隔离 | 新增 `LocalCoopInputIsolationProbe`：18 个 `p2_*` 动作与物理键逐项匹配；P1 `move_right`/`normalhit`/`jump` 保持 D/J/K；P1/P2 输入视图互不串槽；禁用双人后 P2 视图回落基础映射，重新启用恢复 `p2_*`。新增 `LocalCoopKeyConfigProbe`：`set_com` 键位布局修改即时应用、保存，`_on_reset_layout_pressed` 恢复默认；临时 `user://KeyConfig.json` 备份/恢复。**验证**：`coop_probe_runner` **25/25 PASS**；`check_all --godot-bin` 8/8 PASS。 | 19-4A 完成；19-4B/19-4C 未启动 |
 | 2026-10-30 Phase 19-4B HUD 只读 | 新增 `LocalCoopHudReadOnlyProbe`：P1/P2 HP/MP/经验/等级/无双/护盾与宠物经验/HP 均取自槽位查询；HUD 帧前后 `PlayerData`/2P 档案 JSON 快照一致；面板打开/关闭与暂停期间 HUD 值不变、数据无残留写入；HUD 释放与 `clear_runtime` 不写 1P 档案。面板首次打开会补默认 `角色昵称`（既有补全行为），探针在快照前预置昵称以隔离 HUD 写入。**验证**：`coop_probe_runner` **26/26 PASS**；`check_all --godot-bin` 8/8 PASS。 | 19-4B 完成；19-4C 未启动 |
-| 2026-10-30 Phase 19-4C 输入写入守卫 | `contract_scan.py` 新增第十七类 `input_boundary`：`Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save`；`INPUT_BOUNDARY_ALLOWLIST` 当前为空。新增正负样本自测；全量扫描 ERROR=0，无现有违规；契约看板补上 `phase17_boundary` 与 `input_boundary` 两类。**验证**：`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --godot-bin` 8/8 PASS。 | 19-4C 完成；19-4 完成 |
+| 2026-10-30 Phase 19-4C 输入写入守卫 | `contract_scan.py` 新增 `input_boundary` 类（加入时为第 17 类，现行 20 类）：`Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save`；`INPUT_BOUNDARY_ALLOWLIST` 当前为空。新增正负样本自测；全量扫描 ERROR=0，无现有违规；契约看板补上 `phase17_boundary` 与 `input_boundary` 两类。**验证**：`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --godot-bin` 8/8 PASS。 | 19-4C 完成；19-4 完成 |
 | 2026-10-30 Phase 20-1B Autoload 边界 | 新增 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：决策时 13 个注册项（12 业务 + 1 调试桥）逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`Global` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，给出 W0~W8 顺序；试点为删除 `BaseHit` 与抽取 `RuntimeDiagnostics`。事实基线：`global.gd` **6,041 行 / 360 函数 / 295 变量 / 76 常量 / 2 信号**；生产代码 `Global.` **427 文件 / 3,372 调用 / 273 成员**；外部直接写入 **494 次 / 64 变量**；含探针为 432 文件 / 3,586 调用 / 298 成员。**验证**：文档链接可达；`check_all --skip-engine` PASS。本轮只决策，未修改运行代码、未新增/移除 Autoload、未批量改名。 | 20-1B 完成；20-1A/20-1C/20-1D 未启动 |
 | 2026-10-30 Phase 20-1B P1 `BaseHit` 删除 | 删除 `project.godot` 的 `BaseHit` 注册、`source/base_hit.gd`/`.uid`、`hit_bullet.gd` 的 `remove_infor()` 与 4 个弹体场景中 6 个 `remove_infor` 动画方法键；命中数值逻辑未变。Autoload **13→12**（11 业务 + 1 调试桥）。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（718 脚本）；`level_1` 冒烟 **PASS**（4 Stage，日志 0/0/0）；`scene_probe_runner --probe magic-weapons` **PASS**；4 个改动场景加载/实例化/方法轨道临时探针 **PASS**；`check_all --godot-bin` **8/8 PASS**。 | 20-1B P1 完成；P2 完成 |
 | 2026-10-30 Phase 20-1B P2 `RuntimeDiagnostics` | 新增 `source/Script/runtime/runtime_diagnostics.gd`（`class_name RuntimeDiagnostics`，230 行），由 `Global._ready` 创建为普通 `Node` 子节点，不注册 Autoload。迁出调试性能浮层、`get_runtime_generation`、后台保存/失败状态、缓存作用域/关卡租约/预载单槽快照及诊断状态；`Global` **6,041→5,775 行、360→347 函数、295→291 变量、76→75 常量**。新入口 `Global.get_runtime_diagnostics()`；`scene_probes` 与 `archive_probes` 已迁移，旧 `Global.get_*_snapshot` 入口删除。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（719 脚本）；`scene_probe_runner` 的租约/加载守卫/关卡选择 **3/3 PASS**；`archive_probe_runner` **289/289 PASS**；`level_1` 冒烟 **PASS**（4 Stage，日志 0/0/0）；临时调试浮层/快照探针 **PASS**；`check_all --godot-bin` **8/8 PASS**。 | 20-1B P2 完成；W3 未启动 |

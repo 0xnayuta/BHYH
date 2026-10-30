@@ -15,7 +15,7 @@
 | 工程根 | `source/` |
 | 语言与架构 | GDScript 2.0、场景/Resource 分层、构建期资源管线 |
 | 规模 | 以 [`docs/reference/status.md`](docs/reference/status.md) 为单一事实源 |
-| Autoload | 13 个注册项（12 个业务单例 + 1 个编辑器调试桥；新增需评审） |
+| Autoload | 11 个注册项（10 个业务单例 + 1 个编辑器调试桥；其余职责由 `Global` 的普通子节点运行时承担，新增需评审） |
 | 素材边界 | 公开仓库不含第三方素材；完整验收使用本地合法素材工作区 |
 
 完整版本谱系、目录职责与验证状态见 [`docs/reference/status.md`](docs/reference/status.md)。
@@ -108,10 +108,13 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 |:---|:---|
 | [`docs/README.md`](docs/README.md) | 文档分层与完整索引 |
 | [`docs/reference/architecture.md`](docs/reference/architecture.md) | 运行时架构：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
+| [`docs/reference/autoload_boundary_matrix.md`](docs/reference/autoload_boundary_matrix.md) | Phase 20-1B Autoload 与 `Global` 拆分边界：普通子节点运行时、场景工厂族与迁移顺序 |
 | [`docs/reference/atlas_metadata_schema.md`](docs/reference/atlas_metadata_schema.md) | Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View 与边界守卫 |
 | [`docs/reference/runtime_lifecycle_matrix.md`](docs/reference/runtime_lifecycle_matrix.md) | Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理 |
 | [`docs/reference/archive_session_matrix.md`](docs/reference/archive_session_matrix.md) | Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份、会话字段、直接写入分域、补全清单、共享账本与面板显式操作者 |
 | [`docs/reference/gameplay_module_matrix.md`](docs/reference/gameplay_module_matrix.md) | Phase 17-1 玩法与表现调用面矩阵：归属来源、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API |
+| [`docs/reference/module_api_matrix.md`](docs/reference/module_api_matrix.md) | Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` |
+| [`docs/reference/runtime_frames_exceptions.md`](docs/reference/runtime_frames_exceptions.md) | Phase 19-3A 运行时建帧例外决策：保留/补资源/删除回退结论与后续边界 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
@@ -119,7 +122,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 18~20 综合收尾：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D 已完成、19-3 资源/Atlas、19-4 输入/HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 18~20 综合收尾：18-1/18-2/18-3/19-1/19-2/19-3/19-4 全部完成、20-1B 与 20-3A/3B 已落地；20-1A/20-1C/20-1D、20-2 与 20-3 收口未启动，状态以该页为准 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |

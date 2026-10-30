@@ -97,8 +97,8 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 十七类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/档案/槽位/面板操作者/共享账本/Phase 17 边界/输入写入边界 |
-| 契约自测 | `contract_scan.py --self-test` | 边界规则正负样本；含 Phase 17 结算/命令/表现层/路径预算与输入写入边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 二十类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
+| 契约自测 | `contract_scan.py --self-test` | 二十类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、音频入口、HUD 面板只读与输入写入边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
@@ -106,7 +106,7 @@ python scripts/check_all.py --no-cache -j 6
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 十七类契约
+### 4.1 `contract_scan.py` 二十类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -123,10 +123,14 @@ python scripts/check_all.py --no-cache -j 6
 | 场景入口边界 | 业务脚本直接调用 `change_scene_to_file/packed`，仅 `global.gd` 豁免 | ERROR（`SCENE_ENTRY_BYPASS`） |
 | 加载页私有缓存 | `load_scene.gd` 访问 `Global._resource_cache` 等私有缓存/租约/写入函数 | ERROR（`LOAD_CACHE_PRIVATE_ACCESS`） |
 | 池/UI 清理入口 | 业务直接调用 `Global.get_ui_runtime().cleanup_transient_ui`、`Global._clear_runtime_pools`，或访问 `Global.get_ui_runtime()` 的私有 UI 表/释放入口 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
+| 运行状态边界 | 直写已迁入 `RunContext`/运行时的 `Global` 字段，或调用已删除的无状态工具入口 | ERROR（`RUN_STATE_RETIRED_ENTRY`） |
 | 档案边界 | 业务拼接 `user://MyAr_`；业务直调 `load_game`/`save_game`/`safe_write_archive`（登记入口豁免） | ERROR（`ARCHIVE_BOUNDARY_FORBIDDEN`） |
 | 槽位边界 | 业务硬编码 `/root/PlayerData`/`/root/RoleProp`；重新引入 `suspend/resume_player_view` | ERROR（`SLOT_BOUNDARY_FORBIDDEN`） |
 | 面板操作者 | 面板域脚本使用 `PlayerData`/`RoleProp` 但自身与祖先均未声明槽位操作者 | ERROR（`PANEL_OPERATOR_UNBOUND`） |
 | 共享账本与快照互斥 | `LocalCoop` 缺少 `shared_keys()` 登记、`save_profile` 同源剥离或 `is_save_snapshot_in_progress()` 互斥 | ERROR（`SHARED_LEDGER_UNREGISTERED`） |
+| 音频入口 | 业务自建 `AudioStreamPlayer`、直引 `Scene/all_sound/` 场景或直读 `AudioRuntime` 私有状态；`Script/runtime/` 与 `global.gd` 放行 | ERROR（`AUDIO_ENTRY_BYPASS`） |
+| HUD/面板只读 | HUD 与面板域直接档案 IO 或 `PlayerData` 字典直写 | ERROR（`HUD_PANEL_WRITE_FORBIDDEN`） |
+| Phase 17 边界 | 结算文件重复保存或缺 `LevelSettlement`、命令文件缺快照、表现文件直写档案、试点文件深层路径超预算 | ERROR（`PHASE17_BOUNDARY_FORBIDDEN`） |
 | 输入写入边界 | `Input`/`PlayerInput` 输入读取行同时出现 `PlayerData` 或 `request_save` | ERROR（`INPUT_BOUNDARY_STATE_WRITE`） |
 
 只有 **ERROR** 参与 `--fail-on-error` 的退出判定；WARNING 与 INFO 进入报告但不阻断。
@@ -378,7 +382,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
 | warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 十七类契约 | ERROR 才阻断 |
+| 契约规则 | 二十类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
 | PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |

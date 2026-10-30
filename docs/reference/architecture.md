@@ -95,7 +95,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 与 `MainMusic` 已删除，其余实施延期）。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 与 S5 已执行；Spine 跨平台、`_bundled` 与类型化 Atlas accessor 仍延期）。
 
 ### 2.4 运行时服务
 
@@ -623,7 +623,7 @@ classDiagram
 ## 11. 关联文档
 
 - [`acceptance.md`](acceptance.md)：验收分层、门禁命令、阈值与变更矩阵
-- [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：Phase 20-1B 的 12 个当前 Autoload 处置（决策时 13）、`Global` 切面与迁移顺序
+- [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：Phase 20-1B 的 11 个当前 Autoload 处置（决策时 13）、`Global` 切面与迁移顺序
 - [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 的 AtlasMetadata 生产者、schema、消费者、只读 View 与失败矩阵
 - [`status.md`](status.md)：版本、规模与验证状态单一事实源
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）

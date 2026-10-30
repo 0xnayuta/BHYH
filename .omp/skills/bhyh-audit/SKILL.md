@@ -15,7 +15,8 @@ description: 对 BHYH 项目执行只读代码质量审计——动态覆盖 sou
 - 架构与遗留边界：`docs/reference/architecture.md`
 - 验收标准与门禁：`docs/reference/acceptance.md`
 - 当前状态与已知边界：`docs/reference/status.md`
-- 规范：`docs/standards/` 全部活跃文档（命名、Godot 设计、白名单、缺失资产、SpriteFrames）
+- 调用面与所有权矩阵：`docs/reference/` 下的 `autoload_boundary_matrix.md`、`runtime_lifecycle_matrix.md`、`archive_session_matrix.md`、`gameplay_module_matrix.md`、`module_api_matrix.md`、`atlas_metadata_schema.md`、`runtime_frames_exceptions.md`；矩阵用于核对所有者/写入者/失败边界，实现事实仍以 `source/` 为准，矩阵内的历史计数不作为当前结论
+- 规范：`docs/standards/` 全部活跃文档（`target_architecture_contract.md` 总体目标优先，其后命名、Godot 设计、白名单、缺失资产、SpriteFrames）
 - 决策记录：`docs/decisions/` 全部 ADR（决策合规维度按模板 3.10 核对表逐条执行）
 - 路线图：`docs/roadmap/roadmap.md` + `docs/roadmap/current-iteration.md`
 - 工具链：`scripts/README.md`
@@ -25,7 +26,7 @@ description: 对 BHYH 项目执行只读代码质量审计——动态覆盖 sou
 
 - 实现范围：`source/**/*.gd`、`source/**/*.tscn`、`source/**/*.gdshader`、`source/**/*.json`、`source/project.godot`、`source/**/*.tres` 与相关 `.import` / `.uid` 的当前实际清单。文件数量、模块职责和热点按本轮统计，不沿用历史报告结论。
 - 资源范围：`source/Art/**/manifest.json`、图集页、SpriteFrames/AtlasMetadata/Spine 资源的引用、导入与构建期产物；不评价美术质量。
-- 验证范围：`scripts/` 的门禁、回归、双人探针与转换器作为验证契约；`scripts/coop_probes/` 是可执行规格，不进入生产源码。
+- 验证范围：`scripts/` 的门禁、回归、双人/场景/档案探针与转换器作为验证契约；`scripts/coop_probes/`、`scripts/scene_probes/`、`scripts/archive_probes/` 是可执行规格，不进入生产源码。`contract_scan.py` 注册的边界规则（类别与数量以脚本实际注册为准）、`runtime_frames_allowlist.json`、`png_stream_allowlist.json`、`contract_whitelist.json` 同属现行守卫契约，审计时核对其覆盖与文档描述是否一致。
 - 只读契约/接线输入：现行 docs、ADR、`project.godot`、`scripts/` 可用于核对实现契约、门禁与目录边界；不扩展为第三方实现或素材质量审计。当前契约描述错误登记 `DOC`，环境失败单列验证限制。
 - 第三方边界：`source/addons/`、`source/bin/` 的内部实现不审、不改；只核对集成边界、版本、资源路径与许可证。`source/.godot/` 导入缓存不审。
 - 公开仓库边界：`source/Art/`、`Music/`、`Font/`、`Spritesheet/` 可能缺失；缺失资源提示不自动构成缺陷。完整审计以本地合法授权的完整素材工作区为准，并记录实际覆盖范围。
@@ -40,17 +41,18 @@ description: 对 BHYH 项目执行只读代码质量审计——动态覆盖 sou
    - 先运行 `python scripts/check_all.py --skip-engine`，记录 7 维结果与契约 WARNING 预算。
    - 有 Godot 4.7.2 时运行 `python scripts/check_all.py --godot-bin <godot>` 与 `python scripts/health_check.py --project source --godot-bin <godot>`；引擎路径只使用 `<godot>` / `--godot-bin` / `GODOT_BIN` 占位，不记录本地绝对路径。
    - 新增/重命名资源时执行 `godot --headless --path source --import`；它只证明导入缓存重建，不等于构建、运行或门禁通过。
-   - 运行期按范围选择 `level_test_runner.py`（代表关）、`level_regression_all.py --changed-only --diff-base <base>` 或全量回归、`coop_probe_runner.py`（涉及 LocalCoop）、三个转换器 `--check` / `--self-test`。
+   - 运行期按范围选择 `level_test_runner.py`（代表关）、`level_regression_all.py --changed-only --diff-base <base>` 或全量回归、`coop_probe_runner.py`（涉及 LocalCoop）、`scene_probe_runner.py`、`archive_probe_runner.py`，以及 `scripts/README.md` 列出的转换器与守卫脚本的 `--check` / `--self-test` / `--fail-on-error`（如 `convert_*`、`frame_sequence_pack_probe.py`、`png_stream_audit.py`、`contract_scan.py --self-test`、`runtime_frames_audit.py`）。
    - 禁用 `check_all.py --fix`、逐文件例行检查、用 shell 通配替代完整清单。结果按实际填写通过/失败/未执行/受限；命令 exit 0 不等于零警告、完整覆盖或消费者契约已验证；任一失败先定位记录，不在审计中修复。
    - 门禁会生成 `docs/reports/` 机器报告与 `.godot/` 缓存；审计只引用结论，不提交机器报告。删除本次新增的临时产物前先记录基线，不删除用户既有文件。
 2. **全部 ADR 合规核对**（模板 3.10）：
    - 枚举 `docs/decisions/` 实际 ADR 并与索引核对，记录有效/废止/被替代及继承关系；以 `docs/decisions/README.md` 的实际索引为准，不固定编号上限或表行数。
    - 每条先分离当前有效决策本体、当前事实描述和历史事实，再填写实现消费者、可执行检查、API 前提及未覆盖范围。有效决策用合规/部分合规/违反；证据不足用未验证，废止且本轮无适用规则用不适用，不冒充合规或违反。
    - 仅已确认的有效决策违反/部分合规登记 `CMPL`；事实描述错误按只读纪律登记 `DOC`，历史差异不自动成为问题。
-   - 重点核对：ADR-003 设计规范、ADR-004 命名、ADR-005 无回退/跨版本迁移链、ADR-006 Resource 优先、ADR-007 Autoload 边界、ADR-009 构建期资产、ADR-012 门禁、ADR-013 路径迁移、ADR-017 双人隔离。旧实现残留检查针对旧路径、旧 API、双加载分支和消费者调用；裸词 grep 零命中不能单独证明合规。
-3. **分领域审查**（模板 3.1~3.10）：保留 10 个领域，逐项给评级（A~D）、本轮结论与关联问题；既审模块，也追踪跨边界状态转换，如场景切换→释放旧场景、加载页→关卡、暂停→双人面板、保存线程→退出、资源预热→关卡释放。必须有可达消费者和反例，不凭类型、命名或历史结论预判缺陷。
+   - 重点核对：ADR-003 设计规范、ADR-004 命名、ADR-005 无回退/跨版本迁移链、ADR-006 Resource 优先、ADR-007 Autoload 边界（含 `Global` 普通子节点运行时与场景工厂族的职责回流检查）、ADR-009 构建期资产、ADR-012 门禁、ADR-013 路径迁移、ADR-017 双人隔离、ADR-018 运行期缓存/预池、ADR-019 夹具位置、ADR-020 类型化视觉资产、ADR-021 总体目标架构、ADR-022 AtlasMetadata View 边界。旧实现残留检查针对旧路径、旧 API、双加载分支和消费者调用；裸词 grep 零命中不能单独证明合规。
+3. **分领域审查**（模板 3.1~3.10）：保留 10 个领域，逐项给评级（A~D）、本轮结论与关联问题；既审模块，也追踪跨边界状态转换，如场景切换→释放旧场景、加载页→关卡、暂停→双人面板、保存线程→退出、资源预热→关卡释放、`Global` 薄转发→族工厂场景槽位→临时 UI 清理、运行时节点（诊断/UI/音频/资源/场景流/对象池/法宝/关卡进入/怪物生成/角色贴图）创建→退出清理。必须有可达消费者和反例，不凭类型、命名或历史结论预判缺陷。
 4. **验证、证据与统计**：
    - 按实际填写 4.1 的平台、配置、完整命令、工作目录、退出码、覆盖及证据；不可用/受限项说明原因。4.2 分开统计业务脚本/插件脚本、场景、资源、实际执行的关卡/探针/转换器，不引用旧数字。
+   - 文档契约核对（模板 3.8）：索引（`README.md`、`docs/README.md`、`docs/reference/README.md`、`AGENTS.md` 摘要）是否覆盖实际文档；`acceptance.md` 的契约类别描述是否与 `contract_scan.py` 注册一致；Autoload 数量是否与 `project.godot` 一致。不一致登记 `DOC`，不冒充实现缺陷。
    - 验证程度与处理状态/优先级独立：运行确认、静态确认、推断待证。正式问题需运行反例或可复核的可达消费者/契约违反证据；仅推断候选留在第 8 章待证区，不计正式问题，不因未运行危险场景降低已确认风险级别。
    - 每个证据使用报告内稳定 `EVID-NNN`，按 4.4 保留基线/环境、前置条件、最小输入或代码、精确命令或可复建配方、预期、实际输出和未验证范围。路径/版本可参数化，但必须说明取值与依赖；不能用 `...` 或将被删除的临时路径代替配方。
    - **验证隔离**：运行前确认不会覆盖真实 `user://` 存档、设置和日志；使用可丢弃工作区/副本，必要时先备份。`level_test_runner` 的临时驱动/报告/日志在 `source/` 生成后自动清理；审计不得把真实用户数据用于破坏性实验。无法安全隔离的项目标记受限，继续其余可达工作。

@@ -1,6 +1,6 @@
 ---
 name: bhyh-doc-sync
-description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与对齐更新——以 source/ 的当前真实代码与门禁为事实源，排查并平滑消除文档滞后、过时路径与易漂移统计；覆盖 README、docs/reference、docs/standards、docs/decisions、docs/roadmap、docs/guides 与 scripts/README；修改默认保留在工作区，禁止未经确认直接提交。
+description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与对齐更新——以 source/ 的当前真实代码与门禁为事实源，排查并平滑消除文档滞后、过时路径、索引缺项与易漂移统计；覆盖 README、AGENTS.md 摘要、docs/reference（含调用面矩阵与目录索引）、docs/standards、docs/decisions、docs/roadmap、docs/guides 与 scripts/README；修改默认保留在工作区，禁止未经确认直接提交。
 ---
 
 # BHYH 文档与代码一致性审计与对齐 (bhyh-doc-sync)
@@ -17,15 +17,16 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 1. **项目门户与总览**：
    - `README.md`：项目定位、目录结构、快速开始、质量流水线、文档入口与许可证边界。
    - `docs/README.md`：文档分层、活跃文档索引、机器报告与归档规则。
-2. **参考与验收（`docs/reference/`）**：
-   - `docs/reference/architecture.md`：运行时架构、Autoload、场景流、对象模型、数据/持久化、资源层、UI/输入、遗留边界。
-   - `docs/reference/acceptance.md`：验收分层、八维门禁、契约域、引擎健康、运行期夹具、阈值与变更矩阵。
-   - `docs/reference/status.md`：版本、规模、门禁与验证结果的单一事实源。
+2. **参考与验收（`docs/reference/`，以 `docs/reference/README.md` 索引为唯一清单）**：
+   - 现状类：`architecture.md`（运行时架构、Autoload 与普通子节点运行时、场景流、对象模型、数据/持久化、资源层、UI/输入、遗留边界）、`status.md`（版本、规模、门禁与验证结果的单一事实源）。
+   - 验收类：`acceptance.md`（验收分层、八维门禁、契约域、引擎健康、运行期夹具、阈值与变更矩阵）。
+   - 调用面/所有权矩阵：`autoload_boundary_matrix.md`、`runtime_lifecycle_matrix.md`、`archive_session_matrix.md`、`gameplay_module_matrix.md`、`module_api_matrix.md`、`atlas_metadata_schema.md`、`runtime_frames_exceptions.md`。
+   - 新增矩阵必须同时登记到 `docs/reference/README.md`、`docs/README.md` 与根 `README.md` 文档索引；索引缺项按文档缺陷处理。
 3. **规范（`docs/standards/`）**：
-   - `naming_standard.md`、`godot_design_standard.md`、`naming_whitelist.md`、`missing_assets_registry.md`、`spriteframes_generation_policy.md`。
+   - `target_architecture_contract.md`（总体目标架构，优先级最高）、`godot_design_standard.md`、`naming_standard.md`、`naming_whitelist.md`、`missing_assets_registry.md`、`spriteframes_generation_policy.md`，索引见 `docs/standards/README.md`。
    - 规范与代码冲突时，先判断是代码违规还是规范过期；规范变更必须先改规范、再改代码/门禁。
 4. **决策记录（`docs/decisions/`）**：
-   - `docs/decisions/README.md` 与全部 ADR；核对编号、状态、索引与实现一致性。
+   - `docs/decisions/README.md` 与全部 ADR；核对编号、状态、索引与实现一致性。ADR 数量与上限以该索引为准，不在 skill 内固定编号区间；当前总体目标由 ADR-021 解释，AtlasMetadata View 边界见 ADR-022。
    - **已接受 ADR 不直接改写**；决策变化新增 ADR，并在旧 ADR 标注 `Superseded by ADR-xxx`。
 5. **路线图与指南（`docs/roadmap/`、`docs/guides/`）**：
    - `roadmap.md`、`current-iteration.md`：阶段状态、边界与验收描述。
@@ -33,7 +34,10 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 6. **工具链索引**：
    - `scripts/README.md`：脚本职责、参数、产物、退出码与在 `check_all` 中的归属。
 7. **工程摘要**：
-   - `AGENTS.md`：只读核对；当详细规范变更导致摘要过期时，按 `docs/standards/README.md` 的优先级同步摘要，不重写红线。
+   - `AGENTS.md`：只读核对；当详细规范变更导致摘要过期时，按 `docs/standards/README.md` 的优先级同步摘要，不重写红线。`AGENTS.md` 的 `docs/reference/` 清单同样必须覆盖现有矩阵页。
+8. **索引与常量一致性**：
+   - 根 `README.md`、`docs/README.md`、`docs/reference/README.md`、`docs/standards/README.md`、`docs/decisions/README.md`、`docs/archive/README.md`、`scripts/README.md` 的条目必须与磁盘实际文件一致；
+   - Autoload 数量、注册项清单以 `source/project.godot` 实际注册为准；阶段完成状态以 `docs/reference/status.md` 与 git 历史为准，矩阵页中“当前 N 个/其余延期”一类表述必须随最近一次切片同步。
 
 ### 1.2 严格排除与禁止修改的范围（Forbidden Scope）
 
@@ -76,7 +80,7 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 
 1. **引擎与语言**：Godot 4.7.2、GDScript 2.0、优先静态类型。
 2. **显示基线**：1280×800 设计画布、1600×1000 默认窗口、16:10、1.25×、`canvas_items` + `expand`、相机 1.2 与纵向取景偏移；桌面 HUD 五按钮/无双/技能槽基线。
-3. **质量门禁**：`check_all.py` 八维、完整工作区 0 ERROR / 0 WARNING、契约 ERROR=0、WARNING ≤ 1050、命名/资源路径/运行时引用门禁。
+3. **质量门禁**：`check_all.py` 八维（行尾、格式化、gdlint、引擎健康、契约、命名、运行时引用、资源路径）、完整工作区 0 ERROR / 0 WARNING、契约 ERROR=0、契约 WARNING ≤ 预算（预算值以 `acceptance.md` 为准）、命名/资源路径/运行时引用门禁。
 4. **命名与数据契约**：`snake_case` 文件/目录、`PascalCase` 场景节点/`class_name`、`DataKeys` 字典键、UID/`.import` 规则、白名单只减不增。
 5. **架构决策**：单一活跃工程、Resource 优先、Autoload 边界、构建期资产管线、Spine 边界、本地双人槽位隔离、无兼容/回退/跨版本迁移链、三方语义合并、路径迁移走 `rename_path.py`。
 6. **仓库与交付边界**：公开仓库排除第三方素材、代码 MIT、Spine 许可证、本地 commit 需验证且未经允许不 push、环境隔离（不记录本地私有路径）。
@@ -106,7 +110,10 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
    - 命名、白名单、缺失资产、SpriteFrames 策略是否与转换器/审计脚本一致；
    - ADR 索引是否完整，是否出现“已接受决策被静默改写”；
    - 文档中的旧路径、旧文件名、旧命令、旧链接；
-   - 易漂移统计是否仍在活跃文档中硬编码。
+   - 易漂移统计是否仍在活跃文档中硬编码；
+   - 验收文档的契约类别描述是否与 `scripts/contract_scan.py` 实际注册的类别、`contract_gate.py` 实际子门禁一致（类别数量会随守卫扩面增长，文档必须与注册同步，不得停留在旧类别数）；
+   - 矩阵页的“当前/已完成/未启动/其余延期”状态是否落后于最近提交（用 `git log --oneline` 与 `status.md` 交叉核对）；
+   - 根 `README.md` 与 `AGENTS.md` 中与代码直接对应的常量（Autoload 注册数、主场景、引擎版本、门禁命令）是否仍与 `source/project.godot`、`scripts/` 一致。
 
 分类处理：
 
@@ -123,8 +130,8 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 
 1. 使用项目工具小步编辑，遵守中文注释/文档规范与既有术语；代码标识符、路径、API 名称不翻译。
 2. 逐一更新落后描述、结构图、命令、路径、索引与测试/验证说明。
-3. 应用 §2 防漂移准则：剥离易变统计，保留契约常量；统计需要保留时明确基线日期与来源。
-4. 更新索引：`README.md`、`docs/README.md`、`docs/reference/README.md`、`docs/decisions/README.md`、`scripts/README.md` 中受影响的入口。
+3. 应用 §2 防漂移准则：剥离易变统计，保留契约常量；统计需要保留时明确基线日期与来源。矩阵页的历史快照可保留，但必须标注基线提交/日期，且不得把“当时结论”写成“当前状态”。
+4. 更新索引：`README.md`、`docs/README.md`、`docs/reference/README.md`、`docs/standards/README.md`、`docs/decisions/README.md`、`docs/archive/README.md`、`scripts/README.md` 中受影响的入口。
 5. 不修改 `docs/archive/`、`docs/audit/`、`docs/reports/`、已接受 ADR 或第三方目录。
 6. 不把规划目标写成现状；未实现能力标“目标/未落地”，并给出边界。
 
@@ -136,6 +143,7 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 4. 若同时改了 `scripts/` 或代码：执行 `python scripts/check_all.py --skip-engine`；涉及运行时/场景/资源时按 `acceptance.md` 追加引擎/冒烟/回归。
 5. 检查 `git status`，确认没有把 `docs/reports/` 机器报告、`.godot/` 缓存或临时探针加入变更。
 6. 文档中的命令必须来自实际脚本参数，不写未经验证的 `...` 或本地绝对路径。
+7. 当本次同时改动了 `scripts/` 或文档声称的契约类别时，追加 `python scripts/contract_scan.py --self-test` 与 `python scripts/contract_scan.py --fail-on-error`，确认文档描述与规则注册一致；命名/白名单相关文档改动追加对应 `*_audit.py --fail-on-error`。
 
 ### Step 5：交付汇总与等待确认（Report & Confirmation）
 
