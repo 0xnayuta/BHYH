@@ -39,7 +39,7 @@
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
   - `reference/module_api_matrix.md`：Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项；
-  - `roadmap/current-iteration.md`：Phase 18~20 综合收尾：18-1/18-2/18-3/19-1/19-2/19-3/19-4 全部完成、20-1B 与 20-3A/3B 已落地；20-1A/20-1C/20-1D、20-2 与 20-3C 收口未启动，状态以该页为准；Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`；
+  - `roadmap/current-iteration.md`：Phase 21 独立立项与平台发布验证（承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族）；Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`，Phase 18~20 归档见 `archive/iteration_18_20_comprehensive_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；

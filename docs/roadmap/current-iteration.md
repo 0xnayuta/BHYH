@@ -1,241 +1,100 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（W1~W8 与 S5 八族场景工厂，逐项见 `autoload_boundary_matrix.md`）、20-3A 守卫扩面全部登记域（含音频入口）与 20-3B 首片）；20-1A/20-1C/20-1D、20-2、20-3B 收尾与 20-3C 收口未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。21-1A/21-1C/21-1D/21-2、S5 剩余族均未启动。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
-> **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
-> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
-> **历史**：Phase 13、14、15、16、17 归档见 [`archive/README.md`](../archive/README.md)。
+> **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
+> **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
 
 ## 1. 阶段边界与决策
 
 ### 1.1 目标
 
-收尾 Phase 13~17 已登记但尚未关闭的跨阶段缺口：1P/2P 归属、成长/奖励/任务提交、保存反馈与进度、表现层与路径、音频/运行时清理、资源/Atlas 管线、独立项目与平台验证。每个切片必须有唯一所有者、正式入口与可判断失败语义。
-
-- 先关“会写错档/发错奖/归属漂移”的正确性缺口，再关性能、资源与平台项；
-- Phase 13/14/15/16 已归档结论保持不变；本阶段只处理矩阵登记为“后续/未迁移/部分修复/独立立项”的条目；
-- 不引入通用事务框架、事件总线或第二套全局单例；
-- 试点域先读矩阵与现有探针再改代码；每批删除被替代入口，不保留兼容 facade；
-- 资源、平台与独立项目先决策后执行，不以 headless 或单平台结果替代目标平台验证。
+1. 对 Phase 13/19 登记的独立项目做采用/延期/拒绝决策并落地可验证部分；
+2. 在真实目标设备上记录平台与发布证据，不用 headless 或单平台结果替代；
+3. 继续按族收口 `Global` 剩余 `add_*` 工厂，保持不新增 Autoload、不新增全局回落；
+4. 关闭 19-3A 登记的资源转换器扩展与 `weiyang_palace_boss` 符号层缺陷。
 
 ### 1.2 不在本阶段
 
 - 不重写 `base_hero`/`base_monster`/`base_through_level` 继承结构；
 - 不改变伤害公式、Buff 数值、掉落、关卡时序、输入映射、物理层、存档格式或共享规则；
-- 不新增玩法、任务、掉落、平台承诺或内容回植；
 - 不把 `PlayerData.player_data` 整体改成 Resource；
-- 不做全仓目录搬迁、全仓 `get_node` 替换或无证据的素材重制；
-- Phase 13 的 `global.gd` 上帝对象、Spine 跨平台、`_bundled`、类型化 Atlas accessor 属于独立立项，本计划只做决策/验收，不顺手大拆。
+- 不做全仓目录搬迁或全仓 `get_node` 替换；
+- 不重新打开 Phase 18~20 已关闭的归属、命令、档案顺序与守卫结论。
 
-### 1.3 全阶段缺口基线（2026-10-29 复核）
+### 1.3 基线与不变量
 
-| 来源 | 已核实事实 | 归属 |
-|:---|:---|:---|
-| Phase 17 / 16 归属 | **18-1A 已修复** `wd_hurt`/觉醒；**18-1B 已删除** `Global.get_player`（原 13 引用 / 9 文件）；**18-1C 已修复** 无 owner 召唤不再回落 1P、`_apply_role_damage_vs_reduction` 读实际出手者 `damage_bonus`；**18-1D 已统一双人死亡提交**；剩余 `RoleProp.source_player` 回落登记为 HUD/UI/视图别名，不参与伤害归属 | 已关闭 |
-| Phase 17 双人死亡 | 两个死亡分支各自等待后切换（GM-25），双人同时死亡可能重复切换 | 18-1 |
-| Phase 17 成长 | **18-2A/18-2B 已修复神铸/淬骨/合成/任务奖励**：成长三域增加快照/保存判读/失败恢复，任务领取由 `RewardGrantCommand` 在保存快照内提交；`forge._on_froge_pressed_legacy` 已删除；`zd_skill` 等级/变体经 `PlayerData` 命令；2P 商店/奖励共享账本与重复购买无副作用已由档案/合作探针覆盖 | 18-2A/18-2C/18-2D |
-| Phase 16 保存反馈 | **18-3D 已修复**：`request_save_result` 返回 `{ok, reason, error, message, path, notify}`，`last_save_outcome` 与 `save_failed` 信号让丢弃 bool 的调用也可观察；22 处自行提示调用传 `notify=false`，其余由 `Global` 兜底提示（1.5s 去重）；后台保存仍走独立串行/重试路径 | 18-3D 完成 |
-| Phase 16 档案顺序 | **18-3A 已关闭 AS-14**：后台任务带 serial，`Global` 消费信号并记录失败；切档/退出先 flush。**18-3B 已评估 AS-08**：11 个地图页保留一次同步保存（当前地图唯一持久化点）；仅删除 `map_3` 无数据变更的重复保存 | 18-3A/18-3B 完成 |
-| Phase 16 进度写入 | **18-3C 已修复 `add_tg` 写入面**：48 关/23 区域/导入 63~75/北俱芦洲动态键收敛到 `LevelProgressCommand` 数据表；`add_tg` 只写字典，不保存；非胜利转场新增单次 `level_progress_transition` 保存。地图页 `Map_num`、镇妖塔层/积分、GM 工具仍直接写 | 18-3C 完成 |
-| Phase 17 表现/路径 | **19-1A/19-1B/19-1C 已收口**：面板命令化、路径预算清零、奖励失败隐藏；19-1 完成 | 19-1 |
-| Phase 17 音频 | **19-2A/19-2B 已收口**：`stop_bgm()` 接入档案退出；同曲跨父节点同步重挂；音效活动声部/节流表清理 | 19-2 完成 |
-| Phase 15 运行时 | **19-2C/19-2D 已收口**：删除名称兜底与 51 处业务显式调用；UI 只按登记表清理；`MonsterFrameCacheRegistry` 在档案退出统一清理模块静态帧/几何缓存 | 19-2 完成 |
-| Phase 14 Atlas | 112 个 metadata 未被 `AtlasMetadataStore` 规则触达；类型化 `.data` accessor 仍是独立立项 | 19-3/20-1 |
-| Phase 13 资源 | 12 个运行时建帧冻结例外（9 怪物 + 3 非怪物）；`runtime_frames_allowlist` 只减不增；PCK 快照随资源变化需重跑 | 19-3 |
-| Phase 13 独立项目 | `Spine` 跨平台运行时仅 Windows x86_64；`global.gd`+12 Autoload 上帝对象（P1 后）；`_bundled` 历史二进制场景；目标平台 VRAM/首帧/release 未测 | 20-1/20-2 |
-| 守卫 | `phase17_boundary` 只覆盖结算、两个命令、两个表现文件、四试点路径预算；其他域未接入 | 20-3 |
+| 项 | 事实 |
+|:---|:---|
+| Autoload | 11 个（10 业务 + 1 编辑器调试桥）；`Global` 持有 18 个普通子节点与 1 个 `RunContext` |
+| `Global` 规模 | 3,971 行 / 329 函数 / 189 变量；`add_*` 120 个，59 个为薄转发 |
+| 静态守卫 | `contract_scan.py` 20 类；`check_all` 八维；契约 ERROR=0、WARNING ≤ 预算 |
+| 运行时夹具 | `archive_probe_runner` 293 项、`coop_probe_runner` 26 例、`scene_probe_runner` 11 套 |
+| 资源闭包 | 19-3C 的 PCK 快照只在资源未变化时有效；资源变更后必须重跑 |
 
-矩阵计数口径见各参考页；本页不复制历史行数。Phase 16/17 的会话、槽位、保存请求、原子命令与已关闭项是**不变量**。
+矩阵计数口径见各参考页；本页不复制历史数字。
 
-## 2. Phase 18：归属、成长与档案提交
+## 2. Phase 21-1：独立立项（承接 20-1A/20-1C/20-1D）
 
-### 2.1 Phase 18-1：双人归属与全局别名
+**目标**：每项给出采用/延期/拒绝结论、owner 与前置条件；采用项落地并有验收。
 
-**目标**：攻击/效果/提示读取按显式槽位或显式来源解析；不再因全局 1P 别名改变 2P 行为。
+1. **21-1A Spine 跨平台（承接 20-1A）**：确定目标平台、Spine 运行时版本与许可证；补二进制/`.gdextension` 并做目标平台加载验收。未确认平台前只允许决策草案，不写成已支持。
+2. **21-1B `_bundled` 历史场景（承接 20-1C）**：先取证实际格式（不以文件名搜索结果宣布不存在）；评估转换、UID/导入缓存与回归范围后决定转换或拒绝。
+3. **21-1C 类型化 Atlas accessor（承接 20-1D）**：基于 Phase 14 消费清单评审 typed schema；不改变视觉结果，不重开 `data_for`/`validate_path`/`clear_cache` 入口。
 
-**切片**
+**必须验证**：每项有结论与 owner；采用项在目标平台/真实资源上验证；不把 Windows 或 headless 结果当跨平台通过。
 
-1. **18-1A `wd_hurt`/觉醒（已完成，2026-10-29）**：语义定为**每个 Role4 独立触发**；Voodoo 层记录 `source_player`，按来源分组计数、各自读取槽位档案/属性结算，只移除本来源层；1P 行为不变，2P 不再读 1P；探针 `LocalCoopRole4PoisonProbe` 覆盖 1P、2P、混合层与觉醒；`coop_probe_runner` 22/22 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（271.9s），`check_all --godot-bin` 8/8 PASS；
-2. **18-1B `Global.get_player`（已完成，2026-10-29）**：删除全局 1P 别名；`base_monster` 目标改 `LocalCoop.nearest_player`，`dj_sell` 改 `RoleProp.source_player`，`level_23/38` 提示改进入的 `body`，`monster_14501_wdww`/`weiyang_palace_boss` 改最近玩家，`monster_zhw*` 改 `player_reference`/最近玩家；全仓 `Global.get_player` 引用 0；`coop_probe_runner` 22/22 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（354.3s，两关瞬态重试通过），`check_all --godot-bin` 8/8 PASS；
-3. **18-1C 召唤与减伤（已完成，2026-10-29）**：`SummonBaseMonster.find_player_reference` 只认显式 `summoner`/owner，无 owner 返回 null，不再回落 1P 或场景首个英雄；`_apply_role_damage_vs_reduction` 通过 `hurt_reduce_hp`/毒爆上下文读取实际出手者 `damage_bonus`，不再读全局；剩余 `RoleProp.source_player` 仅存 HUD/UI/视图别名，登记不参与伤害；`LocalCoopDamageStatsProbe` 覆盖减伤 75 vs 125，归属探针覆盖无 owner 拒绝；
-4. **18-1D 全灭提交（已完成，2026-10-29）**：两个 `BaseHero` 死亡分支统一调用 `LocalCoop.request_defeat_if_all_players_dead()`；`_defeat_requested` 去重，切换失败可重试，场景切换/清理时重置；新增 `LocalCoopAllDeadProbe` 覆盖单人/双人、重复请求与失败重试；`coop_probe_runner` 23/23 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（261.0s），`check_all --godot-bin` 8/8 PASS；
+## 3. Phase 21-2：平台与发布验证（承接 20-2A/2B/2C）
 
-**必须验证**：2P 角色 4 毒伤/觉醒不读 1P（18-1A）；`Global.get_player` 全仓引用为 0（18-1B）；无来源命中仍为 0；召唤无 owner 不借用 1P（18-1C）；双人全灭只请求一次结算（18-1D）。
+**目标**：把资源闭包与目标设备验证分开记录。
 
-**出口**：归属/减伤/召唤/全灭均有槽位或显式来源；未登记全局回落为 0。
+1. **21-2A 目标平台矩阵**：确认目标平台、渲染后端与最低设备；
+2. **21-2B VRAM/首帧/战斗负载**：在真实设备测量并记录基线；
+3. **21-2C release 包**：重跑 PCK/启动/代表关卡冒烟；资源变化后不沿用旧包结论。
 
-### 2.2 Phase 18-2：成长、奖励与技能命令
+**必须验证**：目标设备数据可复现；release 包能启动并进入代表关卡；日志干净；未测平台明确标注。
 
-**目标**：剩余成长/奖励域复用“校验→快照→扣除→产出→保存→回滚”；先置标志/先发奖的顺序全部消除。
+## 4. Phase 21-3：`Global` 工厂族收口（连续工作）
 
-**切片**
+**目标**：把剩余 61 个 `add_*` 按功能族迁入既有工厂或新族，保持薄转发与公开入口。
 
-1. **18-2A 神铸/淬骨/合成（已完成，2026-10-29）**：三域增加 `PlayerData.snapshot_state`/`restore_state`、产出 bool 判读与仅成功保存；淬骨保留“失败也扣材料”设计并补用例；同时统一 `MLdl.qh_list`/装备 `Data` 键，档案探针新增 8 项成功/失败/回滚断言（总 163 项 PASS）；
-2. **18-2B 任务奖励（已完成，2026-10-29）**：`basic_task` 不再先置已领取/直接保存；领取标记与八仙进度作为 `RewardGrantCommand` 的 `claim` 回调，在快照后、保存前提交，失败恢复；`reward_interface` 透传回调；档案探针新增普通任务重进/保存失败与八仙进度回滚用例，**155 项 PASS**；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（322.7s，两关瞬态重试通过），`check_all --godot-bin` 8/8 PASS；
-3. **18-2C 技能直写（已完成，2026-10-29）**：`zd_skill` 等级读写改用 `PlayerData.get_skill_level`/`set_skill_level`；变体改用 `PlayerData.select_skill_variant` 原子保存/回滚；删除旧直写；档案探针新增变体成功/重载/保存失败断言；
-4. **18-2D 死代码与 2P（已完成，2026-10-29）**：删除 `forge._on_froge_pressed_legacy`；档案探针验证 2P 商店/奖励共享灵魂与背包各只记一次，重复购买失败无副作用；
-5. **18-2E 保存反馈（已完成，2026-10-29）**：新增 `Global.request_save_with_feedback`；面板关闭、背包显示设置、物品锁定接入失败提示与状态回滚；奖励/商店已由命令结果提示；剩余 `request_save` 未迁移点按地图首帧 IO/低风险动作登记，归 18-3B/后续。最终验证：档案持久化 171 项 PASS，`coop_probe_runner` 23/23 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.8s），`check_all --godot-bin` 8/8 PASS。
+1. **21-3A 锻造/分解族（未启动）**：`add_forge_help`、`add_forge_box`、`add_forges`、`add_decompose_help`、`add_decompose_instance`；
+2. **21-3B 角色/怪物弹体族（未启动）**：`add_role4_bullet`、`add_new_bullet`、`add_role_bullet`、`add_role_bullet_1`、`add_role_bullet_1_safe`、`add_monster65_bullet`、`add_weapon_bullet`；
+3. **21-3C 效果族（未启动）**：`add_monster141_aura`、`add_aura`、`add_smb_effect`、`add_role_special_effect`、`add_ws_effect`、`add_line`；
+4. 其余族按 `autoload_boundary_matrix.md` §8 候选清单继续，不建总工厂、不新增 Autoload。
 
-**必须验证**：材料/灵魂/次数不足不产生扣除、不写背包、不发奖（18-2A 已覆盖）；成功只扣一次、只发一次；保存失败恢复（18-2A/18-2B/18-2C 已覆盖）；任务重进不重复领取（18-2B 已覆盖）；2P 商店/奖励共享账本（18-2D 已覆盖）；剩余丢弃返回值有登记（18-2E）。
+**必须验证**：每次迁移删除被替代的槽位字段，保留同名薄转发；`ui-factories` 或对应运行时探针覆盖返回形状与缓存；战斗相关族追加 `level_1` 冒烟与全量回归。
 
-**出口**：试点成长/奖励/任务域单一命令；旧直写与死代码删除；失败可判断且无部分副作用。
+## 5. Phase 21-4：资源转换器与建帧遗留
 
-### 2.3 Phase 18-3：档案顺序与关卡进度
+1. **21-4A 转换器扩展**：`eight_immortals_boss`、`pet_tiger_boss_base`、`three_prince_boss` 的多目录/多纹理动作集需要扩展转换器后再迁移；扩展前保留运行期构建且不新增 allowlist；
+2. **21-4B `weiyang_palace_boss` 符号层**：`3007`/`3010` 路径不匹配为独立缺陷；修正会恢复符号层并改变嘴部第 51 帧发射时序，必须单独做视觉与时序验收。
 
-**目标**：后台保存、任务保存、地图首帧保存与关卡进度写入有明确顺序与单一所有者。
+**必须验证**：补资源项迁移后 `runtime_frames_allowlist` 只减不增；缺陷修正有前后帧与技能时序证据。
 
-**切片**
+## 6. 推荐顺序与恢复
 
-1. **18-3A 后台保存信号（已完成，2026-10-29）**：`background_save_finished` 增加 `serial`；`Global._on_background_save_finished` 为唯一消费者，记录最后序号/路径/成功态/失败次数，失败通过 `last_save_error`、`push_error` 与 `Global.get_background_save_status()` 可观察，不弹战斗内 UI；`end_archive_session`/`set_cd_path` 先 flush；档案探针新增序号单调、失败可观察、重试与退出 flush 用例（总 193 项 PASS）；`level_1` 冒烟 PASS；
-2. **18-3B 地图首帧保存（已完成，2026-10-29）**：11 个地图页均在更新 `Map_num`/`HeavenMap_num` 后保存，是进入城市后的唯一持久化点，删除会丢失崩溃/立即退出时的当前地图，故保留同步语义；仅删除 `map_3._sync_special_button_layer` 的重复保存（只改 z-index、且在 `Map_num=3` 前）。稳态保存实测约 4.7ms；独立冷启动微基准首档密钥创建约 108ms（一次性），地图页保存通常复用已创建密钥；无证据表明城市首帧存在明显卡顿；档案探针 193 项 PASS，`level_1` 冒烟 PASS；
-3. **18-3C 关卡进度（已完成，2026-10-29）**：新增 `LevelProgressCommand` 数据表，覆盖 1~48 关、23 个区域名、导入关卡 63~75 与北俱芦洲动态键；`base_through_level.add_tg`/`north_continent_level.add_tg` 只调用命令，删除 48 分支 match。`add_tg` 只写字典不保存；Level17/22、Level19 非胜利、Level20、Level10/21 剧情跳过关闭分支在转场前调用 `_commit_progress_before_transition` 单次保存，失败保持当前关卡并解除退出锁；胜利仍由 `victory._ready` 单次提交。档案探针新增 63 项进度表检查（总 256 项 PASS），场景探针新增 6 个特殊关卡分支，`level_progress_exit_probe` 6/6 PASS；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（259.7s），`check_all --godot-bin` 8/8 PASS；
-4. **18-3D 会话失败反馈（已完成，2026-10-29）**：`MemoryClass.request_save_result` 统一返回 `ok/reason/error/message/path/notify`，并写入 `last_save_outcome`；`save_failed` 信号由 `Global` 消费，`notify=false` 仅计数，其余在可见 UI 层提示且同错误 1.5s 去重；`Global.request_save_with_feedback` 内部抑制兜底后只提示一次。无会话/身份过期/非法路径/写失败均返回结构化错误；档案探针新增 11 项结果/信号/消费者断言（总 267 项 PASS）；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（268.1s），`check_all --godot-bin` 8/8 PASS；
+推荐顺序：**21-4（无外部依赖）→ 21-3（连续族化）→ 21-1（决策）→ 21-2（设备）**；21-1/21-2 依赖外部确认，可并行准备但不阻塞 21-3/21-4。
 
-**必须验证**：后台保存失败可观察，任务奖励不因信号顺序丢失（18-3A 已覆盖）；地图保存不造成明显首帧卡顿或明确保留理由（18-3B 已覆盖，保留理由为当前地图唯一持久化点）；`add_tg` 写入单一所有者，非胜利分支也保存一次（18-3C 已覆盖）；无会话/身份过期/写失败不再静默 `false`（18-3D 已覆盖）。
+中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
-**出口**：档案/进度顺序固定；保留的首帧保存有 owner/理由；无静默失败。
+**恢复入口**：[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、`scripts/contract_scan.py`、`scripts/archive_probe_runner.py`、`scripts/coop_probe_runner.py`、`scripts/scene_probe_runner.py`。
 
-## 3. Phase 19：表现、运行时与资源管线
-
-### 3.1 Phase 19-1：表现层与路径
-
-**目标**：表现层只读查询/命令；试点深层路径与 `/root` 回落继续收口。
-
-**切片**
-
-1. **19-1A 面板扫描（已完成，2026-10-29）**：任务领取改用 `PlayerData.claim_task`；幻化穿戴/卸下改用 `change_transmog`，拥有列表改用 `record_transmog_owned`；技能键位改用 `set_skill_key`，觉醒/启停改用 `awaken_skill`/`set_skill_awakened_enabled`，被动技能改用 `apply_passive_skill_upgrades`；宠物面板存档改走 `Global.request_save_with_feedback`。目标目录不再有直接 `PlayerData.player_data` 赋值或直接 `MemoryClass.request_save`；`reward_grant_command` 与 `zd_skill.refresh_infor` 作为合法命令入口保留。档案探针 275 项 PASS；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（267.7s），`check_all --godot-bin` 8/8 PASS；
-2. **19-1B 路径（已完成，2026-10-29）**：`pet_interface` 动态行先取 `Content` 再取直接子节点，深层字面路径 22→0；`base_role` 宠物 HUD 先取各 bar/PanelContainer 再取子节点，8→0；`skill_icon.gd` 删除 `/root` 回落，直接 `LocalCoop.data_for/props_for`；`contract_scan` 将三文件深层预算收紧到 0，并把 `skill_icon` 加入 `/root` 禁入与移除 root 白名单；档案探针 275 项 PASS，`coop_probe_runner` 23/23 PASS，`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s），`check_all --godot-bin` 8/8 PASS；
-3. **19-1C 奖励表现（已完成，2026-10-30）**：`RewardGrantCommand` 失败时 `reward_interface` 隐藏并释放奖励盒、标题改为“奖励发放失败”、错误提示保留；成功时奖励盒保留。空奖励/无有效奖励不再创建空 Tween；档案探针新增成功保留、失败隐藏、失败不发奖断言（总 280 项 PASS）；`level_1` 冒烟 PASS，`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（262.5s），`check_all --godot-bin` 8/8 PASS；
-
-**必须验证**：绘制/回调无档案写入（19-1A 已覆盖目标面板）；路径不超预算，`/root` 回落为零或登记；奖励失败不显示成功假象。
-
-**出口**：表现层无直接领域写入；路径预算与矩阵一致。
-
-### 3.2 Phase 19-2：音频与运行时清理
-
-**目标**：音频与临时 UI/静态缓存在切换、退出、复用边界可预测。
-
-**切片**
-
-1. **19-2A BGM（已完成，2026-10-30）**：`end_archive_session()` 调用 `stop_bgm()`，档案退出停止 BGM；`add_bgm` 改为先设置 `target` 再同步 `add_child`，消除 deferred pending 窗口；同曲异父同步重挂并在重挂后按开关状态恢复播放；queued/invalid 实例不参与复用；档案探针新增同曲跨父节点、单父节点、退出停止、重挂后播放断言（289 项 PASS）；
-2. **19-2B 音效池（已完成，2026-10-30）**：`_clear_runtime_pools` 新增 `_release_active_sound_players()`：停止活动声部、清空 `stream`、`queue_free`，随后清空 `_active_sound_players` 与 `_last_sound_play_msec`；回收仍保持 `prepare_for_pool()` 的停流/清流；档案探针新增活动计数、回收计数、teardown 清流与节流表清空断言；验证：档案探针 289 项 PASS，协作探针 23/23，场景探针 7/7，`level_1` 冒烟 PASS，全量回归 128/128 PASS + 5 SKIP（334.5s），`check_all --godot-bin` 8/8 PASS；
-3. **19-2C 临时 UI（已完成，2026-10-30）**：删除 `cleanup_transient_ui` 的 29 项硬编码名称与递归名称兜底；14 个 UI 工厂补齐 `register_transient_ui`（LevelInfo 不调用关闭方法以保留四剑模式，GameSet/LDL 用 `_on_return_pressed`，其余按各自关闭方法）；删除 18 个文件中的 51 处业务显式调用，清理入口收敛为 `Global.change_scene`；`contract_scan` 删除登记文件白名单，业务直接调用一律阻断；`load-guard` 覆盖未登记名称不误删、无关闭方法登记实例释放、真实 `add_choose_text` 工厂登记/清理；地图/商店阴影、地图 Shop 按钮与自动消失 `message_show` 明确保留为场景/父节点所有；
-4. **19-2D 静态帧缓存（已完成，2026-10-30）**：新增 `MonsterFrameCacheRegistry`，集中持有 44 个怪物帧/几何缓存脚本与 `MonsterBullet`、`SwordBossBase`、四个观音效果缓存；`clear_combat_runtime_cache()` 在档案退出/应用退出统一调用 `clear_all()`。同一档案内关卡切换保留不可变帧缓存，跨档案不保留；编辑预览缓存明确保留。`load-guard` 新增注册表清空断言；场景探针 7/7 PASS，协作探针 23/23，全量回归 128/128 PASS + 5 SKIP（279.9s），`check_all --godot-bin` 8/8 PASS；
-
-**必须验证**：BGM 同曲复用、跨父节点同步重挂、切曲停旧、退出停止；音效池无旧流且活动计数/节流表归零；切档/退出无 UI 注册残留；静态缓存有清理/保留结论。
-
-**出口**：音频与运行时清理有明确 owner 与保留清单。
-
-### 3.3 Phase 19-3：资源与 Atlas
-
-**目标**：关闭 Phase 13/14 可验证的资源管线遗留；不重做构建器。
-
-**切片**
-
-1. **19-3A 运行时建帧例外（复核完成，2026-10-30）**：逐项复核 12 个冻结例外（9 怪物 + 3 非怪物），结论为 7 保留 / 4 补资源待办 / 1 删除回退；删除 `tao_wu_boss` 单图回退，改为标准帧缺失时显式报错，`runtime_frames_allowlist` 12→11；`weiyang_palace_boss` 符号层路径指向不存在的 3010 资源，分支不可达，登记为已知缺陷。详见 [`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)。
-2. **19-3B Atlas 未触达 metadata（复核完成，2026-10-30）**：112 项只读分类为 41 未迁移代码 / 38 构建/溯源 / 30 地图/关卡 / 3 角色图集；40 个 legacy 图集的 `consumer_scenes` 全部存在，41 项仍由场景直接读取图集页；19 项仅构建/溯源；未删除任何 metadata，未修改 `source/` 或 `source/Art/`。分类结论见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) §3.1，完整清单由只读分析生成到 `docs/reports/atlas_metadata_untouched.md`；
-3. **19-3C PCK/资源闭包（完成，2026-10-30）**：重跑当前 Catalog/依赖清单与真实 PCK 闭包；`convert_level_preload_catalog --check` 101 关卡 / 17 弹体 / 153 场景（199 怪物场景 / 24 动态场景 / 767 动态纹理），`frame_sequence_pack_probe --self-test` 4100 条；PCK **2,738,706,658 字节**，**4100/4100 可达**，`missing_count=0`，sha256 `ee9a28ad2ece…`，导出+包内校验 **112.01s**。预设 `Windows Desktop (validation)`（`all_resources`）；该结果只证明清单路径在包内可加载，不代表最小发布闭包、release 包策略或平台性能。
-
-**必须验证**：每个例外有结论；Atlas 分类有证据；PCK 闭包全可达；资源变化触发重跑。
-
-**出口**：资源例外/Atlas 清单可审计；不新增未登记运行时建帧。
-
-### 3.4 Phase 19-4：输入与 HUD
-
-**目标**：验证输入隔离与 HUD 只读，不改变映射/布局。
-
-**切片**
-
-1. **19-4A 输入隔离（完成，2026-10-30）**：新增 `LocalCoopInputIsolationProbe`，逐项校验 18 个 `p2_*` 动作与 `P2_KEYS` 物理键、P1 `move_right`/`normalhit`/`jump` 保持 D/J/K、P1/P2 输入视图互不串槽、禁用双人后 P2 视图回落基础映射且重新启用恢复 `p2_*`；新增 `LocalCoopKeyConfigProbe`，验证 `set_com` 键位布局修改即时应用、保存与 `_on_reset_layout_pressed` 恢复默认，测试期间临时 `user://KeyConfig.json` 备份/恢复。`coop_probe_runner` 25/25 PASS；`check_all --godot-bin` 8/8 PASS。
-2. **19-4B HUD 只读（完成，2026-10-30）**：新增 `LocalCoopHudReadOnlyProbe`，验证 P1/P2 HP/MP/经验/等级/无双/护盾与宠物经验/HP 均来自槽位查询；HUD 帧前后档案 JSON 快照一致；面板打开/关闭与暂停期间 HUD 值不变、数据无残留写入；HUD 释放与 `clear_runtime` 不写 1P 档案。面板首次打开会补默认 `角色昵称`（既有补全行为），探针在快照前预置昵称以隔离 HUD 写入。`coop_probe_runner` 26/26 PASS；`check_all --godot-bin` 8/8 PASS。
-3. **19-4C 输入写入守卫（完成，2026-10-30）**：`contract_scan.py` 新增 `input_boundary` 类（加入时为第 17 类，现行 20 类）：`Input`/`PlayerInput` 输入读取行不得同时出现 `PlayerData` 或 `request_save`；`INPUT_BOUNDARY_ALLOWLIST` 当前为空。新增正负样本自测；全量扫描 ERROR=0，无现有违规；契约看板补上 `phase17_boundary` 与 `input_boundary` 两类。`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --godot-bin` 8/8 PASS。
-
-**必须验证**：1P/2P 不串槽；HUD 不写档；切档/退出无残留监听。
-
-**出口**：输入与 HUD 边界有测试与静态守卫；显示基线不变。
-
-## 4. Phase 20：独立项目、平台与收口
-
-### 4.1 Phase 20-1：Phase 13 独立立项处置
-
-**目标**：对 Phase 13 归档中的独立项目做采用/延期/拒绝决策，不直接大拆。
-
-**切片**
-
-1. **20-1A Spine 跨平台**：确定目标平台、Spine 运行时版本与许可证；补二进制/`.gdextension` 并做目标平台加载验收；
-2. **20-1B `global.gd` + Autoload（完成决策、P1、P2，2026-10-30）**：产出 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)。决策时 13 个注册项（12 业务 + 1 调试桥），逐项给出保留/迁移/合并/删除候选、owner 与前置条件；`global.gd` 划为诊断、UI 宿主、音频、场景/资源、UI 工厂、战斗表现、运行状态、通用工具、法宝/召唤九类边界，并给出 W0~W8 迁移顺序。**P1 已执行**：删除 `BaseHit` 注册、脚本、`remove_infor()` 与 6 个动画方法键，Autoload 13→12；命中数值逻辑未变。**P2 已执行**：新增普通子节点 `RuntimeDiagnostics`（非 Autoload），迁出调试性能浮层、运行时代次、后台保存/失败状态、缓存/租约/预载快照；`global.gd` 6,041→5,775 行、360→347 函数、295→291 变量。**W3 S2 已执行**：新增普通子节点 `UiRuntime`（非 Autoload），迁出 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`LocalCoop` 面板改为 `push_windows`/`pop_windows`；`global.gd` 进一步降到 5,563 行/333 函数/285 变量。**W4 已执行**：新增普通子节点 `AudioRuntime`（非 Autoload），迁出 BGM/SFX 声部与设置信号，合并 `MainMusic` 并删除其 Autoload；`global.gd` 降到 5,407 行/326 函数/280 变量、信号 2→1，Autoload 12→11。探针改走 `Global.get_runtime_diagnostics()`、`Global.get_ui_runtime()` 与 `Global.get_audio_runtime()`。 **W5 S4 已执行**：新增普通子节点 `ResourceRuntime`（750 行）与 `SceneFlow`（83 行），迁出四类缓存、怪物场景缓存、常驻小 UI 场景缓存、关卡租约、单槽预载、线程/分帧预热、场景切换流与请求代次；`global.gd` 降到 4,971 行，私有缓存与租约字段删除，`change_scene` 保留为唯一正式入口。 **W6 S5 已执行（首批）**：新增 `PopupFactory`/`ShopFactory`/`BackpackFactory`/`RewardFactory`/`CombatPresentationFactory` 五个功能族工厂，接管 41 个 `add_*`，`Global` 侧保留同名签名薄转发并删除 36 个场景缓存成员；`global.gd` 降到 4,578 行/332 函数/237 变量。延期：`add_level_info`（随 S7）、`add_damage_text`/`add_mr_hurt`/`add_special_effect` RoleBeHit（随 S6）。新增 `ui-factories` 场景探针（59 项）。 **W7 S6/S9 已执行**：新增普通子节点 `CombatPoolRuntime`（322 行）与 `MagicWeaponRuntime`（70 行），迁出四类战斗对象池、伤害数字上限计数、受击节流、剑阵限流与两个槽位法宝召唤物；`CombatPresentationFactory` 追加 3 个池化工厂，`global.gd` 降到 4,352 行/329 函数/228 变量。`ui-factories` 探针扩到 77 项（池容量/节流/归还、法宝替换与清空）。事实基线：生产代码 `Global.` 428 文件/3,393 调用/266 成员（含 `get_audio_runtime` 289、`get_ui_runtime` 185）。
-3. **20-1C `_bundled` 历史场景**：单独立项评估转换、UID/导入缓存与回归；
-4. **20-1D 类型化 Atlas accessor**：基于 Phase 14 消费清单评估 typed schema；不改变视觉结果。
-
-**必须验证**：每项有采用/延期/拒绝结论、owner 与前置条件；不把 Windows/headless 当跨平台通过。
-
-**出口**：独立项目有明确去向；未启动项不阻塞 Phase 18/19。
-
-### 4.2 Phase 20-2：平台与发布验证
-
-**目标**：把资源闭包与目标设备验证分开记录，不把 headless 当 VRAM/发布证据。
-
-**切片**
-
-1. **20-2A 目标平台矩阵**：确认目标平台、渲染后端与最低设备；
-2. **20-2B VRAM/首帧/战斗负载**：在真实设备测量；记录基线；
-3. **20-2C release 包**：重跑 PCK/启动/关卡冒烟；资源变化后不沿用旧包结论。
-
-**必须验证**：目标设备数据可复现；release 包能启动并进入代表关卡；日志干净。
-
-**出口**：平台/发布结论有设备与日期；未测平台明确标注。
-
-### 4.3 Phase 20-3：守卫扩面与阶段收口
-
-**目标**：把 17-7 静态守卫扩到 18/19 改动域，完成验证与归档。
-
-**切片**
-
-1. **20-3A 守卫扩面**：为 `basic_task`、`divine_forge`、`bone_forge`、`synthesis`、`skill_icon`、`pet_interface`、`base_role`、音频入口登记规则；保存一次/命令快照/表现层不写档/路径预算按域配置；
-2. **20-3B 运行时夹具**：把 `archive_probe_runner`、`coop_probe_runner`、场景探针的关键用例纳入验收矩阵；补失败/负向断言；
-3. **20-3C 收口**：`check_all --godot-bin`、L2、相关关卡回归、`contract_scan --self-test`；更新 `status.md`、矩阵、脚本索引与归档。
-
-**已完成（2026-10-30，20-3A/3B 首片）**：场景探针日志门禁改为扫描完整输出并校验收尾标记，探针预期噪声逐条登记（`ProbeSpec.expected_noise`）；门禁开启后修复三处真实缺陷（加载取消路径对已释放实例的类型标注、商店两条不可达条目的每次开店警告、关卡选择探针直写已删除字段）；`archive_probe_runner` 的 BGM 重挂断言改为按帧轮询；`contract_scan` 增加第 18 类 `run_state_boundary`（运行状态字段直写与已删除工具入口）。20-3A 登记域已全部完成（`basic_task`/`divine_forge`/`bone_forge`/`synthesis`/`skill_icon`/`pet_interface`/`base_role` 写档规则、运行状态边界、HUD/面板只读 7 域、音频入口）。20-3B 首片完成：探针日志门禁扫描完整输出、噪声逐条登记并修复三处真实缺陷；剩余“关键用例纳入验收矩阵 + 失败/负向断言”未收尾。20-3C 收口（L2 固定组合、矩阵与归档同步、Phase 18~20 归档）未启动。
-
-**必须验证**：守卫正负样本通过、无新增误报；全仓零 ERROR/WARNING；双人/档案/成长/音频/关卡回归；文档一致。
-
-**出口**：Phase 18/19 缺口全部关闭或明确保留；守卫覆盖改动域；阶段归档。
-
-## 5. 阶段顺序与恢复
-
-推荐顺序：**18-1 → 18-2 → 18-3 → 19-1 → 19-2 → 19-3 → 19-4 → 20-1 → 20-2 → 20-3**。
-
-- 18-1 先消除 2P 战斗归属；18-2/18-3 再修会写档/发奖/进度的正确性缺口；
-- 19-1/19-2 处理表现与运行时；19-3 处理资源/Atlas；19-4 补输入/HUD 验证；
-- 20-1 对独立项目做决策；20-2 单独做目标平台/发布验证；20-3 扩面守卫并收口。
-
-中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。Phase 20 完成后归档本页，另立下一候选。
-
-**恢复入口**：`gameplay_module_matrix.md`、`module_api_matrix.md`、`archive_session_matrix.md`、`runtime_lifecycle_matrix.md`、`atlas_metadata_schema.md`、`acceptance.md`、`scripts/coop_probe_runner.py`、`scripts/archive_probe_runner.py`、`scripts/scene_probe_runner.py`。
-
-## 6. 验证矩阵
+## 7. 验证矩阵
 
 既有命令与档位以 [`acceptance.md`](../reference/acceptance.md) 为准，不在本页复制历史数字。
 
-| Phase/变更 | 必需证据 | 不必无差别执行 |
+| 变更 | 必需证据 | 不必无差别执行 |
 |:---|:---|:---|
-| Phase 18-1 归属 | `coop_probe_runner` 2P 毒伤/觉醒/减伤/召唤/全灭；相关关卡冒烟 | 不重跑全量归属矩阵 |
-| Phase 18-2 成长/奖励 | `archive_probe_runner` 神铸/淬骨/合成/任务/技能成功与失败回滚；2P 商店/奖励；保存反馈 | 不引入通用事务框架 |
-| Phase 18-3 档案/进度 | 后台保存/任务顺序/地图首帧/`add_tg` 用例；无会话/失败反馈；相关关卡回归 | 不重做存档格式 |
-| Phase 19-1 表现/路径 | 面板扫描；路径预算；奖励失败表现；`check_all` 契约域 | 只改 UI 不算完成 |
-| Phase 19-2 音频/运行时 | BGM 同曲/切曲/退出；音效池；临时 UI/静态缓存残留 | 只改音量不算完成 |
-| Phase 19-3 资源/Atlas | 12 例外结论；112 metadata 分类；PCK/闭包重跑 | 不重开构建器 |
-| Phase 19-4 输入/HUD | `coop_probe_runner` 输入隔离；HUD 只读；暂停/切档/退出残留 | 不改映射/布局 |
-| Phase 20-1 独立项目 | 采用/延期/拒绝决策与 owner | 不顺手大拆 |
-| Phase 20-2 平台/发布 | 目标设备 VRAM/首帧/负载；release 启动与代表关卡；PCK | headless 不作 VRAM 证据 |
-| Phase 20-3 守卫 | `contract_scan --self-test`、`check_all --godot-bin`、L2、相关回归 | 包路径/导出无变化不强制 release 重验 |
+| 21-1 独立立项 | 目标平台/格式取证；采用项的加载验收 | 不把决策草案写成已支持 |
+| 21-2 平台/发布 | 目标设备 VRAM/首帧/负载；release 启动与代表关卡；PCK | headless 不作 VRAM 证据 |
+| 21-3 工厂族 | 对应探针返回形状/缓存；`level_1` 冒烟；相关回归 | 只改转发不算完成 |
+| 21-4 资源转换器 | 转换器 `--check`/`--self-test`；allowlist 只减不增；帧与时序证据 | 不重开构建器 |
 
-## 7. 阶段出口
+## 8. 阶段出口
 
-- Phase 18/19 每项有修复/保留/删除结论与验证；
-- 不再存在未登记的 1P 回落、表现层直接写档、成长半提交、重复领取或静默保存失败；
-- Phase 20 独立项目有明确去向，平台/发布结论有设备与日期；
-- 守卫覆盖 Phase 18/19 改动域，全仓 ERROR=0；
+- 21-1 每项有采用/延期/拒绝结论与 owner；
+- 21-2 有目标设备与日期，未测平台明确标注；
+- 21-3 每族删除被替代槽位，守卫与探针覆盖；全仓 ERROR=0；
+- 21-4 补资源项迁移完成或明确拒绝，缺陷有前后证据；
 - 文档、矩阵、脚本索引与状态一致；阶段归档后建立下一候选。
-
-**下一候选**：Phase 20 收口后，按独立工作流处理平台/发布验证；不把未验证平台写成承诺。

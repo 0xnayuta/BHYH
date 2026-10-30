@@ -78,6 +78,7 @@
 | [`iteration_6_9_patch_backport.md`](iteration_6_9_patch_backport.md) | 6.9 补丁回植：范围、文件映射、实施批次与验收结果 | 2026-10-23 |
 | [`iteration_12_display_hud.md`](iteration_12_display_hud.md) | Phase 12 画布、相机与 HUD 重构：多分辨率验收、双人探针、已知边界，以及原计划与实施顺序存档 | 2026-10-24 |
 | [`iteration_13_visual_asset_contract.md`](iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口：阶段回顾、运行时建帧例外、发布闭包、兼容层治理、冻结项与后续顺序 | 2026-10-27 |
+| [`iteration_18_20_comprehensive_closeout.md`](iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾：归属/成长/档案顺序、表现与运行时清理、资源/Atlas 与输入/HUD、Autoload 拆分、守卫扩面、20-3C 收口与延期去向 | 2026-10-30 |
 | [`iteration_17_gameplay_module_boundaries.md`](iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口 | 2026-10-29 |
 | [`iteration_14_atlas_metadata_boundary.md`](iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化数据边界：生产者/消费者矩阵、View 迁移、边界守卫、验证与恢复 | 2026-10-28 |
 | [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页交接、资源租约、缓存/池/UI、退出与后台、边界守卫、验证与恢复 | 2026-10-28 |

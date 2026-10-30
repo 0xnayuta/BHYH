@@ -986,6 +986,33 @@ func _test_audio_boundaries() -> void:
 		(Global.get_audio_runtime()._last_sound_play_msec as Dictionary).is_empty(),
 		str(Global.get_audio_runtime()._last_sound_play_msec)
 	)
+
+	# 负向断言：无效父节点、空路径与重复停止必须被拒绝或保持幂等，且不得占用声部。
+	var invalid_parent_sound = Global.get_audio_runtime().add_sound(null, "res://Music/level/86_pickup.mp3")
+	_check(
+		"sound_invalid_parent_rejected",
+		invalid_parent_sound == null and (Global.get_audio_runtime()._active_sound_players as Dictionary).is_empty(),
+		"node=%s active=%s" % [invalid_parent_sound, Global.get_audio_runtime()._active_sound_players]
+	)
+	var empty_key_sound = Global.get_audio_runtime().add_sound(sound_parent, "")
+	_check(
+		"sound_empty_key_rejected",
+		empty_key_sound == null and not (Global.get_audio_runtime()._last_sound_play_msec as Dictionary).has(""),
+		"node=%s throttle=%s" % [empty_key_sound, Global.get_audio_runtime()._last_sound_play_msec]
+	)
+	var invalid_parent_bgm = Global.get_audio_runtime().add_bgm(null, "res://Music/level/1_music.mp3")
+	_check(
+		"bgm_invalid_parent_rejected",
+		invalid_parent_bgm == null and not Global.get_audio_runtime().has_active_bgm(),
+		"node=%s active=%s" % [invalid_parent_bgm, Global.get_audio_runtime().has_active_bgm()]
+	)
+	Global.get_audio_runtime().stop_bgm()
+	Global.get_audio_runtime().stop_bgm()
+	_check(
+		"bgm_stop_idempotent",
+		not Global.get_audio_runtime().has_active_bgm(),
+		str(Global.get_audio_runtime()._active_bgm_instance)
+	)
 	sound_parent.queue_free()
 	await get_tree().process_frame
 
