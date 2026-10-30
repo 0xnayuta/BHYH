@@ -26,6 +26,20 @@ const ZHEN_YAN_CURE_LEVEL_PATH := "res://Scene/other_scene/zhen_yan_cure_level.t
 const ZHEN_FA_INFO_PATH := "res://Scene/other_scene/zhenfainfo.tscn"
 const ZHENFA_LX_BUTTON_PATH := "res://Scene/other_scene/zhenfalxbutton.tscn"
 const ZHENYAN_BUTTON_PATH := "res://Scene/other_scene/zhenyanbutton.tscn"
+const FORGE_HELP_PATH := "res://Scene/ldl/forge_help.tscn"
+const FORGES_PATH := "res://Scene/ldl/forge.tscn"
+const DECOMPOSE_HELP_PATH := "res://Scene/ldl/decompose_help.tscn"
+const DECOMPOSE_PATH := "res://Scene/ldl/decompose.tscn"
+const ROLE4_BULLET_PATH := "res://Scene/hero/role_4/role4_bullet.tscn"
+const NEW_BULLET_PATH := "res://Scene/hero/bullet_bullet.tscn"
+const ROLE_BULLET_1_PATH := "res://Scene/hero/role_bullet_1.tscn"
+const MONSTER65_BULLET_PATH := "res://Scene/monster/monster65bullet.tscn"
+const MONSTER141_AURA_PATH := "res://Scene/other_scene/nmw_aura.tscn"
+const AURA_PATH := "res://Scene/other_scene/auras.tscn"
+const SMB_EFFECT_PATH := "res://Scene/hero/role_2/smb_effect.tscn"
+const ROLE_SPECIAL_EFFECT_PATH := "res://Scene/hero/role_special_effect.tscn"
+const WS_EFFECT_PATH := "res://Scene/hero/role_1/ws_effect.tscn"
+const LINE_EFFECT_PATH := "res://Scene/level/line_effect.tscn"
 
 var _failures: Array[String] = []
 
@@ -50,6 +64,9 @@ func _run() -> void:
 	await _check_monster_display_family(checks)
 	await _check_level_hint_family(checks)
 	await _check_zhen_fa_family(checks)
+	await _check_forge_family(checks)
+	await _check_projectile_family(checks)
+	await _check_effect_family(checks)
 	await _check_magic_weapon(checks)
 
 	for check_name in checks:
@@ -71,6 +88,9 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["monster_display_factory_node"] = _has_child_node("MonsterDisplayFactory")
 	checks["level_hint_factory_node"] = _has_child_node("LevelHintFactory")
 	checks["zhen_fa_factory_node"] = _has_child_node("ZhenFaFactory")
+	checks["forge_factory_node"] = _has_child_node("ForgeFactory")
+	checks["projectile_factory_node"] = _has_child_node("ProjectileFactory")
+	checks["effect_factory_node"] = _has_child_node("EffectFactory")
 	checks["factories_are_not_autoloads"] = (
 		Global.get_popup_factory().get_parent() == Global
 		and Global.get_shop_factory().get_parent() == Global
@@ -80,6 +100,9 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 		and Global.get_monster_display_factory().get_parent() == Global
 		and Global.get_level_hint_factory().get_parent() == Global
 		and Global.get_zhen_fa_factory().get_parent() == Global
+		and Global.get_forge_factory().get_parent() == Global
+		and Global.get_projectile_factory().get_parent() == Global
+		and Global.get_effect_factory().get_parent() == Global
 	)
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
@@ -514,6 +537,195 @@ func _check_zhen_fa_family(checks: Dictionary) -> void:
 	_cleanup(created, host)
 	if is_instance_valid(father):
 		father.queue_free()
+
+
+func _check_forge_family(checks: Dictionary) -> void:
+	# 锻造/分解族：四个入口共用父节点，锻造说明/主面板与分解说明/主面板各自持有坐标。
+	var host := _make_host("ForgeProbeHost")
+	var created: Array[Node] = []
+	var forge_help: Node = Global.add_forge_help(host, Vector2(13, 14))
+	await _settle()
+	checks["forge_help_created"] = forge_help != null and forge_help.get_parent() == host
+	checks["forge_help_position"] = forge_help != null and forge_help.position == Vector2(13, 14)
+	if forge_help != null:
+		created.append(forge_help)
+	var forges: Node = Global.add_forges(host, Vector2(23, 24))
+	await _settle()
+	checks["forges_created"] = forges != null and forges.get_parent() == host
+	checks["forges_position"] = forges != null and forges.position == Vector2(23, 24)
+	if forges != null:
+		created.append(forges)
+	var decompose_help: Node = Global.add_decompose_help(host, Vector2(33, 34))
+	await _settle()
+	checks["decompose_help_created"] = decompose_help != null and decompose_help.get_parent() == host
+	checks["decompose_help_position"] = decompose_help != null and decompose_help.position == Vector2(33, 34)
+	if decompose_help != null:
+		created.append(decompose_help)
+	var decompose: Node = Global.add_decompose_instance(host, Vector2(43, 44))
+	await _settle()
+	checks["decompose_created"] = decompose != null and decompose.get_parent() == host
+	checks["decompose_position"] = decompose != null and decompose.position == Vector2(43, 44)
+	if decompose != null:
+		created.append(decompose)
+	checks["forge_factory_node"] = _has_child_node("ForgeFactory")
+	checks["forge_factory_parent"] = Global.get_forge_factory().get_parent() == Global
+	checks["forge_scenes_cached"] = (
+		Global.is_resource_cached(FORGE_HELP_PATH)
+		and Global.is_resource_cached(FORGES_PATH)
+		and Global.is_resource_cached(DECOMPOSE_HELP_PATH)
+		and Global.is_resource_cached(DECOMPOSE_PATH)
+	)
+	# 负向断言：已删除的死入口不得复活。
+	checks["forge_box_entry_removed"] = not Global.has_method("add_forge_box")
+	_cleanup(created, host)
+
+
+func _check_projectile_family(checks: Dictionary) -> void:
+	# 弹体族：七个入口共用父节点，缓存槽位与返回字段各自独立。
+	var host := _make_host("ProjectileProbeHost")
+	var created: Array[Node] = []
+	var role4: Node = Global.add_role4_bullet(host, null, Vector2(1, 2))
+	await _settle()
+	checks["role4_bullet_created"] = role4 != null and role4.get_parent() == host
+	checks["role4_bullet_position"] = role4 != null and role4.position == Vector2(1, 2)
+	checks["role4_bullet_player_null"] = role4 != null and role4.player == null
+	if role4 != null:
+		created.append(role4)
+	var hit_dic := {"probe": 1}
+	var new_bullet: Node = Global.add_new_bullet(host, Vector2(3, 4), 1, "ProbeBullet", hit_dic)
+	await _settle()
+	checks["new_bullet_created"] = new_bullet != null and new_bullet.get_parent() == host
+	checks["new_bullet_fields"] = (
+		new_bullet != null
+		and str(new_bullet._name) == "ProbeBullet"
+		and new_bullet.hit_dic == hit_dic
+		and int(new_bullet.direction) == 1
+	)
+	if new_bullet != null:
+		created.append(new_bullet)
+	var slim: Node = Global.add_role_bullet(host, Vector2(5, 6), 1, "Role2Bullet1", hit_dic, null)
+	await _settle()
+	checks["role_bullet_slim_created"] = slim != null and slim.get_parent() == host
+	checks["role_bullet_slim_fields"] = (
+		slim != null and str(slim._name) == "Role2Bullet1" and int(slim.direction) == 1
+	)
+	if slim != null:
+		created.append(slim)
+	var streaming: Node = Global.add_role_bullet(host, Vector2(7, 8), 1, "Role3Bullet2", hit_dic, null)
+	await _settle()
+	checks["role_bullet_streaming_created"] = streaming != null and streaming.get_parent() == host
+	if streaming != null:
+		created.append(streaming)
+	var bullet_1: Node = Global.add_role_bullet_1(host, Vector2(9, 10), "Role2Bullet2", hit_dic, null)
+	await _settle()
+	checks["role_bullet_1_created"] = bullet_1 != null and bullet_1.get_parent() == host
+	checks["role_bullet_1_fields"] = (
+		bullet_1 != null and str(bullet_1._name) == "Role2Bullet2" and bullet_1.hit_dic == hit_dic
+	)
+	if bullet_1 != null:
+		created.append(bullet_1)
+	var safe_bullet: Node = Global.add_role_bullet_1_safe(host, Vector2(11, 12), "Role2Bullet3", hit_dic, null)
+	await _settle()
+	checks["role_bullet_1_safe_created"] = safe_bullet != null and safe_bullet.get_parent() == host
+	if safe_bullet != null:
+		created.append(safe_bullet)
+	var monster_bullet: Node = Global.add_monster65_bullet(host, Vector2(13, 14))
+	await _settle()
+	checks["monster65_bullet_created"] = monster_bullet != null and monster_bullet.get_parent() == host
+	checks["monster65_bullet_position"] = monster_bullet != null and monster_bullet.position == Vector2(13, 14)
+	if monster_bullet != null:
+		created.append(monster_bullet)
+	var weapon_bullet: Node = Global.add_weapon_bullet(host, Vector2(15, 16), "SwordBullet", hit_dic, 1, 50)
+	await _settle()
+	checks["weapon_bullet_created"] = weapon_bullet != null and weapon_bullet.get_parent() == host
+	checks["weapon_bullet_fields"] = (
+		weapon_bullet != null
+		and weapon_bullet.obj_attack_dict == hit_dic
+		and int(weapon_bullet.rnd) == 50
+		and int(weapon_bullet.dir) == 1
+	)
+	if weapon_bullet != null:
+		created.append(weapon_bullet)
+	checks["projectile_scenes_cached"] = (
+		Global.is_resource_cached(ROLE4_BULLET_PATH)
+		and Global.is_resource_cached(NEW_BULLET_PATH)
+		and Global.is_resource_cached(ROLE_BULLET_1_PATH)
+		and Global.is_resource_cached(MONSTER65_BULLET_PATH)
+	)
+	# 负向断言：清缓存必须真正释放四个槽位，且重新取用仍可加载。
+	var projectile_factory := Global.get_projectile_factory()
+	projectile_factory.clear_scene_caches()
+	checks["projectile_cache_cleared"] = (
+		projectile_factory._role4_bullet_scene == null
+		and projectile_factory._new_bullet_scene == null
+		and projectile_factory._role_bullet_1_scene == null
+		and projectile_factory._monster65_bullet_scene == null
+	)
+	checks["projectile_cache_reloads"] = projectile_factory.get_role4_bullet_scene() != null
+	_cleanup(created, host)
+
+
+func _check_effect_family(checks: Dictionary) -> void:
+	# 效果族：六个入口共用父节点，灵魄数值经 PaSkill 加成，字段与返回形状独立。
+	var host := _make_host("EffectProbeHost")
+	var created: Array[Node] = []
+	var boss_aura: Node = Global.add_monster141_aura(host, Vector2(1, 2), null)
+	await _settle()
+	checks["monster141_aura_created"] = boss_aura != null and boss_aura.get_parent() == host
+	checks["monster141_aura_target"] = boss_aura != null and boss_aura.target_monster == null
+	checks["monster141_aura_position"] = boss_aura != null and boss_aura.position == Vector2(1, 2)
+	if boss_aura != null:
+		created.append(boss_aura)
+	var soul: Node = Global.add_aura(host, Vector2(3, 4), 10, 2)
+	await _settle()
+	checks["aura_created"] = soul != null and soul.get_parent() == host
+	checks["aura_value_bonus"] = (
+		soul != null
+		and int(soul.value) == PaSkill.apply_soul_gain_bonus(10)
+		and int(soul.get_meta("base_soul_value", -1)) == 10
+	)
+	checks["aura_color_type"] = soul != null and int(soul.color_type) == 2
+	if soul != null:
+		created.append(soul)
+	var smb: Node = Global.add_smb_effect(host, Vector2(5, 6), 1)
+	await _settle()
+	checks["smb_effect_created"] = smb != null and smb.get_parent() == host
+	checks["smb_effect_dir"] = smb != null and int(smb.dir) == 1
+	if smb != null:
+		created.append(smb)
+	var special: Node = Global.add_role_special_effect(host, Vector2(7, 8), 1, "sd")
+	await _settle()
+	checks["role_special_effect_created"] = special != null and special.get_parent() == host
+	checks["role_special_effect_name"] = special != null and str(special.special_effect_name) == "sd"
+	if special != null:
+		created.append(special)
+	# 未知特效名回落到基础特效场景，仍写入原始名称。
+	var fallback_effect: Node = Global.add_role_special_effect(host, Vector2(9, 10), 1, "__missing_effect__")
+	await _settle()
+	checks["role_special_effect_fallback"] = (
+		fallback_effect != null and str(fallback_effect.special_effect_name) == "__missing_effect__"
+	)
+	if fallback_effect != null:
+		created.append(fallback_effect)
+	var ws: Node = Global.add_ws_effect(host)
+	await _settle()
+	checks["ws_effect_created"] = ws != null and ws.get_parent() == host
+	if ws != null:
+		created.append(ws)
+	var line: Node = Global.add_line(host, null, "probe_line")
+	await _settle()
+	checks["line_effect_created"] = line != null and line.get_parent() == host
+	checks["line_effect_fields"] = line != null and str(line.type) == "probe_line" and line.position == Vector2.ZERO
+	if line != null:
+		created.append(line)
+	checks["effect_scenes_cached"] = (
+		Global.is_resource_cached(MONSTER141_AURA_PATH)
+		and Global.is_resource_cached(SMB_EFFECT_PATH)
+		and Global.is_resource_cached(ROLE_SPECIAL_EFFECT_PATH)
+		and Global.is_resource_cached(WS_EFFECT_PATH)
+		and Global.is_resource_cached(LINE_EFFECT_PATH)
+	)
+	_cleanup(created, host)
 
 
 func _check_magic_weapon(checks: Dictionary) -> void:

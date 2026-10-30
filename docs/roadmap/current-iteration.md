@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。21-1A/21-1C/21-1D/21-2、S5 剩余族均未启动。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A/21-3B/21-3C 已完成**；21-1A/21-1B/21-1C、21-2、21-4 与剩余工厂族未启动。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -27,7 +27,7 @@
 | 项 | 事实 |
 |:---|:---|
 | Autoload | 11 个（10 业务 + 1 编辑器调试桥）；`Global` 持有 18 个普通子节点与 1 个 `RunContext` |
-| `Global` 规模 | 3,971 行 / 329 函数 / 189 变量；`add_*` 120 个，59 个为薄转发 |
+| `Global` 规模 | 3,798 行 / 330 函数 / 178 变量；`add_*` 119 个，76 个为薄转发 |
 | 静态守卫 | `contract_scan.py` 20 类；`check_all` 八维；契约 ERROR=0、WARNING ≤ 预算 |
 | 运行时夹具 | `archive_probe_runner` 293 项、`coop_probe_runner` 26 例、`scene_probe_runner` 11 套 |
 | 资源闭包 | 19-3C 的 PCK 快照只在资源未变化时有效；资源变更后必须重跑 |
@@ -58,12 +58,12 @@
 
 **目标**：把剩余 61 个 `add_*` 按功能族迁入既有工厂或新族，保持薄转发与公开入口。
 
-1. **21-3A 锻造/分解族（未启动）**：`add_forge_help`、`add_forge_box`、`add_forges`、`add_decompose_help`、`add_decompose_instance`；
-2. **21-3B 角色/怪物弹体族（未启动）**：`add_role4_bullet`、`add_new_bullet`、`add_role_bullet`、`add_role_bullet_1`、`add_role_bullet_1_safe`、`add_monster65_bullet`、`add_weapon_bullet`；
-3. **21-3C 效果族（未启动）**：`add_monster141_aura`、`add_aura`、`add_smb_effect`、`add_role_special_effect`、`add_ws_effect`、`add_line`；
-4. 其余族按 `autoload_boundary_matrix.md` §8 候选清单继续，不建总工厂、不新增 Autoload。
+1. **21-3A 锻造/分解族（完成，2026-10-30）**：`add_forge_help`、`add_forges`、`add_decompose_help`、`add_decompose_instance` 迁入 `ForgeFactory`；`add_forge_box` 全仓 0 调用方，随 `forge_box` 槽位删除；
+2. **21-3B 角色/怪物弹体族（完成，2026-10-30）**：7 个弹体入口迁入 `ProjectileFactory`，slim/streaming 路径解析与法宝弹体路径表迁入；来源写入仍经 `Global._assign_attack_source`；
+3. **21-3C 效果族（完成，2026-10-30）**：6 个效果入口迁入 `EffectFactory`，灵魄加成仍由 `PaSkill` 计算；
+4. 其余 43 个 `add_*` 按 `autoload_boundary_matrix.md` §8 候选清单继续，不建总工厂、不新增 Autoload。
 
-**必须验证**：每次迁移删除被替代的槽位字段，保留同名薄转发；`ui-factories` 或对应运行时探针覆盖返回形状与缓存；战斗相关族追加 `level_1` 冒烟与全量回归。
+**必须验证**：每次迁移删除被替代的槽位字段，保留同名薄转发；`ui-factories` 或对应运行时探针覆盖返回形状与缓存；战斗相关族追加 `level_1` 冒烟与全量回归。**21-3A/B/C 验证**：`ui-factories` 170 项 PASS（含清缓存重载与死入口断言）；`check_all --godot-bin` 8/8；`level_1` PASS；全量回归 128/128 PASS + 5 SKIP；存档探针 293/293。
 
 ## 5. Phase 21-4：资源转换器与建帧遗留
 

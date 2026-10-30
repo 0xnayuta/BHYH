@@ -28,15 +28,15 @@ Phase 20-1 其余切片保持未启动：
 
 ### 2.1 `global.gd` 规模
 
-| 指标 | 决策时 | P2 后 | S2 后 | W4 后 | 说明 |
+| 指标 | 决策时 | P2 后 | S2 后 | 当前 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 行数 | **6,041** | **5,775** | **5,563** | **3,971** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7 4,275 → S8 4,111 → 20-3 4,053 → 怪物展示族 4,044 → 关卡提示族 4,015 → 阵法族 3,971 |
-| 顶层函数 | **360** | **347** | **333** | **329** | 含私有函数；`add_*` 工厂仍为薄转发（S8/20-3 删除 11 个工具与死函数、S5 删除 `add_zhen_fa_ui`，新增 3 个工厂 getter） |
-| 顶层变量 | **295** | **291** | **285** | **189** | 含运行状态、UI 引用与跨帧标记；缓存/池/召唤/统计/无尽模式/贴图/怪物展示/关卡提示/阵法场景槽位字段已迁出或删除 |
-| 顶层常量 | **76** | **75** | **76** | **83** | 含场景路径表、弹体路径表、怪物别名与运行时/工厂脚本预载 |
+| 行数 | **6,041** | **5,775** | **5,563** | **3,798** | `source/global.gd`；W4 5,407 → W5 S4 4,971 → W6 S5 4,578 → W7 4,352 → W8 S7 4,275 → S8 4,111 → 20-3 4,053 → 怪物展示族 4,044 → 关卡提示族 4,015 → 阵法族 3,971 → 锻造/弹体/效果三族 3,798 |
+| 顶层函数 | **360** | **347** | **333** | **330** | 含私有函数；`add_*` 工厂仍为薄转发（S8/20-3 删除 11 个工具与死函数、S5 删除 `add_zhen_fa_ui`/`add_forge_box`，新增 6 个工厂 getter） |
+| 顶层变量 | **295** | **291** | **285** | **178** | 含运行状态、UI 引用与跨帧标记；缓存/池/召唤/统计/无尽模式/贴图/怪物展示/关卡提示/阵法/锻造/弹体/效果场景槽位字段已迁出或删除 |
+| 顶层常量 | **76** | **75** | **76** | **78** | 含场景路径表、怪物别名与运行时/工厂脚本预载；法宝弹体路径表随 `ProjectileFactory` 迁出 |
 | 信号 | **2** | **2** | **2** | **1** | `sound_settings_changed` 已迁至 `AudioRuntime`，仅余 `combo_milestone_reached` |
 
-`RuntimeDiagnostics` 为 230 行、`UiRuntime` 为 274 行、`AudioRuntime` 为 233 行普通 `Node`，均由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 158 行 `RefCounted`，`LevelEntryRuntime` 116 行、`MonsterSpawnRuntime` 39 行、`RoleVisualRuntime` 104 行、`MonsterDisplayFactory` 60 行、`LevelHintFactory` 93 行、`ZhenFaFactory` 104 行普通 `Node`，`NodeUtils` 39 行、`ItemUtils` 95 行静态工具类，均由 `Global` 创建/持有或被静态调用。Autoload 从 13 降到 **11**。
+`RuntimeDiagnostics`、`UiRuntime`、`AudioRuntime`、`ResourceRuntime`、`SceneFlow`、`CombatPoolRuntime`、`MagicWeaponRuntime`、`LevelEntryRuntime`、`MonsterSpawnRuntime`、`RoleVisualRuntime` 与 11 个场景工厂族均为普通 `Node`，由 `Global` 在 `_ready` 创建并持有；不计入 Autoload。`RunContext` 为 158 行 `RefCounted`，`LevelEntryRuntime` 116 行、`MonsterSpawnRuntime` 39 行、`RoleVisualRuntime` 104 行、`MonsterDisplayFactory` 60 行、`LevelHintFactory` 93 行、`ZhenFaFactory` 104 行普通 `Node`，`NodeUtils` 39 行、`ItemUtils` 95 行静态工具类，均由 `Global` 创建/持有或被静态调用。Autoload 从 13 降到 **11**。
 
 ### 2.2 调用面
 
@@ -114,7 +114,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | S2 UI 宿主/运行时 | `UiRuntime` 持有 `windows`、popup 层、hover popup、`register_transient_ui` / `cleanup_transient_ui`、UI 实例登记与缓存；`LocalCoop` 使用 `push_windows` / `pop_windows` | `UiRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W3 S2）**；`add_*` 工厂仍留 `Global`，只迁移生命周期；无 Autoload 新增 |
 | S3 音频 | `AudioRuntime` 持有 BGM 单实例、主菜单 BGM、SFX 声部/节流/上限与设置变化信号；`add_*` 音频入口统一为 `Global.get_audio_runtime()` | `AudioRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W4）**；`MainMusic` 已合并删除；无 Autoload 新增 |
 | S4 场景/资源运行时 | `change_scene`（101 处）、缓存四表、单槽预载、线程预热、关卡租约、释放 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | **已拆（W5 S4）**；`Global.change_scene` 仍是唯一正式入口；无 Autoload 新增 |
-| S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **部分已拆**：W6 S5 五族 41 个工厂 + W7 S6 战斗三入口 + S7C `add_level_info` + 怪物展示族（3 入口）+ 关卡提示族（5 入口）+ 阵法族（6 入口）；`Global` 现 120 个 `add_*`，**59 个为薄转发**，其余 61 个按族推进（见 §8 下一批候选）；不建总工厂 |
+| S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **部分已拆**：W6 S5 五族 41 个工厂 + W7 S6 战斗三入口 + S7C `add_level_info` + 怪物展示族（3）+ 关卡提示族（5）+ 阵法族（6）+ 锻造/分解族（4，删除死入口 `add_forge_box`）+ 弹体族（7）+ 效果族（6）；`Global` 现 119 个 `add_*`，**76 个为薄转发**，其余 43 个按族推进（见 §8 下一批候选）；不建总工厂 |
 | S6 战斗表现 | `add_bullet`、`add_buff`、`add_trap`、`add_special_effect`、`add_damage_text`、`add_mr_hurt`、伤害数字/受击四池 | `CombatPresentationFactory` + `CombatPoolRuntime`（`Global` 组合持有） | **已拆（W7 S6）**：弹体/buff/陷阱/特效/伤害数字/受击/血条与对象池；`create_monster` 与生成服务按 S7 运行状态后续处理 |
 | S7 运行状态 | `current_level`、`llbt_level`、13 个 `total_*` 统计、9 个 `is_*` 减益标志、关卡进入编排、怪物生成 | `RunContext`（`RefCounted`）+ `LevelEntryRuntime` + `MonsterSpawnRuntime`（`Global` 持有） | **已拆（W8 S7）**：关卡显示名、宝塔层数与 13 项战斗统计迁入 `RunContext`；9 个减益标志经证据确认写多读零后删除；`add_level_info`/`get_current_level_fall_pro`/`sync_level_drop_pro_data` 与非 res:// 直进分支迁入 `LevelEntryRuntime`，`create_monster`/路径解析迁入 `MonsterSpawnRuntime`；四个无尽模式标志与 `selected_eight_immortal_id` 收进 `RunContext`（整体赋值 API，同一时刻至多一个副本为真），`Global` 暴露 `is/set/clear_special_dungeon_endless` 与八仙选择读写 |
 | S8 通用工具 | `get_ancestor` 95/16、`get_position_between`、`get_dis_betweem`、`get_clean_name`、物品计数、角色纹理加载 | `NodeUtils` / `ItemUtils` 静态类 + `RoleVisualRuntime` | **已拆（W8 S8）**：祖先/向量工具与品质名清理迁入静态类；随机物品条目迁入 `ItemUtils`；角色身体/装备贴图与同槽位旧贴图释放迁入 `RoleVisualRuntime`；`Global` 只保留 `load_role1_body`/`load_role1_eq` 薄转发 |
@@ -279,6 +279,15 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - 验收：`contract_scan --self-test` 全 20 类通过、`--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8；`scene_probe_runner` 11/11；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26；`level_1` PASS；全量 `level_regression_all` 128/128 PASS + 5 SKIP。
 - Owner：音频 + UI/阵法。
 
+### 21-3A/B/C：锻造分解、弹体与效果族（完成，2026-10-30）
+
+- 新增 `ForgeFactory`（4 个常驻场景槽位）：`add_forge_help`、`add_forges`、`add_decompose_help`、`add_decompose_instance`；`Global` 删除 `forge_help`/`forges`/`decompose_help`/`decompose` 四个槽位字段并保留同名薄转发与 `get_forge_factory()`。`add_forge_box` 全仓 0 调用方（`forge.gd` 已自持 `_add_forge_material_box`），随 `forge_box` 槽位删除。
+- 新增 `ProjectileFactory`：`add_role4_bullet`、`add_new_bullet`、`add_role_bullet`、`add_role_bullet_1`、`add_role_bullet_1_safe`、`add_monster65_bullet`、`add_weapon_bullet`。slim/streaming 路径解析与 `ADD_WEAPON_BULLET_PATHS` 迁入；来源写入仍经 `Global._assign_attack_source`，不复制归属规则。
+- 新增 `EffectFactory`：`add_monster141_aura`、`add_aura`、`add_smb_effect`、`add_role_special_effect`、`add_ws_effect`、`add_line`。`AURA_PATH` 与三个 slim 路径常量迁入；灵魄加成仍由 `PaSkill` 计算。
+- 两个清理入口（`clear_combat_runtime_cache`、`release_role_runtime_resources`）改调工厂 `clear_scene_caches()`；工厂不持有跨档案状态。
+- `ui-factories` 探针扩到 **170 项**：新增三族入口的返回形状、字段、场景缓存与“清缓存后重新加载”断言，并断言 `add_forge_box` 不再存在。
+- 验收：`check_all --godot-bin` 8/8；`level_1` PASS；全量 `level_regression_all` **128/128 PASS + 5 SKIP**；存档探针 293/293。
+
 ## 7. 守卫与验收
 
 20-1B 决策本身的验收：
@@ -306,7 +315,7 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - **已决（S5 怪物展示族）**：`add_monster_head`/`add_monster_info`/`add_basic_monment_info` 迁入 `MonsterDisplayFactory`（60 行，三个常驻场景槽位），`Global` 删除 `monster_head`/`monster_info`/`basic_monment_info` 三个场景槽位字段并保留同名薄转发与 `get_monster_display_factory()`；`add_boss_blood_instance` 早已在 `CombatPresentationFactory`。
 - **已决（S5 关卡提示族）**：`add_level_fall_box`、`add_item_box`、`add_game_need_know`、`add_hc_help`、`add_help_thing` 迁入 `LevelHintFactory`（93 行，四个常驻场景槽位；掉落箱与道具箱共用 `box_1.tscn` 但元数据不同）；`Global` 删除 `level_fall_box`/`game_need_know`/`hc_help`/`help_thing` 四个槽位字段，保留同名薄转发与 `get_level_hint_factory()`。
 - **已决（S5 阵法族）**：`add_zhen_fa_help`、`add_zhen_fa_tu_po`、`add_zhen_yan_cure_level`、`add_zhen_fa_info`、`add_zhenfalxbutton` 与同域的 `addzhenyanbutton` 迁入 `ZhenFaFactory`（104 行，六个常驻场景槽位）；`Global` 删除 6 个槽位字段并保留同名薄转发与 `get_zhen_fa_factory()`。`add_zhen_fa_ui` 全仓 0 调用方（含动态调用），随槽位一并删除。
-- **未决（S5 剩余，转入 Phase 21-3）**：`Global` 现有 120 个 `add_*`，其中 59 个已是族工厂的 4 行薄转发；其余 61 个仍持有场景槽位或实例化逻辑。按族推进，不一次性搬迁；批次见 [`current-iteration.md`](../roadmap/current-iteration.md) §4：锻造/分解族、角色/怪物弹体族、效果族，其余按本页候选清单继续。
+- **未决（S5 剩余，Phase 21-3 批次 1~3 已完成）**：`Global` 现有 119 个 `add_*`，其中 76 个已是族工厂的 4 行薄转发；其余 43 个仍持有场景槽位或实例化逻辑。已完成锻造/分解、弹体、效果三族；其余按本页候选清单继续，不一次性搬迁。
 - **已决（W8 S8 + 20-3 守卫批次）**：`get_ancestor`/`get_position_between`/`get_dis_betweem` 迁入 `NodeUtils.ancestor/position_between/distance_between`；`get_clean_name`、`get_all_item_num`、`get_wx` 迁入 `ItemUtils.clean_fashion_name/random_item_entries/random_element_set`（`get_random_wx` 降为 `ItemUtils` 私有）；`load_item_icon`、`add_all_item_num`、`check_dir_between_two_obj`、`normal_face_player` 全仓 0 调用方，直接删除；角色身体/装备贴图加载迁入 `RoleVisualRuntime`，`Global` 保留 `load_role1_body`/`load_role1_eq` 薄转发。运行状态字段直写与上述旧入口由 `contract_scan` 的 `run_state_boundary` 规则阻断。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
 - **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。

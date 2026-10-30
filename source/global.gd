@@ -22,6 +22,9 @@ const ROLE_VISUAL_RUNTIME_SCRIPT := preload("res://Script/runtime/role_visual_ru
 const MONSTER_DISPLAY_FACTORY_SCRIPT := preload("res://Script/runtime/monster_display_factory.gd")
 const LEVEL_HINT_FACTORY_SCRIPT := preload("res://Script/runtime/level_hint_factory.gd")
 const ZHEN_FA_FACTORY_SCRIPT := preload("res://Script/runtime/zhen_fa_factory.gd")
+const FORGE_FACTORY_SCRIPT := preload("res://Script/runtime/forge_factory.gd")
+const PROJECTILE_FACTORY_SCRIPT := preload("res://Script/runtime/projectile_factory.gd")
+const EFFECT_FACTORY_SCRIPT := preload("res://Script/runtime/effect_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -141,28 +144,6 @@ var zhen_fa
 var lhhj_boss_list = {}
 
 const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
-const ADD_WEAPON_BULLET_PATHS := {
-	"CloudSwordBullet": "res://Scene/magic_weapon/hit_bullet_lazy/cloud_sword_bullet.tscn",
-	"CucurFire_1": "res://Scene/magic_weapon/hit_bullet_lazy/cucur_fire_1.tscn",
-	"CucurFire_2": "res://Scene/magic_weapon/hit_bullet_lazy/cucur_fire_2.tscn",
-	"GhostDollBullet_1": "res://Scene/magic_weapon/hit_bullet_lazy/ghost_doll_bullet_1.tscn",
-	"GhostDollBullet_2": "res://Scene/magic_weapon/hit_bullet_lazy/ghost_doll_bullet_2.tscn",
-	"GhostDollBullet_3": "res://Scene/magic_weapon/hit_bullet_lazy/ghost_doll_bullet_3.tscn",
-	"MagicUmbrellaBullet": "res://Scene/magic_weapon/hit_bullet_lazy/magic_umbrella_bullet.tscn",
-	"PurpleGlodCucurbitBullet": "res://Scene/magic_weapon/hit_bullet_lazy/purple_glod_cucurbit_bullet.tscn",
-	"SwordBullet": "res://Scene/magic_weapon/hit_bullet_lazy/sword_bullet.tscn",
-	"wdsfBullet1": "res://Scene/magic_weapon/hit_bullet_lazy/wdsf_bullet1.tscn",
-	"wdsfBullet2": "res://Scene/magic_weapon/hit_bullet_lazy/wdsf_bullet2.tscn",
-	"wdsfBullet3": "res://Scene/magic_weapon/hit_bullet_lazy/wdsf_bullet3.tscn",
-	"wdshBullet1": "res://Scene/magic_weapon/hit_bullet_lazy/wdsh_bullet1.tscn",
-	"wdshBullet2": "res://Scene/magic_weapon/hit_bullet_lazy/wdsh_bullet2.tscn",
-	"wdshBullet2_1": "res://Scene/magic_weapon/hit_bullet_lazy/wdsh_bullet2_1.tscn",
-	"wdslBullet1": "res://Scene/magic_weapon/hit_bullet_lazy/wdsl_bullet1.tscn",
-	"wdslBullet2": "res://Scene/magic_weapon/hit_bullet_lazy/wdsl_bullet2.tscn",
-	"wdstBullet1": "res://Scene/magic_weapon/hit_bullet_lazy/wdst_bullet1.tscn",
-	"wdstBullet2": "res://Scene/magic_weapon/hit_bullet_lazy/wdst_bullet2.tscn",
-	"wdstBullet3": "res://Scene/magic_weapon/hit_bullet_lazy/wdst_bullet3.tscn",
-}
 const MAGIC_WEAPON_SCENE_PATHS := {
 	"zcld": "res://Scene/magic_weapon/zcld.tscn",
 	"dshl": "res://Scene/magic_weapon/cucurbit.tscn",
@@ -204,7 +185,6 @@ const BOSS_BLOOD_PATH := "res://Scene/monster_blood/boss_blood.tscn"
 const MONSTER_BE_HIT_PATH := "res://Scene/monster_damage/monster_be_hit.tscn"
 const SPECIAL_AFFECT_SLIM_DIR := "res://Scene/base/special_affect_slim"
 const ROLE_BE_HIT_EFFECT_PATH := "res://Scene/base/role_be_hit_effect.tscn"
-const AURA_PATH := "res://Scene/other_scene/auras.tscn"
 const BUFF_ICON_PATH := "res://Scene/other_scene/buff_icon.tscn"
 const DAMAGE_NUMBER_PATH := "res://Scene/hittext/damage_number.tscn"
 const MISS_EFFECT_PATH := "res://Scene/hittext/miss_effect.tscn"
@@ -214,12 +194,6 @@ const LIJI_PATH := "res://Scene/show_text/liji.tscn"
 const MOMENT_TEXT_PATH := "res://Scene/show_text/moment_text.tscn"
 const MESSAGE_SHOW_PATH := "res://Scene/show_text/message_show.tscn"
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
-const ROLE_BULLET_SLIM_DIR := "res://Scene/hero/role_bullet_slim"
-const STREAMING_ROLE_BULLET_PATH := "res://Scene/hero/streaming_role_bullet.tscn"
-const ROLE3_BULLET3_SLIM_PATH := "res://Scene/hero/role3_bullet3_slim.tscn"
-const ROLE3_SD_SLIM_PATH := "res://Scene/hero/role3_sd_slim.tscn"
-const ROLE3_ZZNH_SLIM_PATH := "res://Scene/hero/role3_zznh_slim.tscn"
-const ROLE_SPECIAL_EFFECT_SLIM_DIR := "res://Scene/hero/role_special_effect_slim"
 const TTZSSZ_BULLET_SLIM_PATH := "res://Scene/hero/ttzssz_bullet_slim.tscn"
 const MONSTER_BULLET_SLIM_DIR := "res://Scene/monster/monster_bullet_slim"
 const MONSTER_RESOURCE_ALIASES := {
@@ -370,6 +344,18 @@ func _ready() -> void:
 	_zhen_fa.name = "ZhenFaFactory"
 	_zhen_fa.setup(self)
 	add_child(_zhen_fa)
+	_forge_factory = FORGE_FACTORY_SCRIPT.new()
+	_forge_factory.name = "ForgeFactory"
+	_forge_factory.setup(self)
+	add_child(_forge_factory)
+	_projectile_factory = PROJECTILE_FACTORY_SCRIPT.new()
+	_projectile_factory.name = "ProjectileFactory"
+	_projectile_factory.setup(self)
+	add_child(_projectile_factory)
+	_effect_factory = EFFECT_FACTORY_SCRIPT.new()
+	_effect_factory.name = "EffectFactory"
+	_effect_factory.setup(self)
+	add_child(_effect_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -447,6 +433,18 @@ func get_level_hint_factory() -> LevelHintFactory:
 
 func get_zhen_fa_factory() -> ZhenFaFactory:
 	return _zhen_fa
+
+
+func get_forge_factory() -> ForgeFactory:
+	return _forge_factory
+
+
+func get_projectile_factory() -> ProjectileFactory:
+	return _projectile_factory
+
+
+func get_effect_factory() -> EffectFactory:
+	return _effect_factory
 
 
 var cloud_sword = null
@@ -688,6 +686,9 @@ var _role_visual: RoleVisualRuntime = null
 var _monster_display: MonsterDisplayFactory = null
 var _level_hint: LevelHintFactory = null
 var _zhen_fa: ZhenFaFactory = null
+var _forge_factory: ForgeFactory = null
+var _projectile_factory: ProjectileFactory = null
+var _effect_factory: EffectFactory = null
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
@@ -1309,14 +1310,10 @@ func clear_combat_runtime_cache() -> void:
 	fly_bullet = null
 	_chase_bullet = null
 	_combat_factory.clear_scene_caches()
-	role4_bullet = null
-	role_bullet_1 = null
+	_projectile_factory.clear_scene_caches()
+	_effect_factory.clear_scene_caches()
 	role1_shallow = null
-	monster65_bullet = null
-	role_special_effect = null
 	role2_shallow = null
-	smb_effect = null
-	new_bullet = null
 	_all_hero_skill_resources_preloaded = false
 	if _magic_weapon_runtime != null:
 		_magic_weapon_runtime.clear_runtime_state()
@@ -1544,13 +1541,10 @@ func release_role_runtime_resources() -> void:
 	role_bullet = null
 	fly_bullet = null
 	_chase_bullet = null
-	role4_bullet = null
-	role_bullet_1 = null
+	_projectile_factory.clear_scene_caches()
+	_effect_factory.clear_scene_caches()
 	role1_shallow = null
-	role_special_effect = null
 	role2_shallow = null
-	smb_effect = null
-	new_bullet = null
 
 
 # 为下一次关卡加载建立租约；目标场景只记录，不作为租约拥有的资源释放。
@@ -2090,53 +2084,39 @@ var zztwtrap = null
 var bd_skill = null
 var nmw_hands = null
 var change_background = null
-var ws_effect = null
 
 var magic_help = null
 
 var sound = null
 var mosaic = null
-var role4_bullet = null
 var game_set = null
 var skill_key_set = null
-var role_bullet_1 = null
 var role1_shallow = null
 var change_clothes_jm = null
 var h_hjm = null
 var z_lw_stage = null
 var buffinfor = null
-var monster65_bullet = null
 var choose_player = null
-var role_special_effect = null
 var role2_shallow = null
-var smb_effect = null
-var new_bullet = null
 var role_magic_need = null
 var pj = null
 var stage = null
-var decompose = null
-var decompose_help = null
 var task_title = null
 var add_font = null
 var game_announcement = null
 var basic_pellet = null
 var trans_box = null
 var llbt_challenge = null
-var forges = null
-var forge_box = null
-var forge_help = null
 var _hdzm = null
 var _lsh = null
 var _lxdy = null
 var dsg_choose = null
-var line = null
 var cure_times_box = null
 var letter_for_player = null
 var some_monster_help = null
 var lhhj = null
 var listbutton = null
 var lhhjhelp = null
-var monster141_aura = null
 var return_back_map = null
 var ui_28 = null
 var role_button = null
@@ -2202,12 +2182,7 @@ func addhdgqmap(parent, position):
 
 
 func add_monster141_aura(parent, _position, target_monster):
-	if not monster141_aura:
-		monster141_aura = _load_scene("res://Scene/other_scene/nmw_aura.tscn")
-	var target = instance_scene(monster141_aura, parent)
-	target.target_monster = target_monster
-	target.position = _position
-	return target
+	return _effect_factory.add_monster141_aura(parent, _position, target_monster)
 
 
 func addlhhjhelp(parent, position):
@@ -2298,22 +2273,11 @@ func add_trans_box(parent, _name, transmogrified):
 
 
 func add_role4_bullet(parent, Player, position: Vector2):
-	if not role4_bullet:
-		role4_bullet = _load_scene("res://Scene/hero/role_4/role4_bullet.tscn")
-	var target = instance_scene(role4_bullet, parent)
-	target.player = Player
-	target.position = position
-	return target
+	return _projectile_factory.add_role4_bullet(parent, Player, position)
 
 
 func add_line(parent, Monster, Type):
-	if not line:
-		line = _load_scene("res://Scene/level/line_effect.tscn")
-	var target = instance_scene(line, parent)
-	target.position = Vector2(0, 0)
-	target.type = Type
-	target.monster = Monster
-	return target
+	return _effect_factory.add_line(parent, Monster, Type)
 
 
 func add_dsg_choose(parent):
@@ -2369,28 +2333,11 @@ func add_basic_monment_info(parent, show_text, position):
 
 
 func add_forge_help(parent, position):
-	if not forge_help:
-		forge_help = _load_scene("res://Scene/ldl/forge_help.tscn")
-	var target = instance_scene(forge_help, parent)
-	target.position = position
-	return target
-
-
-func add_forge_box(parent, Name, Num):
-	if not forge_box:
-		forge_box = _load_scene("res://Scene/ldl/forge_material_box.tscn")
-	var target = instance_scene(forge_box, parent)
-	target.item_name = Name
-	target.need_num = Num
-	return target
+	return _forge_factory.add_help(parent, position)
 
 
 func add_forges(parent, position):
-	if not forges:
-		forges = _load_scene("res://Scene/ldl/forge.tscn")
-	var target = instance_scene(forges, parent)
-	target.position = position
-	return target
+	return _forge_factory.add_forges(parent, position)
 
 
 func addllbt_challenge(parent, position):
@@ -2545,19 +2492,11 @@ func add_reward_box(parent, item_id, num):
 
 
 func add_decompose_help(parent, position):
-	if not decompose_help:
-		decompose_help = _load_scene("res://Scene/ldl/decompose_help.tscn")
-	var target = instance_scene(decompose_help, parent)
-	target.position = position
-	return target
+	return _forge_factory.add_decompose_help(parent, position)
 
 
 func add_decompose_instance(parent, position):
-	if not decompose:
-		decompose = _load_scene("res://Scene/ldl/decompose.tscn")
-	var target = instance_scene(decompose, parent)
-	target.position = position
-	return target
+	return _forge_factory.add_decompose(parent, position)
 
 
 func add_zztw_trap(parent, Name, position):
@@ -2647,23 +2586,11 @@ func add_role_magic_need(parent, position, _name, old, new):
 
 
 func add_new_bullet(parent, position, dir, _name, dic):
-	if not new_bullet:
-		new_bullet = _load_scene("res://Scene/hero/bullet_bullet.tscn")
-	var target = instance_scene(new_bullet, parent)
-	target.position = position
-	target._name = _name
-	target.hit_dic = dic
-	target.direction = dir
-	return target
+	return _projectile_factory.add_new_bullet(parent, position, dir, _name, dic)
 
 
 func add_smb_effect(parent, position, dir):
-	if not smb_effect:
-		smb_effect = _load_scene("res://Scene/hero/role_2/smb_effect.tscn")
-	var target = instance_scene(smb_effect, parent)
-	target.position = position
-	target.dir = dir
-	return target
+	return _effect_factory.add_smb_effect(parent, position, dir)
 
 
 func add_role2_shallow(parent, position, dir):
@@ -2676,45 +2603,7 @@ func add_role2_shallow(parent, position, dir):
 
 
 func add_role_special_effect(parent, position, dir, _name):
-	var effect_name := str(_name)
-	var scene = null
-	if effect_name in ["sd", "sd2"]:
-		scene = load_scene_uncached(ROLE3_SD_SLIM_PATH)
-	elif effect_name == "zznh":
-		scene = load_scene_uncached(ROLE3_ZZNH_SLIM_PATH)
-	else:
-		var slim_path := ROLE_SPECIAL_EFFECT_SLIM_DIR.path_join(effect_name + ".tscn")
-		scene = load_scene_uncached(slim_path) if ResourceLoader.exists(slim_path) else null
-	if scene == null:
-		if not role_special_effect:
-			role_special_effect = _load_scene("res://Scene/hero/role_special_effect.tscn")
-		scene = role_special_effect
-	var target = instance_scene(scene, parent)
-	target.position = position
-	target.special_effect_name = _name
-	target.dir = dir
-	return target
-
-
-func _role_bullet_slim_filename(bullet_name: String) -> String:
-	var result := ""
-	var length := bullet_name.length()
-	for index in length:
-		var character := bullet_name[index]
-		if character >= "A" and character <= "Z":
-			var previous := bullet_name[index - 1] if index > 0 else ""
-			var next_character := bullet_name[index + 1] if index + 1 < length else ""
-			var previous_breaks := (
-				(previous >= "a" and previous <= "z")
-				or (previous >= "0" and previous <= "9")
-				or (previous >= "A" and previous <= "Z" and next_character >= "a" and next_character <= "z")
-			)
-			if previous_breaks:
-				result += "_"
-			result += character.to_lower()
-		else:
-			result += character
-	return result + ".tscn"
+	return _effect_factory.add_role_special_effect(parent, position, dir, _name)
 
 
 ## 角色侧攻击载体统一写来源：显式来源优先，其次沿父级持有者回溯。
@@ -2732,27 +2621,7 @@ func _assign_attack_source(target: Node, parent: Node, source_player: BaseHero =
 
 
 func add_role_bullet(parent, position, dir, _name, dic, source_player: BaseHero = null):
-	var bullet_name := str(_name)
-	var scene = null
-	if bullet_name in ["Role3Bullet2", "TtzsszBullet"]:
-		scene = load_scene_uncached(STREAMING_ROLE_BULLET_PATH)
-	elif bullet_name == "Role3Bullet3":
-		scene = load_scene_uncached(ROLE3_BULLET3_SLIM_PATH)
-	else:
-		var slim_path := ROLE_BULLET_SLIM_DIR.path_join(_role_bullet_slim_filename(bullet_name))
-		if not ResourceLoader.exists(slim_path):
-			push_error("Missing slim role bullet scene: " + slim_path)
-			return null
-		scene = load_scene_uncached(slim_path)
-	var target = instance_scene(scene, parent)
-	if target == null:
-		return
-	target.position = position
-	target._name = _name
-	target.hit_dic = dic
-	target.direction = dir
-	_assign_attack_source(target, parent, source_player)
-	return target
+	return _projectile_factory.add_role_bullet(parent, position, dir, _name, dic, source_player)
 
 
 func add_choose_player(parent, _position):
@@ -2764,22 +2633,11 @@ func add_choose_player(parent, _position):
 
 
 func add_monster65_bullet(parent, _position):
-	if not monster65_bullet:
-		monster65_bullet = _load_scene("res://Scene/monster/monster65bullet.tscn")
-	var target = instance_scene(monster65_bullet, parent)
-	target.position = _position
-	return target
+	return _projectile_factory.add_monster65_bullet(parent, _position)
 
 
 func add_aura(parent, _position, value_in, color_type = 0):
-	var target = instance_scene(load_cached_scene(AURA_PATH), parent)
-	if target == null:
-		return null
-	target.value = PaSkill.apply_soul_gain_bonus(int(value_in))
-	target.set_meta("base_soul_value", int(value_in))
-	target.color_type = color_type
-	target.position = _position
-	return target
+	return _effect_factory.add_aura(parent, _position, value_in, color_type)
 
 
 func add_buffinfor(parent, _position, Data):
@@ -2907,14 +2765,7 @@ func add_role1_shallow(parent, position, dir, int_action, source_player: BaseHer
 
 
 func add_role_bullet_1(parent, position, _name, dic, source_player: BaseHero = null):
-	if not role_bullet_1:
-		role_bullet_1 = _load_scene("res://Scene/hero/role_bullet_1.tscn")
-	var target = instance_scene(role_bullet_1, parent)
-	target.position = position
-	target._name = _name
-	target.hit_dic = dic
-	_assign_attack_source(target, parent, source_player)
-	return target
+	return _projectile_factory.add_role_bullet_1(parent, position, _name, dic, source_player)
 
 
 func add_skill_key_set(parent, position, _name):
@@ -2974,20 +2825,7 @@ func add_skill_select(parent, position, _name):
 
 
 func add_weapon_bullet(parent, position, _name, list, dir, Rand):
-	var scene_path := str(ADD_WEAPON_BULLET_PATHS.get(str(_name), ""))
-	if scene_path.is_empty() or not ResourceLoader.exists(scene_path):
-		push_error("Missing lazy weapon bullet scene for: " + str(_name))
-		return null
-	var cache_key := StringName("add_weapon_bullet_" + str(_name))
-	var target = instance_scene(_cached_scene(cache_key, scene_path), parent)
-	if target == null:
-		return null
-	target.obj_attack_dict = list
-	target.rnd = Rand
-	target._name = _name
-	target.dir = dir
-	target.position = position
-	return target
+	return _projectile_factory.add_weapon_bullet(parent, position, _name, list, dir, Rand)
 
 
 func get_active_pet_preload_data() -> Dictionary:
@@ -3337,10 +3175,7 @@ func request_save_with_feedback(reason: String, parent: Node = null, failure_pre
 
 
 func add_ws_effect(parent):
-	if not ws_effect:
-		ws_effect = _load_scene("res://Scene/hero/role_1/ws_effect.tscn")
-	var target = instance_scene(ws_effect, parent)
-	return target
+	return _effect_factory.add_ws_effect(parent)
 
 
 func add_choose_item(parent, position, list, _name, page):
@@ -3793,15 +3628,7 @@ func instance_scene_safe(target_scene_, parent):
 
 
 func add_role_bullet_1_safe(parent, position, _name, dic, source_player: BaseHero = null):
-	if not role_bullet_1:
-		role_bullet_1 = _load_scene("res://Scene/hero/role_bullet_1.tscn")
-	var target = role_bullet_1.instantiate()
-	target.position = position
-	target._name = _name
-	target.hit_dic = dic
-	_assign_attack_source(target, parent, source_player)
-	parent.call_deferred("add_child", target)
-	return target
+	return _projectile_factory.add_role_bullet_1_safe(parent, position, _name, dic, source_player)
 
 
 func add_bullet_safe(bullet_name, parent, direction, show_speed, position, _hit_name, list):
