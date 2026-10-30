@@ -32,6 +32,7 @@
 |:---|:---|
 | [`reference/README.md`](reference/README.md) | 参考文档目录索引 |
 | [`reference/architecture.md`](reference/architecture.md) | **运行时架构**：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
+| [`reference/autoload_boundary_matrix.md`](reference/autoload_boundary_matrix.md) | **Phase 20-1B Autoload 与 Global 拆分边界**：13 个注册项决策、`global.gd` 切面、迁移顺序与试点 |
 | [`reference/runtime_frames_exceptions.md`](reference/runtime_frames_exceptions.md) | **Phase 19-3A 运行时建帧例外决策**：12 个冻结例外的保留/补资源/删除回退结论、TaoWu 回退收口与后续边界 |
 | [`reference/runtime_lifecycle_matrix.md`](reference/runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
 | [`reference/archive_session_matrix.md`](reference/archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者 |
