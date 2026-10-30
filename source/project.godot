@@ -85,8 +85,8 @@ Monster=""
 
 bind_mode=0
 custom_bind_ip=""
-port_override_enabled=false
-port_override=6550
+port_override_enabled=true
+port_override=6551
 
 [importer_defaults]
 
