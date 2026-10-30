@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A/21-3B/21-3C/21-3D 已完成**；21-1A/21-1B/21-1C、21-2、21-4 与剩余工厂族未启动。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A/21-3B/21-3C/21-3D 与 21-4B 已完成**；21-1A/21-1B/21-1C、21-2、21-4A 与剩余工厂族未启动。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -69,7 +69,7 @@
 ## 5. Phase 21-4：资源转换器与建帧遗留
 
 1. **21-4A 转换器扩展**：`eight_immortals_boss`、`pet_tiger_boss_base`、`three_prince_boss` 的多目录/多纹理动作集需要扩展转换器后再迁移；扩展前保留运行期构建且不新增 allowlist；
-2. **21-4B `weiyang_palace_boss` 符号层**：`3007`/`3010` 路径不匹配为独立缺陷；修正会恢复符号层并改变嘴部第 51 帧发射时序，必须单独做视觉与时序验收。
+2. **21-4B `weiyang_palace_boss` 符号层（完成，2026-10-30）**：路径修正为 `swf_png/3007/atlas/swf_png_3007_frames.tres`；嘴/眼符号层恢复（78/17/55 帧），初始帧 0/16/54、镜像正确，嘴部可推进到第 50 帧发射；新增 `weiyang-symbol` 探针 23 项 PASS。运行期复制保留在 allowlist，不新增条目。
 
 **必须验证**：补资源项迁移后 `runtime_frames_allowlist` 只减不增；缺陷修正有前后帧与技能时序证据。
 

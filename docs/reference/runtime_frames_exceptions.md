@@ -17,7 +17,7 @@
 | `source/Script/monster/tao_wu_boss.gd` | 标准 `tao_wu_frames.tres` 缺失时用 `monster47.png` 单图伪造 `atlas` 动画 | `tao_wu_frames.tres` 含 `Monster47FramesCenteredCropped`；场景仅 `monster_151.tscn` 使用该脚本 | **删除回退（已执行）** |
 | `source/Script/monster/three_prince_boss.gd` | `_build_body_frames` 遍历 `root/<action>/<n>.png`，超过 `frame_size` 时居中裁剪 | 4 个根目录 × 多动作逐帧 PNG；Nezha 根已走构建期资源，其余仍需运行期构建 | 补资源待办 |
 | `source/Script/monster/three_prince_bullet.gd` | `_build_effect_frames` 有 `frames_resource_path` 时走资源，否则逐帧 PNG 回退 | Nezha 特效走资源；非 Nezha 特效仍依赖逐帧回退，回退是活跃路径 | 保留 |
-| `source/Script/monster/weiyang_palace_boss.gd` | `_build_symbol_frames` 从现有帧资源复制并重命名为 `eye`/`mouth` 符号层 | 当前路径为 `swf_png/3007/atlas/swf_png_3010_frames.tres`，该文件不存在；3007 帧资源才含 `DefineSprite_*` 序列，分支实际不可达 | 补资源待办；登记路径不匹配缺陷 |
+| `source/Script/monster/weiyang_palace_boss.gd` | `_build_symbol_frames` 从现有帧资源复制并重命名为 `eye`/`mouth` 符号层 | **已修复（21-4B，2026-10-30）**：路径改为 `swf_png/3007/atlas/swf_png_3007_frames.tres`，`DefineSprite_45`(17)/`DefineSprite_68`(55)/`DefineSprite_28__1_fla.effect1_1_9`(78) 均存在；嘴部第 50 帧纹理可达，Boss 恢复发射 | **保留运行期复制**（`SpriteFrames.new()` 只复制现有帧，不重扫图集）；allowlist 不变 |
 | `source/Script/pet/pet_neat_bullet.gd` | `_frames_for` 对 `pet_neat_4_bullet_3` 运行时执行蓝底抠图 | 构建期迁移需 22 张去底 PNG 与图像编解码步骤，收益低于素材重复成本 | 保留 |
 | `source/Script/tools/user_key.gd` | `_make_ws_sprite_frames` 使用固定图标路径数组建帧 | 调试工具 UI，不进入游戏运行路径 | 保留 |
 
@@ -31,6 +31,6 @@
 ## 3. 后续边界
 
 1. `eight_immortals_boss`、`pet_tiger_boss_base`、`three_prince_boss` 的“补资源”迁移需要扩展现有转换器以表达多目录/多纹理动作集；在转换器扩展前继续保留运行期构建，不新增 allowlist 条目。
-2. `weiyang_palace_boss` 的符号层路径不匹配是独立缺陷：修正为 3007 帧资源会恢复符号层并改变技能时序（嘴部第 51 帧发射），必须单独做视觉与时序验收，不在本切片直接修改。
+2. `weiyang_palace_boss` 符号层路径已修正为 3007 帧资源（21-4B）；`weiyang-symbol` 探针覆盖帧数、初始帧、镜像与“嘴部推进到第 50 帧”，Boss 技能恢复发射。剩余运行期复制仍保留在 allowlist，不新增条目。
 3. `nanhai_projectile` 与 `three_prince_bullet` 的逐帧回退是活跃路径，不是死代码；在非标准资源模型全部迁移前不得删除。
 4. 其余保留项均为固定数组、已加载帧复制、null 计时帧、运行期抠图或调试工具，不满足“路径扫描/逐帧 IO”的新增禁止条件。

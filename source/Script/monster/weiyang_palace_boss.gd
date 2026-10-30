@@ -281,7 +281,7 @@ func _create_symbol_layer(
 static func _build_symbol_frames(
 	animation_name: StringName, directory: String, _frame_count: int, loops: bool
 ) -> SpriteFrames:
-	var frames_path := ROOT.path_join("atlas/swf_png_3010_frames.tres")
+	var frames_path := ROOT.path_join("atlas/swf_png_3007_frames.tres")
 	if ResourceLoader.exists(frames_path):
 		var source := load(frames_path) as SpriteFrames
 		if source != null and source.has_animation(StringName(directory)):
