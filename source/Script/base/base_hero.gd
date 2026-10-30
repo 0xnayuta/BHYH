@@ -1765,17 +1765,17 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	Global.total_role_hurt += int(last_hit)
 	if not is_miss:
 		if self is Role1Hero:
-			Global.add_sound(self, "res://Music/hero/49_role1_be_attack.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/49_role1_be_attack.mp3")
 		elif self is Role2Hero:
-			Global.add_sound(self, "res://Music/hero/62_role2_be_attack.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/62_role2_be_attack.mp3")
 		elif self is Role5Hero:
-			Global.add_sound(self, "res://Music/hero/role_5/13_hurt_stand.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/13_hurt_stand.mp3")
 		elif self is NeZhaHero:
-			Global.add_sound(self, "res://Music/hero/role_6/hurt_stand.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_6/hurt_stand.mp3")
 		elif self is YutuHero:
-			Global.add_sound(self, "res://Music/hero/role_7/blade/hurt_stand.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_7/blade/hurt_stand.mp3")
 		else:
-			Global.add_sound(self, "res://Music/hero/68_role3_be_attack.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/68_role3_be_attack.mp3")
 		_add_role_hit_effect_throttled()
 		if not is_t_mc:
 			_add_role_protect(randi_range(3, 7))
@@ -3125,7 +3125,7 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 	if self is Role1Hero:
 		if get_action == "qsez":
 			velocity.x = 0
-			Global.add_sound(self, "res://Music/hero/27_role1_hit13_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/27_role1_hit13_2.mp3")
 			if not is_call:
 				is_call = true
 				var pp = [

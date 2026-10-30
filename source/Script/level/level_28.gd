@@ -19,7 +19,7 @@ var _light_hit_time: Dictionary = {}
 
 func _ready() -> void:
 	Global.current_level = "彩虹楼"
-	Global.add_bgm(self, "res://Music/level/floor_7_10.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/floor_7_10.mp3")
 	self.level_stage = 27
 	super._ready()
 	_setup_hidden_lights()

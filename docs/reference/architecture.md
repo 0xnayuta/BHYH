@@ -39,7 +39,7 @@ BHYH/
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
 | 最大 FPS | 150（`run/max_fps`） | `source/project.godot` |
-| Autoload | **12**：11 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
+| Autoload | **11**：10 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
 | 输入动作 | 集中定义于 `source/project.godot`；数量以配置为准 | `source/project.godot` `[input]` |
 | 2D 物理层 | 具名层；名称与数量以 `source/project.godot` 为准 | `source/project.godot` `[layer_names]` |
 | 场景树分组 | `Player`、`Monster` | `source/project.godot` `[global_group]` |
@@ -75,37 +75,37 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 5 | `AE` | `all_equipment.gd` | 装备数值门面，懒加载大体量装备表 | 无业务依赖 |
 | 6 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
 | 7 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
-| 8 | `MainMusic` | `main_music.gd` | 主菜单 BGM 单实例 | 读取 `MainSet`、`Global` |
-| 9 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
-| 10 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
-| 11 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
-| 12 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
+| 8 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
+| 9 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 10 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
+| 11 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
 
 ### 2.2 依赖与初始化约束
 
-- `MemoryClass`、`PaSkill`、`MainMusic`、`Global`、`LocalCoop` 之间存在读取依赖；新增 Autoload 必须说明初始化顺序。
+- `MemoryClass`、`PaSkill`、`Global`、`LocalCoop` 之间存在读取依赖；新增 Autoload 必须说明初始化顺序。
 - `Global`、`PlayerData`、`BaseRoleProperties` 对 `LocalCoop` 使用 `get_node_or_null("/root/LocalCoop")` 探测，避免“声明在最后”导致的启动期空引用。
 - `LocalCoop` 通过 `class_name` 反查 `BaseHero` / `BaseLevel`，用于槽位归属解析；这是当前双人模型的关键耦合点。
 - 新代码访问角色状态时，应使用 `BaseObject` 暴露的 `PlayerData`、`RoleProp`、`PlayerInput`，或 `BaseRole` 暴露的 `PlayerData`、`RoleProp`。这些属性内部经 `LocalCoop` 路由，不能假定永远是 1P。
 
 ### 2.3 边界
 
-12 个 Autoload 是历史结构，登记为遗留例外：
+11 个 Autoload 是历史结构，登记为遗留例外：
 
 - `global.gd` 不得继续扩张为新的业务数据仓库；
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 12 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除，其余实施延期）。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 与 `MainMusic` 已删除，其余实施延期）。
 
 ### 2.4 运行时服务
 
-`Global` 在 `_ready` 创建两个普通子节点，均不是 Autoload：
+`Global` 在 `_ready` 创建三个普通子节点，均不是 Autoload：
 
 - `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记与 UI 实例缓存；`add_*` 工厂仍留在 `Global`，通过 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
+- `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
 - `RuntimeDiagnostics`：调试性能浮层与只读诊断快照（运行时代次、后台保存/失败状态、缓存作用域、关卡租约、预载单槽）。
 
-业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。探针通过 `Global.get_ui_runtime()` / `Global.get_runtime_diagnostics()` 访问；旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.get_*_snapshot()` 等入口已删除。
+业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic` 与 `Global.get_*_snapshot()` 等入口已删除。
 
 ---
 
@@ -543,7 +543,7 @@ classDiagram
 | 商店 | `Script/shop/` | 商店、神秘商店、购买确认 | `shop.gd`、`mystery_shop.gd` |
 | 伤害文本 | `Script/hittext/` | 伤害数字/文字/Miss，走对象池 | `damage_number.gd`、`damage_text.gd` |
 | 子弹 | `Script/bullet/`、`Scene/bullet/` | 直线/追踪弹与 slim 场景 | `fly_bullet.gd`、`chase_bullet.gd` |
-| 音频 | `Script/all_sound/`、`main_music.gd` | BGM 单实例、命中音效池 | `bgm.gd`、`monster_be_hit.gd` |
+| 音频 | `Script/all_sound/`、`Script/runtime/audio_runtime.gd` | BGM 单实例、主菜单 BGM、命中音效池与声部仲裁 | `AudioRuntime`、`bgm.gd`、`monster_be_hit.gd` |
 | 特殊玩法 | `Script/other_menu/`、`Scene/other_scene/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd` |
 | 工具/输入 | `Script/tools/` | 虚拟摇杆、按键设置、场景 viewport | `set_com.gd`、`user_key.gd` |
 
@@ -555,7 +555,7 @@ classDiagram
 
 | 项目 | 现状 | 约束 |
 |:---|:---|:---|
-| 12 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 11 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
@@ -588,7 +588,7 @@ classDiagram
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
 1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。资产身份为 `asset_id`，播放策略由实例覆盖，不再是复合 key。
-2. **Autoload 数量**：共 12 个注册项，其中 11 个是业务单例，`MCPGameBridge` 是调试桥；说“12 个业务 Autoload”不准确。
+2. **Autoload 数量**：共 11 个注册项，其中 10 个是业务单例，`MCPGameBridge` 是调试桥；说“11 个业务 Autoload”不准确。
 3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。
 5. **规模数字**：具体规模以 [`status.md`](status.md) 的当前快照为准；本文不复制脚本、场景与资源数量。

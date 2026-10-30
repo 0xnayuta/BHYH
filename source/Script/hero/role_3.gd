@@ -473,37 +473,37 @@ func _on_inter_timeout() -> void:
 func add_music(idx):
 	match idx:
 		0:
-			Global.add_sound(self, "res://Music/hero/71_role3_hit1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/71_role3_hit1.mp3")
 		1:
-			Global.add_sound(self, "res://Music/hero/70_role3_hit2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/70_role3_hit2.mp3")
 		2:
-			Global.add_sound(self, "res://Music/hero/69_role3_hit3.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/69_role3_hit3.mp3")
 		3:
-			Global.add_sound(self, "res://Music/hero/role_3/16_role3_hit5.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/16_role3_hit5.mp3")
 		4:
-			Global.add_sound(self, "res://Music/hero/role_3/10_role3_hit8.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/10_role3_hit8.mp3")
 		5:
-			Global.add_sound(self, "res://Music/hero/role_3/14_role3_hit7.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/14_role3_hit7.mp3")
 		6:
-			Global.add_sound(self, "res://Music/hero/role_3/31_role3_hit6.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/31_role3_hit6.mp3")
 		7:
-			Global.add_sound(self, "res://Music/hero/role_3/38_role3_hit9.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/38_role3_hit9.mp3")
 		8:
-			Global.add_sound(self, "res://Music/hero/role_3/53_role3_hit4.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/53_role3_hit4.mp3")
 		9:
-			Global.add_sound(self, "res://Music/hero/role_3/56_role3_hit10.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/56_role3_hit10.mp3")
 		10:
-			Global.add_sound(self, "res://Music/hero/role_3/67_role3_hit11.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/67_role3_hit11.mp3")
 		11:
-			Global.add_sound(self, "res://Music/hero/role_3/74_role3_hit12_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/74_role3_hit12_1.mp3")
 		12:
-			Global.add_sound(self, "res://Music/hero/role_3/14_role3_hit7.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/14_role3_hit7.mp3")
 		13:
-			Global.add_sound(self, "res://Music/hero/role_3/52_role3_hit12_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/52_role3_hit12_2.mp3")
 		14:
-			Global.add_sound(self, "res://Music/hero/72_role3_dead.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/72_role3_dead.mp3")
 		15:
-			Global.add_sound(self, "res://Music/hero/role_3/role3_skill_11.wav")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_3/role3_skill_11.wav")
 			pass
 
 

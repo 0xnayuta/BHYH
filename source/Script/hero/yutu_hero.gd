@@ -239,7 +239,7 @@ func get_skill(skill_name):
 func _sound(sound: String, bank: String = "blade") -> void:
 	var path := "res://Music/hero/role_7/" + bank + "/" + sound + ".mp3"
 	if ResourceLoader.exists(path):
-		Global.add_sound(self, path)
+		Global.get_audio_runtime().add_sound(self, path)
 
 
 func _physics_process(delta: float) -> void:

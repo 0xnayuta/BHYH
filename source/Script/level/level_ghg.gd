@@ -29,7 +29,7 @@ func _ready() -> void:
 	Global.game_over = 1
 	level_stage = 0
 	is_two_scene = false
-	Global.add_bgm(self, "res://Music/level/bgm_normal.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_normal.mp3")
 	super._ready()
 
 

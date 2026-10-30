@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`、P2 抽取 `RuntimeDiagnostics`，当前 12 个 Autoload）；20-1A/20-1C/20-1D、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 完成、19-4A/19-4B/19-4C 完成、20-1B 完成（P1 删除 `BaseHit`、P2 抽取 `RuntimeDiagnostics`、W3 S2 抽取 `UiRuntime`、W4 抽取 `AudioRuntime` 并合并 `MainMusic`，当前 11 个 Autoload）；20-1A/20-1C/20-1D、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -45,7 +45,7 @@ source/                     # 唯一活跃 Godot 工程
 ├── Spritesheet/            # 精灵表
 ├── addons/                 # godot_mcp 等第三方插件（非维护任务不改）
 ├── bin/                    # Spine GDExtension（Windows x86_64）
-└── project.godot           # 工程配置（12 个 Autoload）
+└── project.godot           # 工程配置（11 个 Autoload）
 
 docs/                       # 文档（见 docs/README.md）
 scripts/                    # 门禁、审计、回归与构建工具（见 scripts/README.md）
@@ -232,6 +232,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 20-1B P1 `BaseHit` 删除 | 删除 `project.godot` 的 `BaseHit` 注册、`source/base_hit.gd`/`.uid`、`hit_bullet.gd` 的 `remove_infor()` 与 4 个弹体场景中 6 个 `remove_infor` 动画方法键；命中数值逻辑未变。Autoload **13→12**（11 业务 + 1 调试桥）。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（718 脚本）；`level_1` 冒烟 **PASS**（4 Stage，日志 0/0/0）；`scene_probe_runner --probe magic-weapons` **PASS**；4 个改动场景加载/实例化/方法轨道临时探针 **PASS**；`check_all --godot-bin` **8/8 PASS**。 | 20-1B P1 完成；P2 完成 |
 | 2026-10-30 Phase 20-1B P2 `RuntimeDiagnostics` | 新增 `source/Script/runtime/runtime_diagnostics.gd`（`class_name RuntimeDiagnostics`，230 行），由 `Global._ready` 创建为普通 `Node` 子节点，不注册 Autoload。迁出调试性能浮层、`get_runtime_generation`、后台保存/失败状态、缓存作用域/关卡租约/预载单槽快照及诊断状态；`Global` **6,041→5,775 行、360→347 函数、295→291 变量、76→75 常量**。新入口 `Global.get_runtime_diagnostics()`；`scene_probes` 与 `archive_probes` 已迁移，旧 `Global.get_*_snapshot` 入口删除。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（719 脚本）；`scene_probe_runner` 的租约/加载守卫/关卡选择 **3/3 PASS**；`archive_probe_runner` **289/289 PASS**；`level_1` 冒烟 **PASS**（4 Stage，日志 0/0/0）；临时调试浮层/快照探针 **PASS**；`check_all --godot-bin` **8/8 PASS**。 | 20-1B P2 完成；W3 未启动 |
 | 2026-10-30 Phase 20-1B W3 S2 `UiRuntime` | 新增 `source/Script/runtime/ui_runtime.gd`（`class_name UiRuntime`，274 行），由 `Global._ready` 创建为普通 `Node` 子节点，不注册 Autoload。迁出 `windows`、popup 层、hover popup、临时 UI 登记/清理、UI 实例登记/计数与 UI 场景缓存释放；`LocalCoop` 面板改为 `push_windows()`/`pop_windows()`，删除 `_previous_windows`。`add_*` 工厂仍留 `Global`，生命周期改走 `Global.get_ui_runtime()`；`Global.windows`、`Global.get_ui_popup_layer()`、`Global.register_transient_ui()` 等旧入口删除。`Global` **5,775→5,563 行、347→333 函数、291→285 变量**。`contract_scan` 的池/UI 门禁与自测样本改指 `Global.get_ui_runtime()`。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（720 脚本）；`scene_probe_runner` **7/7 PASS**；`archive_probe_runner` **289/289 PASS**；`coop_probe_runner` **26/26 PASS**；`level_1` 冒烟 **PASS**；`contract_scan --self-test` PASS、`--fail-on-error` ERROR=0；`check_all --godot-bin` **8/8 PASS**。 | 20-1B W3 S2 完成；W4 未启动 |
+| 2026-10-30 Phase 20-1B W4 `AudioRuntime` | 新增 `source/Script/runtime/audio_runtime.gd`（`class_name AudioRuntime`，233 行），由 `Global._ready` 创建为普通 `Node` 子节点，不注册 Autoload。迁出 `add_bgm`/`add_sound`/`stop_bgm`/`recycle_sound_player`、BGM 单实例、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；合并 `MainMusic` 并删除其 Autoload 注册与 `main_music.gd`，主菜单 BGM 改由 `AudioRuntime.add_main_menu_music()`/`remove_main_menu_music()`/`has_main_menu_music()` 管理。调用方迁移：`Global.add_bgm` 125 处、`Global.add_sound` 138 处、`MainMusic.*` 27 处改走 `Global.get_audio_runtime()`；Autoload **12→11**。`Global` **5,563→5,407 行、333→326 函数、285→280 变量、信号 2→1**。**验证**：`health_check` **0 Parse / 0 Error / 0 Warning**（720 脚本）；`archive_probe_runner` **289/289 PASS**（含 BGM/SFX 14 项）；`scene_probe_runner` **7/7 PASS**；`coop_probe_runner` **26/26 PASS**；`level_1` 冒烟 **PASS**（4 Stage，0/0/0）；`check_all --godot-bin` **8/8 PASS**。 | 20-1B W4 完成；W5 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

@@ -87,7 +87,7 @@ func _play_level_bgm(bgm_path: String) -> void:
 	var bgm_stream := Global.get_cached_audio(bgm_path)
 	if bgm_stream is AudioStreamMP3:
 		bgm_stream.loop = true
-	Global.add_bgm(self, bgm_path)
+	Global.get_audio_runtime().add_bgm(self, bgm_path)
 
 
 func _configure_level_monsters() -> void:

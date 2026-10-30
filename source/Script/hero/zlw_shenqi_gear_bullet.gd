@@ -151,7 +151,7 @@ func _hurt_monster(monster: BaseMonster) -> void:
 		return
 	monster.hp -= hurt
 	monster.total_hurt += hurt
-	Global.add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+	Global.get_audio_runtime().add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	Global.total_role_hit += hurt
 	if attack_kind == "physics":
 		Global.total_phy_hit += hurt

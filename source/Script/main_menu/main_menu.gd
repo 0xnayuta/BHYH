@@ -81,8 +81,8 @@ func _ready() -> void:
 	MemoryClass.remove_play_data()
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()
-	if MainMusic.my_main_music == null:
-		MainMusic.add_music()
+	if not Global.get_audio_runtime().has_main_menu_music():
+		Global.get_audio_runtime().add_main_menu_music()
 	if MainSet.set_data["FristGame"]:
 		Global.add_game_need_know(_menu_content_parent(), Vector2(0, 0))
 		pass
@@ -142,33 +142,33 @@ func _physics_process(_delta: float) -> void:
 	if music_menu_open:
 		if music_jm != null:
 			if music_jm.is_change:
-				MainMusic.add_music()
+				Global.get_audio_runtime().add_main_menu_music()
 				music_jm.is_change = false
 	if game_set != null:
 		if game_set.music_is_change:
-			MainMusic.add_music()
+			Global.get_audio_runtime().add_main_menu_music()
 			game_set.music_is_change = false
 
 
 func _on_begin_game_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 
 	if ar_infer.get_child_count() == 0:
 		cd_jm = Global.add_cd_jm(ar_infer, Vector2(0, 0))
 
 
 func _on_music_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	music_jm = Global.add_music_set(music_set, Vector2(0, 0))
 
 
 func _on_gmae_help_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	Global.add_gm_infor(_menu_content_parent(), Vector2(0, 0))
 
 
 func _on_tiaoguo_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	if MainSet.set_data["剧情跳过"]:
 		MainSet.set_data["剧情跳过"] = false
 		Global.add_message_show(get_parent(), "将不会跳过结束剧情！！", 1.5, Vector2(470, 340))
@@ -179,17 +179,17 @@ func _on_tiaoguo_pressed() -> void:
 
 
 func _on_change_bg_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	Global.add_change_bg(b_gset, Vector2(0, 0))
 
 
 func _on_game_set_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	game_set = Global.add_game_set(_menu_content_parent(), Vector2(0, 0))
 
 
 func _on_game_warn_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	Global.add_game_need_know(_menu_content_parent(), Vector2(0, 0))
 
 
@@ -271,5 +271,5 @@ func refresh_time(data_list):
 
 
 func _on_letter_pressed() -> void:
-	Global.add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	Global.add_letter_for_player(_menu_content_parent(), Vector2(0, 0))

@@ -7,7 +7,7 @@ extends BaseLevel
 
 func _ready() -> void:
 	Global.current_level = "水帘洞"
-	bgm_node = Global.add_bgm(self, "res://Music/level/1_music.mp3")
+	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/1_music.mp3")
 	self.level_stage = 2
 	super._ready()
 	monster_group = {
@@ -61,7 +61,7 @@ func set_through():
 				bgm_node.queue_free()
 				bgm_node = null
 
-			bgm_node = Global.add_bgm(self, "res://Music/level/2_music.mp3")
+			bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/2_music.mp3")
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

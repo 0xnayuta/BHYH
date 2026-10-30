@@ -166,8 +166,8 @@ func _ready() -> void:
 		MainSet.set_data["CurrentLevelPage"] = max_page
 		MemoryClass.main_bc()
 
-	if MainMusic.my_main_music == null:
-		MainMusic.add_music()
+	if not Global.get_audio_runtime().has_main_menu_music():
+		Global.get_audio_runtime().add_main_menu_music()
 	Global.current_level = ""
 
 	if not Global.is_frist:

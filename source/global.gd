@@ -2,9 +2,9 @@ extends Node
 const DataKeys := preload("res://Script/base/data_keys.gd")
 
 signal combo_milestone_reached(milestone: int)
-signal sound_settings_changed
 
 const TARGET_MAX_FPS := 150
+const AUDIO_RUNTIME_SCRIPT := preload("res://Script/runtime/audio_runtime.gd")
 const UI_RUNTIME_SCRIPT := preload("res://Script/runtime/ui_runtime.gd")
 const RUNTIME_DIAGNOSTICS_SCRIPT := preload("res://Script/runtime/runtime_diagnostics.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
@@ -280,8 +280,8 @@ func _exit_tree() -> void:
 	_audio_cache.clear()
 	_texture_cache.clear()
 	_monster_scene_cache.clear()
-	_last_sound_play_msec.clear()
-	_active_sound_players.clear()
+	if _audio_runtime != null:
+		_audio_runtime.clear_runtime_state()
 	_pending_combo_milestones.clear()
 	FrameSequenceStore.clear_cache()
 	FrameTextureRequests.shutdown_process()
@@ -305,6 +305,10 @@ func _ready() -> void:
 	_ui_runtime.name = "UiRuntime"
 	_ui_runtime.setup(self)
 	add_child(_ui_runtime)
+	_audio_runtime = AUDIO_RUNTIME_SCRIPT.new()
+	_audio_runtime.name = "AudioRuntime"
+	_audio_runtime.setup(self)
+	add_child(_audio_runtime)
 	_runtime_diagnostics = RUNTIME_DIAGNOSTICS_SCRIPT.new()
 	_runtime_diagnostics.name = "RuntimeDiagnostics"
 	_runtime_diagnostics.setup(self)
@@ -322,6 +326,10 @@ func get_runtime_diagnostics() -> RuntimeDiagnostics:
 
 func get_ui_runtime() -> UiRuntime:
 	return _ui_runtime
+
+
+func get_audio_runtime() -> AudioRuntime:
+	return _audio_runtime
 
 
 var cloud_sword = null
@@ -541,16 +549,9 @@ var _permanent_ui_prewarmed := false
 var _prewarmed_pet_signature: String = ""
 var _level_resource_lease: Dictionary = {}
 var _level_resource_lease_id: int = 0
-var _last_sound_play_msec = {}
-var _active_sound_players: Dictionary = {}
-var _last_sfx_enabled := true
-var _last_sfx_volume := INF
-const MOBILE_SFX_VOICE_LIMIT := 24
-const DESKTOP_SFX_VOICE_LIMIT := 48
-const MOBILE_SFX_PER_SOUND_LIMIT := 4
-const DESKTOP_SFX_PER_SOUND_LIMIT := 8
 var _last_mr_hurt_msec = {}
 var _pending_combo_milestones = {}
+var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
 var _runtime_diagnostics: RuntimeDiagnostics = null
 var _sword_damage_text_frame: int = -1
@@ -640,70 +641,6 @@ func recycle_role_be_hit(node: Node) -> void:
 	if node == null or not is_instance_valid(node):
 		return
 	_store_pooled_node(node, _pool_data["role_be_hit"], ROLE_BE_HIT_POOL_LIMIT)
-
-
-func recycle_sound_player(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	_active_sound_players.erase(node.get_instance_id())
-	if not _pool_data["sound_player"].has(node):
-		_store_pooled_node(node, _pool_data["sound_player"], SOUND_PLAYER_POOL_LIMIT)
-
-
-func _release_active_sound_players() -> void:
-	for entry_value in _active_sound_players.values():
-		if not (entry_value is Dictionary):
-			continue
-		var node: Variant = (entry_value as Dictionary).get("node")
-		if not (node is Node) or not is_instance_valid(node):
-			continue
-		if node is AudioStreamPlayer:
-			(node as AudioStreamPlayer).stop()
-			(node as AudioStreamPlayer).stream = null
-		(node as Node).queue_free()
-	_active_sound_players.clear()
-	_last_sound_play_msec.clear()
-
-
-func _on_sound_player_tree_exiting(instance_id: int) -> void:
-	_active_sound_players.erase(instance_id)
-
-
-func _reserve_sound_voice(sound_key: String, priority: int) -> bool:
-	var same_count := 0
-	var total_victim: AudioStreamPlayer
-	var same_victim: AudioStreamPlayer
-	var total_priority := priority
-	var same_priority := priority
-	for id_value in _active_sound_players.keys():
-		var entry: Dictionary = _active_sound_players[id_value]
-		var node: Variant = entry.get("node")
-		if not is_instance_valid(node) or not node.is_inside_tree() or node.is_queued_for_deletion():
-			_active_sound_players.erase(id_value)
-			continue
-		var node_priority := int(entry["priority"])
-		if node_priority < total_priority:
-			total_priority = node_priority
-			total_victim = node as AudioStreamPlayer
-		if str(entry["key"]) == sound_key:
-			same_count += 1
-			if node_priority < same_priority:
-				same_priority = node_priority
-				same_victim = node as AudioStreamPlayer
-	var mobile := OS.has_feature("mobile")
-	var same_limit := MOBILE_SFX_PER_SOUND_LIMIT if mobile else DESKTOP_SFX_PER_SOUND_LIMIT
-	var total_limit := MOBILE_SFX_VOICE_LIMIT if mobile else DESKTOP_SFX_VOICE_LIMIT
-	var victim: AudioStreamPlayer
-	if same_count >= same_limit:
-		victim = same_victim
-	elif _active_sound_players.size() >= total_limit:
-		victim = total_victim
-	else:
-		return true
-	if victim == null:
-		return false
-	victim.call("_on_finished")
-	return true
 
 
 func can_show_sword_damage_text() -> bool:
@@ -1527,7 +1464,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 		sound_player.stream = null
 		sound_player.set_physics_process(false)
 		if not _pool_data["sound_player"].has(sound_player):
-			recycle_sound_player(sound_player)
+			_audio_runtime.recycle_sound_player(sound_player)
 	if is_instance_valid(warm_root):
 		warm_root.free()
 
@@ -1788,7 +1725,7 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 
 
 func end_archive_session() -> void:
-	stop_bgm()
+	_audio_runtime.stop_bgm()
 	# 退出/切档前先落盘未决后台任务；flush 失败时任务仍留在重试队列。
 	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
 		MemoryClass.flush_pending_saves()
@@ -1828,7 +1765,7 @@ func _clear_runtime_pools() -> void:
 		pool_root.queue_free()
 	_pool_data["root"] = null
 	_active_damage_texts.clear()
-	_release_active_sound_players()
+	_audio_runtime.release_active_sound_players()
 	_damage_text_count = 0
 
 
@@ -2565,8 +2502,6 @@ var magic_help = null
 
 var sound = null
 var mosaic = null
-var bgm = null
-var _active_bgm_instance: Node = null
 var role4_bullet = null
 var game_set = null
 var skill_key_set = null
@@ -3857,96 +3792,11 @@ func add_game_set(parent, position):
 	return target
 
 
-func add_bgm(parent, target_):
-	if not is_instance_valid(parent) or parent.is_queued_for_deletion():
-		return null
-	var bgm_key := str(target_)
-	if (
-		_active_bgm_instance != null
-		and (not is_instance_valid(_active_bgm_instance) or _active_bgm_instance.is_queued_for_deletion())
-	):
-		_active_bgm_instance = null
-	if _active_bgm_instance != null:
-		if str(_active_bgm_instance.get("target")) == bgm_key:
-			if _active_bgm_instance.get_parent() != parent:
-				_attach_pooled_node(_active_bgm_instance, parent)
-				_resume_bgm_after_reparent(_active_bgm_instance)
-			return _active_bgm_instance
-		if _active_bgm_instance is AudioStreamPlayer:
-			(_active_bgm_instance as AudioStreamPlayer).stop()
-		_active_bgm_instance.queue_free()
-		_active_bgm_instance = null
-	if not bgm:
-		bgm = _load_scene("res://Scene/all_sound/bgm.tscn")
-	if bgm == null:
-		return null
-	var target = bgm.instantiate()
-	if target == null:
-		return null
-	# 同步挂载，避免同曲在 deferred add_child 前被第二个父节点复用而挂错父节点。
-	target.target = target_
-	parent.add_child(target)
-	_active_bgm_instance = target
-	return target
-
-
-func _resume_bgm_after_reparent(node: Node) -> void:
-	if not (node is AudioStreamPlayer):
-		return
-	var player := node as AudioStreamPlayer
-	if not bool(MainSet.set_data.get("BackGroundMusic", true)):
-		return
-	if player.stream != null and not player.playing and not player.stream_paused:
-		player.play()
-
-
-func stop_bgm() -> void:
-	if not is_instance_valid(_active_bgm_instance):
-		_active_bgm_instance = null
-		return
-	var target := _active_bgm_instance
-	_active_bgm_instance = null
-	if target is AudioStreamPlayer:
-		(target as AudioStreamPlayer).stop()
-	target.queue_free()
-
-
 func add_mosaic_instance(parent, position):
 	if not mosaic:
 		mosaic = _load_scene("res://Scene/ldl/mosaic.tscn")
 	var target = instance_scene(mosaic, parent)
 	target.position = position
-	return target
-
-
-func add_sound(parent, target_, priority: int = 0):
-	if not is_instance_valid(parent) or parent.is_queued_for_deletion():
-		return null
-	if not bool(MainSet.set_data.get("RoleOrMonsterHit", true)):
-		return null
-	var now_msec := Time.get_ticks_msec()
-	var sound_key := str(target_)
-	var last_msec := int(_last_sound_play_msec.get(sound_key, -45))
-	if now_msec - last_msec < 45:
-		return null
-	if get_cached_audio(sound_key) == null:
-		return null
-	if not _reserve_sound_voice(sound_key, priority):
-		return null
-	var target = _take_pooled_node(_pool_data["sound_player"], "res://Scene/all_sound/monster_be_hit.tscn")
-	if target == null:
-		return null
-	_last_sound_play_msec[sound_key] = now_msec
-	_attach_pooled_node(target, parent)
-	var instance_id: int = target.get_instance_id()
-	var exit_callback := _on_sound_player_tree_exiting.bind(instance_id)
-	if not target.tree_exiting.is_connected(exit_callback):
-		target.tree_exiting.connect(exit_callback)
-	_active_sound_players[instance_id] = {"node": target, "key": sound_key, "priority": priority}
-	if target.has_method("setup"):
-		target.setup(target_)
-	else:
-		target.target = target_
 	return target
 
 
@@ -5185,12 +5035,6 @@ func main_remove_child(parent, node_name):
 
 
 func _physics_process(_delta: float) -> void:
-	var sfx_enabled := bool(MainSet.set_data.get("RoleOrMonsterHit", true))
-	var sfx_volume := float(MainSet.set_data.get("MusicFB_2", 0.0))
-	if sfx_enabled != _last_sfx_enabled or not is_equal_approx(sfx_volume, _last_sfx_volume):
-		_last_sfx_enabled = sfx_enabled
-		_last_sfx_volume = sfx_volume
-		sound_settings_changed.emit()
 	if MainSet.set_data.has("FileValue"):
 		if float(MainSet.set_data["FileValue"]) < float(file_num):
 			MainSet.set_data["FileValue"] = file_num

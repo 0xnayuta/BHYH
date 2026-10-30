@@ -426,7 +426,7 @@ func do_slz():
 	super.get_hit_data("slz")
 	is_attacking = true
 	role_action_player.play("slz")
-	Global.add_sound(self, "res://Music/hero/17_role1_hit6.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/17_role1_hit6.mp3")
 	await role_action_player.animation_finished
 	turn_to_wait()
 	is_attacking = false
@@ -445,7 +445,7 @@ func do_hytj():
 	super.get_hit_data("hytj")
 	is_attacking = true
 	role_action_player.play("hytj")
-	Global.add_sound(self, "res://Music/hero/8_role1_hit6.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/8_role1_hit6.mp3")
 	await role_action_player.animation_finished
 	turn_to_wait()
 	is_attacking = false
@@ -474,7 +474,7 @@ func do_lys():
 	super.get_hit_data("lys")
 	is_attacking = true
 	role_action_player.play("lys")
-	Global.add_sound(self, "res://Music/hero/11_role1_hit7.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/11_role1_hit7.mp3")
 	await role_action_player.animation_finished
 	if lys_awaken_up:
 		$Action/SpecialEffect.rotation = 0.0
@@ -502,7 +502,7 @@ func do_lyfb():
 		get_parent().add_child(awaken_effect)
 	is_attacking = true
 	role_action_player.play("lyfb")
-	Global.add_sound(self, "res://Music/hero/1_role1_hit9.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/1_role1_hit9.mp3")
 	await role_action_player.animation_finished
 	if lyfb_awaken_active:
 		lyfb_original_effect.visible = true
@@ -539,7 +539,7 @@ func do_gsrs():
 	super.get_hit_data("gsrs")
 	is_attacking = true
 	role_action_player.play(GSRS_ZZ_ACTION if _prepare_gsrs_zz_action() else &"gsrs")
-	Global.add_sound(self, "res://Music/hero/00_role1_gsrs.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/00_role1_gsrs.mp3")
 	await role_action_player.animation_finished
 	turn_to_wait()
 	is_attacking = false
@@ -701,7 +701,7 @@ func do_hmz_one():
 	is_attacking = true
 	super.get_hit_data("hmz_1")
 
-	Global.add_sound(self, "res://Music/hero/36_role1_hit10_2.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/36_role1_hit10_2.mp3")
 
 	const FRONT_OFFSET = 100
 	const UP_OFFSET = 100
@@ -803,7 +803,7 @@ func do_hmz_two():
 
 	get_action = "hmz"
 	is_attacking = true
-	Global.add_sound(self, "res://Music/hero/37_role1_hit10_4.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/37_role1_hit10_4.mp3")
 
 	velocity = Vector2.ZERO
 
@@ -882,7 +882,7 @@ func do_hmz_pro_old():
 	get_action = "hmz"
 	is_using_skills = true
 	is_using_hmz = true
-	Global.add_sound(self, "res://Music/hero/35_role1_hit10_1.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/35_role1_hit10_1.mp3")
 	var abc
 	var x = 0
 	if player_dir:
@@ -929,7 +929,7 @@ func do_hmz_one_old():
 	get_action = "hmz"
 	is_attacking = true
 	super.get_hit_data("hmz-1")
-	Global.add_sound(self, "res://Music/hero/36_role1_hit10_2.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/36_role1_hit10_2.mp3")
 	role_action_player.play("hmz__")
 	var abc
 	if player_dir:
@@ -980,7 +980,7 @@ func do_hmz_two_old():
 	role_action_player.play("hmz__")
 	get_action = "hmz"
 	is_attacking = true
-	Global.add_sound(self, "res://Music/hero/37_role1_hit10_4.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/37_role1_hit10_4.mp3")
 	velocity.x = 0
 	velocity.y = 0
 	super.get_hit_data("hmz_3")
@@ -1037,21 +1037,21 @@ func reset():
 func add_music(idx):
 	match idx:
 		0:
-			Global.add_sound(self, "res://Music/hero/40_role1_hit1_and_hit2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/40_role1_hit1_and_hit2.mp3")
 		1:
-			Global.add_sound(self, "res://Music/hero/39_role1_hit3_and_hit4.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/39_role1_hit3_and_hit4.mp3")
 		2:
-			Global.add_sound(self, "res://Music/hero/38_role1_hit5.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/38_role1_hit5.mp3")
 		3:
-			Global.add_sound(self, "res://Music/hero/18_role1_hit14.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/18_role1_hit14.mp3")
 		4:
-			Global.add_sound(self, "res://Music/hero/45_role1_hit12_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/45_role1_hit12_1.mp3")
 		5:
-			Global.add_sound(self, "res://Music/hero/42_role1_hit11.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/42_role1_hit11.mp3")
 		6:
-			Global.add_sound(self, "res://Music/hero/26_role1_hit13_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/26_role1_hit13_1.mp3")
 		7:
-			Global.add_sound(self, "res://Music/hero/59_role1_dead.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/59_role1_dead.mp3")
 
 
 func call_hyjj():

@@ -120,7 +120,7 @@ func _apply_area_damage() -> void:
 		var delta := monster.global_position - hit_center
 		if absf(delta.x) <= hit_half_size.x and absf(delta.y) <= hit_half_size.y:
 			monster.receive_friendly_damage(damage, "magic", source if is_instance_valid(source) else null)
-			Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 
 
 func _get_enemy_targets() -> Array[BaseMonster]:

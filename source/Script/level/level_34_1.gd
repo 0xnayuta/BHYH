@@ -9,7 +9,7 @@ var is_set = false
 
 func _ready() -> void:
 	Global.current_level = "牛魔谷"
-	Global.add_bgm(self, "res://Music/level/bgm_1405.MP3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_1405.MP3")
 	self.is_two_scene = true
 
 	Global.game_over = 1

@@ -54,7 +54,7 @@ func _play_official_action_sound(animation_name: StringName) -> void:
 	var sound_name := str(OFFICIAL_ACTION_SOUNDS.get(animation_name, ""))
 	if sound_name == "":
 		return
-	Global.add_sound(self, "res://Music/hero/role_6/" + sound_name + ".mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_6/" + sound_name + ".mp3")
 
 
 func _build_mount_rider_canvas(source_texture: Texture2D) -> Texture2D:

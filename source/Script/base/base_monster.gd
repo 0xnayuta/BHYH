@@ -1726,9 +1726,9 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 			if monster_blood_bar == null:
 				monster_blood_bar = Global.add_monster_blood(self, Vector2(-30, -90), hp / float(max_hp), hp)
 		if PlayerData.player_data["Myself"] != 2:
-			Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		else:
-			Global.add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
 		if not monster_18_protect() and not monster102_protect() and not is_control_immune():
 			_interrupt_attack_state_on_hit()
 			state_hurt()
@@ -3649,7 +3649,7 @@ func _trigger_wd_burst(source_player: Role4Hero, stacks: Array) -> void:
 	var skill_power := int(stacks.size() * power)
 	if skill_power <= 0:
 		return
-	Global.add_sound(self, "res://Music/hero/role_4/mds.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_4/mds.mp3")
 	Global.add_special_effect(self, Vector2(0, -25), "mds", Vector2(1, 1), false, 1)
 	if _is_mds_awaken_active(source_player):
 		set_meta("mds_awaken_skip_combo", true)
@@ -3706,9 +3706,9 @@ func play_hit_effect(attacker = null):
 	Global.add_special_effect(self, Vector2(0, 0), "RoleBeHit", Vector2(1, 1), false, 1)
 
 	if PlayerData.player_data["Myself"] != 2:
-		Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+		Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	else:
-		Global.add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
+		Global.get_audio_runtime().add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
 
 	if not death() and not is_control_immune() and mr_player.has_animation("hurt"):
 		call_deferred("_deferred_play_hurt_animation")

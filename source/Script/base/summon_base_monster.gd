@@ -588,7 +588,7 @@ func get_attacker_damage(attacker: Node) -> int:
 
 func state_hurt(_attacker: Node) -> void:
 	Global.add_special_effect(self, Vector2.ZERO, "RoleBeHit", Vector2.ONE, false, 1)
-	Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+	Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 
 
 func calculate_attack_damage(target: BaseMonster, base_damage: int, attack_kind: String) -> int:

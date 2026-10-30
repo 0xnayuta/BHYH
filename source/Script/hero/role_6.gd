@@ -422,7 +422,7 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 
 			target.reduce_hp(damage)
 
-			Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 
 
 func _handle_death():

@@ -196,7 +196,7 @@ func _ready() -> void:
 			ResourceLoader.load(BACKGROUND_PATH_FORMAT % selected_level, "Texture2D", ResourceLoader.CACHE_MODE_REUSE)
 			as Texture2D
 		)
-	Global.add_bgm(self, "res://Music/level/music_emsd.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/music_emsd.mp3")
 	super._ready()
 
 

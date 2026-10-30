@@ -26,7 +26,7 @@ var trap_sky_20
 
 func _ready() -> void:
 	Global.current_level = "迦楼罗之穴"
-	bgm_node = Global.add_bgm(self, "res://Music/level/7_bg2.mp3")
+	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/7_bg2.mp3")
 	add_trap_sky()
 	set_trap_floor()
 	self.level_stage = 6
@@ -125,7 +125,7 @@ func set_through():
 				bgm_node.queue_free()
 				bgm_node = null
 
-			bgm_node = Global.add_bgm(self, "res://Music/level/7_bg3.MP3")
+			bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/7_bg3.MP3")
 
 
 func set_trap_floor():

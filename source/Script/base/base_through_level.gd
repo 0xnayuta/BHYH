@@ -76,7 +76,7 @@ func _ready() -> void:
 	if not self is Level20:
 		RoleProp.ws_value = 0
 	create_control.wait_time = float(MainSet.set_data.get("CreateMonsterSpeed", 0.3))
-	MainMusic.remove_music()
+	Global.get_audio_runtime().remove_main_menu_music()
 	if not Global.is_show:
 		var zm_player: AnimationPlayer = $CanvasLayer/zmPLAYER
 		if zm_player.has_animation("gdzm"):

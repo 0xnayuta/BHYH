@@ -126,7 +126,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 		if MainSet.set_data["MonsterLittleBlood"]:
 			if monster_blood_bar == null:
 				monster_blood_bar = Global.add_monster_blood(self, Vector2(-30, -90), hp / float(max_hp), hp)
-		Global.add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+		Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		hurt_special_effect = Global.add_mr_hurt(pz, Vector2(0, 0))
 
 	get_target = old_target

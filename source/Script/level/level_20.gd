@@ -22,7 +22,7 @@ func _ready() -> void:
 	tween.tween_property(floor_2, "modulate", Color("00ffff"), 3)
 	tween.tween_property(front, "modulate", Color("00ffff"), 3)
 	current_stage = 4
-	Global.add_bgm(self, "res://Music/level/9_bg3.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/9_bg3.mp3")
 	self.level_stage = 1
 	if _role != null:
 		my_camera = Global.add_camera(_role, Vector2(0, 0), 1200)

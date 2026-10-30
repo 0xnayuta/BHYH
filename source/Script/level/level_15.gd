@@ -18,7 +18,7 @@ var max_times = 6
 
 func _ready() -> void:
 	Global.current_level = "判官府"
-	Global.add_bgm(self, "res://Music/level/4_bg2.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/4_bg2.mp3")
 	self.level_stage = 15
 	super._ready()
 	monster_group = {

@@ -21,6 +21,10 @@ func _diagnostics() -> RuntimeDiagnostics:
 	return Global.get_runtime_diagnostics()
 
 
+func _audio_snapshot() -> Dictionary:
+	return Global.get_audio_runtime().get_snapshot()
+
+
 func _check_pool_scope(checks: Dictionary) -> void:
 	var pool: Array = Global._pool_data["damage_text"]
 	var first := Node.new()
@@ -150,7 +154,9 @@ func _run() -> void:
 	checks["scope_exit_level_cleared"] = int(exit_lease_snapshot.get("owned_path_count", -1)) == 0
 	checks["scope_exit_pools_cleared"] = pools_cleared
 	checks["scope_exit_pool_root_cleared"] = not bool(exit_combat.get("pool_root_valid", true))
-	checks["scope_exit_active_sound_cleared"] = int(exit_combat.get("active_sound_players", -1)) == 0
+	checks["scope_exit_active_sound_cleared"] = (
+		int(_audio_snapshot().get("active_sound_players", -1)) == 0
+	)
 
 	for check_name in checks:
 		if not bool(checks[check_name]):

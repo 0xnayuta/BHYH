@@ -26,7 +26,7 @@ func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_fit_to_window):
 		get_viewport().size_changed.connect(_fit_to_window)
 	Global.remove_all_buff()
-	Global.add_bgm(self, "res://Music/level/13_game_victory.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/13_game_victory.mp3")
 	get_tree().paused = false
 	Global.level_end_time = ""
 	Global.level_end_time = Time.get_datetime_string_from_system(false, true) as String

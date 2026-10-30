@@ -215,7 +215,8 @@ flowchart TD
 | `_pool_data["mr_hurt"]` | `Global` | `_take_pooled_node` / `recycle_mr_hurt` | 消费者 `recycle` 停止动画并隐藏；`_play_hurt_animation` 重新开始 | 同上 | 池上限 32；预置 16 |
 | `_pool_data["role_be_hit"]` | `Global` | `_take_pooled_node` / `recycle_role_be_hit` | `setup` 重置帧/翻转/缩放；`recycle` 停止 | 同上 | 池上限 24；预置 16 |
 | `_pool_data["sound_player"]` | `Global` | `_take_pooled_node` / `recycle_sound_player` | `setup` 绑定音频并播放；回收停止并清空 stream | 同上 | 池上限 32；预置 6；另有移动/桌面声部与单音限制 |
-| `_active_damage_texts` / `_active_sound_players` | `Global` | 取出时登记；回收/树退出时移除 | 不适用 | `_clear_runtime_pools` 清空 | 活动计数用于上限与声部仲裁；不跨档案保留 |
+| `_active_damage_texts` | `Global` | 取出时登记；回收/树退出时移除 | 不适用 | `_clear_runtime_pools` 清空 | 活动计数用于上限；不跨档案保留 |
+| `_active_sound_players` / `_last_sound_play_msec` | `AudioRuntime` | `add_sound` 登记；`recycle_sound_player`/树退出移除 | 不适用 | `release_active_sound_players`（`_clear_runtime_pools` 与 `_exit_tree`） | 活动计数用于声部仲裁；每次清空同时清空 45ms 节流表 |
 
 `preload_combat_hit_resources` 在战斗加载完成时预置池：伤害文本 12、受击 16、角色受击 16、音效 6。`_store_pooled_node` 先移除父节点，池满则 `queue_free`；池根或取出节点已排队删除时不会复用。池节点由消费者 `setup`/`recycle` 重置，`_store_pooled_node` 不负责统一状态重置。
 

@@ -766,7 +766,7 @@ func _apply_sword_hit_feedback(monster: BaseMonster, value: int, source: RoleBul
 				monster, Vector2(-30, -90), monster.hp / float(monster.max_hp), monster.hp
 			)
 	monster.role5_bullet(value, source)
-	Global.add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+	Global.get_audio_runtime().add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	if (
 		not monster.is_miss
 		and not monster.is_boss_protecting()

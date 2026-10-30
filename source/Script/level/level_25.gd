@@ -11,7 +11,7 @@ extends BaseLevel
 func _ready() -> void:
 	Global.current_level = "南天王殿"
 
-	bgm_node = Global.add_bgm(self, "res://Music/level/sdtw.MP3")
+	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/sdtw.MP3")
 	self.level_stage = 24
 	add_trap()
 	super._ready()
@@ -353,7 +353,7 @@ func set_through():
 				bgm_node.queue_free()
 				bgm_node = null
 
-			bgm_node = Global.add_bgm(self, "res://Music/level/twdboss.MP3")
+			bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/twdboss.MP3")
 
 
 func add_trap():

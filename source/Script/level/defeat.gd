@@ -59,7 +59,7 @@ func _ready() -> void:
 	else:
 		player.play("dh_6")
 		text.text = ""
-	Global.add_bgm(self, "res://Music/level/12_over.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/12_over.mp3")
 	box_1.is_in_ldl_gz = true
 	box_1.is_in_hhgz = true
 	box_1.set_button_icon(load_item_icon("xczg"))

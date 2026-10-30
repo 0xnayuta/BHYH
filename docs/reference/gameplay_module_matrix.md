@@ -25,7 +25,7 @@
 11. **成长系统已有可参考的事务实现**：`forge.gd` 采用「快照 → 先加产物并检查 bool → 扣材料 → 保存 → 失败恢复」；其余商店/合成/神铸/淬骨/强化/技能仍为「先扣费/先提交，再产出」或无回滚。
 12. **`PlayerData` 原语失败语义不一致**：`spend_soul`、`add_zb`、`add_fb` 返回 `bool`；`add_dj`、`add_xhp` 返回 `void` 且容量不足时静默丢弃。商店对可选堆叠物没有容量前置校验，扣费后可能拿不到道具。
 13. **HUD 已显式注入玩家**：`RoleInformation` 为 P1/P2 分别设置 `role_p1.player`/`role_p2.player`（`role_information.gd:47-60`）；`BaseRole` 仍保留 `RoleProp.source_player` 兜底（`base_role.gd:82`、`:98`）；其 `_set_values` 直接读全局 `RoleProp`，P2 HUD 的血蓝/经验/无双因此仍显示 1P 值。
-14. **输入与音频是表现层调用面**：`Input.is_action*` 63 行 / 20 文件；`CoopInput` 通过 `p2_` 前缀生成 2P 动作。`Global.add_sound` 138 次 / 34 文件，带 45ms 节流、每音效 4/8 与总声部 24/48 上限；`Global.add_bgm` 125 次 / 94 文件，每次实例化且不停止旧 BGM。
+14. **输入与音频是表现层调用面**：`Input.is_action*` 63 行 / 20 文件；`CoopInput` 通过 `p2_` 前缀生成 2P 动作。`AudioRuntime.add_sound` 138 次 / 34 文件，带 45ms 节流、每音效 4/8 与总声部 24/48 上限；`AudioRuntime.add_bgm` 125 次 / 94 文件，每次实例化且不停止旧 BGM。
 15. **模块公开 API 无清单**：`BaseHero` 128、`BaseMonster` 103、`SummonBaseMonster` 69、`PlayerData` 124、`Global` 265 个公开方法；基础类没有自定义信号，模块间以直接调用为主。节点访问共 699 处（`get_node` 168 + `get_node_or_null` 531），其中字面深层路径 279 处 / 66 文件，`/root` 34 处 / 13 文件。
 16. **直接数据写入集中在关卡进度与菜单状态**：`PlayerData.player_data` 下标赋值 **145 行 / 42 文件**（含属性赋值 197 行 / 44 文件）；热点 `base_through_level.gd` 29、`game_announcement.gd` 14、`base_monster.gd` 13、`c_hange_clothes_jm.gd` 8、`zhen_yao_tower.gd` 8、`local_coop.gd` 6。按目录：`main_menu` 51、`base` 46、`level` 12、`back_pack` 8、`other_menu` 8、`coop` 6、`Scene` 5、`skill` 4。
 
@@ -143,7 +143,7 @@
 | `damage_text` | 80 | 12 | `Global.add_damage_text` | `damage_text.recycle` → `Global.recycle_damage_text` | `setup()` 重置数值/类型/暴击/目标/透明度；`prepare_for_pool()` 仅预热 |
 | `mr_hurt` | 32 | 16 | `Global.add_mr_hurt` | `monster_be_hit.recycle` → `Global.recycle_mr_hurt` | `_play_hurt_animation()` 重置可见/动画；`modulate` 在取出时置白 |
 | `role_be_hit` | 24 | 16 | `Global` 受击效果入口 | `role_be_hit_effect.recycle` → `Global.recycle_role_be_hit` | `setup()` 重置帧/可见/颜色/翻转/速度 |
-| `sound_player` | 32 | 6 | `Global.add_sound` | `_on_finished` → `Global.recycle_sound_player` | `setup()` 重置目标/流/音量；`finished` 时清空 |
+| `sound_player` | 32 | 6 | `AudioRuntime.add_sound` | `_on_finished` → `AudioRuntime.recycle_sound_player` | `setup()` 重置目标/流/音量；`finished` 时清空 |
 
 ### 5.2 取出/归还路径
 
@@ -378,8 +378,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 | 项 | 事实 |
 |:---|:---|
-| 受击音效 | `Global.add_sound` 138 次 / 34 文件；池上限 32；45ms 节流；同音效 4/8、总声部 24/48 |
-| BGM | `Global.add_bgm` 121 处；**19-2A 改为同步挂载**：先设 `target` 再 `add_child`，消除同曲跨父节点 pending；同曲异父同步重挂并按开关恢复；queued/invalid 不复用；切曲先 `stop()` 再释放；`end_archive_session()` 调用 `stop_bgm()` |
+| 受击音效 | `AudioRuntime.add_sound` 138 次 / 34 文件；池上限 32；45ms 节流；同音效 4/8、总声部 24/48 |
+| BGM | `AudioRuntime.add_bgm` 121 处；**19-2A 改为同步挂载**：先设 `target` 再 `add_child`，消除同曲跨父节点 pending；同曲异父同步重挂并按开关恢复；queued/invalid 不复用；切曲先 `stop()` 再释放；`end_archive_session()` 调用 `stop_bgm()` |
 | 热点 | `role_4` 20、`role_5` 19、`role1` 18、`role_3` 16、`role_2` 10 |
 | 音量/开关 | `MainSet.set_data["MusicFB_2"]`、`RoleOrMonsterHit`；由 `game_set.gd` 写入 |
 | 边界 | 音效是纯表现；`add_sound` 先查缓存再预留声部；池回收 `prepare_for_pool()` 停止并清流；**19-2B `_clear_runtime_pools` 停止/清流/释放活动声部，并清空活动计数与 45ms 节流表** |
@@ -436,7 +436,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 | 17-2 | `role_bullet.gd`、`monster_bullet.gd`、`summon_base_monster.gd`、`base_magic_weapon.gd`、`base_monster._get_damage_source_player`/`apply_role_hit` | 归属字段集中，已有 `coop_damage_slot` 快照 | 不重写弹体/召唤继承 |
 | 17-3 | `base_through_level.gd`、`victory.gd`、`defeat.gd`、`level_zhen_yao_tower.gd` | 阶段/结算所有者清晰，失败边界可枚举 | 不改关卡时序/数值 |
 | 17-4 | `shop_item.gd`、`mystery_shop_item_box.gd`、`forge.gd`、`divine_forge.gd`、`bone_forge.gd`、`strength.gd`、`synthesis.gd`、`zd_skill.gd`、`bd_skill.gd`、`reward_interface.gd`、`basic_task.gd` | 已有 `forge` 参考事务；失败模式集中 | 不引入通用事务框架 |
-| 17-5 | `base_role.gd`、`role_information.gd`、`reward_interface.gd`、`transmogtified_box.gd`、`Global.add_bgm`/`add_sound` | 表现层与命令边界可区分 | 不改输入映射/HUD 布局 |
+| 17-5 | `base_role.gd`、`role_information.gd`、`reward_interface.gd`、`transmogtified_box.gd`、`AudioRuntime.add_bgm`/`add_sound` | 表现层与命令边界可区分 | 不改输入映射/HUD 布局 |
 | 17-6 | `pet_interface.gd`、`zd_skill.gd`、`base_role.gd`、`base_magic_weapon.gd` | 四文件 159 条深层字面路径，路径/依赖集中 | 不全仓替换 `get_node` |
 
 ---
@@ -638,8 +638,8 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 ### 17.2 音频
 
-- `Global.add_bgm` 维护 `_active_bgm_instance`：同曲同父复用；同曲异父重挂；切曲先停止旧实例再创建。`stop_bgm()` 提供显式收口。
-- `Global.add_sound` 将缓存检查移到声部预留之前；无音频时不再驱逐已有声部。
+- `AudioRuntime.add_bgm` 维护 `_active_bgm_instance`：同曲同父复用；同曲异父重挂；切曲先停止旧实例再创建。`stop_bgm()` 提供显式收口。
+- `AudioRuntime.add_sound` 将缓存检查移到声部预留之前；无音频时不再驱逐已有声部。
 - `monster_be_hit.prepare_for_pool()` 保持 `stop()` + `stream = null`，池回收不残留旧流。
 - **19-2A/B（2026-10-30）**：`add_bgm` 同步挂载并处理同曲跨父节点；`end_archive_session` 停止 BGM；`_clear_runtime_pools` 释放活动声部并清空节流表。验证：档案探针 289 项 PASS；协作探针 23/23；场景探针 7/7；`level_1` 冒烟 PASS；全量回归 128/128 PASS + 5 SKIP（334.5s，2 个瞬态失败串行重试通过）；`check_all --godot-bin` 8/8 PASS。
 

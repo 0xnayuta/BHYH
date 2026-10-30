@@ -39,7 +39,7 @@ func _ready() -> void:
 		if Global.llbt_level == 24:
 			self.level_stage = 30
 	Global.current_level = "玲珑宝塔"
-	Global.add_bgm(self, "res://Music/level/music_emsd.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/music_emsd.mp3")
 
 	lz_node.visible = false
 	lz_collision.disabled = true

@@ -5,7 +5,7 @@ var platforms = {}
 
 func _ready() -> void:
 	Global.current_level = "仙幻岛"
-	Global.add_bgm(self, "res://Music/level/bgm_normal.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_normal.mp3")
 	load("res://Scene/monster/monster_1406.tscn")
 
 	self.level_stage = 41

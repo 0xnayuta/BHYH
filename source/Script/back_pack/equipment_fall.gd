@@ -85,7 +85,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 func pick_up_items(body):
 	if MainSet.set_data["PickUpItemsMusic"]:
-		Global.add_sound(self, "res://Music/level/86_pickup.mp3")
+		Global.get_audio_runtime().add_sound(self, "res://Music/level/86_pickup.mp3")
 	if item_name != "peach" and item_name != "Bble" and item_name != "radish":
 		var get_type = AE.all_equipment[item_name][DataKeys.TYPE]
 		match get_type:

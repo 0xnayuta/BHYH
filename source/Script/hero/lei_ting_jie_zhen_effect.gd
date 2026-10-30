@@ -184,7 +184,7 @@ func _apply_hit(target: BaseMonster) -> void:
 		target.role5_bullet(damage, owner_player)
 		Global.total_role_hit += damage
 		Global.total_mag_hit += damage
-		Global.add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+		Global.get_audio_runtime().add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 		if not target.is_miss and not target.is_boss_protecting():
 			target.hurt_special_effect = Global.add_mr_hurt(target.pz, Vector2(0, 0))
 		if not target.is_control_immune():

@@ -194,7 +194,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 
 评估项：
 
-- 12 个 Autoload 的职责、初始化顺序与依赖；`global.gd` 是否继续承担不属于编排层的逻辑；
+- 11 个 Autoload 的职责、初始化顺序与依赖；`global.gd` 是否继续承担不属于编排层的逻辑；
 - 场景流（加载页、主菜单、存档、地图、关卡、胜利/失败）与 `Global.change_scene` 的单一入口；
 - `BaseObject` / `BaseHero` / `BaseMonster` / `BaseLevel` / `BaseMagicWeapon` / `BaseBuff` / HUD 的继承与组合边界；
 - `LocalCoop` 槽位路由是否覆盖 P1/P2 数据、属性、输入、伤害/无双归属；

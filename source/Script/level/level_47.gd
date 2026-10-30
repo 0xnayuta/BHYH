@@ -149,7 +149,7 @@ func _ready() -> void:
 	var bgm_stream := Global.get_cached_audio(LEVEL_47_BGM_PATH)
 	if bgm_stream is AudioStreamMP3:
 		bgm_stream.loop = true
-	Global.add_bgm(self, LEVEL_47_BGM_PATH)
+	Global.get_audio_runtime().add_bgm(self, LEVEL_47_BGM_PATH)
 	_create_screen_walls()
 	Global.current_level = "玄武门"
 	level_stage = 47

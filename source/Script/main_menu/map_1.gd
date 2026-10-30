@@ -196,8 +196,8 @@ func _ready():
 	Global.is_dead_link = false
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()
-	if MainMusic.my_main_music == null:
-		MainMusic.add_music()
+	if not Global.get_audio_runtime().has_main_menu_music():
+		Global.get_audio_runtime().add_main_menu_music()
 	check_pass_level()
 
 
@@ -271,19 +271,19 @@ func check_music():
 	if MainSet.set_data["music"] == 1:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
 	elif MainSet.set_data["music"] == 2:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
 	elif MainSet.set_data["music"] == 3:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
 	elif MainSet.set_data["music"] == 4:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
 
 
 func _on_bc_game_pressed() -> void:

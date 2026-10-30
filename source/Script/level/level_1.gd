@@ -8,7 +8,7 @@ class_name Level1
 
 func _ready() -> void:
 	Global.current_level = "花果山"
-	bgm_node = Global.add_bgm(self, "res://Music/level/1_music.mp3")
+	bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/1_music.mp3")
 	self.level_stage = 1
 	super._ready()
 	monster_group = {
@@ -62,4 +62,4 @@ func set_through():
 				bgm_node.queue_free()
 				bgm_node = null
 
-			bgm_node = Global.add_bgm(self, "res://Music/level/2_music.mp3")
+			bgm_node = Global.get_audio_runtime().add_bgm(self, "res://Music/level/2_music.mp3")

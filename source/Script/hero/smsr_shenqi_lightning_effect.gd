@@ -292,6 +292,6 @@ func _apply_hit(target: BaseMonster) -> void:
 		target.add_lj(damage)
 		Global.total_role_hit += damage
 		Global.total_mag_hit += damage
-		Global.add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
+		Global.get_audio_runtime().add_sound(target, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	owner_player.hit_dic = old_hit_data
 	target.unbind_role_damage_source(damage_source_state)

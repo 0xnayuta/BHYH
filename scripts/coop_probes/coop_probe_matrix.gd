@@ -1013,7 +1013,7 @@ func _case_pool_reuse() -> void:
 
 	var path_one := "res://Music/monster_hurt/6_beattack_by_role1.mp3"
 	var path_two := "res://Music/hero/9_beattack_by_role2.mp3"
-	var sound_one: Node = global.add_sound(monster, path_one)
+	var sound_one: Node = global.get_audio_runtime().add_sound(monster, path_one)
 	_check(sound_one != null, "sound_player taken from pool")
 	if sound_one != null:
 		_check(sound_one.is_set and sound_one.stream != null and sound_one.playing, "sound_player active")
@@ -1022,7 +1022,7 @@ func _case_pool_reuse() -> void:
 			not sound_one.is_set and sound_one.stream == null and sound_one.target == null,
 			"sound_player cleaned on finish"
 		)
-		var sound_two: Node = global.add_sound(monster, path_two)
+		var sound_two: Node = global.get_audio_runtime().add_sound(monster, path_two)
 		_check(sound_two == sound_one, "sound_player reused from pool")
 		if sound_two != null:
 			_check(

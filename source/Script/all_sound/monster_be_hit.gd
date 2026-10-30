@@ -25,8 +25,8 @@ func setup(target_) -> void:
 
 func _ready() -> void:
 	set_physics_process(false)
-	if not Global.sound_settings_changed.is_connected(_on_sound_settings_changed):
-		Global.sound_settings_changed.connect(_on_sound_settings_changed)
+	if not Global.get_audio_runtime().sound_settings_changed.is_connected(_on_sound_settings_changed):
+		Global.get_audio_runtime().sound_settings_changed.connect(_on_sound_settings_changed)
 	if target != null and not is_set:
 		setup(target)
 
@@ -52,7 +52,7 @@ func _on_finished() -> void:
 	if not is_set:
 		return
 	is_set = false
-	if Global != null and Global.has_method("recycle_sound_player"):
-		Global.recycle_sound_player(self)
+	if Global != null:
+		Global.get_audio_runtime().recycle_sound_player(self)
 	else:
 		queue_free()

@@ -208,8 +208,8 @@ func _ready():
 	if MainSet.set_data["CurrentLevelPage"] <= max_page:
 		MainSet.set_data["CurrentLevelPage"] = max_page
 		MemoryClass.main_bc()
-	if MainMusic.my_main_music == null:
-		MainMusic.add_music()
+	if not Global.get_audio_runtime().has_main_menu_music():
+		Global.get_audio_runtime().add_main_menu_music()
 	Global.current_level = ""
 	if Global.get_ui_runtime().windows == null:
 		Global.get_ui_runtime().windows = _ui_parent()
@@ -277,19 +277,19 @@ func check_music():
 	if MainSet.set_data["music"] == 1:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
 	elif MainSet.set_data["music"] == 2:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
 	elif MainSet.set_data["music"] == 3:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
 	elif MainSet.set_data["music"] == 4:
 		if my_music != null:
 			my_music.queue_free()
-		my_music = Global.add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
+		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
 
 
 func check_pass_level():

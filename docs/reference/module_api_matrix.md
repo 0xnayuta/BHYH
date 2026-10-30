@@ -27,7 +27,7 @@
 | 公开属性 | `player`、`current_player_magic_summon`（读写委托 `Global`）、`fb_cd`、`fb_level` |
 | 信号 | 无 |
 | 场景依赖 | `mg_action`（`AnimatedSprite2D`）、`mg_player`（`AnimationPlayer`）、`skill_cd`（`Timer`）、`hitbox`/`hit_box`（碰撞） |
-| 外部依赖 | `LocalCoop.data_for/props_for`、`Global.get_magic_summon_for/set_magic_summon_for`、`Global.add_sound` 等表现入口 |
+| 外部依赖 | `LocalCoop.data_for/props_for`、`Global.get_magic_summon_for/set_magic_summon_for`、`AudioRuntime.add_sound` 等表现入口 |
 
 ### 1.3 `zd_skill`（`Script/skill/zd_skill.gd`）
 

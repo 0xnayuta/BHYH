@@ -318,7 +318,7 @@ func _ready() -> void:
 	level_stage = 0
 	current_stage = 1
 	is_two_scene = false
-	Global.add_bgm(self, "res://Music/level/bgm_normal.mp3")
+	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_normal.mp3")
 	super._ready()
 	if _role != null:
 		_role.set_meta("disable_down_drop", true)

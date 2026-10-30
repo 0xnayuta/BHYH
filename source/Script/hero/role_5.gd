@@ -759,43 +759,43 @@ func call_ygth_awaken_bullet():
 func add_music(idx: int):
 	match idx:
 		0:
-			Global.add_sound(self, "res://Music/hero/role_5/attack1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/attack1.mp3")
 		1:
-			Global.add_sound(self, "res://Music/hero/role_5/attack2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/attack2.mp3")
 		2:
-			Global.add_sound(self, "res://Music/hero/role_5/attack3.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/attack3.mp3")
 		3:
-			Global.add_sound(self, "res://Music/hero/role_5/attack4.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/attack4.mp3")
 		4:
-			Global.add_sound(self, "res://Music/hero/role_5/jump_attack.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/jump_attack.mp3")
 		5:
-			Global.add_sound(self, "res://Music/hero/role_5/effect3.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect3.mp3")
 		6:
-			Global.add_sound(self, "res://Music/hero/role_5/effect4.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect4.mp3")
 		7:
-			Global.add_sound(self, "res://Music/hero/role_5/effect2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect2.mp3")
 		8:
-			Global.add_sound(self, "res://Music/hero/role_5/effect1_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect1_1.mp3")
 		9:
-			Global.add_sound(self, "res://Music/hero/role_5/effect1_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect1_2.mp3")
 		10:
-			Global.add_sound(self, "res://Music/hero/role_5/effect6.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect6.mp3")
 		11:
-			Global.add_sound(self, "res://Music/hero/role_5/effect8_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect8_1.mp3")
 		12:
-			Global.add_sound(self, "res://Music/hero/role_5/effect8_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect8_2.mp3")
 		13:
-			Global.add_sound(self, "res://Music/hero/role_5/effect9_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect9_1.mp3")
 		14:
-			Global.add_sound(self, "res://Music/hero/role_5/effect9_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect9_2.mp3")
 		15:
-			Global.add_sound(self, "res://Music/hero/role_5/effect7_1.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect7_1.mp3")
 		16:
-			Global.add_sound(self, "res://Music/hero/role_5/effect7_2.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/effect7_2.mp3")
 		17:
-			Global.add_sound(self, "res://Music/hero/role_5/attack.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/attack.mp3")
 		18:
-			Global.add_sound(self, "res://Music/hero/role_5/13_hurt_stand.mp3")
+			Global.get_audio_runtime().add_sound(self, "res://Music/hero/role_5/13_hurt_stand.mp3")
 
 
 func _prepare_hit_reaction() -> void:
