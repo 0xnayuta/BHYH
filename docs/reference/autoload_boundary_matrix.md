@@ -1,7 +1,7 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
-> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）与 W4（抽取 `AudioRuntime` 并合并 `MainMusic`）。本页记录当前边界、逐项结论与迁移顺序；其余拆分尚未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
-> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`（三者都是普通子节点，不是 Autoload）。
+> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）与 W6 S5（按功能族抽取 5 个场景工厂）。本页记录当前边界、逐项结论与迁移顺序；其余拆分尚未实施。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 5 个功能族工厂（以上全部是 `Global` 的普通子节点，不是 Autoload）。
 > **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
@@ -30,9 +30,9 @@ Phase 20-1 其余切片保持未启动：
 
 | 指标 | 决策时 | P2 后 | S2 后 | W4 后 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 行数 | **6,041** | **5,775** | **5,563** | **5,407** | `source/global.gd` |
-| 顶层函数 | **360** | **347** | **333** | **326** | 含私有函数；`add_*` 工厂 **124** 个 |
-| 顶层变量 | **295** | **291** | **285** | **280** | 含运行状态、缓存、UI 引用与跨帧标记 |
+| 行数 | **6,041** | **5,775** | **5,563** | **4,578** | `source/global.gd`；W4 为 5,407，W5 S4 后 4,971，W6 S5 后 4,578 |
+| 顶层函数 | **360** | **347** | **333** | **332** | 含私有函数；`add_*` 工厂 **122** 个（W6 S5 保留同名薄转发） |
+| 顶层变量 | **295** | **291** | **285** | **237** | 含运行状态、缓存、UI 引用与跨帧标记 |
 | 顶层常量 | **76** | **75** | **76** | **73** | 含场景路径表、弹体路径表、怪物别名与特效脚本预载 |
 | 信号 | **2** | **2** | **2** | **1** | `sound_settings_changed` 已迁至 `AudioRuntime`，仅余 `combo_milestone_reached` |
 
@@ -49,7 +49,7 @@ Phase 20-1 其余切片保持未启动：
 | 不同成员 | **273** |
 | 外部直接写入 | **494** 次，涉及 **64** 个变量 |
 
-以上调用面为 20-1B 决策时基线。P2/W3 S2/W4 已把诊断、UI 生命周期与音频迁出，生产代码当前为引用文件 **428**、调用点 **3,393**、成员 **266**（其中 `get_audio_runtime` 289、`get_ui_runtime` 185）；成员数下降来自 `add_bgm`/`add_sound`/`windows` 等入口删除，调用点上升来自访问器转发。
+以上调用面为 20-1B 决策时基线。P2/W3 S2/W4/W5 S4/W6 S5 已把诊断、UI 生命周期、音频、场景/资源运行时与五个场景工厂族迁出；生产代码当前为引用文件 **429**、调用点 **3,394**、成员 **266**（其中 `get_audio_runtime` 289、`get_ui_runtime` 185）。成员数下降来自 `add_bgm`/`add_sound`/`windows` 等入口删除，调用点上升来自访问器转发；`add_*` 工厂入口签名保持不变。
 
 决策时包含 `scripts/**/*.gd` 探针的基线为引用文件 **432**、调用点 **3,586**、成员 **298**；P2 后探针改走 `Global.get_runtime_diagnostics()`，该计数不再代表当前诊断调用面。
 
@@ -102,7 +102,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | 8 | `PaSkill` | 被动技能数值表与灵魂收益 | **保留（被动数值）** | 52 处/8 文件；纯查表 | 被动/成长；不新增全局状态；静态化单独立项 |
 | 9 | `MainMusic` | 主菜单 BGM 单实例 | **已删除（W4，2026-10-30）** | 原 27 处/13 文件、自身又调用 `Global.add_bgm`；现合并为 `AudioRuntime.add_main_menu_music()` / `remove_main_menu_music()` / `has_main_menu_music()`，Autoload 注册与 `main_music.gd` 已删除 | 音频；BGM 同曲/切曲/退出与主菜单切换已验证 |
 | 10 | `Signals` | 全局确认框信号 | **保留，禁止新增全局信号** | 11 处/9 文件；`choose_pressed` 会清空旧连接 | UI；选择框迁移到显式信号后删除，需确认框流程验证 |
-| 11 | `Global` | 场景流、UI 工厂、缓存、池、预载、运行状态 | **拆分（本页边界）** | 决策时 6,041 行/360 函数/427 文件/3,372 调用；W4 后 5,407 行/326 函数/280 变量，诊断、UI 与音频已移出 | 项目维护者（架构）；按第 4~5 节分波推进 |
+| 11 | `Global` | 场景流入口、UI 工厂入口、池、预载入口、运行状态 | **拆分（本页边界）** | 决策时 6,041 行/360 函数/427 文件/3,372 调用；W6 S5 后 4,578 行/332 函数/237 变量，诊断、UI、音频、场景/资源运行时与 5 族场景工厂已移出 | 项目维护者（架构）；按第 4~5 节分波推进 |
 | 12 | `LocalCoop` | 本地双人会话、槽位数据/属性/输入/面板 | **保留（双人会话）** | 285 处/78 文件；Phase 16/17 已建立槽位与面板边界 | 双人；不建第二组 Autoload；继续由显式槽位 API 服务 |
 | 13 | `MCPGameBridge` | 编辑器调试桥 | **保留（调试桥，不计业务）** | 业务 `MCPGameBridge.` 引用为 0；`_ready` 在 `EngineDebugger.is_active()` 为假时退出 | 工具链；20-2 release 时验证 addon 路径、调试器门控与导出行为 |
 
@@ -113,8 +113,8 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | S1 诊断/快照 | 调试性能浮层；`RuntimeDiagnostics` 的 `get_cache_scope_snapshot`、`get_level_resource_lease_snapshot`、`get_preloaded_scene_slot_snapshot`、运行时代次、后台保存/失败状态；探针通过 `Global.get_runtime_diagnostics()` 访问 | `RuntimeDiagnostics`（`Global` 的普通 `Node` 子节点） | **已拆（P2）**；`scripts/scene_probes`、`scripts/archive_probes` 已迁移；无 Autoload 新增 |
 | S2 UI 宿主/运行时 | `UiRuntime` 持有 `windows`、popup 层、hover popup、`register_transient_ui` / `cleanup_transient_ui`、UI 实例登记与缓存；`LocalCoop` 使用 `push_windows` / `pop_windows` | `UiRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W3 S2）**；`add_*` 工厂仍留 `Global`，只迁移生命周期；无 Autoload 新增 |
 | S3 音频 | `AudioRuntime` 持有 BGM 单实例、主菜单 BGM、SFX 声部/节流/上限与设置变化信号；`add_*` 音频入口统一为 `Global.get_audio_runtime()` | `AudioRuntime`（`Global` 的普通 `Node` 子节点） | **已拆（W4）**；`MainMusic` 已合并删除；无 Autoload 新增 |
-| S4 场景/资源运行时 | `change_scene`（100/48）、缓存四表、单槽预载、线程预热、关卡租约、释放；约 88 个函数、214 次外部调用 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | 第四；保留 `Global.change_scene` 作为正式入口，先抽内部实现；不新增 Autoload |
-| S5 UI 工厂 | 124 个 `add_*`；`add_message_show` 409、`add_level_info` 61、`add_choose_item` 40 等；大量场景/父节点参数 | 按功能族的 `UiFactory` / 场景构建器 | 第五，按功能分批；每批迁移调用方并删除旧 `add_*`，不建一个总工厂 |
+| S4 场景/资源运行时 | `change_scene`（101 处）、缓存四表、单槽预载、线程预热、关卡租约、释放 | `SceneFlow` + `ResourceRuntime`（由 `Global` 组合持有） | **已拆（W5 S4）**；`Global.change_scene` 仍是唯一正式入口；无 Autoload 新增 |
+| S5 UI 工厂 | 122 个 `add_*`；`add_message_show` 408、`add_bullet` 300、`add_trap` 103、`add_special_effect` 81、`add_buff` 68、`add_level_info` 61、`add_choose_item` 40 | 按功能族的场景工厂 | **首批已拆（W6 S5）**：`PopupFactory`/`ShopFactory`/`BackpackFactory`/`RewardFactory`/`CombatPresentationFactory` 五族 41 个工厂；`add_*` 正式入口保留为薄转发；不建总工厂 |
 | S6 战斗表现 | `add_bullet` 300/96、`add_buff` 108/66、`add_trap` 103/3、`add_special_effect` 81/20、`create_monster` 65/51、伤害数字/受击/池 | `CombatPresentation` / `SpawnService`（场景服务） | 第六；按弹体、buff、伤害数字、生成分批；需战斗探针与关卡回归 |
 | S7 运行状态 | `current_level` 106 读/94 写、`llbt_level` 119 读/21 写、`total_*`、`is_*` 减益标志、`windows` 之外的运行标记；64 个变量、494 次外部写入 | `RunContext`（`Resource`）或 `BaseLevel` 持有；槽位状态走 `LocalCoop` | **最后**；先把写入改为显式 accessor/关卡上下文，再删字段；禁止直接搬进新 Autoload |
 | S8 通用工具 | `get_ancestor` 95/16、`get_position_between`、`get_dis_betweem`、`get_clean_name`、物品计数、角色纹理加载 | 静态 `class_name` 工具类 | 可与 S1 并行；无状态、低风险，逐函数迁移 |
@@ -129,8 +129,8 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | W2 | S1 诊断/快照：**已拆（P2）** | 资源/工具 | P2 完成 | `scene_probes` 3 项 PASS；`archive_probes` 289/289 PASS；`level_1` PASS；`check_all --godot-bin` 8/8 | 恢复 `Global` 旧方法并回退探针 |
 | W3 | S2 UI 宿主/运行时：**已拆（W3 S2）** | UI/双人 | S2 完成 | `coop_probe_runner` 25/26 → 修复探针后重跑；`scene_probe_runner` 7/7 PASS；`archive_probe_runner` 289/289 PASS；`check_all --godot-bin` 8/8 | 恢复 `Global.windows` 字段并回退调用方 |
 | W4 | S3 音频 + `MainMusic`：**已拆（W4）** | 音频 | W4 完成 | `archive_probes` 的 BGM/SFX 14 项 PASS（289/289 总）；主菜单 BGM 与关卡切曲、退出清理经档案探针；`scene_probe_runner` 7/7；`coop_probe_runner` 26/26；`check_all --godot-bin` 8/8 | 恢复 `MainMusic` 与 `Global.add_bgm/add_sound` |
-| W5 | S4 场景/资源内部实现 | 资源/场景 | 加载页窄 API、租约、单槽预载、代次检查 | `load_guard`、`level_resource_lease`、`level_1` 加载、相关回归 | 保留 `Global.change_scene` 入口 |
-| W6 | S5 UI 工厂，按功能族 | UI | 每族调用方清单与场景探针 | 对应面板/商店/背包/奖励探针 + `level_regression_all --changed-only` | 按族回退 |
+| W5 | S4 场景/资源内部实现：**已拆（W5 S4）** | 资源/场景 | W5 完成 | `load_guard`、`level_resource_lease`、`level_selection` **7/7 PASS**；`archive_probes` 289/289；`coop_probes` 26/26；`level_1` PASS；`check_all --godot-bin` 8/8 | 保留 `Global.change_scene` 入口并回退两个运行时 |
+| W6 | S5 UI 工厂，按功能族：**首批已拆（W6 S5）** | UI | W6 首批完成：五族 41 个工厂；`add_level_info`、`add_damage_text`、`add_mr_hurt`、`add_special_effect` 因依赖运行状态/对象池延期 | `ui-factories` 探针 59 项 PASS（含族归属、缓存持有、入口转发、工厂拒绝语义）；`scene_probe_runner` 8/8；`archive_probes` 289/289；`coop_probes` 26/26；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP** | 按族回退 |
 | W7 | S6 战斗表现 + S9 法宝/召唤 | 战斗/法宝 | 弹体/buff/伤害/生成/双人归属用例 | 战斗探针、`coop_probe_runner`、受影响关卡回归 | 按族回退 |
 | W8 | S7 运行状态 | 玩法/关卡 | 64 个变量、494 次写入的 accessor 迁移完成 | 全量 `level_regression_all`、档案探针、结算/重战 | 保留旧字段只读一版后删除 |
 
@@ -173,6 +173,39 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - 验收：`archive_probe_runner` 的 BGM/SFX **14/14** PASS（同曲复用/异父重挂/切曲/退出停止/声部池/节流清理）；`scene_probe_runner` 7/7；`coop_probe_runner` 26/26；`level_1` PASS；`check_all --godot-bin` 8/8。
 - Owner：音频。
 
+### W5 S4：场景与资源运行时（完成，2026-10-30）
+
+- 新增 `source/Script/runtime/resource_runtime.gd`（`class_name ResourceRuntime`，750 行）与 `scene_flow.gd`（`class_name SceneFlow`，83 行），由 `Global._ready` 创建为普通 `Node` 子节点，不注册 Autoload。
+- `ResourceRuntime` 接管：场景/精灵帧/音频/纹理四类缓存、怪物场景缓存、常驻小 UI 场景缓存、关卡资源租约、单槽预载、线程预载与分帧预热（scene/audio/texture）。
+- `SceneFlow` 接管：场景切换流、请求代次守卫与 `target_scene`；`Global.target_scene` 改为属性转发，`load_scene.gd` 与其他调用方读写语义不变。
+- 删除 `Global` 私有字段：`_resource_cache`、`_sprite_frames_cache`、`_audio_cache`、`_texture_cache`、`_monster_scene_cache`、`_permanent_small_ui_scene_cache`、`_level_resource_lease`、`_level_resource_lease_id`、`_preloaded_scene`、`_preloaded_scene_path`、`_preloading_path`、`_scene_request_generation`；`PERMANENT_SMALL_UI_SCENE_PATHS` 迁至 `ResourceRuntime`。
+- 保留全部公开入口作为薄转发：`change_scene`、`preload_next`、`clear_preloaded_scene_slot`、`is_resource_cached`、`get_cached_packed_scene`、`handoff_loaded_resource`、`get_cached_audio`/`get_cached_texture`、`load_scene_uncached`、`load_cached_scene`、`begin_level_resource_lease`/`release_level_resource_lease`、`prewarm_*`。
+- `runtime_diagnostics` 的缓存/租约/预载快照改读 `ResourceRuntime` 只读访问器；`ui_runtime` 的缓存释放改走 `ResourceRuntime` 窄 API，不再触碰宿主私有字段；`contract_scan` 的场景入口允许清单扩为 `SCENE_ENTRY_BOUNDARY_FILES`（`global.gd` + `Script/runtime/scene_flow.gd`）并补 SceneFlow 好样本。
+- `Global` 5,407 → **4,971** 行；函数数与变量数不变（仅搬实现）。
+- 验收：`health_check` 0 Parse / 0 Error / 0 Warning（722 脚本）；`scene_probe_runner` 7/7；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26；`level_1` PASS（4 Stage，0/0/0）；`contract_scan --self-test` PASS 且 `--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8。
+- Owner：资源/场景。
+
+### W6 S5：场景工厂功能族（完成首批，2026-10-30）
+
+- 新增 5 个功能族工厂，均为 `Global` 的普通 `Node` 子节点（非 Autoload），各自持有本族的场景缓存字典：
+
+| 工厂 | 行数 | 接管工厂 | 场景缓存 |
+|:---|---:|:---|:---|
+| `PopupFactory` | 135 | `add_message_show`、`add_buff_info`、`add_choose_text`、`add_moment_text`、`add_touch_text`、`add_lj`、`add_combo`、`add_combo_num` | message_show、choose_scene、moment_text、touch_text、liji、combo、combo_num |
+| `ShopFactory` | 119 | `add_shop`、`add_shop_items`、`add_mystery_shop`、`add_choose_item`、`add_synthesis`、`add_strength`、`add_s_y_n_help` | shop、shop_item、mystery_shop、choose_item、synthesis、strength、s_yn_help |
+| `BackpackFactory` | 173 | `add_back_pack`、`add_main_backpack`、`add_dj_infor`、`add_dj_sell`、`add_equ_propeties_box`、`add_se_eq_jm`、`add_pl_sell`、`add_magp_infor`、`add_use_magic_weapon`、`add_skill_select`、`add_buff_icon_text` | back_pack、main_backpack、dj_information、dj_sell、equipment_properies、sell_or_equ、pl_sell、magic_weapon_infor、use_magic_weapon、skill_select、buff |
+| `RewardFactory` | 103 | `add_reward_info`、`add_reward_box`、`add_task_reward`、`add_basic_task`、`add_after_level_end` | reward_interface、reward_box_2、task_reward、basic_task、after_level_end |
+| `CombatPresentationFactory` | 262 | `add_buff`、`add_trap`、`add_special_effect_bullet`、`add_bullet`、`add_bullet_safe`、`add_hit_text`、`add_damage_number`、`add_monster_blood`、`add_miss_effect`、`add_boss_blood_instance` | base_buff、trap、special_effect_bullet、hit_text、damage_number、monster_blood_bar、boss_blood、miss_effect |
+
+- `Global` 侧的 41 个 `add_*` 保留同名签名，改为单行薄转发；36 个场景缓存成员变量删除；`preload_combat_hit_resources`、`add_buff_icon`、`add_aura`、`add_chase_bullet` 改调 `load_cached_scene(path)`，`_cached_scene(property_name, path)` 仅保留仍需成员变量的键。
+- `special_effect_bullet` 缓存改为工厂持有：角色预载调用 `CombatPresentationFactory.preload_special_effect_bullet()`，`clear_combat_runtime_cache` 与 `release_role_runtime_resources` 调用 `clear_scene_caches()`。
+- 顺带修正：`add_after_level_end` 原写 `z_index = 9999` 超出 `CanvasItem` 合法范围 [-4096, 4096]，赋值从未生效；删除该无效赋值，渲染顺序与历史一致。
+- 延期项（不谎报为已完成）：`add_level_info` 依赖 `current_level`/无尽模式标志等运行状态，随 S7 一起迁移；`add_damage_text`、`add_mr_hurt`、`add_special_effect` 的 RoleBeHit 分支依赖对象池与限流状态，随 S6 一起迁移。
+- `Global` 4,971 → **4,578** 行、变量 268 → **237**（`add_*` 计数 122，入口签名不变）。
+- 新增探针 `scripts/scene_probes/ui_factory_probe.{gd,tscn}`（`ui-factories`），59 项检查覆盖族节点归属、工厂转发、缓存持有、`add_buff` 拒绝语义与清缓存后重取景。
+- 验收：`scene_probe_runner` **8/8 PASS**；`archive_probe_runner` 289/289；`coop_probe_runner` 26/26；`level_1` PASS；`level_regression_all --changed-only` **128/128 PASS + 5 SKIP**；`contract_scan --self-test` PASS 且 `--fail-on-error` ERROR=0；`check_all --godot-bin` 8/8。
+- Owner：UI。
+
 ## 7. 守卫与验收
 
 20-1B 决策本身的验收：
@@ -196,4 +229,6 @@ P1、P2 均已执行；二者都不新增 Autoload。
 - **拒绝**：为每个切面新增 Autoload；把 `Global` 拆成多个 Manager 后继续全局访问；把存档 IO 搬出 `MemoryClass`；批量重命名 `PlayerData` / `RoleProp`；在未迁移调用方时保留永久兼容 facade。
 - **拒绝**：把 `Global.is_ice` 等写多读少的旧标志直接当作可删除死代码；`monster_12` / `monster_37` 仍有读取，删除会改变行为，需单独行为验证。
 - **未决**：`RoleProp` 根回退的移除时机、`MLdl` 场景化、`Signals` 退出、`PlayerData` schema 类型化、`Global` 运行状态 accessor 的具体形状；均在对应波次立项。
+- **未决（S5 剩余）**：`add_level_info`（运行状态）、`add_damage_text` / `add_mr_hurt` / `add_special_effect`（对象池与限流）与其余约 81 个 `add_*` 仍未族化；按 W8/W7 顺序推进，不一次性搬迁。
+- **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
 - **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。

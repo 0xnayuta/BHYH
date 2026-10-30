@@ -91,6 +91,12 @@ func register_transient_ui(node: Node, close_method: StringName = &"", scene_pat
 	node.tree_exited.connect(_on_transient_ui_exited.bind(instance_id), CONNECT_ONE_SHOT)
 
 
+func is_transient_ui_registered(node: Node) -> bool:
+	if node == null or not is_instance_valid(node):
+		return false
+	return _transient_ui_instances.has(node.get_instance_id())
+
+
 func _on_transient_ui_exited(instance_id: int) -> void:
 	_transient_ui_instances.erase(instance_id)
 

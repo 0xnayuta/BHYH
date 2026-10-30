@@ -9,6 +9,11 @@ const UI_RUNTIME_SCRIPT := preload("res://Script/runtime/ui_runtime.gd")
 const RUNTIME_DIAGNOSTICS_SCRIPT := preload("res://Script/runtime/runtime_diagnostics.gd")
 const RESOURCE_RUNTIME_SCRIPT := preload("res://Script/runtime/resource_runtime.gd")
 const SCENE_FLOW_SCRIPT := preload("res://Script/runtime/scene_flow.gd")
+const POPUP_FACTORY_SCRIPT := preload("res://Script/runtime/popup_factory.gd")
+const SHOP_FACTORY_SCRIPT := preload("res://Script/runtime/shop_factory.gd")
+const BACKPACK_FACTORY_SCRIPT := preload("res://Script/runtime/backpack_factory.gd")
+const REWARD_FACTORY_SCRIPT := preload("res://Script/runtime/reward_factory.gd")
+const COMBAT_PRESENTATION_FACTORY_SCRIPT := preload("res://Script/runtime/combat_presentation_factory.gd")
 const WUSHUANG_HUOYAN_EFFECT_SCRIPT = preload("res://Script/hero/wu_shuang_huo_yan_jin_jing_effect.gd")
 const BING_YU_EFFECT_SCRIPT = preload("res://Script/hero/bing_yu_effect.gd")
 const BA_DI_QIAN_KUN_EFFECT_SCRIPT = preload("res://Script/hero/ba_di_qian_kun_effect.gd")
@@ -242,18 +247,9 @@ const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_fram
 var basic_ar_button = null
 var weapon_bullet_node = null
 var bullet = null
-var hit_text = null
 var damage_text = null
-var monster_blood = null
 var monster_be_hit = null
 var special_affect = null
-var damage_number = null
-var miss_effect = null
-var combo = null
-var combo_num = null
-var lj = null
-var moment_texxt = null
-var message_show = null
 var role_bullet = null
 var fly_bullet = null
 var _chase_bullet = null
@@ -319,6 +315,26 @@ func _ready() -> void:
 	_scene_flow.name = "SceneFlow"
 	_scene_flow.setup(self)
 	add_child(_scene_flow)
+	_popup_factory = POPUP_FACTORY_SCRIPT.new()
+	_popup_factory.name = "PopupFactory"
+	_popup_factory.setup(self)
+	add_child(_popup_factory)
+	_shop_factory = SHOP_FACTORY_SCRIPT.new()
+	_shop_factory.name = "ShopFactory"
+	_shop_factory.setup(self)
+	add_child(_shop_factory)
+	_backpack_factory = BACKPACK_FACTORY_SCRIPT.new()
+	_backpack_factory.name = "BackpackFactory"
+	_backpack_factory.setup(self)
+	add_child(_backpack_factory)
+	_reward_factory = REWARD_FACTORY_SCRIPT.new()
+	_reward_factory.name = "RewardFactory"
+	_reward_factory.setup(self)
+	add_child(_reward_factory)
+	_combat_factory = COMBAT_PRESENTATION_FACTORY_SCRIPT.new()
+	_combat_factory.name = "CombatPresentationFactory"
+	_combat_factory.setup(self)
+	add_child(_combat_factory)
 	if MemoryClass != null and not MemoryClass.background_save_finished.is_connected(_on_background_save_finished):
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
@@ -344,6 +360,26 @@ func get_resource_runtime() -> ResourceRuntime:
 
 func get_scene_flow() -> SceneFlow:
 	return _scene_flow
+
+
+func get_popup_factory() -> PopupFactory:
+	return _popup_factory
+
+
+func get_shop_factory() -> ShopFactory:
+	return _shop_factory
+
+
+func get_backpack_factory() -> BackpackFactory:
+	return _backpack_factory
+
+
+func get_reward_factory() -> RewardFactory:
+	return _reward_factory
+
+
+func get_combat_factory() -> CombatPresentationFactory:
+	return _combat_factory
 
 
 var cloud_sword = null
@@ -549,6 +585,11 @@ var _shutting_down := false
 var _prewarmed_pet_signature: String = ""
 var _resource_runtime: ResourceRuntime = null
 var _scene_flow: SceneFlow = null
+var _popup_factory: PopupFactory = null
+var _shop_factory: ShopFactory = null
+var _backpack_factory: BackpackFactory = null
+var _reward_factory: RewardFactory = null
+var _combat_factory: CombatPresentationFactory = null
 var _last_mr_hurt_msec = {}
 var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
@@ -682,6 +723,11 @@ func _is_valid_packed_scene(value: Variant) -> bool:
 func load_ui_scene(path: String) -> PackedScene:
 	if not _ui_runtime.is_runtime_ui_scene_path(path):
 		return load(path) as PackedScene
+	return _resource_runtime.load_scene(path)
+
+
+## 场景工厂的统一取景入口：命中永久 UI/资源缓存时复用，不再单独加载。
+func load_cached_scene(path: String) -> PackedScene:
 	return _resource_runtime.load_scene(path)
 
 
@@ -1063,13 +1109,13 @@ func preload_combat_hit_resources() -> void:
 	if not is_runtime_generation_current(request_generation):
 		return
 	preload_damage_number_textures()
-	_cached_scene(&"hit_text", HIT_TEXT_PATH)
+	load_cached_scene(HIT_TEXT_PATH)
 	var damage_scene := _cached_scene(&"damage_text", DAMAGE_TEXT_PATH)
-	_cached_scene(&"damage_number", DAMAGE_NUMBER_PATH)
-	_cached_scene(&"miss_effect", MISS_EFFECT_PATH)
+	load_cached_scene(DAMAGE_NUMBER_PATH)
+	load_cached_scene(MISS_EFFECT_PATH)
 	var role_be_hit_scene := preload_scene_path(ROLE_BE_HIT_EFFECT_PATH)
 	var monster_hit_scene := _cached_scene(&"monster_be_hit", MONSTER_BE_HIT_PATH)
-	var monster_blood_scene := _cached_scene(&"monster_blood", MONSTER_BLOOD_PATH)
+	var monster_blood_scene := load_cached_scene(MONSTER_BLOOD_PATH)
 	var sound_scene := preload_scene_path("res://Scene/all_sound/monster_be_hit.tscn")
 	get_cached_audio("res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	get_cached_audio("res://Music/hero/9_beattack_by_role2.mp3")
@@ -1265,17 +1311,13 @@ func clear_combat_runtime_cache() -> void:
 	_current_role_body_texture_path = ""
 	_current_role_equipment_texture_path = ""
 
-	hit_text = null
 	damage_text = null
-	monster_blood = null
 	monster_be_hit = null
 	special_affect = null
-	damage_number = null
-	miss_effect = null
 	role_bullet = null
 	fly_bullet = null
 	_chase_bullet = null
-	special_effect_bullet = null
+	_combat_factory.clear_scene_caches()
 	role4_bullet = null
 	role_bullet_1 = null
 	role1_shallow = null
@@ -1284,7 +1326,6 @@ func clear_combat_runtime_cache() -> void:
 	role2_shallow = null
 	smb_effect = null
 	new_bullet = null
-	boss_blood = null
 	_all_hero_skill_resources_preloaded = false
 	if current_magic_summon != null and is_instance_valid(current_magic_summon):
 		current_magic_summon.queue_free()
@@ -1527,7 +1568,7 @@ func release_role_runtime_resources() -> void:
 	ROLE4_POISON_ARRAY_AWAKEN_EFFECT_SCRIPT.clear_cached_data()
 	STREAMING_ROLE_BULLET_SCRIPT.clear_cached_frames()
 	_resource_runtime.release_role_cached_resources()
-	special_effect_bullet = null
+	_combat_factory.clear_scene_caches()
 	role_bullet = null
 	fly_bullet = null
 	_chase_bullet = null
@@ -1984,8 +2025,8 @@ func prewarm_current_role_runtime_resources(role_id: int = 0, generation: int = 
 		await tree.process_frame
 		if not is_runtime_generation_current(request_generation):
 			return
-	if role_id == 1 and (equipped_skills.has("hmz") or equipped_skills.has("hmz_ws")) and not special_effect_bullet:
-		special_effect_bullet = _load_scene("res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn")
+	if role_id == 1 and (equipped_skills.has("hmz") or equipped_skills.has("hmz_ws")):
+		_combat_factory.preload_special_effect_bullet()
 	var awakened: Dictionary = PlayerData.player_data.get(DataKeys.Skill.AWAKENED, {})
 	var awaken_enabled: Dictionary = PlayerData.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
 	if role_id == 1:
@@ -2041,8 +2082,6 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 
 var lhhjbutton = null
 var mosaic_help = null
-var back_pack = null
-var touch_text = null
 var cd_jm = null
 var set_menu = null
 
@@ -2073,37 +2112,19 @@ func _get_preloaded(path: String) -> PackedScene:
 	return _resource_runtime.take_preloaded_scene(path)
 
 
-var main_backpack = null
 var sell_or_equ = null
-var equ_propeties_box = null
-var dj_sell = null
-var dj_infor = null
 var fall_equ = null
-var pl_sell = null
 var ldl = null
 var game_information = null
 var zd_skill = null
 var skill_learn = null
 var role_information = null
-var special_effect_bullet = null
-var choose_text = null
 var zztwtrap = null
-var buff_icon = null
-var trap = null
 var bd_skill = null
 var nmw_hands = null
-var qh_jm = null
 var change_background = null
-var synthesis = null
-var magp_infor = null
-var shop_ttems = null
-var s_hop = null
-var ldl_help = null
-var choose_item = null
 var ws_effect = null
 
-var skill_select = null
-var use_magic_weapon = null
 var magic_help = null
 
 var sound = null
@@ -2116,7 +2137,6 @@ var role1_shallow = null
 var change_clothes_jm = null
 var h_hjm = null
 var z_lw_stage = null
-var after_level_end = null
 var buffinfor = null
 var monster65_bullet = null
 var choose_player = null
@@ -2132,15 +2152,10 @@ var level_info = null
 var pj = null
 var help_thing = null
 var hc_help = null
-var boss_blood = null
 var stage = null
 var decompose = null
 var decompose_help = null
-var reward_box = null
-var reward_info = null
 var task_title = null
-var basic_task = null
-var task_reward = null
 var add_font = null
 var game_announcement = null
 var basic_pellet = null
@@ -2156,7 +2171,6 @@ var _lsh = null
 var _lxdy = null
 var dsg_choose = null
 var line = null
-var mystery_shop = null
 var cure_times_box = null
 var letter_for_player = null
 var some_monster_help = null
@@ -2366,15 +2380,7 @@ func add_cure_times_box(parent, position):
 
 
 func add_mystery_shop(parent, position):
-	if not mystery_shop:
-		mystery_shop = _load_scene("res://Scene/shop/mystery_shop.tscn")
-	var target = instance_scene(mystery_shop, parent)
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	if position == Vector2.ZERO or position == Vector2(0, 0):
-		target.position = viewport_center_for_parent(parent) - Vector2(458, 293)
-	else:
-		target.position = position
-	return target
+	return _shop_factory.add_mystery_shop(parent, position)
 
 
 func add_trans_box(parent, _name, transmogrified):
@@ -2537,25 +2543,11 @@ func add_font_instance(parent, show_text, font, font_size, font_color, out_line_
 
 
 func add_task_reward(parent, ItemName, total_num):
-	if not task_reward:
-		task_reward = _load_scene("res://Scene/task/task_reward.tscn")
-	var target = instance_scene(task_reward, parent)
-	target.item_id = ItemName
-	target.total_num = total_num
-	target.z_index = 99
-	return target
+	return _reward_factory.add_task_reward(parent, ItemName, total_num)
 
 
 func add_basic_task(parent, position):
-	if not basic_task:
-		basic_task = _load_scene("res://Scene/task/basic_task.tscn")
-	var target = instance_scene(basic_task, parent)
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	if position == Vector2.ZERO or position == Vector2(0, 0):
-		target.position = viewport_center_for_parent(parent) - Vector2(470, 295)
-	else:
-		target.position = position
-	return target
+	return _reward_factory.add_basic_task(parent, position)
 
 
 func add_task_title(parent, task_type, task_name, my_father):
@@ -2648,31 +2640,11 @@ func viewport_center_for_parent(parent_node: Node) -> Vector2:
 
 
 func add_reward_info(parent, position, list, use_item_name, use_num, claim_callable: Callable = Callable()):
-	if not reward_info:
-		reward_info = _load_scene("res://Scene/other_scene/reward_interface.tscn")
-	var target = instance_scene(reward_info, parent)
-	if position == Vector2.ZERO:
-		target.position = viewport_center_for_parent(parent) - Vector2(478, 210)
-	else:
-		target.position = position
-	target.use_num = use_num
-	target.use_item_name = use_item_name
-	target.reward_items = list
-	target.claim_callable = claim_callable
-	target.z_index = 99
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _reward_factory.add_reward_info(parent, position, list, use_item_name, use_num, claim_callable)
 
 
 func add_reward_box(parent, item_id, num):
-	if not reward_box:
-		reward_box = _load_scene("res://Scene/other_scene/reward_box_2.tscn")
-	var target = instance_scene(reward_box, parent)
-	target.item_id = item_id
-	target.num = num
-	if is_instance_valid(target) and get_tree().paused:
-		target.process_mode = Node.PROCESS_MODE_ALWAYS
-	return target
+	return _reward_factory.add_reward_box(parent, item_id, num)
 
 
 func add_decompose_help(parent, position):
@@ -2710,11 +2682,7 @@ func add_stage(parent, stage_type: String, position: Vector2):
 
 
 func add_boss_blood_instance(parent, Obj):
-	if not boss_blood:
-		boss_blood = _load_scene(BOSS_BLOOD_PATH)
-	var target = instance_scene(boss_blood, parent)
-	target.get_obj = Obj
-	return target
+	return _combat_factory.add_boss_blood_instance(parent, Obj)
 
 
 func add_hc_help(parent, position):
@@ -3026,7 +2994,7 @@ func add_monster65_bullet(parent, _position):
 
 
 func add_aura(parent, _position, value_in, color_type = 0):
-	var target = instance_scene(_cached_scene(&"aura_", AURA_PATH), parent)
+	var target = instance_scene(load_cached_scene(AURA_PATH), parent)
 	if target == null:
 		return null
 	target.value = PaSkill.apply_soul_gain_bonus(int(value_in))
@@ -3049,7 +3017,7 @@ func add_buffinfor(parent, _position, Data):
 func add_buff_icon(parent, Data):
 	if parent == null or not is_instance_valid(parent) or parent.is_queued_for_deletion():
 		return null
-	var buff_scene := _cached_scene(&"buff_icon_", BUFF_ICON_PATH)
+	var buff_scene := load_cached_scene(BUFF_ICON_PATH)
 	if buff_scene == null:
 		return null
 	var target = buff_scene.instantiate()
@@ -3085,145 +3053,19 @@ func clear_white_bar_control_buffs(container: Node) -> void:
 
 
 func add_buff(parent, buff_info):
-	if parent == null or not (buff_info is Dictionary):
-		return null
-	var target = parent.get_parent()
-	if target != null and target.get("no_debuff") != null:
-		if target.get("no_debuff"):
-			if (
-				buff_info.has("DeBuff")
-				and buff_info["DeBuff"]
-				and buff_info["Name"] != "jgz"
-				and buff_info["Name"] != "zznh"
-			):
-				return null
-	var new_name := str(buff_info.get("Name", ""))
-	if new_name == "":
-		return null
-	if target is BaseMonster and target.is_control_immune() and is_monster_control_buff(new_name):
-		return null
-	if (
-		(target is BaseHero or target is BaseMonster)
-		and target.is_white_bar_control_immune()
-		and (is_monster_control_buff(new_name) or new_name == "hanxiangzisleep")
-	):
-		return null
-	var unique_buff_names := [
-		"Ice",
-		"stun",
-		"EyeFix",
-		"DeadLink",
-		"Boundground",
-		"silent",
-		"Immobilize",
-		"blood_fix",
-		"life_mana_lock",
-		"Scary",
-		"SuperArmor",
-		"DoubleFallPro",
-		"PoisionBody",
-		"no_debuff",
-		"yxbuff",
-		"HealOverTime",
-		"MagicDrain",
-		"ReverseMove",
-		"jgz",
-		"zznh",
-		"speed_down",
-		"defe_reduce",
-		"nlls",
-		"slzbuff",
-		"lpzbuff",
-		"tszbuff",
-		"lljybuff",
-		"PetLifeBonus",
-		"PetAttackBonus",
-		"PetDefenseBonus",
-		"PetManaBonus"
-	]
-	var can_add := bool(buff_info.get("CanAdd", false)) and new_name != "speed_down"
-	if not can_add and new_name in unique_buff_names:
-		for child in parent.get_children():
-			var child_buff = child.get("buff_info")
-			if child_buff is Dictionary and str(child_buff.get("Name", "")) == new_name:
-				if child.get("buff_time") != null:
-					child.buff_info = buff_info.duplicate(true)
-					child.last_value = float(buff_info.get("value", 0.0))
-					if new_name == "speed_down" and child.has_method("apply_slow_speed"):
-						child.apply_slow_speed()
-					child.last_time = float(buff_info.get("AddTime", 0.0))
-					if child.buff_time != null:
-						child.buff_time.start(float(buff_info.get("AddTime", 0.0)))
-					if (
-						new_name in ["PetLifeBonus", "PetAttackBonus", "PetDefenseBonus", "PetManaBonus"]
-						and child.has_method("refresh_pet_owner_bonus")
-					):
-						child.refresh_pet_owner_bonus(maxi(0, int(buff_info.get("value", 0))))
-					if (
-						target is BaseMonster
-						and not target.is_control_immune()
-						and new_name in ["Ice", "stun", "EyeFix", "Immobilize", "lljybuff"]
-					):
-						target.interrupt_movement_for_control()
-					return child
-				return null
-	var node_instance = instance_scene(_cached_scene(&"base_buff_", BASE_BUFF_PATH), parent)
-	if node_instance == null:
-		return null
-	if node_instance.has_method("start_buff"):
-		var buff_instance = node_instance
-		buff_instance.buff_info = buff_info.duplicate(true)
-		if (
-			target is BaseMonster
-			and not target.is_control_immune()
-			and new_name in ["Ice", "stun", "EyeFix", "Immobilize", "lljybuff"]
-		):
-			target.interrupt_movement_for_control()
-		return buff_instance
-	else:
-		print("Invalid BaseBuff instance")
-		node_instance.queue_free()
-		return null
+	return _combat_factory.add_buff(parent, buff_info)
 
 
 func add_after_level_end(parent, position):
-	if not after_level_end:
-		after_level_end = _load_scene("res://Scene/other_scene/after_level_end.tscn")
-	var target = instance_scene(after_level_end, parent)
-	target.z_index = 9999
-	target.top_level = true
-	if position != Vector2.ZERO and position != Vector2(0, 0):
-		target.position = position
-	return target
+	return _reward_factory.add_after_level_end(parent, position)
 
 
 func add_combo(parent, combo_num_, position):
-	for child in parent.get_children():
-		if child is Node2D and child.has_method(&"set_combo_num"):
-			child.set_combo_num(combo_num_)
-			child.position = position
-			return child
-	var combo_scene = _cached_scene(&"combo", COMBO_PATH)
-	if combo_scene == null:
-		return null
-	var target = combo_scene.instantiate()
-	if target == null:
-		return null
-	parent.add_child(target)
-	target.position = position
-	if target.has_method(&"set_combo_num"):
-		target.set_combo_num(combo_num_)
-	else:
-		target.combo_num = combo_num_
-	return target
+	return _popup_factory.add_combo(parent, combo_num_, position)
 
 
 func add_combo_num(parent, combo_num_):
-	var target = instance_scene(_cached_scene(&"combo_num", COMBO_NUM_PATH), parent)
-	if target == null:
-		return null
-	target.combo_num = combo_num_
-	return target
+	return _popup_factory.add_combo_num(parent, combo_num_)
 
 
 func add_z_lw_stage(parent, position, speed, dir, max_num, pd):
@@ -3257,28 +3099,11 @@ func add_change_clothes_jm(parent, position, _name, transmogrified):
 
 
 func add_miss_effect(parent, position):
-	var target = instance_scene(_cached_scene(&"miss_effect", MISS_EFFECT_PATH), parent)
-	if target == null:
-		return null
-	target.position = position
-	return target
+	return _combat_factory.add_miss_effect(parent, position)
 
 
 func add_damage_number(parent, value, type_: String, is_crit: bool, tar):
-	if not bool(MainSet.set_data.get("ShowDamageText", true)):
-		return null
-
-	var target = instance_scene(_cached_scene(&"damage_number", DAMAGE_NUMBER_PATH), parent)
-	if target == null:
-		return null
-	if is_instance_valid(tar):
-		target.target = tar
-	else:
-		target.target = null
-	target.is_crit = is_crit
-	target.type = type_
-	target.need_number = value
-	return target
+	return _combat_factory.add_damage_number(parent, value, type_, is_crit, tar)
 
 
 func set_damage_text_enabled(enabled: bool) -> void:
@@ -3420,23 +3245,11 @@ func _get_viewport_center_position() -> Vector2:
 
 
 func add_use_magic_weapon(parent, position):
-	if not use_magic_weapon:
-		use_magic_weapon = _load_scene("res://Scene/back_pack/use_magic_weapon.tscn")
-	var target = instance_scene(use_magic_weapon, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _backpack_factory.add_use_magic_weapon(parent, position)
 
 
 func add_skill_select(parent, position, _name):
-	if not skill_select:
-		skill_select = _load_scene("res://Scene/back_pack/skill_select.tscn")
-	var target = instance_scene(skill_select, parent)
-	if target == null:
-		return null
-	target.weapon_name = str(_name)
-	target.position = position
-	return target
+	return _backpack_factory.add_skill_select(parent, position, _name)
 
 
 func add_weapon_bullet(parent, position, _name, list, dir, Rand):
@@ -3817,18 +3630,7 @@ func set_magic_summon_for(player: Node, summon: Node) -> void:
 
 
 func add_message_show(parent_node, need_text: String, time: float, target_pos: Vector2):
-	var target = instance_scene(_cached_scene(&"message_show", MESSAGE_SHOW_PATH), parent_node)
-	if target == null:
-		return null
-	target.z_index = 999
-	if target_pos == Vector2.ZERO or target_pos == Vector2(470, 300):
-		target.position = viewport_center_for_parent(parent_node)
-	else:
-		target.position = target_pos
-	target.show_text = need_text
-	target.last_time = time
-	center_popup_texts(target)
-	return target
+	return _popup_factory.add_message_show(parent_node, need_text, time, target_pos)
 
 
 ## 统一保存反馈：失败时在可见 UI 层提示，并返回 false 供调用方回滚。
@@ -3851,67 +3653,27 @@ func add_ws_effect(parent):
 
 
 func add_choose_item(parent, position, list, _name, page):
-	list = preload("res://Script/data/yutu_equipment_data.gd").expand_drop_entries(list, "名字")
-	if not choose_item:
-		choose_item = _load_scene("res://Scene/shop/choose_item.tscn")
-	var target = instance_scene(choose_item, parent)
-	target._name = _name
-	target.page = page
-	target._list = list
-	target.z_index = 99
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	if position == Vector2.ZERO or position == Vector2(460, 260):
-		target.position = viewport_center_for_parent(parent)
-	else:
-		target.position = position
-	if is_instance_valid(target) and get_tree().paused:
-		target.process_mode = Node.PROCESS_MODE_ALWAYS
-	return target
+	return _shop_factory.add_choose_item(parent, position, list, _name, page)
 
 
 func add_s_y_n_help(parent, position):
-	if not ldl_help:
-		ldl_help = _load_scene("res://Scene/ldl/s_yn_help.tscn")
-	var target = instance_scene(ldl_help, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _shop_factory.add_s_y_n_help(parent, position)
 
 
 func add_shop(parent, position):
-	if not s_hop:
-		s_hop = _load_scene("res://Scene/shop/shop.tscn")
-	var target = instance_scene(s_hop, parent)
-	target.z_index = 99
-	target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _shop_factory.add_shop(parent, position)
 
 
 func add_shop_items(parent, position, _name: String, need_):
-	if not shop_ttems:
-		shop_ttems = _load_scene("res://Scene/shop/shop_item.tscn")
-	var target = instance_scene(shop_ttems, parent)
-	target.position = position
-	target._item_name = _name
-	target.need_lh = int(need_)
-	return target
+	return _shop_factory.add_shop_items(parent, position, _name, need_)
 
 
 func add_magp_infor(parent, position):
-	if not magp_infor:
-		magp_infor = _load_scene("res://Scene/back_pack/magic_weapon_infor.tscn")
-	var target = instance_scene(magp_infor, parent)
-	target.position = position
-	return target
+	return _backpack_factory.add_magp_infor(parent, position)
 
 
 func add_synthesis(parent, position):
-	if not synthesis:
-		synthesis = _load_scene("res://Scene/ldl/synthesis.tscn")
-	var target = instance_scene(synthesis, parent)
-	target.position = position
-	return target
+	return _shop_factory.add_synthesis(parent, position)
 
 
 func add_change_bg(parent, position):
@@ -3926,11 +3688,7 @@ func add_change_bg(parent, position):
 
 
 func add_strength(parent, position):
-	if not qh_jm:
-		qh_jm = _load_scene("res://Scene/ldl/strength.tscn")
-	var target = instance_scene(qh_jm, parent)
-	target.position = position
-	return target
+	return _shop_factory.add_strength(parent, position)
 
 
 func create_hands(parent, direction, position):
@@ -3947,7 +3705,7 @@ func create_hands(parent, direction, position):
 
 
 func call_chase_bullet(parent, _name, speed, time: float, dir, position, hit_name, dic):
-	var target = instance_scene(_cached_scene(&"chase_bullet_", CHASE_BULLET_PATH), parent)
+	var target = instance_scene(load_cached_scene(CHASE_BULLET_PATH), parent)
 	if target == null:
 		print("Error: failed to instantiate chase_bullet_, check resource path")
 		return null
@@ -3981,35 +3739,19 @@ func call_fly_bullet(parent, _name, dir, position, distance, speed, hit_name, di
 
 
 func add_lj(parent, _position):
-	var target = instance_scene(_cached_scene(&"lj", LIJI_PATH), parent)
-	if target == null:
-		return null
-	target.z_index = 99
-	target.position = _position
-	return target
+	return _popup_factory.add_lj(parent, _position)
 
 
 func add_trap(parent, _position, _name):
-	if not trap:
-		trap = _load_scene("res://Scene/level/trap.tscn")
-	var target = instance_scene(trap, parent)
-	target.z_index = 99
-	target._get_name = _name
-	target.position = _position
-	return target
+	return _combat_factory.add_trap(parent, _position, _name)
 
 
 func add_buff_info(parent, _position, message_text: String):
-	return add_message_show(parent, message_text, 1.5, _position)
+	return _popup_factory.add_buff_info(parent, _position, message_text)
 
 
 func add_buff_icon_text(parent, text_):
-	if not buff_icon:
-		buff_icon = _load_scene("res://Scene/back_pack/buff.tscn")
-	var target = instance_scene(buff_icon, parent)
-	target.z_index = 99
-	target._texture = text_
-	return target
+	return _backpack_factory.add_buff_icon_text(parent, text_)
 
 
 func add_special_effect(parent, _position, _name, _scale, direction, _speed):
@@ -4040,29 +3782,11 @@ func add_special_effect(parent, _position, _name, _scale, direction, _speed):
 
 
 func add_choose_text(parent, _position, text_, calm_time):
-	if not choose_text:
-		choose_text = _load_scene("res://Scene/show_text/choose_scene.tscn")
-	var target = instance_scene(choose_text, parent)
-	target.z_index = 99
-	target.position = _position
-	target.my_text = text_
-	target.calm_time = calm_time
-	_ui_runtime.register_transient_ui(target)
-	if is_instance_valid(target) and get_tree().paused:
-		target.process_mode = Node.PROCESS_MODE_ALWAYS
-	return target
+	return _popup_factory.add_choose_text(parent, _position, text_, calm_time)
 
 
 func add_special_effect_bullet(parent, _position, _scale, _name, dir):
-	if not special_effect_bullet:
-		special_effect_bullet = _load_scene("res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn")
-	var target = instance_scene(special_effect_bullet, parent)
-	target.z_index = 99
-	target.position = _position
-	target._scale = _scale
-	target.dire = dir
-	target.action_name = _name
-	return target
+	return _combat_factory.add_special_effect_bullet(parent, _position, _scale, _name, dir)
 
 
 func add_role_information(parent, position):
@@ -4128,12 +3852,7 @@ func add_ldl(parent, position):
 
 
 func add_pl_sell(parent, position):
-	if not pl_sell:
-		pl_sell = _load_scene("res://Scene/back_pack/pl_sell.tscn")
-	var target = instance_scene(pl_sell, parent)
-	target.z_index = 99
-	target.position = position
-	return target
+	return _backpack_factory.add_pl_sell(parent, position)
 
 
 func fall_item(parent, position, _name, value_):
@@ -4148,14 +3867,7 @@ func fall_item(parent, position, _name, value_):
 
 
 func add_dj_infor(parent, position, _name):
-	if not dj_infor:
-		dj_infor = _load_scene("res://Scene/back_pack/dj_information.tscn")
-	var target = instance_scene(dj_infor, parent)
-	target.my_name = _name
-	target.z_index = 99
-	target.position = position
-	left_align_popup_texts(target)
-	return target
+	return _backpack_factory.add_dj_infor(parent, position, _name)
 
 
 func close_backpack_click_menus(parent: Node = null) -> void:
@@ -4184,15 +3896,7 @@ func _close_backpack_click_menus_in(root: Node) -> void:
 
 
 func add_dj_sell(parent, position, _name, _page):
-	close_backpack_click_menus(parent)
-	if not dj_sell:
-		dj_sell = _load_scene("res://Scene/back_pack/dj_sell.tscn")
-	var target = instance_scene(dj_sell, parent)
-	target.my_page = _page
-	target.my_name = _name
-	target.z_index = 99
-	target.position = position
-	return target
+	return _backpack_factory.add_dj_sell(parent, position, _name, _page)
 
 
 func get_ancestor(self_, times):
@@ -4204,57 +3908,15 @@ func get_ancestor(self_, times):
 
 
 func add_equ_propeties_box(parent, position, _name, qh_level, wx, Data):
-	if not equ_propeties_box:
-		equ_propeties_box = _load_scene("res://Scene/back_pack/equipment_properies.tscn")
-	var target = instance_scene(equ_propeties_box, parent)
-	target.z_index = 199
-	var item_data: Dictionary = Data.duplicate(true) if Data is Dictionary else {}
-	var template: Dictionary = AE.all_equipment.get(str(_name), {})
-	if item_data.is_empty() and str(template.get("所属", "")) == "宠物装备":
-		item_data = template.duplicate(true)
-	var item_type := str(item_data.get(DataKeys.TYPE, template.get(DataKeys.TYPE, "")))
-	var belongs_to := str(item_data.get("所属", template.get("所属", "")))
-	if (item_type == "宠物装备" or belongs_to == "宠物装备") and target.has_method("setup_pet_equipment"):
-		var slot_type := str(item_data.get("装备类型", template.get("装备类型", ""))).strip_edges()
-		var pet_instance := {
-			"名字": str(item_data.get(DataKeys.NAME, template.get(DataKeys.NAME, _name))),
-			"强化等级": int(qh_level),
-			"类型": slot_type,
-			"装备类型": slot_type,
-			"Data": item_data,
-		}
-		if item_data.has("随机属性") and item_data["随机属性"] is Array:
-			pet_instance["随机属性"] = (item_data["随机属性"] as Array).duplicate(true)
-		target.call("setup_pet_equipment", pet_instance, maxi(0, int(item_data.get("售价", template.get("售价", 0)))))
-	else:
-		target.qh_level = qh_level
-		target.nam = _name
-		target.wx = wx
-		target.eq_prop = Data
-	target.position = position
-	left_align_popup_texts(target)
-	return target
+	return _backpack_factory.add_equ_propeties_box(parent, position, _name, qh_level, wx, Data)
 
 
 func add_se_eq_jm(parent, position, _name, _page, _number):
-	close_backpack_click_menus(parent)
-	if not sell_or_equ:
-		sell_or_equ = _load_scene("res://Scene/back_pack/sell_or_equ.tscn")
-	var target = instance_scene(sell_or_equ, parent)
-	target.page = _page
-	target.number = _number
-	target._get_name = _name
-	target.z_index = 99
-	target.position = position
-	return target
+	return _backpack_factory.add_se_eq_jm(parent, position, _name, _page, _number)
 
 
 func add_main_backpack(parent, position):
-	if not main_backpack:
-		main_backpack = _load_scene("res://Scene/back_pack/main_backpack.tscn")
-	var target = instance_scene(main_backpack, parent)
-	target.position = position
-	return target
+	return _backpack_factory.add_main_backpack(parent, position)
 
 
 func change_scene(target, force_loading_screen: bool = false, require_archive_session: bool = true) -> bool:
@@ -4333,34 +3995,15 @@ func add_cd_jm(parent, position):
 
 
 func add_moment_text(parent, position, text, last_time):
-	var target = instance_scene(_cached_scene(&"moment_texxt", MOMENT_TEXT_PATH), parent)
-	if target == null:
-		return null
-	target.position = position
-	target.show_text = text
-	target.last_time = last_time
-	target.z_index = 99
-	return target
+	return _popup_factory.add_moment_text(parent, position, text, last_time)
 
 
 func add_touch_text(parent, position, text):
-	if not touch_text:
-		touch_text = _load_scene("res://Scene/show_text/touch_text.tscn")
-	var target = instance_scene(touch_text, parent)
-	target.position = position
-	target.z_index = 99
-	target.tt = text
-	return target
+	return _popup_factory.add_touch_text(parent, position, text)
 
 
 func add_back_pack(parent, position):
-	if not back_pack:
-		back_pack = _load_scene("res://Scene/back_pack/back_pack.tscn")
-	var target = instance_scene(back_pack, parent)
-	configure_backpack_role_preview(target)
-	target.position = position - Vector2(481, 297)
-	target.z_index = 10
-	return target
+	return _backpack_factory.add_back_pack(parent, position)
 
 
 func create_monster(M_id: int, parent, _position: Vector2) -> BaseMonster:
@@ -4380,25 +4023,11 @@ func create_monster(M_id: int, parent, _position: Vector2) -> BaseMonster:
 
 
 func add_hit_text(parent, _position, value, lx, crit, miss):
-	var target = instance_scene(_cached_scene(&"hit_text", HIT_TEXT_PATH), parent)
-	if target == null:
-		return null
-	target.show_lx = str(lx)
-	target.is_crit = crit
-	target.is_miss = miss
-	target.show_text = value
-	target.position = _position
-	return target
+	return _combat_factory.add_hit_text(parent, _position, value, lx, crit, miss)
 
 
 func add_monster_blood(parent, _position, value, text):
-	var target = instance_scene(_cached_scene(&"monster_blood", MONSTER_BLOOD_PATH), parent)
-	if target == null:
-		return null
-	target.bar_value = value
-	target.bar_text = text
-	target.position = _position
-	return target
+	return _combat_factory.add_monster_blood(parent, _position, value, text)
 
 
 func add_mr_hurt(parent, _position):
@@ -4544,20 +4173,7 @@ func add_role_bullet_1_safe(parent, position, _name, dic, source_player: BaseHer
 
 
 func add_bullet_safe(bullet_name, parent, direction, show_speed, position, _hit_name, list):
-	var bullet_scene = load_monster_bullet_scene(str(bullet_name))
-	if bullet_scene == null:
-		return null
-	var target = bullet_scene.instantiate()
-	target.att_list = list
-	target.hit_name = _hit_name
-	if str(_hit_name) != "" and list is Dictionary:
-		target.obj_attack_dict[_hit_name] = list
-	target.position = position
-	target.dir = direction
-	target.skill_name = bullet_name
-	target.speed = show_speed
-	parent.call_deferred("add_child", target)
-	return target
+	return _combat_factory.add_bullet_safe(bullet_name, parent, direction, show_speed, position, _hit_name, list)
 
 
 func instance_scene(target_scene_, parent):
@@ -4581,16 +4197,7 @@ func instance_scene(target_scene_, parent):
 
 
 func add_bullet(bullet_name: String, parent, direction: bool, show_speed, position, _hit_name, list):
-	var target = instance_scene(load_monster_bullet_scene(bullet_name), parent)
-	if target == null:
-		return null
-	target.att_list = list
-	target.hit_name = _hit_name
-	target.position = position
-	target.dir = direction
-	target.skill_name = bullet_name
-	target.speed = show_speed
-	return target
+	return _combat_factory.add_bullet(bullet_name, parent, direction, show_speed, position, _hit_name, list)
 
 
 func main_remove_child(parent, node_name):

@@ -136,6 +136,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=600,
         timeout_seconds=180,
     ),
+    ProbeSpec(
+        key="ui-factories",
+        title="场景工厂族运行时探针",
+        script_name="ui_factory_probe.gd",
+        scene_name="ui_factory_probe.tscn",
+        result_prefix="UI_FACTORY_PROBE_RESULT=",
+        report_stem="ui_factory_probe_report",
+        teardown_marker="UI_FACTORY_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+    ),
 )
 
 
