@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；当前候选为 **Phase 21 独立立项与平台发布验证**（21-1A/21-1B/21-1C、21-2 与 21-3/21-4 均未启动）。平台与发布验证按独立工作流推进，不把未验证平台写成承诺。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-3 工厂族与 21-4 资源遗留已推进部分批次，21-1/21-2 尚未启动。平台与发布验证按独立工作流推进，不把未验证平台写成承诺。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -15,7 +15,7 @@
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
-| Phase 21 独立立项与平台发布 | 当前候选；21-1A/21-1B/21-1C、21-2、21-3、21-4 均未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 21 独立立项与平台发布 | 进行中：21-3 部分工厂族与 21-4A/21-4B 已完成；21-1、21-2 与 21-3 剩余入口未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -120,5 +120,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15 与 Phase 16 已全部完成并归档；当前候选为 Phase 17，17-1、17-2A、17-2B、17-2C、17-3 与 17-4 已完成，其余批次未实施；Phase 17 的归属/阶段/成长/表现边界以 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md) 与 [`current-iteration.md`](current-iteration.md) 为准。
+- 架构目标与进度分开。Phase 15、Phase 16 与 Phase 17 已完成并归档；当前候选为 Phase 21，进度、剩余批次与恢复条件以 [`current-iteration.md`](current-iteration.md) 与 [`status.md`](../reference/status.md) 为准。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

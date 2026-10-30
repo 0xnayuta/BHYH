@@ -20,7 +20,9 @@
 
 ---
 
-## 1. 13 条缺失资源逐条登记
+## 1. 缺失资源逐条登记
+
+§1 表 1 为 13 条基线；§1.1 为可读文本回退；§1.2 为新发现未处置项。
 
 | # | 资源 | 引用点 | 运行影响 | 原版 PCK/解包 | 恢复来源 | 状态 |
 |:--:|:---|:---|:---|:---:|:---|:---|
@@ -32,9 +34,9 @@
 | 6 | `Art/hero_picture/role_2/jhsj_awaken/runtime/` | `jhsj_awaken_effect.gd`、`hmz_awaken_effect.gd` | 已恢复：`01_2_1` / `08_1` 两个 skeleton 均 `loaded=true` | 缓存存在 | 源文件已反向恢复 | **已恢复**（§2） |
 | 7 | `Art/hero_picture/role_2/lyfb_awaken/runtime/` | `lyfb_awaken_effect.gd` | 已恢复：代码使用的 `07-gray` / `07-red` 均 `loaded=true` | 缓存存在 | 源文件已反向恢复 | **已恢复**（§2） |
 | 8 | `Art/monster/game_3_monster/three_prince/nezha/idle/1.png` | `monster_head_info.gd:6` 头像 fallback | 源帧已补齐（`ResourceLoader.exists=true`）；atlas 回退仍保留 | **原版无 `idle/` 目录**；atlas manifest `idle` 帧 | 从 `nezha/atlas/pages/atlas_009.png` 裁切（region 858,2,210,127；margin 119,99,160,173 → 489×399） | **已补齐（派生）** |
-| 9 | `Art/monster/qiong_qi/effects/buff_green.png` | `qiong_qi_boss.gd:12,255`；`Global.gd:253` | 源帧已补齐（`ResourceLoader.exists=true`）；atlas 回退仍保留 | **原版 `QiongQi/Effects/` 目录不存在**；atlas `Effects` 序列 | 从 `qiong_qi/atlas/pages/atlas_000.png` 裁切（region 88,2,82,120；margin 21,5,50,12 → 153×137）；路径已规范化为 snake_case | **已补齐（派生）** |
-| 10 | `Art/monster/qiong_qi/effects/buff_blue.png` | `qiong_qi_boss.gd:13,255`；`Global.gd:254` | 源帧已补齐（`ResourceLoader.exists=true`）；atlas 回退仍保留 | 同上 | 从 `qiong_qi/atlas/pages/atlas_000.png` 裁切（region 2,2,82,120；margin 21,5,50,12 → 153×137）；路径已规范化为 snake_case | **已补齐（派生）** |
-| 11 | `Art/add_effect/buff_icon/mp_poision.png` | 已移除 `Global.gd:2026,2058` 两处预加载 | 无（`Global.gd:924-925` 回退逻辑保留） | 原版无该文件 | 无需恢复；白名单条目已清理 | **已清理** |
+| 9 | `Art/monster/qiong_qi/effects/buff_green.png` | `qiong_qi_boss.gd:6,240` | 源帧已补齐（`ResourceLoader.exists=true`）；atlas 回退仍保留 | **原版 `QiongQi/Effects/` 目录不存在**；atlas `Effects` 序列 | 从 `qiong_qi/atlas/pages/atlas_000.png` 裁切（region 88,2,82,120；margin 21,5,50,12 → 153×137）；路径已规范化为 snake_case | **已补齐（派生）** |
+| 10 | `Art/monster/qiong_qi/effects/buff_blue.png` | `qiong_qi_boss.gd:7,240` | 源帧已补齐（`ResourceLoader.exists=true`）；atlas 回退仍保留 | 同上 | 从 `qiong_qi/atlas/pages/atlas_000.png` 裁切（region 2,2,82,120；margin 21,5,50,12 → 153×137）；路径已规范化为 snake_case | **已补齐（派生）** |
+| 11 | `Art/add_effect/buff_icon/mp_poision.png` | 已移除旧预加载入口 | 无（`resource_runtime.gd:256-257` 路径归一化保留） | 原版无该文件 | 无需恢复；白名单条目已清理 | **已清理** |
 | 12 | `Art/ui_2_6_0_0/Level_sxmg/csm/csm.wav` | 已删除 `sxmg_csm.gd` | 无 | 原版无 | 废弃工具已删除，白名单条目已清理 | **已清理** |
 | 13 | `Scene/level/Level_sxmg.tscn` | 已删除 `sxmg_csm.gd` | 无 | 原版无 | 废弃工具已删除，白名单条目已清理 | **已清理** |
 
@@ -71,6 +73,14 @@
 >   逐帧透明烘焙方案（7 张图集 / 324 个 AtlasTexture regions），全工程零路径/UID/registry 引用；
 >   当前运行时使用 `Art/monster/guanyin_spine/` 的 Spine 4.3 资源，无代码降级路径。
 >   → **已删除**（Git 历史可恢复）。
+
+---
+
+### 1.2 新发现（未处置）
+
+| # | 资源 | 引用点 | 运行影响 | 取证 | 恢复来源 | 状态 |
+|:--:|:---|:---|:---|:---|:---|:---|
+| 19 | `Art/monster/pet_tiger_boss/model/frames/stage1~4/r*_c*.png` | `pet_tiger_boss_base.gd` `_load_tiger_frame_texture` | 白虎 Boss 帧全部缺失，若场景启用则无可见帧 | 私有工作区 0 个文件；预构建 `pet_tiger_stage*_frames.tres` 仅 9 个动画，缺 `hit5`/`hit6`；`monster_1501~1504` 未被关卡引用 | 补齐源 PNG，或显式删除未引用场景 | **待评估** |
 
 ---
 

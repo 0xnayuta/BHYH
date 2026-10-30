@@ -95,7 +95,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 15 族，剩余清单见矩阵 §8）；Spine 跨平台、`_bundled` 与类型化 Atlas accessor 仍延期）。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 15 族，剩余清单见矩阵 §8）；Spine 跨平台、`_bundled` 与类型化 Atlas accessor 转入 Phase 21-1）。
 
 ### 2.4 运行时服务
 
@@ -407,7 +407,7 @@ classDiagram
 
 - `AtlasMetadata.data` 仅作为 `.tres` 序列化内部字段；六个直接消费者均改用 `view_for()`；`data_for()`、`validate_path()` 与 `clear_cache()` 已删除。空路径与无效 path 由 `view_for()` 报告并返回 `null`；`contract_scan.py` 的 `atlas_boundary` 规则阻断旧入口、非 View `.data` 读取与 `source_masks` 覆盖。
 - `runtime_frames_audit.py` 与 `scripts/runtime_frames_allowlist.json` 冻结剩余运行时建帧；清单是实际范围来源，本文不复制条目计数。
-- 19-3A 已逐项复核 12 个例外：`tao_wu_boss` 单图回退已删除，其余按 [运行时建帧例外决策](runtime_frames_exceptions.md) 登记为保留或补资源待办；`weiyang_palace_boss` 的符号层路径不匹配登记为已知缺陷。
+- 19-3A 逐项复核的运行时建帧例外见 [运行时建帧例外决策](runtime_frames_exceptions.md)：`tao_wu_boss` 单图回退已删除；21-4A 已把八仙与木吒/金吒动作帧迁移到构建期资源；21-4B 修正 `weiyang_palace_boss` 符号层路径；`pet_tiger_boss_base` 因源网格 PNG 缺失明确拒绝转换。
 - allowlist 只减不增；保留项不得作为新增运行时建帧的先例。恢复资源或迁移相应职责时移除登记并重新验收。
 - 具体迁移经过保留在 [Phase 13 归档](../archive/iteration_13_visual_asset_contract.md)，当前实现不重复保存逐批台账。
 
@@ -418,7 +418,7 @@ classDiagram
 |:---|:---|:---|:---|
 | 图集 `manifest.json` | `scripts/convert_atlas_metadata.py` | `AtlasMetadata.tres` | `--check` 逐字比较 + `source_frames` 帧数；`--self-test` 负向样本 |
 | 哪吒 `preview_<layer>.json` + 图集 PNG | `scripts/convert_nezha_preview_frames.py` | 哪吒专用 `SpriteFrames.tres` | `--check` 存在性 + 内容一致性 + 源 schema |
-| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效、法宝与宠物弹体 |
+| 连续编号 PNG 序列 | `scripts/convert_numbered_frames.py` | `SpriteFrames.tres` | `--all --check` 存在且未过期；覆盖 BiLuoTian/LeiTingJieZhen/3077 tornado、212/215/130 弹体、东胜神洲 loose 特效、法宝与宠物弹体、八仙与木吒/金吒多动作帧（21-4A） |
 | 纹理 sheet 固定网格 | `scripts/convert_sheet_frames.py` | `SpriteFrames.tres`（AtlasTexture 子资源） | `--check` 逐字比较；覆盖青龙剑/太极/八仙模型与 Lyfb/哪吒特效区域 |
 | 固定/按需驻留帧序列 | `scripts/convert_frame_sequences.py` | `FrameSequence.tres`（可读 slug 命名）+ Catalog + 发布依赖 JSON | `--check` 内容、schema、`asset_id` 唯一、单目录单序列、UID、路径闭包与陈旧输出；`--export-preset` 仅配置级覆盖 |
 | 动作视图（`play` 子集或连续 PNG + duration） | `scripts/convert_monster_action_views.py` | `monster_130/212/215/*_action_frames.tres`、宠物寅虎 stage1/2 | `--check` 逐字比较；帧索引、逐帧 duration、loop/speed |
@@ -489,7 +489,7 @@ classDiagram
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16 档案/槽位已完成归档；当前候选为 [Phase 17 玩法与表现模块边界](../roadmap/current-iteration.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17 已完成归档；当前候选为 [Phase 21 独立立项与平台发布验证](../roadmap/current-iteration.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
 

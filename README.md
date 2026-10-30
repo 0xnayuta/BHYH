@@ -125,6 +125,9 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 21 独立立项与平台发布验证：Spine 跨平台、`_bundled`、类型化 Atlas、平台/发布、工厂族收口与资源遗留；Phase 18~20 已归档 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
+| [`docs/archive/iteration_16_archive_session_slots.md`](docs/archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位归档 |
+| [`docs/archive/iteration_17_gameplay_module_boundaries.md`](docs/archive/iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界归档 |
+| [`docs/archive/iteration_18_20_comprehensive_closeout.md`](docs/archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾归档 |
 | [`docs/standards/README.md`](docs/standards/README.md) | 规范目录索引与修订流程 |
 | [`docs/standards/naming_standard.md`](docs/standards/naming_standard.md) | 命名规范与契约白皮书 |
 | [`docs/standards/godot_design_standard.md`](docs/standards/godot_design_standard.md) | Godot 现代项目设计规范（场景、Resource、Autoload、结构） |

@@ -33,7 +33,7 @@
 | [`reference/README.md`](reference/README.md) | 参考文档目录索引 |
 | [`reference/architecture.md`](reference/architecture.md) | **运行时架构**：Autoload、场景流、对象模型、数据/资源分层与遗留边界 |
 | [`reference/autoload_boundary_matrix.md`](reference/autoload_boundary_matrix.md) | **Phase 20-1B Autoload 与 Global 拆分边界**：11 个当前注册项（决策时 13）决策、`global.gd` 切面、普通子节点运行时与场景工厂族、迁移顺序与试点 |
-| [`reference/runtime_frames_exceptions.md`](reference/runtime_frames_exceptions.md) | **Phase 19-3A/21-4A 运行时建帧例外决策**：逐项保留/迁移/拒绝结论、TaoWu 回退收口与后续边界 |
+| [`reference/runtime_frames_exceptions.md`](reference/runtime_frames_exceptions.md) | **Phase 19-3A/21-4A/21-4B 运行时建帧例外决策**：逐项保留/迁移/拒绝结论、迁移与符号层修复、后续边界 |
 | [`reference/runtime_lifecycle_matrix.md`](reference/runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
 | [`reference/archive_session_matrix.md`](reference/archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者 |
 | [`reference/gameplay_module_matrix.md`](reference/gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖 |
@@ -91,6 +91,8 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | [`archive/iteration_14_atlas_metadata_boundary.md`](archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界、View 迁移、守卫与验证归档 |
 | [`archive/iteration_15_app_orchestration_lifecycle.md`](archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页、缓存/池/UI、退出与边界守卫归档 |
 | [`archive/iteration_16_archive_session_slots.md`](archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位：调用面矩阵、保存 IO、会话上下文、共享账本、面板显式操作者、契约门禁与恢复归档 |
+| [`archive/iteration_17_gameplay_module_boundaries.md`](archive/iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界：归属/阶段/成长/HUD/音频/模块 API 结论与交接缺口归档 |
+| [`archive/iteration_18_20_comprehensive_closeout.md`](archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾：归属、表现、资源/Atlas、Autoload 拆分、守卫扩面与延期去向归档 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
 

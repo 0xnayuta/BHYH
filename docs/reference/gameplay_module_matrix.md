@@ -704,7 +704,7 @@ _clear_runtime_pools()                    # 退出/重载：stop、stream=null�
 
 `contract_scan --fail-on-error` ERROR=0；`contract_scan --self-test` PASS；`archive_probe_runner` 146 项 PASS；`coop_probe_runner` 21/21 PASS；`level_1` 冒烟 PASS；`level_regression_all --changed-only` 128/128 PASS + 5 SKIP（265.7s）；`check_all --godot-bin` 8/8 PASS。
 
-Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)；剩余缺口连同 Phase 13~16 遗留进入 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 18-1~20-3。
+Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)；Phase 18~20 已收口归档，剩余缺口与延期去向见 [`current-iteration.md`](../roadmap/current-iteration.md) 的 Phase 21。
 
 
 ---

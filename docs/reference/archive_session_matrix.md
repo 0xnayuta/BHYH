@@ -536,7 +536,7 @@ grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 - [x] 静态定义、档案传输格式与实例状态已分开；
 - [x] 仅文档与只读报告，未修改生产代码；结果进入本页与 [`status.md`](status.md)。
 
-**下一入口**：Phase 16 已完成并归档，阶段计划与实施记录见 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)；当前候选 Phase 17 见 [`current-iteration.md`](../roadmap/current-iteration.md)。
+**下一入口**：Phase 16 已完成并归档，阶段计划与实施记录见 [`iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)；当前候选 Phase 21 见 [`current-iteration.md`](../roadmap/current-iteration.md)。
 
 ---
 

@@ -9,14 +9,17 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 18~20 综合收尾**：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D 已完成、19-3 资源/Atlas、19-4 输入/HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动；Phase 17 已归档 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 21 独立立项与平台发布验证**：Spine 跨平台、`_bundled`、类型化 Atlas accessor、平台/发布验证、工厂族收口与资源转换器遗留；Phase 18~20 已归档 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`../archive/iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
 | [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) | 6.9 补丁回植归档：范围、文件映射、实施批次与验收结果 |
 | [`../archive/iteration_12_display_hud.md`](../archive/iteration_12_display_hud.md) | Phase 12 显示层验收归档：分辨率矩阵、双人 HUD、门禁与已知边界 |
+| [`../archive/iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位归档 |
+| [`../archive/iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界归档 |
+| [`../archive/iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾归档 |
 
-当前内容版本 **6.9**。Phase 12~16 已完成并归档；当前候选为 Phase 17 玩法与表现模块边界（七个切片均未启动）；Phase 16 归档见 [`../archive/iteration_16_archive_session_slots.md`](../archive/iteration_16_archive_session_slots.md)。目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12~20 已完成并归档；当前候选为 Phase 21 独立立项与平台发布验证，进度与剩余批次见 [`current-iteration.md`](current-iteration.md)。目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

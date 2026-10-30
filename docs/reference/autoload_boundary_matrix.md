@@ -1,8 +1,8 @@
 # Autoload 与 Global 拆分边界矩阵（Phase 20-1B）
 
-> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取 5 个场景工厂）、W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）、W8 S7A/S7B（抽取 `RunContext` 并删除写多读零的运行状态字段）、W8 S7C（`LevelEntryRuntime` 与 `MonsterSpawnRuntime`）与 W8 S8（`NodeUtils`/`ItemUtils` 静态工具类、`RoleVisualRuntime`），并把四个无尽模式标志与 `selected_eight_immortal_id` 收进 `RunContext`。本页记录当前边界、逐项结论与迁移顺序。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
-> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 迁出 8 个功能族工厂（`Popup`/`Shop`/`Backpack`/`Reward`/`CombatPresentation`/`MonsterDisplay`/`LevelHint`/`ZhenFa`）；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`；S7C 迁出关卡进入编排与怪物生成；S8 迁出无状态工具与角色贴图加载（以上全部是 `Global` 的普通子节点、静态工具类或它持有的 `RefCounted`，不是 Autoload）。
-> **事实快照**：2026-10-30 私有完整工作区，静态扫描 `source/**/*.gd` 755 个文件；`scripts/**/*.gd` 探针另行计数。数量是本次决策证据，不是长期 SLA。
+> **状态**：2026-10-30 完成 20-1B 决策、试点 P1（删除 `BaseHit`）、P2（抽取 `RuntimeDiagnostics`）、W3 S2（抽取 `UiRuntime`）、W4（抽取 `AudioRuntime` 并合并 `MainMusic`）、W5 S4（抽取 `ResourceRuntime` 与 `SceneFlow`）、W6 S5（按功能族抽取首批 5 个场景工厂）、W7 S6/S9（抽取 `CombatPoolRuntime` 与 `MagicWeaponRuntime`）、W8 S7A/S7B（抽取 `RunContext` 并删除写多读零的运行状态字段）、W8 S7C（`LevelEntryRuntime` 与 `MonsterSpawnRuntime`）与 W8 S8（`NodeUtils`/`ItemUtils` 静态工具类、`RoleVisualRuntime`），并把四个无尽模式标志与 `selected_eight_immortal_id` 收进 `RunContext`。本页记录当前边界、逐项结论与迁移顺序。当前 `project.godot` 为 **11 个注册项：10 个业务单例 + `MCPGameBridge` 编辑器调试桥**；20-1B 决策时为 13。
+> **范围**：`source/project.godot` 的 Autoload 注册项；重点为 `global.gd` 的职责切分。P1 删除 `BaseHit`；P2 迁出诊断；S2 迁出 UI 宿主；W4 迁出音频并把 `MainMusic` 合并进 `AudioRuntime`；S4 迁出场景/资源运行时；S5 首批迁出 8 个功能族工厂（`Popup`/`Shop`/`Backpack`/`Reward`/`CombatPresentation`/`MonsterDisplay`/`LevelHint`/`ZhenFa`）；S6/S9 迁出对象池与法宝/召唤；S7A/S7B 迁出关卡显示名、玲珑宝塔层数与战斗统计到 `RunContext`；S7C 迁出关卡进入编排与怪物生成；S8 迁出无状态工具与角色贴图加载（以上全部是 `Global` 的普通子节点、静态工具类或它持有的 `RefCounted`，不是 Autoload）。
+> **事实快照**：2026-10-30 私有完整工作区；脚本与 UID 规模以 `status.md` 为准，探针另行计数。数量是本次决策证据，不是长期 SLA。
 > **依据**：[`目标架构契约`](../standards/target_architecture_contract.md) §3.2、[`Godot 设计规范`](../standards/godot_design_standard.md) §4、[`architecture.md`](architecture.md) §2、[`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)、[`archive_session_matrix.md`](archive_session_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)、[`status.md`](status.md)。
 
 ## 1. 决策摘要
@@ -15,18 +15,20 @@
 - 拆分按所有权闭环推进：迁移生产调用方、删除旧入口、同步守卫与验收；不保留永久兼容 facade。
 - 当前 `Global` 仍是场景流、UI 工厂、资源缓存、对象池、音频与运行状态的组合根；先删死代码与低风险诊断，再拆叶子服务，最后处理高频工厂与运行状态。
 
-Phase 20-1 其余切片保持未启动：
+Phase 20-1 剩余切片转入 Phase 21-1：
 
 | 切片 | 本轮结论 | 说明 |
 |:---|:---|:---|
-| 20-1A Spine 跨平台 | 未启动 | 需先定目标平台、Spine 运行时版本与许可证；不在本页替其作结论 |
-| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2、W3~W8 与 S5 已执行；20-1A/20-1C/20-1D 延期** | 本页；决策时 13 个注册项，W4 合并 `MainMusic` 后 11 个 |
-| 20-1C `_bundled` 历史场景 | 未启动 | 需私有素材、UID/导入缓存与格式取证 |
-| 20-1D 类型化 Atlas accessor | 未启动 | 依赖 19-3B 的 41 项未迁移图集范围 |
+| 20-1A Spine 跨平台 | 转入 Phase 21-1；未启动 | 需先定目标平台、Spine 运行时版本与许可证；不在本页替其作结论 |
+| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2、W3~W8 与 S5 已执行；20-1A/20-1C/20-1D 转入 Phase 21-1** | 本页；决策时 13 个注册项，W4 合并 `MainMusic` 后 11 个 |
+| 20-1C `_bundled` 历史场景 | 转入 Phase 21-1；未启动 | 需私有素材、UID/导入缓存与格式取证 |
+| 20-1D 类型化 Atlas accessor | 转入 Phase 21-1；未启动 | 依赖 19-3B 的 41 项未迁移图集范围 |
 
 ## 2. 量化基线
 
 ### 2.1 `global.gd` 规模
+
+计数基线：2026-10-30（21-3F 合并后）；数字为脚本直接统计，随迭代变动，不承诺长期不变。
 
 | 指标 | 决策时 | P2 后 | S2 后 | 当前 | 说明 |
 |:---|:---|:---|:---|:---|:---|
@@ -285,7 +287,7 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - 新增 `ProjectileFactory`：`add_role4_bullet`、`add_new_bullet`、`add_role_bullet`、`add_role_bullet_1`、`add_role_bullet_1_safe`、`add_monster65_bullet`、`add_weapon_bullet`。slim/streaming 路径解析与 `ADD_WEAPON_BULLET_PATHS` 迁入；来源写入仍经 `Global._assign_attack_source`，不复制归属规则。
 - 新增 `EffectFactory`：`add_monster141_aura`、`add_aura`、`add_smb_effect`、`add_role_special_effect`、`add_ws_effect`、`add_line`。`AURA_PATH` 与三个 slim 路径常量迁入；灵魄加成仍由 `PaSkill` 计算。
 - 两个清理入口（`clear_combat_runtime_cache`、`release_role_runtime_resources`）改调工厂 `clear_scene_caches()`；工厂不持有跨档案状态。
-- `ui-factories` 探针扩到 **170 项**：新增三族入口的返回形状、字段、场景缓存与“清缓存后重新加载”断言，并断言 `add_forge_box` 不再存在。
+- `ui-factories` 探针扩充：三族入口的返回形状、字段、场景缓存与“清缓存后重新加载”断言，并断言 `add_forge_box` 不再存在。
 - 验收：`check_all --godot-bin` 8/8；`level_1` PASS；全量 `level_regression_all` **128/128 PASS + 5 SKIP**；存档探针 293/293。
 
 ### 21-3D：菜单/设置族（完成，2026-10-30）
@@ -295,21 +297,21 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - `add_skill_select` 已是 `BackpackFactory` 薄转发，本批不改。
 - 角色技能图标预热改调 `MenuPanelFactory.prime_learn_skill_scene()`，仍只接受已缓存场景。
 - **修复**：`add_gm_infor` 的根节点是 `CanvasLayer`，原实现直接写 `z_index` 会触发 `SCRIPT ERROR` 并中断返回；改为仅在 `CanvasItem` 上写入，视觉与返回值语义按修复后生效（此前该按钮打开会报错）。
-- `ui-factories` 探针扩到 **189 项**：三族入口返回形状、缩放/层级、临时 UI 登记、常驻小 UI 不登记、`CanvasLayer` 根节点语义与缓存；断言 `add_set_menu` 不再存在。
+- `ui-factories` 探针扩充：三族入口返回形状、缩放/层级、临时 UI 登记、常驻小 UI 不登记、`CanvasLayer` 根节点语义与缓存；断言 `add_set_menu` 不再存在。
 - 验收：`check_all --godot-bin` 8/8；`level_1` PASS；全量回归见 `status.md`。
 
 ### 21-3E 批次 1~2：buff 与关卡场景族（完成，2026-10-30）
 
 - **buff 族**：`add_buffinfor` 并入 `PopupFactory.add_buff_information`（`buff_information.tscn`，屏幕布局 + hover 弹层）；`add_buff_icon` 并入 `CombatPresentationFactory.add_buff_icon`（`buff_icon.tscn`，节点名与 `buff_name` 取自 `Name`）。`add_buff`、`add_buff_info`、`add_buff_icon_text`、`add_magp_infor` 已是既有工厂薄转发，本批不改。`Global` 删除 `buffinfor` 槽位与 `BUFF_ICON_PATH` 常量。
 - **关卡场景族**：新增 `LevelSceneFactory`（90 行，4 个常驻场景槽位）：`add_stage`、`add_z_lw_stage`、`add_zztw_trap`、`add_dsg_choose`；`Global` 删除 `stage`/`z_lw_stage`/`zztwtrap`/`dsg_choose` 四个槽位字段并保留同名薄转发与 `get_level_scene_factory()`。
-- `ui-factories` 探针扩到 **206 项**：buff 信息面板的 `data_list`/hover 层级/缓存、buff 图标字段/命名/无效父节点拒绝、四个关卡场景的字段与缓存、`LevelSceneFactory` 归属。
+- `ui-factories` 探针扩充：buff 信息面板的 `data_list`/hover 层级/缓存、buff 图标字段/命名/无效父节点拒绝、四个关卡场景的字段与缓存、`LevelSceneFactory` 归属。
 - 验收：`check_all --godot-bin` 8/8；`level_1` PASS；全量回归见 `status.md`。
 
 ### 21-3F：展示文本与技能面板族（完成，2026-10-30）
 
 - **展示文本族**：新增 `ShowTextFactory`（3 个常驻场景槽位）：`add_font_instance`（`message_info.tscn`，`font` 为空时保持空字体）、`add_task_title`（`task_title.tscn`，层级 99）、`add_pj`（`ping_jia.tscn`）。`add_star` 全仓 0 调用方（`choose_player` 已自建 Label 星级），随 `star` 槽位删除。
 - **技能面板族**：新增 `SkillPanelFactory`（3 个常驻场景槽位）：`add_zd_skillscene`、`add_bd_skillscene`、`add_magic_help`，层级均固定 99；角色技能图标线程预热改调 `prime_skill_scenes()`，只接受已缓存场景。`add_role_magic_need` 全仓 0 调用方（`role_magic_need.tscn` 无其它引用），随槽位删除。
-- `ui-factories` 探针扩到 **223 项**：字体文本/任务标题/评分字段与层级、技能面板层级与坐标、运行期 UI 场景槽位在缓存释放后仍可复用、两个死入口已删除断言。
+- `ui-factories` 探针扩充：字体文本/任务标题/评分字段与层级、技能面板层级与坐标、运行期 UI 场景槽位在缓存释放后仍可复用、两个死入口已删除断言。
 - 验收：`check_all --godot-bin` 8/8；`level_1` PASS；全量回归见 `status.md`。
 
 ## 7. 守卫与验收
@@ -319,16 +321,20 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - 本页覆盖决策时 13 个 Autoload（当前 11 个；`BaseHit` 已删除、`MainMusic` 已并入 `AudioRuntime`），每项有结论、owner 与前置条件；
 - 明确“不新增 Autoload、不设数量目标、不批量改名”的边界；
 - 文档链接可达；`check_all --skip-engine` 通过；
-- P1/P2 已按“迁移调用方、删除旧入口、同步探针”闭环；其余波次未执行。
+- P1/P2 已按“迁移调用方、删除旧入口、同步探针”闭环。
 
-后续 20-3 可增加的静态守卫（不在本轮实现）：
+已落地的守卫（以 `contract_scan.py` 注册类别为准）：
+
+- `slot_boundary` 阻断业务硬编码 `/root/PlayerData`、`/root/RoleProp` 与重新引入全局视图交换；
+- `run_state_boundary` 阻断运行状态字段的跨场景直接写入；
+- `audio_entry_boundary` 与 `hud_panel_boundary` 约束音频与 HUD/面板域。
+
+尚未落地的候选守卫（需评审后加入门禁）：
 
 1. `project.godot` 的 `[autoload]` 条目冻结；新增/删除必须有本页或新 ADR 记录；
 2. `Global` 公开成员与 `add_*` 数量设基线，新增需评审；
-3. 禁止新增 `Global.<var> =` 的跨场景直接写入；先加 accessor；
-4. 禁止 `/root/PlayerData`、`/root/RoleProp` 回落到 1P；仅保留已登记 getter；
-5. 禁止新代码以 `Global` 作为 UI/音频/战斗/运行状态的万能上下文；
-6. `MCPGameBridge` 仅在 `EngineDebugger.is_active()` 下工作，release 导出验证归 20-2。
+3. 禁止新代码以 `Global` 作为 UI/音频/战斗/运行状态的万能上下文；
+4. `MCPGameBridge` 仅在 `EngineDebugger.is_active()` 下工作；release 导出验证归 Phase 21-2。
 
 ## 8. 拒绝项与未决项
 
@@ -340,6 +346,7 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - **已决（S5 关卡提示族）**：`add_level_fall_box`、`add_item_box`、`add_game_need_know`、`add_hc_help`、`add_help_thing` 迁入 `LevelHintFactory`（93 行，四个常驻场景槽位；掉落箱与道具箱共用 `box_1.tscn` 但元数据不同）；`Global` 删除 `level_fall_box`/`game_need_know`/`hc_help`/`help_thing` 四个槽位字段，保留同名薄转发与 `get_level_hint_factory()`。
 - **已决（S5 阵法族）**：`add_zhen_fa_help`、`add_zhen_fa_tu_po`、`add_zhen_yan_cure_level`、`add_zhen_fa_info`、`add_zhenfalxbutton` 与同域的 `addzhenyanbutton` 迁入 `ZhenFaFactory`（104 行，六个常驻场景槽位）；`Global` 删除 6 个槽位字段并保留同名薄转发与 `get_zhen_fa_factory()`。`add_zhen_fa_ui` 全仓 0 调用方（含动态调用），随槽位一并删除。
 - **未决（S5 剩余，Phase 21-3 批次 1~7 已完成）**：`Global` 现有 116 个 `add_*`，其中 94 个已是族工厂的薄转发（`add_font_instance` 为多行）；其余 22 个仍持有场景槽位或实例化逻辑。已完成锻造/分解、弹体、效果、菜单/设置、buff、关卡场景、展示文本与技能面板七批；其余按本页候选清单继续，不一次性搬迁。
+  未迁移入口（22）：`add_role_button`、`add_basic_ar_button`、`add_some_monster_help`、`add_mosaic_help`、`add_letter_for_player`、`add_cure_times_box`、`add_trans_box`、`add_hdzm`、`add_lsh`、`add_lxdy`、`add_basic_pellet`、`add_game_announcement`、`add_choose_player`、`add_h_hjm`、`add_change_clothes_jm`、`add_role1_shallow`、`add_role2_shallow`、`add_mosaic_instance`、`add_change_bg`、`add_role_information`、`add_camera`、`add_cd_jm`。
 - **已决（W8 S8 + 20-3 守卫批次）**：`get_ancestor`/`get_position_between`/`get_dis_betweem` 迁入 `NodeUtils.ancestor/position_between/distance_between`；`get_clean_name`、`get_all_item_num`、`get_wx` 迁入 `ItemUtils.clean_fashion_name/random_item_entries/random_element_set`（`get_random_wx` 降为 `ItemUtils` 私有）；`load_item_icon`、`add_all_item_num`、`check_dir_between_two_obj`、`normal_face_player` 全仓 0 调用方，直接删除；角色身体/装备贴图加载迁入 `RoleVisualRuntime`，`Global` 保留 `load_role1_body`/`load_role1_eq` 薄转发。运行状态字段直写与上述旧入口由 `contract_scan` 的 `run_state_boundary` 规则阻断。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
-- **未启动**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。
+- **未启动（转入 Phase 21-1）**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。
