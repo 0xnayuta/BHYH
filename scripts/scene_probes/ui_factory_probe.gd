@@ -67,6 +67,11 @@ const MOSAIC_PATH := "res://Scene/ldl/mosaic.tscn"
 const HDZM_PATH := "res://Scene/level/hdzm.tscn"
 const LSH_PATH := "res://Scene/other_scene/lsh.tscn"
 const LXDY_PATH := "res://Scene/other_scene/lxdy.tscn"
+const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
+const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
+const CHANGE_BG_PATH := "res://Scene/other_scene/change_back_ground.tscn"
+const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
+const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
 
 var _failures: Array[String] = []
 
@@ -149,6 +154,11 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["factories_are_plain_nodes"] = (
 		Global.get_popup_factory() is Node and Global.get_popup_factory().get_script() != null
 	)
+	checks["dead_role_entries_removed"] = (
+		not Global.has_method("add_role_button")
+		and not Global.has_method("add_choose_player")
+		and not Global.has_method("add_change_clothes_jm")
+	)
 
 
 func _check_popup_family(checks: Dictionary) -> void:
@@ -222,9 +232,7 @@ func _check_shop_family(checks: Dictionary) -> void:
 		created.append(shop)
 	var item: Node = Global.add_shop_items(host, Vector2(320, 220), "probe_item", 5)
 	await _settle()
-	checks["shop_item_created"] = (
-		item != null and str(item._item_name) == "probe_item" and int(item.need_lh) == 5
-	)
+	checks["shop_item_created"] = (item != null and str(item._item_name) == "probe_item" and int(item.need_lh) == 5)
 	if item != null:
 		created.append(item)
 	var mystery: Node = Global.add_mystery_shop(host, Vector2.ZERO)
@@ -283,9 +291,13 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_backpack_created"] = back_pack != null and back_pack.get_parent() == host
 	if back_pack != null:
 		created.append(back_pack)
-	var dj_infor: Node = Global.add_dj_infor(host, Vector2(20, 20), "probe_dj")
+	# 使用真实装备 ID，避免面板 _physics_process 在探针多帧存活期间访问不存在的数据。
+	var probe_item := _first_equipment_id()
+	var dj_infor: Node = Global.add_dj_infor(host, Vector2(20, 20), probe_item)
 	await _settle()
-	checks["backpack_dj_infor_created"] = dj_infor != null and str(dj_infor.my_name) == "probe_dj"
+	checks["backpack_dj_infor_created"] = (
+		dj_infor != null and probe_item != "" and str(dj_infor.my_name) == probe_item
+	)
 	if dj_infor != null:
 		created.append(dj_infor)
 	var pl_sell: Node = Global.add_pl_sell(host, Vector2(30, 30))
@@ -313,8 +325,23 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_use_weapon_created"] = use_weapon != null
 	if use_weapon != null:
 		created.append(use_weapon)
+	var role_info: Node = Global.add_role_information(host, Vector2(70, 71))
+	checks["backpack_role_info_created"] = role_info != null and role_info.get_parent() == host
+	checks["backpack_role_info_fields"] = (
+		role_info != null and role_info.z_index == 99 and role_info.position == Vector2(70, 71)
+	)
+	checks["backpack_role_info_buff_box"] = (role_info != null and Global.buff_box == role_info.buff_box)
+	if role_info != null:
+		created.append(role_info)
+	var h_hjm: Node = Global.add_h_hjm(host, Vector2(72, 73))
+	await _settle()
+	checks["backpack_h_hjm_created"] = h_hjm != null and h_hjm.get_parent() == host
+	checks["backpack_h_hjm_position"] = h_hjm != null and h_hjm.position == Vector2(72, 73)
+	if h_hjm != null:
+		created.append(h_hjm)
 	checks["backpack_scene_cached"] = Global.is_resource_cached(BACK_PACK_PATH)
 	_cleanup(created, host)
+	Global.buff_box = null
 
 
 func _check_reward_family(checks: Dictionary) -> void:
@@ -389,7 +416,9 @@ func _check_combat_family(checks: Dictionary) -> void:
 	var monster_blood: Node = Global.add_monster_blood(host, Vector2(13, 13), 0.5, 50)
 	await _settle()
 	checks["combat_monster_blood_created"] = (
-		monster_blood != null and int(monster_blood.bar_text) == 50 and is_equal_approx(float(monster_blood.bar_value), 0.5)
+		monster_blood != null
+		and int(monster_blood.bar_text) == 50
+		and is_equal_approx(float(monster_blood.bar_value), 0.5)
 	)
 	if monster_blood != null:
 		created.append(monster_blood)
@@ -507,9 +536,7 @@ func _check_level_hint_family(checks: Dictionary) -> void:
 	# 关卡提示族：掉落箱与道具箱共用同一场景槽位，但元数据与字段不同。
 	var host := _make_host("LevelHintProbeHost")
 	var created: Array[Node] = []
-	var fall_box: Node = Global.add_level_fall_box(
-		host, true, false, "probe_drop", 2, ["金"], {"Def": 1}
-	)
+	var fall_box: Node = Global.add_level_fall_box(host, true, false, "probe_drop", 2, ["金"], {"Def": 1})
 	await _settle()
 	checks["level_fall_box_created"] = fall_box != null and fall_box.get_parent() == host
 	checks["level_fall_box_flags"] = (
@@ -546,9 +573,7 @@ func _check_level_hint_family(checks: Dictionary) -> void:
 	var help_thing: Node = Global.add_help_thing(host, Vector2(41, 42), {"Name": "probe"})
 	await _settle()
 	checks["help_thing_created"] = help_thing != null and help_thing.get_parent() == host
-	checks["help_thing_info"] = (
-		help_thing != null and str(help_thing.item_info.get("Name", "")) == "probe"
-	)
+	checks["help_thing_info"] = (help_thing != null and str(help_thing.item_info.get("Name", "")) == "probe")
 	checks["help_thing_position"] = help_thing != null and help_thing.position == Vector2(41, 42)
 	if help_thing != null:
 		created.append(help_thing)
@@ -817,9 +842,7 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	await _settle()
 	checks["game_set_created"] = game_set != null and game_set.get_parent() == host
 	checks["game_set_scaled"] = game_set != null and game_set.scale.x > 0.0 and game_set.scale.x == game_set.scale.y
-	checks["game_set_registered"] = (
-		game_set != null and ui_runtime.is_transient_ui_registered(game_set)
-	)
+	checks["game_set_registered"] = (game_set != null and ui_runtime.is_transient_ui_registered(game_set))
 	if game_set != null:
 		created.append(game_set)
 	var key_set: Node = Global.add_skill_key_set(host, Vector2(3, 4), "probe_key")
@@ -874,6 +897,25 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	checks["menu_mosaic_position"] = mosaic != null and mosaic.position == Vector2(23, 24)
 	if mosaic != null:
 		created.append(mosaic)
+	var ar_button: Node = Global.add_basic_ar_button(host, 7)
+	await _settle()
+	checks["menu_ar_button_created"] = ar_button != null and ar_button.get_parent() == host
+	checks["menu_ar_button_fields"] = ar_button != null and int(ar_button.archive_num) == 7
+	if ar_button != null:
+		created.append(ar_button)
+	var change_bg: Node = Global.add_change_bg(host, Vector2(31, 32))
+	await _settle()
+	checks["menu_change_bg_created"] = change_bg != null and change_bg.get_parent() == host
+	checks["menu_change_bg_canvaslayer"] = change_bg != null and change_bg is CanvasLayer
+	checks["menu_change_bg_offset"] = change_bg != null and change_bg.offset == Vector2(31, 32)
+	if change_bg != null:
+		created.append(change_bg)
+	var cd_jm: Node = Global.add_cd_jm(host, Vector2(33, 34))
+	await _settle()
+	checks["menu_cd_jm_created"] = cd_jm != null and cd_jm.get_parent() == host
+	checks["menu_cd_jm_position"] = cd_jm != null and cd_jm.position == Vector2(33, 34)
+	if cd_jm != null:
+		created.append(cd_jm)
 	checks["menu_panel_scenes_cached"] = (
 		Global.is_resource_cached(GAME_SET_PATH)
 		and Global.is_resource_cached(SKILL_KEY_SET_PATH)
@@ -881,6 +923,11 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 		and Global.is_resource_cached(LDL_PATH)
 		and Global.is_resource_cached(GAME_INFORMATION_PATH)
 		and Global.is_resource_cached(LEARN_SKILL_PATH)
+		and Global.is_resource_cached(MOSAIC_HELP_PATH)
+		and Global.is_resource_cached(MOSAIC_PATH)
+		and Global.is_resource_cached(BASIC_AR_BUTTON_PATH)
+		and Global.is_resource_cached(CHANGE_BG_PATH)
+		and Global.is_resource_cached(CD_JM_PATH)
 	)
 	# 负向断言：已删除的死入口不得复活。
 	checks["set_menu_entry_removed"] = not Global.has_method("add_set_menu")
@@ -1043,27 +1090,21 @@ func _check_map_overlay_family(checks: Dictionary) -> void:
 		and hdzm.scale == Vector2.ONE
 		and hdzm.position == Global.viewport_center_for_parent(host) - Vector2(493, 260)
 	)
-	checks["map_overlay_hdzm_registered"] = (
-		hdzm != null and ui_runtime.is_transient_ui_registered(hdzm)
-	)
+	checks["map_overlay_hdzm_registered"] = (hdzm != null and ui_runtime.is_transient_ui_registered(hdzm))
 	if hdzm != null:
 		created.append(hdzm)
 	var lsh: Node = Global.add_lsh(host, host)
 	await _settle()
 	checks["map_overlay_lsh_created"] = lsh != null and lsh.get_parent() == host
 	checks["map_overlay_lsh_scaled"] = lsh != null and lsh.scale.x > 0.0
-	checks["map_overlay_lsh_registered"] = (
-		lsh != null and ui_runtime.is_transient_ui_registered(lsh)
-	)
+	checks["map_overlay_lsh_registered"] = (lsh != null and ui_runtime.is_transient_ui_registered(lsh))
 	if lsh != null:
 		created.append(lsh)
 	var lxdy: Node = Global.add_lxdy(host, host)
 	await _settle()
 	checks["map_overlay_lxdy_created"] = lxdy != null and lxdy.get_parent() == host
 	checks["map_overlay_lxdy_scaled"] = lxdy != null and lxdy.scale.x > 0.0
-	checks["map_overlay_lxdy_registered"] = (
-		lxdy != null and ui_runtime.is_transient_ui_registered(lxdy)
-	)
+	checks["map_overlay_lxdy_registered"] = (lxdy != null and ui_runtime.is_transient_ui_registered(lxdy))
 	if lxdy != null:
 		created.append(lxdy)
 	var map_overlay_factory := Global.get_map_overlay_factory()
@@ -1127,6 +1168,9 @@ func _has_child_node(node_name: String) -> bool:
 func _make_host(node_name: String) -> Node2D:
 	var host := Node2D.new()
 	host.name = node_name
+	# 业务场景可能在 _physics_process 中改变 SceneTree.paused 或读取未构造的夹具数据；
+	# 探针宿主禁用处理，只保留 _ready 与显式断言。
+	host.process_mode = Node.PROCESS_MODE_DISABLED
 	get_tree().root.add_child(host)
 	return host
 

@@ -148,7 +148,6 @@ var mg_cd_pic
 var zhen_fa
 var lhhj_boss_list = {}
 
-const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
 const MAGIC_WEAPON_SCENE_PATHS := {
 	"zcld": "res://Scene/magic_weapon/zcld.tscn",
 	"dshl": "res://Scene/magic_weapon/cucurbit.tscn",
@@ -225,7 +224,6 @@ const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet4.gd"),
 ]
 const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_frame_cache_registry.gd")
-var basic_ar_button = null
 var weapon_bullet_node = null
 var bullet = null
 var damage_text = null
@@ -2095,7 +2093,6 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 
 
 var lhhjbutton = null
-var cd_jm = null
 
 var mycamera = null
 var target_scene: String:
@@ -2120,15 +2117,10 @@ func _get_preloaded(path: String) -> PackedScene:
 
 var sell_or_equ = null
 var fall_equ = null
-var role_information = null
 var nmw_hands = null
-var change_background = null
 
 var sound = null
 var role1_shallow = null
-var change_clothes_jm = null
-var h_hjm = null
-var choose_player = null
 var role2_shallow = null
 var game_announcement = null
 var basic_pellet = null
@@ -2138,24 +2130,10 @@ var listbutton = null
 var lhhjhelp = null
 var return_back_map = null
 var ui_28 = null
-var role_button = null
-
-
-func add_role_button(parent, my_name, my_father):
-	if not role_button:
-		role_button = _load_scene("res://Scene/other_scene/role_button.tscn")
-	var target = instance_scene(role_button, parent)
-	target.my_name = my_name
-	target.my_father = my_father
-	return target
 
 
 func add_basic_ar_button(parent, Num):
-	var target = instance_scene(_cached_scene(&"basic_ar_button", BASIC_AR_BUTTON_PATH), parent)
-	if target == null:
-		return null
-	target.archive_num = Num
-	return target
+	return _menu_panel_factory.add_basic_ar_button(parent, Num)
 
 
 func add_zhen_fa_help(parent, position):
@@ -2542,14 +2520,6 @@ func add_role_bullet(parent, position, dir, _name, dic, source_player: BaseHero 
 	return _projectile_factory.add_role_bullet(parent, position, dir, _name, dic, source_player)
 
 
-func add_choose_player(parent, _position):
-	if not choose_player:
-		choose_player = _load_scene("res://Scene/main_menu/choose_player.tscn")
-	var target = instance_scene(choose_player, parent)
-	target.position = _position
-	return target
-
-
 func add_monster65_bullet(parent, _position):
 	return _projectile_factory.add_monster65_bullet(parent, _position)
 
@@ -2607,21 +2577,7 @@ func add_z_lw_stage(parent, position, speed, dir, max_num, pd):
 
 
 func add_h_hjm(parent, position):
-	if not h_hjm:
-		h_hjm = _load_scene("res://Scene/other_scene/transmogrified.tscn")
-	var target = instance_scene(h_hjm, parent)
-	target.position = position
-	return target
-
-
-func add_change_clothes_jm(parent, position, _name, transmogrified):
-	if not change_clothes_jm:
-		change_clothes_jm = _load_scene("res://Scene/other_scene/c_hange_clothes_jm.tscn")
-	var target = instance_scene(change_clothes_jm, parent)
-	target.position = position
-	target.self_name = _name
-	target.transmogrified = transmogrified
-	return target
+	return _backpack_factory.add_h_hjm(parent, position)
 
 
 func add_miss_effect(parent, position):
@@ -3065,14 +3021,7 @@ func add_synthesis(parent, position):
 
 
 func add_change_bg(parent, position):
-	if not change_background:
-		change_background = _load_scene("res://Scene/other_scene/change_back_ground.tscn")
-	var target = instance_scene(change_background, parent)
-	if target is CanvasLayer:
-		target.offset = position
-	elif target != null:
-		target.position = position
-	return target
+	return _menu_panel_factory.add_change_bg(parent, position)
 
 
 func add_strength(parent, position):
@@ -3155,18 +3104,7 @@ func add_special_effect_bullet(parent, _position, _scale, _name, dir):
 
 
 func add_role_information(parent, position):
-	if not role_information:
-		role_information = _load_scene("res://Scene/level/role_information.tscn")
-	if role_information == null or parent == null or not is_instance_valid(parent):
-		return null
-	var target = role_information.instantiate()
-	if target == null:
-		return null
-	parent.add_child(target)
-	target.z_index = 99
-	target.position = position
-	buff_box = target.buff_box
-	return target
+	return _backpack_factory.add_role_information(parent, position)
 
 
 func add_learn_skill(parent, position):
@@ -3305,11 +3243,7 @@ func call_hero(who: String, parent, position: Vector2, _dir: bool, player_slot: 
 
 
 func add_cd_jm(parent, position):
-	if not cd_jm:
-		cd_jm = _load_scene("res://Scene/archive_interface/read_archive_interface.tscn")
-	var target = instance_scene(cd_jm, parent)
-	target.position = position
-	return target
+	return _menu_panel_factory.add_cd_jm(parent, position)
 
 
 func add_moment_text(parent, position, text, last_time):

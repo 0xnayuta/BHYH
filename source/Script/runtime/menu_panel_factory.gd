@@ -1,8 +1,8 @@
 class_name MenuPanelFactory
 extends Node
 
-## 菜单与设置面板族场景工厂：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能
-## 与镶嵌帮助/镶嵌面板。
+## 菜单与设置面板族场景工厂：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、
+## 镶嵌帮助/镶嵌面板、存档按钮、背景切换与读档界面。
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 缓存槽位与迁移前的 Global.game_set/skill_key_set/music_set/ldl/game_information/skill_learn 一致。
 ## 临时 UI 登记仍经 UiRuntime；游戏说明根节点是 CanvasLayer，position/z_index 的赋值与迁移前一致（无效属性不生效）。
@@ -15,6 +15,9 @@ const GAME_INFORMATION_SCENE_PATH := "res://Scene/main_menu/game_information.tsc
 const LEARN_SKILL_SCENE_PATH := "res://Scene/skill/learn_skill.tscn"
 const MOSAIC_HELP_SCENE_PATH := "res://Scene/ldl/mosaic_help.tscn"
 const MOSAIC_SCENE_PATH := "res://Scene/ldl/mosaic.tscn"
+const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
+const CHANGE_BG_PATH := "res://Scene/other_scene/change_back_ground.tscn"
+const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
 
 const GAME_SET_DESIGN_SIZE := Vector2(942, 589)
 
@@ -27,6 +30,9 @@ var _game_information_scene: PackedScene = null
 var _learn_skill_scene: PackedScene = null
 var _mosaic_help_scene: PackedScene = null
 var _mosaic_scene: PackedScene = null
+var _basic_ar_button_scene: PackedScene = null
+var _change_bg_scene: PackedScene = null
+var _cd_jm_scene: PackedScene = null
 
 
 func setup(host: Node) -> void:
@@ -42,6 +48,9 @@ func clear_scene_caches() -> void:
 	_learn_skill_scene = null
 	_mosaic_help_scene = null
 	_mosaic_scene = null
+	_basic_ar_button_scene = null
+	_change_bg_scene = null
+	_cd_jm_scene = null
 
 
 func get_game_set_scene() -> PackedScene:
@@ -90,6 +99,24 @@ func get_mosaic_scene() -> PackedScene:
 	if _mosaic_scene == null:
 		_mosaic_scene = _host.load_cached_scene(MOSAIC_SCENE_PATH)
 	return _mosaic_scene
+
+
+func get_basic_ar_button_scene() -> PackedScene:
+	if _basic_ar_button_scene == null:
+		_basic_ar_button_scene = _host.load_cached_scene(BASIC_AR_BUTTON_PATH)
+	return _basic_ar_button_scene
+
+
+func get_change_bg_scene() -> PackedScene:
+	if _change_bg_scene == null:
+		_change_bg_scene = _host.load_cached_scene(CHANGE_BG_PATH)
+	return _change_bg_scene
+
+
+func get_cd_jm_scene() -> PackedScene:
+	if _cd_jm_scene == null:
+		_cd_jm_scene = _host.load_cached_scene(CD_JM_PATH)
+	return _cd_jm_scene
 
 
 ## 角色技能图标线程预热完成后调用：只接受已缓存场景，未命中时保持为空，由入口按需加载。
@@ -149,6 +176,33 @@ func add_mosaic_help(parent, position):
 
 func add_mosaic_instance(parent, position):
 	var target = _host.instance_scene(get_mosaic_scene(), parent)
+	if target == null:
+		return null
+	target.position = position
+	return target
+
+
+func add_basic_ar_button(parent, Num):
+	var target = _host.instance_scene(get_basic_ar_button_scene(), parent)
+	if target == null:
+		return null
+	target.archive_num = Num
+	return target
+
+
+func add_change_bg(parent, position):
+	var target = _host.instance_scene(get_change_bg_scene(), parent)
+	if target == null:
+		return null
+	if target is CanvasLayer:
+		target.offset = position
+	else:
+		target.position = position
+	return target
+
+
+func add_cd_jm(parent, position):
+	var target = _host.instance_scene(get_cd_jm_scene(), parent)
 	if target == null:
 		return null
 	target.position = position

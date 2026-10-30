@@ -1,8 +1,8 @@
 class_name BackpackFactory
 extends Node
 
-## 背包/装备族的场景工厂：持有背包主页、主背包、装备信息、出售、使用法宝与
-## 技能选择等运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
+## 背包/装备族的场景工厂：持有背包主页、主背包、装备信息、出售、使用法宝、
+## 技能选择、角色信息与幻化面板等运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务代码仍通过 Global.add_* 正式入口调用。
 
 const DataKeys := preload("res://Script/base/data_keys.gd")
@@ -18,6 +18,8 @@ const BUFF_ICON_PATH := "res://Scene/back_pack/buff.tscn"
 const USE_MAGIC_WEAPON_PATH := "res://Scene/back_pack/use_magic_weapon.tscn"
 const SKILL_SELECT_PATH := "res://Scene/back_pack/skill_select.tscn"
 const SELL_OR_EQU_PATH := "res://Scene/back_pack/sell_or_equ.tscn"
+const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
+const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}
@@ -159,6 +161,28 @@ func add_skill_select(parent, position, _name):
 	if target == null:
 		return null
 	target.weapon_name = str(_name)
+	target.position = position
+	return target
+
+
+func add_role_information(parent, position):
+	# 该面板在 _ready 中初始化 buff_box；迁移前就是同步 add_child，保持同步语义。
+	var scene: PackedScene = _scene(ROLE_INFORMATION_PATH)
+	if scene == null or parent == null or not is_instance_valid(parent):
+		return null
+	var target = scene.instantiate()
+	if target == null:
+		return null
+	parent.add_child(target)
+	target.z_index = 99
+	target.position = position
+	return target
+
+
+func add_h_hjm(parent, position):
+	var target = _host.instance_scene(_scene(H_HJM_PATH), parent)
+	if target == null:
+		return null
 	target.position = position
 	return target
 

@@ -121,7 +121,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `ShowTextFactory`：任务标题、评分文字、自定义字体文本、怪物帮助与玩家信件五个常驻场景槽位；通过 `Global.get_show_text_factory()` 访问，业务侧仍用 `Global.add_font_instance` / `add_task_title` / `add_pj` / `add_some_monster_help` / `add_letter_for_player`。
 - `SkillPanelFactory`：角色/变身技能面板与法宝说明三个常驻场景槽位；预热经 `prime_skill_scenes()` 接管已缓存场景；通过 `Global.get_skill_panel_factory()` 访问，业务侧仍用 `Global.add_zd_skillscene` / `add_bd_skillscene` / `add_magic_help`。
 - `LevelSceneFactory`：极彩天地板、逐浪飞行地板、招照镜台陷阱与关卡选择面板四个常驻场景槽位；通过 `Global.get_level_scene_factory()` 访问，业务侧仍用 `Global.add_stage` / `add_z_lw_stage` / `add_zztw_trap` / `add_dsg_choose`。
-- `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、镶嵌帮助与镶嵌面板八个常驻场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；通过 `Global.get_menu_panel_factory()` 访问。
+- `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、镶嵌帮助、镶嵌面板、存档按钮、背景切换与读档界面十一个常驻场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；背景切换根节点为 `CanvasLayer` 时写 `offset`；通过 `Global.get_menu_panel_factory()` 访问。
 - `MapOverlayFactory`：活动之谜、`lsh` 与 `lxdy` 三个主菜单地图浮层常驻场景槽位；三个入口登记临时 UI，活动之谜继续挂窗口守卫；通过 `Global.get_map_overlay_factory()` 访问，业务侧仍用 `Global.add_hdzm` / `add_lsh` / `add_lxdy`。
 - `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_current_level_name` / `set_tower_floor` / `advance_tower_floor` 与 `RunContext` 的 `add_*` / `count_*` / `reset_combat_stats`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 只读同一实例。
 
