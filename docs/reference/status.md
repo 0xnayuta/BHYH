@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A 复核完成、19-3B/19-3C 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
+> 最后更新：2026-10-30（Phase 17 全部批次已完成并归档；当前候选 Phase 18~20：18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成、19-3C 资源与 Atlas、19-4 输入与 HUD、20-1 独立项目、20-2 平台/发布、20-3 守卫扩面未启动）
 
 ---
 
@@ -223,6 +223,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-30 Phase 19-2C 临时 UI | 删除 `cleanup_transient_ui` 的 29 项硬编码名称与递归名称兜底；14 个 UI 工厂补齐 `register_transient_ui`，LevelInfo 以无关闭方法登记以保留四剑模式，GameSet/LDL 使用 `_on_return_pressed`；删除 18 个文件的 51 处业务显式调用，`cleanup_transient_ui` 仅由 `Global.change_scene` 调用。`contract_scan` 删除 `REGISTERED_UI_CLEANUP_FILES` 白名单，业务直接调用一律阻断；`load-guard` 新增未登记名称不误删、无关闭方法释放、真实 `add_choose_text` 工厂登记/清理断言。**验证**：`contract_scan --self-test` PASS；`contract_scan --fail-on-error` ERROR=0；场景探针 7/7 PASS；协作探针 23/23；全量回归 128/128 PASS + 5 SKIP（279.9s）；`check_all --godot-bin` 8/8 PASS。 | 19-2C 完成 |
 | 2026-10-30 Phase 19-2D 静态帧缓存 | 新增 `MonsterFrameCacheRegistry`，集中清理 44 个怪物帧/几何脚本、`MonsterBullet`、`SwordBossBase` 与 4 个观音效果缓存；`clear_combat_runtime_cache()` 在档案退出/应用退出调用，跨档案不保留；同一档案内关卡切换保留不可变帧缓存，编辑预览缓存明确保留。`load-guard` 新增注册表清空断言。**验证**：场景探针 7/7 PASS；协作探针 23/23；全量回归 128/128 PASS + 5 SKIP（279.9s）；`check_all --godot-bin` 8/8 PASS。 | 19-2D 完成 |
 | 2026-10-30 Phase 19-3A 运行时建帧例外 | 逐项复核 12 个冻结例外（9 怪物 + 3 非怪物）：7 保留、4 补资源待办、1 删除回退。删除 `tao_wu_boss` 单图兜底，改为标准帧缺失时 `push_error` 返回；`runtime_frames_allowlist` 12→11。`weiyang_palace_boss` 符号层路径指向不存在的 3010 资源，分支不可达，登记为已知缺陷。**验证**：`runtime_frames_audit --fail-on-error` 11/11 PASS；`level_sssl` 冒烟 PASS（Stage 1~3，0 ERROR / 0 WARNING）；`check_all --godot-bin` 8/8 PASS。 | 19-3A 复核完成；4 项补资源待办 |
+| 2026-10-30 Phase 19-3B Atlas 未触达 metadata | 只读复核 112 项：41 未迁移代码、38 构建/溯源、30 地图/关卡、3 角色图集；40 个 legacy 图集 `consumer_scenes` 全部存在，41 项仍由场景直接读取图集页；19 项仅构建/溯源（15 地图 manifest + `pet_tiger_boss` + 3 pet）；未删除任何 metadata，未修改 `source/` 与 `source/Art/`。**验证**：`convert_atlas_metadata --check` 379/379；`convert_monster_frames --check` 152/152；`convert_frame_sequences --check` 288 序列；`convert_level_preload_catalog --check` 101/17/153；`frame_sequence_pack_probe --self-test` 4100 条。 | 19-3B 复核完成；19-3C 未启动 |
 
 > 公开 clone 缺少第三方素材，不能直接复现完整验收；缺失资源提示属于预期。
 

@@ -74,6 +74,25 @@ flowchart LR
 
 其余 112 个 metadata 未被 `AtlasMetadataStore` 路径规则触达；它们可能只服务构建、溯源、地图/角色图集或尚未迁移的代码，不能据此断言“无消费者”。本阶段只确认 Store 边界。
 
+### 3.1 未触达 metadata 分类（Phase 19-3B，2026-10-30）
+
+只读复核口径：以 metadata 所在目录是否被运行时场景/脚本直接引用、同目录或相邻目录是否存在生成帧资源、是否被构建期转换器/发布依赖清单读取，以及 `consumer_scenes`/`monster_ids` 等溯源字段为证据。**112 项均保留，不删除**：
+
+| 主分类 | 数量 | 消费证据 | 处理 |
+|:---|:---:|:---|:---|
+| 未迁移代码 | 41 | 40 个 legacy `atlas_small_monsters` 由场景直接引用 `atlas/pages`，`consumer_scenes` 全部存在；1 个法宝图集由场景直接引用页面 | 保留；迁移到构建期资源另立批次 |
+| 构建/溯源 | 38 | 星座 Boss/剑 Boss 的 `*_frames.tres` 与 FrameSequence、弹体/怪物/坐骑/宠物/法宝生成帧、`swf_png` 与星座索引 | 保留；metadata 作为构建源，不建立运行时 accessor |
+| 地图/关卡 | 30 | 15 个地图 manifest 的 `items[].assets` 指向 `imported/pool/*.png`；13 个北俱芦洲道具由关卡场景直接引用单独 PNG；2 个 runtime atlas（level_50_52 页面、level_62 背景帧） | 保留；地图 manifest 未发现 metadata 直接运行时读取 |
+| 角色图集 | 3 | `role_3_special_effects.tres`、`ne_zha_effects.tres` 与哪吒装备帧 `.tres` 由角色脚本/场景加载 | 保留；metadata 作为构建源 |
+| **合计** | **112** | | |
+
+补充事实：
+
+- 40 个 legacy 图集的 `consumer_scenes` 路径全部存在；其中 40 项仍由场景直接读取 `atlas/pages`，属于未迁移代码，不得按“无 Store 消费者”删除。
+- 15 个地图 manifest 未发现 metadata 直接运行时读取，但其 `items[].assets` 指向 `imported/pool/*.png`；按构建/溯源保留。
+- 完整 112 行清单由只读分析生成到 `docs/reports/atlas_metadata_untouched.md`（机器报告，不提交）；本页保留分类结论与访问依据。
+- 19-3B 未修改 `source/` 或 `source/Art/`，未删除任何 metadata。
+
 ## 4. 运行时消费者矩阵
 
 **直接 Store 调用点**共 6 个，全部使用 `view_for`：Cloud、East、North、PalaceBossProjectile、PalaceFlyingBoss 与 MountVisual。`data_for` 已删除；弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A 复核完成；19-3B/19-3C、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
+> **状态**：**Phase 17 已完成并归档；当前候选为 Phase 18~20 综合收尾。18-1A/18-1B/18-1C/18-1D/18-2A/18-2B/18-2C/18-2D/18-2E/18-3A/18-3B/18-3C/18-3D/19-1A/19-1B/19-1C/19-2A/19-2B/19-2C/19-2D/19-3A/19-3B 复核完成；19-3C、19-4、20-1、20-2、20-3 未启动**。本页只写当前事实与可执行切片，不把目标写成已实现。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页展开 Phase 18~20；Phase 17 已归档到 [`iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)，Phase 13~16 归档见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -133,7 +133,7 @@
 **切片**
 
 1. **19-3A 运行时建帧例外（复核完成，2026-10-30）**：逐项复核 12 个冻结例外（9 怪物 + 3 非怪物），结论为 7 保留 / 4 补资源待办 / 1 删除回退；删除 `tao_wu_boss` 单图回退，改为标准帧缺失时显式报错，`runtime_frames_allowlist` 12→11；`weiyang_palace_boss` 符号层路径指向不存在的 3010 资源，分支不可达，登记为已知缺陷。详见 [`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)。
-2. **19-3B Atlas 未触达 metadata**：分类 112 个未被 `AtlasMetadataStore` 触达的 metadata（构建/溯源/地图/角色图集/未迁移代码）；有消费证据的建访问清单，无证据不误删；
+2. **19-3B Atlas 未触达 metadata（复核完成，2026-10-30）**：112 项只读分类为 41 未迁移代码 / 38 构建/溯源 / 30 地图/关卡 / 3 角色图集；40 个 legacy 图集的 `consumer_scenes` 全部存在，41 项仍由场景直接读取图集页；19 项仅构建/溯源；未删除任何 metadata，未修改 `source/` 或 `source/Art/`。分类结论见 [`atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) §3.1，完整清单由只读分析生成到 `docs/reports/atlas_metadata_untouched.md`；
 3. **19-3C PCK/资源闭包**：资源变化后重跑 Catalog/PCK 闭包；记录当前字节数与可达数，不沿用历史快照。
 
 **必须验证**：每个例外有结论；Atlas 分类有证据；PCK 闭包全可达；资源变化触发重跑。
