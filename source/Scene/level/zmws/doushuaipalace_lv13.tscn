@@ -6,6 +6,24 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_bg_13_02.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_waterbg_13.png" id="5"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(2050.0, 190.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(2049.0, 82.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(257.0, 1010.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(257.0, 1008.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_0"]
+size = Vector2(1395.0, 974.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1536.0, 1093.0)
+
 [node name="DoushuaipalaceLv13" type="Node2D"]
 
 [node name="Parallax_0_L3" type="Parallax2D" parent="."]
@@ -35,3 +53,57 @@ centered = false
 position = Vector2(491.0, 882.0)
 texture = ExtResource("5")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1312.0, 96.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1313.5, 969.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(415.5, 504.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_03_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2208.5, 506.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "wall"
+
+[node name="ZMWS_MonsterTrigger" type="Node2D" parent="."]
+
+[node name="MonsterTrigger_00_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(1561.5, 678.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_00_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_00_monster"]
+shape = SubResource("monster_trigger_shape_0")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(1312.0, 546.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(656.0, 912.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(720.0, 912.0)

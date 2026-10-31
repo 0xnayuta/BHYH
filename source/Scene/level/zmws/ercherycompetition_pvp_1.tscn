@@ -2,6 +2,21 @@
 
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/ercherycompetition_background.png" id="1"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(1600.0, 64.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(121.0, 1224.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(64.0, 1224.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(1680.0, 65.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1568.0, 896.0)
+
 [node name="ErcherycompetitionPvp1" type="Node2D"]
 
 [node name="Parallax_0_L1" type="Parallax2D" parent="."]
@@ -12,3 +27,52 @@ position = Vector2(-250.0, 1700.0)
 scale = Vector2(2.0, 2.0)
 texture = ExtResource("1")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(800.0, 2208.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1636.5, 2788.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_02_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(-32.0, 2788.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(840.0, 3368.5)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(848.0, 2688.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(241.0, 3236.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(241.0, 3236.0)
+
+[node name="Birth_1_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(1346.0, 3236.0)
+
+[node name="Birth_1_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(1346.0, 3236.0)

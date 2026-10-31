@@ -12,6 +12,24 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_1_ground_door_3.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/common_goldchest_broken_2.png" id="11"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(224.0, 816.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(224.0, 816.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(3240.0, 48.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(3400.0, 64.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(3400.0, 320.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(176.0, 177.0)
+
 [node name="No0Town1" type="Node2D"]
 
 [node name="Parallax_0_L1_spd_0_92_0_7" type="Parallax2D" parent="."]
@@ -81,3 +99,76 @@ scroll_scale = Vector2(1.0, 1.0)
 position = Vector2(2936.0, 424.0)
 texture = ExtResource("8")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(-88.0, 624.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_01_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3088.0, 624.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1420.0, 240.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1500.0, 1000.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_04_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1500.0, 424.0)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_05_ground" type="CollisionPolygon2D" parent="ZMWS_Ground"]
+position = Vector2(284.0, 1014.0)
+polygon = PackedVector2Array(0.0, -0.0, 391.0, -190.0, 1116.0, -190.0, 1444.0, -6.0)
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_06_ground" type="CollisionPolygon2D" parent="ZMWS_Ground"]
+position = Vector2(2024.0, 984.0)
+polygon = PackedVector2Array(0.0, -0.0, 719.0, -216.0, 1176.0, -216.0, 1176.0, -0.0)
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_07_ground" type="CollisionPolygon2D" parent="ZMWS_Ground"]
+position = Vector2(696.0, 712.0)
+polygon = PackedVector2Array(0.0, -80.0, 2182.0, -80.0, 2182.0, -0.0, 237.0, -0.0)
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_08_ground" type="CollisionPolygon2D" parent="ZMWS_Ground"]
+position = Vector2(512.0, 648.0)
+polygon = PackedVector2Array(0.0, -80.0, 2688.0, -80.0, 2688.0, -0.0, 125.0, -0.0)
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_09_ground" type="CollisionPolygon2D" parent="ZMWS_Ground"]
+position = Vector2(1749.0, 999.0)
+polygon = PackedVector2Array(-69.0, -0.0, 69.0, -58.0, 242.0, -127.0, 458.0, -38.0)
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(2961.0, 680.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(144.0, 752.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(240.0, 752.0)

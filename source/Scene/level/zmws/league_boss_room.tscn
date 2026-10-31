@@ -3,6 +3,21 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/league_boss_background.png" id="1"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/league_boss_ground_8.png" id="2"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(320.0, 1152.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(320.0, 1152.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(1632.0, 216.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(1632.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1632.0, 960.0)
+
 [node name="LeagueBossRoom" type="Node2D"]
 
 [node name="Parallax_0_L1_spd_0_8_0_96" type="Parallax2D" parent="."]
@@ -25,3 +40,49 @@ centered = false
 position = Vector2(0.0, 679.0)
 texture = ExtResource("2")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(-160.0, 384.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_01_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1792.0, 384.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(816.0, 852.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(816.0, -128.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(816.0, 480.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(112.0, 728.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(176.0, 728.0)
+
+[node name="Birth_0_02_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(240.0, 728.0)

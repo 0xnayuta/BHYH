@@ -7,6 +7,33 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_1_floor_03.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_1_floor_04.png" id="6"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(270.0, 1166.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(256.0, 1141.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(8271.0, 329.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(7895.0, 121.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_0"]
+size = Vector2(200.0, 1200.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_1"]
+size = Vector2(200.0, 1200.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_2"]
+size = Vector2(200.0, 1200.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_3"]
+size = Vector2(200.0, 1200.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(7860.0, 950.0)
+
 [node name="Reward224Lv1" type="Node2D"]
 
 [node name="Parallax_0_L1_spd_0_95_0_8" type="Parallax2D" parent="."]
@@ -63,3 +90,84 @@ centered = false
 position = Vector2(6144.0, 444.0)
 texture = ExtResource("6")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(53.0, 953.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_01_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7988.0, 989.5)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4066.5, 1348.5)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4052.5, 491.5)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_MonsterTrigger" type="Node2D" parent="."]
+
+[node name="MonsterTrigger_00_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(1600.0, 1000.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_00_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_00_monster"]
+shape = SubResource("monster_trigger_shape_0")
+
+[node name="MonsterTrigger_01_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(3100.0, 1000.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_01_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_01_monster"]
+shape = SubResource("monster_trigger_shape_1")
+
+[node name="MonsterTrigger_02_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(4600.0, 1000.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_02_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_02_monster"]
+shape = SubResource("monster_trigger_shape_2")
+
+[node name="MonsterTrigger_03_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(6100.0, 1000.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_03_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_03_monster"]
+shape = SubResource("monster_trigger_shape_3")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(4050.0, 935.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(547.0, 1168.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(602.0, 1168.0)

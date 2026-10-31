@@ -8,6 +8,39 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_1_1_trap_2.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_1_1_trap_1.png" id="7"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(6528.0, 64.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(1632.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(1632.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(1632.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(1632.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_5"]
+size = Vector2(664.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_6"]
+size = Vector2(344.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_7"]
+size = Vector2(664.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_8"]
+size = Vector2(352.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1632.0, 960.0)
+
 [node name="Reward11Lv1" type="Node2D"]
 
 [node name="Parallax_0_L1_spd_0_96_0_7" type="Parallax2D" parent="."]
@@ -133,3 +166,82 @@ centered = false
 position = Vector2(2592.0, 800.0)
 texture = ExtResource("7")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3264.0, -32.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(816.0, 896.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2448.0, 896.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4080.0, 896.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_04_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5712.0, 896.0)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_05_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2548.0, 624.0)
+shape = SubResource("ground_shape_5")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_06_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4180.0, 624.0)
+shape = SubResource("ground_shape_6")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_07_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5780.0, 624.0)
+shape = SubResource("ground_shape_7")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_08_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6096.0, 432.0)
+shape = SubResource("ground_shape_8")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1456.0, 768.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(816.0, 480.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(176.0, 816.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(272.0, 816.0)

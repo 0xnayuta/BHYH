@@ -5,6 +5,57 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floorg_battle_4.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floorg_battle_3.png" id="4"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(256.0, 1740.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(256.0, 1637.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(4458.0, 436.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(4428.0, 286.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_5"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_6"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_7"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_8"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_9"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_10"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_11"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_12"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_13"]
+size = Vector2(397.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_14"]
+size = Vector2(599.0, 86.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1771.0, 1038.0)
+
 [node name="SacredtowerBattle8" type="Node2D"]
 
 [node name="Parallax_0_L1_spd_0_97_0_9" type="Parallax2D" parent="."]
@@ -83,3 +134,112 @@ centered = false
 position = Vector2(2909.0, 253.0)
 texture = ExtResource("3")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3644.0, 451.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_01_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(-112.0, 566.5)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2004.0, 1178.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1958.0, -113.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_04_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(470.5, 747.0)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_05_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1348.5, 748.0)
+shape = SubResource("ground_shape_5")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_06_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(901.5, 493.0)
+shape = SubResource("ground_shape_6")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_07_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(450.5, 332.0)
+shape = SubResource("ground_shape_7")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_08_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1324.5, 332.0)
+shape = SubResource("ground_shape_8")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_09_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2310.5, 331.0)
+shape = SubResource("ground_shape_9")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_10_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2331.5, 749.0)
+shape = SubResource("ground_shape_10")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_11_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3132.5, 747.0)
+shape = SubResource("ground_shape_11")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_12_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2732.5, 499.0)
+shape = SubResource("ground_shape_12")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_13_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3110.5, 330.0)
+shape = SubResource("ground_shape_13")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_14_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1832.5, 497.0)
+shape = SubResource("ground_shape_14")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1659.0, 895.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(899.5, 537.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(163.0, 941.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(227.0, 941.0)

@@ -2,6 +2,21 @@
 
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15_brith_1_lv1.jpg" id="1"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(1632.0, 91.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(1635.0, 227.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(75.0, 957.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(52.0, 1041.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
 [node name="Rogue15Brith1Lv1" type="Node2D"]
 
 [node name="Parallax_0_L3" type="Parallax2D" parent="."]
@@ -11,3 +26,52 @@ scroll_scale = Vector2(1.0, 1.0)
 position = Vector2(7.0, 330.0)
 texture = ExtResource("1")
 centered = false
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(822.0, 321.5)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(821.5, 1205.5)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1630.5, 828.5)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_03_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(35.0, 802.5)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "wall"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1378.0, 1023.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(171.0, 1071.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(222.0, 1071.0)
+
+[node name="Birth_0_02_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(285.0, 1071.0)
+
+[node name="Birth_0_03_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(352.0, 1071.0)

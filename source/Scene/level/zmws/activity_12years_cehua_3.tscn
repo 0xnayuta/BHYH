@@ -16,6 +16,258 @@
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/999121411_keyboard.png" id="14"]
 [ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/999121411_fishnet.png" id="15"]
 
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(10016.0, 240.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(9998.0, 112.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(256.0, 1192.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(256.0, 1174.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(1540.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_5"]
+size = Vector2(77.0, 45.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_6"]
+size = Vector2(61.0, 45.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_7"]
+size = Vector2(40.0, 39.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_8"]
+size = Vector2(61.0, 61.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_9"]
+size = Vector2(87.0, 353.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_10"]
+size = Vector2(202.0, 45.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_11"]
+size = Vector2(135.0, 45.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_12"]
+size = Vector2(78.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_13"]
+size = Vector2(54.0, 135.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_14"]
+size = Vector2(26.0, 46.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_15"]
+size = Vector2(26.0, 46.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_16"]
+size = Vector2(26.0, 46.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_17"]
+size = Vector2(287.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_18"]
+size = Vector2(87.0, 353.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_19"]
+size = Vector2(87.0, 362.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_20"]
+size = Vector2(416.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_21"]
+size = Vector2(87.0, 358.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_22"]
+size = Vector2(41.0, 67.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_23"]
+size = Vector2(76.0, 304.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_24"]
+size = Vector2(87.0, 440.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_25"]
+size = Vector2(183.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_26"]
+size = Vector2(87.0, 443.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_27"]
+size = Vector2(87.0, 440.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_28"]
+size = Vector2(183.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_29"]
+size = Vector2(87.0, 443.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_30"]
+size = Vector2(749.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_31"]
+size = Vector2(87.0, 145.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_32"]
+size = Vector2(87.0, 145.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_33"]
+size = Vector2(203.0, 125.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_34"]
+size = Vector2(202.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_35"]
+size = Vector2(81.0, 85.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_36"]
+size = Vector2(409.0, 39.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_37"]
+size = Vector2(87.0, 352.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_38"]
+size = Vector2(87.0, 352.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_39"]
+size = Vector2(763.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_40"]
+size = Vector2(87.0, 168.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_41"]
+size = Vector2(87.0, 149.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_42"]
+size = Vector2(69.0, 61.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_43"]
+size = Vector2(83.0, 285.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_44"]
+size = Vector2(51.0, 522.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_45"]
+size = Vector2(179.0, 61.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_46"]
+size = Vector2(51.0, 522.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_47"]
+size = Vector2(179.0, 61.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_48"]
+size = Vector2(51.0, 463.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_49"]
+size = Vector2(51.0, 463.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_50"]
+size = Vector2(804.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_51"]
+size = Vector2(87.0, 168.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_52"]
+size = Vector2(87.0, 149.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_53"]
+size = Vector2(199.0, 125.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_54"]
+size = Vector2(199.0, 125.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_55"]
+size = Vector2(199.0, 125.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_56"]
+size = Vector2(101.0, 154.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_57"]
+size = Vector2(804.0, 47.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_58"]
+size = Vector2(87.0, 168.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_59"]
+size = Vector2(80.0, 67.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_60"]
+size = Vector2(85.0, 76.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_61"]
+size = Vector2(94.0, 125.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_62"]
+size = Vector2(44.0, 99.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_63"]
+size = Vector2(44.0, 158.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_64"]
+size = Vector2(168.0, 99.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_65"]
+size = Vector2(44.0, 99.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_66"]
+size = Vector2(44.0, 99.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_67"]
+size = Vector2(37.0, 149.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_1"]
+size = Vector2(99.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_2"]
+size = Vector2(226.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_3"]
+size = Vector2(226.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_4"]
+size = Vector2(300.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_5"]
+size = Vector2(300.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_6"]
+size = Vector2(300.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_7"]
+size = Vector2(300.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_8"]
+size = Vector2(300.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_9"]
+size = Vector2(274.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_10"]
+size = Vector2(334.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_11"]
+size = Vector2(288.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_12"]
+size = Vector2(369.0, 131.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_0"]
+size = Vector2(145.0, 810.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_1"]
+size = Vector2(145.0, 841.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(9715.0, 1033.0)
+
 [node name="Activity12yearsCehua3" type="Node2D"]
 
 [node name="Parallax_0_L3" type="Parallax2D" parent="."]
@@ -518,3 +770,505 @@ position = Vector2(2145.0, 472.0)
 texture = ExtResource("15")
 centered = false
 z_index = 2
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4818.0, 994.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4807.0, 8.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(-64.0, 522.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_03_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(9855.0, 557.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_04_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(843.0, 771.5)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_05_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(813.5, 749.5)
+shape = SubResource("ground_shape_5")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_06_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(862.5, 727.5)
+shape = SubResource("ground_shape_6")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_07_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(795.0, 747.5)
+shape = SubResource("ground_shape_7")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_08_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(862.5, 736.5)
+shape = SubResource("ground_shape_8")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_09_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1726.5, 698.5)
+shape = SubResource("ground_shape_9")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_10_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1514.0, 746.5)
+shape = SubResource("ground_shape_10")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_11_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1547.5, 703.5)
+shape = SubResource("ground_shape_11")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_12_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1576.0, 658.5)
+shape = SubResource("ground_shape_12")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_13_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1588.0, 725.5)
+shape = SubResource("ground_shape_13")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_14_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1550.0, 659.0)
+shape = SubResource("ground_shape_14")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_15_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1493.0, 705.0)
+shape = SubResource("ground_shape_15")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_16_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1426.0, 748.0)
+shape = SubResource("ground_shape_16")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_17_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1825.5, 545.5)
+shape = SubResource("ground_shape_17")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_18_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1925.5, 700.5)
+shape = SubResource("ground_shape_18")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_19_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2194.5, 683.0)
+shape = SubResource("ground_shape_19")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_20_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2358.0, 525.5)
+shape = SubResource("ground_shape_20")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_21_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2519.5, 686.0)
+shape = SubResource("ground_shape_21")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_22_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2364.5, 473.5)
+shape = SubResource("ground_shape_22")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_23_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2802.0, 744.0)
+shape = SubResource("ground_shape_23")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_24_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3172.5, 644.0)
+shape = SubResource("ground_shape_24")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_25_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3220.5, 444.5)
+shape = SubResource("ground_shape_25")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_26_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3268.5, 645.5)
+shape = SubResource("ground_shape_26")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_27_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3518.5, 583.0)
+shape = SubResource("ground_shape_27")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_28_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3566.5, 383.5)
+shape = SubResource("ground_shape_28")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_29_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3614.5, 584.5)
+shape = SubResource("ground_shape_29")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_30_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4269.5, 753.5)
+shape = SubResource("ground_shape_30")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_31_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(3937.5, 809.5)
+shape = SubResource("ground_shape_31")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_32_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4600.5, 810.5)
+shape = SubResource("ground_shape_32")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_33_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4154.5, 591.5)
+shape = SubResource("ground_shape_33")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_34_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4365.0, 663.0)
+shape = SubResource("ground_shape_34")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_35_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4603.5, 686.5)
+shape = SubResource("ground_shape_35")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_36_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4970.5, 553.5)
+shape = SubResource("ground_shape_36")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_37_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4809.5, 722.0)
+shape = SubResource("ground_shape_37")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_38_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5131.5, 722.0)
+shape = SubResource("ground_shape_38")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_39_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5702.5, 756.5)
+shape = SubResource("ground_shape_39")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_40_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5366.5, 824.0)
+shape = SubResource("ground_shape_40")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_41_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6040.5, 812.5)
+shape = SubResource("ground_shape_41")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_42_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6049.5, 727.5)
+shape = SubResource("ground_shape_42")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_43_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6280.5, 754.5)
+shape = SubResource("ground_shape_43")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_44_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6641.5, 641.0)
+shape = SubResource("ground_shape_44")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_45_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6705.5, 405.5)
+shape = SubResource("ground_shape_45")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_46_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(6769.5, 639.0)
+shape = SubResource("ground_shape_46")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_47_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7105.5, 461.5)
+shape = SubResource("ground_shape_47")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_48_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7041.5, 668.5)
+shape = SubResource("ground_shape_48")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_49_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7169.5, 668.5)
+shape = SubResource("ground_shape_49")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_50_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7908.0, 757.5)
+shape = SubResource("ground_shape_50")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_51_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7551.5, 825.0)
+shape = SubResource("ground_shape_51")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_52_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(8266.5, 823.5)
+shape = SubResource("ground_shape_52")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_53_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7628.5, 588.5)
+shape = SubResource("ground_shape_53")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_54_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(7893.5, 515.5)
+shape = SubResource("ground_shape_54")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_55_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(8149.5, 588.5)
+shape = SubResource("ground_shape_55")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_56_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(8565.5, 817.0)
+shape = SubResource("ground_shape_56")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_57_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(9719.0, 774.5)
+shape = SubResource("ground_shape_57")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_58_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(9361.5, 841.0)
+shape = SubResource("ground_shape_58")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_59_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(9276.0, 841.5)
+shape = SubResource("ground_shape_59")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_60_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(8431.5, 836.0)
+shape = SubResource("ground_shape_60")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_61_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4047.0, 739.5)
+shape = SubResource("ground_shape_61")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_62_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5589.0, 726.5)
+shape = SubResource("ground_shape_62")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_63_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5795.0, 684.0)
+shape = SubResource("ground_shape_63")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_64_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5359.0, 782.5)
+shape = SubResource("ground_shape_64")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_65_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(4829.0, 521.5)
+shape = SubResource("ground_shape_65")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_66_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(5084.0, 515.5)
+shape = SubResource("ground_shape_66")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_67_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(8225.5, 725.5)
+shape = SubResource("ground_shape_67")
+metadata/_zmws_tag = "wall"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(9468.0, 687.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="Gateway_01_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1664.5, 833.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_01_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_01_gateway"]
+shape = SubResource("gateway_shape_1")
+
+[node name="Gateway_02_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(2105.0, 832.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_02_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_02_gateway"]
+shape = SubResource("gateway_shape_2")
+
+[node name="Gateway_03_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(2653.0, 834.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_03_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_03_gateway"]
+shape = SubResource("gateway_shape_3")
+
+[node name="Gateway_04_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(2987.0, 833.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_04_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_04_gateway"]
+shape = SubResource("gateway_shape_4")
+
+[node name="Gateway_05_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(3433.0, 835.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_05_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_05_gateway"]
+shape = SubResource("gateway_shape_5")
+
+[node name="Gateway_06_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(3789.0, 834.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_06_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_06_gateway"]
+shape = SubResource("gateway_shape_6")
+
+[node name="Gateway_07_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(4764.0, 830.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_07_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_07_gateway"]
+shape = SubResource("gateway_shape_7")
+
+[node name="Gateway_08_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(5254.0, 834.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_08_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_08_gateway"]
+shape = SubResource("gateway_shape_8")
+
+[node name="Gateway_09_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(6169.0, 834.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_09_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_09_gateway"]
+shape = SubResource("gateway_shape_9")
+
+[node name="Gateway_10_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(6481.0, 833.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_10_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_10_gateway"]
+shape = SubResource("gateway_shape_10")
+
+[node name="Gateway_11_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(6915.0, 835.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_11_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_11_gateway"]
+shape = SubResource("gateway_shape_11")
+
+[node name="Gateway_12_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(7373.5, 836.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_12_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_12_gateway"]
+shape = SubResource("gateway_shape_12")
+
+[node name="ZMWS_MonsterTrigger" type="Node2D" parent="."]
+
+[node name="MonsterTrigger_00_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(5686.5, 471.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_00_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_00_monster"]
+shape = SubResource("monster_trigger_shape_0")
+
+[node name="MonsterTrigger_01_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(7105.5, 483.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_01_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_01_monster"]
+shape = SubResource("monster_trigger_shape_1")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(4868.5, 510.5)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(279.0, 725.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(375.0, 725.0)
