@@ -410,7 +410,8 @@
       "Scene/mount/rider_adjustments/role6/1004700.tscn"
     ],
     "third_party_prefixes": [
-      "addons/godot_mcp"
+      "addons/godot_mcp",
+      "addons/godot_dragon_bones.daylily-zeleen"
     ],
     "companion_tool_suffixes": [
       ".import",

@@ -32,7 +32,7 @@ WHITELIST_PATH = Path(__file__).resolve().parent / "contract_whitelist.json"
 MACHINE_DIRS: set[str] = set()
 NUMERIC_DIRS: set[str] = set()
 NUMERIC_SCENE_FILES: set[str] = set()
-THIRD_PARTY_PREFIXES: tuple[str, ...] = ("addons/", "godot/", ".godot/")
+THIRD_PARTY_PREFIXES: tuple[str, ...] = ("addons/", "source/addons/", "godot/", ".godot/")
 COMPANION_SUFFIXES: tuple[str, ...] = (".import", ".uid", ".atlas", ".spine-json", ".translation")
 
 
@@ -80,6 +80,8 @@ def is_dir_whitelisted(rel: str) -> bool:
 
 def is_file_whitelisted(rel: str) -> bool:
     """文件豁免：登记的数字场景、机器导出目录子文件、伴生/工具产物。"""
+    if any(rel.startswith(prefix) for prefix in THIRD_PARTY_PREFIXES):
+        return True
     if rel in NUMERIC_SCENE_FILES:
         return True
     if any(rel.endswith(suffix) for suffix in COMPANION_SUFFIXES):
