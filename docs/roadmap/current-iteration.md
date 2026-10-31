@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1B、21-1C、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-1A 与 21-2 未启动。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1A（Windows-only）、21-1B、21-1C、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-2A 平台/后端已确认、最低设备待 21-2B，21-2B 暂缓，21-2C 已完成 PCK 复跑、release 启动/代表关卡未做。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -38,7 +38,7 @@
 
 **目标**：每项给出采用/延期/拒绝结论、owner 与前置条件；采用项落地并有验收。owner 采用**角色责任**，公开仓库不绑定个人姓名；实际人员由项目维护者在内部指派，角色或前置变化时同步修改本节。
 
-1. **21-1A Spine 跨平台（承接 20-1A）**：确定目标平台、Spine 运行时版本与许可证；补二进制/`.gdextension` 并做目标平台加载验收。未确认平台前只允许决策草案，不写成已支持。**Owner**：项目维护者（平台/许可证决策）；项目维护者（构建/加载验证）。**前置**：目标平台、Spine 版本与许可证书面确认。
+1. **21-1A Spine 平台决策（完成：Windows-only，2026-10-31）**：目标平台定为 **Windows x86_64**；Spine 保持官方 **4.3 / Godot 4.7.2** 构建，已验证本地二进制与官方包逐字节一致，不进行版本升级；其它平台延期/未验证。**Owner**：项目维护者（平台/许可证决策）；项目维护者（构建/加载验证）。详见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
 2. **21-1B `_bundled` 历史场景（完成，2026-10-31，拒绝转换）**：公共工程 1,136 个 `.tscn` 全部为 `[gd_scene format=3]` 文本，`git ls-files '*.scn'` 与 `RSRC` 二进制场景均为 0；私人素材仓无 `.scn`/`.tscn`。`source/.godot/exported/*.scn` 为被忽略的导出缓存，`_bundled` 只是缓存内部属性，不作为源场景转换。`Scene/` 1,135 个场景中仅 `load_scene.tscn` 头含 UID，1,134 个无头 UID（无重复）；文本场景按路径加载且门禁通过。转换范围为 0，关闭 20-1C。
 3. **21-1C 类型化 Atlas accessor（完成，2026-10-31）**：复核六个直接消费者均只经 `AtlasMetadataView`；`animation_back_atlas_names`/`animation_front_atlas_names` 改为 `Array[String]`，其余字段已为值类型。不新增嵌套 typed Resource、不加 UID、不重开 `data_for`/`validate_path`/`clear_cache`；新增 `atlas-accessor` 合成 metadata 探针覆盖两类 schema、越界与失败语义。
 
@@ -48,11 +48,11 @@
 
 **目标**：把资源闭包与目标设备验证分开记录。
 
-1. **21-2A 目标平台矩阵**：确认目标平台、渲染后端与最低设备；**Owner**：项目维护者（发布）；**前置**：21-1A 平台决策；
-2. **21-2B VRAM/首帧/战斗负载**：在真实设备测量并记录基线；**Owner**：项目维护者（发布/设备）；**前置**：21-2A 矩阵与可复现目标设备；
-3. **21-2C release 包**：重跑 PCK/启动/代表关卡冒烟；资源变化后不沿用旧包结论。**Owner**：项目维护者（发布/构建）；**前置**：21-2A 目标平台、21-2B 设备基线、当前资源闭包。
+1. **21-2A 目标平台矩阵（平台/后端已确认，最低设备待定）**：Windows x86_64 为唯一目标平台，渲染后端以工程默认 `mobile` 为准；Linux/macOS/Android/Web/iOS 全部延期/未验证；**最低设备未声明**，待 21-2B；本批次未完全关闭。**Owner**：项目维护者（发布）；详见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
+2. **21-2B VRAM/首帧/战斗负载（暂缓）**：无 Linux/macOS 等目标设备；按当前决定，Windows 侧测量本轮也不做。**Owner**：项目维护者（发布/设备）；恢复条件为取得可复现目标设备。
+3. **21-2C release 包（PCK 子项完成，release 启动/代表关卡未做）**：已重跑 PCK/依赖闭包，**4,100/4,100 可达**（约 7.56 GB，验证用 `all_resources` 预设）；release 包启动与代表关卡冒烟仍需单独执行。**Owner**：项目维护者（发布/构建）。
 
-**必须验证**：目标设备数据可复现；release 包能启动并进入代表关卡；日志干净；未测平台明确标注。
+**必须验证**：目标设备数据可复现；release 包能启动并进入代表关卡；日志干净；未测平台明确标注。21-2B 暂缓期间，不得用 Windows 验证机或 headless 结果充当目标设备基线。
 
 ## 4. Phase 21-3：`Global` 工厂族收口（已完成）
 
@@ -86,11 +86,11 @@
 
 ## 6. 推荐顺序与恢复
 
-推荐顺序：**21-4（无外部依赖）→ 21-3（连续族化）→ 21-1（决策）→ 21-2（设备）**；21-1/21-2 依赖外部确认，可并行准备但不阻塞 21-3/21-4。
+当前状态：**21-4 与 21-3 已完成；21-1A 与 21-2A 决策已完成；21-2B 暂缓；21-2C 仅完成 PCK 子项**。21-2C 的 release 启动与代表关卡仍需在 Windows 验证；21-2B 恢复需目标设备。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
-**恢复入口**：[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、`scripts/contract_scan.py`、`scripts/archive_probe_runner.py`、`scripts/coop_probe_runner.py`、`scripts/scene_probe_runner.py`。
+**恢复入口**：[`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、`scripts/contract_scan.py`、`scripts/archive_probe_runner.py`、`scripts/coop_probe_runner.py`、`scripts/scene_probe_runner.py`。
 
 ## 7. 验证矩阵
 
@@ -106,7 +106,7 @@
 ## 8. 阶段出口
 
 - 21-1 每项有采用/延期/拒绝结论与 owner（角色责任，不绑定个人姓名）；
-- 21-2 有目标设备与日期，未测平台明确标注；
+- 21-2 有目标设备与日期，未测平台明确标注；21-2B 暂缓时必须保留该状态，不生成最低设备结论；
 - 21-3 每族删除被替代槽位，守卫与探针覆盖；全仓 ERROR=0；
 - 21-4 补资源项迁移完成或明确拒绝，缺陷有前后证据；
 - 文档、矩阵、脚本索引与状态一致；阶段归档后建立下一候选。

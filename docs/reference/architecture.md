@@ -492,7 +492,7 @@ classDiagram
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
 | Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17 已完成归档；当前候选为 [Phase 21 独立立项与平台发布验证](../roadmap/current-iteration.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
-| Spine 平台库与性能 | [独立平台工作](../roadmap/roadmap.md#41-spine-与目标平台)，按实际目标平台验证 |
+| Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 
 
 ---

@@ -41,6 +41,7 @@
 | [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与收口**：AtlasMetadata 生产者、源形态、消费者、View、守卫与失败边界 |
 | [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（目标，未实施）**：`LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` / Catalog / Store 字段语义、ZMWS 映射、生成器与验收 |
 | [`reference/modernization_gap_matrix.md`](reference/modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、Theme 缺失、数据硬编码等分级清单、处置类型判定与批次建议 |
+| [`reference/spine_platform_baseline.md`](reference/spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B 暂缓状态 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
