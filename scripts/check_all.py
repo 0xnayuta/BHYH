@@ -92,6 +92,11 @@ def main():
         help="跳过资源路径大小写与动态路径工厂门禁"
     )
     parser.add_argument(
+        "--dragonbones-full",
+        action="store_true",
+        help="DragonBones 工厂加载验证强制全量（默认按 mtime/size 增量，发布前使用本开关）"
+    )
+    parser.add_argument(
         "--fix",
         action="store_true",
         help="自动修复模式：若发现行尾或格式未对齐，自动执行写入修复"
@@ -174,6 +179,8 @@ def main():
     dbfact_cmd = [sys.executable, "scripts/verify_dragonbones_factories.py"]
     if args.godot_bin:
         dbfact_cmd += ["--godot", args.godot_bin]
+    if args.dragonbones_full:
+        dbfact_cmd.append("--all")
 
     # 执行字典：dim_id -> (ok, elapsed, out)
     exec_results: Dict[int, Tuple[bool, float, str]] = {}
