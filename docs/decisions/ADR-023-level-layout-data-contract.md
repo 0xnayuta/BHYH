@@ -52,7 +52,7 @@
    - 未登记 → 沿用现有默认常量（这是**未迁移关卡的现有行为**，不是新增回退层，ADR-005 允许）；
    - 一旦某关卡迁移完成，其脚本内的 `monster_group` / `monster_position_x/y` **删除**，不保留双份。
 4. **绞杀式迁移**：新增数据通道与现有 164 个脚本并行；先跑通 1 个 ZMWS 关卡，再按批迁移 84 个「数据容器」脚本；55 个含真实玩法逻辑的脚本保留，只把其中的结构化数据块迁出。
-5. **数据文件格式选 `.tres` 而非 `.json`**，依据 [ADR-006](ADR-006-resource-first-data-and-data-keys.md) 与 `godot_design_standard.md` §3.1。原「用 JSON」的初步设想在此修正。
+5. **数据文件格式选 `.tres` 而非 `.json`**。除 [ADR-006](ADR-006-resource-first-data-and-data-keys.md) 与 `godot_design_standard.md` §3.1 的规范理由外，还有两条技术硬理由：JSON 无法直接表达 `Vector2`/`Rect2`/`PackedVector2Array`，需自写编解码；JSON 内的字符串资源路径不计入导出依赖，需额外清单。原「用 JSON」的初步设想在此修正。
 6. **`ground` 碰撞不进布局资源**：它已在关卡 `.tscn` 中生成 `ZMWS_Ground` 静态节点，资源重复会让同一事实出现两个可写源。
 7. **不新增 Autoload**：`LevelLayoutStore` 为 `RefCounted` 静态工具，与 `LevelPreloadStore` 一致。
 
@@ -84,7 +84,7 @@
 | 方案 | 未采用原因 |
 |:---|:---|
 | 维持脚本内硬编码数据表 | 新增 1,701 个关卡无法接受；违背 ADR-006；无法 Inspector 审查 |
-| 运行时直接解析 ZMWS 关卡 json | 战斗热路径解析源 JSON 被 `target_architecture_contract.md` §7.2 禁止；无类型、不可审计 |
+| 运行时直接解析 ZMWS 关卡 json | **JSON 不支持本契约需要的类型**：`Vector2` / `Rect2` / `PackedVector2Array` 均无法直接表达，必须自写编解码并约定数组长度与坐标顺序（Godot 官方 `saving_games` 明确列出这一限制）；**字符串路径不构成导出依赖**：`LevelPreloadCatalog` 存 `StringName` 路径的先例已证明必须额外维护 `level_preload_export_dependencies.json` 才能进包；此外战斗热路径解析源 JSON 被 `target_architecture_contract.md` §7.2 禁止 |
 | 全部内联进单个大型 `Catalog.tres` | 1,708 关内联预计 20–35 MB 常驻，违背按需加载；单文件版本控制冲突面大 |
 | 先全面重构 `BaseLevel` 与 164 个脚本，再接入 ZMWS | 无验收边界、回归面覆盖 153 场景；且不能解决「怪物 id 对不上」这一真实障碍 |
 | 把 ZMWS 关卡做成独立玩法框架 | 与 §4.3「新关卡不复制第二套独立循环」冲突 |
