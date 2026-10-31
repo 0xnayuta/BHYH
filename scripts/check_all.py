@@ -97,6 +97,11 @@ def main():
         help="DragonBones 工厂加载验证强制全量（默认按 mtime/size 增量，发布前使用本开关）"
     )
     parser.add_argument(
+        "--health-full",
+        action="store_true",
+        help="health_check.py 强制重跑 Godot 全量编译（默认脚本集合未变时复用缓存）"
+    )
+    parser.add_argument(
         "--fix",
         action="store_true",
         help="自动修复模式：若发现行尾或格式未对齐，自动执行写入修复"
@@ -162,6 +167,8 @@ def main():
     engine_cmd = [sys.executable, "scripts/health_check.py"]
     if args.godot_bin:
         engine_cmd += ["--godot-bin", args.godot_bin]
+    if args.no_cache or args.health_full:
+        engine_cmd.append("--no-cache")
 
     # 维度 5: 契约扫描
     contract_cmd = [sys.executable, "scripts/contract_gate.py"]

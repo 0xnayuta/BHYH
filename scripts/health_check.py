@@ -11,6 +11,7 @@ import os
 import re
 import shutil
 import sys
+import hashlib
 import json
 import time
 import argparse
@@ -115,10 +116,12 @@ def _warning_is_allowlisted(entry: Dict[str, str]) -> bool:
 
 
 class ProjectHealthChecker:
-    def __init__(self, project_dir: str, godot_bin: str = None, report_path: str = None):
+    def __init__(self, project_dir: str, godot_bin: str = None, report_path: str = None,
+                 no_cache: bool = False):
         self.project_dir = os.path.abspath(project_dir)
         self.godot_bin = self._resolve_godot_bin(godot_bin)
         self.report_path = os.path.abspath(report_path) if report_path else None
+        self.no_cache = no_cache
 
         # 扫描容器
         self.all_scripts: Set[str] = set()          # res:// 路径
@@ -415,8 +418,78 @@ class ProjectHealthChecker:
         print(f"    - 动态加载与隐式活跃脚本: {len(self.implicit_active_scripts)} 个")
         print(f"    - 确认的纯真死代码 (Dead Code 候选): {len(self.dead_code_candidates)} 个")
 
+    def _compile_cache_path(self) -> str:
+        return os.path.join(self.project_dir, ".godot", "health_check_compile_cache.json")
+
+    def _compile_fingerprint(self) -> str:
+        """所有被扫描脚本的 res 路径 + mtime + size，外加 project.godot。"""
+        digest = hashlib.sha256()
+        for res_p in sorted(self.all_scripts):
+            disk = os.path.join(self.project_dir, res_p[len("res://"):].replace("/", os.sep))
+            try:
+                st = os.stat(disk)
+                digest.update(f"{res_p}\0{st.st_mtime}\0{st.st_size}\n".encode("utf-8"))
+            except OSError:
+                digest.update(f"{res_p}\0missing\n".encode("utf-8"))
+        for extra in ("project.godot",):
+            path = os.path.join(self.project_dir, extra)
+            try:
+                st = os.stat(path)
+                digest.update(f"{extra}\0{st.st_mtime}\0{st.st_size}\n".encode("utf-8"))
+            except OSError:
+                pass
+        return digest.hexdigest()
+
+    def _load_compile_cache(self) -> dict:
+        if self.no_cache:
+            return {}
+        path = self._compile_cache_path()
+        if not os.path.exists(path):
+            return {}
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            return {}
+        if data.get("schema") != 1:
+            return {}
+        return data
+
+    def _save_compile_cache(self, fingerprint: str, result: dict) -> None:
+        if self.no_cache:
+            return
+        path = self._compile_cache_path()
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8", newline="\n") as f:
+                json.dump({"schema": 1, "fingerprint": fingerprint, "result": result},
+                          f, ensure_ascii=False, indent=1)
+                f.write("\n")
+        except OSError:
+            pass
+
     def run_headless_syntax_compilation(self) -> Dict[str, Any]:
         """运行 Headless Godot 引擎预编译校验全量脚本"""
+        fingerprint = self._compile_fingerprint()
+        cached = self._load_compile_cache()
+        if cached and cached.get("fingerprint") == fingerprint:
+            result = dict(cached.get("result") or {})
+            result["cached"] = True
+            result["cost_seconds"] = 0.0
+            print(f"\n[*] 脚本集合与 mtime/size 未变，复用上次编译结果 "
+                  f"（{len(self.all_scripts)} 个脚本；--no-cache 可强制重跑）")
+            cached_parse = result.get("parse_errors") or []
+            cached_warn = result.get("fatal_warnings") or []
+            print(f"    - Headless 扫描耗时: 0.00 秒（缓存）")
+            print(f"    - 严重语法与编译错误 (Parse/Compile Errors): {len(cached_parse)} 个")
+            print(f"    - GDScript 静态分析警告: {len(cached_warn)} 个")
+            if result.get("status") == "passed":
+                print("    [√] 全量脚本全部通过 GDScript 编译与语法树解析 "
+                      "(0 Parse Error, 0 Error, 0 Warning)!")
+            for warning in cached_warn[:100]:
+                print(f"        [!] {warning['code']} "
+                      f"{warning['source'] or '(no source)'} :: {warning['message']}")
+            return result
         print(f"\n[*] 启动 Godot 4.7.2 Headless 模式进行 {len(self.all_scripts)} 个脚本全量编译校验...")
         if not os.path.exists(self.godot_bin):
             print(f"[!] 警告: 未找到 Godot 执行程序 ({self.godot_bin})，跳过 Headless 运行时编译测试")
@@ -513,13 +586,15 @@ script = ExtResource("1_check")
                     "    [√] 全量脚本全部通过 GDScript 编译与语法树解析 "
                     "(0 Parse Error, 0 Error, 0 Warning)!"
                 )
-            return {
+            result = {
                 "status": "passed" if len(parse_errors) == 0 and not fatal_warnings else "failed",
                 "cost_seconds": cost,
                 "parse_errors": parse_errors,
                 "warnings": warnings,
                 "fatal_warnings": fatal_warnings,
             }
+            self._save_compile_cache(fingerprint, result)
+            return result
         except subprocess.TimeoutExpired:
             print("[!] Headless 编译超时 (30s)，强制销毁进程树...")
             if os.name == "nt":
@@ -629,6 +704,8 @@ def main():
     parser.add_argument("--project", default="source", help="Godot 工程路径")
     parser.add_argument("--godot-bin", default=None, help="Godot 4.7.2 二进制执行程序路径")
     parser.add_argument("--report", default="docs/reports/dead_code_audit.md", help="输出 Markdown 报告路径")
+    parser.add_argument("--no-cache", action="store_true",
+                        help="忽略脚本编译结果缓存，强制启动 Godot 全量校验（发布前使用）")
 
     args = parser.parse_args()
     if not os.path.isdir(args.project):
@@ -637,7 +714,8 @@ def main():
     checker = ProjectHealthChecker(
         project_dir=args.project,
         godot_bin=args.godot_bin,
-        report_path=args.report
+        report_path=args.report,
+        no_cache=args.no_cache
     )
     result = checker.run_all()
     if result and result.get("status") == "failed":

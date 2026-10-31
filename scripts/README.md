@@ -83,7 +83,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 |:---|:---|:---|
 | `normalize_eol.py` | 全工程 LF/CRLF 归一化；增量缓存 | `.godot/eol_cache.json` |
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
-| `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁 | `docs/reports/dead_code_audit.md` |
+| `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁；编译结果按脚本 mtime/size 指纹缓存（`--no-cache` 强制重跑） | `docs/reports/dead_code_audit.md`、`.godot/health_check_compile_cache.json` |
 | `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者、共享账本/快照互斥、Phase 17 边界、输入写入边界、运行状态边界、HUD/面板只读与音频入口二十类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
