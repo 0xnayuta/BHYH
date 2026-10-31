@@ -91,7 +91,7 @@
 |:---|:---|
 | 现状 | `base_through_level.tscn:193`：`[node name="floor" type="TileMap"]`，位于 `BackGround/floor_2` 下 |
 | 官方依据 | `TileMap` 类文档：*Deprecated: Use multiple TileMapLayer nodes instead.* |
-| 影响 | 单点，但位于关卡基类场景，所有关卡继承 |
+| 影响 | 基类场景 1 个 `TileMap` 节点；**12 个关卡场景有 `layer_0/tile_data` 覆盖、15 个有 `tile_set` 覆盖**，不能按单行替换 |
 | 处置 | **Phase 31-0**；官方编辑器提供图层提取，改动面小 |
 
 ### 3.2 B 级：结构性问题

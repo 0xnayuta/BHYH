@@ -161,7 +161,7 @@ flowchart TD
 
 **31-0 顺手包（A2/B2/B4/B5）**
 
-- `TileMap` → `TileMapLayer`（`base_through_level.tscn` 单点，官方废弃 API）；
+- `TileMap` → `TileMapLayer`（基类 `base_through_level.tscn` 1 个节点；12 个关卡场景的 `layer_0/tile_data` 覆盖需同步迁移，不能按单行替换）；
 - 数字显示从手工拼 `Sprite2D` 改为 `Label` + BMFont（3 个文件 25 处，替代资源已就绪）；
 - `collision_layer` 裸整数提取具名常量（30 处，`godot_design_standard.md` §6 要求）；
 - `func load_item_icon` 19 处重复定义提取共享实现。
