@@ -38,6 +38,7 @@ Signals="*res://signals.gd"
 Global="*res://global.gd"
 LocalCoop="*res://Script/coop/local_coop.gd"
 MCPGameBridge="res://addons/godot_mcp/game_bridge/mcp_game_bridge.gd"
+ZmwsConfig="*res://Script/config/config.gd"
 
 [debug]
 
