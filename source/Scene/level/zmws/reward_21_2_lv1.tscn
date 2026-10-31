@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_3_hideroom_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_3_hideroom_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210301_table2.png" id="3"]
+
+[node name="Reward212Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_22_3_hideroom_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(72.0, 9767.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_22_3_hideroom_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(72.0, 10791.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_210301_table2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(318.0, 10828.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1

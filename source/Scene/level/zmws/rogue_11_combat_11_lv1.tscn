@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_combat_11_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_infloor_long.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_combat_11_background_02.png" id="3"]
+
+[node name="Rogue11Combat11Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_11_combat_11_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8.0, 538.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(150.0, 762.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10.0, 976.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(142.0, 1180.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(90.0, 336.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1617.0, 1242.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_rogue_11_combat_11_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1249.0, -1.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2132.0, 864.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2132.0, 1262.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2141.0, 1541.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_rogue_11_infloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2132.0, 566.0)
+texture = ExtResource("2")
+centered = false

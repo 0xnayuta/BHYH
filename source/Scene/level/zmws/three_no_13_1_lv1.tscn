@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_background_1.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_midground_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_midground_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_11.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_12.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_1.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_3.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_4.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_5.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_13_1_ground_6.png" id="12"]
+
+[node name="ThreeNo131Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_82" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.82)
+
+[node name="L_00_no_13_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_82"]
+position = Vector2(0.04, 2133.1)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_7_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 0.4)
+
+[node name="L_01_no_13_1_midground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(-0.26, 1859.56)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_13_1_midground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(1350.35, 1899.87)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_13_1_midground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(2699.74, 1859.56)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_no_13_1_midground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(4050.35, 1899.87)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_no_13_1_midground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(5402.8, 1858.5)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_06_no_13_1_ground_10" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-162.34, 2255.1)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_no_13_1_ground_11" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1600.66, 2256.1)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_08_no_13_1_ground_12" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3362.66, 2255.55)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_no_13_1_ground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-3686.4, 1604.89)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_10_no_13_1_ground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-1924.4, 1715.39)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_11_no_13_1_ground_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-304.11, 2124.05)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_12_no_13_1_ground_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-162.34, 1150.16)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_13_no_13_1_ground_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1600.49, 662.1)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_14_no_13_1_ground_6" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3361.1, 686.31)
+texture = ExtResource("12")
+centered = false

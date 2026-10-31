@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_beijing.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_01_05.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_01_04.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_01_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_01_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_01_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_16_1_xuanwu.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_back2_1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_back2_2.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_front2_1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_front2_2.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_chuansong_02.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_chuansong_04.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_chuansong_07.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160101_chuansong_06.png" id="15"]
+
+[node name="No161Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_95_0_95" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.95)
+
+[node name="L_00_no_16_1_beijing" type="Sprite2D" parent="Parallax_0_L1_spd_0_95_0_95"]
+position = Vector2(-3.0, 530.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_16_1_01_05" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8004.0, 553.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_16_1_01_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6004.0, 553.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_16_1_01_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4004.0, 554.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_16_1_01_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2004.0, 943.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_16_1_01_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4.0, 556.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_no_16_1_xuanwu" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(390.0, 979.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_160101_back2_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1800.0, 991.0)
+texture = ExtResource("8")
+centered = false
+z_index = 2
+
+[node name="L_08_160101_back2_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3385.0, 996.0)
+texture = ExtResource("9")
+centered = false
+z_index = 2
+
+[node name="L_12_160101_chuansong_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6197.0, 1413.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_13_160101_chuansong_07" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6442.0, 943.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_09_160101_front2_1" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(1718.0, 1035.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_10_160101_front2_2" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(3315.0, 1035.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="L_11_160101_chuansong_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(6656.0, 1021.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_14_160101_chuansong_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(6263.0, 1332.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_15_160101_chuansong_06" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(6468.0, 961.0)
+texture = ExtResource("15")
+centered = false

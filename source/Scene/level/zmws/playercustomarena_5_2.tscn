@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_2_3_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/shayushanhu.png" id="2"]
+
+[node name="Playercustomarena52" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_2_3_background_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-575.49, -219.79)
+scale = Vector2(2.4, 2.4)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_shayushanhu" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(739.91, 60.0)
+texture = ExtResource("2")
+centered = false

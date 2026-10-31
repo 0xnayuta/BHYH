@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/10051_backgroud_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_3.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_4.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_5.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_6.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_5_boss_7.png" id="8"]
+
+[node name="ThreeNo175Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_1_0_0_8" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.8)
+
+[node name="L_00_10051_backgroud_1" type="Sprite2D" parent="Parallax_0_L1_spd_1_0_0_8"]
+position = Vector2(-600.0, -500.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_17_5_boss_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-9.0, 329.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_17_5_boss_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-9.0, 1353.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_17_5_boss_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1015.0, 931.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_17_5_boss_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2037.0, 1366.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_17_5_boss_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2039.0, 342.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_no_17_5_boss_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1015.0, 1153.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_no_17_5_boss_7" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3063.0, 461.0)
+texture = ExtResource("8")
+centered = false

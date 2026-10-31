@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/league_plantation_bg_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/league_plantation_bg_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/league_plantation_waterpoor.png" id="3"]
+
+[node name="LeaguePlantation" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_league_plantation_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1736.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_league_plantation_bg_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(522.0, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(846.25, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1170.5, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1494.75, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_06_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1819.0, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2143.25, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2467.5, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_09_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2791.75, 1152.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_10_league_plantation_waterpoor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3116.0, 1152.0)
+texture = ExtResource("3")
+centered = false

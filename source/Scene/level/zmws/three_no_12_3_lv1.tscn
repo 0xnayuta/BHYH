@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_3_bg_4.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_3_cloud_4.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_3_floor_4.png" id="3"]
+
+[node name="ThreeNo123Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_12_3_bg_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4.0, 401.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_12_3_cloud_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-123.02, 1340.38)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_spring_floor1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(210.0, 1166.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_03_spring_floor2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(942.0, 1121.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_04_spring_floor3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(559.0, 1000.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_05_spring_floor4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1275.0, 960.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_06_spring_floor5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(936.0, 781.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_07_spring_floor6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(530.0, 654.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_08_spring_floor7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1302.0, 630.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_09_spring_floor8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(133.0, 530.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2

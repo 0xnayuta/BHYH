@@ -1,0 +1,648 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_9_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_9_middleground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_ice_middle.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_ice_right.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_ice_left.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_ice_stone_png.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_darkice_left.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_darkice_right.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2022_yiwen_10_darkice_middle.png" id="9"]
+
+[node name="Activity2021Yiwen10" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_98_0_98" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.98, 0.98)
+
+[node name="L_00_activity_2021_yiwen_9_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_98_0_98"]
+position = Vector2(-40.0, 336.0)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_8_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.3)
+
+[node name="L_01_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(-54.0, 811.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(1262.0, 811.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(2578.0, 811.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(3894.0, 811.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(5209.0, 810.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_activity_2021_yiwen_9_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_3"]
+position = Vector2(6525.0, 810.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_07_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13236.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13824.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_09_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14019.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_10_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13432.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_11_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13628.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_12_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14215.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_13_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14411.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_14_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14607.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_15_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14803.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_16_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14999.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_17_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14803.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_18_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14999.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_19_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(15195.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_20_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(15390.0, 1251.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_21_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13041.0, 1251.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_22_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3424.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_23_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3620.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_24_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3816.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_25_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4012.0, 1251.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_26_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(880.0, 1251.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_27_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1075.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_28_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1663.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_29_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1858.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_30_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1271.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_31_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1467.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_32_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2054.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_33_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2250.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_34_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2446.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_35_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2642.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_36_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2838.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_37_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2642.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_38_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2838.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_39_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3034.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_40_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3228.0, 1251.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_41_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16366.0, 1410.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_42_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16562.0, 1410.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_43_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16910.0, 1336.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_44_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(17106.0, 1336.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_45_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(17424.0, 1266.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_46_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(17620.0, 1266.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_47_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(18056.0, 1254.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_48_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(18252.0, 1254.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_49_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(18832.0, 1423.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_50_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19028.0, 1423.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_51_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19699.0, 1428.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_52_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19895.0, 1428.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_53_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4621.0, 1377.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_54_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4817.0, 1377.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_55_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5013.0, 1377.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_56_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5209.0, 1377.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_57_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4425.0, 1377.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_58_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6069.0, 1250.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_59_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6265.0, 1250.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_60_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6461.0, 1250.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_61_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6657.0, 1250.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_62_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5873.0, 1250.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_63_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7689.0, 1415.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_64_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7885.0, 1415.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_65_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(8081.0, 1415.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_66_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(8277.0, 1415.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_67_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7493.0, 1415.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_68_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9176.0, 1280.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_69_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9372.0, 1280.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_70_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9568.0, 1280.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_71_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9764.0, 1280.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_72_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(8980.0, 1280.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_73_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(10832.0, 1396.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_74_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(11028.0, 1396.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_75_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(11224.0, 1396.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_76_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(11420.0, 1396.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_77_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(10636.0, 1396.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_78_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(11616.0, 1396.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_79_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(10440.0, 1396.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_80_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21622.0, 1388.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_81_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21231.0, 1388.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_82_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21427.0, 1388.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_83_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21035.0, 1388.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_84_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21219.0, 1203.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_85_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22479.0, 1385.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_86_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22088.0, 1385.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_87_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22284.0, 1385.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_88_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21892.0, 1385.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_89_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21941.0, 1210.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_90_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22437.0, 1205.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_91_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23225.0, 1416.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_92_activity_2022_yiwen_10_ice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23030.0, 1416.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_93_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22834.0, 1416.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_94_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23006.0, 1239.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_95_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23781.0, 1400.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_96_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23587.0, 1400.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_97_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(23731.0, 1218.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_98_activity_2022_yiwen_10_ice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24202.0, 1411.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_99_activity_2022_yiwen_10_ice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24008.0, 1411.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_100_activity_2022_yiwen_10_darkice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(12175.0, 1398.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_101_activity_2022_yiwen_10_darkice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(12762.0, 1398.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_102_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(12370.0, 1398.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_103_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(12566.0, 1398.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_104_activity_2022_yiwen_10_darkice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-73.0, 1334.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_105_activity_2022_yiwen_10_darkice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(514.0, 1334.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_106_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(122.0, 1334.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_107_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(318.0, 1334.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_108_activity_2022_yiwen_10_darkice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16089.0, 1347.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_109_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(15894.0, 1347.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_110_activity_2022_yiwen_10_darkice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(15698.0, 1347.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_111_activity_2022_yiwen_10_darkice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(25079.0, 1332.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_112_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24883.0, 1332.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_113_activity_2022_yiwen_10_darkice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24687.0, 1332.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_114_activity_2022_yiwen_10_darkice_right" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(20673.0, 1307.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_115_activity_2022_yiwen_10_darkice_middle" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(20477.0, 1307.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_116_activity_2022_yiwen_10_darkice_left" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(20282.0, 1307.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_117_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14556.0, 1066.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_118_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14918.0, 1066.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_119_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14190.0, 1069.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_120_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(13704.0, 1081.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_121_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1879.0, 1075.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_122_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2484.0, 1073.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_123_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3126.0, 1078.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_124_activity_2022_yiwen_10_ice_stone_png" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3575.0, 1072.0)
+texture = ExtResource("6")
+centered = false

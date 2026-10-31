@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_bg_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_bg_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_paodao_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_paodao_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_jifen.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_left3.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_right3.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_ground_02.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_ground_01.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_left1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_left2.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_left4.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_right1.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_right2.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2024_shijiebei_right4.png" id="15"]
+
+[node name="Activity2024Shijiebei" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_2024_shijiebei_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1249.0, -1.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_activity_2024_shijiebei_bg_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1.0, -1.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_2024_shijiebei_paodao_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-2.0, 1556.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1
+
+[node name="L_03_activity_2024_shijiebei_paodao_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1247.0, 1556.0)
+texture = ExtResource("4")
+centered = false
+z_index = 1
+
+[node name="L_04_activity_2024_shijiebei_jifen" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1054.0, 1485.0)
+texture = ExtResource("5")
+centered = false
+z_index = 2
+
+[node name="L_05_activity_2024_shijiebei_left3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(133.0, 1079.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_activity_2024_shijiebei_right3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2187.0, 1061.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_activity_2024_shijiebei_ground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1252.0, 1754.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_10_activity_2024_shijiebei_ground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3.0, 1754.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_11_activity_2024_shijiebei_left1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(84.0, 1433.0)
+texture = ExtResource("10")
+centered = false
+z_index = 4
+
+[node name="L_14_activity_2024_shijiebei_right1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2143.0, 1428.0)
+texture = ExtResource("13")
+centered = false
+z_index = 4
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_12_activity_2024_shijiebei_left2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(83.0, 1443.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_13_activity_2024_shijiebei_left4" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(82.0, 1050.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_15_activity_2024_shijiebei_right2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(2130.0, 1436.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_16_activity_2024_shijiebei_right4" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(2215.0, 1040.0)
+texture = ExtResource("15")
+centered = false

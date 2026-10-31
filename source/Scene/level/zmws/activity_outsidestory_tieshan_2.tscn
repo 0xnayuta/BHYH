@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_background_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_3_background.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_2_background_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_cloud_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_bossground_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_3_ground_2.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_3_ground_3.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_3_ground_4.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_bossground_2.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_ting_1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_4_middleground_1.png" id="12"]
+
+[node name="ActivityOutsidestoryTieshan2" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.3)
+
+[node name="L_04_no_4_4_cloud_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_3"]
+position = Vector2(-96.0, 1832.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("5")
+centered = false
+
+[node name="Parallax_1_L1_spd_0_99_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.99, 0.3)
+
+[node name="L_00_no_4_4_background_1" type="Sprite2D" parent="Parallax_1_L1_spd_0_99_0_3"]
+position = Vector2(0.0, 1024.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_4_4_background_2" type="Sprite2D" parent="Parallax_1_L1_spd_0_99_0_3"]
+position = Vector2(0.0, -64.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_no_4_2_background_2" type="Sprite2D" parent="Parallax_1_L1_spd_0_99_0_3"]
+position = Vector2(0.0, 1960.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_2_L1_spd_1_7_1_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.7, 1.7)
+
+[node name="L_02_no_3_3_background" type="Sprite2D" parent="Parallax_2_L1_spd_1_7_1_7"]
+position = Vector2(2072.0, 118.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_3_L2_spd_0_4_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+
+[node name="L_11_no_4_4_middleground_1" type="Sprite2D" parent="Parallax_3_L2_spd_0_4_0_4"]
+position = Vector2(0.0, 2232.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_12_no_4_4_middleground_1" type="Sprite2D" parent="Parallax_3_L2_spd_0_4_0_4"]
+position = Vector2(1864.0, 2232.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="Parallax_4_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_05_boss_1" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(-179.2, 106.03)
+texture = ExtResource("6")
+centered = false
+z_index = -2
+
+[node name="L_06_no_3_3_ground_2" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(1818.0, 46.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_no_3_3_ground_3" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(2842.0, 46.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_no_3_3_ground_4" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(3866.0, 46.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_boss_2" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(844.8, 90.03)
+texture = ExtResource("10")
+centered = false
+z_index = -2
+
+[node name="L_10_boss" type="Sprite2D" parent="Parallax_4_L3"]
+position = Vector2(484.8, 432.03)
+texture = ExtResource("11")
+centered = false
+z_index = -2

@@ -1,0 +1,388 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_background_04.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_background_03.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_background_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_background_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_middleground.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor15.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor12.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor11.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor3.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor2.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_18_1_floor1.png" id="11"]
+
+[node name="Arhat18Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_arhat_18_1_background_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(810.0, 1244.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_arhat_18_1_background_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-690.0, 1244.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_arhat_18_1_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(810.0, -751.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_arhat_18_1_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-690.0, -751.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_arhat_18_1_middleground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(650.0, 2610.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_arhat_18_1_floor15" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1787.0, 2169.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1595.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1403.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_22_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1211.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_22_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1019.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_10_22_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(827.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_11_22_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(635.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_12_22_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(443.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_13_22_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(251.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_14_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(59.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_15_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-133.0, 2169.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_16_arhat_18_1_floor11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-237.0, 2169.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_17_arhat_18_1_floor15" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1780.0, 1459.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_18_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1588.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_19_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1396.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_20_22_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1204.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_21_22_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1012.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_22_22_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(820.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_23_22_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(628.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_24_22_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(436.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_25_22_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(244.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_26_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(52.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_27_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-140.0, 1459.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_28_arhat_18_1_floor11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-244.0, 1459.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_29_arhat_18_1_floor15" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1771.0, 749.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_30_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1579.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_31_22_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1387.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_32_22_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1195.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_33_22_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1003.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_34_22_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(811.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_35_22_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(619.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_36_22_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(427.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_37_22_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(235.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_38_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(43.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_39_22_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-149.0, 749.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_40_arhat_18_1_floor11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-253.0, 749.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_41_1_13" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(347.0, 2419.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_42_1_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(155.0, 2419.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_43_1_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(51.0, 2419.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_44_1_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(576.0, 2622.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_45_1_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(472.0, 2622.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_46_1_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(911.0, 2477.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_47_1_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(807.0, 2477.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_48_1_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1256.0, 2420.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_49_1_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1152.0, 2420.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_50_1_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1203.0, 2670.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_51_1_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1099.0, 2670.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_52_2_13" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1449.0, 1834.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_53_2_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1257.0, 1834.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_54_2_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1153.0, 1834.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_55_2_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(610.0, 1835.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_56_2_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(506.0, 1835.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_57_2_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(948.0, 1711.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_58_2_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(844.0, 1711.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_59_2_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(284.0, 1953.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_60_2_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(180.0, 1953.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_61_2_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(936.0, 1970.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_62_2_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(832.0, 1970.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_63_3_13" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(856.0, 1134.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_64_3_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(664.0, 1134.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_65_3_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(560.0, 1134.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_66_3_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(379.0, 1282.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_67_3_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(275.0, 1282.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_68_3_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1189.0, 1284.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_69_3_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1085.0, 1284.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_70_3_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(371.0, 1003.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_71_3_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(267.0, 1003.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_72_3_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1177.0, 1007.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_73_3_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1073.0, 1007.0)
+texture = ExtResource("11")
+centered = false

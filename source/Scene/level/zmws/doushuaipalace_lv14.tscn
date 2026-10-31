@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_bg_14.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_14_ob3.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_14_ob4.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_14_ob2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/doushuaipalace_14_ob1.png" id="5"]
+
+[node name="DoushuaipalaceLv14" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_doushuaipalace_bg_14" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-172.0, 752.0)
+texture = ExtResource("1")
+centered = false
+z_index = -4
+
+[node name="L_01_doushuaipalace_14_ob3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(304.0, 1152.0)
+texture = ExtResource("2")
+centered = false
+z_index = -1
+
+[node name="L_02_doushuaipalace_14_ob4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1176.0, 1152.0)
+texture = ExtResource("3")
+centered = false
+z_index = -1
+
+[node name="L_03_doushuaipalace_14_ob2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1288.0, 1168.0)
+texture = ExtResource("4")
+centered = false
+z_index = -1
+
+[node name="L_04_doushuaipalace_14_ob1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(144.0, 1168.0)
+texture = ExtResource("5")
+centered = false
+z_index = -1

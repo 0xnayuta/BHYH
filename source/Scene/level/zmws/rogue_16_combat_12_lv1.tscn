@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1612_bg_1_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1612_bg_1_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1612_bg_1_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1612_bg_1_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1612_zhaoze_zhezhao_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1609_futai.png" id="6"]
+
+[node name="Rogue16Combat12Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_1612_bg_1_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_1612_bg_1_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1500.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_1612_bg_1_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 999.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_1612_bg_1_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1500.0, 1000.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_rogue_1609_futai" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(973.0, 1541.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_1609_futai" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1548.0, 1541.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_rogue_1612_zhaoze_zhezhao_01" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(835.0, 1736.0)
+texture = ExtResource("5")
+centered = false

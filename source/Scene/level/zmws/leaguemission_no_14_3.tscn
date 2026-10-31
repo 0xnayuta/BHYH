@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140301_night_bg_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140301_night_bg_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140301_bg_07.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140301_bg_08.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140301_shu_2.png" id="5"]
+
+[node name="LeaguemissionNo143" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_7_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, -175.0)
+texture = ExtResource("1")
+centered = false
+z_index = 2
+
+[node name="L_01_8_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1250.0, -174.67)
+texture = ExtResource("2")
+centered = false
+z_index = 2
+
+[node name="L_02_140301_bg_07" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, -8.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_03_140301_bg_08" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1250.0, -8.0)
+texture = ExtResource("4")
+centered = false
+z_index = 2
+
+[node name="L_05_7_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-23.33, -599.64)
+texture = ExtResource("5")
+centered = false
+z_index = 2
+
+[node name="L_07_8_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1160.67, -567.64)
+texture = ExtResource("5")
+centered = false
+z_index = 2
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_140301_shu_2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(-23.33, -599.64)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_140301_shu_2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1160.67, -567.64)
+texture = ExtResource("5")
+centered = false

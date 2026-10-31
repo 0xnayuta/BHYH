@@ -1,14 +1,14 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackground.png" id="1"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor.png" id="2"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock1.png" id="3"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock2.png" id="4"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock3.png" id="5"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock4.png" id="6"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock5.png" id="7"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor2.png" id="8"]
-[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor1.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackfloor.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackrock1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackrock2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackrock3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackrock4.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackrock5.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackfloor2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_rocklandbackfloor1.png" id="9"]
 
 [node name="ActivityRockland1" type="Node2D"]
 

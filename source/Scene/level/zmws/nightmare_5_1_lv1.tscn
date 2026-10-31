@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_background_3.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_background_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_background_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_middleground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_middleground_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_ground_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_ground_2.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_ground_3.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_ground_4.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_ground_5.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_5_1_middleground_3.png" id="11"]
+
+[node name="Nightmare51Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_5_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="L_01_nightmare_5_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_5"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_nightmare_5_1_background_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_5"]
+position = Vector2(1632.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_2_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+
+[node name="L_03_nightmare_5_1_middleground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_2_0_2"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_nightmare_5_1_middleground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_2_0_2"]
+position = Vector2(706.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_nightmare_5_1_middleground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_2_0_2"]
+position = Vector2(1412.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_nightmare_5_1_middleground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_2_0_2"]
+position = Vector2(2185.0, 0.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_nightmare_5_1_middleground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_2_0_2"]
+position = Vector2(3366.0, 0.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_nightmare_5_1_background_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6408.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_08_nightmare_5_1_ground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, -40.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_nightmare_5_1_ground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1632.0, -40.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_10_nightmare_5_1_ground_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3264.0, -40.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_11_nightmare_5_1_ground_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4896.0, -40.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_12_nightmare_5_1_ground_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6528.0, -40.0)
+texture = ExtResource("10")
+centered = false
+z_index = 2
+
+[node name="Parallax_3_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_13_nightmare_5_1_middleground_3" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(1488.0, 32.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_14_nightmare_5_1_middleground_3" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(3136.0, 16.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_15_nightmare_5_1_middleground_3" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(4744.0, 16.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_16_nightmare_5_1_middleground_3" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(6392.0, 16.0)
+texture = ExtResource("11")
+centered = false

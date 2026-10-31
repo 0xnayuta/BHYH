@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_bg_05.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_bg_04.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_bg_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_bg_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_bg_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_futai.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_zhuzi1.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_zhuzi2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_zhuzi3.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_zhezhao_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_zhezhao_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180201_light.png" id="12"]
+
+[node name="No182Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_180201_bg_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7456.0, 546.0)
+texture = ExtResource("1")
+centered = false
+z_index = -1
+
+[node name="L_01_180201_bg_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5604.0, 546.0)
+texture = ExtResource("2")
+centered = false
+z_index = -1
+
+[node name="L_02_180201_bg_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3752.0, 546.0)
+texture = ExtResource("3")
+centered = false
+z_index = -1
+
+[node name="L_03_180201_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1900.0, 546.0)
+texture = ExtResource("4")
+centered = false
+z_index = -1
+
+[node name="L_04_180201_bg_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(48.0, 546.0)
+texture = ExtResource("5")
+centered = false
+z_index = -1
+
+[node name="L_05_180201_futai" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5226.0, 1300.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1
+
+[node name="L_06_180201_futai" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6615.0, 1300.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1
+
+[node name="L_07_180201_futai" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5924.0, 1300.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1
+
+[node name="L_08_180201_zhuzi1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2280.0, 720.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_180201_zhuzi2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2687.0, 720.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_10_180201_zhuzi3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3138.0, 720.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_11_180201_zhuzi1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3711.0, 720.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_12_180201_zhuzi2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4118.0, 720.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_13_180201_zhuzi3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4569.0, 720.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_16_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2617.0, 1083.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_17_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3036.0, 1079.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_18_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2183.0, 1093.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_19_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4030.0, 1078.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_20_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4426.0, 1078.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_21_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3531.0, 1086.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_22_180201_light" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4839.0, 1078.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_14_180201_zhezhao_01" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(4325.0, 1341.0)
+texture = ExtResource("10")
+centered = false
+z_index = 5
+
+[node name="L_15_180201_zhezhao_02" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(6267.0, 1341.0)
+texture = ExtResource("11")
+centered = false
+z_index = 5

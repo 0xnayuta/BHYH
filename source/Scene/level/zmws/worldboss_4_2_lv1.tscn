@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_1_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_6.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_5.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_4.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_background_1.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_floor_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_floor_3.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_floor_4.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/worldboss_4_2_floor_1.png" id="11"]
+
+[node name="Worldboss42Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_99_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.99, 0.5)
+
+[node name="L_00_worldboss_4_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_99_0_5"]
+position = Vector2(0.0, 800.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_worldboss_4_2_background_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3600.0, 1449.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_worldboss_4_2_background_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1800.0, 1796.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_worldboss_4_2_background_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 1449.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_worldboss_4_2_background_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3600.0, 0.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_worldboss_4_2_background_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1800.0, 0.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_worldboss_4_2_background_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_worldboss_4_2_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1197.0, 485.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_worldboss_4_2_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3473.0, 1550.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_worldboss_4_2_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1588.0, 1550.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_10_worldboss_4_2_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(860.0, 1405.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_11_worldboss_4_2_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2424.0, 755.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_12_worldboss_4_2_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(785.0, 755.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_13_worldboss_4_2_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(123.0, 532.0)
+texture = ExtResource("11")
+centered = false

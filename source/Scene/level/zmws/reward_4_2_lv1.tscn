@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_4_2_ground_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_4_2_ground_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_4_2_ground_3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_4_2_ground_4.png" id="4"]
+
+[node name="Reward42Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_reward_4_2_ground_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, -1.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_reward_4_2_ground_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1023.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_reward_4_2_ground_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 2047.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_reward_4_2_ground_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 3071.0)
+texture = ExtResource("4")
+centered = false

@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_7_1_bossbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_7_1_bossground.png" id="2"]
+
+[node name="ThreeNo71Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_no_7_1_bossbackground" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_7_1_bossground" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 85.0)
+texture = ExtResource("2")
+centered = false

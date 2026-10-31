@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_middleground_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_middleground_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_combat_5_ground_lv1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_combat_5_groundshade_1.png" id="5"]
+
+[node name="Rogue3Combat5Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_8_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.7)
+
+[node name="L_00_rogue_3_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_8_0_7"]
+position = Vector2(0.0, 136.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_7_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 0.4)
+
+[node name="L_01_rogue_3_middleground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(0.0, -328.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_02_rogue_3_middleground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-208.0, 24.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_3_combat_5_ground_lv1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_3_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_rogue_3_combat_5_groundshade_1" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(1128.0, 0.0)
+texture = ExtResource("5")
+centered = false

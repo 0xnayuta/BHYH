@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_top_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_top_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_top_morning_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_top_morning_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_ground_edge_01.png" id="5"]
+
+[node name="ZhaoyaomountainClimb220" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_zhaoyaomountain_top_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4.0, 195.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_zhaoyaomountain_top_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1444.0, 195.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_zhaoyaomountain_top_morning_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4.0, 915.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_zhaoyaomountain_top_morning_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1444.0, 915.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_zhaoyaomountain_ground_edge_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(452.0, 812.0)
+texture = ExtResource("5")
+centered = false
+z_index = 7

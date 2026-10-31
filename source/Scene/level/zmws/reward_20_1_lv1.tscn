@@ -1,0 +1,207 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_farbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_floor_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_floor_02_01.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_floor_02_02.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_dong.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road3_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road3_02_01.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road3_02_02.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road3_03.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road2_01_01.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road2_01_02.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road2_02.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road2_03.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road1_01.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_road1_02.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_bossroad2_01.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_bossroad2_02.png" id="21"]
+
+[node name="Reward201Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_8_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.3)
+
+[node name="L_00_200301_farbackground" type="Sprite2D" parent="Parallax_0_L1_spd_0_8_0_3"]
+position = Vector2(-20.0, 6300.0)
+scale = Vector2(3.2, 3.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_200301_midbackground_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-173.0, 5499.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_200301_midbackground_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1843.0, 5628.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_200301_midbackground_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-205.0, 7547.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_200301_midbackground_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1843.0, 7547.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_200301_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(70.0, 9280.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_200301_floor_02_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1094.0, 9280.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_200301_floor_02_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1606.0, 9280.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_200301_dong" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(919.0, 7098.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_200301_road3_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(225.0, 6855.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_10_200301_road3_02_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(737.0, 6853.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="L_11_200301_road3_02_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1249.0, 6844.0)
+texture = ExtResource("12")
+centered = false
+z_index = 1
+
+[node name="L_12_200301_road3_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1761.0, 6845.0)
+texture = ExtResource("13")
+centered = false
+z_index = 1
+
+[node name="L_13_200301_road2_01_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11.0, 7076.0)
+texture = ExtResource("14")
+centered = false
+z_index = 1
+
+[node name="L_14_200301_road2_01_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(349.0, 7075.0)
+texture = ExtResource("15")
+centered = false
+z_index = 1
+
+[node name="L_15_200301_road2_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(861.0, 7084.0)
+texture = ExtResource("16")
+centered = false
+z_index = 1
+
+[node name="L_16_200301_road2_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1373.0, 7086.0)
+texture = ExtResource("17")
+centered = false
+z_index = 1
+
+[node name="L_17_200301_road3_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(236.0, 7329.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_18_200301_road3_02_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(748.0, 7327.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="L_19_200301_road3_02_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1260.0, 7318.0)
+texture = ExtResource("12")
+centered = false
+z_index = 1
+
+[node name="L_20_200301_road3_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1772.0, 7319.0)
+texture = ExtResource("13")
+centered = false
+z_index = 1
+
+[node name="L_21_200301_road2_01_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(27.0, 7549.0)
+texture = ExtResource("14")
+centered = false
+z_index = 1
+
+[node name="L_22_200301_road2_01_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(365.0, 7548.0)
+texture = ExtResource("15")
+centered = false
+z_index = 1
+
+[node name="L_23_200301_road2_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(877.0, 7557.0)
+texture = ExtResource("16")
+centered = false
+z_index = 1
+
+[node name="L_24_200301_road2_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1389.0, 7559.0)
+texture = ExtResource("17")
+centered = false
+z_index = 1
+
+[node name="L_25_200301_road1_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-56.0, 7794.0)
+texture = ExtResource("18")
+centered = false
+z_index = 1
+
+[node name="L_26_200301_road1_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1992.0, 7796.0)
+texture = ExtResource("19")
+centered = false
+z_index = 1
+
+[node name="L_27_200301_road1_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-96.0, 8463.0)
+texture = ExtResource("18")
+centered = false
+z_index = 1
+
+[node name="L_28_200301_road1_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1952.0, 8465.0)
+texture = ExtResource("19")
+centered = false
+z_index = 1
+
+[node name="L_29_boss_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(118.0, 5912.0)
+texture = ExtResource("20")
+centered = false
+
+[node name="L_30_boss_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1142.0, 5912.0)
+texture = ExtResource("21")
+centered = false

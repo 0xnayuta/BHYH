@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_background_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_background_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_floor.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_outfloor_sort.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_qiongqi.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_whitetigerforest_mask.png" id="7"]
+
+[node name="ActivityWhitetigerforest1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_whitetigerforest_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-8.0, -6.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_activity_whitetigerforest_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1459.0, -6.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_whitetigerforest_background_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2927.0, -6.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_whitetigerforest_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(389.0, 795.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_activity_whitetigerforest_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(391.0, 623.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_activity_whitetigerforest_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(386.0, 442.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_rogue_11_outfloor_sort" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3324.0, 780.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_activity_whitetigerforest_qiongqi" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2978.0, 402.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_08_activity_whitetigerforest_mask" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(3075.0, 649.0)
+texture = ExtResource("7")
+centered = false

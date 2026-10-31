@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_5_pve_bg.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_5_pve_bron_bg.png" id="2"]
+
+[node name="ActivityJuezhen5Sociaty" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_juezhen_5_pve_bg" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(163.0, 113.0)
+scale = Vector2(1.51, 1.51)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_activity_juezhen_5_pve_bron_bg" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(145.0, 2292.0)
+texture = ExtResource("2")
+centered = false

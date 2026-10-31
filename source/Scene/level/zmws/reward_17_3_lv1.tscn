@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_17_2_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_17_2_background_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_17_2_background_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_17_2_background_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_17_2_rock.png" id="5"]
+
+[node name="Reward173Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_reward_17_2_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_reward_17_2_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1818.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_reward_17_2_background_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1024.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_reward_17_2_background_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1818.0, 1024.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2185.0, 642.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2276.0, 645.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2228.0, 576.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2229.0, 657.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_08_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1262.0, 642.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_09_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1353.0, 645.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_10_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1305.0, 576.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_11_reward_17_2_rock" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1306.0, 657.0)
+texture = ExtResource("5")
+centered = false

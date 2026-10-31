@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sevenstardisaster_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/mountrace_item1.png" id="2"]
+
+[node name="SevenstardisasterTestscene2" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_85_0_8" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.8)
+
+[node name="L_00_sevenstardisaster_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_85_0_8"]
+position = Vector2(-155.0, 300.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(753.0, 432.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(998.0, 432.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1243.0, 432.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1487.0, 432.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1732.0, 432.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(752.0, 598.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(997.0, 598.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1242.0, 598.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1486.0, 598.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1731.0, 598.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(753.0, 763.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(998.0, 763.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_13_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1243.0, 763.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1487.0, 763.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_15_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1732.0, 763.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_16_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(752.0, 930.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_17_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(997.0, 930.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_18_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1242.0, 930.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_19_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1486.0, 930.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_20_mountrace_item1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1731.0, 930.0)
+texture = ExtResource("2")
+centered = false

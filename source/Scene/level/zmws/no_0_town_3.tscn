@@ -1,0 +1,117 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_middleground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_ground_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_ground_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_ground_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_ground_4.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_paihangbang.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_paihangbangzhi.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_shop_1.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_shop_2.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_shop_3.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_renwulan.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_xuanshangzhi.png" id="13"]
+
+[node name="No0Town3" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_no_0_town_3_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_75_0_6" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.75, 0.6)
+
+[node name="L_01_no_0_town_3_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_75_0_6"]
+position = Vector2(-498.0, 365.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_0_town_3_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_75_0_6"]
+position = Vector2(683.0, 365.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_no_0_town_3_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_75_0_6"]
+position = Vector2(1864.0, 365.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_no_0_town_3_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_75_0_6"]
+position = Vector2(3045.0, 365.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_no_0_town_3_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_75_0_6"]
+position = Vector2(4226.0, 365.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_06_no_0_town_3_ground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 47.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_no_0_town_3_ground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1213.0, 73.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_08_no_0_town_3_ground_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2426.0, 331.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_09_no_0_town_3_ground_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3639.0, 334.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_10_no_0_town_3_paihangbang" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1864.0, 646.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_11_no_0_town_3_paihangbangzhi" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1914.0, 677.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_12_no_0_town_3_shop_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3048.0, 792.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_13_no_0_town_3_shop_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3128.0, 776.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_14_no_0_town_3_shop_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3744.0, 720.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_15_no_0_town_3_renwulan" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1525.0, 649.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_16_no_0_town_3_xuanshangzhi" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1593.0, 721.0)
+texture = ExtResource("13")
+centered = false

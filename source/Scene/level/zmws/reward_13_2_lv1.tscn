@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130501_bg_2.png" id="1"]
+
+[node name="Reward132Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_130501_bg_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-169.42, -380.85)
+texture = ExtResource("1")
+centered = false

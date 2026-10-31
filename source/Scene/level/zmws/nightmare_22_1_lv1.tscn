@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_05.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_06.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_07.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_08.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_09.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bg_01_10.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_mogu1.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_mogu2.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bossmogu.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_22_1_bosstree.png" id="14"]
+
+[node name="Nightmare221Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_nightmare_22_1_bg_01_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2114.0, 7700.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_nightmare_22_1_bg_01_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4162.0, 7700.0)
+texture = ExtResource("2")
+centered = false
+z_index = -2
+
+[node name="L_02_nightmare_22_1_bg_01_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6210.0, 7700.0)
+texture = ExtResource("3")
+centered = false
+z_index = -2
+
+[node name="L_03_nightmare_22_1_bg_01_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8258.0, 7700.0)
+texture = ExtResource("4")
+centered = false
+z_index = -2
+
+[node name="L_04_nightmare_22_1_bg_01_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10306.0, 7700.0)
+texture = ExtResource("5")
+centered = false
+z_index = -2
+
+[node name="L_05_nightmare_22_1_bg_01_06" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2114.0, 8724.0)
+texture = ExtResource("6")
+centered = false
+z_index = -2
+
+[node name="L_06_nightmare_22_1_bg_01_07" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4162.0, 8724.0)
+texture = ExtResource("7")
+centered = false
+z_index = -2
+
+[node name="L_07_nightmare_22_1_bg_01_08" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6210.0, 8724.0)
+texture = ExtResource("8")
+centered = false
+z_index = -2
+
+[node name="L_08_nightmare_22_1_bg_01_09" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8258.0, 8724.0)
+texture = ExtResource("9")
+centered = false
+z_index = -2
+
+[node name="L_09_nightmare_22_1_bg_01_10" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10306.0, 8724.0)
+texture = ExtResource("10")
+centered = false
+z_index = -2
+
+[node name="L_10_nightmare_22_1_mogu1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2104.0, 8150.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_nightmare_22_1_mogu2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3962.0, 8150.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_12_nightmare_22_1_bossmogu" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3067.0, 8337.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_13_boss" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5707.0, 7625.0)
+texture = ExtResource("14")
+centered = false

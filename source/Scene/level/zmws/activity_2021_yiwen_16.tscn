@@ -1,0 +1,264 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_12.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_11.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_10.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_09.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_06.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_05.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_04.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_03.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_backgrounds_1_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_01.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_02.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_03.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_04.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_05.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_07.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_08.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_09.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_10.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_11.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_12.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_floors_1_06.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_8.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_6.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_7.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_2.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_4.png" id="27"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_futai2.png" id="28"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen16_stone.png" id="29"]
+
+[node name="Activity2021Yiwen16" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_yiwen16_backgrounds_1_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10057.0, 2725.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_yiwen16_backgrounds_1_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8097.0, 2614.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_yiwen16_backgrounds_1_10" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6071.0, 2614.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_yiwen16_backgrounds_1_09" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5451.0, 2610.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_yiwen16_backgrounds_1_06" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10121.0, 606.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_yiwen16_backgrounds_1_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8096.0, 606.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_yiwen16_backgrounds_1_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6070.0, 606.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_yiwen16_backgrounds_1_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4045.0, 606.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_yiwen16_backgrounds_1_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2020.0, 606.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_yiwen16_backgrounds_1_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-5.0, 606.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_10_yiwen16_floors_1_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-4.0, 1742.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_yiwen16_floors_1_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2021.0, 998.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_12_yiwen16_floors_1_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4046.0, 1004.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_13_yiwen16_floors_1_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6071.0, 1358.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_14_yiwen16_floors_1_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8097.0, 1369.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_15_yiwen16_floors_1_07" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-4.0, 2555.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_16_yiwen16_floors_1_08" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2021.0, 2564.0)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_17_yiwen16_floors_1_09" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4046.0, 2564.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_18_yiwen16_floors_1_10" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6071.0, 2564.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_19_yiwen16_floors_1_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8097.0, 2564.0)
+texture = ExtResource("20")
+centered = false
+
+[node name="L_20_yiwen16_floors_1_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10121.0, 2564.0)
+texture = ExtResource("21")
+centered = false
+
+[node name="L_21_yiwen16_floors_1_06" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10122.0, 2268.0)
+texture = ExtResource("22")
+centered = false
+
+[node name="L_26_rogue_1_decorate_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5590.0, 1224.0)
+texture = ExtResource("24")
+centered = false
+
+[node name="L_27_rogue_1_decorate_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3614.0, 1335.0)
+texture = ExtResource("24")
+centered = false
+
+[node name="L_28_rogue_1_decorate_6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7808.0, 1596.0)
+texture = ExtResource("24")
+centered = false
+
+[node name="L_29_rogue_1_decorate_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5466.0, 1705.0)
+texture = ExtResource("25")
+centered = false
+
+[node name="L_30_rogue_1_decorate_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4023.0, 1699.0)
+texture = ExtResource("25")
+centered = false
+
+[node name="L_31_rogue_1_decorate_7" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3105.0, 1679.0)
+texture = ExtResource("25")
+centered = false
+
+[node name="L_32_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2720.0, 1691.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_33_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4897.0, 1677.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_34_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2307.0, 1427.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_35_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4367.0, 1414.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_36_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2202.0, 1695.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_37_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5171.0, 1414.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_38_rogue_1_decorate_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8425.0, 1688.0)
+texture = ExtResource("26")
+centered = false
+
+[node name="L_39_rogue_1_decorate_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4410.0, 1345.0)
+texture = ExtResource("27")
+centered = false
+
+[node name="L_40_rogue_1_decorate_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(697.0, 1614.0)
+texture = ExtResource("27")
+centered = false
+
+[node name="L_41_rogue_1_decorate_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7505.0, 1228.0)
+texture = ExtResource("27")
+centered = false
+
+[node name="L_42_yiwen16_futai2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6625.0, 1664.0)
+texture = ExtResource("28")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_22_1_1" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(3690.0, 922.0)
+texture = ExtResource("23")
+centered = false
+
+[node name="L_23_1_2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(3645.0, 1657.0)
+texture = ExtResource("23")
+centered = false
+
+[node name="L_24_1_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(6469.0, 3494.0)
+texture = ExtResource("23")
+centered = false
+
+[node name="L_25_1_4" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(6583.0, 3493.0)
+texture = ExtResource("23")
+centered = false
+
+[node name="L_43_yiwen16_stone" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(8940.0, 2822.0)
+texture = ExtResource("29")
+centered = false
+
+[node name="L_44_yiwen16_stone" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(9087.0, 2804.0)
+texture = ExtResource("29")
+centered = false

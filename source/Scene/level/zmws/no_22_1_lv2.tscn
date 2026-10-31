@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_1_background.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_1_midbackground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_1_floor_04.png" id="3"]
+
+[node name="No221Lv2" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_22_1_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6150.0, 6823.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_no_22_1_midbackground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5964.0, 7010.0)
+texture = ExtResource("2")
+centered = false
+z_index = -1
+
+[node name="L_02_no_22_1_floor_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5966.0, 6822.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1

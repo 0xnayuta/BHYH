@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_09_ground_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_09_ground_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_door_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_movefloor_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_09_mask_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_09_mask_03.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_23_combat_09_mask_01.png" id="7"]
+
+[node name="Rogue22Combat9Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_23_combat_09_ground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 100.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_23_combat_09_ground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1124.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_23_combat_door_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(978.0, 704.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_23_combat_door_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(393.0, 709.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_rogue_23_combat_movefloor_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(152.0, 921.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_rogue_23_combat_09_mask_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(972.0, 482.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_rogue_23_combat_09_mask_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(281.0, 474.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_07_rogue_23_combat_09_mask_01" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(983.0, 754.0)
+texture = ExtResource("7")
+centered = false

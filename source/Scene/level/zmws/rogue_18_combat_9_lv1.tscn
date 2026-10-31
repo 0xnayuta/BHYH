@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_7_background_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_7_background_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_01_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_01_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_02.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_03.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_combat_9_road_04.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_18_dizuo2.png" id="9"]
+
+[node name="Rogue18Combat9Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_18_combat_7_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1000.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_18_combat_7_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_18_combat_9_road_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 576.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_18_combat_9_road_01_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1728.0, 403.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_18_combat_9_road_01_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 403.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_18_combat_9_road_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 159.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_18_combat_9_road_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1280.0, 159.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_rogue_18_combat_9_road_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(709.0, 403.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_rogue_18_dizuo2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(53.0, 351.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_rogue_18_dizuo2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1813.0, 359.0)
+texture = ExtResource("9")
+centered = false

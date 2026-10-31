@@ -1,0 +1,433 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_farvision.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_visionground_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_visionground_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_5.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_6.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_7.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_8.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_9.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_ground_2.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_ground_1.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_10.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_11.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_wall_4.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_ground_4.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_ground_3.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_object_1.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_2021_yiwen_19_object_2.png" id="19"]
+
+[node name="Activity2021Yiwen19" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_98_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.98, 0.7)
+
+[node name="L_00_activity_2021_yiwen_19_farvision" type="Sprite2D" parent="Parallax_0_L1_spd_0_98_0_7"]
+position = Vector2(-320.0, 0.0)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_49_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19035.0, 410.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_50_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19058.0, 456.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_51_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19060.0, 504.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_52_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19017.0, 368.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_53_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19018.0, 323.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_54_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19025.0, 269.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_55_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19031.0, 218.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_56_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19032.0, 166.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_57_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19024.0, 111.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_58_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19020.0, 59.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_59_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19027.0, -10.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_60_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19837.0, 862.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_61_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19835.0, 928.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_62_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19832.0, 785.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_63_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19827.0, 712.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_64_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19822.0, 642.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_65_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19837.0, 561.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_66_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19838.0, 494.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_67_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20688.0, 427.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_68_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20684.0, 493.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_69_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20656.0, 343.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_70_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20659.0, 254.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_71_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20654.0, 193.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_72_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20660.0, 123.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_73_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20659.0, 60.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_74_6_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19181.0, 342.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_75_6_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(19980.0, 558.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_76_6_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(20810.0, 335.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_77_7_1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(22663.0, 330.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_78_7_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(22653.0, 457.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_79_7_3" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(22653.0, 599.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3626.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3626.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7252.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7252.0, 769.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(10878.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(10878.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_09_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14504.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(14504.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_11_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(18130.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(18130.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_13_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21756.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(21756.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_15_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(25382.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_16_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(25382.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_17_activity_2021_yiwen_19_visionground_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(29008.0, -160.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_18_activity_2021_yiwen_19_visionground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(29008.0, 768.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_19_1_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2912.0, 352.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_20_1_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2240.0, -128.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_21_1_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2240.0, 736.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_22_2_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4039.0, -10.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_23_2_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4498.0, 1120.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_24_2_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5003.0, -10.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_25_2_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5846.0, 0.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_26_2_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5462.0, 1120.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_27_2_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6477.0, -17.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_28_3_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(8096.0, 320.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_29_3_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9358.0, 290.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_30_3_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9406.0, 946.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_31_3_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(9406.0, 136.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_32_4_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(11520.0, 0.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_33_4_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(12032.0, 620.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_34_5_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16160.0, 288.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_35_5_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16160.0, 576.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_36_5_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16798.0, 927.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_37_5_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(16832.0, 160.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_38_6_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19877.0, 443.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_39_6_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19072.0, -192.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_40_6_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(20701.0, -197.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_41_6_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19072.0, 864.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_42_6_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(20704.0, 864.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_43_6_6" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(19872.0, 192.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_44_7_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(22624.0, 288.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_45_7_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24000.0, 736.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_46_7_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(24000.0, -192.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_47_8_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(26048.0, 0.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_48_8_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(26208.0, 672.0)
+texture = ExtResource("17")
+centered = false

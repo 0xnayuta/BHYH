@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_20_treasure_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_7_treasure_1_choose.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_20_combat_zhuzi.png" id="3"]
+
+[node name="Rogue19Treasure3Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_20_treasure_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-100.0, 145.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_7_treasure_1_choose" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1257.0, 727.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_7_treasure_1_choose" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1545.0, 727.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_rogue_20_combat_zhuzi" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1132.0, 385.0)
+texture = ExtResource("3")
+centered = false

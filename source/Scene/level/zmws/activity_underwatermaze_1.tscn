@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_4.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_door.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_5.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ground_6.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/underwatermaze_ball.png" id="8"]
+
+[node name="ActivityUnderwatermaze1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_underwatermaze_ground_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-34.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_underwatermaze_ground_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1951.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_underwatermaze_ground_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3951.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_underwatermaze_ground_4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5951.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_underwatermaze_door" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8902.0, 94.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_underwatermaze_ground_5" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7951.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_boss" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(9951.0, -39.0)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_underwatermaze_ball" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(950.0, 585.0)
+texture = ExtResource("8")
+centered = false
+z_index = 3
+
+[node name="L_08_underwatermaze_ball" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2924.0, 561.0)
+texture = ExtResource("8")
+centered = false
+z_index = 3
+
+[node name="L_09_underwatermaze_ball" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5294.0, 568.0)
+texture = ExtResource("8")
+centered = false
+z_index = 3
+
+[node name="L_10_underwatermaze_ball" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6190.0, 564.0)
+texture = ExtResource("8")
+centered = false
+z_index = 3

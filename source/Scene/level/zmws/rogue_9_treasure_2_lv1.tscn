@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_midground_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_midground_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_treasure_1_ground_1_lv1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_stairs_a_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_9_stairs_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_7_treasure_1_choose2.png" id="7"]
+
+[node name="Rogue9Treasure2Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.2)
+
+[node name="L_00_rogue_9_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_2"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_85_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.3)
+
+[node name="L_01_rogue_9_midground_01" type="Sprite2D" parent="Parallax_1_L2_spd_0_85_0_3"]
+position = Vector2(-464.0, 144.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_9_midground_02" type="Sprite2D" parent="Parallax_1_L2_spd_0_85_0_3"]
+position = Vector2(717.0, 262.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_rogue_9_treasure_1_ground_1_lv1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 92.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(126.0, 799.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(294.0, 799.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(470.0, 798.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(642.0, 798.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_08_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(818.0, 796.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_09_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1004.0, 802.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_10_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1194.0, 799.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_11_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1372.0, 798.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_12_rogue_9_stairs_a_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1544.0, 794.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_13_rogue_9_stairs_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-20.0, 796.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_14_rogue_7_treasure_1_choose2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1000.0, 728.0)
+texture = ExtResource("7")
+centered = false

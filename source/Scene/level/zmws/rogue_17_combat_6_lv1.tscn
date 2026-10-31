@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_combat_6_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_combat_6_background_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_combat_6_floor_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_combat_6_floor_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_futai9.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_futai8.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_futai6.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_stone.png" id="8"]
+
+[node name="Rogue17Combat6Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_17_combat_6_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-5.0, 62.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_17_combat_6_background_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1695.0, 62.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_17_combat_6_floor_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1694.0, 726.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_17_combat_6_floor_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-6.0, 61.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_17_futai9" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2350.0, 737.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_17_futai8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(240.0, 834.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_17_futai8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1839.0, 699.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_07_rogue_17_futai6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2028.0, 672.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_rogue_17_futai6" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2029.0, 647.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_rogue_17_stone" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1139.0, 925.0)
+texture = ExtResource("8")
+centered = false

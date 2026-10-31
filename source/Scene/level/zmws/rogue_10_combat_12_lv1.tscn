@@ -1,0 +1,161 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_midground_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_4.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_5.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_12_6.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_stairs_1.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_stairs_2.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_stairs_3.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_stairs_4.png" id="12"]
+
+[node name="Rogue10Combat12Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.1)
+
+[node name="L_00_rogue_10_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_1"]
+position = Vector2(0.0, 362.0)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_85_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.2)
+
+[node name="L_01_rogue_10_midground_01" type="Sprite2D" parent="Parallax_1_L2_spd_0_85_0_2"]
+position = Vector2(0.0, 2310.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_10_midground_01" type="Sprite2D" parent="Parallax_1_L2_spd_0_85_0_2"]
+position = Vector2(1677.0, 2310.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_rogue_10_midground_01" type="Sprite2D" parent="Parallax_1_L2_spd_0_85_0_2"]
+position = Vector2(3354.0, 2310.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_rogue_10_combat_12_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-19.0, 193.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_rogue_10_combat_12_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1930.0, 298.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_rogue_10_combat_12_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-19.0, 1727.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_rogue_10_combat_12_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1930.0, 1573.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_08_rogue_10_combat_12_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-19.0, 3345.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_rogue_10_combat_12_6" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1930.0, 3345.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_10_rogue_10_stairs_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2514.0, 640.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_11_rogue_10_stairs_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2266.0, 1905.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_12_rogue_10_stairs_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2220.0, 1527.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_13_rogue_10_stairs_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1717.0, 1036.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_14_rogue_10_stairs_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1521.0, 2528.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_15_rogue_10_stairs_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1753.0, 1263.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_16_rogue_10_stairs_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1969.0, 2371.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_17_rogue_10_stairs_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3194.0, 3087.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_18_rogue_10_stairs_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2755.0, 3977.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_19_rogue_10_stairs_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3141.0, 3980.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_20_rogue_10_stairs_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3042.0, 4522.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_21_rogue_10_stairs_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2354.0, 3975.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_22_rogue_10_stairs_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2682.0, 3275.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_23_rogue_10_stairs_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1746.0, 3843.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_24_rogue_10_stairs_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1306.0, 4003.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_25_rogue_10_stairs_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2994.0, 3467.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_26_rogue_10_stairs_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2930.0, 4301.0)
+texture = ExtResource("12")
+centered = false

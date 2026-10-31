@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1508_01_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1508_01_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15004.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1511_10.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15007.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15008.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15006.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15001.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1508_04.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1508_02_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1508_02_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_15foxiangqiangbi.png" id="12"]
+
+[node name="Rogue15Combat8Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_1508_01_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(184.0, 16.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_1508_01_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1684.0, 16.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_15004" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(935.0, 90.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_1511_10" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(704.0, 218.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_15007" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1242.0, 62.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_15008" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1784.0, 65.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_15006" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2217.0, 109.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_rogue_15001" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2511.0, 190.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_rogue_1508_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(330.0, 712.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_rogue_1508_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(330.0, 1002.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_10_rogue_1508_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2790.0, 712.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_11_rogue_1508_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2791.0, 1002.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_12_rogue_1508_02_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(724.0, 331.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_13_rogue_1508_02_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1733.0, 331.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_14_rogue_15foxiangqiangbi" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(939.0, 947.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_15_rogue_15foxiangqiangbi" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2303.0, 955.0)
+texture = ExtResource("12")
+centered = false

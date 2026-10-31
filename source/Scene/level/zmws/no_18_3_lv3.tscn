@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180301_farbg.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180301_bg_05.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180301_bg_04.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180301_door2.png" id="4"]
+
+[node name="No183Lv3" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_180301_farbg" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5060.0, -1.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_180301_bg_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6768.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_180301_bg_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5076.0, 0.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_180301_door2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(6413.0, 1.0)
+texture = ExtResource("4")
+centered = false

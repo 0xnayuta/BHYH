@@ -1,0 +1,243 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_background_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_middleground_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_middleground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_iceblock_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_iceblock_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_combat_ground_8_1_lv1.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_combat_ground_8_1_lv1_02.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_iceblock_1.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_water_1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_8_water_2.png" id="11"]
+
+[node name="Rogue8Combat8Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_85_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.2)
+
+[node name="L_00_rogue_8_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_85_0_2"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_8_background_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_85_0_2"]
+position = Vector2(0.0, 938.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_7_1_0" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 1.0)
+
+[node name="L_02_rogue_8_middleground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_1_0"]
+position = Vector2(-1.0, 837.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_2_L2_spd_0_8_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.1)
+
+[node name="L_03_rogue_8_middleground_1" type="Sprite2D" parent="Parallax_2_L2_spd_0_8_0_1"]
+position = Vector2(0.0, 406.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_3_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_rogue_8_iceblock_3" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(513.0, 717.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(690.0, 717.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_8_combat_ground_8_1_lv1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(0.0, 244.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_rogue_8_combat_ground_8_1_lv1_02" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1200.0, 244.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(888.0, 261.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1018.0, 263.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_10_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1162.0, 260.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_11_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1260.0, 265.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_12_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1324.0, 264.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_13_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1343.0, 260.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_14_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1930.0, 259.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_15_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1990.0, 257.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_16_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2083.0, 267.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_17_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2232.0, 265.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_18_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1927.0, 244.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_19_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2215.0, 244.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_20_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1352.0, 244.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_21_rogue_8_iceblock_3" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(888.0, 244.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_22_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1066.0, 244.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_23_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1557.0, 577.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_24_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1667.0, 579.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_25_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1825.0, 585.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_26_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1962.0, 584.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_27_rogue_8_iceblock_3" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1547.0, 560.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_28_rogue_8_iceblock_1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2104.0, 563.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_29_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1724.0, 560.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_30_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1812.0, 562.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_31_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(-189.0, 493.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_32_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(39.0, 490.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_33_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(159.0, 487.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_34_rogue_8_iceblock_1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(356.0, 474.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_35_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(64.0, 473.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_36_rogue_8_iceblock_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(-224.0, 473.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_4_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_37_rogue_8_water_1" type="Sprite2D" parent="Parallax_4_L4"]
+position = Vector2(-12.0, 796.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_38_rogue_8_water_1" type="Sprite2D" parent="Parallax_4_L4"]
+position = Vector2(1620.0, 802.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_39_rogue_8_water_2" type="Sprite2D" parent="Parallax_4_L4"]
+position = Vector2(-336.0, 838.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_40_rogue_8_water_2" type="Sprite2D" parent="Parallax_4_L4"]
+position = Vector2(808.0, 842.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_41_rogue_8_water_2" type="Sprite2D" parent="Parallax_4_L4"]
+position = Vector2(1996.0, 838.0)
+texture = ExtResource("11")
+centered = false

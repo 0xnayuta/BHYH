@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_bg.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_bg_battle_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_bg_battle_5.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floorg_battle_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floorg_battle_3.png" id="5"]
+
+[node name="SacredtowerBattle6" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_9" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.9)
+
+[node name="L_00_sacredtower_bg" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_9"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.45, 1.45)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_sacredtower_bg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_sacredtower_bg_battle_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1800.0, 0.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1650.0, 705.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(977.67, 230.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2305.0, 230.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_sacredtower_floorg_battle_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(185.0, 740.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_sacredtower_floorg_battle_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2810.0, 740.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_08_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(340.33, 230.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1628.0, 230.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_10_sacredtower_floorg_battle_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2943.33, 230.0)
+texture = ExtResource("4")
+centered = false

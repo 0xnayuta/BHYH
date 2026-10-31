@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_bg_01_04.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_bg_01_03.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_bg_01_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_bg_01_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_longtou_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_longtou_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_pingtai_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_pingtai_01.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_longwei_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160501_longwei_01.png" id="10"]
+
+[node name="No165Lv3" type="Node2D"]
+
+[node name="Parallax_0_L2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_160501_bg_01_04" type="Sprite2D" parent="Parallax_0_L2"]
+position = Vector2(2332.0, 230.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160501_bg_01_03" type="Sprite2D" parent="Parallax_0_L2"]
+position = Vector2(1283.0, 230.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_160501_bg_01_02" type="Sprite2D" parent="Parallax_0_L2"]
+position = Vector2(235.0, 230.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_160501_bg_01_01" type="Sprite2D" parent="Parallax_0_L2"]
+position = Vector2(-814.0, 230.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_160501_longtou_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2525.0, 917.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_160501_longtou_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(785.0, 917.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_160501_pingtai_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2056.0, 1408.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_160501_pingtai_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(618.0, 1408.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_08_160501_longwei_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(2042.0, 1632.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_160501_longwei_01" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(735.0, 1631.0)
+texture = ExtResource("10")
+centered = false

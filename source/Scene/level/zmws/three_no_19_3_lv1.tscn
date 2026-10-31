@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_farbackgroud.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background1_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background1_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background1_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background1_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background2_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background2_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background2_03.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background2_04.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background3_03.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background3_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_background3_01.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_floor1_02.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/190301_floor1_01.png" id="14"]
+
+[node name="ThreeNo193Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_85_0_9" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.9)
+
+[node name="L_00_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_0_L1_spd_0_85_0_9"]
+position = Vector2(-452.0, 3000.0)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_190301_background1_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-45.0, 3854.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_190301_background1_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1994.0, 3854.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_190301_background1_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-45.0, 4801.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_190301_background1_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1993.0, 4799.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_190301_background2_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5408.0, 4550.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_190301_background2_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6040.0, 3720.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_190301_background2_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4031.0, 4732.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_190301_background2_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6040.0, 4732.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_boss3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8049.0, 4923.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_10_boss2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8048.0, 3899.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_boss1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8048.0, 3032.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_12_190301_floor1_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(3282.0, 4756.0)
+texture = ExtResource("13")
+centered = false
+z_index = 4
+
+[node name="L_13_190301_floor1_01" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(2054.0, 4762.0)
+texture = ExtResource("14")
+centered = false
+z_index = 4

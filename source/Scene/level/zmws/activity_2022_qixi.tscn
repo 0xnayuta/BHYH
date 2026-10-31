@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/common_goldchest_broken_2.png" id="1"]
+
+[node name="Activity2022Qixi" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_1_0_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.1)
+
+[node name="L_00_common_goldchest_broken_2" type="Sprite2D" parent="Parallax_0_L1_spd_1_0_0_1"]
+position = Vector2(-656.0, 576.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_1_0_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.3)
+
+[node name="L_01_common_goldchest_broken_2" type="Sprite2D" parent="Parallax_1_L2_spd_1_0_0_3"]
+position = Vector2(-656.0, 576.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_02_common_goldchest_broken_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-656.0, 576.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_3_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_common_goldchest_broken_2" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(-656.0, 576.0)
+texture = ExtResource("1")
+centered = false

@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_7_3_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_7_3_middleground_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_7_3_ground_2.png" id="3"]
+
+[node name="ThreeNo73Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_no_7_3_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, -106.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_8_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.5)
+
+[node name="L_01_no_7_3_middleground_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_5"]
+position = Vector2(-236.0, -288.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_02_no_7_3_ground_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 187.0)
+texture = ExtResource("3")
+centered = false

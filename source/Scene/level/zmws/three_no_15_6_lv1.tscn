@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/150601_bg_1.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/150601_bg_4.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/150601_bg_3.jpg" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/150601_bg_2.jpg" id="4"]
+
+[node name="ThreeNo156Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_bg1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_bg2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_bg3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_bg4" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("4")
+centered = false

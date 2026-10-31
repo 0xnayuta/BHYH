@@ -1,0 +1,240 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_farstage_night.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_midstage_night.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_night_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_night_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_night_03.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_night_04.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_farstage_day.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_midstage_day.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_day_01.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_day_02.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_day_03.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/210101_frontstage_day_04.png" id="12"]
+
+[node name="ThreeNo212Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_95_0_8" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.8)
+
+[node name="L_00_210101_farstage_night" type="Sprite2D" parent="Parallax_0_L1_spd_0_95_0_8"]
+position = Vector2(-80.0, 800.0)
+scale = Vector2(1.28, 1.28)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L1_spd_0_95_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.7)
+
+[node name="L_21_210101_farstage_day" type="Sprite2D" parent="Parallax_1_L1_spd_0_95_0_7"]
+position = Vector2(-80.0, 800.0)
+scale = Vector2(1.28, 1.28)
+texture = ExtResource("7")
+centered = false
+
+[node name="Parallax_2_L2_spd_0_85_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.85, 0.5)
+
+[node name="L_01_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(-100.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(412.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(924.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(1436.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(1948.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(2459.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(2971.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(3483.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(3995.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(4507.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(5019.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(5531.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_13_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(6043.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(6554.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_15_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(7066.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_16_210101_midstage_night" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(7578.0, 1239.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_22_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(-100.0, 1239.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_23_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(412.0, 1239.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_24_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(1436.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_25_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(924.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_26_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(1948.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_27_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(2460.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_28_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(2972.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_29_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(3484.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_30_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(3996.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_31_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(4508.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_32_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(5020.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_33_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(5532.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_34_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(6556.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_35_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(7068.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_36_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(7580.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_37_210101_midstage_day" type="Sprite2D" parent="Parallax_2_L2_spd_0_85_0_5"]
+position = Vector2(6044.0, 1240.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="Parallax_3_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_17_210101_frontstage_night_01" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(0.0, 1254.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_18_210101_frontstage_night_02" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2048.0, 1258.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_19_210101_frontstage_night_03" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(4096.0, 1255.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_20_210101_frontstage_night_04" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(6144.0, 736.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_38_210101_frontstage_day_01" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(0.0, 1266.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_39_210101_frontstage_day_02" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2048.0, 1264.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_40_210101_frontstage_day_03" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(4095.0, 1256.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_41_210101_frontstage_day_04" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(6143.0, 736.0)
+texture = ExtResource("12")
+centered = false

@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_13years_chengxu_bg_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_13years_chengxu_bg_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_13years_chengxu_dianxian_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_13years_chengxu_dianxian_02.png" id="4"]
+
+[node name="Activity13yearsTudou1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_13years_chengxu_bg_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(30.0, -314.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_activity_13years_chengxu_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1230.0, -314.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_13years_chengxu_dianxian_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(21.0, 869.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_13years_chengxu_dianxian_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1221.0, 869.0)
+texture = ExtResource("4")
+centered = false

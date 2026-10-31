@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/tianting_warriors_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/tianting_warriors_midground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/tianting_warriors_ground.png" id="3"]
+
+[node name="TiantingWarriors4" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_tianting_warriors_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_tianting_warriors_midground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-14.0, 309.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_tianting_warriors_ground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1420.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1

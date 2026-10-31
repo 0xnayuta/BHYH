@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_06.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_dianti.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_02_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_furai_small.png" id="5"]
+
+[node name="ThreeNo164Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_160401_bg_06" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(100.0, 1086.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160401_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(100.0, 84.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_160401_dianti" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1630.0, 1800.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1
+
+[node name="L_04_160401_furai_small" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1342.0, 570.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_160401_furai_small" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(483.0, 570.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_160401_bg_02_02" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(100.0, 857.0)
+texture = ExtResource("4")
+centered = false

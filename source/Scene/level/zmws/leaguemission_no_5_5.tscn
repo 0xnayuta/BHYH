@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_1_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_5_5_ground_5.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_5_5_ground_6.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_5_5_ground_11.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_5_5_ground_12.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_5_5_dask.png" id="6"]
+
+[node name="LeaguemissionNo55" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_no_4_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_5_5_ground_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, -520.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_5_5_ground_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(816.0, -520.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_5_5_ground_11" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 504.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_5_5_ground_12" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(816.0, 504.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_5_5_dask" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-136.0, 800.0)
+texture = ExtResource("6")
+centered = false
+z_index = 2

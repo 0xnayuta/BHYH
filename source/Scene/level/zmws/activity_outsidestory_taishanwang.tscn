@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_6_2_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_6_2_middleground_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_6_2_middleground_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_6_2_ground_9.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_6_2_ground_8.png" id="5"]
+
+[node name="ActivityOutsidestoryTaishanwang" type="Node2D"]
+
+[node name="Parallax_0_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_6_2_background" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(-2.0, 320.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+z_index = 1
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_6_2_middleground_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(233.0, 435.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_6_2_middleground_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1278.0, 449.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_6_2_ground_9" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(236.0, 638.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_6_2_ground_8" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1253.0, 637.0)
+texture = ExtResource("5")
+centered = false

@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_3_shop_2.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_5_1_bg1.png" id="2"]
+
+[node name="No2051Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_7_1_0" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 1.0)
+
+[node name="L_00_no_0_town_3_shop_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_7_1_0"]
+position = Vector2(-206.0, 2500.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_02_no_20_5_1_bg1" type="Sprite2D" parent="Parallax_0_L1_spd_0_7_1_0"]
+position = Vector2(-206.0, 2600.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_1_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_0_town_3_shop_2" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(5229.0, 2468.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_03_no_20_5_1_bg1" type="Sprite2D" parent="Parallax_1_L1"]
+position = Vector2(5229.0, 2468.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+centered = false

@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_farbackgroud.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/reward_19_5_cloud.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_11_3_cloud_2.png" id="3"]
+
+[node name="Reward195Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_96_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.96, 0.7)
+
+[node name="L_01_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(898.0, 1392.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_02_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(2946.0, 1392.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_03_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(4994.0, 1392.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L1_spd_0_98_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.98, 0.7)
+
+[node name="L_00_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_1_L1_spd_0_98_0_7"]
+position = Vector2(-200.0, 0.0)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-158.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1474.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3106.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4738.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6332.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7990.0, 800.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-145.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1487.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3119.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_13_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4751.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6359.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_15_reward_19_5_cloud" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7990.0, -130.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_16_no_11_3_cloud_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(8650.0, 386.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2

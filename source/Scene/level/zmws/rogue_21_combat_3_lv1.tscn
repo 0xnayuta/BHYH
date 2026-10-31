@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_ground_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_ground_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_ground_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_pilar_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_pilar_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_22_combat_3_float.png" id="6"]
+
+[node name="Rogue21Combat3Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_22_combat_3_ground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_22_combat_3_ground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 512.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_22_combat_3_ground_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1024.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_rogue_22_combat_3_pilar_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-61.0, 502.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("4")
+centered = false
+z_index = 2
+
+[node name="L_06_rogue_22_combat_3_pilar_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1411.0, 500.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("5")
+centered = false
+z_index = 2
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_rogue_22_combat_3_pilar_02" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(-61.0, 502.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_22_combat_3_pilar_01" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1411.0, 500.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_rogue_22_combat_3_float" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(442.0, 427.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("6")
+centered = false

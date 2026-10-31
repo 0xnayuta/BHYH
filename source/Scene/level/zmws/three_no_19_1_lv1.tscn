@@ -1,0 +1,155 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_farbackgroud.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_midbackground_04.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_midbackground_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_midbackground_02_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_midbackground_02_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_midbackground_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_7.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_6.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_4.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_5.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_3.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_3_fix.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_3_fix2.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_2.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_floor_5_1.png" id="15"]
+
+[node name="ThreeNo191Lv1" type="Node2D"]
+
+[node name="Parallax_0_L2_spd_0_8_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.4)
+
+[node name="L_01_no_19_1_midbackground_04" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(2493.0, 4491.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_19_1_midbackground_03" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(445.0, 4492.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_19_1_midbackground_02_1" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(2492.0, 2652.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_19_1_midbackground_02_02" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(2493.0, 3672.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_19_1_midbackground_01" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(590.0, 2449.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_no_19_1_midbackground_04" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(5583.0, 4491.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_no_19_1_midbackground_03" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(3535.0, 4492.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_no_19_1_midbackground_02_1" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(5584.0, 2658.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_no_19_1_midbackground_02_02" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(5583.0, 3672.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_10_no_19_1_midbackground_01" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(3680.0, 2449.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_11_no_19_1_midbackground_04" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(8902.0, 4489.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_no_19_1_midbackground_03" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(6854.0, 4490.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_13_no_19_1_midbackground_02_1" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(8903.0, 2649.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_14_no_19_1_midbackground_02_02" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(8902.0, 3670.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_15_no_19_1_midbackground_01" type="Sprite2D" parent="Parallax_0_L2_spd_0_8_0_4"]
+position = Vector2(6999.0, 2449.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9650.0, 1900.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_16_5_7" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11289.0, 3550.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_17_5_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10266.0, 3404.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_18_5_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10627.0, 4428.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_19_5_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9785.0, 3403.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_20_5_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9892.0, 4427.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_21_5_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11289.0, 2526.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_22_5_3fix" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11651.0, 2989.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_23_5_3fix" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.0, 2989.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_24_5_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10265.0, 2380.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_25_5_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9241.0, 2419.0)
+texture = ExtResource("15")
+centered = false

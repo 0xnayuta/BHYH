@@ -1,0 +1,155 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_2_2.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_3_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_1_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_middleground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_middleground_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_2.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_3.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_4.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_5.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_6.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_7.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_8.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_9.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_10.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_11.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_12.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_13.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_14.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_15.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_4_1_background_16.png" id="21"]
+
+[node name="Nightmare42Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_5_0_9" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.9)
+
+[node name="L_02_nightmare_4_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_9"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_1_L1_spd_0_58_0_9" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.58, 0.9)
+
+[node name="L_00_nightmare_4_1_background_2" type="Sprite2D" parent="Parallax_1_L1_spd_0_58_0_9"]
+position = Vector2(1632.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_nightmare_4_1_background_3" type="Sprite2D" parent="Parallax_1_L1_spd_0_58_0_9"]
+position = Vector2(3232.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L2_spd_0_3_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.3, 0.4)
+
+[node name="L_03_nightmare_4_1_middleground_1" type="Sprite2D" parent="Parallax_2_L2_spd_0_3_0_4"]
+position = Vector2(0.0, 399.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_nightmare_4_1_middleground_2" type="Sprite2D" parent="Parallax_2_L2_spd_0_3_0_4"]
+position = Vector2(6543.0, 239.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="Parallax_3_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_nightmare_4_1_middleground_1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(470.0, 399.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_nightmare_4_1_middleground_1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(940.0, 399.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_nightmare_4_1_background_1" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(91.0, 238.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_08_nightmare_4_1_background_2" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1020.0, -52.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_nightmare_4_1_background_3" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2040.0, -52.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_10_nightmare_4_1_background_4" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(3060.0, -52.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_11_nightmare_4_1_background_5" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(4080.0, -52.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_12_nightmare_4_1_background_6" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(5100.0, -52.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_13_nightmare_4_1_background_7" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(6120.0, -52.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_14_nightmare_4_1_background_8" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(7140.0, 308.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_15_nightmare_4_1_background_9" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(0.0, 529.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_16_nightmare_4_1_background_10" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(1020.0, 529.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_17_nightmare_4_1_background_11" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(2040.0, 529.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_18_nightmare_4_1_background_12" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(3060.0, 529.0)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_19_nightmare_4_1_background_13" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(4080.0, 529.0)
+texture = ExtResource("18")
+centered = false
+
+[node name="L_20_nightmare_4_1_background_14" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(5100.0, 529.0)
+texture = ExtResource("19")
+centered = false
+
+[node name="L_21_nightmare_4_1_background_15" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(6120.0, 529.0)
+texture = ExtResource("20")
+centered = false
+
+[node name="L_22_nightmare_4_1_background_16" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(7140.0, 529.0)
+texture = ExtResource("21")
+centered = false

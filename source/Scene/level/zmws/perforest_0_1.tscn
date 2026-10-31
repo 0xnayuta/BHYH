@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_34.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_35.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_36.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_37.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_38.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_43.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_44.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_45.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_46.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_47.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_55.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_56.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_57.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_58.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/per_1_1_ground_1_59.png" id="16"]
+
+[node name="Perforest01" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_96_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.96, 0.7)
+
+[node name="L_00_per_1_1_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(-96.0, -656.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_per_1_1_ground_1_34" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-376.0, -256.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_per_1_1_ground_1_35" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(136.0, -256.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_per_1_1_ground_1_36" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(648.0, -256.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_per_1_1_ground_1_37" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1160.0, -256.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_per_1_1_ground_1_38" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1672.0, -256.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_per_1_1_ground_1_43" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-376.0, 256.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_per_1_1_ground_1_44" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(136.0, 256.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_per_1_1_ground_1_45" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(648.0, 256.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_per_1_1_ground_1_46" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1160.0, 256.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_10_per_1_1_ground_1_47" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1672.0, 256.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_per_1_1_ground_1_55" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-376.0, 768.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_12_per_1_1_ground_1_56" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(136.0, 768.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_13_per_1_1_ground_1_57" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(648.0, 768.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_14_per_1_1_ground_1_58" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1160.0, 768.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_15_per_1_1_ground_1_59" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1672.0, 768.0)
+texture = ExtResource("16")
+centered = false

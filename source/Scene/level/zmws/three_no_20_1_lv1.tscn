@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_2_farbackgroud.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_4_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_4_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_3_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_3_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_20_1_floor5_1.png" id="7"]
+
+[node name="ThreeNo201Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_20_2_farbackgroud" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7076.0, 2504.0)
+scale = Vector2(2.0, 2.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_1_5_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(9406.0, 4464.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_1_5_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(9406.0, 3440.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_1_4_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8896.0, 4103.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_1_4_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8896.0, 4615.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_1_3" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8894.0, 3081.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_1_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6848.0, 2758.0)
+texture = ExtResource("7")
+centered = false

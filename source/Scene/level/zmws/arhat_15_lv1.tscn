@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_1_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_2_background.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_2_floor.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_1_floor_zuo.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_1_floor_you.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/arhat_15_1_floor.png" id="6"]
+
+[node name="Arhat15Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_arhat_15_1_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_arhat_15_2_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1599.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_arhat_15_2_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(410.0, 610.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 370.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 725.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1080.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1435.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1790.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_08_arhat_15_1_floor_zuo" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 2145.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 370.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_10_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 725.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_11_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 1080.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_12_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 1435.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_13_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 1790.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_14_arhat_15_1_floor_you" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1335.0, 2145.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_15_arhat_15_1_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(695.88, 1864.78)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_16_arhat_15_1_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(368.21, 2118.12)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_17_arhat_15_1_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1014.69, 2625.89)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_18_arhat_15_1_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(297.21, 1365.62)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_19_arhat_15_1_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1081.21, 1080.62)
+texture = ExtResource("6")
+centered = false

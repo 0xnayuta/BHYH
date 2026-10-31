@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_float1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_float2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_ground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_ground_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_1_float3.png" id="6"]
+
+[node name="ActivityJuezhen1Confusionzone" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_65_0_98" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.65, 0.98)
+
+[node name="L_00_activity_juezhen_1_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_65_0_98"]
+position = Vector2(0.0, 839.0)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_activity_juezhen_1_float1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2.0, 371.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_juezhen_1_float2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3344.0, 372.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_juezhen_1_ground_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(741.0, 1243.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_activity_juezhen_1_ground_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2008.0, 1243.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2592.0, 1172.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2418.0, 701.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_07_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1283.0, 709.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_08_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(958.0, 1178.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2584.0, 421.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_10_activity_juezhen_1_float3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1075.0, 503.0)
+texture = ExtResource("6")
+centered = false

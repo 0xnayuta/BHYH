@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_farbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_midbackground_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_bossroad2_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/200301_bossroad2_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_3_insidefloor_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_3_insidefloor_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/blackbackground.png" id="8"]
+
+[node name="ActivityOutsidestoryQiuxian1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_200301_farbackground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 13.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_200301_midbackground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-43.0, 13.0)
+texture = ExtResource("2")
+centered = false
+z_index = -1
+
+[node name="L_02_200301_midbackground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(644.0, 13.0)
+texture = ExtResource("3")
+centered = false
+z_index = -1
+
+[node name="L_03_200301_midbackground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1973.0, 142.0)
+texture = ExtResource("3")
+centered = false
+z_index = -1
+
+[node name="L_04_200301_bossroad2_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(170.0, 1079.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_200301_bossroad2_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1194.0, 1079.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_no_22_3_insidefloor_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 2753.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_07_no_22_3_insidefloor_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 2753.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_blackbackground" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3168.0, 288.0)
+texture = ExtResource("8")
+centered = false

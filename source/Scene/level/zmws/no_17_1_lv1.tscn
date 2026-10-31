@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1_05.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1_04.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_backgroud_1_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_futai_small.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_hideroom.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_futai_big.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_zhezhao_1_02.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_zhezhao_1_03.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_zhezhao_1_04.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_zhezhao_1_05.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_gaizi.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_17_1_buchomng.png" id="15"]
+
+[node name="No171Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_1_0_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.3)
+
+[node name="L_00_no_17_1_backgroud_1" type="Sprite2D" parent="Parallax_0_L1_spd_1_0_0_3"]
+position = Vector2(-13.0, 680.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_17_1_backgroud_1_05" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6801.0, 1141.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_17_1_backgroud_1_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5100.0, 1005.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_17_1_backgroud_1_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3398.0, 834.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_17_1_backgroud_1_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1697.0, 766.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_17_1_backgroud_1_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-4.0, 990.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_no_17_1_futai_small" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5316.0, 2004.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_no_17_1_futai_small" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5315.0, 2183.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_no_17_1_futai_small" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3369.0, 2239.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_no_17_1_futai_small" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3387.0, 2083.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_10_no_17_1_futai_small" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2206.0, 1794.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_11_no_17_1_hideroom" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3100.0, 3246.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_12_no_17_1_futai_big" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5465.0, 1858.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_13_no_17_1_futai_big" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5200.0, 1859.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_14_no_17_1_futai_big" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5200.0, 1859.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_19_no_17_1_gaizi" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2228.0, 1510.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_20_no_17_1_buchomng" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(55.0, 1934.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_15_no_17_1_zhezhao_1_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(1696.0, 1521.0)
+texture = ExtResource("10")
+centered = false
+z_index = 2
+
+[node name="L_16_no_17_1_zhezhao_1_03" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(3397.0, 1896.0)
+texture = ExtResource("11")
+centered = false
+z_index = 2
+
+[node name="L_17_no_17_1_zhezhao_1_04" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(5099.0, 1896.0)
+texture = ExtResource("12")
+centered = false
+z_index = 2
+
+[node name="L_18_no_17_1_zhezhao_1_05" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(6800.0, 1953.0)
+texture = ExtResource("13")
+centered = false
+z_index = 2

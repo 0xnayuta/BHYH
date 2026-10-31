@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_1_ground_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_decorate_2_3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_decorate_1_3.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_tower1_back.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_tower1_top.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_watch_tower_1_cover.png" id="7"]
+
+[node name="Rogue20Combat1Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_9_0_9" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.9, 0.9)
+
+[node name="L_00_rogue_21_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_9_0_9"]
+position = Vector2(0.0, 270.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_rogue_21_combat_1_ground_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 506.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_21_decorate_2_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1077.0, 1055.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_21_decorate_1_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1545.0, 942.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_21_tower1_back" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(818.0, 912.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_21_tower1_top" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(831.0, 860.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_06_rogue_21_watch_tower_1_cover" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(819.0, 933.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_rogue_21_tower1_top" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(831.0, 860.0)
+texture = ExtResource("6")
+centered = false

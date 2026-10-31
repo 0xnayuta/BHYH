@@ -1,0 +1,132 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_background_2.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_middleground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_14.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_15.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_23.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_16.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_17.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_24.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_25.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_3_5_ground_26.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_combat_1_ground.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_magma_1.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/playercustomarena_3_1_ground.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/playercustomarena_3_1_ground_02.png" id="14"]
+
+[node name="Playercustomarena31" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.1)
+
+[node name="L_00_no_3_5_background_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_1"]
+position = Vector2(-8.0, 920.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_3_5_background_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_1"]
+position = Vector2(1493.0, 899.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_8_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.2)
+
+[node name="L_02_rogue_6_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_2"]
+position = Vector2(-328.0, 1064.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_rogue_6_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_2"]
+position = Vector2(896.0, 1064.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_rogue_6_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_2"]
+position = Vector2(2120.0, 1064.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_05_no_3_5_ground_14" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-192.0, 0.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_06_no_3_5_ground_15" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(832.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_no_3_5_ground_23" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1632.0, 0.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_08_no_3_5_ground_16" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-192.0, 1024.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_no_3_5_ground_17" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(832.0, 1024.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_10_no_3_5_ground_24" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1632.0, 1024.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_11_no_3_5_ground_25" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2432.0, 0.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_12_no_3_5_ground_26" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2432.0, 1024.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_13_rogue_6_combat_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 1840.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_14_rogue_6_combat_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1632.0, 1840.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_15_rogue_6_magma_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-416.0, 1864.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_16_rogue_6_magma_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(608.0, 1864.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_17_rogue_6_magma_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1632.0, 1864.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_18_rogue_6_magma_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2656.0, 1864.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_19_playercustomarena_3_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 576.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_20_playercustomarena_3_1_ground_02" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1728.0, 576.0)
+texture = ExtResource("14")
+centered = false

@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_16boss_2.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_16boss_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rouge16_sheshen_01_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rouge16_sheshen_01_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_16boss_land_1.png" id="5"]
+
+[node name="Rogue16Boss1Lv3" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_16boss_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1218.0, 3230.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_16boss_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-532.0, 3230.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rouge16_sheshen_01_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-1297.0, 4434.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rouge16_sheshen_01_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-45.0, 4434.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_16boss_land_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2120.0, 4514.0)
+texture = ExtResource("5")
+centered = false

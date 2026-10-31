@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_bg1_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_bg1_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_mid2_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_mid2_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_mid_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_mid_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_front_01.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_pve_front_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_8_stonebg.png" id="10"]
+
+[node name="ActivityJuezhen8Nightmare" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_juezhen_8_pve_bg1_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-446.0, -3.0)
+texture = ExtResource("1")
+centered = false
+z_index = -1
+
+[node name="L_01_activity_juezhen_8_pve_bg1_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1554.0, -3.0)
+texture = ExtResource("2")
+centered = false
+z_index = -1
+
+[node name="L_02_activity_juezhen_8" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-293.0, 4520.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_juezhen_8_pve_mid2_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-449.0, -47.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_activity_juezhen_8_pve_mid2_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1551.0, -47.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_activity_juezhen_8_pve_mid_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-450.0, 70.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_activity_juezhen_8_pve_mid_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1550.0, 185.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_09_activity_juezhen_8_stonebg" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(963.0, 167.0)
+texture = ExtResource("10")
+centered = false
+z_index = -2
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_07_activity_juezhen_8_pve_front_01" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(-461.0, 1485.0)
+texture = ExtResource("8")
+centered = false
+z_index = 1
+
+[node name="L_08_activity_juezhen_8_pve_front_02" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1539.0, 1267.0)
+texture = ExtResource("9")
+centered = false
+z_index = 1

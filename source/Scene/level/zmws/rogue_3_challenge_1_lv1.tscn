@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_middleground_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_3_challenge_1_ground_1_lv1.png" id="3"]
+
+[node name="Rogue3Challenge1Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_96_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.96, 0.7)
+
+[node name="L_00_rogue_3_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(0.0, 200.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_7_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 0.4)
+
+[node name="L_01_rogue_3_middleground_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_7_0_4"]
+position = Vector2(0.0, -216.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_02_rogue_3_challenge_1_ground_1_lv1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("3")
+centered = false

@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_addfloor.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_floor_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_floor_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_floor_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_floor_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_newmogufloor.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_mogufloor2.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_mogufloor1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/220201_zhezhao.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_22_2_mogufloor.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/220201_addfloor2.png" id="11"]
+
+[node name="No222Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_add" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-201.0, 3962.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_no_22_2_floor_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 3962.0)
+texture = ExtResource("2")
+centered = false
+z_index = -2
+
+[node name="L_02_no_22_2_floor_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 3962.0)
+texture = ExtResource("3")
+centered = false
+z_index = -2
+
+[node name="L_03_no_22_2_floor_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4096.0, 3962.0)
+texture = ExtResource("4")
+centered = false
+z_index = -2
+
+[node name="L_04_no_22_2_floor_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6144.0, 3962.0)
+texture = ExtResource("5")
+centered = false
+z_index = -2
+
+[node name="L_05_no_22_2_newmogufloor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5400.0, 5500.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_no_22_2_mogufloor2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6045.0, 5325.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_no_22_2_mogufloor1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4658.0, 5325.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_09_no_22_2_mogufloor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(449.0, 4417.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_10_no_22_2_mogufloor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2102.0, 4311.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_11_220201_addfloor2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1263.0, 4533.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_08_220201_zhezhao" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1470.0, 4764.0)
+texture = ExtResource("9")
+centered = false

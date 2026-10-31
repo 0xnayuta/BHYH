@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_19_1_farbackgroud.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_combat_1_ground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_12_bigfloor.png" id="3"]
+
+[node name="Etherealabyss1" type="Node2D"]
+
+[node name="Parallax_0_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_19_1_farbackgroud" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(-242.03, -118.91)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_rogue_6_combat_1_ground" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-244.0, 740.15)
+texture = ExtResource("2")
+centered = false
+z_index = 1
+
+[node name="L_02_rogue_6_combat_1_ground" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1099.82, 739.23)
+texture = ExtResource("2")
+centered = false
+z_index = 1
+
+[node name="L_03_rogue_12_bigfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1050.0, 600.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1
+
+[node name="L_04_rogue_12_bigfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(350.0, 600.0)
+texture = ExtResource("3")
+centered = false
+z_index = 1

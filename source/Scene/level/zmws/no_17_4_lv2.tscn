@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/170401_boss_2.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/170401_boss_1.png" id="2"]
+
+[node name="No174Lv2" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_boss" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2874.0, 2229.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_boss" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2876.0, 2276.0)
+texture = ExtResource("2")
+centered = false

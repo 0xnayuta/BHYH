@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_middleground_new.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_6_treasure_1_ground_1_lv1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_5_treasure_1_choose.png" id="4"]
+
+[node name="Rogue6Treasure3Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_9_0_2" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.9, 0.2)
+
+[node name="L_00_rogue_6_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_9_0_2"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_3_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.3, 0.1)
+
+[node name="L_01_rogue_6_middleground_new" type="Sprite2D" parent="Parallax_1_L2_spd_0_3_0_1"]
+position = Vector2(-484.0, -70.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_6_middleground_new" type="Sprite2D" parent="Parallax_1_L2_spd_0_3_0_1"]
+position = Vector2(862.0, -70.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_rogue_6_treasure_1_ground_1_lv1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 728.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_rogue_5_treasure_1_choose" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1000.0, 712.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_rogue_5_treasure_1_choose" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1288.0, 712.0)
+texture = ExtResource("4")
+centered = false

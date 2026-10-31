@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_10_1_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_10_1_ground_6.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_10_1_ground_7.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_10_1_ground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_10_1_ground_2.png" id="5"]
+
+[node name="ThreeNo101Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_95" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.95)
+
+[node name="L_00_no_10_1_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_95"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_no_10_1_ground_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-585.0, 1012.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_10_1_ground_7" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1047.0, 1012.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_10_1_ground_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(100.0, 255.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_10_1_ground_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1047.0, 120.0)
+texture = ExtResource("5")
+centered = false

@@ -1,0 +1,209 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_bg_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_bg_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_bg_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_bg_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_boss_bg_03.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_boss_bg_04.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_boss_bg_01.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140101_bg_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140101_story_1.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_bg.jpg" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_10_combat_7_2.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_08.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_09.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_10.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_05.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_06.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_03.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_04.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_01.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_floor_02.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_cable_01.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_cable_02.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_cable_03.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_cable_04.png" id="24"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_lift.png" id="25"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_roof_01.png" id="26"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/140501_roof_02.png" id="27"]
+
+[node name="No145Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_140501_bg_01" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(-606.0, 5625.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_140501_bg_02" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(1267.0, 5626.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_140501_bg_03" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(-607.0, 6749.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_140501_bg_04" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(1268.0, 6750.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_boss_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2172.0, 6676.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_boss_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3421.99, 7104.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_boss_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2172.0, 6465.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_140101_bg_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5260.0, 4194.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8")
+centered = false
+z_index = 2
+
+[node name="L_08_140101_story_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5260.0, 4206.0)
+texture = ExtResource("9")
+centered = false
+z_index = 2
+
+[node name="L_09_130301_bg" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5192.0, 2460.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("10")
+centered = false
+z_index = 2
+
+[node name="L_10_rogue_10_combat_7_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5856.0, 2526.0)
+texture = ExtResource("11")
+centered = false
+z_index = 2
+
+[node name="L_11_140501_floor_08" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 6851.0)
+texture = ExtResource("12")
+centered = false
+z_index = 1
+
+[node name="L_12_140501_floor_09" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1558.0, 6334.0)
+texture = ExtResource("13")
+centered = false
+z_index = 1
+
+[node name="L_13_140501_floor_10" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3116.0, 6334.0)
+texture = ExtResource("14")
+centered = false
+z_index = 1
+
+[node name="L_14_140501_floor_05" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2468.0, 4794.0)
+texture = ExtResource("15")
+centered = false
+z_index = 1
+
+[node name="L_15_140501_floor_06" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3116.0, 4794.0)
+texture = ExtResource("16")
+centered = false
+z_index = 1
+
+[node name="L_16_140501_floor_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2468.0, 3254.0)
+texture = ExtResource("17")
+centered = false
+z_index = 1
+
+[node name="L_17_140501_floor_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3116.0, 3254.0)
+texture = ExtResource("18")
+centered = false
+z_index = 1
+
+[node name="L_18_140501_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2461.0, 1714.0)
+texture = ExtResource("19")
+centered = false
+z_index = 1
+
+[node name="L_19_140501_floor_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3116.0, 1714.0)
+texture = ExtResource("20")
+centered = false
+z_index = 1
+
+[node name="L_20_140501_cable_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3432.0, 6011.83)
+texture = ExtResource("21")
+centered = false
+z_index = 1
+
+[node name="L_21_140501_cable_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3432.0, 4577.83)
+texture = ExtResource("22")
+centered = false
+z_index = 1
+
+[node name="L_22_140501_cable_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3432.0, 3143.83)
+texture = ExtResource("23")
+centered = false
+z_index = 1
+
+[node name="L_23_140501_cable_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3432.0, 1709.83)
+texture = ExtResource("24")
+centered = false
+z_index = 1
+
+[node name="L_24_140501_lift" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3152.33, 7416.0)
+texture = ExtResource("25")
+centered = false
+z_index = 1
+
+[node name="L_25_140501_roof_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1899.0, 935.0)
+texture = ExtResource("26")
+centered = false
+z_index = 2
+
+[node name="L_26_140501_roof_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3293.66, 935.0)
+texture = ExtResource("27")
+centered = false
+z_index = 2
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_27_140501_roof_01" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(1899.0, 935.0)
+texture = ExtResource("26")
+centered = false
+z_index = 2
+
+[node name="L_28_140501_roof_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(3293.66, 935.0)
+texture = ExtResource("27")
+centered = false
+z_index = 2

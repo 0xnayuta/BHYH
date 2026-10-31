@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_qiongxiao_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_qiongxiao_03.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/zhaoyaomountain_qiongxiao_04.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_2_cloud_1.png" id="4"]
+
+[node name="ZhaoyaomountainClimb144" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_zhaoyaomountain_qiongxiao_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(8.0, 15.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_zhaoyaomountain_qiongxiao_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1288.0, 15.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_zhaoyaomountain_qiongxiao_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2568.0, 15.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(32.0, 1040.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(692.0, 1040.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1456.0, 1032.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2216.0, 1020.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2928.0, 1020.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_08_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4.0, 1420.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(664.0, 1420.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_10_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1428.0, 1412.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_11_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2188.0, 1400.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_12_no_12_2_cloud_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2900.0, 1400.0)
+texture = ExtResource("4")
+centered = false

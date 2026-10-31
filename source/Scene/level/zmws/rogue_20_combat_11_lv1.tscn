@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_ground_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_ground_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_ground_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_ground_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_decorate_2_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_decorate_1_3.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_decorate_3_3.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_cover_1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_combat_11_cover_2.png" id="9"]
+
+[node name="Rogue20Combat11Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_21_combat_11_ground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10.0, 70.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_21_combat_11_ground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10.0, 582.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_21_combat_11_ground_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10.0, 1094.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_rogue_21_combat_11_ground_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(10.0, 1606.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_rogue_21_decorate_2_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(881.0, 1352.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_rogue_21_decorate_1_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(854.0, 1363.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_rogue_21_decorate_1_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(681.0, 1366.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_07_rogue_21_decorate_3_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(617.0, 1369.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_rogue_21_decorate_1_3" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1127.0, 635.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_09_rogue_21_combat_11_cover_1" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1468.0, 1282.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_10_rogue_21_combat_11_cover_2" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1058.0, 1246.0)
+texture = ExtResource("9")
+centered = false

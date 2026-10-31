@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_bg.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_mid_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_bg_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_bg_3.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/130301_mask.png" id="5"]
+
+[node name="Reward131Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_96_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.96, 0.7)
+
+[node name="L_00_130301_bg" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_0_7"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_8_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.8, 0.4)
+
+[node name="L_01_130301_mid_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_4"]
+position = Vector2(0.0, 456.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_130301_mid_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_4"]
+position = Vector2(1195.0, 456.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_130301_mid_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_8_0_4"]
+position = Vector2(2389.94, 457.06)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_130301_bg_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-596.67, 169.94)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_130301_bg_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1403.0, 166.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_130301_mask" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-601.0, 857.33)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_130301_mask" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1097.0, 857.0)
+texture = ExtResource("5")
+centered = false

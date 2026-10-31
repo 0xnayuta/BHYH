@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_14.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_13.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_12.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_11.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_10.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_09.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_08.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_07.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_06.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_05.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_04.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_03.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_02.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_01.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_futai01.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_serverboss_futai02.png" id="16"]
+
+[node name="Activity2025Serverboss1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_activity_serverboss_14" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6144.0, 1227.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_activity_serverboss_13" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5120.0, 1227.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_serverboss_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4096.0, 1227.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_serverboss_11" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3072.0, 1227.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_activity_serverboss_10" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 1227.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_activity_serverboss_09" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1024.0, 1227.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_activity_serverboss_08" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1227.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_activity_serverboss_07" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6144.0, 203.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_activity_serverboss_06" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5120.0, 203.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_activity_serverboss_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4096.0, 203.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_10_activity_serverboss_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3072.0, 203.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_activity_serverboss_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 203.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_12_activity_serverboss_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1024.0, 203.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_13_activity_serverboss_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 203.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_14_activity_serverboss_futai01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4957.21, 859.64)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_15_activity_serverboss_futai01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3104.0, 860.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_16_activity_serverboss_futai02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2150.0, 1011.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_17_activity_serverboss_futai02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1070.0, 1011.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_18_activity_serverboss_futai01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(248.0, 860.0)
+texture = ExtResource("15")
+centered = false

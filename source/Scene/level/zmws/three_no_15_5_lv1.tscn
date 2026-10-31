@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_yuanjing1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_yuanjing2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_yuanjing3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_floor_6.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_floor_6_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_15_5_floor_6_03.png" id="6"]
+
+[node name="ThreeNo155Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_95_0_99" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.99)
+
+[node name="L_00_1_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_95_0_99"]
+position = Vector2(-148.0, 725.0)
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L1_spd_0_95_0_8" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.95, 0.8)
+
+[node name="L_01_1_2" type="Sprite2D" parent="Parallax_1_L1_spd_0_95_0_8"]
+position = Vector2(-147.0, 791.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L1_spd_1_0_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.3)
+
+[node name="L_02_1_3" type="Sprite2D" parent="Parallax_2_L1_spd_1_0_0_3"]
+position = Vector2(-148.0, 716.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_3_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_no_15_5_floor_6" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(8750.0, 1383.0)
+texture = ExtResource("4")
+centered = false
+z_index = 2
+
+[node name="L_04_no_15_5_floor_6_02" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(10500.0, 1469.0)
+texture = ExtResource("5")
+centered = false
+z_index = 2
+
+[node name="L_05_no_15_5_floor_6_03" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(11416.0, 1469.0)
+texture = ExtResource("6")
+centered = false
+z_index = 2
+
+[node name="L_06_no_15_5_floor_6_02" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(10379.0, 1469.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_no_15_5_floor_6_03" type="Sprite2D" parent="Parallax_3_L3"]
+position = Vector2(11416.0, 1469.0)
+texture = ExtResource("6")
+centered = false

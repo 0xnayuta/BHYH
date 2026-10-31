@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/21051_bossbackground_01.png" id="1"]
+
+[node name="No215Lv3" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_21051_bossbackground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(9370.0, 5902.0)
+texture = ExtResource("1")
+centered = false
+z_index = -11

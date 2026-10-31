@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_combat_5_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_scorpionstatue.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_11_outfloor_long.png" id="3"]
+
+[node name="Rogue11Combat5Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_11_combat_5_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 135.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_11_scorpionstatue" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1602.33, 331.33)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_rogue_11_outfloor_long" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(647.0, 1320.0)
+texture = ExtResource("3")
+centered = false

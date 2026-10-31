@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160301_background_01_05.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160301_zhuque.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160301_futai_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160301_futai_01.png" id="4"]
+
+[node name="LeaguemissionNo163" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_160301_background_01_05" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2.0, 216.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160301_zhuque" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(513.0, 335.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_160301_futai_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(497.0, 818.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2
+
+[node name="L_03_160301_futai_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(906.0, 782.0)
+texture = ExtResource("4")
+centered = false
+z_index = 2
+
+[node name="L_04_160301_futai_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1304.0, 814.0)
+texture = ExtResource("3")
+centered = false
+z_index = 2

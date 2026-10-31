@@ -1,0 +1,168 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_middleground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_bossmiddleground.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_ground.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_grass_1.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_grass_2.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_grass_3.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_grass_4.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_grass_5.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_rest.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_1_1_door.png" id="11"]
+
+[node name="Nightmare11Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_nightmare_1_1_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_5_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.4)
+
+[node name="L_01_nightmare_1_1_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_5_0_4"]
+position = Vector2(0.0, 344.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_nightmare_1_1_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_5_0_4"]
+position = Vector2(1216.0, 344.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_nightmare_1_1_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_5_0_4"]
+position = Vector2(2432.0, 344.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_boss_1" type="Sprite2D" parent="Parallax_1_L2_spd_0_5_0_4"]
+position = Vector2(3648.0, 309.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_boss_2" type="Sprite2D" parent="Parallax_1_L2_spd_0_5_0_4"]
+position = Vector2(4864.0, 309.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_06_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(-344.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1192.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_08_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2728.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4264.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_10_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5800.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_11_nightmare_1_1_ground" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7336.0, 784.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_12_nightmare_1_1_grass_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(856.0, 632.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_13_nightmare_1_1_grass_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7544.0, 624.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_14_nightmare_1_1_grass_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3896.0, 728.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_15_nightmare_1_1_grass_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7416.0, 728.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_16_nightmare_1_1_grass_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(752.0, 752.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_17_nightmare_1_1_grass_3" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(7176.0, 752.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_18_nightmare_1_1_grass_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(80.0, 664.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_19_nightmare_1_1_grass_4" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4240.0, 672.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_20_nightmare_1_1_grass_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3416.0, 712.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_21_nightmare_1_1_grass_5" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6600.0, 720.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_22_nightmare_1_1_rest" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1576.0, 0.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_23_nightmare_1_1_rest" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4832.0, 0.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="Parallax_3_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_24_nightmare_1_1_door" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(1512.0, 432.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_25_nightmare_1_1_door" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(3152.0, 440.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_26_nightmare_1_1_door" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(4776.0, 432.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_27_nightmare_1_1_door" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(6424.0, 432.0)
+texture = ExtResource("11")
+centered = false

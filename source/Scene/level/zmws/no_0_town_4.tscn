@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_background_01_01_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_background_01_01_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_background_01_01_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_background_01_01_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_picture.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_shop.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_0_town_4_bridge.png" id="7"]
+
+[node name="No0Town4" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_0_town_4_background_01_01_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1.0, 68.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_0_town_4_background_01_01_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1729.0, 68.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_0_town_4_background_01_01_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3457.0, 68.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_no_0_town_4_background_01_01_04" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5184.0, 68.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_no_0_town_4_picture" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1157.0, 438.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_no_0_town_4_shop" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4595.0, 316.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="Parallax_1_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_06_no_0_town_4_bridge" type="Sprite2D" parent="Parallax_1_L4"]
+position = Vector2(1979.0, 802.0)
+texture = ExtResource("7")
+centered = false

@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_20_shop_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_shop_1_tabal_1_lv1.png" id="2"]
+
+[node name="Rogue19Shop2Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_20_shop_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-219.0, 110.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_1_shop_1_tabal_1_lv1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(725.0, 720.0)
+texture = ExtResource("2")
+centered = false
+z_index = 2

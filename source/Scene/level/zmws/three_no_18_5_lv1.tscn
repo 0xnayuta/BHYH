@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_5_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_5_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_4_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_4_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_stone_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_stone_02.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_water_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_water_01.png" id="8"]
+
+[node name="ThreeNo185Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_180501_background_5_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7463.0, 1226.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_180501_background_5_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7463.0, 1.0)
+texture = ExtResource("2")
+centered = false
+z_index = -2
+
+[node name="L_02_180501_background_4_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5597.0, 1226.0)
+texture = ExtResource("3")
+centered = false
+z_index = -2
+
+[node name="L_03_180501_background_4_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(5597.0, 1.0)
+texture = ExtResource("4")
+centered = false
+z_index = -2
+
+[node name="L_04_180501_stone_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6539.0, 1226.0)
+texture = ExtResource("5")
+centered = false
+z_index = 1
+
+[node name="L_05_180501_stone_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7923.0, 1226.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1
+
+[node name="L_06_180501_water_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7793.0, 1197.0)
+texture = ExtResource("7")
+centered = false
+z_index = 1
+
+[node name="L_07_180501_water_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6258.0, 1197.0)
+texture = ExtResource("8")
+centered = false
+z_index = 1
+
+[node name="L_08_180501_water_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(7791.0, 1199.0)
+texture = ExtResource("7")
+centered = false
+z_index = 7
+
+[node name="L_09_180501_water_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(6256.0, 1199.0)
+texture = ExtResource("8")
+centered = false
+z_index = 7

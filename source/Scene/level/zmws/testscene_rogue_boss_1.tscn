@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground1_01.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground1_02.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_21_bossground1_03.png" id="6"]
+
+[node name="TestsceneRogueBoss1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_21_bossground_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("1")
+centered = false
+z_index = -2
+
+[node name="L_01_rogue_21_bossground_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1024.0, 0.0)
+texture = ExtResource("2")
+centered = false
+z_index = -2
+
+[node name="L_02_rogue_21_bossground_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 0.0)
+texture = ExtResource("3")
+centered = false
+z_index = -2
+
+[node name="L_03_rogue_21_bossground1_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 791.0)
+texture = ExtResource("4")
+centered = false
+z_index = 1
+
+[node name="L_04_rogue_21_bossground1_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1024.0, 791.0)
+texture = ExtResource("5")
+centered = false
+z_index = 1
+
+[node name="L_05_rogue_21_bossground1_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2048.0, 791.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1

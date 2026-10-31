@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_suzakuheaven_bg.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_suzakuheaven_floor_4.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_suzakuheaven_floor_6.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_suzakuheaven_floor_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_suzakuheaven_floor_2.png" id="5"]
+
+[node name="ActivitySuzakuheaven1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_7_0_95" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.7, 0.95)
+
+[node name="L_00_activity_suzakuheaven_bg" type="Sprite2D" parent="Parallax_0_L1_spd_0_7_0_95"]
+position = Vector2(0.0, 150.0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_activity_suzakuheaven_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 943.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(515.61, 628.54)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(645.61, 878.54)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(212.27, 399.76)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(816.27, 235.76)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_06_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1514.27, 393.76)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_activity_suzakuheaven_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1868.27, 669.76)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_activity_suzakuheaven_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2407.61, 632.54)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_09_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2537.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_10_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2789.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_11_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3041.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_12_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3293.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_13_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3545.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_14_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3797.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_15_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4049.61, 627.59)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_16_activity_suzakuheaven_floor_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4301.61, 627.59)
+texture = ExtResource("5")
+centered = false

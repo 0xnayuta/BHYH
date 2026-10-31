@@ -1,0 +1,219 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_5_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_5_middleground.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_05.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_06.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_07.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_08.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_01_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_01_01.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_02.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_03.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_background_04.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_ground_mask_01.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_ground_mask_02.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen_18_door.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen_18_door_2.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_cover.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_4_5_floatfloor_1.png" id="17"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_floatfloor_mid.png" id="18"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_floatfloor_1_stretch.png" id="19"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen_18_door_mask.png" id="20"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_1_decorate_8.png" id="21"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_mask_01.png" id="22"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_mask_02.png" id="23"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/yiwen18_mask_05.png" id="24"]
+
+[node name="Activity2021Yiwen18" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_97_0_7" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.97, 0.7)
+
+[node name="L_00_no_4_5_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_97_0_7"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L2_spd_0_4_0_4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.4, 0.4)
+
+[node name="L_01_no_4_5_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_4_0_4"]
+position = Vector2(0.0, 177.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_no_4_5_middleground" type="Sprite2D" parent="Parallax_1_L2_spd_0_4_0_4"]
+position = Vector2(1632.0, 177.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="Parallax_2_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_yiwen18_background_05" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 1032.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_yiwen18_background_06" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2042.0, 1032.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_yiwen18_background_07" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4084.0, 1032.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_06_yiwen18_background_08" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6126.0, 1032.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_07_yiwen18_background_01_02" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 847.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_08_yiwen18_background_01_01" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(0.0, 335.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_09_yiwen18_background_02" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2042.0, 8.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_10_yiwen18_background_03" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(4084.0, 8.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_11_yiwen18_background_04" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(6126.0, 921.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_12_yiwen18_ground_mask_01" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(948.0, 907.0)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_13_yiwen18_ground_mask_02" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1615.0, 911.0)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_14_yiwen_18_door" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5581.0, 964.0)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_15_yiwen_18_door_2" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3752.0, 550.0)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_16_yiwen18_cover" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(5120.0, 8.0)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_17_no_4_5_floatfloor_1" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(2959.0, 1460.0)
+texture = ExtResource("17")
+centered = false
+z_index = 2
+
+[node name="L_18_yiwen18_floatfloor_mid" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3391.0, 607.0)
+texture = ExtResource("18")
+centered = false
+z_index = 2
+
+[node name="L_19_yiwen18_floatfloor_mid" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(40.0, 372.0)
+texture = ExtResource("18")
+centered = false
+z_index = 2
+
+[node name="L_20_yiwen18_floatfloor_mid" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3462.0, 1328.0)
+texture = ExtResource("18")
+centered = false
+z_index = 2
+
+[node name="L_21_yiwen18_floatfloor_1_stretch" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1330.0, 610.0)
+texture = ExtResource("19")
+centered = false
+z_index = 2
+
+[node name="L_22_yiwen18_floatfloor_mid" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(949.0, 442.0)
+texture = ExtResource("18")
+centered = false
+z_index = 2
+
+[node name="L_23_yiwen18_floatfloor_mid" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(629.0, 611.0)
+texture = ExtResource("18")
+centered = false
+z_index = 2
+
+[node name="L_24_yiwen_18_door_mask" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(3685.0, 331.0)
+texture = ExtResource("20")
+centered = false
+z_index = 8
+
+[node name="L_25_yiwen18_ground_mask_01" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(948.0, 907.0)
+texture = ExtResource("12")
+centered = false
+z_index = 8
+
+[node name="L_26_yiwen18_ground_mask_02" type="Sprite2D" parent="Parallax_2_L3"]
+position = Vector2(1615.0, 911.0)
+texture = ExtResource("13")
+centered = false
+z_index = 8
+
+[node name="Parallax_3_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_27_rogue_1_decorate_8" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(243.0, 790.0)
+scale = Vector2(0.84, 0.84)
+texture = ExtResource("21")
+centered = false
+
+[node name="L_28_rogue_1_decorate_8" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(932.0, 790.0)
+scale = Vector2(0.84, 0.84)
+texture = ExtResource("21")
+centered = false
+
+[node name="L_29_rogue_1_decorate_8" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(3393.0, 513.0)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("21")
+centered = false
+
+[node name="L_30_yiwen18_mask_01" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(4857.0, 977.0)
+texture = ExtResource("22")
+centered = false
+
+[node name="L_31_yiwen18_mask_02" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(5881.0, 977.0)
+texture = ExtResource("23")
+centered = false
+
+[node name="L_32_yiwen18_mask_05" type="Sprite2D" parent="Parallax_3_L4"]
+position = Vector2(2022.0, 1451.0)
+texture = ExtResource("24")
+centered = false

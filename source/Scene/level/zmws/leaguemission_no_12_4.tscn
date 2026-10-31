@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_4_background_12.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/no_12_4_loong.png" id="2"]
+
+[node name="LeaguemissionNo124" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_no_12_4_background_12" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 135.37)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_no_12_4_loong" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(712.36, 308.4)
+texture = ExtResource("2")
+centered = false

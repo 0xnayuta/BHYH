@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_background_1.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_background_2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_background_3.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_middleground_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_middleground_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_2.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_3.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_4.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_5.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_6.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_7.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_8.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/nightmare_7_1_ground_9.png" id="14"]
+
+[node name="Nightmare71Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_5_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="L_00_nightmare_7_1_background_1" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_5"]
+position = Vector2(0.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_nightmare_7_1_background_2" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_5"]
+position = Vector2(1632.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_nightmare_7_1_background_3" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_5"]
+position = Vector2(3104.0, 0.0)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_03_boss" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6572.0, 0.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_boss" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8160.0, 0.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_05_nightmare_7_1_ground_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 112.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_06_nightmare_7_1_ground_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1020.0, -27.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_07_nightmare_7_1_ground_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2040.0, -27.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_08_nightmare_7_1_ground_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3060.0, -27.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_09_nightmare_7_1_ground_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4080.0, -27.0)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_10_nightmare_7_1_ground_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5100.0, -27.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_11_nightmare_7_1_ground_7" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6120.0, -27.0)
+texture = ExtResource("12")
+centered = false
+z_index = 2
+
+[node name="L_12_nightmare_7_1_ground_8" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7140.0, 813.0)
+texture = ExtResource("13")
+centered = false
+z_index = 2
+
+[node name="L_13_nightmare_7_1_ground_9" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8156.0, 813.0)
+texture = ExtResource("14")
+centered = false
+z_index = 2

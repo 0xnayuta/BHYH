@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_3_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_3_float2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_3_ground.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/activity_juezhen_3_float1.png" id="4"]
+
+[node name="ActivityJuezhen3Pve" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_5_0_95" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.95)
+
+[node name="L_00_activity_juezhen_3_background" type="Sprite2D" parent="Parallax_0_L1_spd_0_5_0_95"]
+position = Vector2(0.0, 1425.0)
+scale = Vector2(1.52, 1.52)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_activity_juezhen_3_float2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-218.0, 2074.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_juezhen_3_float2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3540.0, 2052.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_activity_juezhen_3_ground" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1240.0, 552.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_activity_juezhen_3_float1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(818.0, 368.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_activity_juezhen_3_float1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(818.0, 864.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_activity_juezhen_3_float1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2873.0, 368.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_07_activity_juezhen_3_float1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2873.0, 864.0)
+texture = ExtResource("4")
+centered = false

@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_combat_8_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_bomuban2.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_bomubanbianyuan1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_17_bomubanbianyuan2.png" id="4"]
+
+[node name="Rogue17Combat8Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_rogue_17_combat_8_background_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1999.0, 840.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_rogue_17_bomuban2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3182.0, 1761.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_3_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3335.0, 1760.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_3_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3164.0, 1760.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_04_rogue_17_bomuban2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3348.0, 1366.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_rogue_17_bomuban2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3162.0, 1366.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_rogue_17_bomubanbianyuan1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3502.0, 1365.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_rogue_17_bomubanbianyuan2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3144.0, 1365.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_08_rogue_17_bomuban2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3200.0, 1560.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_rogue_17_bomuban2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3386.0, 1560.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_rogue_17_bomubanbianyuan1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3540.0, 1559.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_11_rogue_17_bomubanbianyuan2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(3182.0, 1559.0)
+texture = ExtResource("4")
+centered = false

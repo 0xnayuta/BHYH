@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/endlesssea_background.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/endlesssea_cloud.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/endlesssea_floor.png" id="3"]
+
+[node name="EndlessseaChallenge1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_endlesssea_background" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(4.0, 746.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_endlesssea_cloud" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1.0, 850.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_endlesssea_floor" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(0.0, 1170.0)
+texture = ExtResource("3")
+centered = false

@@ -1,0 +1,1133 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_bg_challenge.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_bg_sacredtower_midbg_challenge.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_machine2_6.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_machine5_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_machine5_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_machine5_3.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_jump4_3.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_movefloor_jump_1.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor2_3.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor2_1.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor2_2.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_4.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_1.png" id="13"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_5.png" id="14"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_6.png" id="15"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_floor_3.png" id="16"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/sacredtower_spikes_jump_1.png" id="17"]
+
+[node name="SacredtowerJump9" type="Node2D"]
+
+[node name="Parallax_0_L1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_sacredtower_bg_challenge" type="Sprite2D" parent="Parallax_0_L1"]
+position = Vector2(-8.12, 1784.36)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(767.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1534.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2301.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2301.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1534.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(767.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3068.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3068.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3835.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4602.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_13_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5369.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6136.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_15_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6903.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_16_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7670.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_17_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8437.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_18_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9204.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_19_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9971.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_20_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10738.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_21_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3835.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_22_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4602.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_23_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5369.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_24_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6136.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_25_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6903.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_26_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7670.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_27_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8437.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_28_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9204.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_29_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9971.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_30_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10738.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_31_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11505.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_32_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12272.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_33_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13039.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_34_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13806.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_35_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14573.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_36_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(15340.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_37_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(16107.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_38_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(16874.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_39_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(17641.0, 0.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_40_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11505.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_41_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12272.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_42_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13039.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_43_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13806.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_44_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14573.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_45_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(15340.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_46_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(16107.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_47_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(16874.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_48_sacredtower_bg_sacredtower_midbg_challenge" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(17641.0, 1392.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_49_sacredtower_floor_machine2_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-1.33, 1233.94)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_50_sacredtower_floor_machine2_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3550.18, 1233.94)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_51_sacredtower_floor_machine5_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4.73, 2430.91)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_52_sacredtower_floor_machine5_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5040.73, 2430.91)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_53_sacredtower_floor_machine5_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6946.73, 2432.91)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_54_sacredtower_floor_machine5_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1604.52, 2430.99)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_55_sacredtower_floor_machine5_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8546.79, 2433.05)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_56_sacredtower_floor_machine5_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3204.62, 2430.97)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_57_sacredtower_floor_machine5_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10146.6, 2433.09)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_58_sacredtower_floor_jump4_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2669.71, 2163.58)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_59_sacredtower_floor_jump4_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3240.32, 2001.27)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_60_sacredtower_floor_jump4_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3804.38, 2159.58)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_61_sacredtower_movefloor_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(671.58, 2171.09)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_62_sacredtower_movefloor_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1034.72, 1974.18)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_63_sacredtower_movefloor_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1500.82, 1974.18)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_64_sacredtower_movefloor_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1966.92, 1974.18)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_65_sacredtower_movefloor_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5684.92, 2182.18)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_66_sacredtower_floor2_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11745.8, 2433.06)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_67_sacredtower_floor2_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.4, 2439.03)
+texture = ExtResource("10")
+centered = false
+
+[node name="L_68_sacredtower_floor2_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12131.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_69_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10232.3, 2398.85)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_70_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10233.7, 2325.35)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_71_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10431.2, 2399.03)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_72_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10337.2, 2399.03)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_73_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10326.3, 2310.32)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_74_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10326.0, 2238.01)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_75_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10431.2, 2310.5)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_76_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10428.5, 2221.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_77_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10428.5, 2157.25)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_78_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10524.5, 2221.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_79_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10524.5, 2157.25)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_80_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10524.5, 2310.35)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_81_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10524.5, 2399.35)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_82_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11340.3, 2396.85)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_83_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11341.7, 2323.35)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_84_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11539.2, 2397.03)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_85_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11445.2, 2397.03)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_86_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11434.3, 2308.32)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_87_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11434.0, 2236.01)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_88_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11539.2, 2308.5)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_89_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11534.7, 2152.58)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_90_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11622.3, 2130.92)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_91_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11535.3, 2219.58)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_92_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11622.3, 2066.92)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_93_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11727.3, 2130.92)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_94_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11727.3, 2066.92)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_95_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11727.0, 2308.45)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_96_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11727.0, 2397.45)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_97_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11727.5, 2219.92)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_98_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11639.8, 2219.5)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_99_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11633.2, 2308.51)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_100_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11633.2, 2397.51)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_101_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11094.5, 2398.68)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_102_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11092.5, 2326.5)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_103_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11000.4, 2309.51)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_104_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11001.7, 2236.75)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_105_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10906.4, 2221.39)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_106_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(11000.5, 2398.51)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_107_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10907.5, 2398.51)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_108_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10906.5, 2310.01)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_109_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10802.9, 2398.6)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_110_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10802.9, 2309.6)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_111_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10802.9, 2220.6)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_112_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10801.6, 2150.15)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_113_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10907.7, 2150.25)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_114_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(10907.7, 2150.25)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_115_7_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12332.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_116_7_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12533.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_117_7_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12734.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_118_7_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12935.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_119_7_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13136.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_120_7_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14945.0, 2439.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_121_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1341.92, 1978.18)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_122_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1815.98, 1984.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_123_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3011.98, 2052.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_124_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3615.98, 2056.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_125_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4874.65, 2328.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_126_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6738.65, 2332.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_127_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7490.65, 2356.6)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_128_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7491.98, 2257.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_129_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7819.98, 2353.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_130_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7918.65, 2353.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_131_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8019.65, 2353.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_132_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8263.65, 2173.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_133_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8364.65, 2173.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_134_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8465.65, 2173.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_135_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8566.65, 2173.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_136_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(8667.65, 2173.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_137_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9067.65, 2349.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_138_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9167.65, 2349.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_139_sacredtower_spikes_jump_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(9271.65, 2349.94)
+texture = ExtResource("17")
+centered = false
+
+[node name="L_140_7_51" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13337.4, 2439.03)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_141_7_52" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13538.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_142_7_53" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13739.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_143_7_54" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13940.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_144_7_55" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14141.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_145_7_56" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14342.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_146_7_57" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14543.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_147_7_58" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14744.0, 2439.0)
+texture = ExtResource("11")
+centered = false
+
+[node name="L_148_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13347.3, 2332.25)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_149_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13438.3, 2243.25)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_150_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13531.0, 2155.92)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_151_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13625.3, 2064.25)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_152_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13717.3, 1975.58)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_153_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13809.8, 1889.58)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_154_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13896.3, 1799.58)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_155_sacredtower_floor_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13999.3, 1709.08)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_156_sacredtower_floor_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14095.3, 1709.08)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_157_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2404.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_158_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2404.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_159_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2315.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_160_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13809.6, 1959.33)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_161_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13999.3, 1781.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_162_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13896.3, 1870.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_163_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13717.0, 2048.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_164_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13625.0, 2137.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_165_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13530.3, 2225.58)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_166_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13436.7, 2315.25)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_167_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13346.2, 2403.55)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_168_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2226.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_169_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2137.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_170_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 2048.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_171_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 1959.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_172_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 1870.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_173_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14094.3, 1781.25)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_174_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.3, 2404.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_175_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.3, 2315.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_176_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.3, 2226.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_177_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.3, 2137.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_178_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.3, 2048.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_179_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.6, 2404.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_180_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13812.6, 2137.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_181_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13720.1, 2226.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_182_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13719.1, 2137.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_183_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13626.3, 2225.75)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_184_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13532.3, 2403.71)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_185_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.6, 2315.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_186_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.6, 1959.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_187_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.6, 1870.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_188_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.3, 2048.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_189_94_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.6, 2226.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_190_94_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13906.6, 2137.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_191_94_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13813.6, 2403.92)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_192_94_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13813.6, 2314.92)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_193_94_3_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13813.6, 2225.92)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_194_94_3_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13719.6, 2403.92)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_195_94_3_2_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13719.6, 2314.92)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_196_94_1_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(14000.6, 1959.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_197_94_1_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13812.4, 2048.25)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_198_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13626.3, 2314.75)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_199_94_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13626.3, 2403.75)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_200_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13532.3, 2314.71)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_201_94_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(13438.3, 2403.71)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_202_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.7, 2405.7)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_203_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.7, 2316.7)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_204_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12308.1, 2244.37)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_205_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12400.1, 2333.37)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_206_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.7, 2227.7)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_207_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12214.1, 2157.37)
+texture = ExtResource("16")
+centered = false
+
+[node name="L_208_sacredtower_floor_4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12013.7, 2138.7)
+texture = ExtResource("12")
+centered = false
+
+[node name="L_209_sacredtower_floor_6" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12400.4, 2405.61)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_210_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12306.7, 2316.61)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_211_3_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12211.9, 2227.7)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_212_3_3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12118.8, 2138.66)
+texture = ExtResource("15")
+centered = false
+
+[node name="L_213_3_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12306.5, 2405.61)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_214_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12118.5, 2405.61)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_215_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12212.5, 2405.61)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_216_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12118.5, 2227.78)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_217_sacredtower_floor_5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12118.7, 2316.7)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_218_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12212.7, 2316.7)
+texture = ExtResource("14")
+centered = false
+
+[node name="L_219_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12012.7, 2071.37)
+texture = ExtResource("13")
+centered = false
+
+[node name="L_220_3_1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(12118.1, 2071.37)
+texture = ExtResource("16")
+centered = false

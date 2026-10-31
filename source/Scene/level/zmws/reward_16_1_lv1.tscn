@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_floor_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_futai.png" id="3"]
+
+[node name="Reward161Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_6_0_1" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.6, 0.1)
+
+[node name="L_00_160601_background_01" type="Sprite2D" parent="Parallax_0_L1_spd_0_6_0_1"]
+position = Vector2(0.0, 49.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160601_background_01" type="Sprite2D" parent="Parallax_0_L1_spd_0_6_0_1"]
+position = Vector2(1449.0, 49.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_02_160601_background_01" type="Sprite2D" parent="Parallax_0_L1_spd_0_6_0_1"]
+position = Vector2(2898.0, 49.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_03_160601_background_01" type="Sprite2D" parent="Parallax_0_L1_spd_0_6_0_1"]
+position = Vector2(4347.0, 49.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_04_160601_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 690.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_160601_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1449.0, 690.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_160601_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2898.0, 690.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_160601_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4347.0, 690.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_160601_futai" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1737.0, 533.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_09_160601_futai" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2337.0, 443.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_10_160601_futai" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3083.0, 443.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_11_160601_futai" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4497.0, 542.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_12_160601_futai" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5097.0, 537.0)
+texture = ExtResource("3")
+centered = false

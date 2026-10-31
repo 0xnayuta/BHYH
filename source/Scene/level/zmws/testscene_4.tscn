@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/greyground_3.png" id="1"]
+
+[node name="Testscene4" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_96_1_0" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.96, 1.0)
+
+[node name="L_00_greyground_3" type="Sprite2D" parent="Parallax_0_L1_spd_0_96_1_0"]
+position = Vector2(-788.0, -368.0)
+scale = Vector2(7.0, 7.0)
+texture = ExtResource("1")
+centered = false

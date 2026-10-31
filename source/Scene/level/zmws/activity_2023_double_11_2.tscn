@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_02.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_07.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_futai_big.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_dianti.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160401_bg_02_02.png" id="5"]
+
+[node name="Activity2023Double112" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_160401_bg_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(23.0, 299.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160401_bg_07" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-2.0, 1823.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_2_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-58.0, 580.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_2_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(422.0, 580.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_1_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(545.0, 733.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_05_1_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1025.0, 733.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_06_1_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(-35.0, 885.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_07_1_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1357.0, 899.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_08_1_2" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1118.0, 509.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_09_1_1" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1598.0, 509.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_10_160401_dianti" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1548.0, 1015.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_11_160401_bg_02_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(22.0, 1072.0)
+texture = ExtResource("5")
+centered = false

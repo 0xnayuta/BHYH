@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_midbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_5_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_5_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_4_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_4_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_03.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_01_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_background_01.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_stone_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_stone_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_water_02.png" id="12"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/180501_water_01.png" id="13"]
+
+[node name="No185Lv1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_1_0_0_3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 0.3)
+
+[node name="L_00_180501_midbackground" type="Sprite2D" parent="Parallax_0_L1_spd_1_0_0_3"]
+position = Vector2(1.0, 413.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_180501_background_5_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7463.0, 1226.0)
+texture = ExtResource("2")
+centered = false
+z_index = -2
+
+[node name="L_02_180501_background_5_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7463.0, 1.0)
+texture = ExtResource("3")
+centered = false
+z_index = -2
+
+[node name="L_03_180501_background_4_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5597.0, 1226.0)
+texture = ExtResource("4")
+centered = false
+z_index = -2
+
+[node name="L_04_180501_background_4_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(5597.0, 1.0)
+texture = ExtResource("5")
+centered = false
+z_index = -2
+
+[node name="L_05_180501_background_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3732.0, 1.0)
+texture = ExtResource("6")
+centered = false
+z_index = 1
+
+[node name="L_06_180501_background_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1866.0, 400.0)
+texture = ExtResource("7")
+centered = false
+z_index = 1
+
+[node name="L_07_1_2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-1866.0, 400.0)
+texture = ExtResource("8")
+centered = false
+z_index = 1
+
+[node name="L_08_180501_background_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(0.0, 400.0)
+texture = ExtResource("9")
+centered = false
+z_index = 1
+
+[node name="L_09_180501_stone_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6539.0, 1226.0)
+texture = ExtResource("10")
+centered = false
+z_index = 1
+
+[node name="L_10_180501_stone_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7923.0, 1226.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="L_11_180501_water_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7793.0, 1197.0)
+texture = ExtResource("12")
+centered = false
+z_index = 1
+
+[node name="L_12_180501_water_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6258.0, 1197.0)
+texture = ExtResource("13")
+centered = false
+z_index = 1
+
+[node name="L_13_180501_water_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(7791.0, 1199.0)
+texture = ExtResource("12")
+centered = false
+z_index = 7
+
+[node name="L_14_180501_water_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(6256.0, 1199.0)
+texture = ExtResource("13")
+centered = false
+z_index = 7

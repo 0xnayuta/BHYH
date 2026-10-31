@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_background_02_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_background_02_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_caibao_01.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_caibao_02.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/160601_caibao_03.png" id="5"]
+
+[node name="ThreeNo166Lv1" type="Node2D"]
+
+[node name="Parallax_0_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_00_160601_background_02_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(15.0, 342.0)
+texture = ExtResource("1")
+centered = false
+
+[node name="L_01_160601_background_02_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1417.0, 342.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_160601_caibao_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1569.0, 981.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_03_160601_caibao_01" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1277.0, 953.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_04_160601_caibao_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1096.0, 994.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_05_160601_caibao_02" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(2484.0, 1004.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_06_160601_caibao_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(1472.0, 1095.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_07_160601_caibao_03" type="Sprite2D" parent="Parallax_0_L3"]
+position = Vector2(995.0, 1100.0)
+texture = ExtResource("5")
+centered = false
