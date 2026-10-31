@@ -50,7 +50,13 @@ def apply_registry(data: dict) -> None:
     MACHINE_DIRS = set(naming.get("machine_export_directories", []))
     NUMERIC_DIRS = set(naming.get("numeric_directories", []))
     NUMERIC_SCENE_FILES = set(naming.get("numeric_scene_files", []))
-    THIRD_PARTY_PREFIXES = tuple(naming.get("third_party_prefixes", ["addons/"])) + ("godot/", ".godot/")
+    # `addons/` 是第三方插件目录，按 naming_standard 的机器导出白名单整体豁免，
+    # 不为每个插件单独登记（白名单只减不增）。
+    THIRD_PARTY_PREFIXES = (
+        ("addons/", "source/addons/")
+        + tuple(naming.get("third_party_prefixes", []))
+        + ("godot/", ".godot/")
+    )
     COMPANION_SUFFIXES = tuple(naming.get("companion_tool_suffixes", COMPANION_SUFFIXES))
 
 

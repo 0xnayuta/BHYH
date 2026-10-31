@@ -40,7 +40,8 @@ check_all.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
-└── resource_path_audit.py
+├── resource_path_audit.py
+└── verify_dragonbones_factories.py
 
 level_regression_all.py
 └── level_test_runner.py（每个关卡实例）
@@ -92,6 +93,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 集合与允许清单守恒；新增/失效/空理由失败 | `scripts/runtime_frames_allowlist.json` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
+| `verify_dragonbones_factories.py` | 逐个 `load()` `.dbfactory`，在独立子进程内捕获插件 C++ 层崩溃；失败批对半二分定位；同时报告「有 `*_ske.json` 但无 `.dbfactory`」的目录 | `docs/reports/dragonbones_factory_verify.json` |
 | `convert_atlas_metadata.py` | `manifest.json` → `metadata.tres` 构建期转换与校验 | 同目录 `metadata.tres` |
 | `convert_monster_action_views.py` | 既有 `play` 帧资源或连续 PNG → 动作视图（帧子集 + 逐帧 duration + loop/speed），按 `scripts/monster_action_views.json` 登记；`--check` 逐字比较 | `monster_130/212/215/*_action_frames.tres`、宠物寅虎 stage 资源（私有素材） |
 | `convert_liu_sha_frames.py` | 流沙河 Boss/分身 `ACTIONS` 动作表 → 按 boss_kind 拆分的构建期 SpriteFrames（逐帧 duration、确定性 UID）；`--check` 逐字比较 | `source/Art/monster/liu_sha_river/**/liu_sha_*_frames.tres`（私有素材） |

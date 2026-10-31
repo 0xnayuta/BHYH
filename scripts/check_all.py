@@ -170,6 +170,11 @@ def main():
     # 维度 8: 资源路径大小写与动态路径工厂
     resource_cmd = [sys.executable, "scripts/resource_path_audit.py", "--project", "source"]
 
+    # 维度 9: DragonBones 工厂加载（依赖 Godot，随 --skip-engine / --fast 跳过）
+    dbfact_cmd = [sys.executable, "scripts/verify_dragonbones_factories.py"]
+    if args.godot_bin:
+        dbfact_cmd += ["--godot", args.godot_bin]
+
     # 执行字典：dim_id -> (ok, elapsed, out)
     exec_results: Dict[int, Tuple[bool, float, str]] = {}
 
@@ -196,6 +201,8 @@ def main():
             tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
         if not args.skip_resource:
             tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
+        if not (args.fast or args.skip_engine):
+            tasks[9] = ("DragonBones 工厂加载验证", dbfact_cmd)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
             future_to_id = {executor.submit(run_step, name, cmd): dim_id for dim_id, (name, cmd) in tasks.items()}
@@ -220,6 +227,8 @@ def main():
             tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
         if not args.skip_resource:
             tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
+        if not (args.fast or args.skip_engine):
+            tasks[9] = ("DragonBones 工厂加载验证", dbfact_cmd)
 
         task_total = len(tasks)
         for ordinal, (d_id, (tname, _)) in enumerate(sorted(tasks.items()), 1):
@@ -339,6 +348,17 @@ def main():
         else:
             detail = "\n".join(out.splitlines()[:12])
             results.append(("8. 资源路径大小写与动态路径工厂", False, el, detail))
+
+    # 维度 9: DragonBones 工厂加载
+    if args.fast or args.skip_engine:
+        results.append(("9. DragonBones 工厂加载验证", True, 0.0, "已跳过 (--skip-engine / --fast)"))
+    else:
+        ok, el, out = exec_results[9]
+        if ok:
+            results.append(("9. DragonBones 工厂加载验证", True, el, ""))
+        else:
+            detail = "\n".join(out.splitlines()[-12:])
+            results.append(("9. DragonBones 工厂加载验证", False, el, detail))
 
     # --------------------------------------------------------------------------
     # 汇总质量报告仪表板
