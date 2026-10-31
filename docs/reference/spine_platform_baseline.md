@@ -16,7 +16,7 @@
 | 其它平台 | Linux、macOS、Android、Web、iOS **延期/未验证**；不补库、不承诺 |
 | 最低设备 | **未声明**；21-2B 暂缓，未取得设备测量前不以当前验证机充当最低配置 |
 | 21-2B | **暂缓**；Windows 侧测量也不在本轮执行 |
-| 21-2C | 重跑 PCK/依赖闭包；release 启动与代表关卡另列验收 |
+| 21-2C | PCK/依赖闭包已重跑；Windows release 启动与 `level_1` 冒烟已完成 |
 
 **不把“Windows 可运行”写成“跨平台支持”。** `source/bin/spine_godot_extension.gdextension` 声明了多平台路径，但仓库实际只包含 Windows x86_64 动态库；声明文件存在不等于运行库已入库或已验证。
 
@@ -70,6 +70,14 @@ Windows 侧验收使用现有场景探针与资源加载路径，不新增跨平
 - `source/bin` 三个 Windows 动态库与官方 4.3 构建一致；
 - 活动 Spine 源文件为 4.3；已恢复的 `.spine-json` 通过导入缓存加载；
 - `scene_probe_runner --probe role-skills` **PASS**（4.63s），覆盖 `jhsj_awaken` 预加载与角色技能路径；
+
+Windows release 验证构建（临时冒烟驱动，验证后已删除并恢复主场景）：
+
+- 导出 exe 约 105 MB + PCK 约 7.1 GB；
+- 启动后加载真实生产主场景 `load_scene.tscn` → `main_menu.tscn`，再切入 `level_1.tscn`；
+- 报告 `ok=true`，生产主场景 `main_menu.tscn`，目标关卡 `level_1.tscn`，耗时约 **3.762s**；
+- 最终退出日志 **0 ERROR / 0 WARNING**；Vulkan 1.4.315 / Forward Mobile / AMD Radeon RX 6750 XT。
+- 这是验证包，不是最小发布包；不改变发布预设，也不代表峰值 VRAM 或跨平台性能。
 - 资源路径审计继续校验 atlas 页名与 PNG 大小写；
 - 任何 Spine 加载失败都必须显式失败，不以静态图或静默缺帧回退。
 
@@ -87,7 +95,7 @@ Windows 侧验收使用现有场景探针与资源加载路径，不新增跨平
 | 21-1A | **Windows-only 决策完成**；运行时保持 4.3 官方构建；Windows 二进制已具备；`role-skills` 加载探针 **PASS**（4.63s） |
 | 21-2A | **平台/后端已确认**：Windows x86_64 为唯一目标，后端以工程默认 `mobile` 为准；其它平台全部延期/未验证；**最低设备待 21-2B，本批次未完全关闭** |
 | 21-2B | **暂缓**：无 Linux/macOS 等设备；Windows 侧测量本轮也不做 |
-| 21-2C | PCK/依赖闭包已重跑：**4,100/4,100 可达**，PCK **7,564,128,928 字节**，sha256 `fa5fdf29adbb…`，导出+校验约 **675s**；PCK 通过不代表 release 启动、代表关卡或平台性能已验收 |
+| 21-2C | PCK/依赖闭包已重跑：**4,100/4,100 可达**，PCK **7,564,128,928 字节**，sha256 `fa5fdf29adbb…`，导出+校验约 **675s**；release 验证包启动真实生产主场景并进入 `level_1`，报告 **ok=true**（3.762s），最终日志 **0 ERROR / 0 WARNING** |
 
 ## 7. 不在本决策范围
 

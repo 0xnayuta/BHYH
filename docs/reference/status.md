@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-31（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备待定，21-2B 暂缓，21-2C 已完成 PCK 复跑、release 启动/代表关卡未做；当前 11 个 Autoload）
+> 最后更新：2026-10-31（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备待定，21-2B 暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟；当前 11 个 Autoload）
 
 ---
 
@@ -259,7 +259,8 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-31 Phase 21-1B `_bundled` 取证 | 公共工程 1,136 个 `.tscn` 全部为 `[gd_scene format=3]` 文本；`git ls-files '*.scn'` 与 `RSRC` 二进制场景均为 0；私人素材仓无 `.scn`/`.tscn`。`source/.godot/exported/*.scn` 共 1,137 个，为 `.gitignore` 排除的导出缓存，`_bundled` 仅是该缓存内部属性，不作为源场景转换。`Scene/` 1,135 个场景中仅 `load_scene.tscn` 头含 UID，其余 1,134 个依赖路径加载且无重复 UID；`health_check` 与资源门禁通过。转换范围为 0，**拒绝转换**并关闭 20-1C。 | 21-1B 完成；无代码/资源变更 |
 | 2026-10-31 Phase 21-1C 类型化 Atlas accessor | 六个直接消费者只经 `AtlasMetadataView`；`animation_back_atlas_names`/`animation_front_atlas_names` 由弱类型 `Array` 改为 `Array[String]`，其余帧几何、geometry、mask、播放参数与 rider transform 已为值类型。不新增嵌套 typed Resource、不改 `AtlasMetadata.data` 序列化、不加 UID、不重开旧入口。新增 `atlas-accessor` 合成 metadata 探针，覆盖 `pages+sequences`、`animation+frames`、越界与无效 View。**验证**：`atlas-accessor` PASS；`check_all --godot-bin` 8/8；`level_1` PASS；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（336.3s，`level_dsg_1` 一次瞬态重试通过）。 | 21-1C 完成 |
 | 2026-10-31 Phase 21-1A/21-2A Spine 平台基线 | 目标平台定为 **Windows x86_64**，渲染后端以工程默认 `mobile` 为准；其它平台全部延期/未验证，最低设备未声明。Spine 保持官方 **4.3 / Godot 4.7.2** 构建：本地 Windows 三个 DLL 与 `.gdextension` 和官方 `spine-godot-extension-4.3-4.7.2-stable.zip` 逐字节一致（ZIP sha256 `1ab0512c…8b15`），无需升级。平台决策与矩阵见 [`spine_platform_baseline.md`](spine_platform_baseline.md)。**验证**：`role-skills` 探针 **PASS**（4.63s）。 | 21-1A 完成（Windows-only）；21-2A 平台/后端确认、最低设备待定；21-2B 暂缓 |
-| 2026-10-31 Phase 21-2C PCK 闭包复跑 | 验证用 `all_resources` 预设重新导出：**4,100/4,100 依赖可达**，PCK **7,564,128,928 字节**，sha256 `fa5fdf29adbb…`，导出+包内校验约 **675s**。PCK 体积较 19-3C 的约 2.74 GB 明显增大；以本轮结果为准，**不等于最小发布闭包**。 | 21-2C PCK 子项完成；release 启动、代表关卡冒烟未做 |
+| 2026-10-31 Phase 21-2C PCK 闭包复跑 | 验证用 `all_resources` 预设重新导出：**4,100/4,100 依赖可达**，PCK **7,564,128,928 字节**，sha256 `fa5fdf29adbb…`，导出+包内校验约 **675s**。PCK 体积较 19-3C 的约 2.74 GB 明显增大；以本轮结果为准，**不等于最小发布闭包**。 | 21-2C PCK 子项完成；release 启动/代表关卡见 2026-11-01 行 |
+| 2026-11-01 Phase 21-2C Windows release 冒烟 | 使用 `all_resources` 验证预设导出 exe（约 105 MB）+ PCK（约 7.1 GB）；临时冒烟驱动启动真实生产主场景 `load_scene.tscn` → `main_menu.tscn`，再切入 `level_1.tscn`。报告 `ok=true`，`production_main=main_menu.tscn`，`level=level_1.tscn`，耗时 **3.762s**；Vulkan 1.4.315 / Forward Mobile / AMD Radeon RX 6750 XT；最终日志 **0 ERROR / 0 WARNING**。验证后删除临时驱动并恢复 `project.godot` 主场景。 | 21-2C 完成；验证包不是最小发布包，峰值 VRAM/跨平台仍未验证 |
 
 ---
 
