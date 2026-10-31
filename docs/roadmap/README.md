@@ -19,7 +19,7 @@
 | [`../archive/iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界归档 |
 | [`../archive/iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾归档 |
 
-当前内容版本 **6.9**。Phase 12~20 已完成并归档；当前候选为 Phase 21 独立立项与平台发布验证，进度与剩余批次见 [`current-iteration.md`](current-iteration.md)。目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12~20 已完成并归档；当前候选为 Phase 21 独立立项与平台发布验证，进度与剩余批次见 [`current-iteration.md`](current-iteration.md)。Phase 30 暂缓（设计完成）与 Phase 31~33 候选的启动条件见 [`roadmap.md`](roadmap.md)；当前迭代页不复制候选队列。目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

@@ -15,7 +15,7 @@
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
-| Phase 21 独立立项与平台发布 | 进行中：21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-1A、21-2 未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 21 独立立项与平台发布 | 进行中：21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-1A、21-2 未启动（owner 与前置见 [current-iteration.md](current-iteration.md) §2/§3） | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；详细批次见 [`current-iteration.md`](current-iteration.md) |
 | Phase 30 关卡布局数据契约 | **暂缓（设计完成，未实施）** | 30-0 设计已产出（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 待启动，见 §3.5 |
 | Phase 31 引擎废弃 API 与局部现代化 | **候选（未启动）** | 31-0 顺手包（`TileMap`/数字图/具名物理层/重复函数）、31-1 视差迁移；见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
