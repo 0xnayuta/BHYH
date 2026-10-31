@@ -1,0 +1,180 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackground.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock1.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock2.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock3.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock4.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackrock5.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor2.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/activity_rockland_1/activity_rocklandbackfloor1.png" id="9"]
+
+[node name="ActivityRockland1" type="Node2D"]
+
+[node name="Parallax_0_L1_spd_0_9_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.9, 0.5)
+
+[node name="L_00_activity_rocklandbackground" type="Sprite2D" parent="Parallax_0_L1_spd_0_9_0_5"]
+position = Vector2(-150.0, 3400.0)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_02_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(-399.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_03_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(401.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_04_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(801.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_05_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1201.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_06_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1601.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_07_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2001.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_08_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2400.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_09_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3200.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_10_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2800.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_11_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3600.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_12_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4000.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_13_activity_rocklandbackfloor" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4400.0, 4610.0)
+texture = ExtResource("2")
+centered = false
+
+[node name="L_14_activity_rocklandbackrock1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(454.0, 4615.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_15_activity_rocklandbackrock2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(608.0, 4692.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_16_activity_rocklandbackrock3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(278.0, 4710.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_17_activity_rocklandbackrock4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(816.0, 4608.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_18_activity_rocklandbackrock5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1199.0, 4658.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_19_activity_rocklandbackrock1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2883.0, 4624.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_20_activity_rocklandbackrock2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2085.0, 4714.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_21_activity_rocklandbackrock3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1837.0, 4626.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_22_activity_rocklandbackrock4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2350.0, 4601.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_23_activity_rocklandbackrock5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2652.0, 4665.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_24_activity_rocklandbackrock1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4363.0, 4621.0)
+texture = ExtResource("3")
+centered = false
+
+[node name="L_25_activity_rocklandbackrock2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3565.0, 4711.0)
+texture = ExtResource("4")
+centered = false
+
+[node name="L_26_activity_rocklandbackrock3" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3317.0, 4623.0)
+texture = ExtResource("5")
+centered = false
+
+[node name="L_27_activity_rocklandbackrock4" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(3830.0, 4598.0)
+texture = ExtResource("6")
+centered = false
+
+[node name="L_28_activity_rocklandbackrock5" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(4132.0, 4662.0)
+texture = ExtResource("7")
+centered = false
+
+[node name="L_29_activity_rocklandbackfloor2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1690.0, 4200.0)
+texture = ExtResource("8")
+centered = false
+
+[node name="L_30_activity_rocklandbackfloor1" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2118.0, 4369.0)
+texture = ExtResource("9")
+centered = false
+
+[node name="L_31_activity_rocklandbackfloor2" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(2650.0, 4200.0)
+texture = ExtResource("8")
+centered = false
