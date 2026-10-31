@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-3A~21-3J、21-4A 与 21-4B 已完成**；21-1A/21-1B/21-1C 与 21-2 未启动。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1B、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-1A、21-1C 与 21-2 未启动。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -39,7 +39,7 @@
 **目标**：每项给出采用/延期/拒绝结论、owner 与前置条件；采用项落地并有验收。
 
 1. **21-1A Spine 跨平台（承接 20-1A）**：确定目标平台、Spine 运行时版本与许可证；补二进制/`.gdextension` 并做目标平台加载验收。未确认平台前只允许决策草案，不写成已支持。
-2. **21-1B `_bundled` 历史场景（承接 20-1C）**：先取证实际格式（不以文件名搜索结果宣布不存在）；评估转换、UID/导入缓存与回归范围后决定转换或拒绝。
+2. **21-1B `_bundled` 历史场景（完成，2026-10-31，拒绝转换）**：公共工程 1,136 个 `.tscn` 全部为 `[gd_scene format=3]` 文本，`git ls-files '*.scn'` 与 `RSRC` 二进制场景均为 0；私人素材仓无 `.scn`/`.tscn`。`source/.godot/exported/*.scn` 为被忽略的导出缓存，`_bundled` 只是缓存内部属性，不作为源场景转换。`Scene/` 1,135 个场景中仅 `load_scene.tscn` 头含 UID，1,134 个无头 UID（无重复）；文本场景按路径加载且门禁通过。转换范围为 0，关闭 20-1C。
 3. **21-1C 类型化 Atlas accessor（承接 20-1D）**：基于 Phase 14 消费清单评审 typed schema；不改变视觉结果，不重开 `data_for`/`validate_path`/`clear_cache` 入口。
 
 **必须验证**：每项有结论与 owner；采用项在目标平台/真实资源上验证；不把 Windows 或 headless 结果当跨平台通过。

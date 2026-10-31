@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-3 工厂族与 21-4 资源遗留已完成，21-1/21-2 尚未启动。平台与发布验证按独立工作流推进，不把未验证平台写成承诺。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1B `_bundled` 取证已完成并拒绝转换，21-3 工厂族与 21-4 资源遗留已完成，21-1A/21-1C 与 21-2 尚未启动。平台与发布验证按独立工作流推进，不把未验证平台写成承诺。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -15,7 +15,7 @@
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
-| Phase 21 独立立项与平台发布 | 进行中：21-3 工厂族与 21-4A/21-4B 已完成；21-1、21-2 未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 21 独立立项与平台发布 | 进行中：21-1B 完成（拒绝转换）、21-3 工厂族与 21-4A/21-4B 完成；21-1A/21-1C、21-2 未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
