@@ -20,9 +20,9 @@ Phase 20-1 剩余切片转入 Phase 21-1：
 | 切片 | 本轮结论 | 说明 |
 |:---|:---|:---|
 | 20-1A Spine 跨平台 | 转入 Phase 21-1；未启动 | 需先定目标平台、Spine 运行时版本与许可证；不在本页替其作结论 |
-| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2、W3~W8 与 S5 已执行；20-1A/20-1C/20-1D 转入 Phase 21-1** | 本页；决策时 13 个注册项，W4 合并 `MainMusic` 后 11 个 |
+| 20-1B `global.gd` + Autoload | **采用边界清单；P1/P2、W3~W8 与 S5 已执行；20-1A 转入 Phase 21-1，20-1C 拒绝、20-1D 完成** | 本页；决策时 13 个注册项，W4 合并 `MainMusic` 后 11 个 |
 | 20-1C `_bundled` 历史场景 | 21-1B 完成，拒绝转换（2026-10-31） | 无待转换二进制场景；`.godot/exported/*.scn` 为可重建缓存，不作为源 |
-| 20-1D 类型化 Atlas accessor | 转入 Phase 21-1；未启动 | 依赖 19-3B 的 41 项未迁移图集范围 |
+| 20-1D 类型化 Atlas accessor | 21-1C 完成（2026-10-31） | 六个消费者只经 View；atlas 页名改为 `Array[String]`，其余字段为值类型 |
 
 ## 2. 量化基线
 
@@ -380,4 +380,4 @@ P1、P2、W3~W8 与 S5 已执行；全部切片都不新增 Autoload。
 - **已决（S5 收口，Phase 21-3 批次 1~11 完成）**：`Global` 现有 113 个 `add_*`，全部为族工厂的薄转发（`add_font_instance` 为多行）；无剩余未迁移入口。已完成锻造/分解、弹体、效果、菜单/设置、buff、关卡场景、展示文本与技能面板、场景/提示与地图浮层、角色/选择面板、丹药/公告、浅攻/相机十一批，并删除 3 个死入口（`add_role_button`/`add_choose_player`/`add_change_clothes_jm`）。后续只按新需求评审，不继续扩张工厂。
 - **已决（W8 S8 + 20-3 守卫批次）**：`get_ancestor`/`get_position_between`/`get_dis_betweem` 迁入 `NodeUtils.ancestor/position_between/distance_between`；`get_clean_name`、`get_all_item_num`、`get_wx` 迁入 `ItemUtils.clean_fashion_name/random_item_entries/random_element_set`（`get_random_wx` 降为 `ItemUtils` 私有）；`load_item_icon`、`add_all_item_num`、`check_dir_between_two_obj`、`normal_face_player` 全仓 0 调用方，直接删除；角色身体/装备贴图加载迁入 `RoleVisualRuntime`，`Global` 保留 `load_role1_body`/`load_role1_eq` 薄转发。运行状态字段直写与上述旧入口由 `contract_scan` 的 `run_state_boundary` 规则阻断。
 - **已决**：`add_after_level_end` 的 `z_index = 9999` 属无效赋值（超出合法范围，从未生效），W6 S5 删除，不改渲染顺序。
-- **未启动（转入 Phase 21-1）**：20-1A、20-1C、20-1D；本页不替其作采用/拒绝结论。
+- **未启动（转入 Phase 21-1）**：20-1A；20-1C 已拒绝转换，20-1D 由 21-1C 完成。

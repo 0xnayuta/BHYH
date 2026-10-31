@@ -95,7 +95,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 16 族，剩余清单见矩阵 §8）；Spine 跨平台与类型化 Atlas accessor 转入 Phase 21-1；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 按族推进（当前 16 族，剩余清单见矩阵 §8）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
 
 ### 2.4 运行时服务
 

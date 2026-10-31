@@ -1,6 +1,6 @@
 # AtlasMetadata 生产者、schema 与消费者矩阵
 
-> **状态**：Phase 14 已完成并归档（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。
+> **状态**：Phase 14 已完成并归档（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。**21-1C 类型化 accessor 复核已完成（2026-10-31）**：atlas 页名查询改为 `Array[String]`，其余消费者字段均以原生值类型返回；不新增嵌套 typed Resource、不改变路径身份。
 > **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
 > **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
 > **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)。
@@ -170,6 +170,13 @@ flowchart LR
 - 所有声明路径的缺失/类型错误必须由消费者显式处理；不得用 typed 失败后读 `.data` 或旧路径回退。
 - `convert_monster_frames` 继续直接读取源 metadata；其 152 目标与 4 个旧动画形态不要求运行时 typed 化。
 
+### 8.1 21-1C 类型化 accessor 复核（完成，2026-10-31）
+
+- **消费面复核**：Cloud/East/North/PalaceBossProjectile/PalaceFlyingBoss/MountVisual 六个直接消费者只调用 `AtlasMetadataView` 的公开查询；业务侧无裸 `.data` 读取，`contract_scan.py` 的 `atlas_boundary` 守卫保持。
+- **typed 修正**：`animation_back_atlas_names()` / `animation_front_atlas_names()` 由弱类型 `Array` 改为 `Array[String]`；其余帧几何、geometry、mask、播放参数、rider transform 已使用 `int`/`float`/`bool`/`Vector2`/`Rect2`/`Transform2D`/`StringName` 等值类型返回。
+- **边界不变**：不新增嵌套 typed Resource、不改 `AtlasMetadata.data` 序列化、不加 UID、不重开 `data_for`/`validate_path`/`clear_cache`。
+- **永久探针**：`scene_probe_runner.py --probe atlas-accessor` 使用合成 metadata 覆盖 `pages+sequences`、`animation+frames`、越界查询、缺失 mask 与无效 View；不依赖私有素材。
+
 ## 9. 验证与复现
 
 构建期调查与本次实现验证：
@@ -184,6 +191,7 @@ python scripts/convert_monster_frames.py --check
 
 运行时验证：
 
+- `scene_probe_runner.py --probe atlas-accessor` **PASS**：合成 metadata 覆盖两类 schema、typed 返回值、越界与失败语义；
 - 临时 GDScript 探针对全部 **267** 个运行时资源建立 View（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；
 - `MountVisual` 的 metadata 动画 `aoyi_skill` 播放与 `get_animation_visual_bounds` PASS；
 - 临时 GDScript 探针对 Palace 3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 逐值比对原始 `.data`，**PASS**；

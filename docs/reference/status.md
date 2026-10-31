@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-10-31（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1B 完成（拒绝转换）、21-3 工厂族与 21-4A/21-4B 完成，21-1A/21-1C、21-2 未启动；当前 11 个 Autoload）
+> 最后更新：2026-10-31（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成，21-1A、21-2 未启动；当前 11 个 Autoload）
 
 ---
 
@@ -257,6 +257,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-10-31 Phase 21-3I 丹药与游戏公告 | `add_basic_pellet` 并入 `ProjectileFactory`（基础丹药场景与坐标写入）；`add_game_announcement` 并入 `PopupFactory`（临时 UI 登记、`CanvasLayer.offset` 与 `Node2D/Control.position` 语义保持）。`Global` 3,555→**3,541 行、329 函数、144 变量、81 常量**；`add_*` 113 个，110 个为薄转发，剩余 3 个。`ui-factories` 探针扩到 **266 项**（丹药创建/缩放/缓存、公告 CanvasLayer 定位与临时 UI 登记）。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；全量回归随 21-3J 合并验证。 | 21-3I 完成；剩余 3 个 `add_*` |
 | 2026-10-31 Phase 21-3J 浅攻与关卡相机 | `add_role1_shallow`/`add_role2_shallow` 并入 `EffectFactory`（浅攻坐标/动作/方向，来源仍经 `_assign_attack_source`）；`add_camera` 并入 `LevelSceneFactory`，相机所有权定为关卡场景（调用方挂到角色节点，工厂只缓存与初始化）。`Global` 删除 3 个槽位字段与两处浅攻显式置空，改由 `_effect_factory.clear_scene_caches()` 统一释放。`Global` 3,541→**3,517 行、329 函数、141 变量、81 常量**；`add_*` 113 个，**113 个全部为薄转发**，未迁移入口 **0**。`ui-factories` 探针扩到 **272 项**（浅攻字段/来源为空、相机坐标/`max_right`、效果与关卡场景缓存）。**验证**：`check_all --godot-bin` 8/8；`level_1` PASS；存档 293/293；协作 26/26；场景 13/13；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（348.0s，`level_xss` 一次瞬态重试通过）。 | 21-3J 完成；S5 收口 |
 | 2026-10-31 Phase 21-1B `_bundled` 取证 | 公共工程 1,136 个 `.tscn` 全部为 `[gd_scene format=3]` 文本；`git ls-files '*.scn'` 与 `RSRC` 二进制场景均为 0；私人素材仓无 `.scn`/`.tscn`。`source/.godot/exported/*.scn` 共 1,137 个，为 `.gitignore` 排除的导出缓存，`_bundled` 仅是该缓存内部属性，不作为源场景转换。`Scene/` 1,135 个场景中仅 `load_scene.tscn` 头含 UID，其余 1,134 个依赖路径加载且无重复 UID；`health_check` 与资源门禁通过。转换范围为 0，**拒绝转换**并关闭 20-1C。 | 21-1B 完成；无代码/资源变更 |
+| 2026-10-31 Phase 21-1C 类型化 Atlas accessor | 六个直接消费者只经 `AtlasMetadataView`；`animation_back_atlas_names`/`animation_front_atlas_names` 由弱类型 `Array` 改为 `Array[String]`，其余帧几何、geometry、mask、播放参数与 rider transform 已为值类型。不新增嵌套 typed Resource、不改 `AtlasMetadata.data` 序列化、不加 UID、不重开旧入口。新增 `atlas-accessor` 合成 metadata 探针，覆盖 `pages+sequences`、`animation+frames`、越界与无效 View。**验证**：`atlas-accessor` PASS；`check_all --godot-bin` 8/8；`level_1` PASS；全量 `level_regression_all` **128/128 PASS + 5 SKIP**（336.3s，`level_dsg_1` 一次瞬态重试通过）。 | 21-1C 完成 |
 
 ---
 

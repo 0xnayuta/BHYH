@@ -154,12 +154,12 @@ func animation_frame_count() -> int:
 	return int(_animation.get("frame_count", _animation_frames.size()))
 
 
-func animation_back_atlas_names() -> Array:
-	return _animation_back_atlases.duplicate()
+func animation_back_atlas_names() -> Array[String]:
+	return _string_array(_animation_back_atlases)
 
 
-func animation_front_atlas_names() -> Array:
-	return _animation_front_atlases.duplicate()
+func animation_front_atlas_names() -> Array[String]:
+	return _string_array(_animation_front_atlases)
 
 
 func animation_layer_has(frame_index: int, layer: StringName) -> bool:
@@ -539,6 +539,14 @@ func _valid_vec2(value: Variant) -> bool:
 		and _is_number((value as Array)[0])
 		and _is_number((value as Array)[1])
 	)
+
+
+func _string_array(values: Array) -> Array[String]:
+	var result: Array[String] = []
+	result.resize(values.size())
+	for index in range(values.size()):
+		result[index] = str(values[index])
+	return result
 
 
 static func _vec2(value: Variant) -> Vector2:
