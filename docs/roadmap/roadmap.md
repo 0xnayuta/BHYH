@@ -17,6 +17,9 @@
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1B 完成（拒绝转换）、21-3 工厂族与 21-4A/21-4B 完成；21-1A/21-1C、21-2 未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
 | Phase 30 关卡布局数据契约 | **暂缓（设计完成，未实施）** | 30-0 设计已产出（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 待启动，见 §3.5 |
+| Phase 31 引擎废弃 API 与局部现代化 | **候选（未启动）** | 31-0 顺手包（`TileMap`/数字图/具名物理层/重复函数）、31-1 视差迁移；见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
+| Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
+| Phase 33 装备数据契约 | **候选（未启动，依赖 Phase 30/32 之一）** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8 |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -150,6 +153,52 @@ flowchart TD
 - 验收：文档与实现一致，无遗留双数据源。
 
 **阶段出口**：30-1~30-3 完成并有回归证据；30-4 给出保留/迁出清单。**不做的事**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData` 整体 Resource 化。
+
+### 3.6 Phase 31：引擎废弃 API 与局部现代化（候选）
+
+> **状态**：候选，未启动。**不依赖 Phase 30**，可独立推进。
+> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
+
+**31-0 顺手包（A2/B2/B4/B5）**
+
+- `TileMap` → `TileMapLayer`（`base_through_level.tscn` 单点，官方废弃 API）；
+- 数字显示从手工拼 `Sprite2D` 改为 `Label` + BMFont（3 个文件 25 处，替代资源已就绪）；
+- `collision_layer` 裸整数提取具名常量（30 处，`godot_design_standard.md` §6 要求）；
+- `func load_item_icon` 19 处重复定义提取共享实现。
+
+**31-1 视差节点迁移（A1）**
+
+- 89 个场景 + 关卡基类的 `ParallaxBackground`/`ParallaxLayer` 迁移到 `Parallax2D`；
+- 语义映射：`motion_scale` → `scroll_scale`、`motion_mirroring` → `repeat_size`、`scroll_offset` → `screen_offset`；
+- 结构变化：容器层消失，每层变为独立 `Parallax2D`，**不是文本替换**；
+- 验收必须含逐场景截图前后对照与 `level_regression_all.py`。
+
+**阶段出口**：`ParallaxLayer`/`ParallaxBackground`/`TileMap` 全仓计数归零；数字图显示与原实现一致；`check_all` 全维 PASS。
+
+### 3.7 Phase 32：UI Theme 契约（候选）
+
+> **状态**：候选，未启动。**依赖 Phase 30 实施完成**，以验证契约重构模式的真实工作量后再启动。
+> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1。
+
+- 定义 `Theme` 资源：字体、字号层级、颜色、`Button`/`Label` 变体；
+- 定义 `theme_type_variation` 命名规范，登记进命名白名单；
+- **先做 1 个面板试点**，截图逐控件对照通过后才允许分批；
+- 分批把 6,830 处 `theme_override_*` 收敛到 Theme 变体；`FontFile` 场景级引用（207 处）随批次减少。
+
+**阶段出口**：`.theme` 资源登记并覆盖主要面板；试点与每批迁移有截图对照；未迁移面板明确列表，不假装全量完成。
+
+### 3.8 Phase 33：装备数据契约（候选）
+
+> **状态**：候选，未启动。**依赖 Phase 30 或 Phase 32 至少一个完成**。
+> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
+
+- `all_equipment_data.gd`（19,185 行）迁出为强类型 `Resource` + 构建期生成器；
+- 字段契约与生成器结构比照 `LevelPreloadCatalog` 范式；
+- 与 `PlayerData.player_data`（可变档案）的边界不变，不把档案整体 Resource 化。
+
+**阶段出口**：装备属性逐字段与迁移前一致（脚本比对）；数据源单一，脚本内不保留第二份可写副本。
+
+**三个阶段共同不做的事**：不改玩法数值、动画时序、掉落规则、输入映射、存档格式或显示基线；不把「现代化」等同于目录搬迁或 Autoload 数量目标。
 
 ## 4. 独立平台与内容工作
 
