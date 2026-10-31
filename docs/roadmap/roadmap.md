@@ -16,6 +16,7 @@
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1B 完成（拒绝转换）、21-3 工厂族与 21-4A/21-4B 完成；21-1A/21-1C、21-2 未启动 | 承接 20-1A/20-1C/20-1D、20-2 与 S5 剩余族；详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 30 关卡布局数据契约 | **暂缓（设计完成，未实施）** | 30-0 设计已产出（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 待启动，见 §3.5 |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -101,6 +102,54 @@ flowchart TD
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
 - Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；当前候选批次为 Phase 21，详细任务见 [`current-iteration.md`](current-iteration.md)。
+
+### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（暂缓）
+
+> **状态**：30-0 设计阶段已完成并入库；30-1~30-4 **暂缓实施**，在 BHYH 工作区具备实施条件后启动。
+> **决策依据**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)（Proposed）
+> **契约细节**：[`level_layout_contract.md`](../reference/level_layout_contract.md)
+
+**为什么存在这个阶段**：接入外部关卡数据（ZMWS 1,701 关）暴露了「关卡结构化数据硬编码在 84 个脚本里」的差距。直接接线会把 1,701 个关卡都变成脚本，因此先做数据契约与驱动器，再接线、再迁移。
+
+**启动前提（进入 30-1 前必须成立）**：
+
+1. `ADR-023` 由 Proposed 转为 Accepted；
+2. 明确该阶段的批次与 [`current-iteration.md`](current-iteration.md) 的关系（本阶段不并入 Phase 21）；
+3. 确认不改动任何现有玩法数值、时序、掉落与输入。
+
+**30-0 设计（已完成，2026-10-31）**
+
+- 产出 `ADR-023` 与 `level_layout_contract.md`；
+- 实测基线入库：84 个脚本硬编码 `monster_group`、76 个脚本 <100 行、分屏最多 30 屏、`Gateway` 最多 32 个、`direction` 存在 int/字符串混用与 `-5` 值；
+- 复用既有扩展点 `_stage_count()` / `_stage_trigger_x()` / `_screen_starts()` / `_screen_rights()` / `_birth_points()`，不改变签名与调用面；
+- 照 `LevelPreloadCatalog` / `LevelPreloadStore` / `convert_level_preload_catalog.py` 既有范式设计五件套（Entry / StageSpec / SpawnPoint / Catalog / Store）。
+
+**30-1 五件套与单关验证**
+
+- 新增 `LevelLayoutEntry`、`LevelStageSpec`、`LevelSpawnPoint`、`LevelLayoutCatalog`、`LevelLayoutStore`；
+- 新增构建期生成器 `scripts/convert_level_layout_catalog.py`（含 `--check`）；
+- `BaseLevel` 五个扩展点默认实现改为「有布局资源时读资源，未登记沿用现状」；
+- 验收：1 个 ZMWS 关卡跑通出生、分屏、刷怪、过关；`check_all` 全维 PASS。
+
+**30-2 怪物映射与代表关卡铺开**
+
+- 建立「外部怪物 id → BHYH 怪物场景」映射资源（先覆盖高频 id）；
+- 选 20–30 个有代表性的关卡完成端到端；
+- 验收：这批关卡可进、可打、可通关；`level_regression_all.py` 无新增失败。
+
+**30-3 数据容器脚本迁出**
+
+- 把 84 个硬编码 `monster_group` 的脚本按批迁出到布局资源；
+- 每批迁移后删除脚本内数据表，不保留双份（ADR-005）；
+- 验收：全仓 `grep "monster_group = {"` 计数逐批下降；每批 `level_regression_all.py` 与原行为一致。
+
+**30-4 边界收尾**
+
+- 55 个含真实玩法逻辑的脚本保留，只迁出其中的结构化数据块；
+- 更新 `architecture.md` §4.3 关卡状态机与 `status.md`；
+- 验收：文档与实现一致，无遗留双数据源。
+
+**阶段出口**：30-1~30-3 完成并有回归证据；30-4 给出保留/迁出清单。**不做的事**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData` 整体 Resource 化。
 
 ## 4. 独立平台与内容工作
 
