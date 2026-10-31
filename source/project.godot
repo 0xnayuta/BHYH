@@ -8,6 +8,10 @@
 
 config_version=5
 
+[Godot Dragon Bones]
+
+auto_generate_dbfactory=true
+
 [application]
 
 config/name="造梦西游八荒湮隳"

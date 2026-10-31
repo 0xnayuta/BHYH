@@ -94,6 +94,8 @@ level_smoke_report*.json
 !source/bin/windows/libspine_godot.windows.editor.x86_64.dll
 !source/bin/windows/libspine_godot.windows.template_debug.x86_64.dll
 !source/bin/windows/libspine_godot.windows.template_release.x86_64.dll
+!source/addons/godot_dragon_bones.daylily-zeleen/bin/libgddragonbones.windows.template_debug.x86_64.dll
+!source/addons/godot_dragon_bones.daylily-zeleen/bin/libgddragonbones.windows.template_release.x86_64.dll
 
 # ==========================================
 # 9. 本机 codegraph 索引，规则详见于 .codegraph/.gitignore
