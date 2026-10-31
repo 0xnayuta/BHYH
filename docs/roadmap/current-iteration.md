@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1A（Windows-only）、21-1B、21-1C、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-2A 平台/后端已确认、最低设备待 21-2B，21-2B 暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
+> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1A（Windows-only）、21-1B、21-1C、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-2A 平台/后端已确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -48,7 +48,7 @@
 
 **目标**：把资源闭包与目标设备验证分开记录。
 
-1. **21-2A 目标平台矩阵（平台/后端已确认，最低设备待定）**：Windows x86_64 为唯一目标平台，渲染后端以工程默认 `mobile` 为准；Linux/macOS/Android/Web/iOS 全部延期/未验证；**最低设备未声明**，待 21-2B；本批次未完全关闭。**Owner**：项目维护者（发布）；详见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
+1. **21-2A 目标平台矩阵（平台/后端已完成，最低设备确认暂缓）**：Windows x86_64 为唯一目标平台，渲染后端以工程默认 `mobile` 为准；Linux/macOS/Android/Web/iOS 全部延期/未验证；**最低设备未声明**，确认工作与 21-2B 一并暂缓；本批次不再有可执行项。**Owner**：项目维护者（发布）；详见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
 2. **21-2B VRAM/首帧/战斗负载（暂缓）**：无 Linux/macOS 等目标设备；按当前决定，Windows 侧测量本轮也不做。**Owner**：项目维护者（发布/设备）；恢复条件为取得可复现目标设备。
 3. **21-2C release 包（完成，2026-11-01）**：PCK/依赖闭包 **4,100/4,100 可达**（约 7.56 GB，验证用 `all_resources` 预设）；Windows release 验证包启动真实生产主场景并进入 `level_1`，报告 **ok=true**（3.762s），最终日志 **0 ERROR / 0 WARNING**。验证包使用临时冒烟驱动，已删除并恢复主场景。**Owner**：项目维护者（发布/构建）。
 
@@ -86,7 +86,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**21-4 与 21-3 已完成；21-1A 与 21-2A 决策已完成；21-2B 暂缓；21-2C Windows release 启动与 `level_1` 冒烟已完成**。21-2B 恢复需目标设备。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**21-4 与 21-3 已完成；21-1A 与 21-2A 平台/后端决策已完成；21-2A 最低设备确认与 21-2B 暂缓；21-2C Windows release 启动与 `level_1` 冒烟已完成**。21-2B 恢复需目标设备。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -116,9 +116,9 @@
 | 项 | 状态 |
 |:---|:---|
 | 21-1A、21-1B、21-1C | 完成 |
-| 21-2A 平台/后端 | 完成；**最低设备确认未完成**，依赖 21-2B |
+| 21-2A 平台/后端 | 完成；**最低设备确认暂缓**（与 21-2B 同口径） |
 | 21-2B | **暂缓**（无目标设备；Windows 侧测量本轮不做） |
 | 21-2C PCK/release 启动/`level_1` 冒烟 | 完成 |
 | 21-3A~21-3J、21-4A/21-4B | 完成 |
 
-按“暂缓项不计入未完成”的口径：**实际未完成 1 项**——21-2A 的最低设备确认；该项依赖暂缓的 21-2B，因此当前没有可继续执行的 21 项。阶段出口中的“21-2 有目标设备与日期”在 21-2B 恢复前不能勾选。
+按“暂缓项不计入未完成”的口径：**实际未完成 0 项**；Phase 21 剩余项全部为暂缓——21-2A 的最低设备确认与 21-2B。当前没有可继续执行的 21 项。阶段出口中的“21-2 有目标设备与日期”在暂缓解除前不能勾选。

@@ -33,21 +33,21 @@ flowchart TD
 | 档位 | 适用场景 | 最低要求 |
 |:---|:---|:---|
 | **L0 静态门禁** | 每次提交；无 Godot 环境 | `check_all.py --skip-engine` 7/7 PASS |
-| **L1 引擎健康** | 改脚本、场景、资源、输入、物理层 | L0 + `check_all.py --godot-bin <godot>` 8/8 PASS |
+| **L1 引擎健康** | 改脚本、场景、资源、输入、物理层 | L0 + `check_all.py --godot-bin <godot>` 9/9 PASS |
 | **L2 运行期夹具** | 改玩法、关卡、双人、HUD、加载流程 | L1 + 相关关卡冒烟 / 回归 / 双人探针 |
 | **L3 发布收口** | 版本迁移、里程碑、发布前 | L2 + 全量关卡回归 + 命名终审 + 构建期资源同步 + 文档链接检查 |
 
 ---
 
-## 3. L0：`check_all.py` 八维总门禁
+## 3. L0：`check_all.py` 九维总门禁
 
 ### 3.1 调用方式
 
 ```bash
-# 无 Godot：跳过第 4 维，历史口径称 7/7
+# 无 Godot：跳过第 4 与第 9 维，7/7
 python scripts/check_all.py --skip-engine
 
-# 有 Godot：8/8
+# 有 Godot：9/9
 python scripts/check_all.py --godot-bin "<Godot 4.7.2 可执行文件>"
 
 # 串行修复行尾与格式后，再并发跑其余维度
@@ -62,12 +62,12 @@ python scripts/check_all.py --skip-resource
 python scripts/check_all.py --no-cache -j 6
 ```
 
-- 默认并发 **6** 个线程；只读模式下 8 个维度并行，`--fix` 模式下维度 1→2 串行写修复，维度 3~8 并行。
-- 汇总顺序固定为维度 1→8；全部通过返回 `0`，任一失败返回 `1`。
+- 默认并发 **6** 个线程；只读模式下 9 个维度并行，`--fix` 模式下维度 1→2 串行写修复，维度 3~9 并行。
+- 汇总顺序固定为维度 1→9；全部通过返回 `0`，任一失败返回 `1`。
 - 启动时切换到仓库根，因此命令可在任意当前目录执行。
 - Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变量指定，不写入仓库。
 
-### 3.2 八维定义与通过判据
+### 3.2 九维定义与通过判据
 
 | 维度 | 门禁项 | 实际命令 | 通过判据 | 需要 Godot |
 |:---:|:---|:---|:---|:---:|
@@ -79,10 +79,11 @@ python scripts/check_all.py --no-cache -j 6
 | 6 | 全量命名 | `naming_audit.py --all` | 退出码 0 | ❌ |
 | 7 | 运行时引用 | `runtime_reference_audit.py` | 退出码 0 | ❌ |
 | 8 | 资源路径与工厂 | `resource_path_audit.py --project source` | 退出码 0 | ❌ |
+| 9 | DragonBones 工厂加载 | `verify_dragonbones_factories.py [--godot X]` | 退出码 0；工厂加载验证通过 | ✅ |
 
 ### 3.3 必须知道的实现口径
 
-1. **七维与八维是同一脚本的两种运行口径**：`--skip-engine` 跳过维度 4；`status.md` 中的“7/7 PASS”通常指此口径。
+1. **七维与九维是同一脚本的两种运行口径**：`--skip-engine` 跳过维度 4 与 9；`status.md` 中的“7/7 PASS”通常指此口径。
 2. **维度 1 的失败判定依赖 stdout 文本**：`normalize_eol.py` 自身永远返回 0（目标不存在时返回 2）；CRLF 未清零由 `check_all.py` 的文本匹配拦截。
 3. **维度 3 只覆盖核心脚本子集**：清单硬编码在 `check_all.py`；不是全量 lint。
 4. **维度 4 在没有 Godot 时不会“通过”**：`health_check.py` 在无引擎时可能返回 `skipped` 且退出码 0，但 `check_all` 找不到成功文本，仍会 FAIL。无引擎环境必须显式 `--skip-engine`。
@@ -368,7 +369,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | `naming_compliance_audit.py` | 全量命名终审四张表 | 人工终审；`--fail-on-error` 有违规返回 `1` |
 | `contract_scan.py --self-test` | 契约扫描负向/正向样本 | 规则变更或迁移前后手动执行 |
 
-这些工具**不在** `check_all` 的日常八维内；使用后仍需执行对应门禁，不能以“工具跑过”替代通过证据。
+这些工具**不在** `check_all` 的日常九维内；使用后仍需执行对应门禁，不能以“工具跑过”替代通过证据。
 
 ---
 
@@ -417,22 +418,22 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 变更类型 | 最低门禁 | 追加验证 | 不算通过的情况 |
 |:---|:---|:---|:---|
 | 纯文档 | 相对链接检查；`normalize_eol.py docs --dry-run` | 更新索引与状态引用 | 只改文字、不更新索引/链接 |
-| 纯 GDScript（无场景/资源） | L1 八维 | 受影响关卡冒烟或定向探针 | `--skip-engine` 后宣称 8/8 |
-| 场景/节点改动 | L1 八维 | `level_test_runner` 代表关；NodePath/动画轨道契约 | 只跑 `gdlint` |
-| 新增/修改美术或音频 | L1 八维 + `--import` | Atlas/编号帧/哪吒 `--check`；相关关卡冒烟 | 未生成 `.import`/UID；未重建导入缓存 |
-| 存档/数据结构 | L1 八维 | 当前格式已有档/新档读取、缺字段补全、损坏档拒绝、备份策略、保存/重载与退出、双人槽位 | 只测新档；猜旧结构；失败空档覆盖原档；将“旧档”误作跨版本兼容 |
-| 输入/物理层 | L1 八维 | 单/双人按键路径；`LocalCoopInputIsolationProbe`/`LocalCoopKeyConfigProbe`；相关关卡冒烟 | 只改 `project.godot` 不实机验证 |
-| 双人/LocalCoop | L1 八维 | `coop_probe_runner` 全部用例；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
-| UI/HUD/显示 | L1 八维 | 单/双人多分辨率截图；`LocalCoopHudReadOnlyProbe`（槽位 HP/MP/经验/无双/宠物与只读快照）；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
-| 关卡/玩法 | L1 八维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
-| 构建期资源管线 | L1 八维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
-| AtlasMetadata View/消费者 | L1 八维 + 定向运行路径 | `view_for` 覆盖受影响运行时资源域；真实消费者正常/错误路径；相关关卡冒烟 | 只编译或只检查单个 API；跳过资源域/消费者 |
-| 应用/场景编排、缓存/池/异步 | L1 八维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
-| 档案会话/2P 面板上下文 | L1 八维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；面板显式操作者、快照互斥与关闭恢复由 `LocalCoopPanelOperatorProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
-| 战斗来源/结算边界 | L1 八维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
-| 玩法/表现模块边界（Phase 17） | L1 八维 + 定向运行路径 | 归属探针（普攻/技能/弹体/召唤/法宝）、池化复用两轮、阶段推进与结算一次、成长命令失败无副作用、HUD/输入/音频残留；写入者/失败边界见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 只改基类或只改 UI；来源默认 1P；重复发奖；表现层写档 |
-| Phase 17 边界守卫 | L1 八维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
-| 输入写入边界守卫 | L1 八维 + `contract_scan --self-test` | `input_boundary` 好/坏样本；全量扫描 ERROR=0 | 只改文档；例外未登记；输入读取行夹带写档 |
+| 纯 GDScript（无场景/资源） | L1 九维 | 受影响关卡冒烟或定向探针 | `--skip-engine` 后宣称 7/7 |
+| 场景/节点改动 | L1 九维 | `level_test_runner` 代表关；NodePath/动画轨道契约 | 只跑 `gdlint` |
+| 新增/修改美术或音频 | L1 九维 + `--import` | Atlas/编号帧/哪吒 `--check`；相关关卡冒烟 | 未生成 `.import`/UID；未重建导入缓存 |
+| 存档/数据结构 | L1 九维 | 当前格式已有档/新档读取、缺字段补全、损坏档拒绝、备份策略、保存/重载与退出、双人槽位 | 只测新档；猜旧结构；失败空档覆盖原档；将“旧档”误作跨版本兼容 |
+| 输入/物理层 | L1 九维 | 单/双人按键路径；`LocalCoopInputIsolationProbe`/`LocalCoopKeyConfigProbe`；相关关卡冒烟 | 只改 `project.godot` 不实机验证 |
+| 双人/LocalCoop | L1 九维 | `coop_probe_runner` 全部用例；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
+| UI/HUD/显示 | L1 九维 | 单/双人多分辨率截图；`LocalCoopHudReadOnlyProbe`（槽位 HP/MP/经验/无双/宠物与只读快照）；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
+| 关卡/玩法 | L1 九维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
+| 构建期资源管线 | L1 九维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
+| AtlasMetadata View/消费者 | L1 九维 + 定向运行路径 | `view_for` 覆盖受影响运行时资源域；真实消费者正常/错误路径；相关关卡冒烟 | 只编译或只检查单个 API；跳过资源域/消费者 |
+| 应用/场景编排、缓存/池/异步 | L1 九维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
+| 档案会话/2P 面板上下文 | L1 九维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；面板显式操作者、快照互斥与关闭恢复由 `LocalCoopPanelOperatorProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
+| 战斗来源/结算边界 | L1 九维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
+| 玩法/表现模块边界（Phase 17） | L1 九维 + 定向运行路径 | 归属探针（普攻/技能/弹体/召唤/法宝）、池化复用两轮、阶段推进与结算一次、成长命令失败无副作用、HUD/输入/音频残留；写入者/失败边界见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 只改基类或只改 UI；来源默认 1P；重复发奖；表现层写档 |
+| Phase 17 边界守卫 | L1 九维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
+| 输入写入边界守卫 | L1 九维 + `contract_scan --self-test` | `input_boundary` 好/坏样本；全量扫描 ERROR=0 | 只改文档；例外未登记；输入读取行夹带写档 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 
 
