@@ -20,6 +20,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `magic-weapons`：法宝与角色特效构建期帧（诛仙剑阵、青莲、青龙剑/太极、八仙、Lyfb、哪吒阴阳）；
 - `action-frames`：八仙 Boss 与三太子（木吒/金吒）构建期动作帧、裁剪区域与实例化后帧绑定；
 - `weiyang-symbol`：未央宫 Boss 嘴/眼符号层帧构建、初始帧与发射时间轴可达。
+- `dragonbones-armature`：ZMWS 批量导出的 .dbfactory 经 DragonBonesArmatureView 实例化、
+  播放 `appear_1`、时间轴推进与 seek，并记录首次/热实例化开销与 8 实例稳态帧时间。
 """
 
 from __future__ import annotations
@@ -138,6 +140,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         timeout_seconds=120,
     ),
     ProbeSpec(
+        key="atlas-accessor",
+        title="AtlasMetadata 类型化 accessor 探针",
+        script_name="atlas_accessor_probe.gd",
+        scene_name="atlas_accessor_probe.tscn",
+        result_prefix="ATLAS_ACCESSOR_PROBE_RESULT=",
+        report_stem="atlas_accessor_probe_report",
+        teardown_marker="ATLAS_ACCESSOR_PROBE_TEARDOWN",
+        quit_after_frames=120,
+        timeout_seconds=60,
+    ),
+    ProbeSpec(
         key="weiyang-symbol",
         title="未央宫 Boss 符号层探针",
         script_name="weiyang_symbol_probe.gd",
@@ -211,6 +224,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         result_prefix="UTILS_PROBE_RESULT=",
         report_stem="utils_probe_report",
         teardown_marker="UTILS_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="dragonbones-armature",
+        title="DragonBones 骨骼运行时探针",
+        script_name="dragonbones_armature_probe.gd",
+        scene_name="dragonbones_armature_probe.tscn",
+        result_prefix="DRAGONBONES_ARMATURE_PROBE_RESULT=",
+        report_stem="dragonbones_armature_probe_report",
+        teardown_marker="DRAGONBONES_ARMATURE_PROBE_TEARDOWN",
         quit_after_frames=600,
         timeout_seconds=180,
     ),
