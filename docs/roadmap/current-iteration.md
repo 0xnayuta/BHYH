@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 综合收尾已完成并归档（见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)）；当前候选为 **Phase 21 独立立项与平台发布验证**，承接 Phase 20 未启动项（20-1A/20-1C/20-1D、20-2A/2B/2C）与连续工厂族工作。**21-1A（Windows-only）、21-1B、21-1C、21-3A~21-3J、21-4A 与 21-4B 已完成**；21-2A 平台/后端已确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。当前批次为 **Phase 31-0A**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重），Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓，31-0B 与 31-1 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -28,7 +28,7 @@
 |:---|:---|
 | Autoload | 11 个（10 业务 + 1 编辑器调试桥）；`Global` 以普通子节点与 `RunContext` 承载运行职责，清单见 [`architecture.md`](../reference/architecture.md) §2.4 |
 | `Global` 规模 | 不在此复制行数、函数与入口计数；当前规模与薄转发统计以 [`status.md`](../reference/status.md) 为准 |
-| 静态守卫 | `contract_scan.py` 20 类；`check_all` 八维；契约 ERROR=0、WARNING ≤ 预算 |
+| 静态守卫 | `contract_scan.py` 20 类；`check_all` 九维；契约 ERROR=0、WARNING ≤ 预算 |
 | 运行时夹具 | 按 `acceptance.md` 的 L2 档位执行；探针清单由各 runner 维护，历史结果见 `status.md` |
 | 资源闭包 | 19-3C 的 PCK 快照只在资源未变化时有效；资源变更后必须重跑 |
 
@@ -84,9 +84,65 @@
 
 **必须验证**：补资源项迁移后 `runtime_frames_allowlist` 只减不增；缺陷修正有前后帧与技能时序证据。
 
+## 5A. Phase 30：关卡布局数据契约（暂缓，设计完成）
+
+> **状态**：30-0 设计已完成（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) `Proposed` + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 **未启动**。本阶段不并入 Phase 21，也不并入 Phase 31。
+
+**启动前提**：ADR-023 由 `Proposed` 转 `Accepted`；本页登记独立批次与出口；确认不改动任何现有玩法数值、时序、掉落与输入。
+
+| 批次 | 内容 | 出口 |
+|:---|:---|:---|
+| 30-1 | `LevelLayoutEntry`/`LevelStageSpec`/`LevelSpawnPoint`/`LevelLayoutCatalog`/`LevelLayoutStore` 五件套；`scripts/convert_level_layout_catalog.py`（含 `--check`）；`BaseLevel` 五个扩展点改为「有布局资源读资源，未登记沿用现状」 | 1 个 ZMWS 关卡跑通出生/分屏/刷怪/过关；`check_all` 全维 PASS |
+| 30-2 | 外部怪物 id → BHYH 怪物场景映射资源；20–30 个代表关卡端到端 | 这批关卡可进、可打、可通关；回归无新增失败 |
+| 30-3 | 84 个硬编码 `monster_group` 脚本按批迁出，删除脚本内数据表 | `monster_group = {` 计数逐批下降；每批行为一致 |
+| 30-4 | 55 个含玩法逻辑脚本保留，仅迁出结构化数据块；更新 `architecture.md` §4.3 与 `status.md` | 无遗留双数据源 |
+
+**当前基线（2026-11-01 实测）**：BHYH 关卡场景 153 / 脚本 164；硬编码 `monster_group` 脚本 **84**；ZMWS 关卡场景 **1,701**；`source/Script` 内 `level_layout_*` 与 `convert_level_layout_catalog.py` **均不存在**。
+
+**不做**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData.player_data` 整体 Resource 化、不保留已迁移关卡脚本内数据副本。
+
+## 5B. Phase 31：引擎废弃 API 与局部现代化（当前批次）
+
+> **状态**：31-0 拆为 31-0A（**当前批次**）与 31-0B（未启动）；31-1 未启动。不依赖 Phase 30。
+> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
+
+### 31-0A 顺手包（本批次）
+
+| 子项 | 现状（2026-11-01 实测） | 目标 |
+|:---|:---|:---|
+| A2 `TileMap` → `TileMapLayer` | 基类 1 个 `TileMap` 节点；**12 个关卡场景**覆盖 `layer_0/tile_data`；15 个覆盖 `tile_set`；106 个场景引用 `BackGround/floor_2`；无 `layer_1+` 属性；12 个文件 alternative 全为 0，source id 为 0（`level_5` 为 2） | 全仓 `type="TileMap"` 归零；格子坐标/源/图集/替代项逐格一致 |
+| B4 `collision_layer` 具名化 | 脚本内裸整数 **30 处**：`0`×11、`1`×1、`2`×8、`4`×7、`16`×1、`32`×2 | 具名常量集中定义；裸整数归零且语义有调用点依据 |
+| B5 `load_item_icon` 去重 | 定义 **19 处**（21 个文件 99 处调用）；至少 5 种兜底语义 | 共享解析器 + 分模式调用；`^func load_item_icon` 归零 |
+
+**31-0A 出口**：三项静态计数达标；`check_all --godot-bin` 9/9 PASS；12 个 TileMap 覆盖关卡与 `level_1` 冒烟通过；`level_regression_all --changed-only` 无新增失败；背包/商店/锻造/分解/buff/失败奖励面板图标行为与迁移前一致。
+
+**31-0A 不做**：不把 `TileMapLayer` 迁移顺带改成数据驱动地形；不把物理层重构为位运算工具类；不改变任何图标的兜底优先级。
+
+### 31-0B 数字图 → BMFont（未启动）
+
+- `Art/all_number` 引用 25 处 / 3 个文件（`back_pack.gd` 等级两位拼接、`backpack_level_display.gd` TextureRect 数字数组、`damage_number.gd` 伤害数字）；
+- 必须先建立 3 个文件的显示基线（字宽、行高、锚点、缩放、生命周期），再做替换；
+- **不能达到原有显示效果时保留旧数字图并登记原因**，不得为通过计数而强行替换。
+
+### 31-1 视差迁移（未启动）
+
+- 89 个场景 95 个 `ParallaxLayer` 节点 + 1 个 `ParallaxBackground`（`base_through_level.tscn`）；
+- 语义映射 `motion_scale→scroll_scale`、`motion_mirroring→repeat_size`、`scroll_offset→screen_offset`；容器层消失，**不是文本替换**；
+- 验收必须含逐场景截图对照与全量回归。
+
+## 5C. Phase 32 / 33（候选，均未启动）
+
+| 阶段 | 内容 | 启动前提 |
+|:---|:---|:---|
+| 32 UI Theme 契约 | `theme_override_*` **6,830 处**收敛到 Theme 资源 + `theme_type_variation`；先 1 个面板试点 | Phase 30 实施完成 |
+| 33 装备数据契约 | `all_equipment_data.gd` **19,185 行**转 Resource + 构建期生成器；属性逐字段一致 | Phase 30 或 32 至少一个完成 |
+
+两阶段与 Phase 31 一样：不改玩法数值、掉落、输入映射、存档格式与显示基线。
+
+
 ## 6. 推荐顺序与恢复
 
-当前状态：**21-4 与 21-3 已完成；21-1A 与 21-2A 平台/后端决策已完成；21-2A 最低设备确认与 21-2B 暂缓；21-2C Windows release 启动与 `level_1` 冒烟已完成**。21-2B 恢复需目标设备。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**当前批次为 Phase 31-0A**；31-0B、31-1、Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -102,6 +158,9 @@
 | 21-2 平台/发布 | 目标设备 VRAM/首帧/负载；release 启动与代表关卡；PCK | headless 不作 VRAM 证据 |
 | 21-3 工厂族 | 对应探针返回形状/缓存；`level_1` 冒烟；相关回归 | 只改转发不算完成 |
 | 21-4 资源转换器 | 转换器 `--check`/`--self-test`；allowlist 只减不增；帧与时序证据 | 不重开构建器 |
+| 31-0A 废弃 API/常量/去重 | `check_all` 9/9；12 个 TileMap 覆盖关卡与 `level_1` 冒烟；changed-only 回归；图标行为对照 | 不以静态计数代替运行验证 |
+| 31-0B 数字图 | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
+| 31-1 视差 | 89 个场景逐场景截图前后对照；全量回归 | 不做纯文本替换 |
 
 ## 8. 阶段出口
 
@@ -110,6 +169,7 @@
 - 21-3 每族删除被替代槽位，守卫与探针覆盖；全仓 ERROR=0；
 - 21-4 补资源项迁移完成或明确拒绝，缺陷有前后证据；
 - 文档、矩阵、脚本索引与状态一致；阶段归档后建立下一候选。
+- 31-0A 三项子项各自可独立回滚；任一子项未验证不得合并提交。
 
 ## 9. 当前剩余项（2026-11-01）
 
@@ -121,4 +181,15 @@
 | 21-2C PCK/release 启动/`level_1` 冒烟 | 完成 |
 | 21-3A~21-3J、21-4A/21-4B | 完成 |
 
-按“暂缓项不计入未完成”的口径：**实际未完成 0 项**；Phase 21 剩余项全部为暂缓——21-2A 的最低设备确认与 21-2B。当前没有可继续执行的 21 项。阶段出口中的“21-2 有目标设备与日期”在暂缓解除前不能勾选。
+按“暂缓项不计入未完成”的口径：**Phase 21 实际未完成 0 项**；剩余项全部为暂缓——21-2A 的最低设备确认与 21-2B。阶段出口中的“21-2 有目标设备与日期”在暂缓解除前不能勾选。
+
+### 9.1 后续批次状态
+
+| 批次 | 状态 |
+|:---|:---|
+| Phase 31-0A（TileMap/物理层/图标去重） | **进行中** |
+| Phase 31-0B（数字图→BMFont） | 未启动 |
+| Phase 31-1（89 场景视差迁移） | 未启动 |
+| Phase 30（ADR-023 关卡布局契约） | 暂缓（设计完成，`Proposed`） |
+| Phase 32（UI Theme） | 未启动，依赖 Phase 30 |
+| Phase 33（装备数据） | 未启动，依赖 Phase 30 或 32 |
