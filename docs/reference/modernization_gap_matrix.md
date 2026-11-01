@@ -45,7 +45,7 @@
 | `Parallax2D` 场景 | **1,790**（外部 1,701 + BHYH 89） | 现代 |
 | `TileMap` 节点 | **0**（31-0A 已迁移为 `TileMapLayer`） | A2 已消除 |
 | `theme_override_*` | **6,830** | B1 |
-| `.theme` 资源 | **0** | B1 |
+| `.theme` 扩展文件 / `Theme` `.tres` | **0 / 1** | B1 |
 | 场景引用 `theme` | **2** | B1 |
 | `FontFile` 场景级 `ext_resource` | **207** | B1（字体未集中） |
 | `Label` / `Button` / `TextureRect` / `Control` 节点 | 851 / 351 / 217 / 70 | B1 影响面 |
@@ -100,7 +100,7 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | `theme_override_*` **6,830 处**内联样式；`.theme` 资源 **0 个**；场景仅 **2 处**引用 `theme`；`FontFile` 场景级引用 **207 处** |
+| 现状 | `theme_override_*` **6,830 处**内联样式；`.theme` 扩展文件 0 个，另有一个 **`Theme` 类型的 `.tres`**（`backpack_action_theme.tres`）；场景仅 **2 处**引用 `theme`；`theme_type_variation` 0 处；`FontFile` 场景级引用 **207 处** |
 | 影响面 | 851 个 `Label`、351 个 `Button`、217 个 `TextureRect`、70 个 `Control` |
 | 问题 | 改一个全局字号/颜色要改 6,830 处；无法主题切换；字体在多场景重复引用；新增 UI 无统一层级 |
 | Godot 推荐 | `Theme` 资源集中管理 + `theme_type_variation` 做变体 |
@@ -197,8 +197,8 @@
 | **Phase 31-0A** | A2 `TileMap`→`TileMapLayer`（基类 1 + 12 个覆盖场景）、B4 具名物理层（30 处）、B5 去重（19 处） | API/普通重构 | 1–2 天 | 无 |
 | ~~Phase 31-0B~~ | B2 数字图→BMFont（3 文件 25 处）：评估后拒绝，保留旧数字图 | 方案替换 | 已评估 | 无（需同源 BMFont 才重启） |
 | **Phase 31-1** | 视差迁移：89 场景 `ParallaxLayer` → `Parallax2D`（完成） | API 迁移 | 已实施 | 31-0 完成 |
-| **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,830 处 | **契约重构** | 试点 2 天 + 分批 | Phase 30 实施完成并验证契约模式工作量 |
-| **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | Phase 30/32 至少一个完成；需全量数值回归方案 |
+| **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,830 处 | **契约重构** | 试点 2 天 + 分批 | **已规划、未启动**；Phase 30 已归档；先 32-0/32-1，见 `current-iteration.md` §5C |
+| **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | **已规划、未启动**；Phase 30 已完成，推荐 32-1 后启动；需全量数值回归方案，见 `current-iteration.md` §5D |
 
 **不建议立项**：B6、B7、B8、C1、C2。
 

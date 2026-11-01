@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1A（Windows-only）、21-1B `_bundled` 取证、21-1C Atlas typed accessor、21-3 工厂族与 21-4 资源遗留已完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。**Phase 31 已完成：31-0A 完成（TileMap→TileMapLayer、物理层具名常量、图标去重）；31-0B 评估后拒绝（保留旧数字图）；31-1 完成（ParallaxLayer/Background 归零）。Phase 30-1/30-2 已完成（`level_48` 布局试点 + 外部怪物映射/原始 ZMWS 驱动器/20 个代表关卡），30-3 收口完成（69 迁出 + 6 空表 + 10 例外），30-4 未启动。**
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**当前候选为 Phase 32 UI Theme 与 Phase 33 装备数据，均未启动**；依赖已满足，详细批次见 [`current-iteration.md`](current-iteration.md)。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -16,10 +16,10 @@
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
-| Phase 30 关卡布局数据契约 | **已完成**：30-1/30-2/30-3/30-4 完成；30-3 含 10 个登记例外，30-4 逐项边界决策与 PCK 复跑 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
+| [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
-| Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
-| Phase 33 装备数据契约 | **候选（未启动，依赖 Phase 30/32 之一）** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8 |
+| Phase 32 UI Theme 契约 | **已规划，未启动；依赖已满足** | 6,830 处静态内联样式收敛到 Theme + 变体；见 §3.7、[`current-iteration.md`](current-iteration.md) §5C |
+| Phase 33 装备数据契约 | **已规划，未启动；依赖已满足** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8、[`current-iteration.md`](current-iteration.md) §5D |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -104,13 +104,13 @@ flowchart TD
 - HUD/面板用只读查询与明确命令，输入与音频表现不拥有领域规则。
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
-- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；当前候选批次为 Phase 21，详细任务见 [`current-iteration.md`](current-iteration.md)。
+- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 30/31 已完成并归档，当前候选为 Phase 32/33，详细任务见 [`current-iteration.md`](current-iteration.md)。
 
-### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（30-1/30-2/30-3/30-4 已完成）
+### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（已完成并归档）
 
 > **状态**：30-0 设计与评审完成；30-1 **已完成**（`level_48` 试点）；30-2 **已完成**（外部怪物映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；30-3 **已完成**（69 迁出 + 6 空表删除 + 10 例外登记）；30-4 **已完成**（85 个原数据容器脚本逐项复核）。
 > **决策依据**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)（Accepted）
-> **契约细节**：[`level_layout_contract.md`](../reference/level_layout_contract.md)
+> **契约细节**：[`level_layout_contract.md`](../reference/level_layout_contract.md)；归档：[`iteration_30_level_layout_data_contract.md`](../archive/iteration_30_level_layout_data_contract.md)
 
 **为什么存在这个阶段**：接入外部关卡数据（ZMWS 1,701 关）暴露了「关卡结构化数据硬编码在 85 个脚本里」的差距。直接接线会把 1,701 个关卡都变成脚本，因此先做数据契约与驱动器，再接线、再迁移。
 
@@ -157,7 +157,7 @@ flowchart TD
 
 **阶段出口**：30-1~30-3 完成并有回归证据；30-4 给出保留/迁出清单。**不做的事**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData` 整体 Resource 化。
 
-### 3.6 Phase 31：引擎废弃 API 与局部现代化（候选）
+### 3.6 Phase 31：引擎废弃 API 与局部现代化（已完成）
 
 > **状态**：31-0A 已完成（2026-11-01）；31-0B 评估后拒绝（保留旧数字图）；31-1 已完成（2026-11-01）。**不依赖 Phase 30**。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
@@ -178,30 +178,32 @@ flowchart TD
 
 **阶段出口（已达成）**：`ParallaxLayer`/`ParallaxBackground`/`TileMap` 全仓计数归零；数字图保留已验收的旧实现（BMFont 替换已拒绝）；`check_all` 9/9 PASS；全量回归 128/128 PASS + 5 SKIP。
 
-### 3.7 Phase 32：UI Theme 契约（候选）
+### 3.7 Phase 32：UI Theme 契约（已规划，未启动）
 
-> **状态**：候选，未启动。**依赖 Phase 30 实施完成**，以验证契约重构模式的真实工作量后再启动。
+> **状态**：已规划，未启动；依赖 Phase 30 已完成、Phase 31 已完成。批次与验收见 [`current-iteration.md`](current-iteration.md) §5C。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1。
 
-- 定义 `Theme` 资源：字体、字号层级、颜色、`Button`/`Label` 变体；
+- 定义 Theme 资源：字体、字号层级、颜色、`Button`/`Label` 变体；
 - 定义 `theme_type_variation` 命名规范，登记进命名白名单；
-- **先做 1 个面板试点**，截图逐控件对照通过后才允许分批；
-- 分批把 6,830 处 `theme_override_*` 收敛到 Theme 变体；`FontFile` 场景级引用（207 处）随批次减少。
+- **先做 1 个面板试点**（`game_set`），截图逐控件对照通过后才允许分批；
+- 分批把 6,830 处静态 `theme_override_*` 收敛到 Theme 变体；动态 `add_theme_*` 保留为数据驱动例外；
+- 不替换现有 12 个字体族，不改变 1280×800 显示基线。
 
-**阶段出口**：`.theme` 资源登记并覆盖主要面板；试点与每批迁移有截图对照；未迁移面板明确列表，不假装全量完成。
+**阶段出口**：Theme 资源登记并覆盖主要面板；试点与每批有截图/几何对照；未迁移面板明确列表，不假装全量完成。
 
-### 3.8 Phase 33：装备数据契约（候选）
+### 3.8 Phase 33：装备数据契约（已规划，未启动）
 
-> **状态**：候选，未启动。**依赖 Phase 30 或 Phase 32 至少一个完成**。
+> **状态**：已规划，未启动；Phase 30 已完成，推荐 Phase 32-1 试点后启动数据层批次。依赖与批次见 [`current-iteration.md`](current-iteration.md) §5D。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
 
-- `all_equipment_data.gd`（19,185 行）迁出为强类型 `Resource` + 构建期生成器；
-- 字段契约与生成器结构比照 `LevelPreloadCatalog` 范式；
+- `all_equipment_data.gd`（19,185 行）迁出为强类型 Resource Catalog + 构建期生成器；
+- 1,035 条运行时定义、32 个字段、`强化属性` 嵌套键与 int/float 类型逐字段对比；
+- 规则（神铸、强化、宝石共鸣、五行随机）与定义分离；随机结果不冻结进静态资源；
 - 与 `PlayerData.player_data`（可变档案）的边界不变，不把档案整体 Resource 化。
 
 **阶段出口**：装备属性逐字段与迁移前一致（脚本比对）；数据源单一，脚本内不保留第二份可写副本。
 
-**三个阶段共同不做的事**：不改玩法数值、动画时序、掉落规则、输入映射、存档格式或显示基线；不把「现代化」等同于目录搬迁或 Autoload 数量目标。
+**Phase 30~33 共同不做的事**：不改玩法数值、动画时序、掉落规则、输入映射、存档格式或显示基线；不把「现代化」等同于目录搬迁或 Autoload 数量目标。
 
 ## 4. 独立平台与内容工作
 
@@ -221,5 +223,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15、Phase 16 与 Phase 17 已完成并归档；当前候选为 Phase 21，进度、剩余批次与恢复条件以 [`current-iteration.md`](current-iteration.md) 与 [`status.md`](../reference/status.md) 为准。
+- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 30 与 Phase 31 已完成并归档；当前候选为 Phase 32/33，进度、批次与恢复条件以 [`current-iteration.md`](current-iteration.md) 与 [`status.md`](../reference/status.md) 为准。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

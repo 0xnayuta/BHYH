@@ -55,7 +55,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 21 独立立项与平台发布验证**：Spine 跨平台、`_bundled`、类型化 Atlas accessor、平台/发布验证、工厂族收口与资源转换器遗留；Phase 18~20 已归档 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 32/33 规划**：UI Theme 契约（6,830 静态覆盖、试点与分批）与装备数据契约（1,035 条定义、规则分离）；Phase 30 已归档，Phase 21/31 完成 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |
@@ -99,6 +99,7 @@ python scripts/level_regression_all.py --jobs 4 --timeout 90
 | [`archive/iteration_15_app_orchestration_lifecycle.md`](archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页、缓存/池/UI、退出与边界守卫归档 |
 | [`archive/iteration_16_archive_session_slots.md`](archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位：调用面矩阵、保存 IO、会话上下文、共享账本、面板显式操作者、契约门禁与恢复归档 |
 | [`archive/iteration_17_gameplay_module_boundaries.md`](archive/iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界：归属/阶段/成长/HUD/音频/模块 API 结论与交接缺口归档 |
+| [`archive/iteration_30_level_layout_data_contract.md`](archive/iteration_30_level_layout_data_contract.md) | Phase 30 关卡布局数据契约：五件套、ZMWS 驱动、69 迁出 + 10 例外、30-4 复核与 PCK 归档 |
 | [`archive/iteration_18_20_comprehensive_closeout.md`](archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾：归属、表现、资源/Atlas、Autoload 拆分、守卫扩面与延期去向归档 |
 
 归档不接收机器报告、临时台账、旧路径映射和仅用于历史取证的原始材料；可复用的迁移方法见 [`guides/migration_playbook.md`](guides/migration_playbook.md)。
