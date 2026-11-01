@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_birth_ground_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_birth_ground_02.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(1984.0, 100.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(1982.0, 246.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(92.0, 1120.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(92.0, 1120.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(92.0, 1120.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_5"]
+size = Vector2(92.0, 1120.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
+[node name="Rogue24Brith1Lv1" type="Node2D"]
+
+[node name="Parallax_0_L2_spd_0_5_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="L_00_rogue_25_birth_ground_01" type="Sprite2D" parent="Parallax_0_L2_spd_0_5_0_5"]
+position = Vector2(-64.0, 192.0)
+texture = ExtResource("1")
+centered = false
+z_index = -15
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_rogue_25_birth_ground_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(64.0, 928.0)
+texture = ExtResource("2")
+centered = false
+z_index = -20
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1056.0, 274.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1055.0, 1115.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1870.0, 688.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_03_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(206.0, 688.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_04_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1870.0, 688.0)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_05_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(206.0, 688.0)
+shape = SubResource("ground_shape_5")
+metadata/_zmws_tag = "wall"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1616.0, 944.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(368.0, 976.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(408.0, 976.0)
+
+[node name="Birth_0_02_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(450.0, 976.0)
+
+[node name="Birth_0_03_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(488.0, 976.0)

@@ -1,0 +1,325 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_background_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_background_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_background_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_floor_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_floor_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_ground_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_ground_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_ground_03.png" id="8"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_ground_04.png" id="9"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_ground_05.png" id="10"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_mask_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://Art/level/zmws/mapbase/rogue_25_combat_04_mask_01.png" id="12"]
+
+[sub_resource type="RectangleShape2D" id="ground_shape_0"]
+size = Vector2(424.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_1"]
+size = Vector2(216.0, 248.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_2"]
+size = Vector2(1000.0, 104.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_3"]
+size = Vector2(1048.0, 112.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_4"]
+size = Vector2(320.0, 104.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_5"]
+size = Vector2(304.0, 392.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_6"]
+size = Vector2(1536.0, 288.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_7"]
+size = Vector2(376.0, 216.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_8"]
+size = Vector2(528.0, 96.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_9"]
+size = Vector2(192.0, 1536.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_10"]
+size = Vector2(96.0, 880.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_11"]
+size = Vector2(216.0, 104.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_12"]
+size = Vector2(104.0, 112.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_13"]
+size = Vector2(112.0, 1440.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_14"]
+size = Vector2(2144.0, 160.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_15"]
+size = Vector2(104.0, 64.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_16"]
+size = Vector2(104.0, 64.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_17"]
+size = Vector2(16.0, 32.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_18"]
+size = Vector2(16.0, 32.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_19"]
+size = Vector2(1264.0, 104.0)
+
+[sub_resource type="RectangleShape2D" id="ground_shape_20"]
+size = Vector2(272.0, 112.0)
+
+[sub_resource type="RectangleShape2D" id="gateway_shape_0"]
+size = Vector2(96.0, 128.0)
+
+[sub_resource type="RectangleShape2D" id="monster_trigger_shape_0"]
+size = Vector2(1640.0, 1312.0)
+
+[sub_resource type="RectangleShape2D" id="screen_trigger_shape_0"]
+size = Vector2(1920.0, 1312.0)
+
+[node name="Rogue24Combat4Lv1" type="Node2D"]
+
+[node name="Parallax_0_L2_spd_0_5_0_5" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="L_00_rogue_25_combat_background_01" type="Sprite2D" parent="Parallax_0_L2_spd_0_5_0_5"]
+position = Vector2(-129.0, 56.0)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("1")
+centered = false
+
+[node name="Parallax_1_L3" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_01_rogue_25_combat_04_background_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1481.0, 46.0)
+texture = ExtResource("2")
+centered = false
+z_index = -21
+
+[node name="L_02_rogue_25_combat_04_background_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(787.0, 1132.0)
+texture = ExtResource("3")
+centered = false
+z_index = -21
+
+[node name="L_03_rogue_25_combat_floor_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(704.0, 712.0)
+texture = ExtResource("4")
+centered = false
+z_index = -20
+
+[node name="L_04_rogue_25_combat_floor_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(480.0, 896.0)
+texture = ExtResource("5")
+centered = false
+z_index = -20
+
+[node name="L_05_rogue_25_combat_04_ground_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1636.0, 47.0)
+texture = ExtResource("6")
+centered = false
+z_index = -20
+
+[node name="L_06_rogue_25_combat_04_ground_02" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(800.0, 47.0)
+texture = ExtResource("7")
+centered = false
+z_index = -20
+
+[node name="L_07_rogue_25_combat_04_ground_03" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(800.0, 607.0)
+texture = ExtResource("8")
+centered = false
+z_index = -20
+
+[node name="L_08_rogue_25_combat_04_ground_04" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(512.0, 1104.0)
+texture = ExtResource("9")
+centered = false
+z_index = -20
+
+[node name="L_09_rogue_25_combat_04_ground_05" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(64.0, 768.0)
+texture = ExtResource("10")
+centered = false
+z_index = -20
+
+[node name="L_11_rogue_25_combat_04_mask_01" type="Sprite2D" parent="Parallax_1_L3"]
+position = Vector2(1480.0, 48.0)
+texture = ExtResource("12")
+centered = false
+z_index = -5
+
+[node name="Parallax_2_L4" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1.0, 1.0)
+
+[node name="L_10_rogue_25_combat_04_mask_02" type="Sprite2D" parent="Parallax_2_L4"]
+position = Vector2(1108.0, 1144.0)
+texture = ExtResource("11")
+centered = false
+z_index = 1
+
+[node name="ZMWS_Ground" type="StaticBody2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Ground_00_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1228.0, 696.0)
+shape = SubResource("ground_shape_0")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_01_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1748.0, 564.0)
+shape = SubResource("ground_shape_1")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_02_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(612.0, 1196.0)
+shape = SubResource("ground_shape_2")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_03_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1540.0, 208.0)
+shape = SubResource("ground_shape_3")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_04_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1072.0, 892.0)
+shape = SubResource("ground_shape_4")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_05_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1800.0, 1340.0)
+shape = SubResource("ground_shape_5")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_06_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(880.0, 1392.0)
+shape = SubResource("ground_shape_6")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_07_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(300.0, 1036.0)
+shape = SubResource("ground_shape_7")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_08_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1072.0, 792.0)
+shape = SubResource("ground_shape_8")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_09_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(2048.0, 768.0)
+shape = SubResource("ground_shape_9")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_10_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1904.0, 704.0)
+shape = SubResource("ground_shape_10")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_11_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1428.0, 316.0)
+shape = SubResource("ground_shape_11")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_12_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1484.0, 424.0)
+shape = SubResource("ground_shape_12")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_13_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(56.0, 816.0)
+shape = SubResource("ground_shape_13")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_14_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1072.0, 16.0)
+shape = SubResource("ground_shape_14")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_15_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(756.0, 776.0)
+shape = SubResource("ground_shape_15")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_16_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(540.0, 960.0)
+shape = SubResource("ground_shape_16")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_17_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(712.0, 728.0)
+shape = SubResource("ground_shape_17")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_18_wall" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1432.0, 632.0)
+shape = SubResource("ground_shape_18")
+metadata/_zmws_tag = "wall"
+
+[node name="Ground_19_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(1432.0, 100.0)
+shape = SubResource("ground_shape_19")
+metadata/_zmws_tag = "ground"
+
+[node name="Ground_20_ground" type="CollisionShape2D" parent="ZMWS_Ground"]
+position = Vector2(248.0, 872.0)
+shape = SubResource("ground_shape_20")
+metadata/_zmws_tag = "ground"
+
+[node name="ZMWS_Gateway" type="Node2D" parent="."]
+
+[node name="Gateway_00_gateway" type="Area2D" parent="ZMWS_Gateway"]
+position = Vector2(1392.0, 1184.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "gateway"
+
+[node name="Gateway_00_gateway_shape" type="CollisionShape2D" parent="ZMWS_Gateway/Gateway_00_gateway"]
+shape = SubResource("gateway_shape_0")
+
+[node name="ZMWS_MonsterTrigger" type="Node2D" parent="."]
+
+[node name="MonsterTrigger_00_monster" type="Area2D" parent="ZMWS_MonsterTrigger"]
+position = Vector2(1204.0, 752.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "monster_trigger"
+
+[node name="MonsterTrigger_00_monster_shape" type="CollisionShape2D" parent="ZMWS_MonsterTrigger/MonsterTrigger_00_monster"]
+shape = SubResource("monster_trigger_shape_0")
+
+[node name="ZMWS_ScreenTrigger" type="Node2D" parent="."]
+
+[node name="ScreenTrigger_00_screen" type="Area2D" parent="ZMWS_ScreenTrigger"]
+position = Vector2(1056.0, 752.0)
+monitoring = false
+monitorable = false
+metadata/_zmws_kind = "screen_trigger"
+
+[node name="ScreenTrigger_00_screen_shape" type="CollisionShape2D" parent="ZMWS_ScreenTrigger/ScreenTrigger_00_screen"]
+shape = SubResource("screen_trigger_shape_0")
+
+[node name="ZMWS_Birth" type="Node2D" parent="."]
+
+[node name="Birth_0_00_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(144.0, 800.0)
+
+[node name="Birth_0_01_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(288.0, 800.0)
+
+[node name="Birth_0_02_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(192.0, 800.0)
+
+[node name="Birth_0_03_birth" type="Marker2D" parent="ZMWS_Birth"]
+position = Vector2(240.0, 800.0)
