@@ -1,8 +1,9 @@
 # ADR-023：关卡布局数据契约与绞杀式迁移
 
-- **状态**：Proposed（设计阶段，尚未实施）
+- **状态**：Accepted（2026-11-01 评审修订；Phase 30-1 首个 ZMWS 导入关迁移已实施）
 - **记录日期**：2026-10-31
-- **影响范围**：`source/Script/base/base_through_level.gd`、`source/Script/level/*.gd`、`source/Script/data/level_layout_*.gd`、`scripts/convert_level_layout_catalog.py`、新增关卡数据资源
+- **评审日期**：2026-11-01
+- **影响范围**：`source/Script/base/base_through_level.gd`、`source/Script/level/*.gd`、`source/Script/data/level_layout_*.gd`、`scripts/convert_level_layout_catalog.py`、`scripts/level_layout_sources.json`、新增关卡数据资源
 - **关联**：[ADR-005](ADR-005-no-compatibility-or-fallback-layers.md)（禁止兼容/回退层）、[ADR-006](ADR-006-resource-first-data-and-data-keys.md)（新结构化数据优先 Resource）、[ADR-008](ADR-008-type-based-directories-with-feature-subdirectories.md)（目录）、[ADR-021](ADR-021-project-wide-target-architecture.md)（总体目标架构）
 - **契约细节**：[`../reference/level_layout_contract.md`](../reference/level_layout_contract.md)
 
@@ -36,22 +37,33 @@
 | Store | `source/Script/data/level_preload_store.gd`（`RefCounted` 静态只读入口 + `CACHE_MODE_REUSE`） | 运行时访问 |
 | 生成器 | `scripts/convert_level_preload_catalog.py` | 构建期从脚本字面量生成 `.tres` |
 
-同时 `BaseLevel` 已预留四个数据契约扩展点（`_stage_count()` / `_stage_trigger_x()` / `_screen_starts()` / `_screen_rights()` / `_birth_points()`），其中前三个已被 `game4_imported_level.gd`、`level_48.gd`、`level_59.gd` 等子类覆写调用，`_birth_points()` 基类返回空且**无调用点**。
+同时 `BaseLevel` 已有五个数据契约扩展点（`_stage_count()` / `_stage_trigger_x()` / `_screen_starts()` / `_screen_rights()` / `_birth_points()`）。前四个是阶段/分屏入口；`_birth_points()` 在 `game4_imported_level.gd` 与 22 个关卡子类中返回**刷怪点字典**，静态检索到 **41 处调用**，不是玩家出生点。原设计把 `_birth_points()` 当作玩家出生点是错误的，评审后保留其现有语义。
+
+## 评审修订（2026-11-01）
+
+本次将 ADR 从 `Proposed` 转为 `Accepted` 前，按当前源码复核了接口与数据形态：
+
+1. **`_birth_points()` 的语义被原设计误判**：它不是无调用点的玩家出生点接口，而是 `Game4ImportedLevel` 与 22 个关卡子类共享的刷怪点字典入口；基线有 41 处调用。契约将玩家出生点改名为 `player_birth_points`，由基类生成角色时消费；`_birth_points()` 保留原返回形状。
+2. **`LevelSpawnPoint` 缺 BHYH 现有点位依赖**：`level_48` 的 21 个点位包含 `after_spawn` / `after_dead`；不进入资源会改变刷怪顺序。字段已补齐，`ignore_count_multiplier` 也纳入第一版。
+3. **Phase 30-1 选定既有导入关而非原始 ZMWS 场景**：原始 `source/Scene/level/zmws/*.tscn` 只有地图/碰撞/触发器节点，没有 `BaseLevel` 角色、刷怪计时器与结算节点；30-1 若自行搭建驱动器会引入第二套循环。先用 `level_48`（ZMWS 朱雀街导入关）验证契约，原始场景驱动器在 30-2 处理。
+4. **构建输入与运行时分离**：`scripts/level_layout_sources.json` 是 30-1 的构建源；运行时只读 `.tres`。`--check` 同时校验布局资源、索引与预载 Catalog 中的关卡怪物集合。
+5. **`level_48.gd` 的布局常量与五个覆写已删除**；`scripts/level_preload_catalog.py` 从布局源合并阶段怪物，保持预载条目不变。
 
 ## 决策
 
 1. **新增关卡布局资源五件套**，命名与结构对齐 `LevelPreload*`：
-   - `LevelLayoutEntry`（单关卡布局，`Resource`）
+   - `LevelLayoutEntry`（单关卡布局，`Resource`；包含 `player_birth_points` 与 `stages`）
    - `LevelStageSpec`（单阶段：分屏矩形、挡板、触发矩形）
-   - `LevelSpawnPoint`（单刷怪点：坐标、怪物 id、数量、延迟、间隔、朝向）
+   - `LevelSpawnPoint`（单刷怪点：坐标、怪物 id、数量、延迟、间隔、朝向，以及 BHYH 现有的 `after_spawn` / `after_dead` / `ignore_count_multiplier` 依赖字段）
    - `LevelLayoutCatalog`（`Dictionary[StringName, StringName]` 场景路径 → 布局资源路径，**只存路径不内联**）
    - `LevelLayoutStore`（`RefCounted` 静态只读入口，按需 `ResourceLoader.load` 单关卡布局）
-2. **布局数据由构建期生成器产出**，运行时只读；不在 `_process` / `_physics_process` 解析 JSON、不扫描目录、不解析脚本源文本。
+2. **布局数据由构建期生成器产出**，运行时只读；不在 `_process` / `_physics_process` 解析 JSON、不扫描目录、不解析脚本源文本。当前 Phase 30-1 的构建输入是 `scripts/level_layout_sources.json`（从既有 ZMWS 导入关提取）；原始 ZMWS JSON 直连在 30-2 建立原始场景驱动器后启用。
 3. **`BaseLevel` 的默认实现改为「优先读布局资源」**：
    - 布局资源登记了该关卡 → 用资源值；
    - 未登记 → 沿用现有默认常量（这是**未迁移关卡的现有行为**，不是新增回退层，ADR-005 允许）；
-   - 一旦某关卡迁移完成，其脚本内的 `monster_group` / `monster_position_x/y` **删除**，不保留双份。
-4. **绞杀式迁移**：新增数据通道与现有 164 个脚本并行；先跑通 1 个 ZMWS 关卡，再按批迁移 84 个「数据容器」脚本；55 个含真实玩法逻辑的脚本保留，只把其中的结构化数据块迁出。
+   - `_birth_points()` 保持「刷怪点字典」返回形状；玩家出生点由 `LevelLayoutStore.player_birth_points()` 在基类生成角色时消费；
+   - 一旦某关卡迁移完成，其脚本内的布局常量/数据表 **删除**，不保留双份。
+4. **绞杀式迁移**：新增数据通道与现有 164 个脚本并行；Phase 30-1 先跑通 1 个既有 ZMWS 导入关（`level_48` 朱雀街），再按批迁移 84 个「数据容器」脚本；55 个含真实玩法逻辑的脚本保留，只把其中的结构化数据块迁出。原始 ZMWS 场景接入另立 30-2，避免在 30-1 复制第二套关卡循环。
 5. **数据文件格式选 `.tres` 而非 `.json`**。除 [ADR-006](ADR-006-resource-first-data-and-data-keys.md) 与 `godot_design_standard.md` §3.1 的规范理由外，还有两条技术硬理由：JSON 无法直接表达 `Vector2`/`Rect2`/`PackedVector2Array`，需自写编解码；JSON 内的字符串资源路径不计入导出依赖，需额外清单。原「用 JSON」的初步设想在此修正。
 6. **`ground` 碰撞不进布局资源**：它已在关卡 `.tscn` 中生成 `ZMWS_Ground` 静态节点，资源重复会让同一事实出现两个可写源。
 7. **不新增 Autoload**：`LevelLayoutStore` 为 `RefCounted` 静态工具，与 `LevelPreloadStore` 一致。
@@ -69,12 +81,12 @@
 
 - 引入 5 个新 `class_name` 与 1 个构建期生成器，需登记进命名白名单与转换器索引；
 - 布局资源与加密 JSON 存档格式无关，不改变任何持久化语义；
-- 若生成器与脚本内容漂移，必须在 `--check` 中失败，不能运行时兜底；
+- 若生成器与布局源清单漂移，必须在 `--check` 中失败，不能运行时兜底；
 - `.tres` 文本比 JSON 大，1,708 关预计 20–35 MB，靠「按关卡懒加载」控制常驻。
 
 ### 必须遵守
 
-- 不得为已迁移关卡保留脚本内数据表副本（ADR-005）；
+- 不得为已迁移关卡保留脚本内布局数据表副本（ADR-005）；源清单是构建输入，不是运行时双源；
 - 不得在运行时用 JSON 解析或目录扫描补齐缺失布局（ADR-005、`target_architecture_contract.md` §7.2）；
 - 不得借本决策改变任何现有玩法的数值、时序、掉落或输入（`current-iteration.md` §1.2）；
 - 不得在 Phase 21 内实施：本决策属于新阶段候选，需另立批次。
@@ -95,5 +107,6 @@
 - [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md) §4.3、§5.1、§7.2
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md) §3.1
 - `source/Script/data/level_preload_*.gd`、`scripts/convert_level_preload_catalog.py`
-- `source/Script/base/base_through_level.gd:1817-1853`（四个契约扩展点）
-- 数据来源：`G:/source/repos/ZMWS/cocos/assets/resources/map/*.json`（1,708 个）
+- `source/Script/data/level_layout_*.gd`、`scripts/convert_level_layout_catalog.py`、`scripts/level_layout_sources.json`
+- `source/Script/base/base_through_level.gd`（五个契约扩展点与玩家出生点消费）
+- 数据来源：既有 ZMWS 导入关 `level_48` 的布局数据；原始 ZMWS JSON（1,708 个）仍为 30-2 的目标输入，不在 30-1 直接读取

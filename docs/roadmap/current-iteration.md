@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 已完成**（`ParallaxLayer`/`ParallaxBackground` 归零，`Parallax2D` + `CanvasLayer` 迁移完成）。Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 已完成**（`ParallaxLayer`/`ParallaxBackground` 归零，`Parallax2D` + `CanvasLayer` 迁移完成）。**ADR-023 已转 Accepted，Phase 30-1 已完成**（`level_48` 试点：出生/分屏/刷怪/过关验证）；30-2~30-4 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -84,20 +84,20 @@
 
 **必须验证**：补资源项迁移后 `runtime_frames_allowlist` 只减不增；缺陷修正有前后帧与技能时序证据。
 
-## 5A. Phase 30：关卡布局数据契约（暂缓，设计完成）
+## 5A. Phase 30：关卡布局数据契约（30-1 已完成）
 
-> **状态**：30-0 设计已完成（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) `Proposed` + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 **未启动**。本阶段不并入 Phase 21，也不并入 Phase 31。
+> **状态**：30-0 设计与评审已完成（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) `Accepted`）；**30-1 已完成（2026-11-01，`level_48` 试点）**；30-2~30-4 未启动。本阶段不并入 Phase 21，也不并入 Phase 31。
 
 **启动前提**：ADR-023 由 `Proposed` 转 `Accepted`；本页登记独立批次与出口；确认不改动任何现有玩法数值、时序、掉落与输入。
 
 | 批次 | 内容 | 出口 |
 |:---|:---|:---|
-| 30-1 | `LevelLayoutEntry`/`LevelStageSpec`/`LevelSpawnPoint`/`LevelLayoutCatalog`/`LevelLayoutStore` 五件套；`scripts/convert_level_layout_catalog.py`（含 `--check`）；`BaseLevel` 五个扩展点改为「有布局资源读资源，未登记沿用现状」 | 1 个 ZMWS 关卡跑通出生/分屏/刷怪/过关；`check_all` 全维 PASS |
+| 30-1（已完成） | 五件套；`convert_level_layout_catalog.py`（含 `--check`）；`BaseLevel`/`Game4ImportedLevel` 有布局资源读资源；`level_48` 删除布局常量与五个覆写 | `level_48` Stage 1–5 冒烟 PASS（22.7s，0/0）；`check_all` 9/9 PASS；预载条目保持 3001/3002/3004/3006；全量回归 128/128 + 5 SKIP（709.5s） |
 | 30-2 | 外部怪物 id → BHYH 怪物场景映射资源；20–30 个代表关卡端到端 | 这批关卡可进、可打、可通关；回归无新增失败 |
 | 30-3 | 84 个硬编码 `monster_group` 脚本按批迁出，删除脚本内数据表 | `monster_group = {` 计数逐批下降；每批行为一致 |
 | 30-4 | 55 个含玩法逻辑脚本保留，仅迁出结构化数据块；更新 `architecture.md` §4.3 与 `status.md` | 无遗留双数据源 |
 
-**当前基线（2026-11-01 实测）**：BHYH 关卡场景 153 / 脚本 164；硬编码 `monster_group` 脚本 **84**；ZMWS 关卡场景 **1,701**；`source/Script` 内 `level_layout_*` 与 `convert_level_layout_catalog.py` **均不存在**。
+**当前基线（2026-11-01）**：BHYH 关卡场景 153 / 脚本 164；硬编码 `monster_group` 脚本 **84**；ZMWS 关卡场景 **1,701**；已迁移布局资源 **1**（`level_48`），生成器与五件套已入库。原始 ZMWS 场景驱动器未接入，30-2 处理。
 
 **不做**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData.player_data` 整体 Resource 化、不保留已迁移关卡脚本内数据副本。
 
@@ -146,7 +146,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。下一候选为 Phase 32/33；Phase 30（ADR-023 为 `Proposed`）暂缓。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**ADR-023 已接受，Phase 30-1 已完成（`level_48` 试点）**；下一批次为 30-2 怪物映射与原始 ZMWS 场景驱动器，随后 30-3/30-4。Phase 32/33 仍依赖 Phase 30 实施完成。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -194,6 +194,6 @@
 | Phase 31-0A（TileMap/物理层/图标去重） | **完成（2026-11-01）** |
 | Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
 | Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
-| Phase 30（ADR-023 关卡布局契约） | 暂缓（设计完成，`Proposed`） |
+| Phase 30（ADR-023 关卡布局契约） | **30-1 已完成（2026-11-01）**；30-2~30-4 未启动 |
 | Phase 32（UI Theme） | 未启动，依赖 Phase 30 |
 | Phase 33（装备数据） | 未启动，依赖 Phase 30 或 32 |

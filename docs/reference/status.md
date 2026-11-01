@@ -2,7 +2,7 @@
 
 > 本文是工程版本、目录结构、规模与验证状态的单一事实源。
 >
-> 最后更新：2026-11-01（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟；当前 11 个 Autoload）
+> 最后更新：2026-11-01（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟；Phase 30-1 已完成 `level_48` 布局试点；Phase 31-1 已完成视差迁移；当前 11 个 Autoload）
 
 ---
 
@@ -265,13 +265,14 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 | 2026-11-01 Phase 31-0A 废弃 API 与局部现代化 | **A2**：`base_through_level.tscn` 的 `floor` 由 `TileMap` 迁移为 `TileMapLayer`，12 个关卡覆盖由 `layer_0/tile_data` 迁移为引擎生成的 `tile_map_data`；迁移前用 headless 探针记录 12 关 **23,561 个格子**，迁移后逐格（坐标/源/图集/替代项）集合比对 **0 差异**，`tile_set` 保留。**B4**：新增 `PhysicsLayers` 具名常量（`NONE`/`ENVIRONMENT`/`CHARACTER`/`MONSTER`/`EXIT`/`STEP`，位值与 `project.godot` 层名一致），脚本内 30 处裸 `collision_layer` 整数全部替换。**B5**：`ItemUtils` 新增 5 个具名图标解析入口，19 处重复 `load_item_icon` 定义与 21 个文件 99 处调用全部收敛，5 种原兜底语义分别保留。**验证**：`TileMap` 迁移探针 12 关 23,561 格逐格（坐标/源/图集/替代项）比对 **0 差异**；`level_1`、`level_3`、`level_5`、`level_11`、`level_15`、`level_18`、`level_19`、`level_20`、`level_bgmj` 冒烟 PASS（0 ERROR / 0 WARNING）；全量回归 **128/128 PASS + 5 SKIP**（708.9s）；图标 7 项语义探针与 3 项旧路径直读对照一致；`utils`/`ui-factories` 场景探针 PASS；`check_all --godot-bin` **9/9 PASS**；`health_check` 749 脚本 **0 Parse / 0 Error / 0 Warning**。 | 31-0A 完成；31-0B 数字图与 31-1 视差未启动 |
 | 2026-11-01 Phase 31-0B 数字图→BMFont 评估 | 只读评估，未改代码。现有 7 个 BMFont 与 3 个消费文件的数字图不同源：等级图 47×50、可见内容 30×38，字体字形 16–30 px；最佳 `beishu` 归一化 alpha IoU **0.866**、RGB 差异 **0.988**（0–3 标度），`zhanlishuz` IoU **0.616**；伤害数字 15 个样式目录（`cure`/`cure_mp`/`reduce_mp`/`lj`/`magic`/`magiccrit`/`monster/*`/`other_number`/`physics`/`physicscrit`/`real`/`realcrit`）无等价字体；`Label + beishu` 运行对照的步进（20 vs 24）与描边粗细不一致。**结论：拒绝替换，保留旧数字图**。 | 31-0B 拒绝；31-1 可启动 |
 | 2026-11-01 Phase 31-1 视差迁移 | 89 个场景 **95 个 `ParallaxLayer`** + 1 个 `ParallaxBackground` 迁移完成；另有 8 个场景仅覆盖继承 `floor_2` 的 `position`，一并转 `scroll_offset`，共修改 **97 个场景文件**。`BackGround` 改为 `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`），每层为 `Parallax2D`；`motion_scale→scroll_scale`、`motion_mirroring→repeat_size`、`position→scroll_offset`。**验证**：89 场景 × 4 相机共 **2,520 个节点** transform 对照，2,504 完全一致；4 个 `level_2` 子像素差异（≤2.235 px）与 12 个 `level_4` 不可见 `stage` 子树差异；7 个代表场景前后截图，3 个 0 差异、4 个差异像素 ≤0.005%；7 个代表关卡冒烟 PASS；全量回归 **128/128 PASS + 5 SKIP**（707.5s）；`check_all --godot-bin` **9/9 PASS**；`health_check` 0 Parse / 0 Error / 0 Warning；`ParallaxLayer`/`ParallaxBackground` 全仓 0。**已知例外**：`level_4` 的 `stage` 为非 Parallax 子节点且 `visible=false`，当前截图无差异。 | 31-1 完成；Phase 31 收口 |
+| 2026-11-01 Phase 30-1 关卡布局契约 | ADR-023 由 `Proposed` 转 `Accepted`；新增 `LevelLayoutEntry`/`LevelStageSpec`/`LevelSpawnPoint`/`LevelLayoutCatalog`/`LevelLayoutStore` 五件套，`convert_level_layout_catalog.py` 与 `level_layout_sources.json` 入库；`LevelLayoutStore` 只读、按场景懒加载。迁移 `level_48`（朱雀街，ZMWS 导入关）：删除脚本内 `STAGE_COUNT`/`SCREEN_*`/`STAGE_TRIGGER_X`/`BIRTH_POINTS` 与五个扩展点覆写，共减 258 行；`Game4ImportedLevel` 与 `BaseLevel` 改为布局优先、未登记沿用原逻辑；玩家出生点与刷怪点分离，`_birth_points()` 保持刷怪点字典形状。预载生成器从布局源合并阶段怪物，`level_48` 条目保持 `3001/3002/3004/3006`。**验证**：`convert_level_layout_catalog.py --check` PASS（1 关卡/1 索引）；`convert_level_preload_catalog.py --check` PASS（101 关卡/17 弹体/153 场景）；`check_all --godot-bin` **9/9 PASS**；`level_48` 冒烟 **Stage 1–5 PASS**（22.7s，0 ERROR / 0 WARNING）；`level_1` 冒烟 PASS；全量关卡回归 **128/128 PASS + 5 SKIP**（709.5s）。 | 30-1 完成；30-2~30-4 未启动 |
 
 ---
 
 ## 6. 已知边界
 
 1. 当前仓库已建立本地 Git 提交历史；尚未推送远端，工作区由本地完整备份保障。
-2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_liu_sha_frames.py`、`convert_monster_action_views.py`、`convert_numbered_frames.py` 与 `convert_sheet_frames.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
+2. 当前构建期转换器为 `scripts/convert_atlas_metadata.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_level_preload_catalog.py`、`convert_level_layout_catalog.py`、`convert_liu_sha_frames.py`、`convert_monster_action_views.py`、`convert_numbered_frames.py` 与 `convert_sheet_frames.py`；上述 `--check` 由 `scripts/contract_gate.py` 调用。`frame_sequence_pack_probe.py` 依赖导出模板，发布前单独执行，不进入日常门禁。
 3. 版本专用的解密、重建、场景恢复工具不进入当前仓库；后续迁移前必须重新验证目标二进制格式。
 4. 当前 Autoload、Global 与档案/双人视图交换仍有遗留耦合；总体契约是目标，不表示已抽取服务或消除交换。类型顶层继续保留，功能在内部聚合，不把目录布局本身列作必须清零的债务。
 5. 高并发全量回归存在偶发的 Godot 启动瞬态（12 并发实测 `level_lxdy1` 1 次，重试通过）；`--jobs 4` 为稳定排障口径。进程复用（同进程多关）已验证但未采用：加载屏/资源清理抵消启动节省，5 关/组实测更慢。
