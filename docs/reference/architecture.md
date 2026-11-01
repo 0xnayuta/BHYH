@@ -539,7 +539,7 @@ classDiagram
 | 8 | 怪物攻击范围检测玩家受伤；蝙蝠吸血 | 17 | 汪汪检测可跳跃墙壁 |
 | 9 | 陷阱 |  |  |
 
-新代码必须使用具名层或集中常量，不新增无注释的裸整数掩码。现有基础场景的 mask 分配属于遗留实现，重构前先逐场景核对。
+新代码必须使用具名层或集中常量，不新增无注释的裸整数掩码。脚本侧具名常量集中在 `Script/base/physics_layers.gd`（`PhysicsLayers`，Phase 31-0A）：`NONE`/`ENVIRONMENT`/`CHARACTER`/`MONSTER`/`EXIT`/`STEP`，位值与上表同源。基础场景 `.tscn` 内的裸掩码仍属遗留实现，重构前先逐场景核对。
 
 ---
 
@@ -565,7 +565,8 @@ classDiagram
 | 子弹 | `Script/bullet/`、`Scene/bullet/` | 直线/追踪弹与 slim 场景 | `fly_bullet.gd`、`chase_bullet.gd` |
 | 音频 | `Script/all_sound/`、`Script/runtime/audio_runtime.gd` | BGM 单实例、主菜单 BGM、命中音效池与声部仲裁 | `AudioRuntime`、`bgm.gd`、`monster_be_hit.gd` |
 | 特殊玩法 | `Script/other_menu/`、`Scene/other_scene/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd` |
-| 工具/输入 | `Script/tools/` | 虚拟摇杆、按键设置、场景 viewport | `set_com.gd`、`user_key.gd` |
+| 工具/输入 | `Script/tools/` | 虚拟摇杆、按键设置、场景 viewport、无状态静态工具（节点/向量、物品图标与条目） | `set_com.gd`、`user_key.gd`、`node_utils.gd`、`item_utils.gd` |
+| 物理层常量 | `Script/base/physics_layers.gd` | 脚本侧 2D 物理层具名位值，与 `project.godot` 层名一一对应 | `physics_layers.gd` |
 
 ---
 

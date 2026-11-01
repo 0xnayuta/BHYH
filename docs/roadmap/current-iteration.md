@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。当前批次为 **Phase 31-0A**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重），Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓，31-0B 与 31-1 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重），下一批次为 31-0B；Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓，31-1 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -103,10 +103,10 @@
 
 ## 5B. Phase 31：引擎废弃 API 与局部现代化（当前批次）
 
-> **状态**：31-0 拆为 31-0A（**当前批次**）与 31-0B（未启动）；31-1 未启动。不依赖 Phase 30。
+> **状态**：31-0A **已完成（2026-11-01）**；31-0B 为下一批次，31-1 未启动。不依赖 Phase 30。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
 
-### 31-0A 顺手包（本批次）
+### 31-0A 顺手包（已完成）
 
 | 子项 | 现状（2026-11-01 实测） | 目标 |
 |:---|:---|:---|
@@ -114,7 +114,7 @@
 | B4 `collision_layer` 具名化 | 脚本内裸整数 **30 处**：`0`×11、`1`×1、`2`×8、`4`×7、`16`×1、`32`×2 | 具名常量集中定义；裸整数归零且语义有调用点依据 |
 | B5 `load_item_icon` 去重 | 定义 **19 处**（21 个文件 99 处调用）；至少 5 种兜底语义 | 共享解析器 + 分模式调用；`^func load_item_icon` 归零 |
 
-**31-0A 出口**：三项静态计数达标；`check_all --godot-bin` 9/9 PASS；12 个 TileMap 覆盖关卡与 `level_1` 冒烟通过；`level_regression_all --changed-only` 无新增失败；背包/商店/锻造/分解/buff/失败奖励面板图标行为与迁移前一致。
+**31-0A 出口（已验证）**：`type="TileMap"` 与 `layer_0/tile_data` 归零，12 关 23,561 个格子逐格一致；`collision_layer` 裸整数归零；`load_item_icon` 定义归零且 5 种图标语义探针一致；`check_all --godot-bin` **9/9 PASS**；8 个迁移关卡代表冒烟与 `level_1` PASS；全量回归 **128/128 PASS + 5 SKIP**（708.9s）。
 
 **31-0A 不做**：不把 `TileMapLayer` 迁移顺带改成数据驱动地形；不把物理层重构为位运算工具类；不改变任何图标的兜底优先级。
 
@@ -142,7 +142,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**当前批次为 Phase 31-0A**；31-0B、31-1、Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成**；下一批次为 31-0B，31-1、Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -187,8 +187,8 @@
 
 | 批次 | 状态 |
 |:---|:---|
-| Phase 31-0A（TileMap/物理层/图标去重） | **进行中** |
-| Phase 31-0B（数字图→BMFont） | 未启动 |
+| Phase 31-0A（TileMap/物理层/图标去重） | **完成（2026-11-01）** |
+| Phase 31-0B（数字图→BMFont） | 下一批次（未启动） |
 | Phase 31-1（89 场景视差迁移） | 未启动 |
 | Phase 30（ADR-023 关卡布局契约） | 暂缓（设计完成，`Proposed`） |
 | Phase 32（UI Theme） | 未启动，依赖 Phase 30 |

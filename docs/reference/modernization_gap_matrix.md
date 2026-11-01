@@ -43,17 +43,17 @@
 | `ParallaxLayer` 场景 | **89** | A1 废弃 |
 | `ParallaxBackground` 场景 | **1**（`base_through_level.tscn`，所有关卡基类） | A1 废弃 |
 | `Parallax2D` 场景 | **1,701** | 现代，仅外部导入 |
-| `TileMap` 节点 | **1**（`base_through_level.tscn:193` 的 `floor`） | A2 废弃 |
+| `TileMap` 节点 | **0**（31-0A 已迁移为 `TileMapLayer`） | A2 已消除 |
 | `theme_override_*` | **6,830** | B1 |
 | `.theme` 资源 | **0** | B1 |
 | 场景引用 `theme` | **2** | B1 |
 | `FontFile` 场景级 `ext_resource` | **207** | B1（字体未集中） |
 | `Label` / `Button` / `TextureRect` / `Control` 节点 | 851 / 351 / 217 / 70 | B1 影响面 |
 | `Art/all_number` 手工拼数字 | 25 处 / 3 文件 | B2 |
-| `func load_item_icon` 定义数 | **19** | B5 |
+| `func load_item_icon` 定义数 | **0**（31-0A 收敛到 `ItemUtils`） | B5 已消除 |
 | `Global.<member>` 调用点 | **2,832** | B8 |
 | 脚本内硬编码 `"res://…"` 字符串 | **1,981** | B6 |
-| `collision_layer = <整数>` | **30** | B4 |
+| `collision_layer = <整数>` | **0**（31-0A 收敛到 `PhysicsLayers`） | B4 已消除 |
 | `all_equipment_data.gd` | **19,185 行** | B3（占 `Script/data` 的 96%） |
 | 最大单场景 `level_85.tscn` | **1,030 节点**（1,022 个 `Sprite2D`） | B7 |
 
@@ -89,9 +89,9 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | `base_through_level.tscn:193`：`[node name="floor" type="TileMap"]`，位于 `BackGround/floor_2` 下 |
+| 现状 | 已消除：`base_through_level.tscn` 的 `floor` 为 `TileMapLayer`；12 个关卡覆盖已迁移为 `tile_map_data`（31-0A） |
 | 官方依据 | `TileMap` 类文档：*Deprecated: Use multiple TileMapLayer nodes instead.* |
-| 影响 | 基类场景 1 个 `TileMap` 节点；**12 个关卡场景有 `layer_0/tile_data` 覆盖、15 个有 `tile_set` 覆盖**，不能按单行替换 |
+| 影响 | 迁移已完成：基类 1 个节点 + 12 个关卡覆盖（15 个有 `tile_set` 覆盖），23,561 个格子逐格一致；原估算「单行替换」不成立，实际需按二进制格式迁移 |
 | 处置 | **Phase 31-0**；官方编辑器提供图层提取，改动面小 |
 
 ### 3.2 B 级：结构性问题
@@ -130,7 +130,7 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | **30 处** `collision_layer = <整数>` |
+| 现状 | **0 处**：30 处已改用 `PhysicsLayers` 具名常量（31-0A） |
 | 规范依据 | `godot_design_standard.md` §6：物理层使用具名层；碰撞掩码不得使用无注释的裸整数 |
 | 处置 | **Phase 31-0**；提取具名常量，改动面小 |
 
@@ -138,7 +138,7 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | `func load_item_icon` **19 处**重复定义（`back_pack.gd`、`box_1.gd`、`main_backpack.gd`、`sell_or_equ.gd`、`buff.gd` 等） |
+| 现状 | **0 处**：19 处定义与 99 处调用已收敛到 `ItemUtils` 的 5 个具名解析入口（31-0A）；原实现存在 5 种不同兜底语义 |
 | 问题 | 修改一处逻辑要改 19 个文件；实现存在细微差异（有的带 fallback、有的不带） |
 | 处置 | **Phase 31-0**；提取共享实现（含缓存）并逐处替换 |
 
@@ -194,7 +194,8 @@
 
 | 批次 | 内容 | 类型 | 预估 | 启动前提 |
 |:---|:---|:---|:---|:---|
-| **Phase 31-0** | 顺手包：A2 `TileMap`（1 处）、B2 数字图→BMFont（3 文件 25 处）、B4 具名物理层（30 处）、B5 去重（19 处） | API/普通重构 | 1–2 天 | 无；不必等待 Phase 30 |
+| **Phase 31-0A** | A2 `TileMap`→`TileMapLayer`（基类 1 + 12 个覆盖场景）、B4 具名物理层（30 处）、B5 去重（19 处） | API/普通重构 | 1–2 天 | 无 |
+| **Phase 31-0B** | B2 数字图→BMFont（3 文件 25 处） | 方案替换 | 返工视截图对照结果 | 31-0A 完成 |
 | **Phase 31-1** | 视差迁移：89 场景 `ParallaxLayer` → `Parallax2D`，含基类 `base_through_level.tscn` | API 迁移 | 3–5 天 | 31-0 完成；建立关卡截图对照基线 |
 | **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,830 处 | **契约重构** | 试点 2 天 + 分批 | Phase 30 实施完成并验证契约模式工作量 |
 | **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | Phase 30/32 至少一个完成；需全量数值回归方案 |
@@ -207,7 +208,8 @@
 
 | 批次 | 必需证据 | 不必执行 |
 |:---|:---|:---|
-| 31-0 | `check_all` 全维 PASS；数字图显示与替换前逐位一致；`collision_layer` 具名常量无裸整数残留；`load_item_icon` 全仓定义数归零 | 不做全量截图 |
+| 31-0A | `check_all` 9/9 PASS；12 个 TileMap 覆盖关卡逐格一致 + 代表关冒烟；`collision_layer` 裸整数归零；`load_item_icon` 定义数归零且 5 种图标语义有对照证据 | 不做全量截图 |
+| 31-0B | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
 | 31-1 | 89 个场景**逐场景**截图前后对照；`level_regression_all.py` 无新增失败；`ParallaxLayer`/`ParallaxBackground` 全仓计数归零 | 不要求重跑平台性能 |
 | 32 | 试点面板截图逐像素或逐控件对照；`.theme` 资源登记；迁移清单按面板分批 | 不在试点前批量迁移 |
 | 33 | 装备属性逐字段与迁移前一致（脚本比对）；`all_equipment_data.gd` 删除或降为生成器输出的薄封装 | 不改装备数值与掉落规则 |

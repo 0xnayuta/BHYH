@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1A（Windows-only）、21-1B `_bundled` 取证、21-1C Atlas typed accessor、21-3 工厂族与 21-4 资源遗留已完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。平台与发布验证按独立工作流推进，不把未验证平台写成承诺。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1A（Windows-only）、21-1B `_bundled` 取证、21-1C Atlas typed accessor、21-3 工厂族与 21-4 资源遗留已完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。**Phase 31 已启动：31-0A 完成（TileMap→TileMapLayer、物理层具名常量、图标去重）；31-0B 与 31-1 未启动。**
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -17,7 +17,7 @@
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
 | Phase 30 关卡布局数据契约 | **暂缓（设计完成，未实施）** | 30-0 设计已产出（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 待启动，见 §3.5 |
-| Phase 31 引擎废弃 API 与局部现代化 | **候选（未启动）** | 31-0 顺手包（`TileMap`/数字图/具名物理层/重复函数）、31-1 视差迁移；见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
+| Phase 31 引擎废弃 API 与局部现代化 | **进行中**：31-0A 完成（`TileMap`/具名物理层/重复函数），31-0B 数字图与 31-1 视差未启动 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
 | Phase 33 装备数据契约 | **候选（未启动，依赖 Phase 30/32 之一）** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8 |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
@@ -156,7 +156,7 @@ flowchart TD
 
 ### 3.6 Phase 31：引擎废弃 API 与局部现代化（候选）
 
-> **状态**：候选，未启动。**不依赖 Phase 30**，可独立推进。
+> **状态**：31-0A 已完成（2026-11-01）；31-0B、31-1 未启动。**不依赖 Phase 30**。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
 
 **31-0 顺手包（A2/B2/B4/B5）**
