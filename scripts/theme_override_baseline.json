@@ -2,16 +2,16 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 6565,
+    "direct_properties": 6326,
     "animation_track_refs": 26,
-    "textual_references": 6591,
+    "textual_references": 6352,
     "scenes": 134
   },
   "property_categories": {
-    "colors": 1703,
-    "constants": 1371,
-    "font_sizes": 961,
-    "fonts": 1014,
+    "colors": 1619,
+    "constants": 1312,
+    "font_sizes": 913,
+    "fonts": 966,
     "styles": 1516
   },
   "animation_categories": {
@@ -23,23 +23,23 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 2205,
+    "Button": 2193,
     "CheckBox": 98,
     "CheckButton": 25,
     "GridContainer": 22,
-    "HBoxContainer": 59,
+    "HBoxContainer": 57,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 3865,
+    "Label": 3647,
     "LineEdit": 107,
-    "MarginContainer": 44,
+    "MarginContainer": 40,
     "OptionButton": 9,
     "Panel": 22,
     "PanelContainer": 9,
     "PopupMenu": 2,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 61,
+    "VBoxContainer": 58,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -48,8 +48,23 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 4,
+    "scene_refs": 6,
     "type_variations": [
+      "EquipmentInfoGroup",
+      "EquipmentItemHighlight",
+      "EquipmentItemMeta",
+      "EquipmentPanelPadding",
+      "EquipmentStatGroup",
+      "EquipmentStatLabel",
+      "EquipmentStatValue",
+      "LevelInfoAlertText",
+      "LevelInfoDropGroup",
+      "LevelInfoFilterGroup",
+      "LevelInfoModeButton",
+      "LevelInfoModeGroup",
+      "LevelInfoShadowText",
+      "LevelInfoSuccessText",
+      "LevelInfoValue",
       "SettingsButton",
       "SettingsButtonBright",
       "SettingsButtonCompact",
@@ -70,7 +85,7 @@
       "SettingsTitle",
       "SettingsValue"
     ],
-    "variation_refs": 45
+    "variation_refs": 99
   },
   "fonts": {
     "scene_refs": 205,
@@ -161,7 +176,7 @@
       "animation": 0
     },
     "Scene/back_pack/equipment_properies.tscn": {
-      "direct": 173,
+      "direct": 18,
       "animation": 0
     },
     "Scene/back_pack/magic_weapon_infor.tscn": {
@@ -457,7 +472,7 @@
       "animation": 0
     },
     "Scene/other_scene/level_info.tscn": {
-      "direct": 118,
+      "direct": 34,
       "animation": 0
     },
     "Scene/other_scene/lhhj.tscn": {

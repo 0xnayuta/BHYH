@@ -20,17 +20,17 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 由 `python scripts/theme_override_audit.py --json` 生成；机器基线为 `scripts/theme_override_baseline.json`。
 
-| 项 | 32-0 基线 | 32-1 后 | 说明 |
-|:---|:---:|:---:|:---|
-| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 135 → 134 个 `.tscn` |
-| 直接属性覆盖 | 6,804 | **6,565** | Phase 32 静态迁移对象 |
-| Animation 轨道路径引用 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | 合计 6,804 → 6,565 |
-| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | `game_set` 迁移后下降 |
-| `FontFile` 场景引用 | 207 | **205** | 12 个字体文件；`game_set` 去掉两个未引用字体 |
-| Theme `.tres` | 1 / 2 引用 | **2 / 4 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
-| `theme_type_variation` | 0 | **19 个直接类型 / 45 个节点引用** | 另有 2 个仅作为 bright 变体基类 |
-| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
+| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 说明 |
+|:---|:---:|:---:|:---:|:---|
+| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | **6,352** | 135 → 134 个 `.tscn` |
+| 直接属性覆盖 | 6,804 | 6,565 | **6,326** | Phase 32 静态迁移对象 |
+| Animation 轨道路径引用 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
+| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | 合计 6,804 → 6,565 → 6,326 |
+| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | `game_set` 与 32-2A 后下降 |
+| `FontFile` 场景引用 | 207 | 205 | 205 | 12 个字体文件；`game_set` 去掉两个未引用字体 |
+| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | **2 / 6 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
+| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | **34 个直接类型 / 99 个节点引用** | 另有 2 个仅作为 bright 变体基类 |
+| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
 
 基线是**上限**，不是迁移目标。迁移只能使直接属性与动画引用下降，不能因新增面板或重构静默增加；新增场景需要显式更新基线并说明原因。
 
@@ -94,13 +94,28 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 | `SettingsSlider` | `HSlider` | 白色轨道 + 红色高亮 |
 | `SettingsGroup` | `VBoxContainer` | separation 7 |
 | `SettingsGroupSpacious` | `VBoxContainer` | separation 13 |
+| `EquipmentPanelPadding` | `MarginContainer` | 四边 10 |
+| `EquipmentStatGroup` | `VBoxContainer` | separation 5 |
+| `EquipmentInfoGroup` | `VBoxContainer` | separation 16 |
+| `EquipmentStatLabel` | `Label` | 字体 `1_fonts_fzcy...` / 16 / 橙色 |
+| `EquipmentStatValue` | `Label` | 华康宋体 W3 / 15 / 黄色 + outline 1 |
+| `EquipmentItemHighlight` | `Label` | 桃花字体 / 20 / 白色 + outline 1 |
+| `EquipmentItemMeta` | `Label` | 桃花字体 / 20 / outline 1 |
+| `LevelInfoValue` | `Label` | 文正字体 / 27 / 黄色 + black outline 9 |
+| `LevelInfoShadowText` | `Label` | 华康宋体 / 22 / 黄色 shadow 12 |
+| `LevelInfoAlertText` | `Label` | 华康宋体 / 22 / 红色 shadow 12 |
+| `LevelInfoSuccessText` | `Label` | 华康宋体 / 25 / 绿色 shadow 10 |
+| `LevelInfoModeButton` | `Button` | 华康宋体 / 25 / outline 5 |
+| `LevelInfoFilterGroup` | `HBoxContainer` | separation 10 |
+| `LevelInfoDropGroup` | `HBoxContainer` | separation 7 |
+| `LevelInfoModeGroup` | `VBoxContainer` | separation 12 |
 
 规则：
 
 1. 变体名表达**角色**，不按单个场景命名；
 2. 不把一个场景的局部样式命名为全局变体；
 3. 同一角色在不同字体族下需要保留字体差异时，可拆分为 `TitleLabelSerif` 等明确变体，不得用运行时覆盖临时修正；
-4. 32-1 已冻结上述 21 个类型（19 个直接使用 + 2 个 bright 基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
+4. 32-2A 后共有 **36 个类型**（34 个直接使用 + 2 个 bright 基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
 
 ## 5. 字体与样式
 
@@ -153,9 +168,24 @@ python scripts/theme_override_audit.py --write-baseline
 5. `theme_override_audit.py --check` PASS；`contract_gate` PASS；`check_all --skip-engine` 7/7；
 6. 后续 32-2 仍按批截图；32-1 通过，不进入回滚分支。
 
+## 7A. 32-2A Label 密集面板结果（已完成，2026-11-01）
+
+| 场景 | 迁移前直接属性 | 迁移后直接属性 | 迁移节点/变体 | 保留例外 |
+|:---|:---:|:---:|:---|:---|
+| `back_pack/equipment_properies.tscn` | 173 | **18** | 40 节点 / 7 变体 | 4 个一次性标签：`eq_name`、`Title`、`eq_ms`、`eq_sj` |
+| `other_scene/level_info.tscn` | 118 | **34** | 14 节点 / 8 变体 | 6 个一次性标签：顶部 `Title`、`Enemy`、`Challenge`、`MyPj`、`Fall`、模式对话框 `Title` |
+
+共同结果：
+
+- 合计直接属性 **6,565 → 6,326**；Theme 场景引用 **6**；类型变体 **36 个定义 / 34 个直接使用 / 99 个节点引用**；
+- 两个场景分别覆盖 49 / 38 个 Control 的计算字体、字号、描边、阴影、颜色、StyleBox、位置、尺寸与文本，**0 差异**；
+- 1600×1000 与 1280×800 截图前后 **0 像素差异**；
+- 保留的一次性标签不使用新变体，避免把单场景局部样式扩散为全局角色；后续批次可再评审；
+- `theme_override_audit.py --check`、`contract_gate` 与 `check_all --godot-bin` 9/9 通过；`scene_probe_runner --probe ui-theme` 仍覆盖 `game_set`，标签面板采用独立计算转储/截图证据。
+
 ## 8. 分批与验收边界
 
-- 32-2 按 Label 密集、Button 密集、混合输入/列表、其余场景分批；每批先快照、再迁移、后验证。
+- 32-2A 已完成（标签密集）；32-2B 按 Button 密集、混合输入/列表、其余场景分批；每批先快照、再迁移、后验证。
 - 32-3 补齐 `OptionButton`、`CheckBox`、`CheckButton`、`LineEdit`、`HSlider`、`Panel`、`PanelContainer`、`TabBar`、`PopupMenu`、`ItemList` 等类型。
 - 32-4 建立例外清单，评估是否启用全局 Theme，退役旧 Theme，更新 `architecture.md`、`status.md` 与索引。
 - 每批必须保留截图/控件转储与相关 `scene_probe_runner` 结果；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
@@ -173,7 +203,7 @@ python scripts/theme_override_audit.py --write-baseline
 | 项 | 当前状态 | 出口 |
 |:---|:---|:---|
 | 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | `Scene/theme/bhyh_theme.tres` 已用于 pilot；旧 Theme 未合并 | 32-4 迁移/退役 |
-| 最终变体名单与字体族映射 | 32-1 已冻结 21 个类型 | 32-2 只按批扩展，不重命名 |
+| 最终变体名单与字体族映射 | 32-1/32-2A 已冻结 36 个类型（34 直接 + 2 基类） | 32-2B 只按批扩展，不重命名 |
 | 是否启用全局 `gui/theme/custom` | 默认不启用 | 32-4 全 UI 覆盖评审 |
 | 动画轨道/脚本动态覆盖的最终例外清单 | 动画 26 处、动态调用 383 处均未迁移 | 32-4 收口 |
 

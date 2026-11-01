@@ -1,7 +1,12 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://bhyhuitheme01"]
 
 [ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
+
+[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="font_fzcy"]
+[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="font_hk"]
+[ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="font_meng"]
+[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="font_hy"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
 [sub_resource type="StyleBoxLine" id="slider_track"]
@@ -142,3 +147,96 @@ SettingsPlainLabel/base_type = &"Label"
 SettingsPlainLabel/fonts/font = ExtResource("font_main")
 SettingsPlainLabel/font_sizes/font_size = 16
 SettingsPlainLabel/constants/outline_size = 1
+
+EquipmentStatLabel/base_type = &"Label"
+EquipmentStatLabel/colors/font_color = Color(1, 0.6, 0.2, 1)
+EquipmentStatLabel/fonts/font = ExtResource("font_fzcy")
+EquipmentStatLabel/font_sizes/font_size = 16
+
+EquipmentStatValue/base_type = &"Label"
+EquipmentStatValue/colors/font_color = Color(1, 1, 0, 1)
+EquipmentStatValue/colors/font_outline_color = Color(1, 1, 0, 1)
+EquipmentStatValue/constants/outline_size = 1
+EquipmentStatValue/fonts/font = ExtResource("font_hk")
+EquipmentStatValue/font_sizes/font_size = 15
+
+EquipmentItemHighlight/base_type = &"Label"
+EquipmentItemHighlight/colors/font_color = Color(1, 1, 1, 1)
+EquipmentItemHighlight/colors/font_outline_color = Color(1, 1, 1, 1)
+EquipmentItemHighlight/constants/outline_size = 1
+EquipmentItemHighlight/fonts/font = ExtResource("font_meng")
+EquipmentItemHighlight/font_sizes/font_size = 20
+
+EquipmentItemMeta/base_type = &"Label"
+EquipmentItemMeta/constants/outline_size = 1
+EquipmentItemMeta/fonts/font = ExtResource("font_meng")
+EquipmentItemMeta/font_sizes/font_size = 20
+
+EquipmentPanelPadding/base_type = &"MarginContainer"
+EquipmentPanelPadding/constants/margin_left = 10
+EquipmentPanelPadding/constants/margin_top = 10
+EquipmentPanelPadding/constants/margin_right = 10
+EquipmentPanelPadding/constants/margin_bottom = 10
+
+EquipmentStatGroup/base_type = &"VBoxContainer"
+EquipmentStatGroup/constants/separation = 5
+
+EquipmentInfoGroup/base_type = &"VBoxContainer"
+EquipmentInfoGroup/constants/separation = 16
+
+LevelInfoValue/base_type = &"Label"
+LevelInfoValue/colors/font_color = Color(1, 1, 0, 1)
+LevelInfoValue/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoValue/constants/outline_size = 9
+LevelInfoValue/fonts/font = ExtResource("font_main")
+LevelInfoValue/font_sizes/font_size = 27
+
+LevelInfoShadowText/base_type = &"Label"
+LevelInfoShadowText/colors/font_color = Color(1, 1, 0, 1)
+LevelInfoShadowText/colors/font_outline_color = Color(1, 1, 0, 1)
+LevelInfoShadowText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LevelInfoShadowText/constants/outline_size = 1
+LevelInfoShadowText/constants/shadow_offset_x = 0
+LevelInfoShadowText/constants/shadow_offset_y = 0
+LevelInfoShadowText/constants/shadow_outline_size = 12
+LevelInfoShadowText/fonts/font = ExtResource("font_hk")
+LevelInfoShadowText/font_sizes/font_size = 22
+
+LevelInfoAlertText/base_type = &"Label"
+LevelInfoAlertText/colors/font_color = Color(1, 0, 0, 1)
+LevelInfoAlertText/colors/font_outline_color = Color(1, 0, 0, 1)
+LevelInfoAlertText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LevelInfoAlertText/constants/outline_size = 1
+LevelInfoAlertText/constants/shadow_offset_x = 0
+LevelInfoAlertText/constants/shadow_offset_y = 0
+LevelInfoAlertText/constants/shadow_outline_size = 12
+LevelInfoAlertText/fonts/font = ExtResource("font_hk")
+LevelInfoAlertText/font_sizes/font_size = 22
+
+LevelInfoSuccessText/base_type = &"Label"
+LevelInfoSuccessText/colors/font_color = Color(0, 1, 0, 1)
+LevelInfoSuccessText/colors/font_outline_color = Color(0, 1, 0, 1)
+LevelInfoSuccessText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LevelInfoSuccessText/constants/outline_size = 1
+LevelInfoSuccessText/constants/shadow_offset_x = 0
+LevelInfoSuccessText/constants/shadow_offset_y = 0
+LevelInfoSuccessText/constants/shadow_outline_size = 10
+LevelInfoSuccessText/fonts/font = ExtResource("font_hk")
+LevelInfoSuccessText/font_sizes/font_size = 25
+
+LevelInfoModeButton/base_type = &"Button"
+LevelInfoModeButton/colors/font_color = Color(1, 1, 0, 1)
+LevelInfoModeButton/colors/font_hover_color = Color(1, 0.42, 0, 1)
+LevelInfoModeButton/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoModeButton/constants/outline_size = 5
+LevelInfoModeButton/fonts/font = ExtResource("font_hk")
+LevelInfoModeButton/font_sizes/font_size = 25
+
+LevelInfoFilterGroup/base_type = &"HBoxContainer"
+LevelInfoFilterGroup/constants/separation = 10
+
+LevelInfoDropGroup/base_type = &"HBoxContainer"
+LevelInfoDropGroup/constants/separation = 7
+
+LevelInfoModeGroup/base_type = &"VBoxContainer"
+LevelInfoModeGroup/constants/separation = 12

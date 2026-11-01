@@ -6,6 +6,8 @@
 [ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="4"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="5"]
 
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
+
 [sub_resource type="ShaderMaterial" id="1"]
 
 [node name="Equipment_properies" type="Node2D" unique_id=806167455]
@@ -20,6 +22,7 @@ color = Color(0, 0, 0, 0.705882)
 metadata/_edit_lock_ = true
 
 [node name="pro_wk" type="MarginContainer" parent="." unique_id=1135014821]
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(200, 0)
 offset_left = 15.0
 offset_right = 121.0
@@ -28,12 +31,9 @@ size_flags_vertical = 0
 metadata/_edit_lock_ = true
 
 [node name="information" type="MarginContainer" parent="pro_wk" unique_id=127072576]
+theme_type_variation = "EquipmentPanelPadding"
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
 metadata/_edit_lock_ = true
 
 [node name="inf" type="VBoxContainer" parent="pro_wk/information" unique_id=1520288783]
@@ -54,10 +54,8 @@ text = "名称："
 vertical_alignment = 1
 
 [node name="eq_pz" type="Label" parent="pro_wk/information/inf/VBoxContainer2" unique_id=2098529170]
+theme_type_variation = "EquipmentItemMeta"
 layout_mode = 2
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "品质："
 vertical_alignment = 1
 
@@ -68,10 +66,8 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="eq_lx" type="Label" parent="pro_wk/information/inf/VBoxContainer2" unique_id=254946584]
+theme_type_variation = "EquipmentItemMeta"
 layout_mode = 2
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "类型："
 vertical_alignment = 1
 
@@ -82,12 +78,8 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="have" type="Label" parent="pro_wk/information/inf/VBoxContainer2" unique_id=1786588400]
+theme_type_variation = "EquipmentItemHighlight"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "拥有："
 vertical_alignment = 1
 
@@ -101,12 +93,8 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 
 [node name="eq_czl" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1646455199]
+theme_type_variation = "EquipmentItemHighlight"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "成长率："
 vertical_alignment = 1
 
@@ -116,12 +104,8 @@ scale = Vector2(0.838174, 1)
 texture = ExtResource("3")
 
 [node name="eq_star_level" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=639465794]
+theme_type_variation = "EquipmentItemHighlight"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "五行："
 vertical_alignment = 1
 
@@ -131,137 +115,105 @@ scale = Vector2(0.838174, 1)
 texture = ExtResource("3")
 
 [node name="eq_hp" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=573303016]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "生命："
 vertical_alignment = 1
 
 [node name="eq_mp" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1083810596]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "魔法："
 vertical_alignment = 1
 
 [node name="eq_power" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1581910241]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "攻击："
 vertical_alignment = 1
 
 [node name="eq_def" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=381254676]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "物防："
 vertical_alignment = 1
 
 [node name="eq_mdef" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=21165094]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "魔防："
 vertical_alignment = 1
 
 [node name="eq_crit" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=603923799]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "暴击："
 vertical_alignment = 1
 
 [node name="eq_miss" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1586335389]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "闪避："
 vertical_alignment = 1
 
 [node name="eq_ehp" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1039673513]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "回血："
 vertical_alignment = 1
 
 [node name="eq_emp" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1416727095]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "回魔："
 vertical_alignment = 1
 
 [node name="eq_mz" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=827637786]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "命中："
 vertical_alignment = 1
 
 [node name="eq_lucky" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1657202054]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "幸运："
 vertical_alignment = 1
 
 [node name="eq_rx" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=88979378]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "韧性："
 vertical_alignment = 1
 
 [node name="eq_pj" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1688012213]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "破甲："
 vertical_alignment = 1
 
 [node name="eq_pm" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1326970190]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "破魔："
 vertical_alignment = 1
 
 [node name="eq_xx" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=1844236255]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "吸血："
 vertical_alignment = 1
 
 [node name="eq_bm" type="Label" parent="pro_wk/information/inf/VBoxContainer3" unique_id=918205740]
+theme_type_variation = "EquipmentStatLabel"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "暴免："
 vertical_alignment = 1
 
 [node name="BsProp" type="VBoxContainer" parent="pro_wk/information/inf" unique_id=1348109149]
+theme_type_variation = "EquipmentStatGroup"
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1717163715]
 layout_mode = 2
@@ -274,169 +226,105 @@ text = "宝石加成"
 vertical_alignment = 1
 
 [node name="eq_hp" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1348690260]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "生命："
 vertical_alignment = 1
 
 [node name="eq_mp" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=697304416]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "魔法："
 vertical_alignment = 1
 
 [node name="eq_power" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=335175772]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "攻击："
 vertical_alignment = 1
 
 [node name="eq_def" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1187923633]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "物防："
 vertical_alignment = 1
 
 [node name="eq_mdef" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1397701981]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "魔防："
 vertical_alignment = 1
 
 [node name="eq_crit" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=365850420]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "暴击："
 vertical_alignment = 1
 
 [node name="eq_miss" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=2125283619]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "闪避："
 vertical_alignment = 1
 
 [node name="eq_ehp" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=909439175]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "回血："
 vertical_alignment = 1
 
 [node name="eq_emp" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=321614339]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "回魔："
 vertical_alignment = 1
 
 [node name="eq_mz" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1915185147]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "命中："
 vertical_alignment = 1
 
 [node name="eq_lucky" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=475998088]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "幸运："
 vertical_alignment = 1
 
 [node name="eq_rx" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=710454857]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "韧性："
 vertical_alignment = 1
 
 [node name="eq_pj" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=795569515]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "破甲："
 vertical_alignment = 1
 
 [node name="eq_pm" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=648938255]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "破魔："
 vertical_alignment = 1
 
 [node name="eq_xx" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=918890835]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "吸血："
 vertical_alignment = 1
 
 [node name="eq_bm" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1533482473]
+theme_type_variation = "EquipmentStatValue"
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 15
 text = "暴免："
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="pro_wk/information/inf" unique_id=743194866]
+theme_type_variation = "EquipmentInfoGroup"
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_constants/separation = 16
 
 [node name="eq_ms" type="Label" parent="pro_wk/information/inf/VBoxContainer" unique_id=892546864]
 layout_mode = 2

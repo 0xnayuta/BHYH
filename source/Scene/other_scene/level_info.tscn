@@ -14,8 +14,10 @@
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="12"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="13"]
 [ext_resource type="Texture2D" path="res://Art/set_menu/653.png" id="14"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="LevelInfo" type="Control" unique_id=796883821]
+theme = ExtResource("theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,11 +142,11 @@ mouse_filter = 0
 metadata/_edit_lock_ = true
 
 [node name="MonsterList" type="HBoxContainer" parent="ColorRect/TextureRect/ScrollContainer2" unique_id=297268527]
+theme_type_variation = "LevelInfoFilterGroup"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 0
-theme_override_constants/separation = 10
 metadata/_edit_lock_ = true
 
 [node name="TextureRect3" type="TextureRect" parent="ColorRect/TextureRect" unique_id=23278676]
@@ -169,33 +171,21 @@ texture_pressed = ExtResource("11")
 texture_hover = ExtResource("12")
 
 [node name="difftext" type="Label" parent="ColorRect/TextureRect/diffbutton" unique_id=1853740020]
+theme_type_variation = "LevelInfoShadowText"
 layout_mode = 0
 offset_left = -155.0
 offset_top = 3.0
 offset_right = -1.0
 offset_bottom = 29.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 12
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 22
 text = "挑战难度:"
 
 [node name="diffvalue" type="Label" parent="ColorRect/TextureRect/diffbutton" unique_id=1892522782]
+theme_type_variation = "LevelInfoValue"
 layout_mode = 0
 offset_left = 10.95459
 offset_top = 0.27270508
 offset_right = 79.54614
 offset_bottom = 32.272705
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("8")
-theme_override_font_sizes/font_size = 27
 text = "普通"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -229,21 +219,13 @@ vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="pj" type="Label" parent="ColorRect/TextureRect" unique_id=10413139]
+theme_type_variation = "LevelInfoShadowText"
 texture_filter = 2
 layout_mode = 0
 offset_left = 20.5
 offset_top = 299.545
 offset_right = 296.5
 offset_bottom = 335.545
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 12
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 22
 text = "本关历史最高评价："
 horizontal_alignment = 2
 metadata/_edit_lock_ = true
@@ -291,24 +273,16 @@ offset_bottom = 419.773
 metadata/_edit_lock_ = true
 
 [node name="FallList" type="HBoxContainer" parent="ColorRect/TextureRect/ScrollContainer" unique_id=1336634967]
+theme_type_variation = "LevelInfoDropGroup"
 layout_mode = 2
-theme_override_constants/separation = 7
 
 [node name="createcount" type="Label" parent="ColorRect/TextureRect" unique_id=403675600]
+theme_type_variation = "LevelInfoAlertText"
 layout_mode = 0
 offset_left = 410.0
 offset_top = 259.044
 offset_right = 564.0
 offset_bottom = 285.044
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 12
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 22
 text = "怪物生成数量："
 
 [node name="Count" type="TextureButton" parent="ColorRect/TextureRect" unique_id=941676408]
@@ -324,17 +298,13 @@ texture_disabled = ExtResource("11")
 metadata/_edit_lock_ = true
 
 [node name="counttext" type="Label" parent="ColorRect/TextureRect/Count" unique_id=484428361]
+theme_type_variation = "LevelInfoValue"
 texture_filter = 2
 layout_mode = 0
 offset_left = 3.0
 offset_top = -3.68182
 offset_right = 91.0
 offset_bottom = 36.3182
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("8")
-theme_override_font_sizes/font_size = 27
 text = "×1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -353,72 +323,44 @@ texture_disabled = ExtResource("11")
 metadata/_edit_lock_ = true
 
 [node name="createspeed" type="Label" parent="ColorRect/TextureRect/Speed" unique_id=2116378826]
+theme_type_variation = "LevelInfoAlertText"
 texture_filter = 2
 layout_mode = 0
 offset_left = -155.0
 offset_top = 3.59091
 offset_right = -1.0
 offset_bottom = 29.5909
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 12
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 22
 text = "怪物生成速度："
 
 [node name="speedtext" type="Label" parent="ColorRect/TextureRect/Speed" unique_id=1881327458]
+theme_type_variation = "LevelInfoValue"
 texture_filter = 2
 layout_mode = 0
 offset_left = 3.0
 offset_top = -3.68182
 offset_right = 91.0
 offset_bottom = 36.3182
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("8")
-theme_override_font_sizes/font_size = 27
 text = "× 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Level" type="Label" parent="ColorRect/TextureRect" unique_id=853342231]
+theme_type_variation = "LevelInfoSuccessText"
 layout_mode = 0
 offset_left = 177.27327
 offset_top = 254.5455
 offset_right = 284.27332
 offset_bottom = 283.5455
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 25
 text = "等级压制:"
 
 [node name="LevelDown" type="Label" parent="ColorRect/TextureRect/Level" unique_id=120571382]
+theme_type_variation = "LevelInfoSuccessText"
 layout_mode = 0
 offset_left = 121.8192
 offset_top = 0.68182397
 offset_right = 171.8182
 offset_bottom = 29.681824
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 25
 text = "10"
 
 [node name="ColorRect2" type="ColorRect" parent="." unique_id=1562330324]
@@ -499,34 +441,24 @@ texture_hover = ExtResource("6")
 texture_disabled = ExtResource("5")
 
 [node name="Modes" type="VBoxContainer" parent="FourSwordsModeDialog/BG" unique_id=1408793203]
+theme_type_variation = "LevelInfoModeGroup"
 layout_mode = 0
 offset_left = 65.0
 offset_top = 102.0
 offset_right = 255.0
 offset_bottom = 230.0
-theme_override_constants/separation = 12
 
 [node name="NormalMode" type="Button" parent="FourSwordsModeDialog/BG/Modes" unique_id=304733096]
+theme_type_variation = "LevelInfoModeButton"
 custom_minimum_size = Vector2(190, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_hover_color = Color(1, 0.42, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 25
 text = "普通模式"
 flat = true
 
 [node name="EndlessMode" type="Button" parent="FourSwordsModeDialog/BG/Modes" unique_id=463662466]
+theme_type_variation = "LevelInfoModeButton"
 custom_minimum_size = Vector2(190, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_hover_color = Color(1, 0.42, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 25
 text = "无限模式"
 flat = true
 
