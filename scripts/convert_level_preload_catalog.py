@@ -35,10 +35,12 @@ MONSTER_SCENE_DIR = SOURCE / "Scene/monster"
 BULLET_SCENE_DIR = MONSTER_SCENE_DIR / "monster_bullet_slim"
 CATALOG_PATH = SOURCE / "Script/data/level_preload_catalog.tres"
 LAYOUT_SOURCE_PATH = ROOT / "scripts/level_layout_sources.json"
+LAYOUT_CATALOG_PATH = SOURCE / "Script/data/level_layout_catalog.tres"
+LAYOUT_DIR = SOURCE / "Script/data/level_layouts"
 DYNAMIC_SOURCE_PATH = ROOT / "scripts/monster_dynamic_paths.json"
 EXPORT_MANIFEST_PATH = SOURCE / "Script/data/level_preload_export_dependencies.json"
 EXPORT_MANIFEST_SCHEMA = "level_preload_export_dependencies"
-EXPORT_MANIFEST_VERSION = 1
+EXPORT_MANIFEST_VERSION = 2
 
 STAGE_KEYS = ("stage_1", "stage_2", "stage_3", "stage_4")
 UID_ALPHABET = "abcdefghijklmnopqrstuvwxy012345678"
@@ -574,11 +576,45 @@ def build_dynamic_paths(levels: dict[str, LevelEntry]) -> DynamicPaths:
     return dynamic
 
 
+def layout_dependency_paths() -> tuple[str, list[str]]:
+    """布局 Catalog 与单关 .tres 同样属于发布闭包。
+
+    路径只由构建源派生，生成后再与运行时目录约定对齐，避免把布局资源
+    误当作素材或源码依赖而漏出发布包。
+    """
+    if not LAYOUT_SOURCE_PATH.is_file():
+        raise ValueError(f"缺少关卡布局源清单: {LAYOUT_SOURCE_PATH.relative_to(ROOT)}")
+    try:
+        raw = json.loads(LAYOUT_SOURCE_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"关卡布局源清单不是合法 JSON: {error}") from error
+    if not isinstance(raw, dict) or raw.get("schema_id") != "level_layout_sources":
+        raise ValueError("关卡布局源清单 schema_id 不匹配")
+    levels = raw.get("levels")
+    if not isinstance(levels, dict):
+        raise ValueError("关卡布局源清单 levels 不是对象")
+    layouts: set[str] = set()
+    for scene_path, layout in levels.items():
+        if not isinstance(scene_path, str) or not isinstance(layout, dict):
+            raise ValueError("关卡布局源条目非法")
+        level_id = layout.get("level_id")
+        if not isinstance(level_id, str) or not level_id:
+            raise ValueError(f"{scene_path}: level_id 非法")
+        path = LAYOUT_DIR / f"{level_id}.tres"
+        if not path.is_file():
+            raise ValueError(f"{scene_path}: 布局资源缺失 {path.relative_to(ROOT)}")
+        layouts.add("res://" + path.relative_to(SOURCE).as_posix())
+    return "res://" + LAYOUT_CATALOG_PATH.relative_to(SOURCE).as_posix(), sorted(layouts)
+
+
 def dependency_manifest_content(dynamic: DynamicPaths, bullets: dict[str, list[str]]) -> str:
+    layout_catalog, layouts = layout_dependency_paths()
     payload = {
         "schema_id": EXPORT_MANIFEST_SCHEMA,
         "schema_version": EXPORT_MANIFEST_VERSION,
         "catalog": "res://" + CATALOG_PATH.relative_to(SOURCE).as_posix(),
+        "layout_catalog": layout_catalog,
+        "layouts": layouts,
         "monster_scenes": dynamic.manifest_monster_scenes,
         "dynamic_monster_scenes": dynamic.manifest_dynamic_scenes,
         "bullet_scenes": sorted({path for paths in bullets.values() for path in paths}),

@@ -110,6 +110,9 @@ def required_paths(manifest: dict[str, object]) -> list[str]:
     catalog = str(manifest.get("catalog", ""))
     if catalog:
         paths.append(catalog)
+    layout_catalog = str(manifest.get("layout_catalog", ""))
+    if layout_catalog:
+        paths.append(layout_catalog)
     for key in (
         "sequences",
         "deferred_textures",
@@ -117,6 +120,7 @@ def required_paths(manifest: dict[str, object]) -> list[str]:
         "dynamic_monster_scenes",
         "bullet_scenes",
         "dynamic_textures",
+        "layouts",
     ):
         items = manifest.get(key, [])
         if isinstance(items, list):

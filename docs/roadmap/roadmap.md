@@ -16,7 +16,7 @@
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
-| Phase 30 关卡布局数据契约 | **进行中**：30-0 设计/评审完成（ADR-023 `Accepted`），30-1 与 30-2 完成，30-3 收口（69 迁出 + 6 空表 + 10 例外）；30-4 未启动 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
+| Phase 30 关卡布局数据契约 | **已完成**：30-1/30-2/30-3/30-4 完成；30-3 含 10 个登记例外，30-4 逐项边界决策与 PCK 复跑 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
 | Phase 33 装备数据契约 | **候选（未启动，依赖 Phase 30/32 之一）** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8 |
@@ -106,9 +106,9 @@ flowchart TD
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
 - Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；当前候选批次为 Phase 21，详细任务见 [`current-iteration.md`](current-iteration.md)。
 
-### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（30-1/30-2/30-3 已完成，30-4 未启动）
+### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（30-1/30-2/30-3/30-4 已完成）
 
-> **状态**：30-0 设计与评审完成；30-1 **已完成**（`level_48` 试点）；30-2 **已完成**（外部怪物映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；30-3 **已完成**（69 迁出 + 6 空表删除 + 10 例外登记）；30-4 未启动。
+> **状态**：30-0 设计与评审完成；30-1 **已完成**（`level_48` 试点）；30-2 **已完成**（外部怪物映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；30-3 **已完成**（69 迁出 + 6 空表删除 + 10 例外登记）；30-4 **已完成**（85 个原数据容器脚本逐项复核）。
 > **决策依据**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)（Accepted）
 > **契约细节**：[`level_layout_contract.md`](../reference/level_layout_contract.md)
 
@@ -149,11 +149,11 @@ flowchart TD
 - 每批迁移后删除脚本内数据表，不保留双份（ADR-005）；新增 `level_layout_migration_audit.py` 阻断双源；
 - 验收：全仓 `grep "monster_group = {"` 计数逐批下降（85 → 65 → 52 → 42 → 30 → 20 → 10 例外）；每批 `level_regression_all.py` 与原行为一致。
 
-**30-4 边界收尾**
+**30-4 边界收尾（已完成）**
 
-- 55 个含真实玩法逻辑的脚本保留，只迁出其中的结构化数据块；
-- 更新 `architecture.md` §4.3 关卡状态机与 `status.md`；
-- 验收：文档与实现一致，无遗留双数据源。
+- 85 个原数据容器脚本逐项复核：55 个逻辑脚本保留，30 个标准/空表脚本分类；10 个动态/非连续例外登记；
+- 更新 `architecture.md` §4.3、`status.md` 与 [`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md)；
+- 验收：文档与实现一致，无未分类数据表。
 
 **阶段出口**：30-1~30-3 完成并有回归证据；30-4 给出保留/迁出清单。**不做的事**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData` 整体 Resource 化。
 

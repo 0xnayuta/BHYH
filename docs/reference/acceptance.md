@@ -315,7 +315,7 @@ python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
-`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致。
+`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致；发布清单包含 `layout_catalog` 与 90 个布局路径。
 
 `convert_level_layout_catalog.py --check` 同样由 `contract_gate.py` 调用，校验 `scripts/level_layout_sources.json` 生成的单关布局 `.tres` 与 `level_layout_catalog.tres` 一致；Phase 30-1 试点关卡为 `level_48`，Phase 30-2 增加 20 个原始 ZMWS 代表关卡，Phase 30-3 收口增加 69 个布局化的 BHYH 关卡（20 个单屏 + 13 个多阶段 + 36 个截断对齐）；另 6 个空数据表删除，10 个动态/非连续脚本登记例外。。`level_layout_migration_audit.py --fail-on-error` 阻断「已登记布局 + 脚本内仍有 `monster_group = {`」的双数据源；剩余数据表必须与 `level_layout_data_exceptions.json` 精确一致，未登记或失效例外均失败。
 
@@ -323,7 +323,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 
-> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-10-27 实测该预设导出 PCK 内 **4,100 条**依赖全部可达（FrameSequence 与关卡预载两份清单合并，约 2.74 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
+> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
 
 `frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。三种证据必须分开记录：
 

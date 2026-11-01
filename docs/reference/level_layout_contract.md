@@ -289,6 +289,7 @@ Phase 30-2 的 `ZmwsLevel`（继承 `Game4ImportedLevel`）负责把原始 `Scen
 - `level_48` 冒烟 Stage 1–5 全部 PASS（22.7s，日志 0 ERROR / 0 WARNING）；全量关卡回归 **128/128 PASS + 5 SKIP**（709.5s）。
 - Phase 30-2：`ExternalMonsterCatalog`/`Store` 512 条精确/唯一归一化名称映射；`ZmwsLevel` 原始场景驱动器；20 个 `zmws_playable` 包装关卡；20/20 Stage 全 PASS、20/20 `can_pass=True`，0 ERROR / 0 WARNING；全量回归 **128/128 PASS + 5 SKIP**（731.4s）。
 - Phase 30-3 收口批：迁移 69 个数据容器脚本（首批 20 个单屏：`level_38_1`、`level_bgmj`、`level_lxdy1~5`、`level_nmg`、`level_sdwfb`、`level_sjg`、`level_tzhy`、`level_xbj`、`level_xss`、`level_xtqfb`、`level_ghg`、`level_hdgqnmg`、`level_hdgqzld`、`level_hdzm`、`level_42`、`level_44`）；`BaseLevel` 新增布局刷怪表展开，`Game4ImportedLevel` 明确不重复填充；新增 `level_layout_migration_audit.py` 阻断「布局资源 + 脚本数据表」双源；第二批迁移 13 个多阶段脚本（`level_1~8`、`level_10`、`level_21`、`level_45`、`level_dtwd`、`level_hddy`），按既有 fallback 分屏/触发矩形生成 2/4 阶段布局，允许终屏零宽 screen_rect；第三批迁移 10 个长度不一致脚本（`level_12~16`、`level_18`、`level_9`、`level_35`、`level_40`、`level_eighteenth_hell`），第四批迁移 12 个剩余四阶段脚本（`level_19`、`level_23~33`），第五批迁移 10 个四阶段脚本（`level_34`、`level_38`、`level_39`、`level_41`、`level_43`、`level_dsg_1~5`），收口批迁移 4 个（`level_11`、`level_47`、`level_pty`、`level_ymj`）；均按 `_align_monster_spawn_tables()` 的 min(ids,x,y) 截断后生成，多余坐标不进入资源；删除 6 个空数据表；剩余 10 个动态/非连续数据表登记 `level_layout_data_exceptions.json`，`monster_group = {` 从 85 降至 10（全部为例外）。
+- Phase 30-4：85 个原数据容器脚本逐项复核；55 个逻辑脚本与 30 个标准/空表脚本的保留/迁出结论见 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)；10 个例外由 `level_layout_data_exceptions.json` 守恒。
 
 ## 8. 验收标准
 

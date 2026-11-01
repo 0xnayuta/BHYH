@@ -40,7 +40,8 @@
 | [`reference/gameplay_module_matrix.md`](reference/gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖 |
 | [`reference/module_api_matrix.md`](reference/module_api_matrix.md) | **Phase 17-6 试点模块 API 与依赖方向（已完成）**：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开 API、场景依赖、路径清理与剩余项 |
 | [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与收口**：AtlasMetadata 生产者、源形态、消费者、View、守卫与失败边界 |
-| [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2 已实施，30-3 收口完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
+| [`reference/phase_30_4_script_decisions.md`](reference/phase_30_4_script_decisions.md) | **Phase 30-4 脚本边界决策**：55 个逻辑脚本与 30 个标准/空表脚本逐项保留/迁出结论；10 个例外 |
+| [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2/30-3/30-4 完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
 | [`reference/modernization_gap_matrix.md`](reference/modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、Theme 缺失、数据硬编码等分级清单、处置类型判定与批次建议 |
 | [`reference/spine_platform_baseline.md`](reference/spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B 暂缓状态 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |

@@ -283,6 +283,8 @@ classDiagram
 
 Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。`ZmwsLevel` 可按碰撞体元数据 `_zmws_wall_name`（缺失时用节点名）匹配布局 `close_walls`/`open_walls`；当前转换地图未保留原名，挡板保持默认关闭。
 
+Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个空表删除、10 个动态/非连续脚本保留为例外；55 个含独立玩法逻辑与 30 个标准/数据脚本的逐项结论见 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)。已迁出脚本的 `monster_group`/坐标表删除，例外由 `level_layout_migration_audit.py` 校验；不重写 `BaseHero`/`BaseMonster` 或关卡时序。
+
 ### 4.4 命中与归属
 
 - 角色攻击 → 怪物受击区域；怪物攻击 → 角色受击区域；法宝使用独立层；
@@ -489,7 +491,7 @@ Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`
 ### 6.6 发布依赖与待收敛边界
 
 - 角色资源清单、AtlasMetadata、构建帧、FrameSequence、关卡预载 Catalog 已落地；具体范围由生成器与 `--check` 决定，不在本文维护数量。
-- `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物及 `scripts/monster_dynamic_paths.json` 派生，随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
+- `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物、`scripts/monster_dynamic_paths.json` 与布局源派生（含 `layout_catalog` + 90 个布局），随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
 - 怪物别名与动态来源已在构建期展开为 Catalog；运行时不再解析源码或扫描纹理目录。旧纹理别名表及其解析入口已移除，不兼容旧路径。
 - PCK 闭包与 Windows release 的已执行结果见 `status.md`；包内可达不等于目标设备加载与峰值性能通过。
 
