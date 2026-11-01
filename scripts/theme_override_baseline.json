@@ -1,0 +1,660 @@
+{
+  "schema_id": "theme_override_baseline",
+  "schema_version": 1,
+  "totals": {
+    "direct_properties": 6804,
+    "animation_track_refs": 26,
+    "textual_references": 6830,
+    "scenes": 135
+  },
+  "property_categories": {
+    "colors": 1730,
+    "constants": 1393,
+    "font_sizes": 1001,
+    "fonts": 1055,
+    "styles": 1625
+  },
+  "animation_categories": {
+    "colors": 15,
+    "constants": 5,
+    "font_sizes": 5,
+    "fonts": 1
+  },
+  "node_types": {
+    "<inherited>": 10,
+    "BoxContainer": 1,
+    "Button": 2380,
+    "CheckBox": 98,
+    "CheckButton": 25,
+    "GridContainer": 22,
+    "HBoxContainer": 59,
+    "HSeparator": 2,
+    "HSlider": 4,
+    "ItemList": 10,
+    "Label": 3921,
+    "LineEdit": 107,
+    "MarginContainer": 44,
+    "OptionButton": 11,
+    "Panel": 22,
+    "PanelContainer": 9,
+    "PopupMenu": 2,
+    "ProgressBar": 2,
+    "TabBar": 8,
+    "VBoxContainer": 63,
+    "VSeparator": 4
+  },
+  "unassigned_direct": 0,
+  "themes": {
+    "resources": [
+      "Scene/back_pack/backpack_action_theme.tres"
+    ],
+    "scene_refs": 2,
+    "type_variations": 0
+  },
+  "fonts": {
+    "scene_refs": 207,
+    "unique_files": 12,
+    "paths": [
+      "res://Font/194_song_ti.ttf",
+      "res://Font/1_aaa_fz_cu_yuan_m03_s.ttf",
+      "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
+      "res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf",
+      "res://Font/8_fz_cu_yuan_m03_s.ttf",
+      "res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
+      "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
+      "res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf",
+      "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
+      "res://Font/jin_qiao_jian_zhong_yuan.ttf",
+      "res://Font/华康宋体W3.ttc",
+      "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+    ]
+  },
+  "dynamic_add_theme": {
+    "calls": 383,
+    "files": 39,
+    "paths": [
+      "Scene/auto_battle_config.gd",
+      "Scene/other_scene/level_info.gd",
+      "Scene/other_scene/monster_head_info.gd",
+      "Scene/other_scene/reward_box_2.gd",
+      "Scene/other_scene/skill_icon.gd",
+      "Scene/other_scene/transmogtified_box.gd",
+      "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "Scene/other_scene/zhen_fa_tu_po.gd",
+      "Scene/other_scene/zhen_fa_ui.gd",
+      "Scene/other_scene/zhen_yan_cure_level.gd",
+      "Scene/show_text/message_info.gd",
+      "Script/back_pack/dj_information.gd",
+      "Script/back_pack/equipment_properies.gd",
+      "Script/back_pack/wq.gd",
+      "Script/base/base_role.gd",
+      "Script/coop/local_coop.gd",
+      "Script/hero/yutu_hero.gd",
+      "Script/hittext/damage_text.gd",
+      "Script/ldl/bone_forge.gd",
+      "Script/ldl/divine_forge.gd",
+      "Script/ldl/forge.gd",
+      "Script/ldl/forge_material_box.gd",
+      "Script/ldl/strength.gd",
+      "Script/level/role_information.gd",
+      "Script/main_menu/choose_player.gd",
+      "Script/main_menu/equipment_catalog_page.gd",
+      "Script/main_menu/game_mode_select.gd",
+      "Script/main_menu/mount_panel.gd",
+      "Script/main_menu/wan_ling_catalog_page.gd",
+      "Script/main_menu/zhen_yao_tower.gd",
+      "Script/main_menu/zhu_xian_sword_page.gd",
+      "Script/other_menu/c_hange_clothes_jm.gd",
+      "Script/pet/pet_interface.gd",
+      "Script/runtime/runtime_diagnostics.gd",
+      "Script/skill/bd_skill.gd",
+      "Script/skill/learn_skill.gd",
+      "Script/skill/zd_skill.gd",
+      "Script/task/basic_task.gd",
+      "Script/task/task_title.gd"
+    ]
+  },
+  "scenes": {
+    "Scene/archive_interface/read_archive_interface.tscn": {
+      "direct": 230,
+      "animation": 0
+    },
+    "Scene/auto_battle_config.tscn": {
+      "direct": 58,
+      "animation": 0
+    },
+    "Scene/back_pack/back_pack.tscn": {
+      "direct": 117,
+      "animation": 0
+    },
+    "Scene/back_pack/box_1.tscn": {
+      "direct": 15,
+      "animation": 0
+    },
+    "Scene/back_pack/dj_information.tscn": {
+      "direct": 19,
+      "animation": 0
+    },
+    "Scene/back_pack/dj_sell.tscn": {
+      "direct": 29,
+      "animation": 0
+    },
+    "Scene/back_pack/equipment_properies.tscn": {
+      "direct": 173,
+      "animation": 0
+    },
+    "Scene/back_pack/magic_weapon_infor.tscn": {
+      "direct": 55,
+      "animation": 0
+    },
+    "Scene/back_pack/main_backpack.tscn": {
+      "direct": 27,
+      "animation": 0
+    },
+    "Scene/back_pack/pl_sell.tscn": {
+      "direct": 107,
+      "animation": 0
+    },
+    "Scene/back_pack/sell_or_equ.tscn": {
+      "direct": 27,
+      "animation": 0
+    },
+    "Scene/back_pack/skill_select.tscn": {
+      "direct": 46,
+      "animation": 0
+    },
+    "Scene/back_pack/use_items.tscn": {
+      "direct": 37,
+      "animation": 0
+    },
+    "Scene/back_pack/use_magic_weapon.tscn": {
+      "direct": 13,
+      "animation": 0
+    },
+    "Scene/back_pack/zb.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/base/base_hero.tscn": {
+      "direct": 7,
+      "animation": 0
+    },
+    "Scene/base/base_role.tscn": {
+      "direct": 68,
+      "animation": 0
+    },
+    "Scene/base/base_through_level.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/hero/role_1/role1.tscn": {
+      "direct": 2,
+      "animation": 0
+    },
+    "Scene/hero/role_2/role_2.tscn": {
+      "direct": 4,
+      "animation": 0
+    },
+    "Scene/hero/role_3/role_3.tscn": {
+      "direct": 2,
+      "animation": 0
+    },
+    "Scene/hero/role_4/role_4.tscn": {
+      "direct": 2,
+      "animation": 0
+    },
+    "Scene/hero/role_5/role_5.tscn": {
+      "direct": 2,
+      "animation": 0
+    },
+    "Scene/hittext/damage_text.tscn": {
+      "direct": 1,
+      "animation": 0
+    },
+    "Scene/hittext/hit_text.tscn": {
+      "direct": 6,
+      "animation": 26
+    },
+    "Scene/ldl/decompose.tscn": {
+      "direct": 12,
+      "animation": 0
+    },
+    "Scene/ldl/decompose_help.tscn": {
+      "direct": 46,
+      "animation": 0
+    },
+    "Scene/ldl/divine_forge.tscn": {
+      "direct": 11,
+      "animation": 0
+    },
+    "Scene/ldl/forge.tscn": {
+      "direct": 23,
+      "animation": 0
+    },
+    "Scene/ldl/forge_help.tscn": {
+      "direct": 41,
+      "animation": 0
+    },
+    "Scene/ldl/forge_material_box.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/ldl/ldl.tscn": {
+      "direct": 74,
+      "animation": 0
+    },
+    "Scene/ldl/mosaic.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/ldl/mosaic_help.tscn": {
+      "direct": 35,
+      "animation": 0
+    },
+    "Scene/ldl/one_key_synthesis.tscn": {
+      "direct": 10,
+      "animation": 0
+    },
+    "Scene/ldl/s_yn_help.tscn": {
+      "direct": 78,
+      "animation": 0
+    },
+    "Scene/ldl/strength.tscn": {
+      "direct": 16,
+      "animation": 0
+    },
+    "Scene/ldl/synthesis.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/level/defeat.tscn": {
+      "direct": 30,
+      "animation": 0
+    },
+    "Scene/level/dsg_choose.tscn": {
+      "direct": 36,
+      "animation": 0
+    },
+    "Scene/level/level_17.tscn": {
+      "direct": 15,
+      "animation": 0
+    },
+    "Scene/level/level_llbt.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/level/level_zhen_yao_tower.tscn": {
+      "direct": 10,
+      "animation": 0
+    },
+    "Scene/level/llbt_challenge.tscn": {
+      "direct": 77,
+      "animation": 0
+    },
+    "Scene/level/role_information.tscn": {
+      "direct": 2,
+      "animation": 0
+    },
+    "Scene/level/victory.tscn": {
+      "direct": 33,
+      "animation": 0
+    },
+    "Scene/magic_weapon/magic_help.tscn": {
+      "direct": 95,
+      "animation": 0
+    },
+    "Scene/magic_weapon/magic_weapon_skill_cd.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/main_menu/body_training.tscn": {
+      "direct": 101,
+      "animation": 0
+    },
+    "Scene/main_menu/body_training_detail.tscn": {
+      "direct": 39,
+      "animation": 0
+    },
+    "Scene/main_menu/choose_player.tscn": {
+      "direct": 25,
+      "animation": 0
+    },
+    "Scene/main_menu/game_announcement.tscn": {
+      "direct": 507,
+      "animation": 0
+    },
+    "Scene/main_menu/game_information.tscn": {
+      "direct": 157,
+      "animation": 0
+    },
+    "Scene/main_menu/game_over_1.tscn": {
+      "direct": 6,
+      "animation": 0
+    },
+    "Scene/main_menu/game_set.tscn": {
+      "direct": 239,
+      "animation": 0
+    },
+    "Scene/main_menu/main_menu.tscn": {
+      "direct": 42,
+      "animation": 0
+    },
+    "Scene/main_menu/map_0.tscn": {
+      "direct": 24,
+      "animation": 0
+    },
+    "Scene/main_menu/map_1.tscn": {
+      "direct": 11,
+      "animation": 0
+    },
+    "Scene/main_menu/map_2.tscn": {
+      "direct": 3,
+      "animation": 0
+    },
+    "Scene/main_menu/map_3.tscn": {
+      "direct": 26,
+      "animation": 0
+    },
+    "Scene/main_menu/map_5.tscn": {
+      "direct": 8,
+      "animation": 0
+    },
+    "Scene/main_menu/wan_ling_catalog_page.tscn": {
+      "direct": 40,
+      "animation": 0
+    },
+    "Scene/main_menu/zhen_yao_tower.tscn": {
+      "direct": 161,
+      "animation": 0
+    },
+    "Scene/main_menu/zhu_xian_sword_page.tscn": {
+      "direct": 100,
+      "animation": 0
+    },
+    "Scene/monster/boss_info.tscn": {
+      "direct": 1,
+      "animation": 0
+    },
+    "Scene/monster/monster_139.tscn": {
+      "direct": 48,
+      "animation": 0
+    },
+    "Scene/monster/some_monster_help.tscn": {
+      "direct": 502,
+      "animation": 0
+    },
+    "Scene/monster_blood/boss_blood.tscn": {
+      "direct": 20,
+      "animation": 0
+    },
+    "Scene/monster_blood/monster_blood_bar.tscn": {
+      "direct": 4,
+      "animation": 0
+    },
+    "Scene/other_scene/a_letter_for_all_players.tscn": {
+      "direct": 82,
+      "animation": 0
+    },
+    "Scene/other_scene/after_level_end.tscn": {
+      "direct": 74,
+      "animation": 0
+    },
+    "Scene/other_scene/bacis_ar_button.tscn": {
+      "direct": 21,
+      "animation": 0
+    },
+    "Scene/other_scene/basic_monment_info.tscn": {
+      "direct": 4,
+      "animation": 0
+    },
+    "Scene/other_scene/buff_icon.tscn": {
+      "direct": 10,
+      "animation": 0
+    },
+    "Scene/other_scene/buff_information.tscn": {
+      "direct": 12,
+      "animation": 0
+    },
+    "Scene/other_scene/c_hange_clothes_jm.tscn": {
+      "direct": 12,
+      "animation": 0
+    },
+    "Scene/other_scene/change_back_ground.tscn": {
+      "direct": 22,
+      "animation": 0
+    },
+    "Scene/other_scene/choose_music.tscn": {
+      "direct": 33,
+      "animation": 0
+    },
+    "Scene/other_scene/game_need_know.tscn": {
+      "direct": 44,
+      "animation": 0
+    },
+    "Scene/other_scene/hc_help.tscn": {
+      "direct": 56,
+      "animation": 0
+    },
+    "Scene/other_scene/help_things.tscn": {
+      "direct": 15,
+      "animation": 0
+    },
+    "Scene/other_scene/level_info.tscn": {
+      "direct": 118,
+      "animation": 0
+    },
+    "Scene/other_scene/lhhj.tscn": {
+      "direct": 149,
+      "animation": 0
+    },
+    "Scene/other_scene/lhhj_button.tscn": {
+      "direct": 8,
+      "animation": 0
+    },
+    "Scene/other_scene/lhhj_help.tscn": {
+      "direct": 78,
+      "animation": 0
+    },
+    "Scene/other_scene/list_button.tscn": {
+      "direct": 8,
+      "animation": 0
+    },
+    "Scene/other_scene/load_scene.tscn": {
+      "direct": 13,
+      "animation": 0
+    },
+    "Scene/other_scene/lsh.tscn": {
+      "direct": 16,
+      "animation": 0
+    },
+    "Scene/other_scene/lxdy.tscn": {
+      "direct": 31,
+      "animation": 0
+    },
+    "Scene/other_scene/monster_head.tscn": {
+      "direct": 14,
+      "animation": 0
+    },
+    "Scene/other_scene/monster_head_info.tscn": {
+      "direct": 16,
+      "animation": 0
+    },
+    "Scene/other_scene/return_back_map.tscn": {
+      "direct": 15,
+      "animation": 0
+    },
+    "Scene/other_scene/reward_box_2.tscn": {
+      "direct": 7,
+      "animation": 0
+    },
+    "Scene/other_scene/reward_interface.tscn": {
+      "direct": 16,
+      "animation": 0
+    },
+    "Scene/other_scene/role_button.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/other_scene/skill_icon.tscn": {
+      "direct": 4,
+      "animation": 0
+    },
+    "Scene/other_scene/transmogrified.tscn": {
+      "direct": 57,
+      "animation": 0
+    },
+    "Scene/other_scene/transmogtified_box.tscn": {
+      "direct": 22,
+      "animation": 0
+    },
+    "Scene/other_scene/twenty_eight_constellations.tscn": {
+      "direct": 8,
+      "animation": 0
+    },
+    "Scene/other_scene/userload.tscn": {
+      "direct": 15,
+      "animation": 0
+    },
+    "Scene/other_scene/zhen_fa_help.tscn": {
+      "direct": 49,
+      "animation": 0
+    },
+    "Scene/other_scene/zhen_fa_tu_po.tscn": {
+      "direct": 62,
+      "animation": 0
+    },
+    "Scene/other_scene/zhen_fa_ui.tscn": {
+      "direct": 65,
+      "animation": 0
+    },
+    "Scene/other_scene/zhen_yan_cure_level.tscn": {
+      "direct": 53,
+      "animation": 0
+    },
+    "Scene/other_scene/zhenfainfo.tscn": {
+      "direct": 62,
+      "animation": 0
+    },
+    "Scene/other_scene/zhenfalxbutton.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/other_scene/zhenyanbutton.tscn": {
+      "direct": 13,
+      "animation": 0
+    },
+    "Scene/pellet/basic_pellet.tscn": {
+      "direct": 231,
+      "animation": 0
+    },
+    "Scene/pellet/pellet_sys_pic.tscn": {
+      "direct": 5,
+      "animation": 0
+    },
+    "Scene/pet/pet_backpack_slot.tscn": {
+      "direct": 11,
+      "animation": 0
+    },
+    "Scene/pet/pet_interface.tscn": {
+      "direct": 430,
+      "animation": 0
+    },
+    "Scene/set_menu.tscn": {
+      "direct": 136,
+      "animation": 0
+    },
+    "Scene/shop/choose_item.tscn": {
+      "direct": 18,
+      "animation": 0
+    },
+    "Scene/shop/cure_times_box.tscn": {
+      "direct": 47,
+      "animation": 0
+    },
+    "Scene/shop/mystery_shop.tscn": {
+      "direct": 12,
+      "animation": 0
+    },
+    "Scene/shop/mystery_shop_item_box.tscn": {
+      "direct": 16,
+      "animation": 0
+    },
+    "Scene/shop/shop.tscn": {
+      "direct": 94,
+      "animation": 0
+    },
+    "Scene/shop/shop_item.tscn": {
+      "direct": 26,
+      "animation": 0
+    },
+    "Scene/show_text/choose_scene.tscn": {
+      "direct": 12,
+      "animation": 0
+    },
+    "Scene/show_text/combo.tscn": {
+      "direct": 3,
+      "animation": 0
+    },
+    "Scene/show_text/liji.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/show_text/message_show.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/show_text/moment_text.tscn": {
+      "direct": 3,
+      "animation": 0
+    },
+    "Scene/show_text/touch_text.tscn": {
+      "direct": 6,
+      "animation": 0
+    },
+    "Scene/skill/bd_skill.tscn": {
+      "direct": 107,
+      "animation": 0
+    },
+    "Scene/skill/learn_skill.tscn": {
+      "direct": 41,
+      "animation": 0
+    },
+    "Scene/skill/role_magic_need.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/skill/skill_awaken_popup.tscn": {
+      "direct": 19,
+      "animation": 0
+    },
+    "Scene/skill/skill_key_set.tscn": {
+      "direct": 45,
+      "animation": 0
+    },
+    "Scene/skill/zd_skill.tscn": {
+      "direct": 343,
+      "animation": 0
+    },
+    "Scene/task/basic_task.tscn": {
+      "direct": 20,
+      "animation": 0
+    },
+    "Scene/task/task_reward.tscn": {
+      "direct": 9,
+      "animation": 0
+    },
+    "Scene/task/task_title.tscn": {
+      "direct": 18,
+      "animation": 0
+    },
+    "Scene/tools/com_key.tscn": {
+      "direct": 8,
+      "animation": 0
+    },
+    "Scene/tools/user_key.tscn": {
+      "direct": 17,
+      "animation": 0
+    }
+  },
+  "generated_at": "2026-11-01"
+}

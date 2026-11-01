@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist。"""
+"""契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist + UI Theme 基线。"""
 from __future__ import annotations
 
 import concurrent.futures
@@ -32,6 +32,7 @@ COMMANDS = [
     ("level_layout_migration_audit", [sys.executable, "scripts/level_layout_migration_audit.py", "--fail-on-error"]),
     ("external_monster_catalog_check", [sys.executable, "scripts/convert_external_monster_catalog.py", "--check"]),
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
+    ("theme_override_audit", [sys.executable, "scripts/theme_override_audit.py", "--check"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),
     ("whitelist_audit", [sys.executable, "scripts/whitelist_audit.py", "--fail-on-error"]),
 ]

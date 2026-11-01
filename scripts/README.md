@@ -40,6 +40,7 @@ check_all.py
 │   ├── convert_external_monster_catalog.py --check
 │   ├── png_stream_audit.py
 │   ├── runtime_frames_audit.py
+│   ├── theme_override_audit.py
 │   └── whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
@@ -87,13 +88,14 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `normalize_eol.py` | 全工程 LF/CRLF 归一化；增量缓存 | `.godot/eol_cache.json` |
 | `format_all.py` | `gdformat` 批量校验/格式化；mtime/size 缓存 | `.godot/format_cache.json` |
 | `health_check.py` | 场景引用拓扑、Autoload、死代码、Headless 编译、GDScript 静态分析 warning 门禁；编译结果按脚本 mtime/size 指纹缓存（`--no-cache` 强制重跑） | `docs/reports/dead_code_audit.md`、`.godot/health_check_compile_cache.json` |
-| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单 | 子脚本报告 |
+| `contract_gate.py` | 契约域总门禁：契约扫描、Atlas、FrameSequence 内容/依赖、编号帧/sheet 帧、PNG 流 guard、白名单、UI Theme 基线 | 子脚本报告 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键、运行时 manifest、AtlasMetadata 边界、关卡预载边界、场景入口、加载页缓存、池/UI 清理、档案边界、槽位边界、面板操作者、共享账本/快照互斥、Phase 17 边界、输入写入边界、运行状态边界、HUD/面板只读与音频入口二十类契约；`--self-test` 校验全部边界规则正负样本 | `docs/reports/contract_audit.md/.json` |
 | `naming_audit.py` | 目录/文件 `snake_case` 门禁；默认检查 Git 新增文件，`--all` 全量 | 终端结果 |
 | `naming_compliance_audit.py` | 全工程命名合规终审四张表；**不在 `check_all.py` 中**，用于人工全量复核 | `docs/reports/naming_compliance_audit.md/.json` |
 | `whitelist_audit.py` | 白名单冻结、未登记项与失效项校验 | `docs/reports/whitelist_freeze_audit.md/.json` |
 | `png_stream_audit.py` | 冻结 allowlist；已迁移消费者旧数组/目录扫描/编号探测回归检查 | 终端结果 |
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 集合与允许清单守恒；新增/失效/空理由失败 | `scripts/runtime_frames_allowlist.json` |
+| `theme_override_audit.py` | 扫描 `Scene/**/*.tscn` 的直接 `theme_override_*` 与动画轨道引用；按场景与基线比较，计数增加失败；报告 Theme/字体/动态调用 | `scripts/theme_override_baseline.json` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 | 终端 / `--json` |
 | `resource_path_audit.py` | 静态 `res://` 路径逐级大小写、动态格式路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 动态工厂目标 | 终端 / `--json` |
 | `verify_dragonbones_factories.py` | 逐个 `load()` `.dbfactory`，在独立子进程内捕获插件 C++ 层崩溃；失败批对半二分定位；默认按 mtime/size 增量（`--all` 全量）；同时报告「有 `*_ske.json` 但无 `.dbfactory`」的目录 | `docs/reports/dragonbones_factory_verify.json`、`.godot/dragonbones_factory_cache.json` |
@@ -140,6 +142,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `level_layout_sources.json` | 已迁移关卡与代表原始 ZMWS 关卡的构建期布局源：玩家出生点、阶段分屏/触发、刷怪点与依赖；生成 `LevelLayoutEntry` 与 Catalog，运行时不再读取 |
 | `monster_dynamic_paths.json` | 关卡预载的动态来源：`aliases`（怪物 ID → 场景 ID）、`textures`（动态纹理/目录）、`scenes`（额外弹体场景）；构建期展开进 Catalog 与发布依赖清单，运行时不再读取 |
 | `runtime_frames_allowlist.json` | 允许运行时调用 `SpriteFrames.new()` 的文件与理由；由 `runtime_frames_audit.py` 守恒 |
+| `theme_override_baseline.json` | UI 直接 `theme_override_*` 与动画轨道引用的场景级上限；由 `theme_override_audit.py` 守恒 |
 
 ---
 
