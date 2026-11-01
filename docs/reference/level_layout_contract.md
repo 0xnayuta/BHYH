@@ -1,6 +1,6 @@
 # 关卡布局数据契约
 
-> **定位**：定义「关卡结构化布局」在 BHYH 侧的数据载体、字段语义、构建期生成与运行时访问方式。Phase 30-1 已实施 `level_48` 试点；Phase 30-2 已接入原始 ZMWS 驱动器与外部怪物映射；30-3 前三批 43 个数据容器脚本已迁移（20 单屏 + 13 多阶段 + 10 截断对齐）；30-4 见 [`roadmap.md`](../roadmap/roadmap.md)。
+> **定位**：定义「关卡结构化布局」在 BHYH 侧的数据载体、字段语义、构建期生成与运行时访问方式。Phase 30-1 已实施 `level_48` 试点；Phase 30-2 已接入原始 ZMWS 驱动器与外部怪物映射；30-3 前四批 55 个数据容器脚本已迁移（20 单屏 + 13 多阶段 + 10/12 截断对齐）；30-4 见 [`roadmap.md`](../roadmap/roadmap.md)。
 > **决策依据**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)（本契约的架构决策）、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)（Resource 优先）、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)（禁止兼容/回退层）。
 > **范围**：关卡的结构化数据（出生点、分屏、刷怪触发与刷怪点、出口）。**不含**渲染层（已在关卡 `.tscn` 的 `Parallax2D`/`Sprite2D`）、碰撞层（已生成 `ZMWS_Ground` 静态节点）、战斗数值（走 `ZmwsConfig`）。
 
@@ -288,16 +288,16 @@ Phase 30-2 的 `ZmwsLevel`（继承 `Game4ImportedLevel`）负责把原始 `Scen
 - `check_all` 契约门禁新增 `level_layout_catalog_check`；预载生成器从布局源合并阶段怪物，`level_48` 预载条目保持 `3001/3002/3004/3006`；
 - `level_48` 冒烟 Stage 1–5 全部 PASS（22.7s，日志 0 ERROR / 0 WARNING）；全量关卡回归 **128/128 PASS + 5 SKIP**（709.5s）。
 - Phase 30-2：`ExternalMonsterCatalog`/`Store` 512 条精确/唯一归一化名称映射；`ZmwsLevel` 原始场景驱动器；20 个 `zmws_playable` 包装关卡；20/20 Stage 全 PASS、20/20 `can_pass=True`，0 ERROR / 0 WARNING；全量回归 **128/128 PASS + 5 SKIP**（731.4s）。
-- Phase 30-3 前三批：迁移 43 个数据容器脚本（`level_38_1`、`level_bgmj`、`level_lxdy1~5`、`level_nmg`、`level_sdwfb`、`level_sjg`、`level_tzhy`、`level_xbj`、`level_xss`、`level_xtqfb`、`level_ghg`、`level_hdgqnmg`、`level_hdgqzld`、`level_hdzm`、`level_42`、`level_44`）；`BaseLevel` 新增布局刷怪表展开，`Game4ImportedLevel` 明确不重复填充；新增 `level_layout_migration_audit.py` 阻断「布局资源 + 脚本数据表」双源；第二批迁移 13 个多阶段脚本（`level_1~8`、`level_10`、`level_21`、`level_45`、`level_dtwd`、`level_hddy`），按既有 fallback 分屏/触发矩形生成 2/4 阶段布局，允许终屏零宽 screen_rect；第三批迁移 10 个长度不一致脚本（`level_12~16`、`level_18`、`level_9`、`level_35`、`level_40`、`level_eighteenth_hell`），按 `_align_monster_spawn_tables()` 的 min(ids,x,y) 截断后生成，多余坐标不进入资源；`monster_group = {` 从 85 降至 65、52 再降至 42。
+- Phase 30-3 前四批：迁移 55 个数据容器脚本（`level_38_1`、`level_bgmj`、`level_lxdy1~5`、`level_nmg`、`level_sdwfb`、`level_sjg`、`level_tzhy`、`level_xbj`、`level_xss`、`level_xtqfb`、`level_ghg`、`level_hdgqnmg`、`level_hdgqzld`、`level_hdzm`、`level_42`、`level_44`）；`BaseLevel` 新增布局刷怪表展开，`Game4ImportedLevel` 明确不重复填充；新增 `level_layout_migration_audit.py` 阻断「布局资源 + 脚本数据表」双源；第二批迁移 13 个多阶段脚本（`level_1~8`、`level_10`、`level_21`、`level_45`、`level_dtwd`、`level_hddy`），按既有 fallback 分屏/触发矩形生成 2/4 阶段布局，允许终屏零宽 screen_rect；第三批迁移 10 个长度不一致脚本（`level_12~16`、`level_18`、`level_9`、`level_35`、`level_40`、`level_eighteenth_hell`），第四批迁移 12 个剩余四阶段脚本（`level_19`、`level_23~33`），均按 `_align_monster_spawn_tables()` 的 min(ids,x,y) 截断后生成，多余坐标不进入资源；`monster_group = {` 从 85 降至 65、52、42 再降至 30。
 
 ## 8. 验收标准
 
 | 维度 | 判据 |
 |:---|:---|
-| 契约完整性 | `--check` 对 64 个登记布局全部通过，0 失败；外部怪物 `--check` 512 条通过 |
+| 契约完整性 | `--check` 对 76 个登记布局全部通过，0 失败；外部怪物 `--check` 512 条通过 |
 | 生成确定性 | 连续两次生成结果逐字节一致 |
-| 运行时接入 | `level_48` Stage 1–5 PASS；20 个原始 ZMWS 包装关卡 Stage 全 PASS 且 `can_pass=True`；三批 43 个已迁移关卡 Stage PASS |
-| 行为等价 | 全量 `level_regression_all.py` **128/128 PASS + 5 SKIP**（744.5s；`level_dsg_3` 一次瞬态重试通过）；原始驱动批次 20/20 PASS |
+| 运行时接入 | `level_48` Stage 1–5 PASS；20 个原始 ZMWS 包装关卡 Stage 全 PASS 且 `can_pass=True`；四批 55 个已迁移关卡 Stage PASS |
+| 行为等价 | 全量 `level_regression_all.py` **128/128 PASS + 5 SKIP**（707.5s）；原始驱动批次 20/20 PASS |
 | 静态门禁 | `check_all.py` 全维 PASS；`contract_scan.py` ERROR=0；布局迁移双源审计 PASS |
 | 无回退 | 已迁移关卡脚本不再有布局常量/五个覆写；预载 Catalog 仍含完整怪物集合 |
 
