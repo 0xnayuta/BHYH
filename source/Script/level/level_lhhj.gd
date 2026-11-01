@@ -62,24 +62,6 @@ func _ready() -> void:
 	self.level_stage = 1
 	super._ready()
 	current_stage = 1
-	monster_group = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 
 
 func get_level_monster_config(monster_id: int) -> Dictionary:

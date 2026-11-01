@@ -8,24 +8,6 @@ func _ready() -> void:
 	Global.set_current_level_name("")
 	self.level_stage = 0
 	super._ready()
-	monster_group = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [100],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [100],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 
 
 func _physics_process(delta: float) -> void:

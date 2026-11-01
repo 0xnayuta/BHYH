@@ -1,0 +1,16 @@
+{
+  "schema_id": "level_layout_data_exceptions",
+  "schema_version": 1,
+  "exceptions": {
+    "level_20.gd": "仅 stage_4 有数据，_ready 直接把 current_stage 设为 4；布局契约要求 stage 从 1 连续，不能无损映射。",
+    "level_34_1.gd": "仅 stage_2 有数据，当前阶段/刷怪语义依赖 stage_2 键；布局契约要求 stage 从 1 连续。",
+    "level_36.gd": "使用 stage_1 + stage_4 非连续阶段，并自行推进 current_stage/level_stage；不能改成连续布局。",
+    "level_37.gd": "使用 stage_1 + stage_4 非连续阶段，并自行推进 current_stage/level_stage；不能改成连续布局。",
+    "level_46.gd": "刷怪 ID 来自运行期 BOSS_MONSTER_ID，布局阶段无法在构建期确定。",
+    "level_llbt.gd": "超长特殊关卡，monster_group 在运行期被多轮分支重写；静态布局会改变波次身份。",
+    "level_sssl.gd": "刷怪 ID 来自运行期 SSSL_BOSS_IDS，并有无尽轮次切换；布局阶段无法在构建期确定。",
+    "level_stz.gd": "刷怪 ID 来自运行期 selected_prince_id，布局阶段无法在构建期确定。",
+    "level_bxgh.gd": "刷怪 ID 来自运行期 selected_boss_id，布局阶段无法在构建期确定。",
+    "liu_sha_river_boss_level.gd": "刷怪 ID 来自运行期 boss_scene_id，布局阶段无法在构建期确定。"
+  }
+}

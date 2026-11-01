@@ -53,24 +53,6 @@ func _ready() -> void:
 	_setup_tzsijian_background()
 	_boss_count_multiplier = clamp(int(MainSet.set_data.get("CreateMonsterCount", 1)), 1, 5)
 	MainSet.set_data["CreateMonsterCount"] = _boss_count_multiplier
-	monster_group = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 	_queue_sword_boss_wave(951)
 
 

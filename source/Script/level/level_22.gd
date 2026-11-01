@@ -10,24 +10,6 @@ func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/floor1_3.mp3")
 	self.level_stage = 1
 	super._ready()
-	monster_group = {
-		"stage_1": [],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [700],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [-5100],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 	add_stage()
 	is_set = true
 	my_camera.max_top = -5426
