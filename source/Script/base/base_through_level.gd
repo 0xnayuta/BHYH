@@ -71,6 +71,7 @@ var _stage_preload_requested: Dictionary = {}
 
 
 func _ready() -> void:
+	_load_layout_spawn_tables()
 	_initialize_active_monster_index()
 	create_control.stop()
 	if not self is Level20:
@@ -1824,6 +1825,33 @@ func _layout_scene_path() -> String:
 
 func _layout_entry() -> LevelLayoutEntry:
 	return LevelLayoutStore.layout(_layout_scene_path())
+
+
+func _uses_layout_spawn_tables() -> bool:
+	return true
+
+
+## 标准 BaseLevel 关卡把布局刷怪点展开回既有三段并行数组。
+## Game4ImportedLevel 仍由 `_configure_level_monsters()` 负责，避免重复填充。
+func _load_layout_spawn_tables() -> void:
+	if not _uses_layout_spawn_tables():
+		return
+	var layout := _layout_entry()
+	if layout == null:
+		return
+	for stage_key in ["stage_1", "stage_2", "stage_3", "stage_4"]:
+		monster_group[stage_key] = []
+		monster_position_x[stage_key] = []
+		monster_position_y[stage_key] = []
+	for point in _birth_points():
+		var stage_key := "stage_%d" % int(point["stage"])
+		if not monster_group.has(stage_key):
+			continue
+		var spawn_position: Vector2 = point["position"]
+		for _unit in range(maxi(int(point.get("total", 1)), 0)):
+			monster_group[stage_key].append(int(point["monster"]))
+			monster_position_x[stage_key].append(spawn_position.x)
+			monster_position_y[stage_key].append(spawn_position.y)
 
 
 func _player_spawn_position(slot: int, fallback: Vector2) -> Vector2:

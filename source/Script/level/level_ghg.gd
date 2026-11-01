@@ -7,24 +7,6 @@ const MONSTER_130_SCENE := preload("res://Scene/monster/monster_130.tscn")
 
 
 func _ready() -> void:
-	monster_group = {
-		"stage_1": [130],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [500],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [200],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 	Global.set_current_level_name("广寒宫")
 	Global.game_over = 1
 	level_stage = 0

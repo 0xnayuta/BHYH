@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 """构建期生成外部 ZMWS 怪物 ID → BHYH 怪物场景映射。
 
-匹配规则（第一版）：
+匹配规则：
 - 以 `source/Data/zmws_config/monster.json` 的 `name` 为外部名称；
 - 从 `source/Scene/monster/monster_<id>.tscn` 的脚本链读取 `my_mr_name` 字面量；
 - 名称完全一致才登记；同一名称有多个 BHYH 场景时固定取最小 ID；
-- 不猜测模糊名称，不把未匹配项静默映射到默认怪物。
+- 额外允许去除空白、全角兼容字符与间隔号后唯一匹配（如「邪悟空」→「邪·悟空」）；
+- 归一化后仍有多个候选、或只是相似名称时不猜测，不把未匹配项静默映射到默认怪物。
 
 用法：
     python scripts/convert_external_monster_catalog.py
@@ -19,6 +20,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +60,12 @@ def scene_script_names(scene_path: Path) -> set[str]:
         script_text = script_path.read_text(encoding="utf-8", errors="replace")
         names.update(re.findall(r'my_mr_name\s*=\s*"([^"]+)"', script_text))
     return names
+
+
+def normalized_name(value: str) -> str:
+    """统一空白、全角字符与分隔标点；不做语义别名或模糊匹配。"""
+    value = unicodedata.normalize("NFKC", value)
+    return re.sub(r"[\s·•・\-—–_]+", "", value)
 
 
 def bhyh_names() -> dict[str, int]:
@@ -106,12 +114,23 @@ def source_names() -> dict[int, str]:
 
 def build_catalog() -> tuple[str, int]:
     by_name = bhyh_names()
+    by_normalized: dict[str, str] = {}
+    for candidate in by_name:
+        key = normalized_name(candidate)
+        if key in by_normalized and by_normalized[key] != candidate:
+            by_normalized[key] = ""
+        else:
+            by_normalized[key] = candidate
     external = source_names()
     mappings: dict[int, int] = {}
     names: dict[int, str] = {}
     for external_id in sorted(external):
         name = external[external_id]
         bhyh_id = by_name.get(name)
+        if bhyh_id is None:
+            alias = by_normalized.get(normalized_name(name), "")
+            if alias:
+                bhyh_id = by_name.get(alias)
         if bhyh_id is None or bhyh_id <= 0:
             continue
         scene_path = MONSTER_SCENE_DIR / f"monster_{bhyh_id}.tscn"
@@ -158,11 +177,11 @@ def run(check_only: bool) -> int:
         if CATALOG_PATH.read_text(encoding="utf-8") != content:
             print(f"[FAIL] 外部怪物映射已过期: {CATALOG_PATH.relative_to(ROOT)}", file=sys.stderr)
             return 1
-        print(f"[OK] 外部怪物映射校验通过: {count} 条精确名称映射")
+        print(f"[OK] 外部怪物映射校验通过: {count} 条精确/唯一归一化名称映射")
         return 0
     CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     CATALOG_PATH.write_text(content, encoding="utf-8", newline="\n")
-    print(f"[OK] 外部怪物映射已生成: {count} 条精确名称映射")
+    print(f"[OK] 外部怪物映射已生成: {count} 条精确/唯一归一化名称映射")
     return 0
 
 

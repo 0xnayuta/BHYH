@@ -29,6 +29,7 @@ COMMANDS = [
     ("action_views_check", [sys.executable, "scripts/convert_monster_action_views.py", "--check"]),
     ("level_preload_catalog_check", [sys.executable, "scripts/convert_level_preload_catalog.py", "--check"]),
     ("level_layout_catalog_check", [sys.executable, "scripts/convert_level_layout_catalog.py", "--check"]),
+    ("level_layout_migration_audit", [sys.executable, "scripts/level_layout_migration_audit.py", "--fail-on-error"]),
     ("external_monster_catalog_check", [sys.executable, "scripts/convert_external_monster_catalog.py", "--check"]),
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),

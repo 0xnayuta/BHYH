@@ -2830,6 +2830,1286 @@
           ]
         }
       ]
+    },
+    "res://Scene/level/level_38_1.tscn": {
+      "level_id": "level_38_1",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                1409
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_bgmj.tscn": {
+      "level_id": "level_bgmj",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                32
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_lxdy1.tscn": {
+      "level_id": "level_lxdy1",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                61
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_lxdy2.tscn": {
+      "level_id": "level_lxdy2",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                63
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_lxdy3.tscn": {
+      "level_id": "level_lxdy3",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                64
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_lxdy4.tscn": {
+      "level_id": "level_lxdy4",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                65
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_lxdy5.tscn": {
+      "level_id": "level_lxdy5",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                6601
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_nmg.tscn": {
+      "level_id": "level_nmg",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                29
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_sdwfb.tscn": {
+      "level_id": "level_sdwfb",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                59
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_sjg.tscn": {
+      "level_id": "level_sjg",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                6
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_tzhy.tscn": {
+      "level_id": "level_tzhy",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                145
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_xbj.tscn": {
+      "level_id": "level_xbj",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                14101
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_xss.tscn": {
+      "level_id": "level_xss",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                14501
+              ],
+              "position": [
+                850.0,
+                100.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_xtqfb.tscn": {
+      "level_id": "level_xtqfb",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                72
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_ghg.tscn": {
+      "level_id": "level_ghg",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                130
+              ],
+              "position": [
+                500.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_hdgqnmg.tscn": {
+      "level_id": "level_hdgqnmg",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                22
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_hdgqzld.tscn": {
+      "level_id": "level_hdgqzld",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                57
+              ],
+              "position": [
+                850.0,
+                200.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_hdzm.tscn": {
+      "level_id": "level_hdzm",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                132
+              ],
+              "position": [
+                500.0,
+                450.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_42.tscn": {
+      "level_id": "level_42",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                148
+              ],
+              "position": [
+                1200.0,
+                300.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/level_44.tscn": {
+      "level_id": "level_44",
+      "layout_size": [
+        2500.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          100.0,
+          340.0
+        ]
+      ],
+      "exit_rect": [
+        2400.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            2250.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                212
+              ],
+              "position": [
+                1250.0,
+                300.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.0,
+              "direction": 0,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
     }
   }
 }

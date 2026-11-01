@@ -14,24 +14,6 @@ func _ready() -> void:
 	self.level_stage = 10
 	Global.game_over = 1
 	super._ready()
-	monster_group = {
-		"stage_1": [148],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [1200],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [300],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 
 
 func _physics_process(delta: float) -> void:

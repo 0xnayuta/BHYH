@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=5 format=3 uid="uid://dn6ouj3heful"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="spawn_1"]
+script = ExtResource("3_spawn")
+point_id = 1
+monster_ids = PackedInt32Array(61)
+position = Vector2(850, 200)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(0, 0, 2250, 1000)
+trigger_rect = Rect2(0, 0, 1, 1000)
+spawn_trigger_rect = Rect2(0, 0, 2250, 1000)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_1")])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"level_lxdy1"
+layout_size = Vector2(2500, 1000)
+player_birth_points = PackedVector2Array(100, 340)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1")])
+exit_rect = Rect2(2400, 0, 1, 1)
+exit_open_when = &"stage_clear"

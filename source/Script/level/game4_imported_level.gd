@@ -94,6 +94,11 @@ func _runtime_monster_id(monster_id: int) -> int:
 	return monster_id
 
 
+func _uses_layout_spawn_tables() -> bool:
+	# 本类在 _ready 中先按布局/外部映射调用 _configure_level_monsters()。
+	return false
+
+
 func _configure_level_monsters() -> void:
 	for stage in range(1, _stage_count() + 1):
 		var stage_key := _stage_key(stage)

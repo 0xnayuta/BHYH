@@ -9,24 +9,6 @@ func _ready() -> void:
 	load("res://Scene/monster/monster_14501.tscn")
 	self.level_stage = 1
 	super._ready()
-	monster_group = {
-		"stage_1": [14501],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_x = {
-		"stage_1": [850],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
-	monster_position_y = {
-		"stage_1": [100],
-		"stage_2": [],
-		"stage_3": [],
-		"stage_4": [],
-	}
 
 
 func _physics_process(delta: float) -> void:
