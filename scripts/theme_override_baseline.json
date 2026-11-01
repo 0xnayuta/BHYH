@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 2603,
+    "direct_properties": 2228,
     "animation_track_refs": 26,
-    "textual_references": 2629,
-    "scenes": 115
+    "textual_references": 2254,
+    "scenes": 110
   },
   "property_categories": {
-    "colors": 776,
-    "constants": 673,
-    "font_sizes": 364,
-    "fonts": 407,
-    "styles": 383
+    "colors": 671,
+    "constants": 612,
+    "font_sizes": 302,
+    "fonts": 345,
+    "styles": 298
   },
   "animation_categories": {
     "colors": 15,
@@ -23,14 +23,14 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 554,
+    "Button": 424,
     "CheckBox": 4,
     "CheckButton": 15,
     "GridContainer": 16,
-    "HBoxContainer": 30,
+    "HBoxContainer": 26,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 1862,
+    "Label": 1625,
     "LineEdit": 14,
     "MarginContainer": 32,
     "OptionButton": 7,
@@ -38,7 +38,7 @@
     "PanelContainer": 1,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 26,
+    "VBoxContainer": 22,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -47,7 +47,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 543,
+    "scene_refs": 620,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -118,6 +118,23 @@
       "BodyTrainingHitButton",
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
+      "EndStatsColumn",
+      "EndStatsCritCount",
+      "EndStatsCure",
+      "EndStatsHeaderRow",
+      "EndStatsHit",
+      "EndStatsHitCount",
+      "EndStatsHurt",
+      "EndStatsHurtCount",
+      "EndStatsMagicHit",
+      "EndStatsMagicHurt",
+      "EndStatsMissCount",
+      "EndStatsMoreInfo",
+      "EndStatsPhysicalHit",
+      "EndStatsPhysicalHurt",
+      "EndStatsRealHit",
+      "EndStatsRealHurt",
+      "EndStatsWarning",
       "EquipmentInfoGroup",
       "EquipmentItemHighlight",
       "EquipmentItemMeta",
@@ -135,6 +152,17 @@
       "GameInfoSectionColumn",
       "GameInfoSectionTitle",
       "GameInfoTitle",
+      "LdlDzButton",
+      "LdlFjButton",
+      "LdlHcButton",
+      "LdlQhButton",
+      "LdlReturnButton",
+      "LdlTitleLabel",
+      "LdlXqButton",
+      "LetterBody",
+      "LetterPageButton",
+      "LetterPageLabel",
+      "LetterTitle",
       "LevelInfoAlertText",
       "LevelInfoDropGroup",
       "LevelInfoFilterGroup",
@@ -154,6 +182,15 @@
       "LhhjSelfValueInput",
       "LhhjTitle",
       "LhhjValueInput",
+      "LlbtCgmsButton",
+      "LlbtCureText",
+      "LlbtList",
+      "LlbtTitle",
+      "LlbtTslzzButton",
+      "LlbtTznzButton",
+      "LlbtTztttwButton",
+      "LlbtTztxsButton",
+      "LlbtWxmsButton",
       "MagicHelpBody",
       "MagicHelpTitle",
       "MenuActionButton",
@@ -216,6 +253,16 @@
       "PetStatName",
       "PetStatPanel",
       "PetStatValue",
+      "RoleExpText",
+      "RoleHpText",
+      "RoleKeyLabel",
+      "RoleLevelLabel",
+      "RoleMpText",
+      "RoleNatureHp",
+      "RoleNatureMp",
+      "RolePetSkillRow",
+      "RoleSkillRow",
+      "RoleSkillRowTight",
       "SellFilterCs",
       "SellFilterGxms",
       "SellFilterHq",
@@ -291,10 +338,10 @@
       "TowerRow",
       "TowerSmallLabel"
     ],
-    "variation_refs": 842
+    "variation_refs": 919
   },
   "fonts": {
-    "scene_refs": 166,
+    "scene_refs": 155,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -409,10 +456,6 @@
       "direct": 7,
       "animation": 0
     },
-    "Scene/base/base_role.tscn": {
-      "direct": 68,
-      "animation": 0
-    },
     "Scene/base/base_through_level.tscn": {
       "direct": 9,
       "animation": 0
@@ -469,10 +512,6 @@
       "direct": 5,
       "animation": 0
     },
-    "Scene/ldl/ldl.tscn": {
-      "direct": 74,
-      "animation": 0
-    },
     "Scene/ldl/mosaic.tscn": {
       "direct": 5,
       "animation": 0
@@ -511,10 +550,6 @@
     },
     "Scene/level/level_zhen_yao_tower.tscn": {
       "direct": 10,
-      "animation": 0
-    },
-    "Scene/level/llbt_challenge.tscn": {
-      "direct": 77,
       "animation": 0
     },
     "Scene/level/role_information.tscn": {
@@ -583,14 +618,6 @@
     },
     "Scene/monster_blood/monster_blood_bar.tscn": {
       "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/a_letter_for_all_players.tscn": {
-      "direct": 82,
-      "animation": 0
-    },
-    "Scene/other_scene/after_level_end.tscn": {
-      "direct": 74,
       "animation": 0
     },
     "Scene/other_scene/bacis_ar_button.tscn": {

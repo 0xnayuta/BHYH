@@ -1791,3 +1791,319 @@ SynHelpBody/font_sizes/font_size = 12
 
 SynHelpTitle/base_type = &"Label"
 SynHelpTitle/font_sizes/font_size = 25
+
+LetterTitle/base_type = &"Label"
+LetterTitle/colors/font_color = Color(0, 0, 0, 1)
+LetterTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
+LetterTitle/fonts/font = ExtResource("font_hy")
+LetterTitle/font_sizes/font_size = 19
+
+LetterBody/base_type = &"Label"
+LetterBody/colors/font_color = Color(0, 0, 0, 1)
+LetterBody/colors/font_shadow_color = Color(1, 1, 1, 1)
+LetterBody/constants/outline_size = 1
+LetterBody/fonts/font = ExtResource("font_hk")
+LetterBody/font_sizes/font_size = 17
+
+LetterPageButton/base_type = &"Button"
+LetterPageButton/colors/font_hover_color = Color(1, 0.423529, 0, 1)
+LetterPageButton/fonts/font = ExtResource("font_return")
+LetterPageButton/font_sizes/font_size = 30
+LetterPageButton/styles/normal = SubResource("empty_button")
+LetterPageButton/styles/pressed = SubResource("empty_button")
+LetterPageButton/styles/hover = SubResource("empty_button")
+LetterPageButton/styles/disabled = SubResource("empty_button")
+LetterPageButton/styles/focus = SubResource("empty_button")
+
+LetterPageLabel/base_type = &"Label"
+LetterPageLabel/fonts/font = ExtResource("font_return")
+LetterPageLabel/font_sizes/font_size = 35
+
+LlbtCureText/base_type = &"Label"
+LlbtCureText/colors/font_color = Color(1, 1, 0, 1)
+LlbtCureText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LlbtCureText/colors/font_outline_color = Color(1, 1, 0, 1)
+LlbtCureText/constants/shadow_offset_x = 0
+LlbtCureText/constants/shadow_offset_y = 0
+LlbtCureText/constants/outline_size = 1
+LlbtCureText/constants/shadow_outline_size = 7
+LlbtCureText/fonts/font = ExtResource("font_hk")
+
+LlbtTitle/base_type = &"Label"
+LlbtTitle/colors/font_color = Color(1, 1, 0, 1)
+LlbtTitle/font_sizes/font_size = 20
+
+LlbtList/base_type = &"VBoxContainer"
+LlbtList/constants/separation = -4
+
+LlbtCgmsButton/base_type = &"Button"
+LlbtCgmsButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtCgmsButton/font_sizes/font_size = 25
+LlbtCgmsButton/styles/normal = SubResource("empty_button")
+LlbtCgmsButton/styles/pressed = SubResource("empty_button")
+LlbtCgmsButton/styles/hover = SubResource("empty_button")
+LlbtCgmsButton/styles/disabled = SubResource("empty_button")
+LlbtCgmsButton/styles/focus = SubResource("empty_button")
+
+LlbtTslzzButton/base_type = &"Button"
+LlbtTslzzButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtTslzzButton/font_sizes/font_size = 25
+LlbtTslzzButton/styles/normal = SubResource("empty_button")
+LlbtTslzzButton/styles/pressed = SubResource("empty_button")
+LlbtTslzzButton/styles/hover = SubResource("empty_button")
+LlbtTslzzButton/styles/disabled = SubResource("empty_button")
+LlbtTslzzButton/styles/focus = SubResource("empty_button")
+
+LlbtTznzButton/base_type = &"Button"
+LlbtTznzButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtTznzButton/font_sizes/font_size = 25
+LlbtTznzButton/styles/normal = SubResource("empty_button")
+LlbtTznzButton/styles/pressed = SubResource("empty_button")
+LlbtTznzButton/styles/hover = SubResource("empty_button")
+LlbtTznzButton/styles/disabled = SubResource("empty_button")
+LlbtTznzButton/styles/focus = SubResource("empty_button")
+
+LlbtTztttwButton/base_type = &"Button"
+LlbtTztttwButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtTztttwButton/font_sizes/font_size = 25
+LlbtTztttwButton/styles/normal = SubResource("empty_button")
+LlbtTztttwButton/styles/pressed = SubResource("empty_button")
+LlbtTztttwButton/styles/hover = SubResource("empty_button")
+LlbtTztttwButton/styles/disabled = SubResource("empty_button")
+LlbtTztttwButton/styles/focus = SubResource("empty_button")
+
+LlbtTztxsButton/base_type = &"Button"
+LlbtTztxsButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtTztxsButton/font_sizes/font_size = 25
+LlbtTztxsButton/styles/normal = SubResource("empty_button")
+LlbtTztxsButton/styles/pressed = SubResource("empty_button")
+LlbtTztxsButton/styles/hover = SubResource("empty_button")
+LlbtTztxsButton/styles/disabled = SubResource("empty_button")
+LlbtTztxsButton/styles/focus = SubResource("empty_button")
+
+LlbtWxmsButton/base_type = &"Button"
+LlbtWxmsButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
+LlbtWxmsButton/font_sizes/font_size = 25
+LlbtWxmsButton/styles/normal = SubResource("empty_button")
+LlbtWxmsButton/styles/pressed = SubResource("empty_button")
+LlbtWxmsButton/styles/hover = SubResource("empty_button")
+LlbtWxmsButton/styles/disabled = SubResource("empty_button")
+LlbtWxmsButton/styles/focus = SubResource("empty_button")
+
+EndStatsMoreInfo/base_type = &"Label"
+EndStatsMoreInfo/colors/font_color = Color(1, 1, 0, 1)
+EndStatsMoreInfo/fonts/font = ExtResource("font_hy")
+EndStatsMoreInfo/font_sizes/font_size = 35
+
+EndStatsWarning/base_type = &"Label"
+EndStatsWarning/colors/font_color = Color(1, 0.568627, 0, 1)
+EndStatsWarning/colors/font_outline_color = Color(1, 0.568627, 0, 1)
+EndStatsWarning/constants/outline_size = 1
+EndStatsWarning/fonts/font = ExtResource("font_hk")
+
+EndStatsHeaderRow/base_type = &"HBoxContainer"
+EndStatsHeaderRow/constants/separation = 80
+
+EndStatsColumn/base_type = &"VBoxContainer"
+EndStatsColumn/constants/separation = 50
+
+EndStatsCritCount/base_type = &"Label"
+EndStatsCritCount/colors/font_color = Color(0.741176, 0.341176, 0.309804, 1)
+EndStatsCritCount/colors/font_outline_color = Color(0.741176, 0.341176, 0.309804, 1)
+EndStatsCritCount/constants/outline_size = 2
+EndStatsCritCount/fonts/font = ExtResource("font_hk")
+EndStatsCritCount/font_sizes/font_size = 25
+
+EndStatsHit/base_type = &"Label"
+EndStatsHit/colors/font_color = Color(1, 0, 0, 1)
+EndStatsHit/colors/font_outline_color = Color(1, 0, 0, 1)
+EndStatsHit/constants/outline_size = 2
+EndStatsHit/fonts/font = ExtResource("font_hk")
+EndStatsHit/font_sizes/font_size = 25
+
+EndStatsHitCount/base_type = &"Label"
+EndStatsHitCount/colors/font_color = Color(1, 0.32549, 0, 1)
+EndStatsHitCount/colors/font_outline_color = Color(1, 0.32549, 0, 1)
+EndStatsHitCount/constants/outline_size = 2
+EndStatsHitCount/fonts/font = ExtResource("font_hk")
+EndStatsHitCount/font_sizes/font_size = 25
+
+EndStatsRealHit/base_type = &"Label"
+EndStatsRealHit/colors/font_color = Color(0.545098, 0.545098, 0.545098, 1)
+EndStatsRealHit/colors/font_outline_color = Color(0.545098, 0.545098, 0.545098, 1)
+EndStatsRealHit/constants/outline_size = 2
+EndStatsRealHit/fonts/font = ExtResource("font_hk")
+EndStatsRealHit/font_sizes/font_size = 25
+
+EndStatsMagicHit/base_type = &"Label"
+EndStatsMagicHit/colors/font_color = Color(0, 0.427451, 0.898039, 1)
+EndStatsMagicHit/colors/font_outline_color = Color(0, 0.427451, 0.898039, 1)
+EndStatsMagicHit/constants/outline_size = 2
+EndStatsMagicHit/fonts/font = ExtResource("font_hk")
+EndStatsMagicHit/font_sizes/font_size = 25
+
+EndStatsPhysicalHit/base_type = &"Label"
+EndStatsPhysicalHit/colors/font_color = Color(1, 0.615686, 0, 1)
+EndStatsPhysicalHit/colors/font_outline_color = Color(1, 0.615686, 0, 1)
+EndStatsPhysicalHit/constants/outline_size = 2
+EndStatsPhysicalHit/fonts/font = ExtResource("font_hk")
+EndStatsPhysicalHit/font_sizes/font_size = 25
+
+EndStatsHurt/base_type = &"Label"
+EndStatsHurt/colors/font_color = Color(0.517647, 0.537255, 0.815686, 1)
+EndStatsHurt/colors/font_outline_color = Color(0.517647, 0.537255, 0.815686, 1)
+EndStatsHurt/constants/outline_size = 2
+EndStatsHurt/fonts/font = ExtResource("font_hk")
+EndStatsHurt/font_sizes/font_size = 25
+
+EndStatsHurtCount/base_type = &"Label"
+EndStatsHurtCount/colors/font_color = Color(0.462745, 0.290196, 0, 1)
+EndStatsHurtCount/colors/font_outline_color = Color(0.462745, 0.290196, 0, 1)
+EndStatsHurtCount/constants/outline_size = 2
+EndStatsHurtCount/fonts/font = ExtResource("font_hk")
+EndStatsHurtCount/font_sizes/font_size = 25
+
+EndStatsMagicHurt/base_type = &"Label"
+EndStatsMagicHurt/colors/font_color = Color(0.376471, 0.184314, 0.815686, 1)
+EndStatsMagicHurt/colors/font_outline_color = Color(0.376471, 0.184314, 0.815686, 1)
+EndStatsMagicHurt/constants/outline_size = 2
+EndStatsMagicHurt/fonts/font = ExtResource("font_hk")
+EndStatsMagicHurt/font_sizes/font_size = 25
+
+EndStatsMissCount/base_type = &"Label"
+EndStatsMissCount/constants/outline_size = 2
+EndStatsMissCount/fonts/font = ExtResource("font_hk")
+EndStatsMissCount/font_sizes/font_size = 25
+
+EndStatsPhysicalHurt/base_type = &"Label"
+EndStatsPhysicalHurt/colors/font_color = Color(0.466667, 0, 0, 1)
+EndStatsPhysicalHurt/colors/font_outline_color = Color(0.466667, 0, 0, 1)
+EndStatsPhysicalHurt/constants/outline_size = 2
+EndStatsPhysicalHurt/fonts/font = ExtResource("font_hk")
+EndStatsPhysicalHurt/font_sizes/font_size = 25
+
+EndStatsRealHurt/base_type = &"Label"
+EndStatsRealHurt/colors/font_color = Color(0.258824, 0.258824, 0.258824, 1)
+EndStatsRealHurt/colors/font_outline_color = Color(0.258824, 0.258824, 0.258824, 1)
+EndStatsRealHurt/constants/outline_size = 2
+EndStatsRealHurt/fonts/font = ExtResource("font_hk")
+EndStatsRealHurt/font_sizes/font_size = 25
+
+EndStatsCure/base_type = &"Label"
+EndStatsCure/colors/font_color = Color(0.431373, 1, 0.368627, 1)
+EndStatsCure/colors/font_outline_color = Color(0.431373, 1, 0.368627, 1)
+EndStatsCure/constants/outline_size = 2
+EndStatsCure/fonts/font = ExtResource("font_hk")
+EndStatsCure/font_sizes/font_size = 25
+
+LdlTitleLabel/base_type = &"Label"
+LdlTitleLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+LdlTitleLabel/font_sizes/font_size = 19
+
+LdlDzButton/base_type = &"Button"
+LdlDzButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlDzButton/fonts/font = ExtResource("font_return")
+LdlDzButton/font_sizes/font_size = 25
+LdlDzButton/styles/normal = SubResource("empty_button")
+LdlDzButton/styles/pressed = SubResource("empty_button")
+LdlDzButton/styles/hover = SubResource("empty_button")
+LdlDzButton/styles/disabled = SubResource("empty_button")
+LdlDzButton/styles/focus = SubResource("empty_button")
+
+LdlFjButton/base_type = &"Button"
+LdlFjButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlFjButton/fonts/font = ExtResource("font_return")
+LdlFjButton/font_sizes/font_size = 25
+LdlFjButton/styles/normal = SubResource("empty_button")
+LdlFjButton/styles/pressed = SubResource("empty_button")
+LdlFjButton/styles/hover = SubResource("empty_button")
+LdlFjButton/styles/disabled = SubResource("empty_button")
+LdlFjButton/styles/focus = SubResource("empty_button")
+
+LdlHcButton/base_type = &"Button"
+LdlHcButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlHcButton/fonts/font = ExtResource("font_return")
+LdlHcButton/font_sizes/font_size = 25
+LdlHcButton/styles/normal = SubResource("empty_button")
+LdlHcButton/styles/pressed = SubResource("empty_button")
+LdlHcButton/styles/hover = SubResource("empty_button")
+LdlHcButton/styles/disabled = SubResource("empty_button")
+LdlHcButton/styles/focus = SubResource("empty_button")
+
+LdlQhButton/base_type = &"Button"
+LdlQhButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlQhButton/fonts/font = ExtResource("font_return")
+LdlQhButton/font_sizes/font_size = 25
+LdlQhButton/styles/normal = SubResource("empty_button")
+LdlQhButton/styles/pressed = SubResource("empty_button")
+LdlQhButton/styles/hover = SubResource("empty_button")
+LdlQhButton/styles/disabled = SubResource("empty_button")
+LdlQhButton/styles/focus = SubResource("empty_button")
+
+LdlReturnButton/base_type = &"Button"
+LdlReturnButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlReturnButton/fonts/font = ExtResource("font_return")
+LdlReturnButton/font_sizes/font_size = 25
+LdlReturnButton/styles/normal = SubResource("empty_button")
+LdlReturnButton/styles/pressed = SubResource("empty_button")
+LdlReturnButton/styles/hover = SubResource("empty_button")
+LdlReturnButton/styles/disabled = SubResource("empty_button")
+LdlReturnButton/styles/focus = SubResource("empty_button")
+
+LdlXqButton/base_type = &"Button"
+LdlXqButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LdlXqButton/fonts/font = ExtResource("font_return")
+LdlXqButton/font_sizes/font_size = 25
+LdlXqButton/styles/normal = SubResource("empty_button")
+LdlXqButton/styles/pressed = SubResource("empty_button")
+LdlXqButton/styles/hover = SubResource("empty_button")
+LdlXqButton/styles/disabled = SubResource("empty_button")
+LdlXqButton/styles/focus = SubResource("empty_button")
+
+RoleLevelLabel/base_type = &"Label"
+RoleLevelLabel/fonts/font = ExtResource("font_return")
+
+RoleExpText/base_type = &"Label"
+RoleExpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleExpText/font_sizes/font_size = 14
+
+RoleHpText/base_type = &"Label"
+RoleHpText/colors/font_color = Color(1, 1, 1, 1)
+RoleHpText/constants/shadow_outline_size = -6
+RoleHpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleHpText/font_sizes/font_size = 14
+
+RoleNatureHp/base_type = &"Label"
+RoleNatureHp/colors/font_color = Color(1, 1, 1, 1)
+RoleNatureHp/fonts/font = ExtResource("font_hy")
+RoleNatureHp/font_sizes/font_size = 12
+
+RoleMpText/base_type = &"Label"
+RoleMpText/colors/font_color = Color(1, 1, 1, 1)
+RoleMpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleMpText/font_sizes/font_size = 14
+
+RoleNatureMp/base_type = &"Label"
+RoleNatureMp/colors/font_color = Color(1, 1, 1, 1)
+RoleNatureMp/colors/font_shadow_color = Color(0, 0, 0, 1)
+RoleNatureMp/colors/font_outline_color = Color(0, 0, 0, 1)
+RoleNatureMp/constants/shadow_offset_x = 2
+RoleNatureMp/constants/shadow_offset_y = 0
+RoleNatureMp/fonts/font = ExtResource("font_hy")
+RoleNatureMp/font_sizes/font_size = 12
+
+RoleKeyLabel/base_type = &"Label"
+RoleKeyLabel/colors/font_color = Color(1, 1, 1, 1)
+RoleKeyLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+RoleKeyLabel/constants/outline_size = 2
+RoleKeyLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleKeyLabel/font_sizes/font_size = 16
+
+RoleSkillRow/base_type = &"HBoxContainer"
+RoleSkillRow/constants/separation = -5
+
+RoleSkillRowTight/base_type = &"HBoxContainer"
+RoleSkillRowTight/constants/separation = -3
+
+RolePetSkillRow/base_type = &"HBoxContainer"
+RolePetSkillRow/constants/separation = 5

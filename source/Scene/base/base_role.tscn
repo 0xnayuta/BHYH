@@ -1,32 +1,54 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/base/base_role.gd" id="1"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/964.png" id="2"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/680.png" id="3"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="5"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/379.png" id="6"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="7"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/688.png" id="8"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/694.png" id="9"]
+
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_properies_box/748.png" id="10"]
+
 [ext_resource type="Texture2D" path="res://Spritesheet/icons_ps4_animated_buttons2.png" id="11"]
+
 [ext_resource type="Script" path="res://Script/base/switch_role.gd" id="12"]
+
 [ext_resource type="Texture2D" path="res://Art/ui_2_6_0_0/skill.png" id="13"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/393.png" id="14"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/397.png" id="15"]
+
 [ext_resource type="Texture2D" path="res://Art/hero_picture/protect_1.png" id="16"]
+
 [ext_resource type="Texture2D" path="res://Art/hero_picture/protect_2.png" id="17"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/416.png" id="18"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/418.png" id="19"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/420.png" id="20"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/422.png" id="21"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/424.png" id="22"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/426.png" id="23"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/428.png" id="24"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/430.png" id="25"]
+
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/432.png" id="26"]
+
 [ext_resource type="Script" path="res://Script/base/ws_key.gd" id="27"]
+
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_462f4"]
 atlas = ExtResource("11")
@@ -103,28 +125,25 @@ nine_patch_stretch = true
 texture_progress = ExtResource("3")
 
 [node name="hp_text" type="Label" parent="role_hp_mp_exp/hp_bar" unique_id=1275306028]
+theme_type_variation = "RoleHpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 4.0
 offset_top = -2.0
 offset_right = 149.0
 offset_bottom = 17.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_outline_size = -6
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="nature_recovery_hp" type="Label" parent="role_hp_mp_exp/hp_bar" unique_id=1844371882]
+theme_type_variation = "RoleNatureHp"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 113.0
 offset_top = -1.0
 offset_right = 150.0
 offset_bottom = 16.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -137,6 +156,8 @@ offset_bottom = 120.0
 texture = ExtResource("6")
 
 [node name="role_level" type="Label" parent="role_hp_mp_exp/TextureRect" unique_id=865592430]
+theme_type_variation = "RoleLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -149,7 +170,6 @@ offset_right = 12.5
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("7")
 text = "0
 "
 horizontal_alignment = 1
@@ -167,30 +187,24 @@ nine_patch_stretch = true
 texture_progress = ExtResource("8")
 
 [node name="mp_text" type="Label" parent="role_hp_mp_exp/mp_bar" unique_id=1463624693]
+theme_type_variation = "RoleMpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = -2.0
 offset_right = 143.0
 offset_bottom = 17.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="nature_recovery_mp" type="Label" parent="role_hp_mp_exp/mp_bar" unique_id=1709916974]
+theme_type_variation = "RoleNatureMp"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 111.0
 offset_top = -1.0
 offset_right = 142.0
 offset_bottom = 15.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -207,13 +221,13 @@ nine_patch_stretch = true
 texture_progress = ExtResource("9")
 
 [node name="exp_text" type="Label" parent="role_hp_mp_exp/exp_bar" unique_id=71146837]
+theme_type_variation = "RoleExpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = -2.0
 offset_right = 148.0
 offset_bottom = 17.0
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -304,6 +318,8 @@ texture_under = ExtResource("14")
 texture_progress = ExtResource("15")
 
 [node name="SkillBox" type="HBoxContainer" parent="role_menu" unique_id=1080155706]
+theme_type_variation = "RoleSkillRow"
+theme = ExtResource("theme")
 visible = false
 layout_mode = 0
 offset_left = 118.0
@@ -313,7 +329,6 @@ offset_bottom = 115.0
 scale = Vector2(-1, 1)
 pivot_offset = Vector2(106, 0)
 mouse_filter = 2
-theme_override_constants/separation = -5
 alignment = 2
 
 [node name="skil_1" type="TextureRect" parent="role_menu" unique_id=1856619771]
@@ -362,81 +377,68 @@ offset_bottom = 109.78174
 metadata/_edit_lock_ = true
 
 [node name="KeyY" type="Label" parent="role_menu"]
+theme_type_variation = "RoleKeyLabel"
+theme = ExtResource("theme")
 offset_left = 133.0
 offset_top = 74.0
 offset_right = 166.0
 offset_bottom = 110.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "Y"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="KeyU" type="Label" parent="role_menu"]
+theme_type_variation = "RoleKeyLabel"
+theme = ExtResource("theme")
 offset_left = 173.0
 offset_top = 74.0
 offset_right = 206.0
 offset_bottom = 110.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "U"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="KeyI" type="Label" parent="role_menu"]
+theme_type_variation = "RoleKeyLabel"
+theme = ExtResource("theme")
 offset_left = 213.0
 offset_top = 74.0
 offset_right = 246.0
 offset_bottom = 110.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "I"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="KeyO" type="Label" parent="role_menu"]
+theme_type_variation = "RoleKeyLabel"
+theme = ExtResource("theme")
 offset_left = 253.0
 offset_top = 74.0
 offset_right = 286.0
 offset_bottom = 110.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "O"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="KeyL" type="Label" parent="role_menu"]
+theme_type_variation = "RoleKeyLabel"
+theme = ExtResource("theme")
 offset_left = 293.0
 offset_top = 74.0
 offset_right = 326.0
 offset_bottom = 110.0
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 text = "L"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="SkillBox2" type="HBoxContainer" parent="role_menu" unique_id=1697939467]
+theme_type_variation = "RoleSkillRowTight"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 118.0
 offset_top = 15.0
@@ -445,7 +447,6 @@ offset_bottom = 60.0
 scale = Vector2(-1, 1)
 pivot_offset = Vector2(106, 0)
 mouse_filter = 2
-theme_override_constants/separation = -3
 
 [node name="magicIcon" type="HBoxContainer" parent="role_menu" unique_id=1573552429]
 layout_mode = 1
@@ -515,28 +516,25 @@ nine_patch_stretch = true
 texture_progress = ExtResource("3")
 
 [node name="hp_text" type="Label" parent="宠物_hp_mp_exp/hp_bar" unique_id=922418070]
+theme_type_variation = "RoleHpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 4.0
 offset_top = -2.0
 offset_right = 149.0
 offset_bottom = 17.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_outline_size = -6
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="nature_recovery_hp" type="Label" parent="宠物_hp_mp_exp/hp_bar" unique_id=706857174]
+theme_type_variation = "RoleNatureHp"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 113.0
 offset_top = -1.0
 offset_right = 150.0
 offset_bottom = 16.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -549,6 +547,8 @@ offset_bottom = 120.0
 texture = ExtResource("6")
 
 [node name="role_level" type="Label" parent="宠物_hp_mp_exp/TextureRect" unique_id=740808487]
+theme_type_variation = "RoleLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -561,7 +561,6 @@ offset_right = 12.5
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("7")
 text = "0
 "
 horizontal_alignment = 1
@@ -579,30 +578,24 @@ nine_patch_stretch = true
 texture_progress = ExtResource("8")
 
 [node name="mp_text" type="Label" parent="宠物_hp_mp_exp/mp_bar" unique_id=1912811657]
+theme_type_variation = "RoleMpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = -2.0
 offset_right = 143.0
 offset_bottom = 17.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="nature_recovery_mp" type="Label" parent="宠物_hp_mp_exp/mp_bar" unique_id=1164851425]
+theme_type_variation = "RoleNatureMp"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 111.0
 offset_top = -1.0
 offset_right = 142.0
 offset_bottom = 15.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -619,13 +612,13 @@ nine_patch_stretch = true
 texture_progress = ExtResource("9")
 
 [node name="exp_text" type="Label" parent="宠物_hp_mp_exp/exp_bar" unique_id=1847185159]
+theme_type_variation = "RoleExpText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = -2.0
 offset_right = 148.0
 offset_bottom = 17.0
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -684,12 +677,13 @@ action = "切换"
 script = ExtResource("12")
 
 [node name="SkillBox" type="HBoxContainer" parent="宠物_hp_mp_exp" unique_id=802636941]
+theme_type_variation = "RolePetSkillRow"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 59.21048
 offset_top = 109.72213
 offset_right = 290.0
 offset_bottom = 150.0
-theme_override_constants/separation = 5
 
 [node name="RoleProtect" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=525127538]
 layout_mode = 0
