@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重），下一批次为 31-0B；Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓，31-1 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 未启动**。Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -103,7 +103,7 @@
 
 ## 5B. Phase 31：引擎废弃 API 与局部现代化（当前批次）
 
-> **状态**：31-0A **已完成（2026-11-01）**；31-0B 为下一批次，31-1 未启动。不依赖 Phase 30。
+> **状态**：31-0A **已完成（2026-11-01）**；31-0B **评估后拒绝**（保留旧数字图，2026-11-01）；31-1 未启动。不依赖 Phase 30。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
 
 ### 31-0A 顺手包（已完成）
@@ -118,11 +118,13 @@
 
 **31-0A 不做**：不把 `TileMapLayer` 迁移顺带改成数据驱动地形；不把物理层重构为位运算工具类；不改变任何图标的兜底优先级。
 
-### 31-0B 数字图 → BMFont（未启动）
+### 31-0B 数字图 → BMFont（评估后拒绝）
 
 - `Art/all_number` 引用 25 处 / 3 个文件（`back_pack.gd` 等级两位拼接、`backpack_level_display.gd` TextureRect 数字数组、`damage_number.gd` 伤害数字）；
-- 必须先建立 3 个文件的显示基线（字宽、行高、锚点、缩放、生命周期），再做替换；
-- **不能达到原有显示效果时保留旧数字图并登记原因**，不得为通过计数而强行替换。
+- 现有 7 个 BMFont（`beishu`/`zhanlishuz`/`redf`/`bluef`/`green`/`fp1`/`fp2`）均与数字图不同源：等级图 47×50、可见内容 30×38；字体字形 16–30 px，最佳 `beishu` 归一化 alpha IoU 仅 **0.866**、颜色归一化差异 **0.988**；`zhanlishuz` IoU **0.616**；
+- 伤害数字有 15 个样式目录（`cure`/`cure_mp`/`reduce_mp`/`lj`/`magic`/`magiccrit`/`monster/*`/`other_number`/`physics`/`physicscrit`/`real`/`realcrit`），现有字体只覆盖少数颜色，且正体/斜体、描边与填充样式不一致，没有等价字体；
+- 临时 `Label + beishu` 运行渲染对照：字宽/步进（字体 20 vs 当前 24）与描边粗细不同，放大到 50 px 会损失清晰度；
+- **结论：保留旧数字图，不替换**。如未来必须迁移，需从现有数字图生成同源 BMFont（构建期私有派生资源），不能直接使用 ZMWS BMFont；该路线不纳入 31-0B。
 
 ### 31-1 视差迁移（未启动）
 
@@ -142,7 +144,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成**；下一批次为 31-0B，31-1、Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图**；下一批次为 31-1，Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -188,8 +190,8 @@
 | 批次 | 状态 |
 |:---|:---|
 | Phase 31-0A（TileMap/物理层/图标去重） | **完成（2026-11-01）** |
-| Phase 31-0B（数字图→BMFont） | 下一批次（未启动） |
-| Phase 31-1（89 场景视差迁移） | 未启动 |
+| Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
+| Phase 31-1（89 场景视差迁移） | 下一批次（未启动） |
 | Phase 30（ADR-023 关卡布局契约） | 暂缓（设计完成，`Proposed`） |
 | Phase 32（UI Theme） | 未启动，依赖 Phase 30 |
 | Phase 33（装备数据） | 未启动，依赖 Phase 30 或 32 |
