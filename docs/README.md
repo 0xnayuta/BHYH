@@ -13,6 +13,7 @@
 | `reference/` | 当前状态、架构、验收与项目范围 | 人工维护 |
 | `decisions/` | 架构决策记录（ADR） | 人工维护；已接受结论不直接改写 |
 | `audit/` | 人工代码质量审计模板与报告 | 只读档案；历史报告不重写，新增按编号接续 |
+| `issues/` | 已知问题与待验证风险清单 | 人工维护；入口见 [`issues/known-issues.md`](issues/known-issues.md) |
 | `roadmap/` | 路线图、当前迭代与后续规划 | 人工维护 |
 | `guides/` | 开发、构建、验证与迁移操作指南 | 人工维护 |
 | `standards/` | 活跃规范，约束当前代码、场景与资产 | 随工程演进人工维护 |
@@ -21,8 +22,8 @@
 
 ### 按需增加
 
-- `issues/`：出现正式已知问题清单时创建；
-- `reference/` 下可继续增加项目范围文档。
+- `reference/` 下可继续增加项目范围文档；
+- `issues/` 维护正式已知问题清单，入口已建立。
 
 ---
 
@@ -48,6 +49,7 @@
 | [`decisions/ADR-021-project-wide-target-architecture.md`](decisions/ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与总体目标选择；保留 ADR-020 视觉子契约，不宣称已实现 |
 | [`decisions/ADR-022-atlas-metadata-view-and-path-identity.md`](decisions/ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份例外与失败语义 |
 | [`decisions/ADR-023-level-layout-data-contract.md`](decisions/ADR-023-level-layout-data-contract.md) | **Proposed**：关卡布局数据契约与绞杀式迁移；数据文件格式由 JSON 修正为 `.tres` |
+| [`issues/known-issues.md`](issues/known-issues.md) | **已知问题与待验证风险**：当前未修复问题、已修复回归线索与系统化清理入口 |
 | [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
