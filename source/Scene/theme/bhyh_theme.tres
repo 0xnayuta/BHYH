@@ -2107,3 +2107,181 @@ RoleSkillRowTight/constants/separation = -3
 
 RolePetSkillRow/base_type = &"HBoxContainer"
 RolePetSkillRow/constants/separation = 5
+
+ZhenFaCurrentLabel/base_type = &"Label"
+ZhenFaCurrentLabel/colors/font_color = Color(0, 0, 0, 1)
+ZhenFaCurrentLabel/colors/font_shadow_color = Color(1, 1, 1, 1)
+ZhenFaCurrentLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+ZhenFaCurrentLabel/constants/shadow_offset_x = 0
+ZhenFaCurrentLabel/constants/shadow_offset_y = 0
+ZhenFaCurrentLabel/constants/outline_size = 1
+ZhenFaCurrentLabel/constants/shadow_outline_size = 7
+ZhenFaCurrentLabel/fonts/font = ExtResource("font_main")
+ZhenFaCurrentLabel/font_sizes/font_size = 24
+
+ZhenFaCurrentName/base_type = &"Label"
+ZhenFaCurrentName/colors/font_color = Color(0, 0, 0, 1)
+ZhenFaCurrentName/colors/font_outline_color = Color(1, 1, 1, 1)
+ZhenFaCurrentName/constants/outline_size = 5
+ZhenFaCurrentName/fonts/font = ExtResource("font_hy")
+ZhenFaCurrentName/font_sizes/font_size = 22
+
+ZhenFaTabRow/base_type = &"HBoxContainer"
+ZhenFaTabRow/constants/separation = 22
+
+ZhenFaTabLabel/base_type = &"Label"
+ZhenFaTabLabel/colors/font_color = Color(1, 0.466667, 0, 1)
+ZhenFaTabLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaTabLabel/colors/font_outline_color = Color(1, 0.466667, 0, 1)
+ZhenFaTabLabel/constants/shadow_offset_x = 0
+ZhenFaTabLabel/constants/shadow_offset_y = 0
+ZhenFaTabLabel/constants/outline_size = 1
+ZhenFaTabLabel/constants/shadow_outline_size = 10
+ZhenFaTabLabel/fonts/font = ExtResource("font_main")
+ZhenFaTabLabel/font_sizes/font_size = 25
+
+ZhenFaSourceLabel/base_type = &"Label"
+ZhenFaSourceLabel/colors/font_color = Color(0, 0.792157, 1, 1)
+ZhenFaSourceLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaSourceLabel/colors/font_outline_color = Color(0, 0.792157, 1, 1)
+ZhenFaSourceLabel/constants/shadow_offset_x = 0
+ZhenFaSourceLabel/constants/shadow_offset_y = 0
+ZhenFaSourceLabel/constants/outline_size = 2
+ZhenFaSourceLabel/constants/shadow_outline_size = 7
+ZhenFaSourceLabel/fonts/font = ExtResource("font_hk")
+
+ZhenFaNameLabel/base_type = &"Label"
+ZhenFaNameLabel/colors/font_color = Color(1, 0.552941, 0, 1)
+ZhenFaNameLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+ZhenFaNameLabel/constants/outline_size = 7
+ZhenFaNameLabel/fonts/font = ExtResource("font_hy")
+ZhenFaNameLabel/font_sizes/font_size = 24
+
+ZhenFaEmptyButton/base_type = &"Button"
+ZhenFaEmptyButton/styles/normal = SubResource("empty_button")
+ZhenFaEmptyButton/styles/pressed = SubResource("empty_button")
+ZhenFaEmptyButton/styles/hover = SubResource("empty_button")
+ZhenFaEmptyButton/styles/disabled = SubResource("empty_button")
+ZhenFaEmptyButton/styles/focus = SubResource("empty_button")
+
+ZhenFaInfoPropGroup/base_type = &"VBoxContainer"
+ZhenFaInfoPropGroup/constants/separation = 6
+
+ZhenFaInfoPropLabel/base_type = &"Label"
+ZhenFaInfoPropLabel/colors/font_color = Color(0.792157, 0.407843, 0, 1)
+ZhenFaInfoPropLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaInfoPropLabel/colors/font_outline_color = Color(0.792157, 0.407843, 0, 1)
+ZhenFaInfoPropLabel/constants/shadow_offset_x = 0
+ZhenFaInfoPropLabel/constants/shadow_offset_y = 0
+ZhenFaInfoPropLabel/constants/outline_size = 2
+ZhenFaInfoPropLabel/constants/shadow_outline_size = 7
+ZhenFaInfoPropLabel/fonts/font = ExtResource("font_hk")
+ZhenFaInfoPropLabel/font_sizes/font_size = 18
+
+ZhenFaInfoLevelLabel/base_type = &"Label"
+ZhenFaInfoLevelLabel/colors/font_color = Color(1, 1, 0, 1)
+ZhenFaInfoLevelLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaInfoLevelLabel/colors/font_outline_color = Color(1, 1, 0, 1)
+ZhenFaInfoLevelLabel/constants/shadow_offset_x = 0
+ZhenFaInfoLevelLabel/constants/shadow_offset_y = 0
+ZhenFaInfoLevelLabel/constants/outline_size = 1
+ZhenFaInfoLevelLabel/constants/shadow_outline_size = 7
+ZhenFaInfoLevelLabel/fonts/font = ExtResource("font_hk")
+
+ZhenFaInfoBodyGroup/base_type = &"VBoxContainer"
+ZhenFaInfoBodyGroup/constants/separation = 10
+
+ZhenFaInfoAddProp/base_type = &"Label"
+ZhenFaInfoAddProp/colors/font_color = Color(0, 1, 1, 1)
+ZhenFaInfoAddProp/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaInfoAddProp/colors/font_outline_color = Color(0, 1, 1, 1)
+ZhenFaInfoAddProp/constants/shadow_offset_x = 0
+ZhenFaInfoAddProp/constants/shadow_offset_y = 0
+ZhenFaInfoAddProp/constants/outline_size = 1
+ZhenFaInfoAddProp/constants/shadow_outline_size = 7
+ZhenFaInfoAddProp/fonts/font = ExtResource("font_hk")
+
+ZhenFaInfoSkill/base_type = &"Label"
+ZhenFaInfoSkill/colors/font_color = Color(1, 0.384314, 0, 1)
+ZhenFaInfoSkill/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaInfoSkill/colors/font_outline_color = Color(1, 0.384314, 0, 1)
+ZhenFaInfoSkill/constants/shadow_offset_x = 0
+ZhenFaInfoSkill/constants/shadow_offset_y = 0
+ZhenFaInfoSkill/constants/outline_size = 1
+ZhenFaInfoSkill/constants/shadow_outline_size = 7
+ZhenFaInfoSkill/fonts/font = ExtResource("font_hk")
+
+ZhenFaTuPoList/base_type = &"VBoxContainer"
+ZhenFaTuPoList/constants/separation = 6
+
+ZhenFaTuPoHeader/base_type = &"Label"
+ZhenFaTuPoHeader/colors/font_color = Color(1, 1, 0, 1)
+ZhenFaTuPoHeader/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaTuPoHeader/colors/font_outline_color = Color(1, 1, 0, 1)
+ZhenFaTuPoHeader/constants/shadow_offset_x = 0
+ZhenFaTuPoHeader/constants/shadow_offset_y = 0
+ZhenFaTuPoHeader/constants/outline_size = 1
+ZhenFaTuPoHeader/constants/shadow_outline_size = 7
+ZhenFaTuPoHeader/fonts/font = ExtResource("font_hk")
+
+ZhenFaTuPoProp/base_type = &"Label"
+ZhenFaTuPoProp/colors/font_color = Color(1, 1, 0, 1)
+ZhenFaTuPoProp/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaTuPoProp/colors/font_outline_color = Color(1, 1, 0, 1)
+ZhenFaTuPoProp/constants/shadow_offset_x = 0
+ZhenFaTuPoProp/constants/shadow_offset_y = 0
+ZhenFaTuPoProp/constants/outline_size = 1
+ZhenFaTuPoProp/constants/shadow_outline_size = 7
+ZhenFaTuPoProp/fonts/font = ExtResource("font_hk")
+ZhenFaTuPoProp/font_sizes/font_size = 16
+
+ZhenFaTuPoSkill/base_type = &"Label"
+ZhenFaTuPoSkill/colors/font_color = Color(1, 0.435294, 0, 1)
+ZhenFaTuPoSkill/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaTuPoSkill/colors/font_outline_color = Color(1, 0.435294, 0, 1)
+ZhenFaTuPoSkill/constants/shadow_offset_x = 0
+ZhenFaTuPoSkill/constants/shadow_offset_y = 0
+ZhenFaTuPoSkill/constants/outline_size = 1
+ZhenFaTuPoSkill/constants/shadow_outline_size = 7
+ZhenFaTuPoSkill/fonts/font = ExtResource("font_hk")
+ZhenFaTuPoSkill/font_sizes/font_size = 16
+
+ZhenFaTuPoNeed/base_type = &"Label"
+ZhenFaTuPoNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+ZhenFaTuPoNeedNote/base_type = &"Label"
+ZhenFaTuPoNeedNote/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenFaTuPoNeedNote/font_sizes/font_size = 14
+
+HcHelpTitle/base_type = &"Label"
+HcHelpTitle/colors/font_color = Color(0, 0, 0, 1)
+HcHelpTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+HcHelpTitle/constants/outline_size = 7
+HcHelpTitle/fonts/font = ExtResource("font_meng")
+HcHelpTitle/font_sizes/font_size = 32
+
+HcHelpTabRow/base_type = &"HBoxContainer"
+HcHelpTabRow/constants/separation = 30
+
+HcHelpTabLabel/base_type = &"Label"
+HcHelpTabLabel/colors/font_color = Color(0.992157, 1, 0, 1)
+HcHelpTabLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+HcHelpTabLabel/constants/outline_size = 6
+HcHelpTabLabel/fonts/font = ExtResource("font_main")
+HcHelpTabLabel/font_sizes/font_size = 24
+
+HcHelpColumnRow/base_type = &"HBoxContainer"
+HcHelpColumnRow/constants/separation = 90
+
+HcHelpColumnLabel/base_type = &"Label"
+HcHelpColumnLabel/colors/font_color = Color(0, 0, 0, 1)
+HcHelpColumnLabel/colors/font_outline_color = Color(1, 1, 1, 1)
+HcHelpColumnLabel/constants/outline_size = 7
+HcHelpColumnLabel/fonts/font = ExtResource("font_hy")
+HcHelpColumnLabel/font_sizes/font_size = 25
+
+HcHelpPage/base_type = &"Label"
+HcHelpPage/colors/font_outline_color = Color(0, 0, 0, 1)
+HcHelpPage/constants/outline_size = 6
+HcHelpPage/fonts/font = ExtResource("font_hy")
+HcHelpPage/font_sizes/font_size = 18

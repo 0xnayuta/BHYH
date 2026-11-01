@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0、32-1、32-2A、32-2B、32-3A、32-3B、32-3C 与 32-3D 已完成**（UI Theme 基线/契约、`game_set`、标签密集、Button 密集、混合控件/布局与多批标签/混合面板）；**Phase 33 未启动**。下一步为 32-3E 其余高覆盖 UI 面板。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0、32-1、32-2A、32-2B、32-3A、32-3B、32-3C、32-3D 与 32-3E 已完成**（UI Theme 基线/契约、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法面板）；**Phase 33 未启动**。下一步为 32-3F 其余高覆盖 UI 面板。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -36,9 +36,9 @@
 
 ### 1.4 当前候选（Phase 32/33）
 
-- **Phase 32**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 已完成；`game_set` 239→0，`equipment_properies` 173→18，`level_info` 118→34，Button 密集 1,649→44，32-3A 七场景 624→0，32-3B 五场景 1,042→0，32-3C 五场景 452→0，32-3D 五场景 375→0；累计直接属性 2,228；计算样式/几何与截图均一致；下一步 32-3E；
+- **Phase 32**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已完成；`game_set` 239→0，`equipment_properies` 173→18，`level_info` 118→34，Button 密集 1,649→44，32-3A 七场景 624→0，32-3B 五场景 1,042→0，32-3C 五场景 452→0，32-3D 五场景 375→0，32-3E 四场景 245→0；累计直接属性 1,983；计算样式/几何与截图均一致；下一步 32-3F；
 - **Phase 33**：把 `all_equipment_data.gd` 的 1,035 条装备定义迁出为 Resource Catalog，规则/随机/玩家实例分离，逐字段保持语义；
-- **顺序**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 已完成；下一步 32-3E；33-0/33-1 可并行启动，33-3 消费方迁移等待 32-2/32-3 覆盖对应面板；
+- **顺序**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已完成；下一步 32-3F；33-0/33-1 可并行启动，33-3 消费方迁移等待 32-2/32-3 覆盖对应面板；
 - **共同边界**：不改玩法数值、掉落、输入映射、存档格式与显示基线；不以统计归零替代行为验收。
 
 ## 2. Phase 21-1：独立立项（承接 20-1A/20-1C/20-1D）
@@ -128,22 +128,22 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - **验证**：89 个场景 × 4 个相机位置、**2,520 个节点** transform 对照；除 `level_2` 子像素（0.06–2.235 px）与 `level_4` 不可见 `stage` 外一致；7 个代表场景前后截图，3 个完全 0 差异，其余 4 个差异像素 ≤0.005%、最大通道差 ≤0.83；7 个代表关卡冒烟 PASS；全量回归 **128/128 PASS + 5 SKIP**（707.5s）。
 - 已知例外：`level_4` 的 `stage` 是 `BackGround` 下唯一非 Parallax 子节点且 `visible=false`；`CanvasLayer.follow_viewport_enabled` 会改变其 transform，但当前不可见，截图无差异。
 
-## 5C. Phase 32：UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 完成，32-3E 未启动）
+## 5C. Phase 32：UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 完成，32-3F 未启动）
 
-> **状态**：32-0 **已完成（2026-11-01）**：基线审计与契约；32-1 **已完成（2026-11-01）**：`game_set` 239→0；32-2A **已完成（2026-11-01）**：`equipment_properies` 173→18、`level_info` 118→34；32-2B **已完成（2026-11-01）**：五个 Button 密集面板 1,649→44；32-3A **已完成（2026-11-01）**：混合控件/布局七场景 624→0；32-3B **已完成（2026-11-01）**：标签/混合五场景 1,042→0；32-3C **已完成（2026-11-01）**：首批标签五场景 452→0；32-3D **已完成（2026-11-01）**：标签/混合五场景 375→0。32-3E 未启动。
+> **状态**：32-0 **已完成（2026-11-01）**：基线审计与契约；32-1 **已完成（2026-11-01）**：`game_set` 239→0；32-2A **已完成（2026-11-01）**：`equipment_properies` 173→18、`level_info` 118→34；32-2B **已完成（2026-11-01）**：五个 Button 密集面板 1,649→44；32-3A **已完成（2026-11-01）**：混合控件/布局七场景 624→0；32-3B **已完成（2026-11-01）**：标签/混合五场景 1,042→0；32-3C **已完成（2026-11-01）**：首批标签五场景 452→0；32-3D **已完成（2026-11-01）**：标签/混合五场景 375→0；32-3E **已完成（2026-11-01）**：阵法/帮助四场景 245→0。32-3F 未启动。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
 > **目标**：把静态场景内联样式收敛为可复用 Theme 资源与 `theme_type_variation`，使字号/颜色/描边/按钮状态有统一来源；不以减少计数替代视觉与交互验收。
 
-### 32.1 现状与问题（32-3D 后，2026-11-01）
+### 32.1 现状与问题（32-3E 后，2026-11-01）
 
 | 项 | 实测 | 说明 |
 |:---|:---:|:---|
-| `theme_override_*` 文本引用 | **2,254 处** | 分布于 **110 个 `.tscn`**；其中 **2,228 处直接属性** + **26 处 Animation 轨道路径** |
-| `Label` / `Button` 直接覆盖 | **1,625 / 424** | 迁移批次后继续下降 |
-| 直接属性分类 | colors 671 / styles 298 / constants 612 / fonts 345 / font_sizes 302 | 五类合计 2,228；另 26 处为动画轨道引用 |
-| `FontFile` 场景引用 | **155 处** | 12 个字体文件；迁移批次删除未引用场景字体 |
-| Theme 资源 | **2 个 `Theme` 类型的 `.tres`** | `backpack_action_theme.tres` 与 `bhyh_theme.tres`；620 个场景引用 |
-| `theme_type_variation` | **288 个直接类型 / 919 个节点引用** | Theme 共 290 个类型定义；另 2 个仅作基类 |
+| `theme_override_*` 文本引用 | **2,009 处** | 分布于 **106 个 `.tscn`**；其中 **1,983 处直接属性** + **26 处 Animation 轨道路径** |
+| `Label` / `Button` 直接覆盖 | **1,402 / 409** | 迁移批次后继续下降 |
+| 直接属性分类 | colors 592 / styles 283 / constants 520 / fonts 312 / font_sizes 276 | 五类合计 1,983；另 26 处为动画轨道引用 |
+| `FontFile` 场景引用 | **146 处** | 12 个字体文件；迁移批次删除未引用场景字体 |
+| Theme 资源 | **2 个 `Theme` 类型的 `.tres`** | `backpack_action_theme.tres` 与 `bhyh_theme.tres`；663 个节点引用 |
+| `theme_type_variation` | **313 个直接类型 / 962 个节点引用** | Theme 共 315 个类型定义；另 2 个仅作基类 |
 | 脚本动态主题调用 | `add_theme_*` **383 处 / 39 个文件** | 属于运行时状态/数据驱动，不与静态场景迁移混算 |
 
 问题不是单纯的属性数量，而是：
@@ -156,7 +156,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 ### 32.2 契约与边界
 
 - **资源**：新增 `source/Scene/theme/bhyh_theme.tres` 作为候选基础 Theme；先审计现有 `backpack_action_theme.tres`，能复用则扩展并迁移其 2 个引用，不并行保留两套长期主题。
-- **变体命名**：`theme_type_variation` 使用 `PascalCase` 角色名；32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 已冻结 `SettingsTitle`/`SettingsSection`/`SettingsButton`/`SettingsReturnButton`/`SettingsSlider`/`MenuActionButton`/`TowerButton`/`AnnouncementButton`/`MonsterHelpButton`/`SkillLabel`/`ArchiveButton`/`PetPageButton`/`BodyTrainingLabel`/`LetterPageButton` 等 290 个类型，完整表见 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) §4.2。
+- **变体命名**：`theme_type_variation` 使用 `PascalCase` 角色名；32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已冻结 `SettingsTitle`/`SettingsSection`/`SettingsButton`/`SettingsReturnButton`/`SettingsSlider`/`MenuActionButton`/`TowerButton`/`AnnouncementButton`/`MonsterHelpButton`/`SkillLabel`/`ArchiveButton`/`PetPageButton`/`BodyTrainingLabel`/`LetterPageButton`/`ZhenFaCurrentLabel`/`HcHelpTitle` 等 315 个类型，完整表见 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) §4.2。
 - **迁移范围**：只迁移静态 `.tscn` 中的直接 `theme_override_*` 属性（6,804 处）。`hit_text.tscn` 的 26 处 Animation 轨道对主题属性的动画引用属于动态表现，保留并单独登记；脚本中的 `add_theme_*` 若表达品质色、血量或运行时状态，也保留为动态例外。不得为了归零把数据驱动颜色写死进 Theme。
 - **字体**：保留现有字体族与字形，不用单一默认字替换 12 个字体；Theme 变体携带精确字体、字号、描边和阴影值。
 - **应用方式**：试点在面板的 Control 子树设置 `theme`，不在 `project.godot` 设置全局 `gui/theme/custom`；全局应用只能在覆盖率达到要求、且未迁移面板有明确豁免后评审。
@@ -174,14 +174,15 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | 32-3B（完成） | 标签/混合五场景：`basic_pellet` 231→0、`pet_interface` 430→0、`game_information` 157→0、`back_pack` 117→0、`bd_skill` 107→0；新增 80 个变体 | 688 个 Control 计算样式/几何 **0 差异**；10 张双分辨率截图 **0 像素差异**；5 场景 0 ERROR / 0 WARNING；`theme_override_audit --check`、`contract_gate`、`check_all --godot-bin` 9/9（29.33s）通过 |
 | 32-3C（完成） | 首批标签五场景：`body_training` 101→0、`zhu_xian_sword_page` 100→0、`magic_help` 95→0、`lhhj_help` 78→0、`s_yn_help` 78→0；新增 15 个变体 | 179 个 Control 计算样式/几何 **0 差异**；10 张双分辨率截图 **0 像素差异**；5 场景 0 ERROR / 0 WARNING；`theme_override_audit --check`、`contract_gate`、`check_all` 通过 |
 | 32-3D（完成） | 标签/混合五场景：`a_letter_for_all_players` 82→0、`llbt_challenge` 77→0、`after_level_end` 74→0、`ldl` 74→0、`base_role` 68→0；新增 47 个变体 | 223 个 Control 计算样式/几何 **0 差异**；10 张双分辨率截图 **0 像素差异**；4/5 直接启动 0 ERROR / 0 WARNING，`ldl` 既有运行期日志登记例外；`theme_override_audit --check`、`contract_gate`、`check_all` 通过 |
-| 32-3E（未启动） | 其余高覆盖 UI 面板与 `HSlider`/`TabBar`/`ItemList` 等控件族；继续按标签/混合/输入簇分批 | 每个控件族有变体或登记例外；未迁移场景不假装完成；直接属性只减不增 |
+| 32-3E（完成） | 阵法/帮助四场景：`zhen_fa_ui` 65→0、`zhenfainfo` 62→0、`zhen_fa_tu_po` 62→0、`hc_help` 56→0；新增 25 个变体 | 166 个 Control 计算样式/几何 **0 差异**；8 张双分辨率截图共 **10,496,000 像素**，冻结阵眼动画后 **0 差异**；四场景直接启动 0 ERROR / 0 WARNING；`theme_override_audit --check`、`contract_gate`、`check_all` 通过 |
+| 32-3F（未启动） | 其余高覆盖 UI 面板与 `HSlider`/`TabBar`/`ItemList` 等控件族；继续按标签/混合/输入簇分批 | 每个控件族有变体或登记例外；未迁移场景不假装完成；直接属性只减不增 |
 | 32-4（收口） | 合并/退役旧 `backpack_action_theme.tres`；维护 `scripts/theme_override_audit.py` 与最终例外清单；评估是否设置全局 Theme；更新 architecture/status/索引 | 场景静态覆盖为 0 或全部登记；无新增未登记覆盖；全量 UI 回归与文档一致 |
 
 ### 32.4 分批策略与验收
 
-1. **先易后难**：32-1 验证 Theme/变体方法，32-2A 标签密集，32-2B Button 密集，32-3A 混合控件/布局，32-3B 标签/混合五场景，32-3C 首批标签，32-3D 标签/混合五场景；32-3E 处理其余面板。
+1. **先易后难**：32-1 验证 Theme/变体方法，32-2A 标签密集，32-2B Button 密集，32-3A 混合控件/布局，32-3B 标签/混合五场景，32-3C 首批标签，32-3D 标签/混合五场景，32-3E 阵法/帮助四场景；32-3F 处理其余面板。
 2. **两类面板优先**：Label 密集（`equipment_properies`、`level_info` 等）与 Button 密集（`game_announcement`、`some_monster_help`、`zd_skill`、`zhen_yao_tower`、`set_menu`）已完成；32-3 处理混合输入/列表。
-3. **混合面板分批**：32-3A 收口四个混合面板与 32-2B 留存 44 处；32-3B 收口宠物、丹药、游戏说明、背包与被动技能；32-3C 收口炼体、诛仙剑阵、法宝与帮助面板；32-3D 收口全服信件、挑战、结算、ldl 与角色 HUD。
+3. **混合面板分批**：32-3A 收口四个混合面板与 32-2B 留存 44 处；32-3B 收口宠物、丹药、游戏说明、背包与被动技能；32-3C 收口炼体、诛仙剑阵、法宝与帮助面板；32-3D 收口全服信件、挑战、结算、ldl 与角色 HUD；32-3E 收口阵法 UI/信息/突破与合成帮助。
 4. **每批证据**：迁移前后截图（1280×800 与 1600×1000）、控件矩形/字体/字号/颜色转储、场景加载 0 ERROR / 0 WARNING、`scene_probe_runner` 相关用例；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
 5. **不接受**：只改 `.tscn` 文本、不运行界面；用统一默认字替换字体导致字形变化；把 383 处动态主题调用强行归零；用截图只看一张静态状态而漏掉 hover/pressed/disabled/focus。
 6. **阶段出口**：135 个初始场景全部迁移或登记例外；试点与每批有截图/几何对照；`check_all --godot-bin` 9/9；未迁移面板有明确列表；全局 Theme 若启用，必须有全 UI 回归证据。
@@ -272,14 +273,14 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 
 ## 5E. 推荐顺序
 
-1. **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 已完成**：验证命名、截图与控件对照流程；下一步 32-3E。
+1. **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已完成**：验证命名、截图与控件对照流程；下一步 32-3F。
 2. **32-1 已完成，可启动 33-0/33-1**：只做数据契约、Catalog 与生成器，不改消费者。
 3. **32-2 覆盖装备/背包相关面板后，再做 33-3**：避免同一面板的场景样式与装备脚本同时改动。若并行，必须指定一个集成 owner，不能两个批次同时改同一场景/脚本。
 4. **33-4/33-5 在 33-3 全簇通过后执行**；Phase 32 的全量 UI 验收可作为 Phase 33 的视觉回归基线，但不替代装备数值对比。
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 已完成，下一步 32-3E；Phase 33 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已完成，下一步 32-3F；Phase 33 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -298,7 +299,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | 31-0A 废弃 API/常量/去重 | `check_all` 9/9；12 个 TileMap 覆盖关卡与 `level_1` 冒烟；changed-only 回归；图标行为对照 | 不以静态计数代替运行验证 |
 | 31-0B 数字图 | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
 | 31-1 视差 | 89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 | 不做纯文本替换 |
-| 32 Theme | 135 场景初始基线；`theme_override_audit.py --check`；32-1 45 Control、32-2A 49/38 Control、32-2B 328 Control、32-3A 389 Control、32-3B 688 Control、32-3C 179 Control、32-3D 223 Control 计算转储与双分辨率截图；`ui-theme` 探针；每批同等证据 | 不只改文本、不以计数代替视觉验收 |
+| 32 Theme | 135 场景初始基线；`theme_override_audit.py --check`；32-1 45 Control、32-2A 49/38 Control、32-2B 328 Control、32-3A 389 Control、32-3B 688 Control、32-3C 179 Control、32-3D 223 Control、32-3E 166 Control 计算转储与双分辨率截图；`ui-theme` 探针；每批同等证据 | 不只改文本、不以计数代替视觉验收 |
 | 33 装备数据 | 生成器 `--check`；1,035 条逐字段类型/值对比；消费方分簇；L2/UI/关卡回归；资源变更后 PCK | 不改存档格式、不冻结随机字段 |
 
 ## 8. 阶段出口
@@ -317,6 +318,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - 32-3B 已验证五个标签/混合场景 688 个 Control 0 计算差异、10 张双分辨率截图 0 像素差异，五场景直接属性归零；
 - 32-3C 已验证五个首批标签场景 179 个 Control 0 计算差异、10 张双分辨率截图 0 像素差异，五场景直接属性归零；
 - 32-3D 已验证五个标签/混合场景 223 个 Control 0 计算差异、10 张双分辨率截图 0 像素差异，五场景直接属性归零；`ldl` 直接启动保留既有运行期例外；
+- 32-3E 已验证四个阵法/帮助场景 166 个 Control 0 计算差异、8 张双分辨率截图共 10,496,000 像素，冻结阵眼动画后 0 像素差异；四场景直接启动 0 ERROR / 0 WARNING；
 - 33 定义/规则/实例分层完成；1,035 条逐字段一致，旧字典 API 归零，存档与掉落语义不变。
 
 ## 9. 当前剩余项（2026-11-01）
@@ -339,5 +341,5 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
 | Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
 | Phase 30（ADR-023 关卡布局契约） | **已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；30-3 含 10 个登记例外 |
-| Phase 32（UI Theme） | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D 完成**（基线/契约/审计 + 全部已验收 UI 批次）；**32-3E 未启动** |
+| Phase 32（UI Theme） | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 完成**（基线/契约/审计 + 全部已验收 UI 批次）；**32-3F 未启动** |
 | Phase 33（装备数据） | **已规划，未启动**；建议 32-1 后启动 33-0/33-1，消费方等待 32-2 覆盖对应面板 |

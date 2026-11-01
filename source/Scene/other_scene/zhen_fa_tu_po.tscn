@@ -1,20 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Scene/other_scene/zhen_fa_tu_po.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="2"]
 [ext_resource type="Texture2D" path="res://Art/show_text/daojukuang.png" id="3"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="4"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="5"]
-
-[sub_resource type="StyleBoxEmpty" id="1"]
-
-[sub_resource type="StyleBoxEmpty" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="2"]
-
-[sub_resource type="StyleBoxEmpty" id="4"]
-
-[sub_resource type="StyleBoxEmpty" id="5"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ZhenFaTuPo" type="Node2D" unique_id=418964611]
 script = ExtResource("1")
@@ -26,11 +15,12 @@ color = Color(0, 0, 0, 0)
 metadata/_edit_lock_ = true
 
 [node name="OldList" type="VBoxContainer" parent="." unique_id=2042569131]
+theme_type_variation = "ZhenFaTuPoList"
+theme = ExtResource("theme")
 offset_left = 14.0
 offset_top = 5.0
 offset_right = 351.0
 offset_bottom = 137.0
-theme_override_constants/separation = 6
 metadata/_edit_lock_ = true
 
 [node name="oldpic" type="TextureRect" parent="OldList" unique_id=725926471]
@@ -42,56 +32,37 @@ position = Vector2(30, 13)
 metadata/_edit_lock_ = true
 
 [node name="OldText" type="Label" parent="OldList/oldpic/sjq" unique_id=1216970902]
+theme_type_variation = "ZhenFaTuPoHeader"
+theme = ExtResource("theme")
 offset_left = 36.0
 offset_top = -9.0
 offset_right = 277.0
 offset_bottom = 11.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="AddPropOld" type="Label" parent="OldList" unique_id=632103597]
+theme_type_variation = "ZhenFaTuPoProp"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="SkillInfoOld" type="Label" parent="OldList" unique_id=493721445]
+theme_type_variation = "ZhenFaTuPoSkill"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.435294, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0.435294, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="NewList" type="VBoxContainer" parent="." unique_id=1744879872]
+theme_type_variation = "ZhenFaTuPoList"
+theme = ExtResource("theme")
 offset_left = 14.0
 offset_top = 136.0
 offset_right = 351.0
 offset_bottom = 268.0
-theme_override_constants/separation = 6
 
 [node name="newpic" type="TextureRect" parent="NewList" unique_id=1100071811]
 layout_mode = 2
@@ -102,46 +73,26 @@ position = Vector2(30, 13)
 metadata/_edit_lock_ = true
 
 [node name="NewText" type="Label" parent="NewList/newpic/sjq" unique_id=1581965568]
+theme_type_variation = "ZhenFaTuPoHeader"
+theme = ExtResource("theme")
 offset_left = 36.0
 offset_top = -9.0
 offset_right = 277.0
 offset_bottom = 11.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="AddPropNew" type="Label" parent="NewList" unique_id=1908498511]
+theme_type_variation = "ZhenFaTuPoProp"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="SkillInfoNew" type="Label" parent="NewList" unique_id=1198936435]
+theme_type_variation = "ZhenFaTuPoSkill"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.435294, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0.435294, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 autowrap_mode = 1
 metadata/_edit_lock_ = true
@@ -163,27 +114,25 @@ scale = Vector2(1.22, 1.22)
 metadata/_edit_lock_ = true
 
 [node name="Need" type="Label" parent="TextureRect" unique_id=586773255]
+theme_type_variation = "ZhenFaTuPoNeed"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -47.0
 offset_top = 75.0
 offset_right = 122.0
 offset_bottom = 96.0
-theme_override_fonts/font = ExtResource("5")
 text = "30/80"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="tupo" type="Button" parent="." unique_id=866192854]
+theme_type_variation = "ZhenFaEmptyButton"
+theme = ExtResource("theme")
 offset_left = 211.0
 offset_top = 259.0
 offset_right = 337.0
 offset_bottom = 318.0
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 metadata/_edit_lock_ = true
 
 [node name="lh" type="Sprite2D" parent="." unique_id=1244205010]
@@ -191,12 +140,12 @@ position = Vector2(273, 335)
 metadata/_edit_lock_ = true
 
 [node name="needlh" type="Label" parent="lh" unique_id=1656870448]
+theme_type_variation = "ZhenFaTuPoNeedNote"
+theme = ExtResource("theme")
 offset_left = -52.0
 offset_top = -10.0
 offset_right = 51.0
 offset_bottom = 15.0
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true

@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 2228,
+    "direct_properties": 1983,
     "animation_track_refs": 26,
-    "textual_references": 2254,
-    "scenes": 110
+    "textual_references": 2009,
+    "scenes": 106
   },
   "property_categories": {
-    "colors": 671,
-    "constants": 612,
-    "font_sizes": 302,
-    "fonts": 345,
-    "styles": 298
+    "colors": 592,
+    "constants": 520,
+    "font_sizes": 276,
+    "fonts": 312,
+    "styles": 283
   },
   "animation_categories": {
     "colors": 15,
@@ -23,14 +23,14 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 424,
+    "Button": 409,
     "CheckBox": 4,
     "CheckButton": 15,
     "GridContainer": 16,
-    "HBoxContainer": 26,
+    "HBoxContainer": 23,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 1625,
+    "Label": 1402,
     "LineEdit": 14,
     "MarginContainer": 32,
     "OptionButton": 7,
@@ -38,7 +38,7 @@
     "PanelContainer": 1,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 22,
+    "VBoxContainer": 18,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -47,7 +47,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 620,
+    "scene_refs": 663,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -152,6 +152,12 @@
       "GameInfoSectionColumn",
       "GameInfoSectionTitle",
       "GameInfoTitle",
+      "HcHelpColumnLabel",
+      "HcHelpColumnRow",
+      "HcHelpPage",
+      "HcHelpTabLabel",
+      "HcHelpTabRow",
+      "HcHelpTitle",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -336,12 +342,31 @@
       "TowerOptions",
       "TowerPanel",
       "TowerRow",
-      "TowerSmallLabel"
+      "TowerSmallLabel",
+      "ZhenFaCurrentLabel",
+      "ZhenFaCurrentName",
+      "ZhenFaEmptyButton",
+      "ZhenFaInfoAddProp",
+      "ZhenFaInfoBodyGroup",
+      "ZhenFaInfoLevelLabel",
+      "ZhenFaInfoPropGroup",
+      "ZhenFaInfoPropLabel",
+      "ZhenFaInfoSkill",
+      "ZhenFaNameLabel",
+      "ZhenFaSourceLabel",
+      "ZhenFaTabLabel",
+      "ZhenFaTabRow",
+      "ZhenFaTuPoHeader",
+      "ZhenFaTuPoList",
+      "ZhenFaTuPoNeed",
+      "ZhenFaTuPoNeedNote",
+      "ZhenFaTuPoProp",
+      "ZhenFaTuPoSkill"
     ],
-    "variation_refs": 919
+    "variation_refs": 962
   },
   "fonts": {
-    "scene_refs": 155,
+    "scene_refs": 146,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -652,10 +677,6 @@
       "direct": 44,
       "animation": 0
     },
-    "Scene/other_scene/hc_help.tscn": {
-      "direct": 56,
-      "animation": 0
-    },
     "Scene/other_scene/help_things.tscn": {
       "direct": 15,
       "animation": 0
@@ -732,20 +753,8 @@
       "direct": 49,
       "animation": 0
     },
-    "Scene/other_scene/zhen_fa_tu_po.tscn": {
-      "direct": 62,
-      "animation": 0
-    },
-    "Scene/other_scene/zhen_fa_ui.tscn": {
-      "direct": 65,
-      "animation": 0
-    },
     "Scene/other_scene/zhen_yan_cure_level.tscn": {
       "direct": 53,
-      "animation": 0
-    },
-    "Scene/other_scene/zhenfainfo.tscn": {
-      "direct": 62,
       "animation": 0
     },
     "Scene/other_scene/zhenfalxbutton.tscn": {
