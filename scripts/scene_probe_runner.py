@@ -20,6 +20,7 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `magic-weapons`：法宝与角色特效构建期帧（诛仙剑阵、青莲、青龙剑/太极、八仙、Lyfb、哪吒阴阳）；
 - `action-frames`：八仙 Boss 与三太子（木吒/金吒）构建期动作帧、裁剪区域与实例化后帧绑定；
 - `weiyang-symbol`：未央宫 Boss 嘴/眼符号层帧构建、初始帧与发射时间轴可达。
+- `ui-theme`：`game_set` 的 Theme 应用、变体计算样式、布局与开关交互。
 - `dragonbones-armature`：ZMWS 批量导出的 .dbfactory 经 DragonBonesArmatureView 实例化、
   播放 `appear_1`、时间轴推进与 seek，并记录首次/热实例化开销与 8 实例稳态帧时间。
 """
@@ -226,6 +227,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="UTILS_PROBE_TEARDOWN",
         quit_after_frames=600,
         timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="ui-theme",
+        title="UI Theme 试点运行时探针",
+        script_name="ui_theme_probe.gd",
+        scene_name="ui_theme_probe.tscn",
+        result_prefix="UI_THEME_PROBE_RESULT=",
+        report_stem="ui_theme_probe_report",
+        teardown_marker="UI_THEME_PROBE_TEARDOWN",
+        quit_after_frames=180,
+        timeout_seconds=90,
     ),
     ProbeSpec(
         key="dragonbones-armature",

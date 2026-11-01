@@ -33,7 +33,7 @@ NODE_RE = re.compile(r'^\[node name="([^"]*)"(?: type="([^"]*)")?')
 DIRECT_RE = re.compile(r"^theme_override_([a-zA-Z0-9_/]+)\s*=")
 ANIMATION_REF_RE = re.compile(r'NodePath\("[^"]*theme_override_([a-zA-Z0-9_/]+)"\)')
 THEME_REF_RE = re.compile(r'^theme\s*=\s*ExtResource\("([^"]+)"\)')
-THEME_VARIATION_RE = re.compile(r"^theme_type_variation\s*=")
+THEME_VARIATION_RE = re.compile(r'^theme_type_variation\s*=\s*"([^"]+)"')
 FONT_RE = re.compile(r'^\[ext_resource type="FontFile"[^\]]*path="([^"]+)"')
 THEME_RESOURCE_RE = re.compile(r'^\[gd_resource type="Theme"')
 
@@ -53,7 +53,8 @@ def scan() -> dict[str, object]:
     node_types: Counter[str] = Counter()
     unassigned = 0
     theme_refs = 0
-    theme_variations = 0
+    theme_variations: set[str] = set()
+    theme_variation_refs = 0
     font_refs = 0
     font_paths: set[str] = set()
 
@@ -82,8 +83,10 @@ def scan() -> dict[str, object]:
                 animation_categories[_category(animation_match.group(1))] += 1
             if THEME_REF_RE.match(line):
                 theme_refs += 1
-            if THEME_VARIATION_RE.match(line):
-                theme_variations += 1
+            variation_match = THEME_VARIATION_RE.match(line)
+            if variation_match:
+                theme_variation_refs += 1
+                theme_variations.add(variation_match.group(1))
         for line in text.splitlines():
             if FONT_RE.match(line):
                 font_refs += 1
@@ -129,7 +132,8 @@ def scan() -> dict[str, object]:
         "themes": {
             "resources": theme_resources,
             "scene_refs": theme_refs,
-            "type_variations": theme_variations,
+            "type_variations": sorted(theme_variations),
+            "variation_refs": theme_variation_refs,
         },
         "fonts": {
             "scene_refs": font_refs,
@@ -211,7 +215,7 @@ def print_summary(report: dict[str, object]) -> None:
         "Theme: "
         f"{len(report['themes']['resources'])} 个资源 / "
         f"{report['themes']['scene_refs']} 个场景引用 / "
-        f"{report['themes']['type_variations']} 个类型变体"
+        f"{len(report['themes']['type_variations'])} 个类型变体 / {report['themes']['variation_refs']} 个节点引用"
     )
     print(
         "字体: "

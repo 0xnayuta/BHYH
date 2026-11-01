@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0 已完成**（UI Theme 基线审计与契约草案）；**32-1 未启动**；**Phase 33 未启动**。依赖已满足，下一步为 32-1 `game_set` 试点。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0 与 32-1 已完成**（UI Theme 基线/契约与 `game_set` 试点）；**32-2 未启动**；**Phase 33 未启动**。下一步为 32-2 分批迁移。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -36,7 +36,7 @@
 
 ### 1.4 当前候选（Phase 32/33）
 
-- **Phase 32**：32-0 已完成，建立 6,804 处直接属性 + 26 处动画轨道基线；下一步做 `game_set` 单面板试点，截图与控件几何对照通过后再分批；
+- **Phase 32**：32-0/32-1 已完成；`game_set` 从 239 处直接属性降到 0，45 个节点使用 19 个变体；计算样式/几何 0 差异；下一步 32-2 分批；
 - **Phase 33**：把 `all_equipment_data.gd` 的 1,035 条装备定义迁出为 Resource Catalog，规则/随机/玩家实例分离，逐字段保持语义；
 - **顺序**：先 32-0/32-1；32-1 后可启动 33-0/33-1 数据层；33-3 消费方迁移等待 32-2 覆盖对应面板；
 - **共同边界**：不改玩法数值、掉落、输入映射、存档格式与显示基线；不以统计归零替代行为验收。
@@ -128,22 +128,22 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - **验证**：89 个场景 × 4 个相机位置、**2,520 个节点** transform 对照；除 `level_2` 子像素（0.06–2.235 px）与 `level_4` 不可见 `stage` 外一致；7 个代表场景前后截图，3 个完全 0 差异，其余 4 个差异像素 ≤0.005%、最大通道差 ≤0.83；7 个代表关卡冒烟 PASS；全量回归 **128/128 PASS + 5 SKIP**（707.5s）。
 - 已知例外：`level_4` 的 `stage` 是 `BackGround` 下唯一非 Parallax 子节点且 `visible=false`；`CanvasLayer.follow_viewport_enabled` 会改变其 transform，但当前不可见，截图无差异。
 
-## 5C. Phase 32：UI Theme 契约（32-0 完成，32-1 未启动）
+## 5C. Phase 32：UI Theme 契约（32-0/32-1 完成，32-2 未启动）
 
-> **状态**：32-0 **已完成（2026-11-01）**：基线审计、`scripts/theme_override_audit.py`、基线 JSON 与 Theme 契约草案已落地；32-1 未启动，尚未修改任何 UI 场景。
+> **状态**：32-0 **已完成（2026-11-01）**：基线审计、`scripts/theme_override_audit.py`、基线 JSON 与 Theme 契约草案；32-1 **已完成（2026-11-01）**：`game_set` 迁移到 Theme，45 节点/19 变体，运行时探针与截图通过；32-2 未启动。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
 > **目标**：把静态场景内联样式收敛为可复用 Theme 资源与 `theme_type_variation`，使字号/颜色/描边/按钮状态有统一来源；不以减少计数替代视觉与交互验收。
 
-### 32.1 现状与问题（2026-11-01 基线）
+### 32.1 现状与问题（32-1 后，2026-11-01）
 
 | 项 | 实测 | 说明 |
 |:---|:---:|:---|
-| `theme_override_*` 文本引用 | **6,830 处** | 分布于 **135 个 `.tscn`**；其中 **6,804 处直接属性** + **26 处 Animation 轨道路径** |
-| `Label` / `Button` 直接覆盖 | **3,921 / 2,380** | 合计 6,301 处，占直接属性约 92% |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | 五类合计 6,804；另 26 处为动画轨道引用 |
-| `FontFile` 场景引用 | **207 处** | 涉及 **12 个字体文件**；不同面板有不同字体族 |
-| Theme 资源 | **1 个 `Theme` 类型的 `.tres`** | `backpack_action_theme.tres`，仅 2 个场景引用；`.theme` 扩展文件为 0 |
-| `theme_type_variation` | **0 处** | 当前没有变体契约 |
+| `theme_override_*` 文本引用 | **6,591 处** | 分布于 **134 个 `.tscn`**；其中 **6,565 处直接属性** + **26 处 Animation 轨道路径** |
+| `Label` / `Button` 直接覆盖 | **3,865 / 2,205** | `game_set` 迁移后下降；仍占主要迁移面 |
+| 直接属性分类 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | 五类合计 6,565；另 26 处为动画轨道引用 |
+| `FontFile` 场景引用 | **205 处** | 12 个字体文件；`game_set` 删除两个未引用字体 |
+| Theme 资源 | **2 个 `Theme` 类型的 `.tres`** | `backpack_action_theme.tres` 与 `bhyh_theme.tres`；4 个场景引用 |
+| `theme_type_variation` | **19 个直接类型 / 45 个节点引用** | 另 2 个 bright 基类；32-1 冻结 |
 | 脚本动态主题调用 | `add_theme_*` **383 处 / 39 个文件** | 属于运行时状态/数据驱动，不与静态场景迁移混算 |
 
 问题不是单纯的属性数量，而是：
@@ -156,7 +156,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 ### 32.2 契约与边界
 
 - **资源**：新增 `source/Scene/theme/bhyh_theme.tres` 作为候选基础 Theme；先审计现有 `backpack_action_theme.tres`，能复用则扩展并迁移其 2 个引用，不并行保留两套长期主题。
-- **变体命名**：`theme_type_variation` 使用 `PascalCase`，例如 `TitleLabel`、`SettingLabel`、`BodyLabel`、`CaptionLabel`、`PrimaryButton`、`MenuButton`、`ToggleButton`、`DangerButton`；32-0 已给出初始候选，32-1 试点后冻结并登记。
+- **变体命名**：`theme_type_variation` 使用 `PascalCase` 角色名；32-1 已冻结 `SettingsTitle`/`SettingsSection`/`SettingsButton`/`SettingsReturnButton`/`SettingsSlider` 等 21 个类型，完整表见 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) §4.2。
 - **迁移范围**：只迁移静态 `.tscn` 中的直接 `theme_override_*` 属性（6,804 处）。`hit_text.tscn` 的 26 处 Animation 轨道对主题属性的动画引用属于动态表现，保留并单独登记；脚本中的 `add_theme_*` 若表达品质色、血量或运行时状态，也保留为动态例外。不得为了归零把数据驱动颜色写死进 Theme。
 - **字体**：保留现有字体族与字形，不用单一默认字替换 12 个字体；Theme 变体携带精确字体、字号、描边和阴影值。
 - **应用方式**：试点在面板的 Control 子树设置 `theme`，不在 `project.godot` 设置全局 `gui/theme/custom`；全局应用只能在覆盖率达到要求、且未迁移面板有明确豁免后评审。
@@ -167,8 +167,8 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | 批次 | 内容 | 出口 |
 |:---|:---|:---|
 | 32-0（完成） | 生成 135 场景基线：6,804 处直接属性 + 26 处动画轨道引用；新增 `scripts/theme_override_audit.py` 与 `scripts/theme_override_baseline.json`；定型 Theme 路径、变体命名、例外规则与截图协议；新增 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) | `theme_override_audit.py --check` PASS；`contract_gate` PASS；`check_all --skip-engine` 7/7；未改 UI 场景 |
-| 32-1（试点） | 选择 `main_menu/game_set.tscn`：**239 处覆盖**，Button 175、Label 56、HSlider 4、OptionButton 2；对 `Bg/BGColor` 子树与 `Bg/Return` 分别应用同一 Theme（该 10 处返回按钮不在 `BGColor` 子树），建立首批 Label/Button/Slider 变体 | 试点场景静态覆盖归零或仅余登记例外；控件几何、字体、字号、颜色与截图对照一致；设置开关/音量/选项交互 PASS；通过后才允许分批 |
-| 32-2（分批） | 按样式族迁移，不按文件名扫描：① Label 密集面板；② Button 密集面板；③ 混合输入/列表面板；④ 其余 135 场景。每批先快照、再迁移、后删除未引用 subresource | 每批有前后对照与场景清单；未迁移场景不假装完成；`theme_override_*` 计数只减不增 |
+| 32-1（完成） | `game_set`：239 处直接覆盖 → 0；45 个节点使用 19 个直接变体；对 `Bg/BGColor` 与 `Bg/Return` 应用同一 Theme；删除 47 个不再引用的 StyleBox subresource 与 2 个未引用字体 ext_resource | 45 个 Control 的字体/字号/描边/颜色/StyleBox/位置/尺寸/文本 **0 差异**；1600/1280 截图仅 ±1 通道抗锯齿差（0.45%/0.48%）；`ui-theme` 探针 PASS；`theme_override_audit --check`、`contract_gate`、`check_all` PASS |
+| 32-2（未启动） | 按样式族迁移，不按文件名扫描：① Label 密集面板；② Button 密集面板；③ 混合输入/列表面板；④ 其余 134 场景。每批先快照、再迁移、后删除未引用 subresource | 每批有前后对照与场景清单；未迁移场景不假装完成；`theme_override_*` 计数只减不增 |
 | 32-3（控件补齐） | 覆盖 `OptionButton`、`CheckBox`、`CheckButton`、`LineEdit`、`HSlider`、`Panel`、`PanelContainer`、`TabBar`、`PopupMenu`、`ItemList` 等非 Label/Button 控件 | 这些控件有明确变体或登记例外；输入、焦点、禁用、悬停状态不漂移 |
 | 32-4（收口） | 合并/退役旧 `backpack_action_theme.tres`；维护 `scripts/theme_override_audit.py` 与最终例外清单；评估是否设置全局 Theme；更新 architecture/status/索引 | 场景静态覆盖为 0 或全部登记；无新增未登记覆盖；全量 UI 回归与文档一致 |
 
@@ -179,7 +179,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 3. **混合面板后置**：`read_archive_interface`、`shop`、`pl_sell`、`lhhj` 等涉及 `LineEdit`/`CheckBox`/列表的面板，在 32-3 控件补齐后迁移。
 4. **每批证据**：迁移前后截图（1280×800 与 1600×1000）、控件矩形/字体/字号/颜色转储、场景加载 0 ERROR / 0 WARNING、`scene_probe_runner` 相关用例；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
 5. **不接受**：只改 `.tscn` 文本、不运行界面；用统一默认字替换字体导致字形变化；把 383 处动态主题调用强行归零；用截图只看一张静态状态而漏掉 hover/pressed/disabled/focus。
-6. **阶段出口**：135 个场景全部迁移或登记例外；试点与每批有截图/几何对照；`check_all --godot-bin` 9/9；未迁移面板有明确列表；全局 Theme 若启用，必须有全 UI 回归证据。
+6. **阶段出口**：135 个初始场景全部迁移或登记例外；试点与每批有截图/几何对照；`check_all --godot-bin` 9/9；未迁移面板有明确列表；全局 Theme 若启用，必须有全 UI 回归证据。
 
 ### 32.5 风险与不做
 
@@ -267,14 +267,14 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 
 ## 5E. 推荐顺序
 
-1. **先 32-0、32-1**：Theme 试点验证命名、截图与控件对照流程；试点不过不铺开。
-2. **32-1 后可启动 33-0/33-1**：只做数据契约、Catalog 与生成器，不改消费者。
+1. **32-0/32-1 已完成**：Theme 试点验证命名、截图与控件对照流程；下一步 32-2。
+2. **32-1 已完成，可启动 33-0/33-1**：只做数据契约、Catalog 与生成器，不改消费者。
 3. **32-2 覆盖装备/背包相关面板后，再做 33-3**：避免同一面板的场景样式与装备脚本同时改动。若并行，必须指定一个集成 owner，不能两个批次同时改同一场景/脚本。
 4. **33-4/33-5 在 33-3 全簇通过后执行**；Phase 32 的全量 UI 验收可作为 Phase 33 的视觉回归基线，但不替代装备数值对比。
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0 已完成，下一步 32-1；Phase 33 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0/32-1 已完成，下一步 32-2；Phase 33 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -293,7 +293,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | 31-0A 废弃 API/常量/去重 | `check_all` 9/9；12 个 TileMap 覆盖关卡与 `level_1` 冒烟；changed-only 回归；图标行为对照 | 不以静态计数代替运行验证 |
 | 31-0B 数字图 | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
 | 31-1 视差 | 89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 | 不做纯文本替换 |
-| 32 Theme | 135 场景基线；`theme_override_audit.py --check`；试点/每批控件矩形/字体/字号/颜色转储与截图；脚本动态主题例外清单；相关 UI 探针与回归 | 不只改文本、不以计数代替视觉验收 |
+| 32 Theme | 135 场景初始基线；`theme_override_audit.py --check`；32-1 45 Control 计算转储与 1600/1280 截图；`ui-theme` 探针；每批同等证据 | 不只改文本、不以计数代替视觉验收 |
 | 33 装备数据 | 生成器 `--check`；1,035 条逐字段类型/值对比；消费方分簇；L2/UI/关卡回归；资源变更后 PCK | 不改存档格式、不冻结随机字段 |
 
 ## 8. 阶段出口
@@ -304,7 +304,8 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - 21-4 补资源项迁移完成或明确拒绝，缺陷有前后证据；
 - 文档、矩阵、脚本索引与状态一致；阶段归档后建立下一候选。
 - 31-0A 三项子项各自可独立回滚；任一子项未验证不得合并提交。
-- 32-0 基线/契约/守卫完成；32-1 试点通过后才分批；135 个场景全部迁移或登记例外；截图/几何对照与相关 UI 回归完成；
+- 32-0 基线/契约/守卫完成；32-1 试点通过后才分批；135 个初始场景全部迁移或登记例外；截图/几何对照与相关 UI 回归完成；
+- 32-1 已验证 `game_set` 45 个 Control 0 计算差异、静态 override 0、运行时探针 PASS；
 - 33 定义/规则/实例分层完成；1,035 条逐字段一致，旧字典 API 归零，存档与掉落语义不变。
 
 ## 9. 当前剩余项（2026-11-01）
@@ -327,5 +328,5 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
 | Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
 | Phase 30（ADR-023 关卡布局契约） | **已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；30-3 含 10 个登记例外 |
-| Phase 32（UI Theme） | **32-0 完成**（基线/契约/审计）；**32-1 未启动** |
+| Phase 32（UI Theme） | **32-0/32-1 完成**（基线/契约/审计 + `game_set` 试点）；**32-2 未启动** |
 | Phase 33（装备数据） | **已规划，未启动**；建议 32-1 后启动 33-0/33-1，消费方等待 32-2 覆盖对应面板 |

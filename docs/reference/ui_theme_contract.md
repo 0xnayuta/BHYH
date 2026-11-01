@@ -1,6 +1,6 @@
-# UI Theme 契约（Phase 32-0 草案）
+# UI Theme 契约（Phase 32-0 基线，32-1 试点完成）
 
-> **状态**：Phase 32-0 基线审计已完成，契约为草案；**未实施迁移**。32-1 试点通过后，才允许开始 32-2 分批。
+> **状态**：32-0 基线审计已完成；32-1 `game_set` 试点已完成（2026-11-01）；32-2 分批尚未启动。契约仍按试点结果维护。
 > **适用范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与相关验证；不约束运行时业务状态。
 > **依据**：[ADR-004](../decisions/ADR-004-naming-contract-and-frozen-whitelist.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[ADR-015](../decisions/ADR-015-documentation-layering-and-single-source-of-truth.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 > **规范**：[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`naming_standard.md`](../standards/naming_standard.md)、[`naming_whitelist.md`](../standards/naming_whitelist.md)、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
@@ -20,17 +20,17 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 由 `python scripts/theme_override_audit.py --json` 生成；机器基线为 `scripts/theme_override_baseline.json`。
 
-| 项 | 基线 | 说明 |
-|:---|:---:|:---|
-| 文本 `theme_override_*` 引用 | **6,830** | 135 个 `.tscn` |
-| 直接属性覆盖 | **6,804** | Phase 32 的静态迁移对象 |
-| Animation 轨道路径引用 | **26** | 仅 `hit_text.tscn`；属于动态表现，单独登记 |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | 合计 6,804 |
-| Label / Button 直接覆盖 | 3,921 / 2,380 | 合计 6,301，约占直接属性 92% |
-| `FontFile` 场景引用 | 207 | 12 个字体文件 |
-| Theme `.tres` | 1 | `backpack_action_theme.tres`；2 个场景引用 |
-| `theme_type_variation` | 0 | 尚无变体契约 |
-| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
+| 项 | 32-0 基线 | 32-1 后 | 说明 |
+|:---|:---:|:---:|:---|
+| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 135 → 134 个 `.tscn` |
+| 直接属性覆盖 | 6,804 | **6,565** | Phase 32 静态迁移对象 |
+| Animation 轨道路径引用 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
+| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | 合计 6,804 → 6,565 |
+| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | `game_set` 迁移后下降 |
+| `FontFile` 场景引用 | 207 | **205** | 12 个字体文件；`game_set` 去掉两个未引用字体 |
+| Theme `.tres` | 1 / 2 引用 | **2 / 4 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
+| `theme_type_variation` | 0 | **19 个直接类型 / 45 个节点引用** | 另有 2 个仅作为 bright 变体基类 |
+| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
 
 基线是**上限**，不是迁移目标。迁移只能使直接属性与动画引用下降，不能因新增面板或重构静默增加；新增场景需要显式更新基线并说明原因。
 
@@ -38,8 +38,8 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 ### 3.1 Theme 资源
 
-- 候选基础资源：`source/Scene/theme/bhyh_theme.tres`（`snake_case` 文件；新建目录遵循功能子目录规则）。
-- 现有 `source/Scene/back_pack/backpack_action_theme.tres` 先审计；若可复用则扩展并迁移其 2 个场景引用，最终只保留一个正式 Theme 来源，避免两套长期主题。
+- 基础资源：`source/Scene/theme/bhyh_theme.tres`（`snake_case` 文件；32-1 已创建）。
+- 现有 `source/Scene/back_pack/backpack_action_theme.tres` 保留 2 个场景引用；32-1 未合并它。32-4 再决定迁移/退役，最终只保留一个正式 Theme 来源，避免两套长期主题。
 - `Theme` 是共享静态 `Resource`，由场景/Control 引用；不得在运行时把控件状态写回 Theme，也不得为每个实例深复制 Theme。
 - 不新增 Autoload、全局 Theme Manager 或服务定位器。主题的创建、加载和验证属于构建/资源层；UI 节点只消费资源。
 
@@ -69,30 +69,38 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 ### 4.2 `theme_type_variation`
 
-`theme_type_variation` 的值使用 `PascalCase` 角色名，不使用文件路径、中文、空格或下划线分隔。初始候选（32-1 审计后冻结）：
+`theme_type_variation` 的值使用 `PascalCase` 角色名，不使用文件路径、中文、空格或下划线分隔。32-1 已冻结：
 
-| 变体 | 角色 | 典型控件 |
+| 变体 | 基类 | 角色/参数 |
 |:---|:---|:---|
-| `TitleLabel` | 面板标题 | `Label` |
-| `SectionLabel` | 分组标题 | `Label` |
-| `BodyLabel` | 正文 | `Label` |
-| `CaptionLabel` | 辅助说明 | `Label` |
-| `ValueLabel` | 数值/状态值 | `Label` |
-| `PrimaryButton` | 主操作 | `Button` |
-| `SecondaryButton` | 次操作 | `Button` |
-| `MenuButton` | 菜单项 | `Button` |
-| `ToggleButton` | 开关/切换 | `Button`、`CheckButton` |
-| `DangerButton` | 危险/删除 | `Button` |
-| `OptionControl` | 选项控件 | `OptionButton` |
-| `InputField` | 文本输入 | `LineEdit` |
-| `SliderControl` | 滑条 | `HSlider` |
+| `SettingsTitle` | `Label` | 面板标题，35 / outline 2 |
+| `SettingsSection` | `Label` | 分组标题，25 / outline 1 |
+| `SettingsValue` | `Label` | 数值/状态，23 / outline 1 |
+| `SettingsOptionLabel` | `Label` | 选项标签，22 / outline 1 |
+| `SettingsControlLabel` | `Label` | 控制标签，21 / outline 1 |
+| `SettingsCompactLabel` | `Label` | 紧凑标签，20 / outline 1 |
+| `SettingsSmallLabel` | `Label` | 小标签，19 / outline 1 |
+| `SettingsPlainLabel` | `Label` | 无字号覆盖的正文，16 / outline 1 |
+| `SettingsButton` | `Button` | 默认设置按钮，25 / 空 StyleBox |
+| `SettingsButtonSmall` | `Button` | 18 基类（由 SmallBright 继承） |
+| `SettingsButtonTiny` | `Button` | 20 基类（由 TinyBright 继承） |
+| `SettingsButtonCompact` | `Button` | 21 |
+| `SettingsButtonMedium` | `Button` | 22 |
+| `SettingsReturnButton` | `Button` | 返回按钮，字体族 5 / 30 / outline 4 |
+| `SettingsButtonBright` | `SettingsButton` | 白色文字，25 |
+| `SettingsButtonSmallBright` | `SettingsButtonSmall` | 白色文字，18 |
+| `SettingsButtonTinyBright` | `SettingsButtonTiny` | 白色文字，20 |
+| `SettingsOption` | `OptionButton` | 帧率选项，字体 3 / 21 |
+| `SettingsSlider` | `HSlider` | 白色轨道 + 红色高亮 |
+| `SettingsGroup` | `VBoxContainer` | separation 7 |
+| `SettingsGroupSpacious` | `VBoxContainer` | separation 13 |
 
 规则：
 
 1. 变体名表达**角色**，不按单个场景命名；
 2. 不把一个场景的局部样式命名为全局变体；
 3. 同一角色在不同字体族下需要保留字体差异时，可拆分为 `TitleLabelSerif` 等明确变体，不得用运行时覆盖临时修正；
-4. 变体名单在 32-1 试点后冻结；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
+4. 32-1 已冻结上述 21 个类型（19 个直接使用 + 2 个 bright 基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
 
 ## 5. 字体与样式
 
@@ -123,25 +131,27 @@ python scripts/theme_override_audit.py --write-baseline
 - 基线更新必须与迁移/评审同批提交；不得为了让新覆盖通过而单独放宽基线。
 - 动画轨道计数不是静态属性计数；两者不能互抵或混算。
 
-## 7. 32-1 试点协议
+## 7. 32-1 试点结果（已完成，2026-11-01）
 
 试点：`source/Scene/main_menu/game_set.tscn`。
 
 | 项 | 值 |
 |:---|:---:|
-| 直接属性覆盖 | 239 |
+| 直接属性覆盖 | 239 → **0** |
 | 涉及控件 | Button 175、Label 56、HSlider 4、OptionButton 2（按覆盖属性统计） |
+| 迁移后变体 | 45 个节点 / 19 个直接类型 |
 | 动画轨道 | 0 |
 | Theme 应用点 | `Bg/BGColor` 子树 + `Bg/Return` |
+| 运行时探针 | `ui-theme` PASS |
 
 验收：
 
-1. 在 1280×800 与 1600×1000 下截图，逐控件对照迁移前；控件矩形、字体、字号、颜色、描边、换行不得改变；
-2. 设置开关、音量滑条、帧率选项与返回操作 PASS；
-3. 场景内直接 `theme_override_*` 为 0，或逐项登记例外；
-4. 无未引用 subresource 遗留，场景加载 0 ERROR / 0 WARNING；
-5. `theme_override_audit.py --check` 通过，且直接属性计数下降；
-6. 试点不通过时回滚该场景，不进入 32-2。
+1. **计算样式/几何**：45 个 Control 的字体、字号、描边、颜色、StyleBox 类型、位置、尺寸、`custom_minimum_size`、文本逐项对照，**0 差异**；
+2. **截图**：1600×1000 与 1280×800 前后对照，仅字形抗锯齿边缘出现 ±1 通道差异（1600：7,274 / 1,600,000，0.45%；1280：4,937 / 1,024,000，0.48%），无可见布局/颜色变化；
+3. **交互**：`ui-theme` 探针的开关状态切换与恢复 PASS；场景加载 0 SCRIPT ERROR；
+4. 场景内直接 `theme_override_*` 为 **0**；无未引用 subresource 遗留；
+5. `theme_override_audit.py --check` PASS；`contract_gate` PASS；`check_all --skip-engine` 7/7；
+6. 后续 32-2 仍按批截图；32-1 通过，不进入回滚分支。
 
 ## 8. 分批与验收边界
 
@@ -158,14 +168,14 @@ python scripts/theme_override_audit.py --write-baseline
 - 不做主题切换、换肤、字体替换、布局重排、动画时序修改或显示基线调整。
 - 不把运行时品质色、血量色、奖励状态色迁入 Theme；这些继续由数据/脚本拥有。
 
-## 10. 未决项（32-1 后冻结）
+## 10. 后续决策
 
 | 项 | 当前状态 | 出口 |
 |:---|:---|:---|
-| 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | 候选 `Scene/theme/bhyh_theme.tres` | 32-1 试点评审 |
-| 最终变体名单与字体族映射 | 初始候选见 §4.2 | 32-1 截图对照后冻结 |
+| 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | `Scene/theme/bhyh_theme.tres` 已用于 pilot；旧 Theme 未合并 | 32-4 迁移/退役 |
+| 最终变体名单与字体族映射 | 32-1 已冻结 21 个类型 | 32-2 只按批扩展，不重命名 |
 | 是否启用全局 `gui/theme/custom` | 默认不启用 | 32-4 全 UI 覆盖评审 |
-| 动画轨道/脚本动态覆盖的最终例外清单 | 仅登记，未迁移 | 32-4 收口 |
+| 动画轨道/脚本动态覆盖的最终例外清单 | 动画 26 处、动态调用 383 处均未迁移 | 32-4 收口 |
 
 ## 11. 参考
 

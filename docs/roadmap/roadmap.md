@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0 已完成**（UI Theme 基线审计与契约草案）；**32-1 未启动**；**Phase 33 未启动**。详细批次见 [`current-iteration.md`](current-iteration.md)。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0/32-1 已完成**（UI Theme 基线/契约与 `game_set` 试点）；**32-2 未启动**；**Phase 33 未启动**。详细批次见 [`current-iteration.md`](current-iteration.md)。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -18,7 +18,7 @@
 | Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
 | [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
-| Phase 32 UI Theme 契约 | **32-0 完成；32-1 未启动** | 6,804 处直接内联属性（另有 26 处动画轨道引用）收敛到 Theme + 变体；见 §3.7、[`current-iteration.md`](current-iteration.md) §5C |
+| Phase 32 UI Theme 契约 | **32-0/32-1 完成；32-2 未启动** | 6,565 处剩余直接内联属性（另有 26 处动画轨道引用）继续收敛到 Theme + 变体；见 §3.7、[`current-iteration.md`](current-iteration.md) §5C |
 | Phase 33 装备数据契约 | **已规划，未启动；依赖已满足** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8、[`current-iteration.md`](current-iteration.md) §5D |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
@@ -178,9 +178,9 @@ flowchart TD
 
 **阶段出口（已达成）**：`ParallaxLayer`/`ParallaxBackground`/`TileMap` 全仓计数归零；数字图保留已验收的旧实现（BMFont 替换已拒绝）；`check_all` 9/9 PASS；全量回归 128/128 PASS + 5 SKIP。
 
-### 3.7 Phase 32：UI Theme 契约（32-0 完成，32-1 未启动）
+### 3.7 Phase 32：UI Theme 契约（32-0/32-1 完成，32-2 未启动）
 
-> **状态**：**32-0 已完成（2026-11-01）**：基线审计、`theme_override_audit.py` 与 Theme 契约草案；32-1 未启动。批次与验收见 [`current-iteration.md`](current-iteration.md) §5C。
+> **状态**：**32-0 已完成（2026-11-01）**：基线审计与契约；**32-1 已完成（2026-11-01）**：`game_set` 迁移到 Theme，239 处覆盖归零，45 个节点/19 个变体，运行时探针与截图通过；32-2 未启动。批次与验收见 [`current-iteration.md`](current-iteration.md) §5C。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1。
 
 - 定义 Theme 资源：字体、字号层级、颜色、`Button`/`Label` 变体；
@@ -193,7 +193,7 @@ flowchart TD
 
 ### 3.8 Phase 33：装备数据契约（已规划，未启动）
 
-> **状态**：已规划，未启动；Phase 30 已完成，推荐 Phase 32-1 试点后启动数据层批次。依赖与批次见 [`current-iteration.md`](current-iteration.md) §5D。
+> **状态**：已规划，未启动；Phase 30 已完成、Phase 32-1 试点已通过，可启动 33-0/33-1 数据层批次。依赖与批次见 [`current-iteration.md`](current-iteration.md) §5D。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
 
 - `all_equipment_data.gd`（19,185 行）迁出为强类型 Resource Catalog + 构建期生成器；

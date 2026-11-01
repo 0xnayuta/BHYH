@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 6804,
+    "direct_properties": 6565,
     "animation_track_refs": 26,
-    "textual_references": 6830,
-    "scenes": 135
+    "textual_references": 6591,
+    "scenes": 134
   },
   "property_categories": {
-    "colors": 1730,
-    "constants": 1393,
-    "font_sizes": 1001,
-    "fonts": 1055,
-    "styles": 1625
+    "colors": 1703,
+    "constants": 1371,
+    "font_sizes": 961,
+    "fonts": 1014,
+    "styles": 1516
   },
   "animation_categories": {
     "colors": 15,
@@ -23,36 +23,57 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 2380,
+    "Button": 2205,
     "CheckBox": 98,
     "CheckButton": 25,
     "GridContainer": 22,
     "HBoxContainer": 59,
     "HSeparator": 2,
-    "HSlider": 4,
     "ItemList": 10,
-    "Label": 3921,
+    "Label": 3865,
     "LineEdit": 107,
     "MarginContainer": 44,
-    "OptionButton": 11,
+    "OptionButton": 9,
     "Panel": 22,
     "PanelContainer": 9,
     "PopupMenu": 2,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 63,
+    "VBoxContainer": 61,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
   "themes": {
     "resources": [
-      "Scene/back_pack/backpack_action_theme.tres"
+      "Scene/back_pack/backpack_action_theme.tres",
+      "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 2,
-    "type_variations": 0
+    "scene_refs": 4,
+    "type_variations": [
+      "SettingsButton",
+      "SettingsButtonBright",
+      "SettingsButtonCompact",
+      "SettingsButtonMedium",
+      "SettingsButtonSmallBright",
+      "SettingsButtonTinyBright",
+      "SettingsCompactLabel",
+      "SettingsControlLabel",
+      "SettingsGroup",
+      "SettingsGroupSpacious",
+      "SettingsOption",
+      "SettingsOptionLabel",
+      "SettingsPlainLabel",
+      "SettingsReturnButton",
+      "SettingsSection",
+      "SettingsSlider",
+      "SettingsSmallLabel",
+      "SettingsTitle",
+      "SettingsValue"
+    ],
+    "variation_refs": 45
   },
   "fonts": {
-    "scene_refs": 207,
+    "scene_refs": 205,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -329,10 +350,6 @@
     },
     "Scene/main_menu/game_over_1.tscn": {
       "direct": 6,
-      "animation": 0
-    },
-    "Scene/main_menu/game_set.tscn": {
-      "direct": 239,
       "animation": 0
     },
     "Scene/main_menu/main_menu.tscn": {

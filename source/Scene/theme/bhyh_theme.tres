@@ -1,0 +1,144 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bhyhuitheme01"]
+
+[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
+
+[sub_resource type="StyleBoxEmpty" id="empty_button"]
+[sub_resource type="StyleBoxLine" id="slider_track"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = -8.0
+thickness = 6
+[sub_resource type="StyleBoxFlat" id="slider_fill"]
+bg_color = Color(1, 0.0392157, 0.0235294, 1)
+
+[resource]
+SettingsButton/base_type = &"Button"
+SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButton/fonts/font = ExtResource("font_main")
+SettingsButton/font_sizes/font_size = 25
+SettingsButton/styles/normal = SubResource("empty_button")
+SettingsButton/styles/hover = SubResource("empty_button")
+SettingsButton/styles/pressed = SubResource("empty_button")
+SettingsButton/styles/disabled = SubResource("empty_button")
+SettingsButton/styles/focus = SubResource("empty_button")
+
+SettingsButtonSmall/base_type = &"Button"
+SettingsButtonBright/base_type = &"SettingsButton"
+SettingsButtonBright/colors/font_color = Color(1, 1, 1, 1)
+
+SettingsButtonSmallBright/base_type = &"SettingsButtonSmall"
+SettingsButtonSmallBright/colors/font_color = Color(1, 1, 1, 1)
+
+SettingsButtonTinyBright/base_type = &"SettingsButtonTiny"
+SettingsButtonTinyBright/colors/font_color = Color(1, 1, 1, 1)
+
+SettingsButtonSmall/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsButtonSmall/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonSmall/fonts/font = ExtResource("font_main")
+SettingsButtonSmall/font_sizes/font_size = 18
+SettingsButtonSmall/styles/normal = SubResource("empty_button")
+SettingsButtonSmall/styles/hover = SubResource("empty_button")
+SettingsButtonSmall/styles/pressed = SubResource("empty_button")
+SettingsButtonSmall/styles/disabled = SubResource("empty_button")
+SettingsButtonSmall/styles/focus = SubResource("empty_button")
+
+SettingsButtonTiny/base_type = &"Button"
+SettingsButtonTiny/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsButtonTiny/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonTiny/fonts/font = ExtResource("font_main")
+SettingsButtonTiny/font_sizes/font_size = 20
+SettingsButtonTiny/styles/normal = SubResource("empty_button")
+SettingsButtonTiny/styles/hover = SubResource("empty_button")
+SettingsButtonTiny/styles/pressed = SubResource("empty_button")
+SettingsButtonTiny/styles/disabled = SubResource("empty_button")
+SettingsButtonTiny/styles/focus = SubResource("empty_button")
+
+SettingsButtonCompact/base_type = &"Button"
+SettingsButtonCompact/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsButtonCompact/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonCompact/fonts/font = ExtResource("font_main")
+SettingsButtonCompact/font_sizes/font_size = 21
+SettingsButtonCompact/styles/normal = SubResource("empty_button")
+SettingsButtonCompact/styles/hover = SubResource("empty_button")
+SettingsButtonCompact/styles/pressed = SubResource("empty_button")
+SettingsButtonCompact/styles/disabled = SubResource("empty_button")
+SettingsButtonCompact/styles/focus = SubResource("empty_button")
+
+SettingsButtonMedium/base_type = &"Button"
+SettingsButtonMedium/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsButtonMedium/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonMedium/fonts/font = ExtResource("font_main")
+SettingsButtonMedium/font_sizes/font_size = 22
+SettingsButtonMedium/styles/normal = SubResource("empty_button")
+SettingsButtonMedium/styles/hover = SubResource("empty_button")
+SettingsButtonMedium/styles/pressed = SubResource("empty_button")
+SettingsButtonMedium/styles/disabled = SubResource("empty_button")
+SettingsButtonMedium/styles/focus = SubResource("empty_button")
+
+SettingsReturnButton/base_type = &"Button"
+SettingsReturnButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
+SettingsReturnButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsReturnButton/colors/font_outline_color = Color(0, 0, 0, 1)
+SettingsReturnButton/constants/outline_size = 4
+SettingsReturnButton/fonts/font = ExtResource("font_return")
+SettingsReturnButton/font_sizes/font_size = 30
+SettingsReturnButton/styles/normal = SubResource("empty_button")
+SettingsReturnButton/styles/hover = SubResource("empty_button")
+SettingsReturnButton/styles/pressed = SubResource("empty_button")
+SettingsReturnButton/styles/disabled = SubResource("empty_button")
+SettingsReturnButton/styles/focus = SubResource("empty_button")
+
+SettingsOption/base_type = &"OptionButton"
+SettingsOption/fonts/font = ExtResource("font_main")
+SettingsOption/font_sizes/font_size = 21
+
+SettingsSlider/base_type = &"HSlider"
+SettingsSlider/styles/slider = SubResource("slider_track")
+SettingsSlider/styles/grabber_area_highlight = SubResource("slider_fill")
+
+SettingsGroup/base_type = &"VBoxContainer"
+SettingsGroup/constants/separation = 7
+SettingsGroupSpacious/base_type = &"VBoxContainer"
+SettingsGroupSpacious/constants/separation = 13
+
+SettingsTitle/base_type = &"Label"
+SettingsTitle/fonts/font = ExtResource("font_main")
+SettingsTitle/font_sizes/font_size = 35
+SettingsTitle/constants/outline_size = 2
+
+SettingsSection/base_type = &"Label"
+SettingsSection/fonts/font = ExtResource("font_main")
+SettingsSection/font_sizes/font_size = 25
+SettingsSection/constants/outline_size = 1
+
+SettingsValue/base_type = &"Label"
+SettingsValue/fonts/font = ExtResource("font_main")
+SettingsValue/font_sizes/font_size = 23
+SettingsValue/constants/outline_size = 1
+
+SettingsOptionLabel/base_type = &"Label"
+SettingsOptionLabel/fonts/font = ExtResource("font_main")
+SettingsOptionLabel/font_sizes/font_size = 22
+SettingsOptionLabel/constants/outline_size = 1
+
+SettingsControlLabel/base_type = &"Label"
+SettingsControlLabel/fonts/font = ExtResource("font_main")
+SettingsControlLabel/font_sizes/font_size = 21
+SettingsControlLabel/constants/outline_size = 1
+
+SettingsCompactLabel/base_type = &"Label"
+SettingsCompactLabel/fonts/font = ExtResource("font_main")
+SettingsCompactLabel/font_sizes/font_size = 20
+SettingsCompactLabel/constants/outline_size = 1
+
+SettingsSmallLabel/base_type = &"Label"
+SettingsSmallLabel/fonts/font = ExtResource("font_main")
+SettingsSmallLabel/font_sizes/font_size = 19
+SettingsSmallLabel/constants/outline_size = 1
+
+SettingsPlainLabel/base_type = &"Label"
+SettingsPlainLabel/fonts/font = ExtResource("font_main")
+SettingsPlainLabel/font_sizes/font_size = 16
+SettingsPlainLabel/constants/outline_size = 1
