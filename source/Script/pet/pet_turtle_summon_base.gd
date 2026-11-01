@@ -595,15 +595,19 @@ func _apply_turtle_link(refresh_only: bool = false) -> void:
 		_hero_link_visual = _create_link_visual_for(player_reference, "PetTurtleLinkVisual", Vector2(0, -50))
 
 
+func _linked_unit_ref() -> WeakRef:
+	# get_meta(key, null) 在键缺失时仍会记录错误；读取前先确认存在。
+	if not is_instance_valid(player_reference) or not player_reference.has_meta("pet_turtle_link_unit_ref"):
+		return null
+	var unit_ref = player_reference.get_meta("pet_turtle_link_unit_ref")
+	return unit_ref if unit_ref is WeakRef else null
+
+
 func _link_active() -> bool:
 	if hp <= 0 or _link_until_msec <= Time.get_ticks_msec():
 		return false
-	if not is_instance_valid(player_reference):
-		return false
-	var unit_ref = player_reference.get_meta("pet_turtle_link_unit_ref", null)
-	if not (unit_ref is WeakRef):
-		return false
-	return unit_ref.get_ref() == self
+	var unit_ref := _linked_unit_ref()
+	return unit_ref != null and unit_ref.get_ref() == self
 
 
 func _process_turtle_link() -> void:
@@ -612,12 +616,11 @@ func _process_turtle_link() -> void:
 
 
 func _clear_turtle_link() -> void:
-	if is_instance_valid(player_reference):
-		var unit_ref = player_reference.get_meta("pet_turtle_link_unit_ref", null)
-		if unit_ref is WeakRef and unit_ref.get_ref() == self:
-			for key in ["pet_turtle_link_unit_ref", "pet_turtle_link_percent", "pet_turtle_link_until_msec"]:
-				if player_reference.has_meta(key):
-					player_reference.remove_meta(key)
+	var unit_ref := _linked_unit_ref()
+	if unit_ref != null and unit_ref.get_ref() == self:
+		for key in ["pet_turtle_link_unit_ref", "pet_turtle_link_percent", "pet_turtle_link_until_msec"]:
+			if player_reference.has_meta(key):
+				player_reference.remove_meta(key)
 	if is_instance_valid(_turtle_link_visual):
 		_turtle_link_visual.queue_free()
 	if is_instance_valid(_hero_link_visual):
