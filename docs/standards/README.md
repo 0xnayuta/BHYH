@@ -53,6 +53,7 @@ python scripts/convert_frame_sequences.py --check
 python scripts/convert_monster_frames.py --check
 python scripts/convert_level_preload_catalog.py --check
 python scripts/convert_level_layout_catalog.py --check
+python scripts/convert_external_monster_catalog.py --check
 ```
 
 完整引擎与关卡验证的命令/判据见 [`../reference/acceptance.md`](../reference/acceptance.md)，已执行结果见 [`../reference/status.md`](../reference/status.md)。

@@ -280,6 +280,8 @@ classDiagram
 
 `BaseLevel` 同时负责 2P 生成、活动宠物生成与关卡资源预热请求。新关卡应继承 `BaseLevel` 并复用阶段契约，不要复制一套独立的刷怪循环。
 
+Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。
+
 ### 4.4 命中与归属
 
 - 角色攻击 → 怪物受击区域；怪物攻击 → 角色受击区域；法宝使用独立层；
@@ -428,6 +430,7 @@ classDiagram
 | 怪物 `AtlasMetadata.sequences` + 动作映射 | `scripts/convert_monster_frames.py` | 既有 `Art/monster/**/*_frames.tres`（sequence + 动作别名） | `--check` 动画名集合、帧数、页路径闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；`--all` 追加动作别名并修正 loop；`--rewrite` 只补 UID 头 |
 | Spine `.atlas` + `.spine-json` | Spine 运行时导入 | Spine 资源 | 运行时 `loaded` 探针 |
 | 关卡脚本刷怪表（`monster_group`、`"monster":`、`preload_level_monster_*`）、怪物脚本弹体名、`monster_dynamic_paths.json` 与 `level_layout_sources.json` | `scripts/convert_level_preload_catalog.py` | `source/Script/data/level_preload_catalog.tres`（`LevelPreloadEntry`、弹体表、别名场景、动态纹理、额外场景）+ `source/Script/data/level_preload_export_dependencies.json` | `--check` 逐字比较 Catalog 与依赖清单；无法静态解析的条目输出到 stderr，由关卡自身预载；动态路径缺失/悬空直接失败 |
+| 外部怪物 `monster.json` 名称 + BHYH `my_mr_name` | `scripts/convert_external_monster_catalog.py` | `source/Script/data/external_monster_catalog.tres` | `--check` 逐字比较；仅精确名称，重复名称取最小 ID |
 | 构建期关卡布局源 `level_layout_sources.json` | `scripts/convert_level_layout_catalog.py` | `source/Script/data/level_layouts/*.tres` + `source/Script/data/level_layout_catalog.tres` | `--check` 逐字比较；stage 连续、点位唯一、依赖存在、矩形范围与场景路径校验 |
 
 关卡预载数据契约：
@@ -601,6 +604,8 @@ classDiagram
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
 | 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；`level_48` 试点，构建期生成、运行时只读 |
+| 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称匹配 506 条，未匹配项不静默回退 |
+| 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 20 个 `Scene/level/zmws_playable/*.tscn` 包装场景 |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由；`slot_snapshot()` 枚举槽位所有者，`shared_keys()` 登记共享账本键，`save_profile` 剥离 2P 档案的共享副本 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |

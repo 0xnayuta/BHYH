@@ -40,7 +40,7 @@
 | [`reference/gameplay_module_matrix.md`](reference/gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖 |
 | [`reference/module_api_matrix.md`](reference/module_api_matrix.md) | **Phase 17-6 试点模块 API 与依赖方向（已完成）**：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开 API、场景依赖、路径清理与剩余项 |
 | [`reference/atlas_metadata_schema.md`](reference/atlas_metadata_schema.md) | **Phase 14 矩阵与收口**：AtlasMetadata 生产者、源形态、消费者、View、守卫与失败边界 |
-| [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（Phase 30-1 已实施）**：五件套字段语义、ZMWS 映射、生成器与试点验收 |
+| [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2 已实施）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
 | [`reference/modernization_gap_matrix.md`](reference/modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、Theme 缺失、数据硬编码等分级清单、处置类型判定与批次建议 |
 | [`reference/spine_platform_baseline.md`](reference/spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B 暂缓状态 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
@@ -48,7 +48,7 @@
 | [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
 | [`decisions/ADR-021-project-wide-target-architecture.md`](decisions/ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与总体目标选择；保留 ADR-020 视觉子契约，不宣称已实现 |
 | [`decisions/ADR-022-atlas-metadata-view-and-path-identity.md`](decisions/ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份例外与失败语义 |
-| [`decisions/ADR-023-level-layout-data-contract.md`](decisions/ADR-023-level-layout-data-contract.md) | **Accepted**：关卡布局数据契约与绞杀式迁移；Phase 30-1 已迁移 `level_48` |
+| [`decisions/ADR-023-level-layout-data-contract.md`](decisions/ADR-023-level-layout-data-contract.md) | **Accepted**：关卡布局数据契约与绞杀式迁移；Phase 30-1/30-2 已迁移 `level_48`、接入外部怪物映射与原始 ZMWS 驱动 |
 | [`issues/known-issues.md`](issues/known-issues.md) | **已知问题与待验证风险**：当前未修复问题、已修复回归线索与系统化清理入口 |
 | [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
