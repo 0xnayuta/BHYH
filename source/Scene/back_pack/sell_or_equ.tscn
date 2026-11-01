@@ -5,27 +5,7 @@
 [ext_resource type="Texture2D" path="res://Art/backpack/all_items/5.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/backpack/15.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/backpack/lock_button_bg.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="6"]
-
-[sub_resource type="StyleBoxEmpty" id="1"]
-
-[sub_resource type="StyleBoxEmpty" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="2"]
-
-[sub_resource type="StyleBoxEmpty" id="4"]
-
-[sub_resource type="StyleBoxEmpty" id="5"]
-
-[sub_resource type="StyleBoxEmpty" id="6"]
-
-[sub_resource type="StyleBoxEmpty" id="8"]
-
-[sub_resource type="StyleBoxEmpty" id="7"]
-
-[sub_resource type="StyleBoxEmpty" id="9"]
-
-[sub_resource type="StyleBoxEmpty" id="10"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="sell_or_equ" type="Control" unique_id=2075446418]
 show_behind_parent = true
@@ -58,69 +38,59 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1144302610]
+theme_type_variation = "BackpackCompactVBox"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 3.0
 offset_right = 57.0
 offset_bottom = 104.0
 mouse_filter = 0
-theme_override_constants/separation = -2
 alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="infor" type="Label" parent="VBoxContainer" unique_id=1040900393]
+theme_type_variation = "SellOrEquInfo"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_outline_size = 8
-theme_override_font_sizes/font_size = 10
 text = "第1页第2格"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="equ" type="Button" parent="VBoxContainer" unique_id=1170422351]
+theme_type_variation = "ZhenFaEmptyButton"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 icon = ExtResource("3")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
 [node name="sell" type="Button" parent="VBoxContainer" unique_id=1356043163]
+theme_type_variation = "ZhenFaEmptyButton"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme_override_styles/normal = SubResource("6")
-theme_override_styles/pressed = SubResource("8")
-theme_override_styles/hover = SubResource("7")
-theme_override_styles/disabled = SubResource("9")
-theme_override_styles/focus = SubResource("10")
 icon = ExtResource("4")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
 [node name="lock" type="Button" parent="VBoxContainer" unique_id=896095821]
+theme_type_variation = "ZhenFaEmptyButton"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 tooltip_text = "锁定物品，禁止出售"
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 icon = ExtResource("5")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
 [node name="Text" type="Label" parent="VBoxContainer/lock" unique_id=778338259]
+theme_type_variation = "BackpackLockText"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -129,11 +99,6 @@ offset_left = 0.666667
 offset_right = 0.666667
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 11
 text = "锁 定"
 horizontal_alignment = 1
 vertical_alignment = 1

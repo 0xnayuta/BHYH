@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
 [ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="font_1_aaa_fz_cu_yuan_m03_s"]
 [ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="font_wo"]
+[ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
+[ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
 
@@ -280,6 +282,54 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 0.82, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxTexture" id="backpack_tab_unselected"]
+texture = ExtResource("tex_backpack_tab")
+
+[sub_resource type="StyleBoxTexture" id="backpack_tab_hovered"]
+texture = ExtResource("tex_backpack_tab_selected")
+
+[sub_resource type="StyleBoxTexture" id="backpack_tab_selected"]
+texture = ExtResource("tex_backpack_tab_selected")
+
+[sub_resource type="StyleBoxTexture" id="backpack_tab_pressed"]
+texture = ExtResource("tex_backpack_tab")
+
+[sub_resource type="StyleBoxFlat" id="map0_catalog_normal"]
+bg_color = Color(0.13, 0.17, 0.16, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.52, 0.24, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="map0_catalog_pressed"]
+bg_color = Color(0.08, 0.11, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84, 0.63, 0.29, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="map0_catalog_hover"]
+bg_color = Color(0.2, 0.29, 0.25, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.75, 0.38, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -2688,3 +2738,230 @@ SkillSelectNoHave/colors/font_outline_color = Color(0, 0, 0, 1)
 SkillSelectNoHave/constants/outline_size = 10
 SkillSelectNoHave/fonts/font = ExtResource("font_hy")
 SkillSelectNoHave/font_sizes/font_size = 20
+
+BackpackCompactVBox/base_type = &"VBoxContainer"
+BackpackCompactVBox/constants/separation = -2
+
+DjSellMargin/base_type = &"MarginContainer"
+DjSellMargin/constants/margin_left = 8
+DjSellMargin/constants/margin_top = 4
+DjSellMargin/constants/margin_right = 10
+DjSellMargin/constants/margin_bottom = 6
+
+DjSellInfo/base_type = &"Label"
+DjSellInfo/colors/font_color = Color(1, 1, 0, 1)
+DjSellInfo/colors/font_outline_color = Color(1, 1, 1, 1)
+DjSellInfo/font_sizes/font_size = 12
+
+DjSellNumber/base_type = &"LineEdit"
+DjSellNumber/colors/font_outline_color = Color(0, 0, 0, 1)
+DjSellNumber/colors/font_placeholder_color = Color(0.94902, 0.94902, 0, 1)
+DjSellNumber/constants/outline_size = 9
+DjSellNumber/font_sizes/font_size = 12
+DjSellNumber/styles/normal = SubResource("empty_button")
+DjSellNumber/styles/read_only = SubResource("empty_button")
+DjSellNumber/styles/focus = SubResource("empty_button")
+
+DjSellCloseButton/base_type = &"Button"
+DjSellCloseButton/colors/font_color = Color(1, 0, 0, 1)
+DjSellCloseButton/font_sizes/font_size = 76
+DjSellCloseButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+DjSellCloseButton/styles/normal = SubResource("empty_button")
+
+SellOrEquInfo/base_type = &"Label"
+SellOrEquInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
+SellOrEquInfo/colors/font_outline_color = Color(0, 0, 0, 1)
+SellOrEquInfo/constants/shadow_offset_x = 2
+SellOrEquInfo/constants/shadow_offset_y = 1
+SellOrEquInfo/constants/shadow_outline_size = 8
+SellOrEquInfo/font_sizes/font_size = 10
+
+BackpackLockText/base_type = &"Label"
+BackpackLockText/colors/font_color = Color(0, 0, 0, 1)
+BackpackLockText/colors/font_outline_color = Color(0, 0, 0, 1)
+BackpackLockText/constants/outline_size = 1
+BackpackLockText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackLockText/font_sizes/font_size = 11
+
+BackpackInnerMargin/base_type = &"MarginContainer"
+BackpackInnerMargin/constants/margin_left = 5
+
+BackpackTitle/base_type = &"Label"
+BackpackTitle/fonts/font = ExtResource("font_return")
+BackpackTitle/font_sizes/font_size = 25
+
+BackpackTabBar/base_type = &"TabBar"
+BackpackTabBar/constants/h_separation = 16
+BackpackTabBar/constants/icon_max_width = 14
+BackpackTabBar/fonts/font = ExtResource("font_return")
+BackpackTabBar/font_sizes/font_size = 18
+BackpackTabBar/styles/tab_unselected = SubResource("backpack_tab_unselected")
+BackpackTabBar/styles/tab_hovered = SubResource("backpack_tab_hovered")
+BackpackTabBar/styles/tab_selected = SubResource("backpack_tab_selected")
+BackpackTabBar/styles/button_pressed = SubResource("backpack_tab_pressed")
+
+BackpackTabRow/base_type = &"HBoxContainer"
+BackpackTabRow/constants/separation = 4
+
+BackpackTabLabel/base_type = &"Label"
+BackpackTabLabel/fonts/font = ExtResource("font_hy")
+
+BackpackTabLabelLarge/base_type = &"Label"
+BackpackTabLabelLarge/fonts/font = ExtResource("font_hy")
+BackpackTabLabelLarge/font_sizes/font_size = 18
+
+BackpackTabLabelSmall/base_type = &"Label"
+BackpackTabLabelSmall/fonts/font = ExtResource("font_hy")
+BackpackTabLabelSmall/font_sizes/font_size = 15
+
+BackpackGridMargin/base_type = &"MarginContainer"
+BackpackGridMargin/constants/margin_left = -3
+
+BackpackGrid/base_type = &"GridContainer"
+BackpackGrid/constants/h_separation = 11
+BackpackGrid/constants/v_separation = 11
+
+BackpackPageRow/base_type = &"HBoxContainer"
+BackpackPageRow/constants/separation = -1
+
+BackpackPageLabel/base_type = &"Label"
+BackpackPageLabel/fonts/font = ExtResource("font_hy")
+
+BackpackCoinLabel/base_type = &"Label"
+BackpackCoinLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackCoinLabel/font_sizes/font_size = 12
+
+ShopItemName/base_type = &"Label"
+ShopItemName/colors/font_color = Color(0, 0, 0, 1)
+ShopItemName/colors/font_shadow_color = Color(1, 1, 1, 1)
+ShopItemName/colors/font_outline_color = Color(0, 0, 0, 1)
+ShopItemName/constants/shadow_offset_x = 0
+ShopItemName/constants/shadow_offset_y = 0
+ShopItemName/constants/outline_size = 1
+ShopItemName/constants/shadow_outline_size = 9
+ShopItemName/fonts/font = ExtResource("font_hk")
+
+ShopItemNumber/base_type = &"LineEdit"
+ShopItemNumber/font_sizes/font_size = 12
+ShopItemNumber/styles/normal = SubResource("empty_button")
+ShopItemNumber/styles/read_only = SubResource("empty_button")
+ShopItemNumber/styles/focus = SubResource("empty_button")
+
+ShopItemBuyButton/base_type = &"Button"
+ShopItemBuyButton/colors/icon_hover_color = Color(0.788235, 0.811765, 0.576471, 1)
+ShopItemBuyButton/styles/normal = SubResource("empty_button")
+ShopItemBuyButton/styles/pressed = SubResource("empty_button")
+ShopItemBuyButton/styles/hover = SubResource("empty_button")
+ShopItemBuyButton/styles/disabled = SubResource("empty_button")
+ShopItemBuyButton/styles/focus = SubResource("empty_button")
+
+ShopItemSoulValue/base_type = &"Label"
+ShopItemSoulValue/colors/font_color = Color(0, 0, 0, 1)
+ShopItemSoulValue/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopItemSoulValue/font_sizes/font_size = 17
+
+ShopItemSoulText/base_type = &"Label"
+ShopItemSoulText/colors/font_color = Color(0, 0, 0, 1)
+ShopItemSoulText/colors/font_outline_color = Color(1, 1, 1, 0)
+ShopItemSoulText/constants/outline_size = 7
+ShopItemSoulText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+ShopItemSoulText/font_sizes/font_size = 12
+
+Map3RegionLabel/base_type = &"Label"
+Map3RegionLabel/colors/font_color = Color(1, 0.290196, 0, 1)
+Map3RegionLabel/fonts/font = ExtResource("font_hy")
+Map3RegionLabel/font_sizes/font_size = 18
+
+Map3ButtonTitle/base_type = &"Label"
+Map3ButtonTitle/colors/font_color = Color(1, 0.290196, 0, 1)
+Map3ButtonTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+Map3ButtonTitle/constants/outline_size = 2
+Map3ButtonTitle/fonts/font = ExtResource("font_hy")
+Map3ButtonTitle/font_sizes/font_size = 16
+
+ChoosePlayerTitle/base_type = &"Label"
+ChoosePlayerTitle/colors/font_color = Color(1, 0.760784, 0.196078, 1)
+ChoosePlayerTitle/colors/font_shadow_color = Color(0.141176, 0.0470588, 0.0117647, 1)
+ChoosePlayerTitle/constants/shadow_offset_x = 2
+ChoosePlayerTitle/constants/shadow_offset_y = 2
+ChoosePlayerTitle/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerTitle/font_sizes/font_size = 38
+
+ChoosePlayerCardRow/base_type = &"HBoxContainer"
+ChoosePlayerCardRow/constants/separation = 14
+
+ChoosePlayerRoleName/base_type = &"Label"
+ChoosePlayerRoleName/colors/font_color = Color(1, 0.760784, 0.196078, 1)
+ChoosePlayerRoleName/colors/font_shadow_color = Color(0, 0, 0, 1)
+ChoosePlayerRoleName/constants/shadow_offset_x = 2
+ChoosePlayerRoleName/constants/shadow_offset_y = 2
+ChoosePlayerRoleName/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerRoleName/font_sizes/font_size = 26
+
+ChoosePlayerProp/base_type = &"Label"
+ChoosePlayerProp/colors/font_color = Color(0, 1, 0, 1)
+ChoosePlayerProp/colors/font_shadow_color = Color(0, 0, 0, 1)
+ChoosePlayerProp/constants/shadow_offset_x = 1
+ChoosePlayerProp/constants/shadow_offset_y = 1
+ChoosePlayerProp/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerProp/font_sizes/font_size = 20
+
+ChoosePlayerInfo/base_type = &"Label"
+ChoosePlayerInfo/colors/font_color = Color(0.996078, 0.956863, 0.721569, 1)
+ChoosePlayerInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
+ChoosePlayerInfo/constants/shadow_offset_x = 1
+ChoosePlayerInfo/constants/shadow_offset_y = 1
+ChoosePlayerInfo/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerInfo/font_sizes/font_size = 17
+
+Map0PlayerLevel/base_type = &"Label"
+Map0PlayerLevel/colors/font_color = Color(1, 1, 1, 1)
+Map0PlayerLevel/colors/font_outline_color = Color(0, 0, 0, 1)
+Map0PlayerLevel/constants/outline_size = 1
+Map0PlayerLevel/font_sizes/font_size = 12
+
+Map0CatalogButton/base_type = &"Button"
+Map0CatalogButton/colors/font_color = Color(0.96, 0.86, 0.62, 1)
+Map0CatalogButton/colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
+Map0CatalogButton/colors/font_hover_color = Color(1, 0.96, 0.8, 1)
+Map0CatalogButton/colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
+Map0CatalogButton/constants/outline_size = 2
+Map0CatalogButton/fonts/font = ExtResource("font_main")
+Map0CatalogButton/font_sizes/font_size = 18
+Map0CatalogButton/styles/normal = SubResource("map0_catalog_normal")
+Map0CatalogButton/styles/pressed = SubResource("map0_catalog_pressed")
+Map0CatalogButton/styles/hover = SubResource("map0_catalog_hover")
+
+ForgeTitle/base_type = &"Label"
+ForgeTitle/colors/font_color = Color(0.972549, 0.976471, 0, 1)
+ForgeTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeTitle/constants/outline_size = 5
+ForgeTitle/fonts/font = ExtResource("font_return")
+ForgeTitle/font_sizes/font_size = 32
+
+ForgeSubtitle/base_type = &"Label"
+ForgeSubtitle/colors/font_color = Color(0, 0.976471, 0, 1)
+ForgeSubtitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeSubtitle/constants/outline_size = 5
+ForgeSubtitle/fonts/font = ExtResource("font_return")
+ForgeSubtitle/font_sizes/font_size = 22
+
+ForgeMaterialRow/base_type = &"HBoxContainer"
+ForgeMaterialRow/constants/separation = 15
+
+ForgeBoxRow/base_type = &"HBoxContainer"
+ForgeBoxRow/constants/separation = 32
+
+ForgeItemName/base_type = &"Label"
+ForgeItemName/colors/font_color = Color(0.45098, 0.427451, 0.4, 1)
+ForgeItemName/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeItemName/constants/outline_size = 5
+ForgeItemName/fonts/font = ExtResource("font_return")
+ForgeItemName/font_sizes/font_size = 27
+
+ForgeSoulLabel/base_type = &"Label"
+ForgeSoulLabel/colors/font_color = Color(1, 1, 1, 1)
+ForgeSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeSoulLabel/constants/outline_size = 10
+ForgeSoulLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ForgeSoulLabel/font_sizes/font_size = 22

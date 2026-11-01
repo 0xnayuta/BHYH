@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://Script/main_menu/choose_player.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/3.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="3"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/2_1_p.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/5.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/9.png" id="6"]
@@ -24,6 +23,7 @@
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/92.png" id="22"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/93.png" id="23"]
 [ext_resource type="Texture2D" path="res://Art/main_game/choose_player_zm4/90.png" id="24"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ChoosePlayer" type="CanvasLayer" unique_id=1201272005]
 process_mode = 3
@@ -53,18 +53,14 @@ offset_bottom = 76.0
 mouse_filter = 2
 
 [node name="Title" type="Label" parent="FitRoot/TopBar" unique_id=1132756378]
+theme_type_variation = "ChoosePlayerTitle"
+theme = ExtResource("theme")
 visible = false
 layout_mode = 0
 offset_left = 322.0
 offset_top = 12.0
 offset_right = 618.0
 offset_bottom = 64.0
-theme_override_colors/font_color = Color(1, 0.760784, 0.196078, 1)
-theme_override_colors/font_shadow_color = Color(0.141176, 0.0470588, 0.0117647, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 38
 text = "创建新角色"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -91,13 +87,14 @@ texture_hover = ExtResource("7")
 texture_disabled = ExtResource("6")
 
 [node name="RoleCards" type="HBoxContainer" parent="FitRoot" unique_id=1380485717]
+theme_type_variation = "ChoosePlayerCardRow"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 54.0
 offset_top = 46.0
 offset_right = 904.0
 offset_bottom = 575.0
 scale = Vector2(0.84, 0.87417924)
-theme_override_constants/separation = 14
 alignment = 1
 
 [node name="Role1" type="TextureButton" parent="FitRoot/RoleCards" unique_id=573406613]
@@ -235,47 +232,35 @@ offset_bottom = 436.0
 mouse_filter = 2
 
 [node name="RoleName" type="Label" parent="FitRoot/InfoPanel" unique_id=886302412]
+theme_type_variation = "ChoosePlayerRoleName"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 14.0
 offset_top = 12.0
 offset_right = 221.0
 offset_bottom = 52.0
-theme_override_colors/font_color = Color(1, 0.760784, 0.196078, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Prop" type="Label" parent="FitRoot/InfoPanel" unique_id=551798851]
+theme_type_variation = "ChoosePlayerProp"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 18.0
 offset_top = 58.0
 offset_right = 218.0
 offset_bottom = 88.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Info" type="Label" parent="FitRoot/InfoPanel" unique_id=889930365]
+theme_type_variation = "ChoosePlayerInfo"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 18.0
 offset_top = 96.0
 offset_right = 218.0
 offset_bottom = 300.0
-theme_override_colors/font_color = Color(0.996078, 0.956863, 0.721569, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
 autowrap_mode = 3
 
 [node name="Stats" type="Control" parent="FitRoot/InfoPanel" unique_id=449584915]

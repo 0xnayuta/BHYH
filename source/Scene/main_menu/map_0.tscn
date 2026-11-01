@@ -41,7 +41,6 @@
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_normal.png" id="39"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_pressed.png" id="40"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/zhuxian_hover.png" id="41"]
-[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="42"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_normal.png" id="43"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_pressed.png" id="44"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/shop_hover.png" id="45"]
@@ -63,42 +62,7 @@
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_normal.png" id="61"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_pressed.png" id="62"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_hover.png" id="63"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_normal"]
-bg_color = Color(0.13, 0.17, 0.16, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.68, 0.52, 0.24, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_pressed"]
-bg_color = Color(0.08, 0.11, 0.1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.84, 0.63, 0.29, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_wanling_hover"]
-bg_color = Color(0.2, 0.29, 0.25, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.92, 0.75, 0.38, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="Map_0" type="Node2D" unique_id=306605179]
 script = ExtResource("1")
@@ -248,15 +212,13 @@ texture = ExtResource("20")
 expand_mode = 1
 
 [node name="PlayerLevel" type="Label" parent="." unique_id=2038194501]
+theme_type_variation = "Map0PlayerLevel"
+theme = ExtResource("theme")
 z_index = 2
 offset_left = 10.0
 offset_top = 84.0
 offset_right = 38.0
 offset_bottom = 101.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_font_sizes/font_size = 12
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -334,41 +296,25 @@ texture_pressed = ExtResource("40")
 texture_hover = ExtResource("41")
 
 [node name="WanLingCatalog" type="Button" parent="TopButtons" unique_id=1050870640]
+theme_type_variation = "Map0CatalogButton"
+theme = ExtResource("theme")
 offset_left = 498.0
 offset_top = 27.0
 offset_right = 582.0
 offset_bottom = 71.0
 tooltip_text = "万灵图录"
 focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.86, 0.62, 1)
-theme_override_colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
-theme_override_colors/font_hover_color = Color(1, 0.96, 0.8, 1)
-theme_override_colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("42")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBox_wanling_normal")
-theme_override_styles/pressed = SubResource("StyleBox_wanling_pressed")
-theme_override_styles/hover = SubResource("StyleBox_wanling_hover")
 text = "万灵图录"
 
 [node name="EquipmentCatalog" type="Button" parent="." unique_id=440307013]
+theme_type_variation = "Map0CatalogButton"
+theme = ExtResource("theme")
 offset_left = 834.0
 offset_top = 27.0
 offset_right = 918.0
 offset_bottom = 71.0
 tooltip_text = "装备图鉴"
 focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.86, 0.62, 1)
-theme_override_colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
-theme_override_colors/font_hover_color = Color(1, 0.96, 0.8, 1)
-theme_override_colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("42")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBox_wanling_normal")
-theme_override_styles/pressed = SubResource("StyleBox_wanling_pressed")
-theme_override_styles/hover = SubResource("StyleBox_wanling_hover")
 text = "装备图鉴"
 
 [node name="BottomButtons" type="Node2D" parent="." unique_id=1759593118]

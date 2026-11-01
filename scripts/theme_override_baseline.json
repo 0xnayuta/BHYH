@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 1524,
+    "direct_properties": 1317,
     "animation_track_refs": 26,
-    "textual_references": 1550,
-    "scenes": 97
+    "textual_references": 1343,
+    "scenes": 89
   },
   "property_categories": {
-    "colors": 447,
-    "constants": 376,
-    "font_sizes": 229,
-    "fonts": 238,
-    "styles": 234
+    "colors": 399,
+    "constants": 331,
+    "font_sizes": 200,
+    "fonts": 210,
+    "styles": 177
   },
   "animation_categories": {
     "colors": 15,
@@ -22,19 +22,18 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 348,
+    "Button": 283,
     "CheckBox": 4,
-    "GridContainer": 12,
-    "HBoxContainer": 19,
+    "GridContainer": 10,
+    "HBoxContainer": 13,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 1041,
-    "LineEdit": 14,
-    "MarginContainer": 32,
+    "Label": 934,
+    "LineEdit": 3,
+    "MarginContainer": 26,
     "Panel": 5,
     "ProgressBar": 2,
-    "TabBar": 8,
-    "VBoxContainer": 13,
+    "VBoxContainer": 11,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -43,7 +42,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 767,
+    "scene_refs": 820,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -107,15 +106,29 @@
       "AutoBattleSkillRow",
       "AutoBattleSmallButton",
       "AutoBattleTitle",
+      "BackpackCoinLabel",
+      "BackpackCompactVBox",
       "BackpackEquipmentColumn",
       "BackpackEquipmentRow",
       "BackpackExpLabel",
+      "BackpackGrid",
+      "BackpackGridMargin",
       "BackpackHeadButton",
       "BackpackHpLabel",
       "BackpackHpValue",
+      "BackpackInnerMargin",
+      "BackpackLockText",
       "BackpackMessageLabel",
       "BackpackMpLabel",
       "BackpackNameInput",
+      "BackpackPageLabel",
+      "BackpackPageRow",
+      "BackpackTabBar",
+      "BackpackTabLabel",
+      "BackpackTabLabelLarge",
+      "BackpackTabLabelSmall",
+      "BackpackTabRow",
+      "BackpackTitle",
       "BackpackTitleLabel",
       "BackpackToggleButton",
       "BackpackWingLabel",
@@ -128,6 +141,11 @@
       "BodyTrainingHitButton",
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
+      "ChoosePlayerCardRow",
+      "ChoosePlayerInfo",
+      "ChoosePlayerProp",
+      "ChoosePlayerRoleName",
+      "ChoosePlayerTitle",
       "CureTimesCurrency",
       "CureTimesHeader",
       "CureTimesHint",
@@ -136,6 +154,10 @@
       "DecomposeHelpBody",
       "DecomposeHelpRow",
       "DecomposeHelpTitle",
+      "DjSellCloseButton",
+      "DjSellInfo",
+      "DjSellMargin",
+      "DjSellNumber",
       "EndStatsColumn",
       "EndStatsCritCount",
       "EndStatsCure",
@@ -160,6 +182,12 @@
       "EquipmentStatGroup",
       "EquipmentStatLabel",
       "EquipmentStatValue",
+      "ForgeBoxRow",
+      "ForgeItemName",
+      "ForgeMaterialRow",
+      "ForgeSoulLabel",
+      "ForgeSubtitle",
+      "ForgeTitle",
       "GameInfoBodyText",
       "GameInfoContentPanel",
       "GameInfoDetailButton",
@@ -231,6 +259,10 @@
       "MagicWeaponStat",
       "MagicWeaponStatHp",
       "MagicWeaponValue",
+      "Map0CatalogButton",
+      "Map0PlayerLevel",
+      "Map3ButtonTitle",
+      "Map3RegionLabel",
       "MenuActionButton",
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
@@ -314,6 +346,7 @@
       "SellFilterSs",
       "SellFilterXl",
       "SellFilterYx",
+      "SellOrEquInfo",
       "SellPageInput",
       "SellTitle",
       "SellWarning",
@@ -339,6 +372,11 @@
       "ShopCloseButton",
       "ShopDamageText",
       "ShopHintLabel",
+      "ShopItemBuyButton",
+      "ShopItemName",
+      "ShopItemNumber",
+      "ShopItemSoulText",
+      "ShopItemSoulValue",
       "ShopMessageText",
       "ShopPageLabel",
       "ShopRoleText",
@@ -418,10 +456,10 @@
       "ZhenYanPropInfo",
       "ZhenYanPropList"
     ],
-    "variation_refs": 1066
+    "variation_refs": 1119
   },
   "fonts": {
-    "scene_refs": 126,
+    "scene_refs": 113,
     "unique_files": 11,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -491,20 +529,8 @@
       "direct": 19,
       "animation": 0
     },
-    "Scene/back_pack/dj_sell.tscn": {
-      "direct": 29,
-      "animation": 0
-    },
     "Scene/back_pack/equipment_properies.tscn": {
       "direct": 18,
-      "animation": 0
-    },
-    "Scene/back_pack/main_backpack.tscn": {
-      "direct": 27,
-      "animation": 0
-    },
-    "Scene/back_pack/sell_or_equ.tscn": {
-      "direct": 27,
       "animation": 0
     },
     "Scene/back_pack/use_items.tscn": {
@@ -561,10 +587,6 @@
     },
     "Scene/ldl/divine_forge.tscn": {
       "direct": 11,
-      "animation": 0
-    },
-    "Scene/ldl/forge.tscn": {
-      "direct": 23,
       "animation": 0
     },
     "Scene/ldl/forge_help.tscn": {
@@ -631,10 +653,6 @@
       "direct": 39,
       "animation": 0
     },
-    "Scene/main_menu/choose_player.tscn": {
-      "direct": 25,
-      "animation": 0
-    },
     "Scene/main_menu/game_over_1.tscn": {
       "direct": 6,
       "animation": 0
@@ -643,20 +661,12 @@
       "direct": 42,
       "animation": 0
     },
-    "Scene/main_menu/map_0.tscn": {
-      "direct": 24,
-      "animation": 0
-    },
     "Scene/main_menu/map_1.tscn": {
       "direct": 11,
       "animation": 0
     },
     "Scene/main_menu/map_2.tscn": {
       "direct": 3,
-      "animation": 0
-    },
-    "Scene/main_menu/map_3.tscn": {
-      "direct": 26,
       "animation": 0
     },
     "Scene/main_menu/map_5.tscn": {
@@ -805,10 +815,6 @@
     },
     "Scene/shop/mystery_shop_item_box.tscn": {
       "direct": 16,
-      "animation": 0
-    },
-    "Scene/shop/shop_item.tscn": {
-      "direct": 26,
       "animation": 0
     },
     "Scene/show_text/choose_scene.tscn": {
