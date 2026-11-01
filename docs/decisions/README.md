@@ -47,7 +47,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md) | 类型化视觉资产、显式后端与流式生命周期 | Accepted | 三层契约、请求回收、导出闭包 |
 | [ADR-021](ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与项目总体目标架构 | Accepted（目标） | 总体所有权/生命周期；局部替代 ADR-017 §5 的长期 UI 交换策略，保留 ADR-020 |
 | [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份与失败语义 | Accepted | 运行时 View、`.data` 边界、路径例外、迁移与失败处理 |
-| [ADR-023](ADR-023-level-layout-data-contract.md) | 关卡布局走构建期生成的 Resource，绞杀式迁移脚本内数据表 | **Accepted** | 关卡数据载体、`BaseLevel` 扩展点默认实现、生成器与迁移批次；30-1 已迁移 `level_48`，30-2 已接入外部怪物映射与原始 ZMWS 驱动，30-3 前四批 55 个脚本已迁移 |
+| [ADR-023](ADR-023-level-layout-data-contract.md) | 关卡布局走构建期生成的 Resource，绞杀式迁移脚本内数据表 | **Accepted** | 关卡数据载体、`BaseLevel` 扩展点默认实现、生成器与迁移批次；30-1 已迁移 `level_48`，30-2 已接入外部怪物映射与原始 ZMWS 驱动，30-3 前五批 65 个脚本已迁移 |
 
 ### 2.1 常见决策检索
 

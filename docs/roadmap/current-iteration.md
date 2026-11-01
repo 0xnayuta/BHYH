@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 已完成**（`ParallaxLayer`/`ParallaxBackground` 归零，`Parallax2D` + `CanvasLayer` 迁移完成）。**ADR-023 已转 Accepted，Phase 30-1 已完成**（`level_48` 试点）；**30-2 已完成**（外部怪物映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；**30-3 进行中**（四批共 55 个数据容器脚本已迁出（20 单屏 + 13 多阶段 + 10 截断对齐 + 12 剩余四阶段），剩余 30 个脚本待分批）；30-4 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 已完成**（`ParallaxLayer`/`ParallaxBackground` 归零，`Parallax2D` + `CanvasLayer` 迁移完成）。**ADR-023 已转 Accepted，Phase 30-1 已完成**（`level_48` 试点）；**30-2 已完成**（外部怪物映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；**30-3 进行中**（五批共 65 个数据容器脚本已迁出（20 单屏 + 13 多阶段 + 10+12+10 截断对齐），剩余 20 个脚本待分批）；30-4 未启动。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -86,7 +86,7 @@
 
 ## 5A. Phase 30：关卡布局数据契约（30-1/30-2 已完成，30-3 进行中）
 
-> **状态**：30-0 设计与评审已完成（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) `Accepted`）；**30-1 已完成**（`level_48` 试点）；**30-2 已完成**（映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；**30-3 进行中**（四批共 55 个脚本迁移完成（20 单屏 + 13 多阶段 + 10 截断对齐 + 12 剩余四阶段），剩余 30 个）；30-4 未启动。本阶段不并入 Phase 21，也不并入 Phase 31。
+> **状态**：30-0 设计与评审已完成（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) `Accepted`）；**30-1 已完成**（`level_48` 试点）；**30-2 已完成**（映射 + 原始 ZMWS 驱动器 + 20 个代表关卡）；**30-3 进行中**（五批共 65 个脚本迁移完成（20 单屏 + 13 多阶段 + 10+12+10 截断对齐），剩余 20 个）；30-4 未启动。本阶段不并入 Phase 21，也不并入 Phase 31。
 
 **启动前提**：ADR-023 由 `Proposed` 转 `Accepted`；本页登记独立批次与出口；确认不改动任何现有玩法数值、时序、掉落与输入。
 
@@ -94,10 +94,10 @@
 |:---|:---|:---|
 | 30-1（已完成） | 五件套；`convert_level_layout_catalog.py`（含 `--check`）；`BaseLevel`/`Game4ImportedLevel` 有布局资源读资源；`level_48` 删除布局常量与五个覆写 | `level_48` Stage 1–5 冒烟 PASS（22.7s，0/0）；`check_all` 9/9 PASS；预载条目保持 3001/3002/3004/3006；全量回归 128/128 + 5 SKIP（709.5s） |
 | 30-2（已完成） | `ExternalMonsterCatalog`/`Store`（512 条精确/唯一归一化名称映射）；`ZmwsLevel` 原始场景驱动器；20 个 `Scene/level/zmws_playable` 包装关卡 | 20/20 代表关卡 Stage 全 PASS 且 can_pass=True；日志 0 ERROR / 0 WARNING；`check_all` 全维 PASS；全量回归 128/128 + 5 SKIP（731.4s） |
-| 30-3（进行中） | 四批 55 个 `monster_group` 数据容器脚本迁出：20 单屏 + 13 多阶段 + 10+12 个按 `_align_monster_spawn_tables()` 最小长度截断；删除脚本内三段数据表；双源门禁与终屏零宽 screen_rect | 55 个关卡迁移；布局资源 76；`monster_group = {` 从 85 降至 30；每批行为回归 PASS；剩余 30 个待批 |
+| 30-3（进行中） | 五批 65 个 `monster_group` 数据容器脚本迁出：20 单屏 + 13 多阶段 + 32 个按 `_align_monster_spawn_tables()` 最小长度截断；删除脚本内三段数据表；双源门禁与终屏零宽 screen_rect | 65 个关卡迁移；布局资源 86；`monster_group = {` 从 85 降至 20；每批行为回归 PASS；剩余 20 个待批 |
 | 30-4 | 55 个含玩法逻辑脚本保留，仅迁出结构化数据块；更新 `architecture.md` §4.3 与 `status.md` | 无遗留双数据源 |
 
-**当前基线（2026-11-01）**：BHYH 关卡场景 153 / 脚本 164；硬编码 `monster_group` 脚本 **30**（四批共迁出 55）；ZMWS 关卡场景 **1,701**；布局资源 **76**（`level_48` + 20 个原始 ZMWS 代表关卡 + 55 个已迁移 BHYH 关卡）；包装关卡 **20**；外部怪物映射 **512** 条。原始 ZMWS 驱动器已接入，30-2 完成，30-3 前四批完成。
+**当前基线（2026-11-01）**：BHYH 关卡场景 153 / 脚本 164；硬编码 `monster_group` 脚本 **20**（五批共迁出 65）；ZMWS 关卡场景 **1,701**；布局资源 **86**（`level_48` + 20 个原始 ZMWS 代表关卡 + 65 个已迁移 BHYH 关卡）；包装关卡 **20**；外部怪物映射 **512** 条。原始 ZMWS 驱动器已接入，30-2 完成，30-3 前五批完成。
 
 **不做**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData.player_data` 整体 Resource 化、不保留已迁移关卡脚本内数据副本。
 
@@ -146,7 +146,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**ADR-023 已接受，Phase 30-1/30-2 已完成，30-3 前四批 55 个脚本已迁移（剩余 30）**；下一批继续 30-3，随后 30-4 收口。Phase 32/33 仍依赖 Phase 30 实施完成。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**ADR-023 已接受，Phase 30-1/30-2 已完成，30-3 前五批 65 个脚本已迁移（剩余 20）**；下一批继续 30-3，随后 30-4 收口。Phase 32/33 仍依赖 Phase 30 实施完成。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -194,6 +194,6 @@
 | Phase 31-0A（TileMap/物理层/图标去重） | **完成（2026-11-01）** |
 | Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
 | Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
-| Phase 30（ADR-023 关卡布局契约） | **30-1/30-2 已完成，30-3 四批 55 个脚本完成（剩余 30）**；30-4 未启动 |
+| Phase 30（ADR-023 关卡布局契约） | **30-1/30-2 已完成，30-3 五批 65 个脚本完成（剩余 20）**；30-4 未启动 |
 | Phase 32（UI Theme） | 未启动，依赖 Phase 30 |
 | Phase 33（装备数据） | 未启动，依赖 Phase 30 或 32 |
