@@ -1,0 +1,510 @@
+{
+  "schema_id": "level_layout_sources",
+  "schema_version": 1,
+  "levels": {
+    "res://Scene/level/level_48.tscn": {
+      "level_id": "level_48",
+      "layout_size": [
+        4984.0,
+        1000.0
+      ],
+      "player_birth_points": [
+        [
+          32.0,
+          448.0
+        ]
+      ],
+      "exit_rect": [
+        4835.0,
+        350.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            325.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                705.0,
+                400.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 3,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                796.0,
+                400.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 1,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "screen_rect": [
+            1000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            1488.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            1000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 4,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                1333.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 5,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                1677.0,
+                380.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 6,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                1992.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 7,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                2012.0,
+                390.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 8,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                2025.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 7,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 9,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                1346.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": 1,
+              "after_spawn": 8,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 10,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                1632.0,
+                376.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 9,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 11,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                1716.0,
+                189.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 10,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "screen_rect": [
+            2000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            2616.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            2000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 12,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                2384.0,
+                400.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 0.6,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 14,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                2950.0,
+                338.0
+              ],
+              "count": 2,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 16,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                2916.0,
+                341.0
+              ],
+              "count": 2,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 14,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 15,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                2427.0,
+                400.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 16,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "screen_rect": [
+            3000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            3294.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            3000.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 17,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                3385.0,
+                400.0
+              ],
+              "count": 2,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 18,
+              "monster_ids": [
+                3004
+              ],
+              "position": [
+                3912.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 2.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 19,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                3908.0,
+                400.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 18,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 20,
+              "monster_ids": [
+                3004
+              ],
+              "position": [
+                3384.0,
+                400.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 2.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 19,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 21,
+              "monster_ids": [
+                3002
+              ],
+              "position": [
+                3969.0,
+                392.0
+              ],
+              "count": 2,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 20,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 22,
+              "monster_ids": [
+                3001
+              ],
+              "position": [
+                3590.0,
+                361.0
+              ],
+              "count": 3,
+              "delay": 0.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 21,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "screen_rect": [
+            3784.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "trigger_rect": [
+            4397.0,
+            0.0,
+            1.0,
+            1000.0
+          ],
+          "spawn_trigger_rect": [
+            3784.0,
+            0.0,
+            1200.0,
+            1000.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 23,
+              "monster_ids": [
+                3006
+              ],
+              "position": [
+                4697.0,
+                346.0
+              ],
+              "count": 1,
+              "delay": 0.0,
+              "interval": 2.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -67,7 +67,7 @@ func _ready() -> void:
 		monster_position_y[stage_key] = []
 	_configure_level_monsters()
 	super._ready()
-	if _role != null:
+	if _role != null and _layout_entry() == null:
 		_role.position = spawn_position
 	_update_screen_bounds()
 
@@ -411,6 +411,9 @@ func _update_screen_bounds(delta: float = 0.0) -> void:
 
 
 func _stage_count() -> int:
+	var layout := _layout_entry()
+	if layout != null and layout.stage_count() > 0:
+		return layout.stage_count()
 	return 4
 
 
@@ -419,19 +422,28 @@ func _stage_key(stage: int) -> String:
 
 
 func _screen_starts() -> Array:
+	var starts := LevelLayoutStore.screen_starts(str(scene_file_path))
+	if not starts.is_empty():
+		return starts
 	return [0.0]
 
 
 func _screen_rights() -> Array:
+	var rights := LevelLayoutStore.screen_rights(str(scene_file_path))
+	if not rights.is_empty():
+		return rights
 	return [_level_width]
 
 
 func _stage_trigger_x() -> Array:
+	var triggers := LevelLayoutStore.stage_trigger_x(str(scene_file_path))
+	if not triggers.is_empty():
+		return triggers
 	return [0.0]
 
 
 func _birth_points() -> Array:
-	return []
+	return LevelLayoutStore.spawn_point_dicts(str(scene_file_path))
 
 
 func get_level_monster_config(_monster_id: int) -> Dictionary:

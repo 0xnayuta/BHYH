@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LevelLayoutCatalog" load_steps=2 format=3 uid="uid://7mal82dumhu6"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_catalog.gd" id="1_catalog"]
+
+[resource]
+script = ExtResource("1_catalog")
+layout_paths = {
+	&"res://Scene/level/level_48.tscn": &"res://Script/data/level_layouts/level_48.tres",
+}

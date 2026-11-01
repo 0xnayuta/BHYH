@@ -91,11 +91,15 @@ func _ready() -> void:
 	var role_id = int(PlayerData.player_data.get("Myself", 1))
 	if role_id <= 0:
 		role_id = 1
-	_role = Global.call_hero("role_" + str(role_id), hero, Vector2(100, 340), false)
+	_role = Global.call_hero("role_" + str(role_id), hero, _player_spawn_position(1, Vector2(100, 340)), false)
 	if LocalCoop.is_enabled():
 		LocalCoop.secondary_props.ws_value = 0
 		role_p2 = Global.call_hero(
-			"role_" + str(int(LocalCoop.secondary_data.player_data.Myself)), hero, Vector2(170, 340), false, 2
+			"role_" + str(int(LocalCoop.secondary_data.player_data.Myself)),
+			hero,
+			_player_spawn_position(2, Vector2(170, 340)),
+			false,
+			2
 		)
 		if role_p2 != null:
 			role_p2.action.scale.x = -1
@@ -1814,7 +1818,21 @@ func remove_all_records():
 ## 关卡阶段契约（Phase 10.5 / Phase 11 夹具与 CI 统一入口）
 ## 子类可覆盖；默认实现基于 BaseLevel 的 4 阶段状态机与 change_mysee 相机边界。
 ## ---------------------------------------------------------------------------
+func _layout_entry() -> LevelLayoutEntry:
+	return LevelLayoutStore.layout(str(scene_file_path))
+
+
+func _player_spawn_position(slot: int, fallback: Vector2) -> Vector2:
+	var births := LevelLayoutStore.player_birth_points(str(scene_file_path))
+	if slot >= 1 and slot <= births.size():
+		return births[slot - 1]
+	return fallback
+
+
 func _stage_count() -> int:
+	var layout := _layout_entry()
+	if layout != null and layout.stage_count() > 0:
+		return layout.stage_count()
 	var populated := 0
 	for stage_index in range(1, 5):
 		var stage_key := "stage_%d" % stage_index
@@ -1825,26 +1843,42 @@ func _stage_count() -> int:
 
 
 func _stage_trigger_x() -> Array:
-	var triggers: Array = [0.0]
+	var layout := _layout_entry()
+	if layout != null:
+		var triggers := LevelLayoutStore.stage_trigger_x(str(scene_file_path))
+		if not triggers.is_empty():
+			return triggers
+	var fallback: Array = [0.0]
 	if is_two_scene:
-		triggers.append_array([1300.0, 2700.0, 4000.0])
+		fallback.append_array([1300.0, 2700.0, 4000.0])
 	else:
-		triggers.append_array([1600.0, 2700.0, 4000.0])
-	return triggers.slice(0, _stage_count())
+		fallback.append_array([1600.0, 2700.0, 4000.0])
+	return fallback.slice(0, _stage_count())
 
 
 func _screen_starts() -> Array:
-	var starts: Array = [0.0, 2250.0, 3550.0, 4650.0]
-	return starts.slice(0, _stage_count())
+	var layout := _layout_entry()
+	if layout != null:
+		var starts := LevelLayoutStore.screen_starts(str(scene_file_path))
+		if not starts.is_empty():
+			return starts
+	var fallback: Array = [0.0, 2250.0, 3550.0, 4650.0]
+	return fallback.slice(0, _stage_count())
 
 
 func _screen_rights() -> Array:
-	var rights: Array = [2250.0, 3550.0, 4650.0, 4650.0]
-	return rights.slice(0, _stage_count())
+	var layout := _layout_entry()
+	if layout != null:
+		var rights := LevelLayoutStore.screen_rights(str(scene_file_path))
+		if not rights.is_empty():
+			return rights
+	var fallback: Array = [2250.0, 3550.0, 4650.0, 4650.0]
+	return fallback.slice(0, _stage_count())
 
 
 func _birth_points() -> Array:
-	return []
+	# 兼容既有 Game4ImportedLevel 契约：这里返回刷怪点字典，不是玩家出生点。
+	return LevelLayoutStore.spawn_point_dicts(str(scene_file_path))
 
 
 func _stage_activate(_index: int) -> bool:

@@ -34,6 +34,7 @@ LEVEL_SCENE_DIR = SOURCE / "Scene/level"
 MONSTER_SCENE_DIR = SOURCE / "Scene/monster"
 BULLET_SCENE_DIR = MONSTER_SCENE_DIR / "monster_bullet_slim"
 CATALOG_PATH = SOURCE / "Script/data/level_preload_catalog.tres"
+LAYOUT_SOURCE_PATH = ROOT / "scripts/level_layout_sources.json"
 DYNAMIC_SOURCE_PATH = ROOT / "scripts/monster_dynamic_paths.json"
 EXPORT_MANIFEST_PATH = SOURCE / "Script/data/level_preload_export_dependencies.json"
 EXPORT_MANIFEST_SCHEMA = "level_preload_export_dependencies"
@@ -373,6 +374,52 @@ def collect_levels(class_index: dict[str, Path]) -> dict[str, LevelEntry]:
     return levels
 
 
+def merge_level_layout_sources(levels: dict[str, LevelEntry]) -> None:
+    """把已迁移关卡布局源中的阶段/怪物并回预载清单。
+
+    迁移后脚本不再保留 BIRTH_POINTS；预载生成器必须从布局源补齐阶段首波与
+    完整怪物集合，否则 level_48 这类关卡会在预载时丢怪。
+    """
+    if not LAYOUT_SOURCE_PATH.is_file():
+        raise ValueError(f"缺少关卡布局源清单: {LAYOUT_SOURCE_PATH.relative_to(ROOT)}")
+    try:
+        raw = json.loads(LAYOUT_SOURCE_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"关卡布局源清单不是合法 JSON: {error}") from error
+    if not isinstance(raw, dict) or raw.get("schema_id") != "level_layout_sources":
+        raise ValueError("关卡布局源清单 schema_id 不匹配")
+    raw_levels = raw.get("levels")
+    if not isinstance(raw_levels, dict):
+        raise ValueError("关卡布局源清单 levels 不是对象")
+    for scene_path, layout in raw_levels.items():
+        entry = levels.get(scene_path)
+        if entry is None:
+            raise ValueError(f"布局源登记了未知关卡: {scene_path}")
+        stages = layout.get("stages") if isinstance(layout, dict) else None
+        if not isinstance(stages, list):
+            raise ValueError(f"{scene_path}: 布局源 stages 非法")
+        all_ids: list[int] = []
+        for stage in stages:
+            if not isinstance(stage, dict):
+                raise ValueError(f"{scene_path}: 布局源 stage 非法")
+            index = int(stage.get("index", 0))
+            ids: list[int] = []
+            for point in stage.get("spawn_points", []):
+                if not isinstance(point, dict):
+                    raise ValueError(f"{scene_path}: 布局源刷怪点非法")
+                for monster_id in point.get("monster_ids", []):
+                    value = int(monster_id)
+                    if value > 0 and value not in ids:
+                        ids.append(value)
+                    if value > 0 and value not in all_ids:
+                        all_ids.append(value)
+            if 1 <= index <= 4:
+                entry.stages["stage_%d" % index] = ids
+        for monster_id in all_ids:
+            if monster_id not in entry.monster_ids:
+                entry.monster_ids.append(monster_id)
+
+
 def collect_monster_bullets() -> dict[str, list[str]]:
     by_lower = {path.stem.lower(): path.name for path in BULLET_SCENE_DIR.glob("*.tscn")}
     bullets: dict[str, list[str]] = {}
@@ -616,6 +663,11 @@ def run(check_only: bool) -> int:
         return 2
     class_index = build_class_index()
     levels = collect_levels(class_index)
+    try:
+        merge_level_layout_sources(levels)
+    except ValueError as error:
+        print(f"[FAIL] {error}", file=sys.stderr)
+        return 1
     bullets = collect_monster_bullets()
     try:
         dynamic = build_dynamic_paths(levels)
