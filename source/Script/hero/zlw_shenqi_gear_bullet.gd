@@ -33,7 +33,7 @@ const OVERLAP_POLL_INTERVAL := 0.1
 
 func _ready() -> void:
 	if hit_box != null:
-		hit_box.collision_layer = 2
+		hit_box.collision_layer = PhysicsLayers.CHARACTER
 		hit_box.collision_mask = 2064
 		hit_box.monitoring = true
 		hit_box.monitorable = true

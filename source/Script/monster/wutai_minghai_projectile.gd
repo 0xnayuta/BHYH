@@ -95,7 +95,7 @@ func _init() -> void:
 
 	var attack_area := Area2D.new()
 	attack_area.name = "HitBox"
-	attack_area.collision_layer = 4
+	attack_area.collision_layer = PhysicsLayers.MONSTER
 	attack_area.collision_mask = 8321
 	attack_area.monitoring = false
 	attack_area.monitorable = false

@@ -1084,7 +1084,7 @@ func _attach_hit_area(
 	var offset := Vector2(-center.x if facing_right else center.x, center.y)
 	var area := Area2D.new()
 	area.name = "HitBox"
-	area.collision_layer = 4
+	area.collision_layer = PhysicsLayers.MONSTER
 	area.collision_mask = 896
 	area.monitoring = true
 	area.monitorable = false

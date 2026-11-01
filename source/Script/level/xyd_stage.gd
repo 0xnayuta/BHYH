@@ -18,9 +18,9 @@ func _ready():
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
 
-	collision_layer = 32
+	collision_layer = PhysicsLayers.STEP
 	collision_mask = 0
-	detection_area.collision_layer = 0
+	detection_area.collision_layer = PhysicsLayers.NONE
 	detection_area.collision_mask = 2
 
 

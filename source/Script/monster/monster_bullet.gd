@@ -937,7 +937,7 @@ static func _prewarm_pet_bullet_instances(bullet_scene: PackedScene, effect_name
 		instance.set_meta("pet_phoenix_disabled", true)
 		var warm_hit_box := instance.get_node_or_null("middle/HitBox") as Area2D
 		if warm_hit_box != null:
-			warm_hit_box.collision_layer = 0
+			warm_hit_box.collision_layer = PhysicsLayers.NONE
 			warm_hit_box.collision_mask = 0
 			warm_hit_box.monitoring = false
 			warm_hit_box.monitorable = false

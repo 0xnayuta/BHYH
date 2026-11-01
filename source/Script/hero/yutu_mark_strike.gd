@@ -14,7 +14,7 @@ func _ready() -> void:
 	skill_id = YutuSkillData.PASSIVE_KEY
 	super._ready()
 
-	hit_box.collision_layer = 0
+	hit_box.collision_layer = PhysicsLayers.NONE
 	hit_box.monitorable = false
 	hit_box.monitoring = false
 	_contact_query.collision_mask = hit_box.collision_mask

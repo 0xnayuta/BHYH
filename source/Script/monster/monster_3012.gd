@@ -169,7 +169,7 @@ func _active_screen_bounds() -> Vector2:
 
 
 func _configure_flying_collision() -> void:
-	collision_layer = 0
+	collision_layer = PhysicsLayers.NONE
 	collision_mask = 0
 	if pz != null:
 		pz.set_deferred("disabled", true)
@@ -224,7 +224,7 @@ func remove_from_battle() -> void:
 	is_attacking = false
 	is_be_attacking = false
 	velocity = Vector2.ZERO
-	collision_layer = 0
+	collision_layer = PhysicsLayers.NONE
 	collision_mask = 0
 	if _attack_timer != null:
 		_attack_timer.stop()

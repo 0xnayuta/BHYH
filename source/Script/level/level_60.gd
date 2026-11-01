@@ -471,7 +471,7 @@ func _setup_hazard_1022() -> void:
 		var source_rect: Rect2 = HAZARD_1022_TRIGGER_RECTS[hazard_index]
 		var trigger := Area2D.new()
 		trigger.name = "Hazard1022Trigger%d" % (hazard_index + 1)
-		trigger.collision_layer = 0
+		trigger.collision_layer = PhysicsLayers.NONE
 		trigger.collision_mask = 18
 		trigger.monitoring = true
 		trigger.monitorable = false

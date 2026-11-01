@@ -648,7 +648,7 @@ func _create_screen_walls() -> void:
 	if wall_node == null:
 		wall_node = StaticBody2D.new()
 		wall_node.name = "screen_walls"
-		wall_node.collision_layer = 32
+		wall_node.collision_layer = PhysicsLayers.STEP
 		wall_node.collision_mask = 0
 		add_child(wall_node)
 	var wall_shape := RectangleShape2D.new()
@@ -765,7 +765,7 @@ func _spawn_factory_stone(factory_index: int) -> void:
 	var stone := RigidBody2D.new()
 	stone.name = "Stone1021_%d" % Time.get_ticks_msec()
 	stone.position = factory["position"]
-	stone.collision_layer = 1
+	stone.collision_layer = PhysicsLayers.ENVIRONMENT
 	stone.collision_mask = 1
 	stone.mass = 4.0
 	stone.contact_monitor = true
@@ -792,7 +792,7 @@ func _spawn_factory_stone(factory_index: int) -> void:
 
 	var damage_area := Area2D.new()
 	damage_area.name = "DamageArea"
-	damage_area.collision_layer = 0
+	damage_area.collision_layer = PhysicsLayers.NONE
 	damage_area.collision_mask = _role.collision_layer if _role != null else 18
 	damage_area.monitoring = true
 	damage_area.position = Vector2(-1, -112)

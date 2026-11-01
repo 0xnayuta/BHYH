@@ -1270,7 +1270,7 @@ func setup_bullet_collision(bullet_instance) -> Node:
 	if bullet_instance and bullet_instance.has_node("middle/HitBox"):
 		var hit_box_area = bullet_instance.get_node("middle/HitBox") as Area2D
 		if hit_box_area:
-			hit_box_area.collision_layer = 2
+			hit_box_area.collision_layer = PhysicsLayers.CHARACTER
 			hit_box_area.collision_mask = 2048
 			bullet_instance.set_meta("is_summon_bullet", true)
 			bullet_instance.set_meta("summoner", self)

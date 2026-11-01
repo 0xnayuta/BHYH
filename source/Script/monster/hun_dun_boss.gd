@@ -237,7 +237,7 @@ func _spawn_attack_effect(
 
 	var area := Area2D.new()
 	area.name = "HitBox"
-	area.collision_layer = 4
+	area.collision_layer = PhysicsLayers.MONSTER
 	area.collision_mask = 896
 	area.monitoring = true
 	area.monitorable = false

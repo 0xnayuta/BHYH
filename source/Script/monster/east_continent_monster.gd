@@ -2849,7 +2849,7 @@ func _spawn_official_pulse_area(
 		return null
 
 	var pulse_hit_box := area.get_node("middle/HitBox") as Area2D
-	pulse_hit_box.collision_layer = 0
+	pulse_hit_box.collision_layer = PhysicsLayers.NONE
 	pulse_hit_box.collision_mask = 0
 	bullet.add_child(area)
 	return area

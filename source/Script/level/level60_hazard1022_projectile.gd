@@ -25,7 +25,7 @@ func configure(
 func _ready() -> void:
 	set_as_top_level(true)
 	global_position = _spawn_global_position
-	collision_layer = 0
+	collision_layer = PhysicsLayers.NONE
 	collision_mask = 18
 	monitoring = true
 	monitorable = false

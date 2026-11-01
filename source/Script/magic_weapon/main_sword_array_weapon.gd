@@ -603,7 +603,7 @@ func _spawn_sword_hit_bullet(center: Vector2, hit_radius: float, hit_dic: Dictio
 	var hit_box := bullet.get_node_or_null("Middle/HitBox") as Area2D
 	var shape := bullet.get_node_or_null("Middle/HitBox/Collion") as CollisionShape2D
 	if hit_box != null:
-		hit_box.collision_layer = 2
+		hit_box.collision_layer = PhysicsLayers.CHARACTER
 		hit_box.collision_mask = SWORD_ARRAY_HIT_COLLISION_MASK
 		hit_box.monitoring = true
 		hit_box.monitorable = true
@@ -648,7 +648,7 @@ func _create_sword_hit_area(center: Vector2, hit_radius: float) -> Area2D:
 		return null
 	var area := Area2D.new()
 	area.name = "SwordArrayHitArea"
-	area.collision_layer = 2
+	area.collision_layer = PhysicsLayers.CHARACTER
 	area.collision_mask = 3140
 	area.monitoring = true
 	area.monitorable = true

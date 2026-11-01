@@ -123,10 +123,10 @@ func _ready() -> void:
 	call_deferred("_prepare_level_runtime_resources")
 
 	if _green_detector:
-		_green_detector.collision_layer = 16
+		_green_detector.collision_layer = PhysicsLayers.EXIT
 
 		_green_detector.add_to_group("green_detector")
-		print("[调试] GreenDetector 已设置：collision_layer=4，已加入 green_detector 组")
+		print("[调试] GreenDetector 已设置：collision_layer=%d，已加入 green_detector 组" % PhysicsLayers.EXIT)
 		print("[调试] GreenDetector 位置：", _green_detector.global_position)
 	else:
 		print("[错误] _green_detector 为 null，请检查场景中是否存在 GreenDetector 节点")
