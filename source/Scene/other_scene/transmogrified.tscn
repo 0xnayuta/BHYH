@@ -5,17 +5,12 @@
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/4.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="6"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="7"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="8"]
-[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="9"]
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/53.png" id="10"]
-[ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="11"]
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/8.png" id="12"]
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/10.png" id="13"]
 [ext_resource type="Texture2D" path="res://Art/shop/71.png" id="14"]
 [ext_resource type="Texture2D" path="res://Art/shop/69.png" id="15"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="16"]
 [ext_resource type="Texture2D" path="res://Art/shop/76.png" id="17"]
 [ext_resource type="Texture2D" path="res://Art/shop/74.png" id="18"]
 [ext_resource type="Texture2D" path="res://Art/all_tx/cmscj.png" id="19"]
@@ -45,6 +40,7 @@
 [ext_resource type="Texture2D" path="res://Art/hero_picture/wings/xtzy.png" id="43"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_4_all_equipment/role_4_body_empty.png" id="44"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_4_all_equipment/role_4_eq_empty.png" id="45"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u4byg"]
 atlas = ExtResource("23")
@@ -2534,12 +2530,13 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BG" unique_id=1516578676]
+theme_type_variation = "TransTabRow"
+theme = ExtResource("theme")
 offset_left = -86.0
 offset_top = -202.0
 offset_right = 462.0
 offset_bottom = -167.0
 scale = Vector2(0.9, 0.9)
-theme_override_constants/separation = -2
 metadata/_edit_lock_ = true
 
 [node name="Total" type="TextureButton" parent="BG/HBoxContainer" unique_id=1083229778]
@@ -2550,12 +2547,11 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/Total" unique_id=1664932936]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "全部"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2569,12 +2565,11 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/wq" unique_id=629595580]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "武器"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2588,12 +2583,11 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/Fj" unique_id=1859521060]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "防具"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2607,12 +2601,11 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/CB" unique_id=1968405413]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "翅膀"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2626,12 +2619,11 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/SZ" unique_id=1999591973]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "时装"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2645,40 +2637,34 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Text" type="Label" parent="BG/HBoxContainer/TX" unique_id=246712355]
+theme_type_variation = "TransTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "头衔"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Role" type="Label" parent="BG" unique_id=1754414479]
+theme_type_variation = "TransRoleLabel"
+theme = ExtResource("theme")
 offset_left = -369.0
 offset_top = -176.0
 offset_right = -146.0
 offset_bottom = -132.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="CollectValue" type="Label" parent="BG" unique_id=1735178544]
+theme_type_variation = "TransCollectValue"
+theme = ExtResource("theme")
 offset_left = -406.0
 offset_top = -213.0
 offset_right = -90.0
 offset_bottom = -188.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("7")
-theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
@@ -2691,16 +2677,13 @@ icon = null
 metadata/_edit_lock_ = true
 
 [node name="wq" type="Label" parent="BG/wqq" unique_id=1929915554]
+theme_type_variation = "TransSlotLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 4.0
 offset_top = 12.0
 offset_right = 44.0
 offset_bottom = 39.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("9")
-theme_override_font_sizes/font_size = 20
 text = "武器"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2720,16 +2703,13 @@ icon = null
 metadata/_edit_lock_ = true
 
 [node name="fj2" type="Label" parent="BG/fjj" unique_id=1125731129]
+theme_type_variation = "TransSlotLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 4.0
 offset_top = 12.0
 offset_right = 44.0
 offset_bottom = 39.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("9")
-theme_override_font_sizes/font_size = 20
 text = "防具"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2749,16 +2729,13 @@ icon = null
 metadata/_edit_lock_ = true
 
 [node name="cb" type="Label" parent="BG/cbb" unique_id=968342823]
+theme_type_variation = "TransSlotLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 4.0
 offset_top = 12.0
 offset_right = 44.0
 offset_bottom = 39.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("9")
-theme_override_font_sizes/font_size = 20
 text = "翅膀"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2770,26 +2747,22 @@ position = Vector2(25, 25)
 texture = ExtResource("10")
 
 [node name="Tips_1" type="Label" parent="BG" unique_id=463383604]
+theme_type_variation = "TransTips"
+theme = ExtResource("theme")
 offset_left = 53.0
 offset_top = -230.0
 offset_right = 473.0
 offset_bottom = -200.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("11")
-theme_override_font_sizes/font_size = 20
 text = "获取过即可永久幻化，出售后仍可使用"
 metadata/_edit_lock_ = true
 
 [node name="Tips_2" type="Label" parent="BG" unique_id=1261391025]
+theme_type_variation = "TransTipsSmall"
+theme = ExtResource("theme")
 offset_left = -396.0
 offset_top = 167.0
 offset_right = -118.0
 offset_bottom = 198.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("11")
-theme_override_font_sizes/font_size = 18
 text = "外观显示顺序： 幻化 > 时装 > 装备"
 metadata/_edit_lock_ = true
 
@@ -2818,11 +2791,9 @@ texture_hover = ExtResource("15")
 texture_disabled = ExtResource("14")
 
 [node name="Infor" type="Label" parent="BG/ChangePage" unique_id=985451867]
+theme_type_variation = "TransPage"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("16")
-theme_override_font_sizes/font_size = 20
 text = "1/1"
 horizontal_alignment = 1
 vertical_alignment = 2
@@ -2881,12 +2852,12 @@ metadata/_edit_lock_ = true
 libraries/ = SubResource("114")
 
 [node name="BoxList" type="GridContainer" parent="BG" unique_id=799175971]
+theme_type_variation = "TransGrid"
+theme = ExtResource("theme")
 offset_left = -77.0
 offset_top = -163.0
 offset_right = 398.0
 offset_bottom = 175.0
-theme_override_constants/h_separation = 14
-theme_override_constants/v_separation = 16
 columns = 3
 metadata/_edit_lock_ = true
 

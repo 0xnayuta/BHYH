@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 1983,
+    "direct_properties": 1760,
     "animation_track_refs": 26,
-    "textual_references": 2009,
-    "scenes": 106
+    "textual_references": 1786,
+    "scenes": 102
   },
   "property_categories": {
-    "colors": 592,
-    "constants": 520,
-    "font_sizes": 276,
-    "fonts": 312,
-    "styles": 283
+    "colors": 519,
+    "constants": 456,
+    "font_sizes": 246,
+    "fonts": 270,
+    "styles": 269
   },
   "animation_categories": {
     "colors": 15,
@@ -23,22 +23,19 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 409,
+    "Button": 392,
     "CheckBox": 4,
-    "CheckButton": 15,
-    "GridContainer": 16,
-    "HBoxContainer": 23,
+    "GridContainer": 12,
+    "HBoxContainer": 20,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 1402,
+    "Label": 1231,
     "LineEdit": 14,
     "MarginContainer": 32,
-    "OptionButton": 7,
     "Panel": 5,
-    "PanelContainer": 1,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 18,
+    "VBoxContainer": 13,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -47,7 +44,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 663,
+    "scene_refs": 729,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -97,6 +94,20 @@
       "ArchiveStepText",
       "ArchiveUidHash",
       "ArchiveUploadButton",
+      "AutoBattleActionButton",
+      "AutoBattleActions",
+      "AutoBattleCheck",
+      "AutoBattleContent",
+      "AutoBattleHint",
+      "AutoBattleOption",
+      "AutoBattleOptionsGrid",
+      "AutoBattlePanel",
+      "AutoBattleSectionLabel",
+      "AutoBattleSelectedList",
+      "AutoBattleSkillOption",
+      "AutoBattleSkillRow",
+      "AutoBattleSmallButton",
+      "AutoBattleTitle",
       "BackpackEquipmentColumn",
       "BackpackEquipmentRow",
       "BackpackExpLabel",
@@ -199,6 +210,20 @@
       "LlbtWxmsButton",
       "MagicHelpBody",
       "MagicHelpTitle",
+      "MagicWeaponAction",
+      "MagicWeaponActionAlt",
+      "MagicWeaponActionSmall",
+      "MagicWeaponAttr",
+      "MagicWeaponEmpty",
+      "MagicWeaponName",
+      "MagicWeaponPsSkill",
+      "MagicWeaponPsTitle",
+      "MagicWeaponSkillBody",
+      "MagicWeaponSkillGroup",
+      "MagicWeaponSkillTitle",
+      "MagicWeaponStat",
+      "MagicWeaponStatHp",
+      "MagicWeaponValue",
       "MenuActionButton",
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
@@ -343,6 +368,15 @@
       "TowerPanel",
       "TowerRow",
       "TowerSmallLabel",
+      "TransCollectValue",
+      "TransGrid",
+      "TransPage",
+      "TransRoleLabel",
+      "TransSlotLabel",
+      "TransTabLabel",
+      "TransTabRow",
+      "TransTips",
+      "TransTipsSmall",
       "ZhenFaCurrentLabel",
       "ZhenFaCurrentName",
       "ZhenFaEmptyButton",
@@ -361,13 +395,19 @@
       "ZhenFaTuPoNeed",
       "ZhenFaTuPoNeedNote",
       "ZhenFaTuPoProp",
-      "ZhenFaTuPoSkill"
+      "ZhenFaTuPoSkill",
+      "ZhenYanLevelInfo",
+      "ZhenYanNeedNote",
+      "ZhenYanNeedNum",
+      "ZhenYanNeedTitle",
+      "ZhenYanPropInfo",
+      "ZhenYanPropList"
     ],
-    "variation_refs": 962
+    "variation_refs": 1028
   },
   "fonts": {
-    "scene_refs": 146,
-    "unique_files": 12,
+    "scene_refs": 134,
+    "unique_files": 11,
     "paths": [
       "res://Font/194_song_ti.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s.ttf",
@@ -376,7 +416,6 @@
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
       "res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
       "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
-      "res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf",
       "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
       "res://Font/jin_qiao_jian_zhong_yuan.ttf",
       "res://Font/华康宋体W3.ttc",
@@ -429,10 +468,6 @@
     ]
   },
   "scenes": {
-    "Scene/auto_battle_config.tscn": {
-      "direct": 58,
-      "animation": 0
-    },
     "Scene/back_pack/box_1.tscn": {
       "direct": 15,
       "animation": 0
@@ -447,10 +482,6 @@
     },
     "Scene/back_pack/equipment_properies.tscn": {
       "direct": 18,
-      "animation": 0
-    },
-    "Scene/back_pack/magic_weapon_infor.tscn": {
-      "direct": 55,
       "animation": 0
     },
     "Scene/back_pack/main_backpack.tscn": {
@@ -733,10 +764,6 @@
       "direct": 4,
       "animation": 0
     },
-    "Scene/other_scene/transmogrified.tscn": {
-      "direct": 57,
-      "animation": 0
-    },
     "Scene/other_scene/transmogtified_box.tscn": {
       "direct": 22,
       "animation": 0
@@ -751,10 +778,6 @@
     },
     "Scene/other_scene/zhen_fa_help.tscn": {
       "direct": 49,
-      "animation": 0
-    },
-    "Scene/other_scene/zhen_yan_cure_level.tscn": {
-      "direct": 53,
       "animation": 0
     },
     "Scene/other_scene/zhenfalxbutton.tscn": {

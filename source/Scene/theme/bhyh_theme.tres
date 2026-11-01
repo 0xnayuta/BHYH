@@ -10,6 +10,7 @@
 [ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="font_8_fz_cu_yuan_m03_s"]
 [ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
 [ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="font_1_aaa_fz_cu_yuan_m03_s"]
+[ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="font_wo"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
 
@@ -243,6 +244,46 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="auto_battle_panel"]
+content_margin_left = 22.0
+content_margin_top = 16.0
+content_margin_right = 22.0
+content_margin_bottom = 16.0
+bg_color = Color(0.08, 0.05, 0.03, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.78, 0.61, 0.32, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="auto_battle_button"]
+bg_color = Color(0.22, 0.14, 0.09, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.65, 0.48, 0.23, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="auto_battle_button_hover"]
+bg_color = Color(0.42, 0.27, 0.13, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.82, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [resource]
 SettingsButton/base_type = &"Button"
@@ -2285,3 +2326,238 @@ HcHelpPage/colors/font_outline_color = Color(0, 0, 0, 1)
 HcHelpPage/constants/outline_size = 6
 HcHelpPage/fonts/font = ExtResource("font_hy")
 HcHelpPage/font_sizes/font_size = 18
+
+AutoBattlePanel/base_type = &"PanelContainer"
+AutoBattlePanel/styles/panel = SubResource("auto_battle_panel")
+
+AutoBattleContent/base_type = &"VBoxContainer"
+AutoBattleContent/constants/separation = 8
+
+AutoBattleTitle/base_type = &"Label"
+AutoBattleTitle/colors/font_color = Color(1, 0.88, 0.38, 1)
+AutoBattleTitle/colors/font_outline_color = Color(0.02, 0.01, 0, 1)
+AutoBattleTitle/constants/outline_size = 3
+AutoBattleTitle/fonts/font = ExtResource("font_return")
+AutoBattleTitle/font_sizes/font_size = 26
+
+AutoBattleSectionLabel/base_type = &"Label"
+AutoBattleSectionLabel/colors/font_color = Color(0.84, 0.92, 1, 1)
+AutoBattleSectionLabel/fonts/font = ExtResource("font_return")
+AutoBattleSectionLabel/font_sizes/font_size = 20
+
+AutoBattleOptionsGrid/base_type = &"GridContainer"
+AutoBattleOptionsGrid/constants/h_separation = 20
+AutoBattleOptionsGrid/constants/v_separation = 2
+
+AutoBattleCheck/base_type = &"CheckButton"
+AutoBattleCheck/colors/font_color = Color(1, 0.92, 0.62, 1)
+AutoBattleCheck/fonts/font = ExtResource("font_return")
+AutoBattleCheck/font_sizes/font_size = 20
+
+AutoBattleOption/base_type = &"OptionButton"
+AutoBattleOption/colors/font_color = Color(1, 0.92, 0.62, 1)
+AutoBattleOption/fonts/font = ExtResource("font_return")
+AutoBattleOption/font_sizes/font_size = 20
+
+AutoBattleSkillRow/base_type = &"HBoxContainer"
+AutoBattleSkillRow/constants/separation = 10
+
+AutoBattleSkillOption/base_type = &"OptionButton"
+AutoBattleSkillOption/fonts/font = ExtResource("font_return")
+AutoBattleSkillOption/font_sizes/font_size = 19
+AutoBattleSkillOption/styles/normal = SubResource("auto_battle_button")
+AutoBattleSkillOption/styles/hover = SubResource("auto_battle_button_hover")
+
+AutoBattleSmallButton/base_type = &"Button"
+AutoBattleSmallButton/fonts/font = ExtResource("font_return")
+AutoBattleSmallButton/font_sizes/font_size = 19
+AutoBattleSmallButton/styles/normal = SubResource("auto_battle_button")
+AutoBattleSmallButton/styles/hover = SubResource("auto_battle_button_hover")
+
+AutoBattleSelectedList/base_type = &"VBoxContainer"
+AutoBattleSelectedList/constants/separation = 4
+
+AutoBattleHint/base_type = &"Label"
+AutoBattleHint/colors/font_color = Color(0.7, 0.78, 0.86, 1)
+AutoBattleHint/fonts/font = ExtResource("font_return")
+AutoBattleHint/font_sizes/font_size = 16
+
+AutoBattleActions/base_type = &"HBoxContainer"
+AutoBattleActions/constants/separation = 20
+
+AutoBattleActionButton/base_type = &"Button"
+AutoBattleActionButton/fonts/font = ExtResource("font_return")
+AutoBattleActionButton/font_sizes/font_size = 21
+AutoBattleActionButton/styles/normal = SubResource("auto_battle_button")
+AutoBattleActionButton/styles/hover = SubResource("auto_battle_button_hover")
+
+TransTabRow/base_type = &"HBoxContainer"
+TransTabRow/constants/separation = -2
+
+TransTabLabel/base_type = &"Label"
+TransTabLabel/colors/font_color = Color(1, 1, 0, 1)
+TransTabLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+TransTabLabel/constants/outline_size = 6
+
+TransRoleLabel/base_type = &"Label"
+TransRoleLabel/colors/font_color = Color(1, 1, 0, 1)
+TransRoleLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+TransRoleLabel/constants/outline_size = 10
+TransRoleLabel/fonts/font = ExtResource("font_return")
+TransRoleLabel/font_sizes/font_size = 40
+
+TransCollectValue/base_type = &"Label"
+TransCollectValue/colors/font_color = Color(0, 0, 0, 1)
+TransCollectValue/colors/font_shadow_color = Color(0, 0, 0, 1)
+TransCollectValue/fonts/font = ExtResource("font_hk")
+TransCollectValue/font_sizes/font_size = 20
+
+TransSlotLabel/base_type = &"Label"
+TransSlotLabel/colors/font_color = Color(1, 1, 0, 1)
+TransSlotLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+TransSlotLabel/constants/outline_size = 9
+TransSlotLabel/fonts/font = ExtResource("font_main")
+TransSlotLabel/font_sizes/font_size = 20
+
+TransTips/base_type = &"Label"
+TransTips/colors/font_outline_color = Color(0, 0, 0, 1)
+TransTips/constants/outline_size = 10
+TransTips/fonts/font = ExtResource("font_wo")
+TransTips/font_sizes/font_size = 20
+
+TransTipsSmall/base_type = &"Label"
+TransTipsSmall/colors/font_outline_color = Color(0, 0, 0, 1)
+TransTipsSmall/constants/outline_size = 8
+TransTipsSmall/fonts/font = ExtResource("font_wo")
+TransTipsSmall/font_sizes/font_size = 18
+
+TransPage/base_type = &"Label"
+TransPage/colors/font_outline_color = Color(0, 0, 0, 1)
+TransPage/constants/outline_size = 7
+TransPage/fonts/font = ExtResource("font_hy")
+TransPage/font_sizes/font_size = 20
+
+TransGrid/base_type = &"GridContainer"
+TransGrid/constants/h_separation = 14
+TransGrid/constants/v_separation = 16
+
+MagicWeaponValue/base_type = &"Label"
+MagicWeaponValue/fonts/font = ExtResource("font_fzcy")
+
+MagicWeaponEmpty/base_type = &"Label"
+MagicWeaponEmpty/fonts/font = ExtResource("font_fzcy")
+MagicWeaponEmpty/font_sizes/font_size = 24
+
+MagicWeaponStat/base_type = &"Label"
+MagicWeaponStat/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+MagicWeaponStatHp/base_type = &"Label"
+MagicWeaponStatHp/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponStatHp/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+MagicWeaponAttr/base_type = &"Label"
+MagicWeaponAttr/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponAttr/colors/font_outline_color = Color(1, 1, 1, 1)
+MagicWeaponAttr/constants/outline_size = 2
+MagicWeaponAttr/font_sizes/font_size = 13
+
+MagicWeaponSkillTitle/base_type = &"Label"
+MagicWeaponSkillTitle/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponSkillTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
+MagicWeaponSkillTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+MagicWeaponSkillTitle/constants/outline_size = 3
+MagicWeaponSkillTitle/constants/shadow_outline_size = 13
+MagicWeaponSkillTitle/font_sizes/font_size = 21
+
+MagicWeaponSkillBody/base_type = &"Label"
+MagicWeaponSkillBody/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponSkillBody/colors/font_shadow_color = Color(0, 0, 0, 1)
+MagicWeaponSkillBody/colors/font_outline_color = Color(1, 1, 1, 1)
+MagicWeaponSkillBody/constants/shadow_offset_x = 0
+MagicWeaponSkillBody/constants/shadow_offset_y = 0
+MagicWeaponSkillBody/constants/outline_size = 2
+MagicWeaponSkillBody/constants/shadow_outline_size = 8
+
+MagicWeaponPsTitle/base_type = &"Label"
+MagicWeaponPsTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponPsTitle/constants/shadow_offset_x = 0
+MagicWeaponPsTitle/constants/shadow_offset_y = 0
+MagicWeaponPsTitle/constants/outline_size = 8
+MagicWeaponPsTitle/fonts/font = ExtResource("font_hy")
+
+MagicWeaponPsSkill/base_type = &"Label"
+MagicWeaponPsSkill/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponPsSkill/constants/shadow_offset_x = 0
+MagicWeaponPsSkill/constants/shadow_offset_y = 0
+MagicWeaponPsSkill/constants/outline_size = 4
+MagicWeaponPsSkill/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+
+MagicWeaponName/base_type = &"Label"
+MagicWeaponName/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponName/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponName/constants/outline_size = 6
+MagicWeaponName/fonts/font = ExtResource("font_hy")
+
+MagicWeaponAction/base_type = &"Label"
+MagicWeaponAction/colors/font_color = Color(0, 1, 1, 1)
+MagicWeaponAction/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponAction/constants/outline_size = 9
+MagicWeaponAction/font_sizes/font_size = 20
+
+MagicWeaponActionSmall/base_type = &"Label"
+MagicWeaponActionSmall/colors/font_color = Color(0, 1, 1, 1)
+MagicWeaponActionSmall/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponActionSmall/constants/outline_size = 8
+MagicWeaponActionSmall/font_sizes/font_size = 14
+
+MagicWeaponActionAlt/base_type = &"Label"
+MagicWeaponActionAlt/colors/font_color = Color(0, 1, 1, 1)
+MagicWeaponActionAlt/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponActionAlt/constants/outline_size = 8
+MagicWeaponActionAlt/font_sizes/font_size = 20
+
+MagicWeaponSkillGroup/base_type = &"VBoxContainer"
+MagicWeaponSkillGroup/constants/separation = 7
+
+ZhenYanPropList/base_type = &"VBoxContainer"
+ZhenYanPropList/constants/separation = 20
+
+ZhenYanLevelInfo/base_type = &"Label"
+ZhenYanLevelInfo/colors/font_color = Color(1, 1, 0, 1)
+ZhenYanLevelInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenYanLevelInfo/colors/font_outline_color = Color(1, 1, 0, 1)
+ZhenYanLevelInfo/constants/shadow_offset_x = 0
+ZhenYanLevelInfo/constants/shadow_offset_y = 0
+ZhenYanLevelInfo/constants/outline_size = 1
+ZhenYanLevelInfo/constants/shadow_outline_size = 7
+ZhenYanLevelInfo/fonts/font = ExtResource("font_hk")
+
+ZhenYanPropInfo/base_type = &"Label"
+ZhenYanPropInfo/colors/font_color = Color(1, 0.4, 0, 1)
+ZhenYanPropInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenYanPropInfo/colors/font_outline_color = Color(1, 0.4, 0, 1)
+ZhenYanPropInfo/constants/shadow_offset_x = 0
+ZhenYanPropInfo/constants/shadow_offset_y = 0
+ZhenYanPropInfo/constants/outline_size = 1
+ZhenYanPropInfo/constants/shadow_outline_size = 7
+ZhenYanPropInfo/fonts/font = ExtResource("font_hk")
+
+ZhenYanNeedTitle/base_type = &"Label"
+ZhenYanNeedTitle/colors/font_color = Color(1, 1, 1, 1)
+ZhenYanNeedTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenYanNeedTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+ZhenYanNeedTitle/constants/shadow_offset_x = 0
+ZhenYanNeedTitle/constants/shadow_offset_y = 0
+ZhenYanNeedTitle/constants/outline_size = 1
+ZhenYanNeedTitle/constants/shadow_outline_size = 7
+ZhenYanNeedTitle/fonts/font = ExtResource("font_hk")
+
+ZhenYanNeedNum/base_type = &"Label"
+ZhenYanNeedNum/colors/font_color = Color(1, 0, 0, 1)
+ZhenYanNeedNum/colors/font_outline_color = Color(0, 0, 0, 1)
+ZhenYanNeedNum/constants/outline_size = 5
+ZhenYanNeedNum/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+ZhenYanNeedNote/base_type = &"Label"
+ZhenYanNeedNote/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenYanNeedNote/font_sizes/font_size = 14

@@ -5,14 +5,10 @@
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/205.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/156.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/160.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="6"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/207.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/209.png" id="8"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="9"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/220.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="11"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="12"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="13"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/178.png" id="14"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/180.png" id="15"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/183.png" id="16"]
@@ -20,6 +16,7 @@
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/70.png" id="18"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="19"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="20"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="MagicWeaponInfor" type="Node2D" unique_id=1651371050]
 position = Vector2(472, 293)
@@ -49,12 +46,13 @@ texture_progress = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="lh_value" type="Label" parent="BG/Content/bg_2/lh_bar" unique_id=943746546]
+theme_type_variation = "MagicWeaponValue"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = -1.0
 offset_right = 165.0
 offset_bottom = 22.0
-theme_override_fonts/font = ExtResource("6")
 text = "999/999"
 horizontal_alignment = 1
 vertical_alignment = 2
@@ -72,82 +70,86 @@ texture_disabled = ExtResource("7")
 metadata/_edit_lock_ = true
 
 [node name="m_level" type="Label" parent="BG/Content/bg_2" unique_id=1516528480]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = 44.0
 offset_top = -106.0
 offset_right = 126.0
 offset_bottom = -85.0
-theme_override_fonts/font = ExtResource("9")
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_czl" type="Label" parent="BG/Content/bg_2" unique_id=1081971812]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = 58.0
 offset_top = -58.0
 offset_right = 125.0
 offset_bottom = -37.0
-theme_override_fonts/font = ExtResource("9")
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_wx" type="Label" parent="BG/Content/bg_2" unique_id=89639896]
+theme_type_variation = "MagicWeaponAttr"
+theme = ExtResource("theme")
 offset_left = 44.0
 offset_top = -12.0
 offset_right = 126.0
 offset_bottom = 5.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 13
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_Hp" type="Label" parent="BG/Content/bg_2" unique_id=681891453]
+theme_type_variation = "MagicWeaponStatHp"
+theme = ExtResource("theme")
 offset_left = -88.0
 offset_top = 36.0
 offset_right = -6.0
 offset_bottom = 57.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("9")
 text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_Mp" type="Label" parent="BG/Content/bg_2" unique_id=394025124]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = 43.0
 offset_top = 36.0
 offset_right = 125.0
 offset_bottom = 57.0
-theme_override_fonts/font = ExtResource("9")
 text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_Power" type="Label" parent="BG/Content/bg_2" unique_id=1902768053]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = -88.0
 offset_top = 84.0
 offset_right = -6.0
 offset_bottom = 105.0
-theme_override_fonts/font = ExtResource("9")
 text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_Def" type="Label" parent="BG/Content/bg_2" unique_id=1752735930]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = 43.0
 offset_top = 84.0
 offset_right = 80.0
 offset_bottom = 105.0
-theme_override_fonts/font = ExtResource("9")
 text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="m_MDef" type="Label" parent="BG/Content/bg_2" unique_id=1725095469]
+theme_type_variation = "MagicWeaponStat"
+theme = ExtResource("theme")
 offset_left = 81.0
 offset_top = 84.0
 offset_right = 123.0
 offset_bottom = 105.0
-theme_override_fonts/font = ExtResource("9")
 text = "0"
 vertical_alignment = 2
 metadata/_edit_lock_ = true
@@ -181,16 +183,12 @@ metadata/_edit_lock_ = true
 [node name="IconPlayer" type="AnimationPlayer" parent="BG/Content" unique_id=1469273213]
 
 [node name="MagicWeaponSkillTitle" type="Label" parent="BG/Content" unique_id=1945734207]
+theme_type_variation = "MagicWeaponSkillTitle"
+theme = ExtResource("theme")
 offset_left = 97.0
 offset_top = -122.0
 offset_right = 186.0
 offset_bottom = -59.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 13
-theme_override_font_sizes/font_size = 21
 vertical_alignment = 1
 autowrap_mode = 1
 metadata/_edit_lock_ = true
@@ -207,51 +205,39 @@ offset_bottom = 86.0
 metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BG/Content/ScrollContainer" unique_id=848609022]
+theme_type_variation = "MagicWeaponSkillGroup"
+theme = ExtResource("theme")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 7
 metadata/_edit_lock_ = true
 
 [node name="MagicWeaponSkill" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=550509959]
+theme_type_variation = "MagicWeaponSkillBody"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 8
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="PsTitle" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=1457521027]
+theme_type_variation = "MagicWeaponPsTitle"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("12")
 
 [node name="MagicWeaponSkill2" type="Label" parent="BG/Content/ScrollContainer/VBoxContainer" unique_id=2131532858]
+theme_type_variation = "MagicWeaponPsSkill"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("13")
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Name_" type="Label" parent="BG/Content" unique_id=20511901]
+theme_type_variation = "MagicWeaponName"
+theme = ExtResource("theme")
 offset_left = -271.0
 offset_top = -7.0
 offset_right = -143.0
 offset_bottom = 14.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("12")
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -295,15 +281,13 @@ texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
 [node name="WXXL" type="Label" parent="BG/Content/wxxl" unique_id=300490567]
+theme_type_variation = "MagicWeaponAction"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 88.0
 offset_bottom = 30.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_font_sizes/font_size = 20
 text = "五行重置"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -322,15 +306,13 @@ texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
 [node name="WXXL" type="Label" parent="BG/Content/gjwx" unique_id=427623153]
+theme_type_variation = "MagicWeaponActionSmall"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 88.0
 offset_bottom = 30.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 14
 text = "高级五行重置"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -349,28 +331,26 @@ texture_disabled = ExtResource("19")
 metadata/_edit_lock_ = true
 
 [node name="CZLXL" type="Label" parent="BG/Content/czlxl" unique_id=1226602499]
+theme_type_variation = "MagicWeaponActionAlt"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 88.0
 offset_bottom = 30.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
 text = "成长重置"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="EmptyState" type="Label" parent="BG" unique_id=2145000002]
+theme_type_variation = "MagicWeaponEmpty"
+theme = ExtResource("theme")
 visible = false
 offset_left = -270.0
 offset_top = -40.0
 offset_right = -10.0
 offset_bottom = 40.0
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 24
 text = "当前角色未装备法宝"
 horizontal_alignment = 1
 vertical_alignment = 1

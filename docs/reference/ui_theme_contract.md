@@ -1,6 +1,6 @@
-# UI Theme 契约（Phase 32-0 基线，32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 完成）
+# UI Theme 契约（Phase 32-0 基线，32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F 完成）
 
-> **状态**：32-0 基线审计、32-1 `game_set`、32-2A 标签密集、32-2B Button 密集、32-3A 混合控件、32-3B 标签/混合面板、32-3C 首批标签、32-3D 标签/混合面板与 32-3E 阵法/帮助面板批次已完成（2026-11-01）；32-3F 未启动。契约按已验收批次维护。
+> **状态**：32-0 基线审计、32-1 `game_set`、32-2A 标签密集、32-2B Button 密集、32-3A 混合控件、32-3B 标签/混合面板、32-3C 首批标签、32-3D 标签/混合面板、32-3E 阵法/帮助面板与 32-3F 自动战斗/幻化/法宝/阵眼面板批次已完成（2026-11-01）；32-3G 未启动。契约按已验收批次维护。
 > **适用范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与相关验证；不约束运行时业务状态。
 > **依据**：[ADR-004](../decisions/ADR-004-naming-contract-and-frozen-whitelist.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[ADR-015](../decisions/ADR-015-documentation-layering-and-single-source-of-truth.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 > **规范**：[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`naming_standard.md`](../standards/naming_standard.md)、[`naming_whitelist.md`](../standards/naming_whitelist.md)、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
@@ -20,17 +20,17 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 由 `python scripts/theme_override_audit.py --json` 生成；机器基线为 `scripts/theme_override_baseline.json`。
 
-| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 32-2B 后 | 32-3A 后 | 32-3B 后 | 32-3C 后 | 32-3D 后 | 32-3E 后 | 说明 |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
-| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 6,352 | 4,747 | 4,123 | 3,081 | 2,629 | 2,254 | **2,009** | 135 → 106 个 `.tscn` |
-| 直接属性覆盖 | 6,804 | 6,565 | 6,326 | 4,721 | 4,097 | 3,055 | 2,603 | 2,228 | **1,983** | Phase 32 静态迁移对象 |
-| Animation 轨道路径引用 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | colors 1,366 / styles 702 / constants 1,208 / fonts 749 / font_sizes 696 | colors 1,189 / styles 556 / constants 1,100 / fonts 634 / font_sizes 618 | colors 924 / styles 419 / constants 786 / fonts 484 / font_sizes 442 | colors 776 / styles 383 / constants 673 / fonts 407 / font_sizes 364 | colors 671 / styles 298 / constants 612 / fonts 345 / font_sizes 302 | colors 592 / styles 283 / constants 520 / fonts 312 / font_sizes 276 | 合计 6,804 → 6,565 → 6,326 → 4,721 → 4,097 → 3,055 → 2,603 → 2,228 → 1,983 |
-| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | 3,350 / 895 | 3,100 / 745 | 2,272 / 590 | 2,059 / 554 | 1,625 / 424 | **1,402 / 409** | 迁移批次后下降 |
-| `FontFile` 场景引用 | 207 | 205 | 205 | 200 | 186 | 173 | 166 | 155 | **146** | 12 个字体文件；迁移批次删除未引用场景字体 |
-| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | 2 / 6 引用 | 2 / 96 引用 | 2 / 199 引用 | 2 / 447 引用 | 2 / 543 引用 | 2 / 620 引用 | **2 / 663 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
-| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | 34 个直接类型 / 99 个节点引用 | 72 个直接类型 / 359 个节点引用 | 146 个直接类型 / 498 个节点引用 | 226 个直接类型 / 746 个节点引用 | 241 个直接类型 / 842 个节点引用 | 288 个直接类型 / 919 个节点引用 | **313 个直接类型 / 962 个节点引用** | Theme 共 315 个类型定义；另 2 个仅作基类 |
-| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
+| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 32-2B 后 | 32-3A 后 | 32-3B 后 | 32-3C 后 | 32-3D 后 | 32-3E 后 | 32-3F 后 | 说明 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
+| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 6,352 | 4,747 | 4,123 | 3,081 | 2,629 | 2,254 | 2,009 | **1,786** | 135 → 102 个 `.tscn` |
+| 直接属性覆盖 | 6,804 | 6,565 | 6,326 | 4,721 | 4,097 | 3,055 | 2,603 | 2,228 | 1,983 | **1,760** | Phase 32 静态迁移对象 |
+| Animation 轨道路径引用 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
+| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | colors 1,366 / styles 702 / constants 1,208 / fonts 749 / font_sizes 696 | colors 1,189 / styles 556 / constants 1,100 / fonts 634 / font_sizes 618 | colors 924 / styles 419 / constants 786 / fonts 484 / font_sizes 442 | colors 776 / styles 383 / constants 673 / fonts 407 / font_sizes 364 | colors 671 / styles 298 / constants 612 / fonts 345 / font_sizes 302 | colors 592 / styles 283 / constants 520 / fonts 312 / font_sizes 276 | colors 519 / styles 269 / constants 456 / fonts 270 / font_sizes 246 | 合计 6,804 → 6,565 → 6,326 → 4,721 → 4,097 → 3,055 → 2,603 → 2,228 → 1,983 → 1,760 |
+| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | 3,350 / 895 | 3,100 / 745 | 2,272 / 590 | 2,059 / 554 | 1,625 / 424 | 1,402 / 409 | **1,231 / 392** | 迁移批次后下降 |
+| `FontFile` 场景引用 | 207 | 205 | 205 | 200 | 186 | 173 | 166 | 155 | 146 | **134** | 11 个场景字体文件；迁移批次删除未引用场景字体 |
+| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | 2 / 6 引用 | 2 / 96 引用 | 2 / 199 引用 | 2 / 447 引用 | 2 / 543 引用 | 2 / 620 引用 | 2 / 663 引用 | **2 / 729 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
+| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | 34 个直接类型 / 99 个节点引用 | 72 个直接类型 / 359 个节点引用 | 146 个直接类型 / 498 个节点引用 | 226 个直接类型 / 746 个节点引用 | 241 个直接类型 / 842 个节点引用 | 288 个直接类型 / 919 个节点引用 | 313 个直接类型 / 962 个节点引用 | **356 个直接类型 / 1028 个节点引用** | Theme 共 358 个类型定义；另 2 个仅作基类 |
+| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
 
 基线是**上限**，不是迁移目标。迁移只能使直接属性与动画引用下降，不能因新增面板或重构静默增加；新增场景需要显式更新基线并说明原因。
 
@@ -394,12 +394,56 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 | `HcHelpColumnLabel` | `Label` | 合成帮助材料列表头 |
 | `HcHelpPage` | `Label` | 合成帮助页码 |
 
+| `AutoBattlePanel` | `PanelContainer` | 自动战斗面板背景 |
+| `AutoBattleContent` | `VBoxContainer` | 自动战斗内容区 |
+| `AutoBattleTitle` | `Label` | 自动战斗标题 |
+| `AutoBattleSectionLabel` | `Label` | 自动战斗分区标签 |
+| `AutoBattleOptionsGrid` | `GridContainer` | 自动战斗选项网格 |
+| `AutoBattleCheck` | `CheckButton` | 自动战斗复选按钮 |
+| `AutoBattleOption` | `OptionButton` | 自动战斗角色选择 |
+| `AutoBattleSkillRow` | `HBoxContainer` | 技能选择行 |
+| `AutoBattleSkillOption` | `OptionButton` | 技能下拉框 |
+| `AutoBattleSmallButton` | `Button` | 添加技能按钮 |
+| `AutoBattleSelectedList` | `VBoxContainer` | 已选技能列表 |
+| `AutoBattleHint` | `Label` | 自动战斗提示 |
+| `AutoBattleActions` | `HBoxContainer` | 自动战斗操作行 |
+| `AutoBattleActionButton` | `Button` | 自动战斗确定/取消 |
+| `TransTabRow` | `HBoxContainer` | 幻化页签行 |
+| `TransTabLabel` | `Label` | 幻化页签文字 |
+| `TransRoleLabel` | `Label` | 幻化角色标题 |
+| `TransCollectValue` | `Label` | 幻化收集进度 |
+| `TransSlotLabel` | `Label` | 幻化部位标签 |
+| `TransTips` | `Label` | 幻化说明 |
+| `TransTipsSmall` | `Label` | 幻化说明小字 |
+| `TransPage` | `Label` | 幻化页码 |
+| `TransGrid` | `GridContainer` | 幻化物品网格 |
+| `MagicWeaponValue` | `Label` | 法宝数值文本 |
+| `MagicWeaponEmpty` | `Label` | 法宝空状态 |
+| `MagicWeaponStat` | `Label` | 法宝属性值 |
+| `MagicWeaponStatHp` | `Label` | 法宝生命值 |
+| `MagicWeaponAttr` | `Label` | 法宝五行属性 |
+| `MagicWeaponSkillTitle` | `Label` | 法宝技能标题 |
+| `MagicWeaponSkillBody` | `Label` | 法宝技能正文 |
+| `MagicWeaponPsTitle` | `Label` | 法宝被动标题 |
+| `MagicWeaponPsSkill` | `Label` | 法宝被动正文 |
+| `MagicWeaponName` | `Label` | 法宝名称 |
+| `MagicWeaponAction` | `Label` | 法宝操作按钮文字 |
+| `MagicWeaponActionSmall` | `Label` | 法宝操作小字 |
+| `MagicWeaponActionAlt` | `Label` | 法宝操作文字（8 描边） |
+| `MagicWeaponSkillGroup` | `VBoxContainer` | 法宝技能组 |
+| `ZhenYanPropList` | `VBoxContainer` | 阵眼属性列 |
+| `ZhenYanLevelInfo` | `Label` | 阵眼等级 |
+| `ZhenYanPropInfo` | `Label` | 阵眼属性 |
+| `ZhenYanNeedTitle` | `Label` | 阵眼需求标题 |
+| `ZhenYanNeedNum` | `Label` | 阵眼需求数量 |
+| `ZhenYanNeedNote` | `Label` | 阵眼灵魂需求 |
+
 规则：
 
 1. 变体名表达**角色**，不按单个场景命名；
 2. 不把一个场景的局部样式命名为全局变体；
 3. 同一角色在不同字体族下需要保留字体差异时，可拆分为 `TitleLabelSerif` 等明确变体，不得用运行时覆盖临时修正；
-4. 32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 后共有 **315 个类型**（313 个直接使用 + 2 个基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
+4. 32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F 后共有 **358 个类型**（356 个直接使用 + 2 个基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
 
 ## 5. 字体与样式
 
@@ -590,10 +634,29 @@ python scripts/theme_override_audit.py --write-baseline
 - `zhen_fa_ui` 的 `Title` 区域采用共享 `ZhenFaTabLabel`，`hc_help` 的合成页签、材料列与页码分别收敛到 `HcHelp*`；旧一次性 `StyleBoxEmpty` subresource 与场景字体 `ext_resource` 已删除；
 - 其余高覆盖面板进入 32-3F，不把 1,983 处剩余直接属性写成阶段完成。
 
+## 7H. 32-3F 自动战斗/幻化/法宝/阵眼面板结果（已完成，2026-11-01）
+
+| 场景 | 迁移前直接属性 | 迁移后直接属性 | 迁移节点/变体 | 覆盖控件 |
+|:---|:---:|:---:|:---|:---|
+| `auto_battle_config.tscn` | 58 | **0** | 21 节点 / 14 变体 | Button、CheckButton、OptionButton、Label、容器 |
+| `other_scene/transmogrified.tscn` | 57 | **0** | 16 节点 / 9 变体 | Label、HBox、Grid |
+| `back_pack/magic_weapon_infor.tscn` | 55 | **0** | 19 节点 / 14 变体 | Label、VBox |
+| `other_scene/zhen_yan_cure_level.tscn` | 53 | **0** | 10 节点 / 6 变体（共享空按钮） | Label、Button、VBox |
+
+共同结果：
+
+- 四个场景合计直接属性 **223 → 0**；全局直接属性 **1,983 → 1,760**，文本引用 **1,786**，剩余含覆盖场景 **102**；
+- Theme 新增 **43 个变体**，累计 **358 个定义 / 356 个直接使用 / 1028 个节点引用**；Theme 节点引用 **729**；FontFile 场景引用 **134**；
+- 四个场景合计 **114 个 Control** 的字体、字号、描边、阴影、颜色、StyleBox、位置、尺寸与文本迁移前后 **0 差异**；
+- 1600×1000 与 1280×800 各 4 张截图，共 **10,496,000 像素**；冻结 `AnimationPlayer` 与 `AnimatedSprite2D` 到首帧后 **0 像素差异**；
+- 四个场景直接启动均 **0 ERROR / 0 WARNING**；
+- `auto_battle_config` 的面板与按钮 StyleBox 已移入 Theme；`magic_weapon_infor` 的空状态截图与隐藏内容由 Control 计算转储共同覆盖；`zhen_yan_cure_level` 复用 32-3E 的 `ZhenFaEmptyButton`；
+- 其余高覆盖面板进入 32-3G，不把 1,760 处剩余直接属性写成阶段完成。
+
 ## 8. 分批与验收边界
 
-- 32-2A（标签密集）、32-2B（Button 密集）、32-3A（混合控件/布局）、32-3B（标签/混合五场景）、32-3C（首批标签五场景）、32-3D（标签/混合五场景）与 32-3E（阵法/帮助四场景）已完成；32-3F 继续其余高覆盖 UI 面板；每批先快照、再迁移、后验证。
-- 32-3A 已补齐 `OptionButton`、`CheckButton`、`LineEdit`、`Panel`、`PanelContainer`、`PopupMenu`、`GridContainer`；32-3B 覆盖宠物、丹药、游戏说明、背包与被动技能；32-3C 覆盖炼体、诛仙剑阵、法宝与帮助面板；32-3D 覆盖全服信件、挑战、结算、ldl 与角色 HUD；32-3E 覆盖阵法 UI/信息/突破与合成帮助；32-3F 继续其余面板与 `HSlider`/`TabBar`/`ItemList`。
+- 32-2A（标签密集）、32-2B（Button 密集）、32-3A（混合控件/布局）、32-3B（标签/混合五场景）、32-3C（首批标签五场景）、32-3D（标签/混合五场景）、32-3E（阵法/帮助四场景）与 32-3F（自动战斗/幻化/法宝/阵眼四场景）已完成；32-3G 继续其余高覆盖 UI 面板；每批先快照、再迁移、后验证。
+- 32-3A 已补齐 `OptionButton`、`CheckButton`、`LineEdit`、`Panel`、`PanelContainer`、`PopupMenu`、`GridContainer`；32-3B 覆盖宠物、丹药、游戏说明、背包与被动技能；32-3C 覆盖炼体、诛仙剑阵、法宝与帮助面板；32-3D 覆盖全服信件、挑战、结算、ldl 与角色 HUD；32-3E 覆盖阵法 UI/信息/突破与合成帮助；32-3F 覆盖自动战斗、幻化、法宝与阵眼面板；32-3G 继续其余面板与 `HSlider`/`TabBar`/`ItemList`。
 - 32-4 建立例外清单，评估是否启用全局 Theme，退役旧 Theme，更新 `architecture.md`、`status.md` 与索引。
 - 每批必须保留截图/控件转储与相关 `scene_probe_runner` 结果；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
 - 阶段完成标准是“直接属性为 0 或全部登记例外”，不是“总数看起来接近 0”；动画轨道与动态调用单独报告。
@@ -610,7 +673,7 @@ python scripts/theme_override_audit.py --write-baseline
 | 项 | 当前状态 | 出口 |
 |:---|:---|:---|
 | 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | `Scene/theme/bhyh_theme.tres` 已用于 pilot；旧 Theme 未合并 | 32-4 迁移/退役 |
-| 最终变体名单与字体族映射 | 32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E 已冻结 315 个类型（313 直接 + 2 基类） | 32-3F 只按批扩展，不重命名 |
+| 最终变体名单与字体族映射 | 32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F 已冻结 358 个类型（356 直接 + 2 基类） | 32-3G 只按批扩展，不重命名 |
 | 是否启用全局 `gui/theme/custom` | 默认不启用 | 32-4 全 UI 覆盖评审 |
 | 动画轨道/脚本动态覆盖的最终例外清单 | 动画 26 处、动态调用 383 处均未迁移 | 32-4 收口 |
 
