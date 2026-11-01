@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 510,
+    "direct_properties": 310,
     "animation_track_refs": 26,
-    "textual_references": 536,
-    "scenes": 61
+    "textual_references": 336,
+    "scenes": 47
   },
   "property_categories": {
-    "colors": 156,
-    "constants": 155,
-    "font_sizes": 70,
-    "fonts": 77,
-    "styles": 52
+    "colors": 91,
+    "constants": 95,
+    "font_sizes": 46,
+    "fonts": 46,
+    "styles": 32
   },
   "animation_categories": {
     "colors": 15,
@@ -22,11 +22,11 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 75,
+    "Button": 43,
     "GridContainer": 6,
-    "HBoxContainer": 11,
-    "Label": 392,
-    "MarginContainer": 13,
+    "HBoxContainer": 4,
+    "Label": 235,
+    "MarginContainer": 9,
     "Panel": 1,
     "ProgressBar": 2
   },
@@ -36,7 +36,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1002,
+    "scene_refs": 1046,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -151,6 +151,9 @@
       "BossBloodName",
       "BossBloodValue",
       "BossProtectName",
+      "BoxItemButton",
+      "BoxItemNumber",
+      "BoxLockMark",
       "ChangeBackgroundButton",
       "ChangeBackgroundList",
       "ChangeBackgroundTitle",
@@ -164,6 +167,8 @@
       "ChoosePlayerProp",
       "ChoosePlayerRoleName",
       "ChoosePlayerTitle",
+      "ChooseSceneCountdown",
+      "ChooseSceneText",
       "CureTimesCurrency",
       "CureTimesHeader",
       "CureTimesHint",
@@ -250,6 +255,7 @@
       "HcHelpTabRow",
       "HcHelpTitle",
       "HelpContentList",
+      "HelpThingsText",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -265,6 +271,8 @@
       "LetterPageButton",
       "LetterPageLabel",
       "LetterTitle",
+      "Level17Text",
+      "Level17TextRed",
       "LevelInfoAlertText",
       "LevelInfoChallengeTitle",
       "LevelInfoDialogTitle",
@@ -299,6 +307,10 @@
       "LlbtTztttwButton",
       "LlbtTztxsButton",
       "LlbtWxmsButton",
+      "LoadSceneNotice",
+      "LoadScenePanelMargin",
+      "LoadSceneProgress",
+      "LoadSceneTips",
       "LxdyButtonRow",
       "LxdyLastTimes",
       "LxdyStageInfo",
@@ -333,14 +345,20 @@
       "MenuHintLabel",
       "Monster139Button",
       "Monster139DamageLabel",
+      "MonsterHeadBoss",
+      "MonsterHeadInfoName",
+      "MonsterHeadName",
       "MonsterHelpButton",
       "MonsterHelpTitle",
       "MonsterHelpTitleLarge",
       "MonsterHelpWarning",
       "MosaicHelpLine",
       "MosaicHelpTitle",
+      "MysteryShopInfo",
       "MysteryShopLabel",
+      "MysteryShopList",
       "MysteryShopPurchase",
+      "MysteryShopTitle",
       "PelletAttTab",
       "PelletAttValue",
       "PelletCritTab",
@@ -479,6 +497,9 @@
       "SkillShadowLabelPlain",
       "SkillSmallLabel",
       "SkillTextButton",
+      "StrengthCost",
+      "StrengthNumber",
+      "StrengthNumberSmall",
       "SwordPageLevelLabel",
       "SwordPageMaterialLabel",
       "SwordPageStatLabel",
@@ -519,9 +540,16 @@
       "UseItemStatName",
       "UseItemUpLabel",
       "UseItemsTitle",
+      "UseMagicPage",
+      "UseMagicRow",
+      "UseMagicTitle",
       "UserKeyKey",
       "UserKeyTime",
       "UserKeyTimeSmall",
+      "UserLoadIdRow",
+      "UserLoadInputLabel",
+      "UserLoadKeyRow",
+      "UserLoadTitle",
       "VictoryInfoLabel",
       "VictoryMoreButton",
       "WanLingAttributeContent",
@@ -563,17 +591,18 @@
       "ZhenYanNeedNum",
       "ZhenYanNeedTitle",
       "ZhenYanPropInfo",
-      "ZhenYanPropList"
+      "ZhenYanPropList",
+      "ZhenYanSlotButton",
+      "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1301
+    "variation_refs": 1345
   },
   "fonts": {
-    "scene_refs": 65,
-    "unique_files": 9,
+    "scene_refs": 42,
+    "unique_files": 8,
     "paths": [
       "res://Font/194_song_ti.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
-      "res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
       "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
       "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
@@ -628,14 +657,6 @@
     ]
   },
   "scenes": {
-    "Scene/back_pack/box_1.tscn": {
-      "direct": 15,
-      "animation": 0
-    },
-    "Scene/back_pack/use_magic_weapon.tscn": {
-      "direct": 13,
-      "animation": 0
-    },
     "Scene/back_pack/zb.tscn": {
       "direct": 5,
       "animation": 0
@@ -696,16 +717,8 @@
       "direct": 10,
       "animation": 0
     },
-    "Scene/ldl/strength.tscn": {
-      "direct": 16,
-      "animation": 0
-    },
     "Scene/ldl/synthesis.tscn": {
       "direct": 9,
-      "animation": 0
-    },
-    "Scene/level/level_17.tscn": {
-      "direct": 15,
       "animation": 0
     },
     "Scene/level/level_llbt.tscn": {
@@ -764,36 +777,12 @@
       "direct": 12,
       "animation": 0
     },
-    "Scene/other_scene/help_things.tscn": {
-      "direct": 15,
-      "animation": 0
-    },
     "Scene/other_scene/lhhj_button.tscn": {
       "direct": 8,
       "animation": 0
     },
     "Scene/other_scene/list_button.tscn": {
       "direct": 8,
-      "animation": 0
-    },
-    "Scene/other_scene/load_scene.tscn": {
-      "direct": 13,
-      "animation": 0
-    },
-    "Scene/other_scene/lsh.tscn": {
-      "direct": 16,
-      "animation": 0
-    },
-    "Scene/other_scene/monster_head.tscn": {
-      "direct": 14,
-      "animation": 0
-    },
-    "Scene/other_scene/monster_head_info.tscn": {
-      "direct": 16,
-      "animation": 0
-    },
-    "Scene/other_scene/return_back_map.tscn": {
-      "direct": 15,
       "animation": 0
     },
     "Scene/other_scene/reward_box_2.tscn": {
@@ -812,16 +801,8 @@
       "direct": 8,
       "animation": 0
     },
-    "Scene/other_scene/userload.tscn": {
-      "direct": 15,
-      "animation": 0
-    },
     "Scene/other_scene/zhenfalxbutton.tscn": {
       "direct": 9,
-      "animation": 0
-    },
-    "Scene/other_scene/zhenyanbutton.tscn": {
-      "direct": 13,
       "animation": 0
     },
     "Scene/pellet/pellet_sys_pic.tscn": {
@@ -830,14 +811,6 @@
     },
     "Scene/pet/pet_backpack_slot.tscn": {
       "direct": 11,
-      "animation": 0
-    },
-    "Scene/shop/mystery_shop.tscn": {
-      "direct": 12,
-      "animation": 0
-    },
-    "Scene/show_text/choose_scene.tscn": {
-      "direct": 12,
       "animation": 0
     },
     "Scene/show_text/combo.tscn": {

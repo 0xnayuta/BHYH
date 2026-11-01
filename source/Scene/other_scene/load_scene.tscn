@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bn6fqn2kosybq" path="res://Scene/other_scene/load_scene.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://clnjs4iyflfc6" path="res://Art/set_menu/313.png" id="2"]
-[ext_resource type="FontFile" uid="uid://dbr2rb1tdo4o8" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="3"]
 [ext_resource type="Texture2D" uid="uid://cxdba8hhprvql" path="res://Art/set_menu/154.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://mnecjqrllap7" path="res://Art/set_menu/157.png" id="5"]
-[ext_resource type="FontFile" uid="uid://dhby4qepqc8np" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="6"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="LoadScene" type="CanvasLayer" unique_id=386290307]
 process_mode = 3
@@ -23,6 +22,8 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="Tips" type="Label" parent="bg" unique_id=1521174440]
+theme_type_variation = "LoadSceneTips"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(714, 0)
 layout_mode = 1
 anchors_preset = 7
@@ -35,22 +36,18 @@ offset_top = -169.0
 offset_right = 357.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3")
 text = "Tips：每个小怪都有概率掉落强化石哦~"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="PanelContainer" type="MarginContainer" parent="." unique_id=1491332179]
+theme_type_variation = "LoadScenePanelMargin"
+theme = ExtResource("theme")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 64
 
 [node name="loading_bar" type="TextureProgressBar" parent="PanelContainer" unique_id=842256977]
 layout_mode = 2
@@ -63,28 +60,25 @@ texture_under = ExtResource("4")
 texture_progress = ExtResource("5")
 
 [node name="resource_loading_notice" type="Label" parent="PanelContainer/loading_bar" unique_id=1964690416]
+theme_type_variation = "LoadSceneNotice"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 125.0
 offset_top = -55.0
 offset_right = 425.0
 offset_bottom = -10.0
-theme_override_colors/font_color = Color(1, 0.91, 0.55, 1)
-theme_override_colors/font_outline_color = Color(0.12, 0.08, 0.03, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 32
 text = "资源加载中"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="loading_text" type="Label" parent="PanelContainer/loading_bar" unique_id=686805823]
+theme_type_variation = "LoadSceneProgress"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 203.0
 offset_top = 1.0
 offset_right = 347.0
 offset_bottom = 38.0
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 33
 text = "99%"
 horizontal_alignment = 1
 vertical_alignment = 1

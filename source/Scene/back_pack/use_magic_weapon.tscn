@@ -2,14 +2,13 @@
 
 [ext_resource type="Script" path="res://Script/back_pack/use_magic_weapon.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/64.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
 [ext_resource type="Texture2D" path="res://Art/shop/71.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/shop/69.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="6"]
 [ext_resource type="Texture2D" path="res://Art/shop/76.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/shop/74.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/220.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="10"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="UseMagicWeapon" type="Node2D" unique_id=870009583]
 script = ExtResource("1")
@@ -26,29 +25,24 @@ metadata/_edit_lock_ = true
 texture = ExtResource("2")
 
 [node name="chooseSkill" type="Label" parent="BG" unique_id=840506690]
+theme_type_variation = "UseMagicTitle"
+theme = ExtResource("theme")
 offset_left = -301.0
 offset_top = -188.0
 offset_right = 309.0
 offset_bottom = -163.0
-theme_override_colors/font_color = Color(1, 0.607843, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0.607843, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("3")
 text = "从下面的法宝技能中选择一个作为实际技能（需拥有该法宝！）"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BG" unique_id=1745968351]
+theme_type_variation = "UseMagicRow"
+theme = ExtResource("theme")
 offset_left = -76.0
 offset_top = 202.0
 offset_right = 71.0
 offset_bottom = 235.0
-theme_override_constants/separation = 10
 
 [node name="Last" type="TextureButton" parent="BG/HBoxContainer" unique_id=1458462594]
 layout_mode = 2
@@ -58,11 +52,9 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="PageInfor" type="Label" parent="BG/HBoxContainer" unique_id=397062099]
+theme_type_variation = "UseMagicPage"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("6")
 text = "1/1"
 horizontal_alignment = 1
 vertical_alignment = 2

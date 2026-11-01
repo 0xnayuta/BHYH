@@ -5,13 +5,12 @@
 [ext_resource type="Texture2D" path="res://Art/shop/othe_bg1.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/shop/othe_bg2.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/shop/othe_bg3.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="6"]
-[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="7"]
 [ext_resource type="Texture2D" path="res://Art/shop/cure_times1.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/shop/cure_times2.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_1.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_2.png" id="11"]
 [ext_resource type="PackedScene" path="res://Scene/shop/mystery_shop_item_box.tscn" id="12"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="MysteryShop" type="Node2D" unique_id=628884719]
 script = ExtResource("1")
@@ -45,39 +44,34 @@ texture = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="ttext" type="Label" parent="ShopBg/OtheBg3" unique_id=1723148279]
+theme_type_variation = "MysteryShopTitle"
+theme = ExtResource("theme")
 offset_left = -146.0
 offset_top = -19.0
 offset_right = 143.0
 offset_bottom = 45.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 12
 text = "每次购买需要消耗一次购买次数，一个神秘令牌可以换取一次购买次数，神秘令牌部分小怪小概率掉落。也可以消耗灵魂直接购买次数。第五摊位开启概率极低，商品很贵，建议积攒足够的次数和灵魂再来！！"
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="AllTimes" type="Label" parent="ShopBg" unique_id=1918253516]
+theme_type_variation = "MysteryShopInfo"
+theme = ExtResource("theme")
 offset_left = -186.0
 offset_top = -155.0
 offset_right = -1.0
 offset_bottom = -132.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("7")
 text = "购买次数：199"
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="AllLH" type="Label" parent="ShopBg" unique_id=2103230094]
+theme_type_variation = "MysteryShopInfo"
+theme = ExtResource("theme")
 offset_left = 11.0
 offset_top = -153.0
 offset_right = 324.0
 offset_bottom = -130.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("7")
 text = "剩余灵魂：10291089138200000000"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -106,11 +100,12 @@ texture_disabled = ExtResource("10")
 metadata/_edit_lock_ = true
 
 [node name="ShopItemList" type="HBoxContainer" parent="ShopBg" unique_id=947043764]
+theme_type_variation = "MysteryShopList"
+theme = ExtResource("theme")
 offset_left = -187.0
 offset_top = -125.0
 offset_right = 320.0
 offset_bottom = 17.0
-theme_override_constants/separation = 9
 metadata/_edit_lock_ = true
 
 [node name="MysteryShopItemBox" parent="ShopBg/ShopItemList" unique_id=1681678422 instance=ExtResource("12")]

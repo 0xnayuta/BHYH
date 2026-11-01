@@ -3,13 +3,12 @@
 [ext_resource type="Script" path="res://Script/ldl/strength.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/game_2/ldl/215.png" id="2"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="3"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
 [ext_resource type="Texture2D" path="res://Art/game_2/ldl/212.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/game_2/ldl/202.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/ldl/176.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/ldl/188.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/ldl/533.png" id="9"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="10"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="strength" type="Node2D" unique_id=1454122461]
 script = ExtResource("1")
@@ -40,16 +39,13 @@ offset_bottom = 24.0
 metadata/_edit_lock_ = true
 
 [node name="number" type="Label" parent="n_q_1/n_q_1" unique_id=1642558793]
+theme_type_variation = "StrengthNumber"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -16.0
 offset_top = 37.0
 offset_right = 66.0
 offset_bottom = 68.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -67,16 +63,13 @@ offset_bottom = 24.0
 metadata/_edit_lock_ = true
 
 [node name="number2" type="Label" parent="n_q_2/n_q_2" unique_id=1968241688]
+theme_type_variation = "StrengthNumberSmall"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -13.0
 offset_top = 36.0
 offset_right = 66.0
 offset_bottom = 67.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -105,11 +98,12 @@ texture = ExtResource("7")
 metadata/_edit_lock_ = true
 
 [node name="lh" type="Label" parent="need_lh" unique_id=1523243363]
+theme_type_variation = "StrengthCost"
+theme = ExtResource("theme")
 offset_left = 40.0
 offset_top = -12.0
 offset_right = 80.0
 offset_bottom = 14.0
-theme_override_fonts/font = ExtResource("4")
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
@@ -126,6 +120,8 @@ stretch_mode = 3
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="." unique_id=937866746]
+theme_type_variation = "ForgeTitle"
+theme = ExtResource("theme")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -137,11 +133,6 @@ offset_right = 99.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.972549, 0.976471, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 32
 text = "装备强化"
 horizontal_alignment = 1
 vertical_alignment = 1

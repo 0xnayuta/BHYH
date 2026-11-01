@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://Scene/level/boat.tscn" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/level_11/1_floor_bg3.jpg" id="4"]
 [ext_resource type="Texture2D" path="res://Art/level/level_11/wch.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="6"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(120, 846)
@@ -54,43 +54,34 @@ position = Vector2(4491, 276)
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="CanvasLayer" parent_id_path=PackedInt32Array(1390746928) index="1" unique_id=1064913567]
+theme_type_variation = "Level17Text"
+theme = ExtResource("theme")
 offset_left = 402.0
 offset_top = 25.0
 offset_right = 577.0
 offset_bottom = 54.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 25
 text = "当前受击次数：
 受伤越多，boss越强"
 metadata/_edit_lock_ = true
 
 [node name="text2" type="Label" parent="CanvasLayer/text" index="0" unique_id=1248417820]
+theme_type_variation = "Level17Text"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 169.0
 offset_right = 344.0
 offset_bottom = 29.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 25
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="text3" type="Label" parent="CanvasLayer/text" index="1" unique_id=2058651809]
+theme_type_variation = "Level17TextRed"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -1.0
 offset_top = 55.0
 offset_right = 329.0
 offset_bottom = 84.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 18
 text = "忘川河的邪气会吞噬法力（无法回血，使用技能和法宝）"
 vertical_alignment = 1
 metadata/_edit_lock_ = true

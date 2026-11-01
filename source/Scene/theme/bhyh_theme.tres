@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
 [ext_resource type="FontFile" path="res://Font/194_song_ti.ttf" id="font_194_song_ti"]
 [ext_resource type="FontFile" path="res://Font/jin_qiao_jian_zhong_yuan.ttf" id="font_jin_qiao"]
+[ext_resource type="Texture2D" path="res://Art/backpack/all_items/empty.png" id="tex_box_empty"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
 
@@ -473,6 +474,9 @@ border_width_top = 3
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 16
 corner_detail = 9
+
+[sub_resource type="StyleBoxTexture" id="box_item_empty"]
+texture = ExtResource("tex_box_empty")
 
 [resource]
 SettingsButton/base_type = &"Button"
@@ -3846,3 +3850,201 @@ RewardTitle/font_sizes/font_size = 30
 RewardItemGrid/base_type = &"GridContainer"
 RewardItemGrid/constants/h_separation = 40
 RewardItemGrid/constants/v_separation = 33
+
+MonsterHeadBoss/base_type = &"Label"
+MonsterHeadBoss/colors/font_color = Color(1, 0.431373, 0, 1)
+MonsterHeadBoss/colors/font_outline_color = Color(0, 0, 0, 1)
+MonsterHeadBoss/constants/outline_size = 10
+MonsterHeadBoss/fonts/font = ExtResource("font_hy")
+
+MonsterHeadInfoName/base_type = &"Button"
+MonsterHeadInfoName/colors/font_color = Color(1, 1, 1, 1)
+MonsterHeadInfoName/colors/font_hover_color = Color(1, 0.392157, 0, 1)
+MonsterHeadInfoName/colors/font_disabled_color = Color(1, 1, 1, 1)
+MonsterHeadInfoName/colors/font_outline_color = Color(0, 0, 0, 1)
+MonsterHeadInfoName/constants/outline_size = 5
+MonsterHeadInfoName/fonts/font = ExtResource("font_fzcy")
+MonsterHeadInfoName/font_sizes/font_size = 14
+MonsterHeadInfoName/styles/normal = SubResource("empty_button")
+MonsterHeadInfoName/styles/pressed = SubResource("empty_button")
+MonsterHeadInfoName/styles/hover = SubResource("empty_button")
+MonsterHeadInfoName/styles/disabled = SubResource("empty_button")
+MonsterHeadInfoName/styles/focus = SubResource("empty_button")
+
+MonsterHeadName/base_type = &"Button"
+MonsterHeadName/colors/font_color = Color(1, 1, 1, 1)
+MonsterHeadName/colors/font_hover_color = Color(1, 0.462745, 0, 1)
+MonsterHeadName/colors/font_outline_color = Color(0, 0, 0, 1)
+MonsterHeadName/constants/outline_size = 6
+MonsterHeadName/fonts/font = ExtResource("font_return")
+MonsterHeadName/styles/normal = SubResource("empty_button")
+MonsterHeadName/styles/pressed = SubResource("empty_button")
+MonsterHeadName/styles/hover = SubResource("empty_button")
+MonsterHeadName/styles/disabled = SubResource("empty_button")
+MonsterHeadName/styles/focus = SubResource("empty_button")
+
+StrengthNumber/base_type = &"Label"
+StrengthNumber/colors/font_color = Color(0, 1, 0, 1)
+StrengthNumber/colors/font_outline_color = Color(0, 0, 0, 1)
+StrengthNumber/constants/outline_size = 8
+StrengthNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+StrengthNumber/font_sizes/font_size = 20
+
+StrengthNumberSmall/base_type = &"Label"
+StrengthNumberSmall/colors/font_color = Color(0, 1, 0, 1)
+StrengthNumberSmall/colors/font_outline_color = Color(0, 0, 0, 1)
+StrengthNumberSmall/constants/outline_size = 6
+StrengthNumberSmall/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+StrengthNumberSmall/font_sizes/font_size = 20
+
+StrengthCost/base_type = &"Label"
+StrengthCost/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+UserLoadTitle/base_type = &"Label"
+UserLoadTitle/colors/font_color = Color(1, 1, 0, 1)
+UserLoadTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+UserLoadTitle/constants/outline_size = 7
+UserLoadTitle/fonts/font = ExtResource("font_return")
+UserLoadTitle/font_sizes/font_size = 35
+
+UserLoadIdRow/base_type = &"HBoxContainer"
+UserLoadIdRow/constants/separation = -2
+
+UserLoadKeyRow/base_type = &"HBoxContainer"
+UserLoadKeyRow/constants/separation = -1
+
+UserLoadInputLabel/base_type = &"Label"
+UserLoadInputLabel/colors/font_color = Color(1, 1, 0, 1)
+UserLoadInputLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+UserLoadInputLabel/constants/outline_size = 10
+UserLoadInputLabel/font_sizes/font_size = 18
+
+HelpThingsText/base_type = &"Label"
+HelpThingsText/colors/font_color = Color(0, 0, 0, 1)
+HelpThingsText/colors/font_outline_color = Color(1, 1, 1, 1)
+HelpThingsText/constants/outline_size = 11
+HelpThingsText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+HelpThingsText/font_sizes/font_size = 100
+
+Level17Text/base_type = &"Label"
+Level17Text/colors/font_color = Color(1, 1, 1, 1)
+Level17Text/colors/font_outline_color = Color(0, 0, 0, 1)
+Level17Text/constants/outline_size = 8
+Level17Text/fonts/font = ExtResource("font_hy")
+Level17Text/font_sizes/font_size = 25
+
+Level17TextRed/base_type = &"Label"
+Level17TextRed/colors/font_color = Color(1, 0, 0, 1)
+Level17TextRed/colors/font_outline_color = Color(0, 0, 0, 1)
+Level17TextRed/constants/outline_size = 8
+Level17TextRed/fonts/font = ExtResource("font_hy")
+Level17TextRed/font_sizes/font_size = 18
+
+BoxItemButton/base_type = &"Button"
+BoxItemButton/styles/normal = SubResource("box_item_empty")
+BoxItemButton/styles/pressed = SubResource("box_item_empty")
+BoxItemButton/styles/hover = SubResource("box_item_empty")
+BoxItemButton/styles/disabled = SubResource("box_item_empty")
+BoxItemButton/styles/focus = SubResource("box_item_empty")
+
+BoxItemNumber/base_type = &"Label"
+BoxItemNumber/colors/font_color = Color(1, 0.466667, 0, 1)
+BoxItemNumber/colors/font_shadow_color = Color(0, 0, 0, 1)
+BoxItemNumber/colors/font_outline_color = Color(0, 0, 0, 1)
+BoxItemNumber/constants/outline_size = 6
+BoxItemNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BoxItemNumber/font_sizes/font_size = 18
+
+BoxLockMark/base_type = &"Label"
+BoxLockMark/colors/font_color = Color(1, 0.86, 0.2, 1)
+BoxLockMark/colors/font_outline_color = Color(0, 0, 0, 1)
+BoxLockMark/constants/outline_size = 4
+BoxLockMark/font_sizes/font_size = 13
+
+ZhenYanSlotLabel/base_type = &"Label"
+ZhenYanSlotLabel/colors/font_color = Color(1, 0.529412, 0, 1)
+ZhenYanSlotLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenYanSlotLabel/colors/font_outline_color = Color(1, 0.529412, 0, 1)
+ZhenYanSlotLabel/constants/shadow_offset_x = 0
+ZhenYanSlotLabel/constants/shadow_offset_y = 0
+ZhenYanSlotLabel/constants/outline_size = 1
+ZhenYanSlotLabel/constants/shadow_outline_size = 7
+ZhenYanSlotLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+ZhenYanSlotButton/base_type = &"Button"
+ZhenYanSlotButton/styles/normal = SubResource("empty_button")
+ZhenYanSlotButton/styles/pressed = SubResource("empty_button")
+ZhenYanSlotButton/styles/hover = SubResource("empty_button")
+ZhenYanSlotButton/styles/disabled = SubResource("empty_button")
+ZhenYanSlotButton/styles/focus = SubResource("empty_button")
+
+LoadSceneTips/base_type = &"Label"
+LoadSceneTips/colors/font_color = Color(0, 0, 0, 1)
+LoadSceneTips/fonts/font = ExtResource("font_hy")
+
+LoadScenePanelMargin/base_type = &"MarginContainer"
+LoadScenePanelMargin/constants/margin_left = 64
+LoadScenePanelMargin/constants/margin_top = 64
+LoadScenePanelMargin/constants/margin_right = 64
+LoadScenePanelMargin/constants/margin_bottom = 64
+
+LoadSceneNotice/base_type = &"Label"
+LoadSceneNotice/colors/font_color = Color(1, 0.91, 0.55, 1)
+LoadSceneNotice/colors/font_outline_color = Color(0.12, 0.08, 0.03, 1)
+LoadSceneNotice/constants/outline_size = 6
+LoadSceneNotice/fonts/font = ExtResource("font_hy")
+LoadSceneNotice/font_sizes/font_size = 32
+
+LoadSceneProgress/base_type = &"Label"
+LoadSceneProgress/fonts/font = ExtResource("font_return")
+LoadSceneProgress/font_sizes/font_size = 33
+
+UseMagicTitle/base_type = &"Label"
+UseMagicTitle/colors/font_color = Color(1, 0.607843, 0, 1)
+UseMagicTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
+UseMagicTitle/colors/font_outline_color = Color(1, 0.607843, 0, 1)
+UseMagicTitle/constants/shadow_offset_x = 0
+UseMagicTitle/constants/shadow_offset_y = 0
+UseMagicTitle/constants/outline_size = 2
+UseMagicTitle/constants/shadow_outline_size = 10
+UseMagicTitle/fonts/font = ExtResource("font_hk")
+
+UseMagicRow/base_type = &"HBoxContainer"
+UseMagicRow/constants/separation = 10
+
+UseMagicPage/base_type = &"Label"
+UseMagicPage/colors/font_color = Color(1, 1, 0, 1)
+UseMagicPage/colors/font_outline_color = Color(0, 0, 0, 1)
+UseMagicPage/constants/outline_size = 7
+UseMagicPage/fonts/font = ExtResource("font_hy")
+
+ChooseSceneText/base_type = &"Label"
+ChooseSceneText/colors/font_color = Color(1, 1, 1, 1)
+ChooseSceneText/colors/font_shadow_color = Color(0, 0, 0, 1)
+ChooseSceneText/colors/font_outline_color = Color(1, 1, 1, 1)
+ChooseSceneText/constants/shadow_offset_x = 0
+ChooseSceneText/constants/shadow_offset_y = 0
+ChooseSceneText/constants/outline_size = 2
+ChooseSceneText/constants/shadow_outline_size = 9
+ChooseSceneText/fonts/font = ExtResource("font_hk")
+ChooseSceneText/font_sizes/font_size = 17
+
+ChooseSceneCountdown/base_type = &"Label"
+ChooseSceneCountdown/colors/font_color = Color(1, 0, 0, 1)
+ChooseSceneCountdown/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ChooseSceneCountdown/font_sizes/font_size = 18
+
+MysteryShopTitle/base_type = &"Label"
+MysteryShopTitle/colors/font_color = Color(0, 0, 0, 1)
+MysteryShopTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+MysteryShopTitle/constants/outline_size = 1
+MysteryShopTitle/fonts/font = ExtResource("font_hk")
+MysteryShopTitle/font_sizes/font_size = 12
+
+MysteryShopInfo/base_type = &"Label"
+MysteryShopInfo/colors/font_color = Color(0, 0, 0, 1)
+MysteryShopInfo/colors/font_outline_color = Color(0, 0, 0, 1)
+MysteryShopInfo/fonts/font = ExtResource("font_fzcy")
+
+MysteryShopList/base_type = &"HBoxContainer"
+MysteryShopList/constants/separation = 9
