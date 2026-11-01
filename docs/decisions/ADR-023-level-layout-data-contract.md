@@ -48,7 +48,7 @@
 3. **Phase 30-1 选定既有导入关而非原始 ZMWS 场景**：原始 `source/Scene/level/zmws/*.tscn` 只有地图/碰撞/触发器节点，没有 `BaseLevel` 角色、刷怪计时器与结算节点；30-1 若自行搭建驱动器会引入第二套循环。先用 `level_48`（ZMWS 朱雀街导入关）验证契约，原始场景驱动器在 30-2 处理。
 4. **构建输入与运行时分离**：`scripts/level_layout_sources.json` 是 30-1/30-2/30-3 的构建源；运行时只读 `.tres`。`--check` 同时校验布局资源、索引与预载 Catalog 中的关卡怪物集合。
 5. **`level_48.gd` 的布局常量与五个覆写已删除**；`scripts/level_preload_catalog.py` 从布局源合并阶段怪物，保持预载条目不变。
-6. **Phase 30-2 接入原始 ZMWS 场景**：`ExternalMonsterCatalog` 按精确中文名/唯一归一化建立 512 条外部 ID → BHYH 怪物映射；`ZmwsLevel` 组合原始地图并复用 BaseLevel 阶段契约；20 个包装关卡 Stage 全 PASS 且可清场。未映射 ID 只警告一次并拒绝生成，不静默替换。Phase 30-3 前五批 65 个数据容器脚本已迁出（20 单屏 + 13 多阶段 + 10/12/10 截断对齐），布局资源 86 个，脚本数据表 20 个。
+6. **Phase 30-2 接入原始 ZMWS 场景**：`ExternalMonsterCatalog` 按精确中文名/唯一归一化建立 512 条外部 ID → BHYH 怪物映射；`ZmwsLevel` 组合原始地图并复用 BaseLevel 阶段契约；20 个包装关卡 Stage 全 PASS 且可清场。未映射 ID 只警告一次并拒绝生成，不静默替换。Phase 30-3 收口：69 个数据容器脚本迁出（20 单屏 + 13 多阶段 + 36 截断对齐），6 个空数据表删除，10 个动态/非连续脚本登记例外；布局资源 90 个，未迁移数据表 10 个（全部为登记例外）。
 
 ## 决策
 
