@@ -54,14 +54,14 @@ position = Vector2(1377, 187)
 shape = SubResource("4")
 
 [node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
-motion_scale = Vector2(1, 1)
+scroll_scale = Vector2(1, 1)
 
 [node name="Hdzmbg" type="Sprite2D" parent="BackGround/End" index="0" unique_id=632240422]
 position = Vector2(521, 47)
 scale = Vector2(1.1761745, 1.0203391)
 texture = ExtResource("3")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1488922948]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1488922948]
 
 [node name="Hdzmfront" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1698121419]
 position = Vector2(508, 115)
@@ -72,7 +72,7 @@ position = Vector2(522, 529)
 scale = Vector2(1.1831256, 1)
 texture = ExtResource("5")
 
-[node name="front2" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=564413070]
+[node name="front2" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=564413070]
 
 [node name="exit" parent="." index="11" unique_id=2115553614]
 position = Vector2(512, 325)

@@ -54,7 +54,7 @@ shape = SubResource("6")
 disabled = true
 
 [node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
-motion_scale = Vector2(0.1, 0)
+scroll_scale = Vector2(0.1, 0)
 
 [node name="Hld1Bg" type="Sprite2D" parent="BackGround/End" index="0" unique_id=180759961]
 position = Vector2(844.5, 273.87494)
@@ -69,7 +69,7 @@ texture = ExtResource("4")
 position = Vector2(1410, 296)
 texture = ExtResource("4")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=442373101]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=442373101]
 
 [node name="exit" parent="." index="11" unique_id=2115553614]
 position = Vector2(4422, 319)

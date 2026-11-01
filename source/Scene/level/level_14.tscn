@@ -154,7 +154,7 @@ scale = Vector2(1.1625, 1.0072463)
 texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=970941202]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=970941202]
 
 [node name="Jyy" type="Sprite2D" parent="BackGround/front" index="0" unique_id=191532878]
 position = Vector2(2727, 382)

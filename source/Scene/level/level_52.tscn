@@ -3001,7 +3001,7 @@ position = Vector2(720, 287)
 texture = SubResource("LevelAtlasTexture_8127b8682522")
 
 [node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
-position = Vector2(0, -12)
+scroll_offset = Vector2(0, -12)
 
 [node name="bg31_1" type="AnimatedSprite2D" parent="BackGround/floor_2" index="0" unique_id=2141590266]
 position = Vector2(706, 274)

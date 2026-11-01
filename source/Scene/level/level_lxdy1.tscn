@@ -26,7 +26,7 @@ position = Vector2(534.738, 289)
 scale = Vector2(1.07348, 1.01356)
 texture = ExtResource("3")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1883873554]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1883873554]
 
 [node name="exit" parent="." index="11" unique_id=2115553614]
 position = Vector2(733, 317)

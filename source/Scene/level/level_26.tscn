@@ -118,7 +118,7 @@ metadata/_edit_lock_ = true
 position = Vector2(4500, 385)
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=144794988]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=144794988]
 
 [node name="Gmtw" type="Sprite2D" parent="BackGround/front" index="0" unique_id=426472976]
 position = Vector2(2308.7502, 251.24997)

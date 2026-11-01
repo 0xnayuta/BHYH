@@ -44,7 +44,7 @@ shape = SubResource("Shape_stage_wall")
 position = Vector2(3600, -406)
 shape = SubResource("Shape_stage_wall")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1811815509]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1811815509]
 
 [node name="Background" type="Sprite2D" parent="BackGround/front" index="0" unique_id=179008827]
 position = Vector2(2117.1526, 261)

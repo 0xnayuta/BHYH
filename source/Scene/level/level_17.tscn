@@ -47,7 +47,7 @@ texture = ExtResource("4")
 position = Vector2(2453, 343)
 texture = ExtResource("5")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=245569297]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=245569297]
 
 [node name="exit" parent="." index="13" unique_id=2115553614]
 position = Vector2(4491, 276)

@@ -204,7 +204,7 @@ rotation = -3.14159
 position = Vector2(3657, 396)
 rotation = -3.14159
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=2046327102]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=2046327102]
 
 [node name="Dwtw" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1256198021]
 position = Vector2(2326.75, 263.25003)

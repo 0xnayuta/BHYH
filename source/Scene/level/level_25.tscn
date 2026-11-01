@@ -82,7 +82,7 @@ position = Vector2(3405, 100)
 [node name="Trap" type="Node2D" parent="." index="6" unique_id=1510931837]
 position = Vector2(236, -225)
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=109465750]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=109465750]
 
 [node name="Zztw" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1299407692]
 position = Vector2(2299.25, 254.24998)

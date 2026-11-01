@@ -182,13 +182,15 @@ autostart = true
 [node name="fall_items" type="Node2D" parent="." unique_id=1160963530]
 position = Vector2(-1, -111)
 
-[node name="BackGround" type="ParallaxBackground" parent="." unique_id=1466504861]
+[node name="BackGround" type="CanvasLayer" parent="." unique_id=1466504861]
+layer = -100
+follow_viewport_enabled = true
 
-[node name="End" type="ParallaxLayer" parent="BackGround" unique_id=653194421]
-motion_scale = Vector2(0, 0)
-motion_mirroring = Vector2(1440, 0)
+[node name="End" type="Parallax2D" parent="BackGround" unique_id=653194421]
+scroll_scale = Vector2(0, 0)
+repeat_size = Vector2(1440, 0)
 
-[node name="floor_2" type="ParallaxLayer" parent="BackGround" unique_id=458132924]
+[node name="floor_2" type="Parallax2D" parent="BackGround" unique_id=458132924]
 
 [node name="floor" type="TileMapLayer" parent="BackGround/floor_2" unique_id=643279606]
 

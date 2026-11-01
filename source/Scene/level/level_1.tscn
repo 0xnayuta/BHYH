@@ -142,8 +142,8 @@ position = Vector2(718, 244)
 texture = ExtResource("4")
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1164429011]
-position = Vector2(2014, 36)
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1164429011]
+scroll_offset = Vector2(2014, 36)
 metadata/_edit_lock_ = true
 
 [node name="front" type="Sprite2D" parent="BackGround/front" index="0" unique_id=407592145]
@@ -151,7 +151,7 @@ position = Vector2(438, 338)
 texture = ExtResource("5")
 metadata/_edit_lock_ = true
 
-[node name="floor3" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1200748593]
+[node name="floor3" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1200748593]
 metadata/_edit_lock_ = true
 
 [node name="floor2" type="Sprite2D" parent="BackGround/floor3" index="0" unique_id=2144053821]

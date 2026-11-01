@@ -40,7 +40,7 @@ position = Vector2(600, -827)
 texture = ExtResource("3")
 
 [node name="floor_2" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=458132924]
-position = Vector2(0, -43)
+scroll_offset = Vector2(0, -43)
 
 [node name="bg10" type="Sprite2D" parent="BackGround/floor_2" index="0" unique_id=538650099]
 position = Vector2(601.00006, 367.5)

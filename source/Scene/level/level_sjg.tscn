@@ -31,15 +31,15 @@ shape = SubResource("2")
 wait_time = 3.0
 
 [node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
-position = Vector2(4, 0)
+scroll_offset = Vector2(4, 0)
 
 [node name="248" type="Sprite2D" parent="BackGround/End" index="0" unique_id=312079600]
 position = Vector2(675.25, 230.75)
 scale = Vector2(1.0648856, 1.0745298)
 texture = ExtResource("3")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=747723841]
-position = Vector2(17, -48)
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=747723841]
+scroll_offset = Vector2(17, -48)
 metadata/_edit_lock_ = true
 
 [node name="131" type="Sprite2D" parent="BackGround/front" index="0" unique_id=45352590]

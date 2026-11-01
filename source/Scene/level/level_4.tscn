@@ -68,8 +68,8 @@ position = Vector2(723, 247)
 texture = ExtResource("4")
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1691842681]
-position = Vector2(-2, 0)
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1691842681]
+scroll_offset = Vector2(-2, 0)
 metadata/_edit_lock_ = true
 
 [node name="64" type="Sprite2D" parent="BackGround/front" index="0" unique_id=247949721]

@@ -384,7 +384,7 @@ position = Vector2(1693.5, 332)
 shape = SubResource("2")
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=488974848]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=488974848]
 
 [node name="1" type="Sprite2D" parent="BackGround/front" index="0" unique_id=833225540]
 position = Vector2(481, 250.99997)

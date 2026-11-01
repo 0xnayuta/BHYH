@@ -2352,14 +2352,14 @@ metadata/_edit_lock_ = true
 libraries/ = SubResource("9")
 
 [node name="End" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="0" unique_id=653194421]
-position = Vector2(2, 0)
+scroll_offset = Vector2(2, 0)
 
 [node name="246" type="Sprite2D" parent="BackGround/End" index="0" unique_id=289502927]
 position = Vector2(718, 248)
 texture = ExtResource("5")
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=970134013]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=970134013]
 
 [node name="84" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1228978437]
 position = Vector2(2930, 237.99998)

@@ -166,14 +166,14 @@ position = Vector2(2, -112)
 position = Vector2(719, 244)
 texture = ExtResource("5")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=110615891]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=110615891]
 
 [node name="50" type="Sprite2D" parent="BackGround/front" index="0" unique_id=1480537221]
 position = Vector2(2339, 329)
 texture = ExtResource("6")
 metadata/_edit_lock_ = true
 
-[node name="floor" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=1767584279]
+[node name="floor" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="3" unique_id=1767584279]
 
 [node name="River" parent="BackGround/floor" index="0" unique_id=613845135 instance=ExtResource("7")]
 position = Vector2(2986, 547)

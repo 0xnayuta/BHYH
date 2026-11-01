@@ -56,7 +56,7 @@ position = Vector2(1142.25, 547)
 scale = Vector2(1.21007, 1)
 metadata/_edit_lock_ = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1440703188]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="2" unique_id=1440703188]
 
 [node name="exit" parent="." index="11" unique_id=2115553614]
 position = Vector2(1726, 342)

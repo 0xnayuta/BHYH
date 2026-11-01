@@ -49,7 +49,7 @@ position = Vector2(0, -10.5)
 shape = SubResource("Shape_platform")
 one_way_collision = true
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=378659875]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=378659875]
 
 [node name="Background" type="Sprite2D" parent="BackGround/front" index="0" unique_id=31263869]
 position = Vector2(601, 295)

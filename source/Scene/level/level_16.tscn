@@ -673,7 +673,7 @@ visible = false
 position = Vector2(519, 245)
 texture = ExtResource("3")
 
-[node name="front" type="ParallaxLayer" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1753790214]
+[node name="front" type="Parallax2D" parent="BackGround" parent_id_path=PackedInt32Array(1466504861) index="1" unique_id=1753790214]
 
 [node name="Yld" type="Sprite2D" parent="BackGround/front" index="0" unique_id=525745060]
 position = Vector2(2263, 64.00001)
