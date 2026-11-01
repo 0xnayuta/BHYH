@@ -190,8 +190,7 @@ motion_mirroring = Vector2(1440, 0)
 
 [node name="floor_2" type="ParallaxLayer" parent="BackGround" unique_id=458132924]
 
-[node name="floor" type="TileMap" parent="BackGround/floor_2" unique_id=643279606]
-format = 2
+[node name="floor" type="TileMapLayer" parent="BackGround/floor_2" unique_id=643279606]
 
 [node name="exit" type="AnimatedSprite2D" parent="." unique_id=2115553614]
 visible = false
