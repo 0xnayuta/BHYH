@@ -2561,3 +2561,130 @@ ZhenYanNeedNum/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
 ZhenYanNeedNote/base_type = &"Label"
 ZhenYanNeedNote/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
 ZhenYanNeedNote/font_sizes/font_size = 14
+
+ZhenFaHelpTitle/base_type = &"Label"
+ZhenFaHelpTitle/colors/font_color = Color(0, 0, 0, 1)
+ZhenFaHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
+ZhenFaHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ZhenFaHelpTitle/constants/shadow_offset_x = 0
+ZhenFaHelpTitle/constants/shadow_offset_y = 0
+ZhenFaHelpTitle/constants/outline_size = 1
+ZhenFaHelpTitle/constants/shadow_outline_size = 5
+ZhenFaHelpTitle/fonts/font = ExtResource("font_main")
+ZhenFaHelpTitle/font_sizes/font_size = 29
+
+ZhenFaHelpBody/base_type = &"Label"
+ZhenFaHelpBody/colors/font_color = Color(0, 1, 1, 1)
+ZhenFaHelpBody/colors/font_shadow_color = Color(0, 0, 0, 1)
+ZhenFaHelpBody/colors/font_outline_color = Color(0, 1, 1, 1)
+ZhenFaHelpBody/constants/shadow_offset_x = 0
+ZhenFaHelpBody/constants/shadow_offset_y = 0
+ZhenFaHelpBody/constants/outline_size = 2
+ZhenFaHelpBody/constants/shadow_outline_size = 9
+ZhenFaHelpBody/fonts/font = ExtResource("font_hk")
+
+Monster139Button/base_type = &"Button"
+Monster139Button/colors/font_color = Color(1, 1, 1, 1)
+Monster139Button/colors/font_hover_color = Color(1, 0.454902, 0, 1)
+Monster139Button/fonts/font = ExtResource("font_return")
+Monster139Button/styles/normal = SubResource("empty_button")
+Monster139Button/styles/pressed = SubResource("empty_button")
+Monster139Button/styles/hover = SubResource("empty_button")
+Monster139Button/styles/disabled = SubResource("empty_button")
+Monster139Button/styles/focus = SubResource("empty_button")
+
+Monster139DamageLabel/base_type = &"Label"
+Monster139DamageLabel/colors/font_color = Color(1, 1, 1, 1)
+Monster139DamageLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+Monster139DamageLabel/colors/font_outline_color = Color(1, 1, 1, 1)
+Monster139DamageLabel/constants/shadow_offset_x = 0
+Monster139DamageLabel/constants/shadow_offset_y = 0
+Monster139DamageLabel/constants/outline_size = 2
+Monster139DamageLabel/constants/shadow_outline_size = 10
+Monster139DamageLabel/fonts/font = ExtResource("font_hk")
+
+CureTimesHeader/base_type = &"Label"
+CureTimesHeader/fonts/font = ExtResource("font_return")
+CureTimesHeader/font_sizes/font_size = 25
+
+CureTimesSection/base_type = &"Label"
+CureTimesSection/fonts/font = ExtResource("font_return")
+CureTimesSection/font_sizes/font_size = 20
+
+CureTimesHint/base_type = &"Label"
+CureTimesHint/colors/font_color = Color(1, 0.752941, 0, 1)
+CureTimesHint/fonts/font = ExtResource("font_return")
+CureTimesHint/font_sizes/font_size = 16
+
+CureTimesCurrency/base_type = &"Label"
+CureTimesCurrency/colors/font_color = Color(1, 1, 0, 1)
+CureTimesCurrency/colors/font_outline_color = Color(0, 0, 0, 1)
+CureTimesCurrency/constants/outline_size = 6
+CureTimesCurrency/fonts/font = ExtResource("font_return")
+CureTimesCurrency/font_sizes/font_size = 22
+
+CureTimesRow/base_type = &"HBoxContainer"
+CureTimesRow/constants/separation = 0
+
+DecomposeHelpTitle/base_type = &"Label"
+DecomposeHelpTitle/colors/font_color = Color(0, 0, 0, 1)
+DecomposeHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
+DecomposeHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+DecomposeHelpTitle/constants/shadow_offset_x = 0
+DecomposeHelpTitle/constants/shadow_offset_y = 0
+DecomposeHelpTitle/constants/outline_size = 2
+DecomposeHelpTitle/constants/shadow_outline_size = 8
+DecomposeHelpTitle/fonts/font = ExtResource("font_hk")
+DecomposeHelpTitle/font_sizes/font_size = 25
+
+DecomposeHelpBody/base_type = &"Label"
+DecomposeHelpBody/colors/font_color = Color(1, 0.635294, 0, 1)
+DecomposeHelpBody/colors/font_shadow_color = Color(0, 0, 0, 1)
+DecomposeHelpBody/colors/font_outline_color = Color(1, 0.635294, 0, 1)
+DecomposeHelpBody/constants/shadow_offset_x = 0
+DecomposeHelpBody/constants/shadow_offset_y = 0
+DecomposeHelpBody/constants/outline_size = 1
+DecomposeHelpBody/constants/shadow_outline_size = 10
+DecomposeHelpBody/fonts/font = ExtResource("font_hk")
+DecomposeHelpBody/font_sizes/font_size = 20
+
+DecomposeHelpRow/base_type = &"BoxContainer"
+DecomposeHelpRow/constants/separation = -10
+
+SkillSelectName/base_type = &"Label"
+SkillSelectName/colors/font_color = Color(1, 1, 0, 1)
+SkillSelectName/colors/font_shadow_color = Color(0, 0, 0, 1)
+SkillSelectName/colors/font_outline_color = Color(1, 1, 0, 1)
+SkillSelectName/constants/shadow_offset_x = 0
+SkillSelectName/constants/shadow_offset_y = 0
+SkillSelectName/constants/outline_size = 2
+SkillSelectName/constants/shadow_outline_size = 10
+SkillSelectName/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+
+SkillSelectLevel/base_type = &"Label"
+SkillSelectLevel/colors/font_color = Color(1, 0.556863, 0, 1)
+SkillSelectLevel/colors/font_shadow_color = Color(0, 0, 0, 1)
+SkillSelectLevel/colors/font_outline_color = Color(1, 0.556863, 0, 1)
+SkillSelectLevel/constants/shadow_offset_x = 0
+SkillSelectLevel/constants/shadow_offset_y = 0
+SkillSelectLevel/constants/outline_size = 2
+SkillSelectLevel/constants/shadow_outline_size = 8
+SkillSelectLevel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+
+SkillSelectInfo/base_type = &"Label"
+SkillSelectInfo/colors/font_color = Color(0, 0, 0, 1)
+SkillSelectInfo/colors/font_shadow_color = Color(1, 1, 1, 1)
+SkillSelectInfo/colors/font_outline_color = Color(0, 0, 0, 1)
+SkillSelectInfo/constants/shadow_offset_x = 0
+SkillSelectInfo/constants/shadow_offset_y = 0
+SkillSelectInfo/constants/outline_size = 1
+SkillSelectInfo/constants/shadow_outline_size = 6
+SkillSelectInfo/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+SkillSelectInfo/font_sizes/font_size = 15
+
+SkillSelectNoHave/base_type = &"Label"
+SkillSelectNoHave/colors/font_color = Color(1, 0, 0, 1)
+SkillSelectNoHave/colors/font_outline_color = Color(0, 0, 0, 1)
+SkillSelectNoHave/constants/outline_size = 10
+SkillSelectNoHave/fonts/font = ExtResource("font_hy")
+SkillSelectNoHave/font_sizes/font_size = 20

@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 1760,
+    "direct_properties": 1524,
     "animation_track_refs": 26,
-    "textual_references": 1786,
-    "scenes": 102
+    "textual_references": 1550,
+    "scenes": 97
   },
   "property_categories": {
-    "colors": 519,
-    "constants": 456,
-    "font_sizes": 246,
-    "fonts": 270,
-    "styles": 269
+    "colors": 447,
+    "constants": 376,
+    "font_sizes": 229,
+    "fonts": 238,
+    "styles": 234
   },
   "animation_categories": {
     "colors": 15,
@@ -22,14 +22,13 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "BoxContainer": 1,
-    "Button": 392,
+    "Button": 348,
     "CheckBox": 4,
     "GridContainer": 12,
-    "HBoxContainer": 20,
+    "HBoxContainer": 19,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 1231,
+    "Label": 1041,
     "LineEdit": 14,
     "MarginContainer": 32,
     "Panel": 5,
@@ -44,7 +43,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 729,
+    "scene_refs": 767,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -129,6 +128,14 @@
       "BodyTrainingHitButton",
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
+      "CureTimesCurrency",
+      "CureTimesHeader",
+      "CureTimesHint",
+      "CureTimesRow",
+      "CureTimesSection",
+      "DecomposeHelpBody",
+      "DecomposeHelpRow",
+      "DecomposeHelpTitle",
       "EndStatsColumn",
       "EndStatsCritCount",
       "EndStatsCure",
@@ -228,6 +235,8 @@
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
       "MenuHintLabel",
+      "Monster139Button",
+      "Monster139DamageLabel",
       "MonsterHelpButton",
       "MonsterHelpTitle",
       "MonsterHelpTitleLarge",
@@ -347,6 +356,10 @@
       "SkillLabel",
       "SkillNeedLabel",
       "SkillPopupMenu",
+      "SkillSelectInfo",
+      "SkillSelectLevel",
+      "SkillSelectName",
+      "SkillSelectNoHave",
       "SkillShadowLabel",
       "SkillShadowLabelPlain",
       "SkillSmallLabel",
@@ -380,6 +393,8 @@
       "ZhenFaCurrentLabel",
       "ZhenFaCurrentName",
       "ZhenFaEmptyButton",
+      "ZhenFaHelpBody",
+      "ZhenFaHelpTitle",
       "ZhenFaInfoAddProp",
       "ZhenFaInfoBodyGroup",
       "ZhenFaInfoLevelLabel",
@@ -403,10 +418,10 @@
       "ZhenYanPropInfo",
       "ZhenYanPropList"
     ],
-    "variation_refs": 1028
+    "variation_refs": 1066
   },
   "fonts": {
-    "scene_refs": 134,
+    "scene_refs": 126,
     "unique_files": 11,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -492,10 +507,6 @@
       "direct": 27,
       "animation": 0
     },
-    "Scene/back_pack/skill_select.tscn": {
-      "direct": 46,
-      "animation": 0
-    },
     "Scene/back_pack/use_items.tscn": {
       "direct": 37,
       "animation": 0
@@ -546,10 +557,6 @@
     },
     "Scene/ldl/decompose.tscn": {
       "direct": 12,
-      "animation": 0
-    },
-    "Scene/ldl/decompose_help.tscn": {
-      "direct": 46,
       "animation": 0
     },
     "Scene/ldl/divine_forge.tscn": {
@@ -664,10 +671,6 @@
       "direct": 1,
       "animation": 0
     },
-    "Scene/monster/monster_139.tscn": {
-      "direct": 48,
-      "animation": 0
-    },
     "Scene/monster_blood/boss_blood.tscn": {
       "direct": 20,
       "animation": 0
@@ -776,10 +779,6 @@
       "direct": 15,
       "animation": 0
     },
-    "Scene/other_scene/zhen_fa_help.tscn": {
-      "direct": 49,
-      "animation": 0
-    },
     "Scene/other_scene/zhenfalxbutton.tscn": {
       "direct": 9,
       "animation": 0
@@ -798,10 +797,6 @@
     },
     "Scene/shop/choose_item.tscn": {
       "direct": 18,
-      "animation": 0
-    },
-    "Scene/shop/cure_times_box.tscn": {
-      "direct": 47,
       "animation": 0
     },
     "Scene/shop/mystery_shop.tscn": {
