@@ -1,16 +1,23 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/pellet/basic_pellet.gd" id="1"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
+
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="4"]
+
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="6"]
+
 [ext_resource type="Texture2D" path="res://Art/backpack/dywk.png" id="7"]
+
 [ext_resource type="Texture2D" path="res://Art/backpack/fydy.png" id="8"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="9"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="10"]
 
+
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 [node name="BasicPellet" type="Node2D" unique_id=991376514]
 script = ExtResource("1")
 
@@ -36,24 +43,22 @@ color = Color(0, 0, 0, 0.403922)
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="BG" unique_id=753882593]
+theme_type_variation = "PelletTitle"
+theme = ExtResource("theme")
 offset_left = -441.0
 offset_top = -278.0
 offset_right = -281.0
 offset_bottom = -234.0
-theme_override_colors/font_color = Color(1, 0.6, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 40
 text = "丹药服用"
 metadata/_edit_lock_ = true
 
 [node name="TypeButonList" type="HBoxContainer" parent="BG" unique_id=1497416907]
+theme_type_variation = "PelletTypeRow"
+theme = ExtResource("theme")
 offset_left = -290.0
 offset_top = -181.0
 offset_right = 343.0
 offset_bottom = -146.0
-theme_override_constants/separation = 15
 metadata/_edit_lock_ = true
 
 [node name="HpDy" type="TextureButton" parent="BG/TypeButonList" unique_id=635321438]
@@ -64,20 +69,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Hp" type="Label" parent="BG/TypeButonList/HpDy" unique_id=1889485054]
+theme_type_variation = "PelletHpTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "生命丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -91,20 +89,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Mp" type="Label" parent="BG/TypeButonList/MpDy" unique_id=1383539308]
+theme_type_variation = "PelletMpTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "魔法丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -118,20 +109,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Att" type="Label" parent="BG/TypeButonList/AttDy" unique_id=630179890]
+theme_type_variation = "PelletAttTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(1, 0.658824, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0.658824, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "攻击丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -145,20 +129,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Crit" type="Label" parent="BG/TypeButonList/CritDy" unique_id=1834966180]
+theme_type_variation = "PelletCritTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(0.658824, 0.67451, 0.670588, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0.658824, 0.67451, 0.670588, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "暴击丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -172,20 +149,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Lucky" type="Label" parent="BG/TypeButonList/LuckyDy" unique_id=1178468131]
+theme_type_variation = "PelletLuckyTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "幸运丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -199,20 +169,13 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("4")
 
 [node name="Emy" type="Label" parent="BG/TypeButonList/EmpDy" unique_id=1342935478]
+theme_type_variation = "PelletEmpTab"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 32.0
-theme_override_colors/font_color = Color(0, 0.627451, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0.627451, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 17
 text = "回魔丹"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -225,85 +188,57 @@ offset_right = 403.0
 offset_bottom = -144.0
 
 [node name="Stage_1" type="Label" parent="BG/Eat_all" unique_id=984460557]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = -5.0
 offset_right = 66.0
 offset_bottom = 48.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "一键
 服用"
 
 [node name="AllPellet" type="HBoxContainer" parent="BG" unique_id=1285279710]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 offset_left = -392.0
 offset_top = -116.0
 offset_right = 93.0
 offset_bottom = 180.0
-theme_override_constants/separation = 25
 metadata/_edit_lock_ = true
 
 [node name="AllPelletName" type="VBoxContainer" parent="BG/AllPellet" unique_id=225446414]
+theme_type_variation = "PelletNameColumn"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 39
 
 [node name="Stage_1" type="Label" parent="BG/AllPellet/AllPelletName" unique_id=1723715912]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "一品丹"
 
 [node name="Stage_2" type="Label" parent="BG/AllPellet/AllPelletName" unique_id=1669189849]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "二品丹"
 
 [node name="Stage_3" type="Label" parent="BG/AllPellet/AllPelletName" unique_id=1972712921]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "三品丹"
 
 [node name="Stage_4" type="Label" parent="BG/AllPellet/AllPelletName" unique_id=956032967]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "四品丹"
 
 [node name="Stage_5" type="Label" parent="BG/AllPellet/AllPelletName" unique_id=75454410]
+theme_type_variation = "PelletEatLabel"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 22
 text = "五品丹"
 
 [node name="AllPelletBox" type="VBoxContainer" parent="BG/AllPellet" unique_id=1824952643]
@@ -311,8 +246,9 @@ layout_mode = 2
 metadata/_edit_lock_ = true
 
 [node name="Stage_1" type="HBoxContainer" parent="BG/AllPellet/AllPelletBox" unique_id=1657403412]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 25
 
 [node name="Dy_1" type="TextureRect" parent="BG/AllPellet/AllPelletBox/Stage_1" unique_id=1013037901]
 layout_mode = 2
@@ -335,8 +271,9 @@ layout_mode = 2
 texture = ExtResource("7")
 
 [node name="Stage_2" type="HBoxContainer" parent="BG/AllPellet/AllPelletBox" unique_id=1587055686]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 25
 
 [node name="Dy_1" type="TextureRect" parent="BG/AllPellet/AllPelletBox/Stage_2" unique_id=1738453177]
 layout_mode = 2
@@ -359,8 +296,9 @@ layout_mode = 2
 texture = ExtResource("7")
 
 [node name="Stage_3" type="HBoxContainer" parent="BG/AllPellet/AllPelletBox" unique_id=709210387]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 25
 
 [node name="Dy_1" type="TextureRect" parent="BG/AllPellet/AllPelletBox/Stage_3" unique_id=2121437464]
 layout_mode = 2
@@ -383,8 +321,9 @@ layout_mode = 2
 texture = ExtResource("7")
 
 [node name="Stage_4" type="HBoxContainer" parent="BG/AllPellet/AllPelletBox" unique_id=24036757]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 25
 
 [node name="Dy_1" type="TextureRect" parent="BG/AllPellet/AllPelletBox/Stage_4" unique_id=790579490]
 layout_mode = 2
@@ -407,8 +346,9 @@ layout_mode = 2
 texture = ExtResource("7")
 
 [node name="Stage_5" type="HBoxContainer" parent="BG/AllPellet/AllPelletBox" unique_id=1553633078]
+theme_type_variation = "PelletStageRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 25
 
 [node name="Dy_1" type="TextureRect" parent="BG/AllPellet/AllPelletBox/Stage_5" unique_id=1926290830]
 layout_mode = 2
@@ -431,8 +371,9 @@ layout_mode = 2
 texture = ExtResource("7")
 
 [node name="AllPelletPropButton" type="VBoxContainer" parent="BG/AllPellet" unique_id=716363268]
+theme_type_variation = "PelletPropertyButtonColumn"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 17
 
 [node name="Eat_1" type="TextureButton" parent="BG/AllPellet/AllPelletPropButton" unique_id=1159945130]
 layout_mode = 2
@@ -465,232 +406,157 @@ texture_pressed = ExtResource("8")
 texture_hover = ExtResource("8")
 
 [node name="AllPelletProp" type="VBoxContainer" parent="BG/AllPellet" unique_id=217521099]
+theme_type_variation = "PelletPropertyColumn"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 43
 
 [node name="PropStage_1" type="Label" parent="BG/AllPellet/AllPelletProp" unique_id=1284506214]
+theme_type_variation = "PelletStageProperty"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 
 [node name="PropStage_2" type="Label" parent="BG/AllPellet/AllPelletProp" unique_id=417630941]
+theme_type_variation = "PelletStageProperty"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 
 [node name="PropStage_3" type="Label" parent="BG/AllPellet/AllPelletProp" unique_id=607879486]
+theme_type_variation = "PelletStageProperty"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 
 [node name="PropStage_4" type="Label" parent="BG/AllPellet/AllPelletProp" unique_id=1217269006]
+theme_type_variation = "PelletStageProperty"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 
 [node name="PropStage_5" type="Label" parent="BG/AllPellet/AllPelletProp" unique_id=70003647]
+theme_type_variation = "PelletStageProperty"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 
 [node name="AllPelletsBox" type="VBoxContainer" parent="BG" unique_id=596135543]
+theme_type_variation = "PelletStageList"
+theme = ExtResource("theme")
 offset_left = -299.0
 offset_top = -114.0
 offset_right = 81.0
 offset_bottom = 184.0
-theme_override_constants/separation = 10
 metadata/_edit_lock_ = true
 
 [node name="Stage_1" type="HBoxContainer" parent="BG/AllPelletsBox" unique_id=1652494808]
+theme_type_variation = "PelletStagePropertyRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 31
 
 [node name="Stage_2" type="HBoxContainer" parent="BG/AllPelletsBox" unique_id=331080337]
+theme_type_variation = "PelletStagePropertyRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 31
 
 [node name="Stage_3" type="HBoxContainer" parent="BG/AllPelletsBox" unique_id=56363643]
+theme_type_variation = "PelletStagePropertyRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 31
 
 [node name="Stage_4" type="HBoxContainer" parent="BG/AllPelletsBox" unique_id=715350317]
+theme_type_variation = "PelletStagePropertyRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 31
 
 [node name="Stage_5" type="HBoxContainer" parent="BG/AllPelletsBox" unique_id=1184915893]
+theme_type_variation = "PelletStagePropertyRow"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 31
 
 [node name="zl" type="Label" parent="BG" unique_id=1072943874]
+theme_type_variation = "PelletTabLabel"
+theme = ExtResource("theme")
 offset_left = -390.0
 offset_top = -184.0
 offset_right = -310.0
 offset_bottom = -160.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "丹药种类"
 metadata/_edit_lock_ = true
 
 [node name="line" type="Label" parent="BG/zl" unique_id=1713758646]
+theme_type_variation = "PelletLineLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -20.0
 offset_top = 21.0
 offset_bottom = 52.0
 rotation = -0.104067
 scale = Vector2(6, 1)
-theme_override_font_sizes/font_size = 20
 text = "—"
 metadata/_edit_lock_ = true
 
 [node name="pz" type="Label" parent="BG/zl" unique_id=173171150]
+theme_type_variation = "PelletTabLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -1.0
 offset_top = 39.0
 offset_right = 79.0
 offset_bottom = 63.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "丹药品质"
 metadata/_edit_lock_ = true
 
 [node name="TotalProp" type="Label" parent="BG" unique_id=273203874]
+theme_type_variation = "PelletTotalValue"
+theme = ExtResource("theme")
 offset_left = -404.0
 offset_top = 176.0
 offset_right = -284.0
 offset_bottom = 218.0
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 30
 text = "总属性："
 metadata/_edit_lock_ = true
 
 [node name="TotalProps" type="GridContainer" parent="BG/TotalProp" unique_id=344108313]
+theme_type_variation = "PelletTotalGrid"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 115.0
 offset_top = 8.0
 offset_right = 821.0
 offset_bottom = 39.0
-theme_override_constants/h_separation = 30
-theme_override_constants/v_separation = 10
 columns = 6
 metadata/_edit_lock_ = true
 
 [node name="Hp" type="Label" parent="BG/TotalProp/TotalProps" unique_id=75582161]
+theme_type_variation = "PelletHpValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "生命："
 
 [node name="Mp" type="Label" parent="BG/TotalProp/TotalProps" unique_id=1040523922]
+theme_type_variation = "PelletMpValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "魔法："
 
 [node name="Att" type="Label" parent="BG/TotalProp/TotalProps" unique_id=1516737821]
+theme_type_variation = "PelletAttValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.623529, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "攻击："
 
 [node name="Crit" type="Label" parent="BG/TotalProp/TotalProps" unique_id=250578205]
+theme_type_variation = "PelletCritValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(0.615686, 0.541176, 0.494118, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "暴击："
 
 [node name="Lucky" type="Label" parent="BG/TotalProp/TotalProps" unique_id=140045866]
+theme_type_variation = "PelletLuckyValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "幸运："
 
 [node name="Emp" type="Label" parent="BG/TotalProp/TotalProps" unique_id=517765340]
+theme_type_variation = "PelletEmpValue"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.592157, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "回魔："
 
 [node name="Close" type="TextureButton" parent="BG" unique_id=229833894]

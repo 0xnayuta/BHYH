@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" load_steps=33 format=3 uid="uid://bhyhuitheme01"]
 
 [ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
@@ -195,6 +195,54 @@ corner_radius_bottom_left = 4
 texture = ExtResource("tex_56")
 texture_margin_left = 10.0
 texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_stat"]
+bg_color = Color(0.290196, 0.129412, 0.0588235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.784314, 0.568627, 0.227451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page"]
+bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page_hover"]
+bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page_selected"]
+bg_color = Color(0.643137, 0.364706, 0.0901961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [resource]
 SettingsButton/base_type = &"Button"
@@ -1141,3 +1189,512 @@ LhhjTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 LhhjTitle/constants/outline_size = 8
 LhhjTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
 LhhjTitle/font_sizes/font_size = 30
+
+PelletStageRow/base_type = &"HBoxContainer"
+PelletStageRow/constants/separation = 25
+
+PelletNameColumn/base_type = &"VBoxContainer"
+PelletNameColumn/constants/separation = 39
+
+PelletPropertyColumn/base_type = &"VBoxContainer"
+PelletPropertyColumn/constants/separation = 43
+
+PelletStageProperty/base_type = &"Label"
+PelletStageProperty/colors/font_color = Color(1, 1, 0, 1)
+PelletStageProperty/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletStageProperty/colors/font_outline_color = Color(1, 1, 0, 1)
+PelletStageProperty/constants/shadow_offset_x = 0
+PelletStageProperty/constants/shadow_offset_y = 0
+PelletStageProperty/constants/outline_size = 2
+PelletStageProperty/constants/shadow_outline_size = 7
+PelletStageProperty/fonts/font = ExtResource("font_hk")
+PelletStageProperty/font_sizes/font_size = 20
+
+PelletPropertyButtonColumn/base_type = &"VBoxContainer"
+PelletPropertyButtonColumn/constants/separation = 17
+
+PelletStageList/base_type = &"VBoxContainer"
+PelletStageList/constants/separation = 10
+
+PelletStagePropertyRow/base_type = &"HBoxContainer"
+PelletStagePropertyRow/constants/separation = 31
+
+PelletEatLabel/base_type = &"Label"
+PelletEatLabel/colors/font_color = Color(1, 1, 0, 1)
+PelletEatLabel/constants/shadow_offset_x = 0
+PelletEatLabel/constants/shadow_offset_y = 0
+PelletEatLabel/constants/outline_size = 3
+PelletEatLabel/constants/shadow_outline_size = 5
+PelletEatLabel/fonts/font = ExtResource("font_hk")
+PelletEatLabel/font_sizes/font_size = 22
+
+PelletTitle/base_type = &"Label"
+PelletTitle/colors/font_color = Color(1, 0.6, 0, 1)
+PelletTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+PelletTitle/constants/outline_size = 3
+PelletTitle/fonts/font = ExtResource("font_return")
+PelletTitle/font_sizes/font_size = 40
+
+PelletTotalValue/base_type = &"Label"
+PelletTotalValue/colors/font_color = Color(0, 1, 0, 1)
+PelletTotalValue/constants/shadow_offset_x = 0
+PelletTotalValue/constants/outline_size = 2
+PelletTotalValue/constants/shadow_outline_size = 7
+PelletTotalValue/fonts/font = ExtResource("font_hk")
+PelletTotalValue/font_sizes/font_size = 30
+
+PelletTotalGrid/base_type = &"GridContainer"
+PelletTotalGrid/constants/h_separation = 30
+PelletTotalGrid/constants/v_separation = 10
+
+PelletAttValue/base_type = &"Label"
+PelletAttValue/colors/font_color = Color(1, 0.623529, 0, 1)
+PelletAttValue/constants/shadow_offset_x = 0
+PelletAttValue/constants/shadow_offset_y = 0
+PelletAttValue/constants/outline_size = 2
+PelletAttValue/constants/shadow_outline_size = 7
+PelletAttValue/fonts/font = ExtResource("font_hk")
+PelletAttValue/font_sizes/font_size = 20
+
+PelletCritValue/base_type = &"Label"
+PelletCritValue/colors/font_color = Color(0.615686, 0.541176, 0.494118, 1)
+PelletCritValue/constants/shadow_offset_x = 0
+PelletCritValue/constants/shadow_offset_y = 0
+PelletCritValue/constants/outline_size = 2
+PelletCritValue/constants/shadow_outline_size = 7
+PelletCritValue/fonts/font = ExtResource("font_hk")
+PelletCritValue/font_sizes/font_size = 20
+
+PelletEmpValue/base_type = &"Label"
+PelletEmpValue/colors/font_color = Color(0, 0.592157, 1, 1)
+PelletEmpValue/constants/shadow_offset_x = 0
+PelletEmpValue/constants/shadow_offset_y = 0
+PelletEmpValue/constants/outline_size = 2
+PelletEmpValue/constants/shadow_outline_size = 7
+PelletEmpValue/fonts/font = ExtResource("font_hk")
+PelletEmpValue/font_sizes/font_size = 20
+
+PelletHpValue/base_type = &"Label"
+PelletHpValue/colors/font_color = Color(1, 0, 0, 1)
+PelletHpValue/constants/shadow_offset_x = 0
+PelletHpValue/constants/shadow_offset_y = 0
+PelletHpValue/constants/outline_size = 2
+PelletHpValue/constants/shadow_outline_size = 8
+PelletHpValue/fonts/font = ExtResource("font_hk")
+PelletHpValue/font_sizes/font_size = 20
+
+PelletLuckyValue/base_type = &"Label"
+PelletLuckyValue/colors/font_color = Color(1, 1, 0, 1)
+PelletLuckyValue/constants/shadow_offset_x = 0
+PelletLuckyValue/constants/shadow_offset_y = 0
+PelletLuckyValue/constants/outline_size = 2
+PelletLuckyValue/constants/shadow_outline_size = 7
+PelletLuckyValue/fonts/font = ExtResource("font_hk")
+PelletLuckyValue/font_sizes/font_size = 20
+
+PelletMpValue/base_type = &"Label"
+PelletMpValue/colors/font_color = Color(0, 1, 1, 1)
+PelletMpValue/constants/shadow_offset_x = 0
+PelletMpValue/constants/shadow_offset_y = 0
+PelletMpValue/constants/outline_size = 2
+PelletMpValue/constants/shadow_outline_size = 7
+PelletMpValue/fonts/font = ExtResource("font_hk")
+PelletMpValue/font_sizes/font_size = 20
+
+PelletTypeRow/base_type = &"HBoxContainer"
+PelletTypeRow/constants/separation = 15
+
+PelletAttTab/base_type = &"Label"
+PelletAttTab/colors/font_color = Color(1, 0.658824, 0, 1)
+PelletAttTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletAttTab/colors/font_outline_color = Color(1, 0.658824, 0, 1)
+PelletAttTab/constants/shadow_offset_x = 0
+PelletAttTab/constants/shadow_offset_y = 0
+PelletAttTab/constants/outline_size = 1
+PelletAttTab/constants/shadow_outline_size = 7
+PelletAttTab/fonts/font = ExtResource("font_hk")
+PelletAttTab/font_sizes/font_size = 17
+
+PelletCritTab/base_type = &"Label"
+PelletCritTab/colors/font_color = Color(0.658824, 0.67451, 0.670588, 1)
+PelletCritTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletCritTab/colors/font_outline_color = Color(0.658824, 0.67451, 0.670588, 1)
+PelletCritTab/constants/shadow_offset_x = 0
+PelletCritTab/constants/shadow_offset_y = 0
+PelletCritTab/constants/outline_size = 1
+PelletCritTab/constants/shadow_outline_size = 7
+PelletCritTab/fonts/font = ExtResource("font_hk")
+PelletCritTab/font_sizes/font_size = 17
+
+PelletEmpTab/base_type = &"Label"
+PelletEmpTab/colors/font_color = Color(0, 0.627451, 1, 1)
+PelletEmpTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletEmpTab/colors/font_outline_color = Color(0, 0.627451, 1, 1)
+PelletEmpTab/constants/shadow_offset_x = 0
+PelletEmpTab/constants/shadow_offset_y = 0
+PelletEmpTab/constants/outline_size = 1
+PelletEmpTab/constants/shadow_outline_size = 7
+PelletEmpTab/fonts/font = ExtResource("font_hk")
+PelletEmpTab/font_sizes/font_size = 17
+
+PelletHpTab/base_type = &"Label"
+PelletHpTab/colors/font_color = Color(1, 0, 0, 1)
+PelletHpTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletHpTab/colors/font_outline_color = Color(1, 0, 0, 1)
+PelletHpTab/constants/shadow_offset_x = 0
+PelletHpTab/constants/shadow_offset_y = 0
+PelletHpTab/constants/outline_size = 1
+PelletHpTab/constants/shadow_outline_size = 7
+PelletHpTab/fonts/font = ExtResource("font_hk")
+PelletHpTab/font_sizes/font_size = 17
+
+PelletLuckyTab/base_type = &"Label"
+PelletLuckyTab/colors/font_color = Color(1, 1, 0, 1)
+PelletLuckyTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletLuckyTab/colors/font_outline_color = Color(1, 1, 0, 1)
+PelletLuckyTab/constants/shadow_offset_x = 0
+PelletLuckyTab/constants/shadow_offset_y = 0
+PelletLuckyTab/constants/outline_size = 1
+PelletLuckyTab/constants/shadow_outline_size = 7
+PelletLuckyTab/fonts/font = ExtResource("font_hk")
+PelletLuckyTab/font_sizes/font_size = 17
+
+PelletMpTab/base_type = &"Label"
+PelletMpTab/colors/font_color = Color(0, 1, 1, 1)
+PelletMpTab/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletMpTab/colors/font_outline_color = Color(0, 1, 1, 1)
+PelletMpTab/constants/shadow_offset_x = 0
+PelletMpTab/constants/shadow_offset_y = 0
+PelletMpTab/constants/outline_size = 1
+PelletMpTab/constants/shadow_outline_size = 7
+PelletMpTab/fonts/font = ExtResource("font_hk")
+PelletMpTab/font_sizes/font_size = 17
+
+PelletTabLabel/base_type = &"Label"
+PelletTabLabel/colors/font_color = Color(1, 1, 1, 1)
+PelletTabLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+PelletTabLabel/colors/font_outline_color = Color(1, 1, 1, 1)
+PelletTabLabel/constants/shadow_offset_x = 0
+PelletTabLabel/constants/shadow_offset_y = 0
+PelletTabLabel/constants/outline_size = 2
+PelletTabLabel/constants/shadow_outline_size = 7
+PelletTabLabel/fonts/font = ExtResource("font_hk")
+PelletTabLabel/font_sizes/font_size = 20
+
+PelletLineLabel/base_type = &"Label"
+PelletLineLabel/font_sizes/font_size = 20
+
+PetStatPanel/base_type = &"Panel"
+PetStatPanel/styles/panel = SubResource("sub_StyleBoxFlat_pet_stat")
+
+PetStatName/base_type = &"Label"
+PetStatName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetStatName/colors/font_outline_color = Color(0, 0, 0, 1)
+PetStatName/constants/outline_size = 3
+PetStatName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetStatName/font_sizes/font_size = 13
+
+PetStatValue/base_type = &"Label"
+PetStatValue/colors/font_color = Color(1, 1, 1, 1)
+PetStatValue/colors/font_outline_color = Color(0, 0, 0, 1)
+PetStatValue/constants/outline_size = 3
+PetStatValue/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetStatValue/font_sizes/font_size = 12
+
+PetLearnButton/base_type = &"Button"
+PetLearnButton/colors/font_color = Color(1, 1, 1, 1)
+PetLearnButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetLearnButton/font_sizes/font_size = 14
+PetLearnButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
+PetLearnButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
+PetLearnButton/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
+PetLearnButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_selected")
+
+PetBackpackGrid/base_type = &"GridContainer"
+PetBackpackGrid/constants/h_separation = 8
+PetBackpackGrid/constants/v_separation = 8
+
+PetBackpackSlotButton/base_type = &"Button"
+PetBackpackSlotButton/styles/normal = SubResource("empty_button")
+PetBackpackSlotButton/styles/pressed = SubResource("empty_button")
+PetBackpackSlotButton/styles/hover = SubResource("empty_button")
+PetBackpackSlotButton/styles/disabled = SubResource("empty_button")
+
+PetFormationList/base_type = &"VBoxContainer"
+PetFormationList/constants/separation = 5
+
+PetFormationCost/base_type = &"Label"
+PetFormationCost/colors/font_color = Color(0.88, 0.88, 0.88, 1)
+PetFormationCost/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationCost/font_sizes/font_size = 12
+
+PetFormationEffect/base_type = &"Label"
+PetFormationEffect/colors/font_color = Color(0.388235, 0.780392, 1, 1)
+PetFormationEffect/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationEffect/font_sizes/font_size = 12
+
+PetFormationLevel/base_type = &"Label"
+PetFormationLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationLevel/font_sizes/font_size = 14
+
+PetFormationName/base_type = &"Label"
+PetFormationName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetFormationName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationName/font_sizes/font_size = 15
+
+PetResourceLabel/base_type = &"Label"
+PetResourceLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
+PetResourceLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetResourceLabel/constants/outline_size = 2
+PetResourceLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetResourceLabel/font_sizes/font_size = 12
+
+PetSkillList/base_type = &"VBoxContainer"
+PetSkillList/constants/separation = 6
+
+PetLearnRowPanel/base_type = &"PanelContainer"
+PetLearnRowPanel/styles/panel = SubResource("sub_StyleBoxFlat_pet_stat")
+
+PetBookCount/base_type = &"Label"
+PetBookCount/colors/font_color = Color(0.388235, 0.780392, 1, 1)
+PetBookCount/colors/font_outline_color = Color(0, 0, 0, 1)
+PetBookCount/constants/outline_size = 3
+PetBookCount/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetBookCount/font_sizes/font_size = 12
+
+PetSkillDescription/base_type = &"Label"
+PetSkillDescription/colors/font_color = Color(0.92, 0.92, 0.92, 1)
+PetSkillDescription/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSkillDescription/constants/outline_size = 2
+PetSkillDescription/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillDescription/font_sizes/font_size = 11
+
+PetSkillName/base_type = &"Label"
+PetSkillName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetSkillName/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSkillName/constants/outline_size = 3
+PetSkillName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillName/font_sizes/font_size = 15
+
+PetPopupTitle/base_type = &"Label"
+PetPopupTitle/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetPopupTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+PetPopupTitle/constants/outline_size = 3
+PetPopupTitle/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetPopupTitle/font_sizes/font_size = 20
+
+PetSkillLevel/base_type = &"Label"
+PetSkillLevel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetSkillLevel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSkillLevel/constants/outline_size = 3
+PetSkillLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillLevel/font_sizes/font_size = 14
+
+PetSkillMana/base_type = &"Label"
+PetSkillMana/colors/font_color = Color(0.388235, 0.780392, 1, 1)
+PetSkillMana/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSkillMana/constants/outline_size = 3
+PetSkillMana/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillMana/font_sizes/font_size = 13
+
+PetSkillNeed/base_type = &"Label"
+PetSkillNeed/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
+PetSkillNeed/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSkillNeed/constants/outline_size = 3
+PetSkillNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillNeed/font_sizes/font_size = 12
+
+PetSoulLabel/base_type = &"Label"
+PetSoulLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
+PetSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetSoulLabel/constants/outline_size = 3
+PetSoulLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSoulLabel/font_sizes/font_size = 15
+
+PetPageButton/base_type = &"Button"
+PetPageButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+PetPageButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetPageButton/font_sizes/font_size = 14
+PetPageButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
+PetPageButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
+PetPageButton/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
+PetPageButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_selected")
+
+PetLevelLabel/base_type = &"Label"
+PetLevelLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+PetLevelLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetLevelLabel/constants/outline_size = 3
+PetLevelLabel/font_sizes/font_size = 13
+
+PetExpLabel/base_type = &"Label"
+PetExpLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+PetExpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetExpLabel/constants/outline_size = 3
+PetExpLabel/font_sizes/font_size = 12
+
+PetNameLabel/base_type = &"Label"
+PetNameLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+PetNameLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+PetNameLabel/constants/outline_size = 3
+PetNameLabel/font_sizes/font_size = 14
+
+GameInfoContentPanel/base_type = &"PanelContainer"
+GameInfoContentPanel/styles/panel = SubResource("skill_text_pressed")
+
+GameInfoHeaderRow/base_type = &"HBoxContainer"
+GameInfoHeaderRow/constants/separation = 300
+
+GameInfoSectionColumn/base_type = &"VBoxContainer"
+GameInfoSectionColumn/constants/separation = 25
+
+GameInfoSectionTitle/base_type = &"Label"
+GameInfoSectionTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
+GameInfoSectionTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+GameInfoSectionTitle/constants/shadow_offset_x = 0
+GameInfoSectionTitle/constants/shadow_offset_y = 0
+GameInfoSectionTitle/constants/outline_size = 2
+GameInfoSectionTitle/constants/shadow_outline_size = 7
+GameInfoSectionTitle/fonts/font = ExtResource("font_hk")
+GameInfoSectionTitle/font_sizes/font_size = 20
+
+GameInfoBodyText/base_type = &"Label"
+GameInfoBodyText/colors/font_color = Color(1, 1, 1, 1)
+GameInfoBodyText/colors/font_shadow_color = Color(0, 0, 0, 1)
+GameInfoBodyText/colors/font_outline_color = Color(1, 1, 1, 1)
+GameInfoBodyText/constants/shadow_offset_x = 0
+GameInfoBodyText/constants/shadow_offset_y = 0
+GameInfoBodyText/constants/outline_size = 2
+GameInfoBodyText/constants/shadow_outline_size = 7
+GameInfoBodyText/fonts/font = ExtResource("font_hk")
+GameInfoBodyText/font_sizes/font_size = 20
+
+GameInfoNoticeRow/base_type = &"VBoxContainer"
+GameInfoNoticeRow/constants/separation = 11
+
+GameInfoTitle/base_type = &"Label"
+GameInfoTitle/colors/font_color = Color(1, 1, 1, 1)
+GameInfoTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
+GameInfoTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+GameInfoTitle/constants/shadow_offset_x = 0
+GameInfoTitle/constants/shadow_offset_y = 0
+GameInfoTitle/constants/outline_size = 2
+GameInfoTitle/constants/shadow_outline_size = 7
+GameInfoTitle/fonts/font = ExtResource("font_hk")
+GameInfoTitle/font_sizes/font_size = 30
+
+GameInfoGuideButton/base_type = &"Button"
+GameInfoGuideButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+GameInfoGuideButton/fonts/font = ExtResource("font_return")
+GameInfoGuideButton/styles/normal = SubResource("empty_button")
+GameInfoGuideButton/styles/pressed = SubResource("empty_button")
+GameInfoGuideButton/styles/hover = SubResource("empty_button")
+GameInfoGuideButton/styles/disabled = SubResource("empty_button")
+GameInfoGuideButton/styles/focus = SubResource("empty_button")
+
+GameInfoNoticeButton/base_type = &"Button"
+GameInfoNoticeButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+GameInfoNoticeButton/styles/normal = SubResource("empty_button")
+GameInfoNoticeButton/styles/pressed = SubResource("empty_button")
+GameInfoNoticeButton/styles/hover = SubResource("empty_button")
+GameInfoNoticeButton/styles/disabled = SubResource("empty_button")
+GameInfoNoticeButton/styles/focus = SubResource("empty_button")
+
+GameInfoDetailButton/base_type = &"Button"
+GameInfoDetailButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+GameInfoDetailButton/styles/normal = SubResource("empty_button")
+GameInfoDetailButton/styles/pressed = SubResource("empty_button")
+GameInfoDetailButton/styles/hover = SubResource("empty_button")
+GameInfoDetailButton/styles/disabled = SubResource("empty_button")
+GameInfoDetailButton/styles/focus = SubResource("empty_button")
+
+BackpackNameInput/base_type = &"LineEdit"
+BackpackNameInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
+BackpackNameInput/fonts/font = ExtResource("font_meng")
+BackpackNameInput/font_sizes/font_size = 16
+BackpackNameInput/styles/normal = SubResource("empty_button")
+BackpackNameInput/styles/read_only = SubResource("empty_button")
+BackpackNameInput/styles/focus = SubResource("empty_button")
+
+BackpackTitleLabel/base_type = &"Label"
+BackpackTitleLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+BackpackHeadButton/base_type = &"Button"
+BackpackHeadButton/styles/normal = SubResource("empty_button")
+BackpackHeadButton/styles/pressed = SubResource("empty_button")
+BackpackHeadButton/styles/hover = SubResource("empty_button")
+BackpackHeadButton/styles/disabled = SubResource("empty_button")
+BackpackHeadButton/styles/focus = SubResource("empty_button")
+
+BackpackWingsButton/base_type = &"Button"
+BackpackWingsButton/styles/normal = SubResource("empty_button")
+BackpackWingsButton/styles/pressed = SubResource("empty_button")
+BackpackWingsButton/styles/hover = SubResource("empty_button")
+BackpackWingsButton/styles/disabled = SubResource("empty_button")
+BackpackWingsButton/styles/focus = SubResource("empty_button")
+
+BackpackWingLabel/base_type = &"Label"
+BackpackWingLabel/colors/font_color = Color(1, 0.792157, 0, 1)
+BackpackWingLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+BackpackWingLabel/colors/font_outline_color = Color(1, 0.792157, 0, 1)
+BackpackWingLabel/constants/shadow_offset_x = 0
+BackpackWingLabel/constants/shadow_offset_y = 0
+BackpackWingLabel/constants/outline_size = 1
+BackpackWingLabel/constants/shadow_outline_size = 6
+BackpackWingLabel/fonts/font = ExtResource("font_hk")
+BackpackWingLabel/font_sizes/font_size = 12
+
+BackpackEquipmentRow/base_type = &"HBoxContainer"
+BackpackEquipmentRow/constants/separation = 19
+
+BackpackEquipmentColumn/base_type = &"VBoxContainer"
+BackpackEquipmentColumn/constants/separation = 20
+
+BackpackExpLabel/base_type = &"Label"
+BackpackExpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+BackpackExpLabel/constants/outline_size = 5
+BackpackExpLabel/fonts/font = ExtResource("font_fzcy")
+
+BackpackHpLabel/base_type = &"Label"
+BackpackHpLabel/constants/outline_size = 0
+BackpackHpLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackHpLabel/font_sizes/font_size = 15
+
+BackpackHpValue/base_type = &"Label"
+BackpackHpValue/colors/font_color = Color(1, 1, 0.643137, 1)
+BackpackHpValue/colors/font_outline_color = Color(0, 0, 0, 1)
+BackpackHpValue/constants/outline_size = 5
+BackpackHpValue/fonts/font = ExtResource("font_main")
+BackpackHpValue/font_sizes/font_size = 16
+
+BackpackMessageLabel/base_type = &"Label"
+BackpackMessageLabel/colors/font_color = Color(0.980392, 0.776471, 0, 1)
+BackpackMessageLabel/fonts/font = ExtResource("font_return")
+BackpackMessageLabel/font_sizes/font_size = 20
+
+BackpackMpLabel/base_type = &"Label"
+BackpackMpLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackMpLabel/font_sizes/font_size = 15
+
+BackpackToggleButton/base_type = &"Button"
+BackpackToggleButton/colors/font_disabled_color = Color(1, 1, 1, 1)
+BackpackToggleButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+
+BdSkillRow/base_type = &"HBoxContainer"
+BdSkillRow/constants/separation = 0
+
+BdSkillColumn/base_type = &"VBoxContainer"
+BdSkillColumn/constants/separation = 0
+
+BdSkillTitle/base_type = &"Label"
+BdSkillTitle/constants/outline_size = 1
+BdSkillTitle/fonts/font = ExtResource("font_main")
+BdSkillTitle/font_sizes/font_size = 25
+
+BdSkillName/base_type = &"Label"
+BdSkillName/constants/outline_size = 1
+BdSkillName/fonts/font = ExtResource("font_main")
+BdSkillName/font_sizes/font_size = 20
+
+BdSkillUpgradeButton/base_type = &"Button"
+BdSkillUpgradeButton/fonts/font = ExtResource("font_main")
+BdSkillUpgradeButton/font_sizes/font_size = 20

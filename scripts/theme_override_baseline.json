@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 4097,
+    "direct_properties": 3055,
     "animation_track_refs": 26,
-    "textual_references": 4123,
-    "scenes": 125
+    "textual_references": 3081,
+    "scenes": 120
   },
   "property_categories": {
-    "colors": 1189,
-    "constants": 1100,
-    "font_sizes": 618,
-    "fonts": 634,
-    "styles": 556
+    "colors": 924,
+    "constants": 786,
+    "font_sizes": 442,
+    "fonts": 484,
+    "styles": 419
   },
   "animation_categories": {
     "colors": 15,
@@ -23,22 +23,22 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 745,
+    "Button": 590,
     "CheckBox": 4,
     "CheckButton": 15,
-    "GridContainer": 20,
-    "HBoxContainer": 46,
+    "GridContainer": 16,
+    "HBoxContainer": 31,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 3100,
-    "LineEdit": 20,
+    "Label": 2272,
+    "LineEdit": 14,
     "MarginContainer": 32,
     "OptionButton": 7,
-    "Panel": 18,
-    "PanelContainer": 5,
+    "Panel": 5,
+    "PanelContainer": 1,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 48,
+    "VBoxContainer": 31,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -47,7 +47,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 199,
+    "scene_refs": 447,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -97,6 +97,24 @@
       "ArchiveStepText",
       "ArchiveUidHash",
       "ArchiveUploadButton",
+      "BackpackEquipmentColumn",
+      "BackpackEquipmentRow",
+      "BackpackExpLabel",
+      "BackpackHeadButton",
+      "BackpackHpLabel",
+      "BackpackHpValue",
+      "BackpackMessageLabel",
+      "BackpackMpLabel",
+      "BackpackNameInput",
+      "BackpackTitleLabel",
+      "BackpackToggleButton",
+      "BackpackWingLabel",
+      "BackpackWingsButton",
+      "BdSkillColumn",
+      "BdSkillName",
+      "BdSkillRow",
+      "BdSkillTitle",
+      "BdSkillUpgradeButton",
       "EquipmentInfoGroup",
       "EquipmentItemHighlight",
       "EquipmentItemMeta",
@@ -104,6 +122,16 @@
       "EquipmentStatGroup",
       "EquipmentStatLabel",
       "EquipmentStatValue",
+      "GameInfoBodyText",
+      "GameInfoContentPanel",
+      "GameInfoDetailButton",
+      "GameInfoGuideButton",
+      "GameInfoHeaderRow",
+      "GameInfoNoticeButton",
+      "GameInfoNoticeRow",
+      "GameInfoSectionColumn",
+      "GameInfoSectionTitle",
+      "GameInfoTitle",
       "LevelInfoAlertText",
       "LevelInfoDropGroup",
       "LevelInfoFilterGroup",
@@ -128,6 +156,58 @@
       "MonsterHelpTitle",
       "MonsterHelpTitleLarge",
       "MonsterHelpWarning",
+      "PelletAttTab",
+      "PelletAttValue",
+      "PelletCritTab",
+      "PelletCritValue",
+      "PelletEatLabel",
+      "PelletEmpTab",
+      "PelletEmpValue",
+      "PelletHpTab",
+      "PelletHpValue",
+      "PelletLineLabel",
+      "PelletLuckyTab",
+      "PelletLuckyValue",
+      "PelletMpTab",
+      "PelletMpValue",
+      "PelletNameColumn",
+      "PelletPropertyButtonColumn",
+      "PelletPropertyColumn",
+      "PelletStageList",
+      "PelletStageProperty",
+      "PelletStagePropertyRow",
+      "PelletStageRow",
+      "PelletTabLabel",
+      "PelletTitle",
+      "PelletTotalGrid",
+      "PelletTotalValue",
+      "PelletTypeRow",
+      "PetBackpackGrid",
+      "PetBackpackSlotButton",
+      "PetBookCount",
+      "PetExpLabel",
+      "PetFormationCost",
+      "PetFormationEffect",
+      "PetFormationLevel",
+      "PetFormationList",
+      "PetFormationName",
+      "PetLearnButton",
+      "PetLearnRowPanel",
+      "PetLevelLabel",
+      "PetNameLabel",
+      "PetPageButton",
+      "PetPopupTitle",
+      "PetResourceLabel",
+      "PetSkillDescription",
+      "PetSkillLevel",
+      "PetSkillList",
+      "PetSkillMana",
+      "PetSkillName",
+      "PetSkillNeed",
+      "PetSoulLabel",
+      "PetStatName",
+      "PetStatPanel",
+      "PetStatValue",
       "SellFilterCs",
       "SellFilterGxms",
       "SellFilterHq",
@@ -196,10 +276,10 @@
       "TowerRow",
       "TowerSmallLabel"
     ],
-    "variation_refs": 498
+    "variation_refs": 746
   },
   "fonts": {
-    "scene_refs": 186,
+    "scene_refs": 173,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -264,10 +344,6 @@
   "scenes": {
     "Scene/auto_battle_config.tscn": {
       "direct": 58,
-      "animation": 0
-    },
-    "Scene/back_pack/back_pack.tscn": {
-      "direct": 117,
       "animation": 0
     },
     "Scene/back_pack/box_1.tscn": {
@@ -456,10 +532,6 @@
     },
     "Scene/main_menu/choose_player.tscn": {
       "direct": 25,
-      "animation": 0
-    },
-    "Scene/main_menu/game_information.tscn": {
-      "direct": 157,
       "animation": 0
     },
     "Scene/main_menu/game_over_1.tscn": {
@@ -662,20 +734,12 @@
       "direct": 13,
       "animation": 0
     },
-    "Scene/pellet/basic_pellet.tscn": {
-      "direct": 231,
-      "animation": 0
-    },
     "Scene/pellet/pellet_sys_pic.tscn": {
       "direct": 5,
       "animation": 0
     },
     "Scene/pet/pet_backpack_slot.tscn": {
       "direct": 11,
-      "animation": 0
-    },
-    "Scene/pet/pet_interface.tscn": {
-      "direct": 430,
       "animation": 0
     },
     "Scene/shop/choose_item.tscn": {
@@ -720,10 +784,6 @@
     },
     "Scene/show_text/touch_text.tscn": {
       "direct": 6,
-      "animation": 0
-    },
-    "Scene/skill/bd_skill.tscn": {
-      "direct": 107,
       "animation": 0
     },
     "Scene/skill/learn_skill.tscn": {
