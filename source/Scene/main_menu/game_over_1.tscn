@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://Script/main_menu/game_over_1.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/main_game/181.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
 [ext_resource type="Texture2D" path="res://Art/main_game/second.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/main_game/zm2.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/main_game/zm_22.png" id="6"]
@@ -11,6 +10,7 @@
 [ext_resource type="Texture2D" path="res://Art/game_2/40.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/main_game/tiaoguo_1.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/main_game/tiaoguo_2.png" id="11"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Over_1"
@@ -917,13 +917,13 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="OVERTEXT" type="Label" parent="." unique_id=484796475]
+theme_type_variation = "GameOverTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -96.0
 offset_top = 450.0
 offset_right = 554.0
 offset_bottom = 1678.0
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -1026,23 +1026,15 @@ placeholder_text = "输入速度"
 metadata/_edit_lock_ = true
 
 [node name="Text_2" type="Label" parent="." unique_id=64289246]
+theme_type_variation = "GameOverSubtitle"
+theme = ExtResource("theme")
 visible = false
 layout_mode = 0
 offset_left = 250.0
 offset_top = 329.698
 offset_right = 701.0
 offset_bottom = 1493.7
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 30
 text = "第二系列----《十殿阎罗篇》终了    
-
-
-
-
-
-
 
 决战转轮殿，见浩瀚星空
 

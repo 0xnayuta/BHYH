@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Script/base/base_through_level.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/level/export.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="RectangleShape2D" id="GreenRectShape"]
 size = Vector2(930, 580)
@@ -221,21 +221,14 @@ autostart = true
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1390746928]
 
 [node name="ZM" type="Label" parent="CanvasLayer" unique_id=656821244]
+theme_type_variation = "BaseThroughLevelNotice"
+theme = ExtResource("theme")
 visible = false
 texture_filter = 2
 offset_left = 941.0
 offset_top = 16.0
 offset_right = 2645.0
 offset_bottom = 45.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 11
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
 text = "欢迎来到造梦西游——八荒湮隳篇，当前版本完全免费，请勿用于商业用途，谨防受骗上当，不足之处还请谅解，请更多支持原版造梦，感谢各位支持！！"
 metadata/_edit_lock_ = true
 

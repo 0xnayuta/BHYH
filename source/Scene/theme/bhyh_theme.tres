@@ -514,6 +514,18 @@ corner_radius_top_right = 11
 corner_radius_bottom_right = 11
 corner_radius_bottom_left = 11
 
+[sub_resource type="StyleBoxFlat" id="constellation_panel"]
+bg_color = Color(0.290196, 0.129412, 0.0588235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.784314, 0.568627, 0.227451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [resource]
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
@@ -4290,3 +4302,131 @@ ZhenFaActiveLabel/constants/outline_size = 2
 ZhenFaActiveLabel/constants/shadow_outline_size = 7
 ZhenFaActiveLabel/fonts/font = ExtResource("font_hk")
 ZhenFaActiveLabel/font_sizes/font_size = 26
+
+BaseThroughLevelNotice/base_type = &"Label"
+BaseThroughLevelNotice/colors/font_color = Color(1, 0, 0, 1)
+BaseThroughLevelNotice/colors/font_shadow_color = Color(0, 0, 0, 1)
+BaseThroughLevelNotice/colors/font_outline_color = Color(1, 0, 0, 1)
+BaseThroughLevelNotice/constants/shadow_offset_x = 0
+BaseThroughLevelNotice/constants/shadow_offset_y = 0
+BaseThroughLevelNotice/constants/outline_size = 2
+BaseThroughLevelNotice/constants/shadow_outline_size = 11
+BaseThroughLevelNotice/fonts/font = ExtResource("font_hk")
+BaseThroughLevelNotice/font_sizes/font_size = 18
+
+ComKeyLabel/base_type = &"Label"
+ComKeyLabel/colors/font_color = Color(0.901961, 0.890196, 0, 1)
+ComKeyLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+ComKeyLabel/constants/shadow_offset_x = 0
+ComKeyLabel/constants/shadow_offset_y = 0
+ComKeyLabel/constants/outline_size = 1
+ComKeyLabel/constants/shadow_outline_size = 8
+ComKeyLabel/fonts/font = ExtResource("font_hk")
+ComKeyLabel/font_sizes/font_size = 24
+
+ConstellationGrid/base_type = &"GridContainer"
+ConstellationGrid/constants/h_separation = 8
+ConstellationGrid/constants/v_separation = 8
+
+ConstellationPanel/base_type = &"Panel"
+ConstellationPanel/styles/panel = SubResource("constellation_panel")
+
+ConstellationTitle/base_type = &"Label"
+ConstellationTitle/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+ConstellationTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ConstellationTitle/constants/outline_size = 3
+ConstellationTitle/fonts/font = ExtResource("font_hk")
+ConstellationTitle/font_sizes/font_size = 20
+
+EmptyButton/base_type = &"Button"
+EmptyButton/styles/normal = SubResource("empty_button")
+EmptyButton/styles/pressed = SubResource("empty_button")
+EmptyButton/styles/hover = SubResource("empty_button")
+EmptyButton/styles/disabled = SubResource("empty_button")
+EmptyButton/styles/focus = SubResource("empty_button")
+
+ForgeMaterialNeed/base_type = &"Label"
+ForgeMaterialNeed/colors/font_color = Color(0, 1, 0, 1)
+ForgeMaterialNeed/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeMaterialNeed/constants/outline_size = 5
+ForgeMaterialNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ForgeMaterialNeed/font_sizes/font_size = 14
+
+GameOverSubtitle/base_type = &"Label"
+GameOverSubtitle/colors/font_outline_color = Color(0, 0, 0, 1)
+GameOverSubtitle/constants/outline_size = 7
+GameOverSubtitle/fonts/font = ExtResource("font_return")
+GameOverSubtitle/font_sizes/font_size = 30
+
+GameOverTitle/base_type = &"Label"
+GameOverTitle/fonts/font = ExtResource("font_return")
+GameOverTitle/font_sizes/font_size = 22
+
+HeroName/base_type = &"Label"
+HeroName/colors/font_color = Color(1, 1, 0, 1)
+HeroName/colors/font_shadow_color = Color(0, 0, 0, 1)
+HeroName/colors/font_outline_color = Color(1, 1, 0, 1)
+HeroName/constants/outline_size = 2
+HeroName/constants/shadow_outline_size = 10
+HeroName/fonts/font = ExtResource("font_hk")
+HeroName/font_sizes/font_size = 17
+
+LevelLlbtText/base_type = &"Label"
+LevelLlbtText/colors/font_color = Color(0, 0, 0, 1)
+LevelLlbtText/colors/font_outline_color = Color(1, 1, 1, 1)
+LevelLlbtText/constants/outline_size = 6
+LevelLlbtText/fonts/font = ExtResource("font_return")
+LevelLlbtText/font_sizes/font_size = 25
+
+LhhjButtonRole/base_type = &"Button"
+LhhjButtonRole/colors/font_hover_color = Color(1, 0.439216, 0, 1)
+LhhjButtonRole/fonts/font = ExtResource("font_return")
+LhhjButtonRole/font_sizes/font_size = 17
+LhhjButtonRole/styles/normal = SubResource("empty_button")
+LhhjButtonRole/styles/pressed = SubResource("empty_button")
+LhhjButtonRole/styles/hover = SubResource("empty_button")
+LhhjButtonRole/styles/disabled = SubResource("empty_button")
+LhhjButtonRole/styles/focus = SubResource("empty_button")
+
+ListButtonRole/base_type = &"Button"
+ListButtonRole/colors/font_hover_color = Color(1, 0.45098, 0, 1)
+ListButtonRole/fonts/font = ExtResource("font_return")
+ListButtonRole/font_sizes/font_size = 17
+ListButtonRole/styles/normal = SubResource("empty_button")
+ListButtonRole/styles/pressed = SubResource("empty_button")
+ListButtonRole/styles/hover = SubResource("empty_button")
+ListButtonRole/styles/disabled = SubResource("empty_button")
+ListButtonRole/styles/focus = SubResource("empty_button")
+
+MagicWeaponCdText/base_type = &"Label"
+MagicWeaponCdText/colors/font_color = Color(1, 1, 1, 1)
+MagicWeaponCdText/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicWeaponCdText/constants/outline_size = 8
+MagicWeaponCdText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MagicWeaponCdText/font_sizes/font_size = 16
+
+PelletSysTitle/base_type = &"Label"
+PelletSysTitle/colors/font_color = Color(1, 1, 1, 1)
+PelletSysTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+PelletSysTitle/constants/outline_size = 2
+PelletSysTitle/fonts/font = ExtResource("font_hk")
+PelletSysTitle/font_sizes/font_size = 25
+
+RewardBoxName/base_type = &"Label"
+RewardBoxName/colors/font_color = Color(1, 1, 1, 1)
+RewardBoxName/colors/font_shadow_color = Color(0, 0, 0, 1)
+RewardBoxName/colors/font_outline_color = Color(1, 1, 1, 1)
+RewardBoxName/constants/outline_size = 1
+RewardBoxName/constants/shadow_outline_size = 8
+RewardBoxName/fonts/font = ExtResource("font_hk")
+RewardBoxName/font_sizes/font_size = 20
+
+TouchTextLabel/base_type = &"Label"
+TouchTextLabel/colors/font_color = Color(0, 0, 0, 1)
+TouchTextLabel/fonts/font = ExtResource("font_194_song_ti")
+
+TouchTextMargin/base_type = &"MarginContainer"
+TouchTextMargin/constants/margin_left = 25
+TouchTextMargin/constants/margin_top = 25
+TouchTextMargin/constants/margin_right = 25
+TouchTextMargin/constants/margin_bottom = 25

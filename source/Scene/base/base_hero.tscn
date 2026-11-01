@@ -2,7 +2,6 @@
 
 [ext_resource type="Shader" path="res://Shader/ws_effect.gdshader" id="1"]
 [ext_resource type="Script" path="res://Script/base/base_hero.gd" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
 [ext_resource type="Texture2D" path="res://Art/all_tx/cmscj.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/all_tx/sryx.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/all_tx/fmxz.png" id="6"]
@@ -23,6 +22,7 @@
 [ext_resource type="Texture2D" path="res://Art/all_tx/zyscj.png" id="21"]
 [ext_resource type="Texture2D" path="res://Art/zhenfa/senluozhen/slz_effect.png" id="22"]
 [ext_resource type="Script" path="res://Script/base/base_role_hit_box.gd" id="23"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 shader = ExtResource("1")
@@ -2724,16 +2724,11 @@ collision_mask = 33
 script = ExtResource("2")
 
 [node name="Name_" type="Label" parent="." unique_id=630687534]
+theme_type_variation = "HeroName"
+theme = ExtResource("theme")
 z_index = 1
 offset_right = 49.0
 offset_bottom = 22.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
 
 [node name="tx" type="AnimatedSprite2D" parent="." unique_id=478600657]
 z_index = 100

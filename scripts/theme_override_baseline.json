@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 148,
+    "direct_properties": 43,
     "animation_track_refs": 26,
-    "textual_references": 174,
-    "scenes": 31
+    "textual_references": 69,
+    "scenes": 15
   },
   "property_categories": {
-    "colors": 37,
-    "constants": 45,
-    "font_sizes": 21,
-    "fonts": 22,
-    "styles": 23
+    "colors": 9,
+    "constants": 20,
+    "font_sizes": 6,
+    "fonts": 6,
+    "styles": 2
   },
   "animation_categories": {
     "colors": 15,
@@ -22,12 +22,9 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 26,
-    "GridContainer": 4,
+    "GridContainer": 2,
     "HBoxContainer": 4,
-    "Label": 97,
-    "MarginContainer": 4,
-    "Panel": 1,
+    "Label": 25,
     "ProgressBar": 2
   },
   "unassigned_direct": 0,
@@ -36,7 +33,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1078,
+    "scene_refs": 1099,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -132,6 +129,7 @@
       "BackpackToggleButton",
       "BackpackWingLabel",
       "BackpackWingsButton",
+      "BaseThroughLevelNotice",
       "BasicTaskNumber",
       "BasicTaskText",
       "BasicTaskTitle",
@@ -177,6 +175,10 @@
       "ChoosePlayerTitle",
       "ChooseSceneCountdown",
       "ChooseSceneText",
+      "ComKeyLabel",
+      "ConstellationGrid",
+      "ConstellationPanel",
+      "ConstellationTitle",
       "CureTimesCurrency",
       "CureTimesHeader",
       "CureTimesHint",
@@ -204,6 +206,7 @@
       "DjSellNumber",
       "DsgChooseButton",
       "DsgChooseTitle",
+      "EmptyButton",
       "EndStatsColumn",
       "EndStatsCritCount",
       "EndStatsCure",
@@ -237,6 +240,7 @@
       "ForgeHelpList",
       "ForgeHelpTitle",
       "ForgeItemName",
+      "ForgeMaterialNeed",
       "ForgeMaterialRow",
       "ForgeSoulLabel",
       "ForgeSubtitle",
@@ -260,6 +264,8 @@
       "GameNeedKnowTitle",
       "GameNeedKnowVBox",
       "GameNeedKnowYellow",
+      "GameOverSubtitle",
+      "GameOverTitle",
       "HcHelpColumnLabel",
       "HcHelpColumnRow",
       "HcHelpPage",
@@ -268,6 +274,7 @@
       "HcHelpTitle",
       "HelpContentList",
       "HelpThingsText",
+      "HeroName",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -299,9 +306,11 @@
       "LevelInfoSuccessText",
       "LevelInfoTitle",
       "LevelInfoValue",
+      "LevelLlbtText",
       "LhhjActionLabel",
       "LhhjAltValueInput",
       "LhhjBossGrid",
+      "LhhjButtonRole",
       "LhhjHelpBody",
       "LhhjHelpList",
       "LhhjHelpTitle",
@@ -311,6 +320,7 @@
       "LhhjTitle",
       "LhhjValueInput",
       "LijiText",
+      "ListButtonRole",
       "LlbtCgmsButton",
       "LlbtCureText",
       "LlbtList",
@@ -334,6 +344,7 @@
       "MagicWeaponActionAlt",
       "MagicWeaponActionSmall",
       "MagicWeaponAttr",
+      "MagicWeaponCdText",
       "MagicWeaponEmpty",
       "MagicWeaponName",
       "MagicWeaponPsSkill",
@@ -396,6 +407,7 @@
       "PelletStageProperty",
       "PelletStagePropertyRow",
       "PelletStageRow",
+      "PelletSysTitle",
       "PelletTabLabel",
       "PelletTitle",
       "PelletTotalGrid",
@@ -429,6 +441,7 @@
       "PetStatName",
       "PetStatPanel",
       "PetStatValue",
+      "RewardBoxName",
       "RewardItemGrid",
       "RewardQd",
       "RewardTitle",
@@ -534,6 +547,8 @@
       "TaskRewardTitle",
       "TaskTitleHeading",
       "TaskTitleStatus",
+      "TouchTextLabel",
+      "TouchTextMargin",
       "TowerButton",
       "TowerButtonSmall",
       "TowerContent",
@@ -623,13 +638,12 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1377
+    "variation_refs": 1398
   },
   "fonts": {
-    "scene_refs": 22,
-    "unique_files": 6,
+    "scene_refs": 7,
+    "unique_files": 5,
     "paths": [
-      "res://Font/194_song_ti.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
       "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
@@ -683,18 +697,6 @@
     ]
   },
   "scenes": {
-    "Scene/back_pack/zb.tscn": {
-      "direct": 5,
-      "animation": 0
-    },
-    "Scene/base/base_hero.tscn": {
-      "direct": 7,
-      "animation": 0
-    },
-    "Scene/base/base_through_level.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
     "Scene/hero/role_1/role1.tscn": {
       "direct": 2,
       "animation": 0
@@ -723,36 +725,12 @@
       "direct": 6,
       "animation": 26
     },
-    "Scene/ldl/forge_material_box.tscn": {
-      "direct": 5,
-      "animation": 0
-    },
-    "Scene/ldl/mosaic.tscn": {
-      "direct": 5,
-      "animation": 0
-    },
-    "Scene/level/level_llbt.tscn": {
-      "direct": 5,
-      "animation": 0
-    },
     "Scene/level/role_information.tscn": {
       "direct": 2,
       "animation": 0
     },
-    "Scene/magic_weapon/magic_weapon_skill_cd.tscn": {
-      "direct": 5,
-      "animation": 0
-    },
-    "Scene/main_menu/game_over_1.tscn": {
-      "direct": 6,
-      "animation": 0
-    },
     "Scene/main_menu/map_2.tscn": {
       "direct": 3,
-      "animation": 0
-    },
-    "Scene/main_menu/map_5.tscn": {
-      "direct": 8,
       "animation": 0
     },
     "Scene/monster/boss_info.tscn": {
@@ -767,28 +745,8 @@
       "direct": 4,
       "animation": 0
     },
-    "Scene/other_scene/lhhj_button.tscn": {
-      "direct": 8,
-      "animation": 0
-    },
-    "Scene/other_scene/list_button.tscn": {
-      "direct": 8,
-      "animation": 0
-    },
-    "Scene/other_scene/reward_box_2.tscn": {
-      "direct": 7,
-      "animation": 0
-    },
     "Scene/other_scene/skill_icon.tscn": {
       "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/twenty_eight_constellations.tscn": {
-      "direct": 8,
-      "animation": 0
-    },
-    "Scene/pellet/pellet_sys_pic.tscn": {
-      "direct": 5,
       "animation": 0
     },
     "Scene/show_text/combo.tscn": {
@@ -797,14 +755,6 @@
     },
     "Scene/show_text/moment_text.tscn": {
       "direct": 3,
-      "animation": 0
-    },
-    "Scene/show_text/touch_text.tscn": {
-      "direct": 6,
-      "animation": 0
-    },
-    "Scene/tools/com_key.tscn": {
-      "direct": 8,
       "animation": 0
     }
   },

@@ -2,29 +2,12 @@
 
 [ext_resource type="Texture2D" path="res://Art/backpack/all_items/empty.png" id="1"]
 [ext_resource type="Script" path="res://Script/back_pack/wq.gd" id="2"]
-
-[sub_resource type="StyleBoxTexture" id="1"]
-texture = ExtResource("1")
-
-[sub_resource type="StyleBoxTexture" id="3"]
-texture = ExtResource("1")
-
-[sub_resource type="StyleBoxTexture" id="2"]
-texture = ExtResource("1")
-
-[sub_resource type="StyleBoxTexture" id="4"]
-texture = ExtResource("1")
-
-[sub_resource type="StyleBoxTexture" id="5"]
-texture = ExtResource("1")
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="wq" type="Button" unique_id=311426508]
+theme_type_variation = "BoxItemButton"
+theme = ExtResource("theme")
 size_flags_vertical = 4
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 icon = ExtResource("1")
 script = ExtResource("2")
 

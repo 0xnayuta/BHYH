@@ -21,8 +21,8 @@
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/gg_1.png" id="19"]
 [ext_resource type="Texture2D" path="res://Art/main_game/49.png" id="20"]
 [ext_resource type="Texture2D" path="res://Art/main_game/463.png" id="21"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="22"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/dy_1.png" id="23"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_45sxn"]
 shader = ExtResource("3")
@@ -48,16 +48,6 @@ shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader = ExtResource("3")
 shader_parameter/outline_width = 1.0
 shader_parameter/outline_color = Color(1, 0.941176, 0, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nowf1"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h1ygq"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mjyiq"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6d6n5"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cnujk"]
 
 [sub_resource type="AtlasTexture" id="10"]
 atlas = ExtResource("20")
@@ -1034,15 +1024,12 @@ metadata/lazy_texture_pressed_path = "res://Art/game_3/other_map_button/gg_1.png
 metadata/lazy_texture_hover_path = "res://Art/game_3/other_map_button/gg_2.png"
 
 [node name="next" type="Button" parent="." unique_id=1181026559]
+theme_type_variation = "EmptyButton"
+theme = ExtResource("theme")
 offset_left = 14.0
 offset_top = 11.0
 offset_right = 84.0
 offset_bottom = 72.0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_nowf1")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_h1ygq")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_mjyiq")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_6d6n5")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_cnujk")
 metadata/_edit_lock_ = true
 
 [node name="NewWorld" type="AnimatedSprite2D" parent="next" unique_id=173311793]
@@ -1060,13 +1047,12 @@ texture = ExtResource("21")
 metadata/_edit_lock_ = true
 
 [node name="difu" type="Label" parent="next/NewWorld/bg" unique_id=773269482]
+theme_type_variation = "MapLocationText"
+theme = ExtResource("theme")
 offset_left = -35.0
 offset_top = -9.99997
 offset_right = 37.0
 offset_bottom = 12.0
-theme_override_colors/font_color = Color(1, 0.290196, 0, 1)
-theme_override_fonts/font = ExtResource("22")
-theme_override_font_sizes/font_size = 18
 text = "截教天境"
 
 [node name="Pellet" type="TextureButton" parent="." unique_id=2133072586]

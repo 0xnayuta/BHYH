@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" path="res://Art/ui_2_5_9_0/key/p.png" id="1"]
 [ext_resource type="Texture2D" path="res://Art/ui_2_5_9_0/key/u.png" id="2"]
 [ext_resource type="Script" path="res://Script/tools/com_key.gd" id="3"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="4"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ComKey" type="TextureButton" unique_id=29406400]
 offset_right = 50.0
@@ -15,6 +15,8 @@ stretch_mode = 4
 script = ExtResource("3")
 
 [node name="Key" type="Label" parent="." unique_id=7504335]
+theme_type_variation = "ComKeyLabel"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = 15
@@ -22,14 +24,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.901961, 0.890196, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 24
 text = "Y"
 horizontal_alignment = 1
 vertical_alignment = 1

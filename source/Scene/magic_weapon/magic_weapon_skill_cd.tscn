@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" path="res://Art/skill/little_skill_icon/empty.png" id="1"]
 [ext_resource type="Script" path="res://Script/magic_weapon/magic_weapon_skill_cd.gd" id="2"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="3"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="MagicWeaponSkillCD" type="TextureRect" unique_id=172123954]
 offset_left = -1.0
@@ -39,16 +39,13 @@ metadata/_edit_lock_ = true
 one_shot = true
 
 [node name="TimeText" type="Label" parent="." unique_id=1704178879]
+theme_type_variation = "MagicWeaponCdText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 44.0
 offset_bottom = 44.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true

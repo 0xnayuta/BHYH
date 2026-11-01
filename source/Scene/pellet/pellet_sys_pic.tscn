@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Script/pellet/pellet_sys_pic.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/show_text/502.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="3"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="PelletSysPic" type="Node2D" unique_id=1823346718]
 script = ExtResource("1")
@@ -20,14 +20,11 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="SysPicTitle" type="Label" parent="SysHelp" unique_id=745632041]
+theme_type_variation = "PelletSysTitle"
+theme = ExtResource("theme")
 offset_left = -49.0
 offset_top = -169.0
 offset_right = 51.0
 offset_bottom = -140.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 25
 text = "合成图鉴"
 metadata/_edit_lock_ = true

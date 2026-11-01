@@ -4,7 +4,6 @@
 [ext_resource type="Script" path="res://Script/level/level_llbt.gd" id="2"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llbtbg.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llbtfloor.png" id="4"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="5"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/flzdz.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/hlzdz.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llzdz.png" id="8"]
@@ -13,6 +12,7 @@
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/hlz.png" id="11"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/llz.png" id="12"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_4/tlz.png" id="13"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(1656, 81.5)
@@ -327,15 +327,12 @@ position = Vector2(1064, 326)
 metadata/_edit_lock_ = true
 
 [node name="LevelText" type="Label" parent="." index="14" unique_id=1493937725]
+theme_type_variation = "LevelLlbtText"
+theme = ExtResource("theme")
 offset_left = 361.0
 offset_top = -133.0
 offset_right = 664.0
 offset_bottom = -104.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 25
 text = "24"
 horizontal_alignment = 1
 vertical_alignment = 1
