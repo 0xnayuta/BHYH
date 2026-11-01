@@ -16,7 +16,7 @@
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖的所有者、写入者与失败边界 |
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
 | [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | **Phase 14 矩阵与试点**：AtlasMetadata 生产者、源形态、消费者、View 与失败边界 |
-| [`level_layout_contract.md`](level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2 已实施）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
+| [`level_layout_contract.md`](level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2 已实施，30-3 首批完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
 | [`modernization_gap_matrix.md`](modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、UI Theme 缺失、装备数据硬编码等分级清单、处置类型判定、批次建议与未测量项 |
 | [`spine_platform_baseline.md`](spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B/21-2C 状态 |
 | [`acceptance.md`](acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具、阈值与分变更矩阵 |

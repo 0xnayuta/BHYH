@@ -46,9 +46,9 @@
 1. **`_birth_points()` 的语义被原设计误判**：它不是无调用点的玩家出生点接口，而是 `Game4ImportedLevel` 与 22 个关卡子类共享的刷怪点字典入口；基线有 41 处调用。契约将玩家出生点改名为 `player_birth_points`，由基类生成角色时消费；`_birth_points()` 保留原返回形状。
 2. **`LevelSpawnPoint` 缺 BHYH 现有点位依赖**：`level_48` 的 21 个点位包含 `after_spawn` / `after_dead`；不进入资源会改变刷怪顺序。字段已补齐，`ignore_count_multiplier` 也纳入第一版。
 3. **Phase 30-1 选定既有导入关而非原始 ZMWS 场景**：原始 `source/Scene/level/zmws/*.tscn` 只有地图/碰撞/触发器节点，没有 `BaseLevel` 角色、刷怪计时器与结算节点；30-1 若自行搭建驱动器会引入第二套循环。先用 `level_48`（ZMWS 朱雀街导入关）验证契约，原始场景驱动器在 30-2 处理。
-4. **构建输入与运行时分离**：`scripts/level_layout_sources.json` 是 30-1/30-2 的构建源；运行时只读 `.tres`。`--check` 同时校验布局资源、索引与预载 Catalog 中的关卡怪物集合。
+4. **构建输入与运行时分离**：`scripts/level_layout_sources.json` 是 30-1/30-2/30-3 的构建源；运行时只读 `.tres`。`--check` 同时校验布局资源、索引与预载 Catalog 中的关卡怪物集合。
 5. **`level_48.gd` 的布局常量与五个覆写已删除**；`scripts/level_preload_catalog.py` 从布局源合并阶段怪物，保持预载条目不变。
-6. **Phase 30-2 接入原始 ZMWS 场景**：`ExternalMonsterCatalog` 按精确中文名建立 506 条外部 ID → BHYH 怪物映射；`ZmwsLevel` 组合原始地图并复用 BaseLevel 阶段契约；20 个包装关卡 Stage 全 PASS 且可清场。未映射 ID 只警告一次并拒绝生成，不静默替换。
+6. **Phase 30-2 接入原始 ZMWS 场景**：`ExternalMonsterCatalog` 按精确中文名/唯一归一化建立 512 条外部 ID → BHYH 怪物映射；`ZmwsLevel` 组合原始地图并复用 BaseLevel 阶段契约；20 个包装关卡 Stage 全 PASS 且可清场。未映射 ID 只警告一次并拒绝生成，不静默替换。Phase 30-3 首批 20 个单屏数据容器脚本已迁出，布局资源 41 个，脚本数据表 65 个。
 
 ## 决策
 
@@ -64,7 +64,7 @@
    - 未登记 → 沿用现有默认常量（这是**未迁移关卡的现有行为**，不是新增回退层，ADR-005 允许）；
    - `_birth_points()` 保持「刷怪点字典」返回形状；玩家出生点由 `LevelLayoutStore.player_birth_points()` 在基类生成角色时消费；
    - 一旦某关卡迁移完成，其脚本内的布局常量/数据表 **删除**，不保留双份。
-4. **绞杀式迁移**：新增数据通道与现有 164 个脚本并行；Phase 30-1 先跑通 1 个既有 ZMWS 导入关（`level_48` 朱雀街），Phase 30-2 已接入原始 ZMWS 场景驱动器与 20 个代表关卡；再按批迁移 84 个「数据容器」脚本；55 个含真实玩法逻辑的脚本保留，只把其中的结构化数据块迁出。
+4. **绞杀式迁移**：新增数据通道与现有 164 个脚本并行；Phase 30-1 先跑通 1 个既有 ZMWS 导入关（`level_48` 朱雀街），Phase 30-2 已接入原始 ZMWS 场景驱动器与 20 个代表关卡；再按批迁移 85 个「数据容器」脚本；55 个含真实玩法逻辑的脚本保留，只把其中的结构化数据块迁出。
 5. **数据文件格式选 `.tres` 而非 `.json`**。除 [ADR-006](ADR-006-resource-first-data-and-data-keys.md) 与 `godot_design_standard.md` §3.1 的规范理由外，还有两条技术硬理由：JSON 无法直接表达 `Vector2`/`Rect2`/`PackedVector2Array`，需自写编解码；JSON 内的字符串资源路径不计入导出依赖，需额外清单。原「用 JSON」的初步设想在此修正。
 6. **`ground` 碰撞不进布局资源**：它已在关卡 `.tscn` 中生成 `ZMWS_Ground` 静态节点，资源重复会让同一事实出现两个可写源。
 7. **不新增 Autoload**：`LevelLayoutStore` 为 `RefCounted` 静态工具，与 `LevelPreloadStore` 一致。

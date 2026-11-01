@@ -273,6 +273,7 @@ classDiagram
 - `monster_group` 与 `monster_position_x/y` 按 `stage_1`…`stage_4` 组织；
 - `_stage_count()`、`_stage_trigger_x()`、`_screen_starts()`、`_screen_rights()` 提供给夹具与子类覆写；登记了 `LevelLayoutEntry` 的关卡优先读取布局资源，未登记关卡沿用现有常量；
 - `_birth_points()` 是刷怪点字典入口（不是玩家出生点）；`BaseLevel._player_spawn_position()` 从布局 `player_birth_points` 读取 1P/2P 出生点，缺失时保留原默认位置；
+- `BaseLevel._load_layout_spawn_tables()` 在 `_ready` 早期把已登记布局的刷怪点展开回 `monster_group`/`monster_position_x/y`；`Game4ImportedLevel` 覆写为不执行，继续由 `_configure_level_monsters()` 统一填充，避免重复；
 - 角色越过触发点推进 `current_stage`，按阶段实例化怪物；
 - 当前阶段刷怪表清空且场上无存活阶段怪物时开放出口；
 - 通关调用 `add_tg(...)` 记录主线/副本进度；
@@ -280,7 +281,7 @@ classDiagram
 
 `BaseLevel` 同时负责 2P 生成、活动宠物生成与关卡资源预热请求。新关卡应继承 `BaseLevel` 并复用阶段契约，不要复制一套独立的刷怪循环。
 
-Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。
+Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。`ZmwsLevel` 可按碰撞体元数据 `_zmws_wall_name`（缺失时用节点名）匹配布局 `close_walls`/`open_walls`；当前转换地图未保留原名，挡板保持默认关闭。
 
 ### 4.4 命中与归属
 
@@ -603,8 +604,8 @@ Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`
 | 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
-| 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；`level_48` 试点，构建期生成、运行时只读 |
-| 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称匹配 506 条，未匹配项不静默回退 |
+| 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；41 个登记布局（`level_48`、20 个原始 ZMWS 代表关卡、20 个首批单屏关卡），构建期生成、运行时只读 |
+| 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称优先、唯一归一化补 6 条，当前 512 条，未匹配项不静默回退 |
 | 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 20 个 `Scene/level/zmws_playable/*.tscn` 包装场景 |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由；`slot_snapshot()` 枚举槽位所有者，`shared_keys()` 登记共享账本键，`save_profile` 剥离 2P 档案的共享副本 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |

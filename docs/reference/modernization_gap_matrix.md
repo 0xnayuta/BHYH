@@ -172,7 +172,7 @@
 |:---|:---|:---|
 | C1 | Spine 运行时仅支持 4.x，外部源为 3.7/3.8 | [ADR-010](../decisions/ADR-010-spine-runtime-boundary.md) 已定边界；受商业软件授权约束，**不是架构落后**，不纳入本矩阵的批次建议 |
 | C2 | Autoload 11 个 | [ADR-007](../decisions/ADR-007-autoload-boundary.md)：遗留基线，不设数量目标 |
-| C3 | 关卡数据硬编码在 84 个脚本 | 已归 [Phase 30](../roadmap/roadmap.md) + [ADR-023](../decisions/ADR-023-level-layout-data-contract.md)，本页不重复 |
+| C3 | 关卡数据硬编码在 85 个脚本 | 已归 [Phase 30](../roadmap/roadmap.md) + [ADR-023](../decisions/ADR-023-level-layout-data-contract.md)，本页不重复 |
 
 ---
 

@@ -36,6 +36,7 @@ check_all.py
 │   ├── convert_monster_action_views.py --check
 │   ├── convert_level_preload_catalog.py --check
 │   ├── convert_level_layout_catalog.py --check
+│   ├── level_layout_migration_audit.py --fail-on-error
 │   ├── convert_external_monster_catalog.py --check
 │   ├── png_stream_audit.py
 │   ├── runtime_frames_audit.py
@@ -102,7 +103,8 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `convert_monster_frames.py` | 怪物 `AtlasMetadata.sequences` → 既有 `*_frames.tres`；按 `monster_action_maps.json` 追加动作别名（复用 `AtlasTexture` 子资源）并修正 loop；`--check` 校验动画名集合、帧数、页闭包、region/margin、确定性 UID 与全局 UID 冲突；`--all` 只补缺失/语义不一致/别名/loop/speed；支持旧 `animations` schema、null 计时帧与 `TARGET_OVERRIDES` 目标推导；`--rewrite` 只补 UID 头；`--emit` 输出规范格式到指定目录 | 既有 `source/Art/monster/**/*_frames.tres`（私有素材） |
 | `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 + `monster_dynamic_paths.json` + `level_layout_sources.json` → `LevelPreloadCatalog.tres` 与 `level_preload_export_dependencies.json`；`--check` 同时校验两份输出并进入总门禁 | `source/Script/data/level_preload_catalog.tres`、`source/Script/data/level_preload_export_dependencies.json` |
 | `convert_level_layout_catalog.py` | `level_layout_sources.json` → 单关布局 `.tres` 与 `LevelLayoutCatalog.tres`；校验 stage 连续、点位唯一、依赖存在、矩形范围与场景路径；`--check` 逐字比较并进入总门禁 | `source/Script/data/level_layouts/*.tres`、`source/Script/data/level_layout_catalog.tres` |
-| `convert_external_monster_catalog.py` | `source/Data/zmws_config/monster.json` 名称 + BHYH 怪物场景脚本 `my_mr_name` → 外部 ID → BHYH 怪物 ID/场景路径；仅精确名称匹配，重复名称取最小 ID；`--check` 逐字比较并进入总门禁 | `source/Script/data/external_monster_catalog.tres` |
+| `level_layout_migration_audit.py` | 检查已登记布局的标准关卡脚本是否仍保留 `monster_group = {` 数据表；双数据源失败，未登记布局的剩余脚本只统计 | 终端 |
+| `convert_external_monster_catalog.py` | `source/Data/zmws_config/monster.json` 名称 + BHYH 怪物场景脚本 `my_mr_name` → 外部 ID → BHYH 怪物 ID/场景路径；精确名称优先，去除空白/全角/间隔号后唯一匹配次之，重复名称取最小 ID；`--check` 逐字比较并进入总门禁 | `source/Script/data/external_monster_catalog.tres` |
 
 ### 3.3 人工审计与迁移工具
 

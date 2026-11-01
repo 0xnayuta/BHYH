@@ -102,7 +102,7 @@ python scripts/check_all.py --no-cache -j 6
 | 契约自测 | `contract_scan.py --self-test` | 二十类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、音频入口、HUD 面板只读与输入写入边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
-| 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配；外部 ID/场景路径/名称逐字一致 |
+| 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
 | 关卡布局同步 | `convert_level_layout_catalog.py --check` | `level_layout_sources.json` 与布局 `.tres`/Catalog 逐字一致；stage 连续、点位唯一、依赖存在、矩形范围与场景路径校验 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
 | 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
@@ -317,9 +317,9 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 
 `convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致。
 
-`convert_level_layout_catalog.py --check` 同样由 `contract_gate.py` 调用，校验 `scripts/level_layout_sources.json` 生成的单关布局 `.tres` 与 `level_layout_catalog.tres` 一致；Phase 30-1 试点关卡为 `level_48`，Phase 30-2 增加 20 个原始 ZMWS 代表关卡。
+`convert_level_layout_catalog.py --check` 同样由 `contract_gate.py` 调用，校验 `scripts/level_layout_sources.json` 生成的单关布局 `.tres` 与 `level_layout_catalog.tres` 一致；Phase 30-1 试点关卡为 `level_48`，Phase 30-2 增加 20 个原始 ZMWS 代表关卡，Phase 30-3 首批增加 20 个 BHYH 单屏关卡。`level_layout_migration_audit.py --fail-on-error` 阻断「已登记布局 + 脚本内仍有 `monster_group = {`」的双数据源。
 
-`convert_external_monster_catalog.py --check` 校验外部 ZMWS 怪物 ID → BHYH 怪物 ID/场景映射；当前只做精确中文名匹配，未匹配项不猜测。
+`convert_external_monster_catalog.py --check` 校验外部 ZMWS 怪物 ID → BHYH 怪物 ID/场景映射；当前精确中文名优先，去除空白/全角/间隔号后唯一匹配次之，未匹配项不猜测。
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 

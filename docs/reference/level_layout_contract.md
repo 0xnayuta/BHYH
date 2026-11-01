@@ -1,6 +1,6 @@
 # 关卡布局数据契约
 
-> **定位**：定义「关卡结构化布局」在 BHYH 侧的数据载体、字段语义、构建期生成与运行时访问方式。Phase 30-1 已实施 `level_48` 试点；Phase 30-2 已接入原始 ZMWS 驱动器与外部怪物映射；30-3/30-4 见 [`roadmap.md`](../roadmap/roadmap.md)。
+> **定位**：定义「关卡结构化布局」在 BHYH 侧的数据载体、字段语义、构建期生成与运行时访问方式。Phase 30-1 已实施 `level_48` 试点；Phase 30-2 已接入原始 ZMWS 驱动器与外部怪物映射；30-3 首批 20 个单屏数据容器脚本已迁移；30-4 见 [`roadmap.md`](../roadmap/roadmap.md)。
 > **决策依据**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)（本契约的架构决策）、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)（Resource 优先）、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)（禁止兼容/回退层）。
 > **范围**：关卡的结构化数据（出生点、分屏、刷怪触发与刷怪点、出口）。**不含**渲染层（已在关卡 `.tscn` 的 `Parallax2D`/`Sprite2D`）、碰撞层（已生成 `ZMWS_Ground` 静态节点）、战斗数值（走 `ZmwsConfig`）。
 
@@ -280,24 +280,25 @@ Phase 30-2 的 `ZmwsLevel`（继承 `Game4ImportedLevel`）负责把原始 `Scen
 
 ---
 
-## 7.1 Phase 30-1/30-2 实施记录（2026-11-01）
+## 7.1 Phase 30-1/30-2/30-3 实施记录（2026-11-01）
 
 - 新增 `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` / `LevelLayoutCatalog` / `LevelLayoutStore`；
 - 新增 `scripts/convert_level_layout_catalog.py` 与构建源 `scripts/level_layout_sources.json`；
 - 迁移 `level_48`（朱雀街，ZMWS 导入关）：删除脚本内 `STAGE_COUNT` / `SCREEN_*` / `STAGE_TRIGGER_X` / `BIRTH_POINTS` 与五个扩展点覆写；
 - `check_all` 契约门禁新增 `level_layout_catalog_check`；预载生成器从布局源合并阶段怪物，`level_48` 预载条目保持 `3001/3002/3004/3006`；
 - `level_48` 冒烟 Stage 1–5 全部 PASS（22.7s，日志 0 ERROR / 0 WARNING）；全量关卡回归 **128/128 PASS + 5 SKIP**（709.5s）。
-- Phase 30-2：`ExternalMonsterCatalog`/`Store` 506 条精确名称映射；`ZmwsLevel` 原始场景驱动器；20 个 `zmws_playable` 包装关卡；20/20 Stage 全 PASS、20/20 `can_pass=True`，0 ERROR / 0 WARNING；全量回归 **128/128 PASS + 5 SKIP**（731.4s）。
+- Phase 30-2：`ExternalMonsterCatalog`/`Store` 512 条精确/唯一归一化名称映射；`ZmwsLevel` 原始场景驱动器；20 个 `zmws_playable` 包装关卡；20/20 Stage 全 PASS、20/20 `can_pass=True`，0 ERROR / 0 WARNING；全量回归 **128/128 PASS + 5 SKIP**（731.4s）。
+- Phase 30-3 首批：迁移 20 个单屏数据容器脚本（`level_38_1`、`level_bgmj`、`level_lxdy1~5`、`level_nmg`、`level_sdwfb`、`level_sjg`、`level_tzhy`、`level_xbj`、`level_xss`、`level_xtqfb`、`level_ghg`、`level_hdgqnmg`、`level_hdgqzld`、`level_hdzm`、`level_42`、`level_44`）；`BaseLevel` 新增布局刷怪表展开，`Game4ImportedLevel` 明确不重复填充；新增 `level_layout_migration_audit.py` 阻断「布局资源 + 脚本数据表」双源；`monster_group = {` 从 85 降至 65。
 
 ## 8. 验收标准
 
 | 维度 | 判据 |
 |:---|:---|
-| 契约完整性 | `--check` 对 21 个登记布局全部通过，0 失败；外部怪物 `--check` 506 条通过 |
+| 契约完整性 | `--check` 对 41 个登记布局全部通过，0 失败；外部怪物 `--check` 512 条通过 |
 | 生成确定性 | 连续两次生成结果逐字节一致 |
-| 运行时接入 | `level_48` Stage 1–5 PASS；20 个原始 ZMWS 包装关卡 Stage 全 PASS 且 `can_pass=True` |
-| 行为等价 | 全量 `level_regression_all.py` **128/128 PASS + 5 SKIP**（709.5s）；原始驱动批次 20/20 PASS |
-| 静态门禁 | `check_all.py` 全维 PASS；`contract_scan.py` ERROR=0 |
+| 运行时接入 | `level_48` Stage 1–5 PASS；20 个原始 ZMWS 包装关卡 Stage 全 PASS 且 `can_pass=True`；20 个首批 BHYH 单屏关卡 Stage PASS |
+| 行为等价 | 全量 `level_regression_all.py` **128/128 PASS + 5 SKIP**（708.3s）；原始驱动批次 20/20 PASS |
+| 静态门禁 | `check_all.py` 全维 PASS；`contract_scan.py` ERROR=0；布局迁移双源审计 PASS |
 | 无回退 | 已迁移关卡脚本不再有布局常量/五个覆写；预载 Catalog 仍含完整怪物集合 |
 
 ---
@@ -319,5 +320,5 @@ Phase 30-2 的 `ZmwsLevel`（继承 `Game4ImportedLevel`）负责把原始 `Scen
 | U3 | `RandomIds`/`RandomWeight` 是否并入第一版 | 4,734 条点位带随机权重 | 玩法侧 | 第一版不使用；`monster_ids` 只取 `mIds` |
 | U4 | 布局资源体积是否入 LFS | 预计 20–35 MB / 1,708 个文件 | 发布侧 | 先普通 Git；单文件超 1 MB 时评估 LFS |
 | U5 | 挡板节点命名如何对齐 | ZMWS 用中文名（`战斗挡板1`），BHYH 用 `stop1`/`wall` | 场景侧 | 原始驱动器禁用原始静态 `wall`，用布局 screen 边界驱动挡板；中文名到节点映射留到后续批次 |
-| U7 | 外部怪物名称变体/随机组 | 外部源 1,659 个名称；当前精确中文名映射 506 条 | 玩法侧 | 不模糊匹配；未映射 ID 只警告一次并拒绝生成，30-3 再补 |
-| U8 | 原始地图 `triggerWall`/`endOpenWall` 的节点级开合 | 原始场景导出未保留中文名到节点的直接映射 | 场景侧 | 30-2 只保证布局分屏与刷怪；静态原始墙禁用，后续补命名/开合 |
+| U7 | 外部怪物名称变体/随机组 | 外部源 1,659 个名称；当前精确 + 唯一归一化映射 512 条 | 玩法侧 | 不模糊匹配；未映射 ID 只警告一次并拒绝生成，后续批次再补显式别名 |
+| U8 | 原始地图 `triggerWall`/`endOpenWall` 的节点级开合 | 原始场景导出未保留中文名到节点的直接映射；当前转换场景只有 `Ground_*_wall` | 场景侧 | `ZmwsLevel` 已支持按 `_zmws_wall_name` 或节点名匹配布局 close/open；当前转换地图无该元数据，静态墙保持默认关闭，后续转换补充原名 |
