@@ -1,0 +1,769 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=62 format=3 uid="uid://btc7qqjsturo1"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="spawn_1"]
+script = ExtResource("3_spawn")
+point_id = 1
+monster_ids = PackedInt32Array(16)
+position = Vector2(900, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_2"]
+script = ExtResource("3_spawn")
+point_id = 2
+monster_ids = PackedInt32Array(16)
+position = Vector2(900, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_3"]
+script = ExtResource("3_spawn")
+point_id = 3
+monster_ids = PackedInt32Array(14)
+position = Vector2(900, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_4"]
+script = ExtResource("3_spawn")
+point_id = 4
+monster_ids = PackedInt32Array(14)
+position = Vector2(900, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_5"]
+script = ExtResource("3_spawn")
+point_id = 5
+monster_ids = PackedInt32Array(15)
+position = Vector2(700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_6"]
+script = ExtResource("3_spawn")
+point_id = 6
+monster_ids = PackedInt32Array(15)
+position = Vector2(700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_7"]
+script = ExtResource("3_spawn")
+point_id = 7
+monster_ids = PackedInt32Array(15)
+position = Vector2(700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_8"]
+script = ExtResource("3_spawn")
+point_id = 8
+monster_ids = PackedInt32Array(15)
+position = Vector2(700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_9"]
+script = ExtResource("3_spawn")
+point_id = 9
+monster_ids = PackedInt32Array(14)
+position = Vector2(1100, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_10"]
+script = ExtResource("3_spawn")
+point_id = 10
+monster_ids = PackedInt32Array(14)
+position = Vector2(1100, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_11"]
+script = ExtResource("3_spawn")
+point_id = 11
+monster_ids = PackedInt32Array(16)
+position = Vector2(1100, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_12"]
+script = ExtResource("3_spawn")
+point_id = 12
+monster_ids = PackedInt32Array(15)
+position = Vector2(2000, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_13"]
+script = ExtResource("3_spawn")
+point_id = 13
+monster_ids = PackedInt32Array(15)
+position = Vector2(2000, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_14"]
+script = ExtResource("3_spawn")
+point_id = 14
+monster_ids = PackedInt32Array(16)
+position = Vector2(2000, 250)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_15"]
+script = ExtResource("3_spawn")
+point_id = 15
+monster_ids = PackedInt32Array(15)
+position = Vector2(2000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_16"]
+script = ExtResource("3_spawn")
+point_id = 16
+monster_ids = PackedInt32Array(14)
+position = Vector2(1400, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_17"]
+script = ExtResource("3_spawn")
+point_id = 17
+monster_ids = PackedInt32Array(16)
+position = Vector2(1400, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_18"]
+script = ExtResource("3_spawn")
+point_id = 18
+monster_ids = PackedInt32Array(14)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_19"]
+script = ExtResource("3_spawn")
+point_id = 19
+monster_ids = PackedInt32Array(16)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_20"]
+script = ExtResource("3_spawn")
+point_id = 20
+monster_ids = PackedInt32Array(15)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_21"]
+script = ExtResource("3_spawn")
+point_id = 21
+monster_ids = PackedInt32Array(15)
+position = Vector2(1400, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_22"]
+script = ExtResource("3_spawn")
+point_id = 22
+monster_ids = PackedInt32Array(14)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_23"]
+script = ExtResource("3_spawn")
+point_id = 23
+monster_ids = PackedInt32Array(16)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_24"]
+script = ExtResource("3_spawn")
+point_id = 24
+monster_ids = PackedInt32Array(14)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_25"]
+script = ExtResource("3_spawn")
+point_id = 25
+monster_ids = PackedInt32Array(16)
+position = Vector2(1400, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_26"]
+script = ExtResource("3_spawn")
+point_id = 26
+monster_ids = PackedInt32Array(14)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_27"]
+script = ExtResource("3_spawn")
+point_id = 27
+monster_ids = PackedInt32Array(16)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_28"]
+script = ExtResource("3_spawn")
+point_id = 28
+monster_ids = PackedInt32Array(15)
+position = Vector2(1600, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_29"]
+script = ExtResource("3_spawn")
+point_id = 29
+monster_ids = PackedInt32Array(15)
+position = Vector2(1400, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_30"]
+script = ExtResource("3_spawn")
+point_id = 30
+monster_ids = PackedInt32Array(14)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_31"]
+script = ExtResource("3_spawn")
+point_id = 31
+monster_ids = PackedInt32Array(16)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_32"]
+script = ExtResource("3_spawn")
+point_id = 32
+monster_ids = PackedInt32Array(14)
+position = Vector2(1800, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_33"]
+script = ExtResource("3_spawn")
+point_id = 33
+monster_ids = PackedInt32Array(14)
+position = Vector2(2700, 200)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_34"]
+script = ExtResource("3_spawn")
+point_id = 34
+monster_ids = PackedInt32Array(14)
+position = Vector2(2705, 200)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_35"]
+script = ExtResource("3_spawn")
+point_id = 35
+monster_ids = PackedInt32Array(16)
+position = Vector2(2700, 200)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_36"]
+script = ExtResource("3_spawn")
+point_id = 36
+monster_ids = PackedInt32Array(16)
+position = Vector2(2700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_37"]
+script = ExtResource("3_spawn")
+point_id = 37
+monster_ids = PackedInt32Array(16)
+position = Vector2(2700, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_38"]
+script = ExtResource("3_spawn")
+point_id = 38
+monster_ids = PackedInt32Array(15)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_39"]
+script = ExtResource("3_spawn")
+point_id = 39
+monster_ids = PackedInt32Array(16)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_40"]
+script = ExtResource("3_spawn")
+point_id = 40
+monster_ids = PackedInt32Array(14)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_41"]
+script = ExtResource("3_spawn")
+point_id = 41
+monster_ids = PackedInt32Array(16)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_42"]
+script = ExtResource("3_spawn")
+point_id = 42
+monster_ids = PackedInt32Array(15)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_43"]
+script = ExtResource("3_spawn")
+point_id = 43
+monster_ids = PackedInt32Array(16)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_44"]
+script = ExtResource("3_spawn")
+point_id = 44
+monster_ids = PackedInt32Array(14)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_45"]
+script = ExtResource("3_spawn")
+point_id = 45
+monster_ids = PackedInt32Array(16)
+position = Vector2(3300, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_46"]
+script = ExtResource("3_spawn")
+point_id = 46
+monster_ids = PackedInt32Array(17)
+position = Vector2(3300, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_47"]
+script = ExtResource("3_spawn")
+point_id = 47
+monster_ids = PackedInt32Array(16)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_48"]
+script = ExtResource("3_spawn")
+point_id = 48
+monster_ids = PackedInt32Array(14)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_49"]
+script = ExtResource("3_spawn")
+point_id = 49
+monster_ids = PackedInt32Array(16)
+position = Vector2(3000, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_50"]
+script = ExtResource("3_spawn")
+point_id = 50
+monster_ids = PackedInt32Array(15)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_51"]
+script = ExtResource("3_spawn")
+point_id = 51
+monster_ids = PackedInt32Array(15)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_52"]
+script = ExtResource("3_spawn")
+point_id = 52
+monster_ids = PackedInt32Array(14)
+position = Vector2(3200, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_53"]
+script = ExtResource("3_spawn")
+point_id = 53
+monster_ids = PackedInt32Array(16)
+position = Vector2(3300, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_54"]
+script = ExtResource("3_spawn")
+point_id = 54
+monster_ids = PackedInt32Array(14)
+position = Vector2(3300, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="spawn_55"]
+script = ExtResource("3_spawn")
+point_id = 55
+monster_ids = PackedInt32Array(18)
+position = Vector2(4550, 300)
+count = 1
+delay = 0
+interval = 0
+direction = 0
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(0, 0, 2250, 1000)
+trigger_rect = Rect2(0, 0, 1, 1000)
+spawn_trigger_rect = Rect2(0, 0, 2250, 1000)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_1"), SubResource("spawn_2"), SubResource("spawn_3"), SubResource("spawn_4"), SubResource("spawn_5"), SubResource("spawn_6"), SubResource("spawn_7"), SubResource("spawn_8")])
+
+[sub_resource type="Resource" id="stage_2"]
+script = ExtResource("2_stage")
+index = 2
+screen_rect = Rect2(2250, 0, 1300, 1000)
+trigger_rect = Rect2(1600, 0, 1, 1000)
+spawn_trigger_rect = Rect2(2250, 0, 1300, 1000)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_9"), SubResource("spawn_10"), SubResource("spawn_11"), SubResource("spawn_12"), SubResource("spawn_13"), SubResource("spawn_14"), SubResource("spawn_15"), SubResource("spawn_16"), SubResource("spawn_17"), SubResource("spawn_18"), SubResource("spawn_19"), SubResource("spawn_20"), SubResource("spawn_21"), SubResource("spawn_22"), SubResource("spawn_23"), SubResource("spawn_24"), SubResource("spawn_25"), SubResource("spawn_26"), SubResource("spawn_27"), SubResource("spawn_28"), SubResource("spawn_29"), SubResource("spawn_30"), SubResource("spawn_31"), SubResource("spawn_32")])
+
+[sub_resource type="Resource" id="stage_3"]
+script = ExtResource("2_stage")
+index = 3
+screen_rect = Rect2(3550, 0, 1100, 1000)
+trigger_rect = Rect2(2700, 0, 1, 1000)
+spawn_trigger_rect = Rect2(3550, 0, 1100, 1000)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_33"), SubResource("spawn_34"), SubResource("spawn_35"), SubResource("spawn_36"), SubResource("spawn_37"), SubResource("spawn_38"), SubResource("spawn_39"), SubResource("spawn_40"), SubResource("spawn_41"), SubResource("spawn_42"), SubResource("spawn_43"), SubResource("spawn_44"), SubResource("spawn_45"), SubResource("spawn_46"), SubResource("spawn_47"), SubResource("spawn_48"), SubResource("spawn_49"), SubResource("spawn_50"), SubResource("spawn_51"), SubResource("spawn_52"), SubResource("spawn_53"), SubResource("spawn_54")])
+
+[sub_resource type="Resource" id="stage_4"]
+script = ExtResource("2_stage")
+index = 4
+screen_rect = Rect2(4650, 0, 0, 1000)
+trigger_rect = Rect2(4000, 0, 1, 1000)
+spawn_trigger_rect = Rect2(4650, 0, 1, 1000)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_55")])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"level_8"
+layout_size = Vector2(5000, 1000)
+player_birth_points = PackedVector2Array(100, 340)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1"), SubResource("stage_2"), SubResource("stage_3"), SubResource("stage_4")])
+exit_rect = Rect2(4900, 0, 1, 1)
+exit_open_when = &"stage_clear"

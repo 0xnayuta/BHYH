@@ -109,9 +109,9 @@ def packed_vectors(values: object, label: str) -> str:
     return "PackedVector2Array(%s)" % ", ".join(flat)
 
 
-def require_rect_inside(rect: list[float], size: list[float], label: str) -> None:
+def require_rect_inside(rect: list[float], size: list[float], label: str, allow_zero_width: bool = False) -> None:
     x, y, width, height = rect
-    if width <= 0 or height <= 0:
+    if width < 0 or height <= 0 or (width == 0 and not allow_zero_width):
         raise LayoutError(f"{label} 尺寸必须为正: {rect}")
     if x < 0 or y < 0 or x + width > size[0] + 1e-6 or y + height > size[1] + 1e-6:
         raise LayoutError(f"{label} 超出布局范围: {rect} / {size}")
@@ -140,7 +140,7 @@ def validate_level(scene_path: str, level: dict) -> None:
             rect = stage.get(key)
             if not isinstance(rect, list) or len(rect) != 4:
                 raise LayoutError(f"{scene_path}: stage {index} {key} 非法")
-            require_rect_inside(rect, size, f"{scene_path}: stage {index} {key}")
+            require_rect_inside(rect, size, f"{scene_path}: stage {index} {key}", key == "screen_rect")
         packed_strings(stage.get("close_walls"), f"{scene_path}: stage {index} close_walls")
         packed_strings(stage.get("open_walls"), f"{scene_path}: stage {index} open_walls")
         spawns = stage.get("spawn_points")
