@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 4721,
+    "direct_properties": 4097,
     "animation_track_refs": 26,
-    "textual_references": 4747,
-    "scenes": 132
+    "textual_references": 4123,
+    "scenes": 125
   },
   "property_categories": {
-    "colors": 1366,
-    "constants": 1208,
-    "font_sizes": 696,
-    "fonts": 749,
-    "styles": 702
+    "colors": 1189,
+    "constants": 1100,
+    "font_sizes": 618,
+    "fonts": 634,
+    "styles": 556
   },
   "animation_categories": {
     "colors": 15,
@@ -23,23 +23,22 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 895,
-    "CheckBox": 98,
-    "CheckButton": 25,
-    "GridContainer": 22,
-    "HBoxContainer": 51,
+    "Button": 745,
+    "CheckBox": 4,
+    "CheckButton": 15,
+    "GridContainer": 20,
+    "HBoxContainer": 46,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 3350,
-    "LineEdit": 107,
-    "MarginContainer": 40,
-    "OptionButton": 9,
-    "Panel": 22,
-    "PanelContainer": 8,
-    "PopupMenu": 2,
+    "Label": 3100,
+    "LineEdit": 20,
+    "MarginContainer": 32,
+    "OptionButton": 7,
+    "Panel": 18,
+    "PanelContainer": 5,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 55,
+    "VBoxContainer": 48,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -48,19 +47,56 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 96,
+    "scene_refs": 199,
     "type_variations": [
+      "AnnouncementActionRow",
       "AnnouncementAlert",
       "AnnouncementButton",
+      "AnnouncementCheckButton",
+      "AnnouncementCheckButtonSmall",
+      "AnnouncementFunctionColumns",
+      "AnnouncementFunctionContent",
+      "AnnouncementFunctionMargin",
       "AnnouncementHeading",
+      "AnnouncementLeftColumn",
+      "AnnouncementListGroup",
+      "AnnouncementOption",
+      "AnnouncementOverlayPanel",
+      "AnnouncementPasswordContent",
+      "AnnouncementPasswordInput",
+      "AnnouncementPasswordMargin",
       "AnnouncementPrompt",
       "AnnouncementSecretButton",
       "AnnouncementSecretButtonSmall",
       "AnnouncementSecretButtonTiny",
+      "AnnouncementSecretPanel",
       "AnnouncementStatus",
       "AnnouncementSubtitle",
       "AnnouncementTitle",
       "AnnouncementWarning",
+      "ArchiveActionButtonSmall",
+      "ArchiveCdButton",
+      "ArchiveCloudButton",
+      "ArchiveConfirmButton",
+      "ArchiveDeleteButton",
+      "ArchiveDialogActionButton",
+      "ArchiveDialogTitle",
+      "ArchiveFieldTitle",
+      "ArchiveHelpButton",
+      "ArchiveLoginButton",
+      "ArchiveLoginInput",
+      "ArchiveLoginLabel",
+      "ArchiveMessageText",
+      "ArchiveMutedButton",
+      "ArchiveNumberInput",
+      "ArchivePanelTitle",
+      "ArchivePopupPanel",
+      "ArchiveReadOnlyLink",
+      "ArchiveSectionTitle",
+      "ArchiveStatusText",
+      "ArchiveStepText",
+      "ArchiveUidHash",
+      "ArchiveUploadButton",
       "EquipmentInfoGroup",
       "EquipmentItemHighlight",
       "EquipmentItemMeta",
@@ -76,6 +112,14 @@
       "LevelInfoShadowText",
       "LevelInfoSuccessText",
       "LevelInfoValue",
+      "LhhjActionLabel",
+      "LhhjAltValueInput",
+      "LhhjBossGrid",
+      "LhhjHpLabel",
+      "LhhjSectionText",
+      "LhhjSelfValueInput",
+      "LhhjTitle",
+      "LhhjValueInput",
       "MenuActionButton",
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
@@ -84,6 +128,20 @@
       "MonsterHelpTitle",
       "MonsterHelpTitleLarge",
       "MonsterHelpWarning",
+      "SellFilterCs",
+      "SellFilterGxms",
+      "SellFilterHq",
+      "SellFilterHsh",
+      "SellFilterJl",
+      "SellFilterList",
+      "SellFilterPt",
+      "SellFilterSq",
+      "SellFilterSs",
+      "SellFilterXl",
+      "SellFilterYx",
+      "SellPageInput",
+      "SellTitle",
+      "SellWarning",
       "SettingsButton",
       "SettingsButtonBright",
       "SettingsButtonCompact",
@@ -103,12 +161,26 @@
       "SettingsSmallLabel",
       "SettingsTitle",
       "SettingsValue",
+      "ShopCloseButton",
+      "ShopDamageText",
+      "ShopHintLabel",
+      "ShopMessageText",
+      "ShopPageLabel",
+      "ShopRoleText",
+      "ShopSearchInput",
+      "ShopSearchRow",
+      "ShopStatTitle",
+      "ShopTabRow",
+      "ShopTabText",
+      "ShopTabTextStrong",
+      "ShopTitleText",
       "SkillCooldownLabel",
       "SkillGridRow",
       "SkillIconButton",
       "SkillIconButtonTexture",
       "SkillLabel",
       "SkillNeedLabel",
+      "SkillPopupMenu",
       "SkillShadowLabel",
       "SkillShadowLabelPlain",
       "SkillSmallLabel",
@@ -116,6 +188,7 @@
       "TowerButton",
       "TowerButtonSmall",
       "TowerContent",
+      "TowerFloorInput",
       "TowerFloorPicker",
       "TowerLabel",
       "TowerOptions",
@@ -123,10 +196,10 @@
       "TowerRow",
       "TowerSmallLabel"
     ],
-    "variation_refs": 359
+    "variation_refs": 498
   },
   "fonts": {
-    "scene_refs": 200,
+    "scene_refs": 186,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -189,10 +262,6 @@
     ]
   },
   "scenes": {
-    "Scene/archive_interface/read_archive_interface.tscn": {
-      "direct": 230,
-      "animation": 0
-    },
     "Scene/auto_battle_config.tscn": {
       "direct": 58,
       "animation": 0
@@ -223,10 +292,6 @@
     },
     "Scene/back_pack/main_backpack.tscn": {
       "direct": 27,
-      "animation": 0
-    },
-    "Scene/back_pack/pl_sell.tscn": {
-      "direct": 107,
       "animation": 0
     },
     "Scene/back_pack/sell_or_equ.tscn": {
@@ -393,10 +458,6 @@
       "direct": 25,
       "animation": 0
     },
-    "Scene/main_menu/game_announcement.tscn": {
-      "direct": 34,
-      "animation": 0
-    },
     "Scene/main_menu/game_information.tscn": {
       "direct": 157,
       "animation": 0
@@ -431,10 +492,6 @@
     },
     "Scene/main_menu/wan_ling_catalog_page.tscn": {
       "direct": 40,
-      "animation": 0
-    },
-    "Scene/main_menu/zhen_yao_tower.tscn": {
-      "direct": 8,
       "animation": 0
     },
     "Scene/main_menu/zhu_xian_sword_page.tscn": {
@@ -507,10 +564,6 @@
     },
     "Scene/other_scene/level_info.tscn": {
       "direct": 34,
-      "animation": 0
-    },
-    "Scene/other_scene/lhhj.tscn": {
-      "direct": 149,
       "animation": 0
     },
     "Scene/other_scene/lhhj_button.tscn": {
@@ -641,10 +694,6 @@
       "direct": 16,
       "animation": 0
     },
-    "Scene/shop/shop.tscn": {
-      "direct": 94,
-      "animation": 0
-    },
     "Scene/shop/shop_item.tscn": {
       "direct": 26,
       "animation": 0
@@ -691,10 +740,6 @@
     },
     "Scene/skill/skill_key_set.tscn": {
       "direct": 45,
-      "animation": 0
-    },
-    "Scene/skill/zd_skill.tscn": {
-      "direct": 2,
       "animation": 0
     },
     "Scene/task/basic_task.tscn": {

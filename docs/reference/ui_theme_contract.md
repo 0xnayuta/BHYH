@@ -1,6 +1,6 @@
-# UI Theme 契约（Phase 32-0 基线，32-1/32-2A/32-2B 完成）
+# UI Theme 契约（Phase 32-0 基线，32-1/32-2A/32-2B/32-3A 完成）
 
-> **状态**：32-0 基线审计、32-1 `game_set`、32-2A 标签密集与 32-2B Button 密集批次已完成（2026-11-01）；32-3 未启动。契约按已验收批次维护。
+> **状态**：32-0 基线审计、32-1 `game_set`、32-2A 标签密集、32-2B Button 密集与 32-3A 混合控件批次已完成（2026-11-01）；32-3B 未启动。契约按已验收批次维护。
 > **适用范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与相关验证；不约束运行时业务状态。
 > **依据**：[ADR-004](../decisions/ADR-004-naming-contract-and-frozen-whitelist.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[ADR-015](../decisions/ADR-015-documentation-layering-and-single-source-of-truth.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 > **规范**：[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`naming_standard.md`](../standards/naming_standard.md)、[`naming_whitelist.md`](../standards/naming_whitelist.md)、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
@@ -20,17 +20,17 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 由 `python scripts/theme_override_audit.py --json` 生成；机器基线为 `scripts/theme_override_baseline.json`。
 
-| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 32-2B 后 | 说明 |
-|:---|:---:|:---:|:---:|:---:|:---|
-| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 6,352 | **4,747** | 135 → 132 个 `.tscn` |
-| 直接属性覆盖 | 6,804 | 6,565 | 6,326 | **4,721** | Phase 32 静态迁移对象 |
-| Animation 轨道路径引用 | 26 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | colors 1,366 / styles 702 / constants 1,208 / fonts 749 / font_sizes 696 | 合计 6,804 → 6,565 → 6,326 → 4,721 |
-| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | 3,350 / 895 | `game_set`、32-2A、32-2B 后下降 |
-| `FontFile` 场景引用 | 207 | 205 | 205 | 200 | 12 个字体文件；32-1/32-2B 去掉未引用字体 |
-| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | 2 / 6 引用 | **2 / 96 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
-| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | 34 个直接类型 / 99 个节点引用 | **72 个直接类型 / 359 个节点引用** | Theme 共 74 个类型定义；另 2 个仅作基类 |
-| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
+| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 32-2B 后 | 32-3A 后 | 说明 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---|
+| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 6,352 | 4,747 | **4,123** | 135 → 125 个 `.tscn` |
+| 直接属性覆盖 | 6,804 | 6,565 | 6,326 | 4,721 | **4,097** | Phase 32 静态迁移对象 |
+| Animation 轨道路径引用 | 26 | 26 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
+| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | colors 1,366 / styles 702 / constants 1,208 / fonts 749 / font_sizes 696 | colors 1,189 / styles 556 / constants 1,100 / fonts 634 / font_sizes 618 | 合计 6,804 → 6,565 → 6,326 → 4,721 → 4,097 |
+| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | 3,350 / 895 | 3,100 / 745 | 32-1/2A/2B/3A 后下降 |
+| `FontFile` 场景引用 | 207 | 205 | 205 | 200 | 186 | 12 个字体文件；迁移批次删除未引用场景字体 |
+| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | 2 / 6 引用 | 2 / 96 引用 | **2 / 199 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
+| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | 34 个直接类型 / 99 个节点引用 | 72 个直接类型 / 359 个节点引用 | **146 个直接类型 / 498 个节点引用** | Theme 共 148 个类型定义；另 2 个仅作基类 |
+| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
 
 基线是**上限**，不是迁移目标。迁移只能使直接属性与动画引用下降，不能因新增面板或重构静默增加；新增场景需要显式更新基线并说明原因。
 
@@ -148,12 +148,87 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 | `SkillIconButtonTexture` | `SkillIconButton` | pressed 使用空 StyleBoxTexture |
 | `SkillGridRow` | `HBoxContainer` | separation 25 |
 
+| `TowerFloorInput` | `LineEdit` | 镇妖塔输入 |
+| `AnnouncementListGroup` | `VBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementOverlayPanel` | `PanelContainer` | 公告面板混合控件/布局 |
+| `AnnouncementFunctionMargin` | `MarginContainer` | 公告面板混合控件/布局 |
+| `AnnouncementFunctionContent` | `VBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementFunctionColumns` | `HBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementLeftColumn` | `VBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementCheckButton` | `CheckButton` | 公告面板混合控件/布局 |
+| `AnnouncementCheckButtonSmall` | `CheckButton` | 公告面板混合控件/布局 |
+| `AnnouncementOption` | `OptionButton` | 公告面板混合控件/布局 |
+| `AnnouncementSecretPanel` | `PanelContainer` | 公告面板混合控件/布局 |
+| `AnnouncementPasswordMargin` | `MarginContainer` | 公告面板混合控件/布局 |
+| `AnnouncementPasswordContent` | `VBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementActionRow` | `HBoxContainer` | 公告面板混合控件/布局 |
+| `AnnouncementPasswordInput` | `LineEdit` | 公告面板混合控件/布局 |
+| `SkillPopupMenu` | `PopupMenu` | 技能面板 PopupMenu |
+| `ArchiveReadOnlyLink` | `LineEdit` | 归档接口控件/布局 |
+| `ArchiveStepText` | `Label` | 归档接口控件/布局 |
+| `ArchiveSectionTitle` | `Label` | 归档接口控件/布局 |
+| `ArchiveDialogTitle` | `Label` | 归档接口控件/布局 |
+| `ArchivePopupPanel` | `Panel` | 归档接口控件/布局 |
+| `ArchiveActionButtonSmall` | `Button` | 归档接口控件/布局 |
+| `ArchiveHelpButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveMutedButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveUidHash` | `LineEdit` | 归档接口控件/布局 |
+| `ArchiveFieldTitle` | `Label` | 归档接口控件/布局 |
+| `ArchiveUploadButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveDialogActionButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveLoginInput` | `LineEdit` | 归档接口控件/布局 |
+| `ArchiveLoginLabel` | `Label` | 归档接口控件/布局 |
+| `ArchiveLoginButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveStatusText` | `Label` | 归档接口控件/布局 |
+| `ArchivePanelTitle` | `Label` | 归档接口控件/布局 |
+| `ArchiveConfirmButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveMessageText` | `Label` | 归档接口控件/布局 |
+| `ArchiveCdButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveNumberInput` | `LineEdit` | 归档接口控件/布局 |
+| `ArchiveCloudButton` | `Button` | 归档接口控件/布局 |
+| `ArchiveDeleteButton` | `Button` | 归档接口控件/布局 |
+| `ShopPageLabel` | `Label` | 商店控件/布局 |
+| `ShopSearchRow` | `HBoxContainer` | 商店控件/布局 |
+| `ShopSearchInput` | `LineEdit` | 商店控件/布局 |
+| `ShopStatTitle` | `Label` | 商店控件/布局 |
+| `ShopDamageText` | `Label` | 商店控件/布局 |
+| `ShopTabRow` | `HBoxContainer` | 商店控件/布局 |
+| `ShopTabText` | `Label` | 商店控件/布局 |
+| `ShopTabTextStrong` | `Label` | 商店控件/布局 |
+| `ShopRoleText` | `Label` | 商店控件/布局 |
+| `ShopCloseButton` | `Button` | 商店控件/布局 |
+| `ShopHintLabel` | `Label` | 商店控件/布局 |
+| `ShopMessageText` | `Label` | 商店控件/布局 |
+| `ShopTitleText` | `Label` | 商店控件/布局 |
+| `SellFilterList` | `VBoxContainer` | 出售筛选与输入 |
+| `SellFilterCs` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterGxms` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterHq` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterHsh` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterJl` | `CheckBox` | 出售筛选与输入 |
+| `SellPageInput` | `LineEdit` | 出售筛选与输入 |
+| `SellTitle` | `Label` | 出售筛选与输入 |
+| `SellFilterPt` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterSq` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterSs` | `CheckBox` | 出售筛选与输入 |
+| `SellWarning` | `Label` | 出售筛选与输入 |
+| `SellFilterXl` | `CheckBox` | 出售筛选与输入 |
+| `SellFilterYx` | `CheckBox` | 出售筛选与输入 |
+| `LhhjActionLabel` | `Label` | 六合/挑战面板标签与输入 |
+| `LhhjSectionText` | `Label` | 六合/挑战面板标签与输入 |
+| `LhhjBossGrid` | `GridContainer` | 六合/挑战面板标签与输入 |
+| `LhhjValueInput` | `LineEdit` | 六合/挑战面板标签与输入 |
+| `LhhjHpLabel` | `Label` | 六合/挑战面板标签与输入 |
+| `LhhjAltValueInput` | `LineEdit` | 六合/挑战面板标签与输入 |
+| `LhhjSelfValueInput` | `LineEdit` | 六合/挑战面板标签与输入 |
+| `LhhjTitle` | `Label` | 六合/挑战面板标签与输入 |
+
 规则：
 
 1. 变体名表达**角色**，不按单个场景命名；
 2. 不把一个场景的局部样式命名为全局变体；
 3. 同一角色在不同字体族下需要保留字体差异时，可拆分为 `TitleLabelSerif` 等明确变体，不得用运行时覆盖临时修正；
-4. 32-2A/32-2B 后共有 **74 个类型**（72 个直接使用 + 2 个基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
+4. 32-2A/32-2B/32-3A 后共有 **148 个类型**（146 个直接使用 + 2 个基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
 
 ## 5. 字体与样式
 
@@ -242,10 +317,33 @@ python scripts/theme_override_audit.py --write-baseline
 - `set_menu` 的 16 个空 StyleBox 按钮收敛为 `MenuActionButton` / `MenuActionButtonOutline` 两态；`some_monster_help` 的 61 个按钮收敛为一个 `MonsterHelpButton`；
 - 剩余 44 处均是混合控件/布局或 PopupMenu 字体，不以“只改文本”归零；未迁移场景不假装完成。
 
+## 7C. 32-3A 混合控件与布局批次结果（已完成，2026-11-01）
+
+| 场景 | 迁移前直接属性 | 迁移后直接属性 | 迁移节点/变体 | 覆盖控件 |
+|:---|:---:|:---:|:---|:---|
+| `main_menu/zhen_yao_tower.tscn` | 8 | **0** | 1 节点 / 1 变体 | LineEdit |
+| `main_menu/game_announcement.tscn` | 34 | **0** | 21 节点 / 14 变体 | CheckButton、OptionButton、LineEdit、PanelContainer、MarginContainer、VBox/HBox |
+| `skill/zd_skill.tscn` | 2 | **0** | 2 节点 / 1 变体 | PopupMenu |
+| `archive_interface/read_archive_interface.tscn` | 230 | **0** | 42 节点 / 23 变体 | Button、Label、LineEdit、Panel |
+| `shop/shop.tscn` | 94 | **0** | 16 节点 / 13 变体 | Label、LineEdit、Button、HBox |
+| `back_pack/pl_sell.tscn` | 107 | **0** | 14 节点 / 14 变体 | CheckBox、Label、LineEdit、VBox |
+| `other_scene/lhhj.tscn` | 149 | **0** | 43 节点 / 8 变体 | Label、LineEdit、GridContainer |
+
+共同结果：
+
+- 七个场景合计直接属性 **624 → 0**；全局直接属性 **4,721 → 4,097**，文本引用 **4,123**，剩余含覆盖场景 **125**；
+- Theme 新增 **74 个变体**，累计 **148 个定义 / 146 个直接使用 / 498 个节点引用**；Theme 场景引用 **199**；FontFile 场景引用 **186**；
+- 七个场景分别覆盖 32 / 108 / 85 / 56 / 29 / 20 / 59 个 Control，合计 **389 个 Control** 的字体、字号、描边、阴影、颜色、StyleBox、位置、尺寸与文本，迁移前后 **0 差异**；
+- 1600×1000 与 1280×800 各 7 张截图，共 **18,368,000 像素**，**0 像素差异**；
+- 七个场景直接启动 0 ERROR / 0 WARNING；`theme_override_audit.py --check`、`contract_gate` 与 `check_all --godot-bin` 9/9（28.91s）通过；
+- `read_archive_interface`、`shop`、`lhhj` 的 `Node2D`/`Sprite2D` 父级会阻断 Theme 继承，已对迁移节点显式绑定同一 Theme；`pl_sell` 使用 Control 根，`zhen_yao_tower`/`game_announcement` 使用既有 Control 根，`zd_skill` 保留 32-2B 的显式绑定；
+- 32-2B 登记的 44 处混合/布局/PopupMenu 覆盖已全部关闭；这些场景不再有静态 `theme_override_*`；
+- 仍未迁移的混合面板留待 32-3B；不把一次性背景纹理或运行时品质色伪装成全局面板角色。
+
 ## 8. 分批与验收边界
 
-- 32-2A（标签密集）与 32-2B（Button 密集五场景）已完成；32-3 处理混合输入/列表与控件补齐；每批先快照、再迁移、后验证。
-- 32-3 补齐 `OptionButton`、`CheckBox`、`CheckButton`、`LineEdit`、`HSlider`、`Panel`、`PanelContainer`、`TabBar`、`PopupMenu`、`ItemList` 等类型；优先收口 32-2B 留存的 44 处混合覆盖。
+- 32-2A（标签密集）、32-2B（Button 密集五场景）与 32-3A（混合控件/布局七场景）已完成；32-3B 继续其余混合面板；每批先快照、再迁移、后验证。
+- 32-3A 已补齐 `OptionButton`、`CheckButton`、`LineEdit`、`Panel`、`PanelContainer`、`PopupMenu`、`GridContainer` 与尺寸/布局变体；32-3B 继续 `CheckBox` 其余消费方、`HSlider`、`TabBar`、`ItemList` 与未迁移混合面板。
 - 32-4 建立例外清单，评估是否启用全局 Theme，退役旧 Theme，更新 `architecture.md`、`status.md` 与索引。
 - 每批必须保留截图/控件转储与相关 `scene_probe_runner` 结果；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
 - 阶段完成标准是“直接属性为 0 或全部登记例外”，不是“总数看起来接近 0”；动画轨道与动态调用单独报告。
@@ -262,7 +360,7 @@ python scripts/theme_override_audit.py --write-baseline
 | 项 | 当前状态 | 出口 |
 |:---|:---|:---|
 | 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | `Scene/theme/bhyh_theme.tres` 已用于 pilot；旧 Theme 未合并 | 32-4 迁移/退役 |
-| 最终变体名单与字体族映射 | 32-1/32-2A/32-2B 已冻结 74 个类型（72 直接 + 2 基类） | 32-3 只按批扩展，不重命名 |
+| 最终变体名单与字体族映射 | 32-1/32-2A/32-2B/32-3A 已冻结 148 个类型（146 直接 + 2 基类） | 32-3B 只按批扩展，不重命名 |
 | 是否启用全局 `gui/theme/custom` | 默认不启用 | 32-4 全 UI 覆盖评审 |
 | 动画轨道/脚本动态覆盖的最终例外清单 | 动画 26 处、动态调用 383 处均未迁移 | 32-4 收口 |
 

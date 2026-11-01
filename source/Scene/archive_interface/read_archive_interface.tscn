@@ -1,88 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/archive_interface/read_archive_interface.gd" id="1"]
+
 [ext_resource type="Texture2D" path="res://Art/game_pic/archive_picture/87.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf" id="3"]
+
 [ext_resource type="Texture2D" path="res://Art/backpack/49.png" id="4"]
+
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="5"]
 
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="3"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="2"]
-
-[sub_resource type="StyleBoxEmpty" id="4"]
-
-[sub_resource type="StyleBoxFlat" id="5"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="CloudButton"]
-bg_color = Color(0.0352941, 0.0352941, 0.0352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.45, 0.45, 0.45, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="CloudButtonHover"]
-bg_color = Color(0.18, 0.18, 0.18, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.415686, 0, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="6"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxEmpty" id="8"]
-
-[sub_resource type="StyleBoxFlat" id="7"]
-
-[sub_resource type="StyleBoxEmpty" id="9"]
-
-[sub_resource type="StyleBoxEmpty" id="11"]
-
-[sub_resource type="StyleBoxEmpty" id="10"]
-
-[sub_resource type="StyleBoxEmpty" id="12"]
-
-[sub_resource type="StyleBoxEmpty" id="13"]
-
-[sub_resource type="StyleBoxFlat" id="CloudPanel"]
-bg_color = Color(0.105882, 0.105882, 0.105882, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.670588, 0.670588, 0.670588, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="CloudInput"]
-bg_color = Color(0.0352941, 0.0352941, 0.0352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.45, 0.45, 0.45, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="Read_Archive_Interface" type="Node2D" unique_id=1300077727]
 script = ExtResource("1")
@@ -104,21 +30,12 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="delete" type="Button" parent="background" unique_id=1919363999]
+theme_type_variation = "ArchiveDeleteButton"
+theme = ExtResource("theme")
 offset_left = 52.1685
 offset_top = -115.59
 offset_right = 124.168
 offset_bottom = -84.5899
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.827451, 0.552941, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 19
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "删除存档"
 metadata/_edit_lock_ = true
 
@@ -133,73 +50,42 @@ texture_hover = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="cloud_archive" type="Button" parent="background" unique_id=131738930]
+theme_type_variation = "ArchiveCloudButton"
+theme = ExtResource("theme")
 offset_left = 134.85051
 offset_top = -165.92714
 offset_right = 229.85051
 offset_bottom = -130.92714
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
-theme_override_styles/focus = SubResource("CloudButton")
 text = "云存档"
 
 [node name="cd_number" type="LineEdit" parent="background" unique_id=102745102]
+theme_type_variation = "ArchiveNumberInput"
+theme = ExtResource("theme")
 offset_left = 135.835
 offset_top = -115.59
 offset_right = 232.835
 offset_bottom = -84.5899
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 3
-theme_override_constants/minimum_character_width = 0
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("6")
-theme_override_styles/read_only = SubResource("8")
-theme_override_styles/focus = SubResource("7")
 placeholder_text = "输入存档号"
 alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Addcd" type="Button" parent="background" unique_id=176266713]
+theme_type_variation = "ArchiveCdButton"
+theme = ExtResource("theme")
 offset_left = -263.795
 offset_top = -114.658
 offset_right = -175.795
 offset_bottom = -83.6575
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("3")
-theme_override_styles/normal = SubResource("9")
-theme_override_styles/pressed = SubResource("11")
-theme_override_styles/hover = SubResource("10")
-theme_override_styles/disabled = SubResource("12")
-theme_override_styles/focus = SubResource("13")
 text = "增加存档格"
 metadata/_edit_lock_ = true
 
 [node name="Removecd" type="Button" parent="background" unique_id=885293435]
+theme_type_variation = "ArchiveCdButton"
+theme = ExtResource("theme")
 offset_left = -177.176
 offset_top = -114.658
 offset_right = -89.1758
 offset_bottom = -83.6575
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("3")
-theme_override_styles/normal = SubResource("9")
-theme_override_styles/pressed = SubResource("11")
-theme_override_styles/hover = SubResource("10")
-theme_override_styles/disabled = SubResource("12")
-theme_override_styles/focus = SubResource("13")
 text = "减少存档格"
 metadata/_edit_lock_ = true
 
@@ -230,40 +116,33 @@ offset_bottom = 588.0
 color = Color(0, 0, 0, 0.66)
 
 [node name="Panel" type="Panel" parent="CloudArchivePopup" unique_id=205032370]
+theme_type_variation = "ArchivePopupPanel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 286.0
 offset_top = 112.0
 offset_right = 656.0
 offset_bottom = 476.0
-theme_override_styles/panel = SubResource("CloudPanel")
 
 [node name="Title" type="Label" parent="CloudArchivePopup/Panel" unique_id=152044625]
+theme_type_variation = "ArchivePanelTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 17.0
 offset_right = 346.0
 offset_bottom = 53.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 25
 text = "云存档"
 horizontal_alignment = 1
 
 [node name="Close" type="Button" parent="CloudArchivePopup/Panel" unique_id=1600402676]
+theme_type_variation = "ArchiveDialogActionButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 322.0
 offset_top = 10.0
 offset_right = 358.0
 offset_bottom = 46.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "×"
 
 [node name="LoginPage" type="Control" parent="CloudArchivePopup/Panel" unique_id=887184529]
@@ -274,94 +153,71 @@ offset_right = 346.0
 offset_bottom = 346.0
 
 [node name="AccountLabel" type="Label" parent="CloudArchivePopup/Panel/LoginPage" unique_id=624327356]
+theme_type_variation = "ArchiveLoginLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 5.0
 offset_right = 78.0
 offset_bottom = 38.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
 text = "账号"
 
 [node name="Account" type="LineEdit" parent="CloudArchivePopup/Panel/LoginPage" unique_id=285180152]
+theme_type_variation = "ArchiveLoginInput"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 78.0
 offset_right = 322.0
 offset_bottom = 42.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_placeholder_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("CloudInput")
-theme_override_styles/focus = SubResource("CloudButtonHover")
 placeholder_text = "请输入账号"
 max_length = 64
 
 [node name="PasswordLabel" type="Label" parent="CloudArchivePopup/Panel/LoginPage" unique_id=382666731]
+theme_type_variation = "ArchiveLoginLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 67.0
 offset_right = 78.0
 offset_bottom = 100.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
 text = "密码"
 
 [node name="Password" type="LineEdit" parent="CloudArchivePopup/Panel/LoginPage" unique_id=523387511]
+theme_type_variation = "ArchiveLoginInput"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 78.0
 offset_top = 62.0
 offset_right = 322.0
 offset_bottom = 104.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_placeholder_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("CloudInput")
-theme_override_styles/focus = SubResource("CloudButtonHover")
 placeholder_text = "请输入密码"
 max_length = 128
 secret = true
 
 [node name="Register" type="Button" parent="CloudArchivePopup/Panel/LoginPage" unique_id=351783708]
+theme_type_variation = "ArchiveLoginButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 130.0
 offset_right = 150.0
 offset_bottom = 178.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
-theme_override_styles/disabled = SubResource("CloudButton")
 text = "注册"
 
 [node name="Login" type="Button" parent="CloudArchivePopup/Panel/LoginPage" unique_id=601278928]
+theme_type_variation = "ArchiveLoginButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 172.0
 offset_top = 130.0
 offset_right = 322.0
 offset_bottom = 178.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
-theme_override_styles/disabled = SubResource("CloudButton")
 text = "登录"
 
 [node name="Status" type="Label" parent="CloudArchivePopup/Panel/LoginPage" unique_id=1212376883]
+theme_type_variation = "ArchiveStatusText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 198.0
 offset_right = 322.0
 offset_bottom = 270.0
-theme_override_colors/font_color = Color(1, 0.84, 0.54, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 16
 text = "请输入账号和密码"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -376,100 +232,70 @@ offset_right = 346.0
 offset_bottom = 346.0
 
 [node name="ImportHelp" type="Button" parent="CloudArchivePopup/Panel/ActionPage" unique_id=11557000]
+theme_type_variation = "ArchiveHelpButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 234.0
 offset_right = 322.0
 offset_bottom = 36.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "导入说明"
 
 [node name="UidTitle" type="Label" parent="CloudArchivePopup/Panel/ActionPage" unique_id=43984645]
+theme_type_variation = "ArchiveFieldTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_right = 322.0
 offset_bottom = 24.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
 text = "文件夹名"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="UidHash" type="LineEdit" parent="CloudArchivePopup/Panel/ActionPage" unique_id=182094514]
+theme_type_variation = "ArchiveUidHash"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 46.0
 offset_right = 240.0
 offset_bottom = 84.0
-theme_override_colors/font_color = Color(1, 0.84, 0.54, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("CloudInput")
-theme_override_styles/read_only = SubResource("CloudInput")
 text = "00000000000000000000000000000000"
 editable = false
 
 [node name="CopyUid" type="Button" parent="CloudArchivePopup/Panel/ActionPage" unique_id=37643808]
+theme_type_variation = "ArchiveActionButtonSmall"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 248.0
 offset_top = 46.0
 offset_right = 322.0
 offset_bottom = 84.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "复制"
 
 [node name="Upload" type="Button" parent="CloudArchivePopup/Panel/ActionPage" unique_id=142463907]
+theme_type_variation = "ArchiveUploadButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 100.0
 offset_right = 322.0
 offset_bottom = 156.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
-theme_override_styles/disabled = SubResource("CloudButton")
 text = "上传存档"
 
 [node name="Import" type="Button" parent="CloudArchivePopup/Panel/ActionPage" unique_id=1110187083]
+theme_type_variation = "ArchiveDialogActionButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 176.0
 offset_right = 322.0
 offset_bottom = 232.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "导入存档"
 
 [node name="Logout" type="Button" parent="CloudArchivePopup/Panel/ActionPage" unique_id=1260961911]
+theme_type_variation = "ArchiveMutedButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 111.0
 offset_top = 250.0
 offset_right = 211.0
 offset_bottom = 286.0
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "退出登录"
 
 [node name="ImportHelp" type="Control" parent="CloudArchivePopup" unique_id=333797083]
@@ -486,102 +312,84 @@ offset_bottom = 588.0
 color = Color(0, 0, 0, 0.78)
 
 [node name="Panel" type="Panel" parent="CloudArchivePopup/ImportHelp" unique_id=462498855]
+theme_type_variation = "ArchivePopupPanel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 145.0
 offset_top = 35.0
 offset_right = 797.0
 offset_bottom = 553.0
-theme_override_styles/panel = SubResource("CloudPanel")
 
 [node name="Title" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=222304190]
+theme_type_variation = "ArchiveDialogTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 14.0
 offset_right = 628.0
 offset_bottom = 48.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
 text = "导入说明"
 horizontal_alignment = 1
 
 [node name="Close" type="Button" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=1756660451]
+theme_type_variation = "ArchiveDialogActionButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 604.0
 offset_top = 9.0
 offset_right = 640.0
 offset_bottom = 45.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "×"
 
 [node name="LinkTitle" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=1064124348]
+theme_type_variation = "ArchiveFieldTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 58.0
 offset_right = 628.0
 offset_bottom = 84.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
 text = "存档下载链接"
 
 [node name="DownloadLink" type="LineEdit" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=915815612]
+theme_type_variation = "ArchiveReadOnlyLink"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 86.0
 offset_right = 510.0
 offset_bottom = 126.0
-theme_override_colors/font_color = Color(1, 0.84, 0.54, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("CloudInput")
-theme_override_styles/read_only = SubResource("CloudInput")
 text = "https://pan.xunlei.com/s/VP0hqWiZoC9jJJ1zAoyj5dYEA1"
 editable = false
 
 [node name="CopyLink" type="Button" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=251980760]
+theme_type_variation = "ArchiveActionButtonSmall"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 520.0
 offset_top = 86.0
 offset_right = 628.0
 offset_bottom = 126.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 17
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "复制"
 
 [node name="StepsTitle" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=465612935]
+theme_type_variation = "ArchiveSectionTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 140.0
 offset_right = 628.0
 offset_bottom = 168.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
 text = "下载与导入"
 
 [node name="Steps" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=2132564616]
+theme_type_variation = "ArchiveStepText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 171.0
 offset_right = 628.0
 offset_bottom = 278.0
-theme_override_colors/font_color = Color(0.94, 0.94, 0.94, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 16
 text = "1. 复制存档下载链接，并在浏览器中打开
 2. 复制文件夹名，在链接页面中搜索
 3. 打开搜索到的文件夹，下载里面的 ZIP
@@ -590,25 +398,23 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="MobileTitle" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=2003872027]
+theme_type_variation = "ArchiveSectionTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 290.0
 offset_right = 628.0
 offset_bottom = 318.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
 text = "手机额外设置"
 
 [node name="MobileSteps" type="Label" parent="CloudArchivePopup/ImportHelp/Panel" unique_id=603746158]
+theme_type_variation = "ArchiveStepText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 321.0
 offset_right = 628.0
 offset_bottom = 493.0
-theme_override_colors/font_color = Color(0.94, 0.94, 0.94, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 16
 text = "1. 打开迅雷网盘，点击右下角“我的”
 2. 点击本地文件，找到下载的存档
 3. 长按存档并点击移动，选择手机系统文件
@@ -631,36 +437,33 @@ offset_bottom = 588.0
 color = Color(0, 0, 0, 0.72)
 
 [node name="Panel" type="Panel" parent="CloudArchivePopup/UploadConfirm" unique_id=1074995211]
+theme_type_variation = "ArchivePopupPanel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 286.0
 offset_top = 176.0
 offset_right = 656.0
 offset_bottom = 412.0
-theme_override_styles/panel = SubResource("CloudPanel")
 
 [node name="Title" type="Label" parent="CloudArchivePopup/UploadConfirm/Panel" unique_id=1691424486]
+theme_type_variation = "ArchiveDialogTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 18.0
 offset_right = 346.0
 offset_bottom = 54.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
 text = "确认上传"
 horizontal_alignment = 1
 
 [node name="Message" type="Label" parent="CloudArchivePopup/UploadConfirm/Panel" unique_id=1290346199]
+theme_type_variation = "ArchiveMessageText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 26.0
 offset_top = 68.0
 offset_right = 344.0
 offset_bottom = 138.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
 text = "上传以后存档将绑定此账号，不能更改。
 是否继续上传？"
 horizontal_alignment = 1
@@ -668,33 +471,23 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Cancel" type="Button" parent="CloudArchivePopup/UploadConfirm/Panel" unique_id=1245034817]
+theme_type_variation = "ArchiveConfirmButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 26.0
 offset_top = 166.0
 offset_right = 174.0
 offset_bottom = 214.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "取消"
 
 [node name="Confirm" type="Button" parent="CloudArchivePopup/UploadConfirm/Panel" unique_id=1383335929]
+theme_type_variation = "ArchiveConfirmButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 196.0
 offset_top = 166.0
 offset_right = 344.0
 offset_bottom = 214.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "确定"
 
 [node name="ImportConfirm" type="Control" parent="CloudArchivePopup" unique_id=340776096]
@@ -711,36 +504,33 @@ offset_bottom = 588.0
 color = Color(0, 0, 0, 0.72)
 
 [node name="Panel" type="Panel" parent="CloudArchivePopup/ImportConfirm" unique_id=354243935]
+theme_type_variation = "ArchivePopupPanel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 286.0
 offset_top = 176.0
 offset_right = 656.0
 offset_bottom = 412.0
-theme_override_styles/panel = SubResource("CloudPanel")
 
 [node name="Title" type="Label" parent="CloudArchivePopup/ImportConfirm/Panel" unique_id=1345464883]
+theme_type_variation = "ArchiveDialogTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 18.0
 offset_right = 346.0
 offset_bottom = 54.0
-theme_override_colors/font_color = Color(1, 0.72, 0.16, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
 text = "确认导入"
 horizontal_alignment = 1
 
 [node name="Message" type="Label" parent="CloudArchivePopup/ImportConfirm/Panel" unique_id=1637498027]
+theme_type_variation = "ArchiveMessageText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 26.0
 offset_top = 68.0
 offset_right = 344.0
 offset_bottom = 138.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 18
 text = "导入存档会覆盖本地存档。
 是否继续导入？"
 horizontal_alignment = 1
@@ -748,33 +538,23 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Cancel" type="Button" parent="CloudArchivePopup/ImportConfirm/Panel" unique_id=521776087]
+theme_type_variation = "ArchiveConfirmButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 26.0
 offset_top = 166.0
 offset_right = 174.0
 offset_bottom = 214.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "取消"
 
 [node name="Confirm" type="Button" parent="CloudArchivePopup/ImportConfirm/Panel" unique_id=192381294]
+theme_type_variation = "ArchiveConfirmButton"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 196.0
 offset_top = 166.0
 offset_right = 344.0
 offset_bottom = 214.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.415686, 0, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("CloudButton")
-theme_override_styles/pressed = SubResource("CloudButtonHover")
-theme_override_styles/hover = SubResource("CloudButtonHover")
 text = "确定"
 
 [node name="CloudRequest" type="HTTPRequest" parent="." unique_id=1021410090]

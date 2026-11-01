@@ -1,30 +1,16 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/main_menu/game_announcement.gd" id="1"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="4"]
+
 [ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="6"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="7"]
+
 [ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="8"]
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secret_panel"]
-bg_color = Color(0.075, 0.082, 0.094, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.53, 0.19, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0, 0, 0.65)
-shadow_size = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y1b1"]
-bg_color = Color(0, 0, 0, 1)
 
 [node name="GameAnnouncement" type="CanvasLayer" unique_id=377112224]
 layer = 2
@@ -122,10 +108,10 @@ offset_right = 171.0
 offset_bottom = 398.0
 
 [node name="bblist" type="VBoxContainer" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer" unique_id=275287977]
+theme_type_variation = "AnnouncementListGroup"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 15
 
 [node name="V0_50" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177987]
 theme_type_variation = "AnnouncementButton"
@@ -413,9 +399,9 @@ offset_bottom = 393.0
 metadata/_edit_lock_ = true
 
 [node name="TextList" type="VBoxContainer" parent="BG/PanelContainer/HBoxContainer/InfoBg/ScrollContainer" unique_id=1025919198]
+theme_type_variation = "AnnouncementListGroup"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 15
 
 [node name="SecretPasswordOverlay" type="Control" parent="." unique_id=1605558437]
 theme = ExtResource("theme")
@@ -438,6 +424,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.48)
 
 [node name="PasswordPanel" type="PanelContainer" parent="SecretPasswordOverlay" unique_id=2263979]
+theme_type_variation = "AnnouncementSecretPanel"
 custom_minimum_size = Vector2(500, 230)
 layout_mode = 1
 anchors_preset = 8
@@ -451,18 +438,14 @@ offset_right = 250.0
 offset_bottom = 115.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_secret_panel")
 
 [node name="PasswordMargin" type="MarginContainer" parent="SecretPasswordOverlay/PasswordPanel" unique_id=732276928]
+theme_type_variation = "AnnouncementPasswordMargin"
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 20
 
 [node name="PasswordContent" type="VBoxContainer" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin" unique_id=1399961327]
+theme_type_variation = "AnnouncementPasswordContent"
 layout_mode = 2
-theme_override_constants/separation = 10
 
 [node name="PasswordTitle" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=367939056]
 theme_type_variation = "AnnouncementSubtitle"
@@ -476,10 +459,9 @@ layout_mode = 2
 text = "请输入密钥"
 
 [node name="PasswordInput" type="LineEdit" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=66168510]
+theme_type_variation = "AnnouncementPasswordInput"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
 placeholder_text = "密钥"
 caret_blink = true
 caret_blink_interval = 0.5
@@ -493,8 +475,8 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="PasswordButtons" type="HBoxContainer" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=623950188]
+theme_type_variation = "AnnouncementActionRow"
 layout_mode = 2
-theme_override_constants/separation = 12
 
 [node name="LeftSpacer" type="Control" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=1387843916]
 layout_mode = 2
@@ -537,6 +519,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.48)
 
 [node name="FunctionPanel" type="PanelContainer" parent="SecretFunctionOverlay" unique_id=432419472]
+theme_type_variation = "AnnouncementSecretPanel"
 custom_minimum_size = Vector2(720, 460)
 layout_mode = 1
 anchors_preset = 8
@@ -550,18 +533,14 @@ offset_right = 360.0
 offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_secret_panel")
 
 [node name="FunctionMargin" type="MarginContainer" parent="SecretFunctionOverlay/FunctionPanel" unique_id=168983529]
+theme_type_variation = "AnnouncementFunctionMargin"
 layout_mode = 2
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 14
 
 [node name="FunctionContent" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin" unique_id=1196087010]
+theme_type_variation = "AnnouncementFunctionContent"
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="Header" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=2104542680]
 custom_minimum_size = Vector2(0, 42)
@@ -589,34 +568,31 @@ stretch_mode = 5
 layout_mode = 2
 
 [node name="FunctionColumns" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=1670624087]
+theme_type_variation = "AnnouncementFunctionColumns"
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 22
 
 [node name="LeftColumn" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns" unique_id=644336649]
+theme_type_variation = "AnnouncementLeftColumn"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
 
 [node name="Invincible" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1956689057]
+theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 22
 text = "无敌"
 
 [node name="InstantKill" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1064476348]
+theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 22
 text = "秒杀"
 
 [node name="AllMaps" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=794288554]
+theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 22
 text = "地图全开"
 
 [node name="AddSouls" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=768345083]
@@ -632,22 +608,20 @@ layout_mode = 2
 text = "一键神装"
 
 [node name="RightColumn" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns" unique_id=331778278]
+theme_type_variation = "AnnouncementFunctionContent"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="FreeShop" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=386484875]
+theme_type_variation = "AnnouncementCheckButtonSmall"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 21
 text = "商店0元购"
 
 [node name="AllShopItems" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=810771676]
+theme_type_variation = "AnnouncementCheckButtonSmall"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 21
 text = "商店全物品"
 
 [node name="PlayerMaxLevel" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=114725072]
@@ -675,17 +649,16 @@ layout_mode = 2
 text = "全部图录满级"
 
 [node name="MapProgressRow" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=608156548]
+theme_type_variation = "AnnouncementActionRow"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_constants/separation = 12
 
 [node name="MapSelector" type="OptionButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/MapProgressRow" unique_id=2068075119]
+theme_type_variation = "AnnouncementOption"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "选择要清除进度的地图"
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 18
 
 [node name="ClearProgress" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/MapProgressRow" unique_id=139116305]
 theme_type_variation = "AnnouncementSecretButton"
@@ -702,6 +675,8 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1907988831]
+theme = ExtResource("theme")
+theme_type_variation = "AnnouncementOverlayPanel"
 custom_minimum_size = Vector2(100, 0)
 anchors_preset = 1
 anchor_left = 1.0
@@ -709,7 +684,6 @@ anchor_right = 1.0
 offset_left = -100.0
 offset_bottom = 40.0
 grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_6y1b1")
 
 [node name="Close" type="TextureButton" parent="PanelContainer" unique_id=1653267160]
 layout_mode = 2

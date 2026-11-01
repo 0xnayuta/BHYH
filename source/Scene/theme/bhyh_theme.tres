@@ -1,19 +1,24 @@
-[gd_resource type="Theme" load_steps=18 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" load_steps=29 format=3 uid="uid://bhyhuitheme01"]
 
 [ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
-
 [ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="font_fzcy"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="font_hk"]
 [ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="font_meng"]
 [ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="font_hy"]
+[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf" id="font_1_aaa_fz_cu_yuan_m03_s_ttf"]
+[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="font_8_fz_cu_yuan_m03_s"]
+[ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
+[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="font_1_aaa_fz_cu_yuan_m03_s"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
+
 [sub_resource type="StyleBoxLine" id="slider_track"]
 color = Color(1, 1, 1, 1)
 grow_begin = 0.0
 grow_end = -8.0
 thickness = 6
+
 [sub_resource type="StyleBoxFlat" id="slider_fill"]
 bg_color = Color(1, 0.0392157, 0.0235294, 1)
 
@@ -130,6 +135,66 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxTexture" id="skill_text_pressed"]
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_6y1b1"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_secret_panel"]
+bg_color = Color(0.075, 0.082, 0.094, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.72, 0.53, 0.19, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.65)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="sub_CloudInput"]
+bg_color = Color(0.0352941, 0.0352941, 0.0352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.45, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="sub_CloudPanel"]
+bg_color = Color(0.105882, 0.105882, 0.105882, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.670588, 0.670588, 0.670588, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="sub_CloudButtonHover"]
+bg_color = Color(0.18, 0.18, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.415686, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="sub_7"]
+
+[sub_resource type="StyleBoxTexture" id="sub_1"]
+texture = ExtResource("tex_56")
+texture_margin_left = 10.0
+texture_margin_bottom = 2.0
 
 [resource]
 SettingsButton/base_type = &"Button"
@@ -557,3 +622,522 @@ SkillIconButtonTexture/styles/pressed = SubResource("skill_text_pressed")
 
 SkillGridRow/base_type = &"HBoxContainer"
 SkillGridRow/constants/separation = 25
+
+TowerFloorInput/base_type = &"LineEdit"
+TowerFloorInput/colors/font_color = Color(1, 0.933333, 0.713726, 1)
+TowerFloorInput/colors/font_outline_color = Color(0.0901961, 0.047059, 0.023529, 1)
+TowerFloorInput/colors/font_placeholder_color = Color(1, 0.933333, 0.713726, 0.7)
+TowerFloorInput/constants/outline_size = 2
+TowerFloorInput/fonts/font = ExtResource("font_main")
+TowerFloorInput/font_sizes/font_size = 22
+TowerFloorInput/styles/normal = SubResource("tower_button_normal")
+TowerFloorInput/styles/focus = SubResource("tower_button_hover")
+
+AnnouncementListGroup/base_type = &"VBoxContainer"
+AnnouncementListGroup/constants/separation = 15
+
+AnnouncementOverlayPanel/base_type = &"PanelContainer"
+AnnouncementOverlayPanel/styles/panel = SubResource("sub_StyleBoxFlat_6y1b1")
+
+AnnouncementFunctionMargin/base_type = &"MarginContainer"
+AnnouncementFunctionMargin/constants/margin_left = 22
+AnnouncementFunctionMargin/constants/margin_top = 16
+AnnouncementFunctionMargin/constants/margin_right = 18
+AnnouncementFunctionMargin/constants/margin_bottom = 14
+
+AnnouncementFunctionContent/base_type = &"VBoxContainer"
+AnnouncementFunctionContent/constants/separation = 8
+
+AnnouncementFunctionColumns/base_type = &"HBoxContainer"
+AnnouncementFunctionColumns/constants/separation = 22
+
+AnnouncementLeftColumn/base_type = &"VBoxContainer"
+AnnouncementLeftColumn/constants/separation = 12
+
+AnnouncementCheckButton/base_type = &"CheckButton"
+AnnouncementCheckButton/fonts/font = ExtResource("font_hk")
+AnnouncementCheckButton/font_sizes/font_size = 22
+
+AnnouncementCheckButtonSmall/base_type = &"CheckButton"
+AnnouncementCheckButtonSmall/fonts/font = ExtResource("font_hk")
+AnnouncementCheckButtonSmall/font_sizes/font_size = 21
+
+AnnouncementOption/base_type = &"OptionButton"
+AnnouncementOption/fonts/font = ExtResource("font_hk")
+AnnouncementOption/font_sizes/font_size = 18
+
+AnnouncementSecretPanel/base_type = &"PanelContainer"
+AnnouncementSecretPanel/styles/panel = SubResource("sub_StyleBoxFlat_secret_panel")
+
+AnnouncementPasswordMargin/base_type = &"MarginContainer"
+AnnouncementPasswordMargin/constants/margin_left = 24
+AnnouncementPasswordMargin/constants/margin_top = 20
+AnnouncementPasswordMargin/constants/margin_right = 24
+AnnouncementPasswordMargin/constants/margin_bottom = 20
+
+AnnouncementPasswordContent/base_type = &"VBoxContainer"
+AnnouncementPasswordContent/constants/separation = 10
+
+AnnouncementActionRow/base_type = &"HBoxContainer"
+AnnouncementActionRow/constants/separation = 12
+
+AnnouncementPasswordInput/base_type = &"LineEdit"
+AnnouncementPasswordInput/fonts/font = ExtResource("font_hk")
+AnnouncementPasswordInput/font_sizes/font_size = 20
+
+SkillPopupMenu/base_type = &"PopupMenu"
+SkillPopupMenu/fonts/font = ExtResource("font_main")
+
+ArchiveReadOnlyLink/base_type = &"LineEdit"
+ArchiveReadOnlyLink/colors/font_color = Color(1, 0.84, 0.54, 1)
+ArchiveReadOnlyLink/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveReadOnlyLink/font_sizes/font_size = 13
+ArchiveReadOnlyLink/styles/normal = SubResource("sub_CloudInput")
+ArchiveReadOnlyLink/styles/read_only = SubResource("sub_CloudInput")
+
+ArchiveStepText/base_type = &"Label"
+ArchiveStepText/colors/font_color = Color(0.94, 0.94, 0.94, 1)
+ArchiveStepText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveStepText/font_sizes/font_size = 16
+
+ArchiveSectionTitle/base_type = &"Label"
+ArchiveSectionTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
+ArchiveSectionTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveSectionTitle/font_sizes/font_size = 18
+
+ArchiveDialogTitle/base_type = &"Label"
+ArchiveDialogTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
+ArchiveDialogTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ArchiveDialogTitle/constants/outline_size = 2
+ArchiveDialogTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDialogTitle/font_sizes/font_size = 24
+
+ArchivePopupPanel/base_type = &"Panel"
+ArchivePopupPanel/styles/panel = SubResource("sub_CloudPanel")
+
+ArchiveActionButtonSmall/base_type = &"Button"
+ArchiveActionButtonSmall/colors/font_color = Color(1, 1, 1, 1)
+ArchiveActionButtonSmall/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveActionButtonSmall/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveActionButtonSmall/font_sizes/font_size = 17
+ArchiveActionButtonSmall/styles/normal = SubResource("sub_CloudInput")
+ArchiveActionButtonSmall/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveActionButtonSmall/styles/hover = SubResource("sub_CloudButtonHover")
+
+ArchiveHelpButton/base_type = &"Button"
+ArchiveHelpButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveHelpButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveHelpButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveHelpButton/font_sizes/font_size = 14
+ArchiveHelpButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveHelpButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveHelpButton/styles/hover = SubResource("sub_CloudButtonHover")
+
+ArchiveMutedButton/base_type = &"Button"
+ArchiveMutedButton/colors/font_color = Color(0.8, 0.8, 0.8, 1)
+ArchiveMutedButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveMutedButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveMutedButton/font_sizes/font_size = 17
+ArchiveMutedButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveMutedButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveMutedButton/styles/hover = SubResource("sub_CloudButtonHover")
+
+ArchiveUidHash/base_type = &"LineEdit"
+ArchiveUidHash/colors/font_color = Color(1, 0.84, 0.54, 1)
+ArchiveUidHash/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveUidHash/font_sizes/font_size = 11
+ArchiveUidHash/styles/normal = SubResource("sub_CloudInput")
+ArchiveUidHash/styles/read_only = SubResource("sub_CloudInput")
+
+ArchiveFieldTitle/base_type = &"Label"
+ArchiveFieldTitle/colors/font_color = Color(1, 1, 1, 1)
+ArchiveFieldTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveFieldTitle/font_sizes/font_size = 17
+
+ArchiveUploadButton/base_type = &"Button"
+ArchiveUploadButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveUploadButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveUploadButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveUploadButton/font_sizes/font_size = 22
+ArchiveUploadButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveUploadButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveUploadButton/styles/hover = SubResource("sub_CloudButtonHover")
+ArchiveUploadButton/styles/disabled = SubResource("sub_CloudInput")
+
+ArchiveDialogActionButton/base_type = &"Button"
+ArchiveDialogActionButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveDialogActionButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveDialogActionButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDialogActionButton/font_sizes/font_size = 22
+ArchiveDialogActionButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveDialogActionButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveDialogActionButton/styles/hover = SubResource("sub_CloudButtonHover")
+
+ArchiveLoginInput/base_type = &"LineEdit"
+ArchiveLoginInput/colors/font_color = Color(1, 1, 1, 1)
+ArchiveLoginInput/colors/font_placeholder_color = Color(0.65, 0.65, 0.65, 1)
+ArchiveLoginInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginInput/font_sizes/font_size = 18
+ArchiveLoginInput/styles/normal = SubResource("sub_CloudInput")
+ArchiveLoginInput/styles/focus = SubResource("sub_CloudButtonHover")
+
+ArchiveLoginLabel/base_type = &"Label"
+ArchiveLoginLabel/colors/font_color = Color(1, 1, 1, 1)
+ArchiveLoginLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginLabel/font_sizes/font_size = 20
+
+ArchiveLoginButton/base_type = &"Button"
+ArchiveLoginButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveLoginButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveLoginButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginButton/font_sizes/font_size = 20
+ArchiveLoginButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveLoginButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveLoginButton/styles/hover = SubResource("sub_CloudButtonHover")
+ArchiveLoginButton/styles/disabled = SubResource("sub_CloudInput")
+
+ArchiveStatusText/base_type = &"Label"
+ArchiveStatusText/colors/font_color = Color(1, 0.84, 0.54, 1)
+ArchiveStatusText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveStatusText/font_sizes/font_size = 16
+
+ArchivePanelTitle/base_type = &"Label"
+ArchivePanelTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
+ArchivePanelTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ArchivePanelTitle/constants/outline_size = 2
+ArchivePanelTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchivePanelTitle/font_sizes/font_size = 25
+
+ArchiveConfirmButton/base_type = &"Button"
+ArchiveConfirmButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveConfirmButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveConfirmButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveConfirmButton/font_sizes/font_size = 20
+ArchiveConfirmButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveConfirmButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveConfirmButton/styles/hover = SubResource("sub_CloudButtonHover")
+
+ArchiveMessageText/base_type = &"Label"
+ArchiveMessageText/colors/font_color = Color(1, 1, 1, 1)
+ArchiveMessageText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveMessageText/font_sizes/font_size = 18
+
+ArchiveCdButton/base_type = &"Button"
+ArchiveCdButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveCdButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveCdButton/colors/font_outline_color = Color(1, 1, 1, 1)
+ArchiveCdButton/constants/outline_size = 1
+ArchiveCdButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveCdButton/styles/normal = SubResource("empty_button")
+ArchiveCdButton/styles/pressed = SubResource("empty_button")
+ArchiveCdButton/styles/hover = SubResource("empty_button")
+ArchiveCdButton/styles/disabled = SubResource("empty_button")
+ArchiveCdButton/styles/focus = SubResource("empty_button")
+
+ArchiveNumberInput/base_type = &"LineEdit"
+ArchiveNumberInput/colors/font_outline_color = Color(0, 0, 0, 1)
+ArchiveNumberInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
+ArchiveNumberInput/constants/outline_size = 3
+ArchiveNumberInput/constants/minimum_character_width = 0
+ArchiveNumberInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveNumberInput/font_sizes/font_size = 18
+ArchiveNumberInput/styles/normal = SubResource("sub_StyleBoxFlat_6y1b1")
+ArchiveNumberInput/styles/read_only = SubResource("empty_button")
+ArchiveNumberInput/styles/focus = SubResource("sub_7")
+
+ArchiveCloudButton/base_type = &"Button"
+ArchiveCloudButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveCloudButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+ArchiveCloudButton/colors/font_outline_color = Color(0, 0, 0, 1)
+ArchiveCloudButton/constants/outline_size = 2
+ArchiveCloudButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveCloudButton/font_sizes/font_size = 20
+ArchiveCloudButton/styles/normal = SubResource("sub_CloudInput")
+ArchiveCloudButton/styles/pressed = SubResource("sub_CloudButtonHover")
+ArchiveCloudButton/styles/hover = SubResource("sub_CloudButtonHover")
+ArchiveCloudButton/styles/focus = SubResource("sub_CloudInput")
+
+ArchiveDeleteButton/base_type = &"Button"
+ArchiveDeleteButton/colors/font_color = Color(1, 1, 1, 1)
+ArchiveDeleteButton/colors/font_hover_pressed_color = Color(0.827451, 0.552941, 0, 1)
+ArchiveDeleteButton/colors/font_outline_color = Color(0, 0, 0, 1)
+ArchiveDeleteButton/constants/outline_size = 2
+ArchiveDeleteButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDeleteButton/font_sizes/font_size = 19
+ArchiveDeleteButton/styles/normal = SubResource("sub_StyleBoxFlat_6y1b1")
+ArchiveDeleteButton/styles/pressed = SubResource("sub_StyleBoxFlat_6y1b1")
+ArchiveDeleteButton/styles/hover = SubResource("sub_7")
+ArchiveDeleteButton/styles/disabled = SubResource("empty_button")
+ArchiveDeleteButton/styles/focus = SubResource("sub_StyleBoxFlat_6y1b1")
+
+ShopPageLabel/base_type = &"Label"
+ShopPageLabel/colors/font_color = Color(0, 0, 0, 1)
+ShopPageLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopPageLabel/font_sizes/font_size = 24
+
+ShopSearchRow/base_type = &"HBoxContainer"
+ShopSearchRow/constants/separation = -17
+
+ShopSearchInput/base_type = &"LineEdit"
+ShopSearchInput/colors/font_color = Color(0, 0, 0, 1)
+ShopSearchInput/colors/font_outline_color = Color(0, 0, 0, 1)
+ShopSearchInput/colors/font_placeholder_color = Color(0, 0, 0, 1)
+ShopSearchInput/colors/caret_color = Color(0, 0, 0, 1)
+ShopSearchInput/constants/outline_size = 1
+ShopSearchInput/fonts/font = ExtResource("font_main")
+ShopSearchInput/font_sizes/font_size = 15
+ShopSearchInput/styles/normal = SubResource("sub_1")
+ShopSearchInput/styles/read_only = SubResource("sub_1")
+ShopSearchInput/styles/focus = SubResource("sub_1")
+
+ShopStatTitle/base_type = &"Label"
+ShopStatTitle/colors/font_color = Color(1, 1, 0, 1)
+ShopStatTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ShopStatTitle/constants/outline_size = 8
+ShopStatTitle/fonts/font = ExtResource("font_hy")
+ShopStatTitle/font_sizes/font_size = 25
+
+ShopDamageText/base_type = &"Label"
+ShopDamageText/colors/font_color = Color(1, 1, 0, 1)
+ShopDamageText/colors/font_shadow_color = Color(0, 0, 0, 1)
+ShopDamageText/colors/font_outline_color = Color(1, 1, 0, 1)
+ShopDamageText/constants/shadow_offset_x = 0
+ShopDamageText/constants/shadow_offset_y = 0
+ShopDamageText/constants/outline_size = 1
+ShopDamageText/constants/shadow_outline_size = 8
+ShopDamageText/fonts/font = ExtResource("font_hk")
+
+ShopTabRow/base_type = &"HBoxContainer"
+ShopTabRow/constants/separation = -2
+
+ShopTabText/base_type = &"Label"
+ShopTabText/colors/font_color = Color(1, 1, 1, 1)
+ShopTabText/colors/font_shadow_color = Color(0, 0, 0, 1)
+ShopTabText/colors/font_outline_color = Color(1, 1, 1, 1)
+ShopTabText/constants/shadow_offset_x = 0
+ShopTabText/constants/shadow_offset_y = 0
+ShopTabText/constants/outline_size = 1
+ShopTabText/constants/shadow_outline_size = 8
+ShopTabText/fonts/font = ExtResource("font_hk")
+ShopTabText/font_sizes/font_size = 15
+
+ShopTabTextStrong/base_type = &"Label"
+ShopTabTextStrong/colors/font_color = Color(1, 1, 1, 1)
+ShopTabTextStrong/colors/font_shadow_color = Color(0, 0, 0, 1)
+ShopTabTextStrong/colors/font_outline_color = Color(1, 1, 1, 1)
+ShopTabTextStrong/constants/shadow_offset_x = 0
+ShopTabTextStrong/constants/shadow_offset_y = 0
+ShopTabTextStrong/constants/outline_size = 1
+ShopTabTextStrong/constants/shadow_outline_size = 9
+ShopTabTextStrong/fonts/font = ExtResource("font_hk")
+ShopTabTextStrong/font_sizes/font_size = 15
+
+ShopRoleText/base_type = &"Label"
+ShopRoleText/colors/font_color = Color(1, 1, 0, 1)
+ShopRoleText/colors/font_outline_color = Color(0, 0, 0, 1)
+ShopRoleText/constants/outline_size = 9
+ShopRoleText/fonts/font = ExtResource("font_return")
+ShopRoleText/font_sizes/font_size = 24
+
+ShopCloseButton/base_type = &"Button"
+ShopCloseButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+ShopCloseButton/fonts/font = ExtResource("font_return")
+ShopCloseButton/font_sizes/font_size = 25
+ShopCloseButton/styles/normal = SubResource("empty_button")
+ShopCloseButton/styles/pressed = SubResource("empty_button")
+ShopCloseButton/styles/hover = SubResource("empty_button")
+ShopCloseButton/styles/disabled = SubResource("empty_button")
+ShopCloseButton/styles/focus = SubResource("empty_button")
+
+ShopHintLabel/base_type = &"Label"
+ShopHintLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopHintLabel/font_sizes/font_size = 25
+
+ShopMessageText/base_type = &"Label"
+ShopMessageText/colors/font_color = Color(1, 0.584314, 0, 1)
+ShopMessageText/colors/font_outline_color = Color(1, 0.584314, 0, 1)
+ShopMessageText/constants/outline_size = 2
+ShopMessageText/fonts/font = ExtResource("font_hk")
+
+ShopTitleText/base_type = &"Label"
+ShopTitleText/constants/outline_size = 2
+ShopTitleText/fonts/font = ExtResource("font_main")
+
+SellFilterList/base_type = &"VBoxContainer"
+SellFilterList/constants/separation = 2
+
+SellFilterCs/base_type = &"CheckBox"
+SellFilterCs/colors/font_color = Color(1, 0.635294, 0, 1)
+SellFilterCs/colors/font_outline_color = Color(1, 0.635294, 0, 1)
+SellFilterCs/constants/outline_size = 1
+SellFilterCs/fonts/font = ExtResource("font_hk")
+SellFilterCs/styles/normal = SubResource("empty_button")
+SellFilterCs/styles/pressed = SubResource("empty_button")
+SellFilterCs/styles/hover = SubResource("empty_button")
+SellFilterCs/styles/hover_pressed = SubResource("empty_button")
+SellFilterCs/styles/disabled = SubResource("empty_button")
+SellFilterCs/styles/focus = SubResource("empty_button")
+
+SellFilterGxms/base_type = &"CheckBox"
+SellFilterGxms/colors/font_color = Color(1, 0.462745, 0, 1)
+SellFilterGxms/colors/font_outline_color = Color(1, 0.462745, 0, 1)
+SellFilterGxms/constants/outline_size = 1
+SellFilterGxms/fonts/font = ExtResource("font_hk")
+
+SellFilterHq/base_type = &"CheckBox"
+SellFilterHq/colors/font_color = Color(0, 1, 1, 1)
+SellFilterHq/colors/font_outline_color = Color(0, 1, 1, 1)
+SellFilterHq/constants/outline_size = 1
+SellFilterHq/fonts/font = ExtResource("font_hk")
+SellFilterHq/styles/normal = SubResource("empty_button")
+SellFilterHq/styles/pressed = SubResource("empty_button")
+SellFilterHq/styles/hover = SubResource("empty_button")
+SellFilterHq/styles/hover_pressed = SubResource("empty_button")
+SellFilterHq/styles/disabled = SubResource("empty_button")
+SellFilterHq/styles/focus = SubResource("empty_button")
+
+SellFilterHsh/base_type = &"CheckBox"
+SellFilterHsh/colors/font_color = Color(0.6, 0, 0, 1)
+SellFilterHsh/colors/font_outline_color = Color(0.6, 0, 0, 1)
+SellFilterHsh/constants/outline_size = 1
+SellFilterHsh/fonts/font = ExtResource("font_hk")
+SellFilterHsh/styles/normal = SubResource("empty_button")
+SellFilterHsh/styles/pressed = SubResource("empty_button")
+SellFilterHsh/styles/hover = SubResource("empty_button")
+SellFilterHsh/styles/hover_pressed = SubResource("empty_button")
+SellFilterHsh/styles/disabled = SubResource("empty_button")
+SellFilterHsh/styles/focus = SubResource("empty_button")
+
+SellFilterJl/base_type = &"CheckBox"
+SellFilterJl/colors/font_color = Color(0, 0.666667, 1, 1)
+SellFilterJl/colors/font_outline_color = Color(0, 0.666667, 1, 1)
+SellFilterJl/constants/outline_size = 1
+SellFilterJl/fonts/font = ExtResource("font_hk")
+SellFilterJl/styles/normal = SubResource("empty_button")
+SellFilterJl/styles/pressed = SubResource("empty_button")
+SellFilterJl/styles/hover = SubResource("empty_button")
+SellFilterJl/styles/hover_pressed = SubResource("empty_button")
+SellFilterJl/styles/disabled = SubResource("empty_button")
+SellFilterJl/styles/focus = SubResource("empty_button")
+
+SellPageInput/base_type = &"LineEdit"
+SellPageInput/colors/font_outline_color = Color(1, 0, 0, 1)
+SellPageInput/colors/font_placeholder_color = Color(1, 0, 0, 1)
+SellPageInput/constants/outline_size = 1
+SellPageInput/fonts/font = ExtResource("font_hk")
+SellPageInput/font_sizes/font_size = 15
+
+SellTitle/base_type = &"Label"
+SellTitle/fonts/font = ExtResource("font_return")
+SellTitle/font_sizes/font_size = 20
+
+SellFilterPt/base_type = &"CheckBox"
+SellFilterPt/colors/font_color = Color(1, 1, 1, 1)
+SellFilterPt/colors/font_outline_color = Color(1, 1, 1, 1)
+SellFilterPt/constants/outline_size = 1
+SellFilterPt/fonts/font = ExtResource("font_hk")
+SellFilterPt/styles/normal = SubResource("empty_button")
+SellFilterPt/styles/pressed = SubResource("empty_button")
+SellFilterPt/styles/hover = SubResource("empty_button")
+SellFilterPt/styles/hover_pressed = SubResource("empty_button")
+SellFilterPt/styles/disabled = SubResource("empty_button")
+SellFilterPt/styles/focus = SubResource("empty_button")
+
+SellFilterSq/base_type = &"CheckBox"
+SellFilterSq/colors/font_color = Color(1, 0, 0, 1)
+SellFilterSq/colors/font_outline_color = Color(1, 0, 0, 1)
+SellFilterSq/constants/outline_size = 1
+SellFilterSq/fonts/font = ExtResource("font_hk")
+SellFilterSq/styles/normal = SubResource("empty_button")
+SellFilterSq/styles/pressed = SubResource("empty_button")
+SellFilterSq/styles/hover = SubResource("empty_button")
+SellFilterSq/styles/hover_pressed = SubResource("empty_button")
+SellFilterSq/styles/disabled = SubResource("empty_button")
+SellFilterSq/styles/focus = SubResource("empty_button")
+
+SellFilterSs/base_type = &"CheckBox"
+SellFilterSs/colors/font_color = Color(0.592157, 0.254902, 1, 1)
+SellFilterSs/colors/font_outline_color = Color(0.592157, 0.254902, 1, 1)
+SellFilterSs/constants/outline_size = 1
+SellFilterSs/fonts/font = ExtResource("font_hk")
+SellFilterSs/styles/normal = SubResource("empty_button")
+SellFilterSs/styles/pressed = SubResource("empty_button")
+SellFilterSs/styles/hover = SubResource("empty_button")
+SellFilterSs/styles/hover_pressed = SubResource("empty_button")
+SellFilterSs/styles/disabled = SubResource("empty_button")
+SellFilterSs/styles/focus = SubResource("empty_button")
+
+SellWarning/base_type = &"Label"
+SellWarning/colors/font_color = Color(1, 0, 0, 1)
+SellWarning/colors/font_outline_color = Color(1, 0, 0, 1)
+SellWarning/constants/outline_size = 2
+SellWarning/fonts/font = ExtResource("font_hk")
+SellWarning/font_sizes/font_size = 14
+
+SellFilterXl/base_type = &"CheckBox"
+SellFilterXl/colors/font_color = Color(0.403922, 0.403922, 0.403922, 1)
+SellFilterXl/colors/font_outline_color = Color(0.403922, 0.403922, 0.403922, 1)
+SellFilterXl/constants/outline_size = 1
+SellFilterXl/fonts/font = ExtResource("font_hk")
+SellFilterXl/styles/normal = SubResource("empty_button")
+SellFilterXl/styles/pressed = SubResource("empty_button")
+SellFilterXl/styles/hover = SubResource("empty_button")
+SellFilterXl/styles/hover_pressed = SubResource("empty_button")
+SellFilterXl/styles/disabled = SubResource("empty_button")
+SellFilterXl/styles/focus = SubResource("empty_button")
+
+SellFilterYx/base_type = &"CheckBox"
+SellFilterYx/colors/font_color = Color(0, 1, 0, 1)
+SellFilterYx/colors/font_outline_color = Color(0, 1, 0, 1)
+SellFilterYx/constants/outline_size = 1
+SellFilterYx/fonts/font = ExtResource("font_hk")
+SellFilterYx/styles/normal = SubResource("empty_button")
+SellFilterYx/styles/pressed = SubResource("empty_button")
+SellFilterYx/styles/hover = SubResource("empty_button")
+SellFilterYx/styles/hover_pressed = SubResource("empty_button")
+SellFilterYx/styles/disabled = SubResource("empty_button")
+SellFilterYx/styles/focus = SubResource("empty_button")
+
+LhhjActionLabel/base_type = &"Label"
+LhhjActionLabel/colors/font_color = Color(1, 1, 0, 1)
+LhhjActionLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+LhhjActionLabel/constants/outline_size = 8
+LhhjActionLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+
+LhhjSectionText/base_type = &"Label"
+LhhjSectionText/colors/font_color = Color(1, 0.454902, 0, 1)
+LhhjSectionText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LhhjSectionText/colors/font_outline_color = Color(1, 0.454902, 0, 1)
+LhhjSectionText/constants/shadow_offset_x = 0
+LhhjSectionText/constants/shadow_offset_y = 0
+LhhjSectionText/constants/outline_size = 2
+LhhjSectionText/constants/shadow_outline_size = 8
+LhhjSectionText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjSectionText/font_sizes/font_size = 14
+
+LhhjBossGrid/base_type = &"GridContainer"
+LhhjBossGrid/constants/v_separation = 3
+
+LhhjValueInput/base_type = &"LineEdit"
+LhhjValueInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjValueInput/font_sizes/font_size = 12
+
+LhhjHpLabel/base_type = &"Label"
+LhhjHpLabel/colors/font_color = Color(1, 0, 0, 1)
+LhhjHpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+LhhjHpLabel/constants/outline_size = 7
+LhhjHpLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+
+LhhjAltValueInput/base_type = &"LineEdit"
+LhhjAltValueInput/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+LhhjAltValueInput/font_sizes/font_size = 12
+
+LhhjSelfValueInput/base_type = &"LineEdit"
+LhhjSelfValueInput/font_sizes/font_size = 12
+
+LhhjTitle/base_type = &"Label"
+LhhjTitle/colors/font_color = Color(1, 0.384314, 0.0431373, 1)
+LhhjTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LhhjTitle/constants/outline_size = 8
+LhhjTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjTitle/font_sizes/font_size = 30
