@@ -54,10 +54,10 @@ func _physics_process(_delta: float) -> void:
 	else:
 		new_zb_name = item_name
 	data = data
-	old_zb.set_button_icon(load_item_icon(item_name))
+	old_zb.set_button_icon(ItemUtils.item_icon(item_name))
 	old_zb.get_item_name = item_name
 	old_zb.eq_prop = data
-	new_zb.set_button_icon(load_item_icon(preview_id))
+	new_zb.set_button_icon(ItemUtils.item_icon(preview_id))
 	new_zb.get_item_name = preview_id
 	new_zb.eq_prop = preview_data
 	var selected_page := int(selected.get("page", 0))
@@ -76,10 +76,10 @@ func _physics_process(_delta: float) -> void:
 		and stage < BONE_MAX_COUNT
 	)
 	if not valid:
-		n_q_1.set_button_icon(load_item_icon("empty"))
+		n_q_1.set_button_icon(ItemUtils.item_icon("empty"))
 		n_q_1.get_item_name = "empty"
 		n_q_1.eq_prop = {}
-		n_q_2.set_button_icon(load_item_icon("empty"))
+		n_q_2.set_button_icon(ItemUtils.item_icon("empty"))
 		n_q_2.get_item_name = "empty"
 		n_q_2.eq_prop = {}
 		num_b1.text = "已完成" if stage >= BONE_MAX_COUNT else "不可淬骨"
@@ -87,14 +87,14 @@ func _physics_process(_delta: float) -> void:
 		lh_text.text = ""
 		return
 	var fire_id: String = BONE_FIRE_IDS[stage]
-	n_q_1.set_button_icon(load_item_icon(fire_id))
+	n_q_1.set_button_icon(ItemUtils.item_icon(fire_id))
 	n_q_1.get_item_name = fire_id
 	n_q_1.eq_prop = AE.all_equipment.get(fire_id, {})
 	n_q_1.total_number = 0
 	var fire_count := _count_item_all_pages(fire_id)
 	num_b1.text = str(fire_count) + "/3"
 	_set_requirement_color(num_b1, fire_count >= 3)
-	n_q_2.set_button_icon(load_item_icon("empty"))
+	n_q_2.set_button_icon(ItemUtils.item_icon("empty"))
 	n_q_2.get_item_name = "empty"
 	n_q_2.eq_prop = {}
 	n_q_2.total_number = 0

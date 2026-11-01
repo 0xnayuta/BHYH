@@ -697,47 +697,47 @@ func _set_box():
 	else:
 		cbb.get_item_name = PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]
 	if wqq.get_item_name == "empty":
-		wqq.set_button_icon(load_item_icon("empty"))
+		wqq.set_button_icon(ItemUtils.item_icon("empty"))
 		wq.visible = true
 	else:
 		wq.visible = false
 		wqq.is_in_ldl_gz = true
 		wqq.is_in_hh = true
 		if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON] == "":
-			wqq.set_button_icon(load_item_icon("empty"))
+			wqq.set_button_icon(ItemUtils.item_icon("empty"))
 			wqq.eq_prop = {}
 		else:
-			wqq.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON]))
+			wqq.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON]))
 			wqq.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON]]
 		wqq.qh_level = 0
 		wqq.wx = []
 	if fjj.get_item_name == "empty":
 		fj_2.visible = true
-		fjj.set_button_icon(load_item_icon("empty"))
+		fjj.set_button_icon(ItemUtils.item_icon("empty"))
 	else:
 		fj_2.visible = false
 		fjj.is_in_ldl_gz = true
 		fjj.is_in_hh = true
 		if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR] == "":
-			fjj.set_button_icon(load_item_icon("empty"))
+			fjj.set_button_icon(ItemUtils.item_icon("empty"))
 			fjj.eq_prop = {}
 		else:
-			fjj.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR]))
+			fjj.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR]))
 			fjj.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR]]
 		fjj.qh_level = 0
 		fjj.wx = []
 	if cbb.get_item_name == "empty":
 		cb.visible = true
-		cbb.set_button_icon(load_item_icon("empty"))
+		cbb.set_button_icon(ItemUtils.item_icon("empty"))
 	else:
 		cb.visible = false
 		cbb.is_in_ldl_gz = true
 		cbb.is_in_hh = true
 		if PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS] == "":
-			cbb.set_button_icon(load_item_icon("empty"))
+			cbb.set_button_icon(ItemUtils.item_icon("empty"))
 			cbb.eq_prop = {}
 		else:
-			cbb.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]))
+			cbb.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]))
 			cbb.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]]
 		cbb.qh_level = 0
 		cbb.wx = []
@@ -947,11 +947,6 @@ func _update_nezha_preview(delta: float) -> void:
 	role_body_front.texture = body_front_frames.get_frame_texture(&"wait", frame_index)
 	role_body_front.scale = role_body.scale
 	role_body_front.offset = role_body.offset
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _ensure_xianyu_wing_animation() -> void:

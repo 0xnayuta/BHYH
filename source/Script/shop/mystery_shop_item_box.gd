@@ -144,7 +144,7 @@ func set_box():
 	item_box.eq_prop = AE.all_equipment[new_list["Name"]]
 	item_box.get_item_name = new_list["Name"]
 	item_box.set_meta("item_name", new_list["Name"])
-	item_box.set_button_icon(load_item_icon(new_list["Name"]))
+	item_box.set_button_icon(ItemUtils.item_icon(new_list["Name"]))
 
 
 func _on_purchase_pressed() -> void:
@@ -204,11 +204,6 @@ func open_and_close_box():
 		5:
 			self.close()
 			my_father.item_1.open()
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _drive_item_hover(item_box) -> void:

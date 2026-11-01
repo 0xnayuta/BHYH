@@ -15,7 +15,7 @@ func _physics_process(_delta: float) -> void:
 
 func _add_item():
 	for i in _list.size():
-		item_list.add_item(get_item_name(i), load_item_icon(get_item(i)), true)
+		item_list.add_item(get_item_name(i), ItemUtils.item_icon(get_item(i)), true)
 
 
 func get_item(idx):
@@ -77,11 +77,6 @@ func get_wx(idx):
 func get_item_num(idx):
 	var _num = _list[idx]["num"]
 	return _num
-
-
-func load_item_icon(_name_value):
-	var abc = load("res://Art/backpack/all_items/" + str(_name_value) + ".png")
-	return abc
 
 
 func _on_item_list_item_selected(index: int) -> void:

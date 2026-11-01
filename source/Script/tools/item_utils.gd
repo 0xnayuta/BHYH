@@ -1,7 +1,13 @@
 class_name ItemUtils
 extends RefCounted
 
-## 无状态物品工具：品质前缀清理与随机物品条目生成。调用方直接用 `ItemUtils.xxx()`。
+## 无状态物品工具：品质前缀清理、随机物品条目生成与物品图标解析。
+## 调用方直接用 `ItemUtils.xxx()`。
+
+const ITEM_ICON_DIR := "res://Art/backpack/all_items/"
+const FALLBACK_ICON_DIR := "res://Art/backpack/"
+const BUFF_ICON_DIR := "res://Art/add_effect/buff_icon/"
+const EMPTY_ICON_PATH := ITEM_ICON_DIR + "empty.png"
 
 const QUALITY_PREFIXES := ["shishi", "youxiu", "jingliang", "putong", "xieling", "hunqi", "chuanshuo", "shenqi"]
 const XIANYU_BODY_NAME_MAP := {
@@ -92,3 +98,51 @@ static func random_item_entries(item_ids, rolls: int, value_range: int) -> Array
 			)
 		)
 	return entries
+
+
+## 物品图标：`all_items/<id>.png`，缺失返回 null（不抛错、不占位）。
+static func item_icon(item_id) -> Texture2D:
+	var path := ITEM_ICON_DIR + str(item_id) + ".png"
+	if not ResourceLoader.exists(path):
+		return null
+	return load(path) as Texture2D
+
+
+## 物品图标带旧目录兜底：先 `all_items/`，再 `Art/backpack/<id>.png`，都缺失返回 null。
+static func item_icon_with_legacy_fallback(item_id) -> Texture2D:
+	var primary := item_icon(item_id)
+	if primary != null:
+		return primary
+	var fallback_path := FALLBACK_ICON_DIR + str(item_id) + ".png"
+	if not ResourceLoader.exists(fallback_path):
+		return null
+	return load(fallback_path) as Texture2D
+
+
+## 物品图标带空图标兜底：装备数据 `图标` 优先，其次 `all_items/<id>.png`，最后 `empty.png`。
+static func item_icon_with_empty_fallback(item_id) -> Texture2D:
+	var item_data: Dictionary = AE.all_equipment.get(str(item_id), {})
+	var data_icon_path := str(item_data.get("图标", ""))
+	if data_icon_path != "" and ResourceLoader.exists(data_icon_path):
+		return load(data_icon_path) as Texture2D
+	var icon := item_icon(item_id)
+	if icon != null:
+		return icon
+	return load(EMPTY_ICON_PATH) as Texture2D
+
+
+## 装备数据图标优先：`图标` 命中即返回，否则回落 `all_items/<id>.png`（无空图标兜底）。
+static func equipment_icon_or_item_icon(item_id) -> Texture2D:
+	var item_data: Dictionary = AE.all_equipment.get(str(item_id), {})
+	var icon_path := str(item_data.get("图标", ""))
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		return load(icon_path) as Texture2D
+	return load(ITEM_ICON_DIR + str(item_id) + ".png") as Texture2D
+
+
+## buff 图标：统一走 `Global.get_cached_texture`，沿用其 `mp_poision -> poision` 别名与缓存。
+static func buff_icon(buff_id) -> Texture2D:
+	var resolved := str(buff_id)
+	if resolved == "mp_poision":
+		resolved = "poision"
+	return Global.get_cached_texture(BUFF_ICON_DIR + resolved.to_lower() + ".png")

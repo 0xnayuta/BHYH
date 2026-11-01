@@ -185,7 +185,7 @@ func add_item_box():
 	var item_name := book_name.split("zzs")[0] if book_name != "" else ""
 	if item_name == "" or not AE.all_equipment.has(item_name):
 		scw.get_item_name = "empty"
-		scw.icon = load_item_icon("empty")
+		scw.icon = ItemUtils.item_icon("empty")
 		scw.eq_prop = {}
 		remove_name_and_need()
 		return
@@ -196,7 +196,7 @@ func add_item_box():
 		item_data = get_bz_prop()
 
 	scw.get_item_name = item_name
-	scw.icon = load_item_icon(str(item_name))
+	scw.icon = ItemUtils.item_icon(str(item_name))
 	scw.eq_prop = item_data
 	scw.is_in_ldl_gz = true
 
@@ -291,11 +291,6 @@ func remove_infomation():
 
 func remove_all_bspic():
 	_clear_children_now(bs_box)
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func check_full_material() -> bool:
@@ -398,7 +393,7 @@ func remove_material_box():
 
 func rmove_box():
 	scw.get_item_name = "empty"
-	scw.icon = load_item_icon("empty")
+	scw.icon = ItemUtils.item_icon("empty")
 	scw.eq_prop = {}
 
 

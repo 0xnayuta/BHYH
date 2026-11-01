@@ -27,7 +27,7 @@ func _physics_process(_delta: float) -> void:
 			_set_total_num(MAX_SHOP_BUY_NUM)
 	if _item_name != "" and AE.all_equipment.has(_item_name):
 		item_name.text = str(AE.all_equipment[_item_name].get(DataKeys.NAME, _item_name))
-		items.set_button_icon(load_item_icon(_item_name))
+		items.set_button_icon(ItemUtils.item_icon(_item_name))
 		items.qh_level = 0
 		items.wx = []
 		items.eq_prop = AE.all_equipment[_item_name]
@@ -111,10 +111,6 @@ func add_item_toplayer(times):
 		Global.add_message_show(_parent, str(result.get("message", "购买失败！")), 2.0, Vector2(485, 295))
 		return
 	Global.add_message_show(_parent, "购买成功！", 1.5, Vector2(485, 295))
-
-
-func load_item_icon(_name):
-	return load("res://Art/backpack/all_items/" + str(_name) + ".png")
 
 
 func gm():

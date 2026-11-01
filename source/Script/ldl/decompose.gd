@@ -163,12 +163,12 @@ func change_item_list():
 								box = Global.add_item_box(
 									item_list, true, true, item_name, target_count, 0, [], AE.all_equipment[item_name]
 								)
-								box.set_button_icon(load_item_icon(item_name))
+								box.set_button_icon(ItemUtils.item_icon(item_name))
 							"道具":
 								box = Global.add_item_box(
 									item_list, true, true, item_name, 0, target_count, [], AE.all_equipment[item_name]
 								)
-								box.set_button_icon(load_item_icon(item_name))
+								box.set_button_icon(ItemUtils.item_icon(item_name))
 						num += 1
 					if 8 - num > 0:
 						for i in range(8 - num):
@@ -188,7 +188,7 @@ func change_item_list():
 						var box = Global.add_item_box(
 							item_list, true, true, i["name"], 0, i["num"], [], AE.all_equipment[i["name"]]
 						)
-						box.set_button_icon(load_item_icon(i["name"]))
+						box.set_button_icon(ItemUtils.item_icon(i["name"]))
 						num += 1
 					if 8 - num > 0:
 						for i in range(8 - num):
@@ -203,7 +203,9 @@ func remove_l_ist():
 
 
 func set_remove_items_properies():
-	remove_items.set_button_icon(load_item_icon(str(PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME])))
+	remove_items.set_button_icon(
+		ItemUtils.item_icon(str(PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]))
+	)
 	remove_items.qh_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 	remove_items.eq_prop = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
 
@@ -321,13 +323,8 @@ func remove_infomation():
 				PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
 			"道具":
 				PlayerData.add_dj(name_str, 1)
-	remove_items.set_button_icon(load_item_icon(str("empty")))
+	remove_items.set_button_icon(ItemUtils.item_icon(str("empty")))
 	PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _on_help_pressed() -> void:

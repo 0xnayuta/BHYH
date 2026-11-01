@@ -39,8 +39,3 @@ func set_box():
 		return
 	var icon_path := "res://Art/backpack/all_items/%s.png" % str(item_name)
 	item_box.set("icon", ResourceLoader.load(icon_path) as Texture2D if ResourceLoader.exists(icon_path) else null)
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc

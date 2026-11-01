@@ -15,7 +15,7 @@ func _physics_process(_delta: float) -> void:
 
 func _refresh_texture() -> void:
 	_last_texture_key = _texture
-	set_texture(load_item_icon(_texture))
+	set_texture(ItemUtils.buff_icon(_texture))
 
 
 func _on_mouse_entered() -> void:
@@ -43,9 +43,3 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	if _tt != null:
 		_tt.queue_free()
-
-
-func load_item_icon(_name):
-	if _name == "mp_poision":
-		_name = "poision"
-	return Global.get_cached_texture("res://Art/add_effect/buff_icon/" + str(_name).to_lower() + ".png")

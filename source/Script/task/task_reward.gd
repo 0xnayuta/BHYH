@@ -16,7 +16,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	items.eq_prop = AE.all_equipment[item_id]
 	items.wx = []
-	items.set_button_icon(load_item_icon(item_id))
+	items.set_button_icon(ItemUtils.item_icon(item_id))
 	if total_num <= 1:
 		total_num = 1
 	var item_name = AE.all_equipment[item_id][DataKeys.NAME]
@@ -30,8 +30,3 @@ func _physics_process(delta: float) -> void:
 			items.total_number = 0
 	title.text = str(item_name) + " * " + str(total_num)
 	set_physics_process(false)
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc

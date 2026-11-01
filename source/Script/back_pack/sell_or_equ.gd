@@ -426,11 +426,6 @@ func get_number():
 	return _number
 
 
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
-
-
 func _on_mouse_exited() -> void:
 	pass
 

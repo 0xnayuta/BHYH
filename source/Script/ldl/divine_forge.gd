@@ -45,7 +45,7 @@ func _physics_process(_delta: float) -> void:
 	new_zb_name = item_name
 	data = item_data
 	self.qh_level = qh_level
-	old_zb.set_button_icon(load_item_icon(item_name))
+	old_zb.set_button_icon(ItemUtils.item_icon(item_name))
 	old_zb.get_item_name = item_name
 	old_zb.eq_prop = item_data
 	old_zb.qh_level = qh_level
@@ -55,7 +55,7 @@ func _physics_process(_delta: float) -> void:
 	old_zb.set_meta("equipped_type", equipped_type)
 	old_zb.set_meta("backpack_page", selected_page)
 	old_zb.set_meta("backpack_index", selected_index)
-	new_zb.set_button_icon(load_item_icon(item_name))
+	new_zb.set_button_icon(ItemUtils.item_icon(item_name))
 	new_zb.get_item_name = item_name
 	new_zb.eq_prop = target_data
 	new_zb.qh_level = qh_level
@@ -67,8 +67,8 @@ func _physics_process(_delta: float) -> void:
 	new_zb.set_meta("backpack_index", selected_index)
 
 	if current_stage >= MAX_STAGE:
-		n_q_1.set_button_icon(load_item_icon("empty"))
-		n_q_2.set_button_icon(load_item_icon("empty"))
+		n_q_1.set_button_icon(ItemUtils.item_icon("empty"))
+		n_q_2.set_button_icon(ItemUtils.item_icon("empty"))
 		n_q_1.get_item_name = "empty"
 		n_q_2.get_item_name = "empty"
 		n_q_1.eq_prop = {}
@@ -81,7 +81,7 @@ func _physics_process(_delta: float) -> void:
 	var required_stones: int = STONES_PER_STAGE
 	var stone_id := _stone_id(target_stage)
 	var stone_count := _count_item_all_pages(stone_id)
-	n_q_1.set_button_icon(load_item_icon(stone_id))
+	n_q_1.set_button_icon(ItemUtils.item_icon(stone_id))
 	n_q_1.get_item_name = stone_id
 	n_q_1.eq_prop = AE.all_equipment.get(stone_id, {})
 	n_q_1.total_number = 0
@@ -227,7 +227,7 @@ func _clear_display() -> void:
 	qh_level = -1
 	data = {}
 	for slot in [old_zb, new_zb, n_q_1, n_q_2]:
-		slot.set_button_icon(load_item_icon("empty"))
+		slot.set_button_icon(ItemUtils.item_icon("empty"))
 		slot.get_item_name = "empty"
 		slot.eq_prop = {}
 	num_b1.text = ""

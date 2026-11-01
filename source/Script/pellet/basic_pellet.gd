@@ -120,7 +120,7 @@ func add_box():
 				var box = Global.add_level_fall_box(
 					parent_node, true, true, current_in_type + str(i), 0, [], AE.all_equipment[current_in_type + str(i)]
 				)
-				box.set_button_icon(load_item_icon(current_in_type + str(i)))
+				box.set_button_icon(ItemUtils.item_icon(current_in_type + str(i)))
 
 
 func remove_box():
@@ -290,11 +290,6 @@ func _on_eat_5_pressed() -> void:
 
 func _on_close_pressed() -> void:
 	queue_free()
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _on_one_key_auto_eat_pressed() -> void:

@@ -62,7 +62,7 @@ func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/12_over.mp3")
 	box_1.is_in_ldl_gz = true
 	box_1.is_in_hhgz = true
-	box_1.set_button_icon(load_item_icon("xczg"))
+	box_1.set_button_icon(ItemUtils.item_icon("xczg"))
 	box_1.qh_level = 0
 	box_1.wx = []
 	box_1.eq_prop = AE.all_equipment["xczg"]
@@ -126,11 +126,6 @@ func _on_re_challenge_pressed() -> void:
 	_reset_role_state_for_rechallenge()
 	if not _request_scene_change(Global.last_level_path):
 		_abort_rechallenge()
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 var _equipment_reward_claimed: bool = false

@@ -58,7 +58,7 @@ func set_zb_properies():
 		zb.set_button_icon(_pet_item_icon(pet_item, zb.get_item_name))
 		zb.eq_prop = pet_item
 	else:
-		zb.set_button_icon(load_item_icon(zb.get_item_name))
+		zb.set_button_icon(ItemUtils.item_icon(zb.get_item_name))
 		zb.eq_prop = selected["Data"]
 
 
@@ -68,30 +68,30 @@ func set_other_prop():
 	for i in range(bs_list.size()):
 		if i < b_ssize:
 			bs_list[i].set_button_icon(
-				load_item_icon(str(PlayerData.player_data[DataKeys.INLAY_LIST][0]["Data"][DataKeys.GEM][i]))
+				ItemUtils.item_icon(str(PlayerData.player_data[DataKeys.INLAY_LIST][0]["Data"][DataKeys.GEM][i]))
 			)
 		else:
-			bs_list[i].set_button_icon(load_item_icon(str("empty")))
+			bs_list[i].set_button_icon(ItemUtils.item_icon(str("empty")))
 
 
 func remove_infomation():
 	PlayerData.restore_mosaic_equipment()
-	zb.set_button_icon(load_item_icon(str("empty")))
+	zb.set_button_icon(ItemUtils.item_icon(str("empty")))
 	zb.get_item_name = "empty"
 	zb.qh_level = 0
 	zb.eq_prop = {}
 	zb.strength_source = "装备背包"
 	zb.strength_index = -1
 	zb.set_meta("equipped_type", "")
-	bs_1.set_button_icon(load_item_icon(str("empty")))
-	bs_2.set_button_icon(load_item_icon(str("empty")))
-	bs_3.set_button_icon(load_item_icon(str("empty")))
-	bs_4.set_button_icon(load_item_icon(str("empty")))
+	bs_1.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_2.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_3.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_4.set_button_icon(ItemUtils.item_icon(str("empty")))
 
-	bs_5.set_button_icon(load_item_icon(str("empty")))
-	bs_6.set_button_icon(load_item_icon(str("empty")))
-	bs_7.set_button_icon(load_item_icon(str("empty")))
-	bs_8.set_button_icon(load_item_icon(str("empty")))
+	bs_5.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_6.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_7.set_button_icon(ItemUtils.item_icon(str("empty")))
+	bs_8.set_button_icon(ItemUtils.item_icon(str("empty")))
 	PlayerData.player_data[DataKeys.INLAY_LIST].clear()
 
 
@@ -112,11 +112,6 @@ func _pet_item_icon(item: Dictionary, item_id: String) -> Texture2D:
 	if ResourceLoader.exists(item_path):
 		return load(item_path) as Texture2D
 	return PET_GENERIC_EQUIPMENT_ICON
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _on_help_pressed() -> void:

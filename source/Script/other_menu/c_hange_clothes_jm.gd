@@ -14,7 +14,7 @@ func _physics_process(_delta: float) -> void:
 	eq_name.text = str(AE.all_equipment[self_name][DataKeys.NAME])
 	show_box.is_in_ldl_gz = true
 	show_box.is_in_hhgz = true
-	show_box.set_button_icon(load_item_icon(self_name))
+	show_box.set_button_icon(ItemUtils.item_icon(self_name))
 	show_box.qh_level = 0
 	show_box.wx = []
 	show_box.eq_prop = AE.all_equipment[self_name]
@@ -33,11 +33,6 @@ func _physics_process(_delta: float) -> void:
 		have_or_not.text = "未解锁"
 
 	set_physics_process(false)
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
 
 
 func _on_change_pressed() -> void:

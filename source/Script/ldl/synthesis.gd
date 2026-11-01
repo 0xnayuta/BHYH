@@ -89,7 +89,7 @@ func _get_display_name():
 			var result_item = recipe_info[1]
 
 			_name.text = str(AE.all_equipment[result_item][DataKeys.NAME])
-			item_4.set_button_icon(load_item_icon(str(result_item)))
+			item_4.set_button_icon(ItemUtils.equipment_icon_or_item_icon(str(result_item)))
 			var lx = AE.all_equipment[result_item][DataKeys.TYPE]
 			need_lh.text = str(recipe_info[2])
 
@@ -111,11 +111,11 @@ func _get_display_name():
 			item_4.eq_prop = {}
 			_name.text = ""
 			need_lh.text = ""
-			item_4.set_button_icon(load_item_icon("empty"))
+			item_4.set_button_icon(ItemUtils.equipment_icon_or_item_icon("empty"))
 	else:
 		_name.text = ""
 		need_lh.text = ""
-		item_4.set_button_icon(load_item_icon("empty"))
+		item_4.set_button_icon(ItemUtils.equipment_icon_or_item_icon("empty"))
 
 
 func _on_syn_pressed() -> void:
@@ -182,17 +182,17 @@ func set_cailiao_pic():
 	var list_2 = PlayerData.player_data["放入列表"]["物品2"]
 	var list_3 = PlayerData.player_data["放入列表"]["物品3"]
 	if list_1.size() == 0:
-		item_1.set_button_icon(load_item_icon("empty"))
+		item_1.set_button_icon(ItemUtils.equipment_icon_or_item_icon("empty"))
 	else:
-		item_1.set_button_icon(load_item_icon(list_1[0]))
+		item_1.set_button_icon(ItemUtils.equipment_icon_or_item_icon(list_1[0]))
 	if list_2.size() == 0:
-		item_2.set_button_icon(load_item_icon("empty"))
+		item_2.set_button_icon(ItemUtils.equipment_icon_or_item_icon("empty"))
 	else:
-		item_2.set_button_icon(load_item_icon(list_2[0]))
+		item_2.set_button_icon(ItemUtils.equipment_icon_or_item_icon(list_2[0]))
 	if list_3.size() == 0:
-		item_3.set_button_icon(load_item_icon("empty"))
+		item_3.set_button_icon(ItemUtils.equipment_icon_or_item_icon("empty"))
 	else:
-		item_3.set_button_icon(load_item_icon(list_3[0]))
+		item_3.set_button_icon(ItemUtils.equipment_icon_or_item_icon(list_3[0]))
 	if list_1.size() > 3:
 		item_1.qh_level = int(list_1[3])
 		item_1.eq_prop = list_1[4]
@@ -211,14 +211,6 @@ func set_cailiao_pic():
 	else:
 		item_3.qh_level = 0
 		item_3.eq_prop = {}
-
-
-func load_item_icon(name1):
-	var item_data: Dictionary = AE.all_equipment.get(str(name1), {})
-	var icon_path := str(item_data.get("图标", ""))
-	if icon_path != "" and ResourceLoader.exists(icon_path):
-		return load(icon_path)
-	return load("res://Art/backpack/all_items/" + str(name1) + ".png")
 
 
 func get_xianjie_prop(result_item: String) -> Dictionary:

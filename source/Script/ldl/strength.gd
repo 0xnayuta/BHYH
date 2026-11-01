@@ -56,8 +56,8 @@ func _physics_process(_delta: float) -> void:
 
 func set_str_info():
 	new_zb_name = old_zb_name
-	n_q_1.set_button_icon(load_item_icon(str(qhs_1_name)))
-	n_q_2.set_button_icon(load_item_icon(str(qhs_2_name)))
+	n_q_1.set_button_icon(ItemUtils.item_icon(str(qhs_1_name)))
+	n_q_2.set_button_icon(ItemUtils.item_icon(str(qhs_2_name)))
 	var equipment_icon := _selected_equipment_icon()
 	old_zb.set_button_icon(equipment_icon)
 	old_zb.get_item_name = old_zb_name
@@ -90,14 +90,9 @@ func set_str_info():
 	lh_text.text = str(need_lh)
 
 
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc
-
-
 func _selected_equipment_icon() -> Texture2D:
 	if str(MLdl.qh_list.get("来源", "装备背包")) != "宠物背包":
-		return load_item_icon(str(old_zb_name))
+		return ItemUtils.item_icon(str(old_zb_name))
 	var item: Dictionary = data if data is Dictionary else {}
 	var nested: Dictionary = item.get("data", {}) if item.get("data", {}) is Dictionary else {}
 	for source in [item, nested]:

@@ -645,8 +645,3 @@ func get_max_bs():
 	if PlayerData.player_data[DataKeys.INLAY_LIST].size() == 0:
 		return 0
 	return 8
-
-
-func load_item_icon(_name):
-	var abc = load("res://Art/backpack/all_items/" + str(_name) + ".png")
-	return abc

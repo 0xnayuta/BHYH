@@ -60,7 +60,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _set_box_item(box, item_name: String, qh_level := 0, total_num := 0, eq_prop = {}, wx_list := []) -> void:
-	box.set_button_icon(load_item_icon(item_name))
+	box.set_button_icon(ItemUtils.item_icon_with_empty_fallback(item_name))
 	box.get_item_name = item_name
 	box.set_meta("item_name", item_name)
 	box.qh_level = qh_level
@@ -139,7 +139,7 @@ func _pet_item_icon(item: Dictionary, item_id: String) -> Texture2D:
 
 
 func _set_box_empty(box) -> void:
-	box.set_button_icon(load_item_icon("empty"))
+	box.set_button_icon(ItemUtils.item_icon_with_empty_fallback("empty"))
 	box.get_item_name = "empty"
 	box.set_meta("item_name", "empty")
 	box.qh_level = 0
@@ -262,7 +262,7 @@ func set_box_data():
 			title.text = "装备背包"
 			var x = 1
 			for i in PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码" + str(current_page)]:
-				target_box(x).set_button_icon(load_item_icon(str(i.名字)))
+				target_box(x).set_button_icon(ItemUtils.item_icon_with_empty_fallback(str(i.名字)))
 				target_box(x).get_item_name = str(i.名字)
 				target_box(x).set_meta("item_name", str(i.名字))
 				target_box(x).qh_level = i.强化等级
@@ -284,7 +284,7 @@ func set_box_data():
 			title.text = "道具背包"
 			var x = 1
 			for i in PlayerData.player_data[DataKeys.ITEM_LIST]["页码" + str(current_page)]:
-				target_box(x).set_button_icon(load_item_icon(str(i.名字)))
+				target_box(x).set_button_icon(ItemUtils.item_icon_with_empty_fallback(str(i.名字)))
 				target_box(x).get_item_name = str(i.名字)
 				target_box(x).set_meta("item_name", str(i.名字))
 				target_box(x).total_number = i.数量
@@ -303,7 +303,7 @@ func set_box_data():
 			title.text = "消耗品背包"
 			var x = 1
 			for i in PlayerData.player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(current_page)]:
-				target_box(x).set_button_icon(load_item_icon(str(i.名字)))
+				target_box(x).set_button_icon(ItemUtils.item_icon_with_empty_fallback(str(i.名字)))
 				target_box(x).get_item_name = str(i.名字)
 				target_box(x).set_meta("item_name", str(i.名字))
 				target_box(x).total_number = i.数量
@@ -346,18 +346,6 @@ func set_empty_box():
 	for i in range(25):
 		_set_box_empty(target_box(i + 1))
 		_mark_box_kind(target_box(i + 1), "")
-
-
-func load_item_icon(_name):
-	var item_id := str(_name)
-	var item_data: Dictionary = AE.all_equipment.get(item_id, {})
-	var data_icon_path := str(item_data.get("图标", ""))
-	if data_icon_path != "" and ResourceLoader.exists(data_icon_path):
-		return load(data_icon_path)
-	var icon_path := "res://Art/backpack/all_items/" + item_id + ".png"
-	if ResourceLoader.exists(icon_path):
-		return load(icon_path)
-	return load("res://Art/backpack/all_items/empty.png")
 
 
 func _on_button_pressed() -> void:

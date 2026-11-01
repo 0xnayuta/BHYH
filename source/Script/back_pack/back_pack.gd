@@ -350,64 +350,66 @@ func set_icon():
 	_last_equipped_snapshot = current_snapshot.duplicate(true)
 	if PlayerData.player_data[DataKeys.WEAPON].size() != 0:
 		wq.get_item_name = PlayerData.player_data[DataKeys.WEAPON][0][DataKeys.NAME]
-		wq.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.WEAPON][0][DataKeys.NAME]))
+		wq.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.WEAPON][0][DataKeys.NAME])
+		)
 		wq.qh_level = PlayerData.player_data[DataKeys.WEAPON][0][DataKeys.ENHANCE_LEVEL]
 		wq.eq_prop = PlayerData.player_data[DataKeys.WEAPON][0]["Data"]
 	else:
-		wq.set_button_icon(load_item_icon("wq"))
+		wq.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("wq"))
 	if PlayerData.player_data[DataKeys.ARMOR].size() != 0:
 		fj.get_item_name = PlayerData.player_data[DataKeys.ARMOR][0][DataKeys.NAME]
-		fj.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.ARMOR][0][DataKeys.NAME]))
+		fj.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.ARMOR][0][DataKeys.NAME])
+		)
 		fj.qh_level = PlayerData.player_data[DataKeys.ARMOR][0][DataKeys.ENHANCE_LEVEL]
 		fj.eq_prop = PlayerData.player_data[DataKeys.ARMOR][0]["Data"]
 	else:
-		fj.set_button_icon(load_item_icon("fj"))
+		fj.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("fj"))
 	if PlayerData.player_data["饰品"].size() != 0:
 		sp.get_item_name = PlayerData.player_data["饰品"][0][DataKeys.NAME]
-		sp.set_button_icon(load_item_icon(PlayerData.player_data["饰品"][0][DataKeys.NAME]))
+		sp.set_button_icon(ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data["饰品"][0][DataKeys.NAME]))
 		sp.qh_level = PlayerData.player_data["饰品"][0][DataKeys.ENHANCE_LEVEL]
 		sp.eq_prop = PlayerData.player_data["饰品"][0]["Data"]
 	else:
-		sp.set_button_icon(load_item_icon("sp"))
+		sp.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("sp"))
 	if PlayerData.player_data[DataKeys.TITLE].size() != 0:
 		tx.get_item_name = PlayerData.player_data[DataKeys.TITLE][0][DataKeys.NAME]
-		tx.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.TITLE][0][DataKeys.NAME]))
+		tx.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.TITLE][0][DataKeys.NAME])
+		)
 		tx.qh_level = PlayerData.player_data[DataKeys.TITLE][0][DataKeys.ENHANCE_LEVEL]
 		tx.eq_prop = PlayerData.player_data[DataKeys.TITLE][0]["Data"]
 	else:
-		tx.set_button_icon(load_item_icon("tx"))
+		tx.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("tx"))
 	if PlayerData.player_data[DataKeys.FASHION].size() != 0:
 		sz.get_item_name = PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME]
-		sz.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME]))
+		sz.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME])
+		)
 		sz.qh_level = PlayerData.player_data[DataKeys.FASHION][0][DataKeys.ENHANCE_LEVEL]
 		sz.eq_prop = PlayerData.player_data[DataKeys.FASHION][0]["Data"]
 	else:
-		sz.set_button_icon(load_item_icon("sz"))
+		sz.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("sz"))
 	if PlayerData.player_data[DataKeys.WINGS].size() != 0:
 		cb.get_item_name = PlayerData.player_data[DataKeys.WINGS][0][DataKeys.NAME]
-		cb.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.WINGS][0][DataKeys.NAME]))
+		cb.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.WINGS][0][DataKeys.NAME])
+		)
 		cb.qh_level = PlayerData.player_data[DataKeys.WINGS][0][DataKeys.ENHANCE_LEVEL]
 		cb.eq_prop = PlayerData.player_data[DataKeys.WINGS][0]["Data"]
 	else:
-		cb.set_button_icon(load_item_icon("cb"))
+		cb.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("cb"))
 	if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
 		fb.get_item_name = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
-		fb.set_button_icon(load_item_icon(PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]))
+		fb.set_button_icon(
+			ItemUtils.item_icon_with_legacy_fallback(PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME])
+		)
 		fb.qh_level = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
 		fb.eq_prop = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
 		fb.wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
 	else:
-		fb.set_button_icon(load_item_icon("fb"))
-
-
-func load_item_icon(_name):
-	var primary_path = "res://Art/backpack/all_items/" + str(_name) + ".png"
-	if ResourceLoader.exists(primary_path):
-		return load(primary_path)
-	var fallback_path = "res://Art/backpack/" + str(_name) + ".png"
-	if ResourceLoader.exists(fallback_path):
-		return load(fallback_path)
-	return null
+		fb.set_button_icon(ItemUtils.item_icon_with_legacy_fallback("fb"))
 
 
 func _on_first_pressed() -> void:
