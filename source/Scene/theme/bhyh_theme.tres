@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" load_steps=18 format=3 uid="uid://bhyhuitheme01"]
 
 [ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
@@ -16,6 +16,120 @@ grow_end = -8.0
 thickness = 6
 [sub_resource type="StyleBoxFlat" id="slider_fill"]
 bg_color = Color(1, 0.0392157, 0.0235294, 1)
+
+[sub_resource type="StyleBoxFlat" id="tower_button_normal"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.219608, 0.137255, 0.094118, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.752941, 0.611765, 0.337255, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="tower_button_pressed"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.490196, 0.313725, 0.164706, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.941176, 0.635294, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="tower_button_hover"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.376471, 0.239216, 0.12549, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.85098, 0.478431, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="tower_panel"]
+content_margin_left = 18.0
+content_margin_top = 20.0
+content_margin_right = 18.0
+content_margin_bottom = 20.0
+bg_color = Color(0.137255, 0.0862745, 0.054902, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.752941, 0.611765, 0.337255, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="announcement_secret_normal"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16, 0.18, 0.21, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.45, 0.5, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="announcement_secret_pressed"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.34, 0.31, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.39, 0.82, 0.7, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="announcement_secret_hover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.24, 0.27, 0.3, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.64, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxTexture" id="skill_text_pressed"]
 
 [resource]
 SettingsButton/base_type = &"Button"
@@ -240,3 +354,206 @@ LevelInfoDropGroup/constants/separation = 7
 
 LevelInfoModeGroup/base_type = &"VBoxContainer"
 LevelInfoModeGroup/constants/separation = 12
+
+MenuActionButton/base_type = &"Button"
+MenuActionButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+MenuActionButton/fonts/font = ExtResource("font_return")
+MenuActionButton/font_sizes/font_size = 25
+MenuActionButton/styles/normal = SubResource("empty_button")
+MenuActionButton/styles/hover = SubResource("empty_button")
+MenuActionButton/styles/pressed = SubResource("empty_button")
+MenuActionButton/styles/disabled = SubResource("empty_button")
+MenuActionButton/styles/focus = SubResource("empty_button")
+
+MenuActionButtonOutline/base_type = &"MenuActionButton"
+MenuActionButtonOutline/colors/font_outline_color = Color(1, 1, 1, 1)
+
+MenuHintLabel/base_type = &"Label"
+MenuHintLabel/constants/outline_size = 1
+MenuHintLabel/fonts/font = ExtResource("font_main")
+MenuHintLabel/font_sizes/font_size = 18
+
+MenuActionButtonGroup/base_type = &"VBoxContainer"
+MenuActionButtonGroup/constants/separation = 20
+
+TowerButton/base_type = &"Button"
+TowerButton/colors/font_color = Color(1, 0.933333, 0.713726, 1)
+TowerButton/colors/font_hover_color = Color(1, 0.968627, 0.815686, 1)
+TowerButton/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
+TowerButton/colors/font_pressed_color = Color(1, 1, 0.901961, 1)
+TowerButton/constants/outline_size = 2
+TowerButton/fonts/font = ExtResource("font_main")
+TowerButton/font_sizes/font_size = 18
+TowerButton/styles/normal = SubResource("tower_button_normal")
+TowerButton/styles/hover = SubResource("tower_button_hover")
+TowerButton/styles/pressed = SubResource("tower_button_pressed")
+
+TowerButtonSmall/base_type = &"TowerButton"
+TowerButtonSmall/font_sizes/font_size = 16
+
+TowerLabel/base_type = &"Label"
+TowerLabel/colors/font_color = Color(1, 0.933333, 0.713726, 1)
+TowerLabel/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
+TowerLabel/constants/outline_size = 2
+TowerLabel/fonts/font = ExtResource("font_main")
+TowerLabel/font_sizes/font_size = 20
+
+TowerSmallLabel/base_type = &"TowerLabel"
+TowerSmallLabel/font_sizes/font_size = 17
+
+TowerRow/base_type = &"HBoxContainer"
+TowerRow/constants/separation = 8
+
+TowerFloorPicker/base_type = &"HBoxContainer"
+TowerFloorPicker/constants/separation = 12
+
+TowerContent/base_type = &"VBoxContainer"
+TowerContent/constants/separation = 10
+
+TowerOptions/base_type = &"VBoxContainer"
+TowerOptions/constants/separation = 4
+
+TowerPanel/base_type = &"PanelContainer"
+TowerPanel/styles/panel = SubResource("tower_panel")
+
+AnnouncementButton/base_type = &"Button"
+AnnouncementButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+AnnouncementButton/fonts/font = ExtResource("font_return")
+AnnouncementButton/font_sizes/font_size = 28
+AnnouncementButton/styles/normal = SubResource("empty_button")
+AnnouncementButton/styles/hover = SubResource("empty_button")
+AnnouncementButton/styles/pressed = SubResource("empty_button")
+AnnouncementButton/styles/disabled = SubResource("empty_button")
+AnnouncementButton/styles/focus = SubResource("empty_button")
+
+AnnouncementSecretButton/base_type = &"Button"
+AnnouncementSecretButton/fonts/font = ExtResource("font_hk")
+AnnouncementSecretButton/font_sizes/font_size = 20
+AnnouncementSecretButton/styles/normal = SubResource("announcement_secret_normal")
+AnnouncementSecretButton/styles/hover = SubResource("announcement_secret_hover")
+AnnouncementSecretButton/styles/pressed = SubResource("announcement_secret_pressed")
+
+AnnouncementSecretButtonSmall/base_type = &"AnnouncementSecretButton"
+AnnouncementSecretButtonSmall/font_sizes/font_size = 18
+
+AnnouncementSecretButtonTiny/base_type = &"AnnouncementSecretButton"
+AnnouncementSecretButtonTiny/font_sizes/font_size = 19
+
+AnnouncementHeading/base_type = &"Label"
+AnnouncementHeading/fonts/font = ExtResource("font_hy")
+AnnouncementHeading/font_sizes/font_size = 35
+
+AnnouncementWarning/base_type = &"Label"
+AnnouncementWarning/colors/font_color = Color(1, 0, 0, 1)
+AnnouncementWarning/colors/font_outline_color = Color(1, 0, 0, 1)
+AnnouncementWarning/colors/font_shadow_color = Color(0, 0, 0, 1)
+AnnouncementWarning/constants/outline_size = 2
+AnnouncementWarning/constants/shadow_outline_size = 6
+AnnouncementWarning/fonts/font = ExtResource("font_hk")
+AnnouncementWarning/font_sizes/font_size = 17
+
+AnnouncementStatus/base_type = &"Label"
+AnnouncementStatus/colors/font_color = Color(0.42, 0.88, 0.7, 1)
+AnnouncementStatus/fonts/font = ExtResource("font_hk")
+AnnouncementStatus/font_sizes/font_size = 16
+
+AnnouncementPrompt/base_type = &"Label"
+AnnouncementPrompt/colors/font_color = Color(0.84, 0.86, 0.9, 1)
+AnnouncementPrompt/fonts/font = ExtResource("font_hk")
+AnnouncementPrompt/font_sizes/font_size = 17
+
+AnnouncementSubtitle/base_type = &"Label"
+AnnouncementSubtitle/colors/font_color = Color(0.94, 0.73, 0.34, 1)
+AnnouncementSubtitle/fonts/font = ExtResource("font_hy")
+AnnouncementSubtitle/font_sizes/font_size = 27
+
+AnnouncementTitle/base_type = &"Label"
+AnnouncementTitle/colors/font_color = Color(0.94, 0.73, 0.34, 1)
+AnnouncementTitle/fonts/font = ExtResource("font_hy")
+AnnouncementTitle/font_sizes/font_size = 28
+
+AnnouncementAlert/base_type = &"Label"
+AnnouncementAlert/colors/font_color = Color(1, 0.34, 0.3, 1)
+AnnouncementAlert/fonts/font = ExtResource("font_hk")
+AnnouncementAlert/font_sizes/font_size = 16
+
+MonsterHelpButton/base_type = &"Button"
+MonsterHelpButton/colors/font_hover_color = Color(1, 0.258824, 0, 1)
+MonsterHelpButton/fonts/font = ExtResource("font_main")
+MonsterHelpButton/font_sizes/font_size = 24
+MonsterHelpButton/styles/normal = SubResource("empty_button")
+MonsterHelpButton/styles/hover = SubResource("empty_button")
+MonsterHelpButton/styles/pressed = SubResource("empty_button")
+MonsterHelpButton/styles/disabled = SubResource("empty_button")
+MonsterHelpButton/styles/focus = SubResource("empty_button")
+
+MonsterHelpTitle/base_type = &"Label"
+MonsterHelpTitle/constants/outline_size = 1
+MonsterHelpTitle/fonts/font = ExtResource("font_meng")
+MonsterHelpTitle/font_sizes/font_size = 25
+
+MonsterHelpTitleLarge/base_type = &"MonsterHelpTitle"
+MonsterHelpTitleLarge/font_sizes/font_size = 30
+
+MonsterHelpWarning/base_type = &"Label"
+MonsterHelpWarning/colors/font_color = Color(1, 0.584314, 0, 1)
+MonsterHelpWarning/colors/font_outline_color = Color(1, 0.584314, 0, 1)
+MonsterHelpWarning/constants/outline_size = 1
+MonsterHelpWarning/fonts/font = ExtResource("font_main")
+MonsterHelpWarning/font_sizes/font_size = 30
+
+SkillLabel/base_type = &"Label"
+SkillLabel/constants/outline_size = 1
+SkillLabel/fonts/font = ExtResource("font_main")
+SkillLabel/font_sizes/font_size = 25
+
+SkillSmallLabel/base_type = &"Label"
+SkillSmallLabel/constants/outline_size = 1
+SkillSmallLabel/fonts/font = ExtResource("font_main")
+SkillSmallLabel/font_sizes/font_size = 20
+
+SkillCooldownLabel/base_type = &"Label"
+SkillCooldownLabel/colors/font_color = Color(1, 1, 0, 1)
+SkillCooldownLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SkillCooldownLabel/constants/outline_size = 10
+SkillCooldownLabel/font_sizes/font_size = 25
+
+SkillNeedLabel/base_type = &"Label"
+SkillNeedLabel/colors/font_color = Color(1, 1, 0, 1)
+SkillNeedLabel/colors/font_outline_color = Color(1, 1, 0, 1)
+SkillNeedLabel/constants/outline_size = 2
+SkillNeedLabel/fonts/font = ExtResource("font_main")
+
+SkillShadowLabel/base_type = &"Label"
+SkillShadowLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+SkillShadowLabel/constants/outline_size = 1
+SkillShadowLabel/constants/shadow_outline_size = 3
+SkillShadowLabel/fonts/font = ExtResource("font_main")
+SkillShadowLabel/font_sizes/font_size = 15
+
+SkillShadowLabelPlain/base_type = &"Label"
+SkillShadowLabelPlain/constants/outline_size = 1
+SkillShadowLabelPlain/constants/shadow_outline_size = 3
+SkillShadowLabelPlain/fonts/font = ExtResource("font_main")
+SkillShadowLabelPlain/font_sizes/font_size = 15
+
+SkillTextButton/base_type = &"Button"
+SkillTextButton/fonts/font = ExtResource("font_main")
+SkillTextButton/font_sizes/font_size = 20
+SkillTextButton/styles/normal = SubResource("empty_button")
+SkillTextButton/styles/hover = SubResource("empty_button")
+SkillTextButton/styles/pressed = SubResource("skill_text_pressed")
+SkillTextButton/styles/focus = SubResource("empty_button")
+
+SkillIconButton/base_type = &"Button"
+SkillIconButton/styles/normal = SubResource("empty_button")
+SkillIconButton/styles/hover = SubResource("empty_button")
+SkillIconButton/styles/pressed = SubResource("empty_button")
+SkillIconButton/styles/disabled = SubResource("empty_button")
+SkillIconButton/styles/focus = SubResource("empty_button")
+
+SkillIconButtonTexture/base_type = &"SkillIconButton"
+SkillIconButtonTexture/styles/pressed = SubResource("skill_text_pressed")
+
+SkillGridRow/base_type = &"HBoxContainer"
+SkillGridRow/constants/separation = 25

@@ -2,52 +2,12 @@
 
 [ext_resource type="Script" path="res://Script/main_menu/game_announcement.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="3"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="4"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="5"]
 [ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="6"]
 [ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="8"]
 
-[sub_resource type="StyleBoxEmpty" id="1"]
-
-[sub_resource type="StyleBoxEmpty" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="2"]
-
-[sub_resource type="StyleBoxEmpty" id="4"]
-
-[sub_resource type="StyleBoxEmpty" id="5"]
-
-[sub_resource type="StyleBoxEmpty" id="6"]
-
-[sub_resource type="StyleBoxEmpty" id="8"]
-
-[sub_resource type="StyleBoxEmpty" id="7"]
-
-[sub_resource type="StyleBoxEmpty" id="9"]
-
-[sub_resource type="StyleBoxEmpty" id="10"]
-
-[sub_resource type="StyleBoxEmpty" id="11"]
-
-[sub_resource type="StyleBoxEmpty" id="13"]
-
-[sub_resource type="StyleBoxEmpty" id="12"]
-
-[sub_resource type="StyleBoxEmpty" id="14"]
-
-[sub_resource type="StyleBoxEmpty" id="15"]
-
-[sub_resource type="StyleBoxEmpty" id="16"]
-
-[sub_resource type="StyleBoxEmpty" id="18"]
-
-[sub_resource type="StyleBoxEmpty" id="17"]
-
-[sub_resource type="StyleBoxEmpty" id="19"]
-
-[sub_resource type="StyleBoxEmpty" id="20"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secret_panel"]
 bg_color = Color(0.075, 0.082, 0.094, 0.98)
@@ -62,54 +22,6 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 shadow_color = Color(0, 0, 0, 0.65)
 shadow_size = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secret_button"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.16, 0.18, 0.21, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.42, 0.45, 0.5, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secret_button_pressed"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.1, 0.34, 0.31, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.39, 0.82, 0.7, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secret_button_hover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.24, 0.27, 0.3, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.85, 0.64, 0.25, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6y1b1"]
 bg_color = Color(0, 0, 0, 1)
@@ -128,6 +40,7 @@ color = Color(1, 1, 1, 0)
 metadata/_edit_lock_ = true
 
 [node name="BG" type="TextureRect" parent="." unique_id=516419683]
+theme = ExtResource("theme")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -137,6 +50,7 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="BB2" type="Label" parent="BG" unique_id=1080045584]
+theme_type_variation = "AnnouncementHeading"
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -146,11 +60,10 @@ offset_left = -245.0
 offset_right = 245.0
 offset_bottom = 39.0
 grow_horizontal = 2
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 35
 text = "点击版本号查看该版本更新内容"
 
 [node name="BB4" type="Label" parent="BG" unique_id=895155344]
+theme_type_variation = "AnnouncementWarning"
 visible = false
 texture_filter = 2
 layout_mode = 1
@@ -164,13 +77,6 @@ offset_top = -42.0
 offset_right = 311.5
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 6
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 17
 text = "本作为作者为自己制作的游戏，仅用于分享，难度可能较高，敬请理解！！"
 vertical_alignment = 1
 autowrap_mode = 1
@@ -201,13 +107,12 @@ size_flags_horizontal = 0
 color = Color(0, 0, 0, 0.47451)
 
 [node name="BB" type="Label" parent="BG/PanelContainer/HBoxContainer/BBBg" unique_id=1189698376]
+theme_type_variation = "AnnouncementHeading"
 layout_mode = 0
 offset_left = 35.0
 offset_top = 11.0
 offset_right = 140.0
 offset_bottom = 50.0
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 35
 text = "版本号"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BG/PanelContainer/HBoxContainer/BBBg" unique_id=241269770]
@@ -223,603 +128,253 @@ size_flags_vertical = 3
 theme_override_constants/separation = 15
 
 [node name="V0_50" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177987]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.9"
 
 [node name="V0_49" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177986]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.8"
 
 [node name="V0_48" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177985]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.7"
 
 [node name="V0_47" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177984]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.6"
 
 [node name="V0_46" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=919031042]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.5"
 
 [node name="V0_45" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1593163070]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.4"
 
 [node name="V0_44" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1364626708]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.3"
 
 [node name="V0_43" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1712604638]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.2"
 
 [node name="V0_42" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1464738426]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.1"
 
 [node name="V0_41" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1457732676]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V6.0"
 
 [node name="V0_40" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1415391027]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.9"
 
 [node name="V0_39" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=640176444]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.8"
 
 [node name="V0_38" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=261161902]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.7"
 
 [node name="V0_37" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1311977258]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.6"
 
 [node name="V0_36" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=823098141]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.5"
 
 [node name="V0_35" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=387286087]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.4"
 
 [node name="V0_34" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1255284526]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.3"
 
 [node name="V0_33" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1685272890]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.2"
 
 [node name="V0_32" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=820559512]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.1"
 
 [node name="V0_31" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1538184066]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V5.0"
 
 [node name="V0_30" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1749937624]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.9"
 
 [node name="V0_29" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=23757967]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.8"
 
 [node name="V0_28" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1789630380]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.7"
 
 [node name="V0_27" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2044758744]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.6"
 
 [node name="V0_26" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=921040510]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.5"
 
 [node name="V0_25" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1683956074]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.4"
 
 [node name="V0_24" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1240950451]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.3"
 
 [node name="V0_23" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1090311978]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.2"
 
 [node name="V0_22" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=560859540]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.1"
 
 [node name="V0_21" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=408632720]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V4.0"
 
 [node name="V0_20" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1208993157]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.9"
 
 [node name="V0_19" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2068737848]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.8"
 
 [node name="V0_18" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=249035668]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.7"
 
 [node name="V0_17" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1814679579]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.6"
 
 [node name="V0_16" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1527444074]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.5"
 
 [node name="V0_15" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1125621856]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.4"
 
 [node name="V0_14" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=151032407]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.3"
 
 [node name="V0_13" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=491337932]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.2"
 
 [node name="V0_12" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=125061279]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.1"
 
 [node name="V0_11" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=623437161]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V3.0"
 
 [node name="V0_10" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=542297150]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.9"
 
 [node name="V0_9" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1183515802]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.8"
 
 [node name="V0_8" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1496513143]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.7"
 
 [node name="V0_7" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1588242122]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.6"
 
 [node name="V0_6" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=79620139]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.5"
 
 [node name="V0_5" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=466941460]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.4"
 
 [node name="V0_1" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1134402506]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("1")
-theme_override_styles/pressed = SubResource("3")
-theme_override_styles/hover = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/focus = SubResource("5")
 text = "V2.3"
 
 [node name="V0_2" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1961812522]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("6")
-theme_override_styles/pressed = SubResource("8")
-theme_override_styles/hover = SubResource("7")
-theme_override_styles/disabled = SubResource("9")
-theme_override_styles/focus = SubResource("10")
 text = "V2.2"
 
 [node name="V0_3" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=838416926]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("11")
-theme_override_styles/pressed = SubResource("13")
-theme_override_styles/hover = SubResource("12")
-theme_override_styles/disabled = SubResource("14")
-theme_override_styles/focus = SubResource("15")
 text = "V2.1"
 
 [node name="V0_4" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2109742497]
+theme_type_variation = "AnnouncementButton"
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(1, 0.466667, 0, 1)
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("16")
-theme_override_styles/pressed = SubResource("18")
-theme_override_styles/hover = SubResource("17")
-theme_override_styles/disabled = SubResource("19")
-theme_override_styles/focus = SubResource("20")
 text = "V2.0"
 
 [node name="InfoBg" type="ColorRect" parent="BG/PanelContainer/HBoxContainer" unique_id=317568821]
@@ -829,12 +384,11 @@ size_flags_horizontal = 8
 color = Color(0, 0, 0, 0.47451)
 
 [node name="BB" type="Label" parent="BG/PanelContainer/HBoxContainer/InfoBg" unique_id=501686216]
+theme_type_variation = "AnnouncementHeading"
 layout_mode = 0
 offset_top = 7.0
 offset_right = 659.0
 offset_bottom = 46.0
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 35
 text = "V0.1更新详情"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -864,6 +418,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 15
 
 [node name="SecretPasswordOverlay" type="Control" parent="." unique_id=1605558437]
+theme = ExtResource("theme")
 visible = false
 z_index = 200
 layout_mode = 3
@@ -910,18 +465,14 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="PasswordTitle" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=367939056]
+theme_type_variation = "AnnouncementSubtitle"
 layout_mode = 2
-theme_override_colors/font_color = Color(0.94, 0.73, 0.34, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 27
 text = "功能验证"
 horizontal_alignment = 1
 
 [node name="PasswordPrompt" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=1152474948]
+theme_type_variation = "AnnouncementPrompt"
 layout_mode = 2
-theme_override_colors/font_color = Color(0.84, 0.86, 0.9, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 17
 text = "请输入密钥"
 
 [node name="PasswordInput" type="LineEdit" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=66168510]
@@ -936,11 +487,9 @@ secret = true
 secret_character = "*"
 
 [node name="PasswordStatus" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=324293791]
+theme_type_variation = "AnnouncementAlert"
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.34, 0.3, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="PasswordButtons" type="HBoxContainer" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=623950188]
@@ -952,23 +501,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Cancel" type="Button" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=1560459393]
+theme_type_variation = "AnnouncementSecretButtonSmall"
 custom_minimum_size = Vector2(110, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "取消"
 
 [node name="Confirm" type="Button" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=105351120]
+theme_type_variation = "AnnouncementSecretButtonSmall"
 custom_minimum_size = Vector2(110, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "确认"
 
 [node name="RightSpacer" type="Control" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=253270133]
@@ -976,6 +517,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="SecretFunctionOverlay" type="Control" parent="." unique_id=610758542]
+theme = ExtResource("theme")
 visible = false
 z_index = 200
 layout_mode = 3
@@ -1026,11 +568,9 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 
 [node name="Title" type="Label" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/Header" unique_id=1783780181]
+theme_type_variation = "AnnouncementTitle"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.94, 0.73, 0.34, 1)
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 28
 text = "功能页面"
 vertical_alignment = 1
 
@@ -1080,23 +620,15 @@ theme_override_font_sizes/font_size = 22
 text = "地图全开"
 
 [node name="AddSouls" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=768345083]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "添加1亿灵魂"
 
 [node name="OneClickDivineSet" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1997904806]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "一键神装"
 
 [node name="RightColumn" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns" unique_id=331778278]
@@ -1119,43 +651,27 @@ theme_override_font_sizes/font_size = 21
 text = "商店全物品"
 
 [node name="PlayerMaxLevel" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=114725072]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "人物满级"
 
 [node name="PetsMaxLevel" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=1755412070]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "宠物全满级"
 
 [node name="PetGrowthMax" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=1153977825]
+theme_type_variation = "AnnouncementSecretButtonTiny"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 19
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "宠物资质根骨全满"
 
 [node name="WanLingMax" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=898742156]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "全部图录满级"
 
 [node name="MapProgressRow" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=608156548]
@@ -1172,21 +688,15 @@ theme_override_fonts/font = ExtResource("4")
 theme_override_font_sizes/font_size = 18
 
 [node name="ClearProgress" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/MapProgressRow" unique_id=139116305]
+theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(160, 42)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_secret_button")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_secret_button_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_secret_button_hover")
 text = "清除进度"
 
 [node name="FunctionStatus" type="Label" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=1733901869]
+theme_type_variation = "AnnouncementStatus"
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.88, 0.7, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

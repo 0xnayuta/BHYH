@@ -1,6 +1,6 @@
-# UI Theme 契约（Phase 32-0 基线，32-1 试点完成）
+# UI Theme 契约（Phase 32-0 基线，32-1/32-2A/32-2B 完成）
 
-> **状态**：32-0 基线审计已完成；32-1 `game_set` 试点已完成（2026-11-01）；32-2 分批尚未启动。契约仍按试点结果维护。
+> **状态**：32-0 基线审计、32-1 `game_set`、32-2A 标签密集与 32-2B Button 密集批次已完成（2026-11-01）；32-3 未启动。契约按已验收批次维护。
 > **适用范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与相关验证；不约束运行时业务状态。
 > **依据**：[ADR-004](../decisions/ADR-004-naming-contract-and-frozen-whitelist.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[ADR-015](../decisions/ADR-015-documentation-layering-and-single-source-of-truth.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 > **规范**：[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`naming_standard.md`](../standards/naming_standard.md)、[`naming_whitelist.md`](../standards/naming_whitelist.md)、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
@@ -20,17 +20,17 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 由 `python scripts/theme_override_audit.py --json` 生成；机器基线为 `scripts/theme_override_baseline.json`。
 
-| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 说明 |
-|:---|:---:|:---:|:---:|:---|
-| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | **6,352** | 135 → 134 个 `.tscn` |
-| 直接属性覆盖 | 6,804 | 6,565 | **6,326** | Phase 32 静态迁移对象 |
-| Animation 轨道路径引用 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
-| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | 合计 6,804 → 6,565 → 6,326 |
-| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | `game_set` 与 32-2A 后下降 |
-| `FontFile` 场景引用 | 207 | 205 | 205 | 12 个字体文件；`game_set` 去掉两个未引用字体 |
-| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | **2 / 6 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
-| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | **34 个直接类型 / 99 个节点引用** | 另有 2 个仅作为 bright 变体基类 |
-| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
+| 项 | 32-0 基线 | 32-1 后 | 32-2A 后 | 32-2B 后 | 说明 |
+|:---|:---:|:---:|:---:|:---:|:---|
+| 文本 `theme_override_*` 引用 | 6,830 | 6,591 | 6,352 | **4,747** | 135 → 132 个 `.tscn` |
+| 直接属性覆盖 | 6,804 | 6,565 | 6,326 | **4,721** | Phase 32 静态迁移对象 |
+| Animation 轨道路径引用 | 26 | 26 | 26 | 26 | 仅 `hit_text.tscn`；动态例外 |
+| 直接属性分类 | colors 1,730 / styles 1,625 / constants 1,393 / fonts 1,055 / font_sizes 1,001 | colors 1,703 / styles 1,516 / constants 1,371 / fonts 1,014 / font_sizes 961 | colors 1,619 / styles 1,516 / constants 1,312 / fonts 966 / font_sizes 913 | colors 1,366 / styles 702 / constants 1,208 / fonts 749 / font_sizes 696 | 合计 6,804 → 6,565 → 6,326 → 4,721 |
+| Label / Button 直接覆盖 | 3,921 / 2,380 | 3,865 / 2,205 | 3,647 / 2,193 | 3,350 / 895 | `game_set`、32-2A、32-2B 后下降 |
+| `FontFile` 场景引用 | 207 | 205 | 205 | 200 | 12 个字体文件；32-1/32-2B 去掉未引用字体 |
+| Theme `.tres` | 1 / 2 引用 | 2 / 4 引用 | 2 / 6 引用 | **2 / 96 引用** | 新增 `bhyh_theme.tres`；旧 `backpack_action_theme.tres` 仍保留 |
+| `theme_type_variation` | 0 | 19 个直接类型 / 45 个节点引用 | 34 个直接类型 / 99 个节点引用 | **72 个直接类型 / 359 个节点引用** | Theme 共 74 个类型定义；另 2 个仅作基类 |
+| 脚本 `add_theme_*` | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 383 处 / 39 个文件 | 数据/状态驱动，不计入静态迁移 |
 
 基线是**上限**，不是迁移目标。迁移只能使直接属性与动画引用下降，不能因新增面板或重构静默增加；新增场景需要显式更新基线并说明原因。
 
@@ -69,7 +69,7 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 
 ### 4.2 `theme_type_variation`
 
-`theme_type_variation` 的值使用 `PascalCase` 角色名，不使用文件路径、中文、空格或下划线分隔。32-1 已冻结：
+`theme_type_variation` 的值使用 `PascalCase` 角色名，不使用文件路径、中文、空格或下划线分隔。32-1/32-2A/32-2B 已冻结：
 
 | 变体 | 基类 | 角色/参数 |
 |:---|:---|:---|
@@ -109,13 +109,51 @@ Theme 只承载**静态 UI 定义**。HP/MP、品质色、奖励状态、战斗�
 | `LevelInfoFilterGroup` | `HBoxContainer` | separation 10 |
 | `LevelInfoDropGroup` | `HBoxContainer` | separation 7 |
 | `LevelInfoModeGroup` | `VBoxContainer` | separation 12 |
+| `MenuActionButton` | `Button` | 菜单按钮，华康海报体 / 25 / 空 StyleBox |
+| `MenuActionButtonOutline` | `MenuActionButton` | 白色 outline |
+| `MenuHintLabel` | `Label` | 菜单提示，文正字体 / 18 / outline 1 |
+| `MenuActionButtonGroup` | `VBoxContainer` | separation 20 |
+| `TowerButton` | `Button` | 镇妖塔按钮，文正字体 / 18 / 棕色 Flat 三态 |
+| `TowerButtonSmall` | `TowerButton` | 字号 16 |
+| `TowerLabel` | `Label` | 镇妖塔标签，文正字体 / 20 / outline 2 |
+| `TowerSmallLabel` | `TowerLabel` | 字号 17 |
+| `TowerRow` | `HBoxContainer` | separation 8 |
+| `TowerFloorPicker` | `HBoxContainer` | separation 12 |
+| `TowerContent` | `VBoxContainer` | separation 10 |
+| `TowerOptions` | `VBoxContainer` | separation 4 |
+| `TowerPanel` | `PanelContainer` | 棕色面板 Flat |
+| `AnnouncementButton` | `Button` | 公告列表按钮，华康海报体 / 28 / 空 StyleBox |
+| `AnnouncementSecretButton` | `Button` | 秘钥按钮，华康宋体 / 20 / 深色 Flat 三态 |
+| `AnnouncementSecretButtonSmall` | `AnnouncementSecretButton` | 字号 18 |
+| `AnnouncementSecretButtonTiny` | `AnnouncementSecretButton` | 字号 19 |
+| `AnnouncementHeading` | `Label` | 公告大标题，竹字美容 / 35 |
+| `AnnouncementWarning` | `Label` | 红色阴影警告，华康宋体 / 17 / outline 2 / shadow 6 |
+| `AnnouncementStatus` | `Label` | 青绿色状态，华康宋体 / 16 |
+| `AnnouncementPrompt` | `Label` | 浅灰提示，华康宋体 / 17 |
+| `AnnouncementSubtitle` | `Label` | 金色副标题，竹字美容 / 27 |
+| `AnnouncementTitle` | `Label` | 金色标题，竹字美容 / 28 |
+| `AnnouncementAlert` | `Label` | 红色错误，华康宋体 / 16 |
+| `MonsterHelpButton` | `Button` | 怪物帮助按钮，文正字体 / 24 / 空 StyleBox |
+| `MonsterHelpTitle` | `Label` | 桃花字体 / 25 / outline 1 |
+| `MonsterHelpTitleLarge` | `MonsterHelpTitle` | 字号 30 |
+| `MonsterHelpWarning` | `Label` | 文正字体 / 30 / 橙色 outline 1 |
+| `SkillLabel` | `Label` | 技能主标签，文正字体 / 25 / outline 1 |
+| `SkillSmallLabel` | `Label` | 技能小标签，文正字体 / 20 / outline 1 |
+| `SkillCooldownLabel` | `Label` | 冷却文本，黄色 / 黑色 outline 10 / 25 |
+| `SkillNeedLabel` | `Label` | 升级需求，黄色 / 黄色 outline 2 / 文正字体 |
+| `SkillShadowLabel` | `Label` | 技能阴影，黑色 shadow 3 / outline 1 / 15 |
+| `SkillShadowLabelPlain` | `Label` | 同尺寸但不显式设置 shadow 颜色 |
+| `SkillTextButton` | `Button` | 技能文字按钮，文正字体 / 20 / 空 StyleBox |
+| `SkillIconButton` | `Button` | 技能图标按钮，空 StyleBox 五态 |
+| `SkillIconButtonTexture` | `SkillIconButton` | pressed 使用空 StyleBoxTexture |
+| `SkillGridRow` | `HBoxContainer` | separation 25 |
 
 规则：
 
 1. 变体名表达**角色**，不按单个场景命名；
 2. 不把一个场景的局部样式命名为全局变体；
 3. 同一角色在不同字体族下需要保留字体差异时，可拆分为 `TitleLabelSerif` 等明确变体，不得用运行时覆盖临时修正；
-4. 32-2A 后共有 **36 个类型**（34 个直接使用 + 2 个 bright 基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
+4. 32-2A/32-2B 后共有 **74 个类型**（72 个直接使用 + 2 个基类）；新增变体需要在 Phase 32 批次评审中登记，不能静默扩散。
 
 ## 5. 字体与样式
 
@@ -183,10 +221,31 @@ python scripts/theme_override_audit.py --write-baseline
 - 保留的一次性标签不使用新变体，避免把单场景局部样式扩散为全局角色；后续批次可再评审；
 - `theme_override_audit.py --check`、`contract_gate` 与 `check_all --godot-bin` 9/9 通过；`scene_probe_runner --probe ui-theme` 仍覆盖 `game_set`，标签面板采用独立计算转储/截图证据。
 
+## 7B. 32-2B Button 密集面板结果（已完成，2026-11-01）
+
+| 场景 | 迁移前直接属性 | 迁移后直接属性 | 迁移节点/变体 | 保留例外 |
+|:---|:---:|:---:|:---|:---|
+| `set_menu.tscn` | 136 | **0** | 18 节点 / 4 变体 | 无 |
+| `main_menu/zhen_yao_tower.tscn` | 161 | **8** | 26 节点 / 9 变体 | `FloorInput` LineEdit 的 8 处字体/描边/样式覆盖，留待 32-3 |
+| `main_menu/game_announcement.tscn` | 507 | **34** | 68 节点 / 11 变体 | 5 个 CheckButton（10）、1 个 LineEdit（2）、1 个 OptionButton（2）与 14 个容器/面板/边距（20）；留待 32-3/32-4 |
+| `monster/some_monster_help.tscn` | 502 | **0** | 65 节点 / 4 变体 | 无 |
+| `skill/zd_skill.tscn` | 343 | **2** | 83 节点 / 10 变体 | 2 个 PopupMenu 的字体覆盖，留待 32-3 |
+
+共同结果：
+
+- 五个场景合计直接属性 **1,649 → 44**；全局直接属性 **6,326 → 4,721**，文本引用 **4,747**，剩余含覆盖场景 **132**；
+- Theme 新增 38 个变体，累计 **74 个定义 / 72 个直接使用 / 359 个节点引用**；Theme 场景引用 **96**；
+- 五个场景分别覆盖 24 / 32 / 108 / 79 / 85 个 Control，合计 **328 个 Control** 的字体、字号、描边、阴影、颜色、StyleBox、位置、尺寸与文本，迁移前后 **0 差异**；
+- 1600×1000 与 1280×800 各 5 张截图，共 **13,120,000 像素**，**0 像素差异**；
+- 五个场景直接启动与 0 ERROR / 0 WARNING；`check_all --godot-bin` 通过；
+- `zd_skill` 的控件位于 `Node2D` 容器（`Sk_na`/`sk_pi`/`sk_lv`/`sk_le`/`sk_ms`）下，Theme 继承在 Node2D 边界中断；因此除根 `MarginContainer` 外，对每个带变体的 Control 显式绑定同一 Theme。该重复是当前 Node2D UI 形态的已知边界，32-4 评估全局 Theme 时再收敛；
+- `set_menu` 的 16 个空 StyleBox 按钮收敛为 `MenuActionButton` / `MenuActionButtonOutline` 两态；`some_monster_help` 的 61 个按钮收敛为一个 `MonsterHelpButton`；
+- 剩余 44 处均是混合控件/布局或 PopupMenu 字体，不以“只改文本”归零；未迁移场景不假装完成。
+
 ## 8. 分批与验收边界
 
-- 32-2A 已完成（标签密集）；32-2B 按 Button 密集、混合输入/列表、其余场景分批；每批先快照、再迁移、后验证。
-- 32-3 补齐 `OptionButton`、`CheckBox`、`CheckButton`、`LineEdit`、`HSlider`、`Panel`、`PanelContainer`、`TabBar`、`PopupMenu`、`ItemList` 等类型。
+- 32-2A（标签密集）与 32-2B（Button 密集五场景）已完成；32-3 处理混合输入/列表与控件补齐；每批先快照、再迁移、后验证。
+- 32-3 补齐 `OptionButton`、`CheckBox`、`CheckButton`、`LineEdit`、`HSlider`、`Panel`、`PanelContainer`、`TabBar`、`PopupMenu`、`ItemList` 等类型；优先收口 32-2B 留存的 44 处混合覆盖。
 - 32-4 建立例外清单，评估是否启用全局 Theme，退役旧 Theme，更新 `architecture.md`、`status.md` 与索引。
 - 每批必须保留截图/控件转储与相关 `scene_probe_runner` 结果；共享 HUD/关卡 UI 变更追加 `level_1` 冒烟与 changed-only 回归。
 - 阶段完成标准是“直接属性为 0 或全部登记例外”，不是“总数看起来接近 0”；动画轨道与动态调用单独报告。
@@ -203,7 +262,7 @@ python scripts/theme_override_audit.py --write-baseline
 | 项 | 当前状态 | 出口 |
 |:---|:---|:---|
 | 基础 Theme 路径与现有 `backpack_action_theme.tres` 的合并方式 | `Scene/theme/bhyh_theme.tres` 已用于 pilot；旧 Theme 未合并 | 32-4 迁移/退役 |
-| 最终变体名单与字体族映射 | 32-1/32-2A 已冻结 36 个类型（34 直接 + 2 基类） | 32-2B 只按批扩展，不重命名 |
+| 最终变体名单与字体族映射 | 32-1/32-2A/32-2B 已冻结 74 个类型（72 直接 + 2 基类） | 32-3 只按批扩展，不重命名 |
 | 是否启用全局 `gui/theme/custom` | 默认不启用 | 32-4 全 UI 覆盖评审 |
 | 动画轨道/脚本动态覆盖的最终例外清单 | 动画 26 处、动态调用 383 处均未迁移 | 32-4 收口 |
 
