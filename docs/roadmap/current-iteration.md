@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 未启动**。Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；**Phase 21 全部可执行项完成**（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓。**Phase 31-0A 已完成**（TileMap→TileMapLayer、`collision_layer` 具名化、`load_item_icon` 去重）；**31-0B 评估后拒绝**（现有 BMFont 与数字图不同字体/分辨率，保留旧数字图）；**31-1 已完成**（`ParallaxLayer`/`ParallaxBackground` 归零，`Parallax2D` + `CanvasLayer` 迁移完成）。Phase 30 设计完成但按 ADR-023 `Proposed` 暂缓。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -103,7 +103,7 @@
 
 ## 5B. Phase 31：引擎废弃 API 与局部现代化（当前批次）
 
-> **状态**：31-0A **已完成（2026-11-01）**；31-0B **评估后拒绝**（保留旧数字图，2026-11-01）；31-1 未启动。不依赖 Phase 30。
+> **状态**：31-0A **已完成（2026-11-01）**；31-0B **评估后拒绝**（保留旧数字图）；31-1 **已完成（2026-11-01）**。不依赖 Phase 30。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
 
 ### 31-0A 顺手包（已完成）
@@ -126,11 +126,13 @@
 - 临时 `Label + beishu` 运行渲染对照：字宽/步进（字体 20 vs 当前 24）与描边粗细不同，放大到 50 px 会损失清晰度；
 - **结论：保留旧数字图，不替换**。如未来必须迁移，需从现有数字图生成同源 BMFont（构建期私有派生资源），不能直接使用 ZMWS BMFont；该路线不纳入 31-0B。
 
-### 31-1 视差迁移（未启动）
+### 31-1 视差迁移（已完成）
 
-- 89 个场景 95 个 `ParallaxLayer` 节点 + 1 个 `ParallaxBackground`（`base_through_level.tscn`）；
-- 语义映射 `motion_scale→scroll_scale`、`motion_mirroring→repeat_size`、`scroll_offset→screen_offset`；容器层消失，**不是文本替换**；
-- 验收必须含逐场景截图对照与全量回归。
+- 89 个场景 **95 个 `ParallaxLayer`** + 1 个 `ParallaxBackground`（`base_through_level.tscn`）迁移完成；另有 8 个场景仅覆盖继承 `floor_2` 的 `position`，一并转成 `scroll_offset`，合计修改 **97 个场景文件**；
+- 容器 `BackGround` 由 `ParallaxBackground` 改为 `CanvasLayer`（`layer = -100`、`follow_viewport_enabled = true`），每个层改为 `Parallax2D`；该组合经运行时 transform 对照与旧实现逐点一致；
+- 语义映射：`motion_scale→scroll_scale`、`motion_mirroring→repeat_size`、`motion_offset→scroll_offset`；`position` 在 `Parallax2D` 会被进入树时覆盖，统一转为 `scroll_offset`；
+- **验证**：89 个场景 × 4 个相机位置、**2,520 个节点** transform 对照；除 `level_2` 子像素（0.06–2.235 px）与 `level_4` 不可见 `stage` 外一致；7 个代表场景前后截图，3 个完全 0 差异，其余 4 个差异像素 ≤0.005%、最大通道差 ≤0.83；7 个代表关卡冒烟 PASS；全量回归 **128/128 PASS + 5 SKIP**（707.5s）。
+- 已知例外：`level_4` 的 `stage` 是 `BackGround` 下唯一非 Parallax 子节点且 `visible=false`；`CanvasLayer.follow_viewport_enabled` 会改变其 transform，但当前不可见，截图无差异。
 
 ## 5C. Phase 32 / 33（候选，均未启动）
 
@@ -144,7 +146,7 @@
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图**；下一批次为 31-1，Phase 30（ADR-023 为 `Proposed`）与 Phase 32/33 未启动。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。下一候选为 Phase 32/33；Phase 30（ADR-023 为 `Proposed`）暂缓。资源再次变化后必须重跑 PCK，不沿用本轮 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -162,7 +164,7 @@
 | 21-4 资源转换器 | 转换器 `--check`/`--self-test`；allowlist 只减不增；帧与时序证据 | 不重开构建器 |
 | 31-0A 废弃 API/常量/去重 | `check_all` 9/9；12 个 TileMap 覆盖关卡与 `level_1` 冒烟；changed-only 回归；图标行为对照 | 不以静态计数代替运行验证 |
 | 31-0B 数字图 | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
-| 31-1 视差 | 89 个场景逐场景截图前后对照；全量回归 | 不做纯文本替换 |
+| 31-1 视差 | 89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 | 不做纯文本替换 |
 
 ## 8. 阶段出口
 
@@ -191,7 +193,7 @@
 |:---|:---|
 | Phase 31-0A（TileMap/物理层/图标去重） | **完成（2026-11-01）** |
 | Phase 31-0B（数字图→BMFont） | **评估后拒绝（保留旧数字图，2026-11-01）** |
-| Phase 31-1（89 场景视差迁移） | 下一批次（未启动） |
+| Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
 | Phase 30（ADR-023 关卡布局契约） | 暂缓（设计完成，`Proposed`） |
 | Phase 32（UI Theme） | 未启动，依赖 Phase 30 |
 | Phase 33（装备数据） | 未启动，依赖 Phase 30 或 32 |

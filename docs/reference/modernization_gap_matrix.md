@@ -20,7 +20,7 @@
 | 不立项、随域收敛 | **B6 硬编码路径**、**B7 超大场景**、**B8 `Global` 调用密度** |
 | 外部约束、非架构问题 | **C1 Spine 版本** |
 
-**最重要的一条不一致**：同一引擎内并存两套视差实现——外部导入的 1,701 个关卡场景使用现代 `Parallax2D`，BHYH 原有 89 个场景使用**已废弃**的 `ParallaxLayer`。
+**曾存在的一条不一致（31-1 已消除）**：外部导入的 1,701 个关卡场景使用现代 `Parallax2D`，BHYH 原有 89 个场景使用**已废弃**的 `ParallaxLayer`；当前 BHYH 89 个场景已全部迁移，`ParallaxLayer`/`ParallaxBackground` 全仓 0。
 
 ---
 
@@ -40,9 +40,9 @@
 
 | 项 | 数值 | 判定 |
 |:---|---:|:---|
-| `ParallaxLayer` 场景 | **89** | A1 废弃 |
-| `ParallaxBackground` 场景 | **1**（`base_through_level.tscn`，所有关卡基类） | A1 废弃 |
-| `Parallax2D` 场景 | **1,701** | 现代，仅外部导入 |
+| `ParallaxLayer` 场景 | **0**（31-1 已迁移） | A1 已消除 |
+| `ParallaxBackground` 场景 | **0**（`base_through_level.tscn` 改为 `CanvasLayer`） | A1 已消除 |
+| `Parallax2D` 场景 | **1,790**（外部 1,701 + BHYH 89） | 现代 |
 | `TileMap` 节点 | **0**（31-0A 已迁移为 `TileMapLayer`） | A2 已消除 |
 | `theme_override_*` | **6,830** | B1 |
 | `.theme` 资源 | **0** | B1 |
@@ -77,13 +77,13 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | `ParallaxBackground` + `ParallaxLayer`，**89 个场景** + 关卡基类 `base_through_level.tscn` |
+| 现状 | 已消除：89 个场景 95 个 `ParallaxLayer` + 1 个 `ParallaxBackground` 全部迁移；`base_through_level.tscn` 容器改为 `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`），层为 `Parallax2D`（31-1） |
 | 官方依据 | `ParallaxLayer` 类文档：*Deprecated: Use the Parallax2D node instead.*；2D Parallax 教程：*recommended to use over the ParallaxLayer and ParallaxBackground nodes* |
-| 内部不一致 | 外部导入的 1,701 个关卡场景已是 `Parallax2D`，与新老两套并存 |
-| 语义映射 | `ParallaxLayer.motion_scale` → `Parallax2D.scroll_scale`；`motion_mirroring` → `repeat_size`；`ParallaxBackground.scroll_offset` → `screen_offset` |
-| 结构变化 | 容器层 `ParallaxBackground` 消失，每个 `ParallaxLayer` 变为独立 `Parallax2D`，**不是纯文本替换** |
-| 风险 | 89 个场景的视觉表现需逐个对照；`level_1.tscn` 等被大量关卡继承 |
-| 处置 | **Phase 31-1**；验收必须含截图前后对照，不能只跑静态门禁 |
+| 内部不一致 | 已消除：外部 1,701 个关卡与 BHYH 89 个场景统一为 `Parallax2D` |
+| 语义映射 | `motion_scale`→`scroll_scale`；`motion_mirroring`→`repeat_size`；`motion_offset`→`scroll_offset`；`position`→`scroll_offset`（Parallax2D 进树后 position 会被覆盖） |
+| 结构变化 | `ParallaxBackground` → `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`）；每层独立 `Parallax2D` |
+| 风险 | 已对照：89 场景 × 4 相机 2,520 节点 transform；7 个代表场景截图；`level_4` 不可见 `stage` 与 `level_2` 子像素为已知例外 |
+| 处置 | **31-1 已完成（2026-11-01）**；`ParallaxLayer`/`ParallaxBackground` 全仓 0；全量回归 128/128 PASS + 5 SKIP |
 
 #### A2 `TileMap` 使用已废弃 API
 
@@ -92,7 +92,7 @@
 | 现状 | 已消除：`base_through_level.tscn` 的 `floor` 为 `TileMapLayer`；12 个关卡覆盖已迁移为 `tile_map_data`（31-0A） |
 | 官方依据 | `TileMap` 类文档：*Deprecated: Use multiple TileMapLayer nodes instead.* |
 | 影响 | 迁移已完成：基类 1 个节点 + 12 个关卡覆盖（15 个有 `tile_set` 覆盖），23,561 个格子逐格一致；原估算「单行替换」不成立，实际需按二进制格式迁移 |
-| 处置 | **Phase 31-0**；官方编辑器提供图层提取，改动面小 |
+| 处置 | **31-0A 已完成**（2026-11-01）：`TileMapLayer` + 12 个 `tile_map_data` 覆盖；23,561 格逐格一致 |
 
 ### 3.2 B 级：结构性问题
 
@@ -196,7 +196,7 @@
 |:---|:---|:---|:---|:---|
 | **Phase 31-0A** | A2 `TileMap`→`TileMapLayer`（基类 1 + 12 个覆盖场景）、B4 具名物理层（30 处）、B5 去重（19 处） | API/普通重构 | 1–2 天 | 无 |
 | ~~Phase 31-0B~~ | B2 数字图→BMFont（3 文件 25 处）：评估后拒绝，保留旧数字图 | 方案替换 | 已评估 | 无（需同源 BMFont 才重启） |
-| **Phase 31-1** | 视差迁移：89 场景 `ParallaxLayer` → `Parallax2D`，含基类 `base_through_level.tscn` | API 迁移 | 3–5 天 | 31-0 完成；建立关卡截图对照基线 |
+| **Phase 31-1** | 视差迁移：89 场景 `ParallaxLayer` → `Parallax2D`（完成） | API 迁移 | 已实施 | 31-0 完成 |
 | **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,830 处 | **契约重构** | 试点 2 天 + 分批 | Phase 30 实施完成并验证契约模式工作量 |
 | **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | Phase 30/32 至少一个完成；需全量数值回归方案 |
 
@@ -210,7 +210,7 @@
 |:---|:---|:---|
 | 31-0A | `check_all` 9/9 PASS；12 个 TileMap 覆盖关卡逐格一致 + 代表关冒烟；`collision_layer` 裸整数归零；`load_item_icon` 定义数归零且 5 种图标语义有对照证据 | 不做全量截图 |
 | 31-0B | 已评估：字形/颜色/步进与截图对照不达标，保留旧实现并登记；未改代码 | 不为归零强行替换 |
-| 31-1 | 89 个场景**逐场景**截图前后对照；`level_regression_all.py` 无新增失败；`ParallaxLayer`/`ParallaxBackground` 全仓计数归零 | 不要求重跑平台性能 |
+| 31-1 | 已实施：89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 128/128 + 5 SKIP；`ParallaxLayer`/`ParallaxBackground` 归零 | 不重跑平台性能 |
 | 32 | 试点面板截图逐像素或逐控件对照；`.theme` 资源登记；迁移清单按面板分批 | 不在试点前批量迁移 |
 | 33 | 装备属性逐字段与迁移前一致（脚本比对）；`all_equipment_data.gd` 删除或降为生成器输出的薄封装 | 不改装备数值与掉落规则 |
 

@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1A（Windows-only）、21-1B `_bundled` 取证、21-1C Atlas typed accessor、21-3 工厂族与 21-4 资源遗留已完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。**Phase 31 已启动：31-0A 完成（TileMap→TileMapLayer、物理层具名常量、图标去重）；31-0B 评估后拒绝（保留旧数字图）；31-1 未启动。**
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 独立立项与平台发布验证进行中**：21-1A（Windows-only）、21-1B `_bundled` 取证、21-1C Atlas typed accessor、21-3 工厂族与 21-4 资源遗留已完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟。**Phase 31 已完成：31-0A 完成（TileMap→TileMapLayer、物理层具名常量、图标去重）；31-0B 评估后拒绝（保留旧数字图）；31-1 完成（ParallaxLayer/Background 归零）。**
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -17,7 +17,7 @@
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
 | Phase 30 关卡布局数据契约 | **暂缓（设计完成，未实施）** | 30-0 设计已产出（[ADR-023](../decisions/ADR-023-level-layout-data-contract.md) + [`level_layout_contract.md`](../reference/level_layout_contract.md)）；30-1~30-4 待启动，见 §3.5 |
-| Phase 31 引擎废弃 API 与局部现代化 | **进行中**：31-0A 完成（`TileMap`/具名物理层/重复函数）；31-0B BMFont 评估后拒绝；31-1 视差未启动 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
+| Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **候选（未启动，依赖 Phase 30）** | 6,830 处内联样式收敛到 Theme + 变体；见 §3.7 |
 | Phase 33 装备数据契约 | **候选（未启动，依赖 Phase 30/32 之一）** | 19,185 行脚本数据表转 Resource + 生成器；见 §3.8 |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
@@ -156,7 +156,7 @@ flowchart TD
 
 ### 3.6 Phase 31：引擎废弃 API 与局部现代化（候选）
 
-> **状态**：31-0A 已完成（2026-11-01）；31-0B 评估后拒绝（保留旧数字图）；31-1 未启动。**不依赖 Phase 30**。
+> **状态**：31-0A 已完成（2026-11-01）；31-0B 评估后拒绝（保留旧数字图）；31-1 已完成（2026-11-01）。**不依赖 Phase 30**。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
 
 **31-0 顺手包（A2/B2/B4/B5）**
@@ -166,14 +166,14 @@ flowchart TD
 - `collision_layer` 裸整数提取具名常量（30 处，`godot_design_standard.md` §6 要求）；
 - `func load_item_icon` 19 处重复定义提取共享实现。
 
-**31-1 视差节点迁移（A1）**
+**31-1 视差节点迁移（A1，已完成）**
 
-- 89 个场景 + 关卡基类的 `ParallaxBackground`/`ParallaxLayer` 迁移到 `Parallax2D`；
-- 语义映射：`motion_scale` → `scroll_scale`、`motion_mirroring` → `repeat_size`、`scroll_offset` → `screen_offset`；
-- 结构变化：容器层消失，每层变为独立 `Parallax2D`，**不是文本替换**；
-- 验收必须含逐场景截图前后对照与 `level_regression_all.py`。
+- 89 个场景 95 个 `ParallaxLayer` + 1 个 `ParallaxBackground` 迁移到 `Parallax2D`；8 个只覆盖继承 `floor_2` position 的场景一并转 `scroll_offset`；
+- 容器 `BackGround` 改为 `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`），每层独立 `Parallax2D`；
+- 语义映射：`motion_scale`→`scroll_scale`、`motion_mirroring`→`repeat_size`；`position`→`scroll_offset`（避免 Parallax2D 进树覆盖）；
+- 验收：89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图对照；全量回归 **128/128 PASS + 5 SKIP**；`ParallaxLayer`/`ParallaxBackground` 全仓 0。
 
-**阶段出口**：`ParallaxLayer`/`ParallaxBackground`/`TileMap` 全仓计数归零；数字图保留已验收的旧实现（BMFont 替换已拒绝）；`check_all` 全维 PASS。
+**阶段出口（已达成）**：`ParallaxLayer`/`ParallaxBackground`/`TileMap` 全仓计数归零；数字图保留已验收的旧实现（BMFont 替换已拒绝）；`check_all` 9/9 PASS；全量回归 128/128 PASS + 5 SKIP。
 
 ### 3.7 Phase 32：UI Theme 契约（候选）
 

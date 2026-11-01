@@ -602,7 +602,8 @@ classDiagram
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |
 | 存档 | 加密 JSON、`.tmp`/`.bak` 原子写、后台保存、稳定密钥 |
-| 质量门禁 | `check_all.py` 八维 + 运行期夹具，详见验收文档 |
+| 质量门禁 | `check_all.py` 九维 + 运行期夹具，详见验收文档 |
+| 视差背景 | `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`）+ 每层独立 `Parallax2D`；`ParallaxLayer`/`ParallaxBackground` 已归零 |
 
 ### 9.3 文档与代码的已知差异
 
