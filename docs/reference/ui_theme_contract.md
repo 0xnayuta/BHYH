@@ -926,6 +926,7 @@ python scripts/theme_override_audit.py --write-baseline
 - 十六个场景合计 **575 个 Control**；**456 个可见 Control** 的字体、字号、描边、阴影、颜色、StyleBox 与全局位置/尺寸迁移前后 **0 差异**；隐藏滚动公告与英雄名局部变换随父级动画变化，未参与可见对照；
 - 1600×1000 与 1280×800 各 16 张截图，共 **41,984,000 像素**；2 个捕获 worker 与 2 个比较 worker，冻结动画/时间后 **0 像素差异**；
 - 14/16 场景直接启动 0 ERROR / 0 WARNING；`base_through_level` 的 `BackGround/front` 既有节点错误与 `reward_box_2` 的空物品上下文错误在 HEAD 上复现；截图夹具注入名称后完成对照；
+- 3G7/3G8 涉及共享 HUD/关卡 UI：`level_1` 冒烟 PASS（24.3s，0 ERROR / 0 WARNING）；`level_regression_all --changed-only --diff-base HEAD~2` 因命中共享 HUD 回退全量，**PASS 128/128 + SKIP 5（307.3s）**，覆盖 `level_zhen_yao_tower` 与 `level_llbt`；
 - `theme_override_audit --check`、`contract_gate`、`scene_probe ui-theme` 与 `check_all --godot-bin` 9/9（28.65s）通过。
 
 ## 8. 分批与验收边界
