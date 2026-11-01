@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/skill/role_magic_need.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="2"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="RoleMagicNeed" type="Node2D" unique_id=1748371729]
 script = ExtResource("1")
@@ -16,13 +16,6 @@ layout_mode = 2
 color = Color(1, 0.545098, 0, 0.572549)
 
 [node name="Infor" type="Label" parent="PanelContainer" unique_id=1997013901]
+theme_type_variation = "RoleMagicNeedText"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 9
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 18

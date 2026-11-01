@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 310,
+    "direct_properties": 148,
     "animation_track_refs": 26,
-    "textual_references": 336,
-    "scenes": 47
+    "textual_references": 174,
+    "scenes": 31
   },
   "property_categories": {
-    "colors": 91,
-    "constants": 95,
-    "font_sizes": 46,
-    "fonts": 46,
-    "styles": 32
+    "colors": 37,
+    "constants": 45,
+    "font_sizes": 21,
+    "fonts": 22,
+    "styles": 23
   },
   "animation_categories": {
     "colors": 15,
@@ -22,11 +22,11 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 43,
-    "GridContainer": 6,
+    "Button": 26,
+    "GridContainer": 4,
     "HBoxContainer": 4,
-    "Label": 235,
-    "MarginContainer": 9,
+    "Label": 97,
+    "MarginContainer": 4,
     "Panel": 1,
     "ProgressBar": 2
   },
@@ -36,7 +36,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1046,
+    "scene_refs": 1078,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -154,9 +154,17 @@
       "BoxItemButton",
       "BoxItemNumber",
       "BoxLockMark",
+      "BuffIconTime",
+      "BuffIconTimes",
+      "BuffInformationMargin",
+      "BuffInformationRoot",
+      "BuffInformationText",
       "ChangeBackgroundButton",
       "ChangeBackgroundList",
       "ChangeBackgroundTitle",
+      "ChangeClothesAction",
+      "ChangeClothesName",
+      "ChangeClothesStatus",
       "ChooseItemHSeparator",
       "ChooseItemList",
       "ChooseItemTitle",
@@ -177,8 +185,12 @@
       "DecomposeHelpBody",
       "DecomposeHelpRow",
       "DecomposeHelpTitle",
+      "DecomposeItemList",
+      "DecomposeTitle",
+      "DecomposeTitleOrange",
       "DefeatMessageLabel",
       "DefeatYellowLabel",
+      "DivineForgeButton",
       "DjInfoDescription",
       "DjInfoInnerVBox",
       "DjInfoLine",
@@ -298,6 +310,7 @@
       "LhhjSelfValueInput",
       "LhhjTitle",
       "LhhjValueInput",
+      "LijiText",
       "LlbtCgmsButton",
       "LlbtCureText",
       "LlbtList",
@@ -339,10 +352,13 @@
       "Map0PlayerLevel",
       "Map3ButtonTitle",
       "Map3RegionLabel",
+      "MapLocationText",
+      "MapReturnText",
       "MenuActionButton",
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
       "MenuHintLabel",
+      "MessageShowText",
       "Monster139Button",
       "Monster139DamageLabel",
       "MonsterHeadBoss",
@@ -387,6 +403,8 @@
       "PelletTypeRow",
       "PetBackpackGrid",
       "PetBackpackSlotButton",
+      "PetBackpackSlotButtonEmpty",
+      "PetBackpackSlotNumber",
       "PetBookCount",
       "PetExpLabel",
       "PetFormationCost",
@@ -414,10 +432,12 @@
       "RewardItemGrid",
       "RewardQd",
       "RewardTitle",
+      "RoleButtonName",
       "RoleExpText",
       "RoleHpText",
       "RoleKeyLabel",
       "RoleLevelLabel",
+      "RoleMagicNeedText",
       "RoleMpText",
       "RoleNatureHp",
       "RoleNatureMp",
@@ -507,6 +527,11 @@
       "SynHelpSection",
       "SynHelpTitle",
       "SynHelpTitleRow",
+      "SynthesisCost",
+      "SynthesisItemName",
+      "SynthesisTargetDan",
+      "SynthesisTitle",
+      "TaskRewardTitle",
       "TaskTitleHeading",
       "TaskTitleStatus",
       "TowerButton",
@@ -514,6 +539,8 @@
       "TowerContent",
       "TowerFloorInput",
       "TowerFloorPicker",
+      "TowerFloorText",
+      "TowerHintText",
       "TowerLabel",
       "TowerOptions",
       "TowerPanel",
@@ -565,6 +592,7 @@
       "WanLingSectionTitle",
       "WanLingStagePanel",
       "WanLingTitle",
+      "ZhenFaActiveLabel",
       "ZhenFaCurrentLabel",
       "ZhenFaCurrentName",
       "ZhenFaEmptyButton",
@@ -595,18 +623,16 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1345
+    "variation_refs": 1377
   },
   "fonts": {
-    "scene_refs": 42,
-    "unique_files": 8,
+    "scene_refs": 22,
+    "unique_files": 6,
     "paths": [
       "res://Font/194_song_ti.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
-      "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
       "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
-      "res://Font/jin_qiao_jian_zhong_yuan.ttf",
       "res://Font/华康宋体W3.ttc",
       "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
     ]
@@ -697,14 +723,6 @@
       "direct": 6,
       "animation": 26
     },
-    "Scene/ldl/decompose.tscn": {
-      "direct": 12,
-      "animation": 0
-    },
-    "Scene/ldl/divine_forge.tscn": {
-      "direct": 11,
-      "animation": 0
-    },
     "Scene/ldl/forge_material_box.tscn": {
       "direct": 5,
       "animation": 0
@@ -713,20 +731,8 @@
       "direct": 5,
       "animation": 0
     },
-    "Scene/ldl/one_key_synthesis.tscn": {
-      "direct": 10,
-      "animation": 0
-    },
-    "Scene/ldl/synthesis.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
     "Scene/level/level_llbt.tscn": {
       "direct": 5,
-      "animation": 0
-    },
-    "Scene/level/level_zhen_yao_tower.tscn": {
-      "direct": 10,
       "animation": 0
     },
     "Scene/level/role_information.tscn": {
@@ -739,10 +745,6 @@
     },
     "Scene/main_menu/game_over_1.tscn": {
       "direct": 6,
-      "animation": 0
-    },
-    "Scene/main_menu/map_1.tscn": {
-      "direct": 11,
       "animation": 0
     },
     "Scene/main_menu/map_2.tscn": {
@@ -765,18 +767,6 @@
       "direct": 4,
       "animation": 0
     },
-    "Scene/other_scene/buff_icon.tscn": {
-      "direct": 10,
-      "animation": 0
-    },
-    "Scene/other_scene/buff_information.tscn": {
-      "direct": 12,
-      "animation": 0
-    },
-    "Scene/other_scene/c_hange_clothes_jm.tscn": {
-      "direct": 12,
-      "animation": 0
-    },
     "Scene/other_scene/lhhj_button.tscn": {
       "direct": 8,
       "animation": 0
@@ -789,10 +779,6 @@
       "direct": 7,
       "animation": 0
     },
-    "Scene/other_scene/role_button.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
     "Scene/other_scene/skill_icon.tscn": {
       "direct": 4,
       "animation": 0
@@ -801,28 +787,12 @@
       "direct": 8,
       "animation": 0
     },
-    "Scene/other_scene/zhenfalxbutton.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
     "Scene/pellet/pellet_sys_pic.tscn": {
       "direct": 5,
       "animation": 0
     },
-    "Scene/pet/pet_backpack_slot.tscn": {
-      "direct": 11,
-      "animation": 0
-    },
     "Scene/show_text/combo.tscn": {
       "direct": 3,
-      "animation": 0
-    },
-    "Scene/show_text/liji.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
-    "Scene/show_text/message_show.tscn": {
-      "direct": 9,
       "animation": 0
     },
     "Scene/show_text/moment_text.tscn": {
@@ -831,14 +801,6 @@
     },
     "Scene/show_text/touch_text.tscn": {
       "direct": 6,
-      "animation": 0
-    },
-    "Scene/skill/role_magic_need.tscn": {
-      "direct": 9,
-      "animation": 0
-    },
-    "Scene/task/task_reward.tscn": {
-      "direct": 9,
       "animation": 0
     },
     "Scene/tools/com_key.tscn": {

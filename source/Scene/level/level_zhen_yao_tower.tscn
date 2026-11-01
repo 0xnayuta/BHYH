@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Script/level/level_zhen_yao_tower.gd" id="2"]
 [ext_resource type="Texture2D" path="res://Art/zhenyaota/far.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/zhenyaota/near.png" id="4"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="5"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="Level_ZhenYaoTower" unique_id=1063028270 instance=ExtResource("1")]
 script = ExtResource("2")
@@ -33,25 +33,19 @@ texture = ExtResource("4")
 position = Vector2(600, 289)
 
 [node name="TowerFloorLabel" type="Label" parent="CanvasLayer" parent_id_path=PackedInt32Array(1390746928) index="4" unique_id=891314916]
+theme_type_variation = "TowerFloorText"
+theme = ExtResource("theme")
 offset_left = 292.0
 offset_top = 19.0
 offset_right = 507.0
 offset_bottom = 55.0
-theme_override_colors/font_color = Color(1, 0.933333, 0.713726, 1)
-theme_override_colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 22
 text = "第 1 层"
 
 [node name="TowerHintLabel" type="Label" parent="CanvasLayer" parent_id_path=PackedInt32Array(1390746928) index="5" unique_id=1027802165]
+theme_type_variation = "TowerHintText"
+theme = ExtResource("theme")
 offset_left = 292.0
 offset_top = 51.0
 offset_right = 507.0
 offset_bottom = 83.0
-theme_override_colors/font_color = Color(1, 0.933333, 0.713726, 1)
-theme_override_colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 16
 text = "本次积分 0"

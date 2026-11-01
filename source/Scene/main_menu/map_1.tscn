@@ -37,12 +37,11 @@
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/gg_2.png" id="35"]
 [ext_resource type="Texture2D" path="res://Art/level/level_9/80.png" id="36"]
 [ext_resource type="Texture2D" path="res://Art/main_game/463.png" id="37"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="38"]
 [ext_resource type="Texture2D" path="res://Art/game_2/button/button_return_main_menu.png" id="39"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="40"]
 [ext_resource type="Shader" path="res://Shader/level_button.gdshader" id="41"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hj1.png" id="42"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/hj2.png" id="43"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="ShaderMaterial" id="23"]
 shader = ExtResource("41")
@@ -1123,13 +1122,12 @@ position = Vector2(53, 103)
 texture = ExtResource("37")
 
 [node name="difu" type="Label" parent="Task/bg" unique_id=802238854]
+theme_type_variation = "MapLocationText"
+theme = ExtResource("theme")
 offset_left = -35.0
 offset_top = -9.99997
 offset_right = 37.0
 offset_bottom = 12.0
-theme_override_colors/font_color = Color(1, 0.290196, 0, 1)
-theme_override_fonts/font = ExtResource("38")
-theme_override_font_sizes/font_size = 18
 text = "任务"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1149,16 +1147,13 @@ texture_disabled = ExtResource("39")
 metadata/_edit_lock_ = true
 
 [node name="TEXT" type="Label" parent="turn_mainmenu" unique_id=238323628]
+theme_type_variation = "MapReturnText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 17.0
 offset_top = 86.0
 offset_right = 97.0
 offset_bottom = 111.0
-theme_override_colors/font_color = Color(1, 0.470588, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("40")
-theme_override_font_sizes/font_size = 15
 text = "返回主菜单"
 metadata/_edit_lock_ = true
 
@@ -1185,13 +1180,12 @@ position = Vector2(110.5, 98)
 texture = ExtResource("37")
 
 [node name="difu" type="Label" parent="level_lhhj/bg" unique_id=115170697]
+theme_type_variation = "MapLocationText"
+theme = ExtResource("theme")
 offset_left = -35.0
 offset_top = -9.99997
 offset_right = 37.0
 offset_bottom = 12.0
-theme_override_colors/font_color = Color(1, 0.290196, 0, 1)
-theme_override_fonts/font = ExtResource("38")
-theme_override_font_sizes/font_size = 18
 text = "轮回幻境"
 horizontal_alignment = 1
 vertical_alignment = 1
