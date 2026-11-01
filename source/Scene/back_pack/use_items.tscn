@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://Script/back_pack/use_items.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/66.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="4"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="6"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="UseItems" type="Node2D" unique_id=1303830862]
 script = ExtResource("1")
@@ -25,15 +25,12 @@ texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="." unique_id=667775652]
+theme_type_variation = "UseItemsTitle"
+theme = ExtResource("theme")
 offset_left = 437.0
 offset_top = 181.0
 offset_right = 497.0
 offset_bottom = 200.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 15
 text = "物品使用"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -46,24 +43,21 @@ offset_right = 399.0
 offset_bottom = 258.0
 
 [node name="ItemName" type="Label" parent="." unique_id=156646688]
+theme_type_variation = "UseItemName"
+theme = ExtResource("theme")
 offset_left = 403.0
 offset_top = 210.0
 offset_right = 473.0
 offset_bottom = 232.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 14
 text = "物品名称："
 
 [node name="Name" type="Label" parent="ItemName" unique_id=313448768]
+theme_type_variation = "UseItemStatName"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 66.0
 offset_right = 182.0
 offset_bottom = 21.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 13
 text = "强化石宝箱"
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -81,14 +75,12 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="UpLabel" type="Label" parent="." unique_id=1311828742]
+theme_type_variation = "UseItemUpLabel"
+theme = ExtResource("theme")
 offset_left = 539.0
 offset_top = 221.0
 offset_right = 558.0
 offset_bottom = 270.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 33
 text = "+"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -107,14 +99,12 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="DownLabel" type="Label" parent="." unique_id=5603546]
+theme_type_variation = "UseItemDownLabel"
+theme = ExtResource("theme")
 offset_left = 427.0
 offset_top = 215.0
 offset_right = 446.0
 offset_bottom = 269.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 37
 text = "-"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -133,14 +123,12 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="MaxLabel" type="Label" parent="." unique_id=809180216]
+theme_type_variation = "UseItemMaxLabel"
+theme = ExtResource("theme")
 offset_left = 563.0
 offset_top = 221.0
 offset_right = 584.0
 offset_bottom = 270.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 10
 text = "Max"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -159,27 +147,24 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="MinLabel" type="Label" parent="." unique_id=1046413124]
+theme_type_variation = "UseItemMinLabel"
+theme = ExtResource("theme")
 offset_left = 401.0
 offset_top = 221.0
 offset_right = 422.0
 offset_bottom = 270.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 11
 text = "Min"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="LineEdit" type="LineEdit" parent="." unique_id=314038327]
+theme_type_variation = "UseItemInput"
+theme = ExtResource("theme")
 offset_left = 456.0
 offset_top = 232.0
 offset_right = 523.063
 offset_bottom = 263.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
 text = "0"
 alignment = 1
 metadata/_edit_lock_ = true
@@ -197,13 +182,12 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="qd" type="Label" parent="QD" unique_id=405918437]
+theme_type_variation = "UseItemKey"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 92.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
 text = "确定"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -221,13 +205,12 @@ texture_disabled = ExtResource("5")
 metadata/_edit_lock_ = true
 
 [node name="qx" type="Label" parent="QX" unique_id=1138117743]
+theme_type_variation = "UseItemKey"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_right = 93.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
 text = "取消"
 horizontal_alignment = 1
 vertical_alignment = 1

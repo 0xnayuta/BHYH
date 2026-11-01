@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 1317,
+    "direct_properties": 988,
     "animation_track_refs": 26,
-    "textual_references": 1343,
-    "scenes": 89
+    "textual_references": 1014,
+    "scenes": 81
   },
   "property_categories": {
-    "colors": 399,
-    "constants": 331,
-    "font_sizes": 200,
-    "fonts": 210,
-    "styles": 177
+    "colors": 298,
+    "constants": 276,
+    "font_sizes": 147,
+    "fonts": 154,
+    "styles": 113
   },
   "animation_categories": {
     "colors": 15,
@@ -22,18 +22,17 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 283,
+    "Button": 174,
     "CheckBox": 4,
-    "GridContainer": 10,
+    "GridContainer": 8,
     "HBoxContainer": 13,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 934,
-    "LineEdit": 3,
-    "MarginContainer": 26,
-    "Panel": 5,
+    "Label": 736,
+    "MarginContainer": 17,
+    "Panel": 1,
     "ProgressBar": 2,
-    "VBoxContainer": 11,
+    "VBoxContainer": 7,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -42,7 +41,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 820,
+    "scene_refs": 898,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -138,9 +137,14 @@
       "BdSkillRow",
       "BdSkillTitle",
       "BdSkillUpgradeButton",
+      "BodyTrainingDetailAttribute",
+      "BodyTrainingDetailLevel",
+      "BodyTrainingDetailMaterial",
+      "BodyTrainingDetailProgress",
       "BodyTrainingHitButton",
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
+      "BodyTrainingTrainButton",
       "ChoosePlayerCardRow",
       "ChoosePlayerInfo",
       "ChoosePlayerProp",
@@ -183,6 +187,9 @@
       "EquipmentStatLabel",
       "EquipmentStatValue",
       "ForgeBoxRow",
+      "ForgeHelpLine",
+      "ForgeHelpList",
+      "ForgeHelpTitle",
       "ForgeItemName",
       "ForgeMaterialRow",
       "ForgeSoulLabel",
@@ -198,6 +205,15 @@
       "GameInfoSectionColumn",
       "GameInfoSectionTitle",
       "GameInfoTitle",
+      "GameNeedKnowButton",
+      "GameNeedKnowFooter",
+      "GameNeedKnowIntro",
+      "GameNeedKnowMargin",
+      "GameNeedKnowRule",
+      "GameNeedKnowRulePlain",
+      "GameNeedKnowTitle",
+      "GameNeedKnowVBox",
+      "GameNeedKnowYellow",
       "HcHelpColumnLabel",
       "HcHelpColumnRow",
       "HcHelpPage",
@@ -211,6 +227,10 @@
       "LdlReturnButton",
       "LdlTitleLabel",
       "LdlXqButton",
+      "LearnSkillButton",
+      "LearnSkillDescriptionButton",
+      "LearnSkillLevelValue",
+      "LearnSkillTitle",
       "LetterBody",
       "LetterPageButton",
       "LetterPageLabel",
@@ -259,6 +279,10 @@
       "MagicWeaponStat",
       "MagicWeaponStatHp",
       "MagicWeaponValue",
+      "MainMenuLabel",
+      "MainMenuPlayerDetail",
+      "MainMenuPlayerName",
+      "MainMenuTitle",
       "Map0CatalogButton",
       "Map0PlayerLevel",
       "Map3ButtonTitle",
@@ -391,6 +415,8 @@
       "SkillGridRow",
       "SkillIconButton",
       "SkillIconButtonTexture",
+      "SkillKeySetButton",
+      "SkillKeySetLabel",
       "SkillLabel",
       "SkillNeedLabel",
       "SkillPopupMenu",
@@ -428,6 +454,28 @@
       "TransTabRow",
       "TransTips",
       "TransTipsSmall",
+      "UseItemDownLabel",
+      "UseItemInput",
+      "UseItemKey",
+      "UseItemMaxLabel",
+      "UseItemMinLabel",
+      "UseItemName",
+      "UseItemStatName",
+      "UseItemUpLabel",
+      "UseItemsTitle",
+      "WanLingAttributeContent",
+      "WanLingAttributeMargin",
+      "WanLingAttributeText",
+      "WanLingAttributeTitle",
+      "WanLingCategoryList",
+      "WanLingCategoryMargin",
+      "WanLingCloseButton",
+      "WanLingEmptyLabel",
+      "WanLingMonsterGrid",
+      "WanLingSectionPanel",
+      "WanLingSectionTitle",
+      "WanLingStagePanel",
+      "WanLingTitle",
       "ZhenFaCurrentLabel",
       "ZhenFaCurrentName",
       "ZhenFaEmptyButton",
@@ -456,10 +504,10 @@
       "ZhenYanPropInfo",
       "ZhenYanPropList"
     ],
-    "variation_refs": 1119
+    "variation_refs": 1197
   },
   "fonts": {
-    "scene_refs": 113,
+    "scene_refs": 102,
     "unique_files": 11,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -533,10 +581,6 @@
       "direct": 18,
       "animation": 0
     },
-    "Scene/back_pack/use_items.tscn": {
-      "direct": 37,
-      "animation": 0
-    },
     "Scene/back_pack/use_magic_weapon.tscn": {
       "direct": 13,
       "animation": 0
@@ -587,10 +631,6 @@
     },
     "Scene/ldl/divine_forge.tscn": {
       "direct": 11,
-      "animation": 0
-    },
-    "Scene/ldl/forge_help.tscn": {
-      "direct": 41,
       "animation": 0
     },
     "Scene/ldl/forge_material_box.tscn": {
@@ -649,16 +689,8 @@
       "direct": 5,
       "animation": 0
     },
-    "Scene/main_menu/body_training_detail.tscn": {
-      "direct": 39,
-      "animation": 0
-    },
     "Scene/main_menu/game_over_1.tscn": {
       "direct": 6,
-      "animation": 0
-    },
-    "Scene/main_menu/main_menu.tscn": {
-      "direct": 42,
       "animation": 0
     },
     "Scene/main_menu/map_1.tscn": {
@@ -671,10 +703,6 @@
     },
     "Scene/main_menu/map_5.tscn": {
       "direct": 8,
-      "animation": 0
-    },
-    "Scene/main_menu/wan_ling_catalog_page.tscn": {
-      "direct": 40,
       "animation": 0
     },
     "Scene/monster/boss_info.tscn": {
@@ -715,10 +743,6 @@
     },
     "Scene/other_scene/choose_music.tscn": {
       "direct": 33,
-      "animation": 0
-    },
-    "Scene/other_scene/game_need_know.tscn": {
-      "direct": 44,
       "animation": 0
     },
     "Scene/other_scene/help_things.tscn": {
@@ -841,20 +865,12 @@
       "direct": 6,
       "animation": 0
     },
-    "Scene/skill/learn_skill.tscn": {
-      "direct": 41,
-      "animation": 0
-    },
     "Scene/skill/role_magic_need.tscn": {
       "direct": 9,
       "animation": 0
     },
     "Scene/skill/skill_awaken_popup.tscn": {
       "direct": 19,
-      "animation": 0
-    },
-    "Scene/skill/skill_key_set.tscn": {
-      "direct": 45,
       "animation": 0
     },
     "Scene/task/basic_task.tscn": {

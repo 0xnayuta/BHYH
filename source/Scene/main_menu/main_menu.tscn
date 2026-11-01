@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://Script/main_menu/main_menu.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/main_game/bg_extended_runtime.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/main_game/game_logo_runtime.png" id="3"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="4"]
 [ext_resource type="Texture2D" path="res://Art/main_game/begin0.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/main_game/begin2.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/main_game/begin1.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/main_game/b0.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/main_game/b1.png" id="9"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="Main_Menu" type="Node2D" unique_id=526767492]
 process_mode = 3
@@ -36,40 +36,32 @@ scale = Vector2(0.54, 0.54)
 texture = ExtResource("3")
 
 [node name="name" type="Label" parent="." unique_id=1333570763]
+theme_type_variation = "MainMenuPlayerName"
+theme = ExtResource("theme")
 visible = false
 offset_left = 736.0
 offset_top = 42.0
 offset_right = 888.0
 offset_bottom = 85.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 30
 text = "造梦西游之"
 
 [node name="name2" type="Label" parent="name" unique_id=2094523652]
+theme_type_variation = "MainMenuPlayerDetail"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -43.0
 offset_top = 44.0
 offset_right = 210.0
 offset_bottom = 71.0
-theme_override_colors/font_color = Color(0.945098, 0.556863, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 17
 text = "《八荒湮隳篇·力战七大魔王》"
 
 [node name="title" type="Label" parent="." unique_id=2079814506]
+theme_type_variation = "MainMenuTitle"
+theme = ExtResource("theme")
 offset_left = 32.0
 offset_top = 3.0
 offset_right = 907.0
 offset_bottom = 30.0
-theme_override_colors/font_color = Color(1, 0.396078, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 0.396078, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 18
 text = "本改版游戏完全免费 如果你是收费购买的 请申请退款 免费就是对作者最大的支持"
 
 [node name="Begin_game" type="TextureButton" parent="." unique_id=2006426438]
@@ -97,6 +89,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="music" unique_id=1048676382]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -109,10 +103,6 @@ offset_right = 52.0
 offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "切换音乐"
 
 [node name="gmae_help" type="TextureButton" parent="." unique_id=797242858]
@@ -130,6 +120,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="gmae_help" unique_id=335363277]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -142,10 +134,6 @@ offset_right = 52.0
 offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "游戏帮助"
 
 [node name="changeBg" type="TextureButton" parent="." unique_id=1677699433]
@@ -162,6 +150,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="changeBg" unique_id=2057528180]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -174,10 +164,6 @@ offset_right = 52.0
 offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "切换背景"
 
 [node name="tiaoguo" type="TextureButton" parent="." unique_id=829558534]
@@ -194,6 +180,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="tiaoguo_label" type="Label" parent="tiaoguo" unique_id=1714636004]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -206,10 +194,6 @@ offset_right = 60.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "跳过剧情"
 
 [node name="Letter" type="TextureButton" parent="." unique_id=1552204181]
@@ -226,6 +210,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="Letter" unique_id=2115427416]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -238,10 +224,6 @@ offset_right = 60.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "致玩家信"
 
 [node name="GameWarn" type="TextureButton" parent="." unique_id=8739319]
@@ -258,6 +240,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="GameWarn" unique_id=328253848]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -270,10 +254,6 @@ offset_right = 60.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "游戏须知"
 
 [node name="GameSet" type="TextureButton" parent="." unique_id=1147478889]
@@ -290,6 +270,8 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="Label" type="Label" parent="GameSet" unique_id=419294580]
+theme_type_variation = "MainMenuLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -302,10 +284,6 @@ offset_right = 60.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 26
 text = "游戏设置"
 
 [node name="ar_infer" type="Node2D" parent="." unique_id=1108165285]

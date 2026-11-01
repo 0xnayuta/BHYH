@@ -335,6 +335,124 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="learn_damage_normal"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.16, 0.09, 0.035, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.82, 0.61, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="learn_damage_pressed"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.09, 0.05, 0.02, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.72, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="learn_damage_hover"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.27, 0.15, 0.055, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.82, 0.39, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="learn_damage_focus"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.16, 0.09, 0.035, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.88, 0.5, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_stage_panel"]
+bg_color = Color(0.067, 0.078, 0.084, 0.985)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.73, 0.58, 0.28, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.72)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_close_normal"]
+bg_color = Color(0.28, 0.1, 0.105, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.42, 0.34, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_close_pressed"]
+bg_color = Color(0.19, 0.06, 0.065, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.6, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_close_hover"]
+bg_color = Color(0.46, 0.15, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.94, 0.72, 0.46, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_section_panel"]
+bg_color = Color(0.105, 0.125, 0.136, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.31, 0.36, 0.38, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
@@ -2965,3 +3083,295 @@ ForgeSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 ForgeSoulLabel/constants/outline_size = 10
 ForgeSoulLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
 ForgeSoulLabel/font_sizes/font_size = 22
+
+SkillKeySetButton/base_type = &"Button"
+SkillKeySetButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SkillKeySetButton/fonts/font = ExtResource("font_return")
+SkillKeySetButton/font_sizes/font_size = 25
+SkillKeySetButton/styles/normal = SubResource("empty_button")
+SkillKeySetButton/styles/pressed = SubResource("empty_button")
+SkillKeySetButton/styles/hover = SubResource("empty_button")
+SkillKeySetButton/styles/disabled = SubResource("empty_button")
+SkillKeySetButton/styles/focus = SubResource("empty_button")
+
+SkillKeySetLabel/base_type = &"Label"
+SkillKeySetLabel/colors/font_color = Color(0.964706, 1, 0, 1)
+SkillKeySetLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SkillKeySetLabel/constants/outline_size = 5
+SkillKeySetLabel/fonts/font = ExtResource("font_hy")
+SkillKeySetLabel/font_sizes/font_size = 18
+
+GameNeedKnowTitle/base_type = &"Label"
+GameNeedKnowTitle/constants/outline_size = 1
+GameNeedKnowTitle/fonts/font = ExtResource("font_meng")
+GameNeedKnowTitle/font_sizes/font_size = 35
+
+GameNeedKnowMargin/base_type = &"MarginContainer"
+GameNeedKnowMargin/constants/margin_left = 57
+
+GameNeedKnowVBox/base_type = &"VBoxContainer"
+GameNeedKnowVBox/constants/separation = 10
+
+GameNeedKnowIntro/base_type = &"Label"
+GameNeedKnowIntro/colors/font_color = Color(1, 1, 0, 1)
+GameNeedKnowIntro/colors/font_outline_color = Color(0, 0, 0, 1)
+GameNeedKnowIntro/constants/outline_size = 8
+GameNeedKnowIntro/fonts/font = ExtResource("font_return")
+GameNeedKnowIntro/font_sizes/font_size = 24
+
+GameNeedKnowRule/base_type = &"Label"
+GameNeedKnowRule/colors/font_outline_color = Color(1, 1, 1, 1)
+GameNeedKnowRule/constants/outline_size = 2
+GameNeedKnowRule/fonts/font = ExtResource("font_hk")
+
+GameNeedKnowRulePlain/base_type = &"Label"
+GameNeedKnowRulePlain/constants/outline_size = 2
+GameNeedKnowRulePlain/fonts/font = ExtResource("font_hk")
+
+GameNeedKnowButton/base_type = &"Button"
+GameNeedKnowButton/colors/font_color = Color(1, 1, 1, 1)
+GameNeedKnowButton/colors/font_hover_color = Color(0.890196, 0.388235, 0, 1)
+GameNeedKnowButton/colors/font_disabled_color = Color(1, 0, 0, 1)
+GameNeedKnowButton/fonts/font = ExtResource("font_return")
+GameNeedKnowButton/font_sizes/font_size = 20
+GameNeedKnowButton/styles/normal = SubResource("empty_button")
+GameNeedKnowButton/styles/pressed = SubResource("empty_button")
+GameNeedKnowButton/styles/hover = SubResource("empty_button")
+GameNeedKnowButton/styles/disabled = SubResource("empty_button")
+GameNeedKnowButton/styles/focus = SubResource("empty_button")
+
+GameNeedKnowYellow/base_type = &"Label"
+GameNeedKnowYellow/colors/font_color = Color(1, 1, 0, 1)
+
+GameNeedKnowFooter/base_type = &"Label"
+GameNeedKnowFooter/constants/outline_size = 2
+GameNeedKnowFooter/fonts/font = ExtResource("font_meng")
+
+MainMenuPlayerName/base_type = &"Label"
+MainMenuPlayerName/colors/font_color = Color(1, 1, 1, 1)
+MainMenuPlayerName/colors/font_outline_color = Color(1, 1, 1, 1)
+MainMenuPlayerName/constants/outline_size = 0
+MainMenuPlayerName/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuPlayerName/font_sizes/font_size = 30
+
+MainMenuPlayerDetail/base_type = &"Label"
+MainMenuPlayerDetail/colors/font_color = Color(0.945098, 0.556863, 0, 1)
+MainMenuPlayerDetail/constants/outline_size = 2
+MainMenuPlayerDetail/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuPlayerDetail/font_sizes/font_size = 17
+
+MainMenuTitle/base_type = &"Label"
+MainMenuTitle/colors/font_color = Color(1, 0.396078, 0, 1)
+MainMenuTitle/colors/font_outline_color = Color(1, 0.396078, 0, 1)
+MainMenuTitle/constants/outline_size = 1
+MainMenuTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuTitle/font_sizes/font_size = 18
+
+MainMenuLabel/base_type = &"Label"
+MainMenuLabel/colors/font_color = Color(1, 1, 1, 1)
+MainMenuLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+MainMenuLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuLabel/font_sizes/font_size = 26
+
+LearnSkillLevelValue/base_type = &"Label"
+LearnSkillLevelValue/colors/font_outline_color = Color(1, 1, 1, 1)
+LearnSkillLevelValue/constants/shadow_outline_size = -5
+LearnSkillLevelValue/fonts/font = ExtResource("font_main")
+LearnSkillLevelValue/font_sizes/font_size = 25
+
+LearnSkillTitle/base_type = &"Label"
+LearnSkillTitle/constants/outline_size = 2
+LearnSkillTitle/fonts/font = ExtResource("font_main")
+LearnSkillTitle/font_sizes/font_size = 30
+
+LearnSkillDescriptionButton/base_type = &"Button"
+LearnSkillDescriptionButton/colors/font_color = Color(0.95, 0.91, 0.78, 1)
+LearnSkillDescriptionButton/colors/font_pressed_color = Color(1, 0.75, 0.3, 1)
+LearnSkillDescriptionButton/colors/font_hover_color = Color(1, 0.58, 0.12, 1)
+LearnSkillDescriptionButton/constants/outline_size = 2
+LearnSkillDescriptionButton/fonts/font = ExtResource("font_main")
+LearnSkillDescriptionButton/font_sizes/font_size = 21
+LearnSkillDescriptionButton/styles/normal = SubResource("learn_damage_normal")
+LearnSkillDescriptionButton/styles/pressed = SubResource("learn_damage_pressed")
+LearnSkillDescriptionButton/styles/hover = SubResource("learn_damage_hover")
+LearnSkillDescriptionButton/styles/focus = SubResource("learn_damage_focus")
+
+LearnSkillButton/base_type = &"Button"
+LearnSkillButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+LearnSkillButton/fonts/font = ExtResource("font_main")
+LearnSkillButton/font_sizes/font_size = 25
+LearnSkillButton/styles/normal = SubResource("empty_button")
+LearnSkillButton/styles/pressed = SubResource("empty_button")
+LearnSkillButton/styles/hover = SubResource("empty_button")
+LearnSkillButton/styles/disabled = SubResource("empty_button")
+LearnSkillButton/styles/focus = SubResource("empty_button")
+
+ForgeHelpTitle/base_type = &"Label"
+ForgeHelpTitle/colors/font_color = Color(0.988235, 1, 0, 1)
+ForgeHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeHelpTitle/constants/outline_size = 5
+ForgeHelpTitle/fonts/font = ExtResource("font_return")
+ForgeHelpTitle/font_sizes/font_size = 35
+
+ForgeHelpList/base_type = &"VBoxContainer"
+ForgeHelpList/constants/separation = 15
+
+ForgeHelpLine/base_type = &"Label"
+ForgeHelpLine/colors/font_color = Color(1, 1, 1, 1)
+ForgeHelpLine/colors/font_outline_color = Color(0, 0, 0, 1)
+ForgeHelpLine/constants/outline_size = 5
+ForgeHelpLine/fonts/font = ExtResource("font_return")
+ForgeHelpLine/font_sizes/font_size = 20
+
+WanLingStagePanel/base_type = &"Panel"
+WanLingStagePanel/styles/panel = SubResource("wan_ling_stage_panel")
+
+WanLingTitle/base_type = &"Label"
+WanLingTitle/colors/font_color = Color(0.96, 0.81, 0.45, 1)
+WanLingTitle/colors/font_outline_color = Color(0.1, 0.055, 0.025, 1)
+WanLingTitle/constants/outline_size = 3
+WanLingTitle/fonts/font = ExtResource("font_main")
+WanLingTitle/font_sizes/font_size = 30
+
+WanLingCloseButton/base_type = &"Button"
+WanLingCloseButton/colors/font_color = Color(1, 0.91, 0.78, 1)
+WanLingCloseButton/colors/font_hover_color = Color(1, 1, 1, 1)
+WanLingCloseButton/fonts/font = ExtResource("font_main")
+WanLingCloseButton/font_sizes/font_size = 26
+WanLingCloseButton/styles/normal = SubResource("wan_ling_close_normal")
+WanLingCloseButton/styles/pressed = SubResource("wan_ling_close_pressed")
+WanLingCloseButton/styles/hover = SubResource("wan_ling_close_hover")
+
+WanLingSectionPanel/base_type = &"Panel"
+WanLingSectionPanel/styles/panel = SubResource("wan_ling_section_panel")
+
+WanLingCategoryMargin/base_type = &"MarginContainer"
+WanLingCategoryMargin/constants/margin_left = 9
+WanLingCategoryMargin/constants/margin_top = 10
+WanLingCategoryMargin/constants/margin_right = 9
+WanLingCategoryMargin/constants/margin_bottom = 10
+
+WanLingCategoryList/base_type = &"VBoxContainer"
+WanLingCategoryList/constants/separation = 7
+
+WanLingSectionTitle/base_type = &"Label"
+WanLingSectionTitle/colors/font_color = Color(0.76, 0.9, 0.83, 1)
+WanLingSectionTitle/fonts/font = ExtResource("font_main")
+WanLingSectionTitle/font_sizes/font_size = 23
+
+WanLingMonsterGrid/base_type = &"GridContainer"
+WanLingMonsterGrid/constants/h_separation = 8
+WanLingMonsterGrid/constants/v_separation = 9
+
+WanLingEmptyLabel/base_type = &"Label"
+WanLingEmptyLabel/colors/font_color = Color(0.67, 0.72, 0.73, 1)
+WanLingEmptyLabel/fonts/font = ExtResource("font_main")
+WanLingEmptyLabel/font_sizes/font_size = 24
+
+WanLingAttributeMargin/base_type = &"MarginContainer"
+WanLingAttributeMargin/constants/margin_left = 14
+WanLingAttributeMargin/constants/margin_top = 12
+WanLingAttributeMargin/constants/margin_right = 14
+WanLingAttributeMargin/constants/margin_bottom = 12
+
+WanLingAttributeContent/base_type = &"VBoxContainer"
+WanLingAttributeContent/constants/separation = 10
+
+WanLingAttributeTitle/base_type = &"Label"
+WanLingAttributeTitle/colors/font_color = Color(0.96, 0.81, 0.45, 1)
+WanLingAttributeTitle/fonts/font = ExtResource("font_main")
+WanLingAttributeTitle/font_sizes/font_size = 21
+
+WanLingAttributeText/base_type = &"Label"
+WanLingAttributeText/colors/font_color = Color(0.82, 0.89, 0.85, 1)
+WanLingAttributeText/fonts/font = ExtResource("font_main")
+WanLingAttributeText/font_sizes/font_size = 17
+
+BodyTrainingDetailLevel/base_type = &"Label"
+BodyTrainingDetailLevel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
+BodyTrainingDetailLevel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingDetailLevel/constants/outline_size = 3
+BodyTrainingDetailLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailLevel/font_sizes/font_size = 20
+
+BodyTrainingDetailAttribute/base_type = &"Label"
+BodyTrainingDetailAttribute/colors/font_color = Color(0.2, 0.12, 0.07, 1)
+BodyTrainingDetailAttribute/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailAttribute/font_sizes/font_size = 16
+
+BodyTrainingDetailProgress/base_type = &"Label"
+BodyTrainingDetailProgress/colors/font_color = Color(1, 1, 1, 1)
+BodyTrainingDetailProgress/colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
+BodyTrainingDetailProgress/constants/outline_size = 3
+BodyTrainingDetailProgress/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailProgress/font_sizes/font_size = 16
+
+BodyTrainingDetailMaterial/base_type = &"Label"
+BodyTrainingDetailMaterial/colors/font_color = Color(1, 0.941176, 0.470588, 1)
+BodyTrainingDetailMaterial/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingDetailMaterial/constants/outline_size = 3
+BodyTrainingDetailMaterial/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailMaterial/font_sizes/font_size = 16
+
+BodyTrainingTrainButton/base_type = &"Button"
+BodyTrainingTrainButton/colors/font_color = Color(1, 1, 1, 1)
+BodyTrainingTrainButton/colors/font_pressed_color = Color(1, 1, 1, 1)
+BodyTrainingTrainButton/colors/font_hover_color = Color(1, 1, 1, 1)
+BodyTrainingTrainButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingTrainButton/font_sizes/font_size = 14
+BodyTrainingTrainButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
+BodyTrainingTrainButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
+BodyTrainingTrainButton/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
+BodyTrainingTrainButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_selected")
+
+UseItemsTitle/base_type = &"Label"
+UseItemsTitle/colors/font_color = Color(1, 1, 0, 1)
+UseItemsTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemsTitle/constants/outline_size = 7
+UseItemsTitle/fonts/font = ExtResource("font_return")
+UseItemsTitle/font_sizes/font_size = 15
+
+UseItemName/base_type = &"Label"
+UseItemName/colors/font_color = Color(1, 1, 0, 1)
+UseItemName/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemName/constants/outline_size = 6
+UseItemName/font_sizes/font_size = 14
+
+UseItemStatName/base_type = &"Label"
+UseItemStatName/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemStatName/constants/outline_size = 5
+UseItemStatName/font_sizes/font_size = 13
+
+UseItemUpLabel/base_type = &"Label"
+UseItemUpLabel/colors/font_color = Color(1, 1, 0, 1)
+UseItemUpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemUpLabel/constants/outline_size = 5
+UseItemUpLabel/font_sizes/font_size = 33
+
+UseItemDownLabel/base_type = &"Label"
+UseItemDownLabel/colors/font_color = Color(1, 1, 0, 1)
+UseItemDownLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemDownLabel/constants/outline_size = 5
+UseItemDownLabel/font_sizes/font_size = 37
+
+UseItemMaxLabel/base_type = &"Label"
+UseItemMaxLabel/colors/font_color = Color(1, 1, 0, 1)
+UseItemMaxLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemMaxLabel/constants/outline_size = 5
+UseItemMaxLabel/font_sizes/font_size = 10
+
+UseItemMinLabel/base_type = &"Label"
+UseItemMinLabel/colors/font_color = Color(1, 1, 0, 1)
+UseItemMinLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemMinLabel/constants/outline_size = 5
+UseItemMinLabel/font_sizes/font_size = 11
+
+UseItemInput/base_type = &"LineEdit"
+UseItemInput/colors/font_color = Color(1, 1, 1, 1)
+UseItemInput/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemInput/constants/outline_size = 6
+
+UseItemKey/base_type = &"Label"
+UseItemKey/colors/font_color = Color(1, 1, 0, 1)
+UseItemKey/colors/font_outline_color = Color(0, 0, 0, 1)
+UseItemKey/constants/outline_size = 5
