@@ -1,10 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/back_pack/equipment_properies.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="2"]
 [ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="3"]
-[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="4"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="5"]
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
@@ -46,10 +43,9 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 
 [node name="eq_name" type="Label" parent="pro_wk/information/inf/VBoxContainer2" unique_id=221674352]
+theme_type_variation = "EquipmentName"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "名称："
 vertical_alignment = 1
 
@@ -216,12 +212,9 @@ layout_mode = 2
 size_flags_vertical = 0
 
 [node name="Title" type="Label" parent="pro_wk/information/inf/BsProp" unique_id=1717163715]
+theme_type_variation = "EquipmentTitle"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 20
 text = "宝石加成"
 vertical_alignment = 1
 
@@ -327,22 +320,16 @@ layout_mode = 2
 size_flags_vertical = 0
 
 [node name="eq_ms" type="Label" parent="pro_wk/information/inf/VBoxContainer" unique_id=892546864]
+theme_type_variation = "EquipmentDescription"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 13
 text = "描述："
 vertical_alignment = 1
 autowrap_mode = 1
 
 [node name="eq_sj" type="Label" parent="pro_wk/information/inf/VBoxContainer" unique_id=1014534768]
+theme_type_variation = "EquipmentSale"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
-theme_override_colors/font_outline_color = Color(1, 0.6, 0.2, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 17
 text = "售价："
 vertical_alignment = 1

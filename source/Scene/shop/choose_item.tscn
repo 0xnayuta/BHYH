@@ -1,34 +1,13 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/shop/choose_item.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="2"]
 [ext_resource type="Texture2D" path="res://Art/backpack/119.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/backpack/121.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/backpack/124.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/backpack/126.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/220.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="8"]
-
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0.568627, 0.32549, 0.129412, 1)
-
-[sub_resource type="StyleBoxEmpty" id="2"]
-
-[sub_resource type="StyleBoxFlat" id="3"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 4
-corner_radius_top_right = 11
-corner_radius_bottom_right = 6
-corner_detail = 16
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="4"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 3
-border_width_top = 3
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 16
-corner_detail = 9
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ChooseItem" type="Node2D" unique_id=1534666826]
 script = ExtResource("1")
@@ -77,33 +56,25 @@ color = Color(0.643137, 0.407843, 0.117647, 1)
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="BG" unique_id=234143102]
+theme_type_variation = "ChooseItemTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 62.0
 offset_top = 2.0
 offset_right = 237.0
 offset_bottom = 31.0
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 25
 text = "请选择一个物品"
 metadata/_edit_lock_ = true
 
 [node name="ItemList" type="ItemList" parent="BG" unique_id=712200983]
+theme_type_variation = "ChooseItemList"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 16.0
 offset_top = 43.0
 offset_right = 288.0
 offset_bottom = 233.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/guide_color = Color(1, 1, 1, 1)
-theme_override_constants/v_separation = 5
-theme_override_constants/outline_size = 10
-theme_override_constants/icon_margin = 4
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 19
-theme_override_styles/panel = SubResource("1")
-theme_override_styles/focus = SubResource("2")
 max_columns = 3
 metadata/_edit_lock_ = true
 
@@ -144,41 +115,43 @@ texture_disabled = ExtResource("7")
 metadata/_edit_lock_ = true
 
 [node name="VSeparator" type="VSeparator" parent="." unique_id=1145054871]
+theme_type_variation = "ChooseItemVSeparator"
+theme = ExtResource("theme")
 visible = false
 offset_left = -160.0
 offset_top = -148.0
 offset_right = -150.0
 offset_bottom = 142.0
-theme_override_constants/separation = 10
-theme_override_styles/separator = SubResource("3")
 metadata/_edit_lock_ = true
 
 [node name="VSeparator2" type="VSeparator" parent="." unique_id=387186543]
+theme_type_variation = "ChooseItemVSeparator"
+theme = ExtResource("theme")
 visible = false
 offset_left = 162.0
 offset_top = -148.0
 offset_right = 172.0
 offset_bottom = 142.0
-theme_override_constants/separation = 10
-theme_override_styles/separator = SubResource("3")
 metadata/_edit_lock_ = true
 
 [node name="HSeparator" type="HSeparator" parent="." unique_id=2085584683]
+theme_type_variation = "ChooseItemHSeparator"
+theme = ExtResource("theme")
 visible = false
 offset_left = -157.0
 offset_top = 139.0
 offset_right = 169.0
 offset_bottom = 145.0
-theme_override_styles/separator = SubResource("4")
 metadata/_edit_lock_ = true
 
 [node name="HSeparator2" type="HSeparator" parent="." unique_id=1651230749]
+theme_type_variation = "ChooseItemHSeparator"
+theme = ExtResource("theme")
 visible = false
 offset_left = -157.0
 offset_top = -150.0
 offset_right = 169.0
 offset_bottom = -143.0
-theme_override_styles/separator = SubResource("4")
 metadata/_edit_lock_ = true
 
 [connection signal="item_selected" from="BG/ItemList" to="." method="_on_item_list_item_selected"]

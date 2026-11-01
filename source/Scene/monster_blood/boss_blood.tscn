@@ -3,8 +3,6 @@
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_properies_box/128.png" id="1"]
 [ext_resource type="Script" path="res://Script/monster/boss_blood.gd" id="2"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_properies_box/124.png" id="3"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="4"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="5"]
 [ext_resource type="Texture2D" path="res://Art/blood/3f6eddd8be6d616c93f13b2bfd1f892c.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/protect_1.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/protect_2.png" id="8"]
@@ -36,6 +34,7 @@
 [ext_resource type="Texture2D" path="res://Art/add_effect/buff_icon/flls.png" id="34"]
 [ext_resource type="Texture2D" path="res://Art/add_effect/buff_icon/zznh.png" id="35"]
 [ext_resource type="Texture2D" path="res://Art/add_effect/buff_icon/jgz.png" id="36"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="BossBlood" type="TextureProgressBar" unique_id=1205296666]
 custom_minimum_size = Vector2(0, 60)
@@ -59,32 +58,26 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="MonsterName" type="Label" parent="." unique_id=615130387]
+theme_type_variation = "BossBloodName"
+theme = ExtResource("theme")
 z_index = 1
 layout_mode = 0
 offset_left = -220.0
 offset_top = 4.0
 offset_right = 35.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 13
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 29
 horizontal_alignment = 2
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="BloodValue" type="Label" parent="." unique_id=891244535]
+theme_type_variation = "BossBloodValue"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 45.0
 offset_top = 4.0
 offset_right = 340.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 14
 text = "39/20(58.93%)"
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -137,32 +130,26 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="ProtectName" type="Label" parent="ProtectBar" unique_id=2066826321]
+theme_type_variation = "BossProtectName"
+theme = ExtResource("theme")
 visible = false
 layout_mode = 0
 offset_left = -277.0
 offset_top = 4.0
 offset_right = 23.0
 offset_bottom = 34.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 13
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 24
 text = "护盾"
 horizontal_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="ProtectValue" type="Label" parent="ProtectBar" unique_id=20373991]
+theme_type_variation = "BossBloodValue"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 23.0
 offset_top = 6.0
 offset_right = 331.0
 offset_bottom = 27.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 7
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true

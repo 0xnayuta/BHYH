@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 734,
+    "direct_properties": 510,
     "animation_track_refs": 26,
-    "textual_references": 760,
-    "scenes": 73
+    "textual_references": 536,
+    "scenes": 61
   },
   "property_categories": {
-    "colors": 227,
-    "constants": 216,
-    "font_sizes": 113,
-    "fonts": 115,
-    "styles": 63
+    "colors": 156,
+    "constants": 155,
+    "font_sizes": 70,
+    "fonts": 77,
+    "styles": 52
   },
   "animation_categories": {
     "colors": 15,
@@ -22,18 +22,13 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 99,
-    "CheckBox": 4,
-    "GridContainer": 8,
+    "Button": 75,
+    "GridContainer": 6,
     "HBoxContainer": 11,
-    "HSeparator": 2,
-    "ItemList": 10,
-    "Label": 562,
-    "MarginContainer": 17,
+    "Label": 392,
+    "MarginContainer": 13,
     "Panel": 1,
-    "ProgressBar": 2,
-    "VBoxContainer": 4,
-    "VSeparator": 4
+    "ProgressBar": 2
   },
   "unassigned_direct": 0,
   "themes": {
@@ -41,7 +36,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 947,
+    "scene_refs": 1002,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -105,6 +100,11 @@
       "AutoBattleSkillRow",
       "AutoBattleSmallButton",
       "AutoBattleTitle",
+      "BacisInfoLevel",
+      "BacisInfoName",
+      "BacisInfoNumber",
+      "BacisInfoTime",
+      "BacisInfoVBox",
       "BackpackCoinLabel",
       "BackpackCompactVBox",
       "BackpackEquipmentColumn",
@@ -132,6 +132,9 @@
       "BackpackToggleButton",
       "BackpackWingLabel",
       "BackpackWingsButton",
+      "BasicTaskNumber",
+      "BasicTaskText",
+      "BasicTaskTitle",
       "BdSkillColumn",
       "BdSkillName",
       "BdSkillRow",
@@ -145,6 +148,16 @@
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
       "BodyTrainingTrainButton",
+      "BossBloodName",
+      "BossBloodValue",
+      "BossProtectName",
+      "ChangeBackgroundButton",
+      "ChangeBackgroundList",
+      "ChangeBackgroundTitle",
+      "ChooseItemHSeparator",
+      "ChooseItemList",
+      "ChooseItemTitle",
+      "ChooseItemVSeparator",
       "ChooseMusicList",
       "ChoosePlayerCardRow",
       "ChoosePlayerInfo",
@@ -161,6 +174,13 @@
       "DecomposeHelpTitle",
       "DefeatMessageLabel",
       "DefeatYellowLabel",
+      "DjInfoDescription",
+      "DjInfoInnerVBox",
+      "DjInfoLine",
+      "DjInfoMargin",
+      "DjInfoSale",
+      "DjInfoTitle",
+      "DjInfoVBox",
       "DjSellCloseButton",
       "DjSellInfo",
       "DjSellMargin",
@@ -184,13 +204,17 @@
       "EndStatsRealHit",
       "EndStatsRealHurt",
       "EndStatsWarning",
+      "EquipmentDescription",
       "EquipmentInfoGroup",
       "EquipmentItemHighlight",
       "EquipmentItemMeta",
+      "EquipmentName",
       "EquipmentPanelPadding",
+      "EquipmentSale",
       "EquipmentStatGroup",
       "EquipmentStatLabel",
       "EquipmentStatValue",
+      "EquipmentTitle",
       "ForgeBoxRow",
       "ForgeHelpLine",
       "ForgeHelpList",
@@ -315,6 +339,8 @@
       "MonsterHelpWarning",
       "MosaicHelpLine",
       "MosaicHelpTitle",
+      "MysteryShopLabel",
+      "MysteryShopPurchase",
       "PelletAttTab",
       "PelletAttValue",
       "PelletCritTab",
@@ -367,6 +393,9 @@
       "PetStatName",
       "PetStatPanel",
       "PetStatValue",
+      "RewardItemGrid",
+      "RewardQd",
+      "RewardTitle",
       "RoleExpText",
       "RoleHpText",
       "RoleKeyLabel",
@@ -429,6 +458,10 @@
       "ShopTabText",
       "ShopTabTextStrong",
       "ShopTitleText",
+      "SkillAwakenCheck",
+      "SkillAwakenDescription",
+      "SkillAwakenName",
+      "SkillAwakenStatus",
       "SkillCooldownLabel",
       "SkillGridRow",
       "SkillIconButton",
@@ -453,6 +486,8 @@
       "SynHelpSection",
       "SynHelpTitle",
       "SynHelpTitleRow",
+      "TaskTitleHeading",
+      "TaskTitleStatus",
       "TowerButton",
       "TowerButtonSmall",
       "TowerContent",
@@ -484,6 +519,9 @@
       "UseItemStatName",
       "UseItemUpLabel",
       "UseItemsTitle",
+      "UserKeyKey",
+      "UserKeyTime",
+      "UserKeyTimeSmall",
       "VictoryInfoLabel",
       "VictoryMoreButton",
       "WanLingAttributeContent",
@@ -527,17 +565,16 @@
       "ZhenYanPropInfo",
       "ZhenYanPropList"
     ],
-    "variation_refs": 1246
+    "variation_refs": 1301
   },
   "fonts": {
-    "scene_refs": 87,
-    "unique_files": 10,
+    "scene_refs": 65,
+    "unique_files": 9,
     "paths": [
       "res://Font/194_song_ti.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
       "res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
-      "res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
       "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
       "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
       "res://Font/jin_qiao_jian_zhong_yuan.ttf",
@@ -593,14 +630,6 @@
   "scenes": {
     "Scene/back_pack/box_1.tscn": {
       "direct": 15,
-      "animation": 0
-    },
-    "Scene/back_pack/dj_information.tscn": {
-      "direct": 19,
-      "animation": 0
-    },
-    "Scene/back_pack/equipment_properies.tscn": {
-      "direct": 18,
       "animation": 0
     },
     "Scene/back_pack/use_magic_weapon.tscn": {
@@ -715,16 +744,8 @@
       "direct": 1,
       "animation": 0
     },
-    "Scene/monster_blood/boss_blood.tscn": {
-      "direct": 20,
-      "animation": 0
-    },
     "Scene/monster_blood/monster_blood_bar.tscn": {
       "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/bacis_ar_button.tscn": {
-      "direct": 21,
       "animation": 0
     },
     "Scene/other_scene/basic_monment_info.tscn": {
@@ -741,10 +762,6 @@
     },
     "Scene/other_scene/c_hange_clothes_jm.tscn": {
       "direct": 12,
-      "animation": 0
-    },
-    "Scene/other_scene/change_back_ground.tscn": {
-      "direct": 22,
       "animation": 0
     },
     "Scene/other_scene/help_things.tscn": {
@@ -783,10 +800,6 @@
       "direct": 7,
       "animation": 0
     },
-    "Scene/other_scene/reward_interface.tscn": {
-      "direct": 16,
-      "animation": 0
-    },
     "Scene/other_scene/role_button.tscn": {
       "direct": 9,
       "animation": 0
@@ -819,16 +832,8 @@
       "direct": 11,
       "animation": 0
     },
-    "Scene/shop/choose_item.tscn": {
-      "direct": 18,
-      "animation": 0
-    },
     "Scene/shop/mystery_shop.tscn": {
       "direct": 12,
-      "animation": 0
-    },
-    "Scene/shop/mystery_shop_item_box.tscn": {
-      "direct": 16,
       "animation": 0
     },
     "Scene/show_text/choose_scene.tscn": {
@@ -859,28 +864,12 @@
       "direct": 9,
       "animation": 0
     },
-    "Scene/skill/skill_awaken_popup.tscn": {
-      "direct": 19,
-      "animation": 0
-    },
-    "Scene/task/basic_task.tscn": {
-      "direct": 20,
-      "animation": 0
-    },
     "Scene/task/task_reward.tscn": {
       "direct": 9,
       "animation": 0
     },
-    "Scene/task/task_title.tscn": {
-      "direct": 18,
-      "animation": 0
-    },
     "Scene/tools/com_key.tscn": {
       "direct": 8,
-      "animation": 0
-    },
-    "Scene/tools/user_key.tscn": {
-      "direct": 17,
       "animation": 0
     }
   },

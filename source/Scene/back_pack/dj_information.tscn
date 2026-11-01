@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/back_pack/dj_information.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="2"]
 [ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="3"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="dj_information" type="Control" unique_id=527276617]
 layout_mode = 3
@@ -32,32 +32,33 @@ offset_bottom = 228.0
 metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=56060824]
+theme_type_variation = "DjInfoMargin"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer" unique_id=458428895]
+theme_type_variation = "DjInfoVBox"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 0
 
 [node name="title" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=289452351]
+theme_type_variation = "DjInfoTitle"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
 text = "道具详情"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="name" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=2081685337]
+theme_type_variation = "DjInfoLine"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "名称："
 
 [node name="lx" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1621932404]
+theme_type_variation = "DjInfoLine"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "类型："
 
 [node name="fgx" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/lx" unique_id=574581109]
@@ -66,8 +67,9 @@ scale = Vector2(0.66805, 1)
 texture = ExtResource("3")
 
 [node name="pz" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=981021209]
+theme_type_variation = "DjInfoLine"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "品质："
 
 [node name="fgx2" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/pz" unique_id=1142057259]
@@ -76,8 +78,9 @@ scale = Vector2(0.66805, 1)
 texture = ExtResource("3")
 
 [node name="sl" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1196374986]
+theme_type_variation = "DjInfoLine"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "数量："
 
 [node name="fgx2" type="Sprite2D" parent="MarginContainer/MarginContainer/VBoxContainer/sl" unique_id=606992918]
@@ -86,22 +89,20 @@ scale = Vector2(0.66805, 1)
 texture = ExtResource("3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1980566775]
+theme_type_variation = "DjInfoInnerVBox"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_constants/separation = 16
 
 [node name="ms" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=384625159]
+theme_type_variation = "DjInfoDescription"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 15
 text = "描述："
 vertical_alignment = 1
 autowrap_mode = 1
 
 [node name="sj" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1805706074]
+theme_type_variation = "DjInfoSale"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.768627, 0, 1)
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 18
 text = "售价："

@@ -4,9 +4,8 @@
 [ext_resource type="Texture2D" path="res://Art/show_text/wkbg.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="4"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="5"]
 [ext_resource type="Texture2D" path="res://Art/show_text/gxhd.png" id="6"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="7"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "pl"
@@ -61,20 +60,13 @@ texture_disabled = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="qd" type="Label" parent="Wkbg/Close" unique_id=687760248]
+theme_type_variation = "RewardQd"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("5")
-theme_override_font_sizes/font_size = 18
 text = "确定"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -86,15 +78,12 @@ texture = ExtResource("6")
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="Wkbg" unique_id=992231778]
+theme_type_variation = "RewardTitle"
+theme = ExtResource("theme")
 offset_left = -164.474
 offset_top = -36.8421
 offset_right = 210.526
 offset_bottom = -2.8421
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("7")
-theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -106,11 +95,11 @@ offset_bottom = 175.333
 metadata/_edit_lock_ = true
 
 [node name="ItemList" type="GridContainer" parent="Wkbg/ScrollContainer" unique_id=906791699]
+theme_type_variation = "RewardItemGrid"
+theme = ExtResource("theme")
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-theme_override_constants/h_separation = 40
-theme_override_constants/v_separation = 33
 columns = 6
 
 [node name="pl" type="AnimationPlayer" parent="." unique_id=1612558965]

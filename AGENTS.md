@@ -39,8 +39,8 @@
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
   - `reference/module_api_matrix.md`：Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项；
-  - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4 批次结果、变体命名、例外、审计与迁移边界；
-  - `roadmap/current-iteration.md`：Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4 UI Theme 与面板批次、Phase 32-3G-5/33 规划；Phase 30 已完成并归档，Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`，Phase 18~20 归档见 `archive/iteration_18_20_comprehensive_closeout.md`；
+  - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5 批次结果、变体命名、例外、审计与迁移边界；
+  - `roadmap/current-iteration.md`：Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5 UI Theme 与面板批次、Phase 32-3G-6/33 规划；Phase 30 已完成并归档，Phase 17 归档见 `archive/iteration_17_gameplay_module_boundaries.md`，Phase 18~20 归档见 `archive/iteration_18_20_comprehensive_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
