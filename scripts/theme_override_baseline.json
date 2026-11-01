@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 988,
+    "direct_properties": 734,
     "animation_track_refs": 26,
-    "textual_references": 1014,
-    "scenes": 81
+    "textual_references": 760,
+    "scenes": 73
   },
   "property_categories": {
-    "colors": 298,
-    "constants": 276,
-    "font_sizes": 147,
-    "fonts": 154,
-    "styles": 113
+    "colors": 227,
+    "constants": 216,
+    "font_sizes": 113,
+    "fonts": 115,
+    "styles": 63
   },
   "animation_categories": {
     "colors": 15,
@@ -22,17 +22,17 @@
   },
   "node_types": {
     "<inherited>": 10,
-    "Button": 174,
+    "Button": 99,
     "CheckBox": 4,
     "GridContainer": 8,
-    "HBoxContainer": 13,
+    "HBoxContainer": 11,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 736,
+    "Label": 562,
     "MarginContainer": 17,
     "Panel": 1,
     "ProgressBar": 2,
-    "VBoxContainer": 7,
+    "VBoxContainer": 4,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -41,7 +41,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 898,
+    "scene_refs": 947,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -145,6 +145,7 @@
       "BodyTrainingLevelLabel",
       "BodyTrainingMainLabel",
       "BodyTrainingTrainButton",
+      "ChooseMusicList",
       "ChoosePlayerCardRow",
       "ChoosePlayerInfo",
       "ChoosePlayerProp",
@@ -158,10 +159,14 @@
       "DecomposeHelpBody",
       "DecomposeHelpRow",
       "DecomposeHelpTitle",
+      "DefeatMessageLabel",
+      "DefeatYellowLabel",
       "DjSellCloseButton",
       "DjSellInfo",
       "DjSellMargin",
       "DjSellNumber",
+      "DsgChooseButton",
+      "DsgChooseTitle",
       "EndStatsColumn",
       "EndStatsCritCount",
       "EndStatsCure",
@@ -220,6 +225,7 @@
       "HcHelpTabLabel",
       "HcHelpTabRow",
       "HcHelpTitle",
+      "HelpContentList",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -236,12 +242,18 @@
       "LetterPageLabel",
       "LetterTitle",
       "LevelInfoAlertText",
+      "LevelInfoChallengeTitle",
+      "LevelInfoDialogTitle",
       "LevelInfoDropGroup",
+      "LevelInfoEnemyTitle",
+      "LevelInfoFall",
       "LevelInfoFilterGroup",
       "LevelInfoModeButton",
       "LevelInfoModeGroup",
+      "LevelInfoMyPj",
       "LevelInfoShadowText",
       "LevelInfoSuccessText",
+      "LevelInfoTitle",
       "LevelInfoValue",
       "LhhjActionLabel",
       "LhhjAltValueInput",
@@ -263,6 +275,10 @@
       "LlbtTztttwButton",
       "LlbtTztxsButton",
       "LlbtWxmsButton",
+      "LxdyButtonRow",
+      "LxdyLastTimes",
+      "LxdyStageInfo",
+      "LxdyStageLabel",
       "MagicHelpBody",
       "MagicHelpTitle",
       "MagicWeaponAction",
@@ -297,6 +313,8 @@
       "MonsterHelpTitle",
       "MonsterHelpTitleLarge",
       "MonsterHelpWarning",
+      "MosaicHelpLine",
+      "MosaicHelpTitle",
       "PelletAttTab",
       "PelletAttValue",
       "PelletCritTab",
@@ -454,6 +472,9 @@
       "TransTabRow",
       "TransTips",
       "TransTipsSmall",
+      "TransmogrifiedActionLabel",
+      "TransmogrifiedEqName",
+      "TransmogrifiedHaveOrNot",
       "UseItemDownLabel",
       "UseItemInput",
       "UseItemKey",
@@ -463,6 +484,8 @@
       "UseItemStatName",
       "UseItemUpLabel",
       "UseItemsTitle",
+      "VictoryInfoLabel",
+      "VictoryMoreButton",
       "WanLingAttributeContent",
       "WanLingAttributeMargin",
       "WanLingAttributeText",
@@ -504,14 +527,13 @@
       "ZhenYanPropInfo",
       "ZhenYanPropList"
     ],
-    "variation_refs": 1197
+    "variation_refs": 1246
   },
   "fonts": {
-    "scene_refs": 102,
-    "unique_files": 11,
+    "scene_refs": 87,
+    "unique_files": 10,
     "paths": [
       "res://Font/194_song_ti.ttf",
-      "res://Font/1_aaa_fz_cu_yuan_m03_s.ttf",
       "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
       "res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
@@ -641,10 +663,6 @@
       "direct": 5,
       "animation": 0
     },
-    "Scene/ldl/mosaic_help.tscn": {
-      "direct": 35,
-      "animation": 0
-    },
     "Scene/ldl/one_key_synthesis.tscn": {
       "direct": 10,
       "animation": 0
@@ -655,14 +673,6 @@
     },
     "Scene/ldl/synthesis.tscn": {
       "direct": 9,
-      "animation": 0
-    },
-    "Scene/level/defeat.tscn": {
-      "direct": 30,
-      "animation": 0
-    },
-    "Scene/level/dsg_choose.tscn": {
-      "direct": 36,
       "animation": 0
     },
     "Scene/level/level_17.tscn": {
@@ -679,10 +689,6 @@
     },
     "Scene/level/role_information.tscn": {
       "direct": 2,
-      "animation": 0
-    },
-    "Scene/level/victory.tscn": {
-      "direct": 33,
       "animation": 0
     },
     "Scene/magic_weapon/magic_weapon_skill_cd.tscn": {
@@ -741,16 +747,8 @@
       "direct": 22,
       "animation": 0
     },
-    "Scene/other_scene/choose_music.tscn": {
-      "direct": 33,
-      "animation": 0
-    },
     "Scene/other_scene/help_things.tscn": {
       "direct": 15,
-      "animation": 0
-    },
-    "Scene/other_scene/level_info.tscn": {
-      "direct": 34,
       "animation": 0
     },
     "Scene/other_scene/lhhj_button.tscn": {
@@ -767,10 +765,6 @@
     },
     "Scene/other_scene/lsh.tscn": {
       "direct": 16,
-      "animation": 0
-    },
-    "Scene/other_scene/lxdy.tscn": {
-      "direct": 31,
       "animation": 0
     },
     "Scene/other_scene/monster_head.tscn": {
@@ -799,10 +793,6 @@
     },
     "Scene/other_scene/skill_icon.tscn": {
       "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/transmogtified_box.tscn": {
-      "direct": 22,
       "animation": 0
     },
     "Scene/other_scene/twenty_eight_constellations.tscn": {

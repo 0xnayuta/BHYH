@@ -9,7 +9,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序、近期重点与独立立项的唯一来源 |
-| [`current-iteration.md`](current-iteration.md) | **Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3 完成 / 33 未启动**：UI Theme 基线、`game_set`、标签/Button 密集、混合控件与多批标签/混合/技能/主菜单批次、装备数据契约；Phase 30 已归档 |
+| [`current-iteration.md`](current-iteration.md) | **Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4 完成 / 33 未启动**：UI Theme 基线、`game_set`、标签/Button 密集、混合控件与多批标签/混合/技能/主菜单/关卡结算批次、装备数据契约；Phase 30 已归档 |
 | [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`../archive/iteration_15_app_orchestration_lifecycle.md`](../archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`../archive/iteration_13_visual_asset_contract.md`](../archive/iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口归档：阶段回顾、冻结/遗留项、发布验收与后续顺序 |
@@ -20,7 +20,7 @@
 | [`../archive/iteration_30_level_layout_data_contract.md`](../archive/iteration_30_level_layout_data_contract.md) | Phase 30 关卡布局数据契约归档 |
 | [`../archive/iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾归档 |
 
-当前内容版本 **6.9**。Phase 12~20 已完成并归档；Phase 30 已完成并归档，Phase 31 已完成；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3 已完成、32-3G-4 未启动；Phase 33 未启动；批次与顺序见 [`current-iteration.md`](current-iteration.md)。当前迭代页不复制候选队列；目录治理不再作为全仓搬迁阶段。
+当前内容版本 **6.9**。Phase 12~20 已完成并归档；Phase 30 已完成并归档，Phase 31 已完成；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4 已完成、32-3G-5 未启动；Phase 33 未启动；批次与顺序见 [`current-iteration.md`](current-iteration.md)。当前迭代页不复制候选队列；目录治理不再作为全仓搬迁阶段。
 
 ## 2. 边界
 

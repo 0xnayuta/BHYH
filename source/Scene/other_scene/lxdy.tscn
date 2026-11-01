@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy0.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy01.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/main_game/463.png" id="5"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="6"]
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy1.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy11.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy2.png" id="9"]
@@ -16,12 +15,11 @@
 [ext_resource type="Texture2D" path="res://Art/level/level_lxdy/lxdy41.png" id="14"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/41.png" id="15"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_lsh/41_1.png" id="16"]
-[ext_resource type="FontFile" path="res://Font/194_song_ti.ttf" id="17"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="18"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_1.png" id="19"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/close_2.png" id="20"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cy_2.png" id="21"]
 [ext_resource type="Texture2D" path="res://Art/game_3/other_map_button/cy_1.png" id="22"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="lxdy" type="Node2D" unique_id=789403766]
 script = ExtResource("1")
@@ -69,6 +67,8 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("5")
 
 [node name="Label" type="Label" parent="Hdgqbg/xss/TextureButton" unique_id=482141526]
+theme_type_variation = "LxdyStageLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -83,9 +83,6 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.89, 0.89)
 pivot_offset = Vector2(30.6784, 11.5285)
-theme_override_colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "五官王"
 
 [node name="xbj" type="TextureButton" parent="Hdgqbg" unique_id=1551388509]
@@ -120,6 +117,8 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("5")
 
 [node name="Label" type="Label" parent="Hdgqbg/xbj/TextureButton" unique_id=335156320]
+theme_type_variation = "LxdyStageLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -134,9 +133,6 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.89, 0.89)
 pivot_offset = Vector2(30.6784, 11.5285)
-theme_override_colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "卞城王"
 
 [node name="xts" type="TextureButton" parent="Hdgqbg" unique_id=106544906]
@@ -171,6 +167,8 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("5")
 
 [node name="Label" type="Label" parent="Hdgqbg/xts/TextureButton" unique_id=1297046160]
+theme_type_variation = "LxdyStageLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -185,9 +183,6 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.89, 0.89)
 pivot_offset = Vector2(30.6784, 11.5285)
-theme_override_colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "泰山王"
 
 [node name="xwk" type="TextureButton" parent="Hdgqbg" unique_id=1360807004]
@@ -222,6 +217,8 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("5")
 
 [node name="Label" type="Label" parent="Hdgqbg/xwk/TextureButton" unique_id=821370390]
+theme_type_variation = "LxdyStageLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -236,9 +233,6 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.89, 0.89)
 pivot_offset = Vector2(30.6784, 11.5285)
-theme_override_colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "都市王"
 
 [node name="xhy" type="TextureButton" parent="Hdgqbg" unique_id=2138332974]
@@ -273,6 +267,8 @@ texture_hover = ExtResource("5")
 texture_disabled = ExtResource("5")
 
 [node name="Label" type="Label" parent="Hdgqbg/xhy/TextureButton" unique_id=1404020175]
+theme_type_variation = "LxdyStageLabel"
+theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -287,9 +283,6 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.89, 0.89)
 pivot_offset = Vector2(30.6784, 11.5285)
-theme_override_colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-theme_override_fonts/font = ExtResource("6")
-theme_override_font_sizes/font_size = 20
 text = "平等王"
 
 [node name="xs" type="TextureButton" parent="Hdgqbg" unique_id=1003065425]
@@ -304,50 +297,42 @@ texture_hover = ExtResource("16")
 texture_disabled = ExtResource("15")
 
 [node name="ButtonList" type="HBoxContainer" parent="Hdgqbg" unique_id=170614427]
+theme_type_variation = "LxdyButtonRow"
+theme = ExtResource("theme")
 visible = false
 offset_left = -269.0
 offset_top = -152.0
 offset_right = 263.0
 offset_bottom = 32.0
-theme_override_constants/separation = -10
 
 [node name="ButtonList2" type="HBoxContainer" parent="Hdgqbg" unique_id=234811789]
+theme_type_variation = "LxdyButtonRow"
+theme = ExtResource("theme")
 visible = false
 offset_left = -269.0
 offset_top = 23.0
 offset_right = 263.0
 offset_bottom = 207.0
-theme_override_constants/separation = -10
 
 [node name="LastTimes" type="Label" parent="Hdgqbg" unique_id=1192067440]
+theme_type_variation = "LxdyLastTimes"
+theme = ExtResource("theme")
 visible = false
 offset_left = 211.0
 offset_top = 63.0
 offset_right = 212.0
 offset_bottom = 94.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("17")
-theme_override_font_sizes/font_size = 20
 text = "∞"
 metadata/_edit_lock_ = true
 
 [node name="StageInfo" type="Label" parent="Hdgqbg" unique_id=199231601]
+theme_type_variation = "LxdyStageInfo"
+theme = ExtResource("theme")
 visible = false
 offset_left = -281.0
 offset_top = 92.0
 offset_right = 264.0
 offset_bottom = 167.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("18")
-theme_override_font_sizes/font_size = 16
 text = "搜遍了整个天庭，都找不到玉帝。唯一的可能就是玉帝被人挟持，通过混沌之门传送到另一个世界里了。而要进入那个世界必须拥有通天令牌和足够强的实力。斩妖除魔，找到罪魁祸首，加油挑战自我吧！"
 autowrap_mode = 1
 metadata/_edit_lock_ = true

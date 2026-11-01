@@ -3,16 +3,13 @@
 [ext_resource type="Script" path="res://Scene/other_scene/level_info.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/show_text/502.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/level/challenge/ui_beizhan_anniudi.png" id="3"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="4"]
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/8.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/backpack/clothes_change/10.png" id="6"]
 [ext_resource type="Texture2D" path="res://Art/level_info_bg/hgs.png" id="7"]
-[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="8"]
 [ext_resource type="Texture2D" path="res://Art/level/challenge/ui_beizhan_bmiaoshudi.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/level/challenge/ui_beizhan_diaoluodi.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="11"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="12"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="13"]
 [ext_resource type="Texture2D" path="res://Art/set_menu/653.png" id="14"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
@@ -65,17 +62,14 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="ColorRect/TextureRect" unique_id=370603995]
+theme_type_variation = "LevelInfoTitle"
+theme = ExtResource("theme")
 texture_filter = 2
 layout_mode = 0
 offset_left = 60.0
 offset_top = 39.0
 offset_right = 650.0
 offset_bottom = 78.0
-theme_override_colors/font_color = Color(0.952941, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 35
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -106,17 +100,14 @@ expand_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="Enemy" type="Label" parent="ColorRect/TextureRect" unique_id=2005534293]
+theme_type_variation = "LevelInfoEnemyTitle"
+theme = ExtResource("theme")
 texture_filter = 2
 layout_mode = 0
 offset_left = 21.5915
 offset_top = 94.3182
 offset_right = 141.592
 offset_bottom = 129.318
-theme_override_colors/font_color = Color(0.952941, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("8")
-theme_override_font_sizes/font_size = 24
 text = "敌方阵容："
 metadata/_edit_lock_ = true
 
@@ -202,17 +193,14 @@ texture_hover = ExtResource("12")
 stretch_mode = 0
 
 [node name="Label" type="Label" parent="ColorRect/TextureRect/Challenge" unique_id=2004074714]
+theme_type_variation = "LevelInfoChallengeTitle"
+theme = ExtResource("theme")
 texture_filter = 2
 layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 101.0
 offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.929412, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 31
 text = "挑战"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -231,36 +219,26 @@ horizontal_alignment = 2
 metadata/_edit_lock_ = true
 
 [node name="MyPj" type="Label" parent="ColorRect/TextureRect/pj" unique_id=462612246]
+theme_type_variation = "LevelInfoMyPj"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 279.523
 offset_top = -0.568178
 offset_right = 329.523
 offset_bottom = 28.4318
-theme_override_colors/font_color = Color(0.505882, 0.505882, 0.505882, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("4")
-theme_override_font_sizes/font_size = 22
 text = "暂无"
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="Fall" type="Label" parent="ColorRect/TextureRect" unique_id=1479877707]
+theme_type_variation = "LevelInfoFall"
+theme = ExtResource("theme")
 texture_filter = 2
 layout_mode = 0
 offset_left = 12.0
 offset_top = 352.773
 offset_right = 207.0
 offset_bottom = 422.773
-theme_override_colors/font_color = Color(0.952941, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0.952941, 1, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 metadata/_edit_lock_ = true
 
@@ -415,16 +393,13 @@ grow_vertical = 2
 texture = ExtResource("14")
 
 [node name="Title" type="Label" parent="FourSwordsModeDialog/BG" unique_id=1775033405]
+theme_type_variation = "LevelInfoDialogTitle"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 30.0
 offset_top = 42.0
 offset_right = 290.0
 offset_bottom = 78.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("13")
-theme_override_font_sizes/font_size = 23
 text = "请选择挑战模式"
 horizontal_alignment = 1
 vertical_alignment = 1

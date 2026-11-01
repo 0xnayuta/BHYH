@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" path="res://Art/level/settlement/459.png" id="7"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="9"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="10"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="11"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="Animation" id="1"]
 length = 0.001
@@ -819,34 +819,26 @@ texture_disabled = ExtResource("8")
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="lqjl" unique_id=1374948681]
+theme_type_variation = "DefeatYellowLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("10")
 text = "正义奖励"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="." unique_id=1127204832]
+theme_type_variation = "DefeatMessageLabel"
+theme = ExtResource("theme")
 visible = false
 offset_left = 7.0
 offset_top = 435.0
 offset_right = 934.005
 offset_bottom = 486.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 19
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 1
@@ -875,17 +867,13 @@ texture_disabled = ExtResource("8")
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="text/js" unique_id=2013772812]
+theme_type_variation = "DefeatYellowLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("10")
 text = "接受力量"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -904,17 +892,13 @@ texture_disabled = ExtResource("8")
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="text/jj" unique_id=100712147]
+theme_type_variation = "DefeatYellowLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("10")
 text = "我不需要"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -934,17 +918,13 @@ texture_disabled = ExtResource("8")
 metadata/_edit_lock_ = true
 
 [node name="text" type="Label" parent="text/yjjj" unique_id=1205650127]
+theme_type_variation = "DefeatYellowLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 91.0
 offset_bottom = 33.0
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("10")
 text = "不再提示"
 horizontal_alignment = 1
 vertical_alignment = 1

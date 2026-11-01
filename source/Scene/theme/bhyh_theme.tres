@@ -13,6 +13,8 @@
 [ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="font_wo"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
+[ext_resource type="FontFile" path="res://Font/194_song_ti.ttf" id="font_194_song_ti"]
+[ext_resource type="FontFile" path="res://Font/jin_qiao_jian_zhong_yuan.ttf" id="font_jin_qiao"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
 
@@ -3375,3 +3377,174 @@ UseItemKey/base_type = &"Label"
 UseItemKey/colors/font_color = Color(1, 1, 0, 1)
 UseItemKey/colors/font_outline_color = Color(0, 0, 0, 1)
 UseItemKey/constants/outline_size = 5
+
+DsgChooseTitle/base_type = &"Label"
+DsgChooseTitle/colors/font_color = Color(1, 1, 0, 1)
+DsgChooseTitle/colors/font_outline_color = Color(1, 1, 0, 1)
+DsgChooseTitle/constants/outline_size = 1
+DsgChooseTitle/fonts/font = ExtResource("font_hk")
+DsgChooseTitle/font_sizes/font_size = 25
+
+HelpContentList/base_type = &"VBoxContainer"
+HelpContentList/constants/separation = 15
+
+DsgChooseButton/base_type = &"Button"
+DsgChooseButton/colors/font_hover_color = Color(1, 0.427451, 0, 1)
+DsgChooseButton/styles/normal = SubResource("empty_button")
+DsgChooseButton/styles/pressed = SubResource("empty_button")
+DsgChooseButton/styles/hover = SubResource("empty_button")
+DsgChooseButton/styles/disabled = SubResource("empty_button")
+DsgChooseButton/styles/focus = SubResource("empty_button")
+
+MosaicHelpTitle/base_type = &"Label"
+MosaicHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+MosaicHelpTitle/constants/outline_size = 5
+MosaicHelpTitle/fonts/font = ExtResource("font_hy")
+MosaicHelpTitle/font_sizes/font_size = 30
+
+MosaicHelpLine/base_type = &"Label"
+MosaicHelpLine/colors/font_shadow_color = Color(0, 0, 0, 1)
+MosaicHelpLine/constants/outline_size = 2
+MosaicHelpLine/constants/shadow_outline_size = 12
+MosaicHelpLine/fonts/font = ExtResource("font_hk")
+MosaicHelpLine/font_sizes/font_size = 17
+
+LevelInfoTitle/base_type = &"Label"
+LevelInfoTitle/colors/font_color = Color(0.952941, 1, 0, 1)
+LevelInfoTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoTitle/constants/outline_size = 10
+LevelInfoTitle/fonts/font = ExtResource("font_hy")
+LevelInfoTitle/font_sizes/font_size = 35
+
+LevelInfoEnemyTitle/base_type = &"Label"
+LevelInfoEnemyTitle/colors/font_color = Color(0.952941, 1, 0, 1)
+LevelInfoEnemyTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoEnemyTitle/constants/outline_size = 10
+LevelInfoEnemyTitle/fonts/font = ExtResource("font_main")
+LevelInfoEnemyTitle/font_sizes/font_size = 24
+
+LevelInfoChallengeTitle/base_type = &"Label"
+LevelInfoChallengeTitle/colors/font_color = Color(0.929412, 1, 0, 1)
+LevelInfoChallengeTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoChallengeTitle/constants/outline_size = 9
+LevelInfoChallengeTitle/fonts/font = ExtResource("font_hy")
+LevelInfoChallengeTitle/font_sizes/font_size = 31
+
+LevelInfoMyPj/base_type = &"Label"
+LevelInfoMyPj/colors/font_color = Color(0.505882, 0.505882, 0.505882, 1)
+LevelInfoMyPj/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoMyPj/constants/outline_size = 12
+LevelInfoMyPj/fonts/font = ExtResource("font_hy")
+LevelInfoMyPj/font_sizes/font_size = 22
+
+LevelInfoFall/base_type = &"Label"
+LevelInfoFall/colors/font_color = Color(0.952941, 1, 0, 1)
+LevelInfoFall/colors/font_shadow_color = Color(0, 0, 0, 1)
+LevelInfoFall/colors/font_outline_color = Color(0.952941, 1, 0, 1)
+LevelInfoFall/constants/shadow_offset_x = 0
+LevelInfoFall/constants/shadow_offset_y = 0
+LevelInfoFall/constants/outline_size = 1
+LevelInfoFall/constants/shadow_outline_size = 10
+LevelInfoFall/fonts/font = ExtResource("font_hk")
+LevelInfoFall/font_sizes/font_size = 20
+
+LevelInfoDialogTitle/base_type = &"Label"
+LevelInfoDialogTitle/colors/font_color = Color(1, 1, 0, 1)
+LevelInfoDialogTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LevelInfoDialogTitle/constants/outline_size = 6
+LevelInfoDialogTitle/fonts/font = ExtResource("font_hk")
+LevelInfoDialogTitle/font_sizes/font_size = 23
+
+ChooseMusicList/base_type = &"VBoxContainer"
+ChooseMusicList/constants/separation = 6
+
+VictoryInfoLabel/base_type = &"Label"
+VictoryInfoLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+VictoryInfoLabel/constants/outline_size = 6
+VictoryInfoLabel/fonts/font = ExtResource("font_hy")
+VictoryInfoLabel/font_sizes/font_size = 18
+
+VictoryMoreButton/base_type = &"Button"
+VictoryMoreButton/colors/font_color = Color(0.933333, 0.505882, 0, 1)
+VictoryMoreButton/colors/font_pressed_color = Color(0.933333, 0.505882, 0, 1)
+VictoryMoreButton/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+VictoryMoreButton/colors/font_disabled_color = Color(0.933333, 0.505882, 0, 1)
+VictoryMoreButton/colors/font_outline_color = Color(0, 0, 0, 1)
+VictoryMoreButton/constants/outline_size = 5
+VictoryMoreButton/fonts/font = ExtResource("font_hy")
+VictoryMoreButton/font_sizes/font_size = 30
+VictoryMoreButton/styles/normal = SubResource("empty_button")
+VictoryMoreButton/styles/pressed = SubResource("empty_button")
+VictoryMoreButton/styles/hover = SubResource("empty_button")
+VictoryMoreButton/styles/disabled = SubResource("empty_button")
+VictoryMoreButton/styles/focus = SubResource("empty_button")
+
+LxdyStageLabel/base_type = &"Label"
+LxdyStageLabel/colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
+LxdyStageLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LxdyStageLabel/font_sizes/font_size = 20
+
+LxdyButtonRow/base_type = &"HBoxContainer"
+LxdyButtonRow/constants/separation = -10
+
+LxdyLastTimes/base_type = &"Label"
+LxdyLastTimes/colors/font_shadow_color = Color(0, 0, 0, 1)
+LxdyLastTimes/constants/shadow_offset_x = 0
+LxdyLastTimes/constants/shadow_offset_y = 0
+LxdyLastTimes/constants/outline_size = 1
+LxdyLastTimes/constants/shadow_outline_size = 10
+LxdyLastTimes/fonts/font = ExtResource("font_194_song_ti")
+LxdyLastTimes/font_sizes/font_size = 20
+
+LxdyStageInfo/base_type = &"Label"
+LxdyStageInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
+LxdyStageInfo/constants/shadow_offset_x = 0
+LxdyStageInfo/constants/shadow_offset_y = 0
+LxdyStageInfo/constants/outline_size = 1
+LxdyStageInfo/constants/shadow_outline_size = 10
+LxdyStageInfo/fonts/font = ExtResource("font_hk")
+LxdyStageInfo/font_sizes/font_size = 16
+
+DefeatYellowLabel/base_type = &"Label"
+DefeatYellowLabel/colors/font_color = Color(1, 1, 0, 1)
+DefeatYellowLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+DefeatYellowLabel/colors/font_outline_color = Color(1, 1, 0, 1)
+DefeatYellowLabel/constants/outline_size = 1
+DefeatYellowLabel/constants/shadow_outline_size = 5
+DefeatYellowLabel/fonts/font = ExtResource("font_hk")
+
+DefeatMessageLabel/base_type = &"Label"
+DefeatMessageLabel/colors/font_color = Color(1, 1, 1, 1)
+DefeatMessageLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
+DefeatMessageLabel/colors/font_outline_color = Color(1, 1, 1, 1)
+DefeatMessageLabel/constants/outline_size = 1
+DefeatMessageLabel/fonts/font = ExtResource("font_hk")
+DefeatMessageLabel/font_sizes/font_size = 19
+
+TransmogrifiedEqName/base_type = &"Label"
+TransmogrifiedEqName/colors/font_color = Color(1, 1, 1, 1)
+TransmogrifiedEqName/colors/font_shadow_color = Color(0, 0, 0, 1)
+TransmogrifiedEqName/colors/font_outline_color = Color(1, 1, 1, 1)
+TransmogrifiedEqName/constants/shadow_offset_x = 0
+TransmogrifiedEqName/constants/shadow_offset_y = 0
+TransmogrifiedEqName/constants/outline_size = 2
+TransmogrifiedEqName/constants/shadow_outline_size = 11
+TransmogrifiedEqName/fonts/font = ExtResource("font_hk")
+
+TransmogrifiedHaveOrNot/base_type = &"Label"
+TransmogrifiedHaveOrNot/colors/font_color = Color(1, 0, 0, 1)
+TransmogrifiedHaveOrNot/colors/font_shadow_color = Color(0, 0, 0, 1)
+TransmogrifiedHaveOrNot/colors/font_outline_color = Color(1, 0, 0, 1)
+TransmogrifiedHaveOrNot/constants/shadow_offset_x = 0
+TransmogrifiedHaveOrNot/constants/shadow_offset_y = 0
+TransmogrifiedHaveOrNot/constants/outline_size = 1
+TransmogrifiedHaveOrNot/constants/shadow_outline_size = 8
+TransmogrifiedHaveOrNot/fonts/font = ExtResource("font_main")
+TransmogrifiedHaveOrNot/font_sizes/font_size = 15
+
+TransmogrifiedActionLabel/base_type = &"Label"
+TransmogrifiedActionLabel/colors/font_color = Color(1, 1, 0, 1)
+TransmogrifiedActionLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+TransmogrifiedActionLabel/constants/outline_size = 6
+TransmogrifiedActionLabel/fonts/font = ExtResource("font_jin_qiao")
+TransmogrifiedActionLabel/font_sizes/font_size = 13
