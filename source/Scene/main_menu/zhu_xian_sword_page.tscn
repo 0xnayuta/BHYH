@@ -1,40 +1,74 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/main_menu/zhu_xian_sword_page.gd" id="1"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/1.png" id="2"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/98.png" id="3"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/10.png" id="4"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/3.png" id="5"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/7.png" id="6"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/5.png" id="7"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/15.png" id="8"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/1.png" id="9"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="10"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/1.png" id="11"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_84/1.png" id="12"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/1.png" id="13"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/1.png" id="14"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_87/1.png" id="15"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/26.png" id="16"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/32.png" id="17"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/30.png" id="18"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/28.png" id="19"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/images/76.png" id="20"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/2.png" id="21"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/2.png" id="22"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/2.png" id="23"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/2.png" id="24"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/3.png" id="25"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/3.png" id="26"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/3.png" id="27"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/4.png" id="28"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/4.png" id="29"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/4.png" id="30"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/4.png" id="31"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_75/5.png" id="32"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_47/5.png" id="33"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_61/5.png" id="34"]
+
 [ext_resource type="Texture2D" path="res://Art/zhuxianjianzhen/zhu_xian_sword/sprites/DefineSprite_96/5.png" id="35"]
+
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ZhuXianSwordPage" type="Control" unique_id=113292984]
 layout_mode = 3
@@ -120,17 +154,14 @@ mouse_filter = 2
 texture = ExtResource("9")
 
 [node name="Level" type="Label" parent="Stage/SwordCard1" unique_id=1698749514]
+theme_type_variation = "SwordPageLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 98.0
 offset_top = 19.0
 offset_right = 156.0
 offset_bottom = 45.0
 scale = Vector2(0.8, 0.8800006)
-theme_override_colors/font_color = Color(1, 1, 0.22, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "Lv.10"
 vertical_alignment = 1
 
@@ -163,16 +194,13 @@ mouse_filter = 2
 texture = ExtResource("13")
 
 [node name="Stat0" type="Label" parent="Stage/SwordCard1" unique_id=989692259]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 267.0
 offset_right = 125.0
 offset_bottom = 291.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "攻击: 300"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -187,16 +215,13 @@ mouse_filter = 2
 texture = ExtResource("14")
 
 [node name="MaterialText1" type="Label" parent="Stage/SwordCard1" unique_id=2047305783]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 322.0
 offset_right = 152.0
 offset_bottom = 346.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -211,16 +236,13 @@ mouse_filter = 2
 texture = ExtResource("15")
 
 [node name="MaterialText2" type="Label" parent="Stage/SwordCard1" unique_id=1705122839]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 347.0
 offset_right = 152.0
 offset_bottom = 371.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -289,17 +311,14 @@ mouse_filter = 2
 texture = ExtResource("21")
 
 [node name="Level" type="Label" parent="Stage/SwordCard2" unique_id=1868615996]
+theme_type_variation = "SwordPageLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 98.0
 offset_top = 19.0
 offset_right = 156.0
 offset_bottom = 45.0
 scale = Vector2(0.8, 0.8800006)
-theme_override_colors/font_color = Color(1, 1, 0.22, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "Lv.10"
 vertical_alignment = 1
 
@@ -332,16 +351,13 @@ mouse_filter = 2
 texture = ExtResource("23")
 
 [node name="Stat0" type="Label" parent="Stage/SwordCard2" unique_id=392228147]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 267.0
 offset_right = 125.0
 offset_bottom = 291.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "生命: 2500"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -356,16 +372,13 @@ mouse_filter = 2
 texture = ExtResource("24")
 
 [node name="MaterialText1" type="Label" parent="Stage/SwordCard2" unique_id=1111139071]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 322.0
 offset_right = 152.0
 offset_bottom = 346.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -380,16 +393,13 @@ mouse_filter = 2
 texture = ExtResource("15")
 
 [node name="MaterialText2" type="Label" parent="Stage/SwordCard2" unique_id=572000512]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 347.0
 offset_right = 152.0
 offset_bottom = 371.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -458,17 +468,14 @@ mouse_filter = 2
 texture = ExtResource("25")
 
 [node name="Level" type="Label" parent="Stage/SwordCard3" unique_id=1828711772]
+theme_type_variation = "SwordPageLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 100.0
 offset_top = 19.0
 offset_right = 158.0
 offset_bottom = 45.0
 scale = Vector2(0.8, 0.8800006)
-theme_override_colors/font_color = Color(1, 1, 0.22, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "Lv.10"
 vertical_alignment = 1
 
@@ -501,46 +508,37 @@ mouse_filter = 2
 texture = ExtResource("27")
 
 [node name="Stat0" type="Label" parent="Stage/SwordCard3" unique_id=1246533943]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 267.0
 offset_right = 125.0
 offset_bottom = 291.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "暴击: 10%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Stat1" type="Label" parent="Stage/SwordCard3" unique_id=2122869995]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 289.0
 offset_right = 125.0
 offset_bottom = 313.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "闪避: 10%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Stat2" type="Label" parent="Stage/SwordCard3" unique_id=1665467662]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 311.0
 offset_right = 125.0
 offset_bottom = 335.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "魔抗: 10%"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -610,17 +608,14 @@ mouse_filter = 2
 texture = ExtResource("28")
 
 [node name="Level" type="Label" parent="Stage/SwordCard4" unique_id=1557254796]
+theme_type_variation = "SwordPageLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 98.0
 offset_top = 19.0
 offset_right = 156.0
 offset_bottom = 45.0
 scale = Vector2(0.8, 0.8800006)
-theme_override_colors/font_color = Color(1, 1, 0.22, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "Lv.10"
 vertical_alignment = 1
 
@@ -653,16 +648,13 @@ mouse_filter = 2
 texture = ExtResource("30")
 
 [node name="Stat0" type="Label" parent="Stage/SwordCard4" unique_id=65696828]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 267.0
 offset_right = 125.0
 offset_bottom = 291.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "防御: 150"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -677,16 +669,13 @@ mouse_filter = 2
 texture = ExtResource("31")
 
 [node name="MaterialText1" type="Label" parent="Stage/SwordCard4" unique_id=1480825573]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 322.0
 offset_right = 152.0
 offset_bottom = 346.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -701,16 +690,13 @@ mouse_filter = 2
 texture = ExtResource("15")
 
 [node name="MaterialText2" type="Label" parent="Stage/SwordCard4" unique_id=754486348]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 347.0
 offset_right = 152.0
 offset_bottom = 371.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -779,17 +765,14 @@ mouse_filter = 2
 texture = ExtResource("32")
 
 [node name="Level" type="Label" parent="Stage/SwordCard5" unique_id=741779017]
+theme_type_variation = "SwordPageLevelLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 98.0
 offset_top = 19.0
 offset_right = 156.0
 offset_bottom = 45.0
 scale = Vector2(0.8, 0.8800006)
-theme_override_colors/font_color = Color(1, 1, 0.22, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "Lv.10"
 vertical_alignment = 1
 
@@ -822,16 +805,13 @@ mouse_filter = 2
 texture = ExtResource("34")
 
 [node name="Stat0" type="Label" parent="Stage/SwordCard5" unique_id=145895413]
+theme_type_variation = "SwordPageStatLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 39.0
 offset_top = 267.0
 offset_right = 125.0
 offset_bottom = 291.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 18
 text = "魔法: 2000"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -846,16 +826,13 @@ mouse_filter = 2
 texture = ExtResource("35")
 
 [node name="MaterialText1" type="Label" parent="Stage/SwordCard5" unique_id=689702571]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 322.0
 offset_right = 152.0
 offset_bottom = 346.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -870,16 +847,13 @@ mouse_filter = 2
 texture = ExtResource("15")
 
 [node name="MaterialText2" type="Label" parent="Stage/SwordCard5" unique_id=198543854]
+theme_type_variation = "SwordPageMaterialLabel"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 48.0
 offset_top = 347.0
 offset_right = 152.0
 offset_bottom = 371.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("10")
-theme_override_font_sizes/font_size = 16
 text = "该版本已满级"
 horizontal_alignment = 1
 vertical_alignment = 1

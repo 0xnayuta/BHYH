@@ -1698,3 +1698,96 @@ BdSkillName/font_sizes/font_size = 20
 BdSkillUpgradeButton/base_type = &"Button"
 BdSkillUpgradeButton/fonts/font = ExtResource("font_main")
 BdSkillUpgradeButton/font_sizes/font_size = 20
+
+BodyTrainingHitButton/base_type = &"Button"
+BodyTrainingHitButton/styles/normal = SubResource("empty_button")
+BodyTrainingHitButton/styles/pressed = SubResource("empty_button")
+BodyTrainingHitButton/styles/hover = SubResource("empty_button")
+
+BodyTrainingLevelLabel/base_type = &"Label"
+BodyTrainingLevelLabel/colors/font_color = Color(1, 0.952941, 0.658824, 1)
+BodyTrainingLevelLabel/colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+BodyTrainingLevelLabel/constants/outline_size = 3
+BodyTrainingLevelLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingLevelLabel/font_sizes/font_size = 14
+
+BodyTrainingMainLabel/base_type = &"Label"
+BodyTrainingMainLabel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
+BodyTrainingMainLabel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingMainLabel/constants/outline_size = 3
+BodyTrainingMainLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingMainLabel/font_sizes/font_size = 14
+
+SwordPageLevelLabel/base_type = &"Label"
+SwordPageLevelLabel/colors/font_color = Color(1, 1, 0.22, 1)
+SwordPageLevelLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SwordPageLevelLabel/constants/outline_size = 3
+SwordPageLevelLabel/fonts/font = ExtResource("font_hy")
+SwordPageLevelLabel/font_sizes/font_size = 18
+
+SwordPageMaterialLabel/base_type = &"Label"
+SwordPageMaterialLabel/colors/font_color = Color(1, 1, 1, 1)
+SwordPageMaterialLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SwordPageMaterialLabel/constants/outline_size = 3
+SwordPageMaterialLabel/fonts/font = ExtResource("font_hy")
+SwordPageMaterialLabel/font_sizes/font_size = 16
+
+SwordPageStatLabel/base_type = &"Label"
+SwordPageStatLabel/colors/font_color = Color(1, 1, 1, 1)
+SwordPageStatLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+SwordPageStatLabel/constants/outline_size = 3
+SwordPageStatLabel/fonts/font = ExtResource("font_hy")
+SwordPageStatLabel/font_sizes/font_size = 18
+
+MagicHelpBody/base_type = &"Label"
+MagicHelpBody/colors/font_color = Color(0, 0, 0, 1)
+MagicHelpBody/colors/font_shadow_color = Color(1, 1, 1, 1)
+MagicHelpBody/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicHelpBody/constants/shadow_offset_x = 0
+MagicHelpBody/constants/shadow_offset_y = 0
+MagicHelpBody/constants/outline_size = 2
+MagicHelpBody/constants/shadow_outline_size = 6
+MagicHelpBody/fonts/font = ExtResource("font_hk")
+MagicHelpBody/font_sizes/font_size = 18
+
+MagicHelpTitle/base_type = &"Label"
+MagicHelpTitle/colors/font_color = Color(1, 1, 0, 1)
+MagicHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+MagicHelpTitle/constants/outline_size = 8
+MagicHelpTitle/fonts/font = ExtResource("font_hy")
+MagicHelpTitle/font_sizes/font_size = 30
+
+LhhjHelpList/base_type = &"VBoxContainer"
+LhhjHelpList/constants/separation = 14
+
+LhhjHelpBody/base_type = &"Label"
+LhhjHelpBody/colors/font_color = Color(0, 0, 0, 1)
+LhhjHelpBody/colors/font_shadow_color = Color(1, 1, 1, 1)
+LhhjHelpBody/colors/font_outline_color = Color(0, 0, 0, 1)
+LhhjHelpBody/constants/shadow_offset_x = 0
+LhhjHelpBody/constants/shadow_offset_y = 0
+LhhjHelpBody/constants/outline_size = 2
+LhhjHelpBody/constants/shadow_outline_size = 6
+LhhjHelpBody/fonts/font = ExtResource("font_hk")
+LhhjHelpBody/font_sizes/font_size = 18
+
+LhhjHelpTitle/base_type = &"Label"
+LhhjHelpTitle/colors/font_color = Color(1, 1, 0, 1)
+LhhjHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+LhhjHelpTitle/constants/outline_size = 8
+LhhjHelpTitle/fonts/font = ExtResource("font_hy")
+LhhjHelpTitle/font_sizes/font_size = 30
+
+SynHelpTitleRow/base_type = &"HBoxContainer"
+SynHelpTitleRow/constants/separation = 33
+
+SynHelpSection/base_type = &"VBoxContainer"
+SynHelpSection/constants/separation = 15
+
+SynHelpBody/base_type = &"Label"
+SynHelpBody/colors/font_color = Color(1, 1, 0.32549, 1)
+SynHelpBody/fonts/font = ExtResource("font_hy")
+SynHelpBody/font_sizes/font_size = 12
+
+SynHelpTitle/base_type = &"Label"
+SynHelpTitle/font_sizes/font_size = 25

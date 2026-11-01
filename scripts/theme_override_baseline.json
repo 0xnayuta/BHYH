@@ -2,17 +2,17 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 3055,
+    "direct_properties": 2603,
     "animation_track_refs": 26,
-    "textual_references": 3081,
-    "scenes": 120
+    "textual_references": 2629,
+    "scenes": 115
   },
   "property_categories": {
-    "colors": 924,
-    "constants": 786,
-    "font_sizes": 442,
-    "fonts": 484,
-    "styles": 419
+    "colors": 776,
+    "constants": 673,
+    "font_sizes": 364,
+    "fonts": 407,
+    "styles": 383
   },
   "animation_categories": {
     "colors": 15,
@@ -23,14 +23,14 @@
   "node_types": {
     "<inherited>": 10,
     "BoxContainer": 1,
-    "Button": 590,
+    "Button": 554,
     "CheckBox": 4,
     "CheckButton": 15,
     "GridContainer": 16,
-    "HBoxContainer": 31,
+    "HBoxContainer": 30,
     "HSeparator": 2,
     "ItemList": 10,
-    "Label": 2272,
+    "Label": 1862,
     "LineEdit": 14,
     "MarginContainer": 32,
     "OptionButton": 7,
@@ -38,7 +38,7 @@
     "PanelContainer": 1,
     "ProgressBar": 2,
     "TabBar": 8,
-    "VBoxContainer": 31,
+    "VBoxContainer": 26,
     "VSeparator": 4
   },
   "unassigned_direct": 0,
@@ -47,7 +47,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 447,
+    "scene_refs": 543,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -115,6 +115,9 @@
       "BdSkillRow",
       "BdSkillTitle",
       "BdSkillUpgradeButton",
+      "BodyTrainingHitButton",
+      "BodyTrainingLevelLabel",
+      "BodyTrainingMainLabel",
       "EquipmentInfoGroup",
       "EquipmentItemHighlight",
       "EquipmentItemMeta",
@@ -143,11 +146,16 @@
       "LhhjActionLabel",
       "LhhjAltValueInput",
       "LhhjBossGrid",
+      "LhhjHelpBody",
+      "LhhjHelpList",
+      "LhhjHelpTitle",
       "LhhjHpLabel",
       "LhhjSectionText",
       "LhhjSelfValueInput",
       "LhhjTitle",
       "LhhjValueInput",
+      "MagicHelpBody",
+      "MagicHelpTitle",
       "MenuActionButton",
       "MenuActionButtonGroup",
       "MenuActionButtonOutline",
@@ -265,6 +273,13 @@
       "SkillShadowLabelPlain",
       "SkillSmallLabel",
       "SkillTextButton",
+      "SwordPageLevelLabel",
+      "SwordPageMaterialLabel",
+      "SwordPageStatLabel",
+      "SynHelpBody",
+      "SynHelpSection",
+      "SynHelpTitle",
+      "SynHelpTitleRow",
       "TowerButton",
       "TowerButtonSmall",
       "TowerContent",
@@ -276,10 +291,10 @@
       "TowerRow",
       "TowerSmallLabel"
     ],
-    "variation_refs": 746
+    "variation_refs": 842
   },
   "fonts": {
-    "scene_refs": 173,
+    "scene_refs": 166,
     "unique_files": 12,
     "paths": [
       "res://Font/194_song_ti.ttf",
@@ -470,10 +485,6 @@
       "direct": 10,
       "animation": 0
     },
-    "Scene/ldl/s_yn_help.tscn": {
-      "direct": 78,
-      "animation": 0
-    },
     "Scene/ldl/strength.tscn": {
       "direct": 16,
       "animation": 0
@@ -514,16 +525,8 @@
       "direct": 33,
       "animation": 0
     },
-    "Scene/magic_weapon/magic_help.tscn": {
-      "direct": 95,
-      "animation": 0
-    },
     "Scene/magic_weapon/magic_weapon_skill_cd.tscn": {
       "direct": 5,
-      "animation": 0
-    },
-    "Scene/main_menu/body_training.tscn": {
-      "direct": 101,
       "animation": 0
     },
     "Scene/main_menu/body_training_detail.tscn": {
@@ -564,10 +567,6 @@
     },
     "Scene/main_menu/wan_ling_catalog_page.tscn": {
       "direct": 40,
-      "animation": 0
-    },
-    "Scene/main_menu/zhu_xian_sword_page.tscn": {
-      "direct": 100,
       "animation": 0
     },
     "Scene/monster/boss_info.tscn": {
@@ -640,10 +639,6 @@
     },
     "Scene/other_scene/lhhj_button.tscn": {
       "direct": 8,
-      "animation": 0
-    },
-    "Scene/other_scene/lhhj_help.tscn": {
-      "direct": 78,
       "animation": 0
     },
     "Scene/other_scene/list_button.tscn": {
