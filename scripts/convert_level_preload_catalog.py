@@ -394,7 +394,8 @@ def merge_level_layout_sources(levels: dict[str, LevelEntry]) -> None:
     for scene_path, layout in raw_levels.items():
         entry = levels.get(scene_path)
         if entry is None:
-            raise ValueError(f"布局源登记了未知关卡: {scene_path}")
+            # 原始 ZMWS 地图由包装场景在运行期按布局资源预载，不进入顶层关卡 Catalog。
+            continue
         stages = layout.get("stages") if isinstance(layout, dict) else None
         if not isinstance(stages, list):
             raise ValueError(f"{scene_path}: 布局源 stages 非法")

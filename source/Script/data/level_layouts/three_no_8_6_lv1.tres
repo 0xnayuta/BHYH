@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=5 format=3 uid="uid://dl15lw05mx005"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="spawn_1"]
+script = ExtResource("3_spawn")
+point_id = 91
+monster_ids = PackedInt32Array(5011701)
+position = Vector2(1000, 829)
+count = 1
+delay = 0.5
+interval = 1
+direction = -1
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(295, 0, 1317, 960)
+trigger_rect = Rect2(295, 0, 1317, 960)
+spawn_trigger_rect = Rect2(594, 0, 1016, 960)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_1")])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"three_no_8_6_lv1"
+layout_size = Vector2(5120, 1280)
+player_birth_points = PackedVector2Array(446, 816, 510, 816)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1")])
+exit_rect = Rect2(1451, 705, 96, 128)
+exit_open_when = &"boss_dead"

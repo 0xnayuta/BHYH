@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://Scene/base/zmws_level_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://Scene/level/zmws/three_no_7_1_lv1.tscn" id="2_map"]
+
+[node name="ZmwsThreeNo71Lv1" instance=ExtResource("1_base")]
+map_scene = ExtResource("2_map")
+map_scene_path = "res://Scene/level/zmws/three_no_7_1_lv1.tscn"
+display_name = "Three-No_7-1-Lv1.json"

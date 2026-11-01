@@ -90,6 +90,10 @@ func _play_level_bgm(bgm_path: String) -> void:
 	Global.get_audio_runtime().add_bgm(self, bgm_path)
 
 
+func _runtime_monster_id(monster_id: int) -> int:
+	return monster_id
+
+
 func _configure_level_monsters() -> void:
 	for stage in range(1, _stage_count() + 1):
 		var stage_key := _stage_key(stage)
@@ -100,8 +104,11 @@ func _configure_level_monsters() -> void:
 	for point in _birth_points():
 		var stage_key := _stage_key(int(point["stage"]))
 		var spawn_position: Vector2 = point["position"]
+		var runtime_monster_id := _runtime_monster_id(int(point["monster"]))
+		if runtime_monster_id <= 0:
+			continue
 		for _unit in range(int(point["total"])):
-			monster_group[stage_key].append(int(point["monster"]))
+			monster_group[stage_key].append(runtime_monster_id)
 			monster_position_x[stage_key].append(spawn_position.x)
 			monster_position_y[stage_key].append(spawn_position.y)
 
@@ -252,7 +259,9 @@ func _point_all_dead(point_id: int) -> bool:
 
 func _spawn_birth_point_unit(point: Dictionary, state: Dictionary) -> bool:
 	var point_id := int(point["point"])
-	var monster_id := int(point["monster"])
+	var monster_id := _runtime_monster_id(int(point["monster"]))
+	if monster_id <= 0:
+		return false
 	var spawn_position: Vector2 = point["position"]
 	var created := Global.create_monster(monster_id, monster, spawn_position)
 	if created == null:
@@ -422,28 +431,28 @@ func _stage_key(stage: int) -> String:
 
 
 func _screen_starts() -> Array:
-	var starts := LevelLayoutStore.screen_starts(str(scene_file_path))
+	var starts := LevelLayoutStore.screen_starts(_layout_scene_path())
 	if not starts.is_empty():
 		return starts
 	return [0.0]
 
 
 func _screen_rights() -> Array:
-	var rights := LevelLayoutStore.screen_rights(str(scene_file_path))
+	var rights := LevelLayoutStore.screen_rights(_layout_scene_path())
 	if not rights.is_empty():
 		return rights
 	return [_level_width]
 
 
 func _stage_trigger_x() -> Array:
-	var triggers := LevelLayoutStore.stage_trigger_x(str(scene_file_path))
+	var triggers := LevelLayoutStore.stage_trigger_x(_layout_scene_path())
 	if not triggers.is_empty():
 		return triggers
 	return [0.0]
 
 
 func _birth_points() -> Array:
-	return LevelLayoutStore.spawn_point_dicts(str(scene_file_path))
+	return LevelLayoutStore.spawn_point_dicts(_layout_scene_path())
 
 
 func get_level_monster_config(_monster_id: int) -> Dictionary:

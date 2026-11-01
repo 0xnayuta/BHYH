@@ -1818,12 +1818,16 @@ func remove_all_records():
 ## 关卡阶段契约（Phase 10.5 / Phase 11 夹具与 CI 统一入口）
 ## 子类可覆盖；默认实现基于 BaseLevel 的 4 阶段状态机与 change_mysee 相机边界。
 ## ---------------------------------------------------------------------------
+func _layout_scene_path() -> String:
+	return str(scene_file_path)
+
+
 func _layout_entry() -> LevelLayoutEntry:
-	return LevelLayoutStore.layout(str(scene_file_path))
+	return LevelLayoutStore.layout(_layout_scene_path())
 
 
 func _player_spawn_position(slot: int, fallback: Vector2) -> Vector2:
-	var births := LevelLayoutStore.player_birth_points(str(scene_file_path))
+	var births := LevelLayoutStore.player_birth_points(_layout_scene_path())
 	if slot >= 1 and slot <= births.size():
 		return births[slot - 1]
 	return fallback
@@ -1878,7 +1882,7 @@ func _screen_rights() -> Array:
 
 func _birth_points() -> Array:
 	# 兼容既有 Game4ImportedLevel 契约：这里返回刷怪点字典，不是玩家出生点。
-	return LevelLayoutStore.spawn_point_dicts(str(scene_file_path))
+	return LevelLayoutStore.spawn_point_dicts(_layout_scene_path())
 
 
 func _stage_activate(_index: int) -> bool:

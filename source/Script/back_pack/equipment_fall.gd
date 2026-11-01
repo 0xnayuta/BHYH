@@ -80,6 +80,9 @@ func automatically_pick_up_items():
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
+	# 原始 ZMWS 地面为 StaticBody2D；掉落物只允许被有效英雄拾取。
+	if not body is BaseHero:
+		return
 	pick_up_items(body)
 
 

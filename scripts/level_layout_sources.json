@@ -505,6 +505,2331 @@
           ]
         }
       ]
+    },
+    "res://Scene/level/zmws/activity_2020_baodacehua_1.tscn": {
+      "level_id": "activity_2020_baodacehua_1",
+      "source_map": "Activity_2020-baodacehua-1.json",
+      "layout_size": [
+        1632.0,
+        1120.0
+      ],
+      "player_birth_points": [
+        [
+          176.0,
+          832.0
+        ],
+        [
+          272.0,
+          832.0
+        ]
+      ],
+      "exit_rect": [
+        1408.0,
+        720.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "mids_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            976.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            976.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            976.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                2140701
+              ],
+              "position": [
+                992.0,
+                848.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/activity_outsidestory_guichengxiang_1.tscn": {
+      "level_id": "activity_outsidestory_guichengxiang_1",
+      "source_map": "Activity_OutsideStory-guichengxiang-1.json",
+      "layout_size": [
+        8160.0,
+        3200.0
+      ],
+      "player_birth_points": [
+        [
+          1865.0,
+          1339.0
+        ],
+        [
+          1961.0,
+          1339.0
+        ]
+      ],
+      "exit_rect": [
+        7904.0,
+        1232.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            1632.0,
+            528.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            1761.0,
+            528.0,
+            1503.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            1952.0,
+            528.0,
+            1312.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板2",
+            "战斗挡板3",
+            "战斗挡板4"
+          ],
+          "open_walls": [
+            "战斗挡板2",
+            "战斗挡板3"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 41,
+              "monster_ids": [
+                20106
+              ],
+              "position": [
+                2181.0,
+                1360.0
+              ],
+              "count": 1,
+              "delay": 1.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 42,
+              "monster_ids": [
+                20204
+              ],
+              "position": [
+                2888.0,
+                1359.0
+              ],
+              "count": 1,
+              "delay": 1.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 43,
+              "monster_ids": [
+                20106
+              ],
+              "position": [
+                2285.0,
+                1359.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 44,
+              "monster_ids": [
+                20204
+              ],
+              "position": [
+                2659.0,
+                1363.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 45,
+              "monster_ids": [
+                20204
+              ],
+              "position": [
+                2784.0,
+                1360.0
+              ],
+              "count": 1,
+              "delay": 2.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 46,
+              "monster_ids": [
+                20106
+              ],
+              "position": [
+                2048.0,
+                1360.0
+              ],
+              "count": 1,
+              "delay": 2.2,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 91,
+              "monster_ids": [
+                21431
+              ],
+              "position": [
+                2499.0,
+                1360.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/no_2_1_lv1.tscn": {
+      "level_id": "no_2_1_lv1",
+      "source_map": "No_2-1-Lv1.json",
+      "layout_size": [
+        8160.0,
+        2336.0
+      ],
+      "player_birth_points": [
+        [
+          240.0,
+          960.0
+        ],
+        [
+          336.0,
+          960.0
+        ]
+      ],
+      "exit_rect": [
+        7872.0,
+        880.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            67.0,
+            32.0,
+            1565.0,
+            1072.0
+          ],
+          "trigger_rect": [
+            0.0,
+            32.0,
+            1632.0,
+            1104.0
+          ],
+          "spawn_trigger_rect": [
+            352.0,
+            32.0,
+            1280.0,
+            1104.0
+          ],
+          "close_walls": [
+            "战斗挡板1",
+            "战斗挡板2",
+            "战斗挡板3"
+          ],
+          "open_walls": [
+            "战斗挡板1",
+            "战斗挡板2"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 11,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1056.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 12,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1152.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.2,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 13,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1248.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.6,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 21,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                384.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 1.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 22,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1184.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 23,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                288.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 1.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 24,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1280.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "screen_rect": [
+            1136.0,
+            32.0,
+            1632.0,
+            1744.0
+          ],
+          "trigger_rect": [
+            1824.0,
+            32.0,
+            944.0,
+            1744.0
+          ],
+          "spawn_trigger_rect": [
+            1888.0,
+            32.0,
+            880.0,
+            1744.0
+          ],
+          "close_walls": [
+            "战斗挡板7",
+            "战斗挡板3",
+            "战斗挡板4"
+          ],
+          "open_walls": [
+            "战斗挡板7",
+            "战斗挡板3"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 31,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1440.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 32,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1568.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 33,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1696.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 0.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 34,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1824.0,
+                984.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 41,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                2528.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 1.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 42,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1792.0,
+                984.0
+              ],
+              "count": 1,
+              "delay": 1.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 43,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                2016.0,
+                1000.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 44,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                1664.0,
+                976.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "screen_rect": [
+            2768.0,
+            176.0,
+            2048.0,
+            960.0
+          ],
+          "trigger_rect": [
+            3136.0,
+            176.0,
+            1680.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            3408.0,
+            176.0,
+            1408.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板3",
+            "战斗挡板4",
+            "战斗挡板5"
+          ],
+          "open_walls": [
+            "战斗挡板3",
+            "战斗挡板4"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 51,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                3712.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 0.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 52,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                4352.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 61,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                3872.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 1.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 62,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                3616.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 63,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                4032.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 1.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 64,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                4192.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 65,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                4512.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 2.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "screen_rect": [
+            4816.0,
+            176.0,
+            1712.0,
+            1824.0
+          ],
+          "trigger_rect": [
+            4992.0,
+            32.0,
+            1536.0,
+            1968.0
+          ],
+          "spawn_trigger_rect": [
+            5056.0,
+            176.0,
+            1472.0,
+            1824.0
+          ],
+          "close_walls": [
+            "战斗挡板4",
+            "战斗挡板5",
+            "战斗挡板6"
+          ],
+          "open_walls": [
+            "战斗挡板4",
+            "战斗挡板5"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 71,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5216.0,
+                1280.0
+              ],
+              "count": 1,
+              "delay": 0.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 72,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                5696.0,
+                1056.0
+              ],
+              "count": 1,
+              "delay": 0.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 73,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5376.0,
+                1024.0
+              ],
+              "count": 1,
+              "delay": 0.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 74,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5568.0,
+                1376.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 75,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                6080.0,
+                1280.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 76,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5984.0,
+                960.0
+              ],
+              "count": 1,
+              "delay": 0.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 81,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5568.0,
+                1728.0
+              ],
+              "count": 1,
+              "delay": 1.2,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 82,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5728.0,
+                1568.0
+              ],
+              "count": 1,
+              "delay": 1.6,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 83,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                6016.0,
+                1872.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 84,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                5248.0,
+                1696.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 85,
+              "monster_ids": [
+                20101
+              ],
+              "position": [
+                6112.0,
+                1664.0
+              ],
+              "count": 1,
+              "delay": 1.8,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 86,
+              "monster_ids": [
+                20201
+              ],
+              "position": [
+                5440.0,
+                1872.0
+              ],
+              "count": 1,
+              "delay": 1.4,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "screen_rect": [
+            6528.0,
+            176.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            6720.0,
+            32.0,
+            1440.0,
+            1104.0
+          ],
+          "spawn_trigger_rect": [
+            6816.0,
+            176.0,
+            1344.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板5",
+            "战斗挡板6"
+          ],
+          "open_walls": [
+            "战斗挡板6"
+          ],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                21101
+              ],
+              "position": [
+                7680.0,
+                1008.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/no_4_4_lv3.tscn": {
+      "level_id": "no_4_4_lv3",
+      "source_map": "No_4-4-Lv3.json",
+      "layout_size": [
+        4896.0,
+        3072.0
+      ],
+      "player_birth_points": [
+        [
+          3648.0,
+          2776.0
+        ],
+        [
+          3744.0,
+          2776.0
+        ]
+      ],
+      "exit_rect": [
+        4464.0,
+        2668.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            3264.0,
+            1908.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            3328.0,
+            1948.0,
+            1568.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            3592.0,
+            1900.0,
+            1304.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板10",
+            "战斗挡板4",
+            "战斗挡板3"
+          ],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                41801
+              ],
+              "position": [
+                4218.0,
+                2798.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_5_boss_1_lv1.tscn": {
+      "level_id": "rogue_5_boss_1_lv1",
+      "source_map": "Rogue_5-Boss-1-Lv1.json",
+      "layout_size": [
+        1632.0,
+        1120.0
+      ],
+      "player_birth_points": [
+        [
+          208.0,
+          816.0
+        ],
+        [
+          272.0,
+          816.0
+        ],
+        [
+          336.0,
+          816.0
+        ],
+        [
+          400.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1536.0,
+        736.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                1012801
+              ],
+              "position": [
+                992.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 2,
+              "monster_ids": [
+                1012901
+              ],
+              "position": [
+                1088.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/no_7_5_lv1.tscn": {
+      "level_id": "no_7_5_lv1",
+      "source_map": "No_7-5-Lv1.json",
+      "layout_size": [
+        2592.0,
+        1120.0
+      ],
+      "player_birth_points": [
+        [
+          976.0,
+          752.0
+        ],
+        [
+          1072.0,
+          752.0
+        ]
+      ],
+      "exit_rect": [
+        1792.0,
+        640.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            632.0,
+            0.0,
+            1334.0,
+            960.0
+          ],
+          "trigger_rect": [
+            480.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            480.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板1",
+            "战斗挡板2"
+          ],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                71602
+              ],
+              "position": [
+                1312.0,
+                288.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/no_8_5_lv1.tscn": {
+      "level_id": "no_8_5_lv1",
+      "source_map": "No_8-5-Lv1.json",
+      "layout_size": [
+        1632.0,
+        1120.0
+      ],
+      "player_birth_points": [
+        [
+          176.0,
+          832.0
+        ],
+        [
+          272.0,
+          832.0
+        ]
+      ],
+      "exit_rect": [
+        -89.0,
+        -45.0,
+        1793.0,
+        414.0
+      ],
+      "exit_open_when": "auto",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            976.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            976.0
+          ],
+          "spawn_trigger_rect": [
+            362.0,
+            0.0,
+            1270.0,
+            976.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 1,
+              "monster_ids": [
+                81501
+              ],
+              "position": [
+                1006.0,
+                848.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_7_1_lv1.tscn": {
+      "level_id": "three_no_7_1_lv1",
+      "source_map": "Three-No_7-1-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1478.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            258.0,
+            0.0,
+            1374.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5010101
+              ],
+              "position": [
+                800.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_7_2_lv1.tscn": {
+      "level_id": "three_no_7_2_lv1",
+      "source_map": "Three-No_7-2-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1500.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            288.0,
+            0.0,
+            1344.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 98,
+              "monster_ids": [
+                5010202
+              ],
+              "position": [
+                725.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            },
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5010201
+              ],
+              "position": [
+                885.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_7_5_lv1.tscn": {
+      "level_id": "three_no_7_5_lv1",
+      "source_map": "Three-No_7-5-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1505.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            278.0,
+            0.0,
+            1354.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 98,
+              "monster_ids": [
+                5010501
+              ],
+              "position": [
+                838.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5010502
+              ],
+              "position": [
+                832.0,
+                288.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": 1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_8_1_lv1.tscn": {
+      "level_id": "three_no_8_1_lv1",
+      "source_map": "Three-No_8-1-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1444.0,
+        704.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            278.0,
+            0.0,
+            1354.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5011101
+              ],
+              "position": [
+                800.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_8_2_lv1.tscn": {
+      "level_id": "three_no_8_2_lv1",
+      "source_map": "Three-No_8-2-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1457.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            273.0,
+            0.0,
+            1358.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5011201
+              ],
+              "position": [
+                800.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_8_3_lv1.tscn": {
+      "level_id": "three_no_8_3_lv1",
+      "source_map": "Three-No_8-3-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1470.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            274.0,
+            0.0,
+            1358.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5011301
+              ],
+              "position": [
+                800.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_8_4_lv1.tscn": {
+      "level_id": "three_no_8_4_lv1",
+      "source_map": "Three-No_8-4-Lv1.json",
+      "layout_size": [
+        1632.0,
+        960.0
+      ],
+      "player_birth_points": [
+        [
+          112.0,
+          816.0
+        ],
+        [
+          208.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1470.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            280.0,
+            0.0,
+            1352.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 99,
+              "monster_ids": [
+                5011401
+              ],
+              "position": [
+                800.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_8_6_lv1.tscn": {
+      "level_id": "three_no_8_6_lv1",
+      "source_map": "Three-No_8-6-Lv1.json",
+      "layout_size": [
+        5120.0,
+        1280.0
+      ],
+      "player_birth_points": [
+        [
+          446.0,
+          816.0
+        ],
+        [
+          510.0,
+          816.0
+        ]
+      ],
+      "exit_rect": [
+        1451.0,
+        705.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            295.0,
+            0.0,
+            1317.0,
+            960.0
+          ],
+          "trigger_rect": [
+            295.0,
+            0.0,
+            1317.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            594.0,
+            0.0,
+            1016.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                5011701
+              ],
+              "position": [
+                1000.0,
+                829.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_9_2_lv1.tscn": {
+      "level_id": "three_no_9_2_lv1",
+      "source_map": "Three-No_9-2-Lv1.json",
+      "layout_size": [
+        8320.0,
+        1280.0
+      ],
+      "player_birth_points": [
+        [
+          176.0,
+          813.0
+        ],
+        [
+          240.0,
+          813.0
+        ]
+      ],
+      "exit_rect": [
+        1150.0,
+        701.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            0.0,
+            0.0,
+            1332.0,
+            960.0
+          ],
+          "trigger_rect": [
+            0.0,
+            0.0,
+            1332.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            320.0,
+            0.0,
+            1022.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                5012201
+              ],
+              "position": [
+                900.0,
+                832.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_9_4_lv1.tscn": {
+      "level_id": "three_no_9_4_lv1",
+      "source_map": "Three-No_9-4-Lv1.json",
+      "layout_size": [
+        8320.0,
+        1280.0
+      ],
+      "player_birth_points": [
+        [
+          1847.0,
+          813.0
+        ],
+        [
+          1947.0,
+          813.0
+        ]
+      ],
+      "exit_rect": [
+        2900.0,
+        701.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            1740.0,
+            121.0,
+            1334.0,
+            867.0
+          ],
+          "trigger_rect": [
+            1740.0,
+            121.0,
+            1334.0,
+            867.0
+          ],
+          "spawn_trigger_rect": [
+            2052.0,
+            120.0,
+            1022.0,
+            840.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 91,
+              "monster_ids": [
+                5012601
+              ],
+              "position": [
+                2547.0,
+                829.0
+              ],
+              "count": 1,
+              "delay": 0.5,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_14_1_lv1.tscn": {
+      "level_id": "three_no_14_1_lv1",
+      "source_map": "Three-No_14-1-Lv1.json",
+      "layout_size": [
+        2560.0,
+        1600.0
+      ],
+      "player_birth_points": [
+        [
+          464.0,
+          836.0
+        ],
+        [
+          528.0,
+          836.0
+        ]
+      ],
+      "exit_rect": [
+        1120.0,
+        718.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "mids_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            222.0,
+            45.0,
+            1778.0,
+            980.0
+          ],
+          "trigger_rect": [
+            0.0,
+            44.0,
+            2001.0,
+            1048.0
+          ],
+          "spawn_trigger_rect": [
+            710.0,
+            42.0,
+            964.0,
+            1043.0
+          ],
+          "close_walls": [
+            "战斗挡板3",
+            "战斗挡板4"
+          ],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 501,
+              "monster_ids": [
+                5017101
+              ],
+              "position": [
+                1074.0,
+                848.0
+              ],
+              "count": 1,
+              "delay": 0.3,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_14_3_lv1.tscn": {
+      "level_id": "three_no_14_3_lv1",
+      "source_map": "Three-No_14-3-Lv1.json",
+      "layout_size": [
+        3200.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          212.0,
+          1040.0
+        ],
+        [
+          276.0,
+          1040.0
+        ]
+      ],
+      "exit_rect": [
+        1379.0,
+        928.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            35.0,
+            210.0,
+            1882.0,
+            982.0
+          ],
+          "trigger_rect": [
+            415.0,
+            265.0,
+            1445.0,
+            928.0
+          ],
+          "spawn_trigger_rect": [
+            415.0,
+            259.0,
+            1457.0,
+            922.0
+          ],
+          "close_walls": [
+            "战斗挡板5",
+            "战斗挡板1"
+          ],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 501,
+              "monster_ids": [
+                5017301
+              ],
+              "position": [
+                1053.0,
+                1057.0
+              ],
+              "count": 1,
+              "delay": 1.0,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
+    },
+    "res://Scene/level/zmws/three_no_14_4_lv1.tscn": {
+      "level_id": "three_no_14_4_lv1",
+      "source_map": "Three-No_14-4-Lv1.json",
+      "layout_size": [
+        6400.0,
+        6400.0
+      ],
+      "player_birth_points": [
+        [
+          656.0,
+          2192.0
+        ],
+        [
+          720.0,
+          2192.0
+        ]
+      ],
+      "exit_rect": [
+        2786.0,
+        1468.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "boss_dead",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            38.0,
+            1493.0,
+            1909.0,
+            877.0
+          ],
+          "trigger_rect": [
+            14.0,
+            1382.0,
+            1781.0,
+            1024.0
+          ],
+          "spawn_trigger_rect": [
+            38.0,
+            1493.0,
+            1909.0,
+            877.0
+          ],
+          "close_walls": [],
+          "open_walls": [
+            "战斗挡板1"
+          ],
+          "spawn_points": []
+        },
+        {
+          "index": 2,
+          "screen_rect": [
+            2078.0,
+            231.0,
+            2074.0,
+            1428.0
+          ],
+          "trigger_rect": [
+            2079.0,
+            82.0,
+            2023.0,
+            1589.0
+          ],
+          "spawn_trigger_rect": [
+            2713.0,
+            101.0,
+            1482.0,
+            1569.0
+          ],
+          "close_walls": [
+            "大地板"
+          ],
+          "open_walls": [],
+          "spawn_points": [
+            {
+              "point_id": 501,
+              "monster_ids": [
+                5017401
+              ],
+              "position": [
+                3307.0,
+                673.0
+              ],
+              "count": 1,
+              "delay": 0.3,
+              "interval": 1.0,
+              "direction": -1,
+              "after_spawn": 0,
+              "after_dead": 0,
+              "ignore_count_multiplier": false
+            }
+          ]
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=6 format=3 uid="uid://dqtc1683o67at"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="spawn_1"]
+script = ExtResource("3_spawn")
+point_id = 501
+monster_ids = PackedInt32Array(5017401)
+position = Vector2(3307, 673)
+count = 1
+delay = 0.3
+interval = 1
+direction = -1
+after_spawn = 0
+after_dead = 0
+ignore_count_multiplier = false
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(38, 1493, 1909, 877)
+trigger_rect = Rect2(14, 1382, 1781, 1024)
+spawn_trigger_rect = Rect2(38, 1493, 1909, 877)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray("战斗挡板1")
+spawn_points = Array[ExtResource("3_spawn")]([])
+
+[sub_resource type="Resource" id="stage_2"]
+script = ExtResource("2_stage")
+index = 2
+screen_rect = Rect2(2078, 231, 2074, 1428)
+trigger_rect = Rect2(2079, 82, 2023, 1589)
+spawn_trigger_rect = Rect2(2713, 101, 1482, 1569)
+close_walls = PackedStringArray("大地板")
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([SubResource("spawn_1")])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"three_no_14_4_lv1"
+layout_size = Vector2(6400, 6400)
+player_birth_points = PackedVector2Array(656, 2192, 720, 2192)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1"), SubResource("stage_2")])
+exit_rect = Rect2(2786, 1468, 96, 128)
+exit_open_when = &"boss_dead"
