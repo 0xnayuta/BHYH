@@ -526,6 +526,18 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="role_shield_bg"]
+bg_color = Color(0.2, 0.2, 0.2, 0.55)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="role_shield_fill"]
+bg_color = Color(1, 1, 1, 1)
+
 [resource]
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
@@ -4430,3 +4442,60 @@ TouchTextMargin/constants/margin_left = 25
 TouchTextMargin/constants/margin_top = 25
 TouchTextMargin/constants/margin_right = 25
 TouchTextMargin/constants/margin_bottom = 25
+
+BasicMonmentText/base_type = &"Label"
+BasicMonmentText/colors/font_outline_color = Color(1, 1, 1, 1)
+BasicMonmentText/constants/outline_size = 1
+BasicMonmentText/fonts/font = ExtResource("font_hk")
+BasicMonmentText/font_sizes/font_size = 18
+
+BossInfoTitle/base_type = &"Label"
+BossInfoTitle/font_sizes/font_size = 30
+
+ComboFather/base_type = &"HBoxContainer"
+ComboFather/constants/separation = -41
+
+ComboRow/base_type = &"HBoxContainer"
+ComboRow/constants/separation = -23
+
+ComboText/base_type = &"HBoxContainer"
+ComboText/constants/separation = 11
+
+DamageNumberRow/base_type = &"HBoxContainer"
+DamageNumberRow/constants/separation = -10
+
+HeroNameFlat/base_type = &"Label"
+HeroNameFlat/colors/font_color = Color(1, 1, 0, 1)
+HeroNameFlat/colors/font_shadow_color = Color(0, 0, 0, 1)
+HeroNameFlat/colors/font_outline_color = Color(1, 1, 0, 1)
+HeroNameFlat/constants/outline_size = 2
+HeroNameFlat/constants/shadow_outline_size = 10
+HeroNameFlat/constants/shadow_offset_x = 0
+HeroNameFlat/constants/shadow_offset_y = 0
+HeroNameFlat/fonts/font = ExtResource("font_hk")
+HeroNameFlat/font_sizes/font_size = 17
+
+MomentTextLabel/base_type = &"Label"
+MomentTextLabel/colors/font_color = Color(1, 1, 1, 1)
+MomentTextLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+MomentTextLabel/font_sizes/font_size = 30
+
+MonsterBloodText/base_type = &"Label"
+MonsterBloodText/colors/font_outline_color = Color(0, 0, 0, 1)
+MonsterBloodText/constants/outline_size = 5
+MonsterBloodText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MonsterBloodText/font_sizes/font_size = 15
+
+RoleInformationGrid/base_type = &"GridContainer"
+RoleInformationGrid/constants/h_separation = 0
+RoleInformationGrid/constants/v_separation = 6
+
+RoleShieldBar/base_type = &"ProgressBar"
+RoleShieldBar/styles/background = SubResource("role_shield_bg")
+RoleShieldBar/styles/fill = SubResource("role_shield_fill")
+
+SkillIconTime/base_type = &"Label"
+SkillIconTime/colors/font_color = Color(1, 1, 1, 1)
+SkillIconTime/colors/font_outline_color = Color(0, 0, 0, 1)
+SkillIconTime/constants/outline_size = 9
+SkillIconTime/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")

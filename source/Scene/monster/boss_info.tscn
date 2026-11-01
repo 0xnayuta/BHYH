@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/monster/boss_info.gd" id="1"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="BossInfo" type="Node2D" unique_id=1689426213]
 script = ExtResource("1")
@@ -17,7 +18,8 @@ color = Color(0, 0, 0, 0.67451)
 layout_mode = 2
 
 [node name="Title" type="Label" parent="MarginContainer/TextList" unique_id=1040727601]
+theme_type_variation = "BossInfoTitle"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1

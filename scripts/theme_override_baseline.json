@@ -2,17 +2,16 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 43,
+    "direct_properties": 6,
     "animation_track_refs": 26,
-    "textual_references": 69,
-    "scenes": 15
+    "textual_references": 32,
+    "scenes": 1
   },
   "property_categories": {
-    "colors": 9,
-    "constants": 20,
-    "font_sizes": 6,
-    "fonts": 6,
-    "styles": 2
+    "colors": 3,
+    "constants": 1,
+    "font_sizes": 1,
+    "fonts": 1
   },
   "animation_categories": {
     "colors": 15,
@@ -21,11 +20,7 @@
     "fonts": 1
   },
   "node_types": {
-    "<inherited>": 10,
-    "GridContainer": 2,
-    "HBoxContainer": 4,
-    "Label": 25,
-    "ProgressBar": 2
+    "Label": 6
   },
   "unassigned_direct": 0,
   "themes": {
@@ -33,7 +28,7 @@
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1099,
+    "scene_refs": 1116,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -130,6 +125,7 @@
       "BackpackWingLabel",
       "BackpackWingsButton",
       "BaseThroughLevelNotice",
+      "BasicMonmentText",
       "BasicTaskNumber",
       "BasicTaskText",
       "BasicTaskTitle",
@@ -148,6 +144,7 @@
       "BodyTrainingTrainButton",
       "BossBloodName",
       "BossBloodValue",
+      "BossInfoTitle",
       "BossProtectName",
       "BoxItemButton",
       "BoxItemNumber",
@@ -176,6 +173,9 @@
       "ChooseSceneCountdown",
       "ChooseSceneText",
       "ComKeyLabel",
+      "ComboFather",
+      "ComboRow",
+      "ComboText",
       "ConstellationGrid",
       "ConstellationPanel",
       "ConstellationTitle",
@@ -184,6 +184,7 @@
       "CureTimesHint",
       "CureTimesRow",
       "CureTimesSection",
+      "DamageNumberRow",
       "DecomposeHelpBody",
       "DecomposeHelpRow",
       "DecomposeHelpTitle",
@@ -275,6 +276,7 @@
       "HelpContentList",
       "HelpThingsText",
       "HeroName",
+      "HeroNameFlat",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -370,8 +372,10 @@
       "MenuActionButtonOutline",
       "MenuHintLabel",
       "MessageShowText",
+      "MomentTextLabel",
       "Monster139Button",
       "Monster139DamageLabel",
+      "MonsterBloodText",
       "MonsterHeadBoss",
       "MonsterHeadInfoName",
       "MonsterHeadName",
@@ -448,6 +452,7 @@
       "RoleButtonName",
       "RoleExpText",
       "RoleHpText",
+      "RoleInformationGrid",
       "RoleKeyLabel",
       "RoleLevelLabel",
       "RoleMagicNeedText",
@@ -455,6 +460,7 @@
       "RoleNatureHp",
       "RoleNatureMp",
       "RolePetSkillRow",
+      "RoleShieldBar",
       "RoleSkillRow",
       "RoleSkillRowTight",
       "SellFilterCs",
@@ -517,6 +523,7 @@
       "SkillGridRow",
       "SkillIconButton",
       "SkillIconButtonTexture",
+      "SkillIconTime",
       "SkillKeySetButton",
       "SkillKeySetLabel",
       "SkillLabel",
@@ -638,16 +645,13 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1398
+    "variation_refs": 1415
   },
   "fonts": {
-    "scene_refs": 7,
-    "unique_files": 5,
+    "scene_refs": 2,
+    "unique_files": 2,
     "paths": [
-      "res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf",
       "res://Font/8_fz_cu_yuan_m03_s.ttf",
-      "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
-      "res://Font/华康宋体W3.ttc",
       "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
     ]
   },
@@ -697,65 +701,9 @@
     ]
   },
   "scenes": {
-    "Scene/hero/role_1/role1.tscn": {
-      "direct": 2,
-      "animation": 0
-    },
-    "Scene/hero/role_2/role_2.tscn": {
-      "direct": 4,
-      "animation": 0
-    },
-    "Scene/hero/role_3/role_3.tscn": {
-      "direct": 2,
-      "animation": 0
-    },
-    "Scene/hero/role_4/role_4.tscn": {
-      "direct": 2,
-      "animation": 0
-    },
-    "Scene/hero/role_5/role_5.tscn": {
-      "direct": 2,
-      "animation": 0
-    },
-    "Scene/hittext/damage_text.tscn": {
-      "direct": 1,
-      "animation": 0
-    },
     "Scene/hittext/hit_text.tscn": {
       "direct": 6,
       "animation": 26
-    },
-    "Scene/level/role_information.tscn": {
-      "direct": 2,
-      "animation": 0
-    },
-    "Scene/main_menu/map_2.tscn": {
-      "direct": 3,
-      "animation": 0
-    },
-    "Scene/monster/boss_info.tscn": {
-      "direct": 1,
-      "animation": 0
-    },
-    "Scene/monster_blood/monster_blood_bar.tscn": {
-      "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/basic_monment_info.tscn": {
-      "direct": 4,
-      "animation": 0
-    },
-    "Scene/other_scene/skill_icon.tscn": {
-      "direct": 4,
-      "animation": 0
-    },
-    "Scene/show_text/combo.tscn": {
-      "direct": 3,
-      "animation": 0
-    },
-    "Scene/show_text/moment_text.tscn": {
-      "direct": 3,
-      "animation": 0
     }
   },
   "generated_at": "2026-11-01"

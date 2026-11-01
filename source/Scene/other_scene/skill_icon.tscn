@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scene/other_scene/skill_icon.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/skill/ne_zha_hud/nz_power_eff_strip.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/skill/ne_zha_hud/nz_open_eff_strip.png" id="3"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="4"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="SkillIcon" type="TextureRect" unique_id=478261969]
 custom_minimum_size = Vector2(45, 45)
@@ -39,15 +39,13 @@ texture = ExtResource("3")
 hframes = 30
 
 [node name="TimeText" type="Label" parent="." unique_id=1659218985]
+theme_type_variation = "SkillIconTime"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_left = 2.0
 offset_top = 5.0
 offset_right = 45.0
 offset_bottom = 45.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 9
-theme_override_fonts/font = ExtResource("4")
 horizontal_alignment = 1
 vertical_alignment = 1
 

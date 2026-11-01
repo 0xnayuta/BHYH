@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://Art/hero_picture/wings/xqzy.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/wings/xtzy.png" id="10"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_death.png" id="11"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r3j82"]
 atlas = ExtResource("3")
@@ -4171,29 +4172,17 @@ height = 102.0
 radius = 20.0
 height = 82.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrgle"]
-bg_color = Color(0.2, 0.2, 0.2, 0.55)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_de76c"]
-bg_color = Color(1, 1, 1, 1)
-
 [node name="Role_2" unique_id=1775122786 instance=ExtResource("1")]
 collision_layer = 18
 script = ExtResource("2")
 
 [node name="Name_" parent="." index="0" unique_id=630687534]
+theme_type_variation = "HeroNameFlat"
+theme = ExtResource("theme")
 offset_left = -761.0
 offset_top = -94.0
 offset_right = 762.0
 offset_bottom = -67.0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -4257,6 +4246,8 @@ wait_time = 0.2
 autostart = true
 
 [node name="ShieldBar" type="ProgressBar" parent="." index="17" unique_id=165768576]
+theme_type_variation = "RoleShieldBar"
+theme = ExtResource("theme")
 visible = false
 modulate = Color(1, 1, 1, 0.85)
 clip_contents = true
@@ -4264,8 +4255,6 @@ offset_left = -40.0
 offset_top = -70.0
 offset_right = 40.0
 offset_bottom = -60.0
-theme_override_styles/background = SubResource("StyleBoxFlat_mrgle")
-theme_override_styles/fill = SubResource("StyleBoxFlat_de76c")
 show_percentage = false
 
 [connection signal="timeout" from="NormalHitReduce" to="." method="_on_normal_hit_reduce_timeout"]

@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Scene/other_scene/basic_monment_info.gd" id="1"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="2"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="BasicMonmentInfo" type="Control" unique_id=1854092415]
 layout_mode = 3
@@ -20,10 +20,8 @@ layout_mode = 2
 color = Color(0, 0, 0, 0.572549)
 
 [node name="ShowText" type="Label" parent="MarginContainer" unique_id=1457500588]
+theme_type_variation = "BasicMonmentText"
+theme = ExtResource("theme")
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 1
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 18
 text = "生命值：归零后角色死亡。"
 autowrap_mode = 1

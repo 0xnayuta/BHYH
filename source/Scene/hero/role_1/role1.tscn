@@ -46,6 +46,7 @@
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1_special_effect/role1_slz.png" id="44"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1_special_effect/role1_zz_1.png" id="45"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1_special_effect/role1zz.png" id="46"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r3j82"]
 atlas = ExtResource("3")
@@ -14454,12 +14455,12 @@ collision_layer = 18
 script = ExtResource("2")
 
 [node name="Name_" parent="." index="0" unique_id=630687534]
+theme_type_variation = "HeroNameFlat"
+theme = ExtResource("theme")
 offset_left = -514.0
 offset_top = -96.0
 offset_right = 517.0
 offset_bottom = -65.0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 

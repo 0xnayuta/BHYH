@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/hittext/damage_text.gd" id="1"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "magic"
@@ -125,9 +126,10 @@ script = ExtResource("1")
 self_modulate = Color(1, 1, 1, 0)
 
 [node name="Number" type="HBoxContainer" parent="Midlle" unique_id=922501432]
+theme_type_variation = "DamageNumberRow"
+theme = ExtResource("theme")
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_constants/separation = -10
 
 [node name="ShowPlayer" type="AnimationPlayer" parent="." unique_id=1698483359]
 libraries/ = SubResource("4")

@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/472.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/500.png" id="10"]
 [ext_resource type="Script" path="res://Script/backpack.gd" id="12"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="SpriteFrames" id="1"]
 animations = [{
@@ -265,6 +266,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ButtonGroup" type="GridContainer" parent="roleLayer" unique_id=1945758134]
+theme_type_variation = "RoleInformationGrid"
+theme = ExtResource("theme")
 custom_minimum_size = Vector2(56, 304)
 anchors_preset = 1
 anchor_left = 1.0
@@ -276,8 +279,6 @@ offset_bottom = 73.0
 grow_horizontal = 0
 mouse_filter = 2
 columns = 1
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 6
 
 [node name="backpack" type="TextureButton" parent="roleLayer/ButtonGroup" unique_id=654017739]
 process_mode = 1

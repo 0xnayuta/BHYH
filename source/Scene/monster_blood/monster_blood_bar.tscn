@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://Scene/monster_blood/monster_blood_bar.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/blood/blood_empty.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="3"]
 [ext_resource type="Shader" path="res://Shader/level_button.gdshader" id="4"]
 [ext_resource type="Texture2D" path="res://Art/blood/wk.png" id="5"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 shader = ExtResource("4")
@@ -42,14 +42,12 @@ tint_under = Color(1, 1, 1, 0.223529)
 tint_progress = Color(0.454902, 0, 0, 1)
 
 [node name="blood_text" type="Label" parent="blood_bar" unique_id=1103706482]
+theme_type_variation = "MonsterBloodText"
+theme = ExtResource("theme")
 layout_mode = 0
 offset_top = -2.0
 offset_right = 70.0
 offset_bottom = 18.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
