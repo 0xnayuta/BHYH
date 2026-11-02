@@ -1,9 +1,9 @@
 extends Node
 
 ## 宠物运行期探针（由 scripts/scene_probe_runner.py 复制到工程根目录执行）。
-## 覆盖三类回归：宠物在树外初始化属性时不得依赖绝对节点路径；宠物 HUD 头像
-## 必须从构建期模型帧解析；寅虎 SpriteFrames 的逐帧 duration 必须使用相对时长，
-## 保证 walk 的绝对帧时长不是 speed 倍加速后的闪烁值。
+## 覆盖四类回归：宠物在树外初始化属性时不得依赖绝对节点路径；宠物 HUD 头像
+## 必须从构建期模型帧解析；寅虎 SpriteFrames 的逐帧 duration 必须使用相对时长；
+## 宠物 AnimationPlayer 的 String/bool value track 必须使用离散更新，避免 String 混合警告。
 
 const RESULT_PREFIX := "PET_RUNTIME_PROBE_RESULT="
 const TEARDOWN_MARKER := "PET_RUNTIME_PROBE_TEARDOWN"
@@ -20,6 +20,7 @@ func _run() -> void:
 	_check_phoenix_outside_tree(checks)
 	_check_head_textures(checks)
 	_check_yin_tiger_timing(checks)
+	await _check_phoenix_animation_tracks(checks)
 
 	checks["teardown"] = true
 	for check_name in checks:
@@ -76,3 +77,31 @@ func _check_yin_tiger_timing(checks: Dictionary) -> void:
 		checks["yin_walk_speed_%d" % stage] = is_equal_approx(walk_speed, 24.0)
 		checks["yin_walk_seconds_%d" % stage] = is_equal_approx(walk_seconds, 4.0 / 24.0)
 		checks["yin_wait_seconds_%d" % stage] = is_equal_approx(wait_seconds, 2.0 / 24.0)
+
+
+func _check_phoenix_animation_tracks(checks: Dictionary) -> void:
+	# 逐动画触发 AnimationMixer 缓存；连续 String 轨道会在此打印 experimental WARNING。
+	var scene := load("res://Scene/pet/pet_phoenix_summon_1.tscn") as PackedScene
+	checks["phoenix_anim_scene"] = scene != null
+	if scene == null:
+		return
+	var pet = scene.instantiate()
+	add_child(pet)
+	await get_tree().process_frame
+	var player := pet.get_node_or_null("mr_player") as AnimationPlayer
+	var sprite := pet.get_node_or_null("MonsterDir/mr_ani") as AnimatedSprite2D
+	checks["phoenix_anim_player"] = player != null
+	checks["phoenix_anim_sprite"] = sprite != null and sprite.sprite_frames != null
+	if player != null and sprite != null and sprite.sprite_frames != null:
+		var played := 0
+		for animation_name in player.get_animation_list():
+			if not sprite.sprite_frames.has_animation(animation_name):
+				continue
+			player.play(animation_name)
+			player.seek(0.0, true)
+			await get_tree().process_frame
+			played += 1
+		player.stop()
+		checks["phoenix_anim_played"] = played > 0
+	pet.queue_free()
+	await get_tree().process_frame

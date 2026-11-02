@@ -9,7 +9,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
-4. 动画轨道契约 (Animation Track Contract): method 轨道与 value 属性轨道的方法与节点大小写比对
+4. 动画轨道契约 (Animation Track Contract): method 轨道与 value 属性轨道的方法与节点大小写比对，以及 String/bool 状态轨道的离散更新校验
 5. 字典键契约 (Dictionary Key Contract): 中文字典键字面量与 DataKeys 常量契约映射比对
 6. 运行时 manifest 门禁 (Runtime Manifest Gate): 新增代码禁止在运行时直接加载 atlas manifest
 7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary): 禁止旧入口、直接 .data 读取与 source_masks 覆盖
@@ -849,6 +849,59 @@ class ContractScanner:
                             )
                             if not self.whitelist.is_suppressed(finding):
                                 self.findings.append(finding)
+
+            # 3. String/bool value track 必须离散更新，避免 String 混合实验算法 WARNING。
+            content_lines = content.splitlines()
+            line_index = 0
+            while line_index < len(content_lines):
+                header_match = re.match(r'tracks/(\d+)/type = "value"$', content_lines[line_index])
+                if not header_match:
+                    line_index += 1
+                    continue
+                track_index = header_match.group(1)
+                track_end = line_index + 1
+                while track_end < len(content_lines):
+                    next_header = re.match(r'tracks/(\d+)/', content_lines[track_end])
+                    if next_header and next_header.group(1) != track_index:
+                        break
+                    if content_lines[track_end].startswith("["):
+                        break
+                    track_end += 1
+                track_lines = content_lines[line_index:track_end]
+                path_line = next(
+                    (line for line in track_lines if line.startswith(f"tracks/{track_index}/path")),
+                    "",
+                )
+                path_match = re.search(r'NodePath\("([^"]+)"\)', path_line)
+                update_index = next(
+                    (
+                        offset
+                        for offset, line in enumerate(track_lines)
+                        if re.match(r'"update": \d+,?$', line)
+                    ),
+                    None,
+                )
+                if path_match and update_index is not None:
+                    track_path = path_match.group(1)
+                    property_name = track_path.rsplit(":", 1)[-1] if ":" in track_path else track_path
+                    update_value = int(re.search(r'"update": (\d+)', track_lines[update_index]).group(1))
+                    if property_name in ("animation", "playing") and update_value != 1:
+                        finding = ContractFinding(
+                            category="anim_track",
+                            severity="ERROR",
+                            file_path=rel_p,
+                            line=0,
+                            literal=track_path,
+                            message=(
+                                f"动画轨道 '{track_path}' 的 {property_name} 必须使用离散更新 "
+                                f"(update=1)，当前为 {update_value}，会触发 String 混合实验算法 WARNING"
+                            ),
+                            suggested_fix='"update": 1',
+                            rule_id="ANIM_TRACK_STATE_CONTINUOUS"
+                        )
+                        if not self.whitelist.is_suppressed(finding):
+                            self.findings.append(finding)
+                line_index = track_end
 
     # --------------------------------------------------------------------------
     # 5. 字典键契约扫描 (Dictionary Key Contract)

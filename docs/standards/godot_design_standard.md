@@ -57,7 +57,8 @@ SHOULD：
 
 - 优先使用 `%UniqueName` + `@onready` 获取场景内部节点；
 - 节点路径必须与场景树真实大小写一致；
-- 重构场景结构时同步更新所有 `get_node()` / `$` / 动画轨道引用。
+- 重构场景结构时同步更新所有 `get_node()` / `$` / 动画轨道引用；
+- `AnimationPlayer` 驱动非数值状态的 value track（`AnimatedSprite2D.animation`、`playing` 等 `StringName`/`bool` 属性）MUST 使用离散更新（`keys.update = 1`）；连续更新会触发 Godot 的 String 混合实验算法 WARNING。数值属性可按需要连续插值。
 
 ```gdscript
 @onready var title_label: Label = %TitleLabel
