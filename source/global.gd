@@ -142,40 +142,6 @@ var mg_cd_pic
 var zhen_fa
 var lhhj_boss_list = {}
 
-const MAGIC_WEAPON_SCENE_PATHS := {
-	"zcld": "res://Scene/magic_weapon/zcld.tscn",
-	"dshl": "res://Scene/magic_weapon/cucurbit.tscn",
-	"dhqf": "res://Scene/magic_weapon/dhqf.tscn",
-	"tsgj": "res://Scene/magic_weapon/sword.tscn",
-	"bsyj": "res://Scene/magic_weapon/mirror.tscn",
-	"lsys": "res://Scene/magic_weapon/magic_umbrella.tscn",
-	"xhmt": "res://Scene/magic_weapon/ghost_doll.tscn",
-	"xhhl": "res://Scene/magic_weapon/cucurbit2.tscn",
-	"kyl": "res://Scene/magic_weapon/hybrofoline.tscn",
-	"qyj": "res://Scene/magic_weapon/cloud_sword.tscn",
-	"zjfyd": "res://Scene/magic_weapon/purple_gold_bell.tscn",
-	"zjhl": "res://Scene/magic_weapon/purple_glod_cucurbit.tscn",
-	"yjp": "res://Scene/magic_weapon/yujingping.tscn",
-	"zlwdah": "res://Scene/magic_weapon/zlwdah.tscn",
-	"sqzlw": "res://Scene/magic_weapon/sqzlw.tscn",
-	"nmwdnh": "res://Scene/magic_weapon/nmwdnh.tscn",
-	"sqnmwdnh": "res://Scene/magic_weapon/nmwdnh.tscn",
-	"xianyjp": "res://Scene/magic_weapon/xian_yujingping.tscn",
-	"yx": "res://Scene/magic_weapon/yx.tscn",
-	"qlsword": "res://Scene/magic_weapon/qlsword.tscn",
-	"tjbg": "res://Scene/magic_weapon/taiji_bagua.tscn",
-	"dzyl": "res://Scene/magic_weapon/qing_lian.tscn",
-	"469000004": "res://Scene/magic_weapon/zhen_lei_tian_chui.tscn",
-	"469000011": "res://Scene/magic_weapon/di_kong_yu_mo_quan.tscn",
-	"yyzlj": "res://Scene/magic_weapon/eight_immortal_yyzlj.tscn",
-	"ywhl": "res://Scene/magic_weapon/eight_immortal_ywhl.tscn",
-	"zhyx": "res://Scene/magic_weapon/eight_immortal_zhyx.tscn",
-	"bjs": "res://Scene/magic_weapon/eight_immortal_bjs.tscn",
-	"sxyg": "res://Scene/magic_weapon/eight_immortal_sxyg.tscn",
-	"dkhl": "res://Scene/magic_weapon/eight_immortal_dkhl.tscn",
-	"yyb": "res://Scene/magic_weapon/eight_immortal_yyb.tscn",
-	"hehua": "res://Scene/magic_weapon/eight_immortal_hehua.tscn",
-}
 const HIT_TEXT_PATH := "res://Scene/hittext/hit_text.tscn"
 const DAMAGE_TEXT_PATH := "res://Scene/hittext/damage_text.tscn"
 const MONSTER_BLOOD_PATH := "res://Scene/monster_blood/monster_blood_bar.tscn"
@@ -481,26 +447,6 @@ func get_skill_panel_factory() -> SkillPanelFactory:
 func get_map_overlay_factory() -> MapOverlayFactory:
 	return _map_overlay_factory
 
-
-var cloud_sword = null
-var purple_gold_bell = null
-var zcld = null
-var cucurbit = null
-var sword = null
-var mirror = null
-var ghost_doll = null
-var dhqf = null
-var magic_umbrella = null
-var purple_glod_cucurbit = null
-var hybrofoline = null
-var yujingping = null
-var zlwdah = null
-var sqzlw = null
-var nmwdnh = null
-var xian_yujingping = null
-var yx = null
-var qlsword = null
-var cucurbit2 = null
 
 var _last_full_monster_bullet_name := ""
 var _last_combo_value: int = 0
@@ -2791,37 +2737,19 @@ func prewarm_active_pet_runtime_resources() -> void:
 
 
 func get_magic_weapon_scene_path(weapon_name: String) -> String:
-	return str(MAGIC_WEAPON_SCENE_PATHS.get(weapon_name, ""))
+	return _magic_weapon_runtime.get_scene_path(weapon_name)
 
 
 func get_magic_weapon_preload_paths(_name) -> Array[String]:
-	var weapon_name := str(_name)
-	var paths: Array[String] = []
-	var scene_path := str(MAGIC_WEAPON_SCENE_PATHS.get(weapon_name, ""))
-	if scene_path != "":
-		paths.append(scene_path)
-	if weapon_name == "xianyjp":
-		(
-			paths
-			. append_array(
-				[
-					"res://Scene/monster/monster_zhw/guanyin_summon.tscn",
-					"res://Art/monster/guanyin_spine/skeleton.atlas",
-					"res://Art/monster/guanyin_spine/guanyin.spine-json",
-				]
-			)
-		)
-	return paths
+	return _magic_weapon_runtime.get_preload_paths(str(_name))
 
 
 func prewarm_magic_weapon_runtime_resources(_name) -> void:
-	if str(_name) != "xianyjp":
-		return
-	GuanyinSummon.preload_spine_data()
+	_magic_weapon_runtime.prewarm_runtime_resources(str(_name))
 
 
 func prepare_magic_weapon_resources(_name) -> void:
-	var scene_path := str(MAGIC_WEAPON_SCENE_PATHS.get(str(_name), ""))
+	var scene_path := _magic_weapon_runtime.get_scene_path(str(_name))
 	if scene_path == "" or _resource_runtime.is_resource_cached(scene_path):
 		return
 	await _resource_runtime.preload_paths_threaded([scene_path])

@@ -108,7 +108,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `SceneFlow`：场景切换流、请求代次守卫与 `target_scene`；通过 `Global.get_scene_flow()` 读取代次，`Global.change_scene` 是唯一正式切换入口。
 - `PopupFactory` / `ShopFactory` / `BackpackFactory` / `RewardFactory` / `CombatPresentationFactory`：按功能族的场景工厂，各自持有本族场景缓存；`Global.add_*` 保留同名签名并转发到族级 API，分别通过 `Global.get_popup_factory()` / `get_shop_factory()` / `get_backpack_factory()` / `get_reward_factory()` / `get_combat_factory()` 访问。
 - `CombatPoolRuntime`：伤害数字/怪物受击/角色受击/命中音效四池、池根、伤害数字 80 上限计数、受击 55ms 节流与剑阵按帧限流；通过 `Global.get_combat_pool()` 访问，业务侧仍用 `Global.recycle_damage_text` / `recycle_mr_hurt` / `recycle_role_be_hit` / `can_show_sword_*`。
-- `MagicWeaponRuntime`：两个槽位的当前法宝召唤物与创建/替换/清理；通过 `Global.get_magic_weapon_runtime()` 访问，业务侧仍用 `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for`。
+- `MagicWeaponRuntime`：两个槽位的当前法宝召唤物、场景路径表、预载路径与创建/替换/清理；通过 `Global.get_magic_weapon_runtime()` 访问，业务侧仍用 `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for`。
 - `LevelEntryRuntime`：关卡信息面板常驻场景槽位、关卡掉落概率表与进入编排（面板分支、非 res:// 直进分支、强制信息面板关卡）；通过 `Global.get_level_entry_runtime()` 访问，业务侧仍用 `Global.add_level_info` / `get_current_level_fall_pro` / `sync_level_drop_pro_data`。
 - `MonsterSpawnRuntime`：怪物 ID 到场景路径的解析（预载覆盖优先）与 `create_monster`；通过 `Global.get_monster_spawn_runtime()` 访问，业务侧仍用 `Global.create_monster`。
 - `RoleVisualRuntime`：角色身体/装备静态贴图加载、当前角色 ID 与同槽位上一张贴图释放；通过 `Global.get_role_visual_runtime()` 访问，业务侧仍用 `Global.load_role1_body` / `load_role1_eq`。
@@ -500,7 +500,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A 已完成，22-3B 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A/22-3B 已完成，22-3C 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 

@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1/22-2 已完成；Phase 22-3A 云存档字段迁移已完成（2026-11-02）。当前规模为 **126 个字段、261 个公开函数**；删除与迁移清单见 §6。
+> **状态**：Phase 22-1/22-2/22-3A/22-3B 已完成（2026-11-02）。当前规模为 **107 个字段、261 个公开函数**；删除与迁移清单见 §6。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3B 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3C 及后续状态迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,8 +14,8 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,302（22-1 基线 3,516；22-2/22-3A 共删除 214 行） |
-| `var` 字段 | 126（22-1 基线 141；22-2 删除 10，22-3A 迁出 5） |
+| `global.gd` 行数 | 3,230（22-1 基线 3,516；22-2/22-3A/22-3B 共删除 286 行） |
+| `var` 字段 | 107（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19） |
 | 公开函数（非 `_` 前缀） | 261（22-1 基线 273；22-2 删除 12） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
@@ -54,11 +54,9 @@ grep -RIn '"/root/' source --include='*.gd'
 
 **判定**：表现/HUD 状态候选。节点引用优先归 `UiRuntime`、`CombatPresentationFactory`、`ProjectileFactory` 或对应场景；共享定义若确为只读，改由 Resource/Catalog 或显式服务持有。`weapon_bullet_node` 已在 22-2 删除。
 
-### 2.4 法宝实例槽位（19）
+### 2.4 法宝实例槽位（已迁出）
 
-`cloud_sword`, `purple_gold_bell`, `zcld`, `cucurbit`, `sword`, `mirror`, `ghost_doll`, `dhqf`, `magic_umbrella`, `purple_glod_cucurbit`, `hybrofoline`, `yujingping`, `zlwdah`, `sqzlw`, `nmwdnh`, `xian_yujingping`, `yx`, `qlsword`, `cucurbit2`
-
-**判定**：迁移到 `MagicWeaponRuntime` 的槽位 API，或删除已退役槽位。不得继续用同名全局字段保存当前召唤物/实例。
+19 个旧字段均已删除；`MagicWeaponRuntime` 是双槽位与法宝场景路径表的唯一所有者，负责创建、替换、预载与清理，`Global` 只保留稳定转发入口。
 
 ### 2.5 单局、关卡、选择与统计（20）
 
@@ -109,7 +107,7 @@ grep -RIn '"/root/' source --include='*.gd'
 | `RewardFactory` | 奖励展示/领取场景槽位 | 保留 |
 | `CombatPresentationFactory` | 角色/怪物战斗表现场景槽位 | 保留；不拥有伤害真源 |
 | `CombatPoolRuntime` | 伤害文本/受击/音效池与限流 | 保留；消费者负责重置 |
-| `MagicWeaponRuntime` | 法宝召唤物两槽位与创建/替换/清理 | 保留；迁入残留法宝字段 |
+| `MagicWeaponRuntime` | 法宝召唤物两槽位、场景路径表、创建/替换/预载/清理 | 保留；唯一所有者 |
 | `LevelEntryRuntime` | 关卡信息面板、掉落表、进入编排 | 保留；迁入关卡选择/进入状态 |
 | `MonsterSpawnRuntime` | 怪物 ID 解析与 `create_monster` | 保留 |
 | `RoleVisualRuntime` | 角色身体/装备静态贴图与同槽释放 | 保留 |
@@ -367,14 +365,30 @@ main_remove_child, on_fresh, track_monster
 - `coop_probe_runner` **26/26 PASS**；
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
 
-### 6.4 22-3B 交接
+### 6.4 Phase 22-3B 结果
+
+- 19 个旧法宝实例字段经 `Global.<field>` 精确检查均为 0 引用；已全部删除；
+- `MagicWeaponRuntime` 已是双槽位唯一所有者；本批把法宝场景路径表、预载路径计算与 xianyjp 预热分派迁入运行时；
+- `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for` 保留为稳定转发；创建、替换、清理语义未变；
+- 未新增 Autoload，未改变法宝数值、冷却、输入或双人槽位规则。
+
+**验证**：
+
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `magic-weapons` 场景探针 **PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.5 22-3C 交接
 
 下一批按以下顺序执行，不跳步：
 
-1. **22-3B 法宝槽位**：把残留实例字段迁入 `MagicWeaponRuntime`；两个槽位规则不变。
-2. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
-3. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
-4. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
+1. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
+2. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
+3. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
 
 每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
 
