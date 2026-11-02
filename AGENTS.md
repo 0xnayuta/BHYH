@@ -32,6 +32,7 @@
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
   - `reference/architecture.md`：当前运行时架构：Autoload 与 `Global` 普通子节点运行时、场景流、战斗、档案/双人、资源、UI/输入及遗留差距；
   - `reference/acceptance.md`：验收分层、`check_all` 总门禁、契约域、运行期夹具与阈值；
+  - `reference/global_runtime_inventory.md`：Phase 22-1 `Global` 状态字段、公开入口、26 个普通子服务与迁移判定基线；
   - `reference/autoload_boundary_matrix.md`：Phase 20-1B Autoload 与 `Global` 拆分边界：11 个注册项处置、普通子节点运行时、场景工厂族、迁移顺序与剩余候选；
   - `reference/runtime_frames_exceptions.md`：Phase 19-3A/21-4A/21-4B 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界；
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；
@@ -41,7 +42,7 @@
   - `reference/module_api_matrix.md`：Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项；
   - `reference/equipment_data_contract.md`：Phase 33 装备数据契约（33-0~33-5 完成）：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、构建源与验证；
   - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 批次结果、变体命名、例外、审计与迁移边界；
-  - `roadmap/current-iteration.md`：当前候选；Phase 21~33 已收口且当前无活跃候选，程序记录见 `archive/program_21_33_closeout.md`；
+  - `roadmap/current-iteration.md`：当前候选；Phase 22 进行中（22-1 完成、22-2 下一步），Phase 23~26 已规划未启动；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；

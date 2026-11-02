@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（UI Theme 基线、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）。**Phase 33-0/33-1/33-2/33-3/33-4/33-5 已完成**（装备数据契约、规则层、全部消费方迁移、旧脚本与 `AE` Autoload 删除、全量回归与 PCK 闭包）。详细批次见 [`current-iteration.md`](current-iteration.md)。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 22 已启动**：22-1 `Global` 状态/入口清单完成，22-2 为下一步；**Phase 23~26 已规划、未启动**。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（UI Theme 基线、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）。**Phase 33-0/33-1/33-2/33-3/33-4/33-5 已完成**（装备数据契约、规则层、全部消费方迁移、旧脚本与 `AE` Autoload 删除、全量回归与 PCK 闭包）。详细批次见 [`current-iteration.md`](current-iteration.md)。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -16,6 +16,11 @@
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
 | Phase 21 独立立项与平台发布 | 完成（21-2A 最低设备确认与 21-2B 平台测量暂缓）：21-1A/21-1B/21-1C、21-3、21-4A/21-4B、21-2C 已完成 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，暂缓边界见 [`status.md`](../reference/status.md) |
+| Phase 22 `Global` 状态与入口契约 | **进行中**：22-1 已完成；22-2~22-4 未启动 | 先清单、再零引用清理、按所有权迁移状态；见 [`global_runtime_inventory.md`](../reference/global_runtime_inventory.md) 与 [`current-iteration.md`](current-iteration.md) |
+| Phase 23 关卡、宠物与档案数据边界 | 规划、未启动 | 依赖 Phase 22；先抽 `BaseLevel` 宠物，再做 `PlayerData` 宠物域视图 |
+| Phase 24 UI 与成长命令边界 | 规划、未启动 | 依赖 Phase 23 首批；面板显式操作者、命令/快照、拒绝表现层写档 |
+| Phase 25 战斗实体行为切片 | 规划、未启动 | 依赖 Phase 22；`BaseHero`/`BaseMonster` 行为切片，不引入 ECS |
+| Phase 26 平台与发布验证 | 规划、未启动；独立工作流 | release 启动、目标设备 VRAM/首帧、Spine 平台；不以 PCK 闭包替代 |
 | [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成** | 唯一 Theme；旧 Theme 退役；静态直接属性 0，仅 26 条 `hit_text` 动画轨道最终例外；见 §3.7、[`program_21_33_closeout.md`](../archive/program_21_33_closeout.md) §5C |
@@ -61,6 +66,7 @@ flowchart TD
 - 这是推荐执行队列，不声称 AtlasMetadata 是所有应用/会话工作的技术前置。独立清单调查和只读设计可提前；实施顺序由真实调用、共享状态与验证条件决定。
 - Phase 15 的退出/资源所有权与 Phase 16 的档案/槽位边界已稳定；Phase 17 的归属与结算替换以这两组边界为前置，不重新打开全局视图交换或直接写档路径。
 - 平台工作可独立推进；Windows 基线不证明跨平台或战斗峰值性能。
+- 后续依赖：**Phase 22 → Phase 23 → Phase 24 → Phase 25**；Phase 26 可独立推进，但涉及资源/导出变化时与当前代码批次协调。Phase 22 先收口状态所有权，Phase 23 再动关卡/宠物，Phase 24 再动 UI/成长命令，Phase 25 最后动实体行为。
 - 不预先决定精确服务类名、组件数量、Autoload 目标数量或全局目录布局。进入候选阶段前补调用面、边界、原子迁移批次与可执行验收。
 
 ## 3. 各候选阶段的职责
@@ -205,6 +211,22 @@ flowchart TD
 
 **Phase 30~33 共同不做的事**：不改玩法数值、动画时序、掉落规则、输入映射、存档格式或显示基线；不把「现代化」等同于目录搬迁或 Autoload 数量目标。
 
+### 3.9 Phase 22~26：后续现代化候选
+
+> **状态**：Phase 22 进行中（22-1 完成、22-2 下一步）；Phase 23~26 已规划、未启动。
+> **详细任务与验收**：[`current-iteration.md`](current-iteration.md)；Phase 22 基线见 [`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)。
+
+| 阶段 | 目标 | 主要边界 | 依赖 |
+|:---|:---|:---|:---|
+| **Phase 22** Global 状态与入口契约 | 清单、零引用清理、状态迁移与守卫；`Global` 只保留组合根/getter/稳定窄入口 | 不新增 Autoload/业务字段；不改场景流与玩法 | 22-1 已完成；22-2 下一步 |
+| **Phase 23** 关卡、宠物与档案数据边界 | `BaseLevel` 宠物生成/进化抽取，`PlayerData` 宠物域只读视图 | 保留阶段/结算；不重写 `PlayerData` | Phase 22 状态边界稳定 |
+| **Phase 24** UI 与成长命令边界 | 面板显式操作者、命令/快照；拆分 `pet_interface` 与 `LocalCoop` 面板宿主 | 不改 Theme/布局/显示基线；不直接写档 | Phase 23 首批完成 |
+| **Phase 25** 战斗实体行为切片 | `BaseHero` 自动战斗/法宝表现、`BaseMonster` 保护/掉落、受击归属 | 不引入 ECS；不改数值/时序/碰撞层 | Phase 22；建议 Phase 24 后 |
+| **Phase 26** 平台与发布验证 | release 启动、最小包、目标设备 VRAM/首帧、Spine 平台 | 路径闭包 ≠ release；headless ≠ VRAM | 独立；资源变化时协调 |
+
+**编号边界**：Phase 22~26 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。
+**共同非目标**：不改变玩法、数值、掉落、输入、存档格式或显示基线；不以目录搬迁、Autoload 数量或文件行数作为完成标准。
+
 ## 4. 独立平台与内容工作
 
 ### 4.1 Spine 与目标平台
@@ -223,5 +245,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 30、Phase 31、Phase 32 与 Phase 33 已完成并归档；当前无活跃候选，下一候选条件见 [`current-iteration.md`](current-iteration.md)，验证事实见 [`status.md`](../reference/status.md)。
+- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 30、Phase 31、Phase 32 与 Phase 33 已完成并归档；**Phase 22 进行中（22-1 完成，22-2 下一步）**，Phase 23~26 已规划、未启动，详见 [`current-iteration.md`](current-iteration.md) 与验证事实 [`status.md`](../reference/status.md)。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

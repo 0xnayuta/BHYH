@@ -95,7 +95,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 已由 21-3A~J 收口（113 个 `add_*` 全部为族工厂薄转发；未决项见矩阵 §8）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
+- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 已由 21-3A~J 收口（`add` 系入口共 120 个，其中 113 个为带 `add_` 前缀的族工厂薄转发；当前字段/入口基线见 [`global_runtime_inventory.md`](global_runtime_inventory.md)）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
 
 ### 2.4 运行时服务
 
@@ -500,7 +500,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；当前无活跃候选 |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1 已完成清单，22-2 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 
@@ -595,7 +595,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 
 | 项目 | 现状 | 约束 |
 |:---|:---|:---|
-| 11 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 11 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)，当前字段/入口见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
 | 脚本内静态数据表 | `level_info`、怪物路径表 | 新增数据不复制此模式；装备定义已落为 `EquipmentCatalog`，旧装备数据脚本已在 33-4 删除 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
@@ -658,6 +658,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 
 - [`acceptance.md`](acceptance.md)：验收分层、门禁命令、阈值与变更矩阵
 - [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：Phase 20-1B 的 11 个当前 Autoload 处置（决策时 13）、`Global` 切面与迁移顺序
+- [`global_runtime_inventory.md`](global_runtime_inventory.md)：Phase 22-1 的 `Global` 状态字段、公开入口与普通子服务基线
 - [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 的 AtlasMetadata 生产者、schema、消费者、只读 View 与失败矩阵
 - [`status.md`](status.md)：版本、规模与验证状态单一事实源
 - [`../decisions/README.md`](../decisions/README.md)：已做出的架构决策记录（ADR）

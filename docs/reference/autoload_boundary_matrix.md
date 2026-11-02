@@ -33,7 +33,7 @@
 
 ## 3. 运行时服务
 
-`RuntimeDiagnostics`、`UiRuntime`、`AudioRuntime`、`ResourceRuntime`、`SceneFlow`、`CombatPoolRuntime`、`MagicWeaponRuntime`、`LevelEntryRuntime`、`MonsterSpawnRuntime`、`RoleVisualRuntime` 与场景工厂族均为 `Global` 的普通子节点、静态工具或 `RefCounted`，不计入 Autoload。
+`RuntimeDiagnostics`、`UiRuntime`、`AudioRuntime`、`ResourceRuntime`、`SceneFlow`、`CombatPoolRuntime`、`MagicWeaponRuntime`、`LevelEntryRuntime`、`MonsterSpawnRuntime`、`RoleVisualRuntime` 与场景工厂族均为 `Global` 的普通子节点、静态工具或 `RefCounted`，不计入 Autoload。当前字段/入口、26 个普通子服务与 Phase 22 迁移判定见 [`global_runtime_inventory.md`](global_runtime_inventory.md)。
 
 `RunContext` 持有迁移后的运行状态；新增字段应先判定是否属于实例状态、会话状态或全局上下文，不直接塞入 `Global`。
 
