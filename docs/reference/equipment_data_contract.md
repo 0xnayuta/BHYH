@@ -1,6 +1,6 @@
-# 装备数据契约（Phase 33-0/33-1）
+# 装备数据契约（Phase 33-0/33-1/33-2）
 
-> **状态**：33-0（契约与字段审计）与 33-1（Definition/Catalog/Store/生成器）已完成；33-2 规则、33-3 消费方迁移、33-4 切换与 33-5 收口未启动。
+> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）与 33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）已完成；33-3 消费方迁移、33-4 切换与 33-5 收口未启动。
 >
 > **范围**：`all_equipment_data.gd` 的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。运行时旧路径在本批保持不变；本页描述新 Catalog 契约，不宣称消费者已迁移。
 >
@@ -31,7 +31,7 @@
 | 层 | 载体 | 内容 |
 |:---|:---|:---|
 | **定义** | `EquipmentDefinition` + `EquipmentCatalog`（只读 `.tres`） | 静态名称、品质、颜色、类型、价格、图标、属性、强化模板、扩展字段 |
-| **规则** | 后续 `EquipmentRules`/`EquipmentRoller`（33-2） | 随机属性、五行、神铸、强化、宝石共鸣、成长倍率 |
+| **规则** | `EquipmentRules` / `EquipmentRoller`（33-2 已落地） | 随机属性、五行、神铸、强化、宝石共鸣、成长倍率 |
 | **实例** | 当前 `PlayerData.player_data` JSON | 拥有装备、强化等级、宝石实例、槽位、双人共享/个体状态 |
 
 本批不得把 `PlayerData.player_data` 整体 Resource 化，也不得把实例状态写入 Catalog。
@@ -85,10 +85,24 @@
 
 ### 3.5 元数据字段
 
-`EquipmentDefinition` 额外保存两个非业务字段：
+`EquipmentDefinition` 额外保存以下非业务字段：
 
 - `defined_fields: PackedStringArray`：旧字典出现过的 32 字段顶层键；保留“缺失”与“空值”的差异；
-- `randomized_fields: PackedStringArray`：由运行时生成、构建源不保存值的字段；只允许 16 属性与 `成长率`。
+- `randomized_fields: PackedStringArray`：由运行时生成、构建源不保存值的字段；只允许 16 属性与 `成长率`；
+- `random_rolls: Dictionary[StringName, EquipmentStatRoll]`：每个随机字段的范围/采样/变换规格。
+
+`EquipmentStatRoll` 的规格键：
+
+| 键 | 含义 |
+|:---|:---|
+| `sampler` | `randi`（randi_range）或 `randf`（randf_range） |
+| `kind` | 采样输出类型：`int` / `float` |
+| `minimum`、`maximum` | 采样闭区间 |
+| `step` | `randf` 的 snapped 步长；`randi` 必须为 0 |
+| `scale` | 采样后的缩放；1.0 表示不缩放 |
+| `rounding` | `none` / `int_if_integral` / `ceil` |
+
+规格不保存采样值。`randf` + 整数 `step` 保留旧 `snapped` 的 int 返回类型；`randf` + 小数 step 保留 float。
 
 它们不是第 33/34 个业务字段，不进入旧字典键统计。
 
@@ -104,11 +118,11 @@
 2. 与源码中的 `randi_range`/`randf_range` 位置交叉核对；
 3. 将变化字段写入该定义的 `randomized_fields`；
 4. 构建源与 Catalog **不保存这些字段的采样值**；`defined_fields` 仍记录其存在；
-5. 33-2 必须在 `EquipmentRules`/`EquipmentRoller` 中恢复随机生成，不能用 Catalog 的缺省值代替。
+5. 33-2 由 `EquipmentRoller` 按 `random_rolls` 生成；`EquipmentRules` 消费物化快照，不写回定义。
 
-当前结果为 **163 条定义、258 个随机字段值**。随机字段未冻结为某个固定数值；33-2 之前 Catalog 不参与运行时消费。
+当前结果为 **163 条定义、258 个随机字段值**。规格覆盖直接 `randi_range`、偏移 `N + randi_range`、`snapped(randf_range, step)`，以及玉兔复制、中秋 ×1.4、月宫 ×1.25 取整等生成关系。随机值不冻结为固定样本。
 
-`get_wx()` 返回的五行列表是规则结果，不是静态定义；本批不把随机五行写入 `element`。
+`get_wx()` 返回的五行列表是规则结果，不是静态定义；随机五行不写入 `element`。
 
 ---
 
@@ -116,13 +130,16 @@
 
 | 路径 | 职责 |
 |:---|:---|
-| `scripts/equipment_sources.json` | 已提交、可审查的单文件构建源；保存确定性字段、`defined_fields`、`randomized_fields` |
+| `scripts/equipment_sources.json` | 已提交、可审查的单文件构建源；保存确定性字段、`defined_fields`、`randomized_fields` 与 `random_rolls` |
 | `scripts/equipment_data_schema.py` | 32 字段白名单、类型/嵌套键/随机边界校验 |
 | `scripts/equipment_data_audit.py` | 字段审计；未知字段、类型错误、随机字段采样值均失败 |
 | `scripts/convert_equipment_catalog.py` | 构建源 → `equipment_catalog.tres`；`--check` 逐字比较 |
 | `source/Script/data/equipment_definition.gd` | 单条定义 Resource |
 | `source/Script/data/equipment_catalog.gd` | Catalog Resource |
 | `source/Script/data/equipment_store.gd` | 只读索引/查询 |
+| `source/Script/data/equipment_stat_roll.gd` | 随机范围/变换规格 Resource |
+| `source/Script/data/equipment_roller.gd` | 按规格物化随机字段，生成稳定会话快照 |
+| `source/Script/data/equipment_rules.gd` | 旧规则服务化：强化、五行、神铸、宝石共鸣 |
 | `source/Script/data/equipment_catalog.tres` | 1,035 条定义的构建期产物 |
 
 构建源是运行时数据的唯一新来源；生成器不读取旧 `all_equipment_data.gd`、玉兔 JSON 或 Art 目录。公开 clone 缺少玉兔素材时，已提交的 Catalog 仍可加载；不能以公开环境重建源或伪造玉兔条目。
@@ -150,23 +167,47 @@ store.by_category(&"武器")
 
 ---
 
-## 7. 验证
+## 7. 规则层
+
+`EquipmentRoller` 与 `EquipmentRules` 都由 `EquipmentStore` 构造，不新增 Autoload：
+
+```gdscript
+var catalog := load("res://Script/data/equipment_catalog.tres") as EquipmentCatalog
+var store := catalog.create_store()
+var roller := EquipmentRoller.new(store)
+var rules := EquipmentRules.new(store, roller)
+
+var data := roller.materialize(&"tjbg")   # 旧字典形状的随机会话快照
+rules.get_last_equ_pro(&"tjbg", 3, data)
+rules.get_divine_forge_properties(&"tjbg", 3, data, true)
+rules.get_wx()
+```
+
+- `EquipmentRoller.materialize()` 只读 Catalog，把确定性字段与随机字段合成旧字典形状；按 ID 缓存，`clear_cache()` 重置；
+- `EquipmentRules` 保留旧方法名与旧字典输入/输出，`AE` 现有路径未迁移；
+- 规则不写回 Catalog/定义；旧实现对非道具且缺少 `强化属性` 的输入会索引缺失键，新实现返回未修改结果，比较用例只覆盖有效输入；
+- `get_wx()` 保留旧 `randomize()` 行为；五行结果不进入静态定义。
+
+---
+
+## 8. 验证
 
 本批已执行：
 
-- 构建源审计：**1,035 条**、**32 字段**、**163 条随机定义 / 258 个随机字段值**，0 错误；
+- 构建源审计：**1,035 条**、**32 字段**、**163 条随机定义 / 258 个随机字段值**、**258 个随机规格**，0 错误；
 - 8 个种子下确定性字段逐 ID/逐字段一致；随机字段变化集合与源码随机表达式交叉核对；
 - Catalog 往返：Godot 加载 **1,035 条**，Store 查询、分类、缺失 ID 失败语义 PASS；
+- 旧实现对照：**20,640 个字段值**、**258 个随机字段**、**980 个有效规则用例**、8 槽宝石合成用例，**0 差异**（浮点按 `is_equal_approx`；整数、字段存在性与容器精确）；旧随机值均在规格范围/类型内，32 次/规格抽样 PASS；
 - `equipment_catalog.tres` 与构建源逐字同步；`convert_equipment_catalog.py --check` PASS；
 - `contract_gate` 含 `equipment_catalog_check` 与 `equipment_data_audit`，PASS；
 - `check_all`、`health_check` 结果记录于 [`status.md`](status.md)。
 
-未执行：33-2 规则对照、33-3 消费方迁移、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
+未执行：33-3 消费方迁移、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
 
 ---
 
-## 8. 边界与下一步
+## 9. 边界与下一步
 
 - 不改变装备数值、掉落、随机范围、强化/神铸公式、存档格式或双人共享规则；
 - 不删除 `all_equipment_data.gd`，不保留第二份可写字典；
-- 33-2 抽规则并恢复随机字段生成；33-3 按四簇迁移 `AE.all_equipment`；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。
+- 33-2 已完成规则抽取与随机字段恢复；33-3 按四簇迁移 `AE.all_equipment`；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。

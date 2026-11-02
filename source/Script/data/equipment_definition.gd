@@ -31,6 +31,8 @@ extends Resource
 @export var defined_fields: PackedStringArray = PackedStringArray()
 ## 由旧运行时代码生成、构建源不保存采样值的字段。
 @export var randomized_fields: PackedStringArray = PackedStringArray()
+## 随机字段的范围/变换规格；由 EquipmentRoller 读取，不在定义中保存采样值。
+@export var random_rolls: Dictionary[StringName, EquipmentStatRoll] = {}
 
 
 func has_defined_field(field: StringName) -> bool:

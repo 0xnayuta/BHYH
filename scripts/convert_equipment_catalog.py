@@ -36,6 +36,7 @@ SOURCE_PATH = ROOT / "scripts/equipment_sources.json"
 CATALOG_PATH = ROOT / "source/Script/data/equipment_catalog.tres"
 CATALOG_SCRIPT_PATH = "res://Script/data/equipment_catalog.gd"
 DEFINITION_SCRIPT_PATH = "res://Script/data/equipment_definition.gd"
+ROLL_SCRIPT_PATH = "res://Script/data/equipment_stat_roll.gd"
 UID_ALPHABET = "abcdefghijklmnopqrstuvwxy012345678"
 UID_BASE = len(UID_ALPHABET)
 UID_MAX_VALUE = 0x7FFFFFFFFFFFFFFF
@@ -106,7 +107,23 @@ def definition_stats(definition: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def render_definition(definition: dict[str, Any], index: int) -> str:
+def render_roll(roll: dict[str, Any], roll_id: str) -> str:
+    return "\n".join(
+        [
+            f'[sub_resource type="Resource" id="{roll_id}"]',
+            'script = ExtResource("3_roll")',
+            f"sampler = {gd_string_name(str(roll['sampler']))}",
+            f"kind = {gd_string_name(str(roll['kind']))}",
+            f"minimum = {repr(float(roll['minimum']))}",
+            f"maximum = {repr(float(roll['maximum']))}",
+            f"step = {repr(float(roll['step']))}",
+            f"scale = {repr(float(roll['scale']))}",
+            f"rounding = {gd_string_name(str(roll['rounding']))}",
+        ]
+    )
+
+
+def render_definition(definition: dict[str, Any], index: int, roll_ids: dict[tuple[int, str], str]) -> str:
     values = definition["values"]
     defined = definition["defined_fields"]
     randomized = definition["randomized_fields"]
@@ -138,21 +155,39 @@ def render_definition(definition: dict[str, Any], index: int) -> str:
         f"defined_fields = {gd_packed_strings(defined)}",
         f"randomized_fields = {gd_packed_strings(randomized)}",
     ]
+    if randomized:
+        lines.append("random_rolls = {")
+        for field in randomized:
+            lines.append(f"\t{gd_string_name(str(field))}: SubResource(\"{roll_ids[(index, str(field))]}\"),")
+        lines.append("}")
+    else:
+        lines.append("random_rolls = {}")
     return "\n".join(lines)
 
 
 def render_catalog(payload: dict[str, Any]) -> str:
     definitions = payload["definitions"]
     count = len(definitions)
+    roll_ids: dict[tuple[int, str], str] = {}
+    roll_blocks: list[str] = []
+    for index, definition in enumerate(definitions, 1):
+        for field in definition["randomized_fields"]:
+            roll_id = f"roll_{index}_{len(roll_ids) + 1}"
+            roll_ids[(index, str(field))] = roll_id
+            roll_blocks.append(render_roll(definition["random_rolls"][field], roll_id))
     lines = [
-        f'[gd_resource type="Resource" script_class="EquipmentCatalog" load_steps={count + 3} format=3 uid="{catalog_uid()}"]',
+        f'[gd_resource type="Resource" script_class="EquipmentCatalog" load_steps={count + len(roll_blocks) + 4} format=3 uid="{catalog_uid()}"]',
         "",
         f'[ext_resource type="Script" path="{CATALOG_SCRIPT_PATH}" id="1_catalog"]',
         f'[ext_resource type="Script" path="{DEFINITION_SCRIPT_PATH}" id="2_definition"]',
+        f'[ext_resource type="Script" path="{ROLL_SCRIPT_PATH}" id="3_roll"]',
         "",
     ]
+    for block in roll_blocks:
+        lines.append(block)
+        lines.append("")
     for index, definition in enumerate(definitions, 1):
-        lines.append(render_definition(definition, index))
+        lines.append(render_definition(definition, index, roll_ids))
         lines.append("")
     subresources = ", ".join(f'SubResource("definition_{index}")' for index in range(1, count + 1))
     lines.extend(

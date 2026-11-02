@@ -105,8 +105,8 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `convert_monster_frames.py` | 怪物 `AtlasMetadata.sequences` → 既有 `*_frames.tres`；按 `monster_action_maps.json` 追加动作别名（复用 `AtlasTexture` 子资源）并修正 loop；`--check` 校验动画名集合、帧数、页闭包、region/margin、确定性 UID 与全局 UID 冲突；`--all` 只补缺失/语义不一致/别名/loop/speed；支持旧 `animations` schema、null 计时帧与 `TARGET_OVERRIDES` 目标推导；`--rewrite` 只补 UID 头；`--emit` 输出规范格式到指定目录 | 既有 `source/Art/monster/**/*_frames.tres`（私有素材） |
 | `convert_level_preload_catalog.py` | 关卡脚本刷怪表 / 出生点 / 怪物弹体名 + `monster_dynamic_paths.json` + `level_layout_sources.json` → `LevelPreloadCatalog.tres` 与 `level_preload_export_dependencies.json`；`--check` 同时校验两份输出并进入总门禁 | `source/Script/data/level_preload_catalog.tres`、`source/Script/data/level_preload_export_dependencies.json` |
 | `convert_level_layout_catalog.py` | `level_layout_sources.json` → 单关布局 `.tres` 与 `LevelLayoutCatalog.tres`；校验 stage 连续、点位唯一、依赖存在、矩形范围（终屏 `screen_rect` 允许零宽）与场景路径；`--check` 逐字比较并进入总门禁 | `source/Script/data/level_layouts/*.tres`、`source/Script/data/level_layout_catalog.tres` |
-| `convert_equipment_catalog.py` | `equipment_sources.json` → `EquipmentCatalog` 与 1,035 条 `EquipmentDefinition`；保留 32 字段、int/float 与嵌套强化键；随机字段只登记不采样；`--check` 逐字比较并进入总门禁 | `source/Script/data/equipment_catalog.tres` |
-| `equipment_data_audit.py` | 校验装备构建源的 32 字段白名单、类型、扩展键、字段存在性、随机字段边界与计数；未知字段/类型/随机采样值失败 | 终端 / `--json` |
+| `convert_equipment_catalog.py` | `equipment_sources.json` → `EquipmentCatalog` 与 1,035 条 `EquipmentDefinition`；保留 32 字段、int/float、嵌套强化键与 258 个随机规格；随机字段不采样；`--check` 逐字比较并进入总门禁 | `source/Script/data/equipment_catalog.tres` |
+| `equipment_data_audit.py` | 校验装备构建源的 32 字段白名单、类型、扩展键、字段存在性、随机规格与计数；未知字段/类型/随机采样值失败 | 终端 / `--json` |
 | `level_layout_migration_audit.py` | 检查已登记布局的标准关卡脚本是否仍保留 `monster_group = {` 数据表；双数据源、未登记例外或失效例外均失败 | 终端 |
 | `convert_external_monster_catalog.py` | `source/Data/zmws_config/monster.json` 名称 + BHYH 怪物场景脚本 `my_mr_name` → 外部 ID → BHYH 怪物 ID/场景路径；精确名称优先，去除空白/全角/间隔号后唯一匹配次之，重复名称取最小 ID；`--check` 逐字比较并进入总门禁 | `source/Script/data/external_monster_catalog.tres` |
 
@@ -142,7 +142,7 @@ frame_sequence_pack_probe.py（发布前，独立执行，不在 check_all 中�
 | `monster_action_views.json` | 怪物动作视图登记：输出路径 → `{action: {source, frames, durations?, loop, speed}}` |
 | `level_layout_data_exceptions.json` | 30-3 收口保留的 10 个动态/非连续数据表例外：脚本名 → 不可静态布局化理由；由迁移审计校验精确集合 |
 | `level_layout_sources.json` | 已迁移关卡与代表原始 ZMWS 关卡的构建期布局源：玩家出生点、阶段分屏/触发、刷怪点与依赖；生成 `LevelLayoutEntry` 与 Catalog，运行时不再读取 |
-| `equipment_sources.json` | 装备/物品构建源：1,035 条定义、32 字段、字段存在性与随机字段登记；由 `convert_equipment_catalog.py` 生成只读 Catalog |
+| `equipment_sources.json` | 装备/物品构建源：1,035 条定义、32 字段、字段存在性、`randomized_fields` 与 `random_rolls`；由 `convert_equipment_catalog.py` 生成只读 Catalog |
 | `monster_dynamic_paths.json` | 关卡预载的动态来源：`aliases`（怪物 ID → 场景 ID）、`textures`（动态纹理/目录）、`scenes`（额外弹体场景）；构建期展开进 Catalog 与发布依赖清单，运行时不再读取 |
 | `runtime_frames_allowlist.json` | 允许运行时调用 `SpriteFrames.new()` 的文件与理由；由 `runtime_frames_audit.py` 守恒 |
 | `theme_override_baseline.json` | UI 直接 `theme_override_*` 与动画轨道引用的场景级上限；由 `theme_override_audit.py` 守恒 |

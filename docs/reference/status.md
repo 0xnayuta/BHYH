@@ -4,7 +4,7 @@
 >
 > 最后更新：2026-11-02（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟；Phase 30-1 已完成 `level_48` 布局试点，Phase 30-2 已完成外部怪物映射与原始 ZMWS 驱动，Phase 30-3 收口完成（69 个脚本迁出布局、6 个空数据表删除、10 个动态/非连续例外登记），Phase 30-4 边界收尾完成并归档（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：55 个逻辑脚本/30 个标准脚本逐项复核；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 UI Theme 与高密度/低密度/中高密度/关卡结算/运行时/收口批次完成；PCK 4191/4191 可达）；Phase 31-1 已完成视差迁移；当前 11 个 Autoload）
 >
-> 2026-11-02 补充：Phase 33-0/33-1 已完成（装备 32 字段契约、1,035 条 Resource Catalog、生成器/审计、只读 Store）；33-2~33-5 未启动。详见 [`equipment_data_contract.md`](equipment_data_contract.md)。
+> 2026-11-02 补充：Phase 33-0/33-1/33-2 已完成（装备 32 字段契约、1,035 条 Resource Catalog、生成器/审计、只读 Store、258 个随机规格与 Rules/Roller）；33-3~33-5 未启动。详见 [`equipment_data_contract.md`](equipment_data_contract.md)。
 
 ---
 
@@ -59,18 +59,18 @@ scripts/                    # 门禁、审计、回归与构建工具（见 scri
 
 | 指标 | 数量 |
 |:---|:---:|
-| GDScript | **785**（业务 749：`Script/` 688 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36；33-1 新增 3 个装备定义/Store 脚本） |
+| GDScript | **788**（业务 752：`Script/` 691 + 顶层 5 + `Scene/` 55 + `Art/` 1；插件 36；33-1/33-2 新增 6 个装备脚本） |
 | 场景 `.tscn` | **1,136**（`Scene/` 1,135 + 插件 1） |
 | 资源 `.tres` | **1,381**（`Art/` 1,371、`Script/` 9、`Scene/` 1；含 21-4A 生成的动作帧与 33-1 `equipment_catalog.tres`） |
 | PNG | **16,723**（16,702 小写 `.png` + 21 大写 `.PNG`） |
 | `.import` | **17,013** |
-| `.uid` | **818**（33-1 新增 3 个脚本伴生 UID） |
+| `.uid` | **821**（33-1/33-2 新增 6 个脚本伴生 UID） |
 | MP3 / WAV | **170 + 8**（大写 `.MP3`）/ **1** |
 | 字体 | **13 TTF + 2 TTC** |
 | Shader | **7** |
 | Autoload | **11**（10 业务 + 1 编辑器调试桥；运行时职责由 `Global` 的普通子节点承担） |
 
-> 统计日期 2026-11-02（私有完整素材工作区实测；33-1 新增 3 个脚本、3 个 `.uid`、1 个 Catalog）；数字随迭代变动，更新时须重新实测。仓库体积与本地素材、`.git`、导入缓存相关，不作为发布指标；公开仓库不包含第三方素材。
+> 统计日期 2026-11-02（私有完整素材工作区实测；33-1/33-2 新增 6 个脚本、6 个 `.uid`、1 个 Catalog）；数字随迭代变动，更新时须重新实测。仓库体积与本地素材、`.git`、导入缓存相关，不作为发布指标；公开仓库不包含第三方素材。
 
 ---
 
@@ -100,6 +100,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 | 验证 | 结果 | 说明 |
 |:---|:---|:---|
+| 2026-11-02 Phase 33-2 装备规则层 | 新增 `EquipmentRoller`、`EquipmentRules`、258 个 `EquipmentStatRoll` 规格与 `random_rolls`；恢复 163 条定义的随机字段。旧实现对照：**20,640 个字段值 / 258 个随机字段 / 980 个有效规则用例 / 8 槽宝石**，**0 差异**（浮点按 `is_equal_approx`；整数、字段存在性与容器精确）；旧随机值范围/类型与 32 次/规格抽样 PASS。`equipment_catalog --check`、`equipment_data_audit --check` PASS；`check_all --godot-bin` **9/9（28.20s）**。 | 旧 `AE.all_equipment` 路径未改；新规则不写定义；`get_wx` 保留旧随机化行为；33-3 才迁移消费者 |
 | 2026-11-02 Phase 33-0/33-1 装备数据契约 | 构建源 **1,035 条 / 32 字段**；**163 条随机定义 / 258 个随机字段值**；8 个种子下确定性字段逐 ID/逐字段 **0 差异**；构建源与 Catalog 往返 **0 差异**；Godot 加载 **1,035 条**、Store 查询/分类/缺失 ID 失败语义 PASS；生成器/审计 `--check` PASS；`check_all --godot-bin` **9/9（29.43s）**；`level_1` **PASS 24.48s（0/0）** | 旧 `AE.all_equipment` 运行路径未改；随机字段只登记、不采样；新增 `EquipmentDefinition`/`EquipmentCatalog`/`EquipmentStore`、`equipment_sources.json`、生成器/审计与 `equipment_catalog.tres`；不新增 Autoload |
 | 2026-10-25 3077 tornado 构建期帧迁移 | `convert_numbered_frames.py --all --check` **5/5 PASS**（tornado **7 帧 / duration 3.0**）；headless 验证 3077 普通 `Texture2D` 帧可视与碰撞 **PASS**，3117 `AtlasTexture` 回归 **PASS**；静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS** | 3077 `tornado` 改用独立 `tornado_frames.tres`，移除逐帧 `frame_root/frame_count`；弹道碰撞标准帧分支同时支持普通 `Texture2D` 的 `used_rect` 几何 |
 | 2026-10-25 Wutai 弹道图集帧审计 | 83 个 swf_png 模型 / **588** 个序列全部能在伴随 `*_frames.tres` 中找到，缺失 **0**；Wutai 自动解析用例 3065/3069/3076/3078/3136 可视节点创建成功；3077 `tornado` 已由独立构建期帧资源接管；静态门禁 **7/7 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**；`level_1` 冒烟 **PASS** | `WutaiMinghaiProjectile` 对 swf_png 序列自动解析同目录构建期 frames 资源，仅在目标动画存在时启用；避免各 Boss 配置漏传 `frames_resource` 时回退到不存在的逐帧 PNG |

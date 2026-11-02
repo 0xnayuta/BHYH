@@ -571,6 +571,17 @@
         "描述": "玉兔的云裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -759,6 +770,17 @@
         "描述": "玉兔的究天裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -825,6 +847,44 @@
         "描述": "玉兔的摩愿杏裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 3,
+          "maximum": 5,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 120,
+          "maximum": 135,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -888,6 +948,17 @@
         "描述": "哪吒的究天衣。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -954,6 +1025,44 @@
         "描述": "哪吒的摩愿枫衣。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 3,
+          "maximum": 5,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 120,
+          "maximum": 135,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1145,6 +1254,17 @@
         "描述": "玉兔的罗悲素裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 350,
+          "maximum": 370,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1212,6 +1332,26 @@
         "描述": "玉兔的浮行烨裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 15,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 80,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1277,6 +1417,17 @@
         "描述": "哪吒的罗悲泉衣。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 350,
+          "maximum": 370,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1344,6 +1495,26 @@
         "描述": "哪吒的浮行烽衣。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 15,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 80,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1780,6 +1951,17 @@
         "描述": "玉兔的多智绮裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 650,
+          "maximum": 700,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1846,6 +2028,17 @@
         "描述": "玉兔的风廉寒裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 800,
+          "maximum": 850,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -1912,6 +2105,26 @@
         "描述": "玉兔的萍雨雾裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 110,
+          "maximum": 125,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -2035,6 +2248,26 @@
         "描述": "玉兔的震雷银裳，月华凝裳，护身御敌。",
         "类型": "防具",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1000,
+          "maximum": 1050,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 440,
+          "maximum": 485,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -2159,6 +2392,17 @@
         "描述": "哪吒的多智轻衣。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 650,
+          "maximum": 700,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -2225,6 +2469,17 @@
         "描述": "哪吒的风廉绸衣。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 800,
+          "maximum": 850,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -2291,6 +2546,26 @@
         "描述": "哪吒的萍雨霓衣。",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 110,
+          "maximum": 125,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -2414,6 +2689,26 @@
         "描述": "哪吒的震雷陌衣。",
         "类型": "防具",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1000,
+          "maximum": 1050,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 440,
+          "maximum": 485,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -5082,6 +5377,26 @@
         "描述": "困骥犹在辕，沉珠尚隐精。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 465,
+          "maximum": 485,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 185,
+          "maximum": 205,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -5280,6 +5595,17 @@
         "描述": "传说由白虎的肋骨打制的法杖，施法时其疾如风，只见白虎之影。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -6105,6 +6431,17 @@
         "描述": "召唤玄风棕扇吹出强风攻击敌人。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -7546,6 +7883,17 @@
         "描述": "阵解星芒尽，营空海雾消。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 95,
+          "maximum": 105,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -7780,6 +8128,17 @@
         "描述": "一切有为法。如梦幻泡影，如露亦如电。应作如是观。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 75,
+          "maximum": 90,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -7846,6 +8205,44 @@
         "描述": "极寒之地的千年冰魄，锻造的胸甲，散发出无法靠近的寒气。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 15,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 7,
+          "maximum": 9,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 15,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 330,
+          "maximum": 350,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -7915,6 +8312,17 @@
         "描述": "拥有【邪灵寄生】技能，附身到怪物身上偷取生命，同时使其减速，一段时间后将偷取到的生命给予玩家。",
         "类型": "法宝",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 0.8,
+          "maximum": 1.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -7980,6 +8388,26 @@
         "描述": "寒气逼人，毛骨俱悚，狂飙刮地，人马俱惊。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 85,
+          "maximum": 95,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -8067,6 +8495,17 @@
         "描述": "极寒之地的千年冰魄，锻造的重铠，犹如千年寒冰那般坚固。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 400,
+          "maximum": 420,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -8253,6 +8692,26 @@
         "描述": "可以合成的传说饰品花宴。",
         "类型": "饰品",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Crit": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 280,
+          "maximum": 296,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -8370,6 +8829,17 @@
         "描述": "九曲黄河万里沙，浪淘风簸自天涯。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 165,
+          "maximum": 185,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -8429,6 +8899,35 @@
         "描述": "贪嗔痴,妄念起,便是万丈红尘。",
         "类型": "道具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "Crit": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 30,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -8820,6 +9319,35 @@
         "描述": "贪嗔痴,妄念起,便是万丈红尘。",
         "类型": "道具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "R_mp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 5,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 60,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 6,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -9671,6 +10199,17 @@
         "描述": "苍天之下，至于酆都蔫蔫然枯草木，独挂饰盎然，万劫亦重生。",
         "类型": "饰品",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 55,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10151,6 +10690,35 @@
         "描述": "",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 24,
+          "maximum": 30,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 24,
+          "maximum": 30,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 260,
+          "maximum": 270,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10320,6 +10888,17 @@
         "描述": " 拥有【士气鼓舞】技能，回复血量和蓝量。",
         "类型": "法宝",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 0.6,
+          "maximum": 1.0,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10411,6 +10990,26 @@
         "描述": "持续恢复生命和魔法。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "R_hp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 5.0,
+          "maximum": 15.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10736,6 +11335,17 @@
         "描述": " 拥有【烈焰火柱】技能，释放三道火柱，造成多段伤害，并灼烧目标。",
         "类型": "法宝",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 0.6,
+          "maximum": 1.0,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10799,6 +11409,17 @@
         "描述": "玄丝织就，坚韧无匹，其声如虎啸。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 85,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10863,6 +11484,26 @@
         "描述": "聚万物之灵气，佩戴后来去通风，聆其音，知其前后，万物皆明。",
         "类型": "饰品",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 60,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 25,
+          "maximum": 45,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -10989,6 +11630,17 @@
         "描述": "权杖捆绑着上古遗骸，蕴藏驱神之力，挥舞间，兴云起雾，电闪雷鸣。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 16,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -11052,6 +11704,17 @@
         "描述": "据说是通臂猿猴的战甲，染上了无法褪去的血迹和被遗忘的记忆。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -11116,6 +11779,17 @@
         "描述": "龙王为齐天大圣定制的战铠，斩妖除魔所向披靡。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 500,
+          "maximum": 550,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -11181,6 +11855,17 @@
         "描述": "跋扈千里行，疏狂袍飞扬。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 85,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -11606,6 +12291,26 @@
         "描述": "",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 110,
+          "maximum": 125,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -13784,6 +14489,17 @@
         "描述": "牛头的古藤棒，重达千斤，碎大石，易如反掌。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 80,
+          "maximum": 85,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -13846,6 +14562,17 @@
         "描述": "坚韧无比，碎大石，轻而易举。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 115,
+          "maximum": 125,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -14077,6 +14804,17 @@
         "描述": "醉卧枕天下，谈笑弄乾坤。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 40,
+          "maximum": 45,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -15226,6 +15964,26 @@
         "描述": "复活已阵亡的宠物。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "R_mp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 3.0,
+          "maximum": 10.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -15517,6 +16275,35 @@
         "描述": "一种相思，两处闲愁，火焰化红莲，此情自消衍。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 18,
+          "maximum": 20,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 15,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 700,
+          "maximum": 740,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -17782,6 +18569,26 @@
         "描述": "倾盆雨，惊天雷，众里寻他而去。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 9,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 235,
+          "maximum": 245,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -17845,6 +18652,17 @@
         "描述": "龙吟恨，且回首，却在灯火阑珊。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 850,
+          "maximum": 900,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -17908,6 +18726,26 @@
         "描述": "损愁眉，哭断肠，待到佳期如梦。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 220,
+          "maximum": 240,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18031,6 +18869,17 @@
         "描述": "太上老君用神冰铁亲自锤炼，借五方五帝、六丁六甲之力锻造而成，重量有一藏之数，连柄五千零四十八斤。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 60,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18092,6 +18941,17 @@
         "描述": "\t一点浩然气，千里快哉风。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 25,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18154,6 +19014,17 @@
         "描述": "看似普通的衣裳，蕴藏有神秘的力量，只有凑齐家传装备才能释放出这股力量。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 175,
+          "maximum": 205,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18223,6 +19094,17 @@
         "描述": "集齐家传装备后熔铸而成，拥有神秘的力量。",
         "类型": "法宝",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.0,
+          "maximum": 1.8,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18284,6 +19166,17 @@
         "描述": "风雷鼓舞三千浪，易象飞龙定在天。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 120,
+          "maximum": 130,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18407,6 +19300,26 @@
         "描述": "看似普通的手镯，蕴藏有神秘的力量，只有凑齐家传装备才能释放出这股力量。",
         "类型": "饰品",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 110,
+          "maximum": 130,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 55,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18528,6 +19441,17 @@
         "描述": "地狱炎岩经三味真火灼烧四十九日而成的战甲，故金刚不灭。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 200,
+          "maximum": 220,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -18591,6 +19515,17 @@
         "描述": "渡劫之日，三界俱灭，九环圣光，万物复苏。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 60,
+          "maximum": 70,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19014,6 +19949,17 @@
         "描述": "",
         "类型": "武器",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19190,6 +20136,17 @@
         "描述": "金汤既失险，玉石乃同焚。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 175,
+          "maximum": 180,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19253,6 +20210,26 @@
         "描述": "浮生速流电，倏忽变光彩。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 565,
+          "maximum": 585,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 245,
+          "maximum": 285,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19319,6 +20296,26 @@
         "描述": "",
         "类型": "防具",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1000,
+          "maximum": 1050,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 500,
+          "maximum": 585,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19382,6 +20379,35 @@
         "描述": "观音菩萨交给取经人的袈裟，镶嵌七宝，水火不侵，蕴藏无尽的法力。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 16,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 430,
+          "maximum": 450,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19502,6 +20528,26 @@
         "描述": "风卷云残，俱消往昔，既然无缘，何立誓言。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 700,
+          "maximum": 740,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 360,
+          "maximum": 365,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19644,6 +20690,17 @@
         "描述": "醉卧枕天下，谈笑弄乾坤。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 75,
+          "maximum": 85,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19788,6 +20845,17 @@
         "描述": "菩提本无树，明镜亦非台。本来无一物，何处惹尘埃。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 265,
+          "maximum": 285,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -19850,6 +20918,26 @@
         "描述": "句芒爱弄春风权,开萌发翠无党偏。",
         "类型": "翅膀",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 300,
+          "maximum": 320,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 80,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20311,6 +21399,17 @@
         "描述": "落红，一枯叶，落红离弦去，从此两难聚。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 215,
+          "maximum": 220,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20380,6 +21479,17 @@
         "描述": "拥有【沐浴回春】技能，每秒为玩家恢复生命,期间免疫击退。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.4,
+          "maximum": 2.0,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20444,6 +21554,17 @@
         "描述": "落黄昏，三更雨，临行密密缝，离愁丝丝苦。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 650,
+          "maximum": 700,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20507,6 +21628,26 @@
         "描述": "求不得，放不下，梧桐化成杖，孤走枯苍道。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 22,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 195,
+          "maximum": 210,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20572,6 +21713,17 @@
         "描述": "恶鬼之衣，怨气重重。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 270,
+          "maximum": 300,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20636,6 +21788,17 @@
         "描述": "人朴情虑肃，境闲视听空。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 365,
+          "maximum": 385,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20699,6 +21862,26 @@
         "描述": "死神遗落的镰刀，一但被砍伤，将留下永远无法愈合的伤口。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 25,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 100,
+          "maximum": 105,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -20763,6 +21946,17 @@
         "描述": "传说阿修罗的指环，横行于六道之间，却留下一抹黯然。",
         "类型": "饰品",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 60,
+          "maximum": 70,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -21199,6 +22393,26 @@
         "描述": "禁锢刑天于十八层地狱之中，六道轮回，生生世世，永无止境。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 16,
+          "maximum": 18,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 145,
+          "maximum": 155,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -21950,6 +23164,17 @@
         "描述": "拥有【暴雨梨花】技能，散出漫天毒针，命中敌人后会造成少量伤害并令其中毒。",
         "类型": "法宝",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.0,
+          "maximum": 1.6,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -22151,6 +23376,35 @@
         "描述": "窃以暮景残光，步履蹒跚，能余几日，魂聚长袍，方今生不朽。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 6,
+          "maximum": 8,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 260,
+          "maximum": 280,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -23229,6 +24483,26 @@
         "描述": "兔苑词才去不还,兰亭水石空明月。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 22,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 165,
+          "maximum": 175,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -23806,6 +25080,17 @@
         "描述": "召唤牛魔王助战。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.2,
+          "maximum": 2.7,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -24051,6 +25336,17 @@
         "描述": "哪吒的火尖枪。",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -24114,6 +25410,17 @@
         "描述": "哪吒的莲衣。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -24541,6 +25848,26 @@
         "描述": "可以合成的传说饰品花宴。",
         "类型": "饰品",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 28,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 280,
+          "maximum": 296,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -25174,6 +26501,17 @@
         "描述": "",
         "类型": "武器",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -25832,6 +27170,17 @@
         "描述": "粗糙的布料制成的绸布衣服。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 25,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -25893,6 +27242,17 @@
         "描述": "粗糙的布料制成的长袍。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 25,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -25954,6 +27314,17 @@
         "描述": "粗糙的布料制成的长衫。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 45,
+          "maximum": 55,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26015,6 +27386,17 @@
         "描述": "一把普通的钉耙。",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 5,
+          "maximum": 7,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26076,6 +27458,17 @@
         "描述": "粗布缝制成的袈裟。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26137,6 +27530,17 @@
         "描述": "松木制成的法杖。",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 6,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26254,6 +27658,17 @@
         "描述": "普通的铁枪.",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 8,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26315,6 +27730,17 @@
         "描述": "粗布缝制而成的衣物。",
         "类型": "防具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26374,6 +27800,17 @@
         "描述": "普通的铁棍",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26433,6 +27870,17 @@
         "描述": "普通的月牙铲.",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 4,
+          "maximum": 7,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26738,6 +28186,17 @@
         "描述": "传说由貔貅的绒毛打造而成的铠甲，金光灿灿，百毒不侵。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 125,
+          "maximum": 135,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -26801,6 +28260,35 @@
         "描述": "彼岸花，有花无叶，生生世世，永不相见。幻七彩，无生无死，无苦无悲，无欲无求。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 370,
+          "maximum": 400,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -27301,6 +28789,17 @@
         "描述": "传说由麒麟的绒毛编织的法袍，法力源源不绝，犹如麒麟附体。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 220,
+          "maximum": 240,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -27370,6 +28869,17 @@
         "描述": "召唤青龙剑御剑飞行。",
         "类型": "法宝",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.3,
+          "maximum": 2.7,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -27857,6 +29367,17 @@
         "描述": "天枢、天璇、天玑、天权、玉衡、开阳、摇光，七星北斗，七星守护。",
         "类型": "饰品",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 30,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -27986,6 +29507,35 @@
         "描述": "碧天阔，白云散，百万里无硝烟，大雁向南飞去。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 18,
+          "maximum": 20,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 555,
+          "maximum": 600,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -28055,6 +29605,17 @@
         "描述": "拥有【戮天斩击】技能，释放剑阵，飞向当前生命最高的敌人，对受到伤害所有目标施加破甲。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -28182,6 +29743,17 @@
         "描述": "珠有泪，玉生烟，稀白头不胜簪，只是当时惘然。",
         "类型": "饰品",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 150,
+          "maximum": 160,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -28822,6 +30394,17 @@
         "描述": "",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1200,
+          "maximum": 1300,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -30094,6 +31677,17 @@
         "描述": "英雄泪，只为江山。万里山河，千里孤城，破国恨，永难忘。",
         "类型": "饰品",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 170,
+          "maximum": 180,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -30156,6 +31750,17 @@
         "描述": "朔月盈亏已可疑,随泉上下更难知。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 200,
+          "maximum": 205,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -32492,6 +34097,26 @@
         "描述": "魔非魔，念人间，怎知情愁滋味。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 260,
+          "maximum": 270,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -32945,6 +34570,26 @@
         "描述": "前世的因，今生的果，宿命轮回，缘起缘灭，三生锤下，瓦解冰消。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 55,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 115,
+          "maximum": 120,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33068,6 +34713,17 @@
         "描述": "七八个星天外，两三点雨山前。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 230,
+          "maximum": 250,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33363,6 +35019,17 @@
         "描述": "绿色铅笔.",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1,
+          "maximum": 3,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33596,6 +35263,17 @@
         "描述": "短时间提升移动速度。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33717,6 +35395,35 @@
         "描述": "绝景良时难再并，他年此日应惆怅。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 135,
+          "maximum": 145,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 175,
+          "maximum": 180,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33864,6 +35571,35 @@
         "描述": "贪嗔痴,妄念起,便是万丈红尘。（只留两个可以刷属性。）",
         "类型": "道具",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "R_hp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 5,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 50,
+          "maximum": 100,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -33971,6 +35707,26 @@
         "描述": "",
         "类型": "武器",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 20,
+          "maximum": 24,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 300,
+          "maximum": 310,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -34086,6 +35842,17 @@
         "描述": "殿可毁，人可亡，恨犹在，何时还。",
         "类型": "饰品",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 500,
+          "maximum": 600,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -34445,6 +36212,53 @@
         "描述": "6级解锁全场眩晕，消耗10魔法，冷却20秒。装备后每关可满血复活一次，获得2秒无敌；木属性延长眩晕并额外恢复一半最大魔法。",
         "类型": "法宝",
         "颜色": "FFA500"
+      },
+      "random_rolls": {
+        "Crit": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 6.0,
+          "maximum": 8.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 6.0,
+          "maximum": 8.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 6.0,
+          "maximum": 8.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "R_hp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 8.0,
+          "maximum": 28.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "R_mp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 6.0,
+          "maximum": 8.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -34598,6 +36412,26 @@
         "描述": "",
         "类型": "防具",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1000,
+          "maximum": 1050,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 440,
+          "maximum": 485,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -34970,6 +36804,26 @@
         "描述": "执志挺身与命抗,浴血奋斗不畏殇。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 90,
+          "maximum": 100,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 140,
+          "maximum": 150,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -35091,6 +36945,17 @@
         "描述": "泥丸九宫中的天蓬战衣，在妖邪之间散发一股仙气。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 700,
+          "maximum": 750,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -35359,6 +37224,26 @@
         "描述": "",
         "类型": "武器",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 305,
+          "maximum": 315,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -35488,6 +37373,17 @@
         "描述": " 拥有【万剑归宗】技能，召唤数把巨剑从天而降，造成多段伤害，并概率令其冰冻。",
         "类型": "法宝",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 0.8,
+          "maximum": 1.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -35553,6 +37449,26 @@
         "描述": "用无数妖怪的骸骨熔炼的项链，月圆时会发出百兽的悲鸣。",
         "类型": "饰品",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 350,
+          "maximum": 400,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 95,
+          "maximum": 110,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -35618,6 +37534,17 @@
         "描述": "且镇寒魂意，掩尽透骨伤。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 350,
+          "maximum": 370,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -36231,6 +38158,35 @@
         "描述": "传说由鲲鹏羽毛编织成的法袍，藏有无限的法力，穿上后腾云驾雾，翱翔云端。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 6,
+          "maximum": 8,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 310,
+          "maximum": 340,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -36436,6 +38392,17 @@
         "描述": "好风频借力，送我上青云。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 170,
+          "maximum": 180,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -36844,6 +38811,35 @@
         "描述": "",
         "类型": "武器",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 240,
+          "maximum": 265,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 9,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 255,
+          "maximum": 265,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -38545,6 +40541,17 @@
         "描述": "心若顽石，不生多情，多情空于恨，此恨无绝期。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1000,
+          "maximum": 1050,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -38782,6 +40789,17 @@
         "描述": "当舍于懈怠，远离诸愦闹；寂静常知足，是人当解脱。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 15,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39080,6 +41098,35 @@
         "描述": "街喧闹，人过往，且记曾相识，不为少年留。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 175,
+          "maximum": 185,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 200,
+          "maximum": 205,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39213,6 +41260,17 @@
         "描述": "拥有【万象天引】技能，将怪物吸引至玩家身边。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.6,
+          "maximum": 2.2,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39278,6 +41336,26 @@
         "描述": "群叶以覆，片片杀生。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 650,
+          "maximum": 670,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 300,
+          "maximum": 335,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39345,6 +41423,26 @@
         "描述": "聚集了无数怨魂的怨气，闪烁着胆寒的光芒，给人撕心裂肺的绝望。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 12,
+          "maximum": 15,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 80,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39414,6 +41512,17 @@
         "描述": "拥有【魔童连击,邪灵净化】技能，清除低级负面效果，之后对目标进行多次打击，造成魔法伤害。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.2,
+          "maximum": 1.8,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39480,6 +41589,44 @@
         "描述": "人离合，月圆缺，花开又花谢，不愿再相逢。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 30,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 30,
+          "maximum": 35,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 650,
+          "maximum": 670,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 300,
+          "maximum": 335,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39544,6 +41691,17 @@
         "描述": "邪念所至，万魂俱寂。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 135,
+          "maximum": 145,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39609,6 +41767,26 @@
         "描述": "取了血海里无数鲜血和冤魂妖化而成，诡异的妖杖散发着死亡的气息。",
         "类型": "武器",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 14,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 115,
+          "maximum": 125,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39674,6 +41852,26 @@
         "描述": "在血池里浸泡数载而出，坚如磐石，固若金汤。",
         "类型": "饰品",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 580,
+          "maximum": 680,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 135,
+          "maximum": 150,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39739,6 +41937,17 @@
         "描述": "传闻遗失在血海中的铠甲，历经千载，弥漫着死亡的气息。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 500,
+          "maximum": 520,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -39803,6 +42012,17 @@
         "描述": "花映红，春风笑，佳人佩美坠，不知与谁同。",
         "类型": "饰品",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 120,
+          "maximum": 140,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -40591,6 +42811,44 @@
         "描述": "传说由玄武的鳞片打造的战甲，装备后坚不可摧，呈现玄武防御之势。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Lucky": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 3,
+          "maximum": 5,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 8,
+          "maximum": 10,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 120,
+          "maximum": 135,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -44634,6 +46892,35 @@
         "描述": "汝修三昧，本出尘劳。淫心不除，尘不可出。",
         "类型": "防具",
         "颜色": "008aff"
+      },
+      "random_rolls": {
+        "Def": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Mdef": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 10,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 220,
+          "maximum": 240,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -44742,6 +47029,26 @@
         "描述": "",
         "类型": "防具",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 850,
+          "maximum": 900,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 400,
+          "maximum": 435,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -44811,6 +47118,17 @@
         "描述": "",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.0,
+          "maximum": 2.5,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -44976,6 +47294,17 @@
         "描述": "",
         "类型": "武器",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 350,
+          "maximum": 375,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -45156,6 +47485,26 @@
         "描述": "黑云压城城欲摧，甲光向日金鳞开。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 500,
+          "maximum": 550,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 185,
+          "maximum": 205,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -45221,6 +47570,17 @@
         "描述": "",
         "类型": "防具",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 1500,
+          "maximum": 1600,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -46331,6 +48691,17 @@
         "描述": "玉兔的初月双刀，双刃映月，寒芒破邪。",
         "类型": "武器",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 2,
+          "maximum": 6,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -46700,6 +49071,26 @@
         "描述": "使用后恢复生命值。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "R_hp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 5.0,
+          "maximum": 15.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -46769,6 +49160,17 @@
         "描述": "扣除失去一半生命值，攻击力、暴击率、幸运提高50%。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.2,
+          "maximum": 2.7,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47023,6 +49425,17 @@
         "描述": "提升宠物战斗能力。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47150,6 +49563,35 @@
         "描述": "召唤阴阳斩龙剑攻击敌人。",
         "类型": "法宝",
         "颜色": "00ffff"
+      },
+      "random_rolls": {
+        "Crit": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 4.0,
+          "maximum": 12.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "Miss": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 1.0,
+          "maximum": 3.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47219,6 +49661,17 @@
         "描述": " 提升灵魂获取和掉宝率！随等级提高",
         "类型": "法宝",
         "颜色": "FFFFFF"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 0.5,
+          "maximum": 0.8,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47551,6 +50004,35 @@
         "描述": "可以合成的传说饰品花宴。",
         "类型": "饰品",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "ar": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 63,
+          "maximum": 68,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 280,
+          "maximum": 296,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "sp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 63,
+          "maximum": 68,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47668,6 +50150,17 @@
         "描述": "皎佩星连景，飘衣云结庆。",
         "类型": "防具",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 70,
+          "maximum": 80,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47732,6 +50225,17 @@
         "描述": "传说由诸怀的血肉熔铸的金耙，挥舞时，其声如鸣雁，万物俱寂。",
         "类型": "武器",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 35,
+          "maximum": 40,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -47995,6 +50499,26 @@
         "描述": "吹奏玉箫，使敌人进入睡眠状态。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "R_mp": {
+          "sampler": "randf",
+          "kind": "int",
+          "minimum": 3.0,
+          "maximum": 10.0,
+          "step": 1.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 1.8,
+          "maximum": 2.4,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48228,6 +50752,17 @@
         "描述": "拥有【不灭神盾】技能，使用后获得【不灭】效果，一段时间内免疫高于当前生命的伤害。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.0,
+          "maximum": 2.5,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48293,6 +50828,26 @@
         "描述": "生生相错不相见，世世轮回血色湮。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 700,
+          "maximum": 740,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 360,
+          "maximum": 365,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48362,6 +50917,17 @@
         "描述": "拥有【伏妖神火】技能，朝前方喷出火焰，造成物理伤害,并有10%概率施加一层（灼烧）。",
         "类型": "法宝",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.0,
+          "maximum": 2.5,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48427,6 +50993,26 @@
         "描述": "人间如梦，红尘万丈，劈不断相思情。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 200,
+          "maximum": 215,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 230,
+          "maximum": 235,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48493,6 +51079,17 @@
         "描述": "恨悠悠，几时休。爱轻轻，随风行。",
         "类型": "防具",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 800,
+          "maximum": 850,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48558,6 +51155,26 @@
         "描述": "倾盆雨，惊天雷，众里寻他而去。",
         "类型": "武器",
         "颜色": "800080"
+      },
+      "random_rolls": {
+        "htarget": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 9,
+          "maximum": 12,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "power": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 265,
+          "maximum": 270,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -48705,6 +51322,17 @@
         "描述": "召唤转轮王助战。",
         "类型": "法宝",
         "颜色": "656565"
+      },
+      "random_rolls": {
+        "成长率": {
+          "sampler": "randf",
+          "kind": "float",
+          "minimum": 2.2,
+          "maximum": 2.7,
+          "step": 0.1,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -49004,7 +51632,7 @@
           "Def": 42,
           "Lucky": 4.2,
           "Mdef": 42,
-          "R_mp": 1.4,
+          "R_mp": 1.4000000000000001,
           "SHp": 980,
           "power": 56,
           "toughness": 14
@@ -49130,7 +51758,7 @@
           "Def": 28,
           "Lucky": 14,
           "Mdef": 28,
-          "R_mp": 2.8,
+          "R_mp": 2.8000000000000003,
           "SHp": 420,
           "SMp": 420,
           "power": 98,
@@ -49257,7 +51885,7 @@
           "Def": 28,
           "Lucky": 7,
           "Mdef": 28,
-          "R_mp": 2.8,
+          "R_mp": 2.8000000000000003,
           "SHp": 700,
           "SMp": 280,
           "power": 70,
@@ -49384,7 +52012,7 @@
           "Def": 28,
           "Lucky": 7,
           "Mdef": 28,
-          "R_mp": 2.8,
+          "R_mp": 2.8000000000000003,
           "SHp": 280,
           "SMp": 280,
           "power": 70,
@@ -49511,7 +52139,7 @@
           "Def": 28,
           "Lucky": 7,
           "Mdef": 28,
-          "R_mp": 2.8,
+          "R_mp": 2.8000000000000003,
           "SHp": 420,
           "SMp": 700,
           "power": 70,
@@ -49638,7 +52266,7 @@
           "Def": 28,
           "Lucky": 7,
           "Mdef": 28,
-          "R_mp": 2.8,
+          "R_mp": 2.8000000000000003,
           "SHp": 700,
           "SMp": 280,
           "power": 70,
@@ -49892,6 +52520,26 @@
         "描述": "传说由朱雀的内丹熔炼的戒指，佩戴完如朱雀般华丽。",
         "类型": "饰品",
         "颜色": "00FF00"
+      },
+      "random_rolls": {
+        "SHp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 200,
+          "maximum": 220,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        },
+        "SMp": {
+          "sampler": "randi",
+          "kind": "int",
+          "minimum": 45,
+          "maximum": 65,
+          "step": 0.0,
+          "scale": 1.0,
+          "rounding": "none"
+        }
       }
     },
     {
@@ -51504,7 +54152,9 @@
         "描述": "",
         "类型": "消耗品",
         "颜色": "800080"
-      }
+      },
+      "random_roll_count": 258
     }
-  ]
+  ],
+  "random_roll_count": 258
 }

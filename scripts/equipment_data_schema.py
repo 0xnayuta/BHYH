@@ -58,6 +58,10 @@ EXTENSION_FIELDS = (
 ALL_FIELDS = CORE_FIELDS + STAT_FIELDS + STRUCT_FIELDS + EXTENSION_FIELDS
 ENHANCEMENT_FIELDS = STAT_FIELDS + ("target",)
 RANDOMIZABLE_FIELDS = STAT_FIELDS + ("成长率",)
+ROLL_SAMPLERS = ("randi", "randf")
+ROLL_KINDS = ("int", "float")
+ROLL_ROUNDINGS = ("none", "int_if_integral", "ceil")
+ROLL_KEYS = ("sampler", "kind", "minimum", "maximum", "step", "scale", "rounding")
 REQUIRED_FIELDS = (
     "名字",
     "所属",
@@ -156,6 +160,44 @@ def _validate_value(field: str, value: Any, errors: list[str]) -> None:
     errors.append(f"{field}: 未实现类型校验")
 
 
+def _validate_roll(field: str, roll: Any, prefix: str) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(roll, dict):
+        return [f"{prefix}.random_rolls.{field}: 期望对象"]
+    unknown = set(roll) - set(ROLL_KEYS)
+    missing = set(ROLL_KEYS) - set(roll)
+    if unknown:
+        errors.append(f"{prefix}.random_rolls.{field}: 未登记键 {sorted(unknown)}")
+    if missing:
+        errors.append(f"{prefix}.random_rolls.{field}: 缺少键 {sorted(missing)}")
+    sampler = roll.get("sampler")
+    if sampler not in ROLL_SAMPLERS:
+        errors.append(f"{prefix}.random_rolls.{field}.sampler: 未知采样器 {sampler!r}")
+    kind = roll.get("kind")
+    if kind not in ROLL_KINDS:
+        errors.append(f"{prefix}.random_rolls.{field}.kind: 未知类型 {kind!r}")
+    rounding = roll.get("rounding")
+    if rounding not in ROLL_ROUNDINGS:
+        errors.append(f"{prefix}.random_rolls.{field}.rounding: 未知取整 {rounding!r}")
+    minimum = roll.get("minimum")
+    maximum = roll.get("maximum")
+    step = roll.get("step")
+    scale = roll.get("scale")
+    if not _is_number(minimum) or not _is_number(maximum):
+        errors.append(f"{prefix}.random_rolls.{field}: minimum/maximum 必须是数值")
+    elif minimum > maximum:
+        errors.append(f"{prefix}.random_rolls.{field}: minimum > maximum")
+    if not _is_number(step) or step < 0:
+        errors.append(f"{prefix}.random_rolls.{field}.step: 必须是非负数值")
+    if not _is_number(scale) or scale <= 0:
+        errors.append(f"{prefix}.random_rolls.{field}.scale: 必须是正数")
+    if sampler == "randi" and _is_number(step) and step != 0:
+        errors.append(f"{prefix}.random_rolls.{field}: randi 规格的 step 必须为 0")
+    if kind == "int" and sampler == "randi" and roll.get("kind") != "int":
+        errors.append(f"{prefix}.random_rolls.{field}: randi 采样必须输出 int")
+    return errors
+
+
 def _validate_definition(definition: Any, index: int) -> list[str]:
     prefix = f"definitions[{index}]"
     if not isinstance(definition, dict):
@@ -209,6 +251,20 @@ def _validate_definition(definition: Any, index: int) -> list[str]:
     for field in defined:
         if field not in randomized and field not in values:
             errors.append(f"{prefix}.values.{field}: 确定性字段缺少值")
+
+    rolls = definition.get("random_rolls", {})
+    if not isinstance(rolls, dict):
+        errors.append(f"{prefix}.random_rolls: 必须是对象")
+        rolls = {}
+    for field in rolls:
+        if field not in randomized:
+            errors.append(f"{prefix}.random_rolls: {field} 不在 randomized_fields")
+        if field not in defined:
+            errors.append(f"{prefix}.random_rolls: {field} 不在 defined_fields")
+        errors.extend(_validate_roll(field, rolls[field], prefix))
+    for field in randomized:
+        if field not in rolls:
+            errors.append(f"{prefix}.random_rolls: 随机字段 {field} 缺少规格")
     return errors
 
 
@@ -239,6 +295,13 @@ def validate_source(payload: dict[str, Any]) -> list[str]:
             randomized_field_count += len(randomized)
     if payload.get("randomized_field_count") != randomized_field_count:
         errors.append("randomized_field_count: 与 randomized_fields 总数不一致")
+    roll_count = sum(
+        len(definition.get("random_rolls", {}))
+        for definition in definitions
+        if isinstance(definition, dict) and isinstance(definition.get("random_rolls"), dict)
+    )
+    if payload.get("random_roll_count") != roll_count:
+        errors.append("random_roll_count: 与 random_rolls 总数不一致")
     return errors
 
 
