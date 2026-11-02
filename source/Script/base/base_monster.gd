@@ -2530,7 +2530,7 @@ func add_lj(value):
 	if value <= 0:
 		return
 	Global.lj_times += 1
-	Global.check_combo_milestone(Global.lj_times)
+	Global.get_combat_pool().check_combo_milestone(Global.lj_times)
 	Global.get_run_context().record_combo(Global.lj_times)
 	var level_node = get_level_node()
 	Global.add_combo(level_node.lj_tt, Global.lj_times, Vector2(0, 0))

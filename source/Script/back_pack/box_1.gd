@@ -557,7 +557,8 @@ func on_press_when_xq():
 
 func _on_pressed() -> void:
 	var _parent
-	if Global.box_count > 0:
+	var backpack_factory := Global.get_backpack_factory()
+	if backpack_factory.is_box_click_blocked():
 		if is_in_ldl:
 			_parent = NodeUtils.ancestor(self, 7)
 		else:
@@ -568,7 +569,7 @@ func _on_pressed() -> void:
 			Global.add_message_show(_parent, "点击过快！！", 1.5, Vector2(500, 305))
 		return
 	else:
-		Global.box_count = 6
+		backpack_factory.start_box_click_cooldown()
 	if hide_prop:
 		return
 	if is_in_hh or is_in_shop or is_in_hhgz:

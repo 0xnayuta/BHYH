@@ -2,9 +2,12 @@ class_name CombatPoolRuntime
 extends Node
 
 ## 战斗表现对象池：伤害数字、怪物受击、角色受击与命中音效的池化、
-## 显示限流计数与清理。由 Global 作为普通子节点持有，不是 Autoload；
+## 显示限流计数与清理；同时持有连击里程碑去重与延迟派发状态。
+## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务代码通过 Global 的同名入口（add_damage_text / recycle_* / can_show_sword_*）
 ## 使用，场景内部通过 Global.get_combat_pool() 归还节点。
+
+signal combo_milestone_reached(milestone: int)
 
 const DAMAGE_TEXT_POOL_LIMIT := 80
 const MR_HURT_POOL_LIMIT := 32
@@ -31,6 +34,10 @@ var _sword_damage_text_frame: int = -1
 var _sword_damage_text_count: int = 0
 var _sword_hit_effect_frame: int = -1
 var _sword_hit_effect_count: int = 0
+
+## 连击里程碑：只在跨越 40 的倍数时派发一次，pending 防止同帧重复入队。
+var _last_combo_value: int = 0
+var _pending_combo_milestones: Dictionary = {}
 
 
 func setup(host: Node) -> void:
@@ -161,6 +168,34 @@ func clear_runtime_pools() -> void:
 	_active_damage_texts.clear()
 	_damage_text_count = 0
 	_last_mr_hurt_msec.clear()
+	clear_combo_milestone_state()
+
+
+func clear_combo_milestone_state() -> void:
+	_last_combo_value = 0
+	_pending_combo_milestones.clear()
+
+
+func check_combo_milestone(current_combo: int) -> void:
+	if current_combo == 0:
+		clear_combo_milestone_state()
+		return
+	if current_combo % 40 == 0 and _last_combo_value % 40 != 0:
+		if not _pending_combo_milestones.has(current_combo):
+			_pending_combo_milestones[current_combo] = true
+			call_deferred("_emit_combo_milestone_deferred", current_combo)
+	_last_combo_value = current_combo
+
+
+func _emit_combo_milestone_deferred(current_combo: int) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	if not is_inside_tree():
+		return
+	_pending_combo_milestones.erase(current_combo)
+	combo_milestone_reached.emit(current_combo)
 
 
 # -----------------------------------------------------------------------------

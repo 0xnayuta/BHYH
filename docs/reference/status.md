@@ -28,7 +28,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **28.14s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **28.82s**） |
 | `health_check` | **763 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **297/297 PASS** |
 | `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 22-3D-1：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。`check_all` 9/9、`ui-factories` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3C：关卡计时、`last_level_path`、最大连击、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数与结算类型迁入 `RunContext`；删除 5 个无消费者或重复真源字段；星座进度只以 `PlayerData` 为真源。`run-context` 与 `level-selection` 探针、`check_all` 9/9、档案 297/297、场景 17/17、协作 26/26、`level_1` / `level_llbt` / `level_17` 冒烟 PASS；全量回归未作为本批结论。
 - Phase 22-3B：19 个法宝实例字段确认零引用后删除；场景路径表、预载路径与 xianyjp 预热分派迁入 `MagicWeaponRuntime`；`magic-weapons` 探针、`check_all` 9/9、档案 297/297、场景 PASS、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3A：云存档登录状态从 `Global` 迁入 `MemoryClass` 持有的 `CloudSession`；`Global.cloud_save_*` 与认证冷却字段已删除；`CloudSession` 逻辑探针、`check_all` 9/9、档案 297/297、场景 PASS、协作 26/26、`level_1` PASS；全量回归未作为本批结论。

@@ -16,9 +16,29 @@ var _ui_runtime_instance_paths: Dictionary = {}
 var _ui_runtime_instance_counts: Dictionary = {}
 var _transient_ui_instances: Dictionary = {}
 
+## 一次性 UI 状态：跨档案保持，不随 clear_runtime_state 重置；只由消费方调用。
+var _welcome_message_shown := false
+var _first_level_intro_shown := false
+
 
 func setup(host: Node) -> void:
 	_host = host
+
+
+## 首次进入任意地图时返回 true 并标记已消费；后续调用返回 false。
+func consume_welcome_message() -> bool:
+	if _welcome_message_shown:
+		return false
+	_welcome_message_shown = true
+	return true
+
+
+## 首次进入任意关卡时返回 true 并标记已消费；后续调用返回 false。
+func consume_first_level_intro() -> bool:
+	if _first_level_intro_shown:
+		return false
+	_first_level_intro_shown = true
+	return true
 
 
 func push_windows(host: Node) -> void:

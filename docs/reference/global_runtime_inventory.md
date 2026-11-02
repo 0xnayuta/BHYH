@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C 已完成（2026-11-02）。当前规模为 **91 个字段、261 个公开函数**；删除与迁移清单见 §6。
+> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1 已完成（2026-11-02）。当前规模为 **86 个字段、260 个公开函数**；删除与迁移清单见 §6。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3D 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3D-2 及后续状态迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,9 +14,9 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,212（22-1 基线 3,516；22-2/22-3A/22-3B/22-3C 共删除 304 行） |
-| `var` 字段 | 91（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19，22-3C 迁移 11 + 删除 5） |
-| 公开函数（非 `_` 前缀） | 261（22-1 基线 273；22-2 删除 12） |
+| `global.gd` 行数 | 3,179（22-1 基线 3,516；22-2/22-3A/22-3B/22-3C/22-3D-1 共删除 337 行） |
+| `var` 字段 | 86（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19，22-3C 迁移 11 + 删除 5，22-3D-1 迁出 5） |
+| 公开函数（非 `_` 前缀） | 260（22-1 基线 273；22-2 删除 12，22-3D-1 删除 `check_combo_milestone`） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
 | 仓库内 `Global.` 引用（含注释/字符串） | 约 3.1k 处，分布于 432 个脚本 |
@@ -58,13 +58,9 @@ grep -RIn '"/root/' source --include='*.gd'
 
 19 个旧字段均已删除；`MagicWeaponRuntime` 是双槽位与法宝场景路径表的唯一所有者，负责创建、替换、预载与清理，`Global` 只保留稳定转发入口。
 
-### 2.5 表现与一次性 UI 遗留（4）
+### 2.5 表现与一次性 UI 遗留（已迁出）
 
-`_last_combo_value`, `is_frist`, `is_show`, `box_count`
-
-**判定**：已不属单局/关卡/选择状态，保留到 Phase 22-3D。`_last_combo_value` 是连击里程碑去重；`is_frist` 是首次进入地图的欢迎提示；`is_show` 是首次关卡动画；`box_count` 是背包点击冷却。四者分别归连击表现、UI 提示与背包面板所有，不能搬进 `RunContext`。
-
-**22-3C 已迁移**：关卡计时、`last_level_path`、`most_lianji`、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数与结算类型迁入 `RunContext`；`last_prop_hp`、`collect_num`、`infinite_level_multiplier`、`_last_full_monster_bullet_name` 删除；`constellation_best_tier` 删除，星座进度只以 `PlayerData` 为真源。
+`is_frist`、`is_show` 已迁入 `UiRuntime` 的一次性消费状态；`box_count` 已迁入 `BackpackFactory` 的点击冷却；`_last_combo_value` 与 `_pending_combo_milestones` 已迁入 `CombatPoolRuntime` 的连击里程碑状态。`Global` 不再保留四类字段。
 
 ### 2.6 锻造、背包与瞬时面板状态（10）
 
@@ -78,11 +74,11 @@ grep -RIn '"/root/' source --include='*.gd'
 
 **判定**：保留生命周期控制面。档案身份/代次继续归 `ArchiveSession` 与 `MemoryClass`；保存结果由显式状态/信号观察；`_archive_session` 与 `_run_context` 作为组合根持有的上下文引用保留，不把其内容重新暴露为全局字段。预热标记逐步归 `ResourceRuntime`。
 
-### 2.8 普通子服务指针（27）
+### 2.8 普通子服务指针（26）
 
-`_resource_runtime`, `_scene_flow`, `_popup_factory`, `_shop_factory`, `_backpack_factory`, `_reward_factory`, `_combat_factory`, `_combat_pool`, `_magic_weapon_runtime`, `_level_entry`, `_monster_spawn`, `_role_visual`, `_monster_display`, `_level_hint`, `_zhen_fa`, `_forge_factory`, `_projectile_factory`, `_effect_factory`, `_menu_panel_factory`, `_level_scene_factory`, `_show_text_factory`, `_skill_panel_factory`, `_map_overlay_factory`, `_pending_combo_milestones`, `_audio_runtime`, `_ui_runtime`, `_runtime_diagnostics`
+`_resource_runtime`, `_scene_flow`, `_popup_factory`, `_shop_factory`, `_backpack_factory`, `_reward_factory`, `_combat_factory`, `_combat_pool`, `_magic_weapon_runtime`, `_level_entry`, `_monster_spawn`, `_role_visual`, `_monster_display`, `_level_hint`, `_zhen_fa`, `_forge_factory`, `_projectile_factory`, `_effect_factory`, `_menu_panel_factory`, `_level_scene_factory`, `_show_text_factory`, `_skill_panel_factory`, `_map_overlay_factory`, `_audio_runtime`, `_ui_runtime`, `_runtime_diagnostics`
 
-**判定**：保留在 `Global` 的组合根内。除 `_pending_combo_milestones` 外，均是 26 个普通子服务的引用；不得把服务内部字段重新搬回 `Global`。`_pending_combo_milestones` 应归连击表现服务/状态；`_monsters_to_track` 已随 22-2 删除。
+**判定**：全部是 26 个普通子服务的引用，保留在 `Global` 的组合根内；不得把服务内部字段重新搬回 `Global`。`_monsters_to_track` 已随 22-2 删除。
 
 ### 2.9 场景/UI 遗留引用（11）
 
@@ -98,17 +94,17 @@ grep -RIn '"/root/' source --include='*.gd'
 
 | 服务 | 当前职责 | 目标 |
 |:---|:---|:---|
-| `UiRuntime` | UI 宿主、弹层、hover、临时 UI 登记与实例缓存 | 保留；UI 生命周期的唯一服务入口 |
+| `UiRuntime` | UI 宿主、弹层、hover、临时 UI 登记、UI 实例缓存与一次性欢迎/开场状态 | 保留；UI 生命周期的唯一服务入口 |
 | `AudioRuntime` | BGM/SFX、声部仲裁与设置信号 | 保留；业务不直接创建 `AudioStreamPlayer` |
 | `RuntimeDiagnostics` | 只读诊断与性能浮层 | 保留；只读，不成为业务状态写者 |
 | `ResourceRuntime` | 场景/精灵帧/音频/纹理缓存、租约、预载单槽 | 保留；缓存/租约的唯一服务 |
 | `SceneFlow` | 场景切换、请求代次、目标快照 | 保留；业务唯一正式切换入口 |
 | `PopupFactory` | 通用弹窗/确认框场景槽位 | 保留；继续走 `UiRuntime` 登记 |
 | `ShopFactory` | 商店场景槽位 | 保留 |
-| `BackpackFactory` | 背包/装备/售卖场景槽位 | 保留 |
+| `BackpackFactory` | 背包/装备/售卖场景槽位与背包格点击冷却 | 保留；背包 UI 状态所有者 |
 | `RewardFactory` | 奖励展示/领取场景槽位 | 保留 |
 | `CombatPresentationFactory` | 角色/怪物战斗表现场景槽位 | 保留；不拥有伤害真源 |
-| `CombatPoolRuntime` | 伤害文本/受击/音效池与限流 | 保留；消费者负责重置 |
+| `CombatPoolRuntime` | 伤害文本/受击/音效池与限流、连击里程碑去重/延迟派发 | 保留；消费者负责重置 |
 | `MagicWeaponRuntime` | 法宝召唤物两槽位、场景路径表、创建/替换/预载/清理 | 保留；唯一所有者 |
 | `LevelEntryRuntime` | 关卡信息面板、掉落表、进入编排 | 保留；迁入关卡选择/进入状态 |
 | `MonsterSpawnRuntime` | 怪物 ID 解析与 `create_monster` | 保留 |
@@ -308,8 +304,7 @@ add_back_pack, create_monster, add_hit_text, add_monster_blood,
 add_mr_hurt, left_align_popup_texts,
 prepare_hover_info_popup, center_popup_texts,
 add_role_bullet_1_safe, add_bullet_safe, instance_scene, add_bullet,
-check_combo_milestone, load_role1_body,
-load_role1_eq, remove_all_buff, remove_all_active_buffs,
+load_role1_body, load_role1_eq, remove_all_buff, remove_all_active_buffs,
 remove_a_all_buff, check_wd, remove_wd
 ```
 
@@ -390,7 +385,7 @@ main_remove_child, on_fresh, track_monster
 - 5 个字段删除：`last_prop_hp`、`collect_num`、`infinite_level_multiplier`、`_last_full_monster_bullet_name`、`constellation_best_tier`；
 - 关卡计时、最大连击、玩家受击计数与结算类型全部走 `RunContext` 方法；选择与玲珑塔模式走 `RunContext`，未新增 `Global` 业务字段或公开方法；
 - `constellation_best_tier` 删除后，星座最高层只读写 `PlayerData` 的 `CONSTELLATION_PROGRESS_KEY`；`level_info` 预览与 `level_esbxx` 结算不再维护第二份镜像；
-- 保留 `Global._last_combo_value`、`is_frist`、`is_show`、`box_count` 到 22-3D；它们分别是连击表现、欢迎提示、首关动画与背包 UI 冷却，不属本批所有权。
+- 22-3C 保留的 `Global._last_combo_value`、`is_frist`、`is_show`、`box_count` 已在 22-3D-1 迁出；它们分别是连击表现、欢迎提示、首关动画与背包 UI 冷却。
 
 **验证**：
 
@@ -402,12 +397,30 @@ main_remove_child, on_fresh, track_monster
 - `coop_probe_runner` **26/26 PASS**；
 - `level_1` 四阶段与 `level_llbt`、`level_17` 冒烟 **PASS**（0 ERROR / 0 WARNING）。
 
-### 6.6 22-3D 交接
+### 6.6 Phase 22-3D-1 结果
+
+- `is_frist`、`is_show` 删除，一次性欢迎/开场消费迁入 `UiRuntime`；
+- `box_count` 删除，背包格点击冷却迁入 `BackpackFactory`，并保留 Global 与背包可见时的双重递减语义；
+- `_last_combo_value`、`_pending_combo_milestones` 与 `Global.check_combo_milestone` / `combo_milestone_reached` 迁入 `CombatPoolRuntime`；
+- 未新增 Autoload；`Global` 字段从 91 降至 86，公开函数从 261 降至 260。
+
+**验证**：
+
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `ui-factories` 场景探针 **PASS**（含一次性 UI、背包冷却与连击里程碑）；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **17/17 PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.7 22-3D-2 交接
 
 下一批按以下顺序执行，不跳步：
 
-1. **22-3D UI/场景遗留引用**：迁移剩余 4 个表现/UI 字段与 2.6/2.9 场景引用；临时 UI 必须登记；无消费者条目删除。
-2. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
+1. **§2.6 锻造/背包/瞬时面板**：逐字段确认消费者；`get_target`、`wait_time` 等无消费者条目删除，其余迁入 `ForgeFactory`、背包面板或场景上下文。
+2. **§2.9 场景/UI 引用**：`target_scene` 归 `SceneFlow`，其余节点/提示引用迁入对应工厂或删除；临时 UI 必须登记。
+3. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
 
 每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
 

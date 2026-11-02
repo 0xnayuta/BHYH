@@ -92,8 +92,8 @@ func _physics_process(_delta: float) -> void:
 	if _props_refresh_timer >= 0.1:
 		_props_refresh_timer = 0.0
 		set_backpack_properies()
-	if Global.box_count > 0:
-		Global.box_count -= 1
+	if Global.get_backpack_factory().is_box_click_blocked():
+		Global.get_backpack_factory().tick_box_click_cooldown()
 
 
 func get_level():

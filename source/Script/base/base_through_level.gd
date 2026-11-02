@@ -78,13 +78,10 @@ func _ready() -> void:
 		RoleProp.ws_value = 0
 	create_control.wait_time = float(MainSet.set_data.get("CreateMonsterSpeed", 0.3))
 	Global.get_audio_runtime().remove_main_menu_music()
-	if not Global.is_show:
+	if Global.get_ui_runtime().consume_first_level_intro():
 		var zm_player: AnimationPlayer = $CanvasLayer/zmPLAYER
 		if zm_player.has_animation("gdzm"):
 			zm_player.play("gdzm")
-		Global.is_show = true
-		pass
-	Global.is_show = true
 	Global.fb_cd = -10
 	Global.get_run_context().set_last_level_path(str(self.scene_file_path))
 	remove_all_records()

@@ -124,6 +124,11 @@ func _run() -> void:
 
 
 func _check_factory_wiring(checks: Dictionary) -> void:
+	var ui_runtime := Global.get_ui_runtime()
+	checks["ui_welcome_once"] = ui_runtime.consume_welcome_message()
+	checks["ui_welcome_once_only"] = not ui_runtime.consume_welcome_message()
+	checks["ui_first_level_intro_once"] = ui_runtime.consume_first_level_intro()
+	checks["ui_first_level_intro_once_only"] = not ui_runtime.consume_first_level_intro()
 	checks["popup_factory_node"] = _has_child_node("PopupFactory")
 	checks["shop_factory_node"] = _has_child_node("ShopFactory")
 	checks["backpack_factory_node"] = _has_child_node("BackpackFactory")
@@ -360,6 +365,12 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	if h_hjm != null:
 		created.append(h_hjm)
 	checks["backpack_scene_cached"] = Global.is_resource_cached(BACK_PACK_PATH)
+	var backpack_factory := Global.get_backpack_factory()
+	backpack_factory.start_box_click_cooldown()
+	checks["backpack_box_cooldown_started"] = backpack_factory.is_box_click_blocked()
+	for _frame in range(7):
+		backpack_factory.tick_box_click_cooldown()
+	checks["backpack_box_cooldown_expired"] = not backpack_factory.is_box_click_blocked()
 	_cleanup(created, host)
 	Global.buff_box = null
 
@@ -475,6 +486,17 @@ func _check_combat_family(checks: Dictionary) -> void:
 
 func _check_combat_pool(checks: Dictionary) -> void:
 	var pool := Global.get_combat_pool()
+	var milestones: Array[int] = []
+	pool.combo_milestone_reached.connect(
+		func(milestone: int) -> void:
+			milestones.append(milestone)
+	)
+	pool.check_combo_milestone(39)
+	pool.check_combo_milestone(40)
+	pool.check_combo_milestone(40)
+	await _settle()
+	checks["combo_milestone_once"] = milestones == [40]
+	pool.check_combo_milestone(0)
 	checks["combat_pool_node"] = pool != null and pool.get_parent() == Global
 	checks["combat_pool_limits"] = (
 		int(pool.get_pool_limits().get("damage_text", 0)) == 80

@@ -1,8 +1,6 @@
 extends Node
 const DataKeys := preload("res://Script/base/data_keys.gd")
 
-signal combo_milestone_reached(milestone: int)
-
 const TARGET_MAX_FPS := 150
 const AUDIO_RUNTIME_SCRIPT := preload("res://Script/runtime/audio_runtime.gd")
 const UI_RUNTIME_SCRIPT := preload("res://Script/runtime/ui_runtime.gd")
@@ -214,7 +212,6 @@ func _exit_tree() -> void:
 		_resource_runtime.clear_runtime_state()
 	if _audio_runtime != null:
 		_audio_runtime.clear_runtime_state()
-	_pending_combo_milestones.clear()
 	FrameSequenceStore.clear_cache()
 	FrameTextureRequests.shutdown_process()
 
@@ -448,10 +445,6 @@ func get_map_overlay_factory() -> MapOverlayFactory:
 	return _map_overlay_factory
 
 
-var _last_combo_value: int = 0
-var is_frist: bool
-var is_show: bool
-var box_count: int = 0
 var _cd_path: String = ""
 
 
@@ -651,7 +644,6 @@ var _level_scene_factory: LevelSceneFactory = null
 var _show_text_factory: ShowTextFactory = null
 var _skill_panel_factory: SkillPanelFactory = null
 var _map_overlay_factory: MapOverlayFactory = null
-var _pending_combo_milestones = {}
 var _audio_runtime: AudioRuntime = null
 var _ui_runtime: UiRuntime = null
 var _runtime_diagnostics: RuntimeDiagnostics = null
@@ -3120,36 +3112,11 @@ func _physics_process(_delta: float) -> void:
 	if MainSet.set_data.has("FileValue"):
 		if float(MainSet.set_data["FileValue"]) < float(file_num):
 			MainSet.set_data["FileValue"] = file_num
-	if box_count > 0:
-		box_count -= 1
 	lj_count += 1
 	if lj_count > 100:
 		lj_count = 0
 		lj_times = 0
-		check_combo_milestone(lj_times)
-
-
-func check_combo_milestone(current_combo: int):
-	if current_combo == 0:
-		_last_combo_value = 0
-		_pending_combo_milestones.clear()
-		return
-	if current_combo % 40 == 0 and _last_combo_value % 40 != 0:
-		if not _pending_combo_milestones.has(current_combo):
-			_pending_combo_milestones[current_combo] = true
-			call_deferred("_emit_combo_milestone_deferred", current_combo)
-	_last_combo_value = current_combo
-
-
-func _emit_combo_milestone_deferred(current_combo: int) -> void:
-	var tree := get_tree()
-	if tree == null:
-		return
-	await tree.process_frame
-	if not is_inside_tree():
-		return
-	_pending_combo_milestones.erase(current_combo)
-	combo_milestone_reached.emit(current_combo)
+		_combat_pool.check_combo_milestone(lj_times)
 
 
 func load_role1_body(_name, role_id: int = 0) -> Texture2D:

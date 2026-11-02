@@ -20,13 +20,34 @@ const SKILL_SELECT_PATH := "res://Scene/back_pack/skill_select.tscn"
 const SELL_OR_EQU_PATH := "res://Scene/back_pack/sell_or_equ.tscn"
 const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
 const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
+const BOX_CLICK_COOLDOWN_FRAMES := 6
 
 var _host: Node = null
 var _scenes: Dictionary = {}
+var _box_click_cooldown_frames := 0
 
 
 func setup(host: Node) -> void:
 	_host = host
+
+
+## 背包格点击冷却：每个物理帧递减一次；背包可见时由 back_pack 再递减一次，
+## 与迁移前 Global 与 back_pack 各自递减的行为一致。
+func _physics_process(_delta: float) -> void:
+	tick_box_click_cooldown()
+
+
+func is_box_click_blocked() -> bool:
+	return _box_click_cooldown_frames > 0
+
+
+func start_box_click_cooldown() -> void:
+	_box_click_cooldown_frames = BOX_CLICK_COOLDOWN_FRAMES
+
+
+func tick_box_click_cooldown() -> void:
+	if _box_click_cooldown_frames > 0:
+		_box_click_cooldown_frames -= 1
 
 
 func clear_scene_caches() -> void:

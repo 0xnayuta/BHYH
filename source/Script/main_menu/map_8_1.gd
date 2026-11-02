@@ -120,9 +120,8 @@ func _ready() -> void:
 	if not Global.get_audio_runtime().has_main_menu_music():
 		Global.get_audio_runtime().add_main_menu_music()
 	Global.set_current_level_name("")
-	if not Global.is_frist:
+	if Global.get_ui_runtime().consume_welcome_message():
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
-		Global.is_frist = true
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 	Global.fb_cd = 0
