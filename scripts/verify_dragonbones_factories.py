@@ -39,7 +39,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -47,9 +46,11 @@ import tempfile
 import time
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_PROJECT = REPO_ROOT / "source"
-REPORT_PATH = REPO_ROOT / "docs" / "reports" / "dragonbones_factory_verify.json"
+from tool_common import REPORT_DIR, ROOT, SOURCE, resolve_godot, write_json
+
+REPO_ROOT = ROOT
+DEFAULT_PROJECT = SOURCE
+REPORT_PATH = REPORT_DIR / "dragonbones_factory_verify.json"
 CACHE_REL = Path(".godot") / "dragonbones_factory_cache.json"
 CACHE_SCHEMA = 1
 
@@ -74,20 +75,6 @@ func _init():
 			print("LOAD_FAIL ", base)
 	quit()
 """
-
-
-def resolve_godot(explicit: str | None) -> str:
-    candidates = [explicit, os.environ.get("GODOT_BIN"), "godot", "godot4"]
-    for candidate in candidates:
-        if not candidate:
-            continue
-        path = Path(candidate)
-        if path.is_file():
-            return str(path)
-        found = shutil.which(candidate)
-        if found:
-            return str(found)
-    raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或设置 GODOT_BIN。")
 
 
 def collect_factories(project: Path, only_zorder: bool) -> list[tuple[str, Path]]:
@@ -209,8 +196,7 @@ def main() -> int:
     if not items:
         print("[skip] 未找到 .dbfactory。")
         payload = {"checked": 0, "failures": [], "missing_dbfactory": missing, "skipped": True}
-        REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-        REPORT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        write_json(REPORT_PATH, payload)
         return 0
 
     pending, cached_hits = select_pending(items, cache_entries, args.all or args.no_cache)
@@ -220,6 +206,8 @@ def main() -> int:
 
     if pending:
         godot = resolve_godot(args.godot)
+        if godot is None:
+            raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。")
         workdir = Path(tempfile.mkdtemp(prefix="dbf_verify_"))
         loader = workdir / "dbf_verify_loader.gd"
         loader.write_text(LOADER, encoding="utf-8", newline="\n")
@@ -264,8 +252,7 @@ def main() -> int:
         "failures": failures,
         "missing_dbfactory": missing,
     }
-    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    REPORT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json(REPORT_PATH, payload)
 
     if args.json:
         print(json.dumps(payload, ensure_ascii=False))

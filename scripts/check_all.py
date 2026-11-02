@@ -52,6 +52,69 @@ def run_step(step_name: str, cmd: List[str], env=None) -> Tuple[bool, float, str
         elapsed = time.time() - start_time
         return False, elapsed, str(e)
 
+def build_tasks(args: argparse.Namespace) -> Dict[int, Tuple[str, List[str]]]:
+    """构造 1~9 维任务；正常模式与 --fix 模式共用，避免任务表漂移。"""
+    eol_cmd = [sys.executable, "scripts/normalize_eol.py", "source"]
+    if not args.fix:
+        eol_cmd.append("--dry-run")
+    if args.no_cache:
+        eol_cmd.append("--no-cache")
+
+    fmt_cmd = [sys.executable, "scripts/format_all.py", "source"]
+    if not args.fix:
+        fmt_cmd.append("--check")
+    if args.no_cache:
+        fmt_cmd.append("--no-cache")
+
+    core_scripts = [
+        "source/global.gd",
+        "source/Script/base/base_role_properies.gd",
+        "source/Script/base/base_hero.gd",
+        "source/Script/base/base_monster.gd",
+        "source/Script/level/level_1.gd",
+        "source/Script/level/victory.gd",
+        "source/Script/memory_class/player_data.gd",
+        "source/Script/memory_class/memory_class.gd",
+    ]
+    gdlint_cmd = ["gdlint"] + core_scripts
+
+    engine_cmd = [sys.executable, "scripts/health_check.py"]
+    if args.godot_bin:
+        engine_cmd += ["--godot-bin", args.godot_bin]
+    if args.no_cache or args.health_full:
+        engine_cmd.append("--no-cache")
+
+    contract_cmd = [sys.executable, "scripts/contract_gate.py"]
+    naming_cmd = [sys.executable, "scripts/naming_audit.py", "--all"]
+    runtime_cmd = [sys.executable, "scripts/runtime_reference_audit.py"]
+    resource_cmd = [sys.executable, "scripts/resource_path_audit.py", "--project", "source"]
+
+    dbfact_cmd = [sys.executable, "scripts/verify_dragonbones_factories.py"]
+    if args.godot_bin:
+        dbfact_cmd += ["--godot", args.godot_bin]
+    if args.dragonbones_full:
+        dbfact_cmd.append("--all")
+
+    tasks: Dict[int, Tuple[str, List[str]]] = {
+        1: ("行尾合规性扫描 (normalize_eol.py)", eol_cmd),
+        2: ("代码格式门禁校验 (format_all.py)", fmt_cmd),
+        3: ("核心架构静态 Lint 扫描 (gdlint)", gdlint_cmd),
+    }
+    if not (args.fast or args.skip_engine):
+        tasks[4] = ("全盘场景依赖与脚本编译扫描 (health_check.py)", engine_cmd)
+    if not args.skip_contract:
+        tasks[5] = ("全工程字面量契约与资源门禁 (contract_gate.py)", contract_cmd)
+    if not args.skip_naming:
+        tasks[6] = ("白名单外全量目录/文件命名校验 (naming_audit.py --all)", naming_cmd)
+    if not args.skip_runtime:
+        tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
+    if not args.skip_resource:
+        tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
+    if not (args.fast or args.skip_engine):
+        tasks[9] = ("DragonBones 工厂加载验证", dbfact_cmd)
+    return tasks
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="BHYH 一键式全工程质量总门禁 (CI Pipeline Runner · 多核并发版)"
@@ -133,60 +196,7 @@ def main():
         print(f"[*] 缓存策略: 强制全量 (--no-cache)")
 
     overall_start = time.time()
-
-    # 准备各维度的命令定义
-    # 维度 1: 行尾
-    eol_cmd = [sys.executable, "scripts/normalize_eol.py", "source"]
-    if not args.fix:
-        eol_cmd.append("--dry-run")
-    if args.no_cache:
-        eol_cmd.append("--no-cache")
-
-    # 维度 2: 代码格式
-    fmt_cmd = [sys.executable, "scripts/format_all.py", "source"]
-    if not args.fix:
-        fmt_cmd.append("--check")
-    if args.no_cache:
-        fmt_cmd.append("--no-cache")
-
-    # 维度 3: 静态异味
-    core_scripts = [
-        "source/global.gd",
-        "source/Script/base/base_role_properies.gd",
-        "source/Script/base/base_hero.gd",
-        "source/Script/base/base_monster.gd",
-        "source/Script/level/level_1.gd",
-        "source/Script/level/victory.gd",
-        "source/Script/memory_class/player_data.gd",
-        "source/Script/memory_class/memory_class.gd",
-    ]
-    gdlint_cmd = ["gdlint"] + core_scripts
-
-    # 维度 4: 引擎编译
-    engine_cmd = [sys.executable, "scripts/health_check.py"]
-    if args.godot_bin:
-        engine_cmd += ["--godot-bin", args.godot_bin]
-    if args.no_cache or args.health_full:
-        engine_cmd.append("--no-cache")
-
-    # 维度 5: 契约扫描
-    contract_cmd = [sys.executable, "scripts/contract_gate.py"]
-
-    # 维度 6: 命名审计（总门禁使用全量，避免只检查 Git 新增文件）
-    naming_cmd = [sys.executable, "scripts/naming_audit.py", "--all"]
-
-    # 维度 7: 运行时引用契约
-    runtime_cmd = [sys.executable, "scripts/runtime_reference_audit.py"]
-
-    # 维度 8: 资源路径大小写与动态路径工厂
-    resource_cmd = [sys.executable, "scripts/resource_path_audit.py", "--project", "source"]
-
-    # 维度 9: DragonBones 工厂加载（依赖 Godot，随 --skip-engine / --fast 跳过）
-    dbfact_cmd = [sys.executable, "scripts/verify_dragonbones_factories.py"]
-    if args.godot_bin:
-        dbfact_cmd += ["--godot", args.godot_bin]
-    if args.dragonbones_full:
-        dbfact_cmd.append("--all")
+    tasks = build_tasks(args)
 
     # 执行字典：dim_id -> (ok, elapsed, out)
     exec_results: Dict[int, Tuple[bool, float, str]] = {}
@@ -195,54 +205,25 @@ def main():
         # fix 模式：先串行执行写入修复
         print(f"\n{BOLD}[执行流水线] 串行自动修复阶段 (Fix Phase)...{RESET}")
         print(f"[*] 正在执行: 行尾自动清洗 (normalize_eol.py)...")
-        exec_results[1] = run_step("行尾自动清洗", eol_cmd)
+        exec_results[1] = run_step(tasks[1][0], tasks[1][1])
         print(f"[*] 正在执行: 代码自动格式化 (format_all.py)...")
-        exec_results[2] = run_step("代码自动格式化", fmt_cmd)
+        exec_results[2] = run_step(tasks[2][0], tasks[2][1])
 
         # 随后并发执行其余只读体检
         print(f"\n{BOLD}[执行流水线] 并发只读门禁阶段 (Concurrent Check Phase)...{RESET}")
-        tasks = {
-            3: ("核心架构静态 Lint 扫描 (gdlint)", gdlint_cmd),
-        }
-        if not (args.fast or args.skip_engine):
-            tasks[4] = ("全盘场景依赖与脚本编译扫描 (health_check.py)", engine_cmd)
-        if not args.skip_contract:
-            tasks[5] = ("全工程字面量契约与资源门禁 (contract_gate.py)", contract_cmd)
-        if not args.skip_naming:
-            tasks[6] = ("白名单外全量目录/文件命名校验 (naming_audit.py --all)", naming_cmd)
-        if not args.skip_runtime:
-            tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
-        if not args.skip_resource:
-            tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
-        if not (args.fast or args.skip_engine):
-            tasks[9] = ("DragonBones 工厂加载验证", dbfact_cmd)
+        readonly_tasks = {dim: task for dim, task in tasks.items() if dim >= 3}
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
-            future_to_id = {executor.submit(run_step, name, cmd): dim_id for dim_id, (name, cmd) in tasks.items()}
+            future_to_id = {
+                executor.submit(run_step, name, cmd): dim_id
+                for dim_id, (name, cmd) in readonly_tasks.items()
+            }
             for f in concurrent.futures.as_completed(future_to_id):
                 d_id = future_to_id[f]
                 exec_results[d_id] = f.result()
     else:
         # 只读 check 模式：全量多任务异步并发调度
         print(f"\n{BOLD}[执行流水线] 全维度多任务并发拉起 (Concurrent Quality Gates)...{RESET}")
-        tasks = {
-            1: ("行尾合规性扫描 (normalize_eol.py)", eol_cmd),
-            2: ("代码格式门禁校验 (format_all.py)", fmt_cmd),
-            3: ("核心架构静态 Lint 扫描 (gdlint)", gdlint_cmd),
-        }
-        if not (args.fast or args.skip_engine):
-            tasks[4] = ("全盘场景依赖与脚本编译扫描 (health_check.py)", engine_cmd)
-        if not args.skip_contract:
-            tasks[5] = ("全工程字面量契约与资源门禁 (contract_gate.py)", contract_cmd)
-        if not args.skip_naming:
-            tasks[6] = ("白名单外全量目录/文件命名校验 (naming_audit.py --all)", naming_cmd)
-        if not args.skip_runtime:
-            tasks[7] = ("NodePath 与 Global.<method>() 静态引用门禁", runtime_cmd)
-        if not args.skip_resource:
-            tasks[8] = ("资源路径大小写与动态路径工厂门禁", resource_cmd)
-        if not (args.fast or args.skip_engine):
-            tasks[9] = ("DragonBones 工厂加载验证", dbfact_cmd)
-
         task_total = len(tasks)
         for ordinal, (d_id, (tname, _)) in enumerate(sorted(tasks.items()), 1):
             print(f" [+] 启动任务 [{ordinal}/{task_total}]: {tname}")

@@ -14,12 +14,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PROJECT = ROOT / "source"
+from tool_common import REPORT_DIR, ROOT, SOURCE, resolve_godot, write_json
+
+PROJECT = SOURCE
 MATRIX_SOURCE = ROOT / "scripts" / "coop_probes" / "coop_probe_matrix.gd"
 MATRIX_TEMP = PROJECT / "_coop_probe_matrix.gd"
-REPORT_MD = ROOT / "docs" / "reports" / "coop_probe_matrix_report.md"
-REPORT_JSON = ROOT / "docs" / "reports" / "coop_probe_matrix_report.json"
+REPORT_MD = REPORT_DIR / "coop_probe_matrix_report.md"
+REPORT_JSON = REPORT_DIR / "coop_probe_matrix_report.json"
 
 CASES = [
     "LocalCoopProbe",
@@ -49,24 +50,6 @@ CASES = [
     "LocalCoopKeyConfigProbe",
     "LocalCoopHudReadOnlyProbe",
 ]
-
-GODOT_CANDIDATES = ("godot", "godot4")
-
-
-def resolve_godot(explicit: str | None) -> str:
-    candidates = [explicit] if explicit else []
-    candidates.extend(GODOT_CANDIDATES)
-    for candidate in candidates:
-        if not candidate:
-            continue
-        path = Path(candidate)
-        if path.is_file():
-            return str(path)
-        found = shutil.which(candidate)
-        if found:
-            return found
-    raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 指定。")
-
 
 def cleanup_temp() -> None:
     for path in (MATRIX_TEMP, MATRIX_TEMP.with_suffix(".gd.uid")):
@@ -135,11 +118,7 @@ def run_case(godot: str, case: str, timeout: int) -> dict:
 
 
 def write_reports(results: list[dict]) -> None:
-    REPORT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    REPORT_JSON.write_text(
-        json.dumps({"cases": results}, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    write_json(REPORT_JSON, {"cases": results})
     lines = [
         "# LocalCoop 验证矩阵报告",
         "",
@@ -174,6 +153,8 @@ def main() -> int:
     args = parser.parse_args()
 
     godot = resolve_godot(args.godot)
+    if godot is None:
+        raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。")
     cases = args.only or CASES
     unknown = [case for case in cases if case not in CASES]
     if unknown:

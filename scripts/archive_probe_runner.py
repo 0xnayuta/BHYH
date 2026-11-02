@@ -21,10 +21,10 @@ import tempfile
 import uuid
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PROJECT = ROOT / "source"
+from tool_common import REPORT_DIR, ROOT, SOURCE, resolve_godot, write_json
+
+PROJECT = SOURCE
 FIXTURE_DIR = ROOT / "scripts" / "archive_probes"
-REPORT_DIR = ROOT / "docs" / "reports"
 RESULT_PREFIX = "ARCHIVE_PERSISTENCE_PROBE_RESULT="
 USER_DIR_PREFIX = "USER_DIR="
 # 探针会主动触发校验拒绝；这些日志属于预期，不计入门禁。
@@ -42,20 +42,6 @@ EXPECTED_ERROR_MARKERS = (
     "change_scene rejected level target without archive session",
     "后台存档写入失败，已保留快照",
 )
-
-
-def resolve_godot(explicit: str | None) -> str:
-    candidates = [explicit, os.environ.get("GODOT_BIN"), "godot", "godot4"]
-    for candidate in candidates:
-        if not candidate:
-            continue
-        path = Path(candidate)
-        if path.is_file():
-            return str(path)
-        found = shutil.which(candidate)
-        if found:
-            return found
-    raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。")
 
 
 def write_fixture(instance_id: str) -> list[Path]:
@@ -165,7 +151,6 @@ def run(godot: str, timeout: int) -> int:
         print(f"  [{'PASS' if item.get('ok') else 'FAIL'}] {name} {item.get('detail', '')}")
     print(f"检查项 {len(checks)}，失败 {len(failures)}")
 
-    REPORT_DIR.mkdir(parents=True, exist_ok=True)
     report = {
         "ok": not failures,
         "checks": checks,
@@ -174,9 +159,7 @@ def run(godot: str, timeout: int) -> int:
         "runtime_errors": runtime_errors,
         "returncode": completed.returncode,
     }
-    (REPORT_DIR / "archive_persistence_probe_report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    write_json(REPORT_DIR / "archive_persistence_probe_report.json", report)
     cleanup_temp(fixture_paths, user_dir)
     if failures:
         for failure in failures:
@@ -191,7 +174,10 @@ def main() -> int:
     parser.add_argument("--godot", help="Godot 可执行文件；缺省读 GODOT_BIN 或 PATH")
     parser.add_argument("--timeout", type=int, default=120)
     args = parser.parse_args()
-    return run(resolve_godot(args.godot), args.timeout)
+    godot = resolve_godot(args.godot)
+    if godot is None:
+        raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。")
+    return run(godot, args.timeout)
 
 
 if __name__ == "__main__":

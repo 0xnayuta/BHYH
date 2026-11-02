@@ -39,11 +39,10 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PROJECT = ROOT / "source"
+from tool_common import REPORT_DIR, ROOT, SOURCE, resolve_godot, write_json
+
+PROJECT = SOURCE
 FIXTURE_DIR = ROOT / "scripts" / "scene_probes"
-REPORT_DIR = ROOT / "docs" / "reports"
-GODOT_CANDIDATES = ("godot", "godot4")
 
 
 @dataclass(frozen=True)
@@ -265,21 +264,6 @@ PROBES: tuple[ProbeSpec, ...] = (
 )
 
 
-def resolve_godot(explicit: str | None) -> str:
-    candidates = [explicit] if explicit else []
-    candidates.extend(GODOT_CANDIDATES)
-    for candidate in candidates:
-        if not candidate:
-            continue
-        path = Path(candidate)
-        if path.is_file():
-            return str(path)
-        found = shutil.which(candidate)
-        if found:
-            return found
-    raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 指定。")
-
-
 def write_fixture(spec: ProbeSpec, instance_id: str) -> tuple[Path, Path]:
     gd_path = PROJECT / f"_{spec.key.replace('-', '_')}_probe_{instance_id}.gd"
     scene_path = PROJECT / f"_{spec.key.replace('-', '_')}_probe_{instance_id}.tscn"
@@ -403,9 +387,8 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
 
 def write_reports(spec: ProbeSpec, result: dict) -> None:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    report_json = REPORT_DIR / f"{spec.report_stem}.json"
     report_md = REPORT_DIR / f"{spec.report_stem}.md"
-    report_json.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json(REPORT_DIR / f"{spec.report_stem}.json", result)
     lines = [
         f"# {spec.title}报告",
         "",
@@ -450,6 +433,9 @@ def main() -> int:
         return 2
 
     godot = resolve_godot(args.godot)
+    if godot is None:
+        print("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。", file=sys.stderr)
+        return 2
     selected = [spec for spec in PROBES if not args.probe or spec.key in args.probe]
     failures: list[tuple[ProbeSpec, dict]] = []
     for spec in selected:

@@ -18,15 +18,14 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "source"
+from tool_common import ROOT, SOURCE, resolve_godot, write_json
+
 MANIFEST_PATHS = (
     SOURCE / "Art/frame_sequences/frame_sequence_export_dependencies.json",
     SOURCE / "Script/data/level_preload_export_dependencies.json",
@@ -129,17 +128,6 @@ def required_paths(manifest: dict[str, object]) -> list[str]:
         if isinstance(items, list):
             paths.extend(str(item) for item in items)
     return paths
-
-
-def resolve_godot(explicit: str | None) -> str | None:
-    candidate = explicit or os.environ.get("GODOT_BIN", "")
-    if candidate and Path(candidate).is_file():
-        return candidate
-    for name in ("godot", "godot4", "Godot"):
-        found = shutil.which(name)
-        if found:
-            return found
-    return None
 
 
 def find_preset_name() -> str:
@@ -323,9 +311,7 @@ def main() -> int:
             "missing_count": len(missing),
         }
         if args.report:
-            report_path = Path(args.report)
-            report_path.parent.mkdir(parents=True, exist_ok=True)
-            report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            write_json(Path(args.report), report)
         if missing:
             print(
                 f"[FAIL] PCK 缺少 {len(missing)}/{len(expected)} 条发布依赖，例如: "
