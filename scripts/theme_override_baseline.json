@@ -18,7 +18,6 @@
   "unassigned_direct": 0,
   "themes": {
     "resources": [
-      "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
     "scene_refs": 1117,
@@ -90,6 +89,7 @@
       "BacisInfoNumber",
       "BacisInfoTime",
       "BacisInfoVBox",
+      "BackpackActionButton",
       "BackpackCoinLabel",
       "BackpackCompactVBox",
       "BackpackEquipmentColumn",
@@ -639,7 +639,7 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1416
+    "variation_refs": 1418
   },
   "fonts": {
     "scene_refs": 2,

@@ -538,6 +538,42 @@ border_blend = true
 [sub_resource type="StyleBoxFlat" id="role_shield_fill"]
 bg_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxFlat" id="backpack_action_normal"]
+bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="backpack_action_hover"]
+bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="backpack_action_disabled"]
+bg_color = Color(0.643137, 0.364706, 0.0901961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [resource]
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
@@ -4507,3 +4543,12 @@ HitTextBase/colors/font_outline_color = Color(0, 0, 0, 1)
 HitTextBase/constants/outline_size = 10
 HitTextBase/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
 HitTextBase/font_sizes/font_size = 25
+
+BackpackActionButton/base_type = &"Button"
+BackpackActionButton/colors/font_color = Color(1, 1, 1, 1)
+BackpackActionButton/font_sizes/font_size = 14
+BackpackActionButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackActionButton/styles/disabled = SubResource("backpack_action_disabled")
+BackpackActionButton/styles/hover = SubResource("backpack_action_hover")
+BackpackActionButton/styles/normal = SubResource("backpack_action_normal")
+BackpackActionButton/styles/pressed = SubResource("backpack_action_hover")

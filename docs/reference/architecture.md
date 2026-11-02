@@ -498,7 +498,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31 已完成；当前候选为 [Phase 32 UI Theme 与 Phase 33 装备数据](../roadmap/current-iteration.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32 已完成；当前候选为 [Phase 33 装备数据](../roadmap/current-iteration.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 
@@ -548,6 +548,15 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 9 | 陷阱 |  |  |
 
 新代码必须使用具名层或集中常量，不新增无注释的裸整数掩码。脚本侧具名常量集中在 `Script/base/physics_layers.gd`（`PhysicsLayers`，Phase 31-0A）：`NONE`/`ENVIRONMENT`/`CHARACTER`/`MONSTER`/`EXIT`/`STEP`，位值与上表同源。基础场景 `.tscn` 内的裸掩码仍属遗留实现，重构前先逐场景核对。
+
+### 7.4 Theme 与 UI 样式
+
+- 唯一正式 Theme 为 `Scene/theme/bhyh_theme.tres`；旧 `Scene/back_pack/backpack_action_theme.tres` 已退役，`back_pack` 的 `Button` 与 `main_backpack` 的 `SortButton` 使用 `BackpackActionButton` 变体。
+- 静态 `.tscn` 直接 `theme_override_*` 已为 **0**；场景通过 `theme` + `theme_type_variation` 消费 Theme。最终清单：**618 个类型定义 / 616 个直接使用 / 1418 个节点引用**，1117 个场景引用。
+- `hit_text` 保留 **26 条 Animation 轨道路径**作为最终例外；这些轨道按命中类型驱动颜色、描边与字号，不改为静态变体，也不扩张。
+- 脚本 `add_theme_*` 仍保留 **383 处 / 39 个文件**，只用于品质色、状态与运行时动态样式；不把这些状态写回共享 Theme。
+- `project.godot` **未启用** `gui/theme/custom`。32-4 评审选择显式节点/场景绑定，避免对未覆盖控件产生隐式全局默认；启用全局 Theme 前必须补齐全 UI 回归证据。
+- Theme 资源与基线由 `scripts/theme_override_audit.py`、`scripts/theme_override_baseline.json` 与本页、`ui_theme_contract.md` 共同约束。
 
 ---
 

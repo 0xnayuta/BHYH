@@ -80,7 +80,6 @@
 
 [ext_resource type="PackedScene" path="res://Scene/back_pack/main_backpack.tscn" id="47"]
 
-[ext_resource type="Theme" path="res://Scene/back_pack/backpack_action_theme.tres" id="48"]
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 [sub_resource type="AtlasTexture" id="AtlasTexture_ruduh"]
@@ -2534,13 +2533,14 @@ offset_right = 192.0
 offset_bottom = 5.0
 
 [node name="Button" type="Button" parent="." unique_id=482323573]
+theme_type_variation = "BackpackActionButton"
 offset_left = 47.0
 offset_top = -188.0
 offset_right = 101.0
 offset_bottom = -160.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme = ExtResource("48")
+theme = ExtResource("theme")
 text = "幻化"
 
 [node name="backpack" type="Node2D" parent="." unique_id=1169269072]

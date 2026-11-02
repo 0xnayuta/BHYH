@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="4"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="6"]
-[ext_resource type="Theme" path="res://Scene/back_pack/backpack_action_theme.tres" id="7"]
 [ext_resource type="Texture2D" path="res://Art/backpack/last_page_n.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/backpack/last_page_y.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/backpack/next_page_n.png" id="10"]
@@ -286,6 +285,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SortButton" type="Button" parent="." unique_id=2051265514]
+theme_type_variation = "BackpackActionButton"
 z_index = 2
 layout_mode = 0
 offset_left = 96.0
@@ -295,7 +295,7 @@ offset_bottom = -165.0
 tooltip_text = "整理全部页：装备按品质排序，道具按关联分组、等级排序"
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme = ExtResource("7")
+theme = ExtResource("theme")
 text = "整理"
 
 [node name="ChangePage" type="HBoxContainer" parent="." unique_id=367034305]
