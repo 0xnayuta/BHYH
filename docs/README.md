@@ -43,6 +43,7 @@
 | [`reference/phase_30_4_script_decisions.md`](reference/phase_30_4_script_decisions.md) | **Phase 30-4 脚本边界决策**：55 个逻辑脚本与 30 个标准/空表脚本逐项保留/迁出结论；10 个例外 |
 | [`reference/level_layout_contract.md`](reference/level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2/30-3/30-4 完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
 | [`reference/ui_theme_contract.md`](reference/ui_theme_contract.md) | **Phase 32 UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4）**：直接属性/动画轨道基线、Theme 与变体命名、试点、审计与例外边界 |
+| [`reference/equipment_data_contract.md`](reference/equipment_data_contract.md) | **Phase 33-0/33-1 装备数据契约**：32 字段、int/float、随机字段边界、`EquipmentDefinition`/`Catalog`/`Store`、构建源与验证 |
 | [`reference/modernization_gap_matrix.md`](reference/modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、Theme 缺失、数据硬编码等分级清单、处置类型判定与批次建议 |
 | [`reference/spine_platform_baseline.md`](reference/spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B 暂缓状态 |
 | [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
@@ -56,7 +57,7 @@
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |
 | [`roadmap/README.md`](roadmap/README.md) | 路线图目录索引 |
 | [`roadmap/roadmap.md`](roadmap/roadmap.md) | **项目状态与长期阶段顺序的唯一来源**：当前状态、阶段路线、近期重点与独立立项 |
-| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 32/33 规划**：UI Theme 契约（0 直接覆盖、26 动画轨道、Phase 32 完成）与装备数据契约（1,035 条定义、规则分离）；Phase 30 已归档，Phase 21/31 完成 |
+| [`roadmap/current-iteration.md`](roadmap/current-iteration.md) | **Phase 32 完成 / Phase 33-0/33-1 完成**：UI Theme 契约（0 直接覆盖、26 动画轨道）与装备数据契约（1,035 条定义、32 字段、只读 Catalog/Store；33-2~33-5 未启动）；Phase 30 已归档，Phase 21/31 完成 |
 | [`guides/README.md`](guides/README.md) | 操作指南目录索引 |
 | [`guides/migration_playbook.md`](guides/migration_playbook.md) | 下一次版本迁移的方法、阶段与红线 |
 | [`standards/README.md`](standards/README.md) | 规范目录索引、效力边界与修订流程 |

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0、32-1、32-2A、32-2B、32-3A、32-3B、32-3C、32-3D、32-3E、32-3F、32-3G-1、32-3G-2、32-3G-3、32-3G-4、32-3G-5、32-3G-6、32-3G-7、32-3G-8、32-3G-9、32-3G-10 与 32-4 已完成**（UI Theme 基线/契约、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）；**Phase 33 未启动**。Phase 32 已完成；下一步为 Phase 33 装备数据契约。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
+> **状态**：Phase 18~20 已归档；Phase 21 全部可执行项完成（21-1A/1B/1C、21-2C、21-3A~J、21-4A/4B），21-2A 最低设备确认与 21-2B 暂缓；Phase 31-0A/31-1 已完成，31-0B 评估后拒绝；**Phase 30-1~30-4 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；**Phase 32-0、32-1、32-2A、32-2B、32-3A、32-3B、32-3C、32-3D、32-3E、32-3F、32-3G-1、32-3G-2、32-3G-3、32-3G-4、32-3G-5、32-3G-6、32-3G-7、32-3G-8、32-3G-9、32-3G-10 与 32-4 已完成**（UI Theme 基线/契约、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）；**Phase 33-0/33-1 已完成，33-2~33-5 未启动**。Phase 32 已完成；下一步为 Phase 33 装备数据契约。平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，现代化差距见 [`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md)。
 > **版本**：6.9；不新增玩法、任务与掉落，不改变数值、动画时序、输入映射、存档格式、本地双人共享规则或显示基线。
 > **职责**：本页只展开当前候选；Phase 18~20 的结论、验证与延期去向见归档页，Phase 13~17 见 [`archive/README.md`](../archive/README.md)。
 > **依据**：[`总体目标契约`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
@@ -37,8 +37,8 @@
 ### 1.4 当前候选（Phase 32/33）
 
 - **Phase 32**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10/32-4 已完成；32-4 已退役旧 Theme、接受 26 条动画轨道例外并决定不启用全局 Theme；`game_set` 239→0，`equipment_properies` 173→18→0，`level_info` 118→34→0，Button 密集 1,649→44，32-3A 七场景 624→0，32-3B 五场景 1,042→0，32-3C 五场景 452→0，32-3D 五场景 375→0，32-3E 四场景 245→0，32-3F 四场景 223→0，32-3G-1 五场景 236→0，32-3G-2 八场景 207→0，32-3G-3 八场景 329→0，32-3G-4 八场景 254→0，32-3G-5 十二场景 224→0，32-3G-6 十四场景 200→0，32-3G-7 十六场景 162→0，32-3G-8 十六场景 105→0，32-3G-9 十四场景 37→0，32-3G-10 hit_text 静态 6→0，32-4 退役旧 Theme 并接受动画例外；累计直接属性 0（仅 26 条动画轨道例外）；计算样式/几何与截图均一致；下一步 Phase 33；
-- **Phase 33**：把 `all_equipment_data.gd` 的 1,035 条装备定义迁出为 Resource Catalog，规则/随机/玩家实例分离，逐字段保持语义；
-- **顺序**：32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10/32-4 已完成；下一步 Phase 33；33-0/33-1 可并行启动，33-3 消费方迁移等待 32-2/32-3 覆盖对应面板；
+- **Phase 33**：33-0/33-1 已完成；把 `all_equipment_data.gd` 的 1,035 条装备定义迁出为 Resource Catalog，规则/随机/玩家实例分离，逐字段保持语义；33-2 规则、33-3 消费方、33-4 切换与 33-5 收口未启动；
+- **顺序**：Phase 32 已完成；33-0/33-1 已完成；下一步 33-2 规则，其后 33-3 消费方、33-4 切换、33-5 收口；
 - **共同边界**：不改玩法数值、掉落、输入映射、存档格式与显示基线；不以统计归零替代行为验收。
 
 ## 2. Phase 21-1：独立立项（承接 20-1A/20-1C/20-1D）
@@ -128,7 +128,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - **验证**：89 个场景 × 4 个相机位置、**2,520 个节点** transform 对照；除 `level_2` 子像素（0.06–2.235 px）与 `level_4` 不可见 `stage` 外一致；7 个代表场景前后截图，3 个完全 0 差异，其余 4 个差异像素 ≤0.005%、最大通道差 ≤0.83；7 个代表关卡冒烟 PASS；全量回归 **128/128 PASS + 5 SKIP**（707.5s）。
 - 已知例外：`level_4` 的 `stage` 是 `BackGround` 下唯一非 Parallax 子节点且 `visible=false`；`CanvasLayer.follow_viewport_enabled` 会改变其 transform，但当前不可见，截图无差异。
 
-## 5C. Phase 32：UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成，Phase 33 未启动）
+## 5C. Phase 32：UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成；Phase 33-0/33-1 已完成）
 
 > **状态**：32-0 **已完成（2026-11-01）**：基线审计与契约；32-1 **已完成（2026-11-01）**：`game_set` 239→0；32-2A **已完成（2026-11-01）**：`equipment_properies` 173→18、`level_info` 118→34；32-2B **已完成（2026-11-01）**：五个 Button 密集面板 1,649→44；32-3A **已完成（2026-11-01）**：混合控件/布局七场景 624→0；32-3B **已完成（2026-11-01）**：标签/混合五场景 1,042→0；32-3C **已完成（2026-11-01）**：首批标签五场景 452→0；32-3D **已完成（2026-11-01）**：标签/混合五场景 375→0；32-3E **已完成（2026-11-01）**：阵法/帮助四场景 245→0；32-3F **已完成（2026-11-01）**：自动战斗/幻化/法宝/阵眼四场景 223→0；32-3G-1 **已完成（2026-11-01）**：首批高密度五场景 236→0；32-3G-2 **已完成（2026-11-01）**：低密度八场景 207→0；32-3G-3 **已完成（2026-11-01）**：中高密度八场景 329→0；32-3G-4 **已完成（2026-11-01）**：关卡/帮助/信息八场景 254→0；32-3G-5 **已完成（2026-11-01）**：十二场景 224→0（运行时 5 + 帮助/信息 7）；32-3G-6 **已完成（2026-11-01）**：十四场景 200→0（运行时 5 + 静态 9）；32-3G-7 **已完成（2026-11-01）**：十六场景 162→0（运行时 5 + 静态 11）；32-3G-8 **已完成（2026-11-01）**：十六场景 105→0（运行时 5 + 静态 11）；32-3G-9 **已完成（2026-11-01）**：十四场景 37→0（运行时 5 + 静态 9）；32-3G-10 **已完成（2026-11-02）**：`hit_text` 静态 6→0，保留 26 条动画轨道例外；32-4 **已完成（2026-11-02）**：旧 Theme 退役、`BackpackActionButton` 迁移、全局 Theme 不启用。Phase 33 未启动。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §6。
@@ -203,9 +203,9 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - 不新增主题切换功能，不改显示基线，不替换字体资产，不借 Theme 迁移重排面板布局。
 - 不把动态品质色、血量色、奖励状态色搬入静态 Theme；这些继续由数据与脚本驱动，必要时建立少量状态变体。
 
-## 5D. Phase 33：装备数据契约（已规划，未启动）
+## 5D. Phase 33：装备数据契约（33-0/33-1 完成，33-2~33-5 未启动）
 
-> **状态**：未启动。Phase 30/32 至少一个完成后启动；推荐 32-1 试点通过后先做 33-0/33-1，消费方迁移等待 Phase 32 覆盖对应面板。
+> **状态**：33-0（32 字段契约与字段审计）与 33-1（Definition/Catalog/Store/生成器）已完成；33-2 规则、33-3 消费方迁移、33-4 切换与 33-5 收口未启动。消费者迁移等待 Phase 32 覆盖对应面板，当前已满足。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5。
 > **目标**：把 `all_equipment_data.gd` 中的静态装备定义迁出为强类型 Resource Catalog；保留现有装备规则、随机生成、玩家档案与掉落语义。不把 `PlayerData.player_data` 整体 Resource 化。
 
@@ -226,18 +226,19 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 关键事实：
 
 - 数值类型不统一：部分属性是 int，部分为 float；`颜色` 是十六进制字符串；直接全部改成 `float` 会改变显示或比较语义。
-- `tjbg` 的部分属性由 `randf_range` 生成；`get_wx` 运行时随机返回五行列表。静态 Resource 不能冻结这些值，否则改变玩法。
+- 随机不只在 `tjbg`：16 个属性中的 13 个与 `成长率` 均有 `randi_range`/`randf_range` 用例；跨 8 个种子实测为 **163 条定义 / 258 个随机字段值**。`get_wx` 运行时随机返回五行列表。静态 Resource 不能冻结这些值，否则改变玩法。
 - `YutuEquipmentData` 从私有 `Art/hero_picture/role_7/equipment.json` 读取并合并定义；公开 clone 不包含该素材，生成 Catalog 必须提交，公开环境不能自行重建玉兔条目。
 - `all_equipment.gd` 是 Autoload facade；`all_equipment_data.gd` 由它延迟加载。当前数据、规则和随机生成没有分层。
 
 ### 33.2 契约与数据模型
 
-建议按“定义 / 规则 / 实例”三分：
+已按“定义 / 规则 / 实例”三分：
 
 1. **定义**：`EquipmentDefinition` Resource，只读。
-   - 强类型核心字段：`id: StringName`、`name`、`origin`、`quality`、`color_hex`、`category`、`description`、`price`、`icon_path`、`equipment_type`、`fb_type`、`next_stage`、`growth_rate`、`element`、`forge_forbidden`。
+   - 强类型核心字段：`id: StringName`、`display_name`、`origin`、`quality`、`color_hex`、`category`、`description`、`price`、`icon_path`、`equipment_type`、`fb_type`、`next_stage`、`growth_rate`、`element`、`forge_forbidden`。
    - 属性与扩展：`stats: Dictionary[StringName, Variant]`（16 个属性 + 已登记扩展键）与 `enhancement: Dictionary[StringName, Variant]`；保留 int/float 原类型，不静默转换。
-   - `gem_slots: Array` 只承载定义期空槽位；宝石实例仍在玩家档案。
+   - `gem_slots: PackedStringArray` 只承载定义期空槽位；宝石实例仍在玩家档案。
+   - `defined_fields` 保留旧字典字段存在性；`randomized_fields` 登记由规则层生成、构建源不保存采样值的字段。
    - 不把 16 个属性分别写成 `float` 字段；混合 int/float 与历史键会使逐字段回归失真。字段白名单由生成器校验。
 2. **Catalog / Store**：`EquipmentCatalog` 保存全部定义与 ID 索引；`EquipmentStore` 提供只读查询（`definition(id)`、`has(id)`、`ids()`、`by_category()`），不提供可写 `all_equipment` 字典。
 3. **规则**：`EquipmentRules`/`EquipmentRoller` 承载 `get_last_equ_pro`、`get_fb_last_equ_pro`、神铸倍率、宝石共鸣、五行随机等；规则可以读取定义，但不把结果写回定义。
@@ -246,8 +247,8 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 ### 33.3 构建源与生成器
 
 - 新增构建源 `scripts/equipment_sources.json`（或等价、可审查的单文件源），由它生成 `source/Script/data/equipment_catalog.tres`；生成器 `scripts/convert_equipment_catalog.py` 提供 `--check`。
-- 生成器合并：静态数据块、玉兔 `equipment.json`、中秋/月宫/魂晶等确定性生成项；对 `tjbg` 的随机字段只保留基础定义或明确的运行时生成入口，不把随机结果写死。
-- `.tres` 与构建源同步由 `--check` 保证；运行时只加载 Resource，不解析 `.gd`/JSON 源文本。公开 clone 不含玉兔素材时，已提交 Catalog 仍可运行，但不能以公开环境重建全部条目。
+- 构建源已完成一次性合并：静态数据块、玉兔 `equipment.json`、中秋/月宫/魂晶等确定性生成项；随机字段只登记 `randomized_fields`，不保存采样值。生成器只做 schema 校验与 Resource 序列化，不在运行期解析旧脚本。
+- `.tres` 与构建源同步由 `--check` 保证；运行时只加载 Resource，不解析 `.gd`/JSON 源文本。公开 clone 不含玉兔素材时，已提交 Catalog 与构建源仍可加载；不能以公开环境重建全部条目。
 - `all_equipment_data.gd` 在迁移期间作为对照源；33-4 删除，不能留下运行时第二份可写数据。
 - Autoload `AE` 在迁移期间保留现有方法名作为过渡调用面；最终只保留正式 typed service，不保留 `all_equipment` 字典别名。若保留 `AE` 名称，它必须是正式装备服务入口，而不是兼容 facade。
 
@@ -255,22 +256,29 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 
 | 批次 | 内容 | 出口 |
 |:---|:---|:---|
-| 33-0（契约） | 定义 32 字段 schema、int/float 规则、扩展键白名单、随机例外；产出 `docs/reference/equipment_data_contract.md` 与字段审计脚本 | 1,035 条定义可枚举；未知字段/类型不静默通过 |
-| 33-1（Catalog） | 新增 `EquipmentDefinition`、`EquipmentCatalog`、`EquipmentStore`、生成器与 `--check`；先不迁移消费者 | 生成 Catalog 与旧脚本逐 ID/逐字段一致；旧运行路径不变 |
+| 33-0（契约）**已完成** | 定义 32 字段 schema、int/float 规则、扩展键白名单、随机例外；产出 `docs/reference/equipment_data_contract.md` 与字段审计脚本 | 1,035 条定义可枚举；未知字段/类型不静默通过 |
+| 33-1（Catalog）**已完成** | 新增 `EquipmentDefinition`、`EquipmentCatalog`、`EquipmentStore`、生成器与 `--check`；先不迁移消费者 | 1,035 条 ID/字段存在性与确定性字段一致；随机字段不采样；旧运行路径不变 |
 | 33-2（规则） | 抽出 `EquipmentRules` 与随机五行/神铸/强化/宝石共鸣；保留现有调用名过渡 | 规则结果与旧实现对照；随机分布/边界不变；不写定义 |
 | 33-3（消费方） | 按 48 个文件分四簇迁移：① UI/说明/背包；② 商店/奖励/掉落/关卡；③ 锻造/合成/分解/神铸；④ `PlayerData`/玉兔/坐骑。每簇删除 `AE.all_equipment` 直接访问 | 每簇 `AE.all_equipment` 归零；背包、商店、奖励、锻造、装备属性面板冒烟 PASS |
 | 33-4（切换） | 删除 `all_equipment_data.gd` 与字典 getter/setter；`AE` 只保留 typed 查询与规则；更新 Autoload/索引 | 运行时不再加载 19k 行脚本；旧字典 API 归零；存档格式未变 |
-| 33-5（收口） | 全量数值对比、L2/UI/关卡回归；新增 `equipment_data_audit.py` 守卫；资源加入发布闭包并重跑 PCK | 1,035 条逐字段一致；无重复/未知字段；日志 0/0；pack 路径可达 |
+| 33-5（收口） | 全量数值对比、L2/UI/关卡回归；复用 `equipment_data_audit.py` 守卫；资源加入发布闭包并重跑 PCK | 1,035 条逐字段一致；无重复/未知字段；日志 0/0；pack 路径可达 |
 
 ### 33.5 验证与风险
 
 **必须验证**：
 
-- 旧脚本与新 Catalog 的 **1,035 个 ID**、32 个字段、嵌套 `强化属性` 键、数组与数值类型逐字段一致；随机字段用范围/分布与行为用例验证，不伪造固定值；
+- 旧脚本与新 Catalog 的 **1,035 个 ID**、32 个字段、嵌套 `强化属性` 键、数组与数值类型逐字段一致；33-1 已验证确定性字段与字段存在性，随机字段只登记、不采样；33-2 用范围/分布与行为用例验证；
 - 生成器 `--check`、`equipment_data_audit.py`、`check_all --godot-bin` 9/9；
 - 现有存档读取、装备穿戴/卸下、强化/神铸、宝石、合成/分解、商店购买、奖励领取、关卡掉落、玉兔装备映射与双人槽位；
 - L2 `level_1`、`scene_probe_runner`、`coop_probe_runner`；相关 UI 冒烟；全量回归按变更矩阵执行；
 - 新增 `equipment_catalog.tres` 后重跑发布闭包 PCK，不沿用旧 4,191 路径/7.56 GB 结论。
+
+**本批已完成**：
+
+- 构建源审计 **1,035 条 / 32 字段 / 163 条随机定义 / 258 个随机字段值**，0 错误；负向样本（未知字段、错误类型、随机采样值）均失败；
+- 8 个种子下确定性字段逐 ID/逐字段一致；构建源与 Catalog 双向往返 0 差异；
+- Godot 加载 1,035 条定义，Store 的 ID、分类、缺失 ID 失败语义 PASS；
+- `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check`、`contract_gate`、`check_all --godot-bin` **9/9（29.43s）**、`level_1` **PASS（24.48s，0/0）**。
 
 **边界**：
 
@@ -279,18 +287,18 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 - 不为减少 19k 行而把规则搬进 Resource，也不保留第二份可写字典；
 - 玉兔 JSON 的私有素材边界不能让公开 clone 伪造或重建数据。
 
-**主要风险**：字段类型混合、`强化属性` 历史键、`tjbg` 随机字段、玉兔私有源、272 处字典访问。任一未逐项解释，不得宣称 Phase 33 完成。
+**主要风险**：字段类型混合、`强化属性` 历史键、163 条定义的随机字段、玉兔私有源、272 处字典访问。任一未逐项解释，不得宣称 Phase 33 完成。
 
 ## 5E. 推荐顺序
 
 1. **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**：验证命名、截图与控件对照流程；Phase 32 收口，下一步 Phase 33。
-2. **32-1 已完成，可启动 33-0/33-1**：只做数据契约、Catalog 与生成器，不改消费者。
-3. **32-2 覆盖装备/背包相关面板后，再做 33-3**：避免同一面板的场景样式与装备脚本同时改动。若并行，必须指定一个集成 owner，不能两个批次同时改同一场景/脚本。
+2. **33-0/33-1 已完成**：数据契约、Catalog 与生成器已落地；下一步 33-2 规则。
+3. **33-2 完成后做 33-3**：Phase 32 已收口，可进入消费方分簇；仍须每簇单独迁移并验证，不能把场景样式与装备脚本混在同一批。
 4. **33-4/33-5 在 33-3 全簇通过后执行**；Phase 32 的全量 UI 验收可作为 Phase 33 的视觉回归基线，但不替代装备数值对比。
 
 ## 6. 推荐顺序与恢复
 
-当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成；Phase 33 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
+当前状态：**Phase 21 全部可执行项完成**；21-2A 最低设备确认与 21-2B 暂缓，恢复需目标设备。**Phase 31-0A 已完成；31-0B 评估后拒绝并保留旧数字图；31-1 已完成**。**Phase 30-1/30-2/30-3/30-4 已完成并归档**；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成；Phase 33-0/33-1 已完成，33-2~33-5 未启动，批次间依赖见 §5C/§5D。资源再次变化后必须重跑 PCK，不沿用 Phase 30 的 7.56 GB 验证包结论。
 
 中断时从最近一个已验证切片恢复；失败回滚该逻辑阶段，不恢复被替代的全局 1P 回落、直接发奖、表现层写档、死代码或无证据的资源回退。阶段完成后归档本页并另立候选。
 
@@ -310,7 +318,7 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | 31-0B 数字图 | 3 个消费文件截图/布局对照；不达标则保留旧实现并登记 | 不为归零强行替换 |
 | 31-1 视差 | 89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 | 不做纯文本替换 |
 | 32 Theme | 135 场景初始基线；`theme_override_audit.py --check`；32-1 45 Control、32-2A 49/38 Control、32-2B 328 Control、32-3A 389 Control、32-3B 688 Control、32-3C 179 Control、32-3D 223 Control、32-3E 166 Control、32-3F 114 Control、32-3G-1 55 Control、32-3G-2 267 Control、32-3G-3 519 Control、32-3G-4 125 Control、32-3G-5 354 Control、32-3G-6 391 Control、32-3G-7 430 Control、32-3G-8 575 Control、32-3G-9 271 Control、32-3G-10 hit_text 动画/静态截图、32-4 Theme 退役截图；`ui-theme` 探针；每批同等证据 | 不只改文本、不以计数代替视觉验收 |
-| 33 装备数据 | 生成器 `--check`；1,035 条逐字段类型/值对比；消费方分簇；L2/UI/关卡回归；资源变更后 PCK | 不改存档格式、不冻结随机字段 |
+| 33 装备数据 | 生成器/审计 `--check`；1,035 条逐字段类型/值对比；消费方分簇；L2/UI/关卡回归；资源变更后 PCK | 不改存档格式、不冻结随机字段 |
 
 ## 8. 阶段出口
 
@@ -364,4 +372,4 @@ Phase 30-1~30-4 已完成；完整设计、迁移批次、快照与验证记录�
 | Phase 31-1（89 场景视差迁移） | **完成（2026-11-01）** |
 | Phase 30（ADR-023 关卡布局契约） | **已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）；30-3 含 10 个登记例外 |
 | Phase 32（UI Theme） | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成**（基线/契约/审计 + 全部已验收 UI 批次）；唯一 Theme、旧 Theme 退役、静态直接覆盖 0 |
-| Phase 33（装备数据） | **已规划，未启动**；建议 32-1 后启动 33-0/33-1，消费方等待 32-2 覆盖对应面板 |
+| Phase 33（装备数据） | **33-0/33-1 已完成**；下一 33-2 规则，其后 33-3 消费方、33-4 切换、33-5 收口 |
