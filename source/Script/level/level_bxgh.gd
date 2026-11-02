@@ -314,7 +314,7 @@ func _ready() -> void:
 	}
 	_align_boss_spawn_height()
 	Global.set_current_level_name("八仙过海")
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	level_stage = 0
 	current_stage = 1
 	is_two_scene = false

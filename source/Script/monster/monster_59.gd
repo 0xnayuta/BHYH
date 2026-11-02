@@ -1,6 +1,6 @@
 extends BaseMonster
 class_name Monster59
-var role_be_hit_count = Global.player_be_hit_count
+var role_be_hit_count = Global.get_run_context().get_player_hit_count()
 
 
 func monster_59(BeHitCount):
@@ -86,7 +86,7 @@ func _ready() -> void:
 	skill_1_cd = 0
 	skill_2_cd = 0
 	skill_3_cd = 0
-	role_be_hit_count = Global.player_be_hit_count
+	role_be_hit_count = Global.get_run_context().get_player_hit_count()
 	monster_59(role_be_hit_count)
 
 

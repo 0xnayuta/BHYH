@@ -28,15 +28,10 @@ func _ready() -> void:
 	Global.remove_all_buff()
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/13_game_victory.mp3")
 	get_tree().paused = false
-	Global.level_end_time = ""
-	Global.level_end_time = Time.get_datetime_string_from_system(false, true) as String
-	var num_1 = int(Global.level_end_time.split(" ")[1].split(":")[0]) * 3600
-	var num_2 = int(Global.level_end_time.split(" ")[1].split(":")[1]) * 60
-	var num_3 = int(Global.level_end_time.split(" ")[1].split(":")[2])
-	var num_4 = int(Global.level_begin_time.split(" ")[1].split(":")[0]) * 3600
-	var num_5 = int(Global.level_begin_time.split(" ")[1].split(":")[1]) * 60
-	var num_6 = int(Global.level_begin_time.split(" ")[1].split(":")[2])
-	var last_num = (num_1 + num_2 + num_3) - (num_4 + num_5 + num_6)
+	var run_context := Global.get_run_context()
+	var last_num := run_context.finish_level_timing()
+	var begin_time_text := run_context.get_level_begin_time()
+	var end_time_text := run_context.get_level_end_time()
 
 	last_time = get_lasttime(last_num)
 	if Global.get_current_level_name() == "火焰山":
@@ -44,13 +39,13 @@ func _ready() -> void:
 			MainSet.set_data["LevelHYS"] = true
 			MemoryClass.main_bc()
 			Global.add_message_show(Global.get_ui_runtime().windows, "恭喜通关火焰山，解锁角色“猪八戒”！！", 1.5, Vector2(470, 300))
-	begin_time.text = "开始时间：" + Global.level_begin_time
-	end_time.text = "结束时间：" + Global.level_end_time
+	begin_time.text = "开始时间：" + begin_time_text
+	end_time.text = "结束时间：" + end_time_text
 	use_time.text = (
 		"过关用时：" + str(last_time["小时"]) + " 小时 " + str(last_time["分钟"]) + " 分钟 " + str(last_time["秒"]) + " 秒 "
 	)
 	hp_text.text = "剩余状态：" + str(snapped(float(RoleProp.roleprop.Hp) / float(RoleProp.roleprop.SHp) * 100, 0.01)) + "%"
-	most_lj_text.text = "最高连击：" + str(Global.most_lianji)
+	most_lj_text.text = "最高连击：" + str(run_context.get_max_combo())
 	if not MainSet.set_data["Music4"]:
 		if randf_range(0, 1) <= 0.05:
 			if p_dpj() >= 4:
@@ -135,7 +130,8 @@ func _on_more_informaition_pressed() -> void:
 
 
 func _on_rechallenge_pressed() -> void:
-	if Global.last_level_path == "":
+	var last_level_path := Global.get_run_context().get_last_level_path()
+	if last_level_path == "":
 		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 		return
 	if not _begin_rechallenge():
@@ -144,7 +140,7 @@ func _on_rechallenge_pressed() -> void:
 		_abort_rechallenge()
 		return
 	_reset_role_state_for_rechallenge()
-	if not _request_scene_change(Global.last_level_path):
+	if not _request_scene_change(last_level_path):
 		_abort_rechallenge()
 
 

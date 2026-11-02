@@ -2531,8 +2531,7 @@ func add_lj(value):
 		return
 	Global.lj_times += 1
 	Global.check_combo_milestone(Global.lj_times)
-	if Global.lj_times >= Global.most_lianji:
-		Global.most_lianji = Global.lj_times
+	Global.get_run_context().record_combo(Global.lj_times)
 	var level_node = get_level_node()
 	Global.add_combo(level_node.lj_tt, Global.lj_times, Vector2(0, 0))
 	Global.lj_count = 0

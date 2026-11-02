@@ -70,26 +70,19 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_wxms_pressed() -> void:
-	Global.llbtbossms = false
-	Global.llbtcgms = false
-	Global.llbtwxms = true
-
+	Global.get_run_context().set_llbt_challenge_modes(true, false, false)
 	_enter_llbt_level()
 
 
 func _on_cgms_pressed() -> void:
-	Global.llbtbossms = false
-	Global.llbtcgms = true
-	Global.llbtwxms = false
+	Global.get_run_context().set_llbt_challenge_modes(false, true, false)
 	_enter_llbt_level()
 
 
 func _on_tztxs_pressed() -> void:
 	if _llbt_reached_level() > 6:
 		Global.set_tower_floor(6)
-		Global.llbtbossms = true
-		Global.llbtwxms = false
-		Global.llbtcgms = false
+		Global.get_run_context().set_llbt_challenge_modes(false, false, true)
 		_enter_llbt_level()
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第7层！！", 1.5, Vector2(470, 300))
@@ -98,9 +91,7 @@ func _on_tztxs_pressed() -> void:
 func _on_tslzz_pressed() -> void:
 	if _llbt_reached_level() > 12:
 		Global.set_tower_floor(12)
-		Global.llbtbossms = true
-		Global.llbtwxms = false
-		Global.llbtcgms = false
+		Global.get_run_context().set_llbt_challenge_modes(false, false, true)
 		_enter_llbt_level()
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第13层！！", 1.5, Vector2(470, 300))
@@ -109,9 +100,7 @@ func _on_tslzz_pressed() -> void:
 func _on_tznz_pressed() -> void:
 	if _llbt_reached_level() > 18:
 		Global.set_tower_floor(18)
-		Global.llbtbossms = true
-		Global.llbtwxms = false
-		Global.llbtcgms = false
+		Global.get_run_context().set_llbt_challenge_modes(false, false, true)
 		_enter_llbt_level()
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "请先至少到达第19层！！", 1.5, Vector2(470, 300))
@@ -120,9 +109,7 @@ func _on_tznz_pressed() -> void:
 func _on_tztttw_pressed() -> void:
 	if _llbt_reached_level() >= 25:
 		Global.set_tower_floor(24)
-		Global.llbtbossms = true
-		Global.llbtwxms = false
-		Global.llbtcgms = false
+		Global.get_run_context().set_llbt_challenge_modes(false, false, true)
 		_enter_llbt_level()
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "请先通关玲珑塔！！", 1.5, Vector2(470, 300))
@@ -158,6 +145,6 @@ func _on_change_pressed() -> void:
 	if current_ceng_shu < 1:
 		Global.add_message_show(Global.get_ui_runtime().windows, "低于最低限制层数！！", 1.5, Vector2(470, 300))
 		return
-	Global.llbtcgms = true
+	Global.get_run_context().set_llbt_continue_mode(true)
 	Global.set_tower_floor(current_ceng_shu)
 	_enter_llbt_level()

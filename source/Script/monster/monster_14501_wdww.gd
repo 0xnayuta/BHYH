@@ -48,7 +48,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if source_player == null or not is_instance_valid(source_player):
 		return
 	if monster_target is Monster47:
-		Global.player_be_hit_count += 1
+		Global.get_run_context().add_player_hit()
 	var last_hit = source_player.get_monster_last_hurt(monster_target, target)
 
 	if source_player is Role3Hero and source_player.RoleProp.is_ws_state:

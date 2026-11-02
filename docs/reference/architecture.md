@@ -123,7 +123,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `LevelSceneFactory`：极彩天地板、逐浪飞行地板、招照镜台陷阱、关卡选择面板与关卡相机五个常驻场景槽位；相机由调用方挂到角色节点，工厂只缓存与初始化；通过 `Global.get_level_scene_factory()` 访问，业务侧仍用 `Global.add_stage` / `add_z_lw_stage` / `add_zztw_trap` / `add_dsg_choose` / `add_camera`。
 - `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、镶嵌帮助、镶嵌面板、存档按钮、背景切换与读档界面十一个常驻场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；背景切换根节点为 `CanvasLayer` 时写 `offset`；通过 `Global.get_menu_panel_factory()` 访问。
 - `MapOverlayFactory`：活动之谜、`lsh` 与 `lxdy` 三个主菜单地图浮层常驻场景槽位；三个入口登记临时 UI，活动之谜继续挂窗口守卫；通过 `Global.get_map_overlay_factory()` 访问，业务侧仍用 `Global.add_hdzm` / `add_lsh` / `add_lxdy`。
-- `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_current_level_name` / `set_tower_floor` / `advance_tower_floor` 与 `RunContext` 的 `add_*` / `count_*` / `reset_combat_stats`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 只读同一实例。
+- `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数、关卡计时、`last_level_path`、最大连击、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数、结算类型与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_*` / `advance_*` / `record_*` / `add_*` / `count_*` / `reset_*`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 与 `victory` 只读同一实例。
 
 业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段、9 个写多读零的 `Global.is_*` 减益标志、四个无尽模式标志、`selected_eight_immortal_id`、两个角色贴图槽位字段，以及 `get_ancestor`/`get_position_between`/`get_dis_betweem`/`get_clean_name`/`get_all_item_num`/`load_item_icon` 等工具函数、`monster_head`/`monster_info`/`basic_monment_info` 三个怪物展示场景槽位、`level_fall_box`/`game_need_know`/`hc_help`/`help_thing` 四个提示场景槽位与 6 个阵法场景槽位已删除（`add_zhen_fa_ui` 无调用方一并删除）；无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
 
@@ -500,7 +500,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A/22-3B 已完成，22-3C 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A/22-3B/22-3C 已完成，22-3D 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 

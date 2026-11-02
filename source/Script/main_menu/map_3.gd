@@ -196,9 +196,7 @@ func _ready():
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()
 	Global.set_tower_floor(1)
-	Global.llbtbossms = false
-	Global.llbtcgms = false
-	Global.llbtwxms = false
+	Global.get_run_context().clear_llbt_challenge_modes()
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()
 	RoleProp.current_hp = RoleProp.roleprop.Hp
@@ -216,8 +214,8 @@ func _ready():
 	if not Global.is_frist:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
-	Global.player_be_hit_count = 0
-	Global.last_level_path = ""
+	Global.get_run_context().reset_player_hit_count()
+	Global.get_run_context().clear_last_level_path()
 	Global.fb_cd = 0
 
 	get_tree().paused = false
@@ -405,7 +403,7 @@ func _on_level_30_pressed() -> void:
 
 
 func _on_level_stz_pressed() -> void:
-	Global.selected_three_prince_id = 0
+	Global.get_run_context().set_selected_three_prince_id(0)
 	Global.add_level_info(_ui_parent(), "挑战三太子", Vector2(0, 0), "res://Scene/level/level_stz.tscn")
 
 

@@ -69,11 +69,8 @@ func _ready() -> void:
 		if float(MainSet.set_data["FileValue"]) < float(Global.file_num):
 			MainSet.set_data["FileValue"] = Global.file_num
 	Global.set_cd_path("")
-	Global.collect_num = 0
 	Global.set_tower_floor(1)
-	Global.llbtbossms = false
-	Global.llbtcgms = false
-	Global.llbtwxms = false
+	Global.get_run_context().clear_llbt_challenge_modes()
 	Global.get_ui_runtime().windows = get_parent()
 	Global.fb_cd = 0
 	MemoryClass.remove_play_data()

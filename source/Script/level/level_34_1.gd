@@ -12,7 +12,7 @@ func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_1405.MP3")
 	self.is_two_scene = true
 
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	super._ready()
 	monster_group = {
 		"stage_1": [],

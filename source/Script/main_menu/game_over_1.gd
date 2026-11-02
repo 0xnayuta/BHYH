@@ -7,7 +7,8 @@ var text_2 = "第二系列----《十殿阎罗篇》终了\n\n\n\n\n\n\n浩劫之
 
 
 func _ready() -> void:
-	if Global.game_over == 1:
+	var game_over_variant := Global.get_run_context().get_game_over_variant()
+	if game_over_variant == 1:
 		over_text.text = text_1
 		Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 		over_player.play("first_")
@@ -19,7 +20,7 @@ func _ready() -> void:
 		over_player.play("XY_1OVER")
 		await over_player.animation_finished
 		change_tomap()
-	elif Global.game_over == 2:
+	elif game_over_variant == 2:
 		Global.get_audio_runtime().add_bgm(self, "res://Music/level/2_bg4.mp3")
 		over_player.play("Over_1")
 

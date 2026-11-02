@@ -448,27 +448,10 @@ func get_map_overlay_factory() -> MapOverlayFactory:
 	return _map_overlay_factory
 
 
-var _last_full_monster_bullet_name := ""
 var _last_combo_value: int = 0
 var is_frist: bool
 var is_show: bool
-var collect_num: int = 0
-var player_be_hit_count: int = 0
-var game_over: int = 1
-var llbtwxms: bool = false
-var llbtcgms: bool = true
-var llbtbossms: bool
 var box_count: int = 0
-
-var infinite_level_multiplier: float = 0.0
-var selected_three_prince_id: int = 0
-var selected_constellation_level: int = 1
-var constellation_best_tier: Dictionary = {}
-var level_begin_time = ""
-var level_end_time = ""
-var most_lianji: int = 0
-var last_prop_hp: float
-var last_level_path: String
 var _cd_path: String = ""
 
 
@@ -526,8 +509,8 @@ func get_archive_identity_epoch() -> int:
 
 
 ## ---------------------------------------------------------------------------
-## 运行上下文：关卡显示名、玲珑宝塔层数与战斗统计的唯一读写入口。
-## 写入必须经 set_*/advance_* 或 RunContext 的统计方法；读取固定走 accessor。
+## 运行上下文：关卡显示名、玲珑宝塔层数、选择、计时、导航、挑战模式与战斗统计的读写入口。
+## 写入必须经 set_*/advance_*/record_* 或 RunContext 的统计方法；读取固定走 accessor。
 ## ---------------------------------------------------------------------------
 func get_run_context() -> RunContext:
 	return _run_context
@@ -989,7 +972,6 @@ func load_monster_bullet_scene(bullet_name: String) -> PackedScene:
 	var slim_path := MONSTER_BULLET_SLIM_DIR.path_join(bullet_name + ".tscn")
 	if ResourceLoader.exists(slim_path):
 		return load_scene_uncached(slim_path)
-	_last_full_monster_bullet_name = bullet_name
 
 	var fallback := load_scene_uncached(MONSTER_BULLET_PATH)
 	if fallback != null:

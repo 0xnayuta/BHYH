@@ -36,7 +36,7 @@ func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 	level_stage = 48
 	is_two_scene = false
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	monster_group = {
 		"stage_1": [],
 		"stage_2": [BOSS_MONSTER_ID],

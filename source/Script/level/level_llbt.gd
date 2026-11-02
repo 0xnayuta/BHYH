@@ -18,13 +18,13 @@ var lz_triggered: bool = false
 func _ready() -> void:
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()
-	if Global.llbtwxms:
+	var run_context := Global.get_run_context()
+	if run_context.is_llbt_endless_mode():
 		Global.set_tower_floor(25)
-		Global.infinite_level_multiplier = 0.0
 		print("无限模式当前实际层数固定为: ", Global.get_tower_floor())
 	var reached_level := int(PlayerData.player_data.get("玲珑宝塔层数", 0))
 	if Global.get_tower_floor() >= reached_level:
-		if not Global.llbtwxms:
+		if not run_context.is_llbt_endless_mode():
 			PlayerData.player_data["玲珑宝塔层数"] = Global.get_tower_floor()
 	if (
 		Global.get_tower_floor() == 24
@@ -35,7 +35,7 @@ func _ready() -> void:
 		bbg.modulate = Color(1, 1, 1, 1)
 	else:
 		bbg.modulate = Color(1, 1, 1, 0)
-	if Global.llbtwxms:
+	if run_context.is_llbt_endless_mode():
 		Global.set_tower_floor(25)
 		level_text.text = "∞"
 		self.level_stage = 1
@@ -56,7 +56,7 @@ func _ready() -> void:
 	monster_list()
 	super._ready()
 	set_through()
-	if Global.llbtcgms:
+	if run_context.is_llbt_continue_mode():
 		if Global.get_tower_floor() != 1:
 			RoleProp.roleprop.Hp = RoleProp.current_hp
 			RoleProp.roleprop.Mp = RoleProp.current_mp
@@ -154,7 +154,7 @@ func _physics_process(_delta: float) -> void:
 				and monster_group["stage_4"].size() == 0
 			):
 				if one_check_can_exit():
-					if Global.llbtwxms:
+					if Global.get_run_context().is_llbt_endless_mode():
 						_restart_infinite_monster_wave()
 					else:
 						exit.visible = true
@@ -180,7 +180,7 @@ func _restart_level_for_auto_battle() -> bool:
 		return false
 	if not bool(MainSet.set_data.get("AutoBattleRetry", false)):
 		return false
-	if Global.last_level_path == "":
+	if Global.get_run_context().get_last_level_path() == "":
 		return false
 	_save_auto_battle_progress()
 	RoleProp.set_full_hp()
@@ -190,7 +190,7 @@ func _restart_level_for_auto_battle() -> bool:
 	RoleProp.ws_value = 0
 	RoleProp.is_ws_state = false
 	Global.remove_all_buff()
-	Global.change_scene(Global.last_level_path)
+	Global.change_scene(Global.get_run_context().get_last_level_path())
 	return true
 
 
@@ -207,10 +207,11 @@ func _leave_level_from_exit() -> void:
 		return
 	RoleProp.current_hp = RoleProp.roleprop.Hp
 	RoleProp.current_mp = RoleProp.roleprop.Mp
-	if Global.llbtbossms:
+	var run_context := Global.get_run_context()
+	if run_context.is_llbt_boss_mode():
 		if not _restart_level_for_auto_battle():
 			Global.change_scene("res://Scene/level/victory.tscn")
-	elif Global.llbtcgms:
+	elif run_context.is_llbt_continue_mode():
 		if Global.get_tower_floor() == 24:
 			if PlayerData.has_method("ensure_special_dungeon_progress"):
 				PlayerData.ensure_special_dungeon_progress()
@@ -223,7 +224,7 @@ func _leave_level_from_exit() -> void:
 			if not _commit_auto_battle_progress():
 				return
 			Global.change_scene("res://Scene/level/level_llbt.tscn")
-	elif Global.llbtwxms:
+	elif run_context.is_llbt_endless_mode():
 		if not _commit_auto_battle_progress():
 			return
 		Global.change_scene("res://Scene/level/level_llbt.tscn")
@@ -247,7 +248,6 @@ func set_through():
 
 func _restart_infinite_monster_wave() -> void:
 	Global.set_tower_floor(25)
-	Global.infinite_level_multiplier = 0.0
 	monster_list()
 	current_stage = 1
 	can_exit = false
@@ -265,7 +265,7 @@ func _on_create_control_timeout() -> void:
 
 
 func monster_list():
-	if Global.llbtwxms:
+	if Global.get_run_context().is_llbt_endless_mode():
 		monster_group = {
 			"stage_1":
 			[

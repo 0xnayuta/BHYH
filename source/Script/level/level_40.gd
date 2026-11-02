@@ -12,7 +12,7 @@ func _ready() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 	self.is_two_scene = true
 	self.level_stage = 44
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	super._ready()
 
 

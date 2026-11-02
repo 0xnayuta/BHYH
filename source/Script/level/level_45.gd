@@ -11,7 +11,7 @@ func _ready() -> void:
 	Global.set_current_level_name("绝境宫")
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/10_bg4.mp3")
 	self.level_stage = 47
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	super._ready()
 
 

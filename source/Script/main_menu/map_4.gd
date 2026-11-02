@@ -157,9 +157,7 @@ func _ready() -> void:
 		Global.add_message_show(Global.get_ui_runtime().windows, "恭喜通到达天庭，解锁角色“沙悟净”！！", 1.5, Vector2(470, 300))
 		MemoryClass.main_bc()
 	Global.set_tower_floor(1)
-	Global.llbtbossms = false
-	Global.llbtcgms = false
-	Global.llbtwxms = false
+	Global.get_run_context().clear_llbt_challenge_modes()
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()
 	RoleProp.current_hp = RoleProp.roleprop.Hp
@@ -177,8 +175,8 @@ func _ready() -> void:
 	if not Global.is_frist:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
-	Global.player_be_hit_count = 0
-	Global.last_level_path = ""
+	Global.get_run_context().reset_player_hit_count()
+	Global.get_run_context().clear_last_level_path()
 	Global.fb_cd = 0
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = 4
@@ -247,7 +245,7 @@ func _on_level_esbxx_pressed() -> void:
 	if PlayerData.player_data["尾妖林"] == 0:
 		Global.add_message_show(get_parent(), "需通关尾妖林！！", 1.5, Vector2(470, 300))
 		return
-	Global.selected_constellation_level = 0
+	Global.get_run_context().set_selected_constellation_level(0)
 	Global.add_level_info(_ui_parent(), "挑战28星宿", Vector2.ZERO, "res://Scene/level/level_esbxx.tscn")
 
 

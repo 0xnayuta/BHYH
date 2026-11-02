@@ -64,11 +64,11 @@ func _check_bxgh(checks: Dictionary) -> void:
 
 func _check_stz(checks: Dictionary) -> void:
 	for prince_id: int in PRINCE_IDS:
-		Global.selected_three_prince_id = prince_id
+		Global.get_run_context().set_selected_three_prince_id(prince_id)
 		checks["stz_%d" % prince_id] = await _check_selection(
 			STZ_SCENE, prince_id, PRINCE_BACKGROUNDS[prince_id]
 		)
-	Global.selected_three_prince_id = 0
+	Global.get_run_context().set_selected_three_prince_id(0)
 	checks["stz_invalid_fallback"] = await _check_selection(
 		STZ_SCENE, PRINCE_FALLBACK_ID, PRINCE_BACKGROUNDS[PRINCE_FALLBACK_ID]
 	)

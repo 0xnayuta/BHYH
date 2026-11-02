@@ -52,7 +52,7 @@ func _ready() -> void:
 	_read_level_width_from_scene()
 	Global.set_current_level_name(display_name)
 	level_stage = stage_number
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	if is_two_scene == null:
 		is_two_scene = false
 	_create_screen_walls()

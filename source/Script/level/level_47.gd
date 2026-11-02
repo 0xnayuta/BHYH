@@ -153,7 +153,7 @@ func _ready() -> void:
 	_create_screen_walls()
 	Global.set_current_level_name("玄武门")
 	level_stage = 47
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	super._ready()
 	_update_screen_bounds()
 

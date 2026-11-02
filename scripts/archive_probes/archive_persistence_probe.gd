@@ -1078,8 +1078,8 @@ func _test_settlement_ownership() -> void:
 	_reset_profile(1, 1)
 	_open_session(TEST_ARCHIVE_PREFIX + "041.json")
 	Global.set_current_level_name("花果山")
-	Global.level_begin_time = "2026-10-29 00:00:00"
-	Global.last_level_path = "res://Scene/level/level_1.tscn"
+	Global.get_run_context().begin_level_timing()
+	Global.get_run_context().set_last_level_path("res://Scene/level/level_1.tscn")
 	RoleProp.roleprop.Hp = 100
 	RoleProp.roleprop.SHp = 100
 	RoleProp.roleprop.Mp = 100

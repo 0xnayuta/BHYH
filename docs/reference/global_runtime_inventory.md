@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1/22-2/22-3A/22-3B 已完成（2026-11-02）。当前规模为 **107 个字段、261 个公开函数**；删除与迁移清单见 §6。
+> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C 已完成（2026-11-02）。当前规模为 **91 个字段、261 个公开函数**；删除与迁移清单见 §6。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3C 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3D 及后续状态迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,8 +14,8 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,230（22-1 基线 3,516；22-2/22-3A/22-3B 共删除 286 行） |
-| `var` 字段 | 107（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19） |
+| `global.gd` 行数 | 3,212（22-1 基线 3,516；22-2/22-3A/22-3B/22-3C 共删除 304 行） |
+| `var` 字段 | 91（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19，22-3C 迁移 11 + 删除 5） |
 | 公开函数（非 `_` 前缀） | 261（22-1 基线 273；22-2 删除 12） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
@@ -58,11 +58,13 @@ grep -RIn '"/root/' source --include='*.gd'
 
 19 个旧字段均已删除；`MagicWeaponRuntime` 是双槽位与法宝场景路径表的唯一所有者，负责创建、替换、预载与清理，`Global` 只保留稳定转发入口。
 
-### 2.5 单局、关卡、选择与统计（20）
+### 2.5 表现与一次性 UI 遗留（4）
 
-`_last_full_monster_bullet_name`, `_last_combo_value`, `is_frist`, `is_show`, `collect_num`, `player_be_hit_count`, `game_over`, `llbtwxms`, `llbtcgms`, `llbtbossms`, `box_count`, `infinite_level_multiplier`, `selected_three_prince_id`, `selected_constellation_level`, `constellation_best_tier`, `level_begin_time`, `level_end_time`, `most_lianji`, `last_prop_hp`, `last_level_path`
+`_last_combo_value`, `is_frist`, `is_show`, `box_count`
 
-**判定**：按消费者拆分到 `RunContext`、`LevelEntryRuntime` 或关卡/场景上下文。`total_role_hurt` 已在 22-2 删除；其余字段先确认是单局状态、关卡选择还是表现缓存。
+**判定**：已不属单局/关卡/选择状态，保留到 Phase 22-3D。`_last_combo_value` 是连击里程碑去重；`is_frist` 是首次进入地图的欢迎提示；`is_show` 是首次关卡动画；`box_count` 是背包点击冷却。四者分别归连击表现、UI 提示与背包面板所有，不能搬进 `RunContext`。
+
+**22-3C 已迁移**：关卡计时、`last_level_path`、`most_lianji`、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数与结算类型迁入 `RunContext`；`last_prop_hp`、`collect_num`、`infinite_level_multiplier`、`_last_full_monster_bullet_name` 删除；`constellation_best_tier` 删除，星座进度只以 `PlayerData` 为真源。
 
 ### 2.6 锻造、背包与瞬时面板状态（10）
 
@@ -382,13 +384,30 @@ main_remove_child, on_fresh, track_monster
 - `coop_probe_runner` **26/26 PASS**；
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
 
-### 6.5 22-3C 交接
+### 6.5 Phase 22-3C 结果
+
+- 11 个字段迁入 `RunContext`：`level_begin_time`、`level_end_time`、`last_level_path`、`most_lianji`、`selected_three_prince_id`、`selected_constellation_level`、`llbtwxms` / `llbtcgms` / `llbtbossms`、`player_be_hit_count`、`game_over`；
+- 5 个字段删除：`last_prop_hp`、`collect_num`、`infinite_level_multiplier`、`_last_full_monster_bullet_name`、`constellation_best_tier`；
+- 关卡计时、最大连击、玩家受击计数与结算类型全部走 `RunContext` 方法；选择与玲珑塔模式走 `RunContext`，未新增 `Global` 业务字段或公开方法；
+- `constellation_best_tier` 删除后，星座最高层只读写 `PlayerData` 的 `CONSTELLATION_PROGRESS_KEY`；`level_info` 预览与 `level_esbxx` 结算不再维护第二份镜像；
+- 保留 `Global._last_combo_value`、`is_frist`、`is_show`、`box_count` 到 22-3D；它们分别是连击表现、欢迎提示、首关动画与背包 UI 冷却，不属本批所有权。
+
+**验证**：
+
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `run-context` 与 `level-selection` 场景探针 **PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **17/17 PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段与 `level_llbt`、`level_17` 冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.6 22-3D 交接
 
 下一批按以下顺序执行，不跳步：
 
-1. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
-2. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
-3. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
+1. **22-3D UI/场景遗留引用**：迁移剩余 4 个表现/UI 字段与 2.6/2.9 场景引用；临时 UI 必须登记；无消费者条目删除。
+2. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
 
 每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
 

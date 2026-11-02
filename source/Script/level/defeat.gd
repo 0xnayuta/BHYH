@@ -115,7 +115,8 @@ func _on_return_map_pressed() -> void:
 
 
 func _on_re_challenge_pressed() -> void:
-	if Global.last_level_path == "":
+	var last_level_path := Global.get_run_context().get_last_level_path()
+	if last_level_path == "":
 		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
 		return
 	if not _begin_rechallenge():
@@ -124,7 +125,7 @@ func _on_re_challenge_pressed() -> void:
 		_abort_rechallenge()
 		return
 	_reset_role_state_for_rechallenge()
-	if not _request_scene_change(Global.last_level_path):
+	if not _request_scene_change(last_level_path):
 		_abort_rechallenge()
 
 

@@ -52,7 +52,7 @@ func _ready() -> void:
 		"stage_3": [],
 		"stage_4": [250],
 	}
-	Global.last_level_path = "res://Scene/level/level_19.tscn"
+	Global.get_run_context().set_last_level_path("res://Scene/level/level_19.tscn")
 
 
 func _physics_process(delta: float) -> void:

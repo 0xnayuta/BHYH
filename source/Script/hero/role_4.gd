@@ -789,7 +789,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if target.obj_attack_dict.size() == 0:
 		return
 	if monster_target is Monster47:
-		Global.player_be_hit_count += 1
+		Global.get_run_context().add_player_hit()
 	var last_hit = get_monster_last_hurt(monster_target, target) * (1 - slzjs) * (1 - slzjs2)
 	if monster_target != null:
 		if monster_target.is_lpz:

@@ -8,7 +8,7 @@ const MONSTER_130_SCENE := preload("res://Scene/monster/monster_130.tscn")
 
 func _ready() -> void:
 	Global.set_current_level_name("广寒宫")
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	level_stage = 0
 	is_two_scene = false
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/bgm_normal.mp3")

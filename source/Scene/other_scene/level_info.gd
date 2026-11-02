@@ -2369,7 +2369,7 @@ func _get_level_fall_items(level_info: Dictionary) -> Array:
 	if _is_human_nightmare_level():
 		return _get_human_nightmare_soul_items(level_info)
 	if target_stage_path == "res://Scene/level/level_stz.tscn":
-		var selected_id := int(Global.selected_three_prince_id)
+		var selected_id := Global.get_run_context().get_selected_three_prince_id()
 		var items := (THREE_PRINCE_DROP_ITEMS.get(selected_id, THREE_PRINCE_DROP_ITEMS[0]) as Array).duplicate()
 		if int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY:
 			for index in range(items.size()):
@@ -2504,7 +2504,7 @@ func _get_eight_immortal_fall_preview() -> Dictionary:
 
 func _get_constellation_fall_preview() -> Dictionary:
 	var result := {"items": [], "probabilities": {}}
-	var selected_level := int(Global.selected_constellation_level)
+	var selected_level := Global.get_run_context().get_selected_constellation_level()
 	if selected_level not in range(1, 15):
 		return result
 	var config := _get_level_monster_config("", 47100 + selected_level, 1)
@@ -2633,8 +2633,7 @@ func add_monster_head():
 			var preview_tier := 0
 			if constellation_level in range(1, 15):
 				var stored_best := PlayerData.get_constellation_highest_defeated_tier(constellation_level)
-				var legacy_best := clampi(int(Global.constellation_best_tier.get(str(constellation_level), 0)), 0, 10)
-				preview_tier = clampi(maxi(stored_best, legacy_best) + 1, 1, 10)
+				preview_tier = clampi(stored_best + 1, 1, 10)
 			head.level_monster_config = _get_level_monster_config(
 				str(i.get("ScenePath", "")), int(i.get("ConfigId", 0)), preview_tier
 			)
@@ -2695,7 +2694,7 @@ func _on_three_prince_head_selected(head: Node) -> void:
 	var select_id := int(head.get_meta("three_prince_id", 0))
 	if select_id not in [4401, 4402, 4403]:
 		return
-	Global.selected_three_prince_id = select_id
+	Global.get_run_context().set_selected_three_prince_id(select_id)
 	for child in monster_list.get_children():
 		if child.has_method("set_selected"):
 			child.set_selected(child == head)
@@ -2727,7 +2726,7 @@ func _on_constellation_head_selected(head: Node) -> void:
 	var selected_level := int(head.get_meta("constellation_level", 0))
 	if selected_level not in range(1, 15):
 		return
-	Global.selected_constellation_level = selected_level
+	Global.get_run_context().set_selected_constellation_level(selected_level)
 	for child in monster_list.get_children():
 		if child.has_method("set_selected"):
 			child.set_selected(child == head)
@@ -2782,13 +2781,13 @@ func _on_challenge_pressed() -> void:
 			return
 		if (
 			target_stage_path == "res://Scene/level/level_stz.tscn"
-			and Global.selected_three_prince_id not in [4401, 4402, 4403]
+			and Global.get_run_context().get_selected_three_prince_id() not in [4401, 4402, 4403]
 		):
 			Global.add_message_show(_popup_parent(), "请选择要挑战的太子！", 1.5, Vector2(470, 300))
 			return
 		if (
 			target_stage_path == "res://Scene/level/level_esbxx.tscn"
-			and Global.selected_constellation_level not in range(1, 15)
+			and Global.get_run_context().get_selected_constellation_level() not in range(1, 15)
 		):
 			Global.add_message_show(_popup_parent(), "请选择要挑战的星宿！", 1.5, Vector2(470, 300))
 			return

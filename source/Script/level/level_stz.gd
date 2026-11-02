@@ -14,7 +14,7 @@ var _monster_count_multiplier := 1
 
 
 func _ready() -> void:
-	selected_prince_id = int(Global.selected_three_prince_id)
+	selected_prince_id = Global.get_run_context().get_selected_three_prince_id()
 	if selected_prince_id not in PRINCE_IDS:
 		selected_prince_id = 4401
 	_monster_count_multiplier = clampi(int(MainSet.set_data.get("CreateMonsterCount", 1)), 1, 5)
@@ -37,7 +37,7 @@ func _ready() -> void:
 		"stage_4": [],
 	}
 	Global.set_current_level_name("挑战三太子")
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	level_stage = 44
 	_set_selected_background()
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/music_emsd.mp3")

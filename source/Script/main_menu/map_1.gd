@@ -163,9 +163,7 @@ func _ready():
 
 	update_button_texture()
 	Global.set_tower_floor(1)
-	Global.llbtbossms = false
-	Global.llbtcgms = false
-	Global.llbtwxms = false
+	Global.get_run_context().clear_llbt_challenge_modes()
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()
 	RoleProp.current_hp = RoleProp.roleprop.Hp
@@ -179,8 +177,8 @@ func _ready():
 	if not Global.is_frist:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 		Global.is_frist = true
-	Global.player_be_hit_count = 0
-	Global.last_level_path = ""
+	Global.get_run_context().reset_player_hit_count()
+	Global.get_run_context().clear_last_level_path()
 	Global.fb_cd = 0
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = 1

@@ -201,7 +201,7 @@ func _build_archive_preload_paths() -> Array[String]:
 	for extra_path in EXTRA_PRELOAD_PATHS:
 		_append_preload_path(unique, str(extra_path))
 	if str(_target_scene) == "res://Scene/level/level_esbxx.tscn":
-		var constellation_level := clampi(int(Global.selected_constellation_level), 1, 14)
+		var constellation_level := clampi(Global.get_run_context().get_selected_constellation_level(), 1, 14)
 		_append_preload_path(unique, "res://Art/constellations/background/%d.png" % constellation_level)
 	for role_path in Global.get_current_role_preload_paths():
 		_append_preload_path(unique, role_path)

@@ -180,12 +180,12 @@ var _blackout_serial := 0
 
 
 func _ready() -> void:
-	selected_level = clampi(int(Global.selected_constellation_level), 1, 14)
+	selected_level = clampi(Global.get_run_context().get_selected_constellation_level(), 1, 14)
 	current_tier = 1
 	_boss_count_multiplier = clampi(int(MainSet.set_data.get("CreateMonsterCount", 1)), 1, 5)
 	MainSet.set_data["CreateMonsterCount"] = _boss_count_multiplier
 	Global.set_current_level_name("挑战28星宿阵")
-	Global.game_over = 1
+	Global.get_run_context().set_game_over_variant(1)
 	level_stage = 47
 	is_two_scene = false
 	if constellation_background != null:
@@ -284,11 +284,9 @@ func on_constellation_boss_defeated(boss: BaseMonster) -> void:
 	if _has_alive_current_boss():
 		return
 	_advancing = true
-	var key := str(selected_level)
 	var stored_best := PlayerData.get_constellation_highest_defeated_tier(selected_level)
-	var best := mini(maxi(maxi(stored_best, int(Global.constellation_best_tier.get(key, 0))), current_tier), 10)
+	var best := mini(maxi(stored_best, current_tier), 10)
 	var progress_changed := PlayerData.record_constellation_defeated_tier(selected_level, best)
-	Global.constellation_best_tier[key] = best
 	if progress_changed and Global.is_archive_session_active():
 		if not MemoryClass.request_save("level_esbxx_tier", false):
 			Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
@@ -322,14 +320,7 @@ func get_constellation_tier() -> int:
 
 
 func _get_highest_defeated_tier() -> int:
-	var key := str(selected_level)
-	var stored_best := PlayerData.get_constellation_highest_defeated_tier(selected_level)
-	var legacy_best := clampi(int(Global.constellation_best_tier.get(key, 0)), 0, 10)
-	if legacy_best > stored_best:
-		PlayerData.record_constellation_defeated_tier(selected_level, legacy_best)
-		stored_best = legacy_best
-	Global.constellation_best_tier[key] = stored_best
-	return stored_best
+	return PlayerData.get_constellation_highest_defeated_tier(selected_level)
 
 
 func get_selected_constellation_level() -> int:

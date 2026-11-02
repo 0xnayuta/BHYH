@@ -99,6 +99,61 @@ func _run() -> void:
 
 	context.reset_combat_stats()
 	checks["reset_after_use"] = context.damage_dealt == 0 and context.healing == 0
+
+	var previous_path := context.get_last_level_path()
+	context.set_last_level_path("res://Scene/level/level_1.tscn")
+	checks["last_level_path_roundtrip"] = context.get_last_level_path() == "res://Scene/level/level_1.tscn"
+	context.clear_last_level_path()
+	checks["last_level_path_clear"] = context.get_last_level_path() == ""
+	context.set_last_level_path(previous_path)
+
+	context.begin_level_timing()
+	var begin_text := context.get_level_begin_time()
+	var elapsed := context.finish_level_timing()
+	checks["level_timing_end"] = begin_text != "" and context.get_level_end_time() != ""
+	checks["level_timing_elapsed"] = elapsed >= 0
+
+	context.record_combo(3)
+	context.record_combo(2)
+	context.record_combo(5)
+	checks["max_combo"] = context.get_max_combo() == 5
+	context.reset_player_hit_count()
+	context.add_player_hit()
+	checks["player_hit_count"] = context.get_player_hit_count() == 1
+	context.reset_player_hit_count()
+
+	var previous_game_over := context.get_game_over_variant()
+	context.set_game_over_variant(2)
+	checks["game_over_variant"] = context.get_game_over_variant() == 2
+	context.set_game_over_variant(previous_game_over)
+
+	var previous_prince := context.get_selected_three_prince_id()
+	var previous_constellation := context.get_selected_constellation_level()
+	context.set_selected_three_prince_id(4402)
+	context.set_selected_constellation_level(7)
+	checks["selected_ids"] = (
+		context.get_selected_three_prince_id() == 4402
+		and context.get_selected_constellation_level() == 7
+	)
+	context.set_selected_three_prince_id(previous_prince)
+	context.set_selected_constellation_level(previous_constellation)
+
+	var previous_endless := context.is_llbt_endless_mode()
+	var previous_continue := context.is_llbt_continue_mode()
+	var previous_boss := context.is_llbt_boss_mode()
+	context.set_llbt_challenge_modes(true, false, true)
+	checks["llbt_modes_set"] = (
+		context.is_llbt_endless_mode() and not context.is_llbt_continue_mode() and context.is_llbt_boss_mode()
+	)
+	context.clear_llbt_challenge_modes()
+	checks["llbt_modes_clear"] = (
+		not context.is_llbt_endless_mode()
+		and not context.is_llbt_continue_mode()
+		and not context.is_llbt_boss_mode()
+	)
+	context.set_llbt_challenge_modes(previous_endless, previous_continue, previous_boss)
+	context.reset_level_progress()
+
 	Global.set_tower_floor(previous_floor)
 	Global.set_current_level_name(previous_name)
 	checks["restored_floor"] = Global.get_tower_floor() == previous_floor

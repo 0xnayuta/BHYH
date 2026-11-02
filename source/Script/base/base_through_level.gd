@@ -86,9 +86,9 @@ func _ready() -> void:
 		pass
 	Global.is_show = true
 	Global.fb_cd = -10
-	Global.last_level_path = str(self.scene_file_path)
+	Global.get_run_context().set_last_level_path(str(self.scene_file_path))
 	remove_all_records()
-	Global.level_begin_time = Time.get_datetime_string_from_system(false, true)
+	Global.get_run_context().begin_level_timing()
 	var role_id = int(PlayerData.player_data.get("Myself", 1))
 	if role_id <= 0:
 		role_id = 1
@@ -1451,7 +1451,7 @@ func _restart_level_for_auto_battle() -> bool:
 		return false
 	if not bool(MainSet.set_data.get("AutoBattleRetry", false)):
 		return false
-	if Global.last_level_path == "":
+	if Global.get_run_context().get_last_level_path() == "":
 		return false
 	if not MemoryClass.request_save("auto_battle_retry", false):
 		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
@@ -1463,7 +1463,7 @@ func _restart_level_for_auto_battle() -> bool:
 	RoleProp.ws_value = 0
 	RoleProp.is_ws_state = false
 	Global.remove_all_buff()
-	Global.change_scene(Global.last_level_path)
+	Global.change_scene(Global.get_run_context().get_last_level_path())
 	return true
 
 
@@ -1809,10 +1809,7 @@ func _shake_screen(strength: float, times: int, inte: float):
 
 
 func remove_all_records():
-	Global.level_begin_time = ""
-	Global.most_lianji = 0
-	Global.last_prop_hp = 0
-	Global.get_run_context().reset_combat_stats()
+	Global.get_run_context().reset_level_progress()
 
 
 ## ---------------------------------------------------------------------------

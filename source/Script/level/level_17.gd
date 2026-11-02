@@ -5,14 +5,14 @@ class_name Level17
 
 func _ready() -> void:
 	Global.set_current_level_name("忘川河")
-	Global.player_be_hit_count = 0
+	Global.get_run_context().reset_player_hit_count()
 	Global.get_audio_runtime().add_bgm(self, "res://Music/level/9_bg3.mp3")
 	self.level_stage = 1
 	super._ready()
 
 
 func _physics_process(delta: float) -> void:
-	text_2.text = str(Global.player_be_hit_count)
+	text_2.text = str(Global.get_run_context().get_player_hit_count())
 	super._physics_process(delta)
 	if current_stage >= 1:
 		if current_stage < 4:
