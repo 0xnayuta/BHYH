@@ -2,7 +2,7 @@ class_name EquipmentService
 extends RefCounted
 
 ## 装备定义与规则的静态服务入口；不新增 Autoload。
-## 33-3 用它替换 UI/背包中的旧 AE 字典访问，33-4 再收口 AE。
+## 33-3 已用它替换旧装备字典访问；33-4 后运行时只加载 Catalog。
 
 const CATALOG_PATH := "res://Script/data/equipment_catalog.tres"
 

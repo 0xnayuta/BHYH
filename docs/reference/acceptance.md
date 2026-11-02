@@ -104,7 +104,7 @@ python scripts/check_all.py --no-cache -j 6
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
 | 关卡布局同步 | `convert_level_layout_catalog.py --check` | `level_layout_sources.json` 与布局 `.tres`/Catalog 逐字一致；stage 连续、点位唯一、依赖存在、矩形范围（终屏 screen_rect 允许零宽）与场景路径校验 |
-| 装备 Catalog/字段 | `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check` | 1,035 条定义、32 字段、`defined_fields`/`randomized_fields`/`random_rolls`、嵌套强化键、int/float 类型与构建源同源；随机字段不得保存采样值；33-2 Rules/Roller 需与旧实现逐项对照；33-3 第一簇需通过 `ui-factories`/`ui-theme`、`coop_probe` 与 `level_1`；第二簇需通过 `ui-factories`、`level-entry`（掉落盒）、`archive_probe_runner`（商店/奖励/结算）与 `level_1`；第三簇需通过 `archive_probe_runner`（强化/合成/分解/神铸/淬骨/锻造）、`ui-factories` 与 `health_check`；第四簇需通过 `archive_probe_runner`、`coop_probe_runner`、`level_1` 与 `health_check` |
+| 装备 Catalog/字段 | `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check` | 1,035 条定义、32 字段、`defined_fields`/`randomized_fields`/`random_rolls`、嵌套强化键、int/float 类型与构建源同源；随机字段不得保存采样值；33-2 Rules/Roller 与旧实现逐项对照；33-3 四簇与 33-4 `base_role_properies` 规则调用全部迁移；33-4 删除旧脚本/字典入口/Autoload；33-5 需通过审计、全量回归与包含 `equipment_catalog` 的 PCK 闭包 |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
 | 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
@@ -317,7 +317,7 @@ python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 ```
 
-`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致；发布清单包含 `layout_catalog` 与 90 个布局路径。
+`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致；发布清单 schema 3 包含 `layout_catalog`、`equipment_catalog`（`equipment_catalog.tres`）与 98 个布局路径。
 
 `convert_level_layout_catalog.py --check` 同样由 `contract_gate.py` 调用，校验 `scripts/level_layout_sources.json` 生成的单关布局 `.tres` 与 `level_layout_catalog.tres` 一致；Phase 30-1 试点关卡为 `level_48`，Phase 30-2 增加 20 个原始 ZMWS 代表关卡，Phase 30-3 收口增加 69 个布局化的 BHYH 关卡（20 个单屏 + 13 个多阶段 + 36 个截断对齐）；另 6 个空数据表删除，10 个动态/非连续脚本登记例外。。`level_layout_migration_audit.py --fail-on-error` 阻断「已登记布局 + 脚本内仍有 `monster_group = {`」的双数据源；剩余数据表必须与 `level_layout_data_exceptions.json` 精确一致，未登记或失效例外均失败。
 
@@ -325,7 +325,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
 
-> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
+> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。2026-11-02 Phase 33-5 重新导出并校验 **4,200/4,200 可达**（新增 `equipment_catalog.tres`），PCK **7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
 
 `frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。三种证据必须分开记录：
 
@@ -333,7 +333,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 |:---|:---|:---|
 | 源闭包 | `convert_frame_sequences.py --check` + `convert_level_preload_catalog.py --check` | 源文件存在、schema、UID、Catalog、FrameSequence 与关卡预载依赖清单一致 |
 | 预设声明 | `convert_frame_sequences.py --export-preset` | 预设过滤器不会排除依赖；仍是配置级 |
-| 发布包 | `frame_sequence_pack_probe.py` | 合并两份清单后，引擎挂载 PCK 逐条判定 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
+| 发布包 | `frame_sequence_pack_probe.py` | 合并两份清单后，引擎挂载 PCK 逐条判定 FrameSequence/关卡预载/布局 Catalog/装备 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
 
 判定：
 

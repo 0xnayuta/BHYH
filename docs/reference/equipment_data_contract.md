@@ -1,8 +1,8 @@
-# 装备数据契约（Phase 33-0/33-1/33-2 + 33-3 消费方）
+# 装备数据契约（Phase 33 完成）
 
-> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）、33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）与 33-3 第一/第二/第三/第四簇已完成；33-4 切换与 33-5 收口未启动。
+> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）、33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）、33-3 第一/第二/第三/第四簇、33-4 切换与 33-5 收口均已完成（2026-11-02）。旧 `all_equipment_data.gd`、`all_equipment.gd`、字典 getter/setter 与 `AE` Autoload 已删除；运行时只加载 `equipment_catalog.tres`。
 >
-> **范围**：`all_equipment_data.gd` 的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。33-3 完成后源码内 `AE.all_equipment` 直接访问为 **0**；旧脚本与字典入口仍保留到 33-4。本页描述新 Catalog 契约与已迁移调用面，不宣称 33-4 已完成。
+> **范围**：从旧脚本迁出的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。源码内旧 `AE`/`all_equipment` API 引用为 **0**；本页描述最终 Catalog 契约、规则层与验证结果。
 >
 > **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[总体目标契约](../standards/target_architecture_contract.md) §5。
 
@@ -20,9 +20,10 @@
 | 属性字段 | **16 个**，保留 int/float 原类型 |
 | `宝石` 静态定义 | **456 条空数组**；实例属于玩家档案 |
 | 图标 | 可选；缺失由 `defined_fields` 表达，不以空字符串伪造存在 |
-| 旧运行入口 | `AE.all_equipment`，Autoload `AE` 懒加载 `all_equipment_data.gd`；33-3 完成后源码直接访问 0，33-4 删除旧脚本与字典入口 |
+| 旧运行入口 | **已删除（33-4）**：`AE.all_equipment`、`all_equipment.gd`、`all_equipment_data.gd` 与 Autoload 注册均不存在；运行时只加载 Catalog |
+| 发布依赖 | `level_preload_export_dependencies.json` schema 3 登记 `equipment_catalog.tres`；PCK 闭包逐条验证 |
 
-旧脚本的随机不是只存在于 `tjbg`：`SHp`、`SMp`、`power`、`Def`、`Mdef`、`Crit`、`Miss`、`R_hp`、`R_mp`、`Lucky`、`htarget`、`ar`、`sp` 与 `成长率` 均存在 `randi_range`/`randf_range`。本契约以实际源码与跨种子运行结果为准，不沿用“只有 `tjbg` 随机”的旧描述。
+迁移前旧脚本的随机不只存在于 `tjbg`：`SHp`、`SMp`、`power`、`Def`、`Mdef`、`Crit`、`Miss`、`R_hp`、`R_mp`、`Lucky`、`htarget`、`ar`、`sp` 与 `成长率` 均存在 `randi_range`/`randf_range`。本契约以迁移期源码与跨种子运行结果为准，不沿用“只有 `tjbg` 随机”的旧描述。
 
 ---
 
@@ -142,7 +143,7 @@
 | `source/Script/data/equipment_rules.gd` | 旧规则服务化：强化、五行、神铸、宝石共鸣 |
 | `source/Script/data/equipment_catalog.tres` | 1,035 条定义的构建期产物 |
 
-构建源是运行时数据的唯一新来源；生成器不读取旧 `all_equipment_data.gd`、玉兔 JSON 或 Art 目录。公开 clone 缺少玉兔素材时，已提交的 Catalog 仍可加载；不能以公开环境重建源或伪造玉兔条目。
+构建源是运行时数据的唯一新来源；生成器只读取构建源，不读取素材源或旧脚本。公开 clone 缺少玉兔素材时，已提交的 Catalog 仍可加载；不能以公开环境重建源或伪造玉兔条目。
 
 ---
 
@@ -163,7 +164,7 @@ store.by_category(&"武器")
 - 只读：不提供 `all_equipment` 字典、setter 或兼容别名；
 - `definition()` 缺失时 `push_error` 并返回 `null`，不静默回退；
 - 索引只在构造时建立；`ids()` 返回副本；`by_category()` 返回新数组；
-- 本批不新增 Autoload；`AE` 旧路径不变。
+- 不新增 Autoload；旧 `AE` Autoload 已删除，`EquipmentService` 为静态服务入口。
 
 ---
 
@@ -184,7 +185,7 @@ rules.get_wx()
 ```
 
 - `EquipmentRoller.materialize()` 只读 Catalog，把确定性字段与随机字段合成旧字典形状；按 ID 缓存，`clear_cache()` 重置；
-- `EquipmentRules` 保留旧方法名与旧字典输入/输出；33-3 各簇经 `EquipmentService.rules()` 调用，源码不再直接访问 `AE.all_equipment`；`base_role_properies` 的 `AE` 规则调用留待 33-4；
+- `EquipmentRules` 保留旧方法名与旧字典输入/输出；33-3/33-4 的调用方全部经 `EquipmentService.rules()` 调用，源码不再直接访问旧 Autoload；
 - 规则不写回 Catalog/定义；旧实现对非道具且缺少 `强化属性` 的输入会索引缺失键，新实现返回未修改结果，比较用例只覆盖有效输入；
 - `get_wx()` 保留旧 `randomize()` 行为；五行结果不进入静态定义。
 
@@ -257,7 +258,12 @@ rules.get_wx()
 - 33-3 完成后源码内 `AE.all_equipment` 直接访问为 **0**；
 - 第四簇内 `AE.` 代码访问为 **0**。
 
-剩余：`base_role_properies.gd` 的 13 处 `AE` 规则调用（不是 `AE.all_equipment`）留待 33-4 按 typed service 收口；33-3 消费方迁移整体完成。
+33-3 消费方迁移整体完成。33-4 已将 `base_role_properies.gd` 的 13 处规则调用改为 `EquipmentService.rules()`，并删除旧 Autoload。
+
+### 8.5 33-4 切换与 33-5 收口
+
+- 33-4：迁移 `base_role_properies` 的 13 处规则调用；更新 archive/UI 探针的旧字典种子；删除 `all_equipment.gd`、`all_equipment_data.gd` 及其 `.uid`；移除 `project.godot` 的 `AE` 注册；`check_all.py` 移除旧文件。
+- 33-5：`equipment_catalog` 加入 `level_preload_export_dependencies.json` schema 3；`frame_sequence_pack_probe.py` 将其纳入 PCK 必需路径；完成构建源/Catalog 审计、L2、全量关卡与实际 PCK 闭包。
 
 ---
 
@@ -275,14 +281,13 @@ rules.get_wx()
 - 33-3 第二簇：`ui-factories` PASS（20.68s）、`level-entry` PASS（4.94s，含 `fall_boxes_built`/`fall_boxes_resolved`）、`archive_probe_runner` **293/293 PASS**（13.86s，含普通/神秘商店购买、奖励与失败结算）、`level_1` 冒烟 PASS（25.15s，4 阶段，日志 0/0/0）、`health_check` 0 Parse / 0 Error / 0 Warning（15.11s）；`check_all --godot-bin` **9/9（28.11s）**；
 - 33-3 第三簇：`archive_probe_runner` **297/297 PASS**（11.34s，含强化、合成、分解、神铸、淬骨与锻造基础属性）；`ui-factories` PASS（20.18s，forge/decompose 场景工厂）；`health_check` **0 Parse / 0 Error / 0 Warning**（14.51s）；`check_all --godot-bin` **9/9（27.76s）**；
 - 33-3 第四簇：源码 `AE.all_equipment` **0**；`archive_probe_runner` **297/297 PASS**（14.55s）、`coop_probe_runner` **26/26 PASS**（133.36s）、`level_1` PASS（25.58s，4 阶段，日志 0/0/0）、`health_check` 0 Parse / 0 Error / 0 Warning（14.90s）、`check_all --godot-bin` **9/9（27.78s）**；
-- `check_all`、`health_check` 结果记录于 [`status.md`](status.md)。
-
-未执行：33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
+- 33-4：13 处 `base_role_properies` 规则调用迁移；旧脚本/字典/getter/setter/Autoload 删除；`health_check` 762 脚本 **0/0/0**（15.04s）；`check_all --godot-bin` **9/9（28.33s）**；`archive_probe_runner` **297/297**（12.21s）、`scene_probe_runner` **14/14**（170.22s）、`coop_probe_runner` **26/26**（148.45s）、`level_1` PASS（26.87s，4 阶段 0/0/0）；
+- 33-5：`equipment_data_audit.py --check` **1,035 条 / 32 字段 / 163 条随机定义 / 258 个随机字段值**、`convert_equipment_catalog.py --check`、`convert_level_preload_catalog.py --check` 与发布清单自检 **4,200 条** PASS；全量回归 **PASS 128/128 + SKIP 5，FAIL 0**（302.3s）；实际 PCK **4,200/4,200 可达**，**7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。
 
 ---
 
 ## 10. 边界与下一步
 
 - 不改变装备数值、掉落、随机范围、强化/神铸公式、存档格式或双人共享规则；
-- 不删除 `all_equipment_data.gd`，不保留第二份可写字典；
-- 33-2 已完成规则抽取与随机字段恢复；33-3 消费方迁移已完成；33-4 删除旧脚本与字典 API，并收口 `base_role_properies` 的 `AE` 规则调用；33-5 补全量对比、L2/UI/关卡回归与 PCK。
+- 旧 `all_equipment_data.gd`/`all_equipment.gd` 与旧字典 API 已删除，不再保留第二份可写数据或兼容 facade；
+- Phase 33 出口已满足：33-4 删除旧脚本与 Autoload，33-5 完成审计、L2、全量关卡回归与 PCK 闭包。

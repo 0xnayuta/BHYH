@@ -1209,7 +1209,7 @@ func _check_combat_cache_release(checks: Dictionary) -> void:
 
 func _first_equipment_id() -> String:
 	# 取一个有图标资源的装备，避免探针把缺失素材算作真实错误。
-	for key in AE.all_equipment.keys():
+	for key in EquipmentService.ids():
 		var item_id := str(key)
 		if ResourceLoader.exists("res://Art/backpack/all_items/%s.png" % item_id):
 			return item_id

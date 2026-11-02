@@ -5,7 +5,7 @@
 输入：`scripts/equipment_sources.json`（已提交、可审查的单文件构建源）。
 输出：`source/Script/data/equipment_catalog.tres`。
 
-运行时只加载 `.tres`，不解析旧 `all_equipment_data.gd`、玉兔 JSON 或本脚本。
+运行时只加载 `.tres`，不解析源文本、玉兔 JSON 或本脚本。
 随机字段在构建源中以 `randomized_fields` 登记，构建源与 Catalog 均不保存采样值；
 其运行时生成属于后续装备规则批次。
 

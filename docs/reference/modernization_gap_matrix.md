@@ -54,7 +54,7 @@
 | `Global.<member>` 调用点 | **2,832** | B8 |
 | 脚本内硬编码 `"res://…"` 字符串 | **1,981** | B6 |
 | `collision_layer = <整数>` | **0**（31-0A 收敛到 `PhysicsLayers`） | B4 已消除 |
-| `all_equipment_data.gd` | **19,185 行** | B3（占 `Script/data` 的 96%） |
+| `all_equipment_data.gd` | **0（33-4 删除）** | B3 已消除（迁移前 19,185 行，占 `Script/data` 的 96%） |
 | 最大单场景 `level_85.tscn` | **1,030 节点**（1,022 个 `Sprite2D`） | B7 |
 
 ### 2.3 已经健康的部分（不做）
@@ -121,10 +121,10 @@
 
 | 项 | 内容 |
 |:---|:---|
-| 现状 | `source/Script/data/all_equipment_data.gd` **19,185 行**，占 `Script/data` 的 96% |
+| 现状 | 迁移前 `source/Script/data/all_equipment_data.gd` **19,185 行**；33-4 已删除，运行时只加载 `equipment_catalog.tres` |
 | 问题 | 加载即全量编译；不可 Inspector 审查；字段无类型契约 |
 | 与 ADR-006 关系 | 该文件是**静态装备定义**，属 ADR-006「新结构化静态数据优先 Resource」的管辖对象；与 `current-iteration.md` §1.2「不把 `PlayerData.player_data` 整体改成 Resource」不冲突（后者是可变档案） |
-| 处置 | **Phase 33**；需生成器 + 全量数值回归（装备属性必须逐字段不变） |
+| 处置 | **Phase 33 已完成**：构建源/生成器、只读 Catalog/Store、Rules/Roller 与全量回归；旧脚本已删除 |
 
 #### B4 `collision_layer` 使用裸整数
 
@@ -197,8 +197,8 @@
 | **Phase 31-0A** | A2 `TileMap`→`TileMapLayer`（基类 1 + 12 个覆盖场景）、B4 具名物理层（30 处）、B5 去重（19 处） | API/普通重构 | 1–2 天 | 无 |
 | ~~Phase 31-0B~~ | B2 数字图→BMFont（3 文件 25 处）：评估后拒绝，保留旧数字图 | 方案替换 | 已评估 | 无（需同源 BMFont 才重启） |
 | **Phase 31-1** | 视差迁移：89 场景 `ParallaxLayer` → `Parallax2D`（完成） | API 迁移 | 已实施 | 31-0 完成 |
-| **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,804 处直接属性，动画轨道单独登记 | **契约重构** | 试点 2 天 + 分批 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（基线/契约/审计 + `game_set` + 标签/Button 密集 + 混合控件/布局 + 多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）；Phase 33-0/33-1/33-2 已完成，33-3 完成；见 `current-iteration.md` §5C |
-| **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | **33-0/33-1/33-2 已完成，33-3 完成**（32 字段、1,035 条 Catalog、258 个随机规格与 Rules/Roller、UI/背包、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔迁移）；源码 `AE.all_equipment` 为 0，33-4/33-5 未启动；见 `equipment_data_contract.md`、`current-iteration.md` §5D |
+| **Phase 32** | UI Theme 契约：定义 Theme 资源 + `theme_type_variation` 命名规范；1 个面板试点；试点通过后分批迁移 6,804 处直接属性，动画轨道单独登记 | **契约重构** | 试点 2 天 + 分批 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（基线/契约/审计 + `game_set` + 标签/Button 密集 + 混合控件/布局 + 多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）；Phase 33 已完成；见 `current-iteration.md` §5C |
+| **Phase 33** | 装备数据契约：19,185 行 → Resource + 生成器 | **契约重构** | 3–5 天 | **33-0/33-1/33-2/33-3/33-4/33-5 已完成**（32 字段、1,035 条 Catalog、258 个随机规格与 Rules/Roller、全部消费方迁移、旧脚本与 Autoload 删除、全量回归与 PCK 闭包）；见 `equipment_data_contract.md`、`current-iteration.md` §5D |
 
 **不建议立项**：B6、B7、B8、C1、C2。
 
@@ -212,7 +212,7 @@
 | 31-0B | 已评估：字形/颜色/步进与截图对照不达标，保留旧实现并登记；未改代码 | 不为归零强行替换 |
 | 31-1 | 已实施：89 场景 × 4 相机 2,520 节点 transform 对照；7 个代表场景截图前后对照；全量回归 128/128 + 5 SKIP；`ParallaxLayer`/`ParallaxBackground` 归零 | 不重跑平台性能 |
 | 32 | 试点面板截图逐像素或逐控件对照；`.theme` 资源登记；迁移清单按面板分批 | 不在试点前批量迁移 |
-| 33 | 装备属性逐字段与迁移前一致（脚本比对）；`all_equipment_data.gd` 删除或降为生成器输出的薄封装 | 不改装备数值与掉落规则 |
+| 33 | 装备属性逐字段与迁移前一致；`all_equipment_data.gd` 已删除；构建源/Catalog 审计、全量回归与 PCK 闭包 PASS | 不改装备数值与掉落规则 |
 
 ---
 
@@ -226,7 +226,6 @@ grep -rh "theme_override" source/Scene --include=*.tscn | wc -l
 grep -rn "^func load_item_icon" source/Script --include=*.gd | wc -l
 grep -rn "collision_layer = [0-9]" source/Script --include=*.gd | wc -l
 grep -rho "Global\.[a-z_]*" source/Script --include=*.gd | wc -l
-wc -l source/Script/data/all_equipment_data.gd
 ```
 
 - 相关文档：[`architecture.md`](architecture.md) §9 遗留与现代化分界、[`status.md`](status.md)、[`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)。

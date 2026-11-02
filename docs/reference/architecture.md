@@ -72,13 +72,13 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 2 | `PlayerData` | `Script/memory_class/player_data.gd` | 存档数据仓库与 `ensure_*` 补全 | `class_name PlayerDataStore` |
 | 3 | `MemoryClass` | `Script/memory_class/memory_class.gd` | 本地存档加密读写、备份、后台保存、设置文件 | 本地存档 IO 主入口；云存档导入/导出在归档界面单独加密读写 |
 | 4 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
-| 5 | `AE` | `all_equipment.gd` | 装备数值门面，懒加载大体量装备表 | 无业务依赖 |
-| 6 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
-| 7 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
-| 8 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
-| 9 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
-| 10 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
-| 11 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
+| 5 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
+| 6 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
+| 7 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
+| 8 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 9 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
+| 10 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
+| 11 | `ZmwsConfig` | `Script/config/config.gd` | ZMWS 数值配置表查询与缓存 | 按需加载，不预载全表 |
 
 ### 2.2 依赖与初始化约束
 
@@ -305,7 +305,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 会话设置 | `MainSet.set_data` | 音乐、画质、剧情跳过、自动战斗、难度、刷怪速度/数量、主菜单背景等 |
 | 持久化 | `MemoryClass` | `user://MyAr_<n>.json` 加密档、`.bak`、`.tmp`、后台线程、`user://MainGame.json` 设置、`user://.save_key` 稳定密钥 |
 | 契约常量 | `DataKeys` | 字典键的统一常量入口与安全访问器 |
-| 装备静态定义 | `EquipmentDefinition` / `EquipmentCatalog` | 33-1 构建期只读 Catalog（1,035 条、32 字段）；运行时索引由 `EquipmentStore` 提供；33-3 各簇经 `EquipmentService` 查询，源码 `AE.all_equipment` 为 0；旧脚本与 `base_role_properies` 的 `AE` 规则调用待 33-4 收口 |
+| 装备静态定义 | `EquipmentDefinition` / `EquipmentCatalog` | 构建期只读 Catalog（1,035 条、32 字段）；运行时索引由 `EquipmentStore` 提供；33-3/33-4 全部经 `EquipmentService` 查询；旧脚本、字典入口与 `AE` Autoload 已删除 |
 | 装备规则 | `EquipmentRoller` / `EquipmentRules` | 33-2 按 258 个随机规格物化定义，服务化强化/神铸/宝石/五行；不写 Catalog；33-3 各簇通过 `EquipmentService` 使用 |
 
 ### 5.2 `PlayerDataStore`
@@ -597,7 +597,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 |:---|:---|:---|
 | 11 个 Autoload、`Global` 上帝对象 | 承担场景、UI、缓存、池、预载与业务判定 | 注册是遗留基线，不是数量目标；按职责闭环迁移，旧 API 不永久 facade 化；边界与顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
 | 中文裸字典键业务数据 | `player_data` / `initialized_data` 大量中文键 | 新增键必须走 `DataKeys`；新结构化数据优先 Resource |
-| 脚本内静态数据表 | `level_info`、`all_equipment_data`、怪物路径表 | 新增数据不复制此模式；装备定义已落为 `EquipmentCatalog`，旧 `all_equipment_data.gd` 仅保留到 33-4 切换 |
+| 脚本内静态数据表 | `level_info`、怪物路径表 | 新增数据不复制此模式；装备定义已落为 `EquipmentCatalog`，旧装备数据脚本已在 33-4 删除 |
 | 运行时 `SpriteFrames.new()` | 机读 allowlist 登记的动态/裁剪/占位边界 | 固定资产离线构建；冻结例外不得扩张，不用帧数决定后端 |
 | 场景切换入口 | `Global.change_scene` 统一校验、清理、代次与切换；加载页用目标快照完成交接 | 新代码只走 `Global.change_scene`；加载页不直接切场景 |
 | 临时 UI 登记 | `UiRuntime.register_transient_ui` 与 `UiRuntime.cleanup_transient_ui`（经 `Global.get_ui_runtime()` 访问） | 新增工厂必须登记；业务不得直接调用 `cleanup_transient_ui`；永久小 UI 跳过 |
@@ -618,7 +618,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
 | 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；98 个登记布局（`level_48`、20 个原始 ZMWS 代表关卡、8 个 Rogue 24 代表关卡、69 个已迁移 BHYH 关卡），构建期生成、运行时只读 |
-| 装备定义 | `EquipmentDefinition` / `EquipmentCatalog` + `EquipmentStore`；1,035 条、32 字段，构建期由 `equipment_sources.json` 生成；随机字段由 `random_rolls` 登记；33-3 各簇经 `EquipmentService` 查询，源码 `AE.all_equipment` 为 0，33-4 删除旧脚本与字典入口 |
+| 装备定义 | `EquipmentDefinition` / `EquipmentCatalog` + `EquipmentStore`；1,035 条、32 字段，构建期由 `equipment_sources.json` 生成；随机字段由 `random_rolls` 登记；33-3/33-4 全部经 `EquipmentService` 查询，旧脚本与字典入口已删除 |
 | 装备规则 | `EquipmentRoller` + `EquipmentRules`；258 个随机规格、旧字典形状快照、强化/神铸/宝石/五行；33-2 已用旧实现对照；33-3 各簇经 `EquipmentService` 接入 |
 | 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称优先、唯一归一化补 6 条，当前 512 条，未匹配项不静默回退 |
 | 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 28 个 `Scene/level/zmws_playable/*.tscn` 包装场景（20 个 Phase 30 代表关 + 8 个 Rogue 24 非战斗代表关） |

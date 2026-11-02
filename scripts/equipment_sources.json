@@ -1,9 +1,8 @@
 {
   "schema_version": 1,
   "source": {
-    "data_script": "res://Script/data/all_equipment_data.gd",
     "yutu_source": "res://Art/hero_picture/role_7/equipment.json",
-    "random_policy": "Fields listed in randomized_fields are generated at runtime by the legacy data script; no sampled value is stored."
+    "random_policy": "Fields listed in randomized_fields are generated at runtime by EquipmentRoller; no sampled value is stored."
   },
   "definition_count": 1035,
   "randomized_field_count": 258,

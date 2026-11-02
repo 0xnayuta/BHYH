@@ -1,8 +1,9 @@
 {
   "schema_id": "level_preload_export_dependencies",
-  "schema_version": 2,
+  "schema_version": 3,
   "catalog": "res://Script/data/level_preload_catalog.tres",
   "layout_catalog": "res://Script/data/level_layout_catalog.tres",
+  "equipment_catalog": "res://Script/data/equipment_catalog.tres",
   "layouts": [
     "res://Script/data/level_layouts/activity_2020_baodacehua_1.tres",
     "res://Script/data/level_layouts/activity_outsidestory_guichengxiang_1.tres",

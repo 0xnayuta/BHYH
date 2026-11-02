@@ -3660,7 +3660,7 @@ func _pet_item_sell_price(item: Dictionary) -> int:
 				if configured_price > 0:
 					return configured_price
 	var item_name := _pet_item_name(item)
-	if AE != null and EquipmentService.has(item_name):
+	if EquipmentService.has(item_name):
 		var equipment_price := maxi(0, int(EquipmentService.data(item_name).get("售价", 0)))
 		if equipment_price > 0:
 			return equipment_price

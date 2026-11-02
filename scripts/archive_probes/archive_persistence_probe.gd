@@ -851,7 +851,7 @@ func _prepare_strength_state(with_materials: bool = true) -> Dictionary:
 	if with_materials:
 		PlayerData.add_dj("qhs_1", 10)
 		PlayerData.add_dj("qhs_2", 10)
-	var data: Dictionary = AE.all_equipment["ptxzg"].duplicate(true)
+	var data: Dictionary = EquipmentService.data("ptxzg").duplicate(true)
 	var entry := {"名字": "ptxzg", "强化等级": 1, "Data": data}
 	PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"].append(entry)
 	MLdl.qh_list["名字"] = "ptxzg"
@@ -1550,7 +1550,7 @@ func _test_growth_commands() -> void:
 	# 神铸：成功扣 20 颗神石并提升阶段；保存失败恢复装备与石头。
 	_reset_profile(1, 5)
 	_open_session(PANEL_ARCHIVE_PATH)
-	var divine_data: Dictionary = AE.all_equipment["xyfjwk"].duplicate(true)
+	var divine_data: Dictionary = EquipmentService.data("xyfjwk").duplicate(true)
 	divine_data["神铸阶段"] = 0
 	_seed_forge_equipment("xyfjwk", divine_data)
 	PlayerData.add_dj("pgs", 20)
@@ -1591,7 +1591,7 @@ func _test_growth_commands() -> void:
 	# 淬骨：失败也扣 3 个神火（保留原设计）；成功升级；保存失败全部恢复。
 	_reset_profile(1, 5)
 	_open_session(PANEL_ARCHIVE_PATH)
-	var bone_data: Dictionary = AE.all_equipment["psdzzg"].duplicate(true)
+	var bone_data: Dictionary = EquipmentService.data("psdzzg").duplicate(true)
 	bone_data["淬骨次数"] = 0
 	_seed_forge_equipment("psdzzg", bone_data)
 	PlayerData.add_dj("shenhuo_1", 3)

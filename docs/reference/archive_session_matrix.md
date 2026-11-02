@@ -554,7 +554,7 @@ grep -rn "is_save_snapshot_in_progress" source --include='*.gd'
 | `tower_floor_select` 验证 | 该处理器调用 `Global.change_scene` 切换关卡，无法在单场景夹具中安全执行；改用一次性场景脚本在真实 `current_scene` 下验证：`镇妖塔当前层数=1` 写入且加密档案 `存档时间` 刷新。临时脚本已删除 |
 | 角色范围 | 新增 `MemoryClass.is_valid_role_id`（1..7，接受 int/float）；本地校验、云收集、云导入共用 |
 | 读档拒绝 | 非空档案在合入 `player_data` 前执行 `_is_valid_player_archive_data`；结构或角色非法返回 `false` |
-| 退出泄漏修复 | `AE`（`all_equipment.gd`）懒加载的 `_data` 在 `_exit_tree` 释放；此前每次退出泄漏 1 个 Node |
+| 退出泄漏修复（历史） | 旧 `AE` 懒加载的 `_data` 曾在 `_exit_tree` 释放；33-4 已删除该 Autoload，运行时改由 `EquipmentService` 静态加载 Catalog |
 | 定向夹具 | 新增 `scripts/archive_probe_runner.py` + `scripts/archive_probes/archive_persistence_probe.gd`；隔离临时 `user://`，覆盖缺失/空/损坏档、`.bak` 恢复、`.tmp` 清理、角色 1/7/0/8、`request_save` 空档/成功/拒绝、空档不覆盖原档 |
 | 首批夹具结果 | **27/27 PASS**；`level_1` 冒烟 **PASS**（23.05s，0 ERROR / 0 WARNING）；`LocalCoopPanelProbe` **PASS**；`check_all --skip-engine` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning** |
 | 第二批夹具结果 | **34/34 PASS**：新增 `panel_backpack_wings_saved`、`panel_backpack_head_saved`、`panel_skill_key_saved`、`panel_strength_saved`、`panel_ldl_saved`、`panel_synthesis_saved` 与 `panel_seed_saved`，直接调用面板处理器并回读加密档案 |

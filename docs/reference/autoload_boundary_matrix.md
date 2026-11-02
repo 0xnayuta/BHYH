@@ -90,7 +90,7 @@ Phase 20-1 剩余切片转入 Phase 21-1：
 
 ## 3. 逐项决策
 
-Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；表中“战斗/法宝”“UI/双人”等是批次审查责任域，不虚构人员姓名。表保留 20-1B 决策时的 13 项编号；`BaseHit` 与 `MainMusic` 已删除，当前 11 项。
+Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；表中“战斗/法宝”“UI/双人”等是批次审查责任域，不虚构人员姓名。表保留 20-1B 决策时的 13 项编号，并补登后续注册的 `ZmwsConfig`；`BaseHit`、`MainMusic` 与 `AE` 已删除，当前 11 项。
 
 | # | Autoload | 当前职责 | 决策 | 证据与边界 | Owner / 前置条件 |
 |:---:|:---|:---|:---|:---|:---|
@@ -99,7 +99,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | 3 | `PlayerData` | 1P 档案数据仓库与补全 | **保留（1P 档案仓库）** | 菜单/地图可直接读取；新代码应走 `BaseObject.PlayerData`、`BaseRole.PlayerData` 或 `LocalCoop.data_for()` | 存档/1P UI；禁止新增直接 Autoload 读写；数据 schema 拆分延期 |
 | 4 | `MemoryClass` | 本地存档加密读写、备份、后台保存、设置文件 | **保留（持久化边界）** | 230 处/72 文件；已有后台保存、补全、失败反馈与快照互斥 | 存档；不把存档 IO 搬进 `Global`，不再增加第二套保存入口 |
 | 5 | `MainSet` | 设置字典、帧率、主菜单背景解锁 | **保留（设置）** | 393 处/65 文件；跨场景且自管设置 | 设置/UI；类型化设置 Resource 可作为后续独立项 |
-| 6 | `AE` | 装备数值门面，懒加载装备表 | **保留（装备目录）** | 321 处/48 文件；无业务依赖 | 装备；不新增字段；静态 Resource 化单独立项 |
+| 6 | `AE` | 装备数值门面，懒加载装备表 | **已删除（33-4）** | 删除 `all_equipment.gd`、`all_equipment_data.gd`、字典 getter/setter 与 Autoload 注册；13 处 `base_role_properies` 规则调用迁移到 `EquipmentService` | 装备；静态 Resource 化完成 |
 | 7 | `MLdl` | 锻造台 UI 会话状态 | **迁移候选（场景状态）** | 105 处/6 文件；仅 `qh_list`、`current_mode` | 锻造 UI；迁移到锻造台场景/面板持有状态，需面板开关与切档验证 |
 | 8 | `PaSkill` | 被动技能数值表与灵魂收益 | **保留（被动数值）** | 52 处/8 文件；纯查表 | 被动/成长；不新增全局状态；静态化单独立项 |
 | 9 | `MainMusic` | 主菜单 BGM 单实例 | **已删除（W4，2026-10-30）** | 原 27 处/13 文件、自身又调用 `Global.add_bgm`；现合并为 `AudioRuntime.add_main_menu_music()` / `remove_main_menu_music()` / `has_main_menu_music()`，Autoload 注册与 `main_music.gd` 已删除 | 音频；BGM 同曲/切曲/退出与主菜单切换已验证 |
@@ -107,6 +107,7 @@ Owner 口径：当前仓库为单人维护，owner 默认为项目维护者；�
 | 11 | `Global` | 场景流入口、UI 工厂入口、预载入口、运行状态 | **拆分（本页边界）** | 决策时 6,041 行/360 函数/427 文件/3,372 调用；W7 后 4,352 行/329 函数/228 变量，诊断、UI、音频、场景/资源运行时、5 族场景工厂、对象池与法宝召唤已移出 | 项目维护者（架构）；按第 4~5 节分波推进 |
 | 12 | `LocalCoop` | 本地双人会话、槽位数据/属性/输入/面板 | **保留（双人会话）** | 285 处/78 文件；Phase 16/17 已建立槽位与面板边界 | 双人；不建第二组 Autoload；继续由显式槽位 API 服务 |
 | 13 | `MCPGameBridge` | 编辑器调试桥 | **保留（调试桥，不计业务）** | 业务 `MCPGameBridge.` 引用为 0；`_ready` 在 `EngineDebugger.is_active()` 为假时退出 | 工具链；20-2 release 时验证 addon 路径、调试器门控与导出行为 |
+| 14 | `ZmwsConfig` | ZMWS 数值配置表查询与缓存 | **保留（配置查询）** | 按需加载 `Data/zmws_config/`，不预载全表；缺少索引只告警不伪造数据 | 配置/关卡；继续只读查询，不写回全局状态 |
 
 ## 4. `Global` 拆分边界
 

@@ -113,6 +113,9 @@ def required_paths(manifest: dict[str, object]) -> list[str]:
     layout_catalog = str(manifest.get("layout_catalog", ""))
     if layout_catalog:
         paths.append(layout_catalog)
+    equipment_catalog = str(manifest.get("equipment_catalog", ""))
+    if equipment_catalog:
+        paths.append(equipment_catalog)
     for key in (
         "sequences",
         "deferred_textures",

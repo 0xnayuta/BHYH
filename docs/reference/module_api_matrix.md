@@ -49,7 +49,7 @@
 | 场景回调 | 大量 `_on_*`/`_*_click` 按钮回调；只作为 `pet_interface.tscn` 连接入口 |
 | 信号 | 无 |
 | 场景依赖 | `PetAttributeShow`、`PetBackPackShow`、`PetDevelopInterface`、`PetSkillLearnPopup`、`PetSkillUpgradePopup`、`PetFormationPopup`、`PetAttributePages` 根节点及子节点 |
-| 外部依赖 | `PlayerData`（宠物、背包、成长、技能书）、`LocalCoop.data_for/props_for`、`Global.add_message_show`、`AE`、`MainSet` |
+| 外部依赖 | `PlayerData`（宠物、背包、成长、技能书）、`LocalCoop.data_for/props_for`、`Global.add_message_show`、`EquipmentService`、`MainSet` |
 
 ## 2. 依赖方向
 

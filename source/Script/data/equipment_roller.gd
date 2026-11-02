@@ -2,7 +2,7 @@ class_name EquipmentRoller
 extends RefCounted
 
 ## 将 EquipmentDefinition 的随机字段物化为旧字典形状的运行时快照。
-## 规格只来自 Resource；不解析旧 all_equipment_data.gd，也不修改 Catalog 定义。
+## 规格只来自 Resource；不解析源文本，也不修改 Catalog 定义。
 
 var _store: EquipmentStore
 var _cache: Dictionary[StringName, Dictionary] = {}

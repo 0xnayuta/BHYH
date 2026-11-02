@@ -36,11 +36,12 @@ BULLET_SCENE_DIR = MONSTER_SCENE_DIR / "monster_bullet_slim"
 CATALOG_PATH = SOURCE / "Script/data/level_preload_catalog.tres"
 LAYOUT_SOURCE_PATH = ROOT / "scripts/level_layout_sources.json"
 LAYOUT_CATALOG_PATH = SOURCE / "Script/data/level_layout_catalog.tres"
+EQUIPMENT_CATALOG_PATH = SOURCE / "Script/data/equipment_catalog.tres"
 LAYOUT_DIR = SOURCE / "Script/data/level_layouts"
 DYNAMIC_SOURCE_PATH = ROOT / "scripts/monster_dynamic_paths.json"
 EXPORT_MANIFEST_PATH = SOURCE / "Script/data/level_preload_export_dependencies.json"
 EXPORT_MANIFEST_SCHEMA = "level_preload_export_dependencies"
-EXPORT_MANIFEST_VERSION = 2
+EXPORT_MANIFEST_VERSION = 3
 
 STAGE_KEYS = ("stage_1", "stage_2", "stage_3", "stage_4")
 UID_ALPHABET = "abcdefghijklmnopqrstuvwxy012345678"
@@ -614,6 +615,7 @@ def dependency_manifest_content(dynamic: DynamicPaths, bullets: dict[str, list[s
         "schema_version": EXPORT_MANIFEST_VERSION,
         "catalog": "res://" + CATALOG_PATH.relative_to(SOURCE).as_posix(),
         "layout_catalog": layout_catalog,
+        "equipment_catalog": "res://" + EQUIPMENT_CATALOG_PATH.relative_to(SOURCE).as_posix(),
         "layouts": layouts,
         "monster_scenes": dynamic.manifest_monster_scenes,
         "dynamic_monster_scenes": dynamic.manifest_dynamic_scenes,

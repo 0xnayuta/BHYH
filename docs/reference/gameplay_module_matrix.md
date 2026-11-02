@@ -35,7 +35,7 @@
 
 | 类别 | 载体 | 所有者 | 本阶段边界 |
 |:---|:---|:---|:---|
-| **静态定义** | `AE.all_equipment`、`DataKeys`、技能/材料表、关卡刷怪表、场景路径常量 | 各模块常量与 `Resource` | 只读；不得在运行时改写 |
+| **静态定义** | `EquipmentCatalog`、`DataKeys`、技能/材料表、关卡刷怪表、场景路径常量 | 各模块常量与 `Resource` | 只读；不得在运行时改写 |
 | **实例状态** | `BaseLevel.current_stage`、`monster_group`、`BaseHero`/`BaseMonster` 字段、`LocalCoop` 槽位、`PlayerData.player_data` | `BaseLevel`、实体自身、`LocalCoop`、`PlayerData` | 本页只登记所有者/写入者；迁移按试点域闭环 |
 | **表现资源** | 对象池节点、伤害文本、受击特效、音效、BGM、HUD 控件 | `Global` 与各场景脚本 | 表现层不得提交领域状态；池化必须清理旧状态 |
 
