@@ -66,7 +66,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `format_all.py` | `gdformat` 校验/格式化 |
 | `health_check.py` | 场景引用、Autoload、死代码、Headless 编译与静态 warning |
 | `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme 与白名单子门禁 |
-| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；`--self-test` 覆盖正负样本 |
+| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；含 Global 表面基线；`--self-test` 覆盖正负样本 |
 | `naming_audit.py` | 目录/文件 `snake_case`；`--all` 全量 |
 | `naming_compliance_audit.py` | 全量命名终审；人工执行，不在日常 `check_all` 内 |
 | `whitelist_audit.py` | 白名单冻结、未登记与失效项 |
@@ -124,6 +124,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `contract_whitelist.json` | 命名/契约/机器导出白名单 |
 | `png_stream_allowlist.json` | StreamedPngEffect 允许文件 |
 | `runtime_frames_allowlist.json` | 运行时 `SpriteFrames.new()` 允许文件 |
+| `global_surface_baseline.json` | Phase 22 收口后的 Global 字段与 add 系入口冻结基线 |
 | `theme_override_baseline.json` | Theme 直接属性/动画轨道场景级上限 |
 | `monster_action_maps.json` / `monster_action_views.json` | 怪物动作与视图构建源 |
 | `level_layout_sources.json` / `level_layout_data_exceptions.json` | 关卡布局构建源与 10 个动态/非连续例外 |

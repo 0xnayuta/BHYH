@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 进行中**；22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 已完成（2026-11-02），22-4 守卫为下一批。Phase 23~26 已规划、未启动。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；Phase 23 为下一候选，尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -42,7 +42,7 @@
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）；
 - 未改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
 
-### 22-3 状态迁移（22-3A/22-3B/22-3C/22-3D-1/22-3D-2 完成，22-4 下一步）
+### 22-3 状态迁移（22-3A/22-3B/22-3C/22-3D-1/22-3D-2/22-3E 完成）
 
 每批只迁移一个所有权边界，迁移全部生产调用方后删除旧字段/入口。
 
@@ -56,6 +56,10 @@
 
 **22-3D-2 结果**：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`；场景槽位分别归 `MenuPanelFactory`、`LevelSceneFactory`、`BackpackFactory`、`MonsterDisplayFactory` 与 `SceneFlow`。验证：`check_all` 7/7、9/9，`ui-factories`/`run-context` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` PASS。
 
+**22-3E 结果**：26 个普通子服务指针保留在 `Global` 组合根，不把服务内部状态搬回；无代码搬迁，已在剩余字段复核表中登记所有者与出口。
+
+**22-4 结果**：新增 `global_surface_boundary` 契约规则，基线 `scripts/global_surface_baseline.json` 冻结 65 字段与 120 个 `add` 入口；新增未登记表面在 `--fail-on-error` 下为 ERROR。自测坏样本 2 / 好样本 4；全量契约 ERROR=0。
+
 | 批次 | 范围 | 目标所有者 | 关键约束 |
 |:---|:---|:---|:---|
 | 22-3A | 云存档/账号字段与相关读取（已完成） | `MemoryClass` 持 `CloudSession` | 不新增 Autoload；保留失败与退出语义 |
@@ -63,7 +67,8 @@
 | 22-3C | 单局、关卡、选择与统计字段（已完成） | `RunContext` / `LevelEntryRuntime` | 单局状态、关卡选择与表现缓存分开；不改变关卡时序 |
 | 22-3D-1 | 2.5 表现与一次性 UI 字段（已完成） | `UiRuntime` / `BackpackFactory` / `CombatPoolRuntime` | 一次性提示、背包冷却与连击里程碑不回到 `Global` |
 | 22-3D-2 | 2.6 瞬时面板与 2.9 场景/UI 引用（已完成） | 对应工厂 / `UiRuntime` / `SceneFlow` | 临时 UI 必须登记；无消费者条目删除 |
-| 22-3E | 服务指针与组合根 | `Global` 组合根 | 只整理引用，不把服务私有状态搬回 `Global` |
+| 22-3E | 服务指针与组合根（评估完成，保留） | `Global` 组合根 | 只整理引用，不把服务私有状态搬回 `Global` |
+| 22-4 | 新增 Global 业务字段/add 入口守卫（已完成） | `contract_scan.py` + 基线 | `--self-test` 与 `--fail-on-error` 证据 |
 
 **每批验收**：
 
@@ -71,11 +76,11 @@
 - 正常、边界、失败、退出路径按 [`acceptance.md`](../reference/acceptance.md) 选取；
 - 档案、场景、协作与相关关卡探针通过；不把 PCK 闭包当作本批行为验证。
 
-### 22-4 守卫与阶段收口
+### 22-4 守卫与阶段收口（已完成）
 
-- 评估为“新增 `Global` 业务字段/新增 `add` 系入口”增加静态守卫；先准备坏样本、`--self-test` 与 `--fail-on-error` 证据，无法稳定实现则不纳入门禁；
-- 更新 `architecture.md`、`autoload_boundary_matrix.md` 与本清单；不修改已归档记录；
-- 复核 `Global` 是否仍出现新的业务状态写入；未迁移项必须登记所有者、理由与出口；
+- 新增 `contract_scan.py` 的 Global 表面基线门禁与 `scripts/global_surface_baseline.json`；
+- 自测覆盖新增字段、新增入口、局部变量、注释与非 `Global` 文件，坏样本 2 / 好样本 4；
+- 剩余 65 字段已在 `global_runtime_inventory.md` §2.10 登记所有者、理由与出口；
 - 阶段出口：`Global` 不再新增业务状态；服务/会话/关卡状态有单一写入者；相关矩阵与状态一致。
 
 ---
@@ -83,7 +88,7 @@
 ## 2. Phase 23：关卡、宠物与档案数据边界
 
 **目标**：先抽出 `BaseLevel` 中最明确的边界泄漏，再建立 `PlayerData` 的域视图试点。
-**前置**：Phase 22 完成，至少 22-2 与 22-3C 已闭环；不要求 Phase 22 全部字段迁移完才启动 23-0 调查。
+**前置**：Phase 22 已完成并收口；不要求 22-3E 的 26 个服务指针继续搬迁。
 **非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则。
 
 ### 23-0 调用面与首批宠物族选型
@@ -259,8 +264,8 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 22-4：守卫与阶段收口**。
-**当前不启动**：Phase 23~26；它们保留为已规划候选，不伪造“进行中”。
+**当前下一步**：**Phase 23-0：关卡与宠物调用面调查**。
+**当前不启动**：Phase 23 实现批次；先完成 23-0 调查与首批选择。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

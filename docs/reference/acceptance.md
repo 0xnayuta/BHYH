@@ -98,8 +98,8 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 二十类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
-| 契约自测 | `contract_scan.py --self-test` | 二十类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、音频入口、HUD 面板只读与输入写入边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 二十一类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
+| 契约自测 | `contract_scan.py --self-test` | 二十一类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、Global 表面、音频入口、HUD 面板只读与输入写入边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
@@ -111,7 +111,7 @@ python scripts/check_all.py --no-cache -j 6
 | UI Theme 基线 | `theme_override_audit.py --check` | 直接属性或 Animation 轨道引用超过基线、新增带覆盖场景 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 二十类契约
+### 4.1 `contract_scan.py` 二十一类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -129,6 +129,7 @@ python scripts/check_all.py --no-cache -j 6
 | 加载页私有缓存 | `load_scene.gd` 访问 `Global._resource_cache` 等私有缓存/租约/写入函数 | ERROR（`LOAD_CACHE_PRIVATE_ACCESS`） |
 | 池/UI 清理入口 | 业务直接调用 `Global.get_ui_runtime().cleanup_transient_ui`、`Global._clear_runtime_pools`，或访问 `Global.get_ui_runtime()` 的私有 UI 表/释放入口 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
 | 运行状态边界 | 直写已迁入 `RunContext`/运行时的 `Global` 字段，或调用已删除的无状态工具入口 | ERROR（`RUN_STATE_RETIRED_ENTRY`） |
+| Global 表面基线 | 新增未登记的 `Global` 业务字段或 `add` 系入口 | ERROR（`GLOBAL_SURFACE_UNAPPROVED`） |
 | 档案边界 | 业务拼接 `user://MyAr_`；业务直调 `load_game`/`save_game`/`safe_write_archive`（登记入口豁免） | ERROR（`ARCHIVE_BOUNDARY_FORBIDDEN`） |
 | 槽位边界 | 业务硬编码 `/root/PlayerData`/`/root/RoleProp`；重新引入 `suspend/resume_player_view` | ERROR（`SLOT_BOUNDARY_FORBIDDEN`） |
 | 面板操作者 | 面板域脚本使用 `PlayerData`/`RoleProp` 但自身与祖先均未声明槽位操作者 | ERROR（`PANEL_OPERATOR_UNBOUND`） |
@@ -153,7 +154,7 @@ python scripts/check_all.py --no-cache -j 6
 ### 4.3 `--self-test` 的边界
 
 - `convert_atlas_metadata.py --self-test` 在 `contract_gate` 内；
-- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、档案、槽位、共享账本、Phase 17 边界、输入写入边界与面板操作者的正负样本；
+- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、运行状态、Global 表面、档案、槽位、共享账本、Phase 17 边界、输入写入边界与面板操作者的正负样本；
 - 涉及契约扫描规则变更时，应单独执行 `python scripts/contract_scan.py --self-test`。
 
 ---
@@ -392,7 +393,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
 | warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
 | 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 二十类契约 | ERROR 才阻断 |
+| 契约规则 | 二十一类契约 | ERROR 才阻断 |
 | 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
 | PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
 | 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |
@@ -443,6 +444,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 玩法/表现模块边界（Phase 17） | L1 九维 + 定向运行路径 | 归属探针（普攻/技能/弹体/召唤/法宝）、池化复用两轮、阶段推进与结算一次、成长命令失败无副作用、HUD/输入/音频残留；写入者/失败边界见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 只改基类或只改 UI；来源默认 1P；重复发奖；表现层写档 |
 | Phase 17 边界守卫 | L1 九维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
 | 输入写入边界守卫 | L1 九维 + `contract_scan --self-test` | `input_boundary` 好/坏样本；全量扫描 ERROR=0 | 只改文档；例外未登记；输入读取行夹带写档 |
+| Global 表面守卫 | L1 九维 + `contract_scan --self-test` | `global_surface` 好/坏样本；`--fail-on-error`；基线字段/add 入口守恒 | 只改文档；基线未更新；新增字段/add 入口未登记 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 
 

@@ -26,6 +26,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 18. 运行状态边界门禁 (Run State Boundary): 禁止重新直写已迁移的运行状态字段或调用已删除的工具入口
 19. HUD/面板只读门禁 (HUD Panel Boundary): HUD 与面板域禁止直接档案 IO 与 PlayerData 字典直写
 20. 音频入口门禁 (Audio Entry Boundary): BGM/SFX 只经 AudioRuntime，业务禁止自建播放器或直读其私有状态
+21. Global 表面门禁 (Global Surface Baseline): 禁止新增未登记的 Global 业务字段或 add 系入口
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -497,6 +498,29 @@ class ContractScanner:
         datakeys_path = os.path.join(self.project_dir, "Script", "base", "data_keys.gd")
         self.datakeys_index = DataKeysIndex(datakeys_path)
         print(f"[*] 索引初始化完成，耗时: {time.time() - t0:.2f}s")
+
+    @classmethod
+    def global_surface_violations(cls, content: str, baseline: Dict[str, Any], rel_path: str):
+        """返回 (行号, 标识) 列表；只检查 global.gd 的新增字段/add 入口。"""
+        if rel_path != cls.GLOBAL_SURFACE_FILE or not isinstance(baseline, dict):
+            return []
+        allowed_fields = set(baseline.get("global_fields", []) or [])
+        allowed_add_entries = set(baseline.get("add_entries", []) or [])
+        violations: List[Tuple[int, str]] = []
+        for lineno, line in enumerate(content.splitlines(), 1):
+            field_match = cls.GLOBAL_SURFACE_FIELD_RE.match(line)
+            if field_match:
+                name = field_match.group(1)
+                if name not in allowed_fields:
+                    violations.append((lineno, f"field:{name}"))
+                continue
+            add_match = cls.GLOBAL_SURFACE_ADD_RE.match(line)
+            if add_match:
+                name = add_match.group(1)
+                if name not in allowed_add_entries:
+                    violations.append((lineno, f"add:{name}"))
+        return violations
+
 
     # --------------------------------------------------------------------------
     # 1. 资源路径契约扫描 (Resource Path Contract)
@@ -1033,6 +1057,10 @@ class ContractScanner:
         r"|_current_role_body_texture_path|_current_role_equipment_texture_path)\b\s*(?:=|\+=|-=|\*=|/=)"
     )
     RUNTIME_STATE_TOTAL_RE = re.compile(r"\bGlobal\.total_[A-Za-z0-9_]*\b")
+    GLOBAL_SURFACE_FILE = "global.gd"
+    GLOBAL_SURFACE_BASELINE_PATH = os.path.join(REPO_ROOT, "scripts", "global_surface_baseline.json")
+    GLOBAL_SURFACE_FIELD_RE = re.compile(r"^var\s+([A-Za-z_]\w*)")
+    GLOBAL_SURFACE_ADD_RE = re.compile(r"^func\s+(add[A-Za-z0-9_]*)\s*\(")
 
     ARCHIVE_PATH_LITERAL = "user://MyAr_"
     ARCHIVE_PATH_LITERAL_ALLOWLIST = {
@@ -1687,6 +1715,66 @@ class ContractScanner:
             rule_id="RUN_STATE_RETIRED_ENTRY",
         )
 
+    def scan_global_surface_boundary(self):
+        print("[*] 扫描 Global 表面基线门禁 (Phase 22-4)...")
+        global_path = os.path.join(self.project_dir, self.GLOBAL_SURFACE_FILE)
+        if not os.path.exists(global_path):
+            self.findings.append(ContractFinding(
+                category="global_surface",
+                severity="ERROR",
+                file_path=self.GLOBAL_SURFACE_FILE,
+                line=0,
+                literal=self.GLOBAL_SURFACE_FILE,
+                message="Global 表面基线门禁缺少 global.gd",
+                suggested_fix="确认工程根目录与脚本路径",
+                rule_id="GLOBAL_SURFACE_BASELINE_MISSING",
+            ))
+            return
+        if not os.path.exists(self.GLOBAL_SURFACE_BASELINE_PATH):
+            self.findings.append(ContractFinding(
+                category="global_surface",
+                severity="ERROR",
+                file_path=self.GLOBAL_SURFACE_FILE,
+                line=0,
+                literal=self.GLOBAL_SURFACE_BASELINE_PATH,
+                message="Global 表面基线文件缺失",
+                suggested_fix="恢复 scripts/global_surface_baseline.json 后重新评审新增表面",
+                rule_id="GLOBAL_SURFACE_BASELINE_MISSING",
+            ))
+            return
+        try:
+            with open(self.GLOBAL_SURFACE_BASELINE_PATH, "r", encoding="utf-8") as f:
+                baseline = json.load(f)
+        except (OSError, ValueError) as exc:
+            self.findings.append(ContractFinding(
+                category="global_surface",
+                severity="ERROR",
+                file_path=self.GLOBAL_SURFACE_FILE,
+                line=0,
+                literal=self.GLOBAL_SURFACE_BASELINE_PATH,
+                message=f"Global 表面基线无法读取: {exc}",
+                suggested_fix="修复 scripts/global_surface_baseline.json",
+                rule_id="GLOBAL_SURFACE_BASELINE_INVALID",
+            ))
+            return
+        try:
+            content = open(global_path, "r", encoding="utf-8", errors="ignore").read()
+        except OSError:
+            return
+        for line, marker in self.global_surface_violations(content, baseline, self.GLOBAL_SURFACE_FILE):
+            finding = ContractFinding(
+                category="global_surface",
+                severity="ERROR",
+                file_path=self.GLOBAL_SURFACE_FILE,
+                line=line,
+                literal=marker,
+                message=f"Global 表面新增未登记条目 '{marker}'；先评审所有权，再更新基线",
+                suggested_fix="迁移到对应服务/上下文；确需保留时评审后更新 scripts/global_surface_baseline.json",
+                rule_id="GLOBAL_SURFACE_UNAPPROVED",
+            )
+            if not self.whitelist.is_suppressed(finding):
+                self.findings.append(finding)
+
     def scan_archive_boundary(self):
         print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
         self._scan_rule(
@@ -1758,6 +1846,7 @@ class ContractScanner:
         self.scan_load_cache_boundary()
         self.scan_pool_ui_boundary()
         self.scan_run_state_boundary()
+        self.scan_global_surface_boundary()
         self.scan_archive_boundary()
         self.scan_slot_boundary()
         self.scan_panel_operator()
@@ -2191,6 +2280,48 @@ def run_run_state_boundary_self_test() -> bool:
     return passed
 
 
+def run_global_surface_boundary_self_test() -> bool:
+    """Global 表面基线自测：新增字段/add 入口必须拦截，登记表面必须放行。"""
+    print("[*] Global 表面基线门禁负向自测...")
+    baseline = {
+        "global_fields": ["allowed_state"],
+        "add_entries": ["add_allowed_entry"],
+    }
+    bad_samples = {
+        "新增业务字段": ("var runaway_state: int = 0\n", "global.gd"),
+        "新增 add 入口": ("func add_runaway_entry(parent):\n\tpass\n", "global.gd"),
+    }
+    good_samples = {
+        "已登记表面": (
+            "var allowed_state: int = 0\nfunc add_allowed_entry(parent):\n\tpass\n",
+            "global.gd",
+        ),
+        "局部变量": ("func _local_helper():\n\tvar local_state := 0\n", "global.gd"),
+        "注释中的表面": ("# var runaway_state := 0\n# func add_runaway_entry(parent):\n", "global.gd"),
+        "非 Global 文件": ("var another_state := 0\nfunc add_another_entry(parent):\n\tpass\n", "Script/level/sample.gd"),
+    }
+    passed = True
+    for label, (content, rel_path) in bad_samples.items():
+        violations = ContractScanner.global_surface_violations(content, baseline, rel_path)
+        if not violations:
+            print(f"    [X] 坏样本未被拦截: {label}", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 坏样本已拦截: {label} (标识 '{violations[0][1]}')")
+    for label, (content, rel_path) in good_samples.items():
+        violations = ContractScanner.global_surface_violations(content, baseline, rel_path)
+        if violations:
+            print(f"    [X] 好样本被误报: {label} (标识 '{violations[0][1]}')", file=sys.stderr)
+            passed = False
+        else:
+            print(f"    [√] 好样本已放行: {label}")
+    if passed:
+        print(f"\n[SUCCESS] Global 表面基线门禁自测通过 (坏样本 {len(bad_samples)} / 好样本 {len(good_samples)})")
+    else:
+        print("\n[FAIL] Global 表面基线门禁自测失败！", file=sys.stderr)
+    return passed
+
+
 def run_archive_boundary_self_test() -> bool:
     """档案边界门禁自测：路径拼接与绕过 request_save 必须拦截，登记入口必须放行。"""
     print("[*] 档案边界门禁负向自测...")
@@ -2536,7 +2667,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2548,6 +2679,7 @@ def main():
         load_cache_ok = run_load_cache_boundary_self_test()
         pool_ui_ok = run_pool_ui_boundary_self_test()
         run_state_ok = run_run_state_boundary_self_test()
+        global_surface_ok = run_global_surface_boundary_self_test()
         archive_ok = run_archive_boundary_self_test()
         slot_ok = run_slot_boundary_self_test()
         shared_ledger_ok = run_shared_ledger_self_test()
@@ -2565,6 +2697,7 @@ def main():
             and load_cache_ok
             and pool_ui_ok
             and run_state_ok
+            and global_surface_ok
             and archive_ok
             and slot_ok
             and shared_ledger_ok

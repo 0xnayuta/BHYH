@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 已完成（2026-11-02）。当前规模为 **65 个字段、260 个公开函数**；删除与迁移清单见 §6。
+> **状态**：Phase 22 已收口（2026-11-02，22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2/22-3E/22-4 完成）。当前规模为 **65 个字段、260 个公开函数**；删除与迁移清单见 §6，剩余字段所有者见 §2.10。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-4 及后续阶段迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 23 及后续阶段的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -92,6 +92,19 @@ grep -RIn '"/root/' source --include='*.gd'
 - `nmw_hands` -> `MonsterDisplayFactory.create_hands`；
 - `llbt_challenge` -> `LevelSceneFactory.add_llbt_challenge`；
 - `sell_or_equ`、`sound` 无消费者，删除。
+
+### 2.10 剩余字段复核（Phase 22-4）
+
+| 组 | 数量 | 字段范围 | 所有者 | 保留理由 | 出口 |
+|:---|:---:|:---|:---|:---|:---|
+| 2.2 功能开关 | 1 | `_hidden_feature_flags` | `Global` | 隐藏功能总开关，当前读取/清理入口固定 | 专门功能开关服务出现时再迁移 |
+| 2.3 HUD/战斗表现引用 | 15 | §2.3 列表全部 | `UiRuntime` / 场景工厂 / 场景上下文 | 均为表现/HUD 共享引用，消费者明确 | 无消费者时删除；新增写入禁止进入 `Global` |
+| 2.7 档案/保存/运行代次 | 23 | §2.7 列表全部 | `MemoryClass` / `ArchiveSession` / `ResourceRuntime` | 生命周期控制面，服务于保存、退出与预热 | 随对应服务边界迁移；不重新暴露为业务字段 |
+| 2.8 普通子服务指针 | 26 | §2.8 列表全部 | `Global` 组合根 | 组合根持有服务引用，非业务状态 | 保留；服务内部状态不得回流 |
+
+其余组：2.1/2.4/2.5/2.6/2.9 均为 0 字段。合计 **1 + 15 + 23 + 26 = 65**。
+
+**机读守卫**：`scripts/contract_scan.py` 的 `global_surface_boundary` 规则读取 `scripts/global_surface_baseline.json`；新增 `Global` 字段或新增 `add` 系入口在 `--fail-on-error` 下为 ERROR。自测覆盖新增字段、新增入口、局部变量、注释与非 `Global` 文件。
 
 ---
 
@@ -439,16 +452,29 @@ main_remove_child, on_fresh, track_monster
 - `coop_probe_runner` **26/26 PASS**；
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
 
-### 6.8 22-4 交接
+### 6.8 Phase 22-4 结果
 
-下一批进入 **22-4 守卫**：
+- 新增 `contract_scan.py` 的 `global_surface_boundary` 规则，基线为 `scripts/global_surface_baseline.json`；
+- 基线快照：65 个 `Global` 字段、120 个 `add` 系入口；
+- 新增字段或新增 `add` 入口产生 `GLOBAL_SURFACE_UNAPPROVED` ERROR；`--fail-on-error` 退出码 1；
+- `--self-test` 覆盖新增字段、新增入口、局部变量、注释与非 `Global` 文件，坏样本 2 / 好样本 4；
+- 剩余字段复核见 §2.10；22-3E 服务指针评估结论为保留组合根，不做搬迁。
 
-1. 评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；
-2. 守卫必须先有坏样本、`--self-test` 与 `--fail-on-error` 证据；
-3. 复核 `Global` 剩余 65 字段是否仍有可迁移状态；未迁移项登记所有者、理由与出口；
-4. 更新 `architecture.md`、`autoload_boundary_matrix.md` 与本清单；不修改已归档记录。
+**验证**：
 
-阶段出口：`Global` 不再新增业务状态；服务/会话/关卡状态有单一写入者；相关矩阵与状态一致。
+- `contract_scan.py --self-test` **PASS**；
+- `contract_scan.py --fail-on-error` **PASS**（ERROR=0）；
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `ui-factories`、`run-context` 场景探针 **PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **17/17 PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.9 Phase 22 收口
+
+Phase 22 已完成：`Global` 从 141 字段、273 公开函数收敛到 **65 字段、260 公开函数**；业务状态按 `RunContext`、`ArchiveSession`、`MemoryClass`、`UiRuntime`、`CombatPoolRuntime`、场景工厂与 `SceneFlow` 分域；未新增 Autoload。后续阶段从 Phase 23 开始，不再把已迁移状态回流 `Global`。
 
 ---
 

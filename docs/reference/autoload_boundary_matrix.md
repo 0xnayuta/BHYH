@@ -26,7 +26,7 @@
 
 1. 不设 Autoload 数量目标；新增、合并、删除必须评审调用面、初始化顺序、生命周期与回归。
 2. 新职责优先使用 `Resource`、`RefCounted`、静态 `class_name` 工具或场景节点；不以“方便访问”新增单例。
-3. `Global` 只保留组合根与稳定公开入口；新业务状态不得回流。
+3. `Global` 只保留组合根与稳定公开入口；新业务状态不得回流。`contract_scan.py` 的 `global_surface_boundary` 以 `scripts/global_surface_baseline.json` 冻结当前 65 字段与 120 个 `add` 入口；新增项必须先评审并更新基线。
 4. 业务访问角色/档案时使用 `BaseObject`/`BaseRole` 注入属性或 `LocalCoop.data_for/props_for`，不假定 1P。
 5. 已删除的旧入口不得恢复为兼容 facade；调用方迁移完成后删除旧路径。
 6. 调试桥在 release 中不承担业务职责；编辑器调试门控与导出行为单独验证。
@@ -35,7 +35,7 @@
 
 `RuntimeDiagnostics`、`UiRuntime`、`AudioRuntime`、`ResourceRuntime`、`SceneFlow`、`CombatPoolRuntime`、`MagicWeaponRuntime`、`LevelEntryRuntime`、`MonsterSpawnRuntime`、`RoleVisualRuntime` 与场景工厂族均为 `Global` 的普通子节点、静态工具或 `RefCounted`，不计入 Autoload。当前字段/入口、26 个普通子服务与 Phase 22 迁移判定见 [`global_runtime_inventory.md`](global_runtime_inventory.md)。
 
-`RunContext` 持有迁移后的运行状态；新增字段应先判定是否属于实例状态、会话状态或全局上下文，不直接塞入 `Global`。
+`RunContext` 持有迁移后的运行状态；新增字段应先判定是否属于实例状态、会话状态或全局上下文，不直接塞入 `Global`。Phase 22 收口后 `Global` 基线为 65 字段、260 公开函数；Global 表面守卫见 [`acceptance.md`](acceptance.md) §4.1。
 
 ## 4. 验收
 

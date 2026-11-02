@@ -28,7 +28,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **29.21s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **26.79s**） |
 | `health_check` | **763 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **297/297 PASS** |
 | `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 22-4：新增 `contract_scan.py` 的 `global_surface_boundary` 规则与 `scripts/global_surface_baseline.json`，冻结 65 字段与 120 个 `add` 入口；`--self-test` 坏样本 2 / 好样本 4，`--fail-on-error` ERROR=0；剩余 65 字段已在 `global_runtime_inventory.md` §2.10 登记所有者、理由与出口。Phase 22 已收口。
 - Phase 22-3D-2：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`，场景槽位归对应工厂与 `SceneFlow`。`check_all` 9/9、`ui-factories`/`run-context` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3D-1：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。`check_all` 9/9、`ui-factories` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3C：关卡计时、`last_level_path`、最大连击、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数与结算类型迁入 `RunContext`；删除 5 个无消费者或重复真源字段；星座进度只以 `PlayerData` 为真源。`run-context` 与 `level-selection` 探针、`check_all` 9/9、档案 297/297、场景 17/17、协作 26/26、`level_1` / `level_llbt` / `level_17` 冒烟 PASS；全量回归未作为本批结论。
