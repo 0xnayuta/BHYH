@@ -31,7 +31,7 @@
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
   - `reference/architecture.md`：当前运行时架构：Autoload 与 `Global` 普通子节点运行时、场景流、战斗、档案/双人、资源、UI/输入及遗留差距；
-  - `reference/acceptance.md`：验收分层、八维门禁、契约域、运行期夹具与阈值；
+  - `reference/acceptance.md`：验收分层、`check_all` 总门禁、契约域、运行期夹具与阈值；
   - `reference/autoload_boundary_matrix.md`：Phase 20-1B Autoload 与 `Global` 拆分边界：11 个注册项处置、普通子节点运行时、场景工厂族、迁移顺序与剩余候选；
   - `reference/runtime_frames_exceptions.md`：Phase 19-3A/21-4A/21-4B 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界；
   - `reference/atlas_metadata_schema.md`：Phase 14 AtlasMetadata 生产者/schema/消费者矩阵、只读 View、边界守卫与失败边界；归档记录见 `archive/iteration_14_atlas_metadata_boundary.md`；

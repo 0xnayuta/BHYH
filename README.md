@@ -117,7 +117,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/reference/ui_theme_contract.md`](docs/reference/ui_theme_contract.md) | Phase 32 Theme 契约、批次结果、变体命名、例外与迁移边界 |
 | [`docs/reference/equipment_data_contract.md`](docs/reference/equipment_data_contract.md) | Phase 33 装备数据契约（完成）：32 字段、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、全量回归与 PCK 验证 |
 | [`docs/reference/runtime_frames_exceptions.md`](docs/reference/runtime_frames_exceptions.md) | Phase 19-3A/21-4A 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界 |
-| [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
+| [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：`check_all` 总门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | 架构决策记录（ADR）索引 |
 | [`docs/audit/README.md`](docs/audit/README.md) | 审计档案索引与只读模板入口 |

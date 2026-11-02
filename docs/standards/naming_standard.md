@@ -218,11 +218,11 @@ var level: int = PlayerData.player_data[DataKeys.PLAYER_LEVEL]
 8. `scripts/naming_compliance_audit.py`：全量命名终审（存量 + 代码标识符）；
 9. `scripts/resource_path_audit.py`：静态资源路径大小写、动态格式路径、Spine atlas 页名与动态工厂目标。
 
-> `naming_compliance_audit.py` 是人工全量终审，不在 `check_all.py` 的八维日常并发门禁内；其结论必须单独执行。
+> `naming_compliance_audit.py` 是人工全量终审，不在 `check_all.py` 的日常并发门禁内；其结论必须单独执行。
 
 ### 7.1 门禁基线
 
-- `check_all.py` 八维必须 100% PASS；
+- `check_all.py` 全部维度必须 100% PASS；
 - `naming_audit.py --all` 与 `naming_compliance_audit.py --fail-on-error` 用于全量终审；
 - 存量命名债务必须保持在机读基线中逐步递减，不得新增；
 - 任何新增文件若违反本白皮书，`naming_audit.py` 必须拦截。

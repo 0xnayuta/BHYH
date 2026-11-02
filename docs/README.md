@@ -46,12 +46,13 @@
 | [`reference/equipment_data_contract.md`](reference/equipment_data_contract.md) | **Phase 33 装备数据契约（完成）**：32 字段、int/float、随机规格、`EquipmentDefinition`/`Catalog`/`Store`、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、全量回归与 PCK 验证 |
 | [`reference/modernization_gap_matrix.md`](reference/modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、Theme 缺失、数据硬编码等分级清单、处置类型判定与批次建议 |
 | [`reference/spine_platform_baseline.md`](reference/spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B 暂缓状态 |
-| [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
+| [`reference/acceptance.md`](reference/acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`reference/status.md`](reference/status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 | [`decisions/README.md`](decisions/README.md) | **架构决策记录索引**：有效选择、历史决定及替代关系 |
 | [`decisions/ADR-021-project-wide-target-architecture.md`](decisions/ADR-021-project-wide-target-architecture.md) | Godot 原生场景组合与总体目标选择；保留 ADR-020 视觉子契约，不宣称已实现 |
 | [`decisions/ADR-022-atlas-metadata-view-and-path-identity.md`](decisions/ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份例外与失败语义 |
 | [`decisions/ADR-023-level-layout-data-contract.md`](decisions/ADR-023-level-layout-data-contract.md) | **Accepted**：关卡布局数据契约与绞杀式迁移；Phase 30-1/30-2 已迁移 `level_48`、接入外部怪物映射与原始 ZMWS 驱动；30-3 收口（69 迁出 + 10 例外） |
+| [`decisions/ADR-024-check-all-nine-gate-dimensions.md`](decisions/ADR-024-check-all-nine-gate-dimensions.md) | **Accepted**：`check_all` 九维门禁与维度清单治理；扩展 ADR-012，`acceptance.md` 为文档事实源 |
 | [`issues/known-issues.md`](issues/known-issues.md) | **已知问题与待验证风险**：当前未修复问题、已修复回归线索与系统化清理入口 |
 | [`audit/README.md`](audit/README.md) | **审计档案索引**：模板、命名、只读与报告规则 |
 | [`audit/AUDIT-000-audit-template.md`](audit/AUDIT-000-audit-template.md) | **只读审计模板**：10 个领域、12 个问题前缀、证据与问题总表 |

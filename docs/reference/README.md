@@ -19,10 +19,10 @@
 | [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) | **Phase 30-4 脚本边界决策**：85 个原数据容器脚本的 55 个逻辑脚本 + 30 个标准/空表脚本逐项结论；10 个动态/非连续例外；保留/迁出边界 |
 | [`level_layout_contract.md`](level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2/30-3/30-4 完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
 | [`equipment_data_contract.md`](equipment_data_contract.md) | **Phase 33 装备数据契约（完成）**：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、全量回归与 PCK 验证 |
-| [`ui_theme_contract.md`](ui_theme_contract.md) | **Phase 32 UI Theme 契约（32-0 草案）**：6,804 直接覆盖 + 26 动画轨道、Theme/变体命名、试点、基线审计与迁移边界 |
+| [`ui_theme_contract.md`](ui_theme_contract.md) | **Phase 32 UI Theme 契约（完成）**：直接属性/动画轨道基线、Theme/变体命名、审计与最终例外边界 |
 | [`modernization_gap_matrix.md`](modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、UI Theme 缺失、装备数据硬编码等分级清单、处置类型判定、批次建议与未测量项 |
 | [`spine_platform_baseline.md`](spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B/21-2C 状态 |
-| [`acceptance.md`](acceptance.md) | **验收标准**：八维门禁、契约域、引擎健康、运行期夹具、阈值与分变更矩阵 |
+| [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具、阈值与分变更矩阵 |
 | [`status.md`](status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
 
 ## 2. 边界

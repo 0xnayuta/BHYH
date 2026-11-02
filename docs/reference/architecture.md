@@ -635,7 +635,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 
 1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。资产身份为 `asset_id`，播放策略由实例覆盖，不再是复合 key。
 2. **Autoload 数量**：共 11 个注册项，其中 10 个是业务单例，`MCPGameBridge` 是调试桥；说“11 个业务 Autoload”不准确。
-3. **门禁维度**：`check_all.py` 当前是八维；历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
+3. **门禁维度**：维度清单以 `acceptance.md` §3 与 `check_all.py` 实际注册为准；本文不复制数量。历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。
 5. **规模数字**：具体规模以 [`status.md`](status.md) 的当前快照为准；本文不复制脚本、场景与资源数量。
 6. **渲染后端**：`project.godot` 默认 `mobile`、Web `forward_plus`；以工程配置为准，不要沿用旧文档中的渲染后端名称。
