@@ -289,7 +289,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 
 评估项：
 
-- `check_all.py` 八维门禁的实际执行与失败判据；
+- `check_all.py` 总门禁的实际执行与失败判据（维度以 `acceptance.md` 与脚本注册为准）；
 - `health_check.py` 的 Parse Error / warning / 断裂引用覆盖；
 - `level_test_runner.py` 的阶段断言、日志门禁与自动清理；
 - `level_regression_all.py` 的候选发现、SKIP 口径、changed-only 映射；
@@ -310,7 +310,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 - `source/project.godot` 的 Autoload、输入、物理层、显示配置与文档一致；
 - `DataKeys`、RoleRuntime Manifest、AtlasMetadata、资源路径表是否单一事实源；
 - 文档是否重复易变统计（脚本数、场景数、历史 PASS 数），是否违反防漂移准则；
-- `docs/README.md`、`docs/reference/README.md`、`docs/decisions/README.md` 的索引与链接；
+- 各目录 README 是否覆盖本目录文件；根 `README.md` 与 `docs/README.md` 的分类入口是否有效；
 - ADR 是否被静默改写或与当前实践冲突。
 
 - 评级：`<A/B/C/D>`
@@ -323,7 +323,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 
 - 本轮源码清单与 `project.godot` / 场景引用 / 导入缓存的差集；
 - `godot --headless --path source --import` 是否重建缓存，`.import`/`.uid` 是否完整；
-- `check_all.py` 八维：行尾、格式、gdlint、引擎健康、契约、命名、运行时引用、资源路径；
+- `check_all.py` 九维：行尾、格式、gdlint、引擎健康、契约、命名、运行时引用、资源路径、DragonBones 工厂加载；
 - `gdlint` 仅覆盖 10 个核心脚本的边界；
 - 格式/行尾/白名单冻结/契约 WARNING 预算；
 - 本地绝对路径、解密沙盒、临时产物是否进入文档/提交；
@@ -363,7 +363,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 | 环境隔离检查 | `<Windows / 完整素材工作区>` | `<确认 user:// 存档、日志、临时目录隔离；实际步骤>` | `<通过/受限>` | `<是否会覆盖真实数据；隔离方式>` | `<EVID-001>` |
 | 静态门禁 | 任意 | `python scripts/check_all.py --skip-engine`；`<仓库根>` | `<实际结果>` | `<7 维 PASS/FAIL；WARNING 预算>` | `<EVID-002>` |
 | 导入缓存 | Godot 4.7.2 | `godot --headless --path source --import`；`<仓库根>` | `<实际结果>` | `<新增/变更资源的 .import/UID>` | `<EVID-003>` |
-| 全量门禁 | Windows / 完整工作区 | `python scripts/check_all.py --godot-bin <godot>`；`<仓库根>` | `<实际结果>` | `<8 维 PASS/FAIL；引擎编译与契约>` | `<EVID-004>` |
+| 全量门禁 | Windows / 完整工作区 | `python scripts/check_all.py --godot-bin <godot>`；`<仓库根>` | `<实际结果>` | `<9 维 PASS/FAIL；引擎编译与契约>` | `<EVID-004>` |
 | 引擎健康检查 | Windows / 完整工作区 | `python scripts/health_check.py --project source --godot-bin <godot>`；`<仓库根>` | `<实际结果>` | `<Parse Error / warning / 断裂引用 / 死代码候选>` | `<EVID-005>` |
 | 单关冒烟 | Windows headless | `python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn` | `<实际结果>` | `<阶段断言、0 SCRIPT ERROR/ERROR/WARNING、清理>` | `<EVID-006>` |
 | 关卡回归 | Windows headless | `python scripts/level_regression_all.py --jobs 4 --timeout 90` 或 `--changed-only --diff-base <base>` | `<实际结果>` | `<候选/执行/跳过/失败；实际范围>` | `<EVID-007>` |

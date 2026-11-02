@@ -44,6 +44,7 @@
 - Phase 33：装备数据契约完成；旧 `all_equipment_data.gd`、`all_equipment.gd`、字典入口与 `AE` Autoload 已删除；运行时只加载 `equipment_catalog.tres`。
 - 最新宠物预热门禁与寅虎动作帧修复：`convert_monster_action_views.py --check` **5/5**，`pet-runtime` 场景探针 PASS，全量场景探针 **17/17**、`coop_probe_runner` **26/26**、`level_1` PASS；完整记录见归档。
 - Phase 31/32/33 的实施记录、Phase 30-4 决策页和 2026 验证历史已归档，不再占用当前参考页。
+- 文档与工具链收敛：活跃 reference 页面只保留当前契约；`scripts/README` 补齐脚本索引；`docs_audit.py` 检查 **684 条链接 / 0 缺失 / 0 索引缺项**；未修改 `source/`。
 
 ---
 

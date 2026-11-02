@@ -16,12 +16,12 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 
 1. **项目门户与总览**：
    - `README.md`：项目定位、目录结构、快速开始、质量流水线、文档入口与许可证边界。
-   - `docs/README.md`：文档分层、活跃文档索引、机器报告与归档规则。
+   - `docs/README.md`：目录分层、子目录入口、机器报告与归档规则；完整文件清单由各子目录 README 维护。
 2. **参考与验收（`docs/reference/`，以 `docs/reference/README.md` 索引为唯一清单）**：
    - 现状类：`architecture.md`（运行时架构、Autoload 与普通子节点运行时、场景流、对象模型、数据/持久化、资源层、UI/输入、遗留边界）、`status.md`（版本、规模、门禁与验证结果的单一事实源）。
-   - 验收类：`acceptance.md`（验收分层、八维门禁、契约域、引擎健康、运行期夹具、阈值与变更矩阵）。
+   - 验收类：`acceptance.md`（验收分层、`check_all` 总门禁、契约域、引擎健康、运行期夹具、阈值与变更矩阵）。
    - 调用面/所有权矩阵：`autoload_boundary_matrix.md`、`runtime_lifecycle_matrix.md`、`archive_session_matrix.md`、`gameplay_module_matrix.md`、`module_api_matrix.md`、`atlas_metadata_schema.md`、`runtime_frames_exceptions.md`。
-   - 新增矩阵必须同时登记到 `docs/reference/README.md`、`docs/README.md` 与根 `README.md` 文档索引；索引缺项按文档缺陷处理。
+   - 新增矩阵必须登记到 `docs/reference/README.md`；`docs/README.md` 与根 `README.md` 只保留分类入口，不复制完整文件清单；索引缺项按文档缺陷处理。
 3. **规范（`docs/standards/`）**：
    - `target_architecture_contract.md`（总体目标架构，优先级最高）、`godot_design_standard.md`、`naming_standard.md`、`naming_whitelist.md`、`missing_assets_registry.md`、`spriteframes_generation_policy.md`，索引见 `docs/standards/README.md`。
    - 规范与代码冲突时，先判断是代码违规还是规范过期；规范变更必须先改规范、再改代码/门禁。
@@ -36,13 +36,13 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 7. **工程摘要**：
    - `AGENTS.md`：只读核对；当详细规范变更导致摘要过期时，按 `docs/standards/README.md` 的优先级同步摘要，不重写红线。`AGENTS.md` 的 `docs/reference/` 清单同样必须覆盖现有矩阵页。
 8. **索引与常量一致性**：
-   - 根 `README.md`、`docs/README.md`、`docs/reference/README.md`、`docs/standards/README.md`、`docs/decisions/README.md`、`docs/archive/README.md`、`scripts/README.md` 的条目必须与磁盘实际文件一致；
+   - 各目录 README 必须覆盖本目录实际文件；根 `README.md` 与 `docs/README.md` 只维护分类入口，不复制子目录清单；`scripts/README.md` 必须覆盖脚本与数据文件；
    - Autoload 数量、注册项清单以 `source/project.godot` 实际注册为准；阶段完成状态以 `docs/reference/status.md` 与 git 历史为准，矩阵页中“当前 N 个/其余延期”一类表述必须随最近一次切片同步。
 
 ### 1.2 严格排除与禁止修改的范围（Forbidden Scope）
 
 - **`docs/archive/`**：已完成阶段归档，保持历史原貌，只作参考，严禁主动修改。
-- **`docs/audit/`**：历史审计报告与只读模板，属于时间戳固化的审计档案；只读引用，不修改、不补写历史结论。
+- **`docs/audit/`**：历史审计报告与模板档案；默认只读，不改写历史报告。模板版本升级仅在用户明确授权的修订任务中修改。
 - **`docs/reports/`**：脚本生成的机器报告，随时可能被覆盖；不手改、不提交历史报告，结论写入 `docs/reference/status.md`。
 - **`source/addons/`、`source/bin/`**：第三方插件与 Spine 运行库；只核对集成边界、版本与许可证，不修改其内部实现或文档。
 - **`.omp/skills/`**：项目本地 agent skills；除非用户明确要求维护 skill，否则不作为文档同步对象。
@@ -80,7 +80,7 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 
 1. **引擎与语言**：Godot 4.7.2、GDScript 2.0、优先静态类型。
 2. **显示基线**：1280×800 设计画布、1600×1000 默认窗口、16:10、1.25×、`canvas_items` + `expand`、相机 1.2 与纵向取景偏移；桌面 HUD 五按钮/无双/技能槽基线。
-3. **质量门禁**：`check_all.py` 八维（行尾、格式化、gdlint、引擎健康、契约、命名、运行时引用、资源路径）、完整工作区 0 ERROR / 0 WARNING、契约 ERROR=0、契约 WARNING ≤ 预算（预算值以 `acceptance.md` 为准）、命名/资源路径/运行时引用门禁。
+3. **质量门禁**：`check_all.py` 总门禁（维度清单以 `acceptance.md` 与实际注册为准）、完整工作区 0 ERROR / 0 WARNING、契约 ERROR=0、契约 WARNING ≤ 预算（预算值以 `acceptance.md` 为准）、命名/资源路径/运行时引用门禁。
 4. **命名与数据契约**：`snake_case` 文件/目录、`PascalCase` 场景节点/`class_name`、`DataKeys` 字典键、UID/`.import` 规则、白名单只减不增。
 5. **架构决策**：单一活跃工程、Resource 优先、Autoload 边界、构建期资产管线、Spine 边界、本地双人槽位隔离、无兼容/回退/跨版本迁移链、三方语义合并、路径迁移走 `rename_path.py`。
 6. **仓库与交付边界**：公开仓库排除第三方素材、代码 MIT、Spine 许可证、本地 commit 需验证且未经允许不 push、环境隔离（不记录本地私有路径）。
@@ -131,13 +131,13 @@ description: 对 BHYH 项目执行代码与 Markdown 文档的一致性审计与
 1. 使用项目工具小步编辑，遵守中文注释/文档规范与既有术语；代码标识符、路径、API 名称不翻译。
 2. 逐一更新落后描述、结构图、命令、路径、索引与测试/验证说明。
 3. 应用 §2 防漂移准则：剥离易变统计，保留契约常量；统计需要保留时明确基线日期与来源。矩阵页的历史快照可保留，但必须标注基线提交/日期，且不得把“当时结论”写成“当前状态”。
-4. 更新索引：`README.md`、`docs/README.md`、`docs/reference/README.md`、`docs/standards/README.md`、`docs/decisions/README.md`、`docs/archive/README.md`、`scripts/README.md` 中受影响的入口。
-5. 不修改 `docs/archive/`、`docs/audit/`、`docs/reports/`、已接受 ADR 或第三方目录。
+4. 更新索引：优先更新受影响子目录的 README；仅当分类入口变化时更新根 `README.md` 或 `docs/README.md`；同步 `scripts/README.md` 中受影响的工具条目。
+5. 不修改 `docs/archive/` 正文、`docs/reports/`、已接受 ADR 或第三方目录；`docs/audit/` 默认只读，仅在用户明确授权的模板修订任务中修改模板，不改历史报告。
 6. 不把规划目标写成现状；未实现能力标“目标/未落地”，并给出边界。
 
 ### Step 4：质量门禁与回归验证（Gate Verification）
 
-1. 文档链接检查：对 `README.md`、`docs/**/*.md`、`scripts/README.md` 的相对链接做一次检查，记录检查文件数与缺失链接数。
+1. 文档检查：运行 `python scripts/docs_audit.py --check`，检查相对链接、目录索引与脚本索引；记录链接数与缺失项。
 2. `git diff --check` 检查空白错误；`python scripts/normalize_eol.py docs --dry-run` 检查 CRLF（注意该脚本可能在仓库根生成 `.cache/`，结束后清理自有产物）。
 3. 若本次只改文档：不需要引擎门禁，但必须确认未误改 `source/`。
 4. 若同时改了 `scripts/` 或代码：执行 `python scripts/check_all.py --skip-engine`；涉及运行时/场景/资源时按 `acceptance.md` 追加引擎/冒烟/回归。
