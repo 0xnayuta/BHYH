@@ -342,6 +342,10 @@ func _run_all() -> void:
 			"can_pass": can_pass,
 			"ok": stage_ok,
 		}})
+		# 清场后的开门/阶段转场由 BaseLevel._physics_process 提交；
+		# 高并发下 process_frame 可能先于下一 physics tick，必须先让物理帧落地。
+		if stage_ok and index < stage_count - 1:
+			await _wait_physics_frames(2)
 
 	# 5. 恢复沙盒（保证测试环境纯净）
 	Engine.time_scale = 1.0
@@ -436,6 +440,11 @@ func _await_level_ready(report: Dictionary) -> Node:
 func _wait_frames(count: int) -> void:
 	for _i in range(count):
 		await get_tree().process_frame
+
+
+func _wait_physics_frames(count: int) -> void:
+	for _i in range(count):
+		await get_tree().physics_frame
 
 
 func _finish(report: Dictionary, exit_code: int) -> void:
@@ -548,11 +557,13 @@ script = ExtResource("1")
         log_delta = self._read_log_delta(log_start_size)
         marker = "__LEVEL_SMOKE_REPORT_WRITTEN__"
         test_log, _, teardown_log = log_delta.partition(marker)
-        # Godot headless dummy renderer 在 Camera2D/纹理初始化时会产生
-        # `Parameter "t" is null` 的引擎噪声；只剔除带 dummy texture 栈的这一种，
-        # 其它 ERROR/WARNING 仍按原门禁计数，并在报告中单独列出。
+        # Godot headless dummy renderer 在并发启动/纹理初始化时会偶发引擎噪声：
+        # `Parameter "t" is null`、`Parameter "mem" is null` 与重复 RID 初始化。
+        # 只剔除这三类已验证的 headless 噪声（含缩进栈），不做通用 ERROR 白名单；
+        # 其它 SCRIPT ERROR/ERROR/WARNING 仍按原门禁计数并在报告中保留样本。
         headless_pattern = re.compile(
-            r'^ERROR: Parameter "t" is null\.\n(?:[ \t].*\n)*',
+            r'^ERROR: (?:Parameter "(?:t|mem)" is null|Initializing already initialized RID)\.?\n'
+            r'(?:[ \t].*\n)*',
             re.M,
         )
         headless_render_noise = len(headless_pattern.findall(test_log))

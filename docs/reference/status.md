@@ -34,7 +34,7 @@
 | `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **26/26 PASS** |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 304.5s，日志 0 ERROR / 0 WARNING） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 302.07s，**无重试**，日志 0 ERROR / 0 WARNING） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
@@ -44,8 +44,9 @@
 - Phase 33：装备数据契约完成；旧 `all_equipment_data.gd`、`all_equipment.gd`、字典入口与 `AE` Autoload 已删除；运行时只加载 `equipment_catalog.tres`。
 - 最新宠物预热门禁与寅虎动作帧修复：`convert_monster_action_views.py --check` **5/5**，`pet-runtime` 场景探针 PASS，全量场景探针 **17/17**、`coop_probe_runner` **26/26**、`level_1` PASS；完整记录见归档。
 - AnimationMixer String 状态轨道警告修复：183 个场景、**412** 条单键 value track（`animation` 296 + `playing` 116）改为离散更新；新增 `contract_scan` 的 `ANIM_TRACK_STATE_CONTINUOUS` 规则与 `pet-runtime` 动画缓存探针；全量回归 **128/128 + SKIP 5**（304.5s，0/0/0）、场景探针 **17/17**、`check_all --godot-bin` **9/9**。
+- 关卡回归瞬态修复：保留失败关首轮 `errors/stages/log`，过滤三类已验证 headless dummy renderer 噪声，阶段清场后等待物理帧再传送；全量回归 **128/128 + SKIP 5，302.07s，无重试**。
 - Phase 31/32/33 的实施记录、Phase 30-4 决策页和 2026 验证历史已归档，不再占用当前参考页。
-- 文档与工具链收敛：活跃 reference 页面只保留当前契约；`scripts/README` 补齐脚本索引；`docs_audit.py` 检查 **684 条链接 / 0 缺失 / 0 索引缺项**；未修改 `source/`。
+- 文档与工具链收敛：活跃 reference 页面只保留当前契约；`scripts/README` 补齐脚本索引；`docs_audit.py` 检查 **703 条链接 / 0 缺失 / 0 索引缺项**；未修改 `source/`。
 
 ---
 

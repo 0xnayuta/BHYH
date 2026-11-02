@@ -330,6 +330,8 @@ def write_reports(
             reasons.append(f"ERROR={log['errors']}")
         if log.get("warnings"):
             reasons.append(f"WARNING={log['warnings']}")
+        if item.get("retry"):
+            reasons.append("retry_after_failure")
         reason = "; ".join(reasons)[:200]
         lines.append(
             f"| {item['scene']} | {'SKIP' if item.get('skipped') else ('PASS' if item['passed'] else 'FAIL')} | "
@@ -342,6 +344,19 @@ def write_reports(
             lines.append(f"- 阶段: `{item['stages']}`")
             lines.append(f"- 驱动错误: `{item['errors']}`")
             lines.append(f"- 日志: `{item['log']}`")
+            lines.append("")
+    retried = [item for item in results if item.get("retry")]
+    if retried:
+        lines.extend(["", "## 重试记录", ""])
+        for item in retried:
+            retry = item["retry"]
+            lines.append(f"### {item['scene']}")
+            lines.append(
+                f"- 首轮: passed={retry.get('first_passed')} elapsed={retry.get('first_elapsed')}s"
+            )
+            lines.append(f"- 首轮阶段: `{retry.get('first_stages', [])}`")
+            lines.append(f"- 首轮错误: `{retry.get('first_errors', [])}`")
+            lines.append(f"- 首轮日志: `{retry.get('first_log', {})}`")
             lines.append("")
     with open(report_md, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(lines) + "\n")
@@ -483,9 +498,18 @@ def main() -> int:
     if retry_stems:
         print(f"[*] 重试失败关卡: {', '.join(retry_stems)}", flush=True)
         for stem in retry_stems:
+            first_attempt = results_by_scene[stem]
             result = run_one(stem, args.timeout)
+            result["retry"] = {
+                "attempted": True,
+                "first_passed": bool(first_attempt.get("passed")),
+                "first_elapsed": first_attempt.get("elapsed"),
+                "first_stages": first_attempt.get("stages", []),
+                "first_errors": first_attempt.get("errors", []),
+                "first_log": first_attempt.get("log", {}),
+            }
             results_by_scene[stem] = result
-            label = "PASS" if result["passed"] else "FAIL"
+            label = "PASS (retry)" if result["passed"] else "FAIL"
             print(f"    [重试] {stem}: {label} ({result['elapsed']}s)", flush=True)
     results = [results_by_scene[stem] for stem in targets]
     duration = time.time() - started

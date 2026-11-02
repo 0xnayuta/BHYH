@@ -250,7 +250,8 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 | SKIP | 命中 `NON_BATTLE_SPECIALS` 的菜单/地图/交互场景直接 `passed=True, skipped=True`，**SKIP 计入通过**（这是关卡回归的既定口径；与双人探针的 SKIP 语义不同） |
 | 单关超时 | 默认 150 秒；子进程超时为 `timeout + 90` 秒 |
 | 并发 | 默认 `auto = min(12, max(4, CPU 核数))`；实测 12 并发全量 275.7s，瞬态失败自动串行重试；`--jobs 4` 为稳定排障口径 |
-| 重试 | 失败关串行重试 1 次 |
+| 重试 | 失败关串行重试 1 次；报告保留首轮 `errors/stages/log` 并标 `retry_after_failure`，不得用重试结果覆盖失败证据 |
+| headless 噪声 | 仅过滤已验证的 dummy renderer 三类错误（`Parameter "t"/"mem" is null`、重复 RID 初始化）；其他 ERROR/WARNING 仍失败并保留样本 |
 | changed-only | 关卡/脚本/Art 目录直接映射；其他源码走反向依赖；无法映射时全量回退 |
 | 日常口径 | 提交前跑 `--changed-only --diff-base HEAD~1`，只跑受影响关卡 |
 | 发布口径 | 发布前跑全量（默认 auto 并发）；`--warmup` 默认 0（实测无收益）；进程复用未采用（5 关/组实测更慢） |
