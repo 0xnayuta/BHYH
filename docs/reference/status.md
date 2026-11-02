@@ -28,7 +28,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS，31.76s**（2026-11-02 Phase 33-5） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 Phase 33-5 为 31.76s；文档/工具整理后复跑 **27.93s**） |
 | `health_check` | **762 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **297/297 PASS** |
 | `scene_probe_runner` | **14/14 PASS**（Phase 33-5）；最新宠物运行时探针见历史归档 |
