@@ -2,7 +2,7 @@
 
 > **归档日期**：2026-11-01
 > **状态**：Archived
-> **关联**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)、[`level_layout_contract.md`](../reference/level_layout_contract.md)、[`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md)、[`architecture.md`](../reference/architecture.md) §4.3、[`status.md`](../reference/status.md)
+> **关联**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)、[`level_layout_contract.md`](../reference/level_layout_contract.md)、[`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)、[`architecture.md`](../reference/architecture.md) §4.3、[`status.md`](../reference/status.md)
 
 ## 1. 阶段结果
 
@@ -61,7 +61,7 @@ Phase 30 将 BHYH 关卡脚本中的结构化布局数据迁出为构建期生�
 - 55 个含独立玩法逻辑的脚本保留，仅迁出其中的结构化数据块；
 - 30 个标准流程/空表脚本分类：24 个已迁出、6 个空表删除；
 - 更新 `architecture.md` §4.3、`status.md`、路线图与索引；
-- 新增 [`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md) 记录逐项结论。
+- 新增 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) 记录逐项结论。
 
 ## 4. 完成时基线
 
@@ -103,7 +103,7 @@ level_stz
 liu_sha_river_boss_level
 ```
 
-例外覆盖动态刷怪、非连续流程或运行时坐标计算；逐项理由与数据处置见 [`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md)。
+例外覆盖动态刷怪、非连续流程或运行时坐标计算；逐项理由与数据处置见 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)。
 
 保留边界：
 
@@ -121,4 +121,4 @@ liu_sha_river_boss_level
 
 ## 8. 后续
 
-Phase 30 已完成并归档。布局数据契约继续由 [`level_layout_contract.md`](../reference/level_layout_contract.md) 与 [`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md) 维护；当前迭代转入 Phase 32 / 33 规划，见 [`current-iteration.md`](../roadmap/current-iteration.md)。
+Phase 30 已完成并归档。布局数据契约继续由 [`level_layout_contract.md`](../reference/level_layout_contract.md) 与 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) 维护；当前迭代转入 Phase 32 / 33 规划，见 [`current-iteration.md`](../roadmap/current-iteration.md)。

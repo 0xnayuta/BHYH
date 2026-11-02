@@ -15,10 +15,10 @@
 | [Phase 16 档案会话、持久化与玩家槽位](../archive/iteration_16_archive_session_slots.md) | 完成、归档 | 档案会话、共享账本、槽位查询、面板显式操作者与档案/槽位契约门禁；矩阵见 [`archive_session_matrix.md`](../reference/archive_session_matrix.md)，旧计划见归档页 |
 | [Phase 17 玩法与表现模块边界](../archive/iteration_17_gameplay_module_boundaries.md) | 完成、归档 | 归属/阶段/结算/成长/HUD/音频/模块 API 与 17-7 静态守卫；矩阵见 [`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md) |
 | [Phase 18~20 综合收尾](../archive/iteration_18_20_comprehensive_closeout.md) | 完成、归档 | 归属/成长/档案/表现/运行时/资源/Atlas/守卫与 Autoload 拆分；边界见 [`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) |
-| Phase 21 独立立项与平台发布 | 进行中：21-1A（Windows-only）完成、21-1B 完成（拒绝转换）、21-1C 完成、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓、21-2C 已完成 PCK 复跑与 Windows release 冒烟 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，详细批次见 [`current-iteration.md`](current-iteration.md) |
+| Phase 21 独立立项与平台发布 | 完成（21-2A 最低设备确认与 21-2B 平台测量暂缓）：21-1A/21-1B/21-1C、21-3、21-4A/21-4B、21-2C 已完成 | 承接 20-1A/20-1C/20-1D、20-2；S5 已由 21-3 收口；平台决策见 [`spine_platform_baseline.md`](../reference/spine_platform_baseline.md)，暂缓边界见 [`status.md`](../reference/status.md) |
 | [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
-| Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
-| Phase 32 UI Theme 契约 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成** | 唯一 Theme；旧 Theme 退役；静态直接属性 0，仅 26 条 `hit_text` 动画轨道最终例外；见 §3.7、[`current-iteration.md`](current-iteration.md) §5C |
+| Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) |
+| Phase 32 UI Theme 契约 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成** | 唯一 Theme；旧 Theme 退役；静态直接属性 0，仅 26 条 `hit_text` 动画轨道最终例外；见 §3.7、[`program_21_33_closeout.md`](../archive/program_21_33_closeout.md) §5C |
 | Phase 33 装备数据契约 | **完成**：33-0/33-1/33-2/33-3/33-4/33-5 | 1,035 条定义、32 字段、163 条随机定义/258 个随机字段值；Resource Catalog、258 个随机规格、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、全量回归与 PCK 闭包；见 §3.8、[`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
@@ -104,7 +104,7 @@ flowchart TD
 - HUD/面板用只读查询与明确命令，输入与音频表现不拥有领域规则。
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
-- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 30/31 已完成并归档，Phase 32 已完成，Phase 33-0/33-1/33-2/33-3/33-4/33-5 已完成；详细任务见 [`current-iteration.md`](current-iteration.md)。
+- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 30/31 已完成并归档，Phase 32 已完成，Phase 33-0/33-1/33-2/33-3/33-4/33-5 已完成；实施记录见 [`program_21_33_closeout.md`](../archive/program_21_33_closeout.md)，当前候选见 [`current-iteration.md`](current-iteration.md)。
 
 ### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（已完成并归档）
 
@@ -152,7 +152,7 @@ flowchart TD
 **30-4 边界收尾（已完成）**
 
 - 85 个原数据容器脚本逐项复核：55 个逻辑脚本保留，30 个标准/空表脚本分类；10 个动态/非连续例外登记；
-- 更新 `architecture.md` §4.3、`status.md` 与 [`phase_30_4_script_decisions.md`](../reference/phase_30_4_script_decisions.md)；
+- 更新 `architecture.md` §4.3、`status.md` 与 [`phase_30_4_script_decisions.md`](../archive/phase_30_4_script_decisions.md)；
 - 验收：文档与实现一致，无未分类数据表。
 
 **阶段出口**：30-1~30-3 完成并有回归证据；30-4 给出保留/迁出清单。**不做的事**：不改玩法数值与时序、不重写 `base_hero`/`base_monster` 继承、不把 `PlayerData` 整体 Resource 化。
@@ -160,7 +160,7 @@ flowchart TD
 ### 3.6 Phase 31：引擎废弃 API 与局部现代化（已完成）
 
 > **状态**：31-0A 已完成（2026-11-01）；31-0B 评估后拒绝（保留旧数字图）；31-1 已完成（2026-11-01）。**不依赖 Phase 30**。
-> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.1、§3.2。
+> **依据**：[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) §3.1、§3.2。
 
 **31-0 顺手包（A2/B2/B4/B5）**
 
@@ -181,7 +181,7 @@ flowchart TD
 ### 3.7 Phase 32：UI Theme 契约（32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成）
 
 > **状态**：**32-0 已完成（2026-11-01）**：基线审计与契约；**32-1 已完成（2026-11-01）**：`game_set` 239→0；**32-2A 已完成（2026-11-01）**：`equipment_properies` 173→18、`level_info` 118→34；**32-2B 已完成（2026-11-01）**：五个 Button 密集面板 1,649→44；**32-3A 已完成（2026-11-01）**：混合控件/布局七场景 624→0；**32-3B 已完成（2026-11-01）**：标签/混合五场景 1,042→0；**32-3C 已完成（2026-11-01）**：首批标签五场景 452→0；**32-3D 已完成（2026-11-01）**：标签/混合五场景 375→0；**32-3E 已完成（2026-11-01）**：阵法/帮助四场景 245→0；**32-3F 已完成（2026-11-01）**：自动战斗/幻化/法宝/阵眼四场景 223→0；**32-3G-1 已完成（2026-11-01）**：首批高密度五场景 236→0；**32-3G-2 已完成（2026-11-01）**：低密度八场景 207→0；**32-3G-3 已完成（2026-11-01）**：中高密度八场景 329→0；**32-3G-4 已完成（2026-11-01）**：关卡/帮助/信息八场景 254→0；**32-3G-5 已完成（2026-11-01）**：十二场景 224→0；**32-3G-6 已完成（2026-11-01）**：十四场景 200→0；**32-3G-7 已完成（2026-11-01）**：十六场景 162→0；**32-3G-8 已完成（2026-11-01）**：十六场景 105→0；**32-3G-9 已完成（2026-11-01）**：十四场景 37→0；**32-3G-10 已完成（2026-11-02）**：hit_text 静态 6→0、26 条动画轨道保留；**32-4 已完成（2026-11-02）**：旧 Theme 退役、全局 Theme 不启用，Phase 32 完成。批次与验收见 [`current-iteration.md`](current-iteration.md) §5C。
-> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B1。
+> **依据**：[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) §3.2 B1。
 
 - 定义 Theme 资源：字体、字号层级、颜色、`Button`/`Label` 变体；
 - 定义 `theme_type_variation` 命名规范，登记进命名白名单；
@@ -193,8 +193,8 @@ flowchart TD
 
 ### 3.8 Phase 33：装备数据契约（完成）
 
-> **状态**：Phase 33 已完成（2026-11-02）：32 字段契约、字段审计、1,035 条定义的只读 Resource Catalog、生成器/Store、258 个随机规格、`EquipmentRoller`/`EquipmentRules`；33-3 全部消费方迁移、33-4 删除旧脚本与 `AE` Autoload、33-5 全量回归与 PCK 闭包均完成。批次见 [`current-iteration.md`](current-iteration.md) §5D。
-> **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
+> **状态**：Phase 33 已完成（2026-11-02）：32 字段契约、字段审计、1,035 条定义的只读 Resource Catalog、生成器/Store、258 个随机规格、`EquipmentRoller`/`EquipmentRules`；33-3 全部消费方迁移、33-4 删除旧脚本与 `AE` Autoload、33-5 全量回归与 PCK 闭包均完成。批次见 [`program_21_33_closeout.md`](../archive/program_21_33_closeout.md) §5D。
+> **依据**：[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
 
 - `all_equipment_data.gd`（19,185 行）的 1,035 条定义已落入 `EquipmentDefinition`/`EquipmentCatalog` + 构建源/生成器；旧脚本与字典入口已在 33-4 删除，运行时只加载 Catalog；
 - 33-1/33-2 已验证 1,035 条 ID、32 字段、`强化属性` 嵌套键、字段存在性与确定性字段；163 条定义/258 个随机字段值由 `EquipmentRoller` 恢复，旧实现对照 0 差异；
@@ -223,5 +223,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 30 与 Phase 31 已完成并归档；当前候选为 Phase 32/33，进度、批次与恢复条件以 [`current-iteration.md`](current-iteration.md) 与 [`status.md`](../reference/status.md) 为准。
+- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 30、Phase 31、Phase 32 与 Phase 33 已完成并归档；当前无活跃候选，下一候选条件见 [`current-iteration.md`](current-iteration.md)，验证事实见 [`status.md`](../reference/status.md)。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

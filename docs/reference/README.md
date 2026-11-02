@@ -1,37 +1,30 @@
 # 参考文档 (Reference)
 
-本目录保存描述当前工程事实、架构与验收边界的参考文档。
-
----
+本目录保存当前工程事实、架构、验收和仍生效的契约。已完成阶段的实施记录、历史验证与逐项决策见 [`../archive/README.md`](../archive/README.md)。
 
 ## 1. 当前文档
 
 | 文档 | 内容 |
 |:---|:---|
-| [`architecture.md`](architecture.md) | **当前运行时架构**：应用/Autoload、场景流、战斗、档案/双人、资源、UI/输入及与目标的遗留差距 |
-| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | **Phase 20-1B Autoload 与 Global 拆分边界**：11 个当前注册项（决策时 13）的保留/迁移/合并/删除决策、`global.gd` 切面、普通子节点运行时与场景工厂族、迁移顺序与试点 |
-| [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | **Phase 19-3A/21-4A/21-4B 运行时建帧例外决策**：逐项保留/迁移/拒绝结论、证据与后续边界 |
-| [`archive_session_matrix.md`](archive_session_matrix.md) | **Phase 16-1 档案、持久化与槽位调用面矩阵**：保存入口、档案身份、会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者的当前所有者与失败边界 |
-| [`module_api_matrix.md`](module_api_matrix.md) | **Phase 17-6 试点模块 API 与依赖方向**：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开 API、场景依赖、路径清理结果与未迁移项 |
-| [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | **Phase 17-1 玩法与表现调用面矩阵（已完成）**：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖的所有者、写入者与失败边界 |
-| [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | **Phase 15 运行时调用面与所有权矩阵（已完成、归档）**：场景切换、加载页、缓存/池/UI、档案会话与退出清理的当前所有者及失败边界 |
-| [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | **Phase 14 矩阵与试点**：AtlasMetadata 生产者、源形态、消费者、View 与失败边界 |
-| [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) | **Phase 30-4 脚本边界决策**：85 个原数据容器脚本的 55 个逻辑脚本 + 30 个标准/空表脚本逐项结论；10 个动态/非连续例外；保留/迁出边界 |
-| [`level_layout_contract.md`](level_layout_contract.md) | **关卡布局数据契约（Phase 30-1/30-2/30-3/30-4 完成）**：五件套字段语义、外部怪物映射、原始 ZMWS 驱动、生成器与代表关卡验收 |
-| [`equipment_data_contract.md`](equipment_data_contract.md) | **Phase 33 装备数据契约（完成）**：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、全量回归与 PCK 验证 |
-| [`ui_theme_contract.md`](ui_theme_contract.md) | **Phase 32 UI Theme 契约（完成）**：直接属性/动画轨道基线、Theme/变体命名、审计与最终例外边界 |
-| [`modernization_gap_matrix.md`](modernization_gap_matrix.md) | **现代化差距矩阵（Phase 31~33 候选依据）**：废弃 API、UI Theme 缺失、装备数据硬编码等分级清单、处置类型判定、批次建议与未测量项 |
-| [`spine_platform_baseline.md`](spine_platform_baseline.md) | **Spine 平台基线（21-1A/21-2A 已确认）**：Windows x86_64 先行、Spine 4.3 运行时基线、平台矩阵、许可证、加载验收与 21-2B/21-2C 状态 |
-| [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具、阈值与分变更矩阵 |
-| [`status.md`](status.md) | **当前状态单一事实源**：版本、目录、规模、门禁与验收基线 |
+| [`architecture.md`](architecture.md) | **当前运行时架构**：Autoload、场景流、战斗、档案/双人、资源、UI/输入及遗留边界 |
+| [`status.md`](status.md) | **当前状态单一事实源**：版本、门禁、最近验证与已知边界 |
+| [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与变更矩阵 |
+| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 11 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |
+| [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
+| [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |
+| [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |
+| [`module_api_matrix.md`](module_api_matrix.md) | Phase 17-6 试点模块公开 API 与依赖方向 |
+| [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | AtlasMetadata 生产者、schema、消费者、只读 View 与失败边界 |
+| [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | 运行时建帧冻结例外与后续边界 |
+| [`level_layout_contract.md`](level_layout_contract.md) | 当前关卡布局对象模型、字段、构建与运行时契约 |
+| [`equipment_data_contract.md`](equipment_data_contract.md) | 当前装备定义/规则/实例三层契约与发布闭包 |
+| [`ui_theme_contract.md`](ui_theme_contract.md) | 当前 Theme 资源、变体命名、最终例外与审计 |
+| [`spine_platform_baseline.md`](spine_platform_baseline.md) | Spine 运行时、平台、许可证与暂缓边界 |
 
 ## 2. 边界
 
-- 当前状态、架构、验收与项目范围类文档放在本目录；
-- 架构决策记录放在 [`../decisions/`](../decisions/README.md)；
-- 规范约束放在 [`../standards/`](../standards/README.md)；
-- 项目总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md)；本文档目录只记录现状与实际验收，不把目标写成已实现。
-- 操作步骤放在 [`../guides/`](../guides/README.md)；
-- 已完成且不再活跃的历史资料放在 [`../archive/`](../archive/README.md)。
-
-后续可继续在本目录增加架构、验收、项目范围文档；新增文件时同步更新本页与 [`../README.md`](../README.md)。
+- 当前状态、架构、验收和仍生效的契约放在本目录；
+- 架构决策放在 [`../decisions/`](../decisions/README.md)；规范放在 [`../standards/`](../standards/README.md)；
+- 已完成阶段的实施记录、历史计数和验证快照进入 [`../archive/`](../archive/README.md)；
+- 新增或移动文件时同步本索引，不复制完整清单到其他入口；
+- 本文档目录不把目标写成已实现，不复制历史批次台账。

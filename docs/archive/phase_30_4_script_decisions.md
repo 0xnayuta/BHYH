@@ -1,3 +1,11 @@
+# Phase 30-4 关卡脚本边界决策（归档）
+
+> **归档日期**：2026-11-02
+> **状态**：Archived
+> **关联**：Phase 30 归档见 [`iteration_30_level_layout_data_contract.md`](iteration_30_level_layout_data_contract.md)
+
+<!-- 以下为归档时的完整决策记录，保留历史原貌。 -->
+
 # Phase 30-4 关卡脚本边界决策
 
 > **范围**：Phase 30-4 收尾审计的原 85 个 `monster_group` 数据容器脚本。

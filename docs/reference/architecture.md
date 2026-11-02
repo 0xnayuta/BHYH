@@ -283,7 +283,7 @@ classDiagram
 
 Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。`ZmwsLevel` 可按碰撞体元数据 `_zmws_wall_name`（缺失时用节点名）匹配布局 `close_walls`/`open_walls`；当前转换地图未保留原名，挡板保持默认关闭。
 
-Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个空表删除、10 个动态/非连续脚本保留为例外；55 个含独立玩法逻辑与 30 个标准/数据脚本的逐项结论见 [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)。已迁出脚本的 `monster_group`/坐标表删除，例外由 `level_layout_migration_audit.py` 校验；不重写 `BaseHero`/`BaseMonster` 或关卡时序。
+Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个空表删除、10 个动态/非连续脚本保留为例外；55 个含独立玩法逻辑与 30 个标准/数据脚本的逐项结论见 [`../archive/phase_30_4_script_decisions.md`](../archive/phase_30_4_script_decisions.md)。已迁出脚本的 `monster_group`/坐标表删除，例外由 `level_layout_migration_audit.py` 校验；不重写 `BaseHero`/`BaseMonster` 或关卡时序。
 
 ### 4.4 命中与归属
 
@@ -500,7 +500,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32 已完成；当前候选为 [Phase 33 装备数据](../roadmap/current-iteration.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；当前无活跃候选 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 

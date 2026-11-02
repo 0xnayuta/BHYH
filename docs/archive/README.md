@@ -84,3 +84,14 @@
 | [`iteration_14_atlas_metadata_boundary.md`](iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化数据边界：生产者/消费者矩阵、View 迁移、边界守卫、验证与恢复 | 2026-10-28 |
 | [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页交接、资源租约、缓存/池/UI、退出与后台、边界守卫、验证与恢复 | 2026-10-28 |
 | [`iteration_16_archive_session_slots.md`](iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位：调用面矩阵、保存 IO 与身份、会话上下文、共享账本、面板显式操作者、契约门禁、验证与恢复 | 2026-10-29 |
+| [`iteration_15_runtime_lifecycle_matrix.md`](iteration_15_runtime_lifecycle_matrix.md) | Phase 15 运行时调用面与生命周期实施记录快照 | 2026-11-02 |
+| [`iteration_16_archive_session_matrix.md`](iteration_16_archive_session_matrix.md) | Phase 16 档案会话与槽位调用面实施记录快照 | 2026-11-02 |
+| [`iteration_17_18_gameplay_module_matrix.md`](iteration_17_18_gameplay_module_matrix.md) | Phase 17/18 玩法与表现调用面实施记录快照 | 2026-11-02 |
+| [`iteration_20_autoload_boundary_matrix.md`](iteration_20_autoload_boundary_matrix.md) | Phase 20 Autoload 拆分与迁移实施记录快照 | 2026-11-02 |
+| [`iteration_30_level_layout_contract.md`](iteration_30_level_layout_contract.md) | Phase 30 关卡布局契约与 ZMWS 映射实施记录快照 | 2026-11-02 |
+| [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) | Phase 30-4 数据容器脚本逐项决策（归档移动） | 2026-11-02 |
+| [`iteration_31_33_modernization_gap_matrix.md`](iteration_31_33_modernization_gap_matrix.md) | Phase 31~33 现代化差距调查快照 | 2026-11-02 |
+| [`iteration_32_ui_theme.md`](iteration_32_ui_theme.md) | Phase 32 UI Theme 完整批次与验证记录快照 | 2026-11-02 |
+| [`iteration_33_equipment_data_contract.md`](iteration_33_equipment_data_contract.md) | Phase 33 装备数据契约完整批次与验证记录快照 | 2026-11-02 |
+| [`program_21_33_closeout.md`](program_21_33_closeout.md) | Phase 21~33 程序计划、完成状态与收口记录 | 2026-11-02 |
+| [`validation_history_2026.md`](validation_history_2026.md) | 2026 年逐批验证记录（含历史计数与耗时） | 2026-11-02 |

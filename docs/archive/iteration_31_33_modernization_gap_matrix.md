@@ -1,9 +1,17 @@
+# Phase 31~33 现代化差距矩阵（归档）
+
+> **归档日期**：2026-11-02
+> **状态**：Archived
+> **关联**：当前路线见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)
+
+<!-- 以下为归档时的完整差距分析，保留历史原貌。 -->
+
 # 现代化差距矩阵（Phase 31 候选依据）
 
 > **状态**：2026-10-31 完成静态调查与分级；**本页只登记差距与建议批次，不实施**。Phase 31/32/33 为候选阶段，是否启动与何时启动以 [`roadmap.md`](../roadmap/roadmap.md) 为准。
 > **范围**：`source/` 内的场景、脚本、资源与 UI 样式。不含第三方 `addons/`、`bin/`，不含素材本身（素材边界见 [ADR-011](../decisions/ADR-011-public-repository-asset-boundary.md)）。
 > **事实快照**：2026-10-31 私有完整工作区静态扫描；数字随迭代变动，不承诺长期不变。运行时行为未实测的部分已标注。
-> **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`architecture.md`](architecture.md)、[`status.md`](status.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)。
+> **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)、[`godot_design_standard.md`](../standards/godot_design_standard.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)。
 
 ---
 
@@ -228,7 +236,7 @@ grep -rn "collision_layer = [0-9]" source/Script --include=*.gd | wc -l
 grep -rho "Global\.[a-z_]*" source/Script --include=*.gd | wc -l
 ```
 
-- 相关文档：[`architecture.md`](architecture.md) §9 遗留与现代化分界、[`status.md`](status.md)、[`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)、[`gameplay_module_matrix.md`](gameplay_module_matrix.md)。
+- 相关文档：[`architecture.md`](../reference/architecture.md) §9 遗留与现代化分界、[`status.md`](../reference/status.md)、[`autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)。
 
 ---
 
