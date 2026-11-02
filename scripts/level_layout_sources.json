@@ -63484,6 +63484,489 @@
           ]
         }
       ]
+    },
+    "res://Scene/level/zmws/rogue_24_brith_1_lv1.tscn": {
+      "level_id": "rogue_24_brith_1_lv1",
+      "source_map": "Rogue_24-Brith-1-Lv1.json",
+      "layout_size": [
+        2112.0,
+        1344.0
+      ],
+      "player_birth_points": [
+        [
+          368.0,
+          976.0
+        ],
+        [
+          408.0,
+          976.0
+        ],
+        [
+          450.0,
+          976.0
+        ],
+        [
+          488.0,
+          976.0
+        ]
+      ],
+      "exit_rect": [
+        1568.0,
+        880.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            224.0,
+            224.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            224.0,
+            224.0,
+            1632.0,
+            960.0
+          ],
+          "spawn_trigger_rect": [
+            224.0,
+            224.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [
+            "战斗挡板1",
+            "战斗挡板2"
+          ],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_hidden_1_lv1.tscn": {
+      "level_id": "rogue_24_hidden_1_lv1",
+      "source_map": "Rogue_24-hidden-1-Lv1.json",
+      "layout_size": [
+        2560.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          912.0,
+          336.0
+        ],
+        [
+          720.0,
+          336.0
+        ],
+        [
+          784.0,
+          336.0
+        ],
+        [
+          848.0,
+          336.0
+        ]
+      ],
+      "exit_rect": [
+        800.0,
+        224.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "spawn_trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "close_walls": [
+            "单向墙壁1"
+          ],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_hidden_2_lv1.tscn": {
+      "level_id": "rogue_24_hidden_2_lv1",
+      "source_map": "Rogue_24-hidden-2-Lv1.json",
+      "layout_size": [
+        2560.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          1080.0,
+          336.0
+        ],
+        [
+          888.0,
+          336.0
+        ],
+        [
+          952.0,
+          336.0
+        ],
+        [
+          1016.0,
+          336.0
+        ]
+      ],
+      "exit_rect": [
+        968.0,
+        224.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "spawn_trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "close_walls": [
+            "单向墙壁1"
+          ],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_hidden_3_lv1.tscn": {
+      "level_id": "rogue_24_hidden_3_lv1",
+      "source_map": "Rogue_24-hidden-3-Lv1.json",
+      "layout_size": [
+        2560.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          752.0,
+          344.0
+        ],
+        [
+          560.0,
+          344.0
+        ],
+        [
+          624.0,
+          344.0
+        ],
+        [
+          688.0,
+          344.0
+        ]
+      ],
+      "exit_rect": [
+        640.0,
+        232.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "spawn_trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "close_walls": [
+            "单向墙壁1"
+          ],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_hidden_4_lv1.tscn": {
+      "level_id": "rogue_24_hidden_4_lv1",
+      "source_map": "Rogue_24-hidden-4-Lv1.json",
+      "layout_size": [
+        2560.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          912.0,
+          344.0
+        ],
+        [
+          720.0,
+          344.0
+        ],
+        [
+          784.0,
+          344.0
+        ],
+        [
+          848.0,
+          344.0
+        ]
+      ],
+      "exit_rect": [
+        800.0,
+        232.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "all_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "spawn_trigger_rect": [
+            64.0,
+            32.0,
+            1696.0,
+            1536.0
+          ],
+          "close_walls": [
+            "单向墙壁1"
+          ],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_treasure_1_lv1.tscn": {
+      "level_id": "rogue_24_treasure_1_lv1",
+      "source_map": "Rogue_24-Treasure-1-Lv1.json",
+      "layout_size": [
+        3200.0,
+        1920.0
+      ],
+      "player_birth_points": [
+        [
+          304.0,
+          1136.0
+        ],
+        [
+          336.0,
+          1136.0
+        ],
+        [
+          368.0,
+          1136.0
+        ],
+        [
+          400.0,
+          1136.0
+        ]
+      ],
+      "exit_rect": [
+        96.0,
+        1072.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            25.0,
+            320.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            32.0,
+            512.0,
+            1529.0,
+            732.0
+          ],
+          "spawn_trigger_rect": [
+            25.0,
+            320.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_treasure_2_lv1.tscn": {
+      "level_id": "rogue_24_treasure_2_lv1",
+      "source_map": "Rogue_24-Treasure-2-Lv1.json",
+      "layout_size": [
+        3200.0,
+        1600.0
+      ],
+      "player_birth_points": [
+        [
+          272.0,
+          1108.0
+        ],
+        [
+          336.0,
+          1108.0
+        ],
+        [
+          400.0,
+          1108.0
+        ],
+        [
+          464.0,
+          1108.0
+        ]
+      ],
+      "exit_rect": [
+        129.0,
+        1034.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            25.0,
+            288.0,
+            1632.0,
+            960.0
+          ],
+          "trigger_rect": [
+            64.0,
+            480.0,
+            1534.0,
+            784.0
+          ],
+          "spawn_trigger_rect": [
+            25.0,
+            288.0,
+            1632.0,
+            960.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
+    },
+    "res://Scene/level/zmws/rogue_24_treasure_3_lv1.tscn": {
+      "level_id": "rogue_24_treasure_3_lv1",
+      "source_map": "Rogue_24-Treasure-3-Lv1.json",
+      "layout_size": [
+        1920.0,
+        1120.0
+      ],
+      "player_birth_points": [
+        [
+          400.0,
+          1145.0
+        ],
+        [
+          464.0,
+          1145.0
+        ],
+        [
+          528.0,
+          1145.0
+        ],
+        [
+          592.0,
+          1145.0
+        ]
+      ],
+      "exit_rect": [
+        96.0,
+        1072.0,
+        96.0,
+        128.0
+      ],
+      "exit_open_when": "stage_clear",
+      "stages": [
+        {
+          "index": 1,
+          "screen_rect": [
+            25.0,
+            288.0,
+            1632.0,
+            832.0
+          ],
+          "trigger_rect": [
+            25.0,
+            288.0,
+            1632.0,
+            832.0
+          ],
+          "spawn_trigger_rect": [
+            25.0,
+            288.0,
+            1632.0,
+            832.0
+          ],
+          "close_walls": [],
+          "open_walls": [],
+          "spawn_points": []
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=4 format=3 uid="uid://d5exjf6o2epe"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(224, 224, 1632, 960)
+trigger_rect = Rect2(224, 224, 1632, 960)
+spawn_trigger_rect = Rect2(224, 224, 1632, 960)
+close_walls = PackedStringArray("战斗挡板1", "战斗挡板2")
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"rogue_24_brith_1_lv1"
+layout_size = Vector2(2112, 1344)
+player_birth_points = PackedVector2Array(368, 976, 408, 976, 450, 976, 488, 976)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1")])
+exit_rect = Rect2(1568, 880, 96, 128)
+exit_open_when = &"stage_clear"

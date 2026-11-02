@@ -491,7 +491,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 ### 6.6 发布依赖与待收敛边界
 
 - 角色资源清单、AtlasMetadata、构建帧、FrameSequence、关卡预载 Catalog 已落地；具体范围由生成器与 `--check` 决定，不在本文维护数量。
-- `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物、`scripts/monster_dynamic_paths.json` 与布局源派生（含 `layout_catalog` + 90 个布局），随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
+- `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物、`scripts/monster_dynamic_paths.json` 与布局源派生（含 `layout_catalog` + 98 个布局），随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
 - 怪物别名与动态来源已在构建期展开为 Catalog；运行时不再解析源码或扫描纹理目录。旧纹理别名表及其解析入口已移除，不兼容旧路径。
 - PCK 闭包与 Windows release 的已执行结果见 `status.md`；包内可达不等于目标设备加载与峰值性能通过。
 
@@ -606,9 +606,9 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 构建期动画资源 | `convert_numbered_frames.py`、`convert_frame_sequences.py`、`convert_monster_frames.py`、`convert_nezha_preview_frames.py` |
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
-| 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；90 个登记布局（`level_48`、20 个原始 ZMWS 代表关卡、69 个已迁移 BHYH 关卡），构建期生成、运行时只读 |
+| 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；98 个登记布局（`level_48`、20 个原始 ZMWS 代表关卡、8 个 Rogue 24 代表关卡、69 个已迁移 BHYH 关卡），构建期生成、运行时只读 |
 | 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称优先、唯一归一化补 6 条，当前 512 条，未匹配项不静默回退 |
-| 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 20 个 `Scene/level/zmws_playable/*.tscn` 包装场景 |
+| 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 28 个 `Scene/level/zmws_playable/*.tscn` 包装场景（20 个 Phase 30 代表关 + 8 个 Rogue 24 非战斗代表关） |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由；`slot_snapshot()` 枚举槽位所有者，`shared_keys()` 登记共享账本键，`save_profile` 剥离 2P 档案的共享副本 |
 | 资源加载 | 四类缓存、线程预载、精确失效、对象池 |
 | 场景切换 | 加载页预载 + 覆盖式切换 + VRAM 观测 |

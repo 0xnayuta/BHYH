@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="LevelLayoutEntry" load_steps=4 format=3 uid="uid://dc7aynqygxli8"]
+
+[ext_resource type="Script" path="res://Script/data/level_layout_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://Script/data/level_stage_spec.gd" id="2_stage"]
+[ext_resource type="Script" path="res://Script/data/level_spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="Resource" id="stage_1"]
+script = ExtResource("2_stage")
+index = 1
+screen_rect = Rect2(25, 288, 1632, 832)
+trigger_rect = Rect2(25, 288, 1632, 832)
+spawn_trigger_rect = Rect2(25, 288, 1632, 832)
+close_walls = PackedStringArray()
+open_walls = PackedStringArray()
+spawn_points = Array[ExtResource("3_spawn")]([])
+
+[resource]
+script = ExtResource("1_entry")
+level_id = &"rogue_24_treasure_3_lv1"
+layout_size = Vector2(1920, 1120)
+player_birth_points = PackedVector2Array(400, 1145, 464, 1145, 528, 1145, 592, 1145)
+stages = Array[ExtResource("2_stage")]([SubResource("stage_1")])
+exit_rect = Rect2(96, 1072, 96, 128)
+exit_open_when = &"stage_clear"

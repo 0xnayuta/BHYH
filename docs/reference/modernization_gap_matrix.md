@@ -20,7 +20,7 @@
 | 不立项、随域收敛 | **B6 硬编码路径**、**B7 超大场景**、**B8 `Global` 调用密度** |
 | 外部约束、非架构问题 | **C1 Spine 版本** |
 
-**曾存在的一条不一致（31-1 已消除）**：外部导入的 1,701 个关卡场景使用现代 `Parallax2D`，BHYH 原有 89 个场景使用**已废弃**的 `ParallaxLayer`；当前 BHYH 89 个场景已全部迁移，`ParallaxLayer`/`ParallaxBackground` 全仓 0。
+**曾存在的一条不一致（31-1 已消除）**：外部导入的 1,727 个关卡场景使用现代 `Parallax2D`，BHYH 原有 89 个场景使用**已废弃**的 `ParallaxLayer`；当前 BHYH 89 个场景已全部迁移，`ParallaxLayer`/`ParallaxBackground` 全仓 0。
 
 ---
 
@@ -32,8 +32,8 @@
 |:---|---:|:---|
 | `.tscn` 场景总数 | **2,836** | `find source/Scene -name '*.tscn'` |
 | 节点总数 | **93,633** | `grep -rh '^\[node '` |
-| BHYH 原有场景 | ~1,135 | 总数减去外部导入 1,701 |
-| 外部（ZMWS）导入场景 | **1,701** | `source/Scene/level/zmws/` |
+| BHYH 原有场景 | ~1,135 | 总数减去外部导入 1,727 |
+| 外部（ZMWS）导入场景 | **1,727** | `source/Scene/level/zmws/` |
 | `source/Script/data` 体量 | 583 KB / 19,949 行 | `du`、`wc -l` |
 
 ### 2.2 关键计数
@@ -42,7 +42,7 @@
 |:---|---:|:---|
 | `ParallaxLayer` 场景 | **0**（31-1 已迁移） | A1 已消除 |
 | `ParallaxBackground` 场景 | **0**（`base_through_level.tscn` 改为 `CanvasLayer`） | A1 已消除 |
-| `Parallax2D` 场景 | **1,790**（外部 1,701 + BHYH 89） | 现代 |
+| `Parallax2D` 场景 | **1,816**（外部 1,727 + BHYH 89） | 现代 |
 | `TileMap` 节点 | **0**（31-0A 已迁移为 `TileMapLayer`） | A2 已消除 |
 | `theme_override_*` 文本引用 | **6,830**（6,804 直接属性 + 26 动画轨道） | B1 |
 | `.theme` 扩展文件 / `Theme` `.tres` | **0 / 1** | B1 |
@@ -79,7 +79,7 @@
 |:---|:---|
 | 现状 | 已消除：89 个场景 95 个 `ParallaxLayer` + 1 个 `ParallaxBackground` 全部迁移；`base_through_level.tscn` 容器改为 `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`），层为 `Parallax2D`（31-1） |
 | 官方依据 | `ParallaxLayer` 类文档：*Deprecated: Use the Parallax2D node instead.*；2D Parallax 教程：*recommended to use over the ParallaxLayer and ParallaxBackground nodes* |
-| 内部不一致 | 已消除：外部 1,701 个关卡与 BHYH 89 个场景统一为 `Parallax2D` |
+| 内部不一致 | 已消除：外部 1,727 个关卡与 BHYH 89 个场景统一为 `Parallax2D` |
 | 语义映射 | `motion_scale`→`scroll_scale`；`motion_mirroring`→`repeat_size`；`motion_offset`→`scroll_offset`；`position`→`scroll_offset`（Parallax2D 进树后 position 会被覆盖） |
 | 结构变化 | `ParallaxBackground` → `CanvasLayer`（`layer=-100`、`follow_viewport_enabled=true`）；每层独立 `Parallax2D` |
 | 风险 | 已对照：89 场景 × 4 相机 2,520 节点 transform；7 个代表场景截图；`level_4` 不可见 `stage` 与 `level_2` 子像素为已知例外 |

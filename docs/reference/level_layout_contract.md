@@ -295,9 +295,9 @@ Phase 30-2 的 `ZmwsLevel`（继承 `Game4ImportedLevel`）负责把原始 `Scen
 
 | 维度 | 判据 |
 |:---|:---|
-| 契约完整性 | `--check` 对 90 个登记布局全部通过，0 失败；外部怪物 `--check` 512 条通过 |
+| 契约完整性 | `--check` 对 98 个登记布局全部通过，0 失败；外部怪物 `--check` 512 条通过 |
 | 生成确定性 | 连续两次生成结果逐字节一致 |
-| 运行时接入 | `level_48` Stage 1–5 PASS；20 个原始 ZMWS 包装关卡 Stage 全 PASS 且 `can_pass=True`；收口批后 69 个已迁移关卡 Stage PASS |
+| 运行时接入 | `level_48` Stage 1–5 PASS；20 个 Phase 30 ZMWS 代表包装关卡与 8 个 Rogue 24 非战斗代表包装关卡 Stage 全 PASS 且 `can_pass=True`；收口批后 69 个已迁移关卡 Stage PASS |
 | 行为等价 | 全量 `level_regression_all.py` **128/128 PASS + 5 SKIP**（710.9s）；原始驱动批次 20/20 PASS |
 | 静态门禁 | `check_all.py` 全维 PASS；`contract_scan.py` ERROR=0；布局迁移双源 + 例外清单审计 PASS |
 | 无回退 | 已迁移关卡脚本不再有布局常量/五个覆写；预载 Catalog 仍含完整怪物集合 |
