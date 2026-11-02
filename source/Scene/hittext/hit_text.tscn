@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="1"]
 [ext_resource type="Script" path="res://Script/hittext/hit_text.gd" id="2"]
+[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "cure_text"
@@ -607,15 +608,11 @@ _data = {
 }
 
 [node name="HitText" type="Label" unique_id=435429288]
+theme_type_variation = "HitTextBase"
+theme = ExtResource("theme")
 offset_right = 72.0011
 offset_bottom = 52.0
 scale = Vector2(2.5, 2.5)
-theme_override_colors/font_color = Color(0.145098, 1, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 25
 vertical_alignment = 1
 script = ExtResource("2")
 

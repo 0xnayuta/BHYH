@@ -2,33 +2,26 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 6,
+    "direct_properties": 0,
     "animation_track_refs": 26,
-    "textual_references": 32,
+    "textual_references": 26,
     "scenes": 1
   },
-  "property_categories": {
-    "colors": 3,
-    "constants": 1,
-    "font_sizes": 1,
-    "fonts": 1
-  },
+  "property_categories": {},
   "animation_categories": {
     "colors": 15,
     "constants": 5,
     "font_sizes": 5,
     "fonts": 1
   },
-  "node_types": {
-    "Label": 6
-  },
+  "node_types": {},
   "unassigned_direct": 0,
   "themes": {
     "resources": [
       "Scene/back_pack/backpack_action_theme.tres",
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1116,
+    "scene_refs": 1117,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -277,6 +270,7 @@
       "HelpThingsText",
       "HeroName",
       "HeroNameFlat",
+      "HitTextBase",
       "LdlDzButton",
       "LdlFjButton",
       "LdlHcButton",
@@ -645,7 +639,7 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1415
+    "variation_refs": 1416
   },
   "fonts": {
     "scene_refs": 2,
@@ -702,9 +696,9 @@
   },
   "scenes": {
     "Scene/hittext/hit_text.tscn": {
-      "direct": 6,
+      "direct": 0,
       "animation": 26
     }
   },
-  "generated_at": "2026-11-01"
+  "generated_at": "2026-11-02"
 }

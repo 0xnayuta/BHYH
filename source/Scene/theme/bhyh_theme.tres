@@ -4499,3 +4499,11 @@ SkillIconTime/colors/font_color = Color(1, 1, 1, 1)
 SkillIconTime/colors/font_outline_color = Color(0, 0, 0, 1)
 SkillIconTime/constants/outline_size = 9
 SkillIconTime/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+
+HitTextBase/base_type = &"Label"
+HitTextBase/colors/font_color = Color(0.145098, 1, 0, 1)
+HitTextBase/colors/font_shadow_color = Color(0, 0, 0, 1)
+HitTextBase/colors/font_outline_color = Color(0, 0, 0, 1)
+HitTextBase/constants/outline_size = 10
+HitTextBase/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+HitTextBase/font_sizes/font_size = 25
