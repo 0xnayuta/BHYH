@@ -594,19 +594,28 @@ func _update_pet_head(pet: Dictionary, pet_unit: Node) -> void:
 
 
 func _pet_tiger_head_texture(stage: int) -> Texture2D:
-	return Global.get_cached_texture(
-		"res://Art/pet/pet_tiger/model/actions/stage%d/wait/icon.png" % clampi(stage, 1, 4)
-	)
+	return _pet_model_head_texture("res://Art/pet/pet_tiger/model/pet_tiger_stage%d_frames.tres" % clampi(stage, 1, 4))
 
 
 func _pet_dragon_head_texture(stage: int) -> Texture2D:
-	return Global.get_cached_texture("res://Art/pet/pet_dragon/model/actions/stage%d/wait/头像.png" % clampi(stage, 1, 4))
+	return _pet_model_head_texture(
+		"res://Art/pet/pet_dragon/model/pet_dragon_stage%d_frames.tres" % clampi(stage, 1, 4)
+	)
 
 
 func _pet_phoenix_head_texture(stage: int) -> Texture2D:
-	return Global.get_cached_texture(
-		"res://Art/pet/pet_phoenix/model/actions/stage%d/wait/头像.png" % clampi(stage, 1, 4)
+	return _pet_model_head_texture(
+		"res://Art/pet/pet_phoenix/model/pet_phoenix_stage%d_frames.tres" % clampi(stage, 1, 4)
 	)
+
+
+func _pet_model_head_texture(frames_path: String) -> Texture2D:
+	if not ResourceLoader.exists(frames_path, "SpriteFrames"):
+		return null
+	var frames := ResourceLoader.load(frames_path, "SpriteFrames", ResourceLoader.CACHE_MODE_REUSE) as SpriteFrames
+	if frames == null or not frames.has_animation("wait") or frames.get_frame_count("wait") == 0:
+		return null
+	return frames.get_frame_texture("wait", 0)
 
 
 func _pet_turtle_head_texture(stage: int) -> Texture2D:

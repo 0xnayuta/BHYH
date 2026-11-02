@@ -23,6 +23,7 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `ui-theme`：`game_set` 的 Theme 应用、变体计算样式、布局与开关交互。
 - `dragonbones-armature`：ZMWS 批量导出的 .dbfactory 经 DragonBonesArmatureView 实例化、
   播放 `appear_1`、时间轴推进与 seek，并记录首次/热实例化开销与 8 实例稳态帧时间。
+- `pet-runtime`：宠物树外初始化属性（预热路径）、HUD 头像构建期帧解析与寅虎帧绝对时长。
 """
 
 from __future__ import annotations
@@ -249,6 +250,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="DRAGONBONES_ARMATURE_PROBE_TEARDOWN",
         quit_after_frames=600,
         timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="pet-runtime",
+        title="宠物初始化与动作帧运行时探针",
+        script_name="pet_runtime_probe.gd",
+        scene_name="pet_runtime_probe.tscn",
+        result_prefix="PET_RUNTIME_PROBE_RESULT=",
+        report_stem="pet_runtime_probe_report",
+        teardown_marker="PET_RUNTIME_PROBE_TEARDOWN",
+        quit_after_frames=300,
+        timeout_seconds=120,
     ),
 )
 

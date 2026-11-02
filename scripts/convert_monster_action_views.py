@@ -5,7 +5,7 @@
 数据源：`scripts/monster_action_views.json`。每个输出资源声明：
 - `animations.<action>.source`：源 `*_frames.tres`（只含 `play`）；
 - `frames`：从源 `play` 取用的帧索引；
-- `durations`：可选逐帧时长；省略时沿用源帧时长；
+- `durations`：可选逐帧相对时长（SpriteFrames 语义；绝对秒 = 相对时长 / 速度）；省略时沿用源帧时长；
 - `loop`、`speed`。
 
 输出沿用既有目录，动画名等于怪物动作名。资源头写入由输出路径派生的

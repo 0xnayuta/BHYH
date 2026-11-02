@@ -5,6 +5,7 @@
 ## 默认规则
 
 - `speed` 统一使用源素材 FPS（默认 24；30 FPS 源显式传 `--fps 30`）；
+- 逐帧 `duration` 使用相对时长，绝对帧时长 = `duration / (speed × playing_speed)`；禁止把绝对秒数写入 `duration` 后再叠加 `speed`，否则播放速度会放大 `speed` 倍；
 - 与 `AnimatedSprite2D` 配合时，`AnimationPlayer` 可编排状态、属性、事件与时长，但不得对同一帧播放时钟重复驱动或额外叠加速度倍率；
 - 循环动画命名：`wait`、`walk`、`idle`、`run`、`Monster*`；
 - 一次性攻击/受伤/死亡/特效默认不循环；

@@ -173,8 +173,8 @@ func setup_pet_phoenix(stage: int) -> void:
 	var mp_bonus := int(equipment_bonus.get(DataKeys.MP, 0))
 	var passive_value = _pet_get(pet_data, ["被动技能"], {})
 	var passive: Dictionary = passive_value if passive_value is Dictionary else {}
-	var passive_hp := _pet_passive_value("热血", int(passive.get("热血", 0)))
-	var passive_mp := _pet_passive_value("魔泉", int(passive.get("魔泉", 0)))
+	var passive_hp := int(PaSkill.get_value("热血", int(passive.get("热血", 0))))
+	var passive_mp := int(PaSkill.get_value("魔泉", int(passive.get("魔泉", 0))))
 	my_mr_name = str(_pet_get(pet_data, [DataKeys.ALT_NAME], PHOENIX_STAGE_NAMES[phoenix_stage]))
 	attack_in = max(1, attack_from_pet + int(equipment_bonus.get(DataKeys.ATTACK, 0)))
 	attack_in += PET_LEARNED_SKILL_RUNTIME.permanent_stat_bonus(pet_data, "天生蛮力", attack_in)
@@ -237,13 +237,6 @@ func _pet_get(data: Dictionary, keys: Array, fallback):
 		if data.has(key):
 			return data[key]
 	return fallback
-
-
-func _pet_passive_value(passive_name: String, passive_level: int) -> int:
-	var passive_node := get_node_or_null("/root/PaSkill")
-	if passive_node != null and passive_node.has_method("get_value"):
-		return int(passive_node.get_value(passive_name, passive_level))
-	return 0
 
 
 func _process_pet_phoenix_recovery(delta: float) -> void:
