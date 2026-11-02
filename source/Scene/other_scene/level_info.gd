@@ -2342,7 +2342,7 @@ func _rebuild_level_fall_items() -> void:
 				if fixed_probability
 				else _get_fall_pro_text(int(item_probability[i]))
 			)
-		var box = Global.add_level_fall_box(fall_list, true, true, i, 0, [], AE.all_equipment[i])
+		var box = Global.add_level_fall_box(fall_list, true, true, i, 0, [], EquipmentService.data(StringName(str(i))))
 		box.set_button_icon(load_item_icon(i))
 		box.set_meta("fall_item_name", i)
 		if pro_txt != "":
@@ -2445,7 +2445,7 @@ func _get_heaven_nightmare_soul_items(level_info: Dictionary) -> Array:
 		if monster_id <= 0:
 			continue
 		var item_id := BaseMonster.HEAVEN_SOUL_CRYSTAL_ITEM_PREFIX + str(monster_id)
-		if AE.all_equipment.has(item_id) and item_id not in items:
+		if EquipmentService.has(StringName(item_id)) and item_id not in items:
 			items.append(item_id)
 	return items
 
@@ -2460,7 +2460,7 @@ func _get_underworld_nightmare_soul_items(level_info: Dictionary) -> Array:
 		if monster_id <= 0:
 			continue
 		var item_id := BaseMonster.UNDERWORLD_SOUL_CRYSTAL_ITEM_PREFIX + str(monster_id)
-		if AE.all_equipment.has(item_id) and item_id not in items:
+		if EquipmentService.has(StringName(item_id)) and item_id not in items:
 			items.append(item_id)
 	return items
 
@@ -2475,7 +2475,7 @@ func _get_human_nightmare_soul_items(level_info: Dictionary) -> Array:
 		if monster_id <= 0:
 			continue
 		var item_id := BaseMonster.HUMAN_SOUL_CRYSTAL_ITEM_PREFIX + str(monster_id)
-		if AE.all_equipment.has(item_id) and item_id not in items:
+		if EquipmentService.has(StringName(item_id)) and item_id not in items:
 			items.append(item_id)
 	return items
 
@@ -2493,7 +2493,7 @@ func _get_eight_immortal_fall_preview() -> Dictionary:
 			if not drop is Dictionary:
 				continue
 			var item_id := str(drop.get("name", ""))
-			if item_id == "" or not AE.all_equipment.has(item_id):
+			if item_id == "" or not EquipmentService.has(StringName(item_id)):
 				continue
 			if item_id not in result["items"]:
 				result["items"].append(item_id)
@@ -2515,7 +2515,7 @@ func _get_constellation_fall_preview() -> Dictionary:
 			if not drop is Dictionary:
 				continue
 			var item_id := str(drop.get("name", ""))
-			if item_id == "" or not AE.all_equipment.has(item_id):
+			if item_id == "" or not EquipmentService.has(StringName(item_id)):
 				continue
 			if item_id not in result["items"]:
 				result["items"].append(item_id)
@@ -2573,8 +2573,10 @@ func _sync_hell_extra_fall_display():
 		box.queue_free()
 
 	if int(MainSet.set_data.get("Difficult", 0)) == 2:
-		if existing_qhsbx == null and AE.all_equipment.has("qhsbx"):
-			var qhsbx_box = Global.add_level_fall_box(fall_list, true, true, "qhsbx", 0, [], AE.all_equipment["qhsbx"])
+		if existing_qhsbx == null and EquipmentService.has(&"qhsbx"):
+			var qhsbx_box = Global.add_level_fall_box(
+				fall_list, true, true, "qhsbx", 0, [], EquipmentService.data(&"qhsbx")
+			)
 			qhsbx_box.set_button_icon(load_item_icon("qhsbx"))
 			qhsbx_box.set_meta("fall_item_name", "qhsbx")
 			qhsbx_box.set_meta("hell_qhsbx", true)
@@ -2739,8 +2741,9 @@ func _on_constellation_head_selected(head: Node) -> void:
 
 func load_item_icon(_name):
 	var item_id := str(_name)
-	if AE.all_equipment.has(item_id):
-		var data_icon_path := str(AE.all_equipment[item_id].get("图标", ""))
+	var item_definition := EquipmentService.definition(StringName(item_id))
+	if item_definition != null:
+		var data_icon_path := item_definition.icon_path
 		if data_icon_path != "" and ResourceLoader.exists(data_icon_path):
 			return load(data_icon_path)
 	var icon_path := "res://Art/backpack/all_items/" + item_id + ".png"

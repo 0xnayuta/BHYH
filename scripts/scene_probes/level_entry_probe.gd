@@ -49,6 +49,21 @@ func _run() -> void:
 	)
 	checks["context_name_set"] = Global.get_current_level_name() == DROP_LEVEL_NAME
 	if panel != null and is_instance_valid(panel):
+		await get_tree().process_frame
+		await get_tree().physics_frame
+		var fall_list := panel.get_node_or_null("ColorRect/TextureRect/ScrollContainer/FallList") as HBoxContainer
+		var fall_names: Array[String] = []
+		if fall_list != null:
+			for child in fall_list.get_children():
+				if child is Button:
+					fall_names.append(str(child.get_meta("fall_item_name", "")))
+		checks["fall_boxes_built"] = fall_names.size() > 0
+		var fall_names_resolved := true
+		for fall_name in fall_names:
+			if fall_name == "" or not EquipmentService.has(StringName(fall_name)):
+				fall_names_resolved = false
+				break
+		checks["fall_boxes_resolved"] = fall_names_resolved
 		panel.queue_free()
 
 	# 设置关闭信息面板时走直进分支：非 res:// 目标落到兜率宫选择面板，并记录关卡名。

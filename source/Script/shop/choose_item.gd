@@ -27,8 +27,9 @@ func get_item(idx):
 func get_item_name(idx):
 	var _name_value
 	_name_value = _list[idx][DataKeys.NAME]
-	var name_text = AE.all_equipment[_name_value][DataKeys.NAME]
-	var lx = AE.all_equipment[_name_value][DataKeys.TYPE]
+	var item_definition := EquipmentService.definition(StringName(str(_name_value)))
+	var name_text := item_definition.display_name
+	var lx := item_definition.category
 	var get_num = get_item_num(idx)
 	var wxx = get_wx_text(idx)
 
@@ -87,7 +88,8 @@ func _on_qd_pressed() -> void:
 	if current_choose >= 0:
 		var names
 		names = _list[current_choose][DataKeys.NAME]
-		var lx = AE.all_equipment[names][DataKeys.TYPE]
+		var item_definition := EquipmentService.definition(StringName(str(names)))
+		var lx := item_definition.category
 		var get_num = get_item_num(current_choose)
 		var _roll_element = get_wx(current_choose)
 		var list = [

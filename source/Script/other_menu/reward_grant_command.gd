@@ -17,9 +17,9 @@ static func execute(
 			return _failure("奖励数据异常，未发放")
 		var reward: Dictionary = entry
 		var item_name := str(reward.get("Name", ""))
-		if item_name == "" or not AE.all_equipment.has(item_name):
+		if item_name == "" or not EquipmentService.has(StringName(item_name)):
 			return _failure("奖励物品不存在，未发放")
-		var item_type := str(AE.all_equipment[item_name].get(DataKeys.TYPE, ""))
+		var item_type := EquipmentService.definition(StringName(item_name)).category
 		if item_type not in ALL_TYPES:
 			return _failure("奖励类型不支持，未发放")
 		(
@@ -36,9 +36,9 @@ static func execute(
 			)
 		)
 	if use_item_name != "":
-		if not AE.all_equipment.has(use_item_name) or use_num <= 0:
+		if not EquipmentService.has(StringName(use_item_name)) or use_num <= 0:
 			return _failure("使用道具数据异常，未发放")
-		var use_type := str(AE.all_equipment[use_item_name].get(DataKeys.TYPE, ""))
+		var use_type := EquipmentService.definition(StringName(use_item_name)).category
 		var owned: int = (
 			PlayerData.get_item_data(use_item_name)
 			if use_type == "道具"

@@ -99,7 +99,8 @@ func open():
 	purchase_button.visible = true
 	mystery_shop_item_box.texture = load("res://Art/shop/shop_item_box.png")
 	self.set_box()
-	item_num.text = str(AE.all_equipment[new_list["Name"]][DataKeys.NAME]) + "×" + str(new_list["Value"])
+	var item_definition := EquipmentService.definition(StringName(str(new_list["Name"])))
+	item_num.text = item_definition.display_name + "×" + str(new_list["Value"])
 	need_value.text = str(new_list["Need"]) + "灵魂"
 
 
@@ -132,8 +133,8 @@ func basic_set():
 func set_box():
 	var current_list = all_item_list["Box_" + str(my_num)]
 	new_list = current_list[randi_range(0, current_list.size() - 1)]
-	var type = AE.all_equipment[new_list["Name"]][DataKeys.TYPE]
-	match type:
+	var item_definition := EquipmentService.definition(StringName(str(new_list["Name"])))
+	match item_definition.category:
 		"武器", "饰品", "防具", "时装", "头衔":
 			item_box.qh_level = new_list["Level"]
 			item_box.wx = []
@@ -141,7 +142,7 @@ func set_box():
 			item_box.wx = new_list["WX"]
 		"道具", "消耗品":
 			item_box.total_number = new_list["Value"]
-	item_box.eq_prop = AE.all_equipment[new_list["Name"]]
+	item_box.eq_prop = EquipmentService.data(StringName(str(new_list["Name"])))
 	item_box.get_item_name = new_list["Name"]
 	item_box.set_meta("item_name", new_list["Name"])
 	item_box.set_button_icon(ItemUtils.item_icon(new_list["Name"]))
@@ -152,12 +153,10 @@ func _on_purchase_pressed() -> void:
 		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
 	var item_name := str(new_list.get("Name", ""))
-	var item_data_value: Variant = AE.all_equipment.get(item_name, {})
-	if not item_data_value is Dictionary:
+	if item_name == "" or not EquipmentService.has(StringName(item_name)):
 		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
 		return
-	var item_data: Dictionary = item_data_value
-	var item_type := str(item_data.get(DataKeys.TYPE, ""))
+	var item_type := EquipmentService.definition(StringName(item_name)).category
 	var quantity := 1 if item_type in ["武器", "饰品", "防具", "时装", "头衔", "法宝"] else int(new_list.get("Value", 1))
 	var result: Dictionary = ShopPurchaseCommand.execute_mystery(
 		item_name,
@@ -241,7 +240,7 @@ func _show_item_info(item_box) -> void:
 	var item_name = item_box.get_item_name
 	if (item_name == "" or item_name == "empty") and item_box.has_meta("item_name"):
 		item_name = str(item_box.get_meta("item_name"))
-	if item_name == "" or item_name == "empty" or not AE.all_equipment.has(item_name):
+	if item_name == "" or item_name == "empty" or not EquipmentService.has(StringName(item_name)):
 		return
 	var parent_node = Global.get_ui_runtime().get_popup_layer()
 	var popup_pos = Global.screen_popup_position()

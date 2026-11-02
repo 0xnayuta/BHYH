@@ -1,8 +1,8 @@
-# 装备数据契约（Phase 33-0/33-1/33-2）
+# 装备数据契约（Phase 33-0/33-1/33-2 + 33-3 消费方）
 
-> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）、33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）与 33-3 第一簇（UI/说明/背包）已完成；33-3 其余消费方、33-4 切换与 33-5 收口未启动。
+> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）、33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）与 33-3 第一/第二簇已完成；剩余 ③④ 簇、33-4 切换与 33-5 收口未启动。
 >
-> **范围**：`all_equipment_data.gd` 的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。运行时旧路径在本批保持不变；本页描述新 Catalog 契约，不宣称消费者已迁移。
+> **范围**：`all_equipment_data.gd` 的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。旧运行路径仅在剩余 11 个文件、97 处 `AE.all_equipment` 中保留；本页描述新 Catalog 契约与已迁移调用面，不宣称 33-3 全部完成。
 >
 > **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-012](../decisions/ADR-012-zero-error-zero-warning-quality-gates.md)、[总体目标契约](../standards/target_architecture_contract.md) §5。
 
@@ -20,7 +20,7 @@
 | 属性字段 | **16 个**，保留 int/float 原类型 |
 | `宝石` 静态定义 | **456 条空数组**；实例属于玩家档案 |
 | 图标 | 可选；缺失由 `defined_fields` 表达，不以空字符串伪造存在 |
-| 旧运行入口 | `AE.all_equipment`，Autoload `AE` 懒加载 `all_equipment_data.gd` |
+| 旧运行入口 | `AE.all_equipment`，Autoload `AE` 懒加载 `all_equipment_data.gd`；33-3 第一/第二簇迁移后剩余 11 个文件、97 处 |
 
 旧脚本的随机不是只存在于 `tjbg`：`SHp`、`SMp`、`power`、`Def`、`Mdef`、`Crit`、`Miss`、`R_hp`、`R_mp`、`Lucky`、`htarget`、`ar`、`sp` 与 `成长率` 均存在 `randi_range`/`randf_range`。本契约以实际源码与跨种子运行结果为准，不沿用“只有 `tjbg` 随机”的旧描述。
 
@@ -184,13 +184,15 @@ rules.get_wx()
 ```
 
 - `EquipmentRoller.materialize()` 只读 Catalog，把确定性字段与随机字段合成旧字典形状；按 ID 缓存，`clear_cache()` 重置；
-- `EquipmentRules` 保留旧方法名与旧字典输入/输出，`AE` 现有路径未迁移；
+- `EquipmentRules` 保留旧方法名与旧字典输入/输出；迁移簇经 `EquipmentService.rules()` 调用，剩余 11 个文件仍走旧 `AE`；
 - 规则不写回 Catalog/定义；旧实现对非道具且缺少 `强化属性` 的输入会索引缺失键，新实现返回未修改结果，比较用例只覆盖有效输入；
 - `get_wx()` 保留旧 `randomize()` 行为；五行结果不进入静态定义。
 
 ---
 
-## 8. 33-3 第一簇：UI/说明/背包（已完成）
+## 8. 33-3 第一/第二簇（已完成）
+
+### 8.1 第一簇：UI/说明/背包
 
 第一簇覆盖 **28 个原 `AE.all_equipment` 消费者**，并同步迁移 `equipment_catalog_data` 助手：
 
@@ -207,7 +209,25 @@ rules.get_wx()
 - `equipment_properies` 的旧 `AE._get_data()`/规则调用改为 `EquipmentService.rules()`；`equipment_catalog_data` 改为按定义/服务查询；
 - 第一簇内 `AE.all_equipment` 与 `AE.` 代码访问均为 **0**。
 
-未迁移的 20 个消费者仍在 ②③④ 簇：`level_info`、商店、奖励命令、锻造/合成/分解、`player_data`、坐骑、任务等；33-3 整体未完成。
+### 8.2 第二簇：商店/奖励/掉落/关卡
+
+第二簇覆盖 **9 个文件、39 处原 `AE.all_equipment` 访问**：
+
+- `Script/shop/`：`choose_item.gd`、`mystery_shop_item_box.gd`、`shop.gd`、`shop_item.gd`、`shop_purchase_command.gd`；
+- `Script/other_menu/reward_grant_command.gd`；
+- `Script/task/task_reward.gd`；
+- `Scene/other_scene/level_info.gd`；
+- `Script/level/defeat.gd`。
+
+迁移面：
+
+- 名称、类型、品质、图标与所属等静态字段改读 `EquipmentDefinition`；
+- UI 仍接收旧字典形状时使用 `EquipmentService.data(...)`（`shop_item`、神秘商店、任务奖励、失败结算、关卡掉落模板）；
+- `ShopPurchaseCommand` 的法宝五行改为 `EquipmentService.rules().get_wx()`，与旧 `get_wx()` 算法一致；
+- 关卡掉落的预览、灵魂晶石与 `qhsbx` 额外掉落均改经 `EquipmentService`，图标优先读取定义的 `icon_path`；
+- 第二簇内 `AE.all_equipment` 与 `AE.` 代码访问均为 **0**。
+
+剩余 **11 个文件、97 处 `AE.all_equipment`** 属于 ③④ 簇：`ldl/` 9 个文件（锻造、合成、分解、强化、神铸、配方）、`main_menu/mount_panel.gd` 与 `memory_class/player_data.gd`。33-3 整体仍未完成。
 
 ---
 
@@ -222,9 +242,10 @@ rules.get_wx()
 - `equipment_catalog.tres` 与构建源逐字同步；`convert_equipment_catalog.py --check` PASS；
 - `contract_gate` 含 `equipment_catalog_check` 与 `equipment_data_audit`，PASS；
 - 33-3 第一簇：`ui-factories`、`ui-theme`、`equipment_catalog_page` 场景启动、`level_1` 冒烟、`coop_probe_runner` **26/26** PASS；`check_all --godot-bin` **9/9（23.45s）**；
+- 33-3 第二簇：`ui-factories` PASS（20.68s）、`level-entry` PASS（4.94s，含 `fall_boxes_built`/`fall_boxes_resolved`）、`archive_probe_runner` **293/293 PASS**（13.86s，含普通/神秘商店购买、奖励与失败结算）、`level_1` 冒烟 PASS（25.15s，4 阶段，日志 0/0/0）、`health_check` 0 Parse / 0 Error / 0 Warning（15.11s）；`check_all --godot-bin` **9/9（28.11s）**；
 - `check_all`、`health_check` 结果记录于 [`status.md`](status.md)。
 
-未执行：33-3 其余三簇、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
+未执行：33-3 第三/第四簇、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
 
 ---
 
@@ -232,4 +253,4 @@ rules.get_wx()
 
 - 不改变装备数值、掉落、随机范围、强化/神铸公式、存档格式或双人共享规则；
 - 不删除 `all_equipment_data.gd`，不保留第二份可写字典；
-- 33-2 已完成规则抽取与随机字段恢复；33-3 第一簇已完成，继续 ②③④；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。
+- 33-2 已完成规则抽取与随机字段恢复；33-3 第一/第二簇已完成，继续 ③④；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。

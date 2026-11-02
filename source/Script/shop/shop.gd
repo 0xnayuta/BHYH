@@ -241,8 +241,9 @@ func _read_custom_item_price(item: Dictionary) -> int:
 	if item.has("cost"):
 		return int(item["cost"])
 	var item_name := _read_custom_item_name(item)
-	if AE.all_equipment.has(item_name):
-		return get_price_by_quality(str(AE.all_equipment[item_name].get(DataKeys.QUALITY, "")))
+	var item_definition := EquipmentService.definition(StringName(item_name))
+	if item_definition != null:
+		return get_price_by_quality(item_definition.quality)
 	return 0
 
 
@@ -250,7 +251,7 @@ func _normalize_custom_shop_item(item: Dictionary, category: String) -> Dictiona
 	var item_name := _read_custom_item_name(item)
 	if item_name == "":
 		return {}
-	if not AE.all_equipment.has(item_name):
+	if not EquipmentService.has(StringName(item_name)):
 		push_warning("商店商品不存在: " + item_name)
 		return {}
 	_custom_shop_item_types[item_name] = category
@@ -275,22 +276,20 @@ func _append_all_equipment_items() -> void:
 	for item in total_item_list:
 		if item is Dictionary:
 			existing_ids[_shop_item_id(item)] = true
-	var item_ids: Array = AE.all_equipment.keys()
+	var item_ids := EquipmentService.ids()
 	item_ids.sort()
 	for item_id_value in item_ids:
 		var item_id := str(item_id_value)
 		if existing_ids.has(item_id):
 			continue
-		var item_data: Variant = AE.all_equipment.get(item_id, {})
-		if not (item_data is Dictionary):
+		var item_definition := EquipmentService.definition(StringName(item_id))
+		if item_definition == null:
 			continue
-		var category := _shop_category_for_type(str(item_data.get(DataKeys.TYPE, "")))
+		var category := _shop_category_for_type(item_definition.category)
 		if category == "":
 			continue
 		_custom_shop_item_types[item_id] = category
-		total_item_list.push_back(
-			{"id": item_id, "price": get_price_by_quality(str(item_data.get(DataKeys.QUALITY, "")))}
-		)
+		total_item_list.push_back({"id": item_id, "price": get_price_by_quality(item_definition.quality)})
 
 
 func _shop_category_for_type(item_type: String) -> String:
@@ -338,8 +337,8 @@ func _current_role_owner_name() -> String:
 
 
 func _is_fashion_for_current_role(item_id: String) -> bool:
-	var item_data: Dictionary = AE.all_equipment[item_id]
-	var owner := str(item_data.get("所属", "")).strip_edges()
+	var item_definition := EquipmentService.definition(StringName(item_id))
+	var owner := item_definition.origin.strip_edges()
 	return owner == "通用" or owner == _current_role_owner_name()
 
 
@@ -388,7 +387,7 @@ func _is_shop_item_visible(item) -> bool:
 	if not item is Dictionary:
 		return false
 	var item_id := _shop_item_id(item)
-	if item_id == "" or not AE.all_equipment.has(item_id):
+	if item_id == "" or not EquipmentService.has(StringName(item_id)):
 		return false
 	var item_category := str(_custom_shop_item_types.get(item_id, ""))
 	if current_type == SHOP_CATEGORY_ALL:
@@ -409,7 +408,7 @@ func set_current_page_type_items():
 		for item in total_item_list:
 			if _is_shop_item_visible(item):
 				var item_id := _shop_item_id(item)
-				var item_name = str(AE.all_equipment[item_id].get(DataKeys.NAME, item_id)).to_lower()
+				var item_name := EquipmentService.definition(StringName(item_id)).display_name.to_lower()
 				if keyword in item_name:
 					get_target_list.append(item)
 	else:

@@ -4,7 +4,7 @@
 >
 > 最后更新：2026-11-02（Phase 17 与 Phase 18~20 均已完成并归档，归档页见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 21 进行中：21-1A（Windows-only）、21-1B、21-1C、21-3 工厂族与 21-4A/21-4B 完成；21-2A 平台/后端确认、最低设备确认与 21-2B 一并暂缓，21-2C 已完成 PCK 复跑、Windows release 启动与 `level_1` 冒烟；Phase 30-1 已完成 `level_48` 布局试点，Phase 30-2 已完成外部怪物映射与原始 ZMWS 驱动，Phase 30-3 收口完成（69 个脚本迁出布局、6 个空数据表删除、10 个动态/非连续例外登记），Phase 30-4 边界收尾完成并归档（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：55 个逻辑脚本/30 个标准脚本逐项复核；Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 UI Theme 与高密度/低密度/中高密度/关卡结算/运行时/收口批次完成；PCK 4191/4191 可达）；Phase 31-1 已完成视差迁移；当前 11 个 Autoload）
 >
-> 2026-11-02 补充：Phase 33-0/33-1/33-2 已完成；33-3 第一簇（UI/说明/背包）已完成（`EquipmentService`、28 个原消费者 + Catalog 数据助手），其余集群与 33-4/33-5 未启动。详见 [`equipment_data_contract.md`](equipment_data_contract.md)。
+> 2026-11-02 补充：Phase 33-0/33-1/33-2 已完成；33-3 第一簇（UI/说明/背包）与第二簇（商店/奖励/掉落/关卡，9 个文件）已完成，第二簇 `AE.all_equipment`/`AE.` 代码访问为 0；剩余 11 个文件、97 处 `AE.all_equipment` 属于第三/第四簇，33-4/33-5 未启动。详见 [`equipment_data_contract.md`](equipment_data_contract.md)。
 
 ---
 
@@ -100,6 +100,7 @@ Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变�
 
 | 验证 | 结果 | 说明 |
 |:---|:---|:---|
+| 2026-11-02 Phase 33-3 第二簇 商店/奖励/掉落/关卡 | 迁移 9 个文件、39 处原 `AE.all_equipment`；第二簇 `AE.all_equipment`/`AE.` 代码访问 **0**。商店静态字段改读 `EquipmentDefinition`，旧字典形状的 `eq_prop` 使用 `EquipmentService.data`；法宝五行改 `EquipmentRules.get_wx()`；关卡掉落、灵魂晶石、`qhsbx` 与失败结算改经服务。**验证**：`ui-factories` PASS（20.68s）、`level-entry` PASS（4.94s，`fall_boxes_built`/`fall_boxes_resolved` PASS）、`archive_probe_runner` **293/293 PASS**（13.86s，含商店购买/神秘商店/奖励/失败结算）、`level_1` PASS（25.15s，4 阶段，日志 0/0/0）、`health_check` **0 Parse / 0 Error / 0 Warning**（15.11s）、`check_all --godot-bin` **9/9 PASS（28.11s）**。 | 剩余 11 个文件、97 处 `AE.all_equipment`：`ldl/` 9 个文件、`mount_panel`、`player_data`；33-3 第三/第四簇、33-4/33-5 未启动 |
 | 2026-11-02 Phase 33-3 第一簇 UI/说明/背包 | 新增 `EquipmentService`；迁移 28 个原消费者 + `equipment_catalog_data`；第一簇 `AE.all_equipment`/`AE.` 代码访问 **0**。`equipment_properies` 改用 `EquipmentRules`，Catalog 页面改用 Store 查询。**验证**：`ui-factories` PASS（16.64s）、`ui-theme` PASS（4.69s）、`equipment_catalog_page` headless PASS、`level_1` PASS（0/0）、`coop_probe_runner` **26/26 PASS**（123.38s）；`check_all --godot-bin` **9/9 PASS（23.45s）**。 | 剩余 20 个消费者（商店/奖励/掉落/关卡、锻造/合成/分解、PlayerData/坐骑/任务）未迁移；33-4/33-5 未启动 |
 | 2026-11-02 Phase 33-2 装备规则层 | 新增 `EquipmentRoller`、`EquipmentRules`、258 个 `EquipmentStatRoll` 规格与 `random_rolls`；恢复 163 条定义的随机字段。旧实现对照：**20,640 个字段值 / 258 个随机字段 / 980 个有效规则用例 / 8 槽宝石**，**0 差异**（浮点按 `is_equal_approx`；整数、字段存在性与容器精确）；旧随机值范围/类型与 32 次/规格抽样 PASS。`equipment_catalog --check`、`equipment_data_audit --check` PASS；`check_all --godot-bin` **9/9（28.20s）**。 | 旧 `AE.all_equipment` 路径未改；新规则不写定义；`get_wx` 保留旧随机化行为；33-3 才迁移消费者 |
 | 2026-11-02 Phase 33-0/33-1 装备数据契约 | 构建源 **1,035 条 / 32 字段**；**163 条随机定义 / 258 个随机字段值**；8 个种子下确定性字段逐 ID/逐字段 **0 差异**；构建源与 Catalog 往返 **0 差异**；Godot 加载 **1,035 条**、Store 查询/分类/缺失 ID 失败语义 PASS；生成器/审计 `--check` PASS；`check_all --godot-bin` **9/9（29.43s）**；`level_1` **PASS 24.48s（0/0）** | 旧 `AE.all_equipment` 运行路径未改；随机字段只登记、不采样；新增 `EquipmentDefinition`/`EquipmentCatalog`/`EquipmentStore`、`equipment_sources.json`、生成器/审计与 `equipment_catalog.tres`；不新增 Autoload |

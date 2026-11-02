@@ -29,13 +29,12 @@ static func _execute(
 	item_wx: Array,
 	use_purchase_count: bool
 ) -> Dictionary:
-	if item_name == "" or not AE.all_equipment.has(item_name):
+	if item_name == "" or not EquipmentService.has(StringName(item_name)):
 		return _failure("商品信息错误！")
 	if use_purchase_count and int(PlayerData.player_data.get(DataKeys.SHOP_PURCHASE_COUNT, 0)) <= 0:
 		return _failure("购买次数不足！！")
 	var count := clampi(buy_num, 1, MAX_BUY_NUM)
-	var item_data: Dictionary = AE.all_equipment[item_name]
-	var item_type := str(item_data.get(DataKeys.TYPE, ""))
+	var item_type := EquipmentService.definition(StringName(item_name)).category
 	var free_slots := _free_slot_count(item_type, item_name)
 	if not _can_receive(item_type, item_name, count, free_slots):
 		if free_slots == 0 and not _has_existing_stack(item_type, item_name):
@@ -118,7 +117,7 @@ static func _grant_items(item_name: String, item_type: String, count: int, item_
 				if not PlayerData.add_zb(item_name, item_level, {}):
 					return false
 		"法宝":
-			var wx: Array = item_wx if not item_wx.is_empty() else AE.get_wx()
+			var wx: Array = item_wx if not item_wx.is_empty() else EquipmentService.rules().get_wx()
 			for _index in range(count):
 				if not PlayerData.add_fb(item_name, item_level, wx, {}):
 					return false

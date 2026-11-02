@@ -305,8 +305,8 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 会话设置 | `MainSet.set_data` | 音乐、画质、剧情跳过、自动战斗、难度、刷怪速度/数量、主菜单背景等 |
 | 持久化 | `MemoryClass` | `user://MyAr_<n>.json` 加密档、`.bak`、`.tmp`、后台线程、`user://MainGame.json` 设置、`user://.save_key` 稳定密钥 |
 | 契约常量 | `DataKeys` | 字典键的统一常量入口与安全访问器 |
-| 装备静态定义 | `EquipmentDefinition` / `EquipmentCatalog` | 33-1 构建期只读 Catalog（1,035 条、32 字段）；运行时索引由 `EquipmentStore` 提供，旧 `AE.all_equipment` 在 33-4 前仍是现有消费者路径 |
-| 装备规则 | `EquipmentRoller` / `EquipmentRules` | 33-2 按 258 个随机规格物化定义，服务化强化/神铸/宝石/五行；不写 Catalog；33-3 第一簇通过 `EquipmentService` 使用 |
+| 装备静态定义 | `EquipmentDefinition` / `EquipmentCatalog` | 33-1 构建期只读 Catalog（1,035 条、32 字段）；运行时索引由 `EquipmentStore` 提供；33-3 第一/第二簇经 `EquipmentService` 查询，剩余 11 个文件在 33-4 前仍走旧 `AE.all_equipment` |
+| 装备规则 | `EquipmentRoller` / `EquipmentRules` | 33-2 按 258 个随机规格物化定义，服务化强化/神铸/宝石/五行；不写 Catalog；33-3 第一/第二簇通过 `EquipmentService` 使用 |
 
 ### 5.2 `PlayerDataStore`
 
@@ -618,8 +618,8 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 流式帧序列 | `FrameSequence` + `FrameSequenceCatalog` + `FrameSequenceStore`，构建期生成、运行时只读 |
 | 关卡预载清单 | `LevelPreloadCatalog` + `LevelPreloadStore`，构建期从关卡脚本生成，运行时只读 |
 | 关卡布局 | `LevelLayoutEntry` / `LevelStageSpec` / `LevelSpawnPoint` + `LevelLayoutCatalog` / `LevelLayoutStore`；98 个登记布局（`level_48`、20 个原始 ZMWS 代表关卡、8 个 Rogue 24 代表关卡、69 个已迁移 BHYH 关卡），构建期生成、运行时只读 |
-| 装备定义 | `EquipmentDefinition` / `EquipmentCatalog` + `EquipmentStore`；1,035 条、32 字段，构建期由 `equipment_sources.json` 生成；随机字段由 `random_rolls` 登记；UI/说明/背包第一簇经 `EquipmentService` 查询，其余 `AE` 路径待 33-4 |
-| 装备规则 | `EquipmentRoller` + `EquipmentRules`；258 个随机规格、旧字典形状快照、强化/神铸/宝石/五行；33-2 已用旧实现对照；33-3 第一簇经 `EquipmentService` 接入 |
+| 装备定义 | `EquipmentDefinition` / `EquipmentCatalog` + `EquipmentStore`；1,035 条、32 字段，构建期由 `equipment_sources.json` 生成；随机字段由 `random_rolls` 登记；33-3 第一/第二簇经 `EquipmentService` 查询，剩余 11 个文件待 33-4 |
+| 装备规则 | `EquipmentRoller` + `EquipmentRules`；258 个随机规格、旧字典形状快照、强化/神铸/宝石/五行；33-2 已用旧实现对照；33-3 第一/第二簇经 `EquipmentService` 接入 |
 | 外部怪物映射 | `ExternalMonsterCatalog` + `ExternalMonsterStore`；精确名称优先、唯一归一化补 6 条，当前 512 条，未匹配项不静默回退 |
 | 原始 ZMWS 关卡驱动 | `ZmwsLevel` + `Scene/base/zmws_level_base.tscn` + 28 个 `Scene/level/zmws_playable/*.tscn` 包装场景（20 个 Phase 30 代表关 + 8 个 Rogue 24 非战斗代表关） |
 | 双人会话 | `LocalCoop` 独立数据/属性/输入实例与槽位路由；`slot_snapshot()` 枚举槽位所有者，`shared_keys()` 登记共享账本键，`save_profile` 剥离 2P 档案的共享副本 |

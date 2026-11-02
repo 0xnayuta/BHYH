@@ -25,12 +25,13 @@ func _physics_process(_delta: float) -> void:
 			_set_total_num(1)
 		elif total_num > MAX_SHOP_BUY_NUM:
 			_set_total_num(MAX_SHOP_BUY_NUM)
-	if _item_name != "" and AE.all_equipment.has(_item_name):
-		item_name.text = str(AE.all_equipment[_item_name].get(DataKeys.NAME, _item_name))
+	if _item_name != "" and EquipmentService.has(StringName(_item_name)):
+		var item_definition := EquipmentService.definition(StringName(_item_name))
+		item_name.text = item_definition.display_name
 		items.set_button_icon(ItemUtils.item_icon(_item_name))
 		items.qh_level = 0
 		items.wx = []
-		items.eq_prop = AE.all_equipment[_item_name]
+		items.eq_prop = EquipmentService.data(StringName(_item_name))
 	lh_need.text = str(_effective_price())
 
 
