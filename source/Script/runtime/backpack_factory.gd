@@ -20,10 +20,12 @@ const SKILL_SELECT_PATH := "res://Scene/back_pack/skill_select.tscn"
 const SELL_OR_EQU_PATH := "res://Scene/back_pack/sell_or_equ.tscn"
 const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
 const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
+const EQUIPMENT_FALL_PATH := "res://Scene/back_pack/equipment_fall.tscn"
 const BOX_CLICK_COOLDOWN_FRAMES := 6
 
 var _host: Node = null
 var _scenes: Dictionary = {}
+var _equipment_fall_scene: PackedScene = null
 var _box_click_cooldown_frames := 0
 
 
@@ -52,6 +54,7 @@ func tick_box_click_cooldown() -> void:
 
 func clear_scene_caches() -> void:
 	_scenes.clear()
+	_equipment_fall_scene = null
 
 
 func _scene(path: String) -> PackedScene:
@@ -214,4 +217,17 @@ func add_buff_icon_text(parent, text_):
 		return null
 	target.z_index = 99
 	target._texture = text_
+	return target
+
+
+func fall_item(parent, position, item_name, amount):
+	var resolved_name := preload("res://Script/data/yutu_equipment_data.gd").role_drop(str(item_name))
+	if _equipment_fall_scene == null:
+		_equipment_fall_scene = _host.load_cached_scene(EQUIPMENT_FALL_PATH)
+	var target = _host.instance_scene(_equipment_fall_scene, parent)
+	if target == null:
+		return null
+	target.position = position
+	target.item_name = resolved_name
+	target._num = amount
 	return target

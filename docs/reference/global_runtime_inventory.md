@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1 已完成（2026-11-02）。当前规模为 **86 个字段、260 个公开函数**；删除与迁移清单见 §6。
+> **状态**：Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 已完成（2026-11-02）。当前规模为 **65 个字段、260 个公开函数**；删除与迁移清单见 §6。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3D-2 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-4 及后续阶段迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,8 +14,8 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,179（22-1 基线 3,516；22-2/22-3A/22-3B/22-3C/22-3D-1 共删除 337 行） |
-| `var` 字段 | 86（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19，22-3C 迁移 11 + 删除 5，22-3D-1 迁出 5） |
+| `global.gd` 行数 | 3,087（22-1 基线 3,516；22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 共删除 429 行） |
+| `var` 字段 | 65（22-1 基线 141；22-2 删除 10，22-3A 迁出 5，22-3B 删除 19，22-3C 迁移 11 + 删除 5，22-3D-1 迁出 5，22-3D-2 迁出/删除 21） |
 | 公开函数（非 `_` 前缀） | 260（22-1 基线 273；22-2 删除 12，22-3D-1 删除 `check_combo_milestone`） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
@@ -62,11 +62,15 @@ grep -RIn '"/root/' source --include='*.gd'
 
 `is_frist`、`is_show` 已迁入 `UiRuntime` 的一次性消费状态；`box_count` 已迁入 `BackpackFactory` 的点击冷却；`_last_combo_value` 与 `_pending_combo_milestones` 已迁入 `CombatPoolRuntime` 的连击里程碑状态。`Global` 不再保留四类字段。
 
-### 2.6 锻造、背包与瞬时面板状态（10）
+### 2.6 锻造、背包与瞬时面板状态（已迁出）
 
-`file_num`, `forge`, `fb_cd`, `is_in_ldl`, `get_target`, `lj_times`, `lj_count`, `wait_time`, `need_change_item`, `player_dir`
-
-**判定**：瞬时 UI/场景状态候选。优先归面板、`ForgeFactory`、背包命令或场景上下文；无消费者的历史字段删除。`mytime`、`player_pos_x`、`zb_packisfull`、`dj_packisfull`、`xhp_packisfull`、`remove_jq` 已在 22-2 删除。`get_target`、`lj_times`、`lj_count` 等需先确认是否属于战斗/关卡状态，不能仅凭命名迁移。
+- `file_num` -> `MainSet.FILE_VALUE` 常量；
+- `forge` -> `ForgeFactory` 活动面板；
+- `is_in_ldl` -> `UiRuntime` Ldl 模式；
+- `lj_times`、`lj_count` -> `CombatPoolRuntime` 连击计数与空闲窗口；
+- `need_change_item` -> `ForgeFactory` 分解脏标记；
+- `player_dir` -> `RunContext` 玩家朝向；
+- `get_target`、`wait_time` 无消费者，删除；`fb_cd` 只写 -10/0 且恒为可用，删除。
 
 ### 2.7 档案、保存与运行代次（23）
 
@@ -80,11 +84,14 @@ grep -RIn '"/root/' source --include='*.gd'
 
 **判定**：全部是 26 个普通子服务的引用，保留在 `Global` 的组合根内；不得把服务内部字段重新搬回 `Global`。`_monsters_to_track` 已随 22-2 删除。
 
-### 2.9 场景/UI 遗留引用（11）
+### 2.9 场景/UI 遗留引用（已迁出）
 
-`lhhjbutton`, `target_scene`, `sell_or_equ`, `fall_equ`, `nmw_hands`, `sound`, `llbt_challenge`, `lhhj`, `listbutton`, `lhhjhelp`, `return_back_map`
-
-**判定**：`target_scene` 归 `SceneFlow`；其余是历史场景/UI 节点或提示引用，优先迁到对应工厂、`UiRuntime`、`AudioRuntime` 或删除。新增 UI 不得继续写这些全局槽位。`ui_28` 与 `_monsters_to_track`/`track_monster` 已在 22-2 删除。
+- `target_scene` -> `SceneFlow.target_scene`，加载页经 `get_target_scene` / `set_target_scene` 读取；
+- `lhhjbutton`、`lhhjhelp`、`listbutton`、`lhhj`、`return_back_map` -> `MenuPanelFactory`；
+- `fall_equ` -> `BackpackFactory.fall_item`；
+- `nmw_hands` -> `MonsterDisplayFactory.create_hands`；
+- `llbt_challenge` -> `LevelSceneFactory.add_llbt_challenge`；
+- `sell_or_equ`、`sound` 无消费者，删除。
 
 ---
 
@@ -414,15 +421,34 @@ main_remove_child, on_fresh, track_monster
 - `coop_probe_runner` **26/26 PASS**；
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
 
-### 6.7 22-3D-2 交接
+### 6.7 Phase 22-3D-2 结果
 
-下一批按以下顺序执行，不跳步：
+- §2.6 与 §2.9 共 21 个字段迁出或删除；
+- `file_num` 收敛为 `MainSet.FILE_VALUE`；`forge` 与分解脏标记归 `ForgeFactory`；`is_in_ldl` 归 `UiRuntime`；
+- 连击计数、超时空闲窗口与里程碑归 `CombatPoolRuntime`；玩家朝向归 `RunContext`；
+- 场景槽位分别归 `MenuPanelFactory`、`LevelSceneFactory`、`BackpackFactory`、`MonsterDisplayFactory` 与 `SceneFlow`；
+- `Global.addlistbutton` / `addlhhj` / `addhdgqmap` / `addllbt_challenge` / `create_hands` / `fall_item` 等正式入口保留为薄转发，未新增 Autoload。
 
-1. **§2.6 锻造/背包/瞬时面板**：逐字段确认消费者；`get_target`、`wait_time` 等无消费者条目删除，其余迁入 `ForgeFactory`、背包面板或场景上下文。
-2. **§2.9 场景/UI 引用**：`target_scene` 归 `SceneFlow`，其余节点/提示引用迁入对应工厂或删除；临时 UI 必须登记。
-3. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
+**验证**：
 
-每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `ui-factories`、`run-context` 场景探针 **PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **17/17 PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.8 22-4 交接
+
+下一批进入 **22-4 守卫**：
+
+1. 评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；
+2. 守卫必须先有坏样本、`--self-test` 与 `--fail-on-error` 证据；
+3. 复核 `Global` 剩余 65 字段是否仍有可迁移状态；未迁移项登记所有者、理由与出口；
+4. 更新 `architecture.md`、`autoload_boundary_matrix.md` 与本清单；不修改已归档记录。
+
+阶段出口：`Global` 不再新增业务状态；服务/会话/关卡状态有单一写入者；相关矩阵与状态一致。
 
 ---
 

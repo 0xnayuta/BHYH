@@ -234,18 +234,15 @@ func _on_pressed() -> void:
 				set_button_icon(load("res://Art/backpack/cb.png"))
 			PlayerData.player_data[DataKeys.WINGS].clear()
 		"fb":
-			if Global.fb_cd <= 0:
-				if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-					var _name = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
-					var ql = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
-					var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
-					eq_prop = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
-					PlayerData.add_fb(_name, ql, wx, eq_prop)
-				else:
-					set_button_icon(load("res://Art/backpack/fb.png"))
-				PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
+			if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
+				var _name = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
+				var ql = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
+				var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
+				eq_prop = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
+				PlayerData.add_fb(_name, ql, wx, eq_prop)
 			else:
-				Global.add_message_show(NodeUtils.ancestor(self, 5), "当前法宝正在使用，无法更换！！", 1.5, Vector2(80, 0))
+				set_button_icon(load("res://Art/backpack/fb.png"))
+			PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
 	qh_level = 0
 	RoleProp.get_equ_last_pro()
 	RoleProp.get_last_prop()

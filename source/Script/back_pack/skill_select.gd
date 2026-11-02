@@ -143,8 +143,5 @@ func check_i_schoose() -> void:
 
 
 func _on_choose_pressed() -> void:
-	if Global.fb_cd <= 0:
-		PlayerData.player_data["实战法宝"] = weapon_name
-		MemoryClass.request_save("back_pack_magic_select")
-	else:
-		Global.add_message_show(get_parent().get_parent(), "当前法宝正在使用，无法更换！", 1.5, Vector2(0, 0))
+	PlayerData.player_data["实战法宝"] = weapon_name
+	MemoryClass.request_save("back_pack_magic_select")

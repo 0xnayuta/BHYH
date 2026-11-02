@@ -173,7 +173,6 @@ func _ready() -> void:
 
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
-	Global.fb_cd = 0
 	get_tree().paused = false
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()

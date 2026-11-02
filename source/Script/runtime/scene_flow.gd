@@ -18,6 +18,14 @@ func get_scene_request_generation() -> int:
 	return _scene_request_generation
 
 
+func get_target_scene() -> String:
+	return target_scene
+
+
+func set_target_scene(value: String) -> void:
+	target_scene = value
+
+
 func is_scene_request_current(generation: int) -> bool:
 	return generation == _scene_request_generation
 

@@ -12,6 +12,7 @@ const FLY_STAGE_SCENE_PATH := "res://Scene/level/zlw_fly_floor.tscn"
 const TRAP_SCENE_PATH := "res://Scene/level/zztw_trap.tscn"
 const DSG_CHOOSE_SCENE_PATH := "res://Scene/level/dsg_choose.tscn"
 const CAMERA_SCENE_PATH := "res://Scene/level/camera.tscn"
+const LLBT_CHALLENGE_SCENE_PATH := "res://Scene/level/llbt_challenge.tscn"
 
 var _host = null
 var _stage_scene: PackedScene = null
@@ -19,6 +20,7 @@ var _fly_stage_scene: PackedScene = null
 var _trap_scene: PackedScene = null
 var _dsg_choose_scene: PackedScene = null
 var _camera_scene: PackedScene = null
+var _llbt_challenge_scene: PackedScene = null
 
 
 func setup(host: Node) -> void:
@@ -31,6 +33,7 @@ func clear_scene_caches() -> void:
 	_trap_scene = null
 	_dsg_choose_scene = null
 	_camera_scene = null
+	_llbt_challenge_scene = null
 
 
 func get_stage_scene() -> PackedScene:
@@ -107,4 +110,14 @@ func add_dsg_choose(parent):
 	if target == null:
 		return null
 	target.position = Vector2(0, 0)
+	return target
+
+
+func add_llbt_challenge(parent, position):
+	if _llbt_challenge_scene == null:
+		_llbt_challenge_scene = _host.load_cached_scene(LLBT_CHALLENGE_SCENE_PATH)
+	var target = _host.instance_scene(_llbt_challenge_scene, parent)
+	if target == null:
+		return null
+	target.position = position
 	return target

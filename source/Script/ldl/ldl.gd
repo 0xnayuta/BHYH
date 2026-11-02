@@ -41,7 +41,7 @@ func _ready() -> void:
 	_fit_to_fullscreen()
 	if not get_viewport().size_changed.is_connected(_fit_to_fullscreen):
 		get_viewport().size_changed.connect(_fit_to_fullscreen)
-	Global.is_in_ldl = true
+	Global.get_ui_runtime().set_ldl_mode_active(true)
 	add_qh_jm()
 
 
@@ -94,7 +94,7 @@ func _on_return_pressed() -> void:
 	remove_sz_jm()
 	remove_cg_jm()
 	remove_onekey_jm()
-	Global.is_in_ldl = false
+	Global.get_ui_runtime().set_ldl_mode_active(false)
 	queue_free()
 
 

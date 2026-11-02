@@ -15,10 +15,35 @@ var _forge_help_scene: PackedScene = null
 var _forges_scene: PackedScene = null
 var _decompose_help_scene: PackedScene = null
 var _decompose_scene: PackedScene = null
+var _active_forge: Node = null
+var _decompose_item_changed := true
 
 
 func setup(host: Node) -> void:
 	_host = host
+
+
+func set_active_forge(forge_node: Node) -> void:
+	_active_forge = forge_node
+
+
+func get_active_forge() -> Node:
+	if _active_forge != null and is_instance_valid(_active_forge) and not _active_forge.is_queued_for_deletion():
+		return _active_forge
+	_active_forge = null
+	return null
+
+
+## 分解面板的脏标记：箱子设置，面板消费一次。
+func mark_decompose_item_changed() -> void:
+	_decompose_item_changed = true
+
+
+func consume_decompose_item_changed() -> bool:
+	if not _decompose_item_changed:
+		return false
+	_decompose_item_changed = false
+	return true
 
 
 func get_forge_help_scene() -> PackedScene:

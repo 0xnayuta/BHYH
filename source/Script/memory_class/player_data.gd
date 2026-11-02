@@ -4744,7 +4744,7 @@ func remove_dj(_name, page, num):
 	player_data[DataKeys.ITEM_LIST]["页码" + str(page)][x][DataKeys.COUNT] -= num
 	if last_num <= 0:
 		player_data[DataKeys.ITEM_LIST]["页码" + str(page)].remove_at(x)
-	if not Global.is_in_ldl:
+	if not Global.get_ui_runtime().is_ldl_mode_active():
 		all_coin = EquipmentService.definition(StringName(str(_name))).price * num
 		add_soul(all_coin)
 	var list = {"名字": _name, "数量": last_num, "获得灵魂": all_coin, "卖出数量": num}
@@ -4859,7 +4859,7 @@ func remove_xhp(_name, page, num):
 	player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(page)][x][DataKeys.COUNT] -= num
 	if last_num <= 0:
 		player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(page)].remove_at(x)
-	if not Global.is_in_ldl:
+	if not Global.get_ui_runtime().is_ldl_mode_active():
 		all_coin = EquipmentService.definition(StringName(str(_name))).price * num
 		add_soul(all_coin)
 	var list = {"名字": _name, "数量": last_num, "获得灵魂": all_coin, "卖出数量": num}
@@ -4923,8 +4923,8 @@ func _process(_delta: float) -> void:
 				skill_keys[key_name] = "by"
 
 	if MainSet.set_data.has("FileValue"):
-		if Global != null and float(MainSet.set_data["FileValue"]) < float(Global.file_num):
-			MainSet.set_data["FileValue"] = Global.file_num
+		if Global != null and float(MainSet.set_data["FileValue"]) < float(MainSet.FILE_VALUE):
+			MainSet.set_data["FileValue"] = MainSet.FILE_VALUE
 
 	if MainSet.set_data["xg"] and not _invalid_data_exit_started:
 		_invalid_data_exit_started = true

@@ -129,6 +129,10 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 	checks["ui_welcome_once_only"] = not ui_runtime.consume_welcome_message()
 	checks["ui_first_level_intro_once"] = ui_runtime.consume_first_level_intro()
 	checks["ui_first_level_intro_once_only"] = not ui_runtime.consume_first_level_intro()
+	ui_runtime.set_ldl_mode_active(true)
+	checks["ui_ldl_mode_active"] = ui_runtime.is_ldl_mode_active()
+	ui_runtime.set_ldl_mode_active(false)
+	checks["ui_ldl_mode_inactive"] = not ui_runtime.is_ldl_mode_active()
 	checks["popup_factory_node"] = _has_child_node("PopupFactory")
 	checks["shop_factory_node"] = _has_child_node("ShopFactory")
 	checks["backpack_factory_node"] = _has_child_node("BackpackFactory")
@@ -365,6 +369,12 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	if h_hjm != null:
 		created.append(h_hjm)
 	checks["backpack_scene_cached"] = Global.is_resource_cached(BACK_PACK_PATH)
+	var fall: Node = Global.fall_item(host, Vector2(45, 46), _first_equipment_id(), 1)
+	await _settle()
+	checks["backpack_fall_created"] = fall != null and fall.get_parent() == host
+	checks["backpack_fall_position"] = fall != null and fall.position == Vector2(45, 46)
+	if fall != null:
+		created.append(fall)
 	var backpack_factory := Global.get_backpack_factory()
 	backpack_factory.start_box_click_cooldown()
 	checks["backpack_box_cooldown_started"] = backpack_factory.is_box_click_blocked()
@@ -491,6 +501,11 @@ func _check_combat_pool(checks: Dictionary) -> void:
 		func(milestone: int) -> void:
 			milestones.append(milestone)
 	)
+	pool.clear_combo_state()
+	checks["combo_count_increment"] = pool.register_combo_hit() == 1 and pool.register_combo_hit() == 2
+	for _frame in range(101):
+		pool.tick_combo_window()
+	checks["combo_count_timeout"] = pool.get_combo_count() == 0
 	pool.check_combo_milestone(39)
 	pool.check_combo_milestone(40)
 	pool.check_combo_milestone(40)
@@ -566,6 +581,12 @@ func _check_monster_display_family(checks: Dictionary) -> void:
 	checks["basic_moment_position"] = moment != null and moment.position == Vector2(41, 42)
 	if moment != null:
 		created.append(moment)
+	var hands: Node = Global.create_hands(host, true, Vector2(43, 44))
+	await _settle()
+	checks["monster_hands_created"] = hands != null and hands.get_parent() == host
+	checks["monster_hands_position"] = hands != null and hands.position == Vector2(43, 44)
+	if hands != null:
+		created.append(hands)
 	checks["monster_display_scenes_cached"] = (
 		Global.is_resource_cached(MONSTER_HEAD_INFO_PATH)
 		and Global.is_resource_cached(BOSS_INFO_PATH)
@@ -716,6 +737,12 @@ func _check_forge_family(checks: Dictionary) -> void:
 		created.append(decompose)
 	checks["forge_factory_node"] = _has_child_node("ForgeFactory")
 	checks["forge_factory_parent"] = Global.get_forge_factory().get_parent() == Global
+	checks["forge_active_registered"] = Global.get_forge_factory().get_active_forge() == forges
+	Global.get_forge_factory().mark_decompose_item_changed()
+	checks["forge_decompose_change_consumed"] = (
+		Global.get_forge_factory().consume_decompose_item_changed()
+		and not Global.get_forge_factory().consume_decompose_item_changed()
+	)
 	checks["forge_scenes_cached"] = (
 		Global.is_resource_cached(FORGE_HELP_PATH)
 		and Global.is_resource_cached(FORGES_PATH)
@@ -992,6 +1019,41 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	checks["menu_cd_jm_position"] = cd_jm != null and cd_jm.position == Vector2(33, 34)
 	if cd_jm != null:
 		created.append(cd_jm)
+	var return_map: Node = Global.addhdgqmap(host, Vector2(35, 36))
+	await _settle()
+	checks["menu_return_map_created"] = return_map != null and return_map.get_parent() == host
+	checks["menu_return_map_registered"] = (
+		return_map != null and ui_runtime.is_transient_ui_registered(return_map)
+	)
+	if return_map != null:
+		created.append(return_map)
+	var lhhj_help: Node = Global.addlhhjhelp(host, Vector2(37, 38))
+	await _settle()
+	checks["menu_lhhj_help_created"] = lhhj_help != null and lhhj_help.get_parent() == host
+	if lhhj_help != null:
+		created.append(lhhj_help)
+	var list_button: Node = Global.addlistbutton(host, "probe_list", host, 3)
+	await _settle()
+	checks["menu_list_button_created"] = list_button != null and list_button.get_parent() == host
+	checks["menu_list_button_fields"] = (
+		list_button != null
+		and str(list_button.self_name) == "probe_list"
+		and list_button.father == host
+		and int(list_button.num) == 3
+	)
+	if list_button != null:
+		created.append(list_button)
+	var lhhj: Node = Global.addlhhj(host, Vector2(39, 40))
+	await _settle()
+	checks["menu_lhhj_created"] = lhhj != null and lhhj.get_parent() == host
+	checks["menu_lhhj_registered"] = lhhj != null and ui_runtime.is_transient_ui_registered(lhhj)
+	if lhhj != null:
+		created.append(lhhj)
+	var lhhj_button: Node = Global.addlhhjbutton(host, "probe_lhhj", host)
+	await _settle()
+	checks["menu_lhhj_button_created"] = lhhj_button != null and lhhj_button.get_parent() == host
+	if lhhj_button != null:
+		created.append(lhhj_button)
 	checks["menu_panel_scenes_cached"] = (
 		Global.is_resource_cached(GAME_SET_PATH)
 		and Global.is_resource_cached(SKILL_KEY_SET_PATH)
@@ -1051,6 +1113,11 @@ func _check_level_scene_family(checks: Dictionary) -> void:
 	checks["camera_fields"] = (camera != null and camera.position == Vector2(25, 26) and int(camera.max_right) == 1200)
 	if camera != null:
 		created.append(camera)
+	var llbt_challenge: Node = Global.addllbt_challenge(host, Vector2(27, 28))
+	await _settle()
+	checks["llbt_challenge_created"] = llbt_challenge != null and llbt_challenge.get_parent() == host
+	if llbt_challenge != null:
+		created.append(llbt_challenge)
 	checks["level_scene_scenes_cached"] = (
 		Global.is_resource_cached(STAGE_PATH)
 		and Global.is_resource_cached(FLY_STAGE_PATH)

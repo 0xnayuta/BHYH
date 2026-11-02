@@ -24,6 +24,7 @@ var constellation_endless: bool = false
 var selected_eight_immortal_id: int = 0
 var selected_three_prince_id: int = 0
 var selected_constellation_level: int = 1
+var player_direction: bool = false
 
 # 玲珑宝塔挑战模式：入口按模式整体赋值；普通菜单清空全部模式。
 var llbt_endless_mode: bool = false
@@ -151,6 +152,14 @@ func get_selected_constellation_level() -> int:
 
 func set_selected_constellation_level(value: int) -> void:
 	selected_constellation_level = value
+
+
+func get_player_direction() -> bool:
+	return player_direction
+
+
+func set_player_direction(value: bool) -> void:
+	player_direction = value
 
 
 func set_llbt_challenge_modes(endless_mode: bool, continue_mode: bool, boss_mode: bool) -> void:

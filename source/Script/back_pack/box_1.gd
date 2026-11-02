@@ -40,7 +40,7 @@ func _get_strength_max_level(item_name: String) -> int:
 
 
 func _ready() -> void:
-	is_in_ldl = Global.is_in_ldl
+	is_in_ldl = Global.get_ui_runtime().is_ldl_mode_active()
 
 	if strength_source == "宠物背包":
 		get_type = "宠物装备"
@@ -79,7 +79,7 @@ func _physics_process(_delta: float) -> void:
 		gl_po = Global.popup_position_for_parent(popup_parent, Vector2(25, 20))
 		add_equ_box.position = gl_po
 
-	is_in_ldl = Global.is_in_ldl
+	is_in_ldl = Global.get_ui_runtime().is_ldl_mode_active()
 
 	if strength_source == "宠物背包":
 		get_type = "宠物装备"
@@ -304,7 +304,8 @@ func on_press_when_synthesis():
 
 
 func on_press_when_dz():
-	if Global.forge == null:
+	var forge := Global.get_forge_factory().get_active_forge()
+	if forge == null:
 		return
 	var item_data: Dictionary = EquipmentService.data_or_empty(str(get_item_name))
 	if item_data.is_empty():
@@ -320,12 +321,12 @@ func on_press_when_dz():
 		if type != "道具":
 			Global.add_message_show(_parent, str(item_name) + "不可以参与打造！", 1.5, Vector2(500, 305))
 			return
-		if Global.forge.zzs.get_children().size() <= 0:
+		if forge.zzs.get_children().size() <= 0:
 			if have != "制作书":
 				Global.add_message_show(_parent, "只有制作书可以参与打造！", 1.5, Vector2(500, 305))
 				return
 			else:
-				Global.forge.replace_book(get_item_name, qh_level, eq_prop)
+				forge.replace_book(get_item_name, qh_level, eq_prop)
 		else:
 			if have != "制作书":
 				var count_baozhu = 0
@@ -358,13 +359,13 @@ func on_press_when_dz():
 
 				var bz_prop = {"名字": get_item_name, "强化等级": qh_level, "Data": eq_prop.duplicate(true)}
 				PlayerData.player_data["宝珠列表"].push_back(bz_prop)
-				Global.forge.addbzpic()
+				forge.addbzpic()
 				PlayerData.remove_dj(get_item_name, PlayerData.get_dj_page(get_item_name), 1)
 				return
 			else:
-				Global.forge.replace_book(get_item_name, qh_level, eq_prop)
+				forge.replace_book(get_item_name, qh_level, eq_prop)
 	else:
-		Global.forge.remove_bspic(forge_bzid)
+		forge.remove_bspic(forge_bzid)
 
 
 func _set_forge_book_box_properties(item_box) -> void:
@@ -577,9 +578,9 @@ func _on_pressed() -> void:
 	if add_equ_box != null:
 		add_equ_box.queue_free()
 	if get_item_name != "empty" and sell_box == null:
-		if Global.is_in_ldl == false:
+		if Global.get_ui_runtime().is_ldl_mode_active() == false:
 			on_press_when_in_back()
-		elif Global.is_in_ldl == true:
+		elif Global.get_ui_runtime().is_ldl_mode_active() == true:
 			match MLdl.current_mode:
 				"强化":
 					on_press_when_strength()
@@ -592,7 +593,7 @@ func _on_pressed() -> void:
 				"镶嵌":
 					on_press_when_xq()
 				"分解":
-					Global.need_change_item = true
+					Global.get_forge_factory().mark_decompose_item_changed()
 					on_press_whenfj()
 				"打造":
 					on_press_when_dz()

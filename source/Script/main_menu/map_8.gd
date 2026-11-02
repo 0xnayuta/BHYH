@@ -129,7 +129,6 @@ func _ready() -> void:
 		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
-	Global.fb_cd = 0
 	get_tree().paused = false
 	PlayerData.player_data["Map_num"] = max_page
 	PlayerData.player_data["Map_variant"] = ""

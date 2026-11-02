@@ -70,7 +70,7 @@ func _ready() -> void:
 			$background/Player.play("wait4")
 		5:
 			$background/Player.play("wait5")
-	Global.is_in_ldl = false
+	Global.get_ui_runtime().set_ldl_mode_active(false)
 	MemoryClass.main_dq()
 	name_1.text = _archive_display_name()
 	$background/gy.self_modulate = Color(1, 1, 1, 1)

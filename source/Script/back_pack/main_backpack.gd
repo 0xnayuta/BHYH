@@ -40,11 +40,13 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	sort_button.disabled = Global.is_in_ldl or choose_ms or is_instance_valid(sell_panel)
+	sort_button.disabled = Global.get_ui_runtime().is_ldl_mode_active() or choose_ms or is_instance_valid(sell_panel)
 	if not PlayerData.player_data["ieho"]:
 		if PlayerData.check_have_zb("xczg")[0]:
 			PlayerData.player_data["ieho"] = true
-	var show_pet_backpack: bool = Global.is_in_ldl == true and str(MLdl.current_mode) in ["强化", "镶嵌"]
+	var show_pet_backpack: bool = (
+		Global.get_ui_runtime().is_ldl_mode_active() == true and str(MLdl.current_mode) in ["强化", "镶嵌"]
+	)
 	pet_backpack_button.visible = show_pet_backpack
 	pl_sell.visible = not show_pet_backpack
 	if current_fl == 3 and not show_pet_backpack:
@@ -52,7 +54,7 @@ func _physics_process(_delta: float) -> void:
 		current_page = 1
 	_update_max_page()
 	current_page_text.text = str(current_page) + "/" + str(max_page)
-	if Global.is_in_ldl:
+	if Global.get_ui_runtime().is_ldl_mode_active():
 		pl_sell.disabled = true
 	else:
 		pl_sell.disabled = false
@@ -256,7 +258,7 @@ func _set_ldl_equipment_box_data() -> void:
 func set_box_data():
 	match current_fl:
 		0:
-			if Global.is_in_ldl:
+			if Global.get_ui_runtime().is_ldl_mode_active():
 				_set_ldl_equipment_box_data()
 				return
 			title.text = "装备背包"
@@ -381,7 +383,7 @@ func remove_choose():
 
 
 func _on_sort_pressed() -> void:
-	if Global.is_in_ldl or choose_ms or is_instance_valid(sell_panel):
+	if Global.get_ui_runtime().is_ldl_mode_active() or choose_ms or is_instance_valid(sell_panel):
 		return
 	if not PlayerData.organize_backpack():
 		return
@@ -416,7 +418,7 @@ func _on_xhp_pressed() -> void:
 
 
 func _on_pet_backpack_pressed() -> void:
-	if not Global.is_in_ldl or str(MLdl.current_mode) not in ["强化", "镶嵌"]:
+	if not Global.get_ui_runtime().is_ldl_mode_active() or str(MLdl.current_mode) not in ["强化", "镶嵌"]:
 		return
 	current_fl = 3
 	current_page = 1
@@ -427,7 +429,7 @@ func _update_max_page() -> void:
 	if current_fl == 3:
 		var pet_backpack: Array = PlayerData.ensure_shared_pet_backpack()
 		max_page = maxi(1, ceili(float(pet_backpack.size()) / PET_ITEMS_PER_PAGE))
-	elif current_fl == 0 and Global.is_in_ldl:
+	elif current_fl == 0 and Global.get_ui_runtime().is_ldl_mode_active():
 		var equipment_count := _get_ldl_equipment_entries().size()
 		max_page = maxi(1, ceili(float(equipment_count) / EQUIPMENT_ITEMS_PER_PAGE))
 	else:

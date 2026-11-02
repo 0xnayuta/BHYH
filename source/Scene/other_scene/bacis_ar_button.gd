@@ -99,8 +99,8 @@ func _on_pressed() -> void:
 		_open_creation_mode()
 		return
 	if PlayerData.player_data.has("FileValue"):
-		if float(PlayerData.player_data["FileValue"]) <= float(Global.file_num):
-			PlayerData.player_data["FileValue"] = Global.file_num
+		if float(PlayerData.player_data["FileValue"]) <= float(MainSet.FILE_VALUE):
+			PlayerData.player_data["FileValue"] = MainSet.FILE_VALUE
 		else:
 			Global.add_message_show(get_parent(), "当前游戏不是最新版本，请使用最新版本游戏！！！", 1.5, Vector2(470, 340))
 			return

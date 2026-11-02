@@ -82,7 +82,6 @@ func _ready() -> void:
 		var zm_player: AnimationPlayer = $CanvasLayer/zmPLAYER
 		if zm_player.has_animation("gdzm"):
 			zm_player.play("gdzm")
-	Global.fb_cd = -10
 	Global.get_run_context().set_last_level_path(str(self.scene_file_path))
 	remove_all_records()
 	Global.get_run_context().begin_level_timing()

@@ -66,13 +66,12 @@ func _ready() -> void:
 		print("错误：Global 未加载")
 		return
 	if MainSet.set_data.has("FileValue"):
-		if float(MainSet.set_data["FileValue"]) < float(Global.file_num):
-			MainSet.set_data["FileValue"] = Global.file_num
+		if float(MainSet.set_data["FileValue"]) < float(MainSet.FILE_VALUE):
+			MainSet.set_data["FileValue"] = MainSet.FILE_VALUE
 	Global.set_cd_path("")
 	Global.set_tower_floor(1)
 	Global.get_run_context().clear_llbt_challenge_modes()
 	Global.get_ui_runtime().windows = get_parent()
-	Global.fb_cd = 0
 	MemoryClass.remove_play_data()
 	RoleProp.ws_value = 0
 	MemoryClass.main_dq()

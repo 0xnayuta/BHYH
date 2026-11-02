@@ -135,7 +135,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	Global.forge = self
+	Global.get_forge_factory().set_active_forge(self)
 	addbzpic()
 	lh.text = str(5000)
 	remove_name_and_need()

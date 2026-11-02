@@ -129,14 +129,18 @@ func _run() -> void:
 
 	var previous_prince := context.get_selected_three_prince_id()
 	var previous_constellation := context.get_selected_constellation_level()
+	var previous_direction := context.get_player_direction()
 	context.set_selected_three_prince_id(4402)
 	context.set_selected_constellation_level(7)
+	context.set_player_direction(true)
 	checks["selected_ids"] = (
 		context.get_selected_three_prince_id() == 4402
 		and context.get_selected_constellation_level() == 7
+		and context.get_player_direction()
 	)
 	context.set_selected_three_prince_id(previous_prince)
 	context.set_selected_constellation_level(previous_constellation)
+	context.set_player_direction(previous_direction)
 
 	var previous_endless := context.is_llbt_endless_mode()
 	var previous_continue := context.is_llbt_continue_mode()

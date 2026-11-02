@@ -754,7 +754,7 @@ func _test_active_skill_command() -> void:
 
 
 func _test_strength_command() -> void:
-	Global.is_in_ldl = true
+	Global.get_ui_runtime().set_ldl_mode_active(true)
 	_reset_profile(1, 1)
 	_open_session(TEST_ARCHIVE_PREFIX + "055.json")
 	var setup := _prepare_strength_state()
@@ -843,7 +843,7 @@ func _test_strength_command() -> void:
 	)
 	failed_strength.queue_free()
 	await get_tree().process_frame
-	Global.is_in_ldl = false
+	Global.get_ui_runtime().set_ldl_mode_active(false)
 
 
 func _prepare_strength_state(with_materials: bool = true) -> Dictionary:
@@ -1303,7 +1303,7 @@ func _test_archive_session() -> void:
 	Global.end_archive_session()
 	var blocked_level := Global.change_scene("res://Scene/level/level_1.tscn")
 	_check("session_level_entry_blocked", not blocked_level)
-	_check("session_level_entry_no_target", Global.target_scene != "res://Scene/level/level_1.tscn")
+	_check("session_level_entry_no_target", Global.get_scene_flow().get_target_scene() != "res://Scene/level/level_1.tscn")
 	_open_session(reentry_path)
 	_check("session_level_entry_allowed", Global._is_valid_scene_change_target("res://Scene/level/level_1.tscn"))
 	Global.end_archive_session()

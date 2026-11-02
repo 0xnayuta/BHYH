@@ -585,18 +585,6 @@ func set_save_failure_feedback_enabled(enabled: bool) -> void:
 	_save_failure_feedback_enabled = enabled
 
 
-var file_num = 1.201
-var forge
-var fb_cd: int
-var is_in_ldl
-var get_target
-var lj_times: int
-var lj_count: int
-
-var wait_time: float = 0.8
-var need_change_item: bool = true
-var player_dir
-
 var _all_hero_skill_resources_preloaded: bool = false
 var _prewarmed_role_id: int = 0
 var _archive_session: ArchiveSession = ArchiveSession.new()
@@ -1919,16 +1907,6 @@ func _cached_scene(property_name: StringName, path: String) -> PackedScene:
 	return scene
 
 
-var lhhjbutton = null
-
-var target_scene: String:
-	get:
-		return _scene_flow.target_scene if _scene_flow != null else ""
-	set(value):
-		if _scene_flow != null:
-			_scene_flow.target_scene = value
-
-
 func preload_next(path: String) -> void:
 	_resource_runtime.preload_next(path)
 
@@ -1939,18 +1917,6 @@ func clear_preloaded_scene_slot() -> void:
 
 func _get_preloaded(path: String) -> PackedScene:
 	return _resource_runtime.take_preloaded_scene(path)
-
-
-var sell_or_equ = null
-var fall_equ = null
-var nmw_hands = null
-
-var sound = null
-var llbt_challenge = null
-var lhhj = null
-var listbutton = null
-var lhhjhelp = null
-var return_back_map = null
 
 
 func add_basic_ar_button(parent, Num):
@@ -1982,12 +1948,7 @@ func add_zhenfalxbutton(parent, zhenfa_name, father):
 
 
 func addhdgqmap(parent, position):
-	if not return_back_map:
-		return_back_map = _load_scene("res://Scene/other_scene/return_back_map.tscn")
-	var target = instance_scene(return_back_map, parent)
-	target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _menu_panel_factory.add_return_back_map(parent, position)
 
 
 func add_monster141_aura(parent, _position, target_monster):
@@ -1995,45 +1956,19 @@ func add_monster141_aura(parent, _position, target_monster):
 
 
 func addlhhjhelp(parent, position):
-	if not lhhjhelp:
-		lhhjhelp = _load_scene("res://Scene/other_scene/lhhj_help.tscn")
-	var target = instance_scene(lhhjhelp, parent)
-	target.position = position
-	return target
+	return _menu_panel_factory.add_lhhj_help(parent, position)
 
 
 func addlistbutton(parent, self_name, father, Num):
-	if not listbutton:
-		listbutton = _load_scene("res://Scene/other_scene/list_button.tscn")
-	var target = instance_scene(listbutton, parent)
-	target.self_name = self_name
-	target.father = father
-	target.num = Num
-	return target
+	return _menu_panel_factory.add_list_button(parent, self_name, father, Num)
 
 
 func addlhhj(parent, position):
-	if not lhhj:
-		lhhj = _load_scene("res://Scene/other_scene/lhhj.tscn")
-	var target = instance_scene(lhhj, parent)
-	target.scale = Vector2.ONE
-	if position == Vector2.ZERO or position == Vector2(0, 0):
-		target.position = viewport_center_for_parent(parent) - Vector2(461, 282)
-	else:
-		target.position = position
-	_ui_runtime.register_transient_ui(target, &"_on_close_pressed")
-	return target
+	return _menu_panel_factory.add_lhhj(parent, position)
 
 
 func addlhhjbutton(parent, self_name, father):
-	if not lhhjbutton:
-		lhhjbutton = _load_scene("res://Scene/other_scene/lhhj_button.tscn")
-	var target = instance_scene(lhhjbutton, parent)
-	if not target:
-		return null
-	target.self_name = self_name
-	target.father = father
-	return target
+	return _menu_panel_factory.add_lhhj_button(parent, self_name, father)
 
 
 func add_some_monster_help(parent, position):
@@ -2101,11 +2036,7 @@ func add_forges(parent, position):
 
 
 func addllbt_challenge(parent, position):
-	if not llbt_challenge:
-		llbt_challenge = _load_scene("res://Scene/level/llbt_challenge.tscn")
-	var target = instance_scene(llbt_challenge, parent)
-	target.position = position
-	return target
+	return _level_scene_factory.add_llbt_challenge(parent, position)
 
 
 func add_basic_pellet(parent, position):
@@ -2794,16 +2725,7 @@ func add_strength(parent, position):
 
 
 func create_hands(parent, direction, position):
-	if not nmw_hands:
-		nmw_hands = _load_scene("res://Scene/monster/monster_25.tscn")
-	var target = instance_scene(nmw_hands, parent)
-	if target == null:
-		return null
-	target.position = position
-	var mr_ani_node = target.get_node_or_null("MonsterDir/mr_ani")
-	if mr_ani_node:
-		mr_ani_node.flip_h = direction
-	return target
+	return _monster_display.create_hands(parent, direction, position)
 
 
 func call_chase_bullet(parent, _name, speed, time: float, dir, position, hit_name, dic):
@@ -2897,14 +2819,7 @@ func add_pl_sell(parent, position):
 
 
 func fall_item(parent, position, _name, value_):
-	_name = preload("res://Script/data/yutu_equipment_data.gd").role_drop(str(_name))
-	if not fall_equ:
-		fall_equ = _load_scene("res://Scene/back_pack/equipment_fall.tscn")
-	var target = instance_scene(fall_equ, parent)
-	target.position = position
-	target.item_name = _name
-	target._num = value_
-	return target
+	return _backpack_factory.fall_item(parent, position, _name, value_)
 
 
 func add_dj_infor(parent, position, _name):
@@ -3109,14 +3024,7 @@ func add_bullet(bullet_name: String, parent, direction: bool, show_speed, positi
 
 
 func _physics_process(_delta: float) -> void:
-	if MainSet.set_data.has("FileValue"):
-		if float(MainSet.set_data["FileValue"]) < float(file_num):
-			MainSet.set_data["FileValue"] = file_num
-	lj_count += 1
-	if lj_count > 100:
-		lj_count = 0
-		lj_times = 0
-		_combat_pool.check_combo_milestone(lj_times)
+	_combat_pool.tick_combo_window()
 
 
 func load_role1_body(_name, role_id: int = 0) -> Texture2D:

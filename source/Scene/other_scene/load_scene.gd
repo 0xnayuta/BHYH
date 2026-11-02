@@ -79,10 +79,11 @@ var tips_textlist = [
 func _ready() -> void:
 	_apply_window_policy()
 	MemoryClass.main_dq()
-	# 固定本次加载的目标与代次；后续不再读取可变的 Global.target_scene。
-	if Global.target_scene == null or Global.target_scene == "":
-		Global.target_scene = DEFAULT_TARGET_SCENE
-	_target_scene = str(Global.target_scene)
+	# 固定本次加载的目标与代次；后续不再读取可变的 Global 状态。
+	var scene_flow := Global.get_scene_flow()
+	if scene_flow.get_target_scene() == "":
+		scene_flow.set_target_scene(DEFAULT_TARGET_SCENE)
+	_target_scene = scene_flow.get_target_scene()
 	_request_generation = Global.get_scene_request_generation()
 	loading_bar.value = 0.0
 	loading_text.text = "0%"

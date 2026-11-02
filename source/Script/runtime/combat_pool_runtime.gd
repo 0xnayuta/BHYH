@@ -39,6 +39,10 @@ var _sword_hit_effect_count: int = 0
 var _last_combo_value: int = 0
 var _pending_combo_milestones: Dictionary = {}
 
+## 连击计数：每个物理帧推进空闲窗口，超过 100 帧清零。
+var combo_count: int = 0
+var _combo_idle_frames: int = 0
+
 
 func setup(host: Node) -> void:
 	_host = host
@@ -168,12 +172,37 @@ func clear_runtime_pools() -> void:
 	_active_damage_texts.clear()
 	_damage_text_count = 0
 	_last_mr_hurt_msec.clear()
-	clear_combo_milestone_state()
+	clear_combo_state()
 
 
 func clear_combo_milestone_state() -> void:
 	_last_combo_value = 0
 	_pending_combo_milestones.clear()
+
+
+func register_combo_hit() -> int:
+	combo_count += 1
+	_combo_idle_frames = 0
+	check_combo_milestone(combo_count)
+	return combo_count
+
+
+func tick_combo_window() -> void:
+	_combo_idle_frames += 1
+	if _combo_idle_frames > 100:
+		_combo_idle_frames = 0
+		combo_count = 0
+		check_combo_milestone(0)
+
+
+func get_combo_count() -> int:
+	return combo_count
+
+
+func clear_combo_state() -> void:
+	combo_count = 0
+	_combo_idle_frames = 0
+	clear_combo_milestone_state()
 
 
 func check_combo_milestone(current_combo: int) -> void:

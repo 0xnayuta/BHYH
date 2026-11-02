@@ -19,6 +19,7 @@ var _transient_ui_instances: Dictionary = {}
 ## 一次性 UI 状态：跨档案保持，不随 clear_runtime_state 重置；只由消费方调用。
 var _welcome_message_shown := false
 var _first_level_intro_shown := false
+var _ldl_mode_active := false
 
 
 func setup(host: Node) -> void:
@@ -39,6 +40,15 @@ func consume_first_level_intro() -> bool:
 		return false
 	_first_level_intro_shown = true
 	return true
+
+
+## 炼丹炉/背包融合模式：由 Ldl 场景开启与关闭，背包与档案清理读取。
+func set_ldl_mode_active(active: bool) -> void:
+	_ldl_mode_active = active
+
+
+func is_ldl_mode_active() -> bool:
+	return _ldl_mode_active
 
 
 func push_windows(host: Node) -> void:

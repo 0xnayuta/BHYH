@@ -36,9 +36,8 @@ func _physics_process(delta: float) -> void:
 	if PlayerData.player_data[DataKeys.DECOMPOSE_LIST].size() != 0:
 		is_set = false
 		set_remove_items_properies()
-		if Global.need_change_item:
+		if Global.get_forge_factory().consume_decompose_item_changed():
 			change_item_list()
-			Global.need_change_item = false
 	else:
 		if not is_set:
 			remove_l_ist()

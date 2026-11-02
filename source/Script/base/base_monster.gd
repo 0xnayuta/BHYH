@@ -2529,17 +2529,15 @@ func _on_hit_box_area_entered(area: Area2D) -> Node2D:
 func add_lj(value):
 	if value <= 0:
 		return
-	Global.lj_times += 1
-	Global.get_combat_pool().check_combo_milestone(Global.lj_times)
-	Global.get_run_context().record_combo(Global.lj_times)
+	var combo_count := Global.get_combat_pool().register_combo_hit()
+	Global.get_run_context().record_combo(combo_count)
 	var level_node = get_level_node()
-	Global.add_combo(level_node.lj_tt, Global.lj_times, Vector2(0, 0))
-	Global.lj_count = 0
+	Global.add_combo(level_node.lj_tt, combo_count, Vector2(0, 0))
 
 
 func monster_18_protect():
 	if self is Monster18:
-		if self.monster_direction == Global.player_dir:
+		if self.monster_direction == Global.get_run_context().get_player_direction():
 			if self.monster_direction == false:
 				Global.add_special_effect(self, Vector2(0, 5), "protect", Vector2(1.1, 1.1), false, 1)
 			else:

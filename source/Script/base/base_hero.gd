@@ -788,7 +788,7 @@ func _physics_process(delta: float) -> void:
 	was_ws_state = RoleProp.is_ws_state
 
 	if int(get_meta("coop_slot", 1)) == 1:
-		Global.player_dir = player_dir
+		Global.get_run_context().set_player_direction(player_dir)
 	move_and_slide()
 
 

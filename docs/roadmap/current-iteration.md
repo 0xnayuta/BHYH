@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 进行中**；22-1/22-2/22-3A/22-3B/22-3C/22-3D-1 已完成（2026-11-02），22-3D-2 为下一批。Phase 23~26 已规划、未启动。
+> **状态**：**Phase 22 进行中**；22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 已完成（2026-11-02），22-4 守卫为下一批。Phase 23~26 已规划、未启动。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -42,7 +42,7 @@
 - `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）；
 - 未改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
 
-### 22-3 状态迁移（22-3A/22-3B/22-3C/22-3D-1 完成，22-3D-2 下一步）
+### 22-3 状态迁移（22-3A/22-3B/22-3C/22-3D-1/22-3D-2 完成，22-4 下一步）
 
 每批只迁移一个所有权边界，迁移全部生产调用方后删除旧字段/入口。
 
@@ -54,13 +54,15 @@
 
 **22-3D-1 结果**：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。验证：`check_all` 7/7、9/9，`ui-factories` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` PASS。
 
+**22-3D-2 结果**：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`；场景槽位分别归 `MenuPanelFactory`、`LevelSceneFactory`、`BackpackFactory`、`MonsterDisplayFactory` 与 `SceneFlow`。验证：`check_all` 7/7、9/9，`ui-factories`/`run-context` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` PASS。
+
 | 批次 | 范围 | 目标所有者 | 关键约束 |
 |:---|:---|:---|:---|
 | 22-3A | 云存档/账号字段与相关读取（已完成） | `MemoryClass` 持 `CloudSession` | 不新增 Autoload；保留失败与退出语义 |
 | 22-3B | 法宝实例槽位与残留节点引用（已完成） | `MagicWeaponRuntime` | 两个槽位规则不变；创建/替换/预载/清理同批迁移 |
 | 22-3C | 单局、关卡、选择与统计字段（已完成） | `RunContext` / `LevelEntryRuntime` | 单局状态、关卡选择与表现缓存分开；不改变关卡时序 |
 | 22-3D-1 | 2.5 表现与一次性 UI 字段（已完成） | `UiRuntime` / `BackpackFactory` / `CombatPoolRuntime` | 一次性提示、背包冷却与连击里程碑不回到 `Global` |
-| 22-3D-2 | 2.6 瞬时面板与 2.9 场景/UI 引用 | 对应工厂 / `UiRuntime` / `SceneFlow` | 临时 UI 必须登记；无消费者条目删除 |
+| 22-3D-2 | 2.6 瞬时面板与 2.9 场景/UI 引用（已完成） | 对应工厂 / `UiRuntime` / `SceneFlow` | 临时 UI 必须登记；无消费者条目删除 |
 | 22-3E | 服务指针与组合根 | `Global` 组合根 | 只整理引用，不把服务私有状态搬回 `Global` |
 
 **每批验收**：
@@ -257,7 +259,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 22-3D-2：§2.6 瞬时面板与 §2.9 场景/UI 引用迁移**。
+**当前下一步**：**Phase 22-4：守卫与阶段收口**。
 **当前不启动**：Phase 23~26；它们保留为已规划候选，不伪造“进行中”。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)

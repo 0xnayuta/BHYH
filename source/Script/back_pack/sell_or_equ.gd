@@ -292,28 +292,19 @@ func _on_equ_pressed() -> void:
 				PlayerData.zl_zb()
 		"法宝":
 			PlayerData.remove_zb(page, number)
-			if Global.fb_cd <= 0:
-				if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-					var mz = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
-					var ql = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
-					var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
-					eq_prop = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
-					PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
-					PlayerData.player_data[DataKeys.MAGIC_WEAPON].push_back(new_list)
-					PlayerData.zl_zb()
-					PlayerData.add_fb(mz, ql, wx, eq_prop)
-				else:
-					PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
-					PlayerData.player_data[DataKeys.MAGIC_WEAPON].push_back(new_list)
-					PlayerData.zl_zb()
-			else:
-				var mz = new_list[DataKeys.NAME]
-				var ql = new_list[DataKeys.ENHANCE_LEVEL]
-				var wx = new_list[DataKeys.FIVE_ELEMENTS]
-				eq_prop = new_list["Data"]
+			if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
+				var mz = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
+				var ql = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
+				var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
+				eq_prop = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON].push_back(new_list)
+				PlayerData.zl_zb()
 				PlayerData.add_fb(mz, ql, wx, eq_prop)
-				var parent = NodeUtils.ancestor(self, 3)
-				Global.add_message_show(parent, "当前法宝正在使用，无法更换！！", 1.5, Vector2(485, 240))
+			else:
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON].clear()
+				PlayerData.player_data[DataKeys.MAGIC_WEAPON].push_back(new_list)
+				PlayerData.zl_zb()
 	RoleProp.get_equ_last_pro()
 	RoleProp.get_last_prop()
 	if is_instance_valid(RoleProp.source_player):

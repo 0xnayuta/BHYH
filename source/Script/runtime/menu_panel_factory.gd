@@ -18,6 +18,11 @@ const MOSAIC_SCENE_PATH := "res://Scene/ldl/mosaic.tscn"
 const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
 const CHANGE_BG_PATH := "res://Scene/other_scene/change_back_ground.tscn"
 const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
+const RETURN_BACK_MAP_PATH := "res://Scene/other_scene/return_back_map.tscn"
+const LHHJ_HELP_PATH := "res://Scene/other_scene/lhhj_help.tscn"
+const LIST_BUTTON_PATH := "res://Scene/other_scene/list_button.tscn"
+const LHHJ_PATH := "res://Scene/other_scene/lhhj.tscn"
+const LHHJ_BUTTON_PATH := "res://Scene/other_scene/lhhj_button.tscn"
 
 const GAME_SET_DESIGN_SIZE := Vector2(942, 589)
 
@@ -33,6 +38,11 @@ var _mosaic_scene: PackedScene = null
 var _basic_ar_button_scene: PackedScene = null
 var _change_bg_scene: PackedScene = null
 var _cd_jm_scene: PackedScene = null
+var _return_back_map_scene: PackedScene = null
+var _lhhj_help_scene: PackedScene = null
+var _list_button_scene: PackedScene = null
+var _lhhj_scene: PackedScene = null
+var _lhhj_button_scene: PackedScene = null
 
 
 func setup(host: Node) -> void:
@@ -51,6 +61,11 @@ func clear_scene_caches() -> void:
 	_basic_ar_button_scene = null
 	_change_bg_scene = null
 	_cd_jm_scene = null
+	_return_back_map_scene = null
+	_lhhj_help_scene = null
+	_list_button_scene = null
+	_lhhj_scene = null
+	_lhhj_button_scene = null
 
 
 func get_game_set_scene() -> PackedScene:
@@ -228,4 +243,63 @@ func add_learn_skill(parent, position):
 	target.z_index = 99
 	target.position = position
 	_host.get_ui_runtime().register_transient_ui(target, &"_on_close_pressed")
+	return target
+
+
+func add_return_back_map(parent, position):
+	if _return_back_map_scene == null:
+		_return_back_map_scene = _host.load_cached_scene(RETURN_BACK_MAP_PATH)
+	var target = _host.instance_scene(_return_back_map_scene, parent)
+	if target == null:
+		return null
+	target.position = position
+	_host.get_ui_runtime().register_transient_ui(target, &"_on_close_pressed")
+	return target
+
+
+func add_lhhj_help(parent, position):
+	if _lhhj_help_scene == null:
+		_lhhj_help_scene = _host.load_cached_scene(LHHJ_HELP_PATH)
+	var target = _host.instance_scene(_lhhj_help_scene, parent)
+	if target == null:
+		return null
+	target.position = position
+	return target
+
+
+func add_list_button(parent, self_name, father, num):
+	if _list_button_scene == null:
+		_list_button_scene = _host.load_cached_scene(LIST_BUTTON_PATH)
+	var target = _host.instance_scene(_list_button_scene, parent)
+	if target == null:
+		return null
+	target.self_name = self_name
+	target.father = father
+	target.num = num
+	return target
+
+
+func add_lhhj(parent, position):
+	if _lhhj_scene == null:
+		_lhhj_scene = _host.load_cached_scene(LHHJ_PATH)
+	var target = _host.instance_scene(_lhhj_scene, parent)
+	if target == null:
+		return null
+	target.scale = Vector2.ONE
+	if position == Vector2.ZERO:
+		target.position = _host.viewport_center_for_parent(parent) - Vector2(461, 282)
+	else:
+		target.position = position
+	_host.get_ui_runtime().register_transient_ui(target, &"_on_close_pressed")
+	return target
+
+
+func add_lhhj_button(parent, self_name, father):
+	if _lhhj_button_scene == null:
+		_lhhj_button_scene = _host.load_cached_scene(LHHJ_BUTTON_PATH)
+	var target = _host.instance_scene(_lhhj_button_scene, parent)
+	if target == null:
+		return null
+	target.self_name = self_name
+	target.father = father
 	return target

@@ -101,29 +101,29 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 `Global` 在 `_ready` 创建 26 个普通子节点，并持有 1 个 `RefCounted` 运行上下文，均不是 Autoload：
 
-- `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记、UI 实例缓存与一次性欢迎/开场消费；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
+- `UiRuntime`：UI 宿主 `windows`、popup 层、hover popup、临时 UI 登记、UI 实例缓存、一次性欢迎/开场消费与 Ldl 模式状态；`add_*` 工厂经 `Global.get_ui_runtime()` 使用生命周期 API；`LocalCoop` 面板使用 `push_windows()` / `pop_windows()`。
 - `AudioRuntime`：BGM 单实例与主菜单 BGM、SFX 声部仲裁（45ms 节流、同音效 4/8、总声部 24/48）与 `sound_settings_changed` 信号；通过 `Global.get_audio_runtime()` 访问。
 - `RuntimeDiagnostics`：调试性能浮层与只读诊断快照（运行时代次、后台保存/失败状态、缓存作用域、关卡租约、预载单槽）。
 - `ResourceRuntime`：场景/精灵帧/音频/纹理四类缓存、怪物场景缓存、常驻小 UI 场景缓存、关卡资源租约、单槽预载与线程/分帧预热；通过 `Global.get_resource_runtime()` 访问，业务侧仍用 `Global.is_resource_cached` / `handoff_loaded_resource` / `begin_level_resource_lease` 等窄入口。
 - `SceneFlow`：场景切换流、请求代次守卫与 `target_scene`；通过 `Global.get_scene_flow()` 读取代次，`Global.change_scene` 是唯一正式切换入口。
-- `PopupFactory` / `ShopFactory` / `BackpackFactory` / `RewardFactory` / `CombatPresentationFactory`：按功能族的场景工厂，各自持有本族场景缓存；`BackpackFactory` 另持有背包格点击冷却；`Global.add_*` 保留同名签名并转发到族级 API，分别通过 `Global.get_popup_factory()` / `get_shop_factory()` / `get_backpack_factory()` / `get_reward_factory()` / `get_combat_factory()` 访问。
+- `PopupFactory` / `ShopFactory` / `BackpackFactory` / `RewardFactory` / `CombatPresentationFactory`：按功能族的场景工厂，各自持有本族场景缓存；`BackpackFactory` 另持有背包格点击冷却与装备掉落物槽位；`Global.add_*` 保留同名签名并转发到族级 API，分别通过 `Global.get_popup_factory()` / `get_shop_factory()` / `get_backpack_factory()` / `get_reward_factory()` / `get_combat_factory()` 访问。
 - `CombatPoolRuntime`：伤害数字/怪物受击/角色受击/命中音效四池、池根、伤害数字 80 上限计数、受击 55ms 节流、剑阵按帧限流与连击里程碑去重/延迟派发；通过 `Global.get_combat_pool()` 访问，业务侧仍用 `Global.recycle_damage_text` / `recycle_mr_hurt` / `recycle_role_be_hit` / `can_show_sword_*`。
 - `MagicWeaponRuntime`：两个槽位的当前法宝召唤物、场景路径表、预载路径与创建/替换/清理；通过 `Global.get_magic_weapon_runtime()` 访问，业务侧仍用 `Global.add_magic_weapon` / `get_magic_summon_for` / `set_magic_summon_for`。
 - `LevelEntryRuntime`：关卡信息面板常驻场景槽位、关卡掉落概率表与进入编排（面板分支、非 res:// 直进分支、强制信息面板关卡）；通过 `Global.get_level_entry_runtime()` 访问，业务侧仍用 `Global.add_level_info` / `get_current_level_fall_pro` / `sync_level_drop_pro_data`。
 - `MonsterSpawnRuntime`：怪物 ID 到场景路径的解析（预载覆盖优先）与 `create_monster`；通过 `Global.get_monster_spawn_runtime()` 访问，业务侧仍用 `Global.create_monster`。
 - `RoleVisualRuntime`：角色身体/装备静态贴图加载、当前角色 ID 与同槽位上一张贴图释放；通过 `Global.get_role_visual_runtime()` 访问，业务侧仍用 `Global.load_role1_body` / `load_role1_eq`。
-- `MonsterDisplayFactory`：怪物头像属性面板、Boss 信息面板与通用提示文本三个常驻场景槽位；通过 `Global.get_monster_display_factory()` 访问，业务侧仍用 `Global.add_monster_head` / `add_monster_info` / `add_basic_monment_info`。
+- `MonsterDisplayFactory`：怪物头像属性面板、Boss 信息面板、通用提示文本与怪物手部四个场景槽位；通过 `Global.get_monster_display_factory()` 访问，业务侧仍用 `Global.add_monster_head` / `add_monster_info` / `add_basic_monment_info` / `create_hands`。
 - `LevelHintFactory`：掉落箱与道具箱（共用 `box_1.tscn`，元数据不同）、进入条件提示、回收提示与物品悬浮提示四个常驻场景槽位；通过 `Global.get_level_hint_factory()` 访问，业务侧仍用 `Global.add_level_fall_box` / `add_item_box` / `add_game_need_know` / `add_hc_help` / `add_help_thing`。
 - `ZhenFaFactory`：阵法说明、突破提示、阵眼疗伤等级、阵法信息、阵法类型按钮与阵眼按钮六个常驻场景槽位；通过 `Global.get_zhen_fa_factory()` 访问，业务侧仍用 `Global.add_zhen_fa_help` / `add_zhen_fa_tu_po` / `add_zhen_yan_cure_level` / `add_zhen_fa_info` / `add_zhenfalxbutton` / `addzhenyanbutton`。
-- `ForgeFactory`：锻造说明、锻造主面板、分解说明与分解主面板四个常驻场景槽位；通过 `Global.get_forge_factory()` 访问，业务侧仍用 `Global.add_forge_help` / `add_forges` / `add_decompose_help` / `add_decompose_instance`。
+- `ForgeFactory`：锻造说明、锻造主面板、分解说明与分解主面板四个常驻场景槽位，并持有活动锻造面板与分解脏标记；通过 `Global.get_forge_factory()` 访问，业务侧仍用 `Global.add_forge_help` / `add_forges` / `add_decompose_help` / `add_decompose_instance`。
 - `ProjectileFactory`：Role4 弹体、通用弹体、角色 slim 弹体、怪物弹体、法宝弹体与基础丹药；slim/streaming 路径按名称解析，来源写入仍经 `Global._assign_attack_source`；通过 `Global.get_projectile_factory()` 访问。
 - `EffectFactory`：灵魄光效、灵魄获取提示、技能特效、Boss 光环、无双特效、线性特效与角色 1/2 浅攻载体；浅攻来源仍经 `Global._assign_attack_source`；灵魄加成仍由 `PaSkill` 计算；通过 `Global.get_effect_factory()` 访问。
 - `ShowTextFactory`：任务标题、评分文字、自定义字体文本、怪物帮助与玩家信件五个常驻场景槽位；通过 `Global.get_show_text_factory()` 访问，业务侧仍用 `Global.add_font_instance` / `add_task_title` / `add_pj` / `add_some_monster_help` / `add_letter_for_player`。
 - `SkillPanelFactory`：角色/变身技能面板与法宝说明三个常驻场景槽位；预热经 `prime_skill_scenes()` 接管已缓存场景；通过 `Global.get_skill_panel_factory()` 访问，业务侧仍用 `Global.add_zd_skillscene` / `add_bd_skillscene` / `add_magic_help`。
-- `LevelSceneFactory`：极彩天地板、逐浪飞行地板、招照镜台陷阱、关卡选择面板与关卡相机五个常驻场景槽位；相机由调用方挂到角色节点，工厂只缓存与初始化；通过 `Global.get_level_scene_factory()` 访问，业务侧仍用 `Global.add_stage` / `add_z_lw_stage` / `add_zztw_trap` / `add_dsg_choose` / `add_camera`。
-- `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、镶嵌帮助、镶嵌面板、存档按钮、背景切换与读档界面十一个常驻场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；背景切换根节点为 `CanvasLayer` 时写 `offset`；通过 `Global.get_menu_panel_factory()` 访问。
+- `LevelSceneFactory`：极彩天地板、逐浪飞行地板、招照镜台陷阱、关卡选择面板、关卡相机与玲珑塔挑战面板六个场景槽位；相机由调用方挂到角色节点，工厂只缓存与初始化；通过 `Global.get_level_scene_factory()` 访问，业务侧仍用 `Global.add_stage` / `add_z_lw_stage` / `add_zztw_trap` / `add_dsg_choose` / `add_camera` / `addllbt_challenge`。
+- `MenuPanelFactory`：游戏设置、技能键位、音乐设置、炼丹炉、游戏说明、学习技能、镶嵌帮助、镶嵌面板、存档按钮、背景切换、读档界面、活动面板、活动帮助、活动按钮、列表按钮与返回地图十六个场景槽位；游戏说明根节点是 `CanvasLayer`，只在 `CanvasItem` 上写层级/位置；背景切换根节点为 `CanvasLayer` 时写 `offset`；通过 `Global.get_menu_panel_factory()` 访问。
 - `MapOverlayFactory`：活动之谜、`lsh` 与 `lxdy` 三个主菜单地图浮层常驻场景槽位；三个入口登记临时 UI，活动之谜继续挂窗口守卫；通过 `Global.get_map_overlay_factory()` 访问，业务侧仍用 `Global.add_hdzm` / `add_lsh` / `add_lxdy`。
-- `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数、关卡计时、`last_level_path`、最大连击、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数、结算类型与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_*` / `advance_*` / `record_*` / `add_*` / `count_*` / `reset_*`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 与 `victory` 只读同一实例。
+- `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数、关卡计时、`last_level_path`、最大连击、玩家朝向、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数、结算类型与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_*` / `advance_*` / `record_*` / `add_*` / `count_*` / `reset_*`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 与 `victory` 只读同一实例。
 
 业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段、9 个写多读零的 `Global.is_*` 减益标志、四个无尽模式标志、`selected_eight_immortal_id`、两个角色贴图槽位字段，以及 `get_ancestor`/`get_position_between`/`get_dis_betweem`/`get_clean_name`/`get_all_item_num`/`load_item_icon` 等工具函数、`monster_head`/`monster_info`/`basic_monment_info` 三个怪物展示场景槽位、`level_fall_box`/`game_need_know`/`hc_help`/`help_thing` 四个提示场景槽位与 6 个阵法场景槽位已删除（`add_zhen_fa_ui` 无调用方一并删除）；无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
 
@@ -500,7 +500,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1 已完成，22-3D-2 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**当前候选 Phase 22-1/22-2/22-3A/22-3B/22-3C/22-3D-1/22-3D-2 已完成，22-4 为下一步**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |
 
