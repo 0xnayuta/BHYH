@@ -1,5 +1,6 @@
 extends Node
 var player_data = PlayerData.player_data
+var cloud_session: CloudSession = CloudSession.new()
 var _player:
 	get:
 		return player_data
@@ -40,6 +41,10 @@ var last_save_outcome: Dictionary = {}
 ## 后台写任务序号：每次入队递增；完成信号携带同一序号，消费方可判定信号顺序。
 var _background_save_serial: int = 0
 var _last_background_save_serial: int = 0
+
+
+func get_cloud_session() -> CloudSession:
+	return cloud_session
 
 
 ## 后台保存：路径缺省取当前会话档案；调用方不能借路径参数越过会话身份。

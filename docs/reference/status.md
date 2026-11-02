@@ -28,8 +28,8 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **33.09s**） |
-| `health_check` | **762 脚本 0 Parse / 0 Error / 0 Warning** |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **30.72s**） |
+| `health_check` | **763 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **297/297 PASS** |
 | `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **26/26 PASS** |
@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 22-3A：云存档登录状态从 `Global` 迁入 `MemoryClass` 持有的 `CloudSession`；`Global.cloud_save_*` 与认证冷却字段已删除；`CloudSession` 逻辑探针、`check_all` 9/9、档案 297/297、场景 PASS、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 33：装备数据契约完成；旧 `all_equipment_data.gd`、`all_equipment.gd`、字典入口与 `AE` Autoload 已删除；运行时只加载 `equipment_catalog.tres`。
 - 最新宠物预热门禁与寅虎动作帧修复：`convert_monster_action_views.py --check` **5/5**，`pet-runtime` 场景探针 PASS，全量场景探针 **17/17**、`coop_probe_runner` **26/26**、`level_1` PASS；完整记录见归档。
 - AnimationMixer String 状态轨道警告修复：183 个场景、**412** 条单键 value track（`animation` 296 + `playing` 116）改为离散更新；新增 `contract_scan` 的 `ANIM_TRACK_STATE_CONTINUOUS` 规则与 `pet-runtime` 动画缓存探针；全量回归 **128/128 + SKIP 5**（304.5s，0/0/0）、场景探针 **17/17**、`check_all --godot-bin` **9/9**。

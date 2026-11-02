@@ -29,15 +29,13 @@ var initialized_data = {}
 @onready var cloud_auth_cooldown: Timer = $CloudAuthCooldown
 
 var cloud_request_action := ""
-var cloud_user_id := ""
-var cloud_access_token := ""
-var cloud_uid_md5 := ""
-var cloud_account_name := ""
+var _cloud_session: CloudSession
 var cloud_upload_zip_path := ""
 var cloud_upload_temp_files := PackedStringArray()
 
 
 func _ready() -> void:
+	_cloud_session = MemoryClass.get_cloud_session()
 	MemoryClass.main_dq()
 	add_ar()
 	_restore_cloud_session()
@@ -51,11 +49,7 @@ func _exit_tree() -> void:
 
 
 func _restore_cloud_session() -> void:
-	cloud_user_id = Global.cloud_save_user_id
-	cloud_access_token = Global.cloud_save_access_token
-	cloud_uid_md5 = Global.cloud_save_uid_md5
-	cloud_account_name = Global.cloud_save_account
-	cloud_uid_hash.text = _cloud_folder_name() if not cloud_uid_md5.is_empty() else ""
+	cloud_uid_hash.text = _cloud_folder_name() if not _cloud_session.uid_md5.is_empty() else ""
 
 
 func get_need_box():
@@ -80,7 +74,7 @@ func _on_close_pressed() -> void:
 
 func _on_cloud_archive_pressed() -> void:
 	cloud_popup.show()
-	if cloud_access_token.is_empty():
+	if _cloud_session.access_token.is_empty():
 		cloud_login_page.show()
 		cloud_action_page.hide()
 		cloud_status.text = "请输入账号和密码"
@@ -132,7 +126,7 @@ func _send_cloud_auth_request(action: String) -> void:
 
 	var body := JSON.stringify({"username": username, "password": password})
 	var headers := PackedStringArray(["Content-Type: application/json"])
-	Global.cloud_auth_cooldown_until_msec = Time.get_ticks_msec() + CLOUD_AUTH_COOLDOWN_MSEC
+	_cloud_session.begin_auth_cooldown(CLOUD_AUTH_COOLDOWN_MSEC)
 	cloud_auth_cooldown.start()
 	cloud_request_action = action
 	_set_cloud_auth_busy(true)
@@ -156,7 +150,7 @@ func _on_cloud_auth_cooldown_timeout() -> void:
 
 
 func _update_cloud_auth_buttons() -> void:
-	var remaining_msec: int = maxi(Global.cloud_auth_cooldown_until_msec - Time.get_ticks_msec(), 0)
+	var remaining_msec: int = _cloud_session.remaining_auth_cooldown_msec()
 	var request_busy := not cloud_request_action.is_empty()
 	var cooling_down := remaining_msec > 0
 	cloud_register_button.disabled = request_busy or cooling_down
@@ -205,23 +199,18 @@ func _on_cloud_request_completed(
 		cloud_status.text = message + "，请点击登录"
 		return
 
-	cloud_user_id = str(response.get("user_id", ""))
-	cloud_access_token = str(response.get("access_token", ""))
-	if cloud_user_id.is_empty() or cloud_access_token.is_empty():
+	var user_id := str(response.get("user_id", ""))
+	var access_token := str(response.get("access_token", ""))
+	if user_id.is_empty() or access_token.is_empty():
 		cloud_status.text = "登录失败：服务器未返回登录凭证"
-		cloud_user_id = ""
-		cloud_access_token = ""
+		_cloud_session.user_id = ""
+		_cloud_session.access_token = ""
 		return
 
 	cloud_login_page.hide()
 	cloud_action_page.show()
-	cloud_uid_md5 = cloud_user_id.md5_text()
-	cloud_account_name = cloud_account.text.strip_edges()
+	_cloud_session.set_credentials(user_id, access_token, user_id.md5_text(), cloud_account.text.strip_edges())
 	cloud_uid_hash.text = _cloud_folder_name()
-	Global.cloud_save_user_id = cloud_user_id
-	Global.cloud_save_access_token = cloud_access_token
-	Global.cloud_save_uid_md5 = cloud_uid_md5
-	Global.cloud_save_account = cloud_account_name
 
 
 func _get_cloud_response_message(response: Dictionary) -> String:
@@ -239,7 +228,7 @@ func _get_cloud_response_message(response: Dictionary) -> String:
 
 
 func _on_cloud_upload_pressed() -> void:
-	if cloud_access_token.is_empty() or cloud_user_id.is_empty():
+	if _cloud_session.access_token.is_empty() or _cloud_session.user_id.is_empty():
 		Global.add_message_show(self, "登录状态无效，请退出后重新登录", 1.5, Vector2(470, 300))
 		return
 	cloud_upload_confirm.show()
@@ -269,7 +258,7 @@ func _confirm_cloud_upload() -> void:
 
 
 func _prepare_cloud_upload_zip() -> Dictionary:
-	if cloud_account_name.is_empty():
+	if _cloud_session.account_name.is_empty():
 		return {"ok": false, "message": "缺少登录账号，请退出后重新登录"}
 	var archives := _collect_local_cloud_archives()
 	if archives.is_empty():
@@ -278,7 +267,7 @@ func _prepare_cloud_upload_zip() -> Dictionary:
 	for archive in archives:
 		var archive_data: Dictionary = archive["data"]
 		var bound_uid := str(archive_data.get(CLOUD_SAVE_UID_KEY, "")).strip_edges()
-		if not bound_uid.is_empty() and bound_uid != cloud_user_id:
+		if not bound_uid.is_empty() and bound_uid != _cloud_session.user_id:
 			return {
 				"ok": false,
 				"message": "存档%d已绑定其他账号，不能上传" % int(archive["number"]),
@@ -287,7 +276,7 @@ func _prepare_cloud_upload_zip() -> Dictionary:
 	for archive in archives:
 		var archive_data: Dictionary = archive["data"]
 		if str(archive_data.get(CLOUD_SAVE_UID_KEY, "")).strip_edges().is_empty():
-			archive_data[CLOUD_SAVE_UID_KEY] = cloud_user_id
+			archive_data[CLOUD_SAVE_UID_KEY] = _cloud_session.user_id
 			if not MemoryClass.safe_write_archive(str(archive["path"]), archive_data):
 				return {
 					"ok": false,
@@ -380,15 +369,15 @@ func _write_cloud_encrypted_archive(path: String, data: Dictionary, encryption_k
 
 
 func _cloud_zip_filename() -> String:
-	return cloud_uid_md5 + ".zip"
+	return _cloud_session.uid_md5 + ".zip"
 
 
 func _cloud_folder_name() -> String:
-	return cloud_uid_md5
+	return _cloud_session.uid_md5
 
 
 func _cloud_archive_encryption_key() -> String:
-	return (_cloud_zip_filename() + cloud_account_name + cloud_user_id).md5_text()
+	return (_cloud_zip_filename() + _cloud_session.account_name + _cloud_session.user_id).md5_text()
 
 
 func _send_cloud_upload_request() -> Error:
@@ -417,7 +406,7 @@ func _send_cloud_upload_request() -> Error:
 	request_body.append_array(("\r\n--" + boundary + "--\r\n").to_utf8_buffer())
 	var headers := PackedStringArray(
 		[
-			"Authorization: Bearer " + cloud_access_token,
+			"Authorization: Bearer " + _cloud_session.access_token,
 			"Content-Type: multipart/form-data; boundary=" + boundary,
 		]
 	)
@@ -457,7 +446,7 @@ func _cleanup_cloud_upload_files() -> void:
 
 
 func _on_cloud_import_pressed() -> void:
-	if cloud_access_token.is_empty() or cloud_user_id.is_empty():
+	if _cloud_session.access_token.is_empty() or _cloud_session.user_id.is_empty():
 		Global.add_message_show(self, "登录状态无效，请退出后重新登录", 1.5, Vector2(470, 300))
 		return
 	cloud_import_confirm.show()
@@ -482,7 +471,7 @@ func _on_cloud_import_cancel_pressed() -> void:
 
 func _confirm_cloud_import() -> void:
 	cloud_import_confirm.hide()
-	if cloud_account_name.is_empty():
+	if _cloud_session.account_name.is_empty():
 		Global.add_message_show(self, "缺少登录账号，请退出后重新登录", 2.0, Vector2(470, 300))
 		return
 	var downloads_path := OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)
@@ -565,7 +554,7 @@ func _import_cloud_save_zip(path: String) -> Dictionary:
 			zip_reader.close()
 			_cleanup_cloud_import_files()
 			return {"ok": false, "message": "存档内容不完整，不能导入"}
-		if str(archive_data.get(CLOUD_SAVE_UID_KEY, "")) != cloud_user_id:
+		if str(archive_data.get(CLOUD_SAVE_UID_KEY, "")) != _cloud_session.user_id:
 			zip_reader.close()
 			_cleanup_cloud_import_files()
 			return {"ok": false, "message": "存档已绑定其他账号，不能导入"}
@@ -623,22 +612,15 @@ func _cleanup_cloud_import_files() -> void:
 
 
 func _on_cloud_copy_uid_pressed() -> void:
-	if cloud_uid_md5.is_empty():
+	if _cloud_session.uid_md5.is_empty():
 		return
 	DisplayServer.clipboard_set(_cloud_folder_name())
 	Global.add_message_show(self, "文件夹名已复制", 1.5, Vector2(470, 300))
 
 
 func _on_cloud_logout_pressed() -> void:
-	cloud_user_id = ""
-	cloud_access_token = ""
-	cloud_uid_md5 = ""
-	cloud_account_name = ""
+	_cloud_session.clear_auth()
 	cloud_uid_hash.clear()
-	Global.cloud_save_user_id = ""
-	Global.cloud_save_access_token = ""
-	Global.cloud_save_uid_md5 = ""
-	Global.cloud_save_account = ""
 	cloud_action_page.hide()
 	cloud_login_page.show()
 	cloud_status.text = "已退出登录"

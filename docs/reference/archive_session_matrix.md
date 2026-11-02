@@ -17,6 +17,7 @@
 ## 2. 档案身份与会话
 
 - `Global.set_cd_path()` 是唯一身份写入口；切换前 flush 待写队列并推进 session/epoch。
+- 云存档登录会话由 `MemoryClass` 持有的 `CloudSession`（`RefCounted`）保存，不写入本地档案；档案界面通过 `MemoryClass.get_cloud_session()` 使用，不新增 Autoload。
 - `ArchiveSession` 只读持有档案号、角色、路径与会话代次；业务查询会话，不直接读写 `cd_path`。
 - 无会话时保存、关卡入口和后台保存必须拒绝；过期身份回写不得覆盖当前档案。
 - `load_game` 在合并前重置内存档，并按 `loaded/missing/empty/unreadable/invalid/invalid_path` 返回显式状态。

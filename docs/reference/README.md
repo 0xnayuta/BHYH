@@ -7,7 +7,7 @@
 | 文档 | 内容 |
 |:---|:---|
 | [`architecture.md`](architecture.md) | **当前运行时架构**：Autoload、场景流、战斗、档案/双人、资源、UI/输入及遗留边界 |
-| [`global_runtime_inventory.md`](global_runtime_inventory.md) | **Phase 22-1/22-2**：`Global` 状态字段、公开入口、26 个普通子服务、删除项与迁移判定 |
+| [`global_runtime_inventory.md`](global_runtime_inventory.md) | **Phase 22-1/22-2/22-3A**：`Global` 状态字段、公开入口、26 个普通子服务、删除/迁出项与迁移判定 |
 | [`status.md`](status.md) | **当前状态单一事实源**：版本、门禁、最近验证与已知边界 |
 | [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与变更矩阵 |
 | [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 11 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |

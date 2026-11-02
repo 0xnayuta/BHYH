@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1 基线已完成；Phase 22-2 零引用清理已完成（2026-11-02）。当前规模为 **131 个字段、261 个公开函数**；删除清单见 §6.1。
+> **状态**：Phase 22-1/22-2 已完成；Phase 22-3A 云存档字段迁移已完成（2026-11-02）。当前规模为 **126 个字段、261 个公开函数**；删除与迁移清单见 §6。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3B 及后续状态迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,8 +14,8 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,308（22-1 基线 3,516；22-2 删除 208 行） |
-| `var` 字段 | 131（22-1 基线 141；22-2 删除 10） |
+| `global.gd` 行数 | 3,302（22-1 基线 3,516；22-2/22-3A 共删除 214 行） |
+| `var` 字段 | 126（22-1 基线 141；22-2 删除 10，22-3A 迁出 5） |
 | 公开函数（非 `_` 前缀） | 261（22-1 基线 273；22-2 删除 12） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
@@ -38,11 +38,9 @@ grep -RIn '"/root/' source --include='*.gd'
 
 字段为在 `source/global.gd` 中静态声明的 `var`；类型、默认值与写入口以源码为准。
 
-### 2.1 云存档与账号（5）
+### 2.1 云存档与账号（已迁出）
 
-`cloud_save_user_id`, `cloud_save_access_token`, `cloud_save_uid_md5`, `cloud_save_account`, `cloud_auth_cooldown_until_msec`
-
-**判定**：迁移候选。目标为 `MemoryClass` 或独立的普通云端适配器；不新增 Autoload。迁移前确认这些字段是否仍被登录/云存档流程使用，避免把“状态搬家”当成功能变更。
+登录会话已迁入 `MemoryClass` 持有的 `CloudSession`（`RefCounted`），不新增 Autoload；`Global` 不再保留 `cloud_save_*` 或云认证冷却字段。
 
 ### 2.2 功能开关（1）
 
@@ -131,6 +129,7 @@ grep -RIn '"/root/' source --include='*.gd'
 
 - `RunContext`（`RefCounted`）由 `Global` 持有，负责关卡显示名、宝塔层数、单局统计、特殊副本无尽模式与八仙选择；**不是**第 27 个子服务。
 - `ArchiveSession` 由 `Global` 持有，负责档案身份、档案号、路径与代次；业务查询会话，不直接写 `cd_path`。
+- `CloudSession`（`RefCounted`）由 `MemoryClass` 持有，负责云存档登录凭证、UID 摘要、账号名与认证冷却；档案界面通过 `MemoryClass.get_cloud_session()` 使用，不新增 Autoload。
 
 **保留原则**：`Global` 只保留组合、typed getter 与正式窄入口；服务内部状态由服务自身所有。新增能力若需要跨场景生命周期，先证明普通节点/`RefCounted`/`Resource` 不足，再按 Autoload 评审。
 
@@ -351,15 +350,31 @@ main_remove_child, on_fresh, track_monster
 - 全量关卡回归未作为本批结论：一次性执行超时，未得到完整结果；不把未完成写成 PASS；
 - 未修改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
 
-### 6.3 22-3 交接
+### 6.3 Phase 22-3A 结果
+
+- 删除 `Global` 的 5 个云存档字段：`cloud_save_user_id`、`cloud_save_access_token`、`cloud_save_uid_md5`、`cloud_save_account`、`cloud_auth_cooldown_until_msec`；
+- 新增 `CloudSession`（`RefCounted`），由 `MemoryClass` 持有；登录、登录失败、冷却、退出登录均通过该会话；
+- 唯一生产消费者 `read_archive_interface.gd` 已迁移；`Global` 云字段引用为 0；
+- 未新增 Autoload，未改变云存档 UI 行为、本地档案格式或网络协议。
+
+**验证**：
+
+- 临时 `CloudSession` 逻辑探针：`PASS`（凭证设置/清理、`has_credentials`、冷却剩余时间）；
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）。
+
+### 6.4 22-3B 交接
 
 下一批按以下顺序执行，不跳步：
 
-1. **22-3A 云存档/账号字段**：确认 `cloud_save_*` 的生产消费者，迁入 `MemoryClass` 或普通云端适配器；不新增 Autoload。
-2. **22-3B 法宝槽位**：把残留实例字段迁入 `MagicWeaponRuntime`；两个槽位规则不变。
-3. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
-4. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
-5. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
+1. **22-3B 法宝槽位**：把残留实例字段迁入 `MagicWeaponRuntime`；两个槽位规则不变。
+2. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
+3. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
+4. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
 
 每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
 

@@ -69,12 +69,6 @@ const ZHENFA_ICON_PATHS := {
 	"tqz": "res://Art/zhenfa/taiqingzhen/tqz.png",
 }
 
-var cloud_save_user_id := ""
-var cloud_save_access_token := ""
-var cloud_save_uid_md5 := ""
-var cloud_save_account := ""
-var cloud_auth_cooldown_until_msec := 0
-
 const HIDDEN_FEATURE_INVINCIBLE := "invincible"
 const HIDDEN_FEATURE_INSTANT_KILL := "instant_kill"
 const HIDDEN_FEATURE_ALL_MAPS := "all_maps"
