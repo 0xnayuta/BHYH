@@ -115,7 +115,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/reference/gameplay_module_matrix.md`](docs/reference/gameplay_module_matrix.md) | Phase 17-1 玩法与表现调用面矩阵：归属来源、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API |
 | [`docs/reference/module_api_matrix.md`](docs/reference/module_api_matrix.md) | Phase 17-6 试点模块 API 与依赖方向：`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` |
 | [`docs/reference/ui_theme_contract.md`](docs/reference/ui_theme_contract.md) | Phase 32 Theme 契约、批次结果、变体命名、例外与迁移边界 |
-| [`docs/reference/equipment_data_contract.md`](docs/reference/equipment_data_contract.md) | Phase 33-0/33-1/33-2/33-3 第一/第二/第三簇装备数据契约：32 字段、随机规格、Catalog/Store、Rules/Roller、商店/奖励/掉落/关卡与锻造/合成/分解/神铸迁移、验证 |
+| [`docs/reference/equipment_data_contract.md`](docs/reference/equipment_data_contract.md) | Phase 33-0/33-1/33-2/33-3 装备数据契约：32 字段、随机规格、Catalog/Store、Rules/Roller、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔迁移、验证 |
 | [`docs/reference/runtime_frames_exceptions.md`](docs/reference/runtime_frames_exceptions.md) | Phase 19-3A/21-4A 运行时建帧例外决策：保留/迁移/拒绝结论与后续边界 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收标准：八维门禁、契约域、引擎健康、运行期夹具与阈值 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前版本、规模、门禁与验证状态 |
@@ -124,7 +124,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 | [`docs/audit/AUDIT-000-audit-template.md`](docs/audit/AUDIT-000-audit-template.md) | 代码质量审计模板（10 个领域、12 个问题前缀） |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
 | [`docs/guides/migration_playbook.md`](docs/guides/migration_playbook.md) | 版本迁移方法、阶段与红线 |
-| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 32 完成 / Phase 33-0/33-1/33-2 完成 / 33-3 第一/第二/第三簇完成 / 其余未启动：UI Theme、`game_set`、标签密集、Button 密集、混合控件/布局、多批标签/混合/阵法/输入/技能/主菜单/关卡结算/运行时/系统面板、装备数据契约、随机规格、Rules/Roller、UI/背包、商店/奖励/掉落/关卡与锻造/合成/分解/神铸迁移；Phase 30 已归档，Phase 21/31 完成 |
+| [`docs/roadmap/current-iteration.md`](docs/roadmap/current-iteration.md) | Phase 32 完成 / Phase 33-0/33-1/33-2 完成 / 33-3 完成 / 33-4/33-5 未启动：UI Theme、`game_set`、标签密集、Button 密集、混合控件/布局、多批标签/混合/阵法/输入/技能/主菜单/关卡结算/运行时/系统面板、装备数据契约、随机规格、Rules/Roller、UI/背包、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔迁移；Phase 30 已归档，Phase 21/31 完成 |
 | [`docs/archive/iteration_14_atlas_metadata_boundary.md`](docs/archive/iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化边界归档：View 迁移、守卫与验证 |
 | [`docs/archive/iteration_15_app_orchestration_lifecycle.md`](docs/archive/iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期归档：场景入口、加载页、缓存/池/UI、退出与边界守卫 |
 | [`docs/archive/iteration_16_archive_session_slots.md`](docs/archive/iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位归档 |

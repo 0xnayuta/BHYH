@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（UI Theme 基线、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）。**Phase 33-0/33-1/33-2 已完成，33-3 第一/第二/第三簇完成**（装备数据契约、规则层、UI/背包、商店/奖励/掉落/关卡与锻造/合成/分解/神铸迁移）；**33-3 第四簇与 33-4/33-5 未启动**。详细批次见 [`current-iteration.md`](current-iteration.md)。
+> **当前版本**：6.9。Phase 12~Phase 20 均已完成并归档；**Phase 21 平台/发布验证的可执行项已完成**，21-2A 最低设备确认与 21-2B 暂缓。**Phase 31 已完成**（31-0A TileMap/物理层/图标去重，31-0B 拒绝 BMFont 替换，31-1 视差迁移）。**Phase 30 已完成并归档**（[归档页](../archive/iteration_30_level_layout_data_contract.md)）：30-1 `level_48` 试点、30-2 外部怪物映射/原始 ZMWS 驱动、30-3 69 迁出 + 6 空表 + 10 例外、30-4 85 脚本逐项复核。**Phase 32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 已完成**（UI Theme 基线、`game_set`、标签/Button 密集、混合控件/布局与多批标签/混合/阵法/输入/地图/技能/主菜单/关卡结算/运行时面板）。**Phase 33-0/33-1/33-2 已完成，33-3 第一/第二/第三/第四簇完成**（装备数据契约、规则层、UI/背包、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔迁移）；**33-4/33-5 未启动**。详细批次见 [`current-iteration.md`](current-iteration.md)。
 > **目标依据**：[`项目总体目标架构契约`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，档位见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -19,7 +19,7 @@
 | [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成** | 唯一 Theme；旧 Theme 退役；静态直接属性 0，仅 26 条 `hit_text` 动画轨道最终例外；见 §3.7、[`current-iteration.md`](current-iteration.md) §5C |
-| Phase 33 装备数据契约 | **33-0/33-1/33-2 已完成；33-3 第一/第二/第三簇完成；其余未启动** | 1,035 条定义、32 字段、163 条随机定义/258 个随机字段值；Resource Catalog、258 个随机规格、Rules/Roller、生成器/审计、UI/背包、商店/奖励/掉落/关卡与锻造/合成/分解/神铸迁移已落地；剩余 2 个文件、28 处；见 §3.8、[`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
+| Phase 33 装备数据契约 | **33-0/33-1/33-2 已完成；33-3 完成；33-4/33-5 未启动** | 1,035 条定义、32 字段、163 条随机定义/258 个随机字段值；Resource Catalog、258 个随机规格、Rules/Roller、生成器/审计、UI/背包、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔迁移已落地；源码 `AE.all_equipment` 为 0；见 §3.8、[`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | 平台与性能发布验收 | 独立工作流 | 按目标平台与设备条件启动，不等待目录迁移 |
 | 高版本内容回植 | 未确认 | 不把 7.0 写成承诺，按 [`migration_playbook`](../guides/migration_playbook.md) 另立范围 |
 
@@ -104,7 +104,7 @@ flowchart TD
 - HUD/面板用只读查询与明确命令，输入与音频表现不拥有领域规则。
 - 成长系统按实际域抽取命令：购买/锻造/学习/奖励先校验，再提交扣除与产出；保留共同账本与个体分配，验证失败无部分扣费、无重复领取，不引入通用事务框架。
 - 模块公开 API、场景依赖与必要的功能子目录一起治理；深层路径只在受影响边界清理，不全仓替换。
-- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 30/31 已完成并归档，Phase 32 已完成，Phase 33-0/33-1/33-2 与 33-3 第一/第二/第三簇已完成；当前候选为 33-3 第四簇、33-4、33-5，详细任务见 [`current-iteration.md`](current-iteration.md)。
+- Phase 18~20 已完成并归档，结论与延期去向见 [`iteration_18_20_comprehensive_closeout.md`](../archive/iteration_18_20_comprehensive_closeout.md)；Phase 30/31 已完成并归档，Phase 32 已完成，Phase 33-0/33-1/33-2 与 33-3 第一/第二/第三/第四簇已完成；当前候选为 33-4、33-5，详细任务见 [`current-iteration.md`](current-iteration.md)。
 
 ### 3.5 Phase 30：关卡布局数据契约与绞杀式迁移（已完成并归档）
 
@@ -191,17 +191,17 @@ flowchart TD
 
 **阶段出口**：Theme 资源登记并覆盖主要面板；试点与每批有截图/几何对照；未迁移面板明确列表，不假装全量完成。
 
-### 3.8 Phase 33：装备数据契约（33-0/33-1/33-2 完成，33-3 第一/第二/第三簇完成，其余未启动）
+### 3.8 Phase 33：装备数据契约（33-0/33-1/33-2 完成，33-3 完成，33-4/33-5 未启动）
 
-> **状态**：33-0/33-1/33-2 已完成（2026-11-02）：32 字段契约、字段审计、1,035 条定义的只读 Resource Catalog、生成器/Store、258 个随机规格、`EquipmentRoller`/`EquipmentRules`；33-3 第一/第二/第三簇（UI/说明/背包 + 商店/奖励/掉落/关卡 + 锻造/合成/分解/神铸）已完成，旧 `AE.all_equipment` 仅在剩余 2 个文件、28 处保留。33-3 第四簇、33-4 切换与 33-5 收口未启动。批次见 [`current-iteration.md`](current-iteration.md) §5D。
+> **状态**：33-0/33-1/33-2 已完成（2026-11-02）：32 字段契约、字段审计、1,035 条定义的只读 Resource Catalog、生成器/Store、258 个随机规格、`EquipmentRoller`/`EquipmentRules`；33-3 第一/第二/第三/第四簇已完成，源码内 `AE.all_equipment` 直接访问为 **0**。33-4 切换与 33-5 收口未启动。批次见 [`current-iteration.md`](current-iteration.md) §5D。
 > **依据**：[`modernization_gap_matrix.md`](../reference/modernization_gap_matrix.md) §3.2 B3、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)。
 
 - `all_equipment_data.gd`（19,185 行）的 1,035 条定义已落入 `EquipmentDefinition`/`EquipmentCatalog` + 构建源/生成器；旧脚本仍为运行时对照源，33-4 删除；
 - 33-1/33-2 已验证 1,035 条 ID、32 字段、`强化属性` 嵌套键、字段存在性与确定性字段；163 条定义/258 个随机字段值由 `EquipmentRoller` 恢复，旧实现对照 0 差异；
-- 规则（神铸、强化、宝石共鸣、五行随机）已由 `EquipmentRules` 提供；UI/说明/背包、商店/奖励/掉落/关卡与锻造/合成/分解/神铸三簇已改用 `EquipmentService`，剩余 2 个文件仍未切换；
+- 规则（神铸、强化、宝石共鸣、五行随机）已由 `EquipmentRules` 提供；UI/说明/背包、商店/奖励/掉落/关卡、锻造/合成/分解/神铸与 PlayerData/坐骑/玉兔已改用 `EquipmentService`，源码 `AE.all_equipment` 为 0；
 - 与 `PlayerData.player_data`（可变档案）的边界不变，不把档案整体 Resource 化。
 
-**阶段出口**：33-1/33-2 与 33-3 第一/第二/第三簇已完成；Phase 33 整体出口仍未达到：33-3 第四簇、33-4 旧脚本删除与 33-5 全量回归/PCK 完成后才能关闭。
+**阶段出口**：33-1/33-2 与 33-3 已完成；Phase 33 整体出口仍未达到：33-4 旧脚本删除与 33-5 全量回归/PCK 完成后才能关闭。
 
 **Phase 30~33 共同不做的事**：不改玩法数值、动画时序、掉落规则、输入映射、存档格式或显示基线；不把「现代化」等同于目录搬迁或 Autoload 数量目标。
 

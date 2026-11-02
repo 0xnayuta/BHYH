@@ -200,8 +200,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 		var unlock_requirement := PlayerData.get_mount_unlock_requirement(str(mount.get("ID", "")))
 		var item_id := str(unlock_requirement.get("物品", ""))
 		var needed := maxi(1, int(unlock_requirement.get(DataKeys.COUNT, 1)))
-		var item_data_value: Variant = AE.all_equipment.get(item_id, {})
-		var item_data: Dictionary = item_data_value if item_data_value is Dictionary else {}
+		var item_data := EquipmentService.data_or_empty(StringName(item_id))
 		var owned := PlayerData.get_inventory_item_count(item_id)
 		var unlock_row := HBoxContainer.new()
 		unlock_row.name = "MountUnlockRequirement"
@@ -299,8 +298,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 	qualification_header.add_child(qualification_title)
 	var requirement := PlayerData.get_mount_unlock_requirement(str(mount.get("ID", "")))
 	var material_id := str(requirement.get("物品", ""))
-	var material_data_value: Variant = AE.all_equipment.get(material_id, {})
-	var material_data: Dictionary = material_data_value if material_data_value is Dictionary else {}
+	var material_data := EquipmentService.data_or_empty(StringName(material_id))
 	var material_name := str(material_data.get(DataKeys.NAME, material_id))
 	var material_count := PlayerData.get_inventory_item_count(material_id)
 	var material_label := _label(
@@ -725,8 +723,7 @@ func _toggle_active_mount() -> void:
 		var requirement := PlayerData.get_mount_unlock_requirement(selected_mount_id)
 		var item_id := str(requirement.get("物品", ""))
 		var needed := maxi(1, int(requirement.get(DataKeys.COUNT, 1)))
-		var item_data_value: Variant = AE.all_equipment.get(item_id, {})
-		var item_data: Dictionary = item_data_value if item_data_value is Dictionary else {}
+		var item_data := EquipmentService.data_or_empty(StringName(item_id))
 		var item_name := str(item_data.get(DataKeys.NAME, item_id))
 		var owned := PlayerData.get_inventory_item_count(item_id)
 		if item_id == "":
@@ -822,8 +819,7 @@ func _train_mount_qualification() -> void:
 		return
 	var requirement := PlayerData.get_mount_unlock_requirement(selected_mount_id)
 	var material_id := str(requirement.get("物品", result.get("item_id", "")))
-	var material_data_value: Variant = AE.all_equipment.get(material_id, {})
-	var material_data: Dictionary = material_data_value if material_data_value is Dictionary else {}
+	var material_data := EquipmentService.data_or_empty(StringName(material_id))
 	_show_message("缺少%s" % str(material_data.get(DataKeys.NAME, material_id)))
 
 

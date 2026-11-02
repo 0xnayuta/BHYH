@@ -1502,7 +1502,7 @@ func restore_state(snapshot: Dictionary) -> void:
 func change_transmog(slot_type: String, item_name: String) -> bool:
 	if slot_type not in [DataKeys.WEAPON, DataKeys.ARMOR, DataKeys.WINGS, DataKeys.TITLE]:
 		return false
-	if item_name != "" and (not AE.all_equipment.has(item_name) or not has_acquired_equipment(item_name)):
+	if item_name != "" and (not EquipmentService.has(StringName(item_name)) or not has_acquired_equipment(item_name)):
 		return false
 	var snapshot := snapshot_state()
 	player_data[DataKeys.TRANSMOG_LIST][slot_type] = item_name
@@ -2728,9 +2728,9 @@ func add_pet_backpack_item(item_id: String, amount: int = 1, data_override: Dict
 		return 0
 	var item_data: Dictionary = data_override.duplicate(true)
 	if item_data.is_empty():
-		if AE == null or not AE.all_equipment.has(item_id):
+		if not EquipmentService.has(StringName(item_id)):
 			return 0
-		item_data = AE.all_equipment[item_id].duplicate(true)
+		item_data = EquipmentService.data(StringName(item_id))
 	if item_data.is_empty():
 		return 0
 
@@ -2774,8 +2774,8 @@ func get_equipment_strength_max_level(item: Dictionary = {}, item_id: String = "
 	):
 		return 0
 	var quality := str(item.get(DataKeys.QUALITY, nested.get(DataKeys.QUALITY, ""))).strip_edges()
-	if quality == "" and AE != null and AE.all_equipment.has(resolved_item_id):
-		quality = str(AE.all_equipment[resolved_item_id].get(DataKeys.QUALITY, "")).strip_edges()
+	if quality == "" and EquipmentService.has(StringName(resolved_item_id)):
+		quality = EquipmentService.definition(StringName(resolved_item_id)).quality.strip_edges()
 	if quality == "" or STANDARD_STRENGTH_QUALITIES.has(quality):
 		return 30
 	return PET_EQUIPMENT_MAX_STRENGTH_LEVEL
@@ -2944,7 +2944,7 @@ func _pet_equipment_gem_properties(sources: Array) -> Dictionary:
 		var source: Dictionary = source_value
 		if not (source.get(DataKeys.GEM, null) is Array):
 			continue
-		return AE.get_divine_forge_gem_properties("", source)
+		return EquipmentService.rules().get_divine_forge_gem_properties(&"", source)
 	return {}
 
 
@@ -3669,10 +3669,10 @@ func _migrate_retired_xianyu_item_array(items: Array) -> void:
 
 
 func _replace_retired_xianyu_item_data(item: Dictionary, new_id: String) -> void:
-	if not AE.all_equipment.has(new_id):
+	if not EquipmentService.has(StringName(new_id)):
 		return
 	var old_data = item.get("Data", {})
-	var new_data = AE.all_equipment[new_id].duplicate(true)
+	var new_data := EquipmentService.data(StringName(new_id))
 	if old_data is Dictionary and old_data.has(DataKeys.GEM):
 		new_data[DataKeys.GEM] = old_data[DataKeys.GEM].duplicate(true)
 	item[DataKeys.NAME] = new_id
@@ -4241,9 +4241,10 @@ func get_total_zb_list():
 
 
 func record_acquired_equipment(item_id: String) -> void:
-	if not AE.all_equipment.has(item_id) or _is_removed_equipment_id(item_id):
+	var item_definition := EquipmentService.definition(StringName(item_id))
+	if item_definition == null or _is_removed_equipment_id(item_id):
 		return
-	if str(AE.all_equipment[item_id].get(DataKeys.TYPE, "")) not in ["武器", "防具", "时装", "翅膀", "头衔"]:
+	if item_definition.category not in ["武器", "防具", "时装", "翅膀", "头衔"]:
 		return
 	var acquired_value: Variant = player_data.get("已获取装备列表", [])
 	var acquired: Array = acquired_value if acquired_value is Array else []
@@ -4282,14 +4283,14 @@ func add_zb(_name, qh_level, data) -> bool:
 	var equipment_id := str(_name)
 	if equipment_id == "" or _is_removed_equipment_id(equipment_id):
 		return false
-	if not AE.all_equipment.has(equipment_id):
+	if not EquipmentService.has(StringName(equipment_id)):
 		return false
 
 	var page_number: int = int(check_can_use_page("装备列表"))
 	if page_number == 0:
 		return false
 	if data.is_empty():
-		data = (AE.all_equipment[equipment_id] as Dictionary).duplicate(true)
+		data = EquipmentService.data(StringName(equipment_id))
 	player_data[DataKeys.EQUIPMENT_LIST]["页码" + str(page_number)].push_back(
 		{"名字": equipment_id, "强化等级": qh_level, "Data": data}
 	)
@@ -4301,14 +4302,14 @@ func add_fb(_name, qh_level, wx, data) -> bool:
 	var equipment_id := str(_name)
 	if equipment_id == "" or equipment_id in RETIRED_WUDU_MAGIC_WEAPONS:
 		return false
-	if not AE.all_equipment.has(equipment_id):
+	if not EquipmentService.has(StringName(equipment_id)):
 		return false
 
 	var page_number: int = int(check_can_use_page("装备列表"))
 	if page_number == 0:
 		return false
 	if data.is_empty():
-		data = (AE.all_equipment[equipment_id] as Dictionary).duplicate(true)
+		data = EquipmentService.data(StringName(equipment_id))
 	player_data[DataKeys.EQUIPMENT_LIST]["页码" + str(page_number)].push_back(
 		{"名字": equipment_id, "强化等级": qh_level, "五行": wx, "Data": data}
 	)
@@ -4387,7 +4388,7 @@ func organize_backpack() -> bool:
 
 func _backpack_material_group(item: Dictionary) -> Array:
 	var item_id := str(item.get(DataKeys.NAME, ""))
-	var template: Dictionary = AE.all_equipment.get(item_id, {})
+	var template := EquipmentService.data_or_empty(StringName(item_id))
 	var item_name := str(template.get(DataKeys.NAME, item_id))
 	var group := str(template.get("所属", ""))
 	var family := item_name
@@ -4427,8 +4428,8 @@ func _backpack_item_before(a: Dictionary, b: Dictionary) -> bool:
 	var quality_order := ["普通", "优秀", "精良", "史诗", "邪灵", "魂器", "传说", "神器", "玄冥", "黑神话", "无敌"]
 	var a_id := str(a.get(DataKeys.NAME, ""))
 	var b_id := str(b.get(DataKeys.NAME, ""))
-	var a_template: Dictionary = AE.all_equipment.get(a_id, {})
-	var b_template: Dictionary = AE.all_equipment.get(b_id, {})
+	var a_template := EquipmentService.data_or_empty(StringName(a_id))
+	var b_template := EquipmentService.data_or_empty(StringName(b_id))
 	var a_data: Dictionary = a.get("Data", {}) if a.get("Data", {}) is Dictionary else {}
 	var b_data: Dictionary = b.get("Data", {}) if b.get("Data", {}) is Dictionary else {}
 	var a_rank := quality_order.find(str(a_data.get(DataKeys.QUALITY, a_template.get(DataKeys.QUALITY, ""))))
@@ -4458,7 +4459,7 @@ func zl_zb():
 			list.push_back(z)
 		player_data[DataKeys.EQUIPMENT_LIST]["页码" + str(u)].clear()
 	for i in list:
-		var lx = AE.all_equipment[i.名字][DataKeys.TYPE]
+		var lx := EquipmentService.definition(StringName(str(i.名字))).category
 		if lx != "法宝":
 			add_zb(i.名字, i.强化等级, i.Data)
 		else:
@@ -4640,7 +4641,7 @@ func get_total_dj_list():
 func add_dj(_name, number, locked := false) -> bool:
 	if number <= 0:
 		return false
-	if not AE.all_equipment.has(_name):
+	if not EquipmentService.has(StringName(str(_name))):
 		return false
 
 	var existing_page = get_dj_page(_name)
@@ -4656,7 +4657,7 @@ func add_dj(_name, number, locked := false) -> bool:
 	if usable_page == 0:
 		return false
 
-	var data = AE.all_equipment[_name]
+	var data := EquipmentService.data(StringName(str(_name)))
 	player_data[DataKeys.ITEM_LIST]["页码" + str(usable_page)].push_back(
 		{"名字": _name, "数量": number, "Data": data, "锁定": bool(locked)}
 	)
@@ -4675,7 +4676,7 @@ func add_dj_batch(entries: Array) -> bool:
 			return false
 		var item_name := str((entry as Dictionary).get("name", ""))
 		var item_number := int((entry as Dictionary).get("number", 0))
-		if item_name == "" or item_number <= 0 or not AE.all_equipment.has(item_name):
+		if item_name == "" or item_number <= 0 or not EquipmentService.has(StringName(item_name)):
 			player_data[DataKeys.ITEM_LIST] = before
 			return false
 		expected[item_name] = int(expected.get(item_name, 0)) + item_number
@@ -4744,7 +4745,7 @@ func remove_dj(_name, page, num):
 	if last_num <= 0:
 		player_data[DataKeys.ITEM_LIST]["页码" + str(page)].remove_at(x)
 	if not Global.is_in_ldl:
-		all_coin = AE.all_equipment[_name]["售价"] * num
+		all_coin = EquipmentService.definition(StringName(str(_name))).price * num
 		add_soul(all_coin)
 	var list = {"名字": _name, "数量": last_num, "获得灵魂": all_coin, "卖出数量": num}
 	return list
@@ -4859,7 +4860,7 @@ func remove_xhp(_name, page, num):
 	if last_num <= 0:
 		player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(page)].remove_at(x)
 	if not Global.is_in_ldl:
-		all_coin = AE.all_equipment[_name]["售价"] * num
+		all_coin = EquipmentService.definition(StringName(str(_name))).price * num
 		add_soul(all_coin)
 	var list = {"名字": _name, "数量": last_num, "获得灵魂": all_coin, "卖出数量": num}
 	return list
@@ -4874,7 +4875,8 @@ func migrate_consumables_from_dj_to_xhp() -> void:
 			var item = page[x]
 			if item.has(DataKeys.NAME):
 				var item_name = item[DataKeys.NAME]
-				if AE.all_equipment.has(item_name) and AE.all_equipment[item_name][DataKeys.TYPE] == "消耗品":
+				var item_definition := EquipmentService.definition(StringName(str(item_name)))
+				if item_definition != null and item_definition.category == "消耗品":
 					var item_num = int(item[DataKeys.COUNT]) if item.has(DataKeys.COUNT) else 1
 					page.remove_at(x)
 					move_list.push_back({"名字": item_name, "数量": item_num, "锁定": bool(item.get("锁定", false))})
