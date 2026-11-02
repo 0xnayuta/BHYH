@@ -183,7 +183,7 @@ func load_material_box():
 func add_item_box():
 	var book_name := _get_current_book_name()
 	var item_name := book_name.split("zzs")[0] if book_name != "" else ""
-	if item_name == "" or not AE.all_equipment.has(item_name):
+	if item_name == "" or not EquipmentService.has(StringName(item_name)):
 		scw.get_item_name = "empty"
 		scw.icon = ItemUtils.item_icon("empty")
 		scw.eq_prop = {}
@@ -210,13 +210,12 @@ func refresh_name():
 
 	var book_name := _get_current_book_name()
 	var item_name := book_name.split("zzs")[0] if book_name != "" else ""
-	if item_name == "" or not AE.all_equipment.has(item_name):
+	if item_name == "" or not EquipmentService.has(StringName(item_name)):
 		remove_name_and_need()
 		return
-	var item_display_name = AE.all_equipment[item_name][DataKeys.NAME]
-	var color = AE.all_equipment[item_name]["颜色"]
-	item_name_label.text = str(item_display_name)
-	item_name_label.add_theme_color_override("font_color", color)
+	var item_definition := EquipmentService.definition(StringName(item_name))
+	item_name_label.text = item_definition.display_name
+	item_name_label.add_theme_color_override("font_color", item_definition.color_hex)
 
 
 func addbzpic():
@@ -257,7 +256,7 @@ func remove_bspic(id: int):
 		return
 	var jewel: Dictionary = jewel_value
 	var jewel_name := str(jewel.get(DataKeys.NAME, ""))
-	if jewel_name == "" or not AE.all_equipment.has(jewel_name):
+	if jewel_name == "" or not EquipmentService.has(StringName(jewel_name)):
 		print("警告：宝珠名称无效，跳过移除索引 ", id)
 		return
 	if id < bs_box.get_child_count():
@@ -283,7 +282,7 @@ func remove_infomation():
 			continue
 		var jewel: Dictionary = jewel_value
 		var item_name := str(jewel.get(DataKeys.NAME, ""))
-		if item_name != "" and AE.all_equipment.has(item_name):
+		if item_name != "" and EquipmentService.has(StringName(item_name)):
 			PlayerData.add_dj(item_name, 1)
 	bz_list.clear()
 	MemoryClass.request_save("ldl_forge_remove")
@@ -501,7 +500,7 @@ func _on_froge_pressed() -> void:
 		book_name == ""
 		or item_name == ""
 		or not item_material_list.has(book_name)
-		or not AE.all_equipment.has(item_name)
+		or not EquipmentService.has(StringName(item_name))
 	):
 		Global.add_message_show(Global.get_ui_runtime().windows, "制作书数据异常，无法打造！！", 1.5, Vector2(500, 305))
 		return
@@ -512,8 +511,8 @@ func _on_froge_pressed() -> void:
 		Global.add_message_show(Global.get_ui_runtime().windows, "材料或制作书不足！！", 1.5, Vector2(500, 305))
 		return
 
-	var item_data: Dictionary = AE.all_equipment[item_name] as Dictionary
-	var equipment_type := str(item_data.get(DataKeys.TYPE, ""))
+	var item_data := EquipmentService.data(StringName(item_name))
+	var equipment_type := EquipmentService.definition(StringName(item_name)).category
 	var jewels_value: Variant = PlayerData.player_data.get("宝珠列表", [])
 	if not jewels_value is Array:
 		Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
@@ -534,15 +533,11 @@ func _on_froge_pressed() -> void:
 			return
 		var jewel: Dictionary = jewel_value
 		var jewel_name := str(jewel.get(DataKeys.NAME, ""))
-		if jewel_name == "" or not AE.all_equipment.has(jewel_name):
+		if jewel_name == "" or not EquipmentService.has(StringName(jewel_name)):
 			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
 			return
-		var jewel_data_value: Variant = AE.all_equipment.get(jewel_name, {})
-		if not jewel_data_value is Dictionary:
-			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
-			return
-		var jewel_data: Dictionary = jewel_data_value
-		for prop in AE.prop_list_name:
+		var jewel_data := EquipmentService.data(StringName(jewel_name))
+		for prop in EquipmentRules.PROP_LIST_NAME:
 			if jewel_data.has(prop):
 				new_equip_data[prop] = new_equip_data.get(prop, 0) + jewel_data[prop]
 		var jewel_strength_value: Variant = jewel_data.get(DataKeys.ENHANCE_PROP, {})
@@ -554,7 +549,7 @@ func _on_froge_pressed() -> void:
 	var added := false
 	match equipment_type:
 		"法宝":
-			added = PlayerData.add_fb(item_name, 0, AE.get_wx(), new_equip_data)
+			added = PlayerData.add_fb(item_name, 0, EquipmentService.rules().get_wx(), new_equip_data)
 		"武器", "防具", "饰品", "神骨", "时装", "头衔", "翅膀":
 			added = PlayerData.add_zb(item_name, 0, new_equip_data)
 		_:
@@ -603,20 +598,20 @@ func get_bz_prop_legacy():
 	if PlayerData.player_data["宝珠列表"].size() <= 0:
 		return
 	var bz_prop = {}
-	for i in AE.prop_list_name:
+	for i in EquipmentRules.PROP_LIST_NAME:
 		bz_prop[i] = 0
 	for i in PlayerData.player_data["宝珠列表"]:
-		i["Data"] = AE.all_equipment[i[DataKeys.NAME]]
-		for u in AE.prop_list_name:
+		i["Data"] = EquipmentService.data(StringName(i[DataKeys.NAME]))
+		for u in EquipmentRules.PROP_LIST_NAME:
 			bz_prop[u] += i["Data"][u]
 	var book_name := _get_current_book_name()
 	if book_name == "":
 		return
 	var item_name := book_name.split("zzs")[0]
-	if not AE.all_equipment.has(item_name):
+	if not EquipmentService.has(StringName(item_name)):
 		return
-	var prop_list = AE.all_equipment[item_name].duplicate(true)
-	for i in AE.prop_list_name:
+	var prop_list := EquipmentService.data(StringName(item_name))
+	for i in EquipmentRules.PROP_LIST_NAME:
 		prop_list[i] += bz_prop[i]
 	return prop_list
 
@@ -630,29 +625,26 @@ func get_bz_prop() -> Dictionary:
 		return {}
 
 	var bonus: Dictionary = {}
-	for prop in AE.prop_list_name:
+	for prop in EquipmentRules.PROP_LIST_NAME:
 		bonus[prop] = 0
 	for jewel_value in jewels:
 		if not jewel_value is Dictionary:
 			return {}
 		var jewel: Dictionary = jewel_value
 		var jewel_name := str(jewel.get(DataKeys.NAME, ""))
-		if jewel_name == "" or not AE.all_equipment.has(jewel_name):
+		if jewel_name == "" or not EquipmentService.has(StringName(jewel_name)):
 			return {}
-		var jewel_data_value: Variant = AE.all_equipment.get(jewel_name, {})
-		if not jewel_data_value is Dictionary:
-			return {}
-		var jewel_data: Dictionary = jewel_data_value
-		for prop in AE.prop_list_name:
+		var jewel_data := EquipmentService.data(StringName(jewel_name))
+		for prop in EquipmentRules.PROP_LIST_NAME:
 			if jewel_data.has(prop):
 				bonus[prop] = bonus.get(prop, 0) + jewel_data[prop]
 
 	var book_name := _get_current_book_name()
 	var item_name := book_name.split("zzs")[0] if book_name != "" else ""
-	if item_name == "" or not AE.all_equipment.has(item_name):
+	if item_name == "" or not EquipmentService.has(StringName(item_name)):
 		return {}
-	var prop_list: Dictionary = (AE.all_equipment[item_name] as Dictionary).duplicate(true)
-	for prop in AE.prop_list_name:
+	var prop_list := EquipmentService.data(StringName(item_name))
+	for prop in EquipmentRules.PROP_LIST_NAME:
 		if prop_list.has(prop):
 			prop_list[prop] += bonus.get(prop, 0)
 	return prop_list
@@ -663,9 +655,9 @@ func get_eq_prop():
 	if book_name == "":
 		return
 	var item_name := book_name.split("zzs")[0]
-	if not AE.all_equipment.has(item_name):
+	if not EquipmentService.has(StringName(item_name)):
 		return
-	return AE.all_equipment[item_name]
+	return EquipmentService.data(StringName(item_name))
 
 
 func _on_help_pressed() -> void:

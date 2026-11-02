@@ -34,7 +34,9 @@ func set_text():
 
 
 func set_box():
-	var item_box = Global.add_item_box(box, true, true, item_name, 0, 1, [], AE.all_equipment[item_name])
+	var item_box = Global.add_item_box(
+		box, true, true, item_name, 0, 1, [], EquipmentService.data(StringName(item_name))
+	)
 	if item_box == null or not is_instance_valid(item_box):
 		return
 	var icon_path := "res://Art/backpack/all_items/%s.png" % str(item_name)

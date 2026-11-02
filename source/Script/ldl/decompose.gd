@@ -112,7 +112,7 @@ func push_basic_item(type):
 
 
 func bs_fj(name_str):
-	var base = AE.all_equipment[name_str]["所属"]
+	var base := EquipmentService.definition(StringName(name_str)).origin
 	if base != "宝石":
 		return
 	var name_list = str(name_str).split("_")
@@ -135,7 +135,8 @@ func change_item_list():
 		var name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 		var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 		var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-		var get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
+		var item_definition := EquipmentService.definition(StringName(name_str))
+		var get_tt := item_definition.category
 		if normal_items.has(name_str):
 			if normal_items[name_str].has("Need"):
 				need_lh = normal_items[name_str]["Need"]
@@ -150,23 +151,24 @@ func change_item_list():
 		match get_tt:
 			"武器", "饰品", "防具":
 				pushqhs(name_str, cur_level)
-				push_bs(name_str, AE.all_equipment[name_str][DataKeys.QUALITY])
-				push_basic_item(AE.all_equipment[name_str][DataKeys.QUALITY])
+				push_bs(name_str, item_definition.quality)
+				push_basic_item(item_definition.quality)
 				if item_data.size() != 0:
 					for i in item_data:
 						var item_name = i["name"]
-						var type = AE.all_equipment[item_name][DataKeys.TYPE]
+						var type := EquipmentService.definition(StringName(item_name)).category
 						var target_count = i["num"]
+						var item_box_data := EquipmentService.data(StringName(item_name))
 						var box
 						match type:
 							"武器", "饰品", "防具":
 								box = Global.add_item_box(
-									item_list, true, true, item_name, target_count, 0, [], AE.all_equipment[item_name]
+									item_list, true, true, item_name, target_count, 0, [], item_box_data
 								)
 								box.set_button_icon(ItemUtils.item_icon(item_name))
 							"道具":
 								box = Global.add_item_box(
-									item_list, true, true, item_name, 0, target_count, [], AE.all_equipment[item_name]
+									item_list, true, true, item_name, 0, target_count, [], item_box_data
 								)
 								box.set_button_icon(ItemUtils.item_icon(item_name))
 						num += 1
@@ -186,7 +188,14 @@ func change_item_list():
 				else:
 					for i in normal_items[name_str]["Value"]:
 						var box = Global.add_item_box(
-							item_list, true, true, i["name"], 0, i["num"], [], AE.all_equipment[i["name"]]
+							item_list,
+							true,
+							true,
+							i["name"],
+							0,
+							i["num"],
+							[],
+							EquipmentService.data(StringName(i["name"]))
 						)
 						box.set_button_icon(ItemUtils.item_icon(i["name"]))
 						num += 1
@@ -225,9 +234,10 @@ func _on_decompose_button_pressed() -> void:
 		var name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 		var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 		var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-		var get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
-		var typee = AE.all_equipment[name_str][DataKeys.TYPE]
-		var item_name = AE.all_equipment[name_str][DataKeys.NAME]
+		var item_definition := EquipmentService.definition(StringName(name_str))
+		var get_tt := item_definition.category
+		var typee := item_definition.category
+		var item_name := item_definition.display_name
 		if cur_level > 0:
 			Global.add_choose_text(
 				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（该装备包含强化等级！）", 0
@@ -244,15 +254,16 @@ func fj():
 		var name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 		var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 		var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-		var get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
-		var typee = AE.all_equipment[name_str][DataKeys.TYPE]
-		var item_name = AE.all_equipment[name_str][DataKeys.NAME]
+		var item_definition := EquipmentService.definition(StringName(name_str))
+		var get_tt := item_definition.category
+		var typee := item_definition.category
+		var item_name := item_definition.display_name
 		match get_tt:
 			"武器", "饰品", "防具":
 				if item_data.size() != 0:
 					for i in item_data:
 						var sub_item_name = i["name"]
-						var type = AE.all_equipment[sub_item_name][DataKeys.TYPE]
+						var type := EquipmentService.definition(StringName(sub_item_name)).category
 						var target_count = i["num"]
 						var box
 						match type:
@@ -261,7 +272,7 @@ func fj():
 									{
 										"Name": sub_item_name,
 										"Value": 1,
-										"Prop": AE.all_equipment[sub_item_name],
+										"Prop": EquipmentService.data(StringName(sub_item_name)),
 										"WX": [],
 										"strength_value": target_count
 									}
@@ -292,8 +303,8 @@ func fj():
 			"道具":
 				bs_fj(name_str)
 				if not normal_items.has(name_str):
-					var _name = AE.all_equipment[name_str][DataKeys.NAME]
-					var type = AE.all_equipment[name_str][DataKeys.TYPE]
+					var _name := item_definition.display_name
+					var type := item_definition.category
 					Global.add_message_show(
 						Global.get_ui_runtime().windows, str(type) + str(_name) + "不可以进行分解！！", 1.5, Vector2(500, 305)
 					)
@@ -316,7 +327,7 @@ func remove_infomation():
 		var name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 		var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 		var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-		var get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
+		var get_tt := EquipmentService.definition(StringName(name_str)).category
 		match get_tt:
 			"武器", "饰品", "防具":
 				PlayerData.add_zb(name_str, cur_level, data)

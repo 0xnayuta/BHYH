@@ -104,7 +104,7 @@ python scripts/check_all.py --no-cache -j 6
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
 | 关卡布局同步 | `convert_level_layout_catalog.py --check` | `level_layout_sources.json` 与布局 `.tres`/Catalog 逐字一致；stage 连续、点位唯一、依赖存在、矩形范围（终屏 screen_rect 允许零宽）与场景路径校验 |
-| 装备 Catalog/字段 | `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check` | 1,035 条定义、32 字段、`defined_fields`/`randomized_fields`/`random_rolls`、嵌套强化键、int/float 类型与构建源同源；随机字段不得保存采样值；33-2 Rules/Roller 需与旧实现逐项对照；33-3 第一簇需通过 `ui-factories`/`ui-theme`、`coop_probe` 与 `level_1`；第二簇需通过 `ui-factories`、`level-entry`（掉落盒）、`archive_probe_runner`（商店/奖励/结算）与 `level_1` |
+| 装备 Catalog/字段 | `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check` | 1,035 条定义、32 字段、`defined_fields`/`randomized_fields`/`random_rolls`、嵌套强化键、int/float 类型与构建源同源；随机字段不得保存采样值；33-2 Rules/Roller 需与旧实现逐项对照；33-3 第一簇需通过 `ui-factories`/`ui-theme`、`coop_probe` 与 `level_1`；第二簇需通过 `ui-factories`、`level-entry`（掉落盒）、`archive_probe_runner`（商店/奖励/结算）与 `level_1`；第三簇需通过 `archive_probe_runner`（强化/合成/分解/神铸/淬骨/锻造）、`ui-factories` 与 `health_check` |
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
 | 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |

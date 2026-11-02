@@ -212,7 +212,7 @@ var recipes_by_type = {"装备": [], "道具": [], "法宝": [], "时装": []}
 
 func _ready():
 	for recipe in RECIPES:
-		var type = AE.all_equipment[recipe["result"]][DataKeys.TYPE]
+		var type := EquipmentService.definition(StringName(recipe["result"])).category
 		match type:
 			"武器", "防具", "饰品", "头衔":
 				recipes_by_type["装备"].append(recipe)

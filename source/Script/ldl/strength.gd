@@ -126,7 +126,7 @@ func set_color():
 func _on_qh_pressed() -> void:
 	var selected_name: String = str(MLdl.qh_list.get(DataKeys.NAME, ""))
 	var selected_data: Dictionary = MLdl.qh_list.get("Data", {}) if MLdl.qh_list.get("Data", {}) is Dictionary else {}
-	var template_data: Dictionary = AE.all_equipment.get(selected_name, {})
+	var template_data := EquipmentService.data_or_empty(StringName(selected_name))
 	if (
 		bool(selected_data.get("不可强化", template_data.get("不可强化", false)))
 		and selected_name not in ["cjxianjie", "cdxianjie", "zhxianjie"]
@@ -144,7 +144,9 @@ func _on_qh_pressed() -> void:
 	var current_level = int(equipment.get(DataKeys.ENHANCE_LEVEL, 0))
 	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = current_level
 	qh_level = current_level
-	var type = AE.all_equipment.get(MLdl.qh_list[DataKeys.NAME], {}).get(DataKeys.QUALITY, "")
+	var type: String = str(
+		EquipmentService.data_or_empty(StringName(MLdl.qh_list[DataKeys.NAME])).get(DataKeys.QUALITY, "")
+	)
 	var max_level: int = _get_strength_max_level(MLdl.qh_list[DataKeys.NAME])
 	if current_level >= max_level:
 		Global.add_message_show(get_parent(), str(type) + "品质装备最高强化" + str(max_level) + "级！！", 1.5, Vector2(15, -45))

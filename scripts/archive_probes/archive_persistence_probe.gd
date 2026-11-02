@@ -1693,6 +1693,54 @@ func _test_growth_commands() -> void:
 	synthesis.queue_free()
 	await get_tree().process_frame
 
+	# 分解：选中装备后重建预览，验证静态字段与掉落物品均能解析。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	PlayerData.player_data[DataKeys.DECOMPOSE_LIST] = [
+		{"名字": "ptxzg", "强化等级": 0, "Data": {}}
+	]
+	var decompose: Node = (load("res://Scene/ldl/decompose.tscn") as PackedScene).instantiate()
+	decompose.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(decompose)
+	await get_tree().process_frame
+	decompose.call("change_item_list")
+	await get_tree().process_frame
+	var decompose_items: Node = decompose.get("item_list")
+	var decompose_data: Array = decompose.get("item_data")
+	_check("decompose_data_built", not decompose_data.is_empty(), "item_data=%d" % decompose_data.size())
+	_check(
+		"decompose_boxes_built",
+		decompose_items != null and decompose_items.get_child_count() == 8,
+		"children=%d" % (decompose_items.get_child_count() if decompose_items != null else -1)
+	)
+	decompose.queue_free()
+	PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
+	await get_tree().process_frame
+
+	# 锻造：选中制作书后，静态定义与基础属性均从 Catalog 解析。
+	_reset_profile(1, 5)
+	_open_session(PANEL_ARCHIVE_PATH)
+	var forge: Node = (load("res://Scene/ldl/forge.tscn") as PackedScene).instantiate()
+	forge.process_mode = Node.PROCESS_MODE_DISABLED
+	add_child(forge)
+	await get_tree().process_frame
+	var book: Node = (load("res://Scene/back_pack/box_1.tscn") as PackedScene).instantiate()
+	book.set_meta("item_name", "tfljzzs")
+	book.process_mode = Node.PROCESS_MODE_DISABLED
+	forge.get("zzs").add_child(book)
+	book.set("get_item_name", "tfljzzs")
+	_check("forge_book_selected", str(forge.call("_get_current_book_name")) == "tfljzzs", str(book.get("get_item_name")))
+	var forge_prop: Variant = forge.call("get_eq_prop")
+	_check(
+		"forge_eq_prop_from_catalog",
+		forge_prop is Dictionary
+		and not (forge_prop as Dictionary).is_empty()
+		and str((forge_prop as Dictionary).get(DataKeys.NAME, "")) == "通风灵戒",
+		"prop=%s" % str(forge_prop)
+	)
+	forge.queue_free()
+	await get_tree().process_frame
+
 
 func _seed_forge_equipment(item_id: String, data: Dictionary) -> void:
 	var page: Array = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"]

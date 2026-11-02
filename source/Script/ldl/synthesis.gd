@@ -58,7 +58,7 @@ func remove_infomation():
 	for i in PlayerData.player_data["放入列表"]:
 		if PlayerData.player_data["放入列表"][i].size() != 0:
 			var new_list = PlayerData.player_data["放入列表"][i]
-			var get_tt = AE.all_equipment[new_list[0]][DataKeys.TYPE]
+			var get_tt := EquipmentService.definition(StringName(new_list[0])).category
 			if get_tt == "武器" or get_tt == "防具" or get_tt == "饰品" or get_tt == "翅膀" or get_tt == "头衔" or get_tt == "时装":
 				PlayerData.add_zb(new_list[0], new_list[3], new_list[4])
 			elif get_tt == "道具" or get_tt == "消耗品":
@@ -87,15 +87,16 @@ func _get_display_name():
 		var recipe_info = get_recipe(name_1, name_2, name_3)
 		if recipe_info[0]:
 			var result_item = recipe_info[1]
+			var result_definition := EquipmentService.definition(StringName(result_item))
 
-			_name.text = str(AE.all_equipment[result_item][DataKeys.NAME])
+			_name.text = result_definition.display_name
 			item_4.set_button_icon(ItemUtils.equipment_icon_or_item_icon(str(result_item)))
-			var lx = AE.all_equipment[result_item][DataKeys.TYPE]
+			var lx := result_definition.category
 			need_lh.text = str(recipe_info[2])
 
 			match lx:
 				"道具", "消耗品":
-					item_4.eq_prop = AE.all_equipment[result_item]
+					item_4.eq_prop = EquipmentService.data(StringName(result_item))
 				"法宝":
 					item_4.eq_prop = get_fb_prop(result_item)
 				"武器", "饰品", "防具", "时装", "头衔", "翅膀":
@@ -106,7 +107,7 @@ func _get_display_name():
 							"dzjj", "huayan", "cjjj":
 								item_4.eq_prop = get_equipment_prop(result_item)
 								return
-						item_4.eq_prop = AE.all_equipment[result_item]
+						item_4.eq_prop = EquipmentService.data(StringName(result_item))
 		else:
 			item_4.eq_prop = {}
 			_name.text = ""
@@ -146,14 +147,14 @@ func _on_syn_pressed() -> void:
 		Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
 		return
 	var _item = recipe_info[1]
-	var get_tt = AE.all_equipment[_item][DataKeys.TYPE]
+	var get_tt := EquipmentService.definition(StringName(_item)).category
 	var granted := false
 	if get_tt == "武器" or get_tt == "防具" or get_tt == "饰品" or get_tt == "时装" or get_tt == "头衔" or get_tt == "翅膀":
 		granted = PlayerData.add_zb(_item, 0, item_4.eq_prop)
 	elif get_tt == "道具" or get_tt == "消耗品":
 		granted = PlayerData.add_dj(_item, 1)
 	elif get_tt == "法宝":
-		granted = PlayerData.add_fb(_item, 0, AE.get_wx(), item_4.eq_prop)
+		granted = PlayerData.add_fb(_item, 0, EquipmentService.rules().get_wx(), item_4.eq_prop)
 	if not granted:
 		PlayerData.restore_state(snapshot)
 		Global.add_message_show(get_parent(), "背包已满，合成已撤销！", 1.5, Vector2(15, -45))
@@ -169,7 +170,10 @@ func _on_syn_pressed() -> void:
 		)
 		return
 	Global.add_message_show(
-		get_parent(), "合成成功！获得：" + str(AE.all_equipment[_item][DataKeys.NAME]) + " * 1 !!", 1.5, Vector2(15, -45)
+		get_parent(),
+		"合成成功！获得：" + EquipmentService.definition(StringName(_item)).display_name + " * 1 !!",
+		1.5,
+		Vector2(15, -45)
 	)
 
 
@@ -229,13 +233,15 @@ func get_xianjie_prop(result_item: String) -> Dictionary:
 				source_list = candidate
 				break
 
-	var result: Dictionary = AE.all_equipment[result_item].duplicate(true)
+	var result := EquipmentService.data(StringName(result_item))
 	if source_list.size() < 5:
 		return result
 	var source_data_value: Variant = source_list[4]
 	var source_data: Dictionary = source_data_value if source_data_value is Dictionary else {}
 	var source_level := int(source_list[3])
-	var current_properties: Dictionary = AE.get_divine_forge_properties(source_name, source_level, source_data, true)
+	var current_properties: Dictionary = EquipmentService.rules().get_divine_forge_properties(
+		StringName(source_name), source_level, source_data, true
+	)
 	for property_name in prop_list_name:
 		result[property_name] = current_properties.get(property_name, 0) * 2
 	result[DataKeys.GEM] = []
@@ -272,15 +278,15 @@ func get_fb_prop(name1):
 		prop3_dict[attr] = 0
 
 	if list_1.size() >= 5:
-		var prop1 = AE.get_last_equ_pro(list_1[0], list_1[3], list_1[4])
+		var prop1 = EquipmentService.rules().get_last_equ_pro(StringName(list_1[0]), list_1[3], list_1[4])
 		for attr in prop_list_name:
 			prop1_dict[attr] = prop1.get(attr, 0) if prop1 and prop1.has(attr) else 0
 	if list_2.size() >= 5:
-		var prop2 = AE.get_last_equ_pro(list_2[0], list_2[3], list_2[4])
+		var prop2 = EquipmentService.rules().get_last_equ_pro(StringName(list_2[0]), list_2[3], list_2[4])
 		for attr in prop_list_name:
 			prop2_dict[attr] = prop2.get(attr, 0) if prop2 and prop2.has(attr) else 0
 	if list_3.size() >= 5:
-		var prop3 = AE.get_last_equ_pro(list_3[0], list_3[3], list_3[4])
+		var prop3 = EquipmentService.rules().get_last_equ_pro(StringName(list_3[0]), list_3[3], list_3[4])
 		for attr in prop_list_name:
 			prop3_dict[attr] = prop3.get(attr, 0) if prop3 and prop3.has(attr) else 0
 
@@ -289,7 +295,7 @@ func get_fb_prop(name1):
 		var avg_val = int((prop1_dict[attr] + prop2_dict[attr] + prop3_dict[attr]) / 3)
 		new_list[attr] = avg_val
 
-	var proplist = AE.all_equipment[name1].duplicate(true)
+	var proplist := EquipmentService.data(StringName(name1))
 	for i in new_list:
 		if proplist.has(i):
 			proplist[i] += new_list[i]
@@ -303,8 +309,8 @@ func get_equipment_prop(name_1):
 	var list_1 = PlayerData.player_data["放入列表"]["物品1"]
 	var list_2 = PlayerData.player_data["放入列表"]["物品2"]
 	var list_3 = PlayerData.player_data["放入列表"]["物品3"]
-	var proplist = AE.all_equipment[name_1].duplicate(true)
-	var name_prop_list = AE.prop_list_name
+	var proplist := EquipmentService.data(StringName(name_1))
+	var name_prop_list: Array = prop_list_name
 	var prop_old = {}
 
 	for i in name_prop_list:
@@ -386,20 +392,27 @@ func get_same_type(Name_1, Name_2, Name_3, need: String):
 		return false
 	if Name_1 == Name_2 or Name_1 == Name_3 or Name_2 == Name_3:
 		return false
-	var t = AE.all_equipment
-	if not t[Name_1].has("FBTYPE") or not t[Name_2].has("FBTYPE") or not t[Name_3].has("FBTYPE"):
+	var definition_1 := EquipmentService.definition(StringName(str(Name_1)))
+	var definition_2 := EquipmentService.definition(StringName(str(Name_2)))
+	var definition_3 := EquipmentService.definition(StringName(str(Name_3)))
+	if (
+		definition_1 == null
+		or definition_2 == null
+		or definition_3 == null
+		or not definition_1.has_defined_field(&"FBTYPE")
+		or not definition_2.has_defined_field(&"FBTYPE")
+		or not definition_3.has_defined_field(&"FBTYPE")
+	):
 		return false
 
-	if t[Name_1]["FBTYPE"] == need and t[Name_2]["FBTYPE"] == need and t[Name_3]["FBTYPE"] == need:
-		return true
-	return false
+	return definition_1.fb_type == need and definition_2.fb_type == need and definition_3.fb_type == need
 
 
 func get_prop(list, need):
 	var q_hlevel: int
-	if AE.all_equipment[list[0]][DataKeys.TYPE] == "道具":
+	if EquipmentService.definition(StringName(list[0])).category == "道具":
 		q_hlevel = 0
 	else:
 		q_hlevel = list[3]
-	var prop_data: Dictionary = AE.get_last_equ_pro(list[0], q_hlevel, list[4])
+	var prop_data: Dictionary = EquipmentService.rules().get_last_equ_pro(StringName(list[0]), q_hlevel, list[4])
 	return prop_data[need] if prop_data.has(need) else 0

@@ -29,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 	var equipment: Dictionary = selected.get("item", {})
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
 	var data: Dictionary = equipment.get("Data", {}) if equipment.get("Data", {}) is Dictionary else {}
-	var template: Dictionary = AE.all_equipment.get(item_name, {})
+	var template := EquipmentService.data_or_empty(StringName(item_name))
 	var stage := int(data.get("淬骨次数", 0))
 	var next_id := str(data.get("下一阶段", template.get("下一阶段", "")))
 	var qh_level := int(equipment.get(DataKeys.ENHANCE_LEVEL, 0))
@@ -43,11 +43,12 @@ func _physics_process(_delta: float) -> void:
 		_bake_bone_strength_into_base(preview_data, qh_level, 2.0)
 		_normalize_bone_attribute_signs(preview_data)
 		preview_id = next_id
-		new_zb_name = str(AE.all_equipment.get(next_id, {}).get(DataKeys.NAME, item_name))
-		var preview_template: Dictionary = AE.all_equipment.get(next_id, {}).duplicate(true)
+		var next_template := EquipmentService.data_or_empty(StringName(next_id))
+		new_zb_name = str(next_template.get(DataKeys.NAME, item_name))
+		var preview_template := next_template.duplicate(true)
 		for preview_key in preview_data:
 			preview_template[preview_key] = preview_data[preview_key]
-		preview_template[DataKeys.NAME] = str(AE.all_equipment.get(next_id, {}).get(DataKeys.NAME, item_name))
+		preview_template[DataKeys.NAME] = new_zb_name
 		preview_template["淬骨次数"] = BONE_MAX_COUNT
 		preview_template.erase("下一阶段")
 		preview_data = preview_template
@@ -89,7 +90,7 @@ func _physics_process(_delta: float) -> void:
 	var fire_id: String = BONE_FIRE_IDS[stage]
 	n_q_1.set_button_icon(ItemUtils.item_icon(fire_id))
 	n_q_1.get_item_name = fire_id
-	n_q_1.eq_prop = AE.all_equipment.get(fire_id, {})
+	n_q_1.eq_prop = EquipmentService.data_or_empty(StringName(fire_id))
 	n_q_1.total_number = 0
 	var fire_count := _count_item_all_pages(fire_id)
 	num_b1.text = str(fire_count) + "/3"
@@ -115,7 +116,7 @@ func _on_sz_pressed() -> void:
 	var equipment: Dictionary = selected.get("item", {})
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
 	var data: Dictionary = equipment.get("Data", {}) if equipment.get("Data", {}) is Dictionary else {}
-	var template: Dictionary = AE.all_equipment.get(item_name, {})
+	var template := EquipmentService.data_or_empty(StringName(item_name))
 	var next_id := str(data.get("下一阶段", template.get("下一阶段", "")))
 	var stage := int(data.get("淬骨次数", 0))
 	if str(data.get(DataKeys.TYPE, template.get(DataKeys.TYPE, ""))) != "神骨" or next_id == "":
@@ -242,7 +243,7 @@ func _ensure_bone_strength_data(data: Dictionary, source_id: String) -> void:
 	var strength: Variant = data.get(DataKeys.ENHANCE_PROP, null)
 	if strength is Dictionary and not (strength as Dictionary).is_empty():
 		return
-	var source_template: Dictionary = AE.all_equipment.get(source_id, {})
+	var source_template := EquipmentService.data_or_empty(StringName(source_id))
 	var template_strength: Variant = source_template.get(DataKeys.ENHANCE_PROP, {})
 	if template_strength is Dictionary:
 		data[DataKeys.ENHANCE_PROP] = (template_strength as Dictionary).duplicate(true)
@@ -271,7 +272,7 @@ func _promote_bone(data: Dictionary, next_id: String, source_id: String = "", qh
 	_ensure_bone_strength_data(promoted, source_id)
 	_bake_bone_strength_into_base(promoted, qh_level, 2.0)
 	_normalize_bone_attribute_signs(promoted)
-	var template: Dictionary = AE.all_equipment.get(next_id, {})
+	var template := EquipmentService.data_or_empty(StringName(next_id))
 	for key in ["品质", "类型", "颜色", "所属", "描述", "图标"]:
 		if template.has(key):
 			promoted[key] = template[key]

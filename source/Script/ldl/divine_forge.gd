@@ -35,7 +35,7 @@ func _physics_process(_delta: float) -> void:
 	var selected_page := int(selected.get("page", 0))
 	var selected_index := int(selected.get("index", -1))
 	var equipped_type := str(selected.get("穿戴栏", MLdl.qh_list.get("穿戴栏", "")))
-	var current_stage := AE.get_divine_forge_stage(item_data)
+	var current_stage := EquipmentService.rules().get_divine_forge_stage(item_data)
 	var target_stage: int = min(current_stage + 1, MAX_STAGE)
 	var qh_level := int(equipment.get(DataKeys.ENHANCE_LEVEL, 0))
 	var target_data: Dictionary = item_data.duplicate(true)
@@ -83,7 +83,7 @@ func _physics_process(_delta: float) -> void:
 	var stone_count := _count_item_all_pages(stone_id)
 	n_q_1.set_button_icon(ItemUtils.item_icon(stone_id))
 	n_q_1.get_item_name = stone_id
-	n_q_1.eq_prop = AE.all_equipment.get(stone_id, {})
+	n_q_1.eq_prop = EquipmentService.data_or_empty(StringName(stone_id))
 	n_q_1.total_number = 0
 	num_b1.text = str(stone_count) + "/" + str(required_stones)
 	_set_requirement_color(num_b1, stone_count >= required_stones)
@@ -100,17 +100,17 @@ func _on_sz_pressed() -> void:
 	var equipment: Dictionary = selected["item"]
 	var item_name := str(equipment.get(DataKeys.NAME, ""))
 	var item_data: Dictionary = equipment.get("Data", {})
-	if not AE.can_divine_forge(item_name, item_data):
+	if not EquipmentService.rules().can_divine_forge(StringName(item_name), item_data):
 		_show_message("只有神器及以上品质的武器、防具和饰品可以神铸！")
 		return
-	var current_stage := AE.get_divine_forge_stage(item_data)
+	var current_stage := EquipmentService.rules().get_divine_forge_stage(item_data)
 	if current_stage >= MAX_STAGE:
 		_show_message("该装备已经达到神铸最高九阶！")
 		return
 	var target_stage := current_stage + 1
 	var stone_id := _stone_id(target_stage)
 	if _count_item_all_pages(stone_id) < STONES_PER_STAGE:
-		_show_message(str(AE.all_equipment[stone_id][DataKeys.NAME]) + "不足，需要20颗！")
+		_show_message(EquipmentService.definition(StringName(stone_id)).display_name + "不足，需要20颗！")
 		return
 	var snapshot := PlayerData.snapshot_state()
 	var previous_data: Variant = MLdl.qh_list.get("Data", {})

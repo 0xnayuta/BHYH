@@ -96,13 +96,10 @@ func _get_target_name(index: int) -> String:
 	if index < 0 or index >= target_keys.size():
 		return ""
 	var item_name: String = target_keys[index]
-	if not AE.all_equipment.has(item_name):
+	var item_definition := EquipmentService.definition(StringName(item_name))
+	if item_definition == null:
 		return item_name
-	var item_data: Dictionary = AE.all_equipment[item_name]
-	var keys: Array = item_data.keys()
-	if keys.size() > 0:
-		return str(item_data[keys[0]])
-	return item_name
+	return item_definition.display_name
 
 
 func _create_target_list() -> void:
@@ -187,7 +184,8 @@ func update_icons(target: String):
 	item_1.tooltip_text = material_names[0] if material_names[0] != "" else "无"
 	item_2.tooltip_text = material_names[1] if material_names[1] != "" else "无"
 	item_3.tooltip_text = material_names[2] if material_names[2] != "" else "无"
-	item_4.tooltip_text = AE.all_equipment[target][DataKeys.NAME] if AE.all_equipment.has(target) else target
+	var target_definition := EquipmentService.definition(StringName(target))
+	item_4.tooltip_text = target_definition.display_name if target_definition != null else target
 
 
 func get_item_count(item_name: String) -> int:
@@ -243,7 +241,7 @@ func perform_onekey_synthesis(target_dan_name: String, times: int):
 	MemoryClass.request_save("ldl_one_key_synthesis")
 	Global.add_message_show(
 		Global.get_ui_runtime().windows,
-		"一键合成成功！获得 " + AE.all_equipment[target_dan_name][DataKeys.NAME] + " x" + str(times),
+		"一键合成成功！获得 " + EquipmentService.definition(StringName(target_dan_name)).display_name + " x" + str(times),
 		1.5,
 		Vector2(470, 300)
 	)
