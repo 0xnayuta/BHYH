@@ -1,8 +1,8 @@
 # Global 状态与入口清单（Phase 22-1 基线）
 
-> **状态**：Phase 22-1 已完成（2026-11-02）；只读盘点，未修改 `source/`。
+> **状态**：Phase 22-1 基线已完成；Phase 22-2 零引用清理已完成（2026-11-02）。当前规模为 **131 个字段、261 个公开函数**；删除清单见 §6.1。
 >
-> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-2 及后续状态迁移的基线。
+> **定位**：记录 `source/global.gd` 当前状态字段、公开入口、26 个普通子服务与迁移判定，作为 Phase 22-3 及后续状态迁移的基线。
 >
 > **事实源**：当前工作区的 `source/global.gd`、`source/project.godot` 与源码引用统计。数量是带日期的基线快照，不是长期 SLA；每个迁移批次开始前重新统计。
 >
@@ -14,9 +14,9 @@
 
 | 指标 | 2026-11-02 基线 |
 |:---|:---|
-| `global.gd` 行数 | 3,516 |
-| `var` 字段 | 141 |
-| 公开函数（非 `_` 前缀） | 273 |
+| `global.gd` 行数 | 3,308（22-1 基线 3,516；22-2 删除 208 行） |
+| `var` 字段 | 131（22-1 基线 141；22-2 删除 10） |
+| 公开函数（非 `_` 前缀） | 261（22-1 基线 273；22-2 删除 12） |
 | 其中 `add` 系工厂/门面 | 120（113 个带 `add_` 前缀，7 个历史无下划线命名） |
 | `Global._ready()` 创建的普通子服务 | 26 |
 | 仓库内 `Global.` 引用（含注释/字符串） | 约 3.1k 处，分布于 432 个脚本 |
@@ -50,11 +50,11 @@ grep -RIn '"/root/' source --include='*.gd'
 
 **判定**：保留只读能力，或迁往 `MainSet`/配置边界。新增开关不得继续以裸全局字段扩张。
 
-### 2.3 HUD、战斗表现与共享引用（16）
+### 2.3 HUD、战斗表现与共享引用（15）
 
-`all_buff_list`, `buff_list`, `choose_list`, `choose_ms`, `buff_box`, `mg_cd_pic`, `zhen_fa`, `lhhj_boss_list`, `weapon_bullet_node`, `bullet`, `damage_text`, `monster_be_hit`, `special_affect`, `role_bullet`, `fly_bullet`, `_chase_bullet`
+`all_buff_list`, `buff_list`, `choose_list`, `choose_ms`, `buff_box`, `mg_cd_pic`, `zhen_fa`, `lhhj_boss_list`, `bullet`, `damage_text`, `monster_be_hit`, `special_affect`, `role_bullet`, `fly_bullet`, `_chase_bullet`
 
-**判定**：表现/HUD 状态候选。节点引用优先归 `UiRuntime`、`CombatPresentationFactory`、`ProjectileFactory` 或对应场景；共享定义若确为只读，改由 Resource/Catalog 或显式服务持有。`weapon_bullet_node` 静态检索仅见声明，需在 22-2 复核动态/字符串引用后再决定删除。
+**判定**：表现/HUD 状态候选。节点引用优先归 `UiRuntime`、`CombatPresentationFactory`、`ProjectileFactory` 或对应场景；共享定义若确为只读，改由 Resource/Catalog 或显式服务持有。`weapon_bullet_node` 已在 22-2 删除。
 
 ### 2.4 法宝实例槽位（19）
 
@@ -62,17 +62,17 @@ grep -RIn '"/root/' source --include='*.gd'
 
 **判定**：迁移到 `MagicWeaponRuntime` 的槽位 API，或删除已退役槽位。不得继续用同名全局字段保存当前召唤物/实例。
 
-### 2.5 单局、关卡、选择与统计（21）
+### 2.5 单局、关卡、选择与统计（20）
 
-`_last_full_monster_bullet_name`, `_last_combo_value`, `is_frist`, `is_show`, `collect_num`, `player_be_hit_count`, `game_over`, `llbtwxms`, `llbtcgms`, `llbtbossms`, `box_count`, `infinite_level_multiplier`, `selected_three_prince_id`, `selected_constellation_level`, `constellation_best_tier`, `level_begin_time`, `level_end_time`, `most_lianji`, `last_prop_hp`, `total_role_hurt`, `last_level_path`
+`_last_full_monster_bullet_name`, `_last_combo_value`, `is_frist`, `is_show`, `collect_num`, `player_be_hit_count`, `game_over`, `llbtwxms`, `llbtcgms`, `llbtbossms`, `box_count`, `infinite_level_multiplier`, `selected_three_prince_id`, `selected_constellation_level`, `constellation_best_tier`, `level_begin_time`, `level_end_time`, `most_lianji`, `last_prop_hp`, `last_level_path`
 
-**判定**：按消费者拆分到 `RunContext`、`LevelEntryRuntime` 或关卡/场景上下文。`total_role_hurt` 静态检索仅见声明，列入 22-2 删除候选；其余字段先确认是单局状态、关卡选择还是表现缓存。
+**判定**：按消费者拆分到 `RunContext`、`LevelEntryRuntime` 或关卡/场景上下文。`total_role_hurt` 已在 22-2 删除；其余字段先确认是单局状态、关卡选择还是表现缓存。
 
-### 2.6 锻造、背包与瞬时面板状态（16）
+### 2.6 锻造、背包与瞬时面板状态（10）
 
-`file_num`, `mytime`, `player_pos_x`, `zb_packisfull`, `dj_packisfull`, `xhp_packisfull`, `forge`, `fb_cd`, `is_in_ldl`, `get_target`, `lj_times`, `lj_count`, `remove_jq`, `wait_time`, `need_change_item`, `player_dir`
+`file_num`, `forge`, `fb_cd`, `is_in_ldl`, `get_target`, `lj_times`, `lj_count`, `wait_time`, `need_change_item`, `player_dir`
 
-**判定**：瞬时 UI/场景状态候选。优先归面板、`ForgeFactory`、背包命令或场景上下文；无消费者的历史字段删除。`get_target`、`lj_times`、`lj_count` 等需先确认是否属于战斗/关卡状态，不能仅凭命名迁移。
+**判定**：瞬时 UI/场景状态候选。优先归面板、`ForgeFactory`、背包命令或场景上下文；无消费者的历史字段删除。`mytime`、`player_pos_x`、`zb_packisfull`、`dj_packisfull`、`xhp_packisfull`、`remove_jq` 已在 22-2 删除。`get_target`、`lj_times`、`lj_count` 等需先确认是否属于战斗/关卡状态，不能仅凭命名迁移。
 
 ### 2.7 档案、保存与运行代次（23）
 
@@ -84,19 +84,13 @@ grep -RIn '"/root/' source --include='*.gd'
 
 `_resource_runtime`, `_scene_flow`, `_popup_factory`, `_shop_factory`, `_backpack_factory`, `_reward_factory`, `_combat_factory`, `_combat_pool`, `_magic_weapon_runtime`, `_level_entry`, `_monster_spawn`, `_role_visual`, `_monster_display`, `_level_hint`, `_zhen_fa`, `_forge_factory`, `_projectile_factory`, `_effect_factory`, `_menu_panel_factory`, `_level_scene_factory`, `_show_text_factory`, `_skill_panel_factory`, `_map_overlay_factory`, `_pending_combo_milestones`, `_audio_runtime`, `_ui_runtime`, `_runtime_diagnostics`
 
-**判定**：保留在 `Global` 的组合根内。除 `_pending_combo_milestones` 与 `_monsters_to_track` 外，均是 26 个普通子服务的引用；不得把服务内部字段重新搬回 `Global`。`_pending_combo_milestones` 应归连击表现服务/状态；`target_scene` 见下节场景流。
+**判定**：保留在 `Global` 的组合根内。除 `_pending_combo_milestones` 外，均是 26 个普通子服务的引用；不得把服务内部字段重新搬回 `Global`。`_pending_combo_milestones` 应归连击表现服务/状态；`_monsters_to_track` 已随 22-2 删除。
 
-### 2.9 场景/UI 遗留引用（12）
+### 2.9 场景/UI 遗留引用（11）
 
-`lhhjbutton`, `target_scene`, `sell_or_equ`, `fall_equ`, `nmw_hands`, `sound`, `llbt_challenge`, `lhhj`, `listbutton`, `lhhjhelp`, `return_back_map`, `ui_28`
+`lhhjbutton`, `target_scene`, `sell_or_equ`, `fall_equ`, `nmw_hands`, `sound`, `llbt_challenge`, `lhhj`, `listbutton`, `lhhjhelp`, `return_back_map`
 
-**判定**：`target_scene` 归 `SceneFlow`；其余是历史场景/UI 节点或提示引用，优先迁到对应工厂、`UiRuntime`、`AudioRuntime` 或删除。新增 UI 不得继续写这些全局槽位。
-
-### 2.10 怪物追踪（1）
-
-`_monsters_to_track`
-
-**判定**：待 22-2 引用审计。若只服务诊断/表现，迁入 `RuntimeDiagnostics`、关卡上下文或对应工厂；若确无消费者则删除。
+**判定**：`target_scene` 归 `SceneFlow`；其余是历史场景/UI 节点或提示引用，优先迁到对应工厂、`UiRuntime`、`AudioRuntime` 或删除。新增 UI 不得继续写这些全局槽位。`ui_28` 与 `_monsters_to_track`/`track_monster` 已在 22-2 删除。
 
 ---
 
@@ -173,7 +167,7 @@ grep -RIn '"/root/' source --include='*.gd'
 
 ### 4.3 兼容/遗留入口
 
-`instance_scene`, `add_bullet`, `instance_scene_safe`, `add_role_bullet_1_safe`, `add_bullet_safe`, `fall_item`, `main_remove_child`, `on_fresh`, `remove_all_buff`, `remove_a_all_buff`, `check_wd`, `remove_wd`, `track_monster` 等：
+`instance_scene`, `add_bullet`, `add_role_bullet_1_safe`, `add_bullet_safe`, `fall_item`, `remove_all_buff`, `remove_a_all_buff`, `check_wd`, `remove_wd` 等：
 
 - 先确认生产调用方与生命周期；
 - 有正式工厂/服务的，迁入后删除；
@@ -225,7 +219,7 @@ set_selected_eight_immortal_id, set_save_failure_feedback_enabled
 recycle_damage_text, recycle_mr_hurt, recycle_role_be_hit,
 can_show_sword_damage_text, can_show_sword_hit_effect, load_ui_scene,
 load_cached_scene, prewarm_permanent_small_ui_scenes,
-get_level_info_monster_ids, is_resource_cached, get_cached_packed_scene,
+is_resource_cached, get_cached_packed_scene,
 handoff_loaded_resource, get_cached_audio, get_cached_texture,
 get_zhenfa_icon_path, get_zhenfa_icon, get_static_texture,
 release_cached_texture, preload_scene_path, prewarm_skill_page_resources,
@@ -243,7 +237,6 @@ is_archive_exit_scene, bind_archive_session, begin_archive_session,
 get_current_role_equipment_preload_paths, end_archive_session,
 release_role_runtime_resources, begin_level_resource_lease,
 release_level_resource_lease, prewarm_monster_bullet_scene_paths,
-preload_combat_misc_resources, preload_common_drop_textures,
 preload_damage_number_textures, preload_all_hero_skill_resources,
 prewarm_sprite_frames_paths, prewarm_texture_paths,
 get_current_role_preload_paths, prewarm_current_role_runtime_resources,
@@ -269,7 +262,7 @@ add_task_title, configure_backpack_role_preview, screen_popup_position
 ### 5.7 UI/工厂与关卡提示第二批
 
 ```text
-center_node_on_screen, popup_ui_scale, apply_popup_screen_layout,
+apply_popup_screen_layout,
 popup_position_for_parent, viewport_center_for_parent, add_reward_info,
 add_reward_box, add_decompose_help, add_decompose_instance,
 add_zztw_trap, add_stage, add_boss_blood_instance, add_hc_help,
@@ -313,29 +306,62 @@ add_se_eq_jm, add_main_backpack, change_scene
 get_scene_request_generation, is_scene_request_current, add_music_set,
 add_camera, call_hero, add_cd_jm, add_moment_text, add_touch_text,
 add_back_pack, create_monster, add_hit_text, add_monster_blood,
-add_mr_hurt, promote_popup_without_moving, set_popup_screen_position,
-promote_popup_to_global_layer_without_moving, left_align_popup_texts,
-prepare_hover_info_popup, center_popup_texts, instance_scene_safe,
+add_mr_hurt, left_align_popup_texts,
+prepare_hover_info_popup, center_popup_texts,
 add_role_bullet_1_safe, add_bullet_safe, instance_scene, add_bullet,
-main_remove_child, check_combo_milestone, load_role1_body,
+check_combo_milestone, load_role1_body,
 load_role1_eq, remove_all_buff, remove_all_active_buffs,
-remove_a_all_buff, on_fresh, check_wd, remove_wd, track_monster
+remove_a_all_buff, check_wd, remove_wd
 ```
 
 ---
 
-## 6. Phase 22-2 交接
+## 6. Phase 22-2 结果与 22-3 交接
+
+### 6.1 已删除
+
+字段（10 个，均为全仓无引用，含动态字符串检查）：
+
+```text
+weapon_bullet_node, total_role_hurt, mytime, player_pos_x,
+zb_packisfull, dj_packisfull, xhp_packisfull, remove_jq, ui_28,
+_monsters_to_track
+```
+
+公开入口（12 个，均为全仓无调用、无字符串/场景引用）：
+
+```text
+get_level_info_monster_ids, preload_combat_misc_resources,
+preload_common_drop_textures, center_node_on_screen, popup_ui_scale,
+promote_popup_without_moving, set_popup_screen_position,
+promote_popup_to_global_layer_without_moving, instance_scene_safe,
+main_remove_child, on_fresh, track_monster
+```
+
+同时删除了仅供 `track_monster` 使用的私有 `_on_monster_exited`。未删除仍有内部调用、服务 getter、档案访问器或诊断消费者的入口，例如 `get_*_runtime()`、`get_archive_session*()`、`preload_all_hero_skill_resources`（`RuntimeDiagnostics` 仍读取其状态）与 `set_save_failure_feedback_enabled`。
+
+### 6.2 本批验收
+
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **PASS**（含 `pet-runtime`、`load-guard`）；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）；
+- 全量关卡回归未作为本批结论：一次性执行超时，未得到完整结果；不把未完成写成 PASS；
+- 未修改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
+
+### 6.3 22-3 交接
 
 下一批按以下顺序执行，不跳步：
 
-1. **引用确认**：对 §2 的每个迁移候选记录静态 `Global.` 引用、动态字符串引用、场景/资源路径与生产调用方；只依据命名或单个 `grep` 不删除。
-2. **零引用清理**：确认 `weapon_bullet_node`、`total_role_hurt` 等仅声明/无动态引用的条目；删除后跑 `check_all` 与现有探针，不新增永久测试。
-3. **状态迁移**：按云存档 → 法宝槽位 → 单局/关卡 → UI/场景遗留的顺序，一次一个所有权边界；每批删除旧字段与旧门面。
-4. **服务边界**：迁移后的状态只能由 `ArchiveSession`、`MemoryClass`、`RunContext`、`ResourceRuntime`、`MagicWeaponRuntime`、`LevelEntryRuntime`、`UiRuntime` 或对应工厂写入；`Global` 只保留组合与 getter。
-5. **守卫**：在不误伤动态访问的前提下，评估为 `Global` 新增业务字段/新增 `add_*` 增加静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据，不能只写文档规则。
-6. **验收**：`check_all`、`archive_probe_runner`、`scene_probe_runner`、`coop_probe_runner`、相关关卡与全量回归按受影响范围执行；行为不变不等于跳过失败/退出路径。
+1. **22-3A 云存档/账号字段**：确认 `cloud_save_*` 的生产消费者，迁入 `MemoryClass` 或普通云端适配器；不新增 Autoload。
+2. **22-3B 法宝槽位**：把残留实例字段迁入 `MagicWeaponRuntime`；两个槽位规则不变。
+3. **22-3C 单局/关卡/选择状态**：迁入 `RunContext` / `LevelEntryRuntime`；先确认字段的消费者与生命周期。
+4. **22-3D UI/场景遗留引用**：迁入对应工厂、`UiRuntime`、`AudioRuntime` 或删除；新增 UI 必须登记临时 UI。
+5. **22-4 守卫**：评估新增 `Global` 业务字段/新增 `add` 系入口的静态守卫；守卫必须先有坏样本与 `--self-test`/`--fail-on-error` 证据。
 
-**禁止**：新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口、在没有引用证据时删除“看起来像遗留”的入口。
+每批迁移全部生产调用方后删除旧字段/旧门面；`Global` 只保留组合、getter 与正式窄入口。禁止新增 Autoload、把字段整体搬进另一个 Manager、为旧调用方保留永久 facade、以目录搬迁替代所有权收口。
 
 ---
 

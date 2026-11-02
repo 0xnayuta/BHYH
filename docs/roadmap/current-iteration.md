@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 进行中**；22-1 已完成（2026-11-02），22-2 为下一批。Phase 23~26 已规划、未启动。
+> **状态**：**Phase 22 进行中**；22-1/22-2 已完成（2026-11-02），22-3 为下一批。Phase 23~26 已规划、未启动。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -22,27 +22,27 @@
 - 结论：`Global` 已具备组合根形态，但仍有业务状态与工厂门面；后续必须按所有权切片，不按字段数量一次性搬运。
 - 验证：只读盘点；未改 `source/`，未声称新的运行验证。
 
-### 22-2 引用确认与零引用清理（下一步）
+### 22-2 引用确认与零引用清理（已完成）
 
-**范围**：
+**结果**：
 
-- 对清单中的迁移候选逐项记录静态 `Global.` 引用、动态/字符串引用、场景/资源引用与生产调用方；
-- 先处理零引用或已退役字段/入口，例如 `weapon_bullet_node`、`total_role_hurt` 及同类候选；删除前必须复核动态访问；
-- 不迁移仍有跨场景消费者的状态；不在本批改服务职责。
-
-**输出**：
-
-- 每个字段/入口的引用结论表（保留/迁移/删除/待证）；
-- 删除项与调用方迁移清单；
-- 若发现字符串/反射访问，保留并登记，不用单一 `grep` 结果宣布无引用。
+- 完成全量静态引用、动态字符串、场景/资源引用确认；
+- 删除 **10 个字段**、**12 个公开入口**及仅供调试追踪的私有回调；
+- `global.gd` 从 **3,516 行降至 3,308 行**（-208 行）；
+- 当前 **131 个字段、261 个公开函数、120 个 `add` 系入口**；
+- 删除清单、保留项理由与 22-3 交接见 [`global_runtime_inventory.md`](../reference/global_runtime_inventory.md) §6。
 
 **验收**：
 
-- `check_all --godot-bin`、`archive_probe_runner`、`scene_probe_runner` 与受影响关卡冒烟；
-- 行为无变化；无新增兼容 facade；`git diff` 只包含本批范围；
-- 不新增永久测试来验证“删除本身”；用现有探针证明未破坏消费路径。
+- `check_all --skip-engine` **7/7 PASS**；
+- `check_all --godot-bin` **9/9 PASS**；
+- `archive_probe_runner` **297/297 PASS**；
+- `scene_probe_runner` **PASS**；
+- `coop_probe_runner` **26/26 PASS**；
+- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）；
+- 未改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
 
-### 22-3 状态迁移（按所有权分批）
+### 22-3 状态迁移（下一步）
 
 每批只迁移一个所有权边界，迁移全部生产调用方后删除旧字段/入口。
 
@@ -248,7 +248,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 22-2：引用确认与零引用清理**。
+**当前下一步**：**Phase 22-3：Global 状态迁移（按所有权分批）**。
 **当前不启动**：Phase 23~26；它们保留为已规划候选，不伪造“进行中”。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)

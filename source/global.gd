@@ -224,7 +224,6 @@ const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet4.gd"),
 ]
 const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_frame_cache_registry.gd")
-var weapon_bullet_node = null
 var bullet = null
 var damage_text = null
 var monster_be_hit = null
@@ -529,7 +528,6 @@ var level_begin_time = ""
 var level_end_time = ""
 var most_lianji: int = 0
 var last_prop_hp: float
-var total_role_hurt: int
 var last_level_path: String
 var _cd_path: String = ""
 
@@ -672,11 +670,6 @@ func set_save_failure_feedback_enabled(enabled: bool) -> void:
 
 
 var file_num = 1.201
-var mytime
-var player_pos_x
-var zb_packisfull = false
-var dj_packisfull = false
-var xhp_packisfull = false
 var forge
 var fb_cd: int
 var is_in_ldl
@@ -684,7 +677,6 @@ var get_target
 var lj_times: int
 var lj_count: int
 
-var remove_jq
 var wait_time: float = 0.8
 var need_change_item: bool = true
 var player_dir
@@ -797,44 +789,6 @@ func load_cached_scene(path: String) -> PackedScene:
 
 func prewarm_permanent_small_ui_scenes(generation: int = -1) -> void:
 	await _resource_runtime.prewarm_permanent_small_ui_scenes(generation)
-
-
-func get_level_info_monster_ids(level_name: String) -> Array:
-	if level_name == "":
-		return []
-	var level_info_scene := _level_entry.get_level_info_scene()
-	if level_info_scene == null:
-		return []
-	var probe := level_info_scene.instantiate()
-	if probe == null:
-		return []
-	var all_info: Variant = probe.get("level_info")
-	if not all_info is Dictionary:
-		probe.free()
-		return []
-	var current_level_info: Variant = (all_info as Dictionary).get(level_name, {})
-	if not current_level_info is Dictionary:
-		probe.free()
-		return []
-	var result: Array = []
-	var monster_list: Variant = (current_level_info as Dictionary).get("monster_list", [])
-	if monster_list is Array:
-		for monster_entry_value in monster_list:
-			if not monster_entry_value is Dictionary:
-				continue
-			var monster_entry: Dictionary = monster_entry_value
-			var monster_id := int(monster_entry.get("ConfigId", 0))
-			if monster_id <= 0:
-				var scene_path := str(monster_entry.get("ScenePath", ""))
-				var monster_file := scene_path.get_file().get_basename()
-				if monster_file.begins_with("Monster_"):
-					var monster_id_text := monster_file.trim_prefix("Monster_")
-					if monster_id_text.is_valid_int():
-						monster_id = int(monster_id_text)
-			if monster_id > 0 and not result.has(monster_id):
-				result.append(monster_id)
-	probe.free()
-	return result
 
 
 # 加载页只读查询：不暴露缓存字典，也不触发加载。
@@ -1733,43 +1687,6 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array, generation: int = -1
 			_mark_level_scene_warmed(path)
 
 
-func preload_combat_misc_resources() -> void:
-	var texture_paths: Array[String] = [
-		"res://Art/add_effect/buff_icon/poision.png",
-		"res://Art/add_effect/buff_icon/ice.png",
-		"res://Art/add_effect/buff_icon/fire.png",
-		"res://Art/add_effect/buff_icon/speed_down.png",
-		"res://Art/add_effect/buff_icon/stun.png",
-		"res://Art/add_effect/buff_icon/htsf.png",
-		"res://Art/add_effect/buff_icon/bleed.png",
-		"res://Art/add_effect/buff_icon/yxbuff.png",
-	]
-	for path in texture_paths:
-		get_cached_texture(path)
-	var scene_paths: Array[String] = [
-		"res://Scene/monster/monster_zhw/monster_141_zhw.tscn",
-		"res://Scene/monster/monster_zhw/monster_142_sqzlw.tscn",
-		"res://Scene/monster/monster_zhw/monster_142_zhw.tscn",
-		"res://Scene/monster/monster_14501.tscn",
-		"res://Scene/monster/monster_14501_wdww.tscn",
-		"res://Scene/monster/monster_146.tscn",
-		"res://Scene/monster/monster_63.tscn",
-	]
-
-
-func preload_common_drop_textures() -> void:
-	var drop_paths: Array[String] = [
-		"res://Art/item_icon/zxbx_3.png",
-		"res://Art/item_icon/peach.png",
-		"res://Art/item_icon/bble.png",
-		"res://Art/item_icon/radish.png",
-		"res://Art/item_icon/qhsbx.png",
-		"res://Art/backpack/all_items/empty.png",
-	]
-	for path in drop_paths:
-		get_cached_texture(path)
-
-
 func preload_damage_number_textures() -> void:
 	var number_dirs: Array[String] = [
 		"res://Art/all_number/cure/cure_",
@@ -2120,7 +2037,6 @@ var lhhj = null
 var listbutton = null
 var lhhjhelp = null
 var return_back_map = null
-var ui_28 = null
 
 
 func add_basic_ar_button(parent, Num):
@@ -2339,20 +2255,6 @@ func configure_backpack_role_preview(page: Node, player: Variant = null) -> void
 
 func screen_popup_position(offset := Vector2(25, 20)) -> Vector2:
 	return get_viewport().get_mouse_position() + offset
-
-
-func center_node_on_screen(node: Node, fallback_size := Vector2(940, 590)) -> void:
-	var viewport_size = get_viewport().get_visible_rect().size
-	var size = fallback_size
-	if node.has_method("get_rect"):
-		size = node.get_rect().size
-	if node is Node2D:
-		(node as Node2D).position = (viewport_size - size) * 0.5
-
-
-func popup_ui_scale() -> float:
-	var viewport_size = get_viewport().get_visible_rect().size
-	return min(viewport_size.x / 940.0, viewport_size.y / 590.0)
 
 
 func apply_popup_screen_layout(node: Node, position: Vector2, estimated_size := Vector2(240, 240)) -> void:
@@ -3236,67 +3138,6 @@ func add_mr_hurt(parent, _position):
 	return _combat_factory.add_mr_hurt(parent, _position)
 
 
-func promote_popup_without_moving(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	var in_popup_layer := node.get_parent() == _ui_runtime.get_popup_layer()
-	if node is Control:
-		var control := node as Control
-		var old_position := control.global_position
-		control.z_index = 9999
-		control.z_as_relative = false
-		control.top_level = not in_popup_layer
-		control.global_position = old_position
-	elif node is Node2D:
-		var node_2d := node as Node2D
-		var old_transform: Transform2D = node_2d.global_transform
-		node_2d.z_index = 9999
-		node_2d.z_as_relative = false
-		node_2d.top_level = not in_popup_layer
-		node_2d.global_transform = old_transform
-	elif node is CanvasItem:
-		var canvas_item := node as CanvasItem
-		canvas_item.z_index = 9999
-		canvas_item.z_as_relative = false
-		canvas_item.top_level = not in_popup_layer
-
-
-func set_popup_screen_position(node: Node, screen_position: Vector2) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	if node is Control:
-		(node as Control).global_position = screen_position
-	elif node is Node2D:
-		(node as Node2D).global_position = screen_position
-	elif node is CanvasItem:
-		(node as CanvasItem).global_transform.origin = screen_position
-
-
-func promote_popup_to_global_layer_without_moving(node: Node) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	var popup_layer := _ui_runtime.get_popup_layer()
-	if popup_layer == null or not is_instance_valid(popup_layer):
-		promote_popup_without_moving(node)
-		return
-	var screen_pos := Vector2.ZERO
-	if node is Control:
-		screen_pos = (node as Control).global_position
-	elif node is Node2D:
-		screen_pos = (node as Node2D).global_position
-	elif node is CanvasItem:
-		screen_pos = (node as CanvasItem).get_global_transform().origin
-	var old_parent := node.get_parent()
-	if old_parent != popup_layer:
-		if old_parent != null:
-			old_parent.remove_child(node)
-		popup_layer.add_child(node)
-	set_popup_screen_position(node, screen_pos)
-	promote_popup_without_moving(node)
-	if node is CanvasItem:
-		(node as CanvasItem).visible = true
-
-
 func left_align_popup_texts(root: Node) -> void:
 	if root == null:
 		return
@@ -3339,13 +3180,6 @@ func center_popup_texts(root: Node) -> void:
 		center_popup_texts(child)
 
 
-func instance_scene_safe(target_scene_, parent):
-	var target = target_scene_.instantiate()
-	parent.call_deferred("add_child", target)
-	center_popup_texts(target)
-	return target
-
-
 func add_role_bullet_1_safe(parent, position, _name, dic, source_player: BaseHero = null):
 	return _projectile_factory.add_role_bullet_1_safe(parent, position, _name, dic, source_player)
 
@@ -3376,10 +3210,6 @@ func instance_scene(target_scene_, parent):
 
 func add_bullet(bullet_name: String, parent, direction: bool, show_speed, position, _hit_name, list):
 	return _combat_factory.add_bullet(bullet_name, parent, direction, show_speed, position, _hit_name, list)
-
-
-func main_remove_child(parent, node_name):
-	parent.remove_child(get_node(node_name))
 
 
 func _physics_process(_delta: float) -> void:
@@ -3450,29 +3280,6 @@ func remove_a_all_buff():
 			i.queue_free()
 
 
-func on_fresh():
-	var dic = Time.get_datetime_dict_from_system()
-	var my_dic = PlayerData.player_data["MyTime"]
-	if my_dic == {}:
-		return
-	if int(dic["year"]) < int(my_dic["year"]):
-		return false
-	elif int(dic["year"]) > int(my_dic["year"]):
-		return true
-	else:
-		if int(dic["month"]) < int(my_dic["month"]):
-			return false
-		elif int(dic["month"]) > int(my_dic["month"]):
-			return true
-		else:
-			if int(dic["day"]) < int(my_dic["day"]):
-				return false
-			elif int(dic["day"]) > int(my_dic["day"]):
-				return true
-			else:
-				return false
-
-
 ## 统计 Voodoo 层；传入 source_player 时只统计该 Role4 施加的层。
 func check_wd(OBJ, source_player: BaseHero = null) -> int:
 	var count: int = 0
@@ -3495,21 +3302,6 @@ func remove_wd(OBJ, source_player: BaseHero = null) -> void:
 			continue
 		if source_player == null or i.buff_info.get("source_player") == source_player:
 			i.queue_free()
-
-
-var _monsters_to_track = []
-
-
-func track_monster(monster: Node):
-	if not monster.tree_exited.is_connected(_on_monster_exited.bind(monster)):
-		monster.tree_exited.connect(_on_monster_exited.bind(monster))
-	_monsters_to_track.append(monster)
-
-
-func _on_monster_exited(monster: Node):
-	print("[Global monitor] Monster deleted: ", monster)
-	print_stack()
-	print("  delete frame: ", Engine.get_process_frames())
 
 # ==============================================================================
 # Phase 6-3: 现代 GDScript 规范 snake_case 双轨兼容函数入口
