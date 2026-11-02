@@ -90,7 +90,7 @@ func add_equ_propeties_box(parent, position, _name, qh_level, wx, Data):
 		return null
 	target.z_index = 199
 	var item_data: Dictionary = Data.duplicate(true) if Data is Dictionary else {}
-	var template: Dictionary = AE.all_equipment.get(str(_name), {})
+	var template: Dictionary = EquipmentService.data_or_empty(str(_name))
 	if item_data.is_empty() and str(template.get("所属", "")) == "宠物装备":
 		item_data = template.duplicate(true)
 	var item_type := str(item_data.get(DataKeys.TYPE, template.get(DataKeys.TYPE, "")))

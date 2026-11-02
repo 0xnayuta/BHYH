@@ -30,7 +30,7 @@ var _icon_cache: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	catalog.initialize(AE.all_equipment)
+	catalog.initialize()
 	category = CATEGORIES[clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7) - 1]
 	_build_ui()
 	_layout_panel()
@@ -247,9 +247,9 @@ func refresh_items() -> void:
 	_type_filter.disabled = category == "法宝"
 	var filter_type := _type_filter.get_item_text(_type_filter.selected)
 	var query := _search.text.strip_edges()
-	for key in catalog.equipment:
+	for key in EquipmentService.ids():
 		var item_id := str(key)
-		var data: Dictionary = catalog.equipment[key]
+		var data: Dictionary = EquipmentService.data_or_empty(StringName(item_id))
 		var type_name := str(data.get(DataKeys.TYPE, ""))
 		if item_id in CATALOG_DATA.HIDDEN_ITEM_IDS:
 			continue
@@ -272,8 +272,8 @@ func refresh_items() -> void:
 		displayed_ids.append(item_id)
 	displayed_ids.sort_custom(
 		func(a, b):
-			var a_data: Dictionary = catalog.equipment[a]
-			var b_data: Dictionary = catalog.equipment[b]
+			var a_data: Dictionary = EquipmentService.data_or_empty(StringName(a))
+			var b_data: Dictionary = EquipmentService.data_or_empty(StringName(b))
 			var a_quality := QUALITY_ORDER.find(str(a_data.get(DataKeys.QUALITY, "")))
 			var b_quality := QUALITY_ORDER.find(str(b_data.get(DataKeys.QUALITY, "")))
 			if a_quality != b_quality:
@@ -310,7 +310,7 @@ func select_item(item_id: String) -> void:
 	if list_index >= 0:
 		_item_list.select(list_index)
 		_item_list.ensure_current_is_visible()
-	var data: Dictionary = catalog.equipment.get(item_id, {})
+	var data: Dictionary = EquipmentService.data_or_empty(StringName(item_id))
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 14)
 	var banner := PanelContainer.new()

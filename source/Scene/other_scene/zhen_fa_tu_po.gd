@@ -37,7 +37,7 @@ func set_item_pic():
 	item.set_button_icon(load_item_icon(item_name))
 	item.qh_level = 0
 	item.wx = []
-	item.eq_prop = AE.all_equipment[item_name]
+	item.eq_prop = EquipmentService.data(item_name)
 
 
 func load_item_icon(_name):

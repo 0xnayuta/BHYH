@@ -170,7 +170,7 @@ func _on_equ_pressed() -> void:
 	var new_list = PlayerData.get_zb_data(page, number)
 	if not check_can_equipment(new_list[DataKeys.NAME]):
 		return
-	match AE.all_equipment[new_list[DataKeys.NAME]][DataKeys.TYPE]:
+	match EquipmentService.data(new_list[DataKeys.NAME])[DataKeys.TYPE]:
 		"武器":
 			PlayerData.remove_zb(page, number)
 			if PlayerData.player_data[DataKeys.WEAPON].size() != 0:
@@ -362,7 +362,7 @@ func _on_sell_pressed() -> void:
 		_show_sell_confirm("确定要卖出" + str(lx) + str(item_name) + "吗？（此装备已强化至+" + str(abc[DataKeys.ENHANCE_LEVEL]) + "。）")
 		return
 
-	var get_value = AE.all_equipment[_get_name]["售价"]
+	var get_value = EquipmentService.data(_get_name)["售价"]
 	PlayerData.add_soul(get_value)
 	MemoryClass.request_save("back_pack_sell")
 	PlayerData.remove_zb(page, number)
@@ -414,7 +414,7 @@ func sell():
 		visible = true
 		_refresh_lock_button()
 		return
-	var get_value = AE.all_equipment[_get_name]["售价"]
+	var get_value = EquipmentService.data(_get_name)["售价"]
 	PlayerData.add_soul(get_value)
 	MemoryClass.request_save("back_pack_sell")
 	PlayerData.remove_zb(page, number)
@@ -441,8 +441,8 @@ func _on_panel_mouse_exited() -> void:
 func check_can_equipment(EquipmentName):
 	var role_id: int = PlayerData.player_data["Myself"]
 	var parent = NodeUtils.ancestor(self, 3)
-	var eq_base = AE.all_equipment[EquipmentName]["所属"]
-	var name_str = AE.all_equipment[EquipmentName][DataKeys.NAME] as String
+	var eq_base = EquipmentService.data(EquipmentName)["所属"]
+	var name_str = EquipmentService.data(EquipmentName)[DataKeys.NAME] as String
 	var role_base: String
 	if eq_base == "通用":
 		return true

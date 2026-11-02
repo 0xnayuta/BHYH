@@ -1,6 +1,6 @@
 # 装备数据契约（Phase 33-0/33-1/33-2）
 
-> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）与 33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）已完成；33-3 消费方迁移、33-4 切换与 33-5 收口未启动。
+> **状态**：33-0（契约与字段审计）、33-1（Definition/Catalog/Store/生成器）、33-2（EquipmentRules/EquipmentRoller 与随机字段恢复）与 33-3 第一簇（UI/说明/背包）已完成；33-3 其余消费方、33-4 切换与 33-5 收口未启动。
 >
 > **范围**：`all_equipment_data.gd` 的 1,035 条静态装备/物品定义、玉兔合并项与确定性生成项。运行时旧路径在本批保持不变；本页描述新 Catalog 契约，不宣称消费者已迁移。
 >
@@ -190,7 +190,28 @@ rules.get_wx()
 
 ---
 
-## 8. 验证
+## 8. 33-3 第一簇：UI/说明/背包（已完成）
+
+第一簇覆盖 **28 个原 `AE.all_equipment` 消费者**，并同步迁移 `equipment_catalog_data` 助手：
+
+- `Scene/other_scene/`：`hc_help`、`help_things`、`monster_head_info`、`reward_box_2`、`reward_interface`、`transmogtified_box`、`zhen_fa_tu_po`、`zhenyanbutton`；
+- `Script/back_pack/`：`box_1`、`dj_information`、`dj_sell`、`equipment_fall`、`equipment_properies`、`magic_weapon_infor`、`main_backpack`、`pl_sell`、`sell_or_equ`、`skill_select`、`wq`；
+- `Script/main_menu/`：`equipment_catalog_data`、`equipment_catalog_page`、`game_announcement`、`zhen_yao_tower`；
+- `Script/other_menu/`：`c_hange_clothes_jm`、`transmogrified`；
+- `Script/runtime/backpack_factory.gd`、`Script/tools/item_utils.gd`、`Script/pet/pet_interface.gd`、`Script/pellet/basic_pellet.gd`。
+
+迁移面：
+
+- 新增 `EquipmentService` 静态服务（不是 Autoload）：`store/roller/rules/definition/ids/has/data/data_or_empty/find`；
+- `AE.all_equipment[...]` → `EquipmentService.data(...)`；`.get(id, {})` → `data_or_empty`；`.get(id)` → `find`；`.has` → `has`；整体迭代 → `ids()`；
+- `equipment_properies` 的旧 `AE._get_data()`/规则调用改为 `EquipmentService.rules()`；`equipment_catalog_data` 改为按定义/服务查询；
+- 第一簇内 `AE.all_equipment` 与 `AE.` 代码访问均为 **0**。
+
+未迁移的 20 个消费者仍在 ②③④ 簇：`level_info`、商店、奖励命令、锻造/合成/分解、`player_data`、坐骑、任务等；33-3 整体未完成。
+
+---
+
+## 9. 验证
 
 本批已执行：
 
@@ -200,14 +221,15 @@ rules.get_wx()
 - 旧实现对照：**20,640 个字段值**、**258 个随机字段**、**980 个有效规则用例**、8 槽宝石合成用例，**0 差异**（浮点按 `is_equal_approx`；整数、字段存在性与容器精确）；旧随机值均在规格范围/类型内，32 次/规格抽样 PASS；
 - `equipment_catalog.tres` 与构建源逐字同步；`convert_equipment_catalog.py --check` PASS；
 - `contract_gate` 含 `equipment_catalog_check` 与 `equipment_data_audit`，PASS；
+- 33-3 第一簇：`ui-factories`、`ui-theme`、`equipment_catalog_page` 场景启动、`level_1` 冒烟、`coop_probe_runner` **26/26** PASS；`check_all --godot-bin` **9/9（23.45s）**；
 - `check_all`、`health_check` 结果记录于 [`status.md`](status.md)。
 
-未执行：33-3 消费方迁移、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
+未执行：33-3 其余三簇、33-4 旧脚本删除、33-5 全量回归与 PCK；不得据本页宣称 Phase 33 完成。
 
 ---
 
-## 9. 边界与下一步
+## 10. 边界与下一步
 
 - 不改变装备数值、掉落、随机范围、强化/神铸公式、存档格式或双人共享规则；
 - 不删除 `all_equipment_data.gd`，不保留第二份可写字典；
-- 33-2 已完成规则抽取与随机字段恢复；33-3 按四簇迁移 `AE.all_equipment`；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。
+- 33-2 已完成规则抽取与随机字段恢复；33-3 第一簇已完成，继续 ②③④；33-4 删除旧脚本与字典 API；33-5 补全量对比、L2/UI/关卡回归与 PCK。

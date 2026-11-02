@@ -61,8 +61,8 @@ func _control_has_point(control: Control, screen_position: Vector2) -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	infor.text = "名字：" + str(AE.all_equipment[my_name][DataKeys.NAME])
-	if AE.all_equipment[my_name][DataKeys.TYPE] == "道具" and is_set == false:
+	infor.text = "名字：" + str(EquipmentService.data(my_name)[DataKeys.NAME])
+	if EquipmentService.data(my_name)[DataKeys.TYPE] == "道具" and is_set == false:
 		use.disabled = true
 		is_set = true
 	be_number = int(sell_number.text)
@@ -70,7 +70,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _get_inventory_entry() -> Dictionary:
-	var list_name := "道具列表" if AE.all_equipment[my_name][DataKeys.TYPE] == "道具" else "消耗品列表"
+	var list_name := "道具列表" if EquipmentService.data(my_name)[DataKeys.TYPE] == "道具" else "消耗品列表"
 	var pages: Variant = PlayerData.player_data.get(list_name, {})
 	if not pages is Dictionary:
 		return {}
@@ -135,12 +135,12 @@ func _on_sell_pressed() -> void:
 		Global.add_message_show(Global.get_ui_runtime().get_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
 		return
 	be_number = _get_sell_count()
-	var type = AE.all_equipment[my_name][DataKeys.TYPE]
+	var type = EquipmentService.data(my_name)[DataKeys.TYPE]
 	match type:
 		"道具":
 			var get_list = PlayerData.remove_dj(my_name, my_page, be_number)
 			if be_number > 0 and int(get_list["获得灵魂"]) > 0:
-				var _name = AE.all_equipment[my_name][DataKeys.NAME]
+				var _name = EquipmentService.data(my_name)[DataKeys.NAME]
 				var parent = get_parent().get_parent().get_parent()
 				Global.add_message_show(
 					parent,
@@ -154,7 +154,7 @@ func _on_sell_pressed() -> void:
 		"消耗品":
 			var get_list = PlayerData.remove_xhp(my_name, my_page, be_number)
 			if be_number > 0 and int(get_list["获得灵魂"]) > 0:
-				var _name = AE.all_equipment[my_name][DataKeys.NAME]
+				var _name = EquipmentService.data(my_name)[DataKeys.NAME]
 				var parent = get_parent().get_parent().get_parent()
 				Global.add_message_show(
 					parent,

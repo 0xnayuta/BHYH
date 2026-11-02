@@ -118,7 +118,13 @@ func add_box():
 			for u in range(PlayerData.player_data[str(current_pellet_type) + "丹" + str(i)]):
 				var parent_node = all_pellets_box.get_node("Stage_" + str(i))
 				var box = Global.add_level_fall_box(
-					parent_node, true, true, current_in_type + str(i), 0, [], AE.all_equipment[current_in_type + str(i)]
+					parent_node,
+					true,
+					true,
+					current_in_type + str(i),
+					0,
+					[],
+					EquipmentService.data(current_in_type + str(i))
 				)
 				box.set_button_icon(ItemUtils.item_icon(current_in_type + str(i)))
 

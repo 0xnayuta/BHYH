@@ -41,8 +41,8 @@ func _physics_process(_delta: float) -> void:
 	if _reward_committed and not _reward_succeeded:
 		set_physics_process(false)
 		return
-	if use_item_name != null and use_num != null and AE.all_equipment.has(str(use_item_name)):
-		title.text = "本次使用：" + str(AE.all_equipment[use_item_name][DataKeys.NAME]) + " * " + str(use_num)
+	if use_item_name != null and use_num != null and EquipmentService.has(str(use_item_name)):
+		title.text = "本次使用：" + str(EquipmentService.data(use_item_name)[DataKeys.NAME]) + " * " + str(use_num)
 	else:
 		title.text = ""
 	pl.play("pl")
@@ -56,9 +56,9 @@ func add_box():
 	var tween: Tween = null
 	for i in reward_items:
 		var item_name = str(i.get("Name", ""))
-		if not AE.all_equipment.has(item_name):
+		if not EquipmentService.has(item_name):
 			continue
-		var type = AE.all_equipment[item_name][DataKeys.TYPE]
+		var type = EquipmentService.data(item_name)[DataKeys.TYPE]
 		var value = i["Value"]
 		var strength_value = i["strength_value"]
 		var prop = i["Prop"]

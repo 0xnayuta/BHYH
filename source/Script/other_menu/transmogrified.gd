@@ -619,7 +619,7 @@ func get_current_type_list():
 	if current_type == "全部":
 		return list
 	for i in list:
-		if AE.all_equipment.has(i) and AE.all_equipment[i][DataKeys.TYPE] == current_type:
+		if EquipmentService.has(i) and EquipmentService.data(i)[DataKeys.TYPE] == current_type:
 			new_list.push_back(i)
 	return new_list
 
@@ -663,8 +663,8 @@ func get_finish_item_num():
 	for i in PlayerData.player_data["幻化拥有列表"]:
 		if (
 			_is_transmog_item_visible(str(i))
-			and AE.all_equipment.has(i)
-			and AE.all_equipment[i][DataKeys.TYPE] == current_type
+			and EquipmentService.has(i)
+			and EquipmentService.data(i)[DataKeys.TYPE] == current_type
 		):
 			list.push_back(i)
 	return list.size()
@@ -708,7 +708,7 @@ func _set_box():
 			wqq.eq_prop = {}
 		else:
 			wqq.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON]))
-			wqq.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON]]
+			wqq.eq_prop = EquipmentService.data(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WEAPON])
 		wqq.qh_level = 0
 		wqq.wx = []
 	if fjj.get_item_name == "empty":
@@ -723,7 +723,7 @@ func _set_box():
 			fjj.eq_prop = {}
 		else:
 			fjj.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR]))
-			fjj.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR]]
+			fjj.eq_prop = EquipmentService.data(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.ARMOR])
 		fjj.qh_level = 0
 		fjj.wx = []
 	if cbb.get_item_name == "empty":
@@ -738,7 +738,7 @@ func _set_box():
 			cbb.eq_prop = {}
 		else:
 			cbb.set_button_icon(ItemUtils.item_icon(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]))
-			cbb.eq_prop = AE.all_equipment[PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS]]
+			cbb.eq_prop = EquipmentService.data(PlayerData.player_data[DataKeys.TRANSMOG_LIST][DataKeys.WINGS])
 		cbb.qh_level = 0
 		cbb.wx = []
 

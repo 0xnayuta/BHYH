@@ -24,15 +24,13 @@ const RECIPE_SCRIPT := preload("res://Script/ldl/recipe_data.gd")
 const MAGIC_INFO_SCRIPT := preload("res://Script/back_pack/magic_weapon_infor.gd")
 const HIDDEN_ITEM_IDS := ["fgwxg", "fgwxj", "sbhf", "xczg", "zxttq", "zxttp"]
 
-var equipment: Dictionary = {}
 var drops: Dictionary = {}
 var recipes: Dictionary = {}
 var forge_materials: Dictionary = {}
 var shop_items: Dictionary = {}
 
 
-func initialize(all_equipment: Dictionary) -> void:
-	equipment = all_equipment
+func initialize() -> void:
 	var level_script := load("res://Scene/other_scene/level_info.gd")
 	var level_instance = level_script.new()
 	for level_name in level_instance.level_info:
@@ -85,7 +83,8 @@ func _register_level(level_name: String, info: Dictionary) -> void:
 
 
 func item_name(item_id: String) -> String:
-	var name_text := str(equipment.get(item_id, {}).get(DataKeys.NAME, "")).strip_edges()
+	var definition := EquipmentService.definition(StringName(item_id))
+	var name_text := "" if definition == null else definition.display_name.strip_edges()
 	return name_text if name_text != "" else "未登记物品"
 
 
@@ -96,7 +95,7 @@ func get_sources(item_id: String) -> String:
 	if shop_items.has(item_id):
 		lines.append("获取方式：商城购买")
 	var book_id := item_id + "zzs"
-	if forge_materials.has(book_id) and equipment.has(book_id):
+	if forge_materials.has(book_id) and EquipmentService.has(StringName(book_id)):
 		lines.append("获取方式：炼丹炉打造（" + item_name(book_id) + "）")
 		var book_drops: Array = drops.get(book_id, [])
 		lines.append("制作书掉落：" + ("、".join(book_drops) if not book_drops.is_empty() else "暂无关卡掉落记录"))
@@ -123,7 +122,8 @@ func get_sources(item_id: String) -> String:
 
 
 func get_description(item_id: String) -> String:
-	var text := str(equipment.get(item_id, {}).get("描述", "")).strip_edges()
+	var definition := EquipmentService.definition(StringName(item_id))
+	var text := "" if definition == null else definition.description.strip_edges()
 	if text == "":
 		text = "暂无描述"
 	var skill: Dictionary = MAGIC_INFO_SCRIPT.SKILL_INFO.get(item_id, {})
@@ -135,7 +135,7 @@ func get_description(item_id: String) -> String:
 
 
 func get_attributes(item_id: String) -> Array[String]:
-	var data: Dictionary = equipment.get(item_id, {})
+	var data: Dictionary = EquipmentService.data_or_empty(StringName(item_id))
 	var result: Array[String] = []
 	for key in ATTRIBUTES:
 		var value := float(data.get(key, 0.0))
@@ -150,7 +150,8 @@ func get_attributes(item_id: String) -> Array[String]:
 
 
 func get_icon_path(item_id: String) -> String:
-	var custom := str(equipment.get(item_id, {}).get("图标", ""))
+	var definition := EquipmentService.definition(StringName(item_id))
+	var custom := "" if definition == null else definition.icon_path
 	for path in [custom, "res://Art/backpack/all_items/%s.png" % item_id]:
 		if path != "" and ResourceLoader.exists(path):
 			return path

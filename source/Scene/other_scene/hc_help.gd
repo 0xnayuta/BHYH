@@ -42,7 +42,7 @@ var item_list = []
 
 func _ready():
 	for recipe in RecipeData.RECIPES:
-		var type = AE.all_equipment[recipe["result"]][DataKeys.TYPE]
+		var type = EquipmentService.data(recipe["result"])[DataKeys.TYPE]
 		var display_recipe = {
 			"cl_1": recipe["materials"][0],
 			"cl_2": recipe["materials"][1],

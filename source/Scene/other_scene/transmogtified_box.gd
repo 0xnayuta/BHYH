@@ -9,13 +9,13 @@ var transmogrified: Transmogrified
 
 
 func _physics_process(_delta: float) -> void:
-	eq_name.text = str(AE.all_equipment[self_name][DataKeys.NAME])
+	eq_name.text = str(EquipmentService.data(self_name)[DataKeys.NAME])
 	show_box.is_in_ldl_gz = true
 	show_box.is_in_hhgz = true
 	show_box.set_button_icon(load_item_icon(self_name))
 	show_box.qh_level = 0
 	show_box.wx = []
-	show_box.eq_prop = AE.all_equipment[self_name]
+	show_box.eq_prop = EquipmentService.data(self_name)
 	var list = PlayerData.player_data[DataKeys.TRANSMOG_LIST]
 	if (
 		list[DataKeys.WEAPON] == self_name
@@ -50,10 +50,10 @@ func already_have(Name):
 
 
 func _on_change_pressed() -> void:
-	var lx = AE.all_equipment[self_name][DataKeys.TYPE]
+	var lx = EquipmentService.data(self_name)[DataKeys.TYPE]
 	if lx == "时装":
 		lx = "防具"
-	var item_name = AE.all_equipment[self_name][DataKeys.NAME]
+	var item_name = EquipmentService.data(self_name)[DataKeys.NAME]
 	if cdorxx.text == "穿戴":
 		if not already_have(self_name):
 			Global.add_message_show(

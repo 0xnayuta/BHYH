@@ -47,7 +47,7 @@ func set_pic(_name):
 		texture = load_soft(texture_path)
 
 	if not texture:
-		var item_data: Dictionary = AE.all_equipment.get(str(_name), {})
+		var item_data: Dictionary = EquipmentService.data_or_empty(str(_name))
 		var custom_icon_path := str(item_data.get("图标", ""))
 		if custom_icon_path != "":
 			texture = load_soft(custom_icon_path)
@@ -90,7 +90,7 @@ func pick_up_items(body):
 	if MainSet.set_data["PickUpItemsMusic"]:
 		Global.get_audio_runtime().add_sound(self, "res://Music/level/86_pickup.mp3")
 	if item_name != "peach" and item_name != "Bble" and item_name != "radish":
-		var get_type = AE.all_equipment[item_name][DataKeys.TYPE]
+		var get_type = EquipmentService.data(item_name)[DataKeys.TYPE]
 		match get_type:
 			"武器", "防具", "饰品", "翅膀", "时装", "头衔":
 				if not PlayerData.check_can_use_page("装备列表") == 0:
@@ -99,7 +99,7 @@ func pick_up_items(body):
 					return
 			"法宝":
 				if not PlayerData.check_can_use_page("装备列表") == 0:
-					PlayerData.add_fb(item_name, 0, AE.get_wx(), {})
+					PlayerData.add_fb(item_name, 0, EquipmentService.rules().get_wx(), {})
 				else:
 					return
 			"道具":

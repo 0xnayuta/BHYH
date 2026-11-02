@@ -437,7 +437,7 @@ func _create_shop_item_row(
 	icon.custom_minimum_size = Vector2(42.0 if show_quantity else 46.0, 46.0)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var data: Dictionary = AE.all_equipment.get(item_id, {}) as Dictionary
+	var data: Dictionary = EquipmentService.data_or_empty(item_id) as Dictionary
 	var icon_path := str(data.get("图标", "res://Art/backpack/all_items/%s.png" % item_id))
 	icon.texture = load(icon_path) as Texture2D
 	line.add_child(icon)
@@ -630,7 +630,7 @@ func _purchase_shop_item(
 	required_cleared_floor: int = 0,
 	required_level_name: String = ""
 ) -> void:
-	if not is_instance_valid(_shop_overlay) or not AE.all_equipment.has(item_id):
+	if not is_instance_valid(_shop_overlay) or not EquipmentService.has(item_id):
 		return
 	if required_cleared_floor > 0 and not _has_cleared_tower_floor(required_cleared_floor):
 		_show_shop_message("需要通关镇妖塔%d层" % required_cleared_floor)

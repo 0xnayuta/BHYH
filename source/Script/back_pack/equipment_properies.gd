@@ -326,90 +326,32 @@ func _update_pet_popup_background() -> void:
 		color_rect.size = $pro_wk/information.size
 
 
-func _call_divine_helper(method_names: Array, args: Array):
-	for method_name in method_names:
-		if AE.has_method(method_name):
-			return AE.callv(method_name, args)
-
-	if AE.has_method("_get_data"):
-		var data_node = AE.call("_get_data")
-		if data_node != null:
-			for method_name in method_names:
-				if data_node.has_method(method_name):
-					return data_node.callv(method_name, args)
-	return null
-
-
 func _is_divine_eligible(_name: String, data: Dictionary) -> bool:
-	var template: Dictionary = AE.all_equipment.get(_name, {})
-	var item_type := str(data.get(DataKeys.TYPE, template.get(DataKeys.TYPE, "")))
-	var quality := str(data.get(DataKeys.QUALITY, template.get(DataKeys.QUALITY, "")))
-	var quality_rank := {
-		"普通": 0, "优秀": 1, "精良": 2, "史诗": 3, "邪灵": 4, "魂器": 5, "传说": 6, "神器": 7, "玄冥": 8, "黑神话": 9, "无敌": 10
-	}
-	return ["武器", "防具", "饰品"].has(item_type) and int(quality_rank.get(quality, -1)) >= 7
+	return EquipmentService.rules().can_divine_forge(StringName(_name), data)
 
 
 func _get_divine_stage(data: Dictionary) -> int:
-	var stage = _call_divine_helper(["get_divine_forge_stage"], [data])
-	if stage == null:
-		stage = data.get("神铸阶段", 0)
-	return clampi(int(stage), 0, 9)
+	return EquipmentService.rules().get_divine_forge_stage(data)
 
 
 func _get_divine_multiplier(_name: String, data: Dictionary) -> float:
-	var multiplier = _call_divine_helper(["get_divine_forge_multiplier"], [_name, data])
-	if multiplier == null:
-		return 1.0 + float(_get_divine_stage(data)) * 0.3 if _is_divine_eligible(_name, data) else 1.0
-	return float(multiplier)
+	return EquipmentService.rules().get_divine_forge_multiplier(StringName(_name), data)
 
 
 func _scale_divine_value(value, _name: String, data: Dictionary):
-	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
-		return value
-	var scaled = _call_divine_helper(["scale_divine_forge_value"], [value, _name, data])
-	if scaled != null:
-		return scaled
-	return float(value) * _get_divine_multiplier(_name, data)
+	return EquipmentService.rules().scale_divine_forge_value(value, StringName(_name), data)
 
 
 func _get_divine_display_name(_name: String) -> String:
-	var display_name = _call_divine_helper(
-		["get_divine_forge_display_name", "get_equipment_display_name"], [_name, eq_prop]
-	)
-	if display_name != null:
-		return str(display_name)
-	var base_name := str(eq_prop.get(DataKeys.NAME, AE.all_equipment.get(_name, {}).get(DataKeys.NAME, _name)))
-	var prefixes := ["", "一阶·", "二阶·", "三阶·", "四阶·", "五阶·", "六阶·", "七阶·", "八阶·", "九阶·"]
-	return prefixes[_get_divine_stage(eq_prop)] + base_name if _is_divine_eligible(_name, eq_prop) else base_name
+	return EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
 
 
 func _get_divine_properties(_name: String, level: int, data: Dictionary, include_gems := false) -> Dictionary:
-	var properties = _call_divine_helper(
-		["get_divine_forge_properties", "get_divine_forge_props"], [_name, level, data, include_gems]
-	)
-	if properties is Dictionary:
-		return properties
-	return {}
+	return EquipmentService.rules().get_divine_forge_properties(StringName(_name), level, data, include_gems)
 
 
 func _get_divine_gem_properties(_name: String, data: Dictionary) -> Dictionary:
-	var properties = _call_divine_helper(
-		["get_divine_forge_gem_properties", "get_divine_forge_gem_props"], [_name, data]
-	)
-	if properties is Dictionary:
-		return properties
-	var result := {}
-	for property_name in DIVINE_PROPERTY_NAMES:
-		result[property_name] = 0
-	if not data.has(DataKeys.GEM) or not data[DataKeys.GEM] is Array:
-		return result
-	for gem_name in data[DataKeys.GEM]:
-		var gem_data: Dictionary = AE.all_equipment.get(str(gem_name), {})
-		for property_name in DIVINE_PROPERTY_NAMES:
-			if gem_data.has(property_name):
-				result[property_name] += AE.scale_gem_resonance_value(gem_data[property_name], data)
-	return result
+	return EquipmentService.rules().get_divine_forge_gem_properties(StringName(_name), data)
 
 
 func _ready() -> void:
@@ -451,7 +393,7 @@ func _physics_process(_delta: float) -> void:
 		create_tween().tween_property(self, "modulate", Color(1, 1, 1, 1), 0.2)
 		set_some_pro_color(nam)
 		_set_equipment_info(nam)
-		if AE.all_equipment[nam][DataKeys.TYPE] != "道具" and AE.all_equipment[nam][DataKeys.TYPE] != "消耗品":
+		if EquipmentService.data(nam)[DataKeys.TYPE] != "道具" and EquipmentService.data(nam)[DataKeys.TYPE] != "消耗品":
 			have.queue_free()
 			set_bs_infor()
 		else:
@@ -463,14 +405,14 @@ func _physics_process(_delta: float) -> void:
 
 
 func set_some_pro_color(_name):
-	if str(AE.all_equipment[_name].get(DataKeys.QUALITY, "")) == "黑神话":
+	if str(EquipmentService.data(_name).get(DataKeys.QUALITY, "")) == "黑神话":
 		_apply_black_myth_text_style(eq_name)
 		_apply_black_myth_text_style(eq_pz)
 		return
-	eq_name.add_theme_color_override("font_color", AE.all_equipment[_name]["颜色"])
-	eq_name.add_theme_color_override("font_outline_color", AE.all_equipment[_name]["颜色"])
-	eq_pz.add_theme_color_override("font_color", AE.all_equipment[_name]["颜色"])
-	eq_pz.add_theme_color_override("font_outline_color", AE.all_equipment[_name]["颜色"])
+	eq_name.add_theme_color_override("font_color", EquipmentService.data(_name)["颜色"])
+	eq_name.add_theme_color_override("font_outline_color", EquipmentService.data(_name)["颜色"])
+	eq_pz.add_theme_color_override("font_color", EquipmentService.data(_name)["颜色"])
+	eq_pz.add_theme_color_override("font_outline_color", EquipmentService.data(_name)["颜色"])
 
 
 func _apply_black_myth_text_style(label: Label) -> void:
@@ -478,31 +420,33 @@ func _apply_black_myth_text_style(label: Label) -> void:
 
 
 func _set_equipment_info(_name: String):
-	if AE.all_equipment[_name][DataKeys.TYPE] == "道具" or AE.all_equipment[_name][DataKeys.TYPE] == "消耗品":
-		eq_name.text = str(AE.all_equipment[_name][DataKeys.NAME])
-		eq_pz.text = "品质：" + str(AE.all_equipment[_name][DataKeys.QUALITY])
-		if AE.all_equipment[_name].has("所属"):
-			if AE.all_equipment[_name]["所属"] != "" and AE.all_equipment[_name]["所属"] != "无":
+	if EquipmentService.data(_name)[DataKeys.TYPE] == "道具" or EquipmentService.data(_name)[DataKeys.TYPE] == "消耗品":
+		eq_name.text = str(EquipmentService.data(_name)[DataKeys.NAME])
+		eq_pz.text = "品质：" + str(EquipmentService.data(_name)[DataKeys.QUALITY])
+		if EquipmentService.data(_name).has("所属"):
+			if EquipmentService.data(_name)["所属"] != "" and EquipmentService.data(_name)["所属"] != "无":
 				eq_lx.text = (
-					"类型：" + str(AE.all_equipment[_name][DataKeys.TYPE]) + "·" + str(AE.all_equipment[_name]["所属"])
+					"类型："
+					+ str(EquipmentService.data(_name)[DataKeys.TYPE])
+					+ "·"
+					+ str(EquipmentService.data(_name)["所属"])
 				)
 			else:
-				eq_lx.text = "类型：" + str(AE.all_equipment[_name][DataKeys.TYPE])
+				eq_lx.text = "类型：" + str(EquipmentService.data(_name)[DataKeys.TYPE])
 		else:
-			eq_lx.text = "类型：" + str(AE.all_equipment[_name][DataKeys.TYPE])
-		if str(AE.all_equipment[_name][DataKeys.TYPE]) == "消耗品":
+			eq_lx.text = "类型：" + str(EquipmentService.data(_name)[DataKeys.TYPE])
+		if str(EquipmentService.data(_name)[DataKeys.TYPE]) == "消耗品":
 			have.text = "拥有：" + str(PlayerData.get_xhp_data(_name)) + " 个"
 		else:
 			have.text = "拥有：" + str(PlayerData.get_item_data(_name)) + " 个"
-		if AE.all_equipment[_name]["描述"] == "" and eq_ms != null:
+		if EquipmentService.data(_name)["描述"] == "" and eq_ms != null:
 			eq_ms.queue_free()
 		else:
-			eq_ms.text = "描述:" + str(AE.all_equipment[_name]["描述"])
-		eq_sj.text = "售价:" + str(AE.all_equipment[_name]["售价"]) + "灵魂。"
+			eq_ms.text = "描述:" + str(EquipmentService.data(_name)["描述"])
+		eq_sj.text = "售价:" + str(EquipmentService.data(_name)["售价"]) + "灵魂。"
 		return
 
-	var equipment_data_source: Node = AE._get_data()
-	var display_name: String = equipment_data_source.get_divine_forge_display_name(_name, eq_prop)
+	var display_name: String = EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
 	if qh_level != 0:
 		eq_name.text = display_name + "(+" + str(qh_level) + ")"
 	else:
@@ -511,7 +455,7 @@ func _set_equipment_info(_name: String):
 	eq_lx.text = "类型：" + str(get_properies(_name, "类型")[0]) + "·" + str(get_properies(_name, "所属")[0])
 	match get_properies(_name, "类型")[0]:
 		"法宝":
-			if not AE.all_equipment[_name].has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
+			if not EquipmentService.data(_name).has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
 				eq_star_level.queue_free()
 			else:
 				if get_wx() == "":
@@ -602,12 +546,12 @@ func _set_equipment_info(_name: String):
 			else:
 				eq_bm.text = "暴免:" + str(get_properies(_name, "CritReduce")[0])
 
-			if AE.all_equipment[_name]["描述"] == "" and eq_ms != null:
+			if EquipmentService.data(_name)["描述"] == "" and eq_ms != null:
 				eq_ms.queue_free()
 			else:
-				eq_ms.text = "描述:" + str(AE.all_equipment[_name]["描述"])
+				eq_ms.text = "描述:" + str(EquipmentService.data(_name)["描述"])
 		"武器", "防具", "饰品", "神骨", "头衔", "时装", "翅膀":
-			if not AE.all_equipment[_name].has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
+			if not EquipmentService.data(_name).has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
 				eq_star_level.queue_free()
 			else:
 				eq_star_level.text = "五行：" + str(get_wx())
@@ -693,7 +637,7 @@ func _set_equipment_info(_name: String):
 
 
 func set_bs_infor():
-	if not is_pet_equipment and str(AE.all_equipment.get(nam, {}).get(DataKeys.TYPE, "")) == "法宝":
+	if not is_pet_equipment and str(EquipmentService.data_or_empty(nam).get(DataKeys.TYPE, "")) == "法宝":
 		bs_pro_list.hide()
 		return
 	if not eq_prop.has(DataKeys.GEM):
@@ -724,9 +668,8 @@ func set_bs_infor():
 		"CritReduce": "暴免"
 	}
 
-	var equipment_data_source: Node = AE._get_data()
 	for i in eq_prop[DataKeys.GEM]:
-		var gem_data = AE.all_equipment.get(i)
+		var gem_data = EquipmentService.find(i)
 		if gem_data == null:
 			continue
 
@@ -753,7 +696,7 @@ func set_bs_infor():
 		]:
 			if gem_data.has(u) and gem_data[u] != 0:
 				var display_name = prop_names.get(u, u)
-				var scaled_value = equipment_data_source.scale_gem_resonance_value(gem_data[u], eq_prop)
+				var scaled_value = EquipmentService.rules().scale_gem_resonance_value(gem_data[u], eq_prop)
 				props_text += " " + display_name + "+" + str(scaled_value)
 
 		var hbox = HBoxContainer.new()
@@ -779,7 +722,7 @@ func _set_gem_resonance_information(data: Dictionary) -> void:
 	var gems: Variant = data.get(DataKeys.GEM, null)
 	if not gems is Array:
 		return
-	var resonance := AE.get_gem_resonance_level(data)
+	var resonance := EquipmentService.rules().get_gem_resonance_level(data)
 	var container := bs_pro_list.get_parent()
 	var label := container.get_node_or_null("GemResonance") as Label
 	if label == null:
@@ -809,8 +752,9 @@ func get_bs_prop(need):
 func set_bs_prop():
 	if eq_prop == null or not eq_prop.has(DataKeys.GEM):
 		return {}
-	var equipment_data_source: Node = AE._get_data()
-	var divine_gem_properties: Dictionary = equipment_data_source.get_divine_forge_gem_properties(nam, eq_prop)
+	var divine_gem_properties: Dictionary = EquipmentService.rules().get_divine_forge_gem_properties(
+		StringName(nam), eq_prop
+	)
 	for property_name in bs_prop:
 		bs_prop[property_name] = divine_gem_properties.get(property_name, 0)
 	if eq_prop[DataKeys.GEM].is_empty():
@@ -838,16 +782,15 @@ func get_properies(_name, need):
 		if eq_prop.has(DataKeys.ENHANCE_PROP) and eq_prop[DataKeys.ENHANCE_PROP].has(need):
 			strengthen_val = eq_prop[DataKeys.ENHANCE_PROP][need]
 		elif (
-			AE.all_equipment[_name].has(DataKeys.ENHANCE_PROP)
-			and AE.all_equipment[_name][DataKeys.ENHANCE_PROP].has(need)
+			EquipmentService.data(_name).has(DataKeys.ENHANCE_PROP)
+			and EquipmentService.data(_name)[DataKeys.ENHANCE_PROP].has(need)
 		):
-			strengthen_val = AE.all_equipment[_name][DataKeys.ENHANCE_PROP][need]
+			strengthen_val = EquipmentService.data(_name)[DataKeys.ENHANCE_PROP][need]
 
-		var equipment_data_source: Node = AE._get_data()
-		var base_value = eq_prop.get(need, AE.all_equipment[_name].get(need, 0))
-		var scaled_base = equipment_data_source.scale_divine_forge_value(base_value, _name, eq_prop)
-		var scaled_strength = equipment_data_source.scale_divine_forge_value(
-			float(strengthen_val) * float(qh_level), _name, eq_prop
+		var base_value = eq_prop.get(need, EquipmentService.data(_name).get(need, 0))
+		var scaled_base = EquipmentService.rules().scale_divine_forge_value(base_value, StringName(_name), eq_prop)
+		var scaled_strength = EquipmentService.rules().scale_divine_forge_value(
+			float(strengthen_val) * float(qh_level), StringName(_name), eq_prop
 		)
 		infomation = str(scaled_base)
 		if qh_level > 0 and strengthen_val != 0:
@@ -859,7 +802,7 @@ func get_properies(_name, need):
 func get_last_equ_pro(_name_, qh_level_):
 	if eq_prop == null:
 		return
-	return AE._get_data().get_divine_forge_properties(_name_, qh_level_, eq_prop)
+	return EquipmentService.rules().get_divine_forge_properties(StringName(_name_), qh_level_, eq_prop)
 
 
 func _get_display_name():
@@ -875,7 +818,7 @@ func get_wx():
 
 
 func get_fb_pro(_name, need):
-	var infomation = AE.get_fb_last_equ_pro(_name, qh_level, wx, eq_prop)[need]
+	var infomation = EquipmentService.rules().get_fb_last_equ_pro(StringName(_name), qh_level, wx, eq_prop)[need]
 	return infomation
 
 

@@ -13,8 +13,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	items.set_button_icon(load_item_icon(item_id))
 	items.total_number = num if num != null else 1
-	_name.text = AE.all_equipment[item_id][DataKeys.NAME]
-	var color = AE.all_equipment[item_id]["颜色"]
+	_name.text = EquipmentService.data(item_id)[DataKeys.NAME]
+	var color = EquipmentService.data(item_id)["颜色"]
 	_name.add_theme_color_override("font_color", color)
 	_name.add_theme_color_override("font_outline_color", color)
 	set_physics_process(false)

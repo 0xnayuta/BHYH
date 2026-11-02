@@ -92,11 +92,11 @@ func _pet_item_id(item: Dictionary) -> String:
 	for source in [item, data]:
 		for key in ["物品ID", "ID", "id"]:
 			var candidate := str(source.get(key, "")).strip_edges()
-			if AE.all_equipment.has(candidate):
+			if EquipmentService.has(candidate):
 				return candidate
 		for key in ["图标", "图标路径", "icon", "Icon"]:
 			var candidate := str(source.get(key, "")).get_file().get_basename()
-			if AE.all_equipment.has(candidate):
+			if EquipmentService.has(candidate):
 				return candidate
 	var stored_name := (
 		str(
@@ -106,12 +106,12 @@ func _pet_item_id(item: Dictionary) -> String:
 		)
 		. strip_edges()
 	)
-	if AE.all_equipment.has(stored_name):
+	if EquipmentService.has(stored_name):
 		return stored_name
 	if pet_item_id_cache.has(stored_name):
 		return str(pet_item_id_cache[stored_name])
-	for item_id in AE.all_equipment:
-		if str(AE.all_equipment[item_id].get(DataKeys.NAME, "")) == stored_name:
+	for item_id in EquipmentService.ids():
+		if str(EquipmentService.data(item_id).get(DataKeys.NAME, "")) == stored_name:
 			pet_item_id_cache[stored_name] = str(item_id)
 			return str(item_id)
 	var fallback := stored_name if stored_name != "" else "宠物装备"
@@ -171,9 +171,9 @@ func _get_ldl_equipment_entries() -> Array:
 		if not (equipped_item is Dictionary):
 			continue
 		var item_name := str((equipped_item as Dictionary).get(DataKeys.NAME, ""))
-		if item_name == "" or not AE.all_equipment.has(item_name):
+		if item_name == "" or not EquipmentService.has(item_name):
 			continue
-		if ldl_type_filter != "" and str(AE.all_equipment[item_name].get(DataKeys.TYPE, "")) != ldl_type_filter:
+		if ldl_type_filter != "" and str(EquipmentService.data(item_name).get(DataKeys.TYPE, "")) != ldl_type_filter:
 			continue
 		(
 			entries
@@ -203,8 +203,8 @@ func _get_ldl_equipment_entries() -> Array:
 					if (
 						ldl_type_filter != ""
 						and (
-							not AE.all_equipment.has(item_name)
-							or str(AE.all_equipment[item_name].get(DataKeys.TYPE, "")) != ldl_type_filter
+							not EquipmentService.has(item_name)
+							or str(EquipmentService.data(item_name).get(DataKeys.TYPE, "")) != ldl_type_filter
 						)
 					):
 						continue
@@ -233,10 +233,10 @@ func _set_ldl_equipment_box_data() -> void:
 		var entry: Dictionary = entries[entry_index]
 		var item: Dictionary = entry.get("item", {})
 		var item_name := str(item.get(DataKeys.NAME, ""))
-		if item_name == "" or not AE.all_equipment.has(item_name):
+		if item_name == "" or not EquipmentService.has(item_name):
 			continue
 		var item_data: Dictionary = item.get("Data", {}) if item.get("Data", {}) is Dictionary else {}
-		var item_type := str(AE.all_equipment[item_name].get(DataKeys.TYPE, ""))
+		var item_type := str(EquipmentService.data(item_name).get(DataKeys.TYPE, ""))
 		var wx_list: Variant = item.get(DataKeys.FIVE_ELEMENTS, []) if item_type == "法宝" else []
 		var box = target_box(x)
 		_set_box_item(box, item_name, int(item.get(DataKeys.ENHANCE_LEVEL, 0)), 0, item_data, wx_list)
@@ -268,7 +268,7 @@ func set_box_data():
 				target_box(x).qh_level = i.强化等级
 				target_box(x).eq_prop = i.Data
 				target_box(x).item_locked = bool(i.Data.get("锁定", false))
-				if AE.all_equipment[i.名字][DataKeys.TYPE] == "法宝":
+				if EquipmentService.data(i.名字)[DataKeys.TYPE] == "法宝":
 					target_box(x).wx = i.五行
 				else:
 					target_box(x).wx = []

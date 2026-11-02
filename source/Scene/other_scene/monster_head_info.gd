@@ -810,8 +810,8 @@ func _create_monster_attr_panel() -> Control:
 			if item_id == "":
 				continue
 			var item_name := item_id
-			if AE.all_equipment.has(item_id):
-				item_name = str(AE.all_equipment[item_id].get(DataKeys.NAME, item_id))
+			if EquipmentService.has(item_id):
+				item_name = str(EquipmentService.data(item_id).get(DataKeys.NAME, item_id))
 			var chance := _get_drop_chance_text(
 				float(drop.get("chance", 0.0)), diff, bool(drop.get("fixed_chance", false))
 			)

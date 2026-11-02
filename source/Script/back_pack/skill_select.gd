@@ -117,7 +117,7 @@ func set_infor() -> void:
 	if info.is_empty():
 		return
 	skill_icon.texture = load(str(info["icon"]))
-	wp_name_label.text = str(AE.all_equipment.get(weapon_name, {}).get(DataKeys.NAME, weapon_name))
+	wp_name_label.text = str(EquipmentService.data_or_empty(weapon_name).get(DataKeys.NAME, weapon_name))
 	skill_name.text = str(info["skill"])
 	skill_level.text = "Lv: " + str(PlayerData.get_most_level(weapon_name) + (1 if weapon_name == "tjbg" else 0))
 	wx_mu.visible = PlayerData.check_have_wx(weapon_name, "木")

@@ -1151,10 +1151,9 @@ func _get_secret_armor_id(role_id: int) -> String:
 
 
 func _build_secret_equipment(item_id: String, divine_forge: bool) -> Dictionary:
-	AE.ensure_loaded()
-	if not AE.all_equipment.has(item_id):
+	if not EquipmentService.has(item_id):
 		return {}
-	var data: Dictionary = (AE.all_equipment[item_id] as Dictionary).duplicate(true)
+	var data: Dictionary = (EquipmentService.data(item_id) as Dictionary).duplicate(true)
 	var gems: Array[String] = []
 	for _socket_index in range(SECRET_GEM_SOCKET_COUNT):
 		gems.push_back(SECRET_ATTACK_GEM_ID)

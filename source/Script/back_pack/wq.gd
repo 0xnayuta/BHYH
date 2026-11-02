@@ -64,7 +64,7 @@ func _has_item_icon() -> bool:
 
 func _item_id() -> String:
 	var item_name := str(get_item_name)
-	if AE.all_equipment.has(item_name):
+	if EquipmentService.has(item_name):
 		return item_name
 	return _icon_name()
 

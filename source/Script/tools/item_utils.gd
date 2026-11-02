@@ -121,7 +121,7 @@ static func item_icon_with_legacy_fallback(item_id) -> Texture2D:
 
 ## 物品图标带空图标兜底：装备数据 `图标` 优先，其次 `all_items/<id>.png`，最后 `empty.png`。
 static func item_icon_with_empty_fallback(item_id) -> Texture2D:
-	var item_data: Dictionary = AE.all_equipment.get(str(item_id), {})
+	var item_data: Dictionary = EquipmentService.data_or_empty(str(item_id))
 	var data_icon_path := str(item_data.get("图标", ""))
 	if data_icon_path != "" and ResourceLoader.exists(data_icon_path):
 		return load(data_icon_path) as Texture2D
@@ -133,7 +133,7 @@ static func item_icon_with_empty_fallback(item_id) -> Texture2D:
 
 ## 装备数据图标优先：`图标` 命中即返回，否则回落 `all_items/<id>.png`（无空图标兜底）。
 static func equipment_icon_or_item_icon(item_id) -> Texture2D:
-	var item_data: Dictionary = AE.all_equipment.get(str(item_id), {})
+	var item_data: Dictionary = EquipmentService.data_or_empty(str(item_id))
 	var icon_path := str(item_data.get("图标", ""))
 	if icon_path != "" and ResourceLoader.exists(icon_path):
 		return load(icon_path) as Texture2D

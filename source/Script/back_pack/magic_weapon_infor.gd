@@ -185,7 +185,7 @@ func _refresh_weapon_visual_if_needed() -> void:
 	if nn_name == _displayed_weapon_name:
 		return
 	_displayed_weapon_name = nn_name
-	_name.text = str(AE.all_equipment[nn_name][DataKeys.NAME])
+	_name.text = str(EquipmentService.data(nn_name)[DataKeys.NAME])
 	set_skill_info(nn_name)
 	_show_lazy_preview(nn_name)
 
@@ -251,7 +251,7 @@ func get_fb_pro(_name, need):
 	var wx = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS]
 	var _level = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL]
 	var data = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0]["Data"]
-	var infomation = AE.get_fb_last_equ_pro(_name, _level, wx, data)[need]
+	var infomation = EquipmentService.rules().get_fb_last_equ_pro(StringName(_name), _level, wx, data)[need]
 	return infomation
 
 

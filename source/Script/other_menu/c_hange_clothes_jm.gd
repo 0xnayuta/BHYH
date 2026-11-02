@@ -11,13 +11,13 @@ var transmogrified: Transmogrified
 
 
 func _physics_process(_delta: float) -> void:
-	eq_name.text = str(AE.all_equipment[self_name][DataKeys.NAME])
+	eq_name.text = str(EquipmentService.data(self_name)[DataKeys.NAME])
 	show_box.is_in_ldl_gz = true
 	show_box.is_in_hhgz = true
 	show_box.set_button_icon(ItemUtils.item_icon(self_name))
 	show_box.qh_level = 0
 	show_box.wx = []
-	show_box.eq_prop = AE.all_equipment[self_name]
+	show_box.eq_prop = EquipmentService.data(self_name)
 	var list = PlayerData.player_data[DataKeys.TRANSMOG_LIST]
 	if list[DataKeys.WEAPON] == self_name or list[DataKeys.ARMOR] == self_name or list[DataKeys.WINGS] == self_name:
 		cdinfor.visible = true
@@ -36,8 +36,8 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_change_pressed() -> void:
-	var lx = AE.all_equipment[self_name][DataKeys.TYPE]
-	var item_name = AE.all_equipment[self_name][DataKeys.NAME]
+	var lx = EquipmentService.data(self_name)[DataKeys.TYPE]
+	var item_name = EquipmentService.data(self_name)[DataKeys.NAME]
 	var slot_type := ""
 	var type_label := ""
 	match lx:

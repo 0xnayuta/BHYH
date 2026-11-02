@@ -85,8 +85,8 @@ func _physics_process(_delta: float) -> void:
 		get_type = "宠物装备"
 		item_number.text = "+%d" % qh_level if qh_level > 0 else ""
 	elif get_item_name != "empty":
-		if AE.all_equipment.has(get_item_name):
-			get_type = AE.all_equipment[get_item_name][DataKeys.TYPE]
+		if EquipmentService.has(get_item_name):
+			get_type = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 			match get_type:
 				"武器":
 					item_number.text = ""
@@ -171,7 +171,7 @@ func on_press_when_strength():
 		var _parent = NodeUtils.ancestor(self, 7)
 		Global.add_message_show(_parent, "该装备不可强化！", 1.5, Vector2(500, 305))
 		return
-	var get_tt = "宠物装备" if strength_source == "宠物背包" else AE.all_equipment[get_item_name][DataKeys.TYPE]
+	var get_tt = "宠物装备" if strength_source == "宠物背包" else EquipmentService.data(get_item_name)[DataKeys.TYPE]
 	if get_tt != "道具" and get_tt != "消耗品" and get_tt != "法宝":
 		var max_level = _get_strength_max_level(get_item_name)
 		if qh_level < max_level:
@@ -188,11 +188,11 @@ func on_press_when_strength():
 
 
 func on_press_when_divine_forge() -> void:
-	var item_data: Dictionary = AE.all_equipment.get(get_item_name, {})
+	var item_data: Dictionary = EquipmentService.data_or_empty(get_item_name)
 	if (
 		bool(eq_prop.get("不可神铸", item_data.get("不可神铸", false)))
 		or item_data.is_empty()
-		or not AE.can_divine_forge(get_item_name, eq_prop)
+		or not EquipmentService.rules().can_divine_forge(StringName(get_item_name), eq_prop)
 	):
 		var _parent = NodeUtils.ancestor(self, 7)
 		Global.add_message_show(_parent, "只有神器及以上品质的武器、防具和饰品可以神铸！", 1.5, Vector2(500, 305))
@@ -207,7 +207,7 @@ func on_press_when_divine_forge() -> void:
 
 
 func on_press_when_bone_forge() -> void:
-	var item_data: Dictionary = AE.all_equipment.get(get_item_name, {})
+	var item_data: Dictionary = EquipmentService.data_or_empty(get_item_name)
 	var item_type := str(eq_prop.get(DataKeys.TYPE, item_data.get(DataKeys.TYPE, "")))
 	var next_stage := str(eq_prop.get("下一阶段", item_data.get("下一阶段", "")))
 	if item_data.is_empty() or item_type != "神骨" or next_stage == "":
@@ -250,7 +250,7 @@ func on_press_when_synthesis():
 		for i in PlayerData.player_data["放入列表"]:
 			var mylist = PlayerData.player_data["放入列表"][i]
 			if mylist.size() == 0:
-				var get_tt = AE.all_equipment[get_item_name][DataKeys.TYPE]
+				var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 				if get_tt == "法宝":
 					Global.add_message_show(_parent, "法宝无法参与合成！！！", 1.5, Vector2(500, 305))
 					return
@@ -289,7 +289,7 @@ func on_press_when_synthesis():
 			return
 		var list = PlayerData.player_data["放入列表"]["物品" + str(num)]
 		if list.has(str(get_item_name)):
-			var get_tt = AE.all_equipment[list[0]][DataKeys.TYPE]
+			var get_tt = EquipmentService.data(list[0])[DataKeys.TYPE]
 			if get_tt == "武器" or get_tt == "防具" or get_tt == "饰品" or get_tt == "翅膀" or get_tt == "时装" or get_tt == "头衔":
 				PlayerData.add_zb(get_item_name, list[3], eq_prop)
 			elif get_tt == "道具":
@@ -306,7 +306,7 @@ func on_press_when_synthesis():
 func on_press_when_dz():
 	if Global.forge == null:
 		return
-	var item_data: Dictionary = AE.all_equipment.get(str(get_item_name), {})
+	var item_data: Dictionary = EquipmentService.data_or_empty(str(get_item_name))
 	if item_data.is_empty():
 		return
 	var type := str(item_data.get(DataKeys.TYPE, ""))
@@ -339,7 +339,7 @@ func on_press_when_dz():
 						continue
 					var item: Dictionary = item_value
 					var jewel_name := str(item.get(DataKeys.NAME, ""))
-					var jewel_data: Variant = AE.all_equipment.get(jewel_name, {})
+					var jewel_data: Variant = EquipmentService.data_or_empty(jewel_name)
 					if not jewel_data is Dictionary:
 						continue
 					var belong := str((jewel_data as Dictionary).get("所属", ""))
@@ -390,14 +390,14 @@ func on_press_whenfj():
 		return
 	if not is_in_ldl_gz:
 		var _parent = NodeUtils.ancestor(self, 7)
-		var get_tt = AE.all_equipment[get_item_name][DataKeys.TYPE]
-		var base = AE.all_equipment[get_item_name]["所属"]
+		var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
+		var base = EquipmentService.data(get_item_name)["所属"]
 		var name_str
 		if PlayerData.player_data[DataKeys.DECOMPOSE_LIST].size() != 0:
 			name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 			var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 			var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-			get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
+			get_tt = EquipmentService.data(name_str)[DataKeys.TYPE]
 			match get_tt:
 				"武器", "饰品", "防具":
 					PlayerData.add_zb(name_str, cur_level, data)
@@ -405,7 +405,7 @@ func on_press_whenfj():
 				"道具":
 					PlayerData.add_dj(name_str, 1)
 					PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
-		var get_tt2 = AE.all_equipment[get_item_name][DataKeys.TYPE]
+		var get_tt2 = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 		match get_tt2:
 			"法宝":
 				Global.add_message_show(_parent, "法宝不可以分解！！", 1.5, Vector2(500, 305))
@@ -443,7 +443,7 @@ func on_press_whenfj():
 			var name_str = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.NAME]
 			var cur_level = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0][DataKeys.ENHANCE_LEVEL]
 			var data = PlayerData.player_data[DataKeys.DECOMPOSE_LIST][0]["Data"]
-			get_tt = AE.all_equipment[name_str][DataKeys.TYPE]
+			get_tt = EquipmentService.data(name_str)[DataKeys.TYPE]
 			match get_tt:
 				"武器", "饰品", "防具":
 					PlayerData.add_zb(name_str, cur_level, data)
@@ -464,8 +464,8 @@ func on_press_when_xq():
 			if not PlayerData.take_pet_equipment_for_mosaic(strength_index, eq_prop, get_item_name):
 				Global.add_message_show(_parent, "宠物装备位置已变化，请重新选择！！", 1.5, Vector2(500, 305))
 			return
-		var get_tt = AE.all_equipment[get_item_name][DataKeys.TYPE]
-		var base = AE.all_equipment[get_item_name]["所属"]
+		var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
+		var base = EquipmentService.data(get_item_name)["所属"]
 		if PlayerData.player_data[DataKeys.INLAY_LIST].size() == 0:
 			match get_tt:
 				"法宝":
@@ -543,7 +543,7 @@ func on_press_when_xq():
 			if strength_source == "宠物背包":
 				PlayerData.restore_mosaic_equipment()
 				return
-			var get_tt = AE.all_equipment[get_item_name][DataKeys.TYPE]
+			var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 			match get_tt:
 				"武器", "饰品", "防具", "神骨", "翅膀", "时装", "头衔":
 					PlayerData.restore_mosaic_equipment()
