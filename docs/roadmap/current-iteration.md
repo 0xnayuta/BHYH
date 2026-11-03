@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射已完成**，25-1~25-5 未启动；Phase 26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器已完成**，25-2~25-5 未启动；Phase 26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -75,14 +75,16 @@
 - 产出 [`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)：`BaseHero` 自动战斗的状态/输入/生命周期/失败路径、`BaseMonster` 受击反应/控制免疫/Boss 保护/死亡映射、现有探针覆盖与缺口；
 - 首批选择 **自动战斗**：6 个 `_auto_battle_*` 字段、20 个 `_auto_battle*` 方法，目标/技能/移动可由显式上下文迁出；受击反应有 37 个 `state_hurt` 文件（含基类与覆写）和 3 个 `play_hit_effect` 文件，保留到 25-4；
 - 记录必须保持的现状：1P/2P 共用运行时开关、按 `coop_slot` 读技能配置、自动重试归 `BaseThroughLevel`/胜利/失败/玲珑塔、手动 `is_t_mc` 与法宝输入仍可能绕过自动分支；
-- 现有 `coop`/`scene`/全量回归没有直接驱动自动战斗或受击代次的探针，25-1/25-4 各自补定向验收；
+- 现有 `coop`/`scene`/全量回归没有直接驱动自动战斗或受击代次的探针；25-1 已补 `LocalCoopAutoBattleProbe`，25-4 仍需受击代次探针；
 - 本批次未修改 `source/`，未改变数值/时序/输入映射。
 
-### 25-1 自动战斗控制器
+### 25-1 自动战斗控制器（已完成）
 
-- 抽出目标选择、技能选择、移动/跳跃与重试策略；
-- `BaseHero` 保留实体根与公开入口，控制器通过显式上下文查询目标/技能；
-- 不改变自动战斗数值与动作时序；验证单双人、暂停、死亡与切关。
+- 新增 `Script/base/auto_battle_context.gd`：显式开关/配置/目标/技能/冷却/MP/动作/移动查询与受控命令，不持有节拍或游标；
+- 新增 `Script/base/auto_battle_controller.gd`：接管目标缓存/筛选、技能游标/计数、0.22s 节拍、移动/朝向/障碍跳跃，以及自动法宝→剑阵→无双调用顺序；
+- `BaseHero` 删除 6 个自动战斗字段与 20 个旧方法，保留实体根、`get_skill`/`use_fb`/`ws_skill`、`is_auto_battle_target_valid` 与 `is_auto_battle_skill_active` 钩子；角色 3/4/哪吒覆写改为公开钩子，玉兔索敌改走公开目标校验；
+- `LocalCoopAutoBattleProbe` 覆盖 P1/P2 槽位配置、目标缓存/移动、真实 `slz` 起手与计数、无双短路、关闭清理、暂停、死亡、场景退出；
+- 未改数值/动作时序/输入映射/碰撞层；障碍跳跃、自动重试转场与手动输入冲突仍留待后续验证。
 
 ### 25-2 法宝/时装/翅膀表现切片
 
@@ -159,9 +161,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 25-1 自动战斗控制器**；Phase 24 已完成，25-0 已完成。
+**当前下一步**：**Phase 25-2 法宝/时装/翅膀表现切片**；Phase 24 已完成，25-0/25-1 已完成。
 **当前不启动**：Phase 26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0/25-1 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`LocalCoopAutoBattleProbe`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

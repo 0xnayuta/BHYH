@@ -495,7 +495,7 @@ func find_moon_target(from: Vector2) -> BaseMonster:
 	var nearest: BaseMonster
 	var distance := INF
 	for candidate in candidates:
-		if not _is_auto_battle_target_valid(candidate):
+		if not is_auto_battle_target_valid(candidate):
 			continue
 		var monster := candidate as BaseMonster
 		if monster.is_boss:

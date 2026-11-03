@@ -46,18 +46,8 @@ var _static_wing_track_states: Array[Dictionary] = []
 var _xyzy_wing_flip_tracks_disabled := false
 var _xyzy_wing_flip_track_states: Array[Dictionary] = []
 var _sword_array_sync_elapsed := 0.0
-var _auto_battle_elapsed := 0.0
-var _auto_battle_skill_cursor := 0
-var _auto_battle_skill_cast_counts: Dictionary = {}
-var _auto_battle_target: Variant = null
-var _auto_battle_target_search_elapsed := 0.0
-var _auto_battle_jump_elapsed := 0.0
-const AUTO_BATTLE_INTERVAL := 0.22
-const AUTO_BATTLE_TARGET_SEARCH_INTERVAL := 0.15
-const AUTO_BATTLE_TARGET_SEARCH_RANGE := 1800.0
-const AUTO_BATTLE_ATTACK_RANGE := 260.0
-const AUTO_BATTLE_JUMP_COOLDOWN := 0.8
-const AUTO_BATTLE_MOVE_SPEED_SCALE := 1.0
+var auto_battle_context: AutoBattleContext
+var auto_battle_controller: AutoBattleController
 ## 松开跳跃键时保留的向上速度比例；越小点按跳得越低，长按不受影响。
 const JUMP_RELEASE_SPEED_SCALE := 0.7
 
@@ -295,6 +285,7 @@ var _last_role_hit_effect_msec: int = 0
 
 func _ready() -> void:
 	RoleProp.source_player = self
+	_ensure_auto_battle_controller()
 
 	_capture_wings_base_transform()
 	call_deferred("_scan_late_static_wing_tracks")
@@ -327,15 +318,20 @@ func _attach_mount_runtime() -> void:
 	mount_runtime.call("setup", self)
 
 
+func _ensure_auto_battle_controller() -> void:
+	if auto_battle_controller != null:
+		return
+	auto_battle_context = AutoBattleContext.new(self)
+	auto_battle_controller = AutoBattleController.new(auto_battle_context)
+
+
 func _exit_tree() -> void:
 	if RoleProp.source_player == self:
 		RoleProp.source_player = null
 	set_process(false)
 	set_physics_process(false)
-	_auto_battle_target = null
-	_auto_battle_skill_cast_counts.clear()
-	_auto_battle_skill_cursor = 0
-	_auto_battle_elapsed = 0.0
+	if auto_battle_controller != null:
+		auto_battle_controller.reset()
 	_clear_visual_resources(self)
 
 
@@ -567,8 +563,8 @@ func _physics_process(delta: float) -> void:
 	white_bar_armor_time_left = maxf(0.0, white_bar_armor_time_left - delta)
 	_enforce_white_bar_control_immunity()
 	_sword_array_sync_elapsed += delta
-	_auto_battle_target_search_elapsed += delta
-	_auto_battle_jump_elapsed += delta
+	if auto_battle_controller != null:
+		auto_battle_controller.advance_timers(delta)
 	jsfzsy()
 	use_zhen_fa()
 	set_wings_offset()
@@ -621,7 +617,8 @@ func _physics_process(delta: float) -> void:
 	if is_death:
 		return
 	_update_fashion_values_if_needed()
-	_process_auto_battle(delta)
+	if auto_battle_controller != null:
+		auto_battle_controller.tick(delta)
 	add_tx()
 	if RoleProp.ws_value >= RoleProp.max_ws_value:
 		if PlayerInput.is_action_just_pressed("无双"):
@@ -850,8 +847,8 @@ func noarmal_control():
 	if is_use_smb:
 		return
 
-	if MainSet.is_auto_battle_enabled() and not _is_auto_battle_skill_only():
-		_process_auto_battle_movement()
+	if auto_battle_controller != null and auto_battle_controller.should_control_movement():
+		auto_battle_controller.process_movement()
 		return
 
 	if not islljy:
@@ -893,170 +890,8 @@ func noarmal_control():
 		get_skill(skill_name)
 
 
-func _process_auto_battle(delta: float) -> void:
-	if is_queued_for_deletion():
-		return
-	if not MainSet.is_auto_battle_enabled():
-		_auto_battle_elapsed = 0.0
-		_auto_battle_target = null
-		_auto_battle_target_search_elapsed = 0.0
-		_auto_battle_skill_cursor = 0
-		_auto_battle_skill_cast_counts.clear()
-		return
-	if is_death:
-		return
-	if not is_inside_tree() or get_tree().current_scene == null:
-		return
-	_process_auto_battle_equipment()
-	if _try_auto_battle_wushuang():
-		return
-	if is_silent or is_using_skills or is_attacking or is_be_attacking:
-		return
-	if is_stun or is_ice or is_immobilize:
-		return
-	_auto_battle_elapsed += delta
-	if _auto_battle_elapsed < AUTO_BATTLE_INTERVAL:
-		return
-	_auto_battle_elapsed = 0.0
-
-	if not _is_auto_battle_skill_only():
-		var target: Variant = _get_auto_battle_target()
-		if target == null or not _is_auto_battle_target_in_attack_range(target):
-			return
-
-	var skill_entries := _get_auto_battle_skill_entries()
-	if skill_entries.is_empty():
-		_auto_battle_skill_cursor = 0
-		_auto_battle_skill_cast_counts.clear()
-		return
-	if _auto_battle_skill_cursor >= skill_entries.size():
-		_auto_battle_skill_cursor = 0
-	var configured_ids: Array[String] = []
-	for entry in skill_entries:
-		configured_ids.append(str(entry.get("id", "")))
-	for skill_id in _auto_battle_skill_cast_counts.keys():
-		if str(skill_id) not in configured_ids:
-			_auto_battle_skill_cast_counts.erase(skill_id)
-	for offset in range(skill_entries.size()):
-		var index := (_auto_battle_skill_cursor + offset) % skill_entries.size()
-		var entry: Dictionary = skill_entries[index]
-		var skill_id := str(entry.get("id", ""))
-		if _is_auto_battle_skill_active(skill_id):
-			_auto_battle_skill_cast_counts.erase(skill_id)
-			_auto_battle_skill_cursor = (index + 1) % skill_entries.size()
-			continue
-		if not _can_auto_battle_use_skill(skill_id):
-			continue
-		var mp_before := int(RoleProp.roleprop.Mp)
-		var cooldown_before := float(role1_skill_inter.get(skill_id, 0.0))
-		var action_before: String = str(get_action)
-		var using_skill_before := is_using_skills
-		if not is_inside_tree() or get_tree().current_scene == null:
-			return
-		get_skill(skill_id)
-		var cooldown_after := float(role1_skill_inter.get(skill_id, 0.0))
-		var skill_cast_started := (
-			cooldown_after > cooldown_before + 0.001
-			or int(RoleProp.roleprop.Mp) < mp_before
-			or is_using_skills != using_skill_before
-			or get_action != action_before
-		)
-		if not skill_cast_started:
-			continue
-		var cast_count := int(_auto_battle_skill_cast_counts.get(skill_id, 0)) + 1
-		var required_count := maxi(1, int(entry.get("count", 1)))
-		if cast_count >= required_count:
-			_auto_battle_skill_cast_counts.erase(skill_id)
-			_auto_battle_skill_cursor = (index + 1) % skill_entries.size()
-		else:
-			_auto_battle_skill_cast_counts[skill_id] = cast_count
-			_auto_battle_skill_cursor = index
-		return
-
-
-func _is_auto_battle_skill_only() -> bool:
-	return bool(MainSet.set_data.get("AutoBattleSkillOnly", false))
-
-
-func _process_auto_battle_equipment() -> void:
-	if bool(MainSet.set_data.get("AutoBattleMagicWeapon", false)):
-		_try_auto_battle_magic_weapon()
-	if bool(MainSet.set_data.get("AutoBattleSwordArray", false)) and zhen_fa_cd <= 0:
-		_try_use_main_sword_array()
-
-
-func _try_auto_battle_magic_weapon() -> bool:
-	if mg_target == null or not is_instance_valid(mg_target) or mg_target.is_queued_for_deletion():
-		return false
-	if _is_magic_weapon_disabled_in_current_level():
-		return false
-	if bool(mg_target.get("is_use")) or not bool(mg_target.get("is_canuse")):
-		return false
-	if not mg_target is GhostDoll and not no_limit_buff():
-		return false
-	use_fb()
-	return bool(mg_target.get("is_use"))
-
-
-func _is_magic_weapon_disabled_in_current_level() -> bool:
-	var scene_parent := get_parent()
-	if scene_parent == null:
-		return false
-	var level := scene_parent.get_parent()
-	return level is Level17 or level is Level22
-
-
-func _try_auto_battle_wushuang() -> bool:
-	if not bool(MainSet.set_data.get("AutoBattleWushuang", false)):
-		return false
-	if RoleProp.is_ws_state or RoleProp.ws_value < RoleProp.max_ws_value:
-		return false
-	if not ws_skill():
-		return false
-	RoleProp.is_ws_state = true
-	return true
-
-
-func _get_auto_battle_target() -> Variant:
-	if (
-		is_instance_valid(_auto_battle_target)
-		and _is_auto_battle_target_valid(_auto_battle_target)
-		and _auto_battle_target_search_elapsed < AUTO_BATTLE_TARGET_SEARCH_INTERVAL
-	):
-		return _auto_battle_target
-
-	_auto_battle_target_search_elapsed = 0.0
-	_auto_battle_target = null
-	var candidates: Array = []
-	var current_scene := get_tree().current_scene
-	if current_scene != null and current_scene.has_method("get_active_monsters"):
-		var active_monsters: Variant = current_scene.call("get_active_monsters")
-		if active_monsters is Array:
-			candidates = active_monsters
-	if candidates.is_empty():
-		candidates = get_tree().get_nodes_in_group("monsters")
-
-	var best_target: Variant = null
-	var best_score := INF
-	for candidate in candidates:
-		if not _is_auto_battle_target_valid(candidate):
-			continue
-		var monster := candidate as BaseMonster
-		if monster == null:
-			continue
-		var horizontal_distance := absf(monster.global_position.x - global_position.x)
-		var vertical_distance := absf(monster.global_position.y - global_position.y)
-		if horizontal_distance > AUTO_BATTLE_TARGET_SEARCH_RANGE:
-			continue
-		var score := horizontal_distance + vertical_distance * 0.35
-		if score < best_score:
-			best_score = score
-			best_target = monster
-	_auto_battle_target = best_target
-	return _auto_battle_target
-
-
-func _is_auto_battle_target_valid(target: Variant) -> bool:
+## 自动战斗与玉兔索敌共享的目标有效性入口。
+func is_auto_battle_target_valid(target: Variant) -> bool:
 	if target == null or not is_instance_valid(target) or not target is BaseMonster:
 		return false
 	var monster := target as BaseMonster
@@ -1071,229 +906,8 @@ func _is_auto_battle_target_valid(target: Variant) -> bool:
 	return true
 
 
-func _get_auto_battle_attack_range() -> float:
-	var range_value := AUTO_BATTLE_ATTACK_RANGE
-	for skill_entry in _get_auto_battle_skill_entries():
-		var skill_id := str(skill_entry.get("id", ""))
-		if skill_id in ["hyjj", "hyjj_ws", "nz_yysj"]:
-			range_value = maxf(range_value, 420.0)
-		elif skill_id in ["lyfb", "hmz", "hmz_ws", "smb", "by", "cmly", "tllz", "ltjz"]:
-			range_value = maxf(range_value, 320.0)
-	return range_value
-
-
-func _is_auto_battle_target_in_attack_range(target: Variant) -> bool:
-	if not _is_auto_battle_target_valid(target):
-		return false
-	var monster := target as BaseMonster
-	var horizontal_distance := absf(monster.global_position.x - global_position.x)
-	var vertical_distance := absf(monster.global_position.y - global_position.y)
-	return horizontal_distance <= _get_auto_battle_attack_range() and vertical_distance <= 220.0
-
-
-func _process_auto_battle_movement() -> void:
-	if not MainSet.is_auto_battle_enabled():
-		return
-	if _is_auto_battle_skill_only():
-		_auto_battle_target = null
-		velocity.x = 0.0
-		_set_auto_battle_idle()
-		return
-	if is_death or is_silent or is_using_skills or is_attacking or is_be_attacking:
-		velocity.x = 0.0
-		return
-	if not no_limit_buff() or is_bound_to_the_ground:
-		velocity.x = 0.0
-		return
-
-	var target: Variant = _get_auto_battle_target()
-	if not _is_auto_battle_target_valid(target):
-		target = null
-	var _direction := 1.0
-	if target != null and not _is_auto_battle_target_in_attack_range(target):
-		var horizontal_delta: float = float((target as BaseMonster).global_position.x - global_position.x)
-		if absf(horizontal_delta) > 12.0:
-			_direction = signf(horizontal_delta)
-		elif target.global_position.y < global_position.y - 50.0:
-			_direction = 1.0 if player_dir else -1.0
-		else:
-			velocity.x = 0.0
-			_set_auto_battle_idle()
-			return
-	elif target != null:
-		var target_delta_x: float = float((target as BaseMonster).global_position.x - global_position.x)
-		if absf(target_delta_x) > 8.0:
-			_set_auto_battle_facing(signf(target_delta_x))
-		velocity.x = 0.0
-		_set_auto_battle_idle()
-		return
-	else:
-		_direction = 1.0
-
-	_set_auto_battle_facing(_direction)
-	if _auto_battle_is_blocked_ahead(_direction):
-		_auto_battle_jump_if_blocked()
-	if is_attacking or is_be_attacking or is_using_skills:
-		velocity.x = 0.0
-		return
-	velocity.x = (
-		_direction
-		* walk_speed
-		* RoleProp.ws_up_power
-		* reverse_move_speed_multiplier
-		* AUTO_BATTLE_MOVE_SPEED_SCALE
-		* mount_speed_multiplier
-	)
-	if is_on_floor():
-		_play_locomotion_animation(&"run")
-		get_action = "run"
-
-
-func _set_auto_battle_facing(_direction: float) -> void:
-	if _direction > 0.0:
-		action.scale.x = -1
-		base_damagebox.scale.x = -1
-		player_dir = true
-	elif _direction < 0.0:
-		action.scale.x = 1
-		base_damagebox.scale.x = 1
-		player_dir = false
-
-
-func _set_auto_battle_idle() -> void:
-	if get_action == "run":
-		get_action = ""
-	if is_on_floor() and not is_attacking and not is_using_skills:
-		_play_locomotion_animation(&"wait")
-
-
-func _auto_battle_is_blocked_ahead(_direction: float) -> bool:
-	if not is_on_floor() or _direction == 0.0:
-		return false
-	var has_obstacle_collision := false
-	var has_slide_collision := false
-	for index in range(get_slide_collision_count()):
-		var collision := get_slide_collision(index)
-		if collision == null:
-			continue
-		has_slide_collision = true
-		var slide_collider := collision.get_collider()
-		if slide_collider is Node and _find_auto_battle_monster(slide_collider as Node) != null:
-			continue
-		var normal := collision.get_normal()
-		if _direction > 0.0 and normal.x < -0.25:
-			has_obstacle_collision = true
-		if _direction < 0.0 and normal.x > 0.25:
-			has_obstacle_collision = true
-	if has_obstacle_collision or (not has_slide_collision and is_on_wall()):
-		return true
-
-	var space_state := get_world_2d().direct_space_state
-	if space_state == null:
-		return false
-	var ray_start := global_position + Vector2(0.0, -28.0)
-	var ray_end := ray_start + Vector2(_direction * 36.0, 0.0)
-	var query := PhysicsRayQueryParameters2D.create(ray_start, ray_end, collision_mask, [get_rid()])
-	var hit := space_state.intersect_ray(query)
-	if hit.is_empty():
-		return false
-	var collider: Variant = hit.get("collider")
-	if collider is Node:
-		var monster := _find_auto_battle_monster(collider as Node)
-		if monster != null:
-			return false
-	return true
-
-
-func _find_auto_battle_monster(node: Node) -> BaseMonster:
-	var current := node
-	var depth := 0
-	while current != null and is_instance_valid(current) and depth < 8:
-		if current is BaseMonster:
-			return current as BaseMonster
-		current = current.get_parent()
-		depth += 1
-	return null
-
-
-func _auto_battle_jump_if_blocked() -> void:
-	if _auto_battle_jump_elapsed < AUTO_BATTLE_JUMP_COOLDOWN:
-		return
-	if not is_on_floor() or is_bound_to_the_ground or is_jump:
-		return
-	if is_attacking or is_be_attacking or is_using_skills:
-		return
-	_auto_battle_jump_elapsed = 0.0
-	jump(false)
-
-
-func _get_auto_battle_skills() -> Array:
-	var result: Array = []
-	for entry in _get_auto_battle_skill_entries():
-		result.append(str(entry.get("id", "")))
-	return result
-
-
-func _get_auto_battle_skill_entries() -> Array[Dictionary]:
-	var role_id := int(PlayerData.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
-		role_id = 1
-	var role_key := "角色" + str(role_id)
-	var slot := int(get_meta("coop_slot", 1))
-	var by_slot_value: Variant = MainSet.set_data.get("AutoBattleSkillsBySlot", {})
-	if by_slot_value is Dictionary:
-		var slot_skills: Variant = (by_slot_value as Dictionary).get(str(slot), {})
-		if slot_skills is Dictionary and (slot_skills as Dictionary).has(role_key):
-			return _normalize_auto_battle_skill_entries((slot_skills as Dictionary).get(role_key, []))
-	var by_role_value: Variant = MainSet.set_data.get("AutoBattleSkillsByRole", {})
-	if by_role_value is Dictionary and (by_role_value as Dictionary).has(role_key):
-		var role_skills: Variant = (by_role_value as Dictionary).get(role_key, [])
-		return _normalize_auto_battle_skill_entries(role_skills)
-	var legacy_skills: Variant = MainSet.set_data.get("AutoBattleSkills", [])
-	return _normalize_auto_battle_skill_entries(legacy_skills)
-
-
-func _normalize_auto_battle_skill_entries(raw_value: Variant) -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	if not raw_value is Array:
-		return result
-	var seen: Dictionary = {}
-	for value in raw_value:
-		var skill_id := ""
-		var count := 1
-		if value is Dictionary:
-			var entry: Dictionary = value
-			skill_id = str(entry.get("id", entry.get("skill_id", "")))
-			count = clampi(int(entry.get("count", 1)), 1, 99)
-		else:
-			skill_id = str(value)
-		if skill_id == "" or seen.has(skill_id):
-			continue
-		seen[skill_id] = true
-		(
-			result
-			. append(
-				{
-					"id": skill_id,
-					"count": count,
-				}
-			)
-		)
-	return result
-
-
-func _can_auto_battle_use_skill(skill_id: String) -> bool:
-	if skill_id == "" or not role1_skill_inter.has(skill_id):
-		return false
-	if float(role1_skill_inter.get(skill_id, 0.0)) > 0.0:
-		return false
-	if not has_method("get_need_mp"):
-		return false
-	var need_mp := int(get_need_mp(skill_id, false))
-	return int(RoleProp.roleprop.Mp) >= need_mp
-
-
-func _is_auto_battle_skill_active(_skill_id: String) -> bool:
+## 角色子类覆盖点：自动战斗是否应把该技能视为持续激活。
+func is_auto_battle_skill_active(_skill_id: String) -> bool:
 	return false
 
 

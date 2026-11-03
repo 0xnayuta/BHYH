@@ -141,6 +141,8 @@ func _run() -> void:
 			await _case_key_config()
 		"LocalCoopHudReadOnlyProbe":
 			await _case_hud_read_only()
+		"LocalCoopAutoBattleProbe":
+			await _case_auto_battle()
 		_:
 			status = "FAIL"
 			failures.append("unknown case: " + case_name)
@@ -1986,6 +1988,239 @@ func _action_has_physical_key(action: StringName, key: int) -> bool:
 		if event is InputEventKey and int(event.physical_keycode) == key:
 			return true
 	return false
+
+
+func _probe_has_property(node: Object, property_name: String) -> bool:
+	for property: Dictionary in node.get_property_list():
+		if str(property.get("name", "")) == property_name:
+			return true
+	return false
+
+
+func _auto_battle_context_for(hero: Node) -> Object:
+	if _probe_has_property(hero, "auto_battle_context"):
+		var existing: Variant = hero.get("auto_battle_context")
+		if existing != null:
+			return existing
+	var context_script: Script = load("res://Script/base/auto_battle_context.gd")
+	return context_script.new(hero)
+
+
+func _auto_battle_controller_for(hero: Node) -> Object:
+	if _probe_has_property(hero, "auto_battle_controller"):
+		var existing: Variant = hero.get("auto_battle_controller")
+		if existing != null:
+			return existing
+	var controller_script: Script = load("res://Script/base/auto_battle_controller.gd")
+	return controller_script.new(_auto_battle_context_for(hero))
+
+
+## 25-1：目标缓存/移动、配置槽位隔离、关闭清理与游标计数。
+func _case_auto_battle() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var settings: Node = root.get_node("MainSet")
+	var old_enabled: bool = settings.is_auto_battle_enabled()
+	var old_skill_only: Variant = settings.set_data.get("AutoBattleSkillOnly", false)
+	var old_by_slot: Variant = settings.set_data.get("AutoBattleSkillsBySlot", {})
+	var old_magic: Variant = settings.set_data.get("AutoBattleMagicWeapon", false)
+	var old_sword: Variant = settings.set_data.get("AutoBattleSwordArray", false)
+	var old_wushuang: Variant = settings.set_data.get("AutoBattleWushuang", false)
+	settings.set_auto_battle_enabled(false)
+	settings.set_data["AutoBattleSkillOnly"] = false
+	settings.set_data["AutoBattleMagicWeapon"] = false
+	settings.set_data["AutoBattleSwordArray"] = false
+	settings.set_data["AutoBattleWushuang"] = false
+	settings.set_data["AutoBattleSkillsBySlot"] = {
+		"1": {"角色1": [{"id": "slz", "count": 2}, {"id": "zz", "count": 1}]},
+		"2": {"角色7": [{"id": "yt_ldmw", "count": 3}]},
+	}
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "auto battle owners instantiated")
+	if p1 == null or p2 == null:
+		return
+	p1.set_physics_process(false)
+	p2.set_physics_process(false)
+	p1.set_process(false)
+	p2.set_process(false)
+	var context1: Object = _auto_battle_context_for(p1)
+	var context2: Object = _auto_battle_context_for(p2)
+	var entries1: Array = context1.get_skill_entries()
+	var entries2: Array = context2.get_skill_entries()
+	_check(entries1.size() == 2 and str(entries1[0].get("id", "")) == "slz", "P1 slot skills isolated")
+	_check(entries2.size() == 1 and str(entries2[0].get("id", "")) == "yt_ldmw", "P2 slot skills isolated")
+	_check(int(entries1[0].get("count", 0)) == 2, "P1 skill count retained")
+
+	var controller: Object = _auto_battle_controller_for(p1)
+	if _probe_has_property(p1, "auto_battle_controller"):
+		var production_controller: Variant = p1.get("auto_battle_controller")
+		_check(production_controller == controller, "BaseHero owns controller")
+
+	settings.set_data["AutoBattleSkillsBySlot"] = {
+		"1": {"角色1": []},
+		"2": {"角色7": [{"id": "yt_ldmw", "count": 3}]},
+	}
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.hp = 1000000
+	monster.max_hp = 1000000
+	monster.global_position = Vector2(700, 340)
+	if not monster.is_in_group("monsters"):
+		monster.add_to_group("monsters")
+
+	settings.set_auto_battle_enabled(true)
+	controller.reset()
+	controller.advance_timers(1.0)
+	controller.tick(0.22)
+	_check(controller.get_target() == monster, "auto target cached")
+	controller.process_movement()
+	_check(p1.velocity.x > 0.0, "auto moves toward distant target")
+	_check(bool(p1.player_dir), "auto faces target direction")
+
+	monster.global_position = Vector2(180, 340)
+	controller.tick(0.22)
+	controller.process_movement()
+	_check(controller.get_target() == monster, "in-range target retained")
+	_check(is_zero_approx(p1.velocity.x), "auto stops inside attack range")
+
+	monster.queue_free()
+	await process_frame
+	controller.tick(0.22)
+	_check(controller.get_target() == null, "dead target cleared")
+
+	settings.set_auto_battle_enabled(false)
+	controller.tick(0.22)
+	_check(controller.get_target() == null, "disable clears target")
+	_check(controller.get_skill_cursor() == 0, "disable clears cursor")
+	_check(controller.get_skill_cast_counts().is_empty(), "disable clears cast counts")
+	_check(is_zero_approx(controller.get_elapsed()), "disable clears cadence")
+
+	var skill_hero: Node = _make_hero(1, 1)
+	_check(skill_hero != null, "auto battle skill owner instantiated")
+	if skill_hero == null:
+		return
+	skill_hero.set_physics_process(false)
+	skill_hero.set_process(false)
+	settings.set_data["AutoBattleSkillOnly"] = true
+	settings.set_data["AutoBattleSkillsBySlot"] = {
+		"1": {"角色1": [{"id": "slz", "count": 2}]},
+	}
+	data.player_data[DataKeys.SKILL_LEARNED]["技能键位"]["Y"] = "slz"
+	skill_hero.RoleProp.roleprop.Mp = skill_hero.RoleProp.roleprop.SMp
+	var skill_controller: Object = _auto_battle_controller_for(skill_hero)
+	settings.set_auto_battle_enabled(true)
+	skill_controller.reset()
+	skill_controller.tick(0.22)
+	_check(
+		float(skill_hero.role1_skill_inter.get("slz", 0.0)) > 0.0, "real skill starts through controller"
+	)
+	_check(
+		int(skill_controller.get_skill_cast_counts().get("slz", 0)) == 1, "skill cast count tracks start"
+	)
+	skill_hero.is_using_skills = false
+	skill_hero.is_attacking = false
+	skill_hero.get_action = "wait"
+	skill_hero.role1_skill_inter["slz"] = 0.0
+	skill_hero.RoleProp.roleprop.Mp = skill_hero.RoleProp.roleprop.SMp
+	skill_hero.role_action_player.stop()
+	skill_controller.tick(0.22)
+	_check(
+		skill_controller.get_skill_cast_counts().is_empty(), "skill count clears after required casts"
+	)
+	_check(skill_controller.get_skill_cursor() == 0, "skill cursor wraps after count")
+	skill_controller.reset()
+	_check(skill_controller.get_target() == null and skill_controller.get_skill_cursor() == 0, "reset clears state")
+
+	settings.set_data["AutoBattleWushuang"] = true
+	settings.set_data["AutoBattleSkillOnly"] = true
+	skill_hero.RoleProp.is_ws_state = false
+	skill_hero.RoleProp.ws_value = skill_hero.RoleProp.max_ws_value
+	skill_hero.role1_skill_inter["slz"] = 0.0
+	skill_controller.reset()
+	skill_controller.tick(0.22)
+	_check(skill_hero.RoleProp.is_ws_state, "auto wushuang triggers before skill")
+	_check(is_zero_approx(float(skill_hero.role1_skill_inter.get("slz", 0.0))), "wushuang short-circuits skill")
+	settings.set_data["AutoBattleWushuang"] = false
+	skill_hero.RoleProp.is_ws_state = false
+
+	var live_hero: Node = _make_hero(1, 1)
+	_check(live_hero != null, "live auto battle owner instantiated")
+	if live_hero == null:
+		return
+	var live_monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	live_monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(live_monster)
+	await process_frame
+	live_monster.set_physics_process(false)
+	live_monster.hp = 1000000
+	live_monster.max_hp = 1000000
+	live_monster.global_position = Vector2(700, 340)
+	if not live_monster.is_in_group("monsters"):
+		live_monster.add_to_group("monsters")
+	settings.set_data["AutoBattleSkillOnly"] = false
+	settings.set_data["AutoBattleSkillsBySlot"] = {"1": {"角色1": []}, "2": {"角色7": []}}
+	settings.set_auto_battle_enabled(true)
+	var live_controller: Object = live_hero.auto_battle_controller
+	_check(live_controller != null, "live BaseHero auto controller")
+	for _frame in 30:
+		await physics_frame
+		if live_controller.get_target() == live_monster and live_hero.velocity.x > 0.0:
+			break
+	_check(live_controller.get_target() == live_monster, "live physics selects target")
+	_check(live_hero.velocity.x > 0.0, "live physics auto-moves")
+
+	p2.set_physics_process(true)
+	p2.set_process(true)
+	for _frame in 30:
+		await physics_frame
+		if p2.auto_battle_controller.get_target() == live_monster and p2.velocity.x > 0.0:
+			break
+	_check(p2.auto_battle_controller.get_target() == live_monster, "P2 physics selects target")
+	_check(p2.velocity.x > 0.0, "P2 physics auto-moves")
+
+	settings.set_auto_battle_enabled(false)
+	await physics_frame
+	await physics_frame
+	_check(absf(live_hero.velocity.x) < 1.0, "live physics stops after disable")
+	_check(absf(p2.velocity.x) < 1.0, "P2 physics stops after disable")
+
+	settings.set_auto_battle_enabled(true)
+	for _frame in 20:
+		await physics_frame
+		if live_controller.get_target() == live_monster:
+			break
+	var paused_target: Variant = live_controller.get_target()
+	_check(paused_target == live_monster, "pause fixture target")
+	live_hero.process_mode = Node.PROCESS_MODE_DISABLED
+	await physics_frame
+	await physics_frame
+	_check(live_controller.get_target() == paused_target, "pause freezes auto target")
+	live_hero.process_mode = Node.PROCESS_MODE_INHERIT
+	live_hero.is_death = true
+	live_hero.velocity.x = 100.0
+	live_controller.process_movement()
+	_check(absf(live_hero.velocity.x) < 1.0, "death stops auto movement")
+	live_hero.is_death = false
+	_check(live_controller.get_target() == live_monster, "death retains auto target")
+	var scene_target: Variant = live_controller.get_target()
+	var had_scene_target := scene_target != null
+	stage.queue_free()
+	stage = null
+	await process_frame
+	_check(live_controller.get_target() == null, "scene exit clears auto target")
+	_check(had_scene_target, "scene exit fixture had target")
+
+	settings.set_auto_battle_enabled(old_enabled)
+	settings.set_data["AutoBattleSkillOnly"] = old_skill_only
+	settings.set_data["AutoBattleSkillsBySlot"] = old_by_slot
+	settings.set_data["AutoBattleMagicWeapon"] = old_magic
+	settings.set_data["AutoBattleSwordArray"] = old_sword
+	settings.set_data["AutoBattleWushuang"] = old_wushuang
+	monster = null
 
 
 func _case_input_isolation() -> void:

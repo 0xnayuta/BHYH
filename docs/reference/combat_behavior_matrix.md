@@ -1,6 +1,6 @@
-# 战斗实体行为与验证映射（Phase 25-0）
+# 战斗实体行为与验证映射（Phase 25-0/25-1）
 
-> **状态**：Phase 25-0 已完成（2026-11-03）；本页是行为切片、调用方、验收场景与回滚边界的事实映射，不表示 25-1~25-5 已实现。
+> **状态**：Phase 25-0 行为映射与 Phase 25-1 自动战斗控制器已完成（2026-11-04 最终验证）；25-2~25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
 > **范围**：`BaseHero` 自动战斗与受击反应、`BaseMonster` 受击反应/控制免疫/死亡，以及 `MainSet`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景和现有探针的调用面。
 > **非目标**：不改战斗数值、动作时序、碰撞层、输入映射或存档格式；不引入 ECS；不把这些调查结论写成已完成迁移。
 
@@ -10,14 +10,14 @@
 
 | 候选 | 状态面 | 调用面 | 独立性与风险 | 结论 |
 |:---|:---|:---|:---|:---|
-| 自动战斗 | 6 个 `_auto_battle_*` 字段、20 个 `_auto_battle*` 方法、配置/重试入口 | `BaseHero`、`MainSet`、`auto_battle_config`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景 | 目标选择、技能选择、移动/跳跃可通过显式上下文迁出；不直接决定伤害归属；现有自动战斗缺少行为探针 | **25-1 首批：自动战斗控制器** |
+| 自动战斗 | 6 个状态字段、20 个方法已迁入 `AutoBattleController`；配置/重试入口保留 | `BaseHero`、`AutoBattleContext`、`AutoBattleController`、`MainSet`、`auto_battle_config`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景 | 目标、技能游标、节拍、移动/跳跃与装备调用顺序已独立；不直接决定伤害归属；新增 `LocalCoopAutoBattleProbe` | **25-1 已完成** |
 | 受击反应 | `_hurt_reaction_active`、`_hurt_reaction_generation`、`is_be_attacking`、控制免疫、Boss 保护、死亡 | 37 个文件包含 `state_hurt` 定义（含基类与覆写），3 个文件包含 `play_hit_effect` 定义，并与伤害/来源/死亡/Boss 保护交叉 | 子类覆写多，和来源归属、Boss 阶段、死亡结算共享状态；独立生命周期较弱 | 保留到 25-4，先做映射 |
 
-**决策**：25-1 先抽 `BaseHero` 自动战斗；25-4 再做受击与来源归属加固。理由不是文件行数，而是自动战斗有独立输入/节拍/目标/技能游标，受击反应与伤害、控制免疫和子类覆写耦合更深。
+**决策**：25-1 已先抽 `BaseHero` 自动战斗；25-4 再做受击与来源归属加固。理由不是文件行数，而是自动战斗有独立输入/节拍/目标/技能游标，受击反应与伤害、控制免疫和子类覆写耦合更深。
 
 ---
 
-## 2. `BaseHero` 自动战斗
+## 2. `BaseHero` 自动战斗（25-1 已迁移）
 
 ### 2.1 状态与所有者
 
@@ -27,34 +27,34 @@
 | `AutoBattleSkills` / `AutoBattleSkillsByRole` / `AutoBattleSkillsBySlot` | `MainSet.set_data` | `auto_battle_config._persist_current_skill_config` | 技能列表、角色回退、槽位覆盖；按 `coop_slot` 读取 |
 | `AutoBattlePlayerSlot` | `MainSet.set_data` | `auto_battle_config` | 只选择配置界面正在编辑的 1P/2P；当前不被 `BaseHero` 用来选择目标或启用开关 |
 | `AutoBattleWushuang` / `AutoBattleRetry` / `AutoBattleSkillOnly` / `AutoBattleMagicWeapon` / `AutoBattleSwordArray` | `MainSet.set_data` | `auto_battle_config` | 无双、自动重试、仅技能、自动法宝、自动剑阵 |
-| `_auto_battle_elapsed` | `BaseHero` | `_process_auto_battle` | 技能节拍；关闭自动时归零 |
-| `_auto_battle_target_search_elapsed` | `BaseHero` | `_physics_process` 累加、`_get_auto_battle_target` 归零 | 目标缓存/重选节拍；关闭自动时归零 |
-| `_auto_battle_target` | `BaseHero` | `_get_auto_battle_target`、关闭自动、`_exit_tree` | 当前目标；失效、死亡、出树或不是 `BaseMonster` 时替换 |
-| `_auto_battle_skill_cursor` | `BaseHero` | 技能循环 | 下一次技能尝试位置；关闭自动/空列表时归零 |
-| `_auto_battle_skill_cast_counts` | `BaseHero` | 技能循环 | 每个技能已释放次数；与配置 `count` 比较；关闭自动/空列表/失效 ID 时清理 |
-| `_auto_battle_jump_elapsed` | `BaseHero` | `_physics_process` 累加、跳跃成功归零 | 障碍跳跃冷却；关闭自动不重置，下一次启用可能立即允许跳跃 |
+| `AutoBattleController._elapsed` | `Script/base/auto_battle_controller.gd` | `tick` | 技能节拍；关闭自动时归零 |
+| `AutoBattleController._target_search_elapsed` | 同上 | `advance_timers` 累加、`get_target_for_tick` 归零 | 目标缓存/重选节拍；关闭自动时归零 |
+| `AutoBattleController._target` | 同上 | `get_target_for_tick`、关闭自动、`reset` | 当前目标；失效、死亡、出树或不是 `BaseMonster` 时替换 |
+| `AutoBattleController._skill_cursor` | 同上 | 技能循环 | 下一次技能尝试位置；关闭自动/空列表时归零 |
+| `AutoBattleController._skill_cast_counts` | 同上 | 技能循环 | 每个技能已释放次数；与配置 `count` 比较；关闭自动/空列表/失效 ID 时清理 |
+| `AutoBattleController._jump_elapsed` | 同上 | `advance_timers` 累加、跳跃成功归零 | 障碍跳跃冷却；关闭自动不重置，下一次启用可能立即允许跳跃 |
 
 ### 2.2 输入与调用链
 
 | 来源 | 消费方 | 语义 |
 |:---|:---|:---|
-| `MainSet.is_auto_battle_enabled()` | `BaseHero._process_auto_battle`、`_process_auto_battle_movement`、`BaseLevel`/`BaseThroughLevel` | 全局开关；1P/2P 共用，不由 `AutoBattlePlayerSlot` 单独启用 |
-| `AutoBattleSkillsBySlot[slot][role]` → `AutoBattleSkillsByRole[role]` → `AutoBattleSkills` | `_get_auto_battle_skill_entries` | 槽位优先、角色回退、旧配置最后；按 `coop_slot` 取，不按配置界面的当前编辑槽位取 |
-| `current_scene.get_active_monsters()`，否则 `get_tree().get_nodes_in_group("monsters")` | `_get_auto_battle_target` | 目标候选；排除死亡、`no_target`、召唤/宠物、出树/待释放对象 |
-| `BaseMonster` 位置/生命周期 | `_is_auto_battle_target_valid`、攻击距离与移动 | 目标在 1800 搜索半径、攻击距离/垂直 220 内才施法；失效后重新选择 |
-| `MainSet.set_data["AutoBattleSkillOnly"]` | `_process_auto_battle`、`_process_auto_battle_movement` | 仅技能：跳过目标距离门禁、清空目标并停止移动 |
-| `get_skill`、`_is_auto_battle_skill_active`、`_can_auto_battle_use_skill` | `BaseHero._process_auto_battle` 及子类覆盖 | 技能释放；冷却/MP 不足跳过；子类可声明技能处于激活态，避免重复释放 |
-| `use_fb`、`_try_use_main_sword_array`、`ws_skill` | `_process_auto_battle_equipment`、`_try_auto_battle_wushuang` | 自动法宝/剑阵/无双配置 |
-| `PlayerInput` | `BaseHero._physics_process`/`noarmal_control` | 自动战斗开启且非仅技能时，`noarmal_control` 改走自动移动后直接返回，跳过手动移动/技能/跳跃分支 |
+| `MainSet.is_auto_battle_enabled()` | `AutoBattleController.tick`、`process_movement`、`BaseLevel`/`BaseThroughLevel` | 全局开关；1P/2P 共用，不由 `AutoBattlePlayerSlot` 单独启用 |
+| `AutoBattleSkillsBySlot[slot][role]` → `AutoBattleSkillsByRole[role]` → `AutoBattleSkills` | `AutoBattleContext.get_skill_entries` | 槽位优先、角色回退、旧配置最后；按 `coop_slot` 取，不按配置界面的当前编辑槽位取 |
+| `current_scene.get_active_monsters()`，否则 `get_tree().get_nodes_in_group("monsters")` | `AutoBattleContext.get_target_candidates` / `AutoBattleController.get_target_for_tick` | 目标候选；排除死亡、`no_target`、召唤/宠物、出树/待释放对象 |
+| `BaseMonster` 位置/生命周期 | `BaseHero.is_auto_battle_target_valid`、`AutoBattleContext` 距离查询、控制器移动 | 目标在 1800 搜索半径、攻击距离/垂直 220 内才施法；失效后重新选择 |
+| `MainSet.set_data["AutoBattleSkillOnly"]` | `AutoBattleController.tick`、`process_movement` | 仅技能：跳过目标距离门禁、清空目标并停止移动 |
+| `get_skill`、`BaseHero.is_auto_battle_skill_active`、`AutoBattleContext.can_use_skill`/`cast_skill` | `AutoBattleController.tick` 及子类覆盖 | 技能释放；冷却/MP 不足跳过；子类可声明技能处于激活态，避免重复释放 |
+| `use_fb`、`_try_use_main_sword_array`、`ws_skill` | `AutoBattleContext.try_use_magic_weapon`/`use_sword_array`/`try_activate_wushuang` | 自动法宝/剑阵/无双配置；控制器保持先法宝、后剑阵、再无双的顺序 |
+| `PlayerInput` | `BaseHero._physics_process`/`noarmal_control` | 自动战斗开启且非仅技能时，`noarmal_control` 调用控制器移动后直接返回，跳过手动移动/技能/跳跃分支 |
 
 ### 2.3 单帧顺序与生命周期
 
 ```mermaid
 flowchart TD
-    A[BaseHero._physics_process] --> B[累计搜索/跳跃计时]
+    A[BaseHero._physics_process] --> B[controller.advance_timers]
     B --> C{is_death?}
     C -->|是| D[不再执行自动战斗]
-    C -->|否| E[_process_auto_battle]
+    C -->|否| E[controller.tick]
     E --> F{MainSet 自动开关?}
     F -->|否| G[清空节拍/目标/技能游标]
     F -->|是| H[自动法宝/剑阵]
@@ -66,10 +66,10 @@ flowchart TD
     M -->|否| N[返回]
     M -->|是| O[选目标/检查距离]
     O --> P[按配置循环技能]
-    P --> Q[get_skill 后以冷却/MP/动作变化确认是否起手]
+    P --> Q[context.cast_skill 后以冷却/MP/动作变化确认是否起手]
 ```
 
-- `_exit_tree` 清空目标、技能游标、计数和节拍；不重置 `_auto_battle_target_search_elapsed`/`_auto_battle_jump_elapsed`，节点释放后由新节点重新开始。
+- `_exit_tree` 调用 `AutoBattleController.reset()`，清空目标、技能游标、计数和全部计时器；新英雄重新开始。
 - 死亡路径在 `_physics_process` 中设置 `is_death`、清控制并播放死亡；自动战斗从下一帧起跳过。
 - 暂停由 SceneTree 暂停控制；自动战斗没有独立暂停状态。
 - 场景切换销毁旧英雄；新英雄在自动开关仍为 true 时重新开始，旧目标不得跨场景复用。
@@ -77,31 +77,32 @@ flowchart TD
 
 ### 2.4 失败与边界
 
-| 场景 | 当前行为 | 25-1 必须保持/验证 |
+| 场景 | 当前行为 | 25-1 验证/结果 |
 |:---|:---|:---|
 | 无目标/全部死亡 | 目标为 null；非仅技能时向右移动，可能持续到墙边 | 不空引用、不无界移动；停止/巡逻策略必须先取证再改 |
-| 目标无效/死亡/召唤物 | `_is_auto_battle_target_valid` 排除并重选 | 不误选宠物、召唤物、待释放对象、`no_target` 怪物 |
+| 目标无效/死亡/召唤物 | `BaseHero.is_auto_battle_target_valid` 排除并重选 | 不误选宠物、召唤物、待释放对象、`no_target` 怪物 |
 | 技能列表为空/全部已满 | 清空游标/计数，不施法 | 不空循环、不重复清状态 |
-| 冷却/MP 不足 | `_can_auto_battle_use_skill` 跳过；循环尝试其他技能 | 不扣 MP、不推进错误技能计数 |
+| 冷却/MP 不足 | `AutoBattleContext.can_use_skill` 跳过；循环尝试其他技能 | 不扣 MP、不推进错误技能计数 |
 | `get_skill` 无起手 | 以冷却/MP/`is_using_skills`/`get_action` 变化判定；无变化则继续尝试 | 不把失败起手计入 `count`，不无限重复同一技能 |
-| 技能激活态 | 子类 `_is_auto_battle_skill_active` 返回 true 时清计数并推进游标 | 角色 3 `sd`、角色 4 `wdzt`、哪吒阴阳/火莲等覆盖不得回退 |
+| 技能激活态 | 子类 `is_auto_battle_skill_active` 返回 true 时清计数并推进游标 | 角色 3 `sd`、角色 4 `wdzt`、哪吒阴阳/火莲等覆盖不得回退 |
 | 地形阻挡 | 滑动碰撞 + 射线；障碍时按 0.8s 冷却跳跃；`is_bound_to_the_ground`/空中/攻击中禁止 | 不穿墙、不丢失跳跃冷却、不改碰撞层 |
 | 沉默/眩晕/冰冻/定身/攻击/受击 | 自动技能与移动提前返回；装备/无双在控制门禁前执行 | 保持现有优先级；25-1 不把装备/无双误移入控制门禁之后 |
 | 仅技能模式 | 停止移动、清目标，只按节拍释放技能 | 不意外追击或回头移动 |
-| 手动输入 | 自动移动分支绕过手动移动/技能/跳跃；但 `is_t_mc` 的角色 3 分支仍读取手动技能键，手动法宝输入也仍在外层读取 | 记录为输入冲突，25-1 需显式隔离或保持现状并加测试 |
+| 手动输入 | 自动移动分支绕过手动移动/技能/跳跃；但 `is_t_mc` 的角色 3 分支仍读取手动技能键，手动法宝输入也仍在外层读取 | 现状保留，未在 25-1 隔离；不声称已消除冲突 |
 | 双人 | 开关为全局；每个英雄按自身 `coop_slot` 读技能；配置界面只编辑 `AutoBattlePlayerSlot` 对应档案 | 验证 P1/P2 配置隔离、目标互不覆盖；不把 `AutoBattlePlayerSlot` 当运行时启用开关 |
-| 自动重试/切关 | `BaseThroughLevel`/胜利/失败/玲珑塔分别拥有重试/转场；保存失败保留当前场景 | 25-1 不改转场与保存次数；旧目标失效后重选 |
+| 自动重试/切关 | `BaseThroughLevel`/胜利/失败/玲珑塔分别拥有重试/转场；保存失败保留当前场景 | 未改转场与保存次数；场景退出清目标已覆盖 |
 | 退出/死亡/暂停 | 死亡跳过、暂停冻结、退出清理；未清理的计时器在重新启用时可能已累计 | 验证重新启用不残留旧目标/计数 |
 | 冷却时间基 | `role1_skill_inter` 在 `_physics_process` 中按每帧 `0.1` 递减；自动节拍按 `delta` 累加 | 25-1 不得顺手把冷却改成 delta 或改变释放节奏；先记录该现状 |
-| 目标候选声明 | `_get_auto_battle_target` 当前重复声明 `var candidates`（可编译） | 25-1 迁移时保留单一声明，避免遮蔽/解析差异 |
+| 目标候选声明 | 25-1 已删除重复声明，保留单一声明 | 行为不变；由 `LocalCoopAutoBattleProbe` 覆盖目标缓存 |
 
-### 2.5 25-1 切片边界
+### 2.5 25-1 已完成边界
 
-- 控制器拥有：目标缓存/筛选、技能游标与计数、0.22s 节拍、移动/朝向/障碍跳跃、自动法宝/剑阵/无双的调用顺序。
+- 已落地：`AutoBattleController` 拥有目标缓存/筛选、技能游标与计数、0.22s 节拍、移动/朝向/障碍跳跃、自动法宝/剑阵/无双的调用顺序；`AutoBattleContext` 是唯一查询/命令边界。
 - `BaseHero` 保留：实体根、`_physics_process` 顺序、`get_skill`/`use_fb`/`ws_skill` 等公开能力、输入视图与死亡/场景生命周期。
 - 控制器通过显式上下文读取：自动开关、配置、当前场景活跃怪物、自身位置/朝向/移动状态、技能冷却/MP/起手结果、槽位与角色键；不直接读取/写入 UI 或存档。
 - 不在 25-1 迁移 `BaseThroughLevel` 的自动重试/转场；不在同一批改手动输入映射、碰撞层或动作时序。
-- 回滚边界：保留现有 `MainSet` 配置键和 `BaseHero` 公开入口；控制器不得成为 Autoload；关闭自动开关应立即停止目标/移动/技能并清理游标。
+- 回滚边界：保留现有 `MainSet` 配置键和 `BaseHero` 公开入口；控制器不得成为 Autoload；关闭自动开关立即停止目标/移动/技能并清理游标。
+- 25-1 新增文件：`source/Script/base/auto_battle_context.gd`、`auto_battle_controller.gd`；`BaseHero` 保留 `auto_battle_context`/`auto_battle_controller` 实例字段与 `is_auto_battle_target_valid`/`is_auto_battle_skill_active` 公开钩子。
 
 ---
 
@@ -180,7 +181,7 @@ flowchart TD
 
 ### 4.1 现有基线
 
-当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。与本次行为相关的已有覆盖：
+当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1 新增 `LocalCoopAutoBattleProbe`，`coop` 矩阵为 **34/34 PASS**；与本次行为相关的已有覆盖：
 
 | 验证 | 覆盖 | 缺口 |
 |:---|:---|:---|
@@ -191,25 +192,27 @@ flowchart TD
 | `LocalCoopPoolReuseProbe` | `mr_hurt` 池取出/回收/复用 | 不覆盖受击状态字段重置 |
 | `scene action-frames` | 怪物 `hurt`/`death` 帧 | 不验证进入/退出受击状态 |
 | `level_progress_exit_probe` | 自动战斗开关被显式关闭的退出路径 | 不验证自动战斗行为 |
+| `LocalCoopAutoBattleProbe` | P1/P2 槽位配置、目标缓存、移动、技能计数、关闭清理、暂停、死亡、场景退出 | 不覆盖障碍跳跃、自动重试转场和手动输入冲突 |
 | `archive` | 档案/命令/失败回滚 | 不覆盖战斗实体行为 |
 
 ### 4.2 25-1 自动战斗验收场景
 
-新增定向探针（建议名：`LocalCoopAutoBattleProbe`，或 `coop_probe_matrix` 的同职责 case；不得只测 wiring）：
+已实现 `LocalCoopAutoBattleProbe`；下表为覆盖结果，未覆盖项留待后续输入/关卡切片，不写成已通过：
 
 | 场景 | 前置/动作 | 必须观察 |
 |:---|:---|:---|
-| 单目标起手 | 开启自动，配置 1 个技能，生成 `BaseMonster`；运行若干物理帧 | 目标被选中且在距离内；技能只按节拍起手；MP/冷却按现有语义变化 |
-| 无目标 | 无活跃怪物/全部死亡 | 不空引用；不无限施法；移动/停止行为符合现状 |
-| 冷却/MP 跳过 | 技能冷却中或 MP 不足 | 不扣 MP、不增加错误技能计数；游标继续尝试后续技能 |
-| 技能计数 | 配置 `count=2` | 同一技能按配置次数释放后推进；激活态覆盖不重复 |
-| 目标失效 | 目标死亡/移出范围/出树 | 重新选目标或停止；不访问已释放对象 |
-| 仅技能 | `AutoBattleSkillOnly=true` | 目标清空、停止移动、只按节拍施法 |
-| 障碍跳跃 | 目标在墙后、自动移动被阻挡 | 仅在允许状态跳跃，受 0.8s 冷却；不穿墙 |
-| 关闭/死亡/暂停 | 运行中关闭开关、击杀英雄、暂停场景 | 立即停止自动移动/施法并清理目标/游标；恢复后不残留旧目标/计数 |
-| P1/P2 配置 | 双人，分别配置槽位技能；同时运行 | 各英雄读自身 `coop_slot` 配置；不串技能、不互相覆盖目标 |
-| 自动重试/切关 | `AutoBattleRetry` 成功/保存失败 | 成功只转场一次；失败留在当前场景；旧目标不跨场景 |
-| 手动输入冲突 | 自动开启时按移动/技能/法宝/`is_t_mc` 分支 | 明确哪些输入被自动覆盖；不静默双重施法 |
+| 单目标起手 | 开启自动，配置 1 个技能，生成 `BaseMonster`；运行若干物理帧 | **已覆盖**：目标、节拍、`slz` 真实起手与计数 |
+| 无目标 | 无活跃怪物/全部死亡 | **部分覆盖**：目标死亡清理；向右移动策略由映射保留 |
+| 冷却/MP 跳过 | 技能冷却中或 MP 不足 | **未定向覆盖**：`can_use_skill` 逻辑保留，25-1 不改变数值 |
+| 技能计数 | 配置 `count=2` | **已覆盖**：同一技能两次起手后清计数并回卷游标 |
+| 目标失效 | 目标死亡/移出范围/出树 | **已覆盖**：目标死亡清理；出树不访问已释放对象 |
+| 仅技能 | `AutoBattleSkillOnly=true` | **已覆盖**：真实技能起手与计数 |
+| 障碍跳跃 | 目标在墙后、自动移动被阻挡 | **未定向覆盖**：碰撞/射线判断已迁入 context，后续补墙体验证 |
+| 关闭/死亡/暂停 | 运行中关闭开关、击杀英雄、暂停场景 | **已覆盖**：关闭清目标/游标/计数；暂停冻结目标；死亡停止移动 |
+| P1/P2 配置 | 双人，分别配置槽位技能；同时运行 | **已覆盖**：P1/P2 各自技能配置与移动目标 |
+| 无双优先 | 自动无双配置、WS 就绪、技能可用 | **已覆盖**：先触发无双并短路技能；法宝/剑阵顺序由控制器代码与既有法宝测试保留 |
+| 自动重试/切关 | `AutoBattleRetry` 成功/保存失败 | **未定向覆盖**：转场/保存仍在 `BaseThroughLevel`；场景退出清目标已覆盖 |
+| 手动输入冲突 | 自动开启时按移动/技能/法宝/`is_t_mc` 分支 | **未定向覆盖**：现状保留，留待后续输入切片 |
 
 ### 4.3 25-4 受击验收场景
 
@@ -229,7 +232,7 @@ flowchart TD
 ## 5. 回滚与实施边界
 
 - 25-0 只新增本页与索引/状态文档，不改 `source/`；回滚为删除本页与对应文档引用。
-- 25-1 只抽自动战斗控制器；保留 `MainSet` 配置键、`BaseHero` 公开入口、`BaseThroughLevel`/胜利/失败/玲珑塔的转场与保存职责；旧行为由版本控制回滚，不保留双实现。
+- 25-1 已抽自动战斗控制器；保留 `MainSet` 配置键、`BaseHero` 公开入口、`BaseThroughLevel`/胜利/失败/玲珑塔的转场与保存职责；旧行为由版本控制回滚，不保留双实现。
 - 25-4 只统一受击状态/来源快照；不改变伤害数值、Boss 保护阈值、白条持续时间、碰撞层或动作时序；特殊子类覆写按批次保留并逐项验证。
 - 任一阶段发现行为语义不明确时，先补探针和记录，再迁移；不以“代码更短”为迁移依据。
 
@@ -237,4 +240,4 @@ flowchart TD
 
 ## 6. 下一步
 
-**25-1 自动战斗控制器**：先建立 `AutoBattleContext`（显式开关/配置/目标/技能/冷却/MP/动作/输入能力），迁出目标选择、技能游标、节拍和移动/跳跃；`BaseHero` 保留实体与公开能力；先实现并验证上表单人、双人、暂停、死亡、切关，再处理手动输入冲突。
+**25-1 自动战斗控制器已完成**：`AutoBattleContext` 提供显式开关/配置/目标/技能/冷却/MP/动作/移动能力，`AutoBattleController` 接管目标、技能游标、节拍和移动/跳跃；`BaseHero` 保留实体与公开能力。下一步转入 25-2。

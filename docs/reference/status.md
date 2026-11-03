@@ -1,7 +1,7 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-03。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
+> **最后更新**：2026-11-04。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
 
 ---
 
@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **33.99s**） |
-| `health_check` | **776 脚本 0 Parse / 0 Error / 0 Warning** |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **35.06s**） |
+| `health_check` | **778 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（10.47s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（170.36s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **33/33 PASS**（199.88s，含宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
-| `level_1` 冒烟 | **PASS，4 阶段，24.95s，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 305.8s，默认 auto 并发，本轮无重试） |
+| `scene_probe_runner` | **17/17 PASS**（158.41s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **34/34 PASS**（188.69s，含 `LocalCoopAutoBattleProbe`、宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
+| `level_1` 冒烟 | **PASS，4 阶段，25.71s，0/0/0** |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 309.6s，默认 auto 并发，本轮无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 25-1：新增 `AutoBattleContext`/`AutoBattleController`，自动战斗的目标缓存/筛选、技能游标/计数、0.22s 节拍、移动/朝向/障碍跳跃与法宝→剑阵→无双顺序迁出 `BaseHero`；`BaseHero` 删除 6 个状态字段与 20 个旧方法，保留 `get_skill`/`use_fb`/`ws_skill` 与公开 `is_auto_battle_target_valid`/`is_auto_battle_skill_active` 钩子；角色 3/4/哪吒覆写与玉兔索敌调用同步迁移。新增 `LocalCoopAutoBattleProbe` 覆盖 P1/P2 槽位配置、目标/移动、真实 `slz` 计数、无双短路、关闭清理、暂停、死亡与场景退出。验证：`check_all` 9/9（35.06s）、`health_check` 778 脚本 0/0/0、`scene` 17/17（158.41s）、`coop` 34/34（188.69s）、`level_1` 4 阶段（25.71s，0/0/0）、全量 128/128 + 5 SKIP（309.6s，无重试）。未改数值/时序/输入映射/碰撞层；障碍跳跃、自动重试转场与手动输入冲突未定向覆盖。
 - Phase 25-0：完成 `BaseHero` 自动战斗与 `BaseMonster` 受击反应的行为映射，新增 [`combat_behavior_matrix.md`](combat_behavior_matrix.md)：自动战斗 6 个状态字段、20 个 `_auto_battle*` 方法，受击 `state_hurt` 37 个文件（含基类与覆写）、`play_hit_effect` 3 个文件；记录 1P/2P 共用开关、按 `coop_slot` 读技能、自动重试归关卡、手动输入旁路及现有探针缺口。首批选择自动战斗；受击留给 25-4。本批次未修改 `source/`，未改变数值/时序/映射；沿用 24-4 全量基线。
 - Phase 24-4：阶段验收关闭 Phase 24。`hud_panel_boundary` 扩展到 `Script/back_pack/`、`Script/skill/`、`Script/ldl/` 与显式 HUD 文件，识别 `_data()`、`data_for(_slot)(...).player_data`、嵌套访问修改与局部别名；11 个旧直写文件整文件登记、`pet_interface` 7 行、`synthesis` 3 行、`coop_backpack` 2 行逐行登记，档案 IO 不豁免。验证：HUD 自测 14/13；`check_all` 9/9（33.99s）；`archive` 344/344（10.47s）；`scene` 17/17（170.36s）；`coop` 33/33（199.88s）；`level_1` 4 阶段 PASS（24.95s）；全量 128/128 + 5 SKIP（305.8s，无重试）。
 - Phase 24-3：`PetDomainCommand.upgrade_formation` 接管宠物阵法升级；规则表/等级上限/费用与 UI 分离，按可负担级数一次快照、扣材料、升级并调用 `MemoryClass.request_save_result("pet_formation", false)`。保存失败恢复完整档案；双人会话以 1P 快照覆盖 1P/2P 与共享道具、灵魂，2P 操作失败同样整批恢复。`PetFormationPopup` 不再写 `_data()`，升十级不再逐级保存。验证：`archive` 344/344（10.54s，含 1P/2P 成功、失败回滚、材料/灵魂恢复与单次保存）、`check_all` 9/9（28.51s）、`scene` 17/17（167.51s）、`coop` 33/33（191.91s）、`level_1` 4 阶段 PASS（24.95s）、全量 128/128 + 5 SKIP（311.4s，无重试）。

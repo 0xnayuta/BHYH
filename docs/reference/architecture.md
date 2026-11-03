@@ -255,7 +255,9 @@ classDiagram
 | 类 | 文件 | 职责 | 生命周期要点 |
 |:---|:---|:---|:---|
 | `BaseObject` | `Script/base/base_object.gd` | 所有战斗单位的基类（`CharacterBody2D`）；提供槽位感知的 `PlayerData` / `RoleProp` / `PlayerInput` | 只做 HP 夹取与基础字段重置；具体移动/攻击在子类 |
-| `BaseHero` | `Script/base/base_hero.gd` | 玩家角色：移动、普攻、技能、无双、法宝、剑阵、坐骑、时装、自动战斗 | `_ready` 绑定 `RoleProp.source_player`；`_exit_tree` 清理；死亡触发复活或失败 |
+| `BaseHero` | `Script/base/base_hero.gd` | 玩家角色：移动、普攻、技能、无双、法宝、剑阵、坐骑、时装；自动战斗经控制器 | `_ready` 绑定 `RoleProp.source_player` 并创建上下文/控制器；`_exit_tree` 清理；死亡触发复活或失败 |
+| `AutoBattleContext` | `Script/base/auto_battle_context.gd` | 自动战斗显式边界：开关/配置/目标候选/技能冷却与 MP/动作/移动查询与受控命令，不持有节拍 | `RefCounted`；由 `BaseHero._ready` 创建，随英雄生命周期 |
+| `AutoBattleController` | `Script/base/auto_battle_controller.gd` | 自动战斗状态机：目标缓存、技能游标/计数、0.22s 节拍、移动/跳跃、法宝/剑阵/无双顺序 | `RefCounted`；每个英雄一份；`_physics_process` 推进，`_exit_tree` 重置 |
 | `BaseMonster` | `Script/base/base_monster.gd` | 怪物与 Boss：受击、击退、掉落、阶段保护、难度 | 由关卡按阶段实例化；死亡结算掉落并计数 |
 | `SummonBaseMonster` | `Script/base/summon_base_monster.gd` | 召唤物基类 | 由技能/宠物生成，归属通过 meta 与槽位解析 |
 | `BaseLevel` | `Script/base/base_through_level.gd` | 关卡运行器：4 阶段刷怪表、相机边界、出口判定、通关记账、2P 生成；八族宠物生成已全部委托控制器 | `_ready` 生成角色/HUD/相机；`_physics_process` 推进阶段与出口 |

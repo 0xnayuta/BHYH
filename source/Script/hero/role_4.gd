@@ -60,7 +60,7 @@ func get_skill(skill_name):
 	super.get_skill(skill_name)
 
 
-func _is_auto_battle_skill_active(skill_id: String) -> bool:
+func is_auto_battle_skill_active(skill_id: String) -> bool:
 	return skill_id == WDZT_SKILL_ID and _wdzt_awaken_enabled
 
 

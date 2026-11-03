@@ -1159,7 +1159,7 @@ func _is_yinyang_awaken_active() -> bool:
 	return _is_skill_awakened(SKILL_YINYANG) and _is_skill_awaken_enabled(SKILL_YINYANG)
 
 
-func _is_auto_battle_skill_active(skill_id: String) -> bool:
+func is_auto_battle_skill_active(skill_id: String) -> bool:
 	if skill_id == SKILL_YINYANG:
 		return _yinyang_enabled
 	if skill_id == SKILL_LOTUS:

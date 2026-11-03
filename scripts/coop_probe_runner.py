@@ -56,6 +56,7 @@ CASES = [
     "LocalCoopInputIsolationProbe",
     "LocalCoopKeyConfigProbe",
     "LocalCoopHudReadOnlyProbe",
+    "LocalCoopAutoBattleProbe",
 ]
 
 def cleanup_temp() -> None:

@@ -168,7 +168,7 @@ func _physics_process(delta: float) -> void:
 				return
 	if skill_id == "1112040" and effect_name in ["effect4_2", "effect4_3"]:
 		var target: BaseMonster = locked_target.get_ref() if locked_target != null else null
-		if not player._is_auto_battle_target_valid(target):
+		if not player.is_auto_battle_target_valid(target):
 			target = player.find_moon_target(global_position)
 			locked_target = weakref(target) if target != null else null
 		if target != null:
@@ -237,7 +237,7 @@ func _collect_awakened_wheel_targets() -> void:
 	)
 	var screen := get_viewport_rect()
 	for candidate in candidates:
-		if not player._is_auto_battle_target_valid(candidate):
+		if not player.is_auto_battle_target_valid(candidate):
 			continue
 		var target := candidate as BaseMonster
 		if target.cannot_attract:
