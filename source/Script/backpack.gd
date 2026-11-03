@@ -99,8 +99,8 @@ func _second_role():
 ## ESC 统一入口：协作面板优先，其次关闭当前 HUD 窗口的最上层子层。
 ## 返回 true 表示已消费本次 ESC；false 表示没有可关闭的 UI，交由设置菜单处理。
 func _close_topmost_window() -> bool:
-	if LocalCoop.has_panel():
-		LocalCoop.close_panel()
+	if LocalCoop.panel_host != null and LocalCoop.panel_host.has_panel():
+		LocalCoop.panel_host.close_panel()
 		return true
 	_cleanup_targets()
 	var window := _find_active_window()
@@ -197,7 +197,7 @@ func _on_pet_pressed() -> void:
 
 func _toggle_backpack(_role) -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(LocalCoop.slot_for(_role), "背包")
+		LocalCoop.panel_host.open_panel(LocalCoop.slot_for(_role), "背包")
 		return
 	_cleanup_targets()
 	if _is_alive(back_target):
@@ -221,7 +221,7 @@ func _toggle_backpack(_role) -> void:
 
 func _toggle_skill(_role) -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(LocalCoop.slot_for(_role), "技能")
+		LocalCoop.panel_host.open_panel(LocalCoop.slot_for(_role), "技能")
 		return
 	_cleanup_targets()
 	if _is_alive(skill_target):
@@ -238,7 +238,7 @@ func _toggle_skill(_role) -> void:
 
 func _toggle_pet() -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(LocalCoop.slot_for(_main_role()), "宠物")
+		LocalCoop.panel_host.open_panel(LocalCoop.slot_for(_main_role()), "宠物")
 		return
 	_cleanup_targets()
 	if _is_alive(pet_target):
@@ -259,7 +259,7 @@ func _toggle_pet() -> void:
 
 func _toggle_magic(_role) -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(LocalCoop.slot_for(_role), "法宝")
+		LocalCoop.panel_host.open_panel(LocalCoop.slot_for(_role), "法宝")
 		return
 	_cleanup_targets()
 	if _is_alive(magic_weapon_target):
@@ -304,7 +304,7 @@ func _refresh_pause_state() -> void:
 
 
 func _has_open_child() -> bool:
-	if LocalCoop.has_panel():
+	if LocalCoop.panel_host != null and LocalCoop.panel_host.has_panel():
 		return true
 	_cleanup_targets()
 	for child in get_children():

@@ -42,10 +42,10 @@
   - `reference/module_api_matrix.md`:Phase 17-6 试点模块 API 与依赖方向:`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项;
   - `reference/pet_level_boundary_matrix.md`:Phase 23 宠物调用面（23-5 已关闭）:8 族/30 召唤场景、`BaseLevel` 生成/归一化/进化/技能/路径/槽位矩阵、`PetLevelController`/`PetTurtleFamily`/`PetTigerFamily`/`PetDragonFamily`/`PetPhoenixFamily`/`PetRabbitFamily`/`PetMouseFamily`/`PetNeatFamily`/`PetYinTigerFamily`、2P 写回修复与共享槽位边界;
   - `reference/pet_domain_contract.md`:Phase 23-4 宠物域只读 View、出战/休息/成长显式命令、保存失败回滚与 `PlayerData` 职责边界;
-  - `reference/ui_panel_contract_matrix.md`:Phase 24-0/24-1 面板操作者、命令/快照、关闭保存、直接写档边界与属性页拆分;
+  - `reference/ui_panel_contract_matrix.md`:Phase 24-0/24-1/24-2 面板操作者、命令/快照、关闭保存、直接写档边界、属性页拆分与面板宿主;
   - `reference/equipment_data_contract.md`：Phase 33 装备数据契约（33-0~33-5 完成）：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、构建源与验证；
   - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 批次结果、变体命名、例外、审计与迁移边界；
-  - `roadmap/current-iteration.md`：当前候选；Phase 22、23 已完成并归档，Phase 24-0 面板盘点与 24-1 属性页拆分已完成、24-2~24-4 未启动；Phase 25~26 已规划；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
+  - `roadmap/current-iteration.md`：当前候选；Phase 22、23 已完成并归档，Phase 24-0 面板盘点、24-1 属性页拆分与 24-2 面板宿主分离已完成、24-3~24-4 未启动；Phase 25~26 已规划；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；

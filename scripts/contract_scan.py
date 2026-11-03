@@ -1097,9 +1097,13 @@ class ContractScanner:
     )
     PANEL_OPERATOR_OPS = ("PlayerData", "RoleProp")
     COOP_SESSION_FILE = "Script/coop/local_coop.gd"
+    COOP_PANEL_HOST_FILE = "Script/coop/coop_panel_host.gd"
     COOP_SESSION_REQUIRED_TOKENS = (
         "func shared_keys()",
         "for key: String in shared_keys()",
+    )
+    COOP_PANEL_HOST_REQUIRED_TOKENS = (
+        "func open_panel(slot: int, type: String) -> void:",
         "is_save_snapshot_in_progress",
     )
     # 共享键族登记：四个背包键由 BAG_KEYS 统一登记，其余为显式族名。
@@ -1333,7 +1337,12 @@ class ContractScanner:
 
     @classmethod
     def shared_ledger_boundary_violation(cls, content: str, rel_path: str):
-        """共享账本与快照互斥：登记、剥离与互斥入口必须同源；返回 (行号, 命中标识)。"""
+        """共享账本与快照互斥：会话账本与 UI 面板宿主分别守住同源约束。"""
+        if rel_path == cls.COOP_PANEL_HOST_FILE:
+            for token in cls.COOP_PANEL_HOST_REQUIRED_TOKENS:
+                if token not in content:
+                    return (1, token)
+            return (0, "")
         if rel_path != cls.COOP_SESSION_FILE:
             return (0, "")
         for token in cls.COOP_SESSION_REQUIRED_TOKENS:
@@ -2411,17 +2420,20 @@ def run_shared_ledger_self_test() -> bool:
         "\tkeys.append(\"coin_num\")\n"
         "\treturn keys\n\n\n"
         "func save_profile(snapshot: Dictionary) -> void:\n"
-        "\tfor key: String in shared_keys():\n\t\tprofile.erase(key)\n\n"
+        "\tfor key: String in shared_keys():\n\t\tprofile.erase(key)\n"
+    )
+    host_complete = (
         "func open_panel(slot: int, type: String) -> void:\n"
         "\tif is_save_snapshot_in_progress():\n\t\treturn\n"
     )
     bad_samples = {
         "缺少共享键登记": (complete.replace('keys.append("炼体")\n', ""), "Script/coop/local_coop.gd"),
         "缺少 2P 剥离": (complete.replace("for key: String in shared_keys():", "for key: String in BAG_KEYS:"), "Script/coop/local_coop.gd"),
-        "缺少快照互斥": (complete.replace("is_save_snapshot_in_progress", "snapshot_flag"), "Script/coop/local_coop.gd"),
+        "缺少快照互斥": (host_complete.replace("is_save_snapshot_in_progress", "snapshot_flag"), "Script/coop/coop_panel_host.gd"),
     }
     good_samples = {
         "完整登记与剥离": (complete, "Script/coop/local_coop.gd"),
+        "面板宿主互斥": (host_complete, "Script/coop/coop_panel_host.gd"),
         "非目标文件": ("func shared_keys() -> void:\n\tpass\n", "Script/other.gd"),
     }
     passed = True

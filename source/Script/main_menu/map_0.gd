@@ -211,14 +211,14 @@ func _on_heaven_pressed() -> void:
 
 func _on_bag_pressed() -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(1, "背包")
+		LocalCoop.panel_host.open_panel(1, "背包")
 		return
 	backpack_page = _toggle_scene(backpack_page, BACKPACK_SCENE_PATH, true)
 
 
 func _on_magic_weapon_pressed() -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(1, "法宝")
+		LocalCoop.panel_host.open_panel(1, "法宝")
 		return
 	if magic_weapon_page != null and is_instance_valid(magic_weapon_page):
 		magic_weapon_page.queue_free()
@@ -232,14 +232,14 @@ func _on_mount_pressed() -> void:
 		Global.add_message_show(_ui_parent(), "通关碧游宫开放坐骑", 1.5, Vector2(470, 300))
 		return
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(1, "坐骑")
+		LocalCoop.panel_host.open_panel(1, "坐骑")
 		return
 	mount_page = _toggle_scene(mount_page, MOUNT_SCENE_PATH)
 
 
 func _on_pet_pressed() -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(1, "宠物")
+		LocalCoop.panel_host.open_panel(1, "宠物")
 		return
 	pet_page = _toggle_scene(pet_page, PET_SCENE_PATH)
 	_center_pet_page()
@@ -282,7 +282,7 @@ func _on_alchemy_pressed() -> void:
 
 func _on_skill_pressed() -> void:
 	if LocalCoop.is_enabled():
-		LocalCoop.open_panel(1, "技能")
+		LocalCoop.panel_host.open_panel(1, "技能")
 		return
 	if skill_page != null and is_instance_valid(skill_page):
 		skill_page.queue_free()

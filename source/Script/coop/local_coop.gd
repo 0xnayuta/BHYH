@@ -11,13 +11,6 @@ const PROPS_SCRIPT := preload("res://Script/base/base_role_properies.gd")
 const BODY_TRAINING_DATA := preload("res://Script/data/body_training_data.gd")
 const PASSIVE_SCRIPT := preload("res://passive_skills.gd")
 const INPUT_VIEW := preload("res://Script/coop/coop_input.gd")
-const PANEL_PATHS := {
-	"背包": "res://Scene/back_pack/back_pack.tscn",
-	"技能": "res://Scene/skill/learn_skill.tscn",
-	"宠物": "res://Scene/pet/pet_interface.tscn",
-	"法宝": "res://Scene/back_pack/magic_weapon_infor.tscn",
-	"坐骑": "res://Scene/main_menu/mount_panel.tscn",
-}
 const P2_KEYS := {
 	"move_left": KEY_LEFT,
 	"move_right": KEY_RIGHT,
@@ -43,6 +36,7 @@ var secondary_data: Node
 var secondary_props: Node
 var secondary_passives: Node
 var inputs: Array[CoopInput] = []
+var panel_host: CoopPanelHost
 var ui_slot := 1
 ## 双人死亡只提交一次；由场景切换或 clear_runtime 重置。
 var _defeat_requested := false
@@ -52,13 +46,6 @@ var creation_player_count := 1
 var _property_cache: Dictionary = {}
 var _owner_fields_cache: Dictionary = {}
 var _target_elapsed := 0.0
-var _panel_layer: CanvasLayer
-var _panel: Node
-var _panel_type := ""
-var _panel_scene: PackedScene
-var _switching_panel := false
-var _panel_was_paused := false
-var _session_buttons: CanvasLayer
 var _shared_soul := 0
 
 
@@ -76,6 +63,10 @@ func _ready() -> void:
 			var key := InputEventKey.new()
 			key.physical_keycode = P2_KEYS[action]
 			InputMap.action_add_event(name, key)
+	panel_host = CoopPanelHost.new()
+	panel_host.name = "CoopPanelHost"
+	add_child(panel_host)
+	panel_host.setup(self)
 	get_tree().scene_changed.connect(_on_scene_changed)
 
 
@@ -351,6 +342,8 @@ func set_shared_soul(value: int) -> int:
 
 
 func clear_runtime() -> void:
+	if panel_host != null:
+		panel_host.clear()
 	ui_slot = 1
 	_defeat_requested = false
 	for node in [secondary_passives, secondary_props, secondary_data]:
@@ -570,191 +563,10 @@ func _physics_process(delta: float) -> void:
 
 func _on_scene_changed() -> void:
 	_defeat_requested = false
-	if is_instance_valid(_session_buttons):
-		_session_buttons.queue_free()
-	ui_slot = 1
-	var scene := get_tree().current_scene
-	if not is_enabled() or scene == null:
-		return
-	if not scene.scene_file_path.begins_with("res://Scene/main_menu/map_") and not scene is BaseLevel:
-		return
-	_session_buttons = CanvasLayer.new()
-	_session_buttons.layer = 12
-	scene.add_child(_session_buttons)
-	var row := HBoxContainer.new()
-	row.position = Vector2(325, 4)
-	_session_buttons.add_child(row)
-	for slot in [1, 2]:
-		for type: String in ["背包", "技能"]:
-			var button := Button.new()
-			button.text = "%dP%s" % [slot, type]
-			button.add_theme_font_override("font", load("res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf"))
-			button.pressed.connect(open_panel.bind(slot, type))
-			row.add_child(button)
-	if not scene is BaseLevel:
-		(
-			row
-			. set_deferred(
-				"position",
-				Vector2(
-					get_viewport().get_visible_rect().size.x - row.get_combined_minimum_size().x - 12,
-					get_viewport().get_visible_rect().size.y - 42,
-				)
-			)
-		)
-
-
-func open_panel(slot: int, type: String) -> void:
-	if is_instance_valid(_panel) or _switching_panel or not is_enabled() or not PANEL_PATHS.has(type):
-		return
-	if MemoryClass != null and MemoryClass.has_method("is_save_snapshot_in_progress"):
-		if bool(MemoryClass.is_save_snapshot_in_progress()):
-			return
-	ui_slot = slot
-	_panel_was_paused = get_tree().paused
-	get_tree().paused = true
-	_panel_type = type
-	_panel_scene = load(PANEL_PATHS[type]) as PackedScene
-	var layer := CanvasLayer.new()
-	layer.layer = 30
-	# 弹出层携带槽位，供当前 UI 宿主下的子面板与弹窗解析操作者。
-	layer.set_meta("coop_slot", slot)
-	get_tree().current_scene.add_child(layer)
-	_panel_layer = layer
-	Global.get_ui_runtime().push_windows(layer)
-	var shade := ColorRect.new()
-	shade.color = Color(0, 0, 0, 0.25)
-	shade.size = get_viewport().get_visible_rect().size
-	layer.add_child(shade)
-	_create_panel(slot, type)
-
-
-func _create_panel(slot: int, type: String) -> void:
-	var path: String = PANEL_PATHS[type]
-	_panel = _panel_scene.instantiate()
-	if type == "背包":
-		_panel.set_script(load("res://Script/coop/coop_backpack.gd"))
-	_panel.set_meta("coop_slot", slot)
-	_panel.process_mode = Node.PROCESS_MODE_ALWAYS
-	if type == "背包":
-		var player: Variant = props_for_slot(slot).source_player
-		if _has_property(_panel, "Player"):
-			_panel.set("Player", player if is_instance_valid(player) else null)
-		Global.configure_backpack_role_preview(_panel, player)
-	Global.get_ui_runtime().register_ui_runtime_instance(_panel, path)
-	_panel.tree_exited.connect(_on_panel_closed, CONNECT_ONE_SHOT)
-	_panel_layer.add_child(_panel)
-	get_tree().paused = true
-	if type in ["背包", "法宝"]:
-		_panel.position = get_viewport().get_visible_rect().size * 0.5
-	elif type == "宠物":
-		_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		_panel.size = Vector2(653, 513)
-		_panel.position = (get_viewport().get_visible_rect().size - _panel.size) * 0.5
-	_panel.set_meta("coop_layer", _panel_layer)
-	_add_player_selector(type)
-
-
-func _add_player_selector(type: String) -> void:
-	var tabs: BoxContainer
-	if type in ["技能", "坐骑"]:
-		tabs = HBoxContainer.new()
+	if panel_host != null:
+		panel_host.on_scene_changed(get_tree().current_scene)
 	else:
-		tabs = VBoxContainer.new()
-	tabs.name = "CoopPlayerSelector"
-	tabs.add_theme_constant_override("separation", 6)
-	match type:
-		"背包":
-			tabs.position = Vector2(-408, -195)
-		"技能":
-			tabs.position = Vector2(394, 6)
-		"宠物":
-			tabs.position = Vector2(-50, 40)
-		"法宝":
-			tabs.position = Vector2(-355, -177)
-		"坐骑":
-			tabs.position = Vector2(24, 15)
-	var group := ButtonGroup.new()
-	for slot in [1, 2]:
-		var button := Button.new()
-		button.name = "Player%d" % slot
-		button.text = "%dP" % slot
-		button.custom_minimum_size = Vector2(66 if type == "技能" else 46, 40)
-		button.toggle_mode = true
-		button.button_group = group
-		button.set_pressed_no_signal(slot == ui_slot)
-		button.add_theme_font_override("font", load("res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf"))
-		button.add_theme_font_size_override("font_size", 22)
-		button.add_theme_color_override("font_color", Color("e9d6ae"))
-		button.add_theme_color_override("font_pressed_color", Color("fff2b4"))
-		for state: String in ["normal", "hover", "pressed", "focus"]:
-			var style := StyleBoxFlat.new()
-			style.bg_color = Color("85511c") if state == "pressed" else Color("36200f")
-			style.border_color = Color("ffd473") if state in ["pressed", "focus"] else Color("a47738")
-			style.set_border_width_all(2)
-			style.set_corner_radius_all(5)
-			button.add_theme_stylebox_override(state, style)
-		button.pressed.connect(_switch_panel.bind(slot))
-		tabs.add_child(button)
-	if type == "坐骑":
-		_panel.panel_root.add_child(tabs)
-	else:
-		_panel.add_child(tabs)
-
-
-func _switch_panel(slot: int) -> void:
-	if _switching_panel or slot == ui_slot or not is_instance_valid(_panel):
-		return
-	_switching_panel = true
-	_replace_panel.call_deferred(slot)
-
-
-func _replace_panel(slot: int) -> void:
-	if not is_instance_valid(_panel) or not is_instance_valid(_panel_layer):
-		_switching_panel = false
-		return
-	var old_panel := _panel
-	old_panel.tree_exited.disconnect(_on_panel_closed)
-	Global.get_ui_runtime().clear_hover_popup()
-	old_panel.free()
-	link_bags()
-	ui_slot = slot
-	_panel_layer.set_meta("coop_slot", slot)
-	_create_panel(slot, _panel_type)
-	_switching_panel = false
-
-
-func _on_panel_closed() -> void:
-	if not is_inside_tree():
-		return
-	if is_instance_valid(_panel_layer):
-		_panel_layer.queue_free()
-	Global.get_ui_runtime().pop_windows()
-	ui_slot = 1
-	_panel = null
-	_panel_scene = null
-	link_bags()
-	refresh_passive_skills()
-	if is_instance_valid(secondary_props):
-		secondary_props.get_equ_last_pro()
-		secondary_props.get_last_prop()
-	get_tree().paused = _panel_was_paused
-	Global.request_save_with_feedback(
-		"coop_panel_close",
-		Global.get_ui_runtime().windows if is_instance_valid(Global.get_ui_runtime().windows) else self,
-		"面板关闭保存失败："
-	)
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	if not is_enabled() or not event is InputEventKey or event.echo or not event.pressed:
-		return
-	if event.physical_keycode == KEY_KP_ADD:
-		open_panel(2, "背包")
-		get_viewport().set_input_as_handled()
-	elif event.physical_keycode == KEY_INSERT:
-		open_panel(2, "技能")
-		get_viewport().set_input_as_handled()
+		ui_slot = 1
 
 
 func clear_player_buffs(player: BaseHero) -> void:
@@ -763,16 +575,6 @@ func clear_player_buffs(player: BaseHero) -> void:
 	for item in player.buff.get_children():
 		if str(item.buff_info.get("Name", "")) != "DoubleFallPro":
 			item.queue_free()
-
-
-func has_panel() -> bool:
-	return is_instance_valid(_panel)
-
-
-## 关闭当前协作面板；生命周期收口仍由 _on_panel_closed 统一处理。
-func close_panel() -> void:
-	if is_instance_valid(_panel):
-		_panel.queue_free()
 
 
 func nearest_player(point: Vector2) -> BaseHero:

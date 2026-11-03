@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **32.39s**） |
-| `health_check` | **775 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **332/332 PASS**（11.02s，一次通过） |
-| `scene_probe_runner` | **17/17 PASS**（166.43s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **33/33 PASS**（196.98s，含宠物面板操作者/属性页切页、`LocalCoopPanelProbe` 快照互斥） |
-| `level_1` 冒烟 | **PASS，4 阶段，24.45s，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 311.1s，默认 auto 并发，本轮无重试） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **34.77s**） |
+| `health_check` | **776 脚本 0 Parse / 0 Error / 0 Warning** |
+| `archive_probe_runner` | **332/332 PASS**（11.06s，一次通过） |
+| `scene_probe_runner` | **17/17 PASS**（157.58s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **33/33 PASS**（182.96s，含宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
+| `level_1` 冒烟 | **PASS，4 阶段，24.35s，0/0/0** |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 308.8s，默认 auto 并发，本轮无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 24-2：新增普通节点 `CoopPanelHost`，迁移 `PANEL_PATHS`、面板实例/图层、窗口栈、暂停、1P/2P 选择器、场景按钮、关闭保存与本地清理；`LocalCoop` 只保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`，生产调用方改走 `LocalCoop.panel_host`。`shared_ledger` 门禁拆分宿主快照互斥与 LocalCoop 账本约束。验证：`check_all` 9/9、`health_check` 776 脚本 0/0/0、`archive` 332/332、`scene` 17/17、`coop` 33/33（含宿主节点/无旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥、`clear` 关闭面板/恢复暂停/窗口栈）、全量 128/128 + 5 SKIP（308.8s，无重试）。
 - Phase 24-1：将 `pet_interface` 的属性页拆为 `PetAttributePages` 子控制器；分页定义、10 行绑定、按钮与显示文本迁入子控制器，父面板注入显示值 `Callable` 并保留当前宠物/装备加成协调。子控制器不读取 `PlayerData`/`RoleProp`、不保存、不写档；父面板删除重复状态与旧分页回调。验证：`check_all` 9/9（32.39s）、`health_check` 775 脚本 0/0/0、`archive` 332/332（11.02s，含真实按钮切页与显示值）、`scene` 17/17（166.43s）、`coop` 33/33（196.98s，含 2P 面板操作者）、全量 128/128 + 5 SKIP（311.1s，无重试）。
 - Phase 24-0：完成 UI 面板契约静态盘点，新增 [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md)，记录 `LocalCoop` 宿主、五个面板入口、`pet_interface` 子区域、LDL 成长面板、只读信息面板、操作者/关闭保存/直接写档路径与门禁覆盖缺口；选定 24-1 首个拆分为 `PetAttributePages`，24-3 首个成长命令为宠物阵法升级。Phase 22/23 详细批次已归档到 `docs/archive/`。本批次未修改 `source/`。
 - Phase 23-5：阶段验收关闭 Phase 23。`BaseLevel` 宠物相关函数由基线 73 降至 16，八族生成只经 `PetLevelController`；`PlayerData` 宠物域只读 View/命令边界保持。验证：`check_all --godot-bin` **9/9**（31.67s）、`health_check` **774 脚本 0/0/0**、`scene` **17/17**（152.42s，首跑 `level-selection` 出现一次引擎 RID/mem 瞬态，功能检查全 true，隔离与完整复跑通过）、`coop` **33/33**（179.44s，含快照互斥）、`archive` **328/328**（10.42s，含补全/失败/切档/退出）、`level_1` 4 阶段 PASS（24.45s）、全量 **128/128 + 5 SKIP**（303.4s，无重试）。

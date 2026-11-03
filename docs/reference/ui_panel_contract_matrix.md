@@ -1,6 +1,6 @@
 # UI 面板操作者、命令与保存边界矩阵
 
-> **状态**：Phase 24-0 静态盘点完成；Phase 24-1 `PetAttributePages` 拆分已完成（2026-11-03）。本页记录当前代码事实与后续拆分判断。
+> **状态**：Phase 24-0 静态盘点、Phase 24-1 `PetAttributePages` 拆分与 Phase 24-2 `CoopPanelHost` 宿主分离已完成（2026-11-03）。本页记录当前代码事实与后续拆分判断。
 > **范围**：`LocalCoop` 面板宿主、5 个协作面板入口、`pet_interface` 子区域、LDL 成长面板，以及关卡/怪物信息面板。
 > **事实源**：`source/Script/coop/local_coop.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/back_pack/*.gd`、`source/Script/skill/*.gd`、`source/Script/ldl/*.gd`、`source/Script/main_menu/mount_panel.gd`、`source/Scene/other_scene/level_info.gd`、`source/Scene/other_scene/monster_head_info.gd`、`scripts/contract_scan.py`。
 > **非目标**：不改 Theme、布局、显示基线、存档格式、宠物数值或输入映射；不把本页当作实现完成证明。
@@ -24,27 +24,27 @@
 
 ### 1.3 生命周期与临时 UI
 
-- `LocalCoop.open_panel` 创建 `CanvasLayer`，写入 `coop_slot` meta，调用 `UiRuntime.push_windows(layer)`，实例化面板并用 `register_ui_runtime_instance` 登记缓存租约。
-- `_on_panel_closed` 释放图层、`pop_windows()`、恢复暂停、重置 `ui_slot`、刷新账本/被动，并保存 `coop_panel_close`。
+- `CoopPanelHost.open_panel` 创建 `CanvasLayer`，写入 `coop_slot` meta，调用 `UiRuntime.push_windows(layer)`，实例化面板并用 `register_ui_runtime_instance` 登记缓存租约。
+- `CoopPanelHost._on_panel_closed` 释放图层、`pop_windows()`、恢复暂停、重置 `ui_slot`、刷新账本/被动，并保存 `coop_panel_close`。
 - ESC 由 `backpack.gd` 协调：若 `LocalCoop.has_panel()`，先关闭整个协作面板，再处理 HUD 窗口；面板内部弹窗不参与 ESC 分层。
 - 工厂创建的提示/确认/地图覆盖等临时 UI 由 `UiRuntime.register_transient_ui` 登记；面板内直接 `add_child` 的局部浮层由面板自身释放。
 
 ---
 
-## 2. `LocalCoop` 面板宿主
+## 2. `CoopPanelHost` 面板宿主
 
 | 职责 | 当前入口/字段 | 说明 |
 |:---|:---|:---|
-| 面板类型表 | `PANEL_PATHS` | `背包`、`技能`、`宠物`、`法宝`、`坐骑` 五个场景 |
-| 打开 | `open_panel(slot, type)` | 检查现有面板/切换中/是否启用/路径/快照；创建图层、阴影、选择器并暂停树 |
+| 面板类型表 | `CoopPanelHost.PANEL_PATHS` | `背包`、`技能`、`宠物`、`法宝`、`坐骑` 五个场景 |
+| 打开 | `CoopPanelHost.open_panel(slot, type)` | 检查现有面板/切换中/是否启用/路径/快照；创建图层、阴影、选择器并暂停树 |
 | 切换 | `_switch_panel` → `_replace_panel` | 保留类型，释放旧面板后按新槽位重建 |
-| 关闭 | `close_panel()` / `_on_panel_closed` | 关闭按钮仅 `queue_free`；宿主统一清理并保存 |
+| 关闭 | `CoopPanelHost.close_panel()` / `_on_panel_closed` | 关闭按钮仅 `queue_free`；宿主统一清理并保存 |
 | 操作者 | `slot_for` / `data_for` / `props_for` / `data_for_slot` | 槽位查询；面板根和弹出层携带 `coop_slot` |
-| 双人选择器 | `_add_player_selector` | 按面板类型放置 1P/2P 切换按钮，调用 `_switch_panel` |
-| 快照互斥 | `open_panel` 中的 `is_save_snapshot_in_progress()` | 仅阻止打开；关闭保存仍由宿主发起 |
-| 保存副作用 | `_on_panel_closed` 的 `coop_panel_close` | 面板内未即时保存的操作会在关闭时统一提交 |
+| 双人选择器 | `CoopPanelHost._add_player_selector` | 按面板类型放置 1P/2P 切换按钮，调用 `switch_panel` |
+| 快照互斥 | `CoopPanelHost.open_panel` 中的 `is_save_snapshot_in_progress()` | 仅阻止打开；关闭保存仍由宿主发起 |
+| 保存副作用 | `CoopPanelHost._on_panel_closed` 的 `coop_panel_close` | 面板内未即时保存的操作会在关闭时统一提交 |
 
-**拆分判断**：`LocalCoop` 同时承担槽位/账本/输入会话与面板宿主、窗口切换、暂停、关闭保存、选择器创建。24-2 应把面板宿主生命周期迁到 UI 侧普通节点或服务，保留 `slot_for`/账本/输入会话在 `LocalCoop`。
+**拆分结果**：24-2 已把面板宿主生命周期迁入普通节点 `CoopPanelHost`；`LocalCoop` 保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`，生产调用方改走 `LocalCoop.panel_host`。
 
 ---
 
@@ -133,11 +133,12 @@
 - 子控制器不读取 `PlayerData`/`RoleProp`、不保存、不写档；父面板删除旧分页状态与回调，`_refresh_pet_attribute_page` 仅委托。
 - 后续再拆 `PetFormationPopup`、技能弹窗与装备区域，不按文件行数一次性拆整个面板。
 
-### 24-2 `LocalCoop` 面板宿主分离
+### 24-2 `CoopPanelHost` 宿主分离（已完成）
 
-- 新建 UI 侧普通节点/服务（建议名 `CoopPanelHost`）持有 `PANEL_PATHS`、`_panel*`、窗口栈、暂停、选择器、关闭保存与临时 UI 清理。
-- `LocalCoop` 保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`；`open_panel`/`close_panel` 委托宿主。
-- 保持 `push_windows()`/`pop_windows()` 的嵌套语义与 ESC 先关协作面板的规则；快照期间拒绝打开/切换。
+- 新增普通节点 `CoopPanelHost`，由 `LocalCoop` 持有；面板路径、实例/图层、窗口栈、暂停、1P/2P 选择器、场景按钮、关闭保存与本地清理均迁入宿主。
+- `LocalCoop` 保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`；生产调用方与探针改走 `LocalCoop.panel_host`。
+- `push_windows()`/`pop_windows()` 嵌套语义与 ESC 先关协作面板规则保持；快照期间拒绝打开/切换。
+- `clear`/场景切换释放面板、图层、会话按钮与悬停弹层，并恢复暂停与窗口栈；全局临时 UI 仍由 `UiRuntime`/`SceneFlow` 负责。
 
 ### 24-3 成长命令试点
 

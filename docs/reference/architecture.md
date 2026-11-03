@@ -271,6 +271,7 @@ classDiagram
 | `PetDomainView` | `Script/pet/pet_domain_view.gd` | 宠物域只读副本/标量查询，不暴露档案数组 | 绑定显式 `PlayerDataStore`；不保存、不补全 |
 | `PetDomainCommand` | `Script/pet/pet_domain_command.gd` | 出战、休息与成长提交；快照回滚 | 保存仍经 `MemoryClass.request_save`；不回落 1P |
 | `PetAttributePages` | `Script/pet/pet_attribute_pages.gd` | 宠物属性页分页/行绑定/文本显示 | `Control`；父面板注入显示值 `Callable`，不读 `PlayerData`、不保存 |
+| `CoopPanelHost` | `Script/coop/coop_panel_host.gd` | 协作面板实例、图层/窗口栈、暂停、选择器、场景按钮与关闭保存 | 普通 `Node`，由 `LocalCoop` 持有；槽位/账本/输入仍在 `LocalCoop` |
 | `BaseMagicWeapon` | `Script/base/base_magic_weapon.gd` | 法宝运行时：跟随角色、MP 消耗、CD、`use_skill` 模板方法 | 由角色装备/法宝系统实例化 |
 | `BaseBuff` | `Script/base/base_buff.gd` | Buff 载体：时长、减益、免疫、特效 | 首次处理时绑定目标；非战斗目标自释放 |
 | `BaseRole` | `Script/base/base_role.gd` | **HUD**：头像、HP/MP/经验、无双槽、技能 CD、Buff、宠物面板 | `Control`，不是战斗体；由 HUD 容器实例化 |

@@ -294,19 +294,21 @@ func _case_nickname() -> void:
 func _case_panel() -> void:
 	coop.create_secondary(7)
 	await _make_stage()
-	coop.open_panel(1, "背包")
+	_check(coop.panel_host != null and coop.panel_host.get_parent() == coop, "panel host is child node")
+	_check(not coop.has_method("open_panel") and not coop.has_method("has_panel"), "panel API moved off LocalCoop")
+	coop.panel_host.open_panel(1, "背包")
 	await process_frame
 	await process_frame
-	_check(coop.has_panel(), "bag panel opens")
-	coop._switch_panel(2)
+	_check(coop.panel_host.has_panel(), "bag panel opens")
+	coop.panel_host.switch_panel(2)
 	await process_frame
 	await process_frame
 	_check(coop.ui_slot == 2, "panel switches to P2")
-	if coop.has_panel():
-		coop._panel.queue_free()
+	if coop.panel_host.has_panel():
+		coop.panel_host.current_panel().queue_free()
 		await process_frame
 		await process_frame
-	_check(not coop.has_panel(), "panel closes")
+	_check(not coop.panel_host.has_panel(), "panel closes")
 
 
 func _case_performance() -> void:
@@ -1316,13 +1318,13 @@ func _case_panel_operator() -> void:
 	_check(not coop.has_method("suspend_player_view"), "view swap entry removed")
 	_check(not coop.has_method("resume_player_view"), "view swap restore removed")
 
-	coop.open_panel(2, "背包")
+	coop.panel_host.open_panel(2, "背包")
 	await process_frame
 	await process_frame
-	_check(coop.has_panel(), "2P panel opens")
-	if not coop.has_panel():
+	_check(coop.panel_host.has_panel(), "2P panel opens")
+	if not coop.panel_host.has_panel():
 		return
-	var panel: Node = coop._panel
+	var panel: Node = coop.panel_host.current_panel()
 	_check(coop.ui_slot == 2, "panel slot is 2P")
 	_check(panel.PlayerData == coop.secondary_data, "panel operator is 2P")
 	_check(panel.RoleProp == coop.secondary_props, "panel props operator is 2P")
@@ -1330,36 +1332,47 @@ func _case_panel_operator() -> void:
 	panel.PlayerData.player_data["角色昵称"] = "P2_PANEL"
 	_check(str(coop.secondary_data.player_data.get("角色昵称", "")) == "P2_PANEL", "panel write hits 2P")
 	_check(str(data.player_data.get("角色昵称", "")) != "P2_PANEL", "panel write does not hit 1P")
-	_check(int(coop._panel_layer.get_meta("coop_slot", 0)) == 2, "panel layer carries slot")
+	_check(int(coop.panel_host.current_layer().get_meta("coop_slot", 0)) == 2, "panel layer carries slot")
+	var selector: Node = panel.get_node_or_null("CoopPlayerSelector")
+	_check(
+		(
+			selector != null
+			and selector.get_node_or_null("Player1") != null
+			and selector.get_node_or_null("Player2") != null
+		),
+		"panel builds 1P/2P selector"
+	)
 
-	coop._switch_panel(1)
+	coop.panel_host.switch_panel(1)
 	await process_frame
 	await process_frame
 	_check(coop.ui_slot == 1, "panel switches to 1P")
-	_check(coop.has_panel() and coop._panel.PlayerData == data, "1P panel operator is 1P")
+	_check(
+		coop.panel_host.has_panel() and coop.panel_host.current_panel().PlayerData == data, "1P panel operator is 1P"
+	)
 
 	# 快照互斥：快照生成期间拒绝打开/切换面板。
 	memory._save_snapshot_in_progress = true
-	coop.close_panel()
+	coop.panel_host.close_panel()
 	await process_frame
 	await process_frame
-	coop.open_panel(1, "背包")
+	coop.panel_host.open_panel(1, "背包")
 	await process_frame
-	_check(not coop.has_panel(), "panel open blocked during snapshot")
+	_check(not coop.panel_host.has_panel(), "panel open blocked during snapshot")
 	memory._save_snapshot_in_progress = false
 	_check(not memory.is_save_snapshot_in_progress(), "snapshot flag cleared")
 
-	coop.open_panel(1, "背包")
+	coop.panel_host.open_panel(1, "背包")
 	await process_frame
 	await process_frame
-	_check(coop.has_panel(), "panel reopens after snapshot")
+	_check(coop.panel_host.has_panel(), "panel reopens after snapshot")
 	_check(paused, "panel pauses tree")
-	var layer: Node = coop._panel_layer
+	var layer: Node = coop.panel_host.current_layer()
 	_check(global.get_ui_runtime().windows == layer, "windows points to panel layer")
-	coop.close_panel()
+	coop.panel_host.close_panel()
 	await process_frame
 	await process_frame
-	_check(not coop.has_panel(), "panel closed")
+	_check(not coop.panel_host.has_panel(), "panel closed")
 	_check(not paused, "tree unpaused after close")
 	_check(
 		global.get_ui_runtime().windows == null,
@@ -1368,12 +1381,12 @@ func _case_panel_operator() -> void:
 	_check(coop.ui_slot == 1, "ui slot reset after close")
 
 	# 24-1：宠物属性页子控制器与 P2 操作者。
-	coop.open_panel(2, "宠物")
+	coop.panel_host.open_panel(2, "宠物")
 	await process_frame
 	await process_frame
-	_check(coop.has_panel(), "pet panel opens")
-	if coop.has_panel():
-		var pet_panel: Node = coop._panel
+	_check(coop.panel_host.has_panel(), "pet panel opens")
+	if coop.panel_host.has_panel():
+		var pet_panel: Node = coop.panel_host.current_panel()
 		_check(pet_panel.PlayerData == coop.secondary_data, "pet panel operator is 2P")
 		var attribute_pages: Node = pet_panel.get_node_or_null("PetAttributePages")
 		_check(
@@ -1388,11 +1401,23 @@ func _case_panel_operator() -> void:
 			var row7: CanvasItem = pet_panel.get_node_or_null("PetAttributePages/StatRow7") as CanvasItem
 			_check(row6 != null and row6.visible, "page 2 shows row 6")
 			_check(row7 != null and not row7.visible, "page 2 hides row 7")
-		coop.close_panel()
+		coop.panel_host.close_panel()
 		await process_frame
 		await process_frame
-		_check(not coop.has_panel(), "pet panel closed")
+		_check(not coop.panel_host.has_panel(), "pet panel closed")
+
+	# 24-2：会话清理必须关闭面板、恢复暂停与窗口栈。
+	coop.panel_host.open_panel(1, "背包")
+	await process_frame
+	await process_frame
+	_check(coop.panel_host.has_panel() and paused, "clear fixture panel open")
 	coop.clear_runtime()
+	await process_frame
+	await process_frame
+	_check(not coop.panel_host.has_panel(), "clear closes panel")
+	_check(not paused, "clear restores pause")
+	_check(global.get_ui_runtime().windows == null, "clear restores windows")
+	_check(coop.ui_slot == 1, "clear resets ui slot")
 
 
 func _case_skill_keys() -> void:
@@ -2211,10 +2236,10 @@ func _case_hud_read_only() -> void:
 	_check(_hud_snapshot(data) == p1_before, "P1 HUD frame is read-only")
 	_check(_hud_snapshot(coop.secondary_data) == p2_before, "P2 HUD frame is read-only")
 
-	coop.open_panel(2, "背包")
+	coop.panel_host.open_panel(2, "背包")
 	await process_frame
 	await process_frame
-	_check(coop.has_panel(), "HUD panel opens")
+	_check(coop.panel_host.has_panel(), "HUD panel opens")
 	_check(
 		_hud_snapshot(data) == p1_before,
 		"P1 data unchanged while panel open diff=" + _hud_diff(p1_before, _hud_snapshot(data))
@@ -2224,10 +2249,10 @@ func _case_hud_read_only() -> void:
 		"P2 data unchanged while panel open diff=" + _hud_diff(p2_before, _hud_snapshot(coop.secondary_data))
 	)
 	_check(hud1.hp_text.text == "111/222" and hud2.hp_text.text == "333/444", "HUD values survive pause/panel")
-	coop.close_panel()
+	coop.panel_host.close_panel()
 	await process_frame
 	await process_frame
-	_check(not coop.has_panel(), "HUD panel closes")
+	_check(not coop.panel_host.has_panel(), "HUD panel closes")
 	_check(_hud_snapshot(data) == p1_before, "P1 data unchanged after panel close")
 	_check(_hud_snapshot(coop.secondary_data) == p2_before, "P2 data unchanged after panel close")
 

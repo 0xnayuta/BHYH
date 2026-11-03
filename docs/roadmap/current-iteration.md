@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点与 24-1 `PetAttributePages` 拆分已完成**，24-2~24-4 未启动；Phase 25~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点、24-1 `PetAttributePages` 拆分与 24-2 `CoopPanelHost` 宿主分离已完成**，24-3~24-4 未启动；Phase 25~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -38,12 +38,13 @@
 - 未改布局、Theme、数值规则或存档格式；`PetAttributePages` 节点仍使用原场景行与按钮；
 - 验证：`check_all --godot-bin` **9/9**（32.39s）、`health_check` **775 脚本 0/0/0**、`archive` **332/332**（11.02s，含控制器、真实按钮切页与显示值）、`scene` **17/17**（166.43s）、`coop` **33/33**（196.98s，含 2P 宠物面板操作者与切页）、全量 **128/128 + SKIP 5**（311.1s，无重试）。
 
-### 24-2 `LocalCoop` 面板宿主分离
+### 24-2 `CoopPanelHost` 宿主分离（已完成）
 
-- 保留 `LocalCoop` 的槽位/账本/输入会话职责；
-- 把双人面板宿主、窗口切换与关闭生命周期迁到 UI 侧普通节点/服务；
-- 保持 `push_windows()`/`pop_windows()` 语义与 ESC 关闭一层规则；
-- 验证双人面板、切档、退出与临时 UI 清理。
+- 新增普通节点 `CoopPanelHost`，由 `LocalCoop` 持有；`PANEL_PATHS`、面板实例/图层、窗口栈、暂停、1P/2P 选择器、场景按钮、关闭保存与本地清理迁入宿主；
+- `LocalCoop` 只保留槽位、共享账本、输入会话、`slot_for`/`data_for`/`props_for` 与 `ui_slot` 状态；`backpack.gd`、`map_0.gd` 与探针全部改走 `LocalCoop.panel_host`；
+- 关闭仍经 `coop_panel_close` 保存；`on_scene_changed`/`clear` 释放面板、图层、会话按钮与悬停弹层，并恢复暂停/窗口栈；全局临时 UI 仍由 `UiRuntime`/`SceneFlow` 持有；
+- 新增 `shared_ledger` 门禁的宿主文件约束：`coop_panel_host.gd` 必须保留 `open_panel` 快照互斥，`local_coop.gd` 只校验共享账本；
+- 验证：`check_all --godot-bin` **9/9**（34.77s）、`health_check` **776 脚本 0/0/0**、`archive` **332/332**（11.06s）、`scene` **17/17**（157.58s）、`coop` **33/33**（182.96s，含宿主节点/无旧入口、P2 面板操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理）、全量 **128/128 + SKIP 5**（308.8s，无重试）。
 
 ### 24-3 成长命令试点
 
@@ -153,9 +154,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 24-2 `LocalCoop` 面板宿主分离**；24-0/24-1 已完成。
+**当前下一步**：**Phase 24-3 成长命令试点**；24-0/24-1/24-2 已完成。
 **当前不启动**：Phase 25~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
