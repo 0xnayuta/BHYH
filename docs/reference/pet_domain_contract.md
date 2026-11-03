@@ -1,6 +1,6 @@
 # PlayerData 宠物域只读视图与命令契约
 
-> **状态**：Phase 23-4 已完成（2026-11-03）。八族宠物规则与 `PetLevelController` 生成入口已完成；本页定义 `PlayerData` 宠物域的首个稳定读取/提交边界。
+> **状态**：Phase 23-4 已完成；Phase 23-5 阶段验收通过（2026-11-03）。八族宠物规则与 `PetLevelController` 生成入口已完成；本页定义 `PlayerData` 宠物域的首个稳定读取/提交边界。
 > **范围**：`PlayerDataStore` 的 `宠物列表` / `出战宠物` 读取、出战/休息、成长提交及保存失败回滚。
 > **非目标**：不整体 Resource 化 `PlayerData`，不重写存档格式、宠物补全、八族数值/进化规则或 UI 布局。
 
@@ -76,5 +76,6 @@ view.is_deployed(index)
 
 ## 6. 后续
 
-- Phase 23-5 做阶段验收，覆盖 `pet-runtime`、场景/协作/关卡、全量与 Stage 出口；
-- 不把本页 View/命令当作全部宠物写入面的迁移完成证明；`PlayerData` 的载入补全与族内写入仍按现有 owner 边界保留。
+- Phase 23-5 已完成：`pet-runtime`、场景 17/17、协作 33/33、档案 328/328、`level_1` 与全量 128/128 + 5 SKIP 均通过；
+- 不把本页 View/命令当作全部宠物写入面的迁移完成证明；`PlayerData` 的载入补全与族内写入仍按现有 owner 边界保留；
+- 下一入口为 Phase 24-0 面板契约清单。

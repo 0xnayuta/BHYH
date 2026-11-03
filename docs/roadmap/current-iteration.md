@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成；Phase 23-4 宠物域只读 View 与显式命令已完成**。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成；Phase 23-4 宠物域只读 View 与显式命令已完成；Phase 23-5 阶段验收通过，Phase 23 已关闭**。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -200,11 +200,17 @@
 - 验证：档案探针 **328/328 PASS**（11.20s）、`check_all` **9/9**（33.45s）、`coop` **33/33**（176.83s）、`scene` **17/17**（153.51s）、`level_1` PASS、全量 **128/128 + 5 SKIP**（300.7s）；
 - 契约见 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)。
 
-### 23-5 阶段验收
+### 23-5 阶段验收（已完成，Phase 23 已关闭）
 
-- `pet-runtime`、`scene_probe_runner`、`coop_probe_runner`、相关关卡与全量回归；
-- 存档补全/失败、快照互斥、切档/退出路径按受影响范围执行；
-- 出口：`BaseLevel` 宠物职责显著缩小；`PlayerData` 至少一个域有稳定只读边界。
+- **出口证据**：`BaseLevel` 宠物相关函数由基线 **73 个降至 16 个**；八族生成只经 `PetLevelController`，旧族分派已删除；
+- `PlayerData` 宠物域已有 `PetDomainView` 只读边界与 `PetDomainCommand` 显式提交，契约见 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)；
+- **存档补全/失败**：`archive_probe_runner` 覆盖规范化幂等、后置条件失败阻断写入、同步/后台写失败、快照恢复与失败可观察；
+- **快照互斥**：`LocalCoopPanelProbe` 覆盖快照期间拒绝打开面板、标志清理与恢复后重开；
+- **切档/退出**：`identity_stale_write_rejected`、`identity_switch_flushed_old_archive`、`background_exit_flushed`、`session_ended_by_path_switch`、`session_reentry_*` 等通过；
+- **运行期**：`pet-runtime`、场景 **17/17**、协作 **33/33**、档案 **328/328**、`level_1` 四阶段 PASS、全量 **128/128 + SKIP 5**；
+- **门禁**：`check_all --godot-bin` **9/9**、`health_check` **774 脚本 0/0/0**；
+- 首跑完整场景套件时 `level-selection` 出现一次引擎 `RID`/`mem` 瞬态（功能检查全为 true）；隔离复跑与完整复跑均通过，最终 **17/17**。
+- 验收结论：Phase 23 出口满足；下一入口为 Phase 24-0 面板契约清单。
 
 ---
 
@@ -342,9 +348,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-5 阶段验收**；Phase 23-2 八族、23-3 结算与 23-4 宠物域边界已完成。
-**当前不启动**：Phase 24~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)
+**当前下一步**：**Phase 24-0 面板契约清单**；Phase 23 已关闭。
+**当前不启动**：Phase 25~26。
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

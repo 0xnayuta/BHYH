@@ -14,8 +14,8 @@
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
 | [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |
-| [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) | Phase 23-0/23-1/23-2 首批：`BaseLevel` 宠物调用面、八族矩阵、`PetLevelController`/`PetTurtleFamily`/`PetTigerFamily`/`PetDragonFamily`/`PetPhoenixFamily`/`PetRabbitFamily`/`PetMouseFamily`/`PetNeatFamily`/`PetYinTigerFamily`、2P 写回修复与共享槽位边界 |
-| [`pet_domain_contract.md`](pet_domain_contract.md) | Phase 23-4：`PlayerData` 宠物域只读 View、出战/休息/成长命令、保存失败回滚与调用面 |
+| [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) | Phase 23（已关闭）：`BaseLevel` 宠物调用面、八族矩阵、`PetLevelController` 与族规则、2P 写回修复、共享槽位边界及 73→16 收口证据 |
+| [`pet_domain_contract.md`](pet_domain_contract.md) | Phase 23（已关闭）：`PlayerData` 宠物域只读 View、出战/休息/成长命令、保存失败回滚与调用面 |
 | [`module_api_matrix.md`](module_api_matrix.md) | Phase 17-6 试点模块公开 API 与依赖方向 |
 | [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | AtlasMetadata 生产者、schema、消费者、只读 View 与失败边界 |
 | [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | 运行时建帧冻结例外与后续边界 |

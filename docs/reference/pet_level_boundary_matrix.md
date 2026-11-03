@@ -1,6 +1,6 @@
 # 宠物关卡调用面与首批抽取矩阵
 
-> **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次（预热/装备/法宝复活）、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移已完成（2026-11-03）；八族全部完成。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
+> **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 八族迁移、Phase 23-3 结算复核、Phase 23-4 宠物域边界与 Phase 23-5 阶段验收已完成（2026-11-03）；Phase 23 已关闭。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
 > **范围**：`BaseLevel` 的宠物生成、恢复、归一化、进化、技能、场景路径与槽位解析；同时登记 `BaseMonster`、`PetInterface`、`PlayerData`、`Global` 与召唤物单位的现有调用点。
 > **事实源**：`source/Script/base/base_through_level.gd`、`source/Script/base/base_monster.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/pet/pet_level_controller.gd`、`source/Script/pet/pet_turtle_family.gd`、`source/Script/pet/pet_tiger_family.gd`、`source/Script/pet/pet_dragon_family.gd`、`source/Script/pet/pet_phoenix_family.gd`、`source/Script/pet/pet_rabbit_family.gd`、`source/Script/pet/pet_mouse_family.gd`、`source/Script/pet/pet_neat_family.gd`、`source/Script/pet/pet_yin_tiger_family.gd`、`source/Script/memory_class/player_data.gd`、`source/global.gd`、`source/Script/coop/local_coop.gd`。数量是本次工作区快照，不作为长期 SLA。
 > **非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则、不新增 Autoload。
@@ -10,7 +10,7 @@
 ## 1. 结论
 
 1. 当前有 **8 个宠物族**、**30 个召唤场景**（除子鼠 2 阶外，其余每族 4 阶）。
-2. 23-0 基线中 `BaseLevel` 自身包含 **73 个宠物相关函数**；随着八族全部迁出，当前数量已低于该基线。同一套规则还分散在 `BaseMonster`、`PetInterface` 与 `PlayerData`：
+2. 23-0 基线中 `BaseLevel` 自身包含 **73 个宠物相关函数**；八族迁出后当前为 **16 个**，其余为槽位、规范化、生成生命周期与死亡查询等通用职责。同一套规则还分散在 `BaseMonster`、`PetInterface` 与 `PlayerData`：
    - `BaseLevel` 与 `BaseMonster` 重名 **22 个**；
    - `BaseLevel` 与 `PetInterface` 重名 **19 个**；
    - `BaseMonster` 与 `PetInterface` 重名 **20 个**。
@@ -307,4 +307,4 @@ PetFamilySpec (RefCounted, 各族实现)
 
 ## 8. 下一轮
 
-**Phase 23-2 八族全部完成。** `BaseLevel` 的宠物生成只保留 `PetLevelController` 入口；`PlayerData` 载入补全保留；Phase 23-3 结算与 23-4 宠物域只读视图/命令均已完成。下一步进入 Phase 23-5 阶段验收。
+**Phase 23 已关闭。** `BaseLevel` 宠物函数由 73 降至 16，八族生成只保留 `PetLevelController` 入口；Phase 23-3 结算复核、23-4 宠物域只读视图/命令与 23-5 全量验收均已通过。下一入口为 Phase 24-0 面板契约清单。
