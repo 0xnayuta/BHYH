@@ -106,7 +106,7 @@
 - `_canonicalize_active_pet_data`、`_pet_active_name` 的龟族识别与归一化统一走 `PetTurtleFamily`，并显式传入当前槽位档案；
 - `BaseMonster` 删除龟族重复进化，现有各族进化与成长写入改为显式接收 `profile`，修复 P2 升级写回 1P；
 - `PetInterface` 龟族出战/进化复用同一规则；`PlayerData` 的载入补全保留到 23-4；
-- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）。
+- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）；临时探针覆盖死亡抑制与复活。
 
 ### 23-2 其余宠物族分批迁移（未启动）
 
