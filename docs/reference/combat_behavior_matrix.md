@@ -1,6 +1,6 @@
-# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2/25-3/25-4）
+# 战斗实体行为与验证映射（Phase 25-0~25-5）
 
-> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态与 Phase 25-4 受击/来源归属加固已完成（2026-11-04 最终验证）；25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
+> **状态**：Phase 25-0 行为映射、25-1 自动战斗控制器、25-2 法宝展示实例、25-3 Boss 保护状态、25-4 受击/来源归属加固与 25-5 阶段验收已完成（2026-11-04 最终验证），Phase 25 已关闭。本页保留行为切片、调用方、验收场景与回滚边界；阶段验收结论见 [`current-iteration.md`](../roadmap/current-iteration.md) §25-5。
 > **范围**：`BaseHero` 自动战斗与受击反应、`BaseMonster` 受击反应/控制免疫/死亡，以及 `MainSet`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景和现有探针的调用面。
 > **非目标**：不改战斗数值、动作时序、碰撞层、输入映射或存档格式；不引入 ECS；不把这些调查结论写成已完成迁移。
 
@@ -230,7 +230,7 @@ flowchart TD
 
 ### 4.1 现有基线
 
-当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2/25-3/25-4 新增 `LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe` 与 `LocalCoopHitReactionProbe`，`coop` 矩阵为 **37/37 PASS**；与本次行为相关的已有覆盖：
+当前基线（Phase 25-5 关闭）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 37/37、全量 128/128 + 5 SKIP；Phase 24-4 原基线为 `coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2/25-3/25-4 新增 `LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe` 与 `LocalCoopHitReactionProbe`，`coop` 矩阵为 **37/37 PASS**；与本次行为相关的已有覆盖：
 
 | 验证 | 覆盖 | 缺口 |
 |:---|:---|:---|
@@ -315,4 +315,4 @@ flowchart TD
 
 ## 6. 下一步
 
-**25-1/25-2/25-3/25-4 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。下一步转入 25-5 阶段验收。
+**Phase 25 已关闭**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。下一阶段为 Phase 26（独立工作流，未启动）。

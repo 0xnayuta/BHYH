@@ -28,12 +28,12 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **32.88s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **32.75s**） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **344/344 PASS**（10.47s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（155.63s，含 `pet-runtime`、`load-guard`） |
+| `archive_probe_runner` | **344/344 PASS**（10.54s，含阵法 1P/2P 命令与回滚） |
+| `scene_probe_runner` | **17/17 PASS**（153.38s，含 `pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（202.31s，含 `LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`/`LocalCoopBossProtectionProbe`/`LocalCoopHitReactionProbe`、宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
-| `level_1` 冒烟 | **PASS，4 阶段，25.07s，0/0/0** |
+| `level_1` 冒烟 | **PASS，4 阶段，24.31s，0/0/0** |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 301.0s，默认 auto 并发，本轮无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 25-5：Phase 25 阶段验收关闭。四个行为切片（`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`）分别由 `BaseHero`/`BaseMonster` 持有，控制器之间无互相调用；各自定向探针通过。全量关卡保持 128/128 PASS + 5 SKIP，与 Phase 24-4 的 128/128 + 5 一致；`level_1` 4 阶段通过且日志 0/0/0；`LocalCoopDamageStatsProbe` 与 `LocalCoopAttributionSourcesProbe` 通过；未改伤害、保护阈值/白条时长、动作时序、输入映射、碰撞层或存档格式。验证：`check_all` 9/9（32.75s）、`health_check` 781 脚本 0/0/0、`archive` 344/344（10.54s）、`scene` 17/17（153.38s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（24.31s）、全量 128/128 + 5 SKIP（301.0s，无重试）、`docs_audit` 749 链接 0 缺失。`naming_audit --all` 与 `whitelist_audit` 通过；`naming_compliance_audit --fail-on-error` 仍为 Phase 11-1 存量债务（目录 99.9679%、文件 99.9908%、代码 100%），未新增违规，不据此声明 L3/release 完成。
 - Phase 25-4：新增 `HitReactionController`，集中 `BaseMonster` 受击反应活动标志、代次与来源快照；`_begin/_finish/_cancel_hurt_reaction` 改为委托，各族直接读取状态改走 `is_hurt_reaction_active()`/`get_hurt_reaction_generation()`。`apply_role_hit` 进入反应时创建 `Snapshot`（实际来源目标/`BaseHero`/`hit_dic`），`get_hit_reaction_source_player()` 不再依赖已恢复的临时字段；`play_hit_effect` 与 `tao_wu_boss` 捕获代次，`_deferred_play_hurt_animation(expected_generation)` 拒绝过期动画。`BaseMonster`/`BaseHero._exit_tree` 调用 `reset_hit_reaction_state()` 清理活动反应、代次、`is_be_attacking`、待处理僵直与控制移动锁；保护/白条不重置。新增 `LocalCoopHitReactionProbe` 覆盖零击退、连续受击、Boss/白条控免、表现竞争、P2 来源快照、无来源零伤害与退出重置；召唤物/弹体/法宝/1P/2P 来源沿用 `LocalCoopAttributionSourcesProbe`。特殊 `state_hurt` 分支保留。验证：`check_all` 9/9（32.88s）、`health_check` 781 脚本 0/0/0、`scene` 17/17（155.63s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（25.07s，0/0/0）、全量 128/128 + 5 SKIP（301.0s，无重试）。未改伤害、保护阈值/白条时长、动作时序、碰撞层或双人来源归属。
 - Phase 25-3：新增 `BossProtectionController`，将 Boss 保护累计值、激活态、保护/白条计时与最近受击时间从 `BaseMonster` 迁出；`_process_boss_protect`/`_add_boss_protect_from_hit` 委托控制器，激活副作用仍由 `BaseMonster` 按旧顺序执行（清白条控制 buff、刷新控免、重置技能冷却、停速度/受击态、半透明）。`boss_blood` 改读 getter，`east_continent_monster` 覆盖改用 `is_boss_protecting()`；`settle_death_drops` 的 `death_drops_settled` 单一提交与塔层回调保持不变。新增 `LocalCoopBossProtectionProbe` 覆盖保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用。验证：`check_all` 9/9（33.73s）、`health_check` 780 脚本 0/0/0、`scene` 17/17（157.65s）、`coop` 36/36（203.57s）、`level_1` 4 阶段（25.01s，0/0/0）、全量 128/128 + 5 SKIP（307.6s，无重试）。未改 Boss 阶段推进、伤害、保护阈值/时长、掉落规则或重战。
 - Phase 25-2：新增 `MagicWeaponPresentationController`，将当前装备法宝的展示实例与 active name 从 `BaseHero` 迁出；按槽位档案创建/切换/默认回退/移除，并在英雄退出时清理实例。`BaseHero` 删除 `mg_target`、`_active_magic_weapon_name` 与 4 个同步方法，保留 `get_magic_weapon_target`/`get_active_magic_weapon_name` 只读入口与 `use_fb` 命令；`BaseMagicWeapon` 的 `is_use`/`is_canuse`/`fb_cd`/`usecd`/`skill_cd`、伤害和 `Global`/`MagicWeaponRuntime` 槽位归属不变；`user_key` 冷却读取改走公开入口。新增 `LocalCoopMagicPresentationProbe` 覆盖 P1/P2 实例/槽位、切换、默认/退役回退、移除、`use_fb` 冷却与英雄退出清理。验证：`check_all` 9/9（34.82s）、`health_check` 779 脚本 0/0/0、`scene` 17/17（157.35s）、`coop` 35/35（193.75s）、`level_1` 4 阶段（24.68s，0/0/0）、全量 128/128 + 5 SKIP（306.1s，无重试）。未改法宝数值/冷却/伤害/场景路径。
@@ -87,6 +88,7 @@
 4. **存档**：加密 JSON、`.tmp`/`.bak` 原子写与当前格式补全不变；不引入跨版本迁移链。
 5. **架构**：Autoload 与 `Global` 普通子节点运行时是遗留基线；新增需按 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) 评审。
 6. **文档**：历史验证只在归档中保留，当前页不复制逐批计数。
+7. **命名终审**：`naming_compliance_audit.py --fail-on-error` 仍返回 1，来源为 Phase 11-1 已登记的存量目录/文件债务（当前 99.9679% / 99.9908%，代码标识符 100%）；`naming_audit.py --all` 与 `whitelist_audit.py` 通过，Phase 25 未新增违规。该终审是 L3/release 项，不据此声明 release 完成。
 
 ---
 

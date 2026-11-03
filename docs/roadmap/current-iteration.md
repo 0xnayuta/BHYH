@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固已完成**，25-5 未启动；Phase 26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；Phase 26 已规划、未启动。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -112,10 +112,24 @@
 - 新增 `LocalCoopHitReactionProbe` 覆盖零击退、连续受击代次、Boss/白条控免、`play_hit_effect` 竞争、P2 来源快照、无来源零伤害、英雄/怪物退出重置；召唤物、弹体、法宝与 1P/2P 来源沿用 `LocalCoopAttributionSourcesProbe`；
 - 未改伤害数值、Boss 保护阈值/白条时长、动作时序、碰撞层或双人来源归属；特殊 `state_hurt` 分支（Monster114、无超级调用族、特殊 Boss 阶段）保留并由全量回归覆盖。
 
-### 25-5 阶段验收
+### 25-5 阶段验收（已完成，Phase 25 关闭）
 
-- 相关关卡、`coop_probe_runner`、战斗/场景探针与全量回归；
-- 出口：至少两个行为切片独立，且战斗结果与现有基线一致。
+**结论**：Phase 25 的四个行为切片相互独立，战斗结果与 Phase 24-4 基线一致；阶段出口满足，Phase 25 关闭。
+
+| 切片 | 独立边界 | 定向探针 |
+|:---|:---|:---|
+| 25-1 自动战斗 | `AutoBattleContext` + `AutoBattleController` 由 `BaseHero` 持有；不调用法宝/保护/受击控制器 | `LocalCoopAutoBattleProbe` |
+| 25-2 法宝展示 | `MagicWeaponPresentationController` 由 `BaseHero` 持有；不拥有冷却、伤害或槽位召唤归属 | `LocalCoopMagicPresentationProbe` |
+| 25-3 Boss 保护 | `BossProtectionController` 由 `BaseMonster` 持有；激活副作用与掉落结算仍由怪物基类提交 | `LocalCoopBossProtectionProbe` |
+| 25-4 受击状态 | `HitReactionController` 由 `BaseMonster` 持有；特殊 `state_hurt` 分支保留自身动画 | `LocalCoopHitReactionProbe` |
+
+**独立性证据**：四个控制器均为独立 `RefCounted` 脚本；生产引用只出现在各自拥有者 `BaseHero`/`BaseMonster` 与探针；控制器之间无互相调用。`LocalCoopAttributionSourcesProbe` 继续覆盖召唤物、弹体、法宝和 1P/2P 来源。
+
+**基线一致性**：全量关卡保持 **128/128 PASS + 5 SKIP**（与 Phase 24-4 的 128/128 + 5 一致）；`level_1` 4 阶段通过且日志 0/0/0；`LocalCoopDamageStatsProbe` 与 `LocalCoopAttributionSourcesProbe` 通过；25-1~25-4 未改伤害数值、保护阈值/白条时长、动作时序、输入映射、碰撞层或存档格式。`coop` 由 33 项基线扩展为 37 项，原有用例全部保留并通过。
+
+**验证**：`check_all --godot-bin` 9/9（32.75s）；`health_check` 781 脚本 0/0/0；`archive` 344/344（10.54s）；`scene` 17/17（153.38s）；`coop` 37/37（202.31s）；`level_1` 4 阶段（24.31s，0/0/0）；全量 128/128 + 5 SKIP（301.0s，无重试）；`docs_audit` 749 链接 0 缺失。
+
+**边界**：`naming_compliance_audit.py --fail-on-error` 仍返回 1，属于 Phase 11-1 已登记的存量命名债务（目录 99.9679%、文件 99.9908%、代码标识符 100%）；本阶段 `naming_audit.py --all` 与 `whitelist_audit.py` 通过，未新增违规。该结果是 L3/release 终审项，不冒充 Phase 25 阶段出口，也不声明 release 完成。
 
 ---
 
@@ -169,9 +183,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 25-5 阶段验收**；Phase 24 已完成，25-0/25-1/25-2/25-3/25-4 已完成。
-**当前不启动**：Phase 26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0~25-4 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe`、`LocalCoopHitReactionProbe`
+**当前下一步**：**Phase 26-0 平台支持矩阵**（独立工作流；只记录已验证平台与未验证边界）。Phase 24 已完成，Phase 25 已关闭。
+**当前不启动**：Phase 26-1/26-2 的 release 构建与目标设备性能验证，直到 26-0 支持矩阵、设备与导出条件明确。
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0~25-5 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe`、`LocalCoopHitReactionProbe`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

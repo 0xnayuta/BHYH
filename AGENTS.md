@@ -39,14 +39,14 @@
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
-  - `reference/combat_behavior_matrix.md`：Phase 25-0~25-4 战斗实体行为、自动战斗控制器、法宝展示实例、Boss 保护与受击/来源归属：`BaseHero`/`AutoBattleContext`/`AutoBattleController`/`MagicWeaponPresentationController`、`BossProtectionController`/`HitReactionController`/`BaseMonster` 受击/控制免疫/死亡/掉落、`LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`/`LocalCoopBossProtectionProbe`/`LocalCoopHitReactionProbe` 与后续回滚边界；
+  - `reference/combat_behavior_matrix.md`：Phase 25-0~25-5 战斗实体行为、自动战斗控制器、法宝展示实例、Boss 保护、受击/来源归属与阶段验收（Phase 25 已关闭）：`BaseHero`/`AutoBattleContext`/`AutoBattleController`/`MagicWeaponPresentationController`、`BossProtectionController`/`HitReactionController`/`BaseMonster` 受击/控制免疫/死亡/掉落、`LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`/`LocalCoopBossProtectionProbe`/`LocalCoopHitReactionProbe` 与后续回滚边界；
   - `reference/module_api_matrix.md`:Phase 17-6 试点模块 API 与依赖方向:`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项;
   - `reference/pet_level_boundary_matrix.md`:Phase 23 宠物调用面（23-5 已关闭）:8 族/30 召唤场景、`BaseLevel` 生成/归一化/进化/技能/路径/槽位矩阵、`PetLevelController`/`PetTurtleFamily`/`PetTigerFamily`/`PetDragonFamily`/`PetPhoenixFamily`/`PetRabbitFamily`/`PetMouseFamily`/`PetNeatFamily`/`PetYinTigerFamily`、2P 写回修复与共享槽位边界;
   - `reference/pet_domain_contract.md`:Phase 23-4/24-3 宠物域只读 View、出战/休息/成长/阵法显式命令、保存失败回滚与 `PlayerData` 职责边界;
   - `reference/ui_panel_contract_matrix.md`:Phase 24-0/24-1/24-2/24-3/24-4 面板操作者、成长命令/快照、关闭保存、直接/间接写档边界、属性页拆分、面板宿主与登记例外;
   - `reference/equipment_data_contract.md`：Phase 33 装备数据契约（33-0~33-5 完成）：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、构建源与验证；
   - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 批次结果、变体命名、例外、审计与迁移边界；
-  - `roadmap/current-iteration.md`：当前候选；Phase 22、23 已完成并归档，Phase 24-0 面板盘点、24-1 属性页拆分、24-2 面板宿主分离、24-3 阵法升级命令与 24-4 阶段验收已完成，Phase 24 已关闭；Phase 25-0/25-1/25-2/25-3/25-4 已完成，25-5 与 Phase 26 未启动；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
+  - `roadmap/current-iteration.md`：当前候选；Phase 22、23 已完成并归档，Phase 24-0 面板盘点、24-1 属性页拆分、24-2 面板宿主分离、24-3 阵法升级命令与 24-4 阶段验收已完成，Phase 24 已关闭；Phase 25-0/25-1/25-2/25-3/25-4/25-5 已完成，Phase 25 已关闭；Phase 26 未启动；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；
   - `audit/`：人工代码质量审计模板与报告，只读；入口见 `audit/README.md`；
