@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取完成**（2026-11-03），Phase 23-2 尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移完成**（2026-11-03），其余 6 族尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -108,11 +108,13 @@
 - `PetInterface` 龟族出战/进化复用同一规则；`PlayerData` 的载入补全保留到 23-4；
 - 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）；临时探针覆盖死亡抑制与复活。
 
-### 23-2 其余宠物族分批迁移（未启动）
+### 23-2 其余宠物族分批迁移（`PetTiger` 已完成，其余 6 族未启动）
 
-- 一次一个宠物族，复用 23-1 接口；
-- 每批删除对应 `BaseLevel` 分支并更新调用面清单；
-- 不以“所有宠物共用一个大控制器”为目标；共享接口可以，业务规则仍按族拥有。
+- 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
+- `BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
+- `BaseMonster` 删除虎族重复进化，升级调用改走 `PetTigerFamily.evolve`；成长分支使用族阶段名/技能；
+- `PetInterface` 虎族检测、归一化、进化与死亡别名复用同一规则；
+- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297（首跑 1 个瞬态后重跑）、场景 17/17、协作 26/26、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（292.1s，默认 auto）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
 
 ### 23-3 关卡结算单一提交
 
@@ -268,9 +270,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-2：其余宠物族分批迁移**。
-**当前不启动**：Phase 23-3~23-5；先选下一族并复用 `PetTurtleFamily` 接口。
-**23-0/23-1 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
+**当前下一步**：**Phase 23-2 其余 6 族**；建议下一族 `PetDragon`。
+**当前不启动**：Phase 23-3~23-5。
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

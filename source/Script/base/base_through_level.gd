@@ -3,6 +3,7 @@ class_name BaseLevel
 const LEVEL_PROGRESS_COMMAND := preload("res://Script/base/level_progress_command.gd")
 const PET_LEVEL_CONTROLLER := preload("res://Script/pet/pet_level_controller.gd")
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
+const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 var is_two_scene
@@ -322,18 +323,13 @@ func _spawn_active_pet(slot: int = 1) -> void:
 				)
 			):
 				return
-	if pet_kind == "PetTurtle":
+	if pet_kind == "PetTurtle" or pet_kind == "PetTiger":
 		return
 	if pet_kind == "PetYinTiger":
 		_normalize_pet_yin_tiger_spawn_data(pet_data)
 		_recalculate_active_pet_growth_stats(pet_data)
 		_restore_active_pet_for_level_start(pet_data)
 		_update_pet_yin_tiger_evolution(pet_data)
-	elif pet_kind == "PetTiger":
-		_normalize_pet_tiger_spawn_data(pet_data)
-		_recalculate_active_pet_growth_stats(pet_data)
-		_restore_active_pet_for_level_start(pet_data)
-		_update_pet_tiger_evolution(pet_data)
 	elif pet_kind == "PetDragon":
 		_normalize_pet_dragon_spawn_data(pet_data)
 		_recalculate_active_pet_growth_stats(pet_data)
@@ -380,16 +376,12 @@ func _spawn_active_pet(slot: int = 1) -> void:
 				_pet_mouse_scene_path(pet_stage)
 				if pet_kind == "PetMouse"
 				else (
-					_pet_tiger_scene_path(pet_stage)
-					if pet_kind == "PetTiger"
+					_pet_phoenix_scene_path(pet_stage)
+					if pet_kind == "PetPhoenix"
 					else (
-						_pet_phoenix_scene_path(pet_stage)
-						if pet_kind == "PetPhoenix"
-						else (
-							_pet_rabbit_scene_path(pet_stage)
-							if pet_kind == "PetRabbit"
-							else _pet_dragon_scene_path(pet_stage)
-						)
+						_pet_rabbit_scene_path(pet_stage)
+						if pet_kind == "PetRabbit"
+						else _pet_dragon_scene_path(pet_stage)
 					)
 				)
 			)
@@ -404,8 +396,6 @@ func _spawn_active_pet(slot: int = 1) -> void:
 	pet.set_meta("coop_slot", slot)
 	if pet_kind == "PetYinTiger":
 		pet.set_meta("pet_yin_tiger_unit", true)
-	elif pet_kind == "PetTiger":
-		pet.set_meta("pet_tiger_unit", true)
 	elif pet_kind == "PetPhoenix":
 		pet.set_meta("pet_phoenix_unit", true)
 	elif pet_kind == "PetRabbit":
@@ -552,7 +542,7 @@ func _normalize_pet_rabbit_spawn_data(pet: Dictionary) -> void:
 		bool(pet.get(DataKeys.DEPLOYED, false))
 		or str(PlayerData.player_data.get(_active_pet_name_key(), "")) == "PetRabbit"
 	)
-	var stage := _pet_tiger_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
+	var stage := _pet_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
 	pet[DataKeys.TYPE] = "PetRabbit"
 	pet["阶段"] = stage
 	pet[DataKeys.ALT_NAME] = _pet_rabbit_stage_name(stage)
@@ -749,48 +739,14 @@ func _pet_yin_tiger_scene_path(stage: int) -> String:
 	return "res://Scene/pet/pet_yin_tiger_summon_%d.tscn" % clampi(stage, 1, 4)
 
 
-func _pet_tiger_stage_for_level(level: int) -> int:
-	if level >= 50:
+func _pet_stage_for_level(pet_level: int) -> int:
+	if pet_level >= 50:
 		return 4
-	if level >= 30:
+	if pet_level >= 30:
 		return 3
-	if level >= 15:
+	if pet_level >= 15:
 		return 2
 	return 1
-
-
-func _pet_tiger_stage_name(stage: int) -> String:
-	match clampi(stage, 1, 4):
-		1:
-			return "虎丸"
-		2:
-			return "白灵虎"
-		3:
-			return "白虎将军"
-		_:
-			return "白虎战神"
-
-
-func _pet_tiger_stage_skills(stage: int) -> Array:
-	match clampi(stage, 1, 4):
-		1:
-			return ["猛扑", "虎啸"]
-		2:
-			return ["猛扑", "虎啸", "嗜血虎爪"]
-		_:
-			return ["猛扑", "虎啸", "嗜血虎爪", "横扫千军"]
-
-
-func _normalize_pet_tiger_spawn_data(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	pet[DataKeys.TYPE] = "PetTiger"
-	if not pet.has(DataKeys.ALT_NAME):
-		pet[DataKeys.ALT_NAME] = "虎丸"
-	if not pet.has("阶段"):
-		pet["阶段"] = 1
-	if not pet.has(DataKeys.LEVEL):
-		pet[DataKeys.LEVEL] = int(pet.get("阶段", 1))
-	pet[DataKeys.DEPLOYED] = bool(pet.get(DataKeys.DEPLOYED, true))
 
 
 func _ensure_pet_growth_fields_for_spawn(pet: Dictionary) -> void:
@@ -864,27 +820,6 @@ func _restore_active_pet_for_level_start(pet: Dictionary) -> void:
 	var mp_max: int = max(1, int(pet.get("魔法上限", 1)))
 	pet[DataKeys.HP] = hp_max
 	pet[DataKeys.MP] = mp_max
-
-
-func _update_pet_tiger_evolution(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	if not _is_pet_tiger_data(pet):
-		return
-	_normalize_pet_tiger_spawn_data(pet)
-	var stage := _pet_tiger_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
-	pet["阶段"] = stage
-	var stage_name := _pet_tiger_stage_name(stage)
-	pet[DataKeys.ALT_NAME] = stage_name
-	pet[DataKeys.TYPE] = "PetTiger"
-	var stage_skills := _pet_tiger_stage_skills(stage)
-	pet["技能"] = stage_skills
-	if _pet_is_fighting(pet):
-		PlayerData.player_data[_active_pet_name_key()] = "PetTiger"
-		PlayerData.player_data["出战宠物"] = "PetTiger"
-
-
-func _pet_tiger_scene_path(stage: int) -> String:
-	return "res://Scene/pet/pet_tiger_summon_%d.tscn" % clampi(stage, 1, 4)
 
 
 func _active_pet_stage_from_data(pet: Dictionary) -> int:
@@ -1043,8 +978,8 @@ func _pet_active_name(pet: Dictionary) -> String:
 		return PET_TURTLE_FAMILY.KIND
 	if _is_pet_phoenix_data(pet):
 		return "PetPhoenix"
-	if type_name == "PetTiger" or _is_pet_tiger_data(pet):
-		return "PetTiger"
+	if type_name == PET_TIGER_FAMILY.KIND or PET_TIGER_FAMILY.matches(pet):
+		return PET_TIGER_FAMILY.KIND
 	if type_name == "PetDragon" or _is_pet_dragon_data(pet):
 		return "PetDragon"
 	return str(pet.get(DataKeys.ALT_NAME, ""))
@@ -1104,7 +1039,7 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		elif _is_pet_dragon_data(pet):
 			dragon_pet = pet
 			dragon_is_fighting = dragon_is_fighting or _pet_is_fighting(pet)
-		elif _is_pet_tiger_data(pet):
+		elif PET_TIGER_FAMILY.matches(pet):
 			tiger_pet = pet
 			tiger_is_fighting = tiger_is_fighting or _pet_is_fighting(pet)
 	if (
@@ -1157,20 +1092,13 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		_set_only_active_pet(pets, dragon_pet, data, "PetDragon")
 		return "PetDragon"
 	if (
-		(active_name == "PetTiger" or _is_pet_tiger_data({"名称": active_name}) or tiger_is_fighting)
+		(active_name == PET_TIGER_FAMILY.KIND or PET_TIGER_FAMILY.matches({"名称": active_name}) or tiger_is_fighting)
 		and not tiger_pet.is_empty()
 	):
-		_normalize_pet_tiger_spawn_data(tiger_pet)
-		_set_only_active_pet(pets, tiger_pet, data, "PetTiger")
-		return "PetTiger"
+		PET_TIGER_FAMILY.normalize_spawn(tiger_pet, profile)
+		_set_only_active_pet(pets, tiger_pet, data, PET_TIGER_FAMILY.KIND)
+		return PET_TIGER_FAMILY.KIND
 	return active_name
-
-
-func _is_pet_tiger_data(pet: Dictionary) -> bool:
-	if str(pet.get(DataKeys.TYPE, "")) == "PetTiger":
-		return true
-	var name := str(pet.get(DataKeys.ALT_NAME, ""))
-	return name == "虎丸" or name == "白灵虎" or name == "白虎将军" or name == "白虎战神" or name == "白虎"
 
 
 ## 宠物数据必须由调用方按槽位提供档案；不再回落到 /root/PlayerData（隐含 1P）。

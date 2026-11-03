@@ -3,6 +3,7 @@ class_name BaseMonster
 
 const NIGHTMARE_DIFFICULTY := 3
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
+const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const NIGHTMARE_HEALTH_BONUS := 20000000
 const NIGHTMARE_ATTACK_BONUS := 40000
 const NIGHTMARE_DEFENSE_BONUS := 5000
@@ -3001,10 +3002,10 @@ func _cure_active_pet_exp(value: int, slot: int = 1) -> void:
 		pet[DataKeys.LEVEL] = int(pet.get(DataKeys.LEVEL, 1)) + 1
 		pet["下级经验"] = _pet_next_exp_requirement(int(pet.get(DataKeys.LEVEL, 1)))
 		var level_growth := _apply_pet_level_growth(pet)
-		_update_pet_tiger_evolution(pet, profile)
 		_update_pet_dragon_evolution(pet, profile)
 		_update_pet_phoenix_evolution(pet, profile)
 		PET_TURTLE_FAMILY.evolve(pet, profile)
+		PET_TIGER_FAMILY.evolve(pet, profile)
 		_update_pet_rabbit_evolution(pet, profile)
 		_update_pet_mouse_evolution(pet, profile)
 		_update_pet_yin_tiger_evolution(pet, profile)
@@ -3125,53 +3126,6 @@ func _active_pet_unit_can_restore(slot: int = 1) -> bool:
 func _restore_pet_to_peak(pet: Dictionary) -> void:
 	pet[DataKeys.HP] = int(pet.get("生命上限", pet.get(DataKeys.HP, 0)))
 	pet[DataKeys.MP] = int(pet.get("魔法上限", pet.get(DataKeys.MP, 0)))
-
-
-func _pet_tiger_stage_for_level(level: int) -> int:
-	if level >= 50:
-		return 4
-	if level >= 30:
-		return 3
-	if level >= 15:
-		return 2
-	return 1
-
-
-func _pet_tiger_stage_name(stage: int) -> String:
-	match clampi(stage, 1, 4):
-		1:
-			return "虎丸"
-		2:
-			return "白灵虎"
-		3:
-			return "白虎将军"
-		_:
-			return "白虎战神"
-
-
-func _pet_tiger_stage_skills(stage: int) -> Array:
-	match clampi(stage, 1, 4):
-		1:
-			return ["猛扑", "虎啸"]
-		2:
-			return ["猛扑", "虎啸", "嗜血虎爪"]
-		_:
-			return ["猛扑", "虎啸", "嗜血虎爪", "横扫千军"]
-
-
-func _update_pet_tiger_evolution(pet: Dictionary, profile: Node) -> void:
-	if (
-		str(pet.get(DataKeys.TYPE, "")) != "PetTiger"
-		and not ["虎丸", "白灵虎", "白虎将军", "白虎战神"].has(str(pet.get(DataKeys.ALT_NAME, "")))
-	):
-		return
-	var stage := _pet_tiger_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = _pet_tiger_stage_name(stage)
-	pet[DataKeys.TYPE] = "PetTiger"
-	pet["技能"] = _pet_tiger_stage_skills(stage)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		profile.player_data["出战宠物"] = str(pet.get(DataKeys.ALT_NAME, ""))
 
 
 func _update_pet_dragon_evolution(pet: Dictionary, profile: Node) -> void:
@@ -3418,9 +3372,9 @@ func _apply_active_pet_unit_growth(
 			pet[DataKeys.ALT_NAME] = ["", "龙仔", "绿英龙", "青龙将军", "青龙妖圣"][new_stage]
 			pet["技能"] = _pet_dragon_stage_skills(new_stage)
 		elif bool(unit.get_meta("pet_tiger_unit", false)):
-			pet[DataKeys.TYPE] = "PetTiger"
-			pet[DataKeys.ALT_NAME] = _pet_tiger_stage_name(new_stage)
-			pet["技能"] = _pet_tiger_stage_skills(new_stage)
+			pet[DataKeys.TYPE] = PET_TIGER_FAMILY.KIND
+			pet[DataKeys.ALT_NAME] = PET_TIGER_FAMILY.stage_name(new_stage)
+			pet["技能"] = PET_TIGER_FAMILY.stage_skills(new_stage)
 	if new_stage != old_stage and unit.has_method("apply_pet_data"):
 		unit.call("apply_pet_data", pet)
 		if is_mouse_unit:

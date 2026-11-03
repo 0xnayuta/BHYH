@@ -1,9 +1,10 @@
 class_name PetLevelController
 extends RefCounted
-## 关卡宠物生成控制器：23-1 先接管龟布系，其余族仍由 BaseLevel 旧分派处理。
-## 控制器只持有生命周期逻辑，族规则由 PetTurtleFamily 提供；不新增 Autoload。
+## 关卡宠物生成控制器：当前接管龟布、白虎两族，其余族仍由 BaseLevel 旧分派处理。
+## 控制器只持有生命周期逻辑，族规则由 Pet*Family 提供；不新增 Autoload。
 
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
+const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 const PET_UNIT_METAS := [
@@ -19,7 +20,8 @@ const PET_UNIT_METAS := [
 
 
 func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary) -> bool:
-	if not PET_TURTLE_FAMILY.matches(pet_data):
+	var family = _family_for(pet_data)
+	if family == null:
 		return false
 	if level == null or profile == null:
 		return true
@@ -30,7 +32,7 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 	if monster == null:
 		return true
 	profile.clamp_pet_level_to_player(pet_data)
-	var pet_name: String = PET_TURTLE_FAMILY.KIND
+	var pet_name: String = str(family.KIND)
 	if bool(level.call("_is_active_pet_dead_this_level", pet_name, slot)):
 		pet_data[DataKeys.DEPLOYED] = false
 		var active_key := _active_pet_name_key()
@@ -48,10 +50,10 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 		learned_custom_levels[str(learned_skill)] = PET_SKILL_PROGRESSION.get_level(pet_data, str(learned_skill))
 	if _has_pet_unit(monster, slot):
 		return true
-	PET_TURTLE_FAMILY.normalize_spawn(pet_data, profile)
+	family.normalize_spawn(pet_data, profile)
 	level.call("_recalculate_active_pet_growth_stats", pet_data)
 	level.call("_restore_active_pet_for_level_start", pet_data)
-	PET_TURTLE_FAMILY.evolve(pet_data, profile)
+	family.evolve(pet_data, profile)
 	if not learned_custom_skills.is_empty():
 		var normalized_skills: Array = pet_data.get("技能", []) if pet_data.get("技能", []) is Array else []
 		for learned_skill in learned_custom_skills:
@@ -63,7 +65,7 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 			normalized_levels[learned_skill] = learned_custom_levels[learned_skill]
 	var pet_stage: int = clampi(int(pet_data.get("阶段", 1)), 1, 4)
 	await Global.prewarm_active_pet_runtime_resources()
-	var scene_path := PET_TURTLE_FAMILY.scene_path(pet_stage)
+	var scene_path: String = family.scene_path(pet_stage)
 	var scene := Global.preload_scene_path(scene_path)
 	if scene == null:
 		return true
@@ -71,11 +73,11 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 		return true
 	var pet = scene.instantiate()
 	pet.set_meta("coop_slot", slot)
-	pet.set_meta(PET_TURTLE_FAMILY.UNIT_META, true)
+	pet.set_meta(str(family.UNIT_META), true)
 	pet.set_meta("is_summon", true)
 	if pet.has_method("apply_pet_data"):
 		pet.apply_pet_data(pet_data)
-	PET_TURTLE_FAMILY.setup(pet, pet_stage)
+	family.setup(pet, pet_stage)
 	monster.add_child(pet)
 	if pet.has_method("apply_pet_data"):
 		pet.call_deferred("apply_pet_data", pet_data)
@@ -91,6 +93,14 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 	if pet.has_method("set_summon_properties"):
 		pet.call_deferred("set_summon_properties", source_player, 0.0)
 	return true
+
+
+func _family_for(pet_data: Dictionary) -> Variant:
+	if PET_TURTLE_FAMILY.matches(pet_data):
+		return PET_TURTLE_FAMILY
+	if PET_TIGER_FAMILY.matches(pet_data):
+		return PET_TIGER_FAMILY
+	return null
 
 
 func _has_pet_unit(monster: Node, slot: int) -> bool:
