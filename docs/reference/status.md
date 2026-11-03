@@ -1,7 +1,7 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-02。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
+> **最后更新**：2026-11-03。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
 
 ---
 
@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 23-0：完成 8 族、30 个召唤场景的 `BaseLevel` 宠物生成/归一化/进化/技能/路径/槽位调用面调查，产出 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md)；首批选择 `PetTurtle`，23-1 采用 `PetLevelController` + `PetTurtleFamily`。静态确认 2P 预热、2P 升级写回、凤凰别名、寅虎预热门禁与法宝复活槽位风险。验证：`pet-runtime` PASS（7.63s），`coop_probe_runner` **26/26 PASS**（126.53s）；未改 `source/`，23-1 未启动。
 - Phase 22-4：新增 `contract_scan.py` 的 `global_surface_boundary` 规则与 `scripts/global_surface_baseline.json`，冻结 65 字段与 120 个 `add` 入口；`--self-test` 坏样本 2 / 好样本 4，`--fail-on-error` ERROR=0；剩余 65 字段已在 `global_runtime_inventory.md` §2.10 登记所有者、理由与出口。Phase 22 已收口。
 - Phase 22-3D-2：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`，场景槽位归对应工厂与 `SceneFlow`。`check_all` 9/9、`ui-factories`/`run-context` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3D-1：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。`check_all` 9/9、`ui-factories` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。

@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；Phase 23 为下一候选，尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查完成**，Phase 23-1 尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -91,17 +91,20 @@
 **前置**：Phase 22 已完成并收口；不要求 22-3E 的 26 个服务指针继续搬迁。
 **非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则。
 
-### 23-0 调用面与首批宠物族选型
+### 23-0 调用面与首批宠物族选型（已完成）
 
 - 盘点 `BaseLevel` 中宠物生成、归一化、进化、技能、场景路径与槽位解析函数；
 - 选择一个调用面清晰、现有探针覆盖充分的宠物族作为首批，不按文件行数选；
-- 输出：函数/字段迁移表、调用方清单、首批验收关卡与失败路径。
+- 输出 [`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)：函数/字段迁移表、调用方清单、首批验收关卡与失败路径。
 
-### 23-1 首批宠物生成/进化抽取
+**结果**：当前 8 个宠物族、30 个召唤场景；`BaseLevel` 有 73 个宠物相关函数，并与 `BaseMonster`/`PetInterface` 存在 22/19 个重名规则。首批选择 **`PetTurtle`（龟布系）**：4 阶规则标准，且 `coop_probe_runner` 已直接覆盖龟族 P1/P2 经验、槽位、生命加成与 HUD 死亡态。23-1 采用 `PetLevelController` + `PetTurtleFamily`，龟族分支不得保留双实现；其余 7 族在 23-2 逐族迁移。已确认的 2P 预热、2P 升级写回、凤凰别名、寅虎预热门禁与法宝复活槽位风险登记在同页，修复放入对应实现批次。
+
+### 23-1 首批宠物生成/进化抽取（未启动）
 
 - 新增 `pet/` 下的普通控制器（`RefCounted` 或场景子节点，不新增 Autoload）；
 - `BaseLevel` 只保留阶段编排入口，调用控制器完成宠物生成/恢复；
 - 删除首批对应的 `BaseLevel` 方法与分派分支，不保留双实现；
+- 同批把 `BaseMonster` 与 `PetInterface` 的龟族进化调用接到同一族规则，避免新增第三份规则；`PlayerData` 的载入补全保留到 23-4；
 - 验证 1P/2P、宠物死亡/复活、关卡切换与重战。
 
 ### 23-2 其余宠物族分批迁移
@@ -264,8 +267,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-0：关卡与宠物调用面调查**。
-**当前不启动**：Phase 23 实现批次；先完成 23-0 调查与首批选择。
+**当前下一步**：**Phase 23-1：首批 `PetTurtle` 生成/进化抽取**。
+**当前不启动**：Phase 23-2~23-5；先完成 23-1 的控制器、龟族规则与 1P/2P 验证。
+**23-0 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
