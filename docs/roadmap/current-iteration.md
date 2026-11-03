@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；Phase 25~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射已完成**，25-1~25-5 未启动；Phase 26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -70,11 +70,13 @@
 **前置**：Phase 22 的伤害/状态所有权稳定；建议在 Phase 24 之后再启动，避免 UI 与实体同时迁移。
 **非目标**：不引入 ECS、不重排继承、不一次性拆完 `BaseHero`/`BaseMonster`、不改碰撞层与动作时序。
 
-### 25-0 行为与验证映射
+### 25-0 行为与验证映射（已完成）
 
-- 以 `BaseHero`、`BaseMonster`、关卡/协作战探针为输入，标记行为的状态、输入、生命周期、失败路径；
-- 首批选择一个最有独立性的行为（建议自动战斗或受击反应），不按行数选；
-- 输出：行为切片、调用方、验收场景与回滚边界。
+- 产出 [`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)：`BaseHero` 自动战斗的状态/输入/生命周期/失败路径、`BaseMonster` 受击反应/控制免疫/Boss 保护/死亡映射、现有探针覆盖与缺口；
+- 首批选择 **自动战斗**：6 个 `_auto_battle_*` 字段、20 个 `_auto_battle*` 方法，目标/技能/移动可由显式上下文迁出；受击反应有 37 个 `state_hurt` 文件（含基类与覆写）和 3 个 `play_hit_effect` 文件，保留到 25-4；
+- 记录必须保持的现状：1P/2P 共用运行时开关、按 `coop_slot` 读技能配置、自动重试归 `BaseThroughLevel`/胜利/失败/玲珑塔、手动 `is_t_mc` 与法宝输入仍可能绕过自动分支；
+- 现有 `coop`/`scene`/全量回归没有直接驱动自动战斗或受击代次的探针，25-1/25-4 各自补定向验收；
+- 本批次未修改 `source/`，未改变数值/时序/输入映射。
 
 ### 25-1 自动战斗控制器
 
@@ -157,9 +159,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 25-0 行为与验证映射**；Phase 24 已完成，Phase 25 尚未启动。
+**当前下一步**：**Phase 25-1 自动战斗控制器**；Phase 24 已完成，25-0 已完成。
 **当前不启动**：Phase 26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

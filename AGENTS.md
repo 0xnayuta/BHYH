@@ -39,6 +39,7 @@
   - `reference/runtime_lifecycle_matrix.md`：Phase 15 运行时调用面与所有权矩阵：场景切换、加载页、缓存/池/UI、档案会话与退出清理；
   - `reference/archive_session_matrix.md`：Phase 16-1 档案、持久化与槽位调用面矩阵：保存入口、档案身份与会话字段、直接写入分域、补全清单、双人槽位、共享账本与面板显式操作者；
   - `reference/gameplay_module_matrix.md`：Phase 17-1 玩法与表现调用面矩阵：攻击/弹体/召唤/法宝归属、对象池、关卡阶段与结算、成长提交、HUD/输入/音频、模块 API 与场景依赖；
+  - `reference/combat_behavior_matrix.md`：Phase 25-0 战斗实体行为与验证映射：`BaseHero` 自动战斗、`BaseMonster` 受击/控制免疫/死亡、现有探针缺口与 25-1/25-4 回滚边界；
   - `reference/module_api_matrix.md`:Phase 17-6 试点模块 API 与依赖方向:`pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon` 的公开契约、场景依赖、路径清理与剩余项;
   - `reference/pet_level_boundary_matrix.md`:Phase 23 宠物调用面（23-5 已关闭）:8 族/30 召唤场景、`BaseLevel` 生成/归一化/进化/技能/路径/槽位矩阵、`PetLevelController`/`PetTurtleFamily`/`PetTigerFamily`/`PetDragonFamily`/`PetPhoenixFamily`/`PetRabbitFamily`/`PetMouseFamily`/`PetNeatFamily`/`PetYinTigerFamily`、2P 写回修复与共享槽位边界;
   - `reference/pet_domain_contract.md`:Phase 23-4/24-3 宠物域只读 View、出战/休息/成长/阵法显式命令、保存失败回滚与 `PlayerData` 职责边界;

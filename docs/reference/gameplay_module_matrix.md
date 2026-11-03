@@ -1,6 +1,8 @@
 # 玩法与表现模块边界（当前）
 
 > **状态**：Phase 17/18 已完成并归档；本页只保留当前所有权、失败边界与不可回退规则。完整调查、批次差异和验证记录见 [`../archive/iteration_17_18_gameplay_module_matrix.md`](../archive/iteration_17_18_gameplay_module_matrix.md)。
+>
+> **Phase 25-0**：实体行为状态/输入/生命周期/失败路径与首批切片见 [`combat_behavior_matrix.md`](combat_behavior_matrix.md)。
 
 ## 1. 三类数据
 
