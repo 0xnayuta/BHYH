@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成**。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -183,11 +183,13 @@
 - `PetInterface` 虎族检测、归一化、进化与死亡别名复用同一规则；
 - 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297（首跑 1 个瞬态后重跑）、场景 17/17、协作 26/26（共享槽位批次后复跑为 27/27）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（292.1s，默认 auto）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
 
-### 23-3 关卡结算单一提交
+### 23-3 关卡结算单一提交（已完成）
 
-- 复核 `LevelSettlement` 与关卡子类的胜败/重战/保存路径；
-- 确保一次流程只提交一次保存，重复返回/自动重试不重复发奖；
-- 若现有实现已满足，只补调用面与失败验证，不为重构而重写。
+- 复核 `LevelSettlement`、`victory`、`defeat` 与 `BaseLevel` 出口/重战路径；
+- 结论：胜利场景 `_ready` 只提交一次 `level_victory`；返回/重战仅在有 pending 时 flush，重复点击由 `_is_leaving`/`_is_rechallenging` 拦截；
+- 失败场景的道具、装备与永久拒绝奖励各自使用一次 `_request_settlement_save("level_defeat_reward")`，重复点击由本地/持久标记拦截，保存失败回滚本次奖励；
+- 未改生产代码；补强 `archive_persistence_probe` 的装备成功、永久拒绝成功/失败路径；档案探针 **303/303 PASS**（11.21s），`check_all` **9/9 PASS**（32.78s）；
+- 生产源码未变，沿用 Phase 23-2 末次 `coop` 33/33、`scene` 17/17、全量 128/128 + 5 SKIP 结果。
 
 ### 23-4 `PlayerData` 宠物域只读视图试点
 
@@ -337,8 +339,8 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-3 关卡结算单一提交**；Phase 23-2 八族已完成，23-4 宠物域只读视图随后。
-**当前不启动**：Phase 23-3~23-5。
+**当前下一步**：**Phase 23-4 `PlayerData` 宠物域只读视图**；Phase 23-2 八族与 Phase 23-3 结算已完成。
+**当前不启动**：Phase 23-5。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)

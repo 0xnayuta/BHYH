@@ -69,7 +69,9 @@ func _remove_empty_directory(path: String) -> bool:
 	var parent := DirAccess.open(path.get_base_dir())
 	if parent == null:
 		return false
-	return parent.remove(path.get_file()) == OK and not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(path))
+	return (
+		parent.remove(path.get_file()) == OK and not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(path))
+	)
 
 
 func _write_plain(path: String, text: String) -> void:
@@ -135,14 +137,14 @@ func _test_level_progress_command() -> void:
 	)
 	var target := {}
 	var written := LEVEL_PROGRESS_COMMAND.apply(target, 20, "", false, true)
-	_check("level_progress_apply", target.get("天庭") == true and target.get("地府噩梦") == true and written.size() == 2, str(target))
+	_check(
+		"level_progress_apply",
+		target.get("天庭") == true and target.get("地府噩梦") == true and written.size() == 2,
+		str(target)
+	)
 	var north := {}
 	LEVEL_PROGRESS_COMMAND.apply_north_continent(north, 80, "北俱芦洲·测试")
-	_check(
-		"level_progress_north",
-		north.get("北俱芦洲通关_80") == 1 and north.get("北俱芦洲·测试") == 1,
-		str(north)
-	)
+	_check("level_progress_north", north.get("北俱芦洲通关_80") == 1 and north.get("北俱芦洲·测试") == 1, str(north))
 
 
 func _test_background_save_order() -> void:
@@ -165,10 +167,22 @@ func _test_background_save_order() -> void:
 		if serials[index] <= serials[index - 1]:
 			monotonic = false
 	_check("background_signal_serial_monotonic", monotonic, str(serials))
-	_check("background_signal_last_serial", not serials.is_empty() and serials[-1] == MemoryClass.get_last_background_save_serial(), str(serials))
+	_check(
+		"background_signal_last_serial",
+		not serials.is_empty() and serials[-1] == MemoryClass.get_last_background_save_serial(),
+		str(serials)
+	)
 	var status: Dictionary = _diagnostics().get_background_save_status()
-	_check("background_consumer_serial", int(status.get("serial", -1)) == MemoryClass.get_last_background_save_serial(), str(status))
-	_check("background_written_latest", MemoryClass.get_archive_level(path) == 6, "level=%s" % MemoryClass.get_archive_level(path))
+	_check(
+		"background_consumer_serial",
+		int(status.get("serial", -1)) == MemoryClass.get_last_background_save_serial(),
+		str(status)
+	)
+	_check(
+		"background_written_latest",
+		MemoryClass.get_archive_level(path) == 6,
+		"level=%s" % MemoryClass.get_archive_level(path)
+	)
 	_check("background_last_error_clear", MemoryClass.last_save_error == "", MemoryClass.last_save_error)
 	MemoryClass.background_save_finished.disconnect(on_finished)
 
@@ -200,7 +214,11 @@ func _test_background_save_order() -> void:
 	_check("background_failure_cleanup", _remove_empty_directory(fail_path))
 	_check("background_failure_retry_success", MemoryClass.flush_pending_saves())
 	_check("background_failure_retry_cleared", not MemoryClass.has_failed_background_save(fail_path))
-	_check("background_failure_retry_written", MemoryClass.get_archive_level(fail_path) == 7, "level=%s" % MemoryClass.get_archive_level(fail_path))
+	_check(
+		"background_failure_retry_written",
+		MemoryClass.get_archive_level(fail_path) == 7,
+		"level=%s" % MemoryClass.get_archive_level(fail_path)
+	)
 	MemoryClass.background_save_finished.disconnect(on_failed)
 
 	# 退出会话前必须 flush 未决后台任务，不能留下旧档快照。
@@ -210,13 +228,22 @@ func _test_background_save_order() -> void:
 	_check("background_exit_request", MemoryClass.request_background_save())
 	Global.end_archive_session()
 	_check("background_exit_inactive", not Global.is_archive_session_active())
-	_check("background_exit_flushed", MemoryClass.get_archive_level(exit_path) == 8, "level=%s" % MemoryClass.get_archive_level(exit_path))
+	_check(
+		"background_exit_flushed",
+		MemoryClass.get_archive_level(exit_path) == 8,
+		"level=%s" % MemoryClass.get_archive_level(exit_path)
+	)
+
 
 func _test_missing_and_empty() -> void:
 	var missing_path := TEST_ARCHIVE_PREFIX + "001.json"
 	_reset_profile(1, 3)
 	var missing_result: Dictionary = MemoryClass.load_game(missing_path)
-	_check("missing_archive_reported", missing_result.get("status") == "missing", "status=%s" % missing_result.get("status"))
+	_check(
+		"missing_archive_reported",
+		missing_result.get("status") == "missing",
+		"status=%s" % missing_result.get("status")
+	)
 	_check("missing_archive_not_loaded", not bool(missing_result.get("ok", true)))
 	_check("missing_archive_not_created", not FileAccess.file_exists(missing_path))
 
@@ -251,7 +278,11 @@ func _test_backup_recovery() -> void:
 	var result: Dictionary = MemoryClass._read_encrypted_dictionary_compatible(path, MemoryClass.keys)
 	var recovered := bool(result.get("recovered_from_backup", false))
 	var recovered_level := int((result.get("data", {}) as Dictionary).get("玩家等级", 0))
-	_check("backup_recovered", bool(result.get("ok", false)) and recovered, "ok/recovered=%s/%s" % [result.get("ok"), recovered])
+	_check(
+		"backup_recovered",
+		bool(result.get("ok", false)) and recovered,
+		"ok/recovered=%s/%s" % [result.get("ok"), recovered]
+	)
 	_check("backup_content_previous", recovered_level == 10, "level=%s" % recovered_level)
 
 
@@ -265,7 +296,11 @@ func _test_role_range() -> void:
 	MemoryClass.safe_write_archive(invalid_path, _archive_data(8, 1))
 	_reset_profile(1, 1)
 	var invalid_loaded: Dictionary = MemoryClass.load_game(invalid_path)
-	_check("invalid_role_load_rejected", invalid_loaded.get("status") == "invalid", "status=%s" % invalid_loaded.get("status"))
+	_check(
+		"invalid_role_load_rejected",
+		invalid_loaded.get("status") == "invalid",
+		"status=%s" % invalid_loaded.get("status")
+	)
 
 	var valid_path := TEST_ARCHIVE_PREFIX + "006.json"
 	MemoryClass.safe_write_archive(valid_path, _archive_data(7, 5))
@@ -292,7 +327,10 @@ func _test_request_save() -> void:
 	var no_session_outcome := MemoryClass.request_save_result("probe_empty")
 	_check(
 		"request_save_without_session",
-		not bool(no_session_outcome.get("ok", true)) and str(no_session_outcome.get("error", "")) == "no_archive_session",
+		(
+			not bool(no_session_outcome.get("ok", true))
+			and str(no_session_outcome.get("error", "")) == "no_archive_session"
+		),
 		str(no_session_outcome)
 	)
 	_check("request_save_outcome_message", str(no_session_outcome.get("message", "")) != "", str(no_session_outcome))
@@ -301,7 +339,11 @@ func _test_request_save() -> void:
 		MemoryClass.get_last_save_outcome().get("error") == "no_archive_session",
 		str(MemoryClass.get_last_save_outcome())
 	)
-	_check("request_save_failure_event", not save_events.is_empty() and str(save_events[0].get("error", "")) == "no_archive_session", str(save_events))
+	_check(
+		"request_save_failure_event",
+		not save_events.is_empty() and str(save_events[0].get("error", "")) == "no_archive_session",
+		str(save_events)
+	)
 	_check(
 		"request_save_failure_consumer",
 		int(_diagnostics().get_save_failure_status().get("count", 0)) > failures_before,
@@ -315,7 +357,10 @@ func _test_request_save() -> void:
 	_check("request_save_writes", saved and FileAccess.file_exists(Global.get_cd_path()), "saved=%s" % saved)
 	_check(
 		"request_save_success_outcome",
-		bool(MemoryClass.get_last_save_outcome().get("ok", false)) and str(MemoryClass.get_last_save_outcome().get("error", "x")) == "",
+		(
+			bool(MemoryClass.get_last_save_outcome().get("ok", false))
+			and str(MemoryClass.get_last_save_outcome().get("error", "x")) == ""
+		),
 		str(MemoryClass.get_last_save_outcome())
 	)
 	_check("request_save_no_temp", not FileAccess.file_exists(Global.get_cd_path() + ".tmp"))
@@ -326,8 +371,15 @@ func _test_request_save() -> void:
 	var reloaded: Dictionary = MemoryClass.load_game(saved_path)
 	_check(
 		"request_save_reloads",
-		bool(reloaded.get("ok", false)) and int(PlayerData.player_data.get("Myself", 0)) == 7 and int(PlayerData.player_data.get("玩家等级", 0)) == 12,
-		"status=%s role=%s level=%s" % [reloaded.get("status"), PlayerData.player_data.get("Myself"), PlayerData.player_data.get("玩家等级")]
+		(
+			bool(reloaded.get("ok", false))
+			and int(PlayerData.player_data.get("Myself", 0)) == 7
+			and int(PlayerData.player_data.get("玩家等级", 0)) == 12
+		),
+		(
+			"status=%s role=%s level=%s"
+			% [reloaded.get("status"), PlayerData.player_data.get("Myself"), PlayerData.player_data.get("玩家等级")]
+		)
 	)
 
 	_reset_profile(8, 1)
@@ -356,7 +408,10 @@ func _test_request_save() -> void:
 	_reset_profile(1, 2)
 	_open_session(write_fail_path)
 	_check("request_save_write_failure_clean", _remove_empty_directory(write_fail_path))
-	_check("request_save_write_failure_fixture", DirAccess.make_dir_absolute(ProjectSettings.globalize_path(write_fail_path)) == OK)
+	_check(
+		"request_save_write_failure_fixture",
+		DirAccess.make_dir_absolute(ProjectSettings.globalize_path(write_fail_path)) == OK
+	)
 	var write_failure_events: Array = []
 	var on_write_failed := func(_reason: String, error: String, _message: String, notify: bool) -> void:
 		write_failure_events.append({"error": error, "notify": notify})
@@ -425,18 +480,22 @@ func _test_reward_interface_visual() -> void:
 	success_reward.call("_process", 0.0)
 	await get_tree().process_frame
 	var success_grid := success_reward.get("item_grid_container") as GridContainer
-	_check("reward_success_granted", PlayerData.get_item_data("qhs_1") > 0, "qhs_1=%s" % PlayerData.get_item_data("qhs_1"))
+	_check(
+		"reward_success_granted", PlayerData.get_item_data("qhs_1") > 0, "qhs_1=%s" % PlayerData.get_item_data("qhs_1")
+	)
 	_check(
 		"reward_success_keeps_boxes",
 		success_grid.visible and success_grid.get_child_count() > 0,
-		"visible=%s children=%d title=%s succeeded=%s error=%s"
-		% [
-			success_grid.visible,
-			success_grid.get_child_count(),
-			success_reward.get("title").text,
-			success_reward.get("_reward_succeeded"),
-			MemoryClass.last_save_error,
-		]
+		(
+			"visible=%s children=%d title=%s succeeded=%s error=%s"
+			% [
+				success_grid.visible,
+				success_grid.get_child_count(),
+				success_reward.get("title").text,
+				success_reward.get("_reward_succeeded"),
+				MemoryClass.last_save_error,
+			]
+		)
 	)
 	success_reward.queue_free()
 	await get_tree().process_frame
@@ -480,9 +539,11 @@ func _test_shop_purchase_command() -> void:
 	var unsaved: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
 	_check(
 		"shop_purchase_save_failure_rolls_back",
-		not bool(unsaved.get("ok", true))
-		and PlayerData.get_soul() == 1000
-		and _item_count("qhs_1") == count_before_save_fail,
+		(
+			not bool(unsaved.get("ok", true))
+			and PlayerData.get_soul() == 1000
+			and _item_count("qhs_1") == count_before_save_fail
+		),
 		"%s soul=%d qhs=%d" % [unsaved, PlayerData.get_soul(), _item_count("qhs_1")]
 	)
 
@@ -496,18 +557,23 @@ func _test_shop_purchase_command() -> void:
 	var shared_buy: Dictionary = ShopPurchaseCommand.execute("qhs_1", 1, 10)
 	_check(
 		"shop_purchase_2p_shared_ledger",
-		bool(shared_buy.get("ok", false))
-		and PlayerData.get_soul() == 490
-		and coop.secondary_data.get_soul() == 490
-		and int(PlayerData.get_item_data("qhs_1")) == shared_before + 1
-		and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 1,
-		"%s p1soul=%d p2soul=%d p1qhs=%d p2qhs=%d" % [
-			shared_buy,
-			PlayerData.get_soul(),
-			coop.secondary_data.get_soul(),
-			PlayerData.get_item_data("qhs_1"),
-			coop.secondary_data.get_item_data("qhs_1"),
-		]
+		(
+			bool(shared_buy.get("ok", false))
+			and PlayerData.get_soul() == 490
+			and coop.secondary_data.get_soul() == 490
+			and int(PlayerData.get_item_data("qhs_1")) == shared_before + 1
+			and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 1
+		),
+		(
+			"%s p1soul=%d p2soul=%d p1qhs=%d p2qhs=%d"
+			% [
+				shared_buy,
+				PlayerData.get_soul(),
+				coop.secondary_data.get_soul(),
+				PlayerData.get_item_data("qhs_1"),
+				coop.secondary_data.get_item_data("qhs_1"),
+			]
+		)
 	)
 	var repeat: Dictionary = ShopPurchaseCommand.execute("qhs_1", 100, 10)
 	_check(
@@ -520,12 +586,12 @@ func _test_shop_purchase_command() -> void:
 	)
 	_check(
 		"reward_2p_shared_bag_once",
-		bool(reward.get("ok", false))
-		and int(PlayerData.get_item_data("qhs_1")) == shared_before + 2
-		and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 2,
-		"%s p1qhs=%d p2qhs=%d" % [
-			reward, PlayerData.get_item_data("qhs_1"), coop.secondary_data.get_item_data("qhs_1")
-		]
+		(
+			bool(reward.get("ok", false))
+			and int(PlayerData.get_item_data("qhs_1")) == shared_before + 2
+			and int(coop.secondary_data.get_item_data("qhs_1")) == shared_before + 2
+		),
+		"%s p1qhs=%d p2qhs=%d" % [reward, PlayerData.get_item_data("qhs_1"), coop.secondary_data.get_item_data("qhs_1")]
 	)
 	coop.clear_runtime()
 
@@ -557,16 +623,21 @@ func _test_mystery_shop_command() -> void:
 	var bought: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
 	_check(
 		"mystery_purchase_ok",
-		bool(bought.get("ok", false))
-		and PlayerData.get_soul() == 990
-		and _item_count("qhs_1") == before_count + 1
-		and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 0,
-		"%s soul=%d qhs=%d times=%d" % [
-			bought,
-			PlayerData.get_soul(),
-			_item_count("qhs_1"),
-			int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
-		]
+		(
+			bool(bought.get("ok", false))
+			and PlayerData.get_soul() == 990
+			and _item_count("qhs_1") == before_count + 1
+			and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 0
+		),
+		(
+			"%s soul=%d qhs=%d times=%d"
+			% [
+				bought,
+				PlayerData.get_soul(),
+				_item_count("qhs_1"),
+				int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
+			]
+		)
 	)
 
 	_reset_profile(1, 1)
@@ -576,9 +647,11 @@ func _test_mystery_shop_command() -> void:
 	var limited: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
 	_check(
 		"mystery_purchase_count_blocks",
-		not bool(limited.get("ok", true))
-		and PlayerData.get_soul() == 1000
-		and _item_count("qhs_1") == count_before_limit,
+		(
+			not bool(limited.get("ok", true))
+			and PlayerData.get_soul() == 1000
+			and _item_count("qhs_1") == count_before_limit
+		),
 		"%s soul=%d qhs=%d" % [limited, PlayerData.get_soul(), _item_count("qhs_1")]
 	)
 
@@ -590,16 +663,21 @@ func _test_mystery_shop_command() -> void:
 	var unsaved: Dictionary = ShopPurchaseCommand.execute_mystery("qhs_1", 1, 10)
 	_check(
 		"mystery_purchase_save_failure_rolls_back",
-		not bool(unsaved.get("ok", true))
-		and PlayerData.get_soul() == 1000
-		and _item_count("qhs_1") == count_before_save_fail
-		and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 1,
-		"%s soul=%d qhs=%d times=%d" % [
-			unsaved,
-			PlayerData.get_soul(),
-			_item_count("qhs_1"),
-			int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
-		]
+		(
+			not bool(unsaved.get("ok", true))
+			and PlayerData.get_soul() == 1000
+			and _item_count("qhs_1") == count_before_save_fail
+			and int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]) == 1
+		),
+		(
+			"%s soul=%d qhs=%d times=%d"
+			% [
+				unsaved,
+				PlayerData.get_soul(),
+				_item_count("qhs_1"),
+				int(PlayerData.player_data[DataKeys.SHOP_PURCHASE_COUNT]),
+			]
+		)
 	)
 
 
@@ -625,10 +703,15 @@ func _test_passive_skill_command() -> void:
 	var loaded: Dictionary = MemoryClass.load_game(saved_path)
 	_check(
 		"passive_skill_upgrade_reloads",
-		bool(loaded.get("ok", false))
-		and PlayerData.get_soul() == 15000
-		and int(PlayerData.player_data["被动技能"]["热血"]) == level_before + 1,
-		"status=%s soul=%d level=%d" % [loaded.get("status"), PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
+		(
+			bool(loaded.get("ok", false))
+			and PlayerData.get_soul() == 15000
+			and int(PlayerData.player_data["被动技能"]["热血"]) == level_before + 1
+		),
+		(
+			"status=%s soul=%d level=%d"
+			% [loaded.get("status"), PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
+		)
 	)
 
 	_reset_profile(1, 30)
@@ -642,9 +725,11 @@ func _test_passive_skill_command() -> void:
 	var failed_upgrade: bool = failed_bd.up_level("热血")
 	_check(
 		"passive_skill_save_failure_rolls_back",
-		not failed_upgrade
-		and PlayerData.get_soul() == 20000
-		and int(PlayerData.player_data["被动技能"]["热血"]) == failed_level,
+		(
+			not failed_upgrade
+			and PlayerData.get_soul() == 20000
+			and int(PlayerData.player_data["被动技能"]["热血"]) == failed_level
+		),
 		"ok=%s soul=%d level=%d" % [failed_upgrade, PlayerData.get_soul(), int(PlayerData.player_data["被动技能"]["热血"])]
 	)
 	failed_bd.queue_free()
@@ -658,7 +743,11 @@ func _test_awaken_command() -> void:
 	_check("awaken_seed_stones", PlayerData.add_dj("tjs", 15), "stones=%d" % PlayerData.count_item_amount("tjs"))
 	_open_session(TEST_ARCHIVE_PREFIX + "055.json")
 	_check("awaken_command_ok", PlayerData.awaken_skill("ltjz"), "error=%s" % MemoryClass.last_save_error)
-	_check("awaken_stones_consumed", PlayerData.count_item_amount("tjs") == 0, "stones=%d" % PlayerData.count_item_amount("tjs"))
+	_check(
+		"awaken_stones_consumed",
+		PlayerData.count_item_amount("tjs") == 0,
+		"stones=%d" % PlayerData.count_item_amount("tjs")
+	)
 	_check("awaken_state_written", bool(PlayerData.player_data[DataKeys.Skill.AWAKENED].get("ltjz", false)))
 	var saved_path := Global.get_cd_path()
 	_reset_profile(1, 30)
@@ -675,7 +764,11 @@ func _test_awaken_command() -> void:
 	PlayerData.add_dj("tjs", 15)
 	Global.end_archive_session()
 	_check("awaken_save_failure_rolls_back", not PlayerData.awaken_skill("ltjz"))
-	_check("awaken_failure_keeps_stones", PlayerData.count_item_amount("tjs") == 15, "stones=%d" % PlayerData.count_item_amount("tjs"))
+	_check(
+		"awaken_failure_keeps_stones",
+		PlayerData.count_item_amount("tjs") == 15,
+		"stones=%d" % PlayerData.count_item_amount("tjs")
+	)
 	_check("awaken_failure_keeps_state", not bool(PlayerData.player_data[DataKeys.Skill.AWAKENED].get("ltjz", false)))
 
 
@@ -691,9 +784,14 @@ func _test_active_skill_command() -> void:
 	zd.up_level()
 	_check(
 		"active_skill_upgrade_ok",
-		PlayerData.get_soul() == 900
-		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1,
-		"soul=%d level=%d" % [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+		(
+			PlayerData.get_soul() == 900
+			and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1
+		),
+		(
+			"soul=%d level=%d"
+			% [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+		)
 	)
 	var saved_path := Global.get_cd_path()
 	zd.queue_free()
@@ -702,14 +800,19 @@ func _test_active_skill_command() -> void:
 	var loaded: Dictionary = MemoryClass.load_game(saved_path)
 	_check(
 		"active_skill_upgrade_reloads",
-		bool(loaded.get("ok", false))
-		and PlayerData.get_soul() == 900
-		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1,
-		"status=%s soul=%d level=%d" % [
-			loaded.get("status"),
-			PlayerData.get_soul(),
-			int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]),
-		]
+		(
+			bool(loaded.get("ok", false))
+			and PlayerData.get_soul() == 900
+			and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == level_before + 1
+		),
+		(
+			"status=%s soul=%d level=%d"
+			% [
+				loaded.get("status"),
+				PlayerData.get_soul(),
+				int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]),
+			]
+		)
 	)
 
 	_reset_profile(1, 30)
@@ -723,9 +826,14 @@ func _test_active_skill_command() -> void:
 	failed_zd.up_level()
 	_check(
 		"active_skill_save_failure_rolls_back",
-		PlayerData.get_soul() == 1000
-		and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == failed_level,
-		"soul=%d level=%d" % [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+		(
+			PlayerData.get_soul() == 1000
+			and int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL]) == failed_level
+		),
+		(
+			"soul=%d level=%d"
+			% [PlayerData.get_soul(), int(PlayerData.player_data[DataKeys.SKILL_LEARNED]["技能1"][DataKeys.LEVEL])]
+		)
 	)
 	failed_zd.queue_free()
 	await get_tree().process_frame
@@ -735,7 +843,11 @@ func _test_active_skill_command() -> void:
 	PlayerData.player_data["技能5版本"] = 0
 	_open_session(TEST_ARCHIVE_PREFIX + "056.json")
 	_check("skill_variant_command_ok", PlayerData.select_skill_variant("技能5版本", 1), "command failed")
-	_check("skill_variant_written", int(PlayerData.player_data.get("技能5版本", -1)) == 1, str(PlayerData.player_data.get("技能5版本")))
+	_check(
+		"skill_variant_written",
+		int(PlayerData.player_data.get("技能5版本", -1)) == 1,
+		str(PlayerData.player_data.get("技能5版本"))
+	)
 	var variant_path := Global.get_cd_path()
 	_reset_profile(1, 30)
 	var variant_loaded: Dictionary = MemoryClass.load_game(variant_path)
@@ -747,8 +859,7 @@ func _test_active_skill_command() -> void:
 	Global.end_archive_session()
 	_check(
 		"skill_variant_save_failure_rolls_back",
-		not PlayerData.select_skill_variant("技能5版本", 0)
-		and int(PlayerData.player_data.get("技能5版本", -1)) == 1,
+		not PlayerData.select_skill_variant("技能5版本", 0) and int(PlayerData.player_data.get("技能5版本", -1)) == 1,
 		"variant=%s" % PlayerData.player_data.get("技能5版本")
 	)
 
@@ -770,16 +881,21 @@ func _test_strength_command() -> void:
 	var entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
 	_check(
 		"strength_upgrade_ok",
-		int(entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
-		and PlayerData.get_soul() == 700
-		and PlayerData.get_item_data("qhs_1") == 4
-		and PlayerData.get_item_data("qhs_2") == 6,
-		"level=%d soul=%d qhs1=%d qhs2=%d" % [
-			int(entry.get(DataKeys.ENHANCE_LEVEL, 0)),
-			PlayerData.get_soul(),
-			PlayerData.get_item_data("qhs_1"),
-			PlayerData.get_item_data("qhs_2"),
-		]
+		(
+			int(entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
+			and PlayerData.get_soul() == 700
+			and PlayerData.get_item_data("qhs_1") == 4
+			and PlayerData.get_item_data("qhs_2") == 6
+		),
+		(
+			"level=%d soul=%d qhs1=%d qhs2=%d"
+			% [
+				int(entry.get(DataKeys.ENHANCE_LEVEL, 0)),
+				PlayerData.get_soul(),
+				PlayerData.get_item_data("qhs_1"),
+				PlayerData.get_item_data("qhs_2"),
+			]
+		)
 	)
 	var saved_path := Global.get_cd_path()
 	strength.queue_free()
@@ -789,10 +905,15 @@ func _test_strength_command() -> void:
 	var loaded_entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
 	_check(
 		"strength_upgrade_reloads",
-		bool(loaded.get("ok", false))
-		and int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
-		and PlayerData.get_soul() == 700,
-		"status=%s level=%d soul=%d" % [loaded.get("status"), int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)), PlayerData.get_soul()]
+		(
+			bool(loaded.get("ok", false))
+			and int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 2
+			and PlayerData.get_soul() == 700
+		),
+		(
+			"status=%s level=%d soul=%d"
+			% [loaded.get("status"), int(loaded_entry.get(DataKeys.ENHANCE_LEVEL, 0)), PlayerData.get_soul()]
+		)
 	)
 
 	_reset_profile(1, 1)
@@ -830,16 +951,21 @@ func _test_strength_command() -> void:
 	var failed_entry: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST]["页码1"][0]
 	_check(
 		"strength_save_failure_rolls_back",
-		int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 1
-		and PlayerData.get_soul() == 1000
-		and PlayerData.get_item_data("qhs_1") == 10
-		and PlayerData.get_item_data("qhs_2") == 10,
-		"level=%d soul=%d qhs1=%d qhs2=%d" % [
-			int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)),
-			PlayerData.get_soul(),
-			PlayerData.get_item_data("qhs_1"),
-			PlayerData.get_item_data("qhs_2"),
-		]
+		(
+			int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)) == 1
+			and PlayerData.get_soul() == 1000
+			and PlayerData.get_item_data("qhs_1") == 10
+			and PlayerData.get_item_data("qhs_2") == 10
+		),
+		(
+			"level=%d soul=%d qhs1=%d qhs2=%d"
+			% [
+				int(failed_entry.get(DataKeys.ENHANCE_LEVEL, 0)),
+				PlayerData.get_soul(),
+				PlayerData.get_item_data("qhs_1"),
+				PlayerData.get_item_data("qhs_2"),
+			]
+		)
 	)
 	failed_strength.queue_free()
 	await get_tree().process_frame
@@ -874,7 +1000,9 @@ func _test_audio_boundaries() -> void:
 	add_child(parent)
 	var first_bgm = Global.get_audio_runtime().add_bgm(parent, "res://Music/level/1_music.mp3")
 	var same_bgm = Global.get_audio_runtime().add_bgm(parent, "res://Music/level/1_music.mp3")
-	_check("bgm_same_track_reuses_instance", first_bgm != null and same_bgm == first_bgm, "%s/%s" % [first_bgm, same_bgm])
+	_check(
+		"bgm_same_track_reuses_instance", first_bgm != null and same_bgm == first_bgm, "%s/%s" % [first_bgm, same_bgm]
+	)
 	var second_bgm = Global.get_audio_runtime().add_bgm(parent, "res://Music/level/2_music.mp3")
 	await get_tree().process_frame
 	_check(
@@ -884,7 +1012,11 @@ func _test_audio_boundaries() -> void:
 	)
 	Global.get_audio_runtime().stop_bgm()
 	await get_tree().process_frame
-	_check("bgm_stop_clears_instance", not is_instance_valid(Global.get_audio_runtime()._active_bgm_instance), str(Global.get_audio_runtime()._active_bgm_instance))
+	_check(
+		"bgm_stop_clears_instance",
+		not is_instance_valid(Global.get_audio_runtime()._active_bgm_instance),
+		str(Global.get_audio_runtime()._active_bgm_instance)
+	)
 	parent.queue_free()
 	await get_tree().process_frame
 
@@ -1032,8 +1164,14 @@ func _test_transmog_command() -> void:
 	var loaded: Dictionary = MemoryClass.load_game(saved_path)
 	_check(
 		"transmog_command_reloads",
-		bool(loaded.get("ok", false)) and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == "ptxzg",
-		"status=%s slot=%s" % [loaded.get("status"), str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))]
+		(
+			bool(loaded.get("ok", false))
+			and str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, "")) == "ptxzg"
+		),
+		(
+			"status=%s slot=%s"
+			% [loaded.get("status"), str(PlayerData.player_data[DataKeys.TRANSMOG_LIST].get(DataKeys.WEAPON, ""))]
+		)
 	)
 
 	_reset_profile(1, 1)
@@ -1055,20 +1193,25 @@ func _test_pet_interface_paths() -> void:
 	await get_tree().process_frame
 	_check(
 		"pet_interface_roots_resolved",
-		pet_ui.get("pet_attribute_show") != null
-		and pet_ui.get("pet_backpack_show") != null
-		and pet_ui.get("pet_develop_interface") != null
-		and pet_ui.get("pet_skill_learn_popup") != null
-		and pet_ui.get("pet_skill_upgrade_popup") != null
-		and pet_ui.get("pet_formation_popup") != null,
-		"roots=%s/%s/%s/%s/%s/%s" % [
-			pet_ui.get("pet_attribute_show"),
-			pet_ui.get("pet_backpack_show"),
-			pet_ui.get("pet_develop_interface"),
-			pet_ui.get("pet_skill_learn_popup"),
-			pet_ui.get("pet_skill_upgrade_popup"),
-			pet_ui.get("pet_formation_popup"),
-		]
+		(
+			pet_ui.get("pet_attribute_show") != null
+			and pet_ui.get("pet_backpack_show") != null
+			and pet_ui.get("pet_develop_interface") != null
+			and pet_ui.get("pet_skill_learn_popup") != null
+			and pet_ui.get("pet_skill_upgrade_popup") != null
+			and pet_ui.get("pet_formation_popup") != null
+		),
+		(
+			"roots=%s/%s/%s/%s/%s/%s"
+			% [
+				pet_ui.get("pet_attribute_show"),
+				pet_ui.get("pet_backpack_show"),
+				pet_ui.get("pet_develop_interface"),
+				pet_ui.get("pet_skill_learn_popup"),
+				pet_ui.get("pet_skill_upgrade_popup"),
+				pet_ui.get("pet_formation_popup"),
+			]
+		)
 	)
 	pet_ui.queue_free()
 	await get_tree().process_frame
@@ -1137,13 +1280,20 @@ func _test_settlement_ownership() -> void:
 	add_child(retry_victory)
 	await get_tree().process_frame
 	retry_victory._on_return_map_pressed()
-	_check("victory_retry_save_after_failure", retry_attempts.size() == 2 and retry_scenes.size() == 1, "%s/%s" % [retry_attempts, retry_scenes])
+	_check(
+		"victory_retry_save_after_failure",
+		retry_attempts.size() == 2 and retry_scenes.size() == 1,
+		"%s/%s" % [retry_attempts, retry_scenes]
+	)
 	retry_victory.queue_free()
 	await get_tree().process_frame
 
 	var items_before_batch: Dictionary = PlayerData.player_data[DataKeys.ITEM_LIST].duplicate(true)
 	var invalid_batch := PlayerData.add_dj_batch([{"name": "__missing_reward__", "number": 1}])
-	_check("defeat_batch_rejects_invalid_atomically", not invalid_batch and PlayerData.player_data[DataKeys.ITEM_LIST] == items_before_batch)
+	_check(
+		"defeat_batch_rejects_invalid_atomically",
+		not invalid_batch and PlayerData.player_data[DataKeys.ITEM_LIST] == items_before_batch
+	)
 
 	PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = false
 	var defeat_saves: Array = []
@@ -1161,7 +1311,11 @@ func _test_settlement_ownership() -> void:
 	defeat._on_lqjl_pressed()
 	defeat._on_lqjl_pressed()
 	_check("defeat_items_once", defeat_saves == ["level_defeat_reward"], str(defeat_saves))
-	_check("defeat_items_granted", _item_count("bsd_5") == bsd_before + 1 and _item_count("qhs_1") == 8, "bsd=%d qhs1=%d" % [_item_count("bsd_5"), _item_count("qhs_1")])
+	_check(
+		"defeat_items_granted",
+		_item_count("bsd_5") == bsd_before + 1 and _item_count("qhs_1") == 8,
+		"bsd=%d qhs1=%d" % [_item_count("bsd_5"), _item_count("qhs_1")]
+	)
 	_check("defeat_items_claim_persisted", bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false)))
 	defeat._on_return_map_pressed()
 	defeat._on_return_map_pressed()
@@ -1179,7 +1333,11 @@ func _test_settlement_ownership() -> void:
 	await get_tree().process_frame
 	var reentry_qhs := _item_count("qhs_1")
 	reentry._on_lqjl_pressed()
-	_check("defeat_reentry_no_regrant", _item_count("qhs_1") == reentry_qhs and reentry_saves.is_empty(), "qhs=%d saves=%s" % [_item_count("qhs_1"), str(reentry_saves)])
+	_check(
+		"defeat_reentry_no_regrant",
+		_item_count("qhs_1") == reentry_qhs and reentry_saves.is_empty(),
+		"qhs=%d saves=%s" % [_item_count("qhs_1"), str(reentry_saves)]
+	)
 	reentry.queue_free()
 	await get_tree().process_frame
 
@@ -1193,7 +1351,14 @@ func _test_settlement_ownership() -> void:
 	await get_tree().process_frame
 	var qhs_before := _item_count("qhs_1")
 	failed._on_lqjl_pressed()
-	_check("defeat_items_save_failure_rolls_back", _item_count("qhs_1") == qhs_before and not bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false)), "qhs=%d" % _item_count("qhs_1"))
+	_check(
+		"defeat_items_save_failure_rolls_back",
+		(
+			_item_count("qhs_1") == qhs_before
+			and not bool(PlayerData.player_data.get(DataKeys.DEFEAT_REWARD_CLAIMED, false))
+		),
+		"qhs=%d" % _item_count("qhs_1")
+	)
 	_check("defeat_items_failure_attempted", failed_saves == ["level_defeat_reward"], str(failed_saves))
 	failed.queue_free()
 	await get_tree().process_frame
@@ -1206,9 +1371,58 @@ func _test_settlement_ownership() -> void:
 	add_child(equipment_failed)
 	await get_tree().process_frame
 	equipment_failed._on_js_pressed()
-	_check("defeat_equipment_save_failure_rolls_back", not PlayerData.has_acquired_equipment("xczg"), str(PlayerData.player_data.get(DataKeys.ACQUIRED_EQUIPMENT_LIST, [])))
+	_check(
+		"defeat_equipment_save_failure_rolls_back",
+		not PlayerData.has_acquired_equipment("xczg"),
+		str(PlayerData.player_data.get(DataKeys.ACQUIRED_EQUIPMENT_LIST, []))
+	)
 	_check("defeat_equipment_failure_attempted", equipment_saves == ["level_defeat_reward"], str(equipment_saves))
 	equipment_failed.queue_free()
+	await get_tree().process_frame
+
+	var equipment_success_saves: Array = []
+	var equipment_success: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	equipment_success.save_request_override = func(reason: String) -> bool:
+		equipment_success_saves.append(reason)
+		return true
+	add_child(equipment_success)
+	await get_tree().process_frame
+	equipment_success._on_js_pressed()
+	equipment_success._on_js_pressed()
+	_check("defeat_equipment_once", equipment_success_saves == ["level_defeat_reward"], str(equipment_success_saves))
+	_check("defeat_equipment_granted", PlayerData.has_acquired_equipment("xczg"))
+	equipment_success.queue_free()
+	await get_tree().process_frame
+
+	PlayerData.player_data["zyforever"] = false
+	var refusal_saves: Array = []
+	var refusal_success: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	refusal_success.save_request_override = func(reason: String) -> bool:
+		refusal_saves.append(reason)
+		return true
+	add_child(refusal_success)
+	await get_tree().process_frame
+	refusal_success._on_yjjj_pressed()
+	refusal_success._on_yjjj_pressed()
+	_check("defeat_refusal_once", refusal_saves == ["level_defeat_reward"], str(refusal_saves))
+	_check("defeat_refusal_persisted", bool(PlayerData.player_data["zyforever"]))
+	refusal_success.queue_free()
+	await get_tree().process_frame
+
+	PlayerData.player_data["zyforever"] = false
+	var refusal_failed_saves: Array = []
+	var refusal_failed: Node = load("res://Scene/level/defeat.tscn").instantiate()
+	refusal_failed.save_request_override = func(reason: String) -> bool:
+		refusal_failed_saves.append(reason)
+		return false
+	add_child(refusal_failed)
+	await get_tree().process_frame
+	refusal_failed._on_yjjj_pressed()
+	_check("defeat_refusal_save_failure_rolls_back", not bool(PlayerData.player_data["zyforever"]))
+	_check(
+		"defeat_refusal_failure_attempted", refusal_failed_saves == ["level_defeat_reward"], str(refusal_failed_saves)
+	)
+	refusal_failed.queue_free()
 	await get_tree().process_frame
 
 
@@ -1234,18 +1448,27 @@ func _test_archive_session() -> void:
 	var bound := Global.bind_archive_session()
 	_check("session_bind_ok", bound)
 	_check("session_active_after_bind", Global.is_archive_session_active())
-	_check("session_archive_number", Global.get_archive_session_archive_number() == 9031, "%d" % Global.get_archive_session_archive_number())
+	_check(
+		"session_archive_number",
+		Global.get_archive_session_archive_number() == 9031,
+		"%d" % Global.get_archive_session_archive_number()
+	)
 	_check("session_role_id", Global.get_archive_session_role_id() == 1, "%d" % Global.get_archive_session_role_id())
 	_check("session_path_matches_cd_path", Global.get_archive_session_path() == Global.get_cd_path())
 	var generation := Global.get_archive_session_generation()
-	_check("session_rebind_is_idempotent", Global.bind_archive_session() and Global.get_archive_session_generation() == generation)
+	_check(
+		"session_rebind_is_idempotent",
+		Global.bind_archive_session() and Global.get_archive_session_generation() == generation
+	)
 
 	# 会话未建立时保存与后台保存都必须拒绝。
 	Global.set_cd_path("")
 	_check("session_ended_by_path_switch", not Global.is_archive_session_active())
 	var no_session_save := MemoryClass.request_save("probe_no_session")
 	_check("session_absent_blocks_save", not no_session_save)
-	_check("session_absent_save_reason", MemoryClass.last_save_error == "no_archive_session", MemoryClass.last_save_error)
+	_check(
+		"session_absent_save_reason", MemoryClass.last_save_error == "no_archive_session", MemoryClass.last_save_error
+	)
 	var no_session_background := MemoryClass.request_background_save()
 	_check("session_absent_blocks_background_save", not no_session_background)
 
@@ -1264,7 +1487,11 @@ func _test_archive_session() -> void:
 	PlayerData.player_data["Myself"] = 3
 	_check("session_role_change_rebinds", Global.bind_archive_session())
 	_check("session_role_change_generation", Global.get_archive_session_generation() > role_change_generation)
-	_check("session_role_change_role_id", Global.get_archive_session_role_id() == 3, "%d" % Global.get_archive_session_role_id())
+	_check(
+		"session_role_change_role_id",
+		Global.get_archive_session_role_id() == 3,
+		"%d" % Global.get_archive_session_role_id()
+	)
 	_check(
 		"session_role_change_number_kept",
 		Global.get_archive_session_archive_number() == 9033,
@@ -1303,7 +1530,9 @@ func _test_archive_session() -> void:
 	Global.end_archive_session()
 	var blocked_level := Global.change_scene("res://Scene/level/level_1.tscn")
 	_check("session_level_entry_blocked", not blocked_level)
-	_check("session_level_entry_no_target", Global.get_scene_flow().get_target_scene() != "res://Scene/level/level_1.tscn")
+	_check(
+		"session_level_entry_no_target", Global.get_scene_flow().get_target_scene() != "res://Scene/level/level_1.tscn"
+	)
 	_open_session(reentry_path)
 	_check("session_level_entry_allowed", Global._is_valid_scene_change_target("res://Scene/level/level_1.tscn"))
 	Global.end_archive_session()
@@ -1327,16 +1556,8 @@ func _test_panel_saves() -> void:
 	bag.call("_on_wings_show_pressed")
 	bag.call("_on_head_show_pressed")
 	var bag_data := MemoryClass.peek_archive_data(PANEL_ARCHIVE_PATH)
-	_check(
-		"panel_backpack_wings_saved",
-		bag_data.get("翅膀显示") == false,
-		"wings=%s" % bag_data.get("翅膀显示")
-	)
-	_check(
-		"panel_backpack_head_saved",
-		bag_data.get("头衔显示") == false,
-		"head=%s" % bag_data.get("头衔显示")
-	)
+	_check("panel_backpack_wings_saved", bag_data.get("翅膀显示") == false, "wings=%s" % bag_data.get("翅膀显示"))
+	_check("panel_backpack_head_saved", bag_data.get("头衔显示") == false, "head=%s" % bag_data.get("头衔显示"))
 	var wings_before_fail: bool = bool(PlayerData.player_data["翅膀显示"])
 	Global.end_archive_session()
 	bag.call("_on_wings_show_pressed")
@@ -1480,7 +1701,9 @@ func _check_save_identity_and_normalization() -> void:
 	_check("identity_stale_for_a", not MemoryClass.is_archive_identity_current(path_a, epoch_b))
 	var stale_written := MemoryClass.save_game(path_a)
 	_check("identity_stale_write_rejected", not stale_written, "written=%s" % stale_written)
-	_check("identity_error_reason", MemoryClass.last_save_error == "stale_archive_identity", MemoryClass.last_save_error)
+	_check(
+		"identity_error_reason", MemoryClass.last_save_error == "stale_archive_identity", MemoryClass.last_save_error
+	)
 	_check("identity_error_readable", MemoryClass.describe_save_error() != "")
 
 	# 切档前 flush：旧档案的待写任务在身份切换前落盘。
@@ -1539,10 +1762,6 @@ func _check_save_identity_and_normalization() -> void:
 	)
 	_check("normalize_failure_not_written", MemoryClass.get_archive_level(path_b) == 5)
 	_reset_profile(1, 5)
-
-
-
-
 
 
 ## 成长三域：神铸/淬骨/合成的快照、保存判读与失败回滚。
@@ -1663,11 +1882,15 @@ func _test_growth_commands() -> void:
 	await get_tree().process_frame
 	_check(
 		"synthesis_save_failure_rolls_back",
-		PlayerData.get_soul() == 100 and int(PlayerData.get_item_data("qhs_2")) == 0
-		and PlayerData.player_data["放入列表"]["物品1"].size() == 1,
-		"soul=%d qhs2=%d input=%d" % [
-			PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()
-		]
+		(
+			PlayerData.get_soul() == 100
+			and int(PlayerData.get_item_data("qhs_2")) == 0
+			and PlayerData.player_data["放入列表"]["物品1"].size() == 1
+		),
+		(
+			"soul=%d qhs2=%d input=%d"
+			% [PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()]
+		)
 	)
 	synthesis.queue_free()
 	await get_tree().process_frame
@@ -1684,11 +1907,15 @@ func _test_growth_commands() -> void:
 	await get_tree().process_frame
 	_check(
 		"synthesis_success_once",
-		PlayerData.get_soul() == 0 and int(PlayerData.get_item_data("qhs_2")) == 1
-		and PlayerData.player_data["放入列表"]["物品1"].is_empty(),
-		"soul=%d qhs2=%d input=%d" % [
-			PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()
-		]
+		(
+			PlayerData.get_soul() == 0
+			and int(PlayerData.get_item_data("qhs_2")) == 1
+			and PlayerData.player_data["放入列表"]["物品1"].is_empty()
+		),
+		(
+			"soul=%d qhs2=%d input=%d"
+			% [PlayerData.get_soul(), PlayerData.get_item_data("qhs_2"), PlayerData.player_data["放入列表"]["物品1"].size()]
+		)
 	)
 	synthesis.queue_free()
 	await get_tree().process_frame
@@ -1696,9 +1923,7 @@ func _test_growth_commands() -> void:
 	# 分解：选中装备后重建预览，验证静态字段与掉落物品均能解析。
 	_reset_profile(1, 5)
 	_open_session(PANEL_ARCHIVE_PATH)
-	PlayerData.player_data[DataKeys.DECOMPOSE_LIST] = [
-		{"名字": "ptxzg", "强化等级": 0, "Data": {}}
-	]
+	PlayerData.player_data[DataKeys.DECOMPOSE_LIST] = [{"名字": "ptxzg", "强化等级": 0, "Data": {}}]
 	var decompose: Node = (load("res://Scene/ldl/decompose.tscn") as PackedScene).instantiate()
 	decompose.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(decompose)
@@ -1729,13 +1954,17 @@ func _test_growth_commands() -> void:
 	book.process_mode = Node.PROCESS_MODE_DISABLED
 	forge.get("zzs").add_child(book)
 	book.set("get_item_name", "tfljzzs")
-	_check("forge_book_selected", str(forge.call("_get_current_book_name")) == "tfljzzs", str(book.get("get_item_name")))
+	_check(
+		"forge_book_selected", str(forge.call("_get_current_book_name")) == "tfljzzs", str(book.get("get_item_name"))
+	)
 	var forge_prop: Variant = forge.call("get_eq_prop")
 	_check(
 		"forge_eq_prop_from_catalog",
-		forge_prop is Dictionary
-		and not (forge_prop as Dictionary).is_empty()
-		and str((forge_prop as Dictionary).get(DataKeys.NAME, "")) == "通风灵戒",
+		(
+			forge_prop is Dictionary
+			and not (forge_prop as Dictionary).is_empty()
+			and str((forge_prop as Dictionary).get(DataKeys.NAME, "")) == "通风灵戒"
+		),
 		"prop=%s" % str(forge_prop)
 	)
 	forge.queue_free()
@@ -1869,7 +2098,11 @@ func _test_task_claim_command() -> void:
 		bool(daily_result.get("ok", false)) and (daily_progress.get(DataKeys.Daily.DEFEATED, []) as Array).is_empty(),
 		"%s defeated=%s" % [daily_result, daily_progress.get(DataKeys.Daily.DEFEATED)]
 	)
-	_check("task_eight_daily_reward_once", int(PlayerData.get_item_data("kly3")) == 1, "kly3=%d" % PlayerData.get_item_data("kly3"))
+	_check(
+		"task_eight_daily_reward_once",
+		int(PlayerData.get_item_data("kly3")) == 1,
+		"kly3=%d" % PlayerData.get_item_data("kly3")
+	)
 
 	_reset_profile(1, 5)
 	_open_session(PANEL_ARCHIVE_PATH)
@@ -1883,10 +2116,15 @@ func _test_task_claim_command() -> void:
 	var failed_progress := PlayerData.get_eight_immortal_daily_progress()
 	_check(
 		"task_eight_daily_save_failure_restores_progress",
-		not bool(daily_failed.get("ok", true))
-		and (failed_progress.get(DataKeys.Daily.DEFEATED, []) as Array).size() == defeated_all.size()
-		and int(PlayerData.get_item_data("kly3")) == 0,
-		"%s defeated=%s kly3=%d" % [daily_failed, failed_progress.get(DataKeys.Daily.DEFEATED), PlayerData.get_item_data("kly3")]
+		(
+			not bool(daily_failed.get("ok", true))
+			and (failed_progress.get(DataKeys.Daily.DEFEATED, []) as Array).size() == defeated_all.size()
+			and int(PlayerData.get_item_data("kly3")) == 0
+		),
+		(
+			"%s defeated=%s kly3=%d"
+			% [daily_failed, failed_progress.get(DataKeys.Daily.DEFEATED), PlayerData.get_item_data("kly3")]
+		)
 	)
 
 
@@ -1896,6 +2134,7 @@ func _clear_task_probe_nodes(task: Node) -> void:
 	for child in get_children():
 		if child != task and child.has_method("_on_close_pressed"):
 			child.queue_free()
+
 
 ## 关卡与收尾批次：验证结算界面与其余业务保存处理器确实经 request_save 落盘。
 func _check_reward_and_menu_saves() -> void:
