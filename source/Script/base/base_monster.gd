@@ -7,6 +7,7 @@ const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const PET_DRAGON_FAMILY := preload("res://Script/pet/pet_dragon_family.gd")
 const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
 const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
+const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const NIGHTMARE_HEALTH_BONUS := 20000000
 const NIGHTMARE_ATTACK_BONUS := 40000
 const NIGHTMARE_DEFENSE_BONUS := 5000
@@ -3010,7 +3011,7 @@ func _cure_active_pet_exp(value: int, slot: int = 1) -> void:
 		PET_TURTLE_FAMILY.evolve(pet, profile)
 		PET_TIGER_FAMILY.evolve(pet, profile)
 		PET_RABBIT_FAMILY.evolve(pet, profile)
-		_update_pet_mouse_evolution(pet, profile)
+		PET_MOUSE_FAMILY.evolve(pet, profile)
 		_update_pet_yin_tiger_evolution(pet, profile)
 		for key in growth.keys():
 			growth[key] = int(growth[key]) + int(level_growth.get(key, 0))
@@ -3131,19 +3132,6 @@ func _restore_pet_to_peak(pet: Dictionary) -> void:
 	pet[DataKeys.MP] = int(pet.get("魔法上限", pet.get(DataKeys.MP, 0)))
 
 
-func _is_pet_mouse_data(pet: Dictionary) -> bool:
-	if str(pet.get(DataKeys.TYPE, "")) == "PetMouse":
-		return true
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, "")).strip_edges()
-	var pet_title := str(pet.get(DataKeys.NAME, "")).strip_edges()
-	return (
-		pet_name.begins_with("子鼠")
-		or pet_title.begins_with("子鼠")
-		or pet_name in ["子鼠元帅", "子鼠大元帅"]
-		or pet_title in ["子鼠元帅", "子鼠大元帅"]
-	)
-
-
 func _is_pet_neat_data(pet: Dictionary) -> bool:
 	if str(pet.get(DataKeys.TYPE, "")) == "PetNeat":
 		return true
@@ -3185,33 +3173,6 @@ func _update_pet_yin_tiger_evolution(pet: Dictionary, profile: Node) -> void:
 		profile.player_data["出战宠物"] = "PetYinTiger"
 
 
-func _pet_mouse_stage_for_level(pet_level: int) -> int:
-	return 2 if pet_level >= 50 else 1
-
-
-func _pet_mouse_skills_for_level(pet_level: int) -> Array:
-	if pet_level >= 50:
-		return ["鼠窜", "回旋飞镖", "子鼠奥义"]
-	if pet_level >= 30:
-		return ["鼠窜", "回旋飞镖"]
-	return ["鼠窜"]
-
-
-func _update_pet_mouse_evolution(pet: Dictionary, profile: Node) -> void:
-	if not _is_pet_mouse_data(pet):
-		return
-	var pet_level := int(pet.get(DataKeys.LEVEL, 1))
-	var stage := _pet_mouse_stage_for_level(pet_level)
-	var stage_name := "子鼠大元帅" if stage == 2 else "子鼠元帅"
-	pet[DataKeys.TYPE] = "PetMouse"
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = stage_name
-	pet[DataKeys.NAME] = stage_name
-	pet["技能"] = _pet_mouse_skills_for_level(pet_level)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		profile.player_data["出战宠物"] = "PetMouse"
-
-
 func _apply_active_pet_unit_growth(
 	level_up_count: int,
 	growth: Dictionary,
@@ -3230,23 +3191,22 @@ func _apply_active_pet_unit_growth(
 		return
 	var unit_level_value = unit.get("level")
 	var unit_level := int(unit_level_value) if unit_level_value != null else 1
-	var is_mouse_unit := bool(unit.get_meta("pet_mouse_unit", false)) or _is_pet_mouse_data(pet)
+	var is_mouse_unit := bool(unit.get_meta("pet_mouse_unit", false)) or PET_MOUSE_FAMILY.matches(pet)
 	var is_neat_unit := bool(unit.get_meta("pet_neat_unit", false)) or _is_pet_neat_data(pet)
 	var is_yin_tiger_unit := bool(unit.get_meta("pet_yin_tiger_unit", false)) or _is_pet_yin_tiger_data(pet)
 	var level_stage := (
-		_pet_mouse_stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
+		PET_MOUSE_FAMILY.stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
 		if is_mouse_unit
 		else _pet_stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
 	)
 	var new_stage: int = level_stage if is_mouse_unit else max(int(pet.get("阶段", old_stage)), level_stage)
 	if is_mouse_unit:
-		var mouse_name := "子鼠大元帅" if new_stage == 2 else "子鼠元帅"
-		pet[DataKeys.TYPE] = "PetMouse"
+		pet[DataKeys.TYPE] = PET_MOUSE_FAMILY.KIND
 		pet["阶段"] = new_stage
-		pet[DataKeys.ALT_NAME] = mouse_name
-		pet[DataKeys.NAME] = mouse_name
-		pet["技能"] = _pet_mouse_skills_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
-		profile.player_data["出战宠物"] = "PetMouse"
+		pet[DataKeys.ALT_NAME] = PET_MOUSE_FAMILY.stage_name(new_stage)
+		pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
+		pet["技能"] = PET_MOUSE_FAMILY.skills_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
+		profile.player_data["出战宠物"] = PET_MOUSE_FAMILY.KIND
 	elif is_neat_unit:
 		var neat_stage := _pet_stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
 		pet[DataKeys.TYPE] = "PetNeat"

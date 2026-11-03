@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix` 与 `PetRabbit` 迁移完成**（2026-11-03），其余 3 族尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit` 与 `PetMouse` 迁移完成**（2026-11-03），其余 2 族尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -144,7 +144,17 @@
 - `PlayerData` 载入补全保留到 23-4；
 - 验证：`LocalCoopPetRabbitProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **30/30 PASS**（164.29s）。
 
-### 23-2 其余宠物族分批迁移（`PetTiger`/`PetDragon`/`PetPhoenix`/`PetRabbit` 已完成，其余 3 族未启动）
+### 23-2 `PetMouse` 迁移（已完成）
+
+- 新增 `pet_mouse_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙、凤、兔、鼠六族；
+- `BaseLevel` 删除子鼠 7 个规则函数与生成分支，子鼠改由控制器生成；
+- `BaseMonster` 删除子鼠重复进化，升级调用改走 `PetMouseFamily.evolve`；成长分支保留 50 级进阶与技能 CD 解锁；
+- `PetInterface` 子鼠检测、归一化、进化、技能补全与活跃名复用族规则；
+- `BaseLevel` 与 `PetInterface` 的死亡别名改由 `PetMouseFamily.append_death_aliases` 提供，覆盖 `子鼠元帅`/`子鼠大元帅`；
+- `PlayerData` 载入补全保留到 23-4；
+- 验证：`LocalCoopPetMouseProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **31/31 PASS**（179.34s）。
+
+### 23-2 其余宠物族分批迁移（`PetTiger`/`PetDragon`/`PetPhoenix`/`PetRabbit`/`PetMouse` 已完成，其余 2 族未启动）
 
 - 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
 - `BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
@@ -306,7 +316,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-2 其余 3 族**；`PetRabbit` 已完成，建议下一族 `PetMouse`。
+**当前下一步**：**Phase 23-2 其余 2 族**；`PetMouse` 已完成，建议下一族 `PetNeat`。
 **当前不启动**：Phase 23-3~23-5。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 

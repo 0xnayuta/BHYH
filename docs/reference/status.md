@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **34.83s**） |
-| `health_check` | **769 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **297/297 PASS**（本轮一次通过） |
-| `scene_probe_runner` | **17/17 PASS**（163.52s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **30/30 PASS**（164.29s，含 `LocalCoopPetSlotProbe`、`LocalCoopPetDragonProbe`、`LocalCoopPetPhoenixProbe` 与 `LocalCoopPetRabbitProbe`） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **36.53s**） |
+| `health_check` | **770 脚本 0 Parse / 0 Error / 0 Warning** |
+| `archive_probe_runner` | **297/297 PASS**（首跑 1 个瞬态，复跑 10.62s 通过） |
+| `scene_probe_runner` | **17/17 PASS**（164.45s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **31/31 PASS**（179.34s，含 `LocalCoopPetSlotProbe`、`LocalCoopPetDragonProbe`、`LocalCoopPetPhoenixProbe`、`LocalCoopPetRabbitProbe` 与 `LocalCoopPetMouseProbe`） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 303.3s，默认 auto 并发，本轮无重试） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 317.2s，默认 auto 并发；`level_35` 一次瞬态重试通过） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 23-2 `PetMouse`：新增 `PetMouseFamily`；`PetLevelController` 接管龟、虎、龙、凤、兔、鼠六族；`BaseLevel` 删除子鼠 7 个规则函数与生成分支；`BaseMonster`/`PetInterface` 复用两阶、30/50 级技能、归一化、进化与活跃名；`BaseLevel`/`PetInterface` 死亡别名改由族规则提供；`PlayerData` 载入补全保留到 23-4。验证：`LocalCoopPetMouseProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **31/31 PASS**（179.34s），`scene_probe_runner` **17/17 PASS**（164.45s），档案 297/297（首跑 1 个瞬态后复跑通过），`level_1` 4 阶段 PASS，全量 128/128 + 5 SKIP（317.2s，`level_35` 一次瞬态重试通过），`check_all` 9/9（36.53s），`health_check` 770 脚本 0/0/0。
 - Phase 23-2 `PetRabbit`：新增 `PetRabbitFamily`；`PetLevelController` 接管龟、虎、龙、凤、兔五族；`BaseLevel` 删除月兔 6 个规则函数与生成分支；`BaseMonster`/`PetInterface` 复用族阶段名、技能、归一化、进化与活跃名；`BaseLevel`/`PetInterface` 死亡别名改由族规则提供；保留永久解锁与不可放生逻辑；`PlayerData` 载入补全保留到 23-4。验证：`LocalCoopPetRabbitProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **30/30 PASS**（164.29s），`scene_probe_runner` **17/17 PASS**（163.52s），档案 297/297，`level_1` 4 阶段 PASS，全量 128/128 + 5 SKIP（303.3s，无重试），`check_all` 9/9（34.83s），`health_check` 769 脚本 0/0/0。
 - Phase 23-2 `PetPhoenix`：新增 `PetPhoenixFamily`；`PetLevelController` 接管龟、虎、龙、凤四族；`BaseLevel` 删除凤凰族 7 个规则函数与生成分支；`BaseMonster`/`PetInterface` 复用族阶段名、技能、归一化、进化与活跃名；补齐 `BaseLevel`/`PetInterface` 凤凰死亡别名（四阶名与 `朱雀幼灵`/`赤羽朱雀`/`朱雀神君`）；`PlayerData` 载入补全保留到 23-4。验证：`coop_probe_runner` **29/29 PASS**（148.65s，新增 `LocalCoopPetPhoenixProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成）。
 - Phase 23-2 `PetDragon`：新增 `PetDragonFamily`；`PetLevelController` 接管龟、虎、龙三族；`BaseLevel` 删除龙族 7 个规则函数与生成分支；`BaseMonster`/`PetInterface` 复用族阶段名、技能、归一化、进化与活跃名；`PlayerData` 载入补全保留到 23-4。验证：`coop_probe_runner` **28/28 PASS**（165.15s，新增 `LocalCoopPetDragonProbe` 覆盖族规则、P2 升级写回与 `level_1` 双槽生成）；`health_check` 767 脚本 0/0/0。

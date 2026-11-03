@@ -103,6 +103,8 @@ func _run() -> void:
 			await _case_pet_phoenix()
 		"LocalCoopPetRabbitProbe":
 			await _case_pet_rabbit()
+		"LocalCoopPetMouseProbe":
+			await _case_pet_mouse()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -875,6 +877,99 @@ func _case_pet_rabbit() -> void:
 		_check(int(p1_unit.get("turtle_stage")) == 2, "P1 rabbit stage 2")
 	if p2_unit != null:
 		_check(int(p2_unit.get("turtle_stage")) == 2, "P2 rabbit stage 2")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+## 23-2 子鼠族：两阶、等级技能、升级写回、死亡别名与双槽生成。
+func _case_pet_mouse() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_mouse_family.gd").new()
+	var family_pet := _pet_probe_data("PetMouse", "子鼠元帅", 1000)
+	family_pet["等级"] = 30
+	family_pet["阶段"] = 2
+	_check(family.matches(family_pet), "mouse family matches type")
+	_check(family.matches({"名称": "子鼠大元帅"}), "mouse family matches display name")
+	_check(not family.matches({"名称": "月兔"}), "mouse family rejects rabbit name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 1, "mouse normalize uses level stage")
+	_check(str(family_pet.get("名称", "")) == "子鼠元帅", "mouse normalize updates display name")
+	_check((family_pet.get("技能", []) as Array).size() == 2, "mouse normalize applies level 30 skills")
+	_check(int(family_pet.get("生命资质基础上限", 0)) == 2500, "mouse normalize sets base stat limits")
+	family_pet["等级"] = 50
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 2, "mouse evolve reaches stage 2")
+	_check(str(family_pet.get("名称", "")) == "子鼠大元帅", "mouse evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("子鼠奥义"), "mouse evolve applies level 50 skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetMouse", "mouse evolve writes P2 active")
+	_check(family.scene_path(2) == "res://Scene/pet/pet_mouse_summon_2.tscn", "mouse scene path")
+	var aliases: Array[String] = ["子鼠元帅"]
+	family.append_death_aliases(aliases, "子鼠元帅")
+	_check(aliases.has("PetMouse") and aliases.has("子鼠大元帅"), "mouse death aliases")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("子鼠元帅")
+	_check(level_aliases.has("PetMouse") and level_aliases.has("子鼠大元帅"), "BaseLevel mouse death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("子鼠大元帅")
+	_check(panel_aliases.has("PetMouse") and panel_aliases.has("子鼠元帅"), "PetInterface mouse death aliases")
+	panel.free()
+
+	data.player_data["玩家等级"] = 50
+	coop.secondary_data.player_data["玩家等级"] = 50
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 50
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 50
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetMouse", "子鼠元帅", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetMouse", "子鼠元帅", 1000)
+	p2_pet["等级"] = 49
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetMouse"
+	coop.secondary_data.player_data["出战宠物"] = "PetMouse"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(200000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 50, "P2 mouse reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 2, "P2 mouse evolves to stage 2")
+	_check(str(p2_pet.get("名称", "")) == "子鼠大元帅", "P2 mouse evolution name")
+	_check((p2_pet.get("技能", []) as Array).has("子鼠奥义"), "P2 mouse evolution skills")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 mouse untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 50
+	p2_pet["等级"] = 50
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_mouse_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_mouse_unit")
+	_check(p1_unit != null, "P1 mouse spawned by controller")
+	_check(p2_unit != null, "P2 mouse spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("turtle_stage")) == 2, "P1 mouse stage 2")
+	if p2_unit != null:
+		_check(int(p2_unit.get("turtle_stage")) == 2, "P2 mouse stage 2")
 	level.queue_free()
 	stage = null
 	await process_frame
