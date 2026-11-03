@@ -1,6 +1,6 @@
-# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2）
+# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2/25-3）
 
-> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器与 Phase 25-2 法宝展示实例已完成（2026-11-04 最终验证）；25-3~25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
+> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例与 Phase 25-3 Boss 保护状态已完成（2026-11-04 最终验证）；25-4/25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
 > **范围**：`BaseHero` 自动战斗与受击反应、`BaseMonster` 受击反应/控制免疫/死亡，以及 `MainSet`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景和现有探针的调用面。
 > **非目标**：不改战斗数值、动作时序、碰撞层、输入映射或存档格式；不引入 ECS；不把这些调查结论写成已完成迁移。
 
@@ -135,7 +135,8 @@ flowchart TD
 | `is_be_attacking` | `BaseObject`/`BaseMonster` | 受击/控制表现占用；AI 与移动的互斥依据之一 |
 | `is_attacking` / `is_using_skills` | `BaseMonster` | 攻击/技能占用；受击中断路径清理 |
 | `get_target` / `get_player` / `hit_dic` | `BaseMonster` | 本次受击的来源/攻击数据；`apply_role_hit` 临时设置后恢复 |
-| `super_armor_active` / `boss_protect_active` / `white_bar_armor_time_left` | `BaseMonster` | 控制免疫来源；免疫时取消受击反应并清控制 |
+| `super_armor_active` | `BaseMonster` | 控制免疫来源；免疫时取消受击反应并清控制 |
+| `BossProtectionController._active` / `_current` / `_time_left` / `_white_bar_time_left` | `BossProtectionController` | Boss 保护/白条状态；经 `is_boss_protecting`/`is_white_bar_control_immune` 查询，激活副作用由 `BaseMonster` 执行 |
 | `is_death` / `death()` / 生成保护 | `BaseMonster` | 死亡/生成保护早退；死亡流程禁用受击箱并结算掉落 |
 | `_control_movement_locked` / `_control_movement_tweens` | `BaseMonster` | 控制位移锁与可取消 tween；受击开始时清理 tween |
 
@@ -194,13 +195,33 @@ flowchart TD
 
 `BaseHero.state_behit`、`_on_hurt_box_area_entered` 使用 `_hit_reaction_generation`、`_pending_hit_stiff_seconds`、`need_protect`、白条无敌、击退免疫与 `_cancel_hit_reaction`。它与 `BaseMonster` 的受击状态形状相似，但位于 Hero 的伤害/保护路径，不在 25-1 自动战斗切片内；25-4 与怪物受击一起做来源快照与池化/退出重置。
 
+### 3.6 Boss 保护/白条（25-3）
+
+| 状态/入口 | 所有者 | 语义 |
+|:---|:---|:---|
+| `_current` / `_active` / `_time_left` | `BossProtectionController` | 受击累计、保护激活、3.5s 保护剩余 |
+| `_white_bar_time_left` | 同上 | 激活时写入 7.5s；保护结束后仍提供控制免疫 |
+| `_last_hit_msec` | 同上 | 1s 空闲后才开始按 `6.0/s` 衰减 |
+| `boss_max_protect` | `BaseMonster` | 固定 225 上限；控制器读取，不写回共享资源 |
+| `get_boss_current_protect` / `get_white_bar_armor_time_left` | `BaseMonster` | `boss_blood` 与探针的只读入口 |
+| `settle_death_drops` | `BaseMonster` | 保持 `death_drops_settled` 单一提交；不在保护控制器内 |
+
+生命周期：
+
+- `_physics_process` 调用 `_process_boss_protect` → 控制器 `tick`；非 Boss 清零并恢复透明度。
+- `hd_reduce` 在有效伤害后调用 `_add_boss_protect_from_hit`；控制器累计 1~3，达到 225 后返回激活。
+- `BaseMonster` 收到激活事件后按旧顺序清白条控制 buff、刷新控制免疫、重置技能冷却、停速度、清 `is_be_attacking`、设置半透明。
+- 保护持续 3.5s；白条 7.5s 独立计时，保护结束后仍使 `is_control_immune()` 为 true，直到白条归零。
+- `boss_blood` 只读 getter；`east_continent_monster` 的 3120/3161 覆盖在 `super` 前后使用 `is_boss_protecting()`。
+- 掉落/死亡仍由 `settle_death_drops`、`death_drops_settled`、塔层回调与 `state_death` 负责；保护状态不参与掉落提交。
+
 ---
 
 ## 4. 验证映射
 
 ### 4.1 现有基线
 
-当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2 新增 `LocalCoopAutoBattleProbe` 与 `LocalCoopMagicPresentationProbe`，`coop` 矩阵为 **35/35 PASS**；与本次行为相关的已有覆盖：
+当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2/25-3 新增 `LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe` 与 `LocalCoopBossProtectionProbe`，`coop` 矩阵为 **36/36 PASS**；与本次行为相关的已有覆盖：
 
 | 验证 | 覆盖 | 缺口 |
 |:---|:---|:---|
@@ -213,6 +234,7 @@ flowchart TD
 | `level_progress_exit_probe` | 自动战斗开关被显式关闭的退出路径 | 不验证自动战斗行为 |
 | `LocalCoopAutoBattleProbe` | P1/P2 槽位配置、目标缓存、移动、技能计数、关闭清理、暂停、死亡、场景退出 | 不覆盖障碍跳跃、自动重试转场和手动输入冲突 |
 | `LocalCoopMagicPresentationProbe` | 装备法宝 P1/P2 实例、槽位、切换、默认回退、移除、`use_fb` 冷却、英雄退出清理 | 不覆盖实际 HUD 绘制、完整死亡动画窗口和所有法宝子类 |
+| `LocalCoopBossProtectionProbe` | 保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用 | 不覆盖真实 Boss 血量/UI 绘制、所有 Boss 子类与完整死亡动画 |
 | `archive` | 档案/命令/失败回滚 | 不覆盖战斗实体行为 |
 
 ### 4.2 25-1 自动战斗验收场景
@@ -258,6 +280,16 @@ flowchart TD
 | 特殊怪物 | Monster114、`state_hurt` 37 个文件、`play_hit_effect` 3 个文件的特殊分支不回归 |
 | 释放/未来池化 | 退出或复用前清 `_hurt_reaction_active/generation`、`is_be_attacking`、控制锁与延迟动画 |
 
+### 4.5 25-3 Boss 保护验收场景
+
+| 场景 | 前置/动作 | 必须观察 |
+|:---|:---|:---|
+| 保护激活 | Boss 连续受击至 225 | `is_boss_protecting` 为 true；当前保护值 > 0；白条启动 |
+| 控制清理/技能重置 | 激活前设置 `is_stun` 与 `skill_1_cd` | 控制清除；技能冷却归零；水平速度/受击态按旧逻辑清理 |
+| 白条超时 | 保护 4.1s 后与再 4.0s | 保护先结束；白条仍提供控免；白条归零后控免结束 |
+| 掉落唯一结算 | 带 `tower_floor` 的 Boss 连续调用两次 | 首次写 `death_drops_settled` 并通知塔层一次；第二次不重复 |
+| 未覆盖 | 真实 Boss 血量/UI 绘制、所有 Boss 子类、完整死亡动画 | 不写成已通过；由场景/全量关卡回归补充 |
+
 ---
 
 ## 5. 回滚与实施边界
@@ -265,6 +297,7 @@ flowchart TD
 - 25-0 只新增本页与索引/状态文档，不改 `source/`；回滚为删除本页与对应文档引用。
 - 25-1 已抽自动战斗控制器；保留 `MainSet` 配置键、`BaseHero` 公开入口、`BaseThroughLevel`/胜利/失败/玲珑塔的转场与保存职责；旧行为由版本控制回滚，不保留双实现。
 - 25-2 已抽法宝展示实例；`BaseMagicWeapon` 命令/冷却/伤害与 `Global`/`MagicWeaponRuntime` 槽位归属不变；控制器不得读取 UI 或写共享资源。
+- 25-3 只抽 Boss 保护/白条状态；阶段推进、伤害、保护阈值/时长、掉落结算与重战流程不变；控制器不得直接提交掉落。
 - 25-4 只统一受击状态/来源快照；不改变伤害数值、Boss 保护阈值、白条持续时间、碰撞层或动作时序；特殊子类覆写按批次保留并逐项验证。
 - 任一阶段发现行为语义不明确时，先补探针和记录，再迁移；不以“代码更短”为迁移依据。
 
@@ -272,4 +305,4 @@ flowchart TD
 
 ## 6. 下一步
 
-**25-1/25-2 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例；`BaseHero`/`BaseMagicWeapon` 保留实体、命令与冷却。下一步转入 25-3。
+**25-1/25-2/25-3 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态；掉落仍由 `BaseMonster` 单一提交。下一步转入 25-4。

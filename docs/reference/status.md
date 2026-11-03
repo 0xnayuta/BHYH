@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **34.82s**） |
-| `health_check` | **779 脚本 0 Parse / 0 Error / 0 Warning** |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **33.73s**） |
+| `health_check` | **780 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（10.47s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（157.35s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **35/35 PASS**（193.75s，含 `LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`、宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
-| `level_1` 冒烟 | **PASS，4 阶段，24.68s，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 306.1s，默认 auto 并发，本轮无重试） |
+| `scene_probe_runner` | **17/17 PASS**（157.65s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **36/36 PASS**（203.57s，含 `LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`/`LocalCoopBossProtectionProbe`、宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
+| `level_1` 冒烟 | **PASS，4 阶段，25.01s，0/0/0** |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 307.6s，默认 auto 并发，本轮无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 25-3：新增 `BossProtectionController`，将 Boss 保护累计值、激活态、保护/白条计时与最近受击时间从 `BaseMonster` 迁出；`_process_boss_protect`/`_add_boss_protect_from_hit` 委托控制器，激活副作用仍由 `BaseMonster` 按旧顺序执行（清白条控制 buff、刷新控免、重置技能冷却、停速度/受击态、半透明）。`boss_blood` 改读 getter，`east_continent_monster` 覆盖改用 `is_boss_protecting()`；`settle_death_drops` 的 `death_drops_settled` 单一提交与塔层回调保持不变。新增 `LocalCoopBossProtectionProbe` 覆盖保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用。验证：`check_all` 9/9（33.73s）、`health_check` 780 脚本 0/0/0、`scene` 17/17（157.65s）、`coop` 36/36（203.57s）、`level_1` 4 阶段（25.01s，0/0/0）、全量 128/128 + 5 SKIP（307.6s，无重试）。未改 Boss 阶段推进、伤害、保护阈值/时长、掉落规则或重战。
 - Phase 25-2：新增 `MagicWeaponPresentationController`，将当前装备法宝的展示实例与 active name 从 `BaseHero` 迁出；按槽位档案创建/切换/默认回退/移除，并在英雄退出时清理实例。`BaseHero` 删除 `mg_target`、`_active_magic_weapon_name` 与 4 个同步方法，保留 `get_magic_weapon_target`/`get_active_magic_weapon_name` 只读入口与 `use_fb` 命令；`BaseMagicWeapon` 的 `is_use`/`is_canuse`/`fb_cd`/`usecd`/`skill_cd`、伤害和 `Global`/`MagicWeaponRuntime` 槽位归属不变；`user_key` 冷却读取改走公开入口。新增 `LocalCoopMagicPresentationProbe` 覆盖 P1/P2 实例/槽位、切换、默认/退役回退、移除、`use_fb` 冷却与英雄退出清理。验证：`check_all` 9/9（34.82s）、`health_check` 779 脚本 0/0/0、`scene` 17/17（157.35s）、`coop` 35/35（193.75s）、`level_1` 4 阶段（24.68s，0/0/0）、全量 128/128 + 5 SKIP（306.1s，无重试）。未改法宝数值/冷却/伤害/场景路径。
 - Phase 25-1：新增 `AutoBattleContext`/`AutoBattleController`，自动战斗的目标缓存/筛选、技能游标/计数、0.22s 节拍、移动/朝向/障碍跳跃与法宝→剑阵→无双顺序迁出 `BaseHero`；`BaseHero` 删除 6 个状态字段与 20 个旧方法，保留 `get_skill`/`use_fb`/`ws_skill` 与公开 `is_auto_battle_target_valid`/`is_auto_battle_skill_active` 钩子；角色 3/4/哪吒覆写与玉兔索敌调用同步迁移。新增 `LocalCoopAutoBattleProbe` 覆盖 P1/P2 槽位配置、目标/移动、真实 `slz` 计数、无双短路、关闭清理、暂停、死亡与场景退出。验证：`check_all` 9/9（35.06s）、`health_check` 778 脚本 0/0/0、`scene` 17/17（158.41s）、`coop` 34/34（188.69s）、`level_1` 4 阶段（25.71s，0/0/0）、全量 128/128 + 5 SKIP（309.6s，无重试）。未改数值/时序/输入映射/碰撞层；障碍跳跃、自动重试转场与手动输入冲突未定向覆盖。
 - Phase 25-0：完成 `BaseHero` 自动战斗与 `BaseMonster` 受击反应的行为映射，新增 [`combat_behavior_matrix.md`](combat_behavior_matrix.md)：自动战斗 6 个状态字段、20 个 `_auto_battle*` 方法，受击 `state_hurt` 37 个文件（含基类与覆写）、`play_hit_effect` 3 个文件；记录 1P/2P 共用开关、按 `coop_slot` 读技能、自动重试归关卡、手动输入旁路及现有探针缺口。首批选择自动战斗；受击留给 25-4。本批次未修改 `source/`，未改变数值/时序/映射；沿用 24-4 全量基线。

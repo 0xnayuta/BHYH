@@ -3682,11 +3682,11 @@ func _start_3120_wind_blade(serial: int) -> void:
 
 
 func _add_boss_protect_from_hit(source: Node) -> void:
-	var was_active := boss_protect_active
+	var was_active := is_boss_protecting()
 	super._add_boss_protect_from_hit(source)
-	if monster_kind == 3120 and not was_active and boss_protect_active:
+	if monster_kind == 3120 and not was_active and is_boss_protecting():
 		_start_3120_protect_teleport()
-	elif monster_kind == 3161 and not was_active and boss_protect_active:
+	elif monster_kind == 3161 and not was_active and is_boss_protecting():
 		_start_3161_protect_counter()
 
 

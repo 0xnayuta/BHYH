@@ -279,17 +279,8 @@ var max_hd: int
 var boss_max_protect: float = 225.0:
 	set(_value):
 		boss_max_protect = 225.0
-var boss_current_protect: float = 0.0
-var boss_protect_active: bool = false
-var boss_protect_time_left: float = 0.0
-const BOSS_PROTECT_DURATION: float = 3.5
 const WHITE_BAR_ARMOR_DURATION: float = 7.5
-var white_bar_armor_time_left: float = 0.0
-const BOSS_PROTECT_GAIN_MIN: int = 1
-const BOSS_PROTECT_GAIN_MAX: int = 3
-const BOSS_PROTECT_IDLE_DECAY: float = 6.0
-const BOSS_PROTECT_IDLE_DELAY_MSEC: int = 1000
-var boss_protect_last_hit_msec: int = 0
+var boss_protection: BossProtectionController
 var spawn_damage_protection_until_msec: int = 0
 var total_hit: int
 var total_hurt: int
@@ -389,6 +380,7 @@ func can_set_gra():
 
 
 func _ready() -> void:
+	_ensure_boss_protection()
 	self.max_hp = self.max_hp + randi_range(0, 1)
 	self.hp = self.hp + randi_range(0, 1)
 	if is_node_ready():
@@ -416,7 +408,14 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if boss_protection != null:
+		boss_protection.clear()
 	_clear_visual_resources(self)
+
+
+func _ensure_boss_protection() -> void:
+	if boss_protection == null:
+		boss_protection = BossProtectionController.new(self)
 
 
 func _clear_visual_resources(node: Node) -> void:
@@ -721,54 +720,46 @@ func _recover_interrupted_combat_state() -> void:
 
 
 func _process_boss_protect(delta: float) -> void:
-	white_bar_armor_time_left = maxf(0.0, white_bar_armor_time_left - delta)
-	if not is_boss:
-		boss_current_protect = 0.0
-		boss_protect_active = false
-		boss_protect_time_left = 0.0
-		_set_boss_protect_transparent(false)
-		return
-	if boss_protect_active:
-		_set_boss_protect_transparent(true)
-		boss_protect_time_left = maxf(0.0, boss_protect_time_left - delta)
-		boss_current_protect = boss_max_protect * boss_protect_time_left / BOSS_PROTECT_DURATION
-		if boss_protect_time_left <= 0.0:
-			boss_protect_active = false
-			boss_current_protect = 0.0
-			_set_boss_protect_transparent(false)
-		return
-	var since_last_hit := Time.get_ticks_msec() - boss_protect_last_hit_msec
-	if since_last_hit > BOSS_PROTECT_IDLE_DELAY_MSEC:
-		boss_current_protect = maxf(0.0, boss_current_protect - BOSS_PROTECT_IDLE_DECAY * delta)
+	if boss_protection != null:
+		boss_protection.tick(delta)
 
 
 func _add_boss_protect_from_hit(_source: Node) -> void:
-	if not is_boss or boss_protect_active:
+	if boss_protection == null:
 		return
-	boss_protect_last_hit_msec = Time.get_ticks_msec()
-	var gain := float(randi_range(BOSS_PROTECT_GAIN_MIN, BOSS_PROTECT_GAIN_MAX))
-	boss_current_protect = minf(boss_max_protect, boss_current_protect + gain)
-	if boss_current_protect >= boss_max_protect:
-		boss_current_protect = boss_max_protect
-		boss_protect_active = true
-		boss_protect_time_left = BOSS_PROTECT_DURATION
-		white_bar_armor_time_left = WHITE_BAR_ARMOR_DURATION
-		Global.clear_white_bar_control_buffs(buff)
-		_enforce_control_immunity_state()
-		_reset_white_bar_skill_cooldowns()
-		velocity.x = 0.0
-		is_be_attacking = false
-		_set_boss_protect_transparent(true)
+	if boss_protection.add_hit():
+		_apply_boss_protection_started()
 
 
-func _set_boss_protect_transparent(active: bool) -> void:
+func _apply_boss_protection_started() -> void:
+	Global.clear_white_bar_control_buffs(buff)
+	_enforce_control_immunity_state()
+	_reset_white_bar_skill_cooldowns()
+	velocity.x = 0.0
+	is_be_attacking = false
+	set_boss_protect_transparent(true)
+
+
+func set_boss_protect_transparent(active: bool) -> void:
 	var body_color := modulate
 	body_color.a = 0.5 if active else 1.0
 	modulate = body_color
 
 
+func get_boss_current_protect() -> float:
+	return boss_protection.get_current() if boss_protection != null else 0.0
+
+
+func get_white_bar_armor_time_left() -> float:
+	return boss_protection.get_white_bar_time_left() if boss_protection != null else 0.0
+
+
 func is_boss_protecting() -> bool:
-	return is_boss and boss_protect_active
+	return boss_protection != null and boss_protection.is_active()
+
+
+func is_white_bar_control_immune() -> bool:
+	return boss_protection != null and boss_protection.is_white_bar_control_immune()
 
 
 func start_spawn_damage_protection(duration: float = 0.75) -> void:
@@ -783,10 +774,6 @@ func is_spawn_damage_protected() -> bool:
 
 func is_control_immune() -> bool:
 	return super_armor_active or is_boss_protecting() or is_white_bar_control_immune()
-
-
-func is_white_bar_control_immune() -> bool:
-	return is_boss and white_bar_armor_time_left > 0.0
 
 
 func _reset_white_bar_skill_cooldowns() -> void:
@@ -1643,7 +1630,7 @@ func death():
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if death() or is_death or is_spawn_damage_protected():
 		return
-	if is_boss and boss_protect_active:
+	if is_boss and is_boss_protecting():
 		return
 	if _is_summon_or_pet_hit_area(area):
 		return
@@ -1670,7 +1657,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_data: Dictionary = {}) -> int:
 	if death() or is_death or is_spawn_damage_protected():
 		return 0
-	if is_boss and boss_protect_active:
+	if is_boss and is_boss_protecting():
 		return 0
 	if source_target == null or not is_instance_valid(source_target):
 		return 0
@@ -2327,7 +2314,7 @@ func add_hurt_text(value, target):
 func hd_reduce(value):
 	value = _apply_role_damage_vs_reduction(int(value))
 	if is_boss:
-		if boss_protect_active:
+		if is_boss_protecting():
 			return 0
 		if value > 0 and not bool(get_meta("mds_awaken_skip_combo", false)):
 			_add_boss_protect_from_hit(null)

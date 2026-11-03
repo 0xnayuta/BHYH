@@ -27,6 +27,7 @@ CASES = [
     "LocalCoopGameplayProbe",
     "LocalCoopMagicSwitchProbe",
     "LocalCoopMagicPresentationProbe",
+    "LocalCoopBossProtectionProbe",
     "LocalCoopMonsterBalanceProbe",
     "LocalCoopMonsterInfoProbe",
     "LocalCoopNicknameProbe",

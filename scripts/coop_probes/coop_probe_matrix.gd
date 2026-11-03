@@ -22,6 +22,15 @@ class PetSlotProbeLevel:
 		spawned_slots.append(slot)
 
 
+class BossProtectionProbeLevel:
+	extends Node2D
+
+	var tower_defeated_count: int = 0
+
+	func on_tower_monster_defeated(_monster: Node) -> void:
+		tower_defeated_count += 1
+
+
 func _initialize() -> void:
 	call_deferred("_run")
 
@@ -84,6 +93,8 @@ func _run() -> void:
 			await _case_magic_switch()
 		"LocalCoopMagicPresentationProbe":
 			await _case_magic_presentation()
+		"LocalCoopBossProtectionProbe":
+			await _case_boss_protection()
 		"LocalCoopMonsterBalanceProbe":
 			await _case_monster_balance()
 		"LocalCoopMonsterInfoProbe":
@@ -360,6 +371,51 @@ func _case_magic_presentation() -> void:
 
 	global.get_magic_weapon_runtime().clear_runtime_state()
 	await process_frame
+	await process_frame
+
+
+## 25-3：Boss 保护/白条、控制免疫、技能重置与掉落唯一结算。
+func _case_boss_protection() -> void:
+	stage = BossProtectionProbeLevel.new()
+	root.add_child(stage)
+	current_scene = stage
+	await process_frame
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	monster.process_mode = Node.PROCESS_MODE_DISABLED
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.is_boss = true
+	monster.hp = 100000
+	monster.max_hp = 100000
+	monster.set_meta("tower_floor", 1)
+	monster.is_stun = true
+	monster.set("skill_1_cd", 5.0)
+	monster.set_meta("death_drops_settled", false)
+
+	for _index in 225:
+		monster._add_boss_protect_from_hit(null)
+	_check(monster.is_boss_protecting(), "boss protection activates at max")
+	_check(monster.get_boss_current_protect() > 0.0, "boss protection current value")
+	_check(monster.get_white_bar_armor_time_left() > 0.0, "white bar starts")
+	_check(not monster.is_stun, "boss protection clears control")
+	_check(float(monster.get("skill_1_cd")) == 0.0, "boss protection resets skill cooldown")
+	_check(monster.is_control_immune(), "boss protection implies control immunity")
+
+	monster._process_boss_protect(4.1)
+	_check(not monster.is_boss_protecting(), "boss protection expires")
+	_check(monster.is_white_bar_control_immune(), "white bar outlives protection")
+	_check(monster.is_control_immune(), "white bar implies control immunity")
+	monster._process_boss_protect(4.0)
+	_check(not monster.is_white_bar_control_immune(), "white bar expires")
+	_check(not monster.is_control_immune(), "control immunity ends with white bar")
+
+	monster.settle_death_drops()
+	_check(bool(monster.get_meta("death_drops_settled", false)), "death drops marked settled")
+	_check(stage.tower_defeated_count == 1, "tower settlement called once")
+	monster.settle_death_drops()
+	_check(stage.tower_defeated_count == 1, "duplicate death settlement ignored")
+	monster.queue_free()
 	await process_frame
 
 
@@ -2014,7 +2070,6 @@ func _case_role4_poison() -> void:
 	monster.def = 0
 	monster.mdef = 0
 	monster.is_boss = false
-	monster.boss_protect_active = false
 	_check(not monster._is_mds_awaken_active(p1), "P1 MDS awakening is source-local")
 	_check(monster._is_mds_awaken_active(p2), "P2 MDS awakening is source-local")
 

@@ -108,7 +108,7 @@ func protect_bar_control():
 		role_protect.visible = true
 	if not is_equal_approx(role_protect.max_value, max_white_bar):
 		role_protect.max_value = max_white_bar
-	var white_bar_value := clampf(get_obj.boss_current_protect, 0.0, max_white_bar)
+	var white_bar_value := clampf(get_obj.get_boss_current_protect(), 0.0, max_white_bar)
 	if not is_equal_approx(role_protect.value, white_bar_value):
 		role_protect.value = white_bar_value
 	var max_shield := maxf(float(get_obj.max_hd), 1.0)
@@ -188,7 +188,7 @@ func _collect_buff_info() -> void:
 func _collect_armor_buff_info() -> void:
 	if not get_obj.is_boss or not get_obj.is_control_immune():
 		return
-	var armor_time: float = get_obj.white_bar_armor_time_left
+	var armor_time: float = get_obj.get_white_bar_armor_time_left()
 	var info: Dictionary = _buff_info_by_name.get("SuperArmor", {})
 	if info.is_empty():
 		info = {
