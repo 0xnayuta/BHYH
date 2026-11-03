@@ -3,7 +3,7 @@
 """
 scripts/level_regression_all.py
 
-全量关卡冒烟回归（并发，默认 4 路）。
+全量关卡冒烟回归（并发，默认 auto，上限 12 路）。
 
 范围
 ----
@@ -19,7 +19,7 @@ scripts/level_regression_all.py
 - 关卡场景、`Script/level/<关卡>.gd`、`Art/level/<关卡>/` 资源直接映射；
 - 其他源码沿 `res://` 依赖反查图向上定位受影响关卡；
 - 无法映射的源码保守回退全量，避免漏测；
-- 默认 `--jobs 4`，`--jobs 1` 为串行排障口径。
+- 默认 `--jobs 0`（auto = min(12, max(4, CPU 核数))）；`--jobs 4` 为稳定排障口径，`--jobs 1` 为串行排障口径。
 
 输出
 ----
@@ -395,6 +395,7 @@ def main() -> int:
     if args.jobs < 0:
         parser.error("--jobs 必须 >= 0（0=auto，1=串行）")
     jobs = args.jobs if args.jobs > 0 else min(12, max(4, os.cpu_count() or 4))
+    # 12 路是当前实测上限；4 路仅用于稳定排障，不作为默认。
     if not os.path.isdir(SOURCE_ROOT):
         print(f"[!] 工程目录不存在: {SOURCE_ROOT}", file=sys.stderr)
         return 2

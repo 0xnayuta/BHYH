@@ -366,7 +366,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 | 全量门禁 | Windows / 完整工作区 | `python scripts/check_all.py --godot-bin <godot>`；`<仓库根>` | `<实际结果>` | `<9 维 PASS/FAIL；引擎编译与契约>` | `<EVID-004>` |
 | 引擎健康检查 | Windows / 完整工作区 | `python scripts/health_check.py --project source --godot-bin <godot>`；`<仓库根>` | `<实际结果>` | `<Parse Error / warning / 断裂引用 / 死代码候选>` | `<EVID-005>` |
 | 单关冒烟 | Windows headless | `python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn` | `<实际结果>` | `<阶段断言、0 SCRIPT ERROR/ERROR/WARNING、清理>` | `<EVID-006>` |
-| 关卡回归 | Windows headless | `python scripts/level_regression_all.py --jobs 4 --timeout 90` 或 `--changed-only --diff-base <base>` | `<实际结果>` | `<候选/执行/跳过/失败；实际范围>` | `<EVID-007>` |
+| 关卡回归 | Windows headless | `python scripts/level_regression_all.py` 或 `--changed-only --diff-base <base>`；稳定排障用 `--jobs 4` | `<实际结果>` | `<候选/执行/跳过/失败；实际范围>` | `<EVID-007>` |
 | 双人探针 | Windows headless | `python scripts/coop_probe_runner.py --godot <godot>` | `<实际结果或未执行原因>` | `<16 用例 PASS/FAIL；P1/P2 覆盖>` | `<EVID-008>` |
 | 构建期资源校验 | 任意 | `python scripts/convert_atlas_metadata.py --check`；`--self-test`；`convert_numbered_frames.py --all --check`；`convert_nezha_preview_frames.py --check` | `<实际结果>` | `<同步/过期/缺失；素材范围>` | `<EVID-009>` |
 | 命名终审 | 任意 | `python scripts/naming_compliance_audit.py --fail-on-error`；`python scripts/whitelist_audit.py --fail-on-error` | `<实际结果>` | `<违规/白名单冻结>` | `<EVID-010>` |

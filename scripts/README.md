@@ -142,7 +142,8 @@ python scripts/check_all.py --godot-bin "<godot>"
 
 # 单关与回归
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
-python scripts/level_regression_all.py --jobs 4 --timeout 90
+python scripts/level_regression_all.py
+python scripts/level_regression_all.py --jobs 4 --timeout 90  # 稳定排障口径
 python scripts/level_regression_all.py --changed-only --diff-base HEAD
 
 # 运行期探针

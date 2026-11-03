@@ -35,7 +35,7 @@
 ```bash
 python scripts/check_all.py --skip-engine
 python scripts/contract_scan.py --project-dir source --fail-on-error
-python scripts/level_regression_all.py --jobs 4 --timeout 90
+python scripts/level_regression_all.py
 ```
 
 报告与脚本的对应关系见 [`reports/README.md`](reports/README.md) 与 [`../scripts/README.md`](../scripts/README.md)。
