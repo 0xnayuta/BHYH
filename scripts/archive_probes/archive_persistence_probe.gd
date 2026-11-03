@@ -594,6 +594,65 @@ func _test_shop_purchase_command() -> void:
 		),
 		"%s p1qhs=%d p2qhs=%d" % [reward, PlayerData.get_item_data("qhs_1"), coop.secondary_data.get_item_data("qhs_1")]
 	)
+
+	# 24-3：2P 阵法命令复用 1P 档案快照，失败恢复共享容器与灵魂。
+	PlayerData.player_data[PlayerData.PET_FORMATION_LEVELS_KEY] = {"生命": 0}
+	coop.secondary_data.player_data[PlayerData.PET_FORMATION_LEVELS_KEY] = {"生命": 0}
+	var p1_formation_before := int(PlayerData.get_pet_formation_levels().get("生命", 0))
+	PlayerData.add_dj("zqjs", 5)
+	PlayerData.add_dj("zqjh", 3)
+	var p2_formation_saves: Array[String] = []
+	var p2_formation := PetDomainCommand.upgrade_formation(
+		coop.secondary_data,
+		"生命",
+		1,
+		func(reason: String) -> Dictionary:
+			p2_formation_saves.append(reason)
+			return {"ok": true}
+	)
+	_check("formation_2p_ok", bool(p2_formation.get("ok", false)), str(p2_formation))
+	_check(
+		"formation_2p_stays_on_p2",
+		(
+			int(coop.secondary_data.get_pet_formation_levels().get("生命", 0)) == 1
+			and int(PlayerData.get_pet_formation_levels().get("生命", 0)) == p1_formation_before
+			and p2_formation_saves == ["pet_formation"]
+		),
+		str(p2_formation_saves)
+	)
+	PlayerData.add_dj("zqjs", 3)
+	PlayerData.add_dj("zqjh", 2)
+	var p1_stone_before_failure := int(PlayerData.count_item_amount("zqjs"))
+	var p1_core_before_failure := int(PlayerData.count_item_amount("zqjh"))
+	var soul_before_failure := int(PlayerData.get_soul())
+	var p2_formation_failed := PetDomainCommand.upgrade_formation(
+		coop.secondary_data, "生命", 1, func(_reason: String) -> Dictionary: return {"ok": false, "message": "探针保存失败"}
+	)
+	_check("formation_2p_failure", not bool(p2_formation_failed.get("ok", true)), str(p2_formation_failed))
+	_check(
+		"formation_2p_rollback",
+		(
+			int(coop.secondary_data.get_pet_formation_levels().get("生命", 0)) == 1
+			and int(PlayerData.get_pet_formation_levels().get("生命", 0)) == p1_formation_before
+			and int(PlayerData.count_item_amount("zqjs")) == p1_stone_before_failure
+			and int(PlayerData.count_item_amount("zqjh")) == p1_core_before_failure
+			and int(coop.secondary_data.count_item_amount("zqjs")) == p1_stone_before_failure
+			and int(coop.secondary_data.count_item_amount("zqjh")) == p1_core_before_failure
+			and int(PlayerData.get_soul()) == soul_before_failure
+			and int(coop.secondary_data.get_soul()) == soul_before_failure
+		),
+		(
+			"p1lvl=%d p2lvl=%d p1stone=%d p2stone=%d soul=%d/%d"
+			% [
+				int(PlayerData.get_pet_formation_levels().get("生命", 0)),
+				int(coop.secondary_data.get_pet_formation_levels().get("生命", 0)),
+				int(PlayerData.count_item_amount("zqjs")),
+				int(coop.secondary_data.count_item_amount("zqjs")),
+				int(PlayerData.get_soul()),
+				int(coop.secondary_data.get_soul()),
+			]
+		)
+	)
 	coop.clear_runtime()
 
 
@@ -1260,6 +1319,55 @@ func _test_pet_domain_contract() -> void:
 	_check("pet_domain_deploy_failure", not bool(failed_deploy.get("ok", true)), str(failed_deploy))
 	_check("pet_domain_deploy_rollback", view.active_name() == "" and not view.is_deployed(1))
 
+	# 24-3：阵法升级以单次快照提交材料、等级与保存结果。
+	PlayerData.player_data[PlayerData.PET_FORMATION_LEVELS_KEY] = {"生命": 0}
+	PlayerData.add_dj("zqjs", 2)
+	PlayerData.add_dj("zqjh", 1)
+	var formation_saves: Array[String] = []
+	var formation := PetDomainCommand.upgrade_formation(
+		PlayerData,
+		"生命",
+		1,
+		func(reason: String) -> Dictionary:
+			formation_saves.append(reason)
+			return {"ok": true}
+	)
+	_check("pet_domain_formation_ok", bool(formation.get("ok", false)), str(formation))
+	_check(
+		"pet_domain_formation_values",
+		(
+			int(PlayerData.get_pet_formation_levels().get("生命", 0)) == 1
+			and int(PlayerData.count_item_amount("zqjs")) == 0
+			and int(PlayerData.count_item_amount("zqjh")) == 0
+		)
+	)
+	_check("pet_domain_formation_save_reason", formation_saves == ["pet_formation"], str(formation_saves))
+
+	PlayerData.player_data[PlayerData.PET_FORMATION_LEVELS_KEY] = {"生命": 1}
+	PlayerData.add_dj("zqjs", 12)
+	PlayerData.add_dj("zqjh", 7)
+	var formation_stone_before := int(PlayerData.count_item_amount("zqjs"))
+	var formation_core_before := int(PlayerData.count_item_amount("zqjh"))
+	var failed_formation_saves: Array[String] = []
+	var failed_formation := PetDomainCommand.upgrade_formation(
+		PlayerData,
+		"生命",
+		10,
+		func(reason: String) -> Dictionary:
+			failed_formation_saves.append(reason)
+			return {"ok": false, "message": "探针保存失败"}
+	)
+	_check("pet_domain_formation_failure", not bool(failed_formation.get("ok", true)), str(failed_formation))
+	_check(
+		"pet_domain_formation_rollback",
+		(
+			int(PlayerData.get_pet_formation_levels().get("生命", 0)) == 1
+			and int(PlayerData.count_item_amount("zqjs")) == formation_stone_before
+			and int(PlayerData.count_item_amount("zqjh")) == formation_core_before
+		)
+	)
+	_check("pet_domain_formation_single_save", failed_formation_saves == ["pet_formation"], str(failed_formation_saves))
+
 
 func _test_pet_interface_paths() -> void:
 	_reset_profile(1, 1)
@@ -1353,6 +1461,23 @@ func _test_pet_interface_paths() -> void:
 			(
 				int(pets[turtle_index].get("根骨", 0)) == root_before + 1
 				and MemoryClass.get_last_save_outcome().get("reason") == "pet_growth"
+			),
+			str(MemoryClass.get_last_save_outcome())
+		)
+		PlayerData.player_data[PlayerData.PET_FORMATION_LEVELS_KEY] = {"生命": 0}
+		var formation_stone_before := int(PlayerData.count_item_amount("zqjs"))
+		var formation_core_before := int(PlayerData.count_item_amount("zqjh"))
+		PlayerData.add_dj("zqjs", 2)
+		PlayerData.add_dj("zqjh", 1)
+		var formation_result: Dictionary = pet_ui._upgrade_pet_formation_once("生命")
+		_check("pet_interface_formation_saved", bool(formation_result.get("ok", false)), str(formation_result))
+		_check(
+			"pet_interface_formation_values",
+			(
+				int(PlayerData.get_pet_formation_levels().get("生命", 0)) == 1
+				and int(PlayerData.count_item_amount("zqjs")) == formation_stone_before
+				and int(PlayerData.count_item_amount("zqjh")) == formation_core_before
+				and MemoryClass.get_last_save_outcome().get("reason") == "pet_formation"
 			),
 			str(MemoryClass.get_last_save_outcome())
 		)

@@ -25,18 +25,6 @@ const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_LEARNED_SKILLS_KEY := "已学习技能"
-const PET_FORMATION_MAX_LEVEL := 100
-const PET_FORMATION_DEFINITIONS := [
-	{"stat": "生命", "gain": 400, "stone": "zqjs", "core": "zqjh", "stone_name": "朱雀晶石", "core_name": "朱雀晶核"},
-	{"stat": "攻击", "gain": 50, "stone": "zqjs", "core": "zqjh", "stone_name": "朱雀晶石", "core_name": "朱雀晶核"},
-	{"stat": "暴击", "gain": 5, "stone": "zqjs", "core": "zqjh", "stone_name": "朱雀晶石", "core_name": "朱雀晶核"},
-	{"stat": "幸运", "gain": 5, "stone": "zqjs", "core": "zqjh", "stone_name": "朱雀晶石", "core_name": "朱雀晶核"},
-	{"stat": "破甲", "gain": 5, "stone": "xwjs", "core": "xwjh", "stone_name": "玄武晶石", "core_name": "玄武晶核"},
-	{"stat": "破魔", "gain": 5, "stone": "xwjs", "core": "xwjh", "stone_name": "玄武晶石", "core_name": "玄武晶核"},
-	{"stat": "闪避", "gain": 5, "stone": "xwjs", "core": "xwjh", "stone_name": "玄武晶石", "core_name": "玄武晶核"},
-	{"stat": "物防", "gain": 25, "stone": "xwjs", "core": "xwjh", "stone_name": "玄武晶石", "core_name": "玄武晶核"},
-	{"stat": "魔防", "gain": 25, "stone": "xwjs", "core": "xwjh", "stone_name": "玄武晶石", "core_name": "玄武晶核"},
-]
 const PET_LEARNABLE_SKILLS := [
 	{
 		"name": "生命加成",
@@ -1123,8 +1111,8 @@ func _setup_pet_formation_popup() -> void:
 	pet_formation_rows.clear()
 	if pet_formation_list == null or pet_formation_template == null:
 		return
-	for index in PET_FORMATION_DEFINITIONS.size():
-		var definition: Dictionary = PET_FORMATION_DEFINITIONS[index]
+	for index in PetDomainCommand.FORMATION_DEFINITIONS.size():
+		var definition: Dictionary = PetDomainCommand.FORMATION_DEFINITIONS[index]
 		var row := pet_formation_template.duplicate() as PanelContainer
 		row.name = "FormationRow_%d" % index
 		row.visible = true
@@ -1151,30 +1139,29 @@ func _close_pet_formation_popup() -> void:
 
 
 func _pet_formation_levels() -> Dictionary:
-	if PlayerData != null and PlayerData.has_method("get_pet_formation_levels"):
-		return PlayerData.get_pet_formation_levels()
-	var levels_value: Variant = _data().get("宠物阵法等级", {})
-	var levels: Dictionary = levels_value if levels_value is Dictionary else {}
-	_data()["宠物阵法等级"] = levels
-	return levels
+	if PlayerData == null:
+		return {}
+	return PlayerData.get_pet_formation_levels()
 
 
 func _pet_formation_definition(stat_name: String) -> Dictionary:
-	for definition in PET_FORMATION_DEFINITIONS:
-		if str(definition.get("stat", "")) == stat_name:
-			return definition
-	return {}
+	return PetDomainCommand.formation_definition(stat_name)
 
 
 func _pet_formation_cost(level: int) -> Vector2i:
-	var stone_cost := clampi(level, 0, PET_FORMATION_MAX_LEVEL) + 2
-	return Vector2i(stone_cost, ceili(float(stone_cost) * 0.5))
+	return PetDomainCommand.formation_cost(level)
+
+
+func _pet_formation_item_count(item_id: String) -> int:
+	if PlayerData == null:
+		return 0
+	return PlayerData.count_item_amount(item_id)
 
 
 func _pet_formation_stat_value(level: int, gain_per_level: int) -> int:
 	if PlayerData != null and PlayerData.has_method("pet_formation_stat_value"):
 		return int(PlayerData.pet_formation_stat_value(level, gain_per_level))
-	var safe_level := clampi(level, 0, PET_FORMATION_MAX_LEVEL)
+	var safe_level := clampi(level, 0, PetDomainCommand.FORMATION_MAX_LEVEL)
 	return roundi(float(safe_level * gain_per_level) * (1.0 + float(floori(float(safe_level) / 10.0)) * 0.1))
 
 
@@ -1184,30 +1171,35 @@ func _refresh_pet_formation_popup() -> void:
 		pet_formation_resources,
 		(
 			"朱雀晶石 %d  晶核 %d    玄武晶石 %d  晶核 %d"
-			% [_item_count("zqjs"), _item_count("zqjh"), _item_count("xwjs"), _item_count("xwjh")]
+			% [
+				_pet_formation_item_count("zqjs"),
+				_pet_formation_item_count("zqjh"),
+				_pet_formation_item_count("xwjs"),
+				_pet_formation_item_count("xwjh")
+			]
 		)
 	)
-	for definition in PET_FORMATION_DEFINITIONS:
+	for definition in PetDomainCommand.FORMATION_DEFINITIONS:
 		var stat_name := str(definition["stat"])
 		var row: PanelContainer = pet_formation_rows.get(stat_name) as PanelContainer
 		if row == null:
 			continue
-		var level := clampi(int(levels.get(stat_name, 0)), 0, PET_FORMATION_MAX_LEVEL)
+		var level := clampi(int(levels.get(stat_name, 0)), 0, PetDomainCommand.FORMATION_MAX_LEVEL)
 		var gain := int(definition["gain"])
 		var cost := _pet_formation_cost(level)
 		var current_value := _pet_formation_stat_value(level, gain)
-		var next_value := _pet_formation_stat_value(mini(level + 1, PET_FORMATION_MAX_LEVEL), gain)
+		var next_value := _pet_formation_stat_value(mini(level + 1, PetDomainCommand.FORMATION_MAX_LEVEL), gain)
 		var content := row.get_node_or_null("Content")
 		_set_label(content.get_node_or_null("Name") as Label if content != null else null, stat_name)
 		_set_label(
 			content.get_node_or_null("Level") as Label if content != null else null,
-			"Lv.%d/%d" % [level, PET_FORMATION_MAX_LEVEL]
+			"Lv.%d/%d" % [level, PetDomainCommand.FORMATION_MAX_LEVEL]
 		)
 		_set_label(
 			content.get_node_or_null("Effect") as Label if content != null else null,
 			(
 				"当前 +%d" % current_value
-				if level >= PET_FORMATION_MAX_LEVEL
+				if level >= PetDomainCommand.FORMATION_MAX_LEVEL
 				else "当前 +%d  下级 +%d" % [current_value, next_value]
 			)
 		)
@@ -1215,80 +1207,63 @@ func _refresh_pet_formation_popup() -> void:
 			content.get_node_or_null("Cost") as Label if content != null else null,
 			(
 				"已达等级上限"
-				if level >= PET_FORMATION_MAX_LEVEL
+				if level >= PetDomainCommand.FORMATION_MAX_LEVEL
 				else "%s×%d\n%s×%d" % [str(definition["stone_name"]), cost.x, str(definition["core_name"]), cost.y]
 			)
 		)
 		var upgrade_button := content.get_node_or_null("UpgradeButton") as Button if content != null else null
 		if upgrade_button != null:
-			upgrade_button.disabled = level >= PET_FORMATION_MAX_LEVEL
-			upgrade_button.text = "满级" if level >= PET_FORMATION_MAX_LEVEL else "升级"
+			upgrade_button.disabled = level >= PetDomainCommand.FORMATION_MAX_LEVEL
+			upgrade_button.text = "满级" if level >= PetDomainCommand.FORMATION_MAX_LEVEL else "升级"
 		var upgrade_ten_button := content.get_node_or_null("UpgradeTenButton") as Button if content != null else null
 		if upgrade_ten_button != null:
-			upgrade_ten_button.disabled = level >= PET_FORMATION_MAX_LEVEL
-			upgrade_ten_button.text = "满级" if level >= PET_FORMATION_MAX_LEVEL else "升十级"
+			upgrade_ten_button.disabled = level >= PetDomainCommand.FORMATION_MAX_LEVEL
+			upgrade_ten_button.text = "满级" if level >= PetDomainCommand.FORMATION_MAX_LEVEL else "升十级"
 
 
 func _upgrade_pet_formation(stat_name: String) -> void:
-	var definition := _pet_formation_definition(stat_name)
-	if definition.is_empty():
+	var result := _upgrade_pet_formation_once(stat_name)
+	if not bool(result.get("ok", false)):
+		_show_pet_formation_upgrade_failure(stat_name, result)
 		return
-	if not _upgrade_pet_formation_once(stat_name):
-		_show_pet_formation_upgrade_failure(stat_name)
-		return
-	var levels := _pet_formation_levels()
-	var level := clampi(int(levels.get(stat_name, 0)), 0, PET_FORMATION_MAX_LEVEL)
 	_refresh_pet_formation_popup()
-	_show_tip("%s阵法升级至Lv.%d" % [stat_name, level])
+	_show_tip("%s阵法升级至Lv.%d" % [stat_name, int(result.get("level", 0))])
 
 
 func _upgrade_pet_formation_ten(stat_name: String) -> void:
-	var upgraded_count := 0
-	for _index in range(10):
-		if not _upgrade_pet_formation_once(stat_name):
-			break
-		upgraded_count += 1
-	if upgraded_count <= 0:
-		_show_pet_formation_upgrade_failure(stat_name)
+	var result := _upgrade_pet_formation_once(stat_name, 10)
+	if not bool(result.get("ok", false)):
+		_show_pet_formation_upgrade_failure(stat_name, result)
 		return
-	var levels := _pet_formation_levels()
-	var level := clampi(int(levels.get(stat_name, 0)), 0, PET_FORMATION_MAX_LEVEL)
 	_refresh_pet_formation_popup()
-	_show_tip("%s阵法升级%d级，当前Lv.%d" % [stat_name, upgraded_count, level])
+	_show_tip("%s阵法升级%d级，当前Lv.%d" % [stat_name, int(result.get("upgraded_count", 0)), int(result.get("level", 0))])
 
 
-func _upgrade_pet_formation_once(stat_name: String) -> bool:
-	var definition := _pet_formation_definition(stat_name)
-	if definition.is_empty():
-		return false
-	var levels := _pet_formation_levels()
-	var level := clampi(int(levels.get(stat_name, 0)), 0, PET_FORMATION_MAX_LEVEL)
-	if level >= PET_FORMATION_MAX_LEVEL:
-		return false
-	var cost := _pet_formation_cost(level)
-	var stone_id := str(definition["stone"])
-	var core_id := str(definition["core"])
-	if _item_count(stone_id) < cost.x or _item_count(core_id) < cost.y:
-		return false
-	PlayerData.remove_dj(stone_id, PlayerData.get_dj_page(stone_id), cost.x)
-	PlayerData.remove_dj(core_id, PlayerData.get_dj_page(core_id), cost.y)
-	levels[stat_name] = level + 1
+func _upgrade_pet_formation_once(stat_name: String, count: int = 1) -> Dictionary:
+	# 先刷新一次既有状态，确保命令快照覆盖面板打开后可能发生的补全/归一化。
+	_refresh_current_pet()
+	var result := PetDomainCommand.upgrade_formation(PlayerData, stat_name, count)
+	if not bool(result.get("ok", false)):
+		return result
 	_refresh_current_pet()
 	for pet_value in _pet_list():
 		if pet_value is Dictionary and bool(pet_value.get(DataKeys.DEPLOYED, false)):
 			_refresh_live_pet_passives(pet_value)
 			break
-	_save_pet_changes()
-	return true
+	return result
 
 
-func _show_pet_formation_upgrade_failure(stat_name: String) -> void:
+func _show_pet_formation_upgrade_failure(stat_name: String, result: Dictionary = {}) -> void:
+	var message := str(result.get("message", ""))
+	if message != "":
+		_show_tip(message)
+		return
 	var definition := _pet_formation_definition(stat_name)
 	if definition.is_empty():
 		return
 	var levels := _pet_formation_levels()
-	var level := clampi(int(levels.get(stat_name, 0)), 0, PET_FORMATION_MAX_LEVEL)
-	if level >= PET_FORMATION_MAX_LEVEL:
+	var level := clampi(int(levels.get(stat_name, 0)), 0, PetDomainCommand.FORMATION_MAX_LEVEL)
+	if level >= PetDomainCommand.FORMATION_MAX_LEVEL:
 		_show_tip("%s阵法已满级" % stat_name)
 		return
 	var cost := _pet_formation_cost(level)

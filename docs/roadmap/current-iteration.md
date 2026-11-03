@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点、24-1 `PetAttributePages` 拆分与 24-2 `CoopPanelHost` 宿主分离已完成**，24-3~24-4 未启动；Phase 25~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离与 24-3 阵法升级命令已完成**，24-4 未启动；Phase 25~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -25,9 +25,9 @@
 - 产出 [`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)：`LocalCoop` 五个入口、`pet_interface` 子区域、LDL 成长面板与只读信息面板；
 - 盘点结果：面板显式操作者由 `LocalCoop.data_for/props_for` 解析；`hud_panel_boundary` 仅覆盖部分文件，`_data()[...]`、嵌套字典与 `data_for_slot(...).player_data[...]` 仍可绕过；
 - 已具备回滚的路径：宠物出战/休息/成长果、LDL 强化/神铸/淬骨/合成/打造、主动技能升级；
-- 待命令化：宠物阵法/被动/技能/装备/批量出售、法宝强化、LDL 分解/镶嵌/一键合成、背包昵称与坐骑培养；
+- 待命令化：宠物被动/技能/装备/批量出售、法宝强化、LDL 分解/镶嵌/一键合成、背包昵称与坐骑培养；宠物阵法已在 24-3 完成；
 - **24-1 首个拆分对象**：`PetAttributePages`（只读属性区域，无保存副作用）；
-- **24-3 首个成长命令**：宠物阵法升级（当前 `_data()["宠物阵法等级"]` 直写、材料先扣、保存失败不回滚）；
+- **24-3 首个成长命令**：宠物阵法升级（已于 24-3 命令化；此前为 `_data()["宠物阵法等级"]` 直写、材料先扣、保存失败不回滚）；
 - 本批次只改文档，未修改 `source/`。
 
 ### 24-1 `pet_interface` 分段拆分（已完成）
@@ -46,12 +46,13 @@
 - 新增 `shared_ledger` 门禁的宿主文件约束：`coop_panel_host.gd` 必须保留 `open_panel` 快照互斥，`local_coop.gd` 只校验共享账本；
 - 验证：`check_all --godot-bin` **9/9**（34.77s）、`health_check` **776 脚本 0/0/0**、`archive` **332/332**（11.06s）、`scene` **17/17**（157.58s）、`coop` **33/33**（182.96s，含宿主节点/无旧入口、P2 面板操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理）、全量 **128/128 + SKIP 5**（308.8s，无重试）。
 
-### 24-3 成长命令试点
+### 24-3 成长命令试点（已完成）
 
-- 选择一个域（锻造、背包或宠物成长）建立“校验 → 快照 → 提交 → 保存 → 失败恢复”命令；
-- UI 只发命令并显示结果，不直接拼档路径或写 `player_data`；
-- 共用现有 `EquipmentService` 模式与共享账本规则，不引入通用事务框架；
-- 验证失败无部分扣费、无重复领取、面板状态可恢复。
+- `PetDomainCommand.upgrade_formation(profile, stat_name, requested_count, save_request)` 校验等级与材料，按可负担级数计算总消耗；
+- 一次快照后扣材料、写入 `宠物阵法等级`，调用 `MemoryClass.request_save_result("pet_formation", false)`；保存失败恢复完整档案；
+- 双人会话以 1P 档案快照覆盖 1P/2P 与共享道具、灵魂，2P 操作失败同样恢复共享容器；
+- `PetFormationPopup` 只读规则与材料计数并显示命令结果，阵法路径不再写 `_data()`；升十级改为一次命令提交；
+- 验证：`archive` **344/344**（10.54s，含 1P/2P 成功、失败整批回滚、材料/灵魂恢复与单次保存）、`check_all` **9/9**（28.51s）、`health_check` **776 脚本 0/0/0**、`scene` **17/17**（167.51s）、`coop` **33/33**（191.91s）、`level_1` **4 阶段 PASS**（24.95s，0/0/0）、全量 **128/128 + SKIP 5**（311.4s，无重试）。
 
 ### 24-4 阶段验收
 
@@ -154,9 +155,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 24-3 成长命令试点**；24-0/24-1/24-2 已完成。
+**当前下一步**：**Phase 24-4 阶段验收**；24-0/24-1/24-2/24-3 已完成。
 **当前不启动**：Phase 25~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

@@ -56,7 +56,7 @@
 |:---|:---|:---|:---|:---|:---|
 | 背包 | `Scene/back_pack/back_pack.tscn`，双人时 `coop_backpack.gd` 覆盖脚本 | `back_pack.gd` 显式 getter；`coop_backpack` 继承 | `_on_close_pressed` → `queue_free` | `back_pack_wings_show`、`back_pack_head_show`、`back_pack_sort`、`back_pack_*` 子面板；宿主 `coop_panel_close` | `coop_backpack._on_name_text_changed` 直接写 `LocalCoop.data_for_slot(slot).player_data["角色昵称"]`，无即时保存；`back_pack` 显示开关直接写字段但有保存失败回滚 |
 | 技能 | `Scene/skill/learn_skill.tscn` | `learn_skill.gd` 显式 getter；子面板 `zd_skill`/`bd_skill` | `_on_close_pressed` → `queue_free`；`request_escape_close` 先关伤害公式浮层 | `skill_refresh`、`skill_passive_upgrade_all` 等；宿主 `coop_panel_close` | `zd_skill` 升级使用 `PlayerData.snapshot_state`/`restore_state`；`skill_key_set` 经 `PlayerData.set_skill_key`；`bd_skill` 经 `apply_passive_skill_upgrades` |
-| 宠物 | `Scene/pet/pet_interface.tscn`；`backpack.gd` 也可独立打开 | `pet_interface.gd` 显式 getter；子区域见 §3.2 | `btn_close` → `queue_free`；子弹窗各有 close 按钮 | `pet_deploy`、`pet_rest`、`pet_growth`、`pet_passive_upgrade`、`pet_changes`；LocalCoop 入口另有 `coop_panel_close` | 见 §3.2；`_data()` 间接写入与未回滚保存是 24-1/24-3 的主要目标；非 LocalCoop 入口缺少宿主关闭保存 |
+| 宠物 | `Scene/pet/pet_interface.tscn`；`backpack.gd` 也可独立打开 | `pet_interface.gd` 显式 getter；子区域见 §3.2 | `btn_close` → `queue_free`；子弹窗各有 close 按钮 | `pet_deploy`、`pet_rest`、`pet_growth`、`pet_formation`、`pet_passive_upgrade`、`pet_changes`；LocalCoop 入口另有 `coop_panel_close` | 见 §3.2；阵法已命令化；其余 `_data()` 间接写入与未回滚保存仍按 §3.2 登记 |
 | 法宝 | `Scene/back_pack/magic_weapon_infor.tscn` | `magic_weapon_infor.gd` 显式 getter | `_on_close_pressed` → `queue_free` | `magic_weapon_enhance`（普通 `request_save`）；宿主 `coop_panel_close` | 直接写 `PlayerData.player_data[DataKeys.MAGIC_WEAPON]` 的强化等级/五行/成长率；保存失败不回滚 |
 | 坐骑 | `Scene/main_menu/mount_panel.tscn`；`map_0.gd` 也可打开 | `mount_panel.gd` 显式 getter | `close.pressed` → `queue_free` | 面板内无 `request_save`；LocalCoop 入口依赖 `coop_panel_close`，主菜单入口依赖页面生命周期 | 通过 `PlayerData.set_active_mount`/`unlock_mount`/`upgrade_mount_*` 改档；`_train_mount` 先 `set_soul`、`add_mount_exp`，无即时保存/快照 |
 
@@ -67,9 +67,9 @@
 | 宠物列表/状态 | `_refresh_pet_name_list`、`fight_click`、`rest_click` | `PetDomainView` + `PetDomainCommand`；`PlayerData` getter | `pet_deploy`/`pet_rest` 快照回滚 | 列表读取已走 View；出战/休息已命令化，可作为边界基线 |
 | 属性页 | `pet_attribute_pages.gd`（既有 `PetAttributePages` 节点）；父面板注入显示值 `Callable` | 子控制器不读取 `PlayerData`/`RoleProp`；父面板持有操作者 | 无保存 | **24-1 已拆分**；子控制器只做分页/行绑定/文本显示，无直接写档 |
 | 培养/食用/资质 | `PetDevelopInterface`、`_on_eat_item_pressed`、`_on_quality_fruit_pressed`、`_on_buy_strength_pressed` | 当前宠物字典、共享宠物背包 | 资质/食用/购买强化点无即时保存，依赖关闭时 `coop_panel_close` | 直接修改宠物字典和共享背包；关闭保存失败没有按操作回滚 |
-| 被动技能 | `_upgrade_pet_passive`、`_on_pet_passive_one_key_upgrade_pressed` | 当前宠物字典 + `PlayerData` 灵魂 | `pet_passive_upgrade`，无快照 | 先扣灵魂、改等级，保存失败只返回 `false`，未恢复；24-3 候选 |
+| 被动技能 | `_upgrade_pet_passive`、`_on_pet_passive_one_key_upgrade_pressed` | 当前宠物字典 + `PlayerData` 灵魂 | `pet_passive_upgrade`，无快照 | 先扣灵魂、改等级，保存失败只返回 `false`，未恢复；后续命令化候选 |
 | 技能学习/升级 | `_learn_pet_skill`、`_upgrade_pet_skill` | 当前宠物字典 + 技能书/灵魂 | `pet_changes`，无快照 | 先扣书/灵魂、改技能，保存失败不回滚 |
-| 阵法 | `PetFormationPopup`、`_upgrade_pet_formation_once` | `_pet_formation_levels()`（`_data()["宠物阵法等级"]`）+ 材料 | `pet_changes`，无快照 | `_data()["宠物阵法等级"] = levels` 是间接直写；先扣材料再保存，失败不回滚；**24-3 首选试点** |
+| 阵法 | `PetFormationPopup`、`_upgrade_pet_formation_once` | `PetDomainCommand.upgrade_formation` + `PlayerData` 显式 getter | `pet_formation`；快照 → 扣材料与升级 → 保存失败恢复 | **24-3 已命令化**；UI 只读等级/材料并显示结果，阵法路径不再写 `_data()` |
 | 宠物背包/装备/批量出售 | `_equip_pet_pack_item`、`_unequip_pet_item`、`_sell_pet_equipment_at`、批量出售 | 共享宠物背包 + 当前宠物装备 | `pet_changes`，无快照 | 直接增删共享数组/装备、加灵魂；保存失败不回滚 |
 | 关闭 | `btn_close`、子弹窗 close | 面板根协调 | 宿主 `coop_panel_close` | 关闭保存不能替代操作级回滚 |
 
@@ -101,19 +101,19 @@
 ### 4.1 已具备命令/回滚的路径
 
 - 宠物出战、休息、成长果：`PetDomainCommand` 快照 + `pet_deploy`/`pet_rest`/`pet_growth`。
+- 宠物阵法：`PetDomainCommand.upgrade_formation` 快照 + `pet_formation`；按可负担级数一次扣材料、升级与保存，失败恢复共享档案。
 - LDL 强化、神铸、淬骨、合成、打造：`snapshot_state`/`restore_state` 或等价快照。
 - 主动技能升级、被动技能批量升级、技能按键：`PlayerData` 命令 + 保存结果。
 - 背包显示开关：写入后保存失败恢复原值。
 
 ### 4.2 需要后续命令化的路径
 
-1. **宠物阵法**：`_data()["宠物阵法等级"]` 直写，材料先扣，`pet_changes` 失败不回滚；范围小、边界清晰，适合 24-3 首个成长命令。
-2. **宠物被动/技能学习/技能升级**：先扣灵魂或技能书，保存失败不回滚。
-3. **宠物装备与批量出售**：直接改共享宠物背包、宠物装备与灵魂，保存失败不回滚。
-4. **法宝强化/五行/成长率**：直接改 `PlayerData.player_data`，`request_save("magic_weapon_enhance")` 返回值未用于回滚。
-5. **LDL 分解/镶嵌/一键合成**：动作级保存与回滚不完整，当前主要依赖面板切换或关闭保存。
-6. **背包昵称**：`coop_backpack` 直接写 `player_data["角色昵称"]`，无即时保存；P1/P2 各自槽位虽正确，但失败不可观察。
-7. **坐骑培养/解锁**：面板内无 `request_save`，依赖宿主关闭保存；失败无法按操作恢复。
+1. **宠物被动/技能学习/技能升级**：先扣灵魂或技能书，保存失败不回滚。
+2. **宠物装备与批量出售**：直接改共享宠物背包、宠物装备与灵魂，保存失败不回滚。
+3. **法宝强化/五行/成长率**：直接改 `PlayerData.player_data`，`request_save("magic_weapon_enhance")` 返回值未用于回滚。
+4. **LDL 分解/镶嵌/一键合成**：动作级保存与回滚不完整，当前主要依赖面板切换或关闭保存。
+5. **背包昵称**：`coop_backpack` 直接写 `player_data["角色昵称"]`，无即时保存；P1/P2 各自槽位虽正确，但失败不可观察。
+6. **坐骑培养/解锁**：面板内无 `request_save`，依赖宿主关闭保存；失败无法按操作恢复。
 
 ### 4.3 现有守卫覆盖
 
@@ -140,13 +140,15 @@
 - `push_windows()`/`pop_windows()` 嵌套语义与 ESC 先关协作面板规则保持；快照期间拒绝打开/切换。
 - `clear`/场景切换释放面板、图层、会话按钮与悬停弹层，并恢复暂停与窗口栈；全局临时 UI 仍由 `UiRuntime`/`SceneFlow` 负责。
 
-### 24-3 成长命令试点
+### 24-3 成长命令试点（已完成）
 
 **首选：宠物阵法升级命令。**
 
-- 校验材料/等级 → 快照 → 扣材料与升级 → `request_save_result("pet_formation")` → 失败恢复。
-- UI 只发命令并显示结果；`PetFormationPopup` 不再直接访问 `_data()`。
-- 用现有 `PetDomainCommand` 的快照/回滚风格，不引入通用事务框架。
+- `PetDomainCommand.upgrade_formation(profile, stat_name, requested_count, save_request)` 先校验等级与材料，按可负担级数计算总消耗；随后一次快照、扣材料、写入 `宠物阵法等级`，并调用 `MemoryClass.request_save_result("pet_formation", false)`。
+- 保存失败恢复完整档案快照；在双人会话中由 1P 档案快照覆盖 1P/2P 与共享容器，2P 操作同样恢复共享道具与灵魂。
+- `PetFormationPopup` 只读取 `PlayerData.get_pet_formation_levels()`、`PetDomainCommand` 规则和材料计数并显示结果；阵法路径不再直接写 `_data()`，也不再逐级保存。
+- 升十级改为一次命令提交，最多按当前可负担级数升级，避免中途保存产生多段提交。
+- 验证：`check_all --godot-bin` **9/9**（28.51s）、`health_check` **776 脚本 0/0/0**、`archive` **344/344**（10.54s，含 1P/2P 命令、保存失败整批回滚与共享道具/灵魂恢复）、`scene` **17/17**（167.51s）、`coop` **33/33**（191.91s）、`level_1` **4 阶段 PASS**（24.95s，0/0/0）。
 
 ### 24-4 阶段验收
 
