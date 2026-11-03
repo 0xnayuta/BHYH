@@ -1,0 +1,155 @@
+# UI 面板操作者、命令与保存边界矩阵
+
+> **状态**：Phase 24-0 静态盘点完成（2026-11-03）。本页只记录当前代码事实与拆分判断，未修改 `source/`。
+> **范围**：`LocalCoop` 面板宿主、5 个协作面板入口、`pet_interface` 子区域、LDL 成长面板，以及关卡/怪物信息面板。
+> **事实源**：`source/Script/coop/local_coop.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/back_pack/*.gd`、`source/Script/skill/*.gd`、`source/Script/ldl/*.gd`、`source/Script/main_menu/mount_panel.gd`、`source/Scene/other_scene/level_info.gd`、`source/Scene/other_scene/monster_head_info.gd`、`scripts/contract_scan.py`。
+> **非目标**：不改 Theme、布局、显示基线、存档格式、宠物数值或输入映射；不把本页当作实现完成证明。
+
+---
+
+## 1. 当前边界与判定口径
+
+### 1.1 操作者
+
+- 协作面板的正式操作者由 `LocalCoop.data_for(node)` / `props_for(node)` 解析；节点先按 `coop_slot`、祖先链、持有者回溯，再回退到 `ui_slot`。
+- 面板脚本必须声明 `PlayerData: PlayerDataStore` / `RoleProp: BaseRoleProperties`，或从声明过的父脚本继承；`panel_operator` 门禁只检查这一层。
+- 关卡/怪物信息面板（`level_info`、`monster_head_info`）仍直接使用全局 `PlayerData`/`RoleProp`；它们是只读信息层，不是协作面板，但 2P 下仍可能读到当前视图。
+
+### 1.2 保存与快照
+
+- 业务保存统一经 `MemoryClass.request_save*`；面板可调用 `Global.request_save_with_feedback` 获得失败提示。
+- 面板打开期间 `LocalCoop.open_panel` 检查 `MemoryClass.is_save_snapshot_in_progress()`；快照生成时拒绝打开/切换。
+- 面板关闭由宿主统一保存 `coop_panel_close`；关闭按钮只负责 `queue_free`，不直接写盘。
+- UI 直接调用 `MemoryClass.save_game` / `safe_write_archive` / `load_game` 被 `hud_panel_boundary` 禁止；但 `_data()` 间接写入、嵌套字典修改和 `LocalCoop.data_for_slot(...).player_data[...]` 不在现有守卫内。
+
+### 1.3 生命周期与临时 UI
+
+- `LocalCoop.open_panel` 创建 `CanvasLayer`，写入 `coop_slot` meta，调用 `UiRuntime.push_windows(layer)`，实例化面板并用 `register_ui_runtime_instance` 登记缓存租约。
+- `_on_panel_closed` 释放图层、`pop_windows()`、恢复暂停、重置 `ui_slot`、刷新账本/被动，并保存 `coop_panel_close`。
+- ESC 由 `backpack.gd` 协调：若 `LocalCoop.has_panel()`，先关闭整个协作面板，再处理 HUD 窗口；面板内部弹窗不参与 ESC 分层。
+- 工厂创建的提示/确认/地图覆盖等临时 UI 由 `UiRuntime.register_transient_ui` 登记；面板内直接 `add_child` 的局部浮层由面板自身释放。
+
+---
+
+## 2. `LocalCoop` 面板宿主
+
+| 职责 | 当前入口/字段 | 说明 |
+|:---|:---|:---|
+| 面板类型表 | `PANEL_PATHS` | `背包`、`技能`、`宠物`、`法宝`、`坐骑` 五个场景 |
+| 打开 | `open_panel(slot, type)` | 检查现有面板/切换中/是否启用/路径/快照；创建图层、阴影、选择器并暂停树 |
+| 切换 | `_switch_panel` → `_replace_panel` | 保留类型，释放旧面板后按新槽位重建 |
+| 关闭 | `close_panel()` / `_on_panel_closed` | 关闭按钮仅 `queue_free`；宿主统一清理并保存 |
+| 操作者 | `slot_for` / `data_for` / `props_for` / `data_for_slot` | 槽位查询；面板根和弹出层携带 `coop_slot` |
+| 双人选择器 | `_add_player_selector` | 按面板类型放置 1P/2P 切换按钮，调用 `_switch_panel` |
+| 快照互斥 | `open_panel` 中的 `is_save_snapshot_in_progress()` | 仅阻止打开；关闭保存仍由宿主发起 |
+| 保存副作用 | `_on_panel_closed` 的 `coop_panel_close` | 面板内未即时保存的操作会在关闭时统一提交 |
+
+**拆分判断**：`LocalCoop` 同时承担槽位/账本/输入会话与面板宿主、窗口切换、暂停、关闭保存、选择器创建。24-2 应把面板宿主生命周期迁到 UI 侧普通节点或服务，保留 `slot_for`/账本/输入会话在 `LocalCoop`。
+
+---
+
+## 3. 协作面板清单
+
+### 3.1 五个 `LocalCoop` 入口
+
+| 面板 | 场景 | 操作者/视图 | 关闭 | 保存副作用 | 直接写入与风险 |
+|:---|:---|:---|:---|:---|:---|
+| 背包 | `Scene/back_pack/back_pack.tscn`，双人时 `coop_backpack.gd` 覆盖脚本 | `back_pack.gd` 显式 getter；`coop_backpack` 继承 | `_on_close_pressed` → `queue_free` | `back_pack_wings_show`、`back_pack_head_show`、`back_pack_sort`、`back_pack_*` 子面板；宿主 `coop_panel_close` | `coop_backpack._on_name_text_changed` 直接写 `LocalCoop.data_for_slot(slot).player_data["角色昵称"]`，无即时保存；`back_pack` 显示开关直接写字段但有保存失败回滚 |
+| 技能 | `Scene/skill/learn_skill.tscn` | `learn_skill.gd` 显式 getter；子面板 `zd_skill`/`bd_skill` | `_on_close_pressed` → `queue_free`；`request_escape_close` 先关伤害公式浮层 | `skill_refresh`、`skill_passive_upgrade_all` 等；宿主 `coop_panel_close` | `zd_skill` 升级使用 `PlayerData.snapshot_state`/`restore_state`；`skill_key_set` 经 `PlayerData.set_skill_key`；`bd_skill` 经 `apply_passive_skill_upgrades` |
+| 宠物 | `Scene/pet/pet_interface.tscn`；`backpack.gd` 也可独立打开 | `pet_interface.gd` 显式 getter；子区域见 §3.2 | `btn_close` → `queue_free`；子弹窗各有 close 按钮 | `pet_deploy`、`pet_rest`、`pet_growth`、`pet_passive_upgrade`、`pet_changes`；LocalCoop 入口另有 `coop_panel_close` | 见 §3.2；`_data()` 间接写入与未回滚保存是 24-1/24-3 的主要目标；非 LocalCoop 入口缺少宿主关闭保存 |
+| 法宝 | `Scene/back_pack/magic_weapon_infor.tscn` | `magic_weapon_infor.gd` 显式 getter | `_on_close_pressed` → `queue_free` | `magic_weapon_enhance`（普通 `request_save`）；宿主 `coop_panel_close` | 直接写 `PlayerData.player_data[DataKeys.MAGIC_WEAPON]` 的强化等级/五行/成长率；保存失败不回滚 |
+| 坐骑 | `Scene/main_menu/mount_panel.tscn`；`map_0.gd` 也可打开 | `mount_panel.gd` 显式 getter | `close.pressed` → `queue_free` | 面板内无 `request_save`；LocalCoop 入口依赖 `coop_panel_close`，主菜单入口依赖页面生命周期 | 通过 `PlayerData.set_active_mount`/`unlock_mount`/`upgrade_mount_*` 改档；`_train_mount` 先 `set_soul`、`add_mount_exp`，无即时保存/快照 |
+
+### 3.2 `pet_interface` 子区域
+
+| 区域 | 关键入口 | 数据/操作者 | 保存与回滚 | 直接写入结论 |
+|:---|:---|:---|:---|:---|
+| 宠物列表/状态 | `_refresh_pet_name_list`、`fight_click`、`rest_click` | `PetDomainView` + `PetDomainCommand`；`PlayerData` getter | `pet_deploy`/`pet_rest` 快照回滚 | 列表读取已走 View；出战/休息已命令化，可作为边界基线 |
+| 属性页 | `PetAttributePages`、`_refresh_pet_attribute_page`、`_pet_attribute_display_value` | 显式 `PlayerData`/`RoleProp`，只读 | 无保存 | 无直接写档；**24-1 首选拆分对象** |
+| 培养/食用/资质 | `PetDevelopInterface`、`_on_eat_item_pressed`、`_on_quality_fruit_pressed`、`_on_buy_strength_pressed` | 当前宠物字典、共享宠物背包 | 资质/食用/购买强化点无即时保存，依赖关闭时 `coop_panel_close` | 直接修改宠物字典和共享背包；关闭保存失败没有按操作回滚 |
+| 被动技能 | `_upgrade_pet_passive`、`_on_pet_passive_one_key_upgrade_pressed` | 当前宠物字典 + `PlayerData` 灵魂 | `pet_passive_upgrade`，无快照 | 先扣灵魂、改等级，保存失败只返回 `false`，未恢复；24-3 候选 |
+| 技能学习/升级 | `_learn_pet_skill`、`_upgrade_pet_skill` | 当前宠物字典 + 技能书/灵魂 | `pet_changes`，无快照 | 先扣书/灵魂、改技能，保存失败不回滚 |
+| 阵法 | `PetFormationPopup`、`_upgrade_pet_formation_once` | `_pet_formation_levels()`（`_data()["宠物阵法等级"]`）+ 材料 | `pet_changes`，无快照 | `_data()["宠物阵法等级"] = levels` 是间接直写；先扣材料再保存，失败不回滚；**24-3 首选试点** |
+| 宠物背包/装备/批量出售 | `_equip_pet_pack_item`、`_unequip_pet_item`、`_sell_pet_equipment_at`、批量出售 | 共享宠物背包 + 当前宠物装备 | `pet_changes`，无快照 | 直接增删共享数组/装备、加灵魂；保存失败不回滚 |
+| 关闭 | `btn_close`、子弹窗 close | 面板根协调 | 宿主 `coop_panel_close` | 关闭保存不能替代操作级回滚 |
+
+### 3.3 LDL 成长面板
+
+| 面板 | 操作者 | 保存 reason | 回滚/风险 |
+|:---|:---|:---|:---|
+| `Ldl` 根 | `ldl.gd` 显式 getter | `ldl_strength_panel`、`ldl_synthesis_panel`、`ldl_mosaic_panel`、`ldl_decompose_panel`、`ldl_forge_panel`、`ldl_divine_panel` | 面板切换时保存；`MemoryClass.request_save` 结果未统一反馈 |
+| `Strength` | 显式 getter | `ldl_strength`、`ldl_strength_remove` | `snapshot_state`/`restore_state`；保存失败恢复 |
+| `DivineForge` | 继承 `Strength` | `ldl_divine_forge` | 快照回滚 |
+| `BoneForge` | 继承 `DivineForge` | `ldl_bone_forge` | 快照回滚；失败仍消耗神火是已登记设计 |
+| `Synthesis` | 显式 getter | `ldl_synthesis`、`ldl_synthesis_remove` | 快照回滚；配方校验 |
+| `Forge` | 显式 getter | `forge`、`ldl_forge_remove` | 手动 `player_data.duplicate(true)` 快照/恢复 |
+| `Decompose` | 显式 getter | 无独立保存调用 | 直接清空 `分解列表`、加装备/道具；动作级保存与回滚缺失，依赖面板切换/关闭 |
+| `Mosaic` | 显式 getter | 无独立保存调用 | `restore_mosaic_equipment` + 直接清空 `镶嵌列表`；动作级保存不完整 |
+| `OneKeySynthesis` | 显式 getter | `ldl_one_key_synthesis` | 先扣材料再加丹药；无快照回滚 |
+
+### 3.4 只读信息面板
+
+| 面板/数据 | 入口 | 操作者 | 保存 | 结论 |
+|:---|:---|:---|:---|:---|
+| `LevelInfo` | `LevelEntryRuntime.add_level_info`，`Scene/other_scene/level_info.tscn` | 直接全局 `PlayerData` | 无 | 只读关卡信息；不进入协作面板槽位体系 |
+| `MonsterHeadInfo` + `MonsterAttrData` | HUD/怪物头像 | 直接全局 `PlayerData`/`RoleProp`；`MonsterAttrData` 是 `RefCounted` 数据表 | 无 | 只读属性悬浮层；不保存、不创建面板宿主 |
+
+---
+
+## 4. 直接写档与守卫缺口
+
+### 4.1 已具备命令/回滚的路径
+
+- 宠物出战、休息、成长果：`PetDomainCommand` 快照 + `pet_deploy`/`pet_rest`/`pet_growth`。
+- LDL 强化、神铸、淬骨、合成、打造：`snapshot_state`/`restore_state` 或等价快照。
+- 主动技能升级、被动技能批量升级、技能按键：`PlayerData` 命令 + 保存结果。
+- 背包显示开关：写入后保存失败恢复原值。
+
+### 4.2 需要后续命令化的路径
+
+1. **宠物阵法**：`_data()["宠物阵法等级"]` 直写，材料先扣，`pet_changes` 失败不回滚；范围小、边界清晰，适合 24-3 首个成长命令。
+2. **宠物被动/技能学习/技能升级**：先扣灵魂或技能书，保存失败不回滚。
+3. **宠物装备与批量出售**：直接改共享宠物背包、宠物装备与灵魂，保存失败不回滚。
+4. **法宝强化/五行/成长率**：直接改 `PlayerData.player_data`，`request_save("magic_weapon_enhance")` 返回值未用于回滚。
+5. **LDL 分解/镶嵌/一键合成**：动作级保存与回滚不完整，当前主要依赖面板切换或关闭保存。
+6. **背包昵称**：`coop_backpack` 直接写 `player_data["角色昵称"]`，无即时保存；P1/P2 各自槽位虽正确，但失败不可观察。
+7. **坐骑培养/解锁**：面板内无 `request_save`，依赖宿主关闭保存；失败无法按操作恢复。
+
+### 4.3 现有守卫覆盖
+
+- `panel_operator`：覆盖 `Script/back_pack/`、`Script/skill/`、`Script/pet/`、`Script/mount/`、`Script/ldl/`；只检查未声明操作者的 `PlayerData`/`RoleProp` 使用。`Script/main_menu/mount_panel.gd` 不在该目录集合内，虽然自身声明了操作者，但不由该门禁覆盖。
+- `hud_panel_boundary`：当前只覆盖 `Script/pet/pet_interface.gd`、`Script/ldl/divine_forge.gd`、`Script/ldl/synthesis.gd`、`Script/ldl/bone_forge.gd`、`Script/base/base_role.gd`、`Script/task/basic_task.gd`、`Scene/other_scene/skill_icon.gd`；禁止档案 IO 与 `PlayerData.player_data[...] =`，但不识别 `_data()[...] =`、嵌套字典修改、`data_for_slot(...).player_data[...] =`。
+- 因此 `magic_weapon_infor`、`back_pack`、`main_backpack`、`mount_panel`、`decompose`、`mosaic`、`one_key_synthesis` 的直写/保存路径目前主要靠人工审计。
+
+---
+
+## 5. 批次拆分建议
+
+### 24-1 `pet_interface` 首个拆分对象
+
+**首选：`PetAttributePages`。**
+
+- 该区域是只读属性展示，无保存副作用、无直接写档；把页面布局、数值格式化和按钮切换迁到子场景或子控制器，面板根保留当前宠物、装备加成与信号协调。
+- 满足“子区域不直接写档”的验收条件，风险最低，可先固化 P1/P2 注入、打开/关闭与快照互斥。
+- 后续再拆 `PetFormationPopup`、技能弹窗与装备区域，不按文件行数一次性拆整个面板。
+
+### 24-2 `LocalCoop` 面板宿主分离
+
+- 新建 UI 侧普通节点/服务（建议名 `CoopPanelHost`）持有 `PANEL_PATHS`、`_panel*`、窗口栈、暂停、选择器、关闭保存与临时 UI 清理。
+- `LocalCoop` 保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`；`open_panel`/`close_panel` 委托宿主。
+- 保持 `push_windows()`/`pop_windows()` 的嵌套语义与 ESC 先关协作面板的规则；快照期间拒绝打开/切换。
+
+### 24-3 成长命令试点
+
+**首选：宠物阵法升级命令。**
+
+- 校验材料/等级 → 快照 → 扣材料与升级 → `request_save_result("pet_formation")` → 失败恢复。
+- UI 只发命令并显示结果；`PetFormationPopup` 不再直接访问 `_data()`。
+- 用现有 `PetDomainCommand` 的快照/回滚风格，不引入通用事务框架。
+
+### 24-4 阶段验收
+
+- `coop` 面板/槽位/快照互斥、`scene`、相关 UI 场景与全量回归；
+- 至少一个子区域拆分、一个成长域命令化；
+- 面板根与子区域均无新增直接写档路径；
+- 补强 `hud_panel_boundary` 的间接写档识别或登记例外后，再关闭 Phase 24。

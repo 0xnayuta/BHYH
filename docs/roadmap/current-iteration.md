@@ -1,230 +1,34 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成；Phase 23-4 宠物域只读 View 与显式命令已完成；Phase 23-5 阶段验收通过，Phase 23 已关闭**。Phase 24~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点已完成**，24-1~24-4 未启动；Phase 25~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
 
 ---
 
-## 1. Phase 22：Global 状态与入口契约
+## 1. 已完成阶段（归档）
 
-**目标**：把 `Global` 收敛为组合根、typed getter 与稳定窄入口；业务状态由明确服务/会话/关卡上下文拥有。
-**非目标**：不减少 Autoload 数量、不搬迁目录、不重写场景流、不改变玩法行为、不把 UI/成长域一并重做。
-
-### 22-1 Global 状态/入口基线（已完成）
-
-- 产出 [`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)：
-  - 141 个 `var` 字段按云存档、表现、法宝、单局、瞬时面板、生命周期、服务指针、场景遗留与怪物追踪分组；
-  - 273 个公开函数、120 个 `add` 系工厂入口；
-  - 26 个普通子服务及 `RunContext`/`ArchiveSession` 的当前边界；
-  - 每组给出保留/迁移/删除候选与 Phase 22-2 交接条件。
-- 结论：`Global` 已具备组合根形态，但仍有业务状态与工厂门面；后续必须按所有权切片，不按字段数量一次性搬运。
-- 验证：只读盘点；未改 `source/`，未声称新的运行验证。
-
-### 22-2 引用确认与零引用清理（已完成）
-
-**结果**：
-
-- 完成全量静态引用、动态字符串、场景/资源引用确认；
-- 删除 **10 个字段**、**12 个公开入口**及仅供调试追踪的私有回调；
-- `global.gd` 从 **3,516 行降至 3,308 行**（-208 行）；
-- 当前 **131 个字段、261 个公开函数、120 个 `add` 系入口**；
-- 删除清单、保留项理由与 22-3 交接见 [`global_runtime_inventory.md`](../reference/global_runtime_inventory.md) §6。
-
-**验收**：
-
-- `check_all --skip-engine` **7/7 PASS**；
-- `check_all --godot-bin` **9/9 PASS**；
-- `archive_probe_runner` **297/297 PASS**；
-- `scene_probe_runner` **PASS**；
-- `coop_probe_runner` **26/26 PASS**；
-- `level_1` 四阶段冒烟 **PASS**（0 ERROR / 0 WARNING）；
-- 未改场景、资源、存档格式、输入映射或玩法数值；未新增永久测试。
-
-### 22-3 状态迁移（22-3A/22-3B/22-3C/22-3D-1/22-3D-2/22-3E 完成）
-
-每批只迁移一个所有权边界，迁移全部生产调用方后删除旧字段/入口。
-
-**22-3A 结果**：`Global.cloud_save_*` 与认证冷却字段已删除；新增 `CloudSession`（`RefCounted`）由 `MemoryClass` 持有，`read_archive_interface.gd` 已迁移，生产消费引用为 0。验证：`check_all` 7/7、9/9，档案探针 297/297，场景探针 PASS，协作探针 26/26，`level_1` PASS，临时 `CloudSession` 逻辑探针 PASS。
-
-**22-3B 结果**：19 个法宝实例字段经精确 `Global.<field>` 检查为零引用后删除；场景路径表、预载路径与 xianyjp 预热分派迁入 `MagicWeaponRuntime`；双槽位、创建/替换/清理语义不变。验证：`check_all` 7/7、9/9，`magic-weapons` 探针 PASS，档案 297/297，场景探针 PASS，协作 26/26，`level_1` PASS。
-
-**22-3C 结果**：关卡计时、`last_level_path`、最大连击、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数与结算类型迁入 `RunContext`；删除 5 个无消费者或重复真源字段；星座进度只以 `PlayerData` 为真源。验证：`check_all` 7/7、9/9，`run-context` 与 `level-selection` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` / `level_llbt` / `level_17` 冒烟 PASS。
-
-**22-3D-1 结果**：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。验证：`check_all` 7/7、9/9，`ui-factories` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` PASS。
-
-**22-3D-2 结果**：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`；场景槽位分别归 `MenuPanelFactory`、`LevelSceneFactory`、`BackpackFactory`、`MonsterDisplayFactory` 与 `SceneFlow`。验证：`check_all` 7/7、9/9，`ui-factories`/`run-context` 探针 PASS，档案 297/297，场景 17/17，协作 26/26，`level_1` PASS。
-
-**22-3E 结果**：26 个普通子服务指针保留在 `Global` 组合根，不把服务内部状态搬回；无代码搬迁，已在剩余字段复核表中登记所有者与出口。
-
-**22-4 结果**：新增 `global_surface_boundary` 契约规则，基线 `scripts/global_surface_baseline.json` 冻结 65 字段与 120 个 `add` 入口；新增未登记表面在 `--fail-on-error` 下为 ERROR。自测坏样本 2 / 好样本 4；全量契约 ERROR=0。
-
-| 批次 | 范围 | 目标所有者 | 关键约束 |
-|:---|:---|:---|:---|
-| 22-3A | 云存档/账号字段与相关读取（已完成） | `MemoryClass` 持 `CloudSession` | 不新增 Autoload；保留失败与退出语义 |
-| 22-3B | 法宝实例槽位与残留节点引用（已完成） | `MagicWeaponRuntime` | 两个槽位规则不变；创建/替换/预载/清理同批迁移 |
-| 22-3C | 单局、关卡、选择与统计字段（已完成） | `RunContext` / `LevelEntryRuntime` | 单局状态、关卡选择与表现缓存分开；不改变关卡时序 |
-| 22-3D-1 | 2.5 表现与一次性 UI 字段（已完成） | `UiRuntime` / `BackpackFactory` / `CombatPoolRuntime` | 一次性提示、背包冷却与连击里程碑不回到 `Global` |
-| 22-3D-2 | 2.6 瞬时面板与 2.9 场景/UI 引用（已完成） | 对应工厂 / `UiRuntime` / `SceneFlow` | 临时 UI 必须登记；无消费者条目删除 |
-| 22-3E | 服务指针与组合根（评估完成，保留） | `Global` 组合根 | 只整理引用，不把服务私有状态搬回 `Global` |
-| 22-4 | 新增 Global 业务字段/add 入口守卫（已完成） | `contract_scan.py` + 基线 | `--self-test` 与 `--fail-on-error` 证据 |
-
-**每批验收**：
-
-- 旧字段/入口删除，调用方全部迁移；
-- 正常、边界、失败、退出路径按 [`acceptance.md`](../reference/acceptance.md) 选取；
-- 档案、场景、协作与相关关卡探针通过；不把 PCK 闭包当作本批行为验证。
-
-### 22-4 守卫与阶段收口（已完成）
-
-- 新增 `contract_scan.py` 的 Global 表面基线门禁与 `scripts/global_surface_baseline.json`；
-- 自测覆盖新增字段、新增入口、局部变量、注释与非 `Global` 文件，坏样本 2 / 好样本 4；
-- 剩余 65 字段已在 `global_runtime_inventory.md` §2.10 登记所有者、理由与出口；
-- 阶段出口：`Global` 不再新增业务状态；服务/会话/关卡状态有单一写入者；相关矩阵与状态一致。
+- **Phase 22 Global 状态与入口契约**：已完成并归档；详细批次、字段迁移与验证记录见 [`iteration_22_global_state_boundary.md`](../archive/iteration_22_global_state_boundary.md)。
+- **Phase 23 关卡、宠物与档案数据边界**：已完成并关闭；八族生成只经 `PetLevelController`，`PlayerData` 宠物域只读 View/命令已建立；详细批次见 [`iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)，当前调用面见 [`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md) 与 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)。
 
 ---
 
-## 2. Phase 23：关卡、宠物与档案数据边界
-
-**目标**：先抽出 `BaseLevel` 中最明确的边界泄漏，再建立 `PlayerData` 的域视图试点。
-**前置**：Phase 22 已完成并收口；不要求 22-3E 的 26 个服务指针继续搬迁。
-**非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则。
-
-### 23-0 调用面与首批宠物族选型（已完成）
-
-- 盘点 `BaseLevel` 中宠物生成、归一化、进化、技能、场景路径与槽位解析函数；
-- 选择一个调用面清晰、现有探针覆盖充分的宠物族作为首批，不按文件行数选；
-- 输出 [`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)：函数/字段迁移表、调用方清单、首批验收关卡与失败路径。
-
-**结果**：当前 8 个宠物族、30 个召唤场景；`BaseLevel` 有 73 个宠物相关函数，并与 `BaseMonster`/`PetInterface` 存在 22/19 个重名规则。首批选择 **`PetTurtle`（龟布系）**：4 阶规则标准，且 `coop_probe_runner` 已直接覆盖龟族 P1/P2 经验、槽位、生命加成与 HUD 死亡态。23-1 采用 `PetLevelController` + `PetTurtleFamily`，龟族分支不得保留双实现；其余 7 族在 23-2 逐族迁移。已确认的 2P 预热、2P 升级写回、凤凰别名、寅虎预热门禁与法宝复活槽位风险登记在同页，修复放入对应实现批次。
-
-### 23-1 首批宠物生成/进化抽取（已完成）
-
-- 新增 `pet_level_controller.gd` 与 `pet_turtle_family.gd`（`RefCounted`，不新增 Autoload）；
-- `BaseLevel` 删除龟族 7 个规则函数与龟族生成分支，改为控制器生成/恢复；
-- `_canonicalize_active_pet_data`、`_pet_active_name` 的龟族识别与归一化统一走 `PetTurtleFamily`，并显式传入当前槽位档案；
-- `BaseMonster` 删除龟族重复进化，现有各族进化与成长写入改为显式接收 `profile`，修复 P2 升级写回 1P；
-- `PetInterface` 龟族出战/进化复用同一规则；`PlayerData` 的载入补全保留到 23-4；
-- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）；临时探针覆盖死亡抑制与复活。
-
-### 23-2 共享槽位边界（已完成）
-
-- `Global.prewarm_active_pet_runtime_resources(slot)`、`get_active_pet_preload_data(slot)` 与 `get_active_pet_preload_paths(slot)` 按槽位解析；预热签名缓存按槽位隔离；
-- `BaseLevel`、`PetLevelController` 与加载页按 1P/2P 遍历传槽位；`get_active_pet_preload_paths` 双槽并入加载清单；
-- 慈心妙莲按持有者槽位读取死亡元数据、恢复对应槽位宠物并调用 `_spawn_active_pet(slot)`；`_active_pet` 查询按槽位过滤；
-- 宠物装备加成经 `BaseObject.PlayerData` 槽位解析验证；未改宠物数值或装备规则；
-- 验证：`coop_probe_runner` **27/27 PASS**（130.78s），新增 `LocalCoopPetSlotProbe` 覆盖 P1/P2 预载/路径/签名、P2 阵法装备加成与慈心妙莲槽位隔离。
-
-### 23-2 `PetDragon` 迁移（已完成）
-
-- 新增 `pet_dragon_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙三族；
-- `BaseLevel` 删除龙族 7 个规则函数与生成分支，龙族改由控制器生成；
-- `BaseMonster` 删除龙族重复进化，升级调用改走 `PetDragonFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 龙族检测、归一化、进化与活跃名复用族规则；`PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetDragonProbe` 覆盖族规则、P2 升级写回与 `level_1` 双槽生成；`coop_probe_runner` **28/28 PASS**（165.15s）。
-
-### 23-2 `PetPhoenix` 迁移（已完成）
-
-- 新增 `pet_phoenix_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙、凤四族；
-- `BaseLevel` 删除凤凰族 7 个规则函数与生成分支，凤凰改由控制器生成；
-- `BaseMonster` 删除凤凰重复进化，升级调用改走 `PetPhoenixFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 凤凰检测、修复、归一化、进化与活跃名复用族规则；
-- 补齐 `BaseLevel` 与 `PetInterface` 的凤凰死亡别名，覆盖 `雀蛋`、四阶名与 `朱雀幼灵`/`赤羽朱雀`/`朱雀神君`；
-- `PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetPhoenixProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **29/29 PASS**（148.65s）。
-
-### 23-2 `PetRabbit` 迁移（已完成）
-
-- 新增 `pet_rabbit_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙、凤、兔五族；
-- `BaseLevel` 删除月兔 6 个规则函数与生成分支，月兔改由控制器生成；
-- `BaseMonster` 删除月兔重复进化，升级调用改走 `PetRabbitFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 月兔检测、归一化、进化与活跃名复用族规则，保留永久解锁与不可放生逻辑；
-- `BaseLevel` 与 `PetInterface` 的死亡别名改由 `PetRabbitFamily.append_death_aliases` 提供，覆盖 `月兔`/`疾风兔`/`寒冰玉兔`/`冰霜月神`；
-- `PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetRabbitProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **30/30 PASS**（164.29s）。
-
-### 23-2 `PetMouse` 迁移（已完成）
-
-- 新增 `pet_mouse_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙、凤、兔、鼠六族；
-- `BaseLevel` 删除子鼠 7 个规则函数与生成分支，子鼠改由控制器生成；
-- `BaseMonster` 删除子鼠重复进化，升级调用改走 `PetMouseFamily.evolve`；成长分支保留 50 级进阶与技能 CD 解锁；
-- `PetInterface` 子鼠检测、归一化、进化、技能补全与活跃名复用族规则；
-- `BaseLevel` 与 `PetInterface` 的死亡别名改由 `PetMouseFamily.append_death_aliases` 提供，覆盖 `子鼠元帅`/`子鼠大元帅`；
-- `PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetMouseProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **31/31 PASS**（179.34s）。
-
-### 23-2 `PetNeat` 迁移（已完成）
-
-- 新增 `pet_neat_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙、凤、兔、鼠、牛七族；
-- `BaseLevel` 删除丑牛 7 个规则函数与生成分支，丑牛改由控制器生成；
-- `BaseMonster` 删除丑牛重复规则，升级循环新增 `PetNeatFamily.evolve`，修复升级不刷新阶段/技能；成长分支改用族规则；
-- `PetInterface` 丑牛检测、归一化、进化与活跃名复用族规则；
-- `BaseLevel` 与 `PetInterface` 的死亡别名改由 `PetNeatFamily.append_death_aliases` 提供，覆盖 `丑牛元帅`/`丑牛大元帅`；
-- `PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetNeatProbe` 覆盖族规则、P2 升级写回、死亡别名与 `level_1` 双槽生成；`coop_probe_runner` **32/32 PASS**（168.53s）。
-
-### 23-2 `PetYinTiger` 迁移（已完成）
-
-- 新增 `pet_yin_tiger_family.gd`；`PetLevelController` 接管八族，`BaseLevel` 移除最后的旧生成分派；
-- `BaseLevel` 删除寅虎 7 个规则函数与旧生成分支，生成只走控制器；
-- `BaseMonster` 升级循环与成长分支改用 `PetYinTigerFamily`；
-- `PetInterface` 寅虎检测、技能补全、归一化、进化与活跃名复用族规则；
-- `Global` 补齐寅虎预载识别、场景/帧/弹体/头像/技能图标路径与预热；
-- `BaseLevel` 与 `PetInterface` 的死亡别名改由 `PetYinTigerFamily.append_death_aliases` 提供；
-- `PlayerData` 载入补全保留到 23-4；
-- 验证：`LocalCoopPetYinTigerProbe` 覆盖族规则、P2 升级写回、死亡别名、Global 预热与 `level_1` 双槽生成；`coop_probe_runner` **33/33 PASS**（182.53s）。
-
-### 23-2 其余宠物族分批迁移（八族全部完成）
-
-- 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
-- `BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
-- `BaseMonster` 删除虎族重复进化，升级调用改走 `PetTigerFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 虎族检测、归一化、进化与死亡别名复用同一规则；
-- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297（首跑 1 个瞬态后重跑）、场景 17/17、协作 26/26（共享槽位批次后复跑为 27/27）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（292.1s，默认 auto）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
-
-### 23-3 关卡结算单一提交（已完成）
-
-- 复核 `LevelSettlement`、`victory`、`defeat` 与 `BaseLevel` 出口/重战路径；
-- 结论：胜利场景 `_ready` 只提交一次 `level_victory`；返回/重战仅在有 pending 时 flush，重复点击由 `_is_leaving`/`_is_rechallenging` 拦截；
-- 失败场景的道具、装备与永久拒绝奖励各自使用一次 `_request_settlement_save("level_defeat_reward")`，重复点击由本地/持久标记拦截，保存失败回滚本次奖励；
-- 未改生产代码；补强 `archive_persistence_probe` 的装备成功、永久拒绝成功/失败路径；档案探针 **303/303 PASS**（11.21s），`check_all` **9/9 PASS**（32.78s）；
-- 生产源码未变，沿用 Phase 23-2 末次 `coop` 33/33、`scene` 17/17、全量 128/128 + 5 SKIP 结果。
-
-### 23-4 `PlayerData` 宠物域只读视图试点（已完成）
-
-- 新增 `PetDomainView`：`PlayerData.pet_domain_view()` 返回只读副本/标量，不暴露档案数组；
-- 新增 `PetDomainCommand`：`deploy`、`rest`、`commit_growth`，保存失败恢复 `PlayerDataStore` 快照；
-- `PetInterface` 的名称列表改用 View；出战/休息与成长果路径改走命令，保存 reason 分别为 `pet_deploy`、`pet_rest`、`pet_growth`；
-- `PlayerData` 继续承担加载、补全、快照/恢复与保存聚合；未整体 Resource 化；
-- 验证：档案探针 **328/328 PASS**（11.20s）、`check_all` **9/9**（33.45s）、`coop` **33/33**（176.83s）、`scene` **17/17**（153.51s）、`level_1` PASS、全量 **128/128 + 5 SKIP**（300.7s）；
-- 契约见 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)。
-
-### 23-5 阶段验收（已完成，Phase 23 已关闭）
-
-- **出口证据**：`BaseLevel` 宠物相关函数由基线 **73 个降至 16 个**；八族生成只经 `PetLevelController`，旧族分派已删除；
-- `PlayerData` 宠物域已有 `PetDomainView` 只读边界与 `PetDomainCommand` 显式提交，契约见 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)；
-- **存档补全/失败**：`archive_probe_runner` 覆盖规范化幂等、后置条件失败阻断写入、同步/后台写失败、快照恢复与失败可观察；
-- **快照互斥**：`LocalCoopPanelProbe` 覆盖快照期间拒绝打开面板、标志清理与恢复后重开；
-- **切档/退出**：`identity_stale_write_rejected`、`identity_switch_flushed_old_archive`、`background_exit_flushed`、`session_ended_by_path_switch`、`session_reentry_*` 等通过；
-- **运行期**：`pet-runtime`、场景 **17/17**、协作 **33/33**、档案 **328/328**、`level_1` 四阶段 PASS、全量 **128/128 + SKIP 5**；
-- **门禁**：`check_all --godot-bin` **9/9**、`health_check` **774 脚本 0/0/0**；
-- 首跑完整场景套件时 `level-selection` 出现一次引擎 `RID`/`mem` 瞬态（功能检查全为 true）；隔离复跑与完整复跑均通过，最终 **17/17**。
-- 验收结论：Phase 23 出口满足；下一入口为 Phase 24-0 面板契约清单。
-
----
-
-## 3. Phase 24：UI 与成长命令边界
+## 2. Phase 24：UI 与成长命令边界
 
 **目标**：让面板成为“显式操作者 + 数据视图 + 命令”的界面层，成长操作统一为可回滚命令；不重做整套 UI。
 **前置**：Phase 23 的宠物生成与宠物域视图至少完成首批；否则先处理 Phase 23。
 **非目标**：不换 Theme、不改布局/显示基线、不启用全局 Theme、不一次性重写全部面板。
 
-### 24-0 面板契约清单
+### 24-0 面板契约清单（已完成）
 
-- 盘点 `pet_interface`、`monster_attr_data`、`level_info`、`LocalCoop` 面板宿主及关键成长面板；
-- 为每个面板记录：打开者、`coop_slot`/操作者、注入的数据视图、关闭入口、临时 UI 登记、保存副作用；
-- 选出首个拆分对象（优先 `pet_interface` 的一个可独立区域，不按文件大小整体拆）。
+- 产出 [`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)：`LocalCoop` 五个入口、`pet_interface` 子区域、LDL 成长面板与只读信息面板；
+- 盘点结果：面板显式操作者由 `LocalCoop.data_for/props_for` 解析；`hud_panel_boundary` 仅覆盖部分文件，`_data()[...]`、嵌套字典与 `data_for_slot(...).player_data[...]` 仍可绕过；
+- 已具备回滚的路径：宠物出战/休息/成长果、LDL 强化/神铸/淬骨/合成/打造、主动技能升级；
+- 待命令化：宠物阵法/被动/技能/装备/批量出售、法宝强化、LDL 分解/镶嵌/一键合成、背包昵称与坐骑培养；
+- **24-1 首个拆分对象**：`PetAttributePages`（只读属性区域，无保存副作用）；
+- **24-3 首个成长命令**：宠物阵法升级（当前 `_data()["宠物阵法等级"]` 直写、材料先扣、保存失败不回滚）；
+- 本批次只改文档，未修改 `source/`。
 
 ### 24-1 `pet_interface` 分段拆分
 
@@ -255,7 +59,7 @@
 
 ---
 
-## 4. Phase 25：战斗实体行为切片
+## 3. Phase 25：战斗实体行为切片
 
 **目标**：在不改变战斗数值与时序的前提下，把 `BaseHero`/`BaseMonster` 中可独立生命周期的行为移出。
 **前置**：Phase 22 的伤害/状态所有权稳定；建议在 Phase 24 之后再启动，避免 UI 与实体同时迁移。
@@ -298,7 +102,7 @@
 
 ---
 
-## 5. Phase 26：平台与发布验证
+## 4. Phase 26：平台与发布验证
 
 **目标**：把“路径闭包”“release 启动”“目标设备性能”“Spine 平台支持”分别证明。
 **前置**：可与 Phase 23~25 并行做只读规划；涉及资源/导出变化时再与当前代码批次协调。
@@ -334,7 +138,7 @@
 
 ---
 
-## 6. 跨阶段纪律
+## 5. 跨阶段纪律
 
 1. **一个批次一个所有权边界**：迁移全部生产调用方，删除旧实现；回滚用版本控制，不用永久双实现。
 2. **不新增 Autoload、不新增 `Global` 业务字段、不新增 `add` 系门面**；新增能力先证明普通节点/`RefCounted`/`Resource`/静态工具不足。
@@ -346,11 +150,11 @@
 
 ---
 
-## 7. 当前恢复入口
+## 6. 当前恢复入口
 
-**当前下一步**：**Phase 24-0 面板契约清单**；Phase 23 已关闭。
+**当前下一步**：**Phase 24-1 `PetAttributePages` 子区域拆分**；24-0 已完成。
 **当前不启动**：Phase 25~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

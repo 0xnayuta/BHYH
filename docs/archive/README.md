@@ -93,5 +93,7 @@
 | [`iteration_31_33_modernization_gap_matrix.md`](iteration_31_33_modernization_gap_matrix.md) | Phase 31~33 现代化差距调查快照 | 2026-11-02 |
 | [`iteration_32_ui_theme.md`](iteration_32_ui_theme.md) | Phase 32 UI Theme 完整批次与验证记录快照 | 2026-11-02 |
 | [`iteration_33_equipment_data_contract.md`](iteration_33_equipment_data_contract.md) | Phase 33 装备数据契约完整批次与验证记录快照 | 2026-11-02 |
+| [`iteration_22_global_state_boundary.md`](iteration_22_global_state_boundary.md) | Phase 22 Global 状态与入口契约：字段/入口清理、状态迁移、Global 表面守卫与验证记录 | 2026-11-03 |
+| [`iteration_23_pet_domain_boundary.md`](iteration_23_pet_domain_boundary.md) | Phase 23 关卡、宠物与档案数据边界：八族迁移、结算复核、宠物域 View/命令与阶段验收 | 2026-11-03 |
 | [`program_21_33_closeout.md`](program_21_33_closeout.md) | Phase 21~33 程序计划、完成状态与收口记录 | 2026-11-02 |
 | [`validation_history_2026.md`](validation_history_2026.md) | 2026 年逐批验证记录（含历史计数与耗时） | 2026-11-02 |

@@ -16,6 +16,7 @@
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |
 | [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) | Phase 23（已关闭）：`BaseLevel` 宠物调用面、八族矩阵、`PetLevelController` 与族规则、2P 写回修复、共享槽位边界及 73→16 收口证据 |
 | [`pet_domain_contract.md`](pet_domain_contract.md) | Phase 23（已关闭）：`PlayerData` 宠物域只读 View、出战/休息/成长命令、保存失败回滚与调用面 |
+| [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md) | Phase 24-0：`LocalCoop` 面板宿主、`pet_interface` 子区域、LDL 成长面板、操作者/保存/直接写档边界与拆分建议 |
 | [`module_api_matrix.md`](module_api_matrix.md) | Phase 17-6 试点模块公开 API 与依赖方向 |
 | [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | AtlasMetadata 生产者、schema、消费者、只读 View 与失败边界 |
 | [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | 运行时建帧冻结例外与后续边界 |

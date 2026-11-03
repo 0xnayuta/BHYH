@@ -537,6 +537,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 - 临时 UI 通过 `Global.get_ui_runtime().register_transient_ui(node, close_method, scene_path)` 显式登记；LevelInfo、GameSet、LDL、商店、技能、奖励、选择框、轮回/星座/返回地图等工厂均已登记。`UiRuntime.cleanup_transient_ui` 只关闭登记实例并清理弹出层；永久小 UI 路径跳过，active 守卫保留。名称兜底和 51 处业务显式调用已删除；地图/商店阴影与 `message_show` 由所属场景/父节点释放；
 
 - 新 UI 优先场景组合、`@export` 注入与 `%UniqueName`，不新增跨场景深层 `get_node()`。
+- 面板操作者、关闭保存、快照互斥与直接写档边界见 [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md)；新面板仍须走显式操作者与 `request_save`。
 
 ### 7.2 输入
 

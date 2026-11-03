@@ -41,6 +41,7 @@
 
 ### 最近完成
 
+- Phase 24-0：完成 UI 面板契约静态盘点，新增 [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md)，记录 `LocalCoop` 宿主、五个面板入口、`pet_interface` 子区域、LDL 成长面板、只读信息面板、操作者/关闭保存/直接写档路径与门禁覆盖缺口；选定 24-1 首个拆分为 `PetAttributePages`，24-3 首个成长命令为宠物阵法升级。Phase 22/23 详细批次已归档到 `docs/archive/`。本批次未修改 `source/`。
 - Phase 23-5：阶段验收关闭 Phase 23。`BaseLevel` 宠物相关函数由基线 73 降至 16，八族生成只经 `PetLevelController`；`PlayerData` 宠物域只读 View/命令边界保持。验证：`check_all --godot-bin` **9/9**（31.67s）、`health_check` **774 脚本 0/0/0**、`scene` **17/17**（152.42s，首跑 `level-selection` 出现一次引擎 RID/mem 瞬态，功能检查全 true，隔离与完整复跑通过）、`coop` **33/33**（179.44s，含快照互斥）、`archive` **328/328**（10.42s，含补全/失败/切档/退出）、`level_1` 4 阶段 PASS（24.45s）、全量 **128/128 + 5 SKIP**（303.4s，无重试）。
 - Phase 23-4：新增 `PetDomainView` 与 `PetDomainCommand`；`PlayerData.pet_domain_view()` 提供只读副本/标量；`PetInterface` 名称列表改用 View，出战/休息/成长果分别经 `pet_deploy`/`pet_rest`/`pet_growth` 命令提交，保存失败恢复 `PlayerDataStore` 快照。验证：档案探针 **328/328 PASS**（11.20s），`check_all` 9/9（33.45s），`coop` 33/33（176.83s），`scene` 17/17（153.51s），`level_1` PASS，全量 128/128 + 5 SKIP（300.7s，无重试），`health_check` 774 脚本 0/0/0；契约见 [`pet_domain_contract.md`](pet_domain_contract.md)。
 - Phase 23-3：复核 `LevelSettlement` 的胜败/重战/保存路径；胜利 `_ready` 只提交一次，返回/重战仅在 pending 时 flush，重复点击由 leaving/rechallenge 守卫拦截；失败场景各奖励动作一次保存、失败回滚，重复领取由本地/持久标记拦截。未改生产代码；补强档案探针的装备成功与永久拒绝成功/失败路径，`archive_probe_runner` **303/303 PASS**（11.21s），`check_all` 9/9（32.78s）；生产源码未变，沿用 Phase 23-2 末次 coop 33/33、scene 17/17、全量 128/128 + 5 SKIP。
