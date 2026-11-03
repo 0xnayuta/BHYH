@@ -106,6 +106,7 @@ func _run() -> void:
 	await _test_task_claim_command()
 	await _test_pet_interface_paths()
 	await _test_panel_saves()
+	await _test_pet_domain_contract()
 
 
 ## 18-3A：后台保存序号、信号顺序、失败可观察与退出前 flush。
@@ -1186,6 +1187,80 @@ func _test_transmog_command() -> void:
 	)
 
 
+func _test_pet_domain_contract() -> void:
+	_reset_profile(1, 50)
+	_open_session(TEST_ARCHIVE_PREFIX + "044.json")
+	PlayerData.player_data[PlayerData.PET_LIST_KEY] = [
+		{"名称": "龟布", "类型": "PetTurtle", "等级": 10, "阶段": 1, "经验": 0, "出战": false, "技能": []},
+		{"名称": "子鼠元帅", "类型": "PetMouse", "等级": 10, "阶段": 1, "经验": 0, "出战": false, "技能": []},
+	]
+	PlayerData.player_data[PlayerData.ACTIVE_PET_KEY] = ""
+	var view := PlayerData.pet_domain_view()
+	_check("pet_domain_view_valid", view.is_valid())
+	_check("pet_domain_view_count", view.pet_count() == 2)
+	_check("pet_domain_view_active_empty", view.active_name() == "" and view.active_index() == -1)
+	_check("pet_domain_view_find", view.find_index("PetMouse") == 1)
+	var copied: Array = view.pets()
+	copied[0]["名称"] = "已修改副本"
+	_check("pet_domain_view_pets_copy", str(PlayerData.player_data[PlayerData.PET_LIST_KEY][0].get("名称", "")) == "龟布")
+	var copied_pet: Dictionary = view.pet_at(0)
+	copied_pet["名称"] = "已修改单条"
+	_check("pet_domain_view_pet_copy", str(PlayerData.player_data[PlayerData.PET_LIST_KEY][0].get("名称", "")) == "龟布")
+
+	var deploy := PetDomainCommand.deploy(PlayerData, 0, "PetTurtle")
+	_check("pet_domain_deploy_ok", bool(deploy.get("ok", false)), str(deploy))
+	_check("pet_domain_deploy_active", view.active_name() == "PetTurtle" and view.active_index() == 0)
+	_check("pet_domain_deploy_flags", view.is_deployed(0) and not view.is_deployed(1))
+	_check("pet_domain_deploy_save_reason", MemoryClass.get_last_save_outcome().get("reason") == "pet_deploy")
+	var deploy_noop := PetDomainCommand.deploy(PlayerData, 0, "PetTurtle", func(_reason: String) -> bool: return false)
+	_check(
+		"pet_domain_deploy_noop_no_save",
+		bool(deploy_noop.get("ok", true)) and not bool(deploy_noop.get("changed", true))
+	)
+
+	var growth := PetDomainCommand.commit_growth(
+		PlayerData,
+		1,
+		func(target: Dictionary) -> bool:
+			target["经验"] = 321
+			target["等级"] = 11
+			return true
+	)
+	_check("pet_domain_growth_ok", bool(growth.get("ok", false)), str(growth))
+	_check(
+		"pet_domain_growth_values",
+		(
+			int(PlayerData.player_data[PlayerData.PET_LIST_KEY][1].get("经验", 0)) == 321
+			and int(PlayerData.player_data[PlayerData.PET_LIST_KEY][1].get("等级", 0)) == 11
+		)
+	)
+	_check("pet_domain_growth_save_reason", MemoryClass.get_last_save_outcome().get("reason") == "pet_growth")
+
+	var rest := PetDomainCommand.rest(PlayerData, 0)
+	_check("pet_domain_rest_ok", bool(rest.get("ok", false)), str(rest))
+	_check("pet_domain_rest_clears_active", view.active_name() == "" and not view.is_deployed(0))
+	_check("pet_domain_rest_save_reason", MemoryClass.get_last_save_outcome().get("reason") == "pet_rest")
+
+	var exp_before := int(PlayerData.player_data[PlayerData.PET_LIST_KEY][1].get("经验", 0))
+	var failed_growth := PetDomainCommand.commit_growth(
+		PlayerData,
+		1,
+		func(target: Dictionary) -> bool:
+			target["经验"] = 999
+			return true,
+		"pet_growth",
+		func(_reason: String) -> bool: return false
+	)
+	_check("pet_domain_growth_failure", not bool(failed_growth.get("ok", true)), str(failed_growth))
+	_check(
+		"pet_domain_growth_rollback", int(PlayerData.player_data[PlayerData.PET_LIST_KEY][1].get("经验", 0)) == exp_before
+	)
+
+	var failed_deploy := PetDomainCommand.deploy(PlayerData, 1, "PetMouse", func(_reason: String) -> bool: return false)
+	_check("pet_domain_deploy_failure", not bool(failed_deploy.get("ok", true)), str(failed_deploy))
+	_check("pet_domain_deploy_rollback", view.active_name() == "" and not view.is_deployed(1))
+
+
 func _test_pet_interface_paths() -> void:
 	_reset_profile(1, 1)
 	var pet_ui: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
@@ -1213,6 +1288,47 @@ func _test_pet_interface_paths() -> void:
 			]
 		)
 	)
+	_open_session(TEST_ARCHIVE_PREFIX + "045.json")
+	pet_ui._ensure_pet_storage()
+	var pets: Array = pet_ui._pet_list()
+	var turtle_index := -1
+	for index in pets.size():
+		var pet: Variant = pets[index]
+		if pet is Dictionary and str(pet.get(DataKeys.TYPE, "")) == "PetTurtle":
+			turtle_index = index
+			break
+	_check("pet_interface_turtle_present", turtle_index >= 0)
+	if turtle_index >= 0:
+		pet_ui.current_pet_index = turtle_index
+		pet_ui.fight_click()
+		_check(
+			"pet_interface_fight_saved",
+			(
+				str(PlayerData.player_data[PlayerData.ACTIVE_PET_KEY]) == "PetTurtle"
+				and MemoryClass.get_last_save_outcome().get("reason") == "pet_deploy"
+			),
+			str(MemoryClass.get_last_save_outcome())
+		)
+		pet_ui.rest_click()
+		_check(
+			"pet_interface_rest_saved",
+			(
+				str(PlayerData.player_data[PlayerData.ACTIVE_PET_KEY]) == ""
+				and MemoryClass.get_last_save_outcome().get("reason") == "pet_rest"
+			),
+			str(MemoryClass.get_last_save_outcome())
+		)
+		PlayerData.add_dj("genguguo", 5)
+		var root_before := int(pets[turtle_index].get("根骨", 0))
+		pet_ui._on_develop_fruit_pressed("根骨")
+		_check(
+			"pet_interface_growth_saved",
+			(
+				int(pets[turtle_index].get("根骨", 0)) == root_before + 1
+				and MemoryClass.get_last_save_outcome().get("reason") == "pet_growth"
+			),
+			str(MemoryClass.get_last_save_outcome())
+		)
 	pet_ui.queue_free()
 	await get_tree().process_frame
 

@@ -1092,13 +1092,11 @@ func fight_click() -> void:
 		_refresh_all()
 		return
 	_recalculate_pet_growth_stats(pet, false)
-	for item in _pet_list():
-		if item is Dictionary:
-			item[DataKeys.DEPLOYED] = false
-	pet[DataKeys.DEPLOYED] = true
-	var active_name := _pet_active_name(pet)
-	_data()[_active_pet_key()] = active_name
-	_data()["出战宠物"] = active_name
+	var deploy_result := PetDomainCommand.deploy(PlayerData, current_pet_index, _pet_active_name(pet))
+	if not bool(deploy_result.get("ok", false)):
+		_show_tip(str(deploy_result.get("message", "出战失败")))
+		_refresh_all()
+		return
 	_refresh_all()
 	_despawn_active_pet_now()
 	_spawn_active_pet_now()
@@ -1109,8 +1107,11 @@ func rest_click() -> void:
 	if pet == null:
 		_show_tip("当前没有宠物")
 		return
-	pet[DataKeys.DEPLOYED] = false
-	_clear_pet_active_state(pet)
+	var rest_result := PetDomainCommand.rest(PlayerData, current_pet_index)
+	if not bool(rest_result.get("ok", false)):
+		_show_tip(str(rest_result.get("message", "休息失败")))
+		_refresh_all()
+		return
 	_despawn_active_pet_now()
 	_refresh_all()
 
@@ -1919,13 +1920,25 @@ func _on_develop_fruit_pressed(key: String) -> void:
 		_show_tip("%s已达到上限" % key)
 		return
 	var fruit_id: String = str(DEVELOP_FRUIT_IDS.get(key, ""))
-	if fruit_id == "" or not _consume_item(fruit_id, DEVELOP_FRUIT_COST):
+	if fruit_id == "" or _item_count(fruit_id) < DEVELOP_FRUIT_COST:
 		_show_tip("缺少%s×%d" % [_develop_fruit_name(key), DEVELOP_FRUIT_COST])
 		return
-	pet[key] = current_value + 1
-	if key == "悟性":
-		_ensure_pet_growth_fields(pet)
-		_recalculate_pet_growth_stats(pet, false)
+	var result := PetDomainCommand.commit_growth(
+		PlayerData,
+		current_pet_index,
+		func(target: Dictionary) -> bool:
+			if not _consume_item(fruit_id, DEVELOP_FRUIT_COST):
+				return false
+			target[key] = current_value + 1
+			if key == "悟性":
+				_ensure_pet_growth_fields(target)
+				_recalculate_pet_growth_stats(target, false)
+			return true
+	)
+	if not bool(result.get("ok", false)):
+		_show_tip(str(result.get("message", "成长提交失败")))
+		_refresh_all()
+		return
 	_refresh_live_pet_develop_effects(pet)
 	_show_tip("%s +1" % key)
 	_refresh_all()
@@ -4854,7 +4867,6 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 	pet_list_scroll.size = Vector2(102, 115)
 	for child in pet_list_dropdown.get_children():
 		child.queue_free()
-	var pets := _pet_list()
 	if PlayerData.has_method("ensure_pet_dragon"):
 		PlayerData.ensure_pet_dragon()
 	if PlayerData.has_method("ensure_pet_phoenix"):
@@ -4867,7 +4879,8 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 		PlayerData.ensure_pet_mouse()
 	if PlayerData.has_method("ensure_pet_neat"):
 		PlayerData.ensure_pet_neat()
-	pets = _pet_list()
+	var pet_view := PlayerData.pet_domain_view()
+	var pets := pet_view.pets()
 	for i in pets.size():
 		var pet: Variant = pets[i]
 		if not (pet is Dictionary):
@@ -4888,9 +4901,7 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 		row.set_meta("pet_index", i)
 		row.gui_input.connect(_on_pet_name_row_input.bind(row))
 		var name := str(pet.get(DataKeys.ALT_NAME, pet.get(DataKeys.NAME, "宠物")))
-		var active := (
-			bool(pet.get(DataKeys.DEPLOYED, false)) or str(_data().get(_active_pet_key(), "")) == _pet_active_name(pet)
-		)
+		var active := bool(pet.get(DataKeys.DEPLOYED, false)) or pet_view.active_name() == _pet_active_name(pet)
 		row.text = "%s(已出战)" % name if active else name
 		row.custom_minimum_size = Vector2(96, 24)
 		row.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

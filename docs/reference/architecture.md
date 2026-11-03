@@ -268,6 +268,8 @@ classDiagram
 | `PetMouseFamily` | `Script/pet/pet_mouse_family.gd` | 子鼠族两阶/等级技能/场景路径/归一化/进化/死亡别名 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
 | `PetNeatFamily` | `Script/pet/pet_neat_family.gd` | 丑牛族四阶/阶段技能/场景路径/归一化/进化/死亡别名 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
 | `PetYinTigerFamily` | `Script/pet/pet_yin_tiger_family.gd` | 寅虎族四阶/阶段技能/场景路径/归一化/进化/死亡别名 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
+| `PetDomainView` | `Script/pet/pet_domain_view.gd` | 宠物域只读副本/标量查询，不暴露档案数组 | 绑定显式 `PlayerDataStore`；不保存、不补全 |
+| `PetDomainCommand` | `Script/pet/pet_domain_command.gd` | 出战、休息与成长提交；快照回滚 | 保存仍经 `MemoryClass.request_save`；不回落 1P |
 | `BaseMagicWeapon` | `Script/base/base_magic_weapon.gd` | 法宝运行时：跟随角色、MP 消耗、CD、`use_skill` 模板方法 | 由角色装备/法宝系统实例化 |
 | `BaseBuff` | `Script/base/base_buff.gd` | Buff 载体：时长、减益、免疫、特效 | 首次处理时绑定目标；非战斗目标自释放 |
 | `BaseRole` | `Script/base/base_role.gd` | **HUD**：头像、HP/MP/经验、无双槽、技能 CD、Buff、宠物面板 | `Control`，不是战斗体；由 HUD 容器实例化 |
@@ -509,7 +511,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 八族全部完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 八族、23-3 结算与 23-4 宠物域边界已完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
 | Global 表面继续扩张 | `contract_scan.py` 的 `global_surface_boundary` 以 `scripts/global_surface_baseline.json` 冻结 65 字段与 120 个 `add` 入口；新增项必须先评审并更新基线 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |

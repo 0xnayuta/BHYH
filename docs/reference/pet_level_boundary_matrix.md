@@ -300,11 +300,11 @@ PetFamilySpec (RefCounted, 各族实现)
   - P1 `PetTurtle`、P2 `PetTiger` 同时升级：P1 保持 `PetTurtle`，P2 为 `PetTiger`；
   - 1P `PetTiger` 等级 15 生成：`pet_tiger_unit`、阶段 2、`白灵虎`；
   - 1P 龟族死亡抑制/复活与 2P 龟族 2 阶生成（23-1 基线）。
-- 未覆盖：活跃名显示名清理与 `PlayerData` 宠物域只读视图；后者留到 23-4。不得把本页探针全绿外推为这些路径已验证。
+- 未覆盖：活跃名显示名清理；`PlayerData` 宠物域只读 View 与显式命令已在 23-4 完成，见 [`pet_domain_contract.md`](pet_domain_contract.md)。不得把本页探针全绿外推为这些路径已验证。
 - 选型不按文件行数；23-1 的 2P 写回回归已固化在现有 `LocalCoopPetExperienceProbe` 用例中。
 
 ---
 
 ## 8. 下一轮
 
-**Phase 23-2 八族全部完成。** `BaseLevel` 的宠物生成只保留 `PetLevelController` 入口；`PlayerData` 载入补全保留，域视图留到 23-4。下一步回到 Phase 23-3 关卡结算单一提交，再做 23-4 宠物域只读视图。
+**Phase 23-2 八族全部完成。** `BaseLevel` 的宠物生成只保留 `PetLevelController` 入口；`PlayerData` 载入补全保留；Phase 23-3 结算与 23-4 宠物域只读视图/命令均已完成。下一步进入 Phase 23-5 阶段验收。

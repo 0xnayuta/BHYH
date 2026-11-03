@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成**。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次、`PetDragon`、`PetPhoenix`、`PetRabbit`、`PetMouse`、`PetNeat` 与 `PetYinTiger` 迁移完成**（2026-11-03），八族全部完成；**Phase 23-3 关卡结算单一提交已完成；Phase 23-4 宠物域只读 View 与显式命令已完成**。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -191,11 +191,14 @@
 - 未改生产代码；补强 `archive_persistence_probe` 的装备成功、永久拒绝成功/失败路径；档案探针 **303/303 PASS**（11.21s），`check_all` **9/9 PASS**（32.78s）；
 - 生产源码未变，沿用 Phase 23-2 末次 `coop` 33/33、`scene` 17/17、全量 128/128 + 5 SKIP 结果。
 
-### 23-4 `PlayerData` 宠物域只读视图试点
+### 23-4 `PlayerData` 宠物域只读视图试点（已完成）
 
-- 选宠物域建立只读 View + 显式命令，覆盖读取、出战/休息、成长提交；
-- `PlayerData` 继续承担加载、补全、保存聚合；不整体 Resource 化；
-- 新代码不直接拼中文键；保留现有共享账本与槽位语义。
+- 新增 `PetDomainView`：`PlayerData.pet_domain_view()` 返回只读副本/标量，不暴露档案数组；
+- 新增 `PetDomainCommand`：`deploy`、`rest`、`commit_growth`，保存失败恢复 `PlayerDataStore` 快照；
+- `PetInterface` 的名称列表改用 View；出战/休息与成长果路径改走命令，保存 reason 分别为 `pet_deploy`、`pet_rest`、`pet_growth`；
+- `PlayerData` 继续承担加载、补全、快照/恢复与保存聚合；未整体 Resource 化；
+- 验证：档案探针 **328/328 PASS**（11.20s）、`check_all` **9/9**（33.45s）、`coop` **33/33**（176.83s）、`scene` **17/17**（153.51s）、`level_1` PASS、全量 **128/128 + 5 SKIP**（300.7s）；
+- 契约见 [`pet_domain_contract.md`](../reference/pet_domain_contract.md)。
 
 ### 23-5 阶段验收
 
@@ -339,9 +342,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-4 `PlayerData` 宠物域只读视图**；Phase 23-2 八族与 Phase 23-3 结算已完成。
-**当前不启动**：Phase 23-5。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
+**当前下一步**：**Phase 23-5 阶段验收**；Phase 23-2 八族、23-3 结算与 23-4 宠物域边界已完成。
+**当前不启动**：Phase 24~26。
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

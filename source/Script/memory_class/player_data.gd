@@ -3679,6 +3679,10 @@ func _replace_retired_xianyu_item_data(item: Dictionary, new_id: String) -> void
 	item["Data"] = new_data
 
 
+func pet_domain_view() -> PetDomainView:
+	return PetDomainView.new(self)
+
+
 func ensure_pet_tiger() -> bool:
 	if not (player_data.get(PET_LIST_KEY, []) is Array):
 		player_data[PET_LIST_KEY] = []
