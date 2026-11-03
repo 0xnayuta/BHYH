@@ -1,6 +1,6 @@
 # UI 面板操作者、命令与保存边界矩阵
 
-> **状态**：Phase 24-0 静态盘点完成（2026-11-03）。本页只记录当前代码事实与拆分判断，未修改 `source/`。
+> **状态**：Phase 24-0 静态盘点完成；Phase 24-1 `PetAttributePages` 拆分已完成（2026-11-03）。本页记录当前代码事实与后续拆分判断。
 > **范围**：`LocalCoop` 面板宿主、5 个协作面板入口、`pet_interface` 子区域、LDL 成长面板，以及关卡/怪物信息面板。
 > **事实源**：`source/Script/coop/local_coop.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/back_pack/*.gd`、`source/Script/skill/*.gd`、`source/Script/ldl/*.gd`、`source/Script/main_menu/mount_panel.gd`、`source/Scene/other_scene/level_info.gd`、`source/Scene/other_scene/monster_head_info.gd`、`scripts/contract_scan.py`。
 > **非目标**：不改 Theme、布局、显示基线、存档格式、宠物数值或输入映射；不把本页当作实现完成证明。
@@ -65,7 +65,7 @@
 | 区域 | 关键入口 | 数据/操作者 | 保存与回滚 | 直接写入结论 |
 |:---|:---|:---|:---|:---|
 | 宠物列表/状态 | `_refresh_pet_name_list`、`fight_click`、`rest_click` | `PetDomainView` + `PetDomainCommand`；`PlayerData` getter | `pet_deploy`/`pet_rest` 快照回滚 | 列表读取已走 View；出战/休息已命令化，可作为边界基线 |
-| 属性页 | `PetAttributePages`、`_refresh_pet_attribute_page`、`_pet_attribute_display_value` | 显式 `PlayerData`/`RoleProp`，只读 | 无保存 | 无直接写档；**24-1 首选拆分对象** |
+| 属性页 | `pet_attribute_pages.gd`（既有 `PetAttributePages` 节点）；父面板注入显示值 `Callable` | 子控制器不读取 `PlayerData`/`RoleProp`；父面板持有操作者 | 无保存 | **24-1 已拆分**；子控制器只做分页/行绑定/文本显示，无直接写档 |
 | 培养/食用/资质 | `PetDevelopInterface`、`_on_eat_item_pressed`、`_on_quality_fruit_pressed`、`_on_buy_strength_pressed` | 当前宠物字典、共享宠物背包 | 资质/食用/购买强化点无即时保存，依赖关闭时 `coop_panel_close` | 直接修改宠物字典和共享背包；关闭保存失败没有按操作回滚 |
 | 被动技能 | `_upgrade_pet_passive`、`_on_pet_passive_one_key_upgrade_pressed` | 当前宠物字典 + `PlayerData` 灵魂 | `pet_passive_upgrade`，无快照 | 先扣灵魂、改等级，保存失败只返回 `false`，未恢复；24-3 候选 |
 | 技能学习/升级 | `_learn_pet_skill`、`_upgrade_pet_skill` | 当前宠物字典 + 技能书/灵魂 | `pet_changes`，无快照 | 先扣书/灵魂、改技能，保存失败不回滚 |
@@ -123,14 +123,14 @@
 
 ---
 
-## 5. 批次拆分建议
+## 5. 批次拆分与实施
 
 ### 24-1 `pet_interface` 首个拆分对象
 
-**首选：`PetAttributePages`。**
+**已完成：`PetAttributePages`。**
 
-- 该区域是只读属性展示，无保存副作用、无直接写档；把页面布局、数值格式化和按钮切换迁到子场景或子控制器，面板根保留当前宠物、装备加成与信号协调。
-- 满足“子区域不直接写档”的验收条件，风险最低，可先固化 P1/P2 注入、打开/关闭与快照互斥。
+- 子控制器持有 2 页定义、10 行绑定、分页按钮与显示文本；父面板注入分页按钮和显示值 `Callable`，保留当前宠物、装备加成与数值协调。
+- 子控制器不读取 `PlayerData`/`RoleProp`、不保存、不写档；父面板删除旧分页状态与回调，`_refresh_pet_attribute_page` 仅委托。
 - 后续再拆 `PetFormationPopup`、技能弹窗与装备区域，不按文件行数一次性拆整个面板。
 
 ### 24-2 `LocalCoop` 面板宿主分离

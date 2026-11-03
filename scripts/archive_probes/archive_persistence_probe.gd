@@ -1288,6 +1288,33 @@ func _test_pet_interface_paths() -> void:
 			]
 		)
 	)
+	var attribute_pages: Node = pet_ui.get("pet_attribute_pages")
+	_check(
+		"pet_attribute_pages_controller",
+		attribute_pages != null and attribute_pages.has_method("select_page"),
+		str(attribute_pages)
+	)
+	if attribute_pages != null:
+		var pet_list: Array = pet_ui.call("_pet_list")
+		if not pet_list.is_empty():
+			pet_ui.current_pet_index = 0
+			pet_ui.call("_refresh_pet_attribute_page", pet_list[0], null)
+			await get_tree().process_frame
+			var expected_value := str(pet_ui.call("_pet_attribute_display_value", pet_list[0], "生命", null))
+			var value_label: Label = pet_ui.get_node_or_null("PetAttributePages/StatRow1/Value") as Label
+			_check(
+				"pet_attribute_pages_value",
+				value_label != null and value_label.text == expected_value,
+				"%s/%s" % [value_label.text if value_label != null else "<null>", expected_value]
+			)
+		var page2_button: Button = pet_ui.get_node_or_null("PetStatPage2") as Button
+		if page2_button != null:
+			page2_button.emit_signal("pressed")
+		await get_tree().process_frame
+		_check("pet_attribute_pages_page_switch", int(attribute_pages.get("page_index")) == 1)
+		var row6: CanvasItem = pet_ui.get_node_or_null("PetAttributePages/StatRow6") as CanvasItem
+		var row7: CanvasItem = pet_ui.get_node_or_null("PetAttributePages/StatRow7") as CanvasItem
+		_check("pet_attribute_pages_page2_rows", row6 != null and row6.visible and row7 != null and not row7.visible)
 	_open_session(TEST_ARCHIVE_PREFIX + "045.json")
 	pet_ui._ensure_pet_storage()
 	var pets: Array = pet_ui._pet_list()

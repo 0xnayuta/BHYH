@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://Script/pet/pet_interface.gd" id="1"]
 
+[ext_resource type="Script" path="res://Script/pet/pet_attribute_pages.gd" id="1a"]
+
 [ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_ui_id80_lossless_653x513.png" id="2"]
 
 [ext_resource type="Texture2D" path="res://Art/pet/pet_page_resources/pet_interfacev1270_id79_lossless_55x20.png" id="3"]
@@ -336,6 +338,7 @@ mouse_filter = 2
 texture = ExtResource("14")
 
 [node name="PetAttributePages" type="Control" parent="." unique_id=560441844]
+script = ExtResource("1a")
 anchors_preset = 0
 offset_left = 32.0
 offset_top = 257.0

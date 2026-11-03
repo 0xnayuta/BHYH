@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点已完成**，24-1~24-4 未启动；Phase 25~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点与 24-1 `PetAttributePages` 拆分已完成**，24-2~24-4 未启动；Phase 25~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -30,12 +30,13 @@
 - **24-3 首个成长命令**：宠物阵法升级（当前 `_data()["宠物阵法等级"]` 直写、材料先扣、保存失败不回滚）；
 - 本批次只改文档，未修改 `source/`。
 
-### 24-1 `pet_interface` 分段拆分
+### 24-1 `pet_interface` 分段拆分（已完成）
 
-- 把一个属性/技能/进化区域拆为子场景或子控制器；
-- 面板根保留协调职责，子区域不直接写档；
-- 迁移全部调用方，删除重复节点路径与旧回调；
-- 验证 P1/P2、打开/关闭、保存快照互斥与失败提示。
+- 新增 `pet_attribute_pages.gd` 并挂到既有 `PetAttributePages` 节点：子控制器持有 2 页定义、10 行绑定、分页按钮与显示文本；
+- 父面板只注入分页按钮和显示值 `Callable`，保留当前宠物、装备加成、数值计算与页面协调；子控制器不读取 `PlayerData`、不保存、不写档；
+- 删除父面板的 `pet_attribute_page`、行/标签/按钮数组及旧分页回调，保留 `_refresh_pet_attribute_page` 作为委托入口；
+- 未改布局、Theme、数值规则或存档格式；`PetAttributePages` 节点仍使用原场景行与按钮；
+- 验证：`check_all --godot-bin` **9/9**（32.39s）、`health_check` **775 脚本 0/0/0**、`archive` **332/332**（11.02s，含控制器、真实按钮切页与显示值）、`scene` **17/17**（166.43s）、`coop` **33/33**（196.98s，含 2P 宠物面板操作者与切页）、全量 **128/128 + SKIP 5**（311.1s，无重试）。
 
 ### 24-2 `LocalCoop` 面板宿主分离
 
@@ -152,9 +153,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 24-1 `PetAttributePages` 子区域拆分**；24-0 已完成。
+**当前下一步**：**Phase 24-2 `LocalCoop` 面板宿主分离**；24-0/24-1 已完成。
 **当前不启动**：Phase 25~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

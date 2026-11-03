@@ -148,21 +148,6 @@ const PET_EQUIPMENT_SLOT_FRAME := preload(
 	"res://Art/pet/pet_page_resources/pet_interfacev1270_id202_lossless_54x54.png"
 )
 const PET_EQUIPMENT_STRENGTH_FONT := preload("res://Font/8_fz_cu_yuan_m03_s.ttf")
-const PET_ATTRIBUTE_PAGES := [
-	[
-		["生命", "生命"],
-		["魔法", "魔法"],
-		["攻击", "攻击"],
-		["物防", "物防"],
-		["幸运", "幸运"],
-		["魔防", "魔防"],
-		["暴击", "暴击"],
-		["闪避", "闪避"],
-		["回血", "回血"],
-		["回魔", "回魔"]
-	],
-	[["命中", "命中"], ["韧性", "韧性"], ["吸血", "吸血"], ["暴免", "暴免"], ["破甲", "破甲"], ["破魔", "破魔"]],
-]
 const PET_PACK_CAPACITY := 40
 const PET_BACKPACK_SLOT_SCENE := preload("res://Scene/pet/pet_backpack_slot.tscn")
 const PET_EQUIPMENT_SLOT_TYPES := ["zbst", "zbmz", "zbxz", "zbyf", "zbjn"]
@@ -631,7 +616,7 @@ const PET_YIN_TIGER_PET := {
 @onready var eahptxt := get_node_or_null("eahptxt") as Label
 
 @onready var pet_attribute_show := get_node_or_null("PetAttributeShow") as CanvasItem
-@onready var pet_attribute_pages := get_node_or_null("PetAttributePages") as CanvasItem
+@onready var pet_attribute_pages := get_node_or_null("PetAttributePages") as PetAttributePages
 @onready var learn_skill_button := _pet_ui_node("PetAttributeShow", "LearnSkillButton") as Button
 @onready var pet_formation_button := _pet_ui_node("PetAttributeShow", "PetFormationButton") as Button
 @onready var upgrade_skill_button := _pet_ui_node("PetAttributeShow", "UpgradeSkillButton") as Button
@@ -764,11 +749,6 @@ var pet_action_menu: Control = null
 var pet_property_popup: Node2D = null
 var pet_equipment_slot_empty_style := StyleBoxEmpty.new()
 var pet_equipment_slot_filled_style: StyleBoxTexture = null
-var pet_attribute_page: int = 0
-var pet_attribute_stat_rows: Array[Control] = []
-var pet_attribute_stat_names: Array[Label] = []
-var pet_attribute_stat_values: Array[Label] = []
-var pet_attribute_page_buttons: Array[Button] = []
 var pending_pet_sale: Dictionary = {}
 var pet_batch_sell_confirm: Control = null
 var pet_batch_sell_settings: Dictionary = {}
@@ -1128,31 +1108,15 @@ func _next_pet() -> void:
 
 
 func _setup_pet_attribute_pages() -> void:
-	pet_attribute_stat_rows.clear()
-	pet_attribute_stat_names.clear()
-	pet_attribute_stat_values.clear()
-	pet_attribute_page_buttons.clear()
-	for index in range(10):
-		var row := _pet_ui_node("PetAttributePages", "StatRow%d" % (index + 1)) as Control
-		var stat_name := _pet_ui_node("PetAttributePages", "StatRow%d/Name" % (index + 1)) as Label
-		var stat_value := _pet_ui_node("PetAttributePages", "StatRow%d/Value" % (index + 1)) as Label
-		if row == null or stat_name == null or stat_value == null:
-			continue
-		pet_attribute_stat_rows.append(row)
-		pet_attribute_stat_names.append(stat_name)
-		pet_attribute_stat_values.append(stat_value)
+	if pet_attribute_pages == null:
+		return
+	var page_buttons: Array[Button] = []
 	for page_index in range(2):
 		var page_button := get_node_or_null("PetStatPage%d" % (page_index + 1)) as Button
 		if page_button == null:
 			continue
-		_connect_button(page_button, _on_pet_attribute_page_pressed.bind(page_index))
-		pet_attribute_page_buttons.append(page_button)
-	_update_pet_attribute_page_buttons()
-
-
-func _on_pet_attribute_page_pressed(page_index: int) -> void:
-	pet_attribute_page = clampi(page_index, 0, PET_ATTRIBUTE_PAGES.size() - 1)
-	_refresh_pet_attribute_page(_current_pet())
+		page_buttons.append(page_button)
+	pet_attribute_pages.setup(page_buttons, Callable(self, "_pet_attribute_display_value"))
 
 
 func _setup_pet_formation_popup() -> void:
@@ -1576,30 +1540,9 @@ func _upgrade_pet_skill(skill_name: String) -> void:
 		)
 
 
-func _update_pet_attribute_page_buttons() -> void:
-	for index in pet_attribute_page_buttons.size():
-		var button := pet_attribute_page_buttons[index]
-		var selected := index == pet_attribute_page
-		button.disabled = false
-		button.add_theme_color_override("font_color", Color("fff4bf") if selected else Color.WHITE)
-
-
 func _refresh_pet_attribute_page(pet: Variant, equipment_bonus: Variant = null) -> void:
-	_update_pet_attribute_page_buttons()
-	var resolved_equipment_bonus: Variant = equipment_bonus
-	if pet is Dictionary and not (resolved_equipment_bonus is Dictionary):
-		resolved_equipment_bonus = _pet_equipment_bonuses(pet)
-	var definitions: Array = PET_ATTRIBUTE_PAGES[pet_attribute_page]
-	for index in pet_attribute_stat_rows.size():
-		var has_stat := index < definitions.size()
-		pet_attribute_stat_rows[index].visible = has_stat
-		if not has_stat:
-			continue
-		var definition: Array = definitions[index]
-		pet_attribute_stat_names[index].text = str(definition[0])
-		pet_attribute_stat_values[index].text = _pet_attribute_display_value(
-			pet, str(definition[1]), resolved_equipment_bonus
-		)
+	if pet_attribute_pages != null:
+		pet_attribute_pages.refresh(pet, equipment_bonus)
 
 
 func _pet_attribute_display_value(pet: Variant, stat_key: String, equipment_bonus: Variant = null) -> String:

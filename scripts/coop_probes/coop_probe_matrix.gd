@@ -1366,6 +1366,32 @@ func _case_panel_operator() -> void:
 		"windows restored after close [" + str(global.get_ui_runtime().windows) + "]"
 	)
 	_check(coop.ui_slot == 1, "ui slot reset after close")
+
+	# 24-1：宠物属性页子控制器与 P2 操作者。
+	coop.open_panel(2, "宠物")
+	await process_frame
+	await process_frame
+	_check(coop.has_panel(), "pet panel opens")
+	if coop.has_panel():
+		var pet_panel: Node = coop._panel
+		_check(pet_panel.PlayerData == coop.secondary_data, "pet panel operator is 2P")
+		var attribute_pages: Node = pet_panel.get_node_or_null("PetAttributePages")
+		_check(
+			attribute_pages != null and attribute_pages.has_method("select_page"),
+			"pet attribute pages controller present"
+		)
+		if attribute_pages != null:
+			attribute_pages.call("select_page", 1)
+			await process_frame
+			_check(int(attribute_pages.get("page_index")) == 1, "pet attribute page switches")
+			var row6: CanvasItem = pet_panel.get_node_or_null("PetAttributePages/StatRow6") as CanvasItem
+			var row7: CanvasItem = pet_panel.get_node_or_null("PetAttributePages/StatRow7") as CanvasItem
+			_check(row6 != null and row6.visible, "page 2 shows row 6")
+			_check(row7 != null and not row7.visible, "page 2 hides row 7")
+		coop.close_panel()
+		await process_frame
+		await process_frame
+		_check(not coop.has_panel(), "pet panel closed")
 	coop.clear_runtime()
 
 
