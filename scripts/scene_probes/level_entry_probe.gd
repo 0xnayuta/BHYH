@@ -9,6 +9,36 @@ const TEARDOWN_MARKER := "LEVEL_ENTRY_PROBE_TEARDOWN"
 const NORMAL_LEVEL := "res://Scene/level/level_1.tscn"
 const FORCED_INFO_LEVEL := "res://Scene/level/level_stz.tscn"
 const DROP_LEVEL_NAME := "花果山"
+const YUTU_BOOK_DROP_CASES := [
+	{
+		"level_name": "清音阁",
+		"level_path": "res://Scene/level/level_57.tscn",
+		"script_path": "res://Script/level/level_57.gd",
+		"boss_id": 3041,
+		"book_id": "zqfjytzzs",
+	},
+	{
+		"level_name": "五台山口",
+		"level_path": "res://Scene/level/level_59.tscn",
+		"script_path": "res://Script/level/level_59.gd",
+		"boss_id": 3069,
+		"book_id": "zqwqytzzs",
+	},
+	{
+		"level_name": "桃花谷",
+		"level_path": "res://Scene/level/level_68.tscn",
+		"script_path": "res://Script/level/level_68.gd",
+		"boss_id": 3182,
+		"book_id": "ygfjytzzs",
+	},
+	{
+		"level_name": "万妖穴",
+		"level_path": "res://Scene/level/level_71.tscn",
+		"script_path": "res://Script/level/level_71.gd",
+		"boss_id": 3277,
+		"book_id": "ygwqytzzs",
+	},
+]
 
 var _failures: Array[String] = []
 
@@ -65,6 +95,8 @@ func _run() -> void:
 				break
 		checks["fall_boxes_resolved"] = fall_names_resolved
 		panel.queue_free()
+
+	await _check_yutu_book_drops(host, checks)
 
 	# 设置关闭信息面板时走直进分支：非 res:// 目标落到兜率宫选择面板，并记录关卡名。
 	MainSet.set_data["LevelInfo"] = false
@@ -165,3 +197,44 @@ func _run() -> void:
 	print(RESULT_PREFIX + JSON.stringify(payload))
 	print(TEARDOWN_MARKER)
 	get_tree().quit(0 if _failures.is_empty() else 1)
+
+
+func _check_yutu_book_drops(host: Node, checks: Dictionary) -> void:
+	for case: Dictionary in YUTU_BOOK_DROP_CASES:
+		var script := load(str(case["script_path"])) as Script
+		var table_ok := false
+		if script != null:
+			var level = script.new()
+			if level != null:
+				var config: Variant = level.call("get_level_monster_config", int(case["boss_id"]))
+				if config is Dictionary:
+					var drops: Variant = (config as Dictionary).get("independent_drop_list", [])
+					if drops is Array:
+						for drop: Dictionary in (drops as Array):
+							if (
+								str(drop.get("name", "")) == str(case["book_id"])
+								and int(drop.get("value", 0)) == 1
+								and is_equal_approx(float(drop.get("chance", 0.0)), 0.1)
+							):
+								table_ok = true
+								break
+				level.free()
+		checks["yutu_drop_%d" % int(case["boss_id"])] = table_ok
+
+		var panel = Global.add_level_info(host, str(case["level_name"]), Vector2.ZERO, str(case["level_path"]))
+		var preview_ok := false
+		if panel != null and is_instance_valid(panel):
+			await get_tree().process_frame
+			var info: Variant = panel.call("_get_level_info")
+			if info is Dictionary:
+				var preview_drops: Variant = (info as Dictionary).get("LevelFall", [])
+				var probabilities: Variant = (info as Dictionary).get("LevelFallProbability", {})
+				preview_ok = preview_drops is Array and (preview_drops as Array).has(str(case["book_id"]))
+				preview_ok = (
+					preview_ok
+					and probabilities is Dictionary
+					and int((probabilities as Dictionary).get(str(case["book_id"]), 0)) == 10
+				)
+			panel.queue_free()
+			await get_tree().process_frame
+		checks["yutu_preview_%d" % int(case["boss_id"])] = preview_ok

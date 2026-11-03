@@ -56,7 +56,8 @@ const LEVEL_71_MONSTER_DATA := {
 		[
 			{"name": "ygwqsszzs", "value": 1, "chance": 0.1},
 			{"name": "ygwqblzzs", "value": 1, "chance": 0.1},
-			{"name": "ygwqnzzzs", "value": 1, "chance": 0.1}
+			{"name": "ygwqnzzzs", "value": 1, "chance": 0.1},
+			{"name": "ygwqytzzs", "value": 1, "chance": 0.1}
 		],
 		"is_boss": true
 	},

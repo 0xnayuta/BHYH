@@ -99,7 +99,8 @@ const LEVEL_68_MONSTER_DATA := {
 		[
 			{"name": "ygfjsszzs", "value": 1, "chance": 0.1},
 			{"name": "ygfjblzzs", "value": 1, "chance": 0.1},
-			{"name": "ygfjnzzzs", "value": 1, "chance": 0.1}
+			{"name": "ygfjnzzzs", "value": 1, "chance": 0.1},
+			{"name": "ygfjytzzs", "value": 1, "chance": 0.1}
 		],
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,

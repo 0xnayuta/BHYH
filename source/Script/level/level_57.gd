@@ -130,6 +130,7 @@ const LEVEL_57_MONSTER_DATA := {
 			{"name": "zqfjsszzs", "value": 1, "chance": 0.1},
 			{"name": "zqfjblzzs", "value": 1, "chance": 0.1},
 			{"name": "zqfjnzzzs", "value": 1, "chance": 0.1},
+			{"name": "zqfjytzzs", "value": 1, "chance": 0.1},
 		],
 		"is_boss": true,
 		"max_protect": 240.0,

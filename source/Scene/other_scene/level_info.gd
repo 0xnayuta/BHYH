@@ -1833,8 +1833,8 @@ var level_info = {
 			{"Name": "火焰鸟", "is_boss": false, "ScenePath": "res://Scene/monster/monster_3036.tscn"},
 			{"Name": "噬火毒蝎", "is_boss": true, "ScenePath": "res://Scene/monster/monster_3041.tscn"}
 		],
-		"LevelFall": ["zqfjsszzs", "zqfjblzzs", "zqfjnzzzs"],
-		"LevelFallProbability": {"zqfjsszzs": 10, "zqfjblzzs": 10, "zqfjnzzzs": 10},
+		"LevelFall": ["zqfjsszzs", "zqfjblzzs", "zqfjnzzzs", "zqfjytzzs"],
+		"LevelFallProbability": {"zqfjsszzs": 10, "zqfjblzzs": 10, "zqfjnzzzs": 10, "zqfjytzzs": 10},
 		"NeedZDL":
 		{
 			"1": {"角色": "悟空", "战斗力": 0},
@@ -1880,8 +1880,8 @@ var level_info = {
 			{"Name": "核桃精", "is_boss": false, "ScenePath": "res://Scene/monster/monster_3068.tscn"},
 			{"Name": "金光孔雀", "is_boss": true, "ScenePath": "res://Scene/monster/monster_3069.tscn"}
 		],
-		"LevelFall": ["zqwqsszzs", "zqwqblzzs", "zqwqnzzzs"],
-		"LevelFallProbability": {"zqwqsszzs": 10, "zqwqblzzs": 10, "zqwqnzzzs": 10},
+		"LevelFall": ["zqwqsszzs", "zqwqblzzs", "zqwqnzzzs", "zqwqytzzs"],
+		"LevelFallProbability": {"zqwqsszzs": 10, "zqwqblzzs": 10, "zqwqnzzzs": 10, "zqwqytzzs": 10},
 		"NeedZDL":
 		{
 			"1": {"角色": "悟空", "战斗力": 0},
