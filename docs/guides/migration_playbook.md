@@ -1,8 +1,8 @@
 # 版本迁移操作手册
 
-> **适用**：当前 `source/` 工程向更高内容版本迁移（6.9 已完成，下一次内容版本由用户确认）。
+> **适用**：当前 `source/` 工程向更高内容版本迁移；已归档版本的“完成”只代表当次验收，不自动证明当前源码仍覆盖全部上游差异。下一次内容版本由用户确认。
 >
-> **原则**：本手册只保留可复用的迁移方法与红线；具体版本的逐文件台账、原始验收记录不进入仓库。
+> **原则**：本手册只保留可复用的迁移方法与红线；具体版本的逐文件台账、原始验收记录不进入仓库。台账是过程产物，但**每个上游变更必须有处置结论**，不能因为台账不入库就跳过盘点。
 >
 > **配套**：[`../reference/status.md`](../reference/status.md)（当前状态）、[`../roadmap/roadmap.md`](../roadmap/roadmap.md)（未来路线）。
 
@@ -32,9 +32,10 @@ theirs = 新版本的参考反编译源码
 
 1. 确认当前工作区可构建，记录当前门禁结果；
 2. 在仓库外建立目标版本的解包/反编译沙盒；
-3. 校验目标二进制的完整性与资源清单；
+3. 校验目标二进制完整性与资源清单：记录二进制 SHA-256、PCK 起始偏移、条目总数，并导出逐条 `path / size / md5` 清单；
 4. 生成目标版本的脚本、场景和资产参考工程；
-5. 确认目标版本可以独立打开或反编译。
+5. 确认目标版本可以独立打开或反编译；
+6. 保存**上一版本**的同格式清单。没有上一版本清单时，不得只用脚本 diff 推断范围，必须先恢复或重建基线清单。
 
 ### Phase 1：路径与符号映射
 
@@ -42,14 +43,30 @@ theirs = 新版本的参考反编译源码
 2. 对无法自动映射的脚本、场景和资产人工核对；
 3. 按文件类别标记：脚本、场景、数据、资产、导入缓存、打包文件；
 4. 标记建议动作：移植、适配、复制资产、重建导入、忽略、复核；
-5. 建立临时逐文件台账；台账属于迁移过程产物，不长期入库。
+5. 建立临时逐文件台账；台账属于迁移过程产物，不长期入库；
+6. 台账必须由版本清单做集合差集生成，至少覆盖 `added / modified / removed` 三种变化，并为每条生产条目记录：上游路径、当前路径、类别、处置、证据、验证项、是否进入发布闭包。测试、`.remap`、`.ctex`、旧 `.import`、`uid_cache.bin` 可单独分类，但不能混入生产完成率。
 
 ### Phase 2：功能批次移植
 
 - 先基础设施与数据，再角色/技能，最后侵入性最大的系统；
 - 每个批次保持可编译、可运行、可回滚；
 - 新文件按当前架构重写，不直接复制反编译文本；
-- 每批次完成静态门禁和相关冒烟后再进入下一批。
+- 每批次完成静态门禁和相关冒烟后再进入下一批；
+- **删除和收窄也是变更**：上游移除的生成标记、掉落条目、分支或限制必须逐条核对，不能只移植新增代码；
+- **数据表与 UI 接线同样是变更**：掉落表、概率、白名单、例外表、节点名、控件文本不能只靠脚本函数名覆盖；
+- **2P 路径必须单独核对**：涉及 `RoleProp`/`PlayerData` 的读取要确认是否应走 `LocalCoop` 槽位；相机、Buff 图标、灵气、被动属性、技能键提示等旁路不能因主流程通过而漏检。
+
+### Phase 2 出口：完成判定
+
+“所有文件已移植”不等于“回植完成”。只有同时满足以下条件才可把版本标记为完成：
+
+1. **范围完整**：上一版本到目标版本的每个 `added / modified / removed` 生产条目都有处置结论；没有未映射文件，也没有只凭历史记忆忽略的条目；
+2. **语义完整**：新增函数、修改函数、删除分支、数据表、概率、例外表、节点与控件文本都已核对；“函数名存在”不能代替函数体与行为核对；
+3. **资产完整**：变化资产与数据文件有当前路径和加载证据；构建期转换器通过；原始 JSON/BIN 等非资源文件若由 `FileAccess` 读取，必须进入实际导出闭包；
+4. **双人完整**：涉及 2P 的条目逐项检查相机、HUD/Buff、灵气、被动属性、技能键提示、面板操作者、槽位回写和死亡/退出；不能用单人关卡通过替代；
+5. **失败边界**：缺失资源、空路径、无效路径、导出缺失与保存失败均不静默回退；不允许用新的兼容别名或双加载路径掩盖漏移植；
+6. **证据可复核**：每个功能域有可重跑的命令、场景或探针结果；`check_all`、引擎健康、全量回归、双人/场景/档案探针与实际 PCK 闭包按 `acceptance.md` 完成；
+7. **文档一致**：`status.md`、`roadmap.md` 与版本标识只在上述证据完成后更新；归档完成声明不自动作为当前源码的完成证明。
 
 ### Phase 3：资产与场景收口
 
@@ -57,31 +74,55 @@ theirs = 新版本的参考反编译源码
 - 不复制旧导入缓存、`.ctex` 或旧 `.import`；
 - 源资产复制后由 Godot 重新导入；
 - 新增资产遵循 `docs/standards/naming_standard.md`；
-- 场景先转为可比较的原生 `.tscn`，再做结构化差异；
-- `project.godot` 只手工加入必要配置，不整体覆盖。
+- 场景先转为可比较的原生 `.tscn`，再做结构化差异；导出的 `.scn` 只作对照，不作为编辑源；
+- `project.godot` 只手工加入必要配置，不整体覆盖；
+- **数据文件也要收口**：`manifest.json`、`*.json`、`*.bin`、pose 数据等由 `FileAccess`/构建器直接读取的文件，必须校验当前路径与实际加载；
+- **导出闭包单独验证**：`export_presets.cfg`、`include_filter`、编辑器导出插件与发布依赖清单必须覆盖这些非资源文件。`all_resources` PCK 验证通过不等于 release 会包含它们；缺少导出插件或 include filter 时，必须实际导出 PCK 并检查路径；
+- 上游 `source.json`、manifest 等仅用于溯源的文件，可以不进入生产，但台账要明确标记“非运行时、无消费者”，不能静默删除。
 
-### Phase 4：全量验收
+### Phase 4：收口验收
+
+**版本迁移的最终验收使用 L3 全量**；`--changed-only` 只用于中间功能批次，不能替代最终版本验收。
 
 至少执行：
 
 ```bash
-python scripts/check_all.py --skip-engine
+python scripts/check_all.py --godot-bin <godot>
 python scripts/health_check.py --project source --godot-bin <godot>
-python scripts/level_regression_all.py --changed-only --diff-base <base>
+python scripts/contract_scan.py --self-test
+python scripts/contract_scan.py --fail-on-error
+python scripts/convert_atlas_metadata.py --check
+python scripts/convert_monster_frames.py --check
+python scripts/convert_frame_sequences.py --check
+python scripts/convert_level_preload_catalog.py --check
+python scripts/frame_sequence_pack_probe.py --self-test
+python scripts/level_regression_all.py
 python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot <godot>
 python scripts/scene_probe_runner.py --godot <godot>
-python scripts/convert_atlas_metadata.py --check
+python scripts/archive_probe_runner.py --godot <godot>
+python scripts/naming_audit.py --all
+python scripts/whitelist_audit.py --fail-on-error
 ```
+
+> `naming_compliance_audit.py --fail-on-error` 按 `acceptance.md` 的 L3 命名终审执行；当前工程存在已登记的 Phase 11 存量基线债务，必须把已知项与实际新增项分开记录，不能把 `check_all` 通过写成命名终审已通过。
 
 验收标准：
 
-- 静态门禁全部通过；
-- 完整工作区 0 ERROR / 0 WARNING；
-- 关卡回归通过，或 changed-only 覆盖等价；
-- Atlas 元数据与 manifest 全部同步；
-- 所有变化文件都有明确处置结论；
+- `check_all` 全部维度通过，完整工作区 0 ERROR / 0 WARNING；
+- L3 全量关卡回归通过；确实只能做 changed-only 时必须由用户明确批准并记录覆盖不到的关卡；
+- Atlas、SpriteFrames/FrameSequence、关卡预载 Catalog 与发布依赖清单全部同步；
+- 所有变化文件都有明确处置结论，**包括删除、数据表、场景节点与非资源文件**；
+- 双人相机、Buff 图标、灵气、被动属性、技能键提示、面板操作者按相关探针或最小复现验证；
+- 实际 PCK/release 包检查了原始 JSON/BIN 与构建产物；路径闭包不代替 release 加载；
 - 临时探针、解包目录、逐文件台账不进入生产源码。
+
+### Phase 5：签收
+
+1. 生成完成度摘要：条目总数、已处置、明确忽略、未映射、未验证，分别统计脚本/场景/数据/资产；
+2. 对每个功能域记录“生产入口、资源、测试/探针、结果”，不得只列文件名；
+3. 发现漏项时先补台账与复现，再修复；不得把未验证项写成已通过；
+4. 用户确认后才更新 `status.md`、`roadmap.md` 与版本标识，并保持提交原子化。
 
 ---
 
@@ -92,10 +133,10 @@ python scripts/convert_atlas_metadata.py --check
 每次迁移必须先验证：
 
 1. PE 节区、PCK 起始偏移是否变化；
-2. PCK 条目数与全量 MD5 是否一致；
+2. 逐条清单（路径、大小、MD5）是否与二进制一致；条目总数只作摘要，不能替代逐条比对；
 3. 密钥常量与解密结果是否通过校验；
 4. `.gdc` 字节码版本与 GDRE 映射是否仍匹配；
-5. 反编译输出是否能与参考源码对上。
+5. 反编译输出是否能与参考源码对上，并记录反编译失败/警告条目。
 
 旧版解密/重建脚本只可作为参考：
 
@@ -113,13 +154,16 @@ python scripts/convert_atlas_metadata.py --check
 git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 ```
 
+> `git merge-file` 在存在冲突时返回非零退出码，但带 `-p` 仍会把带冲突标记的结果写到标准输出。自动化流程要显式处理退出码并检查 `<<<<<<<` / `=======` / `>>>>>>>`，不能因 shell 中断而误判为没有输出。
+
 判定规则：
 
 - 无冲突也必须人工复核命名、类型、契约；
 - 有冲突按功能语义手工合并，禁止机械选择 ours/theirs；
 - `modify/delete` 先判断当前删除是否属于治理性清理；
 - 新增文件按当前架构改写，不直接复制；
-- 优先做函数级 diff，避免整文件行级噪声。
+- 优先做函数级 diff，避免整文件行级噪声；
+- 对删除的分支、数据项和限制逐条核对，不能只看新增行。
 
 ---
 
@@ -127,16 +171,17 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 
 | 项目 | 规则 |
 |:---|:---|
-| Atlas manifest | 构建期由 `scripts/convert_atlas_metadata.py` 生成 `metadata.tres`；运行时只读 `AtlasMetadata` |
+| Atlas manifest | `metadata.tres` 由构建期转换器从 `manifest.json` 生成；运行时只读 `AtlasMetadata` |
 | SpriteFrames | 遵循 `docs/standards/spriteframes_generation_policy.md`；FPS、循环命名、speed 语义统一 |
 | Spine | 先安装匹配的 GDExtension，再恢复源文件并重新导入；不复制旧导入缓存 |
 | UID / `.import` | 外部源素材维护导入配置；原生 `.tscn/.tres` 使用资源头 UID，脚本按机制维护 `.uid`；不复制缓存或伪造 `.import` |
 | 命名 | 遵循 `docs/standards/naming_standard.md`，保留类型顶层与精确冻结例外；按实际收益迁移路径 |
 | 数据 | 静态定义优先 Resource；会话/槽位状态与 JSON 持久化分离，不继续扩大 Global 与裸字典 |
+| 非资源文件 | `FileAccess` 读取的 JSON/BIN/pose 数据必须有当前路径、加载探针与导出闭包证据；编辑器导出插件或 `include_filter` 缺失时按失败处理 |
 
 ### 5.1 总体目标架构下的高版本回植检查表
 
-> 适用：7.0 及更高内容版本向当前治理工程回植。目标契约见
+> 适用范围：**高于当前基线的任何内容版本**（包括 6.x 补丁和 7.0 及更高版本）向当前治理工程回植。目标契约见
 > [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)，
 > 当前实现见 [`../reference/architecture.md`](../reference/architecture.md)。
 
@@ -172,10 +217,14 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 ## 7. 下一次迁移检查表
 
 - [ ] 目标版本二进制格式与加密参数已重新验证；
+- [ ] 目标二进制 SHA-256、PCK 偏移、逐条路径/大小/MD5 清单已保存，并与上一版本清单完成集合差集；
 - [ ] 参考脚本/场景/资产已独立生成；
 - [ ] 三方基线、ours、theirs 已明确；
-- [ ] 逐文件映射与功能批次已拆分；
+- [ ] 逐文件映射与功能批次已拆分；生产条目没有未映射项；
+- [ ] 新增、修改和删除均已核对；数据表、概率、例外表与 UI 节点文本已覆盖；
+- [ ] 2P 相机、Buff 图标、灵气、被动属性、技能键提示与操作者路径已核对；
+- [ ] 非资源 JSON/BIN 数据已通过实际加载探针，并进入 release/PCK 导出闭包；
 - [ ] 资产清单与 UID/`.import` 策略已确认；
-- [ ] 静态门禁、引擎健康检查、关卡回归、Atlas 校验全部通过；
+- [ ] 静态门禁、引擎健康检查、L3 全量关卡回归、双人/场景/档案探针、Atlas/帧/Catalog 校验全部通过；
 - [ ] 原始台账与临时产物未进入仓库；
-- [ ] `status.md` 与 `roadmap.md` 已更新。
+- [ ] `status.md` 与 `roadmap.md` 已更新，未验证项已明确列出。
