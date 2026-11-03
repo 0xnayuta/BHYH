@@ -45,6 +45,7 @@ const PET_TURTLE_BULLET_SCRIPT = preload("res://Script/pet/pet_turtle_bullet.gd"
 const PET_RABBIT_BULLET_SCRIPT = preload("res://Script/pet/pet_rabbit_bullet.gd")
 const PET_MOUSE_BULLET_SCRIPT = preload("res://Script/pet/pet_mouse_bullet.gd")
 const PET_NEAT_BULLET_SCRIPT = preload("res://Script/pet/pet_neat_bullet.gd")
+const PET_YIN_TIGER_BULLET_SCRIPT = preload("res://Script/pet/pet_yin_tiger_bullet.gd")
 const MONSTER_CONTROL_BUFF_NAMES := [
 	"Ice",
 	"stun",
@@ -2374,6 +2375,8 @@ func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
 		profile.ensure_pet_mouse()
 	if profile.has_method("ensure_pet_neat"):
 		profile.ensure_pet_neat()
+	if profile.has_method("ensure_pet_yin_tiger"):
+		profile.ensure_pet_yin_tiger()
 	var pets: Variant = profile.player_data.get(PlayerData.PET_LIST_KEY, [])
 	if not (pets is Array):
 		return {}
@@ -2400,6 +2403,7 @@ func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
 		var is_rabbit := type_name == "PetRabbit" or pet_name in ["月兔", "疾风兔", "寒冰玉兔", "冰霜月神"]
 		var is_mouse := type_name == "PetMouse" or pet_name.begins_with("子鼠") or pet_name in ["子鼠元帅", "子鼠大元帅"]
 		var is_neat := type_name == "PetNeat" or pet_name in ["丑牛", "丑牛元帅", "丑牛大元帅"]
+		var is_yin_tiger := type_name == "PetYinTiger" or pet_name in ["寅虎", "银角虎", "寅虎元帅", "寅虎大元帅"]
 		if (
 			not is_dragon
 			and not is_tiger
@@ -2408,21 +2412,26 @@ func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
 			and not is_rabbit
 			and not is_mouse
 			and not is_neat
+			and not is_yin_tiger
 		):
 			continue
 		var pet_type := (
-			"PetNeat"
-			if is_neat
+			"PetYinTiger"
+			if is_yin_tiger
 			else (
-				"PetMouse"
-				if is_mouse
+				"PetNeat"
+				if is_neat
 				else (
-					"PetRabbit"
-					if is_rabbit
+					"PetMouse"
+					if is_mouse
 					else (
-						"PetTurtle"
-						if is_turtle
-						else "PetPhoenix" if is_phoenix else "PetDragon" if is_dragon else "PetTiger"
+						"PetRabbit"
+						if is_rabbit
+						else (
+							"PetTurtle"
+							if is_turtle
+							else "PetPhoenix" if is_phoenix else "PetDragon" if is_dragon else "PetTiger"
+						)
 					)
 				)
 			)
@@ -2460,6 +2469,22 @@ func get_active_pet_preload_paths(slot: int = 1) -> Array[String]:
 		else clampi(int(pet_info.get("stage", 1)), 1, 4)
 	)
 	var pet_level := int(pet_info.get("level", 1))
+	if pet_type == "PetYinTiger":
+		var source_stage := 2 if stage >= 4 else 1
+		var yin_paths: Array[String] = [
+			"res://Scene/pet/pet_yin_tiger_summon_%d.tscn" % stage,
+			(
+				"res://Art/pet/pet_yin_tiger/model/actions/stage%d/yin_tiger_stage%d_frames.tres"
+				% [source_stage, source_stage]
+			),
+			"res://Scene/pet/pet_yin_tiger_bullet.tscn",
+			"res://Art/pet/pet_yin_tiger/model/actions/stage%d/wait/1.png" % source_stage,
+			"res://Art/pet/skillicon/hx.png",
+		]
+		if stage >= 4:
+			yin_paths.append("res://Art/pet/skillicon/mhxs.png")
+			yin_paths.append("res://Art/pet/skillicon/yhaoyi.png")
+		return yin_paths
 	if pet_type == "PetNeat":
 		return (
 			[
@@ -2592,7 +2617,15 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 	var scene_path := ""
 	var frames_path := ""
 	var bullet_scene_path := ""
-	if pet_type == "PetNeat":
+	if pet_type == "PetYinTiger":
+		var source_stage := 2 if stage >= 4 else 1
+		scene_path = "res://Scene/pet/pet_yin_tiger_summon_%d.tscn" % stage
+		frames_path = (
+			"res://Art/pet/pet_yin_tiger/model/actions/stage%d/yin_tiger_stage%d_frames.tres"
+			% [source_stage, source_stage]
+		)
+		bullet_scene_path = "res://Scene/pet/pet_yin_tiger_bullet.tscn"
+	elif pet_type == "PetNeat":
 		scene_path = "res://Scene/pet/pet_neat_summon_%d.tscn" % stage
 		frames_path = "res://Art/pet/pet_neat/model/pet_neat_stage%d_frames.tres" % stage
 		bullet_scene_path = "res://Scene/pet/pet_neat_bullet.tscn"
@@ -2624,7 +2657,9 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 	var bullet_scene := preload_scene_path(bullet_scene_path)
 	_warm_scene_instance(bullet_scene)
 	_preload_sprite_frames_resource(frames_path)
-	if pet_type == "PetNeat":
+	if pet_type == "PetYinTiger":
+		PET_YIN_TIGER_BULLET_SCRIPT.warm_pet_yin_tiger_frames(stage)
+	elif pet_type == "PetNeat":
 		PET_NEAT_BULLET_SCRIPT.warm_pet_neat_frames(stage)
 	elif pet_type == "PetMouse":
 		PET_MOUSE_BULLET_SCRIPT.warm_pet_mouse_frames(pet_level)

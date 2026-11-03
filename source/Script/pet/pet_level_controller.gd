@@ -1,6 +1,6 @@
 class_name PetLevelController
 extends RefCounted
-## 关卡宠物生成控制器：当前接管龟布、白虎、青龙、朱雀、月兔、子鼠、丑牛七族，其余族仍由 BaseLevel 旧分派处理。
+## 关卡宠物生成控制器：八族宠物生成已全部接管，BaseLevel 不再保留旧分派。
 ## 控制器只持有生命周期逻辑，族规则由 Pet*Family 提供；不新增 Autoload。
 
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
@@ -10,6 +10,7 @@ const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
 const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
+const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 const PET_UNIT_METAS := [
@@ -115,6 +116,8 @@ func _family_for(pet_data: Dictionary) -> Variant:
 		return PET_MOUSE_FAMILY
 	if PET_NEAT_FAMILY.matches(pet_data):
 		return PET_NEAT_FAMILY
+	if PET_YIN_TIGER_FAMILY.matches(pet_data):
+		return PET_YIN_TIGER_FAMILY
 	return null
 
 

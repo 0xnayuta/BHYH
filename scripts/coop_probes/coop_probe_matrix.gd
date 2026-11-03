@@ -107,6 +107,8 @@ func _run() -> void:
 			await _case_pet_mouse()
 		"LocalCoopPetNeatProbe":
 			await _case_pet_neat()
+		"LocalCoopPetYinTigerProbe":
+			await _case_pet_yin_tiger()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -1064,6 +1066,114 @@ func _case_pet_neat() -> void:
 		_check(int(p1_unit.get("turtle_stage")) == 4, "P1 neat stage 4")
 	if p2_unit != null:
 		_check(int(p2_unit.get("turtle_stage")) == 4, "P2 neat stage 4")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+## 23-2 寅虎族：四阶、阶段技能、Global 预热、升级写回、死亡别名与双槽生成。
+func _case_pet_yin_tiger() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_yin_tiger_family.gd").new()
+	var family_pet := _pet_probe_data("PetYinTiger", "寅虎元帅", 1000)
+	family_pet["等级"] = 30
+	family_pet["阶段"] = 1
+	_check(family.matches(family_pet), "yin tiger family matches type")
+	_check(family.matches({"名称": "寅虎大元帅"}), "yin tiger family matches display name")
+	_check(not family.matches({"名称": "丑牛元帅"}), "yin tiger family rejects neat name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 3, "yin tiger normalize uses level stage")
+	_check(str(family_pet.get("名称", "")) == "寅虎元帅", "yin tiger normalize updates display name")
+	_check(not (family_pet.get("技能", []) as Array).has("猛虎下山"), "yin tiger stage 3 keeps base skills")
+	_check(int(family_pet.get("生命资质基础上限", 0)) == 2800, "yin tiger normalize sets base stat limits")
+	family_pet["等级"] = 50
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 4, "yin tiger evolve reaches stage 4")
+	_check(str(family_pet.get("名称", "")) == "寅虎大元帅", "yin tiger evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("寅虎奥义"), "yin tiger evolve applies stage 4 skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetYinTiger", "yin tiger evolve writes P2 active")
+	_check(family.scene_path(4) == "res://Scene/pet/pet_yin_tiger_summon_4.tscn", "yin tiger scene path")
+	var aliases: Array[String] = ["寅虎元帅"]
+	family.append_death_aliases(aliases, "寅虎元帅")
+	_check(aliases.has("PetYinTiger") and aliases.has("寅虎大元帅"), "yin tiger death aliases")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("寅虎元帅")
+	_check(level_aliases.has("PetYinTiger") and level_aliases.has("寅虎大元帅"), "BaseLevel yin tiger death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("寅虎大元帅")
+	_check(panel_aliases.has("PetYinTiger") and panel_aliases.has("寅虎元帅"), "PetInterface yin tiger death aliases")
+	panel.free()
+
+	data.player_data["玩家等级"] = 50
+	coop.secondary_data.player_data["玩家等级"] = 50
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 50
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 50
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetYinTiger", "寅虎元帅", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetYinTiger", "寅虎元帅", 1000)
+	p2_pet["等级"] = 49
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetYinTiger"
+	coop.secondary_data.player_data["出战宠物"] = "PetYinTiger"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(200000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 50, "P2 yin tiger reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 4, "P2 yin tiger evolves to stage 4")
+	_check(str(p2_pet.get("名称", "")) == "寅虎大元帅", "P2 yin tiger evolution name")
+	_check((p2_pet.get("技能", []) as Array).has("寅虎奥义"), "P2 yin tiger evolution skills")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 yin tiger untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 50
+	p2_pet["等级"] = 50
+	family.normalize_spawn(p1_pet, data)
+	var preload_info: Dictionary = global.get_active_pet_preload_data(1)
+	_check(str(preload_info.get("type", "")) == "PetYinTiger", "yin tiger preload type")
+	_check(int(preload_info.get("stage", 0)) == 4, "yin tiger preload stage")
+	var preload_paths: Array[String] = global.get_active_pet_preload_paths(1)
+	_check(preload_paths.has("res://Scene/pet/pet_yin_tiger_summon_4.tscn"), "yin tiger preload scene")
+	_check(
+		preload_paths.has("res://Art/pet/pet_yin_tiger/model/actions/stage2/yin_tiger_stage2_frames.tres"),
+		"yin tiger preload stage 2 frames"
+	)
+	_check(preload_paths.has("res://Scene/pet/pet_yin_tiger_bullet.tscn"), "yin tiger preload bullet")
+	_check(preload_paths.has("res://Art/pet/skillicon/yhaoyi.png"), "yin tiger preload aoyi icon")
+	await global.prewarm_active_pet_runtime_resources(1)
+	_check(global.get_prewarmed_pet_signature(1) == "PetYinTiger:4", "yin tiger prewarm signature")
+
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_yin_tiger_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_yin_tiger_unit")
+	_check(p1_unit != null, "P1 yin tiger spawned by controller")
+	_check(p2_unit != null, "P2 yin tiger spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("turtle_stage")) == 4, "P1 yin tiger stage 4")
+	if p2_unit != null:
+		_check(int(p2_unit.get("turtle_stage")) == 4, "P2 yin tiger stage 4")
 	level.queue_free()
 	stage = null
 	await process_frame

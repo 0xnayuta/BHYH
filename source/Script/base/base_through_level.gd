@@ -9,8 +9,7 @@ const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
 const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
-const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
-const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
+const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
 var is_two_scene
 var _pet_level_controller = PET_LEVEL_CONTROLLER.new()
 
@@ -223,10 +222,7 @@ func _is_active_pet_dead_this_level(pet_name: String = "", slot: int = 1) -> boo
 func _active_pet_dead_aliases(pet_name: String) -> Array[String]:
 	var aliases: Array[String] = [pet_name]
 	PET_NEAT_FAMILY.append_death_aliases(aliases, pet_name)
-	if pet_name == "PetYinTiger" or pet_name in ["寅虎", "银角虎", "寅虎元帅", "寅虎大元帅"]:
-		aliases.append("PetYinTiger")
-		aliases.append("寅虎元帅")
-		aliases.append("寅虎大元帅")
+	PET_YIN_TIGER_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_MOUSE_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_RABBIT_FAMILY.append_death_aliases(aliases, pet_name)
 	if pet_name == "PetTurtle" or pet_name.begins_with("玄武") or pet_name in ["龟布", "墨玄龟", "玄武将军", "玄武大帝"]:
@@ -272,180 +268,7 @@ func _spawn_active_pet(slot: int = 1) -> void:
 	var pet_data := _get_active_pet_data(PlayerData)
 	if pet_data.is_empty():
 		return
-	if await _pet_level_controller.spawn_for_slot(self, slot, PlayerData, pet_data):
-		return
-	PlayerData.clamp_pet_level_to_player(pet_data)
-	var pet_name := _pet_active_name(pet_data)
-	if _is_active_pet_dead_this_level(pet_name, slot):
-		pet_data[DataKeys.DEPLOYED] = false
-		if str(PlayerData.player_data.get(_active_pet_name_key(), "")) == pet_name:
-			PlayerData.player_data[_active_pet_name_key()] = ""
-			PlayerData.player_data["出战宠物"] = ""
-		return
-	if int(pet_data.get(DataKeys.HP, 0)) <= 0:
-		var hp_max := int(pet_data.get("生命上限", 1))
-		pet_data[DataKeys.HP] = hp_max
-	if int(pet_data.get(DataKeys.MP, 0)) <= 0:
-		var mp_max := int(pet_data.get("魔法上限", 1))
-		pet_data[DataKeys.MP] = mp_max
-	var learned_custom_skills: Array = PET_LIFE_BONUS_RUNTIME.learned_skill_names(pet_data)
-	var learned_custom_levels: Dictionary = {}
-	for learned_skill in learned_custom_skills:
-		learned_custom_levels[str(learned_skill)] = PET_SKILL_PROGRESSION.get_level(pet_data, str(learned_skill))
-	var pet_kind := _pet_active_name(pet_data)
-	if (
-		pet_kind != "PetTiger"
-		and pet_kind != "PetDragon"
-		and pet_kind != "PetPhoenix"
-		and pet_kind != "PetTurtle"
-		and pet_kind != "PetRabbit"
-		and pet_kind != "PetMouse"
-		and pet_kind != "PetNeat"
-		and pet_kind != "PetYinTiger"
-	):
-		return
-	if monster != null:
-		for child in monster.get_children():
-			if (
-				child != null
-				and not child.is_queued_for_deletion()
-				and int(child.get_meta("coop_slot", 1)) == slot
-				and (
-					child.has_meta("pet_tiger_unit")
-					or child.has_meta("pet_dragon_unit")
-					or child.has_meta("pet_phoenix_unit")
-					or child.has_meta("pet_turtle_unit")
-					or child.has_meta("pet_rabbit_unit")
-					or child.has_meta("pet_mouse_unit")
-					or child.has_meta("pet_neat_unit")
-					or child.has_meta("pet_yin_tiger_unit")
-				)
-			):
-				return
-	if (
-		pet_kind == PET_TURTLE_FAMILY.KIND
-		or pet_kind == PET_TIGER_FAMILY.KIND
-		or pet_kind == PET_DRAGON_FAMILY.KIND
-		or pet_kind == PET_PHOENIX_FAMILY.KIND
-		or pet_kind == PET_RABBIT_FAMILY.KIND
-		or pet_kind == PET_MOUSE_FAMILY.KIND
-		or pet_kind == PET_NEAT_FAMILY.KIND
-	):
-		return
-	if pet_kind == "PetYinTiger":
-		_normalize_pet_yin_tiger_spawn_data(pet_data)
-		_recalculate_active_pet_growth_stats(pet_data)
-		_restore_active_pet_for_level_start(pet_data)
-		_update_pet_yin_tiger_evolution(pet_data)
-	if not learned_custom_skills.is_empty():
-		var normalized_skills: Array = pet_data.get("技能", []) if pet_data.get("技能", []) is Array else []
-		for learned_skill in learned_custom_skills:
-			if not normalized_skills.has(learned_skill):
-				normalized_skills.append(learned_skill)
-		pet_data["技能"] = normalized_skills
-		var normalized_levels := PET_SKILL_PROGRESSION.ensure_levels(pet_data)
-		for learned_skill in learned_custom_levels:
-			normalized_levels[learned_skill] = learned_custom_levels[learned_skill]
-	var pet_stage: int = _active_pet_stage_from_data(pet_data)
-	await Global.prewarm_active_pet_runtime_resources(slot)
-	var scene_path := _pet_yin_tiger_scene_path(pet_stage) if pet_kind == "PetYinTiger" else ""
-	if scene_path == "":
-		return
-	var scene := Global.preload_scene_path(scene_path)
-	if scene == null:
-		return
-	if not is_instance_valid(source_player) or monster == null:
-		return
-	var pet = scene.instantiate()
-	pet.set_meta("coop_slot", slot)
-	if pet_kind == "PetYinTiger":
-		pet.set_meta("pet_yin_tiger_unit", true)
-	else:
-		pet.set_meta("pet_dragon_unit", true)
-	pet.set_meta("is_summon", true)
-	if pet.has_method("apply_pet_data"):
-		pet.apply_pet_data(pet_data)
-	if pet_kind == "PetYinTiger" and pet.has_method("setup_pet_turtle"):
-		pet.setup_pet_turtle(pet_stage)
-	monster.add_child(pet)
-
-	if pet.has_method("apply_pet_data"):
-		pet.call_deferred("apply_pet_data", pet_data)
-	if not learned_custom_skills.is_empty():
-		var life_bonus_runtime := PET_LIFE_BONUS_RUNTIME.new()
-		life_bonus_runtime.name = "PetLearnedSkillRuntime"
-		life_bonus_runtime.setup(pet_data)
-		pet.add_child(life_bonus_runtime)
-	set_meta(LocalCoop.pet_meta_key("active_pet_unit", slot), pet)
-	var spawn_position: Vector2 = _active_pet_spawn_position(pet, source_player)
-	_place_active_pet_near_role(pet, spawn_position)
-	call_deferred("_place_active_pet_near_role", pet, spawn_position)
-	if pet.has_method("set_summon_properties"):
-		pet.call_deferred("set_summon_properties", source_player, 0.0)
-
-
-func _is_pet_yin_tiger_data(pet: Dictionary) -> bool:
-	if str(pet.get(DataKeys.TYPE, "")) == "PetYinTiger":
-		return true
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, pet.get(DataKeys.NAME, ""))).strip_edges()
-	return pet_name in ["寅虎", "银角虎", "寅虎元帅", "寅虎大元帅"]
-
-
-func _pet_yin_tiger_stage_for_level(level: int) -> int:
-	return 4 if level >= 50 else 3 if level >= 30 else 2 if level >= 15 else 1
-
-
-func _pet_yin_tiger_stage_name(stage: int) -> String:
-	return "寅虎大元帅" if clampi(stage, 1, 4) == 4 else "寅虎元帅"
-
-
-func _pet_yin_tiger_stage_skills(stage: int) -> Array:
-	return ["虎啸"] if clampi(stage, 1, 4) < 4 else ["虎啸", "猛虎下山", "寅虎奥义"]
-
-
-func _normalize_pet_yin_tiger_spawn_data(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	var active_name := str(PlayerData.player_data.get(_active_pet_name_key(), ""))
-	var keep_fighting := (
-		bool(pet.get(DataKeys.DEPLOYED, false))
-		or active_name == "PetYinTiger"
-		or active_name in ["寅虎", "银角虎", "寅虎元帅", "寅虎大元帅"]
-	)
-	var stage := _pet_yin_tiger_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
-	pet[DataKeys.TYPE] = "PetYinTiger"
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = _pet_yin_tiger_stage_name(stage)
-	pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
-	pet["技能"] = _pet_yin_tiger_stage_skills(stage)
-	pet["生命资质基础上限"] = 2800
-	pet["魔法资质基础上限"] = 2200
-	pet["攻击资质基础上限"] = 3200
-	pet["防御资质基础上限"] = 2200
-	pet[DataKeys.DEPLOYED] = keep_fighting
-
-
-func _update_pet_yin_tiger_evolution(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	if not _is_pet_yin_tiger_data(pet):
-		return
-	_normalize_pet_yin_tiger_spawn_data(pet)
-	if _pet_is_fighting(pet):
-		PlayerData.player_data[_active_pet_name_key()] = "PetYinTiger"
-		PlayerData.player_data["出战宠物"] = "PetYinTiger"
-
-
-func _pet_yin_tiger_scene_path(stage: int) -> String:
-	return "res://Scene/pet/pet_yin_tiger_summon_%d.tscn" % clampi(stage, 1, 4)
-
-
-func _pet_stage_for_level(pet_level: int) -> int:
-	if pet_level >= 50:
-		return 4
-	if pet_level >= 30:
-		return 3
-	if pet_level >= 15:
-		return 2
-	return 1
+	await _pet_level_controller.spawn_for_slot(self, slot, PlayerData, pet_data)
 
 
 func _ensure_pet_growth_fields_for_spawn(pet: Dictionary) -> void:
@@ -521,14 +344,6 @@ func _restore_active_pet_for_level_start(pet: Dictionary) -> void:
 	pet[DataKeys.MP] = mp_max
 
 
-func _active_pet_stage_from_data(pet: Dictionary) -> int:
-	var stage := int(pet.get("阶段", pet.get("pet_stage", 0)))
-	if stage <= 0:
-		var pet_level := int(pet.get(DataKeys.LEVEL, 1))
-		stage = 4 if pet_level >= 50 else 3 if pet_level >= 30 else 2 if pet_level >= 15 else 1
-	return clampi(stage, 1, 4)
-
-
 func _active_pet_spawn_position(pet: Node, source_player: BaseHero = null) -> Vector2:
 	var role: BaseHero = source_player if is_instance_valid(source_player) else _role
 	var role_anchor: Vector2 = role.global_position
@@ -583,8 +398,8 @@ func _pet_active_name(pet: Dictionary) -> String:
 	var type_name := str(pet.get(DataKeys.TYPE, ""))
 	if PET_NEAT_FAMILY.matches(pet):
 		return PET_NEAT_FAMILY.KIND
-	if type_name == "PetYinTiger" or _is_pet_yin_tiger_data(pet):
-		return "PetYinTiger"
+	if PET_YIN_TIGER_FAMILY.matches(pet):
+		return PET_YIN_TIGER_FAMILY.KIND
 	if PET_MOUSE_FAMILY.matches(pet):
 		return PET_MOUSE_FAMILY.KIND
 	if PET_RABBIT_FAMILY.matches(pet):
@@ -639,7 +454,7 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		elif PET_NEAT_FAMILY.matches(pet):
 			neat_pet = pet
 			neat_is_fighting = neat_is_fighting or _pet_is_fighting(pet)
-		elif _is_pet_yin_tiger_data(pet):
+		elif PET_YIN_TIGER_FAMILY.matches(pet):
 			yin_tiger_pet = pet
 			yin_tiger_is_fighting = yin_tiger_is_fighting or _pet_is_fighting(pet)
 		elif PET_RABBIT_FAMILY.matches(pet):
@@ -672,12 +487,16 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		_set_only_active_pet(pets, neat_pet, data, PET_NEAT_FAMILY.KIND)
 		return PET_NEAT_FAMILY.KIND
 	if (
-		(active_name == "PetYinTiger" or _is_pet_yin_tiger_data({"名称": active_name}) or yin_tiger_is_fighting)
+		(
+			active_name == PET_YIN_TIGER_FAMILY.KIND
+			or PET_YIN_TIGER_FAMILY.matches({"名称": active_name})
+			or yin_tiger_is_fighting
+		)
 		and not yin_tiger_pet.is_empty()
 	):
-		_normalize_pet_yin_tiger_spawn_data(yin_tiger_pet)
-		_set_only_active_pet(pets, yin_tiger_pet, data, "PetYinTiger")
-		return "PetYinTiger"
+		PET_YIN_TIGER_FAMILY.normalize_spawn(yin_tiger_pet, profile)
+		_set_only_active_pet(pets, yin_tiger_pet, data, PET_YIN_TIGER_FAMILY.KIND)
+		return PET_YIN_TIGER_FAMILY.KIND
 	if (
 		(active_name == PET_RABBIT_FAMILY.KIND or PET_RABBIT_FAMILY.matches({"名称": active_name}) or rabbit_is_fighting)
 		and not rabbit_pet.is_empty()
