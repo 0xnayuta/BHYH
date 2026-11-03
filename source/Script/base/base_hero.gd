@@ -34,7 +34,6 @@ var _last_archive_name := ""
 var _last_hero_formation := ""
 var _last_hero_formation_level: int = -1
 var _last_wings_name := ""
-var _active_magic_weapon_name := ""
 var _wings_base_position := Vector2.ZERO
 var _wings_base_offset := Vector2.ZERO
 var _wings_base_rotation := 0.0
@@ -142,7 +141,7 @@ const ROLE_PROTECT_DURATION: float = 3.5
 const WHITE_BAR_ARMOR_DURATION: float = 7.5
 var white_bar_armor_time_left: float = 0.0
 var current_protect: float = 0.0
-var mg_target
+var magic_weapon_presentation: MagicWeaponPresentationController
 var main_sword_array_target: Node2D
 var _last_main_sword_array_id: String = ""
 var lyfb_calm: float
@@ -286,6 +285,7 @@ var _last_role_hit_effect_msec: int = 0
 func _ready() -> void:
 	RoleProp.source_player = self
 	_ensure_auto_battle_controller()
+	_ensure_magic_weapon_presentation()
 
 	_capture_wings_base_transform()
 	call_deferred("_scan_late_static_wing_tracks")
@@ -325,6 +325,12 @@ func _ensure_auto_battle_controller() -> void:
 	auto_battle_controller = AutoBattleController.new(auto_battle_context)
 
 
+func _ensure_magic_weapon_presentation() -> void:
+	if magic_weapon_presentation != null:
+		return
+	magic_weapon_presentation = MagicWeaponPresentationController.new(self)
+
+
 func _exit_tree() -> void:
 	if RoleProp.source_player == self:
 		RoleProp.source_player = null
@@ -332,6 +338,8 @@ func _exit_tree() -> void:
 	set_physics_process(false)
 	if auto_battle_controller != null:
 		auto_battle_controller.reset()
+	if magic_weapon_presentation != null:
+		magic_weapon_presentation.clear()
 	_clear_visual_resources(self)
 
 
@@ -387,7 +395,8 @@ func _load_equipped_magic_weapon_deferred() -> void:
 	await Global.prepare_magic_weapon_resources(equipped_weapon)
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
-	add_magic_weapon()
+	if magic_weapon_presentation != null:
+		magic_weapon_presentation.refresh()
 
 
 func _add_role_hit_effect_throttled() -> void:
@@ -396,30 +405,6 @@ func _add_role_hit_effect_throttled() -> void:
 		return
 	_last_role_hit_effect_msec = now
 	Global.add_special_effect(self, Vector2(0, 0), "RoleBeHit", Vector2(1, 1), false, 1)
-
-
-func null_szfb_case():
-	if PlayerData.player_data["实战法宝"] == "":
-		if mg_target != null:
-			mg_target.queue_free()
-		if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-			add_magic_weapon()
-
-
-func on_szfb_change():
-	if is_instance_valid(mg_target) and _active_magic_weapon_name != str(PlayerData.player_data.get("实战法宝", "")):
-		mg_target.queue_free()
-		if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-			add_magic_weapon()
-
-
-func check_remove_or_add_fb():
-	if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() == 0:
-		if mg_target != null:
-			mg_target.queue_free()
-	else:
-		if mg_target == null:
-			add_magic_weapon()
 
 
 func _sync_main_sword_array_weapon() -> void:
@@ -463,13 +448,27 @@ func _sync_main_sword_array_weapon() -> void:
 	_last_main_sword_array_id = active
 
 
+## 只读入口：当前装备法宝的展示实例。
+func get_magic_weapon_target() -> BaseMagicWeapon:
+	if magic_weapon_presentation == null:
+		return null
+	return magic_weapon_presentation.get_target()
+
+
+func get_active_magic_weapon_name() -> String:
+	if magic_weapon_presentation == null:
+		return ""
+	return magic_weapon_presentation.get_active_name()
+
+
 func use_fb():
-	if mg_target == null or not is_instance_valid(mg_target) or mg_target.is_queued_for_deletion():
+	var target := get_magic_weapon_target()
+	if target == null:
 		return
-	if not mg_target.has_method("enough_mp"):
+	if not target.has_method("enough_mp"):
 		return
-	if bool(mg_target.call("enough_mp")) and bool(mg_target.get("is_canuse")):
-		mg_target.set("is_use", true)
+	if bool(target.call("enough_mp")) and bool(target.get("is_canuse")):
+		target.set("is_use", true)
 
 
 func ws_skill() -> bool:
@@ -666,15 +665,15 @@ func _physics_process(delta: float) -> void:
 
 	self_protect()
 	RoleProp.directon = player_dir
-	null_szfb_case()
-	on_szfb_change()
-	check_remove_or_add_fb()
+	if magic_weapon_presentation != null:
+		magic_weapon_presentation.tick()
 	if _sword_array_sync_elapsed >= 0.25:
 		_sword_array_sync_elapsed = 0.0
 		_sync_main_sword_array_weapon()
 
-	if mg_target != null and "is_zcld" in mg_target and mg_target.is_zcld:
-		zcld_level = mg_target.fb_level
+	var magic_weapon_target := get_magic_weapon_target()
+	if magic_weapon_target != null and "is_zcld" in magic_weapon_target and magic_weapon_target.is_zcld:
+		zcld_level = magic_weapon_target.fb_level
 	else:
 		zcld_level = 0
 
@@ -744,8 +743,9 @@ func _physics_process(delta: float) -> void:
 					when_scary()
 	if PlayerInput.is_action_pressed("MagicWeapon"):
 		if not get_parent().get_parent() is Level17 and not get_parent().get_parent() is Level22:
-			if mg_target != null:
-				if mg_target is GhostDoll:
+			var manual_magic_weapon_target := get_magic_weapon_target()
+			if manual_magic_weapon_target != null:
+				if manual_magic_weapon_target is GhostDoll:
 					use_fb()
 				else:
 					if no_limit_buff():
@@ -2269,40 +2269,6 @@ func _try_taiji_bagua_revive() -> void:
 			int(RoleProp.roleprop.SMp), int(RoleProp.roleprop.Mp) + int(RoleProp.roleprop.SMp / 2.0)
 		)
 	_taiji_bagua_protection_until = Time.get_ticks_msec() + 2000
-
-
-func add_magic_weapon():
-	if is_instance_valid(mg_target) and not mg_target.is_queued_for_deletion():
-		return
-	mg_target = null
-	if str(PlayerData.player_data.get("实战法宝", "")) in PlayerData.RETIRED_WUDU_MAGIC_WEAPONS:
-		PlayerData.player_data["实战法宝"] = ""
-	if PlayerData.player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-		var name1 = PlayerData.player_data["实战法宝"]
-		if name1 != "":
-			var parent = get_parent().get_parent()
-			mg_target = Global.add_magic_weapon(parent, name1, Vector2(0, 0), self)
-			if mg_target != null and mg_target.has_method("set_magic_weapon_player"):
-				mg_target.set_magic_weapon_player(self)
-			else:
-				if mg_target != null:
-					mg_target.queue_free()
-				mg_target = null
-		else:
-			PlayerData.player_data["实战法宝"] = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
-			var parent = get_parent().get_parent()
-			mg_target = Global.add_magic_weapon(parent, PlayerData.player_data["实战法宝"], Vector2(0, 0), self)
-			if mg_target != null and mg_target.has_method("set_magic_weapon_player"):
-				mg_target.set_magic_weapon_player(self)
-			else:
-				if mg_target != null:
-					mg_target.queue_free()
-				mg_target = null
-	else:
-		if mg_target != null:
-			mg_target.queue_free()
-	if is_instance_valid(mg_target) and not mg_target.is_queued_for_deletion():
-		_active_magic_weapon_name = str(PlayerData.player_data.get("实战法宝", ""))
 
 
 func add_ws_effect():

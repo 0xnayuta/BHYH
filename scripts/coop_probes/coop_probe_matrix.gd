@@ -58,8 +58,9 @@ func _make_stage() -> void:
 	await process_frame
 
 
-func _make_hero(role_id: int, slot: int) -> Node:
-	return global.call_hero("role_" + str(role_id), stage, Vector2(100 + slot * 50, 340), false, slot)
+func _make_hero(role_id: int, slot: int, parent: Node = null) -> Node:
+	var host: Node = parent if parent != null else stage
+	return global.call_hero("role_" + str(role_id), host, Vector2(100 + slot * 50, 340), false, slot)
 
 
 func _run() -> void:
@@ -81,6 +82,8 @@ func _run() -> void:
 			await _case_gameplay()
 		"LocalCoopMagicSwitchProbe":
 			await _case_magic_switch()
+		"LocalCoopMagicPresentationProbe":
+			await _case_magic_presentation()
 		"LocalCoopMonsterBalanceProbe":
 			await _case_monster_balance()
 		"LocalCoopMonsterInfoProbe":
@@ -233,6 +236,131 @@ func _case_magic_switch() -> void:
 	second.free()
 	summon1.free()
 	summon2.free()
+
+
+func _magic_weapon_entry(weapon_name: String) -> Dictionary:
+	return {
+		DataKeys.NAME: weapon_name,
+		DataKeys.ENHANCE_LEVEL: 0,
+		DataKeys.FIVE_ELEMENTS: [],
+		"Data": {"成长率": 0.0},
+	}
+
+
+func _wait_magic_weapon(hero: Node, frames: int = 40) -> Node:
+	for _index in frames:
+		if hero.get_magic_weapon_target() != null:
+			return hero.get_magic_weapon_target()
+		await physics_frame
+	return hero.get_magic_weapon_target()
+
+
+## 25-2：装备法宝展示实例的双人创建、切换、默认回退、冷却与移除。
+func _case_magic_presentation() -> void:
+	coop.create_secondary(7)
+	data.player_data[DataKeys.MAGIC_WEAPON] = [_magic_weapon_entry("qlsword")]
+	data.player_data["实战法宝"] = "qlsword"
+	coop.secondary_data.player_data[DataKeys.MAGIC_WEAPON] = [_magic_weapon_entry("qlsword")]
+	coop.secondary_data.player_data["实战法宝"] = "qlsword"
+	await _make_stage()
+	var holder := Node2D.new()
+	stage.add_child(holder)
+	var p1: Node = _make_hero(1, 1, holder)
+	var p2: Node = _make_hero(7, 2, holder)
+	_check(p1 != null and p2 != null, "magic presentation owners instantiated")
+	if p1 != null:
+		var cd1: Node = load("res://Scene/magic_weapon/magic_weapon_skill_cd.tscn").instantiate()
+		stage.add_child(cd1)
+		p1.set_meta("magic_cd_icon", cd1)
+	if p2 != null:
+		var cd2: Node = load("res://Scene/magic_weapon/magic_weapon_skill_cd.tscn").instantiate()
+		stage.add_child(cd2)
+		p2.set_meta("magic_cd_icon", cd2)
+	if p1 == null or p2 == null:
+		return
+	var p1_target: Node = await _wait_magic_weapon(p1)
+	var p2_target: Node = await _wait_magic_weapon(p2)
+	_check(p1_target != null and p2_target != null, "both equipped magic weapons instantiated")
+	if p1_target == null or p2_target == null:
+		return
+	_check(p1_target != p2_target, "P1/P2 magic weapon instances isolated")
+	_check(int(p1_target.get_meta("coop_slot", 0)) == 1, "P1 magic weapon slot")
+	_check(int(p2_target.get_meta("coop_slot", 0)) == 2, "P2 magic weapon slot")
+	_check(p1_target.player == p1 and p2_target.player == p2, "magic weapon owner follows hero slot")
+	_check(p1.get_active_magic_weapon_name() == "qlsword", "P1 active magic weapon name")
+	_check(p1_target.scene_file_path.contains("qlsword"), "P1 initial weapon scene")
+
+	data.player_data[DataKeys.MAGIC_WEAPON] = [
+		_magic_weapon_entry("qlsword"),
+		_magic_weapon_entry("dshl"),
+	]
+	data.player_data["实战法宝"] = "dshl"
+	for _index in 40:
+		await physics_frame
+		if p1.get_magic_weapon_target() != null and p1.get_magic_weapon_target() != p1_target:
+			break
+	var switched: Node = p1.get_magic_weapon_target()
+	_check(switched != null and switched != p1_target, "P1 weapon instance replaced on switch")
+	_check(switched != null and switched.scene_file_path.contains("cucurbit"), "P1 switched to dshl scene")
+	_check(p2.get_magic_weapon_target() == p2_target, "P2 weapon instance survives P1 switch")
+	_check(p1.get_active_magic_weapon_name() == "dshl", "P1 active name follows switch")
+
+	data.player_data["实战法宝"] = ""
+	for _index in 40:
+		await physics_frame
+		if p1.get_magic_weapon_target() != null and p1.get_active_magic_weapon_name() == "qlsword":
+			break
+	_check(p1.get_active_magic_weapon_name() == "qlsword", "empty selection falls back to first weapon")
+	_check((data.player_data[DataKeys.MAGIC_WEAPON] as Array).size() == 2, "fallback keeps owned weapon list")
+
+	var current: Node = p1.get_magic_weapon_target()
+	_check(current != null, "fallback weapon instantiated")
+	if current != null:
+		p1.RoleProp.roleprop.Mp = p1.RoleProp.roleprop.SMp
+		p1.use_fb()
+		for _index in 5:
+			await physics_frame
+		_check(float(current.get("usecd")) > 0.0, "use_fb starts weapon cooldown")
+		var timer: Node = current.get_node_or_null("SkillCD")
+		_check(timer is Timer and not timer.is_stopped(), "weapon cooldown timer running")
+		var p2_timer: Node = p2_target.get_node_or_null("SkillCD")
+		_check(p2_timer is Timer and p2_timer.is_stopped(), "P2 cooldown unaffected by P1 use")
+
+	data.player_data["实战法宝"] = "wdsf"
+	for _index in 20:
+		await physics_frame
+		if p1.get_active_magic_weapon_name() == "qlsword":
+			break
+	_check(p1.get_active_magic_weapon_name() == "qlsword", "retired weapon falls back to first weapon")
+
+	data.player_data[DataKeys.MAGIC_WEAPON] = []
+	for _index in 20:
+		await physics_frame
+		if p1.get_magic_weapon_target() == null:
+			break
+	_check(p1.get_magic_weapon_target() == null, "empty weapon list clears instance")
+	_check(p2.get_magic_weapon_target() == p2_target, "P2 weapon survives P1 removal")
+
+	coop.secondary_data.player_data[DataKeys.MAGIC_WEAPON] = []
+	for _index in 20:
+		await physics_frame
+		if p2.get_magic_weapon_target() == null:
+			break
+	_check(p2.get_magic_weapon_target() == null, "P2 empty weapon list clears instance")
+
+	data.player_data[DataKeys.MAGIC_WEAPON] = [_magic_weapon_entry("qlsword")]
+	data.player_data["实战法宝"] = "qlsword"
+	var exit_target: Node = await _wait_magic_weapon(p1)
+	_check(exit_target != null, "hero exit cleanup fixture target")
+	if exit_target != null:
+		p1.queue_free()
+		await process_frame
+		await process_frame
+		_check(not is_instance_valid(exit_target), "hero exit clears magic weapon instance")
+
+	global.get_magic_weapon_runtime().clear_runtime_state()
+	await process_frame
+	await process_frame
 
 
 func _case_monster_balance() -> void:

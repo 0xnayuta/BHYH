@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器已完成**，25-2~25-5 未启动；Phase 26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例已完成**，25-3~25-5 未启动；Phase 26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -86,11 +86,13 @@
 - `LocalCoopAutoBattleProbe` 覆盖 P1/P2 槽位配置、目标缓存/移动、真实 `slz` 起手与计数、无双短路、关闭清理、暂停、死亡、场景退出；
 - 未改数值/动作时序/输入映射/碰撞层；障碍跳跃、自动重试转场与手动输入冲突仍留待后续验证。
 
-### 25-2 法宝/时装/翅膀表现切片
+### 25-2 法宝展示实例（已完成）
 
-- 只迁移有独立生命周期的实例状态与播放协调；
-- 保留 `BaseMagicWeapon` 与装备/法宝命令边界；不把表现状态写回共享资源；
-- 验证法宝切换、冷却、死亡清理与双人槽位归属。
+- 新增 `Script/base/magic_weapon_presentation_controller.gd`：按槽位档案持有当前 `BaseMagicWeapon` 展示实例与 active name，负责装备切换/默认回退/移除/英雄退出清理；
+- `BaseHero` 删除 `mg_target`、`_active_magic_weapon_name`、`add_magic_weapon`、`null_szfb_case`、`on_szfb_change`、`check_remove_or_add_fb`，保留 `get_magic_weapon_target`/`get_active_magic_weapon_name` 只读入口与 `use_fb` 命令；
+- `BaseMagicWeapon` 的 `is_use`/`is_canuse`/`fb_cd`/`usecd`/`skill_cd` 与 `Global`/`MagicWeaponRuntime` 的槽位召唤归属不变；`user_key` 冷却读取改走公开入口；
+- 新增 `LocalCoopMagicPresentationProbe` 覆盖 P1/P2 实例隔离、槽位元数据、切换、默认回退、移除、`use_fb` 冷却与英雄退出清理；
+- 未改法宝数值、冷却时长、伤害、场景路径或共享档案写入。
 
 ### 25-3 `BaseMonster` Boss 保护与掉落
 
@@ -161,9 +163,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 25-2 法宝/时装/翅膀表现切片**；Phase 24 已完成，25-0/25-1 已完成。
+**当前下一步**：**Phase 25-3 `BaseMonster` Boss 保护与掉落**；Phase 24 已完成，25-0/25-1/25-2 已完成。
 **当前不启动**：Phase 26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0/25-1 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`LocalCoopAutoBattleProbe`
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0/25-1/25-2 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

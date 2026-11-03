@@ -1,6 +1,6 @@
-# 战斗实体行为与验证映射（Phase 25-0/25-1）
+# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2）
 
-> **状态**：Phase 25-0 行为映射与 Phase 25-1 自动战斗控制器已完成（2026-11-04 最终验证）；25-2~25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
+> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器与 Phase 25-2 法宝展示实例已完成（2026-11-04 最终验证）；25-3~25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
 > **范围**：`BaseHero` 自动战斗与受击反应、`BaseMonster` 受击反应/控制免疫/死亡，以及 `MainSet`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景和现有探针的调用面。
 > **非目标**：不改战斗数值、动作时序、碰撞层、输入映射或存档格式；不引入 ECS；不把这些调查结论写成已完成迁移。
 
@@ -104,6 +104,25 @@ flowchart TD
 - 回滚边界：保留现有 `MainSet` 配置键和 `BaseHero` 公开入口；控制器不得成为 Autoload；关闭自动开关立即停止目标/移动/技能并清理游标。
 - 25-1 新增文件：`source/Script/base/auto_battle_context.gd`、`auto_battle_controller.gd`；`BaseHero` 保留 `auto_battle_context`/`auto_battle_controller` 实例字段与 `is_auto_battle_target_valid`/`is_auto_battle_skill_active` 公开钩子。
 
+### 2.6 25-2 法宝展示实例
+
+| 状态 | 位置 | 写入/读取 | 说明 |
+|:---|:---|:---|:---|
+| `_target` | `MagicWeaponPresentationController` | 创建/切换/移除/退出 | 当前装备法宝的 `BaseMagicWeapon` 展示实例；失效或待释放时按 null 处理 |
+| `_active_name` | 同上 | 创建/切换 | 当前实例对应的装备名；空选择回退到 `法宝[0]` 后更新 |
+| `magic_weapon_presentation` | `BaseHero` | `_ready` 创建、`_exit_tree` 清理 | 每个英雄一份，不是 Autoload，不写共享资源 |
+| `实战法宝` / `法宝` | `PlayerData` | 控制器读取；空选择/退役项回退时写回当前档案 | 槽位档案来源；P1/P2 各读自身 `PlayerData` |
+
+生命周期与顺序：
+
+- `_ready` 创建控制器；`_load_equipped_magic_weapon_deferred` 等两帧并预热资源后 `refresh`。
+- `_physics_process` 每帧调用 `tick`，保持旧顺序：空选择 → 装备名变化 → 缺失补建。
+- 切换时释放旧实例，再经 `Global.add_magic_weapon` 创建新实例；`MagicWeaponRuntime` 继续按 `coop_slot` 持有槽位召唤与场景路径。
+- `use_fb` 只读取 `BaseHero.get_magic_weapon_target()` 并设置 `is_use`；`is_canuse`、`fb_cd`、`usecd`、`skill_cd`、`show_skill` 仍归 `BaseMagicWeapon`。
+- 空 `实战法宝` 从 `法宝[0]` 回退；退役法宝名清空；空 `法宝` 列表释放实例。
+- 英雄退出调用 `clear()` 释放展示实例；死亡期间的视觉隐藏/冷却仍由 `BaseMagicWeapon` 自身与场景生命周期处理，不新增伤害或冷却改动。
+- `user_key` 的法宝冷却读取改走 `BaseHero.get_magic_weapon_target()`，不直接访问旧 `mg_target`。
+
 ---
 
 ## 3. `BaseMonster` 受击反应
@@ -181,7 +200,7 @@ flowchart TD
 
 ### 4.1 现有基线
 
-当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1 新增 `LocalCoopAutoBattleProbe`，`coop` 矩阵为 **34/34 PASS**；与本次行为相关的已有覆盖：
+当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2 新增 `LocalCoopAutoBattleProbe` 与 `LocalCoopMagicPresentationProbe`，`coop` 矩阵为 **35/35 PASS**；与本次行为相关的已有覆盖：
 
 | 验证 | 覆盖 | 缺口 |
 |:---|:---|:---|
@@ -193,6 +212,7 @@ flowchart TD
 | `scene action-frames` | 怪物 `hurt`/`death` 帧 | 不验证进入/退出受击状态 |
 | `level_progress_exit_probe` | 自动战斗开关被显式关闭的退出路径 | 不验证自动战斗行为 |
 | `LocalCoopAutoBattleProbe` | P1/P2 槽位配置、目标缓存、移动、技能计数、关闭清理、暂停、死亡、场景退出 | 不覆盖障碍跳跃、自动重试转场和手动输入冲突 |
+| `LocalCoopMagicPresentationProbe` | 装备法宝 P1/P2 实例、槽位、切换、默认回退、移除、`use_fb` 冷却、英雄退出清理 | 不覆盖实际 HUD 绘制、完整死亡动画窗口和所有法宝子类 |
 | `archive` | 档案/命令/失败回滚 | 不覆盖战斗实体行为 |
 
 ### 4.2 25-1 自动战斗验收场景
@@ -214,7 +234,18 @@ flowchart TD
 | 自动重试/切关 | `AutoBattleRetry` 成功/保存失败 | **未定向覆盖**：转场/保存仍在 `BaseThroughLevel`；场景退出清目标已覆盖 |
 | 手动输入冲突 | 自动开启时按移动/技能/法宝/`is_t_mc` 分支 | **未定向覆盖**：现状保留，留待后续输入切片 |
 
-### 4.3 25-4 受击验收场景
+### 4.3 25-2 法宝展示验收场景
+
+| 场景 | 前置/动作 | 必须观察 |
+|:---|:---|:---|
+| P1/P2 实例 | 两槽位装备同一法宝，生成双英雄 | 实例不同、`coop_slot` 1/2、`player` 正确、active name 正确 |
+| 切换 | P1 从 `qlsword` 切到 `dshl` | 旧实例释放、新场景实例创建、P2 实例不变 |
+| 默认/退役/移除 | 空 `实战法宝`；空 `法宝` 列表 | 回退 `法宝[0]`；空列表释放；退役名由控制器清空 |
+| 命令/冷却 | `use_fb` 后运行若干物理帧 | `BaseMagicWeapon` 启动 `skill_cd`/`usecd`；P2 冷却不受影响 |
+| 英雄退出 | 保留实例后 `queue_free` 英雄 | 展示实例被清理，不遗留槽位召唤指针 |
+| 未覆盖 | HUD 实际绘制、所有法宝子类、死亡动画窗口 | 不写成已通过；由后续 UI/法宝批次补 |
+
+### 4.4 25-4 受击验收场景
 
 | 场景 | 必须观察 |
 |:---|:---|
@@ -233,6 +264,7 @@ flowchart TD
 
 - 25-0 只新增本页与索引/状态文档，不改 `source/`；回滚为删除本页与对应文档引用。
 - 25-1 已抽自动战斗控制器；保留 `MainSet` 配置键、`BaseHero` 公开入口、`BaseThroughLevel`/胜利/失败/玲珑塔的转场与保存职责；旧行为由版本控制回滚，不保留双实现。
+- 25-2 已抽法宝展示实例；`BaseMagicWeapon` 命令/冷却/伤害与 `Global`/`MagicWeaponRuntime` 槽位归属不变；控制器不得读取 UI 或写共享资源。
 - 25-4 只统一受击状态/来源快照；不改变伤害数值、Boss 保护阈值、白条持续时间、碰撞层或动作时序；特殊子类覆写按批次保留并逐项验证。
 - 任一阶段发现行为语义不明确时，先补探针和记录，再迁移；不以“代码更短”为迁移依据。
 
@@ -240,4 +272,4 @@ flowchart TD
 
 ## 6. 下一步
 
-**25-1 自动战斗控制器已完成**：`AutoBattleContext` 提供显式开关/配置/目标/技能/冷却/MP/动作/移动能力，`AutoBattleController` 接管目标、技能游标、节拍和移动/跳跃；`BaseHero` 保留实体与公开能力。下一步转入 25-2。
+**25-1/25-2 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例；`BaseHero`/`BaseMagicWeapon` 保留实体、命令与冷却。下一步转入 25-3。

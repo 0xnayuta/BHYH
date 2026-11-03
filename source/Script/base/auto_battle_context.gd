@@ -270,7 +270,7 @@ func cast_skill(skill_id: String) -> bool:
 
 
 func try_use_magic_weapon() -> bool:
-	var target: Variant = _hero.mg_target
+	var target: Variant = _hero.get_magic_weapon_target()
 	if target == null or not is_instance_valid(target) or target.is_queued_for_deletion():
 		return false
 	if _is_magic_weapon_disabled_in_current_level():

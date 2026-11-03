@@ -237,8 +237,8 @@ func _update_magic_weapon_cooldown() -> void:
 	var remaining: float = 0.0
 	var total: float = 0.0
 	var player = _current_player()
-	if player != null:
-		var magic_weapon = player.get("mg_target")
+	if player != null and is_instance_valid(player) and player.has_method("get_magic_weapon_target"):
+		var magic_weapon = player.call("get_magic_weapon_target")
 		if magic_weapon != null and is_instance_valid(magic_weapon):
 			total = max(float(magic_weapon.get("usecd")), 0.0)
 			var timer = magic_weapon.get_node_or_null("SkillCD")
