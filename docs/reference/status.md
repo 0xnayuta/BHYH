@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **28.51s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **33.99s**） |
 | `health_check` | **776 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **344/344 PASS**（10.54s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（167.51s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **33/33 PASS**（191.91s，含宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
+| `archive_probe_runner` | **344/344 PASS**（10.47s，含阵法 1P/2P 命令与回滚） |
+| `scene_probe_runner` | **17/17 PASS**（170.36s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **33/33 PASS**（199.88s，含宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
 | `level_1` 冒烟 | **PASS，4 阶段，24.95s，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 311.4s，默认 auto 并发，本轮无重试） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 305.8s，默认 auto 并发，本轮无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 24-4：阶段验收关闭 Phase 24。`hud_panel_boundary` 扩展到 `Script/back_pack/`、`Script/skill/`、`Script/ldl/` 与显式 HUD 文件，识别 `_data()`、`data_for(_slot)(...).player_data`、嵌套访问修改与局部别名；11 个旧直写文件整文件登记、`pet_interface` 7 行、`synthesis` 3 行、`coop_backpack` 2 行逐行登记，档案 IO 不豁免。验证：HUD 自测 14/13；`check_all` 9/9（33.99s）；`archive` 344/344（10.47s）；`scene` 17/17（170.36s）；`coop` 33/33（199.88s）；`level_1` 4 阶段 PASS（24.95s）；全量 128/128 + 5 SKIP（305.8s，无重试）。
 - Phase 24-3：`PetDomainCommand.upgrade_formation` 接管宠物阵法升级；规则表/等级上限/费用与 UI 分离，按可负担级数一次快照、扣材料、升级并调用 `MemoryClass.request_save_result("pet_formation", false)`。保存失败恢复完整档案；双人会话以 1P 快照覆盖 1P/2P 与共享道具、灵魂，2P 操作失败同样整批恢复。`PetFormationPopup` 不再写 `_data()`，升十级不再逐级保存。验证：`archive` 344/344（10.54s，含 1P/2P 成功、失败回滚、材料/灵魂恢复与单次保存）、`check_all` 9/9（28.51s）、`scene` 17/17（167.51s）、`coop` 33/33（191.91s）、`level_1` 4 阶段 PASS（24.95s）、全量 128/128 + 5 SKIP（311.4s，无重试）。
 - Phase 24-2：新增普通节点 `CoopPanelHost`，迁移 `PANEL_PATHS`、面板实例/图层、窗口栈、暂停、1P/2P 选择器、场景按钮、关闭保存与本地清理；`LocalCoop` 只保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`，生产调用方改走 `LocalCoop.panel_host`。`shared_ledger` 门禁拆分宿主快照互斥与 LocalCoop 账本约束。验证：`check_all` 9/9、`health_check` 776 脚本 0/0/0、`archive` 332/332、`scene` 17/17、`coop` 33/33（含宿主节点/无旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥、`clear` 关闭面板/恢复暂停/窗口栈）、全量 128/128 + 5 SKIP（308.8s，无重试）。
 - Phase 24-1：将 `pet_interface` 的属性页拆为 `PetAttributePages` 子控制器；分页定义、10 行绑定、按钮与显示文本迁入子控制器，父面板注入显示值 `Callable` 并保留当前宠物/装备加成协调。子控制器不读取 `PlayerData`/`RoleProp`、不保存、不写档；父面板删除重复状态与旧分页回调。验证：`check_all` 9/9（32.39s）、`health_check` 775 脚本 0/0/0、`archive` 332/332（11.02s，含真实按钮切页与显示值）、`scene` 17/17（166.43s）、`coop` 33/33（196.98s，含 2P 面板操作者）、全量 128/128 + 5 SKIP（311.1s，无重试）。

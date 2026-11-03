@@ -1148,13 +1148,64 @@ class ContractScanner:
     # 面板与命令面板都必须经 request_save 与 PlayerData 写入口方法。
     HUD_PANEL_FILES = {
         "Scene/other_scene/skill_icon.gd",
+        "Script/backpack.gd",
         "Script/pet/pet_interface.gd",
+        "Script/pet/pet_attribute_pages.gd",
         "Script/base/base_role.gd",
         "Script/task/basic_task.gd",
-        "Script/ldl/divine_forge.gd",
-        "Script/ldl/synthesis.gd",
-        "Script/ldl/bone_forge.gd",
+        "Script/main_menu/mount_panel.gd",
+        "Script/coop/coop_backpack.gd",
     }
+    HUD_PANEL_DIRS = (
+        "Script/back_pack/",
+        "Script/skill/",
+        "Script/ldl/",
+    )
+    # 24-4：这些面板仍有已登记的旧直写，迁移前整文件跳过写档模式；
+    # 档案 IO 仍由 HUD_PANEL_ARCHIVE_IO 拦截。新增文件不得复制此例外。
+    HUD_PANEL_LEGACY_WRITE_FILES = {
+        "Script/back_pack/back_pack.gd": "背包显示开关与旧属性缓存",
+        "Script/back_pack/box_1.gd": "放入/分解/镶嵌列表旧直写",
+        "Script/back_pack/dj_sell.gd": "出售/经验旧直写",
+        "Script/back_pack/magic_weapon_infor.gd": "法宝强化/五行旧直写",
+        "Script/back_pack/main_backpack.gd": "背包打开标记旧直写",
+        "Script/back_pack/pl_sell.gd": "装备页出售旧直写",
+        "Script/back_pack/sell_or_equ.gd": "装备穿脱/出售旧直写",
+        "Script/back_pack/skill_select.gd": "技能选择旧直写",
+        "Script/back_pack/wq.gd": "武器强化旧直写",
+        "Script/ldl/decompose.gd": "分解列表旧直写",
+        "Script/ldl/mosaic.gd": "镶嵌列表旧直写",
+    }
+    # 逐行例外：保留旧行作为可审计基线，新写入不得匹配到例外。
+    HUD_PANEL_WRITE_EXCEPTIONS = {
+        "Script/pet/pet_interface.gd": {
+            'data[active_key] = ""',
+            'data["出战宠物"] = str(data.get(active_key, ""))',
+            "data[pet_key] = []",
+            "data[PET_LIST_KEY] = pets",
+            'data[ACTIVE_PET_KEY] = data.get(active_key, "")',
+            "data[PET_SHARED_PACK_KEY] = []",
+            "data[key] = []",
+        },
+        "Script/ldl/synthesis.gd": {
+            'PlayerData.player_data["放入列表"]["物品1"].clear()',
+            'PlayerData.player_data["放入列表"]["物品2"].clear()',
+            'PlayerData.player_data["放入列表"]["物品3"].clear()',
+        },
+        "Script/coop/coop_backpack.gd": {
+            'profile[NICKNAME_KEY] = name_1.text if slot == 1 else ""',
+            "LocalCoop.data_for_slot(slot).player_data[NICKNAME_KEY] = new_text",
+        },
+    }
+    HUD_PANEL_ACCESS = r"(?:\[[^\n]*?\]|\.\w+|\.get\([^\n]*?\))+"
+    HUD_PANEL_ROOT = r"(?:PlayerData\.player_data|_data\(\)|(?:LocalCoop\.)?data_for(?:_slot)?\([^\n]*?\)\.player_data)"
+    HUD_PANEL_WRITE_RE = re.compile(rf"{HUD_PANEL_ROOT}{HUD_PANEL_ACCESS}\s*(?<![=<>!])=(?!=)")
+    HUD_PANEL_MUTATION_RE = re.compile(
+        rf"{HUD_PANEL_ROOT}{HUD_PANEL_ACCESS}\.(?:clear|erase|push_back|append|merge|remove_at)\s*\("
+    )
+    HUD_PANEL_ALIAS_RE = re.compile(
+        rf"^\s*(?:var|const)\s+([A-Za-z_]\w*)\s*(?::[^=\n]+)?\s*:?=\s*{HUD_PANEL_ROOT}\s*$"
+    )
     HUD_PANEL_ARCHIVE_IO = (
         "MemoryClass.save_game(",
         "MemoryClass.safe_write_archive(",
@@ -1582,22 +1633,42 @@ class ContractScanner:
 
     @classmethod
     def hud_panel_boundary_violation(cls, content: str, rel_path: str):
-        """HUD/面板只读：禁止直接档案 IO 与 PlayerData 字典直写；保存只经 request_save 入口。"""
-        if rel_path not in cls.HUD_PANEL_FILES:
+        """HUD/面板只读：拦截档案 IO、字典直写与 _data()/data_for_slot() 间接写档。"""
+        is_panel = rel_path in cls.HUD_PANEL_FILES or any(
+            rel_path.startswith(prefix) for prefix in cls.HUD_PANEL_DIRS
+        )
+        if not is_panel:
             return (0, "")
-        for lineno, line in enumerate(content.splitlines(), 1):
+        lines = content.splitlines()
+        aliases: set[str] = set()
+        for line in lines:
+            match = cls.HUD_PANEL_ALIAS_RE.match(line.split("#", 1)[0])
+            if match:
+                aliases.add(match.group(1))
+        exceptions = cls.HUD_PANEL_WRITE_EXCEPTIONS.get(rel_path, set())
+        legacy_file = rel_path in cls.HUD_PANEL_LEGACY_WRITE_FILES
+        for lineno, line in enumerate(lines, 1):
             clean = line.split("#", 1)[0]
             if not clean.strip():
                 continue
             for token in cls.HUD_PANEL_ARCHIVE_IO:
                 if token in clean:
                     return (lineno, token)
-            if "PlayerData.player_data" in clean and re.search(r"\]\s*(?<![=<>!])=(?!=)", clean):
-                return (lineno, "PlayerData.player_data[...] =")
-            if re.search(
-                r"PlayerData\.player_data\.[A-Za-z_\u4e00-\u9fff]+\s*(?<![=<>!])=(?!=)", clean
-            ):
-                return (lineno, "PlayerData.player_data.attr =")
+            if legacy_file:
+                continue
+            normalized = " ".join(clean.split())
+            if normalized in exceptions:
+                continue
+            if cls.HUD_PANEL_WRITE_RE.search(clean):
+                return (lineno, "PlayerData/_data/data_for 字典直写")
+            if cls.HUD_PANEL_MUTATION_RE.search(clean):
+                return (lineno, "PlayerData/_data/data_for 嵌套修改")
+            for alias in aliases:
+                if re.search(
+                    rf"\b{re.escape(alias)}\s*{cls.HUD_PANEL_ACCESS}(?:\s*\.(?:clear|erase|push_back|append|merge|remove_at)\s*\(|\s*(?<![=<>!])=(?!=))",
+                    clean,
+                ):
+                    return (lineno, f"{alias} 字典直写")
         return (0, "")
 
     @classmethod
@@ -2498,7 +2569,7 @@ def run_audio_entry_boundary_self_test() -> bool:
 
 
 def run_hud_panel_boundary_self_test() -> bool:
-    """HUD/面板只读自测：直接档案 IO 与字典直写必须拦截，request_save 必须放行。"""
+    """HUD/面板只读自测：档案 IO、直接/间接写档必须拦截，登记例外必须放行。"""
     print("[*] HUD/面板只读门禁负向自测...")
     bad_samples = {
         "HUD 直写档案": ("MemoryClass.save_game(path)\n", "Script/base/base_role.gd"),
@@ -2508,6 +2579,19 @@ def run_hud_panel_boundary_self_test() -> bool:
         "面板字典属性直写": ("PlayerData.player_data.技能 = 1\n", "Script/pet/pet_interface.gd"),
         "任务面板直写进度": ('PlayerData.player_data["天庭"] = 1\n', "Script/task/basic_task.gd"),
         "锻造面板写回槽位": ("PlayerData.player_data[slot_type] = equipped\n", "Script/ldl/bone_forge.gd"),
+        "面板 _data 下标直写": ('_data()["宠物阵法等级"] = {}\n', "Script/base/base_role.gd"),
+        "面板嵌套字典直写": ('PlayerData.player_data["技能"]["等级"] = 1\n', "Script/base/base_role.gd"),
+        "槽位档案间接直写": (
+            'LocalCoop.data_for_slot(2).player_data["昵称"] = "x"\n',
+            "Script/main_menu/mount_panel.gd",
+        ),
+        "面板 _data 别名直写": ('var data := _data()\ndata["技能"] = 1\n', "Script/base/base_role.gd"),
+        "面板嵌套列表修改": (
+            'PlayerData.player_data["放入列表"]["物品1"].clear()\n',
+            "Script/base/base_role.gd",
+        ),
+        "面板 get 嵌套直写": ('_data().get("技能", {})["等级"] = 1\n', "Script/base/base_role.gd"),
+        "登记文件仍禁止档案 IO": ("MemoryClass.save_game(path)\n", "Script/back_pack/back_pack.gd"),
     }
     good_samples = {
         "面板提交保存请求": ('Global.request_save_with_feedback("pet_changes", self)\n', "Script/pet/pet_interface.gd"),
@@ -2515,7 +2599,18 @@ def run_hud_panel_boundary_self_test() -> bool:
         "只读查询": ('var v = PlayerData.player_data["技能"]\n', "Script/base/base_role.gd"),
         "比较而非赋值": ('if PlayerData.player_data["技能"] == 1:\n', "Script/base/base_role.gd"),
         "非目标文件写档": ("MemoryClass.save_game(path)\n", "Script/level/victory.gd"),
-        "合成面板原地清空列表": ('PlayerData.player_data["放入列表"]["物品1"].clear()\n', "Script/ldl/synthesis.gd"),
+        "合成面板登记清空": ('PlayerData.player_data["放入列表"]["物品1"].clear()\n', "Script/ldl/synthesis.gd"),
+        "宠物面板登记写回": ('data[active_key] = ""\n', "Script/pet/pet_interface.gd"),
+        "协作背包登记写回": (
+            "LocalCoop.data_for_slot(slot).player_data[NICKNAME_KEY] = new_text\n",
+            "Script/coop/coop_backpack.gd",
+        ),
+        "登记文件旧直写": ('PlayerData.player_data["翅膀显示"] = true\n', "Script/back_pack/back_pack.gd"),
+        "_data 只读": ('var v = _data()["宠物阵法等级"]\n', "Script/pet/pet_interface.gd"),
+        "槽位档案只读": (
+            'var v = LocalCoop.data_for_slot(2).player_data["昵称"]\n',
+            "Script/main_menu/mount_panel.gd",
+        ),
         "锻造面板提交保存": ('MemoryClass.request_save("ldl_bone_forge", false)\n', "Script/ldl/bone_forge.gd"),
         "注释中的直写": ('# PlayerData.player_data["x"] = 1 legacy\n', "Script/base/base_role.gd"),
     }

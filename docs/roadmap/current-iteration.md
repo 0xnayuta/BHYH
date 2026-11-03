@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；当前候选为 **Phase 24**，**24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离与 24-3 阵法升级命令已完成**，24-4 未启动；Phase 25~26 已规划。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；Phase 25~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -23,7 +23,7 @@
 ### 24-0 面板契约清单（已完成）
 
 - 产出 [`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)：`LocalCoop` 五个入口、`pet_interface` 子区域、LDL 成长面板与只读信息面板；
-- 盘点结果：面板显式操作者由 `LocalCoop.data_for/props_for` 解析；`hud_panel_boundary` 仅覆盖部分文件，`_data()[...]`、嵌套字典与 `data_for_slot(...).player_data[...]` 仍可绕过；
+- 盘点结果：面板显式操作者由 `LocalCoop.data_for/props_for` 解析；`hud_panel_boundary` 已在 24-4 扩展为面板目录扫描并识别 `_data()`/嵌套修改/槽位档案别名写档；旧路径按 [`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md) §4.3 登记；
 - 已具备回滚的路径：宠物出战/休息/成长果、LDL 强化/神铸/淬骨/合成/打造、主动技能升级；
 - 待命令化：宠物被动/技能/装备/批量出售、法宝强化、LDL 分解/镶嵌/一键合成、背包昵称与坐骑培养；宠物阵法已在 24-3 完成；
 - **24-1 首个拆分对象**：`PetAttributePages`（只读属性区域，无保存副作用）；
@@ -54,11 +54,13 @@
 - `PetFormationPopup` 只读规则与材料计数并显示命令结果，阵法路径不再写 `_data()`；升十级改为一次命令提交；
 - 验证：`archive` **344/344**（10.54s，含 1P/2P 成功、失败整批回滚、材料/灵魂恢复与单次保存）、`check_all` **9/9**（28.51s）、`health_check` **776 脚本 0/0/0**、`scene` **17/17**（167.51s）、`coop` **33/33**（191.91s）、`level_1` **4 阶段 PASS**（24.95s，0/0/0）、全量 **128/128 + SKIP 5**（311.4s，无重试）。
 
-### 24-4 阶段验收
+### 24-4 阶段验收（已完成）
 
-- `coop_probe_runner`、`scene_probe_runner`、相关 UI 场景与全量回归；
-- 检查临时 UI 登记、快照互斥、返回/关闭/切档；
-- 出口：至少一个面板与一个成长域完成命令化，且无表现层直接写档。
+- 确认 24-1 子区域拆分与 24-3 成长命令已接入；面板关闭/暂停/窗口栈与快照互斥沿用 24-2 结果；
+- `hud_panel_boundary` 扩展到 `Script/back_pack/`、`Script/skill/`、`Script/ldl/` 与显式 HUD 文件，识别 `PlayerData.player_data`、`_data()`、`data_for(_slot)(...).player_data` 的赋值、嵌套访问修改、列表/字典变更和局部别名；
+- 旧路径按 [`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md) §4.3 登记：11 个文件整文件例外 + `pet_interface` 7 行、`synthesis` 3 行、`coop_backpack` 2 行逐行例外；档案 IO 不豁免；
+- 验证：`contract_scan --self-test` HUD **14 坏 / 13 好 PASS**，`check_all` **9/9**（33.99s），`archive` **344/344**（10.47s），`scene` **17/17**（170.36s），`coop` **33/33**（199.88s），`level_1` **4 阶段 PASS**（24.95s，0/0/0），全量 **128/128 + SKIP 5**（305.8s，无重试）；
+- Phase 24 出口：至少一个面板子区域与一个成长域完成命令化；未登记的新增直接/间接写档由门禁拦截；已登记旧路径有明确文件/行与迁移说明。
 
 ---
 
@@ -155,9 +157,9 @@
 
 ## 6. 当前恢复入口
 
-**当前下一步**：**Phase 24-4 阶段验收**；24-0/24-1/24-2/24-3 已完成。
-**当前不启动**：Phase 25~26。
-**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`
+**当前下一步**：**Phase 25-0 行为与验证映射**；Phase 24 已完成，Phase 25 尚未启动。
+**当前不启动**：Phase 26。
+**23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

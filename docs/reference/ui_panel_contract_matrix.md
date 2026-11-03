@@ -20,7 +20,7 @@
 - 业务保存统一经 `MemoryClass.request_save*`；面板可调用 `Global.request_save_with_feedback` 获得失败提示。
 - 面板打开期间 `LocalCoop.open_panel` 检查 `MemoryClass.is_save_snapshot_in_progress()`；快照生成时拒绝打开/切换。
 - 面板关闭由宿主统一保存 `coop_panel_close`；关闭按钮只负责 `queue_free`，不直接写盘。
-- UI 直接调用 `MemoryClass.save_game` / `safe_write_archive` / `load_game` 被 `hud_panel_boundary` 禁止；但 `_data()` 间接写入、嵌套字典修改和 `LocalCoop.data_for_slot(...).player_data[...]` 不在现有守卫内。
+- UI 直接调用 `MemoryClass.save_game` / `safe_write_archive` / `load_game` 被 `hud_panel_boundary` 禁止；`_data()`/`data_for(_slot)(...).player_data` 的赋值、嵌套修改与别名写入同样受守卫约束，已登记的旧路径见 §4.3。
 
 ### 1.3 生命周期与临时 UI
 
@@ -118,8 +118,12 @@
 ### 4.3 现有守卫覆盖
 
 - `panel_operator`：覆盖 `Script/back_pack/`、`Script/skill/`、`Script/pet/`、`Script/mount/`、`Script/ldl/`；只检查未声明操作者的 `PlayerData`/`RoleProp` 使用。`Script/main_menu/mount_panel.gd` 不在该目录集合内，虽然自身声明了操作者，但不由该门禁覆盖。
-- `hud_panel_boundary`：当前只覆盖 `Script/pet/pet_interface.gd`、`Script/ldl/divine_forge.gd`、`Script/ldl/synthesis.gd`、`Script/ldl/bone_forge.gd`、`Script/base/base_role.gd`、`Script/task/basic_task.gd`、`Scene/other_scene/skill_icon.gd`；禁止档案 IO 与 `PlayerData.player_data[...] =`，但不识别 `_data()[...] =`、嵌套字典修改、`data_for_slot(...).player_data[...] =`。
-- 因此 `magic_weapon_infor`、`back_pack`、`main_backpack`、`mount_panel`、`decompose`、`mosaic`、`one_key_synthesis` 的直写/保存路径目前主要靠人工审计。
+- `hud_panel_boundary`：扫描 `Script/back_pack/`、`Script/skill/`、`Script/ldl/` 与显式 HUD 文件；拦截档案 IO、`PlayerData.player_data` / `_data()` / `data_for(_slot)(...).player_data` 的赋值、嵌套访问修改、`.clear()/.erase()/.push_back()/.append()/.merge()/.remove_at()`，并识别以上根对象的局部别名。`contract_scan.py --self-test` 覆盖 14 个坏样本与 13 个好样本。
+- **24-4 登记例外**（迁移前基线；新增文件/新增行不得直接复制）：
+  - 整文件旧直写：`back_pack.gd`、`box_1.gd`、`dj_sell.gd`、`magic_weapon_infor.gd`、`main_backpack.gd`、`pl_sell.gd`、`sell_or_equ.gd`、`skill_select.gd`、`wq.gd`、`decompose.gd`、`mosaic.gd`；
+  - 逐行旧直写：`pet_interface.gd` 的 7 条宠物列表/活跃槽位别名写回；`synthesis.gd` 的 3 条“放入列表”清空；`coop_backpack.gd` 的 2 条昵称写回；
+  - 上述文件仍禁止 `MemoryClass.save_game` / `safe_write_archive` / `load_game`，档案 IO 不享受文件例外。
+- 原先登记为“主要靠人工审计”的路径现分两类：`magic_weapon_infor`、`back_pack`、`main_backpack`、`decompose`、`mosaic` 已列入文件例外；`mount_panel`、`one_key_synthesis` 在扩展扫描下无直写，纳入自动守卫。后续命令化时逐项删除例外，不扩大豁免。
 
 ---
 
@@ -150,9 +154,9 @@
 - 升十级改为一次命令提交，最多按当前可负担级数升级，避免中途保存产生多段提交。
 - 验证：`check_all --godot-bin` **9/9**（28.51s）、`health_check` **776 脚本 0/0/0**、`archive` **344/344**（10.54s，含 1P/2P 命令、保存失败整批回滚与共享道具/灵魂恢复）、`scene` **17/17**（167.51s）、`coop` **33/33**（191.91s）、`level_1` **4 阶段 PASS**（24.95s，0/0/0）。
 
-### 24-4 阶段验收
+### 24-4 阶段验收（已完成）
 
-- `coop` 面板/槽位/快照互斥、`scene`、相关 UI 场景与全量回归；
-- 至少一个子区域拆分、一个成长域命令化；
-- 面板根与子区域均无新增直接写档路径；
-- 补强 `hud_panel_boundary` 的间接写档识别或登记例外后，再关闭 Phase 24。
+- 子区域拆分与成长域命令化：`PetAttributePages` 子控制器、`PetDomainCommand.upgrade_formation` 已接入；
+- `hud_panel_boundary` 扩展为面板目录 + 显式 HUD 文件扫描，覆盖 `_data()`、嵌套访问修改、`data_for(_slot)(...).player_data` 与局部别名；旧路径按 §4.3 整文件/逐行登记，档案 IO 不豁免；
+- 验证：`contract_scan --self-test` HUD **14 坏 / 13 好 PASS**，`check_all` **9/9**（33.99s），`archive` **344/344**（10.47s），`scene` **17/17**（170.36s），`coop` **33/33**（199.88s），`level_1` **4 阶段 PASS**（24.95s，0/0/0），全量 **128/128 + 5 SKIP**（305.8s，无重试）；
+- Phase 24 出口：至少一个面板子区域与一个成长域完成命令化；未登记的新增直接/间接写档由门禁拦截；已登记旧路径有明确文件/行与迁移说明。
