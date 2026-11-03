@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查完成**，Phase 23-1 尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取完成**（2026-11-03），Phase 23-2 尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -99,15 +99,16 @@
 
 **结果**：当前 8 个宠物族、30 个召唤场景；`BaseLevel` 有 73 个宠物相关函数，并与 `BaseMonster`/`PetInterface` 存在 22/19 个重名规则。首批选择 **`PetTurtle`（龟布系）**：4 阶规则标准，且 `coop_probe_runner` 已直接覆盖龟族 P1/P2 经验、槽位、生命加成与 HUD 死亡态。23-1 采用 `PetLevelController` + `PetTurtleFamily`，龟族分支不得保留双实现；其余 7 族在 23-2 逐族迁移。已确认的 2P 预热、2P 升级写回、凤凰别名、寅虎预热门禁与法宝复活槽位风险登记在同页，修复放入对应实现批次。
 
-### 23-1 首批宠物生成/进化抽取（未启动）
+### 23-1 首批宠物生成/进化抽取（已完成）
 
-- 新增 `pet/` 下的普通控制器（`RefCounted` 或场景子节点，不新增 Autoload）；
-- `BaseLevel` 只保留阶段编排入口，调用控制器完成宠物生成/恢复；
-- 删除首批对应的 `BaseLevel` 方法与分派分支，不保留双实现；
-- 同批把 `BaseMonster` 与 `PetInterface` 的龟族进化调用接到同一族规则，避免新增第三份规则；`PlayerData` 的载入补全保留到 23-4；
-- 验证 1P/2P、宠物死亡/复活、关卡切换与重战。
+- 新增 `pet_level_controller.gd` 与 `pet_turtle_family.gd`（`RefCounted`，不新增 Autoload）；
+- `BaseLevel` 删除龟族 7 个规则函数与龟族生成分支，改为控制器生成/恢复；
+- `_canonicalize_active_pet_data`、`_pet_active_name` 的龟族识别与归一化统一走 `PetTurtleFamily`，并显式传入当前槽位档案；
+- `BaseMonster` 删除龟族重复进化，现有各族进化与成长写入改为显式接收 `profile`，修复 P2 升级写回 1P；
+- `PetInterface` 龟族出战/进化复用同一规则；`PlayerData` 的载入补全保留到 23-4；
+- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）。
 
-### 23-2 其余宠物族分批迁移
+### 23-2 其余宠物族分批迁移（未启动）
 
 - 一次一个宠物族，复用 23-1 接口；
 - 每批删除对应 `BaseLevel` 分支并更新调用面清单；
@@ -267,9 +268,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-1：首批 `PetTurtle` 生成/进化抽取**。
-**当前不启动**：Phase 23-2~23-5；先完成 23-1 的控制器、龟族规则与 1P/2P 验证。
-**23-0 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
+**当前下一步**：**Phase 23-2：其余宠物族分批迁移**。
+**当前不启动**：Phase 23-3~23-5；先选下一族并复用 `PetTurtleFamily` 接口。
+**23-0/23-1 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

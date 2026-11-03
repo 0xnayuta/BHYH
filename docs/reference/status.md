@@ -28,20 +28,21 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-02 最新复跑 **26.79s**） |
-| `health_check` | **763 脚本 0 Parse / 0 Error / 0 Warning** |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **27.36s**） |
+| `health_check` | **765 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **297/297 PASS** |
 | `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **26/26 PASS** |
+| `coop_probe_runner` | **26/26 PASS**（含新增 2P 宠物升级写回断言） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 302.07s，**无重试**，日志 0 ERROR / 0 WARNING） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 298.8s，默认 auto 并发，无重试） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
-- Phase 23-0：完成 8 族、30 个召唤场景的 `BaseLevel` 宠物生成/归一化/进化/技能/路径/槽位调用面调查，产出 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md)；首批选择 `PetTurtle`，23-1 采用 `PetLevelController` + `PetTurtleFamily`。静态确认 2P 预热、2P 升级写回、凤凰别名、寅虎预热门禁与法宝复活槽位风险。验证：`pet-runtime` PASS（7.63s），`coop_probe_runner` **26/26 PASS**（126.53s）；未改 `source/`，23-1 未启动。
+- Phase 23-1：新增 `PetLevelController` 与 `PetTurtleFamily`，`BaseLevel` 龟族生成/归一化/进化/路径/技能规则迁出；`BaseMonster` 删除龟族重复实现，现有各族进化与成长写入显式接收槽位档案，修复 P2 升级写回 1P；`PetInterface` 龟族逻辑复用同一规则。验证：`check_all` 9/9、`health_check` 765 脚本 0/0/0、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（含新增 2P 写回断言）、`level_1` PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto）；临时定向探针覆盖 1P/2P 龟族 2 阶生成与 P1/P2 活跃名隔离，已删除。
+- Phase 23-0：完成 8 族、30 个召唤场景的 `BaseLevel` 宠物生成/归一化/进化/技能/路径/槽位调用面调查，产出 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md)；首批选择 `PetTurtle`，23-1 采用 `PetLevelController` + `PetTurtleFamily`。静态确认 2P 预热、凤凰别名、寅虎预热门禁与法宝复活槽位风险。验证：`pet-runtime` PASS，`coop_probe_runner` 26/26；未改 `source/`，23-1 未启动。
 - Phase 22-4：新增 `contract_scan.py` 的 `global_surface_boundary` 规则与 `scripts/global_surface_baseline.json`，冻结 65 字段与 120 个 `add` 入口；`--self-test` 坏样本 2 / 好样本 4，`--fail-on-error` ERROR=0；剩余 65 字段已在 `global_runtime_inventory.md` §2.10 登记所有者、理由与出口。Phase 22 已收口。
 - Phase 22-3D-2：§2.6/§2.9 共 21 个字段迁出或删除；`file_num` 收敛为 `MainSet.FILE_VALUE`，锻造/分解状态归 `ForgeFactory`，Ldl 模式归 `UiRuntime`，连击计数归 `CombatPoolRuntime`，玩家朝向归 `RunContext`，场景槽位归对应工厂与 `SceneFlow`。`check_all` 9/9、`ui-factories`/`run-context` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。
 - Phase 22-3D-1：`is_frist`、`is_show` 迁入 `UiRuntime` 一次性消费；`box_count` 迁入 `BackpackFactory` 点击冷却；`_last_combo_value`、`_pending_combo_milestones` 与 `check_combo_milestone` 迁入 `CombatPoolRuntime`。`check_all` 9/9、`ui-factories` 探针、档案 297/297、场景 17/17、协作 26/26、`level_1` PASS；全量回归未作为本批结论。

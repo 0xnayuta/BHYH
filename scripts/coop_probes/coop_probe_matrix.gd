@@ -477,6 +477,20 @@ func _case_pet_experience() -> void:
 	monster.queue_free()
 	await process_frame
 	await process_frame
+	# 23-1：P2 龟族升级只写 P2 档案，不得把 1P 出战宠物改成 PetTurtle。
+	data.player_data["宠物列表"] = [_pet_probe_data("PetTiger", "虎丸", 1000, 0)]
+	data.player_data["出战宠物"] = "PetTiger"
+	coop.secondary_data.player_data["宠物列表"] = [_pet_probe_data("PetTurtle", "龟布", 1000, 0)]
+	coop.secondary_data.player_data["出战宠物"] = "PetTurtle"
+	var evolution_monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(evolution_monster)
+	await process_frame
+	evolution_monster.set_physics_process(false)
+	evolution_monster._cure_active_pet_exp(200, 2)
+	_check(str(data.player_data.get("出战宠物", "")) != "PetTurtle", "P2 turtle evolution keeps P1 active")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetTurtle", "P2 turtle evolution updates P2 active")
+	evolution_monster.queue_free()
+	await process_frame
 
 
 func _case_shared_soul() -> void:
@@ -1218,8 +1232,7 @@ func _case_all_dead() -> void:
 	paths.clear()
 	p1.is_death = true
 	p2.is_death = true
-	coop.scene_change_override = func(_path: String) -> bool:
-		return false
+	coop.scene_change_override = func(_path: String) -> bool: return false
 	_check(not coop.request_defeat_if_all_players_dead(), "failed scene change is not committed")
 	coop.scene_change_override = func(path: String) -> bool:
 		paths.append(path)
@@ -1245,8 +1258,7 @@ func _case_input_isolation() -> void:
 		var action_name := "p2_" + action
 		_check(InputMap.has_action(action_name), "P2 action exists: " + action_name)
 		_check(
-			_action_has_physical_key(StringName(action_name), int(p2_keys[action])),
-			"P2 key matches: " + action_name
+			_action_has_physical_key(StringName(action_name), int(p2_keys[action])), "P2 key matches: " + action_name
 		)
 	_check(_action_has_physical_key(&"move_right", KEY_D), "P1 move_right remains D")
 	_check(_action_has_physical_key(&"normalhit", KEY_J), "P1 normalhit remains J")
@@ -1313,7 +1325,10 @@ func _case_key_config() -> void:
 		var reset_keys: Array = config.get("keys")
 		_check(str(reset_keys[0]["key"]) == str(defaults[0]["key"]), "reset restores default key label")
 		_check(first_node.get("text_key").text == str(defaults[0]["key"]), "reset applies default label immediately")
-		_check(is_equal_approx(first_node.position.x, float(defaults[0]["position"]["x"])), "reset restores default position")
+		_check(
+			is_equal_approx(first_node.position.x, float(defaults[0]["position"]["x"])),
+			"reset restores default position"
+		)
 
 	config.queue_free()
 	await process_frame
@@ -1390,8 +1405,14 @@ func _case_hud_read_only() -> void:
 	p2.set_process(false)
 	_set_hud_stats(p1, 111, 222, 33, 44, 55, 66, 25, 10, 20)
 	_set_hud_stats(p2, 333, 444, 55, 66, 77, 88, 50, 5, 10)
-	_check(int(p1.RoleProp.roleprop.Hp) == 111 and int(p1.RoleProp.roleprop.SHp) == 222, "P1 stats set immediately actual=" + str(p1.RoleProp.roleprop.Hp) + "/" + str(p1.RoleProp.roleprop.SHp))
-	_check(int(p2.RoleProp.roleprop.Hp) == 333 and int(p2.RoleProp.roleprop.SHp) == 444, "P2 stats set immediately actual=" + str(p2.RoleProp.roleprop.Hp) + "/" + str(p2.RoleProp.roleprop.SHp))
+	_check(
+		int(p1.RoleProp.roleprop.Hp) == 111 and int(p1.RoleProp.roleprop.SHp) == 222,
+		"P1 stats set immediately actual=" + str(p1.RoleProp.roleprop.Hp) + "/" + str(p1.RoleProp.roleprop.SHp)
+	)
+	_check(
+		int(p2.RoleProp.roleprop.Hp) == 333 and int(p2.RoleProp.roleprop.SHp) == 444,
+		"P2 stats set immediately actual=" + str(p2.RoleProp.roleprop.Hp) + "/" + str(p2.RoleProp.roleprop.SHp)
+	)
 	p1.RoleProp.baseroleprop.Level = 11
 	p2.RoleProp.baseroleprop.Level = 22
 	data.player_data["宠物列表"] = [_pet_probe_data("PetTurtle", "龟布", 1000, 5)]
@@ -1417,10 +1438,50 @@ func _case_hud_read_only() -> void:
 	await process_frame
 	await process_frame
 
-	_check(hud1.hp_text.text == "111/222", "P1 HUD HP from slot actual=" + hud1.hp_text.text + " prop=" + str(p1.RoleProp.roleprop.Hp) + "/" + str(p1.RoleProp.roleprop.SHp))
-	_check(hud2.hp_text.text == "333/444", "P2 HUD HP from slot actual=" + hud2.hp_text.text + " prop=" + str(p2.RoleProp.roleprop.Hp) + "/" + str(p2.RoleProp.roleprop.SHp))
-	_check(hud1.mp_text.text == "33/44", "P1 HUD MP from slot actual=" + hud1.mp_text.text + " prop=" + str(p1.RoleProp.roleprop.Mp) + "/" + str(p1.RoleProp.roleprop.SMp))
-	_check(hud2.mp_text.text == "55/66", "P2 HUD MP from slot actual=" + hud2.mp_text.text + " prop=" + str(p2.RoleProp.roleprop.Mp) + "/" + str(p2.RoleProp.roleprop.SMp))
+	_check(
+		hud1.hp_text.text == "111/222",
+		(
+			"P1 HUD HP from slot actual="
+			+ hud1.hp_text.text
+			+ " prop="
+			+ str(p1.RoleProp.roleprop.Hp)
+			+ "/"
+			+ str(p1.RoleProp.roleprop.SHp)
+		)
+	)
+	_check(
+		hud2.hp_text.text == "333/444",
+		(
+			"P2 HUD HP from slot actual="
+			+ hud2.hp_text.text
+			+ " prop="
+			+ str(p2.RoleProp.roleprop.Hp)
+			+ "/"
+			+ str(p2.RoleProp.roleprop.SHp)
+		)
+	)
+	_check(
+		hud1.mp_text.text == "33/44",
+		(
+			"P1 HUD MP from slot actual="
+			+ hud1.mp_text.text
+			+ " prop="
+			+ str(p1.RoleProp.roleprop.Mp)
+			+ "/"
+			+ str(p1.RoleProp.roleprop.SMp)
+		)
+	)
+	_check(
+		hud2.mp_text.text == "55/66",
+		(
+			"P2 HUD MP from slot actual="
+			+ hud2.mp_text.text
+			+ " prop="
+			+ str(p2.RoleProp.roleprop.Mp)
+			+ "/"
+			+ str(p2.RoleProp.roleprop.SMp)
+		)
+	)
 	_check(hud1.exp_text.text == "55/66", "P1 HUD experience from slot")
 	_check(hud2.exp_text.text == "77/88", "P2 HUD experience from slot")
 	_check(hud1.role_level.text == "11", "P1 HUD level from slot")
@@ -1442,7 +1503,10 @@ func _case_hud_read_only() -> void:
 	await process_frame
 	await process_frame
 	_check(coop.has_panel(), "HUD panel opens")
-	_check(_hud_snapshot(data) == p1_before, "P1 data unchanged while panel open diff=" + _hud_diff(p1_before, _hud_snapshot(data)))
+	_check(
+		_hud_snapshot(data) == p1_before,
+		"P1 data unchanged while panel open diff=" + _hud_diff(p1_before, _hud_snapshot(data))
+	)
 	_check(
 		_hud_snapshot(coop.secondary_data) == p2_before,
 		"P2 data unchanged while panel open diff=" + _hud_diff(p2_before, _hud_snapshot(coop.secondary_data))

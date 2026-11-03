@@ -1,8 +1,8 @@
 # 宠物关卡调用面与首批抽取矩阵
 
-> **状态**：Phase 23-0 调查完成（2026-11-03）；Phase 23-1 尚未启动。本页是当前调用面与抽取判定的参考，不把目标写成已实现。
+> **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取已完成（2026-11-03）；Phase 23-2 尚未启动。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
 > **范围**：`BaseLevel` 的宠物生成、恢复、归一化、进化、技能、场景路径与槽位解析；同时登记 `BaseMonster`、`PetInterface`、`PlayerData`、`Global` 与召唤物单位的现有调用点。
-> **事实源**：`source/Script/base/base_through_level.gd`、`source/Script/base/base_monster.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/memory_class/player_data.gd`、`source/global.gd`、`source/Script/coop/local_coop.gd`。数量是本次工作区快照，不作为长期 SLA。
+> **事实源**：`source/Script/base/base_through_level.gd`、`source/Script/base/base_monster.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/pet/pet_level_controller.gd`、`source/Script/pet/pet_turtle_family.gd`、`source/Script/memory_class/player_data.gd`、`source/global.gd`、`source/Script/coop/local_coop.gd`。数量是本次工作区快照，不作为长期 SLA。
 > **非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则、不新增 Autoload。
 
 ---
@@ -19,17 +19,17 @@
    - `coop_probe_runner` 已直接用 `PetTurtle` 数据覆盖 P1/P2 宠物经验、生命加成、槽位归属与 HUD 死亡态；
    - 单位接口 `setup_pet_turtle` 同时是月兔、子鼠、丑牛、寅虎的基类接口，首批可用最小规则验证后续复用面；
    - `BaseLevel` 的龟族分支是完整的 `normalize → growth → restore → evolve → path` 标准链，适合先抽出通用生命周期。
-4. 23-1 应新增 `pet/` 下的 `RefCounted` 控制器 + 族规则对象；`BaseLevel` 只调用控制器，不再保留龟族分支。其他 7 族在 23-2 逐族迁移，阶段出口才达到“BaseLevel 只保留控制器入口”。
-5. 以下问题不阻塞 23-0，但会直接影响 23-1 的 1P/2P 验收，必须先决策：
+4. 23-1 已新增 `pet/` 下的 `PetLevelController` 与 `PetTurtleFamily`；`BaseLevel` 不再保留龟族规则函数与龟族生成分支。其他 7 族在 23-2 逐族迁移，阶段出口才达到“BaseLevel 只保留控制器入口”。
+5. **已由 23-1 修复并回归**：`BaseMonster._cure_active_pet_exp(slot)` 的进化与成长函数显式接收当前槽位档案，P2 升级不再写回 1P `出战宠物`。
+6. 以下剩余风险不阻塞 23-1，但会影响后续批次：
    - `Global.prewarm_active_pet_runtime_resources()` 只读 1P 档案且无槽位参数；P2 生成时会预热 1P 宠物；
-   - `BaseMonster._cure_active_pet_exp(slot)` 的进化函数把 `出战宠物` 写回全局 `PlayerData`，P2 升级可能污染 1P 活跃名；
    - `BaseLevel._active_pet_dead_aliases()` 与 `PetInterface._pet_dead_aliases()` 缺少凤凰别名，而 `BaseRole` 已有；
    - `Global.get_active_pet_preload_data()` 不识别 `PetYinTiger`，寅虎没有预热门禁；
    - 八仙法宝复活入口使用无槽位后缀的死亡元数据，并按 1P 重新生成；
    - `PetTurtleSummonBase.setup_pet_turtle()` 读取全局 `PlayerData` 的装备加成，P2 单位可能拿到 1P 加成；
    - `BaseMonster` 升级循环调用 7 族进化，但没有 `PetNeat`。
 
-上述均为静态阅读结论；运行期反例与修复放在 23-1/23-2，不在本页冒充已验证缺陷。
+未修复项为静态阅读结论；运行期反例与修复放入后续批次，不在本页冒充已验证缺陷。
 
 ---
 
@@ -107,11 +107,11 @@ flowchart TD
 | `active_pet_dead_*` 元数据 | `:198-211`；`summon_base_monster.gd:1107-1116` | 死亡态跨阶段/重战保持 | 控制器 + 召唤物 | 统一读写入口 |
 | `coop_slot` 元数据 | `:406` | 标记单位所属槽位 | 控制器 | 保留 |
 
-### 4.3 族规则
+### 4.3 族规则（23-1 已处理 `PetTurtle`）
 
-| 族 | `BaseLevel` 方法 | 迁移目标 | 删除条件 |
+| 族 | `BaseLevel` 方法 | 迁移目标 | 状态 |
 |:---|:---|:---|:---|
-| `PetTurtle` | `_pet_turtle_stage_for_level`、`_pet_turtle_stage_name`、`_pet_turtle_stage_skills`、`_normalize_pet_turtle_spawn_data`、`_update_pet_turtle_evolution`、`_pet_turtle_scene_path`、`_is_pet_turtle_data`（`:532-604`） | `PetTurtleFamily`（`RefCounted`） | 23-1 完成后删除 |
+| `PetTurtle` | `_pet_turtle_stage_for_level`、`_pet_turtle_stage_name`、`_pet_turtle_stage_skills`、`_normalize_pet_turtle_spawn_data`、`_update_pet_turtle_evolution`、`_pet_turtle_scene_path`、`_is_pet_turtle_data`（23-0 时为 `:532-604`） | `PetTurtleFamily`（`RefCounted`） | **已删除并迁移** |
 | `PetTiger` | `_pet_tiger_stage_for_level`、`_pet_tiger_stage_name`、`_pet_tiger_stage_skills`、`_normalize_pet_tiger_spawn_data`、`_update_pet_tiger_evolution`、`_pet_tiger_scene_path`、`_is_pet_tiger_data`（`:832-970`、`:1249-1255`） | `PetTigerFamily` | 23-2 对应批次 |
 | `PetDragon` | `_pet_dragon_stage_for_level`、`_pet_dragon_stage_name`、`_pet_dragon_stage_skills`、`_normalize_pet_dragon_spawn_data`、`_update_pet_dragon_evolution`、`_pet_dragon_scene_path`、`_is_pet_dragon_data`（`:457-529`） | `PetDragonFamily` | 23-2 |
 | `PetPhoenix` | `_pet_phoenix_stage_for_level`、`_pet_phoenix_stage_name`、`_pet_phoenix_stage_skills`、`_normalize_pet_phoenix_spawn_data`、`_update_pet_phoenix_evolution`、`_pet_phoenix_scene_path`、`_is_pet_phoenix_data` / `_is_pet_phoenix_name`（`:980-1060`） | `PetPhoenixFamily` | 23-2 |
@@ -153,17 +153,17 @@ flowchart TD
 | 风险 | 证据 | 影响 | 归属批次 |
 |:---|:---|:---|:---|
 | P2 预热 1P 宠物 | `global.gd:2363-2446` 使用 `PlayerData`；`2570` 无 slot 参数；`base_through_level.gd:370` 在槽位生成中调用 | P2 首次出战可能未预热正确场景/帧/弹体 | 23-1 或 23-2 |
-| P2 升级写 1P 活跃名 | `base_monster.gd:2975-3018` 按 slot 取数据；`:3222` 等进化函数写 `PlayerData.player_data` | 龟族 P2 升级可能把 1P `出战宠物` 改为 `PetTurtle` | 23-1（龟族） |
+| P2 升级写 1P 活跃名 | `base_monster.gd` 的进化与成长函数已改为接收当前槽位档案 | 已修复；P2 升级不再改 1P `出战宠物` | 23-1 已完成 |
 | 凤凰死亡不隔离 | `base_through_level.gd:214-251` 与 `pet_interface.gd:2342-2384` 无凤凰分支；`base_role.gd:459-468` 有 | 凤凰死亡后可能仍被视为可出战 | 23-2 |
 | 寅虎无预热门禁 | `global.gd:2380-2425` 无 `PetYinTiger`；`prewarm` 分支无寅虎 | 寅虎首次出战直接加载场景/帧 | 23-2 |
-| 法宝复活 1P | `eight_immortal_magic_weapon.gd:315-344` 使用无后缀元数据与无 slot `_spawn_active_pet` | 2P 法宝复活落到 1P | 23-1/23-3 评估 |
-| 龟族单位全局装备加成 | `pet_turtle_summon_base.gd:246-250` 使用 `PlayerData` | P2 龟族可能获得 1P 装备加成 | 23-1 验证 |
+| 法宝复活 1P | `eight_immortal_magic_weapon.gd:315-344` 使用无后缀元数据与无 slot `_spawn_active_pet` | 2P 法宝复活落到 1P | 23-3 |
+| 龟族单位全局装备加成 | `pet_turtle_summon_base.gd:246-250` 使用 `PlayerData` | P2 龟族可能获得 1P 装备加成 | 未覆盖；后续验证 |
 | 丑牛升级无进化 | `base_monster.gd:3003-3009` 缺 `_update_pet_neat_evolution` | 丑牛经验升级可能不刷新阶段/技能 | 23-2 |
-| 活跃名清理不覆盖显示名 | `base_through_level.gd:274-278` 仅比较规范名 `pet_name` | 死亡后可能残留显示名，重复进入仍尝试生成 | 23-1 |
+| 活跃名清理不覆盖显示名 | `base_through_level.gd:274-278` 仅比较规范名 `pet_name` | 死亡后可能残留显示名，重复进入仍尝试生成 | 23-2 |
 
 ---
 
-## 6. 首批 `PetTurtle` 抽取方案
+## 6. 首批 `PetTurtle` 抽取（23-1 已完成）
 
 ### 6.1 23-1 目标形状
 
@@ -186,15 +186,15 @@ PetFamilySpec (RefCounted, 各族实现)
   setup(unit: Node, stage: int) -> void
 ```
 
-23-1 只实现 `PetTurtleFamily`；23-2 每批增加一个族规则并删除对应 `BaseLevel` 分支。未迁移族在 23-1 后仍由 `BaseLevel` 旧分支处理，**龟族不得保留旧分支**；全部批次完成后 `BaseLevel` 只剩控制器入口。
+23-1 已实现 `PetTurtleFamily`；23-2 每批增加一个族规则并删除对应 `BaseLevel` 分支。未迁移族在 23-1 后仍由 `BaseLevel` 旧分支处理，**龟族不再保留旧分支**；全部批次完成后 `BaseLevel` 只剩控制器入口。
 
-### 6.2 23-1 删除/迁移清单
+### 6.2 23-1 删除/迁移清单（已完成）
 
-- 从 `BaseLevel` 删除龟族 7 个规则函数与 `_spawn_active_pet` 的龟族分派；
-- 从 `_canonicalize_active_pet_data` 删除龟族分支，改为族规则注册表；
-- `_pet_active_name` 的龟族识别改由 `PetTurtleFamily.matches` 提供；
-- `BaseMonster._cure_active_pet_exp` 的龟族进化调用改为 `PetTurtleFamily.evolve`，显式传入 `data_for_slot(slot)`，不在规则内写全局 `PlayerData`；
-- `PetInterface` 的龟族出战/进化调用复用同一 `PetTurtleFamily`，保留 UI 数据刷新；
+- 已从 `BaseLevel` 删除龟族 7 个规则函数与 `_spawn_active_pet` 的龟族分派；
+- `_canonicalize_active_pet_data` 的龟族分支已改为 `PetTurtleFamily.normalize_spawn`，并显式传入当前槽位档案；
+- `_pet_active_name` 的龟族识别已改由 `PetTurtleFamily.matches` 提供；
+- `BaseMonster._cure_active_pet_exp` 的龟族进化调用已改为 `PetTurtleFamily.evolve`；`BaseMonster` 现有各族进化与成长写入均接收 `profile`，不再写全局 `PlayerData`；
+- `PetInterface` 的龟族出战/进化已复用同一 `PetTurtleFamily`，保留 UI 数据刷新；
 - `PlayerData._normalize_pet_turtle` 仍作为载入/补全职责保留到 23-4，不作为运行时进化权威。
 
 ### 6.3 首批验收
@@ -225,16 +225,24 @@ PetFamilySpec (RefCounted, 各族实现)
 
 ## 7. 本批验证与边界
 
-- 本轮为只读调查；未修改 `source/`、场景、资源或存档格式。
+- 23-1 已修改 `source/`：新增 `pet_level_controller.gd`、`pet_turtle_family.gd`；修改 `BaseLevel`、`BaseMonster`、`PetInterface`。未修改场景、资源、存档格式或显示基线。
 - 已执行：
-  - `python scripts/scene_probe_runner.py --probe pet-runtime --godot "$GODOT_BIN"`：**PASS（7.63s）**；
-  - `python scripts/coop_probe_runner.py --godot "$GODOT_BIN"`：**26/26 PASS（126.53s）**；
-  - 现有 `status.md` 基线：`archive_probe_runner` 297/297、`scene_probe_runner` 17/17、`level_1` PASS、全量回归 128/128 + 5 SKIP。
-- 未执行：23-1 代码修改后的运行验证、全量回归；不得把本页静态结论当作修复证明。
-- 首批选型不按文件行数；若 23-1 发现龟族单位装备加成或 2P 经验写入无法在同一批闭环，应先缩小为 1P 生成/恢复试点并明确记录 2P 未覆盖，不得用“探针全绿”掩盖。
+  - `check_all --godot-bin`：**9/9 PASS**；
+  - `pet-runtime`：**PASS**；
+  - `archive_probe_runner`：**297/297 PASS**；
+  - `coop_probe_runner`：**26/26 用例 PASS**；宠物经验用例新增 P2 升级写回断言；
+  - `scene_probe_runner`：**17/17 PASS**；
+  - `level_1` 1P 冒烟：**PASS，4 阶段，0 ERROR / 0 WARNING**；
+  - 全量关卡回归：**PASS 128/128 + SKIP 5，FAIL 0**（默认 auto 并发，298.8s）。
+- 临时定向探针（运行后已删除）：
+  - P1 `虎丸`、P2 `PetTurtle` 同时升级：P1 活跃名保持 `虎丸`，P2 为 `PetTurtle`，P2 等级 1→3；
+  - 1P `PetTurtle` 等级 15 生成：`pet_turtle_unit`、阶段 2、`墨玄龟`；
+  - 2P `PetTurtle` 等级 15 生成：槽位 2 阶段 2 单位存在。
+- 未覆盖：2P 预热仍使用 1P 档案；龟族单位装备加成的 2P 归属、凤凰死亡别名、法宝复活槽位、丑牛升级进化为后续批次/单独验证。不得把本页探针全绿外推为这些路径已验证。
+- 首批选型不按文件行数；23-1 的 2P 写回回归已固化在现有 `LocalCoopPetExperienceProbe` 用例中。
 
 ---
 
 ## 8. 下一轮
 
-**23-1：`PetTurtle` 生成/恢复抽取。** 先建立 `PetLevelController` + `PetTurtleFamily`，迁移 `BaseLevel` 龟族规则与分支，并把 `BaseMonster`/`PetInterface` 的龟族进化调用接到同一规则；随后运行 §6.3/§6.4 的验收。
+**23-2：其余宠物族分批迁移。** 复用 `PetTurtleFamily` 的族规则接口，一次迁移一族；每批删除对应 `BaseLevel` 分支并更新本页调用面。优先处理 2P 预热门禁或凤凰死亡别名时，应另立小批次，不与族迁移混在一起。

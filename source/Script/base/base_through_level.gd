@@ -1,9 +1,12 @@
 extends Node2D
 class_name BaseLevel
 const LEVEL_PROGRESS_COMMAND := preload("res://Script/base/level_progress_command.gd")
+const PET_LEVEL_CONTROLLER := preload("res://Script/pet/pet_level_controller.gd")
+const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 var is_two_scene
+var _pet_level_controller = PET_LEVEL_CONTROLLER.new()
 
 var bgm_node: Node = null
 var bgm_changed_for_stage_4: bool = false
@@ -269,6 +272,8 @@ func _spawn_active_pet(slot: int = 1) -> void:
 	var pet_data := _get_active_pet_data(PlayerData)
 	if pet_data.is_empty():
 		return
+	if await _pet_level_controller.spawn_for_slot(self, slot, PlayerData, pet_data):
+		return
 	PlayerData.clamp_pet_level_to_player(pet_data)
 	var pet_name := _pet_active_name(pet_data)
 	if _is_active_pet_dead_this_level(pet_name, slot):
@@ -317,6 +322,8 @@ func _spawn_active_pet(slot: int = 1) -> void:
 				)
 			):
 				return
+	if pet_kind == "PetTurtle":
+		return
 	if pet_kind == "PetYinTiger":
 		_normalize_pet_yin_tiger_spawn_data(pet_data)
 		_recalculate_active_pet_growth_stats(pet_data)
@@ -337,11 +344,6 @@ func _spawn_active_pet(slot: int = 1) -> void:
 		_recalculate_active_pet_growth_stats(pet_data)
 		_restore_active_pet_for_level_start(pet_data)
 		_update_pet_phoenix_evolution(pet_data)
-	elif pet_kind == "PetTurtle":
-		_normalize_pet_turtle_spawn_data(pet_data)
-		_recalculate_active_pet_growth_stats(pet_data)
-		_restore_active_pet_for_level_start(pet_data)
-		_update_pet_turtle_evolution(pet_data)
 	elif pet_kind == "PetRabbit":
 		_normalize_pet_rabbit_spawn_data(pet_data)
 		_recalculate_active_pet_growth_stats(pet_data)
@@ -384,13 +386,9 @@ func _spawn_active_pet(slot: int = 1) -> void:
 						_pet_phoenix_scene_path(pet_stage)
 						if pet_kind == "PetPhoenix"
 						else (
-							_pet_turtle_scene_path(pet_stage)
-							if pet_kind == "PetTurtle"
-							else (
-								_pet_rabbit_scene_path(pet_stage)
-								if pet_kind == "PetRabbit"
-								else _pet_dragon_scene_path(pet_stage)
-							)
+							_pet_rabbit_scene_path(pet_stage)
+							if pet_kind == "PetRabbit"
+							else _pet_dragon_scene_path(pet_stage)
 						)
 					)
 				)
@@ -410,8 +408,6 @@ func _spawn_active_pet(slot: int = 1) -> void:
 		pet.set_meta("pet_tiger_unit", true)
 	elif pet_kind == "PetPhoenix":
 		pet.set_meta("pet_phoenix_unit", true)
-	elif pet_kind == "PetTurtle":
-		pet.set_meta("pet_turtle_unit", true)
 	elif pet_kind == "PetRabbit":
 		pet.set_meta("pet_rabbit_unit", true)
 	elif pet_kind == "PetMouse":
@@ -427,8 +423,6 @@ func _spawn_active_pet(slot: int = 1) -> void:
 		pet.setup_pet_dragon(pet_stage)
 	if pet_kind == "PetPhoenix" and pet.has_method("setup_pet_phoenix"):
 		pet.setup_pet_phoenix(pet_stage)
-	if pet_kind == "PetTurtle" and pet.has_method("setup_pet_turtle"):
-		pet.setup_pet_turtle(pet_stage)
 	if pet_kind == "PetRabbit" and pet.has_method("setup_pet_turtle"):
 		pet.setup_pet_turtle(pet_stage)
 	if pet_kind == "PetMouse" and pet.has_method("setup_pet_turtle"):
@@ -527,80 +521,6 @@ func _is_pet_dragon_data(pet: Dictionary) -> bool:
 	if str(pet.get(DataKeys.TYPE, "")) == "PetDragon":
 		return true
 	return pet_name.begins_with("辰龙") or pet_name in ["龙仔", "绿英龙", "青龙将军", "青龙妖圣"]
-
-
-func _pet_turtle_stage_for_level(level: int) -> int:
-	if level >= 50:
-		return 4
-	if level >= 30:
-		return 3
-	if level >= 15:
-		return 2
-	return 1
-
-
-func _pet_turtle_stage_name(stage: int) -> String:
-	match clampi(stage, 1, 4):
-		1:
-			return "龟布"
-		2:
-			return "墨玄龟"
-		3:
-			return "玄武将军"
-		_:
-			return "玄武大帝"
-
-
-func _pet_turtle_stage_skills(stage: int) -> Array:
-	match clampi(stage, 1, 4):
-		1:
-			return ["水疗盾"]
-		2:
-			return ["水疗盾", "同心链接"]
-		3:
-			return ["水疗盾", "同心链接", "水湮八荒"]
-		_:
-			return ["水疗盾", "同心链接", "水湮八荒", "玄武奥义"]
-
-
-func _normalize_pet_turtle_spawn_data(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	var keep_fighting := (
-		bool(pet.get(DataKeys.DEPLOYED, false))
-		or str(PlayerData.player_data.get(_active_pet_name_key(), "")) == "PetTurtle"
-	)
-	var stage := _pet_turtle_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
-	pet[DataKeys.TYPE] = "PetTurtle"
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = _pet_turtle_stage_name(stage)
-	pet[DataKeys.NAME] = _pet_turtle_stage_name(stage)
-	pet["技能"] = _pet_turtle_stage_skills(stage)
-	pet["生命资质基础上限"] = 4000
-	pet["魔法资质基础上限"] = 1800
-	pet["攻击资质基础上限"] = 1500
-	pet["防御资质基础上限"] = 4000
-	pet[DataKeys.DEPLOYED] = keep_fighting
-
-
-func _update_pet_turtle_evolution(pet: Dictionary) -> void:
-	var PlayerData: Node = LocalCoop.pet_profile_for(pet)
-	if not _is_pet_turtle_data(pet):
-		return
-	_normalize_pet_turtle_spawn_data(pet)
-	if _pet_is_fighting(pet):
-		PlayerData.player_data[_active_pet_name_key()] = "PetTurtle"
-		PlayerData.player_data["出战宠物"] = "PetTurtle"
-
-
-func _pet_turtle_scene_path(stage: int) -> String:
-	return "res://Scene/pet/pet_turtle_summon_%d.tscn" % clampi(stage, 1, 4)
-
-
-func _is_pet_turtle_data(pet: Dictionary) -> bool:
-	if str(pet.get(DataKeys.TYPE, "")) == "PetTurtle":
-		return true
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, pet.get(DataKeys.NAME, ""))).strip_edges()
-	return pet_name.begins_with("玄武") or pet_name in ["龟布", "墨玄龟", "玄武将军", "玄武大帝"]
 
 
 func _is_pet_rabbit_data(pet: Dictionary) -> bool:
@@ -1119,8 +1039,8 @@ func _pet_active_name(pet: Dictionary) -> String:
 		return "PetMouse"
 	if type_name == "PetRabbit" or _is_pet_rabbit_data(pet):
 		return "PetRabbit"
-	if type_name == "PetTurtle" or _is_pet_turtle_data(pet):
-		return "PetTurtle"
+	if type_name == PET_TURTLE_FAMILY.KIND or PET_TURTLE_FAMILY.matches(pet):
+		return PET_TURTLE_FAMILY.KIND
 	if _is_pet_phoenix_data(pet):
 		return "PetPhoenix"
 	if type_name == "PetTiger" or _is_pet_tiger_data(pet):
@@ -1143,7 +1063,7 @@ func _set_only_active_pet(pets: Array, target_pet: Dictionary, data: Dictionary,
 	data["出战宠物"] = active_name
 
 
-func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: String) -> String:
+func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: String, profile: Node) -> String:
 	var mouse_pet: Dictionary = {}
 	var turtle_pet: Dictionary = {}
 	var rabbit_pet: Dictionary = {}
@@ -1175,7 +1095,7 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		elif _is_pet_rabbit_data(pet):
 			rabbit_pet = pet
 			rabbit_is_fighting = rabbit_is_fighting or _pet_is_fighting(pet)
-		elif _is_pet_turtle_data(pet):
+		elif PET_TURTLE_FAMILY.matches(pet):
 			turtle_pet = pet
 			turtle_is_fighting = turtle_is_fighting or _pet_is_fighting(pet)
 		elif _is_pet_phoenix_data(pet):
@@ -1216,12 +1136,12 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		_set_only_active_pet(pets, rabbit_pet, data, "PetRabbit")
 		return "PetRabbit"
 	if (
-		(active_name == "PetTurtle" or _is_pet_turtle_data({"名称": active_name}) or turtle_is_fighting)
+		(active_name == PET_TURTLE_FAMILY.KIND or PET_TURTLE_FAMILY.matches({"名称": active_name}) or turtle_is_fighting)
 		and not turtle_pet.is_empty()
 	):
-		_normalize_pet_turtle_spawn_data(turtle_pet)
-		_set_only_active_pet(pets, turtle_pet, data, "PetTurtle")
-		return "PetTurtle"
+		PET_TURTLE_FAMILY.normalize_spawn(turtle_pet, profile)
+		_set_only_active_pet(pets, turtle_pet, data, PET_TURTLE_FAMILY.KIND)
+		return PET_TURTLE_FAMILY.KIND
 	if (
 		(active_name == "PetPhoenix" or _is_pet_phoenix_name(active_name) or phoenix_is_fighting)
 		and not phoenix_pet.is_empty()
@@ -1280,7 +1200,7 @@ func _get_active_pet_data(profile: Node) -> Dictionary:
 	var pets: Variant = data.get(_active_pet_list_key(), data.get("宠物列表", []))
 	if not (pets is Array):
 		return {}
-	active_name = _canonicalize_active_pet_data(data, pets, active_name)
+	active_name = _canonicalize_active_pet_data(data, pets, active_name, profile)
 	if active_name == "PetPhoenix":
 		for pet in pets:
 			if not (pet is Dictionary):
