@@ -105,6 +105,8 @@ func _run() -> void:
 			await _case_pet_rabbit()
 		"LocalCoopPetMouseProbe":
 			await _case_pet_mouse()
+		"LocalCoopPetNeatProbe":
+			await _case_pet_neat()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -970,6 +972,98 @@ func _case_pet_mouse() -> void:
 		_check(int(p1_unit.get("turtle_stage")) == 2, "P1 mouse stage 2")
 	if p2_unit != null:
 		_check(int(p2_unit.get("turtle_stage")) == 2, "P2 mouse stage 2")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+## 23-2 丑牛族：四阶、阶段技能、升级写回、死亡别名与双槽生成。
+func _case_pet_neat() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_neat_family.gd").new()
+	var family_pet := _pet_probe_data("PetNeat", "丑牛元帅", 1000)
+	family_pet["等级"] = 30
+	family_pet["阶段"] = 1
+	_check(family.matches(family_pet), "neat family matches type")
+	_check(family.matches({"名称": "丑牛大元帅"}), "neat family matches display name")
+	_check(not family.matches({"名称": "子鼠元帅"}), "neat family rejects mouse name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 3, "neat normalize uses level stage")
+	_check(str(family_pet.get("名称", "")) == "丑牛元帅", "neat normalize updates display name")
+	_check((family_pet.get("技能", []) as Array).has("蛮力践踏"), "neat normalize applies stage 3 skills")
+	family_pet["等级"] = 50
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 4, "neat evolve reaches stage 4")
+	_check(str(family_pet.get("名称", "")) == "丑牛大元帅", "neat evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("丑牛奥义"), "neat evolve applies stage 4 skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetNeat", "neat evolve writes P2 active")
+	_check(family.scene_path(4) == "res://Scene/pet/pet_neat_summon_4.tscn", "neat scene path")
+	var aliases: Array[String] = ["丑牛元帅"]
+	family.append_death_aliases(aliases, "丑牛元帅")
+	_check(aliases.has("PetNeat") and aliases.has("丑牛大元帅"), "neat death aliases")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("丑牛元帅")
+	_check(level_aliases.has("PetNeat") and level_aliases.has("丑牛大元帅"), "BaseLevel neat death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("丑牛大元帅")
+	_check(panel_aliases.has("PetNeat") and panel_aliases.has("丑牛元帅"), "PetInterface neat death aliases")
+	panel.free()
+
+	data.player_data["玩家等级"] = 50
+	coop.secondary_data.player_data["玩家等级"] = 50
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 50
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 50
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetNeat", "丑牛元帅", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetNeat", "丑牛元帅", 1000)
+	p2_pet["等级"] = 49
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetNeat"
+	coop.secondary_data.player_data["出战宠物"] = "PetNeat"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(200000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 50, "P2 neat reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 4, "P2 neat evolves to stage 4")
+	_check(str(p2_pet.get("名称", "")) == "丑牛大元帅", "P2 neat evolution name")
+	_check((p2_pet.get("技能", []) as Array).has("丑牛奥义"), "P2 neat evolution skills")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 neat untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 50
+	p2_pet["等级"] = 50
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_neat_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_neat_unit")
+	_check(p1_unit != null, "P1 neat spawned by controller")
+	_check(p2_unit != null, "P2 neat spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("turtle_stage")) == 4, "P1 neat stage 4")
+	if p2_unit != null:
+		_check(int(p2_unit.get("turtle_stage")) == 4, "P2 neat stage 4")
 	level.queue_free()
 	stage = null
 	await process_frame

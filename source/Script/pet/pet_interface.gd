@@ -21,6 +21,7 @@ const PET_DRAGON_FAMILY := preload("res://Script/pet/pet_dragon_family.gd")
 const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
 const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
+const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_LEARNED_SKILLS_KEY := "已学习技能"
 const PET_FORMATION_MAX_LEVEL := 100
@@ -1001,8 +1002,8 @@ func _select_tiger_pet_if_available() -> Dictionary:
 
 func _pet_active_name(pet: Dictionary) -> String:
 	var type_name := str(pet.get(DataKeys.TYPE, ""))
-	if type_name == "PetNeat" or _is_pet_neat(pet):
-		return "PetNeat"
+	if PET_NEAT_FAMILY.matches(pet):
+		return PET_NEAT_FAMILY.KIND
 	if type_name == "PetYinTiger" or _is_pet_yin_tiger(pet):
 		return "PetYinTiger"
 	if PET_MOUSE_FAMILY.matches(pet):
@@ -2325,10 +2326,7 @@ func _is_pet_dead_in_current_level(pet_name: String) -> bool:
 
 func _pet_dead_aliases(pet_name: String) -> Array[String]:
 	var aliases: Array[String] = [pet_name]
-	if pet_name == "PetNeat" or pet_name in ["丑牛", "丑牛元帅", "丑牛大元帅"]:
-		aliases.append("PetNeat")
-		aliases.append("丑牛元帅")
-		aliases.append("丑牛大元帅")
+	PET_NEAT_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_MOUSE_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_RABBIT_FAMILY.append_death_aliases(aliases, pet_name)
 	if (
@@ -4396,11 +4394,7 @@ func _is_pet_mouse(pet: Dictionary) -> bool:
 
 
 func _is_pet_neat(pet: Dictionary) -> bool:
-	if str(pet.get(DataKeys.TYPE, "")) == "PetNeat":
-		return true
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, "")).strip_edges()
-	var pet_title := str(pet.get(DataKeys.NAME, "")).strip_edges()
-	return pet_name in ["丑牛", "丑牛元帅", "丑牛大元帅"] or pet_title in ["丑牛", "丑牛元帅", "丑牛大元帅"]
+	return PET_NEAT_FAMILY.matches(pet)
 
 
 func _is_pet_yin_tiger(pet: Dictionary) -> bool:
@@ -4425,19 +4419,14 @@ func _normalize_pet_neat_name(pet: Dictionary) -> void:
 	for key in base.keys():
 		if not pet.has(key):
 			pet[key] = base[key].duplicate(true) if base[key] is Dictionary or base[key] is Array else base[key]
-	var level := int(pet.get(DataKeys.LEVEL, 1))
-	var stage := 4 if level >= 50 else 3 if level >= 30 else 2 if level >= 15 else 1
-	pet[DataKeys.TYPE] = "PetNeat"
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = ["", "丑牛元帅", "丑牛元帅", "丑牛元帅", "丑牛大元帅"][stage]
-	pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
-	pet["技能"] = [["蛮牛冲撞"], ["蛮牛冲撞"], ["蛮牛冲撞"], ["蛮牛冲撞", "蛮力践踏", "丑牛奥义"]][stage - 1]
+	PET_NEAT_FAMILY.normalize_spawn(pet, PlayerData)
 
 
 func _update_pet_neat_evolution(pet: Dictionary) -> void:
 	_normalize_pet_neat_name(pet)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		_data()[_active_pet_key()] = "PetNeat"
+	if not _is_pet_neat(pet):
+		return
+	PET_NEAT_FAMILY.evolve(pet, PlayerData)
 
 
 func _normalize_pet_yin_tiger_name(pet: Dictionary) -> void:
