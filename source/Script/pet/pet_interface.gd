@@ -18,6 +18,7 @@ const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.g
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
 const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const PET_DRAGON_FAMILY := preload("res://Script/pet/pet_dragon_family.gd")
+const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_LEARNED_SKILLS_KEY := "已学习技能"
 const PET_FORMATION_MAX_LEVEL := 100
@@ -81,10 +82,6 @@ const PET_LEARNABLE_SKILLS := [
 ]
 const PET_ITEM_NAMES := ["生命丹", "魔法丹", "攻击丹", "暴击丹", "幸运丹", "回魔丹", "经验丹", "潜力丹"]
 const PET_DRAGON_STAGE_NAMES := {1: "龙仔", 2: "绿英龙", 3: "青龙将军", 4: "青龙妖圣"}
-const PET_PHOENIX_STAGE_NAMES := {1: "雀蛋", 2: "炎皇雀", 3: "朱雀将军", 4: "朱雀女皇"}
-const PET_PHOENIX_STAGE_SKILLS := {
-	1: ["涅槃"], 2: ["涅槃", "不死火鸟"], 3: ["涅槃", "不死火鸟", "地火燎原"], 4: ["涅槃", "不死火鸟", "地火燎原", "朱雀奥义"]
-}
 const PET_RABBIT_STAGE_NAMES := {1: "月兔", 2: "疾风兔", 3: "寒冰玉兔", 4: "冰霜月神"}
 const PET_RABBIT_STAGE_SKILLS := {1: ["月光"], 2: ["月光", "疾风"], 3: ["月光", "疾风", "冰陨"], 4: ["月光", "疾风", "冰陨", "月神奥义"]}
 const PET_MOUSE_STAGE_NAMES := {1: "子鼠元帅", 2: "子鼠大元帅"}
@@ -1016,8 +1013,8 @@ func _pet_active_name(pet: Dictionary) -> String:
 		return "PetRabbit"
 	if type_name == "PetTurtle" or _is_pet_turtle(pet):
 		return "PetTurtle"
-	if _is_pet_phoenix(pet):
-		return "PetPhoenix"
+	if PET_PHOENIX_FAMILY.matches(pet):
+		return PET_PHOENIX_FAMILY.KIND
 	if type_name == PET_TIGER_FAMILY.KIND or _is_pet_tiger(pet):
 		return PET_TIGER_FAMILY.KIND
 	if type_name == PET_DRAGON_FAMILY.KIND or PET_DRAGON_FAMILY.matches(pet):
@@ -2364,6 +2361,7 @@ func _pet_dead_aliases(pet_name: String) -> Array[String]:
 		for name in PET_TIGER_FAMILY.STAGE_NAMES.values():
 			if not aliases.has(str(name)):
 				aliases.append(str(name))
+	PET_PHOENIX_FAMILY.append_death_aliases(aliases, pet_name)
 	return aliases
 
 
@@ -4491,19 +4489,11 @@ func _update_pet_yin_tiger_evolution(pet: Dictionary) -> void:
 
 
 func _is_pet_phoenix(pet: Dictionary) -> bool:
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, ""))
-	var pet_title := str(pet.get(DataKeys.NAME, ""))
-	var type_name := str(pet.get(DataKeys.TYPE, ""))
-	return type_name == "PetPhoenix" or _is_pet_phoenix_name(pet_name) or _is_pet_phoenix_name(pet_title)
+	return PET_PHOENIX_FAMILY.matches(pet)
 
 
 func _is_pet_phoenix_name(pet_name: String) -> bool:
-	var clean_name := pet_name.strip_edges()
-	return (
-		clean_name.begins_with("朱雀")
-		or clean_name in ["雀蛋", "炎皇雀", "朱雀将军", "朱雀女皇", "朱雀幼灵", "赤羽朱雀", "朱雀神君"]
-		or PET_PHOENIX_STAGE_NAMES.values().has(clean_name)
-	)
+	return PET_PHOENIX_FAMILY.is_name(pet_name)
 
 
 func _repair_phoenix_pet_data(pet: Dictionary) -> void:
@@ -4516,16 +4506,16 @@ func _repair_phoenix_pet_data(pet: Dictionary) -> void:
 	):
 		return
 	var keep_fighting := (
-		bool(pet.get(DataKeys.DEPLOYED, false)) or str(_data().get(_active_pet_key(), "")) == "PetPhoenix"
+		bool(pet.get(DataKeys.DEPLOYED, false)) or str(_data().get(_active_pet_key(), "")) == PET_PHOENIX_FAMILY.KIND
 	)
 	var level := int(pet.get(DataKeys.LEVEL, 1))
-	var level_stage: int = 4 if level >= 50 else 3 if level >= 30 else 2 if level >= 15 else 1
+	var level_stage: int = PET_PHOENIX_FAMILY.stage_for_level(level)
 	var stage: int = maxi(clampi(int(pet.get("阶段", 1)), 1, 4), level_stage)
-	pet[DataKeys.TYPE] = "PetPhoenix"
+	pet[DataKeys.TYPE] = PET_PHOENIX_FAMILY.KIND
 	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	pet[DataKeys.NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	pet["技能"] = _pet_phoenix_stage_skills(stage)
+	pet[DataKeys.ALT_NAME] = PET_PHOENIX_FAMILY.stage_name(stage)
+	pet[DataKeys.NAME] = PET_PHOENIX_FAMILY.stage_name(stage)
+	pet["技能"] = PET_PHOENIX_FAMILY.stage_skills(stage)
 	pet[DataKeys.DEPLOYED] = keep_fighting
 
 
@@ -4671,10 +4661,6 @@ func _pet_mouse_skills_for_level(pet_level: int) -> Array:
 	return (PET_MOUSE_LEVEL_SKILLS[unlock_level] as Array).duplicate(true)
 
 
-func _pet_phoenix_stage_skills(stage: int) -> Array:
-	return (PET_PHOENIX_STAGE_SKILLS.get(clampi(stage, 1, 4), []) as Array).duplicate(true)
-
-
 func _normalize_pet_phoenix_name(pet: Dictionary) -> void:
 	if not _is_pet_phoenix(pet):
 		return
@@ -4683,28 +4669,22 @@ func _normalize_pet_phoenix_name(pet: Dictionary) -> void:
 	for key in base.keys():
 		if not pet.has(key):
 			pet[key] = base[key].duplicate(true) if base[key] is Dictionary or base[key] is Array else base[key]
+	PET_PHOENIX_FAMILY.normalize_spawn(pet, PlayerData)
 	var level := int(pet.get(DataKeys.LEVEL, 1))
-	var level_stage: int = 4 if level >= 50 else 3 if level >= 30 else 2 if level >= 15 else 1
+	var level_stage: int = PET_PHOENIX_FAMILY.stage_for_level(level)
 	var stage: int = maxi(clampi(int(pet.get("阶段", 1)), 1, 4), level_stage)
-	pet[DataKeys.TYPE] = "PetPhoenix"
+	pet[DataKeys.TYPE] = PET_PHOENIX_FAMILY.KIND
 	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	pet[DataKeys.NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	var skills := _pet_phoenix_stage_skills(stage)
-	pet["技能"] = skills.duplicate(true)
+	pet[DataKeys.ALT_NAME] = PET_PHOENIX_FAMILY.stage_name(stage)
+	pet[DataKeys.NAME] = PET_PHOENIX_FAMILY.stage_name(stage)
+	pet["技能"] = PET_PHOENIX_FAMILY.stage_skills(stage).duplicate(true)
 
 
 func _update_pet_phoenix_evolution(pet: Dictionary) -> void:
+	if not _is_pet_phoenix(pet):
+		return
 	_normalize_pet_phoenix_name(pet)
-	var level := int(pet.get(DataKeys.LEVEL, 1))
-	var stage := 4 if level >= 50 else 3 if level >= 30 else 2 if level >= 15 else 1
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	pet[DataKeys.NAME] = str(PET_PHOENIX_STAGE_NAMES[stage])
-	var skills := _pet_phoenix_stage_skills(stage)
-	pet["技能"] = skills.duplicate(true)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		_data()[_active_pet_key()] = _pet_active_name(pet)
+	PET_PHOENIX_FAMILY.evolve(pet, PlayerData)
 
 
 func _update_pet_tiger_evolution(pet: Dictionary) -> void:

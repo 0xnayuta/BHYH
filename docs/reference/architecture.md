@@ -258,11 +258,12 @@ classDiagram
 | `BaseHero` | `Script/base/base_hero.gd` | 玩家角色：移动、普攻、技能、无双、法宝、剑阵、坐骑、时装、自动战斗 | `_ready` 绑定 `RoleProp.source_player`；`_exit_tree` 清理；死亡触发复活或失败 |
 | `BaseMonster` | `Script/base/base_monster.gd` | 怪物与 Boss：受击、击退、掉落、阶段保护、难度 | 由关卡按阶段实例化；死亡结算掉落并计数 |
 | `SummonBaseMonster` | `Script/base/summon_base_monster.gd` | 召唤物基类 | 由技能/宠物生成，归属通过 meta 与槽位解析 |
-| `BaseLevel` | `Script/base/base_through_level.gd` | 关卡运行器：4 阶段刷怪表、相机边界、出口判定、通关记账、2P 生成；龟、虎、龙宠物生成已委托控制器 | `_ready` 生成角色/HUD/相机；`_physics_process` 推进阶段与出口 |
-| `PetLevelController` | `Script/pet/pet_level_controller.gd` | 关卡宠物生成生命周期：槽位档案、死亡/恢复、预热、实例化、元数据与落点 | `RefCounted`；当前接管龟、虎、龙三族，其余族仍走 `BaseLevel` |
+| `BaseLevel` | `Script/base/base_through_level.gd` | 关卡运行器：4 阶段刷怪表、相机边界、出口判定、通关记账、2P 生成；龟、虎、龙、凤宠物生成已委托控制器 | `_ready` 生成角色/HUD/相机；`_physics_process` 推进阶段与出口 |
+| `PetLevelController` | `Script/pet/pet_level_controller.gd` | 关卡宠物生成生命周期：槽位档案、死亡/恢复、预热、实例化、元数据与落点 | `RefCounted`；当前接管龟、虎、龙、凤四族，其余族仍走 `BaseLevel` |
 | `PetTurtleFamily` | `Script/pet/pet_turtle_family.gd` | 龟族阶段/技能/场景路径/归一化/进化规则 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
 | `PetTigerFamily` | `Script/pet/pet_tiger_family.gd` | 虎族阶段/技能/场景路径/归一化/进化规则 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
 | `PetDragonFamily` | `Script/pet/pet_dragon_family.gd` | 龙族阶段/技能/场景路径/归一化/进化规则 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
+| `PetPhoenixFamily` | `Script/pet/pet_phoenix_family.gd` | 凤凰族阶段/技能/场景路径/归一化/进化/死亡别名 | 静态规则；显式接收 `PlayerDataStore`，不写全局 1P |
 | `BaseMagicWeapon` | `Script/base/base_magic_weapon.gd` | 法宝运行时：跟随角色、MP 消耗、CD、`use_skill` 模板方法 | 由角色装备/法宝系统实例化 |
 | `BaseBuff` | `Script/base/base_buff.gd` | Buff 载体：时长、减益、免疫、特效 | 首次处理时绑定目标；非战斗目标自释放 |
 | `BaseRole` | `Script/base/base_role.gd` | **HUD**：头像、HP/MP/经验、无双槽、技能 CD、Buff、宠物面板 | `Control`，不是战斗体；由 HUD 容器实例化 |
@@ -283,7 +284,7 @@ classDiagram
 - 通关调用 `add_tg(...)` 记录主线/副本进度；
 - 自动战斗可按 `AutoBattleRetry` 存盘并重战。
 
-`BaseLevel` 同时负责 2P 生成、关卡资源预热请求与其余宠物族分派；龟、虎、龙族生成/恢复由 `PetLevelController` + 族规则负责。新关卡应继承 `BaseLevel` 并复用阶段契约，不要复制一套独立的刷怪循环。
+`BaseLevel` 同时负责 2P 生成、关卡资源预热请求与其余宠物族分派；龟、虎、龙、凤族生成/恢复由 `PetLevelController` + 族规则负责。新关卡应继承 `BaseLevel` 并复用阶段契约，不要复制一套独立的刷怪循环。
 
 Phase 30-2 新增原始 ZMWS 驱动器 `ZmwsLevel`（继承 `Game4ImportedLevel`）：包装场景把原始地图 Node2D 组合进 BHYH 基类，原始地图背景置于角色之后，`ZMWS_Ground` 归一到环境层，原始静态挡板交给布局分屏边界；外部怪物 ID 通过 `ExternalMonsterStore` 映射为 BHYH 怪物 ID 后再走既有生成/预载入口。`ZmwsLevel` 可按碰撞体元数据 `_zmws_wall_name`（缺失时用节点名）匹配布局 `close_walls`/`open_walls`；当前转换地图未保留原名，挡板保持默认关闭。
 
@@ -504,7 +505,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 首批 `PetTiger`、共享槽位边界与 `PetDragon` 已完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 首批 `PetTiger`、共享槽位边界、`PetDragon` 与 `PetPhoenix` 已完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
 | Global 表面继续扩张 | `contract_scan.py` 的 `global_surface_boundary` 以 `scripts/global_surface_baseline.json` 冻结 65 字段与 120 个 `add` 入口；新增项必须先评审并更新基线 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |

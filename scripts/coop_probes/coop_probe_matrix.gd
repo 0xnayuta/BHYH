@@ -99,6 +99,8 @@ func _run() -> void:
 			await _case_pet_slot()
 		"LocalCoopPetDragonProbe":
 			await _case_pet_dragon()
+		"LocalCoopPetPhoenixProbe":
+			await _case_pet_phoenix()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -680,6 +682,96 @@ func _case_pet_dragon() -> void:
 		_check(int(p1_unit.get("dragon_stage")) == 2, "P1 dragon stage 2")
 	if p2_unit != null:
 		_check(int(p2_unit.get("dragon_stage")) == 2, "P2 dragon stage 2")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+## 23-2 凤凰族：族规则、升级写回、死亡别名与双槽生成。
+func _case_pet_phoenix() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_phoenix_family.gd").new()
+	var family_pet := _pet_probe_data("PetPhoenix", "雀蛋", 1000)
+	family_pet["等级"] = 15
+	family_pet["阶段"] = 3
+	_check(family.matches(family_pet), "phoenix family matches type")
+	_check(family.is_name("朱雀幼灵"), "phoenix family matches extra name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 3, "phoenix normalize keeps stored stage")
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 2, "phoenix evolve uses level threshold")
+	_check(str(family_pet.get("名称", "")) == "炎皇雀", "phoenix evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("不死火鸟"), "phoenix evolve updates skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetPhoenix", "phoenix evolve writes P2 active")
+	_check(
+		family.scene_path(3) == "res://Scene/pet/pet_phoenix_summon_3.tscn",
+		"phoenix scene path"
+	)
+	var aliases: Array[String] = ["雀蛋"]
+	family.append_death_aliases(aliases, "雀蛋")
+	_check(aliases.has("PetPhoenix") and aliases.has("朱雀女皇") and aliases.has("朱雀幼灵"), "phoenix death aliases")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("雀蛋")
+	_check(level_aliases.has("PetPhoenix") and level_aliases.has("朱雀女皇"), "BaseLevel phoenix death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("朱雀幼灵")
+	_check(panel_aliases.has("PetPhoenix") and panel_aliases.has("朱雀女皇"), "PetInterface phoenix death aliases")
+	panel.free()
+
+	data.player_data["玩家等级"] = 15
+	coop.secondary_data.player_data["玩家等级"] = 15
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 15
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 15
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetPhoenix", "雀蛋", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetPhoenix", "雀蛋", 1000)
+	p2_pet["等级"] = 14
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetPhoenix"
+	coop.secondary_data.player_data["出战宠物"] = "PetPhoenix"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(1000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 15, "P2 phoenix reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 2, "P2 phoenix evolves to stage 2")
+	_check(str(p2_pet.get("名称", "")) == "炎皇雀", "P2 phoenix evolution name")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 phoenix untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 15
+	p2_pet["等级"] = 15
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_phoenix_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_phoenix_unit")
+	_check(p1_unit != null, "P1 phoenix spawned by controller")
+	_check(p2_unit != null, "P2 phoenix spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("phoenix_stage")) == 2, "P1 phoenix stage 2")
+	if p2_unit != null:
+		_check(int(p2_unit.get("phoenix_stage")) == 2, "P2 phoenix stage 2")
 	level.queue_free()
 	stage = null
 	await process_frame
