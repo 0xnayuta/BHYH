@@ -108,7 +108,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"small_ui_prewarm_in_progress": _host.get_resource_runtime().is_permanent_ui_prewarm_in_progress(),
 			"small_ui_prewarmed": _host.get_resource_runtime().is_permanent_ui_prewarmed(),
 			"role_prewarmed_id": _host._prewarmed_role_id,
-			"pet_signature": _host._prewarmed_pet_signature,
+			"pet_signatures": _host._prewarmed_pet_signatures.duplicate(),
 		},
 		"level":
 		{

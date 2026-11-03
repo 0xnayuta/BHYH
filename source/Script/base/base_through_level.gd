@@ -365,7 +365,7 @@ func _spawn_active_pet(slot: int = 1) -> void:
 		for learned_skill in learned_custom_levels:
 			normalized_levels[learned_skill] = learned_custom_levels[learned_skill]
 	var pet_stage: int = _active_pet_stage_from_data(pet_data)
-	await Global.prewarm_active_pet_runtime_resources()
+	await Global.prewarm_active_pet_runtime_resources(slot)
 	var scene_path := (
 		_pet_yin_tiger_scene_path(pet_stage)
 		if pet_kind == "PetYinTiger"

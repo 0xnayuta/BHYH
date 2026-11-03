@@ -103,16 +103,22 @@ func _active_monsters() -> Array:
 	return result
 
 
+func _pet_slot() -> int:
+	return LocalCoop.slot_for(player) if is_instance_valid(player) else LocalCoop.slot_for(self)
+
+
 func _active_pet() -> Node:
 	var level := _level_node()
 	if level != null:
-		var registered: Variant = level.get_meta("active_pet_unit", null)
+		var slot := _pet_slot()
+		var registered: Variant = level.get_meta(LocalCoop.pet_meta_key("active_pet_unit", slot), null)
 		if registered is Node and is_instance_valid(registered) and not registered.is_queued_for_deletion():
 			return registered
 		if "monster" in level and level.monster != null:
 			for child in level.monster.get_children():
 				if child is SummonBaseMonster and not child.is_queued_for_deletion():
-					return child
+					if LocalCoop.slot_for(child) == slot:
+						return child
 	return null
 
 
@@ -316,7 +322,8 @@ func _use_miaolian() -> void:
 	var pets: Variant = PlayerData.player_data.get("宠物列表", [])
 	if level == null or not (pets is Array):
 		return
-	var dead_name := str(level.get_meta("active_pet_dead_display_name", ""))
+	var slot := _pet_slot()
+	var dead_name := str(level.get_meta(LocalCoop.pet_meta_key("active_pet_dead_display_name", slot), ""))
 	var target_pet: Dictionary = {}
 	for pet in pets:
 		if not (pet is Dictionary):
@@ -335,13 +342,13 @@ func _use_miaolian() -> void:
 	target_pet[DataKeys.HP] = maxi(1, int(float(target_pet.get("生命上限", 1)) * percent))
 	target_pet[DataKeys.DEPLOYED] = true
 	PlayerData.player_data["出战宠物"] = str(target_pet.get(DataKeys.ALT_NAME, ""))
-	level.set_meta("active_pet_dead_this_level", false)
-	level.set_meta("active_pet_dead_keys", [])
-	level.set_meta("active_pet_dead_name", "")
-	level.set_meta("active_pet_dead_type", "")
-	level.set_meta("active_pet_dead_display_name", "")
+	level.set_meta(LocalCoop.pet_meta_key("active_pet_dead_this_level", slot), false)
+	level.set_meta(LocalCoop.pet_meta_key("active_pet_dead_keys", slot), [])
+	level.set_meta(LocalCoop.pet_meta_key("active_pet_dead_name", slot), "")
+	level.set_meta(LocalCoop.pet_meta_key("active_pet_dead_type", slot), "")
+	level.set_meta(LocalCoop.pet_meta_key("active_pet_dead_display_name", slot), "")
 	if level.has_method("_spawn_active_pet"):
-		level.call_deferred("_spawn_active_pet")
+		level.call_deferred("_spawn_active_pet", slot)
 
 
 func _process_swords(delta: float) -> void:

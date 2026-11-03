@@ -469,7 +469,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 作用域 | 所有者 | 容量/驻留依据 | 清理事件 |
 |:---|:---|:---|:---|
 | 构建期只读 | 构建转换器 + `LevelPreloadStore` | 构建期生成；运行时无增长 | 无 |
-| 永久 | `Global` | 4 条永久小 UI；角色/宠物预热标记各 1 | 退出档案、角色切换、`release_ui_runtime_cache(true)` |
+| 永久 | `Global` | 4 条永久小 UI；角色预热标记 1 个、宠物预热签名每槽位 1 个 | 退出档案、角色切换、`release_ui_runtime_cache(true)` |
 | 关卡 | `Global._level_resource_lease` + `_monster_scene_cache` | 按当前关卡路径；无固定上限 | `change_scene` / `clear_level_resource_cache` |
 | 战斗 | `Global` | 池上限 80/32/24/32；预置 12/16/16/6 | `end_archive_session` → `clear_combat_runtime_cache` |
 | UI | `Global` 实例登记与 UI 纹理前缀 | 按运行时实例/场景；无固定上限 | 实例退出、切换、`release_ui_runtime_cache` |
@@ -503,7 +503,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 当前边界 | 收敛方向与状态 |
 |:---|:---|
 | `AtlasMetadata.data` 与字典返回入口 | [Phase 14 矩阵](atlas_metadata_schema.md)：六个直接消费者已用只读 View；`data_for`、`validate_path`、`clear_cache` 与惰性配置已删除；`contract_scan.py` 阻断旧入口 |
-| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 首批 `PetTiger` 已完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
+| Global 缓存/池/场景流与资源请求交织 | Phase 15 已收口并归档：调用面/所有权矩阵、场景入口、预载交接、缓存/池/UI 与退出生命周期完成；Phase 16、Phase 17、Phase 30 已完成归档；Phase 31、Phase 32、Phase 33 已完成；**Phase 22 已完成并收口；Phase 23-0/23-1 已完成，23-2 首批 `PetTiger` 与共享槽位边界已完成**，见 [`global_runtime_inventory.md`](global_runtime_inventory.md) 与 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) |
 | Global 表面继续扩张 | `contract_scan.py` 的 `global_surface_boundary` 以 `scripts/global_surface_baseline.json` 冻结 65 字段与 120 个 `add` 入口；新增项必须先评审并更新基线 |
 | 冻结运行时建帧 | 保持机读边界，不重新打开 Phase 13 |
 | Spine 平台库与性能 | [Spine 平台基线](spine_platform_baseline.md)：Windows x86_64 先行；Spine 4.3 官方构建；其它平台延期/未验证；21-2B 设备测量暂缓 |

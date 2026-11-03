@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **35.26s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-03 最新复跑 **33.76s**） |
 | `health_check` | **766 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **297/297 PASS**（虎族批首跑 1 个 `message_show` 父节点瞬态，重跑通过） |
-| `scene_probe_runner` | **17/17 PASS**（含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **26/26 PASS**（含 2P 宠物升级写回断言） |
-| `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 292.1s，默认 auto 并发） |
+| `archive_probe_runner` | **297/297 PASS**（共享槽位批首两次出现 `message_show` 父节点瞬态，第三次通过） |
+| `scene_probe_runner` | **17/17 PASS**（164.78s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **27/27 PASS**（130.78s，含 `LocalCoopPetSlotProbe`：P1/P2 预热、装备加成、法宝复活槽位） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（24.73s） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 341.5s，默认 auto 并发；`level_dsg_4` 单次瞬态重试通过） |
 | PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
 
 **边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
 
 ### 最近完成
 
+- Phase 23-2 共享槽位边界：`Global.prewarm_active_pet_runtime_resources(slot)`、`get_active_pet_preload_data(slot)` 与 `get_active_pet_preload_paths(slot)` 按槽位解析，预热签名按槽位缓存；`BaseLevel`、`PetLevelController` 与加载页双槽遍历传槽位；慈心妙莲按持有者槽位读写死亡元数据并重建对应槽位；宠物装备加成经 `BaseObject.PlayerData` 槽位解析验证。新增 `LocalCoopPetSlotProbe` 固化三条路径。验证：`coop_probe_runner` **27/27 PASS**（130.78s）；`health_check` 766 脚本 0/0/0；其余门禁见下表。
 - Phase 23-2 首批 `PetTiger`：新增 `PetTigerFamily`，`PetLevelController` 通过族规则表接管龟、虎；`BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段改用通用 `_pet_stage_for_level`；`BaseMonster` 删除虎族重复进化，`PetInterface` 虎族检测/归一化/进化/死亡别名复用规则。验证：`check_all` 9/9、`health_check` 766 脚本 0/0/0、`pet-runtime` PASS、档案 297/297（首跑瞬态重跑）、场景 17/17、协作 26/26、`level_1` PASS、全量 128/128 + 5 SKIP（292.1s）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
 - Phase 23-1：新增 `PetLevelController` 与 `PetTurtleFamily`，`BaseLevel` 龟族生成/归一化/进化/路径/技能规则迁出；`BaseMonster` 删除龟族重复实现，现有各族进化与成长写入显式接收槽位档案，修复 P2 升级写回 1P；`PetInterface` 龟族逻辑复用同一规则。验证：`check_all` 9/9、`health_check` 765 脚本 0/0/0、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（含新增 2P 写回断言）、`level_1` PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto）；临时定向探针覆盖 1P/2P 龟族 2 阶生成、死亡抑制/复活与 P1/P2 活跃名隔离，已删除。
 - Phase 23-0：完成 8 族、30 个召唤场景的 `BaseLevel` 宠物生成/归一化/进化/技能/路径/槽位调用面调查，产出 [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md)；首批选择 `PetTurtle`，23-1 采用 `PetLevelController` + `PetTurtleFamily`。静态确认 2P 预热、凤凰别名、寅虎预热门禁与法宝复活槽位风险。验证：`pet-runtime` PASS，`coop_probe_runner` 26/26；未改 `source/`，23-1 未启动。

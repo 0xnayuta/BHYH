@@ -202,7 +202,7 @@ func _exit_tree() -> void:
 	_archive_session_prewarm_in_progress = false
 	_archive_session_prewarm_role_id = 0
 	_prewarmed_role_id = 0
-	_prewarmed_pet_signature = ""
+	_prewarmed_pet_signatures.clear()
 	release_role_runtime_resources()
 	clear_combat_runtime_cache()
 	if _ui_runtime != null:
@@ -608,7 +608,7 @@ var _save_failure_notify_msec: int = 0
 var _save_failure_notify_key: String = ""
 var _runtime_generation: int = 0
 var _shutting_down := false
-var _prewarmed_pet_signature: String = ""
+var _prewarmed_pet_signatures: Dictionary = {}
 var _resource_runtime: ResourceRuntime = null
 var _scene_flow: SceneFlow = null
 var _popup_factory: PopupFactory = null
@@ -1202,7 +1202,7 @@ func clear_combat_runtime_cache() -> void:
 	MONSTER_FRAME_CACHE_REGISTRY.clear_all()
 	NeZhaEquipmentVisuals.clear_cached_frames()
 	_prewarmed_role_id = 0
-	_prewarmed_pet_signature = ""
+	_prewarmed_pet_signatures.clear()
 	_role_visual.reset()
 
 	damage_text = null
@@ -2360,23 +2360,24 @@ func add_weapon_bullet(parent, position, _name, list, dir, Rand):
 	return _projectile_factory.add_weapon_bullet(parent, position, _name, list, dir, Rand)
 
 
-func get_active_pet_preload_data() -> Dictionary:
-	if PlayerData.has_method("ensure_pet_dragon"):
-		PlayerData.ensure_pet_dragon()
-	if PlayerData.has_method("ensure_pet_phoenix"):
-		PlayerData.ensure_pet_phoenix()
-	if PlayerData.has_method("ensure_pet_turtle"):
-		PlayerData.ensure_pet_turtle()
-	if PlayerData.has_method("ensure_pet_rabbit"):
-		PlayerData.ensure_pet_rabbit()
-	if PlayerData.has_method("ensure_pet_mouse"):
-		PlayerData.ensure_pet_mouse()
-	if PlayerData.has_method("ensure_pet_neat"):
-		PlayerData.ensure_pet_neat()
-	var pets: Variant = PlayerData.player_data.get(PlayerData.PET_LIST_KEY, [])
+func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
+	var profile: Node = LocalCoop.data_for_slot(2 if slot == 2 else 1)
+	if profile.has_method("ensure_pet_dragon"):
+		profile.ensure_pet_dragon()
+	if profile.has_method("ensure_pet_phoenix"):
+		profile.ensure_pet_phoenix()
+	if profile.has_method("ensure_pet_turtle"):
+		profile.ensure_pet_turtle()
+	if profile.has_method("ensure_pet_rabbit"):
+		profile.ensure_pet_rabbit()
+	if profile.has_method("ensure_pet_mouse"):
+		profile.ensure_pet_mouse()
+	if profile.has_method("ensure_pet_neat"):
+		profile.ensure_pet_neat()
+	var pets: Variant = profile.player_data.get(PlayerData.PET_LIST_KEY, [])
 	if not (pets is Array):
 		return {}
-	var active_name := str(PlayerData.player_data.get(PlayerData.ACTIVE_PET_KEY, ""))
+	var active_name := str(profile.player_data.get(PlayerData.ACTIVE_PET_KEY, ""))
 	var selected_pet: Dictionary = {}
 	var selected_type := ""
 	for pet in pets:
@@ -2448,8 +2449,8 @@ func get_active_pet_preload_data() -> Dictionary:
 	}
 
 
-func get_active_pet_preload_paths() -> Array[String]:
-	var pet_info := get_active_pet_preload_data()
+func get_active_pet_preload_paths(slot: int = 1) -> Array[String]:
+	var pet_info := get_active_pet_preload_data(slot)
 	var pet_type := str(pet_info.get("type", ""))
 	if pet_type == "":
 		return []
@@ -2567,11 +2568,12 @@ func _preload_sprite_frames_resource(path: String) -> void:
 			_resource_runtime.cache_threaded_resource(path, frames)
 
 
-func prewarm_active_pet_runtime_resources() -> void:
+func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 	var request_generation := _runtime_generation
 	if not is_runtime_generation_current(request_generation):
 		return
-	var pet_info := get_active_pet_preload_data()
+	var safe_slot := 2 if slot == 2 else 1
+	var pet_info := get_active_pet_preload_data(safe_slot)
 	var pet_type := str(pet_info.get("type", ""))
 	if pet_type == "":
 		return
@@ -2585,7 +2587,7 @@ func prewarm_active_pet_runtime_resources() -> void:
 	var pet_signature := (
 		"%s:%d:%d" % [pet_type, stage, mouse_skill_tier] if pet_type == "PetMouse" else "%s:%d" % [pet_type, stage]
 	)
-	if pet_signature == _prewarmed_pet_signature:
+	if pet_signature == str(_prewarmed_pet_signatures.get(safe_slot, "")):
 		return
 	var scene_path := ""
 	var frames_path := ""
@@ -2638,7 +2640,11 @@ func prewarm_active_pet_runtime_resources() -> void:
 		await MonsterBullet.prewarm_pet_dragon_runtime(stage, bullet_scene)
 	if not is_runtime_generation_current(request_generation):
 		return
-	_prewarmed_pet_signature = pet_signature
+	_prewarmed_pet_signatures[safe_slot] = pet_signature
+
+
+func get_prewarmed_pet_signature(slot: int = 1) -> String:
+	return str(_prewarmed_pet_signatures.get(2 if slot == 2 else 1, ""))
 
 
 func get_magic_weapon_scene_path(weapon_name: String) -> String:

@@ -64,7 +64,7 @@ func spawn_for_slot(level: Node, slot: int, profile: Node, pet_data: Dictionary)
 		for learned_skill in learned_custom_levels:
 			normalized_levels[learned_skill] = learned_custom_levels[learned_skill]
 	var pet_stage: int = clampi(int(pet_data.get("阶段", 1)), 1, 4)
-	await Global.prewarm_active_pet_runtime_resources()
+	await Global.prewarm_active_pet_runtime_resources(slot)
 	var scene_path: String = family.scene_path(pet_stage)
 	var scene := Global.preload_scene_path(scene_path)
 	if scene == null:

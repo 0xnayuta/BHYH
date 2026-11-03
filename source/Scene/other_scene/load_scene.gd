@@ -206,8 +206,12 @@ func _build_archive_preload_paths() -> Array[String]:
 		_append_preload_path(unique, "res://Art/constellations/background/%d.png" % constellation_level)
 	for role_path in Global.get_current_role_preload_paths():
 		_append_preload_path(unique, role_path)
-	for pet_path in Global.get_active_pet_preload_paths():
-		_append_preload_path(unique, pet_path)
+	var pet_slots: Array[int] = [1]
+	if LocalCoop.is_enabled():
+		pet_slots.append(2)
+	for pet_slot in pet_slots:
+		for pet_path in Global.get_active_pet_preload_paths(pet_slot):
+			_append_preload_path(unique, pet_path)
 	for sword_path in MAIN_SWORD_ARRAY_WEAPON_SCRIPT.get_active_sword_preload_paths():
 		_append_preload_path(unique, sword_path)
 	for monster_path in _get_target_first_wave_monster_scene_paths():
@@ -449,7 +453,11 @@ func _finish_loading() -> void:
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("combat hit resources")
 		await get_tree().process_frame
-		await Global.prewarm_active_pet_runtime_resources()
+		var pet_slots: Array[int] = [1]
+		if LocalCoop.is_enabled():
+			pet_slots.append(2)
+		for pet_slot in pet_slots:
+			await Global.prewarm_active_pet_runtime_resources(pet_slot)
 		if not _is_request_current():
 			return
 		if DisplayServer.get_name() != "headless":

@@ -32,7 +32,7 @@
     "_monster_display",
     "_monster_spawn",
     "_popup_factory",
-    "_prewarmed_pet_signature",
+    "_prewarmed_pet_signatures",
     "_prewarmed_role_id",
     "_projectile_factory",
     "_resource_runtime",

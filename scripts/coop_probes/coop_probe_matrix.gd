@@ -13,6 +13,15 @@ var skip_reason := ""
 var case_name := ""
 
 
+class PetSlotProbeLevel:
+	extends Node2D
+
+	var spawned_slots: Array[int] = []
+
+	func _spawn_active_pet(slot: int = 1) -> void:
+		spawned_slots.append(slot)
+
+
 func _initialize() -> void:
 	call_deferred("_run")
 
@@ -86,6 +95,8 @@ func _run() -> void:
 			await _case_pet_buff()
 		"LocalCoopPetExperienceProbe":
 			await _case_pet_experience()
+		"LocalCoopPetSlotProbe":
+			await _case_pet_slot()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -490,6 +501,96 @@ func _case_pet_experience() -> void:
 	_check(str(data.player_data.get("出战宠物", "")) != "PetTurtle", "P2 turtle evolution keeps P1 active")
 	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetTurtle", "P2 turtle evolution updates P2 active")
 	evolution_monster.queue_free()
+	await process_frame
+
+
+## 23-2 共享槽位边界：预热、装备加成、法宝复活必须按槽位解析。
+func _case_pet_slot() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var p1_pet := _pet_probe_data("PetTiger", "白灵虎", 1000)
+	p1_pet["阶段"] = 2
+	var p2_pet := _pet_probe_data("PetTurtle", "玄武将军", 1000)
+	p2_pet["阶段"] = 3
+	p2_pet["等级"] = 30
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetTiger"
+	coop.secondary_data.player_data["出战宠物"] = "PetTurtle"
+
+	var info1: Dictionary = global.get_active_pet_preload_data(1)
+	var info2: Dictionary = global.get_active_pet_preload_data(2)
+	_check(str(info1.get("type", "")) == "PetTiger" and int(info1.get("stage", 0)) == 2, "P1 preload selects P1 pet")
+	_check(str(info2.get("type", "")) == "PetTurtle" and int(info2.get("stage", 0)) == 3, "P2 preload selects P2 pet actual=" + str(info2))
+	var paths1: Array[String] = global.get_active_pet_preload_paths(1)
+	var paths2: Array[String] = global.get_active_pet_preload_paths(2)
+	_check(paths1.has("res://Scene/pet/pet_tiger_summon_2.tscn"), "P1 preload path is tiger stage 2")
+	_check(paths2.has("res://Scene/pet/pet_turtle_summon_3.tscn"), "P2 preload path is turtle stage 3 actual=" + str(paths2))
+	await global.prewarm_active_pet_runtime_resources(1)
+	await global.prewarm_active_pet_runtime_resources(2)
+	_check(global.get_prewarmed_pet_signature(1) == "PetTiger:2", "P1 prewarm signature")
+	_check(global.get_prewarmed_pet_signature(2) == "PetTurtle:3", "P2 prewarm signature actual=" + global.get_prewarmed_pet_signature(2))
+
+	# 装备加成：阵法等级按槽位读取，P2 不得拿 P1 的加成。
+	data.player_data["宠物阵法等级"] = {"生命": 0}
+	coop.secondary_data.player_data["宠物阵法等级"] = {"生命": 1}
+	var pet_scene: PackedScene = load("res://Scene/pet/pet_turtle_summon_1.tscn")
+	var unit1: Node = pet_scene.instantiate()
+	var unit2: Node = pet_scene.instantiate()
+	unit1.set_meta("coop_slot", 1)
+	unit2.set_meta("coop_slot", 2)
+	stage.add_child(unit1)
+	stage.add_child(unit2)
+	await process_frame
+	unit1.set_physics_process(false)
+	unit1.set_process(false)
+	unit2.set_physics_process(false)
+	unit2.set_process(false)
+	var unit_data := _pet_probe_data("PetTurtle", "龟布", 1000)
+	unit1.apply_pet_data(unit_data.duplicate(true))
+	unit2.apply_pet_data(unit_data.duplicate(true))
+	_check(unit1.PlayerData == data, "P1 pet unit equipment owner")
+	_check(unit2.PlayerData == coop.secondary_data, "P2 pet unit equipment owner")
+	_check(int(unit2.get("max_hp")) - int(unit1.get("max_hp")) == 400, "P2 pet equipment bonus uses P2 formation")
+	unit1.queue_free()
+	unit2.queue_free()
+	await process_frame
+
+	# 慈心妙莲：只清 P2 死亡态、只恢复 P2 宠物、只重建 P2。
+	var probe_level := PetSlotProbeLevel.new()
+	stage.add_child(probe_level)
+	var player_parent := Node2D.new()
+	probe_level.add_child(player_parent)
+	var weapon_player: Node = global.call_hero("role_7", player_parent, Vector2(100, 340), false, 2)
+	var p1_dead := _pet_probe_data("PetTurtle", "龟布", 1000)
+	p1_dead["生命"] = 0
+	var p2_dead := _pet_probe_data("PetTurtle", "龟布", 1000)
+	p2_dead["生命"] = 0
+	data.player_data["宠物列表"] = [p1_dead]
+	data.player_data["出战宠物"] = "龟布"
+	coop.secondary_data.player_data["宠物列表"] = [p2_dead]
+	coop.secondary_data.player_data["出战宠物"] = "龟布"
+	for slot in [1, 2]:
+		probe_level.set_meta(coop.pet_meta_key("active_pet_dead_this_level", slot), true)
+		probe_level.set_meta(coop.pet_meta_key("active_pet_dead_keys", slot), ["PetTurtle", "龟布"])
+		probe_level.set_meta(coop.pet_meta_key("active_pet_dead_name", slot), "PetTurtle")
+		probe_level.set_meta(coop.pet_meta_key("active_pet_dead_type", slot), "PetTurtle")
+		probe_level.set_meta(coop.pet_meta_key("active_pet_dead_display_name", slot), "龟布")
+	var weapon: Node = load("res://Script/magic_weapon/eight_immortal_magic_weapon.gd").new()
+	weapon.player = weapon_player
+	weapon.weapon_id = "hehua"
+	weapon.fb_level = 1
+	weapon.set_meta("coop_slot", 2)
+	weapon._use_miaolian()
+	await process_frame
+	await process_frame
+	_check(int(p2_dead.get("生命", 0)) > 0, "P2 pet revived")
+	_check(int(p1_dead.get("生命", 0)) == 0, "P1 pet untouched by P2 revive")
+	_check(not bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 2), true)), "P2 death meta cleared")
+	_check(bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 1), false)), "P1 death meta preserved")
+	_check(probe_level.spawned_slots == [2], "P2 revive respawns only P2")
+	weapon.free()
+	probe_level.queue_free()
 	await process_frame
 
 

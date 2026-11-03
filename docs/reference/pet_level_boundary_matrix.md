@@ -1,6 +1,6 @@
 # 宠物关卡调用面与首批抽取矩阵
 
-> **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移已完成（2026-11-03）；其余 6 族尚未启动。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
+> **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移与共享槽位边界批次（预热/装备/法宝复活）已完成（2026-11-03）；其余 6 族尚未启动。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
 > **范围**：`BaseLevel` 的宠物生成、恢复、归一化、进化、技能、场景路径与槽位解析；同时登记 `BaseMonster`、`PetInterface`、`PlayerData`、`Global` 与召唤物单位的现有调用点。
 > **事实源**：`source/Script/base/base_through_level.gd`、`source/Script/base/base_monster.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/pet/pet_level_controller.gd`、`source/Script/pet/pet_turtle_family.gd`、`source/Script/pet/pet_tiger_family.gd`、`source/Script/memory_class/player_data.gd`、`source/global.gd`、`source/Script/coop/local_coop.gd`。数量是本次工作区快照，不作为长期 SLA。
 > **非目标**：不重写 `BaseLevel` 阶段状态机、不重写 `PlayerData`、不改变宠物数值/进化/出战规则、不新增 Autoload。
@@ -21,13 +21,15 @@
    - `BaseLevel` 的龟族分支是完整的 `normalize → growth → restore → evolve → path` 标准链，适合先抽出通用生命周期。
 4. 23-1 已新增 `pet/` 下的 `PetLevelController` 与 `PetTurtleFamily`；23-2 首批新增 `PetTigerFamily`，`BaseLevel` 不再保留龟族/虎族规则函数与生成分支。其余 6 族在后续 23-2 批次逐族迁移，阶段出口才达到“BaseLevel 只保留控制器入口”。
 5. **已由 23-1 修复并回归**：`BaseMonster._cure_active_pet_exp(slot)` 的进化与成长函数显式接收当前槽位档案，P2 升级不再写回 1P `出战宠物`。
-6. 以下剩余风险不阻塞 23-1，但会影响后续批次：
-   - `Global.prewarm_active_pet_runtime_resources()` 只读 1P 档案且无槽位参数；P2 生成时会预热 1P 宠物；
+6. **已由 23-2 共享槽位边界批次修复并回归**：
+   - `Global.prewarm_active_pet_runtime_resources(slot)` 与 `get_active_pet_preload_data(slot)` 按槽位解析，签名缓存按槽位隔离；`BaseLevel`、`PetLevelController` 与加载页均传槽位；
+   - 八仙法宝复活按持有者槽位读写死亡元数据并重建对应槽位；
+   - 宠物单位装备加成经 `BaseObject.PlayerData` 的槽位解析验证，P2 使用 P2 阵法/装备；新增 `LocalCoopPetSlotProbe` 固化三条路径。
+7. 以下剩余风险不阻塞当前批次，但会影响后续批次：
    - `BaseLevel._active_pet_dead_aliases()` 与 `PetInterface._pet_dead_aliases()` 缺少凤凰别名，而 `BaseRole` 已有；
    - `Global.get_active_pet_preload_data()` 不识别 `PetYinTiger`，寅虎没有预热门禁；
-   - 八仙法宝复活入口使用无槽位后缀的死亡元数据，并按 1P 重新生成；
-   - `PetTurtleSummonBase.setup_pet_turtle()` 读取全局 `PlayerData` 的装备加成，P2 单位可能拿到 1P 加成；
-   - `BaseMonster` 升级循环调用 7 族进化，但没有 `PetNeat`。
+   - `BaseMonster` 升级循环调用 7 族进化，但没有 `PetNeat`；
+   - 活跃名清理仍只比较规范名，显示名别名清理待族规则统一。
 
 未修复项为静态阅读结论；运行期反例与修复放入后续批次，不在本页冒充已验证缺陷。
 
@@ -45,7 +47,7 @@ flowchart TD
     F --> G["ensure_pet_* + _canonicalize_active_pet_data"]
     G --> H["死亡检查 / HP-MP 恢复 / 已学习技能"]
     H --> I["族 normalize + growth + restore + evolve"]
-    I --> J["Global.prewarm_active_pet_runtime_resources()"]
+    I --> J["Global.prewarm_active_pet_runtime_resources(slot)"]
     J --> K["族 scene_path → preload → instantiate"]
     K --> L["apply_pet_data / setup_pet_*"]
     L --> M["add_child + active_pet_unit 元数据"]
@@ -58,10 +60,10 @@ flowchart TD
 |:---|:---|:---|:---|
 | `BaseLevel._ready` → `_spawn_active_pet_deferred` | 关卡开始生成 1P，再在双人可用时生成 2P | 显式 1 / 2 | 无 |
 | `PetInterface.fight_click` / `rest_click` | 出战/休息后重建或销毁单位 | `LocalCoop.ui_slot` | `PetInterface` 自己的归一化与进化副本 |
-| `BaseMonster.set_exp` → `_cure_active_pet_exp` | 宠物经验与升级进化 | `slot` 参数 | 进化写回全局 `PlayerData`，且缺 `PetNeat` |
+| `BaseMonster.set_exp` → `_cure_active_pet_exp` | 宠物经验与升级进化 | `slot` 参数 | 进化已按槽位写回；缺 `PetNeat` |
 | `SummonBaseMonster._persist_active_pet_death` | 记录本局死亡，禁止再次出战 | `LocalCoop.slot_for(self)` | 依赖调用方别名表 |
-| `EightImmortalMagicWeapon` 复活 | 清除死亡态并重新生成 | 无槽位后缀，按 1P | 2P 复活会落到 1P 元数据 |
-| `Global.prewarm_active_pet_runtime_resources` | 战斗前预热场景/帧/弹体 | 1P 档案 | P2 预热错误；寅虎无分支 |
+| `EightImmortalMagicWeapon` 复活 | 清除死亡态并重新生成 | `LocalCoop.slot_for(player)` | 已按槽位隔离 |
+| `Global.prewarm_active_pet_runtime_resources` | 战斗前预热场景/帧/弹体 | 显式 `slot` | 已按槽位隔离；寅虎仍无分支 |
 | `BaseRole` HUD 查询 | 读取 `active_pet_unit` 与死亡态 | `LocalCoop.slot_for(self)` | 凤凰别名已有，和 Level/UI 不一致 |
 
 ---
@@ -143,23 +145,23 @@ flowchart TD
 | `PetInterface._spawn_active_pet_now` | `LocalCoop.ui_slot` | 当前面板档案 | 单位树 | 正确 |
 | `PetInterface._despawn_active_pet_nodes` | `LocalCoop.ui_slot` | `coop_slot` | 单位树 | 正确 |
 | `SummonBaseMonster._persist_active_pet_death` | `LocalCoop.slot_for(self)` | 单位元数据 | `active_pet_dead_*` | 槽位正确；别名依赖外部 |
-| `EightImmortalMagicWeapon` 复活 | 无 | 硬编码 `active_pet_dead_*` | 1P 档案与元数据 | 2P 不隔离 |
-| `Global.prewarm_active_pet_runtime_resources` | 无 | 全局 `PlayerData` | 缓存 | 仅 1P；寅虎未识别 |
-| `PetTurtleSummonBase.setup_pet_turtle` | 无 | 全局 `PlayerData.get_pet_equipment_bonuses` | 单位属性 | P2 可能使用 1P 装备加成 |
+| `EightImmortalMagicWeapon` 复活 | `LocalCoop.slot_for(player)` | 槽位死亡元数据 | 槽位宠物与死亡态 | 已按槽位隔离 |
+| `Global.prewarm_active_pet_runtime_resources` | 显式 `slot` | 槽位档案与预载路径 | 按槽位签名缓存 | 已按槽位隔离；寅虎未识别 |
+| `PetTurtleSummonBase.setup_pet_turtle` | `BaseObject.PlayerData` → `LocalCoop.data_for(self)` | 槽位装备/阵法加成 | 单位属性 | 已由 `LocalCoopPetSlotProbe` 验证 |
 | `BaseRole._get_cached_active_pet_unit` | `LocalCoop.slot_for(self)` | `active_pet_unit` 元数据 | 清理失效元数据 | 槽位正确 |
 
 ### 5.1 已确认的静态风险
 
 | 风险 | 证据 | 影响 | 归属批次 |
 |:---|:---|:---|:---|
-| P2 预热 1P 宠物 | `global.gd:2363-2446` 使用 `PlayerData`；`2570` 无 slot 参数；`base_through_level.gd:370` 在槽位生成中调用 | P2 首次出战可能未预热正确场景/帧/弹体 | 23-1 或 23-2 |
+| P2 预热 1P 宠物 | `Global.prewarm_active_pet_runtime_resources(slot)`、`get_active_pet_preload_data(slot)` 与加载页双槽遍历 | 已修复；P2 预载/预热门禁按槽位 | 23-2 共享槽位批次完成 |
 | P2 升级写 1P 活跃名 | `base_monster.gd` 的进化与成长函数已改为接收当前槽位档案 | 已修复；P2 升级不再改 1P `出战宠物` | 23-1 已完成 |
-| 凤凰死亡不隔离 | `base_through_level.gd:214-251` 与 `pet_interface.gd:2342-2384` 无凤凰分支；`base_role.gd:459-468` 有 | 凤凰死亡后可能仍被视为可出战 | 23-2 |
-| 寅虎无预热门禁 | `global.gd:2380-2425` 无 `PetYinTiger`；`prewarm` 分支无寅虎 | 寅虎首次出战直接加载场景/帧 | 23-2 |
-| 法宝复活 1P | `eight_immortal_magic_weapon.gd:315-344` 使用无后缀元数据与无 slot `_spawn_active_pet` | 2P 法宝复活落到 1P | 23-3 |
-| 龟族单位全局装备加成 | `pet_turtle_summon_base.gd:246-250` 使用 `PlayerData` | P2 龟族可能获得 1P 装备加成 | 未覆盖；后续验证 |
-| 丑牛升级无进化 | `base_monster.gd:3003-3009` 缺 `_update_pet_neat_evolution` | 丑牛经验升级可能不刷新阶段/技能 | 23-2 |
-| 活跃名清理不覆盖显示名 | `base_through_level.gd:274-278` 仅比较规范名 `pet_name` | 死亡后可能残留显示名，重复进入仍尝试生成 | 23-2 |
+| 凤凰死亡不隔离 | `base_through_level.gd:214-251` 与 `pet_interface.gd:2342-2384` 无凤凰分支；`base_role.gd:459-468` 有 | 凤凰死亡后可能仍被视为可出战 | 23-2 凤凰批次 |
+| 寅虎无预热门禁 | `global.gd:2380-2425` 无 `PetYinTiger`；`prewarm` 分支无寅虎 | 寅虎首次出战直接加载场景/帧 | 23-2 寅虎批次 |
+| 法宝复活 1P | `eight_immortal_magic_weapon.gd` 已改用槽位死亡元数据与 `_spawn_active_pet(slot)` | 已修复；2P 复活只重建 P2 | 23-2 共享槽位批次完成 |
+| 宠物单位全局装备加成 | `BaseObject.PlayerData` 按 `coop_slot` 解析；`LocalCoopPetSlotProbe` 验证 P2 阵法加成 | 已验证；未发现 1P 串槽 | 23-2 共享槽位批次完成 |
+| 丑牛升级无进化 | `base_monster.gd:3003-3009` 缺 `_update_pet_neat_evolution` | 丑牛经验升级可能不刷新阶段/技能 | 23-2 丑牛批次 |
+| 活跃名清理不覆盖显示名 | `base_through_level.gd:274-278` 仅比较规范名 `pet_name` | 死亡后可能残留显示名，重复进入仍尝试生成 | 23-2 族批次 |
 
 ---
 
@@ -234,24 +236,24 @@ PetFamilySpec (RefCounted, 各族实现)
 ## 7. 本批验证与边界
 
 - 23-1 已修改 `source/`：新增 `pet_level_controller.gd`、`pet_turtle_family.gd`；修改 `BaseLevel`、`BaseMonster`、`PetInterface`。
-- 23-2 首批已新增 `pet_tiger_family.gd`，并修改 `PetLevelController`、`BaseLevel`、`BaseMonster`、`PetInterface`；未修改场景、资源、存档格式或显示基线。
+- 23-2 首批已新增 `pet_tiger_family.gd`，并修改 `PetLevelController`、`BaseLevel`、`BaseMonster`、`PetInterface`；共享槽位批次修改 `global.gd`、`load_scene.gd`、`runtime_diagnostics.gd`、`eight_immortal_magic_weapon.gd`、`scripts/global_surface_baseline.json` 与协作探针；未修改场景、资源、存档格式或显示基线。
 - 已执行（虎族迁移后）：
-  - `check_all --godot-bin`：**9/9 PASS**（35.26s）；
+  - `check_all --godot-bin`：**9/9 PASS**（33.76s）；
   - `pet-runtime`：**PASS**（5.37s）；
-  - `archive_probe_runner`：首跑 1 个 `message_show` 父节点瞬态，重跑 **297/297 PASS**；
-  - `coop_probe_runner`：**26/26 用例 PASS**（129.23s）；宠物经验用例含 2P 写回断言；
-  - `scene_probe_runner`：**17/17 PASS**（160.40s）；
-  - `level_1` 1P 冒烟：**PASS，4 阶段，0 ERROR / 0 WARNING**（25.3s）；
-  - 全量关卡回归：**PASS 128/128 + SKIP 5，FAIL 0**（默认 auto 并发，292.1s）。
+  - `archive_probe_runner`：首两次运行出现 1 个 `message_show` 父节点瞬态，第三次 **297/297 PASS**；
+  - `coop_probe_runner`：**27/27 用例 PASS**（130.78s）；新增 `LocalCoopPetSlotProbe`，覆盖 P1/P2 预载数据与路径、按槽位预热签名、P2 装备阵法加成、慈心妙莲只恢复 P2；
+  - `scene_probe_runner`：**17/17 PASS**（164.78s）；
+  - `level_1` 1P 冒烟：**PASS，4 阶段，0 ERROR / 0 WARNING**（24.73s）；
+  - 全量关卡回归：**PASS 128/128 + SKIP 5，FAIL 0**（默认 auto 并发，341.5s；`level_dsg_4` 单次瞬态重试通过）。
 - 临时定向探针（运行后已删除）：
   - P1 `PetTurtle`、P2 `PetTiger` 同时升级：P1 保持 `PetTurtle`，P2 为 `PetTiger`；
   - 1P `PetTiger` 等级 15 生成：`pet_tiger_unit`、阶段 2、`白灵虎`；
   - 1P 龟族死亡抑制/复活与 2P 龟族 2 阶生成（23-1 基线）。
-- 未覆盖：2P 预热仍使用 1P 档案；龟族/虎族单位装备加成的 2P 归属、凤凰死亡别名、法宝复活槽位、丑牛升级进化为后续批次/单独验证。不得把本页探针全绿外推为这些路径已验证。
+- 未覆盖：凤凰死亡别名、寅虎预热门禁、丑牛升级进化与活跃名显示名清理为后续族批次/单独验证。不得把本页探针全绿外推为这些路径已验证。
 - 选型不按文件行数；23-1 的 2P 写回回归已固化在现有 `LocalCoopPetExperienceProbe` 用例中。
 
 ---
 
 ## 8. 下一轮
 
-**23-2 其余 6 族：** 复用 `PetTurtleFamily`/`PetTigerFamily` 的族规则接口，一次迁移一族；每批删除对应 `BaseLevel` 分支并更新本页调用面。优先处理 2P 预热门禁或凤凰死亡别名时，应另立小批次，不与族迁移混在一起。当前建议下一族为 `PetDragon`（标准 4 阶，现有头像探针可复用）。
+**共享槽位边界小批次已完成。** 后续按族迁移：复用 `PetTurtleFamily`/`PetTigerFamily` 的族规则接口，一次迁移一族；每批删除对应 `BaseLevel` 分支并更新本页调用面。凤凰别名、寅虎预热、丑牛进化放进各自族批次；`PlayerData` 域视图留到 23-4。当前建议下一族为 `PetDragon`（标准 4 阶，现有头像探针可复用）。

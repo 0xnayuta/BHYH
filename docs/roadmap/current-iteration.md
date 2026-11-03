@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移完成**（2026-11-03），其余 6 族尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移与共享槽位边界批次完成**（2026-11-03），其余 6 族尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -108,13 +108,21 @@
 - `PetInterface` 龟族出战/进化复用同一规则；`PlayerData` 的载入补全保留到 23-4；
 - 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297、场景 17/17、协作 26/26（新增 P2 写回断言）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（298.8s，默认 auto 并发）；临时探针覆盖死亡抑制与复活。
 
+### 23-2 共享槽位边界（已完成）
+
+- `Global.prewarm_active_pet_runtime_resources(slot)`、`get_active_pet_preload_data(slot)` 与 `get_active_pet_preload_paths(slot)` 按槽位解析；预热签名缓存按槽位隔离；
+- `BaseLevel`、`PetLevelController` 与加载页按 1P/2P 遍历传槽位；`get_active_pet_preload_paths` 双槽并入加载清单；
+- 慈心妙莲按持有者槽位读取死亡元数据、恢复对应槽位宠物并调用 `_spawn_active_pet(slot)`；`_active_pet` 查询按槽位过滤；
+- 宠物装备加成经 `BaseObject.PlayerData` 槽位解析验证；未改宠物数值或装备规则；
+- 验证：`coop_probe_runner` **27/27 PASS**（130.78s），新增 `LocalCoopPetSlotProbe` 覆盖 P1/P2 预载/路径/签名、P2 阵法装备加成与慈心妙莲槽位隔离。
+
 ### 23-2 其余宠物族分批迁移（`PetTiger` 已完成，其余 6 族未启动）
 
 - 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
 - `BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
 - `BaseMonster` 删除虎族重复进化，升级调用改走 `PetTigerFamily.evolve`；成长分支使用族阶段名/技能；
 - `PetInterface` 虎族检测、归一化、进化与死亡别名复用同一规则；
-- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297（首跑 1 个瞬态后重跑）、场景 17/17、协作 26/26、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（292.1s，默认 auto）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
+- 验证：`check_all` 9/9、`pet-runtime` PASS、档案 297/297（首跑 1 个瞬态后重跑）、场景 17/17、协作 26/26（共享槽位批次后复跑为 27/27）、`level_1` 四阶段 PASS、全量 128/128 + 5 SKIP（292.1s，默认 auto）；临时探针覆盖 1P 虎族 2 阶生成与 P2 虎族写回。
 
 ### 23-3 关卡结算单一提交
 
@@ -270,7 +278,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-2 其余 6 族**；建议下一族 `PetDragon`。
+**当前下一步**：**Phase 23-2 其余 6 族**；共享槽位边界已完成，建议下一族 `PetDragon`。
 **当前不启动**：Phase 23-3~23-5。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 
