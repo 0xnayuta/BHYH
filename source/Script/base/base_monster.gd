@@ -6,6 +6,7 @@ const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
 const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
 const PET_DRAGON_FAMILY := preload("res://Script/pet/pet_dragon_family.gd")
 const PET_PHOENIX_FAMILY := preload("res://Script/pet/pet_phoenix_family.gd")
+const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const NIGHTMARE_HEALTH_BONUS := 20000000
 const NIGHTMARE_ATTACK_BONUS := 40000
 const NIGHTMARE_DEFENSE_BONUS := 5000
@@ -3008,7 +3009,7 @@ func _cure_active_pet_exp(value: int, slot: int = 1) -> void:
 		PET_PHOENIX_FAMILY.evolve(pet, profile)
 		PET_TURTLE_FAMILY.evolve(pet, profile)
 		PET_TIGER_FAMILY.evolve(pet, profile)
-		_update_pet_rabbit_evolution(pet, profile)
+		PET_RABBIT_FAMILY.evolve(pet, profile)
 		_update_pet_mouse_evolution(pet, profile)
 		_update_pet_yin_tiger_evolution(pet, profile)
 		for key in growth.keys():
@@ -3128,32 +3129,6 @@ func _active_pet_unit_can_restore(slot: int = 1) -> bool:
 func _restore_pet_to_peak(pet: Dictionary) -> void:
 	pet[DataKeys.HP] = int(pet.get("生命上限", pet.get(DataKeys.HP, 0)))
 	pet[DataKeys.MP] = int(pet.get("魔法上限", pet.get(DataKeys.MP, 0)))
-
-
-func _update_pet_rabbit_evolution(pet: Dictionary, profile: Node) -> void:
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, pet.get(DataKeys.NAME, "")))
-	if str(pet.get(DataKeys.TYPE, "")) != "PetRabbit" and pet_name not in ["月兔", "疾风兔", "寒冰玉兔", "冰霜月神"]:
-		return
-	var stage := _pet_stage_for_level(int(pet.get(DataKeys.LEVEL, 1)))
-	pet[DataKeys.TYPE] = "PetRabbit"
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = ["", "月兔", "疾风兔", "寒冰玉兔", "冰霜月神"][stage]
-	pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
-	pet["技能"] = _pet_rabbit_stage_skills(stage)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		profile.player_data["出战宠物"] = "PetRabbit"
-
-
-func _pet_rabbit_stage_skills(stage: int) -> Array:
-	match clampi(stage, 1, 4):
-		1:
-			return ["月光"]
-		2:
-			return ["月光", "疾风"]
-		3:
-			return ["月光", "疾风", "冰陨"]
-		_:
-			return ["月光", "疾风", "冰陨", "月神奥义"]
 
 
 func _is_pet_mouse_data(pet: Dictionary) -> bool:
@@ -3303,11 +3278,11 @@ func _apply_active_pet_unit_growth(
 			pet["技能"] = PET_TURTLE_FAMILY.stage_skills(new_stage)
 			profile.player_data["出战宠物"] = PET_TURTLE_FAMILY.KIND
 		elif bool(unit.get_meta("pet_rabbit_unit", false)):
-			pet[DataKeys.TYPE] = "PetRabbit"
-			pet[DataKeys.ALT_NAME] = ["", "月兔", "疾风兔", "寒冰玉兔", "冰霜月神"][new_stage]
+			pet[DataKeys.TYPE] = PET_RABBIT_FAMILY.KIND
+			pet[DataKeys.ALT_NAME] = PET_RABBIT_FAMILY.stage_name(new_stage)
 			pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
-			pet["技能"] = _pet_rabbit_stage_skills(new_stage)
-			profile.player_data["出战宠物"] = "PetRabbit"
+			pet["技能"] = PET_RABBIT_FAMILY.stage_skills(new_stage)
+			profile.player_data["出战宠物"] = PET_RABBIT_FAMILY.KIND
 		elif bool(unit.get_meta("pet_dragon_unit", false)):
 			pet[DataKeys.TYPE] = PET_DRAGON_FAMILY.KIND
 			pet[DataKeys.ALT_NAME] = PET_DRAGON_FAMILY.stage_name(new_stage)

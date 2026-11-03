@@ -36,6 +36,7 @@ CASES = [
     "LocalCoopPetSlotProbe",
     "LocalCoopPetDragonProbe",
     "LocalCoopPetPhoenixProbe",
+    "LocalCoopPetRabbitProbe",
     "LocalCoopSharedSoulProbe",
     "LocalCoopSlotLedgerProbe",
     "LocalCoopPanelOperatorProbe",

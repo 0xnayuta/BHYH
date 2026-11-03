@@ -101,6 +101,8 @@ func _run() -> void:
 			await _case_pet_dragon()
 		"LocalCoopPetPhoenixProbe":
 			await _case_pet_phoenix()
+		"LocalCoopPetRabbitProbe":
+			await _case_pet_rabbit()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -525,15 +527,24 @@ func _case_pet_slot() -> void:
 	var info1: Dictionary = global.get_active_pet_preload_data(1)
 	var info2: Dictionary = global.get_active_pet_preload_data(2)
 	_check(str(info1.get("type", "")) == "PetTiger" and int(info1.get("stage", 0)) == 2, "P1 preload selects P1 pet")
-	_check(str(info2.get("type", "")) == "PetTurtle" and int(info2.get("stage", 0)) == 3, "P2 preload selects P2 pet actual=" + str(info2))
+	_check(
+		str(info2.get("type", "")) == "PetTurtle" and int(info2.get("stage", 0)) == 3,
+		"P2 preload selects P2 pet actual=" + str(info2)
+	)
 	var paths1: Array[String] = global.get_active_pet_preload_paths(1)
 	var paths2: Array[String] = global.get_active_pet_preload_paths(2)
 	_check(paths1.has("res://Scene/pet/pet_tiger_summon_2.tscn"), "P1 preload path is tiger stage 2")
-	_check(paths2.has("res://Scene/pet/pet_turtle_summon_3.tscn"), "P2 preload path is turtle stage 3 actual=" + str(paths2))
+	_check(
+		paths2.has("res://Scene/pet/pet_turtle_summon_3.tscn"),
+		"P2 preload path is turtle stage 3 actual=" + str(paths2)
+	)
 	await global.prewarm_active_pet_runtime_resources(1)
 	await global.prewarm_active_pet_runtime_resources(2)
 	_check(global.get_prewarmed_pet_signature(1) == "PetTiger:2", "P1 prewarm signature")
-	_check(global.get_prewarmed_pet_signature(2) == "PetTurtle:3", "P2 prewarm signature actual=" + global.get_prewarmed_pet_signature(2))
+	_check(
+		global.get_prewarmed_pet_signature(2) == "PetTurtle:3",
+		"P2 prewarm signature actual=" + global.get_prewarmed_pet_signature(2)
+	)
 
 	# 装备加成：阵法等级按槽位读取，P2 不得拿 P1 的加成。
 	data.player_data["宠物阵法等级"] = {"生命": 0}
@@ -590,8 +601,13 @@ func _case_pet_slot() -> void:
 	await process_frame
 	_check(int(p2_dead.get("生命", 0)) > 0, "P2 pet revived")
 	_check(int(p1_dead.get("生命", 0)) == 0, "P1 pet untouched by P2 revive")
-	_check(not bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 2), true)), "P2 death meta cleared")
-	_check(bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 1), false)), "P1 death meta preserved")
+	_check(
+		not bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 2), true)),
+		"P2 death meta cleared"
+	)
+	_check(
+		bool(probe_level.get_meta(coop.pet_meta_key("active_pet_dead_this_level", 1), false)), "P1 death meta preserved"
+	)
 	_check(probe_level.spawned_slots == [2], "P2 revive respawns only P2")
 	weapon.free()
 	probe_level.queue_free()
@@ -624,10 +640,7 @@ func _case_pet_dragon() -> void:
 	_check(str(family_pet.get("名称", "")) == "绿英龙", "dragon evolve updates display name")
 	_check((family_pet.get("技能", []) as Array).has("闪电冲刺"), "dragon evolve updates skills")
 	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetDragon", "dragon evolve writes P2 active")
-	_check(
-		family.scene_path(3) == "res://Scene/pet/pet_dragon_summon_3.tscn",
-		"dragon scene path"
-	)
+	_check(family.scene_path(3) == "res://Scene/pet/pet_dragon_summon_3.tscn", "dragon scene path")
 
 	data.player_data["玩家等级"] = 15
 	coop.secondary_data.player_data["玩家等级"] = 15
@@ -704,10 +717,7 @@ func _case_pet_phoenix() -> void:
 	_check(str(family_pet.get("名称", "")) == "炎皇雀", "phoenix evolve updates display name")
 	_check((family_pet.get("技能", []) as Array).has("不死火鸟"), "phoenix evolve updates skills")
 	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetPhoenix", "phoenix evolve writes P2 active")
-	_check(
-		family.scene_path(3) == "res://Scene/pet/pet_phoenix_summon_3.tscn",
-		"phoenix scene path"
-	)
+	_check(family.scene_path(3) == "res://Scene/pet/pet_phoenix_summon_3.tscn", "phoenix scene path")
 	var aliases: Array[String] = ["雀蛋"]
 	family.append_death_aliases(aliases, "雀蛋")
 	_check(aliases.has("PetPhoenix") and aliases.has("朱雀女皇") and aliases.has("朱雀幼灵"), "phoenix death aliases")
@@ -772,6 +782,99 @@ func _case_pet_phoenix() -> void:
 		_check(int(p1_unit.get("phoenix_stage")) == 2, "P1 phoenix stage 2")
 	if p2_unit != null:
 		_check(int(p2_unit.get("phoenix_stage")) == 2, "P2 phoenix stage 2")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+## 23-2 月兔族：族规则、升级写回、死亡别名与双槽生成。
+func _case_pet_rabbit() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_rabbit_family.gd").new()
+	var family_pet := _pet_probe_data("PetRabbit", "月兔", 1000)
+	family_pet["等级"] = 15
+	family_pet["阶段"] = 4
+	_check(family.matches(family_pet), "rabbit family matches type")
+	_check(family.matches({"名称": "疾风兔"}), "rabbit family matches display name")
+	_check(not family.matches({"名称": "朱雀女皇"}), "rabbit family rejects phoenix name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 2, "rabbit normalize uses level threshold")
+	_check(str(family_pet.get("名称", "")) == "疾风兔", "rabbit normalize updates display name")
+	_check((family_pet.get("技能", []) as Array).has("疾风"), "rabbit normalize updates skills")
+	_check(int(family_pet.get("生命资质基础上限", 0)) == 2500, "rabbit normalize sets base stat limits")
+	family_pet["等级"] = 30
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 3, "rabbit evolve uses level threshold")
+	_check(str(family_pet.get("名称", "")) == "寒冰玉兔", "rabbit evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("冰陨"), "rabbit evolve updates skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetRabbit", "rabbit evolve writes P2 active")
+	_check(family.scene_path(4) == "res://Scene/pet/pet_rabbit_summon_4.tscn", "rabbit scene path")
+	var aliases: Array[String] = ["月兔"]
+	family.append_death_aliases(aliases, "月兔")
+	_check(aliases.has("PetRabbit") and aliases.has("冰霜月神"), "rabbit death aliases")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("月兔")
+	_check(level_aliases.has("PetRabbit") and level_aliases.has("冰霜月神"), "BaseLevel rabbit death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("疾风兔")
+	_check(panel_aliases.has("PetRabbit") and panel_aliases.has("寒冰玉兔"), "PetInterface rabbit death aliases")
+	panel.free()
+
+	data.player_data["玩家等级"] = 15
+	coop.secondary_data.player_data["玩家等级"] = 15
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 15
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 15
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetRabbit", "月兔", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetRabbit", "月兔", 1000)
+	p2_pet["等级"] = 14
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetRabbit"
+	coop.secondary_data.player_data["出战宠物"] = "PetRabbit"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(1000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 15, "P2 rabbit reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 2, "P2 rabbit evolves to stage 2")
+	_check(str(p2_pet.get("名称", "")) == "疾风兔", "P2 rabbit evolution name")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetRabbit", "P2 rabbit active stays type")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 rabbit untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 15
+	p2_pet["等级"] = 15
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_rabbit_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_rabbit_unit")
+	_check(p1_unit != null, "P1 rabbit spawned by controller")
+	_check(p2_unit != null, "P2 rabbit spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("turtle_stage")) == 2, "P1 rabbit stage 2")
+	if p2_unit != null:
+		_check(int(p2_unit.get("turtle_stage")) == 2, "P2 rabbit stage 2")
 	level.queue_free()
 	stage = null
 	await process_frame
