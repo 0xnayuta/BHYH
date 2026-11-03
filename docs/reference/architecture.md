@@ -260,6 +260,7 @@ classDiagram
 | `AutoBattleController` | `Script/base/auto_battle_controller.gd` | 自动战斗状态机：目标缓存、技能游标/计数、0.22s 节拍、移动/跳跃、法宝/剑阵/无双顺序 | `RefCounted`；每个英雄一份；`_physics_process` 推进，`_exit_tree` 重置 |
 | `MagicWeaponPresentationController` | `Script/base/magic_weapon_presentation_controller.gd` | 当前装备法宝展示实例与 active name：创建/切换/默认回退/移除/英雄退出清理 | `RefCounted`；每个英雄一份；不拥有冷却、伤害或 `BaseMagicWeapon` 播放；`Global`/`MagicWeaponRuntime` 保留槽位召唤归属 |
 | `BossProtectionController` | `Script/base/boss_protection_controller.gd` | Boss 保护累计/激活/保护与白条计时；控制免疫查询 | `RefCounted`；每个怪物一份；激活副作用仍由 `BaseMonster` 执行；掉落结算不迁入 |
+| `HitReactionController` | `Script/base/hit_reaction_controller.gd` | 通用受击反应活动标志、代次、来源快照；`BaseMonster._begin/_finish/_cancel` 委托 | `RefCounted`；每个怪物一份；特殊 `state_hurt` 分支与动画仍由各族拥有；退出/池化前重置 |
 | `BaseMonster` | `Script/base/base_monster.gd` | 怪物与 Boss：受击、击退、掉落、阶段保护、难度 | 由关卡按阶段实例化；死亡结算掉落并计数 |
 | `SummonBaseMonster` | `Script/base/summon_base_monster.gd` | 召唤物基类 | 由技能/宠物生成，归属通过 meta 与槽位解析 |
 | `BaseLevel` | `Script/base/base_through_level.gd` | 关卡运行器：4 阶段刷怪表、相机边界、出口判定、通关记账、2P 生成；八族宠物生成已全部委托控制器 | `_ready` 生成角色/HUD/相机；`_physics_process` 推进阶段与出口 |

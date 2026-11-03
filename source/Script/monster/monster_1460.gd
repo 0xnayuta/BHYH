@@ -378,7 +378,12 @@ func _set_horizontal_velocity(direction: float) -> void:
 
 func _stop_source() -> void:
 	velocity.x = 0.0
-	if not is_attacking and not _skill_busy and not _hurt_reaction_active and mr_player.current_animation != &"wait":
+	if (
+		not is_attacking
+		and not _skill_busy
+		and not is_hurt_reaction_active()
+		and mr_player.current_animation != &"wait"
+	):
 		mr_player.play(&"wait")
 
 

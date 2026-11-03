@@ -340,6 +340,7 @@ func _exit_tree() -> void:
 		auto_battle_controller.reset()
 	if magic_weapon_presentation != null:
 		magic_weapon_presentation.clear()
+	reset_hit_reaction_state()
 	_clear_visual_resources(self)
 
 
@@ -1270,6 +1271,17 @@ func _get_hit_stiff_animation_duration() -> float:
 func _cancel_hit_reaction() -> void:
 	_hit_reaction_generation += 1
 	is_be_attacking = false
+
+
+## 退出/未来池化前清受击代次、排队僵直与受击占用；保护/白条不在此重置。
+func reset_hit_reaction_state() -> void:
+	_hit_reaction_generation += 1
+	_pending_hit_stiff_seconds.clear()
+	is_be_attacking = false
+
+
+func get_hit_reaction_generation() -> int:
+	return _hit_reaction_generation
 
 
 func state_behit():

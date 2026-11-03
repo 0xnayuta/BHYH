@@ -14,7 +14,7 @@
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
 | [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |
-| [`combat_behavior_matrix.md`](combat_behavior_matrix.md) | Phase 25-0~25-3：`BaseHero`/`AutoBattleContext`/`AutoBattleController` 自动战斗、`MagicWeaponPresentationController` 法宝展示实例、`BossProtectionController` Boss 保护/白条、`BaseMonster` 受击/控制免疫/死亡/掉落、定向探针与验收/回滚边界 |
+| [`combat_behavior_matrix.md`](combat_behavior_matrix.md) | Phase 25-0~25-4：`BaseHero`/`AutoBattleContext`/`AutoBattleController` 自动战斗、`MagicWeaponPresentationController` 法宝展示实例、`BossProtectionController` Boss 保护/白条、`HitReactionController` 受击代次/来源快照/退出重置、`BaseMonster` 受击/控制免疫/死亡/掉落、定向探针与验收/回滚边界 |
 | [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) | Phase 23（已关闭）：`BaseLevel` 宠物调用面、八族矩阵、`PetLevelController` 与族规则、2P 写回修复、共享槽位边界及 73→16 收口证据 |
 | [`pet_domain_contract.md`](pet_domain_contract.md) | Phase 23-4/24-3：`PlayerData` 宠物域只读 View、出战/休息/成长/阵法命令、保存失败回滚、共享容器恢复与调用面 |
 | [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md) | Phase 24-0/24-1/24-2/24-3/24-4：`CoopPanelHost`、`pet_interface` 子区域、阵法成长命令、LDL 成长面板、操作者/保存/直接与间接写档边界及登记例外 |

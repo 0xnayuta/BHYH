@@ -177,13 +177,14 @@ func _add_standard_death_methods(animation: Animation) -> void:
 
 func play_hit_effect(attacker = null) -> void:
 	_interrupt_attack_state_on_hit()
+	var animation_generation := get_hurt_reaction_generation()
 	Global.add_special_effect(self, Vector2(0, -92), "RoleBeHit", Vector2(1, 1), false, 1)
 	if PlayerData.player_data["Myself"] != 2:
 		Global.get_audio_runtime().add_sound(self, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	else:
 		Global.get_audio_runtime().add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
 	if not death() and mr_player.has_animation("hurt"):
-		call_deferred("_deferred_play_hurt_animation")
+		call_deferred("_deferred_play_hurt_animation", animation_generation)
 
 
 func _interrupt_attack_state_on_hit() -> void:

@@ -31,6 +31,21 @@ class BossProtectionProbeLevel:
 		tower_defeated_count += 1
 
 
+class HitReactionProbeLevel:
+	extends Node2D
+
+	var lj_tt: Node2D
+	var monster_blood: Node2D
+
+	func _init() -> void:
+		lj_tt = Node2D.new()
+		lj_tt.name = "lj_tt"
+		add_child(lj_tt)
+		monster_blood = Node2D.new()
+		monster_blood.name = "monster_blood"
+		add_child(monster_blood)
+
+
 func _initialize() -> void:
 	call_deferred("_run")
 
@@ -95,6 +110,8 @@ func _run() -> void:
 			await _case_magic_presentation()
 		"LocalCoopBossProtectionProbe":
 			await _case_boss_protection()
+		"LocalCoopHitReactionProbe":
+			await _case_hit_reaction()
 		"LocalCoopMonsterBalanceProbe":
 			await _case_monster_balance()
 		"LocalCoopMonsterInfoProbe":
@@ -417,6 +434,218 @@ func _case_boss_protection() -> void:
 	_check(stage.tower_defeated_count == 1, "duplicate death settlement ignored")
 	monster.queue_free()
 	await process_frame
+
+
+## 25-4：受击代次、零击退、Boss/白条控免、play_hit_effect 竞争、来源快照与退出重置。
+func _case_hit_reaction() -> void:
+	coop.create_secondary(7)
+	stage = HitReactionProbeLevel.new()
+	root.add_child(stage)
+	current_scene = stage
+	await process_frame
+	var settings: Node = root.get_node("MainSet")
+	settings.set_data["MonsterBloodSHow"] = false
+	settings.set_data["MonsterLittleBlood"] = false
+	var p1: Node = _make_hero(1, 1)
+	var p2: Node = _make_hero(7, 2)
+	_check(p1 != null and p2 != null, "hit reaction owners instantiated")
+	if p1 == null or p2 == null:
+		return
+
+	var hero_generation: int = p1.get_hit_reaction_generation()
+	p1.is_be_attacking = true
+	p1._pending_hit_stiff_seconds.append(0.2)
+	p1.reset_hit_reaction_state()
+	_check(p1.get_hit_reaction_generation() > hero_generation, "hero reset advances generation")
+	_check(not p1.is_be_attacking, "hero reset clears attack state")
+	_check(p1._pending_hit_stiff_seconds.is_empty(), "hero reset clears pending stiffness")
+
+	var monster: Node = await _spawn_hit_probe_monster(p1)
+	var knock_hit := _hit_probe_data([-3, -6])
+	var zero_hit := _hit_probe_data([0, 0])
+	monster.get_target = p1
+	p1.hit_dic = zero_hit
+	monster.velocity = Vector2(77.0, 0.0)
+	monster.state_hurt()
+	_check(not monster.is_hurt_reaction_active(), "zero knockback does not start reaction")
+	_check(is_equal_approx(monster.velocity.x, 77.0), "zero knockback keeps horizontal velocity")
+	_check(not monster.is_be_attacking, "zero knockback leaves attack state")
+
+	p1.hit_dic = knock_hit
+	monster.get_target = p1
+	monster.velocity = Vector2.ZERO
+	monster.state_hurt()
+	_check(monster.is_hurt_reaction_active(), "knockback starts reaction")
+	_check(monster.get_hurt_reaction_generation() > 0, "knockback reaction generation")
+	await create_timer(0.8).timeout
+	_check(not monster.is_hurt_reaction_active(), "reaction clears after hurt animation")
+	_check(not monster.is_be_attacking, "reaction clears attack state")
+
+	monster.set_physics_process(false)
+	monster.hp = 1000000
+	monster.get_target = p1
+	monster.is_be_attacking = false
+	monster.state_hurt()
+	await process_frame
+	var first_generation: int = monster.get_hurt_reaction_generation()
+	monster.state_hurt()
+	var second_generation: int = monster.get_hurt_reaction_generation()
+	_check(second_generation > first_generation, "new hit advances generation")
+	await create_timer(0.8).timeout
+	_check(not monster.is_hurt_reaction_active(), "latest reaction remains authoritative")
+	_check(not monster.is_be_attacking, "latest reaction clears attack state")
+
+	var stale_starts: Array[String] = []
+	monster.mr_player.animation_started.connect(
+		func(animation_name: StringName) -> void:
+			if animation_name == &"hurt":
+				stale_starts.append(String(animation_name))
+	)
+	monster._deferred_play_hurt_animation(second_generation - 1)
+	await create_timer(0.2).timeout
+	_check(stale_starts.is_empty(), "stale deferred animation is ignored")
+
+	var hurt_starts: Array[String] = []
+	monster.mr_player.animation_started.connect(
+		func(animation_name: StringName) -> void:
+			if animation_name == &"hurt":
+				hurt_starts.append(String(animation_name))
+	)
+	monster.play_hit_effect(p1)
+	monster.get_target = p1
+	monster.state_hurt()
+	await create_timer(0.8).timeout
+	_check(hurt_starts.size() == 1, "deferred hit effect does not restart new hurt animation")
+	monster.queue_free()
+	await process_frame
+
+	monster = await _spawn_hit_probe_monster(p1)
+	monster.is_boss = true
+	monster.hp = 1000000
+	monster.max_hp = 1000000
+	for _index in 225:
+		monster._add_boss_protect_from_hit(null)
+	_check(monster.is_boss_protecting(), "boss protection starts for hit probe")
+	monster.get_target = p1
+	monster.velocity = Vector2(44.0, 0.0)
+	monster.state_hurt()
+	_check(not monster.is_hurt_reaction_active(), "boss protection blocks hurt reaction")
+	_check(is_equal_approx(monster.velocity.x, 44.0), "boss protection blocks knockback")
+	var protected_hp := int(monster.hp)
+	_check(monster.apply_role_hit(p1, p1, knock_hit) == 0, "boss protection blocks direct damage entry")
+	_check(int(monster.hp) == protected_hp, "boss protection keeps hp")
+	monster._process_boss_protect(4.1)
+	_check(monster.is_white_bar_control_immune(), "white bar active after protection")
+	monster.velocity = Vector2(44.0, 0.0)
+	monster.state_hurt()
+	_check(not monster.is_hurt_reaction_active(), "white bar blocks hurt reaction")
+	_check(is_equal_approx(monster.velocity.x, 44.0), "white bar blocks knockback")
+	var white_hp := int(monster.hp)
+	var white_damage: int = monster.apply_role_hit(p1, p1, knock_hit)
+	_check(white_damage > 0, "white bar keeps damage semantics")
+	_check(int(monster.hp) < white_hp, "white bar damage applies")
+	_check(not monster.is_hurt_reaction_active(), "white bar skips reaction after damage")
+	monster._process_boss_protect(3.5)
+	_check(not monster.is_white_bar_control_immune(), "white bar recovery fixture expired")
+	monster.get_target = p1
+	monster.velocity = Vector2.ZERO
+	monster.state_hurt()
+	_check(monster.is_hurt_reaction_active(), "reaction resumes after white bar")
+	monster.reset_hit_reaction_state()
+	monster.queue_free()
+	await process_frame
+
+	monster = await _spawn_hit_probe_monster(p1)
+	var old_target := Node2D.new()
+	monster.get_target = old_target
+	monster.get_player = p1
+	monster.set_meta("coop_damage_slot", 1)
+	var old_p2_hit: Variant = p2.hit_dic
+	var source_hp := int(monster.hp)
+	_check(monster.apply_role_hit(p2, p2, knock_hit) > 0, "P2 source applies damage")
+	_check(int(monster.hp) < source_hp, "P2 source reduces hp")
+	_check(monster.get_target == old_target, "source target restored")
+	_check(monster.get_player == p1, "source player restored")
+	_check(int(monster.get_meta("coop_damage_slot", 0)) == 1, "damage slot restored")
+	_check(p2.hit_dic == old_p2_hit, "source hit data restored")
+	_check(monster.is_hurt_reaction_active(), "P2 hit starts reaction")
+	_check(monster.get_hit_reaction_source_player() == p2, "explicit source snapshot keeps P2")
+	var source_snapshot: Variant = monster.hit_reaction.get_snapshot()
+	_check(source_snapshot != null and source_snapshot.target == p2, "snapshot keeps P2 target")
+	_check(
+		source_snapshot != null and int(source_snapshot.hit_data.get("power", 0)) == 100000,
+		"snapshot keeps hit data",
+	)
+	monster.reset_hit_reaction_state()
+	_check(monster.get_hit_reaction_source_player() == null, "reset clears source snapshot")
+	_check(not monster.is_hurt_reaction_active(), "reset clears active reaction")
+	_check(not monster.is_be_attacking, "reset clears attack state")
+	_check(not monster._control_movement_locked, "reset clears control movement lock")
+	old_target.queue_free()
+	monster.queue_free()
+	await process_frame
+
+	monster = await _spawn_hit_probe_monster(p1)
+	var fake_target := Node2D.new()
+	var no_source_hp := int(monster.hp)
+	_check(monster.apply_role_hit(fake_target, null, knock_hit) == 0, "unresolved source returns zero damage")
+	_check(int(monster.hp) == no_source_hp, "unresolved source keeps hp")
+	_check(not monster.is_hurt_reaction_active(), "unresolved source starts no reaction")
+	fake_target.queue_free()
+	monster.queue_free()
+	await process_frame
+
+	monster = await _spawn_hit_probe_monster(p1)
+	monster.start_spawn_damage_protection(0.2)
+	var spawn_hp := int(monster.hp)
+	_check(monster.apply_role_hit(p1, p1, knock_hit) == 0, "spawn protection blocks damage")
+	_check(int(monster.hp) == spawn_hp, "spawn protection keeps hp")
+	_check(not monster.is_hurt_reaction_active(), "spawn protection blocks reaction")
+	monster.is_death = true
+	monster.get_target = p1
+	monster.velocity = Vector2.ZERO
+	monster.state_hurt()
+	_check(not monster.is_hurt_reaction_active(), "death state blocks reaction")
+	monster.queue_free()
+	await process_frame
+
+	monster = await _spawn_hit_probe_monster(p1)
+	monster.get_target = p1
+	monster.state_hurt()
+	_check(monster.is_hurt_reaction_active(), "exit fixture starts reaction")
+	monster.queue_free()
+	await create_timer(0.35).timeout
+	_check(not is_instance_valid(monster), "active reaction monster exits without live callback")
+
+
+func _spawn_hit_probe_monster(owner: Node = null) -> Node:
+	var monster: Node = load("res://Scene/monster/monster_139.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster.is_boss = false
+	monster.big_body = false
+	monster.is_quiescent = false
+	monster.is_bt = false
+	monster.hp = 1000000
+	monster.max_hp = 1000000
+	monster.def = 0
+	monster.mdef = 0
+	monster.crit = 0
+	monster.miss = 0
+	monster.lucky = 0
+	monster.htarget = 0
+	monster.toughness = 0
+	monster.damage_reduction = 0.0
+	monster.lpzzs = 0.0
+	monster.llrdzs = 1.0
+	monster.spawn_damage_protection_until_msec = 0
+	monster.set("get_player", owner)
+	return monster
+
+
+func _hit_probe_data(hurt_back: Array) -> Dictionary:
+	return {"power": 100000, "hurtBack": hurt_back.duplicate(), "attackKind": "real", "WSValue": 1}
 
 
 func _case_monster_balance() -> void:

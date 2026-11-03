@@ -1,6 +1,6 @@
-# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2/25-3）
+# 战斗实体行为与验证映射（Phase 25-0/25-1/25-2/25-3/25-4）
 
-> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例与 Phase 25-3 Boss 保护状态已完成（2026-11-04 最终验证）；25-4/25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
+> **状态**：Phase 25-0 行为映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态与 Phase 25-4 受击/来源归属加固已完成（2026-11-04 最终验证）；25-5 未实现。本页保留行为切片、调用方、验收场景与回滚边界。
 > **范围**：`BaseHero` 自动战斗与受击反应、`BaseMonster` 受击反应/控制免疫/死亡，以及 `MainSet`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景和现有探针的调用面。
 > **非目标**：不改战斗数值、动作时序、碰撞层、输入映射或存档格式；不引入 ECS；不把这些调查结论写成已完成迁移。
 
@@ -11,9 +11,9 @@
 | 候选 | 状态面 | 调用面 | 独立性与风险 | 结论 |
 |:---|:---|:---|:---|:---|
 | 自动战斗 | 6 个状态字段、20 个方法已迁入 `AutoBattleController`；配置/重试入口保留 | `BaseHero`、`AutoBattleContext`、`AutoBattleController`、`MainSet`、`auto_battle_config`、`BaseLevel`、`BaseThroughLevel`、胜利/失败场景 | 目标、技能游标、节拍、移动/跳跃与装备调用顺序已独立；不直接决定伤害归属；新增 `LocalCoopAutoBattleProbe` | **25-1 已完成** |
-| 受击反应 | `_hurt_reaction_active`、`_hurt_reaction_generation`、`is_be_attacking`、控制免疫、Boss 保护、死亡 | 37 个文件包含 `state_hurt` 定义（含基类与覆写），3 个文件包含 `play_hit_effect` 定义，并与伤害/来源/死亡/Boss 保护交叉 | 子类覆写多，和来源归属、Boss 阶段、死亡结算共享状态；独立生命周期较弱 | 保留到 25-4，先做映射 |
+| 受击反应 | `_hurt_reaction_active`、`_hurt_reaction_generation`、`is_be_attacking`、控制免疫、Boss 保护、死亡 | 37 个文件包含 `state_hurt` 定义（含基类与覆写），3 个文件包含 `play_hit_effect` 定义，并与伤害/来源/死亡/Boss 保护交叉 | 子类覆写多，和来源归属、Boss 阶段、死亡结算共享状态；独立生命周期较弱 | 25-4 已完成加固，先保留映射记录 |
 
-**决策**：25-1 已先抽 `BaseHero` 自动战斗；25-4 再做受击与来源归属加固。理由不是文件行数，而是自动战斗有独立输入/节拍/目标/技能游标，受击反应与伤害、控制免疫和子类覆写耦合更深。
+**决策**：25-1 已先抽 `BaseHero` 自动战斗；25-4 已做受击与来源归属加固。理由不是文件行数，而是自动战斗有独立输入/节拍/目标/技能游标，受击反应与伤害、控制免疫和子类覆写耦合更深。
 
 ---
 
@@ -131,10 +131,10 @@ flowchart TD
 
 | 状态 | 所有者 | 语义 |
 |:---|:---|:---|
-| `_hurt_reaction_active` / `_hurt_reaction_generation` | `BaseMonster` | 受击反应是否进行、代次；新反应递增代次，旧异步回调不得结束新反应 |
+| `HitReactionController._active` / `_generation` / `_snapshot` | `HitReactionController` | 受击反应是否进行、代次与显式来源快照；新反应递增代次，旧异步回调不得结束新反应 |
 | `is_be_attacking` | `BaseObject`/`BaseMonster` | 受击/控制表现占用；AI 与移动的互斥依据之一 |
 | `is_attacking` / `is_using_skills` | `BaseMonster` | 攻击/技能占用；受击中断路径清理 |
-| `get_target` / `get_player` / `hit_dic` | `BaseMonster` | 本次受击的来源/攻击数据；`apply_role_hit` 临时设置后恢复 |
+| `get_target` / `get_player` / `hit_dic` | `BaseMonster` | 本次受击的临时来源/攻击数据；`apply_role_hit` 设置后恢复，反应期间以控制器快照为准 |
 | `super_armor_active` | `BaseMonster` | 控制免疫来源；免疫时取消受击反应并清控制 |
 | `BossProtectionController._active` / `_current` / `_time_left` / `_white_bar_time_left` | `BossProtectionController` | Boss 保护/白条状态；经 `is_boss_protecting`/`is_white_bar_control_immune` 查询，激活副作用由 `BaseMonster` 执行 |
 | `is_death` / `death()` / 生成保护 | `BaseMonster` | 死亡/生成保护早退；死亡流程禁用受击箱并结算掉落 |
@@ -176,24 +176,24 @@ flowchart TD
 
 ### 3.4 失败与风险
 
-| 场景 | 当前行为 | 25-4 必须处理 |
+| 场景 | 当前行为 | 25-4 处置 |
 |:---|:---|:---|
-| `hurtBack` 为 0 | 伤害/中断仍可能发生，但无受击动画与击退 | 明确“无击退但有受击表现/完全没有反应”的预期 |
-| 连续受击 | generation 保证旧回调不结束新反应；新反应清理 tween | 验证代次、动画结束、`is_be_attacking` 不悬挂 |
-| 控制免疫/Boss 保护 | `_enforce` 取消反应；Boss 保护激活时伤害入口早退 | 保护期间不产生击退/受击动画，不重复清控制 |
-| 生成保护/死亡 | 伤害入口早退；死亡禁用受击箱并释放 | 死亡流程不留下活动反应或延迟动画 |
-| `Monster114` 特殊分支 | 只处理 `hurtBack`，不击退，动画/0.2s 后按代次结束 | 保留特殊分支，不得套用普通击退 |
-| `is_quiescent` / `is_bt` | 跳过击退但可播 hurt | 记录为显式分支，不改变时序 |
-| 无 hurt 动画 | 0.2s 回退 | 不依赖动画长度；验证代次/免疫/死亡早退 |
-| `play_hit_effect` 表现路径 | 不进入 `_hurt_reaction_generation`；`_deferred_hurt_animation` 只检查免疫/死亡 | 处理与 `state_hurt` 的动画竞争，避免旧 deferred 覆盖新受击 |
-| `_cancel_hurt_reaction` | 递增代次、清 active，不直接清 `is_be_attacking` | 调用方必须清 `is_be_attacking`；统一入口后消除遗漏 |
-| `state_hurt` 37 个文件（含基类与覆写）/ `play_hit_effect` 3 个文件（含基类与覆写） | 各怪物保留特殊阶段/免控/动画分支 | 不能一次性搬空；先建上下文与统一入口，再逐族迁移 |
-| `_exit_tree` | 只清视觉资源，不重置受击/控制字段 | 若未来池化/复用怪物，必须补完整重置；当前释放路径先记录 |
-| 来源恢复 | `apply_role_hit` 在调用异步 `state_hurt` 后恢复 `get_target`/`get_player`/props/`hit_dic` | 延迟回调不得读取已恢复的临时来源；25-4 用显式来源快照 |
+| `hurtBack` 为 0 | 伤害/中断仍可能发生，但无受击动画与击退 | 保留无反应/无击退；探针断言速度不变且不进入代次 |
+| 连续受击 | generation 保证旧回调不结束新反应；新反应清理 tween | 代次迁入控制器；探针覆盖两次受击与最终清理 |
+| 控制免疫/Boss 保护/白条 | `_enforce` 取消反应；Boss 保护激活时伤害入口早退 | 保留；探针覆盖无反应/无击退、白条伤害与过期后恢复 |
+| 生成保护/死亡 | 伤害入口早退；死亡禁用受击箱并释放 | 保留；探针覆盖生成保护零伤害与死亡早退 |
+| `Monster114` 特殊分支 | 只处理 `hurtBack`，不击退，动画/0.2s 后按代次结束 | 保留特殊分支，未套用普通击退 |
+| `is_quiescent` / `is_bt` | 跳过击退但可播 hurt | 保留显式分支，不改时序 |
+| 无 hurt 动画 | 0.2s 回退 | 保留；不依赖动画长度 |
+| `play_hit_effect` 表现路径 | 不进入受击代次；延迟 hurt 动画只检查免疫/死亡 | 延迟播放捕获代次，过期代次被拒绝；探针覆盖无重复动画 |
+| `_cancel_hurt_reaction` | 递增代次、清 active，不直接清 `is_be_attacking` | 迁入控制器；退出重置清 `is_be_attacking`，普通调用方语义保留 |
+| `state_hurt` 37 个文件（含基类与覆写）/ `play_hit_effect` 3 个文件（含基类与覆写） | 各怪物保留特殊阶段/免控/动画分支 | 基类状态统一；直接字段读取的族群改查询入口；特殊分支保留并跑全量 |
+| `_exit_tree` | 只清视觉资源，不重置受击/控制字段 | `BaseMonster`/`BaseHero` 增加退出重置；保护/白条不清 |
+| 来源恢复 | `apply_role_hit` 在调用异步 `state_hurt` 后恢复 `get_target`/`get_player`/props/`hit_dic` | 反应开始时保存显式 `Snapshot`（目标/玩家/`hit_dic`）；探针验证恢复后仍可读 P2 来源 |
 
 ### 3.5 `BaseHero` 受击边界（25-4）
 
-`BaseHero.state_behit`、`_on_hurt_box_area_entered` 使用 `_hit_reaction_generation`、`_pending_hit_stiff_seconds`、`need_protect`、白条无敌、击退免疫与 `_cancel_hit_reaction`。它与 `BaseMonster` 的受击状态形状相似，但位于 Hero 的伤害/保护路径，不在 25-1 自动战斗切片内；25-4 与怪物受击一起做来源快照与池化/退出重置。
+`BaseHero.state_behit`、`_on_hurt_box_area_entered` 使用 `_hit_reaction_generation`、`_pending_hit_stiff_seconds`、`need_protect`、白条无敌、击退免疫与 `_cancel_hit_reaction`。它与 `BaseMonster` 的受击状态形状相似，但位于 Hero 的伤害/保护路径，保留独立代次；25-4 已增加 `reset_hit_reaction_state()` 与 `_exit_tree` 调用，清代次、待处理僵直和 `is_be_attacking`，不重置保护/白条。
 
 ### 3.6 Boss 保护/白条（25-3）
 
@@ -215,13 +215,22 @@ flowchart TD
 - `boss_blood` 只读 getter；`east_continent_monster` 的 3120/3161 覆盖在 `super` 前后使用 `is_boss_protecting()`。
 - 掉落/死亡仍由 `settle_death_drops`、`death_drops_settled`、塔层回调与 `state_death` 负责；保护状态不参与掉落提交。
 
+### 3.7 25-4 实现与族群边界
+
+- 新增 `HitReactionController`（`RefCounted`）：`begin(snapshot)`、`finish(generation)`、`cancel()`、`is_active()`、`get_generation()`、`matches(generation)`；每个 `BaseMonster` 一份。
+- `_begin_hurt_reaction` 消费 `_pending_hit_snapshot`；`_finish_hurt_reaction` 仅在代次匹配时清 active 与 `is_be_attacking`；`_cancel_hurt_reaction` 递增代次并清快照。
+- `apply_role_hit` 仅在真正进入受击反应时创建 `Snapshot`（目标、实际 `BaseHero`、`hit_dic`），避免在免疫/零伤害路径额外分配；`get_hit_reaction_source_player()` 读取该快照。
+- `play_hit_effect` 和 `tao_wu_boss.play_hit_effect` 在中断后捕获代次，`_deferred_play_hurt_animation(expected_generation)` 在代次变化时直接返回；无参调用仍保留给旧路径。
+- 退出重置：`BaseMonster.reset_hit_reaction_state()` 清活动/代次/快照、`is_be_attacking`、控制移动 tween 与锁；`BaseHero.reset_hit_reaction_state()` 清代次、待处理僵直与 `is_be_attacking`。两者均在 `_exit_tree` 调用。
+- 族群迁移：`fire_ancestor_boss`、`monster_1460`、`water_ancestor_boss`、`wutai_earth_ancestor3071/3077/3078` 的直接状态读取改为查询入口；调用 `super.state_hurt()` 的覆写自动使用统一代次。`monster_141`/`14101`/`141_zhw`、`monster_20`、`monster_62`、无超级调用的免控/阶段族仍保留自身 `state_hurt` 分支，未改其动作时序。
+
 ---
 
 ## 4. 验证映射
 
 ### 4.1 现有基线
 
-当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2/25-3 新增 `LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe` 与 `LocalCoopBossProtectionProbe`，`coop` 矩阵为 **36/36 PASS**；与本次行为相关的已有覆盖：
+当前基线（Phase 24-4 收口）为 `check_all` 9/9、`archive` 344/344、`scene` 17/17、`coop` 33/33、全量 128/128 + 5 SKIP。25-1/25-2/25-3/25-4 新增 `LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe` 与 `LocalCoopHitReactionProbe`，`coop` 矩阵为 **37/37 PASS**；与本次行为相关的已有覆盖：
 
 | 验证 | 覆盖 | 缺口 |
 |:---|:---|:---|
@@ -235,6 +244,7 @@ flowchart TD
 | `LocalCoopAutoBattleProbe` | P1/P2 槽位配置、目标缓存、移动、技能计数、关闭清理、暂停、死亡、场景退出 | 不覆盖障碍跳跃、自动重试转场和手动输入冲突 |
 | `LocalCoopMagicPresentationProbe` | 装备法宝 P1/P2 实例、槽位、切换、默认回退、移除、`use_fb` 冷却、英雄退出清理 | 不覆盖实际 HUD 绘制、完整死亡动画窗口和所有法宝子类 |
 | `LocalCoopBossProtectionProbe` | 保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用 | 不覆盖真实 Boss 血量/UI 绘制、所有 Boss 子类与完整死亡动画 |
+| `LocalCoopHitReactionProbe` | 零击退、连续受击代次、Boss/白条控免与恢复、延迟动画代次、P2 来源快照、无来源零伤害、生成/死亡早退、英雄/怪物退出重置 | 不覆盖所有 37 个 `state_hurt` 特殊分支的逐帧动画；由全量回归补充 |
 | `archive` | 档案/命令/失败回滚 | 不覆盖战斗实体行为 |
 
 ### 4.2 25-1 自动战斗验收场景
@@ -269,16 +279,16 @@ flowchart TD
 
 ### 4.4 25-4 受击验收场景
 
-| 场景 | 必须观察 |
-|:---|:---|
-| 有/无 `hurtBack` | 有击退进入受击；零击退不产生击退；两者伤害语义不混淆 |
-| 连续受击 | 旧 generation 不结束新反应；`is_be_attacking` 最终回到 false；动画不被旧回调覆盖 |
-| 控制免疫/Boss 保护/白条 | 不产生受击反应/击退；保护结束后可恢复；不重复清控制 |
-| 生成保护/死亡 | 不受伤/不进入反应；死亡后无延迟回调写活动节点 |
-| `play_hit_effect` 与 `state_hurt` 竞争 | 延迟 hurt 动画不覆盖新受击；无来源/零伤害不产生错误表现 |
-| P1/P2 来源 | 受击来源/WS/伤害归属仍按实际出手者；不回落 1P |
-| 特殊怪物 | Monster114、`state_hurt` 37 个文件、`play_hit_effect` 3 个文件的特殊分支不回归 |
-| 释放/未来池化 | 退出或复用前清 `_hurt_reaction_active/generation`、`is_be_attacking`、控制锁与延迟动画 |
+| 场景 | 必须观察 | 结果 |
+|:---|:---|:---|
+| 有/无 `hurtBack` | 有击退进入受击；零击退不产生击退；两者伤害语义不混淆 | **覆盖**：零击退速度不变且不进入代次；有击退进入/结束 |
+| 连续受击 | 旧 generation 不结束新反应；`is_be_attacking` 最终回到 false；动画不被旧回调覆盖 | **覆盖**：第二次受击推进代次，旧回调返回，最新反应清理 |
+| 控制免疫/Boss 保护/白条 | 不产生受击反应/击退；保护结束后可恢复；不重复清控制 | **覆盖**：Boss 保护与白条均无反应/无击退；白条过期后恢复 |
+| 生成保护/死亡 | 不受伤/不进入反应；死亡后无延迟回调写活动节点 | **覆盖**：生成保护零伤害；`is_death` 下 `state_hurt` 早退 |
+| `play_hit_effect` 与 `state_hurt` 竞争 | 延迟 hurt 动画不覆盖新受击；无来源/零伤害不产生错误表现 | **覆盖**：旧代次 deferred 被拒绝；正常受击动画不重复启动 |
+| P1/P2 来源 | 受击来源/WS/伤害归属仍按实际出手者；不回落 1P | **覆盖**：P2 快照/来源恢复；无来源零伤害；召唤/弹体/法宝由既有探针覆盖 |
+| 特殊怪物 | Monster114、`state_hurt` 37 个文件、`play_hit_effect` 3 个文件的特殊分支不回归 | **部分覆盖**：基类与可委托族；特殊分支由全量回归覆盖，未逐分支断言 |
+| 释放/未来池化 | 退出或复用前清 active/generation、`is_be_attacking`、控制锁与延迟动画 | **覆盖**：重置清状态；怪物/英雄 `_exit_tree` 调用 |
 
 ### 4.5 25-3 Boss 保护验收场景
 
@@ -298,11 +308,11 @@ flowchart TD
 - 25-1 已抽自动战斗控制器；保留 `MainSet` 配置键、`BaseHero` 公开入口、`BaseThroughLevel`/胜利/失败/玲珑塔的转场与保存职责；旧行为由版本控制回滚，不保留双实现。
 - 25-2 已抽法宝展示实例；`BaseMagicWeapon` 命令/冷却/伤害与 `Global`/`MagicWeaponRuntime` 槽位归属不变；控制器不得读取 UI 或写共享资源。
 - 25-3 只抽 Boss 保护/白条状态；阶段推进、伤害、保护阈值/时长、掉落结算与重战流程不变；控制器不得直接提交掉落。
-- 25-4 只统一受击状态/来源快照；不改变伤害数值、Boss 保护阈值、白条持续时间、碰撞层或动作时序；特殊子类覆写按批次保留并逐项验证。
+- 25-4 只统一受击状态/来源快照与退出重置；不改变伤害数值、Boss 保护阈值、白条持续时间、碰撞层或动作时序；特殊子类覆写保留，由探针与全量回归验证。
 - 任一阶段发现行为语义不明确时，先补探针和记录，再迁移；不以“代码更短”为迁移依据。
 
 ---
 
 ## 6. 下一步
 
-**25-1/25-2/25-3 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态；掉落仍由 `BaseMonster` 单一提交。下一步转入 25-4。
+**25-1/25-2/25-3/25-4 已完成**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。下一步转入 25-5 阶段验收。

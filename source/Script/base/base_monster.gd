@@ -339,8 +339,8 @@ var _ai_tick_offset: int = randi_range(0, 7)
 var _friendly_knockback_generation: int = 0
 var _control_movement_locked: bool = false
 var _control_movement_tweens: Array = []
-var _hurt_reaction_active: bool = false
-var _hurt_reaction_generation: int = 0
+var hit_reaction: HitReactionController
+var _pending_hit_snapshot: HitReactionController.Snapshot
 
 
 func apply_tower_monster_config(config: Dictionary) -> void:
@@ -381,6 +381,7 @@ func can_set_gra():
 
 func _ready() -> void:
 	_ensure_boss_protection()
+	_ensure_hit_reaction()
 	self.max_hp = self.max_hp + randi_range(0, 1)
 	self.hp = self.hp + randi_range(0, 1)
 	if is_node_ready():
@@ -408,6 +409,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	reset_hit_reaction_state()
 	if boss_protection != null:
 		boss_protection.clear()
 	_clear_visual_resources(self)
@@ -416,6 +418,11 @@ func _exit_tree() -> void:
 func _ensure_boss_protection() -> void:
 	if boss_protection == null:
 		boss_protection = BossProtectionController.new(self)
+
+
+func _ensure_hit_reaction() -> void:
+	if hit_reaction == null:
+		hit_reaction = HitReactionController.new()
 
 
 func _clear_visual_resources(node: Node) -> void:
@@ -566,7 +573,7 @@ func _physics_process(delta: float) -> void:
 			state_death()
 	if MainSet.set_data["MonsterLittleBlood"] and MainSet.set_data["NoShowMonsterBody"]:
 		little_blood_bar_control()
-	if self.hp > 0 and not is_limit_buff() and not _hurt_reaction_active and _should_run_ai_this_frame():
+	if self.hp > 0 and not is_limit_buff() and not is_hurt_reaction_active() and _should_run_ai_this_frame():
 		ai_think()
 	if is_movement_locked_by_control():
 		interrupt_movement_for_control()
@@ -662,7 +669,7 @@ func _release_timed_hit_stun(until_key: String, pending_key: String) -> void:
 		remove_meta(until_key)
 	if has_meta(pending_key):
 		remove_meta(pending_key)
-	if not _hurt_reaction_active:
+	if not is_hurt_reaction_active():
 		is_be_attacking = false
 
 
@@ -689,13 +696,13 @@ func _release_control_movement_lock() -> void:
 
 
 func _movement_command_is_blocked() -> bool:
-	return _control_movement_locked or is_movement_locked_by_control() or _hurt_reaction_active
+	return _control_movement_locked or is_movement_locked_by_control() or is_hurt_reaction_active()
 
 
 func _recover_interrupted_combat_state() -> void:
 	if is_limit_buff():
 		return
-	if _hurt_reaction_active:
+	if is_hurt_reaction_active():
 		return
 	if has_meta("pet_tiger_sxhz_hold_until"):
 		return
@@ -809,7 +816,7 @@ func _reset_white_bar_skill_cooldowns() -> void:
 func _enforce_control_immunity_state() -> void:
 	if not is_control_immune():
 		return
-	if _hurt_reaction_active:
+	if is_hurt_reaction_active():
 		_cancel_hurt_reaction()
 	is_be_attacking = false
 	is_stun = false
@@ -1059,7 +1066,7 @@ func have_target():
 
 func move_left():
 	if _movement_command_is_blocked():
-		if not _hurt_reaction_active:
+		if not is_hurt_reaction_active():
 			velocity.x = 0
 		return
 	base_damage_box.scale.x = 1
@@ -1076,7 +1083,7 @@ func move_left():
 
 func move_right():
 	if _movement_command_is_blocked():
-		if not _hurt_reaction_active:
+		if not is_hurt_reaction_active():
 			velocity.x = 0
 		return
 	base_damage_box.scale.x = -1
@@ -1093,7 +1100,7 @@ func move_right():
 
 func move_up():
 	if _movement_command_is_blocked():
-		if not _hurt_reaction_active:
+		if not is_hurt_reaction_active():
 			velocity.y = 0
 		return
 	velocity.y = -speed * randi_range(7, 9)
@@ -1105,7 +1112,7 @@ func move_up():
 
 func move_down():
 	if _movement_command_is_blocked():
-		if not _hurt_reaction_active:
+		if not is_hurt_reaction_active():
 			velocity.y = 0
 		return
 	velocity.y = speed * randi_range(7, 9)
@@ -1116,7 +1123,7 @@ func move_down():
 
 
 func stop_move():
-	if _hurt_reaction_active:
+	if is_hurt_reaction_active():
 		return
 	velocity.x = 0
 	var idle_animation := "Fly_wait" if is_fly else "wait"
@@ -1125,7 +1132,7 @@ func stop_move():
 
 
 func stop():
-	if _hurt_reaction_active:
+	if is_hurt_reaction_active():
 		return
 	velocity.x = 0
 
@@ -1155,7 +1162,7 @@ func state_hurt():
 				await mr_player.animation_finished
 			else:
 				await get_tree().create_timer(0.2).timeout
-			if hurt_generation != _hurt_reaction_generation or is_control_immune() or death() or is_death:
+			if not is_hurt_reaction_current(hurt_generation) or is_control_immune() or death() or is_death:
 				return
 			velocity.x = 0
 			_finish_hurt_reaction(hurt_generation)
@@ -1165,13 +1172,13 @@ func state_hurt():
 		var hurt_generation := _begin_hurt_reaction()
 		is_be_attacking = true
 		velocity.x = 0
-		if is_control_immune() or hurt_generation != _hurt_reaction_generation:
+		if is_control_immune() or not is_hurt_reaction_current(hurt_generation):
 			return
 		if not (is_quiescent or is_bt):
 			be_hit_back(get_target)
 		if mr_player.has_animation("hurt"):
 			await get_tree().process_frame
-			if hurt_generation != _hurt_reaction_generation or is_control_immune() or death() or is_death:
+			if not is_hurt_reaction_current(hurt_generation) or is_control_immune() or death() or is_death:
 				return
 			mr_player.play("hurt")
 			await mr_player.animation_finished
@@ -1181,22 +1188,50 @@ func state_hurt():
 
 
 func _begin_hurt_reaction() -> int:
-	_hurt_reaction_generation += 1
-	_hurt_reaction_active = true
+	_ensure_hit_reaction()
+	var snapshot := _pending_hit_snapshot
+	_pending_hit_snapshot = null
+	var generation := hit_reaction.begin(snapshot)
 	_kill_control_movement_tweens()
-	return _hurt_reaction_generation
+	return generation
 
 
 func _finish_hurt_reaction(hurt_generation: int) -> void:
-	if hurt_generation != _hurt_reaction_generation:
+	if hit_reaction == null or not hit_reaction.finish(hurt_generation):
 		return
-	_hurt_reaction_active = false
 	is_be_attacking = false
 
 
 func _cancel_hurt_reaction() -> void:
-	_hurt_reaction_generation += 1
-	_hurt_reaction_active = false
+	_pending_hit_snapshot = null
+	if hit_reaction != null:
+		hit_reaction.cancel()
+
+
+## 退出/未来池化前清受击反应与控制移动锁；不改变伤害或动画时长。
+func reset_hit_reaction_state() -> void:
+	_pending_hit_snapshot = null
+	if hit_reaction != null:
+		hit_reaction.cancel()
+	is_be_attacking = false
+	_kill_control_movement_tweens()
+	_release_control_movement_lock()
+
+
+func is_hurt_reaction_active() -> bool:
+	return hit_reaction != null and hit_reaction.is_active()
+
+
+func get_hurt_reaction_generation() -> int:
+	return hit_reaction.get_generation() if hit_reaction != null else 0
+
+
+func is_hurt_reaction_current(generation: int) -> bool:
+	return hit_reaction != null and hit_reaction.matches(generation)
+
+
+func get_hit_reaction_source_player() -> BaseHero:
+	return hit_reaction.get_source_player() if hit_reaction != null else null
 
 
 func _deferred_hurt_animation():
@@ -1725,8 +1760,16 @@ func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_
 		else:
 			Global.get_audio_runtime().add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
 		if not monster_18_protect() and not monster102_protect() and not is_control_immune():
+			var snapshot := HitReactionController.Snapshot.new()
+			snapshot.target = source_target
+			snapshot.player = source_player
+			var active_hit_data: Variant = source_target.get("hit_dic")
+			snapshot.hit_data = active_hit_data.duplicate(true) if active_hit_data is Dictionary else {}
 			_interrupt_attack_state_on_hit()
+			_pending_hit_snapshot = snapshot
 			state_hurt()
+			if _pending_hit_snapshot == snapshot:
+				_pending_hit_snapshot = null
 		hurt_special_effect = Global.add_mr_hurt(pz, Vector2(0, 0))
 
 	get_target = old_target
@@ -2437,7 +2480,7 @@ func _set_sprite_position(x: int, y: int):
 
 
 func cannotchangestatewhenattorbeatt():
-	return is_attacking or is_be_attacking or _hurt_reaction_active
+	return is_attacking or is_be_attacking or is_hurt_reaction_active()
 
 
 func _interrupt_attack_state_on_hit() -> void:
@@ -2552,7 +2595,7 @@ func _on_hit_box_area_exited(_area: Area2D) -> void:
 
 func rush():
 	if _movement_command_is_blocked():
-		if not _hurt_reaction_active:
+		if not is_hurt_reaction_active():
 			velocity.x = 0
 		return
 	velocity.x = 0
@@ -3456,6 +3499,7 @@ func jsfzsy():
 func play_hit_effect(attacker = null):
 	if not is_control_immune():
 		_interrupt_attack_state_on_hit()
+	var animation_generation := get_hurt_reaction_generation()
 	_show_pet_hit_blood_bar()
 	Global.add_special_effect(self, Vector2(0, 0), "RoleBeHit", Vector2(1, 1), false, 1)
 
@@ -3465,7 +3509,7 @@ func play_hit_effect(attacker = null):
 		Global.get_audio_runtime().add_sound(self, "res://Music/hero/9_beattack_by_role2.mp3")
 
 	if not death() and not is_control_immune() and mr_player.has_animation("hurt"):
-		call_deferred("_deferred_play_hurt_animation")
+		call_deferred("_deferred_play_hurt_animation", animation_generation)
 
 
 func _show_pet_hit_blood_bar() -> void:
@@ -3481,8 +3525,10 @@ func _show_pet_hit_blood_bar() -> void:
 	set_meta("pet_hit_blood_until", Time.get_ticks_msec() + 260)
 
 
-func _deferred_play_hurt_animation():
+func _deferred_play_hurt_animation(expected_generation: int = -1):
 	if not is_instance_valid(self) or death() or is_control_immune():
+		return
+	if expected_generation >= 0 and get_hurt_reaction_generation() != expected_generation:
 		return
 	if mr_player.is_playing():
 		mr_player.stop()

@@ -370,7 +370,7 @@ func _interrupt_attack_state_on_hit() -> void:
 
 func _enforce_control_immunity_state() -> void:
 	super._enforce_control_immunity_state()
-	if _hurt_reaction_active:
+	if is_hurt_reaction_active():
 		_cancel_hurt_reaction()
 
 
