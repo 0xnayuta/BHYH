@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger` 迁移与共享槽位边界批次完成**（2026-11-03），其余 6 族尚未启动。Phase 24~26 已规划。
+> **状态**：**Phase 22 已完成并收口**（2026-11-02）；**Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 首批 `PetTiger`、共享槽位边界批次与 `PetDragon` 迁移完成**（2026-11-03），其余 5 族尚未启动。Phase 24~26 已规划。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射、存档格式或显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~26 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -116,7 +116,15 @@
 - 宠物装备加成经 `BaseObject.PlayerData` 槽位解析验证；未改宠物数值或装备规则；
 - 验证：`coop_probe_runner` **27/27 PASS**（130.78s），新增 `LocalCoopPetSlotProbe` 覆盖 P1/P2 预载/路径/签名、P2 阵法装备加成与慈心妙莲槽位隔离。
 
-### 23-2 其余宠物族分批迁移（`PetTiger` 已完成，其余 6 族未启动）
+### 23-2 `PetDragon` 迁移（已完成）
+
+- 新增 `pet_dragon_family.gd`；`PetLevelController` 通过族规则表接管龟、虎、龙三族；
+- `BaseLevel` 删除龙族 7 个规则函数与生成分支，龙族改由控制器生成；
+- `BaseMonster` 删除龙族重复进化，升级调用改走 `PetDragonFamily.evolve`；成长分支使用族阶段名/技能；
+- `PetInterface` 龙族检测、归一化、进化与活跃名复用族规则；`PlayerData` 载入补全保留到 23-4；
+- 验证：`LocalCoopPetDragonProbe` 覆盖族规则、P2 升级写回与 `level_1` 双槽生成；`coop_probe_runner` **28/28 PASS**（165.15s）。
+
+### 23-2 其余宠物族分批迁移（`PetTiger`/`PetDragon` 已完成，其余 5 族未启动）
 
 - 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
 - `BaseLevel` 删除虎族 7 个规则函数与生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
@@ -278,7 +286,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 23-2 其余 6 族**；共享槽位边界已完成，建议下一族 `PetDragon`。
+**当前下一步**：**Phase 23-2 其余 5 族**；`PetDragon` 已完成，建议下一族 `PetPhoenix`（同步补凤凰死亡别名）或 `PetRabbit`。
 **当前不启动**：Phase 23-3~23-5。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)
 

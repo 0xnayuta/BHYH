@@ -4,6 +4,7 @@ class_name BaseMonster
 const NIGHTMARE_DIFFICULTY := 3
 const PET_TURTLE_FAMILY := preload("res://Script/pet/pet_turtle_family.gd")
 const PET_TIGER_FAMILY := preload("res://Script/pet/pet_tiger_family.gd")
+const PET_DRAGON_FAMILY := preload("res://Script/pet/pet_dragon_family.gd")
 const NIGHTMARE_HEALTH_BONUS := 20000000
 const NIGHTMARE_ATTACK_BONUS := 40000
 const NIGHTMARE_DEFENSE_BONUS := 5000
@@ -3002,7 +3003,7 @@ func _cure_active_pet_exp(value: int, slot: int = 1) -> void:
 		pet[DataKeys.LEVEL] = int(pet.get(DataKeys.LEVEL, 1)) + 1
 		pet["下级经验"] = _pet_next_exp_requirement(int(pet.get(DataKeys.LEVEL, 1)))
 		var level_growth := _apply_pet_level_growth(pet)
-		_update_pet_dragon_evolution(pet, profile)
+		PET_DRAGON_FAMILY.evolve(pet, profile)
 		_update_pet_phoenix_evolution(pet, profile)
 		PET_TURTLE_FAMILY.evolve(pet, profile)
 		PET_TIGER_FAMILY.evolve(pet, profile)
@@ -3126,36 +3127,6 @@ func _active_pet_unit_can_restore(slot: int = 1) -> bool:
 func _restore_pet_to_peak(pet: Dictionary) -> void:
 	pet[DataKeys.HP] = int(pet.get("生命上限", pet.get(DataKeys.HP, 0)))
 	pet[DataKeys.MP] = int(pet.get("魔法上限", pet.get(DataKeys.MP, 0)))
-
-
-func _update_pet_dragon_evolution(pet: Dictionary, profile: Node) -> void:
-	var pet_name := str(pet.get(DataKeys.ALT_NAME, ""))
-	if (
-		str(pet.get(DataKeys.TYPE, "")) != "PetDragon"
-		and not pet_name.begins_with("辰龙")
-		and pet_name not in ["龙仔", "绿英龙", "青龙将军", "青龙妖圣"]
-	):
-		return
-	var pet_level := int(pet.get(DataKeys.LEVEL, 1))
-	var stage := 4 if pet_level >= 50 else 3 if pet_level >= 30 else 2 if pet_level >= 15 else 1
-	pet["阶段"] = stage
-	pet[DataKeys.ALT_NAME] = ["", "龙仔", "绿英龙", "青龙将军", "青龙妖圣"][stage]
-	pet[DataKeys.TYPE] = "PetDragon"
-	pet["技能"] = _pet_dragon_stage_skills(stage)
-	if bool(pet.get(DataKeys.DEPLOYED, false)):
-		profile.player_data["出战宠物"] = str(pet.get(DataKeys.ALT_NAME, ""))
-
-
-func _pet_dragon_stage_skills(stage: int) -> Array:
-	match clampi(stage, 1, 4):
-		1:
-			return ["分身"]
-		2:
-			return ["分身", "闪电冲刺"]
-		3:
-			return ["分身", "闪电冲刺", "雷霆万钧"]
-		_:
-			return ["分身", "闪电冲刺", "雷霆万钧", "青龙奥义"]
 
 
 func _update_pet_rabbit_evolution(pet: Dictionary, profile: Node) -> void:
@@ -3368,9 +3339,11 @@ func _apply_active_pet_unit_growth(
 			pet["技能"] = _pet_rabbit_stage_skills(new_stage)
 			profile.player_data["出战宠物"] = "PetRabbit"
 		elif bool(unit.get_meta("pet_dragon_unit", false)):
-			pet[DataKeys.TYPE] = "PetDragon"
-			pet[DataKeys.ALT_NAME] = ["", "龙仔", "绿英龙", "青龙将军", "青龙妖圣"][new_stage]
-			pet["技能"] = _pet_dragon_stage_skills(new_stage)
+			pet[DataKeys.TYPE] = PET_DRAGON_FAMILY.KIND
+			pet[DataKeys.ALT_NAME] = PET_DRAGON_FAMILY.stage_name(new_stage)
+			pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
+			pet["技能"] = PET_DRAGON_FAMILY.stage_skills(new_stage)
+			profile.player_data["出战宠物"] = PET_DRAGON_FAMILY.KIND
 		elif bool(unit.get_meta("pet_tiger_unit", false)):
 			pet[DataKeys.TYPE] = PET_TIGER_FAMILY.KIND
 			pet[DataKeys.ALT_NAME] = PET_TIGER_FAMILY.stage_name(new_stage)

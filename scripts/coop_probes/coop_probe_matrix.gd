@@ -97,6 +97,8 @@ func _run() -> void:
 			await _case_pet_experience()
 		"LocalCoopPetSlotProbe":
 			await _case_pet_slot()
+		"LocalCoopPetDragonProbe":
+			await _case_pet_dragon()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -591,6 +593,95 @@ func _case_pet_slot() -> void:
 	_check(probe_level.spawned_slots == [2], "P2 revive respawns only P2")
 	weapon.free()
 	probe_level.queue_free()
+	await process_frame
+
+
+func _find_pet_unit(monster: Node, slot: int, meta_key: String) -> Node:
+	if monster == null:
+		return null
+	for child in monster.get_children():
+		if child.has_meta(meta_key) and int(child.get_meta("coop_slot", 1)) == slot:
+			return child
+	return null
+
+
+## 23-2 青龙族：族规则、BaseMonster 升级与槽位写回。
+func _case_pet_dragon() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_dragon_family.gd").new()
+	var family_pet := _pet_probe_data("PetDragon", "龙仔", 1000)
+	family_pet["等级"] = 15
+	family_pet["阶段"] = 1
+	_check(family.matches(family_pet), "dragon family matches type")
+	_check(not family.matches({"名称": "朱雀女皇"}), "dragon family rejects phoenix name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 1, "dragon normalize keeps stored stage")
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 2, "dragon evolve uses level threshold")
+	_check(str(family_pet.get("名称", "")) == "绿英龙", "dragon evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("闪电冲刺"), "dragon evolve updates skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetDragon", "dragon evolve writes P2 active")
+	_check(
+		family.scene_path(3) == "res://Scene/pet/pet_dragon_summon_3.tscn",
+		"dragon scene path"
+	)
+
+	data.player_data["玩家等级"] = 15
+	coop.secondary_data.player_data["玩家等级"] = 15
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 15
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 15
+	coop.secondary_props.baseroleprop.exp = 0
+	var p1_pet := _pet_probe_data("PetDragon", "龙仔", 1000)
+	p1_pet["等级"] = 1
+	var p2_pet := _pet_probe_data("PetDragon", "龙仔", 1000)
+	p2_pet["等级"] = 14
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetDragon"
+	coop.secondary_data.player_data["出战宠物"] = "PetDragon"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(1000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 15, "P2 dragon reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 2, "P2 dragon evolves to stage 2")
+	_check(str(p2_pet.get("名称", "")) == "绿英龙", "P2 dragon evolution name")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetDragon", "P2 dragon active stays type")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 dragon untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	# 控制器/BaseLevel 实际生成：P1/P2 青龙单位都必须带槽位元数据。
+	p1_pet["等级"] = 15
+	p2_pet["等级"] = 15
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_dragon_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_dragon_unit")
+	_check(p1_unit != null, "P1 dragon spawned by controller")
+	_check(p2_unit != null, "P2 dragon spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("dragon_stage")) == 2, "P1 dragon stage 2")
+	if p2_unit != null:
+		_check(int(p2_unit.get("dragon_stage")) == 2, "P2 dragon stage 2")
+	level.queue_free()
+	stage = null
 	await process_frame
 
 
