@@ -1,5 +1,22 @@
 extends Button
 
+const SYNTHESIS_ALLOWED_TREASURES := [
+	"yyzlj",
+	"ywhl",
+	"sxyg",
+	"zhyx",
+	"bjs",
+	"yyb",
+	"dkhl",
+	"hehua",
+]
+
+
+## 法宝默认不能参与合成，但八仙/太极八卦材料按 6.6 语义例外放行。
+static func is_synthesis_allowed(item_type: String, item_id: String) -> bool:
+	return item_type != "法宝" or item_id in SYNTHESIS_ALLOWED_TREASURES
+
+
 ## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
 var PlayerData: PlayerDataStore:
 	get:
@@ -251,7 +268,7 @@ func on_press_when_synthesis():
 			var mylist = PlayerData.player_data["放入列表"][i]
 			if mylist.size() == 0:
 				var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
-				if get_tt == "法宝":
+				if not is_synthesis_allowed(str(get_tt), str(get_item_name)):
 					Global.add_message_show(_parent, "法宝无法参与合成！！！", 1.5, Vector2(500, 305))
 					return
 				if get_tt == "消耗品":
@@ -281,7 +298,9 @@ func on_press_when_synthesis():
 					PlayerData.remove_dj(get_item_name, PlayerData.get_dj_page(get_item_name), 1)
 					NodeUtils.ancestor(self, 6).set_box_data()
 				elif get_tt == "法宝":
-					return
+					PlayerData.player_data["放入列表"][i].push_back(wx.duplicate())
+					PlayerData.remove_zb(_get_equipment_source_page(), _get_equipment_source_index())
+					NodeUtils.ancestor(self, 6).set_box_data()
 				return
 	else:
 		var num = str(self.name).split("_")[1]
@@ -297,7 +316,7 @@ func on_press_when_synthesis():
 			elif get_tt == "消耗品":
 				PlayerData.add_xhp(list[0], 1)
 			elif get_tt == "法宝":
-				return
+				PlayerData.add_fb(list[0], list[3], list[5] if list.size() > 5 else [], list[4])
 			PlayerData.player_data["放入列表"]["物品" + str(num)].clear()
 			MemoryClass.request_save("back_pack_box_synthesis")
 			return

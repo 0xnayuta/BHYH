@@ -369,6 +369,20 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	if h_hjm != null:
 		created.append(h_hjm)
 	checks["backpack_scene_cached"] = Global.is_resource_cached(BACK_PACK_PATH)
+	var box_scene: PackedScene = load(BOX_SCENE_PATH) as PackedScene
+	var box: Node = box_scene.instantiate() if box_scene != null else null
+	if box != null:
+		var allowed_ids := ["yyzlj", "ywhl", "sxyg", "zhyx", "bjs", "yyb", "dkhl", "hehua"]
+		var allowed_ok := true
+		for item_id: String in allowed_ids:
+			if not bool(box.call("is_synthesis_allowed", "法宝", item_id)):
+				allowed_ok = false
+				break
+		checks["box_synthesis_allows_treasure_materials"] = allowed_ok
+		checks["box_synthesis_rejects_other_treasures"] = not bool(
+			box.call("is_synthesis_allowed", "法宝", "other_treasure")
+		)
+		box.free()
 	var fall: Node = Global.fall_item(host, Vector2(45, 46), _first_equipment_id(), 1)
 	await _settle()
 	checks["backpack_fall_created"] = fall != null and fall.get_parent() == host
