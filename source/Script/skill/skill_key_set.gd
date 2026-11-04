@@ -11,6 +11,23 @@ var RoleProp: BaseRoleProperties:
 var need_name: String
 @onready var label: Label = $BG/Label
 
+
+func _ready() -> void:
+	if LocalCoop.slot_for(self) != 2:
+		return
+	var keys := ["Y", "U", "I", "O", "L"]
+	var actions := ["slz", "lys", "lyfb", "hmz", "hytj"]
+	for index in keys.size():
+		var button := get_node_or_null("BG/" + keys[index]) as Button
+		if button == null:
+			continue
+		var key_name := OS.get_keycode_string(LocalCoop.P2_KEYS[actions[index]])
+		button.text = "设置为小键盘 " + key_name.right(1)
+		button.position.x = -114
+		button.size.x = 240
+		button.add_theme_font_size_override("font_size", 22)
+
+
 var name_list = {
 	"yt_mds": "蔓毒散",
 	"yt_tyy": "兔影跃",

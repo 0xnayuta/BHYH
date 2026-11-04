@@ -41,7 +41,12 @@ func _physics_process(delta: float) -> void:
 		idle = false
 
 	if not idle:
-		self.position += NodeUtils.position_between(self, RoleProp.source_player) * speed * 0.5
+		var target: Node2D = (
+			LocalCoop.nearest_player(global_position) if LocalCoop.is_enabled() else RoleProp.source_player
+		)
+		if not is_instance_valid(target):
+			return
+		self.position += NodeUtils.position_between(self, target) * speed * 0.5
 		check.disabled = false
 		speed += 0.2
 		if speed >= 20:
@@ -53,7 +58,8 @@ func _on_check_body_entered(body: Node2D) -> void:
 		_collected = true
 		var hero = body as BaseHero
 
-		PlayerData.add_soul(value)
+		var data: Node = LocalCoop.data_for(hero) if LocalCoop.is_enabled() else PlayerData
+		data.add_soul(value)
 
 		match color_type:
 			ColorType.YELLOW:

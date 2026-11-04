@@ -26,6 +26,23 @@ func _physics_process(_delta: float) -> void:
 	limit_left = max_left
 	limit_top = max_top
 	limit_bottom = max_bottom
+	_center_on_living_players()
+
+
+func _center_on_living_players() -> void:
+	if not LocalCoop.is_enabled():
+		return
+	var players: Array[BaseHero] = LocalCoop.living_players()
+	if players.is_empty():
+		return
+	var center := Vector2.ZERO
+	for player: BaseHero in players:
+		center += player.global_position
+	center /= players.size()
+	global_position = center
+	var half_width := get_viewport_rect().size.x / zoom.x * 0.5 - 55.0
+	for player: BaseHero in players:
+		player.global_position.x = clampf(player.global_position.x, center.x - half_width, center.x + half_width)
 
 
 func _update_vertical_offset() -> void:

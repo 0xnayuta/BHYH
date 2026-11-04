@@ -44,9 +44,9 @@ func _physics_process(_delta: float) -> void:
 		if p_parent != null and p_parent.get("get_obj") != null:
 			parent_node = p_parent.get("get_obj")
 		else:
-			parent_node = RoleProp.source_player
+			parent_node = LocalCoop.props_for(self).source_player
 	else:
-		parent_node = RoleProp.source_player
+		parent_node = LocalCoop.props_for(self).source_player
 	if data_list == {}:
 		return
 	var icon_name := str(data_list["Name"])

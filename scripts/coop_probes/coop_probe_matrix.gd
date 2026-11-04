@@ -216,7 +216,49 @@ func _case_core() -> void:
 			"hero props isolated"
 		)
 		_check(first.PlayerInput != second.PlayerInput, "input views isolated")
+		await _check_coop_presentation(first, second)
 	coop.clear_runtime()
+
+
+func _check_coop_presentation(first: Node, second: Node) -> void:
+	# 相机：两个存活玩家的中心，并限制最远玩家超出半屏。
+	var camera: Camera2D = load("res://Scene/level/camera.tscn").instantiate() as Camera2D
+	camera.max_left = -10000.0
+	camera.max_right = 10000.0
+	camera.max_top = -10000.0
+	camera.max_bottom = 10000.0
+	stage.add_child(camera)
+	first.global_position = Vector2(100, 340)
+	second.global_position = Vector2(500, 340)
+	camera.call("_physics_process", 0.0)
+	_check(camera.global_position.is_equal_approx(Vector2(300, 340)), "coop camera centers living players")
+	first.global_position = Vector2(100, 340)
+	second.global_position = Vector2(2000, 340)
+	camera.call("_physics_process", 0.0)
+	_check(second.global_position.x < 2000.0, "coop camera clamps far player")
+	camera.queue_free()
+
+	# 灵气：应追踪最近玩家，而不是全局 1P 别名。
+	var aura: Node = load("res://Scene/other_scene/auras.tscn").instantiate()
+	aura.position = Vector2.ZERO
+	aura.idle = false
+	aura.speed = 1.0
+	stage.add_child(aura)
+	first.global_position = Vector2(1000, 340)
+	second.global_position = Vector2(10, 340)
+	root.get_node("RoleProp").source_player = first
+	aura.call("_physics_process", 0.0)
+	_check(aura.position.x > 0.0, "aura follows nearest player")
+	aura.queue_free()
+
+	# Buff 图标：无有效父 Buff 时回退到当前槽位的 SourcePlayer。
+	var buff: Node = load("res://Scene/other_scene/buff_icon.tscn").instantiate()
+	buff.set_meta("coop_slot", 2)
+	stage.add_child(buff)
+	buff.call("_physics_process", 0.0)
+	_check(buff.get("parent_node") == second, "buff icon falls back to 2P owner")
+	buff.queue_free()
+	await process_frame
 
 
 func _case_gameplay() -> void:
@@ -1844,6 +1886,16 @@ func _case_skill_keys() -> void:
 	Input.action_press("p2_move_right")
 	_check(input.is_action_pressed("move_right"), "P2 input view responds")
 	Input.action_release("p2_move_right")
+	await _make_stage()
+	var key_panel: Node = load("res://Scene/skill/skill_key_set.tscn").instantiate()
+	key_panel.set_meta("coop_slot", 2)
+	key_panel.need_name = "slz"
+	stage.add_child(key_panel)
+	await process_frame
+	var y_button: Button = key_panel.get_node_or_null("BG/Y") as Button
+	_check(y_button != null and y_button.text.begins_with("设置为小键盘"), "2P skill key label uses numpad")
+	_check(y_button != null and is_equal_approx(y_button.position.x, -114.0), "2P skill key label position")
+	key_panel.queue_free()
 
 
 func _case_switch_passive() -> void:
@@ -1851,6 +1903,12 @@ func _case_switch_passive() -> void:
 	coop.refresh_passive_skills()
 	_check(is_instance_valid(coop.secondary_passives), "secondary passive runtime exists")
 	_check(coop.props_for(coop.secondary_data) == coop.secondary_props, "secondary passive props owner")
+	var primary_shp := int(root.get_node("RoleProp").pasl_prop.SHp)
+	coop.secondary_data.player_data["被动技能"]["热血"] = 5
+	coop.secondary_passives.get_passive_skill_properties()
+	var expected_shp := int(coop.secondary_passives.get_value("热血", 5))
+	_check(int(coop.secondary_props.pasl_prop.SHp) == expected_shp, "2P passive writes P2 props")
+	_check(int(root.get_node("RoleProp").pasl_prop.SHp) == primary_shp, "2P passive does not write P1 props")
 
 
 func _case_sword_mount() -> void:
