@@ -2098,6 +2098,1286 @@
     {
       "path": "res://Art/mount/official_riders/role_7/gear_9/poses.json",
       "bytes": 503
+    },
+    {
+      "path": "res://Data/zmws_config/achievementname.json",
+      "bytes": 2797
+    },
+    {
+      "path": "res://Data/zmws_config/achievementreward.json",
+      "bytes": 24992
+    },
+    {
+      "path": "res://Data/zmws_config/achievementtask.json",
+      "bytes": 856718
+    },
+    {
+      "path": "res://Data/zmws_config/active.json",
+      "bytes": 4141
+    },
+    {
+      "path": "res://Data/zmws_config/activereward.json",
+      "bytes": 571
+    },
+    {
+      "path": "res://Data/zmws_config/activity.json",
+      "bytes": 175699
+    },
+    {
+      "path": "res://Data/zmws_config/activityexchange.json",
+      "bytes": 10117
+    },
+    {
+      "path": "res://Data/zmws_config/activityforum.json",
+      "bytes": 194777
+    },
+    {
+      "path": "res://Data/zmws_config/activitypredict.json",
+      "bytes": 1072
+    },
+    {
+      "path": "res://Data/zmws_config/activitytime.json",
+      "bytes": 118766
+    },
+    {
+      "path": "res://Data/zmws_config/aicfg.json",
+      "bytes": 18856
+    },
+    {
+      "path": "res://Data/zmws_config/aidata.json",
+      "bytes": 1331
+    },
+    {
+      "path": "res://Data/zmws_config/aiinventory.json",
+      "bytes": 47803
+    },
+    {
+      "path": "res://Data/zmws_config/aistage.json",
+      "bytes": 223158
+    },
+    {
+      "path": "res://Data/zmws_config/alchemyroom.json",
+      "bytes": 1466
+    },
+    {
+      "path": "res://Data/zmws_config/antitheticalcouplet.json",
+      "bytes": 6604
+    },
+    {
+      "path": "res://Data/zmws_config/archeryactivity.json",
+      "bytes": 5840
+    },
+    {
+      "path": "res://Data/zmws_config/arena.json",
+      "bytes": 1185
+    },
+    {
+      "path": "res://Data/zmws_config/arenadata.json",
+      "bytes": 2601
+    },
+    {
+      "path": "res://Data/zmws_config/arenamatch.json",
+      "bytes": 1576
+    },
+    {
+      "path": "res://Data/zmws_config/arenarobot.json",
+      "bytes": 3229
+    },
+    {
+      "path": "res://Data/zmws_config/avatarlook.json",
+      "bytes": 64193
+    },
+    {
+      "path": "res://Data/zmws_config/behavior.json",
+      "bytes": 203885
+    },
+    {
+      "path": "res://Data/zmws_config/beskill.json",
+      "bytes": 3135482
+    },
+    {
+      "path": "res://Data/zmws_config/boatactivity.json",
+      "bytes": 222912
+    },
+    {
+      "path": "res://Data/zmws_config/bossbeskill.json",
+      "bytes": 73268
+    },
+    {
+      "path": "res://Data/zmws_config/bossmagicweapon.json",
+      "bytes": 2299
+    },
+    {
+      "path": "res://Data/zmws_config/buff.json",
+      "bytes": 5800851
+    },
+    {
+      "path": "res://Data/zmws_config/buildattribute.json",
+      "bytes": 9875
+    },
+    {
+      "path": "res://Data/zmws_config/building.json",
+      "bytes": 7024
+    },
+    {
+      "path": "res://Data/zmws_config/buildkunlunstage.json",
+      "bytes": 1843
+    },
+    {
+      "path": "res://Data/zmws_config/buildprotectkunlun.json",
+      "bytes": 16232
+    },
+    {
+      "path": "res://Data/zmws_config/buildprotectkunlunwave.json",
+      "bytes": 9705
+    },
+    {
+      "path": "res://Data/zmws_config/calendaraccumulation.json",
+      "bytes": 8377
+    },
+    {
+      "path": "res://Data/zmws_config/calendarsign.json",
+      "bytes": 39176
+    },
+    {
+      "path": "res://Data/zmws_config/callfriend.json",
+      "bytes": 1797
+    },
+    {
+      "path": "res://Data/zmws_config/callgodattribute.json",
+      "bytes": 27572
+    },
+    {
+      "path": "res://Data/zmws_config/callgodratio.json",
+      "bytes": 2816
+    },
+    {
+      "path": "res://Data/zmws_config/cavehuntingreward.json",
+      "bytes": 16544
+    },
+    {
+      "path": "res://Data/zmws_config/chapter.json",
+      "bytes": 3011
+    },
+    {
+      "path": "res://Data/zmws_config/climbingmonsterattribute.json",
+      "bytes": 52632
+    },
+    {
+      "path": "res://Data/zmws_config/climbingnormaldata.json",
+      "bytes": 22109
+    },
+    {
+      "path": "res://Data/zmws_config/climbingpeakdata.json",
+      "bytes": 3075
+    },
+    {
+      "path": "res://Data/zmws_config/closeanything.json",
+      "bytes": 2362
+    },
+    {
+      "path": "res://Data/zmws_config/compose.json",
+      "bytes": 24047
+    },
+    {
+      "path": "res://Data/zmws_config/consts.json",
+      "bytes": 124161
+    },
+    {
+      "path": "res://Data/zmws_config/customkey.json",
+      "bytes": 9540
+    },
+    {
+      "path": "res://Data/zmws_config/danqi.json",
+      "bytes": 30621
+    },
+    {
+      "path": "res://Data/zmws_config/danqifixed.json",
+      "bytes": 8603
+    },
+    {
+      "path": "res://Data/zmws_config/danyuan.json",
+      "bytes": 652595
+    },
+    {
+      "path": "res://Data/zmws_config/dialog.json",
+      "bytes": 619
+    },
+    {
+      "path": "res://Data/zmws_config/dialogue.json",
+      "bytes": 549866
+    },
+    {
+      "path": "res://Data/zmws_config/districtconfigure.json",
+      "bytes": 4922
+    },
+    {
+      "path": "res://Data/zmws_config/dreammakingmap.json",
+      "bytes": 1004
+    },
+    {
+      "path": "res://Data/zmws_config/dreammakingtravel.json",
+      "bytes": 14502
+    },
+    {
+      "path": "res://Data/zmws_config/drop.json",
+      "bytes": 1466488
+    },
+    {
+      "path": "res://Data/zmws_config/dropgroup.json",
+      "bytes": 661999
+    },
+    {
+      "path": "res://Data/zmws_config/edit.json",
+      "bytes": 905
+    },
+    {
+      "path": "res://Data/zmws_config/effect.json",
+      "bytes": 249524
+    },
+    {
+      "path": "res://Data/zmws_config/emoji.json",
+      "bytes": 2611
+    },
+    {
+      "path": "res://Data/zmws_config/emojigroup.json",
+      "bytes": 610
+    },
+    {
+      "path": "res://Data/zmws_config/equip.json",
+      "bytes": 2748211
+    },
+    {
+      "path": "res://Data/zmws_config/equipaffix.json",
+      "bytes": 42484
+    },
+    {
+      "path": "res://Data/zmws_config/equipfashion.json",
+      "bytes": 474934
+    },
+    {
+      "path": "res://Data/zmws_config/equipfashionball.json",
+      "bytes": 17202
+    },
+    {
+      "path": "res://Data/zmws_config/equipfixed.json",
+      "bytes": 7510
+    },
+    {
+      "path": "res://Data/zmws_config/equipgroupname.json",
+      "bytes": 36619
+    },
+    {
+      "path": "res://Data/zmws_config/equipmake.json",
+      "bytes": 421350
+    },
+    {
+      "path": "res://Data/zmws_config/equipsmelt.json",
+      "bytes": 10676
+    },
+    {
+      "path": "res://Data/zmws_config/equipsmeltgrow.json",
+      "bytes": 13048
+    },
+    {
+      "path": "res://Data/zmws_config/equipsuitattribute.json",
+      "bytes": 32928
+    },
+    {
+      "path": "res://Data/zmws_config/equipupgrade.json",
+      "bytes": 44750
+    },
+    {
+      "path": "res://Data/zmws_config/equipupgradevalue.json",
+      "bytes": 1256
+    },
+    {
+      "path": "res://Data/zmws_config/equipwardrobe.json",
+      "bytes": 599409
+    },
+    {
+      "path": "res://Data/zmws_config/evaluate.json",
+      "bytes": 691
+    },
+    {
+      "path": "res://Data/zmws_config/exchangeshop.json",
+      "bytes": 821
+    },
+    {
+      "path": "res://Data/zmws_config/exp.json",
+      "bytes": 156101
+    },
+    {
+      "path": "res://Data/zmws_config/expattribute.json",
+      "bytes": 44929
+    },
+    {
+      "path": "res://Data/zmws_config/expworld.json",
+      "bytes": 15959
+    },
+    {
+      "path": "res://Data/zmws_config/feather.json",
+      "bytes": 7523
+    },
+    {
+      "path": "res://Data/zmws_config/featherattribute.json",
+      "bytes": 45996
+    },
+    {
+      "path": "res://Data/zmws_config/fightver.json",
+      "bytes": 1081
+    },
+    {
+      "path": "res://Data/zmws_config/footballplayer.json",
+      "bytes": 2687
+    },
+    {
+      "path": "res://Data/zmws_config/friendgain.json",
+      "bytes": 5177
+    },
+    {
+      "path": "res://Data/zmws_config/friendvalue.json",
+      "bytes": 688
+    },
+    {
+      "path": "res://Data/zmws_config/functiontime.json",
+      "bytes": 6305
+    },
+    {
+      "path": "res://Data/zmws_config/fund.json",
+      "bytes": 8899
+    },
+    {
+      "path": "res://Data/zmws_config/giftactivity.json",
+      "bytes": 12874
+    },
+    {
+      "path": "res://Data/zmws_config/godcard.json",
+      "bytes": 4654
+    },
+    {
+      "path": "res://Data/zmws_config/godcardactivity.json",
+      "bytes": 3648
+    },
+    {
+      "path": "res://Data/zmws_config/godreward.json",
+      "bytes": 49430
+    },
+    {
+      "path": "res://Data/zmws_config/godrewardactivity.json",
+      "bytes": 12065
+    },
+    {
+      "path": "res://Data/zmws_config/godtask.json",
+      "bytes": 990393
+    },
+    {
+      "path": "res://Data/zmws_config/godtaskacc.json",
+      "bytes": 7177
+    },
+    {
+      "path": "res://Data/zmws_config/godwar.json",
+      "bytes": 64529
+    },
+    {
+      "path": "res://Data/zmws_config/godwarattribute.json",
+      "bytes": 23920
+    },
+    {
+      "path": "res://Data/zmws_config/godwarboss.json",
+      "bytes": 66242
+    },
+    {
+      "path": "res://Data/zmws_config/godwarbossfashion.json",
+      "bytes": 21201
+    },
+    {
+      "path": "res://Data/zmws_config/godwarbossshow.json",
+      "bytes": 8770
+    },
+    {
+      "path": "res://Data/zmws_config/godwarbosstalent.json",
+      "bytes": 17775
+    },
+    {
+      "path": "res://Data/zmws_config/godwarbosstalentgroup.json",
+      "bytes": 775
+    },
+    {
+      "path": "res://Data/zmws_config/godwarcrystal.json",
+      "bytes": 12613
+    },
+    {
+      "path": "res://Data/zmws_config/godwarfight.json",
+      "bytes": 21149
+    },
+    {
+      "path": "res://Data/zmws_config/godwarrank.json",
+      "bytes": 2954
+    },
+    {
+      "path": "res://Data/zmws_config/godwarreward.json",
+      "bytes": 125641
+    },
+    {
+      "path": "res://Data/zmws_config/godwarrewardlimit.json",
+      "bytes": 1320
+    },
+    {
+      "path": "res://Data/zmws_config/godwarrole.json",
+      "bytes": 13426
+    },
+    {
+      "path": "res://Data/zmws_config/godwarstage.json",
+      "bytes": 1060
+    },
+    {
+      "path": "res://Data/zmws_config/godwarsubstitute.json",
+      "bytes": 1284
+    },
+    {
+      "path": "res://Data/zmws_config/godweapon.json",
+      "bytes": 5250
+    },
+    {
+      "path": "res://Data/zmws_config/godweaponfashion.json",
+      "bytes": 1758
+    },
+    {
+      "path": "res://Data/zmws_config/godweaponlev.json",
+      "bytes": 5961
+    },
+    {
+      "path": "res://Data/zmws_config/godweaponskilllev.json",
+      "bytes": 19162
+    },
+    {
+      "path": "res://Data/zmws_config/goodfriend.json",
+      "bytes": 797
+    },
+    {
+      "path": "res://Data/zmws_config/guide.json",
+      "bytes": 6903
+    },
+    {
+      "path": "res://Data/zmws_config/heart.json",
+      "bytes": 11972
+    },
+    {
+      "path": "res://Data/zmws_config/index.json",
+      "bytes": 107590
+    },
+    {
+      "path": "res://Data/zmws_config/item.json",
+      "bytes": 5714009
+    },
+    {
+      "path": "res://Data/zmws_config/league.json",
+      "bytes": 1982
+    },
+    {
+      "path": "res://Data/zmws_config/leagueblessing.json",
+      "bytes": 1669
+    },
+    {
+      "path": "res://Data/zmws_config/leaguebook.json",
+      "bytes": 8867
+    },
+    {
+      "path": "res://Data/zmws_config/leagueboss.json",
+      "bytes": 1013
+    },
+    {
+      "path": "res://Data/zmws_config/leaguebosscopy.json",
+      "bytes": 2703
+    },
+    {
+      "path": "res://Data/zmws_config/leaguebossreally.json",
+      "bytes": 1146
+    },
+    {
+      "path": "res://Data/zmws_config/leaguedonation.json",
+      "bytes": 665
+    },
+    {
+      "path": "res://Data/zmws_config/leaguefish.json",
+      "bytes": 2186
+    },
+    {
+      "path": "res://Data/zmws_config/leaguefishing.json",
+      "bytes": 1406
+    },
+    {
+      "path": "res://Data/zmws_config/leaguefishingcatch.json",
+      "bytes": 905
+    },
+    {
+      "path": "res://Data/zmws_config/leaguemachine.json",
+      "bytes": 1124
+    },
+    {
+      "path": "res://Data/zmws_config/leaguemining.json",
+      "bytes": 9542
+    },
+    {
+      "path": "res://Data/zmws_config/leagueplant.json",
+      "bytes": 17144
+    },
+    {
+      "path": "res://Data/zmws_config/leaguepond.json",
+      "bytes": 743
+    },
+    {
+      "path": "res://Data/zmws_config/leagueresource.json",
+      "bytes": 4870
+    },
+    {
+      "path": "res://Data/zmws_config/leaguetask.json",
+      "bytes": 122719
+    },
+    {
+      "path": "res://Data/zmws_config/loading.json",
+      "bytes": 301501
+    },
+    {
+      "path": "res://Data/zmws_config/luckbaptism.json",
+      "bytes": 116645
+    },
+    {
+      "path": "res://Data/zmws_config/magicweapon.json",
+      "bytes": 16012
+    },
+    {
+      "path": "res://Data/zmws_config/magicweaponfashion.json",
+      "bytes": 2567
+    },
+    {
+      "path": "res://Data/zmws_config/magicweaponlev.json",
+      "bytes": 24053
+    },
+    {
+      "path": "res://Data/zmws_config/magicweaponmerge.json",
+      "bytes": 6013
+    },
+    {
+      "path": "res://Data/zmws_config/magicweaponsoul.json",
+      "bytes": 30098
+    },
+    {
+      "path": "res://Data/zmws_config/magicweaponsoullv.json",
+      "bytes": 39955
+    },
+    {
+      "path": "res://Data/zmws_config/manage.json",
+      "bytes": 595
+    },
+    {
+      "path": "res://Data/zmws_config/matrix.json",
+      "bytes": 2693
+    },
+    {
+      "path": "res://Data/zmws_config/matrixcore.json",
+      "bytes": 83781
+    },
+    {
+      "path": "res://Data/zmws_config/matrixcorefixed.json",
+      "bytes": 820
+    },
+    {
+      "path": "res://Data/zmws_config/matrixreward.json",
+      "bytes": 1060
+    },
+    {
+      "path": "res://Data/zmws_config/matrixskill.json",
+      "bytes": 93078
+    },
+    {
+      "path": "res://Data/zmws_config/matrixstage.json",
+      "bytes": 8071
+    },
+    {
+      "path": "res://Data/zmws_config/matrixstageopen.json",
+      "bytes": 986916
+    },
+    {
+      "path": "res://Data/zmws_config/matrixsuit.json",
+      "bytes": 2073
+    },
+    {
+      "path": "res://Data/zmws_config/meridians.json",
+      "bytes": 15646
+    },
+    {
+      "path": "res://Data/zmws_config/meridiansattribute.json",
+      "bytes": 49741
+    },
+    {
+      "path": "res://Data/zmws_config/meridiansspecial.json",
+      "bytes": 773
+    },
+    {
+      "path": "res://Data/zmws_config/meridiansspecialpill.json",
+      "bytes": 14174
+    },
+    {
+      "path": "res://Data/zmws_config/meridiansspecialplant.json",
+      "bytes": 2317
+    },
+    {
+      "path": "res://Data/zmws_config/meridianstemperaturequality.json",
+      "bytes": 15814
+    },
+    {
+      "path": "res://Data/zmws_config/monster.json",
+      "bytes": 3996271
+    },
+    {
+      "path": "res://Data/zmws_config/monsterattribute.json",
+      "bytes": 46846
+    },
+    {
+      "path": "res://Data/zmws_config/namerandom.json",
+      "bytes": 1778
+    },
+    {
+      "path": "res://Data/zmws_config/newplayertask.json",
+      "bytes": 20461
+    },
+    {
+      "path": "res://Data/zmws_config/notalking.json",
+      "bytes": 686
+    },
+    {
+      "path": "res://Data/zmws_config/npcevent.json",
+      "bytes": 38479
+    },
+    {
+      "path": "res://Data/zmws_config/npcgain.json",
+      "bytes": 25897
+    },
+    {
+      "path": "res://Data/zmws_config/npcletter.json",
+      "bytes": 10920
+    },
+    {
+      "path": "res://Data/zmws_config/operateactivity.json",
+      "bytes": 12082
+    },
+    {
+      "path": "res://Data/zmws_config/overallbuff.json",
+      "bytes": 32313
+    },
+    {
+      "path": "res://Data/zmws_config/passiveskill.json",
+      "bytes": 26671
+    },
+    {
+      "path": "res://Data/zmws_config/peachbanquetmonster1.json",
+      "bytes": 11639
+    },
+    {
+      "path": "res://Data/zmws_config/peachbanquetmonster2.json",
+      "bytes": 5666
+    },
+    {
+      "path": "res://Data/zmws_config/peachbanquetmonster3.json",
+      "bytes": 5671
+    },
+    {
+      "path": "res://Data/zmws_config/peachbanquetphoto1.json",
+      "bytes": 3420
+    },
+    {
+      "path": "res://Data/zmws_config/peachgametrack.json",
+      "bytes": 16289
+    },
+    {
+      "path": "res://Data/zmws_config/pet.json",
+      "bytes": 226766
+    },
+    {
+      "path": "res://Data/zmws_config/petarena.json",
+      "bytes": 1261
+    },
+    {
+      "path": "res://Data/zmws_config/petchampionactivity.json",
+      "bytes": 7069
+    },
+    {
+      "path": "res://Data/zmws_config/petchampiongroup.json",
+      "bytes": 4597
+    },
+    {
+      "path": "res://Data/zmws_config/petchampiontime.json",
+      "bytes": 1710
+    },
+    {
+      "path": "res://Data/zmws_config/petchampiontower.json",
+      "bytes": 18315
+    },
+    {
+      "path": "res://Data/zmws_config/petcharacter.json",
+      "bytes": 1452
+    },
+    {
+      "path": "res://Data/zmws_config/petegg.json",
+      "bytes": 5479
+    },
+    {
+      "path": "res://Data/zmws_config/petequip.json",
+      "bytes": 58085
+    },
+    {
+      "path": "res://Data/zmws_config/petequipaffix.json",
+      "bytes": 36701
+    },
+    {
+      "path": "res://Data/zmws_config/petequipfixed.json",
+      "bytes": 1657
+    },
+    {
+      "path": "res://Data/zmws_config/petequipmake.json",
+      "bytes": 13200
+    },
+    {
+      "path": "res://Data/zmws_config/petequipupgrade.json",
+      "bytes": 30747
+    },
+    {
+      "path": "res://Data/zmws_config/petfashion.json",
+      "bytes": 13203
+    },
+    {
+      "path": "res://Data/zmws_config/petforestpet.json",
+      "bytes": 3159
+    },
+    {
+      "path": "res://Data/zmws_config/petforestweather.json",
+      "bytes": 830
+    },
+    {
+      "path": "res://Data/zmws_config/petforestweatherchange.json",
+      "bytes": 20413
+    },
+    {
+      "path": "res://Data/zmws_config/pethole.json",
+      "bytes": 5044
+    },
+    {
+      "path": "res://Data/zmws_config/petintimacy.json",
+      "bytes": 1330
+    },
+    {
+      "path": "res://Data/zmws_config/petpotential.json",
+      "bytes": 108417
+    },
+    {
+      "path": "res://Data/zmws_config/pettower.json",
+      "bytes": 27015
+    },
+    {
+      "path": "res://Data/zmws_config/pettowerfloor.json",
+      "bytes": 731
+    },
+    {
+      "path": "res://Data/zmws_config/phantom.json",
+      "bytes": 6157
+    },
+    {
+      "path": "res://Data/zmws_config/player.json",
+      "bytes": 881
+    },
+    {
+      "path": "res://Data/zmws_config/pleasegod.json",
+      "bytes": 767
+    },
+    {
+      "path": "res://Data/zmws_config/powerattribute.json",
+      "bytes": 853
+    },
+    {
+      "path": "res://Data/zmws_config/question.json",
+      "bytes": 973
+    },
+    {
+      "path": "res://Data/zmws_config/rankingfix.json",
+      "bytes": 688
+    },
+    {
+      "path": "res://Data/zmws_config/rankinglist.json",
+      "bytes": 37834
+    },
+    {
+      "path": "res://Data/zmws_config/raremonster.json",
+      "bytes": 5294
+    },
+    {
+      "path": "res://Data/zmws_config/recharge.json",
+      "bytes": 21106
+    },
+    {
+      "path": "res://Data/zmws_config/rechargeactivity.json",
+      "bytes": 35372
+    },
+    {
+      "path": "res://Data/zmws_config/redenvelope.json",
+      "bytes": 2870
+    },
+    {
+      "path": "res://Data/zmws_config/redpoint.json",
+      "bytes": 9146
+    },
+    {
+      "path": "res://Data/zmws_config/refiningmedicine.json",
+      "bytes": 31391
+    },
+    {
+      "path": "res://Data/zmws_config/replacetarget.json",
+      "bytes": 51756
+    },
+    {
+      "path": "res://Data/zmws_config/reputation.json",
+      "bytes": 1303
+    },
+    {
+      "path": "res://Data/zmws_config/rewardactivity.json",
+      "bytes": 2615
+    },
+    {
+      "path": "res://Data/zmws_config/ride.json",
+      "bytes": 119647
+    },
+    {
+      "path": "res://Data/zmws_config/ridecatch.json",
+      "bytes": 730
+    },
+    {
+      "path": "res://Data/zmws_config/rideegg.json",
+      "bytes": 1449
+    },
+    {
+      "path": "res://Data/zmws_config/rideequip.json",
+      "bytes": 81926
+    },
+    {
+      "path": "res://Data/zmws_config/rideequipaffix.json",
+      "bytes": 10707
+    },
+    {
+      "path": "res://Data/zmws_config/rideequipfixed.json",
+      "bytes": 1182
+    },
+    {
+      "path": "res://Data/zmws_config/rideequipmake.json",
+      "bytes": 16761
+    },
+    {
+      "path": "res://Data/zmws_config/rideequipupgrade.json",
+      "bytes": 56619
+    },
+    {
+      "path": "res://Data/zmws_config/ridefashion.json",
+      "bytes": 3344
+    },
+    {
+      "path": "res://Data/zmws_config/ridemood.json",
+      "bytes": 1715
+    },
+    {
+      "path": "res://Data/zmws_config/rideskill.json",
+      "bytes": 1026
+    },
+    {
+      "path": "res://Data/zmws_config/rideskillattr.json",
+      "bytes": 2004
+    },
+    {
+      "path": "res://Data/zmws_config/riding.json",
+      "bytes": 6886
+    },
+    {
+      "path": "res://Data/zmws_config/rogueitem.json",
+      "bytes": 302507
+    },
+    {
+      "path": "res://Data/zmws_config/roguelike.json",
+      "bytes": 7154
+    },
+    {
+      "path": "res://Data/zmws_config/roguelikeattribute.json",
+      "bytes": 27492
+    },
+    {
+      "path": "res://Data/zmws_config/roguelikebase.json",
+      "bytes": 21753
+    },
+    {
+      "path": "res://Data/zmws_config/roguelikedoor.json",
+      "bytes": 11431
+    },
+    {
+      "path": "res://Data/zmws_config/roguelikemedicament.json",
+      "bytes": 3816
+    },
+    {
+      "path": "res://Data/zmws_config/role.json",
+      "bytes": 3473
+    },
+    {
+      "path": "res://Data/zmws_config/roleinitial.json",
+      "bytes": 9655
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerdrop.json",
+      "bytes": 911
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtoweritem.json",
+      "bytes": 8439
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerrewardlevel.json",
+      "bytes": 7041
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerroom.json",
+      "bytes": 3284
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerroommonster.json",
+      "bytes": 16657
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerroomranpool.json",
+      "bytes": 103530
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerskill.json",
+      "bytes": 13209
+    },
+    {
+      "path": "res://Data/zmws_config/sacredtowerskilllv.json",
+      "bytes": 1225
+    },
+    {
+      "path": "res://Data/zmws_config/sealevel.json",
+      "bytes": 951
+    },
+    {
+      "path": "res://Data/zmws_config/secondpassword.json",
+      "bytes": 10661
+    },
+    {
+      "path": "res://Data/zmws_config/servant.json",
+      "bytes": 19257
+    },
+    {
+      "path": "res://Data/zmws_config/server.json",
+      "bytes": 513
+    },
+    {
+      "path": "res://Data/zmws_config/setting.json",
+      "bytes": 2374
+    },
+    {
+      "path": "res://Data/zmws_config/sevenday.json",
+      "bytes": 871
+    },
+    {
+      "path": "res://Data/zmws_config/shop.json",
+      "bytes": 2965512
+    },
+    {
+      "path": "res://Data/zmws_config/shopname.json",
+      "bytes": 2329
+    },
+    {
+      "path": "res://Data/zmws_config/shopstructure.json",
+      "bytes": 11031
+    },
+    {
+      "path": "res://Data/zmws_config/skill.json",
+      "bytes": 3564375
+    },
+    {
+      "path": "res://Data/zmws_config/skillawaken.json",
+      "bytes": 6485
+    },
+    {
+      "path": "res://Data/zmws_config/skillextra.json",
+      "bytes": 5724
+    },
+    {
+      "path": "res://Data/zmws_config/skillextralevel.json",
+      "bytes": 194054
+    },
+    {
+      "path": "res://Data/zmws_config/skillfix.json",
+      "bytes": 5716
+    },
+    {
+      "path": "res://Data/zmws_config/skilllevel.json",
+      "bytes": 4861523
+    },
+    {
+      "path": "res://Data/zmws_config/skillrange.json",
+      "bytes": 674
+    },
+    {
+      "path": "res://Data/zmws_config/skilltext.json",
+      "bytes": 236659
+    },
+    {
+      "path": "res://Data/zmws_config/skymelee.json",
+      "bytes": 954
+    },
+    {
+      "path": "res://Data/zmws_config/skywar.json",
+      "bytes": 2361
+    },
+    {
+      "path": "res://Data/zmws_config/skywarattribute.json",
+      "bytes": 27437
+    },
+    {
+      "path": "res://Data/zmws_config/smallpackage.json",
+      "bytes": 6073
+    },
+    {
+      "path": "res://Data/zmws_config/solarterms.json",
+      "bytes": 8563
+    },
+    {
+      "path": "res://Data/zmws_config/sound.json",
+      "bytes": 21989
+    },
+    {
+      "path": "res://Data/zmws_config/stage.json",
+      "bytes": 1621327
+    },
+    {
+      "path": "res://Data/zmws_config/stageactivity.json",
+      "bytes": 20022
+    },
+    {
+      "path": "res://Data/zmws_config/stagebuff.json",
+      "bytes": 9140
+    },
+    {
+      "path": "res://Data/zmws_config/stagelabel.json",
+      "bytes": 978
+    },
+    {
+      "path": "res://Data/zmws_config/stageobject.json",
+      "bytes": 192530
+    },
+    {
+      "path": "res://Data/zmws_config/stagetype.json",
+      "bytes": 1730
+    },
+    {
+      "path": "res://Data/zmws_config/starcore.json",
+      "bytes": 11793
+    },
+    {
+      "path": "res://Data/zmws_config/starhavoc.json",
+      "bytes": 4596
+    },
+    {
+      "path": "res://Data/zmws_config/starhavocdialog.json",
+      "bytes": 6275
+    },
+    {
+      "path": "res://Data/zmws_config/starhavocevent.json",
+      "bytes": 22773
+    },
+    {
+      "path": "res://Data/zmws_config/starhavoceventnumber.json",
+      "bytes": 582
+    },
+    {
+      "path": "res://Data/zmws_config/starhavoceventrandom.json",
+      "bytes": 724
+    },
+    {
+      "path": "res://Data/zmws_config/starhavoceventreward.json",
+      "bytes": 4722
+    },
+    {
+      "path": "res://Data/zmws_config/starhavocmonsterattribute.json",
+      "bytes": 35967
+    },
+    {
+      "path": "res://Data/zmws_config/starhavocpond.json",
+      "bytes": 986
+    },
+    {
+      "path": "res://Data/zmws_config/starhavocroute.json",
+      "bytes": 1417
+    },
+    {
+      "path": "res://Data/zmws_config/starmap.json",
+      "bytes": 2039
+    },
+    {
+      "path": "res://Data/zmws_config/starstone.json",
+      "bytes": 34988
+    },
+    {
+      "path": "res://Data/zmws_config/starstoneaffix.json",
+      "bytes": 163722
+    },
+    {
+      "path": "res://Data/zmws_config/stone.json",
+      "bytes": 13172
+    },
+    {
+      "path": "res://Data/zmws_config/story.json",
+      "bytes": 47659
+    },
+    {
+      "path": "res://Data/zmws_config/storybehavior.json",
+      "bytes": 204569
+    },
+    {
+      "path": "res://Data/zmws_config/stringtext.json",
+      "bytes": 182364
+    },
+    {
+      "path": "res://Data/zmws_config/stronger.json",
+      "bytes": 2845
+    },
+    {
+      "path": "res://Data/zmws_config/surprisebox.json",
+      "bytes": 2717
+    },
+    {
+      "path": "res://Data/zmws_config/surprisedrop.json",
+      "bytes": 6673
+    },
+    {
+      "path": "res://Data/zmws_config/surprisepool.json",
+      "bytes": 1783
+    },
+    {
+      "path": "res://Data/zmws_config/systembulletin.json",
+      "bytes": 86101
+    },
+    {
+      "path": "res://Data/zmws_config/systemicon.json",
+      "bytes": 6825
+    },
+    {
+      "path": "res://Data/zmws_config/sysunlock.json",
+      "bytes": 21796
+    },
+    {
+      "path": "res://Data/zmws_config/task.json",
+      "bytes": 166184
+    },
+    {
+      "path": "res://Data/zmws_config/taskmoney.json",
+      "bytes": 34620
+    },
+    {
+      "path": "res://Data/zmws_config/taskmoneyreward.json",
+      "bytes": 15964
+    },
+    {
+      "path": "res://Data/zmws_config/tenjinarena.json",
+      "bytes": 1122
+    },
+    {
+      "path": "res://Data/zmws_config/tenjinarenadata.json",
+      "bytes": 13073
+    },
+    {
+      "path": "res://Data/zmws_config/ticketbuyservice.json",
+      "bytes": 7745
+    },
+    {
+      "path": "res://Data/zmws_config/timefountain.json",
+      "bytes": 3674
+    },
+    {
+      "path": "res://Data/zmws_config/timertask.json",
+      "bytes": 5212
+    },
+    {
+      "path": "res://Data/zmws_config/timertask25.json",
+      "bytes": 4612
+    },
+    {
+      "path": "res://Data/zmws_config/title.json",
+      "bytes": 58913
+    },
+    {
+      "path": "res://Data/zmws_config/titleattribute.json",
+      "bytes": 79278
+    },
+    {
+      "path": "res://Data/zmws_config/town.json",
+      "bytes": 1616
+    },
+    {
+      "path": "res://Data/zmws_config/townnpc.json",
+      "bytes": 8172
+    },
+    {
+      "path": "res://Data/zmws_config/valueflag.json",
+      "bytes": 28367
+    },
+    {
+      "path": "res://Data/zmws_config/valueflagskill.json",
+      "bytes": 13012
+    },
+    {
+      "path": "res://Data/zmws_config/valueflagskillself.json",
+      "bytes": 3104
+    },
+    {
+      "path": "res://Data/zmws_config/viewzoom.json",
+      "bytes": 30362
+    },
+    {
+      "path": "res://Data/zmws_config/viewzoomlow.json",
+      "bytes": 1753
+    },
+    {
+      "path": "res://Data/zmws_config/vip.json",
+      "bytes": 20839
+    },
+    {
+      "path": "res://Data/zmws_config/wealcard.json",
+      "bytes": 1087
+    },
+    {
+      "path": "res://Data/zmws_config/wearequip.json",
+      "bytes": 17556
+    },
+    {
+      "path": "res://Data/zmws_config/wing.json",
+      "bytes": 1204
+    },
+    {
+      "path": "res://Data/zmws_config/wingattribute.json",
+      "bytes": 15538
+    },
+    {
+      "path": "res://Data/zmws_config/wingskill.json",
+      "bytes": 11845
+    },
+    {
+      "path": "res://Data/zmws_config/worldevents.json",
+      "bytes": 783
+    },
+    {
+      "path": "res://Data/zmws_config/worldeventslist.json",
+      "bytes": 1062
+    },
+    {
+      "path": "res://Data/zmws_config/xianpo.json",
+      "bytes": 147832
     }
   ]
 }

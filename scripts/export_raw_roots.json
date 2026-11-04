@@ -47,6 +47,13 @@
         ".json"
       ],
       "consumer": "NorthOriginalData"
+    },
+    {
+      "path": "res://Data/zmws_config/",
+      "extensions": [
+        ".json"
+      ],
+      "consumer": "ZmwsConfig / convert_external_monster_catalog"
     }
   ],
   "files": [
