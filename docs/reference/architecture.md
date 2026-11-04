@@ -512,6 +512,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 
 - 角色资源清单、AtlasMetadata、构建帧、FrameSequence、关卡预载 Catalog 已落地；具体范围由生成器与 `--check` 决定，不在本文维护数量。
 - `Art/frame_sequences/frame_sequence_export_dependencies.json` 由素材侧 Catalog/页派生，随私有素材管理；`Script/data/level_preload_export_dependencies.json` 由公共关卡/怪物、`scripts/monster_dynamic_paths.json` 与布局源派生（含 `layout_catalog` + 98 个布局），随代码管理。两者不在运行时加载，由 `frame_sequence_pack_probe.py` 合并验证实际包路径闭包。
+- `FileAccess` 直接读取的 JSON/BIN 由 `scripts/export_raw_roots.json` 与生成的 `Script/data/export_raw_dependencies.json` 管理；`source/addons/bhyh_export` 只把清单声明的文件写入导出包，不使用 `include_filter` 通配兜底，`scripts/export_closure_probe.py` 验证实际 PCK 路径。契约见 [ADR-025](../decisions/ADR-025-raw-data-export-closure.md)。
 - 怪物别名与动态来源已在构建期展开为 Catalog；运行时不再解析源码或扫描纹理目录。旧纹理别名表及其解析入口已移除，不兼容旧路径。
 - PCK 闭包与 Windows release 的已执行结果见 `status.md`；包内可达不等于目标设备加载与峰值性能通过。
 

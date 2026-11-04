@@ -28,20 +28,22 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **33.72s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **30.09s**） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（10.55s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（155.81s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **37/37 PASS**（204.06s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
+| `scene_probe_runner` | **19/19 PASS**（170.03s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **37/37 PASS**（210.41s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（包含在全量回归中） |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 308.4s，默认 auto 并发，本轮无重试） |
-| PCK 验证包 | **4,200/4,200 路径可达 + 173/173 `.bin` 可达**；7,658,426,778 字节；sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1` |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 303.9s，默认 auto 并发，本轮无重试） |
+| PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
+| PCK 原始数据包 | **524/524 清单路径可达**（173 `.bin` + 351 JSON）；插件 `files=524 expected=524 missing=0`；7,658,500,205 字节；sha256 `22a7c7ec560aab18094a8aabea1185f33ed55356db575ad9326433a310d84e2f`；导出+校验 **1022.22s** |
 
-**边界**：PCK 为验证用 `all_resources` 包的路径闭包与实际 `.bin` 检查，不等于 release 启动、目标设备 VRAM、首帧耗时或最小发布包已验证；`export_presets.cfg` 的 `include_filter="*.bin"` 已覆盖 raw pose 数据。
+**边界**：PCK 为验证/发布预设的路径闭包，不等于 release 启动、目标设备 VRAM、首帧耗时或最小发布包已验证；原始数据由 `export_raw_dependencies.json` + `bhyh_export` 插件写入，不再使用 `include_filter` 兜底。
 
 ### 最近完成
 
-- 2026-11-04 6.6/6.8 选定回植缺口收口：补齐清音阁/五台山口/桃花谷/万妖穴四条玉兔制作书掉落及 `LevelInfo` 预览；恢复 8 个八仙/太极八卦材料参与合成的例外与法宝出入炉回写；恢复 6.8 双人相机居中/夹取、Buff 图标槽位、灵气最近玩家、2P 被动属性和技能键小键盘提示；验证预设增加 `include_filter="*.bin"`，实际导出 PCK 后逐条检查 **173/173** 个 `poses.bin`。回归断言：`level-entry` 新增 8 项玉兔掉落/预览检查，`ui-factories` 新增法宝合成允许/拒绝检查，`coop` 新增相机/灵气/Buff/2P 被动/键位检查。验证：`check_all --godot-bin` **9/9 PASS**（33.72s）、`archive` **344/344**（10.55s）、`scene` **17/17**（155.81s）、`coop` **37/37**（204.06s）、全量 **128/128 + 5 SKIP**（308.4s，无重试）、PCK **4,200/4,200 + 173/173 bin**（7,658,426,778 字节，sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1`）。
+- 2026-11-04 回植收口与原始数据导出契约：`Level_65`/`Level_68` BOSS 出生点删除 `ignore_count_multiplier`，对齐 6.6；新增 `boss-multiplier` 探针覆盖普通点与 BOSS 的 `×1`/`×5` 复制。新增 `scripts/export_raw_roots.json`、`export_raw_manifest.py`、`export_raw_dependencies.json`、`bhyh_export` EditorExportPlugin、`export_closure_probe.py` 与 `export_release.py`；移除 `include_filter="*.bin"`，实际 release 预设导出 PCK 校验 **524/524** 原始数据路径（173 `.bin` + 351 JSON），插件 `files=524 expected=524 missing=0`，PCK **7,658,500,205** 字节，sha256 `22a7c7ec560a…`，耗时 1022.22s。新增 `yutu-drop` 探针覆盖 `expand_drop_entries` 幂等、源表不变、映射双 ID 与 4 条玉兔制作书预览。验证：`check_all --godot-bin` **9/9**（30.09s）、`scene` **19/19**（170.03s）、`coop` **37/37**（210.41s）、全量 **128/128 + 5 SKIP**（303.9s，无重试）、`level_65`/`level_68` 冒烟 0/0/0；文档链接 754/0 缺失。
+- 2026-11-04 6.6/6.8 选定回植缺口收口：补齐清音阁/五台山口/桃花谷/万妖穴四条玉兔制作书掉落及 `LevelInfo` 预览；恢复 8 个八仙/太极八卦材料参与合成的例外与法宝出入炉回写；恢复 6.8 双人相机居中/夹取、Buff 图标槽位、灵气最近玩家、2P 被动属性和技能键小键盘提示；当时临时使用 `include_filter="*.bin"` 并实际导出 PCK 逐条检查 **173/173** 个 `poses.bin`（该临时兜底已由 ADR-025 的原始数据清单 + `bhyh_export` 插件替换）。回归断言：`level-entry` 新增 8 项玉兔掉落/预览检查，`ui-factories` 新增法宝合成允许/拒绝检查，`coop` 新增相机/灵气/Buff/2P 被动/键位检查。验证：`check_all --godot-bin` **9/9 PASS**（33.72s）、`archive` **344/344**（10.55s）、`scene` **17/17**（155.81s）、`coop` **37/37**（204.06s）、全量 **128/128 + 5 SKIP**（308.4s，无重试）、PCK **4,200/4,200 + 173/173 bin**（7,658,426,778 字节，sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1`）。
 - Phase 25-5：Phase 25 阶段验收关闭。四个行为切片（`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`）分别由 `BaseHero`/`BaseMonster` 持有，控制器之间无互相调用；各自定向探针通过。全量关卡保持 128/128 PASS + 5 SKIP，与 Phase 24-4 的 128/128 + 5 一致；`level_1` 4 阶段通过且日志 0/0/0；`LocalCoopDamageStatsProbe` 与 `LocalCoopAttributionSourcesProbe` 通过；未改伤害、保护阈值/白条时长、动作时序、输入映射、碰撞层或存档格式。验证：`check_all` 9/9（32.75s）、`health_check` 781 脚本 0/0/0、`archive` 344/344（10.54s）、`scene` 17/17（153.38s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（24.31s）、全量 128/128 + 5 SKIP（301.0s，无重试）、`docs_audit` 749 链接 0 缺失。`naming_audit --all` 与 `whitelist_audit` 通过；`naming_compliance_audit --fail-on-error` 仍为 Phase 11-1 存量债务（目录 99.9679%、文件 99.9908%、代码 100%），未新增违规，不据此声明 L3/release 完成。
 - Phase 25-4：新增 `HitReactionController`，集中 `BaseMonster` 受击反应活动标志、代次与来源快照；`_begin/_finish/_cancel_hurt_reaction` 改为委托，各族直接读取状态改走 `is_hurt_reaction_active()`/`get_hurt_reaction_generation()`。`apply_role_hit` 进入反应时创建 `Snapshot`（实际来源目标/`BaseHero`/`hit_dic`），`get_hit_reaction_source_player()` 不再依赖已恢复的临时字段；`play_hit_effect` 与 `tao_wu_boss` 捕获代次，`_deferred_play_hurt_animation(expected_generation)` 拒绝过期动画。`BaseMonster`/`BaseHero._exit_tree` 调用 `reset_hit_reaction_state()` 清理活动反应、代次、`is_be_attacking`、待处理僵直与控制移动锁；保护/白条不重置。新增 `LocalCoopHitReactionProbe` 覆盖零击退、连续受击、Boss/白条控免、表现竞争、P2 来源快照、无来源零伤害与退出重置；召唤物/弹体/法宝/1P/2P 来源沿用 `LocalCoopAttributionSourcesProbe`。特殊 `state_hurt` 分支保留。验证：`check_all` 9/9（32.88s）、`health_check` 781 脚本 0/0/0、`scene` 17/17（155.63s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（25.07s，0/0/0）、全量 128/128 + 5 SKIP（301.0s，无重试）。未改伤害、保护阈值/白条时长、动作时序、碰撞层或双人来源归属。
 - Phase 25-3：新增 `BossProtectionController`，将 Boss 保护累计值、激活态、保护/白条计时与最近受击时间从 `BaseMonster` 迁出；`_process_boss_protect`/`_add_boss_protect_from_hit` 委托控制器，激活副作用仍由 `BaseMonster` 按旧顺序执行（清白条控制 buff、刷新控免、重置技能冷却、停速度/受击态、半透明）。`boss_blood` 改读 getter，`east_continent_monster` 覆盖改用 `is_boss_protecting()`；`settle_death_drops` 的 `death_drops_settled` 单一提交与塔层回调保持不变。新增 `LocalCoopBossProtectionProbe` 覆盖保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用。验证：`check_all` 9/9（33.73s）、`health_check` 780 脚本 0/0/0、`scene` 17/17（157.65s）、`coop` 36/36（203.57s）、`level_1` 4 阶段（25.01s，0/0/0）、全量 128/128 + 5 SKIP（307.6s，无重试）。未改 Boss 阶段推进、伤害、保护阈值/时长、掉落规则或重战。
@@ -84,13 +86,13 @@
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。
-2. **发布**：现有 PCK 是验证包，不是最小发布包；release 启动、目标设备峰值 VRAM 与首帧耗时需单独设备实测。
+2. **发布**：现有 PCK 是验证包，不是最小发布包；`bhyh_export` 清单/插件与 `export_closure_probe` 已覆盖原始 JSON/BIN 闭包，但 release 启动、目标设备峰值 VRAM 与首帧耗时需单独设备实测。
 3. **公开仓库**：不包含第三方素材；公开 clone 的缺失资源提示属于预期。
 4. **存档**：加密 JSON、`.tmp`/`.bak` 原子写与当前格式补全不变；不引入跨版本迁移链。
 5. **架构**：Autoload 与 `Global` 普通子节点运行时是遗留基线；新增需按 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) 评审。
 6. **文档**：历史验证只在归档中保留，当前页不复制逐批计数。
 7. **命名终审**：`naming_compliance_audit.py --fail-on-error` 仍返回 1，来源为 Phase 11-1 已登记的存量目录/文件债务（当前 99.9679% / 99.9908%，代码标识符 100%）；`naming_audit.py --all` 与 `whitelist_audit.py` 通过，Phase 25 未新增违规。该终审是 L3/release 项，不据此声明 release 完成。
-8. **回植剩余边界**：6.6 `Level_65`/`Level_68` 的 BOSS 出生点仍保留 `ignore_count_multiplier=true`，与 6.6 上游删除行为不同，待产品确认；上游 `Monster_63-1` 无生产场景消费者，`MagicWeapon_qlsword/Official/source.json` 与 `Music/Hero/Role6/official_manifest.json` 为无运行时消费者的溯源文件；这些不计入本轮已关闭项。
+8. **回植剩余边界**：6.6 `Level_65`/`Level_68` 的 BOSS 出生点已按上游移除 `ignore_count_multiplier`，`boss-multiplier` 探针覆盖 `×1`/`×5`；上游 `Monster_63-1` 无生产场景消费者，`MagicWeapon_qlsword/Official/source.json` 与 `Music/Hero/Role6/official_manifest.json` 为无运行时消费者的溯源文件，登记为非运行时、不移植。
 
 ---
 

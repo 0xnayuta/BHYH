@@ -35,6 +35,7 @@ check_all.py
 │   ├── convert_equipment_catalog.py --check
 │   ├── equipment_data_audit.py --check
 │   ├── png_stream_audit.py / runtime_frames_audit.py
+│   ├── export_raw_manifest.py --check
 │   ├── theme_override_audit.py / whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
@@ -95,6 +96,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `convert_equipment_catalog.py` | 装备构建源 → `EquipmentCatalog` |
 | `equipment_data_audit.py` | 装备字段、类型、随机规格审计 |
 | `convert_external_monster_catalog.py` | 外部怪物 ID → BHYH 怪物 ID/场景 |
+| `export_raw_manifest.py` | 原始数据根配置 → 精确导出清单；`--write` / `--check`，校验生产脚本字面量与插件配置 |
 
 ### 3.4 回归、探针与发布
 
@@ -106,6 +108,8 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `scene_probe_runner.py` | 场景级运行时探针套件 |
 | `archive_probe_runner.py` | 档案持久化定向夹具；隔离临时 `user://` |
 | `frame_sequence_pack_probe.py` | 实际导出 PCK 并在最小工程挂载校验路径闭包 |
+| `export_closure_probe.py` | 原始数据清单 → 实际 PCK 挂载校验 JSON/BIN；插件日志计数与清单一致 |
+| `export_release.py` | 发布前包装：清单预检 + PCK 闭包；可选 release 可执行导出 |
 | `asset_reference_audit.py` | 单遍 `rg` 扫描旧资产基名；手动执行 |
 
 ### 3.5 迁移与共用模块
@@ -130,6 +134,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `level_layout_sources.json` / `level_layout_data_exceptions.json` | 关卡布局构建源与 10 个动态/非连续例外 |
 | `equipment_sources.json` | 装备/物品构建源；由 `convert_equipment_catalog.py` 生成 Catalog |
 | `monster_dynamic_paths.json` | 关卡预载动态怪物/纹理/额外场景来源 |
+| `export_raw_roots.json` | FileAccess JSON/BIN 的根目录、扩展名与消费者；生成 `source/Script/data/export_raw_dependencies.json` |
 
 ## 5. 常用命令
 
@@ -155,6 +160,9 @@ python scripts/archive_probe_runner.py --godot "<godot>"
 python scripts/contract_scan.py --self-test
 python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
+python scripts/export_raw_manifest.py --check
+python scripts/export_closure_probe.py --self-test
+python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
 ```
 
 ## 6. 约定

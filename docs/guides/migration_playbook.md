@@ -77,7 +77,7 @@ theirs = 新版本的参考反编译源码
 - 场景先转为可比较的原生 `.tscn`，再做结构化差异；导出的 `.scn` 只作对照，不作为编辑源；
 - `project.godot` 只手工加入必要配置，不整体覆盖；
 - **数据文件也要收口**：`manifest.json`、`*.json`、`*.bin`、pose 数据等由 `FileAccess`/构建器直接读取的文件，必须校验当前路径与实际加载；
-- **导出闭包单独验证**：`export_presets.cfg`、`include_filter`、编辑器导出插件与发布依赖清单必须覆盖这些非资源文件。`all_resources` PCK 验证通过不等于 release 会包含它们；缺少导出插件或 include filter 时，必须实际导出 PCK 并检查路径；
+- **导出闭包单独验证**：`export_presets.cfg`、生成清单与编辑器导出插件必须覆盖这些非资源文件。`FileAccess` JSON/BIN 由 `scripts/export_raw_roots.json` 生成 `export_raw_dependencies.json`，再由 `bhyh_export` 插件写入；不使用 `include_filter` 通配兜底。`all_resources` PCK 验证通过不等于 release 会包含它们；必须实际导出 PCK 并检查路径；
 - 上游 `source.json`、manifest 等仅用于溯源的文件，可以不进入生产，但台账要明确标记“非运行时、无消费者”，不能静默删除。
 
 ### Phase 4：收口验收
@@ -177,7 +177,7 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 | UID / `.import` | 外部源素材维护导入配置；原生 `.tscn/.tres` 使用资源头 UID，脚本按机制维护 `.uid`；不复制缓存或伪造 `.import` |
 | 命名 | 遵循 `docs/standards/naming_standard.md`，保留类型顶层与精确冻结例外；按实际收益迁移路径 |
 | 数据 | 静态定义优先 Resource；会话/槽位状态与 JSON 持久化分离，不继续扩大 Global 与裸字典 |
-| 非资源文件 | `FileAccess` 读取的 JSON/BIN/pose 数据必须有当前路径、加载探针与导出闭包证据；编辑器导出插件或 `include_filter` 缺失时按失败处理 |
+| 非资源文件 | `FileAccess` 读取的 JSON/BIN/pose 数据必须有当前路径、加载探针与导出闭包证据；必须由原始数据清单 + `bhyh_export` 插件进入 PCK，不使用 `include_filter` 兜底 |
 
 ### 5.1 总体目标架构下的高版本回植检查表
 

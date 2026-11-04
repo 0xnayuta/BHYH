@@ -212,7 +212,7 @@ python scripts/scene_probe_runner.py --godot "<godot>"
 
 变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。存档 IO、档案校验、保存入口或角色范围变更时，另跑档案持久化定向夹具 `python scripts/archive_probe_runner.py --godot "<godot>"`；该夹具含失败/负向断言（无会话拒绝保存、写入失败结构化结果、后台失败重试、音频无效父节点/空路径/重复停止）。
 
-第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针（`scene_probe_runner.py` 套件另含 `level-progress-exit`、`ui-factories`、`run-context`、`level-entry`、`utils`、`weiyang-symbol`、`action-frames`、`atlas-accessor`、`pet-runtime`）；探针日志门禁扫描完整输出（不按收尾标记截断），并校验收尾标记存在；探针主动构造的失败日志必须在 `ProbeSpec.expected_noise` 逐条登记理由，禁止泛化匹配；契约扫描的 `hud_panel_boundary` 约束 HUD/面板域不直写档案与字典，并识别 `_data()`、`data_for(_slot)(...).player_data`、嵌套修改与别名；`audio_entry_boundary` 约束 BGM/SFX 只经 `AudioRuntime`。`archive_probe_runner` 的 BGM 重挂断言按帧轮询播放状态，避免 headless 音频驱动时序抖动误报；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
+第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针（`scene_probe_runner.py` 套件另含 `level-progress-exit`、`ui-factories`、`run-context`、`level-entry`、`boss-multiplier`、`yutu-drop`、`utils`、`weiyang-symbol`、`action-frames`、`atlas-accessor`、`pet-runtime`）；探针日志门禁扫描完整输出（不按收尾标记截断），并校验收尾标记存在；探针主动构造的失败日志必须在 `ProbeSpec.expected_noise` 逐条登记理由，禁止泛化匹配；契约扫描的 `hud_panel_boundary` 约束 HUD/面板域不直写档案与字典，并识别 `_data()`、`data_for(_slot)(...).player_data`、嵌套修改与别名；`audio_entry_boundary` 约束 BGM/SFX 只经 `AudioRuntime`。`archive_probe_runner` 的 BGM 重挂断言按帧轮询播放状态，避免 headless 音频驱动时序抖动误报；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
 
 ### 6.1 单关冒烟：`level_test_runner.py`
 
@@ -317,6 +317,9 @@ python scripts/convert_frame_sequences.py --check
 python scripts/convert_frame_sequences.py --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
+python scripts/export_raw_manifest.py --check
+python scripts/export_closure_probe.py --self-test
+python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
 ```
 
 `convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致；发布清单 schema 3 包含 `layout_catalog`、`equipment_catalog`（`equipment_catalog.tres`）与 98 个布局路径。
@@ -325,17 +328,20 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 
 `convert_external_monster_catalog.py --check` 校验外部 ZMWS 怪物 ID → BHYH 怪物 ID/场景映射；当前精确中文名优先，去除空白/全角/间隔号后唯一匹配次之，未匹配项不猜测。
 
-`--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内只有一个**验证用**预设（`all_resources`），它不是发布裁剪策略，也不代表 PCK 已验证。
+`--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内有验证用（`Windows Desktop (validation)`）与发布用（`Windows Desktop (release)`）两个 `all_resources` 预设。原始数据由 `bhyh_export` 插件按生成清单加入，不使用 `include_filter` 兜底；预设声明不等于 PCK 已验证。
 
 > 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。2026-11-02 Phase 33-5 重新导出并校验 **4,200/4,200 可达**（新增 `equipment_catalog.tres`），PCK **7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
 
-`frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。三种证据必须分开记录：
+`frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。配置、源清单、实际包与发布包装证据必须分开记录：
 
 | 证据 | 命令 | 覆盖范围 |
 |:---|:---|:---|
 | 源闭包 | `convert_frame_sequences.py --check` + `convert_level_preload_catalog.py --check` | 源文件存在、schema、UID、Catalog、FrameSequence 与关卡预载依赖清单一致 |
 | 预设声明 | `convert_frame_sequences.py --export-preset` | 预设过滤器不会排除依赖；仍是配置级 |
 | 发布包 | `frame_sequence_pack_probe.py` | 合并两份清单后，引擎挂载 PCK 逐条判定 FrameSequence/关卡预载/布局 Catalog/装备 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
+| 原始数据源清单 | `python scripts/export_raw_manifest.py --check` | 清单与素材树、根配置、生产脚本 `res://...json/bin` 字面量、插件启用和 `include_filter` 兜底一致；素材缺失返回 BLOCKED |
+| 原始数据包 | `python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"` | 实际导出 PCK；插件日志 `files == expected` 且 `missing == 0`；挂载后逐条 `FileAccess` 检查 JSON/BIN；缺模板返回 BLOCKED |
+| 发布包装 | `python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)"` | 先跑清单预检，再跑原始数据 PCK 探针；可选 `--output` 导出 release 可执行文件 |
 
 判定：
 
@@ -343,7 +349,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>"
 - 编号帧：登记 profile 的输出存在且内容未过期；
 - 哪吒：输出存在、内容与预览 JSON 一致、源 schema 合法；分类报告 `missing` / `stale` / `invalid`，任一非零即失败。
 
-Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `check_all`；哪吒转换器仍需在对应资源变更时单独执行。`frame_sequence_pack_probe.py` 依赖本机导出模板，不进入日常门禁，发布前单独执行；缺模板时明确 BLOCKED，不得记为通过。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
+Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `check_all`；`export_raw_manifest.py --check` 也进入 `contract_gate`，校验清单、素材、插件启用与生产脚本字面量。哪吒转换器仍需在对应资源变更时单独执行。`frame_sequence_pack_probe.py`、`export_closure_probe.py` 与 `export_release.py` 依赖本机导出模板，不进入日常门禁，发布前单独执行；缺模板时明确 BLOCKED，不得记为通过。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
 
 ---
 

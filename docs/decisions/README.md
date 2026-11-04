@@ -49,6 +49,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md) | AtlasMetadata 只读 View、路径身份与失败语义 | Accepted | 运行时 View、`.data` 边界、路径例外、迁移与失败处理 |
 | [ADR-023](ADR-023-level-layout-data-contract.md) | 关卡布局走构建期生成的 Resource，绞杀式迁移脚本内数据表 | **Accepted** | 关卡数据载体、`BaseLevel` 扩展点默认实现、生成器与迁移批次；30-1 已迁移 `level_48`，30-2 已接入外部怪物映射与原始 ZMWS 驱动，30-3 收口（69 迁出 + 10 例外） |
 | [ADR-024](ADR-024-check-all-nine-gate-dimensions.md) | `check_all` 九维门禁与维度清单治理 | Accepted | 九维门禁、`acceptance.md` 单一文档事实源；扩展 ADR-012 |
+| [ADR-025](ADR-025-raw-data-export-closure.md) | 原始数据导出清单、导出插件与实际 PCK 验证 | Accepted | FileAccess JSON/BIN、导出闭包、发布包装；与 ADR-020 第 7 条衔接 |
 
 ### 2.1 常见决策检索
 
@@ -63,6 +64,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | 动画帧、图集、Spine 如何生产与加载？ | [ADR-020](ADR-020-typed-visual-assets-and-streaming-lifecycle.md)、[ADR-010](ADR-010-spine-runtime-boundary.md) |
 | 提交前必须跑哪些门禁？ | [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md)、[ADR-024](ADR-024-check-all-nine-gate-dimensions.md) |
 | 版本迁移能否整包覆盖？ | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) |
+| 原始 JSON/BIN 如何进入 PCK？ | [ADR-025](ADR-025-raw-data-export-closure.md)；视觉资源契约见 ADR-020 |
 | 本地双人数据为什么不是第二个 Autoload？ | [ADR-017](ADR-017-local-coop-profile-isolation.md) |
 | 项目总体目标、状态所有权和后续架构治理以什么为准？ | [ADR-021](ADR-021-project-wide-target-architecture.md)；视觉资源子契约仍见 ADR-020 |
 | AtlasMetadata 运行时如何读取、为什么没有 UID？ | [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md)；矩阵见 [`../reference/atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) |
