@@ -77,6 +77,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
 | `verify_dragonbones_factories.py` | `.dbfactory` 独立子进程加载与坏资源二分定位 |
+| `asset_library_catalog.py` | 从私有素材库生成 ZMWS 资产库存与消费矩阵；`--check` 校验已提交矩阵 |
 
 ### 3.3 构建期转换
 

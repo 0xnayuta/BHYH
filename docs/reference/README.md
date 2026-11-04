@@ -25,6 +25,7 @@
 | [`equipment_data_contract.md`](equipment_data_contract.md) | 当前装备定义/规则/实例三层契约与发布闭包 |
 | [`ui_theme_contract.md`](ui_theme_contract.md) | 当前 Theme 资源、变体命名、最终例外与审计 |
 | [`spine_platform_baseline.md`](spine_platform_baseline.md) | Spine 运行时、平台、许可证与暂缓边界 |
+| [`zmws_asset_integration_matrix.md`](zmws_asset_integration_matrix.md) | ZMWS 已导入资产的域级消费矩阵、生命周期状态与垂直切片；生成脚本为 `scripts/asset_library_catalog.py` |
 
 ## 2. 边界
 
