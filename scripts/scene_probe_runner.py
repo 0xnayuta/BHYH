@@ -231,6 +231,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         timeout_seconds=90,
     ),
     ProbeSpec(
+        key="yutu-drop",
+        title="6.9 玉兔掉落展开探针",
+        script_name="yutu_drop_probe.gd",
+        scene_name="yutu_drop_probe.tscn",
+        result_prefix="YUTU_DROP_PROBE_RESULT=",
+        report_stem="yutu_drop_probe_report",
+        teardown_marker="YUTU_DROP_PROBE_TEARDOWN",
+        quit_after_frames=180,
+        timeout_seconds=90,
+    ),
+    ProbeSpec(
         key="utils",
         title="通用工具与角色贴图运行时探针",
         script_name="utils_probe.gd",
