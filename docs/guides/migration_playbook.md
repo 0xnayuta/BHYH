@@ -105,7 +105,7 @@ python scripts/naming_audit.py --all
 python scripts/whitelist_audit.py --fail-on-error
 ```
 
-> `naming_compliance_audit.py --fail-on-error` 按 `acceptance.md` 的 L3 命名终审执行；当前工程存在已登记的 Phase 11 存量基线债务，必须把已知项与实际新增项分开记录，不能把 `check_all` 通过写成命名终审已通过。
+> `naming_compliance_audit.py --fail-on-error` 按 `acceptance.md` 的 L3 命名终审执行；当前工程目录、文件与代码标识符均为 100% 合规，后续新增项应按同一门禁记录，不能把 `check_all` 通过替代命名终审。
 
 验收标准：
 

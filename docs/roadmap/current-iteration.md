@@ -129,7 +129,7 @@
 
 **验证**：`check_all --godot-bin` 9/9（32.75s）；`health_check` 781 脚本 0/0/0；`archive` 344/344（10.54s）；`scene` 17/17（153.38s）；`coop` 37/37（202.31s）；`level_1` 4 阶段（24.31s，0/0/0）；全量 128/128 + 5 SKIP（301.0s，无重试）；`docs_audit` 749 链接 0 缺失。
 
-**边界**：`naming_compliance_audit.py --fail-on-error` 仍返回 1，属于 Phase 11-1 已登记的存量命名债务（目录 99.9679%、文件 99.9908%、代码标识符 100%）；本阶段 `naming_audit.py --all` 与 `whitelist_audit.py` 通过，未新增违规。该结果是 L3/release 终审项，不冒充 Phase 25 阶段出口，也不声明 release 完成。
+**命名终审**：`naming_compliance_audit.py --fail-on-error` 已通过；第三方 DragonBones 前缀登记与私有 `Data → data` 收敛完成，目录、文件、代码标识符均为 100%。该结果可作为 L3/release 命名终审证据，但不冒充目标设备性能与正式发布包裁剪验证。
 
 ---
 
