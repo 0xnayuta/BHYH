@@ -28,19 +28,20 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **32.75s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **33.72s**） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **344/344 PASS**（10.54s，含阵法 1P/2P 命令与回滚） |
-| `scene_probe_runner` | **17/17 PASS**（153.38s，含 `pet-runtime`、`load-guard`） |
-| `coop_probe_runner` | **37/37 PASS**（202.31s，含 `LocalCoopAutoBattleProbe`/`LocalCoopMagicPresentationProbe`/`LocalCoopBossProtectionProbe`/`LocalCoopHitReactionProbe`、宿主节点/旧入口、P2 操作者、1P/2P 选择器、切页、快照互斥与 `clear` 清理） |
-| `level_1` 冒烟 | **PASS，4 阶段，24.31s，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 301.0s，默认 auto 并发，本轮无重试） |
-| PCK 验证包 | **4,200/4,200 可达**；7,628,138,078 字节；sha256 `b0d6d3526256…` |
+| `archive_probe_runner` | **344/344 PASS**（10.55s，含阵法 1P/2P 命令与回滚） |
+| `scene_probe_runner` | **17/17 PASS**（155.81s，含 `pet-runtime`、`load-guard`） |
+| `coop_probe_runner` | **37/37 PASS**（204.06s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（包含在全量回归中） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 308.4s，默认 auto 并发，本轮无重试） |
+| PCK 验证包 | **4,200/4,200 路径可达 + 173/173 `.bin` 可达**；7,658,426,778 字节；sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1` |
 
-**边界**：PCK 为验证用 `all_resources` 包的路径闭包，不等于 release 加载、目标设备 VRAM、首帧耗时或最小发布包已验证。
+**边界**：PCK 为验证用 `all_resources` 包的路径闭包与实际 `.bin` 检查，不等于 release 启动、目标设备 VRAM、首帧耗时或最小发布包已验证；`export_presets.cfg` 的 `include_filter="*.bin"` 已覆盖 raw pose 数据。
 
 ### 最近完成
 
+- 2026-11-04 6.6/6.8 回植缺口收口：补齐清音阁/五台山口/桃花谷/万妖穴四条玉兔制作书掉落及 `LevelInfo` 预览；恢复 8 个八仙/太极八卦材料参与合成的例外与法宝出入炉回写；恢复 6.8 双人相机居中/夹取、Buff 图标槽位、灵气最近玩家、2P 被动属性和技能键小键盘提示；验证预设增加 `include_filter="*.bin"`，实际导出 PCK 后逐条检查 **173/173** 个 `poses.bin`。回归断言：`level-entry` 新增 8 项玉兔掉落/预览检查，`ui-factories` 新增法宝合成允许/拒绝检查，`coop` 新增相机/灵气/Buff/2P 被动/键位检查。验证：`check_all --godot-bin` **9/9 PASS**（33.72s）、`archive` **344/344**（10.55s）、`scene` **17/17**（155.81s）、`coop` **37/37**（204.06s）、全量 **128/128 + 5 SKIP**（308.4s，无重试）、PCK **4,200/4,200 + 173/173 bin**（7,658,426,778 字节，sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1`）。
 - Phase 25-5：Phase 25 阶段验收关闭。四个行为切片（`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`）分别由 `BaseHero`/`BaseMonster` 持有，控制器之间无互相调用；各自定向探针通过。全量关卡保持 128/128 PASS + 5 SKIP，与 Phase 24-4 的 128/128 + 5 一致；`level_1` 4 阶段通过且日志 0/0/0；`LocalCoopDamageStatsProbe` 与 `LocalCoopAttributionSourcesProbe` 通过；未改伤害、保护阈值/白条时长、动作时序、输入映射、碰撞层或存档格式。验证：`check_all` 9/9（32.75s）、`health_check` 781 脚本 0/0/0、`archive` 344/344（10.54s）、`scene` 17/17（153.38s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（24.31s）、全量 128/128 + 5 SKIP（301.0s，无重试）、`docs_audit` 749 链接 0 缺失。`naming_audit --all` 与 `whitelist_audit` 通过；`naming_compliance_audit --fail-on-error` 仍为 Phase 11-1 存量债务（目录 99.9679%、文件 99.9908%、代码 100%），未新增违规，不据此声明 L3/release 完成。
 - Phase 25-4：新增 `HitReactionController`，集中 `BaseMonster` 受击反应活动标志、代次与来源快照；`_begin/_finish/_cancel_hurt_reaction` 改为委托，各族直接读取状态改走 `is_hurt_reaction_active()`/`get_hurt_reaction_generation()`。`apply_role_hit` 进入反应时创建 `Snapshot`（实际来源目标/`BaseHero`/`hit_dic`），`get_hit_reaction_source_player()` 不再依赖已恢复的临时字段；`play_hit_effect` 与 `tao_wu_boss` 捕获代次，`_deferred_play_hurt_animation(expected_generation)` 拒绝过期动画。`BaseMonster`/`BaseHero._exit_tree` 调用 `reset_hit_reaction_state()` 清理活动反应、代次、`is_be_attacking`、待处理僵直与控制移动锁；保护/白条不重置。新增 `LocalCoopHitReactionProbe` 覆盖零击退、连续受击、Boss/白条控免、表现竞争、P2 来源快照、无来源零伤害与退出重置；召唤物/弹体/法宝/1P/2P 来源沿用 `LocalCoopAttributionSourcesProbe`。特殊 `state_hurt` 分支保留。验证：`check_all` 9/9（32.88s）、`health_check` 781 脚本 0/0/0、`scene` 17/17（155.63s）、`coop` 37/37（202.31s）、`level_1` 4 阶段（25.07s，0/0/0）、全量 128/128 + 5 SKIP（301.0s，无重试）。未改伤害、保护阈值/白条时长、动作时序、碰撞层或双人来源归属。
 - Phase 25-3：新增 `BossProtectionController`，将 Boss 保护累计值、激活态、保护/白条计时与最近受击时间从 `BaseMonster` 迁出；`_process_boss_protect`/`_add_boss_protect_from_hit` 委托控制器，激活副作用仍由 `BaseMonster` 按旧顺序执行（清白条控制 buff、刷新控免、重置技能冷却、停速度/受击态、半透明）。`boss_blood` 改读 getter，`east_continent_monster` 覆盖改用 `is_boss_protecting()`；`settle_death_drops` 的 `death_drops_settled` 单一提交与塔层回调保持不变。新增 `LocalCoopBossProtectionProbe` 覆盖保护激活、白条超时、控制免疫、技能重置、掉落唯一结算与重复调用。验证：`check_all` 9/9（33.73s）、`health_check` 780 脚本 0/0/0、`scene` 17/17（157.65s）、`coop` 36/36（203.57s）、`level_1` 4 阶段（25.01s，0/0/0）、全量 128/128 + 5 SKIP（307.6s，无重试）。未改 Boss 阶段推进、伤害、保护阈值/时长、掉落规则或重战。
