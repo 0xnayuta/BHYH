@@ -350,8 +350,7 @@ const BIRTH_POINTS := [
 		"total": 1,
 		"face": -1,
 		"after_spawn": 0,
-		"after_dead": 0,
-		"ignore_count_multiplier": true
+		"after_dead": 0
 	},
 ]
 

@@ -220,6 +220,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         timeout_seconds=180,
     ),
     ProbeSpec(
+        key="boss-multiplier",
+        title="6.6 BOSS 刷怪倍率探针",
+        script_name="boss_multiplier_probe.gd",
+        scene_name="boss_multiplier_probe.tscn",
+        result_prefix="BOSS_MULTIPLIER_PROBE_RESULT=",
+        report_stem="boss_multiplier_probe_report",
+        teardown_marker="BOSS_MULTIPLIER_PROBE_TEARDOWN",
+        quit_after_frames=180,
+        timeout_seconds=90,
+    ),
+    ProbeSpec(
         key="utils",
         title="通用工具与角色贴图运行时探针",
         script_name="utils_probe.gd",
