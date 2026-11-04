@@ -72,7 +72,7 @@ movie_writer/disable_vsync=true
 
 [editor_overrides]
 
-text_editor/behavior/indent/type=1
+text_editor/behavior/indent/type=0
 
 [editor_plugins]
 
