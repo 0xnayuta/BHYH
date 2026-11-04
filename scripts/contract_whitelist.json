@@ -36,7 +36,7 @@
   ],
   "schema_version": 2,
   "frozen": true,
-  "frozen_at": "2026-10-21",
+  "frozen_at": "2026-11-04",
   "freeze_policy": "只减不增；新增条目必须完成技术评审并更新 frozen_manifest_sha256",
   "naming": {
     "numeric_directory_prefixes": [
@@ -410,7 +410,8 @@
       "Scene/mount/rider_adjustments/role6/1004700.tscn"
     ],
     "third_party_prefixes": [
-      "addons/godot_mcp"
+      "addons/godot_mcp",
+      "addons/godot_dragon_bones.daylily-zeleen/"
     ],
     "companion_tool_suffixes": [
       ".import",
@@ -452,7 +453,15 @@
       "date": "2026-10-21",
       "reason": "第三方插件遵从上游命名",
       "count": 1
+    },
+    {
+      "category": "third_party",
+      "status": "approved",
+      "reviewer": "Phase 11-3",
+      "date": "2026-11-04",
+      "reason": "DragonBones GDExtension 目录与图标遵从上游包命名；改名破坏插件路径与升级基线",
+      "count": 1
     }
   ],
-  "frozen_manifest_sha256": "ee36a5db7f26eb3f3bb134a11cc63d55d4d4fad718f12732541b569a46f17853"
+  "frozen_manifest_sha256": "d40f2cd91a78b6c0acf3066059a76d1bfa195ffc446861c00740825c0d6a7371"
 }

@@ -3,7 +3,7 @@
 """构建期生成外部 ZMWS 怪物 ID → BHYH 怪物场景映射。
 
 匹配规则：
-- 以 `source/Data/zmws_config/monster.json` 的 `name` 为外部名称；
+- 以 `source/data/zmws_config/monster.json` 的 `name` 为外部名称；
 - 从 `source/Scene/monster/monster_<id>.tscn` 的脚本链读取 `my_mr_name` 字面量；
 - 名称完全一致才登记；同一名称有多个 BHYH 场景时固定取最小 ID；
 - 额外允许去除空白、全角兼容字符与间隔号后唯一匹配（如「邪悟空」→「邪·悟空」）；
@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source"
-MONSTER_CONFIG = SOURCE / "Data/zmws_config/monster.json"
+MONSTER_CONFIG = SOURCE / "data/zmws_config/monster.json"
 MONSTER_SCENE_DIR = SOURCE / "Scene/monster"
 MONSTER_SCRIPT_DIR = SOURCE / "Script/monster"
 CATALOG_PATH = SOURCE / "Script/data/external_monster_catalog.tres"

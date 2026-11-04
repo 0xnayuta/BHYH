@@ -16,7 +16,7 @@ const SAMPLES := [
 func _init() -> void:
 	var cfg = CONFIG_SCRIPT.new()
 	if not cfg.is_available():
-		print("FAIL 配置索引不可用（检查 res://Data/zmws_config/index.json）")
+		print("FAIL 配置索引不可用（检查 res://data/zmws_config/index.json）")
 		quit(1)
 		return
 

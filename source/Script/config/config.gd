@@ -1,11 +1,11 @@
 extends Node
 
 ## ZMWS 数值配置表查询入口（Autoload: ZmwsConfig）。
-## 表文件来自素材仓 Data/zmws_config/，按需加载并缓存，不做全量预载。
+## 表文件来自素材仓 data/zmws_config/，按需加载并缓存，不做全量预载。
 ## 不使用 class_name：干净克隆首次 --headless 运行时全局类名缓存不存在。
 
 const TABLE_SCRIPT := preload("res://Script/config/config_table.gd")
-const ROOT := "res://Data/zmws_config"
+const ROOT := "res://data/zmws_config"
 
 var _cache: Dictionary = {}
 var _index: Dictionary = {}

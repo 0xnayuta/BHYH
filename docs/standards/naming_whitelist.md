@@ -311,6 +311,7 @@ Scene/mount/rider_adjustments/role6/1003500.tscn  Scene/mount/rider_adjustments/
 | 路径 | 理由 |
 |:---|:---|
 | `addons/godot_mcp` | 第三方编辑器通信插件，遵从插件自身命名 |
+| `addons/godot_dragon_bones.daylily-zeleen/` | 第三方 DragonBones GDExtension；目录与图标遵从上游包命名，改名破坏插件路径与升级基线 |
 
 ### 2.3 已知缺失资源白名单（0 条 · 已清空）
 

@@ -49,7 +49,7 @@
       "consumer": "NorthOriginalData"
     },
     {
-      "path": "res://Data/zmws_config/",
+      "path": "res://data/zmws_config/",
       "extensions": [
         ".json"
       ],
