@@ -1,0 +1,70 @@
+{
+  "schema_id": "export_raw_roots",
+  "schema_version": 1,
+  "roots": [
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "NeZhaOfficialPartsData / NeZhaOfficialParts"
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "YutuOfficialParts"
+    },
+    {
+      "path": "res://Art/mount/official_parts/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "MountCatalog / MountVisual / MountBoneGuide"
+    },
+    {
+      "path": "res://Art/mount/official_riders/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "MountRuntime / official rider pose data"
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/",
+      "extensions": [
+        ".json"
+      ],
+      "consumer": "Game4PalaceTerrain / CloudTerrain"
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/",
+      "extensions": [
+        ".json"
+      ],
+      "consumer": "NorthOriginalData"
+    }
+  ],
+  "files": [
+    {
+      "path": "res://Art/hero_picture/role_7/equipment.json",
+      "consumer": "YutuEquipmentData.definitions"
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/skills.json",
+      "consumer": "YutuSkillData"
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/moon_dance_collision.json",
+      "consumer": "YutuSkillEffect"
+    },
+    {
+      "path": "res://Art/hero_picture/role_4/cang_mu_long_yun/frames/cmly_frames.json",
+      "consumer": "CangMuLongYunEffect fallback frame metadata"
+    }
+  ]
+}

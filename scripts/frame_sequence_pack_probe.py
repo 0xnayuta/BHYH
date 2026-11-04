@@ -248,7 +248,7 @@ def main() -> int:
     parser.add_argument("--manifest", action="append", default=None, help="依赖清单路径；可重复，默认读取两份构建清单")
     parser.add_argument("--self-test", action="store_true", help="只校验依赖清单结构")
     parser.add_argument("--report", default=None, help="可选 JSON 报告输出路径")
-    parser.add_argument("--export-timeout", type=int, default=900, help="导出子进程墙钟上限（秒）")
+    parser.add_argument("--export-timeout", type=int, default=1800, help="导出子进程墙钟上限（秒）")
     parser.add_argument("--probe-timeout", type=int, default=300, help="包内校验子进程墙钟上限（秒）")
     args = parser.parse_args()
     manifest_paths = [Path(item) for item in args.manifest] if args.manifest else list(MANIFEST_PATHS)

@@ -1,0 +1,2103 @@
+{
+  "schema_id": "export_raw_dependencies",
+  "schema_version": 1,
+  "roots_config": "scripts/export_raw_roots.json",
+  "files": [
+    {
+      "path": "res://Art/hero_picture/role_4/cang_mu_long_yun/frames/cmly_frames.json",
+      "bytes": 7169
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/default/poses.bin",
+      "bytes": 285696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/default/poses.json",
+      "bytes": 5520
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/default/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/default/preview_1.json",
+      "bytes": 1690
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/default/preview_2.json",
+      "bytes": 1642
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y10/poses.bin",
+      "bytes": 452808
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y10/poses.json",
+      "bytes": 6681
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y10/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y10/preview_1.json",
+      "bytes": 1688
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y10/preview_2.json",
+      "bytes": 1644
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y11/poses.bin",
+      "bytes": 466344
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y11/poses.json",
+      "bytes": 6702
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y11/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y11/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y11/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y12/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y12/poses.json",
+      "bytes": 6755
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y12/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y12/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y12/preview_2.json",
+      "bytes": 1733
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y13/poses.bin",
+      "bytes": 466344
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y13/poses.json",
+      "bytes": 6706
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y13/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y13/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y13/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y14/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y14/poses.json",
+      "bytes": 6758
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y14/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y14/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y14/preview_2.json",
+      "bytes": 1660
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y15/poses.bin",
+      "bytes": 466344
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y15/poses.json",
+      "bytes": 6704
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y15/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y15/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y15/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y16/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y16/poses.json",
+      "bytes": 6730
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y16/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y16/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y16/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y17/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y17/poses.json",
+      "bytes": 6730
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y17/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y17/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y17/preview_2.json",
+      "bytes": 1694
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y18/poses.bin",
+      "bytes": 466344
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y18/poses.json",
+      "bytes": 6702
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y18/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y18/preview_1.json",
+      "bytes": 1686
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y18/preview_2.json",
+      "bytes": 1662
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y22/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y22/poses.json",
+      "bytes": 6733
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y22/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y22/preview_1.json",
+      "bytes": 1690
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y22/preview_2.json",
+      "bytes": 1657
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y23/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y23/poses.json",
+      "bytes": 6731
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y23/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y23/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y23/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y24/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y24/poses.json",
+      "bytes": 6757
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y24/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y24/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y24/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y25/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y25/poses.json",
+      "bytes": 6733
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y25/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y25/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y25/preview_2.json",
+      "bytes": 1688
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y26/poses.bin",
+      "bytes": 466344
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y26/poses.json",
+      "bytes": 6705
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y26/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y26/preview_1.json",
+      "bytes": 1697
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y26/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y27/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y27/poses.json",
+      "bytes": 6730
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y27/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y27/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y27/preview_2.json",
+      "bytes": 1690
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y28/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y28/poses.json",
+      "bytes": 6731
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y28/preview_0.json",
+      "bytes": 1664
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y28/preview_1.json",
+      "bytes": 1697
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y28/preview_2.json",
+      "bytes": 1698
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y29/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y29/poses.json",
+      "bytes": 6733
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y29/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y29/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y29/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y2v500/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y2v500/poses.json",
+      "bytes": 6762
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y2v500/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y2v500/preview_1.json",
+      "bytes": 1690
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y2v500/preview_2.json",
+      "bytes": 1642
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y3/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y3/poses.json",
+      "bytes": 6750
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y3/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y3/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y3/preview_2.json",
+      "bytes": 1657
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y31/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y31/poses.json",
+      "bytes": 6754
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y31/preview_0.json",
+      "bytes": 1664
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y31/preview_1.json",
+      "bytes": 1697
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y31/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y32/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y32/poses.json",
+      "bytes": 6728
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y32/preview_0.json",
+      "bytes": 1694
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y32/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y32/preview_2.json",
+      "bytes": 1731
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y33/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y33/poses.json",
+      "bytes": 6736
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y33/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y33/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y33/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y34/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y34/poses.json",
+      "bytes": 6752
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y34/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y34/preview_1.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y34/preview_2.json",
+      "bytes": 1657
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y35/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y35/poses.json",
+      "bytes": 6732
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y35/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y35/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y35/preview_2.json",
+      "bytes": 1697
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y36/poses.bin",
+      "bytes": 412200
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y36/poses.json",
+      "bytes": 6605
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y36/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y36/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y36/preview_2.json",
+      "bytes": 1698
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y37/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y37/poses.json",
+      "bytes": 6755
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y37/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y37/preview_1.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y37/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y39/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y39/poses.json",
+      "bytes": 6756
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y39/preview_0.json",
+      "bytes": 1664
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y39/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y39/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y4/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y4/poses.json",
+      "bytes": 6750
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y4/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y4/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y4/preview_2.json",
+      "bytes": 1658
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y40/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y40/poses.json",
+      "bytes": 6757
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y40/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y40/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y40/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y42/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y42/poses.json",
+      "bytes": 6732
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y42/preview_0.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y42/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y42/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y44/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y44/poses.json",
+      "bytes": 6733
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y44/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y44/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y44/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y45/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y45/poses.json",
+      "bytes": 6755
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y45/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y45/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y45/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y47/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y47/poses.json",
+      "bytes": 6752
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y47/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y47/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y47/preview_2.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y5/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y5/poses.json",
+      "bytes": 6751
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y5/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y5/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y5/preview_2.json",
+      "bytes": 1690
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y6/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y6/poses.json",
+      "bytes": 6754
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y6/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y6/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y6/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y7/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y7/poses.json",
+      "bytes": 6726
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y7/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y7/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y7/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y8/poses.bin",
+      "bytes": 493416
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y8/poses.json",
+      "bytes": 6751
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y8/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y8/preview_1.json",
+      "bytes": 1696
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y8/preview_2.json",
+      "bytes": 1693
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y9/poses.bin",
+      "bytes": 479880
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y9/poses.json",
+      "bytes": 6727
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y9/preview_0.json",
+      "bytes": 1654
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y9/preview_1.json",
+      "bytes": 1695
+    },
+    {
+      "path": "res://Art/hero_picture/role_6/official_parts_trial/y9/preview_2.json",
+      "bytes": 1691
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/equipment.json",
+      "bytes": 7402
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/moon_dance_collision.json",
+      "bytes": 29817
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/blade/poses.bin",
+      "bytes": 63612
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/blade/poses.json",
+      "bytes": 17890
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/default/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/default/poses.json",
+      "bytes": 6297
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_1/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_1/poses.json",
+      "bytes": 6395
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_11/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_11/poses.json",
+      "bytes": 6433
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_15/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_15/poses.json",
+      "bytes": 6418
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_17/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_17/poses.json",
+      "bytes": 6433
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_2/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_2/poses.json",
+      "bytes": 6411
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_23/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_23/poses.json",
+      "bytes": 6412
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_24/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_24/poses.json",
+      "bytes": 6415
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_26/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_26/poses.json",
+      "bytes": 6415
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_28/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_28/poses.json",
+      "bytes": 6437
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_3/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_3/poses.json",
+      "bytes": 6411
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_33/poses.bin",
+      "bytes": 284868
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_33/poses.json",
+      "bytes": 6393
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_35/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_35/poses.json",
+      "bytes": 6415
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_36/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_36/poses.json",
+      "bytes": 6431
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_4/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_4/poses.json",
+      "bytes": 6431
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_5/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_5/poses.json",
+      "bytes": 6412
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_6/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_6/poses.json",
+      "bytes": 6436
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_7/poses.bin",
+      "bytes": 301752
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_7/poses.json",
+      "bytes": 6414
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_9/poses.bin",
+      "bytes": 318636
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/gear_9/poses.json",
+      "bytes": 6435
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/toxin/poses.bin",
+      "bytes": 4860
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/official_parts/toxin/poses.json",
+      "bytes": 3267
+    },
+    {
+      "path": "res://Art/hero_picture/role_7/skills.json",
+      "bytes": 237169
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/cloud_source_config.json",
+      "bytes": 12002
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1105.json",
+      "bytes": 100
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1106.json",
+      "bytes": 101
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1109.json",
+      "bytes": 2983
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1113.json",
+      "bytes": 3527
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1114.json",
+      "bytes": 3225
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1116.json",
+      "bytes": 137
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1117.json",
+      "bytes": 137
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1118.json",
+      "bytes": 136
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1119.json",
+      "bytes": 136
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1120.json",
+      "bytes": 137
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1120_dead.json",
+      "bytes": 306
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1121.json",
+      "bytes": 1557
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/item_1122.json",
+      "bytes": 137
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/level_72.json",
+      "bytes": 16438
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/level_73.json",
+      "bytes": 30245
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/level_74.json",
+      "bytes": 13843
+    },
+    {
+      "path": "res://Art/level/game_4_level/imported/terrain/level_75.json",
+      "bytes": 11102
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/buffs.json",
+      "bytes": 23782
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1123/manifest.json",
+      "bytes": 269
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1124/manifest.json",
+      "bytes": 719
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1125/manifest.json",
+      "bytes": 1282
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1128/manifest.json",
+      "bytes": 458
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1129/manifest.json",
+      "bytes": 456
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1145/manifest.json",
+      "bytes": 4998
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1146/manifest.json",
+      "bytes": 5004
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1148/manifest.json",
+      "bytes": 540
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1155/manifest.json",
+      "bytes": 544
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1156/manifest.json",
+      "bytes": 468
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1157/manifest.json",
+      "bytes": 269
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1158/manifest.json",
+      "bytes": 812
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/items/item_1159/manifest.json",
+      "bytes": 1041
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_76.json",
+      "bytes": 41948
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_77.json",
+      "bytes": 69671
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_78.json",
+      "bytes": 21432
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_79.json",
+      "bytes": 33692
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_80.json",
+      "bytes": 16555
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_80_hidden.json",
+      "bytes": 8931
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_81.json",
+      "bytes": 29592
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_82.json",
+      "bytes": 21906
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_83.json",
+      "bytes": 25713
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_84.json",
+      "bytes": 47471
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/level_85.json",
+      "bytes": 81730
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/levels.json",
+      "bytes": 910
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/monsters.json",
+      "bytes": 108220
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/skills.json",
+      "bytes": 199319
+    },
+    {
+      "path": "res://Art/level/game_4_level/north_original/sky_paths.json",
+      "bytes": 129062
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/index.json",
+      "bytes": 993
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/man/res/poses.bin",
+      "bytes": 270972
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/man/res/poses.json",
+      "bytes": 214706
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_3_1/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_3_1/poses.json",
+      "bytes": 1367
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_3_2/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_3_2/poses.json",
+      "bytes": 1636
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_4/poses.bin",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002200/skill/effect_4/poses.json",
+      "bytes": 5171
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/index.json",
+      "bytes": 1234
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/man/res/poses.bin",
+      "bytes": 653796
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/man/res/poses.json",
+      "bytes": 221257
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/aoyi_skill_0/poses.bin",
+      "bytes": 5256
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/aoyi_skill_0/poses.json",
+      "bytes": 13546
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_3_1/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_3_1/poses.json",
+      "bytes": 4169
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_4_1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_4_1/poses.json",
+      "bytes": 1875
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_4_2/poses.bin",
+      "bytes": 540
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002700/skill/effect_4_2/poses.json",
+      "bytes": 1419
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/index.json",
+      "bytes": 937
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/man/res/poses.bin",
+      "bytes": 447516
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/man/res/poses.json",
+      "bytes": 214201
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/man/res2/poses.bin",
+      "bytes": 972
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/man/res2/poses.json",
+      "bytes": 2464
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/aoyi_skill_1/poses.bin",
+      "bytes": 8532
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/aoyi_skill_1/poses.json",
+      "bytes": 7462
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/aoyi_skill_2/poses.bin",
+      "bytes": 2304
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/aoyi_skill_2/poses.json",
+      "bytes": 7051
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/effect_5_2/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_parts/1002800/skill/effect_5_2/poses.json",
+      "bytes": 2863
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/index.json",
+      "bytes": 1147
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/man/res/poses.bin",
+      "bytes": 291564
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/man/res/poses.json",
+      "bytes": 211904
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_3_1/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_3_1/poses.json",
+      "bytes": 1370
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_3_2/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_3_2/poses.json",
+      "bytes": 1639
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_4/poses.bin",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_1/effect_4/poses.json",
+      "bytes": 5174
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_2/aoyi_skill_1/poses.bin",
+      "bytes": 2808
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_2/aoyi_skill_1/poses.json",
+      "bytes": 7403
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_3/aoyi_skill_2/poses.bin",
+      "bytes": 2808
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003100/skill_3/aoyi_skill_2/poses.json",
+      "bytes": 6923
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/index.json",
+      "bytes": 1180
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/man/res/poses.bin",
+      "bytes": 221004
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/man/res/poses.json",
+      "bytes": 117710
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/aoyi_skill_1/poses.bin",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/aoyi_skill_1/poses.json",
+      "bytes": 3408
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_1_1/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_1_1/poses.json",
+      "bytes": 1631
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_3_1/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_3_1/poses.json",
+      "bytes": 2741
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_5/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_5/poses.json",
+      "bytes": 1568
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_5_1/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003500/skill/effect_5_1/poses.json",
+      "bytes": 1853
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/index.json",
+      "bytes": 1083
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/man/res/poses.bin",
+      "bytes": 524412
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/man/res/poses.json",
+      "bytes": 304241
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/aoyi_skill_1/poses.bin",
+      "bytes": 2016
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/aoyi_skill_1/poses.json",
+      "bytes": 4693
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_1_1/poses.bin",
+      "bytes": 72
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_1_1/poses.json",
+      "bytes": 434
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_1_2/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_1_2/poses.json",
+      "bytes": 1836
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_2_1/poses.bin",
+      "bytes": 324
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_2_1/poses.json",
+      "bytes": 1473
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_4_1/poses.bin",
+      "bytes": 36
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_4_1/poses.json",
+      "bytes": 363
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_4_2/poses.bin",
+      "bytes": 864
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003600/skill/effect_4_2/poses.json",
+      "bytes": 2277
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/index.json",
+      "bytes": 1060
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/man/res/poses.bin",
+      "bytes": 278208
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/man/res/poses.json",
+      "bytes": 202354
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/aoyi_skill_1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/aoyi_skill_1/poses.json",
+      "bytes": 1969
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/aoyi_skill_2/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/aoyi_skill_2/poses.json",
+      "bytes": 2311
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/effect_3_1/poses.bin",
+      "bytes": 432
+    },
+    {
+      "path": "res://Art/mount/official_parts/1003900/skill/effect_3_1/poses.json",
+      "bytes": 1225
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/index.json",
+      "bytes": 1450
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/man_v3/res/poses.bin",
+      "bytes": 587484
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/man_v3/res/poses.json",
+      "bytes": 173615
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/aoyi_skill_1/poses.bin",
+      "bytes": 864
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/aoyi_skill_1/poses.json",
+      "bytes": 2749
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/aoyi_skill_2/poses.bin",
+      "bytes": 936
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/aoyi_skill_2/poses.json",
+      "bytes": 2817
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/attack_1_4/poses.bin",
+      "bytes": 360
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/attack_1_4/poses.json",
+      "bytes": 1341
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_1_1/poses.bin",
+      "bytes": 432
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_1_1/poses.json",
+      "bytes": 1628
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_2_2/poses.bin",
+      "bytes": 432
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_2_2/poses.json",
+      "bytes": 1580
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_3_1/poses.bin",
+      "bytes": 1440
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_3_1/poses.json",
+      "bytes": 4542
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_4_1/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004700/skill_v1/effect_4_1/poses.json",
+      "bytes": 2270
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/index.json",
+      "bytes": 1313
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/man_v2/res/poses.bin",
+      "bytes": 2384460
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/man_v2/res/poses.json",
+      "bytes": 689982
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/aoyi_skill_1/poses.bin",
+      "bytes": 864
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/aoyi_skill_1/poses.json",
+      "bytes": 2794
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/aoyi_skill_2/poses.bin",
+      "bytes": 936
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/aoyi_skill_2/poses.json",
+      "bytes": 2861
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/attack_1_1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/attack_1_1/poses.json",
+      "bytes": 2350
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/attack_1_2/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/attack_1_2/poses.json",
+      "bytes": 2462
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_1_1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_1_1/poses.json",
+      "bytes": 2407
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_2_1/poses.bin",
+      "bytes": 144
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_2_1/poses.json",
+      "bytes": 745
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_2_2/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_2_2/poses.json",
+      "bytes": 1925
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_3_1/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_3_1/poses.json",
+      "bytes": 3620
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_4_1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_4_1/poses.json",
+      "bytes": 2426
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_4_2/poses.bin",
+      "bytes": 792
+    },
+    {
+      "path": "res://Art/mount/official_parts/1004800/skill_v1/effect_4_2/poses.json",
+      "bytes": 2526
+    },
+    {
+      "path": "res://Art/mount/official_parts/skill_data.json",
+      "bytes": 236447
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/default/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/default/poses.json",
+      "bytes": 498
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y10/poses.bin",
+      "bytes": 1044
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y10/poses.json",
+      "bytes": 687
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y11/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y11/poses.json",
+      "bytes": 709
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y12/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y12/poses.json",
+      "bytes": 739
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y13/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y13/poses.json",
+      "bytes": 709
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y14/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y14/poses.json",
+      "bytes": 741
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y15/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y15/poses.json",
+      "bytes": 707
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y16/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y16/poses.json",
+      "bytes": 722
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y17/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y17/poses.json",
+      "bytes": 724
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y18/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y18/poses.json",
+      "bytes": 704
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y22/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y22/poses.json",
+      "bytes": 731
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y23/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y23/poses.json",
+      "bytes": 728
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y24/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y24/poses.json",
+      "bytes": 741
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y25/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y25/poses.json",
+      "bytes": 728
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y26/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y26/poses.json",
+      "bytes": 713
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y27/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y27/poses.json",
+      "bytes": 729
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y28/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y28/poses.json",
+      "bytes": 724
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y29/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y29/poses.json",
+      "bytes": 727
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y2v500/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y2v500/poses.json",
+      "bytes": 744
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y3/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y3/poses.json",
+      "bytes": 741
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y31/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y31/poses.json",
+      "bytes": 742
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y32/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y32/poses.json",
+      "bytes": 724
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y33/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y33/poses.json",
+      "bytes": 728
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y34/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y34/poses.json",
+      "bytes": 740
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y35/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y35/poses.json",
+      "bytes": 727
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y36/poses.bin",
+      "bytes": 1080
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y36/poses.json",
+      "bytes": 707
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y37/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y37/poses.json",
+      "bytes": 745
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y39/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y39/poses.json",
+      "bytes": 743
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y4/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y4/poses.json",
+      "bytes": 738
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y40/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y40/poses.json",
+      "bytes": 743
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y42/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y42/poses.json",
+      "bytes": 727
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y44/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y44/poses.json",
+      "bytes": 726
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y45/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y45/poses.json",
+      "bytes": 740
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y47/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y47/poses.json",
+      "bytes": 739
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y5/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y5/poses.json",
+      "bytes": 740
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y6/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y6/poses.json",
+      "bytes": 740
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y7/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y7/poses.json",
+      "bytes": 726
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y8/poses.bin",
+      "bytes": 1152
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y8/poses.json",
+      "bytes": 742
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y9/poses.bin",
+      "bytes": 1116
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_6/y9/poses.json",
+      "bytes": 724
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_1/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_1/poses.json",
+      "bytes": 512
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_11/poses.bin",
+      "bytes": 612
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_11/poses.json",
+      "bytes": 501
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_15/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_15/poses.json",
+      "bytes": 489
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_17/poses.bin",
+      "bytes": 684
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_17/poses.json",
+      "bytes": 533
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_2/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_2/poses.json",
+      "bytes": 514
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_23/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_23/poses.json",
+      "bytes": 515
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_24/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_24/poses.json",
+      "bytes": 519
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_26/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_26/poses.json",
+      "bytes": 519
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_28/poses.bin",
+      "bytes": 684
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_28/poses.json",
+      "bytes": 537
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_3/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_3/poses.json",
+      "bytes": 482
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_33/poses.bin",
+      "bytes": 612
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_33/poses.json",
+      "bytes": 500
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_35/poses.bin",
+      "bytes": 648
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_35/poses.json",
+      "bytes": 518
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_36/poses.bin",
+      "bytes": 684
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_36/poses.json",
+      "bytes": 532
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_4/poses.bin",
+      "bytes": 612
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_4/poses.json",
+      "bytes": 499
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_5/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_5/poses.json",
+      "bytes": 483
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_6/poses.bin",
+      "bytes": 612
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_6/poses.json",
+      "bytes": 504
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_7/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_7/poses.json",
+      "bytes": 485
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_9/poses.bin",
+      "bytes": 612
+    },
+    {
+      "path": "res://Art/mount/official_riders/role_7/gear_9/poses.json",
+      "bytes": 503
+    }
+  ]
+}

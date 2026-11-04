@@ -34,6 +34,7 @@ COMMANDS = [
     ("level_layout_migration_audit", [sys.executable, "scripts/level_layout_migration_audit.py", "--fail-on-error"]),
     ("external_monster_catalog_check", [sys.executable, "scripts/convert_external_monster_catalog.py", "--check"]),
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
+    ("export_raw_manifest_check", [sys.executable, "scripts/export_raw_manifest.py", "--check", "--allow-missing"]),
     ("theme_override_audit", [sys.executable, "scripts/theme_override_audit.py", "--check"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),
     ("whitelist_audit", [sys.executable, "scripts/whitelist_audit.py", "--fail-on-error"]),
