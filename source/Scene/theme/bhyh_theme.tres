@@ -4082,7 +4082,7 @@ LoadScenePanelMargin/base_type = &"MarginContainer"
 LoadScenePanelMargin/constants/margin_left = 64
 LoadScenePanelMargin/constants/margin_top = 64
 LoadScenePanelMargin/constants/margin_right = 64
-LoadScenePanelMargin/constants/margin_bottom = 64
+LoadScenePanelMargin/constants/margin_bottom = 128
 
 LoadSceneNotice/base_type = &"Label"
 LoadSceneNotice/colors/font_color = Color(1, 0.91, 0.55, 1)

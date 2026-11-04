@@ -66,14 +66,18 @@ var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
 var _battle_vram_baseline_bytes: int = -1
 static var _integrity_verified_this_process := false
+# 场景中的 Tips 文本是编辑器预览占位，内容应保持为下列条目之一。
 var tips_textlist = [
-	"神秘商店中有概率出现强化石哦~~",
+	"神秘商店中有概率出现强化石哦~",
+	"每个小怪都有概率掉落强化石哦~",
 	"打不过关卡时，可以尝试回去强化装备。",
 	"拾取装备时会自动判断背包是否已满。",
 	"不同装备品质会用不同颜色显示。",
 	"怪物攻击具有不同效果，请小心应对。",
 	"宠物、技能和战斗资源会在进入存档时提前加载。",
 ]
+var _tip_bag: Array[int] = []
+var _last_tip_index := -1
 
 
 func _ready() -> void:
@@ -87,7 +91,7 @@ func _ready() -> void:
 	_request_generation = Global.get_scene_request_generation()
 	loading_bar.value = 0.0
 	loading_text.text = "0%"
-	message_tips.text = "Tips: " + str(tips_textlist[randi_range(0, tips_textlist.size() - 1)])
+	_pick_tip()
 	_initialize_first_launch_integrity()
 	_begin_load_after_first_frame()
 
@@ -344,8 +348,10 @@ func _set_progress(value: float) -> void:
 	value = clampf(value, 0.0, 1.0)
 	if not _finishing:
 		value = minf(value, 0.9)
-	loading_bar.value = maxf(float(loading_bar.value), value)
-	loading_text.text = str(int(round(value * 100.0))) + "%"
+	# 文本与填充使用同一个单调进度值，避免两者不一致。
+	var displayed := maxf(float(loading_bar.value), value)
+	loading_bar.value = displayed
+	loading_text.text = str(int(round(displayed * 100.0))) + "%"
 
 
 func _log_battle_vram(stage: String) -> void:
@@ -493,6 +499,13 @@ func _finish_loading() -> void:
 		_show_integrity_failure()
 		return
 	_set_progress(1.0)
+	# 保证 100% 填充至少渲染一帧，避免切场景前看起来仍停在 99%。
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+	else:
+		await get_tree().process_frame
+	if not _is_request_current():
+		return
 	var elapsed_seconds := float(Time.get_ticks_msec() - _visible_since_msec) / 1000.0
 
 	var minimum_visible_seconds := 0.5 if str(_target_scene) == HDZM_LEVEL_SCENE else MIN_VISIBLE_SECONDS
@@ -677,7 +690,23 @@ func _fail_scene_load(reason: String) -> void:
 	push_warning("scene load failed: %s (%s)" % [_target_scene, reason])
 
 
+func _pick_tip() -> void:
+	if tips_textlist.is_empty():
+		return
+	if _tip_bag.is_empty():
+		for index in tips_textlist.size():
+			_tip_bag.append(index)
+		_tip_bag.shuffle()
+		# 跨轮换边界时也不连续显示同一条。
+		if _tip_bag.size() > 1 and _tip_bag.back() == _last_tip_index:
+			var swap_index := randi_range(0, _tip_bag.size() - 2)
+			var swap_value := _tip_bag[swap_index]
+			_tip_bag[swap_index] = _tip_bag.back()
+			_tip_bag[_tip_bag.size() - 1] = swap_value
+	var index: int = _tip_bag.pop_back()
+	_last_tip_index = index
+	message_tips.text = "Tips: " + str(tips_textlist[index])
+
+
 func _on_tips_change_timeout() -> void:
-	randomize()
-	var tips_count = randi_range(0, tips_textlist.size() - 1)
-	message_tips.text = "Tips: " + str(tips_textlist[tips_count])
+	_pick_tip()
