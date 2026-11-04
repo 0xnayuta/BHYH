@@ -244,7 +244,7 @@ func _check_coop_presentation(first: Node, second: Node) -> void:
 	aura.idle = false
 	aura.speed = 1.0
 	stage.add_child(aura)
-	first.global_position = Vector2(1000, 340)
+	first.global_position = Vector2(-1000, 340)
 	second.global_position = Vector2(10, 340)
 	root.get_node("RoleProp").source_player = first
 	aura.call("_physics_process", 0.0)
