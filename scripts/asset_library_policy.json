@@ -2,11 +2,32 @@
   "schema_version": 1,
   "description": "ZMWS asset-library lifecycle and consumer policy. Counts are generated; status decisions are manual.",
   "status_legend": {
-    "consumer_available": "BHYH has a loader/scene path, but no selected asset binding",
-    "imported_unbound": "asset is imported but has no gameplay consumer",
-    "previewable": "can be loaded/previewed in BHYH",
-    "wired": "a scene/script references the asset",
-    "gameplay_verified": "wired and validated in a level"
+    "asset_status": {
+      "imported_unbound": "资产已完成 Godot 导入并可被引擎发现/加载，但尚未被场景、脚本或运行时系统绑定为消费对象；不等于已接入玩法。",
+      "bound": "资产已选定并绑定到明确消费方（场景、脚本或工厂）；绑定表示存在消费入口，不单独证明已完成关卡玩法验证。",
+      "excluded": "资产被明确排除在导入、导出与运行时消费之外；不得据此推断资产可用。"
+    },
+    "consumer_status": {
+      "unbound": "没有针对本域资产的可追踪消费方或绑定；工程中面向其他资产的加载器不视为本域消费。",
+      "available_not_bound": "工程中存在可用的通用加载器或消费入口，但尚未选定具体资产并建立绑定；只证明通道存在，不证明已接入。",
+      "previewable_not_gameplay_complete": "资产可被加载/预览（如地图渲染与碰撞预览），但触发器、关卡流程和玩法验证尚未完成。",
+      "wired": "已有场景或脚本引用该域资产，运行时消费路径成立；不等同于关卡玩法验收。",
+      "excluded": "明确不导入、不导出，也不参与运行时消费。",
+      "gameplay_verified": "已有 wired 消费路径，并通过对应关卡/玩法验证；当前矩阵尚无域达到，保留为后续目标状态。"
+    },
+    "lifecycle": {
+      "source": "原始文件位于私有素材仓，尚未进入 BHYH 工程或 Godot 导入路径。",
+      "imported": "已进入 BHYH 工程并完成 Godot 导入；资源可被引擎发现和加载，但不表示已有消费方。",
+      "cataloged": "已由本脚本登记到矩阵与清单，明确所属域、数量和来源；登记不等同于运行时消费。",
+      "previewable": "已在工程内完成加载或预览（如地图渲染、碰撞预览），但未接入关卡触发器或玩法链路。",
+      "selected": "已选定具体资产作为接入目标，但尚未形成可运行的场景/脚本引用。",
+      "wired": "场景或脚本已有引用，运行时消费路径成立；尚未完成关卡/玩法验收。",
+      "gameplay_verified": "已有 wired 消费路径，并通过对应关卡/玩法验证；必须有验证证据，不能由导入或预览推断。"
+    },
+    "other_status": {
+      "loaded_no_errors_exit_0": "垂直切片场景在 headless 下加载无错误且进程退出码为 0；只证明加载与资源解析，不证明触发器或玩法。",
+      "quarantined": "资产被隔离，不导入、不导出且无运行时引用；需在来源、版本与用途确认后再评估。"
+    }
   },
   "default_status": "imported_unbound",
   "domains": {

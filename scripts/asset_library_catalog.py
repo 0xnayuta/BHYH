@@ -42,6 +42,20 @@ def count_ext(root: Path, patterns: set[str]) -> int:
     return sum(1 for p in root.rglob("*") if p.is_file() and p.suffix.lower() in patterns)
 
 
+def append_status_table(lines: list[str], title: str,
+                        legend: dict[str, str], used: set[str]) -> None:
+    lines += [
+        f"### {title}",
+        "",
+        "| 值 | 中文说明 | 当前使用 |",
+        "|:---|:---|:---|",
+    ]
+    for value, description in legend.items():
+        mark = "是" if value in used else "否（保留值）"
+        lines.append(f"| `{value}` | {description} | {mark} |")
+    lines.append("")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build the ZMWS asset library matrix.")
     parser.add_argument("--assets-root", default=os.environ.get("BHYH_ASSETS_ROOT"),
@@ -168,6 +182,15 @@ def main() -> int:
         seen.add(key)
         deduped.append((key, count, meta))
 
+    legend = policy.get("status_legend", {})
+    asset_used = {meta.get("asset_status", "imported_unbound") for _, _, meta in deduped}
+    asset_used.add("excluded")
+    consumer_used = {meta.get("consumer_status", "available_not_bound") for _, _, meta in deduped}
+    consumer_used.add("excluded")
+    slice_info = policy.get("vertical_slice", {})
+    other_used = {slice_info.get("status", "")}
+    other_used.update(item.get("status", "") for item in policy.get("quarantined", []))
+
     generated = args.matrix.read_text(encoding="utf-8") if args.matrix.exists() else ""
     lines = [
         "# ZMWS Asset Integration Matrix",
@@ -180,6 +203,32 @@ def main() -> int:
         "```text",
         "source -> imported -> cataloged -> previewable -> selected -> wired -> gameplay_verified",
         "```",
+        "",
+        "生命周期小结：",
+        "",
+    ]
+    for stage, description in legend.get("lifecycle", {}).items():
+        lines.append(f"- `{stage}`：{description}")
+    lines += [
+        "",
+        "> 生命周期是概念顺序，不是自动状态机；当前矩阵只在域矩阵中使用其中若干状态，"
+        "`gameplay_verified` 必须有实际关卡/玩法验证证据，不能由导入或预览推断。",
+        "",
+        "## 状态说明",
+        "",
+        "资产状态描述资产自身所处阶段；消费状态描述是否存在可追踪的消费路径与绑定。"
+        "两列相互独立，不能把“有加载器”或“已导入”解读为已接入。",
+        "",
+    ]
+    append_status_table(lines, "资产状态", legend.get("asset_status", {}), asset_used)
+    append_status_table(lines, "消费状态", legend.get("consumer_status", {}), consumer_used)
+    append_status_table(lines, "其他状态", legend.get("other_status", {}), other_used)
+    lines += [
+        "> `imported_unbound` 表示资产停在导入阶段；`available_not_bound` 表示消费通道存在但尚未选定并绑定具体资产。"
+        "两者同时出现仍不构成接入。",
+        "",
+        "> 资产状态 `bound` 与消费状态 `wired` 可以同时出现：前者表示资产已选定并挂接，"
+        "后者表示引用路径成立；二者都不等于 `gameplay_verified`。",
         "",
         "## 域矩阵",
         "",
@@ -198,7 +247,6 @@ def main() -> int:
         "## 垂直切片",
         "",
     ]
-    slice_info = policy.get("vertical_slice", {})
     lines += [
         f"- 域：`{slice_info.get('domain', '')}`",
         f"- 场景：`{slice_info.get('scene', '')}`",
@@ -215,7 +263,7 @@ def main() -> int:
         "## 边界",
         "",
         "- 逐项资产清单见 `docs/reports/zmws_asset_inventory.json`（生成物，按报告规则处理）。",
-        "- `imported_unbound` 不等于已接入；只有场景/脚本引用并通过关卡验证后才提升状态。",
+        "- `imported_unbound` 不等于已接入；只有场景/脚本引用并通过关卡验证后才提升到 `gameplay_verified`。",
         "- 资产库不复制第二份素材；BHYH 的 `source/Art` 通过 junction 读取私有素材仓。",
         "",
     ]
