@@ -37,8 +37,9 @@
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 303.9s，默认 auto 并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据包 | **524/524 清单路径可达**（173 `.bin` + 351 JSON）；插件 `files=524 expected=524 missing=0`；7,658,500,205 字节；sha256 `22a7c7ec560aab18094a8aabea1185f33ed55356db575ad9326433a310d84e2f`；导出+校验 **1022.22s** |
+| Release 包（真实 exe） | **BHYH.exe 105MB + BHYH.pck 7,658,500,221 字节**；冷启动加载 `load_scene.tscn`，**0 ERROR / 0 WARNING**；实际 release PCK **4,724/4,724**（524 原始数据 + 4,200 FrameSequence）；直接 `level_1` override 加载成功，1 条无档案会话警告属测试夹具限制 |
 
-**边界**：PCK 为验证/发布预设的路径闭包，不等于 release 启动、目标设备 VRAM、首帧耗时或最小发布包已验证；原始数据由 `export_raw_dependencies.json` + `bhyh_export` 插件写入，不再使用 `include_filter` 兜底。
+**边界**：PCK 为验证/发布预设的路径闭包；本表另有真实 release exe 冷启动证据，但 PCK 路径可达仍不等于目标设备 VRAM、首帧耗时或正式发布包裁剪已验证。原始数据由 `export_raw_dependencies.json` + `bhyh_export` 插件写入，不再使用 `include_filter` 兜底。
 
 ### 最近完成
 
@@ -86,7 +87,7 @@
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。
-2. **发布**：现有 PCK 是验证包，不是最小发布包；`bhyh_export` 清单/插件与 `export_closure_probe` 已覆盖原始 JSON/BIN 闭包，但 release 启动、目标设备峰值 VRAM 与首帧耗时需单独设备实测。
+2. **发布**：`BHYH.exe` + `BHYH.pck` 冷启动已通过（`load_scene.tscn`、0 ERROR / 0 WARNING），实际 release PCK 4,724/4,724 路径可达；但目标设备峰值 VRAM、首帧耗时与正式发布包裁剪仍需单独设备实测。直接以 `level_1` override 启动属于无档案会话测试，会产生 1 条预期 `change_scene` 警告，不据此判定发布流程失败。
 3. **公开仓库**：不包含第三方素材；公开 clone 的缺失资源提示属于预期。
 4. **存档**：加密 JSON、`.tmp`/`.bak` 原子写与当前格式补全不变；不引入跨版本迁移链。
 5. **架构**：Autoload 与 `Global` 普通子节点运行时是遗留基线；新增需按 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) 评审。
