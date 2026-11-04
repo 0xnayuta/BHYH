@@ -122,6 +122,12 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `docs_audit.py` | 文档相对链接、目录索引与脚本索引审计；不进入 `check_all` 维度 |
 | `equipment_data_schema.py` | 装备构建源白名单、类型与随机规格校验（供生成器/审计导入） |
 
+### 3.6 素材维护
+
+| 脚本 | 作用 |
+|:---|:---|
+| `fix_ogg_vorbis_comments.py` | 修复 Ogg Vorbis comment 中缺少 `=` 的条目；等长改写并重算页 CRC，音频包与页布局不变；`--check` 只检查。 |
+
 ## 4. 数据文件
 
 | 文件 | 作用 |
