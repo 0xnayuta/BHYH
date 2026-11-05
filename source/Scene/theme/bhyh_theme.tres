@@ -697,7 +697,7 @@ EquipmentStatValue/colors/font_color = Color(1, 1, 0, 1)
 EquipmentStatValue/colors/font_outline_color = Color(1, 1, 0, 1)
 EquipmentStatValue/constants/outline_size = 1
 EquipmentStatValue/fonts/font = ExtResource("font_hk")
-EquipmentStatValue/font_sizes/font_size = 15
+EquipmentStatValue/font_sizes/font_size = 16
 
 EquipmentItemHighlight/base_type = &"Label"
 EquipmentItemHighlight/colors/font_color = Color(1, 1, 1, 1)
@@ -1373,7 +1373,7 @@ SellPageInput/colors/font_outline_color = Color(1, 0, 0, 1)
 SellPageInput/colors/font_placeholder_color = Color(1, 0, 0, 1)
 SellPageInput/constants/outline_size = 1
 SellPageInput/fonts/font = ExtResource("font_hk")
-SellPageInput/font_sizes/font_size = 15
+SellPageInput/font_sizes/font_size = 16
 
 SellTitle/base_type = &"Label"
 SellTitle/fonts/font = ExtResource("font_return")
@@ -2766,7 +2766,7 @@ Monster139DamageLabel/fonts/font = ExtResource("font_hk")
 
 CureTimesHeader/base_type = &"Label"
 CureTimesHeader/fonts/font = ExtResource("font_return")
-CureTimesHeader/font_sizes/font_size = 25
+CureTimesHeader/font_sizes/font_size = 24
 
 CureTimesSection/base_type = &"Label"
 CureTimesSection/fonts/font = ExtResource("font_return")
@@ -2782,7 +2782,7 @@ CureTimesCurrency/colors/font_color = Color(1, 1, 0, 1)
 CureTimesCurrency/colors/font_outline_color = Color(0, 0, 0, 1)
 CureTimesCurrency/constants/outline_size = 6
 CureTimesCurrency/fonts/font = ExtResource("font_return")
-CureTimesCurrency/font_sizes/font_size = 22
+CureTimesCurrency/font_sizes/font_size = 24
 
 CureTimesRow/base_type = &"HBoxContainer"
 CureTimesRow/constants/separation = 0
@@ -2841,7 +2841,7 @@ SkillSelectInfo/constants/shadow_offset_y = 0
 SkillSelectInfo/constants/outline_size = 1
 SkillSelectInfo/constants/shadow_outline_size = 6
 SkillSelectInfo/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-SkillSelectInfo/font_sizes/font_size = 15
+SkillSelectInfo/font_sizes/font_size = 16
 
 SkillSelectNoHave/base_type = &"Label"
 SkillSelectNoHave/colors/font_color = Color(1, 0, 0, 1)
@@ -2867,7 +2867,7 @@ DjSellInfo/font_sizes/font_size = 12
 DjSellNumber/base_type = &"LineEdit"
 DjSellNumber/colors/font_outline_color = Color(0, 0, 0, 1)
 DjSellNumber/colors/font_placeholder_color = Color(0.94902, 0.94902, 0, 1)
-DjSellNumber/constants/outline_size = 9
+DjSellNumber/constants/outline_size = 10
 DjSellNumber/font_sizes/font_size = 12
 DjSellNumber/styles/normal = SubResource("empty_button")
 DjSellNumber/styles/read_only = SubResource("empty_button")
@@ -3044,18 +3044,18 @@ Map0CatalogButton/styles/pressed = SubResource("map0_catalog_pressed")
 Map0CatalogButton/styles/hover = SubResource("map0_catalog_hover")
 
 ForgeTitle/base_type = &"Label"
-ForgeTitle/colors/font_color = Color(0.972549, 0.976471, 0, 1)
+ForgeTitle/colors/font_color = Color(1, 1, 0, 1)
 ForgeTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeTitle/constants/outline_size = 5
+ForgeTitle/constants/outline_size = 6
 ForgeTitle/fonts/font = ExtResource("font_return")
 ForgeTitle/font_sizes/font_size = 32
 
 ForgeSubtitle/base_type = &"Label"
 ForgeSubtitle/colors/font_color = Color(0, 0.976471, 0, 1)
 ForgeSubtitle/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeSubtitle/constants/outline_size = 5
+ForgeSubtitle/constants/outline_size = 6
 ForgeSubtitle/fonts/font = ExtResource("font_return")
-ForgeSubtitle/font_sizes/font_size = 22
+ForgeSubtitle/font_sizes/font_size = 24
 
 ForgeMaterialRow/base_type = &"HBoxContainer"
 ForgeMaterialRow/constants/separation = 15
@@ -3066,16 +3066,16 @@ ForgeBoxRow/constants/separation = 32
 ForgeItemName/base_type = &"Label"
 ForgeItemName/colors/font_color = Color(0.45098, 0.427451, 0.4, 1)
 ForgeItemName/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeItemName/constants/outline_size = 5
+ForgeItemName/constants/outline_size = 6
 ForgeItemName/fonts/font = ExtResource("font_return")
-ForgeItemName/font_sizes/font_size = 27
+ForgeItemName/font_sizes/font_size = 28
 
 ForgeSoulLabel/base_type = &"Label"
 ForgeSoulLabel/colors/font_color = Color(1, 1, 1, 1)
 ForgeSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 ForgeSoulLabel/constants/outline_size = 10
 ForgeSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ForgeSoulLabel/font_sizes/font_size = 22
+ForgeSoulLabel/font_sizes/font_size = 24
 
 SkillKeySetButton/base_type = &"MenuActionButton"
 
@@ -3192,11 +3192,11 @@ LearnSkillButton/styles/disabled = SubResource("empty_button")
 LearnSkillButton/styles/focus = SubResource("empty_button")
 
 ForgeHelpTitle/base_type = &"Label"
-ForgeHelpTitle/colors/font_color = Color(0.988235, 1, 0, 1)
+ForgeHelpTitle/colors/font_color = Color(1, 1, 0, 1)
 ForgeHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeHelpTitle/constants/outline_size = 5
+ForgeHelpTitle/constants/outline_size = 6
 ForgeHelpTitle/fonts/font = ExtResource("font_return")
-ForgeHelpTitle/font_sizes/font_size = 35
+ForgeHelpTitle/font_sizes/font_size = 36
 
 ForgeHelpList/base_type = &"VBoxContainer"
 ForgeHelpList/constants/separation = 15
@@ -3204,7 +3204,7 @@ ForgeHelpList/constants/separation = 15
 ForgeHelpLine/base_type = &"Label"
 ForgeHelpLine/colors/font_color = Color(1, 1, 1, 1)
 ForgeHelpLine/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeHelpLine/constants/outline_size = 5
+ForgeHelpLine/constants/outline_size = 6
 ForgeHelpLine/fonts/font = ExtResource("font_return")
 ForgeHelpLine/font_sizes/font_size = 20
 
@@ -3312,9 +3312,9 @@ BodyTrainingTrainButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page
 UseItemsTitle/base_type = &"Label"
 UseItemsTitle/colors/font_color = Color(1, 1, 0, 1)
 UseItemsTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemsTitle/constants/outline_size = 7
+UseItemsTitle/constants/outline_size = 6
 UseItemsTitle/fonts/font = ExtResource("font_return")
-UseItemsTitle/font_sizes/font_size = 15
+UseItemsTitle/font_sizes/font_size = 16
 
 UseItemName/base_type = &"Label"
 UseItemName/colors/font_color = Color(1, 1, 0, 1)
@@ -3324,32 +3324,32 @@ UseItemName/font_sizes/font_size = 14
 
 UseItemStatName/base_type = &"Label"
 UseItemStatName/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemStatName/constants/outline_size = 5
-UseItemStatName/font_sizes/font_size = 13
+UseItemStatName/constants/outline_size = 6
+UseItemStatName/font_sizes/font_size = 14
 
 UseItemUpLabel/base_type = &"Label"
 UseItemUpLabel/colors/font_color = Color(1, 1, 0, 1)
 UseItemUpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemUpLabel/constants/outline_size = 5
-UseItemUpLabel/font_sizes/font_size = 33
+UseItemUpLabel/constants/outline_size = 6
+UseItemUpLabel/font_sizes/font_size = 32
 
 UseItemDownLabel/base_type = &"Label"
 UseItemDownLabel/colors/font_color = Color(1, 1, 0, 1)
 UseItemDownLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemDownLabel/constants/outline_size = 5
-UseItemDownLabel/font_sizes/font_size = 37
+UseItemDownLabel/constants/outline_size = 6
+UseItemDownLabel/font_sizes/font_size = 36
 
 UseItemMaxLabel/base_type = &"Label"
 UseItemMaxLabel/colors/font_color = Color(1, 1, 0, 1)
 UseItemMaxLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemMaxLabel/constants/outline_size = 5
+UseItemMaxLabel/constants/outline_size = 6
 UseItemMaxLabel/font_sizes/font_size = 10
 
 UseItemMinLabel/base_type = &"Label"
 UseItemMinLabel/colors/font_color = Color(1, 1, 0, 1)
 UseItemMinLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemMinLabel/constants/outline_size = 5
-UseItemMinLabel/font_sizes/font_size = 11
+UseItemMinLabel/constants/outline_size = 6
+UseItemMinLabel/font_sizes/font_size = 12
 
 UseItemInput/base_type = &"LineEdit"
 UseItemInput/colors/font_color = Color(1, 1, 1, 1)
@@ -3359,7 +3359,7 @@ UseItemInput/constants/outline_size = 6
 UseItemKey/base_type = &"Label"
 UseItemKey/colors/font_color = Color(1, 1, 0, 1)
 UseItemKey/colors/font_outline_color = Color(0, 0, 0, 1)
-UseItemKey/constants/outline_size = 5
+UseItemKey/constants/outline_size = 6
 
 DsgChooseTitle/base_type = &"Label"
 DsgChooseTitle/colors/font_color = Color(1, 1, 0, 1)
@@ -3672,8 +3672,8 @@ DjInfoInnerVBox/constants/separation = 16
 DjInfoDescription/base_type = &"Label"
 DjInfoDescription/colors/font_shadow_color = Color(0, 0, 0, 1)
 DjInfoDescription/colors/font_outline_color = Color(0, 0, 0, 1)
-DjInfoDescription/constants/outline_size = 5
-DjInfoDescription/font_sizes/font_size = 15
+DjInfoDescription/constants/outline_size = 6
+DjInfoDescription/font_sizes/font_size = 16
 
 DjInfoSale/base_type = &"Label"
 DjInfoSale/colors/font_color = Color(1, 0.768627, 0, 1)
@@ -3704,7 +3704,7 @@ TaskTitleStatus/font_sizes/font_size = 17
 
 ChooseItemTitle/base_type = &"Label"
 ChooseItemTitle/fonts/font = ExtResource("font_hy")
-ChooseItemTitle/font_sizes/font_size = 25
+ChooseItemTitle/font_sizes/font_size = 24
 
 ChooseItemList/base_type = &"ItemList"
 ChooseItemList/colors/font_color = Color(1, 1, 1, 1)
@@ -3714,7 +3714,7 @@ ChooseItemList/constants/v_separation = 5
 ChooseItemList/constants/outline_size = 10
 ChooseItemList/constants/icon_margin = 4
 ChooseItemList/fonts/font = ExtResource("font_hy")
-ChooseItemList/font_sizes/font_size = 19
+ChooseItemList/font_sizes/font_size = 20
 ChooseItemList/styles/panel = SubResource("choose_item_panel")
 ChooseItemList/styles/focus = SubResource("empty_button")
 
@@ -3742,14 +3742,14 @@ EquipmentDescription/colors/font_color = Color(1, 1, 1, 1)
 EquipmentDescription/colors/font_outline_color = Color(1, 1, 1, 1)
 EquipmentDescription/constants/outline_size = 1
 EquipmentDescription/fonts/font = ExtResource("font_hk")
-EquipmentDescription/font_sizes/font_size = 13
+EquipmentDescription/font_sizes/font_size = 14
 
 EquipmentSale/base_type = &"Label"
 EquipmentSale/colors/font_color = Color(1, 0.6, 0.2, 1)
 EquipmentSale/colors/font_outline_color = Color(1, 0.6, 0.2, 1)
 EquipmentSale/constants/outline_size = 1
 EquipmentSale/fonts/font = ExtResource("font_hk")
-EquipmentSale/font_sizes/font_size = 17
+EquipmentSale/font_sizes/font_size = 18
 
 UserKeyKey/base_type = &"Label"
 UserKeyKey/colors/font_color = Color(0.901961, 0.890196, 0, 1)
@@ -3846,7 +3846,7 @@ MonsterHeadName/styles/focus = SubResource("empty_button")
 StrengthNumber/base_type = &"Label"
 StrengthNumber/colors/font_color = Color(0, 1, 0, 1)
 StrengthNumber/colors/font_outline_color = Color(0, 0, 0, 1)
-StrengthNumber/constants/outline_size = 8
+StrengthNumber/constants/outline_size = 6
 StrengthNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 StrengthNumber/font_sizes/font_size = 20
 
@@ -4059,16 +4059,16 @@ DecomposeItemList/constants/h_separation = 18
 DecomposeItemList/constants/v_separation = 20
 
 DecomposeTitle/base_type = &"Label"
-DecomposeTitle/colors/font_color = Color(0.972549, 0.976471, 0, 1)
+DecomposeTitle/colors/font_color = Color(1, 1, 0, 1)
 DecomposeTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-DecomposeTitle/constants/outline_size = 5
+DecomposeTitle/constants/outline_size = 6
 DecomposeTitle/fonts/font = ExtResource("font_return")
 DecomposeTitle/font_sizes/font_size = 32
 
 DecomposeTitleOrange/base_type = &"Label"
 DecomposeTitleOrange/colors/font_color = Color(0.964706, 0.403922, 0, 1)
 DecomposeTitleOrange/colors/font_outline_color = Color(0, 0, 0, 1)
-DecomposeTitleOrange/constants/outline_size = 12
+DecomposeTitleOrange/constants/outline_size = 10
 DecomposeTitleOrange/fonts/font = ExtResource("font_return")
 DecomposeTitleOrange/font_sizes/font_size = 24
 
@@ -4079,7 +4079,7 @@ DivineForgeButton/colors/font_hover_color = Color(1, 1, 1, 1)
 DivineForgeButton/colors/font_outline_color = Color(0, 0, 0, 1)
 DivineForgeButton/constants/outline_size = 6
 DivineForgeButton/fonts/font = ExtResource("font_return")
-DivineForgeButton/font_sizes/font_size = 30
+DivineForgeButton/font_sizes/font_size = 32
 DivineForgeButton/styles/normal = SubResource("divine_forge_normal")
 DivineForgeButton/styles/pressed = SubResource("divine_forge_pressed")
 DivineForgeButton/styles/hover = SubResource("divine_forge_hover")
@@ -4163,9 +4163,9 @@ SynthesisTargetDan/base_type = &"Button"
 SynthesisTargetDan/font_sizes/font_size = 16
 
 SynthesisTitle/base_type = &"Label"
-SynthesisTitle/colors/font_color = Color(0.972549, 0.976471, 0, 1)
+SynthesisTitle/colors/font_color = Color(1, 1, 0, 1)
 SynthesisTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-SynthesisTitle/constants/outline_size = 5
+SynthesisTitle/constants/outline_size = 6
 SynthesisTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 SynthesisTitle/font_sizes/font_size = 32
 
@@ -4250,7 +4250,7 @@ EmptyButton/styles/focus = SubResource("empty_button")
 ForgeMaterialNeed/base_type = &"Label"
 ForgeMaterialNeed/colors/font_color = Color(0, 1, 0, 1)
 ForgeMaterialNeed/colors/font_outline_color = Color(0, 0, 0, 1)
-ForgeMaterialNeed/constants/outline_size = 5
+ForgeMaterialNeed/constants/outline_size = 6
 ForgeMaterialNeed/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ForgeMaterialNeed/font_sizes/font_size = 14
 
