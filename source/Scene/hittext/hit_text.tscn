@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="1"]
+[ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="1"]
 [ext_resource type="Script" path="res://Script/hittext/hit_text.gd" id="2"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 

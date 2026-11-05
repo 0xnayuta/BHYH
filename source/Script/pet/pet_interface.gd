@@ -135,7 +135,7 @@ const PET_SKILL_SLOT_FRAME := "res://Art/pet/pet_page_resources/pet_interfacev12
 const PET_EQUIPMENT_SLOT_FRAME := preload(
 	"res://Art/pet/pet_page_resources/pet_interfacev1270_id202_lossless_54x54.png"
 )
-const PET_EQUIPMENT_STRENGTH_FONT := preload("res://Font/8_fz_cu_yuan_m03_s.ttf")
+const PET_EQUIPMENT_STRENGTH_FONT := preload("res://Scene/theme/fz_cu_yuan_m03.tres")
 const PET_PACK_CAPACITY := 40
 const PET_BACKPACK_SLOT_SCENE := preload("res://Scene/pet/pet_backpack_slot.tscn")
 const PET_EQUIPMENT_SLOT_TYPES := ["zbst", "zbmz", "zbxz", "zbyf", "zbjn"]

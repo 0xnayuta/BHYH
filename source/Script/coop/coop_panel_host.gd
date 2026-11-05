@@ -102,7 +102,7 @@ func on_scene_changed(scene: Node) -> void:
 		for type: String in ["背包", "技能"]:
 			var button := Button.new()
 			button.text = "%dP%s" % [slot, type]
-			button.add_theme_font_override("font", load("res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf"))
+			button.add_theme_font_override("font", load("res://Scene/theme/fz_cu_yuan_m03.tres"))
 			button.pressed.connect(open_panel.bind(slot, type))
 			row.add_child(button)
 	if not scene is BaseLevel:
@@ -208,7 +208,7 @@ func _add_player_selector(type: String) -> void:
 		button.toggle_mode = true
 		button.button_group = group
 		button.set_pressed_no_signal(slot == _session.ui_slot)
-		button.add_theme_font_override("font", load("res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf"))
+		button.add_theme_font_override("font", load("res://Scene/theme/fz_cu_yuan_m03.tres"))
 		button.add_theme_font_size_override("font_size", 22)
 		button.add_theme_color_override("font_color", Color("e9d6ae"))
 		button.add_theme_color_override("font_pressed_color", Color("fff2b4"))

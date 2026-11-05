@@ -1,15 +1,14 @@
-[gd_resource type="Theme" load_steps=33 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" load_steps=30 format=3 uid="uid://bhyhuitheme01"]
 
 [ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
-[ext_resource type="FontFile" path="res://Font/1_fonts_fzcy_fz_cu_yuan_m03.ttf" id="font_fzcy"]
+[ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="font_fz_cu_yuan_m03"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="font_hk"]
 [ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="font_meng"]
 [ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="font_hy"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s_ttf.ttf" id="font_1_aaa_fz_cu_yuan_m03_s_ttf"]
-[ext_resource type="FontFile" path="res://Font/8_fz_cu_yuan_m03_s.ttf" id="font_8_fz_cu_yuan_m03_s"]
+
 [ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
-[ext_resource type="FontFile" path="res://Font/1_aaa_fz_cu_yuan_m03_s.ttf" id="font_1_aaa_fz_cu_yuan_m03_s"]
+
 [ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="font_wo"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
@@ -575,6 +574,7 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [resource]
+default_font = ExtResource("font_fz_cu_yuan_m03")
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
@@ -707,7 +707,7 @@ SettingsPlainLabel/constants/outline_size = 1
 
 EquipmentStatLabel/base_type = &"Label"
 EquipmentStatLabel/colors/font_color = Color(1, 0.6, 0.2, 1)
-EquipmentStatLabel/fonts/font = ExtResource("font_fzcy")
+EquipmentStatLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 EquipmentStatLabel/font_sizes/font_size = 16
 
 EquipmentStatValue/base_type = &"Label"
@@ -1068,26 +1068,26 @@ SkillPopupMenu/fonts/font = ExtResource("font_main")
 
 ArchiveReadOnlyLink/base_type = &"LineEdit"
 ArchiveReadOnlyLink/colors/font_color = Color(1, 0.84, 0.54, 1)
-ArchiveReadOnlyLink/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveReadOnlyLink/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveReadOnlyLink/font_sizes/font_size = 13
 ArchiveReadOnlyLink/styles/normal = SubResource("sub_CloudInput")
 ArchiveReadOnlyLink/styles/read_only = SubResource("sub_CloudInput")
 
 ArchiveStepText/base_type = &"Label"
 ArchiveStepText/colors/font_color = Color(0.94, 0.94, 0.94, 1)
-ArchiveStepText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveStepText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveStepText/font_sizes/font_size = 16
 
 ArchiveSectionTitle/base_type = &"Label"
 ArchiveSectionTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
-ArchiveSectionTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveSectionTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveSectionTitle/font_sizes/font_size = 18
 
 ArchiveDialogTitle/base_type = &"Label"
 ArchiveDialogTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ArchiveDialogTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchiveDialogTitle/constants/outline_size = 2
-ArchiveDialogTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDialogTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveDialogTitle/font_sizes/font_size = 24
 
 ArchivePopupPanel/base_type = &"Panel"
@@ -1096,7 +1096,7 @@ ArchivePopupPanel/styles/panel = SubResource("sub_CloudPanel")
 ArchiveActionButtonSmall/base_type = &"Button"
 ArchiveActionButtonSmall/colors/font_color = Color(1, 1, 1, 1)
 ArchiveActionButtonSmall/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveActionButtonSmall/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveActionButtonSmall/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveActionButtonSmall/font_sizes/font_size = 17
 ArchiveActionButtonSmall/styles/normal = SubResource("sub_CloudInput")
 ArchiveActionButtonSmall/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1105,7 +1105,7 @@ ArchiveActionButtonSmall/styles/hover = SubResource("sub_CloudButtonHover")
 ArchiveHelpButton/base_type = &"Button"
 ArchiveHelpButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveHelpButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveHelpButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveHelpButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveHelpButton/font_sizes/font_size = 14
 ArchiveHelpButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveHelpButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1114,7 +1114,7 @@ ArchiveHelpButton/styles/hover = SubResource("sub_CloudButtonHover")
 ArchiveMutedButton/base_type = &"Button"
 ArchiveMutedButton/colors/font_color = Color(0.8, 0.8, 0.8, 1)
 ArchiveMutedButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveMutedButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveMutedButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveMutedButton/font_sizes/font_size = 17
 ArchiveMutedButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveMutedButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1122,20 +1122,20 @@ ArchiveMutedButton/styles/hover = SubResource("sub_CloudButtonHover")
 
 ArchiveUidHash/base_type = &"LineEdit"
 ArchiveUidHash/colors/font_color = Color(1, 0.84, 0.54, 1)
-ArchiveUidHash/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveUidHash/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveUidHash/font_sizes/font_size = 11
 ArchiveUidHash/styles/normal = SubResource("sub_CloudInput")
 ArchiveUidHash/styles/read_only = SubResource("sub_CloudInput")
 
 ArchiveFieldTitle/base_type = &"Label"
 ArchiveFieldTitle/colors/font_color = Color(1, 1, 1, 1)
-ArchiveFieldTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveFieldTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveFieldTitle/font_sizes/font_size = 17
 
 ArchiveUploadButton/base_type = &"Button"
 ArchiveUploadButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveUploadButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveUploadButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveUploadButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveUploadButton/font_sizes/font_size = 22
 ArchiveUploadButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveUploadButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1145,7 +1145,7 @@ ArchiveUploadButton/styles/disabled = SubResource("sub_CloudInput")
 ArchiveDialogActionButton/base_type = &"Button"
 ArchiveDialogActionButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveDialogActionButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveDialogActionButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDialogActionButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveDialogActionButton/font_sizes/font_size = 22
 ArchiveDialogActionButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveDialogActionButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1154,20 +1154,20 @@ ArchiveDialogActionButton/styles/hover = SubResource("sub_CloudButtonHover")
 ArchiveLoginInput/base_type = &"LineEdit"
 ArchiveLoginInput/colors/font_color = Color(1, 1, 1, 1)
 ArchiveLoginInput/colors/font_placeholder_color = Color(0.65, 0.65, 0.65, 1)
-ArchiveLoginInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginInput/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveLoginInput/font_sizes/font_size = 18
 ArchiveLoginInput/styles/normal = SubResource("sub_CloudInput")
 ArchiveLoginInput/styles/focus = SubResource("sub_CloudButtonHover")
 
 ArchiveLoginLabel/base_type = &"Label"
 ArchiveLoginLabel/colors/font_color = Color(1, 1, 1, 1)
-ArchiveLoginLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveLoginLabel/font_sizes/font_size = 20
 
 ArchiveLoginButton/base_type = &"Button"
 ArchiveLoginButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveLoginButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveLoginButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveLoginButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveLoginButton/font_sizes/font_size = 20
 ArchiveLoginButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveLoginButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1176,20 +1176,20 @@ ArchiveLoginButton/styles/disabled = SubResource("sub_CloudInput")
 
 ArchiveStatusText/base_type = &"Label"
 ArchiveStatusText/colors/font_color = Color(1, 0.84, 0.54, 1)
-ArchiveStatusText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveStatusText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveStatusText/font_sizes/font_size = 16
 
 ArchivePanelTitle/base_type = &"Label"
 ArchivePanelTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ArchivePanelTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchivePanelTitle/constants/outline_size = 2
-ArchivePanelTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchivePanelTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchivePanelTitle/font_sizes/font_size = 25
 
 ArchiveConfirmButton/base_type = &"Button"
 ArchiveConfirmButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveConfirmButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-ArchiveConfirmButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveConfirmButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveConfirmButton/font_sizes/font_size = 20
 ArchiveConfirmButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveConfirmButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1197,7 +1197,7 @@ ArchiveConfirmButton/styles/hover = SubResource("sub_CloudButtonHover")
 
 ArchiveMessageText/base_type = &"Label"
 ArchiveMessageText/colors/font_color = Color(1, 1, 1, 1)
-ArchiveMessageText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveMessageText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveMessageText/font_sizes/font_size = 18
 
 ArchiveCdButton/base_type = &"Button"
@@ -1205,7 +1205,7 @@ ArchiveCdButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveCdButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveCdButton/colors/font_outline_color = Color(1, 1, 1, 1)
 ArchiveCdButton/constants/outline_size = 1
-ArchiveCdButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveCdButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveCdButton/styles/normal = SubResource("empty_button")
 ArchiveCdButton/styles/pressed = SubResource("empty_button")
 ArchiveCdButton/styles/hover = SubResource("empty_button")
@@ -1217,7 +1217,7 @@ ArchiveNumberInput/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchiveNumberInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
 ArchiveNumberInput/constants/outline_size = 3
 ArchiveNumberInput/constants/minimum_character_width = 0
-ArchiveNumberInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveNumberInput/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveNumberInput/font_sizes/font_size = 18
 ArchiveNumberInput/styles/normal = SubResource("sub_StyleBoxFlat_6y1b1")
 ArchiveNumberInput/styles/read_only = SubResource("empty_button")
@@ -1228,7 +1228,7 @@ ArchiveCloudButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveCloudButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveCloudButton/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchiveCloudButton/constants/outline_size = 2
-ArchiveCloudButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveCloudButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveCloudButton/font_sizes/font_size = 20
 ArchiveCloudButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveCloudButton/styles/pressed = SubResource("sub_CloudButtonHover")
@@ -1240,7 +1240,7 @@ ArchiveDeleteButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveDeleteButton/colors/font_hover_pressed_color = Color(0.827451, 0.552941, 0, 1)
 ArchiveDeleteButton/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchiveDeleteButton/constants/outline_size = 2
-ArchiveDeleteButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+ArchiveDeleteButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ArchiveDeleteButton/font_sizes/font_size = 19
 ArchiveDeleteButton/styles/normal = SubResource("sub_StyleBoxFlat_6y1b1")
 ArchiveDeleteButton/styles/pressed = SubResource("sub_StyleBoxFlat_6y1b1")
@@ -1250,7 +1250,7 @@ ArchiveDeleteButton/styles/focus = SubResource("sub_StyleBoxFlat_6y1b1")
 
 ShopPageLabel/base_type = &"Label"
 ShopPageLabel/colors/font_color = Color(0, 0, 0, 1)
-ShopPageLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopPageLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopPageLabel/font_sizes/font_size = 24
 
 ShopSearchRow/base_type = &"HBoxContainer"
@@ -1328,7 +1328,7 @@ ShopCloseButton/styles/disabled = SubResource("empty_button")
 ShopCloseButton/styles/focus = SubResource("empty_button")
 
 ShopHintLabel/base_type = &"Label"
-ShopHintLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopHintLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopHintLabel/font_sizes/font_size = 25
 
 ShopMessageText/base_type = &"Label"
@@ -1480,7 +1480,7 @@ LhhjActionLabel/base_type = &"Label"
 LhhjActionLabel/colors/font_color = Color(1, 1, 0, 1)
 LhhjActionLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 LhhjActionLabel/constants/outline_size = 8
-LhhjActionLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjActionLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 LhhjSectionText/base_type = &"Label"
 LhhjSectionText/colors/font_color = Color(1, 0.454902, 0, 1)
@@ -1490,24 +1490,24 @@ LhhjSectionText/constants/shadow_offset_x = 0
 LhhjSectionText/constants/shadow_offset_y = 0
 LhhjSectionText/constants/outline_size = 2
 LhhjSectionText/constants/shadow_outline_size = 8
-LhhjSectionText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjSectionText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LhhjSectionText/font_sizes/font_size = 14
 
 LhhjBossGrid/base_type = &"GridContainer"
 LhhjBossGrid/constants/v_separation = 3
 
 LhhjValueInput/base_type = &"LineEdit"
-LhhjValueInput/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjValueInput/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LhhjValueInput/font_sizes/font_size = 12
 
 LhhjHpLabel/base_type = &"Label"
 LhhjHpLabel/colors/font_color = Color(1, 0, 0, 1)
 LhhjHpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 LhhjHpLabel/constants/outline_size = 7
-LhhjHpLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+LhhjHpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 LhhjAltValueInput/base_type = &"LineEdit"
-LhhjAltValueInput/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+LhhjAltValueInput/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LhhjAltValueInput/font_sizes/font_size = 12
 
 LhhjSelfValueInput/base_type = &"LineEdit"
@@ -1517,7 +1517,7 @@ LhhjTitle/base_type = &"Label"
 LhhjTitle/colors/font_color = Color(1, 0.384314, 0.0431373, 1)
 LhhjTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 LhhjTitle/constants/outline_size = 8
-LhhjTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LhhjTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LhhjTitle/font_sizes/font_size = 30
 
 PelletStageRow/base_type = &"HBoxContainer"
@@ -1721,19 +1721,19 @@ PetStatName/base_type = &"Label"
 PetStatName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetStatName/colors/font_outline_color = Color(0, 0, 0, 1)
 PetStatName/constants/outline_size = 3
-PetStatName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetStatName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetStatName/font_sizes/font_size = 13
 
 PetStatValue/base_type = &"Label"
 PetStatValue/colors/font_color = Color(1, 1, 1, 1)
 PetStatValue/colors/font_outline_color = Color(0, 0, 0, 1)
 PetStatValue/constants/outline_size = 3
-PetStatValue/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetStatValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetStatValue/font_sizes/font_size = 12
 
 PetLearnButton/base_type = &"Button"
 PetLearnButton/colors/font_color = Color(1, 1, 1, 1)
-PetLearnButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetLearnButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetLearnButton/font_sizes/font_size = 14
 PetLearnButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
 PetLearnButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
@@ -1755,28 +1755,28 @@ PetFormationList/constants/separation = 5
 
 PetFormationCost/base_type = &"Label"
 PetFormationCost/colors/font_color = Color(0.88, 0.88, 0.88, 1)
-PetFormationCost/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationCost/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetFormationCost/font_sizes/font_size = 12
 
 PetFormationEffect/base_type = &"Label"
 PetFormationEffect/colors/font_color = Color(0.388235, 0.780392, 1, 1)
-PetFormationEffect/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationEffect/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetFormationEffect/font_sizes/font_size = 12
 
 PetFormationLevel/base_type = &"Label"
-PetFormationLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationLevel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetFormationLevel/font_sizes/font_size = 14
 
 PetFormationName/base_type = &"Label"
 PetFormationName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-PetFormationName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetFormationName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetFormationName/font_sizes/font_size = 15
 
 PetResourceLabel/base_type = &"Label"
 PetResourceLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetResourceLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetResourceLabel/constants/outline_size = 2
-PetResourceLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetResourceLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetResourceLabel/font_sizes/font_size = 12
 
 PetSkillList/base_type = &"VBoxContainer"
@@ -1789,61 +1789,61 @@ PetBookCount/base_type = &"Label"
 PetBookCount/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetBookCount/colors/font_outline_color = Color(0, 0, 0, 1)
 PetBookCount/constants/outline_size = 3
-PetBookCount/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetBookCount/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetBookCount/font_sizes/font_size = 12
 
 PetSkillDescription/base_type = &"Label"
 PetSkillDescription/colors/font_color = Color(0.92, 0.92, 0.92, 1)
 PetSkillDescription/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillDescription/constants/outline_size = 2
-PetSkillDescription/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillDescription/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSkillDescription/font_sizes/font_size = 11
 
 PetSkillName/base_type = &"Label"
 PetSkillName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetSkillName/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillName/constants/outline_size = 3
-PetSkillName/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSkillName/font_sizes/font_size = 15
 
 PetPopupTitle/base_type = &"Label"
 PetPopupTitle/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetPopupTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 PetPopupTitle/constants/outline_size = 3
-PetPopupTitle/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetPopupTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetPopupTitle/font_sizes/font_size = 20
 
 PetSkillLevel/base_type = &"Label"
 PetSkillLevel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetSkillLevel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillLevel/constants/outline_size = 3
-PetSkillLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillLevel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSkillLevel/font_sizes/font_size = 14
 
 PetSkillMana/base_type = &"Label"
 PetSkillMana/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetSkillMana/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillMana/constants/outline_size = 3
-PetSkillMana/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillMana/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSkillMana/font_sizes/font_size = 13
 
 PetSkillNeed/base_type = &"Label"
 PetSkillNeed/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
 PetSkillNeed/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillNeed/constants/outline_size = 3
-PetSkillNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSkillNeed/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSkillNeed/font_sizes/font_size = 12
 
 PetSoulLabel/base_type = &"Label"
 PetSoulLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSoulLabel/constants/outline_size = 3
-PetSoulLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetSoulLabel/font_sizes/font_size = 15
 
 PetPageButton/base_type = &"Button"
 PetPageButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-PetPageButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetPageButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetPageButton/font_sizes/font_size = 14
 PetPageButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
 PetPageButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
@@ -1946,7 +1946,7 @@ BackpackNameInput/styles/read_only = SubResource("empty_button")
 BackpackNameInput/styles/focus = SubResource("empty_button")
 
 BackpackTitleLabel/base_type = &"Label"
-BackpackTitleLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackTitleLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BackpackHeadButton/base_type = &"Button"
 BackpackHeadButton/styles/normal = SubResource("empty_button")
@@ -1982,11 +1982,11 @@ BackpackEquipmentColumn/constants/separation = 20
 BackpackExpLabel/base_type = &"Label"
 BackpackExpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 BackpackExpLabel/constants/outline_size = 5
-BackpackExpLabel/fonts/font = ExtResource("font_fzcy")
+BackpackExpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BackpackHpLabel/base_type = &"Label"
 BackpackHpLabel/constants/outline_size = 0
-BackpackHpLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackHpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackHpLabel/font_sizes/font_size = 15
 
 BackpackHpValue/base_type = &"Label"
@@ -2002,12 +2002,12 @@ BackpackMessageLabel/fonts/font = ExtResource("font_return")
 BackpackMessageLabel/font_sizes/font_size = 20
 
 BackpackMpLabel/base_type = &"Label"
-BackpackMpLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackMpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackMpLabel/font_sizes/font_size = 15
 
 BackpackToggleButton/base_type = &"Button"
 BackpackToggleButton/colors/font_disabled_color = Color(1, 1, 1, 1)
-BackpackToggleButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+BackpackToggleButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BdSkillRow/base_type = &"HBoxContainer"
 BdSkillRow/constants/separation = 0
@@ -2038,14 +2038,14 @@ BodyTrainingLevelLabel/base_type = &"Label"
 BodyTrainingLevelLabel/colors/font_color = Color(1, 0.952941, 0.658824, 1)
 BodyTrainingLevelLabel/colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
 BodyTrainingLevelLabel/constants/outline_size = 3
-BodyTrainingLevelLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingLevelLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingLevelLabel/font_sizes/font_size = 14
 
 BodyTrainingMainLabel/base_type = &"Label"
 BodyTrainingMainLabel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
 BodyTrainingMainLabel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
 BodyTrainingMainLabel/constants/outline_size = 3
-BodyTrainingMainLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingMainLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingMainLabel/font_sizes/font_size = 14
 
 SwordPageLevelLabel/base_type = &"Label"
@@ -2327,7 +2327,7 @@ EndStatsCure/fonts/font = ExtResource("font_hk")
 EndStatsCure/font_sizes/font_size = 25
 
 LdlTitleLabel/base_type = &"Label"
-LdlTitleLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+LdlTitleLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LdlTitleLabel/font_sizes/font_size = 19
 
 LdlDzButton/base_type = &"Button"
@@ -2394,13 +2394,13 @@ RoleLevelLabel/base_type = &"Label"
 RoleLevelLabel/fonts/font = ExtResource("font_return")
 
 RoleExpText/base_type = &"Label"
-RoleExpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleExpText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 RoleExpText/font_sizes/font_size = 14
 
 RoleHpText/base_type = &"Label"
 RoleHpText/colors/font_color = Color(1, 1, 1, 1)
 RoleHpText/constants/shadow_outline_size = -6
-RoleHpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleHpText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 RoleHpText/font_sizes/font_size = 14
 
 RoleNatureHp/base_type = &"Label"
@@ -2410,7 +2410,7 @@ RoleNatureHp/font_sizes/font_size = 12
 
 RoleMpText/base_type = &"Label"
 RoleMpText/colors/font_color = Color(1, 1, 1, 1)
-RoleMpText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleMpText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 RoleMpText/font_sizes/font_size = 14
 
 RoleNatureMp/base_type = &"Label"
@@ -2426,7 +2426,7 @@ RoleKeyLabel/base_type = &"Label"
 RoleKeyLabel/colors/font_color = Color(1, 1, 1, 1)
 RoleKeyLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 RoleKeyLabel/constants/outline_size = 2
-RoleKeyLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+RoleKeyLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 RoleKeyLabel/font_sizes/font_size = 16
 
 RoleSkillRow/base_type = &"HBoxContainer"
@@ -2577,10 +2577,10 @@ ZhenFaTuPoSkill/fonts/font = ExtResource("font_hk")
 ZhenFaTuPoSkill/font_sizes/font_size = 16
 
 ZhenFaTuPoNeed/base_type = &"Label"
-ZhenFaTuPoNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenFaTuPoNeed/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 ZhenFaTuPoNeedNote/base_type = &"Label"
-ZhenFaTuPoNeedNote/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenFaTuPoNeedNote/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ZhenFaTuPoNeedNote/font_sizes/font_size = 14
 
 HcHelpTitle/base_type = &"Label"
@@ -2731,18 +2731,18 @@ TransGrid/constants/h_separation = 14
 TransGrid/constants/v_separation = 16
 
 MagicWeaponValue/base_type = &"Label"
-MagicWeaponValue/fonts/font = ExtResource("font_fzcy")
+MagicWeaponValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MagicWeaponEmpty/base_type = &"Label"
-MagicWeaponEmpty/fonts/font = ExtResource("font_fzcy")
+MagicWeaponEmpty/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MagicWeaponEmpty/font_sizes/font_size = 24
 
 MagicWeaponStat/base_type = &"Label"
-MagicWeaponStat/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MagicWeaponStat/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MagicWeaponStatHp/base_type = &"Label"
 MagicWeaponStatHp/colors/font_color = Color(1, 1, 1, 1)
-MagicWeaponStatHp/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MagicWeaponStatHp/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MagicWeaponAttr/base_type = &"Label"
 MagicWeaponAttr/colors/font_color = Color(1, 1, 1, 1)
@@ -2779,7 +2779,7 @@ MagicWeaponPsSkill/colors/font_outline_color = Color(0, 0, 0, 1)
 MagicWeaponPsSkill/constants/shadow_offset_x = 0
 MagicWeaponPsSkill/constants/shadow_offset_y = 0
 MagicWeaponPsSkill/constants/outline_size = 4
-MagicWeaponPsSkill/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MagicWeaponPsSkill/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MagicWeaponName/base_type = &"Label"
 MagicWeaponName/colors/font_color = Color(1, 1, 1, 1)
@@ -2845,10 +2845,10 @@ ZhenYanNeedNum/base_type = &"Label"
 ZhenYanNeedNum/colors/font_color = Color(1, 0, 0, 1)
 ZhenYanNeedNum/colors/font_outline_color = Color(0, 0, 0, 1)
 ZhenYanNeedNum/constants/outline_size = 5
-ZhenYanNeedNum/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenYanNeedNum/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 ZhenYanNeedNote/base_type = &"Label"
-ZhenYanNeedNote/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenYanNeedNote/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ZhenYanNeedNote/font_sizes/font_size = 14
 
 ZhenFaHelpTitle/base_type = &"Label"
@@ -2948,7 +2948,7 @@ SkillSelectName/constants/shadow_offset_x = 0
 SkillSelectName/constants/shadow_offset_y = 0
 SkillSelectName/constants/outline_size = 2
 SkillSelectName/constants/shadow_outline_size = 10
-SkillSelectName/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+SkillSelectName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 SkillSelectLevel/base_type = &"Label"
 SkillSelectLevel/colors/font_color = Color(1, 0.556863, 0, 1)
@@ -2958,7 +2958,7 @@ SkillSelectLevel/constants/shadow_offset_x = 0
 SkillSelectLevel/constants/shadow_offset_y = 0
 SkillSelectLevel/constants/outline_size = 2
 SkillSelectLevel/constants/shadow_outline_size = 8
-SkillSelectLevel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+SkillSelectLevel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 SkillSelectInfo/base_type = &"Label"
 SkillSelectInfo/colors/font_color = Color(0, 0, 0, 1)
@@ -2968,7 +2968,7 @@ SkillSelectInfo/constants/shadow_offset_x = 0
 SkillSelectInfo/constants/shadow_offset_y = 0
 SkillSelectInfo/constants/outline_size = 1
 SkillSelectInfo/constants/shadow_outline_size = 6
-SkillSelectInfo/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+SkillSelectInfo/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 SkillSelectInfo/font_sizes/font_size = 15
 
 SkillSelectNoHave/base_type = &"Label"
@@ -3004,7 +3004,7 @@ DjSellNumber/styles/focus = SubResource("empty_button")
 DjSellCloseButton/base_type = &"Button"
 DjSellCloseButton/colors/font_color = Color(1, 0, 0, 1)
 DjSellCloseButton/font_sizes/font_size = 76
-DjSellCloseButton/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+DjSellCloseButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 DjSellCloseButton/styles/normal = SubResource("empty_button")
 
 SellOrEquInfo/base_type = &"Label"
@@ -3019,7 +3019,7 @@ BackpackLockText/base_type = &"Label"
 BackpackLockText/colors/font_color = Color(0, 0, 0, 1)
 BackpackLockText/colors/font_outline_color = Color(0, 0, 0, 1)
 BackpackLockText/constants/outline_size = 1
-BackpackLockText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackLockText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackLockText/font_sizes/font_size = 11
 
 BackpackInnerMargin/base_type = &"MarginContainer"
@@ -3067,7 +3067,7 @@ BackpackPageLabel/base_type = &"Label"
 BackpackPageLabel/fonts/font = ExtResource("font_hy")
 
 BackpackCoinLabel/base_type = &"Label"
-BackpackCoinLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackCoinLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackCoinLabel/font_sizes/font_size = 12
 
 ShopItemName/base_type = &"Label"
@@ -3096,14 +3096,14 @@ ShopItemBuyButton/styles/focus = SubResource("empty_button")
 
 ShopItemSoulValue/base_type = &"Label"
 ShopItemSoulValue/colors/font_color = Color(0, 0, 0, 1)
-ShopItemSoulValue/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ShopItemSoulValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopItemSoulValue/font_sizes/font_size = 17
 
 ShopItemSoulText/base_type = &"Label"
 ShopItemSoulText/colors/font_color = Color(0, 0, 0, 1)
 ShopItemSoulText/colors/font_outline_color = Color(1, 1, 1, 0)
 ShopItemSoulText/constants/outline_size = 7
-ShopItemSoulText/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+ShopItemSoulText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopItemSoulText/font_sizes/font_size = 12
 
 Map3RegionLabel/base_type = &"Label"
@@ -3123,7 +3123,7 @@ ChoosePlayerTitle/colors/font_color = Color(1, 0.760784, 0.196078, 1)
 ChoosePlayerTitle/colors/font_shadow_color = Color(0.141176, 0.0470588, 0.0117647, 1)
 ChoosePlayerTitle/constants/shadow_offset_x = 2
 ChoosePlayerTitle/constants/shadow_offset_y = 2
-ChoosePlayerTitle/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ChoosePlayerTitle/font_sizes/font_size = 38
 
 ChoosePlayerCardRow/base_type = &"HBoxContainer"
@@ -3134,7 +3134,7 @@ ChoosePlayerRoleName/colors/font_color = Color(1, 0.760784, 0.196078, 1)
 ChoosePlayerRoleName/colors/font_shadow_color = Color(0, 0, 0, 1)
 ChoosePlayerRoleName/constants/shadow_offset_x = 2
 ChoosePlayerRoleName/constants/shadow_offset_y = 2
-ChoosePlayerRoleName/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerRoleName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ChoosePlayerRoleName/font_sizes/font_size = 26
 
 ChoosePlayerProp/base_type = &"Label"
@@ -3142,7 +3142,7 @@ ChoosePlayerProp/colors/font_color = Color(0, 1, 0, 1)
 ChoosePlayerProp/colors/font_shadow_color = Color(0, 0, 0, 1)
 ChoosePlayerProp/constants/shadow_offset_x = 1
 ChoosePlayerProp/constants/shadow_offset_y = 1
-ChoosePlayerProp/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerProp/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ChoosePlayerProp/font_sizes/font_size = 20
 
 ChoosePlayerInfo/base_type = &"Label"
@@ -3150,7 +3150,7 @@ ChoosePlayerInfo/colors/font_color = Color(0.996078, 0.956863, 0.721569, 1)
 ChoosePlayerInfo/colors/font_shadow_color = Color(0, 0, 0, 1)
 ChoosePlayerInfo/constants/shadow_offset_x = 1
 ChoosePlayerInfo/constants/shadow_offset_y = 1
-ChoosePlayerInfo/fonts/font = ExtResource("font_fzcy")
+ChoosePlayerInfo/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ChoosePlayerInfo/font_sizes/font_size = 17
 
 Map0PlayerLevel/base_type = &"Label"
@@ -3202,7 +3202,7 @@ ForgeSoulLabel/base_type = &"Label"
 ForgeSoulLabel/colors/font_color = Color(1, 1, 1, 1)
 ForgeSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 ForgeSoulLabel/constants/outline_size = 10
-ForgeSoulLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ForgeSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ForgeSoulLabel/font_sizes/font_size = 22
 
 SkillKeySetButton/base_type = &"Button"
@@ -3272,26 +3272,26 @@ MainMenuPlayerName/base_type = &"Label"
 MainMenuPlayerName/colors/font_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/colors/font_outline_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/constants/outline_size = 0
-MainMenuPlayerName/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuPlayerName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MainMenuPlayerName/font_sizes/font_size = 30
 
 MainMenuPlayerDetail/base_type = &"Label"
 MainMenuPlayerDetail/colors/font_color = Color(0.945098, 0.556863, 0, 1)
 MainMenuPlayerDetail/constants/outline_size = 2
-MainMenuPlayerDetail/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuPlayerDetail/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MainMenuPlayerDetail/font_sizes/font_size = 17
 
 MainMenuTitle/base_type = &"Label"
 MainMenuTitle/colors/font_color = Color(1, 0.396078, 0, 1)
 MainMenuTitle/colors/font_outline_color = Color(1, 0.396078, 0, 1)
 MainMenuTitle/constants/outline_size = 1
-MainMenuTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MainMenuTitle/font_sizes/font_size = 18
 
 MainMenuLabel/base_type = &"Label"
 MainMenuLabel/colors/font_color = Color(1, 1, 1, 1)
 MainMenuLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
-MainMenuLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+MainMenuLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MainMenuLabel/font_sizes/font_size = 26
 
 LearnSkillLevelValue/base_type = &"Label"
@@ -3412,33 +3412,33 @@ BodyTrainingDetailLevel/base_type = &"Label"
 BodyTrainingDetailLevel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
 BodyTrainingDetailLevel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
 BodyTrainingDetailLevel/constants/outline_size = 3
-BodyTrainingDetailLevel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailLevel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailLevel/font_sizes/font_size = 20
 
 BodyTrainingDetailAttribute/base_type = &"Label"
 BodyTrainingDetailAttribute/colors/font_color = Color(0.2, 0.12, 0.07, 1)
-BodyTrainingDetailAttribute/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailAttribute/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailAttribute/font_sizes/font_size = 16
 
 BodyTrainingDetailProgress/base_type = &"Label"
 BodyTrainingDetailProgress/colors/font_color = Color(1, 1, 1, 1)
 BodyTrainingDetailProgress/colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
 BodyTrainingDetailProgress/constants/outline_size = 3
-BodyTrainingDetailProgress/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailProgress/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailProgress/font_sizes/font_size = 16
 
 BodyTrainingDetailMaterial/base_type = &"Label"
 BodyTrainingDetailMaterial/colors/font_color = Color(1, 0.941176, 0.470588, 1)
 BodyTrainingDetailMaterial/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
 BodyTrainingDetailMaterial/constants/outline_size = 3
-BodyTrainingDetailMaterial/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingDetailMaterial/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailMaterial/font_sizes/font_size = 16
 
 BodyTrainingTrainButton/base_type = &"Button"
 BodyTrainingTrainButton/colors/font_color = Color(1, 1, 1, 1)
 BodyTrainingTrainButton/colors/font_pressed_color = Color(1, 1, 1, 1)
 BodyTrainingTrainButton/colors/font_hover_color = Color(1, 1, 1, 1)
-BodyTrainingTrainButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BodyTrainingTrainButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingTrainButton/font_sizes/font_size = 14
 BodyTrainingTrainButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
 BodyTrainingTrainButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
@@ -3600,7 +3600,7 @@ VictoryMoreButton/styles/focus = SubResource("empty_button")
 
 LxdyStageLabel/base_type = &"Label"
 LxdyStageLabel/colors/font_shadow_color = Color(0.792328, 0.792115, 0.72996, 1)
-LxdyStageLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s")
+LxdyStageLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LxdyStageLabel/font_sizes/font_size = 20
 
 LxdyButtonRow/base_type = &"HBoxContainer"
@@ -3685,7 +3685,7 @@ BacisInfoNumber/base_type = &"Label"
 BacisInfoNumber/colors/font_color = Color(1, 0.376471, 0, 1)
 BacisInfoNumber/colors/font_outline_color = Color(1, 0.376471, 0, 1)
 BacisInfoNumber/constants/outline_size = 1
-BacisInfoNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BacisInfoNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BacisInfoNumber/font_sizes/font_size = 26
 
 BacisInfoVBox/base_type = &"VBoxContainer"
@@ -3724,7 +3724,7 @@ BasicTaskTitle/fonts/font = ExtResource("font_main")
 BasicTaskTitle/font_sizes/font_size = 18
 
 BasicTaskNumber/base_type = &"Label"
-BasicTaskNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BasicTaskNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BasicTaskNumber/font_sizes/font_size = 14
 
 BasicTaskText/base_type = &"Label"
@@ -3749,7 +3749,7 @@ BossBloodValue/base_type = &"Label"
 BossBloodValue/colors/font_color = Color(1, 1, 1, 1)
 BossBloodValue/colors/font_outline_color = Color(0, 0, 0, 1)
 BossBloodValue/constants/outline_size = 7
-BossBloodValue/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BossBloodValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BossBloodValue/font_sizes/font_size = 14
 
 BossProtectName/base_type = &"Label"
@@ -3901,14 +3901,14 @@ UserKeyTime/base_type = &"Label"
 UserKeyTime/colors/font_color = Color(1, 1, 1, 1)
 UserKeyTime/colors/font_outline_color = Color(0, 0, 0, 1)
 UserKeyTime/constants/outline_size = 9
-UserKeyTime/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+UserKeyTime/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 UserKeyTime/font_sizes/font_size = 25
 
 UserKeyTimeSmall/base_type = &"Label"
 UserKeyTimeSmall/colors/font_color = Color(1, 1, 1, 1)
 UserKeyTimeSmall/colors/font_outline_color = Color(0, 0, 0, 1)
 UserKeyTimeSmall/constants/outline_size = 9
-UserKeyTimeSmall/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+UserKeyTimeSmall/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MysteryShopLabel/base_type = &"Label"
 MysteryShopLabel/colors/font_color = Color(0, 0, 0, 1)
@@ -3959,7 +3959,7 @@ MonsterHeadInfoName/colors/font_hover_color = Color(1, 0.392157, 0, 1)
 MonsterHeadInfoName/colors/font_disabled_color = Color(1, 1, 1, 1)
 MonsterHeadInfoName/colors/font_outline_color = Color(0, 0, 0, 1)
 MonsterHeadInfoName/constants/outline_size = 5
-MonsterHeadInfoName/fonts/font = ExtResource("font_fzcy")
+MonsterHeadInfoName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MonsterHeadInfoName/font_sizes/font_size = 14
 MonsterHeadInfoName/styles/normal = SubResource("empty_button")
 MonsterHeadInfoName/styles/pressed = SubResource("empty_button")
@@ -3983,18 +3983,18 @@ StrengthNumber/base_type = &"Label"
 StrengthNumber/colors/font_color = Color(0, 1, 0, 1)
 StrengthNumber/colors/font_outline_color = Color(0, 0, 0, 1)
 StrengthNumber/constants/outline_size = 8
-StrengthNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+StrengthNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 StrengthNumber/font_sizes/font_size = 20
 
 StrengthNumberSmall/base_type = &"Label"
 StrengthNumberSmall/colors/font_color = Color(0, 1, 0, 1)
 StrengthNumberSmall/colors/font_outline_color = Color(0, 0, 0, 1)
 StrengthNumberSmall/constants/outline_size = 6
-StrengthNumberSmall/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+StrengthNumberSmall/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 StrengthNumberSmall/font_sizes/font_size = 20
 
 StrengthCost/base_type = &"Label"
-StrengthCost/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+StrengthCost/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 UserLoadTitle/base_type = &"Label"
 UserLoadTitle/colors/font_color = Color(1, 1, 0, 1)
@@ -4019,7 +4019,7 @@ HelpThingsText/base_type = &"Label"
 HelpThingsText/colors/font_color = Color(0, 0, 0, 1)
 HelpThingsText/colors/font_outline_color = Color(1, 1, 1, 1)
 HelpThingsText/constants/outline_size = 11
-HelpThingsText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+HelpThingsText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 HelpThingsText/font_sizes/font_size = 100
 
 Level17Text/base_type = &"Label"
@@ -4048,7 +4048,7 @@ BoxItemNumber/colors/font_color = Color(1, 0.466667, 0, 1)
 BoxItemNumber/colors/font_shadow_color = Color(0, 0, 0, 1)
 BoxItemNumber/colors/font_outline_color = Color(0, 0, 0, 1)
 BoxItemNumber/constants/outline_size = 6
-BoxItemNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BoxItemNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BoxItemNumber/font_sizes/font_size = 18
 
 BoxLockMark/base_type = &"Label"
@@ -4065,7 +4065,7 @@ ZhenYanSlotLabel/constants/shadow_offset_x = 0
 ZhenYanSlotLabel/constants/shadow_offset_y = 0
 ZhenYanSlotLabel/constants/outline_size = 1
 ZhenYanSlotLabel/constants/shadow_outline_size = 7
-ZhenYanSlotLabel/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ZhenYanSlotLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 ZhenYanSlotButton/base_type = &"Button"
 ZhenYanSlotButton/styles/normal = SubResource("empty_button")
@@ -4127,7 +4127,7 @@ ChooseSceneText/font_sizes/font_size = 17
 
 ChooseSceneCountdown/base_type = &"Label"
 ChooseSceneCountdown/colors/font_color = Color(1, 0, 0, 1)
-ChooseSceneCountdown/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ChooseSceneCountdown/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ChooseSceneCountdown/font_sizes/font_size = 18
 
 MysteryShopTitle/base_type = &"Label"
@@ -4140,7 +4140,7 @@ MysteryShopTitle/font_sizes/font_size = 12
 MysteryShopInfo/base_type = &"Label"
 MysteryShopInfo/colors/font_color = Color(0, 0, 0, 1)
 MysteryShopInfo/colors/font_outline_color = Color(0, 0, 0, 1)
-MysteryShopInfo/fonts/font = ExtResource("font_fzcy")
+MysteryShopInfo/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MysteryShopList/base_type = &"HBoxContainer"
 MysteryShopList/constants/separation = 9
@@ -4149,14 +4149,14 @@ BuffIconTime/base_type = &"Label"
 BuffIconTime/colors/font_color = Color(1, 1, 0, 1)
 BuffIconTime/colors/font_outline_color = Color(0, 0, 0, 1)
 BuffIconTime/constants/outline_size = 5
-BuffIconTime/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BuffIconTime/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BuffIconTime/font_sizes/font_size = 9
 
 BuffIconTimes/base_type = &"Label"
 BuffIconTimes/colors/font_color = Color(1, 1, 1, 1)
 BuffIconTimes/colors/font_outline_color = Color(0, 0, 0, 1)
 BuffIconTimes/constants/outline_size = 5
-BuffIconTimes/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BuffIconTimes/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BuffIconTimes/font_sizes/font_size = 10
 
 BuffInformationMargin/base_type = &"MarginContainer"
@@ -4272,7 +4272,7 @@ PetBackpackSlotNumber/colors/font_color = Color(1, 0.466667, 0, 1)
 PetBackpackSlotNumber/colors/font_shadow_color = Color(0, 0, 0, 1)
 PetBackpackSlotNumber/colors/font_outline_color = Color(0, 0, 0, 1)
 PetBackpackSlotNumber/constants/outline_size = 4
-PetBackpackSlotNumber/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+PetBackpackSlotNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetBackpackSlotNumber/font_sizes/font_size = 15
 
 RoleButtonName/base_type = &"Label"
@@ -4298,7 +4298,7 @@ RoleMagicNeedText/fonts/font = ExtResource("font_hk")
 RoleMagicNeedText/font_sizes/font_size = 18
 
 SynthesisCost/base_type = &"Label"
-SynthesisCost/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+SynthesisCost/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 SynthesisItemName/base_type = &"Label"
 SynthesisItemName/colors/font_outline_color = Color(1, 1, 1, 1)
@@ -4312,7 +4312,7 @@ SynthesisTitle/base_type = &"Label"
 SynthesisTitle/colors/font_color = Color(0.972549, 0.976471, 0, 1)
 SynthesisTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 SynthesisTitle/constants/outline_size = 5
-SynthesisTitle/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+SynthesisTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 SynthesisTitle/font_sizes/font_size = 32
 
 TaskRewardTitle/base_type = &"Label"
@@ -4397,7 +4397,7 @@ ForgeMaterialNeed/base_type = &"Label"
 ForgeMaterialNeed/colors/font_color = Color(0, 1, 0, 1)
 ForgeMaterialNeed/colors/font_outline_color = Color(0, 0, 0, 1)
 ForgeMaterialNeed/constants/outline_size = 5
-ForgeMaterialNeed/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+ForgeMaterialNeed/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ForgeMaterialNeed/font_sizes/font_size = 14
 
 GameOverSubtitle/base_type = &"Label"
@@ -4450,7 +4450,7 @@ MagicWeaponCdText/base_type = &"Label"
 MagicWeaponCdText/colors/font_color = Color(1, 1, 1, 1)
 MagicWeaponCdText/colors/font_outline_color = Color(0, 0, 0, 1)
 MagicWeaponCdText/constants/outline_size = 8
-MagicWeaponCdText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MagicWeaponCdText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MagicWeaponCdText/font_sizes/font_size = 16
 
 PelletSysTitle/base_type = &"Label"
@@ -4513,13 +4513,13 @@ HeroNameFlat/font_sizes/font_size = 17
 
 MomentTextLabel/base_type = &"Label"
 MomentTextLabel/colors/font_color = Color(1, 1, 1, 1)
-MomentTextLabel/fonts/font = ExtResource("font_1_aaa_fz_cu_yuan_m03_s_ttf")
+MomentTextLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MomentTextLabel/font_sizes/font_size = 30
 
 MonsterBloodText/base_type = &"Label"
 MonsterBloodText/colors/font_outline_color = Color(0, 0, 0, 1)
 MonsterBloodText/constants/outline_size = 5
-MonsterBloodText/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+MonsterBloodText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MonsterBloodText/font_sizes/font_size = 15
 
 RoleInformationGrid/base_type = &"GridContainer"
@@ -4534,20 +4534,20 @@ SkillIconTime/base_type = &"Label"
 SkillIconTime/colors/font_color = Color(1, 1, 1, 1)
 SkillIconTime/colors/font_outline_color = Color(0, 0, 0, 1)
 SkillIconTime/constants/outline_size = 9
-SkillIconTime/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+SkillIconTime/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 HitTextBase/base_type = &"Label"
 HitTextBase/colors/font_color = Color(0.145098, 1, 0, 1)
 HitTextBase/colors/font_shadow_color = Color(0, 0, 0, 1)
 HitTextBase/colors/font_outline_color = Color(0, 0, 0, 1)
 HitTextBase/constants/outline_size = 10
-HitTextBase/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+HitTextBase/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 HitTextBase/font_sizes/font_size = 25
 
 BackpackActionButton/base_type = &"Button"
 BackpackActionButton/colors/font_color = Color(1, 1, 1, 1)
 BackpackActionButton/font_sizes/font_size = 14
-BackpackActionButton/fonts/font = ExtResource("font_8_fz_cu_yuan_m03_s")
+BackpackActionButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackActionButton/styles/disabled = SubResource("backpack_action_disabled")
 BackpackActionButton/styles/hover = SubResource("backpack_action_hover")
 BackpackActionButton/styles/normal = SubResource("backpack_action_normal")

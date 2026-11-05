@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://bw2o0d4vui437"]
+
+[ext_resource type="FontFile" path="res://Font/fz_cu_yuan_m03.ttf" id="1_fsurg"]
+[ext_resource type="FontFile" path="res://Font/msyh_semibold.ttc" id="2_ccs78"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_ccs78")])
+base_font = ExtResource("1_fsurg")
