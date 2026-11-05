@@ -3,7 +3,6 @@ extends Control
 const CATALOG_DATA := preload("res://Script/main_menu/equipment_catalog_data.gd")
 const CATEGORIES := ["悟空", "唐僧", "八戒", "沙僧", "白龙", "哪吒", "玉兔", "通用", "法宝"]
 const PANEL_SIZE := Vector2(900.0, 540.0)
-const GOLD := Color("e8c478")
 const SLOT_BACKGROUND := preload("res://Art/backpack/all_items/empty.png")
 const CATALOG_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
 const QUALITY_ORDER := ["普通", "优秀", "精良", "史诗", "邪灵", "魂器", "传说", "神器", "玄冥", "黑神话", "无敌"]
@@ -103,7 +102,7 @@ func _end_drag() -> void:
 	_drag_started = false
 
 
-func _style(color: Color, border := Color("735933"), width := 1) -> StyleBoxFlat:
+func _style(color: Color, border := UiSurfaceTokens.EARTH_BORDER_DIM, width := 1) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = color
 	style.border_color = border
@@ -122,31 +121,39 @@ func _build_ui() -> void:
 	theme.default_font_size = 22
 	theme.set_color("font_color", "Label", UiColorTokens.TEXT_PARCHMENT)
 	for control_type in ["Button", "OptionButton"]:
-		theme.set_stylebox("normal", control_type, _style(Color("242621"), Color("64563e")))
-		theme.set_stylebox("hover", control_type, _style(Color("37362b"), GOLD))
-		theme.set_stylebox("pressed", control_type, _style(Color("49402c"), GOLD))
-		theme.set_stylebox("focus", control_type, _style(Color.TRANSPARENT, Color("aa8b55")))
+		theme.set_stylebox("normal", control_type, _style(UiSurfaceTokens.EARTH_CONTROL, UiSurfaceTokens.EARTH_BORDER))
+		theme.set_stylebox("hover", control_type, _style(UiSurfaceTokens.EARTH_HOVER, UiSurfaceTokens.EARTH_ACCENT))
+		theme.set_stylebox(
+			"pressed", control_type, _style(UiSurfaceTokens.EARTH_SELECTED, UiSurfaceTokens.EARTH_ACCENT)
+		)
+		theme.set_stylebox("focus", control_type, _style(Color.TRANSPARENT, UiSurfaceTokens.EARTH_BORDER_ACCENT))
 		theme.set_color("font_color", control_type, UiColorTokens.TEXT_PARCHMENT_MUTED)
 		theme.set_color("font_pressed_color", control_type, UiColorTokens.TEXT_GOLD_LIGHT)
 		theme.set_color("font_hover_color", control_type, UiColorTokens.TEXT_GOLD_LIGHT)
-	theme.set_stylebox("normal", "LineEdit", _style(Color("171b19"), Color("64563e")))
-	theme.set_stylebox("focus", "LineEdit", _style(Color("20251f"), GOLD))
-	theme.set_stylebox("panel", "ItemList", _style(Color("171b19"), Color("64563e")))
-	theme.set_stylebox("selected", "ItemList", _style(Color("49402c"), Color("b59a60")))
-	theme.set_stylebox("selected_focus", "ItemList", _style(Color("49402c"), GOLD))
+	theme.set_stylebox("normal", "LineEdit", _style(UiSurfaceTokens.EARTH_DEEP, UiSurfaceTokens.EARTH_BORDER))
+	theme.set_stylebox("focus", "LineEdit", _style(UiSurfaceTokens.EARTH_INPUT, UiSurfaceTokens.EARTH_ACCENT))
+	theme.set_color("caret_color", "LineEdit", UiSurfaceTokens.INPUT_CARET)
+	theme.set_color("selection_color", "LineEdit", UiSurfaceTokens.INPUT_SELECTION)
+	theme.set_stylebox("panel", "ItemList", _style(UiSurfaceTokens.EARTH_DEEP, UiSurfaceTokens.EARTH_BORDER))
+	theme.set_stylebox(
+		"selected", "ItemList", _style(UiSurfaceTokens.EARTH_SELECTED, UiSurfaceTokens.EARTH_BORDER_BRIGHT)
+	)
+	theme.set_stylebox(
+		"selected_focus", "ItemList", _style(UiSurfaceTokens.EARTH_SELECTED, UiSurfaceTokens.EARTH_ACCENT)
+	)
 	theme.set_color("font_color", "ItemList", UiColorTokens.TEXT_PARCHMENT)
 	theme.set_color("font_selected_color", "ItemList", UiColorTokens.TEXT_GOLD_LIGHT)
 	var dim := ColorRect.new()
-	dim.color = Color(0.0, 0.0, 0.0, 0.78)
+	dim.color = UiSurfaceTokens.OVERLAY_EARTH
 	add_child(dim)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_panel = PanelContainer.new()
 	_panel.name = "CatalogPanel"
 	_panel.size = PANEL_SIZE
-	var panel_style := _style(Color("20241f"), Color("b59a60"), 2)
+	var panel_style := _style(UiSurfaceTokens.EARTH_PANEL, UiSurfaceTokens.EARTH_BORDER_BRIGHT, 2)
 	panel_style.content_margin_left = 18
 	panel_style.content_margin_right = 18
-	panel_style.shadow_color = Color(0, 0, 0, 0.5)
+	panel_style.shadow_color = UiSurfaceTokens.SHADOW
 	panel_style.shadow_size = 12
 	_panel.add_theme_stylebox_override("panel", panel_style)
 	add_child(_panel)
@@ -208,7 +215,7 @@ func _build_ui() -> void:
 	body.add_child(_item_list)
 	var detail_panel := PanelContainer.new()
 	detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_panel.add_theme_stylebox_override("panel", _style(Color("171b19"), Color("64563e")))
+	detail_panel.add_theme_stylebox_override("panel", _style(UiSurfaceTokens.EARTH_DEEP, UiSurfaceTokens.EARTH_BORDER))
 	body.add_child(detail_panel)
 	_detail_scroll = ScrollContainer.new()
 	_detail_scroll.name = "DetailScroll"
@@ -314,7 +321,7 @@ func select_item(item_id: String) -> void:
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 14)
 	var banner := PanelContainer.new()
-	banner.add_theme_stylebox_override("panel", _style(Color("2d3027"), Color("786443")))
+	banner.add_theme_stylebox_override("panel", _style(UiSurfaceTokens.EARTH_RAISED, UiSurfaceTokens.EARTH_BORDER_WARM))
 	_detail.add_child(banner)
 	banner.add_child(header)
 	var icon := TextureRect.new()
@@ -352,7 +359,7 @@ func select_item(item_id: String) -> void:
 	for value in catalog.get_attributes(item_id):
 		var card := PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.add_theme_stylebox_override("panel", _style(Color("282d25"), Color("454b3a")))
+		card.add_theme_stylebox_override("panel", _style(UiSurfaceTokens.EARTH_CARD, UiSurfaceTokens.EARTH_BORDER_SOFT))
 		attributes.add_child(card)
 		var row := HBoxContainer.new()
 		card.add_child(row)
@@ -376,7 +383,9 @@ func select_item(item_id: String) -> void:
 func _add_section(title: String, value: String, color: Color) -> void:
 	_add_text(title, 23, UiColorTokens.TEXT_GOLD_WARM)
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _style(Color("232820"), Color("454b3a")))
+	panel.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.EARTH_PANEL_ALT, UiSurfaceTokens.EARTH_BORDER_SOFT)
+	)
 	_detail.add_child(panel)
 	var label := Label.new()
 	label.text = value

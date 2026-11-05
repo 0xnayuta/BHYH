@@ -320,10 +320,18 @@ func _build_category_buttons() -> void:
 		button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 		button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
 		button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_GOLD)
-		button.add_theme_stylebox_override("normal", _make_button_style(Color("293138"), Color("5c6870")))
-		button.add_theme_stylebox_override("hover", _make_button_style(Color("3a464d"), Color("89a69c")))
-		button.add_theme_stylebox_override("pressed", _make_button_style(Color("1d252a"), Color("b6c9bd")))
-		button.add_theme_stylebox_override("disabled", _make_button_style(Color("7a2e32"), Color("e2b75c")))
+		button.add_theme_stylebox_override(
+			"normal", _make_button_style(UiSurfaceTokens.COOL_CONTROL, UiSurfaceTokens.COOL_BORDER)
+		)
+		button.add_theme_stylebox_override(
+			"hover", _make_button_style(UiSurfaceTokens.COOL_HOVER, UiSurfaceTokens.COOL_BORDER_BRIGHT)
+		)
+		button.add_theme_stylebox_override(
+			"pressed", _make_button_style(UiSurfaceTokens.COOL_PRESSED, UiSurfaceTokens.COOL_BORDER_SOFT)
+		)
+		button.add_theme_stylebox_override(
+			"disabled", _make_button_style(UiSurfaceTokens.DANGER_SELECTED, UiSurfaceTokens.COOL_ACCENT_SOFT)
+		)
 		button.pressed.connect(_on_category_pressed.bind(str(category_name)))
 		_category_list.add_child(button)
 		_category_buttons[category_name] = button
@@ -443,10 +451,18 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	upgrade_button.add_theme_font_size_override("font_size", 16)
 	upgrade_button.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
 	upgrade_button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_DISABLED)
-	upgrade_button.add_theme_stylebox_override("normal", _make_button_style(Color("276149"), Color("72ae8e")))
-	upgrade_button.add_theme_stylebox_override("hover", _make_button_style(Color("347a5e"), Color("a4d7bb")))
-	upgrade_button.add_theme_stylebox_override("pressed", _make_button_style(Color("1d4937"), Color("d0eadb")))
-	upgrade_button.add_theme_stylebox_override("disabled", _make_button_style(Color("343b3f"), Color("596166")))
+	upgrade_button.add_theme_stylebox_override(
+		"normal", _make_button_style(UiSurfaceTokens.GREEN, UiSurfaceTokens.GREEN_BORDER)
+	)
+	upgrade_button.add_theme_stylebox_override(
+		"hover", _make_button_style(UiSurfaceTokens.GREEN_HOVER, UiSurfaceTokens.GREEN_BORDER_BRIGHT)
+	)
+	upgrade_button.add_theme_stylebox_override(
+		"pressed", _make_button_style(UiSurfaceTokens.GREEN_DEEP, UiSurfaceTokens.GREEN_BORDER_SOFT)
+	)
+	upgrade_button.add_theme_stylebox_override(
+		"disabled", _make_button_style(UiSurfaceTokens.COOL_DISABLED, UiSurfaceTokens.DISABLED_BORDER)
+	)
 	upgrade_button.pressed.connect(_on_consume_pressed.bind(monster_id))
 	column.add_child(upgrade_button)
 
@@ -620,8 +636,8 @@ func _make_button_style(background: Color, border: Color) -> StyleBoxFlat:
 
 func _make_card_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("20272b")
-	style.border_color = Color("58666d")
+	style.bg_color = UiSurfaceTokens.COOL_RAISED
+	style.border_color = UiSurfaceTokens.COOL_BORDER_DIM
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(4)
 	return style

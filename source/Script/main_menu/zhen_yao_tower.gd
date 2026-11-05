@@ -287,13 +287,13 @@ func _style_shop_button(button: Button) -> void:
 	button.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	button.add_theme_constant_override("outline_size", 2)
 	button.add_theme_stylebox_override(
-		"normal", _make_shop_style(Color(0.219608, 0.137255, 0.094118, 0.94), Color(0.752941, 0.611765, 0.337255, 1.0))
+		"normal", _make_shop_style(UiSurfaceTokens.WARM_PANEL, UiSurfaceTokens.WARM_BORDER)
 	)
 	button.add_theme_stylebox_override(
-		"pressed", _make_shop_style(Color(0.490196, 0.313725, 0.164706, 1.0), Color(1.0, 0.941176, 0.635294, 1.0))
+		"pressed", _make_shop_style(UiSurfaceTokens.WARM_PRESSED, UiSurfaceTokens.WARM_BORDER_BRIGHT)
 	)
 	button.add_theme_stylebox_override(
-		"hover", _make_shop_style(Color(0.376471, 0.239216, 0.12549, 0.98), Color(1.0, 0.85098, 0.478431, 1.0))
+		"hover", _make_shop_style(UiSurfaceTokens.WARM_HOVER, UiSurfaceTokens.WARM_ACCENT_LIGHT)
 	)
 
 
@@ -312,7 +312,7 @@ func _show_shop(mode: String) -> void:
 	var dimmer := ColorRect.new()
 	dimmer.name = "Dimmer"
 	dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dimmer.color = Color(0.0352941, 0.0196078, 0.0117647, 0.52)
+	dimmer.color = UiSurfaceTokens.WARM_OVERLAY
 	dimmer.mouse_filter = Control.MOUSE_FILTER_STOP
 	dimmer.gui_input.connect(_on_shop_dimmer_gui_input)
 	_shop_overlay.add_child(dimmer)
@@ -322,8 +322,7 @@ func _show_shop(mode: String) -> void:
 	panel.position = Vector2(98.0, 34.0)
 	panel.size = Vector2(745.0, 523.0)
 	panel.add_theme_stylebox_override(
-		"panel",
-		_make_shop_style(Color(0.137255, 0.0862745, 0.054902, 0.98), Color(0.752941, 0.611765, 0.337255, 1.0), 3)
+		"panel", _make_shop_style(UiSurfaceTokens.WARM_DEEP, UiSurfaceTokens.WARM_BORDER, 3)
 	)
 	_shop_overlay.add_child(panel)
 
@@ -427,7 +426,7 @@ func _create_shop_item_row(
 	row.custom_minimum_size = Vector2(0.0, 60.0)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_stylebox_override(
-		"panel", _make_shop_style(Color(0.219608, 0.137255, 0.094118, 0.7), Color(0.490196, 0.313725, 0.164706, 1.0))
+		"panel", _make_shop_style(UiSurfaceTokens.WARM_PANEL_SOFT, UiSurfaceTokens.WARM_PRESSED)
 	)
 	var line := HBoxContainer.new()
 	line.add_theme_constant_override("separation", 4)
@@ -489,10 +488,10 @@ func _create_shop_item_row(
 		quantity_input.add_theme_font_override("font", TOWER_FONT)
 		quantity_input.add_theme_font_size_override("font_size", 14)
 		quantity_input.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
-		quantity_input.add_theme_color_override("caret_color", Color(1.0, 0.85098, 0.478431, 1.0))
+		quantity_input.add_theme_color_override("caret_color", UiSurfaceTokens.INPUT_CARET)
+		quantity_input.add_theme_color_override("selection_color", UiSurfaceTokens.INPUT_SELECTION)
 		quantity_input.add_theme_stylebox_override(
-			"normal",
-			_make_shop_style(Color(0.0901961, 0.054902, 0.0313725, 0.94), Color(0.490196, 0.313725, 0.164706, 1.0))
+			"normal", _make_shop_style(UiSurfaceTokens.WARM_DEEPEST, UiSurfaceTokens.WARM_PRESSED)
 		)
 		quantity_controls.add_child(quantity_input)
 

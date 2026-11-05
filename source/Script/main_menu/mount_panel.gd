@@ -53,7 +53,7 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	var dim := ColorRect.new()
-	dim.color = Color(0.0, 0.0, 0.0, 0.68)
+	dim.color = UiSurfaceTokens.OVERLAY_MEDIUM
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	panel_root = Control.new()
@@ -64,9 +64,7 @@ func _build_ui() -> void:
 	add_child(panel_root)
 	var frame := Panel.new()
 	frame.size = PANEL_SIZE
-	frame.add_theme_stylebox_override(
-		"panel", _style(Color(0.067, 0.078, 0.084, 0.985), Color(0.73, 0.58, 0.28, 1.0), 2, 6)
-	)
+	frame.add_theme_stylebox_override("panel", _style(UiSurfaceTokens.COOL_FRAME, UiSurfaceTokens.COOL_ACCENT, 2, 6))
 	panel_root.add_child(frame)
 	var title := _label(
 		"坐骑", Vector2(28, 15), Vector2(760, 40), 30, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER
@@ -75,18 +73,20 @@ func _build_ui() -> void:
 	panel_root.add_child(title)
 	var close := _button("×", Vector2(830, 15), Vector2(46, 40), 26)
 	close.add_theme_stylebox_override(
-		"normal", _style(Color(0.28, 0.1, 0.105, 1.0), Color(0.72, 0.42, 0.34, 1.0), 1, 4)
+		"normal", _style(UiSurfaceTokens.DANGER_DEEP, UiSurfaceTokens.DANGER_BORDER, 1, 4)
 	)
-	close.add_theme_stylebox_override("hover", _style(Color(0.46, 0.15, 0.15, 1.0), Color(0.94, 0.72, 0.46, 1.0), 1, 4))
 	close.add_theme_stylebox_override(
-		"pressed", _style(Color(0.19, 0.06, 0.065, 1.0), Color(0.82, 0.6, 0.4, 1.0), 1, 4)
+		"hover", _style(UiSurfaceTokens.DANGER_HOVER, UiSurfaceTokens.DANGER_BORDER_HOVER, 1, 4)
+	)
+	close.add_theme_stylebox_override(
+		"pressed", _style(UiSurfaceTokens.DANGER_PRESSED, UiSurfaceTokens.DANGER_BORDER_PRESSED, 1, 4)
 	)
 	panel_root.add_child(close)
 	close.pressed.connect(queue_free)
 	var header_line := ColorRect.new()
 	header_line.position = Vector2(18, 61)
 	header_line.size = Vector2(864, 2)
-	header_line.color = Color(0.73, 0.58, 0.28, 0.7)
+	header_line.color = UiSurfaceTokens.COOL_ACCENT_LINE
 	header_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel_root.add_child(header_line)
 	list_button = _button("更换坐骑", Vector2(30, 65), Vector2(130, 34), 15)
@@ -107,7 +107,9 @@ func _build_ui() -> void:
 	preview_host.position = Vector2(25, 174)
 	preview_host.size = Vector2(300, 300)
 	preview_host.clip_contents = true
-	preview_host.add_theme_stylebox_override("panel", _style(Color("1b2023"), Color("4f5c61"), 1, 4))
+	preview_host.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.COOL_PANEL, UiSurfaceTokens.COOL_PREVIEW_BORDER, 1, 4)
+	)
 	panel_root.add_child(preview_host)
 	preview = MOUNT_VISUAL.new()
 	preview.name = "MountPreview"
@@ -186,7 +188,10 @@ func _refresh_content(mount: Dictionary) -> void:
 		tab_buttons[index].add_theme_stylebox_override(
 			"normal",
 			_style(
-				Color("7a2e32") if selected else Color("293138"), Color("e2b75c") if selected else Color("5c6870"), 1, 4
+				UiSurfaceTokens.DANGER_SELECTED if selected else UiSurfaceTokens.COOL_CONTROL,
+				UiSurfaceTokens.COOL_ACCENT_SOFT if selected else UiSurfaceTokens.COOL_BORDER,
+				1,
+				4
 			)
 		)
 	var page := VBoxContainer.new()
@@ -352,8 +357,12 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 		bar.show_percentage = false
 		bar.max_value = maxi(1, int(mount.get("%s上限" % key, 1)))
 		bar.value = int(mount.get(key, 0))
-		bar.add_theme_stylebox_override("background", _style(Color("151b1e"), Color("58666d"), 1, 4))
-		bar.add_theme_stylebox_override("fill", _style(Color("6f8e78"), Color("b6c9bd"), 1, 4))
+		bar.add_theme_stylebox_override(
+			"background", _style(UiSurfaceTokens.COOL_DEEP, UiSurfaceTokens.COOL_BORDER_DIM, 1, 4)
+		)
+		bar.add_theme_stylebox_override(
+			"fill", _style(UiSurfaceTokens.COOL_PROGRESS, UiSurfaceTokens.COOL_BORDER_SOFT, 1, 4)
+		)
 		row.add_child(bar)
 		row.add_child(
 			_label(
@@ -382,7 +391,9 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 		icon_frame.custom_minimum_size = Vector2(58, 58)
 		icon_frame.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		icon_frame.tooltip_text = "%s\n%s" % [str(skill.get("name", "技能")), str(skill.get("description", ""))]
-		icon_frame.add_theme_stylebox_override("panel", _style(Color("171d20"), Color("b7954b"), 2, 4))
+		icon_frame.add_theme_stylebox_override(
+			"panel", _style(UiSurfaceTokens.COOL_ICON_BG, UiSurfaceTokens.COOL_ACCENT, 2, 4)
+		)
 		var skill_button := Button.new()
 		skill_button.name = "MountSkillButton_%s" % str(skill.get("id", ""))
 		skill_button.custom_minimum_size = Vector2(54, 54)
@@ -445,7 +456,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	skill_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel_root.add_child(skill_popup)
 	var shade := ColorRect.new()
-	shade.color = Color(0.0, 0.0, 0.0, 0.72)
+	shade.color = UiSurfaceTokens.OVERLAY_STRONG
 	shade.size = PANEL_SIZE
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	skill_popup.add_child(shade)
@@ -453,7 +464,9 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	popup_frame.name = "MountSkillUpgradeFrame"
 	popup_frame.position = Vector2(190, 82)
 	popup_frame.size = Vector2(520, 426)
-	popup_frame.add_theme_stylebox_override("panel", _style(Color("151b1f"), Color("d0a750"), 2, 7))
+	popup_frame.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.COOL_DEEP, UiSurfaceTokens.COOL_ACCENT_BRIGHT, 2, 7)
+	)
 	skill_popup.add_child(popup_frame)
 	popup_frame.add_child(
 		_label("技能升级", Vector2(24, 12), Vector2(410, 38), 25, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
@@ -465,7 +478,9 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	var icon_frame := PanelContainer.new()
 	icon_frame.position = Vector2(28, 70)
 	icon_frame.size = Vector2(84, 84)
-	icon_frame.add_theme_stylebox_override("panel", _style(Color("101519"), Color("b7954b"), 2, 5))
+	icon_frame.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.COOL_DEEPEST, UiSurfaceTokens.COOL_ACCENT, 2, 5)
+	)
 	popup_frame.add_child(icon_frame)
 	var icon_path := MOUNT_CATALOG.get_icon_path(skill_id)
 	if icon_path != "":
@@ -510,7 +525,9 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	var damage_panel := Panel.new()
 	damage_panel.position = Vector2(24, 201)
 	damage_panel.size = Vector2(472, 126)
-	damage_panel.add_theme_stylebox_override("panel", _style(Color("1c2429"), Color("52616a"), 1, 4))
+	damage_panel.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.COOL_PANEL_ALT, UiSurfaceTokens.COOL_DAMAGE_BORDER, 1, 4)
+	)
 	popup_frame.add_child(damage_panel)
 	var combat := MOUNT_CATALOG.get_official_combat(skill_id)
 	var is_buff := bool(combat.get("buff", false)) or str(skill.get("kind", "")) == "buff"
@@ -684,7 +701,9 @@ func _build_mount_list() -> void:
 	mount_list.z_index = 1000
 	mount_list.mouse_filter = Control.MOUSE_FILTER_STOP
 	mount_list.visible = false
-	mount_list.add_theme_stylebox_override("panel", _style(Color("1b2023"), Color(0.73, 0.58, 0.28, 1.0), 2, 4))
+	mount_list.add_theme_stylebox_override(
+		"panel", _style(UiSurfaceTokens.COOL_PANEL, UiSurfaceTokens.COOL_ACCENT, 2, 4)
+	)
 	panel_root.add_child(mount_list)
 	var mounts := _mounts_for_panel()
 	for index in range(mounts.size()):
@@ -904,9 +923,15 @@ func _button(text_value: String, position_value: Vector2, size_value: Vector2, f
 	button.add_theme_font_size_override("font_size", font_size)
 	button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
-	button.add_theme_stylebox_override("normal", _style(Color("293138"), Color("5c6870"), 1, 4))
-	button.add_theme_stylebox_override("hover", _style(Color("3a464d"), Color("89a69c"), 1, 4))
-	button.add_theme_stylebox_override("pressed", _style(Color("1d252a"), Color("b6c9bd"), 1, 4))
+	button.add_theme_stylebox_override(
+		"normal", _style(UiSurfaceTokens.COOL_CONTROL, UiSurfaceTokens.COOL_BORDER, 1, 4)
+	)
+	button.add_theme_stylebox_override(
+		"hover", _style(UiSurfaceTokens.COOL_HOVER, UiSurfaceTokens.COOL_BORDER_BRIGHT, 1, 4)
+	)
+	button.add_theme_stylebox_override(
+		"pressed", _style(UiSurfaceTokens.COOL_PRESSED, UiSurfaceTokens.COOL_BORDER_SOFT, 1, 4)
+	)
 	return button
 
 
