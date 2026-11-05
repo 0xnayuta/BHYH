@@ -315,4 +315,4 @@ flowchart TD
 
 ## 6. 下一步
 
-**Phase 25 已关闭**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。下一阶段为 Phase 26（独立工作流，未启动）。
+**Phase 25 已关闭**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。Phase 26（平台/发布验证）长期暂缓；当前候选为 Phase 27（Theme 与字体契约收敛），不依赖 Phase 26。

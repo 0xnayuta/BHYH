@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-10 颜色批次（2026-11-05）。在 P2-9 基础上把自绘菜单的 StyleBox 底色/边框收敛为 `UiSurfaceTokens`，并统一输入光标/选区色。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-11 输入与动态样式批次（2026-11-05）。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；补齐 `ShopSearchInput`、`ArchiveLoginInput`、`ArchiveNumberInput` 光标/选区，并新增 `ui_surface_token_audit.py`。Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -92,9 +92,11 @@
 | 大地色 | `EARTH_DEEP #171B19`、`EARTH_PANEL #20241F`、`EARTH_PANEL_ALT #232820`、`EARTH_CONTROL #242621`、`EARTH_CARD #282D25`、`EARTH_RAISED #2D3027`、`EARTH_HOVER #37362B`、`EARTH_SELECTED #49402C`、`EARTH_INPUT #20251F` |
 | 大地边框 | `EARTH_BORDER #64563E`、`EARTH_BORDER_BRIGHT #B59A60`、`EARTH_BORDER_ACCENT #AA8B55`、`EARTH_BORDER_SOFT #454B3A`、`EARTH_BORDER_WARM #786443`、`EARTH_BORDER_DIM #735933`、`EARTH_ACCENT #E8C478` |
 | 暖棕/输入 | `WARM_DEEPEST/WARM_DEEP/WARM_PANEL/WARM_PANEL_SOFT/WARM_HOVER/WARM_PRESSED/WARM_BORDER/WARM_BORDER_BRIGHT/WARM_ACCENT_LIGHT`；`INPUT_CARET #FFD97A`、`INPUT_SELECTION #C09C56 45%`、`WARM_OVERLAY` |
-| 遮罩 | `OVERLAY_MEDIUM 68%`、`OVERLAY_STRONG 72%`、`OVERLAY_EARTH 78%`、`SHADOW 50%`、`WARM_OVERLAY 52%` |
+| 模式/地图 | `MODE_PANEL #DAB070`、`MODE_PANEL_BORDER #382714`、`MODE_ACTION #ED9908`、`MODE_ACTION_HOVER #FFC343`、`MODE_ACTION_PRESSED #C57A06`、`MODE_ACTION_BORDER #73501D`、`MAP_HIGHLIGHT #FFF000` |
+| 状态 modulate | `PREVIEW_LOCKED_MODULATE #8C8C8C`、`DISABLED_MODULATE #9E9E9E`；`Color.WHITE` 为启用/复位 |
+| 遮罩 | `OVERLAY_LIGHT 48%`、`OVERLAY_MEDIUM 68%`、`OVERLAY_STRONG 72%`、`OVERLAY_EARTH 78%`、`SHADOW 50%`、`WARM_OVERLAY 52%` |
 
-输入配色：`zhen_yao_tower.gd` 数量输入、`equipment_catalog_page.gd` 搜索框与主题 `TowerFloorInput` 使用 `INPUT_CARET` / `INPUT_SELECTION`。
+输入配色：`zhen_yao_tower.gd` 数量输入、`equipment_catalog_page.gd` 搜索框与主题 `TowerFloorInput` 使用 `INPUT_CARET` / `INPUT_SELECTION`；`ShopSearchInput` 使用浅底 `#331F12` 光标与 25% 选区；`ArchiveLoginInput` / `ArchiveNumberInput` 使用深底 `INPUT_CARET` / `INPUT_SELECTION`。
 
 ### 描边
 
@@ -145,7 +147,8 @@
 | `equipment_catalog_page（脚本）` | 羊皮纸正文/次级文字/暖金/浅金/浅绿/提示改用 `UiColorTokens`：text_parchment、text_parchment_muted、text_gold_warm、text_gold_light、text_jade、text_hint |
 | `其他 main_menu 脚本` | `wan_ling_catalog_page` 按钮/名称/效果/等级/材料/禁用色；`zhen_yao_tower` 文字/按钮/输入与描边；`game_mode_select` 深棕按钮文字；`choose_player` 星级金色，均改用 `UiColorTokens` |
 | `自绘菜单 StyleBox（颜色）` | `mount_panel`/`equipment_catalog_page`/`wan_ling_catalog_page`/`zhen_yao_tower` 的底色、边框、状态、遮罩改用 `UiSurfaceTokens` 冷色/大地/暖棕/危险/绿色组；值保持原有色相 |
-| `输入配色` | `zhen_yao_tower` 数量输入与 `equipment_catalog_page` 搜索框使用 `INPUT_CARET #FFD97A`、`INPUT_SELECTION #C09C56 45%`；主题 `TowerFloorInput` 同步 |
+| `输入配色` | `zhen_yao_tower` 数量输入与 `equipment_catalog_page` 搜索框使用 `INPUT_CARET #FFD97A`、`INPUT_SELECTION #C09C56 45%`；`ShopSearchInput` 使用 `#331F12`/25%；`ArchiveLoginInput`/`ArchiveNumberInput` 使用 `INPUT_CARET`/`INPUT_SELECTION`；主题 `TowerFloorInput` 同步 |
+| `main_menu 动态样式` | `game_mode_select` 遮罩/面板/动作按钮、`map_6/7/8` 高亮、`mount_panel` 锁定预览、`zhu_xian_sword_page` 禁用/材料色接入 `UiSurfaceTokens`/`UiColorTokens`；公告动态文字色由 `TEXT_PRIMARY` 派生 |
 | `archive_interface（状态色）` | 按钮悬停 `#FF6A00`→text_hover；输入占位 `#A6A6A6`→text_placeholder；删除按下 `#D38D00`→text_gold_pressed；值不变 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 神秘商店图标悬停→icon_hover_soft；商品购买图标悬停→icon_hover_gold；商品灵魂描边→outline_none；ChooseItemList guide→text_primary；BoxItemNumber `#FF7700`→text_orange；BoxLockMark `#FFDB33`→text_amber |
 | `战斗 HUD（颜色）` | HitTextBase `#25FF00`→text_green；LijiText `#FF4600`→text_warning；BacisInfoNumber `#FF6000`→text_orange_deep；法术飘字动画 `#0099FF` 登记为 text_hit_blue，动画例外保留 |
@@ -198,7 +201,8 @@
 | `equipment_catalog_page（脚本）` | 0 | 0 | 61 控件；42 处颜色变化，仅字体色 |
 | `其他 main_menu 脚本` | 0 | 0 | `wan_ling` 287、`zhen_yao_tower` 32、`choose_player` 32、`game_mode_select` 7 控件；仅字体/描边色 |
 | `自绘菜单 StyleBox（颜色）` | 0 | 0 | 4 个自绘面板；仅替换样式颜色，静态控件转储无布局变化 |
-| `输入配色` | 0 | 0 | `TowerFloorInput` 光标 `#FFD97A`、选区 `#C09C56` 45%；搜索框同值 |
+| `输入配色` | 0 | 0 | `ShopSearchInput` 光标 `#331F12`、选区 25%；`Archive*`/`TowerFloorInput` 光标 `#FFD97A`、选区 `#C09C56` 45% |
+| `main_menu 动态样式` | 0 | 0 | 模式选择 1 面板/3 按钮；地图 3 处高亮；坐骑预览/诛仙剑状态；公告 9 个动态 Label 使用 `TEXT_PRIMARY` |
 | `archive_interface（状态色）` | 0 | 0 | 悬停/占位/按下值登记为 token，无可见变化 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 0 | 0 | 图标悬停/guide/透明描边登记；BoxItemNumber/BoxLockMark 橙/黄归一 |
 | `战斗 HUD（颜色）` | — | — | HitTextBase、LijiText、BacisInfoNumber 颜色变化；合成 Label 各 1 控件 |
@@ -264,6 +268,7 @@ G:/tmp/p2color4_after/
 G:/tmp/p2color4_after_1600/
 G:/tmp/p2color5_after/
 G:/tmp/p2color5_after_1600/
+G:/tmp/p2input/
 ```
 
 ## 5. 审计
@@ -281,9 +286,11 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（38.06s）；
-- `scene_probe ui-theme`：PASS（6.04s）；
-- `scene_probe ui-factories`：PASS（19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（25.6s）。
+- `theme_token_audit.py --check`：618 变体 / 0 违规；
+- `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 迁移期基线 18 处（`coop_panel_host` 2、`pet_interface` 12、`learn_skill` 4）；
+- `check_all --godot-bin`：**9/9 PASS**（39.15s）；
+- `scene_probe ui-theme`：PASS（6.23s）；
+- `scene_probe ui-factories`：PASS（19.64s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（26.0s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。

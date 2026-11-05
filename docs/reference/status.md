@@ -28,16 +28,17 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-10 复跑 **38.06s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-11 复跑 **39.15s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，6.04s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，6.23s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.64s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
 | Theme token | **618 变体 / 0 违规**（`theme_token_audit.py --check`） |
+| UI 表面色 token | **main_menu 0 裸色；StyleBox 基线 18 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
-| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（25.6s，包含在全量回归中） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（26.0s，包含在全量回归中） |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 298.7s，默认 auto 并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据清单 | **844/844**（173 `.bin` + 671 JSON）；`export_raw_manifest.py --check` 通过 |
@@ -48,6 +49,7 @@
 
 ### 最近完成
 
+- 2026-11-05 第六轮输入/动态样式与 Phase 27-0（P2-11）：补齐 `ShopSearchInput` 浅底暖黑光标/25% 选区、`ArchiveLoginInput`/`ArchiveNumberInput` 深底金色光标/45% 选区；`game_mode_select`、`map_6/7/8`、`mount_panel`、`zhu_xian_sword_page`、公告动态文字全部接入 `UiSurfaceTokens`/`UiColorTokens`；新增 `ui_surface_token_audit.py` 与 `ui_surface_token_baseline.json`，main_menu 裸色 0，StyleBox 迁移期基线 18 处；新增 [`theme_font_inventory.md`](theme_font_inventory.md) 记录 618 变体、111 个 off-token 字号、79 处 off-token 字体色、68.2 MB Theme 字体与 Phase 27-1~27-7 规划。`check_all` **9/9（39.15s）**，`ui-theme` 6.23s，`ui-factories` 19.64s，`level_1` 4 阶段 0/0/0（26.0s），`font_coverage` 0 缺字。
 - 2026-11-05 第五轮颜色 token（P2-10，自绘菜单表面/输入）：新增 `UiSurfaceTokens`，把 `mount_panel`、`equipment_catalog_page`、`wan_ling_catalog_page`、`zhen_yao_tower` 的 StyleBox 底色/边框/状态/遮罩收敛到冷色、大地色、暖棕色与危险/绿色组；输入光标 `#FFD97A`、选区 `#C09C56` 45% 同时应用到 `TowerFloorInput` 与搜索框。1280×800 静态控件转储 0 位置/0 尺寸；1600×1000 截图归档；`theme_token_audit` **618/0**。
 - 2026-11-05 第四轮颜色 token（P2-9，主菜单状态/动态菜单）：main_menu 深棕 outline/shadow 统一为 `ink`，Settings/Announcement/GameInfo hover→`text_hover`，Map0 hover/pressed 与 Tower hover/pressed、TowerFloorInput 占位色收敛；新增 `UiColorTokens` 并将 `mount_panel`、`equipment_catalog_page`、`wan_ling_catalog_page`、`zhen_yao_tower`、`game_mode_select`、`choose_player` 的脚本文字色迁移到 token。1280×800 面板控件 0 位置/0 尺寸（动态菜单 39/61/287/32/32/7 控件）；1600×1000 截图归档；`theme_token_audit` **618/0**。
 - 2026-11-05 第三轮颜色 token（P2-8，主菜单/HUD/宠物）：新增 `text_gold_bright`、`text_jade`、`text_jade_dim`、`text_ink_warm`、`text_hover`、`text_placeholder`、`text_gold_pressed`、`icon_hover_soft`、`icon_hover_gold`、`outline_none`、`text_hit_blue`；主菜单子面板金色/浅绿/暖黑、存档悬停/占位、商品盒数量/锁标与图标状态、命中/暴击 HUD 与宠物槽位数字完成收敛。1280×800 面板控件转储位置/尺寸均为 **0**（HUD 合成 Label 除外）；1600×1000 截图已归档；`theme_token_audit` **618/0**。
