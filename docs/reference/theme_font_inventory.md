@@ -16,7 +16,7 @@
 | `theme_type_variation` 节点引用 | 1,418 | 616 个不同变体被场景直接引用 |
 | 动态 `add_theme_*` | 385 处 / 41 文件 | 不区分 font/size/color/stylebox |
 | 字体文件（顶层） | 13 个 / 80,827,070 字节 | 不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
-| Theme 引用字体资产 | 10 个 / 68,246,521 字节 | 含默认 `FontVariation` 的主字体与 fallback |
+| Theme 引用字体资产 | 5 个 / 约 44.98 MB（27-5 后） | `body` + fallback、`ui`、`display`、`accent` |
 
 ## 2. 变体结构
 
@@ -70,6 +70,8 @@
 
 **27-4 结果（2026-11-05）**：新增 103 个 `Semantic*` 基类；精确有效签名合并 72 组 / 135 个变体；当前 189 个纯别名（无自有 Theme 项），429 个独立变体，独立变体重复签名组 **3**；冻结名 618/618 保留。
 
+**27-5 结果（2026-11-05）**：低频字体合并后独立变体重复组为 **5**（仍 ≤10）；Theme 字体资产 10→5，静态/动态覆盖 0 缺字。
+
 ## 3. 字号与颜色
 
 ### 3.1 字号（27-0 基线）
@@ -109,31 +111,33 @@
 
 ## 4. 字体资产
 
-### 4.1 Theme 字体角色
+### 4.1 Theme 字体角色（27-5 后）
 
-| Theme 资源 | 变体数 | 文件大小 | 现状 |
-|:---|---:|---:|:---|
-| 默认 `FontVariation` + 显式 `font_fz_cu_yuan_m03`（FZCuYuan-M03 + 微软雅黑 fallback） | 206 + 118 | 26,761,588 | 默认字体 206 个变体 + 显式引用同一字体资源 118 个变体；fallback 只覆盖默认链 |
-| `font_main`（文征明小楷） | 56 | 12,674,434 | 面板/设置/商城/技能 |
-| `font_hk`（华康宋体 W3） | 121 | 2,932,088 | 公告、怪物帮助、数值 |
-| `font_return`（华康海报 W12） | 52 | 2,615,307 | 主菜单/返回/公告按钮 |
-| `font_hy`（汉仪竹字美心） | 48 | 2,585,277 | 公告标题/副标题 |
-| `font_meng`（孟丽桃花） | 11 | 4,064,749 | 装备图鉴强调 |
-| `font_wo`（独山月） | 2 | 13,070,587 | 极少数文字 |
-| `font_194_song_ti` | 2 | 45,403 | 极少数文字 |
-| `font_jin_qiao`（金桥简中圆） | 2 | 3,497,088 | 极少数文字 |
+| 角色 | Theme 资源 | 文件 | 有效变体 |
+|:---|:---|:---|---:|
+| `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 默认字体链 |
+| `ui` | `font_hk` | 华康宋体 W3 | 156 |
+| `display` | `font_return` | 华康海报 W12 | 70 |
+| `accent` | `font_main` | 文征明小楷 | 144 |
 
-主题实际加载 10 个字体文件（8 个 FontFile + 主字体与 fallback 2 个文件），合计约 68.2 MB。`font_wo` 用 13 MB 只服务 2 个变体，`font_main` 用 12.7 MB 服务 56 个变体，`font_jin_qiao`/`font_194` 各自只服务 2 个变体；这是当前最明显的资源与视觉一致性问题。
+Theme 字体资产由 **10 个文件 / 68.2 MB** 收敛为 **5 个文件 / 约 44.98 MB**。`font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到 `font_main`；`font_194_song_ti`（2）映射到 `font_hk`。脚本直接字体路径中的 `font_meng` 已改为 `font_main`。
 
-### 4.2 未引用字体资产
+### 4.2 未引用字体资产与边界
 
-- `source/Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf`（2,879,513 字节）
-- `source/Font/jin_qiao_fan_li_shu.ttf`（5,410,904 字节）
-- `source/Font/jin_qiao_jian_cu_hei.ttf`（4,290,132 字节）
-- `source/Font/zmws/ttf/fzy4jw.ttf`（3,032,194 字节）
-- `source/Font/zmws_bmfont/` 下 BMFont 资源当前在 `Scene`/`Script` 中无路径引用。
+Theme 已无未引用字体资源；5 个资源均被 `body`/`ui`/`display`/`accent` 使用。以下私有物理文件已无 `Scene`/`Script`/`.tres` 的 `res://Font/` 引用，但仍保留在私有素材工作区：
 
-未引用不等于可立即删除：需要先核对动态路径、外部导入脚本、授权与回滚归档。Phase 27-5 才允许在证据齐全后移除或归档。
+- `source/Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf`
+- `source/Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf`
+- `source/Font/hy_zhu_zi_mei_xin_ti_w.ttf`
+- `source/Font/194_song_ti.ttf`
+- `source/Font/jin_qiao_jian_zhong_yuan.ttf`
+- `source/Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf`
+- `source/Font/jin_qiao_fan_li_shu.ttf`
+- `source/Font/jin_qiao_jian_cu_hei.ttf`
+- `source/Font/zmws/ttf/fzy4jw.ttf`
+- `source/Font/zmws_bmfont/` 下 BMFont 资源
+
+这些文件不进入公开提交；删除或移动需要素材所有者确认授权与回滚证据，并按私有素材仓 `ASSET_CHANGE_CONTRACT.md` 在私人仓执行。清单与保留策略见 [`font_retirement_manifest.json`](../../scripts/font_retirement_manifest.json)。
 
 ### 4.3 动态字体与覆盖
 
@@ -141,7 +145,8 @@
 - `add_theme_font_size_override`：52 处 / 13 文件；
 - `add_theme_color_override`：110 处 / 25 文件；
 - `add_theme_stylebox_override`：53 处 / 9 文件；
-- 脚本直接 `preload/load` 字体：9 处；`Global.add_font_instance` 调用：4 处（公告、Boss 信息、怪物帮助）。
+- 脚本直接 `preload/load` 字体：9 处；`Global.add_font_instance` 调用：4 处（公告、Boss 信息、怪物帮助）；
+- 动态样本：5 个（公告、Boss 信息、怪物帮助、伤害数字、宠物面板），`font_coverage_audit --check` 同时校验；当前缺字样本 **0**。
 
 这些调用绕过了 Theme 变体，是“主题已经统一、运行时仍各写各的”的主要来源。静态角色应回到 Theme 变体；只有数据驱动/运行时生成的控件保留 token 化覆盖。
 
@@ -157,14 +162,15 @@
 | Phase 27-2 | 111 个 off-token 字号分三批映射到 token；off-token **111→0**；基线更新；截图/控件几何对照归档 |
 | Phase 27-3 | 139 处 off-token 字体色收敛到 0（35 实际值 / 37 palette）；8 类字体色属性纳入审计；StyleBox 精确重复 **54→47**；跨色族 47→≤36 转入 27-4 |
 | Phase 27-4 | 103 个语义基类；Theme 属性 **3,218→1,719**；StyleBox **47→36**；独立重复组 **3**；618 冻结名与场景引用不变；`theme_variant_audit.py` 接入门禁 |
+| Phase 27-5 | 4 个字体角色 + fallback；Theme 字体资产 **10→5**（约 44.98 MB）；静态 135/790/0、动态样本 5/0 缺字；私有未引用字体保留边界登记 |
 
 ## 6. 主要风险
 
 1. **未受管值仍手写**：受管输入/默认字体与 token 类已由 27-1 生成；618 变体的其余字号/颜色/StyleBox 仍直接写在 Theme 中，需继续扩大 token 覆盖并保留 `--check` 守卫。
-2. **样式/颜色存量**：27-2/27-3 后字号与字体色均已强制在 token 内；27-4 后 StyleBox 36 个，独立重复组 3；后续 27-5 处理字体族，27-6 处理动态覆盖。
+2. **样式/颜色存量**：27-2/27-3 后字号与字体色均已强制在 token 内；27-4 后 StyleBox 36 个，27-5 后独立重复组 5；后续 27-6 处理动态覆盖。
 3. **动态覆盖绕过 Theme**：385 处 `add_theme_*` 中大量是静态角色，导致同一视觉角色在 Theme 与脚本中各有一份。
-4. **字体资源成本**：约 68 MB 字体随 Theme 引用；少数族只服务 1~2 个变体，且部分无显式 fallback。
-5. **静态覆盖不等于动态覆盖**：`font_coverage_audit` 只检查 `.tscn` 静态文本；公告、Boss 信息等动态文本依赖运行时字体链。
+4. **字体资源成本**：27-5 后 Theme 仅加载 5 个文件 / 约 44.98 MB；低频族已并入 4 个角色，fallback 固定在 body 链。
+5. **静态覆盖不等于真实动态数据**：27-5 已加入 5 个动态样本，但公告/Boss/怪物帮助的运行时拼接文本仍需 27-7 阶段验收。
 6. **资产授权**：字体为私有素材，公开仓库不包含；任何删除、子集化或再分发都必须先完成授权与回滚证据。
 
 ## 7. 目标结构
@@ -223,10 +229,10 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 |:---|---:|---:|
 | off-token 字号变体 | 0（27-0 基线 111） | 0 |
 | off-token 字体色赋值 | 0（27-3 结果） | 0 |
-| 独立重复签名组 | 3（27-4 结果） | ≤10 |
+| 独立重复签名组 | 5（27-5 结果） | ≤10 |
 | StyleBox 子资源 | 36（27-4 结果） | ≤36 |
 | Theme 属性总数 | 1,719（27-4 结果） | ≤2,000 |
-| Theme 引用字体资产 | 10 个 / 68.2 MB | ≤6 个；未引用字体为 0 |
+| Theme 字体资产 | 5 个文件（27-5 结果） | ≤6；Theme 未引用资源为 0 |
 | 静态主题覆盖 | 0 | 0 |
 | 动态覆盖 | 385 处 / 41 文件 | 静态角色覆盖为 0；数据驱动覆盖全部 token 化并登记 |
 | 字体覆盖 | 135 场景 / 790 节点 / 0 缺字 | 保持 0；动态文本增加样本 |
