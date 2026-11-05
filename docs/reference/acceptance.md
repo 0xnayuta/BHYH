@@ -108,11 +108,11 @@ python scripts/check_all.py --no-cache -j 6
 | FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
 | 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
-| UI Theme 基线 | `theme_override_audit.py --check` | 直接属性或 Animation 轨道引用超过基线、新增带覆盖场景 |
+| UI Theme 基线 | `theme_override_audit.py --check` | 直接属性/Animation 轨道/直接字体/动态调用或文件数超过基线，新增带覆盖场景 |
 | 字体覆盖/资产 | `font_coverage_audit.py --check` | 静态中文缺字、动态样本缺字、Theme 字体文件 >6、Theme 字体资源未引用或字体文件不可读 |
 | Theme token | `theme_token_audit.py --check` | 新增/改写字号、描边、字体颜色或 Button 基类偏离 token 契约 |
 | Theme 变体层级 | `theme_variant_audit.py --check` | 618 冻结变体缺失、语义基类成环、Theme 属性 >2,000、StyleBox >36 或独立重复签名组 >10 |
-| 动态 Theme 覆盖 | `ui_dynamic_theme_audit.py --check` | 脚本静态角色覆盖 >0、调用总数增长或新增未登记文件 |
+| 动态 Theme 覆盖 | `ui_dynamic_theme_audit.py --check` | `source/**/*.gd`（排除 addons/.godot）静态角色覆盖 >0、跨行调用解析失败、调用总数增长或新增未登记文件；`--self-test` 覆盖跨行正负样本 |
 | UI Theme token 源 | `convert_ui_theme_tokens.py --check` | `ui_theme_tokens.json` 与 `UiColorTokens`/`UiSurfaceTokens`/Theme 受管属性不一致 |
 | UI 表面色 token | `ui_surface_token_audit.py --check` | 自绘 StyleBox 裸色或 `main_menu` 裸色超过冻结基线；`--self-test` 覆盖正负样本 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |

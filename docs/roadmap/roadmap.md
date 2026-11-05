@@ -21,7 +21,7 @@
 | Phase 24 UI 与成长命令边界 | **24-0/24-1/24-2/24-3/24-4 已完成；Phase 24 已关闭** | 依赖 Phase 23（已完成）；面板显式操作者、命令/快照、拒绝表现层写档 |
 | Phase 25 战斗实体行为切片 | **25-0/25-1/25-2/25-3/25-4/25-5 已完成；Phase 25 已关闭** | 依赖 Phase 22；`BaseHero`/`BaseMonster` 行为切片，不引入 ECS |
 | Phase 26 平台与发布验证 | **长期暂缓**；未启动；独立工作流 | release 启动、目标设备 VRAM/首帧、Spine 平台；不以 PCK 闭包替代 |
-| Phase 27 Theme 与字体契约收敛 | **27-0~27-6 已完成（27-5 字体资产 5，27-6 动态覆盖 299/静态 0；2026-11-05）**；27-7 已规划、未启动 | `theme_font_inventory.md` 为现状依据；token 源见 `scripts/ui_theme_tokens.json`；见 §3.10 与 [`current-iteration.md`](current-iteration.md) |
+| Phase 27 Theme 与字体契约收敛 | **27-0~27-7 已完成（27-5 字体资产 5，27-7 全源动态覆盖 352/静态 0；2026-11-05），Phase 27 已关闭** | `theme_font_inventory.md` 为现状依据；token 源见 `scripts/ui_theme_tokens.json`；见 §3.10 与 [`current-iteration.md`](current-iteration.md) |
 | [Phase 30 关卡布局数据契约](../archive/iteration_30_level_layout_data_contract.md) | 完成、归档：30-1~30-4；30-3 含 10 个登记例外 | 见 §3.5、[`level_layout_contract.md`](../reference/level_layout_contract.md) |
 | Phase 31 引擎废弃 API 与局部现代化 | **完成**：31-0A（`TileMap`/具名物理层/重复函数）完成；31-0B BMFont 评估后拒绝；31-1 视差完成 | 见 §3.6、[`iteration_31_33_modernization_gap_matrix.md`](../archive/iteration_31_33_modernization_gap_matrix.md) |
 | Phase 32 UI Theme 契约 | **32-0/32-1/32-2A/32-2B/32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 完成** | 唯一 Theme；旧 Theme 退役；静态直接属性 0，仅 26 条 `hit_text` 动画轨道最终例外；见 §3.7、[`program_21_33_closeout.md`](../archive/program_21_33_closeout.md) §5C |
@@ -228,9 +228,9 @@ flowchart TD
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。
 **共同非目标**：不改变玩法、数值、掉落、输入、存档格式或显示基线；不以目录搬迁、Autoload 数量或文件行数作为完成标准。
 
-### 3.10 Phase 27：Theme 与字体契约收敛（27-0~27-6 完成，27-7 规划）
+### 3.10 Phase 27：Theme 与字体契约收敛（27-0~27-7 完成，Phase 27 已关闭）
 
-> **状态**：27-0~27-6 已完成（2026-11-05；27-6 完成动态覆盖分类与基线）；27-7 未启动。现状与指标见 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)，任务与出口见 [`current-iteration.md`](current-iteration.md) §5。
+> **状态**：27-0~27-7 已完成（2026-11-05）；27-7 完成全源动态审计、29 处 Scene 字面覆盖 token 化、双档截图与全量回归，Phase 27 已关闭。现状与指标见 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)，任务与出口见 [`current-iteration.md`](current-iteration.md) §5。
 > **依据**：Phase 32 单一 Theme、P0 字体覆盖修正与 P2-1~P2-11 token 批次；不依赖 Phase 26。
 
 - **问题**：618 个变体、3,218 个属性中，111 个变体使用 17 种 off-token 字号，79 处字体色在 token 集外；49 个重复签名组覆盖 239 个变体；Theme 引用 10 个字体资产约 68.2 MB；385 处动态 `add_theme_*` 绕过 Theme。
@@ -240,6 +240,7 @@ flowchart TD
 - **27-4 已完成（语义基类/共享样式）**：保留 618 个冻结变体名，新增 103 个 `Semantic*` 基类；Theme 属性 **3,218→1,719**，StyleBox **47→36**，独立变体重复签名组 **3**；新增 `theme_variant_audit.py` 并接入 `contract_gate.py`。
 - **27-5 已完成（字体族/资产）**：4 个字体角色 + fallback；Theme 字体资产 **10→5 个文件**、约 **68.2→44.98 MB**；静态 135/790/0、动态 5/0 缺字；私有未引用字体保留边界已登记。
 - **27-6 已完成（动态覆盖）**：脚本 `add_theme_*` **332→299**，字面静态角色 **0**；新增 `ui_dynamic_theme_audit.py` 与基线；保留 `hit_text` 26 条动画轨道例外。
+- **27-7 已完成（阶段验收）**：审计范围扩至 `source/**/*.gd` 并支持跨行调用，动态调用 352（Scene 53），29 处字面覆盖 token 化；新增 `FONT_SIZE_8` 与 2 个阵发色 token；直接字体引用 0；18 场景双档截图/2,323 控件 0 位移；全量回归 128/128 + 5 SKIP；Phase 27 关闭。
 - **方向**：字号/颜色/StyleBox 语义收敛 → 变体语义基类与重复合并 → 4 个字体角色 + fallback 与资产清理 → 静态动态覆盖归零、数据驱动覆盖 token 化 → 截图/字体覆盖/内存验收。
 - **边界**：保留 618 个冻结变体名；不一次性重排布局；不改玩法、输入、存档；字体删除/子集化必须有授权、零引用与回滚证据。
 - **出口**：off-token 字号/颜色 0；Theme 属性 ≤2,000；重复签名组 ≤10；Theme 字体资产 ≤6；静态角色动态覆盖 0；`check_all` 9/9、字体覆盖 0 缺字、0 ERROR/0 WARNING。
@@ -262,5 +263,5 @@ Windows release 的已有验证见 `status.md`。后续战斗负载、峰值驻�
 - 功能子目录不是第二套顶层；`source/` 路径迁移走 `rename_path.py`，同步引用/UID/导入/Catalog/发布清单。`_bundled` 必须按实际格式取证，不以文件名搜索结果宣布不存在。
 - 每批以一个职责与调用面闭环，迁移正式调用方、删除旧入口、验证正常/边界/失败/退出路径；回滚用版本控制。
 - 静态、引擎、生产路径冒烟、相关回归、发布包与性能验证按 `acceptance.md` 的变更矩阵触发；不要求每次文档或清单修改都做 release，也不以通用套件代替新增行为验证。
-- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 22、Phase 30、Phase 31、Phase 32 与 Phase 33 已完成并归档/收口；**Phase 23-0/23-1/23-2/23-3/23-4/23-5 已完成，Phase 23 已归档**；**Phase 24-0/24-1/24-2/24-3/24-4 已完成，Phase 24 已关闭**；**Phase 25-0/25-1/25-2/25-3/25-4/25-5 已完成，Phase 25 已关闭**；**Phase 27-0~27-6 已完成（27-6 动态覆盖 299/静态 0），Phase 27-7 规划**；Phase 26 长期暂缓，详见 [`current-iteration.md`](current-iteration.md) 与验证事实 [`status.md`](../reference/status.md)。
+- 架构目标与进度分开。Phase 15、Phase 16、Phase 17、Phase 22、Phase 30、Phase 31、Phase 32 与 Phase 33 已完成并归档/收口；**Phase 23-0/23-1/23-2/23-3/23-4/23-5 已完成，Phase 23 已归档**；**Phase 24-0/24-1/24-2/24-3/24-4 已完成，Phase 24 已关闭**；**Phase 25-0/25-1/25-2/25-3/25-4/25-5 已完成，Phase 25 已关闭**；**Phase 27-0~27-7 已完成（27-7 全源动态覆盖 352/静态 0），Phase 27 已关闭**；Phase 26 长期暂缓，详见 [`current-iteration.md`](current-iteration.md) 与验证事实 [`status.md`](../reference/status.md)。
 - 归档和已接受 ADR 保留历史；当前决定由 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md) 解释，后续具体实现选择再按需追加 ADR。

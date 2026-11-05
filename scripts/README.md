@@ -73,11 +73,11 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `whitelist_audit.py` | 白名单冻结、未登记与失效项 |
 | `png_stream_audit.py` | StreamedPngEffect allowlist 与旧数组/目录/编号探测回归 |
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 与 allowlist 守恒 |
-| `theme_override_audit.py` | 场景直接 Theme 属性与动画轨道基线 |
+| `theme_override_audit.py` | 场景直接 Theme 属性、动画轨道、直接字体与动态调用/文件上限基线 |
 | `font_coverage_audit.py` | 静态场景/动态样本 CJK 覆盖；检查 Theme 字体文件 ≤6、未引用 Theme 字体资源与字体文件可读性；样本见 `font_dynamic_samples.json` |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
 | `theme_variant_audit.py` | Phase 27-4 语义基类、冻结变体、Theme 属性/StyleBox 上限与独立变体重复签名门禁；冻结清单见 `theme_legacy_variants.json` |
-| `ui_dynamic_theme_audit.py` | Phase 27-6 脚本 `add_theme_*` 分类、静态角色覆盖为 0 与总计数不增长门禁；基线见 `ui_dynamic_theme_baseline.json` |
+| `ui_dynamic_theme_audit.py` | Phase 27-7 全 `source/**/*.gd`（排除 addons/.godot）`add_theme_*` 跨行分类、静态角色/解析错误/总计数不增长门禁；`--self-test` 覆盖跨行正负样本；基线见 `ui_dynamic_theme_baseline.json` |
 | `font_retirement_manifest.json` | Phase 27-5 字体角色、已退役 Theme 资源与私有保留资产边界 |
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |

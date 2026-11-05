@@ -1,7 +1,7 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-11 输入与动态样式批次（2026-11-05）；Phase 27-1 已将文字/表面 token、受管 Theme 输入属性与默认字体迁入 `scripts/ui_theme_tokens.json`，`UiColorTokens`/`UiSurfaceTokens` 由生成器维护；Phase 27-2 已把 111 个 off-token 字号映射到标准标尺，当前 off-token 字号 0；Phase 27-3 已把 139 处 off-token 字体色收敛到 0，实际 35 个值 / 37 个语义 token；Phase 27-4 新增 103 个语义基类，Theme 属性 1,719、StyleBox 36、独立重复组 3；Phase 27-5 收敛为 4 个字体角色 + fallback，Theme 字体资产 10→5，动态样本 5/0 缺字；Phase 27-6 脚本动态调用 332→299，静态字面覆盖 0。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
-> **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
+> **状态**：P2-11 输入与动态样式批次（2026-11-05）；Phase 27-1 已将文字/表面 token、受管 Theme 输入属性与默认字体迁入 `scripts/ui_theme_tokens.json`，`UiColorTokens`/`UiSurfaceTokens` 由生成器维护；Phase 27-2 已把 111 个 off-token 字号映射到标准标尺，当前 off-token 字号 0；Phase 27-3 已把 139 处 off-token 字体色收敛到 0，实际 35 个值 / 37 个语义 token；Phase 27-4 新增 103 个语义基类，Theme 属性 1,719、StyleBox 36、独立重复组 3；Phase 27-5 收敛为 4 个字体角色 + fallback，Theme 字体资产 10→5，动态样本 5/0 缺字；Phase 27-6 脚本动态调用 332→299；Phase 27-7 全源审计 352 调用、静态 0，新增 2 个阵发色和 `FONT_SIZE_8`。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
+> **边界**：不重命名 618 个冻结 `theme_type_variation`；27-7 新增 `SetMenuHintLabel`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
 
@@ -277,23 +277,23 @@ G:/tmp/p2input/
 python scripts/theme_token_audit.py --check
 ```
 
-- `scripts/theme_token_baseline.json` 冻结 721 个当前变体（618 冻结业务名 + 103 语义基类）的有效值；既有变体的合法迁移允许保留基线值。
+- `scripts/theme_token_baseline.json` 冻结 731 个当前变体（618 冻结业务名 + 112 语义基类 + `SetMenuHintLabel`）的有效值；既有变体的合法迁移允许保留基线值。
 - 新增变体或既有变体改写值必须使用本表 token；新增 Button 必须继承已登记 token 基类。
-- 当前结果：**721 变体 / 0 违规**；新增语义基类走 `Semantic*` 前缀，不绕过字号/颜色 token。
+- 当前结果：**731 变体 / 0 违规**；新增语义基类走 `Semantic*` 前缀，不绕过字号/颜色 token。
 - `theme_override_audit` 保持直接属性 **0**、动画轨道 **26**（`hit_text.tscn` 命中颜色值同步）。
 
 ## 6. 既有门禁
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；Theme 字体资产 5；动态样本 5 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `theme_token_audit.py --check`：730 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
-- `convert_ui_theme_tokens.py --check`：37 文字 token、5 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
+- `theme_token_audit.py --check`：731 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
+- `convert_ui_theme_tokens.py --check`：39 文字 token、6 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
-- `check_all --godot-bin`：**9/9 PASS**（35.06s）；
-- `scene_probe ui-theme`：PASS（4.58s）；
-- `scene_probe ui-factories`：PASS（15.07s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.04s）；
-- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 属性 1,737 / StyleBox 36 / 独立重复组 5；
-- `ui_dynamic_theme_audit --check`：299 调用 / 静态 0；基线 `ui_dynamic_theme_baseline.json`。
+- `check_all --godot-bin`：**9/9 PASS**（38.20s）；
+- `scene_probe ui-theme`：PASS（4.43s）；
+- `scene_probe ui-factories`：PASS（15.17s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
+- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 731 总变体 / 属性 1,740 / StyleBox 36 / 独立重复组 5；
+- `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
-其余面板保持基线；后续 27-7 执行阶段验收与全量回归，不静默改变显示基线。
+其余面板保持基线；27-7 已完成阶段验收与全量回归，不静默改变显示基线。
