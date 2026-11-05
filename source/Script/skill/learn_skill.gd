@@ -10,7 +10,6 @@ var RoleProp: BaseRoleProperties:
 
 const FULLSCREEN_DESIGN_SIZE := Vector2(940, 590)
 const SKILL_FORMULA_DATA = preload("res://Script/skill/skill_damage_formula_data.gd")
-const FORMULA_FONT = preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
 @onready var front_bg: ColorRect = $bg/lh_pic/front_bg
 @onready var _title: Label = $bg/lh_pic/front_bg/Title
 @onready var lh_value: Label = $bg/lh_pic/lh_value
@@ -148,9 +147,9 @@ func _create_formula_overlay() -> void:
 	var heading := Label.new()
 	heading.text = SKILL_FORMULA_DATA.get_role_name(role_id) + "技能伤害公式"
 	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	heading.add_theme_font_override("font", FORMULA_FONT)
-	heading.add_theme_font_size_override("font_size", 27)
-	heading.add_theme_color_override("font_color", Color(1.0, 0.78, 0.27))
+	heading.theme_type_variation = &"SemanticLearnSkillMainLabel"
+	heading.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_27)
+	heading.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_AMBER)
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.add_child(heading)
@@ -161,9 +160,9 @@ func _create_formula_overlay() -> void:
 	close_button.custom_minimum_size = Vector2(52.0, 40.0)
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	close_button.add_theme_font_override("font", FORMULA_FONT)
-	close_button.add_theme_font_size_override("font_size", 28)
-	close_button.add_theme_color_override("font_hover_color", Color(1.0, 0.55, 0.18))
+	close_button.theme_type_variation = &"SemanticLearnSkillMainButton"
+	close_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_28)
+	close_button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_ORANGE_BRIGHT)
 	close_button.pressed.connect(_close_formula_overlay)
 	header.add_child(close_button)
 
@@ -242,9 +241,9 @@ func _make_formula_card(skill_id: String, skill_name: String, stored_level: int,
 
 	var title := Label.new()
 	title.text = "%s  Lv.%d  ·  %s" % [skill_name, stored_level, str(detail.get("kind", "技能效果"))]
-	title.add_theme_font_override("font", FORMULA_FONT)
-	title.add_theme_font_size_override("font_size", 21)
-	title.add_theme_color_override("font_color", Color(1.0, 0.74, 0.24))
+	title.theme_type_variation = &"SemanticLearnSkillMainLabel"
+	title.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_21)
+	title.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_ORANGE)
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(title)
 
@@ -254,9 +253,9 @@ func _make_formula_card(skill_id: String, skill_name: String, stored_level: int,
 		line.text = str(line_value)
 		line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		line.add_theme_font_override("font", FORMULA_FONT)
-		line.add_theme_font_size_override("font_size", 17)
-		line.add_theme_color_override("font_color", Color(0.92, 0.92, 0.88))
+		line.theme_type_variation = &"SemanticLearnSkillMainLabel"
+		line.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_17)
+		line.add_theme_color_override("font_color", UiColorTokens.TEXT_IVORY)
 		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		content.add_child(line)
 	return card

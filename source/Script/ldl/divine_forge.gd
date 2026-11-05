@@ -201,7 +201,7 @@ func _consume_item_all_pages(item_name: String, count: int) -> void:
 
 
 func _set_requirement_color(label: Label, enough: bool) -> void:
-	label.add_theme_color_override("font_color", Color("00FF00") if enough else Color("FF0000"))
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN if enough else UiColorTokens.TEXT_DANGER)
 
 
 func _show_message(message: String) -> void:

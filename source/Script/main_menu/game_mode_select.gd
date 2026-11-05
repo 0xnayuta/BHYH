@@ -38,8 +38,7 @@ func _ready() -> void:
 		button.name = ["SinglePlayer", "TwoPlayers", "Cancel"][index]
 		button.text = labels[index]
 		button.custom_minimum_size = Vector2(240, 64)
-		button.add_theme_font_override("font", preload("res://Scene/theme/fz_cu_yuan_m03.tres"))
-		button.add_theme_font_size_override("font_size", 30)
+		button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_30)
 		button.add_theme_color_override("font_color", UiColorTokens.TEXT_INK_WARM)
 		button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_INK_WARM)
 		button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_INK_WARM)

@@ -165,7 +165,7 @@ func _build_ui() -> void:
 	var title := Label.new()
 	title.text = "装备图鉴"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 32)
+	title.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_32)
 	title.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_WARM)
 	header.add_child(title)
 	var close := Button.new()
@@ -228,7 +228,7 @@ func _build_ui() -> void:
 	_detail.add_theme_constant_override("separation", 10)
 	_detail_scroll.add_child(_detail)
 	_count = Label.new()
-	_count.add_theme_font_size_override("font_size", 17)
+	_count.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_17)
 	_count.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 	outer.add_child(_count)
 
@@ -340,13 +340,13 @@ func select_item(item_id: String) -> void:
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_WARM)
-	name_label.add_theme_font_size_override("font_size", 28)
+	name_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_28)
 	identity.add_child(name_label)
 	var metadata := Label.new()
 	metadata.text = (
 		"%s  /  %s  /  %s" % [data.get(DataKeys.QUALITY, ""), data.get(DataKeys.TYPE, ""), data.get("所属", "")]
 	)
-	metadata.add_theme_font_size_override("font_size", 19)
+	metadata.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_19)
 	metadata.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 	identity.add_child(metadata)
 	_add_text("基础属性", 23, UiColorTokens.TEXT_GOLD_WARM)
@@ -366,14 +366,14 @@ func select_item(item_id: String) -> void:
 		var parts: PackedStringArray = value.split("  ", false, 1)
 		var label := Label.new()
 		label.text = parts[0]
-		label.add_theme_font_size_override("font_size", 18)
+		label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
 		label.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(label)
 		if parts.size() > 1:
 			var number := Label.new()
 			number.text = parts[1]
-			number.add_theme_font_size_override("font_size", 24)
+			number.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_24)
 			number.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 			row.add_child(number)
 	_add_section("装备描述", catalog.get_description(item_id), UiColorTokens.TEXT_PARCHMENT)
@@ -390,7 +390,7 @@ func _add_section(title: String, value: String, color: Color) -> void:
 	var label := Label.new()
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", 21)
+	label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_21)
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_constant_override("line_spacing", 5)
 	panel.add_child(label)

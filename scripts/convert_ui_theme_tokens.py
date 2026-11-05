@@ -24,6 +24,7 @@ TOKEN_SOURCE = ROOT / "scripts" / "ui_theme_tokens.json"
 THEME = SOURCE / "Scene" / "theme" / "bhyh_theme.tres"
 COLOR_CLASS = SOURCE / "Script" / "base" / "ui_color_tokens.gd"
 SURFACE_CLASS = SOURCE / "Script" / "base" / "ui_surface_tokens.gd"
+FONT_SIZE_CLASS = SOURCE / "Script" / "base" / "ui_font_sizes.gd"
 SCHEMA_ID = "ui_theme_tokens"
 SCHEMA_VERSION = 1
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
@@ -164,6 +165,21 @@ def render_surface_class(data: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_font_size_class(data: dict) -> str:
+    lines = [
+        "# 由 scripts/ui_theme_tokens.json 生成；不要手改。",
+        "class_name UiFontSizes",
+        "extends RefCounted",
+        "",
+        "## 脚本动态 UI 的 token 字号；值来自 theme_audit.font_sizes。",
+    ]
+    sizes = set(data["theme_audit"]["font_sizes"])
+    sizes.update(data.get("script_font_sizes", []))
+    for size in sorted(sizes):
+        lines.append(f"const FONT_SIZE_{int(size)} := {int(size)}")
+    return "\n".join(lines) + "\n"
+
+
 def expected_theme_value(data: dict, key: str) -> str:
     ref = data["theme_properties"][key]
     if ref == "font.default":
@@ -219,17 +235,18 @@ def main(argv: list[str] | None = None) -> int:
         data = load_source()
         color_text = render_color_class(data)
         surface_text = render_surface_class(data)
+        font_size_text = render_font_size_class(data)
         theme_text = render_theme(data)
     except (ValueError, OSError, json.JSONDecodeError) as exc:
         print(f"FAIL {exc}", file=sys.stderr)
         return 2
     if args.write:
-        for path, content in ((COLOR_CLASS, color_text), (SURFACE_CLASS, surface_text), (THEME, theme_text)):
+        for path, content in ((COLOR_CLASS, color_text), (SURFACE_CLASS, surface_text), (FONT_SIZE_CLASS, font_size_text), (THEME, theme_text)):
             if not path.is_file() or path.read_text(encoding="utf-8") != content:
                 path.write_text(content, encoding="utf-8", newline="\n")
-        print("已生成 token 类与 Theme 受管属性")
+        print("已生成颜色/表面/字号 token 类与 Theme 受管属性")
         return 0
-    errors = check_generated(COLOR_CLASS, color_text) + check_generated(SURFACE_CLASS, surface_text) + check_generated(THEME, theme_text)
+    errors = check_generated(COLOR_CLASS, color_text) + check_generated(SURFACE_CLASS, surface_text) + check_generated(FONT_SIZE_CLASS, font_size_text) + check_generated(THEME, theme_text)
     if errors:
         print(f"token 源校验失败: {len(errors)} 处", file=sys.stderr)
         for error in errors[:20]:

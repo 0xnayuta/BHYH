@@ -330,8 +330,8 @@ func _remove_black_transparent_frames(root: Node = self) -> void:
 		var label := root as Label
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0))
+		label.add_theme_color_override("font_shadow_color", UiColorTokens.TEXT_TRANSPARENT)
+		label.add_theme_color_override("font_outline_color", UiColorTokens.TEXT_TRANSPARENT)
 		label.add_theme_constant_override("outline_size", 0)
 		label.add_theme_constant_override("shadow_outline_size", 0)
 		label.add_theme_constant_override("shadow_offset_x", 0)

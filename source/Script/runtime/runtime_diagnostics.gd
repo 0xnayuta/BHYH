@@ -158,11 +158,11 @@ func _create_debug_perf_overlay() -> void:
 	_debug_perf_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_debug_perf_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	_debug_perf_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_debug_perf_label.add_theme_font_size_override("font_size", 12)
-	_debug_perf_label.add_theme_color_override("font_color", Color(0.1, 1.0, 0.25, 1.0))
-	_debug_perf_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	_debug_perf_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
+	_debug_perf_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN_DEBUG)
+	_debug_perf_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	_debug_perf_label.add_theme_constant_override("outline_size", 1)
-	_debug_perf_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
+	_debug_perf_label.add_theme_color_override("font_shadow_color", UiColorTokens.TEXT_TRANSPARENT)
 	_debug_perf_label.add_theme_constant_override("shadow_offset_x", 0)
 	_debug_perf_label.add_theme_constant_override("shadow_offset_y", 0)
 	_debug_perf_layer.add_child(_debug_perf_label)

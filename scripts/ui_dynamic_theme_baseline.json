@@ -1,0 +1,1960 @@
+{
+  "schema_id": "ui_dynamic_theme_baseline",
+  "schema_version": 1,
+  "totals": {
+    "data": 37,
+    "dynamic_style": 40,
+    "layout": 83,
+    "tokenized": 139,
+    "total": 299
+  },
+  "files": {
+    "Script/back_pack/dj_information.gd": {
+      "data": 2,
+      "tokenized": 1,
+      "total": 3
+    },
+    "Script/back_pack/equipment_properies.gd": {
+      "data": 8,
+      "layout": 1,
+      "tokenized": 5,
+      "total": 14
+    },
+    "Script/back_pack/wq.gd": {
+      "data": 1,
+      "total": 1
+    },
+    "Script/base/base_role.gd": {
+      "layout": 1,
+      "tokenized": 2,
+      "total": 3
+    },
+    "Script/coop/coop_panel_host.gd": {
+      "data": 1,
+      "layout": 1,
+      "tokenized": 3,
+      "total": 5
+    },
+    "Script/hero/yutu_hero.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Script/hittext/damage_text.gd": {
+      "layout": 2,
+      "total": 2
+    },
+    "Script/ldl/bone_forge.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Script/ldl/divine_forge.gd": {
+      "tokenized": 1,
+      "total": 1
+    },
+    "Script/ldl/forge.gd": {
+      "data": 1,
+      "layout": 6,
+      "total": 7
+    },
+    "Script/ldl/forge_material_box.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Script/ldl/strength.gd": {
+      "tokenized": 4,
+      "total": 4
+    },
+    "Script/level/role_information.gd": {
+      "layout": 2,
+      "total": 2
+    },
+    "Script/main_menu/choose_player.gd": {
+      "data": 1,
+      "layout": 1,
+      "tokenized": 1,
+      "total": 3
+    },
+    "Script/main_menu/equipment_catalog_page.gd": {
+      "data": 4,
+      "dynamic_style": 4,
+      "layout": 11,
+      "tokenized": 13,
+      "total": 32
+    },
+    "Script/main_menu/game_mode_select.gd": {
+      "data": 2,
+      "layout": 1,
+      "tokenized": 4,
+      "total": 7
+    },
+    "Script/main_menu/mount_panel.gd": {
+      "data": 5,
+      "dynamic_style": 16,
+      "layout": 11,
+      "tokenized": 4,
+      "total": 36
+    },
+    "Script/main_menu/wan_ling_catalog_page.gd": {
+      "data": 1,
+      "dynamic_style": 9,
+      "layout": 6,
+      "tokenized": 15,
+      "total": 31
+    },
+    "Script/main_menu/zhen_yao_tower.gd": {
+      "data": 1,
+      "dynamic_style": 6,
+      "layout": 11,
+      "tokenized": 11,
+      "total": 29
+    },
+    "Script/main_menu/zhu_xian_sword_page.gd": {
+      "data": 1,
+      "total": 1
+    },
+    "Script/other_menu/c_hange_clothes_jm.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Script/pet/pet_attribute_pages.gd": {
+      "data": 1,
+      "total": 1
+    },
+    "Script/pet/pet_interface.gd": {
+      "data": 8,
+      "dynamic_style": 3,
+      "layout": 14,
+      "tokenized": 43,
+      "total": 68
+    },
+    "Script/runtime/runtime_diagnostics.gd": {
+      "layout": 3,
+      "tokenized": 4,
+      "total": 7
+    },
+    "Script/skill/bd_skill.gd": {
+      "layout": 2,
+      "total": 2
+    },
+    "Script/skill/learn_skill.gd": {
+      "dynamic_style": 2,
+      "layout": 5,
+      "tokenized": 8,
+      "total": 15
+    },
+    "Script/skill/skill_key_set.gd": {
+      "tokenized": 1,
+      "total": 1
+    },
+    "Script/skill/zd_skill.gd": {
+      "layout": 1,
+      "tokenized": 3,
+      "total": 4
+    },
+    "Script/task/basic_task.gd": {
+      "layout": 4,
+      "tokenized": 2,
+      "total": 6
+    },
+    "Script/task/task_title.gd": {
+      "tokenized": 6,
+      "total": 6
+    }
+  },
+  "calls": [
+    {
+      "file": "Script/back_pack/dj_information.gd",
+      "line": 68,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/dj_information.gd",
+      "line": 69,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/dj_information.gd",
+      "line": 73,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 215,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 216,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 308,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 309,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 310,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 311,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 412,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 413,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 414,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 415,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 419,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 743,
+      "kind": "font",
+      "category": "data"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 744,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/equipment_properies.gd",
+      "line": 745,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/back_pack/wq.gd",
+      "line": 51,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/base/base_role.gd",
+      "line": 708,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/base/base_role.gd",
+      "line": 709,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/base/base_role.gd",
+      "line": 710,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/coop/coop_panel_host.gd",
+      "line": 189,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/coop/coop_panel_host.gd",
+      "line": 210,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/coop/coop_panel_host.gd",
+      "line": 211,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/coop/coop_panel_host.gd",
+      "line": 212,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/coop/coop_panel_host.gd",
+      "line": 219,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/hero/yutu_hero.gd",
+      "line": 110,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/hero/yutu_hero.gd",
+      "line": 111,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/hittext/damage_text.gd",
+      "line": 26,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/hittext/damage_text.gd",
+      "line": 51,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/bone_forge.gd",
+      "line": 107,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/bone_forge.gd",
+      "line": 108,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/divine_forge.gd",
+      "line": 204,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 176,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 178,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 180,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 218,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 386,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 388,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge.gd",
+      "line": 390,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/ldl/forge_material_box.gd",
+      "line": 30,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/forge_material_box.gd",
+      "line": 32,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/strength.gd",
+      "line": 117,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/strength.gd",
+      "line": 119,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/strength.gd",
+      "line": 121,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/ldl/strength.gd",
+      "line": 123,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/level/role_information.gd",
+      "line": 173,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/level/role_information.gd",
+      "line": 174,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/choose_player.gd",
+      "line": 102,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/choose_player.gd",
+      "line": 167,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/choose_player.gd",
+      "line": 199,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 158,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 161,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 168,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 169,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 178,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 190,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 205,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 212,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 213,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 218,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 228,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 231,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 232,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 322,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 324,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 342,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 343,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 349,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 350,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 356,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 357,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 362,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 369,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 370,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 376,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 377,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 386,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 393,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 394,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 395,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 429,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/equipment_catalog_page.gd",
+      "line": 430,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 30,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 33,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 41,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 42,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 43,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 44,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/game_mode_select.gd",
+      "line": 53,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 66,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 74,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 77,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 80,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 109,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 162,
+      "kind": "unknown",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 184,
+      "kind": "unknown",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 187,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 200,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 221,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 231,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 268,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 286,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 287,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 315,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 347,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 359,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 362,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 380,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 387,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 393,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 410,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 466,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 480,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 527,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 703,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 907,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 908,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 909,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 910,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 922,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 923,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 924,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 925,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 928,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 931,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 318,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 319,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 320,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 321,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 322,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 325,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 328,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 331,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 376,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 379,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 380,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 381,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 382,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 386,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 394,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 395,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 413,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 414,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 421,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 422,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 427,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 440,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 441,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 450,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 451,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 452,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 453,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 456,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 459,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 462,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 489,
+      "kind": "unknown",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 273,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 274,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 275,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 276,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 282,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 283,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 284,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 285,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 286,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 287,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 288,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 291,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 294,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 323,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 330,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 331,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 332,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 333,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 337,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 383,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 384,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 427,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 431,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 471,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 488,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 489,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 490,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 491,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 492,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhu_xian_sword_page.gd",
+      "line": 248,
+      "kind": "unknown",
+      "category": "data"
+    },
+    {
+      "file": "Script/other_menu/c_hange_clothes_jm.gd",
+      "line": 30,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/other_menu/c_hange_clothes_jm.gd",
+      "line": 32,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_attribute_pages.gd",
+      "line": 85,
+      "kind": "unknown",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2099,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2100,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2101,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2102,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2113,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2114,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2115,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2116,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2371,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2377,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2384,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2385,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2389,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2397,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2404,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2409,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2418,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2424,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2813,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2814,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2815,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2816,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2833,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3072,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3080,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3081,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3082,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3083,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3092,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3093,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3094,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3095,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3105,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3106,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3107,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3108,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3119,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3131,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3141,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3151,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3160,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3161,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3162,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3163,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3170,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3200,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3201,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3202,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3203,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3204,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3217,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3232,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3249,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3353,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3362,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3363,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3364,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3365,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3373,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3424,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3425,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3426,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3427,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3428,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4813,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4814,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4815,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4816,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 161,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 162,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 163,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 164,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 165,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 166,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 167,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/bd_skill.gd",
+      "line": 123,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/bd_skill.gd",
+      "line": 129,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 130,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 139,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 151,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 152,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 164,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 165,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 185,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 191,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 217,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 220,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 238,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 245,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 246,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 257,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/learn_skill.gd",
+      "line": 258,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/skill_key_set.gd",
+      "line": 28,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/zd_skill.gd",
+      "line": 1295,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/zd_skill.gd",
+      "line": 1296,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/zd_skill.gd",
+      "line": 1297,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/skill/zd_skill.gd",
+      "line": 1298,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 333,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 334,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 335,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 336,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 337,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/task/basic_task.gd",
+      "line": 338,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 20,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 21,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 29,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 30,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 34,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
+      "line": 35,
+      "kind": "color",
+      "category": "tokenized"
+    }
+  ]
+}

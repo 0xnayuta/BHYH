@@ -48,7 +48,7 @@
     },
     "AnnouncementHeading": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "36"
     },
     "AnnouncementLeftColumn": {
@@ -125,13 +125,13 @@
     },
     "AnnouncementSubtitle": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(0.94, 0.73, 0.34, 1)",
       "font_sizes/font_size": "28"
     },
     "AnnouncementTitle": {
       "base_type": "&\"AnnouncementSubtitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(0.94, 0.73, 0.34, 1)",
       "font_sizes/font_size": "28"
     },
@@ -400,7 +400,7 @@
     },
     "BacisInfoLevel": {
       "base_type": "&\"SemanticBacisInfoLevel\"",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
       "constants/outline_size": "1"
     },
@@ -409,7 +409,7 @@
       "font_sizes/font_size": "14",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
       "constants/outline_size": "1",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "BacisInfoNumber": {
       "base_type": "&\"SemanticArchiveDialogTitle\"",
@@ -506,14 +506,14 @@
     "BackpackNameInput": {
       "base_type": "&\"LineEdit\"",
       "colors/font_placeholder_color": "Color(1, 1, 1, 1)",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "styles/normal": "SubResource(\"empty_button\")",
       "styles/read_only": "SubResource(\"empty_button\")",
       "styles/focus": "SubResource(\"empty_button\")"
     },
     "BackpackPageLabel": {
       "base_type": "&\"BackpackTabLabel\"",
-      "fonts/font": "ExtResource(\"font_hy\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "BackpackPageRow": {
       "base_type": "&\"HBoxContainer\"",
@@ -532,16 +532,16 @@
     },
     "BackpackTabLabel": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "BackpackTabLabelLarge": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18"
     },
     "BackpackTabLabelSmall": {
       "base_type": "&\"BackpackTabLabel\"",
-      "fonts/font": "ExtResource(\"font_hy\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "BackpackTabRow": {
       "base_type": "&\"HBoxContainer\""
@@ -784,11 +784,11 @@
       "font_sizes/font_size": "12",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "6",
-      "fonts/font": "ExtResource(\"font_jin_qiao\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "ChangeClothesName": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "7"
     },
     "ChangeClothesStatus": {
@@ -807,14 +807,14 @@
       "colors/guide_color": "Color(1, 1, 1, 1)",
       "constants/v_separation": "5",
       "constants/outline_size": "10",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "styles/panel": "SubResource(\"choose_item_panel\")",
       "styles/focus": "SubResource(\"empty_button\")"
     },
     "ChooseItemTitle": {
       "base_type": "&\"SemanticChooseItemTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "24"
     },
     "ChooseItemVSeparator": {
@@ -1039,13 +1039,13 @@
     },
     "DjInfoSale": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 0.752941, 0, 1)"
     },
     "DjInfoTitle": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20"
     },
     "DjInfoVBox": {
@@ -1185,7 +1185,7 @@
     },
     "EndStatsMoreInfo": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "font_sizes/font_size": "36"
     },
@@ -1244,19 +1244,19 @@
       "font_sizes/font_size": "20",
       "constants/outline_size": "1",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "EquipmentItemMeta": {
       "base_type": "&\"SemanticEquipmentItemHighlight\"",
       "font_sizes/font_size": "20",
       "constants/outline_size": "1",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "EquipmentName": {
       "base_type": "&\"SemanticAnnouncementCheckButton\"",
       "font_sizes/font_size": "20",
       "constants/outline_size": "2",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "EquipmentPanelPadding": {
       "base_type": "&\"SemanticDjInfoMargin\"",
@@ -1445,7 +1445,7 @@
     },
     "GameNeedKnowFooter": {
       "base_type": "&\"SemanticBacisInfoLevel\"",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "2"
     },
     "GameNeedKnowIntro": {
@@ -1472,7 +1472,7 @@
     },
     "GameNeedKnowTitle": {
       "base_type": "&\"SemanticBacisInfoLevel\"",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "1",
       "font_sizes/font_size": "36"
     },
@@ -1497,7 +1497,7 @@
     },
     "HcHelpColumnLabel": {
       "base_type": "&\"SemanticChooseItemTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "24",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -1509,7 +1509,7 @@
     },
     "HcHelpPage": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "constants/outline_size": "6"
     },
@@ -1529,7 +1529,7 @@
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
       "constants/outline_size": "7",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "32"
     },
     "HelpContentList": {
@@ -1702,20 +1702,20 @@
     },
     "LetterTitle": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(1, 1, 1, 1)"
     },
     "Level17Text": {
       "base_type": "&\"SemanticChooseItemTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "24",
       "constants/outline_size": "8"
     },
     "Level17TextRed": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "constants/outline_size": "8"
@@ -1734,7 +1734,7 @@
     },
     "LevelInfoChallengeTitle": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "9",
       "font_sizes/font_size": "32"
@@ -1787,7 +1787,7 @@
     },
     "LevelInfoMyPj": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "colors/font_color": "Color(0.65, 0.65, 0.65, 1)",
       "constants/outline_size": "12"
@@ -1818,7 +1818,7 @@
     },
     "LevelInfoTitle": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "10",
       "font_sizes/font_size": "36"
@@ -1878,7 +1878,7 @@
     },
     "LhhjHelpTitle": {
       "base_type": "&\"MagicHelpTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "8",
       "font_sizes/font_size": "28"
@@ -1915,7 +1915,7 @@
     },
     "LijiText": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 0.290196, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)",
       "constants/shadow_offset_x": "15",
@@ -2016,7 +2016,7 @@
     },
     "LoadSceneNotice": {
       "base_type": "&\"SemanticLoadSceneNotice\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 0.84, 0.54, 1)",
       "colors/font_outline_color": "Color(0.12, 0.06, 0, 1)",
@@ -2036,7 +2036,7 @@
     },
     "LoadSceneTips": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(0, 0, 0, 1)"
     },
     "LxdyButtonRow": {
@@ -2051,7 +2051,7 @@
       "constants/shadow_offset_x": "0",
       "constants/shadow_offset_y": "0",
       "constants/shadow_outline_size": "10",
-      "fonts/font": "ExtResource(\"font_194_song_ti\")"
+      "fonts/font": "ExtResource(\"font_hk\")"
     },
     "LxdyStageInfo": {
       "base_type": "&\"SemanticDecomposeHelpBody\"",
@@ -2080,7 +2080,7 @@
     },
     "MagicHelpTitle": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "8",
       "font_sizes/font_size": "28"
@@ -2119,7 +2119,7 @@
     },
     "MagicWeaponName": {
       "base_type": "&\"SemanticLoadSceneNotice\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "6"
     },
     "MagicWeaponPsSkill": {
@@ -2130,7 +2130,7 @@
     },
     "MagicWeaponPsTitle": {
       "base_type": "&\"SemanticLoadSceneNotice\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "6",
       "constants/shadow_offset_x": "0",
       "constants/shadow_offset_y": "0"
@@ -2207,19 +2207,19 @@
     },
     "Map3ButtonTitle": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 0.290196, 0, 1)",
       "constants/outline_size": "2"
     },
     "Map3RegionLabel": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 0.290196, 0, 1)"
     },
     "MapLocationText": {
       "base_type": "&\"Map3RegionLabel\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 0.290196, 0, 1)"
     },
@@ -2304,7 +2304,7 @@
     },
     "MonsterHeadBoss": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 0.415686, 0, 1)",
       "constants/outline_size": "10"
     },
@@ -2348,13 +2348,13 @@
       "base_type": "&\"SemanticArchiveDialogTitle\"",
       "font_sizes/font_size": "24",
       "constants/outline_size": "1",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "MonsterHelpTitleLarge": {
       "base_type": "&\"MonsterHelpTitle\"",
       "font_sizes/font_size": "28",
       "constants/outline_size": "1",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "MonsterHelpWarning": {
       "base_type": "&\"SemanticBacisInfoTime2\"",
@@ -2374,7 +2374,7 @@
     },
     "MosaicHelpTitle": {
       "base_type": "&\"SemanticLoadSceneNotice\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "6",
       "font_sizes/font_size": "32"
     },
@@ -2871,12 +2871,12 @@
     },
     "RoleNatureHp": {
       "base_type": "&\"SemanticRoleNatureHp\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "12"
     },
     "RoleNatureMp": {
       "base_type": "&\"SemanticRoleNatureHp\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "12",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)",
       "constants/shadow_offset_x": "2",
@@ -3329,7 +3329,7 @@
     },
     "ShopStatTitle": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "6",
       "font_sizes/font_size": "24"
@@ -3435,7 +3435,7 @@
     },
     "SkillKeySetLabel": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "5"
@@ -3488,7 +3488,7 @@
     },
     "SkillSelectNoHave": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "constants/outline_size": "10"
@@ -3538,25 +3538,25 @@
     },
     "SwordPageLevelLabel": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "3"
     },
     "SwordPageMaterialLabel": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "3"
     },
     "SwordPageStatLabel": {
       "base_type": "&\"SemanticBackpackTabLabelLarge\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "constants/outline_size": "3"
     },
     "SynHelpBody": {
       "base_type": "&\"SemanticRoleNatureHp\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "12",
       "colors/font_color": "Color(1, 0.941176, 0.470588, 1)"
     },
@@ -3609,7 +3609,7 @@
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
       "constants/outline_size": "1",
       "constants/shadow_outline_size": "7",
-      "fonts/font": "ExtResource(\"font_meng\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "28"
     },
     "TaskTitleStatus": {
@@ -3626,7 +3626,7 @@
     "TouchTextLabel": {
       "base_type": "&\"SemanticHcHelpTitle\"",
       "colors/font_color": "Color(0, 0, 0, 1)",
-      "fonts/font": "ExtResource(\"font_194_song_ti\")"
+      "fonts/font": "ExtResource(\"font_hk\")"
     },
     "TouchTextMargin": {
       "base_type": "&\"MarginContainer\"",
@@ -3729,7 +3729,7 @@
     },
     "TransPage": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "constants/outline_size": "7"
     },
@@ -3760,20 +3760,20 @@
       "base_type": "&\"SemanticAnnouncementCheckButton\"",
       "font_sizes/font_size": "20",
       "constants/outline_size": "10",
-      "fonts/font": "ExtResource(\"font_wo\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "TransTipsSmall": {
       "base_type": "&\"SemanticArchiveFieldTitle\"",
       "font_sizes/font_size": "18",
       "constants/outline_size": "8",
-      "fonts/font": "ExtResource(\"font_wo\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "TransmogrifiedActionLabel": {
       "base_type": "&\"SemanticChangeClothesAction\"",
       "font_sizes/font_size": "12",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "6",
-      "fonts/font": "ExtResource(\"font_jin_qiao\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "TransmogrifiedEqName": {
       "base_type": "&\"SemanticChooseSceneText\"",
@@ -3849,7 +3849,7 @@
     },
     "UseMagicPage": {
       "base_type": "&\"SemanticEndStatsMoreInfo\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "constants/outline_size": "6"
     },
@@ -3911,7 +3911,7 @@
     },
     "VictoryInfoLabel": {
       "base_type": "&\"HcHelpPage\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18",
       "constants/outline_size": "6"
     },
@@ -3926,7 +3926,7 @@
       "colors/font_pressed_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_disabled_color": "Color(1, 0.584314, 0, 1)",
       "constants/outline_size": "5",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "28"
     },
     "WanLingAttributeContent": {
@@ -4029,7 +4029,7 @@
     },
     "ZhenFaCurrentName": {
       "base_type": "&\"SemanticDjInfoTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4120,7 +4120,7 @@
     },
     "ZhenFaNameLabel": {
       "base_type": "&\"SemanticChooseItemTitle\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "24",
       "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "constants/outline_size": "7"
@@ -4265,7 +4265,7 @@
     },
     "SemanticAnnouncementHeading": {
       "base_type": "&\"Label\"",
-      "fonts/font": "ExtResource(\"font_hy\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "SemanticBacisInfoTime": {
       "base_type": "&\"Label\"",
@@ -4353,7 +4353,7 @@
     },
     "SemanticBacisInfoLevel": {
       "base_type": "&\"Control\"",
-      "fonts/font": "ExtResource(\"font_meng\")"
+      "fonts/font": "ExtResource(\"font_main\")"
     },
     "SemanticMagicWeaponSkillGroup": {
       "base_type": "&\"Control\"",
@@ -4394,7 +4394,7 @@
     },
     "SemanticBackpackTabLabelLarge": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "18"
     },
     "SemanticSellFilterCs2": {
@@ -4409,7 +4409,7 @@
     },
     "SemanticEndStatsMoreInfo": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "colors/font_color": "Color(1, 1, 0, 1)"
     },
     "SemanticDecomposeTitle2": {
@@ -4424,7 +4424,7 @@
     },
     "SemanticDjInfoTitle": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "20"
     },
     "SemanticHcHelpTabLabel": {
@@ -4449,12 +4449,12 @@
     },
     "SemanticChooseItemTitle": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "24"
     },
     "SemanticLoadSceneNotice": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "constants/outline_size": "6"
     },
     "SemanticForgeMaterialNeed": {
@@ -4479,7 +4479,7 @@
     },
     "SemanticRoleNatureHp": {
       "base_type": "&\"SemanticAnnouncementHeading\"",
-      "fonts/font": "ExtResource(\"font_hy\")",
+      "fonts/font": "ExtResource(\"font_main\")",
       "font_sizes/font_size": "12"
     },
     "SemanticLearnSkillLevelValue": {
@@ -4886,6 +4886,42 @@
       "constants/shadow_outline_size": "7",
       "colors/font_color": "Color(1, 0.415686, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.415686, 0, 1)"
+    },
+    "SemanticWanLingMainLabel": {
+      "base_type": "&\"Label\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticWanLingMainButton": {
+      "base_type": "&\"Button\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticMountMainLabel": {
+      "base_type": "&\"Label\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticMountMainButton": {
+      "base_type": "&\"Button\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticTowerMainLabel": {
+      "base_type": "&\"Label\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticTowerMainButton": {
+      "base_type": "&\"Button\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticTowerMainInput": {
+      "base_type": "&\"LineEdit\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticLearnSkillMainLabel": {
+      "base_type": "&\"Label\"",
+      "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SemanticLearnSkillMainButton": {
+      "base_type": "&\"Button\"",
+      "fonts/font": "ExtResource(\"font_main\")"
     }
   }
 }

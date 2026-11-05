@@ -10,7 +10,6 @@ var RoleProp: BaseRoleProperties:
 
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 const MOUNT_VISUAL := preload("res://Script/mount/mount_visual.gd")
-const UI_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
 const PANEL_SIZE := Vector2(900.0, 590.0)
 const TAB_NAMES := ["属性", "装备", "兽魂"]
 const EQUIP_KEYS := ["头饰", "鞍具", "护甲", "缰绳", "饰品"]
@@ -407,8 +406,8 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 			skill_button.icon = load(path) as Texture2D
 		else:
 			skill_button.text = "缺图"
-			skill_button.add_theme_font_override("font", UI_FONT)
-			skill_button.add_theme_font_size_override("font_size", 12)
+			skill_button.theme_type_variation = &"SemanticMountMainButton"
+			skill_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
 		icon_frame.add_child(skill_button)
 		holder.add_child(icon_frame)
 		holder.add_child(
@@ -904,7 +903,7 @@ func _label(
 	label.text = text_value
 	label.horizontal_alignment = alignment
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_override("font", UI_FONT)
+	label.theme_type_variation = &"SemanticMountMainLabel"
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_color_override("font_outline_color", UiColorTokens.OUTLINE_NIGHT)
@@ -919,7 +918,7 @@ func _button(text_value: String, position_value: Vector2, size_value: Vector2, f
 	button.size = size_value
 	button.text = text_value
 	button.focus_mode = Control.FOCUS_NONE
-	button.add_theme_font_override("font", UI_FONT)
+	button.theme_type_variation = &"SemanticMountMainButton"
 	button.add_theme_font_size_override("font_size", font_size)
 	button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)

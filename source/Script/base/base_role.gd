@@ -705,8 +705,8 @@ func _ensure_pet_skill_cooldown_nodes(icon: TextureRect) -> void:
 	if time_text == null:
 		time_text = Label.new()
 		time_text.name = "TimeText"
-		time_text.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		time_text.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		time_text.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+		time_text.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		time_text.add_theme_constant_override("outline_size", 5)
 		time_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		time_text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

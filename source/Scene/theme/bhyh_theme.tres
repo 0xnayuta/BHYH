@@ -2812,3 +2812,30 @@ SemanticGameInfoBodyText/colors/font_outline_color = Color(1, 1, 1, 1)
 SemanticZhenFaInfoSkill/base_type = &"SemanticLlbtCureText2"
 SemanticZhenFaInfoSkill/colors/font_color = Color(1, 0.415686, 0, 1)
 SemanticZhenFaInfoSkill/colors/font_outline_color = Color(1, 0.415686, 0, 1)
+
+SemanticWanLingMainLabel/base_type = &"Label"
+SemanticWanLingMainLabel/fonts/font = ExtResource("font_main")
+
+SemanticWanLingMainButton/base_type = &"Button"
+SemanticWanLingMainButton/fonts/font = ExtResource("font_main")
+
+SemanticMountMainLabel/base_type = &"Label"
+SemanticMountMainLabel/fonts/font = ExtResource("font_main")
+
+SemanticMountMainButton/base_type = &"Button"
+SemanticMountMainButton/fonts/font = ExtResource("font_main")
+
+SemanticTowerMainLabel/base_type = &"Label"
+SemanticTowerMainLabel/fonts/font = ExtResource("font_main")
+
+SemanticTowerMainButton/base_type = &"Button"
+SemanticTowerMainButton/fonts/font = ExtResource("font_main")
+
+SemanticTowerMainInput/base_type = &"LineEdit"
+SemanticTowerMainInput/fonts/font = ExtResource("font_main")
+
+SemanticLearnSkillMainLabel/base_type = &"Label"
+SemanticLearnSkillMainLabel/fonts/font = ExtResource("font_main")
+
+SemanticLearnSkillMainButton/base_type = &"Button"
+SemanticLearnSkillMainButton/fonts/font = ExtResource("font_main")

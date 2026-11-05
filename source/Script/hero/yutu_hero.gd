@@ -107,8 +107,8 @@ func _ready() -> void:
 	_potion_label = Label.new()
 	_potion_label.text = "药剂已满"
 	_potion_label.position = Vector2(-32, -165)
-	_potion_label.add_theme_color_override("font_color", Color(0.65, 1.0, 0.55))
-	_potion_label.add_theme_font_size_override("font_size", 16)
+	_potion_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN_LIGHT)
+	_potion_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
 	add_child(_potion_label)
 	_potion_label.hide()
 

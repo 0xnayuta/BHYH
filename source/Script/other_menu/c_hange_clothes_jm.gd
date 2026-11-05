@@ -27,9 +27,9 @@ func _physics_process(_delta: float) -> void:
 		cdorxx.text = str("穿戴")
 	if PlayerData.has_acquired_equipment(self_name):
 		have_or_not.text = "已解锁"
-		have_or_not.add_theme_color_override("font_color", "00ff00")
+		have_or_not.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
 	else:
-		have_or_not.add_theme_color_override("font_color", "ff0000")
+		have_or_not.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
 		have_or_not.text = "未解锁"
 
 	set_physics_process(false)

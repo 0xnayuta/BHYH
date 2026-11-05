@@ -114,13 +114,13 @@ func _selected_equipment_icon() -> Texture2D:
 
 func set_color():
 	if PlayerData.get_item_data(qhs_1_name) < qhs_1_num:
-		num_b1.add_theme_color_override("font_color", Color("FF0000"))
+		num_b1.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
 	else:
-		num_b1.add_theme_color_override("font_color", Color("00FF00"))
+		num_b1.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
 	if PlayerData.get_item_data(qhs_2_name) < qhs_2_num:
-		num_b2.add_theme_color_override("font_color", Color("FF0000"))
+		num_b2.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
 	else:
-		num_b2.add_theme_color_override("font_color", Color("00FF00"))
+		num_b2.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
 
 
 func _on_qh_pressed() -> void:

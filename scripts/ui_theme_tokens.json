@@ -22,7 +22,23 @@
     "TEXT_DANGER": "Color(\"ff0000\")",
     "TEXT_PARCHMENT": "Color(\"e5dbc9\")",
     "TEXT_PARCHMENT_MUTED": "Color(\"bbae91\")",
-    "OUTLINE_NIGHT": "Color(0.02, 0.03, 0.05, 0.8)"
+    "OUTLINE_NIGHT": "Color(0.02, 0.03, 0.05, 0.8)",
+    "TEXT_DANGER_DEEP": "Color(0.6, 0, 0, 1)",
+    "TEXT_ORANGE_WARM": "Color(1, 0.6, 0.2, 1)",
+    "TEXT_ORANGE_HOT": "Color(1, 0.466667, 0, 1)",
+    "TEXT_GREEN_LIGHT": "Color(0.65, 1, 0.55, 1)",
+    "TEXT_GREEN_DEBUG": "Color(0.1, 1, 0.25, 1)",
+    "TEXT_GOLD_SOFT": "Color(1, 0.88, 0.48, 1)",
+    "TEXT_GOLD_PALE": "Color(1, 0.93, 0.72, 1)",
+    "TEXT_GOLD_AMBER": "Color(1, 0.78, 0.27, 1)",
+    "TEXT_ORANGE_BRIGHT": "Color(1, 0.55, 0.18, 1)",
+    "TEXT_GOLD_ORANGE": "Color(1, 0.74, 0.24, 1)",
+    "TEXT_IVORY": "Color(0.92, 0.92, 0.88, 1)",
+    "TEXT_GOLD_EARTH": "Color(\"e8c478\")",
+    "TEXT_CREAM": "Color(\"e9d6ae\")",
+    "TEXT_GOLD_PALE_BRIGHT": "Color(\"fff2b4\")",
+    "TEXT_CYAN": "Color(\"00ffff\")",
+    "TEXT_TRANSPARENT": "Color(0, 0, 0, 0)"
   },
   "surface_groups": [
     {
@@ -244,5 +260,16 @@
     "TEXT_ORANGE_DEEP": "Color(0.827451, 0.552941, 0, 1)",
     "OUTLINE_NIGHT": "Color(0.02, 0.03, 0.05, 0.8)",
     "OUTLINE_WARM": "Color(0.12, 0.06, 0, 1)"
-  }
+  },
+  "script_font_sizes": [
+    11,
+    13,
+    15,
+    17,
+    19,
+    21,
+    22,
+    27,
+    30
+  ]
 }

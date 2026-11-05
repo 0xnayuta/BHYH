@@ -17,8 +17,8 @@ func _physics_process(delta: float) -> void:
 	if task_type != "DailyTask" and PlayerData.player_data.get(task_name, false):
 		label.text = "已领取"
 		my_father.activity_finish_num += 1
-		label.add_theme_color_override("font_color", "00ffff")
-		label.add_theme_color_override("font_outline_color", "00ffff")
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_CYAN)
+		label.add_theme_color_override("font_outline_color", UiColorTokens.TEXT_CYAN)
 		set_physics_process(false)
 		return
 	if check_task_finish():
@@ -26,13 +26,13 @@ func _physics_process(delta: float) -> void:
 		if task_type == "DailyTask":
 			my_father.daily_finish_num += 1
 		label.text = "已完成"
-		label.add_theme_color_override("font_color", "00ff00")
-		label.add_theme_color_override("font_outline_color", "00ff00")
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
+		label.add_theme_color_override("font_outline_color", UiColorTokens.TEXT_GREEN)
 	else:
 		finish = false
 		label.text = "未完成"
-		label.add_theme_color_override("font_color", "ff0000")
-		label.add_theme_color_override("font_outline_color", "ff0000")
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
+		label.add_theme_color_override("font_outline_color", UiColorTokens.TEXT_DANGER)
 	set_physics_process(false)
 
 

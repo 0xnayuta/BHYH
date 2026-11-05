@@ -13,7 +13,6 @@ const TOWER_RUN_POINTS_KEY := "镇妖塔本次闯关积分"
 const TOWER_ACHIEVEMENT_PURCHASE_KEY := "镇妖塔成就商店觉醒石已购次数"
 const TOWER_LEVEL_SCENE_PATH := "res://Scene/level/level_zhen_yao_tower.tscn"
 const TOWER_LEVEL_SCRIPT := preload("res://Script/level/level_zhen_yao_tower.gd")
-const TOWER_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
 const TOWER_MATERIAL_IDS := [
 	"105000012",
 	"105000013",
@@ -270,7 +269,7 @@ func _make_shop_style(background: Color, border: Color, border_width: int = 2) -
 
 
 func _style_shop_label(label: Label, font_size: int = 17) -> void:
-	label.add_theme_font_override("font", TOWER_FONT)
+	label.theme_type_variation = &"SemanticTowerMainLabel"
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 	label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
@@ -279,8 +278,8 @@ func _style_shop_label(label: Label, font_size: int = 17) -> void:
 
 func _style_shop_button(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_NONE
-	button.add_theme_font_override("font", TOWER_FONT)
-	button.add_theme_font_size_override("font_size", 16)
+	button.theme_type_variation = &"SemanticTowerMainButton"
+	button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
 	button.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 	button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_PRIMARY)
 	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_GOLD_LIGHT)
@@ -485,8 +484,8 @@ func _create_shop_item_row(
 		quantity_input.max_length = 4
 		quantity_input.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		quantity_input.tooltip_text = "购买数量（1-9999）"
-		quantity_input.add_theme_font_override("font", TOWER_FONT)
-		quantity_input.add_theme_font_size_override("font_size", 14)
+		quantity_input.theme_type_variation = &"SemanticTowerMainInput"
+		quantity_input.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_14)
 		quantity_input.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 		quantity_input.add_theme_color_override("caret_color", UiSurfaceTokens.INPUT_CARET)
 		quantity_input.add_theme_color_override("selection_color", UiSurfaceTokens.INPUT_SELECTION)

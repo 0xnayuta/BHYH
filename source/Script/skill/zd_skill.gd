@@ -1292,9 +1292,9 @@ func set_skill_mp_cost():
 		mp_label.name = "mp_cost"
 		mp_label.text = str(mp_cost)
 
-		mp_label.add_theme_font_size_override("font_size", 12)
-		mp_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		mp_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		mp_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
+		mp_label.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+		mp_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		mp_label.add_theme_constant_override("outline_size", 3)
 
 		mp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT

@@ -70,4 +70,4 @@ func set_color():
 
 
 func _apply_black_myth_text_style(label: Label) -> void:
-	label.add_theme_color_override("font_color", Color(0.6, 0.0, 0.0, 1.0))
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER_DEEP)

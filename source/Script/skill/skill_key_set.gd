@@ -25,7 +25,7 @@ func _ready() -> void:
 		button.text = "设置为小键盘 " + key_name.right(1)
 		button.position.x = -114
 		button.size.x = 240
-		button.add_theme_font_size_override("font_size", 22)
+		button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_22)
 
 
 var name_list = {

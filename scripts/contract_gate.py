@@ -39,6 +39,7 @@ COMMANDS = [
     ("ui_theme_tokens_check", [sys.executable, "scripts/convert_ui_theme_tokens.py", "--check"]),
     ("theme_token_audit", [sys.executable, "scripts/theme_token_audit.py", "--check"]),
     ("theme_variant_audit", [sys.executable, "scripts/theme_variant_audit.py", "--check"]),
+    ("ui_dynamic_theme_audit", [sys.executable, "scripts/ui_dynamic_theme_audit.py", "--check"]),
     ("font_coverage_audit", [sys.executable, "scripts/font_coverage_audit.py", "--check"]),
     ("ui_surface_token_audit", [sys.executable, "scripts/ui_surface_token_audit.py", "--check"]),
     ("ui_surface_token_self_test", [sys.executable, "scripts/ui_surface_token_audit.py", "--self-test"]),

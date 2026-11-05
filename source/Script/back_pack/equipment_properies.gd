@@ -306,8 +306,8 @@ func _add_pet_random_label(text_value: String, is_header := false) -> void:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	label.add_theme_font_size_override("font_size", 16 if not is_header else 15)
-	label.add_theme_color_override("font_color", Color(1, 0.6, 0.2, 1))
-	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_ORANGE_WARM)
+	label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	label.add_theme_constant_override("outline_size", 1)
 	v_box_container_3.add_child(label)
 	pet_random_labels.append(label)
@@ -416,7 +416,7 @@ func set_some_pro_color(_name):
 
 
 func _apply_black_myth_text_style(label: Label) -> void:
-	label.add_theme_color_override("font_color", Color(0.6, 0.0, 0.0, 1.0))
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER_DEEP)
 
 
 func _set_equipment_info(_name: String):
@@ -741,8 +741,8 @@ func _set_gem_resonance_information(data: Dictionary) -> void:
 		var font_override = eq_lx.get_theme_font("font")
 		if font_override != null:
 			label.add_theme_font_override("font", font_override)
-		label.add_theme_font_size_override("font_size", 18)
-		label.add_theme_color_override("font_color", Color("e8c478"))
+		label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_EARTH)
 		container.add_child(label)
 		container.move_child(label, bs_pro_list.get_index())
 	if resonance > 0:

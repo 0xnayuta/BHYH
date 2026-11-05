@@ -27,9 +27,9 @@ func _physics_process(delta: float) -> void:
 func set_text():
 	if need_num != 0:
 		if PlayerData.get_item_data(item_name) >= need_num:
-			need_and_have.add_theme_color_override("font_color", "00ff00")
+			need_and_have.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
 		else:
-			need_and_have.add_theme_color_override("font_color", "ff0000")
+			need_and_have.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
 		need_and_have.text = str(PlayerData.get_item_data(item_name)) + "/" + str(need_num)
 
 

@@ -104,8 +104,8 @@ func _physics_process(_delta: float) -> void:
 	lh_text.position = Vector2(-170, -12)
 	lh_text.size = Vector2(140, 26)
 	lh_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lh_text.add_theme_color_override("font_color", Color("00FF00"))
-	lh_text.add_theme_color_override("font_outline_color", Color("000000"))
+	lh_text.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
+	lh_text.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 
 
 func _on_sz_pressed() -> void:

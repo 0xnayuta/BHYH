@@ -212,7 +212,6 @@ const HEAVEN_EFFECT_TEXT := {
 }
 const PORTRAIT_PATH := "res://Art/monster/creature_codex/%d.png"
 const CRYSTAL_PATH := "res://Art/monster/soul_crystal/%d.png"
-const UI_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
 
 @onready var _stage: Panel = $Stage
 @onready var _category_list: VBoxContainer = $Stage/CategoryPanel/CategoryMargin/CategoryList
@@ -315,8 +314,8 @@ func _build_category_buttons() -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 		button.text = category_name
-		button.add_theme_font_override("font", UI_FONT)
-		button.add_theme_font_size_override("font_size", 18)
+		button.theme_type_variation = &"SemanticWanLingMainButton"
+		button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
 		button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 		button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
 		button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_GOLD)
@@ -391,8 +390,8 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	name_label.custom_minimum_size.y = 25.0
 	name_label.text = monster_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_override("font", UI_FONT)
-	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.theme_type_variation = &"SemanticWanLingMainLabel"
+	name_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
 	name_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 	column.add_child(name_label)
 
@@ -410,16 +409,16 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	effect_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	effect_label.add_theme_font_override("font", UI_FONT)
-	effect_label.add_theme_font_size_override("font_size", 13)
+	effect_label.theme_type_variation = &"SemanticWanLingMainLabel"
+	effect_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_13)
 	effect_label.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT)
 	column.add_child(effect_label)
 
 	var level_label := Label.new()
 	level_label.custom_minimum_size.y = 22.0
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	level_label.add_theme_font_override("font", UI_FONT)
-	level_label.add_theme_font_size_override("font_size", 16)
+	level_label.theme_type_variation = &"SemanticWanLingMainLabel"
+	level_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
 	level_label.add_theme_color_override("font_color", UiColorTokens.TEXT_JADE)
 	column.add_child(level_label)
 
@@ -437,8 +436,8 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	material_row.add_child(crystal_icon)
 
 	var material_label := Label.new()
-	material_label.add_theme_font_override("font", UI_FONT)
-	material_label.add_theme_font_size_override("font_size", 14)
+	material_label.theme_type_variation = &"SemanticWanLingMainLabel"
+	material_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_14)
 	material_label.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 	material_row.add_child(material_label)
 
@@ -447,8 +446,8 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	upgrade_button.focus_mode = Control.FOCUS_NONE
 	upgrade_button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	upgrade_button.text = "吞噬"
-	upgrade_button.add_theme_font_override("font", UI_FONT)
-	upgrade_button.add_theme_font_size_override("font_size", 16)
+	upgrade_button.theme_type_variation = &"SemanticWanLingMainButton"
+	upgrade_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
 	upgrade_button.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
 	upgrade_button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_DISABLED)
 	upgrade_button.add_theme_stylebox_override(

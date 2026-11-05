@@ -82,7 +82,9 @@ func _update_page_buttons() -> void:
 			continue
 		var selected := index == page_index
 		button.disabled = false
-		button.add_theme_color_override("font_color", Color("fff4bf") if selected else Color.WHITE)
+		button.add_theme_color_override(
+			"font_color", UiColorTokens.TEXT_GOLD_LIGHT if selected else UiColorTokens.TEXT_PRIMARY
+		)
 
 
 func _render() -> void:

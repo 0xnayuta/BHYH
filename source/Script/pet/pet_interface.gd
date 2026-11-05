@@ -135,7 +135,6 @@ const PET_SKILL_SLOT_FRAME := "res://Art/pet/pet_page_resources/pet_interfacev12
 const PET_EQUIPMENT_SLOT_FRAME := preload(
 	"res://Art/pet/pet_page_resources/pet_interfacev1270_id202_lossless_54x54.png"
 )
-const PET_EQUIPMENT_STRENGTH_FONT := preload("res://Scene/theme/fz_cu_yuan_m03.tres")
 const PET_PACK_CAPACITY := 40
 const PET_BACKPACK_SLOT_SCENE := preload("res://Scene/pet/pet_backpack_slot.tscn")
 const PET_EQUIPMENT_SLOT_TYPES := ["zbst", "zbmz", "zbxz", "zbyf", "zbjn"]
@@ -2097,10 +2096,9 @@ func _setup_pet_skill_icons() -> void:
 			mana_label.offset_right = 31
 			mana_label.offset_bottom = 18
 			mana_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			mana_label.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-			mana_label.add_theme_font_size_override("font_size", 12)
-			mana_label.add_theme_color_override("font_color", Color("63c7ff"))
-			mana_label.add_theme_color_override("font_outline_color", Color.BLACK)
+			mana_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
+			mana_label.add_theme_color_override("font_color", UiColorTokens.TEXT_INFO)
+			mana_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 			mana_label.add_theme_constant_override("outline_size", 3)
 			mana_label.visible = false
 			slot.add_child(mana_label)
@@ -2112,10 +2110,9 @@ func _setup_pet_skill_icons() -> void:
 			level_label.offset_right = 55
 			level_label.offset_bottom = 18
 			level_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			level_label.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-			level_label.add_theme_font_size_override("font_size", 11)
-			level_label.add_theme_color_override("font_color", Color("fff4bf"))
-			level_label.add_theme_color_override("font_outline_color", Color.BLACK)
+			level_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_11)
+			level_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+			level_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 			level_label.add_theme_constant_override("outline_size", 3)
 			level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			level_label.visible = false
@@ -2384,12 +2381,12 @@ func _setup_pet_passive_panel() -> void:
 	var title := Label.new()
 	title.text = "宠物被动技能"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
-	title.add_theme_font_size_override("font_size", 15)
+	title.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_SOFT)
+	title.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 	title_row.add_child(title)
 	pet_passive_limit_label = Label.new()
 	pet_passive_limit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	pet_passive_limit_label.add_theme_font_size_override("font_size", 12)
+	pet_passive_limit_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
 	title_row.add_child(pet_passive_limit_label)
 	pet_passive_one_key_button = Button.new()
 	pet_passive_one_key_button.name = "OneKeyUpgradeButton"
@@ -2397,7 +2394,7 @@ func _setup_pet_passive_panel() -> void:
 	pet_passive_one_key_button.custom_minimum_size = Vector2(65, 23)
 	pet_passive_one_key_button.focus_mode = Control.FOCUS_NONE
 	pet_passive_one_key_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pet_passive_one_key_button.add_theme_font_size_override("font_size", 12)
+	pet_passive_one_key_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
 	pet_passive_one_key_button.pressed.connect(_on_pet_passive_one_key_upgrade_pressed)
 	title_row.add_child(pet_passive_one_key_button)
 
@@ -2409,7 +2406,7 @@ func _setup_pet_passive_panel() -> void:
 		var name_label := Label.new()
 		name_label.text = skill_name
 		name_label.custom_minimum_size.x = 40
-		name_label.add_theme_color_override("font_color", Color(1.0, 0.93, 0.72))
+		name_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_PALE)
 		row.add_child(name_label)
 		var level_label := Label.new()
 		level_label.custom_minimum_size.x = 48
@@ -2418,13 +2415,13 @@ func _setup_pet_passive_panel() -> void:
 		var effect_label := Label.new()
 		effect_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		effect_label.clip_text = true
-		effect_label.add_theme_font_size_override("font_size", 12)
+		effect_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_12)
 		row.add_child(effect_label)
 		pet_passive_effect_labels[skill_name] = effect_label
 		var cost_label := Label.new()
 		cost_label.custom_minimum_size.x = 58
 		cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		cost_label.add_theme_font_size_override("font_size", 11)
+		cost_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_11)
 		row.add_child(cost_label)
 		pet_passive_cost_labels[skill_name] = cost_label
 		var upgrade_button := Button.new()
@@ -2813,11 +2810,10 @@ func _set_pet_equipment_strength_label(button: Button, strengthen_level: int) ->
 		label.offset_right = -1.0
 		label.offset_bottom = -1.0
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.add_theme_color_override("font_color", Color(1, 0.466667, 0, 1))
-		label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_ORANGE_HOT)
+		label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		label.add_theme_constant_override("outline_size", 4)
-		label.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-		label.add_theme_font_size_override("font_size", 15)
+		label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 		button.add_child(label)
@@ -3081,10 +3077,9 @@ func _show_pet_batch_sell_options() -> void:
 	title.size = Vector2(512, 34)
 	title.text = "批量出售宠物装备"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-	title.add_theme_color_override("font_outline_color", Color.BLACK)
+	title.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_22)
+	title.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	title.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	title.add_theme_constant_override("outline_size", 3)
 	panel.add_child(title)
 
@@ -3094,10 +3089,9 @@ func _show_pet_batch_sell_options() -> void:
 	description.text = "选择要保留的词条，装备必须同时满足所有已选择词条。\n未选择词条时，只按保护选项出售。锁定装备始终不会出售。"
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	description.add_theme_font_size_override("font_size", 14)
-	description.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-	description.add_theme_color_override("font_outline_color", Color.BLACK)
+	description.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_14)
+	description.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	description.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	description.add_theme_constant_override("outline_size", 2)
 	panel.add_child(description)
 
@@ -3108,10 +3102,9 @@ func _show_pet_batch_sell_options() -> void:
 		row_label.size = Vector2(112, 34)
 		row_label.text = "保留词条%d" % (slot_index + 1)
 		row_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		row_label.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-		row_label.add_theme_font_size_override("font_size", 16)
-		row_label.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-		row_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		row_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
+		row_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+		row_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		row_label.add_theme_constant_override("outline_size", 2)
 		panel.add_child(row_label)
 
@@ -3123,8 +3116,7 @@ func _show_pet_batch_sell_options() -> void:
 		option.mouse_filter = Control.MOUSE_FILTER_STOP
 		option.text = "不限"
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		option.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-		option.add_theme_font_size_override("font_size", 15)
+		option.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 		_style_pet_batch_sell_dropdown_button(option)
 		option.pressed.connect(_open_pet_batch_sell_stat_menu.bind(panel, option, slot_index))
 		panel.add_child(option)
@@ -3136,8 +3128,7 @@ func _show_pet_batch_sell_options() -> void:
 	strengthened_check.text = "不出售强化装备"
 	strengthened_check.button_pressed = true
 	strengthened_check.focus_mode = Control.FOCUS_NONE
-	strengthened_check.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	strengthened_check.add_theme_font_size_override("font_size", 15)
+	strengthened_check.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 	strengthened_check.toggled.connect(_on_pet_batch_sell_protection_toggled.bind("protect_strengthened"))
 	panel.add_child(strengthened_check)
 
@@ -3147,8 +3138,7 @@ func _show_pet_batch_sell_options() -> void:
 	socketed_check.text = "不出售镶嵌宝石装备"
 	socketed_check.button_pressed = true
 	socketed_check.focus_mode = Control.FOCUS_NONE
-	socketed_check.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	socketed_check.add_theme_font_size_override("font_size", 15)
+	socketed_check.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 	socketed_check.toggled.connect(_on_pet_batch_sell_protection_toggled.bind("protect_socketed"))
 	panel.add_child(socketed_check)
 
@@ -3158,8 +3148,7 @@ func _show_pet_batch_sell_options() -> void:
 	identical_stats_check.text = "不出售四条相同词条装备"
 	identical_stats_check.button_pressed = true
 	identical_stats_check.focus_mode = Control.FOCUS_NONE
-	identical_stats_check.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	identical_stats_check.add_theme_font_size_override("font_size", 15)
+	identical_stats_check.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_15)
 	identical_stats_check.toggled.connect(_on_pet_batch_sell_protection_toggled.bind("protect_four_identical_stats"))
 	panel.add_child(identical_stats_check)
 
@@ -3168,10 +3157,9 @@ func _show_pet_batch_sell_options() -> void:
 	pet_batch_sell_summary_label.size = Vector2(488, 36)
 	pet_batch_sell_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pet_batch_sell_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	pet_batch_sell_summary_label.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	pet_batch_sell_summary_label.add_theme_font_size_override("font_size", 17)
-	pet_batch_sell_summary_label.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-	pet_batch_sell_summary_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	pet_batch_sell_summary_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_17)
+	pet_batch_sell_summary_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	pet_batch_sell_summary_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	pet_batch_sell_summary_label.add_theme_constant_override("outline_size", 3)
 	panel.add_child(pet_batch_sell_summary_label)
 
@@ -3212,8 +3200,8 @@ func _style_pet_batch_sell_dropdown_button(button: Button) -> void:
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)
 	button.add_theme_stylebox_override("pressed", hover)
-	button.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
 
 
 func _open_pet_batch_sell_stat_menu(panel: Panel, option: Button, slot_index: int) -> void:
@@ -3258,8 +3246,7 @@ func _open_pet_batch_sell_stat_menu(panel: Panel, option: Button, slot_index: in
 		choice_button.mouse_filter = Control.MOUSE_FILTER_STOP
 		choice_button.text = choices[choice_index]
 		choice_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		choice_button.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-		choice_button.add_theme_font_size_override("font_size", 14)
+		choice_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_14)
 		_style_pet_batch_sell_dropdown_button(choice_button)
 		choice_button.button_pressed = (
 			choices[choice_index] == current_name or (choice_index == 0 and current_name == "")
@@ -3372,10 +3359,9 @@ func _show_pet_batch_sell_confirm_text(confirm_text: String, confirm_callback: C
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	text.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	text.add_theme_font_size_override("font_size", 16)
-	text.add_theme_color_override("font_color", Color(1, 0.956863, 0.74902))
-	text.add_theme_color_override("font_outline_color", Color.BLACK)
+	text.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_16)
+	text.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	text.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	text.add_theme_constant_override("outline_size", 3)
 	text.text = confirm_text
 	panel.add_child(text)
@@ -3438,9 +3424,8 @@ func _style_pet_batch_sell_button(button: Button) -> void:
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("pressed", hover)
 	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_color_override("font_color", Color.WHITE)
-	button.add_theme_font_override("font", PET_EQUIPMENT_STRENGTH_FONT)
-	button.add_theme_font_size_override("font_size", 14)
+	button.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+	button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_14)
 
 
 func _close_pet_batch_sell_confirm() -> void:
@@ -4825,10 +4810,10 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 		row.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		row.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		row.mouse_filter = Control.MOUSE_FILTER_STOP
-		row.add_theme_color_override("font_color", Color(1, 0.95686275, 0.7490196, 1))
-		row.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		row.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+		row.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		row.add_theme_constant_override("outline_size", 3)
-		row.add_theme_font_size_override("font_size", 13)
+		row.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_13)
 		pet_list_dropdown.add_child(row)
 	pet_list_scroll.visible = show_dropdown and not pets.is_empty()
 
