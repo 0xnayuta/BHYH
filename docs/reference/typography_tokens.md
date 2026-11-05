@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-3 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-4 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -83,6 +83,22 @@
 | `ldl` | Title 19→20；六个 `MenuActionButton` 派生按钮 25→24；内嵌 `main_backpack` 同步 |
 | `shop` | Search/TabText 15→16；StatTitle/Hint 25→24；StatTitle outline 8→6；RoleText outline 9→10；Close 25→24；ItemSoulValue 17→18；ItemSoulText outline 7→6 |
 | `mystery_shop` | MysteryShopLabel 13→14；Info 16；Title 12；BoxLockMark 共享 14/3 |
+| `equipment_properies` | StatValue 15→16；Description 13→14；Sale 17→18；其余 20/16 保持 |
+| `use_items` | Title 15→16、outline 7→6；StatName 13→14/6；Up 33→32/6；Down 37→36/6；Min 11→12/6；Max/Key outline 6 |
+| `skill_select` | SkillSelectInfo 15→16；Name/Level/NoHave 保持既有 token |
+| `pl_sell` | SellPageInput 15→16；筛选色与警告色保持数据语义色 |
+| `dj_information` | DjInfoDescription 15→16、outline 5→6；Title/Line 20 |
+| `dj_sell` | DjSellNumber outline 9→10；Close 76；Info 12 |
+| `forge` | Title color→combat/outline 6；Subtitle 22→24/6；ItemName 27→28/6；Soul 22→24；HelpTitle 35→36/6；HelpLine/MaterialNeed outline 6 |
+| `synthesis` | SynthesisTitle color→combat/outline 6；ItemName 18；Cost 16 |
+| `strength` | StrengthNumber outline 8→6；ForgeTitle 共享 |
+| `mosaic` | 仅共享 DecomposeTitle（32/combat/6） |
+| `decompose` | DecomposeTitle 共享；TitleOrange outline 12→10 |
+| `divine_forge` | DivineForgeButton 30→32；继承 strength/Forge 变体 |
+| `bone_forge` | 无自有变体；继承 divine/strength |
+| `choose_item` | ChooseItemTitle 25→24；ChooseItemList 19→20 |
+| `cure_times_box` | CureTimesHeader 25→24；Currency 22→24；Section 20 |
+| `shop_item` | 已在前批完成；本批逐项对照 **0** 字体重写 |
 
 ## 4. 对照结果
 
@@ -99,6 +115,22 @@
 | `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
 | `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
 | `mystery_shop` | 0 | 0 | 仅文字字号/描边变化 |
+| `equipment_properies` | 18（面板布局，≤17 px） | 23 | 直场景缺少装备实例；面板 1025→1043 px，截图仅作布局参考 |
+| `use_items` | 0 | 2 | Up/Down/Min 字号变化，无位移/裁切 |
+| `skill_select` | 0 | 0 | Info 字号变化 |
+| `pl_sell` | 12（≤1 px） | 3 | 输入框字号 15→16；无新增越界 |
+| `dj_information` | 1（2 px） | 2 | 描述字号 15→16；无裁切 |
+| `dj_sell` | 0 | 0 | 描边 9→10 |
+| `forge` | 0 | 1 | 字号/描边变化，无位移 |
+| `synthesis` | 0 | 0 | 标题颜色/描边变化 |
+| `strength` | 0 | 0 | 数字描边 8→6 |
+| `mosaic` | 0 | 0 | 共享标题变化 |
+| `decompose` | 0 | 0 | 标题描边/颜色变化 |
+| `divine_forge` | 0 | 0 | 按钮 30→32，固定按钮框吸收 |
+| `bone_forge` | 0 | 0 | 无自有变体 |
+| `choose_item` | 0 | 0 | 标题 25→24、列表 19→20 |
+| `cure_times_box` | 0 | 0 | Header/Currency 字号变化，容器固定 |
+| `shop_item` | 0 | 0 | 无字体重写 |
 
 截图与控件转储：
 
@@ -111,6 +143,10 @@ G:/tmp/p2c_before/
 G:/tmp/p2c_after/
 G:/tmp/p2c_before_1600/
 G:/tmp/p2c_after_1600/
+G:/tmp/p2d_before/
+G:/tmp/p2d_after/
+G:/tmp/p2d_before_1600/
+G:/tmp/p2d_after_1600/
 ```
 
 ## 5. 审计
@@ -127,8 +163,8 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（36.82s）；
-- `scene_probe ui-theme`：PASS（5.41s）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING。
+- `check_all --godot-bin`：**9/9 PASS**（36.27s）；
+- `scene_probe ui-theme`：PASS（5.51s）；
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.68s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。

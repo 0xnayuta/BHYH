@@ -81,9 +81,10 @@ python scripts/font_coverage_audit.py --check
 
 ## 8. P2 排版 token 试点（2026-11-05）
 
-- 覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
+- 覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`，以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
 - 不重命名 618 个冻结变体；重复 Text/Icon 按钮改为继承 `MenuActionButton`、`EmptyButton`、`SettingsButton`、`SettingsButtonTiny`、`LlbtCgmsButton` 等共享基类，视觉不变。
 - P2-3 新增：公告版本列表 28、Heading 36；背包标题 24、小 Tab 16、BoxLockMark 14/3；`ldl` 按钮 24；商店 Tab/Search 16、Stat/Hint 24、SoulValue 18；神秘商店标签 14。
-- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；1280×800/1600×1000 未见新版裁切。
+- P2-4 新增：装备数值 16/描述 14/售价 18；道具使用 32/36、13/14、15/16；锻造 24/28、标题 36；神铸 32；选择物品 24/20；治疗次数 24/24；`shop_item` 本批无字体重写。
+- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景缺装备实例，面板 1025→1043 px，截图仅作布局参考），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）。
 - `theme_token_audit.py --check` 冻结 618 个既有变体，新增/改写值必须使用 token；当前 **0 违规**。
 - 其余面板继续保持既有 Theme 值，后续按 token 表分批迁移。
