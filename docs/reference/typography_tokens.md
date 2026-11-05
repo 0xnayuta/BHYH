@@ -115,7 +115,7 @@
 | `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
 | `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
 | `mystery_shop` | 0 | 0 | 仅文字字号/描边变化 |
-| `equipment_properies` | 18（面板布局，≤17 px） | 23 | 直场景缺少装备实例；面板 1025→1043 px，截图仅作布局参考 |
+| `equipment_properies` | 18（面板布局，≤17 px） | 23 | 真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切；武器路径“描述/售价”仅保留标签属既有脚本行为；直场景无实例时 1025→1043 px 仅作布局参考 |
 | `use_items` | 0 | 2 | Up/Down/Min 字号变化，无位移/裁切 |
 | `skill_select` | 0 | 0 | Info 字号变化 |
 | `pl_sell` | 12（≤1 px） | 3 | 输入框字号 15→16；无新增越界 |
@@ -147,6 +147,7 @@ G:/tmp/p2d_before/
 G:/tmp/p2d_after/
 G:/tmp/p2d_before_1600/
 G:/tmp/p2d_after_1600/
+G:/tmp/p2d_equip_host.png
 ```
 
 ## 5. 审计
