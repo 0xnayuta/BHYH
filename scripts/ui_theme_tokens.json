@@ -138,6 +138,25 @@
     "resource_id": "font_fz_cu_yuan_m03",
     "path": "res://Scene/theme/fz_cu_yuan_m03.tres"
   },
+  "font_roles": {
+    "body": {
+      "resource_id": "font_fz_cu_yuan_m03",
+      "path": "res://Scene/theme/fz_cu_yuan_m03.tres",
+      "fallback": "res://Font/msyh_semibold.ttc"
+    },
+    "ui": {
+      "resource_id": "font_hk",
+      "path": "res://Font/华康宋体W3.ttc"
+    },
+    "display": {
+      "resource_id": "font_return",
+      "path": "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+    },
+    "accent": {
+      "resource_id": "font_main",
+      "path": "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf"
+    }
+  },
   "theme_properties": {
     "default_font": "font.default",
     "TowerFloorInput/colors/caret_color": "surface.INPUT_CARET",

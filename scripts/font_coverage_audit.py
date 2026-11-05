@@ -23,6 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "source"
 THEME_PATH = SOURCE / "Scene" / "theme" / "bhyh_theme.tres"
+DYNAMIC_SAMPLES = ROOT / "scripts" / "font_dynamic_samples.json"
 CJK_START = 0x3400
 CJK_END = 0x9FFF
 
@@ -237,6 +238,71 @@ def _scene_text_owner(text: str, resources: dict[str, tuple[str, str]]) -> str:
     return resource[1] if resource else ""
 
 
+def theme_asset_report(theme: ThemeFonts) -> dict[str, object]:
+    font_ids = [resource_id for resource_id, (kind, _path) in theme.ext.items() if kind in {"FontFile", "FontVariation"}]
+    referenced_ids: set[str] = set(EXT_REF_RE.findall(theme.props.get("default_font", "")))
+    for props in theme.variants.values():
+        referenced_ids.update(EXT_REF_RE.findall(props.get("fonts/font", "")))
+    used_paths: set[str] = set()
+    for resource_id in font_ids:
+        used_paths.update(theme._variation_file(resource_id))
+    unused = sorted(resource_id for resource_id in font_ids if resource_id not in referenced_ids)
+    return {
+        "font_resources": len(font_ids),
+        "font_files": sorted(used_paths),
+        "font_file_count": len(used_paths),
+        "unused_resources": unused,
+    }
+
+
+def _dynamic_font_chain(theme: ThemeFonts, font_id: str) -> list[str]:
+    if font_id == "default":
+        return list(theme.default)
+    if font_id in theme.ext:
+        return theme._resolve_value(f'ExtResource("{font_id}")')
+    return []
+
+
+def scan_dynamic_samples(theme: ThemeFonts) -> dict[str, object]:
+    data = json.loads(DYNAMIC_SAMPLES.read_text(encoding="utf-8"))
+    samples = data.get("samples", [])
+    faces: dict[str, FontFace] = {}
+    missing: list[dict[str, str]] = []
+    missing_chars: dict[str, int] = {}
+    checked = 0
+    for sample in samples:
+        text = str(sample.get("text", ""))
+        font_id = str(sample.get("font", ""))
+        chain = _dynamic_font_chain(theme, font_id)
+        checked += 1
+        if not chain:
+            missing.append({"name": str(sample.get("name", "")), "font": font_id, "reason": "font 未解析"})
+            continue
+        resolved: set[int] = set()
+        for font_path in chain:
+            if font_path not in faces:
+                faces[font_path] = load_face(font_path)
+            if faces[font_path].codepoints is not None:
+                resolved.update(faces[font_path].codepoints or ())
+        missing_text = [ch for ch in text if CJK_START <= ord(ch) <= CJK_END and ord(ch) not in resolved]
+        if missing_text:
+            for ch in set(missing_text):
+                missing_chars[ch] = missing_chars.get(ch, 0) + 1
+            missing.append({
+                "name": str(sample.get("name", "")),
+                "font": font_id,
+                "font_chain": chain,
+                "missing": "".join(missing_text),
+                "text": text,
+            })
+    return {
+        "samples": checked,
+        "missing": missing,
+        "missing_chars": dict(sorted(missing_chars.items(), key=lambda item: (-item[1], item[0]))),
+        "fonts": {path: {"error": face.error, "codepoints": len(face.codepoints) if face.codepoints is not None else 0} for path, face in sorted(faces.items())},
+    }
+
+
 def scan(theme: ThemeFonts) -> dict[str, object]:
     faces: dict[str, FontFace] = {}
     missing_fonts: dict[str, str] = {}
@@ -309,6 +375,8 @@ def scan(theme: ThemeFonts) -> dict[str, object]:
         "font_nodes": dict(font_nodes.most_common()),
         "fonts": {path: {"error": face.error, "codepoints": len(face.codepoints) if face.codepoints is not None else 0} for path, face in sorted(faces.items())},
         "missing_fonts": missing_fonts,
+        "dynamic": scan_dynamic_samples(theme),
+        "theme_assets": theme_asset_report(theme),
     }
 
 
@@ -329,6 +397,12 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(f"字体覆盖：场景 {report['scenes']}，中文文本节点 {report['cjk_nodes']}，缺字节点 {report['missing_nodes']}")
         print(f"默认字体链: {' + '.join(report['default_font']) or '(none)'}")
+        assets = report["theme_assets"]
+        print(f"Theme 字体资产：{assets['font_resources']} 个资源 / {assets['font_file_count']} 个文件；未引用资源 {len(assets['unused_resources'])} 个")
+        dynamic = report["dynamic"]
+        print(f"动态字体样本：{dynamic['samples']} 个，缺字样本 {len(dynamic['missing'])} 个")
+        for sample in dynamic["missing"]:
+            print(f"MISS dynamic::{sample['name']} 字体={sample['font']!r} 缺字={sample.get('missing', '')!r}")
         if report["missing_fonts"]:
             for path, error in report["missing_fonts"].items():
                 print(f"WARN 字体无法读取: {path} ({error})", file=sys.stderr)
@@ -339,7 +413,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.check:
         return 0
-    if report["missing_nodes"]:
+    if report["missing_nodes"] or report["dynamic"]["missing"]:
+        return 1
+    if report["theme_assets"]["font_file_count"] > 6 or report["theme_assets"]["unused_resources"]:
         return 1
     if report["missing_fonts"] and not args.allow_missing_fonts:
         return 1

@@ -4,16 +4,11 @@
 [ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
 [ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="font_fz_cu_yuan_m03"]
 [ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="font_hk"]
-[ext_resource type="FontFile" path="res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf" id="font_meng"]
-[ext_resource type="FontFile" path="res://Font/hy_zhu_zi_mei_xin_ti_w.ttf" id="font_hy"]
 
 [ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
 
-[ext_resource type="FontFile" path="res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf" id="font_wo"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
 [ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
-[ext_resource type="FontFile" path="res://Font/194_song_ti.ttf" id="font_194_song_ti"]
-[ext_resource type="FontFile" path="res://Font/jin_qiao_jian_zhong_yuan.ttf" id="font_jin_qiao"]
 [ext_resource type="Texture2D" path="res://Art/backpack/all_items/empty.png" id="tex_box_empty"]
 
 [sub_resource type="StyleBoxEmpty" id="empty_button"]
@@ -613,7 +608,7 @@ BacisInfoLevel/constants/outline_size = 1
 BacisInfoName/base_type = &"SemanticBacisInfoName"
 BacisInfoName/colors/font_outline_color = Color(1, 1, 1, 1)
 BacisInfoName/constants/outline_size = 1
-BacisInfoName/fonts/font = ExtResource("font_meng")
+BacisInfoName/fonts/font = ExtResource("font_main")
 
 BacisInfoNumber/base_type = &"SemanticArchiveDialogTitle"
 BacisInfoNumber/colors/font_color = Color(0.964706, 0.403922, 0, 1)
@@ -670,7 +665,7 @@ BackpackMpLabel/base_type = &"BackpackTitleLabel"
 
 BackpackNameInput/base_type = &"LineEdit"
 BackpackNameInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
-BackpackNameInput/fonts/font = ExtResource("font_meng")
+BackpackNameInput/fonts/font = ExtResource("font_main")
 BackpackNameInput/styles/normal = SubResource("empty_button")
 BackpackNameInput/styles/read_only = SubResource("empty_button")
 BackpackNameInput/styles/focus = SubResource("empty_button")
@@ -840,7 +835,7 @@ ChooseItemList/colors/font_color = Color(1, 1, 1, 1)
 ChooseItemList/colors/guide_color = Color(1, 1, 1, 1)
 ChooseItemList/constants/v_separation = 5
 ChooseItemList/constants/outline_size = 10
-ChooseItemList/fonts/font = ExtResource("font_hy")
+ChooseItemList/fonts/font = ExtResource("font_main")
 ChooseItemList/font_sizes/font_size = 20
 ChooseItemList/styles/panel = SubResource("choose_item_panel")
 ChooseItemList/styles/focus = SubResource("empty_button")
@@ -1064,14 +1059,14 @@ EquipmentInfoGroup/constants/separation = 16
 
 EquipmentItemHighlight/base_type = &"SemanticEquipmentItemHighlight"
 EquipmentItemHighlight/colors/font_outline_color = Color(1, 1, 1, 1)
-EquipmentItemHighlight/fonts/font = ExtResource("font_meng")
+EquipmentItemHighlight/fonts/font = ExtResource("font_main")
 
 EquipmentItemMeta/base_type = &"SemanticEquipmentItemHighlight"
-EquipmentItemMeta/fonts/font = ExtResource("font_meng")
+EquipmentItemMeta/fonts/font = ExtResource("font_main")
 
 EquipmentName/base_type = &"SemanticAnnouncementCheckButton"
 EquipmentName/constants/outline_size = 2
-EquipmentName/fonts/font = ExtResource("font_meng")
+EquipmentName/fonts/font = ExtResource("font_main")
 
 EquipmentPanelPadding/base_type = &"SemanticDjInfoMargin"
 EquipmentPanelPadding/constants/margin_left = 10
@@ -1201,7 +1196,7 @@ HcHelpTabRow/constants/separation = 30
 HcHelpTitle/base_type = &"SemanticHcHelpTitle"
 HcHelpTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 HcHelpTitle/constants/outline_size = 7
-HcHelpTitle/fonts/font = ExtResource("font_meng")
+HcHelpTitle/fonts/font = ExtResource("font_main")
 HcHelpTitle/font_sizes/font_size = 32
 
 HelpContentList/base_type = &"AnnouncementListGroup"
@@ -1437,7 +1432,7 @@ LxdyLastTimes/colors/font_shadow_color = Color(0, 0, 0, 1)
 LxdyLastTimes/constants/shadow_offset_x = 0
 LxdyLastTimes/constants/shadow_offset_y = 0
 LxdyLastTimes/constants/shadow_outline_size = 10
-LxdyLastTimes/fonts/font = ExtResource("font_194_song_ti")
+LxdyLastTimes/fonts/font = ExtResource("font_hk")
 
 LxdyStageInfo/base_type = &"SemanticDecomposeHelpBody"
 
@@ -1579,7 +1574,7 @@ MonsterHelpButton/base_type = &"SemanticLearnSkillButton2"
 
 MonsterHelpTitle/base_type = &"SemanticArchiveDialogTitle"
 MonsterHelpTitle/constants/outline_size = 1
-MonsterHelpTitle/fonts/font = ExtResource("font_meng")
+MonsterHelpTitle/fonts/font = ExtResource("font_main")
 
 MonsterHelpTitleLarge/base_type = &"MonsterHelpTitle"
 MonsterHelpTitleLarge/font_sizes/font_size = 28
@@ -2162,7 +2157,7 @@ TaskTitleHeading/base_type = &"SemanticMagicWeaponSkillBody2"
 TaskTitleHeading/colors/font_outline_color = Color(1, 1, 1, 1)
 TaskTitleHeading/constants/outline_size = 1
 TaskTitleHeading/constants/shadow_outline_size = 7
-TaskTitleHeading/fonts/font = ExtResource("font_meng")
+TaskTitleHeading/fonts/font = ExtResource("font_main")
 TaskTitleHeading/font_sizes/font_size = 28
 
 TaskTitleStatus/base_type = &"SemanticGameInfoBodyText2"
@@ -2170,7 +2165,7 @@ TaskTitleStatus/colors/font_color = Color(0, 1, 1, 1)
 TaskTitleStatus/colors/font_outline_color = Color(0, 1, 1, 1)
 
 TouchTextLabel/base_type = &"SemanticHcHelpTitle"
-TouchTextLabel/fonts/font = ExtResource("font_194_song_ti")
+TouchTextLabel/fonts/font = ExtResource("font_hk")
 
 TouchTextMargin/base_type = &"MarginContainer"
 TouchTextMargin/constants/margin_left = 25
@@ -2253,14 +2248,14 @@ TransTabRow/base_type = &"ShopTabRow"
 
 TransTips/base_type = &"SemanticAnnouncementCheckButton"
 TransTips/constants/outline_size = 10
-TransTips/fonts/font = ExtResource("font_wo")
+TransTips/fonts/font = ExtResource("font_main")
 
 TransTipsSmall/base_type = &"SemanticArchiveFieldTitle"
 TransTipsSmall/constants/outline_size = 8
-TransTipsSmall/fonts/font = ExtResource("font_wo")
+TransTipsSmall/fonts/font = ExtResource("font_main")
 
 TransmogrifiedActionLabel/base_type = &"SemanticChangeClothesAction"
-TransmogrifiedActionLabel/fonts/font = ExtResource("font_jin_qiao")
+TransmogrifiedActionLabel/fonts/font = ExtResource("font_main")
 
 TransmogrifiedEqName/base_type = &"SemanticChooseSceneText"
 TransmogrifiedEqName/constants/shadow_outline_size = 11
@@ -2336,7 +2331,7 @@ VictoryMoreButton/colors/font_color = Color(1, 0.584314, 0, 1)
 VictoryMoreButton/colors/font_pressed_color = Color(1, 0.584314, 0, 1)
 VictoryMoreButton/colors/font_disabled_color = Color(1, 0.584314, 0, 1)
 VictoryMoreButton/constants/outline_size = 5
-VictoryMoreButton/fonts/font = ExtResource("font_hy")
+VictoryMoreButton/fonts/font = ExtResource("font_main")
 VictoryMoreButton/font_sizes/font_size = 28
 
 WanLingAttributeContent/base_type = &"TowerContent"
@@ -2490,7 +2485,7 @@ SemanticAnnouncementAlert/base_type = &"Label"
 SemanticAnnouncementAlert/fonts/font = ExtResource("font_hk")
 
 SemanticAnnouncementHeading/base_type = &"Label"
-SemanticAnnouncementHeading/fonts/font = ExtResource("font_hy")
+SemanticAnnouncementHeading/fonts/font = ExtResource("font_main")
 
 SemanticBacisInfoTime/base_type = &"Label"
 SemanticBacisInfoTime/fonts/font = ExtResource("font_main")
@@ -2556,7 +2551,7 @@ SemanticBuffIconTimes/base_type = &"Control"
 SemanticBuffIconTimes/constants/outline_size = 5
 
 SemanticBacisInfoLevel/base_type = &"Control"
-SemanticBacisInfoLevel/fonts/font = ExtResource("font_meng")
+SemanticBacisInfoLevel/fonts/font = ExtResource("font_main")
 
 SemanticMagicWeaponSkillGroup/base_type = &"Control"
 SemanticMagicWeaponSkillGroup/constants/separation = 7

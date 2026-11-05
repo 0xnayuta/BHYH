@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "description": "Phase 27-5 动态文本字体覆盖样本：公告、Boss 信息、怪物帮助、伤害数字、宠物面板。",
+  "samples": [
+    {
+      "name": "announcement",
+      "font": "font_hk",
+      "text": "系统公告：活动开启，奖励已发放。"
+    },
+    {
+      "name": "boss_info",
+      "font": "font_hk",
+      "text": "首领信息：生命、攻击、防御、技能。"
+    },
+    {
+      "name": "monster_help",
+      "font": "font_main",
+      "text": "主动技能：挥拳、旋风斩，对玩家造成伤害。"
+    },
+    {
+      "name": "damage_number",
+      "font": "default",
+      "text": "暴击 +9999 伤害"
+    },
+    {
+      "name": "pet_interface",
+      "font": "default",
+      "text": "宠物属性：生命、魔法、攻击、防御、成长。"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "phase": "27-5",
+  "theme_asset_count": 5,
+  "roles": {
+    "body": {
+      "resource": "font_fz_cu_yuan_m03",
+      "files": [
+        "res://Font/fz_cu_yuan_m03.ttf",
+        "res://Font/msyh_semibold.ttc"
+      ]
+    },
+    "ui": {
+      "resource": "font_hk",
+      "files": [
+        "res://Font/华康宋体W3.ttc"
+      ]
+    },
+    "display": {
+      "resource": "font_return",
+      "files": [
+        "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+      ]
+    },
+    "accent": {
+      "resource": "font_main",
+      "files": [
+        "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf"
+      ]
+    }
+  },
+  "retired_theme_resources": {
+    "font_hy": "font_main",
+    "font_meng": "font_main",
+    "font_wo": "font_main",
+    "font_194_song_ti": "font_hk",
+    "font_jin_qiao": "font_main"
+  },
+  "private_assets_without_theme_reference": [
+    "res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf",
+    "res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
+    "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
+    "res://Font/194_song_ti.ttf",
+    "res://Font/jin_qiao_jian_zhong_yuan.ttf",
+    "res://Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf",
+    "res://Font/jin_qiao_fan_li_shu.ttf",
+    "res://Font/jin_qiao_jian_cu_hei.ttf",
+    "res://Font/zmws/ttf/fzy4jw.ttf",
+    "res://Font/zmws_bmfont/"
+  ],
+  "retention": "私有素材保留用于授权与回滚；公开仓不包含二进制；删除/移动需素材所有者确认后按 ASSET_CHANGE_CONTRACT 执行。"
+}

@@ -401,7 +401,7 @@ func refresh_info():
 					Global.add_font_instance(
 						monster_info,
 						i,
-						"res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
+						"res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
 						25,
 						"FFFFFF",
 						1,
