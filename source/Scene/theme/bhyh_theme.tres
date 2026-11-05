@@ -617,27 +617,9 @@ SettingsButtonTiny/styles/pressed = SubResource("empty_button")
 SettingsButtonTiny/styles/disabled = SubResource("empty_button")
 SettingsButtonTiny/styles/focus = SubResource("empty_button")
 
-SettingsButtonCompact/base_type = &"Button"
-SettingsButtonCompact/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsButtonCompact/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-SettingsButtonCompact/fonts/font = ExtResource("font_main")
-SettingsButtonCompact/font_sizes/font_size = 20
-SettingsButtonCompact/styles/normal = SubResource("empty_button")
-SettingsButtonCompact/styles/hover = SubResource("empty_button")
-SettingsButtonCompact/styles/pressed = SubResource("empty_button")
-SettingsButtonCompact/styles/disabled = SubResource("empty_button")
-SettingsButtonCompact/styles/focus = SubResource("empty_button")
+SettingsButtonCompact/base_type = &"SettingsButtonTiny"
 
-SettingsButtonMedium/base_type = &"Button"
-SettingsButtonMedium/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsButtonMedium/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-SettingsButtonMedium/fonts/font = ExtResource("font_main")
-SettingsButtonMedium/font_sizes/font_size = 24
-SettingsButtonMedium/styles/normal = SubResource("empty_button")
-SettingsButtonMedium/styles/hover = SubResource("empty_button")
-SettingsButtonMedium/styles/pressed = SubResource("empty_button")
-SettingsButtonMedium/styles/disabled = SubResource("empty_button")
-SettingsButtonMedium/styles/focus = SubResource("empty_button")
+SettingsButtonMedium/base_type = &"SettingsButton"
 
 SettingsReturnButton/base_type = &"Button"
 SettingsReturnButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
@@ -948,7 +930,7 @@ MonsterHelpWarning/font_sizes/font_size = 30
 SkillLabel/base_type = &"Label"
 SkillLabel/constants/outline_size = 1
 SkillLabel/fonts/font = ExtResource("font_main")
-SkillLabel/font_sizes/font_size = 25
+SkillLabel/font_sizes/font_size = 24
 
 SkillSmallLabel/base_type = &"Label"
 SkillSmallLabel/constants/outline_size = 1
@@ -959,7 +941,7 @@ SkillCooldownLabel/base_type = &"Label"
 SkillCooldownLabel/colors/font_color = Color(1, 1, 0, 1)
 SkillCooldownLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 SkillCooldownLabel/constants/outline_size = 10
-SkillCooldownLabel/font_sizes/font_size = 25
+SkillCooldownLabel/font_sizes/font_size = 24
 
 SkillNeedLabel/base_type = &"Label"
 SkillNeedLabel/colors/font_color = Color(1, 1, 0, 1)
@@ -972,13 +954,13 @@ SkillShadowLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 SkillShadowLabel/constants/outline_size = 1
 SkillShadowLabel/constants/shadow_outline_size = 3
 SkillShadowLabel/fonts/font = ExtResource("font_main")
-SkillShadowLabel/font_sizes/font_size = 15
+SkillShadowLabel/font_sizes/font_size = 16
 
 SkillShadowLabelPlain/base_type = &"Label"
 SkillShadowLabelPlain/constants/outline_size = 1
 SkillShadowLabelPlain/constants/shadow_outline_size = 3
 SkillShadowLabelPlain/fonts/font = ExtResource("font_main")
-SkillShadowLabelPlain/font_sizes/font_size = 15
+SkillShadowLabelPlain/font_sizes/font_size = 16
 
 SkillTextButton/base_type = &"Button"
 SkillTextButton/fonts/font = ExtResource("font_main")
@@ -988,12 +970,7 @@ SkillTextButton/styles/hover = SubResource("empty_button")
 SkillTextButton/styles/pressed = SubResource("skill_text_pressed")
 SkillTextButton/styles/focus = SubResource("empty_button")
 
-SkillIconButton/base_type = &"Button"
-SkillIconButton/styles/normal = SubResource("empty_button")
-SkillIconButton/styles/hover = SubResource("empty_button")
-SkillIconButton/styles/pressed = SubResource("empty_button")
-SkillIconButton/styles/disabled = SubResource("empty_button")
-SkillIconButton/styles/focus = SubResource("empty_button")
+SkillIconButton/base_type = &"EmptyButton"
 
 SkillIconButtonTexture/base_type = &"SkillIconButton"
 SkillIconButtonTexture/styles/pressed = SubResource("skill_text_pressed")
@@ -1069,7 +1046,7 @@ SkillPopupMenu/fonts/font = ExtResource("font_main")
 ArchiveReadOnlyLink/base_type = &"LineEdit"
 ArchiveReadOnlyLink/colors/font_color = Color(1, 0.84, 0.54, 1)
 ArchiveReadOnlyLink/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveReadOnlyLink/font_sizes/font_size = 13
+ArchiveReadOnlyLink/font_sizes/font_size = 14
 ArchiveReadOnlyLink/styles/normal = SubResource("sub_CloudInput")
 ArchiveReadOnlyLink/styles/read_only = SubResource("sub_CloudInput")
 
@@ -1097,7 +1074,7 @@ ArchiveActionButtonSmall/base_type = &"Button"
 ArchiveActionButtonSmall/colors/font_color = Color(1, 1, 1, 1)
 ArchiveActionButtonSmall/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveActionButtonSmall/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveActionButtonSmall/font_sizes/font_size = 17
+ArchiveActionButtonSmall/font_sizes/font_size = 18
 ArchiveActionButtonSmall/styles/normal = SubResource("sub_CloudInput")
 ArchiveActionButtonSmall/styles/pressed = SubResource("sub_CloudButtonHover")
 ArchiveActionButtonSmall/styles/hover = SubResource("sub_CloudButtonHover")
@@ -1112,10 +1089,10 @@ ArchiveHelpButton/styles/pressed = SubResource("sub_CloudButtonHover")
 ArchiveHelpButton/styles/hover = SubResource("sub_CloudButtonHover")
 
 ArchiveMutedButton/base_type = &"Button"
-ArchiveMutedButton/colors/font_color = Color(0.8, 0.8, 0.8, 1)
+ArchiveMutedButton/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
 ArchiveMutedButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveMutedButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveMutedButton/font_sizes/font_size = 17
+ArchiveMutedButton/font_sizes/font_size = 18
 ArchiveMutedButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveMutedButton/styles/pressed = SubResource("sub_CloudButtonHover")
 ArchiveMutedButton/styles/hover = SubResource("sub_CloudButtonHover")
@@ -1123,20 +1100,20 @@ ArchiveMutedButton/styles/hover = SubResource("sub_CloudButtonHover")
 ArchiveUidHash/base_type = &"LineEdit"
 ArchiveUidHash/colors/font_color = Color(1, 0.84, 0.54, 1)
 ArchiveUidHash/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveUidHash/font_sizes/font_size = 11
+ArchiveUidHash/font_sizes/font_size = 12
 ArchiveUidHash/styles/normal = SubResource("sub_CloudInput")
 ArchiveUidHash/styles/read_only = SubResource("sub_CloudInput")
 
 ArchiveFieldTitle/base_type = &"Label"
 ArchiveFieldTitle/colors/font_color = Color(1, 1, 1, 1)
 ArchiveFieldTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveFieldTitle/font_sizes/font_size = 17
+ArchiveFieldTitle/font_sizes/font_size = 18
 
 ArchiveUploadButton/base_type = &"Button"
 ArchiveUploadButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveUploadButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveUploadButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveUploadButton/font_sizes/font_size = 22
+ArchiveUploadButton/font_sizes/font_size = 24
 ArchiveUploadButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveUploadButton/styles/pressed = SubResource("sub_CloudButtonHover")
 ArchiveUploadButton/styles/hover = SubResource("sub_CloudButtonHover")
@@ -1146,7 +1123,7 @@ ArchiveDialogActionButton/base_type = &"Button"
 ArchiveDialogActionButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveDialogActionButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 ArchiveDialogActionButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveDialogActionButton/font_sizes/font_size = 22
+ArchiveDialogActionButton/font_sizes/font_size = 24
 ArchiveDialogActionButton/styles/normal = SubResource("sub_CloudInput")
 ArchiveDialogActionButton/styles/pressed = SubResource("sub_CloudButtonHover")
 ArchiveDialogActionButton/styles/hover = SubResource("sub_CloudButtonHover")
@@ -1184,7 +1161,7 @@ ArchivePanelTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ArchivePanelTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchivePanelTitle/constants/outline_size = 2
 ArchivePanelTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchivePanelTitle/font_sizes/font_size = 25
+ArchivePanelTitle/font_sizes/font_size = 24
 
 ArchiveConfirmButton/base_type = &"Button"
 ArchiveConfirmButton/colors/font_color = Color(1, 1, 1, 1)
@@ -1241,7 +1218,7 @@ ArchiveDeleteButton/colors/font_hover_pressed_color = Color(0.827451, 0.552941, 
 ArchiveDeleteButton/colors/font_outline_color = Color(0, 0, 0, 1)
 ArchiveDeleteButton/constants/outline_size = 2
 ArchiveDeleteButton/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ArchiveDeleteButton/font_sizes/font_size = 19
+ArchiveDeleteButton/font_sizes/font_size = 20
 ArchiveDeleteButton/styles/normal = SubResource("sub_StyleBoxFlat_6y1b1")
 ArchiveDeleteButton/styles/pressed = SubResource("sub_StyleBoxFlat_6y1b1")
 ArchiveDeleteButton/styles/hover = SubResource("sub_7")
@@ -1317,15 +1294,7 @@ ShopRoleText/constants/outline_size = 9
 ShopRoleText/fonts/font = ExtResource("font_return")
 ShopRoleText/font_sizes/font_size = 24
 
-ShopCloseButton/base_type = &"Button"
-ShopCloseButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-ShopCloseButton/fonts/font = ExtResource("font_return")
-ShopCloseButton/font_sizes/font_size = 25
-ShopCloseButton/styles/normal = SubResource("empty_button")
-ShopCloseButton/styles/pressed = SubResource("empty_button")
-ShopCloseButton/styles/hover = SubResource("empty_button")
-ShopCloseButton/styles/disabled = SubResource("empty_button")
-ShopCloseButton/styles/focus = SubResource("empty_button")
+ShopCloseButton/base_type = &"MenuActionButton"
 
 ShopHintLabel/base_type = &"Label"
 ShopHintLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
@@ -1722,7 +1691,7 @@ PetStatName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetStatName/colors/font_outline_color = Color(0, 0, 0, 1)
 PetStatName/constants/outline_size = 3
 PetStatName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetStatName/font_sizes/font_size = 13
+PetStatName/font_sizes/font_size = 14
 
 PetStatValue/base_type = &"Label"
 PetStatValue/colors/font_color = Color(1, 1, 1, 1)
@@ -1754,7 +1723,7 @@ PetFormationList/base_type = &"VBoxContainer"
 PetFormationList/constants/separation = 5
 
 PetFormationCost/base_type = &"Label"
-PetFormationCost/colors/font_color = Color(0.88, 0.88, 0.88, 1)
+PetFormationCost/colors/font_color = Color(0.94, 0.94, 0.94, 1)
 PetFormationCost/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetFormationCost/font_sizes/font_size = 12
 
@@ -1770,7 +1739,7 @@ PetFormationLevel/font_sizes/font_size = 14
 PetFormationName/base_type = &"Label"
 PetFormationName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetFormationName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetFormationName/font_sizes/font_size = 15
+PetFormationName/font_sizes/font_size = 16
 
 PetResourceLabel/base_type = &"Label"
 PetResourceLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
@@ -1793,18 +1762,18 @@ PetBookCount/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 PetBookCount/font_sizes/font_size = 12
 
 PetSkillDescription/base_type = &"Label"
-PetSkillDescription/colors/font_color = Color(0.92, 0.92, 0.92, 1)
+PetSkillDescription/colors/font_color = Color(0.94, 0.94, 0.94, 1)
 PetSkillDescription/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillDescription/constants/outline_size = 2
 PetSkillDescription/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetSkillDescription/font_sizes/font_size = 11
+PetSkillDescription/font_sizes/font_size = 12
 
 PetSkillName/base_type = &"Label"
 PetSkillName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetSkillName/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillName/constants/outline_size = 3
 PetSkillName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetSkillName/font_sizes/font_size = 15
+PetSkillName/font_sizes/font_size = 16
 
 PetPopupTitle/base_type = &"Label"
 PetPopupTitle/colors/font_color = Color(1, 0.956863, 0.74902, 1)
@@ -1825,7 +1794,7 @@ PetSkillMana/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetSkillMana/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSkillMana/constants/outline_size = 3
 PetSkillMana/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetSkillMana/font_sizes/font_size = 13
+PetSkillMana/font_sizes/font_size = 14
 
 PetSkillNeed/base_type = &"Label"
 PetSkillNeed/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
@@ -1839,7 +1808,7 @@ PetSoulLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetSoulLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetSoulLabel/constants/outline_size = 3
 PetSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-PetSoulLabel/font_sizes/font_size = 15
+PetSoulLabel/font_sizes/font_size = 16
 
 PetPageButton/base_type = &"Button"
 PetPageButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
@@ -1854,16 +1823,16 @@ PetLevelLabel/base_type = &"Label"
 PetLevelLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
 PetLevelLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetLevelLabel/constants/outline_size = 3
-PetLevelLabel/font_sizes/font_size = 13
+PetLevelLabel/font_sizes/font_size = 14
 
 PetExpLabel/base_type = &"Label"
-PetExpLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+PetExpLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetExpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetExpLabel/constants/outline_size = 3
 PetExpLabel/font_sizes/font_size = 12
 
 PetNameLabel/base_type = &"Label"
-PetNameLabel/colors/font_color = Color(1, 0.95686275, 0.7490196, 1)
+PetNameLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetNameLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 PetNameLabel/constants/outline_size = 3
 PetNameLabel/font_sizes/font_size = 14
@@ -1929,13 +1898,7 @@ GameInfoNoticeButton/styles/hover = SubResource("empty_button")
 GameInfoNoticeButton/styles/disabled = SubResource("empty_button")
 GameInfoNoticeButton/styles/focus = SubResource("empty_button")
 
-GameInfoDetailButton/base_type = &"Button"
-GameInfoDetailButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-GameInfoDetailButton/styles/normal = SubResource("empty_button")
-GameInfoDetailButton/styles/pressed = SubResource("empty_button")
-GameInfoDetailButton/styles/hover = SubResource("empty_button")
-GameInfoDetailButton/styles/disabled = SubResource("empty_button")
-GameInfoDetailButton/styles/focus = SubResource("empty_button")
+GameInfoDetailButton/base_type = &"GameInfoNoticeButton"
 
 BackpackNameInput/base_type = &"LineEdit"
 BackpackNameInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
@@ -1948,12 +1911,7 @@ BackpackNameInput/styles/focus = SubResource("empty_button")
 BackpackTitleLabel/base_type = &"Label"
 BackpackTitleLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
-BackpackHeadButton/base_type = &"Button"
-BackpackHeadButton/styles/normal = SubResource("empty_button")
-BackpackHeadButton/styles/pressed = SubResource("empty_button")
-BackpackHeadButton/styles/hover = SubResource("empty_button")
-BackpackHeadButton/styles/disabled = SubResource("empty_button")
-BackpackHeadButton/styles/focus = SubResource("empty_button")
+BackpackHeadButton/base_type = &"EmptyButton"
 
 BackpackWingsButton/base_type = &"BackpackHeadButton"
 
@@ -2170,50 +2128,15 @@ LlbtCgmsButton/styles/hover = SubResource("empty_button")
 LlbtCgmsButton/styles/disabled = SubResource("empty_button")
 LlbtCgmsButton/styles/focus = SubResource("empty_button")
 
-LlbtTslzzButton/base_type = &"Button"
-LlbtTslzzButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
-LlbtTslzzButton/font_sizes/font_size = 25
-LlbtTslzzButton/styles/normal = SubResource("empty_button")
-LlbtTslzzButton/styles/pressed = SubResource("empty_button")
-LlbtTslzzButton/styles/hover = SubResource("empty_button")
-LlbtTslzzButton/styles/disabled = SubResource("empty_button")
-LlbtTslzzButton/styles/focus = SubResource("empty_button")
+LlbtTslzzButton/base_type = &"LlbtCgmsButton"
 
-LlbtTznzButton/base_type = &"Button"
-LlbtTznzButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
-LlbtTznzButton/font_sizes/font_size = 25
-LlbtTznzButton/styles/normal = SubResource("empty_button")
-LlbtTznzButton/styles/pressed = SubResource("empty_button")
-LlbtTznzButton/styles/hover = SubResource("empty_button")
-LlbtTznzButton/styles/disabled = SubResource("empty_button")
-LlbtTznzButton/styles/focus = SubResource("empty_button")
+LlbtTznzButton/base_type = &"LlbtCgmsButton"
 
-LlbtTztttwButton/base_type = &"Button"
-LlbtTztttwButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
-LlbtTztttwButton/font_sizes/font_size = 25
-LlbtTztttwButton/styles/normal = SubResource("empty_button")
-LlbtTztttwButton/styles/pressed = SubResource("empty_button")
-LlbtTztttwButton/styles/hover = SubResource("empty_button")
-LlbtTztttwButton/styles/disabled = SubResource("empty_button")
-LlbtTztttwButton/styles/focus = SubResource("empty_button")
+LlbtTztttwButton/base_type = &"LlbtCgmsButton"
 
-LlbtTztxsButton/base_type = &"Button"
-LlbtTztxsButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
-LlbtTztxsButton/font_sizes/font_size = 25
-LlbtTztxsButton/styles/normal = SubResource("empty_button")
-LlbtTztxsButton/styles/pressed = SubResource("empty_button")
-LlbtTztxsButton/styles/hover = SubResource("empty_button")
-LlbtTztxsButton/styles/disabled = SubResource("empty_button")
-LlbtTztxsButton/styles/focus = SubResource("empty_button")
+LlbtTztxsButton/base_type = &"LlbtCgmsButton"
 
-LlbtWxmsButton/base_type = &"Button"
-LlbtWxmsButton/colors/font_hover_color = Color(1, 0.419608, 0, 1)
-LlbtWxmsButton/font_sizes/font_size = 25
-LlbtWxmsButton/styles/normal = SubResource("empty_button")
-LlbtWxmsButton/styles/pressed = SubResource("empty_button")
-LlbtWxmsButton/styles/hover = SubResource("empty_button")
-LlbtWxmsButton/styles/disabled = SubResource("empty_button")
-LlbtWxmsButton/styles/focus = SubResource("empty_button")
+LlbtWxmsButton/base_type = &"LlbtCgmsButton"
 
 EndStatsMoreInfo/base_type = &"Label"
 EndStatsMoreInfo/colors/font_color = Color(1, 1, 0, 1)
@@ -2325,65 +2248,17 @@ LdlTitleLabel/base_type = &"Label"
 LdlTitleLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 LdlTitleLabel/font_sizes/font_size = 19
 
-LdlDzButton/base_type = &"Button"
-LdlDzButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlDzButton/fonts/font = ExtResource("font_return")
-LdlDzButton/font_sizes/font_size = 25
-LdlDzButton/styles/normal = SubResource("empty_button")
-LdlDzButton/styles/pressed = SubResource("empty_button")
-LdlDzButton/styles/hover = SubResource("empty_button")
-LdlDzButton/styles/disabled = SubResource("empty_button")
-LdlDzButton/styles/focus = SubResource("empty_button")
+LdlDzButton/base_type = &"MenuActionButton"
 
-LdlFjButton/base_type = &"Button"
-LdlFjButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlFjButton/fonts/font = ExtResource("font_return")
-LdlFjButton/font_sizes/font_size = 25
-LdlFjButton/styles/normal = SubResource("empty_button")
-LdlFjButton/styles/pressed = SubResource("empty_button")
-LdlFjButton/styles/hover = SubResource("empty_button")
-LdlFjButton/styles/disabled = SubResource("empty_button")
-LdlFjButton/styles/focus = SubResource("empty_button")
+LdlFjButton/base_type = &"MenuActionButton"
 
-LdlHcButton/base_type = &"Button"
-LdlHcButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlHcButton/fonts/font = ExtResource("font_return")
-LdlHcButton/font_sizes/font_size = 25
-LdlHcButton/styles/normal = SubResource("empty_button")
-LdlHcButton/styles/pressed = SubResource("empty_button")
-LdlHcButton/styles/hover = SubResource("empty_button")
-LdlHcButton/styles/disabled = SubResource("empty_button")
-LdlHcButton/styles/focus = SubResource("empty_button")
+LdlHcButton/base_type = &"MenuActionButton"
 
-LdlQhButton/base_type = &"Button"
-LdlQhButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlQhButton/fonts/font = ExtResource("font_return")
-LdlQhButton/font_sizes/font_size = 25
-LdlQhButton/styles/normal = SubResource("empty_button")
-LdlQhButton/styles/pressed = SubResource("empty_button")
-LdlQhButton/styles/hover = SubResource("empty_button")
-LdlQhButton/styles/disabled = SubResource("empty_button")
-LdlQhButton/styles/focus = SubResource("empty_button")
+LdlQhButton/base_type = &"MenuActionButton"
 
-LdlReturnButton/base_type = &"Button"
-LdlReturnButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlReturnButton/fonts/font = ExtResource("font_return")
-LdlReturnButton/font_sizes/font_size = 25
-LdlReturnButton/styles/normal = SubResource("empty_button")
-LdlReturnButton/styles/pressed = SubResource("empty_button")
-LdlReturnButton/styles/hover = SubResource("empty_button")
-LdlReturnButton/styles/disabled = SubResource("empty_button")
-LdlReturnButton/styles/focus = SubResource("empty_button")
+LdlReturnButton/base_type = &"MenuActionButton"
 
-LdlXqButton/base_type = &"Button"
-LdlXqButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-LdlXqButton/fonts/font = ExtResource("font_return")
-LdlXqButton/font_sizes/font_size = 25
-LdlXqButton/styles/normal = SubResource("empty_button")
-LdlXqButton/styles/pressed = SubResource("empty_button")
-LdlXqButton/styles/hover = SubResource("empty_button")
-LdlXqButton/styles/disabled = SubResource("empty_button")
-LdlXqButton/styles/focus = SubResource("empty_button")
+LdlXqButton/base_type = &"MenuActionButton"
 
 RoleLevelLabel/base_type = &"Label"
 RoleLevelLabel/fonts/font = ExtResource("font_return")
@@ -2482,12 +2357,7 @@ ZhenFaNameLabel/constants/outline_size = 7
 ZhenFaNameLabel/fonts/font = ExtResource("font_hy")
 ZhenFaNameLabel/font_sizes/font_size = 24
 
-ZhenFaEmptyButton/base_type = &"Button"
-ZhenFaEmptyButton/styles/normal = SubResource("empty_button")
-ZhenFaEmptyButton/styles/pressed = SubResource("empty_button")
-ZhenFaEmptyButton/styles/hover = SubResource("empty_button")
-ZhenFaEmptyButton/styles/disabled = SubResource("empty_button")
-ZhenFaEmptyButton/styles/focus = SubResource("empty_button")
+ZhenFaEmptyButton/base_type = &"EmptyButton"
 
 ZhenFaInfoPropGroup/base_type = &"VBoxContainer"
 ZhenFaInfoPropGroup/constants/separation = 6
@@ -3200,15 +3070,7 @@ ForgeSoulLabel/constants/outline_size = 10
 ForgeSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ForgeSoulLabel/font_sizes/font_size = 22
 
-SkillKeySetButton/base_type = &"Button"
-SkillKeySetButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
-SkillKeySetButton/fonts/font = ExtResource("font_return")
-SkillKeySetButton/font_sizes/font_size = 25
-SkillKeySetButton/styles/normal = SubResource("empty_button")
-SkillKeySetButton/styles/pressed = SubResource("empty_button")
-SkillKeySetButton/styles/hover = SubResource("empty_button")
-SkillKeySetButton/styles/disabled = SubResource("empty_button")
-SkillKeySetButton/styles/focus = SubResource("empty_button")
+SkillKeySetButton/base_type = &"MenuActionButton"
 
 SkillKeySetLabel/base_type = &"Label"
 SkillKeySetLabel/colors/font_color = Color(0.964706, 1, 0, 1)
@@ -3268,16 +3130,16 @@ MainMenuPlayerName/colors/font_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/colors/font_outline_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/constants/outline_size = 0
 MainMenuPlayerName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-MainMenuPlayerName/font_sizes/font_size = 30
+MainMenuPlayerName/font_sizes/font_size = 32
 
 MainMenuPlayerDetail/base_type = &"Label"
-MainMenuPlayerDetail/colors/font_color = Color(0.945098, 0.556863, 0, 1)
+MainMenuPlayerDetail/colors/font_color = Color(1, 0.72, 0.16, 1)
 MainMenuPlayerDetail/constants/outline_size = 2
 MainMenuPlayerDetail/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-MainMenuPlayerDetail/font_sizes/font_size = 17
+MainMenuPlayerDetail/font_sizes/font_size = 18
 
 MainMenuTitle/base_type = &"Label"
-MainMenuTitle/colors/font_color = Color(1, 0.396078, 0, 1)
+MainMenuTitle/colors/font_color = Color(1, 0.290196, 0, 1)
 MainMenuTitle/colors/font_outline_color = Color(1, 0.396078, 0, 1)
 MainMenuTitle/constants/outline_size = 1
 MainMenuTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
@@ -3287,7 +3149,7 @@ MainMenuLabel/base_type = &"Label"
 MainMenuLabel/colors/font_color = Color(1, 1, 1, 1)
 MainMenuLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 MainMenuLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-MainMenuLabel/font_sizes/font_size = 26
+MainMenuLabel/font_sizes/font_size = 24
 
 LearnSkillLevelValue/base_type = &"Label"
 LearnSkillLevelValue/colors/font_outline_color = Color(1, 1, 1, 1)
@@ -4062,12 +3924,7 @@ ZhenYanSlotLabel/constants/outline_size = 1
 ZhenYanSlotLabel/constants/shadow_outline_size = 7
 ZhenYanSlotLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
-ZhenYanSlotButton/base_type = &"Button"
-ZhenYanSlotButton/styles/normal = SubResource("empty_button")
-ZhenYanSlotButton/styles/pressed = SubResource("empty_button")
-ZhenYanSlotButton/styles/hover = SubResource("empty_button")
-ZhenYanSlotButton/styles/disabled = SubResource("empty_button")
-ZhenYanSlotButton/styles/focus = SubResource("empty_button")
+ZhenYanSlotButton/base_type = &"EmptyButton"
 
 LoadSceneTips/base_type = &"Label"
 LoadSceneTips/colors/font_color = Color(0, 0, 0, 1)
@@ -4255,12 +4112,7 @@ MessageShowText/constants/shadow_outline_size = 10
 MessageShowText/fonts/font = ExtResource("font_hk")
 MessageShowText/font_sizes/font_size = 25
 
-PetBackpackSlotButtonEmpty/base_type = &"Button"
-PetBackpackSlotButtonEmpty/styles/normal = SubResource("empty_button")
-PetBackpackSlotButtonEmpty/styles/pressed = SubResource("empty_button")
-PetBackpackSlotButtonEmpty/styles/hover = SubResource("empty_button")
-PetBackpackSlotButtonEmpty/styles/disabled = SubResource("empty_button")
-PetBackpackSlotButtonEmpty/styles/focus = SubResource("empty_button")
+PetBackpackSlotButtonEmpty/base_type = &"EmptyButton"
 
 PetBackpackSlotNumber/base_type = &"Label"
 PetBackpackSlotNumber/colors/font_color = Color(1, 0.466667, 0, 1)
