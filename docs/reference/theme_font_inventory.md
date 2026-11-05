@@ -1,6 +1,6 @@
 # Theme 与字体收敛盘点（Phase 27-0）
 
-> **测量日期**：2026-11-05（27-0 基线）；27-2 字号与 27-3 颜色/StyleBox 结果已追加。
+> **测量日期**：2026-11-05（27-0 基线）；27-2 字号、27-3 颜色与 27-4 语义基类结果已追加。
 > **范围**：`source/Scene/theme/bhyh_theme.tres`、`source/Scene/theme/fz_cu_yuan_m03.tres`、`source/Scene/**/*.tscn`、`source/Script/**/*.gd` 与 `source/Font/`（本地完整素材工作区）。
 > **定位**：现状事实与 Phase 27 收敛依据；不是完成度承诺，不替代 `ui_theme_contract.md`、`typography_tokens.md` 或 `status.md`。
 > **边界**：`source/Font/` 为私有素材目录，公开仓库不包含；本页不记录本地绝对路径、二进制来源或授权文件内容。
@@ -9,9 +9,9 @@
 
 | 指标 | 当前值 | 说明 |
 |:---|---:|:---|
-| Theme 变体 | 618 | 全部通过 `theme_type_variation` 使用；无直接属性覆盖 |
-| Theme 属性 | 3,218 | `bhyh_theme.tres` 183,597 字节 |
-| Theme 子资源 | 54（27-0 基线；27-3 后 47） | 27-3 后为 40 个 `StyleBoxFlat`、5 个 `StyleBoxTexture`、1 个 `StyleBoxLine`、1 个 `StyleBoxEmpty` |
+| Theme 变体 | 721（618 冻结 + 103 `Semantic*` 基类） | 全部通过 `theme_type_variation` 使用；无直接属性覆盖 |
+| Theme 属性 | 1,719（27-4 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性并合并 135 个精确别名 |
+| Theme 子资源 | 36（27-4 后） | 27-0 为 54；27-3 后 47；27-4 跨角色合并 47→36，仍为 `StyleBoxFlat`/`StyleBoxTexture`/`StyleBoxLine`/`StyleBoxEmpty` |
 | 场景 Theme 引用 | 1,117 | `theme_override_audit` 统计 |
 | `theme_type_variation` 节点引用 | 1,418 | 616 个不同变体被场景直接引用 |
 | 动态 `add_theme_*` | 385 处 / 41 文件 | 不区分 font/size/color/stylebox |
@@ -20,33 +20,43 @@
 
 ## 2. 变体结构
 
-### 2.1 基类分布
+### 2.1 基类分布（27-4 后）
 
 | 基类 | 变体数 |
 |:---|---:|
-| `Label` | 368 |
-| `Button` | 55 |
-| `VBoxContainer` | 45 |
-| `HBoxContainer` | 41 |
-| `LineEdit` | 15 |
-| `MarginContainer` | 14 |
-| `CheckBox` | 11 |
-| `GridContainer` | 11 |
+| `HBoxContainer` | 28 |
+| `Label` | 20 |
+| `SemanticTextSize20` | 17 |
+| `Control` | 17 |
+| `VBoxContainer` | 16 |
+| `SemanticTextFontHy` | 15 |
+| `SemanticTextSize12` | 15 |
+| `SemanticTextFontMain` | 14 |
+| `SemanticControlFontHkOutlineWidth2Size24` | 12 |
+| `MarginContainer` | 11 |
+| `SemanticTextFontReturn` | 11 |
+| `SemanticTextFontMainOutlineWidth1` | 10 |
 | `MenuActionButton` | 9 |
-| `PanelContainer` | 6 |
-| 其他 | 43 |
+| 其他 | 516 |
 
-`Label` 占 59.5%；前四类容器/文字基类合计 509 个，说明大量变体是“布局别名”或“文字别名”，而不是独立控件族。
+其中 103 个以 `Semantic` 开头的变体是基类，其余 618 个为冻结业务变体；基类按原生根类分树，Label 与 Button 不共享基类。
 
-### 2.2 继承深度
+### 2.2 继承深度（27-4 后）
 
 | 深度 | 变体数 | 说明 |
 |:---|---:|:---|
-| 1 | 586 | 直接继承原生控件或已有变体；没有二次语义层 |
-| 2 | 30 | 有中间基类 |
-| 3 | 2 | 最深链 |
+| 1 | 104 | 冻结变体直接继承原生控件 |
+| 2 | 153 | 冻结变体 -> 一层语义基类 |
+| 3 | 172 | 冻结变体 -> 两层语义基类 |
+| 4 | 78 | |
+| 5 | 40 | |
+| 6 | 17 | |
+| 7 | 34 | |
+| 8 | 10 | |
+| 9 | 8 | |
+| 10 | 2 | 最深层为冻结叶变体 |
 
-当前 Theme 主要靠“每个控件一个变体 + 重复写字体/字号/颜色”维持，而不是“少量语义基类 + 变体只覆盖差异”。`SettingsButtonSmall`、`SettingsButtonTiny` 只作为基类出现，没有场景直接引用；其余 616 个变体均被直接引用。
+语义基类自身最深 8 层；冻结叶最多再多两层。
 
 ### 2.3 重复度
 
@@ -57,6 +67,8 @@
 - 第二组包含 41 个行布局变体（`TowerRow`、`SkillGridRow`、`ShopSearchRow` 等），第三组 14 个 Margin 变体，第四组 11 个 Grid 变体。
 
 这不是 239 个视觉角色，而是 239 个“名字不同、值相同”的别名。后续可以保留变体名以避免冻结名迁移，但应把共享属性上移到语义基类，并让变体只声明差异。
+
+**27-4 结果（2026-11-05）**：新增 103 个 `Semantic*` 基类；精确有效签名合并 72 组 / 135 个变体；当前 189 个纯别名（无自有 Theme 项），429 个独立变体，独立变体重复签名组 **3**；冻结名 618/618 保留。
 
 ## 3. 字号与颜色
 
@@ -144,11 +156,12 @@
 | Phase 27-1 | `ui_theme_tokens.json` 成为文字/表面 token、受管 Theme 输入属性、默认字体与 Theme 审计集合的单一来源；`convert_ui_theme_tokens.py --check` 进入契约门禁 |
 | Phase 27-2 | 111 个 off-token 字号分三批映射到 token；off-token **111→0**；基线更新；截图/控件几何对照归档 |
 | Phase 27-3 | 139 处 off-token 字体色收敛到 0（35 实际值 / 37 palette）；8 类字体色属性纳入审计；StyleBox 精确重复 **54→47**；跨色族 47→≤36 转入 27-4 |
+| Phase 27-4 | 103 个语义基类；Theme 属性 **3,218→1,719**；StyleBox **47→36**；独立重复组 **3**；618 冻结名与场景引用不变；`theme_variant_audit.py` 接入门禁 |
 
 ## 6. 主要风险
 
 1. **未受管值仍手写**：受管输入/默认字体与 token 类已由 27-1 生成；618 变体的其余字号/颜色/StyleBox 仍直接写在 Theme 中，需继续扩大 token 覆盖并保留 `--check` 守卫。
-2. **样式/颜色存量**：27-2 后字号与 27-3 后字体色均已强制在 token 内；仍有 47 个 StyleBox 子资源，跨色族合并待 27-4。
+2. **样式/颜色存量**：27-2/27-3 后字号与字体色均已强制在 token 内；27-4 后 StyleBox 36 个，独立重复组 3；后续 27-5 处理字体族，27-6 处理动态覆盖。
 3. **动态覆盖绕过 Theme**：385 处 `add_theme_*` 中大量是静态角色，导致同一视觉角色在 Theme 与脚本中各有一份。
 4. **字体资源成本**：约 68 MB 字体随 Theme 引用；少数族只服务 1~2 个变体，且部分无显式 fallback。
 5. **静态覆盖不等于动态覆盖**：`font_coverage_audit` 只检查 `.tscn` 静态文本；公告、Boss 信息等动态文本依赖运行时字体链。
@@ -164,7 +177,7 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 - 回写 Theme 的受管属性（默认字体与输入光标/选区/占位）；
 - `--check` 逐字比较生成结果，发现 Theme/脚本常量漂移时失败。
 
-首期只管理共享输入/字体值与 token 审计集合，不重排 618 个变体；字号与字体色已分别于 27-2/27-3 收敛，StyleBox 精确重复已在 27-3 合并，跨色族样式合并按 27-4 进行。
+首期只管理共享输入/字体值与 token 审计集合，不重排 618 个冻结变体；字号与字体色已分别于 27-2/27-3 收敛，StyleBox 精确重复与跨角色合并在 27-3/27-4 完成，语义基类见 §2。
 
 ### 7.2 语义层级
 
@@ -176,7 +189,7 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
         └── 现有变体（只声明差异）
 ```
 
-优先合并 49 个重复签名组；容器别名可只保留布局属性，文字/颜色继承语义基类。目标是减少总属性数与重复值，而不是改场景中的变体名。
+27-4 已按精确有效签名合并 72 个重复组、135 个变体，并以 103 个语义基类承接共享属性；场景中的 618 个冻结变体名保持不变。
 
 ### 7.3 字体角色
 
@@ -210,9 +223,9 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 |:---|---:|---:|
 | off-token 字号变体 | 0（27-0 基线 111） | 0 |
 | off-token 字体色赋值 | 0（27-3 结果） | 0 |
-| 重复签名组 | 49（239 变体） | ≤10 组，且仅容器别名 |
-| StyleBox 子资源 | 47（27-3 结果） | ≤36 |
-| Theme 属性总数 | 3,218 | ≤2,000 |
+| 独立重复签名组 | 3（27-4 结果） | ≤10 |
+| StyleBox 子资源 | 36（27-4 结果） | ≤36 |
+| Theme 属性总数 | 1,719（27-4 结果） | ≤2,000 |
 | Theme 引用字体资产 | 10 个 / 68.2 MB | ≤6 个；未引用字体为 0 |
 | 静态主题覆盖 | 0 | 0 |
 | 动态覆盖 | 385 处 / 41 文件 | 静态角色覆盖为 0；数据驱动覆盖全部 token 化并登记 |
