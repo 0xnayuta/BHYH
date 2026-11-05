@@ -579,7 +579,7 @@ SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
 SettingsButton/fonts/font = ExtResource("font_main")
-SettingsButton/font_sizes/font_size = 25
+SettingsButton/font_sizes/font_size = 24
 SettingsButton/styles/normal = SubResource("empty_button")
 SettingsButton/styles/hover = SubResource("empty_button")
 SettingsButton/styles/pressed = SubResource("empty_button")
@@ -621,7 +621,7 @@ SettingsButtonCompact/base_type = &"Button"
 SettingsButtonCompact/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButtonCompact/colors/font_hover_color = Color(1, 0.466667, 0, 1)
 SettingsButtonCompact/fonts/font = ExtResource("font_main")
-SettingsButtonCompact/font_sizes/font_size = 21
+SettingsButtonCompact/font_sizes/font_size = 20
 SettingsButtonCompact/styles/normal = SubResource("empty_button")
 SettingsButtonCompact/styles/hover = SubResource("empty_button")
 SettingsButtonCompact/styles/pressed = SubResource("empty_button")
@@ -632,7 +632,7 @@ SettingsButtonMedium/base_type = &"Button"
 SettingsButtonMedium/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButtonMedium/colors/font_hover_color = Color(1, 0.466667, 0, 1)
 SettingsButtonMedium/fonts/font = ExtResource("font_main")
-SettingsButtonMedium/font_sizes/font_size = 22
+SettingsButtonMedium/font_sizes/font_size = 24
 SettingsButtonMedium/styles/normal = SubResource("empty_button")
 SettingsButtonMedium/styles/hover = SubResource("empty_button")
 SettingsButtonMedium/styles/pressed = SubResource("empty_button")
@@ -643,9 +643,9 @@ SettingsReturnButton/base_type = &"Button"
 SettingsReturnButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsReturnButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
 SettingsReturnButton/colors/font_outline_color = Color(0, 0, 0, 1)
-SettingsReturnButton/constants/outline_size = 4
+SettingsReturnButton/constants/outline_size = 3
 SettingsReturnButton/fonts/font = ExtResource("font_return")
-SettingsReturnButton/font_sizes/font_size = 30
+SettingsReturnButton/font_sizes/font_size = 32
 SettingsReturnButton/styles/normal = SubResource("empty_button")
 SettingsReturnButton/styles/hover = SubResource("empty_button")
 SettingsReturnButton/styles/pressed = SubResource("empty_button")
@@ -654,7 +654,7 @@ SettingsReturnButton/styles/focus = SubResource("empty_button")
 
 SettingsOption/base_type = &"OptionButton"
 SettingsOption/fonts/font = ExtResource("font_main")
-SettingsOption/font_sizes/font_size = 21
+SettingsOption/font_sizes/font_size = 20
 
 SettingsSlider/base_type = &"HSlider"
 SettingsSlider/styles/slider = SubResource("slider_track")
@@ -667,27 +667,27 @@ SettingsGroupSpacious/constants/separation = 13
 
 SettingsTitle/base_type = &"Label"
 SettingsTitle/fonts/font = ExtResource("font_main")
-SettingsTitle/font_sizes/font_size = 35
+SettingsTitle/font_sizes/font_size = 36
 SettingsTitle/constants/outline_size = 2
 
 SettingsSection/base_type = &"Label"
 SettingsSection/fonts/font = ExtResource("font_main")
-SettingsSection/font_sizes/font_size = 25
+SettingsSection/font_sizes/font_size = 24
 SettingsSection/constants/outline_size = 1
 
 SettingsValue/base_type = &"Label"
 SettingsValue/fonts/font = ExtResource("font_main")
-SettingsValue/font_sizes/font_size = 23
+SettingsValue/font_sizes/font_size = 24
 SettingsValue/constants/outline_size = 1
 
 SettingsOptionLabel/base_type = &"Label"
 SettingsOptionLabel/fonts/font = ExtResource("font_main")
-SettingsOptionLabel/font_sizes/font_size = 22
+SettingsOptionLabel/font_sizes/font_size = 24
 SettingsOptionLabel/constants/outline_size = 1
 
 SettingsControlLabel/base_type = &"Label"
 SettingsControlLabel/fonts/font = ExtResource("font_main")
-SettingsControlLabel/font_sizes/font_size = 21
+SettingsControlLabel/font_sizes/font_size = 20
 SettingsControlLabel/constants/outline_size = 1
 
 SettingsCompactLabel/base_type = &"Label"
@@ -697,7 +697,7 @@ SettingsCompactLabel/constants/outline_size = 1
 
 SettingsSmallLabel/base_type = &"Label"
 SettingsSmallLabel/fonts/font = ExtResource("font_main")
-SettingsSmallLabel/font_sizes/font_size = 19
+SettingsSmallLabel/font_sizes/font_size = 18
 SettingsSmallLabel/constants/outline_size = 1
 
 SettingsPlainLabel/base_type = &"Label"
@@ -1955,17 +1955,12 @@ BackpackHeadButton/styles/hover = SubResource("empty_button")
 BackpackHeadButton/styles/disabled = SubResource("empty_button")
 BackpackHeadButton/styles/focus = SubResource("empty_button")
 
-BackpackWingsButton/base_type = &"Button"
-BackpackWingsButton/styles/normal = SubResource("empty_button")
-BackpackWingsButton/styles/pressed = SubResource("empty_button")
-BackpackWingsButton/styles/hover = SubResource("empty_button")
-BackpackWingsButton/styles/disabled = SubResource("empty_button")
-BackpackWingsButton/styles/focus = SubResource("empty_button")
+BackpackWingsButton/base_type = &"BackpackHeadButton"
 
 BackpackWingLabel/base_type = &"Label"
-BackpackWingLabel/colors/font_color = Color(1, 0.792157, 0, 1)
+BackpackWingLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
-BackpackWingLabel/colors/font_outline_color = Color(1, 0.792157, 0, 1)
+BackpackWingLabel/colors/font_outline_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/constants/shadow_offset_x = 0
 BackpackWingLabel/constants/shadow_offset_y = 0
 BackpackWingLabel/constants/outline_size = 1
@@ -1981,29 +1976,29 @@ BackpackEquipmentColumn/constants/separation = 20
 
 BackpackExpLabel/base_type = &"Label"
 BackpackExpLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-BackpackExpLabel/constants/outline_size = 5
+BackpackExpLabel/constants/outline_size = 6
 BackpackExpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BackpackHpLabel/base_type = &"Label"
 BackpackHpLabel/constants/outline_size = 0
 BackpackHpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-BackpackHpLabel/font_sizes/font_size = 15
+BackpackHpLabel/font_sizes/font_size = 16
 
 BackpackHpValue/base_type = &"Label"
-BackpackHpValue/colors/font_color = Color(1, 1, 0.643137, 1)
+BackpackHpValue/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 BackpackHpValue/colors/font_outline_color = Color(0, 0, 0, 1)
-BackpackHpValue/constants/outline_size = 5
+BackpackHpValue/constants/outline_size = 6
 BackpackHpValue/fonts/font = ExtResource("font_main")
 BackpackHpValue/font_sizes/font_size = 16
 
 BackpackMessageLabel/base_type = &"Label"
-BackpackMessageLabel/colors/font_color = Color(0.980392, 0.776471, 0, 1)
+BackpackMessageLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
 BackpackMessageLabel/fonts/font = ExtResource("font_return")
 BackpackMessageLabel/font_sizes/font_size = 20
 
 BackpackMpLabel/base_type = &"Label"
 BackpackMpLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-BackpackMpLabel/font_sizes/font_size = 15
+BackpackMpLabel/font_sizes/font_size = 16
 
 BackpackToggleButton/base_type = &"Button"
 BackpackToggleButton/colors/font_disabled_color = Color(1, 1, 1, 1)

@@ -58,12 +58,12 @@ func _run() -> void:
 
 	checks["title_variation"] = title.theme_type_variation == &"SettingsTitle"
 	checks["title_font"] = (
-		_font_path(title) == MAIN_FONT and title.get_theme_font_size("font_size") == 35
+		_font_path(title) == MAIN_FONT and title.get_theme_font_size("font_size") == 36
 	)
 	checks["title_outline"] = title.get_theme_constant("outline_size") == 2
 	checks["section_variation"] = section.theme_type_variation == &"SettingsSection"
 	checks["section_font"] = (
-		_font_path(section) == MAIN_FONT and section.get_theme_font_size("font_size") == 25
+		_font_path(section) == MAIN_FONT and section.get_theme_font_size("font_size") == 24
 	)
 	checks["section_outline"] = section.get_theme_constant("outline_size") == 1
 	checks["plain_variation"] = plain.theme_type_variation == &"SettingsPlainLabel"
@@ -75,7 +75,7 @@ func _run() -> void:
 	checks["normal_button_variation"] = normal_button.theme_type_variation == &"SettingsButton"
 	checks["normal_button_font"] = (
 		_font_path(normal_button) == MAIN_FONT
-		and normal_button.get_theme_font_size("font_size") == 25
+		and normal_button.get_theme_font_size("font_size") == 24
 	)
 	checks["normal_button_colors"] = (
 		normal_button.get_theme_color("font_color").to_html(true) == "dfdfdfff"
@@ -92,9 +92,9 @@ func _run() -> void:
 	checks["return_variation"] = return_button.theme_type_variation == &"SettingsReturnButton"
 	checks["return_font"] = (
 		_font_path(return_button) == RETURN_FONT
-		and return_button.get_theme_font_size("font_size") == 30
+		and return_button.get_theme_font_size("font_size") == 32
 	)
-	checks["return_outline"] = return_button.get_theme_constant("outline_size") == 4
+	checks["return_outline"] = return_button.get_theme_constant("outline_size") == 3
 	checks["return_colors"] = (
 		return_button.get_theme_color("font_color").to_html(true) == "dfdfdfff"
 		and return_button.get_theme_color("font_outline_color").to_html(true) == "000000ff"
@@ -107,7 +107,7 @@ func _run() -> void:
 	checks["spacious_group_separation"] = spacious_group.get_theme_constant("separation") == 13
 	checks["option_variation"] = option.theme_type_variation == &"SettingsOption"
 	checks["option_font"] = (
-		_font_path(option) == MAIN_FONT and option.get_theme_font_size("font_size") == 21
+		_font_path(option) == MAIN_FONT and option.get_theme_font_size("font_size") == 20
 	)
 
 	var variation_count := 0
