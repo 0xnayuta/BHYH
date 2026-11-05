@@ -28,6 +28,7 @@ Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘�
 - 变体按角色命名，不按具体面板命名；同一角色跨面板复用。
 - 变体必须登记在 `bhyh_theme.tres`；未定义变体、缺失类型或 Theme 加载失败均应在审计/加载阶段失败，不回退到内联样式。
 - 32-4 冻结的完整变体名单与字体映射见归档页；新增/重命名变体必须评审。
+- P2 排版 token 试点见 [`typography_tokens.md`](typography_tokens.md)；当前仅覆盖 `game_set` 与 `back_pack`，其余面板逐批迁移。
 
 ## 4. 静态、动画与动态覆盖
 
@@ -77,3 +78,10 @@ python scripts/font_coverage_audit.py --check
 **后续**：字体子集化作为独立打包优化，不在本修正批次的视觉基线内；必须保留 hinting、显式 fallback 并通过同一套截图/控件转储后方可采用。
 
 **P1 资源清理（2026-11-05）**：旧 `1_fonts_fzcy_fz_cu_yuan_m03.ttf`、`1_aaa_fz_cu_yuan_m03_s.ttf`、`1_aaa_fz_cu_yuan_m03_s_ttf.ttf`、`8_fz_cu_yuan_m03_s.ttf` 及对应 `.import` 已确认零运行时引用，复制到本地回滚归档后从 `source/Font/` 移除；回滚归档不进入仓库或发布包。当前只保留 `fz_cu_yuan_m03.ttf` 与 `msyh_semibold.ttc`。
+
+## 8. P2 排版 token 试点（2026-11-05）
+
+- 仅覆盖 `game_set` 与 `back_pack` 使用的变体；字号、描边、金色文字与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
+- 不重命名 618 个冻结变体；`BackpackWingsButton` 仅改为继承 `BackpackHeadButton` 的 Icon 族空 StyleBox。
+- 控件转储：位置移动 0；`game_set` 3 个控件尺寸随字号变化；`back_pack` 5 个属性行高度 +2 px；截图未见裁切。
+- 其余面板继续保持既有 Theme 值，后续按 token 表分批迁移。
