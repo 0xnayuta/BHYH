@@ -143,6 +143,29 @@
         "INPUT_CARET": "WARM_ACCENT_LIGHT",
         "INPUT_SELECTION": "Color(0.752941, 0.611765, 0.337255, 0.45)"
       }
+    },
+    {
+      "title": "Phase 27-6 动态 StyleBox",
+      "tokens": {
+        "COOP_TAB_BG_PRESSED": "Color(\"85511c\")",
+        "COOP_TAB_BG": "Color(\"36200f\")",
+        "COOP_TAB_BORDER_FOCUS": "Color(\"ffd473\")",
+        "COOP_TAB_BORDER": "Color(\"a47738\")",
+        "PET_SELL_HOVER": "Color(0.23, 0.11, 0.05, 1)",
+        "PET_PAGE_HOVER": "Color(0.552941, 0.298039, 0.0784314, 1)",
+        "PET_SELL_NORMAL": "Color(0.12, 0.055, 0.025, 1)",
+        "PET_PAGE_NORMAL": "Color(0.415686, 0.203922, 0.0705882, 1)",
+        "PET_SELL_BORDER_DIM": "Color(0.22, 0.12, 0.06, 1)",
+        "PET_GOLD_BORDER": "Color(0.878431, 0.662745, 0.294118, 1)",
+        "PET_PANEL_BG": "Color(0.1, 0.075, 0.045, 0.93)",
+        "PET_PANEL_BORDER": "Color(0.74, 0.54, 0.25, 0.95)",
+        "PET_TAB_BG": "Color(0.16, 0.075, 0.035, 1)",
+        "PET_TAB_BG_ALT": "Color(0.25, 0.12, 0.045, 1)",
+        "LEARN_PANEL_BG": "Color(0.035, 0.055, 0.065, 0.98)",
+        "LEARN_PANEL_BORDER": "Color(0.62, 0.43, 0.16, 1.0)",
+        "LEARN_CARD_BG": "Color(0.075, 0.095, 0.105, 0.96)",
+        "LEARN_CARD_BORDER": "Color(0.26, 0.31, 0.31, 1.0)"
+      }
     }
   ],
   "theme_only": {

@@ -212,8 +212,12 @@ func _add_player_selector(type: String) -> void:
 		button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_GOLD_PALE_BRIGHT)
 		for state: String in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
-			style.bg_color = Color("85511c") if state == "pressed" else Color("36200f")
-			style.border_color = Color("ffd473") if state in ["pressed", "focus"] else Color("a47738")
+			style.bg_color = UiSurfaceTokens.COOP_TAB_BG_PRESSED if state == "pressed" else UiSurfaceTokens.COOP_TAB_BG
+			style.border_color = (
+				UiSurfaceTokens.COOP_TAB_BORDER_FOCUS
+				if state in ["pressed", "focus"]
+				else UiSurfaceTokens.COOP_TAB_BORDER
+			)
 			style.set_border_width_all(2)
 			style.set_corner_radius_all(5)
 			button.add_theme_stylebox_override(state, style)

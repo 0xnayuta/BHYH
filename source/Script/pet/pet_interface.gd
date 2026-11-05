@@ -2361,8 +2361,8 @@ func _setup_pet_passive_panel() -> void:
 	pet_passive_panel.size = Vector2(300, 180)
 	pet_passive_panel.z_index = 5
 	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.1, 0.075, 0.045, 0.93)
-	panel_style.border_color = Color(0.74, 0.54, 0.25, 0.95)
+	panel_style.bg_color = UiSurfaceTokens.PET_PANEL_BG
+	panel_style.border_color = UiSurfaceTokens.PET_PANEL_BORDER
 	panel_style.set_border_width_all(2)
 	panel_style.corner_radius_top_left = 5
 	panel_style.corner_radius_top_right = 5
@@ -3191,12 +3191,12 @@ func _show_pet_batch_sell_options() -> void:
 
 func _style_pet_batch_sell_dropdown_button(button: Button) -> void:
 	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0.12, 0.055, 0.025, 1)
-	normal.border_color = Color(0.22, 0.12, 0.06, 1)
+	normal.bg_color = UiSurfaceTokens.PET_SELL_NORMAL
+	normal.border_color = UiSurfaceTokens.PET_SELL_BORDER_DIM
 	normal.set_border_width_all(1)
 	normal.set_corner_radius_all(3)
 	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = Color(0.23, 0.11, 0.05, 1)
+	hover.bg_color = UiSurfaceTokens.PET_SELL_HOVER
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)
 	button.add_theme_stylebox_override("pressed", hover)
@@ -3257,8 +3257,8 @@ func _open_pet_batch_sell_stat_menu(panel: Panel, option: Button, slot_index: in
 
 func _pet_batch_sell_dropdown_panel_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.16, 0.075, 0.035, 1)
-	style.border_color = Color(0.878431, 0.662745, 0.294118, 1)
+	style.bg_color = UiSurfaceTokens.PET_TAB_BG
+	style.border_color = UiSurfaceTokens.PET_GOLD_BORDER
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(3)
 	return style
@@ -3406,8 +3406,8 @@ func _center_pet_batch_sell_confirm() -> void:
 
 func _pet_batch_sell_panel_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.25, 0.12, 0.045, 1)
-	style.border_color = Color(0.878431, 0.662745, 0.294118, 1)
+	style.bg_color = UiSurfaceTokens.PET_TAB_BG_ALT
+	style.border_color = UiSurfaceTokens.PET_GOLD_BORDER
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(6)
 	return style
@@ -3415,12 +3415,12 @@ func _pet_batch_sell_panel_style() -> StyleBoxFlat:
 
 func _style_pet_batch_sell_button(button: Button) -> void:
 	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
-	normal.border_color = Color(0.878431, 0.662745, 0.294118, 1)
+	normal.bg_color = UiSurfaceTokens.PET_PAGE_NORMAL
+	normal.border_color = UiSurfaceTokens.PET_GOLD_BORDER
 	normal.set_border_width_all(2)
 	normal.set_corner_radius_all(3)
 	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+	hover.bg_color = UiSurfaceTokens.PET_PAGE_HOVER
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("pressed", hover)
 	button.add_theme_stylebox_override("hover", hover)

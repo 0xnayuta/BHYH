@@ -263,8 +263,8 @@ func _make_formula_card(skill_id: String, skill_name: String, stored_level: int,
 
 func _make_panel_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.035, 0.055, 0.065, 0.98)
-	style.border_color = Color(0.62, 0.43, 0.16, 1.0)
+	style.bg_color = UiSurfaceTokens.LEARN_PANEL_BG
+	style.border_color = UiSurfaceTokens.LEARN_PANEL_BORDER
 	style.set_border_width_all(2)
 	style.corner_radius_top_left = 6
 	style.corner_radius_top_right = 6
@@ -279,8 +279,8 @@ func _make_panel_style() -> StyleBoxFlat:
 
 func _make_card_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.075, 0.095, 0.105, 0.96)
-	style.border_color = Color(0.26, 0.31, 0.31, 1.0)
+	style.bg_color = UiSurfaceTokens.LEARN_CARD_BG
+	style.border_color = UiSurfaceTokens.LEARN_CARD_BORDER
 	style.set_border_width_all(1)
 	style.corner_radius_top_left = 4
 	style.corner_radius_top_right = 4
