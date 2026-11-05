@@ -28,10 +28,10 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 名称显示层复跑 **35.65s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 内部名称迁移复跑 **37.99s**） |
 | 字体覆盖 | **135 场景 / 790 中文节点 / 0 缺字；Theme 字体 5 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，6.37s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，40.21s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，8.35s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，32.44s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
 | Theme token | **732 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **39 文字 token / 6 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
 | Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6**（`theme_variant_audit.py --check`） |
@@ -55,7 +55,7 @@
 
 ### 最近完成
 
-- 2026-11-06 名称显示层与 Art 数据：新增 `UiTextFormat.display_name`，在 Boss 血条、怪物头像/属性面板、轮回幻境候选与已选列表、Boss 出现提示等 UI 边界把 ASCII `()` 转为中文 `（）`；内部 `Name`/`my_mr_name`/字典键保持原值，未做源码迁移，避免存档键与名称映射风险。`source/Art/level/game_4_level/north_original/monsters.json` 的 `小蜘蛛(五)`、`通天教主(饕鬣版)` 改为中文括号，`export_raw_dependencies.json` 同步为 108,228 字节。复跑 `check_all` **9/9（35.65s）**、`ui-theme` **6.37s**、`ui-factories` **40.21s**、`health_check` 0 Parse / 0 Error / 0 Warning。
+- 2026-11-06 源码内部名称迁移：将 `通天教主(混沌版)`、`通天教主(穷奇版)`、`牛魔王·魂 (Lv.%d)`、`遮迦越罗 (Lv.%d)` 共 11 处源码内部名称迁移为中文括号，覆盖 `level_info`、`lhhj`、`monster_head_info`、`level_62`、`minghai_boss3117`、`game4_east_late_level`、`east_continent_monster` 与 `monster_zhw` 族；未保留旧名别名，映射键与显示值同步。同步清理 `sqzlw` 与 `monster_zhw` 日志中的 `(神器)`、`(示例)` 括号。`source/Art/level/game_4_level/north_original/monsters.json` 的 `小蜘蛛(五)`、`通天教主(饕鬣版)` 此前已改为中文括号，`export_raw_dependencies.json` 同步为 108,228 字节。复跑 `check_all` **9/9（37.99s）**、`ui-theme` **8.35s**、`ui-factories` **32.44s**、`level_62` **11.63s**、`level_75` **11.88s**，关卡日志均 0 SCRIPT ERROR / 0 ERROR / 0 WARNING。
 - 2026-11-06 界面标点补充：扫描 `source/**/*.gd` 与 `source/**/*.tscn` 的用户可见文本，统一 `zhu_xian` 场景/脚本、`level_info`、`one_key_synthesis`、`zhenyanbutton`、`load_scene`、`game_information`、`shop`、`transmogrified`、`liji`、`lhhj_help`、`buff_information`、`pet_interface`、`dj_sell`、`pl_sell`、`zd_skill`、`return_back_map`、`mount_panel`、`game_over`、`game_announcement`、`skill_key_set` 等 33 个文件的中英文标点混用；英文冒号统一为全角冒号，去除多余空格，英文括号/引号/逗号/波浪号统一为中文形式；`Tips：` 按用户确认保留英文前缀。复跑 `check_all` **9/9（37.00s）**、`ui-theme` **6.62s**、`ui-factories` **29.76s**、`health_check` 0 Parse / 0 Error / 0 Warning；全量关卡回归沿用 **339.9s PASS 128/128 + 5 SKIP**。
 - 2026-11-05 UI 三项修复：`set_menu` 新增 `SetMenuActionButtonGroup`（`separation = 9`），实测容器 402/418、暂停菜单全部内容在框内；背包属性 Tooltip 改为 `backpack.to_local()` 转换并加视口翻转/夹取，修复 1280×800 下约 `(249,143)` 的固定偏移；物品 Tooltip 描述字体 14→18、去掉“描述：”前缀、双 U+3000 首行缩进、售价去句号、动态属性统一全角冒号；`诛仙剑` 属性文本同步统一。新增 `UiTextFormat`；`ui-factories` 增加暂停菜单、Tooltip 位置、描述缩进/售价断言。截图归档 `G:/tmp/ui_fix_set_menu.png`、`ui_fix_backpack_tooltip.png`、`ui_fix_equipment_tooltip.png`。`check_all` **9/9（43.18s）**，`ui-theme` **7.35s**，`ui-factories` **43.97s**，全量回归 **128/128 + 5 SKIP（339.9s）**。
 - 2026-11-05 Phase 27-7 阶段验收：`ui_dynamic_theme_audit` 扫描范围扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处）；修复 Scene 中 **29 处**字面字号/字体色，新增 `FONT_SIZE_8` 与 2 个阵发语义色 token；`set_menu` 直接字体引用改为 `SetMenuHintLabel` 变体。当前静态 literal **0**，token 173 / data 43 / layout 96 / dynamic_style 40；`theme_override_audit` 对字体/动态字段实施上限校验；18 场景 × 1280/1600 截图与 **2,323** 控件几何 **0 位移**；全量回归 **128/128 + SKIP 5（301.0s）**，`level_1` 4 阶段 0/0/0。Phase 27 关闭。
