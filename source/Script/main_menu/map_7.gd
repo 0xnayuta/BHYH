@@ -180,7 +180,7 @@ func _start_level_highlight(level_button: TextureButton) -> void:
 	var highlight_material := ShaderMaterial.new()
 	highlight_material.shader = LEVEL_HIGHLIGHT_SHADER
 	highlight_material.set_shader_parameter("outline_width", 1.0)
-	highlight_material.set_shader_parameter("outline_color", Color(1.0, 0.941176, 0.0, 1.0))
+	highlight_material.set_shader_parameter("outline_color", UiSurfaceTokens.MAP_HIGHLIGHT)
 	level_button.material = highlight_material
 	_level_highlight_tween = create_tween().set_loops()
 	_level_highlight_tween.tween_method(_set_level_highlight_width.bind(highlight_material), 1.0, 4.0, 0.5)

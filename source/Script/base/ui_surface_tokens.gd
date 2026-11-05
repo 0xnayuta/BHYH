@@ -27,8 +27,20 @@ const COOL_ACCENT_BRIGHT := Color("d0a750")
 const COOL_ACCENT_SOFT := Color("e2b75c")
 const COOL_ACCENT_LINE := Color(0.73, 0.58, 0.28, 0.7)
 const COOL_PROGRESS := Color("6f8e78")
+const OVERLAY_LIGHT := Color(0, 0, 0, 0.48)
 const OVERLAY_MEDIUM := Color(0, 0, 0, 0.68)
 const OVERLAY_STRONG := Color(0, 0, 0, 0.72)
+
+# 模式选择与地图高亮
+const MODE_PANEL := Color("dab070")
+const MODE_PANEL_BORDER := Color("382714")
+const MODE_ACTION := Color("ed9908")
+const MODE_ACTION_HOVER := Color("ffc343")
+const MODE_ACTION_PRESSED := Color("c57a06")
+const MODE_ACTION_BORDER := Color("73501d")
+const MAP_HIGHLIGHT := Color(1.0, 0.941176, 0.0, 1.0)
+const PREVIEW_LOCKED_MODULATE := Color(0.55, 0.55, 0.55, 1.0)
+const DISABLED_MODULATE := Color(0.62, 0.62, 0.62, 1.0)
 
 # 危险与绿色状态
 const DANGER_DEEP := Color(0.28, 0.1, 0.105, 1.0)

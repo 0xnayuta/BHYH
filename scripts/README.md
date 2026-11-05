@@ -66,7 +66,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `normalize_eol.py` | LF/CRLF 归一化与增量缓存 |
 | `format_all.py` | `gdformat` 校验/格式化 |
 | `health_check.py` | 场景引用、Autoload、死代码、Headless 编译与静态 warning |
-| `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme 与白名单子门禁 |
+| `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme/字体/表面色与白名单子门禁 |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；含 Global 表面基线；`--self-test` 覆盖正负样本 |
 | `naming_audit.py` | 目录/文件 `snake_case`；`--all` 全量 |
 | `naming_compliance_audit.py` | 全量命名终审；人工执行，不在日常 `check_all` 内 |
@@ -76,6 +76,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `theme_override_audit.py` | 场景直接 Theme 属性与动画轨道基线 |
 | `font_coverage_audit.py` | 静态场景文本与 Theme 字体链的 CJK 字形覆盖审计；缺字或字体文件不可读时失败 |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
+| `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
 | `verify_dragonbones_factories.py` | `.dbfactory` 独立子进程加载与坏资源二分定位 |
@@ -139,6 +140,8 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_allowlist.json` | 运行时 `SpriteFrames.new()` 允许文件 |
 | `global_surface_baseline.json` | Phase 22 收口后的 Global 字段与 add 系入口冻结基线 |
 | `theme_override_baseline.json` | Theme 直接属性/动画轨道场景级上限 |
+| `theme_token_baseline.json` | Theme 变体字号/描边/颜色/Button 基类的迁移期冻结基线 |
+| `ui_surface_token_baseline.json` | 自绘 StyleBox 与 `main_menu` 裸色的迁移期冻结基线 |
 | `monster_action_maps.json` / `monster_action_views.json` | 怪物动作与视图构建源 |
 | `level_layout_sources.json` / `level_layout_data_exceptions.json` | 关卡布局构建源与 10 个动态/非连续例外 |
 | `equipment_sources.json` | 装备/物品构建源；由 `convert_equipment_catalog.py` 生成 Catalog |

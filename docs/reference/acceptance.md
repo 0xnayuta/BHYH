@@ -111,6 +111,7 @@ python scripts/check_all.py --no-cache -j 6
 | UI Theme 基线 | `theme_override_audit.py --check` | 直接属性或 Animation 轨道引用超过基线、新增带覆盖场景 |
 | 字体覆盖 | `font_coverage_audit.py --check` | 静态中文文本缺字、字体链未解析或字体文件不可读 |
 | Theme token | `theme_token_audit.py --check` | 新增/改写字号、描边、字体颜色或 Button 基类偏离 token 契约 |
+| UI 表面色 token | `ui_surface_token_audit.py --check` | 自绘 StyleBox 裸色或 `main_menu` 裸色超过冻结基线；`--self-test` 覆盖正负样本 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
 ### 4.1 `contract_scan.py` 二十一类契约

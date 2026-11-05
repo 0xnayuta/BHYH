@@ -165,14 +165,14 @@ func _refresh_state() -> void:
 		var action_button := card.get_node_or_null("ActionButton") as TextureButton
 		if action_button != null:
 			action_button.disabled = not can_battle
-			action_button.modulate = Color(1, 1, 1, 1) if can_battle else Color(0.62, 0.62, 0.62, 1)
+			action_button.modulate = Color.WHITE if can_battle else UiSurfaceTokens.DISABLED_MODULATE
 		var text := card.get_node_or_null("ActionButton/text_str") as TextureRect
 		if text != null:
 			text.texture = REST_TEXT if selected else BATTLE_TEXT
 		var upgrade_button := card.get_node_or_null("UpgradeButton") as TextureButton
 		if upgrade_button != null:
 			upgrade_button.disabled = not can_upgrade
-			upgrade_button.modulate = Color(1, 1, 1, 1) if can_upgrade else Color(0.62, 0.62, 0.62, 1.0)
+			upgrade_button.modulate = Color.WHITE if can_upgrade else UiSurfaceTokens.DISABLED_MODULATE
 
 
 func _set_card_level(card: Node, level: int) -> void:
@@ -245,7 +245,9 @@ func _set_material_slot(card: Node, slot_index: int, material: Dictionary) -> vo
 			var need := int(material.get("count", 0))
 			var have := _get_material_count(code)
 			label.text = str(have) + "/" + str(need)
-			label.add_theme_color_override("font_color", Color(0, 1, 0, 1) if have >= need else Color(1, 0, 0, 1))
+			label.add_theme_color_override(
+				"font_color", UiColorTokens.TEXT_GREEN if have >= need else UiColorTokens.TEXT_DANGER
+			)
 			_center_material_row(card, icon, label, slot_y)
 
 

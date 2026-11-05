@@ -1206,7 +1206,15 @@ func add_text_info():
 	if verisions_name == "" or verisions_name == null:
 		return
 	for i in text_data[verisions_name]:
-		var item_label = Global.add_font_instance(text_list, i, "res://Font/华康宋体W3.ttc", 17, "FFFFFF", 2, "FFFFFF")
+		var item_label = Global.add_font_instance(
+			text_list,
+			i,
+			"res://Font/华康宋体W3.ttc",
+			17,
+			UiColorTokens.TEXT_PRIMARY.to_html(false),
+			2,
+			UiColorTokens.TEXT_PRIMARY.to_html(false)
+		)
 		if item_label is Label:
 			item_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 			item_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist + UI Theme 基线。"""
+"""契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist + UI Theme/字体覆盖/表面色基线。"""
 from __future__ import annotations
 
 import concurrent.futures
@@ -36,6 +36,10 @@ COMMANDS = [
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
     ("export_raw_manifest_check", [sys.executable, "scripts/export_raw_manifest.py", "--check", "--allow-missing"]),
     ("theme_override_audit", [sys.executable, "scripts/theme_override_audit.py", "--check"]),
+    ("theme_token_audit", [sys.executable, "scripts/theme_token_audit.py", "--check"]),
+    ("font_coverage_audit", [sys.executable, "scripts/font_coverage_audit.py", "--check"]),
+    ("ui_surface_token_audit", [sys.executable, "scripts/ui_surface_token_audit.py", "--check"]),
+    ("ui_surface_token_self_test", [sys.executable, "scripts/ui_surface_token_audit.py", "--self-test"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),
     ("whitelist_audit", [sys.executable, "scripts/whitelist_audit.py", "--fail-on-error"]),
 ]

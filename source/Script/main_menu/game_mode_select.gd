@@ -8,7 +8,7 @@ var _chosen := false
 func _ready() -> void:
 	var shade := ColorRect.new()
 	shade.name = "Shade"
-	shade.color = Color(0, 0, 0, 0.48)
+	shade.color = UiSurfaceTokens.OVERLAY_LIGHT
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	var center := CenterContainer.new()
@@ -17,15 +17,15 @@ func _ready() -> void:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(300, 300)
 	var frame := StyleBoxFlat.new()
-	frame.bg_color = Color("dab070")
-	frame.border_color = Color("382714")
+	frame.bg_color = UiSurfaceTokens.MODE_PANEL
+	frame.border_color = UiSurfaceTokens.MODE_PANEL_BORDER
 	frame.set_border_width_all(5)
 	frame.set_corner_radius_all(12)
 	frame.content_margin_left = 28
 	frame.content_margin_right = 28
 	frame.content_margin_top = 28
 	frame.content_margin_bottom = 28
-	frame.shadow_color = Color(0, 0, 0, 0.5)
+	frame.shadow_color = UiSurfaceTokens.SHADOW
 	frame.shadow_size = 10
 	panel.add_theme_stylebox_override("panel", frame)
 	center.add_child(panel)
@@ -45,10 +45,10 @@ func _ready() -> void:
 		button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_INK_WARM)
 		for state in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
-			style.bg_color = Color("ed9908") if state == "normal" else Color("ffc343")
+			style.bg_color = UiSurfaceTokens.MODE_ACTION if state == "normal" else UiSurfaceTokens.MODE_ACTION_HOVER
 			if state == "pressed":
-				style.bg_color = Color("c57a06")
-			style.border_color = Color("73501d")
+				style.bg_color = UiSurfaceTokens.MODE_ACTION_PRESSED
+			style.border_color = UiSurfaceTokens.MODE_ACTION_BORDER
 			style.set_border_width_all(3)
 			style.set_corner_radius_all(7)
 			button.add_theme_stylebox_override(state, style)

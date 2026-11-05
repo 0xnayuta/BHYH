@@ -169,7 +169,7 @@ func _refresh() -> void:
 	train_all_button.disabled = not unlocked or level >= level_limit
 	var preview_mount_id := "1003100" if selected_mount_id == "1002200" else selected_mount_id
 	preview.setup(preview_mount_id, "idle")
-	preview.modulate = Color(0.55, 0.55, 0.55, 1.0) if not unlocked else Color.WHITE
+	preview.modulate = UiSurfaceTokens.PREVIEW_LOCKED_MODULATE if not unlocked else Color.WHITE
 	_fit_preview()
 	_refresh_content(mount)
 	_refresh_mount_list()

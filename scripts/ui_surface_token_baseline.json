@@ -1,0 +1,23 @@
+{
+  "schema_id": "ui_surface_token_baseline",
+  "schema_version": 1,
+  "entries": {
+    "Script/coop/coop_panel_host.gd::style.bg_color = Color(\"85511c\") if state == \"pressed\" else Color(\"36200f\")": 1,
+    "Script/coop/coop_panel_host.gd::style.border_color = Color(\"ffd473\") if state in [\"pressed\", \"focus\"] else Color(\"a47738\")": 1,
+    "Script/pet/pet_interface.gd::hover.bg_color = Color(0.23, 0.11, 0.05, 1)": 1,
+    "Script/pet/pet_interface.gd::hover.bg_color = Color(0.552941, 0.298039, 0.0784314, 1)": 1,
+    "Script/pet/pet_interface.gd::normal.bg_color = Color(0.12, 0.055, 0.025, 1)": 1,
+    "Script/pet/pet_interface.gd::normal.bg_color = Color(0.415686, 0.203922, 0.0705882, 1)": 1,
+    "Script/pet/pet_interface.gd::normal.border_color = Color(0.22, 0.12, 0.06, 1)": 1,
+    "Script/pet/pet_interface.gd::normal.border_color = Color(0.878431, 0.662745, 0.294118, 1)": 1,
+    "Script/pet/pet_interface.gd::panel_style.bg_color = Color(0.1, 0.075, 0.045, 0.93)": 1,
+    "Script/pet/pet_interface.gd::panel_style.border_color = Color(0.74, 0.54, 0.25, 0.95)": 1,
+    "Script/pet/pet_interface.gd::style.bg_color = Color(0.16, 0.075, 0.035, 1)": 1,
+    "Script/pet/pet_interface.gd::style.bg_color = Color(0.25, 0.12, 0.045, 1)": 1,
+    "Script/pet/pet_interface.gd::style.border_color = Color(0.878431, 0.662745, 0.294118, 1)": 2,
+    "Script/skill/learn_skill.gd::style.bg_color = Color(0.035, 0.055, 0.065, 0.98)": 1,
+    "Script/skill/learn_skill.gd::style.bg_color = Color(0.075, 0.095, 0.105, 0.96)": 1,
+    "Script/skill/learn_skill.gd::style.border_color = Color(0.26, 0.31, 0.31, 1.0)": 1,
+    "Script/skill/learn_skill.gd::style.border_color = Color(0.62, 0.43, 0.16, 1.0)": 1
+  }
+}

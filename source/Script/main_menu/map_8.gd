@@ -245,7 +245,7 @@ func _update_level_progression() -> void:
 		if button != null:
 			var material := ShaderMaterial.new()
 			material.shader = LEVEL_HIGHLIGHT_SHADER
-			material.set_shader_parameter("outline_color", Color(1.0, 0.941176, 0.0, 1.0))
+			material.set_shader_parameter("outline_color", UiSurfaceTokens.MAP_HIGHLIGHT)
 			button.material = material
 			_level_highlight_tween = create_tween().set_loops()
 			_level_highlight_tween.tween_method(_set_level_highlight_width.bind(material), 1.0, 4.0, 0.5)
