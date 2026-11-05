@@ -53,7 +53,7 @@ func _run() -> void:
 	checks["bg_theme"] = _theme_path(bg) == THEME_PATH
 	checks["return_theme"] = _theme_path(return_button) == THEME_PATH
 	checks["theme_resource"] = (
-		bg.theme != null and bg.theme.get_type_variation_base(&"SettingsTitle") == &"Label"
+		bg.theme != null and _native_variation_base(bg.theme, &"SettingsTitle") == &"Label"
 	)
 
 	checks["title_variation"] = title.theme_type_variation == &"SettingsTitle"
@@ -151,6 +151,17 @@ func _finish(checks: Dictionary) -> void:
 	)
 	print(TEARDOWN_MARKER)
 	get_tree().quit()
+
+
+func _native_variation_base(theme: Theme, variation: StringName) -> StringName:
+	var current := variation
+	var seen := {}
+	while theme.get_type_variation_base(current) != &"":
+		if seen.has(current):
+			break
+		seen[current] = true
+		current = theme.get_type_variation_base(current)
+	return current
 
 
 func _theme_path(control: Control) -> String:

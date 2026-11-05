@@ -76,6 +76,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `theme_override_audit.py` | 场景直接 Theme 属性与动画轨道基线 |
 | `font_coverage_audit.py` | 静态场景文本与 Theme 字体链的 CJK 字形覆盖审计；缺字或字体文件不可读时失败 |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
+| `theme_variant_audit.py` | Phase 27-4 语义基类、冻结变体、Theme 属性/StyleBox 上限与独立变体重复签名门禁；冻结清单见 `theme_legacy_variants.json` |
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |

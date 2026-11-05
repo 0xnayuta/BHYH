@@ -70,18 +70,40 @@ def read_variants() -> dict[str, dict[str, str]]:
     return variants
 
 
-def signature(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
+def effective_variants(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
+    """解析语义基类链，返回每个变体的有效 Theme 项。
+
+    Theme 的 ``base_type`` 不在资源内保存继承结果；审计必须沿链读取，
+    否则基类收敛后的字号/颜色会逃逸检查。
+    """
+
+    memo: dict[str, dict[str, str]] = {}
+    visiting: set[str] = set()
+
+    def resolve(name: str) -> dict[str, str]:
+        if name in memo:
+            return memo[name]
+        if name in visiting:
+            return {}
+        visiting.add(name)
+        props = variants.get(name, {})
+        base = props.get("base_type", "").strip('&"')
+        effective = dict(resolve(base)) if base in variants else {}
+        effective.update({key: value for key, value in props.items() if key != "base_type"})
+        visiting.discard(name)
+        memo[name] = effective
+        return effective
+
     result: dict[str, dict[str, str]] = {}
     for name, props in variants.items():
-        entry = {
-            "base_type": props.get("base_type", ""),
-            "font_sizes/font_size": props.get("font_sizes/font_size", ""),
-            "constants/outline_size": props.get("constants/outline_size", ""),
-        }
-        for key in COLOR_KEYS:
-            entry[key] = props.get(key, "")
+        entry = {"base_type": props.get("base_type", "")}
+        entry.update(resolve(name))
         result[name] = entry
     return result
+
+
+def signature(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
+    return effective_variants(variants)
 
 
 def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]]) -> list[str]:
@@ -101,6 +123,8 @@ def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]
             if value is not None and int(value) not in OUTLINE_SIZES:
                 errors.append(f"新增变体 {name} 描边不在 token: {value}")
             base = props.get("base_type", "").strip('&"')
+            if base.startswith("Semantic") or name.startswith("Semantic"):
+                continue
             if base == "Button" or (base in current and current[base].get("base_type") == '&"Button"'):
                 if base != "Button" and base not in BUTTON_TOKEN_BASES:
                     errors.append(f"新增 Button 变体 {name} 未继承登记 token 基类: {base}")
