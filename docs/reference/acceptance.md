@@ -109,6 +109,7 @@ python scripts/check_all.py --no-cache -j 6
 | 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
 | PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
 | UI Theme 基线 | `theme_override_audit.py --check` | 直接属性或 Animation 轨道引用超过基线、新增带覆盖场景 |
+| 字体覆盖 | `font_coverage_audit.py --check` | 静态中文文本缺字、字体链未解析或字体文件不可读 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
 ### 4.1 `contract_scan.py` 二十一类契约
