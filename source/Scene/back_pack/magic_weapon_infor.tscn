@@ -137,17 +137,6 @@ theme_type_variation = "MagicWeaponStat"
 theme = ExtResource("theme")
 offset_left = 43.0
 offset_top = 84.0
-offset_right = 80.0
-offset_bottom = 105.0
-text = "0"
-vertical_alignment = 2
-metadata/_edit_lock_ = true
-
-[node name="m_MDef" type="Label" parent="BG/Content/bg_2" unique_id=1725095469]
-theme_type_variation = "MagicWeaponStat"
-theme = ExtResource("theme")
-offset_left = 81.0
-offset_top = 84.0
 offset_right = 123.0
 offset_bottom = 105.0
 text = "0"

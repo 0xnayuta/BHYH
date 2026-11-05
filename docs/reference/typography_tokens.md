@@ -289,9 +289,12 @@ python scripts/theme_token_audit.py --check
 - `theme_token_audit.py --check`：732 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
 - `convert_ui_theme_tokens.py --check`：39 文字 token、6 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
-- `check_all --godot-bin`：**9/9 PASS**（38.44s）；
+- `check_all --godot-bin`：**9/9 PASS**（26.69s）；
 - `scene_probe ui-theme`：PASS（7.58s）；
-- `scene_probe ui-factories`：PASS（32.58s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
+- `scene_probe ui-factories`：PASS（30.00s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值与整数等级断言）；
+- HUD 只读探针：PASS（7.70s）；
+- 1P/宠物/P2 HUD：三值条 12px 高、3px 间隔，按可见框体边界统一起点 26px；编辑器实机渲染核对；
+- 加载页：`LoadSceneProgress` 字号 24，填满进度条并上移 3px 居中；
 - `ui_text_punctuation_audit.py`：`--self-test` 9/9；全仓 report-only 扫描 0 残留；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
 - `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6；

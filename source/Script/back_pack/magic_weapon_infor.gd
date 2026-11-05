@@ -17,7 +17,6 @@ var RoleProp: BaseRoleProperties:
 @onready var m_mp: Label = $BG/Content/bg_2/m_Mp
 @onready var m_power: Label = $BG/Content/bg_2/m_Power
 @onready var m_def: Label = $BG/Content/bg_2/m_Def
-@onready var m_m_def: Label = $BG/Content/bg_2/m_MDef
 @onready var _name: Label = $BG/Content/Name_
 @onready var icon: Sprite2D = $BG/Content/Icon
 @onready var icon_player: AnimationPlayer = $BG/Content/IconPlayer
@@ -153,7 +152,6 @@ func _clear_weapon_view() -> void:
 	m_mp.text = ""
 	m_power.text = ""
 	m_def.text = ""
-	m_m_def.text = ""
 	magic_weapon_skill_title.text = ""
 	magic_weapon_skill.text = ""
 	pa_title.text = ""
@@ -174,8 +172,8 @@ func _physics_process(_delta: float) -> void:
 	m_hp.text = "%.1f" % get_fb_pro(nn_name, "SHp")
 	m_mp.text = "%.1f" % get_fb_pro(nn_name, "SMp")
 	m_power.text = "%.1f" % get_fb_pro(nn_name, "power")
+	# 法宝物防与魔防使用同一成长公式，当前全部法宝两者恒等；单框只显示一个“防御”值。
 	m_def.text = "%.1f" % get_fb_pro(nn_name, "Def")
-	m_m_def.text = "%.1f" % get_fb_pro(nn_name, "Mdef")
 
 
 func _refresh_weapon_visual_if_needed() -> void:

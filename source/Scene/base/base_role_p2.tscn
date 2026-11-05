@@ -22,6 +22,8 @@ metadata/_edit_use_anchors_ = true
 [node name="hp_bar" parent="role_hp_mp_exp" index="0" unique_id=2006201452]
 scale = Vector2(-1, 1)
 pivot_offset = Vector2(77, 0)
+offset_top = 26.0
+offset_bottom = 38.0
 
 [node name="TextureRect" parent="role_hp_mp_exp" index="1" unique_id=2097966662]
 scale = Vector2(-1, 1)
@@ -30,10 +32,14 @@ pivot_offset = Vector2(20, 0)
 [node name="mp_bar" parent="role_hp_mp_exp" index="2" unique_id=791557866]
 scale = Vector2(-1, 1)
 pivot_offset = Vector2(77, 0)
+offset_top = 41.0
+offset_bottom = 53.0
 
 [node name="exp_bar" parent="role_hp_mp_exp" index="3" unique_id=1590370377]
 scale = Vector2(-1, 1)
 pivot_offset = Vector2(76, 0)
+offset_top = 56.0
+offset_bottom = 68.0
 
 [node name="Buff_box" parent="role_hp_mp_exp" index="4" unique_id=600409278]
 offset_left = 280.0
@@ -41,9 +47,29 @@ offset_right = 460.0
 scale = Vector2(-1, 1)
 alignment = 2
 
-[node name="h_m_e_t" parent="role_hp_mp_exp" index="5" unique_id=1503598018]
+[node name="hp_tag" parent="role_hp_mp_exp" index="5" unique_id=1503598018]
 scale = Vector2(-1, 1)
-pivot_offset = Vector2(8, 0)
+pivot_offset = Vector2(7, 0)
+offset_left = 238.0
+offset_top = 28.0
+offset_right = 252.0
+offset_bottom = 36.0
+
+[node name="mp_tag" parent="role_hp_mp_exp" index="6" unique_id=1503598019]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(7, 0)
+offset_left = 238.0
+offset_top = 43.0
+offset_right = 252.0
+offset_bottom = 51.0
+
+[node name="exp_tag" parent="role_hp_mp_exp" index="7" unique_id=1503598020]
+scale = Vector2(-1, 1)
+pivot_offset = Vector2(8.5, 0)
+offset_left = 235.0
+offset_top = 58.0
+offset_right = 252.0
+offset_bottom = 66.0
 
 [node name="role_menu" parent="." index="1" unique_id=384976899]
 anchors_preset = 3

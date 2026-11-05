@@ -28,10 +28,10 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 非名称文本标点复跑 **38.44s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 UI 四项修复复跑 **26.69s**） |
 | 字体覆盖 | **135 场景 / 790 中文节点 / 0 缺字；Theme 字体 5 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.58s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，32.58s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，30.00s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
 | Theme token | **732 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **39 文字 token / 6 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
 | Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6**（`theme_variant_audit.py --check`） |
@@ -39,7 +39,7 @@
 | 动态 Theme 覆盖 | **352 调用 / 静态 0 / token 173 / data 43 / layout 96 / dynamic_style 40**（`ui_dynamic_theme_audit.py --check`，覆盖 `Script` 与 `Scene`） |
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
-| HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`） |
+| HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **784 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
@@ -55,6 +55,7 @@
 
 ### 最近完成
 
+- 2026-11-06 UI 四项修复：加载页百分比字号由 32 收至 24，改为填满进度条并上移 3px 居中；HUD 三值条统一为 12px 高、3px 间隔，按可见框体边界统一起点 26px（1P/宠物/P2），修正玩家上下留白；HP/MP/EXP 从单张 748 图切为三个 `AtlasTexture`，统一贴条左端并与数值垂直居中，`base_role_p2` 宠物翻转清单同步标签节点；法宝面板删除重复的 `m_MDef`（33 个法宝 `Def`/`Mdef` 全部相等，原为单“防御”框内两个重复值，未改法宝数值或战斗逻辑）；实战法宝等级改用 `%d` 取整，修复 `Lv: 1.0`。`ui-factories` 新增 `backpack_magp_single_defense`、`backpack_magp_def_value`、`backpack_skill_select_level_integer` 断言并通过；`LocalCoopHudReadOnlyProbe` 通过。`check_all` **9/9（26.69s）**，`ui-factories` **PASS（30.00s）**，`coop HUD 只读` **PASS（7.70s）**，`theme_token_audit` / `theme_variant_audit` 0 违规；编辑器实机渲染核对 1P/宠物/P2 HUD 与加载页；未重跑全量关卡回归。
 - 2026-11-06 非名称文本标点 A1/A2：修订 19 处计划内玩家可见文本，并补齐 `magic_help` 同文件 3 处句末句号，包括 `load_scene` 3 条加载省略号、`magic_help` 4 处句末句号、幻化取消冒号、合成提示 `× 1！`，以及背包属性 5 组百分比、Boss 血量百分比、装备强化/属性后缀、商店物品后缀、2 处倒计时括号。帮助/公告的 `1.` 编号保持原样，开发日志与数学公式不改。新增 report-only `scripts/ui_text_punctuation_audit.py`，自测 9 个样本、全仓扫描 0 残留；默认退出码 0，`--fail-on-findings` 可显式阻断。复跑 `check_all` **9/9（38.44s）**、`ui-theme` **7.58s**、`ui-factories` **32.58s**、`health_check` 0 Parse / 0 Error / 0 Warning；背包实测 `0（0.00%）`。
 - 2026-11-06 源码内部名称迁移：将 `通天教主(混沌版)`、`通天教主(穷奇版)`、`牛魔王·魂 (Lv.%d)`、`遮迦越罗 (Lv.%d)` 共 11 处源码内部名称迁移为中文括号，覆盖 `level_info`、`lhhj`、`monster_head_info`、`level_62`、`minghai_boss3117`、`game4_east_late_level`、`east_continent_monster` 与 `monster_zhw` 族；未保留旧名别名，映射键与显示值同步。同步清理 `sqzlw` 与 `monster_zhw` 日志中的 `(神器)`、`(示例)` 括号。`source/Art/level/game_4_level/north_original/monsters.json` 的 `小蜘蛛(五)`、`通天教主(饕鬣版)` 此前已改为中文括号，`export_raw_dependencies.json` 同步为 108,228 字节。复跑 `check_all` **9/9（37.99s）**、`ui-theme` **8.35s**、`ui-factories` **32.44s**、`level_62` **11.63s**、`level_75` **11.88s**，关卡日志均 0 SCRIPT ERROR / 0 ERROR / 0 WARNING。
 - 2026-11-06 界面标点补充：扫描 `source/**/*.gd` 与 `source/**/*.tscn` 的用户可见文本，统一 `zhu_xian` 场景/脚本、`level_info`、`one_key_synthesis`、`zhenyanbutton`、`load_scene`、`game_information`、`shop`、`transmogrified`、`liji`、`lhhj_help`、`buff_information`、`pet_interface`、`dj_sell`、`pl_sell`、`zd_skill`、`return_back_map`、`mount_panel`、`game_over`、`game_announcement`、`skill_key_set` 等 33 个文件的中英文标点混用；英文冒号统一为全角冒号，去除多余空格，英文括号/引号/逗号/波浪号统一为中文形式；`Tips：` 按用户确认保留英文前缀。复跑 `check_all` **9/9（37.00s）**、`ui-theme` **6.62s**、`ui-factories` **29.76s**、`health_check` 0 Parse / 0 Error / 0 Warning；全量关卡回归沿用 **339.9s PASS 128/128 + 5 SKIP**。

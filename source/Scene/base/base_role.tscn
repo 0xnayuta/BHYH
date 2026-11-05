@@ -50,6 +50,18 @@
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_hp"]
+atlas = ExtResource("10")
+region = Rect2(0, 0, 14, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_mp"]
+atlas = ExtResource("10")
+region = Rect2(0, 19, 14, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_exp"]
+atlas = ExtResource("10")
+region = Rect2(0, 38, 17, 8)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_462f4"]
 atlas = ExtResource("11")
 region = Rect2(0, 0, 16, 16)
@@ -116,9 +128,9 @@ texture = ExtResource("2")
 [node name="hp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=2006201452]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 22.0
+offset_top = 26.0
 offset_right = 255.0
-offset_bottom = 34.0
+offset_bottom = 38.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -128,10 +140,10 @@ texture_progress = ExtResource("3")
 theme_type_variation = "RoleHpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_left = 4.0
-offset_top = -2.0
-offset_right = 149.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -178,9 +190,9 @@ vertical_alignment = 1
 [node name="mp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=791557866]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 37.0
+offset_top = 41.0
 offset_right = 255.0
-offset_bottom = 50.0
+offset_bottom = 53.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -190,9 +202,10 @@ texture_progress = ExtResource("8")
 theme_type_variation = "RoleMpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_top = -2.0
-offset_right = 143.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -212,9 +225,9 @@ metadata/_edit_lock_ = true
 [node name="exp_bar" type="TextureProgressBar" parent="role_hp_mp_exp" unique_id=1590370377]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 55.0
+offset_top = 56.0
 offset_right = 255.0
-offset_bottom = 70.0
+offset_bottom = 68.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -224,10 +237,10 @@ texture_progress = ExtResource("9")
 theme_type_variation = "RoleExpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_left = 2.0
-offset_top = -2.0
-offset_right = 148.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -239,14 +252,32 @@ offset_top = 75.0
 offset_right = 135.0
 offset_bottom = 110.0
 
-[node name="h_m_e_t" type="TextureRect" parent="role_hp_mp_exp" unique_id=1503598018]
+[node name="hp_tag" type="TextureRect" parent="role_hp_mp_exp" unique_id=1503598018]
 texture_filter = 1
 layout_mode = 0
-offset_left = 90.0
-offset_top = 20.0
-offset_right = 107.0
+offset_left = 102.0
+offset_top = 28.0
+offset_right = 116.0
+offset_bottom = 36.0
+texture = SubResource("AtlasTexture_hud_hp")
+
+[node name="mp_tag" type="TextureRect" parent="role_hp_mp_exp" unique_id=1503598019]
+texture_filter = 1
+layout_mode = 0
+offset_left = 102.0
+offset_top = 43.0
+offset_right = 116.0
+offset_bottom = 51.0
+texture = SubResource("AtlasTexture_hud_mp")
+
+[node name="exp_tag" type="TextureRect" parent="role_hp_mp_exp" unique_id=1503598020]
+texture_filter = 1
+layout_mode = 0
+offset_left = 102.0
+offset_top = 58.0
+offset_right = 119.0
 offset_bottom = 66.0
-texture = ExtResource("10")
+texture = SubResource("AtlasTexture_hud_exp")
 
 [node name="PanelContainer" type="PanelContainer" parent="role_hp_mp_exp" unique_id=553725871]
 self_modulate = Color(1, 1, 1, 0)
@@ -507,9 +538,9 @@ texture = ExtResource("2")
 [node name="hp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=66657986]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 22.0
+offset_top = 26.0
 offset_right = 255.0
-offset_bottom = 34.0
+offset_bottom = 38.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -519,10 +550,10 @@ texture_progress = ExtResource("3")
 theme_type_variation = "RoleHpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_left = 4.0
-offset_top = -2.0
-offset_right = 149.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -569,9 +600,9 @@ vertical_alignment = 1
 [node name="mp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=1472685260]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 37.0
+offset_top = 41.0
 offset_right = 255.0
-offset_bottom = 50.0
+offset_bottom = 53.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -581,9 +612,10 @@ texture_progress = ExtResource("8")
 theme_type_variation = "RoleMpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_top = -2.0
-offset_right = 143.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -603,9 +635,9 @@ metadata/_edit_lock_ = true
 [node name="exp_bar" type="TextureProgressBar" parent="宠物_hp_mp_exp" unique_id=702601625]
 layout_mode = 0
 offset_left = 100.0
-offset_top = 55.0
+offset_top = 56.0
 offset_right = 255.0
-offset_bottom = 70.0
+offset_bottom = 68.0
 max_value = 1.0
 step = 0.0
 nine_patch_stretch = true
@@ -615,10 +647,10 @@ texture_progress = ExtResource("9")
 theme_type_variation = "RoleExpText"
 theme = ExtResource("theme")
 layout_mode = 0
-offset_left = 2.0
-offset_top = -2.0
-offset_right = 148.0
-offset_bottom = 17.0
+offset_left = 0.0
+offset_top = -3.5
+offset_right = 155.0
+offset_bottom = 15.5
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
@@ -630,14 +662,32 @@ offset_top = 75.0
 offset_right = 135.0
 offset_bottom = 110.0
 
-[node name="h_m_e_t" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=1045931910]
+[node name="hp_tag" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=1045931910]
 texture_filter = 1
 layout_mode = 0
-offset_left = 90.0
-offset_top = 20.0
-offset_right = 107.0
+offset_left = 102.0
+offset_top = 28.0
+offset_right = 116.0
+offset_bottom = 36.0
+texture = SubResource("AtlasTexture_hud_hp")
+
+[node name="mp_tag" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=1045931911]
+texture_filter = 1
+layout_mode = 0
+offset_left = 102.0
+offset_top = 43.0
+offset_right = 116.0
+offset_bottom = 51.0
+texture = SubResource("AtlasTexture_hud_mp")
+
+[node name="exp_tag" type="TextureRect" parent="宠物_hp_mp_exp" unique_id=1045931912]
+texture_filter = 1
+layout_mode = 0
+offset_left = 102.0
+offset_top = 58.0
+offset_right = 119.0
 offset_bottom = 66.0
-texture = ExtResource("10")
+texture = SubResource("AtlasTexture_hud_exp")
 
 [node name="PanelContainer" type="PanelContainer" parent="宠物_hp_mp_exp" unique_id=1933354463]
 self_modulate = Color(1, 1, 1, 0)

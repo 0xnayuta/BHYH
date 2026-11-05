@@ -402,6 +402,13 @@ func _check_backpack_family(checks: Dictionary) -> void:
 			checks["backpack_magp_skill_title"] = (
 				magic_skill_title != null and not magic_skill_title.text.is_empty()
 			)
+			var magic_def_label := magp.get_node_or_null("BG/Content/bg_2/m_Def") as Label
+			checks["backpack_magp_single_defense"] = (
+				magp.get_node_or_null("BG/Content/bg_2/m_MDef") == null
+			)
+			checks["backpack_magp_def_value"] = (
+				magic_def_label != null and not magic_def_label.text.is_empty()
+			)
 		created.append(magp)
 	var buff_text: Node = Global.add_buff_icon_text(host, "poision")
 	await _settle()
@@ -413,6 +420,20 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_skill_select_created"] = skill_select != null and str(skill_select.weapon_name) == "probe_weapon"
 	if skill_select != null:
 		created.append(skill_select)
+	if magic_id != "":
+		var real_skill_select: Node = Global.add_skill_select(host, Vector2(50, 90), magic_id)
+		await _settle()
+		var expected_level_text := "Lv: %d" % (1 + (1 if magic_id == "tjbg" else 0))
+		var real_level_label := (
+			real_skill_select.get_node_or_null("BG/SkillName/Level") as Label
+			if real_skill_select != null
+			else null
+		)
+		checks["backpack_skill_select_level_integer"] = (
+			real_level_label != null and real_level_label.text == expected_level_text
+		)
+		if real_skill_select != null:
+			created.append(real_skill_select)
 	var use_weapon: Node = Global.add_use_magic_weapon(host, Vector2(60, 60))
 	await _settle()
 	checks["backpack_use_weapon_created"] = use_weapon != null

@@ -1421,7 +1421,7 @@ LoadScenePanelMargin/constants/margin_right = 64
 LoadScenePanelMargin/constants/margin_bottom = 128
 
 LoadSceneProgress/base_type = &"SemanticAutoBattleHint"
-LoadSceneProgress/font_sizes/font_size = 32
+LoadSceneProgress/font_sizes/font_size = 24
 
 LoadSceneTips/base_type = &"SemanticAnnouncementHeading"
 LoadSceneTips/colors/font_color = Color(0, 0, 0, 1)

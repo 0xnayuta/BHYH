@@ -27,7 +27,9 @@ func _layout_pet_panel() -> void:
 	pet_panel.offset_right = 267.0
 	pet_panel.pivot_offset = Vector2.ZERO
 	pet_panel.scale.x = -absf(pet_panel.scale.x)
-	for path: String in ["hp_bar", "mp_bar", "exp_bar", "TextureRect", "h_m_e_t", "SkillBox", "Buff_box"]:
+	for path: String in [
+		"hp_bar", "mp_bar", "exp_bar", "TextureRect", "hp_tag", "mp_tag", "exp_tag", "SkillBox", "Buff_box"
+	]:
 		var control: Control = pet_panel.get_node(path)
 		control.pivot_offset = Vector2(control.size.x * 0.5, 0)
 		control.scale.x = -1.0
