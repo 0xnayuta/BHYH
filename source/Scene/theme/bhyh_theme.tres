@@ -2620,7 +2620,7 @@ MagicWeaponAttr/base_type = &"Label"
 MagicWeaponAttr/colors/font_color = Color(1, 1, 1, 1)
 MagicWeaponAttr/colors/font_outline_color = Color(1, 1, 1, 1)
 MagicWeaponAttr/constants/outline_size = 2
-MagicWeaponAttr/font_sizes/font_size = 13
+MagicWeaponAttr/font_sizes/font_size = 14
 
 MagicWeaponSkillTitle/base_type = &"Label"
 MagicWeaponSkillTitle/colors/font_color = Color(1, 1, 1, 1)
@@ -2628,7 +2628,7 @@ MagicWeaponSkillTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
 MagicWeaponSkillTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 MagicWeaponSkillTitle/constants/outline_size = 3
 MagicWeaponSkillTitle/constants/shadow_outline_size = 13
-MagicWeaponSkillTitle/font_sizes/font_size = 21
+MagicWeaponSkillTitle/font_sizes/font_size = 20
 
 MagicWeaponSkillBody/base_type = &"Label"
 MagicWeaponSkillBody/colors/font_color = Color(1, 1, 1, 1)
@@ -2643,14 +2643,14 @@ MagicWeaponPsTitle/base_type = &"Label"
 MagicWeaponPsTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 MagicWeaponPsTitle/constants/shadow_offset_x = 0
 MagicWeaponPsTitle/constants/shadow_offset_y = 0
-MagicWeaponPsTitle/constants/outline_size = 8
+MagicWeaponPsTitle/constants/outline_size = 6
 MagicWeaponPsTitle/fonts/font = ExtResource("font_hy")
 
 MagicWeaponPsSkill/base_type = &"Label"
 MagicWeaponPsSkill/colors/font_outline_color = Color(0, 0, 0, 1)
 MagicWeaponPsSkill/constants/shadow_offset_x = 0
 MagicWeaponPsSkill/constants/shadow_offset_y = 0
-MagicWeaponPsSkill/constants/outline_size = 4
+MagicWeaponPsSkill/constants/outline_size = 3
 MagicWeaponPsSkill/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MagicWeaponName/base_type = &"Label"
@@ -2662,19 +2662,19 @@ MagicWeaponName/fonts/font = ExtResource("font_hy")
 MagicWeaponAction/base_type = &"Label"
 MagicWeaponAction/colors/font_color = Color(0, 1, 1, 1)
 MagicWeaponAction/colors/font_outline_color = Color(0, 0, 0, 1)
-MagicWeaponAction/constants/outline_size = 9
+MagicWeaponAction/constants/outline_size = 10
 MagicWeaponAction/font_sizes/font_size = 20
 
 MagicWeaponActionSmall/base_type = &"Label"
 MagicWeaponActionSmall/colors/font_color = Color(0, 1, 1, 1)
 MagicWeaponActionSmall/colors/font_outline_color = Color(0, 0, 0, 1)
-MagicWeaponActionSmall/constants/outline_size = 8
+MagicWeaponActionSmall/constants/outline_size = 6
 MagicWeaponActionSmall/font_sizes/font_size = 14
 
 MagicWeaponActionAlt/base_type = &"Label"
 MagicWeaponActionAlt/colors/font_color = Color(0, 1, 1, 1)
 MagicWeaponActionAlt/colors/font_outline_color = Color(0, 0, 0, 1)
-MagicWeaponActionAlt/constants/outline_size = 8
+MagicWeaponActionAlt/constants/outline_size = 6
 MagicWeaponActionAlt/font_sizes/font_size = 20
 
 MagicWeaponSkillGroup/base_type = &"VBoxContainer"
@@ -2796,7 +2796,7 @@ DecomposeHelpTitle/constants/shadow_offset_y = 0
 DecomposeHelpTitle/constants/outline_size = 2
 DecomposeHelpTitle/constants/shadow_outline_size = 8
 DecomposeHelpTitle/fonts/font = ExtResource("font_hk")
-DecomposeHelpTitle/font_sizes/font_size = 25
+DecomposeHelpTitle/font_sizes/font_size = 24
 
 DecomposeHelpBody/base_type = &"Label"
 DecomposeHelpBody/colors/font_color = Color(1, 0.635294, 0, 1)
@@ -3381,16 +3381,16 @@ DsgChooseButton/styles/focus = SubResource("empty_button")
 
 MosaicHelpTitle/base_type = &"Label"
 MosaicHelpTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-MosaicHelpTitle/constants/outline_size = 5
+MosaicHelpTitle/constants/outline_size = 6
 MosaicHelpTitle/fonts/font = ExtResource("font_hy")
-MosaicHelpTitle/font_sizes/font_size = 30
+MosaicHelpTitle/font_sizes/font_size = 32
 
 MosaicHelpLine/base_type = &"Label"
 MosaicHelpLine/colors/font_shadow_color = Color(0, 0, 0, 1)
 MosaicHelpLine/constants/outline_size = 2
 MosaicHelpLine/constants/shadow_outline_size = 12
 MosaicHelpLine/fonts/font = ExtResource("font_hk")
-MosaicHelpLine/font_sizes/font_size = 17
+MosaicHelpLine/font_sizes/font_size = 18
 
 LevelInfoTitle/base_type = &"Label"
 LevelInfoTitle/colors/font_color = Color(0.952941, 1, 0, 1)
@@ -3970,7 +3970,7 @@ UseMagicRow/constants/separation = 10
 UseMagicPage/base_type = &"Label"
 UseMagicPage/colors/font_color = Color(1, 1, 0, 1)
 UseMagicPage/colors/font_outline_color = Color(0, 0, 0, 1)
-UseMagicPage/constants/outline_size = 7
+UseMagicPage/constants/outline_size = 6
 UseMagicPage/fonts/font = ExtResource("font_hy")
 
 ChooseSceneText/base_type = &"Label"
@@ -4303,7 +4303,7 @@ ListButtonRole/styles/focus = SubResource("empty_button")
 MagicWeaponCdText/base_type = &"Label"
 MagicWeaponCdText/colors/font_color = Color(1, 1, 1, 1)
 MagicWeaponCdText/colors/font_outline_color = Color(0, 0, 0, 1)
-MagicWeaponCdText/constants/outline_size = 8
+MagicWeaponCdText/constants/outline_size = 6
 MagicWeaponCdText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MagicWeaponCdText/font_sizes/font_size = 16
 
