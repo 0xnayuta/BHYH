@@ -28,9 +28,10 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2 试点复跑 **34.80s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-2 复跑 **37.38s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，4.92s） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，4.88s） |
+| Theme token | **618 变体 / 0 违规**（`theme_token_audit.py --check`） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
@@ -46,7 +47,7 @@
 
 ### 最近完成
 
-- 2026-11-05 P2 token 试点：`game_set` 与 `back_pack` 的字号、描边、金色文字与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛；618 个变体名未改。`SettingsTitle` 35→36、分组/按钮 25→24、返回 30→32、属性行 15→16；`BackpackWingsButton` 继承 `BackpackHeadButton` 的 Icon 族空 StyleBox。控件转储位置移动 **0**；`game_set` 3 个控件随字号变化，`back_pack` 5 个属性行高度 +2 px，截图未见裁切。`check_all --godot-bin` **9/9**（34.80s），`font_coverage_audit` 0 缺字，`scene_probe ui-theme` PASS（4.92s），`level_1` 4 阶段冒烟 0/0/0。
+- 2026-11-05 P2 token 试点（P2-2）：`game_set`、`back_pack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号、描边、文字颜色与 Button 共享基类；618 个变体名未改。`MenuActionButton`/`EmptyButton`/`SettingsButton`/`LlbtCgmsButton` 等重复 Text/Icon 变体改为继承合并，视觉不变。控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化，`zd_skill` ScrollContainer 内 27 个位置随行高变化，`pet` 0 位置/尺寸变化；截图未见裁切。`check_all --godot-bin` **9/9**（37.38s），`theme_token_audit` **618/0 违规**，`font_coverage_audit` 0 缺字，`scene_probe ui-theme` PASS（4.88s），`level_1` 4 阶段冒烟 0/0/0。
 - 2026-11-05 P1 字体资源清理：旧 FZCuYuan 完整版与 3 个 M03S 子集（共 4 个字体文件及 4 个 `.import`）已确认全仓零引用，复制到本地回滚归档后从 `source/Font/` 移除；公开仓库仍不包含字体资产。清理后 `font_coverage_audit` **135 场景 / 790 节点 / 0 缺字**，`check_all --godot-bin` **9/9 PASS**。
 - 2026-11-05 P0 字体覆盖修正：FZCuYuan 的 4 个字体资源（旧完整版 + 3 个 M03S 子集）收敛为 `Scene/theme/fz_cu_yuan_m03.tres`（FontVariation）；主字体为 FZCuYuan-M03，显式 fallback 为 Microsoft YaHei Semibold；Theme `default_font` 指向新字体，覆盖无显式字体的中文节点；`hit_text`、联机面板、模式选择与宠物界面同步更新。静态覆盖 **135 场景 / 790 中文文本节点 / 0 缺字**；4 个代表场景 × 1280×800/1600×1000 截图与控件转储无横向位移，字体度量导致的 Label 高度 +1~+3 px、居中标签纵向 <1 px，未见裁切。`check_all --godot-bin` **9/9**（38.66s），`theme_override_audit --check`、`font_coverage_audit --check`、`scene_probe ui-theme` 与 `level_1` 4 阶段冒烟均通过（日志 0/0/0）。字体文件与 `.import` 未入公开仓库；授权边界见 `THIRD_PARTY_NOTICES.md` 与 `ui_theme_contract.md` §7。
 - 2026-11-04 回植收口与原始数据导出契约：`Level_65`/`Level_68` BOSS 出生点删除 `ignore_count_multiplier`，对齐 6.6；新增 `boss-multiplier` 探针覆盖普通点与 BOSS 的 `×1`/`×5` 复制。新增 `scripts/export_raw_roots.json`、`export_raw_manifest.py`、`export_raw_dependencies.json`、`bhyh_export` EditorExportPlugin、`export_closure_probe.py` 与 `export_release.py`；移除 `include_filter="*.bin"`，清单校验 **844/844** 原始数据路径（173 `.bin` + 671 JSON），实际 release PCK **5,044/5,044**（844 原始数据 + 4,200 FrameSequence），`BHYH.pck` **7,658,516,894** 字节，sha256 `8e73922e99da…`；冷启动 `load_scene.tscn` 游戏与 stdout 均 0 ERROR/0 WARNING。新增 `yutu-drop` 探针覆盖 `expand_drop_entries` 幂等、源表不变、映射双 ID 与 4 条玉兔制作书预览。验证：`check_all --godot-bin` **9/9**（31.39s）、`archive` **344/344**（12.17s）、`scene` **19/19**（167.76s）、`coop` **37/37**（208.26s）、全量 **128/128 + 5 SKIP**（298.7s，无重试）、`level_65`/`level_68` 冒烟 0/0/0；文档链接 754/0 缺失。

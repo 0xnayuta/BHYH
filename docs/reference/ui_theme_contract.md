@@ -81,7 +81,8 @@ python scripts/font_coverage_audit.py --check
 
 ## 8. P2 排版 token 试点（2026-11-05）
 
-- 仅覆盖 `game_set` 与 `back_pack` 使用的变体；字号、描边、金色文字与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
-- 不重命名 618 个冻结变体；`BackpackWingsButton` 仅改为继承 `BackpackHeadButton` 的 Icon 族空 StyleBox。
-- 控件转储：位置移动 0；`game_set` 3 个控件尺寸随字号变化；`back_pack` 5 个属性行高度 +2 px；截图未见裁切。
+- 覆盖 `game_set`、`back_pack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
+- 不重命名 618 个冻结变体；重复 Text/Icon 按钮改为继承 `MenuActionButton`、`EmptyButton`、`SettingsButton`、`SettingsButtonTiny`、`LlbtCgmsButton` 等共享基类，视觉不变。
+- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；`pet` 0；截图未见裁切。
+- `theme_token_audit.py --check` 冻结 618 个既有变体，新增/改写值必须使用 token；当前 **0 违规**。
 - 其余面板继续保持既有 Theme 值，后续按 token 表分批迁移。
