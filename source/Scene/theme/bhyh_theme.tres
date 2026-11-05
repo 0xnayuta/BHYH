@@ -688,7 +688,7 @@ SettingsPlainLabel/font_sizes/font_size = 16
 SettingsPlainLabel/constants/outline_size = 1
 
 EquipmentStatLabel/base_type = &"Label"
-EquipmentStatLabel/colors/font_color = Color(1, 0.6, 0.2, 1)
+EquipmentStatLabel/colors/font_color = Color(1, 0.584314, 0, 1)
 EquipmentStatLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 EquipmentStatLabel/font_sizes/font_size = 16
 
@@ -2799,9 +2799,9 @@ DecomposeHelpTitle/fonts/font = ExtResource("font_hk")
 DecomposeHelpTitle/font_sizes/font_size = 24
 
 DecomposeHelpBody/base_type = &"Label"
-DecomposeHelpBody/colors/font_color = Color(1, 0.635294, 0, 1)
+DecomposeHelpBody/colors/font_color = Color(1, 0.584314, 0, 1)
 DecomposeHelpBody/colors/font_shadow_color = Color(0, 0, 0, 1)
-DecomposeHelpBody/colors/font_outline_color = Color(1, 0.635294, 0, 1)
+DecomposeHelpBody/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 DecomposeHelpBody/constants/shadow_offset_x = 0
 DecomposeHelpBody/constants/shadow_offset_y = 0
 DecomposeHelpBody/constants/outline_size = 1
@@ -3051,7 +3051,7 @@ ForgeTitle/fonts/font = ExtResource("font_return")
 ForgeTitle/font_sizes/font_size = 32
 
 ForgeSubtitle/base_type = &"Label"
-ForgeSubtitle/colors/font_color = Color(0, 0.976471, 0, 1)
+ForgeSubtitle/colors/font_color = Color(0, 1, 0, 1)
 ForgeSubtitle/colors/font_outline_color = Color(0, 0, 0, 1)
 ForgeSubtitle/constants/outline_size = 6
 ForgeSubtitle/fonts/font = ExtResource("font_return")
@@ -3745,8 +3745,8 @@ EquipmentDescription/fonts/font = ExtResource("font_hk")
 EquipmentDescription/font_sizes/font_size = 14
 
 EquipmentSale/base_type = &"Label"
-EquipmentSale/colors/font_color = Color(1, 0.6, 0.2, 1)
-EquipmentSale/colors/font_outline_color = Color(1, 0.6, 0.2, 1)
+EquipmentSale/colors/font_color = Color(1, 0.584314, 0, 1)
+EquipmentSale/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 EquipmentSale/constants/outline_size = 1
 EquipmentSale/fonts/font = ExtResource("font_hk")
 EquipmentSale/font_sizes/font_size = 18
