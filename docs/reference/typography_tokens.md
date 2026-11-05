@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-2 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`；其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-3 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -15,11 +15,12 @@
 | `body_small` | 18 | 次级正文 |
 | `body` | 20 | 默认正文 |
 | `heading` | 24 | 面板分组标题 |
+| `subtitle` | 28 | 公告标题/版本列表 |
 | `title` | 32 | 面板主标题/返回 |
 | `display` | 36 | 特殊主标题 |
 | `combat` | 40 / 50 / 76 / 100 | 战斗、伤害与数字保留值 |
 
-试点使用 `12/14/16/18/20/24/32/36`；战斗特殊值不在本批收敛范围内。
+试点使用 `12/14/16/18/20/24/28/32/36`；战斗特殊值不在本批收敛范围内。
 
 ### 文字颜色
 
@@ -77,6 +78,11 @@
 | `skill/zd_skill` | Cooldown/Label 25→24；Shadow 15→16；需求文字使用 `text_combat`；行高变化由 ScrollContainer 吸收 |
 | `pet/pet_interface` | 13→14、15→16、11→12；金色/信息/弱文字分别映射到 `gold_light`、`info`、`muted`/`secondary` |
 | `read_archive_interface` | 17→18、19→20、22→24、25→24、13→14、11→12；金色/弱文字映射到 `gold_deep`、`gold`、`secondary`、`muted` |
+| `game_announcement` | Heading 35→36；Subtitle 27→28；Warning/Prompt 17→18；CheckButton 22→20；CheckButtonSmall 21→20；SecretButtonTiny 19→20；Button/Title 保持 28 |
+| `main_backpack` | Title 25→24；TabLabelSmall 15→16；LockText 11→12；BoxLockMark 13/4→14/3；TabBar/Large/Page/Coin 保持既有 token |
+| `ldl` | Title 19→20；六个 `MenuActionButton` 派生按钮 25→24；内嵌 `main_backpack` 同步 |
+| `shop` | Search/TabText 15→16；StatTitle/Hint 25→24；StatTitle outline 8→6；RoleText outline 9→10；Close 25→24；ItemSoulValue 17→18；ItemSoulText outline 7→6 |
+| `mystery_shop` | MysteryShopLabel 13→14；Info 16；Title 12；BoxLockMark 共享 14/3 |
 
 ## 4. 对照结果
 
@@ -88,6 +94,11 @@
 | `skill/zd_skill` | 27（ScrollContainer 内） | 2 | 行高增加，滚动容器高度 +33 px；内容仍可滚动，无裁切 |
 | `pet/pet_interface` | 0 | 0 | 仅字体颜色/字号变化 |
 | `read_archive_interface` | 0 | 4 | 按钮/标题宽度随字号变化，无裁切 |
+| `game_announcement` | 13（标题/隐藏面板，最大 7 px） | 17 | 版本列表保持 28；滚动内容与隐藏功能页不新增越界 |
+| `back_pack` | 89（纵向 ≤0.98 px） | 1 | 标题 25→24 引起整行上移；无可见越界 |
+| `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
+| `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
+| `mystery_shop` | 0 | 0 | 仅文字字号/描边变化 |
 
 截图与控件转储：
 
@@ -96,6 +107,10 @@ G:/tmp/p2_pilot_before/
 G:/tmp/p2_pilot_after/
 G:/tmp/p2b_before/
 G:/tmp/p2b_after/
+G:/tmp/p2c_before/
+G:/tmp/p2c_after/
+G:/tmp/p2c_before_1600/
+G:/tmp/p2c_after_1600/
 ```
 
 ## 5. 审计
@@ -112,8 +127,8 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（37.38s）；
-- `scene_probe ui-theme`：PASS（4.88s）；
+- `check_all --godot-bin`：**9/9 PASS**（36.82s）；
+- `scene_probe ui-theme`：PASS（5.41s）；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
