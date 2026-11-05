@@ -15,8 +15,8 @@
 | 场景 Theme 引用 | 1,117 | `theme_override_audit` 统计 |
 | `theme_type_variation` 节点引用 | 1,420 | 617 个不同变体被场景直接引用 |
 | 动态 `add_theme_*` | 352 处 / 41 文件（27-7 后） | 静态字面角色 0；分类见 `ui_dynamic_theme_audit.py` |
-| 字体文件（顶层） | 5 个 / 44,983,417 字节（约 44.98 MB） | 27-7 已删除 8 个无运行时引用字体；不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
-| Theme 引用字体资产 | 4 个 FontVariation 资源 / 5 个文件 | `body` + fallback、`ui`、`display`、`accent`；各角色均有显式回退链 |
+| 字体文件（顶层） | 5 个 / 76,064,116 字节（约 76.06 MB） | P2 替换后：FZCuYuan、msyh、思源宋体 Medium/SemiBold、霞鹜文楷；不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
+| Theme 引用字体资产 | 4 个 FontVariation 资源 / 5 个文件 | `body` + msyh fallback、`ui`、`display`、`accent`；各角色均有显式回退链 |
 
 ## 2. 变体结构
 
@@ -115,18 +115,20 @@
 
 ## 4. 字体资产
 
-### 4.1 Theme 字体角色（27-5 后）
+### 4.1 Theme 字体角色（P2 后）
 
 | 角色 | Theme 资源 | 文件 | 有效变体 |
 |:---|:---|:---|---:|
 | `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 359 |
-| `ui` | `font_hk.tres` FontVariation | 华康宋体 W3 → body fallback | 157 |
-| `display` | `font_return.tres` FontVariation | 华康海报 W12 → body fallback | 70 |
-| `accent` | `font_main.tres` FontVariation | 文征明小楷 → `font_hk` fallback | 145 |
+| `ui` | `font_hk.tres` FontVariation | 思源宋体 Medium → body fallback | 157 |
+| `display` | `font_return.tres` FontVariation | 思源宋体 SemiBold → body fallback | 70 |
+| `accent` | `font_main.tres` FontVariation | 霞鹜文楷 Medium → `font_hk` fallback | 145 |
 
-Theme 字体资产由 **10 个文件 / 68.2 MB** 收敛为 **5 个文件 / 约 44.98 MB**。`font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到 `font_main`；`font_194_song_ti`（2）映射到 `font_hk`。脚本直接字体路径中的 `font_meng` 已改为 `font_main`。
+P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 替换后为 **5 个文件 / 约 76.06 MB**（思源宋体 Medium/SemiBold 与霞鹜文楷体积较大，后续单独子集化）。`font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到 `font_main`；`font_194_song_ti`（2）映射到 `font_hk`。脚本直接字体路径中的 `font_meng` 已改为 `font_main`。
 
 **27-7 P1 结果**：为 `font_main`/`font_hk`/`font_return` 建立 FontVariation 回退链；`SynHelpBody`（12 px 长文本）由小楷改为宋体，HUD 名称/计时、角色自然属性、幻化操作等小楷功能文本改为 body；`CureTimesHint` 由海报体改为 body。字体角色边界调整未改变场景层级。
+
+**27-7 P2 结果**：`ui` 改用 Source Han Serif CN Medium，`display` 改用 Source Han Serif CN SemiBold，`accent` 改用 LXGW WenKai Medium；`FZRunYYSJW` 仅用于 LOGO/活动，不进入 Theme。华康宋体、华康海报、文征明小楷已退役；Microsoft YaHei 保留为 body fallback。字体文件 5 / 76.06 MB，Theme 属性 1,744。
 
 ### 4.2 未引用字体资产与边界
 
@@ -178,7 +180,7 @@ Theme 已无未引用字体资源；4 个 FontVariation 角色均被 `body`/`ui`
 1. **未受管值仍手写**：受管输入/默认字体与 token 类已由 27-1 生成；618 变体的其余字号/颜色/StyleBox 仍直接写在 Theme 中，需继续扩大 token 覆盖并保留 `--check` 守卫。
 2. **样式/颜色存量**：27-2/27-3 后字号与字体色均已强制在 token 内；27-4 后 StyleBox 36 个，27-5 后独立重复组 5，27-7 后静态字面动态覆盖 0。
 3. **动态覆盖绕过 Theme**：352 处 `add_theme_*`（含 Scene 53 处）已分类；字面静态角色 0，剩余 token/data/layout/dynamic_style 均有基线。
-4. **字体资源成本**：27-5 后 Theme 仅加载 5 个文件 / 约 44.98 MB；低频族已并入 4 个角色，fallback 固定在 body 链。
+4. **字体资源成本**：P2 后 Theme 加载 5 个文件 / 约 76.06 MB；思源宋体与霞鹜文楷体积较大，子集化必须单独立项并保留 OFL 保留字体名合规检查。
 5. **静态覆盖不等于真实动态数据**：27-5 已加入 5 个动态样本；27-7 已覆盖公告、菜单、面板、输入与 HUD 代表场景的动态字体与几何检查，仍需在内容新增时复用样本机制。
 6. **资产授权**：字体为私有素材，公开仓库不包含；任何删除、子集化或再分发都必须先完成授权与回滚证据。
 
@@ -240,8 +242,8 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 | off-token 字体色赋值 | 0（27-3 结果） | 0 |
 | 独立重复签名组 | 5（27-5 结果） | ≤10 |
 | StyleBox 子资源 | 36（27-4 结果） | ≤36 |
-| Theme 属性总数 | 1,744（27-7 P1 结果） | ≤2,000 |
-| Theme 字体资产 | 5 个文件（27-5 结果） | ≤6；Theme 未引用资源为 0 |
+| Theme 属性总数 | 1,744（27-7 P2 结果） | ≤2,000 |
+| Theme 字体资产 | 5 个文件（P2 结果） | ≤6；Theme 未引用资源为 0 |
 | 静态主题覆盖 | 0 | 0 |
 | 动态覆盖 | 352 处 / 41 文件（27-7 结果） | 字面静态角色 0；token/data/layout/dynamic_style 已登记 |
 | 字体覆盖 | 135 场景 / 790 节点 / 0 缺字 | 保持 0；动态文本增加样本 |
