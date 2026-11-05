@@ -335,10 +335,42 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_pl_sell_created"] = pl_sell != null
 	if pl_sell != null:
 		created.append(pl_sell)
+	var profile := LocalCoop.data_for(host) as PlayerDataStore
+	checks["backpack_magic_profile_available"] = profile != null
+	var magic_backup: Variant = []
+	var magic_id := _first_magic_weapon_id()
+	if profile != null:
+		magic_backup = profile.player_data.get(DataKeys.MAGIC_WEAPON, [])
+		if magic_backup is Array:
+			magic_backup = magic_backup.duplicate(true)
+		if magic_id != "":
+			var magic_data := EquipmentService.data_or_empty(magic_id)
+			profile.player_data[DataKeys.MAGIC_WEAPON] = [
+				{
+					DataKeys.NAME: magic_id,
+					DataKeys.ENHANCE_LEVEL: 1,
+					DataKeys.FIVE_ELEMENTS: [],
+					"Data": magic_data,
+				}
+			]
+	checks["backpack_magic_id_available"] = magic_id != ""
 	var magp: Node = Global.add_magp_infor(host, Vector2(40, 40))
 	await _settle()
 	checks["backpack_magp_created"] = magp != null
 	if magp != null:
+		magp.call("_physics_process", 0.0)
+		if magic_id != "":
+			var magic_name_label := magp.get_node_or_null("BG/Content/Name_") as Label
+			var magic_skill_title := (
+				magp.get_node_or_null("BG/Content/MagicWeaponSkillTitle") as Label
+			)
+			checks["backpack_magp_data_name"] = (
+				magic_name_label != null
+				and magic_name_label.text == str(EquipmentService.data(magic_id)[DataKeys.NAME])
+			)
+			checks["backpack_magp_skill_title"] = (
+				magic_skill_title != null and not magic_skill_title.text.is_empty()
+			)
 		created.append(magp)
 	var buff_text: Node = Global.add_buff_icon_text(host, "poision")
 	await _settle()
@@ -354,6 +386,14 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	await _settle()
 	checks["backpack_use_weapon_created"] = use_weapon != null
 	if use_weapon != null:
+		use_weapon.call("_physics_process", 0.0)
+		var page_label := use_weapon.get_node_or_null("BG/HBoxContainer/PageInfor") as Label
+		checks["backpack_use_weapon_pages"] = int(use_weapon.max_page) > 0
+		checks["backpack_use_weapon_page_text"] = (
+			page_label != null
+			and page_label.text == "1/" + str(use_weapon.max_page)
+		)
+		checks["backpack_use_weapon_entries"] = (use_weapon.infor_list as Array).size() == 3
 		created.append(use_weapon)
 	var equipment_id := _first_described_equipment_id()
 	checks["backpack_equipment_id_available"] = equipment_id != ""
@@ -451,6 +491,8 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	for _frame in range(7):
 		backpack_factory.tick_box_click_cooldown()
 	checks["backpack_box_cooldown_expired"] = not backpack_factory.is_box_click_blocked()
+	if profile != null:
+		profile.player_data[DataKeys.MAGIC_WEAPON] = magic_backup
 	_cleanup(created, host)
 	Global.buff_box = null
 
@@ -1387,6 +1429,18 @@ func _first_described_equipment_id(type_name: String = "") -> String:
 		elif item_type not in ["武器", "防具", "饰品", "神骨", "头衔", "时装", "翅膀"]:
 			continue
 		if not str(data.get("描述", "")).is_empty():
+			return item_id
+	return ""
+
+
+func _first_magic_weapon_id() -> String:
+	# 太极八卦有完整技能文案，优先作为真实法宝上下文夹具。
+	if EquipmentService.has("tjbg"):
+		return "tjbg"
+	for key in EquipmentService.ids():
+		var item_id := str(key)
+		var data := EquipmentService.data_or_empty(item_id)
+		if str(data.get(DataKeys.TYPE, "")) == "法宝":
 			return item_id
 	return ""
 
