@@ -112,6 +112,7 @@ python scripts/check_all.py --no-cache -j 6
 | 字体覆盖/资产 | `font_coverage_audit.py --check` | 静态中文缺字、动态样本缺字、Theme 字体文件 >6、Theme 字体资源未引用或字体文件不可读 |
 | Theme token | `theme_token_audit.py --check` | 新增/改写字号、描边、字体颜色或 Button 基类偏离 token 契约 |
 | Theme 变体层级 | `theme_variant_audit.py --check` | 618 冻结变体缺失、语义基类成环、Theme 属性 >2,000、StyleBox >36 或独立重复签名组 >10 |
+| 动态 Theme 覆盖 | `ui_dynamic_theme_audit.py --check` | 脚本静态角色覆盖 >0、调用总数增长或新增未登记文件 |
 | UI Theme token 源 | `convert_ui_theme_tokens.py --check` | `ui_theme_tokens.json` 与 `UiColorTokens`/`UiSurfaceTokens`/Theme 受管属性不一致 |
 | UI 表面色 token | `ui_surface_token_audit.py --check` | 自绘 StyleBox 裸色或 `main_menu` 裸色超过冻结基线；`--self-test` 覆盖正负样本 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |

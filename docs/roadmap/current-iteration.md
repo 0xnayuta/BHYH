@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫、Phase 27-1 Token 单一来源与生成/校验、Phase 27-2 字号标尺收敛、Phase 27-3 字体色收敛与 StyleBox 精确重复合并、Phase 27-4 变体层级与共享样式合并、Phase 27-5 字体族与资产收敛已完成（2026-11-05）**；Phase 27-6~27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫、Phase 27-1 Token 单一来源与生成/校验、Phase 27-2 字号标尺收敛、Phase 27-3 字体色收敛与 StyleBox 精确重复合并、Phase 27-4 变体层级与共享样式合并、Phase 27-5 字体族与资产收敛、Phase 27-6 动态覆盖收敛已完成（2026-11-05）**；Phase 27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射或存档格式；Phase 27 的字体/色值变化必须逐批截图与控件几何验收，不静默改变显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~27 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -172,7 +172,7 @@
 
 ## 5. Phase 27：Theme 与字体契约收敛
 
-**状态**：**27-0~27-5 已完成（2026-11-05）**；27-6~27-7 规划、未启动。
+**状态**：**27-0~27-6 已完成（2026-11-05）**；27-7 规划、未启动。
 **目标**：把 618 个冻结变体从“逐控件复制字体/字号/颜色/StyleBox”收敛为“单一 token 源 + 语义基类 + 少数字体角色”；消除 Theme 与脚本双写、off-token 字号/颜色、未引用字体和静态动态覆盖，同时保持可验收的显示基线。
 **前置**：Phase 32 的单一 Theme、P0 字体覆盖修正与 P2-1~P2-11 token 批次已完成；27-0 盘点见 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)。
 **非目标**：不重命名 618 个冻结变体；不一次性重做全部 UI；不改布局层级、输入映射、存档格式或动画时序；不删除未确认授权/回滚证据的私有字体；不以目录搬迁或变体数量作为完成标准。
@@ -236,12 +236,14 @@
 - 16 个代表场景 1280×800 截图归档于 `G:/tmp/p275/font_after/`；对照 `G:/tmp/p274/style_after/`，`wan_ling_catalog_page`、`game_set` 等无可见异常，`a_letter_for_all_players` 的标题/正文随 `font_hy→font_main` 改变字形且未裁切；
 - 出口：Theme 字体资产 **10→5（≤6）**；静态/动态中文覆盖 **0 缺字**；Theme 未引用资源 **0**；私有物理资产保留边界已登记。
 
-### 27-6 动态覆盖收敛
+### 27-6 动态覆盖收敛（已完成）
 
-- 将 385 处 `add_theme_*` 分为“静态角色”与“数据驱动”：静态角色改回 Theme 变体并删除覆盖；数据驱动只允许取 `UiColorTokens`/`UiSurfaceTokens`；
-- 保留 `hit_text` 26 条动画轨道为已接受例外；新增 `ui_dynamic_theme_audit.py` 或等价计数基线，禁止未登记的静态覆盖增长；
-- 重点文件：`pet_interface`、`wan_ling_catalog_page`、`equipment_catalog_page`、`mount_panel`、`zhen_yao_tower`、`game_mode_select`、`coop_panel_host`、`learn_skill`；
-- 出口：静态角色覆盖为 0；数据驱动覆盖全部 token 化并登记；动态覆盖总计数不再增长。
+- 脚本 `add_theme_*` 从 **332 降至 299**：删除 18 处默认 body 字体覆盖（`fz_cu_yuan`/`PET_EQUIPMENT_STRENGTH_FONT`，默认字体链相同），并将 15 处主字体覆盖改绑 9 个 `Semantic*` 字体角色变体（万灵/坐骑/镇妖塔/学习技能）；
+- 62 处字面字体色改用具名 `UiColorTokens`，47 处字面字号改用新生成的 `UiFontSizes`（token 源 `script_font_sizes`）；新增颜色 token 保持原值，字号 token 由 `ui_theme_tokens.json` 生成；
+- 新增 `scripts/ui_dynamic_theme_audit.py`：按 static/tokenized/data/layout/dynamic_style 分类；当前 **static 0 / tokenized 139 / data 37 / layout 83 / dynamic_style 40**，总调用 299；基线见 `ui_dynamic_theme_baseline.json`，已接入 `contract_gate.py`；
+- `hit_text` 的 26 条动画轨道保持已接受例外；`theme_override_audit` 的直接属性仍为 0；
+- 16 个代表场景截图归档于 `G:/tmp/p276/after/`；重点检查 `learn_skill`、`wan_ling_catalog_page`、`game_set`、`auto_battle_config` 等，字体/布局无裁切；
+- 出口：字面静态角色覆盖 **0**；数据驱动覆盖全部 token 化或登记为 data/layout/dynamic_style；动态覆盖总计数 **299**，后续不得增长。
 
 ### 27-7 阶段验收
 
@@ -266,7 +268,7 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 27-6 动态覆盖收敛**（27-5 已完成 4 个字体角色、Theme 字体资产 5 与动态样本 0 缺字；下一步收敛 385 处动态 `add_theme_*`）。
+**当前下一步**：**Phase 27-7 阶段验收**（27-6 已将脚本动态覆盖降到 299、静态字面覆盖 0；下一步执行全量回归、截图与阶段验收）。
 **Phase 26**：平台与发布验证长期暂缓；重新启动需要平台矩阵、设备、导出条件与 release 证据同时明确。
 **Phase 27-0~27-3 产物**：[`theme_font_inventory.md`](../reference/theme_font_inventory.md)、`scripts/ui_surface_token_audit.py`、`scripts/ui_surface_token_baseline.json`、`scripts/ui_theme_tokens.json`、`scripts/convert_ui_theme_tokens.py`、`scripts/theme_token_baseline.json`。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0~25-5 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe`、`LocalCoopHitReactionProbe`
