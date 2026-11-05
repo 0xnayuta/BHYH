@@ -28,19 +28,19 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 Phase 27-2 复跑 **30.94s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 Phase 27-3 复跑 **37.43s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，6.18s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，18.12s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
-| Theme token | **618 变体 / 0 违规；当前字号全部在 token**（`theme_token_audit.py --check`） |
-| UI Theme token 源 | **21 文字 token / 5 组表面 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.35s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.31s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
+| Theme token | **618 变体 / 0 违规；当前字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
+| UI Theme token 源 | **21 文字 token / 5 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 基线 18 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.29s） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
-| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（26.18s，包含在全量回归中） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（24.37s，包含在全量回归中） |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 298.7s，默认 auto 并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据清单 | **844/844**（173 `.bin` + 671 JSON）；`export_raw_manifest.py --check` 通过 |
@@ -51,6 +51,7 @@
 
 ### 最近完成
 
+- 2026-11-05 Phase 27-3 颜色与 StyleBox：139 处 off-token 字体色赋值收敛到 0，756 处赋值使用 35 个实际值 / 37 语义 palette；8 类字体色属性纳入审计，`theme_token_baseline` 618 重建。StyleBox 精确重复合并 **54→47**，`sub_StyleBoxFlat_6y1b1`/`sub_1` 重命名为语义 ID；16 场景颜色/StyleBox 截图与控件转储 0 位移/0 尺寸。跨色族 47→≤36 明确转入 27-4。`check_all` **9/9（37.43s）**，`ui-theme` 5.35s，`ui-factories` 19.31s，HUD 7.29s，`level_1` 24.37s。
 - 2026-11-05 Phase 27-2 字号标尺：111 个 off-token 变体分三批映射到 `10/12/14/16/18/20/24/28/32/36/40/50/76/100`，off-token **111→0**；16 个代表场景 1280×800 截图与控件转储归档（A 0/0，B 70 位移/50 尺寸，C 0 位移/4 尺寸，最大位移 12.8 px、最大尺寸变化 34 px），未见裁切；`theme_token_audit` 改为强制所有当前字号在 token 内，基线 618 重建。`check_all` **9/9（30.94s）**，`theme_token` 618/0，`ui_surface` 18/0，`ui-theme` 6.18s，HUD 7.29s，`level_1` 26.18s，字体覆盖 0 缺字。
 - 2026-11-05 Phase 27-1 Token 单一来源：新增 `scripts/ui_theme_tokens.json` 与 `scripts/convert_ui_theme_tokens.py`，由 token 源生成 `UiColorTokens`/`UiSurfaceTokens` 并回写 Theme 的 10 项受管输入/默认字体属性；`theme_token_audit` 的字号、描边、颜色与 Button 基类改从同一源读取。手工注入 `caret_color` 漂移后 `--check` 精确报错并返回 1，`--write` 恢复后 0 漂移。`check_all` **9/9（36.20s）**，`theme_token` 618/0，`ui_surface` 18 基线/0 新增，字体覆盖 0 缺字。
 - 2026-11-05 第六轮输入/动态样式与 Phase 27-0（P2-11）：补齐 `ShopSearchInput` 浅底暖黑光标/25% 选区、`ArchiveLoginInput`/`ArchiveNumberInput` 深底金色光标/45% 选区；`game_mode_select`、`map_6/7/8`、`mount_panel`、`zhu_xian_sword_page`、公告动态文字全部接入 `UiSurfaceTokens`/`UiColorTokens`；新增 `ui_surface_token_audit.py` 与 `ui_surface_token_baseline.json`，main_menu 裸色 0，StyleBox 迁移期基线 18 处；新增 [`theme_font_inventory.md`](theme_font_inventory.md) 记录 618 变体、111 个 off-token 字号、79 处 off-token 字体色、68.2 MB Theme 字体与 Phase 27-1~27-7 规划。`check_all` **9/9（39.15s）**，`ui-theme` 6.23s，`ui-factories` 19.64s，`level_1` 4 阶段 0/0/0（26.0s），`font_coverage` 0 缺字。

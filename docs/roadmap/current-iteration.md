@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫、Phase 27-1 Token 单一来源与生成/校验、Phase 27-2 字号标尺收敛已完成（2026-11-05）**；Phase 27-3~27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫、Phase 27-1 Token 单一来源与生成/校验、Phase 27-2 字号标尺收敛、Phase 27-3 字体色收敛与 StyleBox 精确重复合并已完成（2026-11-05）**；Phase 27-4~27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射或存档格式；Phase 27 的字体/色值变化必须逐批截图与控件几何验收，不静默改变显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~27 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -172,7 +172,7 @@
 
 ## 5. Phase 27：Theme 与字体契约收敛
 
-**状态**：**27-0、27-1、27-2 已完成（2026-11-05）**；27-3~27-7 规划、未启动。
+**状态**：**27-0、27-1、27-2 已完成；27-3 颜色与 StyleBox 精确重复完成（2026-11-05）**；27-4~27-7 规划、未启动。
 **目标**：把 618 个冻结变体从“逐控件复制字体/字号/颜色/StyleBox”收敛为“单一 token 源 + 语义基类 + 少数字体角色”；消除 Theme 与脚本双写、off-token 字号/颜色、未引用字体和静态动态覆盖，同时保持可验收的显示基线。
 **前置**：Phase 32 的单一 Theme、P0 字体覆盖修正与 P2-1~P2-11 token 批次已完成；27-0 盘点见 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)。
 **非目标**：不重命名 618 个冻结变体；不一次性重做全部 UI；不改布局层级、输入映射、存档格式或动画时序；不删除未确认授权/回滚证据的私有字体；不以目录搬迁或变体数量作为完成标准。
@@ -205,19 +205,22 @@
 - `theme_token_baseline.json` 已按 618 个变体的新字号签名重建；截图与控件转储：`G:/tmp/p27font/baseline/`、`batch_a/`、`batch_b/`、`batch_c/`、`final/`；
 - 出口：off-token 字号变体 **111→0**；显式字号 391 个全部落在 14 档标尺内；无新增缺字/裁切。
 
-### 27-3 颜色与 StyleBox 语义收敛
+### 27-3 颜色与 StyleBox 语义收敛（颜色完成；StyleBox 精确重复完成）
 
-- 将 108 个字体颜色值、79 处 off-token 赋值按文字主/次/弱、金/橙/绿/红、描边/阴影收敛到语义 token；
-- 将 54 个 StyleBox 子资源按面板/卡片/按钮/输入/列表角色合并；保留 `empty_button` 等高频共享资源，删除只服务单一变体的重复 StyleBox；
-- 输入配色继续使用深底 `INPUT_CARET`/`INPUT_SELECTION` 与浅底暖黑/25% 选区；
-- 出口：off-token 字体色赋值 **79→0**；StyleBox 子资源 **54→≤36** 且全部有语义名；截图无未批准色差。
+- 79 个 off-token 字体色值（139 处赋值）按语义调色板收敛：新增 `TEXT_CYAN`、`TEXT_PURPLE`、`TEXT_VIOLET`、`OUTLINE_NIGHT`、`OUTLINE_WARM` 等，最终 756 处字体色赋值收敛到 35 个实际值 / 37 个语义 token；
+- 8 类字体色属性（`font_color`、`font_outline_color`、`font_shadow_color`、`font_hover_color`、`font_pressed_color`、`font_hover_pressed_color`、`font_disabled_color`、`font_placeholder_color`）全部纳入 `theme_token_audit`，当前 off-token **0**；`theme_token_baseline` 618 变体重建；手工注入 `BuffIconTime` 的 `Color(1,0.5,0,1)` 后审计精确报错并返回 1，恢复后 0 违规；
+- StyleBox 精确重复合并：`constellation_panel`→`sub_StyleBoxFlat_pet_stat`、3 个 `backpack_action_*`→对应 pet page、`backpack_tab_pressed/selected`→对应 unselected/hovered、`sub_7`→`empty_button`；`sub_StyleBoxFlat_6y1b1`/`sub_1` 重命名为 `archive_black_panel`/`shop_search_input_texture`；子资源 **54→47**；
+- 16 个代表场景 × 1280×800 截图与控件转储：颜色变化仅影响颜色，控件 **0 位移/0 尺寸变化**；StyleBox 精确重复合并后控件几何仍为 **0**；
+- 跨色族的面板/按钮 StyleBox 未强行合并：合并会改变面板色相、圆角或焦点边框，按“不静默改变显示基线”留到 27-4 与变体层级一起评审；因此 54→≤36 的 StyleBox 目标尚未完成；
+- 出口（本批）：off-token 字体色 **139→0**；StyleBox **54→47**；跨色族 ≤36 转入 27-4。
 
-### 27-4 变体层级与重复合并
+### 27-4 变体层级与共享样式合并
 
 - 保留 618 个变体名，但建立语义基类（正文、标题、强调、按钮、面板、输入、列表）；现有变体只声明差异；
+- 跨色族 StyleBox 角色合并：47→≤36；先定义面板/按钮/输入三族共享资源，再逐面板截图批准色相、圆角与焦点边框变化；
 - 优先合并 49 个重复签名组/239 个变体：45 个容器别名、41 个行布局别名、14 个 Margin、11 个 Grid 等；
 - 变体名仍冻结；新增变体必须继承已登记基类，不得直接继承原生控件或复制整组属性；
-- 出口：重复签名组 **49→≤10**（仅允许纯容器别名）；Theme 属性 **3,218→≤2,000**；所有变体名与场景引用保持不变。
+- 出口：StyleBox 子资源 **47→≤36**；重复签名组 **49→≤10**（仅允许纯容器别名）；Theme 属性 **3,218→≤2,000**；所有变体名与场景引用保持不变。
 
 ### 27-5 字体族与资产收敛
 
@@ -257,9 +260,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 27-3 颜色与 StyleBox 语义收敛**（27-0、27-1、27-2 已完成；字号 off-token 已归零，先处理 79 处 off-token 字体色）。
+**当前下一步**：**Phase 27-4 变体层级与共享样式合并**（27-3 已完成字体色收敛与 54→47 的精确重复合并；下一步做 47→≤36 的跨色族样式合并与变体层级）。
 **Phase 26**：平台与发布验证长期暂缓；重新启动需要平台矩阵、设备、导出条件与 release 证据同时明确。
-**Phase 27-0/27-1/27-2 产物**：[`theme_font_inventory.md`](../reference/theme_font_inventory.md)、`scripts/ui_surface_token_audit.py`、`scripts/ui_surface_token_baseline.json`、`scripts/ui_theme_tokens.json`、`scripts/convert_ui_theme_tokens.py`、`scripts/theme_token_baseline.json`。
+**Phase 27-0~27-3 产物**：[`theme_font_inventory.md`](../reference/theme_font_inventory.md)、`scripts/ui_surface_token_audit.py`、`scripts/ui_surface_token_baseline.json`、`scripts/ui_theme_tokens.json`、`scripts/convert_ui_theme_tokens.py`、`scripts/theme_token_baseline.json`。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0~25-5 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe`、`LocalCoopHitReactionProbe`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
