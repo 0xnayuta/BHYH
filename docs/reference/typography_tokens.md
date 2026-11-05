@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-9 颜色批次（2026-11-05）。在 P2-8 基础上补齐 main_menu 深棕描边/阴影、菜单 hover/pressed 与 TowerFloorInput 占位色；新增 `UiColorTokens` 并迁移 `mount_panel`、`equipment_catalog_page` 等脚本动态文字色。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-10 颜色批次（2026-11-05）。在 P2-9 基础上把自绘菜单的 StyleBox 底色/边框收敛为 `UiSurfaceTokens`，并统一输入光标/选区色。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -76,7 +76,25 @@
 
 ### 脚本动态色
 
-`source/Script/base/ui_color_tokens.gd` 提供 `UiColorTokens` 常量，供无法直接引用 Theme 变体的脚本动态 UI 使用。`mount_panel.gd` 与 `equipment_catalog_page.gd` 的文字色已改用该类别名；面板自绘的 StyleBox 底色、边框与阴影仍属面板样式，不进入文字 token。
+`source/Script/base/ui_color_tokens.gd` 提供 `UiColorTokens` 常量，供无法直接引用 Theme 变体的脚本动态 UI 使用。`mount_panel.gd` 与 `equipment_catalog_page.gd` 等脚本的文字色已改用该类别名；面板自绘的 StyleBox 底色、边框与阴影仍属面板样式，不进入文字 token。
+
+### 脚本表面色（UiSurfaceTokens）
+
+`source/Script/base/ui_surface_tokens.gd` 集中自绘菜单 StyleBox 的结构色。与文字色分离，避免把背景/边框混入 `UiColorTokens`。
+
+| 组 | Token 与值 |
+|:---|:---|
+| 冷色底色 | `COOL_DEEPEST #101519`、`COOL_FRAME Color(0.067,0.078,0.084,0.985)`、`COOL_DEEP #151B1E`、`COOL_PANEL #1B2023`、`COOL_PANEL_ALT #1C2429`、`COOL_RAISED #20272B`、`COOL_ICON_BG #171D20` |
+| 冷色状态 | `COOL_CONTROL #293138`、`COOL_HOVER #3A464D`、`COOL_PRESSED #1D252A`、`COOL_DISABLED #343B3F` |
+| 冷色边框 | `COOL_BORDER_DIM #58666D`、`COOL_BORDER #5C6870`、`COOL_BORDER_BRIGHT #89A69C`、`COOL_BORDER_SOFT #B6C9BD`、`COOL_PREVIEW_BORDER #4F5C61`、`COOL_DAMAGE_BORDER #52616A` |
+| 冷色强调 | `COOL_ACCENT #BA9447`、`COOL_ACCENT_BRIGHT #D0A750`、`COOL_ACCENT_SOFT #E2B75C`、`COOL_ACCENT_LINE #BA9447 70%`、`COOL_PROGRESS #6F8E78` |
+| 危险/绿色 | `DANGER_DEEP/DANGER_HOVER/DANGER_PRESSED/DANGER_BORDER/DANGER_BORDER_HOVER/DANGER_BORDER_PRESSED`、`DANGER_SELECTED #7A2E32`；`GREEN_DEEP #1D4937`、`GREEN #276149`、`GREEN_HOVER #347A5E`、`GREEN_BORDER #72AE8E`、`GREEN_BORDER_BRIGHT #A4D7BB`、`GREEN_BORDER_SOFT #D0EADB`、`DISABLED_BORDER #596166` |
+| 大地色 | `EARTH_DEEP #171B19`、`EARTH_PANEL #20241F`、`EARTH_PANEL_ALT #232820`、`EARTH_CONTROL #242621`、`EARTH_CARD #282D25`、`EARTH_RAISED #2D3027`、`EARTH_HOVER #37362B`、`EARTH_SELECTED #49402C`、`EARTH_INPUT #20251F` |
+| 大地边框 | `EARTH_BORDER #64563E`、`EARTH_BORDER_BRIGHT #B59A60`、`EARTH_BORDER_ACCENT #AA8B55`、`EARTH_BORDER_SOFT #454B3A`、`EARTH_BORDER_WARM #786443`、`EARTH_BORDER_DIM #735933`、`EARTH_ACCENT #E8C478` |
+| 暖棕/输入 | `WARM_DEEPEST/WARM_DEEP/WARM_PANEL/WARM_PANEL_SOFT/WARM_HOVER/WARM_PRESSED/WARM_BORDER/WARM_BORDER_BRIGHT/WARM_ACCENT_LIGHT`；`INPUT_CARET #FFD97A`、`INPUT_SELECTION #C09C56 45%`、`WARM_OVERLAY` |
+| 遮罩 | `OVERLAY_MEDIUM 68%`、`OVERLAY_STRONG 72%`、`OVERLAY_EARTH 78%`、`SHADOW 50%`、`WARM_OVERLAY 52%` |
+
+输入配色：`zhen_yao_tower.gd` 数量输入、`equipment_catalog_page.gd` 搜索框与主题 `TowerFloorInput` 使用 `INPUT_CARET` / `INPUT_SELECTION`。
 
 ### 描边
 
@@ -126,6 +144,8 @@
 | `mount_panel（脚本）` | 标题/名称/状态/页签/提示改用 `UiColorTokens`：text_gold、text_gold_light、text_jade、text_hint、text_hint_dim、text_dim、text_info、text_warning_soft |
 | `equipment_catalog_page（脚本）` | 羊皮纸正文/次级文字/暖金/浅金/浅绿/提示改用 `UiColorTokens`：text_parchment、text_parchment_muted、text_gold_warm、text_gold_light、text_jade、text_hint |
 | `其他 main_menu 脚本` | `wan_ling_catalog_page` 按钮/名称/效果/等级/材料/禁用色；`zhen_yao_tower` 文字/按钮/输入与描边；`game_mode_select` 深棕按钮文字；`choose_player` 星级金色，均改用 `UiColorTokens` |
+| `自绘菜单 StyleBox（颜色）` | `mount_panel`/`equipment_catalog_page`/`wan_ling_catalog_page`/`zhen_yao_tower` 的底色、边框、状态、遮罩改用 `UiSurfaceTokens` 冷色/大地/暖棕/危险/绿色组；值保持原有色相 |
+| `输入配色` | `zhen_yao_tower` 数量输入与 `equipment_catalog_page` 搜索框使用 `INPUT_CARET #FFD97A`、`INPUT_SELECTION #C09C56 45%`；主题 `TowerFloorInput` 同步 |
 | `archive_interface（状态色）` | 按钮悬停 `#FF6A00`→text_hover；输入占位 `#A6A6A6`→text_placeholder；删除按下 `#D38D00`→text_gold_pressed；值不变 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 神秘商店图标悬停→icon_hover_soft；商品购买图标悬停→icon_hover_gold；商品灵魂描边→outline_none；ChooseItemList guide→text_primary；BoxItemNumber `#FF7700`→text_orange；BoxLockMark `#FFDB33`→text_amber |
 | `战斗 HUD（颜色）` | HitTextBase `#25FF00`→text_green；LijiText `#FF4600`→text_warning；BacisInfoNumber `#FF6000`→text_orange_deep；法术飘字动画 `#0099FF` 登记为 text_hit_blue，动画例外保留 |
@@ -177,6 +197,8 @@
 | `mount_panel（脚本）` | 0 | 0 | 39 控件；26 处颜色变化，仅字体色 |
 | `equipment_catalog_page（脚本）` | 0 | 0 | 61 控件；42 处颜色变化，仅字体色 |
 | `其他 main_menu 脚本` | 0 | 0 | `wan_ling` 287、`zhen_yao_tower` 32、`choose_player` 32、`game_mode_select` 7 控件；仅字体/描边色 |
+| `自绘菜单 StyleBox（颜色）` | 0 | 0 | 4 个自绘面板；仅替换样式颜色，静态控件转储无布局变化 |
+| `输入配色` | 0 | 0 | `TowerFloorInput` 光标 `#FFD97A`、选区 `#C09C56` 45%；搜索框同值 |
 | `archive_interface（状态色）` | 0 | 0 | 悬停/占位/按下值登记为 token，无可见变化 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 0 | 0 | 图标悬停/guide/透明描边登记；BoxItemNumber/BoxLockMark 橙/黄归一 |
 | `战斗 HUD（颜色）` | — | — | HitTextBase、LijiText、BacisInfoNumber 颜色变化；合成 Label 各 1 控件 |
@@ -240,6 +262,8 @@ G:/tmp/p2color4_before/
 G:/tmp/p2color4_before_dynamic/
 G:/tmp/p2color4_after/
 G:/tmp/p2color4_after_1600/
+G:/tmp/p2color5_after/
+G:/tmp/p2color5_after_1600/
 ```
 
 ## 5. 审计
@@ -257,9 +281,9 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（31.27s）；
-- `scene_probe ui-theme`：PASS（8.09s）；
+- `check_all --godot-bin`：**9/9 PASS**（38.06s）；
+- `scene_probe ui-theme`：PASS（6.04s）；
 - `scene_probe ui-factories`：PASS（19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（23.84s）。
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（25.6s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
