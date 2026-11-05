@@ -34,6 +34,10 @@ COLORS = {
     "Color(1, 0.290196, 0, 1)",
     "Color(1, 1, 0, 1)",
     "Color(0, 0, 0, 1)",
+    "Color(1, 0, 0, 1)",
+    "Color(0.42, 0.88, 0.7, 1)",
+    "Color(0.84, 0.86, 0.9, 1)",
+    "Color(0.94, 0.73, 0.34, 1)",
 }
 BUTTON_TOKEN_BASES = {
     "Button",

@@ -898,7 +898,7 @@ AnnouncementTitle/fonts/font = ExtResource("font_hy")
 AnnouncementTitle/font_sizes/font_size = 28
 
 AnnouncementAlert/base_type = &"Label"
-AnnouncementAlert/colors/font_color = Color(1, 0.34, 0.3, 1)
+AnnouncementAlert/colors/font_color = Color(1, 0.290196, 0, 1)
 AnnouncementAlert/fonts/font = ExtResource("font_hk")
 AnnouncementAlert/font_sizes/font_size = 16
 
