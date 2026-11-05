@@ -67,7 +67,7 @@ theme = ExtResource("theme")
 offset_right = 380.0
 offset_bottom = 57.0
 scale = Vector2(3, 3)
-text = "999 连击！!"
+text = "999 连击！！"
 script = ExtResource("2")
 
 [node name="LjPlayer" type="AnimationPlayer" parent="." unique_id=714168182]

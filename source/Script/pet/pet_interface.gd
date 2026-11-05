@@ -4805,7 +4805,7 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 		row.gui_input.connect(_on_pet_name_row_input.bind(row))
 		var name := str(pet.get(DataKeys.ALT_NAME, pet.get(DataKeys.NAME, "宠物")))
 		var active := bool(pet.get(DataKeys.DEPLOYED, false)) or pet_view.active_name() == _pet_active_name(pet)
-		row.text = "%s(已出战)" % name if active else name
+		row.text = "%s（已出战）" % name if active else name
 		row.custom_minimum_size = Vector2(96, 24)
 		row.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		row.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

@@ -327,7 +327,7 @@ func _on_g_mzm_4_pressed() -> void:
 		MemoryClass.main_bc()
 		music_is_change = true
 	else:
-		Global.add_message_show(Global.get_ui_runtime().windows, "还未开启四图音乐哦，快去游戏中寻找一下吧~", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "还未开启四图音乐哦，快去游戏中寻找一下吧～", 1.5, Vector2(470, 300))
 
 
 func _on_ornot_pressed() -> void:

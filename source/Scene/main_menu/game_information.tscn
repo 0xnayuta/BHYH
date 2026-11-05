@@ -125,43 +125,43 @@ layout_mode = 2
 theme_type_variation = "GameInfoSectionTitle"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "进传送点： W   ↑"
+text = "进传送点：W   ↑"
 
 [node name="_2" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=602499709]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "向左移动： A   ←"
+text = "向左移动：A   ←"
 
 [node name="_3" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=949129543]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "向右移动： D   →"
+text = "向右移动：D   →"
 
 [node name="_4" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=2120893786]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "普通攻击： J   1"
+text = "普通攻击：J   1"
 
 [node name="_5" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=2106669516]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "角色跳跃： K   2"
+text = "角色跳跃：K   2"
 
 [node name="_6" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=1399050907]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "二段跳跃： KK   22"
+text = "二段跳跃：KK   22"
 
 [node name="_7" type="Label" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer/VBoxContainer" unique_id=136829412]
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "无双技能： 空格   0"
+text = "无双技能：空格   0"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="bg/ColorRect/VBoxContainer/Control/czzn/HBoxContainer" unique_id=998366327]
 theme_type_variation = "GameInfoSectionColumn"
@@ -208,7 +208,7 @@ text = "法宝菜单：N   *"
 theme_type_variation = "GameInfoBodyText"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "宠物菜单： B(未开放)"
+text = "宠物菜单：B（未开放）"
 
 [node name="yxxq" type="MarginContainer" parent="bg/ColorRect/VBoxContainer/Control" unique_id=1123550829]
 unique_name_in_owner = true

@@ -74,7 +74,7 @@ func _on_qd_pressed() -> void:
 				PlayerData.add_soul(value)
 				coin_number += value
 	if coin_number > 0:
-		Global.add_message_show(get_parent(), "卖出成功！!获得：" + str(coin_number) + "灵魂。", 1.5, Vector2(-240, 150))
+		Global.add_message_show(get_parent(), "卖出成功！获得：" + str(coin_number) + "灵魂。", 1.5, Vector2(-240, 150))
 	MemoryClass.request_save("back_pack_sell")
 
 

@@ -37,7 +37,7 @@ offset_right = 357.0
 offset_bottom = -234.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Tips: 每个小怪都有概率掉落强化石哦~"
+text = "Tips：每个小怪都有概率掉落强化石哦～"
 horizontal_alignment = 1
 autowrap_mode = 3
 

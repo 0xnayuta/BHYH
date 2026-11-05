@@ -740,9 +740,9 @@ func _refresh_mount_list() -> void:
 		var mount: Dictionary = mounts[index]
 		var id := str(mount.get("ID", ""))
 		var suffix := (
-			"  [出战]"
+			"  【出战】"
 			if id == active_id
-			else "  [未解锁]" if not bool(mount.get(PlayerData.MOUNT_UNLOCKED_KEY, false)) else ""
+			else "  【未解锁】" if not bool(mount.get(PlayerData.MOUNT_UNLOCKED_KEY, false)) else ""
 		)
 		mount_list_labels[index].text = "%s%s" % [str(mount.get(DataKeys.ALT_NAME, "坐骑")), suffix]
 		row.modulate = UiColorTokens.TEXT_GOLD if id == selected_mount_id else UiColorTokens.TEXT_PRIMARY

@@ -12,11 +12,11 @@ var other_text: String
 func _physics_process(delta: float) -> void:
 	if data_list.has("CanRemove"):
 		if data_list["CanRemove"]:
-			other_text = "(低级负面)"
+			other_text = "（低级负面）"
 		else:
-			other_text = "(高级负面)"
+			other_text = "（高级负面）"
 	else:
-		other_text = "(低级负面)"
+		other_text = "（低级负面）"
 	if parent_node == null:
 		return
 	buff_name = parent_node.data_list["Name"]
@@ -265,7 +265,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				buff_infor.text = "该单位获得腾蛇加护，伤害永久增加" + str(snapped(levelslz * 0.015, 0.001) * 100) + "%"
 		"PoisionBody":
-			buff_infor.text = "该单位获得万毒加护，受伤减少，免疫部分击退，并对攻击者施加”巫毒“。"
+			buff_infor.text = "该单位获得万毒加护，受伤减少，免疫部分击退，并对攻击者施加“巫毒”。"
 		"lljybuff":
 			buff_infor.text = "该单位被点穴，" + str(snapped(last_time, 0.1)) + "秒内，无法行动"
 		"jgz":

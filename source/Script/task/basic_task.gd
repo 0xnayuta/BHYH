@@ -311,7 +311,7 @@ var all_activity_list = {
 	{
 		"task_name": "勇闯八荒",
 		"task_type": "ActivityTask",
-		"task_info": "未拥有过”修成正果头衔“，并且通过天庭",
+		"task_info": "未拥有过“修成正果头衔”，并且通过天庭",
 		"TaskTarget": {"未持有": true, "天庭": true},
 		"FinishType": 5,
 		"task_reward":

@@ -103,7 +103,7 @@ var name_list = {
 
 
 func _physics_process(delta: float) -> void:
-	label.text = "设置技能 “" + str(name_list[need_name]) + "” 按键"
+	label.text = "设置技能“" + str(name_list[need_name]) + "”按键"
 
 
 func _bind_key(key_name: String) -> void:

@@ -35,7 +35,7 @@ func _physics_process(delta: float) -> void:
 		pic.wx = []
 		pic.eq_prop = EquipmentService.data(item_name)
 		var cur_level = PlayerData.player_data[real_name][str(loc_num)]["Level"]
-		locandlevel.text = str(loc_num) + "号位 Lv:" + str(cur_level)
+		locandlevel.text = str(loc_num) + "号位 Lv：" + str(cur_level)
 		if not not_show:
 			if father.current_num == loc_num:
 				jt.visible = true

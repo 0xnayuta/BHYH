@@ -244,7 +244,7 @@ func _on_decompose_button_pressed() -> void:
 		else:
 			Global.add_choose_text(NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0)
 	else:
-		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧~", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧～", 1.5, Vector2(500, 305))
 
 
 func fj():

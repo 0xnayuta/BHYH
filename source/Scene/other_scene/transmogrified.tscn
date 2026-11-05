@@ -2763,7 +2763,7 @@ offset_left = -396.0
 offset_top = 167.0
 offset_right = -118.0
 offset_bottom = 198.0
-text = "外观显示顺序： 幻化 > 时装 > 装备"
+text = "外观显示顺序：幻化→时装→装备"
 metadata/_edit_lock_ = true
 
 [node name="Close" type="TextureButton" parent="BG" unique_id=860053322]

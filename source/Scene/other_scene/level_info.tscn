@@ -168,7 +168,7 @@ offset_left = -155.0
 offset_top = 3.0
 offset_right = -1.0
 offset_bottom = 29.0
-text = "挑战难度:"
+text = "挑战难度："
 
 [node name="diffvalue" type="Label" parent="ColorRect/TextureRect/diffbutton" unique_id=1892522782]
 theme_type_variation = "LevelInfoValue"
@@ -330,7 +330,7 @@ offset_left = 177.27327
 offset_top = 254.5455
 offset_right = 284.27332
 offset_bottom = 283.5455
-text = "等级压制:"
+text = "等级压制："
 
 [node name="LevelDown" type="Label" parent="ColorRect/TextureRect/Level" unique_id=120571382]
 theme_type_variation = "LevelInfoSuccessText"

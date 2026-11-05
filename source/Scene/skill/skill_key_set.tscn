@@ -74,7 +74,7 @@ offset_left = -114.0
 offset_top = -124.0
 offset_right = 99.0
 offset_bottom = -98.0
-text = "设置技能 “升龙斩” 按键"
+text = "设置技能“升龙斩”按键"
 
 [node name="Close" type="TextureButton" parent="." unique_id=90990517]
 offset_left = 148.0

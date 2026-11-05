@@ -62,7 +62,7 @@ theme_type_variation = "LhhjHelpBody"
 theme = ExtResource("theme")
 layout_mode = 2
 size_flags_vertical = 8
-text = "2.点击左侧Boss列表可将Boss添加到召唤列表内，召唤太多会很卡！不可重复添加，通关指定关卡可以解锁对应地图Boss。(截教天境暂不支持)"
+text = "2.点击左侧Boss列表可将Boss添加到召唤列表内，召唤太多会很卡！不可重复添加，通关指定关卡可以解锁对应地图Boss。（截教天境暂不支持）"
 autowrap_mode = 1
 
 [node name="Text_12" type="Label" parent="BG/ScrollContainer/VBoxContainer" unique_id=1498466509]

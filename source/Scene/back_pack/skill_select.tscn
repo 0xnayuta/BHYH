@@ -50,7 +50,7 @@ layout_mode = 0
 offset_left = 69.0
 offset_right = 109.0
 offset_bottom = 20.0
-text = "Lv:"
+text = "Lv："
 
 [node name="Skill_Infor" type="Label" parent="BG" unique_id=1713737950]
 theme_type_variation = "SkillSelectInfo"

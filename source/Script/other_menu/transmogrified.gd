@@ -790,7 +790,7 @@ func _physics_process(_delta: float) -> void:
 	infor.text = str(currentpage) + "/" + str(maxpage)
 
 	collect_value.text = (
-		str(current_type) + "收集进度：(" + str(target_count) + "/" + str(get_current_type_list().size()) + ")"
+		str(current_type) + "收集进度：（" + str(target_count) + "/" + str(get_current_type_list().size()) + "）"
 	)
 
 

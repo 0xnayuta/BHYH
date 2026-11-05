@@ -12,10 +12,10 @@ var current_use_type: String = "阵法详情"
 var current_num: int = 1
 var _last_use_button_state: Variant = null
 var current_zf_list = {
-	"slz": {"FangFa": "北方星宿1~3位掉落"},
-	"lpz": {"FangFa": "北方星宿4~6位掉落"},
-	"tsz": {"FangFa": "北方星宿第7位，南方星宿1~3掉落"},
-	"tqz": {"FangFa": "南方星宿4~7位掉落"}
+	"slz": {"FangFa": "北方星宿1～3位掉落"},
+	"lpz": {"FangFa": "北方星宿4～6位掉落"},
+	"tsz": {"FangFa": "北方星宿第7位，南方星宿1～3掉落"},
+	"tqz": {"FangFa": "南方星宿4～7位掉落"}
 }
 
 

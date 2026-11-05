@@ -144,7 +144,7 @@ func _on_sell_pressed() -> void:
 				var parent = get_parent().get_parent().get_parent()
 				Global.add_message_show(
 					parent,
-					"丢弃：" + str(get_list["卖出数量"]) + "个" + str(_name) + "。  获得：" + str(get_list["获得灵魂"]) + "灵魂。",
+					"丢弃：" + str(get_list["卖出数量"]) + "个" + str(_name) + "，获得：" + str(get_list["获得灵魂"]) + "灵魂。",
 					1.5,
 					Vector2(480, 280)
 				)
@@ -158,7 +158,7 @@ func _on_sell_pressed() -> void:
 				var parent = get_parent().get_parent().get_parent()
 				Global.add_message_show(
 					parent,
-					"丢弃：" + str(get_list["卖出数量"]) + "个" + str(_name) + "。  获得：" + str(get_list["获得灵魂"]) + "灵魂。",
+					"丢弃：" + str(get_list["卖出数量"]) + "个" + str(_name) + "，获得：" + str(get_list["获得灵魂"]) + "灵魂。",
 					1.5,
 					Vector2(480, 280)
 				)
@@ -200,7 +200,7 @@ func use_xhp():
 				return
 			else:
 				var parent = get_parent().get_parent().get_parent()
-				Global.add_message_show(parent, "需通关“奈何桥“！！。", 1.5, Vector2(450, 300))
+				Global.add_message_show(parent, "需通关“奈何桥”！", 1.5, Vector2(450, 300))
 		"mpyj":
 			self.visible = false
 			Signals.connect_choose_box_signal(self, "use_mpyj")
@@ -681,7 +681,7 @@ func use_xhp():
 				)
 				Global.add_message_show(parent, "获得两小时双倍掉率Buff，重进关卡生效。", 1.5, Vector2.ZERO)
 			else:
-				Global.add_message_show(parent, "当前已有双倍掉率Buff!!!。", 1.5, Vector2.ZERO)
+				Global.add_message_show(parent, "当前已有双倍掉率Buff！", 1.5, Vector2.ZERO)
 			queue_free()
 
 		"txd":
@@ -865,7 +865,7 @@ func use_xhp():
 			PlayerData.add_soul(150000 * be_number)
 			PlayerData.remove_xhp("xlhys", PlayerData.get_xhp_page("xlhys"), be_number)
 			Global.add_message_show(
-				parent, "使用" + str(be_number) + "个小灵魂药水获得" + str(be_number * 15) + "w灵魂。", 1.5, Vector2(450, 300)
+				parent, "使用" + str(be_number) + "个小灵魂药水获得" + str(be_number * 15) + "万灵魂。", 1.5, Vector2(450, 300)
 			)
 			MemoryClass.request_save("back_pack_use_consumable")
 			queue_free()
@@ -874,7 +874,7 @@ func use_xhp():
 			PlayerData.add_soul(600000 * be_number)
 			PlayerData.remove_xhp("dlhys", PlayerData.get_xhp_page("dlhys"), be_number)
 			Global.add_message_show(
-				parent, "使用" + str(be_number) + "个大灵魂药水获得" + str(be_number * 60) + "w灵魂。", 1.5, Vector2(450, 300)
+				parent, "使用" + str(be_number) + "个大灵魂药水获得" + str(be_number * 60) + "万灵魂。", 1.5, Vector2(450, 300)
 			)
 			MemoryClass.request_save("back_pack_use_consumable")
 			queue_free()
@@ -963,10 +963,20 @@ func use_xhp():
 					role_info.mp_bar.value = float(RoleProp.roleprop.Mp) / RoleProp.roleprop.SMp
 					role_info.mp_text.text = str(int(RoleProp.roleprop.Mp)) + "/" + str(int(RoleProp.roleprop.SMp))
 
-			var msg = "使用" + str(be_number) + "个大经验药水，获得" + str(exp_gain) + "经验！"
-			msg += " 当前等级: " + str(current_level) + " 经验: " + str(current_exp) + "/" + str(max_exp)
+			var msg = (
+				"使用"
+				+ str(be_number)
+				+ "个大经验药水，获得"
+				+ str(exp_gain)
+				+ "经验！当前等级："
+				+ str(current_level)
+				+ "，经验："
+				+ str(current_exp)
+				+ "/"
+				+ str(max_exp)
+			)
 			if level_up_count > 0:
-				msg += " 连续升级: " + str(level_up_count) + "级！"
+				msg += "，连续升级：" + str(level_up_count) + "级！"
 			Global.add_message_show(parent, msg, 3.0, Vector2(450, 300))
 			MemoryClass.request_save("back_pack_use_consumable")
 			queue_free()

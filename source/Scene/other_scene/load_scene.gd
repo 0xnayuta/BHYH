@@ -68,8 +68,8 @@ var _battle_vram_baseline_bytes: int = -1
 static var _integrity_verified_this_process := false
 # 场景中的 Tips 文本是编辑器预览占位，内容应保持为下列条目之一。
 var tips_textlist = [
-	"神秘商店中有概率出现强化石哦~",
-	"每个小怪都有概率掉落强化石哦~",
+	"神秘商店中有概率出现强化石哦～",
+	"每个小怪都有概率掉落强化石哦～",
 	"打不过关卡时，可以尝试回去强化装备。",
 	"拾取装备时会自动判断背包是否已满。",
 	"不同装备品质会用不同颜色显示。",
@@ -705,7 +705,7 @@ func _pick_tip() -> void:
 			_tip_bag[_tip_bag.size() - 1] = swap_value
 	var index: int = _tip_bag.pop_back()
 	_last_tip_index = index
-	message_tips.text = "Tips: " + str(tips_textlist[index])
+	message_tips.text = "Tips：" + str(tips_textlist[index])
 
 
 func _on_tips_change_timeout() -> void:

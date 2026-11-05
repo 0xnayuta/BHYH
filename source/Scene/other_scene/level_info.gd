@@ -2299,7 +2299,7 @@ func _physics_process(delta: float) -> void:
 
 		var saved_diff = int(MainSet.set_data.get("Difficult", 0))
 		diffvalue.text = ["普通", "困难", "地狱", "噩梦"][clampi(saved_diff, 0, 3)]
-		difftext.text = "挑战难度:"
+		difftext.text = "挑战难度："
 
 		is_set = true
 
@@ -2891,7 +2891,7 @@ func _on_diff_pressed() -> void:
 	diff = (diff + 1) % 4
 	MainSet.set_data["Difficult"] = diff
 	diffvalue.text = ["普通", "困难", "地狱", "噩梦"][diff]
-	difftext.text = "挑战难度:"
+	difftext.text = "挑战难度："
 	add_level_fall_item()
 	_refresh_fall_pro_display()
 	MemoryClass.main_bc()

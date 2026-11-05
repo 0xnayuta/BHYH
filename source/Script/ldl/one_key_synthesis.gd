@@ -249,7 +249,7 @@ func perform_onekey_synthesis(target_dan_name: String, times: int):
 
 func _on_target_dan_selected(index: int):
 	if index < 0:
-		max_label.text = "最大: 0"
+		max_label.text = "最大：0"
 		spin_box.max_value = 0
 		update_icons("")
 		return
@@ -268,7 +268,7 @@ func _on_target_dan_selected(index: int):
 		stock[mat] = get_item_count(mat)
 
 	var max_times = get_max_synthesis(target, stock)
-	max_label.text = "最大: " + str(max_times)
+	max_label.text = "最大：" + str(max_times)
 	spin_box.max_value = max_times
 	if spin_box.value > max_times:
 		spin_box.value = max_times
