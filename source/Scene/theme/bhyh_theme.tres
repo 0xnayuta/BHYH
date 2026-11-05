@@ -862,11 +862,11 @@ AnnouncementSecretButtonSmall/base_type = &"AnnouncementSecretButton"
 AnnouncementSecretButtonSmall/font_sizes/font_size = 18
 
 AnnouncementSecretButtonTiny/base_type = &"AnnouncementSecretButton"
-AnnouncementSecretButtonTiny/font_sizes/font_size = 19
+AnnouncementSecretButtonTiny/font_sizes/font_size = 20
 
 AnnouncementHeading/base_type = &"Label"
 AnnouncementHeading/fonts/font = ExtResource("font_hy")
-AnnouncementHeading/font_sizes/font_size = 35
+AnnouncementHeading/font_sizes/font_size = 36
 
 AnnouncementWarning/base_type = &"Label"
 AnnouncementWarning/colors/font_color = Color(1, 0, 0, 1)
@@ -875,7 +875,7 @@ AnnouncementWarning/colors/font_shadow_color = Color(0, 0, 0, 1)
 AnnouncementWarning/constants/outline_size = 2
 AnnouncementWarning/constants/shadow_outline_size = 6
 AnnouncementWarning/fonts/font = ExtResource("font_hk")
-AnnouncementWarning/font_sizes/font_size = 17
+AnnouncementWarning/font_sizes/font_size = 18
 
 AnnouncementStatus/base_type = &"Label"
 AnnouncementStatus/colors/font_color = Color(0.42, 0.88, 0.7, 1)
@@ -885,12 +885,12 @@ AnnouncementStatus/font_sizes/font_size = 16
 AnnouncementPrompt/base_type = &"Label"
 AnnouncementPrompt/colors/font_color = Color(0.84, 0.86, 0.9, 1)
 AnnouncementPrompt/fonts/font = ExtResource("font_hk")
-AnnouncementPrompt/font_sizes/font_size = 17
+AnnouncementPrompt/font_sizes/font_size = 18
 
 AnnouncementSubtitle/base_type = &"Label"
 AnnouncementSubtitle/colors/font_color = Color(0.94, 0.73, 0.34, 1)
 AnnouncementSubtitle/fonts/font = ExtResource("font_hy")
-AnnouncementSubtitle/font_sizes/font_size = 27
+AnnouncementSubtitle/font_sizes/font_size = 28
 
 AnnouncementTitle/base_type = &"Label"
 AnnouncementTitle/colors/font_color = Color(0.94, 0.73, 0.34, 1)
@@ -1011,11 +1011,11 @@ AnnouncementLeftColumn/constants/separation = 12
 
 AnnouncementCheckButton/base_type = &"CheckButton"
 AnnouncementCheckButton/fonts/font = ExtResource("font_hk")
-AnnouncementCheckButton/font_sizes/font_size = 22
+AnnouncementCheckButton/font_sizes/font_size = 20
 
 AnnouncementCheckButtonSmall/base_type = &"CheckButton"
 AnnouncementCheckButtonSmall/fonts/font = ExtResource("font_hk")
-AnnouncementCheckButtonSmall/font_sizes/font_size = 21
+AnnouncementCheckButtonSmall/font_sizes/font_size = 20
 
 AnnouncementOption/base_type = &"OptionButton"
 AnnouncementOption/fonts/font = ExtResource("font_hk")
@@ -1240,7 +1240,7 @@ ShopSearchInput/colors/font_placeholder_color = Color(0, 0, 0, 1)
 ShopSearchInput/colors/caret_color = Color(0, 0, 0, 1)
 ShopSearchInput/constants/outline_size = 1
 ShopSearchInput/fonts/font = ExtResource("font_main")
-ShopSearchInput/font_sizes/font_size = 15
+ShopSearchInput/font_sizes/font_size = 16
 ShopSearchInput/styles/normal = SubResource("sub_1")
 ShopSearchInput/styles/read_only = SubResource("sub_1")
 ShopSearchInput/styles/focus = SubResource("sub_1")
@@ -1248,9 +1248,9 @@ ShopSearchInput/styles/focus = SubResource("sub_1")
 ShopStatTitle/base_type = &"Label"
 ShopStatTitle/colors/font_color = Color(1, 1, 0, 1)
 ShopStatTitle/colors/font_outline_color = Color(0, 0, 0, 1)
-ShopStatTitle/constants/outline_size = 8
+ShopStatTitle/constants/outline_size = 6
 ShopStatTitle/fonts/font = ExtResource("font_hy")
-ShopStatTitle/font_sizes/font_size = 25
+ShopStatTitle/font_sizes/font_size = 24
 
 ShopDamageText/base_type = &"Label"
 ShopDamageText/colors/font_color = Color(1, 1, 0, 1)
@@ -1274,7 +1274,7 @@ ShopTabText/constants/shadow_offset_y = 0
 ShopTabText/constants/outline_size = 1
 ShopTabText/constants/shadow_outline_size = 8
 ShopTabText/fonts/font = ExtResource("font_hk")
-ShopTabText/font_sizes/font_size = 15
+ShopTabText/font_sizes/font_size = 16
 
 ShopTabTextStrong/base_type = &"Label"
 ShopTabTextStrong/colors/font_color = Color(1, 1, 1, 1)
@@ -1285,20 +1285,21 @@ ShopTabTextStrong/constants/shadow_offset_y = 0
 ShopTabTextStrong/constants/outline_size = 1
 ShopTabTextStrong/constants/shadow_outline_size = 9
 ShopTabTextStrong/fonts/font = ExtResource("font_hk")
-ShopTabTextStrong/font_sizes/font_size = 15
+ShopTabTextStrong/font_sizes/font_size = 16
 
 ShopRoleText/base_type = &"Label"
 ShopRoleText/colors/font_color = Color(1, 1, 0, 1)
 ShopRoleText/colors/font_outline_color = Color(0, 0, 0, 1)
-ShopRoleText/constants/outline_size = 9
+ShopRoleText/constants/outline_size = 10
 ShopRoleText/fonts/font = ExtResource("font_return")
 ShopRoleText/font_sizes/font_size = 24
 
 ShopCloseButton/base_type = &"MenuActionButton"
+ShopCloseButton/font_sizes/font_size = 24
 
 ShopHintLabel/base_type = &"Label"
 ShopHintLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ShopHintLabel/font_sizes/font_size = 25
+ShopHintLabel/font_sizes/font_size = 24
 
 ShopMessageText/base_type = &"Label"
 ShopMessageText/colors/font_color = Color(1, 0.584314, 0, 1)
@@ -2246,19 +2247,25 @@ EndStatsCure/font_sizes/font_size = 25
 
 LdlTitleLabel/base_type = &"Label"
 LdlTitleLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-LdlTitleLabel/font_sizes/font_size = 19
+LdlTitleLabel/font_sizes/font_size = 20
 
 LdlDzButton/base_type = &"MenuActionButton"
+LdlDzButton/font_sizes/font_size = 24
 
 LdlFjButton/base_type = &"MenuActionButton"
+LdlFjButton/font_sizes/font_size = 24
 
 LdlHcButton/base_type = &"MenuActionButton"
+LdlHcButton/font_sizes/font_size = 24
 
 LdlQhButton/base_type = &"MenuActionButton"
+LdlQhButton/font_sizes/font_size = 24
 
 LdlReturnButton/base_type = &"MenuActionButton"
+LdlReturnButton/font_sizes/font_size = 24
 
 LdlXqButton/base_type = &"MenuActionButton"
+LdlXqButton/font_sizes/font_size = 24
 
 RoleLevelLabel/base_type = &"Label"
 RoleLevelLabel/fonts/font = ExtResource("font_return")
@@ -2885,14 +2892,14 @@ BackpackLockText/colors/font_color = Color(0, 0, 0, 1)
 BackpackLockText/colors/font_outline_color = Color(0, 0, 0, 1)
 BackpackLockText/constants/outline_size = 1
 BackpackLockText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-BackpackLockText/font_sizes/font_size = 11
+BackpackLockText/font_sizes/font_size = 12
 
 BackpackInnerMargin/base_type = &"MarginContainer"
 BackpackInnerMargin/constants/margin_left = 5
 
 BackpackTitle/base_type = &"Label"
 BackpackTitle/fonts/font = ExtResource("font_return")
-BackpackTitle/font_sizes/font_size = 25
+BackpackTitle/font_sizes/font_size = 24
 
 BackpackTabBar/base_type = &"TabBar"
 BackpackTabBar/constants/h_separation = 16
@@ -2916,7 +2923,7 @@ BackpackTabLabelLarge/font_sizes/font_size = 18
 
 BackpackTabLabelSmall/base_type = &"Label"
 BackpackTabLabelSmall/fonts/font = ExtResource("font_hy")
-BackpackTabLabelSmall/font_sizes/font_size = 15
+BackpackTabLabelSmall/font_sizes/font_size = 16
 
 BackpackGridMargin/base_type = &"MarginContainer"
 BackpackGridMargin/constants/margin_left = -3
@@ -2962,12 +2969,12 @@ ShopItemBuyButton/styles/focus = SubResource("empty_button")
 ShopItemSoulValue/base_type = &"Label"
 ShopItemSoulValue/colors/font_color = Color(0, 0, 0, 1)
 ShopItemSoulValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
-ShopItemSoulValue/font_sizes/font_size = 17
+ShopItemSoulValue/font_sizes/font_size = 18
 
 ShopItemSoulText/base_type = &"Label"
 ShopItemSoulText/colors/font_color = Color(0, 0, 0, 1)
 ShopItemSoulText/colors/font_outline_color = Color(1, 1, 1, 0)
-ShopItemSoulText/constants/outline_size = 7
+ShopItemSoulText/constants/outline_size = 6
 ShopItemSoulText/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopItemSoulText/font_sizes/font_size = 12
 
@@ -3772,7 +3779,7 @@ MysteryShopLabel/colors/font_color = Color(0, 0, 0, 1)
 MysteryShopLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 MysteryShopLabel/constants/outline_size = 1
 MysteryShopLabel/fonts/font = ExtResource("font_hk")
-MysteryShopLabel/font_sizes/font_size = 13
+MysteryShopLabel/font_sizes/font_size = 14
 
 MysteryShopPurchase/base_type = &"Button"
 MysteryShopPurchase/colors/icon_hover_color = Color(1, 1, 1, 0.682353)
@@ -3911,8 +3918,8 @@ BoxItemNumber/font_sizes/font_size = 18
 BoxLockMark/base_type = &"Label"
 BoxLockMark/colors/font_color = Color(1, 0.86, 0.2, 1)
 BoxLockMark/colors/font_outline_color = Color(0, 0, 0, 1)
-BoxLockMark/constants/outline_size = 4
-BoxLockMark/font_sizes/font_size = 13
+BoxLockMark/constants/outline_size = 3
+BoxLockMark/font_sizes/font_size = 14
 
 ZhenYanSlotLabel/base_type = &"Label"
 ZhenYanSlotLabel/colors/font_color = Color(1, 0.529412, 0, 1)
