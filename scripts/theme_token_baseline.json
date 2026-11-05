@@ -173,13 +173,13 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "16",
       "constants/outline_size": "",
-      "colors/font_color": "Color(1, 0.6, 0.2, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": ""
     },
     "EquipmentStatValue": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -227,7 +227,7 @@
     },
     "LevelInfoValue": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "27",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "9",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -235,7 +235,7 @@
     },
     "LevelInfoShadowText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -243,7 +243,7 @@
     },
     "LevelInfoAlertText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -251,7 +251,7 @@
     },
     "LevelInfoSuccessText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 1, 0, 1)",
@@ -259,7 +259,7 @@
     },
     "LevelInfoModeButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "5",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -291,7 +291,7 @@
     },
     "MenuActionButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -325,8 +325,8 @@
       "base_type": "&\"Button\"",
       "font_sizes/font_size": "18",
       "constants/outline_size": "2",
-      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
-      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "TowerButtonSmall": {
@@ -341,13 +341,13 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
       "constants/outline_size": "2",
-      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
-      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "TowerSmallLabel": {
       "base_type": "&\"TowerLabel\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -419,7 +419,7 @@
     },
     "AnnouncementSecretButtonTiny": {
       "base_type": "&\"AnnouncementSecretButton\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -427,7 +427,7 @@
     },
     "AnnouncementHeading": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -435,7 +435,7 @@
     },
     "AnnouncementWarning": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "18",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -451,7 +451,7 @@
     },
     "AnnouncementPrompt": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "18",
       "constants/outline_size": "",
       "colors/font_color": "Color(0.84, 0.86, 0.9, 1)",
       "colors/font_outline_color": "",
@@ -459,7 +459,7 @@
     },
     "AnnouncementSubtitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "27",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "",
       "colors/font_color": "Color(0.94, 0.73, 0.34, 1)",
       "colors/font_outline_color": "",
@@ -477,7 +477,7 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "16",
       "constants/outline_size": "",
-      "colors/font_color": "Color(1, 0.34, 0.3, 1)",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": ""
     },
@@ -491,7 +491,7 @@
     },
     "MonsterHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -499,7 +499,7 @@
     },
     "MonsterHelpTitleLarge": {
       "base_type": "&\"MonsterHelpTitle\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -507,7 +507,7 @@
     },
     "MonsterHelpWarning": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.584314, 0, 1)",
@@ -595,10 +595,10 @@
     },
     "TowerFloorInput": {
       "base_type": "&\"LineEdit\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "2",
-      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
-      "colors/font_outline_color": "Color(0.0901961, 0.047059, 0.023529, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "AnnouncementListGroup": {
@@ -651,7 +651,7 @@
     },
     "AnnouncementCheckButton": {
       "base_type": "&\"CheckButton\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -659,7 +659,7 @@
     },
     "AnnouncementCheckButtonSmall": {
       "base_type": "&\"CheckButton\"",
-      "font_sizes/font_size": "21",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -923,7 +923,7 @@
     },
     "ShopSearchInput": {
       "base_type": "&\"LineEdit\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -931,8 +931,8 @@
     },
     "ShopStatTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
-      "constants/outline_size": "8",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -955,7 +955,7 @@
     },
     "ShopTabText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -963,7 +963,7 @@
     },
     "ShopTabTextStrong": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -972,14 +972,14 @@
     "ShopRoleText": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "24",
-      "constants/outline_size": "9",
+      "constants/outline_size": "10",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ShopCloseButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -987,7 +987,7 @@
     },
     "ShopHintLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -1059,7 +1059,7 @@
     },
     "SellPageInput": {
       "base_type": "&\"LineEdit\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -1179,7 +1179,7 @@
     },
     "LhhjTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "8",
       "colors/font_color": "Color(1, 0.384314, 0.0431373, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -1243,7 +1243,7 @@
     },
     "PelletEatLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "",
@@ -1259,7 +1259,7 @@
     },
     "PelletTotalValue": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "",
@@ -1331,7 +1331,7 @@
     },
     "PelletAttTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0.658824, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.658824, 0, 1)",
@@ -1339,7 +1339,7 @@
     },
     "PelletCritTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0.658824, 0.67451, 0.670588, 1)",
       "colors/font_outline_color": "Color(0.658824, 0.67451, 0.670588, 1)",
@@ -1347,7 +1347,7 @@
     },
     "PelletEmpTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0.627451, 1, 1)",
       "colors/font_outline_color": "Color(0, 0.627451, 1, 1)",
@@ -1355,7 +1355,7 @@
     },
     "PelletHpTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -1363,7 +1363,7 @@
     },
     "PelletLuckyTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -1371,7 +1371,7 @@
     },
     "PelletMpTab": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 1, 1, 1)",
@@ -1581,7 +1581,7 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "14",
       "constants/outline_size": "3",
-      "colors/font_color": "Color(1, 0.95686275, 0.7490196, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
@@ -1651,7 +1651,7 @@
     },
     "GameInfoTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -1803,7 +1803,7 @@
     },
     "BdSkillTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -1837,8 +1837,8 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "14",
       "constants/outline_size": "3",
-      "colors/font_color": "Color(1, 0.952941, 0.658824, 1)",
-      "colors/font_outline_color": "Color(0.266667, 0.12549, 0.0509804, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "BodyTrainingMainLabel": {
@@ -1846,14 +1846,14 @@
       "font_sizes/font_size": "14",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
-      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "SwordPageLevelLabel": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "18",
       "constants/outline_size": "3",
-      "colors/font_color": "Color(1, 1, 0.22, 1)",
+      "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
@@ -1883,7 +1883,7 @@
     },
     "MagicHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "8",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -1907,7 +1907,7 @@
     },
     "LhhjHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "8",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -1939,7 +1939,7 @@
     },
     "SynHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -1947,7 +1947,7 @@
     },
     "LetterTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "",
@@ -1955,7 +1955,7 @@
     },
     "LetterBody": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "",
@@ -1963,7 +1963,7 @@
     },
     "LetterPageButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -1971,7 +1971,7 @@
     },
     "LetterPageLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2003,7 +2003,7 @@
     },
     "LlbtCgmsButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2051,7 +2051,7 @@
     },
     "EndStatsMoreInfo": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "",
@@ -2083,7 +2083,7 @@
     },
     "EndStatsCritCount": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.741176, 0.341176, 0.309804, 1)",
       "colors/font_outline_color": "Color(0.741176, 0.341176, 0.309804, 1)",
@@ -2091,7 +2091,7 @@
     },
     "EndStatsHit": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -2099,7 +2099,7 @@
     },
     "EndStatsHitCount": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 0.32549, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.32549, 0, 1)",
@@ -2107,7 +2107,7 @@
     },
     "EndStatsRealHit": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.545098, 0.545098, 0.545098, 1)",
       "colors/font_outline_color": "Color(0.545098, 0.545098, 0.545098, 1)",
@@ -2115,7 +2115,7 @@
     },
     "EndStatsMagicHit": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0, 0.427451, 0.898039, 1)",
       "colors/font_outline_color": "Color(0, 0.427451, 0.898039, 1)",
@@ -2123,7 +2123,7 @@
     },
     "EndStatsPhysicalHit": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 0.615686, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.615686, 0, 1)",
@@ -2131,7 +2131,7 @@
     },
     "EndStatsHurt": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.517647, 0.537255, 0.815686, 1)",
       "colors/font_outline_color": "Color(0.517647, 0.537255, 0.815686, 1)",
@@ -2139,7 +2139,7 @@
     },
     "EndStatsHurtCount": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.462745, 0.290196, 0, 1)",
       "colors/font_outline_color": "Color(0.462745, 0.290196, 0, 1)",
@@ -2147,7 +2147,7 @@
     },
     "EndStatsMagicHurt": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.376471, 0.184314, 0.815686, 1)",
       "colors/font_outline_color": "Color(0.376471, 0.184314, 0.815686, 1)",
@@ -2155,7 +2155,7 @@
     },
     "EndStatsMissCount": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2163,7 +2163,7 @@
     },
     "EndStatsPhysicalHurt": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.466667, 0, 0, 1)",
       "colors/font_outline_color": "Color(0.466667, 0, 0, 1)",
@@ -2171,7 +2171,7 @@
     },
     "EndStatsRealHurt": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.258824, 0.258824, 0.258824, 1)",
       "colors/font_outline_color": "Color(0.258824, 0.258824, 0.258824, 1)",
@@ -2179,7 +2179,7 @@
     },
     "EndStatsCure": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.431373, 1, 0.368627, 1)",
       "colors/font_outline_color": "Color(0.431373, 1, 0.368627, 1)",
@@ -2187,7 +2187,7 @@
     },
     "LdlTitleLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2195,7 +2195,7 @@
     },
     "LdlDzButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2203,7 +2203,7 @@
     },
     "LdlFjButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2211,7 +2211,7 @@
     },
     "LdlHcButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2219,7 +2219,7 @@
     },
     "LdlQhButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2227,7 +2227,7 @@
     },
     "LdlReturnButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2235,7 +2235,7 @@
     },
     "LdlXqButton": {
       "base_type": "&\"MenuActionButton\"",
-      "font_sizes/font_size": "",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2331,7 +2331,7 @@
     },
     "ZhenFaCurrentName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "5",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -2347,7 +2347,7 @@
     },
     "ZhenFaTabLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0.466667, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.466667, 0, 1)",
@@ -2507,7 +2507,7 @@
     },
     "HcHelpColumnLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "7",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -2539,7 +2539,7 @@
     },
     "AutoBattleTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "26",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 0.88, 0.38, 1)",
       "colors/font_outline_color": "Color(0.02, 0.01, 0, 1)",
@@ -2587,7 +2587,7 @@
     },
     "AutoBattleSkillOption": {
       "base_type": "&\"OptionButton\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2595,7 +2595,7 @@
     },
     "AutoBattleSmallButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2627,7 +2627,7 @@
     },
     "AutoBattleActionButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "21",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2739,7 +2739,7 @@
     },
     "MagicWeaponAttr": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "14",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -2747,7 +2747,7 @@
     },
     "MagicWeaponSkillTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "21",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -2764,7 +2764,7 @@
     "MagicWeaponPsTitle": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "",
-      "constants/outline_size": "8",
+      "constants/outline_size": "6",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -2772,7 +2772,7 @@
     "MagicWeaponPsSkill": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "",
-      "constants/outline_size": "4",
+      "constants/outline_size": "3",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -2788,7 +2788,7 @@
     "MagicWeaponAction": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
-      "constants/outline_size": "9",
+      "constants/outline_size": "10",
       "colors/font_color": "Color(0, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -2796,7 +2796,7 @@
     "MagicWeaponActionSmall": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "14",
-      "constants/outline_size": "8",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -2804,7 +2804,7 @@
     "MagicWeaponActionAlt": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
-      "constants/outline_size": "8",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -2867,7 +2867,7 @@
     },
     "ZhenFaHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "29",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -2899,7 +2899,7 @@
     },
     "CureTimesHeader": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -2923,7 +2923,7 @@
     },
     "CureTimesCurrency": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -2939,7 +2939,7 @@
     },
     "DecomposeHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -2949,8 +2949,8 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
       "constants/outline_size": "1",
-      "colors/font_color": "Color(1, 0.635294, 0, 1)",
-      "colors/font_outline_color": "Color(1, 0.635294, 0, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
     "DecomposeHelpRow": {
@@ -2979,7 +2979,7 @@
     },
     "SkillSelectInfo": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3020,7 +3020,7 @@
     "DjSellNumber": {
       "base_type": "&\"LineEdit\"",
       "font_sizes/font_size": "12",
-      "constants/outline_size": "9",
+      "constants/outline_size": "10",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -3043,7 +3043,7 @@
     },
     "BackpackLockText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "11",
+      "font_sizes/font_size": "12",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3059,7 +3059,7 @@
     },
     "BackpackTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3099,7 +3099,7 @@
     },
     "BackpackTabLabelSmall": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3171,7 +3171,7 @@
     },
     "ShopItemSoulValue": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "18",
       "constants/outline_size": "",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "",
@@ -3180,9 +3180,9 @@
     "ShopItemSoulText": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "12",
-      "constants/outline_size": "7",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0, 0, 0, 1)",
-      "colors/font_outline_color": "Color(1, 1, 1, 0)",
+      "colors/font_outline_color": "Color(0, 0, 0, 0)",
       "colors/font_shadow_color": ""
     },
     "Map3RegionLabel": {
@@ -3203,11 +3203,11 @@
     },
     "ChoosePlayerTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "38",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "",
-      "colors/font_color": "Color(1, 0.760784, 0.196078, 1)",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
       "colors/font_outline_color": "",
-      "colors/font_shadow_color": "Color(0.141176, 0.0470588, 0.0117647, 1)"
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
     "ChoosePlayerCardRow": {
       "base_type": "&\"HBoxContainer\"",
@@ -3219,9 +3219,9 @@
     },
     "ChoosePlayerRoleName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "26",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
-      "colors/font_color": "Color(1, 0.760784, 0.196078, 1)",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
@@ -3235,9 +3235,9 @@
     },
     "ChoosePlayerInfo": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
-      "colors/font_color": "Color(0.996078, 0.956863, 0.721569, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
@@ -3253,23 +3253,23 @@
       "base_type": "&\"Button\"",
       "font_sizes/font_size": "18",
       "constants/outline_size": "2",
-      "colors/font_color": "Color(0.96, 0.86, 0.62, 1)",
-      "colors/font_outline_color": "Color(0.06, 0.04, 0.02, 1)",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ForgeTitle": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "32",
-      "constants/outline_size": "5",
-      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ForgeSubtitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
-      "constants/outline_size": "5",
-      "colors/font_color": "Color(0, 0.976471, 0, 1)",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
@@ -3291,15 +3291,15 @@
     },
     "ForgeItemName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "27",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "28",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0.45098, 0.427451, 0.4, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ForgeSoulLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "10",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3323,7 +3323,7 @@
     },
     "GameNeedKnowTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "1",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3414,7 +3414,7 @@
       "font_sizes/font_size": "18",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0.290196, 0, 1)",
-      "colors/font_outline_color": "Color(1, 0.396078, 0, 1)",
+      "colors/font_outline_color": "Color(0.964706, 0.403922, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "MainMenuLabel": {
@@ -3427,7 +3427,7 @@
     },
     "LearnSkillLevelValue": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -3435,7 +3435,7 @@
     },
     "LearnSkillTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "2",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3443,7 +3443,7 @@
     },
     "LearnSkillDescriptionButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "21",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.95, 0.91, 0.78, 1)",
       "colors/font_outline_color": "",
@@ -3451,7 +3451,7 @@
     },
     "LearnSkillButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3459,9 +3459,9 @@
     },
     "ForgeHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
-      "constants/outline_size": "5",
-      "colors/font_color": "Color(0.988235, 1, 0, 1)",
+      "font_sizes/font_size": "36",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
@@ -3476,7 +3476,7 @@
     "ForgeHelpLine": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
-      "constants/outline_size": "5",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -3491,17 +3491,17 @@
     },
     "WanLingTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "3",
-      "colors/font_color": "Color(0.96, 0.81, 0.45, 1)",
-      "colors/font_outline_color": "Color(0.1, 0.055, 0.025, 1)",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "WanLingCloseButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "26",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
-      "colors/font_color": "Color(1, 0.91, 0.78, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": ""
     },
@@ -3531,7 +3531,7 @@
     },
     "WanLingSectionTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "23",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "Color(0.76, 0.9, 0.83, 1)",
       "colors/font_outline_color": "",
@@ -3571,17 +3571,17 @@
     },
     "WanLingAttributeTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "21",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
-      "colors/font_color": "Color(0.96, 0.81, 0.45, 1)",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": ""
     },
     "WanLingAttributeText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
-      "colors/font_color": "Color(0.82, 0.89, 0.85, 1)",
+      "colors/font_color": "Color(0.76, 0.9, 0.83, 1)",
       "colors/font_outline_color": "",
       "colors/font_shadow_color": ""
     },
@@ -3590,7 +3590,7 @@
       "font_sizes/font_size": "20",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
-      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "BodyTrainingDetailAttribute": {
@@ -3606,7 +3606,7 @@
       "font_sizes/font_size": "16",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 1, 1, 1)",
-      "colors/font_outline_color": "Color(0.1, 0.1, 0.1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "BodyTrainingDetailMaterial": {
@@ -3614,7 +3614,7 @@
       "font_sizes/font_size": "16",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
-      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "BodyTrainingTrainButton": {
@@ -3627,8 +3627,8 @@
     },
     "UseItemsTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
-      "constants/outline_size": "7",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -3643,24 +3643,24 @@
     },
     "UseItemStatName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "6",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "UseItemUpLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "33",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "UseItemDownLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "37",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "36",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -3668,15 +3668,15 @@
     "UseItemMaxLabel": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "10",
-      "constants/outline_size": "5",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "UseItemMinLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "11",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -3692,14 +3692,14 @@
     "UseItemKey": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "",
-      "constants/outline_size": "5",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "DsgChooseTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -3723,15 +3723,15 @@
     },
     "MosaicHelpTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "6",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "MosaicHelpLine": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "18",
       "constants/outline_size": "2",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3739,7 +3739,7 @@
     },
     "LevelInfoTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "10",
       "colors/font_color": "Color(0.952941, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3755,7 +3755,7 @@
     },
     "LevelInfoChallengeTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "31",
+      "font_sizes/font_size": "32",
       "constants/outline_size": "9",
       "colors/font_color": "Color(0.929412, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3763,7 +3763,7 @@
     },
     "LevelInfoMyPj": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "12",
       "colors/font_color": "Color(0.505882, 0.505882, 0.505882, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3779,7 +3779,7 @@
     },
     "LevelInfoDialogTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "23",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3803,7 +3803,7 @@
     },
     "VictoryMoreButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "5",
       "colors/font_color": "Color(0.933333, 0.505882, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3851,7 +3851,7 @@
     },
     "DefeatMessageLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -3867,7 +3867,7 @@
     },
     "TransmogrifiedHaveOrNot": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 0, 0, 1)",
@@ -3875,7 +3875,7 @@
     },
     "TransmogrifiedActionLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "12",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3891,7 +3891,7 @@
     },
     "ChangeBackgroundTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "Color(1, 0.623529, 0, 1)",
       "colors/font_outline_color": "",
@@ -3899,7 +3899,7 @@
     },
     "ChangeBackgroundButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -3907,10 +3907,10 @@
     },
     "BacisInfoNumber": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "26",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "1",
-      "colors/font_color": "Color(1, 0.376471, 0, 1)",
-      "colors/font_outline_color": "Color(1, 0.376471, 0, 1)",
+      "colors/font_color": "Color(0.964706, 0.403922, 0, 1)",
+      "colors/font_outline_color": "Color(0.964706, 0.403922, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "BacisInfoVBox": {
@@ -3971,7 +3971,7 @@
     },
     "BossBloodName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "29",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "13",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -3995,7 +3995,7 @@
     },
     "SkillAwakenName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "4",
       "colors/font_color": "Color(1, 0.92, 0.05, 1)",
       "colors/font_outline_color": "Color(0.12, 0.06, 0, 1)",
@@ -4003,7 +4003,7 @@
     },
     "SkillAwakenStatus": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "3",
       "colors/font_color": "Color(1, 0.86, 0.32, 1)",
       "colors/font_outline_color": "Color(0.05, 0.08, 0.14, 1)",
@@ -4011,7 +4011,7 @@
     },
     "SkillAwakenDescription": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.82, 0.9, 1, 1)",
       "colors/font_outline_color": "Color(0.02, 0.04, 0.1, 1)",
@@ -4019,7 +4019,7 @@
     },
     "SkillAwakenCheck": {
       "base_type": "&\"CheckBox\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0.82, 0.9, 1, 1)",
       "colors/font_outline_color": "Color(0.02, 0.04, 0.1, 1)",
@@ -4067,8 +4067,8 @@
     },
     "DjInfoDescription": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
-      "constants/outline_size": "5",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "6",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
@@ -4083,7 +4083,7 @@
     },
     "TaskTitleHeading": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "27",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4091,7 +4091,7 @@
     },
     "TaskTitleStatus": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 1, 1, 1)",
@@ -4099,7 +4099,7 @@
     },
     "ChooseItemTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4107,7 +4107,7 @@
     },
     "ChooseItemList": {
       "base_type": "&\"ItemList\"",
-      "font_sizes/font_size": "19",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "10",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4147,7 +4147,7 @@
     },
     "EquipmentDescription": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "14",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4155,10 +4155,10 @@
     },
     "EquipmentSale": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "18",
       "constants/outline_size": "1",
-      "colors/font_color": "Color(1, 0.6, 0.2, 1)",
-      "colors/font_outline_color": "Color(1, 0.6, 0.2, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "UserKeyKey": {
@@ -4171,7 +4171,7 @@
     },
     "UserKeyTime": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "9",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4187,7 +4187,7 @@
     },
     "MysteryShopLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "14",
       "constants/outline_size": "1",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4211,7 +4211,7 @@
     },
     "RewardTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "8",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4252,7 +4252,7 @@
     "StrengthNumber": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "20",
-      "constants/outline_size": "8",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
@@ -4275,7 +4275,7 @@
     },
     "UserLoadTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "35",
+      "font_sizes/font_size": "36",
       "constants/outline_size": "7",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4315,7 +4315,7 @@
     },
     "Level17Text": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "8",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4341,15 +4341,15 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "18",
       "constants/outline_size": "6",
-      "colors/font_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
     "BoxLockMark": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
-      "constants/outline_size": "4",
-      "colors/font_color": "Color(1, 0.86, 0.2, 1)",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.752941, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
@@ -4395,7 +4395,7 @@
     },
     "LoadSceneProgress": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "33",
+      "font_sizes/font_size": "32",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4420,14 +4420,14 @@
     "UseMagicPage": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "",
-      "constants/outline_size": "7",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ChooseSceneText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4467,7 +4467,7 @@
     },
     "BuffIconTime": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "9",
+      "font_sizes/font_size": "10",
       "constants/outline_size": "5",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4499,7 +4499,7 @@
     },
     "BuffInformationText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -4507,7 +4507,7 @@
     },
     "ChangeClothesAction": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "12",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4540,22 +4540,22 @@
     "DecomposeTitle": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "32",
-      "constants/outline_size": "5",
-      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "DecomposeTitleOrange": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "24",
-      "constants/outline_size": "12",
+      "constants/outline_size": "10",
       "colors/font_color": "Color(0.964706, 0.403922, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "DivineForgeButton": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "32",
       "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4565,7 +4565,7 @@
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "50",
       "constants/outline_size": "11",
-      "colors/font_color": "Color(1, 0.27451, 0, 1)",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(0.0941176, 0.0941176, 0.0941176, 1)"
     },
@@ -4579,15 +4579,15 @@
     },
     "MapReturnText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "5",
-      "colors/font_color": "Color(1, 0.470588, 0, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "MessageShowText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4603,9 +4603,9 @@
     },
     "PetBackpackSlotNumber": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "4",
-      "colors/font_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },
@@ -4652,14 +4652,14 @@
     "SynthesisTitle": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "32",
-      "constants/outline_size": "5",
-      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "TaskRewardTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "13",
+      "font_sizes/font_size": "12",
       "constants/outline_size": "1",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4667,23 +4667,23 @@
     },
     "TowerFloorText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "3",
-      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
-      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "TowerHintText": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "16",
       "constants/outline_size": "2",
-      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
-      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "ZhenFaActiveLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "26",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 0.329412, 0, 1)",
       "colors/font_outline_color": "Color(1, 0.329412, 0, 1)",
@@ -4740,14 +4740,14 @@
     "ForgeMaterialNeed": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "14",
-      "constants/outline_size": "5",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "GameOverSubtitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "7",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4755,7 +4755,7 @@
     },
     "GameOverTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "22",
+      "font_sizes/font_size": "20",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4763,7 +4763,7 @@
     },
     "HeroName": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -4771,7 +4771,7 @@
     },
     "LevelLlbtText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "6",
       "colors/font_color": "Color(0, 0, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4779,7 +4779,7 @@
     },
     "LhhjButtonRole": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4787,7 +4787,7 @@
     },
     "ListButtonRole": {
       "base_type": "&\"Button\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4796,14 +4796,14 @@
     "MagicWeaponCdText": {
       "base_type": "&\"Label\"",
       "font_sizes/font_size": "16",
-      "constants/outline_size": "8",
+      "constants/outline_size": "6",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": ""
     },
     "PelletSysTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "Color(1, 1, 1, 1)",
@@ -4843,7 +4843,7 @@
     },
     "BossInfoTitle": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "",
       "colors/font_color": "",
       "colors/font_outline_color": "",
@@ -4883,7 +4883,7 @@
     },
     "HeroNameFlat": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "17",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "2",
       "colors/font_color": "Color(1, 1, 0, 1)",
       "colors/font_outline_color": "Color(1, 1, 0, 1)",
@@ -4891,7 +4891,7 @@
     },
     "MomentTextLabel": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "30",
+      "font_sizes/font_size": "28",
       "constants/outline_size": "",
       "colors/font_color": "Color(1, 1, 1, 1)",
       "colors/font_outline_color": "",
@@ -4899,7 +4899,7 @@
     },
     "MonsterBloodText": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "15",
+      "font_sizes/font_size": "16",
       "constants/outline_size": "5",
       "colors/font_color": "",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
@@ -4931,9 +4931,9 @@
     },
     "HitTextBase": {
       "base_type": "&\"Label\"",
-      "font_sizes/font_size": "25",
+      "font_sizes/font_size": "24",
       "constants/outline_size": "10",
-      "colors/font_color": "Color(0.145098, 1, 0, 1)",
+      "colors/font_color": "Color(0, 1, 0, 1)",
       "colors/font_outline_color": "Color(0, 0, 0, 1)",
       "colors/font_shadow_color": "Color(0, 0, 0, 1)"
     },

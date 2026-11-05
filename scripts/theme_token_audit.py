@@ -4,7 +4,7 @@
 
 - 只读解析 `bhyh_theme.tres`；
 - 用 `scripts/theme_token_baseline.json` 冻结迁移前的既有变体值；
-- 新增变体或既有变体新增/改写的字号、描边、字体颜色必须属于 token 集合；
+- 所有当前字号必须属于 token 集合；新增/改写的描边与字体颜色必须属于 token 集合；
 - 新增 Button 变体必须继承已登记的 Button token 基类。
 
 基线是迁移期的兼容上限，不是新值白名单；新 UI 必须使用 token。
@@ -76,16 +76,15 @@ def signature(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
 def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]]) -> list[str]:
     errors: list[str] = []
     for name, props in sorted(current.items()):
+        # Phase 27-2 后，存量与新增字号都必须落在 token 标尺内。
+        current_size = props.get("font_sizes/font_size")
+        if current_size is not None and int(current_size) not in FONT_SIZES:
+            errors.append(f"{name} 当前字号不在 token: {current_size}")
         previous = baseline.get(name)
         if previous is None:
-            for prop in ("font_sizes/font_size", "constants/outline_size"):
-                value = props.get(prop)
-                if value is None:
-                    continue
-                if prop == "font_sizes/font_size" and int(value) not in FONT_SIZES:
-                    errors.append(f"新增变体 {name} 字号不在 token: {value}")
-                if prop == "constants/outline_size" and int(value) not in OUTLINE_SIZES:
-                    errors.append(f"新增变体 {name} 描边不在 token: {value}")
+            value = props.get("constants/outline_size")
+            if value is not None and int(value) not in OUTLINE_SIZES:
+                errors.append(f"新增变体 {name} 描边不在 token: {value}")
             for key in COLOR_KEYS:
                 value = props.get(key)
                 if value is not None and value not in COLORS:
@@ -97,13 +96,10 @@ def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]
                 if base == "Button":
                     errors.append(f"新增 Button 变体 {name} 直接继承 Button，应使用 token 基类")
             continue
-        for prop in ("font_sizes/font_size", "constants/outline_size"):
-            value = props.get(prop)
-            old = previous.get(prop, "")
-            if value is not None and value != old:
-                allowed = FONT_SIZES if prop.startswith("font_sizes") else OUTLINE_SIZES
-                if int(value) not in allowed:
-                    errors.append(f"{name} {prop} 改写值不在 token: {value}")
+        value = props.get("constants/outline_size")
+        old = previous.get("constants/outline_size", "")
+        if value is not None and value != old and int(value) not in OUTLINE_SIZES:
+            errors.append(f"{name} constants/outline_size 改写值不在 token: {value}")
         for key in COLOR_KEYS:
             value = props.get(key)
             old = previous.get(key, "")
