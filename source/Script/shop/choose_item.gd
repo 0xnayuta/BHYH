@@ -36,16 +36,16 @@ func get_item_name(idx):
 	match lx:
 		"武器", "防具", "饰品":
 			if get_num > 0:
-				name_text = name_text + " (+" + str(get_num) + ")"
+				name_text = name_text + "（+" + str(get_num) + "）"
 		"法宝":
 			if wxx != "":
 				if get_num > 0:
-					name_text = name_text + " (+" + str(get_num) + ")" + "(" + str(wxx) + ")"
+					name_text = name_text + "（+" + str(get_num) + "）（" + str(wxx) + "）"
 				else:
 					name_text = name_text + str(wxx)
 			else:
 				if get_num > 0:
-					name_text = name_text + " (+" + str(get_num) + ")"
+					name_text = name_text + "（+" + str(get_num) + "）"
 				else:
 					name_text = name_text
 		"道具", "消耗品":

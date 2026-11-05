@@ -12,7 +12,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	cd.text = "(" + str(snapped(read_cd.get_time_left(), 0)) + "s)"
+	cd.text = "（" + str(snapped(read_cd.get_time_left(), 0)) + "s）"
 	if read_cd.get_time_left() <= 0:
 		cd.text = ""
 		button.disabled = false

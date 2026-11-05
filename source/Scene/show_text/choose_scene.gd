@@ -17,7 +17,7 @@ func _physics_process(_delta: float) -> void:
 		$TextureRect/bg/ScrollContainer/Text.text = my_text
 		is_set = true
 	if calm_time > 0:
-		calm.text = "(" + str(snapped($think_time.get_time_left(), 0)) + "s)"
+		calm.text = "（" + str(snapped($think_time.get_time_left(), 0)) + "s）"
 	if $think_time.get_time_left() <= 0:
 		calm.text = ""
 

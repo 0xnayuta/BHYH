@@ -75,7 +75,7 @@ func _physics_process(delta: float) -> void:
 		var ratio := float(hp) / maxf(float(shp), 1.0)
 		boss_blood.value = ratio
 		big_bar_hp_c_hange = ratio
-		blood_value.text = " " + str(hp) + "/" + str(shp) + "(" + str(snapped(ratio, 0.001) * 100) + "%)"
+		blood_value.text = " " + str(hp) + "/" + str(shp) + "（" + str(snapped(ratio, 0.001) * 100) + "%）"
 	if display_name != _last_name:
 		_last_name = display_name
 		monster_name.text = display_name + " "

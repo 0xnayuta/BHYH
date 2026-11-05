@@ -81,7 +81,7 @@ func _on_change_pressed() -> void:
 			)
 			return
 		Global.add_message_show(
-			Global.get_ui_runtime().windows, "取消" + str(lx) + ":" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
+			Global.get_ui_runtime().windows, "取消" + str(lx) + "：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
 		)
 	else:
 		return

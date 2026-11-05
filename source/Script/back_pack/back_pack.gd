@@ -291,23 +291,23 @@ func set_backpack_properies():
 
 		var def_raw = RoleProp.roleprop.Def
 		var def_rate = snapped(def_raw / float(def_raw + 250), 0.001) * 100
-		def.text = str(int(def_raw)) + " (" + ("%.2f" % def_rate) + "%)"
+		def.text = str(int(def_raw)) + "（" + ("%.2f" % def_rate) + "%）"
 
 		var mdef_raw = RoleProp.roleprop.Mdef
 		var mdef_rate = snapped(mdef_raw / float(mdef_raw + 250), 0.001) * 100
-		mdef.text = str(int(mdef_raw)) + " (" + ("%.2f" % mdef_rate) + "%)"
+		mdef.text = str(int(mdef_raw)) + "（" + ("%.2f" % mdef_rate) + "%）"
 
 		var crit_raw = RoleProp.roleprop.Crit
 		var crit_rate = snapped(crit_raw / float(crit_raw + 100), 0.001) * 100
-		crit.text = ("%.2f" % crit_raw) + " (" + ("%.2f" % crit_rate) + "%)"
+		crit.text = ("%.2f" % crit_raw) + "（" + ("%.2f" % crit_rate) + "%）"
 
 		var miss_raw = RoleProp.roleprop.Miss
 		var miss_rate = snapped(miss_raw / float(miss_raw + 100), 0.001) * 100
-		miss.text = ("%.2f" % miss_raw) + " (" + ("%.2f" % miss_rate) + "%)"
+		miss.text = ("%.2f" % miss_raw) + "（" + ("%.2f" % miss_rate) + "%）"
 
 		var lucky_raw = RoleProp.roleprop.Lucky
 		var lucky_rate = snapped(lucky_raw / float(lucky_raw + 50), 0.001) * 100
-		lucky.text = ("%.2f" % lucky_raw) + " (" + ("%.2f" % lucky_rate) + "%)"
+		lucky.text = ("%.2f" % lucky_raw) + "（" + ("%.2f" % lucky_rate) + "%）"
 
 	elif current_pro_page == 2:
 		message_text.text = "角色属性详情第二页"

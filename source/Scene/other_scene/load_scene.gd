@@ -406,7 +406,7 @@ func _finish_loading() -> void:
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("archive preload queue")
-		loading_text.text = "正在准备角色技能资源..."
+		loading_text.text = "正在准备角色技能资源……"
 		_set_progress(0.91)
 		await Global.prewarm_current_role_runtime_resources(role_id)
 		if not _is_request_current():
@@ -438,7 +438,7 @@ func _finish_loading() -> void:
 		_set_progress(0.92)
 		await get_tree().process_frame
 	if needs_magic_weapon_prewarm:
-		loading_text.text = "正在准备战斗资源..."
+		loading_text.text = "正在准备战斗资源……"
 		_set_progress(0.93)
 		await get_tree().process_frame
 	if needs_magic_weapon_prewarm:
@@ -484,7 +484,7 @@ func _finish_loading() -> void:
 		if fashions is Array and not fashions.is_empty() and str(fashions[0].get(DataKeys.NAME, "")) == "shenqismsrsz":
 			SMSR_EFFECT_SCRIPT.prewarm_frames()
 			await get_tree().process_frame
-		loading_text.text = "正在准备副本怪物资源..."
+		loading_text.text = "正在准备副本怪物资源……"
 		_set_progress(0.94)
 		await _prewarm_target_level_resources()
 		if not _is_request_current():

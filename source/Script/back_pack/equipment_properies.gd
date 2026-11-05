@@ -448,7 +448,7 @@ func _set_equipment_info(_name: String):
 
 	var display_name: String = EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
 	if qh_level != 0:
-		eq_name.text = display_name + "(+" + str(qh_level) + ")"
+		eq_name.text = display_name + "（+" + str(qh_level) + "）"
 	else:
 		eq_name.text = display_name
 	eq_pz.text = "品质：" + str(get_properies(_name, "品质")[0])
@@ -805,7 +805,7 @@ func get_properies(_name, need):
 		infomation = str(scaled_base)
 		if qh_level > 0 and strengthen_val != 0:
 			var sign := "+" if float(scaled_strength) >= 0.0 else ""
-			infomation += "(" + sign + str(scaled_strength) + ")"
+			infomation += "（" + sign + str(scaled_strength) + "）"
 	return [target_count, infomation]
 
 

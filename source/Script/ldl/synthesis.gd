@@ -171,7 +171,7 @@ func _on_syn_pressed() -> void:
 		return
 	Global.add_message_show(
 		get_parent(),
-		"合成成功！获得：" + EquipmentService.definition(StringName(_item)).display_name + " * 1 !!",
+		"合成成功！获得：" + EquipmentService.definition(StringName(_item)).display_name + " × 1！",
 		1.5,
 		Vector2(15, -45)
 	)
