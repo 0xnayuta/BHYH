@@ -28,7 +28,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-6 复跑 **38.69s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-7 复跑 **37.86s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.91s） |
 | UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
@@ -48,6 +48,7 @@
 
 ### 最近完成
 
+- 2026-11-05 第二轮颜色 token（P2-7，商城/装备/锻造批次）：新增 `text_orange`、`text_amber`、`text_green`、`text_orange_deep`；`ShopMessageText`→orange、`CureTimesHint`→amber（原值不变）；`EquipmentStatLabel/Sale` #FF9933→#FF9500；`ForgeSubtitle` #00F900→#00FF00，`ForgeMaterialNeed`/`StrengthNumber` 使用 green；`DecomposeTitleOrange`→orange_deep，`DecomposeHelpBody` #FFA200→#FF9500。1280×800/1600×1000 控件转储 **0 位置/0 尺寸**，无新增越界；`theme_token_audit` **618/0**。
 - 2026-11-05 第二轮颜色 token（P2-6，公告批次）：新增 `text_danger`、`text_success`、`text_hint`、`text_gold_warm`；`AnnouncementWarning`→danger、`AnnouncementAlert`→warning、`AnnouncementStatus`→success、`AnnouncementPrompt`→hint、`AnnouncementSubtitle/Title`→gold_warm。仅 Alert 实际色值 #FF574D→#FF4A00，其余值保持不变。控件转储 0 位置/0 尺寸；1280×800/1600×1000 截图已归档；`theme_token_audit` **618/0**。
 - 2026-11-05 真实法宝数据探针：`ui-factories` 临时注入 `tjbg` 法宝实例并恢复原数据，验证 `magic_weapon_infor` 的名称/技能标题，以及 `use_magic_weapon` 的 `1/N` 分页和 3 个真实技能选择项；新增断言全部 PASS（19.96s）。
 - 2026-11-05 装备 tooltip 空值修复：`equipment_properies` 的武器/防具/饰品等分支统一通过 `_set_description_and_sale` 写入描述与售价，法宝分支同步补售价；`ui-factories` 新增真实工厂宿主断言 `backpack_equipment_description`、`backpack_equipment_sale`、`backpack_treasure_sale`。真机背包截图与武器面板渲染确认描述/售价显示；`check_all --godot-bin` **9/9**（31.52s 阶段复跑），`level_1` 4 阶段 0/0/0（24.33s）。

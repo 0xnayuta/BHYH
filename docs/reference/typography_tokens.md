@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-6 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-7 颜色批次（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -39,6 +39,10 @@
 | `text_success` | `#6BE0B3` | 成功/可用状态 |
 | `text_hint` | `#D6DBE6` | 密码/辅助提示 |
 | `text_gold_warm` | `#F0BA57` | 公告标题暖金 |
+| `text_orange` | `#FF9500` | 商城提示/装备属性与售价 |
+| `text_amber` | `#FFC000` | 治疗次数提示 |
+| `text_green` | `#00FF00` | 锻造/强化材料与数值 |
+| `text_orange_deep` | `#F66700` | 分解危险标题 |
 | `text_combat` | `#FFFF00` | 战斗冷却/需求 |
 | `ink` | `#000000` | 描边/阴影 |
 
@@ -84,6 +88,9 @@
 | `read_archive_interface` | 17→18、19→20、22→24、25→24、13→14、11→12；金色/弱文字映射到 `gold_deep`、`gold`、`secondary`、`muted` |
 | `game_announcement` | Heading 35→36；Subtitle 27→28；Warning/Prompt 17→18；CheckButton 22→20；CheckButtonSmall 21→20；SecretButtonTiny 19→20；Button/Title 保持 28 |
 | `game_announcement（颜色）` | Warning→danger；Alert→warning；Status→success；Prompt→hint；Subtitle/Title→gold_warm；仅 Alert 值 #FF574D→#FF4A00 |
+| `shop / cure_times_box（颜色）` | ShopMessageText→text_orange；CureTimesHint→text_amber；值保持 `#FF9500` / `#FFC000` |
+| `equipment_properies（颜色）` | EquipmentStatLabel/Sale `#FF9933`→text_orange `#FF9500` |
+| `ldl/forge（颜色）` | ForgeSubtitle `#00F900`→text_green；ForgeMaterialNeed/StrengthNumber 使用 text_green；DecomposeTitleOrange→text_orange_deep；DecomposeHelpBody `#FFA200`→text_orange |
 | `main_backpack` | Title 25→24；TabLabelSmall 15→16；LockText 11→12；BoxLockMark 13/4→14/3；TabBar/Large/Page/Coin 保持既有 token |
 | `ldl` | Title 19→20；六个 `MenuActionButton` 派生按钮 25→24；内嵌 `main_backpack` 同步 |
 | `shop` | Search/TabText 15→16；StatTitle/Hint 25→24；StatTitle outline 8→6；RoleText outline 9→10；Close 25→24；ItemSoulValue 17→18；ItemSoulText outline 7→6 |
@@ -123,6 +130,9 @@
 | `read_archive_interface` | 0 | 4 | 按钮/标题宽度随字号变化，无裁切 |
 | `game_announcement` | 13（标题/隐藏面板，最大 7 px） | 17 | 版本列表保持 28；滚动内容与隐藏功能页不新增越界 |
 | `game_announcement（颜色）` | 0 | 0 | 仅 `AnnouncementAlert` #FF574D→#FF4A00；其余颜色值不变 |
+| `shop / cure_times_box（颜色）` | 0 | 0 | 值不变，仅建立语义 token |
+| `equipment_properies（颜色）` | 0 | 0 | 属性/售价橙色 #FF9933→#FF9500 |
+| `ldl/forge（颜色）` | 0 | 0 | 绿色/橙色提示归一；无布局变化 |
 | `back_pack` | 89（纵向 ≤0.98 px） | 1 | 标题 25→24 引起整行上移；无可见越界 |
 | `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
 | `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
@@ -173,6 +183,8 @@ G:/tmp/p2f_after_1600/
 G:/tmp/p2fix_equipment_after.png
 G:/tmp/p2color_after/
 G:/tmp/p2color_after_1600/
+G:/tmp/p2color2_after/
+G:/tmp/p2color2_after_1600/
 ```
 
 ## 5. 审计
@@ -189,7 +201,7 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（38.69s）；
+- `check_all --godot-bin`：**9/9 PASS**（37.86s）；
 - `scene_probe ui-theme`：PASS（5.91s）；
 - `scene_probe ui-factories`：PASS（19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.33s）。
