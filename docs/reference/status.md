@@ -28,10 +28,10 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-5 复跑 **31.52s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-6 复跑 **38.69s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.91s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.53s，含装备描述/售价与法宝售价断言） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
 | Theme token | **618 变体 / 0 违规**（`theme_token_audit.py --check`） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
@@ -48,7 +48,9 @@
 
 ### 最近完成
 
-- 2026-11-05 装备 tooltip 空值修复：`equipment_properies` 的武器/防具/饰品等分支统一通过 `_set_description_and_sale` 写入描述与售价，法宝分支同步补售价；`ui-factories` 新增真实工厂宿主断言 `backpack_equipment_description`、`backpack_equipment_sale`、`backpack_treasure_sale`。真机背包截图与武器面板渲染确认描述/售价显示；`check_all --godot-bin` **9/9**（31.52s），`ui-factories` PASS（19.53s），`level_1` 4 阶段 0/0/0（24.33s）。
+- 2026-11-05 第二轮颜色 token（P2-6，公告批次）：新增 `text_danger`、`text_success`、`text_hint`、`text_gold_warm`；`AnnouncementWarning`→danger、`AnnouncementAlert`→warning、`AnnouncementStatus`→success、`AnnouncementPrompt`→hint、`AnnouncementSubtitle/Title`→gold_warm。仅 Alert 实际色值 #FF574D→#FF4A00，其余值保持不变。控件转储 0 位置/0 尺寸；1280×800/1600×1000 截图已归档；`theme_token_audit` **618/0**。
+- 2026-11-05 真实法宝数据探针：`ui-factories` 临时注入 `tjbg` 法宝实例并恢复原数据，验证 `magic_weapon_infor` 的名称/技能标题，以及 `use_magic_weapon` 的 `1/N` 分页和 3 个真实技能选择项；新增断言全部 PASS（19.96s）。
+- 2026-11-05 装备 tooltip 空值修复：`equipment_properies` 的武器/防具/饰品等分支统一通过 `_set_description_and_sale` 写入描述与售价，法宝分支同步补售价；`ui-factories` 新增真实工厂宿主断言 `backpack_equipment_description`、`backpack_equipment_sale`、`backpack_treasure_sale`。真机背包截图与武器面板渲染确认描述/售价显示；`check_all --godot-bin` **9/9**（31.52s 阶段复跑），`level_1` 4 阶段 0/0/0（24.33s）。
 - 2026-11-05 P2 token 试点（P2-5）：`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help` 按 [`typography_tokens.md`](typography_tokens.md) 收敛。`sell_or_equ` 与 `forge_help` 已是 token，本批无改写；`use_magic_weapon` 仅 UseMagicPage outline 7→6；`magic_weapon_infor` Attr 13→14、SkillTitle 21→20、Action 9→10、其余描边 8→6/4→3；`mosaic_help` Title 30→32/outline 6、Line 17→18；`decompose_help` Title 25→24。控件转储：`sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0 位置/0 尺寸；`magic_weapon_infor` 0/1；`mosaic_help` 5（≤5 px）/7，无新增可见越界。截图：`G:/tmp/p2f_before/`、`p2f_after/`、`p2f_before_1600/`、`p2f_after_1600/`。
 - 2026-11-05 P2 token 试点（P2-4）：背包子面板 `equipment_properies`/`use_items`/`skill_select`/`pl_sell`/`dj_information`/`dj_sell`、`ldl` 子场景 `forge`/`synthesis`/`strength`/`mosaic`/`decompose`/`divine_forge`/`bone_forge`、商店子面板 `choose_item`/`cure_times_box`/`shop_item` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号与描边；`shop_item` 已在前批完成，本批对照 **0** 字体重写。主要改动：装备数值 15→16、描述 13→14、售价 17→18；道具使用 33/37→32/36、13→14、15→16；锻造 22/27→24/28、标题 35→36；合成/分解标题统一 `combat`；神铸 30→32；选择物品 25→24/19→20；治疗次数 25→24/22→24。618 个变体名未改，未新增颜色族。控件转储：装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐）；`use_items` 0/2；`skill_select` 0/0；`pl_sell` 12（≤1 px）/3；`dj_information` 1/2；`dj_sell` 0/0；`forge` 0/1；`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge` 均 0/0；`choose_item`、`cure_times_box`、`shop_item` 0/0。验证：`check_all --godot-bin` **9/9**（36.27s）、`theme_token_audit` **618/0**、`font_coverage_audit` 0 缺字、`scene_probe ui-theme` PASS（5.51s）、`level_1` 4 阶段 0/0/0（24.68s）。截图：`G:/tmp/p2d_before/`、`p2d_after/`、`p2d_before_1600/`、`p2d_after_1600/`、`p2d_equip_host.png`。
 - 2026-11-05 P2 token 试点（P2-3）：`game_announcement`、`main_backpack`（由 `back_pack`/`ldl` 宿主承载）、`ldl`、`shop`、`mystery_shop` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号与描边；新增 `subtitle=28`，公告版本列表保持 28，背包标题 25→24、底部 `ldl` 按钮 25→24、商店 Tab/Search 15→16、ShopItemSoulValue 17→18、BoxLockMark 13/4→14/3。618 个变体名未改，未新增颜色族。控件转储：公告 13 个位置/17 个尺寸变化，`back_pack` 89 个位置（≤0.98 px）/1 个尺寸，`ldl` 89 个位置（≤1.33 px）/3 个尺寸，`shop` 4 个位置（最大 3.05 px）/1 个尺寸，`mystery_shop` 0；1280×800 与 1600×1000 截图未见裁切，未新增可见越界。验证：`check_all --godot-bin` **9/9**（36.82s）、`theme_token_audit` **618/0**、`font_coverage_audit` 0 缺字、`scene_probe ui-theme` PASS（5.41s）、`level_1` 4 阶段 0/0/0（23.91s）。截图：`G:/tmp/p2c_before/`、`p2c_after/`、`p2c_before_1600/`、`p2c_after_1600/`。
