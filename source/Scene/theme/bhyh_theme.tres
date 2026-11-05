@@ -1,9 +1,9 @@
 [gd_resource type="Theme" load_steps=30 format=3 uid="uid://bhyhuitheme01"]
 
-[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="font_main"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="font_return"]
+[ext_resource type="FontVariation" path="res://Scene/theme/font_main.tres" id="font_main"]
+[ext_resource type="FontVariation" path="res://Scene/theme/font_return.tres" id="font_return"]
 [ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="font_fz_cu_yuan_m03"]
-[ext_resource type="FontFile" path="res://Font/华康宋体W3.ttc" id="font_hk"]
+[ext_resource type="FontVariation" path="res://Scene/theme/font_hk.tres" id="font_hk"]
 
 [ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
 
@@ -608,7 +608,7 @@ BacisInfoLevel/constants/outline_size = 1
 BacisInfoName/base_type = &"SemanticBacisInfoName"
 BacisInfoName/colors/font_outline_color = Color(1, 1, 1, 1)
 BacisInfoName/constants/outline_size = 1
-BacisInfoName/fonts/font = ExtResource("font_main")
+BacisInfoName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BacisInfoNumber/base_type = &"SemanticArchiveDialogTitle"
 BacisInfoNumber/colors/font_color = Color(0.964706, 0.403922, 0, 1)
@@ -617,6 +617,7 @@ BacisInfoNumber/constants/outline_size = 1
 
 BacisInfoTime/base_type = &"SemanticBacisInfoTime2"
 BacisInfoTime/colors/font_outline_color = Color(1, 1, 1, 1)
+BacisInfoTime/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BacisInfoTime/font_sizes/font_size = 14
 
 BacisInfoVBox/base_type = &"BdSkillColumn"
@@ -898,6 +899,7 @@ CureTimesHeader/base_type = &"SemanticAutoBattleTitle"
 
 CureTimesHint/base_type = &"SemanticAutoBattleHint"
 CureTimesHint/colors/font_color = Color(1, 0.752941, 0, 1)
+CureTimesHint/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 CureTimesRow/base_type = &"BdSkillRow"
 
@@ -2131,6 +2133,7 @@ SwordPageStatLabel/constants/outline_size = 3
 
 SynHelpBody/base_type = &"SemanticRoleNatureHp"
 SynHelpBody/colors/font_color = Color(1, 0.941176, 0.470588, 1)
+SynHelpBody/fonts/font = ExtResource("font_hk")
 
 SynHelpSection/base_type = &"AnnouncementListGroup"
 
@@ -2255,7 +2258,7 @@ TransTipsSmall/constants/outline_size = 8
 TransTipsSmall/fonts/font = ExtResource("font_main")
 
 TransmogrifiedActionLabel/base_type = &"SemanticChangeClothesAction"
-TransmogrifiedActionLabel/fonts/font = ExtResource("font_main")
+TransmogrifiedActionLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 TransmogrifiedEqName/base_type = &"SemanticChooseSceneText"
 TransmogrifiedEqName/constants/shadow_outline_size = 11
@@ -2630,6 +2633,7 @@ SemanticConstellationTitle/base_type = &"SemanticAnnouncementAlert"
 SemanticConstellationTitle/font_sizes/font_size = 20
 
 SemanticRoleNatureHp/base_type = &"SemanticAnnouncementHeading"
+SemanticRoleNatureHp/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 SemanticRoleNatureHp/font_sizes/font_size = 12
 
 SemanticLearnSkillLevelValue/base_type = &"SemanticBacisInfoTime"

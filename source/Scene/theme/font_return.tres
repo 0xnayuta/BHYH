@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://bhyhfontdisplay"]
+
+[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="1_display"]
+[ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="2_body"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_body")])
+base_font = ExtResource("1_display")

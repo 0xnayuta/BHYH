@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "phase": "27-5",
+  "phase": "27-7",
   "theme_asset_count": 5,
   "roles": {
     "body": {
@@ -36,7 +36,7 @@
     "font_194_song_ti": "font_hk",
     "font_jin_qiao": "font_main"
   },
-  "private_assets_without_theme_reference": [
+  "removed_unreferenced_fonts": [
     "res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf",
     "res://Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf",
     "res://Font/hy_zhu_zi_mei_xin_ti_w.ttf",
@@ -44,7 +44,9 @@
     "res://Font/jin_qiao_jian_zhong_yuan.ttf",
     "res://Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf",
     "res://Font/jin_qiao_fan_li_shu.ttf",
-    "res://Font/jin_qiao_jian_cu_hei.ttf",
+    "res://Font/jin_qiao_jian_cu_hei.ttf"
+  ],
+  "private_assets_without_theme_reference": [
     "res://Font/zmws/ttf/fzy4jw.ttf",
     "res://Font/zmws_bmfont/"
   ],

@@ -170,6 +170,8 @@ func _theme_path(control: Control) -> String:
 
 func _font_path(control: Control) -> String:
 	var font := control.get_theme_font("font")
+	while font is FontVariation and font.base_font != null:
+		font = font.base_font
 	return font.resource_path if font != null else ""
 
 
