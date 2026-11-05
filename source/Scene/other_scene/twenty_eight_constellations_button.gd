@@ -23,8 +23,8 @@ func configure(level: int, display_name: String, is_north: bool) -> void:
 	label.position = Vector2(0, 67)
 	label.size = Vector2(120, 22)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", Color.WHITE)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+	label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	label.add_theme_constant_override("outline_size", 4)
 	add_child(label)
 

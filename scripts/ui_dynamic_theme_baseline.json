@@ -2,13 +2,64 @@
   "schema_id": "ui_dynamic_theme_baseline",
   "schema_version": 1,
   "totals": {
-    "data": 37,
+    "data": 43,
     "dynamic_style": 40,
-    "layout": 83,
-    "tokenized": 139,
-    "total": 299
+    "layout": 96,
+    "tokenized": 173,
+    "total": 352
   },
   "files": {
+    "Scene/auto_battle_config.gd": {
+      "tokenized": 5,
+      "total": 5
+    },
+    "Scene/other_scene/level_info.gd": {
+      "data": 1,
+      "layout": 4,
+      "tokenized": 6,
+      "total": 11
+    },
+    "Scene/other_scene/monster_head_info.gd": {
+      "data": 4,
+      "layout": 6,
+      "tokenized": 1,
+      "total": 11
+    },
+    "Scene/other_scene/reward_box_2.gd": {
+      "data": 2,
+      "total": 2
+    },
+    "Scene/other_scene/skill_icon.gd": {
+      "layout": 1,
+      "tokenized": 3,
+      "total": 4
+    },
+    "Scene/other_scene/transmogtified_box.gd": {
+      "tokenized": 4,
+      "total": 4
+    },
+    "Scene/other_scene/twenty_eight_constellations_button.gd": {
+      "layout": 1,
+      "tokenized": 2,
+      "total": 3
+    },
+    "Scene/other_scene/zhen_fa_tu_po.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Scene/other_scene/zhen_fa_ui.gd": {
+      "tokenized": 4,
+      "total": 4
+    },
+    "Scene/other_scene/zhen_yan_cure_level.gd": {
+      "tokenized": 2,
+      "total": 2
+    },
+    "Scene/show_text/message_info.gd": {
+      "data": 4,
+      "layout": 1,
+      "total": 5
+    },
     "Script/back_pack/dj_information.gd": {
       "data": 2,
       "tokenized": 1,
@@ -88,17 +139,16 @@
       "total": 7
     },
     "Script/main_menu/mount_panel.gd": {
-      "data": 5,
+      "data": 3,
       "dynamic_style": 16,
       "layout": 11,
-      "tokenized": 4,
+      "tokenized": 6,
       "total": 36
     },
     "Script/main_menu/wan_ling_catalog_page.gd": {
-      "data": 1,
       "dynamic_style": 9,
       "layout": 6,
-      "tokenized": 15,
+      "tokenized": 16,
       "total": 31
     },
     "Script/main_menu/zhen_yao_tower.gd": {
@@ -109,7 +159,7 @@
       "total": 29
     },
     "Script/main_menu/zhu_xian_sword_page.gd": {
-      "data": 1,
+      "tokenized": 1,
       "total": 1
     },
     "Script/other_menu/c_hange_clothes_jm.gd": {
@@ -117,7 +167,7 @@
       "total": 2
     },
     "Script/pet/pet_attribute_pages.gd": {
-      "data": 1,
+      "tokenized": 1,
       "total": 1
     },
     "Script/pet/pet_interface.gd": {
@@ -162,6 +212,324 @@
     }
   },
   "calls": [
+    {
+      "file": "Scene/auto_battle_config.gd",
+      "line": 248,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/auto_battle_config.gd",
+      "line": 253,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/auto_battle_config.gd",
+      "line": 260,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/auto_battle_config.gd",
+      "line": 265,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/auto_battle_config.gd",
+      "line": 276,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2309,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2352,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2353,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2354,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2355,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2356,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2586,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2587,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2588,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2589,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/level_info.gd",
+      "line": 2590,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 479,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 665,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 669,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 670,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 671,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 672,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 677,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 1295,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 1296,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 1297,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/monster_head_info.gd",
+      "line": 1298,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/reward_box_2.gd",
+      "line": 18,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/reward_box_2.gd",
+      "line": 19,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/other_scene/skill_icon.gd",
+      "line": 168,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/skill_icon.gd",
+      "line": 169,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/skill_icon.gd",
+      "line": 170,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/skill_icon.gd",
+      "line": 171,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/transmogtified_box.gd",
+      "line": 33,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/transmogtified_box.gd",
+      "line": 34,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/transmogtified_box.gd",
+      "line": 36,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/transmogtified_box.gd",
+      "line": 37,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "line": 26,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "line": 27,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "line": 28,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_tu_po.gd",
+      "line": 141,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_tu_po.gd",
+      "line": 143,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "line": 78,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "line": 81,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "line": 84,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "line": 87,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_yan_cure_level.gd",
+      "line": 58,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/other_scene/zhen_yan_cure_level.gd",
+      "line": 60,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Scene/show_text/message_info.gd",
+      "line": 11,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/show_text/message_info.gd",
+      "line": 12,
+      "kind": "color",
+      "category": "data"
+    },
+    {
+      "file": "Scene/show_text/message_info.gd",
+      "line": 13,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Scene/show_text/message_info.gd",
+      "line": 15,
+      "kind": "font",
+      "category": "data"
+    },
+    {
+      "file": "Scene/show_text/message_info.gd",
+      "line": 16,
+      "kind": "font_size",
+      "category": "data"
+    },
     {
       "file": "Script/back_pack/dj_information.gd",
       "line": 68,
@@ -314,7 +682,7 @@
     },
     {
       "file": "Script/coop/coop_panel_host.gd",
-      "line": 219,
+      "line": 223,
       "kind": "stylebox",
       "category": "data"
     },
@@ -735,14 +1103,14 @@
     {
       "file": "Script/main_menu/mount_panel.gd",
       "line": 162,
-      "kind": "unknown",
-      "category": "data"
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
       "line": 184,
-      "kind": "unknown",
-      "category": "data"
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
@@ -1101,8 +1469,8 @@
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
       "line": 489,
-      "kind": "unknown",
-      "category": "data"
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
@@ -1281,8 +1649,8 @@
     {
       "file": "Script/main_menu/zhu_xian_sword_page.gd",
       "line": 248,
-      "kind": "unknown",
-      "category": "data"
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/other_menu/c_hange_clothes_jm.gd",
@@ -1299,8 +1667,8 @@
     {
       "file": "Script/pet/pet_attribute_pages.gd",
       "line": 85,
-      "kind": "unknown",
-      "category": "data"
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
@@ -1956,5 +2324,6 @@
       "kind": "color",
       "category": "tokenized"
     }
-  ]
+  ],
+  "parse_errors": []
 }

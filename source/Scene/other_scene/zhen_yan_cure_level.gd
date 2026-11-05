@@ -55,9 +55,9 @@ func set_need_and_lh_info():
 	var current_num = int(PlayerData.get_item_data(item_name))
 	need_num.text = str(PlayerData.get_item_data(item_name)) + "/" + str(material_need_value)
 	if current_num >= material_need_value:
-		need_num.add_theme_color_override("font_color", "00ff00")
+		need_num.add_theme_color_override("font_color", UiColorTokens.TEXT_GREEN)
 	else:
-		need_num.add_theme_color_override("font_color", "ff0000")
+		need_num.add_theme_color_override("font_color", UiColorTokens.TEXT_DANGER)
 	needlh.text = "灵魂：" + str(need_lh)
 
 

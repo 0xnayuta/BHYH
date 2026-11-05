@@ -245,24 +245,24 @@ func _refresh_selected() -> void:
 		var label := Label.new()
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		label.text = str(index + 1) + ". " + _skill_name(skill_id)
-		label.add_theme_font_size_override("font_size", 20)
+		label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_20)
 		var count_label := Label.new()
 		count_label.text = "释放次数"
 		count_label.custom_minimum_size = Vector2(92, 30)
 		count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		count_label.add_theme_font_size_override("font_size", 17)
+		count_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_17)
 		var count_spin_box := SpinBox.new()
 		count_spin_box.custom_minimum_size = Vector2(86, 32)
 		count_spin_box.min_value = 1
 		count_spin_box.max_value = 99
 		count_spin_box.step = 1
 		count_spin_box.value = selected_skill_counts[index] if index < selected_skill_counts.size() else 1
-		count_spin_box.add_theme_font_size_override("font_size", 18)
+		count_spin_box.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
 		count_spin_box.value_changed.connect(_on_skill_count_changed.bind(index))
 		var remove_button := Button.new()
 		remove_button.text = "移除"
 		remove_button.custom_minimum_size = Vector2(76, 30)
-		remove_button.add_theme_font_size_override("font_size", 18)
+		remove_button.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_18)
 		remove_button.pressed.connect(_remove_skill.bind(skill_id))
 		row.add_child(label)
 		row.add_child(count_label)
@@ -273,7 +273,7 @@ func _refresh_selected() -> void:
 		var empty_label := Label.new()
 		empty_label.text = "暂未添加技能"
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		empty_label.add_theme_font_size_override("font_size", 20)
+		empty_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_20)
 		selected_list.add_child(empty_label)
 
 

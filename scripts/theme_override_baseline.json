@@ -472,6 +472,7 @@
       "SellPageInput",
       "SellTitle",
       "SellWarning",
+      "SetMenuHintLabel",
       "SettingsButton",
       "SettingsButtonBright",
       "SettingsButtonCompact",
@@ -639,19 +640,16 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1418
+    "variation_refs": 1420
   },
   "fonts": {
-    "scene_refs": 2,
-    "unique_files": 2,
-    "paths": [
-      "res://Font/8_fz_cu_yuan_m03_s.ttf",
-      "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
-    ]
+    "scene_refs": 0,
+    "unique_files": 0,
+    "paths": []
   },
   "dynamic_add_theme": {
-    "calls": 383,
-    "files": 39,
+    "calls": 352,
+    "files": 41,
     "paths": [
       "Scene/auto_battle_config.gd",
       "Scene/other_scene/level_info.gd",
@@ -668,7 +666,7 @@
       "Script/back_pack/equipment_properies.gd",
       "Script/back_pack/wq.gd",
       "Script/base/base_role.gd",
-      "Script/coop/local_coop.gd",
+      "Script/coop/coop_panel_host.gd",
       "Script/hero/yutu_hero.gd",
       "Script/hittext/damage_text.gd",
       "Script/ldl/bone_forge.gd",
@@ -685,10 +683,12 @@
       "Script/main_menu/zhen_yao_tower.gd",
       "Script/main_menu/zhu_xian_sword_page.gd",
       "Script/other_menu/c_hange_clothes_jm.gd",
+      "Script/pet/pet_attribute_pages.gd",
       "Script/pet/pet_interface.gd",
       "Script/runtime/runtime_diagnostics.gd",
       "Script/skill/bd_skill.gd",
       "Script/skill/learn_skill.gd",
+      "Script/skill/skill_key_set.gd",
       "Script/skill/zd_skill.gd",
       "Script/task/basic_task.gd",
       "Script/task/task_title.gd"
@@ -700,5 +700,5 @@
       "animation": 26
     }
   },
-  "generated_at": "2026-11-02"
+  "generated_at": "2026-11-05"
 }

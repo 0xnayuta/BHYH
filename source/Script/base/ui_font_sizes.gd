@@ -3,6 +3,7 @@ class_name UiFontSizes
 extends RefCounted
 
 ## 脚本动态 UI 的 token 字号；值来自 theme_audit.font_sizes。
+const FONT_SIZE_8 := 8
 const FONT_SIZE_10 := 10
 const FONT_SIZE_11 := 11
 const FONT_SIZE_12 := 12

@@ -1294,6 +1294,6 @@ func _add_attr_label(parent: Node, text_: String, _size: int, color_: String) ->
 	label.text = text_
 	label.add_theme_font_size_override("font_size", _size)
 	label.add_theme_color_override("font_color", Color(color_))
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	label.add_theme_constant_override("outline_size", 4)
 	parent.add_child(label)

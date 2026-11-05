@@ -2,15 +2,10 @@
 
 [ext_resource type="Script" path="res://Scene/set_menu.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/set_menu/653.png" id="2"]
-[ext_resource type="FontFile" path="res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc" id="3"]
 [ext_resource type="Texture2D" path="res://Art/backpack/49.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="6"]
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_lncah"]
-font = ExtResource("3")
-font_size = 25
 
 [node name="Set_Menu" type="CanvasLayer" unique_id=1210585584]
 script = ExtResource("1")
@@ -64,7 +59,7 @@ size_flags_horizontal = 4
 layout_mode = 2
 size_flags_horizontal = 2
 text = "按钮大小："
-label_settings = SubResource("LabelSettings_lncah")
+theme_type_variation = "SetMenuHintLabel"
 
 [node name="big" type="Button" parent="bg/box/HBoxContainer" unique_id=1943266965]
 theme_type_variation = "MenuActionButton"
@@ -88,7 +83,7 @@ text = "小"
 layout_mode = 2
 size_flags_horizontal = 2
 text = "按钮大小："
-label_settings = SubResource("LabelSettings_lncah")
+theme_type_variation = "SetMenuHintLabel"
 
 [node name="big2" type="Button" parent="bg/box/HBoxContainer" unique_id=343604679]
 theme_type_variation = "MenuActionButton"

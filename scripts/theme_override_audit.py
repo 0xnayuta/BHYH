@@ -7,10 +7,10 @@
 - 统计 `source/Scene/**/*.tscn` 中的直接 `theme_override_*` 属性；
 - 单独统计 Animation 轨道里对 `theme_override_*` 属性的路径引用；
 - 统计 Theme 资源、场景引用、`theme_type_variation`、FontFile 引用与脚本动态主题调用；
-- 与 `scripts/theme_override_baseline.json` 比较，禁止场景级直接属性或动画引用增加。
+- 与 `scripts/theme_override_baseline.json` 比较，禁止场景级直接属性、动画引用、直接字体或动态调用/文件数增加。
 
-基线是上限而不是目标：Phase 32 迁移只能让计数下降；新增 UI 场景需要显式更新基线
-并在评审中说明原因。动画轨道与脚本动态覆盖不计入静态迁移完成度。
+基线是上限而不是目标：Phase 32 迁移只能让计数下降；新增 UI 场景或动态主题文件需要
+显式更新基线并在评审中说明原因。动画轨道与脚本动态覆盖不计入静态迁移完成度。
 """
 from __future__ import annotations
 
@@ -197,6 +197,28 @@ def check(report: dict[str, object], baseline: dict[str, object]) -> list[str]:
         errors.append(f"直接属性总数增加: {baseline_totals['direct_properties']} -> {current_totals['direct_properties']}")
     if int(current_totals["animation_track_refs"]) > int(baseline_totals["animation_track_refs"]):
         errors.append(f"动画轨道引用总数增加: {baseline_totals['animation_track_refs']} -> {current_totals['animation_track_refs']}")
+
+    current_fonts = report.get("fonts", {})  # type: ignore[assignment]
+    baseline_fonts = baseline.get("fonts", {})  # type: ignore[assignment]
+    current_font_refs = int(current_fonts.get("scene_refs", 0))
+    baseline_font_refs = int(baseline_fonts.get("scene_refs", 0))
+    if current_font_refs > baseline_font_refs:
+        errors.append(f"场景直接字体引用增加: {baseline_font_refs} -> {current_font_refs}")
+
+    current_dynamic = report.get("dynamic_add_theme", {})  # type: ignore[assignment]
+    baseline_dynamic = baseline.get("dynamic_add_theme", {})  # type: ignore[assignment]
+    current_calls = int(current_dynamic.get("calls", 0))
+    baseline_calls = int(baseline_dynamic.get("calls", 0))
+    if current_calls > baseline_calls:
+        errors.append(f"动态主题调用增加: {baseline_calls} -> {current_calls}")
+    current_files = int(current_dynamic.get("files", 0))
+    baseline_files = int(baseline_dynamic.get("files", 0))
+    if current_files > baseline_files:
+        errors.append(f"动态主题文件增加: {baseline_files} -> {current_files}")
+    baseline_paths = set(baseline_dynamic.get("paths", []))
+    for path in current_dynamic.get("paths", []):
+        if path not in baseline_paths:
+            errors.append(f"新增未登记动态主题文件: {path}")
     return errors
 
 

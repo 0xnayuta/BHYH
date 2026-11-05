@@ -2349,11 +2349,11 @@ func _rebuild_level_fall_items() -> void:
 			var pl = Label.new()
 			pl.text = pro_txt
 			pl.position = Vector2(1, -1)
-			pl.add_theme_color_override("font_color", Color(1, 1, 1))
-			pl.add_theme_color_override("font_shadow_color", Color(0, 0, 0))
+			pl.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+			pl.add_theme_color_override("font_shadow_color", UiColorTokens.INK)
 			pl.add_theme_constant_override("shadow_offset_x", 1)
 			pl.add_theme_constant_override("shadow_offset_y", 1)
-			pl.add_theme_font_size_override("font_size", 10)
+			pl.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_10)
 			pl.mouse_filter = 2
 			pl.set_meta("prob_label", true)
 			box.add_child(pl)
@@ -2583,11 +2583,11 @@ func _sync_hell_extra_fall_display():
 			var qhsbx_pro = Label.new()
 			qhsbx_pro.text = "20%"
 			qhsbx_pro.position = Vector2(1, -1)
-			qhsbx_pro.add_theme_color_override("font_color", Color(1, 1, 1))
-			qhsbx_pro.add_theme_color_override("font_shadow_color", Color(0, 0, 0))
+			qhsbx_pro.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+			qhsbx_pro.add_theme_color_override("font_shadow_color", UiColorTokens.INK)
 			qhsbx_pro.add_theme_constant_override("shadow_offset_x", 1)
 			qhsbx_pro.add_theme_constant_override("shadow_offset_y", 1)
-			qhsbx_pro.add_theme_font_size_override("font_size", 10)
+			qhsbx_pro.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_10)
 			qhsbx_pro.mouse_filter = 2
 			qhsbx_box.add_child(qhsbx_pro)
 	elif existing_qhsbx != null and existing_qhsbx.has_meta("hell_qhsbx"):

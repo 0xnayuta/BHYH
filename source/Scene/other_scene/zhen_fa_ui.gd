@@ -75,16 +75,16 @@ func set_zhenfa_basic_info():
 	match current_zhen_fa_name:
 		"slz":
 			zhenfaname.text = "森罗阵"
-			zhenfaname.add_theme_color_override("font_color", "8a00ff")
+			zhenfaname.add_theme_color_override("font_color", UiColorTokens.TEXT_ZHENFA_PURPLE)
 		"lpz":
 			zhenfaname.text = "落魄阵"
-			zhenfaname.add_theme_color_override("font_color", "8a00ff")
+			zhenfaname.add_theme_color_override("font_color", UiColorTokens.TEXT_ZHENFA_PURPLE)
 		"tsz":
 			zhenfaname.text = "腾蛇阵"
-			zhenfaname.add_theme_color_override("font_color", "ff8d00")
+			zhenfaname.add_theme_color_override("font_color", UiColorTokens.TEXT_ZHENFA_ORANGE)
 		"tqz":
 			zhenfaname.text = "太清阵"
-			zhenfaname.add_theme_color_override("font_color", "ff8d00")
+			zhenfaname.add_theme_color_override("font_color", UiColorTokens.TEXT_ZHENFA_ORANGE)
 	_refresh_use_button_icon()
 
 

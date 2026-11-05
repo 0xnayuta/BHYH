@@ -165,9 +165,9 @@ func set_mp_display(mp_value: int):
 	if _mp_label == null:
 		_mp_label = Label.new()
 		_mp_label.name = "MpCost"
-		_mp_label.add_theme_font_size_override("font_size", 8)
-		_mp_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		_mp_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		_mp_label.add_theme_font_size_override("font_size", UiFontSizes.FONT_SIZE_8)
+		_mp_label.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+		_mp_label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 		_mp_label.add_theme_constant_override("outline_size", 2)
 		_mp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		_mp_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP

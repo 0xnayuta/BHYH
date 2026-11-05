@@ -4922,6 +4922,11 @@
     "SemanticLearnSkillMainButton": {
       "base_type": "&\"Button\"",
       "fonts/font": "ExtResource(\"font_main\")"
+    },
+    "SetMenuHintLabel": {
+      "base_type": "&\"Label\"",
+      "fonts/font": "ExtResource(\"font_return\")",
+      "font_sizes/font_size": "24"
     }
   }
 }

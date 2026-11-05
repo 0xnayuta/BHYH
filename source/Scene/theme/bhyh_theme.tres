@@ -2839,3 +2839,7 @@ SemanticLearnSkillMainLabel/fonts/font = ExtResource("font_main")
 
 SemanticLearnSkillMainButton/base_type = &"Button"
 SemanticLearnSkillMainButton/fonts/font = ExtResource("font_main")
+
+SetMenuHintLabel/base_type = &"Label"
+SetMenuHintLabel/fonts/font = ExtResource("font_return")
+SetMenuHintLabel/font_sizes/font_size = 24
