@@ -277,23 +277,23 @@ G:/tmp/p2input/
 python scripts/theme_token_audit.py --check
 ```
 
-- `scripts/theme_token_baseline.json` 冻结 731 个当前变体（618 冻结业务名 + 112 语义基类 + `SetMenuHintLabel`）的有效值；既有变体的合法迁移允许保留基线值。
+- `scripts/theme_token_baseline.json` 冻结 731 个既有变体（618 冻结业务名 + 112 语义基类 + `SetMenuHintLabel`）的有效值；新增 `SetMenuActionButtonGroup` 不进入冻结基线，由 `theme_variant_audit` 校验。
 - 新增变体或既有变体改写值必须使用本表 token；新增 Button 必须继承已登记 token 基类。
-- 当前结果：**731 变体 / 0 违规**；新增语义基类走 `Semantic*` 前缀，不绕过字号/颜色 token。
+- 当前结果：**732 变体 / 0 违规**；新增语义基类走 `Semantic*` 前缀，不绕过字号/颜色 token。
 - `theme_override_audit` 保持直接属性 **0**、动画轨道 **26**（`hit_text.tscn` 命中颜色值同步）。
 
 ## 6. 既有门禁
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；Theme 字体资产 5；动态样本 5 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `theme_token_audit.py --check`：731 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
+- `theme_token_audit.py --check`：732 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
 - `convert_ui_theme_tokens.py --check`：39 文字 token、6 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
-- `check_all --godot-bin`：**9/9 PASS**（40.93s）；
-- `scene_probe ui-theme`：PASS（6.57s）；
-- `scene_probe ui-factories`：PASS（29.59s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
+- `check_all --godot-bin`：**9/9 PASS**（39.19s）；
+- `scene_probe ui-theme`：PASS（7.35s）；
+- `scene_probe ui-factories`：PASS（43.97s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
-- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 731 总变体 / 属性 1,744 / StyleBox 36 / 独立重复组 5；
+- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6；
 - `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
 其余面板保持基线；27-7 已完成阶段验收与全量回归，不静默改变显示基线。
