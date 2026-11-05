@@ -546,10 +546,6 @@ func _set_equipment_info(_name: String):
 			else:
 				eq_bm.text = "暴免:" + str(get_properies(_name, "CritReduce")[0])
 
-			if EquipmentService.data(_name)["描述"] == "" and eq_ms != null:
-				eq_ms.queue_free()
-			else:
-				eq_ms.text = "描述:" + str(EquipmentService.data(_name)["描述"])
 		"武器", "防具", "饰品", "神骨", "头衔", "时装", "翅膀":
 			if not EquipmentService.data(_name).has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
 				eq_star_level.queue_free()
@@ -634,6 +630,20 @@ func _set_equipment_info(_name: String):
 
 			if get_properies(_name, "CritReduce")[0] == 0 and eq_bm != null:
 				eq_bm.queue_free()
+
+	_set_description_and_sale(_name)
+
+
+func _set_description_and_sale(_name: String) -> void:
+	var data := EquipmentService.data(_name)
+	var description := str(data.get("描述", ""))
+	if eq_ms != null:
+		eq_ms.visible = description != ""
+		if eq_ms.visible:
+			eq_ms.text = "描述:" + description
+	if eq_sj != null:
+		eq_sj.visible = true
+		eq_sj.text = "售价:" + str(data.get("售价", 0)) + "灵魂。"
 
 
 func set_bs_infor():

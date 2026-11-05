@@ -6,6 +6,7 @@ extends Node
 
 const RESULT_PREFIX := "UI_FACTORY_PROBE_RESULT="
 const TEARDOWN_MARKER := "UI_FACTORY_PROBE_TEARDOWN"
+const DataKeys := preload("res://Script/base/data_keys.gd")
 
 const MESSAGE_SHOW_PATH := "res://Scene/show_text/message_show.tscn"
 const SHOP_PATH := "res://Scene/shop/shop.tscn"
@@ -354,6 +355,61 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_use_weapon_created"] = use_weapon != null
 	if use_weapon != null:
 		created.append(use_weapon)
+	var equipment_id := _first_described_equipment_id()
+	checks["backpack_equipment_id_available"] = equipment_id != ""
+	var equipment_popup: Node = null
+	if equipment_id != "":
+		equipment_popup = Global.add_equ_propeties_box(
+			host, Vector2(80, 80), equipment_id, 0, [], {DataKeys.GEM: []}
+		)
+		await _settle()
+	checks["backpack_equipment_popup_created"] = (
+		equipment_popup != null and equipment_popup.get_parent() == host
+	)
+	if equipment_popup != null:
+		equipment_popup.call("_set_equipment_info", equipment_id)
+		var equipment_data := EquipmentService.data(equipment_id)
+		var description := equipment_popup.get_node_or_null(
+			"pro_wk/information/inf/VBoxContainer/eq_ms"
+		) as Label
+		var sale := equipment_popup.get_node_or_null(
+			"pro_wk/information/inf/VBoxContainer/eq_sj"
+		) as Label
+		checks["backpack_equipment_description"] = (
+			description != null
+			and description.visible
+			and description.text == "描述:" + str(equipment_data.get("描述", ""))
+		)
+		checks["backpack_equipment_sale"] = (
+			sale != null
+			and sale.visible
+			and sale.text == "售价:" + str(equipment_data.get("售价", 0)) + "灵魂。"
+		)
+		created.append(equipment_popup)
+	var treasure_id := _first_described_equipment_id("法宝")
+	checks["backpack_treasure_id_available"] = treasure_id != ""
+	if treasure_id != "":
+		var treasure_factory_data := EquipmentService.data_or_empty(treasure_id)
+		treasure_factory_data[DataKeys.GEM] = []
+		var treasure_popup: Node = Global.add_equ_propeties_box(
+			host, Vector2(90, 90), treasure_id, 0, [], treasure_factory_data
+		)
+		await _settle()
+		checks["backpack_treasure_popup_created"] = (
+			treasure_popup != null and treasure_popup.get_parent() == host
+		)
+		if treasure_popup != null:
+			treasure_popup.call("_set_equipment_info", treasure_id)
+			var treasure_data := EquipmentService.data(treasure_id)
+			var treasure_sale := treasure_popup.get_node_or_null(
+				"pro_wk/information/inf/VBoxContainer/eq_sj"
+			) as Label
+			checks["backpack_treasure_sale"] = (
+				treasure_sale != null
+				and treasure_sale.visible
+				and treasure_sale.text == "售价:" + str(treasure_data.get("售价", 0)) + "灵魂。"
+			)
+			created.append(treasure_popup)
 	var role_info: Node = Global.add_role_information(host, Vector2(70, 71))
 	checks["backpack_role_info_created"] = role_info != null and role_info.get_parent() == host
 	checks["backpack_role_info_fields"] = (
@@ -1315,6 +1371,22 @@ func _first_equipment_id() -> String:
 	for key in EquipmentService.ids():
 		var item_id := str(key)
 		if ResourceLoader.exists("res://Art/backpack/all_items/%s.png" % item_id):
+			return item_id
+	return ""
+
+
+func _first_described_equipment_id(type_name: String = "") -> String:
+	# 选择有描述的非道具装备，覆盖装备 tooltip 的武器/防具/饰品等分支。
+	for key in EquipmentService.ids():
+		var item_id := str(key)
+		var data := EquipmentService.data_or_empty(item_id)
+		var item_type := str(data.get(DataKeys.TYPE, ""))
+		if not type_name.is_empty():
+			if item_type != type_name:
+				continue
+		elif item_type not in ["武器", "防具", "饰品", "神骨", "头衔", "时装", "翅膀"]:
+			continue
+		if not str(data.get("描述", "")).is_empty():
 			return item_id
 	return ""
 
