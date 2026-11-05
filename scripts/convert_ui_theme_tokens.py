@@ -39,7 +39,7 @@ def load_source() -> dict:
         raise ValueError("token 源必须是 JSON 对象")
     if data.get("schema_id") != SCHEMA_ID or data.get("schema_version") != SCHEMA_VERSION:
         raise ValueError("token 源 schema 不匹配")
-    for key in ("text_tokens", "surface_groups", "theme_only", "default_font", "theme_properties", "theme_audit"):
+    for key in ("text_tokens", "surface_groups", "theme_only", "default_font", "theme_properties", "theme_font_colors", "theme_audit"):
         if key not in data:
             raise ValueError(f"token 源缺少 {key}")
     validate_source(data)
@@ -58,6 +58,11 @@ def validate_source(data: dict) -> None:
     for name, value in data["theme_only"].items():
         if not isinstance(name, str) or not isinstance(value, str) or not value.strip():
             raise ValueError("theme_only 条目非法")
+    palette_names: set[str] = set()
+    for name, value in data["theme_font_colors"].items():
+        _validate_name(name, palette_names, "theme_font_colors")
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"theme_font_colors.{name} 值非法")
     for name, value in _all_constants(data).items():
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"token {name} 值非法")
@@ -70,7 +75,7 @@ def validate_source(data: dict) -> None:
     if not isinstance(font.get("resource_id"), str) or not isinstance(font.get("path"), str):
         raise ValueError("default_font 条目非法")
     audit = data["theme_audit"]
-    for key in ("font_sizes", "outline_sizes", "font_colors", "button_token_bases"):
+    for key in ("font_sizes", "outline_sizes", "button_token_bases"):
         if not isinstance(audit.get(key), list):
             raise ValueError(f"theme_audit.{key} 必须是数组")
 
@@ -236,7 +241,7 @@ def main(argv: list[str] | None = None) -> int:
             len(data["surface_groups"]),
             len(data["theme_properties"]),
             len(data["theme_audit"]["font_sizes"]),
-            len(data["theme_audit"]["font_colors"]),
+            len(data["theme_font_colors"]),
         )
     )
     return 0

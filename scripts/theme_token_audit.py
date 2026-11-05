@@ -4,7 +4,7 @@
 
 - 只读解析 `bhyh_theme.tres`；
 - 用 `scripts/theme_token_baseline.json` 冻结迁移前的既有变体值；
-- 所有当前字号必须属于 token 集合；新增/改写的描边与字体颜色必须属于 token 集合；
+- 所有当前字号与字体色必须属于 token 集合；新增/改写的描边必须属于 token 集合；
 - 新增 Button 变体必须继承已登记的 Button token 基类。
 
 基线是迁移期的兼容上限，不是新值白名单；新 UI 必须使用 token。
@@ -22,22 +22,33 @@ BASELINE = ROOT / "scripts" / "theme_token_baseline.json"
 TOKEN_SOURCE = ROOT / "scripts" / "ui_theme_tokens.json"
 
 
-def _load_audit_tokens() -> dict[str, list]:
+def _load_tokens() -> dict:
     if not TOKEN_SOURCE.is_file():
         raise RuntimeError(f"token 源不存在: {TOKEN_SOURCE.relative_to(ROOT)}")
     data = json.loads(TOKEN_SOURCE.read_text(encoding="utf-8"))
-    audit = data.get("theme_audit")
-    if not isinstance(audit, dict):
+    if not isinstance(data.get("theme_audit"), dict):
         raise RuntimeError("token 源缺少 theme_audit")
-    return audit
+    if not isinstance(data.get("theme_font_colors"), dict):
+        raise RuntimeError("token 源缺少 theme_font_colors")
+    return data
 
 
-_TOKEN_AUDIT = _load_audit_tokens()
+_TOKENS = _load_tokens()
+_TOKEN_AUDIT = _TOKENS["theme_audit"]
 FONT_SIZES = set(_TOKEN_AUDIT["font_sizes"])
 OUTLINE_SIZES = set(_TOKEN_AUDIT["outline_sizes"])
-COLORS = set(_TOKEN_AUDIT["font_colors"])
+COLORS = set(_TOKENS["theme_font_colors"].values())
 BUTTON_TOKEN_BASES = set(_TOKEN_AUDIT["button_token_bases"])
-COLOR_KEYS = ("colors/font_color", "colors/font_outline_color", "colors/font_shadow_color")
+COLOR_KEYS = (
+    "colors/font_color",
+    "colors/font_outline_color",
+    "colors/font_shadow_color",
+    "colors/font_hover_color",
+    "colors/font_pressed_color",
+    "colors/font_hover_pressed_color",
+    "colors/font_disabled_color",
+    "colors/font_placeholder_color",
+)
 
 
 def read_variants() -> dict[str, dict[str, str]]:
@@ -80,15 +91,15 @@ def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]
         current_size = props.get("font_sizes/font_size")
         if current_size is not None and int(current_size) not in FONT_SIZES:
             errors.append(f"{name} 当前字号不在 token: {current_size}")
+        for key in COLOR_KEYS:
+            value = props.get(key)
+            if value is not None and value not in COLORS:
+                errors.append(f"{name} {key} 当前字体色不在 token: {value}")
         previous = baseline.get(name)
         if previous is None:
             value = props.get("constants/outline_size")
             if value is not None and int(value) not in OUTLINE_SIZES:
                 errors.append(f"新增变体 {name} 描边不在 token: {value}")
-            for key in COLOR_KEYS:
-                value = props.get(key)
-                if value is not None and value not in COLORS:
-                    errors.append(f"新增变体 {name} {key} 不在 token: {value}")
             base = props.get("base_type", "").strip('&"')
             if base == "Button" or (base in current and current[base].get("base_type") == '&"Button"'):
                 if base != "Button" and base not in BUTTON_TOKEN_BASES:
@@ -100,11 +111,6 @@ def check(current: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]
         old = previous.get("constants/outline_size", "")
         if value is not None and value != old and int(value) not in OUTLINE_SIZES:
             errors.append(f"{name} constants/outline_size 改写值不在 token: {value}")
-        for key in COLOR_KEYS:
-            value = props.get(key)
-            old = previous.get(key, "")
-            if value is not None and value != old and value not in COLORS:
-                errors.append(f"{name} {key} 改写值不在 token: {value}")
     return errors
 
 
