@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫已完成（2026-11-05）**；Phase 27-1~27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
+> **状态**：**Phase 22、Phase 23 已完成并归档**（2026-11-03）；**Phase 24 已完成**（24-0 面板契约盘点、24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令、24-4 阶段验收）；**Phase 25-0 行为与验证映射、Phase 25-1 自动战斗控制器、Phase 25-2 法宝展示实例、Phase 25-3 Boss 保护状态、Phase 25-4 受击与来源归属加固与 Phase 25-5 阶段验收已完成，Phase 25 已关闭**；**Phase 27-0 Theme/字体盘点与表面色守卫、Phase 27-1 Token 单一来源与生成/校验已完成（2026-11-05）**；Phase 27-2~27-7 已规划、未启动。**Phase 26 平台与发布验证长期暂缓**，不阻塞 Phase 27。
 > **版本**：6.9；不改变玩法数值、动画时序、输入映射或存档格式；Phase 27 的字体/色值变化必须逐批截图与控件几何验收，不静默改变显示基线。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)（Phase 22-1）、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **编号说明**：Phase 22~27 为本轮新增候选，承接 Phase 21；已归档的 Phase 30~33 不重开，也不把历史归档改写成新计划。
@@ -172,7 +172,7 @@
 
 ## 5. Phase 27：Theme 与字体契约收敛
 
-**状态**：**27-0 已完成（2026-11-05）**；27-1~27-7 规划、未启动。
+**状态**：**27-0、27-1 已完成（2026-11-05）**；27-2~27-7 规划、未启动。
 **目标**：把 618 个冻结变体从“逐控件复制字体/字号/颜色/StyleBox”收敛为“单一 token 源 + 语义基类 + 少数字体角色”；消除 Theme 与脚本双写、off-token 字号/颜色、未引用字体和静态动态覆盖，同时保持可验收的显示基线。
 **前置**：Phase 32 的单一 Theme、P0 字体覆盖修正与 P2-1~P2-11 token 批次已完成；27-0 盘点见 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)。
 **非目标**：不重命名 618 个冻结变体；不一次性重做全部 UI；不改布局层级、输入映射、存档格式或动画时序；不删除未确认授权/回滚证据的私有字体；不以目录搬迁或变体数量作为完成标准。
@@ -185,12 +185,15 @@
 - P2-11 同步完成输入光标/选区与 main_menu 动态样式 token 化；
 - 出口：专项审计通过，main_menu 裸色 0；不改显示基线。
 
-### 27-1 Token 单一来源与生成/校验
+### 27-1 Token 单一来源与生成/校验（已完成）
 
-- 新增 `scripts/ui_theme_tokens.json`：登记常规字号、语义色、字体角色、共享 StyleBox 与输入配色；
-- 新增 `scripts/convert_ui_theme_tokens.py --check`：校验 `bhyh_theme.tres` 的受管属性、`UiColorTokens`、`UiSurfaceTokens` 与 token 源一致；首期只校验/生成受管值，不重排 618 个变体或 UID；
-- 以后所有新字号、颜色、字体、StyleBox 先入 token 源，再由 Theme 使用；生成失败不得留下半成品；
-- 出口：token 源覆盖全部新增值；`--check` 能抓到 Theme/脚本双写漂移；现有运行值不变。
+- 新增 `scripts/ui_theme_tokens.json`：登记 21 个文字 token、5 组表面 token、输入/受管 Theme 值、默认字体与 Theme token 审计集合；
+- 新增 `scripts/convert_ui_theme_tokens.py`：`--write` 生成 `UiColorTokens`/`UiSurfaceTokens` 并回写 Theme 受管属性；`--check` 逐字比较生成结果；
+- 当前受管 Theme 属性 10 项：默认字体、`TowerFloorInput` 光标/选区/占位、`ShopSearchInput` 光标/选区、`ArchiveLoginInput`/`ArchiveNumberInput` 光标/选区；
+- `theme_token_audit.py` 的允许字号、描边、颜色与 Button 基类改从 token 源读取，不再在 Python 中重复定义；
+- 漂移实测：手工把 `TowerFloorInput/colors/caret_color` 改为黑色，`--check` 精确报出文件/行并返回 1；`--write` 恢复后 0 漂移；
+- 现有运行值不变；仅统一 `caret_color` 的 `1.0`/`1` 字面格式。
+- 出口：生成结果与 token 源一致；`--check` 进入 `contract_gate.py`；受管 Theme 属性与脚本常量不再双写。
 
 ### 27-2 字号标尺收敛
 
@@ -251,9 +254,9 @@
 
 ## 7. 当前恢复入口
 
-**当前下一步**：**Phase 27-1 Token 单一来源与生成/校验**（Phase 27-0 已完成；先建立 token 源与 `--check`，不改变现有显示基线）。
+**当前下一步**：**Phase 27-2 字号标尺收敛**（27-0、27-1 已完成；先以 token 源为唯一值来源，再分批处理 111 个 off-token 字号）。
 **Phase 26**：平台与发布验证长期暂缓；重新启动需要平台矩阵、设备、导出条件与 release 证据同时明确。
-**Phase 27-0 产物**：[`theme_font_inventory.md`](../reference/theme_font_inventory.md)、`scripts/ui_surface_token_audit.py`、`scripts/ui_surface_token_baseline.json`、P2-11 输入/动态样式 token 化。
+**Phase 27-0/27-1 产物**：[`theme_font_inventory.md`](../reference/theme_font_inventory.md)、`scripts/ui_surface_token_audit.py`、`scripts/ui_surface_token_baseline.json`、`scripts/ui_theme_tokens.json`、`scripts/convert_ui_theme_tokens.py`。
 **23-0/23-1/23-2 产物**：[`pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md)；**23-4/23-5 产物**：[`pet_domain_contract.md`](../reference/pet_domain_contract.md)、[`status.md`](../reference/status.md)；**24-0/24-1/24-2/24-3/24-4 产物**：[`ui_panel_contract_matrix.md`](../reference/ui_panel_contract_matrix.md)、`PetAttributePages` 子控制器、`CoopPanelHost`、`PetDomainCommand.upgrade_formation`、`hud_panel_boundary` 间接写档守卫；**25-0~25-5 产物**：[`combat_behavior_matrix.md`](../reference/combat_behavior_matrix.md)、`AutoBattleContext`、`AutoBattleController`、`MagicWeaponPresentationController`、`BossProtectionController`、`HitReactionController`、`LocalCoopAutoBattleProbe`、`LocalCoopMagicPresentationProbe`、`LocalCoopBossProtectionProbe`、`LocalCoopHitReactionProbe`
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)

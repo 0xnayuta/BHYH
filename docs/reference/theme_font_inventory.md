@@ -137,6 +137,7 @@
 | P0 字体覆盖 | FZCuYuan 同族完整版 + 微软雅黑 fallback；135 场景 / 790 中文节点 / 0 缺字 |
 | P2-1~P2-10 | 字号、描边、文字色、Button 族、自绘菜单表面色逐批 token 化；`theme_token_audit` 618/0 |
 | P2-11 | 输入光标/选区统一；main_menu 动态裸色清零；新增 `ui_surface_token_audit.py` 与基线 |
+| Phase 27-1 | `ui_theme_tokens.json` 成为文字/表面 token、受管 Theme 输入属性、默认字体与 Theme 审计集合的单一来源；`convert_ui_theme_tokens.py --check` 进入契约门禁 |
 
 ## 6. 主要风险
 
@@ -151,13 +152,13 @@
 
 ### 7.1 单一 token 源
 
-长期以 `scripts/ui_theme_tokens.json`（或等价自定义 `Resource`）作为字号、语义色、字体角色与共享 StyleBox 的单一来源；构建期生成/校验：
+Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字体角色、受管 Theme 属性与 Theme 审计集合的唯一来源。构建期 `scripts/convert_ui_theme_tokens.py` 负责：
 
-- `bhyh_theme.tres` 的受管属性；
-- `UiColorTokens` / `UiSurfaceTokens` 常量；
-- `theme_token_baseline.json` 的迁移白名单。
+- 生成 `UiColorTokens` / `UiSurfaceTokens`；
+- 回写 Theme 的受管属性（默认字体与输入光标/选区/占位）；
+- `--check` 逐字比较生成结果，发现 Theme/脚本常量漂移时失败。
 
-生成器必须支持 `--check`，发现 Theme、脚本常量与 token 源不一致时失败；生成失败不得留下半成品。
+首期只管理共享输入/字体值与 token 审计集合，不重排 618 个变体；字号、全量颜色与 StyleBox 的收敛仍按 27-2~27-4 分批进行。
 
 ### 7.2 语义层级
 

@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-11 输入与动态样式批次（2026-11-05）。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；补齐 `ShopSearchInput`、`ArchiveLoginInput`、`ArchiveNumberInput` 光标/选区，并新增 `ui_surface_token_audit.py`。Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
+> **状态**：P2-11 输入与动态样式批次（2026-11-05）；Phase 27-1 已将文字/表面 token、受管 Theme 输入属性与默认字体迁入 `scripts/ui_theme_tokens.json`，`UiColorTokens`/`UiSurfaceTokens` 由生成器维护。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -287,10 +287,11 @@ python scripts/theme_token_audit.py --check
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
 - `theme_token_audit.py --check`：618 变体 / 0 违规；
+- `convert_ui_theme_tokens.py --check`：21 文字 token、5 组表面 token、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 迁移期基线 18 处（`coop_panel_host` 2、`pet_interface` 12、`learn_skill` 4）；
-- `check_all --godot-bin`：**9/9 PASS**（39.15s）；
-- `scene_probe ui-theme`：PASS（6.23s）；
+- `check_all --godot-bin`：**9/9 PASS**（36.20s）；
+- `scene_probe ui-theme`：PASS（5.76s）；
 - `scene_probe ui-factories`：PASS（19.64s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（26.0s）。
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.77s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
