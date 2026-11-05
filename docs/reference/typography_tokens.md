@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-8 颜色批次（2026-11-05）。在 P2-7 基础上补齐 `main_menu` 子面板（体能训练、选择角色、地图目录/返回、镇妖塔、万灵图鉴、诛仙剑页）、`archive_interface` 状态色、`mystery_shop/choose_item/shop_item` 次要状态色，以及战斗 HUD 与宠物面板高饱和状态色。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-9 颜色批次（2026-11-05）。在 P2-8 基础上补齐 main_menu 深棕描边/阴影、菜单 hover/pressed 与 TowerFloorInput 占位色；新增 `UiColorTokens` 并迁移 `mount_panel`、`equipment_catalog_page` 等脚本动态文字色。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -47,6 +47,12 @@
 | `text_jade` | `#C2E6D4` | 万灵分组/属性浅绿 |
 | `text_jade_dim` | `#ABB8BA` | 万灵空态弱文字 |
 | `text_ink_warm` | `#331F12` | 浅底暖黑正文 |
+| `text_hint_dim` | `#9FB1BC` | 深色面板弱提示 |
+| `text_parchment` | `#E5DBC9` | 装备图鉴羊皮纸正文 |
+| `text_parchment_muted` | `#BBAE91` | 装备图鉴次级文字 |
+| `text_warning_soft` | `#EF8E82` | 柔化警告/材料不足 |
+| `text_gold_pressed_soft` | `#D9C28C` | 地图目录按下金 |
+| `text_gold_placeholder` | `#FFF4BF` 70% | 镇妖塔输入占位 |
 | `text_combat` | `#FFFF00` | 战斗冷却/需求 |
 | `ink` | `#000000` | 描边/阴影 |
 
@@ -59,12 +65,18 @@
 | `text_hover` | `#FF6A00` | 存档/设置按钮悬停橙 |
 | `text_placeholder` | `#A6A6A6` | 输入框占位弱文字 |
 | `text_gold_pressed` | `#D38D00` | 存档删除按下金 |
+| `text_disabled` | `#8E969B` | 脚本按钮禁用文字 |
 | `icon_hover_soft` | `#FFFFFF` 68.2% | 神秘商店图标悬停 |
 | `icon_hover_gold` | `#C9CF93` | 商品购买图标悬停 |
 | `outline_none` | `transparent` | 无描边 |
+| `outline_night` | `#05080D` 80% | 深色面板文字描边 |
 | `text_hit_blue` | `#0099FF` | 法术命中飘字动画保留色 |
 
 动画轨道中的 `hit_text` / `hurt_text` 颜色仍按 Phase 32 例外由 `hit_text.tscn` 持有；本表只登记语义名，不把运行时伤害状态迁入 Theme。
+
+### 脚本动态色
+
+`source/Script/base/ui_color_tokens.gd` 提供 `UiColorTokens` 常量，供无法直接引用 Theme 变体的脚本动态 UI 使用。`mount_panel.gd` 与 `equipment_catalog_page.gd` 的文字色已改用该类别名；面板自绘的 StyleBox 底色、边框与阴影仍属面板样式，不进入文字 token。
 
 ### 描边
 
@@ -110,6 +122,10 @@
 | `equipment_properies（颜色）` | EquipmentStatLabel/Sale `#FF9933`→text_orange `#FF9500` |
 | `ldl/forge（颜色）` | ForgeSubtitle `#00F900`→text_green；ForgeMaterialNeed/StrengthNumber 使用 text_green；DecomposeTitleOrange→text_orange_deep；DecomposeHelpBody `#FFA200`→text_orange |
 | `main_menu 子面板（颜色）` | BodyTraining 亮金→text_gold_bright、等级金→text_gold_light、暖黑正文→text_ink_warm；ChoosePlayer 角色/标题→text_gold_deep、信息→text_gold_light；Map0 目录→text_gold；MapReturn→text_orange；SwordPage 等级→text_combat；Tower 全族→text_gold_light；WanLing 标题→text_gold、浅绿→text_jade、空态→text_jade_dim；MainMenuTitle 描边→text_orange_deep |
+| `main_menu 子面板（描边/状态）` | BodyTraining/ChoosePlayer/Map0/Tower/WanLing 深棕 outline/shadow→ink；Settings/Announcement/GameInfo 悬停→text_hover；Map0 悬停→text_gold_light、按下→text_gold_pressed_soft；Tower 悬停→text_gold_light、按下→text_primary；TowerFloorInput 占位→text_gold_placeholder |
+| `mount_panel（脚本）` | 标题/名称/状态/页签/提示改用 `UiColorTokens`：text_gold、text_gold_light、text_jade、text_hint、text_hint_dim、text_dim、text_info、text_warning_soft |
+| `equipment_catalog_page（脚本）` | 羊皮纸正文/次级文字/暖金/浅金/浅绿/提示改用 `UiColorTokens`：text_parchment、text_parchment_muted、text_gold_warm、text_gold_light、text_jade、text_hint |
+| `其他 main_menu 脚本` | `wan_ling_catalog_page` 按钮/名称/效果/等级/材料/禁用色；`zhen_yao_tower` 文字/按钮/输入与描边；`game_mode_select` 深棕按钮文字；`choose_player` 星级金色，均改用 `UiColorTokens` |
 | `archive_interface（状态色）` | 按钮悬停 `#FF6A00`→text_hover；输入占位 `#A6A6A6`→text_placeholder；删除按下 `#D38D00`→text_gold_pressed；值不变 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 神秘商店图标悬停→icon_hover_soft；商品购买图标悬停→icon_hover_gold；商品灵魂描边→outline_none；ChooseItemList guide→text_primary；BoxItemNumber `#FF7700`→text_orange；BoxLockMark `#FFDB33`→text_amber |
 | `战斗 HUD（颜色）` | HitTextBase `#25FF00`→text_green；LijiText `#FF4600`→text_warning；BacisInfoNumber `#FF6000`→text_orange_deep；法术飘字动画 `#0099FF` 登记为 text_hit_blue，动画例外保留 |
@@ -157,6 +173,10 @@
 | `equipment_properies（颜色）` | 0 | 0 | 属性/售价橙色 #FF9933→#FF9500 |
 | `ldl/forge（颜色）` | 0 | 0 | 绿色/橙色提示归一；无布局变化 |
 | `main_menu 子面板（颜色）` | 0 | 0 | 体能/选择角色/地图/镇妖塔/万灵/诛仙剑页；仅文字颜色变化 |
+| `main_menu 子面板（描边/状态）` | 0 | 0 | 描边/阴影统一为 ink；hover/pressed/placeholder 色值收敛 |
+| `mount_panel（脚本）` | 0 | 0 | 39 控件；26 处颜色变化，仅字体色 |
+| `equipment_catalog_page（脚本）` | 0 | 0 | 61 控件；42 处颜色变化，仅字体色 |
+| `其他 main_menu 脚本` | 0 | 0 | `wan_ling` 287、`zhen_yao_tower` 32、`choose_player` 32、`game_mode_select` 7 控件；仅字体/描边色 |
 | `archive_interface（状态色）` | 0 | 0 | 悬停/占位/按下值登记为 token，无可见变化 |
 | `mystery_shop / choose_item / shop_item（状态色）` | 0 | 0 | 图标悬停/guide/透明描边登记；BoxItemNumber/BoxLockMark 橙/黄归一 |
 | `战斗 HUD（颜色）` | — | — | HitTextBase、LijiText、BacisInfoNumber 颜色变化；合成 Label 各 1 控件 |
@@ -216,6 +236,10 @@ G:/tmp/p2color2_after_1600/
 G:/tmp/p2color3_before/
 G:/tmp/p2color3_after/
 G:/tmp/p2color3_after_1600/
+G:/tmp/p2color4_before/
+G:/tmp/p2color4_before_dynamic/
+G:/tmp/p2color4_after/
+G:/tmp/p2color4_after_1600/
 ```
 
 ## 5. 审计
@@ -233,9 +257,9 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（39.87s）；
-- `scene_probe ui-theme`：PASS（5.68s）；
+- `check_all --godot-bin`：**9/9 PASS**（31.27s）；
+- `scene_probe ui-theme`：PASS（8.09s）；
 - `scene_probe ui-factories`：PASS（19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（23.8s）。
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（23.84s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
