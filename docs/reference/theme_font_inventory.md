@@ -10,13 +10,13 @@
 | 指标 | 当前值 | 说明 |
 |:---|---:|:---|
 | Theme 变体 | 731（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体 |
-| Theme 属性 | 1,740（27-7 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-6/27-7 新增字体角色变体 |
+| Theme 属性 | 1,744（27-7 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
 | Theme 子资源 | 36（27-4 后） | 27-0 为 54；27-3 后 47；27-4 跨角色合并 47→36，仍为 `StyleBoxFlat`/`StyleBoxTexture`/`StyleBoxLine`/`StyleBoxEmpty` |
 | 场景 Theme 引用 | 1,117 | `theme_override_audit` 统计 |
 | `theme_type_variation` 节点引用 | 1,420 | 617 个不同变体被场景直接引用 |
 | 动态 `add_theme_*` | 352 处 / 41 文件（27-7 后） | 静态字面角色 0；分类见 `ui_dynamic_theme_audit.py` |
-| 字体文件（顶层） | 13 个 / 80,827,070 字节 | 不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
-| Theme 引用字体资产 | 5 个 / 约 44.98 MB（27-5 后） | `body` + fallback、`ui`、`display`、`accent` |
+| 字体文件（顶层） | 5 个 / 44,983,417 字节（约 44.98 MB） | 27-7 已删除 8 个无运行时引用字体；不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
+| Theme 引用字体资产 | 4 个 FontVariation 资源 / 5 个文件 | `body` + fallback、`ui`、`display`、`accent`；各角色均有显式回退链 |
 
 ## 2. 变体结构
 
@@ -119,29 +119,34 @@
 
 | 角色 | Theme 资源 | 文件 | 有效变体 |
 |:---|:---|:---|---:|
-| `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 默认字体链 |
-| `ui` | `font_hk` | 华康宋体 W3 | 156 |
-| `display` | `font_return` | 华康海报 W12 | 70 |
-| `accent` | `font_main` | 文征明小楷 | 144 |
+| `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 359 |
+| `ui` | `font_hk.tres` FontVariation | 华康宋体 W3 → body fallback | 157 |
+| `display` | `font_return.tres` FontVariation | 华康海报 W12 → body fallback | 70 |
+| `accent` | `font_main.tres` FontVariation | 文征明小楷 → `font_hk` fallback | 145 |
 
 Theme 字体资产由 **10 个文件 / 68.2 MB** 收敛为 **5 个文件 / 约 44.98 MB**。`font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到 `font_main`；`font_194_song_ti`（2）映射到 `font_hk`。脚本直接字体路径中的 `font_meng` 已改为 `font_main`。
 
+**27-7 P1 结果**：为 `font_main`/`font_hk`/`font_return` 建立 FontVariation 回退链；`SynHelpBody`（12 px 长文本）由小楷改为宋体，HUD 名称/计时、角色自然属性、幻化操作等小楷功能文本改为 body；`CureTimesHint` 由海报体改为 body。字体角色边界调整未改变场景层级。
+
 ### 4.2 未引用字体资产与边界
 
-Theme 已无未引用字体资源；5 个资源均被 `body`/`ui`/`display`/`accent` 使用。以下私有物理文件已无 `Scene`/`Script`/`.tres` 的 `res://Font/` 引用，但仍保留在私有素材工作区：
+Theme 已无未引用字体资源；4 个 FontVariation 角色均被 `body`/`ui`/`display`/`accent` 使用。27-7 已按 `ASSET_CHANGE_CONTRACT.md` 删除此前无运行时引用的 8 个顶层字体及 `.import`，回收 **35,843,653 字节（约 35.84 MB）**：
 
-- `source/Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf`
-- `source/Font/aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf`
-- `source/Font/hy_zhu_zi_mei_xin_ti_w.ttf`
-- `source/Font/194_song_ti.ttf`
-- `source/Font/jin_qiao_jian_zhong_yuan.ttf`
-- `source/Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf`
-- `source/Font/jin_qiao_fan_li_shu.ttf`
-- `source/Font/jin_qiao_jian_cu_hei.ttf`
+- `194_song_ti.ttf`
+- `aa_meng_li_tao_hua_dui_yue_yin_mianfeiziti_com.ttf`
+- `aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf`
+- `hy_zhu_zi_mei_xin_ti_w.ttf`
+- `i_pix_zhong_wen_xiang_su_zi_ti.ttf`
+- `jin_qiao_fan_li_shu.ttf`
+- `jin_qiao_jian_cu_hei.ttf`
+- `jin_qiao_jian_zhong_yuan.ttf`
+
+保留范围（用户指定的排除项）：
+
 - `source/Font/zmws/ttf/fzy4jw.ttf`
 - `source/Font/zmws_bmfont/` 下 BMFont 资源
 
-这些文件不进入公开提交；删除或移动需要素材所有者确认授权与回滚证据，并按私有素材仓 `ASSET_CHANGE_CONTRACT.md` 在私人仓执行。清单与保留策略见 [`font_retirement_manifest.json`](../../scripts/font_retirement_manifest.json)。
+删除回滚副本保存在工作区外；私人素材仓已提交删除，公共仓无二进制。清单与保留策略见 [`font_retirement_manifest.json`](../../scripts/font_retirement_manifest.json)。
 
 ### 4.3 动态字体与覆盖
 
@@ -235,7 +240,7 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 | off-token 字体色赋值 | 0（27-3 结果） | 0 |
 | 独立重复签名组 | 5（27-5 结果） | ≤10 |
 | StyleBox 子资源 | 36（27-4 结果） | ≤36 |
-| Theme 属性总数 | 1,740（27-7 结果） | ≤2,000 |
+| Theme 属性总数 | 1,744（27-7 P1 结果） | ≤2,000 |
 | Theme 字体资产 | 5 个文件（27-5 结果） | ≤6；Theme 未引用资源为 0 |
 | 静态主题覆盖 | 0 | 0 |
 | 动态覆盖 | 352 处 / 41 文件（27-7 结果） | 字面静态角色 0；token/data/layout/dynamic_style 已登记 |

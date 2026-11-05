@@ -249,7 +249,8 @@
 
 - `ui_dynamic_theme_audit` 扫描扩至 `source/**/*.gd`（排除 addons/.godot）并支持跨行调用；动态调用 **299→352**（Scene 53 处），其中 **29 处**字面字号/字体色 token 化，静态 literal **0**；
 - 新增 `FONT_SIZE_8`、`TEXT_ZHENFA_PURPLE`、`TEXT_ZHENFA_ORANGE`；`set_menu.tscn` 直接字体引用迁移为 `SetMenuHintLabel`；`theme_override_audit` 强制直接字体与动态调用上限；
-- 通过 `check_all --godot-bin`、`theme_override_audit`、`theme_token_audit`、`ui_surface_token_audit`、`font_coverage_audit`、动态字体样本与全量关卡回归；
+- P0/P1 字体治理：删除 8 个无运行时引用顶层字体及 `.import`（约 35.84 MB）；`font_main`/`font_hk`/`font_return` 建立 FontVariation 回退；小字号帮助正文、HUD 名称/计时、角色属性、幻化操作与 `CureTimesHint` 移出小楷/海报体；P1 受影响 1,031 控件 / 0 位移；
+- 通过 `check_all --godot-bin`、`theme_override_audit`、`theme_token_audit`、`ui_surface_token_audit`、`font_coverage_audit`、动态字体样本与全量关卡回归（**P1 后 128/128 + 5 SKIP，325.4s**）；
 - 18 个代表场景 × 1280×800 / 1600×1000 截图与控件几何对照：**2,323 控件 / 0 位移**；归档 `G:/tmp/p277/final1280/`、`G:/tmp/p277/final1600/` 与 `final_geometry_compare.json`；`main_menu` 首启须知的覆盖层不纳入主菜单布局批准，菜单布局由 `set_menu`/`choose_player`/`level_info` 覆盖；
 - 全量回归 **PASS 128/128 + SKIP 5**（301.0s）；`check_all` **9/9**；`health_check` **784 脚本 0/0/0**；`level_1` 4 阶段 0/0/0；
 - 更新 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)、[`typography_tokens.md`](../reference/typography_tokens.md)、[`ui_theme_contract.md`](../reference/ui_theme_contract.md)、[`status.md`](../reference/status.md) 与 [`roadmap.md`](roadmap.md)；
