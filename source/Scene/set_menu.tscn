@@ -27,7 +27,7 @@ grow_vertical = 2
 texture = ExtResource("2")
 
 [node name="box" type="VBoxContainer" parent="bg" unique_id=1325593573]
-theme_type_variation = "MenuActionButtonGroup"
+theme_type_variation = "SetMenuActionButtonGroup"
 layout_mode = 0
 offset_left = 15.0
 offset_top = 55.0

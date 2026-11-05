@@ -8,6 +8,7 @@ var show_text: String = ""
 
 func _ready() -> void:
 	self.z_index = 99
+	label.text = str(show_text)
 
 
 func _physics_process(_delta: float) -> void:

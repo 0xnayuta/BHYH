@@ -55,8 +55,8 @@ func _physics_process(_delta: float) -> void:
 			sl.text = "拥有：" + str(PlayerData.get_xhp_data(_get_display_name())) + " 个"
 		else:
 			sl.text = "拥有：" + str(PlayerData.get_item_data(_get_display_name())) + " 个"
-		ms.text = "描述：" + str(EquipmentService.data(_get_display_name())["描述"])
-		sj.text = "售价：" + str(EquipmentService.data(_get_display_name())["售价"]) + "灵魂。"
+		ms.text = UiTextFormat.description(str(EquipmentService.data(_get_display_name())["描述"]))
+		sj.text = UiTextFormat.price(EquipmentService.data(_get_display_name())["售价"])
 		is_set = true
 
 

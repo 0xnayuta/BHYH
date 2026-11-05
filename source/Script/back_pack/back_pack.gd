@@ -1,5 +1,8 @@
 extends Node2D
 
+const TOOLTIP_CURSOR_OFFSET := Vector2(12.0, 18.0)
+const TOOLTIP_VIEWPORT_MARGIN := 8.0
+
 ## 显式操作者：按所在面板的槽位解析数据与属性，不依赖全局 1P/2P 视图交换。
 var PlayerData: PlayerDataStore:
 	get:
@@ -435,7 +438,36 @@ func _on_show_backpack_pressed() -> void:
 
 func add_text(text, parent):
 	if message == null:
-		message = Global.add_basic_monment_info(backpack, text, get_global_mouse_position() + Vector2(90, 40))
+		var anchor := get_global_mouse_position() + TOOLTIP_CURSOR_OFFSET
+		message = Global.add_basic_monment_info(backpack, text, backpack.to_local(anchor))
+		if message is Control:
+			_clamp_tooltip_to_viewport(message as Control)
+
+
+func _clamp_tooltip_to_viewport(tooltip: Control) -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(tooltip) or tooltip.is_queued_for_deletion():
+		return
+	var viewport_rect := get_viewport().get_visible_rect()
+	var mouse := get_global_mouse_position()
+	var visual := tooltip.get_node_or_null("MarginContainer") as Control
+	var rect := visual.get_global_rect() if visual != null else tooltip.get_global_rect()
+	var target := rect.position
+	if target.x + rect.size.x > viewport_rect.end.x - TOOLTIP_VIEWPORT_MARGIN:
+		target.x = mouse.x - rect.size.x - TOOLTIP_CURSOR_OFFSET.x
+	if target.y + rect.size.y > viewport_rect.end.y - TOOLTIP_VIEWPORT_MARGIN:
+		target.y = mouse.y - rect.size.y - TOOLTIP_CURSOR_OFFSET.y
+	target.x = clampf(
+		target.x,
+		viewport_rect.position.x + TOOLTIP_VIEWPORT_MARGIN,
+		viewport_rect.end.x - rect.size.x - TOOLTIP_VIEWPORT_MARGIN
+	)
+	target.y = clampf(
+		target.y,
+		viewport_rect.position.y + TOOLTIP_VIEWPORT_MARGIN,
+		viewport_rect.end.y - rect.size.y - TOOLTIP_VIEWPORT_MARGIN
+	)
+	tooltip.global_position = target
 
 
 func remove_text():

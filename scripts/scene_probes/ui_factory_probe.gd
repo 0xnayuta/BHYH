@@ -308,7 +308,29 @@ func _check_shop_family(checks: Dictionary) -> void:
 	_cleanup(created, host)
 
 
+func _check_set_menu_layout(checks: Dictionary) -> void:
+	var packed := load("res://Scene/set_menu.tscn") as PackedScene
+	var host := _make_host("SetMenuLayoutHost")
+	var menu: Node = packed.instantiate() if packed != null else null
+	if menu != null:
+		host.add_child(menu)
+		await _settle()
+		var box := menu.get_node_or_null("bg/box") as VBoxContainer
+		var last: Control = null
+		if box != null:
+			last = box.get_node_or_null("more") as Control
+		checks["set_menu_separation"] = box != null and box.get_theme_constant("separation") == 9
+		checks["set_menu_fits"] = (
+			box != null
+			and last != null
+			and box.get_combined_minimum_size().y <= box.size.y
+			and last.position.y + last.size.y <= box.size.y
+		)
+	host.queue_free()
+
+
 func _check_backpack_family(checks: Dictionary) -> void:
+	await _check_set_menu_layout(checks)
 	var host := _make_host("BackpackProbeHost")
 	var created: Array[Node] = []
 	var main_backpack: Node = Global.add_main_backpack(host, Vector2(10, 10))
@@ -321,6 +343,15 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_backpack_created"] = back_pack != null and back_pack.get_parent() == host
 	if back_pack != null:
 		created.append(back_pack)
+		back_pack.call("add_text", "生命：角色的健康力，归0后角色死亡。", null)
+		await _settle()
+		var tooltip = back_pack.get("message")
+		var tooltip_expected: Vector2 = (back_pack as Node2D).get_global_mouse_position() + Vector2(12.0, 18.0)
+		checks["backpack_tooltip_near_cursor"] = (
+			tooltip is Control
+			and (tooltip as Control).get_global_rect().position.distance_to(tooltip_expected) <= 1.0
+		)
+		back_pack.call("remove_text")
 	# 使用真实装备 ID，避免面板 _physics_process 在探针多帧存活期间访问不存在的数据。
 	var probe_item := _first_equipment_id()
 	var dj_infor: Node = Global.add_dj_infor(host, Vector2(20, 20), probe_item)
@@ -418,12 +449,20 @@ func _check_backpack_family(checks: Dictionary) -> void:
 		checks["backpack_equipment_description"] = (
 			description != null
 			and description.visible
-			and description.text == "描述:" + str(equipment_data.get("描述", ""))
+			and description.text == UiTextFormat.description(str(equipment_data.get("描述", "")))
+		)
+		checks["backpack_equipment_description_font"] = (
+			description != null and description.get_theme_font_size("font_size") == 18
+		)
+		checks["backpack_equipment_description_indent"] = (
+			description != null
+			and description.text.begins_with(UiTextFormat.PARAGRAPH_INDENT)
 		)
 		checks["backpack_equipment_sale"] = (
 			sale != null
 			and sale.visible
-			and sale.text == "售价:" + str(equipment_data.get("售价", 0)) + "灵魂。"
+			and sale.text == UiTextFormat.price(equipment_data.get("售价", 0))
+			and not sale.text.ends_with("。")
 		)
 		created.append(equipment_popup)
 	var treasure_id := _first_described_equipment_id("法宝")
@@ -447,7 +486,8 @@ func _check_backpack_family(checks: Dictionary) -> void:
 			checks["backpack_treasure_sale"] = (
 				treasure_sale != null
 				and treasure_sale.visible
-				and treasure_sale.text == "售价:" + str(treasure_data.get("售价", 0)) + "灵魂。"
+				and treasure_sale.text == UiTextFormat.price(treasure_data.get("售价", 0))
+				and not treasure_sale.text.ends_with("。")
 			)
 			created.append(treasure_popup)
 	var role_info: Node = Global.add_role_information(host, Vector2(70, 71))

@@ -97,7 +97,7 @@ layout_mode = 2
 theme_type_variation = "DjInfoDescription"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "描述："
+text = ""
 vertical_alignment = 1
 autowrap_mode = 1
 

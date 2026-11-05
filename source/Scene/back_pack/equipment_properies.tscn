@@ -323,7 +323,7 @@ size_flags_vertical = 0
 theme_type_variation = "EquipmentDescription"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "描述："
+text = ""
 vertical_alignment = 1
 autowrap_mode = 1
 

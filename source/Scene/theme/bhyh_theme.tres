@@ -1054,7 +1054,7 @@ EndStatsWarning/colors/font_color = Color(1, 0.584314, 0, 1)
 EndStatsWarning/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 
 EquipmentDescription/base_type = &"SemanticBasicMonmentText"
-EquipmentDescription/font_sizes/font_size = 14
+EquipmentDescription/font_sizes/font_size = 18
 
 EquipmentInfoGroup/base_type = &"VBoxContainer"
 EquipmentInfoGroup/constants/separation = 16
@@ -1540,6 +1540,9 @@ MenuActionButton/base_type = &"SemanticAnnouncementButton3"
 MenuActionButton/font_sizes/font_size = 24
 
 MenuActionButtonGroup/base_type = &"SemanticBackpackEquipmentColumn"
+
+SetMenuActionButtonGroup/base_type = &"MenuActionButtonGroup"
+SetMenuActionButtonGroup/constants/separation = 9
 
 MenuActionButtonOutline/base_type = &"MenuActionButton"
 MenuActionButtonOutline/colors/font_outline_color = Color(1, 1, 1, 1)

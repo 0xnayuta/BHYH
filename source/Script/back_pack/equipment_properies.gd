@@ -249,7 +249,7 @@ func _set_pet_information() -> void:
 		var strengthen_total := _pet_number(strengthen, row[2]) * float(qh_level)
 		label.visible = not is_zero_approx(base_value) or not is_zero_approx(strengthen_total)
 		if label.visible:
-			label.text = "%s:%s" % [str(row[1]), _pet_number_text(base_value)]
+			label.text = UiTextFormat.stat_line(str(row[1]), _pet_number_text(base_value))
 			if not is_zero_approx(strengthen_total):
 				var sign := "+" if strengthen_total > 0.0 else ""
 				label.text += "(%s%s)" % [sign, _pet_number_text(strengthen_total)]
@@ -284,10 +284,10 @@ func _set_pet_information() -> void:
 	var description := str(data.get("描述", "")).strip_edges()
 	eq_ms.visible = description != ""
 	if eq_ms.visible:
-		eq_ms.text = "描述:%s" % description
+		eq_ms.text = UiTextFormat.description(description)
 	eq_sj.visible = pet_sale_price > 0
 	if eq_sj.visible:
-		eq_sj.text = "售价:%d灵魂。" % pet_sale_price
+		eq_sj.text = UiTextFormat.price(pet_sale_price)
 	call_deferred("_update_pet_popup_background")
 
 
@@ -442,8 +442,8 @@ func _set_equipment_info(_name: String):
 		if EquipmentService.data(_name)["描述"] == "" and eq_ms != null:
 			eq_ms.queue_free()
 		else:
-			eq_ms.text = "描述:" + str(EquipmentService.data(_name)["描述"])
-		eq_sj.text = "售价:" + str(EquipmentService.data(_name)["售价"]) + "灵魂。"
+			eq_ms.text = UiTextFormat.description(str(EquipmentService.data(_name)["描述"]))
+		eq_sj.text = UiTextFormat.price(EquipmentService.data(_name)["售价"])
 		return
 
 	var display_name: String = EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
@@ -465,86 +465,86 @@ func _set_equipment_info(_name: String):
 			if get_fb_pro(_name, "成长率") == 0 and eq_czl != null:
 				eq_czl.queue_free()
 			else:
-				eq_czl.text = "成长率: " + str(get_fb_pro(_name, "成长率"))
+				eq_czl.text = UiTextFormat.stat_line("成长率", get_fb_pro(_name, "成长率"))
 			if get_fb_pro(_name, "SHp") == 0 and eq_hp != null:
 				eq_hp.queue_free()
 			else:
-				eq_hp.text = "生命:" + str(get_fb_pro(_name, "SHp"))
+				eq_hp.text = UiTextFormat.stat_line("生命", get_fb_pro(_name, "SHp"))
 
 			if get_fb_pro(_name, "SMp") == 0 and eq_mp != null:
 				eq_mp.queue_free()
 			else:
-				eq_mp.text = "魔法:" + str(get_fb_pro(_name, "SMp"))
+				eq_mp.text = UiTextFormat.stat_line("魔法", get_fb_pro(_name, "SMp"))
 
 			if get_fb_pro(_name, "power") == 0 and eq_power != null:
 				eq_power.queue_free()
 			else:
-				eq_power.text = "攻击:" + str(get_fb_pro(_name, "power"))
+				eq_power.text = UiTextFormat.stat_line("攻击", get_fb_pro(_name, "power"))
 
 			if get_fb_pro(_name, "Def") == 0 and eq_def != null:
 				eq_def.queue_free()
 			else:
-				eq_def.text = "物防:" + str(get_fb_pro(_name, "Def"))
+				eq_def.text = UiTextFormat.stat_line("物防", get_fb_pro(_name, "Def"))
 
 			if get_fb_pro(_name, "Mdef") == 0 and eq_mdef != null:
 				eq_mdef.queue_free()
 			else:
-				eq_mdef.text = "魔防:" + str(get_fb_pro(_name, "Mdef"))
+				eq_mdef.text = UiTextFormat.stat_line("魔防", get_fb_pro(_name, "Mdef"))
 
 			if get_properies(_name, "Crit")[0] == 0 and eq_crit != null:
 				eq_crit.queue_free()
 			else:
-				eq_crit.text = "暴击:" + str(get_properies(_name, "Crit")[0])
+				eq_crit.text = UiTextFormat.stat_line("暴击", get_properies(_name, "Crit")[0])
 
 			if get_properies(_name, "Miss")[0] == 0 and eq_miss != null:
 				eq_miss.queue_free()
 			else:
-				eq_miss.text = "闪避:" + str(get_properies(_name, "Miss")[0])
+				eq_miss.text = UiTextFormat.stat_line("闪避", get_properies(_name, "Miss")[0])
 
 			if get_properies(_name, "R_hp")[0] == 0 and eq_ehp != null:
 				eq_ehp.queue_free()
 			else:
-				eq_ehp.text = "回血:" + str(get_properies(_name, "R_hp")[0])
+				eq_ehp.text = UiTextFormat.stat_line("回血", get_properies(_name, "R_hp")[0])
 
 			if get_properies(_name, "R_mp")[0] == 0 and eq_emp != null:
 				eq_emp.queue_free()
 			else:
-				eq_emp.text = "回魔:" + str(get_properies(_name, "R_mp")[0])
+				eq_emp.text = UiTextFormat.stat_line("回魔", get_properies(_name, "R_mp")[0])
 
 			if get_properies(_name, "htarget")[0] == 0 and eq_mz != null:
 				eq_mz.queue_free()
 			else:
-				eq_mz.text = "命中:" + str(get_properies(_name, "htarget")[0])
+				eq_mz.text = UiTextFormat.stat_line("命中", get_properies(_name, "htarget")[0])
 
 			if get_properies(_name, "Lucky")[0] == 0 and eq_lucky != null:
 				eq_lucky.queue_free()
 			else:
-				eq_lucky.text = "幸运:" + str(get_properies(_name, "Lucky")[0])
+				eq_lucky.text = UiTextFormat.stat_line("幸运", get_properies(_name, "Lucky")[0])
 
 			if get_properies(_name, "toughness")[0] == 0 and eq_rx != null:
 				eq_rx.queue_free()
 			else:
-				eq_rx.text = "韧性:" + str(get_properies(_name, "toughness")[0])
+				eq_rx.text = UiTextFormat.stat_line("韧性", get_properies(_name, "toughness")[0])
 
 			if get_properies(_name, "ar")[0] == 0 and eq_pj != null:
 				eq_pj.queue_free()
 			else:
-				eq_pj.text = "破甲:" + str(get_properies(_name, "ar")[0])
+				eq_pj.text = UiTextFormat.stat_line("破甲", get_properies(_name, "ar")[0])
 
 			if get_properies(_name, "sp")[0] == 0 and eq_pm != null:
 				eq_pm.queue_free()
 			else:
-				eq_pm.text = "破魔:" + str(get_properies(_name, "sp")[0])
+				eq_pm.text = UiTextFormat.stat_line("破魔", get_properies(_name, "sp")[0])
 
 			if get_properies(_name, "vampirism")[0] == 0 and eq_xx != null:
 				eq_xx.queue_free()
 			else:
-				eq_xx.text = "吸血:" + str(get_properies(_name, "vampirism")[0])
+				eq_xx.text = UiTextFormat.stat_line("吸血", get_properies(_name, "vampirism")[0])
 
 			if get_properies(_name, "CritReduce")[0] == 0 and eq_bm != null:
 				eq_bm.queue_free()
 			else:
-				eq_bm.text = "暴免:" + str(get_properies(_name, "CritReduce")[0])
+				eq_bm.text = UiTextFormat.stat_line("暴免", get_properies(_name, "CritReduce")[0])
 
 		"武器", "防具", "饰品", "神骨", "头衔", "时装", "翅膀":
 			if not EquipmentService.data(_name).has(DataKeys.FIVE_ELEMENTS) and eq_star_level != null:
@@ -556,77 +556,77 @@ func _set_equipment_info(_name: String):
 			if get_properies(_name, "SHp")[0] == 0 and eq_hp != null:
 				eq_hp.queue_free()
 			else:
-				eq_hp.text = "生命:" + str(get_properies(_name, "SHp")[1])
+				eq_hp.text = UiTextFormat.stat_line("生命", get_properies(_name, "SHp")[1])
 
 			if get_properies(_name, "SMp")[0] == 0 and eq_mp != null:
 				eq_mp.queue_free()
 			else:
-				eq_mp.text = "魔法:" + str(get_properies(_name, "SMp")[1])
+				eq_mp.text = UiTextFormat.stat_line("魔法", get_properies(_name, "SMp")[1])
 
 			if get_properies(_name, "power")[0] == 0 and eq_power != null:
 				eq_power.queue_free()
 			else:
-				eq_power.text = "攻击:" + str(get_properies(_name, "power")[1])
+				eq_power.text = UiTextFormat.stat_line("攻击", get_properies(_name, "power")[1])
 
 			if get_properies(_name, "Def")[0] == 0 and eq_def != null:
 				eq_def.queue_free()
 			else:
-				eq_def.text = "物防:" + str(get_properies(_name, "Def")[1])
+				eq_def.text = UiTextFormat.stat_line("物防", get_properies(_name, "Def")[1])
 
 			if get_properies(_name, "Mdef")[0] == 0 and eq_mdef != null:
 				eq_mdef.queue_free()
 			else:
-				eq_mdef.text = "魔防:" + str(get_properies(_name, "Mdef")[1])
+				eq_mdef.text = UiTextFormat.stat_line("魔防", get_properies(_name, "Mdef")[1])
 
 			if get_properies(_name, "Crit")[0] == 0 and eq_crit != null:
 				eq_crit.queue_free()
 			else:
-				eq_crit.text = "暴击:" + str(get_properies(_name, "Crit")[1])
+				eq_crit.text = UiTextFormat.stat_line("暴击", get_properies(_name, "Crit")[1])
 
 			if get_properies(_name, "Miss")[0] == 0 and eq_miss != null:
 				eq_miss.queue_free()
 			else:
-				eq_miss.text = "闪避:" + str(get_properies(_name, "Miss")[1])
+				eq_miss.text = UiTextFormat.stat_line("闪避", get_properies(_name, "Miss")[1])
 
 			if get_properies(_name, "R_hp")[0] == 0 and eq_ehp != null:
 				eq_ehp.queue_free()
 			else:
-				eq_ehp.text = "回血:" + str(get_properies(_name, "R_hp")[1])
+				eq_ehp.text = UiTextFormat.stat_line("回血", get_properies(_name, "R_hp")[1])
 
 			if get_properies(_name, "R_mp")[0] == 0 and eq_emp != null:
 				eq_emp.queue_free()
 			else:
-				eq_emp.text = "回魔:" + str(get_properies(_name, "R_mp")[1])
+				eq_emp.text = UiTextFormat.stat_line("回魔", get_properies(_name, "R_mp")[1])
 
 			if get_properies(_name, "htarget")[0] == 0 and eq_mz != null:
 				eq_mz.queue_free()
 			else:
-				eq_mz.text = "命中:" + str(get_properies(_name, "htarget")[1])
+				eq_mz.text = UiTextFormat.stat_line("命中", get_properies(_name, "htarget")[1])
 
 			if get_properies(_name, "Lucky")[0] == 0 and eq_lucky != null:
 				eq_lucky.queue_free()
 			else:
-				eq_lucky.text = "幸运:" + str(get_properies(_name, "Lucky")[1])
+				eq_lucky.text = UiTextFormat.stat_line("幸运", get_properies(_name, "Lucky")[1])
 
 			if get_properies(_name, "toughness")[0] == 0 and eq_rx != null:
 				eq_rx.queue_free()
 			else:
-				eq_rx.text = "韧性:" + str(get_properies(_name, "toughness")[1])
+				eq_rx.text = UiTextFormat.stat_line("韧性", get_properies(_name, "toughness")[1])
 
 			if get_properies(_name, "ar")[0] == 0 and eq_pj != null:
 				eq_pj.queue_free()
 			else:
-				eq_pj.text = "破甲:" + str(get_properies(_name, "ar")[1])
+				eq_pj.text = UiTextFormat.stat_line("破甲", get_properies(_name, "ar")[1])
 
 			if get_properies(_name, "sp")[0] == 0 and eq_pm != null:
 				eq_pm.queue_free()
 			else:
-				eq_pm.text = "破魔:" + str(get_properies(_name, "sp")[1])
+				eq_pm.text = UiTextFormat.stat_line("破魔", get_properies(_name, "sp")[1])
 
 			if get_properies(_name, "vampirism")[0] == 0 and eq_xx != null:
 				eq_xx.queue_free()
 			else:
-				eq_xx.text = "吸血:" + str(get_properies(_name, "vampirism")[1])
+				eq_xx.text = UiTextFormat.stat_line("吸血", get_properies(_name, "vampirism")[1])
 
 			if get_properies(_name, "CritReduce")[0] == 0 and eq_bm != null:
 				eq_bm.queue_free()
@@ -640,10 +640,10 @@ func _set_description_and_sale(_name: String) -> void:
 	if eq_ms != null:
 		eq_ms.visible = description != ""
 		if eq_ms.visible:
-			eq_ms.text = "描述:" + description
+			eq_ms.text = UiTextFormat.description(description)
 	if eq_sj != null:
 		eq_sj.visible = true
-		eq_sj.text = "售价:" + str(data.get("售价", 0)) + "灵魂。"
+		eq_sj.text = UiTextFormat.price(data.get("售价", 0))
 
 
 func set_bs_infor():
