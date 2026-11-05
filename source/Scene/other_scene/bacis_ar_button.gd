@@ -20,7 +20,9 @@ func set_normal_info() -> void:
 	var role_id: int = int(archive_data.get("Myself", 0))
 	if role_id < 1 or role_id > 7:
 		name_label.text = ""
+		name_label.visible = false
 		time.text = ""
+		time.visible = false
 		level_and_role.text = "空存档"
 		return
 
@@ -31,8 +33,10 @@ func set_normal_info() -> void:
 		if archive_time != "":
 			MemoryClass.repair_archive_time(archive_num, archive_time)
 	var archive_name: String = str(metadata.get("name", ""))
-	time.text = archive_time
 	name_label.text = "名字：" + archive_name if archive_name != "" else ""
+	name_label.visible = archive_name != ""
+	time.text = archive_time
+	time.visible = not archive_time.strip_edges().is_empty()
 	var coop_value: Variant = archive_data.get(LocalCoop.SAVE_KEY, {})
 	if coop_value is Dictionary and bool((coop_value as Dictionary).get("启用", false)):
 		var p2_value: Variant = (coop_value as Dictionary).get("2P", {})

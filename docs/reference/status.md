@@ -28,7 +28,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 UI 四项修复复跑 **26.69s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 存档槽文本居中复跑 **30.24s**） |
 | 字体覆盖 | **135 场景 / 790 中文节点 / 0 缺字；Theme 字体 5 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.58s） |
 | UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，30.00s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
@@ -41,7 +41,7 @@
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **784 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
+| `archive_probe_runner` | **344/344 PASS**（14.26s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
@@ -55,6 +55,7 @@
 
 ### 最近完成
 
+- 2026-11-06 存档槽文本居中：`bacis_ar_button` 的 `InfoBox` 由 `x=52..249` 扩为槽位全宽 `0..265`，`VBoxContainer.alignment` 改为居中；空名称与空时间行隐藏，避免空行把有效文本下推；空档、单角色与双角色行均按槽位中心排列。编辑器实机渲染核对；`archive_probe_runner` **344/344 PASS（14.26s）**，`check_all` **9/9（30.24s）**，未重跑全量关卡回归。
 - 2026-11-06 UI 四项修复：加载页百分比字号由 32 收至 24，改为填满进度条并上移 3px 居中；HUD 三值条统一为 12px 高、3px 间隔，按可见框体边界统一起点 26px（1P/宠物/P2），修正玩家上下留白；HP/MP/EXP 从单张 748 图切为三个 `AtlasTexture`，统一贴条左端并与数值垂直居中，`base_role_p2` 宠物翻转清单同步标签节点；法宝面板删除重复的 `m_MDef`（33 个法宝 `Def`/`Mdef` 全部相等，原为单“防御”框内两个重复值，未改法宝数值或战斗逻辑）；实战法宝等级改用 `%d` 取整，修复 `Lv: 1.0`。`ui-factories` 新增 `backpack_magp_single_defense`、`backpack_magp_def_value`、`backpack_skill_select_level_integer` 断言并通过；`LocalCoopHudReadOnlyProbe` 通过。`check_all` **9/9（26.69s）**，`ui-factories` **PASS（30.00s）**，`coop HUD 只读` **PASS（7.70s）**，`theme_token_audit` / `theme_variant_audit` 0 违规；编辑器实机渲染核对 1P/宠物/P2 HUD 与加载页；未重跑全量关卡回归。
 - 2026-11-06 非名称文本标点 A1/A2：修订 19 处计划内玩家可见文本，并补齐 `magic_help` 同文件 3 处句末句号，包括 `load_scene` 3 条加载省略号、`magic_help` 4 处句末句号、幻化取消冒号、合成提示 `× 1！`，以及背包属性 5 组百分比、Boss 血量百分比、装备强化/属性后缀、商店物品后缀、2 处倒计时括号。帮助/公告的 `1.` 编号保持原样，开发日志与数学公式不改。新增 report-only `scripts/ui_text_punctuation_audit.py`，自测 9 个样本、全仓扫描 0 残留；默认退出码 0，`--fail-on-findings` 可显式阻断。复跑 `check_all` **9/9（38.44s）**、`ui-theme` **7.58s**、`ui-factories` **32.58s**、`health_check` 0 Parse / 0 Error / 0 Warning；背包实测 `0（0.00%）`。
 - 2026-11-06 源码内部名称迁移：将 `通天教主(混沌版)`、`通天教主(穷奇版)`、`牛魔王·魂 (Lv.%d)`、`遮迦越罗 (Lv.%d)` 共 11 处源码内部名称迁移为中文括号，覆盖 `level_info`、`lhhj`、`monster_head_info`、`level_62`、`minghai_boss3117`、`game4_east_late_level`、`east_continent_monster` 与 `monster_zhw` 族；未保留旧名别名，映射键与显示值同步。同步清理 `sqzlw` 与 `monster_zhw` 日志中的 `(神器)`、`(示例)` 括号。`source/Art/level/game_4_level/north_original/monsters.json` 的 `小蜘蛛(五)`、`通天教主(饕鬣版)` 此前已改为中文括号，`export_raw_dependencies.json` 同步为 108,228 字节。复跑 `check_all` **9/9（37.99s）**、`ui-theme` **8.35s**、`ui-factories` **32.44s**、`level_62` **11.63s**、`level_75` **11.88s**，关卡日志均 0 SCRIPT ERROR / 0 ERROR / 0 WARNING。
