@@ -196,7 +196,7 @@ func _add_stars(parent: Node, filled: int) -> void:
 	for index in range(5):
 		var star := Label.new()
 		star.text = "★" if index < filled else "☆"
-		star.add_theme_color_override("font_color", Color(1.0, 0.78, 0.25))
+		star.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_DEEP)
 		parent.add_child(star)
 
 

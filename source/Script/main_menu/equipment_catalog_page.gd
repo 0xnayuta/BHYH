@@ -120,22 +120,22 @@ func _build_ui() -> void:
 	theme = Theme.new()
 	theme.default_font = CATALOG_FONT
 	theme.default_font_size = 22
-	theme.set_color("font_color", "Label", Color("e5dbc9"))
+	theme.set_color("font_color", "Label", UiColorTokens.TEXT_PARCHMENT)
 	for control_type in ["Button", "OptionButton"]:
 		theme.set_stylebox("normal", control_type, _style(Color("242621"), Color("64563e")))
 		theme.set_stylebox("hover", control_type, _style(Color("37362b"), GOLD))
 		theme.set_stylebox("pressed", control_type, _style(Color("49402c"), GOLD))
 		theme.set_stylebox("focus", control_type, _style(Color.TRANSPARENT, Color("aa8b55")))
-		theme.set_color("font_color", control_type, Color("cbbd9f"))
-		theme.set_color("font_pressed_color", control_type, Color("ffdfa0"))
-		theme.set_color("font_hover_color", control_type, Color("ffdfa0"))
+		theme.set_color("font_color", control_type, UiColorTokens.TEXT_PARCHMENT_MUTED)
+		theme.set_color("font_pressed_color", control_type, UiColorTokens.TEXT_GOLD_LIGHT)
+		theme.set_color("font_hover_color", control_type, UiColorTokens.TEXT_GOLD_LIGHT)
 	theme.set_stylebox("normal", "LineEdit", _style(Color("171b19"), Color("64563e")))
 	theme.set_stylebox("focus", "LineEdit", _style(Color("20251f"), GOLD))
 	theme.set_stylebox("panel", "ItemList", _style(Color("171b19"), Color("64563e")))
 	theme.set_stylebox("selected", "ItemList", _style(Color("49402c"), Color("b59a60")))
 	theme.set_stylebox("selected_focus", "ItemList", _style(Color("49402c"), GOLD))
-	theme.set_color("font_color", "ItemList", Color("dcd0b8"))
-	theme.set_color("font_selected_color", "ItemList", Color("ffdfa0"))
+	theme.set_color("font_color", "ItemList", UiColorTokens.TEXT_PARCHMENT)
+	theme.set_color("font_selected_color", "ItemList", UiColorTokens.TEXT_GOLD_LIGHT)
 	var dim := ColorRect.new()
 	dim.color = Color(0.0, 0.0, 0.0, 0.78)
 	add_child(dim)
@@ -159,7 +159,7 @@ func _build_ui() -> void:
 	title.text = "装备图鉴"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", GOLD)
+	title.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_WARM)
 	header.add_child(title)
 	var close := Button.new()
 	close.name = "CloseButton"
@@ -222,7 +222,7 @@ func _build_ui() -> void:
 	_detail_scroll.add_child(_detail)
 	_count = Label.new()
 	_count.add_theme_font_size_override("font_size", 17)
-	_count.add_theme_color_override("font_color", Color("a99d83"))
+	_count.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 	outer.add_child(_count)
 
 
@@ -292,7 +292,7 @@ func refresh_items() -> void:
 		select_item(displayed_ids[0])
 	else:
 		_clear_detail()
-		_add_text("没有符合条件的装备", 20, GOLD)
+		_add_text("没有符合条件的装备", 20, UiColorTokens.TEXT_GOLD_WARM)
 
 
 func _clear_detail() -> void:
@@ -332,7 +332,7 @@ func select_item(item_id: String) -> void:
 	name_label.text = catalog.item_name(item_id)
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.add_theme_color_override("font_color", GOLD)
+	name_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_WARM)
 	name_label.add_theme_font_size_override("font_size", 28)
 	identity.add_child(name_label)
 	var metadata := Label.new()
@@ -340,9 +340,9 @@ func select_item(item_id: String) -> void:
 		"%s  /  %s  /  %s" % [data.get(DataKeys.QUALITY, ""), data.get(DataKeys.TYPE, ""), data.get("所属", "")]
 	)
 	metadata.add_theme_font_size_override("font_size", 19)
-	metadata.add_theme_color_override("font_color", Color("bbae91"))
+	metadata.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 	identity.add_child(metadata)
-	_add_text("基础属性", 23, GOLD)
+	_add_text("基础属性", 23, UiColorTokens.TEXT_GOLD_WARM)
 	var attributes := GridContainer.new()
 	attributes.columns = 3
 	attributes.name = "AttributeCards"
@@ -360,21 +360,21 @@ func select_item(item_id: String) -> void:
 		var label := Label.new()
 		label.text = parts[0]
 		label.add_theme_font_size_override("font_size", 18)
-		label.add_theme_color_override("font_color", Color("bbae91"))
+		label.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT_MUTED)
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(label)
 		if parts.size() > 1:
 			var number := Label.new()
 			number.text = parts[1]
 			number.add_theme_font_size_override("font_size", 24)
-			number.add_theme_color_override("font_color", Color("f0d59b"))
+			number.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 			row.add_child(number)
-	_add_section("装备描述", catalog.get_description(item_id), Color("e5dbc9"))
-	_add_section("掉落位置与获取方式", catalog.get_sources(item_id), Color("bdd1b2"))
+	_add_section("装备描述", catalog.get_description(item_id), UiColorTokens.TEXT_PARCHMENT)
+	_add_section("掉落位置与获取方式", catalog.get_sources(item_id), UiColorTokens.TEXT_JADE)
 
 
 func _add_section(title: String, value: String, color: Color) -> void:
-	_add_text(title, 23, GOLD)
+	_add_text(title, 23, UiColorTokens.TEXT_GOLD_WARM)
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", _style(Color("232820"), Color("454b3a")))
 	_detail.add_child(panel)
@@ -413,7 +413,7 @@ func _get_framed_icon(item_id: String) -> Texture2D:
 	return result
 
 
-func _add_text(value: String, font_size := 16, color := Color("e2e8ed")) -> Label:
+func _add_text(value: String, font_size := 16, color := UiColorTokens.TEXT_HINT) -> Label:
 	var label := Label.new()
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

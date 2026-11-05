@@ -317,9 +317,9 @@ func _build_category_buttons() -> void:
 		button.text = category_name
 		button.add_theme_font_override("font", UI_FONT)
 		button.add_theme_font_size_override("font_size", 18)
-		button.add_theme_color_override("font_color", Color("e9e6df"))
-		button.add_theme_color_override("font_hover_color", Color.WHITE)
-		button.add_theme_color_override("font_disabled_color", Color("ffe39a"))
+		button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
+		button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
+		button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_GOLD)
 		button.add_theme_stylebox_override("normal", _make_button_style(Color("293138"), Color("5c6870")))
 		button.add_theme_stylebox_override("hover", _make_button_style(Color("3a464d"), Color("89a69c")))
 		button.add_theme_stylebox_override("pressed", _make_button_style(Color("1d252a"), Color("b6c9bd")))
@@ -385,7 +385,7 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_override("font", UI_FONT)
 	name_label.add_theme_font_size_override("font_size", 18)
-	name_label.add_theme_color_override("font_color", Color("f3dfaa"))
+	name_label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 	column.add_child(name_label)
 
 	var portrait := TextureRect.new()
@@ -404,7 +404,7 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	effect_label.add_theme_font_override("font", UI_FONT)
 	effect_label.add_theme_font_size_override("font_size", 13)
-	effect_label.add_theme_color_override("font_color", Color("d8cda9"))
+	effect_label.add_theme_color_override("font_color", UiColorTokens.TEXT_PARCHMENT)
 	column.add_child(effect_label)
 
 	var level_label := Label.new()
@@ -412,7 +412,7 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	level_label.add_theme_font_override("font", UI_FONT)
 	level_label.add_theme_font_size_override("font_size", 16)
-	level_label.add_theme_color_override("font_color", Color("b9e3cc"))
+	level_label.add_theme_color_override("font_color", UiColorTokens.TEXT_JADE)
 	column.add_child(level_label)
 
 	var material_row := HBoxContainer.new()
@@ -431,7 +431,7 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	var material_label := Label.new()
 	material_label.add_theme_font_override("font", UI_FONT)
 	material_label.add_theme_font_size_override("font_size", 14)
-	material_label.add_theme_color_override("font_color", Color("e5e7e8"))
+	material_label.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
 	material_row.add_child(material_label)
 
 	var upgrade_button := Button.new()
@@ -441,8 +441,8 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	upgrade_button.text = "吞噬"
 	upgrade_button.add_theme_font_override("font", UI_FONT)
 	upgrade_button.add_theme_font_size_override("font_size", 16)
-	upgrade_button.add_theme_color_override("font_color", Color.WHITE)
-	upgrade_button.add_theme_color_override("font_disabled_color", Color("8e969b"))
+	upgrade_button.add_theme_color_override("font_color", UiColorTokens.TEXT_PRIMARY)
+	upgrade_button.add_theme_color_override("font_disabled_color", UiColorTokens.TEXT_DISABLED)
 	upgrade_button.add_theme_stylebox_override("normal", _make_button_style(Color("276149"), Color("72ae8e")))
 	upgrade_button.add_theme_stylebox_override("hover", _make_button_style(Color("347a5e"), Color("a4d7bb")))
 	upgrade_button.add_theme_stylebox_override("pressed", _make_button_style(Color("1d4937"), Color("d0eadb")))
@@ -472,7 +472,8 @@ func _refresh_monster_card(monster_id: int) -> void:
 	level_label.text = "吞噬 %d / %d" % [consumed, consume_limit]
 	material_label.text = "魂晶 %d" % have
 	material_label.add_theme_color_override(
-		"font_color", Color("b9e3cc") if have > 0 and consumed < consume_limit else Color("f0aaa5")
+		"font_color",
+		UiColorTokens.TEXT_JADE if have > 0 and consumed < consume_limit else UiColorTokens.TEXT_WARNING_SOFT
 	)
 	upgrade_button.disabled = have <= 0 or consumed >= consume_limit
 	upgrade_button.text = "已达上限" if consumed >= consume_limit else "吞噬"

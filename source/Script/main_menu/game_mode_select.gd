@@ -40,9 +40,9 @@ func _ready() -> void:
 		button.custom_minimum_size = Vector2(240, 64)
 		button.add_theme_font_override("font", preload("res://Scene/theme/fz_cu_yuan_m03.tres"))
 		button.add_theme_font_size_override("font_size", 30)
-		button.add_theme_color_override("font_color", Color("291a08"))
-		button.add_theme_color_override("font_hover_color", Color("291a08"))
-		button.add_theme_color_override("font_pressed_color", Color("291a08"))
+		button.add_theme_color_override("font_color", UiColorTokens.TEXT_INK_WARM)
+		button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_INK_WARM)
+		button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_INK_WARM)
 		for state in ["normal", "hover", "pressed", "focus"]:
 			var style := StyleBoxFlat.new()
 			style.bg_color = Color("ed9908") if state == "normal" else Color("ffc343")

@@ -69,7 +69,7 @@ func _build_ui() -> void:
 	)
 	panel_root.add_child(frame)
 	var title := _label(
-		"坐骑", Vector2(28, 15), Vector2(760, 40), 30, Color(0.96, 0.81, 0.45, 1.0), HORIZONTAL_ALIGNMENT_CENTER
+		"坐骑", Vector2(28, 15), Vector2(760, 40), 30, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER
 	)
 	title.name = "MountTitle"
 	panel_root.add_child(title)
@@ -93,9 +93,13 @@ func _build_ui() -> void:
 	list_button.name = "MountChangeButton"
 	list_button.pressed.connect(_toggle_mount_list)
 	panel_root.add_child(list_button)
-	name_label = _label("坐骑", Vector2(30, 112), Vector2(290, 30), 21, Color("f3dfaa"), HORIZONTAL_ALIGNMENT_CENTER)
+	name_label = _label(
+		"坐骑", Vector2(30, 112), Vector2(290, 30), 21, UiColorTokens.TEXT_GOLD_LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+	)
 	panel_root.add_child(name_label)
-	state_label = _label("休息", Vector2(30, 144), Vector2(290, 24), 16, Color("b9e3cc"), HORIZONTAL_ALIGNMENT_CENTER)
+	state_label = _label(
+		"休息", Vector2(30, 144), Vector2(290, 24), 16, UiColorTokens.TEXT_JADE, HORIZONTAL_ALIGNMENT_CENTER
+	)
 	panel_root.add_child(state_label)
 
 	preview_host = Panel.new()
@@ -120,7 +124,9 @@ func _build_ui() -> void:
 	train_all_button.name = "MountTrainAllButton"
 	train_all_button.pressed.connect(_train_mount_all)
 	panel_root.add_child(train_all_button)
-	message_label = _label("", Vector2(25, 535), Vector2(305, 32), 13, Color("ffcf75"), HORIZONTAL_ALIGNMENT_CENTER)
+	message_label = _label(
+		"", Vector2(25, 535), Vector2(305, 32), 13, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER
+	)
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel_root.add_child(message_label)
 	_build_content()
@@ -153,7 +159,8 @@ func _refresh() -> void:
 	name_label.text = str(mount.get(DataKeys.ALT_NAME, "坐骑"))
 	state_label.text = "未解锁" if not unlocked else "出战中" if active else "休息中"
 	state_label.add_theme_color_override(
-		"font_color", Color("aab1b6") if not unlocked else Color("ffcf75") if active else Color("9fe3ff")
+		"font_color",
+		UiColorTokens.TEXT_DIM if not unlocked else UiColorTokens.TEXT_GOLD if active else UiColorTokens.TEXT_INFO
 	)
 	action_button.text = "解锁" if not unlocked else "休息" if active else "出战"
 	train_button.disabled = not unlocked or level >= level_limit
@@ -173,7 +180,9 @@ func _refresh_content(mount: Dictionary) -> void:
 			child.queue_free()
 	for index in range(tab_buttons.size()):
 		var selected := index == selected_tab
-		tab_buttons[index].add_theme_color_override("font_color", Color("ffe39a") if selected else Color("e9e6df"))
+		tab_buttons[index].add_theme_color_override(
+			"font_color", UiColorTokens.TEXT_GOLD if selected else UiColorTokens.TEXT_SECONDARY
+		)
 		tab_buttons[index].add_theme_stylebox_override(
 			"normal",
 			_style(
@@ -222,7 +231,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 				Vector2.ZERO,
 				Vector2(420, 26),
 				15,
-				Color("ffcf75") if owned >= needed else Color("ef8e82"),
+				UiColorTokens.TEXT_GOLD if owned >= needed else UiColorTokens.TEXT_WARNING_SOFT,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
@@ -232,28 +241,37 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 				Vector2.ZERO,
 				Vector2(420, 24),
 				13,
-				Color("b9c9d2"),
+				UiColorTokens.TEXT_HINT,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
 		unlock_row.add_child(info)
 		page.add_child(unlock_row)
 		page.add_child(
-			_label("点击左侧“解锁”按钮消耗材料", Vector2.ZERO, Vector2(500, 28), 14, Color("d8e5f2"), HORIZONTAL_ALIGNMENT_CENTER)
+			_label(
+				"点击左侧“解锁”按钮消耗材料",
+				Vector2.ZERO,
+				Vector2(500, 28),
+				14,
+				UiColorTokens.TEXT_HINT,
+				HORIZONTAL_ALIGNMENT_CENTER
+			)
 		)
 		return
 	var summary := HBoxContainer.new()
 	summary.name = "MountAttributeSummary"
 	summary.custom_minimum_size = Vector2(500, 34)
 	summary.add_theme_constant_override("separation", 16)
-	summary.add_child(_label("基础属性", Vector2.ZERO, Vector2(170, 34), 19, Color("ffe3a5"), HORIZONTAL_ALIGNMENT_LEFT))
+	summary.add_child(
+		_label("基础属性", Vector2.ZERO, Vector2(170, 34), 19, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_LEFT)
+	)
 	summary.add_child(
 		_label(
 			"等级  Lv.%d" % int(mount.get(DataKeys.LEVEL, 1)),
 			Vector2.ZERO,
 			Vector2(130, 34),
 			15,
-			Color("d8e5f2"),
+			UiColorTokens.TEXT_HINT,
 			HORIZONTAL_ALIGNMENT_LEFT
 		)
 	)
@@ -282,7 +300,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 				Vector2.ZERO,
 				Vector2(230, 24),
 				15,
-				Color("d8e5f2"),
+				UiColorTokens.TEXT_HINT,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
@@ -292,7 +310,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 	qualification_header.custom_minimum_size = Vector2(500, 30)
 	qualification_header.add_theme_constant_override("separation", 8)
 	var qualification_title := _label(
-		"资质", Vector2.ZERO, Vector2(58, 28), 17, Color("ffe3a5"), HORIZONTAL_ALIGNMENT_LEFT
+		"资质", Vector2.ZERO, Vector2(58, 28), 17, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_LEFT
 	)
 	qualification_title.custom_minimum_size = Vector2(58, 28)
 	qualification_header.add_child(qualification_title)
@@ -306,7 +324,7 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 		Vector2.ZERO,
 		Vector2(270, 28),
 		13,
-		Color("b9c9d2"),
+		UiColorTokens.TEXT_HINT,
 		HORIZONTAL_ALIGNMENT_RIGHT
 	)
 	material_label.custom_minimum_size = Vector2(270, 28)
@@ -326,7 +344,9 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 	for key in ["生命资质", "攻击资质", "防御资质"]:
 		var row := HBoxContainer.new()
 		row.custom_minimum_size = Vector2(500, 21)
-		row.add_child(_label(key, Vector2.ZERO, Vector2(80, 24), 14, Color("c7d5e3"), HORIZONTAL_ALIGNMENT_LEFT))
+		row.add_child(
+			_label(key, Vector2.ZERO, Vector2(80, 24), 14, UiColorTokens.TEXT_HINT, HORIZONTAL_ALIGNMENT_LEFT)
+		)
 		var bar := ProgressBar.new()
 		bar.custom_minimum_size = Vector2(315, 18)
 		bar.show_percentage = false
@@ -341,13 +361,13 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 				Vector2.ZERO,
 				Vector2(85, 24),
 				13,
-				Color("bcd7ea"),
+				UiColorTokens.TEXT_HINT,
 				HORIZONTAL_ALIGNMENT_RIGHT
 			)
 		)
 		qual.add_child(row)
 	page.add_child(qual)
-	page.add_child(_label("技能", Vector2.ZERO, Vector2(500, 22), 17, Color("ffe3a5"), HORIZONTAL_ALIGNMENT_LEFT))
+	page.add_child(_label("技能", Vector2.ZERO, Vector2(500, 22), 17, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_LEFT))
 	var skills_row := HBoxContainer.new()
 	skills_row.add_theme_constant_override("separation", 10)
 	var skills_value: Variant = mount.get("技能", [])
@@ -386,14 +406,19 @@ func _build_attribute_page(page: VBoxContainer, mount: Dictionary) -> void:
 				Vector2.ZERO,
 				Vector2(92, 20),
 				11,
-				Color("d8e5f2"),
+				UiColorTokens.TEXT_HINT,
 				HORIZONTAL_ALIGNMENT_CENTER
 			)
 		)
 		var skill_level := PlayerData.get_mount_skill_level(str(mount.get("ID", "")), str(skill.get("id", "")))
 		holder.add_child(
 			_label(
-				"Lv.%d" % skill_level, Vector2.ZERO, Vector2(92, 18), 11, Color("ffcf75"), HORIZONTAL_ALIGNMENT_CENTER
+				"Lv.%d" % skill_level,
+				Vector2.ZERO,
+				Vector2(92, 18),
+				11,
+				UiColorTokens.TEXT_GOLD,
+				HORIZONTAL_ALIGNMENT_CENTER
 			)
 		)
 		skills_row.add_child(holder)
@@ -431,7 +456,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	popup_frame.add_theme_stylebox_override("panel", _style(Color("151b1f"), Color("d0a750"), 2, 7))
 	skill_popup.add_child(popup_frame)
 	popup_frame.add_child(
-		_label("技能升级", Vector2(24, 12), Vector2(410, 38), 25, Color("f4d98e"), HORIZONTAL_ALIGNMENT_CENTER)
+		_label("技能升级", Vector2(24, 12), Vector2(410, 38), 25, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 	)
 	var close := _button("×", Vector2(454, 12), Vector2(44, 36), 23)
 	close.name = "MountSkillPopupClose"
@@ -457,7 +482,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 			Vector2(132, 67),
 			Vector2(354, 34),
 			21,
-			Color("ffe3a5"),
+			UiColorTokens.TEXT_GOLD,
 			HORIZONTAL_ALIGNMENT_LEFT
 		)
 	)
@@ -466,7 +491,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 		Vector2(132, 101),
 		Vector2(354, 60),
 		14,
-		Color("c9d6df"),
+		UiColorTokens.TEXT_HINT,
 		HORIZONTAL_ALIGNMENT_LEFT
 	)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -478,7 +503,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 			Vector2(132, 163),
 			Vector2(354, 28),
 			16,
-			Color("ffcf75"),
+			UiColorTokens.TEXT_GOLD,
 			HORIZONTAL_ALIGNMENT_LEFT
 		)
 	)
@@ -492,10 +517,19 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 	var next_level := mini(PlayerData.MOUNT_SKILL_MAX_LEVEL, skill_level + 1)
 	if is_buff:
 		damage_panel.add_child(
-			_label("当前技能伤害：无直接伤害", Vector2(16, 7), Vector2(440, 28), 15, Color("d8e5f2"), HORIZONTAL_ALIGNMENT_LEFT)
+			_label(
+				"当前技能伤害：无直接伤害", Vector2(16, 7), Vector2(440, 28), 15, UiColorTokens.TEXT_HINT, HORIZONTAL_ALIGNMENT_LEFT
+			)
 		)
 		damage_panel.add_child(
-			_label("升级后技能伤害：无直接伤害", Vector2(16, 38), Vector2(440, 28), 15, Color("b9e3cc"), HORIZONTAL_ALIGNMENT_LEFT)
+			_label(
+				"升级后技能伤害：无直接伤害",
+				Vector2(16, 38),
+				Vector2(440, 28),
+				15,
+				UiColorTokens.TEXT_JADE,
+				HORIZONTAL_ALIGNMENT_LEFT
+			)
 		)
 		damage_panel.add_child(
 			_label(
@@ -503,7 +537,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 				Vector2(16, 74),
 				Vector2(440, 38),
 				13,
-				Color("9fb1bc"),
+				UiColorTokens.TEXT_HINT_DIM,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
@@ -522,7 +556,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 				Vector2(16, 7),
 				Vector2(440, 28),
 				15,
-				Color("d8e5f2"),
+				UiColorTokens.TEXT_HINT,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
@@ -532,14 +566,16 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 				Vector2(16, 38),
 				Vector2(440, 28),
 				15,
-				Color("b9e3cc"),
+				UiColorTokens.TEXT_JADE,
 				HORIZONTAL_ALIGNMENT_LEFT
 			)
 		)
 		var hits := int(combat.get("hits", 1))
 		var hit_text := "伤害段数：持续命中" if hits >= 999 else "伤害段数：%d段" % maxi(1, hits)
 		damage_panel.add_child(
-			_label(hit_text, Vector2(16, 69), Vector2(210, 28), 14, Color("9fb1bc"), HORIZONTAL_ALIGNMENT_LEFT)
+			_label(
+				hit_text, Vector2(16, 69), Vector2(210, 28), 14, UiColorTokens.TEXT_HINT_DIM, HORIZONTAL_ALIGNMENT_LEFT
+			)
 		)
 		if hits > 1 and hits < 999:
 			damage_panel.add_child(
@@ -548,7 +584,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 					Vector2(220, 69),
 					Vector2(236, 28),
 					14,
-					Color("9fb1bc"),
+					UiColorTokens.TEXT_HINT_DIM,
 					HORIZONTAL_ALIGNMENT_RIGHT
 				)
 			)
@@ -559,7 +595,7 @@ func _open_skill_upgrade_popup(skill: Dictionary) -> void:
 		else "消耗灵魂：%d    当前灵魂：%d" % [cost, PlayerData.get_soul()]
 	)
 	popup_frame.add_child(
-		_label(cost_text, Vector2(24, 334), Vector2(472, 28), 15, Color("ffcf75"), HORIZONTAL_ALIGNMENT_CENTER)
+		_label(cost_text, Vector2(24, 334), Vector2(472, 28), 15, UiColorTokens.TEXT_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 	)
 	var upgrade := _button(
 		"已满级" if skill_level >= PlayerData.MOUNT_SKILL_MAX_LEVEL else "升级", Vector2(190, 371), Vector2(140, 38), 16
@@ -657,7 +693,7 @@ func _build_mount_list() -> void:
 		row.pressed.connect(_select_mount_row.bind(index))
 		mount_list.add_child(row)
 		mount_list_rows.append(row)
-		var label := _label("", Vector2(8, 0), Vector2(173, 32), 13, Color("d8e5f2"), HORIZONTAL_ALIGNMENT_LEFT)
+		var label := _label("", Vector2(8, 0), Vector2(173, 32), 13, UiColorTokens.TEXT_HINT, HORIZONTAL_ALIGNMENT_LEFT)
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(label)
 		mount_list_labels.append(label)
@@ -691,7 +727,7 @@ func _refresh_mount_list() -> void:
 			else "  [未解锁]" if not bool(mount.get(PlayerData.MOUNT_UNLOCKED_KEY, false)) else ""
 		)
 		mount_list_labels[index].text = "%s%s" % [str(mount.get(DataKeys.ALT_NAME, "坐骑")), suffix]
-		row.modulate = Color("ffe19a") if id == selected_mount_id else Color.WHITE
+		row.modulate = UiColorTokens.TEXT_GOLD if id == selected_mount_id else UiColorTokens.TEXT_PRIMARY
 
 
 func _select_mount_row(index: int) -> void:
@@ -852,7 +888,7 @@ func _label(
 	label.add_theme_font_override("font", UI_FONT)
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
-	label.add_theme_color_override("font_outline_color", Color(0.02, 0.03, 0.05, 0.8))
+	label.add_theme_color_override("font_outline_color", UiColorTokens.OUTLINE_NIGHT)
 	label.add_theme_constant_override("outline_size", 2)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
@@ -866,8 +902,8 @@ func _button(text_value: String, position_value: Vector2, size_value: Vector2, f
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_override("font", UI_FONT)
 	button.add_theme_font_size_override("font_size", font_size)
-	button.add_theme_color_override("font_color", Color("e9e6df"))
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_color", UiColorTokens.TEXT_SECONDARY)
+	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_PRIMARY)
 	button.add_theme_stylebox_override("normal", _style(Color("293138"), Color("5c6870"), 1, 4))
 	button.add_theme_stylebox_override("hover", _style(Color("3a464d"), Color("89a69c"), 1, 4))
 	button.add_theme_stylebox_override("pressed", _style(Color("1d252a"), Color("b6c9bd"), 1, 4))

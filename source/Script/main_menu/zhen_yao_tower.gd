@@ -272,8 +272,8 @@ func _make_shop_style(background: Color, border: Color, border_width: int = 2) -
 func _style_shop_label(label: Label, font_size: int = 17) -> void:
 	label.add_theme_font_override("font", TOWER_FONT)
 	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", Color(1.0, 0.933333, 0.713726, 1.0))
-	label.add_theme_color_override("font_outline_color", Color(0.0901961, 0.0470588, 0.0235294, 1.0))
+	label.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	label.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	label.add_theme_constant_override("outline_size", 2)
 
 
@@ -281,10 +281,10 @@ func _style_shop_button(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_override("font", TOWER_FONT)
 	button.add_theme_font_size_override("font_size", 16)
-	button.add_theme_color_override("font_color", Color(1.0, 0.933333, 0.713726, 1.0))
-	button.add_theme_color_override("font_pressed_color", Color(1.0, 1.0, 0.901961, 1.0))
-	button.add_theme_color_override("font_hover_color", Color(1.0, 0.968627, 0.815686, 1.0))
-	button.add_theme_color_override("font_outline_color", Color(0.0901961, 0.0470588, 0.0235294, 1.0))
+	button.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	button.add_theme_color_override("font_pressed_color", UiColorTokens.TEXT_PRIMARY)
+	button.add_theme_color_override("font_hover_color", UiColorTokens.TEXT_GOLD_LIGHT)
+	button.add_theme_color_override("font_outline_color", UiColorTokens.INK)
 	button.add_theme_constant_override("outline_size", 2)
 	button.add_theme_stylebox_override(
 		"normal", _make_shop_style(Color(0.219608, 0.137255, 0.094118, 0.94), Color(0.752941, 0.611765, 0.337255, 1.0))
@@ -488,7 +488,7 @@ func _create_shop_item_row(
 		quantity_input.tooltip_text = "购买数量（1-9999）"
 		quantity_input.add_theme_font_override("font", TOWER_FONT)
 		quantity_input.add_theme_font_size_override("font_size", 14)
-		quantity_input.add_theme_color_override("font_color", Color(1.0, 0.933333, 0.713726, 1.0))
+		quantity_input.add_theme_color_override("font_color", UiColorTokens.TEXT_GOLD_LIGHT)
 		quantity_input.add_theme_color_override("caret_color", Color(1.0, 0.85098, 0.478431, 1.0))
 		quantity_input.add_theme_stylebox_override(
 			"normal",

@@ -79,7 +79,8 @@ func _run() -> void:
 	)
 	checks["normal_button_colors"] = (
 		normal_button.get_theme_color("font_color").to_html(true) == "dfdfdfff"
-		and normal_button.get_theme_color("font_hover_color").to_html(true) == "ff7700ff"
+		and normal_button.get_theme_color("font_hover_color").to_html(true)
+		== UiColorTokens.TEXT_HOVER.to_html(true)
 	)
 	checks["normal_button_style"] = normal_button.get_theme_stylebox("normal") is StyleBoxEmpty
 	checks["bright_button_variation"] = (

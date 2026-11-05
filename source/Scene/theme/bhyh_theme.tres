@@ -577,7 +577,7 @@ corner_radius_bottom_left = 3
 default_font = ExtResource("font_fz_cu_yuan_m03")
 SettingsButton/base_type = &"Button"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 SettingsButton/fonts/font = ExtResource("font_main")
 SettingsButton/font_sizes/font_size = 24
 SettingsButton/styles/normal = SubResource("empty_button")
@@ -597,7 +597,7 @@ SettingsButtonTinyBright/base_type = &"SettingsButtonTiny"
 SettingsButtonTinyBright/colors/font_color = Color(1, 1, 1, 1)
 
 SettingsButtonSmall/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsButtonSmall/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonSmall/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 SettingsButtonSmall/fonts/font = ExtResource("font_main")
 SettingsButtonSmall/font_sizes/font_size = 18
 SettingsButtonSmall/styles/normal = SubResource("empty_button")
@@ -608,7 +608,7 @@ SettingsButtonSmall/styles/focus = SubResource("empty_button")
 
 SettingsButtonTiny/base_type = &"Button"
 SettingsButtonTiny/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsButtonTiny/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsButtonTiny/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 SettingsButtonTiny/fonts/font = ExtResource("font_main")
 SettingsButtonTiny/font_sizes/font_size = 20
 SettingsButtonTiny/styles/normal = SubResource("empty_button")
@@ -623,7 +623,7 @@ SettingsButtonMedium/base_type = &"SettingsButton"
 
 SettingsReturnButton/base_type = &"Button"
 SettingsReturnButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-SettingsReturnButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+SettingsReturnButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 SettingsReturnButton/colors/font_outline_color = Color(0, 0, 0, 1)
 SettingsReturnButton/constants/outline_size = 3
 SettingsReturnButton/fonts/font = ExtResource("font_return")
@@ -803,9 +803,9 @@ MenuActionButtonGroup/constants/separation = 20
 
 TowerButton/base_type = &"Button"
 TowerButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-TowerButton/colors/font_hover_color = Color(1, 0.968627, 0.815686, 1)
-TowerButton/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
-TowerButton/colors/font_pressed_color = Color(1, 1, 0.901961, 1)
+TowerButton/colors/font_hover_color = Color(1, 0.956863, 0.74902, 1)
+TowerButton/colors/font_outline_color = Color(0, 0, 0, 1)
+TowerButton/colors/font_pressed_color = Color(1, 1, 1, 1)
 TowerButton/constants/outline_size = 2
 TowerButton/fonts/font = ExtResource("font_main")
 TowerButton/font_sizes/font_size = 18
@@ -818,7 +818,7 @@ TowerButtonSmall/font_sizes/font_size = 16
 
 TowerLabel/base_type = &"Label"
 TowerLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-TowerLabel/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
+TowerLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 TowerLabel/constants/outline_size = 2
 TowerLabel/fonts/font = ExtResource("font_main")
 TowerLabel/font_sizes/font_size = 20
@@ -842,7 +842,7 @@ TowerPanel/base_type = &"PanelContainer"
 TowerPanel/styles/panel = SubResource("tower_panel")
 
 AnnouncementButton/base_type = &"Button"
-AnnouncementButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+AnnouncementButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 AnnouncementButton/fonts/font = ExtResource("font_return")
 AnnouncementButton/font_sizes/font_size = 28
 AnnouncementButton/styles/normal = SubResource("empty_button")
@@ -980,8 +980,8 @@ SkillGridRow/constants/separation = 25
 
 TowerFloorInput/base_type = &"LineEdit"
 TowerFloorInput/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-TowerFloorInput/colors/font_outline_color = Color(0.0901961, 0.047059, 0.023529, 1)
-TowerFloorInput/colors/font_placeholder_color = Color(1, 0.933333, 0.713726, 0.7)
+TowerFloorInput/colors/font_outline_color = Color(0, 0, 0, 1)
+TowerFloorInput/colors/font_placeholder_color = Color(1, 0.956863, 0.74902, 0.7)
 TowerFloorInput/constants/outline_size = 2
 TowerFloorInput/fonts/font = ExtResource("font_main")
 TowerFloorInput/font_sizes/font_size = 22
@@ -1883,7 +1883,7 @@ GameInfoTitle/fonts/font = ExtResource("font_hk")
 GameInfoTitle/font_sizes/font_size = 30
 
 GameInfoGuideButton/base_type = &"Button"
-GameInfoGuideButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+GameInfoGuideButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 GameInfoGuideButton/fonts/font = ExtResource("font_return")
 GameInfoGuideButton/styles/normal = SubResource("empty_button")
 GameInfoGuideButton/styles/pressed = SubResource("empty_button")
@@ -1892,7 +1892,7 @@ GameInfoGuideButton/styles/disabled = SubResource("empty_button")
 GameInfoGuideButton/styles/focus = SubResource("empty_button")
 
 GameInfoNoticeButton/base_type = &"Button"
-GameInfoNoticeButton/colors/font_hover_color = Color(1, 0.466667, 0, 1)
+GameInfoNoticeButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
 GameInfoNoticeButton/styles/normal = SubResource("empty_button")
 GameInfoNoticeButton/styles/pressed = SubResource("empty_button")
 GameInfoNoticeButton/styles/hover = SubResource("empty_button")
@@ -1990,14 +1990,14 @@ BodyTrainingHitButton/styles/hover = SubResource("empty_button")
 
 BodyTrainingLevelLabel/base_type = &"Label"
 BodyTrainingLevelLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-BodyTrainingLevelLabel/colors/font_outline_color = Color(0.266667, 0.12549, 0.0509804, 1)
+BodyTrainingLevelLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 BodyTrainingLevelLabel/constants/outline_size = 3
 BodyTrainingLevelLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingLevelLabel/font_sizes/font_size = 14
 
 BodyTrainingMainLabel/base_type = &"Label"
 BodyTrainingMainLabel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-BodyTrainingMainLabel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingMainLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 BodyTrainingMainLabel/constants/outline_size = 3
 BodyTrainingMainLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingMainLabel/font_sizes/font_size = 14
@@ -2992,7 +2992,7 @@ Map3ButtonTitle/font_sizes/font_size = 16
 
 ChoosePlayerTitle/base_type = &"Label"
 ChoosePlayerTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
-ChoosePlayerTitle/colors/font_shadow_color = Color(0.141176, 0.0470588, 0.0117647, 1)
+ChoosePlayerTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
 ChoosePlayerTitle/constants/shadow_offset_x = 2
 ChoosePlayerTitle/constants/shadow_offset_y = 2
 ChoosePlayerTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
@@ -3034,8 +3034,8 @@ Map0PlayerLevel/font_sizes/font_size = 12
 Map0CatalogButton/base_type = &"Button"
 Map0CatalogButton/colors/font_color = Color(1, 0.84, 0.54, 1)
 Map0CatalogButton/colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
-Map0CatalogButton/colors/font_hover_color = Color(1, 0.96, 0.8, 1)
-Map0CatalogButton/colors/font_outline_color = Color(0.06, 0.04, 0.02, 1)
+Map0CatalogButton/colors/font_hover_color = Color(1, 0.956863, 0.74902, 1)
+Map0CatalogButton/colors/font_outline_color = Color(0, 0, 0, 1)
 Map0CatalogButton/constants/outline_size = 2
 Map0CatalogButton/fonts/font = ExtResource("font_main")
 Map0CatalogButton/font_sizes/font_size = 18
@@ -3213,7 +3213,7 @@ WanLingStagePanel/styles/panel = SubResource("wan_ling_stage_panel")
 
 WanLingTitle/base_type = &"Label"
 WanLingTitle/colors/font_color = Color(1, 0.84, 0.54, 1)
-WanLingTitle/colors/font_outline_color = Color(0.1, 0.055, 0.025, 1)
+WanLingTitle/colors/font_outline_color = Color(0, 0, 0, 1)
 WanLingTitle/constants/outline_size = 3
 WanLingTitle/fonts/font = ExtResource("font_main")
 WanLingTitle/font_sizes/font_size = 30
@@ -3274,7 +3274,7 @@ WanLingAttributeText/font_sizes/font_size = 17
 
 BodyTrainingDetailLevel/base_type = &"Label"
 BodyTrainingDetailLevel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-BodyTrainingDetailLevel/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingDetailLevel/colors/font_outline_color = Color(0, 0, 0, 1)
 BodyTrainingDetailLevel/constants/outline_size = 3
 BodyTrainingDetailLevel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailLevel/font_sizes/font_size = 20
@@ -3286,14 +3286,14 @@ BodyTrainingDetailAttribute/font_sizes/font_size = 16
 
 BodyTrainingDetailProgress/base_type = &"Label"
 BodyTrainingDetailProgress/colors/font_color = Color(1, 1, 1, 1)
-BodyTrainingDetailProgress/colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
+BodyTrainingDetailProgress/colors/font_outline_color = Color(0, 0, 0, 1)
 BodyTrainingDetailProgress/constants/outline_size = 3
 BodyTrainingDetailProgress/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailProgress/font_sizes/font_size = 16
 
 BodyTrainingDetailMaterial/base_type = &"Label"
 BodyTrainingDetailMaterial/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-BodyTrainingDetailMaterial/colors/font_outline_color = Color(0.2, 0.07451, 0.019608, 1)
+BodyTrainingDetailMaterial/colors/font_outline_color = Color(0, 0, 0, 1)
 BodyTrainingDetailMaterial/constants/outline_size = 3
 BodyTrainingDetailMaterial/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BodyTrainingDetailMaterial/font_sizes/font_size = 16
@@ -4182,14 +4182,14 @@ TaskRewardTitle/font_sizes/font_size = 13
 
 TowerFloorText/base_type = &"Label"
 TowerFloorText/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-TowerFloorText/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
+TowerFloorText/colors/font_outline_color = Color(0, 0, 0, 1)
 TowerFloorText/constants/outline_size = 3
 TowerFloorText/fonts/font = ExtResource("font_hk")
 TowerFloorText/font_sizes/font_size = 22
 
 TowerHintText/base_type = &"Label"
 TowerHintText/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-TowerHintText/colors/font_outline_color = Color(0.0901961, 0.0470588, 0.0235294, 1)
+TowerHintText/colors/font_outline_color = Color(0, 0, 0, 1)
 TowerHintText/constants/outline_size = 2
 TowerHintText/fonts/font = ExtResource("font_hk")
 TowerHintText/font_sizes/font_size = 16
