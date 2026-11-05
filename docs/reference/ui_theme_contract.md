@@ -81,10 +81,11 @@ python scripts/font_coverage_audit.py --check
 
 ## 8. P2 排版 token 试点（2026-11-05）
 
-- 覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`，以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
+- 覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`，以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
 - 不重命名 618 个冻结变体；重复 Text/Icon 按钮改为继承 `MenuActionButton`、`EmptyButton`、`SettingsButton`、`SettingsButtonTiny`、`LlbtCgmsButton` 等共享基类，视觉不变。
 - P2-3 新增：公告版本列表 28、Heading 36；背包标题 24、小 Tab 16、BoxLockMark 14/3；`ldl` 按钮 24；商店 Tab/Search 16、Stat/Hint 24、SoulValue 18；神秘商店标签 14。
 - P2-4 新增：装备数值 16/描述 14/售价 18；道具使用 32/36、13/14、15/16；锻造 24/28、标题 36；神铸 32；选择物品 24/20；治疗次数 24/24；`shop_item` 本批无字体重写。
-- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器路径“描述/售价”仅保留标签属既有脚本行为），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）。
+- P2-5 新增：`magic_weapon_infor` Attr 14/SkillTitle 20/描边 10 或 6/3；`use_magic_weapon` Page outline 6；`mosaic_help` Title 32/6、Line 18；`decompose_help` Title 24；`sell_or_equ` 与 `forge_help` 已为 token，无改写。装备 tooltip 的武器/法宝描述与售价空值已在独立修复中补齐。
+- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）；P2-5 `sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0/0，`magic_weapon_infor` 0/1，`mosaic_help` 5（≤5 px）/7。
 - `theme_token_audit.py --check` 冻结 618 个既有变体，新增/改写值必须使用 token；当前 **0 违规**。
 - 其余面板继续保持既有 Theme 值，后续按 token 表分批迁移。

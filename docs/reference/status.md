@@ -28,15 +28,16 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-4 复跑 **36.27s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 P2-5 复跑 **31.52s**） |
 | 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.51s） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.91s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，19.53s，含装备描述/售价与法宝售价断言） |
 | Theme token | **618 变体 / 0 违规**（`theme_token_audit.py --check`） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
-| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（包含在全量回归中） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0**（24.33s，包含在全量回归中） |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 298.7s，默认 auto 并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据清单 | **844/844**（173 `.bin` + 671 JSON）；`export_raw_manifest.py --check` 通过 |
@@ -47,7 +48,9 @@
 
 ### 最近完成
 
-- 2026-11-05 P2 token 试点（P2-4）：背包子面板 `equipment_properies`/`use_items`/`skill_select`/`pl_sell`/`dj_information`/`dj_sell`、`ldl` 子场景 `forge`/`synthesis`/`strength`/`mosaic`/`decompose`/`divine_forge`/`bone_forge`、商店子面板 `choose_item`/`cure_times_box`/`shop_item` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号与描边；`shop_item` 已在前批完成，本批对照 **0** 字体重写。主要改动：装备数值 15→16、描述 13→14、售价 17→18；道具使用 33/37→32/36、13→14、15→16；锻造 22/27→24/28、标题 35→36；合成/分解标题统一 `combat`；神铸 30→32；选择物品 25→24/19→20；治疗次数 25→24/22→24。618 个变体名未改，未新增颜色族。控件转储：装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器路径“描述/售价”仅保留标签属既有脚本行为）；`use_items` 0/2；`skill_select` 0/0；`pl_sell` 12（≤1 px）/3；`dj_information` 1/2；`dj_sell` 0/0；`forge` 0/1；`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge` 均 0/0；`choose_item`、`cure_times_box`、`shop_item` 0/0。验证：`check_all --godot-bin` **9/9**（36.27s）、`theme_token_audit` **618/0**、`font_coverage_audit` 0 缺字、`scene_probe ui-theme` PASS（5.51s）、`level_1` 4 阶段 0/0/0（24.68s）。截图：`G:/tmp/p2d_before/`、`p2d_after/`、`p2d_before_1600/`、`p2d_after_1600/`、`p2d_equip_host.png`。
+- 2026-11-05 装备 tooltip 空值修复：`equipment_properies` 的武器/防具/饰品等分支统一通过 `_set_description_and_sale` 写入描述与售价，法宝分支同步补售价；`ui-factories` 新增真实工厂宿主断言 `backpack_equipment_description`、`backpack_equipment_sale`、`backpack_treasure_sale`。真机背包截图与武器面板渲染确认描述/售价显示；`check_all --godot-bin` **9/9**（31.52s），`ui-factories` PASS（19.53s），`level_1` 4 阶段 0/0/0（24.33s）。
+- 2026-11-05 P2 token 试点（P2-5）：`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help` 按 [`typography_tokens.md`](typography_tokens.md) 收敛。`sell_or_equ` 与 `forge_help` 已是 token，本批无改写；`use_magic_weapon` 仅 UseMagicPage outline 7→6；`magic_weapon_infor` Attr 13→14、SkillTitle 21→20、Action 9→10、其余描边 8→6/4→3；`mosaic_help` Title 30→32/outline 6、Line 17→18；`decompose_help` Title 25→24。控件转储：`sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0 位置/0 尺寸；`magic_weapon_infor` 0/1；`mosaic_help` 5（≤5 px）/7，无新增可见越界。截图：`G:/tmp/p2f_before/`、`p2f_after/`、`p2f_before_1600/`、`p2f_after_1600/`。
+- 2026-11-05 P2 token 试点（P2-4）：背包子面板 `equipment_properies`/`use_items`/`skill_select`/`pl_sell`/`dj_information`/`dj_sell`、`ldl` 子场景 `forge`/`synthesis`/`strength`/`mosaic`/`decompose`/`divine_forge`/`bone_forge`、商店子面板 `choose_item`/`cure_times_box`/`shop_item` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号与描边；`shop_item` 已在前批完成，本批对照 **0** 字体重写。主要改动：装备数值 15→16、描述 13→14、售价 17→18；道具使用 33/37→32/36、13→14、15→16；锻造 22/27→24/28、标题 35→36；合成/分解标题统一 `combat`；神铸 30→32；选择物品 25→24/19→20；治疗次数 25→24/22→24。618 个变体名未改，未新增颜色族。控件转储：装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐）；`use_items` 0/2；`skill_select` 0/0；`pl_sell` 12（≤1 px）/3；`dj_information` 1/2；`dj_sell` 0/0；`forge` 0/1；`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge` 均 0/0；`choose_item`、`cure_times_box`、`shop_item` 0/0。验证：`check_all --godot-bin` **9/9**（36.27s）、`theme_token_audit` **618/0**、`font_coverage_audit` 0 缺字、`scene_probe ui-theme` PASS（5.51s）、`level_1` 4 阶段 0/0/0（24.68s）。截图：`G:/tmp/p2d_before/`、`p2d_after/`、`p2d_before_1600/`、`p2d_after_1600/`、`p2d_equip_host.png`。
 - 2026-11-05 P2 token 试点（P2-3）：`game_announcement`、`main_backpack`（由 `back_pack`/`ldl` 宿主承载）、`ldl`、`shop`、`mystery_shop` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号与描边；新增 `subtitle=28`，公告版本列表保持 28，背包标题 25→24、底部 `ldl` 按钮 25→24、商店 Tab/Search 15→16、ShopItemSoulValue 17→18、BoxLockMark 13/4→14/3。618 个变体名未改，未新增颜色族。控件转储：公告 13 个位置/17 个尺寸变化，`back_pack` 89 个位置（≤0.98 px）/1 个尺寸，`ldl` 89 个位置（≤1.33 px）/3 个尺寸，`shop` 4 个位置（最大 3.05 px）/1 个尺寸，`mystery_shop` 0；1280×800 与 1600×1000 截图未见裁切，未新增可见越界。验证：`check_all --godot-bin` **9/9**（36.82s）、`theme_token_audit` **618/0**、`font_coverage_audit` 0 缺字、`scene_probe ui-theme` PASS（5.41s）、`level_1` 4 阶段 0/0/0（23.91s）。截图：`G:/tmp/p2c_before/`、`p2c_after/`、`p2c_before_1600/`、`p2c_after_1600/`。
 - 2026-11-05 P2 token 试点（P2-2）：`game_set`、`back_pack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface` 按 [`typography_tokens.md`](typography_tokens.md) 收敛字号、描边、文字颜色与 Button 共享基类；618 个变体名未改。`MenuActionButton`/`EmptyButton`/`SettingsButton`/`LlbtCgmsButton` 等重复 Text/Icon 变体改为继承合并，视觉不变。控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化，`zd_skill` ScrollContainer 内 27 个位置随行高变化，`pet` 0 位置/尺寸变化；截图未见裁切。`check_all --godot-bin` **9/9**（37.38s），`theme_token_audit` **618/0 违规**，`font_coverage_audit` 0 缺字，`scene_pro…
 - 2026-11-05 P1 字体资源清理：旧 FZCuYuan 完整版与 3 个 M03S 子集（共 4 个字体文件及 4 个 `.import`）已确认全仓零引用，复制到本地回滚归档后从 `source/Font/` 移除；公开仓库仍不包含字体资产。清理后 `font_coverage_audit` **135 场景 / 790 节点 / 0 缺字**，`check_all --godot-bin` **9/9 PASS**。

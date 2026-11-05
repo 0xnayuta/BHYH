@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-4 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-5 试点（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -99,6 +99,12 @@
 | `choose_item` | ChooseItemTitle 25→24；ChooseItemList 19→20 |
 | `cure_times_box` | CureTimesHeader 25→24；Currency 22→24；Section 20 |
 | `shop_item` | 已在前批完成；本批逐项对照 **0** 字体重写 |
+| `sell_or_equ` | SellOrEquInfo 10、BackpackLockText 12 均已 token；本批无改写 |
+| `use_magic_weapon` | UseMagicPage outline 7→6；Title 16、outline 2 |
+| `magic_weapon_infor` | Attr 13→14；SkillTitle 21→20；Action outline 9→10；ActionSmall/Alt/CdText/PsTitle outline 8→6；PsSkill outline 4→3 |
+| `forge_help` | 前批已完成 36/20/6；本批 **0** 改写 |
+| `mosaic_help` | Title 30→32、outline 5→6；Line 17→18 |
+| `decompose_help` | Title 25→24；Body 20；Row 共享 |
 
 ## 4. 对照结果
 
@@ -115,7 +121,7 @@
 | `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
 | `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
 | `mystery_shop` | 0 | 0 | 仅文字字号/描边变化 |
-| `equipment_properies` | 18（面板布局，≤17 px） | 23 | 真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切；武器路径“描述/售价”仅保留标签属既有脚本行为；直场景无实例时 1025→1043 px 仅作布局参考 |
+| `equipment_properies` | 18（面板布局，≤17 px） | 23 | 真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切；武器/法宝描述与售价已补齐；直场景无实例时 1025→1043 px 仅作布局参考 |
 | `use_items` | 0 | 2 | Up/Down/Min 字号变化，无位移/裁切 |
 | `skill_select` | 0 | 0 | Info 字号变化 |
 | `pl_sell` | 12（≤1 px） | 3 | 输入框字号 15→16；无新增越界 |
@@ -131,6 +137,12 @@
 | `choose_item` | 0 | 0 | 标题 25→24、列表 19→20 |
 | `cure_times_box` | 0 | 0 | Header/Currency 字号变化，容器固定 |
 | `shop_item` | 0 | 0 | 无字体重写 |
+| `sell_or_equ` | 0 | 0 | 全部既有 token，无改写 |
+| `use_magic_weapon` | 0 | 0 | 仅 UseMagicPage 描边 7→6 |
+| `magic_weapon_infor` | 0 | 1 | 7 个字体/描边变化；直场景无装备数据上下文 |
+| `forge_help` | 0 | 0 | 前批已完成 |
+| `mosaic_help` | 5（≤5 px） | 7 | Title/Line 增大，无新增可见越界 |
+| `decompose_help` | 0 | 0 | Title 25→24 |
 
 截图与控件转储：
 
@@ -148,6 +160,11 @@ G:/tmp/p2d_after/
 G:/tmp/p2d_before_1600/
 G:/tmp/p2d_after_1600/
 G:/tmp/p2d_equip_host.png
+G:/tmp/p2f_before/
+G:/tmp/p2f_after/
+G:/tmp/p2f_before_1600/
+G:/tmp/p2f_after_1600/
+G:/tmp/p2fix_equipment_after.png
 ```
 
 ## 5. 审计
@@ -164,8 +181,9 @@ python scripts/theme_token_audit.py --check
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（36.27s）；
-- `scene_probe ui-theme`：PASS（5.51s）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.68s）。
+- `check_all --godot-bin`：**9/9 PASS**（31.52s）；
+- `scene_probe ui-theme`：PASS（5.91s）；
+- `scene_probe ui-factories`：PASS（19.53s，含装备描述/售价与法宝售价断言）；
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.33s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
