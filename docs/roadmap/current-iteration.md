@@ -239,7 +239,7 @@
 ### 27-6 动态覆盖收敛（已完成）
 
 - 脚本 `add_theme_*` 从 **332 降至 299**：删除 18 处默认 body 字体覆盖（`fz_cu_yuan`/`PET_EQUIPMENT_STRENGTH_FONT`，默认字体链相同），并将 15 处主字体覆盖改绑 9 个 `Semantic*` 字体角色变体（万灵/坐骑/镇妖塔/学习技能）；
-- 62 处字面字体色改用具名 `UiColorTokens`，47 处字面字号改用新生成的 `UiFontSizes`（token 源 `script_font_sizes`）；新增颜色 token 保持原值，字号 token 由 `ui_theme_tokens.json` 生成；
+- 62 处字面字体色改用具名 `UiColorTokens`，47 处字面字号改用新生成的 `UiFontSizes`（token 源 `script_font_sizes`），18 处动态 StyleBox 字面色改用具名 `UiSurfaceTokens`；新增颜色 token 保持原值；
 - 新增 `scripts/ui_dynamic_theme_audit.py`：按 static/tokenized/data/layout/dynamic_style 分类；当前 **static 0 / tokenized 139 / data 37 / layout 83 / dynamic_style 40**，总调用 299；基线见 `ui_dynamic_theme_baseline.json`，已接入 `contract_gate.py`；
 - `hit_text` 的 26 条动画轨道保持已接受例外；`theme_override_audit` 的直接属性仍为 0；
 - 16 个代表场景截图归档于 `G:/tmp/p276/after/`；重点检查 `learn_skill`、`wan_ling_catalog_page`、`game_set`、`auto_battle_config` 等，字体/布局无裁切；

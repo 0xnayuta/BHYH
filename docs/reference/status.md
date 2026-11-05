@@ -28,15 +28,15 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 Phase 27-6 复跑 **36.69s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 Phase 27-6 复跑 **37.03s**） |
 | 字体覆盖 | **135 场景 / 790 中文节点 / 0 缺字；Theme 字体 5 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，5.29s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，16.23s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，4.58s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，15.07s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言） |
 | Theme token | **730 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **37 文字 token / 5 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
 | Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 属性 1,737 / StyleBox 36 / 独立重复组 5**（`theme_variant_audit.py --check`） |
 | 动态 Theme 覆盖 | **299 调用 / 静态 0 / token 139 / data 37 / layout 83 / dynamic_style 40**（`ui_dynamic_theme_audit.py --check`） |
-| UI 表面色 token | **main_menu 0 裸色；StyleBox 基线 18 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
+| UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，6.20s） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
@@ -53,7 +53,7 @@
 
 ### 最近完成
 
-- 2026-11-05 Phase 27-6 动态覆盖：脚本 `add_theme_*` **332→299**，静态字面角色 **0**；删除 18 处默认字体覆盖、15 处主字体覆盖改绑 9 个 `Semantic*` 变体；62 处字面颜色与 47 处字号 token 化，新增 `UiFontSizes`。`ui_dynamic_theme_audit` 分类 token 139 / data 37 / layout 83 / dynamic_style 40，基线已冻结；16+3 场景截图归档。`check_all` **9/9（36.69s）**，UI 5.29s，factory 16.23s，HUD 6.20s，`level_1` 24.99s。
+- 2026-11-05 Phase 27-6 动态覆盖：脚本 `add_theme_*` **332→299**，静态字面角色 **0**；删除 18 处默认字体覆盖、15 处主字体覆盖改绑 9 个 `Semantic*` 变体；62 处字面颜色、47 处字号与 18 处动态 StyleBox 字面色 token 化，新增 `UiFontSizes`。`ui_dynamic_theme_audit` 分类 token 139 / data 37 / layout 83 / dynamic_style 40，基线已冻结；16+3 场景截图归档。`check_all` **9/9（37.03s）**，UI 4.58s，factory 15.07s，HUD 6.20s，`level_1` 24.99s。
 - 2026-11-05 Phase 27-5 字体族与资产：4 个角色 + fallback；Theme 字体资产 **10→5 个文件 / 约 44.98 MB**；`font_hy`/`font_meng`/`font_wo`/`font_jin_qiao`→`font_main`，`font_194`→`font_hk`；`font_coverage_audit` 增加 Theme 资源/未引用/动态样本检查，静态 135/790/0、动态 5/0 缺字。16 场景截图归档；私有未引用字体保留边界登记。`check_all` **9/9（35.06s）**，UI 4.55s，factory 15.20s，HUD 5.98s，`level_1` 24.04s。
 - 2026-11-05 Phase 27-4 变体层级与共享样式：保留 618 个冻结变体名，新增 103 个 `Semantic*` 语义基类（最大链深 8），Theme 属性 **3,218→1,719**，删除 402 个原生默认冗余属性；StyleBox **47→36**，重写 18 处引用；189 个纯别名，独立变体 429 个，独立重复签名组 **3**。16 场景截图归档，`auto_battle_config` 共享按钮样式变化已对照；`theme_variant_audit` 接入 `contract_gate`。`check_all` **9/9（33.91s）**，`ui-theme` 5.12s，`ui-factories` 18.32s，HUD 6.64s，`level_1` 25.51s。
 - 2026-11-05 Phase 27-3 颜色与 StyleBox：139 处 off-token 字体色赋值收敛到 0，756 处赋值使用 35 个实际值 / 37 语义 palette；8 类字体色属性纳入审计，`theme_token_baseline` 618 重建。StyleBox 精确重复合并 **54→47**，`sub_StyleBoxFlat_6y1b1`/`sub_1` 重命名为语义 ID；16 场景颜色/StyleBox 截图与控件转储 0 位移/0 尺寸。跨色族 47→≤36 明确转入 27-4。`check_all` **9/9（37.43s）**，`ui-theme` 5.35s，`ui-factories` 19.31s，HUD 7.29s，`level_1` 24.37s。

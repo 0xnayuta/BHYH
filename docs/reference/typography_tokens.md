@@ -288,10 +288,10 @@ python scripts/theme_token_audit.py --check
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
 - `theme_token_audit.py --check`：730 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
 - `convert_ui_theme_tokens.py --check`：37 文字 token、5 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
-- `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 迁移期基线 18 处（`coop_panel_host` 2、`pet_interface` 12、`learn_skill` 4）；
+- `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
 - `check_all --godot-bin`：**9/9 PASS**（35.06s）；
-- `scene_probe ui-theme`：PASS（5.29s）；
-- `scene_probe ui-factories`：PASS（16.23s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
+- `scene_probe ui-theme`：PASS（4.58s）；
+- `scene_probe ui-factories`：PASS（15.07s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.04s）；
 - `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 属性 1,737 / StyleBox 36 / 独立重复组 5；
 - `ui_dynamic_theme_audit --check`：299 调用 / 静态 0；基线 `ui_dynamic_theme_baseline.json`。
