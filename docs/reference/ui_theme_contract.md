@@ -88,6 +88,7 @@ python scripts/font_coverage_audit.py --check
 - P2-5 新增：`magic_weapon_infor` Attr 14/SkillTitle 20/描边 10 或 6/3；`use_magic_weapon` Page outline 6；`mosaic_help` Title 32/6、Line 18；`decompose_help` Title 24；`sell_or_equ` 与 `forge_help` 已为 token，无改写。装备 tooltip 的武器/法宝描述与售价空值已在独立修复中补齐。
 - P2-6 颜色批次：新增 `text_danger`、`text_success`、`text_hint`、`text_gold_warm`，公告 Warning/Alert/Status/Prompt/Subtitle/Title 分别收敛；仅 Alert 色值变化，控件 0/0。
 - P2-7 颜色批次：新增 `text_orange`、`text_amber`、`text_green`、`text_orange_deep`；商城提示、治疗提示、装备属性/售价、锻造绿色与分解橙色收敛；1280×800/1600×1000 截图与控件转储 0 位置/0 尺寸。
+- P2-8 颜色批次：新增 `text_gold_bright`、`text_jade`、`text_jade_dim`、`text_ink_warm` 与状态/HUD token；主菜单子面板、存档状态色、shop 三场景次要状态色（含商品盒数量/锁标）、命中/暴击 HUD、宠物槽位橙色收敛；1280×800 面板控件 0 位置/0 尺寸（HUD 合成 Label 除外），1600×1000 截图归档。
 - 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）；P2-5 `sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0/0，`magic_weapon_infor` 0/1，`mosaic_help` 5（≤5 px）/7；P2-6 公告颜色 0/0。
 - `theme_token_audit.py --check` 冻结 618 个既有变体，新增/改写值必须使用 token；当前 **0 违规**。
 - 其余面板继续保持既有 Theme 值，后续按 token 表分批迁移。

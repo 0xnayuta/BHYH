@@ -1,6 +1,6 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-7 颜色批次（2026-11-05）。当前覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`；以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`。其余面板继续使用既有 Theme 值，逐批迁移。
+> **状态**：P2-8 颜色批次（2026-11-05）。在 P2-7 基础上补齐 `main_menu` 子面板（体能训练、选择角色、地图目录/返回、镇妖塔、万灵图鉴、诛仙剑页）、`archive_interface` 状态色、`mystery_shop/choose_item/shop_item` 次要状态色，以及战斗 HUD 与宠物面板高饱和状态色。其余面板继续使用既有 Theme 值，逐批迁移。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`，不改变字体族、布局层级或显示画布。
 
 ## 1. Token 标尺
@@ -42,11 +42,29 @@
 | `text_orange` | `#FF9500` | 商城提示/装备属性与售价 |
 | `text_amber` | `#FFC000` | 治疗次数提示 |
 | `text_green` | `#00FF00` | 锻造/强化材料与数值 |
-| `text_orange_deep` | `#F66700` | 分解危险标题 |
+| `text_orange_deep` | `#F66700` | 分解危险标题、HUD 数字 |
+| `text_gold_bright` | `#FFF078` | 体能训练高亮金 |
+| `text_jade` | `#C2E6D4` | 万灵分组/属性浅绿 |
+| `text_jade_dim` | `#ABB8BA` | 万灵空态弱文字 |
+| `text_ink_warm` | `#331F12` | 浅底暖黑正文 |
 | `text_combat` | `#FFFF00` | 战斗冷却/需求 |
 | `ink` | `#000000` | 描边/阴影 |
 
 品质色、血量色、奖励状态色继续由脚本与数据拥有，不进入本表。
+
+### 状态与 HUD 预留色
+
+| Token | 值 | 用途 |
+|:---|:---|:---|
+| `text_hover` | `#FF6A00` | 存档/设置按钮悬停橙 |
+| `text_placeholder` | `#A6A6A6` | 输入框占位弱文字 |
+| `text_gold_pressed` | `#D38D00` | 存档删除按下金 |
+| `icon_hover_soft` | `#FFFFFF` 68.2% | 神秘商店图标悬停 |
+| `icon_hover_gold` | `#C9CF93` | 商品购买图标悬停 |
+| `outline_none` | `transparent` | 无描边 |
+| `text_hit_blue` | `#0099FF` | 法术命中飘字动画保留色 |
+
+动画轨道中的 `hit_text` / `hurt_text` 颜色仍按 Phase 32 例外由 `hit_text.tscn` 持有；本表只登记语义名，不把运行时伤害状态迁入 Theme。
 
 ### 描边
 
@@ -91,6 +109,11 @@
 | `shop / cure_times_box（颜色）` | ShopMessageText→text_orange；CureTimesHint→text_amber；值保持 `#FF9500` / `#FFC000` |
 | `equipment_properies（颜色）` | EquipmentStatLabel/Sale `#FF9933`→text_orange `#FF9500` |
 | `ldl/forge（颜色）` | ForgeSubtitle `#00F900`→text_green；ForgeMaterialNeed/StrengthNumber 使用 text_green；DecomposeTitleOrange→text_orange_deep；DecomposeHelpBody `#FFA200`→text_orange |
+| `main_menu 子面板（颜色）` | BodyTraining 亮金→text_gold_bright、等级金→text_gold_light、暖黑正文→text_ink_warm；ChoosePlayer 角色/标题→text_gold_deep、信息→text_gold_light；Map0 目录→text_gold；MapReturn→text_orange；SwordPage 等级→text_combat；Tower 全族→text_gold_light；WanLing 标题→text_gold、浅绿→text_jade、空态→text_jade_dim；MainMenuTitle 描边→text_orange_deep |
+| `archive_interface（状态色）` | 按钮悬停 `#FF6A00`→text_hover；输入占位 `#A6A6A6`→text_placeholder；删除按下 `#D38D00`→text_gold_pressed；值不变 |
+| `mystery_shop / choose_item / shop_item（状态色）` | 神秘商店图标悬停→icon_hover_soft；商品购买图标悬停→icon_hover_gold；商品灵魂描边→outline_none；ChooseItemList guide→text_primary；BoxItemNumber `#FF7700`→text_orange；BoxLockMark `#FFDB33`→text_amber |
+| `战斗 HUD（颜色）` | HitTextBase `#25FF00`→text_green；LijiText `#FF4600`→text_warning；BacisInfoNumber `#FF6000`→text_orange_deep；法术飘字动画 `#0099FF` 登记为 text_hit_blue，动画例外保留 |
+| `pet_interface（颜色）` | PetBackpackSlotNumber `#FF7700`→text_orange；PetLevelLabel 浮点重复值收敛为 text_gold_light |
 | `main_backpack` | Title 25→24；TabLabelSmall 15→16；LockText 11→12；BoxLockMark 13/4→14/3；TabBar/Large/Page/Coin 保持既有 token |
 | `ldl` | Title 19→20；六个 `MenuActionButton` 派生按钮 25→24；内嵌 `main_backpack` 同步 |
 | `shop` | Search/TabText 15→16；StatTitle/Hint 25→24；StatTitle outline 8→6；RoleText outline 9→10；Close 25→24；ItemSoulValue 17→18；ItemSoulText outline 7→6 |
@@ -133,6 +156,11 @@
 | `shop / cure_times_box（颜色）` | 0 | 0 | 值不变，仅建立语义 token |
 | `equipment_properies（颜色）` | 0 | 0 | 属性/售价橙色 #FF9933→#FF9500 |
 | `ldl/forge（颜色）` | 0 | 0 | 绿色/橙色提示归一；无布局变化 |
+| `main_menu 子面板（颜色）` | 0 | 0 | 体能/选择角色/地图/镇妖塔/万灵/诛仙剑页；仅文字颜色变化 |
+| `archive_interface（状态色）` | 0 | 0 | 悬停/占位/按下值登记为 token，无可见变化 |
+| `mystery_shop / choose_item / shop_item（状态色）` | 0 | 0 | 图标悬停/guide/透明描边登记；BoxItemNumber/BoxLockMark 橙/黄归一 |
+| `战斗 HUD（颜色）` | — | — | HitTextBase、LijiText、BacisInfoNumber 颜色变化；合成 Label 各 1 控件 |
+| `pet_interface（颜色）` | 0 | 0 | 槽位数橙色收敛；等级金精度归一 |
 | `back_pack` | 89（纵向 ≤0.98 px） | 1 | 标题 25→24 引起整行上移；无可见越界 |
 | `ldl` | 89（纵向 ≤1.33 px） | 3 | 标题/内嵌背包行高变化；底部按钮缩小 1 px；无可见越界 |
 | `shop` | 4（搜索行最大 3.05 px） | 1 | Tab 字号增加；底部提示标签原有右边界扩展未新增 |
@@ -185,6 +213,9 @@ G:/tmp/p2color_after/
 G:/tmp/p2color_after_1600/
 G:/tmp/p2color2_after/
 G:/tmp/p2color2_after_1600/
+G:/tmp/p2color3_before/
+G:/tmp/p2color3_after/
+G:/tmp/p2color3_after_1600/
 ```
 
 ## 5. 审计
@@ -195,15 +226,16 @@ python scripts/theme_token_audit.py --check
 
 - `scripts/theme_token_baseline.json` 冻结 618 个既有变体值；既有变体的合法迁移允许保留基线值。
 - 新增变体或既有变体改写值必须使用本表 token；新增 Button 必须继承已登记 token 基类。
-- 当前结果：**618 变体 / 0 违规**。
+- 当前结果：**618 变体 / 0 违规**；P2-8 新增 token 只登记语义，不改变变体数量。
+- `theme_override_audit` 保持直接属性 **0**、动画轨道 **26**（`hit_text.tscn` 命中颜色值同步）。
 
 ## 6. 既有门禁
 
 - `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
-- `check_all --godot-bin`：**9/9 PASS**（37.86s）；
-- `scene_probe ui-theme`：PASS（5.91s）；
+- `check_all --godot-bin`：**9/9 PASS**（39.87s）；
+- `scene_probe ui-theme`：PASS（5.68s）；
 - `scene_probe ui-factories`：PASS（19.96s，含装备描述/售价、法宝售价、真实法宝信息与使用列表断言）；
-- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（24.33s）。
+- `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING（23.8s）。
 
 其余面板保持旧值，后续按同一流程分批迁移；不一次性重排 110 个颜色。
