@@ -75,6 +75,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 与 allowlist 守恒 |
 | `theme_override_audit.py` | 场景直接 Theme 属性、动画轨道、直接字体与动态调用/文件上限基线 |
 | `font_coverage_audit.py` | 静态场景/动态样本 CJK 覆盖；检查 Theme 字体文件 ≤6、未引用 Theme 字体资源与字体文件可读性；样本见 `font_dynamic_samples.json` |
+| `ui_text_punctuation_audit.py` | 报告式扫描 `.gd`/`.tscn` 中文自然语言 ASCII 标点；排除日志、数学公式、`@export_enum`、路径与编号标记；默认 report-only，`--fail-on-findings` 可阻断，支持 `--self-test` |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
 | `theme_variant_audit.py` | Phase 27-4 语义基类、冻结变体、Theme 属性/StyleBox 上限与独立变体重复签名门禁；冻结清单见 `theme_legacy_variants.json` |
 | `ui_dynamic_theme_audit.py` | Phase 27-7 全 `source/**/*.gd`（排除 addons/.godot）`add_theme_*` 跨行分类、静态角色/解析错误/总计数不增长门禁；`--self-test` 覆盖跨行正负样本；基线见 `ui_dynamic_theme_baseline.json` |
