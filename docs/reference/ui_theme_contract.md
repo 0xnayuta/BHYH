@@ -75,3 +75,5 @@ python scripts/font_coverage_audit.py --check
 **授权与发布边界**：FZCuYuan-M03 已由项目方确认授权；Microsoft YaHei Semibold 仅作为本机 fallback，仍受 Microsoft 自身授权约束。`source/Font/` 不进入公开仓库，字体文件与 `.import` 不提交；发布包分发前需再次确认两款字体的分发许可。
 
 **后续**：字体子集化作为独立打包优化，不在本修正批次的视觉基线内；必须保留 hinting、显式 fallback 并通过同一套截图/控件转储后方可采用。
+
+**P1 资源清理（2026-11-05）**：旧 `1_fonts_fzcy_fz_cu_yuan_m03.ttf`、`1_aaa_fz_cu_yuan_m03_s.ttf`、`1_aaa_fz_cu_yuan_m03_s_ttf.ttf`、`8_fz_cu_yuan_m03_s.ttf` 及对应 `.import` 已确认零运行时引用，复制到本地回滚归档后从 `source/Font/` 移除；回滚归档不进入仓库或发布包。当前只保留 `fz_cu_yuan_m03.ttf` 与 `msyh_semibold.ttc`。
