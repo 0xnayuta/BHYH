@@ -186,19 +186,19 @@ func _set_card_stats(card: Node, sword_id: String, level: int) -> void:
 		_set_stat(card, i, "")
 	match sword_id:
 		"zhuxianjian":
-			_set_stat(card, 0, "攻击: " + str(level * 150))
+			_set_stat(card, 0, UiTextFormat.stat_line("攻击", level * 150))
 		"xianxianjian":
-			_set_stat(card, 0, "生命: " + str(level * 500))
+			_set_stat(card, 0, UiTextFormat.stat_line("生命", level * 500))
 		"sijianheyi":
-			_set_stat(card, 0, "暴击: " + str(level * 10))
-			_set_stat(card, 1, "命中: " + str(level * 10))
-			_set_stat(card, 2, "闪避: " + str(level * 5))
-			_set_stat(card, 3, "幸运: " + str(level * 5))
+			_set_stat(card, 0, UiTextFormat.stat_line("暴击", level * 10))
+			_set_stat(card, 1, UiTextFormat.stat_line("命中", level * 10))
+			_set_stat(card, 2, UiTextFormat.stat_line("闪避", level * 5))
+			_set_stat(card, 3, UiTextFormat.stat_line("幸运", level * 5))
 		"luxianjian":
-			_set_stat(card, 0, "物防: " + str(level * 20))
-			_set_stat(card, 1, "魔防: " + str(level * 20))
+			_set_stat(card, 0, UiTextFormat.stat_line("物防", level * 20))
+			_set_stat(card, 1, UiTextFormat.stat_line("魔防", level * 20))
 		"juexianjian":
-			_set_stat(card, 0, "魔法: " + str(level * 400))
+			_set_stat(card, 0, UiTextFormat.stat_line("魔法", level * 400))
 
 
 func _set_stat(card: Node, index: int, text: String) -> void:
