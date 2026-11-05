@@ -61,7 +61,7 @@ func initialize_monster_properties() -> void:
 
 	self.set("rush_speed", 400)
 	self.set("is_boss", true)
-	self.set("my_mr_name", "牛魔王·魂 (Lv.%d)" % weapon_level)
+	self.set("my_mr_name", "牛魔王·魂（Lv.%d）" % weapon_level)
 	self.set("attack_in", 90)
 	self.set("level", 55)
 	self.set("def", scaled_def)
@@ -169,7 +169,7 @@ func initialize_monster_properties() -> void:
 
 	print(
 		(
-			"牛魔王·魂召唤物属性初始化完成 - HP: %d, 防御: %d/%d, 伤害比例: %.1f%%, 实际攻击力(示例): hit1=%d"
+			"牛魔王·魂召唤物属性初始化完成 - HP: %d, 防御: %d/%d, 伤害比例: %.1f%%, 实际攻击力（示例）: hit1=%d"
 			% [scaled_hp, scaled_def, scaled_mdef, damage_ratio * 100, actual_damage_hit1]
 		)
 	)

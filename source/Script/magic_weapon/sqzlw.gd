@@ -77,7 +77,7 @@ func summon_zlw():
 	var duration = 20.0 + (weapon_level - 1) * 2.0
 	summon_timer.start(duration)
 
-	print("召唤物转轮王(神器), 法宝等级: %d, 属性系数: %.1f%%" % [weapon_level, summon_attribute_scale * 100])
+	print("召唤物转轮王（神器）, 法宝等级: %d, 属性系数: %.1f%%" % [weapon_level, summon_attribute_scale * 100])
 
 
 func _on_summon_timeout():

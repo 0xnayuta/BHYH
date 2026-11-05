@@ -20,7 +20,7 @@ const MINGHAI_BIRTH_POINTS := [
 const LEVEL_62_MONSTER_DATA := {
 	3117:
 	{
-		"name": "通天教主(穷奇版)",
+		"name": "通天教主（穷奇版）",
 		"level": 90,
 		"hp": 45000000,
 		"attack": 44000,

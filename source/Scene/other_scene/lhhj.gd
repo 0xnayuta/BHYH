@@ -65,7 +65,7 @@ var boss_data = [
 	{"Name": "后土小风", "Num": 3080},
 	{"Name": "后土大风", "Num": 3081},
 	{"Name": "石墙", "Num": 3082},
-	{"Name": "通天教主(穷奇版)", "Num": 3117}
+	{"Name": "通天教主（穷奇版）", "Num": 3117}
 ]
 var ghost_list = [
 	{"Name": "红孩儿", "Num": 29},

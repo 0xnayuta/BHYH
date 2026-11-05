@@ -1951,7 +1951,7 @@ var level_info = {
 		"monster_list":
 		[
 			{
-				"Name": "通天教主(穷奇版)",
+				"Name": "通天教主（穷奇版）",
 				"is_boss": true,
 				"ScenePath": "res://Scene/monster/monster_3117.tscn",
 				"HideIndependentDrops": true

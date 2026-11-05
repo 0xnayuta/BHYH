@@ -331,7 +331,7 @@ const OFFICIAL_LATE_MONSTER_NAMES := {
 	3320: "金甲护卫",
 	3323: "金翅大鹏雕",
 	3343: "电之祖巫",
-	3352: "通天教主(混沌版)",
+	3352: "通天教主（混沌版）",
 }
 
 const SAND_BOSS_WIND_SPEED := 270.0

@@ -60,7 +60,7 @@ func _configure_boss(config: Dictionary = {}) -> void:
 		config = _runtime_config
 	if config.is_empty():
 		return
-	my_mr_name = str(config.get("name", "通天教主(穷奇版)"))
+	my_mr_name = str(config.get("name", "通天教主（穷奇版）"))
 	level = int(config["level"])
 	attack_in = int(config["attack"])
 	max_hp = int(config["hp"])
