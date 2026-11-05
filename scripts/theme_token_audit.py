@@ -19,54 +19,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 THEME = ROOT / "source" / "Scene" / "theme" / "bhyh_theme.tres"
 BASELINE = ROOT / "scripts" / "theme_token_baseline.json"
+TOKEN_SOURCE = ROOT / "scripts" / "ui_theme_tokens.json"
 
-FONT_SIZES = {10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 50, 76, 100}
-OUTLINE_SIZES = {0, 1, 2, 3, 6, 10}
-COLORS = {
-    "Color(1, 1, 1, 1)",
-    "Color(0.87451, 0.87451, 0.87451, 1)",
-    "Color(0.815686, 0.815686, 0.815686, 1)",
-    "Color(0.94, 0.94, 0.94, 1)",
-    "Color(1, 0.956863, 0.74902, 1)",
-    "Color(1, 0.84, 0.54, 1)",
-    "Color(1, 0.72, 0.16, 1)",
-    "Color(0.388235, 0.780392, 1, 1)",
-    "Color(1, 0.290196, 0, 1)",
-    "Color(1, 1, 0, 1)",
-    "Color(0, 0, 0, 1)",
-    "Color(1, 0, 0, 1)",
-    "Color(0.42, 0.88, 0.7, 1)",
-    "Color(0.84, 0.86, 0.9, 1)",
-    "Color(0.94, 0.73, 0.34, 1)",
-    "Color(1, 0.584314, 0, 1)",
-    "Color(1, 0.752941, 0, 1)",
-    "Color(0, 1, 0, 1)",
-    "Color(0.964706, 0.403922, 0, 1)",
-    "Color(1, 0.941176, 0.470588, 1)",
-    "Color(0.85, 0.76, 0.55, 1)",
-    "Color(1, 0.956863, 0.74902, 0.7)",
-    "Color(0.76, 0.9, 0.83, 1)",
-    "Color(0.67, 0.72, 0.73, 1)",
-    "Color(0.2, 0.12, 0.07, 1)",
-    "Color(1, 0.415686, 0, 1)",
-    "Color(0.65, 0.65, 0.65, 1)",
-    "Color(0.827451, 0.552941, 0, 1)",
-    "Color(1, 1, 1, 0.682353)",
-    "Color(0.788235, 0.811765, 0.576471, 1)",
-    "Color(0, 0, 0, 0)",
-    "Color(0, 0.6, 1, 1)",
-}
-BUTTON_TOKEN_BASES = {
-    "Button",
-    "MenuActionButton",
-    "EmptyButton",
-    "SettingsButton",
-    "SettingsButtonSmall",
-    "SettingsButtonTiny",
-    "LlbtCgmsButton",
-    "BackpackActionButton",
-    "BackpackToggleButton",
-}
+
+def _load_audit_tokens() -> dict[str, list]:
+    if not TOKEN_SOURCE.is_file():
+        raise RuntimeError(f"token 源不存在: {TOKEN_SOURCE.relative_to(ROOT)}")
+    data = json.loads(TOKEN_SOURCE.read_text(encoding="utf-8"))
+    audit = data.get("theme_audit")
+    if not isinstance(audit, dict):
+        raise RuntimeError("token 源缺少 theme_audit")
+    return audit
+
+
+_TOKEN_AUDIT = _load_audit_tokens()
+FONT_SIZES = set(_TOKEN_AUDIT["font_sizes"])
+OUTLINE_SIZES = set(_TOKEN_AUDIT["outline_sizes"])
+COLORS = set(_TOKEN_AUDIT["font_colors"])
+BUTTON_TOKEN_BASES = set(_TOKEN_AUDIT["button_token_bases"])
 COLOR_KEYS = ("colors/font_color", "colors/font_outline_color", "colors/font_shadow_color")
 
 

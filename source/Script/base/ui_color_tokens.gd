@@ -1,8 +1,8 @@
+# 由 scripts/ui_theme_tokens.json 生成；不要手改。
 class_name UiColorTokens
 extends RefCounted
 
-## 脚本动态 UI 的语义文字色。值与 docs/reference/typography_tokens.md 的 token 表一致；
-## 样式框底色、边框与特效色仍由各面板自绘，不进入文字 token。
+## 脚本动态 UI 的语义文字色。值来自 scripts/ui_theme_tokens.json。
 
 const TEXT_PRIMARY := Color("ffffff")
 const TEXT_SECONDARY := Color("f0f0f0")

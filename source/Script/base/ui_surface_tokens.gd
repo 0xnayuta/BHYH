@@ -1,8 +1,9 @@
+# 由 scripts/ui_theme_tokens.json 生成；不要手改。
 class_name UiSurfaceTokens
 extends RefCounted
 
-## 脚本自绘面板的 StyleBox 底色、边框与遮罩 token。
-## 与 UiColorTokens 分离：这里只描述面板结构色，不承载文字语义。
+## 脚本自绘面板的 StyleBox 底色、边框、遮罩与输入配色。
+## 值来自 scripts/ui_theme_tokens.json；与文字色分离。
 
 # 冷色面板（坐骑、万灵）
 const COOL_DEEPEST := Color("101519")

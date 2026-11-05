@@ -100,6 +100,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `convert_equipment_catalog.py` | 装备构建源 → `EquipmentCatalog` |
 | `equipment_data_audit.py` | 装备字段、类型、随机规格审计 |
 | `convert_external_monster_catalog.py` | 外部怪物 ID → BHYH 怪物 ID/场景 |
+| `convert_ui_theme_tokens.py` | UI token JSON → `UiColorTokens`/`UiSurfaceTokens` 与 Theme 受管属性；`--write` / `--check` |
 | `export_raw_manifest.py` | 原始数据根配置 → 精确导出清单；`--write` / `--check`，校验生产脚本字面量与插件配置 |
 
 ### 3.4 回归、探针与发布
@@ -140,6 +141,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_allowlist.json` | 运行时 `SpriteFrames.new()` 允许文件 |
 | `global_surface_baseline.json` | Phase 22 收口后的 Global 字段与 add 系入口冻结基线 |
 | `theme_override_baseline.json` | Theme 直接属性/动画轨道场景级上限 |
+| `ui_theme_tokens.json` | 字号、语义色、字体角色、Theme 受管属性与 Theme token 审计集合的单一来源 |
 | `theme_token_baseline.json` | Theme 变体字号/描边/颜色/Button 基类的迁移期冻结基线 |
 | `ui_surface_token_baseline.json` | 自绘 StyleBox 与 `main_menu` 裸色的迁移期冻结基线 |
 | `monster_action_maps.json` / `monster_action_views.json` | 怪物动作与视图构建源 |
