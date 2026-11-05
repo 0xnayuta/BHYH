@@ -35,22 +35,43 @@ Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘�
 |:---|:---|
 | 直接 `theme_override_*` 属性 | 必须为 **0**；由 Theme 基础类型或变体替代 |
 | Animation 轨道 `theme_override_*` 路径 | 保留 `hit_text.tscn` 的 **26 条**最终例外 |
-| 脚本 `add_theme_*` | 保留为数据/状态驱动；当前 383 处、39 文件，不计入静态迁移 |
+| 脚本 `add_theme_*` | 保留为数据/状态驱动；当前 384 处、41 文件，不计入静态迁移 |
 | 一次性布局/特效覆盖 | 登记场景例外；不得复制成新的通用样式 |
 
 ## 5. 审计与基线
 
 ```bash
 python scripts/theme_override_audit.py --check
+python scripts/font_coverage_audit.py --check
 ```
 
 基线：`scripts/theme_override_baseline.json`。基线是上限，不是迁移目标；直接属性或动画引用增加必须显式评审并更新基线，不能静默增长。
 
-当前结果：直接属性 **0**；动画轨道 **26**（仅 `hit_text`）；静态变体缺失 **0**；旧 Theme 资源引用 **0**。
+当前结果：直接属性 **0**；动画轨道 **26**（仅 `hit_text`）；静态变体缺失 **0**；旧 Theme 资源引用 **0**。字体覆盖审计：135 个显式绑定 Theme 的场景 / 790 个中文文本节点 / **0 缺字**。
 
 ## 6. 边界
 
-- 不做主题切换、换肤、字体替换、布局重排、动画时序修改或显示基线调整。
+- 不做主题切换、换肤、布局重排、动画时序修改或显示基线调整。Phase 32 未替换字体族；2026-11-05 P0 字体覆盖修正仅用同族完整版替换 FZCuYuan 资源并增加 fallback，见 §7。
 - 不把运行时品质色、血量色、奖励状态色迁入 Theme。
 - 不为兼容旧场景保留第二套 Theme；迁移完成即删除旧入口。
 - 完整批次、截图、控件转储与历史计数见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
+
+## 7. P0 字体覆盖修正（2026-11-05）
+
+**范围**：只修字体覆盖与字体回退，不改配色、字号、描边、间距、布局或变体命名。
+
+| 项 | 结果 |
+|:---|:---|
+| FZCuYuan 资源 | `font_fzcy` 与 3 个 `M03S` 子集收敛为 `font_fz_cu_yuan_m03` |
+| 字体资源 | `source/Scene/theme/fz_cu_yuan_m03.tres`（FontVariation） |
+| 主字体 | `source/Font/fz_cu_yuan_m03.ttf`（FZCuYuan-M03，Version 5.32） |
+| 显式回退 | `source/Font/msyh_semibold.ttc`（Microsoft YaHei Semibold，本机 fallback） |
+| Theme 默认字体 | `default_font = font_fz_cu_yuan_m03`，覆盖无显式字体的中文文本 |
+| 变体 | 618 个类型保持不变；无新增/重命名变体 |
+| 直接引用 | `hit_text.tscn`、`coop_panel_host.gd`、`game_mode_select.gd`、`pet_interface.gd` 同步改为新字体资源 |
+| 静态覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字** |
+| 截图/转储 | 4 个代表场景 × 1280×800 / 1600×1000；无横向位移；字体度量导致的 Label 高度 +1~+3 px，居中标签纵向 <1 px，未见裁切 |
+
+**授权与发布边界**：FZCuYuan-M03 已由项目方确认授权；Microsoft YaHei Semibold 仅作为本机 fallback，仍受 Microsoft 自身授权约束。`source/Font/` 不进入公开仓库，字体文件与 `.import` 不提交；发布包分发前需再次确认两款字体的分发许可。
+
+**后续**：字体子集化作为独立打包优化，不在本修正批次的视觉基线内；必须保留 hinting、显式 fallback 并通过同一套截图/控件转储后方可采用。

@@ -26,6 +26,18 @@ attribution must be documented here before distribution. Xbox and PlayStation
 button icons are trademarks of their respective owners and do not imply
 endorsement.
 
+## Game fonts
+
+`source/Font/` is excluded from the public repository; font files and their
+`.import` metadata are not committed. Game fonts are not licensed under the
+root MIT license.
+
+- `FZCuYuan-M03` (方正粗圆): project owner has confirmed authorization for this
+  project. Distribution still requires the applicable commercial font license.
+- `Microsoft YaHei Semibold` is used only as a local fallback font and remains
+  subject to Microsoft's own license; it is not redistributed by this
+  repository.
+
 ## Excluded game assets
 
 `source/Art/`, `source/Music/`, `source/Font/`, and `source/Spritesheet/` are

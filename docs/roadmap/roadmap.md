@@ -193,7 +193,7 @@ flowchart TD
 - 定义 `theme_type_variation` 命名规范，登记进命名白名单；
 - **试点、标签/Button 密集与混合控件批次已完成**：`game_set`、`equipment_properies`、`level_info`、五个 Button 面板、七个混合场景、五个首批标签场景、五个标签/混合场景、阵法/帮助四场景、输入/信息四场景、首批高密度五场景、低密度八场景、中高密度八场景与关卡/帮助/信息八场景、十二场景扩批、十四场景扩批、两批十六场景扩批、十四场景与 hit_text 收口、旧 Theme 退役；Phase 32 完成，Phase 33 完成；
 - 静态直接 `theme_override_*` 已为 0；26 条 `hit_text` 动画轨道已由 32-4 接受为最终例外；动态 `add_theme_*` 保留为数据驱动例外；旧 Theme 已退役；
-- 不替换现有 12 个字体族，不改变 1280×800 显示基线。
+- Phase 32 不替换字体族，不改变 1280×800 显示基线；2026-11-05 P0 字体覆盖修正仅用同族完整版 FZY4K 替换 FZCuYuan 资源并增加显式 fallback，详见 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) §7。
 
 **阶段出口**：Theme 资源登记并覆盖主要面板；试点与每批有截图/几何对照；未迁移面板明确列表，不假装全量完成。
 

@@ -1,7 +1,7 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-04。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
+> **最后更新**：2026-11-05。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本页只保留当前事实与最近基线。
 
 ---
 
@@ -28,7 +28,9 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-04 最新复跑 **31.39s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-05 最新复跑 **38.66s**） |
+| 字体覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字**（`font_coverage_audit.py --check`） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，6.11s） |
 | `health_check` | **781 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（12.17s，含阵法 1P/2P 命令与回滚） |
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
@@ -44,6 +46,7 @@
 
 ### 最近完成
 
+- 2026-11-05 P0 字体覆盖修正：FZCuYuan 的 4 个字体资源（旧完整版 + 3 个 M03S 子集）收敛为 `Scene/theme/fz_cu_yuan_m03.tres`（FontVariation）；主字体为 FZCuYuan-M03，显式 fallback 为 Microsoft YaHei Semibold；Theme `default_font` 指向新字体，覆盖无显式字体的中文节点；`hit_text`、联机面板、模式选择与宠物界面同步更新。静态覆盖 **135 场景 / 790 中文文本节点 / 0 缺字**；4 个代表场景 × 1280×800/1600×1000 截图与控件转储无横向位移，字体度量导致的 Label 高度 +1~+3 px、居中标签纵向 <1 px，未见裁切。`check_all --godot-bin` **9/9**（38.66s），`theme_override_audit --check`、`font_coverage_audit --check`、`scene_probe ui-theme` 与 `level_1` 4 阶段冒烟均通过（日志 0/0/0）。字体文件与 `.import` 未入公开仓库；授权边界见 `THIRD_PARTY_NOTICES.md` 与 `ui_theme_contract.md` §7。
 - 2026-11-04 回植收口与原始数据导出契约：`Level_65`/`Level_68` BOSS 出生点删除 `ignore_count_multiplier`，对齐 6.6；新增 `boss-multiplier` 探针覆盖普通点与 BOSS 的 `×1`/`×5` 复制。新增 `scripts/export_raw_roots.json`、`export_raw_manifest.py`、`export_raw_dependencies.json`、`bhyh_export` EditorExportPlugin、`export_closure_probe.py` 与 `export_release.py`；移除 `include_filter="*.bin"`，清单校验 **844/844** 原始数据路径（173 `.bin` + 671 JSON），实际 release PCK **5,044/5,044**（844 原始数据 + 4,200 FrameSequence），`BHYH.pck` **7,658,516,894** 字节，sha256 `8e73922e99da…`；冷启动 `load_scene.tscn` 游戏与 stdout 均 0 ERROR/0 WARNING。新增 `yutu-drop` 探针覆盖 `expand_drop_entries` 幂等、源表不变、映射双 ID 与 4 条玉兔制作书预览。验证：`check_all --godot-bin` **9/9**（31.39s）、`archive` **344/344**（12.17s）、`scene` **19/19**（167.76s）、`coop` **37/37**（208.26s）、全量 **128/128 + 5 SKIP**（298.7s，无重试）、`level_65`/`level_68` 冒烟 0/0/0；文档链接 754/0 缺失。
 - 2026-11-04 命名终审收口：DragonBones GDExtension 登记为第三方前缀（目录与 6 个图标遵从上游包命名，不改名）；私有 `source/Data` 别名收敛为 `source/data`，同步 `.gitignore`、`ZmwsConfig`、外部怪物转换器、配置探针与原始数据清单。`naming_compliance_audit.py --fail-on-error` 目录/文件/代码标识符均 **100%**，违规 0；`naming_audit --all`、`whitelist_audit --fail-on-error` 通过；白名单评审记录 5 条、未登记/失效 0。
 - 2026-11-04 6.6/6.8 选定回植缺口收口：补齐清音阁/五台山口/桃花谷/万妖穴四条玉兔制作书掉落及 `LevelInfo` 预览；恢复 8 个八仙/太极八卦材料参与合成的例外与法宝出入炉回写；恢复 6.8 双人相机居中/夹取、Buff 图标槽位、灵气最近玩家、2P 被动属性和技能键小键盘提示；当时临时使用 `include_filter="*.bin"` 并实际导出 PCK 逐条检查 **173/173** 个 `poses.bin`（该临时兜底已由 ADR-025 的原始数据清单 + `bhyh_export` 插件替换）。回归断言：`level-entry` 新增 8 项玉兔掉落/预览检查，`ui-factories` 新增法宝合成允许/拒绝检查，`coop` 新增相机/灵气/Buff/2P 被动/键位检查。验证：`check_all --godot-bin` **9/9 PASS**（33.72s）、`archive` **344/344**（10.55s）、`scene` **17/17**（155.81s）、`coop` **37/37**（204.06s）、全量 **128/128 + 5 SKIP**（308.4s，无重试）、PCK **4,200/4,200 + 173/173 bin**（7,658,426,778 字节，sha256 `5b1fc4cd2567520e8a5dc26ce21c4077c955b080c39e821cc5c5384d01355fd1`）。
