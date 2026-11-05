@@ -4,7 +4,7 @@ var father
 
 
 func _physics_process(delta: float) -> void:
-	text = str(self_name)
+	text = UiTextFormat.display_name(self_name)
 	set_physics_process(false)
 
 

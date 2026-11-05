@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		set_buff_icon_info(buff_name)
 	var hp := int(get_obj.hp)
 	var shp := int(get_obj.max_hp)
-	var display_name := str(get_obj.my_mr_name)
+	var display_name := UiTextFormat.display_name(get_obj.my_mr_name)
 	if hp != _last_hp or shp != _last_shp:
 		_last_hp = hp
 		_last_shp = shp

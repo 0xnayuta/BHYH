@@ -127,7 +127,7 @@ func level_create_monster(stage):
 		mr.set_meta("sssl_special_boss", true)
 		mr.set_meta("sssl_stage", stage)
 		if stage > 1:
-			Global.add_message_show(self, str(mr.my_mr_name) + " 出现", 1.2, Vector2(470, 300))
+			Global.add_message_show(self, UiTextFormat.display_name(mr.my_mr_name) + " 出现", 1.2, Vector2(470, 300))
 
 
 func _on_create_control_timeout() -> void:

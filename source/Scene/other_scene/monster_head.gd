@@ -137,7 +137,7 @@ var monster_name_list = {
 
 func _physics_process(delta: float) -> void:
 	if not is_set:
-		monster_name_button.text = monster_name_list[monster_name]
+		monster_name_button.text = UiTextFormat.display_name(monster_name_list[monster_name])
 		if is_boss:
 			boss.visible = true
 		else:

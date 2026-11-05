@@ -482,7 +482,7 @@ func set_selected(value: bool) -> void:
 
 
 func get_display_name() -> String:
-	return str(monster_name_list.get(monster_name, monster_name))
+	return UiTextFormat.display_name(monster_name_list.get(monster_name, monster_name))
 
 
 func _on_selection_gui_input(event: InputEvent) -> void:
@@ -499,7 +499,7 @@ func _on_selection_gui_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if not is_set:
 		var configured_name := str(level_monster_config.get("name", ""))
-		monster_name_button.text = (
+		monster_name_button.text = UiTextFormat.display_name(
 			configured_name if not configured_name.is_empty() else monster_name_list.get(monster_name, monster_name)
 		)
 		if is_boss:
@@ -677,9 +677,9 @@ func _create_monster_attr_panel() -> Control:
 	list.add_theme_constant_override("separation", 3)
 	margin.add_child(list)
 
-	var display_name := str(monster_name_list.get(monster_name, monster_name))
+	var display_name := UiTextFormat.display_name(monster_name_list.get(monster_name, monster_name))
 	if not level_monster_config.is_empty() and str(level_monster_config.get("name", "")) != "":
-		display_name = str(level_monster_config["name"])
+		display_name = UiTextFormat.display_name(level_monster_config["name"])
 	_add_attr_label(list, display_name, 18, "ffb347")
 	if is_boss:
 		_add_attr_label(list, "Boss", 14, "ff6b00")

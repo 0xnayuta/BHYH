@@ -227,7 +227,8 @@ func show_prop() -> void:
 		var node_path = "BG/ColorRect/Text3/TotalList/BossList/" + prop
 		var target_node = get_node_or_null(node_path)
 		if target_node:
-			target_node.text = str(Global.lhhj_boss_list[target_boss][prop])
+			var value := str(Global.lhhj_boss_list[target_boss][prop])
+			target_node.text = UiTextFormat.display_name(value) if prop == "Name" else value
 
 	for item in props_in_second:
 		var node_path = "BG/ColorRect/Text3/TotalList2/BossList/" + str(item["node"])
