@@ -36,7 +36,7 @@ check_all.py
 │   ├── equipment_data_audit.py --check
 │   ├── png_stream_audit.py / runtime_frames_audit.py
 │   ├── export_raw_manifest.py --check
-│   ├── theme_override_audit.py / font_coverage_audit.py / whitelist_audit.py
+│   ├── theme_override_audit.py / font_coverage_audit.py / theme_token_audit.py / whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
 ├── resource_path_audit.py
@@ -75,6 +75,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 与 allowlist 守恒 |
 | `theme_override_audit.py` | 场景直接 Theme 属性与动画轨道基线 |
 | `font_coverage_audit.py` | 静态场景文本与 Theme 字体链的 CJK 字形覆盖审计；缺字或字体文件不可读时失败 |
+| `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
 | `verify_dragonbones_factories.py` | `.dbfactory` 独立子进程加载与坏资源二分定位 |

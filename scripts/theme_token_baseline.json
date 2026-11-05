@@ -1,0 +1,4949 @@
+{
+  "schema_version": 1,
+  "variants": {
+    "SettingsButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.87451, 0.87451, 0.87451, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonSmall": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.87451, 0.87451, 0.87451, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonBright": {
+      "base_type": "&\"SettingsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonSmallBright": {
+      "base_type": "&\"SettingsButtonSmall\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonTinyBright": {
+      "base_type": "&\"SettingsButtonTiny\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonTiny": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.87451, 0.87451, 0.87451, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonCompact": {
+      "base_type": "&\"SettingsButtonTiny\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsButtonMedium": {
+      "base_type": "&\"SettingsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsReturnButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.87451, 0.87451, 0.87451, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsOption": {
+      "base_type": "&\"OptionButton\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsSlider": {
+      "base_type": "&\"HSlider\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsGroupSpacious": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "36",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsSection": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsOptionLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsControlLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsCompactLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsSmallLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SettingsPlainLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentStatLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.6, 0.2, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentStatValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentItemHighlight": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentItemMeta": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentPanelPadding": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentStatGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentInfoGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "27",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoShadowText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelInfoAlertText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelInfoSuccessText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelInfoModeButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoFilterGroup": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoDropGroup": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoModeGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MenuActionButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MenuActionButtonOutline": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MenuHintLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MenuActionButtonGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
+      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TowerButtonSmall": {
+      "base_type": "&\"TowerButton\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
+      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TowerSmallLabel": {
+      "base_type": "&\"TowerLabel\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerFloorPicker": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerContent": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerOptions": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerPanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "28",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementSecretButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementSecretButtonSmall": {
+      "base_type": "&\"AnnouncementSecretButton\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementSecretButtonTiny": {
+      "base_type": "&\"AnnouncementSecretButton\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementHeading": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementWarning": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "AnnouncementStatus": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.42, 0.88, 0.7, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementPrompt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.84, 0.86, 0.9, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementSubtitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "27",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.94, 0.73, 0.34, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "28",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.94, 0.73, 0.34, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementAlert": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.34, 0.3, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHelpButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHelpTitleLarge": {
+      "base_type": "&\"MonsterHelpTitle\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHelpWarning": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillSmallLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillCooldownLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillNeedLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillShadowLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "SkillShadowLabelPlain": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillTextButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillIconButton": {
+      "base_type": "&\"EmptyButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillIconButtonTexture": {
+      "base_type": "&\"SkillIconButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillGridRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TowerFloorInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
+      "colors/font_outline_color": "Color(0.0901961, 0.047059, 0.023529, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementListGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementOverlayPanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementFunctionMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementFunctionContent": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementFunctionColumns": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementLeftColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementCheckButton": {
+      "base_type": "&\"CheckButton\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementCheckButtonSmall": {
+      "base_type": "&\"CheckButton\"",
+      "font_sizes/font_size": "21",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementOption": {
+      "base_type": "&\"OptionButton\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementSecretPanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementPasswordMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementPasswordContent": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementActionRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AnnouncementPasswordInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillPopupMenu": {
+      "base_type": "&\"PopupMenu\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveReadOnlyLink": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveStepText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.94, 0.94, 0.94, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveSectionTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveDialogTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ArchivePopupPanel": {
+      "base_type": "&\"Panel\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveActionButtonSmall": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveHelpButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveMutedButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.815686, 0.815686, 0.815686, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveUidHash": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveFieldTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveUploadButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveDialogActionButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveLoginInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveLoginLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveLoginButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveStatusText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchivePanelTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveConfirmButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveMessageText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveCdButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveNumberInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "3",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveCloudButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ArchiveDeleteButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ShopPageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopSearchRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopSearchInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ShopStatTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ShopDamageText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ShopTabRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopTabText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ShopTabTextStrong": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ShopRoleText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ShopCloseButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopHintLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopMessageText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.584314, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ShopTitleText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterCs": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.635294, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.635294, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterGxms": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.462745, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.462745, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterHq": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterHsh": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.6, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0.6, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterJl": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0.666667, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0.666667, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellPageInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterPt": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterSq": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterSs": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.592157, 0.254902, 1, 1)",
+      "colors/font_outline_color": "Color(0.592157, 0.254902, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellWarning": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterXl": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.403922, 0.403922, 0.403922, 1)",
+      "colors/font_outline_color": "Color(0.403922, 0.403922, 0.403922, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SellFilterYx": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjActionLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjSectionText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.454902, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.454902, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LhhjBossGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjValueInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjHpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjAltValueInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjSelfValueInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 0.384314, 0.0431373, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PelletStageRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletNameColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletPropertyColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletStageProperty": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletPropertyButtonColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletStageList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletStagePropertyRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletEatLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "40",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.6, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PelletTotalValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletTotalGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletAttValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.623529, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletCritValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.615686, 0.541176, 0.494118, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletEmpValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0.592157, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletHpValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletLuckyValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletMpValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletTypeRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PelletAttTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.658824, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.658824, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletCritTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.658824, 0.67451, 0.670588, 1)",
+      "colors/font_outline_color": "Color(0.658824, 0.67451, 0.670588, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletEmpTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0.627451, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0.627451, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletHpTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletLuckyTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletMpTab": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletTabLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "PelletLineLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetStatPanel": {
+      "base_type": "&\"Panel\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetStatName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetStatValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetLearnButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetBackpackGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetBackpackSlotButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetFormationList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetFormationCost": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.94, 0.94, 0.94, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetFormationEffect": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.388235, 0.780392, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetFormationLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetFormationName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetResourceLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.388235, 0.780392, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetLearnRowPanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetBookCount": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.388235, 0.780392, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillDescription": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.94, 0.94, 0.94, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetPopupTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillMana": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.388235, 0.780392, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSkillNeed": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.815686, 0.815686, 0.815686, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetSoulLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.388235, 0.780392, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetPageButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetLevelLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.95686275, 0.7490196, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetExpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PetNameLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoContentPanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoHeaderRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoSectionColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoSectionTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "GameInfoBodyText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "GameInfoNoticeRow": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "GameInfoGuideButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoNoticeButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameInfoDetailButton": {
+      "base_type": "&\"GameInfoNoticeButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackNameInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTitleLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackHeadButton": {
+      "base_type": "&\"EmptyButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackWingsButton": {
+      "base_type": "&\"BackpackHeadButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackWingLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "BackpackEquipmentRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackEquipmentColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackExpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "6",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackHpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "0",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackHpValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackMessageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.84, 0.54, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackMpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackToggleButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BdSkillRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BdSkillColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BdSkillTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BdSkillName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BdSkillUpgradeButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingHitButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingLevelLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.952941, 0.658824, 1)",
+      "colors/font_outline_color": "Color(0.266667, 0.12549, 0.0509804, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingMainLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
+      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SwordPageLevelLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 0.22, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SwordPageMaterialLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SwordPageStatLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicHelpBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "MagicHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjHelpList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjHelpBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "LhhjHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SynHelpTitleRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SynHelpSection": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SynHelpBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 0.32549, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SynHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LetterTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "LetterBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "LetterPageButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LetterPageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtCureText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LlbtTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtCgmsButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtTslzzButton": {
+      "base_type": "&\"LlbtCgmsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtTznzButton": {
+      "base_type": "&\"LlbtCgmsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtTztttwButton": {
+      "base_type": "&\"LlbtCgmsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtTztxsButton": {
+      "base_type": "&\"LlbtCgmsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LlbtWxmsButton": {
+      "base_type": "&\"LlbtCgmsButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsMoreInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsWarning": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.568627, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.568627, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsHeaderRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsColumn": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsCritCount": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.741176, 0.341176, 0.309804, 1)",
+      "colors/font_outline_color": "Color(0.741176, 0.341176, 0.309804, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsHit": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsHitCount": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.32549, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.32549, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsRealHit": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.545098, 0.545098, 0.545098, 1)",
+      "colors/font_outline_color": "Color(0.545098, 0.545098, 0.545098, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsMagicHit": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0.427451, 0.898039, 1)",
+      "colors/font_outline_color": "Color(0, 0.427451, 0.898039, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsPhysicalHit": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.615686, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.615686, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsHurt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.517647, 0.537255, 0.815686, 1)",
+      "colors/font_outline_color": "Color(0.517647, 0.537255, 0.815686, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsHurtCount": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.462745, 0.290196, 0, 1)",
+      "colors/font_outline_color": "Color(0.462745, 0.290196, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsMagicHurt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.376471, 0.184314, 0.815686, 1)",
+      "colors/font_outline_color": "Color(0.376471, 0.184314, 0.815686, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsMissCount": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsPhysicalHurt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.466667, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0.466667, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsRealHurt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.258824, 0.258824, 0.258824, 1)",
+      "colors/font_outline_color": "Color(0.258824, 0.258824, 0.258824, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EndStatsCure": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.431373, 1, 0.368627, 1)",
+      "colors/font_outline_color": "Color(0.431373, 1, 0.368627, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LdlTitleLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlDzButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlFjButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlHcButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlQhButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlReturnButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LdlXqButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleLevelLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleExpText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleHpText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleNatureHp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleMpText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleNatureMp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "RoleKeyLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "RoleSkillRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleSkillRowTight": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RolePetSkillRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaCurrentLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "ZhenFaCurrentName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaTabRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaTabLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaSourceLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0.792157, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0.792157, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaNameLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 0.552941, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaEmptyButton": {
+      "base_type": "&\"EmptyButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaInfoPropGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaInfoPropLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.792157, 0.407843, 0, 1)",
+      "colors/font_outline_color": "Color(0.792157, 0.407843, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaInfoLevelLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaInfoBodyGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaInfoAddProp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaInfoSkill": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.384314, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.384314, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaTuPoList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaTuPoHeader": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaTuPoProp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaTuPoSkill": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.435294, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.435294, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenFaTuPoNeed": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaTuPoNeedNote": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpTabRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpTabLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(0.992157, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpColumnRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpColumnLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HcHelpPage": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "6",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattlePanel": {
+      "base_type": "&\"PanelContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleContent": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "26",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.88, 0.38, 1)",
+      "colors/font_outline_color": "Color(0.02, 0.01, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleSectionLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.84, 0.92, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleOptionsGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleCheck": {
+      "base_type": "&\"CheckButton\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.92, 0.62, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleOption": {
+      "base_type": "&\"OptionButton\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.92, 0.62, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleSkillRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleSkillOption": {
+      "base_type": "&\"OptionButton\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleSmallButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleSelectedList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleHint": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.7, 0.78, 0.86, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleActions": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "AutoBattleActionButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "21",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TransTabRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TransTabLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransRoleLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "40",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransCollectValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TransSlotLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransTips": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "10",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransTipsSmall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "8",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransPage": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "7",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TransGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponEmpty": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponStat": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponStatHp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponAttr": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponSkillTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "21",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "MagicWeaponSkillBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "MagicWeaponPsTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "8",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponPsSkill": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "4",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponAction": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponActionSmall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponActionAlt": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponSkillGroup": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenYanPropList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenYanLevelInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenYanPropInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.4, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.4, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenYanNeedTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenYanNeedNum": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenYanNeedNote": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "29",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "ZhenFaHelpBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "Monster139Button": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "Monster139DamageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "CureTimesHeader": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "CureTimesSection": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "CureTimesHint": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.752941, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "CureTimesCurrency": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "CureTimesRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DecomposeHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "DecomposeHelpBody": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.635294, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.635294, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "DecomposeHelpRow": {
+      "base_type": "&\"BoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillSelectName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "SkillSelectLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.556863, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.556863, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "SkillSelectInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "SkillSelectNoHave": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackCompactVBox": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjSellMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjSellInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DjSellNumber": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "9",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DjSellCloseButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "76",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SellOrEquInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "10",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "BackpackLockText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "11",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackInnerMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTabBar": {
+      "base_type": "&\"TabBar\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTabRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTabLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTabLabelLarge": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackTabLabelSmall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackGridMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackPageRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackPageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BackpackCoinLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopItemName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "ShopItemNumber": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopItemBuyButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopItemSoulValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ShopItemSoulText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 0)",
+      "colors/font_shadow_color": ""
+    },
+    "Map3RegionLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "Map3ButtonTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChoosePlayerTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "38",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.760784, 0.196078, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0.141176, 0.0470588, 0.0117647, 1)"
+    },
+    "ChoosePlayerCardRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ChoosePlayerRoleName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "26",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.760784, 0.196078, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ChoosePlayerProp": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ChoosePlayerInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.996078, 0.956863, 0.721569, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "Map0PlayerLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "Map0CatalogButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.96, 0.86, 0.62, 1)",
+      "colors/font_outline_color": "Color(0.06, 0.04, 0.02, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeSubtitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0, 0.976471, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeMaterialRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeBoxRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeItemName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "27",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.45098, 0.427451, 0.4, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeSoulLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillKeySetButton": {
+      "base_type": "&\"MenuActionButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillKeySetLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.964706, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowVBox": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowIntro": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowRule": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowRulePlain": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowYellow": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "GameNeedKnowFooter": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MainMenuPlayerName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "0",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MainMenuPlayerDetail": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.72, 0.16, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MainMenuTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.396078, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MainMenuLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LearnSkillLevelValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LearnSkillTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LearnSkillDescriptionButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "21",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.95, 0.91, 0.78, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LearnSkillButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.988235, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeHelpList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeHelpLine": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingStagePanel": {
+      "base_type": "&\"Panel\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(0.96, 0.81, 0.45, 1)",
+      "colors/font_outline_color": "Color(0.1, 0.055, 0.025, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingCloseButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "26",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.91, 0.78, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingSectionPanel": {
+      "base_type": "&\"Panel\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingCategoryMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingCategoryList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingSectionTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "23",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.76, 0.9, 0.83, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingMonsterGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingEmptyLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.67, 0.72, 0.73, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingAttributeMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingAttributeContent": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingAttributeTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "21",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.96, 0.81, 0.45, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "WanLingAttributeText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.82, 0.89, 0.85, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingDetailLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
+      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingDetailAttribute": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0.2, 0.12, 0.07, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingDetailProgress": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0.1, 0.1, 0.1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingDetailMaterial": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.941176, 0.470588, 1)",
+      "colors/font_outline_color": "Color(0.2, 0.07451, 0.019608, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BodyTrainingTrainButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemsTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemStatName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "5",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemUpLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "33",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemDownLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "37",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemMaxLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "10",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemMinLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "11",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemInput": {
+      "base_type": "&\"LineEdit\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UseItemKey": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DsgChooseTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HelpContentList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DsgChooseButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MosaicHelpTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "5",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MosaicHelpLine": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelInfoTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(0.952941, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoEnemyTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(0.952941, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoChallengeTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "31",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(0.929412, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoMyPj": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "12",
+      "colors/font_color": "Color(0.505882, 0.505882, 0.505882, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LevelInfoFall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.952941, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0.952941, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelInfoDialogTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "23",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChooseMusicList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "VictoryInfoLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "6",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "VictoryMoreButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.933333, 0.505882, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LxdyStageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0.792328, 0.792115, 0.72996, 1)"
+    },
+    "LxdyButtonRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LxdyLastTimes": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LxdyStageInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "DefeatYellowLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "DefeatMessageLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TransmogrifiedEqName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TransmogrifiedHaveOrNot": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TransmogrifiedActionLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeBackgroundList": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeBackgroundTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.623529, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeBackgroundButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BacisInfoNumber": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "26",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.376471, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.376471, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BacisInfoVBox": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BacisInfoName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BacisInfoLevel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BacisInfoTime": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BasicTaskTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "0",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 0)"
+    },
+    "BasicTaskNumber": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BasicTaskText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "0",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 0)"
+    },
+    "BossBloodName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "29",
+      "constants/outline_size": "13",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BossBloodValue": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BossProtectName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "13",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillAwakenName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "4",
+      "colors/font_color": "Color(1, 0.92, 0.05, 1)",
+      "colors/font_outline_color": "Color(0.12, 0.06, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillAwakenStatus": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.86, 0.32, 1)",
+      "colors/font_outline_color": "Color(0.05, 0.08, 0.14, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillAwakenDescription": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.82, 0.9, 1, 1)",
+      "colors/font_outline_color": "Color(0.02, 0.04, 0.1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SkillAwakenCheck": {
+      "base_type": "&\"CheckBox\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0.82, 0.9, 1, 1)",
+      "colors/font_outline_color": "Color(0.02, 0.04, 0.1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoVBox": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoLine": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoInnerVBox": {
+      "base_type": "&\"VBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DjInfoDescription": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "5",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "DjInfoSale": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.768627, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TaskTitleHeading": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "27",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TaskTitleStatus": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ChooseItemTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ChooseItemList": {
+      "base_type": "&\"ItemList\"",
+      "font_sizes/font_size": "19",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChooseItemVSeparator": {
+      "base_type": "&\"VSeparator\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ChooseItemHSeparator": {
+      "base_type": "&\"HSeparator\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "2",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentDescription": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EquipmentSale": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.6, 0.2, 1)",
+      "colors/font_outline_color": "Color(1, 0.6, 0.2, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UserKeyKey": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.901961, 0.890196, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "UserKeyTime": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UserKeyTimeSmall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MysteryShopLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MysteryShopPurchase": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RewardQd": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "RewardTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "RewardItemGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHeadBoss": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 0.431373, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHeadInfoName": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterHeadName": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "StrengthNumber": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "StrengthNumberSmall": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "StrengthCost": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UserLoadTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "35",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "UserLoadIdRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UserLoadKeyRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UserLoadInputLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HelpThingsText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "100",
+      "constants/outline_size": "11",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "Level17Text": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "Level17TextRed": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BoxItemButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BoxItemNumber": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "BoxLockMark": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "4",
+      "colors/font_color": "Color(1, 0.86, 0.2, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenYanSlotLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 0.529412, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.529412, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ZhenYanSlotButton": {
+      "base_type": "&\"EmptyButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LoadSceneTips": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LoadScenePanelMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "LoadSceneNotice": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 0.91, 0.55, 1)",
+      "colors/font_outline_color": "Color(0.12, 0.08, 0.03, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LoadSceneProgress": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "33",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UseMagicTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.607843, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.607843, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "UseMagicRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "UseMagicPage": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "7",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChooseSceneText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ChooseSceneCountdown": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MysteryShopTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MysteryShopInfo": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MysteryShopList": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BuffIconTime": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "9",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BuffIconTimes": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "10",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BuffInformationMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BuffInformationRoot": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BuffInformationText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeClothesAction": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeClothesName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "7",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ChangeClothesStatus": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "12",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DecomposeItemList": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DecomposeTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DecomposeTitleOrange": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "12",
+      "colors/font_color": "Color(0.964706, 0.403922, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "DivineForgeButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LijiText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "50",
+      "constants/outline_size": "11",
+      "colors/font_color": "Color(1, 0.27451, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0.0941176, 0.0941176, 0.0941176, 1)"
+    },
+    "MapLocationText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 0.290196, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MapReturnText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(1, 0.470588, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "MessageShowText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(1, 1, 1, 1)"
+    },
+    "PetBackpackSlotButtonEmpty": {
+      "base_type": "&\"EmptyButton\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "PetBackpackSlotNumber": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "4",
+      "colors/font_color": "Color(1, 0.466667, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "RoleButtonName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "RoleMagicNeedText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "SynthesisCost": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SynthesisItemName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "SynthesisTargetDan": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SynthesisTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "32",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0.972549, 0.976471, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TaskRewardTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "13",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TowerFloorText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
+      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "TowerHintText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.933333, 0.713726, 1)",
+      "colors/font_outline_color": "Color(0.0901961, 0.0470588, 0.0235294, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "ZhenFaActiveLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "26",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0.329412, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0.329412, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "BaseThroughLevelNotice": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ComKeyLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "24",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(0.901961, 0.890196, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "ConstellationGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ConstellationPanel": {
+      "base_type": "&\"Panel\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ConstellationTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "3",
+      "colors/font_color": "Color(1, 0.956863, 0.74902, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "EmptyButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ForgeMaterialNeed": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "5",
+      "colors/font_color": "Color(0, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameOverSubtitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "7",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "GameOverTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "22",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "HeroName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "LevelLlbtText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "6",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "LhhjButtonRole": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ListButtonRole": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MagicWeaponCdText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "16",
+      "constants/outline_size": "8",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "PelletSysTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "RewardBoxName": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "20",
+      "constants/outline_size": "1",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "TouchTextLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(0, 0, 0, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "TouchTextMargin": {
+      "base_type": "&\"MarginContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "BasicMonmentText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "18",
+      "constants/outline_size": "1",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(1, 1, 1, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "BossInfoTitle": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ComboFather": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ComboRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "ComboText": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "DamageNumberRow": {
+      "base_type": "&\"HBoxContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "HeroNameFlat": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "17",
+      "constants/outline_size": "2",
+      "colors/font_color": "Color(1, 1, 0, 1)",
+      "colors/font_outline_color": "Color(1, 1, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "MomentTextLabel": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "30",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "MonsterBloodText": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "15",
+      "constants/outline_size": "5",
+      "colors/font_color": "",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "RoleInformationGrid": {
+      "base_type": "&\"GridContainer\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "RoleShieldBar": {
+      "base_type": "&\"ProgressBar\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "",
+      "colors/font_color": "",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    },
+    "SkillIconTime": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "",
+      "constants/outline_size": "9",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": ""
+    },
+    "HitTextBase": {
+      "base_type": "&\"Label\"",
+      "font_sizes/font_size": "25",
+      "constants/outline_size": "10",
+      "colors/font_color": "Color(0.145098, 1, 0, 1)",
+      "colors/font_outline_color": "Color(0, 0, 0, 1)",
+      "colors/font_shadow_color": "Color(0, 0, 0, 1)"
+    },
+    "BackpackActionButton": {
+      "base_type": "&\"Button\"",
+      "font_sizes/font_size": "14",
+      "constants/outline_size": "",
+      "colors/font_color": "Color(1, 1, 1, 1)",
+      "colors/font_outline_color": "",
+      "colors/font_shadow_color": ""
+    }
+  }
+}
