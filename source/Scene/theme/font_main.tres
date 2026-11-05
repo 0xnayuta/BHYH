@@ -1,6 +1,6 @@
 [gd_resource type="FontVariation" format=3 uid="uid://bhyhfontmain"]
 
-[ext_resource type="FontFile" path="res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf" id="1_accent"]
+[ext_resource type="FontFile" path="res://Font/lxgw_wen_kai_medium.ttf" id="1_accent"]
 [ext_resource type="FontVariation" path="res://Scene/theme/font_hk.tres" id="2_ui"]
 
 [resource]

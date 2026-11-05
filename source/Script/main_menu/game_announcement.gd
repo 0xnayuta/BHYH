@@ -1209,7 +1209,7 @@ func add_text_info():
 		var item_label = Global.add_font_instance(
 			text_list,
 			i,
-			"res://Font/华康宋体W3.ttc",
+			"res://Font/source_han_serif_cn_medium.otf",
 			17,
 			UiColorTokens.TEXT_PRIMARY.to_html(false),
 			2,

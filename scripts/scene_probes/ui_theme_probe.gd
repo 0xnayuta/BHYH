@@ -12,8 +12,8 @@ const GAME_SET_PATH := "res://Scene/main_menu/game_set.tscn"
 const EQUIPMENT_PATH := "res://Scene/back_pack/equipment_properies.tscn"
 const LEVEL_INFO_PATH := "res://Scene/other_scene/level_info.tscn"
 const THEME_PATH := "res://Scene/theme/bhyh_theme.tres"
-const MAIN_FONT := "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf"
-const RETURN_FONT := "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+const MAIN_FONT := "res://Font/lxgw_wen_kai_medium.ttf"
+const RETURN_FONT := "res://Font/source_han_serif_cn_semibold.otf"
 
 var _failures: Array[String] = []
 

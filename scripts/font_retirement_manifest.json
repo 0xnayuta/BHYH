@@ -13,19 +13,19 @@
     "ui": {
       "resource": "font_hk",
       "files": [
-        "res://Font/华康宋体W3.ttc"
+        "res://Font/source_han_serif_cn_medium.otf"
       ]
     },
     "display": {
       "resource": "font_return",
       "files": [
-        "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+        "res://Font/source_han_serif_cn_semibold.otf"
       ]
     },
     "accent": {
       "resource": "font_main",
       "files": [
-        "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf"
+        "res://Font/lxgw_wen_kai_medium.ttf"
       ]
     }
   },
@@ -45,6 +45,11 @@
     "res://Font/i_pix_zhong_wen_xiang_su_zi_ti.ttf",
     "res://Font/jin_qiao_fan_li_shu.ttf",
     "res://Font/jin_qiao_jian_cu_hei.ttf"
+  ],
+  "removed_replaced_fonts": [
+    "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
+    "res://Font/华康宋体W3.ttc",
+    "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
   ],
   "private_assets_without_theme_reference": [
     "res://Font/zmws/ttf/fzy4jw.ttf",

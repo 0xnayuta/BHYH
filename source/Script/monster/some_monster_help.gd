@@ -399,16 +399,12 @@ func refresh_info():
 			for i in monster_skill_info_list[monster_name]:
 				if i == "主动技能：" or i == "被动技能：":
 					Global.add_font_instance(
-						monster_info,
-						i,
-						"res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
-						25,
-						"FFFFFF",
-						1,
-						"FFFFFF"
+						monster_info, i, "res://Font/lxgw_wen_kai_medium.ttf", 25, "FFFFFF", 1, "FFFFFF"
 					)
 				else:
-					Global.add_font_instance(monster_info, i, "res://Font/华康宋体W3.ttc", 15, "FFFFFF", 1, "FFFFFF")
+					Global.add_font_instance(
+						monster_info, i, "res://Font/source_han_serif_cn_medium.otf", 15, "FFFFFF", 1, "FFFFFF"
+					)
 
 
 func _on_dxx_pressed() -> void:

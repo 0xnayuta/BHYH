@@ -4,7 +4,7 @@ const CATALOG_DATA := preload("res://Script/main_menu/equipment_catalog_data.gd"
 const CATEGORIES := ["悟空", "唐僧", "八戒", "沙僧", "白龙", "哪吒", "玉兔", "通用", "法宝"]
 const PANEL_SIZE := Vector2(900.0, 540.0)
 const SLOT_BACKGROUND := preload("res://Art/backpack/all_items/empty.png")
-const CATALOG_FONT := preload("res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf")
+const CATALOG_FONT := preload("res://Font/lxgw_wen_kai_medium.ttf")
 const QUALITY_ORDER := ["普通", "优秀", "精良", "史诗", "邪灵", "魂器", "传说", "神器", "玄冥", "黑神话", "无敌"]
 
 var catalog = CATALOG_DATA.new()
