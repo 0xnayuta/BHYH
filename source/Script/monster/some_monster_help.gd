@@ -403,7 +403,7 @@ func refresh_info():
 					)
 				else:
 					Global.add_font_instance(
-						monster_info, i, "res://Font/source_han_serif_cn_medium.otf", 15, "FFFFFF", 1, "FFFFFF"
+						monster_info, i, "res://Font/lxgw_wen_kai_regular.ttf", 15, "FFFFFF", 1, "FFFFFF"
 					)
 
 

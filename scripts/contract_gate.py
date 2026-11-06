@@ -41,6 +41,7 @@ COMMANDS = [
     ("theme_variant_audit", [sys.executable, "scripts/theme_variant_audit.py", "--check"]),
     ("ui_dynamic_theme_audit", [sys.executable, "scripts/ui_dynamic_theme_audit.py", "--check"]),
     ("font_coverage_audit", [sys.executable, "scripts/font_coverage_audit.py", "--check"]),
+    ("font_role_audit", [sys.executable, "scripts/font_role_audit.py", "--check"]),
     ("ui_surface_token_audit", [sys.executable, "scripts/ui_surface_token_audit.py", "--check"]),
     ("ui_surface_token_self_test", [sys.executable, "scripts/ui_surface_token_audit.py", "--self-test"]),
     ("png_stream_audit", [sys.executable, "scripts/png_stream_audit.py", "--fail-on-error"]),

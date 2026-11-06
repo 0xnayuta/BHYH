@@ -182,20 +182,23 @@
   "font_roles": {
     "body": {
       "resource_id": "font_fz_cu_yuan_m03",
-      "path": "res://Scene/theme/fz_cu_yuan_m03.tres",
+      "path": "res://Font/fz_cu_yuan_m03.ttf",
       "fallback": "res://Font/msyh_semibold.ttc"
     },
     "ui": {
       "resource_id": "font_hk",
-      "path": "res://Font/华康宋体W3.ttc"
+      "path": "res://Font/lxgw_wen_kai_regular.ttf",
+      "fallback": "res://Scene/theme/fz_cu_yuan_m03.tres"
     },
     "display": {
       "resource_id": "font_return",
-      "path": "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
+      "path": "res://Font/fz_cu_yuan_m03.ttf",
+      "fallback": "res://Scene/theme/fz_cu_yuan_m03.tres"
     },
     "accent": {
       "resource_id": "font_main",
-      "path": "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf"
+      "path": "res://Font/lxgw_wen_kai_medium.ttf",
+      "fallback": "res://Scene/theme/font_hk.tres"
     }
   },
   "theme_properties": {

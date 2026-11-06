@@ -1,0 +1,221 @@
+{
+  "schema_id": "font_role_baseline",
+  "schema_version": 1,
+  "size_exceptions": {
+    "AnnouncementHeading": {
+      "role": "accent",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ArchiveDialogActionButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ArchiveDialogTitle": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ArchivePanelTitle": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ArchiveUploadButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "BacisInfoNumber": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "BossInfoTitle": {
+      "role": "body",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "BuffIconTime": {
+      "role": "body",
+      "size": 10,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "BuffIconTimes": {
+      "role": "body",
+      "size": 10,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ChoosePlayerRoleName": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ChoosePlayerTitle": {
+      "role": "body",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "EndStatsMoreInfo": {
+      "role": "accent",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ForgeSoulLabel": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "GameInfoTitle": {
+      "role": "ui",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "GameNeedKnowTitle": {
+      "role": "accent",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "HitTextBase": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LevelInfoTitle": {
+      "role": "accent",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LhhjTitle": {
+      "role": "body",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LijiText": {
+      "role": "accent",
+      "size": 50,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtCgmsButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtTslzzButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtTznzButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtTztttwButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtTztxsButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "LlbtWxmsButton": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "MagicWeaponEmpty": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "MainMenuLabel": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "MainMenuPlayerName": {
+      "role": "body",
+      "size": 32,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "MomentTextLabel": {
+      "role": "body",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "PelletTotalValue": {
+      "role": "ui",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SellOrEquInfo": {
+      "role": "body",
+      "size": 10,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SemanticArchiveDialogTitle": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SemanticBossInfoTitle": {
+      "role": "body",
+      "size": 28,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SettingsTitle": {
+      "role": "accent",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ShopHintLabel": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "ShopPageLabel": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SkillCooldownLabel": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SynHelpTitle": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "SynthesisTitle": {
+      "role": "body",
+      "size": 32,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "UseItemDownLabel": {
+      "role": "body",
+      "size": 36,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "UseItemMaxLabel": {
+      "role": "body",
+      "size": 10,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "UseItemUpLabel": {
+      "role": "body",
+      "size": 32,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    },
+    "UserKeyTime": {
+      "role": "body",
+      "size": 24,
+      "reason": "存量字号偏离；迁移前保留，禁止扩散"
+    }
+  }
+}

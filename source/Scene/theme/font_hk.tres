@@ -1,6 +1,6 @@
 [gd_resource type="FontVariation" format=3 uid="uid://bhyhfontui"]
 
-[ext_resource type="FontFile" path="res://Font/source_han_serif_cn_medium.otf" id="1_ui"]
+[ext_resource type="FontFile" path="res://Font/lxgw_wen_kai_regular.ttf" id="1_ui"]
 [ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="2_body"]
 
 [resource]

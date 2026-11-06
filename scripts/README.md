@@ -36,7 +36,7 @@ check_all.py
 │   ├── equipment_data_audit.py --check
 │   ├── png_stream_audit.py / runtime_frames_audit.py
 │   ├── export_raw_manifest.py --check
-│   ├── theme_override_audit.py / font_coverage_audit.py / theme_token_audit.py / whitelist_audit.py
+│   ├── theme_override_audit.py / font_coverage_audit.py / font_role_audit.py / theme_token_audit.py / whitelist_audit.py
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
 ├── resource_path_audit.py
@@ -75,11 +75,12 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_audit.py` | 运行时 `SpriteFrames.new()` 与 allowlist 守恒 |
 | `theme_override_audit.py` | 场景直接 Theme 属性、动画轨道、直接字体与动态调用/文件上限基线 |
 | `font_coverage_audit.py` | 静态场景/动态样本 CJK 覆盖；检查 Theme 字体文件 ≤6、未引用 Theme 字体资源与字体文件可读性；样本见 `font_dynamic_samples.json` |
+| `font_role_audit.py` | UI 字体角色语义门禁：有效字体归类、角色包装与 fallback、脚本/场景直接字体、宋体残留与字号例外基线；`--write` 生成 `font_role_baseline.json` |
 | `ui_text_punctuation_audit.py` | 报告式扫描 `.gd`/`.tscn` 中文自然语言 ASCII 标点；排除日志、数学公式、`@export_enum`、路径与编号标记；默认 report-only，`--fail-on-findings` 可阻断，支持 `--self-test` |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
 | `theme_variant_audit.py` | Phase 27-4 语义基类、冻结变体、Theme 属性/StyleBox 上限与独立变体重复签名门禁；冻结清单见 `theme_legacy_variants.json` |
 | `ui_dynamic_theme_audit.py` | Phase 27-7 全 `source/**/*.gd`（排除 addons/.godot）`add_theme_*` 跨行分类、静态角色/解析错误/总计数不增长门禁；`--self-test` 覆盖跨行正负样本；基线见 `ui_dynamic_theme_baseline.json` |
-| `font_retirement_manifest.json` | Phase 27-7/P2 字体角色、已删除/替换字体、已退役 Theme 资源与私有保留资产边界 |
+| `font_retirement_manifest.json` | Phase 27-7/P2.1 字体角色、已删除/替换字体、已退役 Theme 资源与私有保留资产边界 |
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
@@ -145,6 +146,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `runtime_frames_allowlist.json` | 运行时 `SpriteFrames.new()` 允许文件 |
 | `global_surface_baseline.json` | Phase 22 收口后的 Global 字段与 add 系入口冻结基线 |
 | `theme_override_baseline.json` | Theme 直接属性/动画轨道场景级上限 |
+| `font_role_baseline.json` | 字体角色字号存量例外；只允许收紧，不允许新增未登记例外 |
 | `ui_theme_tokens.json` | 字号、语义色、字体角色、Theme 受管属性与 Theme token 审计集合的单一来源 |
 | `theme_token_baseline.json` | Theme 变体字号/描边/颜色/Button 基类的迁移期冻结基线 |
 | `ui_surface_token_baseline.json` | 自绘 StyleBox 与 `main_menu` 裸色的迁移期冻结基线 |

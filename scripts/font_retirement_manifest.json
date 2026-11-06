@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "phase": "27-7",
-  "theme_asset_count": 5,
+  "phase": "27-7 P2.1",
+  "theme_asset_count": 4,
   "roles": {
     "body": {
       "resource": "font_fz_cu_yuan_m03",
@@ -13,13 +13,13 @@
     "ui": {
       "resource": "font_hk",
       "files": [
-        "res://Font/source_han_serif_cn_medium.otf"
+        "res://Font/lxgw_wen_kai_regular.ttf"
       ]
     },
     "display": {
       "resource": "font_return",
       "files": [
-        "res://Font/source_han_serif_cn_semibold.otf"
+        "res://Font/fz_cu_yuan_m03.ttf"
       ]
     },
     "accent": {
@@ -48,6 +48,8 @@
   ],
   "removed_replaced_fonts": [
     "res://Font/aa_wen_zheng_ming_qin_fu_xiao_kai_mianfeiziti_com.ttf",
+    "res://Font/source_han_serif_cn_medium.otf",
+    "res://Font/source_han_serif_cn_semibold.otf",
     "res://Font/华康宋体W3.ttc",
     "res://Font/华康海报体W12 &amp; 华康海报体W12(P).ttc"
   ],

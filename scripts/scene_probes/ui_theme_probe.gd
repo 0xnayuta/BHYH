@@ -13,7 +13,7 @@ const EQUIPMENT_PATH := "res://Scene/back_pack/equipment_properies.tscn"
 const LEVEL_INFO_PATH := "res://Scene/other_scene/level_info.tscn"
 const THEME_PATH := "res://Scene/theme/bhyh_theme.tres"
 const MAIN_FONT := "res://Font/lxgw_wen_kai_medium.ttf"
-const RETURN_FONT := "res://Font/source_han_serif_cn_semibold.otf"
+const RETURN_FONT := "res://Font/fz_cu_yuan_m03.ttf"
 
 var _failures: Array[String] = []
 
