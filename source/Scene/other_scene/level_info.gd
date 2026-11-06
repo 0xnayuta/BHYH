@@ -2150,6 +2150,12 @@ func _get_level_info() -> Dictionary:
 		if not all_drops.has(yutu_book):
 			all_drops.append(yutu_book)
 		all_probabilities[yutu_book] = int(float(drop.chance) * 100)
+	for item_id in all_drops.duplicate():
+		var longnv_id := LongnvEquipmentData.from_nezha(str(item_id))
+		if longnv_id != str(item_id) and not all_drops.has(longnv_id):
+			all_drops.append(longnv_id)
+			if all_probabilities.has(item_id):
+				all_probabilities[longnv_id] = all_probabilities[item_id]
 	info["LevelFall"] = all_drops
 	info["LevelFallProbability"] = all_probabilities
 	return info

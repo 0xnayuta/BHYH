@@ -332,6 +332,8 @@ func _current_role_owner_name() -> String:
 			return "哪吒"
 		7:
 			return "玉兔"
+		8:
+			return "小龙女"
 		_:
 			return ""
 

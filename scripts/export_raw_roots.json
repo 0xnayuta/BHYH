@@ -19,6 +19,14 @@
       "consumer": "YutuOfficialParts"
     },
     {
+      "path": "res://Art/hero_picture/role_8/official_parts/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "LongnvOfficialParts / LongnvHero"
+    },
+    {
       "path": "res://Art/mount/official_parts/",
       "extensions": [
         ".json",
@@ -60,6 +68,10 @@
     {
       "path": "res://Art/hero_picture/role_7/equipment.json",
       "consumer": "YutuEquipmentData.definitions"
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/equipment.json",
+      "consumer": "LongnvEquipmentData.definitions"
     },
     {
       "path": "res://Art/hero_picture/role_7/skills.json",

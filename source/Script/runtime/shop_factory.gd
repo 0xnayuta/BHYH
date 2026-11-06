@@ -95,6 +95,7 @@ func add_trans_box(parent, _name, transmogrified):
 
 func add_choose_item(parent, position, list, _name, page):
 	list = preload("res://Script/data/yutu_equipment_data.gd").expand_drop_entries(list, "名字")
+	list = preload("res://Script/data/longnv_equipment_data.gd").expand_drop_entries(list, "名字")
 	var target = _host.instance_scene(_scene(CHOOSE_ITEM_PATH), parent)
 	if target == null:
 		return null

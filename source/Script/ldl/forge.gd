@@ -132,6 +132,7 @@ var item_material_list = {
 
 func _init() -> void:
 	preload("res://Script/data/yutu_equipment_data.gd").add_forge_materials(item_material_list)
+	preload("res://Script/data/longnv_equipment_data.gd").add_forge_materials(item_material_list)
 
 
 func _ready() -> void:

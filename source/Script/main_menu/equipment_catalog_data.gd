@@ -68,6 +68,10 @@ func _register_level(level_name: String, info: Dictionary) -> void:
 	for drop: Dictionary in YutuEquipmentData.stage_book_drops(str(info.get("LevelName", ""))):
 		if not level_drops.has(str(drop.name)):
 			level_drops.append(str(drop.name))
+	for item_id in level_drops.duplicate():
+		var longnv_id := LongnvEquipmentData.from_nezha(str(item_id))
+		if longnv_id != str(item_id) and not level_drops.has(longnv_id):
+			level_drops.append(longnv_id)
 	for item_id in level_drops:
 		var key := str(item_id)
 		if not drops.has(key):

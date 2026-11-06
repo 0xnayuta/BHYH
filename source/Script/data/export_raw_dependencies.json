@@ -968,6 +968,602 @@
       "bytes": 237169
     },
     {
+      "path": "res://Art/hero_picture/role_8/equipment.json",
+      "bytes": 10310
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack1/poses.bin",
+      "bytes": 252
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack1/poses.json",
+      "bytes": 1017
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack2/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack2/poses.json",
+      "bytes": 1039
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack3/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack3/poses.json",
+      "bytes": 1001
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack4/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack4/poses.json",
+      "bytes": 1033
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack5/poses.bin",
+      "bytes": 396
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/attack5/poses.json",
+      "bytes": 1044
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/default/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/default/poses.json",
+      "bytes": 10564
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect1/poses.bin",
+      "bytes": 540
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect1/poses.json",
+      "bytes": 1011
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect10/poses.bin",
+      "bytes": 1296
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect10/poses.json",
+      "bytes": 1614
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect2/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect2/poses.json",
+      "bytes": 1051
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect2_2/poses.bin",
+      "bytes": 396
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect2_2/poses.json",
+      "bytes": 1009
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect3_1/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect3_1/poses.json",
+      "bytes": 993
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect3_2/poses.bin",
+      "bytes": 684
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect3_2/poses.json",
+      "bytes": 1210
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect4_1/poses.bin",
+      "bytes": 360
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect4_1/poses.json",
+      "bytes": 1078
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect5/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect5/poses.json",
+      "bytes": 1013
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect6_2/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect6_2/poses.json",
+      "bytes": 1047
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect7_1/poses.bin",
+      "bytes": 792
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect7_1/poses.json",
+      "bytes": 1215
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect7_2/poses.bin",
+      "bytes": 1044
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect7_2/poses.json",
+      "bytes": 1156
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect8/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect8/poses.json",
+      "bytes": 986
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect9/poses.bin",
+      "bytes": 576
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect9/poses.json",
+      "bytes": 1219
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect9_buff/poses.bin",
+      "bytes": 360
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/effect9_buff/poses.json",
+      "bytes": 1108
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_1/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_1/poses.json",
+      "bytes": 10088
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_10/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_10/poses.json",
+      "bytes": 10016
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_11/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_11/poses.json",
+      "bytes": 10015
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_12/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_12/poses.json",
+      "bytes": 10013
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_13/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_13/poses.json",
+      "bytes": 10014
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_14/poses.bin",
+      "bytes": 417420
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_14/poses.json",
+      "bytes": 9916
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_15/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_15/poses.json",
+      "bytes": 10014
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_16/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_16/poses.json",
+      "bytes": 10074
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_17/poses.bin",
+      "bytes": 440496
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_17/poses.json",
+      "bytes": 10003
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_18/poses.bin",
+      "bytes": 440496
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_18/poses.json",
+      "bytes": 10001
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_2/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_2/poses.json",
+      "bytes": 10090
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_3/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_3/poses.json",
+      "bytes": 10090
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_4/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_4/poses.json",
+      "bytes": 10013
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_5/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_5/poses.json",
+      "bytes": 10012
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_6/poses.bin",
+      "bytes": 486756
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_6/poses.json",
+      "bytes": 10091
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_7/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_7/poses.json",
+      "bytes": 10014
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_8/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_8/poses.json",
+      "bytes": 10015
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_9/poses.bin",
+      "bytes": 463176
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/gear_9/poses.json",
+      "bytes": 10014
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/jump_attack/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/jump_attack/poses.json",
+      "bytes": 1015
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/default/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/default/poses.json",
+      "bytes": 10613
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_1/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_1/poses.json",
+      "bytes": 10065
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_10/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_10/poses.json",
+      "bytes": 9997
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_11/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_11/poses.json",
+      "bytes": 9981
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_12/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_12/poses.json",
+      "bytes": 9980
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_13/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_13/poses.json",
+      "bytes": 9979
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_14/poses.bin",
+      "bytes": 410616
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_14/poses.json",
+      "bytes": 9886
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_15/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_15/poses.json",
+      "bytes": 9980
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_16/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_16/poses.json",
+      "bytes": 10055
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_17/poses.bin",
+      "bytes": 433332
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_17/poses.json",
+      "bytes": 9969
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_18/poses.bin",
+      "bytes": 433332
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_18/poses.json",
+      "bytes": 9966
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_2/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_2/poses.json",
+      "bytes": 10067
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_3/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_3/poses.json",
+      "bytes": 10069
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_4/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_4/poses.json",
+      "bytes": 9979
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_5/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_5/poses.json",
+      "bytes": 9979
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_6/poses.bin",
+      "bytes": 478872
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_6/poses.json",
+      "bytes": 10070
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_7/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_7/poses.json",
+      "bytes": 9981
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_8/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_8/poses.json",
+      "bytes": 9985
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_9/poses.bin",
+      "bytes": 455472
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring/gear_9/poses.json",
+      "bytes": 9980
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack1/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack1/poses.json",
+      "bytes": 1022
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack2/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack2/poses.json",
+      "bytes": 1028
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack3/poses.bin",
+      "bytes": 360
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack3/poses.json",
+      "bytes": 1142
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack4/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_attack4/poses.json",
+      "bytes": 1062
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect1/poses.json",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect10/poses.bin",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect10/poses.json",
+      "bytes": 1443
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect2/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect2/poses.json",
+      "bytes": 1074
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect2_2/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect2_2/poses.json",
+      "bytes": 1120
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect3/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect3/poses.json",
+      "bytes": 1199
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect4_2/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect4_2/poses.json",
+      "bytes": 1223
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect6/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect6/poses.json",
+      "bytes": 1211
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect8_1/poses.bin",
+      "bytes": 864
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect8_1/poses.json",
+      "bytes": 1308
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect9/poses.bin",
+      "bytes": 1332
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_effect9/poses.json",
+      "bytes": 1430
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_jump_attack/poses.bin",
+      "bytes": 360
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_jump_attack/poses.json",
+      "bytes": 1081
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_run_attack/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/ring_run_attack/poses.json",
+      "bytes": 1064
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/run_attack/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/hero_picture/role_8/official_parts/run_attack/poses.json",
+      "bytes": 1017
+    },
+    {
       "path": "res://Art/level/game_4_level/imported/terrain/cloud_source_config.json",
       "bytes": 12002
     },
