@@ -74,7 +74,7 @@ def _resource_path(ext: dict[str, tuple[str, str]], ref: str) -> str:
 
 def _role_size_ok(role: str, size: int) -> bool:
     if role == "body":
-        return 12 <= size <= 20 or size in {24, 28, 32, 36, 40, 50, 76, 100}
+        return 10 <= size <= 20 or size in {24, 28, 32, 36, 40, 50, 76, 100}
     if role == "ui":
         return 14 <= size <= 24
     if role == "display":

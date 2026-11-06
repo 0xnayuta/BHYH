@@ -1,26 +1,5 @@
 {
   "schema_id": "font_role_baseline",
   "schema_version": 1,
-  "size_exceptions": {
-    "BuffIconTime": {
-      "role": "body",
-      "size": 10,
-      "reason": "存量字号偏离；迁移前保留，禁止扩散"
-    },
-    "BuffIconTimes": {
-      "role": "body",
-      "size": 10,
-      "reason": "存量字号偏离；迁移前保留，禁止扩散"
-    },
-    "SellOrEquInfo": {
-      "role": "body",
-      "size": 10,
-      "reason": "存量字号偏离；迁移前保留，禁止扩散"
-    },
-    "UseItemMaxLabel": {
-      "role": "body",
-      "size": 10,
-      "reason": "存量字号偏离；迁移前保留，禁止扩散"
-    }
-  }
+  "size_exceptions": {}
 }
