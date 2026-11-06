@@ -1270,6 +1270,12 @@ func be_hit_back(target):
 	if target == null:
 		return
 	if target is BaseHero:
+		if target.hit_dic.has("longnv_spin_direction"):
+			if float(target.hit_dic["longnv_spin_direction"]) > 0.0:
+				attack_to_left(target.hit_dic["hurtBack"])
+			else:
+				attack_to_right(target.hit_dic["hurtBack"])
+			return
 		if not get_player.player_dir:
 			attack_to_right(target.hit_dic["hurtBack"])
 		else:

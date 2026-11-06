@@ -26,6 +26,8 @@ func load_body(_name, role_id: int = 0) -> Texture2D:
 		resolved_role_id = current_role_id()
 	if resolved_role_id == 7:
 		return load("res://Art/hero_picture/role_7/preview.png") as Texture2D
+	if resolved_role_id == 8:
+		return load("res://Art/hero_picture/role_8/preview.png") as Texture2D
 	if resolved_role_id == 6:
 		var static_texture := static_preview_texture(NeZhaEquipmentVisuals.get_body_frames(str(_name)))
 		if static_texture == null:
@@ -52,6 +54,8 @@ func load_equipment(_name, role_id: int = 0) -> Texture2D:
 		resolved_role_id = current_role_id()
 	if resolved_role_id == 7:
 		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres") as Texture2D
+	if resolved_role_id == 8:
+		return load("res://Art/hero_picture/role_6/official_parts_trial/transparent.tres") as Texture2D
 	if resolved_role_id == 6:
 		var static_texture := static_preview_texture(NeZhaEquipmentVisuals.get_weapon_frames(str(_name)))
 		if static_texture == null:
@@ -74,7 +78,7 @@ func load_equipment(_name, role_id: int = 0) -> Texture2D:
 
 func current_role_id() -> int:
 	var role_id := int(PlayerData.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		return 1
 	return role_id
 

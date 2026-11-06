@@ -767,7 +767,7 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 		"res://Scene/skill/zd_skill.tscn",
 		"res://Scene/skill/bd_skill.tscn",
 	]
-	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7)
+	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 8)
 	var role_skill_icons := {
 		1: ["slz", "hytj", "lys", "lyfb", "hmz", "hmz_ws", "zz", "qsez", "jdy", "hyjj", "sx", "gsrs", "hyjj_ws"],
 		2: ["blb", "xbz", "shy", "tjgl", "smb", "sgq", "myhc", "jgz", "jhsj", "sjt", "by", "zfjg"],
@@ -776,6 +776,7 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 		5: ["xyq", "slq", "blq", "fhf", "cxq", "llrd", "lljy", "ygth", "tllz", "yyb", "ltjz"],
 		6: ["nz_jlsh", "nz_fhcc", "nz_hlqg", "nz_hlhs", "nz_lblc"],
 		7: YutuSkillData.KEYS,
+		8: LongnvSkillData.KEYS,
 	}
 	for icon_name in role_skill_icons[role_id]:
 		paths.append("res://Art/skill/skill_icon/%s.png" % icon_name)
@@ -1241,7 +1242,7 @@ func bind_archive_session() -> bool:
 		# 前置条件不满足属正常调用结果：由调用方决定提示，不产生运行期告警。
 		return false
 	var role_id := _role_visual.current_role_id()
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		return false
 	if _archive_session.matches(path, role_id):
 		return true
@@ -1338,6 +1339,8 @@ func _role_scene_path(role_id: int) -> String:
 			4: "res://Scene/hero/role_4/role_4.tscn",
 			5: "res://Scene/hero/role_5/role_5.tscn",
 			6: "res://Scene/hero/role_6/role_6.tscn",
+			7: "res://Scene/hero/role_7/role_7.tscn",
+			8: "res://Scene/hero/role_8/role_8.tscn",
 		}
 		. get(role_id, "")
 	)
@@ -1372,6 +1375,11 @@ func get_current_role_equipment_preload_paths(role_id: int = 0) -> Array[String]
 	var paths: Array[String] = []
 	if role_id == 7:
 		return ["res://Art/hero_picture/role_7/official_parts/default/parts.png"]
+	if role_id == 8:
+		return [
+			"res://Art/hero_picture/role_8/official_parts/default/parts.png",
+			"res://Art/hero_picture/role_8/official_parts/ring/default/parts.png",
+		]
 	if role_id == 6:
 		NeZhaEquipmentVisuals.get_body_frames(str(names.get("body", "Empty")))
 		NeZhaEquipmentVisuals.get_body_front_frames(str(names.get("body", "Empty")))
@@ -1897,7 +1905,9 @@ func _role_id_from_runtime_node(role: Variant) -> int:
 				return 6
 			"res://Script/hero/yutu_hero.gd":
 				return 7
-	return clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 7)
+			"res://Script/hero/longnv_hero.gd":
+				return 8
+	return clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 8)
 
 
 func _cached_scene(property_name: StringName, path: String) -> PackedScene:
@@ -2076,6 +2086,9 @@ func configure_backpack_role_preview(page: Node, player: Variant = null) -> void
 	var role_body_front := page.get_node_or_null("background/RoleBodyFront") as Sprite2D
 	if role_id == 7:
 		preload("res://Script/hero/yutu_visuals.gd").preview(role_body, role_equipment, role_body_front, 0.0)
+		return
+	if role_id == 8:
+		preload("res://Script/hero/longnv_visuals.gd").preview(role_body, role_equipment, role_body_front, 0.0)
 		return
 	if role_id == 6:
 		if role_body != null:
@@ -2941,7 +2954,8 @@ func call_hero(who: String, parent, position: Vector2, _dir: bool, player_slot: 
 		"role_4": "res://Scene/hero/role_4/role_4.tscn",
 		"role_5": "res://Scene/hero/role_5/role_5.tscn",
 		"role_6": "res://Scene/hero/role_6/role_6.tscn",
-		"role_7": "res://Scene/hero/role_7/role_7.tscn"
+		"role_7": "res://Scene/hero/role_7/role_7.tscn",
+		"role_8": "res://Scene/hero/role_8/role_8.tscn"
 	}
 	if not scene_paths.has(clean_who):
 		push_error("Unknown hero type: " + who + " (cleaned to: " + clean_who + ")")

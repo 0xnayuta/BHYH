@@ -481,6 +481,8 @@ func _on_buff_value_reduce_time_timeout() -> void:
 				if last_value > 0:
 					if buff_info["Name"] == "hanxiangzisleep":
 						get_obj.reduce_pet_hp(int(last_value), "real")
+					elif buff_info.has("longnv_bleed_source"):
+						_apply_longnv_bleed()
 					else:
 						var hurt = get_obj.get_role_last_hurt(self)
 						get_obj.hurt_reduce_hp(hurt, self)
@@ -516,6 +518,19 @@ func _on_buff_value_reduce_time_timeout() -> void:
 				var get_value_hp = abs(new_position - old_position) * last_value
 				get_obj.reduce_hp(get_value_hp)
 			old_position = get_obj.position.x
+
+
+func _apply_longnv_bleed() -> void:
+	var source: WeakRef = buff_info.get("longnv_bleed_source")
+	var hero := source.get_ref() as BaseHero if source != null else null
+	if not is_instance_valid(hero) or not get_obj is BaseMonster:
+		return
+	var enemy := get_obj as BaseMonster
+	enemy.is_crit = false
+	enemy.is_miss = false
+	enemy.hurt_reduce_hp(
+		LongnvSkillData.bleed_damage(enemy, hero, float(buff_info.get("value", LongnvSkillData.BLEED_RATIO))), self
+	)
 
 
 func _on_special_effect_add_time_timeout() -> void:

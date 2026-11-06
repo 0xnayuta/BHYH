@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RoleRuntimeResourceManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Script/data/role_runtime_resource_manifest.gd" id="1_manifest"]
+
+[resource]
+script = ExtResource("1_manifest")
+scene_paths = PackedStringArray("res://Scene/hero/role_8/role_8.tscn")
+sprite_frames_paths = PackedStringArray()
+texture_paths = PackedStringArray("res://Art/hero_picture/role_8/official_parts/default/parts.png", "res://Art/hero_picture/role_8/official_parts/ring/default/parts.png")
+audio_paths = PackedStringArray("res://Music/hero/role_8/attack1.mp3", "res://Music/hero/role_8/attack2.mp3", "res://Music/hero/role_8/attack3.mp3", "res://Music/hero/role_8/attack4.mp3", "res://Music/hero/role_8/attack5.mp3", "res://Music/hero/role_8/jump_attack.mp3", "res://Music/hero/role_8/run_attack.mp3", "res://Music/hero/role_8/effect1.mp3", "res://Music/hero/role_8/effect2_1.mp3", "res://Music/hero/role_8/effect2_2.mp3", "res://Music/hero/role_8/effect3_1.mp3", "res://Music/hero/role_8/effect3_2.mp3", "res://Music/hero/role_8/effect4_1.mp3", "res://Music/hero/role_8/effect4_2.mp3", "res://Music/hero/role_8/effect5.mp3", "res://Music/hero/role_8/effect6_1.mp3", "res://Music/hero/role_8/effect6_2.mp3", "res://Music/hero/role_8/effect7_1.mp3", "res://Music/hero/role_8/effect8.mp3", "res://Music/hero/role_8/effect9.mp3", "res://Music/hero/role_8/ring/effect10.mp3")
+conditional_scene_paths = {}
+conditional_sprite_frames_paths = {}

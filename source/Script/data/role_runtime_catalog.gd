@@ -10,6 +10,7 @@ const MANIFESTS: Dictionary[int, RoleRuntimeResourceManifest] = {
 	5: preload("res://Script/data/role_runtime/role_5_runtime.tres"),
 	6: preload("res://Script/data/role_runtime/role_6_runtime.tres"),
 	7: preload("res://Script/data/role_runtime/role_7_runtime.tres"),
+	8: preload("res://Script/data/role_runtime/role_8_runtime.tres"),
 }
 
 

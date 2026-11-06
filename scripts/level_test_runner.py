@@ -62,12 +62,14 @@ class LevelTestRunner:
         self,
         target_level: str = DEFAULT_LEVEL,
         time_scale: float = DEFAULT_TIME_SCALE,
+        role_id: int = 1,
         godot_exe: Optional[str] = None,
         project_dir: Optional[str] = None,
         instance_id: Optional[str] = None,
     ) -> None:
         self.target_level = target_level
         self.time_scale = time_scale
+        self.role_id = role_id
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -115,6 +117,7 @@ class LevelTestRunner:
 const REPORT_PATH := "res://{self.report_name}"
 const TARGET_LEVEL := "{self.target_level}"
 const TIME_SCALE := {self.time_scale}
+const ROLE_ID := {self.role_id}
 const LOAD_TIMEOUT_MS := 45000
 const LOAD_MAX_FRAMES := 20000
 const HERO_SETTLE_FRAMES := 60
@@ -159,7 +162,7 @@ func _run_all() -> void:
 	}}
 
 	# 1. 内存沙盒隔离（不落盘、不改玩家存档）
-	PlayerData.player_data["Myself"] = 1
+	PlayerData.player_data["Myself"] = ROLE_ID
 	RoleProp.baseroleprop.Level = 1
 	RoleProp.set_basic_prop()
 	RoleProp.roleprop.Hp = 999999999
@@ -183,13 +186,20 @@ func _run_all() -> void:
 	var scn: Node = loaded_scene
 	report["scene"] = String(scn.name)
 
-	# 3. 定位主角
+	# 3. 定位主角（角色 1/6/7/8 节点名不同，按 BaseHero 类型识别）
 	var hero: Node = scn.get_node_or_null("Hero/Role1")
 	if hero == null:
 		var hero_root: Node = scn.get_node_or_null("Hero")
 		if hero_root != null:
+			for candidate in hero_root.get_children():
+				if candidate is BaseHero:
+					hero = candidate
+					break
+	if hero == null:
+		var hero_root_check: Node = scn.get_node_or_null("Hero")
+		if hero_root_check != null:
 			var kids: Array = []
-			for c in hero_root.get_children():
+			for c in hero_root_check.get_children():
 				kids.append(String(c.name))
 			report["errors"].append("hero_not_found; Hero children=" + str(kids))
 		else:
@@ -645,6 +655,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="BHYH 关卡自动化极速冒烟测试夹具")
     parser.add_argument("--level", default=DEFAULT_LEVEL, help="目标测试关卡路径")
     parser.add_argument("--scale", type=float, default=DEFAULT_TIME_SCALE, help="物理加速倍率")
+    parser.add_argument("--role", type=int, default=1, choices=range(1, 9), help="测试角色 ID (1-8)")
     parser.add_argument("--godot", default=None, help="Godot 可执行文件路径（或设 GODOT_BIN）")
     parser.add_argument("--timeout", type=int, default=300, help="单次冒烟墙钟上限（秒）")
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
@@ -655,11 +666,12 @@ def main() -> int:
         runner = LevelTestRunner(
             target_level=args.level,
             time_scale=args.scale,
+            role_id=args.role,
             godot_exe=args.godot,
             instance_id=args.instance_id,
         )
         if not args.json:
-            print(f"[*] 关卡极速测试夹具就绪: {args.level} (加速: {args.scale}x)")
+            print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")
             print(f"[*] Godot: {runner.godot_exe}")
             print(f"[*] 日志监控路径: {runner.log_path}")
         report = runner.run(timeout_seconds=args.timeout)
