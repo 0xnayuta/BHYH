@@ -298,7 +298,7 @@ python scripts/theme_token_audit.py --check
 - 加载页：`LoadSceneProgress` 字号 24，填满进度条并上移 3px 居中；
 - `ui_text_punctuation_audit.py`：`--self-test` 9/9；全仓 report-only 扫描 0 残留；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
-- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 733 总变体 / 属性 1,781 / StyleBox 36 / 独立重复组 9；
+- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 733 总变体 / 属性 1,784 / StyleBox 36 / 独立重复组 10；
 - `font_role_audit --check`：733 变体 / 0 错误 / 0 条存量字号例外；
 - `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
