@@ -575,7 +575,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 ### 7.4 Theme 与 UI 样式
 
 - 唯一正式 Theme 为 `Scene/theme/bhyh_theme.tres`；旧 `Scene/back_pack/backpack_action_theme.tres` 已退役，`back_pack` 的 `Button` 与 `main_backpack` 的 `SortButton` 使用 `BackpackActionButton` 变体。
-- 静态 `.tscn` 直接 `theme_override_*` 已为 **0**；场景通过 `theme` + `theme_type_variation` 消费 Theme。最终清单：**732 个 Theme 变体 / 617 个直接使用 / 1,420 个节点引用**，1,117 个场景引用。
+- 静态 `.tscn` 直接 `theme_override_*` 已为 **0**；场景通过 `theme` + `theme_type_variation` 消费 Theme。最终清单：**733 个 Theme 变体 / 618 个直接使用 / 1,419 个节点引用**，1,116 个场景引用。
 - `hit_text` 保留 **26 条 Animation 轨道路径**作为最终例外；这些轨道按命中类型驱动颜色、描边与字号，不改为静态变体，也不扩张。
 - 脚本 `add_theme_*` 仍保留 **352 处 / 41 个文件**（含 `Scene` 脚本），无静态字面角色；只用于品质色、状态、布局与运行时动态样式，不把这些状态写回共享 Theme。
 - `project.godot` **未启用** `gui/theme/custom`。32-4 评审选择显式节点/场景绑定，避免对未覆盖控件产生隐式全局默认；启用全局 Theme 前必须补齐全 UI 回归证据。

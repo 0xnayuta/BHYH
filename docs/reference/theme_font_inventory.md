@@ -9,8 +9,8 @@
 
 | 指标 | 当前值 | 说明 |
 |:---|---:|:---|
-| Theme 变体 | 732（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel` + `SetMenuActionButtonGroup`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体；本次新增暂停菜单行距变体 |
-| Theme 属性 | 1,775（字体角色 P2.3 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
+| Theme 变体 | 733（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel` + `SetMenuActionButtonGroup` + `SkillHeaderLabel`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体；P2.6 新增 1 个技能表头字体变体 |
+| Theme 属性 | 1,781（字体角色 P2.6 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
 | Theme 子资源 | 36（27-4 后） | 27-0 为 54；27-3 后 47；27-4 跨角色合并 47→36，仍为 `StyleBoxFlat`/`StyleBoxTexture`/`StyleBoxLine`/`StyleBoxEmpty` |
 | 场景 Theme 引用 | 1,116 | `theme_override_audit` 统计 |
 | `theme_type_variation` 节点引用 | 1,419 | 617 个不同变体被场景直接引用 |
@@ -115,14 +115,14 @@
 
 ## 4. 字体资产
 
-### 4.1 Theme 字体角色（P2.5 后）
+### 4.1 Theme 字体角色（P2.6 后）
 
 | 角色 | Theme 资源 | 文件 | 有效变体 |
 |:---|:---|:---|---:|
 | `body` | 默认 `FontVariation` → `font_body` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 343 |
 | `ui` | `font_ui.tres` FontVariation | LXGW WenKai Regular → body fallback | 154 |
-| `display` | `font_display.tres` FontVariation | FZCuYuan M03 → body fallback | 98 |
-| `accent` | `font_accent.tres` FontVariation | 霞鹜文楷 Medium → `font_ui` fallback | 137 |
+| `display` | `font_display.tres` FontVariation | FZCuYuan M03 → body fallback | 104 |
+| `accent` | `font_accent.tres` FontVariation | 霞鹜文楷 Medium → `font_ui` fallback | 132 |
 
 角色选择与组件映射见 [`ui_typography_contract.md`](../standards/ui_typography_contract.md)；本节只保留当前资源事实。
 
@@ -133,6 +133,8 @@ P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / �
 **27-7 P2 结果**：`ui` 改用 Source Han Serif CN Medium，`display` 改用 Source Han Serif CN SemiBold，`accent` 改用 LXGW WenKai Medium；`FZRunYYSJW` 仅用于 LOGO/活动，不进入 Theme。华康宋体、华康海报、文征明小楷已退役；Microsoft YaHei 保留为 body fallback。字体文件 5 / 76.06 MB，Theme 属性 1,744（P2 时点；当前计数以 `theme_variant_audit` 为准）。
 
 **27-7 P2.1 结果**：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件。Theme 字体资产 4 个资源 / 4 个文件；字体总量约 78.49 MB；E1–E4 字号/角色例外已清零；`MysteryShopTitle` 采用 body 12 px 解决侧栏 14 px 溢出。
+
+**27-7 P2.6 结果**：`LearnSkillTitle`、`LearnSkillDescriptionButton`、`BdSkillTitle`、`LearnSkillButton`、`LearnSkillLevelValue` 迁 `display`；新增 `SkillHeaderLabel` 供五列表头使用，`SkillLabel` 保留给等级/描述数据。`font_role_audit` 733/0、`theme_token` 733/0、`theme_variant` 733 总变体/属性 1,781；`check_all` 9/9（34.32s）、`health_check` 5.98s / 0/0/0、`ui-factories` 31.89s、`level_1` 4 阶段 0/0/0（25.70s）；全量回归 **128/128 + 5 SKIP（565.3s）**。
 
 **27-7 P2.5 结果**：四个 FontVariation 包装统一为 `font_body.tres`、`font_ui.tres`、`font_display.tres`、`font_accent.tres`；同步 Theme ExtResource ID、角色映射、动态样本、退役清单与 token 基线。资源 UID 与实际 TTF 文件名保持不变；`font_role_audit` 732/0、`font_coverage` 4 资源/0 缺字、`theme_token` 732/0；`check_all` 9/9（35.95s）、`health_check` 5.73s / 0/0/0、`ui-theme` 7.32s、`ui-factories` 34.06s、`level_1` 4 阶段 0/0/0（27.21s）；全量回归 **128/128 + 5 SKIP（596.2s）**。
 
