@@ -44,7 +44,7 @@
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **794 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（7.0 回植复跑） |
-| `scene_probe_runner` | **7.0 全量 20 项：19 PASS，1 FAIL**；`longnv-core` PASS；`load-guard` 在清理 UI 后重载主题时报 `font_ui.tres`/`font_accent.tres` 资源错误（其检查项本身全部 PASS） |
+| `scene_probe_runner` | **7.0 全量 20 项：20 PASS**；`longnv-core` PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
 | `coop_probe_runner` | **37/37 PASS**（7.0 回植复跑，含 2P 相机/HUD/推图） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（6.9 基线；7.0 未重跑全量） |
@@ -61,7 +61,7 @@
 - **2P**：角色 8 双人关卡已验证 P1/P2 生成、镜头居中、P2 HUD 绑定、独立档案/属性/冷却、P2 技能与近战起手、P1 倒地时由 P2 推进关卡。
 - **7.0 系统修复**：等级溢出经验循环、死亡/满级升级保护、P2 八仙坠落、青龙剑乘骑/下落、哪吒技能等级上限、宋帝王双人命中数、`jgz` 伤害倍率、`skill_grid` 20 行背景等已按 7.0 语义接入。
 - **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与目标设备性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
-- **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
+- **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
@@ -92,7 +92,6 @@
 7. **命名终审**：`naming_compliance_audit.py --fail-on-error` 已通过（目录、文件、代码标识符均 **100%**）；`naming_audit.py --all` 与 `whitelist_audit.py` 通过。第三方 DragonBones 前缀已登记，私有 `Data` 别名已收敛为 `data`；该结果可作为 L3/release 命名终审证据，但不替代目标设备性能与正式发布包裁剪验证。
 8. **回植剩余边界**：6.6 `Level_65`/`Level_68` 的 BOSS 出生点已按上游移除 `ignore_count_multiplier`，`boss-multiplier` 探针覆盖 `×1`/`×5`；上游 `Monster_63-1` 无生产场景消费者，`MagicWeapon_qlsword/Official/source.json` 与 `Music/Hero/Role6/official_manifest.json` 为无运行时消费者的溯源文件，登记为非运行时、不移植。
 9. **7.0 外部服务边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入 gameplay 回植；角色 8 的训练/成就/云存档服务端闭环以外部能力为准。7.0 release PCK、全量关卡回归与目标设备性能未重跑。
-10. **场景探针边界**：7.0 全量场景探针 20 项中 19 项 PASS；`load-guard` 的检查项全部通过，但在清理 UI 后重新加载主题时出现 `font_ui.tres`/`font_accent.tres` 资源缓存重载错误，与 7.0 角色/2P 路径无直接关系，需单独立项排查资源缓存与字体重载。
 
 ---
 

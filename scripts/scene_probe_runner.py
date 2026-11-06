@@ -110,12 +110,16 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=5000,
         timeout_seconds=180,
         # 本探针故意把 load_timeout_msec 压到 0 触发加载超时并取消在途解析：
-        # 加载页按契约打印失败警告；被中断的解析器会对正在加载的场景与共享 Theme
-        # 报空消息 Parse Error / Failed loading resource，均在 expected_noise 中逐条登记。
+        # 加载页按契约打印失败警告；被中断的解析器会对正在加载的场景、共享 Theme
+        # 及其字体依赖报空消息 Parse Error / Failed loading resource，均在 expected_noise 中逐条登记。
         expected_noise=(
             "scene load failed: ",
             " - Parse Error: .",
             "Failed loading resource: res://Scene/theme/bhyh_theme.tres",
+            "Failed loading resource: res://Scene/theme/font_ui.tres",
+            "Failed loading resource: res://Scene/theme/font_accent.tres",
+            "Failed loading resource: res://Scene/theme/font_body.tres",
+            "Failed loading resource: res://Scene/theme/font_display.tres",
             "Failed loading resource: res://Scene/base/base_through_level.tscn",
             "Failed loading resource: res://Scene/level/level_3.tscn",
         ),
