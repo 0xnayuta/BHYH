@@ -134,6 +134,8 @@ P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / �
 
 **27-7 P2.1 结果**：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件。Theme 字体资产 4 个资源 / 4 个文件；字体总量约 78.49 MB；E1–E4 字号/角色例外已清零；`MysteryShopTitle` 采用 body 12 px 解决侧栏 14 px 溢出。
 
+**27-7 P2.4 结果**：确认四个 body 10 变体均为固定小槽位微辅助文本（Buff 倒计时/次数、格位提示、`Max` 短后缀）；规范允许 body 10–11 微辅助，`font_role_baseline` 4→0。无 Theme 运行时变化，`check_all` **9/9（40.22s）**；全量回归沿用 P2.3 的 128/128 + 5 SKIP（346.4s）。
+
 **27-7 P2.3 结果**：`AnnouncementHeading`、`EndStatsMoreInfo`、`GameNeedKnowTitle`、`LevelInfoTitle`、`SettingsTitle` 五个 36 px 标题与 `LijiText` 50 px 仪式标题迁 `display`；`font_role_baseline` 10→4，剩余 body 10 四条。`check_all` **9/9（46.72s）**；全量回归 **128/128 + 5 SKIP（346.4s）**。
 
 **27-7 P2.2 结果**：优先将 body 24/28/32/36 的功能性数字/计时/短功能标签与 display 标题/操作分流，`GameInfoTitle`、`PelletTotalValue` 及 `ChoosePlayerRoleName` 的角色归属同步收敛；`BacisInfoNumber`、`ForgeSoulLabel`、`ShopHintLabel`、`ShopPageLabel`、`UserKeyTime` 以 body 覆盖保持功能性大号。`font_role_baseline` 43→10。双档代表场景截图与几何转储、`ui-theme` 8.38s、`ui-factories` 33.54s 通过；全量回归见 `status.md`。

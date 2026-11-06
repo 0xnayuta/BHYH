@@ -299,7 +299,7 @@ python scripts/theme_token_audit.py --check
 - `ui_text_punctuation_audit.py`：`--self-test` 9/9；全仓 report-only 扫描 0 残留；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
 - `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,775 / StyleBox 36 / 独立重复组 9；
-- `font_role_audit --check`：732 变体 / 0 错误 / 4 条存量字号例外；
+- `font_role_audit --check`：732 变体 / 0 错误 / 0 条存量字号例外；
 - `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
 其余面板保持基线；27-7 已完成阶段验收与全量回归，不静默改变显示基线。
