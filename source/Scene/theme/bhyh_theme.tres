@@ -1211,7 +1211,7 @@ HcHelpTabRow/constants/separation = 30
 HcHelpTitle/base_type = &"SemanticHcHelpTitle"
 HcHelpTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 HcHelpTitle/constants/outline_size = 7
-HcHelpTitle/fonts/font = ExtResource("font_accent")
+HcHelpTitle/fonts/font = ExtResource("font_display")
 HcHelpTitle/font_sizes/font_size = 32
 
 HelpContentList/base_type = &"AnnouncementListGroup"
@@ -1465,6 +1465,7 @@ MagicHelpBody/constants/shadow_outline_size = 6
 MagicHelpBody/font_sizes/font_size = 18
 
 MagicHelpTitle/base_type = &"SemanticEndStatsMoreInfo"
+MagicHelpTitle/fonts/font = ExtResource("font_display")
 MagicHelpTitle/constants/outline_size = 8
 MagicHelpTitle/font_sizes/font_size = 28
 
@@ -1601,7 +1602,7 @@ MonsterHelpButton/base_type = &"SemanticLearnSkillButton2"
 
 MonsterHelpTitle/base_type = &"SemanticArchiveDialogTitle"
 MonsterHelpTitle/constants/outline_size = 1
-MonsterHelpTitle/fonts/font = ExtResource("font_accent")
+MonsterHelpTitle/fonts/font = ExtResource("font_display")
 
 MonsterHelpTitleLarge/base_type = &"MonsterHelpTitle"
 MonsterHelpTitleLarge/font_sizes/font_size = 28
@@ -1616,6 +1617,7 @@ MosaicHelpLine/constants/shadow_outline_size = 12
 MosaicHelpLine/font_sizes/font_size = 18
 
 MosaicHelpTitle/base_type = &"SemanticLoadSceneNotice"
+MosaicHelpTitle/fonts/font = ExtResource("font_display")
 MosaicHelpTitle/font_sizes/font_size = 32
 
 MysteryShopInfo/base_type = &"SemanticHcHelpTitle"
@@ -2447,6 +2449,7 @@ ZhenFaHelpBody/colors/font_outline_color = Color(0, 1, 1, 1)
 ZhenFaHelpBody/constants/shadow_outline_size = 9
 
 ZhenFaHelpTitle/base_type = &"SemanticBacisInfoTime2"
+ZhenFaHelpTitle/fonts/font = ExtResource("font_display")
 ZhenFaHelpTitle/colors/font_color = Color(0, 0, 0, 1)
 ZhenFaHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
 ZhenFaHelpTitle/constants/shadow_offset_x = 0
