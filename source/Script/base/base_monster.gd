@@ -2717,7 +2717,7 @@ func check_add_buff():
 					is_jgz = true
 					not_jgz = false
 					var skill_level = buff_info.get("value", 1)
-					jgz_bl = 1.2 + (skill_level - 1) * 0.1
+					jgz_bl = float(buff_info.get("damage_multiplier", 1.2 + (skill_level - 1) * 0.1))
 				"lljybuff":
 					islljy = true
 					not_lljy = false

@@ -16,6 +16,7 @@ const XIANYU_WING_PATHS := {
 	4: "res://Art/hero_picture/wings/xyzy/role4.tres",
 	5: "res://Art/hero_picture/wings/xyzy/role5.tres",
 	6: "res://Art/hero_picture/wings/xyzy/role6.tres",
+	8: "res://Art/hero_picture/wings/xyzy/role6.tres",
 }
 const ROLE_SCRIPT_IDS := {
 	"res://Script/hero/role1.gd": 1,
@@ -24,6 +25,7 @@ const ROLE_SCRIPT_IDS := {
 	"res://Script/hero/role_4.gd": 4,
 	"res://Script/hero/role_5.gd": 5,
 	"res://Script/hero/ne_zha_hero.gd": 6,
+	"res://Script/hero/longnv_hero.gd": 8,
 }
 
 
@@ -50,6 +52,11 @@ func _process(_delta: float) -> void:
 
 
 func _apply_preview_transform() -> void:
+	if int(PlayerData.player_data.get("Myself", 1)) == 8:
+		var body := get_node_or_null("../RoleBody") as Sprite2D
+		if body != null and body.get_script() == preload("res://Script/hero/longnv_official_parts.gd"):
+			position = body.position + body.offset + Vector2(0, 188) + NeZhaHero.WINGS_BASE_POSITION
+			rotation = 0.0
 	flip_h = animation == &"xyzy" or animation == &"hhyq"
 	z_index = 0
 	match animation:
@@ -113,7 +120,9 @@ func _ensure_huahao_wing_animation() -> void:
 func _get_role_frames() -> SpriteFrames:
 	var backpack_root := get_parent().get_parent()
 	var player = backpack_root.get("Player") if backpack_root != null else null
-	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 6)
+	var role_id := int(PlayerData.player_data.get("Myself", 1))
+	if not XIANYU_WING_PATHS.has(role_id):
+		role_id = clampi(role_id, 1, 6)
 	if player != null:
 		var role_script := player.get_script() as Script
 		if role_script != null:

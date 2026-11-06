@@ -234,8 +234,16 @@ static func effect_banks(index: int) -> Array[String]:
 	return banks
 
 
+static func _coop() -> Node:
+	var loop := Engine.get_main_loop()
+	if loop is SceneTree:
+		return (loop as SceneTree).root.get_node_or_null("LocalCoop")
+	return null
+
+
 static func bleed_damage(enemy: BaseMonster, caster: BaseHero, ratio: float = BLEED_RATIO) -> int:
-	var caster_props := LocalCoop.props_for(caster) as BaseRoleProperties
+	var coop := _coop()
+	var caster_props := coop.props_for(caster) as BaseRoleProperties if coop != null else null
 	var source_props: BaseRoleProperties = caster_props if caster_props != null else RoleProp
 	var defense := maxf(0.0, float(enemy.mdef) - float(source_props.roleprop.get("sp", 0)))
 	if enemy.is_defe_reduce:

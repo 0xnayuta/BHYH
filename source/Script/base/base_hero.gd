@@ -17,6 +17,7 @@ const XIANYU_WING_PATHS := {
 	"res://Script/hero/role_4.gd": "res://Art/hero_picture/wings/xyzy/role4.tres",
 	"res://Script/hero/role_5.gd": "res://Art/hero_picture/wings/xyzy/role5.tres",
 	"res://Script/hero/ne_zha_hero.gd": "res://Art/hero_picture/wings/xyzy/role6.tres",
+	"res://Script/hero/longnv_hero.gd": "res://Art/hero_picture/wings/xyzy/role6.tres",
 }
 const HUAHAO_WING_FRAME_DIR := "res://Art/hero_picture/wings/hhyq"
 var zlwsz_shenqi_timer: Timer
@@ -787,6 +788,14 @@ func _physics_process(delta: float) -> void:
 
 	if int(get_meta("coop_slot", 1)) == 1:
 		Global.get_run_context().set_player_direction(player_dir)
+	if (
+		magic_weapon_target != null
+		and magic_weapon_target.has_method("is_floor_active")
+		and bool(magic_weapon_target.call("is_floor_active"))
+	):
+		var floor_instance = magic_weapon_target.get("floor_instance")
+		if floor_instance != null and floor_instance.has_method("prepare_player_motion"):
+			floor_instance.call("prepare_player_motion", delta)
 	move_and_slide()
 
 
@@ -1412,7 +1421,14 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 				if not get_parent().get_parent() is Level17 and not get_parent().get_parent() is Level22:
 					cure_hp(RoleProp.roleprop.power * (0.5 + cur_level * 0.03))
 
-	if self is Role1Hero or self is Role2Hero or self is Role4Hero or self is NeZhaHero or self is YutuHero:
+	if (
+		self is Role1Hero
+		or self is Role2Hero
+		or self is Role4Hero
+		or self is NeZhaHero
+		or self is YutuHero
+		or self is LongnvHero
+	):
 		if is_miss or RoleProp.is_ws_state or super_armor_active or need_protect or is_knockback_immune():
 			is_be_attacking = false
 		else:
@@ -3753,7 +3769,14 @@ func set_wings_offset():
 	var special_wing_position := Vector2(41, -4) if self is Role1Hero else _wings_base_position
 	var special_wing_offset_y := (
 		0.0
-		if self is Role1Hero or self is Role4Hero or self is Role5Hero or self is NeZhaHero or self is YutuHero
+		if (
+			self is Role1Hero
+			or self is Role4Hero
+			or self is Role5Hero
+			or self is NeZhaHero
+			or self is YutuHero
+			or self is LongnvHero
+		)
 		else -25.0
 	)
 	if current_wings_name == _last_wings_name:

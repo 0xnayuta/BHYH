@@ -143,7 +143,7 @@ func _create_formula_overlay() -> void:
 	header.custom_minimum_size.y = 42.0
 	body.add_child(header)
 
-	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 6)
+	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 8)
 	var heading := Label.new()
 	heading.text = SKILL_FORMULA_DATA.get_role_name(role_id) + "技能伤害公式"
 	heading.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

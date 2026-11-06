@@ -157,13 +157,15 @@ func get_nearest_monster_target_position(origin: Vector2) -> Vector2:
 	var nearest_position := Vector2.ZERO
 	if is_instance_valid(source_player) and source_player is Node2D:
 		nearest_position = (source_player as Node2D).global_position
+		if source_player.has_method("is_monster_targetable") and not source_player.is_monster_targetable():
+			nearest_position = origin + Vector2(100000, 100000)
 	elif role_pos is Vector2:
 		nearest_position = role_pos
 	elif role_pos_x != null and role_pos_y != null:
 		nearest_position = Vector2(float(role_pos_x), float(role_pos_y))
 
 	if LocalCoop.is_enabled():
-		var hero: Node2D = LocalCoop.nearest_player(origin)
+		var hero: Node2D = LocalCoop.nearest_player(origin, true)
 		if hero != null:
 			nearest_position = hero.global_position
 	var nearest_distance := origin.distance_squared_to(nearest_position)
@@ -964,9 +966,12 @@ func up_level():
 		PlayerData.player_data.玩家等级 = baseroleprop.Level
 		PlayerData.player_data.玩家当前经验 = 0
 		return
-	if baseroleprop.exp >= baseroleprop.max_exp:
-		if baseroleprop.Level < int(PlayerData.PLAYER_MAX_LEVEL):
-			cure_level()
+	while (
+		baseroleprop.max_exp > 0
+		and baseroleprop.exp >= baseroleprop.max_exp
+		and baseroleprop.Level < int(PlayerData.PLAYER_MAX_LEVEL)
+	):
+		cure_level()
 
 
 func get_equ_properies():
@@ -1418,6 +1423,7 @@ func cure_exp(Exp: int):
 		return
 	RoleProp.baseroleprop.exp += Exp
 	PlayerData.player_data.玩家当前经验 = RoleProp.baseroleprop.exp
+	up_level()
 
 
 func cure_level():
@@ -1427,9 +1433,16 @@ func cure_level():
 		PlayerData.player_data.玩家等级 = baseroleprop.Level
 		PlayerData.player_data.玩家当前经验 = 0
 		return
+	var keep_dead: bool = roleprop.Hp <= 0 or (is_instance_valid(source_player) and source_player.is_death)
+	var previous_mp: float = roleprop.Mp
+	baseroleprop.exp = maxi(0, int(baseroleprop.exp) - int(baseroleprop.max_exp))
 	baseroleprop.Level = mini(baseroleprop.Level + 1, int(PlayerData.PLAYER_MAX_LEVEL))
 	PlayerData.player_data.玩家等级 = baseroleprop.Level
-	baseroleprop.exp = 0
-	PlayerData.player_data.玩家当前经验 = 0
-	MemoryClass.request_save("level_up")
+	if baseroleprop.Level >= int(PlayerData.PLAYER_MAX_LEVEL):
+		baseroleprop.exp = 0
+	PlayerData.player_data.玩家当前经验 = baseroleprop.exp
 	set_basic_prop()
+	if keep_dead:
+		roleprop.Hp = 0
+		roleprop.Mp = previous_mp
+	MemoryClass.request_save("level_up")

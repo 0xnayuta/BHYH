@@ -410,7 +410,7 @@ func _resolve_equipment_animation(frames: SpriteFrames, animation_name: StringNa
 	return &"wait"
 
 
-func _add_wings_animation_tracks(animation: Animation, animation_name: StringName) -> void:
+static func _add_wings_animation_tracks(animation: Animation, animation_name: StringName) -> void:
 	var wing_position := WINGS_BASE_POSITION
 	var wing_rotation := WINGS_BASE_ROTATION
 	match animation_name:
@@ -472,7 +472,7 @@ func _hit_data(attack: float, multiplier: float, flat_damage: float, knockback: 
 func _skill_hit_data(
 	attack: float, base_multiplier: float, level_multiplier: float, skill_index: int, knockback: Vector2
 ) -> Dictionary:
-	var level := clampi(int(get_skill_level(skill_index)), 1, 20)
+	var level := clampi(int(get_skill_level(skill_index)), 1, 30)
 	return _hit_data(attack, base_multiplier + level_multiplier * level, 0.0, knockback)
 
 
@@ -959,7 +959,7 @@ func _update_lotus_awaken_bonuses(awakened: bool) -> void:
 		_lotus_base_power = current_power
 		_lotus_awaken_stats_initialized = true
 	var charge := float(_lotus_charge) if awakened else 0.0
-	var lotus_skill_level := float(clampi(int(get_skill_level(4)), 1, 20))
+	var lotus_skill_level := float(clampi(int(get_skill_level(4)), 1, 30))
 	RoleProp.roleprop.power = int(round(_lotus_base_power * (1.0 + charge * lotus_skill_level * 0.01)))
 	_lotus_last_power = float(RoleProp.roleprop.power)
 

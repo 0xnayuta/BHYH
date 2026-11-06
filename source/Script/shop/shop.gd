@@ -459,6 +459,8 @@ func set_role_name():
 			role.text = "角色：哪吒"
 		7:
 			role.text = "角色：玉兔"
+		8:
+			role.text = "角色：小龙女"
 
 
 func _on_last_pressed() -> void:

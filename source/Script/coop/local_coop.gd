@@ -577,10 +577,16 @@ func clear_player_buffs(player: BaseHero) -> void:
 			item.queue_free()
 
 
-func nearest_player(point: Vector2) -> BaseHero:
+func nearest_player(point: Vector2, targetable_only := false) -> BaseHero:
 	var nearest: BaseHero
 	var distance := INF
 	for player: BaseHero in living_players():
+		if (
+			targetable_only
+			and player.has_method("is_monster_targetable")
+			and not bool(player.call("is_monster_targetable"))
+		):
+			continue
 		var current := point.distance_squared_to(player.global_position)
 		if current < distance:
 			distance = current

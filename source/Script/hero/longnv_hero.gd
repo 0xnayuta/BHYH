@@ -49,8 +49,13 @@ var _storm_resources_prepared := false
 var _combat_resources: Array[RefCounted] = []
 
 
+func _coop() -> Node:
+	return get_node_or_null("/root/LocalCoop")
+
+
 func _ready() -> void:
-	var data_store = LocalCoop.data_for(self)
+	var coop := _coop()
+	var data_store = coop.data_for(self) if coop != null else null
 	if data_store != null and data_store.has_method("ensure_skill_data"):
 		data_store.ensure_skill_data()
 	else:
@@ -82,7 +87,8 @@ func _ready() -> void:
 
 
 func _props() -> BaseRoleProperties:
-	var props := LocalCoop.props_for(self) as BaseRoleProperties
+	var coop := _coop()
+	var props := coop.props_for(self) as BaseRoleProperties if coop != null else null
 	return props if props != null else RoleProp
 
 
@@ -139,7 +145,8 @@ func prepare_combat_resources() -> void:
 			var path := sound_root + bank + ".mp3"
 			if ResourceLoader.exists(path):
 				Global.get_cached_audio(path)
-	var data_store = LocalCoop.data_for(self)
+	var coop := _coop()
+	var data_store = coop.data_for(self) if coop != null else null
 	var profile_data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
 	var learned: Variant = profile_data.get(DataKeys.SKILL_LEARNED, {})
 	var keymap: Dictionary = (learned as Dictionary).get(DataKeys.Skill.KEYMAP, {}) if learned is Dictionary else {}
@@ -437,7 +444,8 @@ func _launch_spinning_blade() -> void:
 
 
 func _skill_keymap_slot(slot: int) -> String:
-	var data_store = LocalCoop.data_for(self)
+	var coop := _coop()
+	var data_store = coop.data_for(self) if coop != null else null
 	var profile_data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
 	var learned: Variant = profile_data.get(DataKeys.SKILL_LEARNED, {})
 	if not learned is Dictionary:
@@ -708,7 +716,8 @@ func get_need_mp(skill_name, next_level):
 
 
 func get_skill_level(num):
-	var data_store = LocalCoop.data_for(self)
+	var coop := _coop()
+	var data_store = coop.data_for(self) if coop != null else null
 	var data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
 	var learned: Variant = data.get(DataKeys.SKILL_LEARNED, {})
 	if not learned is Dictionary:

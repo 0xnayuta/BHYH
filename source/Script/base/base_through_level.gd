@@ -972,25 +972,36 @@ func check_can_create(stage):
 	return _get_alive_stage_monster_count() < 6 * count and monster_group[stage_key].size() > 0
 
 
+func get_progression_player() -> BaseHero:
+	for player: BaseHero in [_role, role_p2]:
+		if not is_instance_valid(player) or player.is_death:
+			continue
+		var props: Node = LocalCoop.props_for(player)
+		if is_instance_valid(props) and props.roleprop.Hp > 0:
+			return player
+	return null
+
+
 func _on_create_control_timeout() -> void:
-	if _role != null:
+	var progression_player := get_progression_player()
+	if progression_player != null:
 		if not is_two_scene:
-			if _role.position.x < 1600:
+			if progression_player.position.x < 1600:
 				advance_stage(1)
-			if _role.position.x >= 1600 and _role.position.x < 2700:
+			if progression_player.position.x >= 1600 and progression_player.position.x < 2700:
 				advance_stage(2)
-			if _role.position.x >= 2700 and _role.position.x < 4000:
+			if progression_player.position.x >= 2700 and progression_player.position.x < 4000:
 				advance_stage(3)
-			if _role.position.x >= 4000:
+			if progression_player.position.x >= 4000:
 				advance_stage(4)
 		else:
-			if _role.position.x < 1000:
+			if progression_player.position.x < 1000:
 				advance_stage(1)
-			if _role.position.x >= 1300 and _role.position.x < 2700:
+			if progression_player.position.x >= 1300 and progression_player.position.x < 2700:
 				advance_stage(2)
-			if _role.position.x >= 2700 and _role.position.x < 4000:
+			if progression_player.position.x >= 2700 and progression_player.position.x < 4000:
 				advance_stage(3)
-			if _role.position.x >= 4000:
+			if progression_player.position.x >= 4000:
 				advance_stage(4)
 
 	if current_stage >= 1 and current_stage <= 4:

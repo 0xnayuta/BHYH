@@ -120,6 +120,19 @@ var _last_secret_pointer_msec := -1
 var verisions_name: String = "V6_0"
 var verisions: String = "V6.0"
 var text_data = {
+	"V7_0":
+	[
+		"",
+		"一、版本新增内容：==============================",
+		"1.添加新角色小龙女",
+		"2.修复双人模式八仙副本异常死亡",
+		"3.修复双人模式1p死亡无法继续推图",
+		"4.修复青龙剑无双和位移会掉下剑",
+		"5.修复个别副本青龙剑下不来",
+		"6.修复哪吒技能等级不生效",
+		"7.修复双人模式宋帝王属性过高",
+		"8.取消云存档挂载",
+	],
 	"V6_9":
 	[
 		"",
@@ -1530,4 +1543,10 @@ func _on_v_0_49_pressed() -> void:
 func _on_v_0_50_pressed() -> void:
 	verisions_name = "V6_9"
 	verisions = "V6.9"
+	add_text_info()
+
+
+func _on_v_0_51_pressed() -> void:
+	verisions_name = "V7_0"
+	verisions = "V7.0"
 	add_text_info()

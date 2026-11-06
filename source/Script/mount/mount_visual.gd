@@ -54,6 +54,8 @@ var _rider_body: Sprite2D
 var _rider_body_front: Sprite2D
 var _rider_pose_source := ""
 var _official_rider: Node2D
+var _longnv_rider: Sprite2D
+var _longnv_ride_action := "ride"
 var _official_rider_data: RefCounted
 var _official_weapon_data: RefCounted
 var _registration_anchor := Vector2.ZERO
@@ -387,6 +389,22 @@ func _ensure_sprites() -> void:
 	add_child(_bone_front)
 
 
+func set_longnv_rider(body_id: String, weapon_id: String, ride_action := "ride") -> void:
+	if not is_instance_valid(_longnv_rider):
+		clear_rider_pose()
+		_official_rider = Node2D.new()
+		_rider.add_child(_official_rider)
+		_longnv_rider = Sprite2D.new()
+		_longnv_rider.set_script(preload("res://Script/hero/longnv_official_parts.gd"))
+		_longnv_rider.offset = Vector2(0, -188)
+		_official_rider.add_child(_longnv_rider)
+		_longnv_rider.call("load_set", "default")
+	_longnv_ride_action = ride_action
+	if _longnv_rider.get("body_equipment") != body_id or _longnv_rider.get("weapon_equipment") != weapon_id:
+		_longnv_rider.call("set_equipment", body_id, weapon_id)
+	_apply_rider_frame()
+
+
 func set_official_rider(body: RefCounted, weapon: RefCounted) -> void:
 	_ensure_sprites()
 	if (
@@ -460,6 +478,7 @@ func _clear_official_rider() -> void:
 	if is_instance_valid(_official_rider):
 		_official_rider.free()
 	_official_rider = null
+	_longnv_rider = null
 	_official_rider_data = null
 	_official_weapon_data = null
 
@@ -555,6 +574,8 @@ func _apply_frame() -> void:
 
 
 func _apply_official_rider_frame() -> void:
+	if is_instance_valid(_longnv_rider):
+		_longnv_rider.call("set_time", _longnv_ride_action, _elapsed)
 	if _animation_view != null:
 		if not _animation_view.animation_has_official_ride(frame_index):
 			_rider.visible = false

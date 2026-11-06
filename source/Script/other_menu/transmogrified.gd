@@ -517,6 +517,7 @@ var role_item_list = {
 		"ygwqnz"
 	],
 	"玉兔": preload("res://Script/data/yutu_equipment_data.gd").item_ids(),
+	"小龙女": preload("res://Script/data/longnv_equipment_data.gd").item_ids(),
 	"翅膀": ["xqzy", "bszy", "jmzy", "xtzy", "ttzy", "xmzy", "ryzy", "wyzy", "xyzy", "hhyq"],
 	"头衔":
 	[
@@ -566,6 +567,8 @@ func push_eq_to_list():
 			list = role_item_list["哪吒"]
 		7:
 			list = role_item_list["玉兔"].duplicate()
+		8:
+			list = role_item_list["小龙女"].duplicate()
 	for i in role_item_list[DataKeys.WINGS]:
 		list.push_back(i)
 	for i in role_item_list[DataKeys.TITLE]:
@@ -607,6 +610,9 @@ func get_current_role_list():
 		7:
 			role.text = "玉兔"
 			other_list.append_array(role_item_list["玉兔"])
+		8:
+			role.text = "小龙女"
+			other_list.append_array(role_item_list["小龙女"])
 	for index in range(other_list.size() - 1, -1, -1):
 		if not _is_transmog_item_visible(str(other_list[index])):
 			other_list.remove_at(index)
@@ -776,6 +782,12 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if player_id == 8:
+		role.text = "小龙女"
+		_nezha_preview_elapsed += _delta
+		preload("res://Script/hero/longnv_visuals.gd").preview(
+			role_body, role_equipment, role_body_front, _nezha_preview_elapsed, -115.0
+		)
 	if player_id == 7:
 		role.text = "玉兔"
 		_nezha_preview_elapsed += _delta
@@ -907,6 +919,8 @@ func _set_special_preview_tracks(disabled: bool) -> void:
 
 func change_body(_name):
 	preload("res://Script/hero/moon_palace_clothes_effect.gd").sync(role_body, str(_name))
+	if player_id == 8:
+		return
 	if player_id == 6:
 		_nezha_body_id = str(_name)
 		return
@@ -914,6 +928,8 @@ func change_body(_name):
 
 
 func change_eq(_name):
+	if player_id == 8:
+		return
 	if player_id == 6:
 		_nezha_weapon_id = str(_name)
 		return

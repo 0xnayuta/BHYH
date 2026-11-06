@@ -413,8 +413,10 @@ func _handle_boss_death() -> void:
 
 
 func _on_fall_death_body_entered(body: Node2D) -> void:
-	if (body == _role or body is BaseHero) and RoleProp.roleprop != null:
-		RoleProp.roleprop.Hp = 0
+	if body is BaseHero:
+		var props: Node = LocalCoop.props_for(body)
+		if is_instance_valid(props) and props.roleprop != null:
+			props.roleprop.Hp = 0
 	elif body is BaseMonster and is_instance_valid(body):
 		(body as BaseMonster).hp = 0
 

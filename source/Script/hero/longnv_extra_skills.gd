@@ -88,7 +88,7 @@ func start(index: int, level: int) -> void:
 	fired = 0
 	visual_start = 0.0
 	swept_position = hero.global_position
-	cast_power = float(LocalCoop.props_for(hero).roleprop.power)
+	cast_power = float(hero.call("_props").roleprop.power)
 	match index:
 		5:
 			stealth_left = 10.0

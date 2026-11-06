@@ -600,6 +600,13 @@ func _refresh_rider_pose() -> void:
 	if role_id <= 0 or _current_mount_id == "":
 		mount_visual.clear_rider_pose()
 		return
+	if role_id == 8:
+		mount_visual.set_longnv_rider(
+			str(hero.role_body.body_equipment),
+			str(hero.role_body.weapon_equipment),
+			"ride1" if flying_form or _current_mount_id in FLYING_MOUNT_IDS else "ride"
+		)
+		return
 	if role_id == 7:
 		_refresh_yutu_official_rider(role_id)
 		return
@@ -683,6 +690,8 @@ func _get_rider_role_id() -> int:
 		return 6
 	if hero is YutuHero:
 		return 7
+	if hero is LongnvHero:
+		return 8
 	return 0
 
 

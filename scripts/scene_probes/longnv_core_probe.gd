@@ -91,6 +91,40 @@ func _run() -> void:
 	)
 	_checks["backpack_preview_visible"] = preview_body.visible and not preview_equipment.visible
 	preview_page.free()
+	PlayerData.player_data[DataKeys.TRANSMOG_LIST] = {
+		DataKeys.WEAPON: "4820101",
+		DataKeys.ARMOR: "4820103",
+		DataKeys.WINGS: "hhyq",
+		DataKeys.TITLE: "",
+	}
+	var transmog = load("res://Scene/other_scene/transmogrified.tscn").instantiate()
+	add_child(transmog)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	var role8_items: Array = transmog.call("get_current_role_list")
+	_checks["transmog_role8_items"] = role8_items.has("4820101") and role8_items.has("4820103")
+	_checks["transmog_role8_body"] = (
+		str(transmog.role_body.get("body_equipment")) == "4820103"
+		and transmog.role_body.get_script() != null
+		and transmog.role_body.get_script().resource_path == "res://Script/hero/longnv_official_parts.gd"
+	)
+	_checks["transmog_wings_hhyq"] = (
+		transmog.wings.sprite_frames != null
+		and transmog.wings.sprite_frames.has_animation("hhyq")
+		and transmog.wings.visible
+	)
+	transmog.queue_free()
+	var mount_visual = load("res://Script/mount/mount_visual.gd").new()
+	add_child(mount_visual)
+	await get_tree().process_frame
+	mount_visual.call("set_longnv_rider", "4820103", "4820101", "ride")
+	var longnv_rider = mount_visual.get("_longnv_rider")
+	_checks["mount_longnv_rider"] = (
+		longnv_rider != null
+		and str(longnv_rider.get("body_equipment")) == "4820103"
+		and str(longnv_rider.get("weapon_equipment")) == "4820101"
+	)
+	mount_visual.queue_free()
 	var hero_props = hero.call("_props")
 	hero_props.roleprop.Mp = 999999
 	hero_props.roleprop.SMp = 999999
@@ -152,6 +186,81 @@ func _run() -> void:
 			)
 		p2.call("_finish_action")
 		p2.queue_free()
+	LocalCoop.clear_runtime()
+
+	hero.queue_free()
+	await get_tree().process_frame
+	LocalCoop.create_secondary(8)
+	var p2_data = LocalCoop.data_for_slot(2)
+	p2_data.ensure_skill_data()
+	for skill_index in range(1, 21):
+		var p2_entry: Dictionary = p2_data.player_data[DataKeys.SKILL_LEARNED]["技能" + str(skill_index)]
+		p2_entry[DataKeys.LEVEL] = 1
+		p2_entry["学习"] = 1
+	var previous_scene: Node = get_tree().current_scene
+	var level = load("res://Scene/level/level_1.tscn").instantiate()
+	get_tree().root.add_child(level)
+	get_tree().current_scene = level
+	LocalCoop._on_scene_changed()
+	await get_tree().create_timer(1.2).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var level_p1 = level.get("_role")
+	var level_p2 = level.get("role_p2")
+	_checks["level_p1_role8"] = level_p1 is LongnvHero
+	_checks["level_p2_role8"] = level_p2 is LongnvHero
+	if level_p1 != null and level_p2 != null:
+		_checks["level_profiles_isolated"] = level_p1.PlayerData != level_p2.PlayerData
+		_checks["level_props_isolated"] = level_p1.RoleProp != level_p2.RoleProp
+		_checks["level_p2_slot"] = int(level_p2.get_meta("coop_slot", 0)) == 2
+		var p1_props = level_p1.RoleProp
+		var p2_props = level_p2.RoleProp
+		p1_props.roleprop.Mp = 999999
+		p2_props.roleprop.Mp = 999999
+		level_p1.role1_skill_inter["xln_lz"] = 0.0
+		level_p2.role1_skill_inter["xln_lz"] = 0.0
+		level_p1.call("get_skill", "xln_lz")
+		await get_tree().physics_frame
+		_checks["level_p1_skill"] = bool(level_p1.get("_active"))
+		level_p1.call("_finish_action")
+		level_p2.call("get_skill", "xln_lz")
+		await get_tree().physics_frame
+		_checks["level_p2_skill"] = bool(level_p2.get("_active"))
+		_checks["level_cooldowns_isolated"] = (
+			float(level_p1.role1_skill_inter.get("xln_lz", 0.0)) > 0.0
+			and float(level_p2.role1_skill_inter.get("xln_lz", 0.0)) > 0.0
+		)
+		level_p2.call("_finish_action")
+		level_p2.set("is_using_skills", false)
+		level_p2.set("is_attacking", false)
+		level_p2.call("_start_melee", "hit1")
+		await get_tree().physics_frame
+		_checks["level_p2_melee"] = bool(level_p2.get("_active"))
+		level_p2.call("_finish_action")
+		level_p1.RoleProp.roleprop.Hp = 0
+		level_p2.RoleProp.roleprop.Hp = maxf(1.0, level_p2.RoleProp.roleprop.Hp)
+		_checks["level_progression_uses_p2"] = level.call("get_progression_player") == level_p2
+	var level_camera = level.get("my_camera")
+	if level_camera != null and level_p1 != null and level_p2 != null:
+		level_camera.call("_center_on_living_players")
+		var expected_center: Vector2 = (level_p1.global_position + level_p2.global_position) * 0.5
+		_checks["level_camera_centers"] = (
+			level_camera.global_position.distance_to(expected_center) < 4.0
+		)
+	else:
+		_checks["level_camera_centers"] = false
+	var level_information = level.get("role_information")
+	if level_information != null:
+		level_information.reveal_after_scene_loaded()
+		_checks["level_p2_hud"] = level_information.role_p2 != null
+		if level_information.role_p2 != null:
+			_checks["level_p2_hud_binding"] = level_information.role_p2.player == level_p2
+	else:
+		_checks["level_p2_hud"] = false
+	level.queue_free()
+	await get_tree().process_frame
+	get_tree().current_scene = previous_scene
 	LocalCoop.clear_runtime()
 
 	for check_name in _checks:

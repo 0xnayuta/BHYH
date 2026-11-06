@@ -18,6 +18,9 @@ var _source_elapsed := 0.0
 var _x_tween: Tween
 var _y_tween: Tween
 var _entry_tween: Tween
+var _riding := false
+var _dropping := false
+var _drop_platforms: Array[PhysicsBody2D] = []
 
 
 static func get_source_origin(hero: BaseHero) -> Vector2:
@@ -47,6 +50,10 @@ func _physics_process(delta: float) -> void:
 		if remaining_time <= 0.0:
 			queue_free()
 			return
+	_update_rider()
+	if _riding:
+		prepare_player_motion(delta)
+		return
 	_source_elapsed += delta
 	while _source_elapsed >= 1.0 / SOURCE_FPS:
 		_source_elapsed -= 1.0 / SOURCE_FPS
@@ -55,6 +62,87 @@ func _physics_process(delta: float) -> void:
 	var origin := get_source_origin(player)
 	if player.velocity.y >= 0.0 and absf(origin.x - global_position.x) <= 65.0:
 		global_position.y = maxf(global_position.y, origin.y + SOURCE_OFFSET_Y)
+
+
+func _update_rider() -> void:
+	if _dropping:
+		_ignore_contact_swords()
+		var feet_y := get_source_origin(player).y + 60.0
+		if not player.PlayerInput.is_action_pressed("down") and (_is_on_terrain() or feet_y < global_position.y - 12.0):
+			_restore_drop_collisions()
+			_dropping = false
+		return
+	for index in player.get_slide_collision_count():
+		var contact := player.get_slide_collision(index)
+		if contact.get_collider() == self and contact.get_normal().y < -0.5:
+			_riding = true
+			break
+	if (
+		_riding
+		and player.PlayerInput.is_action_pressed("down")
+		and not player.is_using_skills
+		and not player.is_attacking
+	):
+		_dropping = true
+		_riding = false
+		_stop_follow_tweens()
+		_ignore_drop_platform(self)
+		_ignore_contact_swords()
+	elif player.velocity.y < -1.0:
+		_riding = false
+
+
+func _is_on_terrain() -> bool:
+	if not player.is_on_floor():
+		return false
+	for index in player.get_slide_collision_count():
+		var contact := player.get_slide_collision(index)
+		if not contact.get_collider() is QinglongSwordPlatform and contact.get_normal().y < -0.5:
+			return true
+	return false
+
+
+func _ignore_contact_swords() -> void:
+	for index in player.get_slide_collision_count():
+		var collider := player.get_slide_collision(index).get_collider()
+		if collider is QinglongSwordPlatform:
+			_ignore_drop_platform(collider)
+
+
+func _ignore_drop_platform(platform: PhysicsBody2D) -> void:
+	if platform not in _drop_platforms:
+		player.add_collision_exception_with(platform)
+		_drop_platforms.append(platform)
+
+
+func _restore_drop_collisions() -> void:
+	if is_instance_valid(player):
+		for platform in _drop_platforms:
+			if is_instance_valid(platform):
+				player.remove_collision_exception_with(platform)
+	_drop_platforms.clear()
+
+
+func prepare_player_motion(delta: float) -> void:
+	if not _riding or _dropping:
+		return
+	if player.velocity.y < -1.0:
+		_riding = false
+		return
+	_stop_follow_tweens()
+	var origin := get_source_origin(player)
+	global_position.x = origin.x + player.velocity.x * delta
+	var target_y := origin.y + SOURCE_OFFSET_Y
+	if absf(target_y - global_position.y) > 2.0:
+		global_position.y = target_y
+	sword.flip_h = player.player_dir
+	sword.position.x = -2.75 if sword.flip_h else 2.75
+
+
+func _stop_follow_tweens() -> void:
+	for tween in [_x_tween, _y_tween]:
+		if tween != null and tween.is_valid():
+			tween.kill()
 
 
 func _step_source() -> void:
@@ -80,6 +168,7 @@ func _follow_axis(property: NodePath, target: float, time: float) -> Tween:
 
 
 func _exit_tree() -> void:
+	_restore_drop_collisions()
 	for tween in [_x_tween, _y_tween, _entry_tween]:
 		if tween != null and tween.is_valid():
 			tween.kill()

@@ -42,6 +42,10 @@ func _equipped_name(slot_name: String) -> String:
 
 func _process(delta: float) -> void:
 	var clothes_effect := preload("res://Script/hero/moon_palace_clothes_effect.gd")
+	if int(PlayerData.player_data.get("Myself", 1)) == 8:
+		_elapsed += delta
+		preload("res://Script/hero/longnv_visuals.gd").preview(role_body, role_equipment, role_body_front, _elapsed)
+		return
 	if int(PlayerData.player_data.get("Myself", 1)) == 7:
 		_elapsed += delta
 		preload("res://Script/hero/yutu_visuals.gd").preview(role_body, role_equipment, role_body_front, _elapsed)

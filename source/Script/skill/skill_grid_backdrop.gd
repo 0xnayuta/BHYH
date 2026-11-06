@@ -45,5 +45,5 @@ func _get_row_count() -> int:
 		if skill_list is Dictionary:
 			var role_skills = skill_list.get(skill_page.get_role_key(), [])
 			if role_skills is Array:
-				return clampi(role_skills.size(), 1, MAX_ROW_COUNT)
+				return maxi(1, role_skills.size())
 	return MAX_ROW_COUNT
