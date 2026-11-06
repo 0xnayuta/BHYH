@@ -10,9 +10,9 @@ extends CanvasLayer
 @onready var info: Label = $FitRoot/InfoPanel/Info
 @onready var start_button: TextureButton = $FitRoot/qued
 
-var role_name_list := ["孙悟空", "唐三藏", "猪八戒", "沙悟净", "小白龙", "哪吒", "玉兔"]
-var property_list := ["火", "水", "土", "木", "金", "火", "木"]
-var color_list := ["ff4c30", "02ffff", "d27c21", "27d957", "ffff55", "ff6a32", "bda0ff"]
+var role_name_list := ["孙悟空", "唐三藏", "猪八戒", "沙悟净", "小白龙", "哪吒", "玉兔", "小龙女"]
+var property_list := ["火", "水", "土", "木", "金", "火", "木", "水"]
+var color_list := ["ff4c30", "02ffff", "d27c21", "27d957", "ffff55", "ff6a32", "bda0ff", "70d9ff"]
 var role_info := [
 	"齐天大圣孙悟空，机敏聪慧，胆识过人。善用棍法，灵活多变，上手简单。",
 	"金蝉转世唐三藏，佛法无边，普渡众生。擅长爆发与回复，适合稳扎稳打。",
@@ -21,12 +21,13 @@ var role_info := [
 	"玉龙三太子小白龙，智勇双全，刚正不阿。手持长枪，机制多样，操作灵活。",
 	"灵珠转世哪吒，脚踏风火轮，手持火尖枪。攻势迅捷，擅长持续追击与多段攻击。",
 	"广寒玉兔，双刀映月。药毒与月刃十式兼修，灵巧迅捷。",
+	"暗影小龙女，双刃随身，迅捷灵动。擅长近身连斩、腾空挑击与突袭。",
 ]
-var role_id_to_index := {"swk": 1, "tsz": 2, "zbj": 3, "swj": 4, "xbl": 5, "nz": 6, "yt": 7}
-var shengcun_star := [0, 4, 3, 4, 4, 3, 3, 3]
-var gongji_star := [0, 3, 5, 2, 4, 3, 5, 4]
-var minjie_star := [0, 5, 3, 4, 3, 4, 5, 5]
-var caozuo_star := [0, 3, 4, 3, 4, 5, 4, 4]
+var role_id_to_index := {"swk": 1, "tsz": 2, "zbj": 3, "swj": 4, "xbl": 5, "nz": 6, "yt": 7, "xln": 8}
+var shengcun_star := [0, 4, 3, 4, 4, 3, 3, 3, 3]
+var gongji_star := [0, 3, 5, 2, 4, 3, 5, 4, 4]
+var minjie_star := [0, 5, 3, 4, 3, 4, 5, 5, 5]
+var caozuo_star := [0, 3, 4, 3, 4, 5, 4, 4, 4]
 var current_choose: int = 0
 var selected_roles: Array[int] = [0, 0]
 var selecting_slot := 1
@@ -41,6 +42,7 @@ var role_card_normal := [
 	preload("res://Art/main_game/choose_player_zm4/60.png"),
 	preload("res://Art/main_game/choose_player_zm4/nezha_normal.png"),
 	preload("res://Art/main_game/choose_player_zm4/yutu_normal.png"),
+	preload("res://Art/main_game/choose_player_zm4/longnv_normal.png"),
 ]
 var role_card_hover := [
 	preload("res://Art/main_game/choose_player_zm4/25.png"),
@@ -50,6 +52,7 @@ var role_card_hover := [
 	preload("res://Art/main_game/choose_player_zm4/65.png"),
 	preload("res://Art/main_game/choose_player_zm4/nezha_hover.png"),
 	preload("res://Art/main_game/choose_player_zm4/yutu_hover.png"),
+	preload("res://Art/main_game/choose_player_zm4/longnv_hover.png"),
 ]
 var role_card_selected := [
 	preload("res://Art/main_game/choose_player_zm4/27.png"),
@@ -59,6 +62,7 @@ var role_card_selected := [
 	preload("res://Art/main_game/choose_player_zm4/67.png"),
 	preload("res://Art/main_game/choose_player_zm4/nezha_selected.png"),
 	preload("res://Art/main_game/choose_player_zm4/yutu_selected.png"),
+	preload("res://Art/main_game/choose_player_zm4/longnv_selected.png"),
 ]
 var start_button_normal := preload("res://Art/main_game/choose_player_zm4/90.png")
 var start_button_hover := preload("res://Art/main_game/choose_player_zm4/92.png")
@@ -68,10 +72,16 @@ var selected_player_icon := TextureRect.new()
 
 
 func _fit_choose_player_to_viewport() -> void:
-	var design_size := Vector2(940, 590)
+	var design_size := Vector2(1070, 590)
 	var viewport_size = get_viewport().get_visible_rect().size
 	var fit_scale = min(viewport_size.x / design_size.x, viewport_size.y / design_size.y)
 	var fit_root := $FitRoot as Control
+	fit_root.size = design_size
+	var bg := fit_root.get_node_or_null("Bg") as TextureRect
+	if bg != null:
+		bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg.stretch_mode = TextureRect.STRETCH_SCALE
+	start_button.position.x = (design_size.x - start_button.size.x) * 0.5
 	fit_root.scale = Vector2(fit_scale, fit_scale)
 	fit_root.position = (viewport_size - design_size * fit_scale) * 0.5
 
@@ -99,6 +109,21 @@ func _ready() -> void:
 	yutu_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	yutu_text.hide()
 	$FitRoot/HoverIcons.add_child(yutu_text)
+	var longnv := TextureButton.new()
+	longnv.name = "Role8"
+	longnv.ignore_texture_size = true
+	longnv.stretch_mode = TextureButton.STRETCH_KEEP
+	longnv.pressed.connect(_on_role_card_pressed.bind(8))
+	longnv.mouse_entered.connect(_on_role_card_mouse_entered.bind(8))
+	longnv.mouse_exited.connect(_on_role_card_mouse_exited.bind(8))
+	role_cards.add_child(longnv)
+	var longnv_text := TextureRect.new()
+	longnv_text.name = "Hover8"
+	longnv_text.texture = preload("res://Art/main_game/choose_player_zm4/longnv_hover_text.png")
+	longnv_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	longnv_text.hide()
+	$FitRoot/HoverIcons.add_child(longnv_text)
+	role_cards.size.x = 1040
 	role_cards.add_theme_constant_override("separation", 0)
 	for card: Control in role_cards.get_children():
 		card.custom_minimum_size = Vector2(130, 530)
@@ -124,7 +149,7 @@ func _clear_role_info() -> void:
 
 
 func _refresh_role_cards() -> void:
-	for i in range(1, 8):
+	for i in range(1, 9):
 		var button := role_cards.get_node_or_null("Role" + str(i)) as TextureButton
 		if button == null:
 			continue
@@ -132,7 +157,7 @@ func _refresh_role_cards() -> void:
 		button.texture_normal = role_card_selected[i - 1] if selected else role_card_normal[i - 1]
 		button.texture_hover = role_card_selected[i - 1] if selected else role_card_hover[i - 1]
 		button.texture_pressed = role_card_selected[i - 1]
-		button.texture_disabled = role_card_normal[i - 1]
+		button.texture_disabled = role_card_selected[i - 1] if selected else role_card_normal[i - 1]
 		button.disabled = coop_enabled and selected_roles[1] > 0
 		button.modulate = Color.WHITE
 		button.scale = Vector2.ONE
@@ -141,7 +166,7 @@ func _refresh_role_cards() -> void:
 	start_button.texture_hover = start_button_hover
 	start_button.texture_pressed = start_button_pressed
 	start_button.disabled = selected_roles[0] == 0 or (coop_enabled and selected_roles[1] == 0)
-	if selected_roles[0] >= 1 and selected_roles[0] <= 7:
+	if selected_roles[0] >= 1:
 		var selected_button := role_cards.get_node_or_null("Role" + str(selected_roles[0])) as TextureButton
 		if selected_button != null:
 			if selected_player_icon.get_parent() == null:
@@ -221,12 +246,12 @@ func _set_hover_icon(role_id: int, show_icon: bool) -> void:
 
 
 func _hide_all_hover_icons() -> void:
-	for i in range(1, 8):
+	for i in range(1, 9):
 		_set_hover_icon(i, false)
 
 
 func _on_role_card_mouse_entered(role_id: int) -> void:
-	if role_id >= 1 and role_id <= 7 and role_id != current_choose:
+	if role_id >= 1 and role_id <= 8 and role_id != current_choose:
 		_set_hover_icon(role_id, true)
 
 
@@ -240,9 +265,9 @@ func _on_return_main_menu_pressed() -> void:
 
 
 func _on_qued_pressed() -> void:
-	if selected_roles[0] < 1 or selected_roles[0] > 7:
+	if selected_roles[0] < 1 or selected_roles[0] > 8:
 		return
-	if coop_enabled and (selected_roles[1] < 1 or selected_roles[1] > 7):
+	if coop_enabled and (selected_roles[1] < 1 or selected_roles[1] > 8):
 		return
 
 	PlayerData.player_data["Myself"] = selected_roles[0]

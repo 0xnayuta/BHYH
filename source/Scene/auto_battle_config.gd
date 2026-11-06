@@ -8,6 +8,7 @@ const ROLE_SKILLS := {
 	"角色5": ["xyq", "slq", "blq", "fhf", "cxq", "llrd", "lljy", "ygth", "tllz", "yyb", "ltjz"],
 	"角色6": ["nz_jlsh", "nz_fhcc", "nz_hlqg", "nz_hlhs", "nz_lblc", "nz_yysj"],
 	"角色7": YutuSkillData.KEYS,
+	"角色8": LongnvSkillData.KEYS,
 }
 
 const SKILL_NAMES := {
@@ -21,6 +22,26 @@ const SKILL_NAMES := {
 	"yt_yl": "月轮",
 	"yt_ygj": "月光诀",
 	"yt_ymw": "月魔舞",
+	"xln_lz": "飞旋龙",
+	"xln_tk": "龙影刃",
+	"xln_ay": "落龙刺",
+	"xln_xr": "回龙击",
+	"xln_ly": "魔龙绞",
+	"xln_qlx": "潜龙行",
+	"xln_slj": "瞬龙击",
+	"xln_lzs": "龙之锁",
+	"xln_lzw": "龙之舞",
+	"xln_lzn": "龙之怒",
+	"xln_rw": "刃舞",
+	"xln_yr": "圆刃",
+	"xln_fr": "飞刃",
+	"xln_yrz": "圆刃斩",
+	"xln_jyc": "疾影刺",
+	"xln_fxr": "飞旋刃",
+	"xln_hylz": "幻影连斩",
+	"xln_lrmt": "雷刃漫天",
+	"xln_llft": "雷龙附体",
+	"xln_llmt": "玲珑漫天",
 	"slz": "升龙斩",
 	"hytj": "火炎突击",
 	"lys": "烈焰闪",
@@ -148,7 +169,7 @@ func _get_role_key() -> String:
 	if player_slot == 2 and coop != null and coop.has_method("data_for_slot"):
 		profile = coop.data_for_slot(2)
 	var role_id := int(profile.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		role_id = 1
 	return "角色" + str(role_id)
 

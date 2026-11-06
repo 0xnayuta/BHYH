@@ -198,7 +198,7 @@ func is_target_valid(target: Variant) -> bool:
 
 func get_skill_entries() -> Array[Dictionary]:
 	var role_id := int(_hero.PlayerData.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		role_id = 1
 	var role_key := "角色" + str(role_id)
 	var slot := int(_hero.get_meta("coop_slot", 1))

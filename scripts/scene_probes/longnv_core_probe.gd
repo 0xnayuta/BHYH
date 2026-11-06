@@ -46,6 +46,51 @@ func _run() -> void:
 
 	_checks["body_loaded"] = str(hero.role_body.get("source_set")) == "default"
 	_checks["animations_loaded"] = hero.role_action_player.has_animation("effect1")
+	var choose = load("res://Scene/main_menu/choose_player.tscn").instantiate()
+	add_child(choose)
+	await get_tree().process_frame
+	choose.call("set_role", 8)
+	await get_tree().process_frame
+	_checks["choose_player_card8"] = choose.role_cards.get_node_or_null("Role8") != null
+	_checks["choose_player_role8"] = int(choose.get("selected_roles")[0]) == 8
+	choose.queue_free()
+	var skill_page = load("res://Scene/skill/zd_skill.tscn").instantiate()
+	add_child(skill_page)
+	await get_tree().process_frame
+	_checks["skill_page_role8"] = str(skill_page.call("get_role_key")) == "角色8"
+	_checks["skill_page_20_rows"] = (
+		skill_page.get_node_or_null("ScrollContainer/HBoxContainer/sk_pi/ski_20") != null
+	)
+	_checks["skill_page_20_icons"] = (
+		skill_page.get_node_or_null("ScrollContainer/HBoxContainer/Sk_na/skill_20") != null
+	)
+	skill_page.queue_free()
+	var auto_page = load("res://Scene/auto_battle_config.tscn").instantiate()
+	add_child(auto_page)
+	await get_tree().process_frame
+	_checks["auto_battle_role8"] = str(auto_page.get("role_key")) == "角色8"
+	_checks["auto_battle_20_skills"] = auto_page.get("available_skills").size() == 20
+	auto_page.queue_free()
+	var preview_page := Node.new()
+	var preview_bg := Node2D.new()
+	preview_bg.name = "background"
+	preview_page.add_child(preview_bg)
+	var preview_body := Sprite2D.new()
+	preview_body.name = "RoleBody"
+	preview_bg.add_child(preview_body)
+	var preview_equipment := Sprite2D.new()
+	preview_equipment.name = "RoleEquipment"
+	preview_bg.add_child(preview_equipment)
+	var preview_front := Sprite2D.new()
+	preview_front.name = "RoleBodyFront"
+	preview_bg.add_child(preview_front)
+	Global.configure_backpack_role_preview(preview_page)
+	_checks["backpack_preview_script"] = (
+		preview_body.get_script() != null
+		and preview_body.get_script().resource_path == "res://Script/hero/longnv_official_parts.gd"
+	)
+	_checks["backpack_preview_visible"] = preview_body.visible and not preview_equipment.visible
+	preview_page.free()
 	var hero_props = hero.call("_props")
 	hero_props.roleprop.Mp = 999999
 	hero_props.roleprop.SMp = 999999
@@ -70,6 +115,44 @@ func _run() -> void:
 	await get_tree().physics_frame
 	_checks["melee_started"] = bool(hero.get("_active"))
 	hero.call("_finish_action")
+
+	LocalCoop.create_secondary(8)
+	var p2 = Global.call_hero("role_8", host, Vector2(150, 0), false, 2)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_checks["p2_spawned"] = p2 is LongnvHero
+	_checks["p2_slot"] = int(LocalCoop.slot_for(p2)) == 2
+	_checks["p2_props"] = p2.call("_props") == LocalCoop.secondary_props
+	if is_instance_valid(p2):
+		var p2_data = LocalCoop.data_for(p2)
+		for skill_index in range(1, 21):
+			var skill_entry: Dictionary = p2_data.player_data[DataKeys.SKILL_LEARNED]["技能" + str(skill_index)]
+			skill_entry[DataKeys.LEVEL] = 1
+			skill_entry["学习"] = 1
+		var p2_props = p2.call("_props")
+		p2_props.roleprop.Mp = 999999
+		p2.role1_skill_inter["xln_lz"] = 0.0
+		p2.call("get_skill", "xln_lz")
+		await get_tree().physics_frame
+		_checks["p2_skill_started"] = bool(p2.get("_active"))
+		if not bool(p2.get("_active")):
+			print(
+				"LONGNV_P2_BLOCK active=%s using=%s be=%s death=%s silent=%s limit=%s mp=%s level=%s cd=%s"
+				% [
+					p2.get("_active"),
+					p2.get("is_using_skills"),
+					p2.get("is_be_attacking"),
+					p2.get("is_death"),
+					p2.get("is_silent"),
+					p2.call("no_limit_buff"),
+					p2_props.roleprop.Mp,
+					p2.call("get_skill_level", 1),
+					p2.get("role1_skill_inter").get("xln_lz"),
+				]
+			)
+		p2.call("_finish_action")
+		p2.queue_free()
+	LocalCoop.clear_runtime()
 
 	for check_name in _checks:
 		if not bool(_checks[check_name]):

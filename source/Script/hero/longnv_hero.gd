@@ -50,7 +50,11 @@ var _combat_resources: Array[RefCounted] = []
 
 
 func _ready() -> void:
-	PlayerData.ensure_skill_data()
+	var data_store = LocalCoop.data_for(self)
+	if data_store != null and data_store.has_method("ensure_skill_data"):
+		data_store.ensure_skill_data()
+	else:
+		PlayerData.ensure_skill_data()
 	extra_skills.hero = self
 	role_body.load_set("default")
 	_build_animations()
@@ -135,7 +139,9 @@ func prepare_combat_resources() -> void:
 			var path := sound_root + bank + ".mp3"
 			if ResourceLoader.exists(path):
 				Global.get_cached_audio(path)
-	var learned: Variant = PlayerData.player_data.get(DataKeys.SKILL_LEARNED, {})
+	var data_store = LocalCoop.data_for(self)
+	var profile_data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
+	var learned: Variant = profile_data.get(DataKeys.SKILL_LEARNED, {})
 	var keymap: Dictionary = (learned as Dictionary).get(DataKeys.Skill.KEYMAP, {}) if learned is Dictionary else {}
 	var equipped: Array = keymap.values()
 	for key: String in equipped:
@@ -431,7 +437,9 @@ func _launch_spinning_blade() -> void:
 
 
 func _skill_keymap_slot(slot: int) -> String:
-	var learned: Variant = PlayerData.player_data.get(DataKeys.SKILL_LEARNED, {})
+	var data_store = LocalCoop.data_for(self)
+	var profile_data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
+	var learned: Variant = profile_data.get(DataKeys.SKILL_LEARNED, {})
 	if not learned is Dictionary:
 		return ""
 	var keymap: Variant = (learned as Dictionary).get(DataKeys.Skill.KEYMAP, {})
@@ -697,6 +705,16 @@ func get_need_mp(skill_name, next_level):
 	if index < 0:
 		return 0
 	return LongnvSkillData.mp(str(skill_name), int(get_skill_level(index + 1)) + (1 if next_level else 0))
+
+
+func get_skill_level(num):
+	var data_store = LocalCoop.data_for(self)
+	var data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
+	var learned: Variant = data.get(DataKeys.SKILL_LEARNED, {})
+	if not learned is Dictionary:
+		return 0
+	var entry: Variant = (learned as Dictionary).get("技能" + str(num), {})
+	return int((entry as Dictionary).get(DataKeys.LEVEL, 0)) if entry is Dictionary else 0
 
 
 func get_skill_display_mp(skill_name: String) -> int:

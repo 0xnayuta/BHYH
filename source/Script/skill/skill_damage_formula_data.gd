@@ -8,6 +8,7 @@ const ROLE_NAMES := {
 	5: "白龙",
 	6: "哪吒",
 	7: "玉兔",
+	8: "小龙女",
 }
 
 
@@ -16,6 +17,40 @@ static func get_role_name(role_id: int) -> String:
 
 
 static func get_skill_detail(role_id: int, skill_id: String, stored_level: int, all_levels: Dictionary) -> Dictionary:
+	if role_id == 8:
+		var index := LongnvSkillData.KEYS.find(skill_id)
+		if index < 0:
+			return _detail("物理伤害", ["无对应技能。"])
+		var lines: Array = [
+			LongnvSkillData.DESCRIPTIONS[index],
+			(
+				"攻击力 × (%.2f + %.2f × (技能等级 - 1))"
+				% [float(LongnvSkillData.RATIOS[index]), float(LongnvSkillData.DAMAGE_GROWTH[index])]
+			),
+		]
+		if index == 5:
+			return _detail(
+				"辅助技能",
+				[
+					LongnvSkillData.DESCRIPTIONS[index],
+					"潜龙行攻击增幅：10% + 0.25% × (技能等级 - 1)，持续10秒；显形保护0.7秒。",
+				]
+			)
+		if index >= 5:
+			lines.append("双刃与圆刃技能可自由配置到五个技能键；施放时自动切换对应武器动作。")
+			if index in [8, 10, 13, 16, 19]:
+				lines.append("每次命中的伤害按上述公式计算，多段命中分别结算。")
+			if index == 18:
+				lines.append("龙魂伤害与减伤增幅：min(30%, floor((技能等级 + 1) / 2) × 0.8%)；移动速度提高30%。")
+			if index == 15:
+				lines.append("流血每秒以目标当前生命值2%为基础造成魔法伤害，共3次；受魔法防御与法术穿透影响，不暴击，再次命中刷新持续时间。")
+			return _detail("魔法伤害" if index >= 17 else "物理伤害", lines)
+		if index == 0:
+			lines.append("额外旋转双刃向前飞行0.9秒，每0.2秒可再次命中同一目标；每次伤害与技能单段相同，附带击退。")
+		if index == 3:
+			lines.append("首段攻击后，松开技能键再按一次才会后翻；二段不追加伤害或消耗魔法。")
+			lines.append("流血：每跳以目标当前生命值2%为基础造成魔法伤害，每1.1秒一次，持续4.5秒（4次）；受魔法防御与法术穿透影响，不暴击。")
+		return _detail("物理伤害", lines)
 	if role_id == 7:
 		if skill_id == YutuSkillData.PASSIVE_KEY:
 			if stored_level <= 0:

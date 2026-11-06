@@ -174,7 +174,7 @@ var skill_infor = {
 
 func get_role_key() -> String:
 	var role_id := int(PlayerData.player_data.get("Myself", 1))
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		role_id = 1
 	return "角色" + str(int(role_id))
 
@@ -193,6 +193,15 @@ func _ensure_nezha_yinyang_skill() -> void:
 
 func ensure_extra_skill_slots():
 	var role_key := get_role_key()
+	if role_key == "角色8":
+		PlayerData.ensure_skill_data()
+		var columns := {"Sk_na": "skill_", "sk_pi": "ski_", "sk_lv": "Skill_", "sk_le": "sk_", "sk_ms": "s_"}
+		for row in range(12, LongnvSkillData.KEYS.size() + 1):
+			for column: String in columns:
+				var prefix: String = columns[column]
+				_ensure_extra_node(_skill_column_path(column), prefix + str(row - 1), prefix + str(row), 96.0)
+		_normalize_skill_rows(LongnvSkillData.KEYS.size())
+		return
 	if role_key != "角色1" and role_key != "角色2" and role_key != "角色4":
 		return
 	var list_body = _skill_root_node()
@@ -345,6 +354,9 @@ func _consume_skill_book(level: int) -> bool:
 
 
 func _ready() -> void:
+	skill_ids_by_role["角色8"] = LongnvSkillData.KEYS.duplicate()
+	skill_name["角色8"] = LongnvSkillData.NAMES.duplicate()
+	skill_infor["角色8"] = LongnvSkillData.DESCRIPTIONS.duplicate()
 	skill_ids_by_role["角色7"] = YutuSkillData.KEYS.duplicate()
 	skill_ids_by_role["角色7"].append(YutuSkillData.PASSIVE_KEY)
 	skill_name["角色7"] = YutuSkillData.NAMES.duplicate()
@@ -361,6 +373,7 @@ func _ready() -> void:
 		and role_key != "角色4"
 		and role_key != "角色5"
 		and role_key != "角色7"
+		and role_key != "角色8"
 	):
 		skill_11_label.visible = false
 		ski_11_btn.visible = false
@@ -377,6 +390,9 @@ func _ready() -> void:
 	_set_skill_slot_visibility(skill_ids_by_role.get(role_key, []).size())
 	var max_slot = skill_ids_by_role.get(get_role_key(), []).size()
 	for i in range(1, max_slot + 1):
+		if role_key == "角色8":
+			_connect_longnv_row(i)
+			continue
 		var ski_btn = _skill_column_node("sk_pi", "ski_" + str(i))
 		if ski_btn and ski_btn is Button:
 			var ski_fn = "_on_ski_" + str(i) + "_pressed"
@@ -413,8 +429,30 @@ func _ready() -> void:
 	call_deferred("_fit_skill_descriptions_to_grid")
 
 
+func _connect_longnv_row(row: int) -> void:
+	var icon := _skill_column_node("sk_pi", "ski_" + str(row)) as Button
+	var upgrade := _skill_column_node("sk_lv", "Skill_" + str(row)) as Button
+	if icon == null or upgrade == null:
+		return
+	for pair in [[icon, "pressed"], [icon, "mouse_entered"], [icon, "mouse_exited"], [upgrade, "pressed"]]:
+		var node: Node = pair[0]
+		var signal_name: String = pair[1]
+		for connection: Dictionary in node.get_signal_connection_list(signal_name):
+			if connection.callable.get_object() == self:
+				node.disconnect(signal_name, connection.callable)
+	icon.pressed.connect(_set_key.bind(row - 1))
+	icon.mouse_entered.connect(_show_mp.bind(row - 1))
+	icon.mouse_exited.connect(_clear_info)
+	upgrade.pressed.connect(_on_longnv_upgrade.bind(row))
+
+
+func _on_longnv_upgrade(row: int) -> void:
+	target_skill = row
+	_show_tip()
+
+
 func _set_skill_slot_visibility(skill_count: int) -> void:
-	for index in range(1, 14):
+	for index in range(1, maxi(14, skill_count + 1)):
 		var should_show := index <= skill_count
 		for slot_node in [
 			_skill_column_node("Sk_na", "skill_" + str(index)),
@@ -456,6 +494,8 @@ func get_skill_row_heights() -> Array[float]:
 
 
 func _setup_skill_awaken_buttons() -> void:
+	if get_role_key() == "角色8":
+		return
 	var skill_list = skill_ids_by_role.get(get_role_key(), [])
 	for skill_index in range(skill_list.size()):
 		if get_role_key() == "角色7" and skill_list[skill_index] not in ["yt_mds", "yt_xdz", "yt_ldmw", "yt_yl"]:
@@ -684,6 +724,7 @@ func up_level():
 		&& role_key != "角色3"
 		&& role_key != "角色4"
 		and role_key != "角色5"
+		and role_key != "角色8"
 	):
 		Global.add_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
 		return
@@ -1117,6 +1158,9 @@ func notify_current_role1(skill_internal: String, variant_id: int):
 
 
 func _compute_mp_cost(skill_name: String, next_level: bool = false) -> int:
+	if skill_name in LongnvSkillData.KEYS:
+		var index := LongnvSkillData.KEYS.find(skill_name)
+		return LongnvSkillData.mp(skill_name, int(get_skill_level_by_index(index)) + (1 if next_level else 0))
 	if skill_name in YutuSkillData.KEYS:
 		var index := YutuSkillData.KEYS.find(skill_name)
 		return YutuSkillData.mp(skill_name, int(get_skill_level_by_index(index)) + (1 if next_level else 0))
