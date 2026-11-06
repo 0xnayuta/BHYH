@@ -1,7 +1,7 @@
 [gd_resource type="FontVariation" format=3 uid="uid://bhyhfontdisp"]
 
 [ext_resource type="FontFile" path="res://Font/fz_cu_yuan_m03.ttf" id="1_display"]
-[ext_resource type="FontVariation" path="res://Scene/theme/fz_cu_yuan_m03.tres" id="2_body"]
+[ext_resource type="FontVariation" path="res://Scene/theme/font_body.tres" id="2_body"]
 
 [resource]
 fallbacks = Array[Font]([ExtResource("2_body")])

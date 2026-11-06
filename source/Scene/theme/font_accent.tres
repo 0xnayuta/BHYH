@@ -1,7 +1,7 @@
 [gd_resource type="FontVariation" format=3 uid="uid://bhyhfontmain"]
 
 [ext_resource type="FontFile" path="res://Font/lxgw_wen_kai_medium.ttf" id="1_accent"]
-[ext_resource type="FontVariation" path="res://Scene/theme/font_hk.tres" id="2_ui"]
+[ext_resource type="FontVariation" path="res://Scene/theme/font_ui.tres" id="2_ui"]
 
 [resource]
 fallbacks = Array[Font]([ExtResource("2_ui")])

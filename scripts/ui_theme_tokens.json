@@ -176,29 +176,29 @@
     "tower_placeholder": "Color(1, 0.956863, 0.74902, 0.7)"
   },
   "default_font": {
-    "resource_id": "font_fz_cu_yuan_m03",
-    "path": "res://Scene/theme/fz_cu_yuan_m03.tres"
+    "resource_id": "font_body",
+    "path": "res://Scene/theme/font_body.tres"
   },
   "font_roles": {
     "body": {
-      "resource_id": "font_fz_cu_yuan_m03",
+      "resource_id": "font_body",
       "path": "res://Font/fz_cu_yuan_m03.ttf",
       "fallback": "res://Font/msyh_semibold.ttc"
     },
     "ui": {
-      "resource_id": "font_hk",
+      "resource_id": "font_ui",
       "path": "res://Font/lxgw_wen_kai_regular.ttf",
-      "fallback": "res://Scene/theme/fz_cu_yuan_m03.tres"
+      "fallback": "res://Scene/theme/font_body.tres"
     },
     "display": {
-      "resource_id": "font_return",
+      "resource_id": "font_display",
       "path": "res://Font/fz_cu_yuan_m03.ttf",
-      "fallback": "res://Scene/theme/fz_cu_yuan_m03.tres"
+      "fallback": "res://Scene/theme/font_body.tres"
     },
     "accent": {
-      "resource_id": "font_main",
+      "resource_id": "font_accent",
       "path": "res://Font/lxgw_wen_kai_medium.ttf",
-      "fallback": "res://Scene/theme/font_hk.tres"
+      "fallback": "res://Scene/theme/font_ui.tres"
     }
   },
   "theme_properties": {

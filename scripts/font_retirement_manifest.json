@@ -1,40 +1,41 @@
 {
   "schema_version": 1,
   "phase": "27-7 P2.1",
+  "resource_naming_phase": "27-7 P2.5",
   "theme_asset_count": 4,
   "roles": {
     "body": {
-      "resource": "font_fz_cu_yuan_m03",
+      "resource": "font_body",
       "files": [
         "res://Font/fz_cu_yuan_m03.ttf",
         "res://Font/msyh_semibold.ttc"
       ]
     },
     "ui": {
-      "resource": "font_hk",
+      "resource": "font_ui",
       "files": [
         "res://Font/lxgw_wen_kai_regular.ttf"
       ]
     },
     "display": {
-      "resource": "font_return",
+      "resource": "font_display",
       "files": [
         "res://Font/fz_cu_yuan_m03.ttf"
       ]
     },
     "accent": {
-      "resource": "font_main",
+      "resource": "font_accent",
       "files": [
         "res://Font/lxgw_wen_kai_medium.ttf"
       ]
     }
   },
   "retired_theme_resources": {
-    "font_hy": "font_main",
-    "font_meng": "font_main",
-    "font_wo": "font_main",
-    "font_194_song_ti": "font_hk",
-    "font_jin_qiao": "font_main"
+    "font_hy": "font_accent",
+    "font_meng": "font_accent",
+    "font_wo": "font_accent",
+    "font_194_song_ti": "font_ui",
+    "font_jin_qiao": "font_accent"
   },
   "removed_unreferenced_fonts": [
     "res://Font/aa_wo_du_shan_yue_shan_yue_du_wo_mianfeiziti_com.ttf",
