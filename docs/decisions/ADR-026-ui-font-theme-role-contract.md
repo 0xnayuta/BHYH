@@ -46,6 +46,9 @@
 - **把 Phase 27 盘点页提升为规范**：拒绝。该页明确是现状盘点，包含规模与阶段统计，不适合作为长期规则。
 - **为每个面板维护字体说明**：拒绝。会产生第二套角色定义，无法跨面板复用。
 - **立即重命名 `font_main`/`font_hk`/`font_return`**：暂不采用。重命名会扩大引用与 UID 影响面，先由标准固定语义，资源迁移另行立项。
+
+> **修订（2026-11-06，P2.5）**：角色语义审计与基线已稳定，资源迁移已独立立项并执行。`font_main`、`font_hk`、`font_return` 与默认 body 包装统一为 `font_accent.tres`、`font_ui.tres`、`font_display.tres`、`font_body.tres`；同步 Theme 内部 ExtResource ID。资源 UID 与实际 TTF 文件名保持不变。
+
 - **只接受标准、不同步实现审计**：拒绝。角色语义审计已随字体角色批次实现，并通过 `contract_gate` 接入总门禁；没有审计的标准无法阻止新增漂移。
 
 ## 证据

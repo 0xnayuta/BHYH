@@ -102,6 +102,7 @@ python scripts/font_coverage_audit.py --check
 - Phase 27-7 审计闭合：`ui_dynamic_theme_audit.py` 扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处），其中 **29 处**字面字号/字体色 token 化；新增 `FONT_SIZE_8`、`TEXT_ZHENFA_PURPLE`、`TEXT_ZHENFA_ORANGE`；`set_menu` 直接字体引用迁移为 `SetMenuHintLabel` 变体。当前 **static 0 / token 173 / data 43 / layout 96 / dynamic_style 40**；`theme_override_audit` 新增直接字体与动态调用上限校验。
 - Phase 27-7 P0/P1：删除 8 个无运行时引用顶层字体及 `.import`，回收约 35.84 MB；`font_main`/`font_hk`/`font_return` 改为 FontVariation 显式回退链；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作等小字号功能文本移出小楷，`CureTimesHint` 移出海报体。Theme 属性 **1,744**，字体文件 5，覆盖 0 缺字。
 - Phase 27-7 P2：`ui` 改为思源宋体 Medium，`display` 改为思源宋体 SemiBold，`accent` 改为霞鹜文楷 Medium；退役华康宋体/海报/文征明小楷，保留 Microsoft YaHei 作为 body fallback；方正润玉圆宋仅用于 LOGO/活动，不进入 Theme。P2 字体文件 5 / 76.06 MB；18 场景双档 2,323 控件 0 位移。
+- Phase 27-7 P2.5：字体资源包装统一为角色名 `font_body`、`font_ui`、`font_display`、`font_accent`，同步 Theme 内部 ExtResource ID、角色映射、动态样本与 token 基线；保留资源 UID 与实际 TTF 文件名。
 - Phase 27-7 P2.4：Buff 倒计时/次数、格位提示与 `Max` 登记为 body 10–11 微辅助；`font_role_baseline` 4→0，无 Theme 运行时修改。
 - Phase 27-7 P2.3：五个 36 px 标题与 `LijiText` 50 px 仪式标题迁 display；`font_role_baseline` 10→4。
 - Phase 27-7 P2.2：优先清理 body 24/28/32/36 与 ui 28；标题/操作迁 display，功能性数字/计时/短标签保留 body，`ChoosePlayerRoleName` 迁 accent；基线 43→10。

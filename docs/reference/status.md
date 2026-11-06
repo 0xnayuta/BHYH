@@ -28,11 +28,11 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 字体 P2.4 复跑 **40.22s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 字体 P2.5 复跑 **35.95s**） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | 字体角色语义 | **732 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.20s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，34.42s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，34.06s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
 | Theme token | **732 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **39 文字 token / 6 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
 | Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 732 总变体 / 属性 1,775 / StyleBox 36 / 独立重复组 9**（`theme_variant_audit.py --check`） |
@@ -46,7 +46,7 @@
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 346.4s，默认 auto 并发，本轮无重试） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 P2.5 596.2s，默认并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据清单 | **844/844**（173 `.bin` + 671 JSON）；`export_raw_manifest.py --check` 通过 |
 | Release PCK（实际 exe） | **5,044/5,044**（844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节 |
@@ -64,6 +64,7 @@
 - 2026-11-05 UI 三项修复：`set_menu` 新增 `SetMenuActionButtonGroup`（`separation = 9`），实测容器 402/418、暂停菜单全部内容在框内；背包属性 Tooltip 改为 `backpack.to_local()` 转换并加视口翻转/夹取，修复 1280×800 下约 `(249,143)` 的固定偏移；物品 Tooltip 描述字体 14→18、去掉“描述：”前缀、双 U+3000 首行缩进、售价去句号、动态属性统一全角冒号；`诛仙剑` 属性文本同步统一。新增 `UiTextFormat`；`ui-factories` 增加暂停菜单、Tooltip 位置、描述缩进/售价断言。截图归档 `G:/tmp/ui_fix_set_menu.png`、`ui_fix_backpack_tooltip.png`、`ui_fix_equipment_tooltip.png`。`check_all` **9/9（43.18s）**，`ui-theme` **7.35s**，`ui-factories` **43.97s**，全量回归 **128/128 + 5 SKIP（339.9s）**。
 - 2026-11-05 Phase 27-7 阶段验收：`ui_dynamic_theme_audit` 扫描范围扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处）；修复 Scene 中 **29 处**字面字号/字体色，新增 `FONT_SIZE_8` 与 2 个阵发语义色 token；`set_menu` 直接字体引用改为 `SetMenuHintLabel` 变体。当前静态 literal **0**，token 173 / data 43 / layout 96 / dynamic_style 40；`theme_override_audit` 对字体/动态字段实施上限校验；18 场景 × 1280/1600 截图与 **2,323** 控件几何 **0 位移**；全量回归 **128/128 + SKIP 5（301.0s）**，`level_1` 4 阶段 0/0/0。Phase 27 关闭。
 - 2026-11-05 字体 P0/P1：按素材契约删除 **8 个 35.84 MB** 无运行时引用顶层字体；`font_main`/`font_hk`/`font_return` 增加 FontVariation 显式回退；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作与 `CureTimesHint` 移出小楷/海报体小字号功能文本。Theme 属性 **1,744**，字体覆盖 0 缺字；P1 受影响场景 1,031 控件 / 0 位移，全量回归 128/128 + 5 SKIP（325.4s）。
+- 2026-11-06 字体 P2.5：四个 FontVariation 包装统一为 `font_body.tres`、`font_ui.tres`、`font_display.tres`、`font_accent.tres`；Theme ExtResource ID、`ui_theme_tokens`、动态样本、退役清单与 token 基线同步。保留资源 UID 与实际 TTF 文件名；资源 UID 中旧标识不影响路径语义。`check_all` **9/9（35.95s）**、`health_check` **5.73s / 0/0/0**、`ui-theme` **7.32s**、`ui-factories` **34.06s**、`level_1` **4 阶段 0/0/0（27.21s）**；全量回归 **128/128 + 5 SKIP（596.2s）**。
 - 2026-11-06 字体 P2.4：确认 `BuffIconTime`/`BuffIconTimes` 为 Buff 倒计时/叠加次数，`SellOrEquInfo` 为“第1页第2格”紧凑格位提示，`UseItemMaxLabel` 为 `Max` 短后缀；四者均位于 21–55 px 固定小槽位。将 body 10–11 定义为微辅助字号，仅限倒计时/计数/页码/短后缀，不用于可读正文；`font_role_baseline` 4→0。无运行时视觉变化；只改审计规则与文档，`check_all` **9/9（40.22s）**，未重跑全量回归。
 - 2026-11-06 字体 P2.3：`AnnouncementHeading`、`EndStatsMoreInfo`、`GameNeedKnowTitle`、`LevelInfoTitle`、`SettingsTitle` 五个 36 px 标题与 `LijiText` 50 px 仪式标题迁 `display`；display 允许 50 px 短仪式标题。`font_role_baseline` 10→4，仅剩 body 10 四条；`ui-theme` 7.20s、`ui-factories` 34.42s；`check_all` **9/9（46.72s）**；全量回归 **128/128 + 5 SKIP（346.4s）**。
 - 2026-11-06 字体 P2.2：优先清理 body 24/28/32/36 与 ui 28 的语义归属。标题/操作/短强调迁到 display，`ChoosePlayerRoleName` 迁到 accent；`BacisInfoNumber`、`ForgeSoulLabel`、`ShopHintLabel`、`ShopPageLabel`、`UserKeyTime` 以 body 覆盖保持功能性大号；body 允许 24/28/32/36 的功能性数字/计时/短标签。`font_role_baseline` 43→10（剩余 body 10 四条、accent 36 五条、accent 50 一条）。`ui-theme` 8.38s、`ui-factories` 33.54s；`check_all` **9/9（45.46s）**；全量回归 **128/128 + 5 SKIP（351.7s）**。

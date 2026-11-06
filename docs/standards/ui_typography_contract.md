@@ -33,24 +33,24 @@
 
 | 角色 | 当前实现资源 | 主要用途 | 建议字号 | 约束 |
 |:---|:---|:---|---:|:---|
-| `body` | 默认 `fz_cu_yuan_m03.tres`，fallback `msyh_semibold.ttc` | HUD、数字、输入框、属性标签、紧凑控件、默认正文 | 10–11 微辅助；12–20 默认；功能性大号 24/28/32/36；战斗数字 40/50/76/100 | 默认角色；10–11 仅限固定槽位的倒计时/计数/页码/短后缀；大号仅用于数字/计时/短功能标签，不承担标题或长段叙事 |
-| `ui` | `font_hk.tres`（LXGW WenKai Regular） | 公告、帮助、描述、对话正文、物品元数据 | 14–24 | 不用于 12 px；不承担主标题 |
-| `display` | `font_return.tres`（FZCuYuan M03） | 屏幕/面板标题、菜单级操作、主 CTA、短强调标签 | 16–40；仪式性标题 50 | 不用于长段正文或数据行；50 仅限短仪式标题 |
-| `accent` | `font_main.tres`（LXGW WenKai Medium） | 物品名、技能名、选中标签、专有名词、单点强调 | 16–32 | 一个组件只允许一个短 accent 字符串；不用于段落或元数据组 |
+| `body` | 默认 `font_body.tres`，fallback `msyh_semibold.ttc` | HUD、数字、输入框、属性标签、紧凑控件、默认正文 | 10–11 微辅助；12–20 默认；功能性大号 24/28/32/36；战斗数字 40/50/76/100 | 默认角色；10–11 仅限固定槽位的倒计时/计数/页码/短后缀；大号仅用于数字/计时/短功能标签，不承担标题或长段叙事 |
+| `ui` | `font_ui.tres`（LXGW WenKai Regular） | 公告、帮助、描述、对话正文、物品元数据 | 14–24 | 不用于 12 px；不承担主标题 |
+| `display` | `font_display.tres`（FZCuYuan M03） | 屏幕/面板标题、菜单级操作、主 CTA、短强调标签 | 16–40；仪式性标题 50 | 不用于长段正文或数据行；50 仅限短仪式标题 |
+| `accent` | `font_accent.tres`（LXGW WenKai Medium） | 物品名、技能名、选中标签、专有名词、单点强调 | 16–32 | 一个组件只允许一个短 accent 字符串；不用于段落或元数据组 |
 | `brand` | `FZRunYYSJW` | 游戏 LOGO、活动主视觉 | 不进入运行时 Theme | 不用于普通 UI；不进入 Theme |
 
-### 2.1 资源文件名是历史名
+### 2.1 资源名已按角色收敛
 
-`font_main`、`font_hk`、`font_return` 是旧字体时代的文件名，当前语义已经变化：
+P2.5 已将资源包装统一为角色名，以下旧名仅用于识别历史记录：
 
 ```text
-font_main   -> accent
-font_hk     -> ui
-font_return -> display
-默认字体     -> body
+font_main   -> accent     当前 font_accent.tres
+font_hk     -> ui         当前 font_ui.tres
+font_return -> display    当前 font_display.tres
+默认字体     -> body       当前 font_body.tres
 ```
 
-维护时必须以**角色**为准，不能从资源文件名推断用途。资源重命名属于独立迁移，不得在普通 UI 修改中顺手重命名。
+维护时必须以**角色**和当前资源名为准，不能从旧文件名推断用途。新增资源不得恢复旧名或平行别名；后续资源改名仍按独立迁移处理。
 
 ### 2.2 单一默认角色
 

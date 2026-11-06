@@ -115,24 +115,26 @@
 
 ## 4. 字体资产
 
-### 4.1 Theme 字体角色（P2.1 后）
+### 4.1 Theme 字体角色（P2.5 后）
 
 | 角色 | Theme 资源 | 文件 | 有效变体 |
 |:---|:---|:---|---:|
-| `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 343 |
-| `ui` | `font_hk.tres` FontVariation | LXGW WenKai Regular → body fallback | 154 |
-| `display` | `font_return.tres` FontVariation | FZCuYuan M03 → body fallback | 98 |
-| `accent` | `font_main.tres` FontVariation | 霞鹜文楷 Medium → `font_hk` fallback | 137 |
+| `body` | 默认 `FontVariation` → `font_body` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 343 |
+| `ui` | `font_ui.tres` FontVariation | LXGW WenKai Regular → body fallback | 154 |
+| `display` | `font_display.tres` FontVariation | FZCuYuan M03 → body fallback | 98 |
+| `accent` | `font_accent.tres` FontVariation | 霞鹜文楷 Medium → `font_ui` fallback | 137 |
 
 角色选择与组件映射见 [`ui_typography_contract.md`](../standards/ui_typography_contract.md)；本节只保留当前资源事实。
 
-P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / 约 76.06 MB**；P2.1 移除两款思源宋体并加入 LXGW Regular 后为 **4 个文件 / 约 78.49 MB**（后续单独子集化）。`font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到 `font_main`；`font_194_song_ti`（2）映射到 `font_hk`。脚本直接字体路径中的 `font_meng` 已改为 `font_main`。
+P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / 约 76.06 MB**；P2.1 移除两款思源宋体并加入 LXGW Regular 后为 **4 个文件 / 约 78.49 MB**（后续单独子集化）。以下 P1/P2.x 段落中的 `font_main`/`font_hk`/`font_return` 等旧资源名属于历史记录；当前资源名见本节表格。P1 中 `font_hy`（55 个有效引用）、`font_meng`（13）、`font_wo`（2）、`font_jin_qiao`（2）映射到旧 `font_main`；`font_194_song_ti`（2）映射到旧 `font_hk`。脚本直接字体路径中的旧 `font_meng` 已改为旧 `font_main`。
 
 **27-7 P1 结果**：为 `font_main`/`font_hk`/`font_return` 建立 FontVariation 回退链；`SynHelpBody`（12 px 长文本）由小楷改为宋体，HUD 名称/计时、角色自然属性、幻化操作等小楷功能文本改为 body；`CureTimesHint` 由海报体改为 body。字体角色边界调整未改变场景层级。
 
 **27-7 P2 结果**：`ui` 改用 Source Han Serif CN Medium，`display` 改用 Source Han Serif CN SemiBold，`accent` 改用 LXGW WenKai Medium；`FZRunYYSJW` 仅用于 LOGO/活动，不进入 Theme。华康宋体、华康海报、文征明小楷已退役；Microsoft YaHei 保留为 body fallback。字体文件 5 / 76.06 MB，Theme 属性 1,744（P2 时点；当前计数以 `theme_variant_audit` 为准）。
 
 **27-7 P2.1 结果**：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件。Theme 字体资产 4 个资源 / 4 个文件；字体总量约 78.49 MB；E1–E4 字号/角色例外已清零；`MysteryShopTitle` 采用 body 12 px 解决侧栏 14 px 溢出。
+
+**27-7 P2.5 结果**：四个 FontVariation 包装统一为 `font_body.tres`、`font_ui.tres`、`font_display.tres`、`font_accent.tres`；同步 Theme ExtResource ID、角色映射、动态样本、退役清单与 token 基线。资源 UID 与实际 TTF 文件名保持不变；`font_role_audit` 732/0、`font_coverage` 4 资源/0 缺字、`theme_token` 732/0；`check_all` 9/9（35.95s）、`health_check` 5.73s / 0/0/0、`ui-theme` 7.32s、`ui-factories` 34.06s、`level_1` 4 阶段 0/0/0（27.21s）；全量回归 **128/128 + 5 SKIP（596.2s）**。
 
 **27-7 P2.4 结果**：确认四个 body 10 变体均为固定小槽位微辅助文本（Buff 倒计时/次数、格位提示、`Max` 短后缀）；规范允许 body 10–11 微辅助，`font_role_baseline` 4→0。无 Theme 运行时变化，`check_all` **9/9（40.22s）**；全量回归沿用 P2.3 的 128/128 + 5 SKIP（346.4s）。
 
@@ -225,9 +227,9 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 | 角色 | 用途 | 目标 |
 |:---|:---|:---|
 | `body` | 默认正文/表单/说明 | FZCuYuan-M03 + 显式 fallback |
-| `ui` | 面板/按钮/列表 UI | 从 `font_main` 等现有族中择一 |
-| `display` | 标题/返回/公告主标题 | 从 `font_return`/`font_hy` 中择一 |
-| `accent` | 强调/图鉴/少量装饰 | 从 `font_hk`/`font_meng` 中择一 |
+| `ui` | 面板/按钮/列表 UI | `font_ui.tres` |
+| `display` | 标题/返回/公告主标题 | `font_display.tres` |
+| `accent` | 强调/图鉴/少量装饰 | `font_accent.tres` |
 | `fallback` | 缺字兜底 | 保留现有一致性策略，不新增无授权字体 |
 
 `font_wo`、`font_194`、`font_jin_qiao` 等低频族先映射到上述角色，截图通过后再退役；未引用资产先归档，不直接删除。
