@@ -821,6 +821,7 @@ ChangeBackgroundButton/fonts/font = ExtResource("font_display")
 ChangeBackgroundButton/font_sizes/font_size = 24
 
 ChangeBackgroundList/base_type = &"TowerContent"
+ChangeBackgroundList/constants/separation = 8
 
 ChangeBackgroundTitle/base_type = &"SemanticAutoBattleTitle"
 ChangeBackgroundTitle/colors/font_color = Color(1, 0.584314, 0, 1)
@@ -853,7 +854,11 @@ ChooseItemVSeparator/base_type = &"VSeparator"
 ChooseItemVSeparator/constants/separation = 10
 ChooseItemVSeparator/styles/separator = SubResource("choose_item_vseparator")
 
+ChooseMusicButton/base_type = &"MenuActionButton"
+ChooseMusicButton/font_sizes/font_size = 20
+
 ChooseMusicList/base_type = &"PetSkillList"
+ChooseMusicList/constants/separation = 4
 
 ChoosePlayerCardRow/base_type = &"HBoxContainer"
 ChoosePlayerCardRow/constants/separation = 14

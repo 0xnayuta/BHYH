@@ -34,25 +34,25 @@ scale = Vector2(2, 2)
 metadata/_edit_lock_ = true
 
 [node name="z1" type="Button" parent="bg/con_music" unique_id=1914726676]
-theme_type_variation = "MenuActionButton"
+theme_type_variation = "ChooseMusicButton"
 theme = ExtResource("theme")
 layout_mode = 2
 text = "造梦西游1"
 
 [node name="z2" type="Button" parent="bg/con_music" unique_id=224410960]
-theme_type_variation = "MenuActionButton"
+theme_type_variation = "ChooseMusicButton"
 theme = ExtResource("theme")
 layout_mode = 2
 text = "造梦西游2"
 
 [node name="z3" type="Button" parent="bg/con_music" unique_id=192855600]
-theme_type_variation = "MenuActionButton"
+theme_type_variation = "ChooseMusicButton"
 theme = ExtResource("theme")
 layout_mode = 2
 text = "造梦西游3"
 
 [node name="z4" type="Button" parent="bg/con_music" unique_id=1375182836]
-theme_type_variation = "MenuActionButton"
+theme_type_variation = "ChooseMusicButton"
 theme = ExtResource("theme")
 layout_mode = 2
 text = "造梦西游4"
