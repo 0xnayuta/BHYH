@@ -483,6 +483,7 @@ ArchiveDeleteButton/styles/disabled = SubResource("empty_button")
 ArchiveDeleteButton/styles/focus = SubResource("archive_black_panel")
 
 ArchiveDialogActionButton/base_type = &"SemanticArchiveActionButtonSmall2"
+ArchiveDialogActionButton/fonts/font = ExtResource("font_return")
 ArchiveDialogActionButton/font_sizes/font_size = 24
 
 ArchiveDialogTitle/base_type = &"SemanticArchiveDialogTitle"
@@ -551,6 +552,7 @@ ArchiveUidHash/styles/normal = SubResource("sub_CloudInput")
 ArchiveUidHash/styles/read_only = SubResource("sub_CloudInput")
 
 ArchiveUploadButton/base_type = &"SemanticArchiveActionButtonSmall2"
+ArchiveUploadButton/fonts/font = ExtResource("font_return")
 ArchiveUploadButton/font_sizes/font_size = 24
 ArchiveUploadButton/styles/disabled = SubResource("sub_CloudInput")
 
@@ -611,6 +613,7 @@ BacisInfoName/constants/outline_size = 1
 BacisInfoName/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 BacisInfoNumber/base_type = &"SemanticArchiveDialogTitle"
+BacisInfoNumber/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BacisInfoNumber/colors/font_color = Color(0.964706, 0.403922, 0, 1)
 BacisInfoNumber/colors/font_outline_color = Color(0.964706, 0.403922, 0, 1)
 BacisInfoNumber/constants/outline_size = 1
@@ -861,11 +864,13 @@ ChoosePlayerProp/colors/font_color = Color(0, 1, 0, 1)
 ChoosePlayerProp/colors/font_shadow_color = Color(0, 0, 0, 1)
 
 ChoosePlayerRoleName/base_type = &"SemanticChoosePlayerRoleName"
+ChoosePlayerRoleName/fonts/font = ExtResource("font_main")
 ChoosePlayerRoleName/colors/font_color = Color(1, 0.72, 0.16, 1)
 ChoosePlayerRoleName/constants/shadow_offset_y = 2
 ChoosePlayerRoleName/font_sizes/font_size = 24
 
 ChoosePlayerTitle/base_type = &"SemanticChoosePlayerRoleName"
+ChoosePlayerTitle/fonts/font = ExtResource("font_return")
 ChoosePlayerTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ChoosePlayerTitle/constants/shadow_offset_y = 2
 ChoosePlayerTitle/font_sizes/font_size = 36
@@ -1113,6 +1118,7 @@ ForgeMaterialNeed/colors/font_color = Color(0, 1, 0, 1)
 ForgeMaterialRow/base_type = &"PelletTypeRow"
 
 ForgeSoulLabel/base_type = &"SemanticArchiveDialogTitle"
+ForgeSoulLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ForgeSoulLabel/constants/outline_size = 10
 
 ForgeSubtitle/base_type = &"SemanticAutoBattleTitle"
@@ -1145,6 +1151,7 @@ GameInfoSectionColumn/constants/separation = 25
 GameInfoSectionTitle/base_type = &"PelletTabLabel"
 
 GameInfoTitle/base_type = &"SemanticGameInfoBodyText2"
+GameInfoTitle/fonts/font = ExtResource("font_return")
 GameInfoTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 GameInfoTitle/font_sizes/font_size = 28
 
@@ -1391,6 +1398,7 @@ LijiText/font_sizes/font_size = 50
 ListButtonRole/base_type = &"GameInfoGuideButton"
 
 LlbtCgmsButton/base_type = &"SemanticAnnouncementButton2"
+LlbtCgmsButton/fonts/font = ExtResource("font_return")
 LlbtCgmsButton/font_sizes/font_size = 24
 
 LlbtCureText/base_type = &"PelletLuckyTab"
@@ -1497,6 +1505,7 @@ MagicWeaponStatHp/base_type = &"BackpackTitleLabel"
 MagicWeaponValue/base_type = &"BackpackTitleLabel"
 
 MainMenuLabel/base_type = &"SemanticBoxItemNumber"
+MainMenuLabel/fonts/font = ExtResource("font_return")
 MainMenuLabel/font_sizes/font_size = 24
 
 MainMenuPlayerDetail/base_type = &"SemanticArchiveFieldTitle"
@@ -1504,6 +1513,7 @@ MainMenuPlayerDetail/colors/font_color = Color(1, 0.72, 0.16, 1)
 MainMenuPlayerDetail/constants/outline_size = 2
 
 MainMenuPlayerName/base_type = &"Label"
+MainMenuPlayerName/fonts/font = ExtResource("font_return")
 MainMenuPlayerName/colors/font_outline_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/font_sizes/font_size = 32
 
@@ -1698,6 +1708,7 @@ PelletTotalGrid/constants/h_separation = 30
 PelletTotalGrid/constants/v_separation = 10
 
 PelletTotalValue/base_type = &"SemanticBackpackWingLabel"
+PelletTotalValue/fonts/font = ExtResource("font_return")
 PelletTotalValue/colors/font_color = Color(0, 1, 0, 1)
 PelletTotalValue/constants/outline_size = 2
 PelletTotalValue/constants/shadow_outline_size = 7
@@ -1975,6 +1986,7 @@ ShopDamageText/base_type = &"SemanticLevelInfoFall"
 ShopDamageText/constants/shadow_outline_size = 8
 
 ShopHintLabel/base_type = &"SemanticArchiveDialogTitle"
+ShopHintLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 ShopItemBuyButton/base_type = &"SemanticBackpackHeadButton4"
 ShopItemBuyButton/colors/icon_hover_color = Color(0.788235, 0.811765, 0.576471, 1)
@@ -2003,6 +2015,7 @@ ShopMessageText/colors/font_color = Color(1, 0.584314, 0, 1)
 ShopMessageText/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 
 ShopPageLabel/base_type = &"SemanticArchiveDialogTitle"
+ShopPageLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 ShopPageLabel/colors/font_color = Color(0, 0, 0, 1)
 
 ShopRoleText/base_type = &"SemanticCureTimesCurrency"
@@ -2146,6 +2159,7 @@ SynHelpBody/font_sizes/font_size = 14
 SynHelpSection/base_type = &"AnnouncementListGroup"
 
 SynHelpTitle/base_type = &"ShopHintLabel"
+SynHelpTitle/fonts/font = ExtResource("font_return")
 
 SynHelpTitleRow/base_type = &"HBoxContainer"
 SynHelpTitleRow/constants/separation = 33
@@ -2159,6 +2173,7 @@ SynthesisItemName/constants/outline_size = 1
 SynthesisTargetDan/base_type = &"Button"
 
 SynthesisTitle/base_type = &"UseItemUpLabel"
+SynthesisTitle/fonts/font = ExtResource("font_return")
 
 TaskRewardTitle/base_type = &"SemanticRoleMagicNeedText"
 TaskRewardTitle/constants/shadow_outline_size = 6
@@ -2318,6 +2333,7 @@ UserKeyKey/constants/shadow_outline_size = 8
 UserKeyKey/font_sizes/font_size = 24
 
 UserKeyTime/base_type = &"SemanticArchiveDialogTitle"
+UserKeyTime/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 UserKeyTime/constants/outline_size = 9
 
 UserKeyTimeSmall/base_type = &"Label"
@@ -2523,6 +2539,7 @@ SemanticBuffIconTime/base_type = &"Label"
 SemanticBuffIconTime/colors/font_color = Color(1, 1, 0, 1)
 
 SemanticArchiveDialogTitle/base_type = &"Control"
+SemanticArchiveDialogTitle/fonts/font = ExtResource("font_return")
 SemanticArchiveDialogTitle/font_sizes/font_size = 24
 
 SemanticArchiveFieldTitle/base_type = &"Control"
@@ -2556,6 +2573,7 @@ SemanticShopTabRow/base_type = &"Control"
 SemanticShopTabRow/constants/separation = -2
 
 SemanticBossInfoTitle/base_type = &"Control"
+SemanticBossInfoTitle/fonts/font = ExtResource("font_return")
 SemanticBossInfoTitle/font_sizes/font_size = 28
 
 SemanticBuffIconTimes/base_type = &"Control"
