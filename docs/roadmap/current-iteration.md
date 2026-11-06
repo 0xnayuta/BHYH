@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**当前无活跃候选**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 26 平台与发布验证长期暂缓。
-> **版本**：6.9；不改变玩法数值、动画时序、输入映射或存档格式。
+> **状态**：**当前无活跃候选**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓。
+> **版本**：7.0；本轮回植不改变存档格式，7.0 gameplay 变更以 [`status.md`](../reference/status.md) 为准。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
