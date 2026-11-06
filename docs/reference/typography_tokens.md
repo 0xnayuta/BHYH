@@ -291,15 +291,15 @@ python scripts/theme_token_audit.py --check
 - `convert_ui_theme_tokens.py --check`：39 文字 token、6 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
 - `check_all --godot-bin`：本轮复跑见 [`status.md`](status.md)；
-- `scene_probe ui-theme`：PASS（8.38s）；
-- `scene_probe ui-factories`：PASS（33.54s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值与整数等级断言）；
+- `scene_probe ui-theme`：PASS（7.20s）；
+- `scene_probe ui-factories`：PASS（34.42s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值与整数等级断言）；
 - HUD 只读探针：PASS（7.70s）；
 - 1P/宠物/P2 HUD：三值条 12px 高、3px 间隔，按可见框体边界统一起点 26px；编辑器实机渲染核对；
 - 加载页：`LoadSceneProgress` 字号 24，填满进度条并上移 3px 居中；
 - `ui_text_punctuation_audit.py`：`--self-test` 9/9；全仓 report-only 扫描 0 残留；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
-- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,769 / StyleBox 36 / 独立重复组 8；
-- `font_role_audit --check`：732 变体 / 0 错误 / 10 条存量字号例外；
+- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,775 / StyleBox 36 / 独立重复组 9；
+- `font_role_audit --check`：732 变体 / 0 错误 / 4 条存量字号例外；
 - `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
 其余面板保持基线；27-7 已完成阶段验收与全量回归，不静默改变显示基线。

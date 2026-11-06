@@ -10,7 +10,7 @@
 | 指标 | 当前值 | 说明 |
 |:---|---:|:---|
 | Theme 变体 | 732（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel` + `SetMenuActionButtonGroup`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体；本次新增暂停菜单行距变体 |
-| Theme 属性 | 1,769（字体角色 P2.2 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
+| Theme 属性 | 1,775（字体角色 P2.3 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
 | Theme 子资源 | 36（27-4 后） | 27-0 为 54；27-3 后 47；27-4 跨角色合并 47→36，仍为 `StyleBoxFlat`/`StyleBoxTexture`/`StyleBoxLine`/`StyleBoxEmpty` |
 | 场景 Theme 引用 | 1,116 | `theme_override_audit` 统计 |
 | `theme_type_variation` 节点引用 | 1,419 | 617 个不同变体被场景直接引用 |
@@ -121,8 +121,8 @@
 |:---|:---|:---|---:|
 | `body` | 默认 `FontVariation` → `font_fz_cu_yuan_m03` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 343 |
 | `ui` | `font_hk.tres` FontVariation | LXGW WenKai Regular → body fallback | 154 |
-| `display` | `font_return.tres` FontVariation | FZCuYuan M03 → body fallback | 92 |
-| `accent` | `font_main.tres` FontVariation | 霞鹜文楷 Medium → `font_hk` fallback | 143 |
+| `display` | `font_return.tres` FontVariation | FZCuYuan M03 → body fallback | 98 |
+| `accent` | `font_main.tres` FontVariation | 霞鹜文楷 Medium → `font_hk` fallback | 137 |
 
 角色选择与组件映射见 [`ui_typography_contract.md`](../standards/ui_typography_contract.md)；本节只保留当前资源事实。
 
@@ -133,6 +133,8 @@ P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / �
 **27-7 P2 结果**：`ui` 改用 Source Han Serif CN Medium，`display` 改用 Source Han Serif CN SemiBold，`accent` 改用 LXGW WenKai Medium；`FZRunYYSJW` 仅用于 LOGO/活动，不进入 Theme。华康宋体、华康海报、文征明小楷已退役；Microsoft YaHei 保留为 body fallback。字体文件 5 / 76.06 MB，Theme 属性 1,744（P2 时点；当前计数以 `theme_variant_audit` 为准）。
 
 **27-7 P2.1 结果**：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件。Theme 字体资产 4 个资源 / 4 个文件；字体总量约 78.49 MB；E1–E4 字号/角色例外已清零；`MysteryShopTitle` 采用 body 12 px 解决侧栏 14 px 溢出。
+
+**27-7 P2.3 结果**：`AnnouncementHeading`、`EndStatsMoreInfo`、`GameNeedKnowTitle`、`LevelInfoTitle`、`SettingsTitle` 五个 36 px 标题与 `LijiText` 50 px 仪式标题迁 `display`；`font_role_baseline` 10→4，剩余 body 10 四条。`check_all` **9/9（46.72s）**；全量回归 **128/128 + 5 SKIP（346.4s）**。
 
 **27-7 P2.2 结果**：优先将 body 24/28/32/36 的功能性数字/计时/短功能标签与 display 标题/操作分流，`GameInfoTitle`、`PelletTotalValue` 及 `ChoosePlayerRoleName` 的角色归属同步收敛；`BacisInfoNumber`、`ForgeSoulLabel`、`ShopHintLabel`、`ShopPageLabel`、`UserKeyTime` 以 body 覆盖保持功能性大号。`font_role_baseline` 43→10。双档代表场景截图与几何转储、`ui-theme` 8.38s、`ui-factories` 33.54s 通过；全量回归见 `status.md`。
 
@@ -246,9 +248,9 @@ Phase 27-1 已建立 `scripts/ui_theme_tokens.json`：字号、语义色、字�
 |:---|---:|---:|
 | off-token 字号变体 | 0（27-0 基线 111） | 0 |
 | off-token 字体色赋值 | 0（27-3 结果） | 0 |
-| 独立重复签名组 | 8（P2.2 后） | ≤10 |
+| 独立重复签名组 | 9（P2.3 后） | ≤10 |
 | StyleBox 子资源 | 36（27-4 结果） | ≤36 |
-| Theme 属性总数 | 1,769（P2.2 后） | ≤2,000 |
+| Theme 属性总数 | 1,775（P2.3 后） | ≤2,000 |
 | Theme 字体资产 | 4 个文件（P2.1 结果） | ≤6；Theme 未引用资源为 0 |
 | 静态主题覆盖 | 0 | 0 |
 | 动态覆盖 | 352 处 / 41 文件（27-7 结果） | 字面静态角色 0；token/data/layout/dynamic_style 已登记 |
