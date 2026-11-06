@@ -78,7 +78,7 @@ def _role_size_ok(role: str, size: int) -> bool:
     if role == "ui":
         return 14 <= size <= 24
     if role == "display":
-        return 16 <= size <= 40
+        return 16 <= size <= 40 or size == 50
     if role == "accent":
         return 16 <= size <= 32
     return False

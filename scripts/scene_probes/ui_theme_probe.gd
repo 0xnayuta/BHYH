@@ -58,7 +58,7 @@ func _run() -> void:
 
 	checks["title_variation"] = title.theme_type_variation == &"SettingsTitle"
 	checks["title_font"] = (
-		_font_path(title) == MAIN_FONT and title.get_theme_font_size("font_size") == 36
+		_font_path(title) == RETURN_FONT and title.get_theme_font_size("font_size") == 36
 	)
 	checks["title_outline"] = title.get_theme_constant("outline_size") == 2
 	checks["section_variation"] = section.theme_type_variation == &"SettingsSection"

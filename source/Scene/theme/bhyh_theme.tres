@@ -400,6 +400,7 @@ AnnouncementFunctionMargin/constants/margin_right = 18
 AnnouncementFunctionMargin/constants/margin_bottom = 14
 
 AnnouncementHeading/base_type = &"SemanticAnnouncementHeading"
+AnnouncementHeading/fonts/font = ExtResource("font_return")
 AnnouncementHeading/font_sizes/font_size = 36
 
 AnnouncementLeftColumn/base_type = &"LevelInfoModeGroup"
@@ -1041,6 +1042,7 @@ EndStatsMagicHurt/colors/font_outline_color = Color(0.376471, 0.184314, 0.815686
 EndStatsMissCount/base_type = &"SemanticEndStatsCritCount"
 
 EndStatsMoreInfo/base_type = &"SemanticEndStatsMoreInfo"
+EndStatsMoreInfo/fonts/font = ExtResource("font_return")
 EndStatsMoreInfo/font_sizes/font_size = 36
 
 EndStatsPhysicalHit/base_type = &"SemanticEndStatsCritCount"
@@ -1174,6 +1176,7 @@ GameNeedKnowRule/colors/font_outline_color = Color(1, 1, 1, 1)
 GameNeedKnowRulePlain/base_type = &"SemanticAnnouncementWarning2"
 
 GameNeedKnowTitle/base_type = &"SemanticBacisInfoLevel"
+GameNeedKnowTitle/fonts/font = ExtResource("font_return")
 GameNeedKnowTitle/constants/outline_size = 1
 GameNeedKnowTitle/font_sizes/font_size = 36
 
@@ -1336,6 +1339,7 @@ LevelInfoSuccessText/colors/font_outline_color = Color(0, 1, 0, 1)
 LevelInfoSuccessText/font_sizes/font_size = 24
 
 LevelInfoTitle/base_type = &"SemanticEndStatsMoreInfo"
+LevelInfoTitle/fonts/font = ExtResource("font_return")
 LevelInfoTitle/constants/outline_size = 10
 LevelInfoTitle/font_sizes/font_size = 36
 
@@ -1387,6 +1391,7 @@ LhhjTitle/constants/outline_size = 8
 LhhjValueInput/base_type = &"SemanticArchiveUidHash"
 
 LijiText/base_type = &"SemanticAnnouncementHeading"
+LijiText/fonts/font = ExtResource("font_return")
 LijiText/colors/font_color = Color(1, 0.290196, 0, 1)
 LijiText/colors/font_shadow_color = Color(0, 0, 0, 1)
 LijiText/constants/shadow_offset_x = 15
@@ -1976,6 +1981,7 @@ SettingsSmallLabel/base_type = &"SemanticBacisInfoTime2"
 SettingsSmallLabel/font_sizes/font_size = 18
 
 SettingsTitle/base_type = &"SemanticLearnSkillTitle"
+SettingsTitle/fonts/font = ExtResource("font_return")
 SettingsTitle/font_sizes/font_size = 36
 
 SettingsValue/base_type = &"SettingsSection"
