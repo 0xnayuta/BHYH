@@ -119,6 +119,9 @@ func _set_role_head() -> void:
 			role_head.texture = load("res://Art/hero_picture/role_properies_box/hud_blm.png")
 		6:
 			role_head.texture = load("res://Art/hero_picture/role_properies_box/hud_nz.png")
+		8:
+			role_head.texture = load("res://Art/hero_picture/role_properies_box/hud_xln.png")
+			role_head.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		7:
 			role_head.texture = load("res://Art/hero_picture/role_properies_box/hud_yt.png")
 			role_head.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

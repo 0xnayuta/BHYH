@@ -858,7 +858,7 @@ func set_basic_prop():
 		140, 160, 180, 200, 220, 300, 400, 500, 600, 700, 800, 900, 1200, 1400, 1600, 2000, 2400, 3000, 4000, 5000
 	]
 	match int(PlayerData.player_data["Myself"]):
-		1, 7:
+		1, 7, 8:
 			baseroleprop.SHp = 80 + 50 * (baseroleprop.Level - 1)
 			baseroleprop.SMp = 50 + 15 * (baseroleprop.Level - 1)
 			baseroleprop.power = 8 + 4 * (baseroleprop.Level - 1)

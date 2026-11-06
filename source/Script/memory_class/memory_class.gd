@@ -624,7 +624,7 @@ func is_valid_role_id(value: Variant) -> bool:
 	if not (value is int or value is float):
 		return false
 	var role_id: int = int(value)
-	return role_id >= 1 and role_id <= 7
+	return role_id >= 1 and role_id <= 8
 
 
 func _is_valid_player_archive_data(data: Dictionary) -> bool:

@@ -291,10 +291,10 @@ func _test_role_range() -> void:
 	_check("local_role_1_valid", MemoryClass._is_valid_player_archive_data(_archive_data(1, 1)))
 	_check("local_role_7_valid", MemoryClass._is_valid_player_archive_data(_archive_data(7, 1)))
 	_check("local_role_0_invalid", not MemoryClass._is_valid_player_archive_data(_archive_data(0, 1)))
-	_check("local_role_8_invalid", not MemoryClass._is_valid_player_archive_data(_archive_data(8, 1)))
+	_check("local_role_8_valid", MemoryClass._is_valid_player_archive_data(_archive_data(8, 1)))
 
 	var invalid_path := TEST_ARCHIVE_PREFIX + "005.json"
-	MemoryClass.safe_write_archive(invalid_path, _archive_data(8, 1))
+	MemoryClass.safe_write_archive(invalid_path, _archive_data(9, 1))
 	_reset_profile(1, 1)
 	var invalid_loaded: Dictionary = MemoryClass.load_game(invalid_path)
 	_check(
@@ -313,7 +313,7 @@ func _test_role_range() -> void:
 func _test_cloud_validation() -> void:
 	_check("cloud_role_7_valid", MemoryClass.is_valid_role_id(7))
 	_check("cloud_role_0_invalid", not MemoryClass.is_valid_role_id(0))
-	_check("cloud_role_8_invalid", not MemoryClass.is_valid_role_id(8))
+	_check("cloud_role_8_valid", MemoryClass.is_valid_role_id(8))
 	_check("cloud_role_text_invalid", not MemoryClass.is_valid_role_id("7"))
 
 
@@ -383,7 +383,7 @@ func _test_request_save() -> void:
 		)
 	)
 
-	_reset_profile(8, 1)
+	_reset_profile(9, 1)
 	_open_session(TEST_ARCHIVE_PREFIX + "010.json")
 	var rejected := MemoryClass.request_save("probe_invalid")
 	_check("request_save_rejects_invalid_role", not rejected, "saved=%s" % rejected)

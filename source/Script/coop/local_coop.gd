@@ -88,7 +88,7 @@ func _default_profile() -> Dictionary:
 func create_secondary(role_id: int) -> void:
 	clear_runtime()
 	var profile := _default_profile()
-	profile["Myself"] = clampi(role_id, 1, 7)
+	profile["Myself"] = clampi(role_id, 1, 8)
 	profile["存档名称"] = "2P"
 	PlayerData.player_data[SAVE_KEY] = {"版本": SAVE_VERSION, "启用": true, "2P": profile}
 	load_profile()
@@ -100,7 +100,7 @@ func load_profile() -> void:
 	if not saved is Dictionary or not saved.get("2P", {}) is Dictionary:
 		return
 	var profile: Dictionary = saved.get("2P", {})
-	if not bool(saved.get("启用", false)) or OS.has_feature("mobile") or int(profile.get("Myself", 0)) not in range(1, 8):
+	if not bool(saved.get("启用", false)) or OS.has_feature("mobile") or int(profile.get("Myself", 0)) not in range(1, 9):
 		return
 	PlayerData.ensure_main_sword_array()
 	PlayerData.ensure_player_passive_skills()

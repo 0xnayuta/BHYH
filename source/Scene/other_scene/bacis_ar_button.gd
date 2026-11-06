@@ -18,7 +18,7 @@ func set_normal_info() -> void:
 	my_num.text = str(archive_num)
 	var archive_data: Dictionary = MemoryClass.peek_archive_data(_archive_path(archive_num))
 	var role_id: int = int(archive_data.get("Myself", 0))
-	if role_id < 1 or role_id > 7:
+	if role_id < 1 or role_id > 8:
 		name_label.text = ""
 		name_label.visible = false
 		time.text = ""
@@ -87,6 +87,8 @@ func _role_name(role_id: int) -> String:
 			return "哪吒"
 		7:
 			return "玉兔"
+		8:
+			return "小龙女"
 	return "空存档"
 
 

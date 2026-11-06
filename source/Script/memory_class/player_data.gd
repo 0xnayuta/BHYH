@@ -3494,7 +3494,7 @@ func ensure_skill_data() -> void:
 	if not (skill_data is Dictionary):
 		skill_data = {}
 		player_data[DataKeys.SKILL_LEARNED] = skill_data
-	for skill_number in range(1, 14):
+	for skill_number in range(1, 21 if int(player_data.get("Myself", 0)) == 8 else 14):
 		var skill_key := "技能" + str(skill_number)
 		if not skill_data.has(skill_key) or not (skill_data[skill_key] is Dictionary):
 			skill_data[skill_key] = {"学习": 0, "等级": 0}

@@ -29,6 +29,8 @@ const ROLE_HEAD_PATHS := {
 	4: "res://Art/hero_picture/role_properies_box/hud_shs.png",
 	5: "res://Art/hero_picture/role_properies_box/hud_blm.png",
 	6: "res://Art/hero_picture/role_properies_box/hud_nz.png",
+	7: "res://Art/hero_picture/role_properies_box/hud_yt.png",
+	8: "res://Art/hero_picture/role_properies_box/hud_xln.png",
 }
 
 var backpack_page: Node = null
@@ -65,8 +67,10 @@ func _save_if_possible() -> void:
 
 
 func _update_player_head() -> void:
-	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 6)
+	var role_id := clampi(int(PlayerData.player_data.get("Myself", 1)), 1, 8)
 	$PlayerHead.texture = load(str(ROLE_HEAD_PATHS[role_id])) as Texture2D
+	if role_id in [7, 8]:
+		$PlayerHead.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 
 func _update_player_level() -> void:
