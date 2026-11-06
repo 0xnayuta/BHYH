@@ -320,7 +320,7 @@ func _check_set_menu_layout(checks: Dictionary) -> void:
 		var last: Control = null
 		if box != null:
 			first = box.get_node_or_null("continue_game") as Control
-			last = box.get_node_or_null("more") as Control
+			last = box.get_node_or_null("RoleP2") as Control
 		checks["set_menu_separation"] = box != null and box.get_theme_constant("separation") == 11
 		checks["set_menu_fits"] = (
 			box != null

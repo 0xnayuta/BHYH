@@ -35,7 +35,7 @@ script = ExtResource("2")
 
 [node name="skill_name" type="Label" parent="ScrollContainer/HBoxContainer/Sk_na" unique_id=2110148163]
 theme = ExtResource("theme")
-theme_type_variation = "SkillLabel"
+theme_type_variation = "SkillHeaderLabel"
 offset_right = 100.0
 offset_bottom = 36.0
 text = "技能名称"
@@ -172,7 +172,7 @@ position = Vector2(136, 0)
 
 [node name="Skill_picture" type="Label" parent="ScrollContainer/HBoxContainer/sk_pi" unique_id=1497929873]
 theme = ExtResource("theme")
-theme_type_variation = "SkillLabel"
+theme_type_variation = "SkillHeaderLabel"
 offset_left = -11.0
 offset_top = -1.0
 offset_right = 89.0
@@ -386,7 +386,7 @@ position = Vector2(-14, 0)
 
 [node name="skill_uplevel" type="Label" parent="ScrollContainer/HBoxContainer/sk_lv" unique_id=1905231195]
 theme = ExtResource("theme")
-theme_type_variation = "SkillLabel"
+theme_type_variation = "SkillHeaderLabel"
 offset_left = 258.0
 offset_right = 358.0
 offset_bottom = 36.0
@@ -645,7 +645,7 @@ position = Vector2(-8, 2)
 
 [node name="skill_level" type="Label" parent="ScrollContainer/HBoxContainer/sk_le" unique_id=1236590063]
 theme = ExtResource("theme")
-theme_type_variation = "SkillLabel"
+theme_type_variation = "SkillHeaderLabel"
 offset_left = 389.0
 offset_top = -4.0
 offset_right = 489.0
@@ -777,7 +777,7 @@ vertical_alignment = 1
 
 [node name="skill_ms" type="Label" parent="ScrollContainer/HBoxContainer/sk_ms" unique_id=891240600]
 theme = ExtResource("theme")
-theme_type_variation = "SkillLabel"
+theme_type_variation = "SkillHeaderLabel"
 offset_left = 486.0
 offset_top = -4.0
 offset_right = 759.0

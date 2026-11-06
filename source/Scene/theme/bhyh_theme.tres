@@ -745,6 +745,7 @@ BdSkillRow/base_type = &"HBoxContainer"
 BdSkillRow/constants/separation = 0
 
 BdSkillTitle/base_type = &"SettingsSection"
+BdSkillTitle/fonts/font = ExtResource("font_display")
 
 BdSkillUpgradeButton/base_type = &"SemanticBacisInfoTime"
 BdSkillUpgradeButton/font_sizes/font_size = 20
@@ -1250,12 +1251,13 @@ LdlTitleLabel/base_type = &"ArchiveLoginLabel"
 LdlXqButton/base_type = &"MenuActionButton"
 
 LearnSkillButton/base_type = &"MonsterHelpButton"
+LearnSkillButton/fonts/font = ExtResource("font_display")
 
 LearnSkillDescriptionButton/base_type = &"SemanticAnnouncementButton"
 LearnSkillDescriptionButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 LearnSkillDescriptionButton/colors/font_pressed_color = Color(0.94, 0.73, 0.34, 1)
 LearnSkillDescriptionButton/constants/outline_size = 2
-LearnSkillDescriptionButton/fonts/font = ExtResource("font_accent")
+LearnSkillDescriptionButton/fonts/font = ExtResource("font_display")
 LearnSkillDescriptionButton/font_sizes/font_size = 20
 LearnSkillDescriptionButton/styles/normal = SubResource("learn_damage_normal")
 LearnSkillDescriptionButton/styles/pressed = SubResource("learn_damage_hover")
@@ -1263,10 +1265,12 @@ LearnSkillDescriptionButton/styles/hover = SubResource("learn_damage_hover")
 LearnSkillDescriptionButton/styles/focus = SubResource("learn_damage_normal")
 
 LearnSkillLevelValue/base_type = &"SemanticLearnSkillLevelValue"
+LearnSkillLevelValue/fonts/font = ExtResource("font_display")
 LearnSkillLevelValue/colors/font_outline_color = Color(1, 1, 1, 1)
 LearnSkillLevelValue/constants/shadow_outline_size = -5
 
 LearnSkillTitle/base_type = &"SemanticLearnSkillTitle"
+LearnSkillTitle/fonts/font = ExtResource("font_display")
 LearnSkillTitle/font_sizes/font_size = 28
 
 LetterBody/base_type = &"SemanticLetterBody"
@@ -2096,6 +2100,9 @@ SkillKeySetLabel/colors/font_color = Color(1, 1, 0, 1)
 SkillKeySetLabel/constants/outline_size = 5
 
 SkillLabel/base_type = &"SettingsSection"
+
+SkillHeaderLabel/base_type = &"SkillLabel"
+SkillHeaderLabel/fonts/font = ExtResource("font_display")
 
 SkillNeedLabel/base_type = &"SemanticHcHelpTabLabel"
 SkillNeedLabel/colors/font_outline_color = Color(1, 1, 0, 1)
