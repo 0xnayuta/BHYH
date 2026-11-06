@@ -1559,7 +1559,7 @@ MenuActionButton/font_sizes/font_size = 24
 MenuActionButtonGroup/base_type = &"SemanticBackpackEquipmentColumn"
 
 SetMenuActionButtonGroup/base_type = &"MenuActionButtonGroup"
-SetMenuActionButtonGroup/constants/separation = 9
+SetMenuActionButtonGroup/constants/separation = 11
 
 MenuActionButtonOutline/base_type = &"MenuActionButton"
 MenuActionButtonOutline/colors/font_outline_color = Color(1, 1, 1, 1)

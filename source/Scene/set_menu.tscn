@@ -30,9 +30,10 @@ texture = ExtResource("2")
 theme_type_variation = "SetMenuActionButtonGroup"
 layout_mode = 0
 offset_left = 15.0
-offset_top = 55.0
+offset_top = 31.0
 offset_right = 303.0
-offset_bottom = 473.0
+offset_bottom = 449.0
+alignment = 1
 
 [node name="continue_game" type="Button" parent="bg/box" unique_id=702142068]
 theme_type_variation = "MenuActionButton"

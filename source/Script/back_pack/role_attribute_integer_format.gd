@@ -74,7 +74,7 @@ func _set_percentage_attribute(node_name: String, title_name: String, title: Str
 	var value_label := information.get_node_or_null(node_name) as Label
 	if value_label == null:
 		return
-	value_label.text = "%.2f%%" % (value * 100.0)
+	value_label.text = "%.1f%%" % (value * 100.0)
 	var title_label := value_label.get_node_or_null(title_name) as Label
 	if title_label != null:
 		title_label.text = title

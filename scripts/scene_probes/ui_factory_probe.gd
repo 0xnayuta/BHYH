@@ -316,15 +316,23 @@ func _check_set_menu_layout(checks: Dictionary) -> void:
 		host.add_child(menu)
 		await _settle()
 		var box := menu.get_node_or_null("bg/box") as VBoxContainer
+		var first: Control = null
 		var last: Control = null
 		if box != null:
+			first = box.get_node_or_null("continue_game") as Control
 			last = box.get_node_or_null("more") as Control
-		checks["set_menu_separation"] = box != null and box.get_theme_constant("separation") == 9
+		checks["set_menu_separation"] = box != null and box.get_theme_constant("separation") == 11
 		checks["set_menu_fits"] = (
 			box != null
 			and last != null
 			and box.get_combined_minimum_size().y <= box.size.y
 			and last.position.y + last.size.y <= box.size.y
+		)
+		checks["set_menu_centered"] = (
+			box != null
+			and first != null
+			and last != null
+			and absf((first.position.y + last.position.y + last.size.y) * 0.5 - box.size.y * 0.5) <= 1.0
 		)
 	host.queue_free()
 

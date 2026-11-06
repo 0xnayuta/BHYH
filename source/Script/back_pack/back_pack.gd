@@ -286,28 +286,28 @@ func set_backpack_properies():
 		mp.text = str(int(RoleProp.roleprop.Mp)) + "/" + str(int(RoleProp.roleprop.SMp))
 		att.text = str(int(RoleProp.roleprop.power))
 
-		ehp.text = "%.2f" % RoleProp.roleprop.R_hp
-		emp.text = "%.2f" % RoleProp.roleprop.R_mp
+		ehp.text = "%.1f" % RoleProp.roleprop.R_hp
+		emp.text = "%.1f" % RoleProp.roleprop.R_mp
 
 		var def_raw = RoleProp.roleprop.Def
 		var def_rate = snapped(def_raw / float(def_raw + 250), 0.001) * 100
-		def.text = str(int(def_raw)) + "（" + ("%.2f" % def_rate) + "%）"
+		def.text = str(int(def_raw)) + "（" + ("%.1f" % def_rate) + "%）"
 
 		var mdef_raw = RoleProp.roleprop.Mdef
 		var mdef_rate = snapped(mdef_raw / float(mdef_raw + 250), 0.001) * 100
-		mdef.text = str(int(mdef_raw)) + "（" + ("%.2f" % mdef_rate) + "%）"
+		mdef.text = str(int(mdef_raw)) + "（" + ("%.1f" % mdef_rate) + "%）"
 
 		var crit_raw = RoleProp.roleprop.Crit
 		var crit_rate = snapped(crit_raw / float(crit_raw + 100), 0.001) * 100
-		crit.text = ("%.2f" % crit_raw) + "（" + ("%.2f" % crit_rate) + "%）"
+		crit.text = ("%.1f" % crit_raw) + "（" + ("%.1f" % crit_rate) + "%）"
 
 		var miss_raw = RoleProp.roleprop.Miss
 		var miss_rate = snapped(miss_raw / float(miss_raw + 100), 0.001) * 100
-		miss.text = ("%.2f" % miss_raw) + "（" + ("%.2f" % miss_rate) + "%）"
+		miss.text = ("%.1f" % miss_raw) + "（" + ("%.1f" % miss_rate) + "%）"
 
 		var lucky_raw = RoleProp.roleprop.Lucky
 		var lucky_rate = snapped(lucky_raw / float(lucky_raw + 50), 0.001) * 100
-		lucky.text = ("%.2f" % lucky_raw) + "（" + ("%.2f" % lucky_rate) + "%）"
+		lucky.text = ("%.1f" % lucky_raw) + "（" + ("%.1f" % lucky_rate) + "%）"
 
 	elif current_pro_page == 2:
 		message_text.text = "角色属性详情第二页"
@@ -325,7 +325,7 @@ func set_backpack_properies():
 		hp.text = str(RoleProp.roleprop.htarget)
 		mp.text = str(RoleProp.roleprop.toughness)
 
-		att.text = "%.2f" % (RoleProp.roleprop.vampirism * 100) + "%"
+		att.text = "%.1f" % (RoleProp.roleprop.vampirism * 100) + "%"
 		def.text = str(RoleProp.roleprop.CritReduce)
 		lucky.text = str(RoleProp.roleprop.ar)
 		mdef.text = str(RoleProp.roleprop.sp)
@@ -545,7 +545,7 @@ func _on_crit_mouse_entered() -> void:
 	if current_pro_page == 1:
 		add_text("暴击：提升角色造成更高伤害的几率。", crit)
 	else:
-		pass
+		add_text("伤害：提升角色造成的最终伤害。", crit)
 
 
 func _on_crit_mouse_exited() -> void:
@@ -556,7 +556,7 @@ func _on_miss_mouse_entered() -> void:
 	if current_pro_page == 1:
 		add_text("闪避：提升角色无视伤害的几率（闪避时视为霸体效果）。", miss)
 	else:
-		pass
+		add_text("免伤：降低角色受到的最终伤害。", miss)
 
 
 func _on_miss_mouse_exited() -> void:
