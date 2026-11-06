@@ -28,6 +28,7 @@
 - `docs/`
   - `standards/`：活跃规范，必须遵守；索引见 `standards/README.md`；
   - `standards/target_architecture_contract.md`：项目总体目标架构；应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台及所有权/生命周期，视觉资产为子契约；
+  - `standards/ui_typography_contract.md`：UI 字体角色（`body`/`ui`/`display`/`accent`）、Theme 变体、字号边界、fallback、存量例外与迁移；字体选择以本规范为准，现状清单见 `reference/theme_font_inventory.md`；
   - `reference/status.md`：版本、规模与验证状态的单一事实源；
   - `roadmap/roadmap.md`：项目状态、长期阶段顺序与近期重点的唯一来源；
   - `reference/architecture.md`：当前运行时架构：Autoload 与 `Global` 普通子节点运行时、场景流、战斗、档案/双人、资源、UI/输入及遗留差距；
@@ -45,7 +46,9 @@
   - `reference/pet_domain_contract.md`:Phase 23-4/24-3 宠物域只读 View、出战/休息/成长/阵法显式命令、保存失败回滚与 `PlayerData` 职责边界;
   - `reference/ui_panel_contract_matrix.md`:Phase 24-0/24-1/24-2/24-3/24-4 面板操作者、成长命令/快照、关闭保存、直接/间接写档边界、属性页拆分、面板宿主与登记例外;
   - `reference/equipment_data_contract.md`：Phase 33 装备数据契约（33-0~33-5 完成）：32 字段 schema、int/float 与历史嵌套键、随机规格、Catalog/Store、Rules/Roller、全部消费方迁移、旧脚本/Autoload 删除、构建源与验证；
-  - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 批次结果、变体命名、例外、审计与迁移边界；
+  - `reference/ui_theme_contract.md`：Phase 32 Theme 契约、32-3A/32-3B/32-3C/32-3D/32-3E/32-3F/32-3G-1/32-3G-2/32-3G-3/32-3G-4/32-3G-5/32-3G-6/32-3G-7/32-3G-8/32-3G-9/32-3G-10 与 32-4 批次结果、变体命名、例外、审计与迁移边界；字体角色选择见 `standards/ui_typography_contract.md`；
+  - `reference/theme_font_inventory.md`：当前字体角色、文件、fallback、引用规模与审计事实；不定义选择规则；
+  - `reference/typography_tokens.md`：字号、颜色、描边与 Button 共享族 token；不定义字体角色；
   - `roadmap/current-iteration.md`：当前候选；Phase 22、23 已完成并归档，Phase 24-0 面板盘点、24-1 属性页拆分、24-2 面板宿主分离、24-3 阵法升级命令与 24-4 阶段验收已完成，Phase 24 已关闭；Phase 25-0/25-1/25-2/25-3/25-4/25-5 已完成，Phase 25 已关闭；Phase 26 未启动；Phase 21~33 历史程序记录见 `archive/program_21_33_closeout.md`；
   - `archive/iteration_17_gameplay_module_boundaries.md`：Phase 17 玩法与表现模块边界归档：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口；
   - `guides/migration_playbook.md`：版本迁移方法、阶段与红线；

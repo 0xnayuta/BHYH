@@ -75,6 +75,7 @@ python scripts/check_all.py --godot-bin "<Godot 4.7.2 可执行文件>"
 | [`docs/reference/architecture.md`](docs/reference/architecture.md) | 当前运行时架构与遗留边界 |
 | [`docs/reference/status.md`](docs/reference/status.md) | 当前状态、门禁与已知边界 |
 | [`docs/reference/acceptance.md`](docs/reference/acceptance.md) | 验收分层、命令与变更矩阵 |
+| [`docs/standards/README.md`](docs/standards/README.md) | 活跃规范索引，含 UI 字体角色与 Theme 使用边界 |
 | [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) | 长期阶段顺序与近期重点 |
 | [`docs/decisions/README.md`](docs/decisions/README.md) | ADR 索引 |
 | [`docs/archive/README.md`](docs/archive/README.md) | 已完成阶段归档入口 |

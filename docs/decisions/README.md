@@ -50,6 +50,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-023](ADR-023-level-layout-data-contract.md) | 关卡布局走构建期生成的 Resource，绞杀式迁移脚本内数据表 | **Accepted** | 关卡数据载体、`BaseLevel` 扩展点默认实现、生成器与迁移批次；30-1 已迁移 `level_48`，30-2 已接入外部怪物映射与原始 ZMWS 驱动，30-3 收口（69 迁出 + 10 例外） |
 | [ADR-024](ADR-024-check-all-nine-gate-dimensions.md) | `check_all` 九维门禁与维度清单治理 | Accepted | 九维门禁、`acceptance.md` 单一文档事实源；扩展 ADR-012 |
 | [ADR-025](ADR-025-raw-data-export-closure.md) | 原始数据导出清单、导出插件与实际 PCK 验证 | Accepted | FileAccess JSON/BIN、导出闭包、发布包装；与 ADR-020 第 7 条衔接 |
+| [ADR-026](ADR-026-ui-font-theme-role-contract.md) | UI 字体角色与 Theme 使用边界 | Accepted | 四字体角色、组件矩阵、存量例外与迁移；规范入口 |
 
 ### 2.1 常见决策检索
 
@@ -67,6 +68,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | 原始 JSON/BIN 如何进入 PCK？ | [ADR-025](ADR-025-raw-data-export-closure.md)；视觉资源契约见 ADR-020 |
 | 本地双人数据为什么不是第二个 Autoload？ | [ADR-017](ADR-017-local-coop-profile-isolation.md) |
 | 项目总体目标、状态所有权和后续架构治理以什么为准？ | [ADR-021](ADR-021-project-wide-target-architecture.md)；视觉资源子契约仍见 ADR-020 |
+| UI 字体角色、Theme 变体和字号边界以什么为准？ | [ADR-026](ADR-026-ui-font-theme-role-contract.md)；规范见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md) |
 | AtlasMetadata 运行时如何读取、为什么没有 UID？ | [ADR-022](ADR-022-atlas-metadata-view-and-path-identity.md)；矩阵见 [`../reference/atlas_metadata_schema.md`](../reference/atlas_metadata_schema.md) |
 
 ---

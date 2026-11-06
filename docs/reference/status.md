@@ -28,14 +28,15 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 存档槽文本居中复跑 **30.24s**） |
-| 字体覆盖 | **135 场景 / 790 中文节点 / 0 缺字；Theme 字体 5 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
-| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.58s） |
-| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，30.00s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 字体 P2.1 复跑 **40.34s**） |
+| 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
+| 字体角色语义 | **732 变体 / 0 错误 / 43 条存量字号例外**（`font_role_audit.py --check`） |
+| UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.12s） |
+| UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，34.41s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
 | Theme token | **732 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **39 文字 token / 6 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
-| Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6**（`theme_variant_audit.py --check`） |
-| Theme 字体角色 | **body FZCuYuan / ui 思源宋体 Medium / display 思源宋体 SemiBold / accent 霞鹜文楷 Medium**；msyh 仅作 body fallback；直接字体 0 |
+| Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 732 总变体 / 属性 1,751 / StyleBox 36 / 独立重复组 6**（`theme_variant_audit.py --check`） |
+| Theme 字体角色 | **body FZCuYuan M03 / ui LXGW WenKai Regular / display FZCuYuan M03 / accent LXGW WenKai Medium**；msyh 仅作 body fallback；直接字体 0 |
 | 动态 Theme 覆盖 | **352 调用 / 静态 0 / token 173 / data 43 / layout 96 / dynamic_style 40**（`ui_dynamic_theme_audit.py --check`，覆盖 `Script` 与 `Scene`） |
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
@@ -45,7 +46,7 @@
 | `scene_probe_runner` | **19/19 PASS**（167.76s，含 `boss-multiplier`、`yutu-drop`、`pet-runtime`、`load-guard`） |
 | `coop_probe_runner` | **37/37 PASS**（208.26s，含 6.8 相机/灵气/Buff/2P 被动/键位提示断言） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 339.9s，默认 auto 并发，本轮无重试） |
+| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（最新 372.9s，默认 auto 并发，本轮无重试） |
 | PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s** |
 | PCK 原始数据清单 | **844/844**（173 `.bin` + 671 JSON）；`export_raw_manifest.py --check` 通过 |
 | Release PCK（实际 exe） | **5,044/5,044**（844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节 |
@@ -63,6 +64,7 @@
 - 2026-11-05 UI 三项修复：`set_menu` 新增 `SetMenuActionButtonGroup`（`separation = 9`），实测容器 402/418、暂停菜单全部内容在框内；背包属性 Tooltip 改为 `backpack.to_local()` 转换并加视口翻转/夹取，修复 1280×800 下约 `(249,143)` 的固定偏移；物品 Tooltip 描述字体 14→18、去掉“描述：”前缀、双 U+3000 首行缩进、售价去句号、动态属性统一全角冒号；`诛仙剑` 属性文本同步统一。新增 `UiTextFormat`；`ui-factories` 增加暂停菜单、Tooltip 位置、描述缩进/售价断言。截图归档 `G:/tmp/ui_fix_set_menu.png`、`ui_fix_backpack_tooltip.png`、`ui_fix_equipment_tooltip.png`。`check_all` **9/9（43.18s）**，`ui-theme` **7.35s**，`ui-factories` **43.97s**，全量回归 **128/128 + 5 SKIP（339.9s）**。
 - 2026-11-05 Phase 27-7 阶段验收：`ui_dynamic_theme_audit` 扫描范围扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处）；修复 Scene 中 **29 处**字面字号/字体色，新增 `FONT_SIZE_8` 与 2 个阵发语义色 token；`set_menu` 直接字体引用改为 `SetMenuHintLabel` 变体。当前静态 literal **0**，token 173 / data 43 / layout 96 / dynamic_style 40；`theme_override_audit` 对字体/动态字段实施上限校验；18 场景 × 1280/1600 截图与 **2,323** 控件几何 **0 位移**；全量回归 **128/128 + SKIP 5（301.0s）**，`level_1` 4 阶段 0/0/0。Phase 27 关闭。
 - 2026-11-05 字体 P0/P1：按素材契约删除 **8 个 35.84 MB** 无运行时引用顶层字体；`font_main`/`font_hk`/`font_return` 增加 FontVariation 显式回退；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作与 `CureTimesHint` 移出小楷/海报体小字号功能文本。Theme 属性 **1,744**，字体覆盖 0 缺字；P1 受影响场景 1,031 控件 / 0 位移，全量回归 128/128 + 5 SKIP（325.4s）。
+- 2026-11-06 字体 P2.1：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件，Theme 字体资产 4 个资源 / 4 个文件（约 78.49 MB）。新增 `font_role_audit.py`，覆盖有效字体归属、包装/fallback、脚本/场景直接字体、宋体残留与 43 条存量字号例外；E1–E4 已迁移，暂停菜单、神秘商店、帮助页双档截图与几何转储未见裁切；装备面板描述/售价由 `ui-factories` 断言。`ui-theme` 7.12s、`ui-factories` 34.41s；`check_all` **9/9（40.34s）**；全量回归 **128/128 + 5 SKIP（372.9s）**。
 - 2026-11-05 字体 P2：`ui` 思源宋体 Medium、`display` 思源宋体 SemiBold、`accent` 霞鹜文楷 Medium；华康宋体/海报/文征明小楷退役，Microsoft YaHei 保留为 body fallback；方正润玉圆宋仅用于 LOGO/活动。字体文件 **5 / 76.06 MB**；18 场景双档 **2,323 控件 / 0 位移**；全量回归 128/128 + 5 SKIP（342.3s）。
 - 2026-11-05 Phase 27-6 动态覆盖：脚本 `add_theme_*` **332→299**，静态字面角色 **0**；删除 18 处默认字体覆盖、15 处主字体覆盖改绑 9 个 `Semantic*` 变体；62 处字面颜色、47 处字号与 18 处动态 StyleBox 字面色 token 化，新增 `UiFontSizes`。`ui_dynamic_theme_audit` 分类 token 139 / data 37 / layout 83 / dynamic_style 40，基线已冻结；16+3 场景截图归档。`check_all` **9/9（37.03s）**，UI 4.58s，factory 15.07s，HUD 6.20s，`level_1` 24.99s。
 - 2026-11-05 Phase 27-5 字体族与资产：4 个角色 + fallback；Theme 字体资产 **10→5 个文件 / 约 44.98 MB**；`font_hy`/`font_meng`/`font_wo`/`font_jin_qiao`→`font_main`，`font_194`→`font_hk`；`font_coverage_audit` 增加 Theme 资源/未引用/动态样本检查，静态 135/790/0、动态 5/0 缺字。16 场景截图归档；私有未引用字体保留边界登记。`check_all` **9/9（35.06s）**，UI 4.55s，factory 15.20s，HUD 5.98s，`level_1` 24.04s。

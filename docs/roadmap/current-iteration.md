@@ -251,9 +251,10 @@
 - 新增 `FONT_SIZE_8`、`TEXT_ZHENFA_PURPLE`、`TEXT_ZHENFA_ORANGE`；`set_menu.tscn` 直接字体引用迁移为 `SetMenuHintLabel`；`theme_override_audit` 强制直接字体与动态调用上限；
 - P0/P1 字体治理：删除 8 个无运行时引用顶层字体及 `.import`（约 35.84 MB）；`font_main`/`font_hk`/`font_return` 建立 FontVariation 回退；小字号帮助正文、HUD 名称/计时、角色属性、幻化操作与 `CureTimesHint` 移出小楷/海报体；P1 受影响 1,031 控件 / 0 位移；
 - P2 字体角色：`ui` 思源宋体 Medium、`display` 思源宋体 SemiBold、`accent` 霞鹜文楷 Medium；华康宋体/海报/文征明小楷退役，Microsoft YaHei 保留为 body fallback；字体文件 5 / 76.06 MB；18 场景双档 **2,323 控件 / 0 位移**；
+- P2.1 字体角色：`ui` 霞鹜文楷 Regular、`display` FZCuYuan M03、`accent` 霞鹜文楷 Medium、`body` FZCuYuan M03；移除宋体文件，字体资产 4 个资源 / 4 个文件、约 78.49 MB；E1–E4 例外迁移；新增 `font_role_audit.py` 与 `font_role_baseline.json`；
 - 通过 `check_all --godot-bin`、`theme_override_audit`、`theme_token_audit`、`ui_surface_token_audit`、`font_coverage_audit`、动态字体样本与全量关卡回归（**P2 后 128/128 + 5 SKIP，342.3s**）；
 - 18 个代表场景 × 1280×800 / 1600×1000 截图与控件几何对照：**2,323 控件 / 0 位移**；归档 `G:/tmp/p2font/1280/`、`G:/tmp/p2font/1600/`；`main_menu` 首启须知的覆盖层不纳入主菜单布局批准，菜单布局由 `set_menu`/`choose_player`/`level_info` 覆盖；
-- 全量回归 **PASS 128/128 + SKIP 5**（P2 342.3s）；`check_all` **9/9**；`health_check` **784 脚本 0/0/0**；`level_1` 4 阶段 0/0/0；
+- 全量回归 **PASS 128/128 + SKIP 5**（P2.1 372.9s）；`check_all` **9/9（40.34s）**；`health_check` **784 脚本 0/0/0**；`level_1` 4 阶段 0/0/0；
 - 更新 [`theme_font_inventory.md`](../reference/theme_font_inventory.md)、[`typography_tokens.md`](../reference/typography_tokens.md)、[`ui_theme_contract.md`](../reference/ui_theme_contract.md)、[`status.md`](../reference/status.md) 与 [`roadmap.md`](roadmap.md)；
 - 出口：off-token 字号/颜色为 0；Theme 属性 ≤2,000；重复组 ≤10；字体资产 ≤6；静态动态覆盖 0；0 ERROR / 0 WARNING；显示基线差异均有截图批准记录。
 

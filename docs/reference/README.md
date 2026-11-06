@@ -31,6 +31,7 @@
 
 ## 2. 边界
 
+- 字体角色、Theme 使用边界与字号选择以 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md) 为准；本目录的字体页只保留事实、资源映射与审计结果；
 - 当前状态、架构、验收和仍生效的契约放在本目录；
 - 架构决策放在 [`../decisions/`](../decisions/README.md)；规范放在 [`../standards/`](../standards/README.md)；
 - 已完成阶段的实施记录、历史计数和验证快照进入 [`../archive/`](../archive/README.md)；

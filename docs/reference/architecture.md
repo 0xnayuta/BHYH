@@ -579,7 +579,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 - `hit_text` 保留 **26 条 Animation 轨道路径**作为最终例外；这些轨道按命中类型驱动颜色、描边与字号，不改为静态变体，也不扩张。
 - 脚本 `add_theme_*` 仍保留 **352 处 / 41 个文件**（含 `Scene` 脚本），无静态字面角色；只用于品质色、状态、布局与运行时动态样式，不把这些状态写回共享 Theme。
 - `project.godot` **未启用** `gui/theme/custom`。32-4 评审选择显式节点/场景绑定，避免对未覆盖控件产生隐式全局默认；启用全局 Theme 前必须补齐全 UI 回归证据。
-- Theme 资源与基线由 `scripts/theme_override_audit.py`、`scripts/theme_override_baseline.json` 与本页、`ui_theme_contract.md` 共同约束。
+- Theme 资源与基线由 `scripts/theme_override_audit.py`、`scripts/theme_override_baseline.json` 与本页、`ui_theme_contract.md` 共同约束；字体角色与组件使用边界以 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md) 为准。
 
 ---
 

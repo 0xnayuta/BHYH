@@ -2,6 +2,7 @@
 
 > **状态**：Phase 32 已完成（2026-11-02）。静态直接 `theme_override_*` 为 0；旧 Theme 已退役；完整批次与截图记录见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
 > **范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与审计；不约束运行时业务状态。
+> **规范边界**：字体角色、组件选择与字号边界见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)；本文只记录 Theme 实现、变体、覆盖和审计事实。
 > **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 
 ## 1. 目标
@@ -28,7 +29,7 @@ Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘�
 - 变体按角色命名，不按具体面板命名；同一角色跨面板复用。
 - 变体必须登记在 `bhyh_theme.tres`；未定义变体、缺失类型或 Theme 加载失败均应在审计/加载阶段失败，不回退到内联样式。
 - 32-4 冻结的完整变体名单与字体映射见归档页；新增/重命名变体必须评审。
-- P2 排版 token 试点见 [`typography_tokens.md`](typography_tokens.md)；当前仅覆盖 `game_set` 与 `back_pack`，其余面板逐批迁移。
+- P2 排版 token 覆盖范围与 token 值见 [`typography_tokens.md`](typography_tokens.md)；字体角色选择见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)。
 
 ## 4. 静态、动画与动态覆盖
 
@@ -36,7 +37,7 @@ Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘�
 |:---|:---|
 | 直接 `theme_override_*` 属性 | 必须为 **0**；由 Theme 基础类型或变体替代 |
 | Animation 轨道 `theme_override_*` 路径 | 保留 `hit_text.tscn` 的 **26 条**最终例外 |
-| 脚本 `add_theme_*` | 保留为数据/状态驱动；当前 384 处、41 文件，不计入静态迁移 |
+| 脚本 `add_theme_*` | 保留为数据/状态驱动；当前 352 处、41 文件，不计入静态迁移 |
 | 一次性布局/特效覆盖 | 登记场景例外；不得复制成新的通用样式 |
 
 ## 5. 审计与基线
@@ -101,6 +102,7 @@ python scripts/font_coverage_audit.py --check
 - Phase 27-7 审计闭合：`ui_dynamic_theme_audit.py` 扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处），其中 **29 处**字面字号/字体色 token 化；新增 `FONT_SIZE_8`、`TEXT_ZHENFA_PURPLE`、`TEXT_ZHENFA_ORANGE`；`set_menu` 直接字体引用迁移为 `SetMenuHintLabel` 变体。当前 **static 0 / token 173 / data 43 / layout 96 / dynamic_style 40**；`theme_override_audit` 新增直接字体与动态调用上限校验。
 - Phase 27-7 P0/P1：删除 8 个无运行时引用顶层字体及 `.import`，回收约 35.84 MB；`font_main`/`font_hk`/`font_return` 改为 FontVariation 显式回退链；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作等小字号功能文本移出小楷，`CureTimesHint` 移出海报体。Theme 属性 **1,744**，字体文件 5，覆盖 0 缺字。
 - Phase 27-7 P2：`ui` 改为思源宋体 Medium，`display` 改为思源宋体 SemiBold，`accent` 改为霞鹜文楷 Medium；退役华康宋体/海报/文征明小楷，保留 Microsoft YaHei 作为 body fallback；方正润玉圆宋仅用于 LOGO/活动，不进入 Theme。P2 字体文件 5 / 76.06 MB；18 场景双档 2,323 控件 0 位移。
+- Phase 27-7 P2.1：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif。Theme 字体资产 4 个资源 / 4 个文件；E1–E4 角色/字号例外迁移完成；`ui-theme` 7.12s、`ui-factories` 34.41s、全量回归 128/128 + 5 SKIP（372.9s）。
 - StyleBox 角色合并（47→36）：`learn_damage_focus→normal`、`learn_damage_pressed→hover`、`map0_catalog_pressed→hover`、`divine_forge_pressed→hover`、`tower_button_pressed→hover`、`wan_ling_close_pressed→normal`、`sub_StyleBoxFlat_secret_panel→wan_ling_stage_panel`、`wan_ling_section_panel→sub_CloudPanel`、`sub_StyleBoxFlat_pet_page_selected→...hover`、`auto_battle_button*→tower_button_normal/hover`；重写 18 处引用。
 - 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）；P2-5 `sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0/0，`magic_weapon_infor` 0/1，`mosaic_help` 5（≤5 px）/7；P2-6 公告颜色 0/0；P2-7 商城/装备/锻造颜色 0/0；P2-8 主菜单子面板/商店/宠物颜色 0/0；P2-9 主菜单描边/状态 0/0，动态菜单 39/61/287/32/32/7 控件 0/0；P2-10 自绘菜单表面色 0/0，`TowerFloorInput` 光标/选区已转储；P2-11 输入/动态样式颜色值分别转储 `331f1240`、`ffd97aff`、`c09c5673`。
 - `theme_token_audit.py --check` 冻结 618 个既有变体（当前基线 731 个既有变体 + 新增 `SetMenuActionButtonGroup`），新增/改写值必须使用 token；当前 **0 违规**。

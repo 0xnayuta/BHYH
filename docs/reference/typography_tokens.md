@@ -1,7 +1,8 @@
 # Typography and Control Tokens（P2）
 
-> **状态**：P2-11 输入与动态样式批次（2026-11-05）；Phase 27-1 已将文字/表面 token、受管 Theme 输入属性与默认字体迁入 `scripts/ui_theme_tokens.json`，`UiColorTokens`/`UiSurfaceTokens` 由生成器维护；Phase 27-2 已把 111 个 off-token 字号映射到标准标尺，当前 off-token 字号 0；Phase 27-3 已把 139 处 off-token 字体色收敛到 0，实际 35 个值 / 37 个语义 token；Phase 27-4 新增 103 个语义基类，Theme 属性 1,719、StyleBox 36、独立重复组 3；Phase 27-5 收敛为 4 个字体角色 + fallback，Theme 字体资产 10→5，动态样本 5/0 缺字；Phase 27-6 脚本动态调用 332→299；Phase 27-7 全源审计 352 调用、静态 0，新增 2 个阵发色和 `FONT_SIZE_8`；P2 将 `ui`/`display`/`accent` 切换为思源宋体 Medium/SemiBold 与霞鹜文楷 Medium，保留 body FZCuYuan 与 Microsoft YaHei fallback。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
+> **状态**：P2-11 输入与动态样式批次（2026-11-05）；Phase 27-1 已将文字/表面 token、受管 Theme 输入属性与默认字体迁入 `scripts/ui_theme_tokens.json`，`UiColorTokens`/`UiSurfaceTokens` 由生成器维护；Phase 27-2 已把 111 个 off-token 字号映射到标准标尺，当前 off-token 字号 0；Phase 27-3 已把 139 处 off-token 字体色收敛到 0，实际 35 个值 / 37 个语义 token；Phase 27-4 新增 103 个语义基类，Theme 属性 1,719、StyleBox 36、独立重复组 3；Phase 27-5 收敛为 4 个字体角色 + fallback，Theme 字体资产 10→5，动态样本 5/0 缺字；Phase 27-6 脚本动态调用 332→299；Phase 27-7 全源审计 352 调用、静态 0，新增 2 个阵发色和 `FONT_SIZE_8`；P2.1 将 `ui` 切换为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，保留 body FZCuYuan 与 Microsoft YaHei fallback；不再使用宋体。P2-10 的 `UiSurfaceTokens` 继续扩展模式选择、地图高亮、锁定/禁用 modulate 与 main_menu 动态样式；Phase 27 的长期收敛路线见 [`theme_font_inventory.md`](theme_font_inventory.md)。
 > **边界**：不重命名 618 个冻结 `theme_type_variation`；27-7 新增 `SetMenuHintLabel`，不改变字体族、布局层级或显示画布。
+> **规范边界**：本文只维护字号、颜色、描边和 Button token；字体角色、组件选择与 Theme 使用边界见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)。
 
 ## 1. Token 标尺
 
@@ -284,20 +285,21 @@ python scripts/theme_token_audit.py --check
 
 ## 6. 既有门禁
 
-- `font_coverage_audit.py --check`：135 场景 / 790 中文节点 / 0 缺字；Theme 字体资产 5；动态样本 5 / 0 缺字；
+- `font_coverage_audit.py --check`：135 场景 / 788 中文节点 / 0 缺字；Theme 字体资产 4；动态样本 5 / 0 缺字；
 - `theme_override_audit.py --check`：直接属性 0，动画轨道 26；
 - `theme_token_audit.py --check`：732 变体 / 0 违规；有效字号与 8 类字体色全部在 token；
 - `convert_ui_theme_tokens.py --check`：39 文字 token、6 组表面 token、37 语义字体色、10 项受管 Theme 属性 / 0 漂移；
 - `ui_surface_token_audit.py --check`：主菜单 0 裸色；StyleBox 字面色 0 / 基线 0；
-- `check_all --godot-bin`：**9/9 PASS**（26.69s）；
-- `scene_probe ui-theme`：PASS（7.58s）；
-- `scene_probe ui-factories`：PASS（30.00s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值与整数等级断言）；
+- `check_all --godot-bin`：本轮复跑见 [`status.md`](status.md)；
+- `scene_probe ui-theme`：PASS（7.12s）；
+- `scene_probe ui-factories`：PASS（34.41s，含暂停菜单、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值与整数等级断言）；
 - HUD 只读探针：PASS（7.70s）；
 - 1P/宠物/P2 HUD：三值条 12px 高、3px 间隔，按可见框体边界统一起点 26px；编辑器实机渲染核对；
 - 加载页：`LoadSceneProgress` 字号 24，填满进度条并上移 3px 居中；
 - `ui_text_punctuation_audit.py`：`--self-test` 9/9；全仓 report-only 扫描 0 残留；
 - `level_1`：4 阶段冒烟，0 ERROR / 0 WARNING；
-- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,746 / StyleBox 36 / 独立重复组 6；
+- `theme_variant_audit --check`：618 冻结变体 / 112 基类 / 732 总变体 / 属性 1,751 / StyleBox 36 / 独立重复组 6；
+- `font_role_audit --check`：732 变体 / 0 错误 / 43 条存量字号例外；
 - `ui_dynamic_theme_audit --check`：352 调用 / 静态 0（`Script` 与 `Scene`）；基线 `ui_dynamic_theme_baseline.json`。
 
 其余面板保持基线；27-7 已完成阶段验收与全量回归，不静默改变显示基线。

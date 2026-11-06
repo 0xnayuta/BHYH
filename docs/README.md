@@ -20,7 +20,7 @@
 
 ## 2. 文档规则
 
-1. **单一事实源**：状态以 [`reference/status.md`](reference/status.md) 为准；架构以 [`reference/architecture.md`](reference/architecture.md) 为准；验收以 [`reference/acceptance.md`](reference/acceptance.md) 为准；决策以 [`decisions/`](decisions/README.md) 为准。
+1. **单一事实源**：状态以 [`reference/status.md`](reference/status.md) 为准；架构以 [`reference/architecture.md`](reference/architecture.md) 为准；验收以 [`reference/acceptance.md`](reference/acceptance.md) 为准；字体/Theme 使用边界以 [`standards/ui_typography_contract.md`](standards/ui_typography_contract.md) 为准；决策以 [`decisions/`](decisions/README.md) 为准。
 2. **活跃文档不承载阶段流水账**：批次实施、历史计数、截图与逐项验证移入 `archive/`，当前页只保留仍生效的契约、失败边界和必要入口。
 3. **索引分层**：根 README、docs README 只保留入口；完整文件清单由各子目录索引维护，避免同一移动同步多处。
 4. **报告不手改**：`reports/` 由脚本覆盖；结论写入 `status.md`。

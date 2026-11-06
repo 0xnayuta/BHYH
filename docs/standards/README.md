@@ -14,6 +14,7 @@
 | [`naming_whitelist.md`](naming_whitelist.md) | 机器导出结构、数字 ID 目录与场景 | 冻结白名单；只减不增，新增必须评审登记 |
 | [`godot_design_standard.md`](godot_design_standard.md) | 场景、Resource、Autoload、项目结构 | Godot 现代项目设计规则与遗留边界 |
 | [`target_architecture_contract.md`](target_architecture_contract.md) | 项目总体职责、依赖、状态所有权与生命周期 | 应用/会话、战斗/关卡、数据/存档、UI/输入、资源/平台、迁移与验收；视觉资产为子契约 |
+| [`ui_typography_contract.md`](ui_typography_contract.md) | UI 文本、字体角色、Theme 变体与字号边界 | `body`/`ui`/`display`/`accent` 四角色、组件矩阵、fallback、存量例外、迁移与审计边界 |
 | [`missing_assets_registry.md`](missing_assets_registry.md) | 缺失资产 | 状态、恢复来源与处置记录；不承担命名豁免 |
 | [`spriteframes_generation_policy.md`](spriteframes_generation_policy.md) | SpriteFrames 生成 | 默认 FPS、循环命名、speed 语义与校验 |
 
