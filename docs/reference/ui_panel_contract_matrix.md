@@ -127,36 +127,6 @@
 
 ---
 
-## 5. 批次拆分与实施
+## 5. 批次记录
 
-### 24-1 `pet_interface` 首个拆分对象
-
-**已完成：`PetAttributePages`。**
-
-- 子控制器持有 2 页定义、10 行绑定、分页按钮与显示文本；父面板注入分页按钮和显示值 `Callable`，保留当前宠物、装备加成与数值协调。
-- 子控制器不读取 `PlayerData`/`RoleProp`、不保存、不写档；父面板删除旧分页状态与回调，`_refresh_pet_attribute_page` 仅委托。
-- 后续再拆 `PetFormationPopup`、技能弹窗与装备区域，不按文件行数一次性拆整个面板。
-
-### 24-2 `CoopPanelHost` 宿主分离（已完成）
-
-- 新增普通节点 `CoopPanelHost`，由 `LocalCoop` 持有；面板路径、实例/图层、窗口栈、暂停、1P/2P 选择器、场景按钮、关闭保存与本地清理均迁入宿主。
-- `LocalCoop` 保留槽位、共享账本、输入会话与 `slot_for`/`data_for`/`props_for`；生产调用方与探针改走 `LocalCoop.panel_host`。
-- `push_windows()`/`pop_windows()` 嵌套语义与 ESC 先关协作面板规则保持；快照期间拒绝打开/切换。
-- `clear`/场景切换释放面板、图层、会话按钮与悬停弹层，并恢复暂停与窗口栈；全局临时 UI 仍由 `UiRuntime`/`SceneFlow` 负责。
-
-### 24-3 成长命令试点（已完成）
-
-**首选：宠物阵法升级命令。**
-
-- `PetDomainCommand.upgrade_formation(profile, stat_name, requested_count, save_request)` 先校验等级与材料，按可负担级数计算总消耗；随后一次快照、扣材料、写入 `宠物阵法等级`，并调用 `MemoryClass.request_save_result("pet_formation", false)`。
-- 保存失败恢复完整档案快照；在双人会话中由 1P 档案快照覆盖 1P/2P 与共享容器，2P 操作同样恢复共享道具与灵魂。
-- `PetFormationPopup` 只读取 `PlayerData.get_pet_formation_levels()`、`PetDomainCommand` 规则和材料计数并显示结果；阵法路径不再直接写 `_data()`，也不再逐级保存。
-- 升十级改为一次命令提交，最多按当前可负担级数升级，避免中途保存产生多段提交。
-- 验证：`check_all --godot-bin` **9/9**（28.51s）、`health_check` **776 脚本 0/0/0**、`archive` **344/344**（10.54s，含 1P/2P 命令、保存失败整批回滚与共享道具/灵魂恢复）、`scene` **17/17**（167.51s）、`coop` **33/33**（191.91s）、`level_1` **4 阶段 PASS**（24.95s，0/0/0）。
-
-### 24-4 阶段验收（已完成）
-
-- 子区域拆分与成长域命令化：`PetAttributePages` 子控制器、`PetDomainCommand.upgrade_formation` 已接入；
-- `hud_panel_boundary` 扩展为面板目录 + 显式 HUD 文件扫描，覆盖 `_data()`、嵌套访问修改、`data_for(_slot)(...).player_data` 与局部别名；旧路径按 §4.3 整文件/逐行登记，档案 IO 不豁免；
-- 验证：`contract_scan --self-test` HUD **14 坏 / 13 好 PASS**，`check_all` **9/9**（33.99s），`archive` **344/344**（10.47s），`scene` **17/17**（170.36s），`coop` **33/33**（199.88s），`level_1` **4 阶段 PASS**（24.95s，0/0/0），全量 **128/128 + 5 SKIP**（305.8s，无重试）；
-- Phase 24 出口：至少一个面板子区域与一个成长域完成命令化；未登记的新增直接/间接写档由门禁拦截；已登记旧路径有明确文件/行与迁移说明。
+Phase 24 的 24-1 `PetAttributePages` 拆分、24-2 `CoopPanelHost` 宿主分离、24-3 阵法升级命令与 24-4 阶段验收见 [`../archive/iteration_24_ui_growth_boundaries.md`](../archive/iteration_24_ui_growth_boundaries.md)；本页只保留当前操作者、保存与写档边界。

@@ -36,7 +36,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-009](ADR-009-build-time-visual-asset-pipeline.md) | 视觉资源构建期生成，运行时只读类型资源 | Superseded by ADR-020 | 历史资产管线决策 |
 | [ADR-010](ADR-010-spine-runtime-boundary.md) | Spine 保持骨骼运行时，不烘焙为 SpriteFrames | Accepted | 角色特效、平台库 |
 | [ADR-011](ADR-011-public-repository-asset-boundary.md) | 公开仓库排除第三方素材，代码 MIT | Accepted | 许可证、发布 |
-| [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md) | 零错误零警告与八维门禁为合并门槛 | Accepted | 质量流程 |
+| [ADR-012](ADR-012-zero-error-zero-warning-quality-gates.md) | 零错误零警告与八维门禁（历史基线，已由 ADR-024 扩展为九维） | Accepted | 质量流程 |
 | [ADR-013](ADR-013-tool-guaranteed-path-migration.md) | `source/` 内路径迁移只走 `rename_path.py` | Accepted | 重命名、引用同步 |
 | [ADR-014](ADR-014-three-way-semantic-merge-for-version-migration.md) | 版本迁移使用三方语义合并，禁止整包覆盖 | Accepted | 版本迁移 |
 | [ADR-015](ADR-015-documentation-layering-and-single-source-of-truth.md) | 文档分层，`status.md` 为状态单一事实源 | Accepted | 文档维护 |

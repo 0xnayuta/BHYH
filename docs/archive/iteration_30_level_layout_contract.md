@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-11-02
 > **状态**：Archived
+> **同阶段记录**：阶段结果与批次摘要见 [`iteration_30_level_layout_data_contract.md`](iteration_30_level_layout_data_contract.md)。
 > **关联**：当前契约见 [`../reference/level_layout_contract.md`](../reference/level_layout_contract.md)
 
 <!-- 以下为归档时的完整实施记录，保留历史原貌。 -->

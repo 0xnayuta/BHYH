@@ -155,31 +155,15 @@ flowchart LR
 | metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3B-3 中加 UID |
 | 旧配置残留 | 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已清理 | 不把它们加入 typed 消费者清单；由 `contract_scan.py` 守卫旧入口与 `.data`/`source_masks` |
 
-## 8. Phase 14-2/14-3A/14-3B-1 已实现子集
+## 8. 当前实现边界
 
-本次已实现：
+六个直接消费者（Cloud/East/North/PalaceBossProjectile/PalaceFlyingBoss/MountVisual）均只调用 `AtlasMetadataView` 的公开查询；业务侧无裸 `.data` 读取，`contract_scan.py` 的 `atlas_boundary` 守卫保持。`animation_back_atlas_names()` / `animation_front_atlas_names()` 返回 `Array[String]`，其余帧几何、geometry、mask、播放参数与 rider transform 使用值类型。不建立 `files` 通用 accessor、旧 `animations` 运行时模型或索引字典模型；缺失/类型错误由消费者显式处理。
 
-1. **只读 View**：`AtlasMetadataView` 覆盖 `pages+sequences` 的长度、帧几何、geometry、masks，以及 `animation+frames` 的播放参数/图层/rider transform；不建立 `pages`/`files` 的通用对象图。
-2. **Store 入口**：`view_for(path)` 做路径、资源类型、浅层与深度 schema 校验，按路径缓存 View；失败返回 `null` 并报告。
-3. **消费者**：`PalaceBossProjectile` 使用 View 读取 masks/geometry；`MountVisual` 使用 View 读取 metadata 动画；`PalaceFlyingBoss` 使用 View 读取自有 `geometry`（`center`/`size`/`origin`）与 `masks`；East/Cloud/North 使用 View 读取序列/几何；`NorthBossProjectile` 的 `source_masks` 已删除，mask alias 通过 `mask_sequence` 选择。
-4. **14-4 收口**：清理 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员；新增 `contract_scan.py` 的 `atlas_boundary` 规则，阻断旧 `data_for`/`validate_path`/`clear_cache`、非 View `.data` 读取与 `source_masks` 覆盖。
-
-约束：
-
-- 不建立 `files` 通用 accessor、旧 `animations` 运行时模型、顶层数组模型或索引字典模型。
-- 所有声明路径的缺失/类型错误必须由消费者显式处理；不得用 typed 失败后读 `.data` 或旧路径回退。
-- `convert_monster_frames` 继续直接读取源 metadata；其 152 目标与 4 个旧动画形态不要求运行时 typed 化。
-
-### 8.1 21-1C 类型化 accessor 复核（完成，2026-10-31）
-
-- **消费面复核**：Cloud/East/North/PalaceBossProjectile/PalaceFlyingBoss/MountVisual 六个直接消费者只调用 `AtlasMetadataView` 的公开查询；业务侧无裸 `.data` 读取，`contract_scan.py` 的 `atlas_boundary` 守卫保持。
-- **typed 修正**：`animation_back_atlas_names()` / `animation_front_atlas_names()` 由弱类型 `Array` 改为 `Array[String]`；其余帧几何、geometry、mask、播放参数、rider transform 已使用 `int`/`float`/`bool`/`Vector2`/`Rect2`/`Transform2D`/`StringName` 等值类型返回。
-- **边界不变**：不新增嵌套 typed Resource、不改 `AtlasMetadata.data` 序列化、不加 UID、不重开 `data_for`/`validate_path`/`clear_cache`。
-- **永久探针**：`scene_probe_runner.py --probe atlas-accessor` 使用合成 metadata 覆盖 `pages+sequences`、`animation+frames`、越界查询、缺失 mask 与无效 View；不依赖私有素材。
+Phase 14-2~14-4 与 21-1C 的实现批次、探针数量与逐项验证见 [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)。
 
 ## 9. 验证与复现
 
-构建期调查与本次实现验证：
+构建期检查：
 
 ```bash
 python scripts/convert_atlas_metadata.py --check
@@ -187,18 +171,13 @@ python scripts/convert_atlas_metadata.py --self-test
 python scripts/convert_monster_frames.py --check
 ```
 
-结果：Atlas 同步 **379/379**；帧数负向自测 **4/4**；怪物帧检查 **152 目标 / 152 校验 / 0 缺失 / 0 失败**，跳过 **42**（41 空序列、1 聚合宠物）。
+运行时检查：
 
-运行时验证：
+```bash
+python scripts/scene_probe_runner.py --godot <godot> --probe atlas-accessor
+python scripts/check_all.py --godot-bin <godot>
+```
 
-- `scene_probe_runner.py --probe atlas-accessor` **PASS**：合成 metadata 覆盖两类 schema、typed 返回值、越界与失败语义；
-- 临时 GDScript 探针对全部 **267** 个运行时资源建立 View（137 个 `pages+sequences`、130 个 `animation+frames`），**267/267 PASS**；
-- `MountVisual` 的 metadata 动画 `aoyi_skill` 播放与 `get_animation_visual_bounds` PASS；
-- 临时 GDScript 探针对 Palace 3323/3343 的 `geometry`（`center`/`size`/`origin`）与 `hit1` masks 逐值比对原始 `.data`，**PASS**；
-- East/Cloud 辅助探针覆盖 **149** 个序列资源、**1310** 个序列、**40222** 帧，逐帧比较帧数、registration anchor、center/size/has_visual，**PASS**；
-- North View 探针覆盖 **51** 个资源、**586** 个序列、**20263** 帧、**1788** 个 mask，逐值比较 **PASS**；
-- `level_72`、`level_75`、`level_76`、`level_81` 定向冒烟 PASS；L2：`level_1` PASS、`coop_probe_runner` **16/16 PASS**、`scene_probe_runner` **4/4 PASS**；全量关卡回归 **PASS 128/128 + SKIP 5，FAIL 0**（731.3s；`level_dsg_1` 单次瞬态重试通过），日志门禁 **0 ERROR / 0 WARNING**；
-- `contract_scan.py --self-test` 的 AtlasMetadata 边界坏样本 **5/5** 拦截、好样本 **4/4** 放行；
-- `check_all --godot-bin` **8/8 PASS**；`health_check` **0 Parse / 0 Error / 0 Warning**。
+判据：Atlas manifest 与生成资源同步；帧数负向自测全部拦截；怪物帧目标无缺失；`atlas-accessor` 探针覆盖两类 schema、越界查询、缺失 mask 与无效 View；`level_1` 与全量关卡回归无新增失败。具体计数以脚本输出为准。
 
-临时探针已删除；未修改素材、既有 UID 或归档。再次调查时应从当前源码、资源与命令输出重新生成，不把本页数量当作长期 SLA。
+Phase 14 的一次性探针、逐资源比对数量与旧门禁口径见 [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)；临时探针已删除，再次调查时应从当前源码、资源与命令输出重新生成。

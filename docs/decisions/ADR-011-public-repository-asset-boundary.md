@@ -38,4 +38,4 @@
 - [`../../.gitignore`](../../.gitignore) §3
 - [`../../README.md`](../../README.md) 开头说明、§7
 - [`../../THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md)
-- [`../../AGENTS.md`](../../AGENTS.md) §1.3
+- [`../../AGENTS.md`](../../AGENTS.md) §1.2

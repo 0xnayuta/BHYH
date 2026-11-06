@@ -44,4 +44,4 @@
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md) §4
 - [`../reference/architecture.md`](../reference/architecture.md) §2
 - [`../reference/autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)
-- [`../../AGENTS.md`](../../AGENTS.md) §3.5
+- [`../../AGENTS.md`](../../AGENTS.md) §3

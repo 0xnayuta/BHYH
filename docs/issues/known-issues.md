@@ -86,7 +86,7 @@ get_meta("missing_vector", Vector2.ZERO) # 静默返回 Vector2.ZERO
 
 - 模式修复先例：`37c2cf8`（同心链接路径，见 §2）；
 - 静态门禁：`scripts/contract_scan.py`；
-- 日志基线：`AGENTS.md` §7、[`../reference/acceptance.md`](../reference/acceptance.md)。
+- 日志基线：`AGENTS.md` §6、[`../reference/acceptance.md`](../reference/acceptance.md)。
 
 ---
 

@@ -40,5 +40,5 @@
 
 - [`../standards/naming_standard.md`](../standards/naming_standard.md) §1.3、§7.2
 - [`../../scripts/README.md`](../../scripts/README.md) §3.3
-- [`../../AGENTS.md`](../../AGENTS.md) §8.1
+- [`../../AGENTS.md`](../../AGENTS.md) §8
 - [`../guides/migration_playbook.md`](../guides/migration_playbook.md) §2

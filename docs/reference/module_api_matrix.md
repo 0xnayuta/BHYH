@@ -1,7 +1,7 @@
-# 试点模块 API 与依赖方向（Phase 17-6）
+# 试点模块 API 与依赖方向
 
-> **状态**：17-6A/17-6B/17-6C 已完成，Phase 17 已归档；**Phase 23-0~23-5 全部完成，Phase 23 已关闭**；Phase 24 计划继续处理多消费者模块 API。范围仅 `pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon`；未重排顶层目录，未全仓替换深层路径。
->
+> **类型**：当前契约（Current）
+> **来源**：Phase 17-6 完成并归档；Phase 23 已关闭。范围仅 `pet_interface`、`zd_skill`、`base_role`、`base_magic_weapon`；未重排顶层目录，未全仓替换深层路径。
 > **事实源**：`source/Script/pet/pet_interface.gd`、`source/Script/skill/zd_skill.gd`、`source/Script/base/base_role.gd`、`source/Script/base/base_magic_weapon.gd`。公开方法指供场景脚本、父节点或跨模块调用的方法；下划线开头方法默认是内部实现，除非本节显式列为回调。
 
 ## 1. 公开 API
@@ -57,34 +57,32 @@
 |:---|:---|:---|
 | 父场景 → 模块 | 父级实例化并注入 `player`/`pet_panel`；模块不反向持有父级业务字段 | `role_information` 注入 `player`/`player_p2`；`pet_interface` 由宠物面板父级实例化 |
 | 模块 → 档案 | 读写经 `LocalCoop.data_for`/`props_for` 解析槽位；跨模块写经 `PlayerData` 命令 | HUD 只读；技能升级经 `PlayerData`/`up_level`；宠物命令经 `PlayerData` |
-| 模块 → 全局 | 可用 `Global` 表现/场景入口，但不得在 HUD 绘制回调写档 | 本批清理后无新增 HUD 写档 |
-| 模块 → 其他模块私有字段 | 禁止；父调用子公开方法，子用信号/回调通知 | 本批未新增跨模块私有访问 |
-| 面板 → 场景树 | 深层路径限定在模块自身场景根内；跨模块节点通过注入或公开方法 | `BaseRole` 不再访问 `/root`；`zd_skill` 路径统一经列访问器 |
+| 模块 → 全局 | 可用 `Global` 表现/场景入口，但不得在 HUD 绘制回调写档 | 当前无新增 HUD 写档 |
+| 模块 → 其他模块私有字段 | 禁止；父调用子公开方法，子用信号/回调通知 | 当前无新增跨模块私有访问 |
+| 面板 → 场景树 | 深层路径限定在模块自身场景根内；跨模块节点通过注入或公开方法 | `BaseRole` 不访问 `/root`；`zd_skill` 路径统一经列访问器 |
 
 **禁止**：新增 `/root/<Autoload>` 绝对路径；在 `_process`/`_physics_process` 直接写 `PlayerData.player_data`；跨模块直接读取对方私有字段或节点。
 
 ## 3. 路径清理
 
-| 文件 | 清理前深层字面路径 | 清理后 | 方式 |
+| 文件 | 清理前深层字面路径 | 当前 | 方式 |
 |:---|:---:|:---:|:---|
-| `pet_interface.gd` | 117 | 0 | 保留 `_pet_ui_node(root, child)`；动态行先取 `Content`，再取直接子节点，消除剩余 `Content/*` 与嵌套字面路径 |
-| `zd_skill.gd` | 26 | 0 | 新增 `SKILL_UI_ROOT`、`_skill_root_node`、`_skill_column_node`、`_skill_grandchild`、`_skill_column_path` |
-| `base_role.gd` | 12 | 0 | 删除 `/root` 回落；宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer`，再取子节点，深层字面路径清零 |
-| `base_magic_weapon.gd` | 4 | 0 | 同上；法宝数据/属性改由 `LocalCoop` 槽位查询 |
-| `Scene/other_scene/skill_icon.gd` | 2 处 `/root` | 0 | 删除 `/root/LocalCoop` 与 `/root/PlayerData`/`RoleProp` 回落，直接 `LocalCoop.data_for/props_for` |
+| `pet_interface.gd` | 117 | 0 | 保留 `_pet_ui_node(root, child)`；动态行先取 `Content`，再取直接子节点 |
+| `zd_skill.gd` | 26 | 0 | `SKILL_UI_ROOT`、`_skill_root_node`、`_skill_column_node`、`_skill_grandchild`、`_skill_column_path` |
+| `base_role.gd` | 12 | 0 | 删除 `/root` 回落；宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer` |
+| `base_magic_weapon.gd` | 4 | 0 | 法宝数据/属性改由 `LocalCoop` 槽位查询 |
+| `Scene/other_scene/skill_icon.gd` | 2 处 `/root` | 0 | 删除 `/root/LocalCoop` 与 `/root/PlayerData`/`RoleProp` 回落 |
 
 统计口径：`get_node()`/`get_node_or_null()` 字符串参数中包含 `/` 或 `/root` 的字面路径；不含动态拼接后的运行时结果。
 
 ## 4. 验证
 
-- `archive_probe_runner` 275 项 PASS（含 `zd_skill` 主动技能成功/保存失败回滚、`pet_interface` 根节点解析）；
-- `coop_probe_runner` 23/23 PASS（P1/P2 HUD 与宠物 HUD）；
-- `level_1` 冒烟 PASS（0 ERROR / 0 WARNING）；
-- `level_regression_all --changed-only` 128/128 PASS + 5 SKIP（273.6s）；
-- `check_all --godot-bin` 8/8 PASS。
+当前基线（最近一次全量口径）：`check_all --godot-bin` **9/9**；`archive_probe_runner` **344/344**；`coop_probe_runner` **37/37**；`scene_probe_runner` **17/17**；`level_1` **4 阶段 0/0/0**；全量关卡 **128/128 + 5 SKIP**。具体耗时与日期见 [`status.md`](status.md)。
 
 ## 5. 未迁移项
 
 - `pet_interface`/`base_role` 深层字面路径为 **0**；未改场景节点名或 `%UniqueName`，以中间节点访问器消除字面深层路径；
 - `skill_icon.gd` 的 `/root` 回落为 **0**，`SLOT_ROOT_ALLOWLIST` 移除该文件并加入 Phase 17 绝对路径禁入清单；
 - 本批未移动任何文件、未重排目录、未修改场景节点名或输入映射。
+
+完整批次与历史验证见 [`../archive/iteration_17_gameplay_module_boundaries.md`](../archive/iteration_17_gameplay_module_boundaries.md)。

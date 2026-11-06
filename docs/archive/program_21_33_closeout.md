@@ -1,7 +1,8 @@
-# Phase 21~33 程序收口记录（归档）
+# Phase 21、30~33 程序收口记录（归档）
 
 > **归档日期**：2026-11-02
 > **状态**：Archived
+> **覆盖范围**：本页覆盖 Phase 21、30、31、32、33；Phase 22~27 见各阶段归档。
 > **关联**：当前路线见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)；当前候选见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md)
 
 <!-- 以下为归档时的完整计划与实施记录，保留历史原貌。 -->

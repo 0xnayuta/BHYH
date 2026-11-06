@@ -34,6 +34,6 @@
 ## 证据
 
 - [`../../source/project.godot`](../../source/project.godot) `[application]`、`[rendering]`
-- [`../../AGENTS.md`](../../AGENTS.md) §2.1
+- [`../../AGENTS.md`](../../AGENTS.md) §2
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md) §1
 - [`../reference/status.md`](../reference/status.md) §1

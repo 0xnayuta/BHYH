@@ -41,4 +41,4 @@
 
 - [`../guides/migration_playbook.md`](../guides/migration_playbook.md) §1–§6
 - [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) §1.2–§1.5
-- [`../../AGENTS.md`](../../AGENTS.md) §1.4、§8
+- [`../../AGENTS.md`](../../AGENTS.md) §1.3、§8

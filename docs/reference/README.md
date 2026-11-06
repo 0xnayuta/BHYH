@@ -24,8 +24,8 @@
 | [`level_layout_contract.md`](level_layout_contract.md) | 当前关卡布局对象模型、字段、构建与运行时契约 |
 | [`equipment_data_contract.md`](equipment_data_contract.md) | 当前装备定义/规则/实例三层契约与发布闭包 |
 | [`ui_theme_contract.md`](ui_theme_contract.md) | 当前 Theme 资源、变体命名、最终例外与审计 |
-| [`theme_font_inventory.md`](theme_font_inventory.md) | Phase 27-0 Theme/字体规模、重复度、字体资产、动态覆盖与收敛指标 |
-| [`typography_tokens.md`](typography_tokens.md) | P2 排版 token：字号、颜色、描边、Button 族与 P2-11 输入/动态样式 |
+| [`theme_font_inventory.md`](theme_font_inventory.md) | 当前 Theme/字体规模、变体结构、字体资产、动态覆盖与契约指标 |
+| [`typography_tokens.md`](typography_tokens.md) | 当前字号、颜色、描边、Button 共享族与审计门禁 |
 | [`spine_platform_baseline.md`](spine_platform_baseline.md) | Spine 运行时、平台、许可证与暂缓边界 |
 | [`zmws_asset_integration_matrix.md`](zmws_asset_integration_matrix.md) | ZMWS 已导入资产的域级消费矩阵、生命周期状态与垂直切片；生成脚本为 `scripts/asset_library_catalog.py` |
 

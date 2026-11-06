@@ -33,7 +33,7 @@
 
 ## 证据
 
-- [`../../AGENTS.md`](../../AGENTS.md) §1.1、§1.3
+- [`../../AGENTS.md`](../../AGENTS.md) §1.1、§1.2
 - [`../../README.md`](../../README.md) §1、§2
 - [`../reference/status.md`](../reference/status.md) §1、§2
 - [`../reference/architecture.md`](../reference/architecture.md) §1.1

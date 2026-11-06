@@ -41,6 +41,6 @@
 
 - [`../../scripts/README.md`](../../scripts/README.md) §4
 - [`../../scripts/scene_probes/constellation_probe.gd`](../../scripts/scene_probes/constellation_probe.gd)
-- [`../../AGENTS.md`](../../AGENTS.md) §7.6、§7.7
+- [`../../AGENTS.md`](../../AGENTS.md) §6
 - [`../archive/iteration_6_9_patch_backport.md`](../archive/iteration_6_9_patch_backport.md) §1.2
 - [`../../.gitignore`](../../.gitignore) §6

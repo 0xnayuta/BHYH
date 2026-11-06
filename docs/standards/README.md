@@ -43,22 +43,14 @@
 
 ## 4. 校验入口
 
+常用入口：
+
 ```bash
 python scripts/check_all.py --skip-engine
-python scripts/naming_audit.py --root source --all
-python scripts/naming_compliance_audit.py --fail-on-error
-python scripts/resource_path_audit.py --project source
-python scripts/whitelist_audit.py --fail-on-error
-python scripts/theme_override_audit.py --check
-python scripts/convert_atlas_metadata.py --check
-python scripts/convert_frame_sequences.py --check
-python scripts/convert_monster_frames.py --check
-python scripts/convert_level_preload_catalog.py --check
-python scripts/convert_level_layout_catalog.py --check
-python scripts/convert_external_monster_catalog.py --check
+python scripts/check_all.py --godot-bin "<godot>"
 ```
 
-完整引擎与关卡验证的命令/判据见 [`../reference/acceptance.md`](../reference/acceptance.md)，已执行结果见 [`../reference/status.md`](../reference/status.md)。
+九维门禁判据与运行期夹具见 [`../reference/acceptance.md`](../reference/acceptance.md) §3~§6；契约、命名、资源与各转换器的命令清单见 [`../../scripts/README.md`](../../scripts/README.md)。本页不维护完整命令副本。
 
 ---
 

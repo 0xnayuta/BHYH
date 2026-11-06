@@ -78,22 +78,25 @@
 | [`iteration_6_9_patch_backport.md`](iteration_6_9_patch_backport.md) | 6.9 补丁回植：范围、文件映射、实施批次与验收结果 | 2026-10-23 |
 | [`iteration_12_display_hud.md`](iteration_12_display_hud.md) | Phase 12 画布、相机与 HUD 重构：多分辨率验收、双人探针、已知边界，以及原计划与实施顺序存档 | 2026-10-24 |
 | [`iteration_13_visual_asset_contract.md`](iteration_13_visual_asset_contract.md) | Phase 13 视觉资产契约收口：阶段回顾、运行时建帧例外、发布闭包、兼容层治理、冻结项与后续顺序 | 2026-10-27 |
-| [`iteration_30_level_layout_data_contract.md`](iteration_30_level_layout_data_contract.md) | Phase 30 关卡布局数据契约：五件套、ZMWS 驱动、69 个脚本迁出、10 个例外、30-4 边界复核与发布闭包 | 2026-11-01 |
+| [`iteration_30_level_layout_data_contract.md`](iteration_30_level_layout_data_contract.md) | Phase 30 阶段结果与批次摘要（30-0~30-4：五件套、ZMWS 驱动、脚本迁出、例外登记、边界复核与发布闭包）；完整实施记录见同阶段归档 | 2026-11-01 |
 | [`iteration_18_20_comprehensive_closeout.md`](iteration_18_20_comprehensive_closeout.md) | Phase 18~20 综合收尾：归属/成长/档案顺序、表现与运行时清理、资源/Atlas 与输入/HUD、Autoload 拆分、守卫扩面、20-3C 收口与延期去向 | 2026-10-30 |
-| [`iteration_17_gameplay_module_boundaries.md`](iteration_17_gameplay_module_boundaries.md) | Phase 17 玩法与表现模块边界：17-1~17-7 结论、最终验证、Phase 17 静态守卫与 Phase 18 交接缺口 | 2026-10-29 |
+| [`iteration_17_gameplay_module_boundaries.md`](iteration_17_gameplay_module_boundaries.md) | Phase 17 阶段结论（17-1~17-7）、最终验证、静态守卫与 Phase 18 交接缺口；完整调用面矩阵见同阶段快照 | 2026-10-29 |
 | [`iteration_14_atlas_metadata_boundary.md`](iteration_14_atlas_metadata_boundary.md) | Phase 14 AtlasMetadata 类型化数据边界：生产者/消费者矩阵、View 迁移、边界守卫、验证与恢复 | 2026-10-28 |
-| [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md) | Phase 15 应用编排与运行资源生命周期：场景入口、加载页交接、资源租约、缓存/池/UI、退出与后台、边界守卫、验证与恢复 | 2026-10-28 |
-| [`iteration_16_archive_session_slots.md`](iteration_16_archive_session_slots.md) | Phase 16 档案会话、持久化与玩家槽位：调用面矩阵、保存 IO 与身份、会话上下文、共享账本、面板显式操作者、契约门禁、验证与恢复 | 2026-10-29 |
-| [`iteration_15_runtime_lifecycle_matrix.md`](iteration_15_runtime_lifecycle_matrix.md) | Phase 15 运行时调用面与生命周期实施记录快照 | 2026-11-02 |
-| [`iteration_16_archive_session_matrix.md`](iteration_16_archive_session_matrix.md) | Phase 16 档案会话与槽位调用面实施记录快照 | 2026-11-02 |
-| [`iteration_17_18_gameplay_module_matrix.md`](iteration_17_18_gameplay_module_matrix.md) | Phase 17/18 玩法与表现调用面实施记录快照 | 2026-11-02 |
+| [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md) | Phase 15 阶段计划与结论（场景入口、加载页交接、资源租约、缓存/池/UI、退出与后台、验证与恢复）；完整调用面矩阵见同阶段快照 | 2026-10-28 |
+| [`iteration_16_archive_session_slots.md`](iteration_16_archive_session_slots.md) | Phase 16 阶段计划与结论（调用面、保存 IO 与身份、会话上下文、共享账本、面板显式操作者、契约门禁、验证与恢复）；完整调用面矩阵见同阶段快照 | 2026-10-29 |
+| [`iteration_15_runtime_lifecycle_matrix.md`](iteration_15_runtime_lifecycle_matrix.md) | Phase 15-1 完整调用面与所有权矩阵快照；阶段计划/结论见同阶段记录 | 2026-11-02 |
+| [`iteration_16_archive_session_matrix.md`](iteration_16_archive_session_matrix.md) | Phase 16-1 完整档案会话与槽位调用面矩阵快照；阶段计划/结论见同阶段记录 | 2026-11-02 |
+| [`iteration_17_18_gameplay_module_matrix.md`](iteration_17_18_gameplay_module_matrix.md) | Phase 17-1/18 完整玩法与表现调用面矩阵快照；阶段结论见同阶段记录 | 2026-11-02 |
 | [`iteration_20_autoload_boundary_matrix.md`](iteration_20_autoload_boundary_matrix.md) | Phase 20 Autoload 拆分与迁移实施记录快照 | 2026-11-02 |
-| [`iteration_30_level_layout_contract.md`](iteration_30_level_layout_contract.md) | Phase 30 关卡布局契约与 ZMWS 映射实施记录快照 | 2026-11-02 |
+| [`iteration_30_level_layout_contract.md`](iteration_30_level_layout_contract.md) | Phase 30 完整实施记录（对象模型、字段契约、ZMWS 映射、生成器、迁移与验证）；阶段结果见同阶段摘要 | 2026-11-02 |
 | [`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md) | Phase 30-4 数据容器脚本逐项决策（归档移动） | 2026-11-02 |
 | [`iteration_31_33_modernization_gap_matrix.md`](iteration_31_33_modernization_gap_matrix.md) | Phase 31~33 现代化差距调查快照 | 2026-11-02 |
 | [`iteration_32_ui_theme.md`](iteration_32_ui_theme.md) | Phase 32 UI Theme 完整批次与验证记录快照 | 2026-11-02 |
 | [`iteration_33_equipment_data_contract.md`](iteration_33_equipment_data_contract.md) | Phase 33 装备数据契约完整批次与验证记录快照 | 2026-11-02 |
 | [`iteration_22_global_state_boundary.md`](iteration_22_global_state_boundary.md) | Phase 22 Global 状态与入口契约：字段/入口清理、状态迁移、Global 表面守卫与验证记录 | 2026-11-03 |
 | [`iteration_23_pet_domain_boundary.md`](iteration_23_pet_domain_boundary.md) | Phase 23 关卡、宠物与档案数据边界：八族迁移、结算复核、宠物域 View/命令与阶段验收 | 2026-11-03 |
-| [`program_21_33_closeout.md`](program_21_33_closeout.md) | Phase 21~33 程序计划、完成状态与收口记录 | 2026-11-02 |
-| [`validation_history_2026.md`](validation_history_2026.md) | 2026 年逐批验证记录（含历史计数与耗时） | 2026-11-02 |
+| [`program_21_33_closeout.md`](program_21_33_closeout.md) | Phase 21、30~33 程序收口记录；Phase 22~27 见各阶段归档 | 2026-11-02 |
+| [`validation_history_2026.md`](validation_history_2026.md) | 2026 年逐批验证记录；前段内含 2026-11-02 旧 status 快照，当前事实以 reference/status.md 为准 | 2026-11-02 |
+| [`iteration_24_ui_growth_boundaries.md`](iteration_24_ui_growth_boundaries.md) | Phase 24 UI 与成长命令边界：面板契约盘点、`PetAttributePages` 拆分、`CoopPanelHost` 宿主、阵法升级命令与阶段验收 | 2026-11-06 |
+| [`iteration_25_combat_behavior.md`](iteration_25_combat_behavior.md) | Phase 25 战斗实体行为切片：自动战斗、法宝展示、Boss 保护、受击/来源控制器、探针覆盖与阶段验收 | 2026-11-06 |
+| [`iteration_27_theme_font_convergence.md`](iteration_27_theme_font_convergence.md) | Phase 27 Theme 与字体契约收敛：token 源、字号/颜色、变体层级、字体资产、动态覆盖与验收 | 2026-11-06 |

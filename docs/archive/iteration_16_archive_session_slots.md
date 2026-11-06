@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-10-29
 > **状态**：Archived
+> **同阶段记录**：Phase 16-1 完整档案会话与槽位调用面矩阵见 [`iteration_16_archive_session_matrix.md`](iteration_16_archive_session_matrix.md)。
 > **关联**：[Phase 17 当前计划](../roadmap/current-iteration.md)、[档案会话矩阵](../reference/archive_session_matrix.md)、[ADR-017](../decisions/ADR-017-local-coop-profile-isolation.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)
 >
 > Phase 16 已完成：16-1 调用面矩阵、16-2A/2B/2C/2D、16-3 会话上下文、16-4 玩家槽位与共享账本、16-5 面板显式操作者、16-6 边界守卫全部完成并验收；`contract_scan --fail-on-error` ERROR=0。

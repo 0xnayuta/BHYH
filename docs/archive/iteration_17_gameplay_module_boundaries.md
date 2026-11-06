@@ -1,7 +1,8 @@
 # Phase 17：玩法与表现模块边界（归档）
 
 > **归档日期**：2026-10-29
-> **状态**：Archived；Phase 17-1 ~ 17-7 已完成，Phase 18 起为当前候选。
+> **状态**：Archived；Phase 17-1 ~ 17-7 已完成。
+> **同阶段记录**：Phase 17-1/18 完整调用面矩阵见 [`iteration_17_18_gameplay_module_matrix.md`](iteration_17_18_gameplay_module_matrix.md)。
 > **关联**：[`current-iteration.md`](../roadmap/current-iteration.md)、[`gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)、[`module_api_matrix.md`](../reference/module_api_matrix.md)、[`archive_session_matrix.md`](../reference/archive_session_matrix.md)、[`runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)、[`acceptance.md`](../reference/acceptance.md)、[`status.md`](../reference/status.md)。
 
 ## 1. 阶段结论

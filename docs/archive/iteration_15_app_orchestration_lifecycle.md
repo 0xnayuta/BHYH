@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-10-28
 > **状态**：Archived
+> **同阶段记录**：Phase 15-1 完整调用面与所有权矩阵见 [`iteration_15_runtime_lifecycle_matrix.md`](iteration_15_runtime_lifecycle_matrix.md)。
 > **关联**：[Phase 16 当前计划](../roadmap/current-iteration.md)、[运行时生命周期矩阵](../reference/runtime_lifecycle_matrix.md)、[ADR-018](../decisions/ADR-018-runtime-resource-cache-prewarm-and-pooling.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)
 >
 > Phase 15 已完成：15-1、15-2A/15-2B/15-2C、15-3A/15-3B/15-3C/15-3D、15-4A/15-4B/15-4C/15-4D/15-4E 全部完成并验收。

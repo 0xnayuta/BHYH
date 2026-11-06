@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-11-02
 > **状态**：Archived
+> **同阶段记录**：阶段结论见 [`iteration_17_gameplay_module_boundaries.md`](iteration_17_gameplay_module_boundaries.md)。
 > **关联**：当前边界摘要见 [`../reference/gameplay_module_matrix.md`](../reference/gameplay_module_matrix.md)
 
 <!-- 以下为归档时的完整实施记录，保留历史原貌。 -->

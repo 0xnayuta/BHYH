@@ -99,12 +99,12 @@
 | 架构文档 | `docs/reference/architecture.md` |
 | 验收标准 | `docs/reference/acceptance.md` |
 | 项目状态 | `docs/reference/status.md` |
-| 规范 | `docs/standards/` 全部活跃规范：命名、Godot 设计、SpriteFrames、白名单、缺失资产 |
+| 规范 | `docs/standards/` 全部活跃规范：命名、Godot 设计、目标架构、UI 字体/Theme、SpriteFrames、白名单、缺失资产 |
 | 路线图 | `docs/roadmap/roadmap.md`、`docs/roadmap/current-iteration.md` |
 | 决策记录 | `docs/decisions/` 全部 ADR；区分当前有效决策、废止/替代关系及历史事实；当前事实错误登记 DOC，本体违例登记 CMPL，原文修订另开迭代 |
 | 工程配置 | `source/project.godot`（Autoload、输入、物理层、显示、渲染） |
 | 工具链 | `scripts/README.md`；门禁、回归、转换器命令以脚本实际参数为准 |
-| 环境边界 | `AGENTS.md` §1.3、§1.4；公开素材排除与本地路径禁令 |
+| 环境边界 | `AGENTS.md` §1.2、§1.3；公开素材排除与本地路径禁令 |
 | 审计档案 | `docs/audit/README.md`、`docs/audit/AUDIT-000-audit-template.md` |
 
 ### 1.3 严重级别定义
@@ -112,7 +112,7 @@
 | 优先级 | 定义 | 期望处理 |
 | --- | --- | --- |
 | P0 | 启动/场景切换崩溃、存档损坏或丢失、核心战斗/关卡不可继续、死循环/长时间阻塞、敏感数据泄露、不可恢复的资源破坏 | 立即修复，阻断开发 |
-| P1 | 高概率稳定性/性能/维护性风险，影响核心路径（战斗、关卡、双人、存档、加载、资源预热） | 当前迭代修复 |
+| P1 | 高概率稳定性/性能/维护性风险，影响核心路径（战斗、关卡、双人、存档、加载、资源预热） | 当前维护批次修复 |
 | P2 | 中等风险，影响可维护性、模块边界、验证覆盖、资源占用或协作效率 | 近期排期 |
 | P3 | 低风险改进：命名一致性、注释质量、静态类型、未使用代码、轻微重复 | 持续跟踪或后续优化 |
 
@@ -155,7 +155,7 @@
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
 | 工程配置 | `source/project.godot`：Autoload、输入动作、具名 2D 物理层、显示与渲染（数量以审计时实际配置为准） |
 | UI/场景 | `.tscn` 场景树；`Global.add_*` 工厂与弹窗层 |
-| 数据 | `PlayerData` 巨型字典 + `DataKeys`；新增结构化数据优先 Resource/Manifest |
+| 数据 | `PlayerData` 档案 JSON/字典 + `DataKeys`；静态定义优先 Resource/Catalog（ADR-006/021） |
 | 持久化 | `MemoryClass` 加密 JSON、`.tmp`/`.bak` 原子写、后台线程、`user://.save_key` |
 | 资源 | SpriteFrames、AtlasMetadata、Spine、构建期转换器、运行期缓存/预热/对象池 |
 | 验证 | Python 门禁/回归脚本 + Godot headless；无独立单元测试框架 |
@@ -194,7 +194,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 
 评估项：
 
-- 11 个 Autoload 的职责、初始化顺序与依赖；`global.gd` 是否继续承担不属于编排层的逻辑；
+- Autoload 注册项（业务单例 + 编辑器调试桥，数量与顺序以 `project.godot` 为准）的职责、初始化顺序与依赖；`global.gd` 是否继续承担不属于编排层的逻辑；
 - 场景流（加载页、主菜单、存档、地图、关卡、胜利/失败）与 `Global.change_scene` 的单一入口；
 - `BaseObject` / `BaseHero` / `BaseMonster` / `BaseLevel` / `BaseMagicWeapon` / `BaseBuff` / HUD 的继承与组合边界；
 - `LocalCoop` 槽位路由是否覆盖 P1/P2 数据、属性、输入、伤害/无双归属；
@@ -293,7 +293,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 - `health_check.py` 的 Parse Error / warning / 断裂引用覆盖；
 - `level_test_runner.py` 的阶段断言、日志门禁与自动清理；
 - `level_regression_all.py` 的候选发现、SKIP 口径、changed-only 映射；
-- `coop_probe_runner.py` 的 16 个双人探针与 P1/P2 归属；
+- `coop_probe_runner.py` 的双人探针矩阵（用例清单由脚本维护）与 P1/P2 归属；
 - 构建期转换器 `--check` / `--self-test`；
 - 公开 clone 缺素材时的覆盖限制，不能把跳过项当作通过；
 - 验证是否走生产工厂/真实路径，避免 mock echo、helper 自证或只测文案。
@@ -324,11 +324,11 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 - 本轮源码清单与 `project.godot` / 场景引用 / 导入缓存的差集；
 - `godot --headless --path source --import` 是否重建缓存，`.import`/`.uid` 是否完整；
 - `check_all.py` 九维：行尾、格式、gdlint、引擎健康、契约、命名、运行时引用、资源路径、DragonBones 工厂加载；
-- `gdlint` 仅覆盖 10 个核心脚本的边界；
-- 格式/行尾/白名单冻结/契约 WARNING 预算；
+- `gdlint` 仅覆盖核心脚本子集（清单见 `check_all.py`）的边界；
+- 格式/行尾/白名单冻结/契约 WARNING 预算（阈值以 `acceptance.md` §8 为准）；
 - 本地绝对路径、解密沙盒、临时产物是否进入文档/提交；
 - 公开仓库素材边界与 Spine 平台库边界；
-- git 纪律：提交规范符合 `AGENTS.md` §6，一个提交一件事，未经允许不 push。
+- git 纪律：提交规范符合 `AGENTS.md` §7，一个提交一件事，未经允许不 push。
 
 - 评级：`<A/B/C/D>`
 - 结论：`<摘要>`
@@ -344,7 +344,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 | --- | --- | --- | --- | --- |
 | `<实际 ADR 编号/状态>` | `<有效本体；废止时列替代/继承>` | `<文件:行、命令或证据ID>` | `<合规/部分合规/违反/未验证/不适用；限制>` | `<CMPL/DOC/无>` |
 
-当前 ADR 基线：以审计时 `docs/decisions/README.md` 的实际索引为准。重点核对：ADR-003 设计规范、ADR-004 命名、ADR-005 无回退/跨版本迁移链、ADR-006 Resource 优先、ADR-007 Autoload 边界、ADR-009 构建期资产、ADR-012 门禁、ADR-013 路径迁移、ADR-017 双人隔离。
+当前 ADR 基线：以审计时 `docs/decisions/README.md` 的实际索引为准。重点核对：ADR-003 设计规范、ADR-004 命名、ADR-005 无回退/跨版本迁移链、ADR-006 Resource 优先、ADR-007 Autoload 边界、ADR-008 目录分层、ADR-016 显示基线、ADR-017 双人隔离、ADR-018 缓存/预热/对象池、ADR-019 测试夹具边界、ADR-020 类型化视觉资产、ADR-021 总体目标架构、ADR-022 AtlasMetadata View、ADR-023 关卡布局、ADR-024 九维门禁、ADR-025 原始数据导出、ADR-026 字体/Theme 角色。ADR-009 已由 ADR-020 取代；ADR-012 的八维清单作为历史基线，当前维度以 ADR-024 与 `acceptance.md` 为准。
 
 - 评级：`<A/B/C/D>`
 - 结论：`<摘要>`
@@ -428,7 +428,7 @@ docs/                   # 规范、参考、决策、路线、指南、审计、
 
 - [ ] `<ID>`：`<下一步>`
 
-### 5.2 当前迭代处理（P1）
+### 5.2 当前维护批次处理（P1）
 
 - [ ] `<ID>`：`<下一步>`
 

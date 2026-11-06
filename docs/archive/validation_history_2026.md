@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-11-02
 > **状态**：Archived
+> **内容说明**：前段为 2026-11-02 的旧 `status.md` 快照；当前版本、门禁与边界以 [`../reference/status.md`](../reference/status.md) 为准。
 > **关联**：当前状态见 [`../reference/status.md`](../reference/status.md)
 
 <!-- 以下为归档时的完整验证记录，保留历史原貌。 -->

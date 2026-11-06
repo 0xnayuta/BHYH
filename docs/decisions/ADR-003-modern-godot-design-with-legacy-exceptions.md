@@ -40,5 +40,5 @@
 
 - [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md) §2–§8
 - [`../../AGENTS.md`](../../AGENTS.md) §3
-- [`../roadmap/roadmap.md`](../roadmap/roadmap.md) §2、§3
+- [`../roadmap/roadmap.md`](../roadmap/roadmap.md) §2、§5
 - [`../reference/architecture.md`](../reference/architecture.md) §9

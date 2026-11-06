@@ -1,6 +1,7 @@
-# UI Theme 契约（Phase 32 完成）
+# UI Theme 契约
 
-> **状态**：Phase 32 已完成（2026-11-02）。静态直接 `theme_override_*` 为 0；旧 Theme 已退役；完整批次与截图记录见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
+> **类型**：当前契约（Current）
+> **来源**：Phase 32 完成（2026-11-02）；P0/P2 字体与 token 批次见 [`../archive/iteration_27_theme_font_convergence.md`](../archive/iteration_27_theme_font_convergence.md) 与 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
 > **范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与审计；不约束运行时业务状态。
 > **规范边界**：字体角色、组件选择与字号边界见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)；本文只记录 Theme 实现、变体、覆盖和审计事实。
 > **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
@@ -29,7 +30,7 @@ Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘�
 - 变体按角色命名，不按具体面板命名；同一角色跨面板复用。
 - 变体必须登记在 `bhyh_theme.tres`；未定义变体、缺失类型或 Theme 加载失败均应在审计/加载阶段失败，不回退到内联样式。
 - 32-4 冻结的完整变体名单与字体映射见归档页；新增/重命名变体必须评审。
-- P2 排版 token 覆盖范围与 token 值见 [`typography_tokens.md`](typography_tokens.md)；字体角色选择见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)。
+- 字号、颜色、描边与 Button token 见 [`typography_tokens.md`](typography_tokens.md)；字体角色选择见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)。
 
 ## 4. 静态、动画与动态覆盖
 
@@ -49,69 +50,14 @@ python scripts/font_coverage_audit.py --check
 
 基线：`scripts/theme_override_baseline.json`。基线是上限，不是迁移目标；直接属性或动画引用增加必须显式评审并更新基线，不能静默增长。
 
-当前结果：直接属性 **0**；动画轨道 **26**（仅 `hit_text`）；静态变体缺失 **0**；旧 Theme 资源引用 **0**。字体覆盖审计：135 个显式绑定 Theme 的场景 / 790 个中文文本节点 / **0 缺字**。
+当前结果：直接属性 **0**；动画轨道 **26**（仅 `hit_text`）；静态变体缺失 **0**；旧 Theme 资源引用 **0**。字体覆盖审计：135 个显式绑定 Theme 的场景 / 788 个中文文本节点 / **0 缺字**。
+
+变体规模、属性上限、StyleBox 与重复组结果见 [`theme_font_inventory.md`](theme_font_inventory.md) 与 [`status.md`](status.md)。
 
 ## 6. 边界
 
-- 不做主题切换、换肤、布局重排、动画时序修改或显示基线调整。Phase 32 未替换字体族；2026-11-05 P0 字体覆盖修正仅用同族完整版替换 FZCuYuan 资源并增加 fallback，见 §7。
+- 不做主题切换、换肤、布局重排、动画时序修改或显示基线调整。
 - 不把运行时品质色、血量色、奖励状态色迁入 Theme。
 - 不为兼容旧场景保留第二套 Theme；迁移完成即删除旧入口。
-- 完整批次、截图、控件转储与历史计数见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
-
-## 7. P0 字体覆盖修正（2026-11-05）
-
-**范围**：只修字体覆盖与字体回退，不改配色、字号、描边、间距、布局或变体命名。
-
-| 项 | 结果 |
-|:---|:---|
-| FZCuYuan 资源 | `font_fzcy` 与 3 个 `M03S` 子集收敛为 `font_fz_cu_yuan_m03` |
-| 字体资源 | `source/Scene/theme/fz_cu_yuan_m03.tres`（FontVariation） |
-| 主字体 | `source/Font/fz_cu_yuan_m03.ttf`（FZCuYuan-M03，Version 5.32） |
-| 显式回退 | `source/Font/msyh_semibold.ttc`（Microsoft YaHei Semibold，本机 fallback） |
-| Theme 默认字体 | `default_font = font_fz_cu_yuan_m03`，覆盖无显式字体的中文文本 |
-| 变体 | 618 个类型保持不变；无新增/重命名变体 |
-| 直接引用 | `hit_text.tscn`、`coop_panel_host.gd`、`game_mode_select.gd`、`pet_interface.gd` 同步改为新字体资源 |
-| 静态覆盖 | **135 个场景 / 790 个中文文本节点 / 0 缺字** |
-| 截图/转储 | 4 个代表场景 × 1280×800 / 1600×1000；无横向位移；字体度量导致的 Label 高度 +1~+3 px，居中标签纵向 <1 px，未见裁切 |
-
-**授权与发布边界**：FZCuYuan-M03 已由项目方确认授权；Microsoft YaHei Semibold 仅作为本机 fallback，仍受 Microsoft 自身授权约束。`source/Font/` 不进入公开仓库，字体文件与 `.import` 不提交；发布包分发前需再次确认两款字体的分发许可。
-
-**后续**：字体子集化作为独立打包优化，不在本修正批次的视觉基线内；必须保留 hinting、显式 fallback 并通过同一套截图/控件转储后方可采用。
-
-**P1 资源清理（2026-11-05）**：旧 `1_fonts_fzcy_fz_cu_yuan_m03.ttf`、`1_aaa_fz_cu_yuan_m03_s.ttf`、`1_aaa_fz_cu_yuan_m03_s_ttf.ttf`、`8_fz_cu_yuan_m03_s.ttf` 及对应 `.import` 已确认零运行时引用，复制到本地回滚归档后从 `source/Font/` 移除；回滚归档不进入仓库或发布包。当前只保留 `fz_cu_yuan_m03.ttf` 与 `msyh_semibold.ttc`。
-
-## 8. P2 排版 token 试点（2026-11-05）
-
-- 覆盖 `game_set`、`back_pack`、`main_backpack`、`main_menu`、`skill/zd_skill`、`pet/pet_interface`、`archive_interface/read_archive_interface`、`game_announcement`、`ldl`、`shop`、`mystery_shop`，以及 `equipment_properies`、`use_items`、`skill_select`、`pl_sell`、`dj_information`、`dj_sell`、`forge`、`synthesis`、`strength`、`mosaic`、`decompose`、`divine_forge`、`bone_forge`、`choose_item`、`cure_times_box`、`shop_item`、`sell_or_equ`、`use_magic_weapon`、`magic_weapon_infor`、`forge_help`、`mosaic_help`、`decompose_help`；字号、描边、文字颜色与 Button 族按 [`typography_tokens.md`](typography_tokens.md) 收敛。
-- 不重命名 618 个冻结变体；重复 Text/Icon 按钮改为继承 `MenuActionButton`、`EmptyButton`、`SettingsButton`、`SettingsButtonTiny`、`LlbtCgmsButton` 等共享基类，视觉不变。
-- P2-3 新增：公告版本列表 28、Heading 36；背包标题 24、小 Tab 16、BoxLockMark 14/3；`ldl` 按钮 24；商店 Tab/Search 16、Stat/Hint 24、SoulValue 18；神秘商店标签 14。
-- P2-4 新增：装备数值 16/描述 14/售价 18；道具使用 32/36、13/14、15/16；锻造 24/28、标题 36；神铸 32；选择物品 24/20；治疗次数 24/24；`shop_item` 本批无字体重写。
-- P2-5 新增：`magic_weapon_infor` Attr 14/SkillTitle 20/描边 10 或 6/3；`use_magic_weapon` Page outline 6；`mosaic_help` Title 32/6、Line 18；`decompose_help` Title 24；`sell_or_equ` 与 `forge_help` 已为 token，无改写。装备 tooltip 的武器/法宝描述与售价空值已在独立修复中补齐。
-- P2-6 颜色批次：新增 `text_danger`、`text_success`、`text_hint`、`text_gold_warm`，公告 Warning/Alert/Status/Prompt/Subtitle/Title 分别收敛；仅 Alert 色值变化，控件 0/0。
-- P2-7 颜色批次：新增 `text_orange`、`text_amber`、`text_green`、`text_orange_deep`；商城提示、治疗提示、装备属性/售价、锻造绿色与分解橙色收敛；1280×800/1600×1000 截图与控件转储 0 位置/0 尺寸。
-- P2-8 颜色批次：新增 `text_gold_bright`、`text_jade`、`text_jade_dim`、`text_ink_warm` 与状态/HUD token；主菜单子面板、存档状态色、shop 三场景次要状态色（含商品盒数量/锁标）、命中/暴击 HUD、宠物槽位橙色收敛；1280×800 面板控件 0 位置/0 尺寸（HUD 合成 Label 除外），1600×1000 截图归档。
-- P2-9 颜色批次：main_menu 深棕 outline/shadow 收敛为 `ink`，菜单 hover/pressed 与 TowerFloorInput 占位色 token 化；新增 `UiColorTokens`（`source/Script/base/ui_color_tokens.gd`），`mount_panel`/`equipment_catalog_page`/`wan_ling_catalog_page`/`zhen_yao_tower`/`game_mode_select`/`choose_player` 脚本文字色迁移；动态菜单 1280×800 控件 0 位置/0 尺寸。
-- P2-10 表面色批次：新增 `UiSurfaceTokens`（`source/Script/base/ui_surface_tokens.gd`），`mount_panel`/`equipment_catalog_page`/`wan_ling_catalog_page`/`zhen_yao_tower` 的 StyleBox 底色、边框、状态、遮罩收敛；`TowerFloorInput` 与搜索框统一光标/选区色；1280×800 控件 0 位置/0 尺寸。
-- P2-11 输入与动态样式批次：`ShopSearchInput` 使用浅底暖黑光标/25% 选区，`ArchiveLoginInput`/`ArchiveNumberInput` 使用深底金色光标/45% 选区；`game_mode_select` 遮罩/面板/按钮、地图高亮、坐骑锁定预览、诛仙剑禁用态与材料需求色全部接入 `UiSurfaceTokens`/`UiColorTokens`；公告动态文字色改由 `UiColorTokens.TEXT_PRIMARY` 派生。新增 `ui_surface_token_audit.py`，main_menu 裸色 0，StyleBox 迁移期基线 18 处。
-- Phase 27-1 Token 源：`scripts/ui_theme_tokens.json` 管理文字/表面 token、受管 Theme 输入属性、默认字体与 Theme token 审计集合；`scripts/convert_ui_theme_tokens.py --check` 逐字校验生成结果，`--write` 重建 `UiColorTokens`/`UiSurfaceTokens` 与 Theme 受管行。
-- Phase 27-2 字号：111 个 off-token 变体分三批映射到标准标尺，off-token **111→0**；`theme_token_audit` 强制所有当前字号在 token 内；16 个代表场景截图与控件几何归档。
-- Phase 27-3 颜色/StyleBox：139 处 off-token 字体色收敛到 0（35 实际值 / 37 语义 palette），8 类字体色属性纳入审计；StyleBox 精确重复 **54→47**；跨色族 47→≤36 转入 27-4。
-- Phase 27-4 语义基类/共享样式：保留 618 个冻结变体名，新增 103 个 `Semantic*` 基类（按原生根类型分树，最深 8 层）；Theme 属性 **3,218→1,719**，StyleBox **47→36**，独立变体重复签名组 **3**。`theme_token_audit` 改为解析 `base_type` 有效值；`theme_variant_audit` 冻结清单、规模与重复组进入 `contract_gate`。
-- Phase 27-5 字体角色：`body`（FZCuYuan + 微软雅黑 fallback）、`ui`（华康宋体）、`display`（华康海报）、`accent`（文征明小楷）；Theme 字体资产 **10→5 个文件 / 约 44.98 MB**。`font_hy`/`font_meng`/`font_wo`/`font_jin_qiao` 并入 `font_main`，`font_194_song_ti` 并入 `font_hk`；`font_coverage_audit` 同时检查 5 个动态样本与 Theme 未引用资源。
-- Phase 27-6 动态覆盖：脚本 `add_theme_*` **332→299**；删除 18 处默认 body 字体覆盖，15 处主字体覆盖改绑 9 个 `Semantic*` 字体角色变体；62 处字面颜色、47 处字号 token 化；新增 `ui_dynamic_theme_audit.py` 与 299 条基线；静态字面角色 **0**，`hit_text` 26 条动画轨道保持例外。
-- Phase 27-7 审计闭合：`ui_dynamic_theme_audit.py` 扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处），其中 **29 处**字面字号/字体色 token 化；新增 `FONT_SIZE_8`、`TEXT_ZHENFA_PURPLE`、`TEXT_ZHENFA_ORANGE`；`set_menu` 直接字体引用迁移为 `SetMenuHintLabel` 变体。当前 **static 0 / token 173 / data 43 / layout 96 / dynamic_style 40**；`theme_override_audit` 新增直接字体与动态调用上限校验。
-- Phase 27-7 P0/P1：删除 8 个无运行时引用顶层字体及 `.import`，回收约 35.84 MB；`font_main`/`font_hk`/`font_return` 改为 FontVariation 显式回退链；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作等小字号功能文本移出小楷，`CureTimesHint` 移出海报体。Theme 属性 **1,744**，字体文件 5，覆盖 0 缺字。
-- Phase 27-7 P2：`ui` 改为思源宋体 Medium，`display` 改为思源宋体 SemiBold，`accent` 改为霞鹜文楷 Medium；退役华康宋体/海报/文征明小楷，保留 Microsoft YaHei 作为 body fallback；方正润玉圆宋仅用于 LOGO/活动，不进入 Theme。P2 字体文件 5 / 76.06 MB；18 场景双档 2,323 控件 0 位移。
-- Phase 27-7 P2.6a：`ChooseMusicButton`（`MenuActionButton`，20 号）用于音乐弹窗，`ChooseMusicList` 间距 6→4；`ChangeBackgroundList` 间距 10→8；Theme 属性 1,788、总变体 734，角色 display 112 / accent 125。
-- Phase 27-7 P2.6：技能界面安全子集迁 display；新增 `SkillHeaderLabel` 供五列表头使用，`SkillLabel` 保留给等级/描述数据；帮助标题 `HcHelpTitle`、`MosaicHelpTitle`、`MagicHelpTitle`、`LhhjHelpTitle`、`MonsterHelpTitle`、`MonsterHelpTitleLarge`、`ZhenFaHelpTitle` 迁 display；角色计数 display 111 / accent 125 / 总 733。
-- Phase 27-7 P2.5：字体资源包装统一为角色名 `font_body`、`font_ui`、`font_display`、`font_accent`，同步 Theme 内部 ExtResource ID、角色映射、动态样本与 token 基线；保留资源 UID 与实际 TTF 文件名。
-- Phase 27-7 P2.4：Buff 倒计时/次数、格位提示与 `Max` 登记为 body 10–11 微辅助；`font_role_baseline` 4→0，无 Theme 运行时修改。
-- Phase 27-7 P2.3：五个 36 px 标题与 `LijiText` 50 px 仪式标题迁 display；`font_role_baseline` 10→4。
-- Phase 27-7 P2.2：优先清理 body 24/28/32/36 与 ui 28；标题/操作迁 display，功能性数字/计时/短标签保留 body，`ChoosePlayerRoleName` 迁 accent；基线 43→10。
-- Phase 27-7 P2.1：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif。Theme 字体资产 4 个资源 / 4 个文件；E1–E4 角色/字号例外迁移完成；`ui-theme` 7.12s、`ui-factories` 34.41s、全量回归 128/128 + 5 SKIP（372.9s）。
-- StyleBox 角色合并（47→36）：`learn_damage_focus→normal`、`learn_damage_pressed→hover`、`map0_catalog_pressed→hover`、`divine_forge_pressed→hover`、`tower_button_pressed→hover`、`wan_ling_close_pressed→normal`、`sub_StyleBoxFlat_secret_panel→wan_ling_stage_panel`、`wan_ling_section_panel→sub_CloudPanel`、`sub_StyleBoxFlat_pet_page_selected→...hover`、`auto_battle_button*→tower_button_normal/hover`；重写 18 处引用。
-- 控件转储：`game_set` 3、`back_pack` 5、`main_menu` 4、`archive` 4 个尺寸变化；`zd_skill` ScrollContainer 内 27 个位置随行高变化；P2-3 公告 13 位置/17 尺寸、`back_pack` 89 位置（≤0.98 px）、`ldl` 89 位置（≤1.33 px）、`shop` 4 位置/1 尺寸、`mystery_shop` 0；P2-4 装备面板 18 位置/23 尺寸（直场景无实例时 1025→1043 px；真实背包宿主选择“初月双刀”后 tooltip 正常、无裁切，武器/法宝描述与售价已由后续修复提交补齐），其余 15 个子面板 0 位置或 ≤12 位置（≤1 px）；P2-5 `sell_or_equ`/`use_magic_weapon`/`forge_help`/`decompose_help` 0/0，`magic_weapon_infor` 0/1，`mosaic_help` 5（≤5 px）/7；P2-6 公告颜色 0/0；P2-7 商城/装备/锻造颜色 0/0；P2-8 主菜单子面板/商店/宠物颜色 0/0；P2-9 主菜单描边/状态 0/0，动态菜单 39/61/287/32/32/7 控件 0/0；P2-10 自绘菜单表面色 0/0，`TowerFloorInput` 光标/选区已转储；P2-11 输入/动态样式颜色值分别转储 `331f1240`、`ffd97aff`、`c09c5673`。
-- `theme_token_audit.py --check` 冻结 618 个既有变体（当前基线 731 个既有变体 + 新增 `SetMenuActionButtonGroup`），新增/改写值必须使用 token；当前 **0 违规**。
-- 2026-11-05 暂停菜单行距修复新增 `SetMenuActionButtonGroup`（继承 `MenuActionButtonGroup`，`separation = 9`）；`set_menu` 通过变体消费，不新增场景级 `theme_override_*`。
-- `ui_surface_token_audit.py --check` 扫描自绘 StyleBox 与 main_menu 裸色；当前 **0 新增**。
-- Phase 27 已收口：后续新增/重构 UI 必须直接使用 token 或 Theme 变体，并由 `ui_dynamic_theme_audit`、`theme_token_audit` 与 `theme_variant_audit` 守卫；现状盘点见 [`theme_font_inventory.md`](theme_font_inventory.md)。
+- 字体资产替换、子集化与删除必须保留授权与回滚证据；公开仓库不包含字体文件。
+- 完整批次、截图、控件转储与历史计数见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md) 与 [`../archive/iteration_27_theme_font_convergence.md`](../archive/iteration_27_theme_font_convergence.md)。

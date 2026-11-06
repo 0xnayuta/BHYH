@@ -125,7 +125,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - `MapOverlayFactory`：活动之谜、`lsh` 与 `lxdy` 三个主菜单地图浮层常驻场景槽位；三个入口登记临时 UI，活动之谜继续挂窗口守卫；通过 `Global.get_map_overlay_factory()` 访问，业务侧仍用 `Global.add_hdzm` / `add_lsh` / `add_lxdy`。
 - `RunContext`（`RefCounted`，`Global` 持有单一实例）：关卡显示名、玲珑宝塔层数、关卡计时、`last_level_path`、最大连击、玩家朝向、三太子/星宿选择、玲珑塔三种挑战模式、玩家受击计数、结算类型与 13 项战斗统计（造成/受到的总量与物/魔/真分桶、治疗、攻击/受伤/暴击/闪避次数）；写入只经 `set_*` / `advance_*` / `record_*` / `add_*` / `count_*` / `reset_*`，读取走 `Global.get_run_context()` 或 `Global.get_current_level_name` / `get_tower_floor`；四个特殊副本无尽模式与八仙选择同在此处，写入走 `set_special_dungeon_endless` / `clear_special_dungeon_endless` / `set_selected_eight_immortal_id`，同一时刻至多一个副本为真；结算面板 `after_level_end` 与 `victory` 只读同一实例。
 
-业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。旧 `Global.windows`、`Global.get_ui_popup_layer()`、`Global.add_bgm/add_sound`、`MainMusic`、`Global.get_*_snapshot()`、`Global._resource_cache` 等私有缓存字段、`Global._level_resource_lease`、`Global._pool_data`、`Global._active_damage_texts`、`Global.current_magic_summon`、`Global.current_level`、`Global.llbt_level`、13 个 `Global.total_*` 字段、9 个写多读零的 `Global.is_*` 减益标志、四个无尽模式标志、`selected_eight_immortal_id`、两个角色贴图槽位字段，以及 `get_ancestor`/`get_position_between`/`get_dis_betweem`/`get_clean_name`/`get_all_item_num`/`load_item_icon` 等工具函数、`monster_head`/`monster_info`/`basic_monment_info` 三个怪物展示场景槽位、`level_fall_box`/`game_need_know`/`hc_help`/`help_thing` 四个提示场景槽位与 6 个阵法场景槽位已删除（`add_zhen_fa_ui` 无调用方一并删除）；无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
+业务状态仍归 `Global` 与 `MemoryClass` 所有，诊断节点只读。Phase 22 已删除旧界面/缓存/池/关卡/连击/法宝字段、怪物展示与提示场景槽位与无状态工具函数；这些入口不得回流，逐项清单见 [`../archive/iteration_22_global_state_boundary.md`](../archive/iteration_22_global_state_boundary.md)。无状态工具现为 `NodeUtils`/`ItemUtils` 静态类。
 
 ---
 

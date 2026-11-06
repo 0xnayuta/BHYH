@@ -1,4 +1,4 @@
-# 宠物关卡调用面与首批抽取矩阵
+# 宠物关卡调用面与族规则矩阵
 
 > **状态**：Phase 23-0 调查、Phase 23-1 龟族抽取、Phase 23-2 八族迁移、Phase 23-3 结算复核、Phase 23-4 宠物域边界与 Phase 23-5 阶段验收已完成（2026-11-03）；Phase 23 已关闭。本页是当前调用面与迁移判定的参考，不把未实施目标写成已实现。
 > **范围**：`BaseLevel` 的宠物生成、恢复、归一化、进化、技能、场景路径与槽位解析；同时登记 `BaseMonster`、`PetInterface`、`PlayerData`、`Global` 与召唤物单位的现有调用点。
@@ -162,9 +162,9 @@ flowchart TD
 
 ---
 
-## 6. 首批 `PetTurtle` 抽取（23-1 已完成）
+## 6. 族规则抽取结构
 
-### 6.1 23-1 目标形状
+### 6.1 当前结构
 
 新增 `source/Script/pet/` 下的普通控制器，不新增 Autoload，不新增场景：
 
@@ -185,126 +185,15 @@ PetFamilySpec (RefCounted, 各族实现)
   setup(unit: Node, stage: int) -> void
 ```
 
-23-1 已实现 `PetTurtleFamily`；23-2 每批增加一个族规则并删除对应 `BaseLevel` 分支。未迁移族在 23-1 后仍由 `BaseLevel` 旧分支处理，**龟族不再保留旧分支**；全部批次完成后 `BaseLevel` 只剩控制器入口。
+八族均已完成迁移；`BaseLevel` 只剩 `PetLevelController` 入口，族规则由 `Pet*Family` 提供。
 
-### 6.2 23-1 删除/迁移清单（已完成）
+### 6.2 批次结果
 
-- 已从 `BaseLevel` 删除龟族 7 个规则函数与 `_spawn_active_pet` 的龟族分派；
-- `_canonicalize_active_pet_data` 的龟族分支已改为 `PetTurtleFamily.normalize_spawn`，并显式传入当前槽位档案；
-- `_pet_active_name` 的龟族识别已改由 `PetTurtleFamily.matches` 提供；
-- `BaseMonster._cure_active_pet_exp` 的龟族进化调用已改为 `PetTurtleFamily.evolve`；`BaseMonster` 现有各族进化与成长写入均接收 `profile`，不再写全局 `PlayerData`；
-- `PetInterface` 的龟族出战/进化已复用同一 `PetTurtleFamily`，保留 UI 数据刷新；
-- `PlayerData._normalize_pet_turtle` 仍作为载入/补全职责保留到 23-4，不作为运行时进化权威。
+23-1 龟族与 23-2 七族的迁移清单、验证与 P2 写回修复见 [`../archive/iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)。当前结构：八族均由 `PetLevelController` + 族规则持有，`BaseLevel` 只保留控制器入口；`PlayerData` 载入补全与宠物域 View/命令见 [`pet_domain_contract.md`](pet_domain_contract.md)。
 
-### 6.3 首批验收
+## 7. 当前验证与边界
 
-| 验证 | 覆盖 |
-|:---|:---|
-| `level_1` 1P / 2P | 生成、跟随、受击、死亡、重战、关卡切换 |
-| `pet-runtime` | 树外 `apply_pet_data`、头像、动画/帧 |
-| `coop_probe_runner` | P1/P2 宠物经验、槽位、生命加成、HUD |
-| `archive_probe_runner` | 宠物列表归一化、保存/读档、槽位档案 |
-| `scene_probe_runner` | 既有 17 项场景边界 |
-| `level_regression_all` | `BaseLevel` 是共享基类，变更会影响所有关卡；至少 `--changed-only`，无法映射时回退全量 |
-
-### 6.4 必测失败路径
-
-1. 无出战宠物 / 宠物数据为空：不生成，不报错。
-2. 本局已死亡：不生成，清理活跃名；重战仍不生成。
-3. HP 或 MP 为 0：按上限恢复后生成；死亡态优先于恢复。
-4. 2P 未启用 / `role_p2` 无效：跳过 2P，不影响 1P。
-5. 同槽位已有宠物单位：不重复生成。
-6. 宠物类型未知：不生成，不注册元数据。
-7. 场景路径加载失败：不崩溃，不注册半成品单位。
-8. 2P 宠物升级：只改 P2 档案，1P `出战宠物` 不变。
-9. 龟族死亡后法宝复活：只恢复对应槽位（若 23-1 纳入法宝入口）。
-10. 关卡切换/重战：旧单位释放，`active_pet_unit` 与死亡态按槽位一致。
-
-### 6.5 23-2 首批 `PetTiger` 结果
-
-- 新增 `pet_tiger_family.gd`；`PetLevelController` 通过族规则表接管龟、虎两族；
-- `BaseLevel` 删除虎族 7 个规则函数与虎族生成分支，兔族阶段阈值改用通用 `_pet_stage_for_level`；
-- `BaseMonster` 删除虎族重复进化，升级调用改走 `PetTigerFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 虎族检测、归一化、进化与死亡别名复用同一规则；
-- `PlayerData._normalize_pet_tiger` 仍作为载入补全保留。
-
-### 6.6 23-2 `PetDragon` 结果
-
-- 新增 `pet_dragon_family.gd`（`RefCounted`，不新增 Autoload）：阶段阈值 15/30/50、四阶名称/技能、基础资质上限、场景路径、归一化与进化；
-- `PetLevelController` 通过族规则表接管龟、虎、龙三族；`BaseLevel` 删除龙族 7 个规则函数与生成分支，龙族不再走旧分派；
-- `BaseMonster` 删除龙族重复进化，升级调用改走 `PetDragonFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 龙族检测、归一化、进化与活跃名复用族规则；`PlayerData._normalize_pet_dragon` 仍作为载入补全保留到 23-4；
-- 验证：`LocalCoopPetDragonProbe` 覆盖族规则、P2 升级写回、`level_1` 双槽实际生成；`coop_probe_runner` **28/28 PASS**。
-
-### 6.7 23-2 `PetPhoenix` 结果
-
-- 新增 `pet_phoenix_family.gd`：存储阶段优先归一化、按等级进化、四阶名称/技能、场景路径与死亡别名；
-- `PetLevelController` 接管龟、虎、龙、凤四族；`BaseLevel` 删除凤凰族 7 个规则函数与生成分支；
-- `BaseMonster` 删除凤凰重复进化，升级调用改走 `PetPhoenixFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 凤凰检测、修复、归一化、进化与活跃名复用族规则；
-- 补齐 `BaseLevel._active_pet_dead_aliases` 与 `PetInterface._pet_dead_aliases` 的凤凰别名，覆盖 `雀蛋`/四阶名/`朱雀幼灵`/`赤羽朱雀`/`朱雀神君`；
-- `PlayerData._normalize_pet_phoenix` 仍作为载入补全保留到 23-4。
-
-### 6.8 23-2 `PetRabbit` 结果
-
-- 新增 `pet_rabbit_family.gd`：按等级归一化/进化、四阶名称/技能、基础资质上限、场景路径与死亡别名；
-- `PetLevelController` 接管龟、虎、龙、凤、兔五族；`BaseLevel` 删除月兔 6 个规则函数与生成分支；
-- `BaseMonster` 删除月兔重复进化，升级调用改走 `PetRabbitFamily.evolve`；成长分支使用族阶段名/技能；
-- `PetInterface` 月兔检测、归一化、进化与活跃名复用族规则，保留永久解锁与不可放生逻辑；
-- `BaseLevel`/`PetInterface` 的死亡别名改由 `PetRabbitFamily.append_death_aliases` 提供，覆盖 `月兔`/`疾风兔`/`寒冰玉兔`/`冰霜月神`；
-- `PlayerData._normalize_pet_rabbit` 仍作为载入补全保留到 23-4。
-
-### 6.9 23-2 `PetMouse` 结果
-
-- 新增 `pet_mouse_family.gd`：两阶、按 30/50 级分档技能、归一化/进化、基础资质上限、场景路径与死亡别名；
-- `PetLevelController` 接管龟、虎、龙、凤、兔、鼠六族；`BaseLevel` 删除子鼠 7 个规则函数与生成分支；
-- `BaseMonster` 删除子鼠重复进化，升级调用改走 `PetMouseFamily.evolve`；成长分支保留 50 级进阶与技能 CD 解锁，阶段/技能由族规则提供；
-- `PetInterface` 子鼠检测、归一化、进化、技能补全与活跃名复用族规则；
-- `BaseLevel`/`PetInterface` 的死亡别名改由 `PetMouseFamily.append_death_aliases` 提供，覆盖 `子鼠元帅`/`子鼠大元帅`；
-- `PlayerData._normalize_pet_mouse` 仍作为载入补全保留到 23-4。
-
-### 6.10 23-2 `PetNeat` 结果
-
-- 新增 `pet_neat_family.gd`：四阶、阶段技能（3 阶追加 `蛮力践踏`、4 阶追加 `丑牛奥义`）、归一化/进化、场景路径与死亡别名；
-- `PetLevelController` 接管龟、虎、龙、凤、兔、鼠、牛七族；`BaseLevel` 删除丑牛 7 个规则函数与生成分支；
-- `BaseMonster` 升级循环新增 `PetNeatFamily.evolve`，修复丑牛升级不刷新阶段/技能；成长分支改用族规则；
-- `PetInterface` 丑牛检测、归一化、进化与活跃名复用族规则；
-- `BaseLevel`/`PetInterface` 的死亡别名改由 `PetNeatFamily.append_death_aliases` 提供，覆盖 `丑牛元帅`/`丑牛大元帅`；
-- `PlayerData._normalize_pet_neat` 仍作为载入补全保留到 23-4。
-
-### 6.11 23-2 `PetYinTiger` 结果
-
-- 新增 `pet_yin_tiger_family.gd`：四阶、阶段技能（4 阶追加 `猛虎下山`/`寅虎奥义`）、基础资质上限、场景路径与死亡别名；
-- `PetLevelController` 接管八族；`BaseLevel` 删除寅虎 7 个规则函数，并移除最后的旧生成分派，生成只走控制器；
-- `BaseMonster` 升级循环与成长分支改用 `PetYinTigerFamily`；
-- `PetInterface` 寅虎检测、技能补全、归一化、进化与活跃名复用族规则；
-- `Global` 补齐 `ensure_pet_yin_tiger`、预载类型识别、路径（含 stage1/2 源帧）与 `warm_pet_yin_tiger_frames` 预热；
-- `BaseLevel`/`PetInterface` 的死亡别名改由族规则提供，覆盖 `寅虎元帅`/`寅虎大元帅`；
-- `PlayerData._normalize_pet_yin_tiger` 仍作为载入补全保留到 23-4。
-
----
-
-## 7. 本批验证与边界
-
-- 23-1 已修改 `source/`：新增 `pet_level_controller.gd`、`pet_turtle_family.gd`；修改 `BaseLevel`、`BaseMonster`、`PetInterface`。
-- 23-2 首批已新增 `pet_tiger_family.gd`，龙族批次新增 `pet_dragon_family.gd`，凤凰批次新增 `pet_phoenix_family.gd`，月兔批次新增 `pet_rabbit_family.gd`，子鼠批次新增 `pet_mouse_family.gd`，丑牛批次新增 `pet_neat_family.gd`，寅虎批次新增 `pet_yin_tiger_family.gd`，并修改 `global.gd`、`PetLevelController`、`BaseLevel`、`BaseMonster`、`PetInterface`；共享槽位批次修改 `global.gd`、`load_scene.gd`、`runtime_diagnostics.gd`、`eight_immortal_magic_weapon.gd`、`scripts/global_surface_baseline.json` 与协作探针；未修改场景、资源、存档格式或显示基线。
-- 已执行（寅虎迁移后）：
-  - `check_all --godot-bin`：**9/9 PASS**（35.96s）；
-  - `pet-runtime`：**PASS**；
-  - `archive_probe_runner`：**297/297 PASS**；
-  - `coop_probe_runner`：**33/33 用例 PASS**（182.53s）；新增 `LocalCoopPetSlotProbe`、`LocalCoopPetDragonProbe`、`LocalCoopPetPhoenixProbe`、`LocalCoopPetRabbitProbe`、`LocalCoopPetMouseProbe`、`LocalCoopPetNeatProbe` 与 `LocalCoopPetYinTigerProbe`；寅虎用例额外覆盖 Global 预载路径与预热签名；
-  - `scene_probe_runner`：**17/17 PASS**（157.89s）；
-  - `level_1` 1P 冒烟：**PASS，4 阶段，0 ERROR / 0 WARNING**；
-  - 全量关卡回归：**PASS 128/128 + SKIP 5，FAIL 0**（默认 auto 并发，302.9s，本轮无重试）。
-- 临时定向探针（运行后已删除）：
-  - P1 `PetTurtle`、P2 `PetTiger` 同时升级：P1 保持 `PetTurtle`，P2 为 `PetTiger`；
-  - 1P `PetTiger` 等级 15 生成：`pet_tiger_unit`、阶段 2、`白灵虎`；
-  - 1P 龟族死亡抑制/复活与 2P 龟族 2 阶生成（23-1 基线）。
-- 未覆盖：活跃名显示名清理；`PlayerData` 宠物域只读 View 与显式命令已在 23-4 完成，见 [`pet_domain_contract.md`](pet_domain_contract.md)。不得把本页探针全绿外推为这些路径已验证。
-- 选型不按文件行数；23-1 的 2P 写回回归已固化在现有 `LocalCoopPetExperienceProbe` 用例中。
-
----
-
-## 8. 下一轮
-
-**Phase 23 已关闭。** `BaseLevel` 宠物函数由 73 降至 16，八族生成只保留 `PetLevelController` 入口；Phase 23-3 结算复核、23-4 宠物域只读视图/命令与 23-5 全量验收均已通过。下一入口为 Phase 24-0 面板契约清单。
+- `BaseLevel` 宠物相关函数由基线 73 降至 16；八族生成只经 `PetLevelController`；
+- 当前基线：`check_all` **9/9**、`archive_probe_runner` **344/344**、`coop_probe_runner` **37/37**、`scene_probe_runner` **17/17**、`level_1` 4 阶段 0/0/0、全量 **128/128 + 5 SKIP**；具体日期与耗时见 [`status.md`](status.md)；
+- 未覆盖：活跃名显示名清理由后续阶段处理；`PlayerData` 宠物域只读 View 与显式命令见 [`pet_domain_contract.md`](pet_domain_contract.md)；
+- 选型不按文件行数；2P 写回回归固化在现有 `LocalCoopPetExperienceProbe` 用例中。

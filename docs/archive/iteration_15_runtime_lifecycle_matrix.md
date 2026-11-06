@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-11-02
 > **状态**：Archived
+> **同阶段记录**：阶段计划与结论见 [`iteration_15_app_orchestration_lifecycle.md`](iteration_15_app_orchestration_lifecycle.md)。
 > **关联**：当前边界摘要见 [`../reference/runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)
 
 <!-- 以下为归档时的完整实施记录，保留历史原貌。 -->

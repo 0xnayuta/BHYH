@@ -1,6 +1,6 @@
 # 造梦西游八荒湮隳（BHYH）
 
-《造梦西游八荒湮隳》的 Godot 4 现代化重构工程。仓库采用 **单一活跃工程 + 文档 + 工具链** 结构，当前内容版本为 **6.9**。
+《造梦西游八荒湮隳》的 Godot 4 现代化重构工程。仓库采用 **单一活跃工程 + 文档 + 工具链** 结构；版本与阶段状态以 [`docs/reference/status.md`](docs/reference/status.md) 与 [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md) 为准。
 
 > **公开仓库范围**：本仓库为代码、场景与工具链快照，不包含第三方美术、音乐、字体与控制器图标。`source/Art/`、`source/Music/`、`source/Font/`、`source/Spritesheet/` 及其 `.import` 已由 `.gitignore` 排除。公开 clone 无法直接运行，Godot 会报告缺失资源；请勿使用 `git add -f` 绕过忽略规则。本地运行请自行准备合法授权素材。
 
@@ -8,12 +8,12 @@
 
 | 项目 | 值 |
 |:---|:---|
-| 当前版本 | **6.9**（6.5.0.0 基线 + 6.6 / 6.7 / 6.8 / 6.9 回植） |
-| 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
+| 当前版本 | 以 [`docs/reference/status.md`](docs/reference/status.md) 为准 |
+| 引擎 | Godot 4.x；确切版本与渲染后端以 `source/project.godot` 为准 |
 | 工程根 | `source/` |
 | 语言与架构 | GDScript 2.0、场景/Resource 分层、构建期资源管线 |
 | 规模 | 以 [`docs/reference/status.md`](docs/reference/status.md) 为单一事实源 |
-| Autoload | **11 个注册项**（10 个业务单例 + 1 个编辑器调试桥；新增需评审） |
+| Autoload | 注册项以 `source/project.godot` 为准；新增需评审 |
 | 素材边界 | 公开仓库不含第三方素材；完整验收使用本地合法素材工作区 |
 
 当前阶段与验证状态见 [`docs/reference/status.md`](docs/reference/status.md)；长期路线见 [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md)。

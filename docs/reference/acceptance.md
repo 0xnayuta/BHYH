@@ -421,18 +421,9 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | 格式行宽 | 120 | `format_all.py` |
 | 格式批次 | 100 | `format_all.py` |
 
-### 8.1 历史基线（引用，不是本次复跑）
+### 8.1 历史基线
 
-截至 `status.md`（2026-10-24）：
-
-- 八维门禁 **8/8 PASS**；
-- 关卡回归 **128/128 PASS + 5 SKIP**；
-- 双人探针 **16/16 PASS**；
-- Atlas 元数据 **379/379 同步**；
-- 引擎健康检查 **706 脚本 0 Parse / 0 Error / 0 Warning**；
-- **1,136 场景 0 断裂引用**。
-
-这些数字是历史快照，不是本文的实测结果。当前规模与最新验证状态以 [`status.md`](status.md) 为准。
+历史门禁口径与旧计数见 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本文只维护当前阈值与变更矩阵，不复跑历史数字。
 
 ---
 

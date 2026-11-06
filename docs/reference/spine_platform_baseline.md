@@ -2,7 +2,7 @@
 
 > **状态**：2026-10-31 决策确认；**Windows x86_64 先行，当前唯一承诺平台**。Spine 运行时保持官方 **4.3 / Godot 4.7.2** 构建，不进行版本升级；其它平台明确“延期/未验证”，不宣称可用。
 > **范围**：Spine GDExtension、活动 Spine 资源版本、平台矩阵、许可证与 Windows 加载验收；不含 Spine 3.8 遗留资产的迁移决策，也不含 21-2B 设备测量。
-> **依据**：[`ADR-010`](../decisions/ADR-010-spine-runtime-boundary.md)、[`current-iteration.md`](../roadmap/current-iteration.md) Phase 26、[`missing_assets_registry.md`](../standards/missing_assets_registry.md) §2、[`acceptance.md`](acceptance.md)。
+> **依据**：[`ADR-010`](../decisions/ADR-010-spine-runtime-boundary.md)、[`current-iteration.md`](../roadmap/current-iteration.md) §2、[`missing_assets_registry.md`](../standards/missing_assets_registry.md) §2、[`acceptance.md`](acceptance.md)。
 > **Owner**：项目维护者（平台/许可证决策）；项目维护者（构建/加载验证）。
 
 ## 1. 决策摘要

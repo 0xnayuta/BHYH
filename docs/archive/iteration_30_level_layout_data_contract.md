@@ -2,6 +2,7 @@
 
 > **归档日期**：2026-11-01
 > **状态**：Archived
+> **同阶段记录**：完整实施记录见 [`iteration_30_level_layout_contract.md`](iteration_30_level_layout_contract.md)。
 > **关联**：[ADR-023](../decisions/ADR-023-level-layout-data-contract.md)、[`level_layout_contract.md`](../reference/level_layout_contract.md)、[`phase_30_4_script_decisions.md`](phase_30_4_script_decisions.md)、[`architecture.md`](../reference/architecture.md) §4.3、[`status.md`](../reference/status.md)
 
 ## 1. 阶段结果
