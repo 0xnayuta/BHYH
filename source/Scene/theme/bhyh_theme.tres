@@ -702,6 +702,7 @@ BackpackToggleButton/base_type = &"Button"
 BackpackToggleButton/colors/font_disabled_color = Color(1, 1, 1, 1)
 
 BackpackWingLabel/base_type = &"SemanticBackpackWingLabel4"
+BackpackWingLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 BackpackWingLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/colors/font_outline_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/constants/shadow_outline_size = 6
@@ -1061,10 +1062,10 @@ EquipmentInfoGroup/constants/separation = 16
 
 EquipmentItemHighlight/base_type = &"SemanticEquipmentItemHighlight"
 EquipmentItemHighlight/colors/font_outline_color = Color(1, 1, 1, 1)
-EquipmentItemHighlight/fonts/font = ExtResource("font_main")
+EquipmentItemHighlight/fonts/font = ExtResource("font_hk")
 
 EquipmentItemMeta/base_type = &"SemanticEquipmentItemHighlight"
-EquipmentItemMeta/fonts/font = ExtResource("font_main")
+EquipmentItemMeta/fonts/font = ExtResource("font_hk")
 
 EquipmentName/base_type = &"SemanticAnnouncementCheckButton"
 EquipmentName/constants/outline_size = 2
@@ -1086,6 +1087,7 @@ EquipmentStatLabel/base_type = &"Label"
 EquipmentStatLabel/colors/font_color = Color(1, 0.584314, 0, 1)
 
 EquipmentStatValue/base_type = &"SemanticDefeatYellowLabel"
+EquipmentStatValue/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 EquipmentTitle/base_type = &"SemanticDefeatYellowLabel"
 EquipmentTitle/font_sizes/font_size = 20
@@ -1548,6 +1550,7 @@ MenuActionButtonOutline/base_type = &"MenuActionButton"
 MenuActionButtonOutline/colors/font_outline_color = Color(1, 1, 1, 1)
 
 MenuHintLabel/base_type = &"SettingsSmallLabel"
+MenuHintLabel/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 
 MessageShowText/base_type = &"SemanticDecomposeHelpTitle"
 MessageShowText/constants/shadow_outline_size = 10
@@ -1608,6 +1611,7 @@ MysteryShopPurchase/base_type = &"SemanticBackpackHeadButton4"
 MysteryShopPurchase/colors/icon_hover_color = Color(1, 1, 1, 0.682353)
 
 MysteryShopTitle/base_type = &"SemanticLetterBody"
+MysteryShopTitle/fonts/font = ExtResource("font_fz_cu_yuan_m03")
 MysteryShopTitle/font_sizes/font_size = 12
 
 PelletAttTab/base_type = &"SemanticLlbtCureText2"
@@ -2137,6 +2141,7 @@ SwordPageStatLabel/constants/outline_size = 3
 SynHelpBody/base_type = &"SemanticRoleNatureHp"
 SynHelpBody/colors/font_color = Color(1, 0.941176, 0.470588, 1)
 SynHelpBody/fonts/font = ExtResource("font_hk")
+SynHelpBody/font_sizes/font_size = 14
 
 SynHelpSection/base_type = &"AnnouncementListGroup"
 
@@ -2157,7 +2162,7 @@ SynthesisTitle/base_type = &"UseItemUpLabel"
 
 TaskRewardTitle/base_type = &"SemanticRoleMagicNeedText"
 TaskRewardTitle/constants/shadow_outline_size = 6
-TaskRewardTitle/font_sizes/font_size = 12
+TaskRewardTitle/font_sizes/font_size = 14
 
 TaskTitleHeading/base_type = &"SemanticMagicWeaponSkillBody2"
 TaskTitleHeading/colors/font_outline_color = Color(1, 1, 1, 1)
