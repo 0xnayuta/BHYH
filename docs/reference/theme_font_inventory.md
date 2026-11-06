@@ -9,11 +9,11 @@
 
 | 指标 | 当前值 | 说明 |
 |:---|---:|:---|
-| Theme 变体 | 733（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel` + `SetMenuActionButtonGroup` + `SkillHeaderLabel`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体；P2.6 新增 1 个技能表头字体变体 |
-| Theme 属性 | 1,784（帮助标题 P2.6 后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
+| Theme 变体 | 734（618 冻结 + 112 `Semantic*` 基类 + `SetMenuHintLabel` + `SetMenuActionButtonGroup` + `SkillHeaderLabel` + `ChooseMusicButton`） | 27-6 新增 9 个字体角色变体；27-7 新增 1 个设置菜单字体变体；P2.6 新增 1 个技能表头字体变体；弹窗布局新增 1 个音乐按钮变体 |
+| Theme 属性 | 1,788（弹窗布局后） | 27-0 为 3,218；27-4 删除 402 个原生默认冗余属性；27-7 增加字体角色回退与边界属性 |
 | Theme 子资源 | 36（27-4 后） | 27-0 为 54；27-3 后 47；27-4 跨角色合并 47→36，仍为 `StyleBoxFlat`/`StyleBoxTexture`/`StyleBoxLine`/`StyleBoxEmpty` |
 | 场景 Theme 引用 | 1,116 | `theme_override_audit` 统计 |
-| `theme_type_variation` 节点引用 | 1,419 | 617 个不同变体被场景直接引用 |
+| `theme_type_variation` 节点引用 | 1,419 | 619 个不同变体被场景直接引用 |
 | 动态 `add_theme_*` | 352 处 / 41 文件（27-7 后） | 静态字面角色 0；分类见 `ui_dynamic_theme_audit.py` |
 | 字体文件（顶层） | 4 个 / 78,490,604 字节（约 78.49 MB） | P2.1 后：FZCuYuan M03、msyh fallback、LXGW WenKai Regular/Medium；不含 `Font/zmws`、`Font/zmws_bmfont` 子目录 |
 | Theme 引用字体资产 | 4 个 FontVariation 资源 / 4 个文件 | `body` + msyh fallback、`ui`、`display`、`accent`；各角色均有显式回退链 |
@@ -121,7 +121,7 @@
 |:---|:---|:---|---:|
 | `body` | 默认 `FontVariation` → `font_body` | `fz_cu_yuan_m03.ttf` + `msyh_semibold.ttc` fallback | 343 |
 | `ui` | `font_ui.tres` FontVariation | LXGW WenKai Regular → body fallback | 154 |
-| `display` | `font_display.tres` FontVariation | FZCuYuan M03 → body fallback | 111 |
+| `display` | `font_display.tres` FontVariation | FZCuYuan M03 → body fallback | 112 |
 | `accent` | `font_accent.tres` FontVariation | 霞鹜文楷 Medium → `font_ui` fallback | 125 |
 
 角色选择与组件映射见 [`ui_typography_contract.md`](../standards/ui_typography_contract.md)；本节只保留当前资源事实。
@@ -133,6 +133,8 @@ P1 时字体资产为 **5 个文件 / 约 44.98 MB**；P2 为 **5 个文件 / �
 **27-7 P2 结果**：`ui` 改用 Source Han Serif CN Medium，`display` 改用 Source Han Serif CN SemiBold，`accent` 改用 LXGW WenKai Medium；`FZRunYYSJW` 仅用于 LOGO/活动，不进入 Theme。华康宋体、华康海报、文征明小楷已退役；Microsoft YaHei 保留为 body fallback。字体文件 5 / 76.06 MB，Theme 属性 1,744（P2 时点；当前计数以 `theme_variant_audit` 为准）。
 
 **27-7 P2.1 结果**：`ui` 改为 LXGW WenKai Regular，`display` 改为 FZCuYuan M03，`accent` 保持 LXGW WenKai Medium，`body` 保持 FZCuYuan M03；移除 Source Han Serif 两个文件。Theme 字体资产 4 个资源 / 4 个文件；字体总量约 78.49 MB；E1–E4 字号/角色例外已清零；`MysteryShopTitle` 采用 body 12 px 解决侧栏 14 px 溢出。
+
+**27-7 P2.6a 弹窗布局结果**：`ChooseMusicButton` 继承 `MenuActionButton` 并使用 20 号字；`ChooseMusicList` 间距 6→4；`ChangeBackgroundList` 间距 10→8。运行时实测音乐弹窗末按钮底边距黑框约 10.8 px、背景弹窗约 8.6 px；`theme_variant` 734 总变体/属性 1,788/重复组 10，`font_role` 734/display 112，`theme_token` 734/0；`check_all` 9/9（42.04s）、`health_check` 6.24s / 0/0/0、`level_1` 4 阶段 0/0/0；两场景解锁逻辑与关闭按钮未改。
 
 **27-7 P2.6 结果**：技能界面安全子集迁 display；新增 `SkillHeaderLabel` 供五列表头使用，`SkillLabel` 保留给等级/描述数据；帮助标题 `HcHelpTitle`、`MosaicHelpTitle`、`MagicHelpTitle`、`LhhjHelpTitle`、`MonsterHelpTitle`、`MonsterHelpTitleLarge`、`ZhenFaHelpTitle` 迁 display。`font_role_audit` 733/0、`theme_token` 733/0、`theme_variant` 733 总变体/属性 1,784/重复组 10；`check_all` 9/9（43.46s）、`health_check` 6.58s / 0/0/0、`ui-factories` 32.86s、`level_1` 4 阶段 0/0/0；本次字体角色变更未重复全量回归，最近一次全量为 128/128 + 5 SKIP（565.3s）。
 

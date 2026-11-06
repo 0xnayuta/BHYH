@@ -28,14 +28,14 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 帮助标题迁移复跑 **43.46s**） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-06 弹窗布局复跑 **42.04s**） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
-| 字体角色语义 | **733 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
+| `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
 | UI Factory 运行时探针 | **PASS**（`scene_probe_runner --probe ui-factories`，32.86s，含暂停菜单居中/间距/适配、Tooltip 位置、装备描述/售价、法宝售价、真实法宝信息、单防御值、整数等级与使用列表断言） |
-| Theme token | **733 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
+| Theme token | **734 变体 / 0 违规；有效字号与 8 类字体色全部在 token**（`theme_token_audit.py --check`） |
 | UI Theme token 源 | **39 文字 token / 6 组表面 / 37 语义字体色 / 10 项受管 Theme 属性 / 0 漂移**（`convert_ui_theme_tokens.py --check`） |
-| Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 733 总变体 / 属性 1,784 / StyleBox 36 / 独立重复组 10**（`theme_variant_audit.py --check`） |
+| Theme 变体/规模 | **618 冻结变体 / 112 语义基类 / 734 总变体 / 属性 1,788 / StyleBox 36 / 独立重复组 10**（`theme_variant_audit.py --check`） |
 | Theme 字体角色 | **body FZCuYuan M03 / ui LXGW WenKai Regular / display FZCuYuan M03 / accent LXGW WenKai Medium**；msyh 仅作 body fallback；直接字体 0 |
 | 动态 Theme 覆盖 | **352 调用 / 静态 0 / token 173 / data 43 / layout 96 / dynamic_style 40**（`ui_dynamic_theme_audit.py --check`，覆盖 `Script` 与 `Scene`） |
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
@@ -65,6 +65,7 @@
 - 2026-11-05 Phase 27-7 阶段验收：`ui_dynamic_theme_audit` 扫描范围扩至 `source/**/*.gd` 并支持跨行调用，动态调用 **299→352**（Scene 53 处）；修复 Scene 中 **29 处**字面字号/字体色，新增 `FONT_SIZE_8` 与 2 个阵发语义色 token；`set_menu` 直接字体引用改为 `SetMenuHintLabel` 变体。当前静态 literal **0**，token 173 / data 43 / layout 96 / dynamic_style 40；`theme_override_audit` 对字体/动态字段实施上限校验；18 场景 × 1280/1600 截图与 **2,323** 控件几何 **0 位移**；全量回归 **128/128 + SKIP 5（301.0s）**，`level_1` 4 阶段 0/0/0。Phase 27 关闭。
 - 2026-11-05 字体 P0/P1：按素材契约删除 **8 个 35.84 MB** 无运行时引用顶层字体；`font_main`/`font_hk`/`font_return` 增加 FontVariation 显式回退；`SynHelpBody`、HUD 名称/计时、角色自然属性、幻化操作与 `CureTimesHint` 移出小楷/海报体小字号功能文本。Theme 属性 **1,744**，字体覆盖 0 缺字；P1 受影响场景 1,031 控件 / 0 位移，全量回归 128/128 + 5 SKIP（325.4s）。
 - 2026-11-06 UI 偏移补丁：暂停菜单“更多设置”提示上移至黑框内（`offset_top -52→-76`、`offset_bottom -10→-34`）；加载页百分比文本最终由用户校正为 `offset_top/bottom=0` 居中。验证：`check_all` **9/9（43.66s）**、`health_check` **7.19s / 0/0/0**、`ui-factories` **33.53s**、`level_1` **4 阶段 0/0/0**；本次仅 UI 偏移，未重复全量回归，最近一次全量为 **128/128 + 5 SKIP（565.3s）**。
+- 2026-11-06 弹窗按钮边界修复：`choose_music.tscn` 新增 `ChooseMusicButton`（`MenuActionButton`，字号 20），四个按钮统一切换，列表间距 6→4；`change_back_ground.tscn` 使用 `ChangeBackgroundList` 间距 10→8。运行时实测：音乐弹窗末按钮底边距黑框约 10.8 px，背景弹窗末按钮底边距黑框约 8.6 px；两场景关闭按钮与解锁逻辑未改。角色计数 **734 / display 112 / accent 125 / body 343 / ui 154**；Theme 属性 **1,788** / 重复组 **10**。验证：`theme_variant` 734/0、`theme_token` 734/0、`font_role` 734/0、`font_coverage` 135 场景/0 缺字、`theme_override` 直接属性 0、`check_all` **9/9（42.04s）**、`health_check` **6.24s / 0/0/0**、`level_1` **4 阶段 0/0/0**；本次仅 UI 布局/字号，未重复全量回归，最近一次全量为 **128/128 + 5 SKIP（565.3s）**。
 - 2026-11-06 帮助标题迁移：`HcHelpTitle`、`MosaicHelpTitle`、`MagicHelpTitle`、`LhhjHelpTitle`、`MonsterHelpTitle`、`MonsterHelpTitleLarge`、`ZhenFaHelpTitle` 迁 `display`；`HcHelpColumnLabel`/`HcHelpTabLabel` 保持 accent，等待宿主截图确认。角色计数 **display 111 / accent 125 / 总 733**；Theme 属性 **1,784** / 重复组 **10**。验证：`check_all` **9/9（43.46s）**、`health_check` **6.58s / 0/0/0**、`ui-factories` **32.86s**、`level_1` **4 阶段 0/0/0**；本次字体角色变更未重复全量回归，最近一次全量为 **128/128 + 5 SKIP（565.3s）**。
 - 2026-11-06 技能字体安全子集：`LearnSkillTitle`、`LearnSkillDescriptionButton`、`BdSkillTitle`、`LearnSkillButton`、`LearnSkillLevelValue` 迁 `display`；新增 `SkillHeaderLabel`（`SkillLabel` + display），五列表头使用新变体，`SkillLabel` 保留给等级/描述数据。角色计数 **display 104 / accent 132 / 总计 733**；Theme 属性 **1,781**。验证：`font_role_audit` **733/0**、`theme_variant_audit` **733/0**、`theme_token_audit` **733/0**、`check_all` **9/9（34.32s）**、`health_check` **5.98s / 0/0/0**、`ui-factories` **31.89s**、`level_1` **4 阶段 0/0/0（25.70s）**；全量回归 **128/128 + 5 SKIP（565.3s）**。未修改角色映射、字号或 fallback。
 - 2026-11-06 UI 细节修复：ESC 暂停菜单按钮块改为垂直居中（`alignment=1`，内容区 31–449）且间距 9→11；个人资料数值统一一位小数，物防/魔防括号外保持整数；属性 tooltip 宽度 315→380，并在第二页补充“伤害/免伤”提示；炼丹炉底部 8 个按钮统一 `y=547..578`、水平间距 20，按钮宽度保持 50/100。验证：`check_all` **9/9（29.83s）**、`health_check` **5.70s / 0/0/0**、`ui-factories` **33.08s**、`level_1` **4 阶段 0/0/0（25.88s）**；全量回归 **128/128 + 5 SKIP（583.9s）**。技能界面字体安全子集见上一条。
