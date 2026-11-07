@@ -29,7 +29,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 35-1 复跑） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 35-2 复跑） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
@@ -44,7 +44,7 @@
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **796 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（7.0 回植复跑） |
-| `scene_probe_runner` | **35-1 全量 20 项：20 PASS**；`longnv-core` PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
+| `scene_probe_runner` | **35-2 全量 21 项：21 PASS**；`longnv-core` / `longnv-71` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
 | `coop_probe_runner` | **37/37 PASS**（7.0 回植复跑，含 2P 相机/HUD/推图） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（6.9 基线；7.0 未重跑全量） |
@@ -63,12 +63,13 @@
 - **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与目标设备性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
 - **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
 
-### 7.1 回植进行中（35-0 / 35-1）
+### 7.1 回植进行中（35-0 / 35-1 / 35-2）
 
 - **35-0**：已生成 7.1 反编译参考源码、19 个变更/测试场景与逐文件台账；7.1 清单新增 34、修改 41、删除 0，生产未映射 0，资源差异 0。
 - **35-1**：已接入 `PlayerData` 宠物装备强化上限、`MainSet` 技能特效透明度设置、`RoleSkillOpacity`、`RoleAttackMechanism`、`BaseMonster` 的 `yyb` 觉醒眩晕/5 倍天雷，以及 `SkillDamageFormulaData` 说明文本。
-- **边界**：当前内容版本仍为 **7.0**；7.1 尚未完成全部功能批次，`GameSet` 透明度滑条、Longnv 技能/关卡/场景批次仍待后续。PCK/release 与目标设备验证按用户决策暂缓，待 7.3 回植完成后统一验证。
-- **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 796 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS；`ui-theme` PASS；运行时诊断覆盖透明度、区域转发、宠物强化上限与 `yyb` 文本。
+- **35-2**：已接入 Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
+- **边界**：当前内容版本仍为 **7.0**；7.1 尚未完成全部功能批次，`GameSet` 透明度滑条、关卡/场景批次仍待后续。PCK/release 与目标设备验证按用户决策暂缓，待 7.3 回植完成后统一验证。
+- **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 796 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` **21/21**；`longnv-core` / `longnv-71` PASS；`ui-theme` PASS；运行时诊断覆盖透明度、区域转发、宠物强化上限与 `yyb` 文本。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 

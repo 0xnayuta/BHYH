@@ -118,8 +118,16 @@ func _physics_process(delta: float) -> void:
 	elapsed += delta
 	var canvas := get_viewport().get_canvas_transform()
 	var screen := get_viewport_rect()
-	for index in LongnvSkillData.HIT_TIMES[19].size():
-		var hit_at := float(LongnvSkillData.HIT_TIMES[19][index])
+	var hit_times: Array = LongnvSkillData.HIT_TIMES[19].duplicate()
+	if caster.is_skill_awakened("xln_llmt"):
+		var extended: Array = []
+		for index in hit_times.size():
+			extended.append(hit_times[index])
+			if index + 1 < hit_times.size():
+				extended.append((float(hit_times[index]) + float(hit_times[index + 1])) * 0.5)
+		hit_times = extended
+	for index in hit_times.size():
+		var hit_at := float(hit_times[index])
 		if elapsed < hit_at or previous >= hit_at + 0.09:
 			continue
 		if not pulse_targets.has(index):

@@ -58,12 +58,15 @@ func reveal() -> void:
 
 
 func damage_multiplier() -> float:
-	return (
+	var multiplier := (
 		1.0
 		+ (0.1 + (stealth_level - 1) * 0.0025 if stealth_bonus_left > 0.0 else 0.0)
 		+ (0.3 if fury_left > 0.0 else 0.0)
 		+ (minf(0.3, floorf((soul_level + 1) / 2.0) * 0.008) if soul_left > 0.0 else 0.0)
 	)
+	if hero.is_skill_awakened("xln_lz") and hero._skill_index == 0:
+		multiplier *= 2.0
+	return multiplier
 
 
 func reduction() -> float:
@@ -161,6 +164,11 @@ func update_cast(previous: float) -> void:
 	elif index == 15 and fired == 0 and elapsed >= 0.5:
 		fired += 1
 		projectile("ring_effect6", 450.0, 1.5, 0.5, Vector2(230, 190), 15, true)
+	elif index == 14 and fired == 0 and elapsed >= 0.08 and hero.is_skill_awakened("xln_jyc"):
+		fired += 1
+		var blade = projectile("ring_effect6", 0.0, 1.0, 0.18, Vector2(460, 300), 14, false, Vector2(0, -65))
+		blade.damage = hero._cast_damage * 3.0
+		blade.visual.scale *= 2.0
 	elif index == 17 and fired == 0 and elapsed >= 0.7:
 		fired += 1
 		projectile("ring_effect8_1", 0.0, 0.87, 0.2, Vector2(450, 250), 17, false, Vector2(150 * facing(), 0))
@@ -241,11 +249,11 @@ func is_dashing() -> bool:
 	var elapsed: float = hero._elapsed
 	match hero._skill_index:
 		6:
-			return elapsed >= 0.25 and elapsed < 0.7
+			return elapsed >= 0.06 and elapsed < 0.72
 		13:
-			return elapsed >= 0.2 and elapsed < 1.0
+			return elapsed >= 0.1 and elapsed < 0.82
 		14:
-			return elapsed >= 0.25 and elapsed < 0.8
+			return elapsed >= 0.12 and elapsed < 0.7
 	return false
 
 
@@ -253,17 +261,31 @@ func move_cast(delta: float) -> void:
 	var index: int = hero._skill_index
 	var elapsed: float = hero._elapsed
 	var speed := 0.0
-	if index == 6 and elapsed >= 0.25 and elapsed < 0.7:
-		speed = 900.0 * facing()
-	elif index == 14 and elapsed >= 0.25 and elapsed < 0.8:
-		speed = 850.0 * facing()
-	elif index == 13 and elapsed >= 0.2 and elapsed < 1.0:
-		speed = 500.0 * facing()
+	var dash_progress := -1.0
+	var dash_distance := 0.0
+	var dash_duration := 0.0
+	var dash_start := 0.0
+	if index == 6 and elapsed >= 0.06 and elapsed < 0.72:
+		dash_start = 0.06
+		dash_duration = 0.66
+		dash_distance = 520.0
+	elif index == 14 and not hero.is_skill_awakened("xln_jyc") and elapsed >= 0.12 and elapsed < 0.7:
+		dash_start = 0.12
+		dash_duration = 0.58
+		dash_distance = 280.0
+	elif index == 13 and elapsed >= 0.1 and elapsed < 0.82:
+		dash_start = 0.1
+		dash_duration = 0.72
+		dash_distance = 300.0
 	elif index == 8:
 		speed = hero.PlayerInput.get_axis("move_left", "move_right") * 200.0
-	if speed != 0.0:
+	if dash_duration > 0.0:
+		dash_progress = clampf((elapsed - dash_start) / dash_duration, 0.0, 1.0)
+		speed = dash_distance * PI / (2.0 * dash_duration) * sin(PI * dash_progress) * facing()
+	if index == 14 and hero.is_skill_awakened("xln_jyc"):
+		speed = 0.0
+	if index in [6, 13, 14]:
 		hero.velocity.x = speed
-		hero.move_and_slide()
 	if index == 8 or index == 13:
 		for enemy: BaseMonster in targets(hero.global_position + Vector2(0, -60), Vector2(600, 220)):
 			if not enemy.is_control_immune() and not enemy.is_white_bar_control_immune():
@@ -334,6 +356,22 @@ func add_status(enemy: BaseMonster, status_name: String, duration: float, value 
 
 func on_hit(enemy: BaseMonster, index: int) -> void:
 	match index:
+		4:
+			if hero.is_skill_awakened("xln_ly"):
+				add_status(enemy, "stun", 2.0)
+		3:
+			var stacks: Dictionary = hero.get_meta("longnv_bleed_stacks", {})
+			var target_id := enemy.get_instance_id()
+			var count := int(stacks.get(target_id, 0)) + 1
+			if hero.is_skill_awakened("xln_xr") and count >= 5:
+				var burst: int = LongnvSkillData.bleed_damage(enemy, hero, 0.1)
+				var previous_hit: Dictionary = hero.hit_dic
+				hero.hit_dic = {"power": burst, "attackKind": "magic", "WSValue": 0}
+				enemy.hurt_reduce_hp(maxi(1, burst), hero)
+				hero.hit_dic = previous_hit
+				count = 0
+			stacks[target_id] = count
+			hero.set_meta("longnv_bleed_stacks", stacks)
 		6:
 			add_status(enemy, "stun", 1.0)
 			add_dot(enemy, "pierce", hero._cast_damage * 0.15 / 1.56, 0.0)

@@ -47,6 +47,8 @@ var _storm_resources: Array[RefCounted] = []
 var _storm_audio: AudioStream
 var _storm_resources_prepared := false
 var _combat_resources: Array[RefCounted] = []
+var _secondary_invincible_left := 0.0
+var _extra_blades: Array[Node] = []
 
 
 func _coop() -> Node:
@@ -81,9 +83,18 @@ func _ready() -> void:
 	attack_visual.hide()
 	action.add_child(attack_visual)
 	_screen_layer = CanvasLayer.new()
-	_screen_layer.layer = 3
+	_screen_layer.layer = 2
 	add_child(_screen_layer)
 	role_action_player.play("wait")
+
+
+func _notification(what: int) -> void:
+	if not is_instance_valid(_screen_layer):
+		return
+	if what == NOTIFICATION_PAUSED:
+		_screen_layer.hide()
+	elif what == NOTIFICATION_UNPAUSED:
+		_screen_layer.show()
 
 
 func _props() -> BaseRoleProperties:
@@ -233,6 +244,7 @@ func ws_skill() -> bool:
 
 func _physics_process(delta: float) -> void:
 	extra_skills.tick(delta)
+	_secondary_invincible_left = maxf(0.0, _secondary_invincible_left - delta)
 	_return_window = maxf(0.0, _return_window - delta)
 	if _return_window > 0.0 and not _secondary_pressed(3):
 		_return_key_released = true
@@ -269,6 +281,8 @@ func _physics_process(delta: float) -> void:
 		_combo_timeout = maxf(0.0, _combo_timeout - delta)
 		if _combo_timeout == 0.0:
 			_combo = 0
+	if _active and _skill_index >= 5:
+		extra_skills.move_cast(delta)
 	var saved_walk_speed: int = walk_speed
 	walk_speed = int(float(walk_speed) * extra_skills.speed_multiplier())
 	super._physics_process(delta)
@@ -287,8 +301,6 @@ func _physics_process(delta: float) -> void:
 		if _elapsed >= 0.55:
 			_apply_original_pulse(1)
 		_last_damage_position = global_position
-	elif _active and _skill_index >= 5:
-		extra_skills.move_cast(delta)
 	elif _active and _evading:
 		velocity.x = -500.0 if player_dir else 500.0
 		velocity.y = -100.0 if _elapsed < 0.3 else 100.0
@@ -332,7 +344,8 @@ func _begin_action(animation: String, damage: float, skill: int = -1) -> void:
 	obj_attack_dict[animation] = hit_dic.duplicate(true)
 	_hit_data_needs_reset = true
 	role_action_player.play(animation)
-	_duration = role_action_player.get_animation(animation).length
+	var action_animation: Animation = role_action_player.get_animation(animation)
+	_duration = action_animation.length if action_animation != null else 0.5
 	_hit_at = minf(0.2, _duration * 0.4)
 	var shape := RectangleShape2D.new()
 	shape.size = (
@@ -348,7 +361,14 @@ func _begin_action(animation: String, damage: float, skill: int = -1) -> void:
 		_hit_times = LongnvSkillData.HIT_TIMES[skill].duplicate()
 		_hit_at = float(_hit_times[0]) if not _hit_times.is_empty() else 0.21
 		if skill == 19:
-			_duration = role_action_player.get_animation(animation).length
+			var ultimate_animation: Animation = role_action_player.get_animation(animation)
+			_duration = ultimate_animation.length if ultimate_animation != null else _duration
+			_hit_times.clear()
+		if skill == 4 and is_skill_awakened("xln_ly"):
+			_hit_times = [0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.95, 1.05, 1.15]
+			_duration = 1.3
+		if skill == 14 and is_skill_awakened("xln_jyc"):
+			_duration = 1.05
 			_hit_times.clear()
 	if attack_visual.get_parent() != action:
 		attack_visual.reparent(action, false)
@@ -371,6 +391,9 @@ func _begin_action(animation: String, damage: float, skill: int = -1) -> void:
 			_duration = maxf(_duration, float(attack_visual.get_frame_count("attack")) / 30.0)
 			attack_visual.reparent(_screen_layer, false)
 		_update_attack_visual(0.0)
+	if skill == 0 and is_skill_awakened("xln_lz"):
+		for offset_y in [-70.0, 0.0, 70.0]:
+			_launch_spinning_blade(offset_y)
 
 
 func _update_attack_visual(seconds: float) -> void:
@@ -381,6 +404,8 @@ func _update_attack_visual(seconds: float) -> void:
 		attack_visual.hide()
 		return
 	var visual_seconds := seconds - 0.5 if _skill_index == 2 and _stage == 1 else seconds
+	if _skill_index >= 5:
+		visual_seconds = seconds - extra_skills.visual_start
 	var animations: Dictionary = attack_visual.get("_animations")
 	var looping := bool(animations.get("attack", {}).get("loop", false))
 	attack_visual.visible = _active and role_body.visible and (looping or visual_seconds < float(count) / 30.0)
@@ -388,7 +413,8 @@ func _update_attack_visual(seconds: float) -> void:
 	if (
 		_skill_index == 1
 		or _evading
-		or _skill_index in [12, 14, 15, 16, 17, 19]
+		or _skill_index in [12, 15, 16, 17, 19]
+		or (_skill_index == 14 and is_skill_awakened("xln_jyc"))
 		or (_skill_index == 6 and extra_skills.stage == 0)
 		or (_skill_index == 13 and extra_skills.stage != 1)
 	):
@@ -425,9 +451,18 @@ func _launch_blade() -> void:
 	get_parent().add_child(blade)
 	blade.global_position = global_position + Vector2(40 if player_dir else -40, -45)
 	_blade = blade
+	if is_skill_awakened("xln_tk"):
+		for offset_y in [-90.0, 90.0]:
+			var split_blade = preload("res://Script/hero/longnv_flying_blade.gd").new()
+			split_blade.player = self
+			split_blade.direction = _blade.direction
+			split_blade.damage = _cast_damage
+			get_parent().add_child(split_blade)
+			split_blade.global_position = _blade.global_position + Vector2(0, offset_y)
+			_extra_blades.append(split_blade)
 
 
-func _launch_spinning_blade() -> void:
+func _launch_spinning_blade(offset_y: float = 0.0) -> void:
 	var blade = preload("res://Script/hero/longnv_flying_blade.gd").new()
 	blade.player = self
 	blade.direction = 1.0 if player_dir else -1.0
@@ -440,7 +475,22 @@ func _launch_spinning_blade() -> void:
 	blade.hit_offset = Vector2(0, -65)
 	blade.hit_override = {"hurtBack": [6, -2], "longnv_spin_direction": blade.direction}
 	get_parent().add_child(blade)
-	blade.global_position = global_position + Vector2(40 if player_dir else -40, 0)
+	blade.global_position = global_position + Vector2(40 if player_dir else -40, offset_y)
+
+
+func is_skill_awakened(skill_id: String) -> bool:
+	var coop := _coop()
+	var data_store = coop.data_for(self) if coop != null else null
+	var profile_data: Dictionary = data_store.player_data if data_store != null else PlayerData.player_data
+	var data: Variant = profile_data.get(DataKeys.Skill.AWAKENED, {})
+	if not data is Dictionary or not bool((data as Dictionary).get(skill_id, false)):
+		return false
+	var enabled: Variant = profile_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
+	return (
+		not enabled is Dictionary
+		or not (enabled as Dictionary).has(skill_id)
+		or bool((enabled as Dictionary).get(skill_id, true))
+	)
 
 
 func _skill_keymap_slot(slot: int) -> String:
@@ -483,6 +533,10 @@ func _use_secondary(index: int) -> bool:
 		_blade = null
 		_set_ring_form(false)
 		_begin_action("effect2_2", LongnvSkillData.damage(1, int(get_skill_level(2)), _role_power()), 1)
+		if is_skill_awakened("xln_tk"):
+			_cast_damage *= 5.0
+			hit_dic["power"] = _cast_damage
+			_secondary_invincible_left = 1.0
 		_spawned_blade = true
 		_duration = 0.45
 		_hit_times = [0.16]
@@ -531,7 +585,11 @@ func _apply_original_pulse(pulse: int) -> void:
 		var center := canvas_inverse * view.get_center()
 		var size := view.size / get_viewport().get_canvas_transform().get_scale().abs()
 		hit_original_area(
-			center, size, _cast_damage * (LongnvSkillData.ULTIMATE_SLASH_WEIGHT if pulse < 6 else 1.0), targets
+			center,
+			size,
+			_cast_damage * (LongnvSkillData.ULTIMATE_SLASH_WEIGHT if pulse < 6 else 1.0),
+			targets,
+			{"longnv_skill": 4, "attackKind": "magic", "hurtBack": [0, 0]}
 		)
 	elif _skill_index == 2 and pulse == 1:
 		var travel := global_position - _last_damage_position
@@ -561,13 +619,22 @@ func hit_original_area(
 	shape.size = size
 	query.shape = shape
 	query.transform = Transform2D(0, center)
-	query.collision_mask = 2064
+	query.collision_mask = 3088
 	query.collide_with_areas = true
 	query.collide_with_bodies = false
 	for contact: Dictionary in get_world_2d().direct_space_state.intersect_shape(query, 256):
 		var target: Node = contact.collider
-		while target != null and not target is BaseMonster:
+		while target != null and not target is BaseMonster and not target.has_method("receive_role_area_hit"):
 			target = target.get_parent()
+		if (
+			target != null
+			and target.has_method("receive_role_area_hit")
+			and not hit_targets.has(target.get_instance_id())
+		):
+			if damage > 0.0:
+				hit_targets[target.get_instance_id()] = true
+				target.receive_role_area_hit(melee_area)
+			continue
 		if target is BaseMonster and not hit_targets.has(target.get_instance_id()):
 			hit_targets[target.get_instance_id()] = true
 			var hit := {
@@ -601,6 +668,8 @@ func hit_original_area(
 					)
 				)
 				target.call_deferred("check_add_buff")
+				if is_skill_awakened("xln_xr"):
+					extra_skills.on_hit(target, 3)
 
 
 func _start_melee(animation: String) -> void:
@@ -636,6 +705,10 @@ func _finish_action() -> void:
 	_evading = false
 	is_attacking = false
 	is_using_skills = false
+	for blade in _extra_blades:
+		if is_instance_valid(blade):
+			blade.queue_free()
+	_extra_blades.clear()
 	if was_ultimate:
 		check_add_buff()
 	if was_active and not is_death and not is_be_attacking:
@@ -645,7 +718,12 @@ func _finish_action() -> void:
 
 func _skill_super_armor_active() -> bool:
 	return (
-		not is_death and (extra_skills.fury_left > 0.0 or (_active and _skill_index in [4, 16, 19] and is_using_skills))
+		not is_death
+		and (
+			extra_skills.fury_left > 0.0
+			or extra_skills.is_dashing()
+			or (_active and _skill_index in [4, 16, 19] and is_using_skills)
+		)
 	)
 
 
@@ -654,7 +732,12 @@ func is_white_bar_control_immune() -> bool:
 
 
 func is_dikong_field_invincible() -> bool:
-	return super.is_dikong_field_invincible() or extra_skills.reveal_grace > 0.0 or extra_skills.is_dashing()
+	return (
+		super.is_dikong_field_invincible()
+		or extra_skills.reveal_grace > 0.0
+		or extra_skills.is_dashing()
+		or _secondary_invincible_left > 0.0
+	)
 
 
 func get_total_damage_reduction() -> float:
@@ -662,6 +745,9 @@ func get_total_damage_reduction() -> float:
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
+	if extra_skills.is_dashing():
+		is_miss = true
+		return
 	var props := _props()
 	var before: float = props.roleprop.Hp
 	super._on_hurt_box_area_entered(area)
@@ -674,6 +760,9 @@ func is_monster_targetable() -> bool:
 
 
 func effect_reducehp(value, atkKind):
+	if extra_skills.is_dashing():
+		is_miss = true
+		return
 	var props := _props()
 	var before: float = props.roleprop.Hp
 	super.effect_reducehp(value, atkKind)
@@ -682,6 +771,9 @@ func effect_reducehp(value, atkKind):
 
 
 func get_monster_last_hurt(target_boss, target_obj):
+	if extra_skills.is_dashing():
+		is_miss = true
+		return 0
 	var damage = super.get_monster_last_hurt(target_boss, target_obj)
 	if extra_skills.dodge_left > 0.0 and randf() < 0.5:
 		is_miss = true
@@ -755,8 +847,11 @@ func get_skill(skill_name):
 	if props.roleprop.Mp < cost:
 		return
 	props.roleprop.Mp -= cost
-	role1_skill_inter[key] = LongnvSkillData.COOLDOWNS[index]
-	role1_skill_max_inter[key] = LongnvSkillData.COOLDOWNS[index]
+	var cooldown: float = (
+		0.5 if index == 14 and is_skill_awakened("xln_jyc") else float(LongnvSkillData.COOLDOWNS[index])
+	)
+	role1_skill_inter[key] = cooldown
+	role1_skill_max_inter[key] = cooldown
 	extra_skills.reveal()
 	_set_ring_form(index >= 10)
 	_begin_action(

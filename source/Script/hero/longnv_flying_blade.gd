@@ -18,6 +18,21 @@ var targets: Dictionary = {}
 var carry_enemies := false
 var carried_targets: Dictionary = {}
 var visual: Sprite2D
+var boomerang := false
+var boomerang_origin := Vector2.ZERO
+var boomerang_distance := 420.0
+var boomerang_height := 120.0
+var boomerang_duration := 0.95
+var _boomerang_previous_phase := -1
+
+
+func configure_boomerang(origin: Vector2, distance: float, height: float, duration: float) -> void:
+	boomerang = true
+	boomerang_origin = origin
+	boomerang_distance = distance
+	boomerang_height = height
+	boomerang_duration = duration
+	global_position = origin
 
 
 func _ready() -> void:
@@ -36,8 +51,29 @@ func _physics_process(delta: float) -> void:
 	elapsed += delta
 
 	var previous_position := global_position
-	var distance := speed * delta
-	global_position.x += direction * distance
+	if boomerang:
+		var progress := clampf(elapsed / boomerang_duration, 0.0, 1.0)
+		var outbound := 0.45
+		if progress < outbound:
+			var outward_progress := progress / outbound
+			global_position = boomerang_origin + Vector2(direction * boomerang_distance * outward_progress, 0.0)
+		else:
+			var return_progress := (progress - outbound) / (1.0 - outbound)
+			global_position = (
+				boomerang_origin
+				+ Vector2(
+					direction * boomerang_distance * (1.0 - return_progress),
+					-boomerang_height * sin(PI * return_progress)
+				)
+			)
+		var phase := 0 if progress < outbound else 1
+		if phase != _boomerang_previous_phase:
+			targets.clear()
+			_boomerang_previous_phase = phase
+		speed = 0.0
+	else:
+		var distance := speed * delta
+		global_position.x += direction * distance
 	var travel := global_position - previous_position
 	if carry_enemies:
 		for id: int in carried_targets:
@@ -68,5 +104,5 @@ func _physics_process(delta: float) -> void:
 	)
 	if carry_enemies:
 		carried_targets.merge(targets)
-	if elapsed >= lifetime:
+	if elapsed >= lifetime or (boomerang and elapsed >= boomerang_duration):
 		queue_free()
