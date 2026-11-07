@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 36 7.2 内容回植（36-1 数据/资产完成，36-2 待开始）**。Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2 PCK/release 暂缓。
+> **状态**：**Phase 36 7.2 内容回植（36-2 召唤与战斗完成，36-3 待开始）**。Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2 PCK/release 暂缓。
 > **版本**：7.1 内容基线；7.2 回植进行中，尚未升级版本标记。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
@@ -46,13 +46,14 @@
 - **L3 收口完成**：全量场景 23/23、全量关卡 128/128 PASS + 5 SKIP、双人 37/37、档案 344/344、命名/白名单与构建资源同步通过；PCK/release 与目标设备验证继续暂缓。
 - **发布边界**：PCK/release 与目标设备验证暂缓，待最终发布统一执行；当前版本标记仍以工程配置为准。
 
-### 1.4 Phase 36 7.2 内容回植（36-1 完成，36-2 待开始）
+### 1.4 Phase 36 7.2 内容回植（36-2 完成，36-3 待开始）
 
 - **目标**：7.2 内容回植；base 为 7.1 反编译参考，ours 为当前 7.1 治理工程，theirs 为 7.2 反编译参考。
 - **36-0 完成**：参考源码/场景与逐文件台账；989/989 脚本、8/8 变更场景文本化；生产未映射 0。
 - **36-1 完成**：7.2 PCK 不含年兽原始 PNG；46 张图已从 ctex 解码为 RGBA8 PNG（非 VRAM 纹理）并归一化到 `source/Art/pet/pet_nian`；4 阶帧资源、21 JSON / 20 BIN、shader、`export_raw_roots` 已接入；原始数据清单 1033 文件；`xydxq` 7.2 描述已迁移到装备构建源。
-- **后续批次**：36-2 年兽战斗与召唤；36-3 UI/档案/双人；36-4 首批觉醒/哪吒觉醒轮；36-5 其余脚本修复；36-6 L3 收口。
-- **边界**：36-2 尚未接入运行时代码；PCK/release 暂缓；7.3 未立项。
+- **36-2 完成**：6 个 PetNian 脚本 + 4 个召唤场景 + `FirstBatchAwakenArea` / `NeZhaAwakenWheel` 已按当前 API 适配；修复 `NeZhaOfficialParts.load_set` 切换部件集时的旧帧索引越界；新增 `pet-nian` 运行时探针，覆盖 1–4 阶场景、帧资源、parts 与效果。
+- **后续批次**：36-3 UI/档案/双人；36-4 首批觉醒/哪吒觉醒轮接线；36-5 其余脚本修复；36-6 L3 收口。
+- **边界**：年兽尚未进入 `PlayerData` 默认宠物、宠物界面与 2P 路径；觉醒脚本已存在但未接线；PCK/release 暂缓；7.3 未立项。
 
 ---
 
@@ -108,7 +109,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：进入 Phase 36-2 年兽战斗与召唤。36-1 已完成数据/资产与构建源；PCK/release 与目标设备验证继续暂缓。
+**当前下一步**：进入 Phase 36-3 年兽 UI、档案与双人。36-2 已完成召唤与战斗脚本、4 阶运行时探针；PCK/release 与目标设备验证继续暂缓。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
