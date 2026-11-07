@@ -313,7 +313,7 @@ const MOUNT_UNLOCK_REQUIREMENTS := {
 	"1003600": {"物品": "139300012", "数量": 1},
 	"1004700": {"物品": "139300021", "数量": 1},
 }
-const PLAYER_MAX_LEVEL := 350
+const PLAYER_MAX_LEVEL := 400
 const MOUNT_MAX_LEVEL := PLAYER_MAX_LEVEL
 const MOUNT_SKILL_MAX_LEVEL := 20
 const MOUNT_QUALIFICATION_MAX := 2050
@@ -332,6 +332,11 @@ const WANLING_CATALOG_LEVELS_KEY := "万灵图录等级"
 const WANLING_HUMAN_CATEGORY := "人间"
 const WANLING_UNDERWORLD_CATEGORY := "地府"
 const WANLING_HEAVEN_CATEGORY := "天庭"
+const WANLING_JIEJIAO_DATA := preload("res://Script/data/wan_ling_jiejiao_data.gd")
+const WANLING_JIEJIAO_CATEGORY := WANLING_JIEJIAO_DATA.CATEGORY
+const WANLING_JIEJIAO_MONSTER_IDS := WANLING_JIEJIAO_DATA.IDS
+const WANLING_JIEJIAO_BOSS_IDS := WANLING_JIEJIAO_DATA.BOSS_IDS
+const WANLING_JIEJIAO_MONSTER_EFFECTS := WANLING_JIEJIAO_DATA.EFFECTS
 const WANLING_HUMAN_MONSTER_IDS := [
 	1,
 	2,
@@ -385,6 +390,8 @@ const WANLING_UNDERWORLD_MONSTER_IDS := [
 ]
 const WANLING_UNDERWORLD_BOSS_IDS := [29, 30, 31, 32, 33, 37, 41, 43, 48, 49, 55, 56, 57]
 const WANLING_HEAVEN_MONSTER_IDS := [
+	72,
+	73,
 	74,
 	75,
 	76,
@@ -432,6 +439,7 @@ const WANLING_HEAVEN_MONSTER_IDS := [
 	137,
 ]
 const WANLING_HEAVEN_BOSS_IDS := [
+	72,
 	77,
 	78,
 	79,
@@ -508,6 +516,8 @@ const WANLING_UNDERWORLD_MONSTER_EFFECTS := {
 	58: {"R_hp": 0.2, "R_mp": 0.2},
 }
 const WANLING_HEAVEN_MONSTER_EFFECTS := {
+	72: {"power": 100.0},
+	73: {"SHp": 50.0},
 	74: {"SHp": 50.0},
 	75: {"SHp": 50.0},
 	76: {"Mdef": 1.0},
@@ -804,6 +814,7 @@ var initialized_data: Dictionary = {
 	"zyforever": false,
 	"地府": false,
 	"地府噩梦": false,
+	"天庭噩梦": false,
 	"天庭": false,
 	"截教天镜": false,
 	"碧游宫": false,
@@ -1229,6 +1240,7 @@ var player_data: Dictionary = {
 	"zyforever": false,
 	"地府": false,
 	"地府噩梦": false,
+	"天庭噩梦": false,
 	"天庭": false,
 	"截教天镜": false,
 	"碧游宫": false,
@@ -1983,6 +1995,7 @@ func _ready() -> void:
 	_remove_retired_wudu_magic_weapons()
 	_remove_retired_classic_and_merchant_equipment()
 	ensure_main_sword_array()
+	_remove_retired_jiejiao_soul_crystals()
 	ensure_wanling_catalog_data()
 	ensure_mount_data()
 	ensure_pet_tiger()
@@ -2455,6 +2468,19 @@ func apply_passive_skill_upgrades(plan: Array, total_cost: int, save_reason: Str
 	return true
 
 
+func _remove_retired_jiejiao_soul_crystals() -> void:
+	var inventory_value: Variant = player_data.get(DataKeys.ITEM_LIST, {})
+	if not (inventory_value is Dictionary):
+		return
+	for page_value: Variant in (inventory_value as Dictionary).values():
+		if not (page_value is Array):
+			continue
+		for index in range((page_value as Array).size() - 1, -1, -1):
+			var item_value: Variant = page_value[index]
+			if item_value is Dictionary and str(item_value.get(DataKeys.NAME, "")) == "jiejiao_soul_crystal_140801":
+				page_value.remove_at(index)
+
+
 func ensure_wanling_catalog_data() -> Dictionary:
 	var catalog_value: Variant = player_data.get(WANLING_CATALOG_LEVELS_KEY, {})
 	var catalog: Dictionary = catalog_value if catalog_value is Dictionary else {}
@@ -2486,6 +2512,16 @@ func ensure_wanling_catalog_data() -> Dictionary:
 			int(heaven_levels.get(heaven_key, 0)), 0, get_wanling_heaven_consume_limit(int(monster_id))
 		)
 	catalog[WANLING_HEAVEN_CATEGORY] = heaven_levels
+	var jiejiao_value: Variant = catalog.get(WANLING_JIEJIAO_CATEGORY, {})
+	var jiejiao_levels: Dictionary = jiejiao_value if jiejiao_value is Dictionary else {}
+	jiejiao_levels.erase("140801")
+	jiejiao_levels.erase(140801)
+	for monster_id in WANLING_JIEJIAO_MONSTER_IDS:
+		var jiejiao_key := str(int(monster_id))
+		jiejiao_levels[jiejiao_key] = clampi(
+			int(jiejiao_levels.get(jiejiao_key, 0)), 0, get_wanling_jiejiao_consume_limit(int(monster_id))
+		)
+	catalog[WANLING_JIEJIAO_CATEGORY] = jiejiao_levels
 	player_data[WANLING_CATALOG_LEVELS_KEY] = catalog
 	return catalog
 
@@ -2646,6 +2682,54 @@ func consume_all_wanling_heaven_crystals(monster_id: int) -> int:
 	return consume_count
 
 
+func get_wanling_jiejiao_consumed_count(monster_id: int) -> int:
+	if not WANLING_JIEJIAO_MONSTER_IDS.has(monster_id):
+		return 0
+	var catalog := ensure_wanling_catalog_data()
+	var jiejiao_levels: Dictionary = catalog[WANLING_JIEJIAO_CATEGORY]
+	return max(0, int(jiejiao_levels.get(str(monster_id), 0)))
+
+
+func get_wanling_jiejiao_consume_limit(monster_id: int) -> int:
+	if not WANLING_JIEJIAO_MONSTER_IDS.has(monster_id):
+		return 0
+	return WANLING_BOSS_LIMIT if WANLING_JIEJIAO_BOSS_IDS.has(monster_id) else WANLING_SMALL_MONSTER_LIMIT
+
+
+func get_wanling_jiejiao_soul_crystal_count(monster_id: int) -> int:
+	if not WANLING_JIEJIAO_MONSTER_IDS.has(monster_id):
+		return 0
+	var item_id := "jiejiao_soul_crystal_%d" % monster_id
+	var inventory_value: Variant = player_data.get(DataKeys.ITEM_LIST, {})
+	if not (inventory_value is Dictionary):
+		return 0
+	var total := 0
+	for page_value: Variant in (inventory_value as Dictionary).values():
+		if not (page_value is Array):
+			continue
+		for item_value: Variant in page_value:
+			if item_value is Dictionary and str(item_value.get(DataKeys.NAME, "")) == item_id:
+				total += maxi(0, int(item_value.get(DataKeys.COUNT, 0)))
+	return total
+
+
+func consume_all_wanling_jiejiao_crystals(monster_id: int) -> int:
+	if not WANLING_JIEJIAO_MONSTER_IDS.has(monster_id):
+		return 0
+	var consumed_count := get_wanling_jiejiao_consumed_count(monster_id)
+	var remaining := get_wanling_jiejiao_consume_limit(monster_id) - consumed_count
+	var consume_count := mini(get_wanling_jiejiao_soul_crystal_count(monster_id), remaining)
+	if consume_count <= 0:
+		return 0
+	var item_id := "jiejiao_soul_crystal_%d" % monster_id
+	if not remove_item(item_id, consume_count):
+		return 0
+	var catalog := ensure_wanling_catalog_data()
+	var jiejiao_levels: Dictionary = catalog[WANLING_JIEJIAO_CATEGORY]
+	jiejiao_levels[str(monster_id)] = consumed_count + consume_count
+	return consume_count
+
+
 func get_wanling_attribute_totals() -> Dictionary:
 	var totals := {
 		"SHp": 0.0,
@@ -2683,6 +2767,15 @@ func get_wanling_attribute_totals() -> Dictionary:
 	for monster_id in WANLING_HEAVEN_MONSTER_IDS:
 		var consumed_count := get_wanling_heaven_consumed_count(int(monster_id))
 		var effects_value: Variant = WANLING_HEAVEN_MONSTER_EFFECTS.get(monster_id, {})
+		if consumed_count <= 0 or not (effects_value is Dictionary):
+			continue
+		for attribute_name in effects_value as Dictionary:
+			totals[attribute_name] = (
+				float(totals.get(attribute_name, 0.0)) + float(effects_value[attribute_name]) * consumed_count
+			)
+	for monster_id in WANLING_JIEJIAO_MONSTER_IDS:
+		var consumed_count := get_wanling_jiejiao_consumed_count(int(monster_id))
+		var effects_value: Variant = WANLING_JIEJIAO_MONSTER_EFFECTS.get(monster_id, {})
 		if consumed_count <= 0 or not (effects_value is Dictionary):
 			continue
 		for attribute_name in effects_value as Dictionary:
@@ -3564,6 +3657,7 @@ func ensure_special_dungeon_progress() -> void:
 		"兜率宫4": 0,
 		"兜率宫5": 0,
 		"地府噩梦": false,
+		"天庭噩梦": false,
 	}
 	for key in defaults.keys():
 		if not player_data.has(key):
