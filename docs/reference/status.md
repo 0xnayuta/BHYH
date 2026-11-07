@@ -94,7 +94,7 @@
 - **37-1 数据/资产与截教接入**：JSON/BIN/Atlas/FrameSequence 的 1,028 条数据路径与 7.2 对比，生产内容无变化（仅 `uid_cache` 变化）；37 个新增 `.import`/`.ctex` 条目已从 7.3 `.ctex` 解码为源 PNG：16 个 `Art/backpack/all_items` 图标、21 个 `Art/monster/soul_crystal` 魂晶图标；未复制 `.ctex` 或旧 `.import`。装备构建源由 **1,089 → 1,127** 条定义：新增 16 个八级宝石、2 个天庭魂晶、20 个截教魂晶，三枚仙戒解除“不可神铸”；Catalog 已重新生成。新增 `WanLingJiejiaoData`；`BaseMonster` 接入截教噩梦属性倍率与魂晶掉落，`LevelInfo` 接入截教掉落预览、`Level_22` 天庭魂晶 72/73 预览；`PlayerData` 接入截教图录/魂晶计数/吞噬/属性汇总；`level_31` 冒烟通过。
 - **37-2 完成**：NeZha/Yutu 重叠伤害与月舞碰撞掩码；`EastContinentMonster` 3120 传送前停止攻击、清理速度并修正当前 stage 屏幕边界；Level 47–62 的 `7_bsjh`、Level 63–75 的 `8_bsjh` 掉落/预览；`Level_64` 双 BOSS、`Level_65` 傲来国首领、`Level_63` 移除 `469000011` 等数据表差异已逐条合并。
 - **37-3 完成**：`WanLingCatalogPage` 截教天境分栏与魂晶图标；`GameAnnouncement` V7.3 文案/版本按钮；`SHOP` 招财铃铛；三仙戒神铸解禁；装备分解返还累计强化石的 80%；8 级宝石配方与一键合成；`LevelProgressCommand` 写入天庭噩梦标记；`MonsterHeadInfo` 截教倍率/伤害/免伤与 `fixed_chance` 透传。`load_scene` 的 Android 首启完整性校验作为当前本地保护保留，未按 7.3 删除。
-- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`scene_probe_runner` **26/26**；`level_47` / `level_63` / `level_65` / `level_75` 冒烟均 0 ERROR / 0 WARNING；截教数据/UI/配方/神铸/等级掉落运行时探针通过。
+- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`scene_probe_runner` **26/26**；`level_regression_all --changed-only --diff-base HEAD` **128/128 PASS + 5 SKIP**（回退执行 133 个场景，358.8s）；`level_47` / `level_63` / `level_65` / `level_75` 冒烟均 0 ERROR / 0 WARNING；截教数据/UI/配方/神铸/等级掉落与天庭噩梦进度运行时探针通过。
 - **37-1 待办**：新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录。
 - **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；PCK/release 与全量 L3 继续暂缓。
 
