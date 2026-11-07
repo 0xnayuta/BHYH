@@ -41,7 +41,7 @@
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
 | Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 | Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 37 7.3 内容回植 | **进行中（37-0 参考工程与初版台账完成）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
+| Phase 37 7.3 内容回植 | **进行中（37-0 完成；37-1 数据/资产部分完成）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 

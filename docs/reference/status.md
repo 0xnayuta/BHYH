@@ -91,7 +91,10 @@
 - **解密结果**：7.3 的目录与文件块均为标准 `FileAccessEncrypted`；目录/文件 key 由静态 SGXZ signer 与两组静态掩码 XOR 派生，不是旧版 `HBXZ` 固定 key/table。目录与全部 **40,275** 个文件块 MD5 校验通过。
 - **参考工程**：已生成 **40,275** 个原始条目；**774/774** `.gdc` 反编译成功，**1,152/1,152** `.scn` 转文本成功；参考树与源码清单保存在仓库外。
 - **台账初稿**：7.2→7.3 生产脚本 **49 个修改 + 1 个新增**（`Script/Data/WanLingJiejiaoData`），生产脚本删除 **0**；移除脚本 **216** 个全部位于测试/插件路径；缓存变化 **2**、构建场景变化 **3**、资产新增 **74** / 修改 **93**（多数为 `.ctex` 格式变化）。完整台账仍留在仓库外，等待逐项映射与语义复核。
-- **边界**：37-1 尚未启动；未修改 `source/`；资产/`.ctex`/场景尚需按批次审查；PCK/release 继续暂缓。
+- **37-1 数据/资产（部分完成）**：JSON/BIN/Atlas/FrameSequence 的 1,028 条数据路径与 7.2 对比，生产内容无变化（仅 `uid_cache` 变化）；37 个新增 `.import`/`.ctex` 条目已从 7.3 `.ctex` 解码为源 PNG：16 个 `Art/backpack/all_items` 图标、21 个 `Art/monster/soul_crystal` 魂晶图标；未复制 `.ctex` 或旧 `.import`。装备构建源由 **1,089 → 1,127** 条定义：新增 16 个八级宝石、2 个天庭魂晶、20 个截教魂晶，三枚仙戒解除“不可神铸”；Catalog 已重新生成。
+- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **806 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；装备源审计、Catalog 同步与实际加载冒烟通过。
+- **37-1 待办**：`WanLingJiejiaoData` 的运行时 effects/drop 接线、新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录；37-2 尚未启动。
+- **边界**：未复制旧 `.ctex`/`.import`；未修改生产脚本逻辑；PCK/release 继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
