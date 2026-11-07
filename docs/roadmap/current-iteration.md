@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 36 7.2 内容回植（36-6 L3 收口完成，待发布验证）**。Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2 PCK/release 暂缓；**当前无活跃候选**。
-> **版本**：7.2 内容基线；7.2 回植与 L3 收口完成，待发布验证。
+> **状态**：**Phase 37 7.3 内容回植（37-0 二进制/参考工程准备进行中）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
+> **版本**：7.2 内容基线；7.3 回植进行中，尚未升级版本标记。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -59,6 +59,17 @@
 - **后续批次**：无；Phase 36 已关闭，PCK/release 与目标设备验证按用户决策暂缓。
 - **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证；7.3 未立项。
 
+### 1.5 Phase 37 7.3 内容回植（37-0 进行中）
+
+- **目标**：7.3 内容回植；base 为 7.2 反编译参考，ours 为当前 7.2 治理工程，theirs 为 7.3 反编译参考。
+- **37-0**：校验 7.3 二进制（SHA-256、PCK 偏移、条目/逐文件清单）；建立 `reference/7.3.0.0_source`；生成脚本/场景/资产参考；完成 7.2→7.3 差集与逐文件台账。7.3 使用新的 SGXZ 安全打包格式，必须先验证目录签名/解密路径，不得复用 7.2 的 HBXZ 假设。
+- **37-1**：数据与资产（新增/变化 JSON/BIN、Atlas、FrameSequence、UI 文本），按当前转换器重建 Catalog 与导出清单。
+- **37-2**：角色与技能内容（按 7.3 变更域拆分），每个功能域单独验证。
+- **37-3**：系统、菜单/UI 与公告文本，逐项做三方语义合并。
+- **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异，最后接入侵入性系统。
+- **37-5**：L3 收口；PCK/release 与目标设备验证按用户决策另行执行。
+- **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。
+
 ---
 
 ## 2. Phase 26：平台与发布验证（长期暂缓）
@@ -113,7 +124,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：无活跃候选。Phase 36 已关闭；PCK/release 与目标设备验证按用户决策暂缓；7.3 未立项。
+**当前下一步**：完成 Phase 37-0 的 7.3 二进制校验、参考源码/场景生成与 7.2→7.3 逐文件台账；SGXZ 解密/签名路径未验证前不得进入生产批次。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

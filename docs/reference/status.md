@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；7.0 内容回植已完成并通过当前验收；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：Phase 37 的 7.3 内容回植进行中（37-0 二进制/参考工程准备）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.2**（7.1 基线 + 7.2 内容回植；PCK/release 待发布验证） |
+| 当前内容版本 | **7.2**（7.2 内容回植完成；7.3 回植准备中；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
@@ -83,6 +83,14 @@
 - **36-5**：`Global` 接入年兽出战预载与空子弹场景保护；`GameAnnouncement` 增加 V7.2 文案/版本按钮；`dj_sell` 喜鹊双倍掉率支持叠加且上限 24 小时；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称标签上移；`addons/bone_export/export_plugin.gd` 按第三方插件边界不修改，`Script/Test` 仅作规格。
 - **36-6 L3 收口**：`check_all --godot-bin` 9/9；`health_check --no-cache` **806 脚本 0/0/0**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**（370.18s，`level_ghg` 重试通过）；`scene_probe_runner` **26/26**；`coop_probe_runner` **38/38**；`archive_probe_runner` **344/344**；`level_1` 四阶段 **0/0/0**；`export_raw_manifest` 1033/1033、Atlas 4015/4015、编号帧/怪物帧/哪吒预览/FrameSequence/sheet 同步通过；`export_closure_probe --self-test` 修复 `normalize` 导入后通过；命名、白名单与 `docs_audit` 通过。
 - **边界**：PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
+
+### 7.3 回植准备（37-0 进行中）
+
+- **目标二进制**：`八荒湮隳7.3.exe`，**2,282,485,752 字节**，SHA-256 `93817a09fd4508c7145631a67fe1cbcda9532028970d785b8ddda681009ef131`。
+- **PCK**：`GDPC` v4，engine 4.7.0，raw offset `0x38D5C00`，`dir_offset` `0x84405870`；目录明文计数 **40,275**，加密目录 plaintext length **4,080,072**。
+- **新格式**：7.3 使用 `SGXZSIG1` 安全打包/签名路径，**不能复用 7.2 的 HBXZ 解密假设**；当前 GDRE 2.7.4 无 key 时拒绝打开加密目录。
+- **当前阻塞**：已扫描 7.3 的 `.text/.rdata/.data` 共 **57,688,995** 个 32 字节窗口，未找到目录 key；GDRE 无 key 拒绝打开；运行态内存转储仍未能恢复可验证 key。参考源码、场景与 7.2→7.3 台账尚未生成。下一轮必须先完成 `sgxz_initialize_script_key`/SGXZ 解密路径验证，或替换为支持该格式的工具，再进入生产批次。
+- **边界**：解包/逆向中间产物仅保存在仓库外；未修改 `source/`；PCK/release 继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
