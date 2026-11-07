@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/level/light.gd" id="1"]
+[ext_resource type="Script" path="res://Script/level/role_attack_mechanism.gd" id="99"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_3_3/light1.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_3_3/light2.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_34/2_sl213_light.png" id="4"]
@@ -176,8 +177,9 @@ offset = Vector2(-3, -3)
 libraries/ = SubResource("4")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1022057286]
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
+script = ExtResource("99")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=131715036]
 position = Vector2(-6, -4)

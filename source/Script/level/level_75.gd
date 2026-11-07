@@ -91,4 +91,5 @@ func _leave_level_from_exit() -> void:
 
 
 func get_level_monster_config(monster_id: int) -> Dictionary:
-	return _get_monster_config_with_level_data(monster_id, LEVEL_75_MONSTER_DATA)
+	var config := _get_monster_config_with_level_data(monster_id, LEVEL_75_MONSTER_DATA)
+	return preload("res://Script/level/continent_monster_growth.gd").apply(config, 1)

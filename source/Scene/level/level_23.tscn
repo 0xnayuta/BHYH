@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/level/level_23.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/role_attack_mechanism.gd" id="99"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/frist_bg.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_1_3/bg6.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_hide/yunzuo.png" id="5"]
@@ -185,8 +186,9 @@ libraries/ = SubResource("8")
 
 [node name="Check" type="Area2D" parent="." index="15" unique_id=1925967135]
 position = Vector2(2002, 331)
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
+script = ExtResource("99")
 
 [node name="check" type="CollisionShape2D" parent="Check" index="0" unique_id=1850587875]
 position = Vector2(-17.5, -5)

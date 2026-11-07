@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/level/level_38.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/role_attack_mechanism.gd" id="99"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/2_floor_bg23.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/1_bg231door.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_38/83.png" id="5"]
@@ -82,8 +83,9 @@ metadata/_edit_lock_ = true
 
 [node name="Check" type="Area2D" parent="." index="14" unique_id=1042502358]
 position = Vector2(2607, 287)
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
+script = ExtResource("99")
 
 [node name="check" type="CollisionShape2D" parent="Check" index="0" unique_id=905290753]
 position = Vector2(-17.5, -5)

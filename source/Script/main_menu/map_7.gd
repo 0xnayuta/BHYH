@@ -34,7 +34,7 @@ const MAP_LEVEL_NAMES := {
 	74: "浮天台",
 	75: "云川",
 }
-const LAST_OPEN_LEVEL := 74
+const LAST_OPEN_LEVEL := 75
 
 var max_page: int = 7
 var skill_target

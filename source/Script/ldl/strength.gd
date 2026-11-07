@@ -144,12 +144,9 @@ func _on_qh_pressed() -> void:
 	var current_level = int(equipment.get(DataKeys.ENHANCE_LEVEL, 0))
 	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = current_level
 	qh_level = current_level
-	var type: String = str(
-		EquipmentService.data_or_empty(StringName(MLdl.qh_list[DataKeys.NAME])).get(DataKeys.QUALITY, "")
-	)
 	var max_level: int = _get_strength_max_level(MLdl.qh_list[DataKeys.NAME])
 	if current_level >= max_level:
-		Global.add_message_show(get_parent(), str(type) + "品质装备最高强化" + str(max_level) + "级！！", 1.5, Vector2(15, -45))
+		Global.add_message_show(get_parent(), "装备最高强化" + str(max_level) + "级！！", 1.5, Vector2(15, -45))
 		return
 	old_zb_name = MLdl.qh_list[DataKeys.NAME]
 	if PlayerData.get_item_data(qhs_1_name) < qhs_1_num or PlayerData.get_item_data(qhs_2_name) < qhs_2_num:

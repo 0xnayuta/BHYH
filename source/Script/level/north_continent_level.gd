@@ -127,7 +127,10 @@ func _level_bgm_path() -> String:
 
 
 func get_level_monster_config(id: int) -> Dictionary:
-	return NorthOriginalData.monster_config(id)
+	var config := NorthOriginalData.monster_config(id)
+	if stage_number in [76, 77] and not config.is_empty():
+		return preload("res://Script/level/continent_monster_growth.gd").apply(config, stage_number - 74)
+	return config
 
 
 func _physics_process(delta: float) -> void:

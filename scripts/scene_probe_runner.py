@@ -213,6 +213,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         timeout_seconds=120,
     ),
     ProbeSpec(
+        key="longnv-mechanism",
+        title="小龙女 7.1 机关规格探针",
+        script_name="longnv_mechanism_probe.gd",
+        scene_name="longnv_mechanism_probe.tscn",
+        result_prefix="LONGNV_MECHANISM_PROBE_RESULT=",
+        report_stem="longnv_mechanism_probe_report",
+        teardown_marker="LONGNV_MECHANISM_PROBE_TEARDOWN",
+        quit_after_frames=1200,
+        timeout_seconds=180,
+    ),
+    ProbeSpec(
         key="ui-factories",
         title="场景工厂族运行时探针",
         script_name="ui_factory_probe.gd",

@@ -52,7 +52,7 @@ texture = ExtResource("2")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=867641451]
 visible = false
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=555620605]

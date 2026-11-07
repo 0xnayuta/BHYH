@@ -9,6 +9,12 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_area_2d_area_entered(area: Area2D, _extra = null) -> void:
+	receive_role_area_hit(area)
+
+
+func receive_role_area_hit(_area: Area2D) -> void:
+	if hit_count >= 5:
+		return
 	hit_count += 1
 	Global.add_mr_hurt(self, Vector2(0, 0))
 

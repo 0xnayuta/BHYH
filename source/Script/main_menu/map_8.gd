@@ -1,7 +1,9 @@
 extends Node2D
 class_name Map8
 
+## 噩梦副本入口仍关闭；主关卡开放范围由 LAST_OPEN_LEVEL 控制。
 const TEMPORARILY_CLOSED := true
+const LAST_OPEN_LEVEL := 77
 
 const MAP_DESIGN_SIZE := Vector2(940.0, 590.0)
 const LEVEL_HIGHLIGHT_SHADER := preload("res://Shader/ws_effect.gdshader")
@@ -142,7 +144,7 @@ func _ready() -> void:
 
 
 func _on_map_level_pressed(level_number: int) -> void:
-	if TEMPORARILY_CLOSED:
+	if level_number > LAST_OPEN_LEVEL:
 		Global.add_message_show(_ui_parent(), "北俱芦洲副本暂未开放", 1.5, Vector2(470, 300))
 		return
 	if not _has_prerequisite(level_number):
@@ -227,14 +229,12 @@ func _update_level_progression() -> void:
 	if _level_highlight_tween != null:
 		_level_highlight_tween.kill()
 		_level_highlight_tween = null
-	for number in range(76, 86):
+	for number in range(76, LAST_OPEN_LEVEL + 1):
 		var button := get_node_or_null("Level_%d" % number) as TextureButton
 		if button != null:
 			button.material = null
-			button.disabled = TEMPORARILY_CLOSED or not _has_prerequisite(number)
-	if TEMPORARILY_CLOSED:
-		return
-	for number in range(76, 86):
+			button.disabled = number > LAST_OPEN_LEVEL or not _has_prerequisite(number)
+	for number in range(76, LAST_OPEN_LEVEL + 1):
 		var cleared := (
 			bool(PlayerData.player_data.get("北俱芦洲通关_%d" % number, false))
 			or bool(PlayerData.player_data.get(MAP_LEVEL_NAMES[number], false))

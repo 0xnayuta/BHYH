@@ -52,12 +52,12 @@ func _physics_process(delta: float) -> void:
 		jg.visible = false
 		can_pass = true
 	if can_pass and is_set == false:
+		is_set = true
 		$wall2.play("wall")
 		await $wall2.animation_finished
 		$Wall.visible = false
 		$Wall/StaticBody2D/stage2.disabled = true
 		can_pass = false
-		is_set = true
 	add_trap_sky()
 	super._physics_process(delta)
 	if current_stage >= 1:
@@ -169,4 +169,5 @@ func add_trap_sky():
 
 
 func _on_jg_area_entered(area: Area2D) -> void:
-	hit_count += 1
+	if stop_3.disabled and not pppz.disabled and hit_count < 5:
+		hit_count += 1

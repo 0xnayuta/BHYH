@@ -21,7 +21,12 @@ func configure(level: Game4EastLateLevel, number: int) -> void:
 	_bind_scene_nodes()
 	for record: Dictionary in _source_objects:
 		if record["type"] == "DragonItemEntity" and record.get("target") != null:
-			record["target"].area_entered.connect(
+			var target: Area2D = record["target"] as Area2D
+			if target == null:
+				continue
+			target.set_script(preload("res://Script/level/role_attack_mechanism.gd"))
+			target.set_collision_layer_value(5, true)
+			target.area_entered.connect(
 				func(area):
 					if area is BaseRoleHitBox or area is RoleBullet1 or area is RolehmzBullet or area is MagicWeaponHit:
 						_break_dragon_statue(record)

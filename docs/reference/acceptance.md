@@ -301,7 +301,7 @@ python scripts/scene_probe_runner.py --godot "<godot>" --probe magic-weapons
 | 租约覆盖 | 目标/ID/路径/怪物/弹体/纹理分类；只释放本租约路径；未登记共享缓存保留；旧租约 ID 不能释放新租约；重战清理与 `end_archive_session` 退出清理不误删共享缓存 |
 | 加载守卫覆盖 | 预载单槽缺失/显式清理；重复切换只提交最新目标；超时置失败态并保留加载页；失败/取消不进入目标场景 |
 | 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
-| 小龙女覆盖 | `longnv-core` 验证 20 技能入口、角色卡/技能页/自动战斗/外观/2P 关卡；`longnv-71` 验证 7.1 技能数据、觉醒冷却、冲刺无敌、分刃、暂停层与技能透明度 |
+| 小龙女覆盖 | `longnv-core` 验证 20 技能入口、角色卡/技能页/自动战斗/外观/2P 关卡；`longnv-71` 验证 7.1 技能数据、觉醒冷却、冲刺无敌、分刃、暂停层与技能透明度；`longnv-mechanism` 验证七星洞升墙、入口门、尾妖林灯、北俱芦洲龙珠与白骨/玲珑宝塔 |
 | 法宝/角色特效覆盖 | 诛仙剑阵、青莲、青龙剑/太极、八仙 8 场景；Lyfb 兼容特效与哪吒阴阳剑/光环/Launch；校验构建期 `.tres` 加载、动画名、帧数、duration、loop/speed |
 | 结果通道 | 各探针最后一条 `*_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
 | 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0；唯一豁免为 `ERROR: Parameter "t" is null.` 及其缩进栈 |

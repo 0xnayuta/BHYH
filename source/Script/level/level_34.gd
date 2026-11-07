@@ -50,7 +50,7 @@ func _setup_hidden_lights() -> void:
 			continue
 		area.monitoring = true
 		area.monitorable = true
-		area.collision_layer = PhysicsLayers.NONE
+		area.collision_layer = PhysicsLayers.MECHANISM
 		area.collision_mask = 2
 		var shape := area.get_node_or_null("CollisionShape2D") as CollisionShape2D
 		if shape != null:

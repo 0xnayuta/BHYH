@@ -787,11 +787,18 @@ func _remove_timed_clone() -> void:
 		queue_free()
 
 
-func _on_hurt_box_area_entered(area: Area2D) -> void:
-	var incoming_kind: String = _get_incoming_attack_kind(area)
-	var incoming_attacker: Node = _get_incoming_attacker(area)
+func apply_role_hit(source_target: Variant, source_player: BaseHero = null, hit_data: Dictionary = {}) -> int:
+	var incoming_data: Variant = (
+		hit_data
+		if not hit_data.is_empty()
+		else source_target.get("hit_dic") if is_instance_valid(source_target) else {}
+	)
+	var incoming_kind := str(incoming_data.get("attackKind", "")) if incoming_data is Dictionary else ""
+	var incoming_attacker: Node = (
+		source_player if is_instance_valid(source_player) else _get_damage_source_player(source_target)
+	)
 	var hp_before := hp
-	super._on_hurt_box_area_entered(area)
+	super.apply_role_hit(source_target, source_player, hit_data)
 	var received_damage := maxi(hp_before - hp, 0)
 	if (
 		received_damage > 0
@@ -804,7 +811,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 	):
 		call_deferred("_use_prince_action", &"hit3", 2, randi_range(3, 8))
 	if not _guard_active:
-		return
+		return received_damage
 	if _guard_mode == &"heal" and received_damage > 0:
 		hp = mini(max_hp, hp_before + received_damage)
 	elif _guard_mode == &"reflect" and incoming_kind == "magic" and received_damage > 0:
@@ -814,6 +821,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 			and incoming_attacker.has_method("effect_reducehp")
 		):
 			incoming_attacker.effect_reducehp(received_damage, "real")
+	return received_damage
 
 
 func _get_incoming_attack_source(area: Area2D) -> Node:

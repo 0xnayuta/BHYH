@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 35 7.1 内容回植进行中（35-2 完成）**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2/7.3 待后续独立立项。
+> **状态**：**Phase 35 7.1 内容回植进行中（35-3 完成）**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2/7.3 待后续独立立项。
 > **版本**：7.0 内容基线；7.1 回植进行中，尚未升级版本标记，7.1 gameplay 变更以 [`status.md`](../reference/status.md) 为准。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
@@ -41,7 +41,8 @@
 - **35-0 完成**：7.0/7.1 清单差集（新增 34、修改 41、删除 0），7.1 反编译参考源码与 19 个变更/测试场景，逐文件台账生产未映射 0，资源差异 0。
 - **35-1 完成**：`PlayerData` 宠物装备强化上限、`MainSet` 技能特效透明度、`RoleSkillOpacity`、`RoleAttackMechanism`、`BaseMonster` 的 `yyb` 觉醒眩晕/5 倍天雷，以及 `SkillDamageFormulaData` 文本。
 - **35-2 完成**：Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
-- **后续批次**：35-3 关卡/北俱芦洲/场景；35-4 菜单/UI；之后执行 L3 全量验收。
+- **35-3 完成**：`ContinentMonsterGrowth`、关卡机关 `RoleAttackMechanism`、9 个关卡场景的机关接入、Level 5/28/34/75、北俱芦洲怪物/地形、三太子受击入口、`map_7`/`map_8` 开放范围；新增 `longnv-mechanism` 运行时规格探针。
+- **后续批次**：35-4 菜单/UI 与剩余 7.1 脚本；之后执行 L3 全量验收。
 - **发布边界**：PCK/release 与目标设备验证暂缓，待 7.3 回植完成后统一验证；当前版本标记仍为 7.0。
 
 ---
@@ -98,7 +99,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 35-3 关卡/场景批次；Phase 26 长期暂缓，重新启动按 §2 的恢复条件与 [`roadmap.md`](roadmap.md) 的依赖确认。
+**当前下一步**：Phase 35-4 菜单/UI 与剩余 7.1 脚本批次；Phase 26 长期暂缓，重新启动按 §2 的恢复条件与 [`roadmap.md`](roadmap.md) 的依赖确认。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

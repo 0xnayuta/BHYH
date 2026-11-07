@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://Script/level/bai_gu_level.gd" id="1"]
+[ext_resource type="Script" path="res://Script/level/role_attack_mechanism.gd" id="99"]
 [ext_resource type="Texture2D" path="res://Art/level/level_11/bai_gu.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/level/level_11/88.png" id="3"]
 
@@ -58,8 +59,9 @@ texture = ExtResource("3")
 metadata/_edit_lock_ = true
 
 [node name="Hurt_box" type="Area2D" parent="." unique_id=391785578]
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
+script = ExtResource("99")
 
 [node name="Hurt_" type="CollisionShape2D" parent="Hurt_box" unique_id=156628211]
 shape = SubResource("1")

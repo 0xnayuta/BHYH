@@ -123,6 +123,11 @@ func _resolve_runtime_config() -> Dictionary:
 	var metadata_path := _metadata_path()
 	_north_view = AtlasMetadataStore.view_for(metadata_path) if not metadata_path.is_empty() else null
 	var config := NorthOriginalData.monster_config(monster_kind)
+	if not _runtime_config.is_empty():
+		config.merge(_runtime_config, true)
+	var level_node := get_level_node()
+	if level_node is NorthContinentLevel:
+		config.merge(level_node.get_level_monster_config(monster_kind), true)
 	var animations := {
 		&"wait": ["wait", true], &"walk": ["walk", true], &"hurt": ["hurt", false], &"death": ["death", false]
 	}

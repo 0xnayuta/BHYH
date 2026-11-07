@@ -16,5 +16,7 @@ const CHARACTER := 2
 const MONSTER := 4
 ## 层 5「出口」：出口触发区；关卡 GreenDetector 沿用同一层位。
 const EXIT := 16
+## 层 5 机关查询位：与出口共用；供角色近战命中可交互机关。
+const MECHANISM := EXIT
 ## 层 6「台阶」：屏幕挡板与平台段。
 const STEP := 32

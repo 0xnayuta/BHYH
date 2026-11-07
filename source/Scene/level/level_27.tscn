@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_through_level.tscn" id="1"]
 [ext_resource type="Script" path="res://Script/level/level_27.gd" id="2"]
+[ext_resource type="Script" path="res://Script/level/role_attack_mechanism.gd" id="99"]
 [ext_resource type="PackedScene" path="res://Scene/level/trap_2_dwtw.tscn" id="3"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/dwtw.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/level/game_3_level/level_2_3/leftdoor.png" id="5"]
@@ -241,8 +242,9 @@ metadata/_edit_lock_ = true
 
 [node name="DoorCheck" type="Area2D" parent="." index="22" unique_id=520784178]
 position = Vector2(1380, 74)
-collision_layer = 0
+collision_layer = 16
 collision_mask = 2
+script = ExtResource("99")
 
 [node name="Check" type="CollisionShape2D" parent="DoorCheck" index="0" unique_id=1259837554]
 position = Vector2(-12, 22)
