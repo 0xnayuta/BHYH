@@ -63,7 +63,7 @@
 
 - **目标**：7.3 内容回植；base 为 7.2 反编译参考，ours 为当前 7.2 治理工程，theirs 为 7.3 反编译参考。
 - **37-0**：7.3 二进制、SGXZ 解密和逐文件清单已校验；目录与全部 40,275 个文件块通过 MD5 校验；参考树已生成 774 个 `.gd` 与 1,152 个 `.tscn`；初版台账记录 49 个生产脚本修改、1 个新增生产脚本，生产脚本删除 0。
-- **37-1**：数据/资产与截教接入完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个上游新增图标已复核：36 个进入运行期引用闭包（16 个八级宝石/精粹、20 个截教魂晶），1 个无消费者 `1301` 已移出；装备构建源新增 38 条定义并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落、`LevelInfo` 预览和 `PlayerData` effects/consumption 已接入；资产引用闭包、Atlas/FrameSequence 与导出清单复核已完成。
+- **37-1**：数据/资产与截教接入完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个上游新增图标已复核：36 个进入运行期引用闭包（16 个八级宝石/精粹、20 个截教魂晶），1 个无消费者 `1301` 按上游内容保留、不纳入运行期闭包；装备构建源新增 38 条定义并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落、`LevelInfo` 预览和 `PlayerData` effects/consumption 已接入；资产引用闭包、Atlas/FrameSequence 与导出清单复核已完成。
 - **37-2**：角色与技能内容完成；NeZha/Yutu 重叠伤害与月舞碰撞掩码、EastContinentMonster 3120 传送、Level 47–75 宝石精粹掉落/预览均已接入。
 - **37-3**：系统、菜单/UI 与公告文本完成；万灵图录截教分栏、V7.3 公告、招财铃铛、仙戒神铸、分解返还、8 级宝石配方与天庭噩梦进度已接入。
 - **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异完成；`BaseBuff` 拥有者属性/数据、Buff 图标 HUD 归属与 `MonsterHeadInfo` 操作者已修正；2P 相机、灵气、HUD 与操作者探针收口。
