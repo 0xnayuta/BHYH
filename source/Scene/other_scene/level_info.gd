@@ -33,6 +33,7 @@ const UNDERWORLD_NIGHTMARE_LEVEL_PATHS := [
 	"res://Scene/level/level_21.tscn",
 ]
 const HEAVEN_NIGHTMARE_LEVEL_PATHS := [
+	"res://Scene/level/level_22.tscn",
 	"res://Scene/level/level_23.tscn",
 	"res://Scene/level/level_24.tscn",
 	"res://Scene/level/level_25.tscn",
@@ -154,6 +155,8 @@ const UNDERWORLD_SOUL_CRYSTAL_MONSTER_IDS := {
 	"hhe": 29,
 }
 const HEAVEN_SOUL_CRYSTAL_MONSTER_IDS := {
+	"72": 72,
+	"73": 73,
 	"hg": 74,
 	"hh": 75,
 	"wy": 76,
@@ -2336,6 +2339,7 @@ func _rebuild_level_fall_items() -> void:
 		or _is_human_nightmare_level()
 		or _is_underworld_nightmare_level()
 		or _is_heaven_nightmare_level()
+		or _is_jiejiao_nightmare_level()
 	)
 	var default_pro_txt = ""
 	if fall_pro > 0:
@@ -2368,6 +2372,8 @@ func _rebuild_level_fall_items() -> void:
 
 
 func _get_level_fall_items(level_info: Dictionary) -> Array:
+	if _is_jiejiao_nightmare_level():
+		return _get_jiejiao_nightmare_soul_items()
 	if _is_heaven_nightmare_level():
 		return _get_heaven_nightmare_soul_items(level_info)
 	if _is_underworld_nightmare_level():
@@ -2389,6 +2395,11 @@ func _get_level_fall_items(level_info: Dictionary) -> Array:
 
 
 func _get_level_fall_probabilities(level_info: Dictionary) -> Dictionary:
+	if _is_jiejiao_nightmare_level():
+		var jiejiao_probabilities := {}
+		for item_id in _get_jiejiao_nightmare_soul_items():
+			jiejiao_probabilities[item_id] = 25
+		return jiejiao_probabilities
 	if (
 		target_stage_path == "res://Scene/level/level_stz.tscn"
 		and int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY
@@ -2441,6 +2452,31 @@ func _is_heaven_nightmare_level() -> bool:
 	)
 
 
+func _is_jiejiao_nightmare_level() -> bool:
+	return (
+		int(MainSet.set_data.get("Difficult", 0)) == BaseMonster.NIGHTMARE_DIFFICULTY
+		and BaseMonster.JIEJIAO_CATALOG.LEVEL_MONSTERS.has(target_stage_path)
+	)
+
+
+func _get_jiejiao_nightmare_soul_items() -> Array:
+	var items: Array = []
+	var monster_ids: Array = BaseMonster.JIEJIAO_CATALOG.LEVEL_MONSTERS.get(target_stage_path, []).duplicate()
+	var hidden_path := (
+		"res://Scene/level/level_34_1.tscn"
+		if target_stage_path == "res://Scene/level/level_34.tscn"
+		else "res://Scene/level/level_38_1.tscn" if target_stage_path == "res://Scene/level/level_38.tscn" else ""
+	)
+	for hidden_id in BaseMonster.JIEJIAO_CATALOG.LEVEL_MONSTERS.get(hidden_path, []):
+		if hidden_id not in monster_ids:
+			monster_ids.append(hidden_id)
+	for monster_id in monster_ids:
+		var item_id := "jiejiao_soul_crystal_%d" % int(monster_id)
+		if EquipmentService.has(StringName(item_id)) and item_id not in items:
+			items.append(item_id)
+	return items
+
+
 func _get_heaven_nightmare_soul_items(level_info: Dictionary) -> Array:
 	var items: Array = []
 	for monster_info: Variant in level_info.get("monster_list", []):
@@ -2451,6 +2487,16 @@ func _get_heaven_nightmare_soul_items(level_info: Dictionary) -> Array:
 		if monster_id <= 0:
 			continue
 		var item_id := BaseMonster.HEAVEN_SOUL_CRYSTAL_ITEM_PREFIX + str(monster_id)
+		if EquipmentService.has(StringName(item_id)) and item_id not in items:
+			items.append(item_id)
+
+	var extra_ids: Array = (
+		[73]
+		if target_stage_path == "res://Scene/level/level_22.tscn"
+		else [72] if target_stage_path == "res://Scene/level/level_30.tscn" else []
+	)
+	for monster_id in extra_ids:
+		var item_id := "heaven_soul_crystal_%d" % int(monster_id)
 		if EquipmentService.has(StringName(item_id)) and item_id not in items:
 			items.append(item_id)
 	return items
@@ -2611,6 +2657,7 @@ func _refresh_fall_pro_display():
 		or _is_human_nightmare_level()
 		or _is_underworld_nightmare_level()
 		or _is_heaven_nightmare_level()
+		or _is_jiejiao_nightmare_level()
 	)
 	var default_pro_txt = _get_fall_pro_text(base_pro) if base_pro > 0 else ""
 	for box in fall_list.get_children():

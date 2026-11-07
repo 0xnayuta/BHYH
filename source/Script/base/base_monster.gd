@@ -29,6 +29,10 @@ const HEAVEN_NIGHTMARE_DEFENSE_BONUS := 13000
 const HEAVEN_NIGHTMARE_PENETRATION_BONUS := 21000
 const HEAVEN_NIGHTMARE_DAMAGE_BONUS := 1.0
 const HEAVEN_NIGHTMARE_DAMAGE_REDUCTION := 1.0
+const JIEJIAO_NIGHTMARE_HEALTH_BONUS := 200000000
+const JIEJIAO_NIGHTMARE_ATTACK_BONUS := 200000
+const JIEJIAO_NIGHTMARE_DEFENSE_BONUS := 22000
+const JIEJIAO_NIGHTMARE_PENETRATION_BONUS := 33000
 const UNDERWORLD_NIGHTMARE_LEVEL_PATHS := [
 	"res://Scene/level/level_nmg.tscn",
 	"res://Scene/level/level_bgmj.tscn",
@@ -44,6 +48,7 @@ const UNDERWORLD_NIGHTMARE_LEVEL_PATHS := [
 	"res://Scene/level/level_21.tscn",
 ]
 const HEAVEN_NIGHTMARE_LEVEL_PATHS := [
+	"res://Scene/level/level_22.tscn",
 	"res://Scene/level/level_23.tscn",
 	"res://Scene/level/level_24.tscn",
 	"res://Scene/level/level_25.tscn",
@@ -66,6 +71,7 @@ const HEAVEN_NIGHTMARE_LEVEL_PATHS := [
 const HUMAN_SOUL_CRYSTAL_ITEM_PREFIX := "human_soul_crystal_"
 const UNDERWORLD_SOUL_CRYSTAL_ITEM_PREFIX := "underworld_soul_crystal_"
 const HEAVEN_SOUL_CRYSTAL_ITEM_PREFIX := "heaven_soul_crystal_"
+const JIEJIAO_CATALOG := preload("res://Script/data/wan_ling_jiejiao_data.gd")
 const HUMAN_NIGHTMARE_NO_DROP_MONSTER_IDS := [19]
 const UNDERWORLD_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS := [
 	26,
@@ -94,6 +100,8 @@ const UNDERWORLD_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS := [
 	58,
 ]
 const HEAVEN_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS := [
+	72,
+	73,
 	74,
 	75,
 	76,
@@ -250,7 +258,15 @@ static func is_heaven_nightmare_path(level_path: String) -> bool:
 
 
 static func uses_heaven_nightmare_attributes(level_path: String) -> bool:
-	return is_heaven_nightmare_path(level_path) or level_path == "res://Scene/level/level_stz.tscn"
+	return (
+		is_heaven_nightmare_path(level_path)
+		or JIEJIAO_CATALOG.LEVEL_MONSTERS.has(level_path)
+		or level_path == "res://Scene/level/level_stz.tscn"
+	)
+
+
+static func get_nightmare_extra_multiplier(level_path: String) -> float:
+	return 1.2 if JIEJIAO_CATALOG.LEVEL_MONSTERS.has(level_path) else 1.0
 
 
 func update_fall_mode():
@@ -1487,6 +1503,11 @@ func _settle_nightmare_soul_drop() -> bool:
 		if monster_id not in UNDERWORLD_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS:
 			return true
 		item_id = UNDERWORLD_SOUL_CRYSTAL_ITEM_PREFIX + str(monster_id)
+	elif _is_jiejiao_nightmare_level():
+		set_meta("jiejiao_nightmare_soul_drop_settled", true)
+		if monster_id not in JIEJIAO_CATALOG.IDS:
+			return true
+		item_id = "jiejiao_soul_crystal_" + str(monster_id)
 	elif _is_heaven_nightmare_level():
 		set_meta("heaven_nightmare_soul_drop_settled", true)
 		if monster_id not in HEAVEN_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS:
@@ -1517,6 +1538,13 @@ func _is_underworld_nightmare_level() -> bool:
 		return false
 	var level_node := get_level_node()
 	return level_node != null and is_underworld_nightmare_path(str(level_node.scene_file_path))
+
+
+func _is_jiejiao_nightmare_level() -> bool:
+	if int(MainSet.set_data.get("Difficult", 0)) != NIGHTMARE_DIFFICULTY:
+		return false
+	var level_node := get_level_node()
+	return level_node != null and JIEJIAO_CATALOG.LEVEL_MONSTERS.has(str(level_node.scene_file_path))
 
 
 func _is_heaven_nightmare_level() -> bool:
@@ -2894,6 +2922,7 @@ func difficult():
 
 	var underworld_nightmare := false
 	var heaven_nightmare := false
+	var extra_multiplier := 1.0
 	var attack_bonus := NIGHTMARE_ATTACK_BONUS
 	if difficulty == NIGHTMARE_DIFFICULTY:
 		var level_node := get_level_node()
@@ -2901,11 +2930,13 @@ func difficult():
 			var level_path := str(level_node.scene_file_path)
 			underworld_nightmare = is_underworld_nightmare_path(level_path)
 			heaven_nightmare = uses_heaven_nightmare_attributes(level_path)
+			extra_multiplier = get_nightmare_extra_multiplier(level_path)
 		attack_bonus = (
 			HEAVEN_NIGHTMARE_ATTACK_BONUS
 			if heaven_nightmare
 			else UNDERWORLD_NIGHTMARE_ATTACK_BONUS if underworld_nightmare else NIGHTMARE_ATTACK_BONUS
 		)
+	attack_bonus = JIEJIAO_NIGHTMARE_ATTACK_BONUS if extra_multiplier > 1.0 else attack_bonus
 
 	self.max_hp = int(self.max_hp * mult)
 	if difficulty == NIGHTMARE_DIFFICULTY:
@@ -2930,8 +2961,13 @@ func difficult():
 			if heaven_nightmare
 			else UNDERWORLD_NIGHTMARE_DAMAGE_REDUCTION if underworld_nightmare else NIGHTMARE_DAMAGE_REDUCTION
 		)
+		health_bonus = JIEJIAO_NIGHTMARE_HEALTH_BONUS if extra_multiplier > 1.0 else health_bonus
+		defense_bonus = JIEJIAO_NIGHTMARE_DEFENSE_BONUS if extra_multiplier > 1.0 else defense_bonus
+		penetration_bonus = JIEJIAO_NIGHTMARE_PENETRATION_BONUS if extra_multiplier > 1.0 else penetration_bonus
+		damage_bonus *= extra_multiplier
+		damage_reduction *= extra_multiplier
 		self.max_hp += health_bonus
-		self.level += NIGHTMARE_LEVEL_BONUS
+		self.level += int(NIGHTMARE_LEVEL_BONUS * extra_multiplier)
 		self.def = self.def * 3 + defense_bonus
 		self.mdef = self.mdef * 3 + defense_bonus
 		self.ar = self.ar * 3 + penetration_bonus
@@ -2939,7 +2975,7 @@ func difficult():
 		self.crit *= 3
 		self.miss *= 3
 		self.lucky *= 3
-		self.htarget = self.htarget * 3 + NIGHTMARE_HIT_BONUS
+		self.htarget = self.htarget * 3 + int(NIGHTMARE_HIT_BONUS * extra_multiplier)
 		self.toughness *= 3.0
 		self.crit_reduce *= 3
 		self.self_rhp *= 3
