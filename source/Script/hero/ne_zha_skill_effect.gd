@@ -80,6 +80,39 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 	Global.add_buff(target.buff, hit_dic["addeffect"])
 
 
+func _enable_overlap_damage() -> void:
+	hit_box.collision_mask |= 3088
+	hit_box.monitorable = false
+
+
+func _apply_overlap_damage(pulse: int, target_pulses: Dictionary, freeze_seconds: float = 0.0) -> void:
+	if _damage_exhausted or collion.disabled or not _visual_collision_visible:
+		return
+	for area: Area2D in hit_box.get_overlapping_areas():
+		var target := _get_monster_from_hit_area(area)
+		if target == null or _is_summon_or_pet_target(target) or target.hp <= 0:
+			continue
+		var target_id := target.get_instance_id()
+		if int(target_pulses.get(target_id, -1)) == pulse:
+			continue
+		target_pulses[target_id] = pulse
+		var before: int = target.hp
+		target.apply_role_hit(self, player)
+		if freeze_seconds > 0.0 and before > target.hp and not target.is_control_immune():
+			Global.add_buff(
+				target.buff,
+				{
+					"Name": "Ice",
+					"AddTime": freeze_seconds,
+					"reduce_interval": 0,
+					"value": 0,
+					"AttackKind": "",
+					"DeBuff": true,
+					"CanAdd": false
+				}
+			)
+
+
 func _physics_process(delta: float) -> void:
 	_elapsed += delta
 	_pulse_elapsed += delta

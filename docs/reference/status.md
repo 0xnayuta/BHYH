@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 37 的 7.3 内容回植进行中（37-0 完成；37-1 数据/资产部分完成）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：Phase 37 的 7.3 内容回植进行中（37-0 完成；37-1 数据/资产部分完成；37-2 首批）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -94,7 +94,9 @@
 - **37-1 数据/资产（部分完成）**：JSON/BIN/Atlas/FrameSequence 的 1,028 条数据路径与 7.2 对比，生产内容无变化（仅 `uid_cache` 变化）；37 个新增 `.import`/`.ctex` 条目已从 7.3 `.ctex` 解码为源 PNG：16 个 `Art/backpack/all_items` 图标、21 个 `Art/monster/soul_crystal` 魂晶图标；未复制 `.ctex` 或旧 `.import`。装备构建源由 **1,089 → 1,127** 条定义：新增 16 个八级宝石、2 个天庭魂晶、20 个截教魂晶，三枚仙戒解除“不可神铸”；Catalog 已重新生成。
 - **37-1 截教接入**：新增 `WanLingJiejiaoData`；`BaseMonster` 接入截教噩梦属性倍率与魂晶掉落，`LevelInfo` 接入截教掉落预览、`Level_22` 天庭魂晶 72/73 预览；`level_31` 冒烟通过。
 - **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`level_31` 冒烟 0 ERROR / 0 WARNING；装备源审计、Catalog 同步与运行时数据/图标冒烟通过。
-- **37-1 待办**：`WanLingJiejiaoData` 的 PlayerData effects/consumption 接线、新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录；37-2 尚未启动。
+- **37-1 待办**：`WanLingJiejiaoData` 的 PlayerData effects/consumption 接线、新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录。
+- **37-2 首批**：已迁移 7.3 的 NeZha/Yutu 重叠伤害路径：`NeZhaSkillEffect` 提供共享 `_enable_overlap_damage`/`_apply_overlap_damage`，`FirstBatchAwakenArea` 与 `NeZhaAwakenWheel` 接入脉冲伤害，`YutuSkillEffect` 月舞碰撞掩码补齐；待做剩余角色/技能与 EastContinentMonster/Level 变更。
+- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`level_31` 冒烟 0 ERROR / 0 WARNING；装备源审计、Catalog 同步与运行时数据/图标冒烟通过。
 - **边界**：未复制旧 `.ctex`/`.import`；PCK/release 继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）

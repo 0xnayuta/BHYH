@@ -3,6 +3,16 @@ class_name NeZhaAwakenWheel
 var thrown := false
 var _flight_age := 0.0
 var _throw_direction := 1.0
+var _target_pulses: Dictionary = {}
+
+
+func _ready() -> void:
+	super._ready()
+	_enable_overlap_damage()
+
+
+func _on_hit_box_area_entered(_area: Area2D) -> void:
+	pass
 
 
 func launch() -> void:
@@ -16,6 +26,7 @@ func launch() -> void:
 	_pulse_elapsed = 0.0
 	_pulse_count = 1
 	_damage_exhausted = false
+	_target_pulses.clear()
 	max_hit_pulses = 4
 	life_seconds = 3.0
 	_refresh_collision_state()
@@ -38,3 +49,5 @@ func _physics_process(delta: float) -> void:
 				queue_free()
 				return
 	super._physics_process(delta)
+	if not is_queued_for_deletion():
+		_apply_overlap_damage(_pulse_count, _target_pulses)

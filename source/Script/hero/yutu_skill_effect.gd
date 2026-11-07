@@ -64,6 +64,7 @@ func _ready() -> void:
 	var moon_area := skill_id == "1112040" and effect_name == "effect4_2"
 	collion.disabled = hit_dic.is_empty() and not moon_area
 	if skill_id == "1112050":
+		hit_box.collision_mask |= 3088
 		if _moon_dance_masks.is_empty():
 			_moon_dance_masks = JSON.parse_string(
 				FileAccess.get_file_as_string("res://Art/hero_picture/role_7/moon_dance_collision.json")
