@@ -9,6 +9,8 @@
 source -> imported -> cataloged -> previewable -> selected -> wired -> gameplay_verified
 ```
 
+生命周期小结：
+
 - `source`：原始文件位于私有素材仓，尚未进入 BHYH 工程或 Godot 导入路径。
 - `imported`：已进入 BHYH 工程并完成 Godot 导入；资源可被引擎发现和加载，但不表示已有消费方。
 - `cataloged`：已由本脚本登记到矩阵与清单，明确所属域、数量和来源；登记不等同于运行时消费。
@@ -61,7 +63,7 @@ source -> imported -> cataloged -> previewable -> selected -> wired -> gameplay_
 | `maps` | 1727 | Scene/level/zmws; Parallax2D + StaticBody2D | `imported_unbound` | `previewable_not_gameplay_complete` | 预览单张地图；触发器与玩法仍待设计 |
 | `spine` | 1371 | SpineSprite (existing 14 assets only) | `imported_unbound` | `unbound` | 等待明确的内容需求 |
 | `bhyh.spine` | 14 | Existing BHYH SpineSprite effects | `bound` | `wired` |  |
-| `backpack.all_items` | 11401 | Texture2D / load_item_icon | `imported_unbound` | `available_not_bound` |  |
+| `backpack.all_items` | 11471 | Texture2D / load_item_icon | `imported_unbound` | `available_not_bound` |  |
 | `skill.all_skills` | 747 | Texture2D / load() | `imported_unbound` | `available_not_bound` |  |
 | `effect.all_effects` | 679 | Texture2D / load() | `imported_unbound` | `available_not_bound` |  |
 | `ui.module_res` | 2546 | Texture2D / load() | `imported_unbound` | `available_not_bound` |  |
@@ -69,7 +71,7 @@ source -> imported -> cataloged -> previewable -> selected -> wired -> gameplay_
 | `audio.sfx` | 589 | AudioStreamPlayer | `imported_unbound` | `available_not_bound` |  |
 | `font.ttf` | 1 | FontFile | `imported_unbound` | `available_not_bound` |  |
 | `config` | 320 | ZmwsConfig | `imported_unbound` | `available_not_bound` |  |
-| `ui_audio_font` | 15373 | Texture2D, AudioStreamPlayer, FontFile loaders | `imported_unbound` | `available_not_bound` | 通过现有加载器绑定选中的 UI/音频资产 |
+| `ui_audio_font` | 15443 | Texture2D, AudioStreamPlayer, FontFile loaders | `imported_unbound` | `available_not_bound` | 通过现有加载器绑定选中的 UI/音频资产 |
 | `prefab_scripts` | 0 | none | `excluded` | `excluded` | 不导入 |
 
 ## 垂直切片

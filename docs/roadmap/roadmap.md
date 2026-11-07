@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.3 内容基线；**Phase 37 的 7.3 内容回植完成（37-0~37-4 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3 PCK/release 长期暂缓；当前活跃候选为 Phase 37。
+> **当前版本**：7.3 内容基线；**Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3 PCK/release 长期暂缓；当前活跃候选为 Phase 37。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -41,7 +41,7 @@
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
 | Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 | Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 37 7.3 内容回植 | **完成（37-0~37-4；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
+| Phase 37 7.3 内容回植 | **完成（37-0~37-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
@@ -111,7 +111,7 @@ Phase 35 已完成 7.1 回植与 L3 收口：参考工程/台账、基础数据/
 
 Phase 36 已完成 7.2 内容回植与 L3 收口：年兽宠物、首批觉醒、V7.2 公告、喜鹊叠加、幻化与昵称等生产差异均已接入；PCK/release 与目标设备验证继续暂缓，7.3 未立项。
 
-Phase 37 已完成 7.3 内容回植：二进制/SGXZ、参考源码/场景、数据资产、角色/技能、系统/UI、2P 与 L3 均已收口；PCK/release 与目标设备验证继续暂缓。
+Phase 37 已完成 7.3 内容回植与 37-6 缺口修复：二进制/SGXZ、参考源码/场景、数据资产、角色/技能、系统/UI、2P、语义缺口与 L3 均已收口；PCK/release 与目标设备验证继续暂缓。
 
 ## 5. 跨阶段纪律与验收
 

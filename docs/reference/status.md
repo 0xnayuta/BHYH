@@ -1,8 +1,8 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 37 的 7.3 内容回植完成（37-0~37-4 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **最后更新**：2026-11-08。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
+> **阶段状态**：Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.3**（7.3 内容回植 L3 已完成；PCK/release 待发布验证） |
+| 当前内容版本 | **7.3**（7.3 内容回植与 37-6 缺口修复 L3 已完成；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
@@ -29,7 +29,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 36-6 复跑，44.61s） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-08 37-6 最终复跑，37.90s） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
@@ -42,14 +42,14 @@
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
-| `health_check` | **806 脚本 0 Parse / 0 Error / 0 Warning** |
+| `health_check` | **807 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（L3 复跑） |
-| `scene_probe_runner` | **36-6 全量 26 项：26 PASS**（305.94s）；`awaken-72` / `menu-ui-72` 通过；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
+| `scene_probe_runner` | **37-6 全量 27 项：27 PASS**（305.34s）；新增 `phase37-6` 覆盖寒山坡出口、Role 8 装备、分解帮助与固定概率；`awaken-72` / `menu-ui-72`、`longnv-*` / `menu-ui-71` 与 `load-guard` 预期噪声均通过 |
 | 7.2 觉醒运行时探针 | **PASS**（`scene_probe_runner --probe awaken-72`，10.41s；重斩三道地裂、玄冰阵五段冰刺与冰域、哪吒双火轮、月魔舞三月影、觉醒弹窗/技能面板/一阶觉醒石） |
 | 7.2 其余脚本探针 | **PASS**（`scene_probe_runner --probe menu-ui-72`，8.82s；年兽预载、V7.2 公告、喜鹊叠加/上限、幻化翅膀/头衔、小龙女昵称） |
-| `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`，370.18s；`level_ghg` 重试通过） |
-| `coop_probe_runner` | **38/38 PASS**（L3 复跑，含 2P 相机/HUD/推图/年兽） |
-| `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
+| `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`，331.9s） |
+| `coop_probe_runner` | **38/38 PASS**（37-6 复跑，含 2P 相机/HUD/推图/年兽） |
+| `level_1` 冒烟 | **PASS，4 阶段，0/0/0，26.45s；`--role 8` 主角为 Role_8** |
 | PCK 验证包（FrameSequence） | **历史 6.9 基线：4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；**7.1 PCK 按用户决策暂缓** |
 | PCK 原始数据清单 | **993/993**（7.1 原始数据闭包；`export_raw_manifest.py --check` 通过） |
 | Release PCK（实际 exe） | **5,044/5,044**（6.9 基线；844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节；7.0 未重建 release PCK |
@@ -84,7 +84,7 @@
 - **36-6 L3 收口**：`check_all --godot-bin` 9/9；`health_check --no-cache` **806 脚本 0/0/0**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**（370.18s，`level_ghg` 重试通过）；`scene_probe_runner` **26/26**；`coop_probe_runner` **38/38**；`archive_probe_runner` **344/344**；`level_1` 四阶段 **0/0/0**；`export_raw_manifest` 1033/1033、Atlas 4015/4015、编号帧/怪物帧/哪吒预览/FrameSequence/sheet 同步通过；`export_closure_probe --self-test` 修复 `normalize` 导入后通过；命名、白名单与 `docs_audit` 通过。
 - **边界**：PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
 
-### 7.3 回植（37-0~37-4 批次完成；L3 已通过）
+### 7.3 回植（37-0~37-6 批次完成；L3 已通过）
 
 - **目标二进制**：`八荒湮隳7.3.exe`，**2,282,485,752 字节**，SHA-256 `93817a09fd4508c7145631a67fe1cbcda9532028970d785b8ddda681009ef131`。
 - **PCK**：`GDPC` v4，engine 4.7.0，raw offset `0x38D5C00`，`dir_offset` `0x84405870`；目录明文计数 **40,275**，加密目录 plaintext length **4,080,072**。
@@ -95,7 +95,8 @@
 - **37-2 完成**：NeZha/Yutu 重叠伤害与月舞碰撞掩码；`EastContinentMonster` 3120 传送前停止攻击、清理速度并修正当前 stage 屏幕边界；Level 47–62 的 `7_bsjh`、Level 63–75 的 `8_bsjh` 掉落/预览；`Level_64` 双 BOSS、`Level_65` 傲来国首领、`Level_63` 移除 `469000011` 等数据表差异已逐条合并。
 - **37-3 完成**：`WanLingCatalogPage` 截教天境分栏与魂晶图标；`GameAnnouncement` V7.3 文案/版本按钮；`SHOP` 招财铃铛；三仙戒神铸解禁；装备分解返还累计强化石的 80%；8 级宝石配方与一键合成；`LevelProgressCommand` 写入天庭噩梦标记；`MonsterHeadInfo` 截教倍率/伤害/免伤与 `fixed_chance` 透传。`load_scene` 的 Android 首启完整性校验作为当前本地保护保留，未按 7.3 删除。
 - **37-4 完成**：`BaseBuff` 的灵气/阵法/宠物加成/魔法汲取/初始 Buff 全部按 Buff 拥有者解析 `PlayerData`/`RoleProp`，移除英雄 Buff 图标写入全局 1P HUD 的旁路；`MonsterHeadInfo` 的公式与双倍掉落提示按怪物归属操作者解析；2P 相机居中/边界、灵气追踪最近玩家、P2 HUD 与操作者路径已由 `coop_probe_runner` **38/38** 收口。
-- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`scene_probe_runner` **26/26**（302.82s）；`level_regression_all` **128/128 PASS + 5 SKIP**（133 个场景，354.3s）；`coop_probe_runner` **38/38**（300.18s）；`level_1` 四阶段 0 ERROR / 0 WARNING；`level_47` / `level_63` / `level_65` / `level_75` 冒烟均 0 ERROR / 0 WARNING；截教数据/UI/配方/神铸/等级掉落与天庭噩梦进度运行时探针通过。新增资产运行期闭包 **36/36**；Atlas **4015/4015**、FrameSequence **288/288**、怪物帧 **152/152**、关卡预载 **101/101** 与导出清单自检通过。
+- **37-6 缺口修复**：删除 `level_77.tscn` 的 `exit.visible=true`，恢复基场景初始隐藏并在清关后显示；`sell_or_equ` 恢复 Role 8 小龙女装备权限；同步 7.3 分解帮助文本；`BaseMonster` 支持 `fixed_chance` 独立掉落并新增固定概率/最高难度/双倍掉落断言；新增 `phase37-6` 场景探针。
+- **验证**：`check_all --godot-bin` **9/9 PASS**（37.90s）；`health_check --no-cache` **807 脚本 0 Parse / 0 Error / 0 Warning**（16.24s）；`archive_probe_runner` **344/344**；`scene_probe_runner` **27/27**（305.34s）；`level_regression_all` **128/128 PASS + 5 SKIP**（331.9s）；`coop_probe_runner` **38/38**（289.13s）；`level_1` 四阶段 **0/0/0**（26.45s）；`phase37-6` **PASS**；截教数据/UI/配方/神铸/等级掉落与天庭噩梦进度运行时探针通过。新增资产运行期闭包 **36/36**；Atlas **4015/4015**、FrameSequence **288/288**、怪物帧 **152/152**、关卡预载 **101/101** 与导出清单自检通过；资产矩阵已重生成。
 - **37-1 收口**：资产引用闭包与 Atlas/FrameSequence/导出清单复核已完成。
 - **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；L3 已通过；PCK/release 与目标设备验证继续暂缓。
 
