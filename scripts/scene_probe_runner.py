@@ -224,6 +224,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         timeout_seconds=180,
     ),
     ProbeSpec(
+        key="menu-ui-71",
+        title="7.1 菜单/UI 与剩余脚本规格探针",
+        script_name="menu_ui_71_probe.gd",
+        scene_name="menu_ui_71_probe.tscn",
+        result_prefix="MENU_UI_71_PROBE_RESULT=",
+        report_stem="menu_ui_71_probe_report",
+        teardown_marker="MENU_UI_71_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=120,
+    ),
+    ProbeSpec(
         key="ui-factories",
         title="场景工厂族运行时探针",
         script_name="ui_factory_probe.gd",

@@ -494,8 +494,6 @@ func get_skill_row_heights() -> Array[float]:
 
 
 func _setup_skill_awaken_buttons() -> void:
-	if get_role_key() == "角色8":
-		return
 	var skill_list = skill_ids_by_role.get(get_role_key(), [])
 	for skill_index in range(skill_list.size()):
 		if get_role_key() == "角色7" and skill_list[skill_index] not in ["yt_mds", "yt_xdz", "yt_ldmw", "yt_yl"]:

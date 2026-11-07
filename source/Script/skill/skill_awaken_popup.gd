@@ -28,37 +28,51 @@ func configure(skill_name: String, icon: Texture2D, internal_skill_id: String) -
 	_refresh_awaken_state()
 
 
+func _is_supported_awaken_skill(id: String) -> bool:
+	return (
+		id
+		in [
+			"jhsj",
+			"smb",
+			"zfjg",
+			"tjgl",
+			"nz_lblc",
+			"nz_hlhs",
+			"nz_yysj",
+			"hmz_ws",
+			"lyfb",
+			"lys",
+			"mds",
+			"tkj",
+			"wdzt",
+			"mmw",
+			"jdz",
+			"wdww",
+			"lhsq",
+			"dgq",
+			"sd",
+			"zznh",
+			"ltjz",
+			"tllz",
+			"yyb",
+			"fhf",
+			"ygth",
+			"yt_yl",
+			"yt_xdz",
+			"yt_mds",
+			"yt_ldmw",
+			"xln_lz",
+			"xln_tk",
+			"xln_xr",
+			"xln_ly",
+			"xln_jyc",
+			"xln_llmt",
+		]
+	)
+
+
 func _refresh_awaken_state() -> void:
-	if (
-		skill_id != "jhsj"
-		and skill_id != "smb"
-		and skill_id != "zfjg"
-		and skill_id != "tjgl"
-		and skill_id != "nz_lblc"
-		and skill_id != "nz_hlhs"
-		and skill_id != "nz_yysj"
-		and skill_id != "hmz_ws"
-		and skill_id != "lyfb"
-		and skill_id != "lys"
-		and skill_id != "mds"
-		and skill_id != "tkj"
-		and skill_id != "wdzt"
-		and skill_id != "mmw"
-		and skill_id != "jdz"
-		and skill_id != "wdww"
-		and skill_id != "lhsq"
-		and skill_id != "dgq"
-		and skill_id != "sd"
-		and skill_id != "zznh"
-		and skill_id != "ltjz"
-		and skill_id != "tllz"
-		and skill_id != "fhf"
-		and skill_id != "ygth"
-		and skill_id != "yt_yl"
-		and skill_id != "yt_xdz"
-		and skill_id != "yt_mds"
-		and skill_id != "yt_ldmw"
-	):
+	if not _is_supported_awaken_skill(skill_id):
 		$EffectDescription.text = "当前技能的觉醒效果暂未开放"
 		$Status.text = "觉醒效果"
 		$ConfirmButton.visible = true
@@ -115,6 +129,8 @@ func _refresh_awaken_state() -> void:
 		effect_description = "在距离最远的目标位置额外释放一个雷霆劫阵"
 	elif skill_id == "tllz":
 		effect_description = "命中敌人后降低50%物理防御和魔法防御，并在目标位置额外释放一个雷阵"
+	elif skill_id == "yyb":
+		effect_description = "阴阳双生触发时有概率使敌人眩晕1秒；阴阳双生天雷对已眩晕目标造成的伤害提高至5倍"
 	elif skill_id == "fhf":
 		effect_description = "大幅减少前摇、后摇和冷却，均缩短为原来的三分之一"
 	elif skill_id == "ygth":
@@ -127,6 +143,18 @@ func _refresh_awaken_state() -> void:
 		effect_description = YutuSkillData.POWDER_AWAKEN_DESCRIPTION
 	elif skill_id == "yt_ldmw":
 		effect_description = YutuSkillData.JAR_AWAKEN_DESCRIPTION
+	elif skill_id == "xln_lz":
+		effect_description = "旋转双刃伤害提高至2倍，并追加三段大型旋刃攻击"
+	elif skill_id == "xln_tk":
+		effect_description = "飞刃分裂为三把；二次瞬移后追加5倍斩击并获得1秒无敌"
+	elif skill_id == "xln_xr":
+		effect_description = "流血最多叠加5层，满层后引爆目标当前生命值10%的魔法伤害"
+	elif skill_id == "xln_ly":
+		effect_description = "全屏刀光追加三次，最后一击眩晕2秒并保持霸体"
+	elif skill_id == "xln_jyc":
+		effect_description = "原地旋转飞刃；攻击范围和特效扩大2倍，伤害提高3倍，命中频率提高3倍，冷却缩短至0.5秒"
+	elif skill_id == "xln_llmt":
+		effect_description = "雷龙、月牙刀光和飞刃交替追加攻击，伤害段数翻倍"
 	$EffectDescription.text = effect_description + ("\n（已觉醒）" if awakened else "")
 	$ConfirmButton.visible = not awakened
 	$ConfirmButton.disabled = awakened
@@ -161,36 +189,7 @@ func request_escape_close() -> bool:
 
 
 func _on_confirm_pressed() -> void:
-	if (
-		skill_id != "jhsj"
-		and skill_id != "smb"
-		and skill_id != "zfjg"
-		and skill_id != "tjgl"
-		and skill_id != "nz_lblc"
-		and skill_id != "nz_hlhs"
-		and skill_id != "nz_yysj"
-		and skill_id != "hmz_ws"
-		and skill_id != "lyfb"
-		and skill_id != "lys"
-		and skill_id != "mds"
-		and skill_id != "tkj"
-		and skill_id != "wdzt"
-		and skill_id != "mmw"
-		and skill_id != "jdz"
-		and skill_id != "wdww"
-		and skill_id != "lhsq"
-		and skill_id != "dgq"
-		and skill_id != "sd"
-		and skill_id != "zznh"
-		and skill_id != "ltjz"
-		and skill_id != "tllz"
-		and skill_id != "fhf"
-		and skill_id != "ygth"
-		and skill_id != "yt_yl"
-		and skill_id != "yt_xdz"
-		and skill_id != "yt_mds"
-		and skill_id != "yt_ldmw"
-	):
+	if not _is_supported_awaken_skill(skill_id):
 		Global.add_message_show(self, "当前技能觉醒暂未开启", 1.5, Vector2(470, 270))
 		return
 	if _is_skill_awakened(skill_id):
@@ -287,6 +286,18 @@ func _on_confirm_pressed() -> void:
 		skill_display_name = "蔓毒散"
 	elif skill_id == "yt_ldmw":
 		skill_display_name = "炼毒魔瓮"
+	elif skill_id == "xln_lz":
+		skill_display_name = "飞旋龙"
+	elif skill_id == "xln_tk":
+		skill_display_name = "龙影刃"
+	elif skill_id == "xln_xr":
+		skill_display_name = "回龙击"
+	elif skill_id == "xln_ly":
+		skill_display_name = "魔龙绞"
+	elif skill_id == "xln_jyc":
+		skill_display_name = "疾影刺"
+	elif skill_id == "xln_llmt":
+		skill_display_name = "玲珑漫天"
 	Global.add_message_show(self, skill_display_name + "觉醒成功", 1.5, Vector2(470, 270))
 
 

@@ -122,7 +122,8 @@ func _run() -> void:
 			valid_variations
 			and bg.theme.get_type_variation_base(control.theme_type_variation) != &""
 		)
-	checks["variation_count"] = variation_count == 45
+	# 7.1 新增 SkillOpacity 标签、滑条与百分比，共 3 个 theme variation。
+	checks["variation_count"] = variation_count == 48
 	checks["variation_bases"] = valid_variations
 
 	var music_before := bool(MainSet.set_data["BackGroundMusic"])

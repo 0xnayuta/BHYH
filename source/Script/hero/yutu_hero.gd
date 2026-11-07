@@ -307,6 +307,35 @@ func _finish_action() -> void:
 	can_move_when_use_skill = false
 
 
+func is_dashing() -> bool:
+	return not is_death and _active_id == "1112020" and _motion_until > _clock + 1e-05
+
+
+func is_dikong_field_invincible() -> bool:
+	return super.is_dikong_field_invincible() or is_dashing()
+
+
+func _on_hurt_box_area_entered(area: Area2D) -> void:
+	if is_dashing():
+		is_miss = true
+		return
+	super._on_hurt_box_area_entered(area)
+
+
+func effect_reducehp(value, atkKind):
+	if is_dashing():
+		is_miss = true
+		return
+	super.effect_reducehp(value, atkKind)
+
+
+func get_monster_last_hurt(target_boss, target_obj):
+	if is_dashing():
+		is_miss = true
+		return 0
+	return super.get_monster_last_hurt(target_boss, target_obj)
+
+
 func _prepare_hit_reaction() -> void:
 	var knockback := velocity
 	_finish_action()
@@ -599,6 +628,7 @@ func _heal_once() -> void:
 
 func _potion_effect(key: String) -> void:
 	var effect := AnimatedSprite2D.new()
+	effect.add_to_group("role_skill_visual")
 	effect.sprite_frames = preload("res://Art/hero_picture/role_7/buffs/yutu_buffs.tres")
 	effect.position.y = -55.0
 	add_child(effect)

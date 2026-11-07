@@ -299,6 +299,9 @@ func _refresh_selected() -> void:
 
 
 func _skill_name(skill_id: String) -> String:
+	var longnv_index := LongnvSkillData.KEYS.find(skill_id)
+	if longnv_index >= 0:
+		return str(LongnvSkillData.NAMES[longnv_index])
 	return str(SKILL_NAMES.get(skill_id, skill_id))
 
 

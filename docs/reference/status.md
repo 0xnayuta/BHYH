@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 35 的 7.1 回植进行中（35-1 完成），Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 35 的 7.1 L3 收口完成、待发布验证，Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.0**（6.9 基线 + 7.0 内容回植：角色 8、2P、UI 与系统修复） |
+| 当前内容版本 | **7.1**（7.0 基线 + 7.1 内容回植；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
@@ -29,7 +29,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 35-3 复跑） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 35-4 复跑） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
@@ -43,13 +43,13 @@
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **797 脚本 0 Parse / 0 Error / 0 Warning** |
-| `archive_probe_runner` | **344/344 PASS**（7.0 回植复跑） |
-| `scene_probe_runner` | **35-3 全量 22 项：22 PASS**；`longnv-core` / `longnv-71` / `longnv-mechanism` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
-| `coop_probe_runner` | **37/37 PASS**（7.0 回植复跑，含 2P 相机/HUD/推图） |
+| `archive_probe_runner` | **344/344 PASS**（L3 复跑） |
+| `scene_probe_runner` | **35-4 全量 23 项：23 PASS**；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
+| `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`） |
+| `coop_probe_runner` | **37/37 PASS**（L3 复跑，含 2P 相机/HUD/推图） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
-| 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（6.9 基线；7.0 未重跑全量） |
-| PCK 验证包（FrameSequence） | **4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；导出+校验 **890.48s**（6.9 基线） |
-| PCK 原始数据清单 | **993/993**（7.0 原始数据闭包；`export_raw_manifest.py --check` 通过） |
+| PCK 验证包（FrameSequence） | **历史 6.9 基线：4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；**7.1 PCK 按用户决策暂缓** |
+| PCK 原始数据清单 | **993/993**（7.1 原始数据闭包；`export_raw_manifest.py --check` 通过） |
 | Release PCK（实际 exe） | **5,044/5,044**（6.9 基线；844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节；7.0 未重建 release PCK |
 | Release 冷启动 | `load_scene.tscn` 加载，`--quit-after` 退出码 0；游戏与 stdout 均 **0 ERROR / 0 WARNING**；直接 `level_1` override 加载成功，1 条无档案会话警告属测试夹具限制 |
 
@@ -63,14 +63,15 @@
 - **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与目标设备性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
 - **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
 
-### 7.1 回植进行中（35-0 / 35-1 / 35-2 / 35-3）
+### 7.1 回植完成（L3 已收口；待发布验证）
 
 - **35-0**：已生成 7.1 反编译参考源码、19 个变更/测试场景与逐文件台账；7.1 清单新增 34、修改 41、删除 0，生产未映射 0，资源差异 0。
 - **35-1**：已接入 `PlayerData` 宠物装备强化上限、`MainSet` 技能特效透明度设置、`RoleSkillOpacity`、`RoleAttackMechanism`、`BaseMonster` 的 `yyb` 觉醒眩晕/5 倍天雷，以及 `SkillDamageFormulaData` 说明文本。
 - **35-2**：已接入 Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
 - **35-3**：已接入 `ContinentMonsterGrowth`、关卡机关 `RoleAttackMechanism`、9 个关卡场景机关、Level 5/28/34/75、北俱芦洲怪物/地形、三太子受击入口、`map_7`/`map_8` 开放范围；Level_77 无场景语义差异；新增 `longnv-mechanism` 运行时规格探针。
-- **边界**：当前内容版本仍为 **7.0**；7.1 剩余 `GameSet`/`GameAnnouncement` 等菜单/UI 与 `YutuHero`/`AutoBattleConfig`/`zd_skill` 等脚本待 35-4；PCK/release 与目标设备验证按用户决策暂缓，待 7.3 回植完成后统一验证。
-- **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` **797 脚本 0/0/0**；`scene_probe_runner` **22/22**（含 `longnv-mechanism` PASS）；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**；`longnv-core` / `longnv-71` / `longnv-mechanism` PASS；`ui-theme` PASS；`docs_audit` 880/0。
+- **35-4**：已接入 GameSet 技能透明度、V7.1 公告、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌；新增 `menu-ui-71` 运行时规格探针。
+- **边界**：当前内容版本为 **7.1**；PCK/release 与目标设备验证按用户决策暂缓，待最终发布统一验证；7.2/7.3 未立项。
+- **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` **797 脚本 0/0/0**；`scene_probe_runner` **23/23**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**；`coop_probe_runner` **37/37**；`archive_probe_runner` **344/344**；`export_raw_manifest --check` 993 文件；`convert_atlas_metadata --check` 4015/4015；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` PASS；命名审计、白名单审计与 `docs_audit` 879/0 全部通过。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 

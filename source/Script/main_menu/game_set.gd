@@ -17,10 +17,13 @@ const GAME_SET_DESIGN_SIZE := Vector2(942.0, 589.0)
 @onready var show_close_2: Button = $Bg/BGColor/VBoxContainer/RoleEQ/ShowClose2
 @onready var show_close: Button = $Bg/BGColor/VBoxContainer2/RoleBody/ShowClose
 @onready var frame_rate_option: OptionButton = $Bg/BGColor/VBoxContainer2/FrameRate/FrameRateOption
+@onready var skill_opacity_slider: HSlider = $Bg/BGColor/VBoxContainer/SkillOpacity/Slider
+@onready var skill_opacity_value: Label = $Bg/BGColor/VBoxContainer/SkillOpacity/Value
 
 var is_set = false
 var music_is_change = false
 var _last_setting_state_mask := -1
+var _skill_opacity_save: Timer
 
 
 func _fit_to_viewport() -> void:
@@ -44,6 +47,24 @@ func _ready() -> void:
 	_fit_to_viewport()
 	_fix_setting_layout_rows()
 	_setup_frame_rate_option()
+	skill_opacity_slider.set_value_no_signal(MainSet.get_skill_effect_opacity() * 100.0)
+	skill_opacity_value.text = "%d%%" % skill_opacity_slider.value
+	_skill_opacity_save = Timer.new()
+	_skill_opacity_save.one_shot = true
+	_skill_opacity_save.wait_time = 0.3
+	add_child(_skill_opacity_save)
+	_skill_opacity_save.timeout.connect(_persist_skill_effect_opacity)
+	skill_opacity_slider.value_changed.connect(_on_skill_opacity_changed)
+
+
+func _on_skill_opacity_changed(value: float) -> void:
+	MainSet.set_skill_effect_opacity(value)
+	skill_opacity_value.text = "%d%%" % value
+	_skill_opacity_save.start()
+
+
+func _persist_skill_effect_opacity() -> void:
+	MemoryClass.main_bc()
 
 
 func _fix_setting_layout_rows() -> void:
@@ -57,6 +78,7 @@ func _fix_setting_layout_rows() -> void:
 		[$Bg/BGColor/VBoxContainer/MonsterBloodShow2, Vector2(300, 38)],
 		[$Bg/BGColor/VBoxContainer/RoleEQ, Vector2(290, 31)],
 		[$Bg/BGColor/VBoxContainer/DamageTextShow, Vector2(290, 31)],
+		[$Bg/BGColor/VBoxContainer/SkillOpacity, Vector2(330, 31)],
 		[$Bg/BGColor/VBoxContainer2/GameMusicTitle, Vector2(390, 38)],
 		[$Bg/BGColor/VBoxContainer2/GameMusicTitle2, Vector2(330, 38)],
 		[$Bg/BGColor/VBoxContainer2/FrameRate, Vector2(330, 36)],
@@ -214,6 +236,9 @@ func _on_h_slider_value_changed(value: float) -> void:
 
 
 func _on_return_pressed() -> void:
+	if not _skill_opacity_save.is_stopped():
+		_skill_opacity_save.stop()
+		_persist_skill_effect_opacity()
 	queue_free()
 
 
