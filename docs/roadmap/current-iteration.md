@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**当前无活跃候选**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓。
-> **版本**：7.0；本轮回植不改变存档格式，7.0 gameplay 变更以 [`status.md`](../reference/status.md) 为准。
+> **状态**：**Phase 35 7.1 内容回植进行中（35-1 完成）**。Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2/7.3 待后续独立立项。
+> **版本**：7.0 内容基线；7.1 回植进行中，尚未升级版本标记，7.1 gameplay 变更以 [`status.md`](../reference/status.md) 为准。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -34,6 +34,14 @@
 3. 定义与实例分离：静态定义走 Resource/Catalog；玩家档案保持加密 JSON、`DataKeys` 与 `ensure_*`；不把 `PlayerData.player_data` 整体 Resource 化。
 4. 失败显式：缺资源、无来源、保存失败、加载失败、过期回调必须报告给拥有者；不默认 1P、不猜旧路径、不静默成功。
 5. 回滚通过版本控制，不保留永久双实现、兼容 facade 或双写路径。
+
+### 1.3 Phase 35 7.1 内容回植（进行中）
+
+- **范围锁定**：目标 7.1；7.2/7.3 分别独立立项，不混入本阶段。
+- **35-0 完成**：7.0/7.1 清单差集（新增 34、修改 41、删除 0），7.1 反编译参考源码与 19 个变更/测试场景，逐文件台账生产未映射 0，资源差异 0。
+- **35-1 完成**：`PlayerData` 宠物装备强化上限、`MainSet` 技能特效透明度、`RoleSkillOpacity`、`RoleAttackMechanism`、`BaseMonster` 的 `yyb` 觉醒眩晕/5 倍天雷，以及 `SkillDamageFormulaData` 文本。
+- **后续批次**：35-2 Longnv/技能；35-3 关卡/北俱芦洲/场景；35-4 菜单/UI；之后执行 L3 全量验收。
+- **发布边界**：PCK/release 与目标设备验证暂缓，待 7.3 回植完成后统一验证；当前版本标记仍为 7.0。
 
 ---
 
@@ -89,7 +97,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：无活跃候选；Phase 26 长期暂缓，重新启动按 §2 的恢复条件与 [`roadmap.md`](roadmap.md) 的依赖确认。
+**当前下一步**：Phase 35-2 Longnv/技能批次；Phase 26 长期暂缓，重新启动按 §2 的恢复条件与 [`roadmap.md`](roadmap.md) 的依赖确认。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

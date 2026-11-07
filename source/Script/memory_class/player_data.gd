@@ -26,7 +26,6 @@ const MOUNT_UNLOCKED_KEY := "已解锁"
 const AVATAR_FRAME_KEY := "头像框"
 const PET_RABBIT_UNLOCK_KEY := "月兔已解锁"
 const PET_EQUIPMENT_MAX_STRENGTH_LEVEL := 50
-const STANDARD_STRENGTH_QUALITIES := ["普通", "优秀", "精良", "史诗", "邪灵", "魂器", "传说", "神器"]
 const PET_EQUIPMENT_RANDOM_STAT_COUNT := 4
 const PET_EQUIPMENT_RANDOM_STAT_KEY := "随机属性"
 const PET_EQUIPMENT_TEMPLATE_STAT_KEYS := [
@@ -2773,11 +2772,6 @@ func get_equipment_strength_max_level(item: Dictionary = {}, item_id: String = "
 		and resolved_item_id not in ["cjxianjie", "cdxianjie", "zhxianjie"]
 	):
 		return 0
-	var quality := str(item.get(DataKeys.QUALITY, nested.get(DataKeys.QUALITY, ""))).strip_edges()
-	if quality == "" and EquipmentService.has(StringName(resolved_item_id)):
-		quality = EquipmentService.definition(StringName(resolved_item_id)).quality.strip_edges()
-	if quality == "" or STANDARD_STRENGTH_QUALITIES.has(quality):
-		return 30
 	return PET_EQUIPMENT_MAX_STRENGTH_LEVEL
 
 

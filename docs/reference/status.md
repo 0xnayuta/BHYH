@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 35 的 7.1 回植进行中（35-1 完成），Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -29,7 +29,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 7.0 回植复跑） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 35-1 复跑） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
@@ -42,9 +42,9 @@
 | UI 表面色 token | **main_menu 0 裸色；StyleBox 0 处 / 0 新增**（`ui_surface_token_audit.py --check`，self-test 11/11） |
 | UI Theme 直接覆盖 | **直接属性 0 / 动画轨道 26 / 直接字体 0**（`theme_override_audit.py --check`） |
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
-| `health_check` | **794 脚本 0 Parse / 0 Error / 0 Warning** |
+| `health_check` | **796 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（7.0 回植复跑） |
-| `scene_probe_runner` | **7.0 全量 20 项：20 PASS**；`longnv-core` PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
+| `scene_probe_runner` | **35-1 全量 20 项：20 PASS**；`longnv-core` PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
 | `coop_probe_runner` | **37/37 PASS**（7.0 回植复跑，含 2P 相机/HUD/推图） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
 | 全量关卡回归 | **PASS 128/128 + SKIP 5，FAIL 0**（6.9 基线；7.0 未重跑全量） |
@@ -62,6 +62,13 @@
 - **7.0 系统修复**：等级溢出经验循环、死亡/满级升级保护、P2 八仙坠落、青龙剑乘骑/下落、哪吒技能等级上限、宋帝王双人命中数、`jgz` 伤害倍率、`skill_grid` 20 行背景等已按 7.0 语义接入。
 - **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与目标设备性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
 - **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
+
+### 7.1 回植进行中（35-0 / 35-1）
+
+- **35-0**：已生成 7.1 反编译参考源码、19 个变更/测试场景与逐文件台账；7.1 清单新增 34、修改 41、删除 0，生产未映射 0，资源差异 0。
+- **35-1**：已接入 `PlayerData` 宠物装备强化上限、`MainSet` 技能特效透明度设置、`RoleSkillOpacity`、`RoleAttackMechanism`、`BaseMonster` 的 `yyb` 觉醒眩晕/5 倍天雷，以及 `SkillDamageFormulaData` 说明文本。
+- **边界**：当前内容版本仍为 **7.0**；7.1 尚未完成全部功能批次，`GameSet` 透明度滑条、Longnv 技能/关卡/场景批次仍待后续。PCK/release 与目标设备验证按用户决策暂缓，待 7.3 回植完成后统一验证。
+- **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 796 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS；`ui-theme` PASS；运行时诊断覆盖透明度、区域转发、宠物强化上限与 `yyb` 文本。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 

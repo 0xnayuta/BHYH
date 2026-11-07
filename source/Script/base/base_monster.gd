@@ -1860,9 +1860,30 @@ func role5_bullet(last_hurt, source_target = null):
 		return
 	if not get_player is Role5Hero:
 		return
+	var yinyang_awakened := (
+		get_player.has_method("_is_skill_awakened")
+		and bool(get_player.call("_is_skill_awakened", "yyb"))
+		and bool(get_player.call("_is_skill_awaken_enabled", "yyb"))
+	)
+	var tllz_awaken_guaranteed := passive_source is RoleBullet and bool(passive_source.get("tllz_awaken_extra"))
 	randomize()
-	if randi_range(0, 100) > 15:
+	if not tllz_awaken_guaranteed and randi_range(0, 100) > 15:
 		return
+	if yinyang_awakened and randf() < 0.3:
+		Global.add_buff(
+			self.buff,
+			{
+				"Name": "stun",
+				"AddTime": 1.0,
+				"ReduceInterval": 0,
+				"value": 0,
+				"CanAdd": false,
+				"CanRemove": true,
+				"AttackKind": "",
+				"DeBuff": true
+			}
+		)
+		call_deferred("check_add_buff")
 	var hurt_value = int(last_hurt * 0.3 + (s_level * 0.02))
 	Global.add_role_bullet(
 		get_player.bullet,
@@ -2023,6 +2044,16 @@ func get_role_last_hurt(target, source_player: BaseHero = null):
 		hurt = target.last_value
 		hurt_lx = str(target.buff_info.get("AttackKind", ""))
 	if is_instance_valid(attack_source):
+		if (
+			attack_source is Role5Hero
+			and attack_source.has_method("_is_skill_awakened")
+			and bool(attack_source.call("_is_skill_awakened", "yyb"))
+			and bool(attack_source.call("_is_skill_awaken_enabled", "yyb"))
+			and is_stun
+			and target is RoleBullet
+			and target._name == "Role5Bullet6"
+		):
+			hurt *= 5
 		var monster149_buff_until := int(attack_source.get_meta("monster149_buff_until", 0))
 		if monster149_buff_until > 0:
 			if Time.get_ticks_msec() < monster149_buff_until:

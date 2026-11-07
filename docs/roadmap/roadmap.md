@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.0。Phase 12~34 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 长期暂缓；当前无活跃候选。
+> **当前版本**：7.0（Phase 35 的 7.1 回植进行中）。Phase 12~34 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 长期暂缓；Phase 35 为当前活跃阶段。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -39,6 +39,7 @@
 | Phase 32 UI Theme 契约 | 完成、归档 | [`iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)；当前契约 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) |
 | Phase 33 装备数据契约 | 完成、归档 | [`iteration_33_equipment_data_contract.md`](../archive/iteration_33_equipment_data_contract.md)；当前契约 [`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
+| Phase 35 7.1 内容回植 | **进行中（35-1 完成）** | [`status.md`](../reference/status.md)；Phase 35 目标锁定 7.1，7.2/7.3 后续独立立项 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
@@ -103,6 +104,8 @@ Windows release 的已有验证见 [`status.md`](../reference/status.md)。后�
 只有目标版本、合法来源与范围确认后才进入活动批次；按三方语义合并接入当前总体架构，不恢复旧路径/旧后端/旧存档迁移链。
 
 7.0 回植已完成角色 8 小龙女、2P、角色选择/技能页/自动战斗、背包/幻化/翅膀/坐骑与 7.0 系统修复；当前验证与边界见 [`status.md`](../reference/status.md)。7.0 release PCK、全量关卡回归与外部云存档服务差异不在本轮 gameplay 收口内。
+
+Phase 35 锁定 7.1，已完成 35-0 参考工程/台账与 35-1 基础数据/攻击区域；35-2 及以后继续处理 Longnv、关卡/场景、菜单/UI。7.2/7.3 待各自独立立项，不混入 7.1。
 
 ## 5. 跨阶段纪律与验收
 

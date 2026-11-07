@@ -38,6 +38,7 @@ var set_data: Dictionary = {
 	"MonsterBloodTextSHow": false,
 	"MonsterLittleBlood": true,
 	"ShowDamageText": true,
+	"SkillEffectOpacity": 100,
 	"MusicFB": 0,
 	"MusicFB_2": 0,
 	"NoShowMonsterBody": true,
@@ -74,6 +75,19 @@ var set_data: Dictionary = {
 	"CdNum": 6,
 	"FrameRate": get_default_frame_rate(),
 }
+
+
+func _ready() -> void:
+	var skill_opacity := preload("res://Script/hero/role_skill_opacity.gd").new()
+	add_child(skill_opacity)
+
+
+func get_skill_effect_opacity() -> float:
+	return clampf(float(set_data.get("SkillEffectOpacity", 100)), 0.0, 100.0) / 100.0
+
+
+func set_skill_effect_opacity(percent: float) -> void:
+	set_data["SkillEffectOpacity"] = clampf(percent, 0.0, 100.0)
 
 
 func is_auto_battle_enabled() -> bool:
