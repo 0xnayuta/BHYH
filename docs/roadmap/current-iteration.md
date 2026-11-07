@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 37 7.3 内容回植（37-0~37-3 批次完成；L3 待收口）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
-> **版本**：7.2 内容基线；7.3 回植进行中，尚未升级版本标记。
+> **状态**：**Phase 37 7.3 内容回植完成（37-0~37-4 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
+> **版本**：7.3 内容基线；PCK/release 与目标设备验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -59,15 +59,15 @@
 - **后续批次**：无；Phase 36 已关闭，PCK/release 与目标设备验证按用户决策暂缓。
 - **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证；7.3 未立项。
 
-### 1.5 Phase 37 7.3 内容回植（37-0 参考工程与初版台账完成）
+### 1.5 Phase 37 7.3 内容回植（完成，L3 已通过）
 
 - **目标**：7.3 内容回植；base 为 7.2 反编译参考，ours 为当前 7.2 治理工程，theirs 为 7.3 反编译参考。
 - **37-0**：7.3 二进制、SGXZ 解密和逐文件清单已校验；目录与全部 40,275 个文件块通过 MD5 校验；参考树已生成 774 个 `.gd` 与 1,152 个 `.tscn`；初版台账记录 49 个生产脚本修改、1 个新增生产脚本，生产脚本删除 0。
-- **37-1**：数据/资产与截教接入完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个新增图标已从 7.3 `.ctex` 恢复为源 PNG，装备构建源新增 38 条定义（16 个八级宝石、2 个天庭魂晶、20 个截教魂晶）并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落、`LevelInfo` 预览和 `PlayerData` effects/consumption 已接入；最终资产闭包复核待办。
+- **37-1**：数据/资产与截教接入完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个上游新增图标已复核：36 个进入运行期引用闭包（16 个八级宝石/精粹、20 个截教魂晶），1 个无消费者 `1301` 已移出；装备构建源新增 38 条定义并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落、`LevelInfo` 预览和 `PlayerData` effects/consumption 已接入；资产引用闭包、Atlas/FrameSequence 与导出清单复核已完成。
 - **37-2**：角色与技能内容完成；NeZha/Yutu 重叠伤害与月舞碰撞掩码、EastContinentMonster 3120 传送、Level 47–75 宝石精粹掉落/预览均已接入。
 - **37-3**：系统、菜单/UI 与公告文本完成；万灵图录截教分栏、V7.3 公告、招财铃铛、仙戒神铸、分解返还、8 级宝石配方与天庭噩梦进度已接入。
-- **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异，最后接入侵入性系统。
-- **37-5**：L3 收口；PCK/release 与目标设备验证按用户决策另行执行。
+- **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异完成；`BaseBuff` 拥有者属性/数据、Buff 图标 HUD 归属与 `MonsterHeadInfo` 操作者已修正；2P 相机、灵气、HUD 与操作者探针收口。
+- **37-5**：L3 收口完成（`check_all` 9/9、全量关卡 128/128 + 5 SKIP、coop 38/38、scene 26/26、archive 344/344、level_1 四阶段通过）；PCK/release 与目标设备验证按用户决策另行执行。
 - **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。
 
 ---
