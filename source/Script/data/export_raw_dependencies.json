@@ -2696,6 +2696,166 @@
       "bytes": 503
     },
     {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou1/poses.bin",
+      "bytes": 189612
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou1/poses.json",
+      "bytes": 7078
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou1_effect1/poses.bin",
+      "bytes": 216
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou1_effect1/poses.json",
+      "bytes": 927
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2/poses.bin",
+      "bytes": 190692
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2/poses.json",
+      "bytes": 6256
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect1/poses.bin",
+      "bytes": 288
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect1/poses.json",
+      "bytes": 980
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect2_1/poses.bin",
+      "bytes": 7056
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect2_1/poses.json",
+      "bytes": 2172
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect2_2/poses.bin",
+      "bytes": 2304
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou2_effect2_2/poses.json",
+      "bytes": 1349
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3/poses.bin",
+      "bytes": 295056
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3/poses.json",
+      "bytes": 7212
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect1/poses.bin",
+      "bytes": 720
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect1/poses.json",
+      "bytes": 1086
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect1_1/poses.bin",
+      "bytes": 504
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect1_1/poses.json",
+      "bytes": 1074
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect2/poses.bin",
+      "bytes": 2160
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect2/poses.json",
+      "bytes": 1292
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect2_1/poses.bin",
+      "bytes": 3384
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou3_effect2_1/poses.json",
+      "bytes": 1603
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4/poses.bin",
+      "bytes": 281772
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4/poses.json",
+      "bytes": 6534
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1/poses.bin",
+      "bytes": 864
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1/poses.json",
+      "bytes": 1122
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1_1/poses.bin",
+      "bytes": 504
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1_1/poses.json",
+      "bytes": 1074
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1_2/poses.bin",
+      "bytes": 504
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect1_2/poses.json",
+      "bytes": 1074
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2/poses.bin",
+      "bytes": 2160
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2/poses.json",
+      "bytes": 1306
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_1/poses.bin",
+      "bytes": 2304
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_1/poses.json",
+      "bytes": 1412
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_2/poses.bin",
+      "bytes": 1224
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_2/poses.json",
+      "bytes": 1176
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_3/poses.bin",
+      "bytes": 2160
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou4_effect2_3/poses.json",
+      "bytes": 1304
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou_effect2_1/poses.bin",
+      "bytes": 7056
+    },
+    {
+      "path": "res://Art/pet/pet_nian/official_parts/nianshou_effect2_1/poses.json",
+      "bytes": 2166
+    },
+    {
       "path": "res://data/zmws_config/achievementname.json",
       "bytes": 2797
     },

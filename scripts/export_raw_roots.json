@@ -57,6 +57,14 @@
       "consumer": "NorthOriginalData"
     },
     {
+      "path": "res://Art/pet/pet_nian/official_parts/",
+      "extensions": [
+        ".json",
+        ".bin"
+      ],
+      "consumer": "PetNianSummonBase / PetNianEffect / PetNianParts"
+    },
+    {
       "path": "res://data/zmws_config/",
       "extensions": [
         ".json"
