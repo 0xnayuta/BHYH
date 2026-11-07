@@ -24,6 +24,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `dragonbones-armature`：ZMWS 批量导出的 .dbfactory 经 DragonBonesArmatureView 实例化、
   播放 `appear_1`、时间轴推进与 seek，并记录首次/热实例化开销与 8 实例稳态帧时间。
 - `pet-runtime`：宠物树外初始化属性（预热路径）、HUD 头像构建期帧解析与寅虎帧绝对时长。
+- `pet-nian`：年兽 1–4 阶数据、召唤场景、官方部件、效果与档案/2P 接入。
+- `awaken-72`：7.2 首批觉醒（重斩/玄冰阵/哪吒双火轮/月魔舞）与觉醒弹窗、技能面板、材料。
 """
 
 from __future__ import annotations
@@ -341,6 +343,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         result_prefix="PET_NIAN_RUNTIME_PROBE_RESULT=",
         report_stem="pet_nian_runtime_probe_report",
         teardown_marker="PET_NIAN_RUNTIME_PROBE_TEARDOWN",
+        quit_after_frames=900,
+        timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="awaken-72",
+        title="7.2 首批觉醒运行时探针",
+        script_name="awaken_72_probe.gd",
+        scene_name="awaken_72_probe.tscn",
+        result_prefix="AWAKEN_72_PROBE_RESULT=",
+        report_stem="awaken_72_probe_report",
+        teardown_marker="AWAKEN_72_PROBE_TEARDOWN",
         quit_after_frames=900,
         timeout_seconds=180,
     ),

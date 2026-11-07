@@ -27,6 +27,35 @@ var moon_attack_bonus := 0.0
 var _moon_until := 0.0
 var _potion_label: Label
 var _dance_hits: Dictionary = {}
+var _dance_shadow_hits: Dictionary = {}
+var _dance_shadows: Array[Sprite2D] = []
+
+
+func is_dance_awaken_active() -> bool:
+	var unlocked: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED, {})
+	var enabled: Variant = PlayerData.player_data.get(DataKeys.Skill.AWAKENED_ENABLED, {})
+	return (
+		unlocked is Dictionary
+		and bool(unlocked.get("yt_ymw", false))
+		and (not enabled is Dictionary or bool(enabled.get("yt_ymw", true)))
+	)
+
+
+func _begin_dance_shadows() -> void:
+	_dance_shadow_hits = {-1: {}, 1: {}}
+	for side in [-1, 1]:
+		var shadow := Sprite2D.new()
+		shadow.set_script(preload("res://Script/hero/yutu_official_parts.gd"))
+		shadow.texture = role_body.texture
+		shadow.offset = role_body.offset
+		shadow.scale = role_body.scale
+		shadow.position = role_body.position + Vector2(side * 180, 0)
+		shadow.modulate = Color(0.65, 0.8, 1.0, 0.65)
+		role_body.get_parent().add_child(shadow)
+		shadow.load_set("default")
+		shadow.set_equipment(role_body.body_equipment, role_body.weapon_equipment)
+		shadow.set_pose("skill5", 0)
+		_dance_shadows.append(shadow)
 
 
 func on_yutu_damage_dealt(target: BaseMonster, source: Node) -> void:
@@ -38,7 +67,11 @@ func on_yutu_damage_dealt(target: BaseMonster, source: Node) -> void:
 		level <= 0
 		or (
 			attack_data is Dictionary
-			and (bool(attack_data.get("yutu_mark_proc", false)) or bool(attack_data.get("yutu_poison_damage", false)))
+			and (
+				bool(attack_data.get("yutu_mark_proc", false))
+				or bool(attack_data.get("yutu_poison_damage", false))
+				or bool(attack_data.get("yutu_dance_shadow", false))
+			)
 		)
 	):
 		return
@@ -57,6 +90,12 @@ func on_yutu_damage_dealt(target: BaseMonster, source: Node) -> void:
 		if source is YutuSkillEffect and source.moon_wheel_awakened and source.skill_id in ["1112030", "1112031"]
 		else 1
 	)
+	if (
+		source is YutuSkillEffect
+		and source.skill_id == "1112050"
+		and bool(source.hit_dic.get("yutu_dance_awakened", false))
+	):
+		mark_count = 2
 	for _index in range(mark_count):
 		if mark.call("add_mark"):
 			_spawn_mark_strike.call_deferred(weakref(target), level, float(RoleProp.roleprop.power))
@@ -195,6 +234,8 @@ func get_skill(skill_name):
 	_active_id = YutuSkillData.IDS[index]
 	if _active_id == "1112050":
 		_dance_hits = {}
+		if is_dance_awaken_active():
+			_begin_dance_shadows()
 	_events = JSON.parse_string(str(YutuSkillData.row(_active_id).get("param", "[]")))
 	_clock = 0.0
 	_motion_until = 0.0
@@ -259,10 +300,18 @@ func _physics_process(delta: float) -> void:
 			_finish_action()
 		else:
 			_clock += delta
+			for shadow in _dance_shadows:
+				if is_instance_valid(shadow):
+					shadow.set_time("skill5", _clock)
 			_tick_events()
 			if _clock >= _action_end:
 				_finish_action()
 	var start := position
+	var dance_velocity: float = (
+		PlayerInput.get_axis("move_left", "move_right") * walk_speed * 0.7
+		if _active_id == "1112050" and is_dance_awaken_active()
+		else 0.0
+	)
 	var motion_active := _motion_until - _clock > 1e-05 and _active_id != ""
 	var lock_gravity := _gravity_until > _clock and _active_id != ""
 	if motion_active:
@@ -274,6 +323,17 @@ func _physics_process(delta: float) -> void:
 	if (motion_active or lock_gravity) and not is_on_floor():
 		velocity.y += gravity * delta
 	super._physics_process(delta)
+	if (
+		_active_id == "1112050"
+		and is_dance_awaken_active()
+		and is_using_skills
+		and absf(position.x - start.x) < absf(dance_velocity * delta) * 0.5
+	):
+		velocity.x = dance_velocity
+		var old_y := velocity.y
+		velocity.y = 0.0
+		move_and_slide()
+		velocity.y = old_y
 	if is_death:
 		_finish_action()
 		return
@@ -295,6 +355,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _finish_action() -> void:
+	for shadow in _dance_shadows:
+		if is_instance_valid(shadow):
+			shadow.queue_free()
+	_dance_shadows.clear()
 	if _motion_until > 0.0 or _gravity_until > 0.0:
 		velocity = Vector2.ZERO
 	_events.clear()
@@ -387,6 +451,14 @@ func spawn_skill_events(id: String, level: int, world_position: Vector2) -> void
 func _spawn_event(
 	event: Dictionary, id: String, level: int, world_position: Vector2, dance_hits: Dictionary = {}
 ) -> void:
+	if id == "1112050" and is_dance_awaken_active() and not event.has("yutu_dance_side"):
+		for side in [-1, 0, 1]:
+			var branch := event.duplicate(true)
+			branch["yutu_dance_side"] = side
+			if side != 0 and not _dance_shadow_hits.has(side):
+				_dance_shadow_hits[side] = {}
+			_spawn_event(branch, id, level, world_position, dance_hits if side == 0 else _dance_shadow_hits[side])
+		return
 	var names: Array = event.get("assetLink", [])
 	if names.is_empty() or not is_instance_valid(bullet):
 		return
@@ -421,6 +493,10 @@ func _spawn_event(
 		"attackKind": "physics" if bank == "blade" else "magic",
 		"WSValue": 4
 	}
+	if event.has("yutu_dance_side"):
+		hit["power"] = (float(hit["power"]) * 1.5 * (1.0 if int(event["yutu_dance_side"]) == 0 else 0.7))
+		hit["yutu_dance_awakened"] = true
+		hit["yutu_dance_shadow"] = int(event["yutu_dance_side"]) != 0
 	if id == "melee":
 		bank = "blade"
 		hit.power = float(RoleProp.roleprop.power) * (1.5 if _combo == 0 else 1.1 if _combo == 4 else 1.0)
@@ -432,6 +508,7 @@ func _spawn_event(
 		effect.effect_name = effect_name
 		effect.skill_id = damage_id
 		effect.skill_level = level
+		effect.dance_side = int(event.get("yutu_dance_side", 0))
 		effect.moon_wheel_awakened = (damage_id in ["1112030", "1112031"] and is_moon_wheel_awaken_active())
 		effect.poison_needle_awakened = needle_awakened
 		effect.poison_powder_awakened = damage_id == "1111010" and is_powder_awaken_active()

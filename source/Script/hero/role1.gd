@@ -30,6 +30,9 @@ var interv: int
 var shallow_list: Array
 var w_is_press: bool
 const GSRS_ZZ_ACTION := &"gsrs_zz_action"
+const ZZ_AWAKEN_ACTION := &"zz_awaken"
+const AWAKEN_AREA := preload("res://Script/hero/first_batch_awaken_area.gd")
+const AWAKEN_AREA_SCENE := preload("res://Scene/hero/role_6/ne_zha_skill_effect.tscn")
 
 
 func get_gsrs_defense_reduction(adjusted_skill_level: int) -> float:
@@ -95,6 +98,55 @@ func _prepare_gsrs_zz_action() -> bool:
 	animation.resource_name = String(GSRS_ZZ_ACTION)
 	library.add_animation(GSRS_ZZ_ACTION, animation)
 	return true
+
+
+func _skill_super_armor_active() -> bool:
+	return (
+		(get_action == "zz" and is_using_skills and _is_skill_awakened("zz") and _is_skill_awaken_enabled("zz"))
+		or super._skill_super_armor_active()
+	)
+
+
+func _prepare_zz_awaken_action() -> bool:
+	if role_action_player.has_animation(ZZ_AWAKEN_ACTION):
+		return true
+	var source := role_action_player.get_animation(&"zz")
+	var library := role_action_player.get_animation_library(&"")
+	if source == null or library == null:
+		return false
+	var action := source.duplicate(true) as Animation
+	for track in range(action.get_track_count() - 1, -1, -1):
+		var path := String(action.track_get_path(track))
+		if path.begins_with("base_damagebox/HitBox"):
+			action.remove_track(track)
+		elif path == "RolePlayer:speed_scale":
+			action.track_set_key_value(track, 0, 6.0)
+	var method := action.add_track(Animation.TYPE_METHOD)
+	action.track_set_path(method, NodePath("."))
+	action.track_insert_key(method, 1.4, {"method": &"_spawn_zz_awaken_waves", "args": []})
+	library.add_animation(ZZ_AWAKEN_ACTION, action)
+	return true
+
+
+func _spawn_zz_awaken_waves() -> void:
+	var facing := player_dir
+	var origin := global_position
+	var hit: Dictionary = hit_dic.duplicate(true)
+	var base_power := float(hit.get("power", 0.0))
+	for index in range(3):
+		if not is_inside_tree() or is_death:
+			return
+		var effect := AWAKEN_AREA_SCENE.instantiate()
+		effect.set_script(AWAKEN_AREA)
+		effect.get_node("Middle/BulletPlayer").sprite_frames = lyfb_original_effect.sprite_frames
+		hit["power"] = base_power * pow(2.0, index + 1)
+		effect.configure(self, &"zz_2", hit, facing, 0.35, 0.0, 1, Vector2(180, 120))
+		effect.name = "zz_awaken"
+		bullet.add_child(effect)
+		effect.global_position = origin + Vector2((90 + index * 130) * (1 if facing else -1), -25)
+		effect.scale = Vector2.ONE * (1.0 + index * 0.3)
+		if index < 2:
+			await get_tree().create_timer(0.15, false).timeout
 
 
 func set_hmz_version(is_new: bool):
@@ -517,16 +569,25 @@ func do_zz():
 	self.role1_skill_inter["zz"] = 1.2
 	velocity.x = 0
 	get_action = "zz"
-	set_shallowaction("zz")
+	var awakened := _is_skill_awakened("zz") and _is_skill_awaken_enabled("zz")
+	if awakened:
+		awakened = _prepare_zz_awaken_action()
+	if not awakened:
+		set_shallowaction("zz")
 	is_using_skills = true
 	super.get_hit_data("zz")
 	is_attacking = true
 
-	role_action_player.play("zz")
+	if awakened:
+		lyfb_hit_shape.set_deferred("disabled", true)
+		super_armor_active = true
+	role_action_player.play(ZZ_AWAKEN_ACTION if awakened else &"zz")
 	await role_action_player.animation_finished
 	turn_to_wait()
 	is_attacking = false
 	is_using_skills = false
+	if awakened:
+		super_armor_active = false
 	return
 
 

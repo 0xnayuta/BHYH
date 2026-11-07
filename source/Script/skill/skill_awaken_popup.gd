@@ -29,6 +29,8 @@ func configure(skill_name: String, icon: Texture2D, internal_skill_id: String) -
 
 
 func _is_supported_awaken_skill(id: String) -> bool:
+	if id in ["zz", "xbz", "nz_hlqg", "yt_ymw"]:
+		return true
 	return (
 		id
 		in [
@@ -85,7 +87,15 @@ func _refresh_awaken_state() -> void:
 	var awakened := _is_skill_awakened(skill_id)
 	$Status.text = "已觉醒" if awakened else "觉醒效果"
 	var effect_description := ""
-	if skill_id == "jhsj":
+	if skill_id == "zz":
+		effect_description = "前后摇减半，施放期间霸体；砸地向前依次爆发三道地裂，间隔0.15秒，伤害依次为未觉醒重斩的2倍、4倍、8倍，越远范围越大"
+	elif skill_id == "xbz":
+		effect_description = "冰刺增加至5段，每段伤害提高至2倍，并各自留下持续3秒的冰域，每0.5秒造成一次未觉醒冰刺伤害；最后一段命中冰冻2秒，冰域不刷新冰冻"
+	elif skill_id == "nz_hlqg":
+		effect_description = "每次释放增加2个环绕火轮，可重复叠加，每组独立持续8秒，切割及火轮单次伤害提高至2倍；每组环绕结束后自动向前投出，伤害并击退沿途敌人，随后返回"
+	elif skill_id == "yt_ymw":
+		effect_description = "主体伤害提高至1.5倍，左右各召唤一个月影同步施放，每个月影造成主体70%的伤害；主体每次命中叠加2层月印，月影不叠印；施放时可缓慢移动并免疫击退"
+	elif skill_id == "jhsj":
 		effect_description = "额外召唤光柱攻击"
 	elif skill_id == "smb":
 		effect_description = "50%概率额外释放1次水魔爆\n20%概率额外释放2次水魔爆"
@@ -266,7 +276,9 @@ func _on_confirm_pressed() -> void:
 			)
 		)
 	)
-	if skill_id == "tllz":
+	if skill_id in ["zz", "xbz", "nz_hlqg", "yt_ymw"]:
+		skill_display_name = {"zz": "重斩", "xbz": "玄冰阵", "nz_hlqg": "火轮切割", "yt_ymw": "月魔舞"}[skill_id]
+	elif skill_id == "tllz":
 		skill_display_name = "天龙雷阵"
 	elif skill_id == "fhf":
 		skill_display_name = "翔龙闪"

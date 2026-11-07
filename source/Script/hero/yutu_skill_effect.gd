@@ -39,6 +39,7 @@ var _wheel_scan_elapsed := 0.0
 var _dance_pulse := -1
 var dance_hits: Dictionary = {}
 var _bounds_frame := -1
+var dance_side := 0
 
 
 func _ready() -> void:
@@ -151,6 +152,8 @@ func _physics_process(delta: float) -> void:
 		direction = player.player_dir
 		follow_offset.x = absf(follow_offset.x) * (1.0 if direction else -1.0)
 		global_position = player.global_position + follow_offset
+		if skill_id == "1112050":
+			global_position.x += dance_side * 180.0
 		middle.scale.x = 1.0 if direction else -1.0
 	else:
 		var previous_position := global_position
@@ -192,7 +195,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			for area: Area2D in hit_box.get_overlapping_areas():
 				var target := _get_monster_from_hit_area(area)
-				if target != null and not target.cannot_attract:
+				if target != null and not target.cannot_attract and not target.is_control_immune():
 					_pull_targets[target.get_instance_id()] = {"target": weakref(target), "until": elapsed + 1.034}
 		var pull_speed := (
 			float(YutuSkillData.buff_row("1710007", skill_level).get("attributeV1", "23"))
@@ -205,6 +208,7 @@ func _physics_process(delta: float) -> void:
 				not is_instance_valid(target)
 				or target.is_death
 				or target.cannot_attract
+				or target.is_control_immune()
 				or elapsed > float(entry.until)
 			):
 				_pull_targets.erase(key)
@@ -240,7 +244,7 @@ func _collect_awakened_wheel_targets() -> void:
 		if not player.is_auto_battle_target_valid(candidate):
 			continue
 		var target := candidate as BaseMonster
-		if target.cannot_attract:
+		if target.cannot_attract or target.is_control_immune():
 			continue
 		var screen_position := target.get_global_transform_with_canvas() * Vector2(0, -40)
 		if screen.has_point(screen_position):

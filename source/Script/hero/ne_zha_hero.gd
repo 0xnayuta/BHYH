@@ -196,6 +196,7 @@ var _effect_scene: PackedScene
 var _yinyang_effect_scene: PackedScene
 var _body_equipment_id := "Empty"
 var _weapon_equipment_id := "Empty"
+var _awaken_wheels: Array[NeZhaSkillEffect] = []
 
 
 func _ready() -> void:
@@ -737,21 +738,45 @@ func _use_fire_dash() -> void:
 
 
 func _use_fire_wheel() -> void:
+	var awakened := _is_skill_awakened(SKILL_WHEEL) and _is_skill_awaken_enabled(SKILL_WHEEL)
 	var skill_generation := _begin_skill(&"skill3", SKILL_WHEEL)
 	_add_spear_energy(15)
 	await _wait_frames(2)
 	if not _is_skill_execution_current(skill_generation, SKILL_WHEEL):
 		return
-	_spawn_effect(&"effect3_0", obj_attack_dict[SKILL_WHEEL], 0.4, 1.0, 1, Vector2(150, 75), Vector2.ZERO, true)
+	var hit: Dictionary = obj_attack_dict[SKILL_WHEEL].duplicate(true)
+	if awakened:
+		hit["power"] = float(hit["power"]) * 2.0
+	_spawn_effect(&"effect3_0", hit, 0.4, 1.0, 1, Vector2(150, 75), Vector2.ZERO, true)
 	await _wait_frames(6)
 	if not _is_skill_execution_current(skill_generation, SKILL_WHEEL):
 		return
-	var wheel := _spawn_effect(&"effect3_1", obj_attack_dict[SKILL_WHEEL], 5.0, 1.0, 5, Vector2.ZERO)
-	wheel.orbit_target = self
-	wheel.orbit_radii = Vector2(250, 25)
-	wheel.orbit_offset = Vector2(0, -50)
-	wheel.orbit_angle = 1.5 * PI
-	wheel.orbit_speed = TAU
+	if awakened:
+		_awaken_wheels = _awaken_wheels.filter(
+			func(wheel: NeZhaSkillEffect) -> bool:
+				return is_instance_valid(wheel) and not wheel.is_queued_for_deletion()
+		)
+	for index in range(2 if awakened else 1):
+		var wheel: NeZhaSkillEffect
+		if awakened:
+			wheel = _get_effect_scene().instantiate()
+			wheel.set_script(preload("res://Script/hero/ne_zha_awaken_wheel.gd"))
+			wheel.configure(self, &"effect3_1", hit, player_dir, 8.0, 1.0, 8, Vector2.ZERO)
+			get_parent().get_parent().add_child(wheel)
+			_awaken_wheels.append(wheel)
+		else:
+			wheel = _spawn_effect(&"effect3_1", hit, 5.0, 1.0, 5, Vector2.ZERO)
+		if awakened:
+			wheel.use_visual_collision = true
+			wheel._update_visual_collision()
+		wheel.orbit_target = self
+		wheel.orbit_radii = Vector2(250, 25)
+		wheel.orbit_offset = Vector2(0, -50)
+		wheel.orbit_angle = 1.5 * PI + index * PI
+		wheel.orbit_speed = TAU
+		wheel.global_position = (
+			global_position + wheel.orbit_offset + Vector2(250 * cos(wheel.orbit_angle), 25 * sin(wheel.orbit_angle))
+		)
 	await role_action_player.animation_finished
 	if _is_skill_execution_current(skill_generation, SKILL_WHEEL):
 		_finish_skill(skill_generation)

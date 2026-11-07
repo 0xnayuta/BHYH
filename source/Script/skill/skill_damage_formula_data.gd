@@ -100,6 +100,7 @@ static func get_skill_detail(role_id: int, skill_id: String, stored_level: int, 
 			)
 		if skill_id == "yt_ymw":
 			lines.append("同一目标每次释放最多受到%d段伤害，需处于攻击范围内。" % YutuSkillData.MOON_DANCE_HITS)
+			lines.append("觉醒：主体每段伤害×1.5，左右月影各造成主体70%的伤害；主体每次命中叠加2层月印，月影不叠印。三者均完整命中时直接伤害为未觉醒3.6倍。")
 		elif skill_id == "yt_yl":
 			lines.append("旋转阶段持续5秒，每%s秒可再次造成伤害。" % _number(YutuSkillData.MOON_WHEEL_INTERVAL_MS / 1000.0))
 			lines.append("觉醒：牵引全屏怪物（包括空中目标），每次伤害叠加2层月印。")
@@ -151,7 +152,13 @@ static func _role_1(skill_id: String, stored_level: int) -> Dictionary:
 				]
 			)
 		"zz":
-			return _detail("物理伤害", [_attack_formula("伤害", 4.0, 0.5, level)])
+			return _detail(
+				"物理伤害",
+				[
+					_attack_formula("伤害", 4.0, 0.5, level),
+					"觉醒：三道地裂依次为上述伤害2倍、4倍、8倍，间隔0.15秒，前后摇减半并霸体。",
+				]
+			)
 		"qsez":
 			return _detail(
 				"物理伤害", [_attack_formula("每段", 0.07, 0.02, level), "残影伤害继承：本次技能伤害 × %s。" % _percent(0.7 + level * 0.03)]
@@ -194,6 +201,7 @@ static func _role_2(skill_id: String, stored_level: int, all_levels: Dictionary)
 				"魔法伤害",
 				[
 					_attack_formula("每段冰刺（共3段）", 0.75, 0.075, level),
+					"觉醒：5段冰刺，每段伤害×2，且各自留下持续3秒的冰域，每0.5秒造成一次未觉醒冰刺伤害；最后一段冰冻2秒，冰域不刷新冰冻。",
 					"水精通触发冰冻：%s，持续%s秒。" % [_percent((3.0 + mastery * 0.5) / 100.0), _number(1.0 + mastery * 0.1)],
 					"目标处于紧箍咒中时，冰冻概率再增加：紧箍咒Lv × 3.5%。",
 				]
@@ -511,7 +519,13 @@ static func _role_6(skill_id: String, stored_level: int) -> Dictionary:
 		"nz_fhcc":
 			return _detail("物理伤害", [_attack_formula_clamped("每段（共3段）", 0.8504, 0.26, stored_level)])
 		"nz_hlqg":
-			return _detail("物理伤害", [_attack_formula_clamped("切割及环绕火轮每段", 0.8504, 0.22, stored_level)])
+			return _detail(
+				"物理伤害",
+				[
+					_attack_formula_clamped("切割及环绕火轮每段", 0.8504, 0.22, stored_level),
+					"觉醒：切割及火轮伤害×2；每次新增双轮可叠加，每组独立环绕8秒后自动向前投出，沿途攻击后返回。",
+				]
+			)
 		"nz_hlhs":
 			return _detail("治疗 / 强化", ["无直接伤害。每层充能治疗：8 + 攻击 × 2% × Lv。", "觉醒时每层充能提高攻击：Lv × 1%，最多5层。"])
 		"nz_lblc":

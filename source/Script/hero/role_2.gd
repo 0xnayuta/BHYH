@@ -2,6 +2,9 @@ extends BaseHero
 class_name Role2Hero
 
 const JHSJ_AWAKEN_EFFECT := preload("res://Scene/hero/role_special_effect_slim/jhsj_awaken_effect.tscn")
+const AWAKEN_AREA := preload("res://Script/hero/first_batch_awaken_area.gd")
+const AWAKEN_AREA_SCENE := preload("res://Scene/hero/role_6/ne_zha_skill_effect.tscn")
+const ROLE2_BULLET3_SCENE := preload("res://Scene/hero/role_bullet_slim/role2_bullet3.tscn")
 
 var zhw_list: Array = []
 var current_zhw_summon: Node2D = null
@@ -543,6 +546,9 @@ func add_sgq():
 
 
 func add_xbz():
+	if _is_skill_awakened("xbz") and _is_skill_awaken_enabled("xbz"):
+		_add_awakened_xbz()
+		return
 	var bullet_spawn_positions = [Vector2(-80, -15)]
 	var scale_list = [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1.5, 1.5)]
 	if !player_dir:
@@ -555,6 +561,55 @@ func add_xbz():
 		)
 		xbz.scale = scale_list[i]
 		await get_tree().create_timer(0.2, false).timeout
+
+
+func _add_awakened_xbz() -> void:
+	var origin := global_position
+	var facing := player_dir
+	var offsets: Array[Vector2] = [
+		Vector2(80, -15), Vector2(175, -20), Vector2(275, -25), Vector2(375, -30), Vector2(475, -35)
+	]
+	var scales: Array[float] = [1.0, 1.3, 1.5, 1.7, 1.9]
+	var hit: Dictionary = obj_attack_dict["xbz"].duplicate(true)
+	hit.erase("addeffect")
+	var frames_source := ROLE2_BULLET3_SCENE.instantiate()
+	var frames: SpriteFrames = frames_source.get_node("Middle/BulletPlayer").sprite_frames
+	frames_source.free()
+	for index in range(5):
+		if not is_inside_tree() or is_death:
+			return
+		var effect := AWAKEN_AREA_SCENE.instantiate()
+		effect.set_script(AWAKEN_AREA)
+		effect.get_node("Middle/BulletPlayer").sprite_frames = frames
+		var spike_hit := hit.duplicate(true)
+		spike_hit["power"] = float(hit["power"]) * 2.0
+		effect.configure(self, &"Role2Bullet3", spike_hit, facing, 0.54, 0.0, 1, Vector2(116, 136))
+		effect.name = "xbz_awaken_spike"
+		effect.freeze_seconds = 2.0 if index == 4 else 0.0
+		bullet.add_child(effect)
+		var offset: Vector2 = offsets[index]
+		effect.global_position = origin + Vector2(offset.x * (1 if facing else -1), offset.y)
+		effect.scale = Vector2.ONE * float(scales[index])
+
+		var spike_bottom: Vector2 = effect.global_position + Vector2(0, (166.0 - 181.0 * 0.5) * effect.scale.y)
+		_add_xbz_ice_field(spike_bottom, hit, frames)
+		if index < 4:
+			await get_tree().create_timer(0.2, false).timeout
+
+
+func _add_xbz_ice_field(at: Vector2, hit: Dictionary, frames: SpriteFrames) -> void:
+	var field := AWAKEN_AREA_SCENE.instantiate()
+	field.set_script(AWAKEN_AREA)
+	field.get_node("Middle/BulletPlayer").sprite_frames = frames
+	field.configure(self, &"Role2Bullet3", hit, player_dir, 3.0, 0.5, 6, Vector2(310, 90))
+	field.name = "xbz_awaken_field"
+	bullet.add_child(field)
+	field.global_position = at - Vector2(0, (161.0 - 181.0 * 0.5) * 0.45)
+	field.set_meta("xbz_spike_bottom", at.y)
+	field.bullet_player.scale = Vector2(1.8, 0.45)
+	field.bullet_player.modulate = Color(0.6, 0.85, 1.0, 0.65)
+	field.bullet_player.stop()
+	field.bullet_player.frame = 4
 
 
 func add_smb_1():
