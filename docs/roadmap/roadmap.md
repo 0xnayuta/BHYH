@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.2 内容基线；**Phase 37 的 7.3 内容回植进行中（37-0 参考工程与初版台账完成）**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3 PCK/release 长期暂缓；当前活跃候选为 Phase 37。
+> **当前版本**：7.2 内容基线；**Phase 37 的 7.3 内容回植进行中（37-0 完成；37-1 数据/资产部分完成）**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3 PCK/release 长期暂缓；当前活跃候选为 Phase 37。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
