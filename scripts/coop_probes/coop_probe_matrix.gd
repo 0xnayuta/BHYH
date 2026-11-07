@@ -140,6 +140,8 @@ func _run() -> void:
 			await _case_pet_neat()
 		"LocalCoopPetYinTigerProbe":
 			await _case_pet_yin_tiger()
+		"LocalCoopPetNianProbe":
+			await _case_pet_nian()
 		"LocalCoopSharedSoulProbe":
 			await _case_shared_soul()
 		"LocalCoopSlotLedgerProbe":
@@ -1637,6 +1639,119 @@ func _case_pet_yin_tiger() -> void:
 	stage = null
 	await process_frame
 
+
+
+## 36-3 年兽族：四阶、阶段技能、档案默认条目、P2 写回、死亡别名与双槽生成。
+func _case_pet_nian() -> void:
+	coop.create_secondary(7)
+	await _make_stage()
+	var family = load("res://Script/pet/pet_nian_family.gd").new()
+	var family_pet := _pet_probe_data("PetNian", "年宝", 1000)
+	family_pet["等级"] = 30
+	family_pet["阶段"] = 1
+	_check(family.matches(family_pet), "nian family matches type")
+	_check(family.matches({"名称": "大年兽"}), "nian family matches display name")
+	_check(not family.matches({"名称": "寅虎元帅"}), "nian family rejects yin tiger name")
+	family.normalize_spawn(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 3, "nian normalize uses level stage")
+	_check(str(family_pet.get("名称", "")) == "年兽", "nian normalize updates display name")
+	_check((family_pet.get("技能", []) as Array).has("年兽爆炎"), "nian normalize applies stage 3 skills")
+	_check(int(family_pet.get("生命资质基础上限", 0)) == 3500, "nian normalize sets base stat limits")
+	family_pet["等级"] = 50
+	family.evolve(family_pet, coop.secondary_data)
+	_check(int(family_pet.get("阶段", 0)) == 4, "nian evolve reaches stage 4")
+	_check(str(family_pet.get("名称", "")) == "大年兽", "nian evolve updates display name")
+	_check((family_pet.get("技能", []) as Array).has("年兽奥义"), "nian evolve applies stage 4 skills")
+	_check(str(coop.secondary_data.player_data.get("出战宠物", "")) == "PetNian", "nian evolve writes P2 active")
+	_check(family.scene_path(4) == "res://Scene/pet/pet_nian_summon_4.tscn", "nian scene path")
+	var aliases: Array[String] = ["年宝"]
+	family.append_death_aliases(aliases, "年宝")
+	_check(aliases.has("PetNian") and aliases.has("大年兽"), "nian death aliases")
+
+	# 档案默认条目与归一化：P1/P2 各自补全，不共享同一份宠物字典。
+	data.ensure_pet_nian()
+	coop.secondary_data.ensure_pet_nian()
+	var p1_pet := _find_pet_entry(data, "PetNian")
+	var p2_pet := _find_pet_entry(coop.secondary_data, "PetNian")
+	_check(not p1_pet.is_empty() and not p2_pet.is_empty(), "both slots have nian entry")
+	_check(p1_pet != p2_pet, "nian entries are slot-owned")
+	_check(int(p1_pet.get("等级", 0)) == 1, "nian default level")
+	_check(str(p1_pet.get("类型", "")) == "PetNian", "nian default type")
+	_check((p1_pet.get("技能", []) as Array) == ["年兽扑击"], "nian default stage 1 skill")
+	_check(not bool(p1_pet.get("出战", true)), "nian default not deployed")
+
+	var alias_level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	var level_aliases: Array[String] = alias_level._active_pet_dead_aliases("年兽")
+	_check(level_aliases.has("PetNian") and level_aliases.has("大年兽"), "BaseLevel nian death aliases")
+	alias_level.free()
+	var panel: Node = load("res://Scene/pet/pet_interface.tscn").instantiate()
+	var panel_aliases: Array[String] = panel._pet_dead_aliases("大年兽")
+	_check(panel_aliases.has("PetNian") and panel_aliases.has("年宝"), "PetInterface nian death aliases")
+	panel.free()
+
+	# BaseMonster 升级写回：P2 从 49 升到 50 只改 P2，P1 保持阶段 1。
+	data.player_data["玩家等级"] = 50
+	coop.secondary_data.player_data["玩家等级"] = 50
+	data.player_data["玩家当前经验"] = 0
+	coop.secondary_data.player_data["玩家当前经验"] = 0
+	var props: Node = root.get_node("RoleProp")
+	props.baseroleprop.Level = 50
+	props.baseroleprop.exp = 0
+	coop.secondary_props.baseroleprop.Level = 50
+	coop.secondary_props.baseroleprop.exp = 0
+	p1_pet["等级"] = 1
+	p2_pet["等级"] = 49
+	data.player_data["宠物列表"] = [p1_pet]
+	coop.secondary_data.player_data["宠物列表"] = [p2_pet]
+	data.player_data["出战宠物"] = "PetNian"
+	coop.secondary_data.player_data["出战宠物"] = "PetNian"
+	var monster: Node = load("res://Scene/monster/monster_1.tscn").instantiate()
+	stage.add_child(monster)
+	await process_frame
+	monster.set_physics_process(false)
+	monster._cure_active_pet_exp(200000, 2)
+	_check(int(p2_pet.get("等级", 0)) == 50, "P2 nian reaches player level")
+	_check(int(p2_pet.get("阶段", 0)) == 4, "P2 nian evolves to stage 4")
+	_check(str(p2_pet.get("名称", "")) == "大年兽", "P2 nian evolution name")
+	_check((p2_pet.get("技能", []) as Array).has("年兽奥义"), "P2 nian evolution skills")
+	_check(int(p1_pet.get("阶段", 1)) == 1, "P1 nian untouched by P2 evolution")
+	monster.queue_free()
+	await process_frame
+
+	p1_pet["等级"] = 50
+	p2_pet["等级"] = 50
+	stage.queue_free()
+	stage = null
+	await process_frame
+	var level: Node = load("res://Scene/level/level_1.tscn").instantiate()
+	root.add_child(level)
+	current_scene = level
+	stage = level
+	coop._on_scene_changed()
+	await create_timer(2.0).timeout
+	level.can_create = false
+	if level.get("create_control") != null:
+		level.create_control.stop()
+	var p1_unit: Node = _find_pet_unit(level.get("monster"), 1, "pet_nian_unit")
+	var p2_unit: Node = _find_pet_unit(level.get("monster"), 2, "pet_nian_unit")
+	_check(p1_unit != null, "P1 nian spawned by controller")
+	_check(p2_unit != null, "P2 nian spawned by controller")
+	if p1_unit != null:
+		_check(int(p1_unit.get("turtle_stage")) == 4, "P1 nian stage 4")
+		_check(int(p1_unit.get_meta("coop_slot", 0)) == 1, "P1 nian slot")
+	if p2_unit != null:
+		_check(int(p2_unit.get("turtle_stage")) == 4, "P2 nian stage 4")
+		_check(int(p2_unit.get_meta("coop_slot", 0)) == 2, "P2 nian slot")
+	level.queue_free()
+	stage = null
+	await process_frame
+
+
+func _find_pet_entry(profile: Node, pet_type: String) -> Dictionary:
+	for pet in profile.player_data.get("宠物列表", []):
+		if pet is Dictionary and str(pet.get("类型", "")) == pet_type:
+			return pet
+	return {}
 
 func _case_shared_soul() -> void:
 	coop.create_secondary(7)

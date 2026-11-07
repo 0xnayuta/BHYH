@@ -23,6 +23,8 @@ const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
+const PET_NIAN_FAMILY := preload("res://Script/pet/pet_nian_family.gd")
+const PET_NIAN_DATA := preload("res://Script/pet/pet_nian_data.gd")
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_LEARNED_SKILLS_KEY := "已学习技能"
 const PET_LEARNABLE_SKILLS := [
@@ -968,6 +970,8 @@ func _select_tiger_pet_if_available() -> Dictionary:
 
 func _pet_active_name(pet: Dictionary) -> String:
 	var type_name := str(pet.get(DataKeys.TYPE, ""))
+	if PET_NIAN_FAMILY.matches(pet):
+		return PET_NIAN_FAMILY.KIND
 	if PET_NEAT_FAMILY.matches(pet):
 		return PET_NEAT_FAMILY.KIND
 	if PET_YIN_TIGER_FAMILY.matches(pet):
@@ -1004,6 +1008,8 @@ func _clear_pet_active_state(pet: Dictionary) -> void:
 		valid_names.append("PetRabbit")
 	if _is_pet_mouse(pet):
 		valid_names.append("PetMouse")
+	if _is_pet_nian(pet):
+		valid_names.append("PetNian")
 	if _is_pet_neat(pet):
 		valid_names.append("PetNeat")
 	if _is_pet_yin_tiger(pet):
@@ -1022,7 +1028,9 @@ func fight_click() -> void:
 		_show_tip("当前宠物不能出战")
 		return
 	_repair_phoenix_pet_data(pet)
-	if _is_pet_mouse(pet):
+	if _is_pet_nian(pet):
+		_normalize_pet_nian_name(pet)
+	elif _is_pet_mouse(pet):
 		_normalize_pet_mouse_name(pet)
 		_update_pet_mouse_evolution(pet)
 	elif _is_pet_neat(pet):
@@ -2122,6 +2130,10 @@ func _setup_pet_skill_icons() -> void:
 
 
 func _pet_skill_icon_path(skill_name: String, pet: Variant = null) -> String:
+	var nian_skill: int = PET_NIAN_DATA.SKILLS.find(skill_name)
+	if nian_skill >= 0:
+		var stage: int = int(pet.get("阶段", 1)) if pet is Dictionary else 1
+		return PET_NIAN_DATA.skill_icon_path(stage, nian_skill + 1)
 	match skill_name:
 		"虎啸":
 			if pet is Dictionary and _is_pet_yin_tiger(pet):
@@ -2145,6 +2157,14 @@ func _pet_skill_icon_path(skill_name: String, pet: Variant = null) -> String:
 
 func _pet_skill_base_mp_cost(skill_name: String) -> int:
 	match skill_name:
+		"年兽扑击":
+			return 0
+		"年兽烈焰":
+			return 50
+		"年兽爆炎":
+			return 90
+		"年兽奥义":
+			return 120
 		"涅槃":
 			return 35
 		"不死火鸟":
@@ -2253,6 +2273,7 @@ func _is_pet_dead_in_current_level(pet_name: String) -> bool:
 
 func _pet_dead_aliases(pet_name: String) -> Array[String]:
 	var aliases: Array[String] = [pet_name]
+	PET_NIAN_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_NEAT_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_YIN_TIGER_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_MOUSE_FAMILY.append_death_aliases(aliases, pet_name)
@@ -2299,7 +2320,8 @@ func _despawn_active_pet_nodes(node: Node) -> void:
 	if (
 		(not LocalCoop.is_enabled() or int(node.get_meta("coop_slot", 1)) == LocalCoop.ui_slot)
 		and (
-			bool(node.get_meta("pet_tiger_unit", false))
+			bool(node.get_meta("pet_nian_unit", false))
+			or bool(node.get_meta("pet_tiger_unit", false))
 			or bool(node.get_meta("pet_tiger_summon", false))
 			or bool(node.get_meta("pet_dragon_unit", false))
 			or bool(node.get_meta("pet_phoenix_unit", false))
@@ -4040,7 +4062,9 @@ func _add_exp(pet: Dictionary, amount: int) -> void:
 		_apply_pet_level_growth(pet)
 	if int(pet.get(DataKeys.LEVEL, 1)) >= player_level:
 		pet[DataKeys.EXP] = 0
-	if _is_pet_mouse(pet):
+	if _is_pet_nian(pet):
+		_normalize_pet_nian_name(pet)
+	elif _is_pet_mouse(pet):
 		_update_pet_mouse_evolution(pet)
 	elif _is_pet_neat(pet):
 		_update_pet_neat_evolution(pet)
@@ -4073,6 +4097,8 @@ func _ensure_pet_storage() -> void:
 		PlayerData.ensure_pet_rabbit()
 	if PlayerData.has_method("ensure_pet_mouse"):
 		PlayerData.ensure_pet_mouse()
+	if PlayerData.has_method("ensure_pet_nian"):
+		PlayerData.ensure_pet_nian()
 	if PlayerData.has_method("ensure_pet_neat"):
 		PlayerData.ensure_pet_neat()
 	if PlayerData.has_method("ensure_pet_yin_tiger"):
@@ -4088,6 +4114,7 @@ func _ensure_pet_storage() -> void:
 	_ensure_pet_turtle(pets)
 	_ensure_pet_rabbit(pets)
 	_ensure_pet_mouse(pets)
+	_ensure_pet_nian(pets)
 	_ensure_pet_neat(pets)
 	_ensure_pet_yin_tiger(pets)
 	data[PET_LIST_KEY] = pets
@@ -4315,6 +4342,35 @@ func _is_pet_neat(pet: Dictionary) -> bool:
 
 func _is_pet_yin_tiger(pet: Dictionary) -> bool:
 	return PET_YIN_TIGER_FAMILY.matches(pet)
+
+
+func _is_pet_nian(pet: Dictionary) -> bool:
+	return PET_NIAN_FAMILY.matches(pet)
+
+
+func _normalize_pet_nian_name(pet: Dictionary) -> void:
+	if not _is_pet_nian(pet):
+		return
+	PlayerData._normalize_pet_nian(pet)
+	_ensure_pet_growth_fields(pet)
+
+
+func _ensure_pet_nian(pets: Array) -> bool:
+	for pet in pets:
+		if pet is Dictionary and _is_pet_nian(pet):
+			_normalize_pet_nian_name(pet)
+			return false
+	var nian_data: Dictionary = (
+		(PlayerData.PET_NIAN_PET.duplicate(true) as Dictionary)
+		if "PET_NIAN_PET" in PlayerData
+		else {
+			DataKeys.NAME: PET_NIAN_DATA.NAMES[1],
+			DataKeys.ALT_NAME: PET_NIAN_DATA.NAMES[1],
+			DataKeys.TYPE: PET_NIAN_FAMILY.KIND
+		}
+	)
+	pets.append(nian_data)
+	return true
 
 
 func _normalize_pet_neat_name(pet: Dictionary) -> void:
@@ -4632,6 +4688,7 @@ func _refresh_tiger_quality_preview(pet: Dictionary) -> void:
 		or _is_pet_turtle(pet)
 		or _is_pet_rabbit(pet)
 		or _is_pet_mouse(pet)
+		or _is_pet_nian(pet)
 		or _is_pet_neat(pet)
 		or _is_pet_yin_tiger(pet)
 	)
@@ -4690,7 +4747,10 @@ func _refresh_pet_model_preview(pet: Dictionary) -> void:
 		pet_model_preview.play("wait")
 		pet_model_preview.visible = pet_model_preview.sprite_frames != null
 		return
-	if _is_pet_mouse(pet):
+	if _is_pet_nian(pet):
+		frames_path = "res://Art/pet/pet_nian/model/pet_nian_stage%d_frames.tres" % stage
+		pet_model_preview.offset = Vector2(0, -48)
+	elif _is_pet_mouse(pet):
 		frames_path = "res://Art/pet/pet_mouse/model/pet_mouse_stage%d_frames.tres" % clampi(stage, 1, 2)
 		pet_model_preview.offset = PET_MOUSE_PREVIEW_OFFSET
 	elif _is_pet_neat(pet):
@@ -4780,6 +4840,8 @@ func _refresh_pet_name_list(show_dropdown: bool = true) -> void:
 		PlayerData.ensure_pet_rabbit()
 	if PlayerData.has_method("ensure_pet_mouse"):
 		PlayerData.ensure_pet_mouse()
+	if PlayerData.has_method("ensure_pet_nian"):
+		PlayerData.ensure_pet_nian()
 	if PlayerData.has_method("ensure_pet_neat"):
 		PlayerData.ensure_pet_neat()
 	var pet_view := PlayerData.pet_domain_view()

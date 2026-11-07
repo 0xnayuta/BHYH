@@ -7,6 +7,8 @@ var RoleProp: BaseRoleProperties:
 		return coop.props_for(self) if coop != null else get_node("/root/RoleProp")
 
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
+const PET_NIAN_DATA := preload("res://Script/pet/pet_nian_data.gd")
+const PET_NIAN_FAMILY := preload("res://Script/pet/pet_nian_family.gd")
 const DataKeys := preload("res://Script/base/data_keys.gd")
 const SOUL_MIN: int = 0
 const SOUL_MAX: int = 99999999999
@@ -1922,6 +1924,54 @@ const PET_YIN_TIGER_PET := {
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
 }
+const PET_NIAN_PET := {
+	"名称": "年宝",
+	"名字": "年宝",
+	"类型": "PetNian",
+	"阶段": 1,
+	"等级": 1,
+	"经验": 0,
+	"下级经验": 100,
+	"品质": "神兽",
+	"生命": 620,
+	"生命上限": 620,
+	"魔法": 180,
+	"魔法上限": 180,
+	"攻击": 65,
+	"防御": 60,
+	"物防": 60,
+	"魔防": 60,
+	"暴击": 12,
+	"闪避": 6,
+	"幸运": 10,
+	"回血": 2,
+	"回魔": 1,
+	"悟性": 0,
+	"根骨": 0,
+	"灵力": 0,
+	"生命资质": 1000,
+	"生命资质上限": 3500,
+	"生命资质基础上限": 3500,
+	"魔法资质": 1000,
+	"魔法资质上限": 2800,
+	"魔法资质基础上限": 2800,
+	"攻击资质": 1000,
+	"攻击资质上限": 4000,
+	"攻击资质基础上限": 4000,
+	"防御资质": 1000,
+	"防御资质上限": 2800,
+	"防御资质基础上限": 2800,
+	"潜力": 24,
+	"潜力上限": 24,
+	"强化点": 0,
+	"普通培养次数": 0,
+	"超级培养次数": 0,
+	"放生": false,
+	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	"技能": ["年兽扑击"],
+	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
+	"出战": false
+}
 
 
 func _ready() -> void:
@@ -1941,6 +1991,7 @@ func _ready() -> void:
 	ensure_pet_turtle()
 	ensure_pet_rabbit()
 	ensure_pet_mouse()
+	ensure_pet_nian()
 	ensure_pet_neat()
 	ensure_pet_yin_tiger()
 	ensure_shared_pet_backpack()
@@ -4076,6 +4127,52 @@ func ensure_pet_yin_tiger() -> bool:
 	if not player_data.has(ACTIVE_PET_KEY):
 		player_data[ACTIVE_PET_KEY] = ""
 	return not found
+
+
+func ensure_pet_nian() -> bool:
+	if not (player_data.get(PET_LIST_KEY, []) is Array):
+		player_data[PET_LIST_KEY] = []
+	var pets: Array = player_data[PET_LIST_KEY]
+	var found := false
+	for pet in pets:
+		if not (pet is Dictionary):
+			continue
+		_normalize_pet_passives(pet)
+		if _is_pet_nian(pet):
+			_normalize_pet_nian(pet)
+			found = true
+	if not found:
+		var nian := PET_NIAN_PET.duplicate(true)
+		_normalize_pet_passives(nian)
+		_normalize_pet_nian(nian)
+		pets.append(nian)
+	if not player_data.has(ACTIVE_PET_KEY):
+		player_data[ACTIVE_PET_KEY] = ""
+	return not found
+
+
+func _is_pet_nian(pet: Dictionary) -> bool:
+	return PET_NIAN_DATA.matches(pet)
+
+
+func _normalize_pet_nian(pet: Dictionary) -> void:
+	var base := PET_NIAN_PET.duplicate(true)
+	var active_name := str(player_data.get(ACTIVE_PET_KEY, ""))
+	var keep_fighting := (
+		bool(pet.get(DataKeys.DEPLOYED, false))
+		or active_name == PET_NIAN_FAMILY.KIND
+		or PET_NIAN_FAMILY.is_name(active_name)
+	)
+	for key in base.keys():
+		if not pet.has(key):
+			pet[key] = base[key].duplicate(true) if base[key] is Dictionary or base[key] is Array else base[key]
+	pet["悟性"] = clampi(int(pet.get("悟性", 0)), 0, 25)
+	pet["根骨"] = clampi(int(pet.get("根骨", 0)), 0, 25)
+	pet["灵力"] = clampi(int(pet.get("灵力", 0)), 0, 25)
+	PET_NIAN_DATA.normalize(pet)
+	pet[DataKeys.DEPLOYED] = keep_fighting
+	if keep_fighting:
+		player_data[ACTIVE_PET_KEY] = PET_NIAN_FAMILY.KIND
 
 
 func _is_pet_yin_tiger(pet: Dictionary) -> bool:

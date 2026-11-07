@@ -56,6 +56,7 @@ var buff_tscn: PackedScene = preload("res://Scene/other_scene/buff_icon.tscn")
 const STATUS_ICON_SIZE := Vector2(32, 32)
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_LEARNED_ACTIVE_SKILL_ICONS := {"嗜血狂爆": "sxkb", "法术能量": "fsnl"}
+const PET_NIAN_DATA := preload("res://Script/pet/pet_nian_data.gd")
 
 var player
 var magic_cd
@@ -368,6 +369,8 @@ func _active_pet_data() -> Dictionary:
 			first_active_pet = pet
 		if active_name != "" and str(pet.get(DataKeys.ALT_NAME, "")) == active_name:
 			return pet
+		if active_name == "PetNian" and _is_pet_nian_hud_data(pet, null):
+			return pet
 		if active_name == "PetDragon" and _is_pet_dragon_hud_data(pet, null):
 			return pet
 		if active_name == "PetPhoenix" and _is_pet_phoenix_hud_data(pet, null):
@@ -430,6 +433,11 @@ func _find_pet_dead_level(node: Node, pet_name: String) -> bool:
 
 func _pet_dead_aliases(pet_name: String) -> Array[String]:
 	var aliases: Array[String] = [pet_name]
+	if pet_name == "PetNian" or PET_NIAN_DATA.matches({DataKeys.ALT_NAME: pet_name}):
+		aliases.append("PetNian")
+		for name in PET_NIAN_DATA.NAMES.values():
+			if not aliases.has(str(name)):
+				aliases.append(str(name))
 	if pet_name == "PetNeat" or pet_name in ["丑牛", "丑牛元帅", "丑牛大元帅"]:
 		aliases.append("PetNeat")
 		aliases.append("丑牛元帅")
@@ -530,6 +538,8 @@ func _is_hud_active_pet_unit(node: Node) -> bool:
 		return false
 	if int(node.get_meta("coop_slot", 1)) != LocalCoop.slot_for(self):
 		return false
+	if bool(node.get_meta("pet_nian_unit", false)):
+		return true
 	if (
 		bool(node.get_meta("pet_tiger_unit", false))
 		or bool(node.get_meta("pet_phoenix_unit", false))
@@ -550,7 +560,14 @@ func _update_pet_head(pet: Dictionary, pet_unit: Node) -> void:
 		if pet_head.texture != null:
 			pet_head.texture = null
 		return
+	pet_head.flip_h = not _is_pet_nian_hud_data(pet, pet_unit)
 	var stage := _active_pet_skill_stage(pet, pet_unit)
+	if _is_pet_nian_hud_data(pet, pet_unit):
+		var nian_head_key := "nian:%d" % stage
+		if _last_pet_head_key != nian_head_key:
+			_last_pet_head_key = nian_head_key
+			pet_head.texture = Global.get_cached_texture("res://Art/pet/pet_nian/icons/head%d.png" % stage)
+		return
 	var pet_type := (
 		"yin_tiger"
 		if _is_pet_yin_tiger_hud_data(pet, pet_unit)
@@ -666,10 +683,18 @@ func _update_pet_skill_icons(pet: Dictionary, pet_unit: Node) -> void:
 	for i in range(skill_names.size()):
 		var icon := _ensure_pet_skill_icon(i)
 		var skill_name := str(skill_names[i])
-		if skill_names_changed or str(icon.name) != skill_name:
+		if (
+			skill_names_changed
+			or str(icon.name) != skill_name
+			or (skill_name.begins_with("nian_") and int(icon.get_meta("nian_stage", 0)) != stage)
+		):
 			icon.name = skill_name
 			var icon_file := "aoyi" if skill_name in ["xwaoyi", "ysaoyi", "zsaoyi"] else skill_name
-			icon.texture = load("res://Art/pet/skillicon/%s.png" % icon_file)
+			if skill_name.begins_with("nian_"):
+				icon.set_meta("nian_stage", stage)
+				icon.texture = load(PET_NIAN_DATA.skill_icon_path(stage, int(skill_name.trim_prefix("nian_"))))
+			else:
+				icon.texture = load("res://Art/pet/skillicon/%s.png" % icon_file)
 			icon.visible = icon.texture != null
 		_set_pet_skill_cooldown(icon, skill_name, pet_unit)
 
@@ -758,6 +783,12 @@ func _pet_skill_cooldown_left(skill_name: String, pet_unit: Node) -> float:
 
 func _pet_skill_cooldown_key(skill_name: String) -> String:
 	match skill_name:
+		"nian_2":
+			return "skill_1_cd"
+		"nian_3":
+			return "skill_2_cd"
+		"nian_4":
+			return "skill_4_cd"
 		"hy", "hx", "fs", "np", "sld", "yg", "sc", "mncz":
 			return "skill_1_cd"
 		"sxhz", "sdcc", "bshn", "txlj", "jf", "hxfb", "mljt", "mhxs":
@@ -778,6 +809,14 @@ func _pet_skill_cooldown_max(skill_name: String, pet_unit: Node) -> float:
 		return PET_LEARNED_SKILL_RUNTIME.COOLDOWN_SECONDS
 	var base_cooldown := 1.0
 	match skill_name:
+		"nian_1":
+			base_cooldown = 0.0
+		"nian_2":
+			base_cooldown = 8.0
+		"nian_3":
+			base_cooldown = 12.0
+		"nian_4":
+			base_cooldown = 20.0
 		"hy":
 			base_cooldown = 7.0
 		"hx":
@@ -944,7 +983,7 @@ func _pet_visible_skill_icon_names(pet: Dictionary, pet_unit: Node, stage: int) 
 	var result: Array[String] = []
 	for skill_id in _pet_skill_icon_names_for_pet(pet, pet_unit, stage):
 		var native_skill_id := str(skill_id)
-		if native_skill_id == "yg" or _pet_skill_cooldown_max(native_skill_id, pet_unit) > 0.0:
+		if native_skill_id in ["yg", "nian_1"] or _pet_skill_cooldown_max(native_skill_id, pet_unit) > 0.0:
 			result.append(native_skill_id)
 	for skill_name in PET_LEARNED_SKILL_RUNTIME.learned_skill_names(pet):
 		var learned_skill_id := str(PET_LEARNED_ACTIVE_SKILL_ICONS.get(str(skill_name), ""))
@@ -954,6 +993,15 @@ func _pet_visible_skill_icon_names(pet: Dictionary, pet_unit: Node, stage: int) 
 
 
 func _pet_skill_icon_names_for_pet(pet: Dictionary, pet_unit: Node, stage: int) -> Array[String]:
+	if _is_pet_nian_hud_data(pet, pet_unit):
+		var nian_skills: Array[String] = ["nian_1"]
+		if stage >= 2:
+			nian_skills.append("nian_2")
+		if stage >= 3:
+			nian_skills.append("nian_3")
+		if stage >= 4:
+			nian_skills.append("nian_4")
+		return nian_skills
 	if _is_pet_yin_tiger_hud_data(pet, pet_unit):
 		return ["hx"] if clampi(stage, 1, 4) < 4 else ["hx", "mhxs", "yhaoyi"]
 	if _is_pet_neat_hud_data(pet, pet_unit):
@@ -1013,6 +1061,12 @@ func _pet_skill_icon_names_for_pet(pet: Dictionary, pet_unit: Node, stage: int) 
 			return ["fs", "sdcc", "ltwj"]
 		_:
 			return ["fs", "sdcc", "ltwj", "aoyi"]
+
+
+func _is_pet_nian_hud_data(pet: Dictionary, pet_unit: Node) -> bool:
+	return (
+		PET_NIAN_DATA.matches(pet) or (is_instance_valid(pet_unit) and bool(pet_unit.get_meta("pet_nian_unit", false)))
+	)
 
 
 func _is_pet_dragon_hud_data(pet: Dictionary, pet_unit: Node) -> bool:

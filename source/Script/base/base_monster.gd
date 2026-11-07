@@ -10,6 +10,7 @@ const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
+const PET_NIAN_FAMILY := preload("res://Script/pet/pet_nian_family.gd")
 const NIGHTMARE_HEALTH_BONUS := 20000000
 const NIGHTMARE_ATTACK_BONUS := 40000
 const NIGHTMARE_DEFENSE_BONUS := 5000
@@ -3087,6 +3088,7 @@ func _cure_active_pet_exp(value: int, slot: int = 1) -> void:
 		PET_MOUSE_FAMILY.evolve(pet, profile)
 		PET_NEAT_FAMILY.evolve(pet, profile)
 		PET_YIN_TIGER_FAMILY.evolve(pet, profile)
+		PET_NIAN_FAMILY.evolve(pet, profile)
 		for key in growth.keys():
 			growth[key] = int(growth[key]) + int(level_growth.get(key, 0))
 		level_up_count += 1
@@ -3227,6 +3229,7 @@ func _apply_active_pet_unit_growth(
 	var is_mouse_unit := bool(unit.get_meta("pet_mouse_unit", false)) or PET_MOUSE_FAMILY.matches(pet)
 	var is_neat_unit := bool(unit.get_meta("pet_neat_unit", false)) or PET_NEAT_FAMILY.matches(pet)
 	var is_yin_tiger_unit := bool(unit.get_meta("pet_yin_tiger_unit", false)) or PET_YIN_TIGER_FAMILY.matches(pet)
+	var is_nian_unit := bool(unit.get_meta("pet_nian_unit", false)) or PET_NIAN_FAMILY.matches(pet)
 	var level_stage := (
 		PET_MOUSE_FAMILY.stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
 		if is_mouse_unit
@@ -3248,6 +3251,14 @@ func _apply_active_pet_unit_growth(
 		pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
 		pet["技能"] = PET_NEAT_FAMILY.stage_skills(neat_stage)
 		profile.player_data["出战宠物"] = PET_NEAT_FAMILY.KIND
+	elif is_nian_unit:
+		var nian_stage := PET_NIAN_FAMILY.stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
+		pet[DataKeys.TYPE] = PET_NIAN_FAMILY.KIND
+		pet["阶段"] = nian_stage
+		pet[DataKeys.ALT_NAME] = PET_NIAN_FAMILY.stage_name(nian_stage)
+		pet[DataKeys.NAME] = pet[DataKeys.ALT_NAME]
+		pet["技能"] = PET_NIAN_FAMILY.stage_skills(nian_stage)
+		profile.player_data["出战宠物"] = PET_NIAN_FAMILY.KIND
 	elif is_yin_tiger_unit:
 		var yin_stage := PET_YIN_TIGER_FAMILY.stage_for_level(int(pet.get(DataKeys.LEVEL, unit_level)))
 		pet[DataKeys.TYPE] = PET_YIN_TIGER_FAMILY.KIND
@@ -3399,6 +3410,8 @@ func _active_pet_unit_for_exp(node: Node, slot: int = 1) -> Node:
 	if bool(node.get_meta("pet_neat_unit", false)):
 		return node
 	if bool(node.get_meta("pet_yin_tiger_unit", false)):
+		return node
+	if bool(node.get_meta("pet_nian_unit", false)) and LocalCoop.slot_for(node) == slot:
 		return node
 	for child in node.get_children():
 		var found := _active_pet_unit_for_exp(child, slot)

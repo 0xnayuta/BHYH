@@ -6,6 +6,7 @@ extends Node
 
 const RESULT_PREFIX := "PET_NIAN_RUNTIME_PROBE_RESULT="
 const TEARDOWN_MARKER := "PET_NIAN_RUNTIME_PROBE_TEARDOWN"
+const FAMILY = preload("res://Script/pet/pet_nian_family.gd")
 const LEVELS := {1: 1, 2: 15, 3: 30, 4: 50}
 const STAGES := {1: 1, 2: 2, 3: 3, 4: 4}
 
@@ -19,9 +20,11 @@ func _ready() -> void:
 func _run() -> void:
 	var checks: Dictionary = {}
 	_check_data(checks)
+	_check_archive(checks)
 	await _check_scenes(checks)
 	await _check_parts(checks)
 	await _check_effects(checks)
+	await _check_hud(checks)
 	checks["teardown"] = true
 	for check_name in checks:
 		if not bool(checks[check_name]):
@@ -46,6 +49,61 @@ func _check_data(checks: Dictionary) -> void:
 	checks["data_icon_stage_1"] = PetNianData.skill_icon_path(1, 1) == "res://Art/pet/pet_nian/icons/skill1.png"
 	checks["data_icon_stage_4"] = PetNianData.skill_icon_path(4, 1) == "res://Art/pet/pet_nian/icons/skill7.png"
 	checks["data_icon_ultimate"] = PetNianData.skill_icon_path(4, 4) == "res://Art/pet/skillicon/aoyi.png"
+
+
+func _check_archive(checks: Dictionary) -> void:
+	var before := _find_nian_entry(PlayerData)
+	checks["archive_has_entry"] = not before.is_empty()
+	if before.is_empty():
+		return
+	checks["archive_type"] = str(before.get(DataKeys.TYPE, "")) == FAMILY.KIND
+	checks["archive_stage_name"] = str(before.get(DataKeys.ALT_NAME, "")) == PetNianData.NAMES[1]
+	checks["archive_skill"] = (before.get(DataKeys.Skill.SKILL, []) as Array).has(PetNianData.SKILLS[0])
+	checks["archive_slot_meta"] = LocalCoop.slot_for(PlayerData) == 1 or not LocalCoop.is_enabled()
+	var normalized := before.duplicate(true)
+	normalized[DataKeys.LEVEL] = 50
+	FAMILY.normalize_spawn(normalized, PlayerData)
+	checks["archive_normalize_stage4"] = int(normalized.get(DataKeys.Pet.STAGE, 0)) == 4
+	checks["archive_normalize_name"] = str(normalized.get(DataKeys.ALT_NAME, "")) == PetNianData.NAMES[4]
+	checks["archive_normalize_ultimate"] = (normalized.get(DataKeys.Skill.SKILL, []) as Array).has(PetNianData.SKILLS[3])
+	checks["archive_growth_cap_hp"] = int(normalized.get("生命资质基础上限", 0)) == 3500
+	checks["archive_growth_cap_atk"] = int(normalized.get("攻击资质基础上限", 0)) == 4000
+
+
+func _find_nian_entry(profile: Node) -> Dictionary:
+	if profile == null or not (profile.get("player_data") is Dictionary):
+		return {}
+	for pet in profile.player_data.get("宠物列表", []):
+		if pet is Dictionary and FAMILY.matches(pet):
+			return pet
+	return {}
+
+
+func _check_hud(checks: Dictionary) -> void:
+	var hud_scene := load("res://Scene/base/base_role.tscn") as PackedScene
+	if hud_scene == null:
+		checks["hud_scene"] = false
+		return
+	var hud := hud_scene.instantiate()
+	add_child(hud)
+	await get_tree().process_frame
+	var pet := _find_nian_entry(PlayerData)
+	checks["hud_nian_match"] = hud._is_pet_nian_hud_data(pet, null)
+	checks["hud_skill_list_stage1"] = hud._pet_skill_icon_names_for_pet(pet, null, 1) == ["nian_1"]
+	var stage4 := pet.duplicate(true)
+	stage4[DataKeys.Pet.STAGE] = 4
+	checks["hud_skill_list_stage4"] = hud._pet_skill_icon_names_for_pet(stage4, null, 4) == [
+		"nian_1", "nian_2", "nian_3", "nian_4"
+	]
+	checks["hud_cooldown_key_2"] = hud._pet_skill_cooldown_key("nian_2") == "skill_1_cd"
+	checks["hud_cooldown_key_3"] = hud._pet_skill_cooldown_key("nian_3") == "skill_2_cd"
+	checks["hud_cooldown_key_4"] = hud._pet_skill_cooldown_key("nian_4") == "skill_4_cd"
+	checks["hud_cooldown_max_2"] = is_equal_approx(hud._pet_skill_cooldown_max("nian_2", null), 8.0)
+	checks["hud_cooldown_max_3"] = is_equal_approx(hud._pet_skill_cooldown_max("nian_3", null), 12.0)
+	checks["hud_cooldown_max_4"] = is_equal_approx(hud._pet_skill_cooldown_max("nian_4", null), 20.0)
+	checks["hud_death_alias"] = hud._pet_dead_aliases("大年兽").has(FAMILY.KIND)
+	hud.queue_free()
+	await get_tree().process_frame
 
 
 func _check_scenes(checks: Dictionary) -> void:

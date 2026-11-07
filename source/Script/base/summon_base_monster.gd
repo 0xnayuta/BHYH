@@ -272,6 +272,7 @@ func follow_player_when_idle() -> void:
 func _physics_process(delta: float) -> void:
 	if is_instance_valid(player_reference) and player_reference.is_death:
 		for pet_key in [
+			"pet_nian_unit",
 			"pet_tiger_unit",
 			"pet_dragon_unit",
 			"pet_phoenix_unit",
@@ -1053,6 +1054,7 @@ func apply_knockback(target: BaseMonster) -> void:
 
 
 func _persist_active_pet_death() -> void:
+	var is_nian := bool(get_meta("pet_nian_unit", false))
 	var is_tiger := bool(get_meta("pet_tiger_unit", false))
 	var is_dragon := bool(get_meta("pet_dragon_unit", false)) and not bool(get("is_dragon_clone"))
 	var is_phoenix := bool(get_meta("pet_phoenix_unit", false))
@@ -1062,7 +1064,8 @@ func _persist_active_pet_death() -> void:
 	var is_yin_tiger := bool(get_meta("pet_yin_tiger_unit", false))
 	var is_turtle := bool(get_meta("pet_turtle_unit", false)) and not is_rabbit and not is_mouse
 	if (
-		not is_tiger
+		not is_nian
+		and not is_tiger
 		and not is_dragon
 		and not is_phoenix
 		and not is_turtle
@@ -1076,21 +1079,25 @@ func _persist_active_pet_death() -> void:
 	if level_node == null:
 		return
 	var pet_type := (
-		"PetYinTiger"
-		if is_yin_tiger
+		"PetNian"
+		if is_nian
 		else (
-			"PetNeat"
-			if is_neat
+			"PetYinTiger"
+			if is_yin_tiger
 			else (
-				"PetMouse"
-				if is_mouse
+				"PetNeat"
+				if is_neat
 				else (
-					"PetRabbit"
-					if is_rabbit
+					"PetMouse"
+					if is_mouse
 					else (
-						"PetTurtle"
-						if is_turtle
-						else "PetTiger" if is_tiger else "PetPhoenix" if is_phoenix else "PetDragon"
+						"PetRabbit"
+						if is_rabbit
+						else (
+							"PetTurtle"
+							if is_turtle
+							else "PetTiger" if is_tiger else "PetPhoenix" if is_phoenix else "PetDragon"
+						)
 					)
 				)
 			)

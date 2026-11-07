@@ -286,6 +286,9 @@ func load_game(路径) -> Dictionary:
 	PlayerData.ensure_pet_phoenix()
 	PlayerData.ensure_pet_turtle()
 	PlayerData.ensure_pet_rabbit()
+	PlayerData.ensure_pet_mouse()
+	if PlayerData.has_method("ensure_pet_nian"):
+		PlayerData.ensure_pet_nian()
 	if PlayerData.has_method("ensure_pet_neat"):
 		PlayerData.ensure_pet_neat()
 	if PlayerData.has_method("ensure_pet_yin_tiger"):
@@ -498,6 +501,8 @@ func _normalization_steps() -> Array:
 		["ensure_pet_phoenix", PlayerData],
 		["ensure_pet_turtle", PlayerData],
 		["ensure_pet_rabbit", PlayerData],
+		["ensure_pet_mouse", PlayerData],
+		["ensure_pet_nian", PlayerData],
 		["ensure_pet_neat", PlayerData],
 		["ensure_pet_yin_tiger", PlayerData],
 		["ensure_shared_pet_backpack", PlayerData],

@@ -10,6 +10,7 @@ const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
+const PET_NIAN_FAMILY := preload("res://Script/pet/pet_nian_family.gd")
 var is_two_scene
 var _pet_level_controller = PET_LEVEL_CONTROLLER.new()
 
@@ -221,6 +222,7 @@ func _is_active_pet_dead_this_level(pet_name: String = "", slot: int = 1) -> boo
 
 func _active_pet_dead_aliases(pet_name: String) -> Array[String]:
 	var aliases: Array[String] = [pet_name]
+	PET_NIAN_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_NEAT_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_YIN_TIGER_FAMILY.append_death_aliases(aliases, pet_name)
 	PET_MOUSE_FAMILY.append_death_aliases(aliases, pet_name)
@@ -396,6 +398,8 @@ func _active_pet_name_key() -> String:
 
 func _pet_active_name(pet: Dictionary) -> String:
 	var type_name := str(pet.get(DataKeys.TYPE, ""))
+	if PET_NIAN_FAMILY.matches(pet):
+		return PET_NIAN_FAMILY.KIND
 	if PET_NEAT_FAMILY.matches(pet):
 		return PET_NEAT_FAMILY.KIND
 	if PET_YIN_TIGER_FAMILY.matches(pet):
@@ -429,6 +433,7 @@ func _set_only_active_pet(pets: Array, target_pet: Dictionary, data: Dictionary,
 
 
 func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: String, profile: Node) -> String:
+	var nian_pet: Dictionary = {}
 	var mouse_pet: Dictionary = {}
 	var turtle_pet: Dictionary = {}
 	var rabbit_pet: Dictionary = {}
@@ -437,6 +442,7 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 	var tiger_pet: Dictionary = {}
 	var neat_pet: Dictionary = {}
 	var yin_tiger_pet: Dictionary = {}
+	var nian_is_fighting := false
 	var mouse_is_fighting := false
 	var turtle_is_fighting := false
 	var rabbit_is_fighting := false
@@ -448,7 +454,10 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 	for pet in pets:
 		if not (pet is Dictionary):
 			continue
-		if PET_MOUSE_FAMILY.matches(pet):
+		if PET_NIAN_FAMILY.matches(pet):
+			nian_pet = pet
+			nian_is_fighting = nian_is_fighting or _pet_is_fighting(pet)
+		elif PET_MOUSE_FAMILY.matches(pet):
 			mouse_pet = pet
 			mouse_is_fighting = mouse_is_fighting or _pet_is_fighting(pet)
 		elif PET_NEAT_FAMILY.matches(pet):
@@ -472,6 +481,13 @@ func _canonicalize_active_pet_data(data: Dictionary, pets: Array, active_name: S
 		elif PET_TIGER_FAMILY.matches(pet):
 			tiger_pet = pet
 			tiger_is_fighting = tiger_is_fighting or _pet_is_fighting(pet)
+	if (
+		(active_name == PET_NIAN_FAMILY.KIND or PET_NIAN_FAMILY.matches({"名称": active_name}) or nian_is_fighting)
+		and not nian_pet.is_empty()
+	):
+		PET_NIAN_FAMILY.normalize_spawn(nian_pet, profile)
+		_set_only_active_pet(pets, nian_pet, data, PET_NIAN_FAMILY.KIND)
+		return PET_NIAN_FAMILY.KIND
 	if (
 		(active_name == PET_MOUSE_FAMILY.KIND or PET_MOUSE_FAMILY.matches({"名称": active_name}) or mouse_is_fighting)
 		and not mouse_pet.is_empty()
@@ -552,6 +568,8 @@ func _get_active_pet_data(profile: Node) -> Dictionary:
 		PlayerData.ensure_pet_rabbit()
 	if PlayerData.has_method("ensure_pet_mouse"):
 		PlayerData.ensure_pet_mouse()
+	if PlayerData.has_method("ensure_pet_nian"):
+		PlayerData.ensure_pet_nian()
 	if PlayerData.has_method("ensure_pet_neat"):
 		PlayerData.ensure_pet_neat()
 	if PlayerData.has_method("ensure_pet_yin_tiger"):
@@ -914,7 +932,8 @@ func _is_stage_monster_node(node: Node) -> bool:
 	if not node is BaseMonster:
 		return false
 	if (
-		bool(node.get_meta("pet_tiger_unit", false))
+		bool(node.get_meta("pet_nian_unit", false))
+		or bool(node.get_meta("pet_tiger_unit", false))
 		or bool(node.get_meta("pet_yin_tiger_unit", false))
 		or bool(node.get_meta("pet_dragon_unit", false))
 		or bool(node.get_meta("is_summon", false))

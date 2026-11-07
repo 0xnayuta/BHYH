@@ -11,6 +11,7 @@ const PET_RABBIT_FAMILY := preload("res://Script/pet/pet_rabbit_family.gd")
 const PET_MOUSE_FAMILY := preload("res://Script/pet/pet_mouse_family.gd")
 const PET_NEAT_FAMILY := preload("res://Script/pet/pet_neat_family.gd")
 const PET_YIN_TIGER_FAMILY := preload("res://Script/pet/pet_yin_tiger_family.gd")
+const PET_NIAN_FAMILY := preload("res://Script/pet/pet_nian_family.gd")
 const PET_LIFE_BONUS_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 const PET_UNIT_METAS := [
@@ -22,6 +23,7 @@ const PET_UNIT_METAS := [
 	"pet_mouse_unit",
 	"pet_neat_unit",
 	"pet_yin_tiger_unit",
+	"pet_nian_unit",
 ]
 
 
@@ -118,6 +120,8 @@ func _family_for(pet_data: Dictionary) -> Variant:
 		return PET_NEAT_FAMILY
 	if PET_YIN_TIGER_FAMILY.matches(pet_data):
 		return PET_YIN_TIGER_FAMILY
+	if PET_NIAN_FAMILY.matches(pet_data):
+		return PET_NIAN_FAMILY
 	return null
 
 
