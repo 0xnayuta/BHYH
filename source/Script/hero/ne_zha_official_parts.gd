@@ -63,7 +63,12 @@ func load_set(set_name: String) -> bool:
 	max_parts = data.max_parts
 	pose_bytes = _poses.size() * 4
 	atlas_size = data.atlas_size
+	# 切换官方部件集必须清空上一套的动画/帧身份，否则 set_pose 会以旧索引访问新 poses。
+	animation_name = &""
 	frame_index = -1
+	_pose_key = ""
+	_offset = 0
+	_count = 0
 	set_pose("wait", 0)
 	return true
 

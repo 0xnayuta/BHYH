@@ -333,6 +333,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=300,
         timeout_seconds=120,
     ),
+    ProbeSpec(
+        key="pet-nian",
+        title="年兽 1–4 阶召唤与效果运行时探针",
+        script_name="pet_nian_runtime_probe.gd",
+        scene_name="pet_nian_runtime_probe.tscn",
+        result_prefix="PET_NIAN_RUNTIME_PROBE_RESULT=",
+        report_stem="pet_nian_runtime_probe_report",
+        teardown_marker="PET_NIAN_RUNTIME_PROBE_TEARDOWN",
+        quit_after_frames=900,
+        timeout_seconds=180,
+    ),
 )
 
 
