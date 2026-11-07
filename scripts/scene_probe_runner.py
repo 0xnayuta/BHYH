@@ -26,7 +26,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `pet-runtime`：宠物树外初始化属性（预热路径）、HUD 头像构建期帧解析与寅虎帧绝对时长。
 - `pet-nian`：年兽 1–4 阶数据、召唤场景、官方部件、效果与档案/2P 接入。
 - `awaken-72`：7.2 首批觉醒（重斩/玄冰阵/哪吒双火轮/月魔舞）与觉醒弹窗、技能面板、材料。
-- `menu-ui-72`：年兽预载、V7.2 公告、喜鹊叠加、幻化翅膀/头衔与小龙女昵称偏移。
+- `menu-ui-72`：年兽预载、V7.2 公告、喜鹊叠加、幻化翅膀/头衔与小龙女昵称偏移；
+- `phase37-6`：寒山坡出口初始隐藏/清关可见、小龙女装备权限、分解帮助文本与固定概率掉落。
 """
 
 from __future__ import annotations
@@ -368,6 +369,22 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="MENU_UI_72_PROBE_TEARDOWN",
         quit_after_frames=600,
         timeout_seconds=120,
+    ),
+    ProbeSpec(
+        key="phase37-6",
+        title="37-6 缺口回归探针",
+        script_name="phase37_6_probe.gd",
+        scene_name="phase37_6_probe.tscn",
+        result_prefix="PHASE_37_6_PROBE_RESULT=",
+        report_stem="phase37_6_probe_report",
+        teardown_marker="PHASE_37_6_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=120,
+        # 探针主动走清关路径，Global.preload_next 的线程资源在 headless 退出时
+        # 可能残留 1 个 RefCounted；该清理噪声与生产关卡退出流程无关。
+        expected_noise=(
+            "WARNING: 1 ObjectDB instance was leaked at exit",
+        ),
     ),
 )
 

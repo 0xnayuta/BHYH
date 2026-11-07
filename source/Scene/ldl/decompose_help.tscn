@@ -55,7 +55,7 @@ autowrap_mode = 1
 theme_type_variation = "DecomposeHelpBody"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "2.分解装备时，若装备有强化等级，则返还使用总量一部分的1级强化石。邪灵及以上品质的装备可能分解出随机种类和数量的1级宝石。                       "
+text = "2.分解装备时，若装备有强化等级，则按各等级强化石的累计消耗分别返还80%，不足1个向下取整。邪灵及以上品质的装备可能分解出随机种类和数量的1级宝石。                       "
 autowrap_mode = 1
 
 [node name="_6" type="Label" parent="BG/ScrollContainer/BoxContainer" unique_id=1667724521]

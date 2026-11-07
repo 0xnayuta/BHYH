@@ -466,6 +466,10 @@ func check_can_equipment(EquipmentName):
 			role_base = "玉兔"
 			if eq_base == "玉兔":
 				return true
+		8:
+			role_base = "小龙女"
+			if eq_base == "小龙女":
+				return true
 	Global.add_message_show(parent, name_str + "属于" + eq_base + "，" + role_base + "无法穿戴！！", 1.5, Vector2(485, 240))
 	return false
 

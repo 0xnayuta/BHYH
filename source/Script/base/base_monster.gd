@@ -269,6 +269,20 @@ static func get_nightmare_extra_multiplier(level_path: String) -> float:
 	return 1.2 if JIEJIAO_CATALOG.LEVEL_MONSTERS.has(level_path) else 1.0
 
 
+## 独立掉落项的最终概率：固定概率不受难度和双倍掉落放大。
+static func resolve_independent_drop_chance(
+	base_chance: float,
+	difficulty_index: int,
+	fixed_chance: bool,
+	double_fall_pro: bool,
+) -> float:
+	var difficulty_multiplier: float = [1.0, 2.0, 3.0, 3.0][clampi(difficulty_index, 0, 3)]
+	var chance := clampf(base_chance * (1.0 if fixed_chance else difficulty_multiplier), 0.0, 1.0)
+	if not fixed_chance and double_fall_pro:
+		chance = clampf(chance * 2.0, 0.0, 1.0)
+	return chance
+
+
 func update_fall_mode():
 	if enable_treasure_box and MainSet.set_data.has("BossTreasureBoxMode") and MainSet.set_data["BossTreasureBoxMode"]:
 		current_fall_mode = FallMode.TREASURE_BOX
@@ -1598,10 +1612,14 @@ func fall_items():
 		YutuEquipmentData.expand_drop_entries(independent_fall_list)
 	):
 		var difficulty_index := clampi(int(MainSet.set_data.get("Difficult", 0)), 0, 3)
-		var difficulty_multiplier: float = [1.0, 2.0, 3.0, 3.0][difficulty_index]
-		var drop_chance := clampf(float(independent_drop.get("chance", 0.0)) * difficulty_multiplier, 0.0, 1.0)
-		if RoleProp.source_player != null and RoleProp.source_player.is_double_fall_pro:
-			drop_chance = clampf(drop_chance * 2.0, 0.0, 1.0)
+		var fixed_chance := bool(independent_drop.get("fixed_chance", false))
+		var double_fall_pro: bool = RoleProp.source_player != null and RoleProp.source_player.is_double_fall_pro
+		var drop_chance := resolve_independent_drop_chance(
+			float(independent_drop.get("chance", 0.0)),
+			difficulty_index,
+			fixed_chance,
+			double_fall_pro,
+		)
 		var independent_roll := randf()
 		if independent_roll <= drop_chance:
 			var minimum_value := int(independent_drop.get("min_value", independent_drop.get("value", 1)))
