@@ -257,7 +257,7 @@ func add_buff_effect_first():
 		"MagicDrain":
 			inter_time = 1.0
 			if get_obj is BaseHero:
-				var current_mp = RoleProp.roleprop.Mp
+				var current_mp = _owner_props().roleprop.Mp
 				buff_info["stored_mp"] = current_mp
 
 				get_obj.reduce_mp(current_mp)
@@ -286,7 +286,7 @@ func add_buff_effect_first():
 
 		"lpzbuff":
 			if get_obj is BaseMonster:
-				var levellpz = PlayerData.player_data["落魄阵"]["Level"]
+				var levellpz = _owner_data().player_data["落魄阵"]["Level"]
 				get_obj.lpzjs = levellpz * 0.02
 			elif get_obj is BaseHero:
 				get_obj.xrbl = 1 - last_value
@@ -296,7 +296,7 @@ func add_buff_effect_first():
 			)
 		"tszbuff":
 			if get_obj is BaseHero:
-				var levellpz = PlayerData.player_data["腾蛇阵"]["Level"]
+				var levellpz = _owner_data().player_data["腾蛇阵"]["Level"]
 				get_obj.tszzs = levellpz * 0.015
 			inter_time = 0.6
 			buff_effect_list.push_back(
@@ -382,7 +382,7 @@ func add_buff_effect_first():
 			apply_slow_speed()
 		"slzbuff":
 			if get_obj is BaseHero:
-				var levelslz = PlayerData.player_data["森罗阵"]["Level"]
+				var levelslz = _owner_data().player_data["森罗阵"]["Level"]
 				get_obj.slzjs2 = levelslz * 0.02
 			inter_time = 0.875
 			buff_effect_list.push_back(
@@ -419,7 +419,7 @@ func add_buff_effect_first():
 			inter_time = 0.8
 
 			if get_obj is BaseHero:
-				var current_hp = RoleProp.roleprop.Hp
+				var current_hp = _owner_props().roleprop.Hp
 				var half_hp = int(current_hp * 0.5)
 				get_obj.effect_reducehp(half_hp, "real")
 
@@ -442,16 +442,16 @@ func _on_buff_last_time_timeout() -> void:
 			if get_obj is BaseHero:
 				var stored_mp = buff_info.get("stored_mp", 0)
 
-				RoleProp.roleprop.Mp += stored_mp
+				_owner_props().roleprop.Mp += stored_mp
 
-				if RoleProp.roleprop.Mp > RoleProp.roleprop.SMp:
-					RoleProp.roleprop.Mp = RoleProp.roleprop.SMp
-				print("MagicDrain结束 | 返还魔法:", stored_mp, " | 当前魔法:", RoleProp.roleprop.Mp)
+				if _owner_props().roleprop.Mp > _owner_props().roleprop.SMp:
+					_owner_props().roleprop.Mp = _owner_props().roleprop.SMp
+				print("MagicDrain结束 | 返还魔法:", stored_mp, " | 当前魔法:", _owner_props().roleprop.Mp)
 
 	if str(buff_info.get("AttackKind", "")) == "SpecialBuff_1":
-		for i in PlayerData.player_data["初始Buff"]:
+		for i in _owner_data().player_data["初始Buff"]:
 			if i["Name"] == buff_info["Name"]:
-				PlayerData.player_data["初始Buff"].erase(i)
+				_owner_data().player_data["初始Buff"].erase(i)
 
 	if buff_info["AddTime"] < 99999:
 		remove_buff()
@@ -489,7 +489,7 @@ func _on_buff_value_reduce_time_timeout() -> void:
 
 		"flls":
 			if get_obj is BaseHero:
-				var current_mp = RoleProp.roleprop.Mp
+				var current_mp = _owner_props().roleprop.Mp
 				var reduce_amount = current_mp * 0.1
 				reduce_amount = round(reduce_amount)
 				if reduce_amount < 1 and current_mp > 0:
@@ -499,7 +499,7 @@ func _on_buff_value_reduce_time_timeout() -> void:
 
 		"HealOverTime":
 			if get_obj is BaseHero:
-				var max_hp = RoleProp.roleprop.SHp
+				var max_hp = _owner_props().roleprop.SHp
 				var heal_amount = int(max_hp * last_value)
 				get_obj.effect_reducehp(-heal_amount, "cure")
 			elif get_obj is BaseMonster:
@@ -513,7 +513,7 @@ func _on_buff_value_reduce_time_timeout() -> void:
 				var get_value_hp = int(abs(new_position - old_position) * last_value * 0.3)
 				var get_value_mp = int(abs(new_position - old_position) * last_value * 0.3)
 				get_obj.effect_reducehp(get_value_hp, "real")
-				RoleProp.roleprop.Mp -= get_value_mp
+				_owner_props().roleprop.Mp -= get_value_mp
 			elif get_obj is BaseMonster:
 				var get_value_hp = abs(new_position - old_position) * last_value
 				get_obj.reduce_hp(get_value_hp)
@@ -676,39 +676,6 @@ func _ice_effect_offset() -> Vector2:
 	return Vector2(0, 10)
 
 
-func add_buff_icon():
-	if get_obj is BaseHero:
-		if Global.buff_box == null:
-			return
-		var icon = null
-		for existing_icon in Global.buff_box.get_children():
-			if (
-				str(existing_icon.name) == str(buff_info["Name"])
-				or str(existing_icon.get("buff_name")) == str(buff_info["Name"])
-			):
-				icon = existing_icon
-				break
-		if icon == null:
-			icon = Global.add_buff_icon(Global.buff_box, buff_info)
-		if icon == null:
-			return
-		icon.father_buff = self
-		icon.total_times = total_times
-		icon.last_hurt = last_value
-		icon.data_list = buff_info.duplicate(true)
-		icon.visible = true
-		icon.start_duration(float(buff_info.get("AddTime", 0.0)))
-	elif get_obj is BaseMonster:
-		if get_obj.my_blood != null:
-			for i in get_obj.my_blood.buff_list.get_children():
-				if i.buff_name == buff_info["Name"]:
-					i.queue_free()
-			var icon = Global.add_buff_icon(get_obj.my_blood.buff_list, buff_info)
-			icon.father_buff = self
-			icon.total_times = total_times
-			icon.last_hurt = last_value
-
-
 func remove_buff():
 	_clear_pet_owner_bonus()
 
@@ -751,38 +718,57 @@ func _add_voodoo_visual_once() -> void:
 	get_obj.set_meta("voodoo_effect_visual", effect)
 
 
+func _owner_props() -> BaseRoleProperties:
+	if is_instance_valid(get_obj):
+		var coop := get_node_or_null("/root/LocalCoop")
+		if coop != null:
+			var props: Node = coop.props_for(get_obj)
+			if props is BaseRoleProperties:
+				return props
+	return RoleProp
+
+
+func _owner_data() -> PlayerDataStore:
+	if is_instance_valid(get_obj):
+		var coop := get_node_or_null("/root/LocalCoop")
+		if coop != null:
+			var data: Node = coop.data_for(get_obj)
+			if data is PlayerDataStore:
+				return data
+	return PlayerData
+
+
 func refresh_pet_owner_bonus(value: int) -> void:
 	var bonus := maxi(0, value)
 	match str(buff_info.get("Name", "")):
 		"PetLifeBonus":
-			var old_life := int(RoleProp.pet_life_bonus)
-			RoleProp.pet_life_bonus = bonus
-			RoleProp.roleprop.Hp = int(RoleProp.roleprop.get("Hp", 0)) + maxi(0, bonus - old_life)
+			var old_life := int(_owner_props().pet_life_bonus)
+			_owner_props().pet_life_bonus = bonus
+			_owner_props().roleprop.Hp = int(_owner_props().roleprop.get("Hp", 0)) + maxi(0, bonus - old_life)
 		"PetAttackBonus":
-			RoleProp.pet_attack_bonus = bonus
+			_owner_props().pet_attack_bonus = bonus
 		"PetDefenseBonus":
-			RoleProp.pet_defense_bonus = bonus
-			RoleProp.pet_magic_defense_bonus = maxi(0, int(buff_info.get("magic_value", bonus)))
+			_owner_props().pet_defense_bonus = bonus
+			_owner_props().pet_magic_defense_bonus = maxi(0, int(buff_info.get("magic_value", bonus)))
 		"PetManaBonus":
-			var old_mana := int(RoleProp.pet_mana_bonus)
-			RoleProp.pet_mana_bonus = bonus
-			RoleProp.roleprop.Mp = int(RoleProp.roleprop.get("Mp", 0)) + maxi(0, bonus - old_mana)
+			var old_mana := int(_owner_props().pet_mana_bonus)
+			_owner_props().pet_mana_bonus = bonus
+			_owner_props().roleprop.Mp = int(_owner_props().roleprop.get("Mp", 0)) + maxi(0, bonus - old_mana)
 		_:
 			return
-	add_buff_icon()
 
 
 func _clear_pet_owner_bonus() -> void:
 	match str(buff_info.get("Name", "")):
 		"PetLifeBonus":
-			RoleProp.pet_life_bonus = 0
+			_owner_props().pet_life_bonus = 0
 		"PetAttackBonus":
-			RoleProp.pet_attack_bonus = 0
+			_owner_props().pet_attack_bonus = 0
 		"PetDefenseBonus":
-			RoleProp.pet_defense_bonus = 0
-			RoleProp.pet_magic_defense_bonus = 0
+			_owner_props().pet_defense_bonus = 0
+			_owner_props().pet_magic_defense_bonus = 0
 		"PetManaBonus":
-			RoleProp.pet_mana_bonus = 0
+			_owner_props().pet_mana_bonus = 0
 
 
 func start_buff():
@@ -793,9 +779,9 @@ func start_buff():
 
 
 func set_special_buff_time():
-	if PlayerData.player_data["初始Buff"].size() <= 0:
+	if _owner_data().player_data["初始Buff"].size() <= 0:
 		return
-	for i in PlayerData.player_data["初始Buff"]:
+	for i in _owner_data().player_data["初始Buff"]:
 		if i["Name"] == buff_info["Name"]:
 			i["AddTime"] = buff_time.time_left
 

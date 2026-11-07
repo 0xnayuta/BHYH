@@ -890,6 +890,9 @@ func _case_pet_buff() -> void:
 	_check(buff1 != buff2, "pet owner buffs are distinct nodes")
 	_check(_count_pet_buff(p1, "PetLifeBonus") == 1, "P1 has only its own pet buff")
 	_check(_count_pet_buff(p2, "PetLifeBonus") == 1, "P2 has only its own pet buff")
+	await process_frame
+	_check(int(p1.RoleProp.pet_life_bonus) == 100, "P1 pet buff targets P1 props")
+	_check(int(p2.RoleProp.pet_life_bonus) == 200, "P2 pet buff targets P2 props")
 	_check(int(p1.get_meta("coop_slot", 1)) == 1, "P1 owner slot")
 	_check(int(p2.get_meta("coop_slot", 1)) == 2, "P2 owner slot")
 	pet1.queue_free()

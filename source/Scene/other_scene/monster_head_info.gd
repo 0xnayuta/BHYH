@@ -1141,11 +1141,13 @@ func _resolve_attr_value(value):
 	if expr.find("Global.llbt_level") >= 0:
 		return _resolve_llbt_value(expr)
 	if expr.find("RoleProp.roleprop.SHp") >= 0:
-		return _resolve_role_number_expr(expr, float(RoleProp.roleprop.SHp), "RoleProp.roleprop.SHp")
+		return _resolve_role_number_expr(expr, float(_operator_props().roleprop.SHp), "RoleProp.roleprop.SHp")
 	if expr.find("RoleProp.roleprop.power") >= 0:
-		return _resolve_role_number_expr(expr, float(RoleProp.roleprop.power), "RoleProp.roleprop.power")
+		return _resolve_role_number_expr(expr, float(_operator_props().roleprop.power), "RoleProp.roleprop.power")
 	if expr.find("RoleProp.baseroleprop.Level") >= 0:
-		return _resolve_role_number_expr(expr, float(RoleProp.baseroleprop.Level), "RoleProp.baseroleprop.Level")
+		return _resolve_role_number_expr(
+			expr, float(_operator_props().baseroleprop.Level), "RoleProp.baseroleprop.Level"
+		)
 	return "动态数值"
 
 
@@ -1284,6 +1286,15 @@ func _get_difficulty_value(key: String, value, mult: float, difficulty: int, lev
 	return value
 
 
+func _operator_props() -> BaseRoleProperties:
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and is_instance_valid(monster_info):
+		var props: Node = coop.props_for(monster_info)
+		if props is BaseRoleProperties:
+			return props
+	return RoleProp
+
+
 func _get_drop_chance_text(base_chance: float, difficulty_index: int, fixed_chance := false) -> String:
 	var multipliers := [1.0, 2.0, 3.0, 3.0]
 	var chance: float = (
@@ -1292,7 +1303,7 @@ func _get_drop_chance_text(base_chance: float, difficulty_index: int, fixed_chan
 		else base_chance * float(multipliers[clampi(difficulty_index, 0, multipliers.size() - 1)])
 	)
 	chance = clampf(chance, 0.0, 1.0)
-	if RoleProp.source_player != null and RoleProp.source_player.is_double_fall_pro:
+	if _operator_props().source_player != null and _operator_props().source_player.is_double_fall_pro:
 		chance = clampf(chance * 2.0, 0.0, 1.0)
 	return str(snapped(chance * 100.0, 0.1)) + "%"
 
