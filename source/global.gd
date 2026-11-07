@@ -2386,6 +2386,8 @@ func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
 		profile.ensure_pet_rabbit()
 	if profile.has_method("ensure_pet_mouse"):
 		profile.ensure_pet_mouse()
+	if profile.has_method("ensure_pet_nian"):
+		profile.ensure_pet_nian()
 	if profile.has_method("ensure_pet_neat"):
 		profile.ensure_pet_neat()
 	if profile.has_method("ensure_pet_yin_tiger"):
@@ -2401,6 +2403,10 @@ func get_active_pet_preload_data(slot: int = 1) -> Dictionary:
 			continue
 		var type_name := str(pet.get(DataKeys.TYPE, ""))
 		var pet_name := str(pet.get(DataKeys.ALT_NAME, ""))
+		if type_name == "PetNian":
+			selected_pet = pet
+			selected_type = "PetNian"
+			break
 		var is_dragon := (
 			type_name == "PetDragon" or pet_name.begins_with("辰龙") or pet_name in ["龙仔", "绿英龙", "青龙将军", "青龙妖圣"]
 		)
@@ -2498,6 +2504,12 @@ func get_active_pet_preload_paths(slot: int = 1) -> Array[String]:
 			yin_paths.append("res://Art/pet/skillicon/mhxs.png")
 			yin_paths.append("res://Art/pet/skillicon/yhaoyi.png")
 		return yin_paths
+	if pet_type == "PetNian":
+		return [
+			"res://Scene/pet/pet_nian_summon_%d.tscn" % stage,
+			"res://Art/pet/pet_nian/model/pet_nian_stage%d_frames.tres" % stage,
+			"res://Art/pet/pet_nian/icons/head%d.png" % stage,
+		]
 	if pet_type == "PetNeat":
 		return (
 			[
@@ -2638,6 +2650,9 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 			% [source_stage, source_stage]
 		)
 		bullet_scene_path = "res://Scene/pet/pet_yin_tiger_bullet.tscn"
+	elif pet_type == "PetNian":
+		scene_path = "res://Scene/pet/pet_nian_summon_%d.tscn" % stage
+		frames_path = "res://Art/pet/pet_nian/model/pet_nian_stage%d_frames.tres" % stage
 	elif pet_type == "PetNeat":
 		scene_path = "res://Scene/pet/pet_neat_summon_%d.tscn" % stage
 		frames_path = "res://Art/pet/pet_neat/model/pet_neat_stage%d_frames.tres" % stage
@@ -2667,10 +2682,12 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 		frames_path = "res://Art/pet/pet_dragon/model/pet_dragon_stage%d_frames.tres" % stage
 		bullet_scene_path = "res://Scene/pet/pet_dragon_bullet.tscn"
 	_warm_scene_instance(preload_scene_path(scene_path))
-	var bullet_scene := preload_scene_path(bullet_scene_path)
+	var bullet_scene: PackedScene = preload_scene_path(bullet_scene_path) if bullet_scene_path != "" else null
 	_warm_scene_instance(bullet_scene)
 	_preload_sprite_frames_resource(frames_path)
-	if pet_type == "PetYinTiger":
+	if pet_type == "PetNian":
+		pass
+	elif pet_type == "PetYinTiger":
 		PET_YIN_TIGER_BULLET_SCRIPT.warm_pet_yin_tiger_frames(stage)
 	elif pet_type == "PetNeat":
 		PET_NEAT_BULLET_SCRIPT.warm_pet_neat_frames(stage)

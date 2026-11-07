@@ -23,9 +23,9 @@ script = ExtResource("2")
 
 [node name="Name_" parent="." index="0" unique_id=630687534]
 offset_left = -24.0
-offset_top = -103.0
+offset_top = -134.0
 offset_right = 25.0
-offset_bottom = -81.0
+offset_bottom = -112.0
 
 [node name="tx" parent="." index="1" unique_id=478600657]
 position = Vector2(0, -156)

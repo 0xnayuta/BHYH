@@ -26,6 +26,7 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `pet-runtime`：宠物树外初始化属性（预热路径）、HUD 头像构建期帧解析与寅虎帧绝对时长。
 - `pet-nian`：年兽 1–4 阶数据、召唤场景、官方部件、效果与档案/2P 接入。
 - `awaken-72`：7.2 首批觉醒（重斩/玄冰阵/哪吒双火轮/月魔舞）与觉醒弹窗、技能面板、材料。
+- `menu-ui-72`：年兽预载、V7.2 公告、喜鹊叠加、幻化翅膀/头衔与小龙女昵称偏移。
 """
 
 from __future__ import annotations
@@ -356,6 +357,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         teardown_marker="AWAKEN_72_PROBE_TEARDOWN",
         quit_after_frames=900,
         timeout_seconds=180,
+    ),
+    ProbeSpec(
+        key="menu-ui-72",
+        title="7.2 剩余脚本与场景运行时探针",
+        script_name="menu_ui_72_probe.gd",
+        scene_name="menu_ui_72_probe.tscn",
+        result_prefix="MENU_UI_72_PROBE_RESULT=",
+        report_stem="menu_ui_72_probe_report",
+        teardown_marker="MENU_UI_72_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=120,
     ),
 )
 

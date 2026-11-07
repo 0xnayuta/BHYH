@@ -10,6 +10,8 @@ var RoleProp: BaseRoleProperties:
 
 const LOCK_BUTTON_ICON = preload("res://Art/backpack/dj_lock_button.png")
 const UNLOCK_BUTTON_ICON = preload("res://Art/backpack/dj_unlock_button.png")
+const MAGPIE_DURATION := 7200.0
+const MAGPIE_MAX_DURATION := 86400.0
 
 @onready var v_box_container: VBoxContainer = $MarginContainer2/MarginContainer/VBoxContainer
 @onready var infor: Label = $MarginContainer2/MarginContainer/VBoxContainer/infor
@@ -189,6 +191,52 @@ func use_mpyj():
 	var parent = get_parent().get_parent().get_parent()
 	Global.add_message_show(parent, "技能等级已重置！。", 1.5, Vector2(450, 300))
 	queue_free()
+
+
+func _use_lucky_magpie() -> bool:
+	if PlayerData.get_xhp_data("xydxq") <= 0:
+		return false
+	var stored: Dictionary = {}
+	for entry in PlayerData.player_data.get("初始Buff", []):
+		if entry is Dictionary and str(entry.get("Name", "")) == "DoubleFallPro":
+			stored = entry
+			break
+	var remaining := maxf(float(stored.get("AddTime", 0.0)), 0.0)
+	var active_buffs: Array[BaseBuff] = []
+	var hero := RoleProp.source_player as BaseHero
+	if is_instance_valid(hero) and is_instance_valid(hero.buff):
+		for buff_node in hero.buff.get_children():
+			if (
+				buff_node is BaseBuff
+				and not buff_node.is_queued_for_deletion()
+				and str(buff_node.buff_info.get("Name", "")) == "DoubleFallPro"
+			):
+				active_buffs.append(buff_node as BaseBuff)
+				remaining = maxf(float(buff_node.buff_time.time_left), remaining)
+	var duration := remaining + MAGPIE_DURATION
+	if duration > MAGPIE_MAX_DURATION:
+		return false
+	PlayerData.remove_xhp("xydxq", my_page, 1)
+	if stored.is_empty():
+		stored = {
+			"Name": "DoubleFallPro",
+			"value": 0.0,
+			"AddTime": duration,
+			"reduce_interval": 0.0,
+			"AttackKind": "SpecialBuff_1",
+			"CanRemove": false,
+			"CanAdd": false,
+			"DeBuff": false,
+		}
+		PlayerData.player_data["初始Buff"].push_back(stored)
+	else:
+		stored["AddTime"] = duration
+	for active in active_buffs:
+		active.buff_info["AddTime"] = duration
+		active.last_time = duration
+		active.buff_time.start(duration)
+	MemoryClass.request_save("back_pack_use_consumable")
+	return true
 
 
 func use_xhp():
@@ -665,23 +713,10 @@ func use_xhp():
 
 		"xydxq":
 			var parent = get_parent().get_parent().get_parent()
-			if not PlayerData.check_same_ini_buff("DoubleFallPro"):
-				PlayerData.remove_xhp(my_name, my_page, 1)
-				PlayerData.player_data["初始Buff"].push_back(
-					{
-						"Name": "DoubleFallPro",
-						"value": 0.0,
-						"AddTime": 7200,
-						"reduce_interval": 0.0,
-						"AttackKind": "SpecialBuff_1",
-						"CanRemove": false,
-						"CanAdd": false,
-						"DeBuff": false
-					}
-				)
-				Global.add_message_show(parent, "获得两小时双倍掉率Buff，重进关卡生效。", 1.5, Vector2.ZERO)
+			if _use_lucky_magpie():
+				Global.add_message_show(parent, "双倍掉率时间增加2小时，累计最多24小时，重进关卡生效。", 1.5, Vector2.ZERO)
 			else:
-				Global.add_message_show(parent, "当前已有双倍掉率Buff！", 1.5, Vector2.ZERO)
+				Global.add_message_show(parent, "使用后双倍掉率时间不能超过24小时！", 1.5, Vector2.ZERO)
 			queue_free()
 
 		"txd":

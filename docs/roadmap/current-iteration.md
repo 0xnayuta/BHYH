@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 36 7.2 内容回植（36-4 首批觉醒完成，36-5 待开始）**。Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2 PCK/release 暂缓。
+> **状态**：**Phase 36 7.2 内容回植（36-5 其余脚本完成，36-6 待开始）**。Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.2 PCK/release 暂缓。
 > **版本**：7.1 内容基线；7.2 回植进行中，尚未升级版本标记。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
@@ -46,7 +46,7 @@
 - **L3 收口完成**：全量场景 23/23、全量关卡 128/128 PASS + 5 SKIP、双人 37/37、档案 344/344、命名/白名单与构建资源同步通过；PCK/release 与目标设备验证继续暂缓。
 - **发布边界**：PCK/release 与目标设备验证暂缓，待最终发布统一执行；当前版本标记仍以工程配置为准。
 
-### 1.4 Phase 36 7.2 内容回植（36-4 完成，36-5 待开始）
+### 1.4 Phase 36 7.2 内容回植（36-5 完成，36-6 待开始）
 
 - **目标**：7.2 内容回植；base 为 7.1 反编译参考，ours 为当前 7.1 治理工程，theirs 为 7.2 反编译参考。
 - **36-0 完成**：参考源码/场景与逐文件台账；989/989 脚本、8/8 变更场景文本化；生产未映射 0。
@@ -54,8 +54,9 @@
 - **36-2 完成**：6 个 PetNian 脚本 + 4 个召唤场景 + `FirstBatchAwakenArea` / `NeZhaAwakenWheel` 已按当前 API 适配；修复 `NeZhaOfficialParts.load_set` 切换部件集时的旧帧索引越界；新增 `pet-nian` 运行时探针，覆盖 1–4 阶场景、帧资源、parts 与效果。
 - **36-3 完成**：新增 `PetNianFamily`；`PlayerData` 默认条目与 `ensure_pet_nian`、档案载入/规范化链、PetInterface 出战/升级/预览、BaseRole HUD 头像/技能/死亡别名、BaseThroughLevel/PetLevelController 生成与 2P 槽位、BaseMonster 经验成长、SummonBaseMonster 死亡持久化全部接入；`pet-nian` 探针扩展档案与 HUD，新增 `LocalCoopPetNianProbe`。
 - **36-4 完成**：`NeZhaHero` 接入 `nz_hlqg` 双火轮（2× 伤害、8 秒/8 段、环绕后投掷）；`Role1` 重斩觉醒动作与三道地裂（2×/4×/8×、霸体）；`Role2` 玄冰阵五段冰刺与冰域（末段冰冻 2 秒）；`YutuHero` 月魔舞三月影（主体 1.5×、月影 0.7×、主体双倍月印）；`skill_awaken_popup` / `zd_skill` / `SkillDamageFormulaData` 接入四个新觉醒 ID 与说明；`awaken-72` 探针覆盖上述路径、一阶觉醒石与技能面板按钮。
-- **后续批次**：36-5 其余脚本修复；36-6 L3 收口。
-- **边界**：首批觉醒已接线并通过定向运行时探针；完整关卡战斗中的数值/视觉手感未做人工截图验收；36-5 尚未覆盖 7.2 其余脚本差异；PCK/release 暂缓；7.3 未立项。
+- **36-5 完成**：`Global` 接入年兽出战预载（召唤场景/帧/头像，空子弹场景安全跳过）；`GameAnnouncement` 接入 V7.2 文案与版本按钮；`dj_sell` 喜鹊改为可叠加、上限 24 小时（含活动 Buff 刷新）；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称上移；新增 `menu-ui-72` 探针覆盖预载、公告、喜鹊、幻化与昵称。
+- **后续批次**：36-6 L3 收口。
+- **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；完整关卡内人工视觉/手感验收待 36-6；PCK/release 暂缓；7.3 未立项。
 
 ---
 
@@ -111,7 +112,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：进入 Phase 36-5 其余 7.2 脚本差异修复。36-4 已完成首批觉醒、哪吒双轮、技能觉醒弹窗与装备材料接线；PCK/release 与目标设备验证继续暂缓。
+**当前下一步**：进入 Phase 36-6 L3 收口。36-5 已完成 Global/公告/喜鹊/幻化/昵称等剩余 7.2 生产差异；PCK/release 与目标设备验证继续暂缓。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

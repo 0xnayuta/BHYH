@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 35 的 7.1 L3 收口完成、待发布验证；**Phase 36 的 7.2 回植进行中，36-4 首批觉醒完成**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：7.0 内容回植已完成并通过当前验收；Phase 35 的 7.1 L3 收口完成、待发布验证；**Phase 36 的 7.2 回植进行中，36-5 其余脚本完成**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -29,7 +29,7 @@
 
 | 验证 | 结果 |
 |:---|:---|
-| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 36-4 复跑） |
+| `check_all --godot-bin` | **9/9 PASS**（2026-11-07 36-5 复跑） |
 | 字体覆盖 | **135 场景 / 788 中文节点 / 0 缺字；Theme 字体 4 文件；动态样本 5 / 0 缺字**（`font_coverage_audit.py --check`） |
 | `font_role` | **734 变体 / 0 错误 / 0 条存量字号例外**（`font_role_audit.py --check`） |
 | UI Theme 运行时探针 | **PASS**（`scene_probe_runner --probe ui-theme`，7.32s） |
@@ -44,8 +44,9 @@
 | HUD 只读探针 | **PASS**（`coop_probe_runner --only LocalCoopHudReadOnlyProbe`，7.70s） |
 | `health_check` | **797 脚本 0 Parse / 0 Error / 0 Warning** |
 | `archive_probe_runner` | **344/344 PASS**（L3 复跑） |
-| `scene_probe_runner` | **36-4 全量 25 项：25 PASS**（298.56s）；新增 `awaken-72`；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
+| `scene_probe_runner` | **36-5 全量 26 项：26 PASS**（308.19s）；新增 `awaken-72` / `menu-ui-72`；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` 均 PASS；`load-guard` 的 0ms 超时用例中断 `level_3.tscn` 解析后产生的 Theme/字体依赖 `Failed loading resource` 已按预期噪声登记 |
 | 7.2 觉醒运行时探针 | **PASS**（`scene_probe_runner --probe awaken-72`，10.41s；重斩三道地裂、玄冰阵五段冰刺与冰域、哪吒双火轮、月魔舞三月影、觉醒弹窗/技能面板/一阶觉醒石） |
+| 7.2 其余脚本探针 | **PASS**（`scene_probe_runner --probe menu-ui-72`，8.82s；年兽预载、V7.2 公告、喜鹊叠加/上限、幻化翅膀/头衔、小龙女昵称） |
 | `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`） |
 | `coop_probe_runner` | **37/37 PASS**（L3 复跑，含 2P 相机/HUD/推图） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0；`--role 8` 主角为 Role_8** |
@@ -74,13 +75,14 @@
 - **边界**：当前内容版本为 **7.1**；PCK/release 与目标设备验证按用户决策暂缓，待最终发布统一验证；7.2 回植进行中（36-4 首批觉醒完成，36-5 待开始）；7.3 未立项。
 - **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` **797 脚本 0/0/0**；`scene_probe_runner` **23/23**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**；`coop_probe_runner` **37/37**；`archive_probe_runner` **344/344**；`export_raw_manifest --check` 993 文件；`convert_atlas_metadata --check` 4015/4015；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` PASS；命名审计、白名单审计与 `docs_audit` 879/0 全部通过。
 
-### 7.2 回植进度（36-4 完成）
+### 7.2 回植进度（36-5 完成）
 
 - **36-0 ~ 36-1**：完成 7.2 参考源码/场景/台账、年兽素材与数据、`xydxq` 描述迁移。
 - **36-2 ~ 36-3**：完成年兽脚本/场景适配、档案与 HUD、2P 生成及 `pet-nian` / `LocalCoopPetNianProbe` 探针。
 - **36-4**：接入 `nz_hlqg` 哪吒双火轮、`zz` 重斩觉醒、`xbz` 玄冰阵觉醒、`yt_ymw` 月魔舞三月影；`skill_awaken_popup` / `zd_skill` / `SkillDamageFormulaData` 覆盖四个新 ID；一阶觉醒石「tjs」与材料「ptjs」经 Catalog 校验。
-- **验证**：`check_all --godot-bin` 9/9；`scene_probe_runner` 全量 **25/25 PASS**（含 `awaken-72`、`role-skills`、`action-frames`）；`archive_probe_runner` 344/344；`LocalCoopPetNianProbe` / `LocalCoopPetYinTigerProbe` / `LocalCoopHudReadOnlyProbe` PASS；命名、白名单、`docs_audit` 通过。
-- **边界**：未做完整关卡内人工视觉/手感验收；36-5 尚未覆盖 7.2 其余脚本差异；PCK/release 与目标设备验证继续暂缓。
+- **36-5**：`Global` 接入年兽出战预载与空子弹场景保护；`GameAnnouncement` 增加 V7.2 文案/版本按钮；`dj_sell` 喜鹊双倍掉率支持叠加且上限 24 小时；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称标签上移；`addons/bone_export/export_plugin.gd` 按第三方插件边界不修改，`Script/Test` 仅作规格。
+- **验证**：`check_all --godot-bin` 9/9；`scene_probe_runner` 全量 **26/26 PASS**（含 `awaken-72`、`menu-ui-72`、`role-skills`、`action-frames`）；`archive_probe_runner` 344/344；`LocalCoopPetNianProbe` / `LocalCoopPetYinTigerProbe` / `LocalCoopHudReadOnlyProbe` PASS；命名、白名单、`docs_audit` 通过。
+- **边界**：未做完整关卡内人工视觉/手感验收；36-6 L3 收口待开始；PCK/release 与目标设备验证继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 

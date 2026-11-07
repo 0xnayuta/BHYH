@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.1 内容基线；**Phase 36 的 7.2 内容回植进行中（36-4 首批觉醒完成，36-5 待开始）**。Phase 12~35 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.2 PCK/release 长期暂缓；当前活跃候选为 Phase 36。
+> **当前版本**：7.1 内容基线；**Phase 36 的 7.2 内容回植进行中（36-5 其余脚本完成，36-6 待开始）**。Phase 12~35 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.2 PCK/release 长期暂缓；当前活跃候选为 Phase 36。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -40,7 +40,7 @@
 | Phase 33 装备数据契约 | 完成、归档 | [`iteration_33_equipment_data_contract.md`](../archive/iteration_33_equipment_data_contract.md)；当前契约 [`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
 | Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 36 7.2 内容回植 | **进行中（36-4 首批觉醒完成；36-5 待开始）** | [`current-iteration.md`](current-iteration.md)；目标 7.2，PCK/release 暂缓 |
+| Phase 36 7.2 内容回植 | **进行中（36-5 其余脚本完成；36-6 待开始）** | [`current-iteration.md`](current-iteration.md)；目标 7.2，PCK/release 暂缓 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 

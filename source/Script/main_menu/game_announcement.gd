@@ -120,6 +120,21 @@ var _last_secret_pointer_msec := -1
 var verisions_name: String = "V6_0"
 var verisions: String = "V6.0"
 var text_data = {
+	"V7_2":
+	[
+		"",
+		"一、版本新增内容：==============================",
+		"1.添加新宠物年兽",
+		"2.修复个别角色缺少的幻化",
+		"3.修复小龙女昵称太低",
+		"4.玉兔牵引不能牵引霸体boss",
+		"5.修复寅虎宠物头像",
+		"6.喜鹊可以多次使用最高24小时",
+		"7.猴子重斩技能开放觉醒",
+		"8.唐僧玄冰阵技能开放觉醒",
+		"9.玉兔月魔舞技能开放觉醒",
+		"10.哪吒火轮切割技能开放觉醒",
+	],
 	"V7_1":
 	[
 		"",
@@ -1578,4 +1593,10 @@ func _on_v_0_51_pressed() -> void:
 func _on_v_0_52_pressed() -> void:
 	verisions_name = "V7_1"
 	verisions = "V7.1"
+	add_text_info()
+
+
+func _on_v_0_53_pressed() -> void:
+	verisions_name = "V7_2"
+	verisions = "V7.2"
 	add_text_info()

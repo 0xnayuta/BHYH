@@ -392,6 +392,8 @@ var role_item_list = {
 		"chuanshuosmsrsz",
 		"shenqismsrsz",
 		"js",
+		"slxjc",
+		"slys",
 		"xyfjss",
 		"csssxyhb",
 		"zqfjss",
@@ -613,6 +615,10 @@ func get_current_role_list():
 		8:
 			role.text = "小龙女"
 			other_list.append_array(role_item_list["小龙女"])
+	for category in [DataKeys.WINGS, DataKeys.TITLE]:
+		for item_id in role_item_list[category]:
+			if not other_list.has(item_id):
+				other_list.append(item_id)
 	for index in range(other_list.size() - 1, -1, -1):
 		if not _is_transmog_item_visible(str(other_list[index])):
 			other_list.remove_at(index)
