@@ -773,16 +773,24 @@ func _create_monster_attr_panel() -> Control:
 			_add_attr_label(list, label_name + "：" + value_text, 14, "ffffff")
 	if diff == BaseMonster.NIGHTMARE_DIFFICULTY and not data.has("伤害"):
 		var nightmare_damage_text := (
-			"100%"
-			if BaseMonster.uses_heaven_nightmare_attributes(level_path)
-			else "60%" if advanced_nightmare_path else "30%"
+			"120%"
+			if BaseMonster.get_nightmare_extra_multiplier(level_path) > 1.0
+			else (
+				"100%"
+				if BaseMonster.uses_heaven_nightmare_attributes(level_path)
+				else "60%" if advanced_nightmare_path else "30%"
+			)
 		)
 		_add_attr_label(list, "伤害：" + nightmare_damage_text, 14, "ffffff")
 	if diff == BaseMonster.NIGHTMARE_DIFFICULTY and not data.has("免伤"):
 		var nightmare_reduction_text := (
-			"100%"
-			if BaseMonster.uses_heaven_nightmare_attributes(level_path)
-			else "60%" if advanced_nightmare_path else "30%"
+			"120%"
+			if BaseMonster.get_nightmare_extra_multiplier(level_path) > 1.0
+			else (
+				"100%"
+				if BaseMonster.uses_heaven_nightmare_attributes(level_path)
+				else "60%" if advanced_nightmare_path else "30%"
+			)
 		)
 		_add_attr_label(list, "免伤：" + nightmare_reduction_text, 14, "ffffff")
 
@@ -990,6 +998,7 @@ func _get_scene_attr_data() -> Dictionary:
 							"min_value": minimum_value,
 							"max_value": maximum_value,
 							"chance": float(drop.get("chance", 0.0)),
+							"fixed_chance": bool(drop.get("fixed_chance", false)),
 							"direct_to_pet_backpack": bool(drop.get("direct_to_pet_backpack", false)),
 						}
 					)
@@ -1068,6 +1077,7 @@ func _get_level_config_attr_data() -> Dictionary:
 						"min_value": minimum_value,
 						"max_value": int(drop.get("max_value", minimum_value)),
 						"chance": float(drop.get("chance", float(level_monster_config.get("drop_rate", 0.0)) / 100.0)),
+						"fixed_chance": bool(drop.get("fixed_chance", false)),
 						"direct_to_pet_backpack": bool(drop.get("direct_to_pet_backpack", false)),
 					}
 				)
@@ -1227,9 +1237,16 @@ func _get_difficulty_value(key: String, value, mult: float, difficulty: int, lev
 			)
 		)
 		var penetration_bonus := BaseMonster.HEAVEN_NIGHTMARE_PENETRATION_BONUS if heaven_nightmare else defense_bonus
+		var extra_multiplier := BaseMonster.get_nightmare_extra_multiplier(level_path)
+		health_bonus = BaseMonster.JIEJIAO_NIGHTMARE_HEALTH_BONUS if extra_multiplier > 1.0 else health_bonus
+		attack_bonus = BaseMonster.JIEJIAO_NIGHTMARE_ATTACK_BONUS if extra_multiplier > 1.0 else attack_bonus
+		defense_bonus = BaseMonster.JIEJIAO_NIGHTMARE_DEFENSE_BONUS if extra_multiplier > 1.0 else defense_bonus
+		penetration_bonus = (
+			BaseMonster.JIEJIAO_NIGHTMARE_PENETRATION_BONUS if extra_multiplier > 1.0 else penetration_bonus
+		)
 		match key:
 			"等级":
-				return value + BaseMonster.NIGHTMARE_LEVEL_BONUS
+				return value + int(BaseMonster.NIGHTMARE_LEVEL_BONUS * extra_multiplier)
 			"生命":
 				return value * mult + health_bonus
 			"基础攻击", "攻击":
@@ -1237,14 +1254,14 @@ func _get_difficulty_value(key: String, value, mult: float, difficulty: int, lev
 			"物防", "魔防", "物穿", "魔穿":
 				return value * mult + (penetration_bonus if key in ["物穿", "魔穿"] else defense_bonus)
 			"命中":
-				return value * mult + BaseMonster.NIGHTMARE_HIT_BONUS
+				return value * mult + int(BaseMonster.NIGHTMARE_HIT_BONUS * extra_multiplier)
 			"闪避":
 				return value * mult
 			"暴击", "幸运", "魔抗", "暴击减免", "回血":
 				return value * mult
 			"伤害":
 				return (
-					BaseMonster.HEAVEN_NIGHTMARE_DAMAGE_BONUS
+					BaseMonster.HEAVEN_NIGHTMARE_DAMAGE_BONUS * extra_multiplier
 					if heaven_nightmare
 					else (
 						BaseMonster.UNDERWORLD_NIGHTMARE_DAMAGE_BONUS
@@ -1254,7 +1271,7 @@ func _get_difficulty_value(key: String, value, mult: float, difficulty: int, lev
 				)
 			"免伤":
 				return (
-					BaseMonster.HEAVEN_NIGHTMARE_DAMAGE_REDUCTION
+					BaseMonster.HEAVEN_NIGHTMARE_DAMAGE_REDUCTION * extra_multiplier
 					if heaven_nightmare
 					else (
 						BaseMonster.UNDERWORLD_NIGHTMARE_DAMAGE_REDUCTION

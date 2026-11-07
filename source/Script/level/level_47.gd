@@ -126,6 +126,7 @@ const LEVEL_47_MONSTER_DATA := {
 		"drop_list": [],
 		"independent_drop_list":
 		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
 			{"name": "pgs", "min_value": 2, "max_value": 5, "chance": 0.15},
 		],
 		"is_boss": true,

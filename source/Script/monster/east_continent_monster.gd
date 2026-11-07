@@ -3716,6 +3716,9 @@ func _start_3161_protect_counter() -> void:
 func _start_3120_protect_teleport() -> void:
 	_3120_protect_serial += 1
 	var serial := _3120_protect_serial
+	_attack_serial += 1
+	_disable_attack_box()
+	mr_player.stop()
 	_special_attack_active = true
 	velocity = Vector2.ZERO
 	is_attacking = false
@@ -3752,6 +3755,7 @@ func _start_3120_protect_teleport() -> void:
 	var bounds := _screen_bounds_3120()
 	var move_left := global_position.x >= (bounds.x + bounds.y) * 0.5
 	global_position.x = bounds.x + 50.0 if move_left else bounds.y - 50.0
+	velocity = Vector2.ZERO
 	monster_dir.scale.x = -1.0 if move_left else 1.0
 	var appear_effect := PROJECTILE_SCRIPT.new() as WutaiMinghaiProjectile
 	var appear_configured := (
@@ -3791,9 +3795,21 @@ func _screen_bounds_3120() -> Vector2:
 	if level_node != null and level_node.has_method("_screen_starts") and level_node.has_method("_screen_rights"):
 		var starts: Array = level_node.call("_screen_starts")
 		var rights: Array = level_node.call("_screen_rights")
-		for index in range(mini(starts.size(), rights.size())):
-			if global_position.x >= float(starts[index]) and global_position.x <= float(rights[index]):
-				return Vector2(float(starts[index]), float(rights[index]))
+		var count := mini(starts.size(), rights.size())
+		var stage := int(level_node.get("current_stage"))
+		if stage >= 1 and stage <= count:
+			var stage_index := stage - 1
+			return Vector2(
+				level_node.to_global(Vector2(float(starts[stage_index]), 0.0)).x,
+				level_node.to_global(Vector2(float(rights[stage_index]), 0.0)).x
+			)
+		var local_x: float = level_node.to_local(global_position).x
+		for index in range(count - 1, -1, -1):
+			if local_x >= float(starts[index]) and local_x <= float(rights[index]):
+				return Vector2(
+					level_node.to_global(Vector2(float(starts[index]), 0.0)).x,
+					level_node.to_global(Vector2(float(rights[index]), 0.0)).x
+				)
 	return Vector2(0.0, 1200.0)
 
 

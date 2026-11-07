@@ -137,6 +137,7 @@ const LEVEL_59_MONSTER_DATA := {
 		"drop_list": [],
 		"independent_drop_list":
 		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
 			{"name": "pgs_5", "min_value": 2, "max_value": 5, "chance": 0.15},
 			{"name": "zqwqsszzs", "value": 1, "chance": 0.1},
 			{"name": "zqwqblzzs", "value": 1, "chance": 0.1},

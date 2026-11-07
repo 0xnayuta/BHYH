@@ -92,7 +92,11 @@ const LEVEL_66_MONSTER_DATA := {
 		"drop_list": [],
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,
-		"independent_drop_list": [{"name": "pgs_7", "min_value": 2, "max_value": 5, "chance": 0.15}],
+		"independent_drop_list":
+		[
+			{"name": "8_bsjh", "value": 1, "chance": 0.25},
+			{"name": "pgs_7", "min_value": 2, "max_value": 5, "chance": 0.15}
+		],
 		"is_boss": true,
 		"max_protect": 250.0,
 		"attacks":

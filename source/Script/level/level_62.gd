@@ -42,6 +42,10 @@ const LEVEL_62_MONSTER_DATA := {
 		"coin": 0,
 		"drop_rate": 0.0,
 		"drop_list": [],
+		"independent_drop_list":
+		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
+		],
 		"is_boss": true,
 		"max_protect": 240.0,
 		"attacks":

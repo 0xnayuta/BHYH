@@ -125,6 +125,10 @@ const LEVEL_61_MONSTER_DATA := {
 		"coin": 0,
 		"drop_rate": 0.0,
 		"drop_list": [],
+		"independent_drop_list":
+		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
+		],
 		"is_boss": true,
 		"max_protect": 240.0,
 		"attacks":
@@ -191,6 +195,10 @@ const LEVEL_61_MONSTER_DATA := {
 		"coin": 0,
 		"drop_rate": 0.0,
 		"drop_list": [],
+		"independent_drop_list":
+		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
+		],
 		"is_boss": true,
 		"max_protect": 240.0,
 		"attacks":
@@ -224,6 +232,7 @@ const LEVEL_61_MONSTER_DATA := {
 		"drop_list": [],
 		"independent_drop_list":
 		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
 			{"name": "139300017", "value": 1, "chance": 0.1},
 		],
 		"is_boss": true,

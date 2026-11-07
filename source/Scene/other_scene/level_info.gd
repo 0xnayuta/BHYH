@@ -2174,8 +2174,8 @@ func _get_base_level_info() -> Dictionary:
 			{"Name": "金沙村首领", "is_boss": true, "ScenePath": "res://Scene/monster/monster_3120.tscn"},
 		]
 		east_jinshacun = _clear_east_continent_drop_preview(east_jinshacun)
-		east_jinshacun["LevelFall"] = ["469000011"]
-		east_jinshacun["LevelFallProbability"] = {"469000011": 10}
+		east_jinshacun["LevelFall"] = ["8_bsjh"]
+		east_jinshacun["LevelFallProbability"] = {"8_bsjh": 25}
 		return east_jinshacun
 	if target_stage_path == "res://Scene/level/level_64.tscn":
 		var east_baixianyuan := (level_info["百仙园"] as Dictionary).duplicate(true) if level_info.has("百仙园") else {}
@@ -2193,8 +2193,8 @@ func _get_base_level_info() -> Dictionary:
 			},
 		]
 		east_baixianyuan = _clear_east_continent_drop_preview(east_baixianyuan)
-		east_baixianyuan["LevelFall"] = ["2_jns"]
-		east_baixianyuan["LevelFallProbability"] = {"2_jns": 20}
+		east_baixianyuan["LevelFall"] = ["2_jns", "8_bsjh"]
+		east_baixianyuan["LevelFallProbability"] = {"2_jns": 20, "8_bsjh": 25}
 		return east_baixianyuan
 	if target_stage_path == "res://Scene/level/level_65.tscn":
 		var east_aolaiguo := (level_info["傲来国"] as Dictionary).duplicate(true) if level_info.has("傲来国") else {}
@@ -2206,6 +2206,8 @@ func _get_base_level_info() -> Dictionary:
 			{"Name": "3136", "is_boss": true, "ScenePath": "res://Scene/monster/monster_3136.tscn", "ConfigId": 3136},
 		]
 		east_aolaiguo = _clear_east_continent_drop_preview(east_aolaiguo)
+		east_aolaiguo["LevelFall"].append("469000011")
+		east_aolaiguo["LevelFallProbability"]["469000011"] = 10
 		if not east_aolaiguo.has("NeedZDL"):
 			east_aolaiguo["NeedZDL"] = {}
 		if not east_aolaiguo.has("SelfBg"):
@@ -2260,6 +2262,19 @@ func _get_base_level_info() -> Dictionary:
 				east_late["Level"] = 90
 			return _clear_east_continent_drop_preview(east_late)
 	if level_info.has(level_name):
+		if (
+			target_stage_path.begins_with("res://Scene/level/level_")
+			and int(target_stage_path.get_file().get_basename().trim_prefix("level_")) in range(47, 63)
+		):
+			var south_info: Dictionary = (level_info[level_name] as Dictionary).duplicate(true)
+			var south_items: Array = south_info.get("LevelFall", [])
+			if "7_bsjh" not in south_items:
+				south_items.append("7_bsjh")
+			south_info["LevelFall"] = south_items
+			var south_probabilities: Dictionary = south_info.get("LevelFallProbability", {})
+			south_probabilities["7_bsjh"] = 25
+			south_info["LevelFallProbability"] = south_probabilities
+			return south_info
 		return level_info[level_name]
 	push_warning("level_info missing: " + str(level_name))
 	return {
@@ -2275,8 +2290,8 @@ func _get_base_level_info() -> Dictionary:
 
 func _clear_east_continent_drop_preview(level_info: Dictionary) -> Dictionary:
 	level_info["fall_pro"] = 0
-	level_info["LevelFall"] = []
-	level_info["LevelFallProbability"] = {}
+	level_info["LevelFall"] = ["8_bsjh"]
+	level_info["LevelFallProbability"] = {"8_bsjh": 25}
 	return level_info
 
 
@@ -2814,6 +2829,8 @@ func _get_nightmare_entry_block_message() -> String:
 		return ""
 	if target_stage_path == "res://Scene/level/level_stz.tscn":
 		return ""
+	if BaseMonster.JIEJIAO_CATALOG.LEVEL_MONSTERS.has(target_stage_path):
+		return "" if bool(PlayerData.player_data.get("天庭噩梦", false)) else "通关天庭噩梦开放此难度"
 	if target_stage_path in HUMAN_NIGHTMARE_LEVEL_PATHS:
 		var cleared_biyou_palace := int(PlayerData.player_data.get("通天教主", 0)) == 1
 		return "" if cleared_biyou_palace else "通关碧游宫开放此难度"

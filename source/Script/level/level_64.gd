@@ -131,6 +131,7 @@ const LEVEL_64_MONSTER_DATA := {
 		"drop_list": [],
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,
+		"independent_drop_list": [{"name": "8_bsjh", "value": 1, "chance": 0.25}],
 		"is_boss": true,
 		"max_protect": 250.0,
 		"attacks": {"hit1": {"multiplier": 1.0, "hurt_back": [-4.0, -2.0], "kind": "physics", "protect": 90}}
@@ -159,7 +160,11 @@ const LEVEL_64_MONSTER_DATA := {
 		"coin": 320,
 		"drop_rate": 0.0,
 		"drop_list": [],
-		"independent_drop_list": [{"name": "2_jns", "chance": 0.2, "min_value": 1, "max_value": 3}],
+		"independent_drop_list":
+		[
+			{"name": "8_bsjh", "value": 1, "chance": 0.25},
+			{"name": "2_jns", "chance": 0.2, "min_value": 1, "max_value": 3}
+		],
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,
 		"is_boss": true,

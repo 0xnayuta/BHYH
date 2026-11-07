@@ -131,6 +131,7 @@ const LEVEL_52_MONSTER_DATA := {
 		"drop_list": [],
 		"independent_drop_list":
 		[
+			{"name": "7_bsjh", "value": 1, "chance": 0.25},
 			{"name": "105400003", "value": 1, "chance": 0.1},
 			{"name": "139300012", "value": 1, "chance": 0.1},
 		],

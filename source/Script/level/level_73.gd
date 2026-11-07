@@ -52,6 +52,7 @@ const LEVEL_73_MONSTER_DATA := {
 		"magic_break": 26574,
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,
+		"independent_drop_list": [{"name": "8_bsjh", "value": 1, "chance": 0.25}],
 		"is_boss": true
 	},
 }

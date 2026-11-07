@@ -54,6 +54,7 @@ const LEVEL_70_MONSTER_DATA := {
 		"damage_reduction": 0.6,
 		"independent_drop_list":
 		[
+			{"name": "8_bsjh", "value": 1, "chance": 0.25},
 			{"name": "ygwqwkzzs", "value": 1, "chance": 0.1},
 			{"name": "ygwqtszzs", "value": 1, "chance": 0.1},
 			{"name": "ygwqbjzzs", "value": 1, "chance": 0.1}

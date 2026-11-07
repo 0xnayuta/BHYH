@@ -23,6 +23,7 @@ const LEVEL_75_MONSTER_DATA := {
 		"sight": 12000,
 		"speed": 120.0,
 		"max_protect": 50000.0,
+		"independent_drop_list": [{"name": "8_bsjh", "value": 1, "chance": 0.25}],
 		"is_boss": true,
 		"coin": 0,
 		"exp": 0,

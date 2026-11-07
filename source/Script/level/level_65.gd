@@ -121,6 +121,8 @@ const LEVEL_65_MONSTER_DATA := {
 		"drop_list": [],
 		"damage_bonus": 0.6,
 		"damage_reduction": 0.6,
+		"independent_drop_list":
+		[{"name": "8_bsjh", "value": 1, "chance": 0.25}, {"name": "469000011", "value": 1, "chance": 0.1}],
 		"is_boss": true,
 		"max_protect": 250.0,
 		"animations":
