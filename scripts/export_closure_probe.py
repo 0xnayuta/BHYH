@@ -20,7 +20,7 @@ import tempfile
 from pathlib import Path
 
 from tool_common import ROOT, SOURCE, resolve_godot, write_json
-from frame_sequence_pack_probe import find_preset_name, run_probe
+from frame_sequence_pack_probe import find_preset_name, normalize, run_probe
 
 MANIFEST_PATH = SOURCE / "Script" / "data" / "export_raw_dependencies.json"
 EXPORT_MARKER = "BHYH_RAW_EXPORT"

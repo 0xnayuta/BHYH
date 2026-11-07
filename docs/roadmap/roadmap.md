@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.1 内容基线；**Phase 36 的 7.2 内容回植进行中（36-5 其余脚本完成，36-6 待开始）**。Phase 12~35 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.2 PCK/release 长期暂缓；当前活跃候选为 Phase 36。
+> **当前版本**：7.2 内容基线；**Phase 36 的 7.2 内容回植已完成 L3 收口、待发布验证**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.2 PCK/release 长期暂缓；当前无活跃候选。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -40,7 +40,7 @@
 | Phase 33 装备数据契约 | 完成、归档 | [`iteration_33_equipment_data_contract.md`](../archive/iteration_33_equipment_data_contract.md)；当前契约 [`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
 | Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 36 7.2 内容回植 | **进行中（36-5 其余脚本完成；36-6 待开始）** | [`current-iteration.md`](current-iteration.md)；目标 7.2，PCK/release 暂缓 |
+| Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
@@ -106,9 +106,9 @@ Windows release 的已有验证见 [`status.md`](../reference/status.md)。后�
 
 7.0 回植已完成角色 8 小龙女、2P、角色选择/技能页/自动战斗、背包/幻化/翅膀/坐骑与 7.0 系统修复；当前验证与边界见 [`status.md`](../reference/status.md)。7.0 release PCK、全量关卡回归与外部云存档服务差异不在本轮 gameplay 收口内。
 
-Phase 35 已完成 7.1 回植与 L3 收口：参考工程/台账、基础数据/攻击区域、Longnv/技能、关卡/北俱芦洲/场景、菜单/UI/剩余脚本均已落地；PCK/release 与目标设备验证待最终发布统一执行。7.2/7.3 待各自独立立项。
+Phase 35 已完成 7.1 回植与 L3 收口：参考工程/台账、基础数据/攻击区域、Longnv/技能、关卡/北俱芦洲/场景、菜单/UI/剩余脚本均已落地；PCK/release 与目标设备验证待最终发布统一执行。7.2 已于 Phase 36 完成，7.3 未立项。
 
-Phase 36 已启动 7.2 内容回植：先完成 7.1→7.2 的二进制验证、参考源码/场景与逐文件台账，再按年兽宠物、觉醒系统、其余脚本修复和 L3 收口拆分批次；PCK/release 与目标设备验证继续暂缓。7.3 未立项。
+Phase 36 已完成 7.2 内容回植与 L3 收口：年兽宠物、首批觉醒、V7.2 公告、喜鹊叠加、幻化与昵称等生产差异均已接入；PCK/release 与目标设备验证继续暂缓，7.3 未立项。
 
 ## 5. 跨阶段纪律与验收
 
