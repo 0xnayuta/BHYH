@@ -5,6 +5,8 @@ const STAGE_SIZE := Vector2(940.0, 560.0)
 const HUMAN_CATEGORY := "人间"
 const UNDERWORLD_CATEGORY := "地府"
 const HEAVEN_CATEGORY := "天庭"
+const JIEJIAO_DATA := preload("res://Script/data/wan_ling_jiejiao_data.gd")
+const JIEJIAO_CATEGORY := JIEJIAO_DATA.CATEGORY
 const CATEGORY_NAMES := [
 	"人间",
 	"地府",
@@ -117,6 +119,8 @@ const UNDERWORLD_EFFECT_TEXT := {
 	58: "每个+0.2回血、回魔",
 }
 const HEAVEN_MONSTERS := {
+	72: "哮天犬",
+	73: "恶鹰",
 	74: "黑龟",
 	75: "黑虎",
 	76: "巫鹰",
@@ -164,6 +168,8 @@ const HEAVEN_MONSTERS := {
 	137: "持国天王",
 }
 const HEAVEN_EFFECT_TEXT := {
+	72: "每个+100攻击",
+	73: "每个+50生命",
 	74: "每个+50生命",
 	75: "每个+50生命",
 	76: "每个+1魔防",
@@ -211,7 +217,6 @@ const HEAVEN_EFFECT_TEXT := {
 	137: "每个+20暴击",
 }
 const PORTRAIT_PATH := "res://Art/monster/creature_codex/%d.png"
-const CRYSTAL_PATH := "res://Art/monster/soul_crystal/%d.png"
 
 @onready var _stage: Panel = $Stage
 @onready var _category_list: VBoxContainer = $Stage/CategoryPanel/CategoryMargin/CategoryList
@@ -343,7 +348,7 @@ func _show_category(category_name: String) -> void:
 		var button: Button = _category_buttons[name_value]
 		button.disabled = str(name_value) == category_name
 	_clear_monster_cards()
-	var is_supported := category_name in [HUMAN_CATEGORY, UNDERWORLD_CATEGORY, HEAVEN_CATEGORY]
+	var is_supported := category_name in [HUMAN_CATEGORY, UNDERWORLD_CATEGORY, HEAVEN_CATEGORY, JIEJIAO_CATEGORY]
 	_scroll.visible = is_supported
 	_empty_label.visible = not is_supported
 	if category_name == HUMAN_CATEGORY:
@@ -352,6 +357,8 @@ func _show_category(category_name: String) -> void:
 		_build_cards(UNDERWORLD_MONSTERS)
 	elif category_name == HEAVEN_CATEGORY:
 		_build_cards(HEAVEN_MONSTERS)
+	elif category_name == JIEJIAO_CATEGORY:
+		_build_cards(JIEJIAO_DATA.NAMES)
 	else:
 		_empty_label.text = "%s图录暂未开放" % category_name
 
@@ -432,7 +439,7 @@ func _create_monster_card(monster_id: int, monster_name: String) -> Control:
 	crystal_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	crystal_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	crystal_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	crystal_icon.texture = ResourceLoader.load(CRYSTAL_PATH % monster_id) as Texture2D
+	crystal_icon.texture = ResourceLoader.load(JIEJIAO_DATA.crystal_icon(monster_id)) as Texture2D
 	material_row.add_child(crystal_icon)
 
 	var material_label := Label.new()
@@ -524,6 +531,8 @@ func _get_monster_name(monster_id: int) -> String:
 		monsters = UNDERWORLD_MONSTERS
 	elif _current_category == HEAVEN_CATEGORY:
 		monsters = HEAVEN_MONSTERS
+	elif _current_category == JIEJIAO_CATEGORY:
+		monsters = JIEJIAO_DATA.NAMES
 	return str(monsters.get(monster_id, "怪物"))
 
 
@@ -533,10 +542,14 @@ func _get_effect_text(monster_id: int) -> String:
 		effects = UNDERWORLD_EFFECT_TEXT
 	elif _current_category == HEAVEN_CATEGORY:
 		effects = HEAVEN_EFFECT_TEXT
+	elif _current_category == JIEJIAO_CATEGORY:
+		effects = JIEJIAO_DATA.EFFECT_TEXT
 	return str(effects.get(monster_id, ""))
 
 
 func _get_consumed_count(monster_id: int) -> int:
+	if _current_category == JIEJIAO_CATEGORY:
+		return PlayerData.get_wanling_jiejiao_consumed_count(monster_id)
 	if _current_category == UNDERWORLD_CATEGORY:
 		return PlayerData.get_wanling_underworld_consumed_count(monster_id)
 	if _current_category == HEAVEN_CATEGORY:
@@ -545,6 +558,8 @@ func _get_consumed_count(monster_id: int) -> int:
 
 
 func _get_consume_limit(monster_id: int) -> int:
+	if _current_category == JIEJIAO_CATEGORY:
+		return PlayerData.get_wanling_jiejiao_consume_limit(monster_id)
 	if _current_category == UNDERWORLD_CATEGORY:
 		return PlayerData.get_wanling_underworld_consume_limit(monster_id)
 	if _current_category == HEAVEN_CATEGORY:
@@ -553,6 +568,8 @@ func _get_consume_limit(monster_id: int) -> int:
 
 
 func _get_soul_crystal_count(monster_id: int) -> int:
+	if _current_category == JIEJIAO_CATEGORY:
+		return PlayerData.get_wanling_jiejiao_soul_crystal_count(monster_id)
 	if _current_category == UNDERWORLD_CATEGORY:
 		return PlayerData.get_wanling_underworld_soul_crystal_count(monster_id)
 	if _current_category == HEAVEN_CATEGORY:
@@ -561,6 +578,8 @@ func _get_soul_crystal_count(monster_id: int) -> int:
 
 
 func _consume_all_crystals(monster_id: int) -> int:
+	if _current_category == JIEJIAO_CATEGORY:
+		return PlayerData.consume_all_wanling_jiejiao_crystals(monster_id)
 	if _current_category == UNDERWORLD_CATEGORY:
 		return PlayerData.consume_all_wanling_underworld_crystals(monster_id)
 	if _current_category == HEAVEN_CATEGORY:

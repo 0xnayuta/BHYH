@@ -47,26 +47,9 @@ func _physics_process(delta: float) -> void:
 
 
 func pushqhs(name_str, Level):
-	var total_num: int
-	match Level:
-		0:
-			total_num = 0
-		1:
-			total_num = 3
-		2:
-			total_num = 7
-		3:
-			total_num = 28
-		4:
-			total_num = 57
-		5:
-			total_num = 96
-		6:
-			total_num = 205
-		7:
-			total_num = 417
-	if total_num > 0:
-		item_data.push_back({"name": "qhs_1", "num": total_num})
+	var refund := Strength.get_decompose_stone_refund(int(Level))
+	for item_id in refund:
+		item_data.push_back({"name": item_id, "num": int(refund[item_id])})
 
 
 func add_empty():
@@ -239,7 +222,7 @@ func _on_decompose_button_pressed() -> void:
 		var item_name := item_definition.display_name
 		if cur_level > 0:
 			Global.add_choose_text(
-				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（该装备包含强化等级！）", 0
+				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（返还累计消耗强化石的80%，各等级分别向下取整）", 0
 			)
 		else:
 			Global.add_choose_text(NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0)

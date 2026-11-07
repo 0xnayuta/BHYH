@@ -101,6 +101,8 @@ static func resolve_entries(level: int, current_level: String, is_imported: bool
 	var entries: Dictionary = (entries_value as Dictionary).duplicate() if entries_value is Dictionary else {}
 	if level == NIGHTMARE_LEVEL and nightmare:
 		entries.merge(NIGHTMARE_PROGRESS)
+	if level == 35 and nightmare:
+		entries["天庭噩梦"] = true
 	return entries
 
 

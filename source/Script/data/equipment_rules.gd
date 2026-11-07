@@ -115,7 +115,10 @@ func get_divine_forge_stage(data: Dictionary) -> int:
 
 func can_divine_forge(definition_id: StringName, data: Dictionary = {}) -> bool:
 	var template := _template(definition_id)
-	if bool(data.get("不可神铸", template.get("不可神铸", false))):
+	if (
+		definition_id not in [&"cjxianjie", &"cdxianjie", &"zhxianjie"]
+		and bool(data.get("不可神铸", template.get("不可神铸", false)))
+	):
 		return false
 	var item_type := str(data.get("类型", template.get("类型", "")))
 	var quality := str(data.get("品质", template.get("品质", "")))

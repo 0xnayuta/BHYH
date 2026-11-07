@@ -1,6 +1,21 @@
 extends Node
 
 const RECIPES = [
+	{"materials": ["sms_7", "sms_7", "8_bsjh"], "result": "sms_8", "cost": 0},
+	{"materials": ["fls_7", "fls_7", "8_bsjh"], "result": "fls_8", "cost": 0},
+	{"materials": ["gjs_7", "gjs_7", "8_bsjh"], "result": "gjs_8", "cost": 0},
+	{"materials": ["wfs_7", "wfs_7", "8_bsjh"], "result": "wfs_8", "cost": 0},
+	{"materials": ["mfs_7", "mfs_7", "8_bsjh"], "result": "mfs_8", "cost": 0},
+	{"materials": ["bjs_7", "bjs_7", "8_bsjh"], "result": "bjs_8", "cost": 0},
+	{"materials": ["sbs_7", "sbs_7", "8_bsjh"], "result": "sbs_8", "cost": 0},
+	{"materials": ["rxs_7", "rxs_7", "8_bsjh"], "result": "rxs_8", "cost": 0},
+	{"materials": ["hxs_7", "hxs_7", "8_bsjh"], "result": "hxs_8", "cost": 0},
+	{"materials": ["hms_7", "hms_7", "8_bsjh"], "result": "hms_8", "cost": 0},
+	{"materials": ["xys_7", "xys_7", "8_bsjh"], "result": "xys_8", "cost": 0},
+	{"materials": ["mzs_7", "mzs_7", "8_bsjh"], "result": "mzs_8", "cost": 0},
+	{"materials": ["bms_7", "bms_7", "8_bsjh"], "result": "bms_8", "cost": 0},
+	{"materials": ["pjs_7", "pjs_7", "8_bsjh"], "result": "pjs_8", "cost": 0},
+	{"materials": ["pms_7", "pms_7", "8_bsjh"], "result": "pms_8", "cost": 0},
 	{"materials": ["yyzlj", "ywhl", "sxyg"], "result": "wpfbyyin", "cost": 0},
 	{"materials": ["zhyx", "bjs", "yyb"], "result": "wpfbyyan", "cost": 0},
 	{"materials": ["dkhl", "hehua", "kly3"], "result": "wpfbtc", "cost": 0},

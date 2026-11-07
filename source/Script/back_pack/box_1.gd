@@ -206,11 +206,7 @@ func on_press_when_strength():
 
 func on_press_when_divine_forge() -> void:
 	var item_data: Dictionary = EquipmentService.data_or_empty(get_item_name)
-	if (
-		bool(eq_prop.get("不可神铸", item_data.get("不可神铸", false)))
-		or item_data.is_empty()
-		or not EquipmentService.rules().can_divine_forge(StringName(get_item_name), eq_prop)
-	):
+	if item_data.is_empty() or not EquipmentService.rules().can_divine_forge(StringName(get_item_name), eq_prop):
 		var _parent = NodeUtils.ancestor(self, 7)
 		Global.add_message_show(_parent, "只有神器及以上品质的武器、防具和饰品可以神铸！", 1.5, Vector2(500, 305))
 		return

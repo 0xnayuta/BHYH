@@ -113,6 +113,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="V0_54" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1623596692]
+theme_type_variation = "AnnouncementButton"
+layout_mode = 2
+text = "V7.3"
+
 [node name="V0_53" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1623596691]
 theme_type_variation = "AnnouncementButton"
 layout_mode = 2
@@ -709,6 +714,7 @@ texture_pressed = ExtResource("7")
 texture_hover = ExtResource("8")
 texture_disabled = ExtResource("7")
 
+[connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_54" to="." method="_on_v_0_54_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_53" to="." method="_on_v_0_53_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_52" to="." method="_on_v_0_52_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_51" to="." method="_on_v_0_51_pressed"]

@@ -27,6 +27,7 @@ var playe_id = int(PlayerData.player_data["Myself"])
 var custom_shop_items = {
 	"装备":
 	[
+		{"名字": "zcld", "灵魂": 5000},
 		{"名字": "tpys", "灵魂": 2000000},
 		{"名字": "qtds", "灵魂": 2000000},
 		{"名字": "jldj", "灵魂": 2000000},

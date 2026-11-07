@@ -233,55 +233,51 @@ func _show_invalid_strength_selection() -> void:
 	remove_infomation()
 
 
+static func get_strength_cost(current_level: int) -> Dictionary:
+	match current_level:
+		0:
+			return {"stones": {"qhs_1": 4, "qhs_2": 2}, "soul": 0}
+		1:
+			return {"stones": {"qhs_1": 6, "qhs_2": 4}, "soul": 300}
+		2:
+			return {"stones": {"qhs_2": 9, "qhs_3": 6}, "soul": 600}
+		3:
+			return {"stones": {"qhs_2": 12, "qhs_3": 9}, "soul": 900}
+		4:
+			return {"stones": {"qhs_2": 18, "qhs_3": 12}, "soul": 1500}
+		5:
+			return {"stones": {"qhs_3": 24, "qhs_4": 18}, "soul": 20000}
+	if current_level >= 6:
+		return {
+			"stones": {"qhs_3": 60 + (current_level - 6) * 10, "qhs_4": 36 + (current_level - 6) * 10},
+			"soul": 100000 + (current_level - 6) * 10000,
+		}
+	return {"stones": {}, "soul": 0}
+
+
+static func get_decompose_stone_refund(strength_level: int) -> Dictionary:
+	var totals: Dictionary = {}
+	for level in range(maxi(0, strength_level)):
+		var stones: Dictionary = get_strength_cost(level)["stones"]
+		for item_id in stones:
+			totals[item_id] = int(totals.get(item_id, 0)) + int(stones[item_id])
+	var refund: Dictionary = {}
+	for item_id in totals:
+		var count := int(int(totals[item_id]) * 4 / 5)
+		if count > 0:
+			refund[item_id] = count
+	return refund
+
+
 func get_qhs_name():
-	if qh_level == -1:
-		qhs_1_name = "empty"
-		qhs_2_name = "empty"
-		qhs_1_num = 0
-		qhs_2_num = 0
-		need_lh = int("???")
-	elif qh_level == 0:
-		qhs_1_name = "qhs_1"
-		qhs_2_name = "qhs_2"
-		qhs_1_num = 4
-		qhs_2_num = 2
-		need_lh = 0
-	elif qh_level == 1:
-		qhs_1_name = "qhs_1"
-		qhs_2_name = "qhs_2"
-		qhs_1_num = 6
-		qhs_2_num = 4
-		need_lh = 300
-	elif qh_level == 2:
-		qhs_1_name = "qhs_2"
-		qhs_2_name = "qhs_3"
-		qhs_1_num = 9
-		qhs_2_num = 6
-		need_lh = 600
-	elif qh_level == 3:
-		qhs_1_name = "qhs_2"
-		qhs_2_name = "qhs_3"
-		qhs_1_num = 12
-		qhs_2_num = 9
-		need_lh = 900
-	elif qh_level == 4:
-		qhs_1_name = "qhs_2"
-		qhs_2_name = "qhs_3"
-		qhs_1_num = 18
-		qhs_2_num = 12
-		need_lh = 1500
-	elif qh_level == 5:
-		qhs_1_name = "qhs_3"
-		qhs_2_name = "qhs_4"
-		qhs_1_num = 24
-		qhs_2_num = 18
-		need_lh = 20000
-	elif qh_level >= 6:
-		qhs_1_name = "qhs_3"
-		qhs_2_name = "qhs_4"
-		qhs_1_num = 60 + (qh_level - 6) * 10
-		qhs_2_num = 36 + (qh_level - 6) * 10
-		need_lh = 100000 + (qh_level - 6) * 10000
+	var cost := get_strength_cost(qh_level)
+	var stones: Dictionary = cost["stones"]
+	var names := stones.keys()
+	qhs_1_name = str(names[0]) if names.size() > 0 else "empty"
+	qhs_2_name = str(names[1]) if names.size() > 1 else "empty"
+	qhs_1_num = int(stones.get(qhs_1_name, 0))
+	qhs_2_num = int(stones.get(qhs_2_name, 0))
+	need_lh = int(cost["soul"])
 
 
 func remove_infomation():

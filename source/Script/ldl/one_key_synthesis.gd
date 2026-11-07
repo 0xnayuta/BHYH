@@ -61,7 +61,22 @@ const DAN_RECIPES = {
 	"mzs_7": {"mzs_6": 2, "7_bsjh": 1},
 	"bms_7": {"bms_6": 2, "7_bsjh": 1},
 	"pjs_7": {"pjs_6": 2, "7_bsjh": 1},
-	"pms_7": {"pms_6": 2, "7_bsjh": 1}
+	"pms_7": {"pms_6": 2, "7_bsjh": 1},
+	"sms_8": {"sms_7": 2, "8_bsjh": 1},
+	"fls_8": {"fls_7": 2, "8_bsjh": 1},
+	"gjs_8": {"gjs_7": 2, "8_bsjh": 1},
+	"wfs_8": {"wfs_7": 2, "8_bsjh": 1},
+	"mfs_8": {"mfs_7": 2, "8_bsjh": 1},
+	"bjs_8": {"bjs_7": 2, "8_bsjh": 1},
+	"sbs_8": {"sbs_7": 2, "8_bsjh": 1},
+	"rxs_8": {"rxs_7": 2, "8_bsjh": 1},
+	"hxs_8": {"hxs_7": 2, "8_bsjh": 1},
+	"hms_8": {"hms_7": 2, "8_bsjh": 1},
+	"xys_8": {"xys_7": 2, "8_bsjh": 1},
+	"mzs_8": {"mzs_7": 2, "8_bsjh": 1},
+	"bms_8": {"bms_7": 2, "8_bsjh": 1},
+	"pjs_8": {"pjs_7": 2, "8_bsjh": 1},
+	"pms_8": {"pms_7": 2, "8_bsjh": 1},
 }
 
 @onready var target_dan: Button = $TargetDan
@@ -207,7 +222,7 @@ func _collect_materials(dan: String, times: int, dict: Dictionary):
 	var recipe = DAN_RECIPES[dan]
 	for mat in recipe:
 		var need = recipe[mat] * times
-		if DAN_RECIPES.has(mat) and not dan.begins_with("qhs_"):
+		if DAN_RECIPES.has(mat) and not dan.begins_with("qhs_") and not dan.ends_with("_8"):
 			_collect_materials(mat, need, dict)
 		else:
 			dict[mat] = dict.get(mat, 0) + need

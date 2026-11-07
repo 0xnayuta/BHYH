@@ -1,6 +1,6 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 37 7.3 内容回植（37-0 完成；37-1 部分完成；37-2 首批）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
+> **状态**：**Phase 37 7.3 内容回植（37-0~37-3 批次完成；L3 待收口）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
 > **版本**：7.2 内容基线；7.3 回植进行中，尚未升级版本标记。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
@@ -63,9 +63,9 @@
 
 - **目标**：7.3 内容回植；base 为 7.2 反编译参考，ours 为当前 7.2 治理工程，theirs 为 7.3 反编译参考。
 - **37-0**：7.3 二进制、SGXZ 解密和逐文件清单已校验；目录与全部 40,275 个文件块通过 MD5 校验；参考树已生成 774 个 `.gd` 与 1,152 个 `.tscn`；初版台账记录 49 个生产脚本修改、1 个新增生产脚本，生产脚本删除 0。
-- **37-1**：数据与资产部分完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个新增图标已从 7.3 `.ctex` 恢复为源 PNG，装备构建源新增 38 条定义（16 个八级宝石、2 个天庭魂晶、20 个截教魂晶）并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落和 `LevelInfo` 预览已接入；`PlayerData` effects/consumption 与最终资产闭包仍待处理。
-- **37-2**：角色与技能内容；首批已接入 NeZha/Yutu 重叠伤害与月舞碰撞掩码，剩余角色/技能及 EastContinentMonster/Level 变更待按域拆分。
-- **37-3**：系统、菜单/UI 与公告文本，逐项做三方语义合并。
+- **37-1**：数据/资产与截教接入完成；JSON/BIN/Atlas/FrameSequence 与 7.2 的生产内容无变化（仅缓存变化）；37 个新增图标已从 7.3 `.ctex` 恢复为源 PNG，装备构建源新增 38 条定义（16 个八级宝石、2 个天庭魂晶、20 个截教魂晶）并重建 Catalog。`WanLingJiejiaoData`、`BaseMonster` 属性/魂晶掉落、`LevelInfo` 预览和 `PlayerData` effects/consumption 已接入；最终资产闭包复核待办。
+- **37-2**：角色与技能内容完成；NeZha/Yutu 重叠伤害与月舞碰撞掩码、EastContinentMonster 3120 传送、Level 47–75 宝石精粹掉落/预览均已接入。
+- **37-3**：系统、菜单/UI 与公告文本完成；万灵图录截教分栏、V7.3 公告、招财铃铛、仙戒神铸、分解返还、8 级宝石配方与天庭噩梦进度已接入。
 - **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异，最后接入侵入性系统。
 - **37-5**：L3 收口；PCK/release 与目标设备验证按用户决策另行执行。
 - **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。

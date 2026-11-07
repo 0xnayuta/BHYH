@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-07。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 37 的 7.3 内容回植进行中（37-0 完成；37-1 数据/资产部分完成；37-2 首批）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：Phase 37 的 7.3 内容回植进行中（37-0 完成；37-1~37-3 批次完成；L3 待收口）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.2**（7.2 内容回植完成；7.3 37-0 完成、37-1 数据/资产部分完成；PCK/release 待发布验证） |
+| 当前内容版本 | **7.2**（7.2 内容回植完成；7.3 37-0~37-3 批次完成、L3 待收口；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
@@ -84,20 +84,19 @@
 - **36-6 L3 收口**：`check_all --godot-bin` 9/9；`health_check --no-cache` **806 脚本 0/0/0**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**（370.18s，`level_ghg` 重试通过）；`scene_probe_runner` **26/26**；`coop_probe_runner` **38/38**；`archive_probe_runner` **344/344**；`level_1` 四阶段 **0/0/0**；`export_raw_manifest` 1033/1033、Atlas 4015/4015、编号帧/怪物帧/哪吒预览/FrameSequence/sheet 同步通过；`export_closure_probe --self-test` 修复 `normalize` 导入后通过；命名、白名单与 `docs_audit` 通过。
 - **边界**：PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
 
-### 7.3 回植准备（37-0 完成；37-1 数据/资产部分完成）
+### 7.3 回植（37-0~37-3 批次完成；L3 待收口）
 
 - **目标二进制**：`八荒湮隳7.3.exe`，**2,282,485,752 字节**，SHA-256 `93817a09fd4508c7145631a67fe1cbcda9532028970d785b8ddda681009ef131`。
 - **PCK**：`GDPC` v4，engine 4.7.0，raw offset `0x38D5C00`，`dir_offset` `0x84405870`；目录明文计数 **40,275**，加密目录 plaintext length **4,080,072**。
 - **解密结果**：7.3 的目录与文件块均为标准 `FileAccessEncrypted`；目录/文件 key 由静态 SGXZ signer 与两组静态掩码 XOR 派生，不是旧版 `HBXZ` 固定 key/table。目录与全部 **40,275** 个文件块 MD5 校验通过。
 - **参考工程**：已生成 **40,275** 个原始条目；**774/774** `.gdc` 反编译成功，**1,152/1,152** `.scn` 转文本成功；参考树与源码清单保存在仓库外。
 - **台账初稿**：7.2→7.3 生产脚本 **49 个修改 + 1 个新增**（`Script/Data/WanLingJiejiaoData`），生产脚本删除 **0**；移除脚本 **216** 个全部位于测试/插件路径；缓存变化 **2**、构建场景变化 **3**、资产新增 **74** / 修改 **93**（多数为 `.ctex` 格式变化）。完整台账仍留在仓库外，等待逐项映射与语义复核。
-- **37-1 数据/资产（部分完成）**：JSON/BIN/Atlas/FrameSequence 的 1,028 条数据路径与 7.2 对比，生产内容无变化（仅 `uid_cache` 变化）；37 个新增 `.import`/`.ctex` 条目已从 7.3 `.ctex` 解码为源 PNG：16 个 `Art/backpack/all_items` 图标、21 个 `Art/monster/soul_crystal` 魂晶图标；未复制 `.ctex` 或旧 `.import`。装备构建源由 **1,089 → 1,127** 条定义：新增 16 个八级宝石、2 个天庭魂晶、20 个截教魂晶，三枚仙戒解除“不可神铸”；Catalog 已重新生成。
-- **37-1 截教接入**：新增 `WanLingJiejiaoData`；`BaseMonster` 接入截教噩梦属性倍率与魂晶掉落，`LevelInfo` 接入截教掉落预览、`Level_22` 天庭魂晶 72/73 预览；`level_31` 冒烟通过。
-- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`level_31` 冒烟 0 ERROR / 0 WARNING；装备源审计、Catalog 同步与运行时数据/图标冒烟通过。
-- **37-1 待办**：`WanLingJiejiaoData` 的 PlayerData effects/consumption 接线、新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录。
-- **37-2 首批**：已迁移 7.3 的 NeZha/Yutu 重叠伤害路径：`NeZhaSkillEffect` 提供共享 `_enable_overlap_damage`/`_apply_overlap_damage`，`FirstBatchAwakenArea` 与 `NeZhaAwakenWheel` 接入脉冲伤害，`YutuSkillEffect` 月舞碰撞掩码补齐；待做剩余角色/技能与 EastContinentMonster/Level 变更。
-- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`level_31` 冒烟 0 ERROR / 0 WARNING；装备源审计、Catalog 同步与运行时数据/图标冒烟通过。
-- **边界**：未复制旧 `.ctex`/`.import`；PCK/release 继续暂缓。
+- **37-1 数据/资产与截教接入**：JSON/BIN/Atlas/FrameSequence 的 1,028 条数据路径与 7.2 对比，生产内容无变化（仅 `uid_cache` 变化）；37 个新增 `.import`/`.ctex` 条目已从 7.3 `.ctex` 解码为源 PNG：16 个 `Art/backpack/all_items` 图标、21 个 `Art/monster/soul_crystal` 魂晶图标；未复制 `.ctex` 或旧 `.import`。装备构建源由 **1,089 → 1,127** 条定义：新增 16 个八级宝石、2 个天庭魂晶、20 个截教魂晶，三枚仙戒解除“不可神铸”；Catalog 已重新生成。新增 `WanLingJiejiaoData`；`BaseMonster` 接入截教噩梦属性倍率与魂晶掉落，`LevelInfo` 接入截教掉落预览、`Level_22` 天庭魂晶 72/73 预览；`PlayerData` 接入截教图录/魂晶计数/吞噬/属性汇总；`level_31` 冒烟通过。
+- **37-2 完成**：NeZha/Yutu 重叠伤害与月舞碰撞掩码；`EastContinentMonster` 3120 传送前停止攻击、清理速度并修正当前 stage 屏幕边界；Level 47–62 的 `7_bsjh`、Level 63–75 的 `8_bsjh` 掉落/预览；`Level_64` 双 BOSS、`Level_65` 傲来国首领、`Level_63` 移除 `469000011` 等数据表差异已逐条合并。
+- **37-3 完成**：`WanLingCatalogPage` 截教天境分栏与魂晶图标；`GameAnnouncement` V7.3 文案/版本按钮；`SHOP` 招财铃铛；三仙戒神铸解禁；装备分解返还累计强化石的 80%；8 级宝石配方与一键合成；`LevelProgressCommand` 写入天庭噩梦标记；`MonsterHeadInfo` 截教倍率/伤害/免伤与 `fixed_chance` 透传。`load_scene` 的 Android 首启完整性校验作为当前本地保护保留，未按 7.3 删除。
+- **验证**：`check_all --godot-bin` **9/9 PASS**；`health_check` **807 脚本 0 Parse / 0 Error / 0 Warning**；`archive_probe_runner` **344/344**；`scene_probe_runner` **26/26**；`level_47` / `level_63` / `level_65` / `level_75` 冒烟均 0 ERROR / 0 WARNING；截教数据/UI/配方/神铸/等级掉落运行时探针通过。
+- **37-1 待办**：新增资产引用闭包复核、Atlas/FrameSequence 的最终空差集记录。
+- **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；PCK/release 与全量 L3 继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
