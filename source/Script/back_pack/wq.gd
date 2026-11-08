@@ -14,6 +14,7 @@ var qh_level: int
 var pp
 var wx = []
 var eq_prop = {}
+var _equ_popup_parent: Node = null
 var _slot_background_ready := false
 var _slot_background_item_visible := false
 var _avatar_frame_signature := ""
@@ -21,6 +22,7 @@ var _shengu_signature := ""
 
 
 func _ready() -> void:
+	set_process(false)
 	_sync_avatar_frame_equipment(true)
 	_sync_shengu_equipment(true)
 	_ensure_slot_background()
@@ -143,18 +145,29 @@ func _mouse_position_for_popup(parent_node: Node, offset := Vector2(25, 20)) -> 
 	return mouse_pos
 
 
+func _process(_delta: float) -> void:
+	if add_equ_box == null or not is_instance_valid(add_equ_box):
+		add_equ_box = null
+		set_process(false)
+		return
+	var popup_parent: Node = _equ_popup_parent
+	if popup_parent == null or not is_instance_valid(popup_parent):
+		popup_parent = add_equ_box.get_parent()
+	if popup_parent == null:
+		_close_equ_box()
+		return
+	pp = _mouse_position_for_popup(popup_parent)
+	add_equ_box.position = pp
+
+
 func _physics_process(_delta: float) -> void:
 	_sync_avatar_frame_equipment()
 	_sync_shengu_equipment()
 	_sync_slot_background_style()
-	if add_equ_box != null:
-		var popup_parent = add_equ_box.get_parent()
-		if popup_parent != null:
-			pp = _mouse_position_for_popup(popup_parent)
-			add_equ_box.position = pp
 
 
 func _on_pressed() -> void:
+	_close_equ_box()
 	if PlayerData.check_can_use_page("装备列表") == 0:
 		Global.add_message_show(NodeUtils.ancestor(self, 5), "背包已满，无法卸下！！", 1.5, Vector2(80, 0))
 		return
@@ -261,8 +274,19 @@ func _on_mouse_entered() -> void:
 	var popup_parent = NodeUtils.ancestor(self, ancestor_level)
 	pp = _mouse_position_for_popup(popup_parent)
 	add_equ_box = Global.add_equ_propeties_box(popup_parent, pp, item_id, qh_level, wx, eq_prop)
+	if add_equ_box != null:
+		_equ_popup_parent = popup_parent
+		set_process(true)
 
 
 func _on_mouse_exited() -> void:
+	_close_equ_box()
+
+
+func _close_equ_box() -> void:
 	if add_equ_box != null:
-		add_equ_box.queue_free()
+		if is_instance_valid(add_equ_box):
+			add_equ_box.queue_free()
+		add_equ_box = null
+	_equ_popup_parent = null
+	set_process(false)
