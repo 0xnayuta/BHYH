@@ -70,6 +70,7 @@ class LevelTestRunner:
         performance_warmup_frames: int = 120,
         performance_hud_full: bool = False,
         performance_retries: int = 1,
+        render_window: bool = False,
     ) -> None:
         self.target_level = target_level
         self.time_scale = time_scale
@@ -86,6 +87,9 @@ class LevelTestRunner:
         self.performance_warmup_frames = performance_warmup_frames
         self.performance_hud_full = performance_hud_full
         self.performance_retries = performance_retries
+        # 窗口模式：走真实显示/渲染路径（含 draw、GPU 提交与垂直同步），
+        # 用于补齐 headless dummy 渲染器缺失的 GPU 侧证据。
+        self.render_window = render_window
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -136,6 +140,7 @@ const TIME_SCALE := {self.time_scale}
 const PERFORMANCE_SAMPLE_FRAMES := {self.performance_sample_frames}
 const PERFORMANCE_WARMUP_FRAMES := {self.performance_warmup_frames}
 const PERFORMANCE_HUD_FULL := {str(self.performance_hud_full).lower()}
+const RENDER_WINDOW := {str(self.render_window).lower()}
 const PERFORMANCE_HUD_TEXT_LIMIT := 80
 const PERFORMANCE_THROTTLE_P95_MS := 8.0
 const PERFORMANCE_THROTTLE_P50_MS := 2.0
@@ -465,6 +470,7 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 		"start": snapshot_start,
 		"end": _performance_snapshot(scn),
 	}}
+	performance_result.merge(_render_facts())
 	if PERFORMANCE_HUD_FULL and not full_hud_ready:
 		performance_result["error"] = "full_hud_target_not_met"
 		report["errors"].append(
@@ -511,6 +517,22 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 
 
 
+
+
+func _render_facts() -> Dictionary:
+	## 渲染/节流事实：窗口模式与 headless 的差异须在报告里可直接对照。
+	## headless 的 dummy 显示服务器不保证实现 vsync 查询，先按显示服务器名短路，
+	## 避免驱动在无窗口环境下探测 vsync 触发引擎错误而污染日志门禁。
+	var display_server := String(DisplayServer.get_name())
+	var vsync_mode := -1
+	if display_server != "headless":
+		vsync_mode = int(DisplayServer.window_get_vsync_mode())
+	return {{
+		"render_window": RENDER_WINDOW,
+		"display_server": display_server,
+		"vsync_mode": vsync_mode,
+		"max_fps": int(Engine.max_fps),
+	}}
 
 
 func _is_performance_battle_ready(scn: Node) -> bool:
@@ -774,16 +796,22 @@ script = ExtResource("1")
             pass
         log_start_size = 0
         self._write_driver_resources()
-        cmd = [
-            self.godot_exe,
-            "--headless",
-            "--path",
-            self.project_dir,
-            "--log-file",
-            self.run_log_fp,
-            "--scene",
-            "res://" + self.driver_scene_name,
-        ]
+        cmd = [self.godot_exe]
+        if self.render_window:
+            # 真实显示/渲染路径：窗口 + 关闭垂直同步，避免采样被 60Hz 上限钳住。
+            cmd.extend(["--windowed", "--disable-vsync"])
+        else:
+            cmd.append("--headless")
+        cmd.extend(
+            [
+                "--path",
+                self.project_dir,
+                "--log-file",
+                self.run_log_fp,
+                "--scene",
+                "res://" + self.driver_scene_name,
+            ]
+        )
         started = time.time()
         try:
             proc = subprocess.run(
@@ -814,6 +842,7 @@ script = ExtResource("1")
         report["_runner"] = {
             "exit_code": returncode,
             "elapsed_seconds": round(elapsed, 2),
+            "render_window": self.render_window,
             "stdout_tail": stdout[-2000:],
             "stderr_tail": stderr[-2000:],
         }
@@ -904,6 +933,14 @@ def _print_report(report: Dict[str, Any]) -> None:
                 }
             )
         )
+        print(
+            "  渲染: window={mode} vsync={vsync} max_fps={max_fps} display={display}".format(
+                mode="window" if performance.get("render_window") else "headless",
+                vsync=performance.get("vsync_mode", "n/a"),
+                max_fps=performance.get("max_fps", "n/a"),
+                display=performance.get("display_server", "n/a"),
+            )
+        )
         if performance.get("full_hud_damage_text"):
             print("  满屏伤害数字活跃数: {start}->{end}".format(
                 **{
@@ -981,6 +1018,11 @@ def main() -> int:
         help="采样命中整段节流（p95>=8ms 且 p50<2ms）时的最大重跑次数；默认 1",
     )
     parser.add_argument("--timeout", type=int, default=300, help="单次冒烟墙钟上限（秒）")
+    parser.add_argument(
+        "--render-window",
+        action="store_true",
+        help="窗口模式运行（--windowed --disable-vsync，不加 --headless）：走真实渲染路径采样",
+    )
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
     parser.add_argument("--instance-id", default=None, help="并发实例标识（默认随机）")
     args = parser.parse_args()
@@ -996,10 +1038,12 @@ def main() -> int:
             performance_warmup_frames=args.performance_warmup_frames,
             performance_hud_full=args.performance_hud_full,
             performance_retries=args.performance_retries,
+            render_window=args.render_window,
         )
         if not args.json:
             print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")
             print(f"[*] Godot: {runner.godot_exe}")
+            print(f"[*] 渲染通道: {'window (真实渲染)' if runner.render_window else 'headless'}")
             print(f"[*] 日志监控路径: {runner.log_path}")
         report = runner.run(timeout_seconds=args.timeout)
     except Exception as exc:
