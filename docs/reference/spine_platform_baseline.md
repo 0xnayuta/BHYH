@@ -42,7 +42,7 @@
 
 | 平台 / 架构 | 状态 | 渲染后端 | Spine 库 | 设备/验收 | 边界 |
 |:---|:---|:---|:---|:---|:---|
-| **Windows x86_64** | **当前目标平台** | `mobile` | 已入库：editor / template_debug / template_release | Windows 验证机已有运行基线；Spine 加载探针见 §4 | 最低设备未声明且确认暂缓；不承诺所有 Windows 设备 |
+| **Windows x86_64** | **当前目标平台** | `mobile` | 已入库：editor / template_debug / template_release | Windows 验证机已有运行基线；Spine 加载探针见 §4 | 最低设备未声明且确认暂缓；验收设备口径见 [`ADR-027`](../decisions/ADR-027-platform-commitment-and-verification-device.md)；不承诺所有 Windows 设备 |
 | Linux x86_64 | 延期、未验证 | 未确认 | 官方 4.3 包含库；仓库未入库 | 无 Linux 设备 | 不补库、不写支持声明；需要时再立项 |
 | Linux arm64 / rv64 | 不承诺 | 未确认 | 官方 4.3 包未提供对应库；`.gdextension` 仅有路径声明 | 无设备 | 需要自定义构建，不能只复制路径 |
 | macOS | 延期、未验证 | 未确认 | 官方包含 framework；仓库未入库 | 无 macOS 设备/CI | 需要 Apple 硬件与签名/分发验证 |
@@ -112,5 +112,5 @@ Windows release 验证构建（临时冒烟驱动，验证后已删除并恢复�
 1. 目标平台从 Windows-only 扩展；
 2. Spine 发布新的稳定 major/minor 分支；
 3. Godot 引擎升级导致 GDExtension 需要重建；
-4. 21-2B 取得可复现目标设备数据；
+4. 21-2B 取得可复现验证机数据；最低配置与其他平台另行立项（ADR-027）；
 5. Spine 资产版本或许可证发生变更。

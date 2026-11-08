@@ -51,6 +51,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-024](ADR-024-check-all-nine-gate-dimensions.md) | `check_all` 九维门禁与维度清单治理 | Accepted | 九维门禁、`acceptance.md` 单一文档事实源；扩展 ADR-012 |
 | [ADR-025](ADR-025-raw-data-export-closure.md) | 原始数据导出清单、导出插件与实际 PCK 验证 | Accepted | FileAccess JSON/BIN、导出闭包、发布包装；与 ADR-020 第 7 条衔接 |
 | [ADR-026](ADR-026-ui-font-theme-role-contract.md) | UI 字体角色与 Theme 使用边界 | Accepted | 四字体角色、组件矩阵、存量例外与迁移；规范入口 |
+| [ADR-027](ADR-027-platform-commitment-and-verification-device.md) | 平台承诺与验收设备边界 | Accepted | Windows x64 唯一承诺；最低配置不声明；Phase 26 改为验证机性能基线 |
 
 ### 2.1 常见决策检索
 

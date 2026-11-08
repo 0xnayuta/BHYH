@@ -58,14 +58,14 @@
 | Release PCK（实际 exe） | **5,044/5,044**（6.9 基线；844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节；7.0 未重建 release PCK |
 | Release 冷启动 | `load_scene.tscn` 加载，`--quit-after` 退出码 0；游戏与 stdout 均 **0 ERROR / 0 WARNING**；直接 `level_1` override 加载成功，1 条无档案会话警告属测试夹具限制 |
 
-**边界**：PCK 为验证/发布预设的路径闭包；本表另有真实 release exe 冷启动证据，但 PCK 路径可达仍不等于目标设备 VRAM、首帧耗时或正式发布包裁剪已验证。原始数据由 `export_raw_dependencies.json` + `bhyh_export` 插件写入，不再使用 `include_filter` 兜底。
+**边界**：PCK 为验证/发布预设的路径闭包；本表另有真实 release exe 冷启动证据，但 PCK 路径可达仍不等于最低配置/其他平台 VRAM、首帧耗时或正式发布包裁剪已验证。原始数据由 `export_raw_dependencies.json` + `bhyh_export` 插件写入，不再使用 `include_filter` 兜底。
 
 ### 7.0 回植状态（2026-11-07）
 
 - **角色 8 小龙女**：8 个 Longnv 脚本 + 风暴帧混合 shader、`Role_8` 场景、官方部件/音频、20 技能与双刃/圆刃形态已完成；角色选择卡、技能页 20 行、自动战斗配置、背包/幻化预览、2P 数据/属性/键位已接入。
 - **2P**：角色 8 双人关卡已验证 P1/P2 生成、镜头居中、P2 HUD 绑定、独立档案/属性/冷却、P2 技能与近战起手、P1 倒地时由 P2 推进关卡。
 - **7.0 系统修复**：等级溢出经验循环、死亡/满级升级保护、P2 八仙坠落、青龙剑乘骑/下落、哪吒技能等级上限、宋帝王双人命中数、`jgz` 伤害倍率、`skill_grid` 20 行背景等已按 7.0 语义接入。
-- **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与目标设备性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
+- **边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入本轮 gameplay 回植；7.0 release PCK、全量关卡回归与最低配置/其他平台性能未重跑。角色 8 的训练/成就/云存档服务端闭环仍以外部能力为准。
 - **验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` 794 脚本 0/0/0；`archive_probe_runner` 344/344；`scene_probe_runner` 20/20；`longnv-core` PASS（20 技能、角色卡、技能页、自动战斗、背包/幻化/翅膀/坐骑、2P 关卡相机/HUD/战斗）；`level_1 --role 8` 4 阶段 0/0/0；`coop_probe_runner` 37/37。
 
 ### 7.1 回植完成（L3 已收口；待发布验证）
@@ -75,7 +75,7 @@
 - **35-2**：已接入 Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
 - **35-3**：已接入 `ContinentMonsterGrowth`、关卡机关 `RoleAttackMechanism`、9 个关卡场景机关、Level 5/28/34/75、北俱芦洲怪物/地形、三太子受击入口、`map_7`/`map_8` 开放范围；Level_77 无场景语义差异；新增 `longnv-mechanism` 运行时规格探针。
 - **35-4**：已接入 GameSet 技能透明度、V7.1 公告、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌；新增 `menu-ui-71` 运行时规格探针。
-- **边界**：7.1 回植已完成；当前内容版本为 **7.2**；PCK/release 与目标设备验证按用户决策暂缓，待最终发布统一验证；7.3 未立项。
+- **边界**：7.1 回植已完成；当前内容版本为 **7.2**；PCK/release 与最低配置/其他平台验证按用户决策暂缓，待最终发布统一验证；7.3 未立项。
 - **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` **797 脚本 0/0/0**；`scene_probe_runner` **23/23**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**；`coop_probe_runner` **37/37**；`archive_probe_runner` **344/344**；`export_raw_manifest --check` 993 文件；`convert_atlas_metadata --check` 4015/4015；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` PASS；命名审计、白名单审计与 `docs_audit` 879/0 全部通过。
 
 ### 7.2 回植完成（L3 已收口；待发布验证）
@@ -85,7 +85,7 @@
 - **36-4**：接入 `nz_hlqg` 哪吒双火轮、`zz` 重斩觉醒、`xbz` 玄冰阵觉醒、`yt_ymw` 月魔舞三月影；`skill_awaken_popup` / `zd_skill` / `SkillDamageFormulaData` 覆盖四个新 ID；一阶觉醒石「tjs」与材料「ptjs」经 Catalog 校验。
 - **36-5**：`Global` 接入年兽出战预载与空子弹场景保护；`GameAnnouncement` 增加 V7.2 文案/版本按钮；`dj_sell` 喜鹊双倍掉率支持叠加且上限 24 小时；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称标签上移；`addons/bone_export/export_plugin.gd` 按第三方插件边界不修改，`Script/Test` 仅作规格。
 - **36-6 L3 收口**：`check_all --godot-bin` 9/9；`health_check --no-cache` **806 脚本 0/0/0**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**（370.18s，`level_ghg` 重试通过）；`scene_probe_runner` **26/26**；`coop_probe_runner` **38/38**；`archive_probe_runner` **344/344**；`level_1` 四阶段 **0/0/0**；`export_raw_manifest` 1033/1033、Atlas 4015/4015、编号帧/怪物帧/哪吒预览/FrameSequence/sheet 同步通过；`export_closure_probe --self-test` 修复 `normalize` 导入后通过；命名、白名单与 `docs_audit` 通过。
-- **边界**：PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
+- **边界**：PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
 
 ### 7.3 回植（37-0~37-6 批次完成；L3 已通过）
 
@@ -101,7 +101,7 @@
 - **37-6 缺口修复**：删除 `level_77.tscn` 的 `exit.visible=true`，恢复基场景初始隐藏并在清关后显示；`sell_or_equ` 恢复 Role 8 小龙女装备权限；同步 7.3 分解帮助文本；`BaseMonster` 支持 `fixed_chance` 独立掉落并新增固定概率/最高难度/双倍掉落断言；新增 `phase37-6` 场景探针。
 - **验证**：`check_all --godot-bin` **9/9 PASS**（37.90s）；`health_check --no-cache` **807 脚本 0 Parse / 0 Error / 0 Warning**（16.24s）；`archive_probe_runner` **344/344**；`scene_probe_runner` **27/27**（305.34s）；`level_regression_all` **128/128 PASS + 5 SKIP**（331.9s）；`coop_probe_runner` **38/38**（289.13s）；`level_1` 四阶段 **0/0/0**（26.45s）；`phase37-6` **PASS**；截教数据/UI/配方/神铸/等级掉落与天庭噩梦进度运行时探针通过。新增资产运行期闭包 **36/36**；Atlas **4015/4015**、FrameSequence **288/288**、怪物帧 **152/152**、关卡预载 **101/101** 与导出清单自检通过；资产矩阵已重生成。
 - **37-1 收口**：资产引用闭包与 Atlas/FrameSequence/导出清单复核已完成。
-- **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；L3 已通过；PCK/release 与目标设备验证继续暂缓。
+- **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；L3 已通过；PCK/release 与最低配置/其他平台验证继续暂缓。
 
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
@@ -124,14 +124,14 @@
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。
-2. **发布**：`BHYH.exe` + `BHYH.pck` 冷启动已通过（`load_scene.tscn`、游戏与 stdout 均 0 ERROR / 0 WARNING），实际 release PCK **5,044/5,044** 路径可达；目标设备峰值 VRAM、首帧耗时与正式发布包裁剪仍需单独设备实测。直接以 `level_1` override 启动属于无档案会话测试，会产生 1 条预期 `change_scene` 警告，不据此判定发布流程失败。
+2. **发布**：`BHYH.exe` + `BHYH.pck` 冷启动已通过（`load_scene.tscn`、游戏与 stdout 均 0 ERROR / 0 WARNING），实际 release PCK **5,044/5,044** 路径可达；最低配置/其他平台峰值 VRAM、首帧耗时与正式发布包裁剪仍需单独设备实测。直接以 `level_1` override 启动属于无档案会话测试，会产生 1 条预期 `change_scene` 警告，不据此判定发布流程失败。
 3. **公开仓库**：不包含第三方素材；公开 clone 的缺失资源提示属于预期。
 4. **存档**：加密 JSON、`.tmp`/`.bak` 原子写与当前格式补全不变；不引入跨版本迁移链。
 5. **架构**：Autoload 与 `Global` 普通子节点运行时是遗留基线；新增需按 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) 评审。
 6. **文档**：历史验证只在归档中保留，当前页不复制逐批计数。
-7. **命名终审**：`naming_compliance_audit.py --fail-on-error` 已通过（目录、文件、代码标识符均 **100%**）；`naming_audit.py --all` 与 `whitelist_audit.py` 通过。第三方 DragonBones 前缀已登记，私有 `Data` 别名已收敛为 `data`；该结果可作为 L3/release 命名终审证据，但不替代目标设备性能与正式发布包裁剪验证。
+7. **命名终审**：`naming_compliance_audit.py --fail-on-error` 已通过（目录、文件、代码标识符均 **100%**）；`naming_audit.py --all` 与 `whitelist_audit.py` 通过。第三方 DragonBones 前缀已登记，私有 `Data` 别名已收敛为 `data`；该结果可作为 L3/release 命名终审证据，但不替代最低配置/其他平台性能与正式发布包裁剪验证。
 8. **回植剩余边界**：6.6 `Level_65`/`Level_68` 的 BOSS 出生点已按上游移除 `ignore_count_multiplier`，`boss-multiplier` 探针覆盖 `×1`/`×5`；上游 `Monster_63-1` 无生产场景消费者，`MagicWeapon_qlsword/Official/source.json` 与 `Music/Hero/Role6/official_manifest.json` 为无运行时消费者的溯源文件，登记为非运行时、不移植。
-9. **7.0 外部服务边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入 gameplay 回植；角色 8 的训练/成就/云存档服务端闭环以外部能力为准。7.0 release PCK、全量关卡回归与目标设备性能未重跑。
+9. **7.0 外部服务边界**：7.0 云存档上传/下载差异依赖外部服务，未纳入 gameplay 回植；角色 8 的训练/成就/云存档服务端闭环以外部能力为准。7.0 release PCK、全量关卡回归与最低配置/其他平台性能未重跑。
 
 ---
 

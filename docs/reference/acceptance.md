@@ -252,7 +252,7 @@ python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/
 | 性能预热 | `--performance-warmup-frames N`（默认 120）：采样前先 `Engine.time_scale=1.0`，并等待第 1 阶段进入战斗（有存活怪物）；预热须覆盖至少 1 个 `TIME_PROCESS` 刷新窗口（约 1 秒），HUD 装配帧不计入稳态；HUD 档或 `--render-window` 建议 300 帧（装配帧含首次绘制/纹理上传）；超时记 FAIL |
 | 性能 HUD 档 | `--performance-hud-full`：采样期间维持 80 个活跃伤害数字（对象池上限），未达上限记 FAIL |
 | 性能推进方式 | `Game4ImportedLevel` 先 `_stage_activate(0)`（北俱芦洲）或 `_start_stage(1)`（Boss 关）；普通关先 `advance_stage(1)` + `level_create_monster(1)` |
-| 渲染模式 | 默认 `--headless`（`--display-driver headless` + dummy 渲染器，无 draw、无窗口呈现，故不产生 GPU 侧证据）；`--render-window` 以 `--windowed --disable-vsync` 启动真实渲染路径（不加 `--headless`），采样包含 draw、GPU 提交与窗口呈现/同步。报告 `performance.render_window / vsync_mode / max_fps`：`vsync_mode` 取 `DisplayServer.window_get_vsync_mode()` 原值（`0` = `VSYNC_DISABLED`），headless 下不探测该接口、记 `-1`；`max_fps` 取 `Engine.max_fps`（本工程 `run/max_fps=150`）。窗口模式仍**不是**目标设备基准：受桌面合成器、窗口分辨率与 150 帧上限影响，只用于补齐 headless 缺失的渲染/同步事实 |
+| 渲染模式 | 默认 `--headless`（`--display-driver headless` + dummy 渲染器，无 draw、无窗口呈现，故不产生 GPU 侧证据）；`--render-window` 以 `--windowed --disable-vsync` 启动真实渲染路径（不加 `--headless`），采样包含 draw、GPU 提交与窗口呈现/同步。报告 `performance.render_window / vsync_mode / max_fps`：`vsync_mode` 取 `DisplayServer.window_get_vsync_mode()` 原值（`0` = `VSYNC_DISABLED`），headless 下不探测该接口、记 `-1`；`max_fps` 取 `Engine.max_fps`（本工程 `run/max_fps=150`）。窗口模式仍**不是**最低配置/目标平台基准：受桌面合成器、窗口分辨率与 150 帧上限影响，只用于补齐 headless 缺失的渲染/同步事实（ADR-027） |
 | 加载测量（可选） | `--measure-load`：只测加载链路并提前结束，报告 `load` 字段：`ready_to_change_ms`、`load_scene_visible_ms`、`preload_started_ms` / `preload_done_ms` / `preload_ms`、`finish_started_ms`、`scene_changed_ms` / `switch_ms`、`hero_ready_ms` / `total_ms`；以及加载期峰值 `peak_video_mem_mb`、`peak_object_count`、`peak_node_count`、`peak_render_objects`、`peak_draw_calls`、`peak_primitives`。headless 下 VRAM 与渲染计数为 0，需与 `--render-window` 组合才有 GPU 数据；测量不推进关卡阶段。`--loadout base\|full` 控制沙盒装备：`base` 无宠物/无法宝，`full` 寅虎 4 阶 + 法宝 `xianyjp` |
 
 通过条件：驱动报告 `ok` 且三类日志计数全为 0。退出码：`0` PASS，`1` FAIL，`2` 夹具异常（仍输出可解析 JSON）。
@@ -356,7 +356,7 @@ python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Deskt
 
 `--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内有验证用（`Windows Desktop (validation)`）与发布用（`Windows Desktop (release)`）两个 `all_resources` 预设。原始数据由 `bhyh_export` 插件按生成清单加入，不使用 `include_filter` 兜底；预设声明不等于 PCK 已验证。
 
-> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。2026-11-02 Phase 33-5 重新导出并校验 **4,200/4,200 可达**（新增 `equipment_catalog.tres`），PCK **7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。这证明包内路径闭包，不等于 release 加载、目标设备 VRAM 与首帧耗时已验证。
+> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。2026-11-02 Phase 33-5 重新导出并校验 **4,200/4,200 可达**（新增 `equipment_catalog.tres`），PCK **7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。这证明包内路径闭包，不等于 release 加载、最低配置/其他平台 VRAM 与首帧耗时已验证。
 
 `frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。配置、源清单、实际包与发布包装证据必须分开记录：
 

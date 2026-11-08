@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
 > **状态**：**Phase 37 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
-> **版本**：7.3 内容基线；PCK/release 与目标设备验证暂缓。
+> **版本**：7.3 内容基线；PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -43,8 +43,8 @@
 - **35-2 完成**：Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
 - **35-3 完成**：`ContinentMonsterGrowth`、关卡机关 `RoleAttackMechanism`、9 个关卡场景的机关接入、Level 5/28/34/75、北俱芦洲怪物/地形、三太子受击入口、`map_7`/`map_8` 开放范围；新增 `longnv-mechanism` 运行时规格探针。
 - **35-4 完成**：GameSet 技能透明度、V7.1 公告、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌；新增 `menu-ui-71` 运行时规格探针。
-- **L3 收口完成**：全量场景 23/23、全量关卡 128/128 PASS + 5 SKIP、双人 37/37、档案 344/344、命名/白名单与构建资源同步通过；PCK/release 与目标设备验证继续暂缓。
-- **发布边界**：PCK/release 与目标设备验证暂缓，待最终发布统一执行；当前版本标记仍以工程配置为准。
+- **L3 收口完成**：全量场景 23/23、全量关卡 128/128 PASS + 5 SKIP、双人 37/37、档案 344/344、命名/白名单与构建资源同步通过；PCK/release 与最低配置/其他平台验证继续暂缓。
+- **发布边界**：PCK/release 与最低配置/其他平台验证暂缓，待最终发布统一执行；当前版本标记仍以工程配置为准。
 
 ### 1.4 Phase 36 7.2 内容回植（完成，L3 已收口）
 
@@ -56,8 +56,8 @@
 - **36-4 完成**：`NeZhaHero` 接入 `nz_hlqg` 双火轮（2× 伤害、8 秒/8 段、环绕后投掷）；`Role1` 重斩觉醒动作与三道地裂（2×/4×/8×、霸体）；`Role2` 玄冰阵五段冰刺与冰域（末段冰冻 2 秒）；`YutuHero` 月魔舞三月影（主体 1.5×、月影 0.7×、主体双倍月印）；`skill_awaken_popup` / `zd_skill` / `SkillDamageFormulaData` 接入四个新觉醒 ID 与说明；`awaken-72` 探针覆盖上述路径、一阶觉醒石与技能面板按钮。
 - **36-5 完成**：`Global` 接入年兽出战预载（召唤场景/帧/头像，空子弹场景安全跳过）；`GameAnnouncement` 接入 V7.2 文案与版本按钮；`dj_sell` 喜鹊改为可叠加、上限 24 小时（含活动 Buff 刷新）；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称上移；新增 `menu-ui-72` 探针覆盖预载、公告、喜鹊、幻化与昵称。
 - **36-6 完成**：L3 收口通过 `check_all` 9/9、`health_check --no-cache` 806 脚本 0/0/0、全量关卡回归 128/128 + 5 SKIP、场景探针 26/26、双人矩阵 38/38、档案探针 344/344、`level_1` 四阶段 0/0/0；原始数据/Atlas/帧序列同步校验通过。
-- **后续批次**：无；Phase 36 已关闭，PCK/release 与目标设备验证按用户决策暂缓。
-- **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与目标设备 VRAM/首帧耗时未验证；7.3 未立项。
+- **后续批次**：无；Phase 36 已关闭，PCK/release 与最低配置/其他平台验证按用户决策暂缓。
+- **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证；7.3 未立项。
 
 ### 1.5 Phase 37 7.3 内容回植与 37-6 缺口修复（完成，L3 已通过）
 
@@ -67,7 +67,7 @@
 - **37-2**：角色与技能内容完成；NeZha/Yutu 重叠伤害与月舞碰撞掩码、EastContinentMonster 3120 传送、Level 47–75 宝石精粹掉落/预览均已接入。
 - **37-3**：系统、菜单/UI 与公告文本完成；万灵图录截教分栏、V7.3 公告、招财铃铛、仙戒神铸、分解返还、8 级宝石配方与天庭噩梦进度已接入。
 - **37-4**：2P 相机/HUD/归属与剩余脚本/场景差异完成；`BaseBuff` 拥有者属性/数据、Buff 图标 HUD 归属与 `MonsterHeadInfo` 操作者已修正；2P 相机、灵气、HUD 与操作者探针收口。
-- **37-5**：L3 收口完成（`check_all` 9/9、全量关卡 128/128 + 5 SKIP、coop 38/38、scene 26/26、archive 344/344、level_1 四阶段通过）；PCK/release 与目标设备验证按用户决策另行执行。
+- **37-5**：L3 收口完成（`check_all` 9/9、全量关卡 128/128 + 5 SKIP、coop 38/38、scene 26/26、archive 344/344、level_1 四阶段通过）；PCK/release 与最低配置/其他平台验证按用户决策另行执行。
 - **37-6**：缺口修复完成；Level_77 出口初始隐藏、Role 8 装备权限、分解帮助文案与 `fixed_chance` 掉落语义已修复；新增 `phase37-6` 探针；L3 复跑 `check_all` 9/9、health 807 脚本 0/0/0、全量关卡 128/128 + 5 SKIP、scene 27/27、coop 38/38、archive 344/344、level_1 四阶段通过；资产矩阵已重生成。
 - **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。
 
@@ -75,8 +75,8 @@
 
 ## 2. Phase 26：平台与发布验证（长期暂缓）
 
-**状态**：长期暂缓；未启动，不阻塞后续阶段。
-**目标**：把“路径闭包”“release 启动”“目标设备性能”“Spine 平台支持”分别证明。
+**状态**：长期暂缓；未启动，不阻塞后续阶段。Windows-only 验证口径见 [`ADR-027`](../decisions/ADR-027-platform-commitment-and-verification-device.md)。
+**目标**：把“路径闭包”“release 启动”“验证机性能基线”“Spine 平台支持”分别证明。
 **前置**：可做只读规划；涉及资源/导出变化时再与当前代码批次协调。
 **非目标**：不把未验证平台写成支持，不用 PCK 可达替代 release，不用 headless 替代 HUD/VRAM。
 
@@ -92,9 +92,9 @@
 - 区分离线验证包与最小发布包；记录实际包路径闭包与缺失资源；
 - 失败必须显式，不以“全资源包可运行”替代发布结论。
 
-### 26-2 目标设备性能
+### 26-2 验证机性能基线
 
-- 在目标设备记录首帧、战斗峰值 VRAM、加载时长、重复进出与退出；
+- 在验证机记录首帧、战斗峰值 VRAM、加载时长、重复进出与退出；固定机器、驱动、渲染后端、分辨率与 `max_fps`，只做同机对照（ADR-027）；
 - 至少覆盖一场战斗、一个 Boss、一次返回/重战；
 - 结论写入 `status.md`，带设备、日期与未验证范围。
 
@@ -125,7 +125,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 37（含 37-6 缺口修复）已完成内容回植与 L3 收口；当前无活跃候选。PCK/release 与目标设备验证按用户决策另行执行，恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 37（含 37-6 缺口修复）已完成内容回植与 L3 收口；当前无活跃候选。PCK/release 与最低配置/其他平台验证按用户决策另行执行，恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
