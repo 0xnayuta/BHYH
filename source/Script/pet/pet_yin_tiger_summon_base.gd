@@ -316,12 +316,6 @@ func _spawn_yin_effect(
 	return instance
 
 
-func _target_effect_offset(y_offset: float) -> Vector2:
-	if is_instance_valid(current_target):
-		return current_target.global_position - global_position + Vector2(0.0, y_offset)
-	return _front_offset(400.0, y_offset)
-
-
 func _setup_turtle_model_frames() -> void:
 	if turtle_sprite == null:
 		return

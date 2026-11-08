@@ -1247,18 +1247,6 @@ func get_hit_reaction_source_player() -> BaseHero:
 	return hit_reaction.get_source_player() if hit_reaction != null else null
 
 
-func _deferred_hurt_animation():
-	if is_control_immune():
-		return
-	if mr_player.has_animation("hurt"):
-		mr_player.play("hurt")
-		await mr_player.animation_finished
-
-	if is_control_immune():
-		return
-	try_play_default_animation()
-
-
 func little_blood_bar_control():
 	if monster_blood_bar != null:
 		var pet_hit_show := Time.get_ticks_msec() < int(get_meta("pet_hit_blood_until", 0))
@@ -1476,10 +1464,6 @@ func settle_death_drops() -> void:
 	var level_node = get_level_node()
 	if has_meta("tower_floor") and level_node != null and level_node.has_method("on_tower_monster_defeated"):
 		level_node.call("on_tower_monster_defeated", self)
-
-
-func _settle_human_nightmare_soul_drop() -> bool:
-	return _settle_nightmare_soul_drop()
 
 
 func _settle_nightmare_soul_drop() -> bool:
@@ -2531,14 +2515,6 @@ func do_hit_5():
 
 func do_hit_6():
 	pass
-
-
-func _set_sprite_position(x: int, y: int):
-	if mr_ani.flip_h == false:
-		mr_ani.position.x = -x
-	elif mr_ani.flip_h == true:
-		mr_ani.position.x = x
-	mr_ani.position.y = y
 
 
 func cannotchangestatewhenattorbeatt():

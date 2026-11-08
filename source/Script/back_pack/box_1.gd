@@ -405,22 +405,6 @@ func on_press_when_dz():
 		forge.remove_bspic(forge_bzid)
 
 
-func _set_forge_book_box_properties(item_box) -> void:
-	if item_box == null or not is_instance_valid(item_box):
-		return
-	var icon_path := "res://Art/backpack/all_items/%s.png" % str(get_item_name)
-	item_box.set("icon", ResourceLoader.load(icon_path) as Texture2D if ResourceLoader.exists(icon_path) else null)
-	item_box.set("is_in_ldl_gz", true)
-	item_box.set("is_in_hhgz", true)
-	item_box.set("qh_level", qh_level)
-	item_box.set("total_number", 1)
-	item_box.set("wx", [])
-	item_box.set("eq_prop", eq_prop)
-	item_box.set("get_item_name", get_item_name)
-	item_box.set_meta("item_name", get_item_name)
-	item_box.set("position", Vector2(8, 8))
-
-
 func on_press_whenfj():
 	if strength_source == "人物穿戴":
 		var equipped_parent = NodeUtils.ancestor(self, 7)

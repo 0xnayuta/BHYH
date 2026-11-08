@@ -289,34 +289,6 @@ func _update_pet_popup_background() -> void:
 		color_rect.size = $pro_wk/information.size
 
 
-func _is_divine_eligible(_name: String, data: Dictionary) -> bool:
-	return EquipmentService.rules().can_divine_forge(StringName(_name), data)
-
-
-func _get_divine_stage(data: Dictionary) -> int:
-	return EquipmentService.rules().get_divine_forge_stage(data)
-
-
-func _get_divine_multiplier(_name: String, data: Dictionary) -> float:
-	return EquipmentService.rules().get_divine_forge_multiplier(StringName(_name), data)
-
-
-func _scale_divine_value(value, _name: String, data: Dictionary):
-	return EquipmentService.rules().scale_divine_forge_value(value, StringName(_name), data)
-
-
-func _get_divine_display_name(_name: String) -> String:
-	return EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
-
-
-func _get_divine_properties(_name: String, level: int, data: Dictionary, include_gems := false) -> Dictionary:
-	return EquipmentService.rules().get_divine_forge_properties(StringName(_name), level, data, include_gems)
-
-
-func _get_divine_gem_properties(_name: String, data: Dictionary) -> Dictionary:
-	return EquipmentService.rules().get_divine_forge_gem_properties(StringName(_name), data)
-
-
 func _ready() -> void:
 	self.modulate = Color(1, 1, 1, 0)
 

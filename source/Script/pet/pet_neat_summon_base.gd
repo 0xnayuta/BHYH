@@ -198,26 +198,6 @@ func _target_in_neat_skill_range(_max_distance: float) -> bool:
 	return is_instance_valid(current_target) and current_target.hp > 0
 
 
-func _neat_effect_offset(effect_name: String) -> Vector2:
-	var offset: Vector2 = PetNeatBullet.EFFECT_OFFSETS.get(effect_name, Vector2.ZERO)
-	var facing_left := monster_direction
-	if is_instance_valid(current_target) and current_target.global_position.x != global_position.x:
-		facing_left = current_target.global_position.x < global_position.x
-	offset.x = offset.x if facing_left else -offset.x
-	return offset
-
-
-func _target_in_neat_damage_range(size: Vector2, origin: Vector2) -> bool:
-	if not is_instance_valid(current_target):
-		return false
-	var target_pos := current_target.global_position
-	var hurt := current_target.get_node_or_null("BaseDamageBox/HurtBox/HurtBox") as CollisionShape2D
-	if hurt != null:
-		target_pos = hurt.global_position
-	var delta_pos := target_pos - (global_position + origin)
-	return absf(delta_pos.x) <= size.x * 0.5 and absf(delta_pos.y) <= size.y * 0.5
-
-
 func _target_in_neat_effect_range(effect_name: String, origin: Vector2) -> bool:
 	if not is_instance_valid(current_target):
 		return false

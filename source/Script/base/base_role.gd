@@ -1139,14 +1139,6 @@ func _is_pet_yin_tiger_hud_data(pet: Dictionary, pet_unit: Node) -> bool:
 	return is_yin_tiger
 
 
-func _is_mobile_touch_hud() -> bool:
-	return (
-		OS.has_feature("android")
-		or get_tree().root.has_node("TouchControls")
-		or get_parent() != null and get_parent().name == "Control"
-	)
-
-
 func is_full_ws() -> bool:
 	return RoleProp.ws_value >= RoleProp.max_ws_value and not RoleProp.is_ws_state
 

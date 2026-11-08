@@ -955,16 +955,6 @@ func release_click() -> void:
 	_set_visible(give_up_this_pet, true)
 
 
-func _select_tiger_pet_if_available() -> Dictionary:
-	var pets := _pet_list()
-	for i in pets.size():
-		var item: Variant = pets[i]
-		if item is Dictionary and _is_pet_tiger(item):
-			current_pet_index = i
-			return item
-	return {}
-
-
 func _pet_active_name(pet: Dictionary) -> String:
 	var type_name := str(pet.get(DataKeys.TYPE, ""))
 	if PET_NIAN_FAMILY.matches(pet):
@@ -3341,12 +3331,6 @@ func _update_pet_batch_sell_preview() -> void:
 	pet_batch_sell_summary_label.text = "预计出售：%d件，获得约%d灵魂" % [count, total_price]
 
 
-func _show_pet_batch_sell_confirm(eligible_count: int) -> void:
-	_show_pet_batch_sell_confirm_text(
-		"确定批量出售%d件宠物装备吗？\n（已锁定、强化、镶嵌宝石的装备不会出售。）" % eligible_count, Callable(self, "_confirm_pet_batch_sell")
-	)
-
-
 func _show_pet_batch_sell_confirm_text(confirm_text: String, confirm_callback: Callable) -> void:
 	if is_instance_valid(pet_batch_sell_confirm):
 		return
@@ -3920,21 +3904,6 @@ func _strength_points() -> int:
 
 func _strength_cost(level: int) -> int:
 	return max(1, level + 1)
-
-
-func _pet_skill_text(pet: Dictionary) -> String:
-	var skills: Variant = pet.get("技能", [])
-	if skills is Array:
-		var names: Array[String] = []
-		for skill in skills:
-			if skill is Dictionary:
-				names.append(str(skill.get(DataKeys.NAME, skill.get(DataKeys.ALT_NAME, ""))))
-			else:
-				names.append(str(skill))
-		return "、".join(names) if not names.is_empty() else "无"
-	if str(skills) == "":
-		return "无"
-	return str(skills)
 
 
 func _pet_passive_value(pet: Dictionary, skill_name: String) -> int:
