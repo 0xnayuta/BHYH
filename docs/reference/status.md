@@ -103,6 +103,19 @@
 - **37-1 收口**：资产引用闭包与 Atlas/FrameSequence/导出清单复核已完成。
 - **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；L3 已通过；PCK/release 与最低配置/其他平台验证继续暂缓。
 
+### 性能对照基线（2026-11-09）
+
+> 仅用于同机同参数对照；按 ADR-027 不声明最低配置或其他平台结论。加载测量使用 `--measure-load --loadout full --render-window`，战斗测量使用 `--performance-sample-frames 300 --performance-warmup-frames 120`，关卡均为 `level_1`。
+
+- **加载页（full：寅虎 4 阶 + 法宝 `xianyjp`）**：`preload_ms` 约 473ms、`switch_ms` 约 755ms、`scene_changed_ms` 约 1423ms；`total_ms` 受 60 帧 hero settle 影响，只作参考。
+- **宠物预热**：`active pet prewarm` 66ms → 0-1ms；寅虎弹体帧已进入线程预载，召唤/弹体场景不再 `instantiate()` 预热。
+- **法宝 Spine**：atlas/skeleton 均命中线程预载（0ms）；首次 `SpineSkeletonDataResource` 构建 51-54ms，暂无可压缩路径。
+- **命中资源**：100 张伤害数字纹理 46ms、命中场景 36-44ms、音频 2ms、池 seed 2-4ms、渲染等待 10-17ms。把纹理或场景加入线程预载会使 `preload_ms` 增加 160-181ms、总加载时间反升，已撤回。
+- **预载并发**：桌面 `_request_limit=4` 是当前饱和点；4/6/8 对照中 6/8 未降低 `preload_ms`，`scene_changed_ms` 与加载页帧 p95 反而变差；维持 ADR-018 的移动 2 / 桌面 4。
+- **战斗帧耗时（300 样本）**：headless 无 HUD `p50=0.37ms / p95=0.64ms`；headless + HUD 80 + churn `1.13 / 1.83ms`；窗口无 HUD `3.55 / 6.97ms`；窗口 + HUD 80 + churn `6.22 / 23.83ms`（`sustained`，属 HUD 压力档，不代表正常战斗）。
+- **对象池**：HUD 80 + 受控 churn 下 `damage_text` 30 hits / 0 miss、`role_be_hit` 7 / 0、`sound_player` 7 / 0；`damage_text_peak=80`，无扩容或新建，对象池不是卡顿来源。
+- **边界**：窗口模式受桌面合成器、窗口分辨率与 150fps 上限影响；`TIME_PROCESS` 约每秒刷新且取窗口内最大值；真实设备仍需按 ADR-027 单独测量。
+
 ### 最近基线（2026-11-04 ~ 2026-11-07）
 
 > 只保留当前仍需知晓的最近结果；逐批耗时、截图位置与历史计数不在此复制，完整记录见对应归档页。
