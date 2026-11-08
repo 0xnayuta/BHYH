@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" path="res://Script/back_pack/sell_or_equ.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/game_2/ldl/841.png" id="2"]
-[ext_resource type="Texture2D" path="res://Art/backpack/all_items/5.png" id="3"]
-[ext_resource type="Texture2D" path="res://Art/backpack/15.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/backpack/lock_button_bg.png" id="5"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
@@ -62,20 +60,52 @@ theme_type_variation = "ZhenFaEmptyButton"
 theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-icon = ExtResource("3")
+tooltip_text = "装备物品"
+icon = ExtResource("5")
 flat = true
 icon_alignment = 1
 expand_icon = true
+
+[node name="Text" type="Label" parent="VBoxContainer/equ" unique_id=2194001]
+theme_type_variation = "BackpackLockText"
+theme = ExtResource("theme")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.666667
+offset_right = 0.666667
+grow_horizontal = 2
+grow_vertical = 2
+text = "装 备"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="sell" type="Button" parent="VBoxContainer" unique_id=1356043163]
 theme_type_variation = "ZhenFaEmptyButton"
 theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-icon = ExtResource("4")
+tooltip_text = "出售物品"
+icon = ExtResource("5")
 flat = true
 icon_alignment = 1
 expand_icon = true
+
+[node name="Text" type="Label" parent="VBoxContainer/sell" unique_id=2194002]
+theme_type_variation = "BackpackLockText"
+theme = ExtResource("theme")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.666667
+offset_right = 0.666667
+grow_horizontal = 2
+grow_vertical = 2
+text = "出 售"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="lock" type="Button" parent="VBoxContainer" unique_id=896095821]
 theme_type_variation = "ZhenFaEmptyButton"
