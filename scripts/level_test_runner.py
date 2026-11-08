@@ -66,10 +66,22 @@ class LevelTestRunner:
         godot_exe: Optional[str] = None,
         project_dir: Optional[str] = None,
         instance_id: Optional[str] = None,
+        performance_sample_frames: int = 0,
+        performance_warmup_frames: int = 120,
+        performance_hud_full: bool = False,
     ) -> None:
         self.target_level = target_level
         self.time_scale = time_scale
         self.role_id = role_id
+        if performance_sample_frames < 0:
+            raise ValueError("性能采样帧数不能小于 0")
+        if performance_warmup_frames < 0:
+            raise ValueError("性能预热帧数不能小于 0")
+        if performance_hud_full and performance_sample_frames == 0:
+            raise ValueError("--performance-hud-full 需要启用 --performance-sample-frames")
+        self.performance_sample_frames = performance_sample_frames
+        self.performance_warmup_frames = performance_warmup_frames
+        self.performance_hud_full = performance_hud_full
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -117,6 +129,11 @@ class LevelTestRunner:
 const REPORT_PATH := "res://{self.report_name}"
 const TARGET_LEVEL := "{self.target_level}"
 const TIME_SCALE := {self.time_scale}
+const PERFORMANCE_SAMPLE_FRAMES := {self.performance_sample_frames}
+const PERFORMANCE_WARMUP_FRAMES := {self.performance_warmup_frames}
+const PERFORMANCE_HUD_FULL := {str(self.performance_hud_full).lower()}
+const PERFORMANCE_HUD_TEXT_LIMIT := 80
+const PERFORMANCE_BATTLE_WAIT_FRAMES := 1800
 const ROLE_ID := {self.role_id}
 const LOAD_TIMEOUT_MS := 45000
 const LOAD_MAX_FRAMES := 20000
@@ -127,6 +144,12 @@ const STAGE_ATTEMPTS := 40
 
 
 var _is_worker: bool = false
+var _performance_capture_active: bool = false
+var _performance_sample_index: int = 0
+var _performance_samples: PackedFloat64Array = PackedFloat64Array()
+var _performance_hud_layer: CanvasLayer
+var _performance_hud_root: Node2D
+var _performance_hud_target: BaseHero
 
 
 func _ready() -> void:
@@ -145,6 +168,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not _is_worker:
 		return
+	if _performance_capture_active and _performance_sample_index < PERFORMANCE_SAMPLE_FRAMES:
+		_performance_samples[_performance_sample_index] = Performance.get_monitor(Performance.TIME_PROCESS)
+		_performance_sample_index += 1
 	# 冒烟夹具只验证阶段推进；持续顶满当前生命，避免长链路测试被战斗伤害打断。
 	RoleProp.roleprop.Hp = 999999999
 	RoleProp.current_hp = 999999999
@@ -256,6 +282,32 @@ func _run_all() -> void:
 			scn.set("current_stage", 1)
 			if scn.has_method("_on_create_control_timeout"):
 				scn.call("_on_create_control_timeout")
+	if PERFORMANCE_SAMPLE_FRAMES > 0:
+		if scn is Game4ImportedLevel:
+			if scn.has_method("_stage_activate"):
+				scn.call("_stage_activate", 0)
+			elif scn.has_method("_start_stage"):
+				scn.call("_start_stage", 1)
+		elif scn.has_method("advance_stage"):
+			scn.call("advance_stage", 1)
+			if scn is BaseLevel and scn.has_method("level_create_monster"):
+				scn.call("level_create_monster", 1)
+		Engine.time_scale = 1.0
+		var battle_ready := false
+		for _frame_index in range(PERFORMANCE_BATTLE_WAIT_FRAMES):
+			if _is_performance_battle_ready(scn):
+				battle_ready = true
+				break
+			await get_tree().process_frame
+		if not battle_ready:
+			report["errors"].append("performance_battle_not_ready:%s" % str(_performance_snapshot(scn)))
+		else:
+			if PERFORMANCE_HUD_FULL:
+				_setup_performance_hud(hero as BaseHero)
+			await _capture_performance(report, scn)
+			_clear_performance_hud()
+		Engine.time_scale = TIME_SCALE
+
 
 	var all_ok: bool = true
 	for index in range(stage_count):
@@ -365,6 +417,147 @@ func _run_all() -> void:
 
 	report["ok"] = all_ok and report["errors"].is_empty()
 	await _finish(report, 0 if report["ok"] else 1)
+
+
+
+
+func _capture_performance(report: Dictionary, scn: Node) -> void:
+	if PERFORMANCE_HUD_FULL:
+		for _frame_index in range(PERFORMANCE_BATTLE_WAIT_FRAMES):
+			if (
+				_performance_snapshot(scn)["active_damage_texts"] >= PERFORMANCE_HUD_TEXT_LIMIT
+			):
+				break
+			_refill_performance_hud()
+			await get_tree().process_frame
+	var snapshot_start := _performance_snapshot(scn)
+	var full_hud_ready := (
+		not PERFORMANCE_HUD_FULL
+		or int(snapshot_start["active_damage_texts"]) >= PERFORMANCE_HUD_TEXT_LIMIT
+	)
+	_performance_samples.resize(PERFORMANCE_SAMPLE_FRAMES)
+	_performance_sample_index = 0
+	await _wait_frames(PERFORMANCE_WARMUP_FRAMES)
+	_performance_capture_active = true
+	while _performance_sample_index < PERFORMANCE_SAMPLE_FRAMES:
+		await get_tree().process_frame
+		if not is_inside_tree():
+			break
+	_performance_capture_active = false
+	var sample_count := _performance_sample_index
+	var performance_result := {{
+		"monitor": "Performance.TIME_PROCESS",
+		"unit": "ms",
+		"time_scale": 1.0,
+		"warmup_frames": PERFORMANCE_WARMUP_FRAMES,
+		"requested_sample_frames": PERFORMANCE_SAMPLE_FRAMES,
+		"sample_count": sample_count,
+		"full_hud_damage_text": PERFORMANCE_HUD_FULL,
+		"full_hud_target": PERFORMANCE_HUD_TEXT_LIMIT if PERFORMANCE_HUD_FULL else 0,
+		"full_hud_ready": full_hud_ready,
+		"percentile_definition": "nearest_rank",
+		"start": snapshot_start,
+		"end": _performance_snapshot(scn),
+	}}
+	if PERFORMANCE_HUD_FULL and not full_hud_ready:
+		performance_result["error"] = "full_hud_target_not_met"
+		report["errors"].append(
+			"performance_hud_incomplete:%d/%d" % [
+				int(snapshot_start["active_damage_texts"]), PERFORMANCE_HUD_TEXT_LIMIT
+			]
+		)
+		report["ok"] = false
+	if sample_count == 0:
+		performance_result["error"] = "no_samples"
+		report["errors"].append("performance_sample_empty")
+		report["ok"] = false
+	else:
+		var sorted_samples := _performance_samples.slice(0, sample_count)
+		sorted_samples.sort()
+		var total_seconds := 0.0
+		for sample in sorted_samples:
+			total_seconds += sample
+		var p95_index := clampi(int(ceil(float(sample_count) * 0.95)) - 1, 0, sample_count - 1)
+		performance_result["mean_ms"] = snapped(total_seconds * 1000.0 / float(sample_count), 0.001)
+		performance_result["p95_ms"] = snapped(float(sorted_samples[p95_index]) * 1000.0, 0.001)
+		performance_result["min_ms"] = snapped(float(sorted_samples[0]) * 1000.0, 0.001)
+		performance_result["max_ms"] = snapped(float(sorted_samples[sample_count - 1]) * 1000.0, 0.001)
+	if sample_count != PERFORMANCE_SAMPLE_FRAMES:
+		performance_result["error"] = "incomplete_samples"
+		report["errors"].append("performance_sample_incomplete:%d/%d" % [sample_count, PERFORMANCE_SAMPLE_FRAMES])
+		report["ok"] = false
+	report["performance"] = performance_result
+
+
+
+
+
+
+
+func _is_performance_battle_ready(scn: Node) -> bool:
+	var current_stage := int(scn.get("current_stage"))
+	var monster_root := scn.get_node_or_null("Monster")
+	return (
+		current_stage >= 1
+		and monster_root != null
+		and monster_root.get_child_count() > 0
+	)
+
+func _performance_snapshot(scn: Node) -> Dictionary:
+	var monster_root := scn.get_node_or_null("Monster")
+	var pool: CombatPoolRuntime = Global.get_combat_pool()
+	return {{
+		"current_stage": int(scn.get("current_stage")) if scn.get("current_stage") != null else -1,
+		"monster_children": monster_root.get_child_count() if monster_root != null else 0,
+		"active_damage_texts": pool.get_active_damage_text_count() if pool != null else 0,
+	}}
+
+
+func _setup_performance_hud(hero: BaseHero) -> void:
+	_performance_hud_target = hero
+	_performance_hud_layer = CanvasLayer.new()
+	_performance_hud_layer.name = "PerformanceHudLayer"
+	add_child(_performance_hud_layer)
+	_performance_hud_root = Node2D.new()
+	_performance_hud_root.name = "PerformanceHudRoot"
+	_performance_hud_layer.add_child(_performance_hud_root)
+	_refill_performance_hud()
+
+
+func _refill_performance_hud() -> void:
+	if _performance_hud_root == null or not is_instance_valid(_performance_hud_root):
+		return
+	var pool: CombatPoolRuntime = Global.get_combat_pool()
+	if pool == null:
+		return
+	var active_count := pool.get_active_damage_text_count()
+	if active_count >= PERFORMANCE_HUD_TEXT_LIMIT:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var columns := 10
+	var rows := int(ceil(float(PERFORMANCE_HUD_TEXT_LIMIT) / float(columns)))
+	for index in range(active_count, PERFORMANCE_HUD_TEXT_LIMIT):
+		var column := index % columns
+		var row := int(index / columns)
+		var position := Vector2(
+			(float(column) + 0.5) * viewport_size.x / float(columns),
+			(float(row) + 0.5) * viewport_size.y / float(rows)
+		)
+		var value := 12345 + index * 37
+		var text: Node = Global.add_damage_text(_performance_hud_root, position, value, "physics", false, _performance_hud_target)
+		if text == null:
+			break
+		var show_player := text.get("show_player") as AnimationPlayer
+		if show_player != null:
+			show_player.speed_scale = 0.01
+
+
+func _clear_performance_hud() -> void:
+	if _performance_hud_layer != null and is_instance_valid(_performance_hud_layer):
+		_performance_hud_layer.queue_free()
+	_performance_hud_layer = null
+	_performance_hud_root = null
+	_performance_hud_target = null
 
 
 func _ground_surface_y(scn: Node2D, x: float) -> float:
@@ -630,6 +823,31 @@ def _print_report(report: Dict[str, Any]) -> None:
             f"    [{flag}] Stage {st.get('target_stage')} @ x={st.get('x')} "
             f"-> actual={st.get('actual_stage')} alive={st.get('alive')} can_pass={st.get('can_pass')}"
         )
+    performance = report.get("performance")
+    if performance:
+        print(
+            "  帧耗时: TIME_PROCESS mean={mean}ms p95={p95}ms，样本={count}/{requested}，"
+            "预热={warmup}帧，关卡阶段={stage_start}->{stage_end}，怪物={monsters_start}->{monsters_end}".format(
+                {
+                    "mean": performance.get("mean_ms", "n/a"),
+                    "p95": performance.get("p95_ms", "n/a"),
+                    "count": performance.get("sample_count", 0),
+                    "requested": performance.get("requested_sample_frames", 0),
+                    "warmup": performance.get("warmup_frames", 0),
+                    "stage_start": performance.get("start", {}).get("current_stage", "n/a"),
+                    "stage_end": performance.get("end", {}).get("current_stage", "n/a"),
+                    "monsters_start": performance.get("start", {}).get("monster_children", "n/a"),
+                    "monsters_end": performance.get("end", {}).get("monster_children", "n/a"),
+                }
+            )
+        )
+        if performance.get("full_hud_damage_text"):
+            print("  满屏伤害数字活跃数: {start}->{end}".format(
+                {
+                    "start": performance.get("start", {}).get("active_damage_texts", "n/a"),
+                    "end": performance.get("end", {}).get("active_damage_texts", "n/a"),
+                }
+            ))
     if report.get("load_diag"):
         print("  加载诊断:")
         for line in report["load_diag"]:
@@ -657,6 +875,23 @@ def main() -> int:
     parser.add_argument("--scale", type=float, default=DEFAULT_TIME_SCALE, help="物理加速倍率")
     parser.add_argument("--role", type=int, default=1, choices=range(1, 9), help="测试角色 ID (1-8)")
     parser.add_argument("--godot", default=None, help="Godot 可执行文件路径（或设 GODOT_BIN）")
+    parser.add_argument(
+        "--performance-sample-frames",
+        type=int,
+        default=0,
+        help="可选逐帧 TIME_PROCESS 采样数；0 关闭采样",
+    )
+    parser.add_argument(
+        "--performance-warmup-frames",
+        type=int,
+        default=120,
+        help="性能采样前的预热帧数",
+    )
+    parser.add_argument(
+        "--performance-hud-full",
+        action="store_true",
+        help="采样期间维持 80 个全屏伤害数字；需同时指定 --performance-sample-frames",
+    )
     parser.add_argument("--timeout", type=int, default=300, help="单次冒烟墙钟上限（秒）")
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
     parser.add_argument("--instance-id", default=None, help="并发实例标识（默认随机）")
@@ -669,6 +904,9 @@ def main() -> int:
             role_id=args.role,
             godot_exe=args.godot,
             instance_id=args.instance_id,
+            performance_sample_frames=args.performance_sample_frames,
+            performance_warmup_frames=args.performance_warmup_frames,
+            performance_hud_full=args.performance_hud_full,
         )
         if not args.json:
             print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")

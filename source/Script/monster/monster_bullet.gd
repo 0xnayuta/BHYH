@@ -73,6 +73,8 @@ var monster5_stream_uploaded_sheet_index: int = -1
 var monster_atlas_frames_sprite: Sprite2D
 var monster_atlas_frames: SpriteFrames
 var monster_atlas_frames_animation: StringName = &""
+var _is_standard_bullet: bool = false
+var _atlas_visual_frame: int = -1
 var pet_phoenix_hold_last_elapsed: float = 0.0
 static var pet_dragon_texture_cache: Dictionary = {}
 static var pet_bullet_frames_cache: Dictionary = {}
@@ -748,7 +750,7 @@ func _physics_process(_delta: float) -> void:
 		remove:
 			pass
 
-	if STANDARD_BULLET_FRAMES.has(skill_name):
+	if _is_standard_bullet:
 		_sync_monster_atlas_visual()
 
 	match _runtime_kind:
@@ -782,6 +784,7 @@ func _physics_process(_delta: float) -> void:
 
 func _refresh_runtime_kind() -> void:
 	_runtime_skill_name = skill_name
+	_is_standard_bullet = STANDARD_BULLET_FRAMES.has(skill_name)
 	match skill_name:
 		"Monster5Bullet":
 			_runtime_kind = RuntimeKind.MONSTER_5
@@ -835,12 +838,14 @@ func _sync_monster_atlas_visual() -> void:
 		if frame_count <= 0:
 			return
 		var frame := clampi(bullet_ani.frame, 0, frame_count - 1)
+		if frame != _atlas_visual_frame:
+			_atlas_visual_frame = frame
+			monster_atlas_frames_sprite.texture = monster_atlas_frames.get_frame_texture(
+				monster_atlas_frames_animation, frame
+			)
 		monster_atlas_frames_sprite.position = bullet_ani.offset
 		monster_atlas_frames_sprite.modulate = bullet_ani.self_modulate
 		monster_atlas_frames_sprite.flip_h = bullet_ani.flip_h
-		monster_atlas_frames_sprite.texture = monster_atlas_frames.get_frame_texture(
-			monster_atlas_frames_animation, frame
-		)
 		return
 
 

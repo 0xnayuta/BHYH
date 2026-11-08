@@ -50,6 +50,7 @@
 | `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`，331.9s） |
 | `coop_probe_runner` | **38/38 PASS**（37-6 复跑，含 2P 相机/HUD/推图/年兽） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0，26.45s；`--role 8` 主角为 Role_8** |
+| 帧耗时采样（可选） | `level_test_runner.py` 的 `--performance-sample-frames` / `--performance-warmup-frames` / `--performance-hud-full` 可用；输出 `Performance.TIME_PROCESS` 的 mean/p95，数值只作本地前后对照，不纳入契约 |
 | PCK 验证包（FrameSequence） | **历史 6.9 基线：4,200/4,200 路径可达**；7,658,500,221 字节；sha256 `6bd42e324684b24208efe27448c9cae23ad0a1d5593d74338415e6eabbdd8010`；**7.1 PCK 按用户决策暂缓** |
 | PCK 原始数据清单 | **993/993**（7.1 原始数据闭包；`export_raw_manifest.py --check` 通过） |
 | Release PCK（实际 exe） | **5,044/5,044**（6.9 基线；844 原始数据 + 4,200 FrameSequence）；7,658,516,894 字节；sha256 `8e73922e99daf2004e9f6a15a4ed6571e436d0e2974b7cb8cb64cb7c9e84dcc3`；`BHYH.exe` 109,293,056 字节；7.0 未重建 release PCK |

@@ -3,6 +3,15 @@ extends "res://Script/level/game4_palace_terrain.gd"
 var _moving: Array[Dictionary] = []
 var _collapsing: Array[Dictionary] = []
 var _source_objects: Array[Dictionary] = []
+var _dragon_items: Array[Dictionary] = []
+var _jit_triggers: Array[Dictionary] = []
+var _hurt_zones: Array[Dictionary] = []
+var _stage_port_triggers: Array[Dictionary] = []
+var _sand_zones: Array[Dictionary] = []
+var _day_night_entities: Array[Dictionary] = []
+var _lights: Array[Dictionary] = []
+var _source_bodies: Array[StaticBody2D] = []
+var _trigger_targets: Dictionary = {}
 var _backgrounds: Dictionary = {}
 var _void_floor: StaticBody2D
 var _first_space_bodies: Array[Node] = []
@@ -17,8 +26,9 @@ func configure(level: Game4EastLateLevel, number: int) -> void:
 	level.get_node("wall/right_wall").disabled = true
 	_death_y = float(source_data["height"]) + 100.0
 	_bind_scene_nodes()
-	for record: Dictionary in _source_objects:
-		if record["type"] == "DragonItemEntity" and record.get("target") != null:
+	_index_source_objects()
+	for record: Dictionary in _dragon_items:
+		if record.get("target") != null:
 			var target: Area2D = record["target"] as Area2D
 			if target == null:
 				continue
@@ -53,6 +63,45 @@ func _apply_monster_physics(enemy: Node) -> void:
 	if enemy is BaseMonster:
 		enemy.floor_max_angle = deg_to_rad(80)
 		enemy.floor_snap_length = 18
+
+
+func _index_source_objects() -> void:
+	# 源对象在关卡生命周期内不变；按类型一次分桶，避免每帧对全量记录做字符串分支。
+	_dragon_items.clear()
+	_jit_triggers.clear()
+	_hurt_zones.clear()
+	_stage_port_triggers.clear()
+	_sand_zones.clear()
+	_day_night_entities.clear()
+	_lights.clear()
+	_source_bodies.clear()
+	_trigger_targets.clear()
+	for record: Dictionary in _source_objects:
+		var kind := str(record["type"])
+		match kind:
+			"DragonItemEntity":
+				_dragon_items.append(record)
+			"JITTrigger":
+				_jit_triggers.append(record)
+			"StagePortTrigger":
+				_stage_port_triggers.append(record)
+			"DayNightEntity":
+				_day_night_entities.append(record)
+			"LightEntity":
+				_lights.append(record)
+			_:
+				if kind.begins_with("Hurt"):
+					_hurt_zones.append(record)
+		var props: Dictionary = record["properties"]
+		if props.get("groupType", "") == "sand" and kind != "StagePortTrigger" and not kind.begins_with("Hurt"):
+			_sand_zones.append(record)
+		var body := record.get("body") as StaticBody2D
+		if body != null:
+			_source_bodies.append(body)
+		var trigger_id := str(props.get("triggerID", ""))
+		if not _trigger_targets.has(trigger_id):
+			_trigger_targets[trigger_id] = []
+		(_trigger_targets[trigger_id] as Array).append(record)
 
 
 func _physics_process(delta: float) -> void:
@@ -94,51 +143,41 @@ func _physics_process(delta: float) -> void:
 				record["sprite"].visible = true
 			record["stood"] = -1.0
 			record["revive"] = -1.0
-	for record: Dictionary in _source_objects:
-		if _level.in_void_space:
-			continue
-		var box: Rect2 = record["rect"]
-		var props: Dictionary = record["properties"]
-		if (
-			record["type"] == "DragonItemEntity"
-			and float(record["revive_at"]) > 0
-			and _clock >= float(record["revive_at"])
-		):
-			record["revive_at"] = 0.0
-			record["sprite"].visible = true
-			record["target"].set_deferred("monitoring", true)
-		if record["type"] == "JITrigger" and box.intersects(rect) and not record["active"]:
+	if not _level.in_void_space:
+		for record: Dictionary in _dragon_items:
+			if float(record["revive_at"]) > 0 and _clock >= float(record["revive_at"]):
+				record["revive_at"] = 0.0
+				record["sprite"].visible = true
+				record["target"].set_deferred("monitoring", true)
+		for record: Dictionary in _jit_triggers:
+			if record["active"] or not (record["rect"] as Rect2).intersects(rect):
+				continue
 			record["active"] = true
-			for target: Dictionary in _source_objects:
-				if target["properties"].get("triggerID", "") == props.get("trigger", "-1"):
-					target["active"] = true
-					target["start_at"] = _clock
-		if (
-			str(record["type"]).begins_with("Hurt")
-			and box.intersects(rect)
-			and _clock - float(record["last_hit"]) > 0.5
-		):
-			record["last_hit"] = _clock
-			_damage_role(role, roundi(float(props.get("atk", "1200")) * 0.5), "magic")
-		elif record["type"] == "StagePortTrigger" and box.intersects(rect):
-			var camera := NorthOriginalData.numbers(props.get("stageRec", "0,0,1200,600"))
+			var trigger_targets: Array = _trigger_targets.get(str(record["properties"].get("trigger", "-1")), [])
+			for target: Dictionary in trigger_targets:
+				target["active"] = true
+				target["start_at"] = _clock
+		for record: Dictionary in _hurt_zones:
+			if _clock - float(record["last_hit"]) > 0.5 and (record["rect"] as Rect2).intersects(rect):
+				record["last_hit"] = _clock
+				_damage_role(role, roundi(float(record["properties"].get("atk", "1200")) * 0.5), "magic")
+		for record: Dictionary in _stage_port_triggers:
+			if not (record["rect"] as Rect2).intersects(rect):
+				continue
+			var camera := NorthOriginalData.numbers(record["properties"].get("stageRec", "0,0,1200,600"))
 			_level.set_source_camera_rect(Rect2(float(camera[0]), float(camera[1]), float(camera[2]), float(camera[3])))
-		elif props.get("groupType", "") == "sand" and box.intersects(rect) and role.is_on_floor():
-			role.position.x -= 30.0 * delta
+		if role.is_on_floor():
+			for record: Dictionary in _sand_zones:
+				if (record["rect"] as Rect2).intersects(rect):
+					role.position.x -= 30.0 * delta
 	if _darkness != null and _level.stage_number == 82:
 		var night := false
-		for record: Dictionary in _source_objects:
-			if (
-				record["type"] == "DayNightEntity"
-				and record["active"]
-				and absf(float(record["rect"].get_center().x) - role.position.x) < 650
-			):
+		var role_x: float = role.position.x
+		for record: Dictionary in _day_night_entities:
+			if record["active"] and absf(float(record["rect"].get_center().x) - role_x) < 650:
 				night = fmod(_clock - float(record.get("start_at", 0)), 40.0) > 15.0
-			if (
-				record["type"] == "LightEntity"
-				and _clock < float(record.get("lit_until", 0))
-				and absf(float(record["rect"].get_center().x) - role.position.x) < 200
-			):
+		for record: Dictionary in _lights:
+			if _clock < float(record.get("lit_until", 0)) and absf(float(record["rect"].get_center().x) - role_x) < 200:
 				night = false
 		_darkness.color = Color(0.35, 0.35, 0.5) if night else Color.WHITE
 	if _level.stage_number == 80 and not _level.hidden_original_room:
@@ -177,10 +216,7 @@ func set_void_space(active: bool) -> void:
 		for collision in body.get_children():
 			if collision is CollisionShape2D or collision is CollisionPolygon2D:
 				collision.set_deferred("disabled", active)
-	for record: Dictionary in _source_objects:
-		var body := record.get("body") as StaticBody2D
-		if body == null:
-			continue
+	for body: StaticBody2D in _source_bodies:
 		for collision in body.get_children():
 			if collision is CollisionShape2D or collision is CollisionPolygon2D:
 				if active:
@@ -221,11 +257,8 @@ func _break_dragon_statue(record: Dictionary) -> void:
 	record["sprite"].visible = false
 	record["target"].set_deferred("monitoring", false)
 	await get_tree().create_timer(0.5, false).timeout
-	for light: Dictionary in _source_objects:
-		if (
-			light["type"] == "LightEntity"
-			and light["properties"].get("triggerID", "") == record["properties"].get("dtrigger", "-1")
-		):
+	for light: Dictionary in _lights:
+		if light["properties"].get("triggerID", "") == record["properties"].get("dtrigger", "-1"):
 			light["lit_until"] = _clock + float(light["properties"].get("lightTime", "20000")) / 1000
 			var sprite: AnimatedSprite2D = light["sprite"]
 			if sprite.sprite_frames.has_animation(&"attack1"):

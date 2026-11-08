@@ -72,6 +72,28 @@ const HUMAN_SOUL_CRYSTAL_ITEM_PREFIX := "human_soul_crystal_"
 const UNDERWORLD_SOUL_CRYSTAL_ITEM_PREFIX := "underworld_soul_crystal_"
 const HEAVEN_SOUL_CRYSTAL_ITEM_PREFIX := "heaven_soul_crystal_"
 const JIEJIAO_CATALOG := preload("res://Script/data/wan_ling_jiejiao_data.gd")
+const WALKING_ANIMATIONS := {
+	"walk": true,
+	"walk_1": true,
+	"walk_2": true,
+	"run": true,
+	"Fly": true,
+	"fly": true,
+}
+const IDLE_COMBAT_ANIMATIONS := {
+	"": true,
+	"wait": true,
+	"idle": true,
+	"walk": true,
+	"Fly": true,
+	"Fly_wait": true,
+	"wait_1": true,
+	"wait_2": true,
+	"walk_1": true,
+	"walk_2": true,
+	"Hands": true,
+	"can_hurt": true,
+}
 const HUMAN_NIGHTMARE_NO_DROP_MONSTER_IDS := [19]
 const UNDERWORLD_NIGHTMARE_SOUL_CRYSTAL_MONSTER_IDS := [
 	26,
@@ -652,7 +674,7 @@ func interrupt_movement_for_control() -> void:
 	if mr_player == null:
 		return
 	var current_animation := String(mr_player.current_animation)
-	if current_animation in ["walk", "walk_1", "walk_2", "run", "Fly", "fly"]:
+	if WALKING_ANIMATIONS.has(current_animation):
 		var idle_animations := (
 			["Fly_wait", "fly_wait", "wait", "idle"] if is_fly else ["wait", "idle", "wait_1", "wait_2"]
 		)
@@ -730,10 +752,7 @@ func _recover_interrupted_combat_state() -> void:
 			return
 		_clear_friendly_knockback_lock(int(get_meta("pet_summon_knockback_token", -1)))
 	var current_animation := String(mr_player.current_animation)
-	var is_idle_animation := (
-		current_animation
-		in ["", "wait", "idle", "walk", "Fly", "Fly_wait", "wait_1", "wait_2", "walk_1", "walk_2", "Hands", "can_hurt"]
-	)
+	var is_idle_animation := IDLE_COMBAT_ANIMATIONS.has(current_animation)
 	if not mr_player.is_playing() or is_idle_animation:
 		is_attacking = false
 		is_be_attacking = false
