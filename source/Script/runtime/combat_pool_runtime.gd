@@ -25,6 +25,9 @@ var _pools: Dictionary = {"root": null, "damage_text": [], "mr_hurt": [], "role_
 var _active_damage_texts: Dictionary = {}
 var _damage_text_count: int = 0
 var _damage_text_recount_frame: int = -1
+## 对象池取用统计：仅诊断用的整数计数，随运行时清理归零。
+var _pool_take_hits: Dictionary = {}
+var _pool_take_misses: Dictionary = {}
 
 ## 怪物受击特效按父节点节流。
 var _last_mr_hurt_msec: Dictionary = {}
@@ -75,6 +78,18 @@ func get_pool_size(pool_name: String) -> int:
 	return (pool as Array).size() if pool is Array else 0
 
 
+func get_pool_stats() -> Dictionary:
+	var stats: Dictionary = {}
+	for pool_name in POOL_NAMES:
+		stats[pool_name] = {
+			"size": get_pool_size(pool_name),
+			"limit": get_pool_limit(pool_name),
+			"hits": int(_pool_take_hits.get(pool_name, 0)),
+			"misses": int(_pool_take_misses.get(pool_name, 0)),
+		}
+	return stats
+
+
 func is_pool_root_valid() -> bool:
 	var root: Variant = _pools.get("root")
 	return root is Node and is_instance_valid(root)
@@ -102,8 +117,10 @@ func take_pooled_node(pool_name: String, scene_path: String) -> Node:
 	while pool.size() > 0:
 		var node = pool.pop_back()
 		if is_instance_valid(node) and not node.is_queued_for_deletion():
+			_pool_take_hits[pool_name] = int(_pool_take_hits.get(pool_name, 0)) + 1
 			return node
 	var scene: PackedScene = _host.preload_scene_path(scene_path)
+	_pool_take_misses[pool_name] = int(_pool_take_misses.get(pool_name, 0)) + 1
 	if scene == null:
 		return null
 	return scene.instantiate()
@@ -171,6 +188,8 @@ func clear_runtime_pools() -> void:
 	_pools["root"] = null
 	_active_damage_texts.clear()
 	_damage_text_count = 0
+	_pool_take_hits.clear()
+	_pool_take_misses.clear()
 	_last_mr_hurt_msec.clear()
 	clear_combo_state()
 

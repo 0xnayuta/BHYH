@@ -475,12 +475,16 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 	_performance_samples.resize(PERFORMANCE_SAMPLE_FRAMES)
 	_performance_sample_index = 0
 	await _wait_frames(PERFORMANCE_WARMUP_FRAMES)
+	var pool_stats_start := _pool_stats_snapshot()
+	var damage_text_peak := _current_active_damage_texts()
 	_performance_capture_active = true
 	while _performance_sample_index < PERFORMANCE_SAMPLE_FRAMES:
 		await get_tree().process_frame
 		if not is_inside_tree():
 			break
+		damage_text_peak = maxi(damage_text_peak, _current_active_damage_texts())
 	_performance_capture_active = false
+	var pool_stats_end := _pool_stats_snapshot()
 	var sample_count := _performance_sample_index
 	var performance_result := {{
 		"monitor": "Performance.TIME_PROCESS",
@@ -492,6 +496,10 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 		"full_hud_damage_text": PERFORMANCE_HUD_FULL,
 		"full_hud_target": PERFORMANCE_HUD_TEXT_LIMIT if PERFORMANCE_HUD_FULL else 0,
 		"full_hud_ready": full_hud_ready,
+		"damage_text_peak": damage_text_peak,
+		"pool_stats_start": pool_stats_start,
+		"pool_stats_end": pool_stats_end,
+		"pool_stats_delta": _pool_stats_delta(pool_stats_start, pool_stats_end),
 		"percentile_definition": "nearest_rank",
 		"start": snapshot_start,
 		"end": _performance_snapshot(scn),
@@ -578,6 +586,32 @@ func _performance_snapshot(scn: Node) -> Dictionary:
 		"monster_children": monster_root.get_child_count() if monster_root != null else 0,
 		"active_damage_texts": pool.get_active_damage_text_count() if pool != null else 0,
 	}}
+
+
+func _pool_stats_snapshot() -> Dictionary:
+	var pool: CombatPoolRuntime = Global.get_combat_pool()
+	if pool == null or not pool.has_method("get_pool_stats"):
+		return {{}}
+	return pool.get_pool_stats()
+
+
+func _pool_stats_delta(before: Dictionary, after: Dictionary) -> Dictionary:
+	var delta: Dictionary = {{}}
+	for pool_name in after:
+		var end_stats: Dictionary = after[pool_name]
+		var start_stats: Dictionary = before.get(pool_name, {{}})
+		delta[pool_name] = {{
+			"hits": int(end_stats.get("hits", 0)) - int(start_stats.get("hits", 0)),
+			"misses": int(end_stats.get("misses", 0)) - int(start_stats.get("misses", 0)),
+			"size_end": int(end_stats.get("size", 0)),
+			"limit": int(end_stats.get("limit", 0)),
+		}}
+	return delta
+
+
+func _current_active_damage_texts() -> int:
+	var pool: CombatPoolRuntime = Global.get_combat_pool()
+	return pool.get_active_damage_text_count() if pool != null else 0
 
 
 func _setup_performance_hud(hero: BaseHero) -> void:
