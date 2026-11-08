@@ -60,6 +60,8 @@ var _failure_reported := false
 var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
 var _battle_vram_baseline_bytes: int = -1
+# 验收探针（level_test_runner --measure-load）读取的阶段时间戳；随 LoadScene 实例释放。
+var load_phase_marks: Array[Dictionary] = []
 static var _integrity_verified_this_process := false
 # 场景中的 Tips 文本是编辑器预览占位，内容应保持为下列条目之一。
 var tips_textlist = [
@@ -349,7 +351,12 @@ func _set_progress(value: float) -> void:
 	loading_text.text = str(int(round(displayed * 100.0))) + "%"
 
 
+func _mark_load_phase(stage: String) -> void:
+	load_phase_marks.append({"stage": stage, "msec": Time.get_ticks_msec()})
+
+
 func _log_battle_vram(stage: String) -> void:
+	_mark_load_phase(stage)
 	var current_bytes: int = int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
 	if _battle_vram_baseline_bytes < 0:
 		_battle_vram_baseline_bytes = current_bytes
@@ -403,7 +410,9 @@ func _finish_loading() -> void:
 		_log_battle_vram("archive preload queue")
 		loading_text.text = "正在准备角色技能资源……"
 		_set_progress(0.91)
+		_mark_load_phase("role runtime prewarm begin")
 		await Global.prewarm_current_role_runtime_resources(role_id)
+		_mark_load_phase("role runtime prewarm end")
 		if not _is_request_current():
 			return
 		if DisplayServer.get_name() != "headless":
@@ -437,17 +446,21 @@ func _finish_loading() -> void:
 		_set_progress(0.93)
 		await get_tree().process_frame
 	if needs_magic_weapon_prewarm:
+		_mark_load_phase("magic weapon prewarm begin")
 		if equipped_magic_weapon == "bsyj":
 			await MIRROR_SCRIPT.prewarm_stream_frames()
 		else:
 			Global.prewarm_magic_weapon_runtime_resources(equipped_magic_weapon)
+		_mark_load_phase("magic weapon prewarm end")
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		_log_battle_vram("magic weapon")
 		_set_progress(0.94)
 		await get_tree().process_frame
 	if is_battle_target:
+		_mark_load_phase("combat hit prewarm begin")
 		await Global.preload_combat_hit_resources()
+		_mark_load_phase("combat hit prewarm end")
 		if not _is_request_current():
 			return
 		if DisplayServer.get_name() != "headless":
@@ -458,7 +471,9 @@ func _finish_loading() -> void:
 		if LocalCoop.is_enabled():
 			pet_slots.append(2)
 		for pet_slot in pet_slots:
+			_mark_load_phase("active pet prewarm begin:%d" % pet_slot)
 			await Global.prewarm_active_pet_runtime_resources(pet_slot)
+			_mark_load_phase("active pet prewarm end:%d" % pet_slot)
 		if not _is_request_current():
 			return
 		if DisplayServer.get_name() != "headless":
@@ -481,7 +496,9 @@ func _finish_loading() -> void:
 			await get_tree().process_frame
 		loading_text.text = "正在准备副本怪物资源……"
 		_set_progress(0.94)
+		_mark_load_phase("target level prewarm begin")
 		await _prewarm_target_level_resources()
+		_mark_load_phase("target level prewarm end")
 		if not _is_request_current():
 			return
 		if DisplayServer.get_name() != "headless":

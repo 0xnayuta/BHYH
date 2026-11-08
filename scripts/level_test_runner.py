@@ -727,6 +727,9 @@ func _sample_load_measure(measure: Dictionary) -> void:
 			measure["preload_done_usec"] = now_usec
 		if bool(ls.get("_finishing")) and not measure.has("finish_started_usec"):
 			measure["finish_started_usec"] = now_usec
+		var marks: Variant = ls.get("load_phase_marks")
+		if marks is Array and not (marks as Array).is_empty():
+			measure["phase_marks"] = (marks as Array).duplicate(true)
 	measure["peak_video_mem"] = maxi(
 		int(measure.get("peak_video_mem", 0)),
 		int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
@@ -779,6 +782,27 @@ func _build_load_report(measure: Dictionary, change_usec: int) -> Dictionary:
 	result["peak_render_objects"] = int(measure.get("peak_render_objects", 0))
 	result["peak_draw_calls"] = int(measure.get("peak_draw_calls", 0))
 	result["peak_primitives"] = int(measure.get("peak_primitives", 0))
+	var phase_marks: Array = []
+	var phase_deltas: Array = []
+	var raw_marks_value: Variant = measure.get("phase_marks", [])
+	var raw_marks: Array = raw_marks_value if raw_marks_value is Array else []
+	var previous_stage := ""
+	var previous_msec := 0
+	for mark_value in raw_marks:
+		if not mark_value is Dictionary:
+			continue
+		var mark := mark_value as Dictionary
+		var stage := str(mark.get("stage", ""))
+		var msec := int(mark.get("msec", 0))
+		if stage == "" or msec <= 0:
+			continue
+		phase_marks.append({{"stage": stage, "ms": snapped(float(msec * 1000 - ready_usec) / 1000.0, 0.001)}})
+		if previous_stage != "":
+			phase_deltas.append({{"from": previous_stage, "to": stage, "ms": float(msec - previous_msec)}})
+		previous_stage = stage
+		previous_msec = msec
+	result["phase_marks"] = phase_marks
+	result["phase_deltas"] = phase_deltas
 	result["render_window"] = RENDER_WINDOW
 	return result
 
