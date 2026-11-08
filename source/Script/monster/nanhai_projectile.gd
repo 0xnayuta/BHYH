@@ -153,16 +153,6 @@ func _configure_visual() -> void:
 	_update_motion_rotation()
 
 
-func _configure_atlas_visual(
-	_sequence_name: String,
-	_source_offset: Vector2,
-	_looped: bool,
-	_faces_right: bool = visual_faces_right,
-	_metadata_path: String = ""
-) -> bool:
-	return false
-
-
 func _apply_visual_offset(source_offset: Vector2) -> void:
 	var mirrored_offset := source_offset
 	if bullet_ani.flip_h:

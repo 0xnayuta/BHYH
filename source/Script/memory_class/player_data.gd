@@ -3018,41 +3018,6 @@ func _accumulate_pet_equipment_item_bonuses(totals: Dictionary, item: Dictionary
 		totals[canonical] = float(totals.get(canonical, 0.0)) + item_total
 
 
-func _pet_equipment_canonical_stat_key(stat_name: String) -> String:
-	var requested := stat_name.strip_edges()
-	if requested == "":
-		return ""
-	for canonical in PET_EQUIPMENT_STAT_KEYS:
-		if str(canonical).to_lower() == requested.to_lower():
-			return str(canonical)
-		var aliases: Array = PET_EQUIPMENT_STAT_ALIASES.get(canonical, [])
-		for alias in aliases:
-			if str(alias).to_lower() == requested.to_lower():
-				return str(canonical)
-	return ""
-
-
-func _pet_equipment_item_stat(item: Dictionary, aliases: Array) -> float:
-	var nested_value: Variant = item.get("Data", {})
-	var nested: Dictionary = {}
-	if nested_value is Dictionary:
-		nested = nested_value
-	var sources: Array = [item, nested]
-	var base_value := _pet_equipment_number_from_sources(sources, aliases)
-	var strengthen_value := _pet_equipment_strength_from_sources(sources, aliases)
-	var level := _pet_equipment_level_from_sources(sources)
-	var random_value := _pet_equipment_random_stat_total(
-		_pet_equipment_random_stats_from_sources(sources), aliases, level
-	)
-	var gem_value := _pet_equipment_gem_stat([nested, item], aliases)
-	return base_value + strengthen_value * level + random_value + gem_value
-
-
-func _pet_equipment_gem_stat(sources: Array, aliases: Array) -> float:
-	var gem_properties := _pet_equipment_gem_properties(sources)
-	return _pet_equipment_number_from_sources([gem_properties], aliases)
-
-
 func _pet_equipment_gem_properties(sources: Array) -> Dictionary:
 	for source_value in sources:
 		if not (source_value is Dictionary):

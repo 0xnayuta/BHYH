@@ -129,12 +129,10 @@ var all_buff_list = [
 	"zznh",
 	"SMSRSZ_CD"
 ]
-var buff_list = []
 
 const COMBAT_HIT_DAMAGE_POOL_SIZE := 12
 const COMBAT_HIT_EFFECT_POOL_SIZE := 16
 const COMBAT_HIT_SOUND_POOL_SIZE := 6
-var choose_list = []
 var choose_ms: bool
 var buff_box
 var mg_cd_pic
@@ -182,13 +180,6 @@ const MONSTER_212_BULLET_SCRIPTS := [
 	preload("res://Script/monster/monster212_bullet4.gd"),
 ]
 const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_frame_cache_registry.gd")
-var bullet = null
-var damage_text = null
-var monster_be_hit = null
-var special_affect = null
-var role_bullet = null
-var fly_bullet = null
-var _chase_bullet = null
 
 
 func _exit_tree() -> void:
@@ -1165,12 +1156,6 @@ func clear_combat_runtime_cache() -> void:
 	_prewarmed_pet_signatures.clear()
 	_role_visual.reset()
 
-	damage_text = null
-	monster_be_hit = null
-	special_affect = null
-	role_bullet = null
-	fly_bullet = null
-	_chase_bullet = null
 	_combat_factory.clear_scene_caches()
 	_projectile_factory.clear_scene_caches()
 	_effect_factory.clear_scene_caches()
@@ -1388,9 +1373,6 @@ func release_role_runtime_resources() -> void:
 	STREAMING_ROLE_BULLET_SCRIPT.clear_cached_frames()
 	_resource_runtime.release_role_cached_resources()
 	_combat_factory.clear_scene_caches()
-	role_bullet = null
-	fly_bullet = null
-	_chase_bullet = null
 	_projectile_factory.clear_scene_caches()
 	_effect_factory.clear_scene_caches()
 
@@ -1753,10 +1735,6 @@ func preload_next(path: String) -> void:
 
 func clear_preloaded_scene_slot() -> void:
 	_resource_runtime.clear_preloaded_scene_slot()
-
-
-func _get_preloaded(path: String) -> PackedScene:
-	return _resource_runtime.take_preloaded_scene(path)
 
 
 func add_basic_ar_button(parent, Num):

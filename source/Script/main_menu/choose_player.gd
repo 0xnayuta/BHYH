@@ -325,22 +325,3 @@ func _reset_selection() -> void:
 	current_choose = 0
 	_clear_role_info()
 	_refresh_selected_card()
-
-
-func _update_archive_time() -> void:
-	var num := _archive_num()
-	var time_text: String = MemoryClass.get_time()
-	if num <= 0:
-		return
-	if num <= 6:
-		MainSet.set_data["time" + str(num)] = time_text
-	else:
-		var key := str(num)
-		if not MainSet.set_data["其他存档"].has(key):
-			MainSet.set_data["其他存档"][key] = {"name": "", "time": ""}
-		MainSet.set_data["其他存档"][key]["time"] = time_text
-	MemoryClass.main_bc()
-
-
-func _archive_num() -> int:
-	return MemoryClass.archive_number_from_path(Global.get_cd_path())
