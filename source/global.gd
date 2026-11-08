@@ -665,14 +665,6 @@ func _load_scene(path: String) -> PackedScene:
 	return _resource_runtime.load_scene(path)
 
 
-func _is_scene_resource_path(path: String) -> bool:
-	return _resource_runtime.is_scene_resource_path(path)
-
-
-func _is_valid_packed_scene(value: Variant) -> bool:
-	return _resource_runtime.is_valid_packed_scene(value)
-
-
 func load_ui_scene(path: String) -> PackedScene:
 	if not _ui_runtime.is_runtime_ui_scene_path(path):
 		return load(path) as PackedScene
@@ -970,10 +962,6 @@ func _preload_paths_threaded(paths: Array, generation: int = -1) -> void:
 	await _resource_runtime.preload_paths_threaded(paths, generation)
 
 
-func _get_threaded_preload_batch_size(request_count: int) -> int:
-	return _resource_runtime.get_threaded_preload_batch_size(request_count)
-
-
 func _warm_scene_paths_over_frames(paths: Array, per_frame: int = 2, generation: int = -1) -> void:
 	await _resource_runtime.warm_scene_paths_over_frames(paths, per_frame, generation)
 
@@ -984,29 +972,6 @@ func _warm_audio_streams_over_frames(paths: Array, per_frame: int = 2, generatio
 
 func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6, generation: int = -1) -> void:
 	await _resource_runtime.warm_texture_rids_over_frames(paths, per_frame, generation)
-
-
-func _get_damage_number_texture_paths() -> Array:
-	var result: Array = []
-	var number_dirs: Array[String] = [
-		"res://Art/all_number/cure/cure_",
-		"res://Art/all_number/cure_mp/cure_mp_",
-		"res://Art/all_number/reduce_mp/reduce_mp_",
-		"res://Art/all_number/physics/physics_",
-		"res://Art/all_number/physicscrit/physics_",
-		"res://Art/all_number/magic/magic_",
-		"res://Art/all_number/magic/physics_",
-		"res://Art/all_number/magiccrit/magic_",
-		"res://Art/all_number/real/real_",
-		"res://Art/all_number/realcrit/real_",
-		"res://Art/all_number/lj/lj_",
-		"res://Art/all_number/monster/physics/physics_",
-		"res://Art/all_number/monster/magic/magic_",
-	]
-	for prefix in number_dirs:
-		for i in range(10):
-			result.append(prefix + str(i) + ".png")
-	return result
 
 
 func preload_combat_hit_resources() -> void:
@@ -1320,22 +1285,6 @@ func _prewarm_archive_role_resources(role_id: int, generation: int = -1) -> void
 	if not is_runtime_generation_current(request_generation):
 		return
 	await prewarm_current_role_runtime_resources(role_id, request_generation)
-
-
-func _role_scene_path(role_id: int) -> String:
-	return (
-		{
-			1: "res://Scene/hero/role_1/role1.tscn",
-			2: "res://Scene/hero/role_2/role_2.tscn",
-			3: "res://Scene/hero/role_3/role_3.tscn",
-			4: "res://Scene/hero/role_4/role_4.tscn",
-			5: "res://Scene/hero/role_5/role_5.tscn",
-			6: "res://Scene/hero/role_6/role_6.tscn",
-			7: "res://Scene/hero/role_7/role_7.tscn",
-			8: "res://Scene/hero/role_8/role_8.tscn",
-		}
-		. get(role_id, "")
-	)
 
 
 func _current_visual_equipment_names() -> Dictionary:
@@ -2236,10 +2185,6 @@ func add_mosaic_instance(parent, position):
 
 func add_magic_help(parent, position):
 	return _skill_panel_factory.add_magic_help(parent, position)
-
-
-func _get_viewport_center_position() -> Vector2:
-	return get_viewport().get_visible_rect().size * 0.5
 
 
 func add_use_magic_weapon(parent, position):

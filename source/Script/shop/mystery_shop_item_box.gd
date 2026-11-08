@@ -1,7 +1,5 @@
 extends TextureRect
-var _item_hover_inside := false
 @onready var item_box: Button = $ItemBox
-var _item_hover_popup
 @onready var item_num: Label = $Num
 @onready var need_value: Label = $Need
 @onready var purchase_button: Button = $Purchase
@@ -203,61 +201,3 @@ func open_and_close_box():
 		5:
 			self.close()
 			my_father.item_1.open()
-
-
-func _drive_item_hover(item_box) -> void:
-	if item_box == null or not is_instance_valid(item_box):
-		return
-	if not item_box.visible:
-		if _item_hover_inside:
-			_item_hover_inside = false
-			_hide_item_info()
-		return
-	var inside = item_box.get_global_rect().has_point(item_box.get_global_mouse_position())
-	if inside and not _item_hover_inside:
-		_item_hover_inside = true
-		_show_item_info(item_box)
-	elif inside and _item_hover_popup != null and is_instance_valid(_item_hover_popup):
-		Global.apply_popup_screen_layout(_item_hover_popup, Global.screen_popup_position(), _hover_popup_size(item_box))
-	elif not inside and _item_hover_inside:
-		_item_hover_inside = false
-		_hide_item_info()
-
-
-func _hover_popup_size(item_box) -> Vector2:
-	if item_box != null and is_instance_valid(item_box):
-		var eq_prop = item_box.eq_prop
-		if eq_prop != null and eq_prop.size() > 0 and item_box.item_menu_kind != "item":
-			return Vector2(260, 560)
-	return Vector2(235, 240)
-
-
-func _show_item_info(item_box) -> void:
-	if item_box == null or not is_instance_valid(item_box):
-		return
-	if _item_hover_popup != null and is_instance_valid(_item_hover_popup):
-		return
-	var item_name = item_box.get_item_name
-	if (item_name == "" or item_name == "empty") and item_box.has_meta("item_name"):
-		item_name = str(item_box.get_meta("item_name"))
-	if item_name == "" or item_name == "empty" or not EquipmentService.has(StringName(item_name)):
-		return
-	var parent_node = Global.get_ui_runtime().get_popup_layer()
-	var popup_pos = Global.screen_popup_position()
-	var eq_prop = item_box.eq_prop
-	if eq_prop != null and eq_prop.size() > 0 and item_box.item_menu_kind != "item":
-		_item_hover_popup = Global.add_equ_propeties_box(
-			parent_node, popup_pos, item_name, item_box.qh_level, item_box.wx, eq_prop
-		)
-	else:
-		_item_hover_popup = Global.add_dj_infor(parent_node, popup_pos, item_name)
-	if _item_hover_popup != null:
-		Global.get_ui_runtime().register_hover_popup(_item_hover_popup)
-		_item_hover_popup.top_level = true
-		_item_hover_popup.z_index = 9999
-		_item_hover_popup.visible = true
-
-
-func _hide_item_info() -> void:
-	Global.get_ui_runtime().clear_hover_popup()
-	_item_hover_popup = null

@@ -495,24 +495,6 @@ func _cache_head_slots(skeleton: Variant) -> void:
 			_head_slots.append(slot)
 
 
-func _get_head_forward_reach(skeleton: Variant) -> float:
-	if skeleton == null or not skeleton.has_method("find_slot"):
-		return 0.0
-
-	_head_sweep_direction = 1.0 if face_right else -1.0
-	var furthest := -INF
-	for head_position in _get_active_head_positions(skeleton):
-		var offset_x := (head_position.x - global_position.x) * _head_sweep_direction
-		furthest = maxf(furthest, offset_x)
-
-	if is_inf(furthest):
-		return 0.0
-
-	_head_has_appeared = true
-	_max_head_forward_reach = maxf(_max_head_forward_reach, furthest)
-	return _max_head_forward_reach + HEAD_FORWARD_PADDING
-
-
 func _apply_fallback_visual_damage() -> void:
 	if _fallback_sprite == null or not is_instance_valid(_fallback_sprite) or _fallback_sprite.texture == null:
 		return

@@ -319,10 +319,6 @@ func get_constellation_tier() -> int:
 	return current_tier
 
 
-func _get_highest_defeated_tier() -> int:
-	return PlayerData.get_constellation_highest_defeated_tier(selected_level)
-
-
 func get_selected_constellation_level() -> int:
 	return selected_level
 

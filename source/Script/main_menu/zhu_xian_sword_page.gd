@@ -262,19 +262,6 @@ func _center_material_row(card: Node, icon: TextureRect, label: Label, slot_y: f
 	label.position = Vector2(row_left + MATERIAL_ICON_VISIBLE_WIDTH + MATERIAL_ROW_GAP, slot_y - 1.0)
 
 
-func _format_material(material: Dictionary) -> String:
-	return str(material.get("name", "")) + " x" + str(int(material.get("count", 0)))
-
-
-func _format_materials(sword_id: String) -> String:
-	var materials: Array = _get_upgrade_materials(sword_id, _get_level(sword_id))
-	var parts: Array[String] = []
-	for material in materials:
-		if material is Dictionary:
-			parts.append(_format_material(material))
-	return "、".join(parts)
-
-
 func _get_upgrade_materials(sword_id: String, level: int) -> Array:
 	var base_materials: Array = SWORD_UPGRADE_MATERIALS.get(sword_id, [])
 	var materials: Array = []

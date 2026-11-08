@@ -189,35 +189,6 @@ func _exit_tree() -> void:
 	_cleanup_shop_shadow_rects()
 
 
-func _ensure_shop_shadow_rects() -> void:
-	if _shop_shadow_rects.size() > 0:
-		return
-	_cleanup_shop_shadow_rects()
-	for i in range(4):
-		var rect := ColorRect.new()
-		rect.name = ["ShopShadowTop", "ShopShadowBottom", "ShopShadowLeft", "ShopShadowRight"][i]
-		rect.color = Color.WHITE
-		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		rect.z_index = 1000
-		var material := ShaderMaterial.new()
-		material.shader = _get_shop_shadow_shader()
-		material.set_shader_parameter("side", i)
-		rect.material = material
-		get_parent().add_child(rect)
-		_shop_shadow_rects.append(rect)
-
-
-func _set_shadow_rect(index: int, _pos: Vector2, _size: Vector2, solid_px_: float, fade_px_: float) -> void:
-	var rect: ColorRect = _shop_shadow_rects[index]
-	rect.position = _pos
-	rect.size = Vector2(max(_size.x, 0.0), max(_size.y, 0.0))
-	rect.visible = rect.size.x > 0.5 and rect.size.y > 0.5
-	if rect.material is ShaderMaterial:
-		(rect.material as ShaderMaterial).set_shader_parameter("rect_size", rect.size)
-		(rect.material as ShaderMaterial).set_shader_parameter("solid_px", max(solid_px_, 0.0))
-		(rect.material as ShaderMaterial).set_shader_parameter("fade_px", max(fade_px_, 1.0))
-
-
 func _layout_fullscreen() -> void:
 	var viewport_size := get_viewport_rect().size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:

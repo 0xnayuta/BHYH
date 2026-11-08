@@ -525,26 +525,6 @@ func _play_melee(
 		is_attacking = false
 
 
-func _sync_melee_shape_to_effect(effect: NeZhaSkillEffect) -> void:
-	if not is_instance_valid(effect):
-		return
-	var effect_rectangle := effect.collion.shape as RectangleShape2D
-	var melee_rectangle := melee_shape.shape as RectangleShape2D
-	if effect_rectangle == null or melee_rectangle == null:
-		return
-	if not melee_rectangle.resource_local_to_scene:
-		melee_rectangle = melee_rectangle.duplicate() as RectangleShape2D
-		melee_rectangle.resource_local_to_scene = true
-		melee_shape.shape = melee_rectangle
-	melee_rectangle.size = effect_rectangle.size
-	melee_shape.position = Vector2(-effect.collion.position.x, effect.collion.position.y)
-	melee_shape.set_deferred("disabled", false)
-
-
-func _disable_melee_shape() -> void:
-	melee_shape.set_deferred("disabled", true)
-
-
 func _scaled_skill_mp(base_cost: int, skill_index: int, next_level: bool = false, high_growth: bool = false) -> int:
 	var skill_level := maxi(1, int(get_skill_level(skill_index)))
 	var growth_level := skill_level if next_level else skill_level - 1

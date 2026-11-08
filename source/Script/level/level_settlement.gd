@@ -39,10 +39,6 @@ func _flush_pending_settlement() -> bool:
 	return _commit_settlement(_pending_save_reason)
 
 
-func _clear_pending_settlement() -> void:
-	_pending_save_reason = ""
-
-
 func _notify_settlement_save_failure() -> void:
 	if _save_failure_notified:
 		return

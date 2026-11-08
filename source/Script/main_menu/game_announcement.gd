@@ -1050,10 +1050,6 @@ func _setup_map_progress_selector() -> void:
 		map_progress_selector.select(0)
 
 
-func _get_map_progress_keys() -> Array:
-	return MAP_PROGRESS_KEYS.duplicate()
-
-
 func _clear_selected_map_progress(save_progress: bool = true) -> bool:
 	var selected_index := map_progress_selector.selected
 	if selected_index < 0 or selected_index >= MAP_PROGRESS_KEYS.size():

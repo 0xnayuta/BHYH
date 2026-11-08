@@ -130,16 +130,6 @@ func _load_texture(path: String, fallback_path: String) -> Texture2D:
 	return texture
 
 
-func _ensure_content_icon() -> void:
-	if _content_icon != null:
-		return
-	_content_icon = Sprite2D.new()
-	_content_icon.name = "ContentIcon"
-	_content_icon.centered = true
-	_content_icon.z_index = 1
-	add_child(_content_icon)
-
-
 func _clear_content_icon() -> void:
 	if _content_icon != null:
 		_content_icon.visible = false
