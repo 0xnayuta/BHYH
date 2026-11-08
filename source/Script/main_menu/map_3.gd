@@ -498,9 +498,9 @@ func _on_zhu_xian_sword_pressed() -> void:
 		Global.add_message_show(_ui_parent(), "诛仙剑阵页面加载失败", 1.5, Vector2(470, 300))
 		return
 	zhuxian_sword_page = page_scene.instantiate()
-	var popup_parent := (
-		Global.get_ui_runtime().get_popup_layer() if Global.has_method("get_ui_popup_layer") else _ui_parent()
-	)
+	var popup_parent: Node = Global.get_ui_runtime().get_popup_layer()
+	if popup_parent == null:
+		popup_parent = _ui_parent()
 	popup_parent.add_child(zhuxian_sword_page)
 
 

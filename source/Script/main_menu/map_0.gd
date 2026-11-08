@@ -104,8 +104,9 @@ func _center_pet_page() -> void:
 
 
 func _ui_parent() -> Node:
-	if Global.has_method("get_ui_popup_layer"):
-		return Global.get_ui_runtime().get_popup_layer()
+	var popup_layer := Global.get_ui_runtime().get_popup_layer()
+	if popup_layer != null:
+		return popup_layer
 	var parent := get_parent()
 	return parent if parent != null else self
 
