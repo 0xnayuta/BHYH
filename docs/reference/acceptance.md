@@ -243,7 +243,8 @@ python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/
 | 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头、以 `WARNING` 开头的行都必须为 0 |
 | 唯一噪声豁免 | `ERROR: Parameter "t" is null.` 及其缩进栈（headless dummy 渲染噪声） |
 | 产物 | 临时驱动/报告/日志写入 `source/`，运行后自动清理；**不写 `docs/reports/`** |
-| 性能采样（可选） | `--performance-sample-frames N`：逐帧读取 `Performance.get_monitor(Performance.TIME_PROCESS)`（引擎定义为单帧耗时，秒），报告 `mean_ms / p95_ms / min_ms / max_ms`；p95 采用 nearest-rank，样本数不足记 FAIL |
+| 性能采样（可选） | `--performance-sample-frames N`：逐帧读取 `Performance.get_monitor(Performance.TIME_PROCESS)`（引擎定义为单帧耗时，秒），报告 `mean_ms / p50_ms / p95_ms / min_ms / max_ms`；p50/p95 采用 nearest-rank，样本数不足记 FAIL |
+| 节流判定与重跑 | `p95_ms >= 8.0` 判为整段节流（`p50_ms < 2.0` 记 `sporadic`，否则 `sustained`）；默认 `--performance-retries 1`，命中时重跑并保留 `p95` 最低的一次（报告 `attempts` / `throttled_attempts`）；仍节流不判 FAIL，但数值不可用于前后对照 |
 | 性能预热 | `--performance-warmup-frames N`（默认 120）：采样前先 `Engine.time_scale=1.0`，并等待第 1 阶段进入战斗（有存活怪物）；超时记 FAIL |
 | 性能 HUD 档 | `--performance-hud-full`：采样期间维持 80 个活跃伤害数字（对象池上限），未达上限记 FAIL |
 | 性能推进方式 | `Game4ImportedLevel` 先 `_stage_activate(0)`（北俱芦洲）或 `_start_stage(1)`（Boss 关）；普通关先 `advance_stage(1)` + `level_create_monster(1)` |

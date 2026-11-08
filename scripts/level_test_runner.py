@@ -69,6 +69,7 @@ class LevelTestRunner:
         performance_sample_frames: int = 0,
         performance_warmup_frames: int = 120,
         performance_hud_full: bool = False,
+        performance_retries: int = 1,
     ) -> None:
         self.target_level = target_level
         self.time_scale = time_scale
@@ -77,11 +78,14 @@ class LevelTestRunner:
             raise ValueError("性能采样帧数不能小于 0")
         if performance_warmup_frames < 0:
             raise ValueError("性能预热帧数不能小于 0")
+        if performance_retries < 0:
+            raise ValueError("性能采样重试次数不能小于 0")
         if performance_hud_full and performance_sample_frames == 0:
             raise ValueError("--performance-hud-full 需要启用 --performance-sample-frames")
         self.performance_sample_frames = performance_sample_frames
         self.performance_warmup_frames = performance_warmup_frames
         self.performance_hud_full = performance_hud_full
+        self.performance_retries = performance_retries
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -133,6 +137,8 @@ const PERFORMANCE_SAMPLE_FRAMES := {self.performance_sample_frames}
 const PERFORMANCE_WARMUP_FRAMES := {self.performance_warmup_frames}
 const PERFORMANCE_HUD_FULL := {str(self.performance_hud_full).lower()}
 const PERFORMANCE_HUD_TEXT_LIMIT := 80
+const PERFORMANCE_THROTTLE_P95_MS := 8.0
+const PERFORMANCE_THROTTLE_P50_MS := 2.0
 const PERFORMANCE_BATTLE_WAIT_FRAMES := 1800
 const ROLE_ID := {self.role_id}
 const LOAD_TIMEOUT_MS := 45000
@@ -477,11 +483,24 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 		var total_seconds := 0.0
 		for sample in sorted_samples:
 			total_seconds += sample
+		var p50_index := clampi(int(ceil(float(sample_count) * 0.5)) - 1, 0, sample_count - 1)
 		var p95_index := clampi(int(ceil(float(sample_count) * 0.95)) - 1, 0, sample_count - 1)
 		performance_result["mean_ms"] = snapped(total_seconds * 1000.0 / float(sample_count), 0.001)
+		performance_result["p50_ms"] = snapped(float(sorted_samples[p50_index]) * 1000.0, 0.001)
 		performance_result["p95_ms"] = snapped(float(sorted_samples[p95_index]) * 1000.0, 0.001)
 		performance_result["min_ms"] = snapped(float(sorted_samples[0]) * 1000.0, 0.001)
 		performance_result["max_ms"] = snapped(float(sorted_samples[sample_count - 1]) * 1000.0, 0.001)
+		# p95 达到 8ms 时整段运行已被引擎/系统节流或阻塞，数值不可用于前后对照；
+		# p50 仍低为偶发长帧，p50 也高为持续节流。
+		var p50_ms := float(performance_result["p50_ms"])
+		var p95_ms := float(performance_result["p95_ms"])
+		performance_result["throttled"] = p95_ms >= PERFORMANCE_THROTTLE_P95_MS
+		performance_result["throttle_pattern"] = (
+			"none"
+			if not performance_result["throttled"]
+			else ("sporadic" if p50_ms < PERFORMANCE_THROTTLE_P50_MS else "sustained")
+		)
+		performance_result["throttle_rule"] = "p95_ms >= 8.0（p50_ms < 2.0 判为偶发）"
 	if sample_count != PERFORMANCE_SAMPLE_FRAMES:
 		performance_result["error"] = "incomplete_samples"
 		report["errors"].append("performance_sample_incomplete:%d/%d" % [sample_count, PERFORMANCE_SAMPLE_FRAMES])
@@ -702,6 +721,49 @@ script = ExtResource("1")
                 pass
 
     def run(self, timeout_seconds: int = 300) -> Dict[str, Any]:
+        """执行冒烟；采样命中整段节流时按 performance_retries 重跑并保留最优一次。"""
+        max_attempts = 1 + (self.performance_retries if self.performance_sample_frames > 0 else 0)
+        attempts: List[Dict[str, Any]] = []
+        best: Optional[Dict[str, Any]] = None
+        for attempt in range(1, max_attempts + 1):
+            report = self._run_once(timeout_seconds)
+            performance = report.get("performance") or {}
+            attempts.append(
+                {
+                    "attempt": attempt,
+                    "mean_ms": performance.get("mean_ms"),
+                    "p50_ms": performance.get("p50_ms"),
+                    "p95_ms": performance.get("p95_ms"),
+                    "throttled": bool(performance.get("throttled", False)),
+                    "passed": bool(report.get("_runner", {}).get("passed", False)),
+                }
+            )
+            if not report.get("_runner", {}).get("passed", False):
+                best = report
+                break
+            if best is None or self._p95(report) < self._p95(best):
+                best = report
+            if not performance.get("throttled"):
+                break
+        assert best is not None
+        best["_runner"]["performance_attempts"] = len(attempts)
+        if self.performance_sample_frames > 0:
+            best["_runner"]["performance_attempt_samples"] = attempts
+            best["_runner"]["performance_throttled"] = bool(attempts[-1]["throttled"])
+            if best.get("performance"):
+                best["performance"]["attempts"] = len(attempts)
+                best["performance"]["throttled_attempts"] = sum(
+                    1 for item in attempts if item["throttled"]
+                )
+        return best
+
+    @staticmethod
+    def _p95(report: Dict[str, Any]) -> float:
+        performance = report.get("performance") or {}
+        value = performance.get("p95_ms")
+        return float(value) if isinstance(value, (int, float)) else float("inf")
+
+    def _run_once(self, timeout_seconds: int = 300) -> Dict[str, Any]:
         """执行一次完整冒烟，返回报告字典（含夹具侧结论）。"""
         assert self.log_path, "日志路径解析失败"
         self.cleanup()
@@ -826,10 +888,11 @@ def _print_report(report: Dict[str, Any]) -> None:
     performance = report.get("performance")
     if performance:
         print(
-            "  帧耗时: TIME_PROCESS mean={mean}ms p95={p95}ms，样本={count}/{requested}，"
+            "  帧耗时: TIME_PROCESS mean={mean}ms p50={p50}ms p95={p95}ms，样本={count}/{requested}，"
             "预热={warmup}帧，关卡阶段={stage_start}->{stage_end}，怪物={monsters_start}->{monsters_end}".format(
                 **{
                     "mean": performance.get("mean_ms", "n/a"),
+                    "p50": performance.get("p50_ms", "n/a"),
                     "p95": performance.get("p95_ms", "n/a"),
                     "count": performance.get("sample_count", 0),
                     "requested": performance.get("requested_sample_frames", 0),
@@ -843,11 +906,30 @@ def _print_report(report: Dict[str, Any]) -> None:
         )
         if performance.get("full_hud_damage_text"):
             print("  满屏伤害数字活跃数: {start}->{end}".format(
-                {
+                **{
                     "start": performance.get("start", {}).get("active_damage_texts", "n/a"),
                     "end": performance.get("end", {}).get("active_damage_texts", "n/a"),
                 }
             ))
+        attempts = int(performance.get("attempts", 1) or 1)
+        if attempts > 1:
+            print(
+                "  节流重试: 共 {attempts} 次，命中节流 {throttled} 次（{rule}），已保留 p95 最低的一次".format(
+                    **{
+                        "attempts": attempts,
+                        "throttled": performance.get("throttled_attempts", 0),
+                        "rule": performance.get(
+                            "throttle_rule", "p95_ms >= 8.0（p50_ms < 2.0 判为偶发）"
+                        ),
+                    }
+                )
+            )
+        elif performance.get("throttled"):
+            print(
+                "  [WARN] 本次采样被整段节流（{pattern}），数值不可用于前后对照".format(
+                    pattern=performance.get("throttle_pattern", "unknown")
+                )
+            )
     if report.get("load_diag"):
         print("  加载诊断:")
         for line in report["load_diag"]:
@@ -892,6 +974,12 @@ def main() -> int:
         action="store_true",
         help="采样期间维持 80 个全屏伤害数字；需同时指定 --performance-sample-frames",
     )
+    parser.add_argument(
+        "--performance-retries",
+        type=int,
+        default=1,
+        help="采样命中整段节流（p95>=8ms 且 p50<2ms）时的最大重跑次数；默认 1",
+    )
     parser.add_argument("--timeout", type=int, default=300, help="单次冒烟墙钟上限（秒）")
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
     parser.add_argument("--instance-id", default=None, help="并发实例标识（默认随机）")
@@ -907,6 +995,7 @@ def main() -> int:
             performance_sample_frames=args.performance_sample_frames,
             performance_warmup_frames=args.performance_warmup_frames,
             performance_hud_full=args.performance_hud_full,
+            performance_retries=args.performance_retries,
         )
         if not args.json:
             print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")

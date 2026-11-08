@@ -112,7 +112,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 
 | 脚本 | 作用 |
 |:---|:---|
-| `level_test_runner.py` | 单关冒烟夹具；沙盒、阶段断言、物理帧门闸、日志门禁与自动清理；`--performance-sample-frames` / `--performance-warmup-frames` / `--performance-hud-full` 为可选 `Performance.TIME_PROCESS` 逐帧采样 |
+| `level_test_runner.py` | 单关冒烟夹具；沙盒、阶段断言、物理帧门?、日志门禁与自动清理；`--performance-sample-frames` / `--performance-warmup-frames` / `--performance-hud-full` 为可选 `Performance.TIME_PROCESS` 逐帧采样（mean/p50/p95）；`--performance-retries` 在 `p95>=8ms` 整段节流时重跑 |
 | `level_regression_all.py` | 全量/变更影响关卡回归；失败串行重试并保留首轮失败证据；`--dry-run` 只打印计划 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵 |
 | `scene_probe_runner.py` | 场景级运行时探针套件 |
