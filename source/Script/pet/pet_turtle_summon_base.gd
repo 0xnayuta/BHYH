@@ -930,6 +930,16 @@ func update_animation_and_direction() -> void:
 	_play_turtle_model_animation("walk" if velocity.x != 0 else "wait")
 
 
+func reset_attack_state() -> void:
+	# 宠物模型动画由 turtle_sprite 驱动，mr_player 没有 wait/walk 轨道；
+	# 重写基类，避免 AnimationPlayer 播放不存在的动画。
+	is_be_attacking = false
+	is_attacking = false
+	if death() or should_in_sky:
+		return
+	_play_turtle_model_animation("walk" if velocity.x != 0 else "wait")
+
+
 func _play_turtle_model_animation(animation_name: String) -> void:
 	if (
 		turtle_sprite == null

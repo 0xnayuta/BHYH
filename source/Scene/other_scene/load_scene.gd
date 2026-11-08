@@ -472,7 +472,7 @@ func _finish_loading() -> void:
 			pet_slots.append(2)
 		for pet_slot in pet_slots:
 			_mark_load_phase("active pet prewarm begin:%d" % pet_slot)
-			await Global.prewarm_active_pet_runtime_resources(pet_slot)
+			await Global.prewarm_active_pet_runtime_resources(pet_slot, load_phase_marks)
 			_mark_load_phase("active pet prewarm end:%d" % pet_slot)
 		if not _is_request_current():
 			return

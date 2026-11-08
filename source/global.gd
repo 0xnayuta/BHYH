@@ -2300,12 +2300,17 @@ func get_active_pet_preload_paths(slot: int = 1) -> Array[String]:
 				% [source_stage, source_stage]
 			),
 			"res://Scene/pet/pet_yin_tiger_bullet.tscn",
+			"res://Art/pet/pet_yin_tiger/effects/pet_yin_tiger_1_bullet_1/pet_yin_tiger_1_bullet_1_frames.tres",
+			"res://Art/pet/pet_yin_tiger/effects/pet_yin_tiger_1_bullet_2/pet_yin_tiger_1_bullet_2_frames.tres",
 			"res://Art/pet/pet_yin_tiger/model/actions/stage%d/wait/1.png" % source_stage,
 			"res://Art/pet/skillicon/hx.png",
 		]
 		if stage >= 4:
 			yin_paths.append("res://Art/pet/skillicon/mhxs.png")
 			yin_paths.append("res://Art/pet/skillicon/yhaoyi.png")
+			yin_paths.append(
+				"res://Art/pet/pet_yin_tiger/effects/pet_yin_tiger_1_bullet_3/pet_yin_tiger_1_bullet_3_frames.tres"
+			)
 		return yin_paths
 	if pet_type == "PetNian":
 		return [
@@ -2421,7 +2426,7 @@ func _preload_sprite_frames_resource(path: String) -> void:
 			_resource_runtime.cache_threaded_resource(path, frames)
 
 
-func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
+func prewarm_active_pet_runtime_resources(slot: int = 1, phase_marks: Array = []) -> void:
 	var request_generation := _runtime_generation
 	if not is_runtime_generation_current(request_generation):
 		return
@@ -2484,10 +2489,20 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 		scene_path = "res://Scene/pet/pet_dragon_summon_%d.tscn" % stage
 		frames_path = "res://Art/pet/pet_dragon/model/pet_dragon_stage%d_frames.tres" % stage
 		bullet_scene_path = "res://Scene/pet/pet_dragon_bullet.tscn"
-	_warm_scene_instance(preload_scene_path(scene_path))
-	var bullet_scene: PackedScene = preload_scene_path(bullet_scene_path) if bullet_scene_path != "" else null
-	_warm_scene_instance(bullet_scene)
+	phase_marks.append({"stage": "pet summon scene begin", "msec": Time.get_ticks_msec()})
+	# 线程预载已保证 PackedScene 缓存；宠物帧由下方专用预热覆盖，
+	# 因此这里只确保缓存，不实例化整棵节点树（避免加载页同步节点构建）。
+	preload_scene_path(scene_path)
+	phase_marks.append({"stage": "pet summon scene end", "msec": Time.get_ticks_msec()})
+	var bullet_scene: PackedScene = null
+	if bullet_scene_path != "":
+		phase_marks.append({"stage": "pet bullet scene begin", "msec": Time.get_ticks_msec()})
+		bullet_scene = preload_scene_path(bullet_scene_path)
+		phase_marks.append({"stage": "pet bullet scene end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "pet sprite frames begin", "msec": Time.get_ticks_msec()})
 	_preload_sprite_frames_resource(frames_path)
+	phase_marks.append({"stage": "pet sprite frames end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "pet bullet frames begin", "msec": Time.get_ticks_msec()})
 	if pet_type == "PetNian":
 		pass
 	elif pet_type == "PetYinTiger":
@@ -2506,6 +2521,7 @@ func prewarm_active_pet_runtime_resources(slot: int = 1) -> void:
 		PET_RABBIT_BULLET_SCRIPT.warm_pet_rabbit_frames(stage)
 	else:
 		await MonsterBullet.prewarm_pet_dragon_runtime(stage, bullet_scene)
+	phase_marks.append({"stage": "pet bullet frames end", "msec": Time.get_ticks_msec()})
 	if not is_runtime_generation_current(request_generation):
 		return
 	_prewarmed_pet_signatures[safe_slot] = pet_signature
