@@ -1540,17 +1540,16 @@ func prewarm_monster_bullet_scene_paths(scene_paths: Array, generation: int = -1
 
 
 func preload_damage_number_textures() -> void:
+	# 13 组按伤害类型分组；其中 reduce_mp 与 cure_mp、physics 与 magic/physics、
+	# realcrit 与 real 的内容完全相同，按需加载即可，不进入首次预载。
 	var number_dirs: Array[String] = [
 		"res://Art/all_number/cure/cure_",
 		"res://Art/all_number/cure_mp/cure_mp_",
-		"res://Art/all_number/reduce_mp/reduce_mp_",
-		"res://Art/all_number/physics/physics_",
 		"res://Art/all_number/physicscrit/physics_",
 		"res://Art/all_number/magic/magic_",
 		"res://Art/all_number/magic/physics_",
 		"res://Art/all_number/magiccrit/magic_",
 		"res://Art/all_number/real/real_",
-		"res://Art/all_number/realcrit/real_",
 		"res://Art/all_number/lj/lj_",
 		"res://Art/all_number/monster/physics/physics_",
 		"res://Art/all_number/monster/magic/magic_",
