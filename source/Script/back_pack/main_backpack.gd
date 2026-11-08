@@ -344,12 +344,6 @@ func target_box(num):
 	return target
 
 
-func set_empty_box():
-	for i in range(25):
-		_set_box_empty(target_box(i + 1))
-		_mark_box_kind(target_box(i + 1), "")
-
-
 func _on_button_pressed() -> void:
 	randomize()
 
@@ -444,11 +438,6 @@ func _on_timer_timeout() -> void:
 func add_text(parent, text):
 	if message == null:
 		message = Global.add_touch_text(parent, Vector2(120, 40), text)
-
-
-func remove_message():
-	if message != null:
-		message.queue_free()
 
 
 func _on_last_page_pressed() -> void:

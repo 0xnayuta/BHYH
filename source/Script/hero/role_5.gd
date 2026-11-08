@@ -812,7 +812,3 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 			if monster != null:
 				if monster is BaseMonster and not _is_summon_or_pet_target(monster):
 					Global.add_buff(monster.buff, obj_attack_dict[get_action]["addeffect"])
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

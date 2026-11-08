@@ -58,8 +58,6 @@ const HEAD_SLOT_NAMES := [
 	"FX-shitou-st1_37"
 ]
 const HEAD_FORWARD_PADDING := 120.0
-const HEAD_BACKWARD_PADDING := 80.0
-const HEAD_VERTICAL_HALF := 280.0
 
 const HEAD_HIT_HALF_SIZE := Vector2(140.0, 280.0)
 const NODE_BONE_GROUPS := [

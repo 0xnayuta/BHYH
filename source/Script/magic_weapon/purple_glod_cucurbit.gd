@@ -58,7 +58,3 @@ func cucurbit_fire():
 		Global.add_weapon_bullet(self, Vector2(-30, 10), "PurpleGlodCucurbitBullet", attack_data, self.self_dir, 10)
 	else:
 		Global.add_weapon_bullet(self, Vector2(-30, 10), "PurpleGlodCucurbitBullet", attack_data, !self.self_dir, 10)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

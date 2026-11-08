@@ -350,18 +350,3 @@ func _on_platform_body_exited(body: Node2D, platform_name: String):
 		platform_data["player"] = null
 
 		print("玩家离开平台:", platform_name)
-
-
-func reset_platform(platform_name: String):
-	"重置平台位置"
-	if platform_name in platforms:
-		var data = platforms[platform_name]
-		data["node"].position = data["original_pos"]
-		data["horizontal_direction"] = 0
-
-		if platform_name == "stage5":
-			_set_stage5_collision_state(false)
-			stage5_timer = 0
-			stage5_cooldown = 0
-
-		print("重置平台:", platform_name)

@@ -22,7 +22,6 @@ var role_p2
 var buff_box: HBoxContainer
 var is_stop: bool = false
 var cur_prop: bool = false
-const OLD_WUSHUANG_POSITION := Vector2(735, 505)
 const DESKTOP_BUTTON_ORDER := ["pet", "skill", "magic_weapon", "backpack", "set"]
 const HUD_BUTTON_SIZE := Vector2(54.0, 54.0)
 const HUD_BUTTON_SEPARATION := 5.0

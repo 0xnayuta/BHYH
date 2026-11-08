@@ -60,7 +60,6 @@ const SWORD_CONFIG := {
 		"power_rate_per_level": 0.2,
 	},
 }
-const CAST_CD := 30.0
 const HIT_RADIUS := 520.0
 const IMPACT_RADIUS := 300.0
 const FOLLOW_X := 160.0
@@ -233,13 +232,6 @@ static func get_active_sword_id() -> String:
 	if PlayerData.has_method("can_main_sword_array_battle") and not PlayerData.can_main_sword_array_battle(active):
 		return ""
 	return active
-
-
-static func get_sword_preload_paths(target_sword_id: String) -> Array[String]:
-	var paths: Array[String] = []
-	if SWORD_CONFIG.has(target_sword_id):
-		paths.append(SWORD_FRAMES_RES)
-	return paths
 
 
 static func prewarm_sword_frames(target_sword_id: String) -> void:

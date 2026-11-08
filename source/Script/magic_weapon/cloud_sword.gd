@@ -95,7 +95,3 @@ func add_sword():
 		Global.add_weapon_bullet(
 			$Bullet, target.position + Vector2(0, 30), "CloudSwordBullet", get_attack_snapshot(), mg_action.flip_h, 100
 		)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

@@ -1,7 +1,6 @@
 extends Node2D
 
 const MAP_DESIGN_SIZE := Vector2(940.0, 590.0)
-const MAP_SHADOW_FADE := 55.0
 const LEFT_ALIGNED_BUTTON_NAMES := [
 	"Shop",
 	"bc_game",
@@ -252,25 +251,6 @@ func _on_level_9_pressed() -> void:
 
 func _on_level_10_pressed() -> void:
 	Global.add_level_info(_ui_parent(), "牛魔谷", Vector2(0, 0), "res://Scene/level/level_10.tscn")
-
-
-func check_music():
-	if MainSet.set_data["music"] == 1:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
-	elif MainSet.set_data["music"] == 2:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
-	elif MainSet.set_data["music"] == 3:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
-	elif MainSet.set_data["music"] == 4:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
 
 
 func _on_bc_game_pressed() -> void:

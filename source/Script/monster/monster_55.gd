@@ -313,29 +313,6 @@ func call_bullet():
 		zz_2.z_index = -1
 
 
-func call_round_2():
-	Global.call_fly_bullet(
-		self.bullet,
-		"Monster55Bullet",
-		1,
-		Vector2(position.x, position.y),
-		6500,
-		400,
-		"dyml",
-		self.obj_attack_dict["dyml"]
-	)
-	Global.call_fly_bullet(
-		self.bullet,
-		"Monster55Bullet",
-		-1,
-		Vector2(position.x, position.y),
-		6500,
-		400,
-		"dyml",
-		self.obj_attack_dict["dyml"]
-	)
-
-
 func call_monster():
 	if get_parent().get_parent() is Level21:
 		if boss_3 == null:
@@ -345,7 +322,3 @@ func call_monster():
 		if boss_3 == null:
 			boss_3 = Global.create_monster(56, get_parent(), Vector2(470, 320)) as Monster56
 			var base_level = get_parent().get_parent() as BaseLevel
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

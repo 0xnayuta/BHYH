@@ -5,7 +5,6 @@ class_name PetPhoenixSummonBase
 
 const PHOENIX_MODEL_FRAMES_RES := "res://Art/pet/pet_phoenix/model/pet_phoenix_stage%d_frames.tres"
 const PHOENIX_SCENE_RES := "res://Scene/pet/pet_phoenix_summon_%d.tscn"
-const PHOENIX_EFFECT_DIR := "res://Art/pet/pet_phoenix/effects"
 const PET_PHOENIX_BULLET_SCENE := preload("res://Scene/pet/pet_tiger_bullet.tscn")
 const PET_SKILL_PROGRESSION := preload("res://Script/pet/pet_skill_progression.gd")
 const PET_LEARNED_SKILL_RUNTIME := preload("res://Script/pet/pet_life_bonus_runtime.gd")

@@ -145,13 +145,6 @@ func call_ljf():
 	ljf.set_modulate(Color(2, 0, 2, 1))
 
 
-func call_wling():
-	randomize()
-	for i in range(randi_range(1, 2)):
-		var list = [26, 27, 28, 30, 31]
-		Global.create_monster(list[randi_range(0, 4)], get_parent(), Vector2(self.position.x, self.position.y + 100))
-
-
 func call_fl():
 	return
 

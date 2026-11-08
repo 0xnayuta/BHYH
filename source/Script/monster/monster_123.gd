@@ -53,7 +53,3 @@ func call_bullet_1():
 			"Monster123Bullet1", self.bullet, false, 1.5, Vector2(0, 0) + position, "hit1", self.obj_attack_dict["hit1"]
 		)
 	bullet_node.look_at(RoleProp.get_nearest_monster_target_position(global_position))
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

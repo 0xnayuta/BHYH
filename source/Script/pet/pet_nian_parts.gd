@@ -48,19 +48,3 @@ func _draw() -> void:
 
 func _get_data_root() -> String:
 	return "res://Art/pet/pet_nian/official_parts/"
-
-
-func beam_rect() -> Rect2:
-	var result := Rect2()
-	for index in range(_offset, _offset + _count * STRIDE, STRIDE):
-		var region := _regions[int(_poses[index])]
-		if region.size.x < 400:
-			continue
-		var pose := Transform2D(
-			Vector2(_poses[index + 1], _poses[index + 2]),
-			Vector2(_poses[index + 3], _poses[index + 4]),
-			Vector2(_poses[index + 5], _poses[index + 6])
-		)
-		var bounds := pose * Rect2(Vector2.ZERO, region.size)
-		result = bounds if not result.has_area() else result.merge(bounds)
-	return result

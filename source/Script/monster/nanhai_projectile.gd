@@ -313,13 +313,6 @@ func _begin_impact() -> void:
 		impact_duration = maxf(float(visual_frame_count) / frame_fps, 0.05)
 
 
-static func prewarm_frame_set(root: String, count: int, fps: float = SOURCE_FPS, looped: bool = true) -> void:
-	get_frame_set(root, count, fps, looped)
-	var tree := Engine.get_main_loop() as SceneTree
-	if tree != null:
-		await tree.process_frame
-
-
 static func _standard_frames_for(root: String, fps: float, looped: bool) -> SpriteFrames:
 	# swf_png/<model>/<action> 直接复用预生成的标准帧，避免退回逐帧 PNG 加载。
 	var marker := "/swf_png/"

@@ -2778,10 +2778,6 @@ func check_monster(get_tt):
 	return null
 
 
-func get_real_target(get_tt):
-	return get_tt.get_parent().get_parent()
-
-
 func check_add_buff():
 	var not_san_xian_hu_ti = true
 	var not_reverse_move = true
@@ -3851,11 +3847,3 @@ func set_wings_offset():
 			wings.offset = Vector2(60, special_wing_offset_y)
 			wings.rotation = 0.0
 			wings.scale = Vector2.ONE
-
-
-func reset_san_xian_hu_ti():
-	is_san_xian_hu_ti_used = false
-
-# ==============================================================================
-# Phase 6-3: 现代 GDScript 规范 snake_case 双轨兼容函数入口
-# ==============================================================================

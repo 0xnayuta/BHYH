@@ -156,7 +156,6 @@ const LIJI_PATH := "res://Scene/show_text/liji.tscn"
 const MOMENT_TEXT_PATH := "res://Scene/show_text/moment_text.tscn"
 const MESSAGE_SHOW_PATH := "res://Scene/show_text/message_show.tscn"
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
-const TTZSSZ_BULLET_SLIM_PATH := "res://Scene/hero/ttzssz_bullet_slim.tscn"
 const MONSTER_BULLET_SLIM_DIR := "res://Scene/monster/monster_bullet_slim"
 const MONSTER_RESOURCE_ALIASES := {
 	3178: 3159,
@@ -470,11 +469,6 @@ func set_cd_path(path: String) -> bool:
 
 func get_cd_path() -> String:
 	return _cd_path
-
-
-## 当前档案会话的只读快照；未建立时返回 inactive 对象。
-func get_archive_session() -> ArchiveSession:
-	return _archive_session
 
 
 func is_archive_session_active() -> bool:
@@ -3153,7 +3147,3 @@ func remove_wd(OBJ, source_player: BaseHero = null) -> void:
 			continue
 		if source_player == null or i.buff_info.get("source_player") == source_player:
 			i.queue_free()
-
-# ==============================================================================
-# Phase 6-3: 现代 GDScript 规范 snake_case 双轨兼容函数入口
-# ==============================================================================

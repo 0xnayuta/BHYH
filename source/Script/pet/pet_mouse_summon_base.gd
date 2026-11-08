@@ -483,10 +483,6 @@ static func _get_mouse_stage_scene(stage: int) -> PackedScene:
 	return scene
 
 
-static func clear_cached_mouse_scenes() -> void:
-	_mouse_scene_cache.clear()
-
-
 func state_hurt(attacker: Node) -> void:
 	_mouse_aoyi_step = 0
 	super.state_hurt(attacker)

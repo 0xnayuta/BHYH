@@ -32,7 +32,6 @@ const JAR_AWAKEN_INTERVAL := 0.2
 const JAR_AWAKEN_DESCRIPTION := "爆炸后在原位置每隔0.2秒额外爆炸，共追加3次，造成的毒素层数翻倍。"
 const PASSIVE_KEY := "yt_yyzh"
 const PASSIVE_NAME := "月影追魂"
-const PASSIVE_SLOT := 11
 const PASSIVE_MARKS := 8
 const PASSIVE_BASE := 1.5
 const PASSIVE_GROWTH := 0.3

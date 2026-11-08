@@ -103,11 +103,6 @@ func set_target(target: BaseMonster):
 	target_monster = target
 
 
-func set_bullet_params(spd: float, life: float):
-	speed = spd
-	max_life = life
-
-
 func update_attraction(_delta: float):
 	if monster_container == null:
 		return

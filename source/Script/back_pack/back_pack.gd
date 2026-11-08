@@ -607,15 +607,6 @@ func _on_name_text_changed(new_text: String) -> void:
 		MainSet.set_data["其他存档"][str(archive_number)]["name"] = new_text
 	MemoryClass.main_bc()
 
-
-func set_role_wings():
-	var wings_list = PlayerData.player_data[DataKeys.WINGS]
-	if wings_list.size() <= 0:
-		wings.visible = false
-		wings.play("empty")
-		return
-	var get_wings_name = wings_list[0][DataKeys.NAME]
-	wings.play(get_wings_name)
 	return
 
 

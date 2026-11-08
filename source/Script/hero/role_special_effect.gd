@@ -253,11 +253,6 @@ func add_role_3_cure_effect():
 	_player.my_sd.push_back(Global.add_role_special_effect(_player, Vector2(0, -20), false, "sd2"))
 
 
-func add_role2_cure_effect():
-	var _player = get_parent()
-	_player.my_sd.push_back(Global.add_role_special_effect(_player, Vector2(0, -20), false, "tjgl"))
-
-
 func move_monster_to_player():
 	var _player = get_parent()
 	var m_list = _player.get_parent().get_parent().monster.get_children()

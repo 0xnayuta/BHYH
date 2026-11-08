@@ -379,12 +379,6 @@ func get_wx():
 		return new_list
 
 
-func check_same(_1, _2, _3, _4, _5, _6, need: String):
-	if _1 == need or _2 == need or _3 == need or _4 == need or _5 == need or _6 == need:
-		return true
-	return false
-
-
 func get_same_type(Name_1, Name_2, Name_3, need: String):
 	if Name_1 == null or Name_2 == null or Name_3 == null:
 		return false

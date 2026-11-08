@@ -441,10 +441,6 @@ func _enforce_original_fixed_state() -> void:
 	no_grav = true
 
 
-func to_walk() -> void:
-	velocity = Vector2.ZERO
-
-
 func is_control_immune() -> bool:
 	return true
 

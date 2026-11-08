@@ -5,8 +5,6 @@ var _collapsing: Array[Dictionary] = []
 var _source_objects: Array[Dictionary] = []
 var _backgrounds: Dictionary = {}
 var _void_floor: StaticBody2D
-const VOID_FLOOR_RECT := Rect2(4300, 641, 2000, 38)
-const VOID_ART_FLOOR_Y := 575.0
 var _first_space_bodies: Array[Node] = []
 var _darkness: CanvasModulate
 var _portals: Array[Area2D] = []

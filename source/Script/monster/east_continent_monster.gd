@@ -26,11 +26,9 @@ const SAND_BOSS_ACTION_VISUAL_OFFSETS := {
 }
 const FLOWER_ARROW_ROOT := "res://Art/monster/game_4_special_effect/effect_3121/arrow1"
 const AOLAIGUO_BOSS_METADATA := "res://Art/monster/swf_png/3136/atlas/metadata.tres"
-const RAIN_ANCESTOR_METADATA := "res://Art/monster/swf_png/3182/atlas/metadata.tres"
 const AOLAIGUO_BOSS_FRAMES := "res://Art/monster/swf_png/3136/atlas/swf_png_3136_frames.tres"
 const RAIN_ANCESTOR_FRAMES := "res://Art/monster/swf_png/3182/atlas/swf_png_3182_frames.tres"
 const SMALL_HURT_DURATION := 0.28
-const CORPSE_LIFETIME := 0.9
 
 const MONKEY_ACTION_ROOTS := {
 	&"hit1": "res://Art/monster/game_4_special_effect/effect_3161/effect1",
@@ -3875,11 +3873,6 @@ func settle_death_drops_and_free() -> void:
 		queue_free()
 		return
 	super.settle_death_drops_and_free()
-
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================
 
 
 # 19-2D：档案退出时释放模块静态帧/几何缓存，避免跨会话持有旧资源。

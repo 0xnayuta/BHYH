@@ -106,10 +106,6 @@ func is_floor_active() -> bool:
 	return is_instance_valid(floor_instance) and not floor_instance.is_queued_for_deletion()
 
 
-func get_floor_remaining_time() -> float:
-	return floor_instance.remaining_time if is_floor_active() else 0.0
-
-
 func _exit_tree() -> void:
 	_remove_floor()
 	if _follow_tween != null and _follow_tween.is_valid():

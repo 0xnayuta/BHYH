@@ -260,16 +260,6 @@ func tweentotop():
 	should_in_sky = true
 
 
-func not_move_player():
-	if _movement_command_is_blocked() or get_player == null:
-		velocity.x = 0
-		return
-	if position.x > RoleProp.get_nearest_monster_target_position(global_position).x:
-		velocity.x = 2500
-	else:
-		velocity.x = -2500
-
-
 func remove_speedx():
 	velocity.x = 0
 
@@ -421,9 +411,5 @@ func hurt_reduce_hp(value, target):
 	return super.hurt_reduce_hp(value, target)
 
 
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================
-## [Phase 7-1 兼容代理] 确保动画轨道与反射调用正常
 func call_bullet_2():
 	return call_bullet_alt2()

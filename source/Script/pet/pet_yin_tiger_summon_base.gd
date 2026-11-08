@@ -40,7 +40,6 @@ const MODEL_MAP := {
 	{"wait": "wait", "walk": "walk", "hurt": "hurt", "death": "death", "hit1": "hit1", "hit2": "hit2", "hit3": "hit3"},
 }
 const MODEL_SOURCE_STAGE := {1: 1, 2: 1, 3: 1, 4: 2}
-const MODEL_FRAME_COUNTS := {"wait": 6, "walk": 4, "hurt": 1, "death": 6, "hit1": 5, "hit2": 3, "hit3": 4}
 const MODEL_STOP_COUNTS := {
 	"wait": [2, 2, 2, 3, 2, 4],
 	"walk": [4, 4, 4, 4],

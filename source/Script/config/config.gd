@@ -42,12 +42,6 @@ func total_rows() -> int:
 	return int(_index.get("total_rows", 0))
 
 
-func has_table(name: String) -> bool:
-	_ensure_index()
-	var tables: Dictionary = _index.get("tables", {})
-	return tables.has(name)
-
-
 func table_names() -> PackedStringArray:
 	_ensure_index()
 	var out := PackedStringArray()

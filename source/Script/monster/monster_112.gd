@@ -205,7 +205,3 @@ func call_bullet_3():
 	for i in position_list4:
 		Global.add_bullet("Monster112Bullet3", self.bullet, false, 1, i, "hit3", self.obj_attack_dict["hit3"])
 	await get_tree().create_timer(0.2, false).timeout
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

@@ -402,10 +402,6 @@ func apply_tower_monster_config(config: Dictionary) -> void:
 			(attack_data as Dictionary)["power"] = tower_attack
 
 
-func set_gra():
-	gravity = -980
-
-
 func can_set_gra():
 	return not no_grav and not islljy and not should_in_sky
 
@@ -524,10 +520,6 @@ func get_level_node() -> Node:
 		base_level = self
 	level_cache_valid = true
 	return base_level
-
-
-func invalidate_level_cache():
-	level_cache_valid = false
 
 
 func _physics_process(delta: float) -> void:
@@ -1065,22 +1057,6 @@ func normal_state():
 		move_right()
 
 
-func else_have_target():
-	if is_quiescent:
-		return
-	if is_fly:
-		if RoleProp.get_nearest_monster_target_position(global_position).y > position.y + randi_range(15, 85):
-			move_up()
-		elif RoleProp.get_nearest_monster_target_position(global_position).y < position.y - randi_range(15, 85):
-			move_down()
-	if RoleProp.get_nearest_monster_target_position(global_position).x > position.x + randi_range(65, 85):
-		move_left()
-	elif RoleProp.get_nearest_monster_target_position(global_position).x < position.x - randi_range(65, 85):
-		move_right()
-	else:
-		stop_move()
-
-
 func have_target():
 	if is_quiescent:
 		return
@@ -1166,14 +1142,6 @@ func stop():
 	if is_hurt_reaction_active():
 		return
 	velocity.x = 0
-
-
-func turn_towad_role():
-	if RoleProp.get_nearest_monster_target_position(global_position).x < position.x:
-		self.scale.x = 1
-
-	else:
-		mr_ani.flip_h = true
 
 
 func state_hurt():
@@ -2535,15 +2503,7 @@ func do_hit_2():
 	pass
 
 
-func do_hit_2_2():
-	pass
-
-
 func do_hit_3():
-	pass
-
-
-func do_hit_3_2():
 	pass
 
 
@@ -2691,16 +2651,6 @@ func rush():
 		velocity.x += rush_speed
 	else:
 		velocity.x -= rush_speed
-
-
-func gg_pl():
-	if get_player == null:
-		var top = get_parent().get_parent()
-		var role_jd = top.get_node("Hero")
-		var _role = role_jd.get_children()
-		for i in _role:
-			if i is BaseHero:
-				get_player = i
 
 
 func move_player_to_boss(movetime):
@@ -3641,7 +3591,3 @@ func _deferred_play_hurt_animation(expected_generation: int = -1):
 	if mr_player.is_playing():
 		mr_player.stop()
 	mr_player.play("hurt")
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

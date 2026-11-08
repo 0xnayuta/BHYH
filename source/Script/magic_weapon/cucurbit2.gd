@@ -44,7 +44,3 @@ func move_monster_and_add_buff():
 				tween.tween_property(i, "position", player.position + Vector2(0, -50), 0.5)
 				i.hurt_bl = add_bl
 				i.remove_hurt_bl.start(add_time)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

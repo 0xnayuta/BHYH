@@ -26,15 +26,6 @@ var boomerang_duration := 0.95
 var _boomerang_previous_phase := -1
 
 
-func configure_boomerang(origin: Vector2, distance: float, height: float, duration: float) -> void:
-	boomerang = true
-	boomerang_origin = origin
-	boomerang_distance = distance
-	boomerang_height = height
-	boomerang_duration = duration
-	global_position = origin
-
-
 func _ready() -> void:
 	visual = Sprite2D.new()
 	visual.set_script(preload("res://Script/hero/longnv_official_parts.gd"))

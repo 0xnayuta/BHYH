@@ -1,6 +1,5 @@
 extends RefCounted
 
-const SLOT_KEYS := ["Y", "U", "I", "O", "L"]
 static var _official_data: Dictionary = {}
 
 

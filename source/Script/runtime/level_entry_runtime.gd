@@ -30,10 +30,6 @@ func get_level_info_scene() -> PackedScene:
 	return _level_info_scene
 
 
-func get_drop_pro_by_level() -> Dictionary:
-	return _drop_pro_by_level
-
-
 func sync_drop_pro_data(source: Dictionary) -> void:
 	_drop_pro_by_level.clear()
 	for level_name in source.keys():

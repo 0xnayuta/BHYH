@@ -30,14 +30,6 @@ static func learned_cooldown_seconds(data: Dictionary) -> float:
 	return COOLDOWN_SECONDS * (1.0 - float(clampi(int(data.get("灵力", 0)), 0, 25)) * 0.02)
 
 
-static func defense_bonuses(physical_defense: int, magic_defense: int, skill_level: int) -> Dictionary:
-	return {"physical": scaled_bonus(physical_defense, skill_level), "magic": scaled_bonus(magic_defense, skill_level)}
-
-
-static func bonus_health(pet_health: int, skill_level: int) -> int:
-	return scaled_bonus(pet_health, skill_level)
-
-
 static func duration_seconds(skill_level: int) -> float:
 	return float(clampi(skill_level, 1, 10) * 10 + 20)
 

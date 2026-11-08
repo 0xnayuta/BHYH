@@ -1049,7 +1049,3 @@ func _body_action_path(action: StringName, index: int) -> String:
 
 func _effect_root(action: StringName) -> String:
 	return "res://Art/monster/game_3_monster/monster_%d/%s" % [monster_id, String(action)]
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

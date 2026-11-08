@@ -362,7 +362,3 @@ func move_player():
 		RoleProp.get_nearest_monster_target_position(global_position).x,
 		RoleProp.get_nearest_monster_target_position(global_position).y
 	)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

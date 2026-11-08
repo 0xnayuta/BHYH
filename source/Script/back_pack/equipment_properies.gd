@@ -751,27 +751,6 @@ func _set_gem_resonance_information(data: Dictionary) -> void:
 		label.text = "宝石共鸣：未开启（%d/8）" % gems.size()
 
 
-func get_bs_prop(need):
-	if set_bs_prop() == {}:
-		return 0
-	else:
-		var information = set_bs_prop()[need]
-		return information
-
-
-func set_bs_prop():
-	if eq_prop == null or not eq_prop.has(DataKeys.GEM):
-		return {}
-	var divine_gem_properties: Dictionary = EquipmentService.rules().get_divine_forge_gem_properties(
-		StringName(nam), eq_prop
-	)
-	for property_name in bs_prop:
-		bs_prop[property_name] = divine_gem_properties.get(property_name, 0)
-	if eq_prop[DataKeys.GEM].is_empty():
-		return {}
-	return bs_prop
-
-
 func get_properies(_name, need):
 	var target_count
 	var infomation

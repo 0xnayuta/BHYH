@@ -269,10 +269,6 @@ func get_level_monster_config(monster_id: int) -> Dictionary:
 	}
 
 
-func clamp_monster_x_to_arena(target_x: float) -> float:
-	return clampf(target_x, 80.0, 1120.0)
-
-
 func _on_create_control_timeout() -> void:
 	_spawn_next_tower_monster()
 

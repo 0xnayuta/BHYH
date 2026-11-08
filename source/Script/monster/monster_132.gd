@@ -456,7 +456,3 @@ func _exit_tree():
 	super._exit_tree()
 	if death_timer and death_timer.timeout.is_connected(_on_resurrection_animation_complete):
 		death_timer.timeout.disconnect(_on_resurrection_animation_complete)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

@@ -69,34 +69,3 @@ func set_data():
 	obj_attack_dict = {}
 	jump_count = 0
 	jump_power = -540.0
-
-
-func get_hurt(hit_name):
-	var hurt = obj_attack_dict[hit_name].power
-	return hurt
-
-
-func get_hurt_lx(hit_name):
-	var hurt_kind = obj_attack_dict[hit_name].attackKind
-	return hurt_kind
-
-
-func check_fashion_and_add_fall_pro():
-	if PlayerData.player_data[DataKeys.FASHION].size() <= 0:
-		return 0.0
-	else:
-		if (
-			PlayerData.check_fashion_clothes("wklzyf")
-			or PlayerData.check_fashion_clothes("tslzyf")
-			or PlayerData.check_fashion_clothes("bjlzyf")
-			or PlayerData.check_fashion_clothes("sslzyf")
-		):
-			return 0.05
-		if (
-			PlayerData.check_fashion_clothes("wkhzyf")
-			or PlayerData.check_fashion_clothes("tshzyf")
-			or PlayerData.check_fashion_clothes("bjhzyf")
-			or PlayerData.check_fashion_clothes("sshzyf")
-		):
-			return 0.08
-	return 0

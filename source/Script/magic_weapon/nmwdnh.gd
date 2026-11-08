@@ -111,7 +111,3 @@ func _on_summon_timeout():
 func _exit_tree():
 	if current_summon and is_instance_valid(current_summon):
 		current_summon.queue_free()
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

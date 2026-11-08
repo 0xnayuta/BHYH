@@ -47,24 +47,12 @@ func row_at(index: int) -> Array:
 	return rows[index]
 
 
-func row_dict(index: int) -> Dictionary:
-	var out := {}
-	var row: Array = row_at(index)
-	for i in range(mini(header.size(), row.size())):
-		out[str(header[i])] = row[i]
-	return out
-
-
 func value(index: int, column_name: String) -> Variant:
 	var i := column_index(column_name)
 	if i < 0:
 		return null
 	var row: Array = row_at(index)
 	return row[i] if i < row.size() else null
-
-
-func has_id(id: Variant) -> bool:
-	return _by_id.has(id)
 
 
 func find_by_id(id: Variant) -> Array:

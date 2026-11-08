@@ -260,25 +260,6 @@ func _on_boss_treasure_toggled():
 	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
 
 
-func check_music():
-	if MainSet.set_data["music"] == 1:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_1_bgm.mp3")
-	elif MainSet.set_data["music"] == 2:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy_2_bgm.mp3")
-	elif MainSet.set_data["music"] == 3:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/44_begin.mp3")
-	elif MainSet.set_data["music"] == 4:
-		if my_music != null:
-			my_music.queue_free()
-		my_music = Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/zmxy4bg.mp3")
-
-
 func check_pass_level():
 	var heaven_unlocked := (
 		bool(PlayerData.player_data.get("天庭", false)) or int(PlayerData.player_data.get("转轮殿", 0)) == 1

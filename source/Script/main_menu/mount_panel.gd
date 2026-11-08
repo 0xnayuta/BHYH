@@ -12,7 +12,6 @@ const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 const MOUNT_VISUAL := preload("res://Script/mount/mount_visual.gd")
 const PANEL_SIZE := Vector2(900.0, 590.0)
 const TAB_NAMES := ["属性", "装备", "兽魂"]
-const EQUIP_KEYS := ["头饰", "鞍具", "护甲", "缰绳", "饰品"]
 const HIDDEN_MOUNT_IDS := ["1003900"]
 
 var selected_mount_id := "1002200"

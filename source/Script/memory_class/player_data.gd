@@ -314,7 +314,6 @@ const MOUNT_UNLOCK_REQUIREMENTS := {
 	"1004700": {"物品": "139300021", "数量": 1},
 }
 const PLAYER_MAX_LEVEL := 400
-const MOUNT_MAX_LEVEL := PLAYER_MAX_LEVEL
 const MOUNT_SKILL_MAX_LEVEL := 20
 const MOUNT_QUALIFICATION_MAX := 2050
 const MOUNT_QUALIFICATION_KEYS := ["生命资质", "攻击资质", "防御资质"]
@@ -2310,11 +2309,6 @@ func set_mount_riding(enabled: bool) -> bool:
 	return can_ride
 
 
-func set_mount_auto_ride(enabled: bool) -> void:
-	ensure_mount_data()
-	player_data[MOUNT_AUTO_RIDE_KEY] = enabled
-
-
 func add_mount_exp(mount_id: String, amount: int) -> int:
 	var mount := get_mount_by_id(mount_id)
 	if mount.is_empty() or not bool(mount.get(MOUNT_UNLOCKED_KEY, false)) or amount <= 0:
@@ -2954,22 +2948,6 @@ func _pet_equipment_numeric_value(value: Variant) -> float:
 	if value is String and (value as String).strip_edges().is_valid_float():
 		return float(value)
 	return 0.0
-
-
-func get_pet_equipment_stat(pet: Dictionary, stat_name: String) -> int:
-	var canonical := _pet_equipment_canonical_stat_key(stat_name)
-	if canonical == "":
-		return 0
-	var equipment_value: Variant = pet.get("装备", {})
-	if not (equipment_value is Dictionary):
-		return 0
-	var aliases: Array = PET_EQUIPMENT_STAT_ALIASES.get(canonical, [canonical])
-	var total := 0.0
-	for item_value in (equipment_value as Dictionary).values():
-		if not (item_value is Dictionary) or (item_value as Dictionary).is_empty():
-			continue
-		total += _pet_equipment_item_stat(item_value as Dictionary, aliases)
-	return int(round(total))
 
 
 func get_pet_equipment_bonuses(pet: Dictionary) -> Dictionary:
@@ -4710,45 +4688,6 @@ func check_have_wx(need_, wx):
 	return false
 
 
-func get_all_item():
-	var list = []
-	for i in range(player_data[DataKeys.EQUIPMENT_LIST].size()):
-		var u = i + 1
-		for z in player_data[DataKeys.EQUIPMENT_LIST]["页码" + str(u)]:
-			list.push_back(z)
-
-	if player_data[DataKeys.WEAPON].size() != 0:
-		list.push_back(player_data[DataKeys.WEAPON][0])
-	if player_data[DataKeys.ARMOR].size() != 0:
-		list.push_back(player_data[DataKeys.ARMOR][0])
-	if player_data["饰品"].size() != 0:
-		list.push_back(player_data["饰品"][0])
-	if player_data[DataKeys.MAGIC_WEAPON].size() != 0:
-		list.push_back(player_data[DataKeys.MAGIC_WEAPON][0])
-	if player_data[DataKeys.FASHION].size() != 0:
-		list.push_back(player_data[DataKeys.FASHION][0])
-	if player_data[DataKeys.TITLE].size() != 0:
-		list.push_back(player_data[DataKeys.TITLE][0])
-	if player_data[DataKeys.WINGS].size() != 0:
-		list.push_back(player_data[DataKeys.WINGS][0])
-	return list
-
-
-func check_wx_num():
-	var list = get_all_item()
-	if list == []:
-		return false
-	else:
-		for i in list:
-			var get_data = i["Data"]
-			var get_wx
-
-			if get_data[DataKeys.TYPE] == "法宝":
-				get_wx = get_data[DataKeys.FIVE_ELEMENTS]
-
-	return false
-
-
 func get_most_level(need_):
 	var level_list = []
 	if PlayerData.check_zb(need_).size() != 0:
@@ -4816,15 +4755,6 @@ func get_dj_page(need_name):
 			if u[DataKeys.NAME] == need_name:
 				return page_num
 	return 0
-
-
-func get_total_dj_list():
-	var list = []
-	for i in range(player_data[DataKeys.ITEM_LIST].size()):
-		var u = i + 1
-		for z in player_data[DataKeys.ITEM_LIST]["页码" + str(u)]:
-			list.push_back(z)
-	return list
 
 
 func add_dj(_name, number, locked := false) -> bool:
@@ -4992,15 +4922,6 @@ func remove_item(item_name: String, count: int) -> bool:
 	return remaining == 0
 
 
-func get_total_xhp_list():
-	var list = []
-	for i in range(player_data[DataKeys.CONSUMABLE_LIST].size()):
-		var u = i + 1
-		for z in player_data[DataKeys.CONSUMABLE_LIST]["页码" + str(u)]:
-			list.push_back(z)
-	return list
-
-
 func add_xhp(_name: String, number: int, locked := false) -> bool:
 	if number <= 0:
 		return false
@@ -5082,14 +5003,6 @@ func check_can_use_page(target):
 	return 0
 
 
-func check_fashion_clothes(NeedName: String):
-	if player_data[DataKeys.FASHION].size() <= 0:
-		return false
-	if PlayerData.player_data[DataKeys.FASHION][0][DataKeys.NAME] == NeedName:
-		return true
-	return false
-
-
 func _process(_delta: float) -> void:
 	normalize_soul()
 	_check_zb_elapsed += _delta
@@ -5128,34 +5041,6 @@ func _process(_delta: float) -> void:
 	if player_data["实战法宝"] != "":
 		if check_zb(player_data["实战法宝"]) == []:
 			player_data["实战法宝"] = ""
-
-
-func removedata():
-	MemoryClass.remove()
-	Global.change_scene("res://Scene/main_menu/main_menu.tscn")
-
-
-func check_next_day():
-	var dic = Time.get_datetime_dict_from_system()
-	var my_dic = PlayerData.player_data["MyTime"]
-	if my_dic == {}:
-		return
-	if int(dic["year"]) < int(my_dic["year"]):
-		return false
-	elif int(dic["year"]) > int(my_dic["year"]):
-		return true
-	else:
-		if int(dic["month"]) < int(my_dic["month"]):
-			return false
-		elif int(dic["month"]) > int(my_dic["month"]):
-			return true
-		else:
-			if int(dic["day"]) < int(my_dic["day"]):
-				return false
-			elif int(dic["day"]) > int(my_dic["day"]):
-				return true
-			else:
-				return false
 
 
 const EIGHT_IMMORTAL_DAILY_IDS: Array[int] = [163, 175, 165, 166, 168, 169, 174, 164]
@@ -5224,15 +5109,6 @@ func add_ini_buff():
 			Global.add_buff(RoleProp.source_player.buff, i)
 
 
-func check_same_ini_buff(Need):
-	if player_data["初始Buff"].size() != 0:
-		for i in player_data["初始Buff"]:
-			if i["Name"] == Need:
-				return true
-
-	return false
-
-
 func check_pass(local):
 	if bool(player_data.get("隐藏地图全开", false)):
 		return true
@@ -5247,34 +5123,3 @@ func check_pass(local):
 			if player_data[DataKeys.PLAYER_LEVEL] >= 60 and get_item_data("ttsl") != 0 and player_data["碧游宫"]:
 				return true
 	return false
-
-
-# ==============================================================================
-# Phase 6-4: DataKeys 强类型契约安全访问器
-# ==============================================================================
-
-
-## 获取玩家当前等级 (强类型契约)
-func get_player_level() -> int:
-	return int(player_data.get(DataKeys.PLAYER_LEVEL, 1))
-
-
-## 获取玩家金币数 (强类型契约)
-func get_coin_num() -> int:
-	return int(player_data.get("coin_num", 0))
-
-
-## 获取玩家当前生命值上限 (契约)
-func get_player_max_hp() -> int:
-	return int(player_data.get(DataKeys.Attr.MAX_HP, 0))
-
-
-## 获取玩家当前魔法值上限 (契约)
-func get_player_max_mp() -> int:
-	return int(player_data.get(DataKeys.Attr.MAX_MP, 0))
-
-
-## 获取指定装备容器列表 (强类型契约)
-func get_container_list(container_name: String) -> Array:
-	var list_val: Variant = player_data.get(container_name, [])
-	return list_val as Array if list_val is Array else []

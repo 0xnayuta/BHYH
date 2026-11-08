@@ -1,7 +1,6 @@
 extends Node2D
 
 const SHOP_BASE_SIZE := Vector2(940.0, 591.0)
-const SHOP_SHADOW_FADE := 55.0
 const SHOP_CATEGORY_ALL := "全部"
 const SHOP_CATEGORY_EQUIPMENT := "装备"
 const SHOP_CATEGORY_ITEM := "道具"

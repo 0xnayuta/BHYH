@@ -172,20 +172,3 @@ func _on_platform_body_exited(body: Node2D, platform_name: String):
 		platforms[platform_name]["player_on"] = false
 		platforms[platform_name]["player"] = null
 		print("玩家离开平台:", platform_name)
-
-
-func set_platform_speed(platform_name: String, speed: int):
-	"设置平台速度"
-	if platform_name in platforms:
-		platforms[platform_name]["speed"] = speed
-		print("设置平台", platform_name, "速度为:", speed)
-
-
-func reset_platform(platform_name: String):
-	"重置平台位置"
-	if platform_name in platforms:
-		var data = platforms[platform_name]
-		data["node"].position = data["start_pos"]
-		data["direction_x"] = 1 if data["start_pos"].x <= data["end_pos"].x else -1
-		data["direction_y"] = 1 if data["start_pos"].y <= data["end_pos"].y else -1
-		print("重置平台:", platform_name)

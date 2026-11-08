@@ -24,12 +24,6 @@ static func _ensure_catalog() -> bool:
 	return true
 
 
-static func has_mapping(external_id: int) -> bool:
-	if external_id <= 0 or not _ensure_catalog():
-		return false
-	return _catalog.monster_ids.has(external_id)
-
-
 static func monster_id(external_id: int) -> int:
 	if external_id <= 0 or not _ensure_catalog():
 		return 0

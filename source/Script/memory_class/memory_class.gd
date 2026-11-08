@@ -211,39 +211,6 @@ var _stable_key_loaded: bool = false
 var _main_settings_loaded: bool = false
 
 
-func check_out_time():
-	var dic = limit_time
-	var my_dic = MainSet.set_data["MyTime"]
-	if my_dic == {}:
-		return
-	if int(dic["year"]) < int(my_dic["year"]):
-		return true
-	elif int(dic["year"]) > int(my_dic["year"]):
-		return false
-	else:
-		if int(dic["month"]) < int(my_dic["month"]):
-			return true
-		elif int(dic["month"]) > int(my_dic["month"]):
-			return false
-		else:
-			if int(dic["day"]) < int(my_dic["day"]):
-				return true
-			elif int(dic["day"]) > int(my_dic["day"]):
-				return false
-			else:
-				if int(dic["hour"]) < int(my_dic["hour"]):
-					return true
-				elif int(dic["hour"]) > int(my_dic["hour"]):
-					return false
-				else:
-					if int(dic["minute"]) < int(my_dic["minute"]):
-						return true
-					elif int(dic["minute"]) > int(my_dic["minute"]):
-						return false
-					else:
-						return true
-
-
 ## 读档入口：返回显式结果，调用方不再用 bool 推断“空档/损坏/成功”。
 ## status: loaded / missing / empty / unreadable / invalid / invalid_path
 func load_game(路径) -> Dictionary:

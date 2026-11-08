@@ -617,23 +617,6 @@ func update_skill_name_and_icon(skill_num: int, skill_internal: String, variant_
 			icon_node.set_button_icon(load(fallback_path))
 
 
-func setup_variant_menu(skill_num: int, skill_internal: String, config: Dictionary):
-	if skill_num != 5:
-		return
-
-	hmz_version_menu.clear()
-	var variants = config["variants"]
-	for v in variants:
-		hmz_version_menu.add_item(v["display"], v["id"])
-
-	if not skill5_button.pressed.is_connected(_on_skill5_button_pressed):
-		skill5_button.pressed.connect(_on_skill5_button_pressed)
-	if not hmz_version_menu.id_pressed.is_connected(_on_hmz_version_selected):
-		hmz_version_menu.id_pressed.connect(_on_hmz_version_selected)
-
-	hmz_version_menu.set_meta("skill_internal", skill_internal)
-
-
 func get_skill_name(Num):
 	var role_key = get_role_key()
 	var skill_list = skill_ids_by_role[role_key]

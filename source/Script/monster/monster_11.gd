@@ -147,10 +147,6 @@ func do_hit_3():
 	is_attacking = false
 
 
-func skill_shake():
-	get_parent().get_parent().shake(0, 10, 1, 40, 10, 0.01)
-
-
 func call_poision():
 	var position_x_list = []
 	var position_y = self.position.y - 10

@@ -191,13 +191,3 @@ func call_bullet_2():
 			"Monster107Bullet2", self.bullet, monster_direction, 1, i + position, "hit3", self.obj_attack_dict["hit3"]
 		)
 		await get_tree().create_timer(0.1, false).timeout
-
-
-func repeat_cure_hp():
-	for i in range(5, 8):
-		cure_hp(int(max_hp * randf_range(0.02, 0.03)))
-		await get_tree().create_timer(0.1, false).timeout
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

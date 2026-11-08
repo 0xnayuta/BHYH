@@ -41,11 +41,6 @@ func active_index() -> int:
 	return -1
 
 
-func active_pet() -> Dictionary:
-	var index := active_index()
-	return pet_at(index) if index >= 0 else {}
-
-
 func pets() -> Array:
 	return _pets_value().duplicate(true)
 

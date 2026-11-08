@@ -2,10 +2,6 @@ extends BaseMagicWeapon
 class_name DiKongYuMoQuan
 
 const WEAPON_ID := "469000011"
-const IDLE_FRAME_COUNT := 24
-const SPAWN_FRAME_COUNT := 6
-const FIELD_FRAME_COUNT := 20
-const FLASH_FRAME_COUNT := 14
 const ACTIVATION_DURATION := 0.2
 const BASE_FIELD_DURATION := 3.0
 const LEVEL_DURATION_BONUS := 0.2
@@ -222,7 +218,3 @@ func _exit_tree() -> void:
 	_effect_token += 1
 	_field_active = false
 	_set_player_protected(false)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

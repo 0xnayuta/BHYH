@@ -219,17 +219,6 @@ func ai_think():
 				normal_state()
 
 
-func normal_hit():
-	super.to_hero()
-	hit_name = "hit1"
-	velocity.x = 0
-	is_attacking = true
-	mr_player.play("hit1")
-	await mr_player.animation_finished
-	is_attacking = false
-	stop_move()
-
-
 func use_skill():
 	super.to_hero()
 	skill_1_cd = randi_range(10, 14)

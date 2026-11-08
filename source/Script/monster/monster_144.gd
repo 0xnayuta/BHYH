@@ -156,10 +156,6 @@ func qb():
 	return jcqb.get_collider()
 
 
-func check_hp_ratio(i: float):
-	return hp >= max_hp * i
-
-
 func attack_target():
 	super.to_hero()
 	hit_name = "hit1"
@@ -254,7 +250,3 @@ func reduce_hp(value: int):
 
 func hurt_reduce_hp(value, target):
 	return 0
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

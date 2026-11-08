@@ -290,10 +290,3 @@ func check_can_create(stage: int) -> bool:
 	if not monster_group.has(stage_key):
 		return false
 	return _get_alive_stage_monster_count() < 6 and monster_group[stage_key].size() > 0
-
-
-func reset_note_assignment():
-	stage1_monster_killed_count = 0
-	assigned_image_indices.clear()
-	pending_note_indices.clear()
-	init_puzzle()

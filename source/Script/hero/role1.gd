@@ -854,10 +854,6 @@ func cleanup_hmz_state():
 	turn_to_wait()
 
 
-func do_hmz_flush():
-	do_hmz_two()
-
-
 func do_hmz_two():
 	await get_tree().physics_frame
 	self.role1_skill_inter[hmz_cooldown_key] = 4.8

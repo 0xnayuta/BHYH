@@ -164,28 +164,8 @@ func hide_qgw():
 	qgw.visible = false
 
 
-func add_zd():
-	var _zd = Global.call_chase_bullet(
-		self.bullet,
-		"Monster33Bullet",
-		300,
-		2.5,
-		false,
-		Vector2(self.position.x, self.position.y),
-		"KLZD",
-		self.obj_attack_dict["KLZD"]
-	)
-
-
 func _on_call_zd_timeout() -> void:
 	return
-
-
-func call_wling():
-	randomize()
-	for i in range(randi_range(2, 4)):
-		var list = [26, 27, 28, 30, 31]
-		Global.create_monster(list[randi_range(0, 4)], get_parent(), Vector2(self.position.x, self.position.y + 100))
 
 
 func call_left():

@@ -267,10 +267,6 @@ func do_hit_3():
 	is_attacking = false
 
 
-func move_to_player_local():
-	self.position = RoleProp.get_nearest_monster_target_position(global_position)
-
-
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	super._on_hurt_box_area_entered(area)
 	if randi_range(0, 100) < 5:

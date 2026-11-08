@@ -100,7 +100,6 @@ const BODY_POSITIONS := {
 	192: Vector2(-2, -87),
 }
 
-const SOURCE_BODY_OFFSETS := {31: Vector2(-15, 0), 34: Vector2(-5, -15), 192: Vector2(-2, -30)}
 const SOURCE_ORIGIN_OFFSETS := {31: Vector2(0, -54), 34: Vector2(0, -55), 192: Vector2(0, -57)}
 
 const ATTACK_EVENTS := {

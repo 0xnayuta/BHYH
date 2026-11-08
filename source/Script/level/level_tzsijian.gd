@@ -4,9 +4,7 @@ extends BaseLevel
 @onready var stop_5: CollisionShape2D = $wall/stop5
 @onready var bg_base: Sprite2D = $BackGround/front/tzsijian_top
 
-const BG_PARTS_ROOT := "res://Art/level/game_3_level/level_tzsijian/level_96/bg961_parts"
 const BG_SOURCE_X := -20.0
-const BG_SOURCE_FPS := 30.0
 const BG_EXPORT_SCALE := 2.0
 const BOSS_HP_TRIGGER := 0.7
 const BASE_BOSS_CONCURRENT_LIMIT := 4

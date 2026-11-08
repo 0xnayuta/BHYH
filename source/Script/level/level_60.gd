@@ -5,8 +5,6 @@ const HAZARD_1022_PROJECTILE_SCRIPT := preload("res://Script/level/level60_hazar
 const JINXIU_STAGE_COUNT := 5
 const DAT_Y_OFFSET := 2912.0
 const MAP_WIDTH := 1200.0
-const MAP_SOURCE_WIDTH := 1056.0
-const MAP_SOURCE_HEIGHT := 3840.0
 const LEVEL_ROOT_OFFSET_Y := 112.0
 
 const JINXIU_TRIGGER_Y := [289.0, -241.0, -943.0, -1565.0, -2586.0]

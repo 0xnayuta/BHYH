@@ -357,16 +357,3 @@ func call_jg(lx):
 		await get_tree().create_timer(jg, false).timeout
 	throw = true
 	pass
-
-
-func otherjg():
-	for i in range(randi_range(3, throw_cout * 2)):
-		Global.add_bullet(
-			"Monster56Bullet",
-			bullet,
-			false,
-			1,
-			Vector2(randi_range(-370, 425), 325) + position,
-			"hit2",
-			self.obj_attack_dict["hit2"]
-		)

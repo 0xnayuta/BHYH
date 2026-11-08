@@ -227,7 +227,3 @@ func _on_hit_box_area_entered(area: Area2D) -> Node2D:
 	var buff_target = super._on_hit_box_area_entered(area)
 
 	return buff_target
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

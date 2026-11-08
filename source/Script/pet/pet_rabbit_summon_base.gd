@@ -57,7 +57,6 @@ const RABBIT_ACTIONS := {
 		"hit2": [1, 1, 1, 7, 1, 40]
 	},
 }
-const RABBIT_OFFSETS := {1: Vector2(1, -10), 2: Vector2(1, -10), 3: Vector2(1, -28), 4: Vector2(-7, -41)}
 
 const RABBIT_ROLE_ORIGIN_Y := {1: -15.0, 2: -35.0, 3: -35.0, 4: -50.0}
 

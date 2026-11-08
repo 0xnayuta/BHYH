@@ -25,10 +25,6 @@ func clear_auth() -> void:
 	account_name = ""
 
 
-func has_credentials() -> bool:
-	return not user_id.is_empty() and not access_token.is_empty()
-
-
 func begin_auth_cooldown(duration_msec: int) -> void:
 	auth_cooldown_until_msec = Time.get_ticks_msec() + maxi(duration_msec, 0)
 

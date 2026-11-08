@@ -85,7 +85,3 @@ func _on_summon_timeout():
 		current_summon = null
 		current_player_magic_summon.queue_free()
 		current_player_magic_summon = null
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

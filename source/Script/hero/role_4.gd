@@ -490,10 +490,6 @@ func add_shovel_effect_1():
 		Global.add_role_bullet(self.bullet, bullet_pos + position, player_dir, "Role4Bullet3", obj_attack_dict["mmw"])
 
 
-func addmbyj():
-	Global.add_role4_bullet(self.bullet, self, position)
-
-
 func call_wdww():
 	var bullet_pos: Vector2
 	if player_dir:

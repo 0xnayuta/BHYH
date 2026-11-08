@@ -44,15 +44,6 @@ static func resolve_set(equipment_id: String, layer: String) -> String:
 	return str(item.get("set", "default"))
 
 
-static func available_item_ids() -> Array[String]:
-	var result: Array[String] = []
-	for item_id in CATALOG_SCRIPT.DATA["items"]:
-		var item: Dictionary = CATALOG_SCRIPT.DATA["items"][item_id]
-		if bool(item.get("available", false)):
-			result.append(str(item_id))
-	return result
-
-
 static func _get_frames(equipment_id: String, layer: String) -> SpriteFrames:
 	var set_name := resolve_set(equipment_id, layer)
 	var frames_path := "%s/%s_%s/%s_%s.tres" % [FRAME_ROOT, set_name, layer, set_name, layer]

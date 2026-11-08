@@ -51,13 +51,6 @@ static func player_birth_points(scene_path: String) -> PackedVector2Array:
 	return entry.player_birth_points.duplicate()
 
 
-static func stage_specs(scene_path: String) -> Array[LevelStageSpec]:
-	var entry := layout(scene_path)
-	if entry == null:
-		return []
-	return entry.stages.duplicate()
-
-
 static func stage_count(scene_path: String) -> int:
 	var entry := layout(scene_path)
 	return entry.stage_count() if entry != null else 0

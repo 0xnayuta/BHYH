@@ -1071,10 +1071,6 @@ func one_check_can_exit():
 	)
 
 
-func always_can_pass():
-	return true
-
-
 func _on_exit_2_body_entered(body: Node2D) -> void:
 	if body is BaseHero:
 		_exit_players[body.get_instance_id()] = true

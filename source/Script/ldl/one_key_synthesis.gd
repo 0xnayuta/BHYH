@@ -9,8 +9,6 @@ var RoleProp: BaseRoleProperties:
 	get:
 		return LocalCoop.props_for(self) as BaseRoleProperties
 
-const TARGET_POPUP_MARGIN := 12.0
-const TARGET_POPUP_MIN_HEIGHT := 96.0
 const TARGET_POPUP_MAX_HEIGHT := 180.0
 
 const DAN_RECIPES = {

@@ -257,7 +257,3 @@ func call_bullet_3():
 	var child = Global.add_bullet(
 		"Monster61Bullet3", bullet, monster_direction, 1, position + po, "hit4", self.obj_attack_dict["hit4"]
 	)
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

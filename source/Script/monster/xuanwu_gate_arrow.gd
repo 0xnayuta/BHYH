@@ -1,8 +1,6 @@
 extends MonsterBullet
 
 const FRAME_ROOT := "res://Art/monster/swf_png/3004"
-const FLY_FRAME_COUNT := 4
-const EXPLODE_FRAME_COUNT := 14
 const SOURCE_FPS := 30.0
 
 static var _frames_cache: SpriteFrames

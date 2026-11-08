@@ -24,10 +24,6 @@ func _init(context: AutoBattleContext) -> void:
 	_context = context
 
 
-func get_context() -> AutoBattleContext:
-	return _context
-
-
 func should_control_movement() -> bool:
 	return _context.is_enabled() and not _context.is_skill_only()
 

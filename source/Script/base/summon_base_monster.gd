@@ -1269,10 +1269,6 @@ func get_level_node() -> Node:
 	return base_level
 
 
-func invalidate_level_cache() -> void:
-	level_cache_valid = false
-
-
 func setup_bullet_collision(bullet_instance) -> Node:
 	if bullet_instance and bullet_instance.has_node("middle/HitBox"):
 		var hit_box_area = bullet_instance.get_node("middle/HitBox") as Area2D
@@ -1353,17 +1349,9 @@ func setup_skills() -> void:
 	pass
 
 
-func get_attack_animations() -> Dictionary:
-	return {}
-
-
 func _on_calm_hit_timeout() -> void:
 	rndi_count = randi_range(0, 100)
 
 
 func _on_remove_hurt_bl_timeout() -> void:
 	hurt_bl = 1.0
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

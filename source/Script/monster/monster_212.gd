@@ -324,7 +324,3 @@ func _show_pet_hit_blood_bar() -> void:
 func _move_little_blood_bar_to_head() -> void:
 	if monster_blood_bar != null:
 		monster_blood_bar.position = LITTLE_BLOOD_OFFSET
-
-# ==============================================================================
-# Phase 7-1: 高频多态弹幕与状态虚函数向后兼容代理
-# ==============================================================================

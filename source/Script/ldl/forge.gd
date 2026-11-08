@@ -595,28 +595,6 @@ func _get_current_book_name() -> String:
 	return book_name
 
 
-func get_bz_prop_legacy():
-	if PlayerData.player_data["宝珠列表"].size() <= 0:
-		return
-	var bz_prop = {}
-	for i in EquipmentRules.PROP_LIST_NAME:
-		bz_prop[i] = 0
-	for i in PlayerData.player_data["宝珠列表"]:
-		i["Data"] = EquipmentService.data(StringName(i[DataKeys.NAME]))
-		for u in EquipmentRules.PROP_LIST_NAME:
-			bz_prop[u] += i["Data"][u]
-	var book_name := _get_current_book_name()
-	if book_name == "":
-		return
-	var item_name := book_name.split("zzs")[0]
-	if not EquipmentService.has(StringName(item_name)):
-		return
-	var prop_list := EquipmentService.data(StringName(item_name))
-	for i in EquipmentRules.PROP_LIST_NAME:
-		prop_list[i] += bz_prop[i]
-	return prop_list
-
-
 func get_bz_prop() -> Dictionary:
 	var jewels_value: Variant = PlayerData.player_data.get("宝珠列表", [])
 	if not jewels_value is Array:

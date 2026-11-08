@@ -76,16 +76,6 @@ func reset_all_opacities():
 		node_opacities[i] = 1.0
 
 
-func get_node_opacity(rect_num: int) -> float:
-	if rect_num < MIN_NUM or rect_num > MAX_NUM:
-		return 1.0
-
-	var rect_index: int = rect_num - 1
-	if rect_index >= 0 and rect_index < node_opacities.size():
-		return node_opacities[rect_index]
-	return 1.0
-
-
 func get_current_image_sequence() -> Array[int]:
 	var sequence: Array[int] = []
 	for rect in all_texture_rects:

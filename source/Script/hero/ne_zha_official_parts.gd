@@ -1,7 +1,6 @@
 extends Node2D
 
 const ROOT := "res://Art/hero_picture/role_6/official_parts_trial/"
-const SETS := ["default", "y2V500", "y36"]
 const DATA := preload("res://Script/hero/ne_zha_official_parts_data.gd")
 const STRIDE := 9
 var _data: RefCounted

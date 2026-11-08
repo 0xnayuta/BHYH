@@ -88,7 +88,6 @@ const DEVELOP_FRUIT_IDS := {"悟性": "wuxingguo", "根骨": "genguguo", "灵力
 const QUALITY_FEED_HOLD_DELAY := 2.0
 const QUALITY_FEED_REPEAT_INTERVAL := 0.12
 const POTENTIAL_MAX := 32
-const STRENGTH_POINT_ITEM := "宠物强化石"
 const STRENGTH_BUY_ITEM := "珍珠"
 const PET_PASSIVE_KEYS := ["热血", "魔泉", "狂暴", "永恒", "辉煌", "敏锐"]
 const PET_PASSIVE_EFFECT_NAMES := {"热血": "生命上限", "魔泉": "魔法上限", "狂暴": "暴击", "永恒": "回血", "辉煌": "回魔", "敏锐": "命中"}

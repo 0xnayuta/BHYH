@@ -730,10 +730,6 @@ func _animation_source() -> Variant:
 	return _animation_data
 
 
-func get_registration_anchor() -> Vector2:
-	return _registration_anchor
-
-
 func get_current_visual_bounds() -> Rect2:
 	var source: Variant = _animation_source()
 	if source is Dictionary and (source as Dictionary).is_empty():

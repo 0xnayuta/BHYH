@@ -2,7 +2,6 @@ extends RefCounted
 class_name BodyTrainingData
 
 const BODY_IDS := [10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010, 10011, 10012]
-const BODY_NAMES := ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 const BODY_CONFIG := {
 	10001:
 	{

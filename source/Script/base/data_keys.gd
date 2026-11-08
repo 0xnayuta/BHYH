@@ -157,23 +157,3 @@ const EXP = "经验"
 # ==============================================================================
 # 3. 契约安全访问与校验工具函数
 # ==============================================================================
-
-
-## 安全读取字符串名称
-static func safe_name(data: Dictionary, default_val: String = "") -> String:
-	return str(data.get(NAME, default_val))
-
-
-## 安全读取类型
-static func safe_type(data: Dictionary, default_val: String = "") -> String:
-	return str(data.get(TYPE, default_val))
-
-
-## 安全读取等级
-static func safe_level(data: Dictionary, default_val: int = 1) -> int:
-	return int(data.get(LEVEL, default_val))
-
-
-## 安全读取强化等级
-static func safe_enhance_level(data: Dictionary, default_val: int = 0) -> int:
-	return int(data.get(ENHANCE_LEVEL, default_val))

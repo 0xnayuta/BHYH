@@ -32,12 +32,6 @@ func _ready() -> void:
 	add_times.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func start_duration(seconds: float) -> void:
-	if not is_node_ready():
-		await ready
-	buff_icon_remove.start(seconds)
-
-
 func _physics_process(_delta: float) -> void:
 	var p_parent = NodeUtils.ancestor(self, 2)
 	if parent_node != null:
