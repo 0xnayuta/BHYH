@@ -72,7 +72,10 @@ class LevelTestRunner:
         performance_retries: int = 1,
         render_window: bool = False,
         measure_load: bool = False,
+        loadout: str = "base",
     ) -> None:
+        if loadout not in ("base", "full"):
+            raise ValueError("装备组合只能是 base 或 full")
         self.target_level = target_level
         self.time_scale = time_scale
         self.role_id = role_id
@@ -92,6 +95,7 @@ class LevelTestRunner:
         # 用于补齐 headless dummy 渲染器缺失的 GPU 侧证据。
         self.render_window = render_window
         self.measure_load = measure_load
+        self.loadout = loadout
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -144,6 +148,7 @@ const PERFORMANCE_WARMUP_FRAMES := {self.performance_warmup_frames}
 const PERFORMANCE_HUD_FULL := {str(self.performance_hud_full).lower()}
 const RENDER_WINDOW := {str(self.render_window).lower()}
 const MEASURE_LOAD := {str(self.measure_load).lower()}
+const LOADOUT := "{self.loadout}"
 const PERFORMANCE_HUD_TEXT_LIMIT := 80
 const PERFORMANCE_THROTTLE_P95_MS := 8.0
 const PERFORMANCE_THROTTLE_P50_MS := 2.0
@@ -214,6 +219,15 @@ func _run_all() -> void:
 	Global.set_cd_path("")
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INVINCIBLE, true)
 	Global.set_hidden_feature_enabled(Global.HIDDEN_FEATURE_INSTANT_KILL, true)
+	if LOADOUT == "full":
+		# A/B 对照：满配 = 寅虎 4 阶 + 法宝 xianyjp；base 保持默认空装备。
+		PlayerData.player_data[PlayerData.PET_LIST_KEY] = [
+			{{"名称": "寅虎", "类型": "PetYinTiger", "等级": 50, "出战": true, "阶段": 4}}
+		]
+		PlayerData.player_data[PlayerData.ACTIVE_PET_KEY] = "PetYinTiger"
+		# check_zb 会校验法宝所有权；用装备工厂生成完整 Data，避免缺字段。
+		PlayerData.add_fb("xianyjp", 0, [], {{}})
+		PlayerData.player_data["实战法宝"] = "xianyjp"
 	Engine.time_scale = TIME_SCALE
 
 	# 2. 切入目标关卡（Global.change_scene 走异步加载屏，需等待加载器完成切换）
@@ -1144,6 +1158,12 @@ def main() -> int:
         action="store_true",
         help="只测加载链路：输出启动→关卡可操作的分阶段耗时与峰值 VRAM/对象数，不推进阶段",
     )
+    parser.add_argument(
+        "--loadout",
+        choices=("base", "full"),
+        default="base",
+        help="沙盒装备组合：base 无宠物/无法宝；full 寅虎 4 阶 + 法宝 xianyjp",
+    )
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
     parser.add_argument("--instance-id", default=None, help="并发实例标识（默认随机）")
     args = parser.parse_args()
@@ -1161,6 +1181,7 @@ def main() -> int:
             performance_retries=args.performance_retries,
             render_window=args.render_window,
             measure_load=args.measure_load,
+            loadout=args.loadout,
         )
         if not args.json:
             print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")
