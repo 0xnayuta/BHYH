@@ -32,11 +32,6 @@ func _ready() -> void:
 	infor.text = "第" + str(page) + "页" + "第" + str(number + 1) + "格"
 	call_deferred("_refresh_lock_button")
 	call_deferred("_enable_outside_click")
-	await get_tree().create_timer(1.8).timeout
-	if jm == null and not is_pet_action:
-		queue_free()
-		return
-	_refresh_lock_button()
 
 
 func _enable_outside_click() -> void:
