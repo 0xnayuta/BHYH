@@ -169,6 +169,7 @@ var _performance_samples: PackedFloat64Array = PackedFloat64Array()
 var _performance_hud_layer: CanvasLayer
 var _performance_hud_root: Node2D
 var _performance_hud_target: BaseHero
+var _performance_hud_texts: Array[Node] = []
 var _measure_ready_usec: int = 0
 
 
@@ -482,6 +483,8 @@ func _capture_performance(report: Dictionary, scn: Node) -> void:
 		await get_tree().process_frame
 		if not is_inside_tree():
 			break
+		if PERFORMANCE_HUD_FULL and _performance_sample_index % 10 == 0:
+			_churn_performance_hud_text()
 		damage_text_peak = maxi(damage_text_peak, _current_active_damage_texts())
 	_performance_capture_active = false
 	var pool_stats_end := _pool_stats_snapshot()
@@ -648,6 +651,7 @@ func _refill_performance_hud() -> void:
 		var text: Node = Global.add_damage_text(_performance_hud_root, position, value, "physics", false, _performance_hud_target)
 		if text == null:
 			break
+		_performance_hud_texts.append(text)
 		var show_player := text.get("show_player") as AnimationPlayer
 		if show_player != null:
 			show_player.speed_scale = 0.01
@@ -659,6 +663,20 @@ func _clear_performance_hud() -> void:
 	_performance_hud_layer = null
 	_performance_hud_root = null
 	_performance_hud_target = null
+	_performance_hud_texts.clear()
+
+
+func _churn_performance_hud_text() -> void:
+	# 采样窗口内回收 1 个并立即补 1 个，保持 80 活跃，同时测 damage_text 池命中。
+	if _performance_hud_texts.is_empty():
+		return
+	var text: Node = _performance_hud_texts.pop_back()
+	if text != null and is_instance_valid(text):
+		if text.has_method("recycle"):
+			text.call("recycle")
+		else:
+			text.queue_free()
+	_refill_performance_hud()
 
 
 func _ground_surface_y(scn: Node2D, x: float) -> float:
