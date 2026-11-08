@@ -1463,57 +1463,6 @@ func _deal_pet_phoenix_damage(
 				aoe_target.play_hit_effect(self)
 
 
-func _collect_pet_phoenix_aoe_targets(primary_target: BaseMonster) -> Array[BaseMonster]:
-	var targets: Array[BaseMonster] = []
-	var seen := {}
-	var hit_size: Vector2 = get_meta("pet_phoenix_hit_size", Vector2(180, 100))
-	var radius := maxf(hit_size.x, hit_size.y) * 0.5
-	var summon_owner = get_meta("summoner", null)
-	var tree := get_tree()
-	if tree != null:
-		var candidates := _get_level_active_monster_candidates()
-		for node in candidates:
-			_try_add_pet_phoenix_aoe_target(node, radius, targets, seen, summon_owner)
-		var scene := tree.current_scene
-		if candidates.is_empty() and scene != null and scene.has_node("Monster"):
-			_collect_pet_phoenix_aoe_targets_recursive(scene.get_node("Monster"), radius, targets, seen, summon_owner)
-	if (
-		is_instance_valid(primary_target)
-		and primary_target != summon_owner
-		and primary_target.hp > 0
-		and not targets.has(primary_target)
-	):
-		targets.append(primary_target)
-	return targets
-
-
-func _collect_pet_phoenix_aoe_targets_recursive(
-	node: Node, radius: float, targets: Array[BaseMonster], seen: Dictionary, summon_owner
-) -> void:
-	if node == null:
-		return
-	_try_add_pet_phoenix_aoe_target(node, radius, targets, seen, summon_owner)
-	for child in node.get_children():
-		_collect_pet_phoenix_aoe_targets_recursive(child, radius, targets, seen, summon_owner)
-
-
-func _try_add_pet_phoenix_aoe_target(
-	node: Node, radius: float, targets: Array[BaseMonster], seen: Dictionary, summon_owner
-) -> void:
-	if not (node is BaseMonster):
-		return
-	var monster := node as BaseMonster
-	if monster.hp <= 0 or monster == summon_owner:
-		return
-	var instance_id := monster.get_instance_id()
-	if seen.has(instance_id):
-		return
-	if monster.global_position.distance_to(global_position) > radius:
-		return
-	targets.append(monster)
-	seen[instance_id] = true
-
-
 func _setup_pet_dragon_hit_shape(_name: String) -> void:
 	var hit_shape: CollisionShape2D = hit_box.get_node_or_null("Hit_Box")
 	if hit_shape == null:

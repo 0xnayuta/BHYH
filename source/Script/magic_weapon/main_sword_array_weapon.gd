@@ -197,10 +197,6 @@ func _apply_idle_animation() -> void:
 	sprite.play(StringName(body_folder))
 
 
-func _prewarm_sword_frames(target_sword_id: String) -> void:
-	prewarm_sword_frames(target_sword_id)
-
-
 static func prewarm_active_sword_resources() -> void:
 	prewarm_sword_frames(get_active_sword_id())
 
@@ -608,65 +604,6 @@ func _spawn_sword_hit_bullet(center: Vector2, hit_radius: float, hit_dic: Dictio
 	return bullet
 
 
-func _collect_sword_hit_area_monsters(hit_area: Area2D) -> Dictionary:
-	var hit_monsters := {}
-	for area in hit_area.get_overlapping_areas():
-		var monster := _monster_from_hurt_area(area)
-		if monster == null or hit_monsters.has(monster):
-			continue
-		hit_monsters[monster] = true
-	for body in hit_area.get_overlapping_bodies():
-		if body is BaseMonster and not hit_monsters.has(body):
-			hit_monsters[body] = true
-	return hit_monsters
-
-
-func _collect_sword_distance_monsters(center: Vector2, hit_radius: float) -> Dictionary:
-	var hit_monsters := {}
-	var monster_parent := _get_monster_parent()
-	if monster_parent == null:
-		return hit_monsters
-	for monster in monster_parent.get_children():
-		if not is_instance_valid(monster) or not (monster is BaseMonster):
-			continue
-		if monster.global_position.distance_to(center) <= hit_radius:
-			hit_monsters[monster] = true
-	return hit_monsters
-
-
-func _create_sword_hit_area(center: Vector2, hit_radius: float) -> Area2D:
-	var parent := _get_effect_parent()
-	if parent == null:
-		return null
-	var area := Area2D.new()
-	area.name = "SwordArrayHitArea"
-	area.collision_layer = PhysicsLayers.CHARACTER
-	area.collision_mask = 3140
-	area.monitoring = true
-	area.monitorable = true
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = hit_radius
-	shape.shape = circle
-	area.add_child(shape)
-	parent.add_child(area)
-	area.global_position = center
-	return area
-
-
-func _monster_from_hurt_area(area: Area2D) -> BaseMonster:
-	if area == null or not is_instance_valid(area):
-		return null
-	var node: Node = area
-	for i in range(4):
-		if node == null:
-			return null
-		if node is BaseMonster:
-			return node as BaseMonster
-		node = node.get_parent()
-	return null
-
-
 func _get_sword_level() -> int:
 	var data: Node = LocalCoop.data_for(self)
 	if data.has_method("get_main_sword_array_level"):
@@ -708,97 +645,6 @@ func _get_monster_parent() -> Node:
 	if player_parent == null or player_parent.get_parent() == null:
 		return null
 	return player_parent.get_parent().get("monster") as Node
-
-
-func _add_defe_reduce(monster: BaseMonster) -> void:
-	if monster == null or not is_instance_valid(monster) or monster.buff == null:
-		return
-	(
-		Global
-		. add_buff(
-			monster.buff,
-			{
-				"Name": "defe_reduce",
-				"AddTime": 8,
-				"reduce_interval": 0,
-				"value": SWORD_ARRAY_DEFE_REDUCE_VALUE,
-				"AttackKind": "",
-				"DeBuff": true,
-			}
-		)
-	)
-
-
-func _add_short_stun(monster: BaseMonster, stun_time: float) -> void:
-	if stun_time <= 0.0 or monster == null or not is_instance_valid(monster) or monster.buff == null:
-		return
-	(
-		Global
-		. add_buff(
-			monster.buff,
-			{
-				"Name": "stun",
-				"AddTime": stun_time,
-				"reduce_interval": 0,
-				"value": 0,
-				"AttackKind": "",
-				"CanAdd": false,
-				"DeBuff": true,
-			}
-		)
-	)
-
-
-func _apply_sword_hit_feedback(monster: BaseMonster, value: int, source: RoleBullet) -> void:
-	if value <= 0 or monster == null or not is_instance_valid(monster):
-		return
-	if MainSet.set_data["MonsterLittleBlood"]:
-		if monster.monster_blood_bar == null:
-			monster.monster_blood_bar = Global.add_monster_blood(
-				monster, Vector2(-30, -90), monster.hp / float(monster.max_hp), monster.hp
-			)
-	monster.role5_bullet(value, source)
-	Global.get_audio_runtime().add_sound(monster, "res://Music/monster_hurt/6_beattack_by_role1.mp3")
-	if (
-		not monster.is_miss
-		and not monster.is_boss_protecting()
-		and (not bool(source.get_meta("sword_array_damage", false)) or Global.can_show_sword_hit_effect())
-	):
-		monster.hurt_special_effect = Global.add_mr_hurt(monster.pz, Vector2(0, 0))
-
-
-func _play_sword_hurt_animation(monster: BaseMonster) -> void:
-	if monster == null or not is_instance_valid(monster):
-		return
-	if monster.monster_18_protect() or monster.monster102_protect() or monster.is_control_immune():
-		return
-	monster.set_meta("sword_array_hit_token", Time.get_ticks_msec())
-	monster.is_be_attacking = true
-	monster.interrupt_movement_for_control()
-	if monster.mr_player != null and monster.mr_player.has_animation("hurt"):
-		monster.mr_player.play("hurt")
-	call_deferred("_release_sword_hurt_animation", monster, int(monster.get_meta("sword_array_hit_token")))
-
-
-func _release_sword_hurt_animation(monster: BaseMonster, token: int) -> void:
-	if not await _wait_for_sword_seconds(0.2):
-		return
-	if monster == null or not is_instance_valid(monster):
-		return
-	if int(monster.get_meta("sword_array_hit_token", 0)) != token:
-		return
-	monster.is_be_attacking = false
-
-
-func _apply_role_attack_control(monster: BaseMonster, source: RoleBullet) -> void:
-	if monster == null or not is_instance_valid(monster) or player == null or not is_instance_valid(player):
-		return
-	if monster.is_control_immune():
-		return
-	var old_target = monster.get_target
-	monster.get_target = source
-	monster.state_hurt()
-	monster.get_target = old_target
 
 
 func _runtime_role_props() -> Node:

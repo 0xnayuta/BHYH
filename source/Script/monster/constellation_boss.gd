@@ -815,15 +815,6 @@ func _attack_range(skill: int) -> float:
 	return float(source_ranges.get(skill, 220.0))
 
 
-func _nearest_attack_range() -> float:
-	var slots_value: Variant = ATTACK_SLOTS.get(source_id, [1])
-	var slots: Array = slots_value if slots_value is Array else [1]
-	var result := 220.0
-	for slot_value in slots:
-		result = maxf(result, _attack_range(int(slot_value)))
-	return result
-
-
 func _start_skill(skill: int) -> void:
 	if _busy or death() or (source_id == 140 and _monster140_buried):
 		return
@@ -2124,32 +2115,6 @@ func _monster141_spawn_children() -> void:
 			_expire_monster140_summon(child)
 
 
-func _run_melee_pulses(skill: int, serial: int) -> void:
-	var pulses := 1 if skill == 1 else 3
-	_set_attack_box(Vector2(190, 135), Vector2(-105, -70))
-	for index in range(pulses):
-		if death() or serial != _attack_serial:
-			break
-		_enable_attack_box()
-		await get_tree().physics_frame
-		_disable_attack_box()
-		if index + 1 < pulses:
-			await get_tree().create_timer(0.14).timeout
-
-
-func _spawn_skill_sequence(skill: int, allow_damage: bool, serial: int) -> void:
-	var stage_count := _skill_stage_count(skill)
-	if stage_count <= 0:
-		_spawn_projectile(skill, allow_damage, 0)
-		return
-	for stage_index in range(1, stage_count + 1):
-		if death() or serial != _attack_serial:
-			return
-		_spawn_projectile(skill, allow_damage, stage_index)
-		if stage_index < stage_count:
-			await get_tree().create_timer(0.12).timeout
-
-
 func _spawn_projectile(skill: int, allow_damage: bool = true, stage_index: int = 0) -> void:
 	var options := {
 		"stage_index": stage_index,
@@ -2292,34 +2257,6 @@ func _skill_spawn_offset(skill: int, direction: float, stage_index: int = 0) -> 
 	if mirror_x:
 		offset.x *= direction
 	return offset
-
-
-func _skill_stage_count(skill: int) -> int:
-	var prefix := "skill%d_" % skill
-	var suffixes: Array[int] = []
-	var frames := _standard_frames()
-	if frames != null:
-		for animation in frames.get_animation_names():
-			var animation_name := String(animation)
-			if not animation_name.begins_with(prefix):
-				continue
-			var animation_suffix := animation_name.trim_prefix(prefix)
-			if animation_suffix.is_valid_int() and int(animation_suffix) > 1:
-				suffixes.append(int(animation_suffix))
-	if suffixes.is_empty():
-		var root := _asset_root()
-		for suffix in range(2, 21):
-			var stage_asset := StringName("constellation/%d/skill/skill%d_%d" % [source_id, skill, suffix])
-			if not FrameSequenceStore.has_sequence(stage_asset):
-				break
-			suffixes.append(suffix)
-	suffixes.sort()
-	var expected := 2
-	for suffix in suffixes:
-		if suffix != expected:
-			break
-		expected += 1
-	return expected - 1
 
 
 func _spawn_source_summon(project_id: int, offset: Vector2, lifetime: float) -> void:

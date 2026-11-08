@@ -118,21 +118,6 @@ func _build_body_animations() -> void:
 	mr_player.add_animation_library(&"", library)
 
 
-func _add_sprite_animation(
-	frames: SpriteFrames, anim_name: StringName, textures: Array[Texture2D], looped: bool, start: int, count: int
-) -> void:
-	frames.add_animation(anim_name)
-	frames.set_animation_loop(anim_name, looped)
-	frames.set_animation_speed(anim_name, SOURCE_FPS)
-	if textures.is_empty():
-		return
-	var end_index: int = mini(start + count, textures.size())
-	for index in range(start, end_index):
-		frames.add_frame(anim_name, textures[index])
-	if frames.get_frame_count(anim_name) == 0:
-		frames.add_frame(anim_name, textures[0])
-
-
 func _make_action(sprite_anim: StringName, looped: bool, min_length := 0.05) -> Animation:
 	var animation := Animation.new()
 	animation.loop_mode = Animation.LOOP_LINEAR if looped else Animation.LOOP_NONE

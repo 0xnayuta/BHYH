@@ -402,10 +402,6 @@ func _replace_visual_stream(next_stream: StreamedPngEffect) -> void:
 		previous_stream.queue_free()
 
 
-func _is_swf_png_root(root: String) -> bool:
-	return root.replace("\\", "/").begins_with("res://Art/monster/swf_png/")
-
-
 func _exit_tree() -> void:
 	_clear_visual_stream()
 
