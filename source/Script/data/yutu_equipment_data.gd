@@ -2,24 +2,7 @@ extends RefCounted
 class_name YutuEquipmentData
 
 const DEFINITIONS := "res://Art/hero_picture/role_7/equipment.json"
-const PROPERTIES := [
-	"SHp",
-	"SMp",
-	"power",
-	"Def",
-	"Mdef",
-	"Crit",
-	"Miss",
-	"R_hp",
-	"R_mp",
-	"vampirism",
-	"Lucky",
-	"toughness",
-	"htarget",
-	"CritReduce",
-	"ar",
-	"sp"
-]
+
 static var _definitions: Array = []
 
 

@@ -103,10 +103,6 @@ const SKILL_INFO := {
 	"hehua": {"title": "慈心妙莲", "desc": "复活已阵亡的宠物。"},
 }
 
-var choosejm_1
-var choosejm_2
-var choosejm_3
-var choosejm_4
 var _displayed_weapon_name: String = ""
 
 

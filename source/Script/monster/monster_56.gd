@@ -40,7 +40,6 @@ var is_call = false
 var throw_cout: int = 3
 var call_stage = false
 var add_shallow = false
-var addcount: int = 0
 var poweradd: float = 1
 
 

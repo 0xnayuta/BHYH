@@ -1,7 +1,6 @@
 extends BaseMonster
 class_name Monster48
 var change_body_flag: bool = false
-var change_dir_count: int = 60
 
 
 func monster_48():

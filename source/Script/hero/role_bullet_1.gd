@@ -15,7 +15,6 @@ var player: BaseHero
 var is_set = false
 var hit_dic = {"power": 0, "hurtBack": [0, 0], "attackKind": "real"}
 var shallow
-var first_hyjj: bool = true
 
 
 func _physics_process(_delta: float) -> void:

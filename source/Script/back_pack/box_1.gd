@@ -50,6 +50,9 @@ var strength_source := "装备背包"
 var strength_index := -1
 var item_locked := false
 @onready var lock_mark: Label = $lock_mark
+var _refresh_elapsed := 0.0
+var _refresh_primed := false
+var _last_refresh_signature := ""
 
 
 func _get_strength_max_level(item_name: String) -> int:
@@ -73,7 +76,12 @@ func _ready() -> void:
 		get_item_name = "empty"
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	_refresh_elapsed += delta
+	if _refresh_primed and _refresh_elapsed < 0.1:
+		return
+	_refresh_primed = true
+	_refresh_elapsed = 0.0
 	lock_mark.visible = item_locked and get_item_name != "empty"
 
 	if strength_source == "宠物背包":
@@ -97,6 +105,20 @@ func _physics_process(_delta: float) -> void:
 		add_equ_box.position = gl_po
 
 	is_in_ldl = Global.get_ui_runtime().is_ldl_mode_active()
+
+	var refresh_signature := (
+		"%s|%s|%s|%s|%s"
+		% [
+			get_item_name,
+			strength_source,
+			qh_level,
+			total_number,
+			icon.resource_path if icon != null else "",
+		]
+	)
+	if refresh_signature == _last_refresh_signature:
+		return
+	_last_refresh_signature = refresh_signature
 
 	if strength_source == "宠物背包":
 		get_type = "宠物装备"

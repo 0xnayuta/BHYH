@@ -34,7 +34,6 @@ var bgm_changed_for_stage_4: bool = false
 @onready var create_3: Node2D = $Create_3
 @onready var create_4: Node2D = $Create_4
 
-var is_set_smooth
 var mr: BaseMonster
 var _role
 var role_p2: BaseHero

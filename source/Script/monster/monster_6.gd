@@ -1,5 +1,4 @@
 extends BaseMonster
-var htl
 
 
 func monster_6():

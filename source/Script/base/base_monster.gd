@@ -162,7 +162,6 @@ var no_grav: bool
 var rndi_count: int = randi_range(0, 100)
 var get_player: BaseHero
 
-var get_summon: SummonBaseMonster
 var c_hange_clam_count: float
 var hurt_special_effect: Node2D
 var is_smart_monster: bool
@@ -318,7 +317,6 @@ var total_hurt: int
 var add_buff
 var is_quiescent = false
 var ws_hd = false
-var lj_count: int = 0
 var is_enter_hit_box
 var rush_speed: float = 0.0
 var hit_target
@@ -327,7 +325,6 @@ var _is_set: bool
 var init_speed
 var is_jgz: bool
 var jgz_bl: float = 1
-var jgz_count: int
 var is_zznh: bool = false
 var zznh_bl: float = 1.0
 var zznh_defense_reduction: float = 0.0
@@ -335,7 +332,6 @@ var zznh_defense_reduction: float = 0.0
 var my_blood
 var cannot_attract: bool
 var is_lpz: bool
-var is_llrd: bool
 @onready var bullet: Node = $Bullet
 @onready var hit_box: CollisionShape2D = $BaseDamageBox/HitBox/HitBox
 @onready var hurt_box: CollisionShape2D = $BaseDamageBox/HurtBox/HurtBox
@@ -363,7 +359,6 @@ enum State {
 }
 var hit_name
 var monster_blood_bar: MrBloodBar
-var onset: bool
 var base_level: Node
 var should_in_sky: bool
 var _ai_tick_offset: int = randi_range(0, 7)

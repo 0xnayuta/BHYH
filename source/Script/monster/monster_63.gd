@@ -4,7 +4,6 @@ var hurtcount: int = 0
 var should_fs: bool = false
 var _fs_queued: bool = false
 var is_fs = false
-var fs_list = []
 var reduce_count: int = 0
 var accumulated_hit: int = 0
 

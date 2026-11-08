@@ -72,9 +72,9 @@ grep -RIn '"/root/' source --include='*.gd'
 - `player_dir` -> `RunContext` 玩家朝向；
 - `get_target`、`wait_time` 无消费者，删除；`fb_cd` 只写 -10/0 且恒为可用，删除。
 
-### 2.7 档案、保存与运行代次（23）
+### 2.7 档案、保存与运行代次（22）
 
-`_all_hero_skill_resources_preloaded`, `_prewarmed_role_id`, `_archive_session`, `_run_context`, `_archive_session_prewarm_in_progress`, `_archive_session_prewarm_role_id`, `_archive_session_prewarm_token`, `_archive_session_generation`, `_archive_identity_epoch`, `_cd_path`, `_background_save_last_serial`, `_background_save_last_success`, `_background_save_last_path`, `_background_save_failure_count`, `_save_failure_count`, `_save_failure_last`, `_save_failure_feedback_enabled`, `_suppress_save_failure_feedback`, `_save_failure_notify_msec`, `_save_failure_notify_key`, `_runtime_generation`, `_shutting_down`, `_prewarmed_pet_signatures`
+`_prewarmed_role_id`, `_archive_session`, `_run_context`, `_archive_session_prewarm_in_progress`, `_archive_session_prewarm_role_id`, `_archive_session_prewarm_token`, `_archive_session_generation`, `_archive_identity_epoch`, `_cd_path`, `_background_save_last_serial`, `_background_save_last_success`, `_background_save_last_path`, `_background_save_failure_count`, `_save_failure_count`, `_save_failure_last`, `_save_failure_feedback_enabled`, `_suppress_save_failure_feedback`, `_save_failure_notify_msec`, `_save_failure_notify_key`, `_runtime_generation`, `_shutting_down`, `_prewarmed_pet_signatures`
 
 **判定**：保留生命周期控制面。档案身份/代次继续归 `ArchiveSession` 与 `MemoryClass`；保存结果由显式状态/信号观察；`_archive_session` 与 `_run_context` 作为组合根持有的上下文引用保留，不把其内容重新暴露为全局字段。预热标记逐步归 `ResourceRuntime`。
 
@@ -252,7 +252,7 @@ is_archive_exit_scene, bind_archive_session, begin_archive_session,
 get_current_role_equipment_preload_paths, end_archive_session,
 release_role_runtime_resources, begin_level_resource_lease,
 release_level_resource_lease, prewarm_monster_bullet_scene_paths,
-preload_damage_number_textures, preload_all_hero_skill_resources,
+preload_damage_number_textures,
 prewarm_sprite_frames_paths, prewarm_texture_paths,
 get_current_role_preload_paths, prewarm_current_role_runtime_resources,
 preload_next, clear_preloaded_scene_slot

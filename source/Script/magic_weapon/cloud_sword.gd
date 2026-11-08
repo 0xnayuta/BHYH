@@ -3,7 +3,6 @@ class_name CloudSword
 var monster_list: Array = []
 var _monster_refresh_elapsed: float = 0.0
 var target: BaseMonster
-var is_no_target: bool
 var _hit_data := {
 	"power": 0,
 	"hurtBack": [0, -1],

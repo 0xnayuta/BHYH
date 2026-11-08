@@ -1,6 +1,5 @@
 extends BaseLevel
 var is_cc = false
-var wang_wang: Monster144
 
 
 func _ready() -> void:

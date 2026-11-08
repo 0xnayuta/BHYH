@@ -20,6 +20,9 @@ var max_time
 var mount_skill_slot: int = -1
 var _loaded_icon_path: String = ""
 var _open_effect_elapsed: float = 0.0
+var _refresh_elapsed := 0.0
+var _refresh_primed := false
+var _cached_mount_runtime: Node = null
 
 var _mp_label: Label = null
 
@@ -41,6 +44,11 @@ func _current_role_id() -> int:
 
 func _physics_process(delta: float) -> void:
 	_update_nezha_effects(delta)
+	_refresh_elapsed += delta
+	if _refresh_primed and _refresh_elapsed < 0.1:
+		return
+	_refresh_primed = true
+	_refresh_elapsed = 0.0
 	if skill_name == null or skill_name == "" or skill_name == "Empty":
 		if _loaded_icon_path != "":
 			_loaded_icon_path = ""
@@ -123,10 +131,13 @@ func _show_mount_cooldown(remaining_value: float, total_value: float) -> void:
 
 
 func _current_mount_runtime() -> Node:
+	if _cached_mount_runtime != null and is_instance_valid(_cached_mount_runtime):
+		return _cached_mount_runtime
 	var player = RoleProp.source_player
 	if player == null or not is_instance_valid(player):
 		return null
-	return player.get_node_or_null("MountRuntime")
+	_cached_mount_runtime = player.get_node_or_null("MountRuntime")
+	return _cached_mount_runtime
 
 
 func _update_nezha_effects(delta: float) -> void:

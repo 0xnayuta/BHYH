@@ -5,7 +5,6 @@ const BODY_FRAME_COLUMNS := 6
 const SOURCE_FPS := 24.0
 const BODY_SPRITE_POSITION := Vector2(-9, -103)
 const EFFECT_ROOT := "res://Art/monster/tao_tie/effects"
-const EFFECT_NAMES := ["monster_115_bullet_1", "monster_115_bullet_2", "monster_115_bullet_3"]
 
 var bullet1_height := -70.0
 var bullet2_height := -50.0

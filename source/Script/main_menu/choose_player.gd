@@ -23,7 +23,6 @@ var role_info := [
 	"广寒玉兔，双刀映月。药毒与月刃十式兼修，灵巧迅捷。",
 	"暗影小龙女，双刃随身，迅捷灵动。擅长近身连斩、腾空挑击与突袭。",
 ]
-var role_id_to_index := {"swk": 1, "tsz": 2, "zbj": 3, "swj": 4, "xbl": 5, "nz": 6, "yt": 7, "xln": 8}
 var shengcun_star := [0, 4, 3, 4, 4, 3, 3, 3, 3]
 var gongji_star := [0, 3, 5, 2, 4, 3, 5, 4, 4]
 var minjie_star := [0, 5, 3, 4, 3, 4, 5, 5, 5]

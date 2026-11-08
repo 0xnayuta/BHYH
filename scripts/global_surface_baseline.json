@@ -3,7 +3,6 @@
   "updated": "2026-11-02",
   "description": "Phase 22 收口后的 Global 业务字段与 add 系入口冻结基线；新增条目必须评审并更新本文件。",
   "global_fields": [
-    "_all_hero_skill_resources_preloaded",
     "_archive_identity_epoch",
     "_archive_session",
     "_archive_session_generation",

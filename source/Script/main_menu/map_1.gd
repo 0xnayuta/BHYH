@@ -30,7 +30,6 @@ const RIGHT_ALIGNED_BUTTON_NAMES := [
 @onready var boss_treasure_checkbox: TextureButton = $BossTreasureCheckBox
 var is_chest_mode: bool = false
 
-var my_music
 var _map_shadow_rects := []
 var _map_shadow_shader: Shader
 var _left_aligned_button_positions := {}

@@ -6,7 +6,6 @@ var onset_eatblood: bool
 var remove_blood: bool
 
 var max_summon_count: int = 5
-var current_summon_count: int = 0
 
 
 func monster_61():

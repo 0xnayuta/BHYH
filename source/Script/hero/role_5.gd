@@ -18,7 +18,6 @@ const YGTH_AWAKEN_SCALE := Vector2(2.0, 2.0)
 var interv: int
 var in_sky: bool
 var tllz
-var can_move_in_sky: bool
 var role5_eat_blood: float
 
 

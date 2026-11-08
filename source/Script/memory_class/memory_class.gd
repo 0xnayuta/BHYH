@@ -7,15 +7,6 @@ var _player:
 	set(v):
 		player_data = v
 var initialized_data = {}
-var get_sj = {}
-var limit_time = {
-	"year": 2024,
-	"month": 5,
-	"day": 9,
-	"hour": 13,
-	"minute": 35,
-	"second": 0,
-}
 var level
 const ARCHIVE_BACKUP_SUFFIX: String = ".bak"
 const ARCHIVE_TEMP_SUFFIX: String = ".tmp"

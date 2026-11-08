@@ -1,7 +1,7 @@
 extends Node2D
 
 const MAP_DESIGN_SIZE := Vector2(940.0, 590.0)
-const MAP_SHADOW_FADE := 55.0
+
 const RIGHT_ALIGNED_BUTTON_NAMES := [
 	"changetomain",
 	"Activity",
@@ -33,7 +33,7 @@ var is_chest_mode: bool = false
 
 var max_page: int = 2
 var skill_target
-var my_music
+
 var _map_shadow_rects := []
 var _map_shadow_shader: Shader
 var _right_aligned_button_right_edges := {}

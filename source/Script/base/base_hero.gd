@@ -21,7 +21,6 @@ const XIANYU_WING_PATHS := {
 }
 const HUAHAO_WING_FRAME_DIR := "res://Art/hero_picture/wings/hhyq"
 var zlwsz_shenqi_timer: Timer
-var zlwsz_shenqi_gears: Array = []
 var zcld_level: int = 0
 var has_smsrsz_fashion: bool = false
 var current_fashion_quality: String = ""
@@ -35,6 +34,8 @@ var _last_archive_name := ""
 var _last_hero_formation := ""
 var _last_hero_formation_level: int = -1
 var _last_wings_name := ""
+var _mount_runtime_node: Node = null
+var _coop_slot_cached := 0
 var _wings_base_position := Vector2.ZERO
 var _wings_base_offset := Vector2.ZERO
 var _wings_base_rotation := 0.0
@@ -133,7 +134,6 @@ var is_bound_to_the_ground: bool
 var is_jdy: bool
 var is_cure_hp: bool
 var cure_hp_value: int
-var skill_clam: float
 var player_dir: bool = false
 var is_fabao_jiasu: bool = false
 var _fabao_jiasu_base_speed: int = 240
@@ -146,8 +146,6 @@ var magic_weapon_presentation: MagicWeaponPresentationController
 var main_sword_array_target: Node2D
 var _last_main_sword_array_id: String = ""
 var lyfb_calm: float
-var slz_calm: float
-var hmz_calm: float
 var is_stun = false
 var is_jump = false
 var _jump_release_cut_armed: bool = false
@@ -316,7 +314,24 @@ func _attach_mount_runtime() -> void:
 	mount_runtime.name = "MountRuntime"
 	mount_runtime.set_script(MOUNT_RUNTIME_SCRIPT)
 	add_child(mount_runtime)
+	_mount_runtime_node = mount_runtime
 	mount_runtime.call("setup", self)
+
+
+func get_mount_runtime_node() -> Node:
+	if _mount_runtime_node == null or not is_instance_valid(_mount_runtime_node):
+		_mount_runtime_node = get_node_or_null("MountRuntime")
+	return _mount_runtime_node
+
+
+func _resolve_coop_slot() -> int:
+	if _coop_slot_cached == 0:
+		_coop_slot_cached = int(get_meta("coop_slot", 1))
+	return _coop_slot_cached
+
+
+func _cancel_skill_for_control() -> void:
+	pass
 
 
 func _ensure_auto_battle_controller() -> void:
@@ -755,10 +770,9 @@ func _physics_process(delta: float) -> void:
 	if is_immobilize:
 		velocity = Vector2(0, 0)
 	if not no_limit_buff():
-		if has_method("_cancel_skill_for_control"):
-			call("_cancel_skill_for_control")
+		_cancel_skill_for_control()
 		is_using_skills = false
-	var mount_runtime := get_node_or_null("MountRuntime")
+	var mount_runtime := get_mount_runtime_node()
 	if mount_runtime != null and bool(mount_runtime.call("process_mounted_control", delta)):
 		pass
 	elif no_limit_buff():
@@ -786,7 +800,7 @@ func _physics_process(delta: float) -> void:
 
 	was_ws_state = RoleProp.is_ws_state
 
-	if int(get_meta("coop_slot", 1)) == 1:
+	if _resolve_coop_slot() == 1:
 		Global.get_run_context().set_player_direction(player_dir)
 	if (
 		magic_weapon_target != null
@@ -797,10 +811,6 @@ func _physics_process(delta: float) -> void:
 		if floor_instance != null and floor_instance.has_method("prepare_player_motion"):
 			floor_instance.call("prepare_player_motion", delta)
 	move_and_slide()
-
-
-func _process(_delta: float) -> void:
-	set_wings_offset()
 
 
 func process_san_xian_hu_ti_effect():
@@ -956,7 +966,7 @@ func no_limit_buff():
 
 
 func is_riding_mount() -> bool:
-	var runtime := get_node_or_null("MountRuntime")
+	var runtime := get_mount_runtime_node()
 	return runtime != null and runtime.has_method("is_riding_mount") and bool(runtime.call("is_riding_mount"))
 
 
@@ -2424,7 +2434,7 @@ func on_eqchange():
 	fj = ItemUtils.clean_fashion_name(fj)
 
 	change_body(fj)
-	var mount_runtime := get_node_or_null("MountRuntime")
+	var mount_runtime := get_mount_runtime_node()
 	if mount_runtime != null and mount_runtime.has_method("refresh_rider_appearance"):
 		mount_runtime.call("refresh_rider_appearance")
 	add_special_effect_clothes(wq, fj)

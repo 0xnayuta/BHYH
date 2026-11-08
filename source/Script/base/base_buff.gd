@@ -19,14 +19,10 @@ var buff_info = {
 	"SpecialEffectAddInterval": 0.0,
 	"CanAdd": false
 }
-var ini_buff = {"Name": "", "value": 0.0, "AddTime": 0.0, "AttackKind": "", "CanRemove": false}
-var need_remove: bool
 var total_times: int = 1
 var inter_time: float
 var is_set: bool = false
-var on_set: bool = false
 var buff_effect_list = []
-var buff_array = []
 var old_position
 var new_position
 var ini_speed

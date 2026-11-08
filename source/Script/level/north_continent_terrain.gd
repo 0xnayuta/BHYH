@@ -33,6 +33,26 @@ func configure(level: Game4EastLateLevel, number: int) -> void:
 		set_maze_room(1)
 	if number == 81:
 		set_void_space(false)
+	_bind_level_monster_physics()
+
+
+func _bind_level_monster_physics() -> void:
+	if _level == null or _level.monster == null:
+		return
+	if not _level.monster.child_entered_tree.is_connected(_on_level_monster_added):
+		_level.monster.child_entered_tree.connect(_on_level_monster_added)
+	for enemy in _level.monster.get_children():
+		_apply_monster_physics(enemy)
+
+
+func _on_level_monster_added(node: Node) -> void:
+	_apply_monster_physics(node)
+
+
+func _apply_monster_physics(enemy: Node) -> void:
+	if enemy is BaseMonster:
+		enemy.floor_max_angle = deg_to_rad(80)
+		enemy.floor_snap_length = 18
 
 
 func _physics_process(delta: float) -> void:
@@ -40,7 +60,10 @@ func _physics_process(delta: float) -> void:
 	var role = _level._role
 	if not is_instance_valid(role):
 		return
-	var role_shape := role.get_node("pz") as CollisionShape2D
+	if _cached_role != role:
+		_cached_role = role
+		_cached_role_body = role.get_node("pz") as CollisionShape2D
+	var role_shape := _cached_role_body
 	var rect := role_shape.shape.get_rect()
 	rect.position += role_shape.global_position - global_position
 	for record: Dictionary in _moving:
@@ -131,8 +154,6 @@ func _physics_process(delta: float) -> void:
 		RoleProp.roleprop.Hp = 0
 	for enemy in _level.monster.get_children():
 		if enemy is BaseMonster:
-			enemy.floor_max_angle = deg_to_rad(80)
-			enemy.floor_snap_length = 18
 			if _level.stage_number != 85 and enemy.position.y >= _death_y:
 				enemy.hp = 0
 	if _level.stage_number == 82:

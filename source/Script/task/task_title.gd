@@ -8,7 +8,6 @@ var my_father: BasicTask
 
 var task_info: String
 var reward_list = []
-var nb_name: String
 var finish: bool
 
 

@@ -4,7 +4,6 @@ var is_stop: bool = false
 var call_monster_list: Dictionary = {"List_0": [4, 5, 11], "List_1": [28, 30, 31]}
 var call_monster_id: int = 0
 var call_monster: BaseMonster
-var is_cr: bool = false
 
 
 func monster_49():

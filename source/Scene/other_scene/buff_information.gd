@@ -7,9 +7,16 @@ var last_hurt: float
 var mm_time: int = 99999
 var parent_node
 var other_text: String
+var _refresh_elapsed := 0.0
+var _refresh_primed := false
 
 
 func _physics_process(delta: float) -> void:
+	_refresh_elapsed += delta
+	if _refresh_primed and _refresh_elapsed < 0.1:
+		return
+	_refresh_primed = true
+	_refresh_elapsed = 0.0
 	if data_list.has("CanRemove"):
 		if data_list["CanRemove"]:
 			other_text = "（低级负面）"

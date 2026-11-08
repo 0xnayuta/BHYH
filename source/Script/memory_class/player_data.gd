@@ -4393,11 +4393,6 @@ func _normalize_pet_phoenix(pet: Dictionary) -> void:
 		player_data[ACTIVE_PET_KEY] = "PetPhoenix"
 
 
-var syn_list = {
-	"放入列表": {"物品1": [], "物品2": [], "物品3": []},
-}
-
-
 func get_total_zb_list():
 	var list = []
 	for i in range(player_data[DataKeys.EQUIPMENT_LIST].size()):
@@ -5004,11 +4999,11 @@ func check_can_use_page(target):
 
 
 func _process(_delta: float) -> void:
-	normalize_soul()
 	_check_zb_elapsed += _delta
 	if _check_zb_elapsed < 0.5:
 		return
 	_check_zb_elapsed = 0.0
+	normalize_soul()
 
 	if not player_data[DataKeys.SKILL_LEARNED].has("技能11"):
 		player_data[DataKeys.SKILL_LEARNED]["技能11"] = {"学习": 0, "等级": 0}

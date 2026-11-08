@@ -1,7 +1,5 @@
 extends BaseMonster
-var is_can_attack
 var dir = 1
-var is_can_move
 enum { move, hit, return_, stop_, _death }
 var is_set
 var rr_an = randi_range(0, 100)

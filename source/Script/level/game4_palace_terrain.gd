@@ -7,6 +7,9 @@ var _hidden_platforms: Array[Dictionary] = []
 var _hazards: Array[Dictionary] = []
 var _death_y := 0.0
 var _clock := 0.0
+var _role_floor_configured := false
+var _cached_role: Node = null
+var _cached_role_body: CollisionShape2D = null
 
 
 func configure(level: Game4EastLateLevel, level_number: int) -> void:
@@ -84,11 +87,15 @@ func _physics_process(delta: float) -> void:
 	var role = _level._role
 	if not is_instance_valid(role):
 		return
-	if _level.stage_number == 73:
+	if not _role_floor_configured and _level.stage_number == 73:
+		_role_floor_configured = true
 		role.floor_max_angle = deg_to_rad(80.0)
 		role.floor_snap_length = 18.0
 		role.floor_constant_speed = true
-	var role_body := role.get_node_or_null("pz") as CollisionShape2D
+	if _cached_role != role:
+		_cached_role = role
+		_cached_role_body = role.get_node_or_null("pz") as CollisionShape2D
+	var role_body := _cached_role_body
 	var role_rect := Rect2(role.global_position - global_position - Vector2(20, 60), Vector2(40, 60))
 	if role_body != null and role_body.shape != null:
 		role_rect = role_body.shape.get_rect()

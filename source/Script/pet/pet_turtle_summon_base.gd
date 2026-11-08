@@ -47,12 +47,7 @@ const TURTLE_BUFF_TEXTURE := "res://Art/pet/pet_turtle/effects/pet_turtle_2_buff
 const PET_TURTLE_BULLET_SCENE := preload("res://Scene/pet/pet_turtle_bullet.tscn")
 const TURTLE_NORMAL_ATTACK_RANGES := {1: 40, 2: 70, 3: 70, 4: 70}
 const TURTLE_WATER_SHIELD_HIT_SIZE := Vector2(500, 340)
-const TURTLE_ORIGINAL_SPRITE_OFFSETS := {
-	1: Vector2(1, -10),
-	2: Vector2(1, -10),
-	3: Vector2(21, 5),
-	4: Vector2(21, -17),
-}
+
 const ACTION_STOP_COUNTS := {
 	1:
 	{

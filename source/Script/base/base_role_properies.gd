@@ -34,11 +34,6 @@ var role_pos_x
 var role_pos
 var role_pos_y
 var _monster_attack_targets: Array[Node2D] = []
-var slz_level: int
-var hytj_level: int
-var lys_level: int
-var lyfb_level: int
-var hmz_level: int
 var ws_value: int
 var max_ws_value = 100
 var is_ws_state = false

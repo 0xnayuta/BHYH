@@ -2,9 +2,7 @@ extends BaseMagicWeapon
 class_name ZhenLeiTianChui
 
 const WEAPON_ID := "469000004"
-const IDLE_FRAME_COUNT := 24
 const EFFECT_FRAME_COUNT := 28
-const FLASH_FRAME_COUNT := 14
 const ANIMATION_SPEED := 30.0
 const HIT_FRAMES: Array[int] = [9, 17, 25]
 const HIT_RADIUS := 300.0

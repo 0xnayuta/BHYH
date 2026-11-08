@@ -4,7 +4,6 @@ class_name Nmwdnh
 var add_time: float
 var add_bl: float = 1
 
-var role_7_scene = null
 var current_summon: Node = null
 var summon_timer: Timer = null
 

@@ -51,7 +51,6 @@ var RoleProp: BaseRoleProperties:
 @onready var head_show_button: Button = $background/infomation/HeadShow
 
 var add_equ_box
-var back_pack_jm
 var message
 var current_pro_page: int = 1
 var show_back_pack = true

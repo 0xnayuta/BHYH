@@ -5,7 +5,6 @@ static var _body_frames_resource: SpriteFrames = null
 
 var is_top = false
 var is_drop = false
-var zz_list: Array[BaseMonster] = []
 var _body_frames_sprite: Sprite2D
 var _body_frames: SpriteFrames
 var _body_frames_animation: StringName = &""

@@ -13,7 +13,6 @@ var jhsj_awaken_effect: Node2D = null
 var shield_effect = null
 var bingyu_effects: Array[Node2D] = []
 
-var smb_hold_timer: float = 0.0
 var smb_ready_for_second_press: bool = false
 
 var tjgl_effect: Node2D = null

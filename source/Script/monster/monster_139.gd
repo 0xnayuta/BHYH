@@ -18,7 +18,6 @@ var every_hurt: int
 @onready var bt: Button = $buttonlist/bt
 @onready var bt_2: Button = $buttonlist/bt2
 @onready var bt_3: Button = $buttonlist/bt3
-var show_box_count: int = 0
 var _last_all_hurt: int = -1
 var _last_second_hurt: int = -1
 var _last_every_hurt: int = -1

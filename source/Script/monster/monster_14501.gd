@@ -8,7 +8,6 @@ var current_stage: int = 1
 var max_stage: int = 5
 var has_summoned_next = false
 
-var is_relif: bool
 var is_have_wdww: bool = false
 var wdww: BossXieShaSengWdww
 

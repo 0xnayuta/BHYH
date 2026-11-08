@@ -17,7 +17,6 @@ var reverse_move_speed_multiplier: float = 1.0
 var no_debuff: bool = false
 
 var walk_speed: int = 240
-var run_speed: int
 var gravity: float = -980.0
 var direction: int
 var obj_attack_dict: Dictionary

@@ -11,12 +11,6 @@ const JINXIU_TRIGGER_Y := [289.0, -241.0, -943.0, -1565.0, -2586.0]
 const JINXIU_FORWARD_TOPS := [-600.0, -1200.0, -1800.0, -2400.0, -2912.0]
 const JINXIU_BACK_BOTTOMS := [590.0, 0.0, -600.0, -1200.0, -2322.0]
 
-const LEVEL_60_SOURCE_SCENE_MAP := {
-	3067: "res://Scene/monster/monster_3067.tscn",
-	3065: "res://Scene/monster/monster_3065.tscn",
-	3070: "res://Scene/monster/monster_3070.tscn",
-}
-
 const LEVEL_60_MONSTER_DATA := {
 	3067:
 	{

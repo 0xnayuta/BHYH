@@ -9,7 +9,6 @@ const MAIN_MENU_BACKGROUND_PATHS := [
 	"res://Art/main_game/bei_jing_5_runtime.jpg",
 	"res://Art/main_game/bei_jing_6_runtime.jpg",
 ]
-var abx: TextureButton
 @onready var ar_infer: Node2D = $ar_infer
 @onready var b_gset: Node2D = $BGset
 
@@ -27,10 +26,8 @@ var abx: TextureButton
 @onready var name_2: Label = $name/name2
 @onready var http_request: HTTPRequest = $HTTPRequest
 var times: int = 0
-var my_music
 var is_playing = false
 var cd_jm
-var message_box
 var music_jm
 var game_set: GameSet
 var _last_plot_skip: Variant = null

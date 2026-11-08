@@ -1,6 +1,5 @@
 extends BaseMonster
 class_name Monster144
-var should_chase: bool = false
 @onready var normal_walk_timer: Timer = $NormalWalkTimer
 @onready var jcqb: RayCast2D = $jcqb
 @onready var jumpcd: Timer = $Jumpcd

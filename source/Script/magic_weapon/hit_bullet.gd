@@ -9,7 +9,6 @@ var rnd: int
 var _name
 var obj_attack_dict = {}
 var dir: bool
-var get_dir: bool
 var is_set: bool = false
 var pp
 var hit_dic = {"power": 0, "hurtBack": [0, 0], "attackKind": "real"}

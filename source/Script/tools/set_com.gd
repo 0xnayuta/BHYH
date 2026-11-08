@@ -12,6 +12,8 @@ var cur_node: CanvasItem
 var is_click: bool = false
 var _offset: Vector2 = Vector2.ZERO
 var touch_scale: float = 1.0
+var _refresh_elapsed := 0.0
+var _refresh_primed := false
 const KEY_PATH: String = "user://KeyConfig.json"
 const MOUNT_CATALOG := preload("res://Script/mount/mount_catalog.gd")
 
@@ -198,7 +200,14 @@ func init() -> void:
 	apply_global_scale(_touch_icon_scale())
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if is_click:
+		joy_left.position = get_global_mouse_position() - _offset
+	_refresh_elapsed += delta
+	if _refresh_primed and _refresh_elapsed < 0.2:
+		return
+	_refresh_primed = true
+	_refresh_elapsed = 0.0
 	if is_set and cur_node != null:
 		var node_size: Vector2 = cur_node.get("size_") if cur_node.get("size_") != null else Vector2(70, 70)
 		var size_min: float = min(node_size.x, node_size.y)
@@ -212,9 +221,6 @@ func _physics_process(_delta: float) -> void:
 
 	var skill_data = player_data.get(DataKeys.SKILL_LEARNED, {})
 	key_obj = skill_data.get("技能键位", {}) if skill_data is Dictionary else {}
-
-	if is_click:
-		joy_left.position = get_global_mouse_position() - _offset
 
 	var mount_runtime := _current_mount_runtime()
 	var use_mount_skills := (

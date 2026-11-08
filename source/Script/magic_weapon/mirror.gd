@@ -2,7 +2,6 @@ extends BaseMagicWeapon
 class_name Mirror
 var fix_target: BaseMonster
 var follow_target: BaseObject
-var blood_effect
 var init_speed: int = 5
 var speed: int = 5
 var is_begin: bool

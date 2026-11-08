@@ -1,7 +1,6 @@
 extends BaseMonster
 
 const PROJECTILE_SCRIPT := preload("res://Script/monster/wutai_minghai_projectile.gd")
-const STREAM_SCRIPT := preload("res://Script/monster/streamed_png_effect.gd")
 const BODY_STREAM_SCRIPT := preload("res://Script/monster/constellation_body_stream.gd")
 const HEAL_AURA_SCRIPT := preload("res://Script/monster/constellation_heal_aura.gd")
 const ASSET_ROOT := "res://Art/constellations/boss"
@@ -142,25 +141,6 @@ const SKILL_REGISTRATIONS := {
 		"skill2": Vector2(21.1, -93.95),
 		"skill3": Vector2(-4.05, -91.55),
 	},
-}
-
-const BODY_COUNTS := {
-	140: 8,
-	142: 8,
-	144: 8,
-	146: 8,
-	147: 7,
-	149: 9,
-	150: 8,
-	151: 7,
-	152: 8,
-	156: 7,
-	157: 6,
-	158: 8,
-	159: 8,
-	162: 7,
-	141: 4,
-	145: 6,
 }
 
 const BODY_ACTION_COUNTS := {

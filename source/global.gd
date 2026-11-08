@@ -580,7 +580,6 @@ func set_save_failure_feedback_enabled(enabled: bool) -> void:
 	_save_failure_feedback_enabled = enabled
 
 
-var _all_hero_skill_resources_preloaded: bool = false
 var _prewarmed_role_id: int = 0
 var _archive_session: ArchiveSession = ArchiveSession.new()
 var _run_context: RunContext = RunContext.new()
@@ -1210,7 +1209,6 @@ func clear_combat_runtime_cache() -> void:
 	_combat_factory.clear_scene_caches()
 	_projectile_factory.clear_scene_caches()
 	_effect_factory.clear_scene_caches()
-	_all_hero_skill_resources_preloaded = false
 	if _magic_weapon_runtime != null:
 		_magic_weapon_runtime.clear_runtime_state()
 
@@ -1611,118 +1609,6 @@ func preload_damage_number_textures() -> void:
 	for prefix in number_dirs:
 		for i in range(10):
 			get_cached_texture(prefix + str(i) + ".png")
-
-
-func preload_all_hero_skill_resources() -> void:
-	if _all_hero_skill_resources_preloaded:
-		return
-	_all_hero_skill_resources_preloaded = true
-	var scene_paths: Array[String] = [
-		"res://Scene/hero/role_bullet_1.tscn",
-		"res://Scene/hero/role1_s_hallow.tscn",
-		"res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn",
-		"res://Scene/hero/role_1/hmz_effect/special_effect_bullet_1.tscn",
-		"res://Scene/hero/role_1/ws_effect.tscn",
-		"res://Scene/hero/role_2/smb_effect.tscn",
-		"res://Scene/hero/role_4/role4_bullet.tscn",
-		"res://Scene/bullet/fly_bullet.tscn",
-		"res://Scene/bullet/chase_bullet.tscn",
-	]
-	for scene_path in scene_paths:
-		var scene := preload_scene_path(scene_path)
-		_warm_scene_instance(scene)
-	var audio_paths: Array[String] = [
-		"res://Music/hero/00_role1_gsrs.mp3",
-		"res://Music/hero/1_role1_hit9.mp3",
-		"res://Music/hero/11_role1_hit7.mp3",
-		"res://Music/hero/11_role2_hit4.mp3",
-		"res://Music/hero/17_role1_hit6.mp3",
-		"res://Music/hero/18_role1_hit14.mp3",
-		"res://Music/hero/26_role1_hit13_1.mp3",
-		"res://Music/hero/27_role1_hit13_2.mp3",
-		"res://Music/hero/32_role2_hit6.mp3",
-		"res://Music/hero/35_role1_hit10_1.mp3",
-		"res://Music/hero/36_role1_hit10_2.mp3",
-		"res://Music/hero/37_role1_hit10_4.mp3",
-		"res://Music/hero/38_role1_hit5.mp3",
-		"res://Music/hero/39_role1_hit3_and_hit4.mp3",
-		"res://Music/hero/39_role2_hit9.mp3",
-		"res://Music/hero/40_role1_hit1_and_hit2.mp3",
-		"res://Music/hero/40_role2_hit7.mp3",
-		"res://Music/hero/42_role1_hit11.mp3",
-		"res://Music/hero/44_role1_hit12_2.mp3",
-		"res://Music/hero/45_role1_hit12_1.mp3",
-		"res://Music/hero/49_role1_be_attack.mp3",
-		"res://Music/hero/51_role2_hit10.mp3",
-		"res://Music/hero/57_role2_hit8.mp3",
-		"res://Music/hero/58_role2_hit1.mp3",
-		"res://Music/hero/59_role1_dead.mp3",
-		"res://Music/hero/59_role2_hit2.mp3",
-		"res://Music/hero/60_role2_hit3.mp3",
-		"res://Music/hero/62_role2_be_attack.mp3",
-		"res://Music/hero/68_role3_be_attack.mp3",
-		"res://Music/hero/69_role3_hit3.mp3",
-		"res://Music/hero/70_role3_hit2.mp3",
-		"res://Music/hero/71_role3_hit1.mp3",
-		"res://Music/hero/72_role3_dead.mp3",
-		"res://Music/hero/75_role2_dead.mp3",
-		"res://Music/hero/8_role1_hit6.mp3",
-		"res://Music/hero/9_beattack_by_role2.mp3",
-		"res://Music/hero/effect8.mp3",
-		"res://Music/hero/role_3/10_role3_hit8.mp3",
-		"res://Music/hero/role_3/14_role3_hit7.mp3",
-		"res://Music/hero/role_3/16_role3_hit5.mp3",
-		"res://Music/hero/role_3/31_role3_hit6.mp3",
-		"res://Music/hero/role_3/38_role3_hit9.mp3",
-		"res://Music/hero/role_3/52_role3_hit12_2.mp3",
-		"res://Music/hero/role_3/53_role3_hit4.mp3",
-		"res://Music/hero/role_3/56_role3_hit10.mp3",
-		"res://Music/hero/role_3/67_role3_hit11.mp3",
-		"res://Music/hero/role_3/74_role3_hit12_1.mp3",
-		"res://Music/hero/role_3/role3_skill_11.wav",
-		"res://Music/hero/role_4/arrowdcj.mp3",
-		"res://Music/hero/role_4/arrow_hit1.mp3",
-		"res://Music/hero/role_4/arrow_hit2.mp3",
-		"res://Music/hero/role_4/arrowmmw.mp3",
-		"res://Music/hero/role_4/arrowqlj.mp3",
-		"res://Music/hero/role_4/arrowtkj.mp3",
-		"res://Music/hero/role_4/arrowzq.mp3",
-		"res://Music/hero/role_4/effect6_repeat.mp3",
-		"res://Music/hero/role_4/jdz.mp3",
-		"res://Music/hero/role_4/lhsq.mp3",
-		"res://Music/hero/role_4/mds.mp3",
-		"res://Music/hero/role_4/shoveldcj.mp3",
-		"res://Music/hero/role_4/shovel_hit1.mp3",
-		"res://Music/hero/role_4/shovel_hit2.mp3",
-		"res://Music/hero/role_4/shovel_hit3.mp3",
-		"res://Music/hero/role_4/shovelmmw.mp3",
-		"res://Music/hero/role_4/shovelqlj.mp3",
-		"res://Music/hero/role_4/shovelzq.mp3",
-		"res://Music/hero/role_4/wdww.mp3",
-		"res://Music/hero/role_5/13_hurt_stand.mp3",
-		"res://Music/hero/role_5/attack.mp3",
-		"res://Music/hero/role_5/attack_repeat.mp3",
-		"res://Music/hero/role_5/attack1.mp3",
-		"res://Music/hero/role_5/attack2.mp3",
-		"res://Music/hero/role_5/attack3.mp3",
-		"res://Music/hero/role_5/attack4.mp3",
-		"res://Music/hero/role_5/effect1_1.mp3",
-		"res://Music/hero/role_5/effect1_2.mp3",
-		"res://Music/hero/role_5/effect2.mp3",
-		"res://Music/hero/role_5/effect3.mp3",
-		"res://Music/hero/role_5/effect4.mp3",
-		"res://Music/hero/role_5/effect6.mp3",
-		"res://Music/hero/role_5/effect7_1.mp3",
-		"res://Music/hero/role_5/effect7_2.mp3",
-		"res://Music/hero/role_5/effect8_1.mp3",
-		"res://Music/hero/role_5/effect8_2.mp3",
-		"res://Music/hero/role_5/effect9_1.mp3",
-		"res://Music/hero/role_5/effect9_2.mp3",
-		"res://Music/hero/role_5/jump_attack.mp3",
-		"res://Music/hero/smsrsz_bullet_xc.MP3",
-	]
-	for audio_path in audio_paths:
-		get_cached_audio(audio_path)
 
 
 func _equipped_role_skill_names() -> Array[String]:

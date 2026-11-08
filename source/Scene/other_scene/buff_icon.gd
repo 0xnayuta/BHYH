@@ -7,7 +7,6 @@ extends TextureRect
 var buff_time: float
 var buff_info
 var buff_name: String = ""
-var father_buff: Node = null
 var total_times: int = 1
 var last_hurt: float = 0.0
 var data_list = {}

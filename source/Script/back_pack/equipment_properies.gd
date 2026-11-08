@@ -53,25 +53,6 @@ var RoleProp: BaseRoleProperties:
 @onready var bs_eq_xx: Label = $pro_wk/information/inf/BsProp/eq_xx
 @onready var bs_eq_bm: Label = $pro_wk/information/inf/BsProp/eq_bm
 
-var bs_prop = {
-	"SHp": 0,
-	"SMp": 0,
-	"power": 0,
-	"Def": 0,
-	"Mdef": 0,
-	"Crit": 0,
-	"Miss": 0,
-	"R_hp": 0,
-	"R_mp": 0,
-	"vampirism": 0,
-	"Lucky": 0,
-	"toughness": 0,
-	"htarget": 0,
-	"CritReduce": 0,
-	"ar": 0,
-	"sp": 0
-}
-
 var eq_prop = {}
 var qh_level: int
 var wx = []
@@ -84,24 +65,6 @@ var pet_item: Dictionary = {}
 var pet_sale_price: int = 0
 var pet_random_labels: Array = []
 
-const DIVINE_PROPERTY_NAMES := [
-	"SHp",
-	"SMp",
-	"power",
-	"Def",
-	"Mdef",
-	"Crit",
-	"Miss",
-	"R_hp",
-	"R_mp",
-	"vampirism",
-	"Lucky",
-	"toughness",
-	"htarget",
-	"CritReduce",
-	"ar",
-	"sp"
-]
 const PET_RANDOM_STAT_NAMES := {
 	"SHp": "生命",
 	"SMp": "魔法",

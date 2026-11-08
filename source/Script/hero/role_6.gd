@@ -4,9 +4,6 @@ class_name Role6
 const BaseMonster = preload("res://Script/base/base_monster.gd")
 const BaseHero = preload("res://Script/base/base_hero.gd")
 
-var monster_instance: BaseMonster
-var monster_instance1: BaseHero
-
 @onready var bullet: Node = $Bullet
 @onready var hit_box: CollisionShape2D = $BaseDamageBox/HitBox/HitBox
 @onready var hurt_box: CollisionShape2D = $BaseDamageBox/HurtBox/HurtBox
@@ -22,9 +19,7 @@ var monster_instance1: BaseHero
 var is_sky = false
 var is_friendly: bool = true
 var current_target: BaseMonster = null
-var monster_target_group: String = "monsters"
 var player_reference: BaseHero = null
-var force_collision_setup: bool = true
 
 var monster_blood_bar = null
 var my_blood = null
@@ -50,7 +45,6 @@ var return_check_interval: float = 2.0
 
 var move_timer: float = 0.0
 var move_direction: int = 0
-var move_duration: float = 2.0
 
 
 func wd_hurt():

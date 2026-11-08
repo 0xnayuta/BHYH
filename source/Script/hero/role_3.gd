@@ -18,7 +18,6 @@ const SKILL_INPUT_ACTIONS := [&"slz", &"lys", &"lyfb", &"hmz", &"hytj"]
 var interv: int
 var my_sd: Array[RoleSpecialEffect] = []
 var syzq = []
-var s_yzq
 @onready var tmczx: Node2D = $TMCZX
 static var _special_effect_frames: SpriteFrames = null
 var _dgq_spike_elapsed := 0.0

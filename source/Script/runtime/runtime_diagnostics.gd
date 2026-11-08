@@ -129,7 +129,6 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"pool_root_valid": bool(pool_scope.get("pool_root_valid", false)),
 			"active_damage_texts": int(pool_scope.get("active_damage_texts", 0)),
 			"active_sound_players": int(_host.get_audio_runtime().get_snapshot().get("active_sound_players", 0)),
-			"all_hero_skill_resources_preloaded": _host._all_hero_skill_resources_preloaded,
 		},
 		"ui": _host.get_ui_runtime().get_scope_snapshot(),
 	}

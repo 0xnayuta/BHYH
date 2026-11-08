@@ -12,13 +12,6 @@ var _body_action: StringName = &""
 
 var my_summoner: Role2Hero = null
 
-var is_skill_1_active: bool = false
-var is_skill_2_active: bool = false
-var is_skill_3_active: bool = false
-var is_skill_4_active: bool = false
-var is_skill_5_active: bool = false
-var is_skill_6_active: bool = false
-
 
 func _ready():
 	super._ready()

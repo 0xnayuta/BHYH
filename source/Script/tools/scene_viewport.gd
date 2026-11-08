@@ -6,8 +6,6 @@ var tcp_server: TCPServer
 var tcp_num: int = 0
 var tc_plist: Array[StreamPeerTCP] = []
 var send_time: float
-var cur_img: Image
-var global_img: Image
 
 
 func _ready() -> void:

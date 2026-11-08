@@ -8,9 +8,20 @@ var loc_num: int
 var zhen_fa_type: String
 var real_name: String
 var father
+var _refresh_elapsed := 0.0
+var _refresh_primed := false
+var _last_item_name := ""
+var _last_item_data: Dictionary = {}
 
 
 func _physics_process(delta: float) -> void:
+	if father == null:
+		return
+	_refresh_elapsed += delta
+	if _refresh_primed and _refresh_elapsed < 0.2:
+		return
+	_refresh_primed = true
+	_refresh_elapsed = 0.0
 	if father != null:
 		zhen_fa_type = father.current_zhen_fa_name
 		match zhen_fa_type:
@@ -33,9 +44,14 @@ func _physics_process(delta: float) -> void:
 			pic.text = str(PlayerData.player_data[real_name][str(loc_num)]["Name"])
 		pic.qh_level = 0
 		pic.wx = []
-		pic.eq_prop = EquipmentService.data(item_name)
+		if item_name != _last_item_name:
+			_last_item_name = item_name
+			_last_item_data = EquipmentService.data(item_name)
+		pic.eq_prop = _last_item_data
 		var cur_level = PlayerData.player_data[real_name][str(loc_num)]["Level"]
-		locandlevel.text = str(loc_num) + "号位 Lv：" + str(cur_level)
+		var level_text := str(loc_num) + "号位 Lv：" + str(cur_level)
+		if locandlevel.text != level_text:
+			locandlevel.text = level_text
 		if not not_show:
 			if father.current_num == loc_num:
 				jt.visible = true

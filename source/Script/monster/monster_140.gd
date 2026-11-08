@@ -1,10 +1,7 @@
 extends BaseMonster
-var should_fly: bool
 var sword: Monster117
 var fire_round: Monster116
 var is_call: bool
-var onset_eatblood: bool
-var remove_blood: bool
 
 
 func monster_140():

@@ -1,7 +1,5 @@
 extends BaseLevel
 
-const MONSTER_130_SCENE := preload("res://Scene/monster/monster_130.tscn")
-
 @onready var left_wall: CollisionShape2D = $wall/left_wall
 @onready var right_wall: CollisionShape2D = $wall/right_wall
 

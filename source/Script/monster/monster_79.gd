@@ -1,6 +1,5 @@
 extends BaseMonster
 var current_stage: int = 0
-var is_relif: bool
 
 
 func monster_79():
