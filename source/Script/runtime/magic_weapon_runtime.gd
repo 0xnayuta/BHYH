@@ -73,10 +73,10 @@ func get_preload_paths(weapon_name: String) -> Array[String]:
 	return paths
 
 
-func prewarm_runtime_resources(weapon_name: String) -> void:
+func prewarm_runtime_resources(weapon_name: String, phase_marks: Array = []) -> void:
 	if weapon_name != "xianyjp":
 		return
-	GuanyinSummon.preload_spine_data()
+	GuanyinSummon.preload_spine_data(phase_marks)
 
 
 func clear_runtime_state() -> void:

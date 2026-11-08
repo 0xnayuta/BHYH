@@ -450,7 +450,7 @@ func _finish_loading() -> void:
 		if equipped_magic_weapon == "bsyj":
 			await MIRROR_SCRIPT.prewarm_stream_frames()
 		else:
-			Global.prewarm_magic_weapon_runtime_resources(equipped_magic_weapon)
+			Global.prewarm_magic_weapon_runtime_resources(equipped_magic_weapon, load_phase_marks)
 		_mark_load_phase("magic weapon prewarm end")
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw

@@ -52,8 +52,8 @@ func _ready() -> void:
 	_play_spine(&"idle", true)
 
 
-static func preload_spine_data() -> bool:
-	return _get_shared_spine_data() != null
+static func preload_spine_data(phase_marks: Array = []) -> bool:
+	return _get_shared_spine_data(phase_marks) != null
 
 
 static func clear_cached_data() -> void:
@@ -61,25 +61,47 @@ static func clear_cached_data() -> void:
 	_spine_load_failed = false
 
 
-static func _get_shared_spine_data() -> Variant:
+static func _get_shared_spine_data(phase_marks: Array = []) -> Variant:
 	if _shared_spine_data != null:
 		return _shared_spine_data
 	if _spine_load_failed:
 		return null
+	phase_marks.append({"stage": "spine data begin", "msec": Time.get_ticks_msec()})
 	if not ClassDB.class_exists("SpineSkeletonDataResource"):
 		_spine_load_failed = true
 		push_error("GuanyinSummon: Spine GDExtension is not loaded")
 		return null
+	(
+		phase_marks
+		. append(
+			{
+				"stage":
+				(
+					"spine cache atlas:%s skeleton:%s"
+					% [
+						str(ResourceLoader.has_cached(SPINE_ATLAS_PATH)),
+						str(ResourceLoader.has_cached(SPINE_SKELETON_PATH))
+					]
+				),
+				"msec": Time.get_ticks_msec(),
+			}
+		)
+	)
+	phase_marks.append({"stage": "spine atlas begin", "msec": Time.get_ticks_msec()})
 	var atlas := load(SPINE_ATLAS_PATH)
+	phase_marks.append({"stage": "spine atlas end", "msec": Time.get_ticks_msec()})
 	if atlas == null:
 		_spine_load_failed = true
 		push_error("GuanyinSummon: 无法加载 Spine atlas: " + SPINE_ATLAS_PATH)
 		return null
+	phase_marks.append({"stage": "spine skeleton begin", "msec": Time.get_ticks_msec()})
 	var skeleton_file := load(SPINE_SKELETON_PATH)
+	phase_marks.append({"stage": "spine skeleton end", "msec": Time.get_ticks_msec()})
 	if skeleton_file == null:
 		_spine_load_failed = true
 		push_error("GuanyinSummon: 无法加载 Spine skeleton: " + SPINE_SKELETON_PATH)
 		return null
+	phase_marks.append({"stage": "spine build begin", "msec": Time.get_ticks_msec()})
 	var skeleton_data: Variant = ClassDB.instantiate("SpineSkeletonDataResource")
 	skeleton_data.set_atlas_res(atlas)
 	skeleton_data.set_skeleton_file_res(skeleton_file)
@@ -89,6 +111,8 @@ static func _get_shared_spine_data() -> Variant:
 		push_error("GuanyinSummon: Spine 骨骼数据解析失败")
 		return null
 	_shared_spine_data = skeleton_data
+	phase_marks.append({"stage": "spine build end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "spine data end", "msec": Time.get_ticks_msec()})
 	return _shared_spine_data
 
 

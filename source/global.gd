@@ -2539,8 +2539,8 @@ func get_magic_weapon_preload_paths(_name) -> Array[String]:
 	return _magic_weapon_runtime.get_preload_paths(str(_name))
 
 
-func prewarm_magic_weapon_runtime_resources(_name) -> void:
-	_magic_weapon_runtime.prewarm_runtime_resources(str(_name))
+func prewarm_magic_weapon_runtime_resources(_name, phase_marks: Array = []) -> void:
+	_magic_weapon_runtime.prewarm_runtime_resources(str(_name), phase_marks)
 
 
 func prepare_magic_weapon_resources(_name) -> void:
