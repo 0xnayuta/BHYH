@@ -86,6 +86,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
 | `verify_dragonbones_factories.py` | `.dbfactory` 独立子进程加载与坏资源二分定位 |
 | `asset_library_catalog.py` | 从私有素材库生成 ZMWS 资产库存与消费矩阵；`--check` 校验已提交矩阵；策略见 `asset_library_policy.json` |
+| `icon_alpha_audit.py` | Report-only 扫描 `source/Art/hero_picture/role_*/equipment.json` 引用图标，报告不透明黑色底板；默认不阻断，`--strict` 可返回非零；公开 clone 缺素材时扫描 0 项并正常退出 |
 
 ### 3.3 构建期转换
 
