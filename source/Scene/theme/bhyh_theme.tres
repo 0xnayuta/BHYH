@@ -661,7 +661,7 @@ BackpackInnerMargin/constants/margin_left = 5
 
 BackpackLockText/base_type = &"SemanticArchiveUidHash"
 BackpackLockText/colors/font_color = Color(0, 0, 0, 1)
-BackpackLockText/constants/outline_size = 1
+BackpackLockText/constants/outline_size = 0
 
 BackpackMessageLabel/base_type = &"SemanticAutoBattleSectionLabel"
 BackpackMessageLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
