@@ -71,6 +71,7 @@ class LevelTestRunner:
         performance_hud_full: bool = False,
         performance_retries: int = 1,
         render_window: bool = False,
+        measure_load: bool = False,
     ) -> None:
         self.target_level = target_level
         self.time_scale = time_scale
@@ -90,6 +91,7 @@ class LevelTestRunner:
         # 窗口模式：走真实显示/渲染路径（含 draw、GPU 提交与垂直同步），
         # 用于补齐 headless dummy 渲染器缺失的 GPU 侧证据。
         self.render_window = render_window
+        self.measure_load = measure_load
         self.repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.project_dir = project_dir or os.path.join(self.repo_root, "source")
         if not os.path.isdir(self.project_dir):
@@ -141,6 +143,7 @@ const PERFORMANCE_SAMPLE_FRAMES := {self.performance_sample_frames}
 const PERFORMANCE_WARMUP_FRAMES := {self.performance_warmup_frames}
 const PERFORMANCE_HUD_FULL := {str(self.performance_hud_full).lower()}
 const RENDER_WINDOW := {str(self.render_window).lower()}
+const MEASURE_LOAD := {str(self.measure_load).lower()}
 const PERFORMANCE_HUD_TEXT_LIMIT := 80
 const PERFORMANCE_THROTTLE_P95_MS := 8.0
 const PERFORMANCE_THROTTLE_P50_MS := 2.0
@@ -161,6 +164,7 @@ var _performance_samples: PackedFloat64Array = PackedFloat64Array()
 var _performance_hud_layer: CanvasLayer
 var _performance_hud_root: Node2D
 var _performance_hud_target: BaseHero
+var _measure_ready_usec: int = 0
 
 
 func _ready() -> void:
@@ -173,6 +177,7 @@ func _ready() -> void:
 		worker.name = "LevelSmokeWorker"
 		get_tree().root.add_child.call_deferred(worker)
 		return
+	_measure_ready_usec = Time.get_ticks_usec()
 	call_deferred("_run_all")
 
 
@@ -213,15 +218,22 @@ func _run_all() -> void:
 
 	# 2. 切入目标关卡（Global.change_scene 走异步加载屏，需等待加载器完成切换）
 	var load_started_msec := Time.get_ticks_msec()
+	var measure_change_usec := Time.get_ticks_usec()
+	var load_measure: Dictionary = {{}}
 	# 冒烟夹具不建立档案会话，显式跳过会话前置校验（仍走真实切场链路）。
 	Global.change_scene(TARGET_LEVEL, false, false)
-	var loaded_scene: Node = await _await_level_ready(report)
+	var loaded_scene: Node = await _await_level_ready(report, load_measure)
 	report["load_elapsed_seconds"] = snapped(float(Time.get_ticks_msec() - load_started_msec) / 1000.0, 0.001)
 	if loaded_scene == null:
 		await _finish(report, 1)
 		return
 	var scn: Node = loaded_scene
 	report["scene"] = String(scn.name)
+	if MEASURE_LOAD:
+		report["load"] = _build_load_report(load_measure, measure_change_usec)
+		report["ok"] = report["errors"].is_empty()
+		await _finish(report, 0 if report["ok"] else 1)
+		return
 
 	# 3. 定位主角（角色 1/6/7/8 节点名不同，按 BaseHero 类型识别）
 	var hero: Node = scn.get_node_or_null("Hero/Role1")
@@ -639,7 +651,7 @@ func _alive_stage_monsters(scn: Node) -> Array:
 	return result
 
 
-func _await_level_ready(report: Dictionary) -> Node:
+func _await_level_ready(report: Dictionary, measure: Dictionary = {{}}) -> Node:
 	## 等待加载屏（LoadScene）完成切换，且目标关卡主角节点就绪。
 	## 采用墙钟 + 帧数双重上限，headless 与实机帧率差异下都稳定。
 	var deadline_ms: int = Time.get_ticks_msec() + LOAD_TIMEOUT_MS
@@ -649,9 +661,13 @@ func _await_level_ready(report: Dictionary) -> Node:
 	while Time.get_ticks_msec() < deadline_ms and frames < LOAD_MAX_FRAMES:
 		await get_tree().process_frame
 		frames += 1
+		if MEASURE_LOAD:
+			_sample_load_measure(measure)
 		var cs: Node = get_tree().current_scene
 		if cs != null:
 			last_scene_name = String(cs.name)
+			if MEASURE_LOAD and last_scene_name != "LoadScene" and not measure.has("scene_changed_usec"):
+				measure["scene_changed_usec"] = Time.get_ticks_usec()
 		# 每 300 帧采样一次加载屏状态，便于失败时定位卡点
 		if frames % 300 == 0:
 			var ls: Node = get_tree().root.get_node_or_null("LoadScene")
@@ -672,6 +688,8 @@ func _await_level_ready(report: Dictionary) -> Node:
 		if cs.get_node_or_null("Hero") != null:
 			for _i in range(HERO_SETTLE_FRAMES):
 				await get_tree().process_frame
+			if MEASURE_LOAD:
+				measure["hero_ready_usec"] = Time.get_ticks_usec()
 			return cs
 	if not diag.is_empty():
 		report["load_diag"] = diag.slice(maxi(0, diag.size() - 8), diag.size())
@@ -679,6 +697,76 @@ func _await_level_ready(report: Dictionary) -> Node:
 		"level_load_timeout; last_scene=%s frames=%d" % [last_scene_name, frames]
 	)
 	return null
+
+
+func _sample_load_measure(measure: Dictionary) -> void:
+	var now_usec := Time.get_ticks_usec()
+	var ls: Node = get_tree().root.get_node_or_null("LoadScene")
+	if ls != null:
+		if not measure.has("load_scene_visible_usec"):
+			measure["load_scene_visible_usec"] = now_usec
+		if bool(ls.get("_load_started")) and not measure.has("preload_started_usec"):
+			measure["preload_started_usec"] = now_usec
+		var completed := int(ls.get("_completed_paths"))
+		var total := maxi(int(ls.get("_total_paths")), 1)
+		if completed >= total and not measure.has("preload_done_usec"):
+			measure["preload_done_usec"] = now_usec
+		if bool(ls.get("_finishing")) and not measure.has("finish_started_usec"):
+			measure["finish_started_usec"] = now_usec
+	measure["peak_video_mem"] = maxi(
+		int(measure.get("peak_video_mem", 0)),
+		int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+	)
+	measure["peak_object_count"] = maxi(
+		int(measure.get("peak_object_count", 0)), int(Performance.get_monitor(Performance.OBJECT_COUNT))
+	)
+	measure["peak_node_count"] = maxi(
+		int(measure.get("peak_node_count", 0)), int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
+	)
+	measure["peak_render_objects"] = maxi(
+		int(measure.get("peak_render_objects", 0)),
+		int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))
+	)
+	measure["peak_draw_calls"] = maxi(
+		int(measure.get("peak_draw_calls", 0)),
+		int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	)
+	measure["peak_primitives"] = maxi(
+		int(measure.get("peak_primitives", 0)),
+		int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
+	)
+
+
+func _usec_delta_ms(from_usec: int, to_usec: int) -> float:
+	if from_usec <= 0 or to_usec <= 0 or to_usec < from_usec:
+		return -1.0
+	return snapped(float(to_usec - from_usec) / 1000.0, 0.001)
+
+
+func _build_load_report(measure: Dictionary, change_usec: int) -> Dictionary:
+	var result: Dictionary = {{}}
+	var ready_usec := _measure_ready_usec
+	var preload_started := int(measure.get("preload_started_usec", 0))
+	var preload_done := int(measure.get("preload_done_usec", 0))
+	var scene_changed := int(measure.get("scene_changed_usec", 0))
+	result["ready_to_change_ms"] = _usec_delta_ms(ready_usec, change_usec)
+	result["load_scene_visible_ms"] = _usec_delta_ms(ready_usec, int(measure.get("load_scene_visible_usec", 0)))
+	result["preload_started_ms"] = _usec_delta_ms(ready_usec, preload_started)
+	result["preload_done_ms"] = _usec_delta_ms(ready_usec, preload_done)
+	result["finish_started_ms"] = _usec_delta_ms(ready_usec, int(measure.get("finish_started_usec", 0)))
+	result["scene_changed_ms"] = _usec_delta_ms(ready_usec, scene_changed)
+	result["hero_ready_ms"] = _usec_delta_ms(ready_usec, int(measure.get("hero_ready_usec", 0)))
+	result["total_ms"] = result["hero_ready_ms"]
+	result["preload_ms"] = _usec_delta_ms(preload_started, preload_done)
+	result["switch_ms"] = _usec_delta_ms(preload_done, scene_changed)
+	result["peak_video_mem_mb"] = snapped(float(int(measure.get("peak_video_mem", 0))) / 1048576.0, 0.01)
+	result["peak_object_count"] = int(measure.get("peak_object_count", 0))
+	result["peak_node_count"] = int(measure.get("peak_node_count", 0))
+	result["peak_render_objects"] = int(measure.get("peak_render_objects", 0))
+	result["peak_draw_calls"] = int(measure.get("peak_draw_calls", 0))
+	result["peak_primitives"] = int(measure.get("peak_primitives", 0))
+	result["render_window"] = RENDER_WINDOW
+	return result
 
 
 func _wait_frames(count: int) -> void:
@@ -967,6 +1055,34 @@ def _print_report(report: Dict[str, Any]) -> None:
                     pattern=performance.get("throttle_pattern", "unknown")
                 )
             )
+    load = report.get("load")
+    if load:
+        print(
+            "  加载: ready→change={ready}ms 加载页={visible}ms 预热={preload}ms"
+            " 完成={finish}ms 切换={switch}ms 总计={total}ms".format(
+                **{
+                    "ready": load.get("ready_to_change_ms", "n/a"),
+                    "visible": load.get("load_scene_visible_ms", "n/a"),
+                    "preload": load.get("preload_ms", "n/a"),
+                    "finish": load.get("finish_started_ms", "n/a"),
+                    "switch": load.get("switch_ms", "n/a"),
+                    "total": load.get("total_ms", "n/a"),
+                }
+            )
+        )
+        print(
+            "  峰值: VRAM={vram}MiB objects={objects} nodes={nodes}"
+            " draw_calls={calls} primitives={prims} (window={window})".format(
+                **{
+                    "vram": load.get("peak_video_mem_mb", "n/a"),
+                    "objects": load.get("peak_object_count", "n/a"),
+                    "nodes": load.get("peak_node_count", "n/a"),
+                    "calls": load.get("peak_draw_calls", "n/a"),
+                    "prims": load.get("peak_primitives", "n/a"),
+                    "window": load.get("render_window"),
+                }
+            )
+        )
     if report.get("load_diag"):
         print("  加载诊断:")
         for line in report["load_diag"]:
@@ -1023,6 +1139,11 @@ def main() -> int:
         action="store_true",
         help="窗口模式运行（--windowed --disable-vsync，不加 --headless）：走真实渲染路径采样",
     )
+    parser.add_argument(
+        "--measure-load",
+        action="store_true",
+        help="只测加载链路：输出启动→关卡可操作的分阶段耗时与峰值 VRAM/对象数，不推进阶段",
+    )
     parser.add_argument("--json", action="store_true", help="仅输出 JSON 报告（CI 友好）")
     parser.add_argument("--instance-id", default=None, help="并发实例标识（默认随机）")
     args = parser.parse_args()
@@ -1039,6 +1160,7 @@ def main() -> int:
             performance_hud_full=args.performance_hud_full,
             performance_retries=args.performance_retries,
             render_window=args.render_window,
+            measure_load=args.measure_load,
         )
         if not args.json:
             print(f"[*] 关卡极速测试夹具就绪: {args.level} (角色: {args.role}, 加速: {args.scale}x)")
