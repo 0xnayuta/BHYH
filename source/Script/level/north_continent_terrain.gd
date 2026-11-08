@@ -12,6 +12,7 @@ var _day_night_entities: Array[Dictionary] = []
 var _lights: Array[Dictionary] = []
 var _source_bodies: Array[StaticBody2D] = []
 var _trigger_targets: Dictionary = {}
+var _jit_trigger_ids: Dictionary = {}
 var _backgrounds: Dictionary = {}
 var _void_floor: StaticBody2D
 var _first_space_bodies: Array[Node] = []
@@ -76,6 +77,7 @@ func _index_source_objects() -> void:
 	_lights.clear()
 	_source_bodies.clear()
 	_trigger_targets.clear()
+	_jit_trigger_ids.clear()
 	for record: Dictionary in _source_objects:
 		var kind := str(record["type"])
 		match kind:
@@ -102,6 +104,14 @@ func _index_source_objects() -> void:
 		if not _trigger_targets.has(trigger_id):
 			_trigger_targets[trigger_id] = []
 		(_trigger_targets[trigger_id] as Array).append(record)
+	# HurtIceEntity 的 triggerID 由 JIT 区段激活；无 triggerID 的 HurtEntity 是静态陷阱。
+	for record: Dictionary in _jit_triggers:
+		var trigger_key := str((record["properties"] as Dictionary).get("trigger", ""))
+		if not trigger_key.is_empty():
+			_jit_trigger_ids[trigger_key] = true
+	for record: Dictionary in _hurt_zones:
+		var hurt_trigger := str((record["properties"] as Dictionary).get("triggerID", ""))
+		record["jit_guarded"] = not hurt_trigger.is_empty() and _jit_trigger_ids.has(hurt_trigger)
 
 
 func _physics_process(delta: float) -> void:
@@ -158,6 +168,8 @@ func _physics_process(delta: float) -> void:
 				target["active"] = true
 				target["start_at"] = _clock
 		for record: Dictionary in _hurt_zones:
+			if record["jit_guarded"] and not record["active"]:
+				continue
 			if _clock - float(record["last_hit"]) > 0.5 and (record["rect"] as Rect2).intersects(rect):
 				record["last_hit"] = _clock
 				_damage_role(role, roundi(float(record["properties"].get("atk", "1200")) * 0.5), "magic")

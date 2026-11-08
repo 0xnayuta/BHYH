@@ -397,6 +397,17 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=600,
         timeout_seconds=90,
     ),
+    ProbeSpec(
+        key="north-hurt-ice",
+        title="北俱芦洲冰刺守卫探针",
+        script_name="north_hurt_ice_probe.gd",
+        scene_name="north_hurt_ice_probe.tscn",
+        result_prefix="NORTH_HURT_ICE_PROBE_RESULT=",
+        report_stem="north_hurt_ice_probe_report",
+        teardown_marker="NORTH_HURT_ICE_PROBE_TEARDOWN",
+        quit_after_frames=900,
+        timeout_seconds=120,
+    ),
 )
 
 

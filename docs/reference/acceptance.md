@@ -303,13 +303,14 @@ python scripts/scene_probe_runner.py --godot "<godot>" --probe magic-weapons
 | 项目 | 规则 |
 |:---|:---|
 | 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
-| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`、`atlas_accessor_probe`、`pet_runtime_probe`、`north_daynight_probe` 等；运行期复制到 `source/`，结束后清理 |
+| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`、`atlas_accessor_probe`、`pet_runtime_probe`、`north_daynight_probe`、`north_hurt_ice_probe` 等；运行期复制到 `source/`，结束后清理 |
 | L2 固定子项 | `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 全部执行，不提供 `SKIP`；单次耗时写入报告 |
 | 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
 | 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存、租约目标与背景可见性 |
 | 租约覆盖 | 目标/ID/路径/怪物/弹体/纹理分类；只释放本租约路径；未登记共享缓存保留；旧租约 ID 不能释放新租约；重战清理与 `end_archive_session` 退出清理不误删共享缓存 |
 | 加载守卫覆盖 | 预载单槽缺失/显式清理；重复切换只提交最新目标；超时置失败态并保留加载页；失败/取消不进入目标场景 |
 | 北俱芦洲昼夜覆盖 | 82 关 3 段 `JITrigger` 区段激活 `triggerID=110/112/113` 的 `DayNightEntity`；触发后 15 秒内保持白色、超过 15 秒 `_darkness` 压暗；一次性触发不重置昼夜起点 |
+| 北俱芦洲冰刺覆盖 | 76 关 13 个 `HurtIceEntity` 由 13 个 `JITrigger` 一一激活：未触发时不伤害，触发后按 0.5 秒冷却重复伤害；79 关无 `triggerID` 的 `HurtEntity` 为静态陷阱，始终伤害 |
 | 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
 | 小龙女覆盖 | `longnv-core` 验证 20 技能入口、角色卡/技能页/自动战斗/外观/2P 关卡；`longnv-71` 验证 7.1 技能数据、觉醒冷却、冲刺无敌、分刃、暂停层与技能透明度；`longnv-mechanism` 验证七星洞升墙、入口门、尾妖林灯、北俱芦洲龙珠与白骨/玲珑宝塔 |
 | 7.1 菜单/UI 覆盖 | `menu-ui-71` 验证 GameSet 技能透明度、公告 V7.1、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌 |
