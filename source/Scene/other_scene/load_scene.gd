@@ -459,7 +459,7 @@ func _finish_loading() -> void:
 		await get_tree().process_frame
 	if is_battle_target:
 		_mark_load_phase("combat hit prewarm begin")
-		await Global.preload_combat_hit_resources()
+		await Global.preload_combat_hit_resources(load_phase_marks)
 		_mark_load_phase("combat hit prewarm end")
 		if not _is_request_current():
 			return

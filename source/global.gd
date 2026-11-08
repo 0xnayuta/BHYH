@@ -965,11 +965,15 @@ func _warm_texture_rids_over_frames(paths: Array, per_frame: int = 6, generation
 	await _resource_runtime.warm_texture_rids_over_frames(paths, per_frame, generation)
 
 
-func preload_combat_hit_resources() -> void:
+func preload_combat_hit_resources(phase_marks: Array = []) -> void:
 	var request_generation := _runtime_generation
 	if not is_runtime_generation_current(request_generation):
 		return
+	phase_marks.append({"stage": "hit resources begin", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "hit damage textures begin", "msec": Time.get_ticks_msec()})
 	preload_damage_number_textures()
+	phase_marks.append({"stage": "hit damage textures end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "hit scenes begin", "msec": Time.get_ticks_msec()})
 	load_cached_scene(HIT_TEXT_PATH)
 	var damage_scene := _cached_scene(&"damage_text", DAMAGE_TEXT_PATH)
 	load_cached_scene(DAMAGE_NUMBER_PATH)
@@ -978,29 +982,38 @@ func preload_combat_hit_resources() -> void:
 	var monster_hit_scene := _cached_scene(&"monster_be_hit", MONSTER_BE_HIT_PATH)
 	var monster_blood_scene := load_cached_scene(MONSTER_BLOOD_PATH)
 	var sound_scene := preload_scene_path("res://Scene/all_sound/monster_be_hit.tscn")
+	phase_marks.append({"stage": "hit scenes end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "hit audio begin", "msec": Time.get_ticks_msec()})
 	get_cached_audio("res://Music/monster_hurt/6_beattack_by_role1.mp3")
 	get_cached_audio("res://Music/hero/9_beattack_by_role2.mp3")
 	get_cached_audio("res://Music/hero/49_role1_be_attack.mp3")
 	get_cached_audio("res://Music/hero/62_role2_be_attack.mp3")
 	get_cached_audio("res://Music/hero/68_role3_be_attack.mp3")
+	phase_marks.append({"stage": "hit audio end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "hit pool seed begin", "msec": Time.get_ticks_msec()})
 	_seed_runtime_pool("damage_text", damage_scene, COMBAT_HIT_DAMAGE_POOL_SIZE)
 	_seed_runtime_pool("mr_hurt", monster_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("role_be_hit", role_be_hit_scene, COMBAT_HIT_EFFECT_POOL_SIZE)
 	_seed_runtime_pool("sound_player", sound_scene, COMBAT_HIT_SOUND_POOL_SIZE)
-	await _prewarm_combat_hit_rendering(monster_blood_scene, request_generation)
+	phase_marks.append({"stage": "hit pool seed end", "msec": Time.get_ticks_msec()})
+	await _prewarm_combat_hit_rendering(monster_blood_scene, request_generation, phase_marks)
+	phase_marks.append({"stage": "hit resources end", "msec": Time.get_ticks_msec()})
 
 
 func _seed_runtime_pool(pool_name: String, scene: PackedScene, target_size: int) -> void:
 	_combat_pool.seed_pool(pool_name, scene, target_size)
 
 
-func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation: int = -1) -> void:
+func _prewarm_combat_hit_rendering(
+	monster_blood_scene: PackedScene, generation: int = -1, phase_marks: Array = []
+) -> void:
 	var request_generation := _runtime_generation if generation < 0 else generation
 	if not is_runtime_generation_current(request_generation):
 		return
 	var tree := get_tree()
 	if tree == null:
 		return
+	phase_marks.append({"stage": "hit render setup begin", "msec": Time.get_ticks_msec()})
 	var warm_root := Node2D.new()
 	warm_root.name = "CombatHitPrewarm"
 	warm_root.z_index = -4096
@@ -1075,14 +1088,18 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 		sound_player.play()
 		sound_players.append(sound_player)
 
+	phase_marks.append({"stage": "hit render setup end", "msec": Time.get_ticks_msec()})
+	phase_marks.append({"stage": "hit render frame wait begin", "msec": Time.get_ticks_msec()})
 	await tree.process_frame
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
+	phase_marks.append({"stage": "hit render frame wait end", "msec": Time.get_ticks_msec()})
 	if not is_runtime_generation_current(request_generation):
 		if is_instance_valid(warm_root):
 			warm_root.queue_free()
 		return
 
+	phase_marks.append({"stage": "hit render recycle begin", "msec": Time.get_ticks_msec()})
 	if role_hit != null and is_instance_valid(role_hit):
 		role_hit.modulate = Color.WHITE
 		role_hit.recycle()
@@ -1103,6 +1120,7 @@ func _prewarm_combat_hit_rendering(monster_blood_scene: PackedScene, generation:
 			_audio_runtime.recycle_sound_player(sound_player)
 	if is_instance_valid(warm_root):
 		warm_root.free()
+	phase_marks.append({"stage": "hit render recycle end", "msec": Time.get_ticks_msec()})
 
 
 func _warm_scene_instance(scene: PackedScene) -> void:
