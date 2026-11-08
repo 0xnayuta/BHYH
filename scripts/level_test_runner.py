@@ -730,6 +730,9 @@ func _sample_load_measure(measure: Dictionary) -> void:
 		var marks: Variant = ls.get("load_phase_marks")
 		if marks is Array and not (marks as Array).is_empty():
 			measure["phase_marks"] = (marks as Array).duplicate(true)
+		var frame_times: Array = measure.get("load_frame_times", [])
+		frame_times.append(float(Performance.get_monitor(Performance.TIME_PROCESS)))
+		measure["load_frame_times"] = frame_times
 	measure["peak_video_mem"] = maxi(
 		int(measure.get("peak_video_mem", 0)),
 		int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
@@ -803,6 +806,22 @@ func _build_load_report(measure: Dictionary, change_usec: int) -> Dictionary:
 		previous_msec = msec
 	result["phase_marks"] = phase_marks
 	result["phase_deltas"] = phase_deltas
+	var frame_times_value: Variant = measure.get("load_frame_times", [])
+	var frame_times: Array = frame_times_value if frame_times_value is Array else []
+	var frame_stats: Dictionary = {{}}
+	if not frame_times.is_empty():
+		var sorted_frames := frame_times.duplicate()
+		sorted_frames.sort()
+		var frame_count := sorted_frames.size()
+		var p95_index := clampi(int(ceil(float(frame_count) * 0.95)) - 1, 0, frame_count - 1)
+		var total_frame_ms := 0.0
+		for frame_value in sorted_frames:
+			total_frame_ms += float(frame_value) * 1000.0
+		frame_stats["count"] = frame_count
+		frame_stats["mean_ms"] = snapped(total_frame_ms / float(frame_count), 0.001)
+		frame_stats["p95_ms"] = snapped(float(sorted_frames[p95_index]) * 1000.0, 0.001)
+		frame_stats["max_ms"] = snapped(float(sorted_frames[frame_count - 1]) * 1000.0, 0.001)
+	result["load_frame_stats"] = frame_stats
 	result["render_window"] = RENDER_WINDOW
 	return result
 
