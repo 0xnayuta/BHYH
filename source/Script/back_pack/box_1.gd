@@ -60,6 +60,7 @@ func _get_strength_max_level(item_name: String) -> int:
 
 
 func _ready() -> void:
+	set_process(false)
 	is_in_ldl = Global.get_ui_runtime().is_ldl_mode_active()
 
 	if strength_source == "宠物背包":
@@ -74,6 +75,18 @@ func _ready() -> void:
 		get_item_name = icon_name if icon_name != "" else "empty"
 	else:
 		get_item_name = "empty"
+
+
+func _process(_delta: float) -> void:
+	if add_equ_box == null or not is_instance_valid(add_equ_box):
+		add_equ_box = null
+		set_process(false)
+		return
+	var popup_parent: Node = add_equ_box.get_parent()
+	if popup_parent == null:
+		popup_parent = _get_window_parent()
+	gl_po = Global.popup_position_for_parent(popup_parent, Vector2(25, 20))
+	add_equ_box.position = gl_po
 
 
 func _physics_process(delta: float) -> void:
@@ -96,13 +109,6 @@ func _physics_process(delta: float) -> void:
 		get_item_name = icon_name if icon_name != "" else "empty"
 	else:
 		get_item_name = "empty"
-
-	if add_equ_box != null:
-		var popup_parent = add_equ_box.get_parent()
-		if popup_parent == null:
-			popup_parent = _get_window_parent()
-		gl_po = Global.popup_position_for_parent(popup_parent, Vector2(25, 20))
-		add_equ_box.position = gl_po
 
 	is_in_ldl = Global.get_ui_runtime().is_ldl_mode_active()
 
@@ -596,8 +602,7 @@ func _on_pressed() -> void:
 		return
 	if is_in_hh or is_in_shop or is_in_hhgz:
 		return
-	if add_equ_box != null:
-		add_equ_box.queue_free()
+	_close_equ_box()
 	if get_item_name != "empty" and sell_box == null:
 		if Global.get_ui_runtime().is_ldl_mode_active() == false:
 			on_press_when_in_back()
@@ -633,11 +638,19 @@ func _on_mouse_entered() -> void:
 				add_equ_box.call("setup_pet_equipment", eq_prop)
 			add_equ_box.is_in_ldl_gz = is_in_ldl_gz
 			add_equ_box.is_in_shop = is_in_shop
+			set_process(true)
 
 
 func _on_mouse_exited() -> void:
+	_close_equ_box()
+
+
+func _close_equ_box() -> void:
 	if add_equ_box != null:
-		add_equ_box.queue_free()
+		if is_instance_valid(add_equ_box):
+			add_equ_box.queue_free()
+		add_equ_box = null
+	set_process(false)
 
 
 func get_number():
