@@ -81,7 +81,7 @@ func _index_source_objects() -> void:
 		match kind:
 			"DragonItemEntity":
 				_dragon_items.append(record)
-			"JITTrigger":
+			"JITrigger":
 				_jit_triggers.append(record)
 			"StagePortTrigger":
 				_stage_port_triggers.append(record)

@@ -48,6 +48,7 @@
 | 7.2 觉醒运行时探针 | **PASS**（`scene_probe_runner --probe awaken-72`，10.41s；重斩三道地裂、玄冰阵五段冰刺与冰域、哪吒双火轮、月魔舞三月影、觉醒弹窗/技能面板/一阶觉醒石） |
 | 7.2 其余脚本探针 | **PASS**（`scene_probe_runner --probe menu-ui-72`，8.82s；年兽预载、V7.2 公告、喜鹊叠加/上限、幻化翅膀/头衔、小龙女昵称） |
 | `level_regression_all` | **128/128 PASS + 5 SKIP**（L3 全量，`--jobs 12`，331.9s） |
+| 北俱芦洲昼夜机关 | **PASS**（`scene_probe_runner --probe north-daynight`）：82 关 3 段 JIT 区段激活对应 `DayNightEntity`，触发后 15 秒内白色、超过 15 秒压暗，一次性触发不重置起点 |
 | `coop_probe_runner` | **38/38 PASS**（37-6 复跑，含 2P 相机/HUD/推图/年兽） |
 | `level_1` 冒烟 | **PASS，4 阶段，0/0/0，26.45s；`--role 8` 主角为 Role_8** |
 | 帧耗时采样（可选） | `level_test_runner.py` 的 `--performance-sample-frames` / `--performance-warmup-frames` / `--performance-hud-full` 可用；输出 `Performance.TIME_PROCESS` 的 mean/p95，数值只作本地前后对照，不纳入契约 |

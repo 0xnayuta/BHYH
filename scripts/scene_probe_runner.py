@@ -386,6 +386,17 @@ PROBES: tuple[ProbeSpec, ...] = (
             "WARNING: 1 ObjectDB instance was leaked at exit",
         ),
     ),
+    ProbeSpec(
+        key="north-daynight",
+        title="北俱芦洲 82 关昼夜机关探针",
+        script_name="north_daynight_probe.gd",
+        scene_name="north_daynight_probe.tscn",
+        result_prefix="NORTH_DAYNIGHT_PROBE_RESULT=",
+        report_stem="north_daynight_probe_report",
+        teardown_marker="NORTH_DAYNIGHT_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=90,
+    ),
 )
 
 

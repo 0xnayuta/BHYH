@@ -828,7 +828,7 @@ def _print_report(report: Dict[str, Any]) -> None:
         print(
             "  帧耗时: TIME_PROCESS mean={mean}ms p95={p95}ms，样本={count}/{requested}，"
             "预热={warmup}帧，关卡阶段={stage_start}->{stage_end}，怪物={monsters_start}->{monsters_end}".format(
-                {
+                **{
                     "mean": performance.get("mean_ms", "n/a"),
                     "p95": performance.get("p95_ms", "n/a"),
                     "count": performance.get("sample_count", 0),
