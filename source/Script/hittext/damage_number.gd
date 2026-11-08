@@ -26,13 +26,9 @@ func changepic(Type_: String, num: int, _crit: bool):
 			)
 		)
 		return
-	if Type_ == "CureMp":
+	if Type_ == "CureMp" or Type_ == "ReduceMp":
+		# ReduceMp 与 CureMp 的素材内容一致，复用同一组引用。
 		self.set_texture(Global.get_cached_texture("res://Art/all_number/cure_mp/cure_mp_" + str(int(num)) + ".png"))
-		return
-	if Type_ == "ReduceMp":
-		self.set_texture(
-			Global.get_cached_texture("res://Art/all_number/reduce_mp/reduce_mp_" + str(int(num)) + ".png")
-		)
 		return
 
 	if is_target_valid:
@@ -51,7 +47,8 @@ func changepic(Type_: String, num: int, _crit: bool):
 				)
 		elif target is BaseMonster or target is SummonBaseMonster:
 			if is_crit:
-				var tt = Type_ + "crit"
+				# realcrit 与 real 内容一致，真实伤害暴击复用 real 组。
+				var tt := "real" if Type_ == "real" else Type_ + "crit"
 				self.set_texture(
 					Global.get_cached_texture(
 						"res://Art/all_number/" + str(tt) + "/" + str(type) + "_" + str(int(num)) + ".png"
@@ -72,7 +69,8 @@ func changepic(Type_: String, num: int, _crit: bool):
 					)
 	else:
 		if is_crit:
-			var tt = Type_ + "crit"
+			# realcrit 与 real 内容一致，真实伤害暴击复用 real 组。
+			var tt := "real" if Type_ == "real" else Type_ + "crit"
 			self.set_texture(
 				Global.get_cached_texture(
 					"res://Art/all_number/" + str(tt) + "/" + str(Type_) + "_" + str(int(num)) + ".png"
