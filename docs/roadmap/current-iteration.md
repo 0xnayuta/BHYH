@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；**Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1、39-2 已完成）**；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
-> **版本**：7.4 内容基线；Phase 28 架构治理与 Phase 29 脚本落位已完成并归档；Phase 39 目录收敛进行中，39-0、39-1、39-2 已完成。PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；**Phase 39 Scene/Script 目录收敛已完成并归档**；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
+> **版本**：7.4 内容基线；Phase 28、29、39 已完成并归档。PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -24,7 +24,7 @@
 | Phase 38 7.4 内容回植 | 完成并归档 | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md) |
 | Phase 28 全局通信与派生属性契约 | 完成并归档 | [`iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md) |
 | Phase 29 `Scene/` 脚本落位 | 完成并归档 | [`iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md) |
-| Phase 39 Scene/Script 目录收敛 | 进行中（39-0、39-1、39-2 已完成；39-3、39-4 未启动） | 本页 §1.3 |
+| Phase 39 Scene/Script 目录收敛 | 完成并归档 | [`iteration_39_scene_script_layout.md`](../archive/iteration_39_scene_script_layout.md) |
 | Phase 26 平台与发布验证 | 长期暂缓 | 见 §2 |
 
 阶段产物与当前契约：
@@ -42,63 +42,12 @@
 4. 失败显式：缺资源、无来源、保存失败、加载失败、过期回调必须报告给拥有者；不默认 1P、不猜旧路径、不静默成功。
 5. 回滚通过版本控制，不保留永久双实现、兼容 facade 或双写路径。
 
-### 1.3 Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1、39-2 已完成）
+### 1.3 Phase 39 Scene/Script 目录收敛（完成并归档）
 
-> **批次状态**：39-0、39-1 已完成（2026-11-09），39-2 已完成（2026-11-10）；39-3、39-4 未启动。
-
-- **目标**：在 Phase 29 脚本落位完成后，收敛 `Scene/` 根级场景与混合场景目录：`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 清零；拆分 `Scene/other_scene`；合并文本、怪物血条/受击、魂卡特效场景；启用根级落位门禁。不改变玩法、数值、存档或输入行为。
-- **入口**：39-0、39-1、39-2 已完成；`Scene/other_scene/`、`Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 均已清空并删除。39-3 只评估 `Scene/level/zmws/`、`Script/monster` 数据形态与 `Shader/` 零引用项，不搬 1727 个导入参考场景。
-- **非目标**：不改玩法、数值、掉落、时序、存档格式或输入映射；不搬 `Scene/level/zmws` 的 1727 个导入参考场景；不批量拆 `Scene/level`、`Scene/monster`、`Script/monster`；不处理 `global.gd` 与 `addons/`；不执行 PCK/release、最低配置或其他平台验证。
-
-#### 39-0 根级清零与门禁（已完成）
-
-- `Scene/set_menu.tscn`、`Scene/auto_battle_config.tscn` → `Scene/level/`；两者是游戏内暂停/自动战斗配置 UI。
-- `Script/main_menu/set_menu.gd` → `Script/level/set_menu.gd`；与 `set_menu.tscn` 同步，主菜单设置仍保留 `Script/main_menu/game_set.gd`。
-- `Script/backpack.gd` → `Script/level/role_information_hud.gd`（推荐；最小方案可保留文件名 `backpack.gd`）；它是 `Scene/level/role_information.tscn` 的 HUD 窗口编排器，不是背包数据界面；同步 `contract_scan.py` 的 `HUD_PANEL_FILES` 条目。
-- `Script/monster_86.gd` → `Script/monster/monster_86.gd`；仅 `Scene/monster/monster_86.tscn` 引用，无同名冲突。
-- 扩展 `naming_audit.py`：`Scene/*.tscn` 与 `Script/*.gd` 直接子文件报 `ERROR`；保留 `Scene/**/*.gd` 规则。
-- **结果**：4 个根级文件已迁移；`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 为 0；`naming_audit.py` 已启用根级拦截；`contract_scan.py` 已同步 `Script/level/role_information_hud.gd`；`Scene` 探针路径已同步。
-- **验证结果**：`check_all --skip-engine` 全维度 PASS；`health_check` 823 脚本 0 Parse Error / 0 Warning；`scene_probe_runner` 31/31 PASS；`archive_probe_runner` 344/344 PASS；`level_1` PASS；`docs_audit` 969 链接 / 0 缺失；根级负向探针 2/2 被拦截并清理。
-
-#### 39-1 `Scene/other_scene/` 拆分（44，已完成）
-
-| 目标 | 数量 | 文件 |
-|:---|:---:|:---|
-| `Scene/main_menu/` | 10 | `choose_music`、`lhhj`、`lhhj_button`、`lhhj_help`、`lsh`、`lxdy`、`return_back_map`、`role_button`、`twenty_eight_constellations`、`twenty_eight_constellations_button` |
-| `Scene/other_menu/`（新建） | 11 | `a_letter_for_all_players`、`c_hange_clothes_jm`、`change_back_ground`、`game_need_know`、`hc_help`、`help_things`、`list_button`、`reward_box_2`、`reward_interface`、`transmogrified`、`transmogtified_box` |
-| `Scene/skill/` | 8 | `skill_icon`、`zhen_fa_help`、`zhen_fa_tu_po`、`zhen_fa_ui`、`zhen_yan_cure_level`、`zhenfainfo`、`zhenfalxbutton`、`zhenyanbutton` |
-| `Scene/level/` | 4 | `after_level_end`、`level_info`、`ping_jia`、`star` |
-| `Scene/monster/` | 7 | `auras`、`basic_monment_info`、`buff_icon`、`buff_information`、`monster_head`、`monster_head_info`、`nmw_aura` |
-| `Scene/runtime/`（新建） | 3 | `load_scene`、`startup_loading`、`userload` |
-| `Scene/archive_interface/` | 1 | `bacis_ar_button` |
-
-- 使用 `rename_path.py` 批次迁移；每批后运行 `scene_probe_runner`、`level_1`、`archive_probe_runner` 与 `docs_audit`；`Scene/other_scene` 清空后删除。
-- **结果**：44 个场景按 10/11/8/4/7/3/1 完成迁移；`Scene/other_scene` 已删除；新增 `Scene/other_menu/` 与 `Scene/runtime/`；根级 `project.godot` 主场景已同步 `res://Scene/runtime/startup_loading.tscn`。
-- **验证结果**：7 批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失。
-
-#### 39-2 文本、怪物与特效场景合并（已完成）
-
-- `Scene/show_text/choose_scene.tscn` → `Scene/runtime/`；其余 7 个 `show_text` 场景 → `Scene/hittext/`。
-- `Scene/monster_blood/` 2 个场景 + `Scene/monster_damage/` 1 个场景 → `Scene/monster/`。
-- `Scene/special_effect/elite_soul_card/` 18 个场景 → `Scene/hero/elite_soul_card/`；消费方为 `Script/hero/soul_card_boss_visual.gd`。
-- `Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 清空后删除。
-- **结果**：29 个场景完成合并；`choose_scene.tscn` 归 `Scene/runtime/`，其余 7 个文本场景归 `Scene/hittext/`，3 个怪物血条/受击场景归 `Scene/monster/`，18 个魂卡特效场景归 `Scene/hero/elite_soul_card/`；四个旧目录已删除。
-- **验证结果**：三批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失、`naming_compliance_audit` 与 `whitelist_audit` 通过。
-
-#### 39-3 大型目录与 Shader 评估
-
-- `Scene/level/zmws/` 1727 个 `.tscn` 是 ZMWS 导入参考域（`imported_unbound`，预览非玩法完成）；不按普通业务场景搬迁。若编辑/搜索成本不可接受，先评估按 `rogue`/`zhaoyaomountain`/`no_`/`activity` 等分类建子目录及构建期转换器路径假设；否则保持现状并登记边界。
-- `Script/monster/` 260 个脚本中大量为固定数值块；目录不是首要问题。新怪物优先用 Resource/数据表承载，旧脚本保持基线，不做批量脚本搬迁。
-- `Shader/` 10 个 `.gdshader` 中 `base_hero.gdshader`、`equipment_properies.gdshader` 源码零引用；确认无动态加载后删除或登记为未使用参考；不为 10 个文件做分组迁移，新增 shader 按域建子目录。
-
-#### 39-4 验收与文档
-
-- `Scene/` 根级 `.tscn` 为 0；`Script/` 根级 `.gd` 为 0；`Scene/other_scene`、`show_text`、`monster_blood`、`monster_damage`、`special_effect` 为空并删除；`Scene/` 顶层目录收敛为 22 个。
-- `naming_audit.py` 覆盖 `Scene/*.tscn`、`Scene/**/*.gd`、`Script/*.gd`；`naming_audit --all`、`naming_compliance_audit --fail-on-error`、`whitelist_audit --fail-on-error` 通过。
-- `check_all`、`health_check`、`scene_probe_runner`、`archive_probe_runner`、`level_1`、`docs_audit` 通过；不新增兼容 facade、旧路径重定向或永久双实现。
-- 更新 `architecture.md`、`status.md`、`roadmap.md` 与归档索引；Phase 39 完成后再归档本页阶段内容。
-
-**出口**：根级清零、混合场景目录清零、根级门禁启用、场景/脚本域对照稳定；玩法行为与存档格式不变；所有验证证据可复核。
+- **39-0~39-4 完成**：`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 清零；`Scene/other_scene` 44 个场景拆分；`show_text`、`monster_blood`/`monster_damage`、`special_effect` 共 29 个场景合并；`Scene/` 顶层目录为 22 个；`project.godot` 主场景为 `res://Scene/runtime/startup_loading.tscn`。
+- **39-3 决策**：`Scene/level/zmws` 的 1727 个场景保持平铺；`Script/monster` 的 261 个脚本保持现状；10 个 shader 保留，`base_hero.gdshader` / `equipment_properies.gdshader` 不删除，角色描边暂缓。品质颜色表、装备图标边框与角色描边试验登记在 [`roadmap.md`](roadmap.md) §4.3。
+- **39-4 验收**：根级清零、旧目录删除、`naming_audit` 根级门禁启用；`check_all --skip-engine`、`health_check`（823 脚本 0/0/0）、`scene_probe_runner` 31/31、`archive_probe_runner` 344/344、`level_1` 均通过；`docs_audit` 969 链接 / 0 缺失。
+- 详细批次、路径结果、保留决策与验证证据见 [`../archive/iteration_39_scene_script_layout.md`](../archive/iteration_39_scene_script_layout.md)。
 
 ## 2. Phase 26：平台与发布验证（长期暂缓）
 
@@ -152,7 +101,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 35–38、28、29 已完成并归档；Phase 39 已启动，39-0、39-1、39-2 已完成。下一轮执行 39-3 评估，再完成 39-4 验收与文档；PCK/release、最低配置与其他平台验证按用户决策另行执行。恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 35–38、28、29、39 已完成并归档；当前无活跃代码批次。`roadmap.md` §4.3 的品质颜色表、装备图标边框与角色描边仅为待确认创意，未启动；PCK/release、最低配置与其他平台验证按用户决策另行执行。恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

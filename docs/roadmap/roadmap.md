@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.4 内容基线；Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1、39-2 已完成）**。
+> **当前版本**：7.4 内容基线；Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29、39 已完成并归档；Phase 26 与 7.3/7.4 PCK/release 长期暂缓。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -45,7 +45,7 @@
 | Phase 38 7.4 内容回植 | **完成（38-0~38-6；L3 通过；归档）** | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；PCK/release 暂缓 |
 | Phase 28 全局通信与派生属性契约 | **完成（28-1、28-2、28-3；归档）** | [`iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md)；移除 `Signals`、玩家与宠物被动契约 |
 | Phase 29 `Scene/` 脚本落位 | **完成（29-0~29-4；归档）** | [`iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；56 个场景脚本归 `Script/<domain>/`；`Scene/**/*.gd` 门禁 |
-| Phase 39 Scene/Script 目录收敛 | **进行中（39-0、39-1、39-2 已完成；39-3、39-4 未启动）** | [`current-iteration.md`](current-iteration.md) §1.3；根级清零、`other_scene` 拆分与场景合并已完成，大型目录评估待推进 |
+| Phase 39 Scene/Script 目录收敛 | **完成（39-0~39-4；归档）** | [`iteration_39_scene_script_layout.md`](../archive/iteration_39_scene_script_layout.md)；根级清零、场景合并、`zmws`/monster/shader 保留决策与验收 |
 
 **编号边界**：Phase 22~29 为本轮新增候选；Phase 30 已被使用，Phase 39 为本轮新登记候选；不重开已归档的 Phase 31~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
@@ -119,6 +119,47 @@ Phase 36 已完成 7.2 内容回植与 L3 收口：年兽宠物、首批觉醒�
 Phase 37 已完成 7.3 内容回植与 37-6 缺口修复：二进制/SGXZ、参考源码/场景、数据资产、角色/技能、系统/UI、2P、语义缺口与 L3 均已收口；PCK/release 与最低配置/其他平台验证继续暂缓。
 
 Phase 38 已立项 7.4 内容回植，38-0 已完成：7.4 目录与全部 **40,571** 个文件块 MD5/大小通过，参考树 **791/791** `.gdc` 与 **1,175/1,175** `.scn` 转换成功；7.3→7.4 新增 **296**、删除 **0**、语义生产变化为脚本 **34**、场景 **25**、数据 **1**、资产 **183**、资源 **16**、重映射 **56**。38-1 已完成数据与资产接入：**91** 个源 PNG、**16** 个 `AtlasTexture` `.tres` 与 boot splash（像素一致；38-6d 接入项目设置）已接入，未复制 `.ctex`/`.import`/`.res`/`.remap`；4 个 SVG 按钮按 PNG 接入；Atlas **4,015**、FrameSequence **288**、怪物帧 **152**、装备 **1,127**、关卡预载 **101**、原始数据清单 **1,033** 全部通过。38-2 已完成角色与技能脚本：SoulCardData/Runtime/Effect/BossVisual、EliteAttack/BossMechanics/BossStats/Level_Elite、SoulCardPanelBase、18 个魂卡特效场景与 31 个既有特效纹理已接入；BaseHero/BaseMonster/BaseRoleProperies、Monster 77/78/139 与 Level 22 技能限制已收口；`check_all` **9/9**、health **816 脚本 0/0/0**、`level_1` 与 `--role 6/7/8` **4 阶段 0/0/0**、`level_elite` 通用冒烟 **PASS**、变更影响关卡回归 **129/129 + 5 SKIP**（含 `level_elite`）。38-3 已完成系统/菜单/UI 与公告：SoulCardPage/LoadoutPage/RolePreview/SelectionGlow/FoilPreview、EliteChallengePage、Map_0 四 PNG 入口、GameAnnouncement V7.4、set_menu/defeat 精英返回、load_scene 启动进度、startup_loading 主场景；未新增 AndroidIntegrity Autoload，未启用传感器；`check_all` **9/9**、health **823 脚本 0/0/0**、`level_1`/`level_elite` 冒烟 **0/0/0**、变更影响回归 **129/129 + 5 SKIP**（回退全量 356.4s），UI 页面/入口/公告探针通过。38-4 已完成 2P 与剩余脚本闭合：`coop_probe_runner` **38/38 PASS**（298.29s），覆盖相机/HUD/Buff/灵气/被动/技能键/面板操作者/槽位/全灭死亡/快照互斥；魂卡运行时与属性走槽位入口，新 UI 页面提供 `LocalCoop.data_for(self)` 操作者，剩余脚本差异按台账闭合。38-5 L3 已完成；38-6 缺口修复完成：`check_all` **9/9**、health **823 0/0/0**、全量回归 **129/129 + 5 SKIP**（339.7s）、场景探针 **31/31**（340.68s）、双人 **38/38**、档案 **344 检查 PASS**、命名/白名单 100%；PCK/release 与最低配置/其他平台验证仍暂缓。
+
+### 4.3 UI 表现候选（未启动）
+
+以下为待确认创意，不进入当前活动批次，也不改变现有运行时行为。
+
+#### 4.3.1 统一品质颜色表
+
+- **目标**：将 11 档品质与颜色的映射收敛为单一事实源，避免 `equipment_properies.gd`、图鉴排序、出售筛选等位置各维护一份副本。
+- **范围**：优先提取只读颜色/顺序表；调用方只查询，不复制字典。建议放到 `Script/data/` 的装备规则或独立 `EquipmentQualityColors`，由 `EquipmentService`/`EquipmentRules` 暴露。
+- **非目标**：不改品质值、排序规则、掉落概率或 UI 文案。
+- **前置收益**：装备图标品质边框直接依赖该表，先完成此步可避免边框颜色与文本颜色不一致。
+- **验收**：11 档品质颜色与当前行为一致；重复映射为 0；`check_all`、`health_check` 与相关 UI 探针通过。
+
+#### 4.3.2 装备图标品质边框
+
+**MVP 切片**：
+
+- 使用现有 `equipment_properies.gdshader`，不重写 shader；
+- 为 `box_1.tscn` 增加可复用的图标边框覆盖层（`TextureRect` + `ShaderMaterial`），不改 `Button` 自身材质，避免把边框画到 stylebox/文字上；
+- 根据 `DataKeys.QUALITY` 设置边框颜色，空图标与非装备物品跳过滤镜；
+- 按品质共享 11 个 `ShaderMaterial`，避免逐个图标创建材质；
+- 覆盖 `box_1` 的 19 个复用场景及背包装备槽，作为第一阶段验收范围；
+- 重点验证背包、强化、镶嵌、商店、奖励、任务奖励与 2P 面板的图标对齐、裁剪、性能与空状态。
+
+**二期完整实现**：
+
+- 将覆盖层抽象为统一 `ItemIcon`/`ItemIconBorder` 组件；
+- 接入其余装备图标消费点；当前 `set_button_icon()` 约 114 处、分布 26 个文件，不能一次性直接改所有 `Button`；
+- 支持不同图标尺寸、按钮布局、tooltip、图鉴、掉落与商店上下文；
+- 不扩展到消耗品/材料，除非另有产品需求。
+
+**非目标**：不为全部 `Button` 直接挂材质；不把 shader 分组迁移；不改变物品数据、品质值、价格或掉落。
+
+#### 4.3.3 角色描边试验（暂缓）
+
+- `base_hero.gdshader` 暂时保留，不删除；`base_hero.tscn` 当前已有 `ws_effect.gdshader` 的四方向描边，二者不是“从零新增”。
+- 后续有角色描边创意时再立项，优先评估：
+  - 只给 `RoleBody` 加材质，避免武器/翅膀/特效全部描边；
+  - 或仅在角色选择/预览场景试用；
+  - 若替换全局 `ws_effect`，必须覆盖 8 个角色、装备/翅膀/特效、1P/2P 与移动端性能回归。
+- **当前决策**：不改造角色描边；`base_hero.gdshader` 与 `equipment_properies.gdshader` 均保留，后续由创意批次决定。
 
 ## 5. 跨阶段纪律与验收
 

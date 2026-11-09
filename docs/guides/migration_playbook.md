@@ -233,7 +233,7 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 
 ### 5.2 治理后路径与符号变更索引（7.4 基线）
 
-> **适用范围**：7.4 基线及之后的 7.5+ 内容回植。Phase 28、29 已归档；Phase 39-0、39-1、39-2 已完成，39-3~39-4 未启动。Phase 39 全部完成后必须更新本节路径。
+> **适用范围**：7.4 基线及之后的 7.5+ 内容回植。Phase 28、29、39 已归档；`Scene/level/zmws`、`Script/monster` 与 10 个 shader 按 39-3 决策保持现状。Phase 39 已完成，后续结构变更需重新立项。
 >
 > **边界**：本节只记录回植判定的最小事实，不复制逐文件台账。56 个 `Scene/**/*.gd` 的完整目标路径见
 > [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；
@@ -250,6 +250,8 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 | 场景脚本 | `Scene/**/*.gd`（56 个） | `Script/<domain>/*.gd`；完整映射见 Phase 29 归档 | 先按基名搜索；找不到时查归档矩阵；禁止把新脚本放回 `Scene/` |
 | 根级脚本 | `Script/backpack.gd`、`Script/monster_86.gd` | 39-0 已完成：`Script/level/role_information_hud.gd`、`Script/monster/monster_86.gd` | 按新路径合并；禁止新增 `Script/*.gd` |
 | 场景文件 | `Scene/other_scene/*.tscn`、`Scene/show_text/*.tscn`、`Scene/monster_blood/*.tscn`、`Scene/monster_damage/*.tscn`、`Scene/special_effect/elite_soul_card/*.tscn`（均已删除/迁移） | 39-0~39-2 已完成：根级场景在 `Scene/level/`；文本在 `Scene/hittext/`，`choose_scene` 在 `Scene/runtime/`，怪物血条/受击在 `Scene/monster/`，魂卡特效在 `Scene/hero/elite_soul_card/` | 按当前路径合并；不得再写 `Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 或 `Scene/other_scene/` |
+| 大型参考域 | `Scene/level/zmws/*.tscn`（1727，平铺） | 保持平铺；仅 28 个 `Scene/level/zmws_playable/*.tscn` 为玩法包装 | 不建子目录；不更新 1727 条资产元数据；边界见 Phase 39 归档与 ZMWS 资产矩阵 |
+| Shader | `Shader/base_hero.gdshader`、`Shader/equipment_properies.gdshader` | 零引用但保留；角色描边暂缓；装备品质边框创意见 `roadmap.md` §4.3 | 不删除、不假设已接入；接入前另立创意批次 |
 
 回植判定顺序：
 
@@ -258,7 +260,7 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 3. **路径不存在 ≠ 功能删除**：先判断是否被移动、合并，或改由命令/表承载；禁止直接判定“上游没有、当前也不用”。
 4. **删除文件不重建**：`signals.gd` 是治理性删除，不恢复；确认/取消映射到实例信号。
 5. **UI 直写不回流**：`PlayerData` 字典直写、宠物被动直写、阵法佩戴直写均已有命令/写入口；只合并语义，不恢复旧写法。
-6. **Phase 39 状态明确**：39-0、39-1、39-2 已完成；根级场景与根级脚本已清零，`Scene/other_scene/`、`Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 已删除；新回植按 `Scene/hittext/`、`Scene/runtime/`、`Scene/monster/`、`Scene/hero/elite_soul_card/` 等当前域合并。
+6. **Phase 39 状态明确**：39-0~39-4 已完成；根级场景与根级脚本已清零，`Scene/other_scene/`、`Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 已删除；`Scene/level/zmws`、`Script/monster`、`monster_zhw` 与 10 个 shader 按 39-3 决策保留。新回植按 `Scene/hittext/`、`Scene/runtime/`、`Scene/monster/`、`Scene/hero/elite_soul_card/` 等当前域合并。
 
 > Phase 28/29 的决策依据见 [`ADR-028`](../decisions/ADR-028-confirm-dialog-callback-ownership.md)、[`ADR-029`](../decisions/ADR-029-passive-snapshot-event-driven.md)、[`ADR-030`](../decisions/ADR-030-pet-passive-command-and-table.md)、[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)；当前架构见 [`../reference/architecture.md`](../reference/architecture.md) §1~§3。
 

@@ -103,3 +103,4 @@
 | [`iteration_35_38_content_backport.md`](iteration_35_38_content_backport.md) | Phase 35–38 7.1–7.4 内容回植：范围、三方语义合并、批次、L3 收口、发布边界与缺口修复 | 2026-11-09 |
 | [`iteration_28_global_signal_and_passive_contract.md`](iteration_28_global_signal_and_passive_contract.md) | Phase 28 全局确认信号移除、被动属性快照事件化与宠物被动命令/共享数值表 | 2026-11-09 |
 | [`iteration_29_scene_script_relocation.md`](iteration_29_scene_script_relocation.md) | Phase 29 `Scene/` 脚本落位：规范、56 文件迁移清单、29-1~29-4 批次与门禁 | 2026-11-09 |
+| [`iteration_39_scene_script_layout.md`](iteration_39_scene_script_layout.md) | Phase 39 根级清零、`other_scene` 拆分、文本/怪物/魂卡场景合并、大型目录与 shader 保留决策、最终验收 | 2026-11-10 |
