@@ -154,7 +154,8 @@
 
 - Autoload 注册项 11 → 10：删除 `Signals`；`choose_scene` 暴露 `confirmed`/`cancelled` 实例信号，10 个调用点改为在 `Global.add_choose_text()` 返回值上连接；`PopupFactory` 显式关闭旧确认框，维持单实例语义。
 - 验证：`contract_scan --self-test` 通过（含 `global_signal` 正负样本）；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7 PASS；`health_check --no-cache` 822 脚本 0 Parse / 0 Error / 0 Warning；`level_1` 4 阶段 0/0/0；`choose_scene` 临时探针确认 `confirmed` 信号且无脚本错误。
-- 边界：Phase 28-2 未启动；`scene_probe_runner` 全量复跑结果以该批次出口记录为准。
+- 验证补充：`scene_probe_runner` 全量 31 项 PASS（342.54s）。
+- 边界：Phase 28-2 未启动。
 
 ## 3. 当前已知边界
 
