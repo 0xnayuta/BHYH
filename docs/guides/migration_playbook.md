@@ -231,6 +231,36 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 
 本检查表覆盖总体接入边界，不替代 §1~§4 的功能代码三方语义合并。玩法、数值与显示变更单列验收，不与架构治理混写。
 
+### 5.2 治理后路径与符号变更索引（7.4 基线）
+
+> **适用范围**：7.4 基线及之后的 7.5+ 内容回植。Phase 28、29 已归档；Phase 39 未启动。Phase 39 完成后必须更新本节路径。
+>
+> **边界**：本节只记录回植判定的最小事实，不复制逐文件台账。56 个 `Scene/**/*.gd` 的完整目标路径见
+> [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；
+> Phase 28 的完整批次见 [`../archive/iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md)。
+
+| 类别 | 上游/旧路径或符号 | 当前路径/替代 | 回植动作 |
+|:---|:---|:---|:---|
+| 全局确认信号 | `Script/base/signals.gd`、Autoload `Signals`、`choose_pressed` / `connect_choose_box_signal` | 已删除；`Script/runtime/choose_scene.gd` 的 `confirmed`/`cancelled` 实例信号；`Global.add_choose_text()` 返回实例 | 不恢复 Autoload；确认回调归打开者；保持 `PopupFactory` 单实例语义 |
+| 被动数值入口 | `source/passive_skills.gd` | `Script/skill/passive_skills.gd`（Autoload 名 `PaSkill` 不变） | 按新路径合并；不恢复 `_physics_process` 轮询 |
+| 被动刷新 | 每帧轮询 `get_passive_skill_properties()` | `PlayerData.passive_skills_changed`；`PaSkill` 启动刷新 + 等级/属性实例签名短路；`LocalCoop` 只刷新 2P | 新变更接事件；新增刷新路径必须在装配点显式调用 |
+| 共享数值表 | `PaSkill` 内的等级/费用/数值函数 | `Script/skill/passive_skill_table.gd`（`PassiveSkillTable`）；`PaSkill` 公开函数委托 | 新代码优先用静态表；不要复制第二份数值表 |
+| 宠物被动写入 | UI 直写 `pet[DataKeys.Skill.PASSIVE]` | `PetDomainCommand.upgrade_passive` / `upgrade_all_passives` | 禁止 UI 直写；保存失败恢复等级与共享灵魂 |
+| 阵法佩戴写入 | `PlayerData.player_data["已佩戴阵法"] = ...` | `PlayerData.set_equipped_formation()`；`DataKeys.Skill.EQUIPPED_FORMATION` | 不恢复裸键直写 |
+| 场景脚本 | `Scene/**/*.gd`（56 个） | `Script/<domain>/*.gd`；完整映射见 Phase 29 归档 | 先按基名搜索；找不到时查归档矩阵；禁止把新脚本放回 `Scene/` |
+| 场景文件 | `Scene/other_scene/*.tscn`、`Scene/show_text/*.tscn`、`Scene/set_menu.tscn` 等 | **当前仍在原位；Phase 39 计划迁移** | 39 完成前按当前路径；不要提前按 39 目标写死 |
+
+回植判定顺序：
+
+1. **按基名搜索**：上游路径不存在时，先用文件名在 `source/Script/` 搜索；脚本域迁移通常保留文件名。
+2. **查归档矩阵**：`Scene/**/*.gd` 的 56 个目标路径以 Phase 29 归档为准；不要凭目录名猜测。
+3. **路径不存在 ≠ 功能删除**：先判断是否被移动、合并，或改由命令/表承载；禁止直接判定“上游没有、当前也不用”。
+4. **删除文件不重建**：`signals.gd` 是治理性删除，不恢复；确认/取消映射到实例信号。
+5. **UI 直写不回流**：`PlayerData` 字典直写、宠物被动直写、阵法佩戴直写均已有命令/写入口；只合并语义，不恢复旧写法。
+6. **Phase 39 状态明确**：当前 39-0/39-1/39-2 未执行；`Scene/other_scene`、根级 `set_menu.tscn`/`auto_battle_config.tscn`、`Script/backpack.gd`/`monster_86.gd` 仍在原位。39 完成后再更新本节路径。
+
+> Phase 28/29 的决策依据见 [`ADR-028`](../decisions/ADR-028-confirm-dialog-callback-ownership.md)、[`ADR-029`](../decisions/ADR-029-passive-snapshot-event-driven.md)、[`ADR-030`](../decisions/ADR-030-pet-passive-command-and-table.md)、[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)；当前架构见 [`../reference/architecture.md`](../reference/architecture.md) §1~§3。
+
 ---
 
 ## 6. 红线
@@ -270,4 +300,5 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 - [ ] 静态门禁、引擎健康检查、L3 全量关卡回归、双人/场景/档案探针、Atlas/帧/Catalog 校验全部通过；
 - [ ] 生产完成率不以“路径存在”或“L3 通过”替代场景属性、Role 分支、文本与数值语义核对；
 - [ ] 密钥、派生参数、二进制路径、版本专用解密脚本与原始台账均未进入仓库；
+- [ ] 上游路径已按当前治理结构解析：`Scene/**/*.gd`、`signals.gd`、`passive_skills.gd`、宠物被动/阵法写入路径已核对；不存在误把旧路径或旧直写当作新增依赖；
 - [ ] `status.md` 与 `roadmap.md` 已更新，未验证项已明确列出。

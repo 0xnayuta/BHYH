@@ -206,6 +206,6 @@
 
 - [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)
 - [`../standards/naming_standard.md`](../standards/naming_standard.md) §1.2、§1.4
-- [`architecture.md`](architecture.md) §1
+- [`../reference/architecture.md`](../reference/architecture.md) §1
 - [`../guides/migration_playbook.md`](../guides/migration_playbook.md)
 - [`../../scripts/rename_path.py`](../../scripts/rename_path.py)
