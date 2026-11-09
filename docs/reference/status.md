@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-09。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 38 的 7.4 内容回植进行中（38-0、38-1、38-2、38-3 完成；38-4 2P/剩余脚本、38-5 L3 待执行）；Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：Phase 38 的 7.4 内容回植进行中（38-0、38-1、38-2、38-3、38-4 完成；38-5 L3 待执行）；Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.4**（38-0~38-3 内容回植完成；38-4 2P/剩余脚本、38-5 L3 待执行；PCK/release 待发布验证） |
+| 当前内容版本 | **7.4**（38-0~38-4 内容回植完成；38-5 L3 待执行；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/startup_loading.tscn` |
@@ -115,8 +115,8 @@
 - **38-2 角色与技能**：新增 `SoulCardData`/`SoulCardRuntime`/`SoulCardEffect`/`SoulCardBossVisual`、`EliteAttack`/`EliteBossMechanics`/`EliteBossStats`/`Level_Elite`、`SoulCardPanelBase` 与 `Scene/level/level_elite.tscn`；接入 **18** 个 EliteSoulCard 特效场景（标准节点格式 `.tscn`）与 **31** 个既有特效纹理。`BaseHero` 接入魂卡运行时/伤害吸收/受击来源；`BaseRoleProperies` 合并魂卡属性与防御倍率；`BaseMonster` 接入精英控制免疫/死亡回调/魂卡伤害/难度跳过；`Monster_77/78/139` 接入精英分支；Longnv/NeZha/Yutu 与 `BaseHero.get_skill` 的 Level 22 技能限制移除。`RunContext` 新增精英副本选择状态，未新增 Autoload 或 `Global` 业务字段；`Global.CurrentLevel`/`GameOver` 改用现有 accessor。
 - **38-2 验证**：`check_all --godot-bin` **9/9**、`health_check --no-cache` **816 脚本 0 Parse / 0 Error / 0 Warning**、`level_1` 四阶段 **0/0/0**、`level_1 --role 6/7/8` 四阶段 **0/0/0**、`level_elite` 通用冒烟 **PASS**（1 阶段，Boss 存活，0/0/0）；变更影响关卡回归 **129/129 PASS + 5 SKIP**（含 `level_elite` PASS，377.4s）；临时探针验证 SoulCardData 属性/星级倍率、EliteBossStats 分档、精英 Boss 掉落奖励、qly 特效生成与护盾吸收，以及 sfe 精英攻击载体生成（2 个存活实例）。
 - **项目设置边界**：7.4 `project.binary` 的主场景切换已按评审接入为 `startup_loading.tscn`；`AndroidIntegrity` 未注册为 Autoload，`load_scene` 既有内联首启 APK 签名校验保留；未复制 `project.binary`，未启用传感器；boot splash 保持与 `Art/set_menu/313.png` 像素一致的当前资源。
-- **下一步**：38-4 2P 与剩余脚本/场景；随后 38-5 L3 收口。PCK/release 与最低配置/其他平台验证继续暂缓。
-- **边界**：解包、密钥、参考树与台账只在仓库外；38-0~38-3 证据已通过；38-4/38-5 尚未执行；`scene_probe_runner`/`coop_probe_runner`/`archive_probe_runner` 与 PCK/release 以 38-5 结果为准。
+- **下一步**：38-5 L3 收口。PCK/release 与最低配置/其他平台验证继续暂缓。
+- **边界**：解包、密钥、参考树与台账只在仓库外；38-0~38-4 证据已通过；38-5 尚未执行；`scene_probe_runner`/`archive_probe_runner` 与 PCK/release 以 38-5 结果为准。
 
 ### 性能对照基线（2026-11-09）
 

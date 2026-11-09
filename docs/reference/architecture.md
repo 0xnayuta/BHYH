@@ -360,6 +360,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 - 共享项：装备/道具/消耗品/宠物背包、被动技能、主线剑阵、灵魂、炼体、万灵图录；
 - 归属解析：meta → 祖先 `coop_slot` → `owner_hero()` 反射 → 脚本路径前缀 → 默认 1；
 - 面板：2P 打开背包/技能/宠物/法宝/坐骑时，面板根节点与弹出层携带 `coop_slot`，面板脚本的 `PlayerData`/`RoleProp` 属性按槽位解析；全局别名恒为 1P，不存在视图交换；保存快照期间 `open_panel` 拒绝打开/切换；
+- 魂卡：`SoulCardRuntime` 随每个 `BaseHero` 创建，数据/属性经 `LocalCoop.data_for`/`props_for` 解析；`BaseRoleProperies` 的魂卡属性叠加使用槽位感知 `PlayerData`；
 - 死亡判定：双人模式下只有全部玩家死亡才进入 `defeat`。
 
 **新代码约束**：不得直接假定 `/root/PlayerData` 或 `/root/RoleProp` 是当前操作者；使用 `BaseObject` / `BaseRole` 的槽位感知属性，或显式调用 `LocalCoop.data_for` / `props_for` / `input_for`。
