@@ -59,6 +59,7 @@ var _load_started_msec: int = 0
 var _failure_reported := false
 var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
+var _integrity_thread: Thread
 var _battle_vram_baseline_bytes: int = -1
 # 验收探针（level_test_runner --measure-load）读取的阶段时间戳；随 LoadScene 实例释放。
 var load_phase_marks: Array[Dictionary] = []
@@ -108,15 +109,28 @@ func _initialize_first_launch_integrity() -> void:
 		return
 	_first_launch_integrity_required = true
 	_first_launch_integrity_valid = false
-	if not Engine.has_singleton("ililililllliiil"):
-		push_error("ililililllliiil unavailable")
+	_integrity_thread = Thread.new()
+	if _integrity_thread.start(Callable(self, "_verify_apk")) != OK:
+		_integrity_thread = null
+
+
+func _verify_apk() -> bool:
+	if Engine.has_singleton("ililililllliiil"):
+		var verifier = Engine.get_singleton("ililililllliiil")
+		var result: Variant = verifier.call("ililillliiillil")
+		return result is bool and bool(result)
+	return OS.has_feature("sgxz_apk_signature_valid")
+
+
+func _await_integrity_verification() -> void:
+	if _integrity_thread == null:
 		return
-	var ililililllliiil = Engine.get_singleton("ililililllliiil")
-	var check_result: Variant = ililililllliiil.call("ililillliiillil")
-	_first_launch_integrity_valid = check_result is bool and bool(check_result)
-	if not _first_launch_integrity_valid:
-		return
-	_integrity_verified_this_process = true
+	while _integrity_thread.is_alive():
+		await get_tree().process_frame
+	_first_launch_integrity_valid = bool(_integrity_thread.wait_to_finish())
+	_integrity_thread = null
+	if _first_launch_integrity_valid:
+		_integrity_verified_this_process = true
 
 
 func _show_integrity_failure() -> void:
@@ -510,6 +524,7 @@ func _finish_loading() -> void:
 		_log_battle_vram("target level monsters")
 		_set_progress(0.98)
 		await get_tree().process_frame
+	await _await_integrity_verification()
 	_set_progress(0.99)
 	if _first_launch_integrity_required and not _first_launch_integrity_valid:
 		_show_integrity_failure()
@@ -691,6 +706,9 @@ func _cancel_pending_requests() -> void:
 
 func _exit_tree() -> void:
 	_finishing = true
+	if _integrity_thread != null:
+		_integrity_thread.wait_to_finish()
+		_integrity_thread = null
 	_cancel_pending_requests()
 
 
