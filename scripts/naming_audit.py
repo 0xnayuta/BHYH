@@ -9,7 +9,9 @@ ZMXYBHYH 目录与资产命名审计门禁 (Naming Audit Gate)
    数字 ID 目录按 `docs/naming_whitelist.md` 冻结豁免；
 2. 文件命名：默认检查 Git 新增文件（暂存 + 未跟踪）；`--all`
    检查全量 tracked/untracked 文件。所有文件按 Godot 官方规则使用
-   snake_case（类脚本文件名不要求与 class_name 同为大驼峰）。
+   snake_case（类脚本文件名不要求与 class_name 同为大驼峰）；
+3. 脚本落位：`source/Scene/` 下不得存在 `.gd`；脚本必须归
+   `source/Script/<domain>/`（ADR-031，Phase 29-4 起强制）。
 
 退出码：0 = 全部合规；1 = 存在违规。
 """
@@ -168,6 +170,11 @@ def check_files(violations: list[str], all_files: bool = False) -> int:
         if ext not in {".tscn", ".gd"} and ext not in SNAKE_ASSET_EXT:
             continue
         checked += 1
+        if ext == ".gd" and rel.startswith("Scene/"):
+            violations.append(
+                f"脚本落位违规: {rel} (Scene/ 不承载 .gd，应归 Script/<domain>/)"
+            )
+            continue
         if not SNAKE_RE.match(stem):
             kind = ".tscn 场景" if ext == ".tscn" else (".gd 脚本" if ext == ".gd" else "资源")
             violations.append(f"{kind}文件命名违规: {rel} (期望 snake_case)")

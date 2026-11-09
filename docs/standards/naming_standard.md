@@ -55,7 +55,7 @@
 - **脚本统一落位**：所有 GDScript 必须位于 `source/Script/<domain>/`；`<domain>` 为功能域目录（如 `runtime`、`main_menu`、`monster`、`skill`、`data`），不得按 `.tscn` 所在目录镜像新建平行约定。
 - **存量迁移**：现有 `Scene/` 下 56 个 `.gd` 按 [`../reference/scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md) 分批迁移；决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 - **例外为零**：不保留 `Scene/**/*.gd` 白名单；`addons/` 第三方插件不在本规则范围，但不得作为规避通道。
-- **门禁**：Phase 29-4 起 `scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；门禁启用前也不得新增。
+- **门禁**：自 Phase 29-4 起，`scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；存量已清零，新增脚本不得再放入 `Scene/`。
 
 ---
 

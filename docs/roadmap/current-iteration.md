@@ -135,7 +135,7 @@
 - **28-3D 验证**：单次/一键升级成功与保存失败回滚、满级/灵魂不足、1P/2P 快照作用域、读档/切档、活体宠物属性刷新、宠物背包共享不受影响；`check_all`、`health_check`、`contract_scan --self-test`、`archive_probe_runner`、`coop_probe_runner`、`level_1` 通过。
 - **出口**：宠物被动升级保存失败不产生等级或灵魂变化；宠物域不再调用 `PaSkill`；UI 直写被门禁拦截。
 
-### 1.8 Phase 29 `Scene/` 脚本落位（29-0、29-1、29-2A、29-2B、29-2C、29-3 完成；29-4 未启用）
+### 1.8 Phase 29 `Scene/` 脚本落位（29-0~29-4 完成；Phase 29 完成）
 
 - **目标**：统一 GDScript 落位规则为“`Scene/` 不存放 `.gd`，全部归 `Script/<domain>/`”，迁移当前 56 个场景脚本。
 - **入口**：`source/Scene/` 下 56 个 `.gd`；[`naming_standard.md`](../standards/naming_standard.md) §1.2、§2.1；`scripts/naming_audit.py`。
@@ -166,9 +166,10 @@
 - `special_effect_bullet.gd` → `Script/hero/`。
 - **完成记录**：`rename_path.py` 批量迁移 9 个脚本与 `.uid`；同步 9 个 `.tscn` 的 `ext_resource`；更新两份 theme 基线的 `message_info` 路径；`contract_gate`、`check_all`、`health_check`、`level_1` 通过；`Scene/` 下 `.gd` 为 0。
 
-#### 29-4 门禁启用（未启动）
+#### 29-4 门禁启用（完成）
 
 - `naming_audit.py` 增加 `source/Scene/**/*.gd` 报 ERROR 的规则；清理路径变化产生的白名单旧条目。
+- **完成记录**：`naming_audit.py` 落位规则已启用；负向探针被拦截；`naming_audit --all`、`naming_compliance_audit --fail-on-error`、`whitelist_audit --fail-on-error`、`check_all`、`docs_audit` 通过。
 - **出口**：`Scene/` 下 `.gd` 为 0；`check_all`、`health_check`、`scene_probe_runner`、相关关卡回归通过；`docs_audit` 0 缺失链接。
 
 ---
@@ -225,7 +226,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 29-0、29-1、29-2A、29-2B、29-2C、29-3 已完成；`source/Scene/` 下 `.gd` 为 0。下一步执行 Phase 29-4：`naming_audit.py` 增加 `source/Scene/**/*.gd` ERROR 规则并清理失效白名单条目。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 29 已完成（29-0~29-4），`source/Scene/` 下 `.gd` 为 0，落位门禁已启用。下一轮按用户选择进入目录架构评估或新的功能/治理批次；PCK/release、最低配置与其他平台验证按用户决策另行执行。恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

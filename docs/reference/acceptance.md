@@ -386,7 +386,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 
 | 脚本 | 检查范围 | 失败判据 | 是否在 `check_all` |
 |:---|:---|:---|:---|
-| `naming_audit.py` | 目录与文件 `snake_case`；默认只查 Git 新增，`--all` 全量 | 任一目录/文件 stem 违规 | ✅ 维度 6（固定 `--all`） |
+| `naming_audit.py` | 目录与文件 `snake_case`；`Scene/` 下 `.gd` 报 ERROR；默认只查 Git 新增，`--all` 全量 | 任一目录/文件 stem 违规或 `Scene/**/*.gd` | ✅ 维度 6（固定 `--all`） |
 | `naming_compliance_audit.py` | 四张表：目录、文件、代码标识符、白名单登记 | 任一违规 | ❌ 人工终审 |
 | `runtime_reference_audit.py` | `@onready` 行中的 NodePath、`Global.<method>()` | 路径无法在挂载场景解析；Global 方法未声明 | ✅ 维度 7 |
 | `resource_path_audit.py` | 静态 `res://` 大小写、`%d/%s/%f` 动态路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 工厂目标 | 任一不匹配 | ✅ 维度 8 |

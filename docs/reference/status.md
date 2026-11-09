@@ -227,7 +227,14 @@
 - 基线同步：`ui_dynamic_theme_baseline.json` 与 `theme_override_baseline.json` 的 `message_info` 路径。
 - 验证：`contract_gate` 全 PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`level_1` 4 阶段 0/0/0。
 - 验证补充：`scene_probe_runner` 全量 PASS（346.34s）。
-- 边界：29-4 门禁未启用；`naming_audit.py` 尚未对 `Scene/**/*.gd` 报错。
+- 边界：29-4 已实施，见下节。
+
+### Phase 29-4 `Scene/` 脚本落位门禁启用（2026-11-09）
+
+- `scripts/naming_audit.py` 新增脚本落位规则：`source/Scene/**/*.gd` 报 `ERROR`；负向探针 `Scene/naming_gate_probe.gd` 被拦截，删除后全量 0 违规。
+- `naming_audit.py --all`、`naming_compliance_audit.py --fail-on-error`、`whitelist_audit.py --fail-on-error` 全部通过；`check_all --skip-engine` 7/7；`docs_audit` 940 链接 / 0 缺失。
+- 同步 `naming_standard.md` §1.4、`acceptance.md` 门禁表、`scripts/README.md` 与迁移清单。
+- **Phase 29 完成**：`source/Scene/` 下 `.gd` 为 0；56 个脚本全部归 `Script/<domain>/`；门禁已启用。
 
 ## 3. 当前已知边界
 

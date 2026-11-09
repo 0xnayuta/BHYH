@@ -1,6 +1,6 @@
 # `Scene/` 脚本落位迁移清单（Phase 29-0）
 
-> **状态**：29-1、29-2A、29-2B、29-2C、29-3 已迁移；`source/Scene/` 下 `.gd` 为 0；29-4 门禁未启用。
+> **状态**：29-1、29-2A、29-2B、29-2C、29-3 已迁移；`source/Scene/` 下 `.gd` 为 0；29-4 门禁已启用；Phase 29 完成。
 >
 > **规则**：`source/Scene/` 只承载 `.tscn`/`.tres`；全部 `.gd` 归 `source/Script/<domain>/`。决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 >
@@ -42,6 +42,8 @@
 > **29-2C 已完成（10）**：10 个怪物、血条、受击、Buff 与光环脚本 → `Script/monster/`。`monster_head_info.gd` 的 4 处 StyleBox 颜色改用 `UiSurfaceTokens.OVERLAY_EARTH` 与新增 `MONSTER_SELECT_BG`/`MONSTER_SELECT_BORDER`/`MONSTER_INFO_BORDER`（token 源新增三项并重新生成）；`Scene/` 剩余 9 个 `.gd`。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（348.46s）、`docs_audit` 940/0。29-3 未开始。
 >
 > **29-3 已完成（9）**：`choose_scene.gd` → `Script/runtime/`；`combo`、`combo_num`、`liji`、`message_info`、`message_show`、`moment_text`、`touch_text` → `Script/hittext/`；`special_effect_bullet.gd` → `Script/hero/`。`source/Scene/` 下 `.gd` 为 **0**。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（346.34s）、`docs_audit` 940/0。29-4 门禁未启用。
+>
+> **29-4 已完成**：`naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；负向探针被拦截；`naming_audit --all`、`naming_compliance_audit`、`whitelist_audit`、`check_all`、`docs_audit` 通过。Phase 29 完成。
 
 ### 3.1 主菜单与设置（11）· 已完成
 
