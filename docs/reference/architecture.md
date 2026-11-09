@@ -73,8 +73,8 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 3 | `MemoryClass` | `Script/memory_class/memory_class.gd` | 本地存档加密读写、备份、后台保存、设置文件 | 本地存档 IO 主入口；云存档导入/导出在归档界面单独加密读写 |
 | 4 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
 | 5 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
-| 6 | `PaSkill` | `passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
-| 7 | `Signals` | `signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
+| 6 | `PaSkill` | `Script/skill/passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
+| 7 | `Signals` | `Script/base/signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
 | 8 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
 | 9 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
 | 10 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
