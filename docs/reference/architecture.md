@@ -603,7 +603,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 坐骑 | `Script/mount/` | 坐骑运行时、图鉴、技能效果 | `mount_runtime.gd`、`mount_catalog.gd` |
 | 丹药 | `Script/pellet/` | 丹药属性缓存与消耗 | `basic_pellet.gd` |
 | 锻造 | `Script/ldl/` | 强化、合成、镶嵌、分解、打造、神铸、淬骨 | `ldl.gd`、`strength.gd`、`divine_forge.gd` |
-| 背包 | `Script/back_pack/`、`Script/backpack.gd` | 背包、装备、售卖、法宝信息 | `main_backpack.gd`、`magic_weapon_infor.gd` |
+| 背包 | `Script/back_pack/`、`Script/backpack.gd` | 背包、装备、售卖、法宝信息；角色信息 HUD 的窗口编排 | `main_backpack.gd`、`magic_weapon_infor.gd` |
 | 地图/主菜单 | `Script/main_menu/` | 世界地图、区域地图、设置、公告、坐骑面板 | `main_menu.gd`、`map_0.gd`…`map_9_1.gd` |
 | 存档界面 | `Script/archive_interface/` | 存档列表、云存档、删档 | `read_archive_interface.gd` |
 | 任务 | `Script/task/` | 任务面板与奖励 | `basic_task.gd`、`task_reward.gd` |
@@ -611,7 +611,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 伤害文本 | `Script/hittext/` | 伤害数字/文字/Miss，走对象池 | `damage_number.gd`、`damage_text.gd` |
 | 子弹 | `Script/bullet/`、`Scene/bullet/` | 直线/追踪弹与 slim 场景 | `fly_bullet.gd`、`chase_bullet.gd` |
 | 音频 | `Script/all_sound/`、`Script/runtime/audio_runtime.gd` | BGM 单实例、主菜单 BGM、命中音效池与声部仲裁 | `AudioRuntime`、`bgm.gd`、`monster_be_hit.gd` |
-| 特殊玩法 | `Script/other_menu/`、`Scene/other_scene/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd` |
+| 特殊玩法 | `Script/other_menu/`、`Script/skill/`、`Script/main_menu/`、`Scene/other_scene/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd`、`twenty_eight_constellations.gd` |
 | 工具/输入 | `Script/tools/` | 虚拟摇杆、按键设置、场景 viewport、无状态静态工具（节点/向量、物品图标与条目） | `set_com.gd`、`user_key.gd`、`node_utils.gd`、`item_utils.gd` |
 | 物理层常量 | `Script/base/physics_layers.gd` | 脚本侧 2D 物理层具名位值，与 `project.godot` 层名一一对应 | `physics_layers.gd` |
 
