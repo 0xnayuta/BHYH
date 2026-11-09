@@ -16,7 +16,7 @@ func configure(level: int, display_name: String, is_north: bool) -> void:
 	stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	custom_minimum_size = Vector2(120, 92)
 	tooltip_text = "%d  %s" % [level_index, constellation_name]
-	modulate = Color("9fc8ff") if is_north else Color("ffd19a")
+	modulate = (UiColorTokens.TEXT_CONSTELLATION_NORTH if is_north else UiColorTokens.TEXT_CONSTELLATION_SOUTH)
 	var label := Label.new()
 	label.name = "Name"
 	label.text = "%02d  %s" % [level_index, constellation_name]

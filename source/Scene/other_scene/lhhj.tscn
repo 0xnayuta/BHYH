@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/lhhj.gd" id="1"]
+[ext_resource type="Script" path="res://Script/main_menu/lhhj.gd" id="1"]
 
 [ext_resource type="Texture2D" path="res://Art/show_text/502.png" id="2"]
 

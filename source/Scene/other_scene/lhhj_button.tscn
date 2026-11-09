@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/lhhj_button.gd" id="2"]
+[ext_resource type="Script" path="res://Script/main_menu/lhhj_button.gd" id="2"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="LHHJButton" type="Button" unique_id=1602859585]

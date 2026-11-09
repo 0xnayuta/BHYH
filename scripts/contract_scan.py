@@ -1161,8 +1161,8 @@ class ContractScanner:
         "Script/other_menu/reward_grant_command.gd",
     }
     PHASE17_PRESENTATION_FILES = {
-        "Scene/other_scene/transmogtified_box.gd",
-        "Scene/other_scene/reward_interface.gd",
+        "Script/other_menu/transmogtified_box.gd",
+        "Script/other_menu/reward_interface.gd",
     }
     PHASE17_ROOT_FORBIDDEN_FILES = {
         "Script/base/base_role.gd",
@@ -2829,13 +2829,13 @@ def run_phase17_boundary_self_test() -> bool:
     good = {
         "Script/level/victory.gd": "extends LevelSettlement\nfunc _ready():\n\tpass\n",
         "Script/shop/shop_purchase_command.gd": "func execute():\n\tvar s = PlayerData.snapshot_state()\n\tPlayerData.restore_state(s)\n",
-        "Scene/other_scene/reward_interface.gd": "func _process(_delta):\n\tvar x = PlayerData.player_data.get(\"x\", 0)\n",
+        "Script/other_menu/reward_interface.gd": "func _process(_delta):\n\tvar x = PlayerData.player_data.get(\"x\", 0)\n",
         "Script/base/base_role.gd": "var target = LocalCoop.data_for(self)\n",
     }
     bad = (
         ("Script/level/defeat.gd", "extends LevelSettlement\nfunc _ready():\n\tMemoryClass.request_save(\"x\")\n"),
         ("Script/shop/shop_purchase_command.gd", "func execute():\n\tvar s = PlayerData.snapshot_state()\n"),
-        ("Scene/other_scene/transmogtified_box.gd", "func f():\n\tPlayerData.player_data[DataKeys.TRANSMOG_LIST][\"x\"] = 1\n"),
+        ("Script/other_menu/transmogtified_box.gd", "func f():\n\tPlayerData.player_data[DataKeys.TRANSMOG_LIST][\"x\"] = 1\n"),
         ("Script/base/base_magic_weapon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
         ("Script/skill/skill_icon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
     )

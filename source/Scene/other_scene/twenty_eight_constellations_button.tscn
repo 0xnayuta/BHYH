@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/twenty_eight_constellations_button.gd" id="1"]
+[ext_resource type="Script" path="res://Script/main_menu/twenty_eight_constellations_button.gd" id="1"]
 
 [node name="TwentyEightConstellationsButton" type="TextureButton" unique_id=1097910252]
 offset_right = 40.0

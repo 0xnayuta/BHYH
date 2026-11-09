@@ -25,7 +25,7 @@
       "tokenized": 1,
       "total": 11
     },
-    "Scene/other_scene/reward_box_2.gd": {
+    "Script/other_menu/reward_box_2.gd": {
       "data": 2,
       "total": 2
     },
@@ -34,11 +34,11 @@
       "tokenized": 3,
       "total": 4
     },
-    "Scene/other_scene/transmogtified_box.gd": {
+    "Script/other_menu/transmogtified_box.gd": {
       "tokenized": 4,
       "total": 4
     },
-    "Scene/other_scene/twenty_eight_constellations_button.gd": {
+    "Script/main_menu/twenty_eight_constellations_button.gd": {
       "layout": 1,
       "tokenized": 2,
       "total": 3
@@ -399,13 +399,13 @@
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/reward_box_2.gd",
+      "file": "Script/other_menu/reward_box_2.gd",
       "line": 18,
       "kind": "color",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/reward_box_2.gd",
+      "file": "Script/other_menu/reward_box_2.gd",
       "line": 19,
       "kind": "color",
       "category": "data"
@@ -435,43 +435,43 @@
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/transmogtified_box.gd",
+      "file": "Script/other_menu/transmogtified_box.gd",
       "line": 33,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/transmogtified_box.gd",
+      "file": "Script/other_menu/transmogtified_box.gd",
       "line": 34,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/transmogtified_box.gd",
+      "file": "Script/other_menu/transmogtified_box.gd",
       "line": 36,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/transmogtified_box.gd",
+      "file": "Script/other_menu/transmogtified_box.gd",
       "line": 37,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "file": "Script/main_menu/twenty_eight_constellations_button.gd",
       "line": 26,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "file": "Script/main_menu/twenty_eight_constellations_button.gd",
       "line": 27,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/twenty_eight_constellations_button.gd",
+      "file": "Script/main_menu/twenty_eight_constellations_button.gd",
       "line": 28,
       "kind": "constant",
       "category": "layout"

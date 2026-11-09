@@ -202,6 +202,15 @@
 - 验证补充：`scene_probe_runner` 全量 PASS（355.92s）；`docs_audit` 940 链接 / 0 缺失。
 - 边界：29-2B/29-2C、29-3 未启动；`Scene/` 剩余 38 个 `.gd`。
 
+### Phase 29-2B 主菜单与通用菜单脚本迁移（2026-11-09）
+
+- 19 个脚本迁移：`choose_music`、`lhhj`、`lhhj_button`、`lhhj_help`、`lsh`、`lxdy`、`return_back_map`、`role_button`、`set_menu`、`twenty_eight_constellations`、`twenty_eight_constellations_button` → `Script/main_menu/`；`a_letter_for_all_players`、`game_need_know`、`hc_help`、`help_things`、`list_button`、`reward_box_2`、`reward_interface`、`transmogtified_box` → `Script/other_menu/`。
+- 迁移触发 `ui_surface_token_audit`：`twenty_eight_constellations_button` 的南北星宿 `modulate` 改用 `UiColorTokens.TEXT_CONSTELLATION_NORTH/SOUTH`；`scripts/ui_theme_tokens.json` 新增两项并重新生成 `UiColorTokens`。
+- 基线同步：`contract_scan.py` 的 `reward_interface`/`transmogtified_box` 路径；`ui_dynamic_theme_baseline.json` 与 `theme_override_baseline.json` 的 `reward_box_2`/`transmogtified_box`/`twenty_eight_constellations_button` 路径。
+- 验证：`contract_gate` 全 PASS；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`level_1` 4 阶段 0/0/0。
+- 验证补充：`scene_probe_runner` 全量 PASS（347.42s）。
+- 边界：29-2C、29-3 未启动；`Scene/` 剩余 19 个 `.gd`。
+
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。

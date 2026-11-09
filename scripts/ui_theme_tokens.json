@@ -40,7 +40,9 @@
     "TEXT_CYAN": "Color(\"00ffff\")",
     "TEXT_TRANSPARENT": "Color(0, 0, 0, 0)",
     "TEXT_ZHENFA_PURPLE": "Color(\"8a00ff\")",
-    "TEXT_ZHENFA_ORANGE": "Color(\"ff8d00\")"
+    "TEXT_ZHENFA_ORANGE": "Color(\"ff8d00\")",
+    "TEXT_CONSTELLATION_NORTH": "Color(\"9fc8ff\")",
+    "TEXT_CONSTELLATION_SOUTH": "Color(\"ffd19a\")"
   },
   "surface_groups": [
     {

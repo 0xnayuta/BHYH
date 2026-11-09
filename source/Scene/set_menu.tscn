@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/set_menu.gd" id="1"]
+[ext_resource type="Script" path="res://Script/main_menu/set_menu.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/set_menu/653.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/backpack/49.png" id="5"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/222.png" id="6"]

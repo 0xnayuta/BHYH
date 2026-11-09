@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/hc_help.gd" id="1"]
+[ext_resource type="Script" path="res://Script/other_menu/hc_help.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/show_text/502.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/149.png" id="4"]
 [ext_resource type="Texture2D" path="res://Art/magic_weapon/145.png" id="5"]
