@@ -266,4 +266,4 @@ flowchart TD
 
 ## 6. 当前状态
 
-**Phase 25 已关闭**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。Phase 26 长期暂缓；Phase 27 已完成并关闭；当前无活跃候选，见 [`current-iteration.md`](../roadmap/current-iteration.md)。
+**Phase 25 已关闭**：`AutoBattleContext`/`AutoBattleController` 接管自动战斗，`MagicWeaponPresentationController` 接管装备法宝展示实例，`BossProtectionController` 接管 Boss 保护/白条状态，`HitReactionController` 接管受击代次/来源快照；掉落仍由 `BaseMonster` 单一提交。Phase 26 长期暂缓；Phase 27 已完成并关闭；当前活跃候选为 Phase 38（7.4 内容回植），见 [`current-iteration.md`](../roadmap/current-iteration.md)。

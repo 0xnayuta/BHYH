@@ -1,8 +1,8 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-08。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **最后更新**：2026-11-09。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
+> **阶段状态**：Phase 38 的 7.4 内容回植已立项（38-0、38-1、38-2 完成，38-3 待启动）；Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
 
 ---
 
@@ -11,7 +11,7 @@
 | 项目 | 值 |
 |:---|:---|
 | 工程标识 | **造梦西游八荒湮隳（BHYH）** |
-| 当前内容版本 | **7.3**（7.3 内容回植与 37-6 缺口修复 L3 已完成；PCK/release 待发布验证） |
+| 当前内容版本 | **7.3**（7.3 内容回植与 37-6 缺口修复 L3 已完成；7.4 回植准备、数据资产与战斗脚本完成（38-0/38-1/38-2）；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/load_scene.tscn` |
@@ -75,7 +75,7 @@
 - **35-2**：已接入 Longnv 7.1 技能数据、觉醒冷却、冲刺窗口/无敌、分刃、暂停层与 `LongnvScreenStorm` 增频；新增 `longnv-71` 运行时规格探针。
 - **35-3**：已接入 `ContinentMonsterGrowth`、关卡机关 `RoleAttackMechanism`、9 个关卡场景机关、Level 5/28/34/75、北俱芦洲怪物/地形、三太子受击入口、`map_7`/`map_8` 开放范围；Level_77 无场景语义差异；新增 `longnv-mechanism` 运行时规格探针。
 - **35-4**：已接入 GameSet 技能透明度、V7.1 公告、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌；新增 `menu-ui-71` 运行时规格探针。
-- **边界**：7.1 回植已完成；当前内容版本为 **7.2**；PCK/release 与最低配置/其他平台验证按用户决策暂缓，待最终发布统一验证；7.3 未立项。
+- **边界**：7.1 回植完成时内容版本为 **7.2**；PCK/release 与最低配置/其他平台验证按用户决策暂缓，待最终发布统一验证；7.3 已由 Phase 37 完成。
 - **本批验证**：`check_all --godot-bin` 9/9；`health_check --no-cache` **797 脚本 0/0/0**；`scene_probe_runner` **23/23**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**；`coop_probe_runner` **37/37**；`archive_probe_runner` **344/344**；`export_raw_manifest --check` 993 文件；`convert_atlas_metadata --check` 4015/4015；`longnv-core` / `longnv-71` / `longnv-mechanism` / `menu-ui-71` PASS；命名审计、白名单审计与 `docs_audit` 879/0 全部通过。
 
 ### 7.2 回植完成（L3 已收口；待发布验证）
@@ -85,7 +85,7 @@
 - **36-4**：接入 `nz_hlqg` 哪吒双火轮、`zz` 重斩觉醒、`xbz` 玄冰阵觉醒、`yt_ymw` 月魔舞三月影；`skill_awaken_popup` / `zd_skill` / `SkillDamageFormulaData` 覆盖四个新 ID；一阶觉醒石「tjs」与材料「ptjs」经 Catalog 校验。
 - **36-5**：`Global` 接入年兽出战预载与空子弹场景保护；`GameAnnouncement` 增加 V7.2 文案/版本按钮；`dj_sell` 喜鹊双倍掉率支持叠加且上限 24 小时；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称标签上移；`addons/bone_export/export_plugin.gd` 按第三方插件边界不修改，`Script/Test` 仅作规格。
 - **36-6 L3 收口**：`check_all --godot-bin` 9/9；`health_check --no-cache` **806 脚本 0/0/0**；`level_regression_all --jobs 12` **128/128 PASS + 5 SKIP**（370.18s，`level_ghg` 重试通过）；`scene_probe_runner` **26/26**；`coop_probe_runner` **38/38**；`archive_probe_runner` **344/344**；`level_1` 四阶段 **0/0/0**；`export_raw_manifest` 1033/1033、Atlas 4015/4015、编号帧/怪物帧/哪吒预览/FrameSequence/sheet 同步通过；`export_closure_probe --self-test` 修复 `normalize` 导入后通过；命名、白名单与 `docs_audit` 通过。
-- **边界**：PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 未立项。
+- **边界**：PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证，按用户决策暂缓；`addons/bone_export` 的 7.2 导出根变化未移植；7.3 已由 Phase 37 完成。
 
 ### 7.3 回植（37-0~37-6 批次完成；L3 已通过）
 
@@ -102,6 +102,21 @@
 - **验证**：`check_all --godot-bin` **9/9 PASS**（37.90s）；`health_check --no-cache` **807 脚本 0 Parse / 0 Error / 0 Warning**（16.24s）；`archive_probe_runner` **344/344**；`scene_probe_runner` **27/27**（305.34s）；`level_regression_all` **128/128 PASS + 5 SKIP**（331.9s）；`coop_probe_runner` **38/38**（289.13s）；`level_1` 四阶段 **0/0/0**（26.45s）；`phase37-6` **PASS**；截教数据/UI/配方/神铸/等级掉落与天庭噩梦进度运行时探针通过。新增资产运行期闭包 **36/36**；Atlas **4015/4015**、FrameSequence **288/288**、怪物帧 **152/152**、关卡预载 **101/101** 与导出清单自检通过；资产矩阵已重生成。
 - **37-1 收口**：资产引用闭包与 Atlas/FrameSequence/导出清单复核已完成。
 - **边界**：未复制旧 `.ctex`/`.import`；`load_scene` Android 完整性保护保留；L3 已通过；PCK/release 与最低配置/其他平台验证继续暂缓。
+
+### 7.4 回植准备、数据资产与战斗脚本（38-0、38-1、38-2 完成）
+
+- **目标二进制**：`八荒湮隳7.4.exe`，**2,382,869,864 字节**，SHA-256 `e6e3d1fdab8b34698ede59152f9a1a7bbea0bfba9210789e9027ca20799c0933`。
+- **PCK**：`GDPC` v4，engine 4.7.0，flags `0x3`，`file_base` `0x70`；PCK 起始 `0x38D5C00`，目录偏移 `0x8A3BAA60`（7.3 为 `0x84405870`）；`SGXZSIG1` 位于 PCK+`0x48`。
+- **密钥与目录**：7.4 复用 7.3 的静态 signer/mask 派生路径；目录明文计数 **40,571**、明文长度 **4,107,592**、目录 MD5 `bc036150d6adb9448966fca62b4be987`，完整解析剩余 **0**，flags 全为 `1`。
+- **文件块**：全部 **40,571** 个文件块解密后 MD5 与大小通过；无 `SGXZC001` 压缩包装；存储总量 = 明文总量 = **2,316,959,886** 字节。
+- **参考工程**：已生成 **40,571** 个原始条目；**791/791** `.gdc` 反编译成功、**1,175/1,175** `.scn` 转文本成功；非场景 **39,396** 个文件按清单 size+MD5 复核通过，1,175 个 `.scn` 全部转为 `.tscn`；参考树、清单与逐文件台账保存在仓库外。
+- **台账结论**：7.3→7.4 新增 **296**、删除 **0**、原始修改 **21**（16 `.gdc` + 2 `.scn` + 1 `project.binary` + 2 cache）。语义生产变化：脚本 **34**（16 修改 + 18 新增，含 17 个 `.gdc` 与 1 个 `.gdshader`）、场景 **25**（2 修改 + 23 新增）、数据 **1**、资产 **183**、资源 **16**、重映射 **56**。内容域集中在魂卡系统、精英副本、启动加载/Android 完整性、V7.4 公告与 UI、Level 22 技能限制移除、Monster 77/78/139 精英逻辑。
+- **38-1 数据与资产**：183 条上游资产（91 `.import` + 91 `.ctex` + 1 `.png`）与 16 条资源已处置：91 个 `.ctex` 解码为源 PNG（`Art/soul_card/` 16、`Art/soul_card/elite/` 68、`Art/main_menu/map_0/` 5、`Art/monster/soul_crystal/` 2），16 个 `.res` 恢复为 `AtlasTexture` `.tres`，未复制 `.ctex`/`.import`/`.res`/`.remap`；4 个 SVG 按钮按解码 PNG 接入；boot splash `313.png` 与当前源像素一致，保留当前文件。91 个新 `.import` 由 Godot 重新生成，全工程 51,312 个 UID 重复 **0**；Atlas **4,015/4,015**、FrameSequence **288**、怪物帧 **152/152**、装备 **1,127**、关卡预载 **101**、原始数据清单 **1,033** 通过；`check_all --godot-bin` **9/9**、`health_check --no-cache` **807 脚本 0/0/0**、`level_1` 冒烟 **4 阶段 0/0/0**。
+- **38-2 角色与技能**：新增 `SoulCardData`/`SoulCardRuntime`/`SoulCardEffect`/`SoulCardBossVisual`、`EliteAttack`/`EliteBossMechanics`/`EliteBossStats`/`Level_Elite`、`SoulCardPanelBase` 与 `Scene/level/level_elite.tscn`；接入 **18** 个 EliteSoulCard 特效场景（标准节点格式 `.tscn`）与 **31** 个既有特效纹理。`BaseHero` 接入魂卡运行时/伤害吸收/受击来源；`BaseRoleProperies` 合并魂卡属性与防御倍率；`BaseMonster` 接入精英控制免疫/死亡回调/魂卡伤害/难度跳过；`Monster_77/78/139` 接入精英分支；Longnv/NeZha/Yutu 与 `BaseHero.get_skill` 的 Level 22 技能限制移除。`RunContext` 新增精英副本选择状态，未新增 Autoload 或 `Global` 业务字段；`Global.CurrentLevel`/`GameOver` 改用现有 accessor。
+- **38-2 验证**：`check_all --godot-bin` **9/9**、`health_check --no-cache` **816 脚本 0 Parse / 0 Error / 0 Warning**、`level_1` 四阶段 **0/0/0**、`level_1 --role 6/7/8` 四阶段 **0/0/0**、`level_elite` 通用冒烟 **PASS**（1 阶段，Boss 存活，0/0/0）；变更影响关卡回归 **129/129 PASS + 5 SKIP**（含 `level_elite` PASS，377.4s）；临时探针验证 SoulCardData 属性/星级倍率、EliteBossStats 分档、精英 Boss 掉落奖励、qly 特效生成与护盾吸收，以及 sfe 精英攻击载体生成（2 个存活实例）。
+- **项目设置差异**：`project.binary` 显示 7.4 将主场景改为 `startup_loading.tscn`、boot splash 改为 `Art/set_menu/313.png`、新增 `AndroidIntegrity` Autoload、启用传感器；与当前“不新增 Autoload”和 `load_scene` 入口冲突，38-3 必须评审后接入，禁止整体覆盖 `project.godot`/`project.binary`。
+- **下一步**：38-3 系统/菜单/UI 与公告（SoulCard 页面、EliteChallengePage、Map_0、GameAnnouncement、set_menu、defeat、load_scene/startup_loading、剩余 4 个 UI/启动场景），随后 38-4 2P/剩余脚本、38-5 L3 收口。PCK/release 与最低配置/其他平台验证继续暂缓。
+- **边界**：解包、密钥、参考树与台账只在仓库外；38-0/38-1/38-2 证据已通过；38-3 的 UI/启动场景与 AndroidIntegrity 尚未接入。
 
 ### 性能对照基线（2026-11-09）
 

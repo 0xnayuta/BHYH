@@ -143,7 +143,7 @@ grep -RIn '"/root/' source --include='*.gd'
 
 此外：
 
-- `RunContext`（`RefCounted`）由 `Global` 持有，负责关卡显示名、宝塔层数、单局统计、特殊副本无尽模式与八仙选择；**不是**第 27 个子服务。
+- `RunContext`（`RefCounted`）由 `Global` 持有，负责关卡显示名、宝塔层数、单局统计、特殊副本无尽模式、八仙选择与精英副本选择；**不是**第 27 个子服务。
 - `ArchiveSession` 由 `Global` 持有，负责档案身份、档案号、路径与代次；业务查询会话，不直接写 `cd_path`。
 - `CloudSession`（`RefCounted`）由 `MemoryClass` 持有，负责云存档登录凭证、UID 摘要、账号名与认证冷却；档案界面通过 `MemoryClass.get_cloud_session()` 使用，不新增 Autoload。
 

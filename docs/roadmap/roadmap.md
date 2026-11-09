@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.3 内容基线；**Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 12~36 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3 PCK/release 长期暂缓；当前活跃候选为 Phase 37。
+> **当前版本**：7.3 内容基线；**Phase 38 的 7.4 内容回植已立项（38-0、38-1、38-2 完成，38-3 待启动）**。Phase 12~37 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；当前活跃候选为 Phase 38。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -42,6 +42,7 @@
 | Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 | Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 | Phase 37 7.3 内容回植 | **完成（37-0~37-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
+| Phase 38 7.4 内容回植 | **进行中（38-0、38-1、38-2 完成，38-3 待启动）** | [`current-iteration.md`](current-iteration.md)；目标 7.4，PCK/release 暂缓 |
 
 **编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
@@ -107,11 +108,13 @@ Windows release 的已有验证见 [`status.md`](../reference/status.md)。后�
 
 7.0 回植已完成角色 8 小龙女、2P、角色选择/技能页/自动战斗、背包/幻化/翅膀/坐骑与 7.0 系统修复；当前验证与边界见 [`status.md`](../reference/status.md)。7.0 release PCK、全量关卡回归与外部云存档服务差异不在本轮 gameplay 收口内。
 
-Phase 35 已完成 7.1 回植与 L3 收口：参考工程/台账、基础数据/攻击区域、Longnv/技能、关卡/北俱芦洲/场景、菜单/UI/剩余脚本均已落地；PCK/release 与最低配置/其他平台验证待最终发布统一执行。7.2 已于 Phase 36 完成，7.3 未立项。
+Phase 35 已完成 7.1 回植与 L3 收口：参考工程/台账、基础数据/攻击区域、Longnv/技能、关卡/北俱芦洲/场景、菜单/UI/剩余脚本均已落地；PCK/release 与最低配置/其他平台验证待最终发布统一执行。7.2 已于 Phase 36 完成，7.3 已于 Phase 37 完成。
 
-Phase 36 已完成 7.2 内容回植与 L3 收口：年兽宠物、首批觉醒、V7.2 公告、喜鹊叠加、幻化与昵称等生产差异均已接入；PCK/release 与最低配置/其他平台验证继续暂缓，7.3 未立项。
+Phase 36 已完成 7.2 内容回植与 L3 收口：年兽宠物、首批觉醒、V7.2 公告、喜鹊叠加、幻化与昵称等生产差异均已接入；PCK/release 与最低配置/其他平台验证继续暂缓，7.3 已于 Phase 37 完成。
 
 Phase 37 已完成 7.3 内容回植与 37-6 缺口修复：二进制/SGXZ、参考源码/场景、数据资产、角色/技能、系统/UI、2P、语义缺口与 L3 均已收口；PCK/release 与最低配置/其他平台验证继续暂缓。
+
+Phase 38 已立项 7.4 内容回植，38-0 已完成：7.4 目录与全部 **40,571** 个文件块 MD5/大小通过，参考树 **791/791** `.gdc` 与 **1,175/1,175** `.scn` 转换成功；7.3→7.4 新增 **296**、删除 **0**、语义生产变化为脚本 **34**、场景 **25**、数据 **1**、资产 **183**、资源 **16**、重映射 **56**。38-1 已完成数据与资产接入：**91** 个源 PNG、**16** 个 `AtlasTexture` `.tres` 与 boot splash（像素一致保留）已接入，未复制 `.ctex`/`.import`/`.res`/`.remap`；4 个 SVG 按钮按 PNG 接入；Atlas **4,015**、FrameSequence **288**、怪物帧 **152**、装备 **1,127**、关卡预载 **101**、原始数据清单 **1,033** 全部通过。38-2 已完成角色与技能脚本：SoulCardData/Runtime/Effect/BossVisual、EliteAttack/BossMechanics/BossStats/Level_Elite、SoulCardPanelBase、18 个魂卡特效场景与 31 个既有特效纹理已接入；BaseHero/BaseMonster/BaseRoleProperies、Monster 77/78/139 与 Level 22 技能限制已收口；`check_all` **9/9**、health **816 脚本 0/0/0**、`level_1` 与 `--role 6/7/8` **4 阶段 0/0/0**、`level_elite` 通用冒烟 **PASS**、变更影响关卡回归 **129/129 + 5 SKIP**（含 `level_elite`）。38-3 进入系统/菜单/UI 与公告；`AndroidIntegrity` Autoload、`startup_loading` 主场景与 `project.binary` 差异留到 38-3 评审，不整体覆盖。PCK/release 与最低配置/其他平台验证继续暂缓。
 
 ## 5. 跨阶段纪律与验收
 

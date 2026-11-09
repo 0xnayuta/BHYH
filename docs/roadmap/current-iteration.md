@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 37 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）**。Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3 PCK/release 暂缓。
-> **版本**：7.3 内容基线；PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：**Phase 38 7.4 内容回植（38-0、38-1、38-2 完成，38-3 待启动）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
+> **版本**：7.3 内容基线；7.4 回植进行中（38-0/38-1/38-2 完成），尚未升级版本标记。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -57,7 +57,7 @@
 - **36-5 完成**：`Global` 接入年兽出战预载（召唤场景/帧/头像，空子弹场景安全跳过）；`GameAnnouncement` 接入 V7.2 文案与版本按钮；`dj_sell` 喜鹊改为可叠加、上限 24 小时（含活动 Buff 刷新）；`Transmogrified` 补充沙僧幻化项并聚合翅膀/头衔；`Role_8` 昵称上移；新增 `menu-ui-72` 探针覆盖预载、公告、喜鹊、幻化与昵称。
 - **36-6 完成**：L3 收口通过 `check_all` 9/9、`health_check --no-cache` 806 脚本 0/0/0、全量关卡回归 128/128 + 5 SKIP、场景探针 26/26、双人矩阵 38/38、档案探针 344/344、`level_1` 四阶段 0/0/0；原始数据/Atlas/帧序列同步校验通过。
 - **后续批次**：无；Phase 36 已关闭，PCK/release 与最低配置/其他平台验证按用户决策暂缓。
-- **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证；7.3 未立项。
+- **边界**：7.2 生产脚本与场景差异已收口；`addons/bone_export/export_plugin.gd` 属第三方插件，按仓库边界不修改；`Script/Test` 仅作规格，不进入生产；PCK/release 实际导出与最低配置/其他平台 VRAM/首帧耗时未验证；7.3 已由 Phase 37 完成。
 
 ### 1.5 Phase 37 7.3 内容回植与 37-6 缺口修复（完成，L3 已通过）
 
@@ -70,6 +70,22 @@
 - **37-5**：L3 收口完成（`check_all` 9/9、全量关卡 128/128 + 5 SKIP、coop 38/38、scene 26/26、archive 344/344、level_1 四阶段通过）；PCK/release 与最低配置/其他平台验证按用户决策另行执行。
 - **37-6**：缺口修复完成；Level_77 出口初始隐藏、Role 8 装备权限、分解帮助文案与 `fixed_chance` 掉落语义已修复；新增 `phase37-6` 探针；L3 复跑 `check_all` 9/9、health 807 脚本 0/0/0、全量关卡 128/128 + 5 SKIP、scene 27/27、coop 38/38、archive 344/344、level_1 四阶段通过；资产矩阵已重生成。
 - **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。
+
+### 1.6 Phase 38 7.4 内容回植（38-0、38-1、38-2 完成，38-3 待启动）
+
+- **目标与基线**：7.4 内容回植；`base` 为 7.3 反编译参考，`ours` 为当前 7.3 治理工程，`theirs` 为 7.4 反编译参考。按 [`ADR-014`](../decisions/ADR-014-three-way-semantic-merge-for-version-migration.md) 做三方语义合并；禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存或上游 `Script/Test`。
+- **38-0 完成**：目标 `八荒湮隳7.4.exe`，**2,382,869,864 字节**，SHA-256 `e6e3d1fdab8b34698ede59152f9a1a7bbea0bfba9210789e9027ca20799c0933`；`GDPC` v4 / engine 4.7.0 / flags `0x3` / `file_base` `0x70`；PCK 起始 `0x38D5C00`，目录偏移 `0x8A3BAA60`，`SGXZSIG1` 位于 PCK+`0x48`。7.4 复用 7.3 的静态 signer/mask 派生路径；目录明文计数 **40,571**、明文长度 **4,107,592**、目录 MD5 `bc036150d6adb9448966fca62b4be987`，完整解析剩余 **0**；全部 **40,571** 个文件块解密后 MD5 与大小通过，flags 全为 `1`，无 `SGXZC001` 压缩包装，存储/明文总量 **2,316,959,886** 字节。参考树已生成 **40,571** 个原始条目，**791/791** `.gdc` 反编译成功、**1,175/1,175** `.scn` 转文本成功；非场景 **39,396** 个文件按清单 size+MD5 复核通过，1,175 个 `.scn` 全部转为 `.tscn`；参考树、清单与台账保存在仓库外。PE 前缀与 7.3 不完全一致（首个差异 `0x350`），启动器/版本资源差异已记录。
+- **38-0 台账结论**：7.3→7.4 新增 **296**、删除 **0**、原始修改 **21**（16 `.gdc` + 2 `.scn` + 1 `project.binary` + 2 cache）。语义生产变化：脚本 **34**（16 修改 + 18 新增，含 17 个 `.gdc` 与 1 个 `.gdshader`）、场景 **25**（2 修改 + 23 新增）、数据 **1**、资产 **183**、资源 **16**、重映射 **56**。内容域集中在魂卡系统、精英副本、启动加载/Android 完整性、V7.4 公告与 UI、Level 22 技能限制移除、Monster 77/78/139 精英逻辑。`project.binary` 显示 7.4 将主场景改为 `startup_loading.tscn`、boot splash 改为 `Art/set_menu/313.png`、新增 `AndroidIntegrity` Autoload、启用传感器；与当前“不新增 Autoload”和 `load_scene` 入口冲突，38-3 必须评审后接入，禁止整体覆盖 `project.godot`/`project.binary`。
+- **38-1 资产接入完成**：7.4 新增资产 **183** 条（91 `.import` + 91 `.ctex` + 1 `.png`）与资源 **16** 条已按台账处置：**91** 个 `.ctex` 解码为源 PNG（`Art/soul_card/` 16、`Art/soul_card/elite/` 68、`Art/main_menu/map_0/` 5、`Art/monster/soul_crystal/` 2），**16** 个 `.res` 恢复为 `AtlasTexture` `.tres`（区域全部校验），未复制 `.ctex`/`.import`/`.res`/`.remap`；4 个上游 SVG 按钮图标按解码 PNG 接入，38-3 的 `Map_0` 引用改用 `.png`；boot splash `Art/set_menu/313.png` 与当前源像素一致（0/554,600 差异），保留当前文件。
+- **38-1 校验完成**：91 个新 `.import` 全部由 Godot 重新生成，`source_file` 指向当前路径，无 `res://godot/imported/`；全工程 51,312 个 `.import` UID 重复 **0**。Atlas **4,015/4,015**、FrameSequence **288**、怪物帧 **152/152**、装备 **1,127**、关卡预载 **101**、原始数据清单 **1,033** 均无变化并通过同步检查；`check_all --godot-bin` **9/9**、`health_check --no-cache` **807 脚本 0/0/0**、`level_1` 冒烟 **4 阶段 0/0/0**。56 个 `.remap` 仅作映射证据：16 个 `.tres` 本批消费，17 个脚本与 23 个场景留待 38-2/38-3。
+- **38-2 角色与技能完成**：新增 `SoulCardData`/`SoulCardRuntime`/`SoulCardEffect`/`SoulCardBossVisual`、`EliteAttack`/`EliteBossMechanics`/`EliteBossStats`/`Level_Elite`、`SoulCardPanelBase` 与 `Scene/level/level_elite.tscn`；按当前路径接入 **18** 个 EliteSoulCard 特效场景（标准节点格式 `.tscn`）与 **31** 个既有特效纹理（含 Monster 77/78/139、天王、龙王、判官等特效序列）。`BaseHero` 接入魂卡运行时挂载、伤害吸收与受击来源；`BaseRoleProperies` 合并魂卡属性与防御倍率；`BaseMonster` 接入精英控制免疫、死亡掉落回调、魂卡伤害回调与难度倍率跳过；`Monster_77/78/139` 接入精英分支；Longnv/NeZha/Yutu 与 `BaseHero.get_skill` 的 Level 22 技能限制移除。`RunContext` 新增精英副本选择状态并提供读写访问器，未新增 Autoload 或 `Global` 业务字段；`Global.CurrentLevel`/`GameOver` 改用现有 `get_current_level_name`/`set_current_level_name` 与 RunContext accessor。
+- **38-2 验证**：`check_all --godot-bin` **9/9**、`health_check --no-cache` **816 脚本 0 Parse / 0 Error / 0 Warning**、`level_1` 四阶段 **0/0/0**、`level_1 --role 6/7/8` 四阶段 **0/0/0**、`level_elite` 通用冒烟 **PASS**（1 阶段，Boss 存活，0/0/0）；变更影响关卡回归 **129/129 PASS + 5 SKIP**（含 `level_elite` PASS，377.4s）；临时探针验证 SoulCardData 属性/1→5 星倍率、EliteBossStats 分档、精英 Boss 掉落奖励、qly 特效生成与护盾吸收，以及 sfe 精英攻击载体生成（2 个存活实例）。
+- **38-3 系统、菜单/UI 与公告**：逐项三方语义合并；在现有最小 `SoulCardPanelBase` 上完成 `SoulCardPage`/`SoulCardLoadoutPage`/`SoulCardRolePreview`/`SoulCardSelectionGlow`/`SoulCardFoilPreview`、`EliteChallengePage`，并补 `Map_0`、`GameAnnouncement`、`set_menu`、`defeat`、`load_scene`/`startup_loading` 与剩余 4 个 UI/启动场景；`AndroidIntegrity` Autoload 与主场景切换先做边界评审，优先以普通节点/局部组件满足当前“不新增 Autoload”约束；帮助文本、版本公告、tooltip 与实际数值/规则一致；新增 UI 遵循 [`ui_typography_contract.md`](../standards/ui_typography_contract.md) 与 Theme token；按 [`ADR-005`](../decisions/ADR-005-no-compatibility-or-fallback-layers.md) 与 [`ADR-006`](../decisions/ADR-006-resource-first-data-and-data-keys.md) 不保留兼容/回退双轨，不新增 Autoload、`Global` 业务字段或 `add` 系门面。
+- **38-4 2P 与剩余脚本/场景**：最后接入侵入性系统；按 [`ADR-017`](../decisions/ADR-017-local-coop-profile-isolation.md) 与 [`ADR-021`](../decisions/ADR-021-project-wide-target-architecture.md) 逐项核对相机、HUD/Buff、灵气、被动属性、技能键提示、面板操作者、槽位回写、死亡/退出与保存快照互斥；剩余脚本/场景差异按台账收口。
+- **38-5 L3 收口**：按 [`acceptance.md`](../reference/acceptance.md) 执行 `check_all --godot-bin` 9/9、`health_check --no-cache` 0/0/0、全量关卡回归、`scene_probe_runner`、`coop_probe_runner`、`archive_probe_runner`、`level_1` 四阶段、命名/白名单、文档链接与构建资源同步；PCK/release 与最低配置/其他平台验证按用户决策另行执行。版本标识与 `status.md`/`roadmap.md` 只在证据完成并经用户确认后更新。
+- **38-6 语义复核与缺口修复（按需）**：复核 Role 1–8 分支、装备权限、场景默认可见性/碰撞层、`fixed_chance`/难度倍率/双倍掉落、帮助文本/公告/tooltip；38-5 发现缺口时先补台账与复现，再修复并复跑同一门禁；无缺口则不启用该批次。
+- **完成判定**：按 [`migration_playbook.md`](../guides/migration_playbook.md) Phase 2 出口逐项满足范围完整、语义完整、资产完整、双人完整、失败边界、证据可复核与文档一致；生产未映射 0，删除/数据表/场景属性/UI 文本均有处置结论；不以“路径存在”或“L3 通过”替代语义复核。
+- **非目标与边界**：不夹带上游之外的玩法重设计、数值再平衡、存档格式变更、旧路径/旧后端/旧存档迁移链、Autoload/`Global` 扩张、目录大规模迁移、PCK/release 或平台验证；解包、密钥、参考树、逐文件台账与本地绝对路径只在仓库外；测试探针按 [`ADR-019`](../decisions/ADR-019-test-fixtures-outside-production-source.md) 放在 `scripts/`；`addons/` 非插件维护任务不修改。
 
 ---
 
@@ -125,7 +141,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 37（含 37-6 缺口修复）已完成内容回植与 L3 收口；当前无活跃候选。PCK/release 与最低配置/其他平台验证按用户决策另行执行，恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：执行 Phase 38-3（系统、菜单/UI 与公告）：在现有最小 `SoulCardPanelBase` 上完成 `SoulCardPage`/`SoulCardLoadoutPage`/`EliteChallengePage` 与角色预览、选中光效、闪卡预览；接入 `Map_0`、`GameAnnouncement`、`set_menu`、`defeat`、`load_scene`/`startup_loading` 与剩余 4 个 UI/启动场景；`AndroidIntegrity` Autoload 与主场景切换先做边界评审，优先以普通节点/局部组件满足当前“不新增 Autoload”约束，禁止整体覆盖 `project.godot`/`project.binary`。PCK/release 与最低配置/其他平台验证按用户决策另行执行，恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
