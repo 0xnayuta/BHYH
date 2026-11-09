@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 38 7.4 内容回植（38-0、38-1、38-2、38-3、38-4 完成，38-5 待执行）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
-> **版本**：7.4 内容回植进行中（38-0~38-4 完成，38-5 待执行），尚未升级发布版本标记。
+> **状态**：**Phase 38 7.4 内容回植与 38-5 L3 收口完成（38-0~38-5；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
+> **版本**：7.4 内容基线（38-0~38-5 完成，L3 已通过）；PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -71,7 +71,7 @@
 - **37-6**：缺口修复完成；Level_77 出口初始隐藏、Role 8 装备权限、分解帮助文案与 `fixed_chance` 掉落语义已修复；新增 `phase37-6` 探针；L3 复跑 `check_all` 9/9、health 807 脚本 0/0/0、全量关卡 128/128 + 5 SKIP、scene 27/27、coop 38/38、archive 344/344、level_1 四阶段通过；资产矩阵已重生成。
 - **边界**：禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存；`addons/` 与上游 `Script/Test` 不直接进入生产；台账、解包目录与本地绝对路径不进入仓库；7.3 PCK/release 暂缓。
 
-### 1.6 Phase 38 7.4 内容回植（38-0~38-4 完成，38-5 待执行）
+### 1.6 Phase 38 7.4 内容回植与 L3 收口（38-0~38-5 完成）
 
 - **目标与基线**：7.4 内容回植；`base` 为 7.3 反编译参考，`ours` 为当前 7.3 治理工程，`theirs` 为 7.4 反编译参考。按 [`ADR-014`](../decisions/ADR-014-three-way-semantic-merge-for-version-migration.md) 做三方语义合并；禁止整包覆盖、直接 patch 反编译 diff、复制旧 `.ctex`/`.import`/缓存或上游 `Script/Test`。
 - **38-0 完成**：目标 `八荒湮隳7.4.exe`，**2,382,869,864 字节**，SHA-256 `e6e3d1fdab8b34698ede59152f9a1a7bbea0bfba9210789e9027ca20799c0933`；`GDPC` v4 / engine 4.7.0 / flags `0x3` / `file_base` `0x70`；PCK 起始 `0x38D5C00`，目录偏移 `0x8A3BAA60`，`SGXZSIG1` 位于 PCK+`0x48`。7.4 复用 7.3 的静态 signer/mask 派生路径；目录明文计数 **40,571**、明文长度 **4,107,592**、目录 MD5 `bc036150d6adb9448966fca62b4be987`，完整解析剩余 **0**；全部 **40,571** 个文件块解密后 MD5 与大小通过，flags 全为 `1`，无 `SGXZC001` 压缩包装，存储/明文总量 **2,316,959,886** 字节。参考树已生成 **40,571** 个原始条目，**791/791** `.gdc` 反编译成功、**1,175/1,175** `.scn` 转文本成功；非场景 **39,396** 个文件按清单 size+MD5 复核通过，1,175 个 `.scn` 全部转为 `.tscn`；参考树、清单与台账保存在仓库外。PE 前缀与 7.3 不完全一致（首个差异 `0x350`），启动器/版本资源差异已记录。
@@ -86,7 +86,8 @@
 - **38-4 2P 与剩余脚本完成**：`coop_probe_runner` **38/38 PASS**（298.29s），覆盖相机/HUD/Buff/灵气/被动属性/技能键提示/面板操作者/槽位账本/输入隔离/全灭死亡/保存快照互斥；`SoulCardRuntime` 与 `BaseRoleProperies` 魂卡数据/属性走 `LocalCoop.data_for`/`props_for`，`BaseMonster` 魂卡伤害归属解析实际出手者；新 SoulCard/Elite/RolePreview 页面提供 `LocalCoop.data_for(self)` 的 `PlayerData` 属性并在 `coop_slot=2` 验证 secondary；`Map_0` 新菜单入口保持菜单级单操作者路径（与 7.4 一致）。
 - **38-4 剩余脚本闭合**：`RoleSkillOpacity` 类型安全、`load_scene` startup progress/向下取整/AndroidIntegrity 内联等价、`Global.EliteChallengeSelection`→RunContext、`set_menu`/`defeat`/`GameAnnouncement`/`Map_0` 已完成；无未处置生产脚本/场景。
 - **38-4 验证**：`check_all --godot-bin` **9/9 PASS**（42.77s）、`health_check` **823 脚本 0/0/0**、`level_1`/`level_elite` **0/0/0**、2P 页面操作者探针通过。
-- **38-5 L3 收口**：按 [`acceptance.md`](../reference/acceptance.md) 执行 `check_all --godot-bin` 9/9、`health_check --no-cache` 0/0/0、全量关卡回归、`scene_probe_runner`、`coop_probe_runner`、`archive_probe_runner`、`level_1` 四阶段、命名/白名单、文档链接与构建资源同步；PCK/release 与最低配置/其他平台验证按用户决策另行执行。版本标识与 `status.md`/`roadmap.md` 只在证据完成并经用户确认后更新。
+- **38-5 L3 收口完成**：`check_all --godot-bin` **9/9**（43.87s）、`health_check --no-cache` **823 脚本 0/0/0**、全量关卡回归 **129/129 + 5 SKIP**（351.3s）、`scene_probe_runner` **29/29**（隔离复跑 332.69s）、`coop_probe_runner` **38/38**（326.91s）、`archive_probe_runner` **344 检查 PASS**（23.39s）；命名/白名单 100%、Atlas **4,015**、FrameSequence **288**、怪物帧 **152**、装备 **1,127**、关卡预载 **101/154 场景**、原始数据清单 **1,033**、资源路径 **19,562/160**、文档链接 895/0 全部通过。
+- **38-5 边界**：全量场景探针与回归/双人矩阵并发时曾出现一次 `level-selection` teardown 噪声；单探针与隔离全量复跑均 PASS，L3 采用隔离结果。PCK/release、最低配置与其他平台验证未执行。
 - **38-6 语义复核与缺口修复（按需）**：复核 Role 1–8 分支、装备权限、场景默认可见性/碰撞层、`fixed_chance`/难度倍率/双倍掉落、帮助文本/公告/tooltip；38-5 发现缺口时先补台账与复现，再修复并复跑同一门禁；无缺口则不启用该批次。
 - **完成判定**：按 [`migration_playbook.md`](../guides/migration_playbook.md) Phase 2 出口逐项满足范围完整、语义完整、资产完整、双人完整、失败边界、证据可复核与文档一致；生产未映射 0，删除/数据表/场景属性/UI 文本均有处置结论；不以“路径存在”或“L3 通过”替代语义复核。
 - **非目标与边界**：不夹带上游之外的玩法重设计、数值再平衡、存档格式变更、旧路径/旧后端/旧存档迁移链、Autoload/`Global` 扩张、目录大规模迁移、PCK/release 或平台验证；解包、密钥、参考树、逐文件台账与本地绝对路径只在仓库外；测试探针按 [`ADR-019`](../decisions/ADR-019-test-fixtures-outside-production-source.md) 放在 `scripts/`；`addons/` 非插件维护任务不修改。
@@ -145,7 +146,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：执行 Phase 38-5 L3 收口：全量关卡回归、`scene_probe_runner`、`coop_probe_runner`、`archive_probe_runner`、命名/白名单、文档链接与构建资源同步。PCK/release 与最低配置/其他平台验证按用户决策另行执行，恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 38 内容回植与 L3 已收口，当前无活跃候选。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
