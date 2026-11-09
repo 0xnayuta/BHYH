@@ -178,7 +178,7 @@ flowchart TD
 
 启动与加载流程负责：
 
-- 启动页 `Scene/other_scene/startup_loading.gd` 在主场景阶段显示首帧进度，线程加载 `load_scene.tscn`，以 `startup_progress=0.1` 元数据交接；不新增 Autoload，不复制 `project.binary`，Android 签名校验仍由加载页内联流程执行；
+- 启动页 `Script/runtime/startup_loading.gd` 在主场景阶段显示首帧进度，线程加载 `load_scene.tscn`，以 `startup_progress=0.1` 元数据交接；不新增 Autoload，不复制 `project.binary`，Android 签名校验仍由加载页内联流程执行；
 - 窗口策略：可用屏幕小于 1600×1000 时进入全屏；
 - Android 首启完整性校验（仅 Android 且存在平台单例时）；
 - 构建预载清单：目标场景、角色/宠物/剑阵/法宝、首波怪物、必要背景与音效；关卡怪物与弹体场景来自构建期 `LevelPreloadCatalog`；

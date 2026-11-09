@@ -135,7 +135,7 @@
 - **28-3D 验证**：单次/一键升级成功与保存失败回滚、满级/灵魂不足、1P/2P 快照作用域、读档/切档、活体宠物属性刷新、宠物背包共享不受影响；`check_all`、`health_check`、`contract_scan --self-test`、`archive_probe_runner`、`coop_probe_runner`、`level_1` 通过。
 - **出口**：宠物被动升级保存失败不产生等级或灵魂变化；宠物域不再调用 `PaSkill`；UI 直写被门禁拦截。
 
-### 1.8 Phase 29 `Scene/` 脚本落位（29-0 完成；迁移未启动）
+### 1.8 Phase 29 `Scene/` 脚本落位（29-0、29-1 完成；迁移进行中）
 
 - **目标**：统一 GDScript 落位规则为“`Scene/` 不存放 `.gd`，全部归 `Script/<domain>/`”，迁移当前 56 个场景脚本。
 - **入口**：`source/Scene/` 下 56 个 `.gd`；[`naming_standard.md`](../standards/naming_standard.md) §1.2、§2.1；`scripts/naming_audit.py`。
@@ -148,10 +148,11 @@
 - 新增或修订目录落位 ADR，同步 `architecture.md` 的目录说明。
 - **产出**：`naming_standard.md` v2.2.0（§1.2、§1.4、§2.1）；[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)；[`scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md)；56 个映射无同名冲突，10 个目标目录均无同名目标文件。
 
-#### 29-1 应用编排与档案（未启动）
+#### 29-1 应用编排与档案（完成）
 
 - `load_scene.gd`、`startup_loading.gd`、`userload.gd`、`auto_battle_config.gd` → `Script/runtime/`。
 - `bacis_ar_button.gd` → `Script/archive_interface/`。
+- **完成记录**：`rename_path.py` 批量迁移 5 个脚本与 `.uid`；5 个 `.tscn` 的 `ext_resource` 同步；更新 `contract_scan.py` 路径基线、两份 theme 基线、`naming_whitelist.md` 与 `ADR-018` 链接；`check_all`、`health_check`、`level_1` 通过。
 
 #### 29-2 菜单、关卡、奖励、阵法与怪物（未启动）
 
@@ -223,7 +224,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 29-0 已完成（规范、ADR-031、56 文件清单）；下一步执行 Phase 29-1 应用编排与档案迁移（5 个脚本）。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 29-0、29-1 已完成；下一步执行 Phase 29-2 菜单、帮助、结算、奖励、阵法与怪物迁移（42 个脚本）。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

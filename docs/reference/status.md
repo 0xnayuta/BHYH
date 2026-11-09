@@ -184,6 +184,15 @@
 - 新增 `scene_script_migration_matrix.md`：56 个 `.gd` 逐文件源/目标路径、引用点、批次与统计；56/56 映射完整，10 个目标目录无同名冲突，55 个同名 `.tscn` 加 1 个跨脚本引用。
 - 边界：仅规范与清单；无代码、场景或资源变更；Phase 29-1 未启动。
 
+### Phase 29-1 应用编排与档案迁移（2026-11-09）
+
+- 5 个脚本通过 `rename_path.py` 批量迁移：`auto_battle_config`、`load_scene`、`startup_loading`、`userload` → `Script/runtime/`；`bacis_ar_button` → `Script/archive_interface/`。
+- `.uid` 与 5 个对应 `.tscn` 的 `ext_resource` 同步；`source/` 内旧 `.gd` 路径引用为 0；`Scene/` 下剩余 51 个 `.gd`。
+- 基线更新：`contract_scan.py` 的 `PRELOAD_BOUNDARY_FILE`、`LOAD_CACHE_BOUNDARY_FILE`、档案边界白名单与自测路径；`ui_dynamic_theme_baseline.json`、`theme_override_baseline.json` 的 `auto_battle_config` 路径；`naming_whitelist.md` 与 `ADR-018` 证据链接。
+- 验证：`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0 Parse / 0 Error / 0 Warning；`level_1` 4 阶段 PASS，日志 0/0/0。
+- 验证补充：`scene_probe_runner` 全量 PASS（345.46s）；`docs_audit` 940 链接 / 0 缺失。
+- 边界：29-2/29-3 未启动；`Scene/` 下 `.gd` 未清零。
+
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。

@@ -304,7 +304,7 @@ Scene/mount/rider_adjustments/role6/1003500.tscn  Scene/mount/rider_adjustments/
 
 | 字面量 | 位置 | 理由 |
 |:---|:---|:---|
-| `ililillliiillil` | `Scene/other_scene/load_scene.gd:97` | 加密校验器的方法名，非资源路径 |
+| `ililillliiillil` | `Script/runtime/load_scene.gd:97` | 加密校验器的方法名，非资源路径 |
 
 ### 2.2 文件级豁免（`suppressed_files`）
 

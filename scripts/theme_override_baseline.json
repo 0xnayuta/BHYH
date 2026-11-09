@@ -657,7 +657,7 @@
     "calls": 386,
     "files": 45,
     "paths": [
-      "Scene/auto_battle_config.gd",
+      "Script/runtime/auto_battle_config.gd",
       "Scene/other_scene/level_info.gd",
       "Scene/other_scene/monster_head_info.gd",
       "Scene/other_scene/reward_box_2.gd",

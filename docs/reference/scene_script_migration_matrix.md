@@ -1,6 +1,6 @@
 # `Scene/` 脚本落位迁移清单（Phase 29-0）
 
-> **状态**：清单已确认；迁移未开始（Phase 29-1 起逐批执行）。
+> **状态**：29-1 已迁移并验证；29-2/29-3 未开始（Phase 29-1 起逐批执行）。
 >
 > **规则**：`source/Scene/` 只承载 `.tscn`/`.tres`；全部 `.gd` 归 `source/Script/<domain>/`。决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 >
@@ -21,7 +21,9 @@
   - `global.gd` 与 `popup_factory.gd`/`show_text_factory.gd`/`combat_presentation_factory.gd` 等工厂持有多个 `res://Scene/...` 字符串路径，必须由迁移工具同步。
 - `Scene/other_scene/star.gd` 当前未发现场景/脚本引用；仍按清单迁移，批次验证时确认是否可加载。
 
-## 2. Phase 29-1：应用编排与档案（5）
+## 2. Phase 29-1：应用编排与档案（5）· 已完成
+
+> 5 个脚本已通过 `scripts/rename_path.py` 批量迁移；`.uid` 与 5 个对应 `.tscn` 的 `ext_resource` 同步；`source/Scene/` 下剩余 51 个 `.gd`。基线同步：`contract_scan.py` 的 `load_scene`/`bacis_ar_button` 路径、`ui_dynamic_theme_baseline.json`、`theme_override_baseline.json`、`naming_whitelist.md` 与 `ADR-018` 证据链接。验证：`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（345.46s）、`docs_audit` 940/0。
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|

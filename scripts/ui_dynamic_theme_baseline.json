@@ -9,7 +9,7 @@
     "total": 386
   },
   "files": {
-    "Scene/auto_battle_config.gd": {
+    "Script/runtime/auto_battle_config.gd": {
       "tokenized": 5,
       "total": 5
     },
@@ -237,31 +237,31 @@
   },
   "calls": [
     {
-      "file": "Scene/auto_battle_config.gd",
+      "file": "Script/runtime/auto_battle_config.gd",
       "line": 269,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/auto_battle_config.gd",
+      "file": "Script/runtime/auto_battle_config.gd",
       "line": 274,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/auto_battle_config.gd",
+      "file": "Script/runtime/auto_battle_config.gd",
       "line": 281,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/auto_battle_config.gd",
+      "file": "Script/runtime/auto_battle_config.gd",
       "line": 286,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/auto_battle_config.gd",
+      "file": "Script/runtime/auto_battle_config.gd",
       "line": 297,
       "kind": "font_size",
       "category": "tokenized"

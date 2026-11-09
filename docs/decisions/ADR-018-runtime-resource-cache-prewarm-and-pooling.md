@@ -39,5 +39,5 @@
 
 - [`../reference/architecture.md`](../reference/architecture.md) §3.2、§6.5
 - [`../../source/global.gd`](../../source/global.gd) 缓存/池/预热函数
-- [`../../source/Scene/other_scene/load_scene.gd`](../../source/Scene/other_scene/load_scene.gd)
+- [`../../source/Script/runtime/load_scene.gd`](../../source/Script/runtime/load_scene.gd)
 - [`../reference/status.md`](../reference/status.md) 加载与卡顿修复记录

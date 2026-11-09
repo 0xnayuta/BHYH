@@ -1008,7 +1008,7 @@ class ContractScanner:
         "Script/atlas/atlas_metadata.gd",
         "Script/atlas/atlas_metadata_view.gd",
     }
-    PRELOAD_BOUNDARY_FILE = "Scene/other_scene/load_scene.gd"
+    PRELOAD_BOUNDARY_FILE = "Script/runtime/load_scene.gd"
     PRELOAD_BOUNDARY_PATTERNS = (
         "DirAccess.",
         "ResourceLoader.get_dependencies(",
@@ -1024,7 +1024,7 @@ class ContractScanner:
         "change_scene_to_file(",
         "change_scene_to_packed(",
     )
-    LOAD_CACHE_BOUNDARY_FILE = "Scene/other_scene/load_scene.gd"
+    LOAD_CACHE_BOUNDARY_FILE = "Script/runtime/load_scene.gd"
     LOAD_CACHE_PRIVATE_PATTERNS = (
         "Global._resource_cache",
         "Global._sprite_frames_cache",
@@ -1098,12 +1098,12 @@ class ContractScanner:
 
     ARCHIVE_PATH_LITERAL = "user://MyAr_"
     ARCHIVE_PATH_LITERAL_ALLOWLIST = {
-        "Scene/other_scene/bacis_ar_button.gd",
+        "Script/archive_interface/bacis_ar_button.gd",
         "Script/archive_interface/read_archive_interface.gd",
         "Script/memory_class/memory_class.gd",
     }
     ARCHIVE_ENTRY_ALLOWLIST = {
-        "load_game": {"Scene/other_scene/bacis_ar_button.gd", "Script/memory_class/memory_class.gd"},
+        "load_game": {"Script/archive_interface/bacis_ar_button.gd", "Script/memory_class/memory_class.gd"},
         "save_game": {"Script/memory_class/memory_class.gd"},
         "safe_write_archive": {
             "Script/archive_interface/read_archive_interface.gd",
@@ -2426,12 +2426,12 @@ def run_load_cache_boundary_self_test() -> bool:
     """加载页私有缓存自测：私有字段必须拦截，窄交接 API 必须放行。"""
     print("[*] 加载页私有缓存门禁负向自测...")
     bad_samples = {
-        "直接读 _resource_cache": ("var hit = Global._resource_cache.has(path)\n", "Scene/other_scene/load_scene.gd"),
-        "直接写 _texture_cache": ("Global._texture_cache[path] = resource\n", "Scene/other_scene/load_scene.gd"),
-        "直接调用私有写入": ("Global._cache_threaded_resource(path, resource)\n", "Scene/other_scene/load_scene.gd"),
+        "直接读 _resource_cache": ("var hit = Global._resource_cache.has(path)\n", "Script/runtime/load_scene.gd"),
+        "直接写 _texture_cache": ("Global._texture_cache[path] = resource\n", "Script/runtime/load_scene.gd"),
+        "直接调用私有写入": ("Global._cache_threaded_resource(path, resource)\n", "Script/runtime/load_scene.gd"),
     }
     good_samples = {
-        "窄交接提交": ("Global.handoff_loaded_resource(path, resource, true)\n", "Scene/other_scene/load_scene.gd"),
+        "窄交接提交": ("Global.handoff_loaded_resource(path, resource, true)\n", "Script/runtime/load_scene.gd"),
         "其他文件访问约定 API": ("var hit = Global.is_resource_cached(path)\n", "Script/level/sample.gd"),
     }
     passed = True
@@ -2599,7 +2599,7 @@ def run_archive_boundary_self_test() -> bool:
         "业务直调 load_game": ("var r = MemoryClass.load_game(path)\n", "Script/level/sample.gd"),
     }
     good_samples = {
-        "存档卡片登记入口": ('var p := "user://MyAr_" + str(n) + ".json"\nMemoryClass.load_game(p)\n', "Scene/other_scene/bacis_ar_button.gd"),
+        "存档卡片登记入口": ('var p := "user://MyAr_" + str(n) + ".json"\nMemoryClass.load_game(p)\n', "Script/archive_interface/bacis_ar_button.gd"),
         "存档界面登记写入": ('var p := "user://MyAr_" + str(n) + ".json"\nMemoryClass.safe_write_archive(p, data)\n', "Script/archive_interface/read_archive_interface.gd"),
         "持久化边界内部": ('var prefix := "user://MyAr_"\nif save_game(p):\n\tpass\n', "Script/memory_class/memory_class.gd"),
         "业务提交保存请求": ('MemoryClass.request_save("panel")\n', "Script/level/sample.gd"),
