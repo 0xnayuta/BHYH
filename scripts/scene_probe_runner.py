@@ -28,6 +28,8 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `awaken-72`：7.2 首批觉醒（重斩/玄冰阵/哪吒双火轮/月魔舞）与觉醒弹窗、技能面板、材料。
 - `menu-ui-72`：年兽预载、V7.2 公告、喜鹊叠加、幻化翅膀/头衔与小龙女昵称偏移；
 - `phase37-6`：寒山坡出口初始隐藏/清关可见、小龙女装备权限、分解帮助文本与固定概率掉落。
+- `phase38-6a`：非 qly 精英 signature 的 EliteAttack 方向属性。
+- `phase38-6`：72/73 魂晶图标、2P 魂卡属性隔离与双人精英实际属性。
 """
 
 from __future__ import annotations
@@ -385,6 +387,28 @@ PROBES: tuple[ProbeSpec, ...] = (
         expected_noise=(
             "WARNING: 1 ObjectDB instance was leaked at exit",
         ),
+    ),
+    ProbeSpec(
+        key="phase38-6a",
+        title="38-6a 非 qly 精英方向探针",
+        script_name="phase38_6a_probe.gd",
+        scene_name="phase38_6a_probe.tscn",
+        result_prefix="PHASE_38_6A_PROBE_RESULT=",
+        report_stem="phase38_6a_probe_report",
+        teardown_marker="PHASE_38_6A_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=120,
+    ),
+    ProbeSpec(
+        key="phase38-6",
+        title="38-6 魂卡图标、2P 属性与精英数值探针",
+        script_name="phase38_6_probe.gd",
+        scene_name="phase38_6_probe.tscn",
+        result_prefix="PHASE_38_6_PROBE_RESULT=",
+        report_stem="phase38_6_probe_report",
+        teardown_marker="PHASE_38_6_PROBE_TEARDOWN",
+        quit_after_frames=900,
+        timeout_seconds=180,
     ),
     ProbeSpec(
         key="north-daynight",
