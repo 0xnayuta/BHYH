@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.4 内容基线；Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**Phase 39 Scene/Script 目录收敛（未启动）**。
+> **当前版本**：7.4 内容基线；Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**Phase 39 Scene/Script 目录收敛（进行中：39-0 已完成）**。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -45,7 +45,7 @@
 | Phase 38 7.4 内容回植 | **完成（38-0~38-6；L3 通过；归档）** | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；PCK/release 暂缓 |
 | Phase 28 全局通信与派生属性契约 | **完成（28-1、28-2、28-3；归档）** | [`iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md)；移除 `Signals`、玩家与宠物被动契约 |
 | Phase 29 `Scene/` 脚本落位 | **完成（29-0~29-4；归档）** | [`iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；56 个场景脚本归 `Script/<domain>/`；`Scene/**/*.gd` 门禁 |
-| Phase 39 Scene/Script 目录收敛 | **未启动** | [`current-iteration.md`](current-iteration.md) §1.3；根级清零、`other_scene` 拆分、场景合并与根级门禁 |
+| Phase 39 Scene/Script 目录收敛 | **进行中（39-0 已完成；39-1~39-4 未启动）** | [`current-iteration.md`](current-iteration.md) §1.3；根级清零已完成，`other_scene` 拆分、场景合并与根级门禁待推进 |
 
 **编号边界**：Phase 22~29 为本轮新增候选；Phase 30 已被使用，Phase 39 为本轮新登记候选；不重开已归档的 Phase 31~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 

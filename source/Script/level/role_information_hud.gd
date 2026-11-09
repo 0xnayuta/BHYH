@@ -10,7 +10,7 @@ var bp_c: int = 0
 var _backpack_scene: PackedScene
 
 const BACKPACK_SCENE := "res://Scene/back_pack/back_pack.tscn"
-const SET_MENU_SCENE := "res://Scene/set_menu.tscn"
+const SET_MENU_SCENE := "res://Scene/level/set_menu.tscn"
 const PET_INTERFACE_SCENE := "res://Scene/pet/pet_interface.tscn"
 const ESCAPE_CLOSE_METHOD := &"request_escape_close"
 

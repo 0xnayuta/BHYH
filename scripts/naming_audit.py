@@ -175,6 +175,17 @@ def check_files(violations: list[str], all_files: bool = False) -> int:
                 f"脚本落位违规: {rel} (Scene/ 不承载 .gd，应归 Script/<domain>/)"
             )
             continue
+        parent = os.path.dirname(rel)
+        if parent == "Scene" and ext == ".tscn":
+            violations.append(
+                f"场景落位违规: {rel} (Scene/ 根级不承载 .tscn，应归 Scene/<domain>/)"
+            )
+            continue
+        if parent == "Script" and ext == ".gd":
+            violations.append(
+                f"脚本落位违规: {rel} (Script/ 根级不承载 .gd，应归 Script/<domain>/)"
+            )
+            continue
         if not SNAKE_RE.match(stem):
             kind = ".tscn 场景" if ext == ".tscn" else (".gd 脚本" if ext == ".gd" else "资源")
             violations.append(f"{kind}文件命名违规: {rel} (期望 snake_case)")

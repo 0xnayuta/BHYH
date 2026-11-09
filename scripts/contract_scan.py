@@ -1182,7 +1182,7 @@ class ContractScanner:
     # 面板与命令面板都必须经 request_save 与 PlayerData 写入口方法。
     HUD_PANEL_FILES = {
         "Script/skill/skill_icon.gd",
-        "Script/backpack.gd",
+        "Script/level/role_information_hud.gd",
         "Script/pet/pet_interface.gd",
         "Script/pet/pet_attribute_pages.gd",
         "Script/base/base_role.gd",

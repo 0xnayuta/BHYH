@@ -603,7 +603,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 坐骑 | `Script/mount/` | 坐骑运行时、图鉴、技能效果 | `mount_runtime.gd`、`mount_catalog.gd` |
 | 丹药 | `Script/pellet/` | 丹药属性缓存与消耗 | `basic_pellet.gd` |
 | 锻造 | `Script/ldl/` | 强化、合成、镶嵌、分解、打造、神铸、淬骨 | `ldl.gd`、`strength.gd`、`divine_forge.gd` |
-| 背包 | `Script/back_pack/`、`Script/backpack.gd` | 背包、装备、售卖、法宝信息；角色信息 HUD 的窗口编排 | `main_backpack.gd`、`magic_weapon_infor.gd` |
+| 背包 | `Script/back_pack/`、`Script/level/role_information_hud.gd` | 背包、装备、售卖、法宝信息；角色信息 HUD 的窗口编排 | `main_backpack.gd`、`magic_weapon_infor.gd` |
 | 地图/主菜单 | `Script/main_menu/` | 世界地图、区域地图、设置、公告、坐骑面板 | `main_menu.gd`、`map_0.gd`…`map_9_1.gd` |
 | 存档界面 | `Script/archive_interface/` | 存档列表、云存档、删档 | `read_archive_interface.gd` |
 | 任务 | `Script/task/` | 任务面板与奖励 | `basic_task.gd`、`task_reward.gd` |

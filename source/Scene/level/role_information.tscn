@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/465.png" id="8"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/472.png" id="9"]
 [ext_resource type="Texture2D" path="res://Art/role_info_icon/500.png" id="10"]
-[ext_resource type="Script" path="res://Script/backpack.gd" id="12"]
+[ext_resource type="Script" path="res://Script/level/role_information_hud.gd" id="12"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="SpriteFrames" id="1"]

@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://Scene/base/base_monster.tscn" id="1"]
-[ext_resource type="Script" path="res://Script/monster_86.gd" id="2"]
+[ext_resource type="Script" path="res://Script/monster/monster_86.gd" id="2"]
 [ext_resource type="Texture2D" path="res://Art/monster/game_3_monster/monster_3_3/atlas_small_monsters/pages/atlas_001.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/monster/game_3_special_effect/monster_3_3/atlas_small_monsters/pages/atlas_000.png" id="4"]
 

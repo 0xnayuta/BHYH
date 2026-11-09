@@ -53,9 +53,10 @@
 
 - **`Scene/` 不承载脚本**：`source/Scene/` 只保存 `.tscn`、`.tres` 与场景资源；不得新增或保留 `.gd`。
 - **脚本统一落位**：所有 GDScript 必须位于 `source/Script/<domain>/`；`<domain>` 为功能域目录（如 `runtime`、`main_menu`、`monster`、`skill`、`data`），不得按 `.tscn` 所在目录镜像新建平行约定。
+- **根级清零**：`source/Script/` 根级不承载 `.gd`；`source/Scene/` 根级不承载 `.tscn`。新脚本与新场景分别归 `Script/<domain>/`、`Scene/<domain>/`。
 - **存量迁移**：现有 `Scene/` 下 56 个 `.gd` 按 [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md) 分批迁移；决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 - **例外为零**：不保留 `Scene/**/*.gd` 白名单；`addons/` 第三方插件不在本规则范围，但不得作为规避通道。
-- **门禁**：自 Phase 29-4 起，`scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；存量已清零，新增脚本不得再放入 `Scene/`。
+- **门禁**：自 Phase 29-4 起，`scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；自 Phase 39-0 起，同时拦截 `source/Scene/*.tscn` 与 `source/Script/*.gd`。存量已清零，新增文件不得再落根级。
 
 ---
 

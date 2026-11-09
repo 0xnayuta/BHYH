@@ -90,7 +90,7 @@ func _count_named(root: Node, target: String) -> int:
 
 
 func _check_auto_battle() -> void:
-	var script := load("res://Scene/auto_battle_config.gd") as Script
+	var script := load("res://Script/runtime/auto_battle_config.gd") as Script
 	var auto: Node = script.new() as Node
 	_checks["auto_battle_role8"] = str(auto.call("_skill_name", "xln_lz")) == "飞旋龙"
 	var constants: Dictionary = auto.get_script().get_script_constant_map()

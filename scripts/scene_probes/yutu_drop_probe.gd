@@ -7,7 +7,7 @@ extends Node
 const RESULT_PREFIX := "YUTU_DROP_PROBE_RESULT="
 const TEARDOWN_MARKER := "YUTU_DROP_PROBE_TEARDOWN"
 const YUTU := preload("res://Script/data/yutu_equipment_data.gd")
-const LEVEL_INFO := preload("res://Scene/other_scene/level_info.gd")
+const LEVEL_INFO := preload("res://Script/level/level_info.gd")
 const BOOK_CASES := [
 	{
 		"level_name": "清音阁",

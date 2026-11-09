@@ -263,7 +263,7 @@ func _clear_packed_scene_members_for_path(scene_path: String) -> void:
 
 
 func is_runtime_ui_scene_path(scene_path: String) -> bool:
-	if scene_path == "res://Scene/set_menu.tscn" or scene_path == "res://Scene/pet/pet_interface.tscn":
+	if scene_path == "res://Scene/level/set_menu.tscn" or scene_path == "res://Scene/pet/pet_interface.tscn":
 		return true
 	for prefix in [
 		"res://Scene/back_pack/",

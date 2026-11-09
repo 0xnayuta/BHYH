@@ -309,7 +309,7 @@ func _check_shop_family(checks: Dictionary) -> void:
 
 
 func _check_set_menu_layout(checks: Dictionary) -> void:
-	var packed := load("res://Scene/set_menu.tscn") as PackedScene
+	var packed := load("res://Scene/level/set_menu.tscn") as PackedScene
 	var host := _make_host("SetMenuLayoutHost")
 	var menu: Node = packed.instantiate() if packed != null else null
 	if menu != null:

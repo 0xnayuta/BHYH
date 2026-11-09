@@ -65,7 +65,7 @@ func _run() -> void:
 		skill_page.get_node_or_null("ScrollContainer/HBoxContainer/Sk_na/skill_20") != null
 	)
 	skill_page.queue_free()
-	var auto_page = load("res://Scene/auto_battle_config.tscn").instantiate()
+	var auto_page = load("res://Scene/level/auto_battle_config.tscn").instantiate()
 	add_child(auto_page)
 	await get_tree().process_frame
 	_checks["auto_battle_role8"] = str(auto_page.get("role_key")) == "角色8"
