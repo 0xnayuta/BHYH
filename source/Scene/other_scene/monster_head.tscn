@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Texture2D" path="res://Art/monster/monster_head/els.png" id="1"]
-[ext_resource type="Script" path="res://Scene/other_scene/monster_head.gd" id="2"]
+[ext_resource type="Script" path="res://Script/monster/monster_head.gd" id="2"]
 [ext_resource type="Texture2D" path="res://Art/monster/monster_head/ui_suoyaota_guaiwutouxiang.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/monster/monster_head/hy.png" id="5"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]

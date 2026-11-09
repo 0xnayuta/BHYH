@@ -19,7 +19,7 @@
       "tokenized": 6,
       "total": 11
     },
-    "Scene/other_scene/monster_head_info.gd": {
+    "Script/monster/monster_head_info.gd": {
       "data": 4,
       "layout": 6,
       "tokenized": 1,
@@ -333,67 +333,67 @@
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 479,
       "kind": "stylebox",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 665,
       "kind": "stylebox",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 669,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 670,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 671,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 672,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 677,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 1323,
       "kind": "font_size",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 1324,
       "kind": "color",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 1325,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/monster_head_info.gd",
+      "file": "Script/monster/monster_head_info.gd",
       "line": 1326,
       "kind": "constant",
       "category": "layout"

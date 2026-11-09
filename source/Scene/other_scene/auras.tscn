@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/auras.gd" id="1"]
+[ext_resource type="Script" path="res://Script/monster/auras.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/add_effect/aura.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xh5v1"]

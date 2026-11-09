@@ -211,6 +211,15 @@
 - 验证补充：`scene_probe_runner` 全量 PASS（347.42s）。
 - 边界：29-2C、29-3 未启动；`Scene/` 剩余 19 个 `.gd`。
 
+### Phase 29-2C 怪物、血条、受击、Buff 与光环脚本迁移（2026-11-09）
+
+- 10 个脚本迁移 → `Script/monster/`：`auras`、`basic_monment_info`、`buff_icon`、`buff_information`、`buff_list`、`monster_be_hit`、`monster_blood_bar`、`monster_head`、`monster_head_info`、`nmw_aura`。
+- 迁移触发 `ui_surface_token_audit`：`monster_head_info` 的 4 处 StyleBox 颜色改用 `UiSurfaceTokens.OVERLAY_EARTH` 与新增 `MONSTER_SELECT_BG`/`MONSTER_SELECT_BORDER`/`MONSTER_INFO_BORDER`；`scripts/ui_theme_tokens.json` 新增三项并重新生成 `UiSurfaceTokens`。
+- 基线同步：`ui_dynamic_theme_baseline.json` 与 `theme_override_baseline.json` 的 `monster_head_info` 路径；`ui_panel_contract_matrix.md` 事实源。
+- 验证：`contract_gate` 全 PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`level_1` 4 阶段 0/0/0。
+- 验证补充：`scene_probe_runner` 全量 PASS（348.46s）。
+- 边界：29-3 未启动；`Scene/` 剩余 9 个 `.gd`。
+
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。

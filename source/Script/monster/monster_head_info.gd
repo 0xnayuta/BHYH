@@ -472,8 +472,8 @@ func set_selected(value: bool) -> void:
 		_selection_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		_selection_frame.z_index = 20
 		var style := StyleBoxFlat.new()
-		style.bg_color = Color(1.0, 0.72, 0.12, 0.08)
-		style.border_color = Color(1.0, 0.72, 0.12, 1.0)
+		style.bg_color = UiSurfaceTokens.MONSTER_SELECT_BG
+		style.border_color = UiSurfaceTokens.MONSTER_SELECT_BORDER
 		style.set_border_width_all(3)
 		style.set_corner_radius_all(4)
 		_selection_frame.add_theme_stylebox_override("panel", style)
@@ -658,8 +658,8 @@ func _create_monster_attr_panel() -> Control:
 	panel.name = "MonsterAttrHover"
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0.78)
-	style.border_color = Color(1.0, 0.65, 0.18, 0.95)
+	style.bg_color = UiSurfaceTokens.OVERLAY_EARTH
+	style.border_color = UiSurfaceTokens.MONSTER_INFO_BORDER
 	style.set_border_width_all(2)
 	style.set_corner_radius_all(8)
 	panel.add_theme_stylebox_override("panel", style)

@@ -1,6 +1,6 @@
 # `Scene/` 脚本落位迁移清单（Phase 29-0）
 
-> **状态**：29-1、29-2A、29-2B 已迁移并验证；29-2C、29-3 未开始（Phase 29-1 起逐批执行）。
+> **状态**：29-1、29-2A、29-2B、29-2C 已迁移；29-3 未开始（Phase 29-1 起逐批执行）。
 >
 > **规则**：`source/Scene/` 只承载 `.tscn`/`.tres`；全部 `.gd` 归 `source/Script/<domain>/`。决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 >
@@ -38,6 +38,8 @@
 > **29-2A 已完成（13）**：`monster_attr_data.gd` → `Script/data/`；`skill_icon.gd` 与 7 个阵法脚本 → `Script/skill/`；`after_level_end.gd`、`level_info.gd`、`ping_jia.gd`、`star.gd` → `Script/level/`。迁移后 6 个阵法 UI 增加槽位 `PlayerData` getter，`zhen_fa_ui.gd` 的佩戴写入改经 `PlayerData.set_equipped_formation()`；`Scene/` 剩余 38 个 `.gd`。验证：`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（355.92s）、`docs_audit` 940/0。29-2B（main_menu/other_menu 19）与 29-2C（monster 10）未开始。
 >
 > **29-2B 已完成（19）**：11 个主菜单脚本 → `Script/main_menu/`；8 个公告/帮助/奖励/幻化脚本 → `Script/other_menu/`。`twenty_eight_constellations_button.gd` 的南北星宿颜色改用 `UiColorTokens.TEXT_CONSTELLATION_NORTH/SOUTH`（token 源新增两项并重新生成）；`Scene/` 剩余 19 个 `.gd`。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（347.42s）、`docs_audit` 940/0。29-2C（monster 10）与 29-3（9）未开始。
+>
+> **29-2C 已完成（10）**：10 个怪物、血条、受击、Buff 与光环脚本 → `Script/monster/`。`monster_head_info.gd` 的 4 处 StyleBox 颜色改用 `UiSurfaceTokens.OVERLAY_EARTH` 与新增 `MONSTER_SELECT_BG`/`MONSTER_SELECT_BORDER`/`MONSTER_INFO_BORDER`（token 源新增三项并重新生成）；`Scene/` 剩余 9 个 `.gd`。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（348.46s）、`docs_audit` 940/0。29-3 未开始。
 
 ### 3.1 主菜单与设置（11）· 已完成
 
@@ -90,7 +92,7 @@
 | `Scene/other_scene/zhenfalxbutton.gd` | `Script/skill/zhenfalxbutton.gd` | `zhenfalxbutton.tscn`；`zhen_fa_factory.gd` |
 | `Scene/other_scene/zhenyanbutton.gd` | `Script/skill/zhenyanbutton.gd` | `zhenyanbutton.tscn`；`zhen_fa_factory.gd`、`zhen_yan_cure_level.tscn` |
 
-### 3.5 怪物、血条、受击、Buff 与光环（10）
+### 3.5 怪物、血条、受击、Buff 与光环（10）· 已完成
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|

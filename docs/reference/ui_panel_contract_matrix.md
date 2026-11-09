@@ -2,7 +2,7 @@
 
 > **状态**：Phase 24-0 静态盘点、Phase 24-1 `PetAttributePages` 拆分与 Phase 24-2 `CoopPanelHost` 宿主分离已完成（2026-11-03）。本页记录当前代码事实与后续拆分判断。
 > **范围**：`LocalCoop` 面板宿主、5 个协作面板入口、`pet_interface` 子区域、LDL 成长面板，以及关卡/怪物信息面板。
-> **事实源**：`source/Script/coop/local_coop.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/back_pack/*.gd`、`source/Script/skill/*.gd`、`source/Script/ldl/*.gd`、`source/Script/main_menu/mount_panel.gd`、`source/Script/level/level_info.gd`、`source/Scene/other_scene/monster_head_info.gd`、`scripts/contract_scan.py`。
+> **事实源**：`source/Script/coop/local_coop.gd`、`source/Script/pet/pet_interface.gd`、`source/Script/back_pack/*.gd`、`source/Script/skill/*.gd`、`source/Script/ldl/*.gd`、`source/Script/main_menu/mount_panel.gd`、`source/Script/level/level_info.gd`、`source/Script/monster/monster_head_info.gd`、`scripts/contract_scan.py`。
 > **非目标**：不改 Theme、布局、显示基线、存档格式、宠物数值或输入映射；不把本页当作实现完成证明。
 
 ---
