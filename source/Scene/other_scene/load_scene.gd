@@ -86,8 +86,9 @@ func _ready() -> void:
 		scene_flow.set_target_scene(DEFAULT_TARGET_SCENE)
 	_target_scene = scene_flow.get_target_scene()
 	_request_generation = Global.get_scene_request_generation()
-	loading_bar.value = 0.0
-	loading_text.text = "0%"
+	var startup_progress := float(get_meta("startup_progress", 0.0))
+	loading_bar.value = startup_progress
+	loading_text.text = "%d%%" % int(round(startup_progress * 100.0))
 	_pick_tip()
 	_initialize_first_launch_integrity()
 	_begin_load_after_first_frame()
@@ -345,6 +346,8 @@ func _set_progress(value: float) -> void:
 	value = clampf(value, 0.0, 1.0)
 	if not _finishing:
 		value = minf(value, 0.9)
+	if has_meta("startup_progress"):
+		value = 0.1 + value * 0.9
 	# 文本与填充使用同一个单调进度值，避免两者不一致。
 	var displayed := maxf(float(loading_bar.value), value)
 	loading_bar.value = displayed
