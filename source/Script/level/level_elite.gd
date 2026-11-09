@@ -64,7 +64,7 @@ func _spawn_boss() -> void:
 
 
 func configure_boss(enemy: BaseMonster) -> void:
-	BOSS_STATS.apply(enemy, card_id, tier)
+	BOSS_STATS.apply(enemy, card_id, tier, LocalCoop.is_enabled())
 	enemy.fall_pro = 0
 	enemy.fall_coin = 0
 	enemy.fall_stone_pro = 0

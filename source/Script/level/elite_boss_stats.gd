@@ -74,9 +74,9 @@ static func calculate(base: Dictionary, id: String, tier: int, coop: bool = fals
 	return result
 
 
-static func apply(enemy: BaseMonster, id: String, tier: int) -> void:
-	var values = calculate(snapshot(enemy), id, tier)
-	enemy.set_health_without_coop(values.hp)
+static func apply(enemy: BaseMonster, id: String, tier: int, coop: bool = false) -> void:
+	var values = calculate(snapshot(enemy), id, tier, coop)
+	enemy.set_health_without_coop(int(values.hp / (2 if coop else 1)))
 	enemy.level = values.level
 	enemy.def = values.def
 	enemy.mdef = values.mdef
@@ -88,7 +88,8 @@ static func apply(enemy: BaseMonster, id: String, tier: int) -> void:
 	enemy.mysee = 99999
 	enemy.super_armor_active = true
 	enemy.damage_bonus = values.damage_bonus
-	enemy.damage_reduction = values.damage_reduction
+	# BaseMonster 的 getter 在双人下统一追加 0.25；这里写入 raw 值避免 UI 预览与实际重复叠加。
+	enemy.damage_reduction = float(values.damage_reduction) - (0.25 if coop else 0.0)
 	enemy.obj_attack_dict = values.attacks
 
 

@@ -574,8 +574,9 @@ func _get_static_prop_signature() -> int:
 	var shared_data := _shared_attribute_data()
 	values.append(shared_data.player_data.get("炼体", {}))
 	values.append(shared_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}))
-	values.append(PlayerData.player_data.get(SOUL_CARD_DATA.KEY, {}))
-	values.append(PlayerData.player_data.get("Myself", 1))
+	var soul_profile := _soul_card_profile()
+	values.append(soul_profile.player_data.get(SOUL_CARD_DATA.KEY, {}))
+	values.append(soul_profile.player_data.get("Myself", 1))
 	values.append(PlayerData.player_data.get(PlayerData.ACTIVE_MOUNT_KEY, ""))
 	values.append(PlayerData.is_mount_system_unlocked())
 	var active_mount := PlayerData.get_active_mount()
@@ -591,6 +592,15 @@ func _shared_attribute_data() -> Node:
 	var coop := get_node_or_null("/root/LocalCoop")
 	if coop != null and coop.is_enabled():
 		return coop.canonical_profile_for_slot(1)
+	return PlayerData
+
+
+func _soul_card_profile() -> Node:
+	var coop := get_node_or_null("/root/LocalCoop")
+	if coop != null and coop.is_enabled():
+		var profile: Node = coop.data_for(self)
+		if profile != null:
+			return profile
 	return PlayerData
 
 
@@ -627,7 +637,7 @@ func _refresh_static_prop_cache() -> void:
 		shared_data.player_data.get("炼体", {}), _body_training_profile()
 	)
 	_cached_wanling_props = shared_data.get_wanling_attribute_totals().duplicate()
-	var soul_values: Dictionary = SOUL_CARD_DATA.attribute_totals(PlayerData.player_data)
+	var soul_values: Dictionary = SOUL_CARD_DATA.attribute_totals(_soul_card_profile().player_data)
 	for key in soul_values:
 		_cached_wanling_props[key] = float(_cached_wanling_props.get(key, 0.0)) + float(soul_values[key])
 	_cached_mount_props = PlayerData.get_active_mount_attribute_bonuses()
