@@ -302,6 +302,19 @@ func _ready() -> void:
 	call_deferred("_load_equipped_magic_weapon_deferred")
 	call_deferred("_load_main_sword_array_weapon_deferred")
 	call_deferred("_attach_mount_runtime")
+	call_deferred("_attach_soul_card_runtime")
+
+
+func _attach_soul_card_runtime() -> void:
+	var level_parent = get_parent()
+	while level_parent != null and not level_parent is BaseLevel:
+		level_parent = level_parent.get_parent()
+	if level_parent == null or get_node_or_null("SoulCardRuntime") != null:
+		return
+	var runtime = preload("res://Script/hero/soul_card_runtime.gd").new()
+	runtime.name = "SoulCardRuntime"
+	add_child(runtime)
+	runtime.setup(self)
 
 
 func _attach_mount_runtime() -> void:
@@ -1464,6 +1477,10 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 
 
 func reduce_hp(value: int, target_boss, target_obj):
+	var soul_runtime = get_node_or_null("SoulCardRuntime")
+	if soul_runtime != null and is_instance_valid(target_boss) and target_boss is BaseMonster:
+		soul_runtime.last_attacker = weakref(target_boss)
+
 	if is_dikong_field_invincible() or is_taiji_bagua_protected():
 		return
 
@@ -1964,6 +1981,9 @@ func _pet_turtle_link_unit() -> Node:
 
 
 func _apply_pet_turtle_damage_share(value: int) -> int:
+	var soul_runtime = get_node_or_null("SoulCardRuntime")
+	if soul_runtime != null:
+		value = soul_runtime.absorb_damage(value)
 	if value <= 0:
 		return value
 	var unit := _pet_turtle_link_unit()
@@ -2997,7 +3017,7 @@ func get_skill(name1):
 	var level := scene_parent.get_parent()
 	if level == null or not is_instance_valid(level) or level.is_queued_for_deletion():
 		return
-	if level is Level17 or level is Level22:
+	if level is Level17:
 		return
 	if name1 == "":
 		return

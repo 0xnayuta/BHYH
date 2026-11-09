@@ -17,6 +17,7 @@ var RoleProp: BaseRoleProperties:
 		return self if self == coop.props_for_slot(1) else coop.props_for(self)
 
 const BODY_TRAINING_DATA = preload("res://Script/data/body_training_data.gd")
+const SOUL_CARD_DATA = preload("res://Script/data/soul_card_data.gd")
 
 var directon: bool
 var source_player
@@ -573,6 +574,8 @@ func _get_static_prop_signature() -> int:
 	var shared_data := _shared_attribute_data()
 	values.append(shared_data.player_data.get("炼体", {}))
 	values.append(shared_data.player_data.get(PlayerData.WANLING_CATALOG_LEVELS_KEY, {}))
+	values.append(PlayerData.player_data.get(SOUL_CARD_DATA.KEY, {}))
+	values.append(PlayerData.player_data.get("Myself", 1))
 	values.append(PlayerData.player_data.get(PlayerData.ACTIVE_MOUNT_KEY, ""))
 	values.append(PlayerData.is_mount_system_unlocked())
 	var active_mount := PlayerData.get_active_mount()
@@ -623,7 +626,10 @@ func _refresh_static_prop_cache() -> void:
 	_cached_body_props = BODY_TRAINING_DATA.get_attribute_totals(
 		shared_data.player_data.get("炼体", {}), _body_training_profile()
 	)
-	_cached_wanling_props = shared_data.get_wanling_attribute_totals()
+	_cached_wanling_props = shared_data.get_wanling_attribute_totals().duplicate()
+	var soul_values: Dictionary = SOUL_CARD_DATA.attribute_totals(PlayerData.player_data)
+	for key in soul_values:
+		_cached_wanling_props[key] = float(_cached_wanling_props.get(key, 0.0)) + float(soul_values[key])
 	_cached_mount_props = PlayerData.get_active_mount_attribute_bonuses()
 
 
@@ -847,6 +853,11 @@ func get_last_prop():
 		+ float(_cached_wanling_props.get("sp", 0.0))
 		+ float(_cached_mount_props.get("sp", 0.0))
 	)
+	if is_instance_valid(source_player):
+		var soul_runtime: Node = source_player.get_node_or_null("SoulCardRuntime")
+		if soul_runtime != null:
+			roleprop.Def *= soul_runtime.defense_multiplier()
+			roleprop.Mdef *= soul_runtime.defense_multiplier()
 
 
 func set_basic_prop():

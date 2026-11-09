@@ -1,0 +1,190 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/1.png" id="1_dqyqt"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/2.png" id="2_f6ujj"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/3.png" id="3_7hroo"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/4.png" id="4_cge2s"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/5.png" id="5_8jyc5"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/6.png" id="6_rfea5"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/7.png" id="7_x7bp6"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/8.png" id="8_vef4k"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/9.png" id="9_81bhr"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/10.png" id="10_82jl3"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/11.png" id="11_j6fbj"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/12.png" id="12_3xixt"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/13.png" id="13_h88ae"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/14.png" id="14_02lgn"]
+[ext_resource type="Texture2D" path="res://Art/monster/monster_12/bullet_fire/15.png" id="15_yet5d"]
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fhb7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_dqyqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f6ujj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_7hroo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_cge2s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_8jyc5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_rfea5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_x7bp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_vef4k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_81bhr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_82jl3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_j6fbj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_3xixt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_h88ae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_02lgn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_yet5d")
+}],
+"loop": 0,
+"name": &"Monster12Bullet",
+"speed": 25.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_2b25g"]
+
+[sub_resource type="Animation" id="Animation_il32u"]
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:material")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_2b25g")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual:animation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Monster12Bullet"]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.08, 0.12, 0.16, 0.2, 0.24, 0.28, 0.32, 0.36, 0.4, 0.44, 0.48, 0.52, 0.56),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visual:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nqjmu"]
+_data = {
+&"effect": SubResource("Animation_il32u")
+}
+
+[node name="NativeBossEffect" type="Node2D" unique_id=2047217908]
+metadata/boss_effect_source = "res://Scene/monster/monster_bullet_slim/monster12_bullet.tscn"
+metadata/native_forward = -1.0
+metadata/native_duration = 0.6
+
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=413689074]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_fhb7s")
+animation = &"Empty"
+
+[node name="NativeAnimation" type="AnimationPlayer" parent="." unique_id=1088236298]
+libraries/ = SubResource("AnimationLibrary_nqjmu")
+autoplay = &"effect"

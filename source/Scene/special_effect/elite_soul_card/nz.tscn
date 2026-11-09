@@ -1,0 +1,468 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/monster/game3_special_effect/monster_4/special_effect_13.png" id="1_tn1wt"]
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p6u2y"]
+atlas = ExtResource("1_tn1wt")
+region = Rect2(0, 0, 160, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fq50"]
+atlas = ExtResource("1_tn1wt")
+region = Rect2(160, 0, 160, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6ih3"]
+atlas = ExtResource("1_tn1wt")
+region = Rect2(320, 0, 160, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_524ga"]
+atlas = ExtResource("1_tn1wt")
+region = Rect2(480, 0, 160, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0wehx"]
+atlas = ExtResource("1_tn1wt")
+region = Rect2(640, 0, 160, 162)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1vfhl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6u2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fq50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6ih3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_524ga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wehx")
+}],
+"loop": 0,
+"name": &"Monster102Bullet",
+"speed": 15.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w3oyp"]
+
+[sub_resource type="Animation" id="Animation_f5i70"]
+length = 7.0
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_w3oyp")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0.6)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Monster102Bullet"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visual:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.06667, 1.13333, 1.2, 1.26667, 1.33333, 1.4, 1.46667, 1.53333, 1.6, 1.66667, 1.73333, 1.8, 1.86667, 1.93333, 2, 2.06667, 2.13333, 2.2, 2.26667, 2.33333, 2.4, 2.46667, 2.53333, 2.6, 2.66667, 2.73333, 2.8, 2.86667, 2.93333, 3, 3.06667, 3.13333, 3.2, 3.26667, 3.33333, 3.4, 3.46667, 3.53333, 3.6, 3.66667, 3.73333, 3.8, 3.86667, 3.93333, 4, 4.06667, 4.13333, 4.2, 4.26667, 4.33333, 4.4, 4.46667, 4.53333, 4.6, 4.66667, 4.73333, 4.8, 4.86667, 4.93333, 5, 5.06667, 5.13333, 5.2, 5.26667, 5.33333, 5.4, 5.46667, 5.53333, 5.6, 5.66667, 5.73333, 5.8, 5.86667, 5.93333, 6, 6.06667, 6.13333, 6.2, 6.26667, 6.33333, 6.4, 6.46667, 6.53333, 6.6, 6.66667, 6.73333, 6.8, 6.86667, 6.93333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aq51s"]
+_data = {
+&"effect": SubResource("Animation_f5i70")
+}
+
+[node name="NativeBossEffect" type="Node2D" unique_id=2055257816]
+scale = Vector2(0.6, 0.6)
+metadata/boss_effect_source = "res://Scene/monster/monster_bullet_slim/monster102_bullet.tscn"
+metadata/native_forward = 1.0
+metadata/native_duration = 7.0
+
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=1471836850]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_1vfhl")
+animation = &"Empty"
+
+[node name="NativeAnimation" type="AnimationPlayer" parent="." unique_id=231062041]
+libraries/ = SubResource("AnimationLibrary_aq51s")
+autoplay = &"effect"

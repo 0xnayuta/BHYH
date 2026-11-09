@@ -1,0 +1,236 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Art/monster/game3_special_effect/monster_hide/special_effect_9.png" id="1_1qgpf"]
+
+[sub_resource type="CanvasItemMaterial" id="3526"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6cbjl"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(0, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nesh3"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(99, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k8qfl"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(198, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuq7n"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(297, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nvsi1"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(396, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ebng"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(495, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ecc0y"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(594, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnbqj"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(693, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cv8bv"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(792, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssnbs"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(891, 0, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4oda"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(0, 114, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dyegx"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(99, 114, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gog03"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(198, 114, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wwpv"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(297, 114, 99, 114)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrbew"]
+atlas = ExtResource("1_1qgpf")
+region = Rect2(396, 228, 99, 114)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5re3l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"Empty",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6cbjl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nesh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k8qfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuq7n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nvsi1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ebng")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ecc0y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnbqj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cv8bv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssnbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4oda")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dyegx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gog03")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wwpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrbew")
+}],
+"loop": 0,
+"name": &"Monster137Bullet1",
+"speed": 14.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_b0dap"]
+
+[sub_resource type="Animation" id="Animation_w6uq6"]
+length = 1.07143
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [SubResource("CanvasItemMaterial_b0dap")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Monster137Bullet1"]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visual:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0714286, 0.142857, 0.214286, 0.285714, 0.357143, 0.428571, 0.5, 0.571429, 0.642857, 0.714286, 0.785714, 0.857143, 0.928571, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uh447"]
+_data = {
+&"effect": SubResource("Animation_w6uq6")
+}
+
+[node name="NativeBossEffect" type="Node2D" unique_id=738002568]
+metadata/boss_effect_source = "res://Scene/monster/monster_bullet_slim/monster137_bullet1.tscn"
+metadata/native_forward = -1.0
+metadata/native_duration = 1.07143
+
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=953524231]
+self_modulate = Color(1, 1, 0, 1)
+material = SubResource("3526")
+scale = Vector2(1, 6)
+sprite_frames = SubResource("SpriteFrames_5re3l")
+animation = &"Empty"
+
+[node name="NativeAnimation" type="AnimationPlayer" parent="." unique_id=1828379293]
+libraries/ = SubResource("AnimationLibrary_uh447")
+autoplay = &"effect"
