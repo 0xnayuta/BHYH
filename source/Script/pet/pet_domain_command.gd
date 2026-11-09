@@ -8,6 +8,16 @@ const SAVE_REASON_DEPLOY := "pet_deploy"
 const SAVE_REASON_REST := "pet_rest"
 const SAVE_REASON_GROWTH := "pet_growth"
 const SAVE_REASON_FORMATION := "pet_formation"
+const SAVE_REASON_PASSIVE := "pet_passive_upgrade"
+const SAVE_REASON_PASSIVE_ALL := "pet_passive_upgrade_all"
+const PET_PASSIVE_KEYS := [
+	DataKeys.Skill.PASSIVE_HP,
+	DataKeys.Skill.PASSIVE_MP,
+	DataKeys.Skill.PASSIVE_CRIT,
+	DataKeys.Skill.PASSIVE_HP_REGEN,
+	DataKeys.Skill.PASSIVE_MP_REGEN,
+	DataKeys.Skill.PASSIVE_HIT,
+]
 const FORMATION_MAX_LEVEL := 100
 const FORMATION_DEFINITIONS := [
 	{"stat": "生命", "gain": 400, "stone": "zqjs", "core": "zqjh", "stone_name": "朱雀晶石", "core_name": "朱雀晶核"},
@@ -101,6 +111,89 @@ static func upgrade_formation(
 		"reason": SAVE_REASON_FORMATION,
 		"upgraded_count": steps,
 		"level": level + steps,
+	}
+
+
+## 宠物被动单次升级：校验上限/灵魂，快照后扣费、写等级并保存；失败恢复档案与共享灵魂。
+static func upgrade_passive(
+	profile: PlayerDataStore, pet_index: int, skill_name: String, save_request: Callable = Callable()
+) -> Dictionary:
+	var pet := _pet_at(profile, pet_index)
+	if pet.is_empty():
+		return _failure("宠物不可用")
+	if not PET_PASSIVE_KEYS.has(skill_name):
+		return _failure("未知被动技能")
+	var levels := _passive_levels(pet)
+	var level := int(levels.get(skill_name, 0))
+	var max_level := PassiveSkillTable.get_unlocked_level(int(pet.get(DataKeys.LEVEL, 1)))
+	if level >= max_level:
+		return _failure("已达到当前宠物等级上限")
+	var cost := PassiveSkillTable.get_cost_for_level(level)
+	if profile.get_soul() < cost:
+		return _failure("灵魂不足！")
+	var snapshot := _snapshot(profile)
+	if not profile.spend_soul(cost):
+		_restore(profile, snapshot)
+		return _failure("灵魂扣除失败")
+	levels[skill_name] = level + 1
+	pet[DataKeys.Skill.PASSIVE] = levels
+	var save_result := _request_save_result(SAVE_REASON_PASSIVE, save_request)
+	if not bool(save_result.get("ok", false)):
+		_restore(profile, snapshot)
+		return _failure("存档保存失败，本次宠物被动升级已撤销：" + _save_message(save_result))
+	return {
+		"ok": true,
+		"changed": true,
+		"reason": SAVE_REASON_PASSIVE,
+		"level": level + 1,
+		"cost": cost,
+	}
+
+
+## 宠物被动一键升级：按可负担级数一次扣费、一次保存；失败整批恢复。
+static func upgrade_all_passives(
+	profile: PlayerDataStore, pet_index: int, save_request: Callable = Callable()
+) -> Dictionary:
+	var pet := _pet_at(profile, pet_index)
+	if pet.is_empty():
+		return _failure("宠物不可用")
+	var levels := _passive_levels(pet)
+	var max_level := PassiveSkillTable.get_unlocked_level(int(pet.get(DataKeys.LEVEL, 1)))
+	var budget := profile.get_soul()
+	var working: Dictionary = levels.duplicate(true)
+	var total_cost := 0
+	var upgraded_count := 0
+	var upgraded := true
+	while upgraded:
+		upgraded = false
+		for skill_name in PET_PASSIVE_KEYS:
+			var level := int(working.get(skill_name, 0))
+			if level >= max_level:
+				continue
+			var cost := PassiveSkillTable.get_cost_for_level(level)
+			if total_cost + cost > budget:
+				continue
+			total_cost += cost
+			working[skill_name] = level + 1
+			upgraded_count += 1
+			upgraded = true
+	if upgraded_count <= 0:
+		return _failure("灵魂不足或已达当前宠物等级上限")
+	var snapshot := _snapshot(profile)
+	if not profile.spend_soul(total_cost):
+		_restore(profile, snapshot)
+		return _failure("灵魂扣除失败")
+	pet[DataKeys.Skill.PASSIVE] = working
+	var save_result := _request_save_result(SAVE_REASON_PASSIVE_ALL, save_request)
+	if not bool(save_result.get("ok", false)):
+		_restore(profile, snapshot)
+		return _failure("存档保存失败，本次宠物被动升级已撤销：" + _save_message(save_result))
+	return {
+		"ok": true,
+		"changed": true,
+		"reason": SAVE_REASON_PASSIVE_ALL,
+		"upgraded_count": upgraded_count,
+		"cost": total_cost,
 	}
 
 
@@ -265,6 +358,19 @@ static func _pets(profile: PlayerDataStore) -> Array:
 		return []
 	var value: Variant = profile.player_data.get(PlayerDataStore.PET_LIST_KEY, [])
 	return value if value is Array else []
+
+
+static func _pet_at(profile: PlayerDataStore, pet_index: int) -> Dictionary:
+	var pets := _pets(profile)
+	if pet_index < 0 or pet_index >= pets.size():
+		return {}
+	var value: Variant = pets[pet_index]
+	return value if value is Dictionary else {}
+
+
+static func _passive_levels(pet: Dictionary) -> Dictionary:
+	var value: Variant = pet.get(DataKeys.Skill.PASSIVE, {})
+	return value if value is Dictionary else {}
 
 
 static func _active_name(profile: PlayerDataStore) -> String:

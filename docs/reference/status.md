@@ -164,6 +164,17 @@
 - 门禁：`contract_scan` 新增 `passive_boundary`（`PASSIVE_POLLING`/`PASSIVE_SNAPSHOT_WRITE`/`PASSIVE_DATA_WRITE`）与自测；共享账本 token 改为 `DataKeys.Skill.PASSIVE`。
 - 验证：`health_check --no-cache` 822 脚本 0/0/0；`contract_scan --fail-on-error` ERROR=0；`docs_audit` 905/0；`level_1` 4 阶段 0/0/0；`archive_probe_runner` 344/344；被动快照临时场景探针 PASS（信号刷新、等级变化、幂等）。
 - 验证补充：`check_all --skip-engine` 7/7 PASS；`coop_probe_runner` 38/38 PASS（309.53s）。
+- 边界：28-3 已实施，见下节；Phase 29 未启动。
+
+### Phase 28-3 宠物被动成长命令与数值表契约（2026-11-09）
+
+- 宠物被动单次/一键升级迁入 `PetDomainCommand`：校验上限/灵魂，`profile.snapshot_state()` 快照后扣费/写等级/保存；失败 `restore_state()` 恢复等级与共享灵魂；保存 reason 为 `pet_passive_upgrade` / `pet_passive_upgrade_all`。
+- `PetInterface` 不再直接扣费或写宠物字典；`_pet_passive_levels()` 只读；成功后刷新当前槽位活体。
+- 新增 `PassiveSkillTable`：玩家/宠物共用只读数值表、解锁等级与费用；`PaSkill` 公开函数委托；4 个召唤物与面板改用静态表，宠物域不再引用 `PaSkill`。
+- 宠物被动键收敛到 `DataKeys.Skill.PASSIVE_*`（6 项）；默认字典、`_normalize_pet_passives` 与召唤物读取同步。
+- 门禁：`contract_scan` 新增 `pet_passive_boundary`（`PET_PASSIVE_WRITE`/`PET_PASSIVE_COMMAND`）与自测。
+- 验证：`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`contract_scan --self-test` 全通过；`contract_scan --fail-on-error` ERROR=0；`archive_probe_runner` 344/344；`level_1` 4 阶段 0/0/0；宠物被动命令临时场景探针 PASS（成功升级、失败回滚、一键升级）。
+- 验证补充：`coop_probe_runner` 38/38 PASS（295.72s）。
 - 边界：Phase 29 未启动。
 
 ## 3. 当前已知边界

@@ -14,6 +14,8 @@
 | 等级→数值查表 | `PaSkill` | 无状态 | `get_value()`、`get_unlocked_level()`、`get_lh_for_level()` 为纯查表 |
 | 属性快照 `RoleProp.pasl_prop` | `PaSkill` 唯一写入 | `PaSkill.get_passive_skill_properties()` | `BaseRoleProperties` 只读消费；不得由业务直接写 |
 | 档案变更事件 | `PlayerData` | `PlayerData.passive_skills_changed` | 升级成功、`ensure_*` 实际修正、档案载入完成后发出 |
+| 宠物条目被动等级 | `PlayerData` 宠物条目 | `PetDomainCommand.upgrade_passive/upgrade_all_passives`；`_normalize_pet_passives` 补全 | 6 项，不含“收益”；宠物列表按槽位独立 |
+| 玩家/宠物共用数值表 | `PassiveSkillTable` | 无状态 | `get_value`、`get_unlocked_level`、`get_cost_for_level` |
 
 ## 2. 刷新路径
 
@@ -34,6 +36,7 @@ flowchart LR
 - **读档**：`MemoryClass.load_game()` 完成数据合并与 `ensure_*` 后调用 `PlayerData.notify_passive_skills_changed()`，保证旧档案值不会残留在 `pasl_prop`。
 - **双人**：`LocalCoop` 连接同一信号，只刷新 `secondary_passives`；1P 由 `PaSkill` 单例负责。`refresh_passive_skills()` 保留为面板关闭/切换等显式兜底。
 - **属性实例重建**：主 `RoleProp` 只在启动 `_ready()` 初始化 `pasl_prop`；`secondary_props` 创建后由 `LocalCoop.load_profile()` 刷新。若未来新增重建路径，必须在装配点调用刷新。
+- **宠物**：宠物被动不写 `pasl_prop`，也不接 `passive_skills_changed`；升级由 `PetDomainCommand` 提交，保存成功后才刷新当前槽位活体宠物。
 
 ## 3. 快照签名短路
 
@@ -50,6 +53,7 @@ flowchart LR
 2. 禁止 `PaSkill` 之外的文件写 `pasl_prop`；`BaseRoleProperties._ready()` 的初始化除外。
 3. 禁止 UI 直接写 `PlayerData.player_data[DataKeys.Skill.PASSIVE]`；只能通过 `apply_passive_skill_upgrades()`。双人 `link_passive_skills()` 是已登记的档案会话写入。
 4. 宠物被动技能的键保持独立语义，不因本契约新增宠物专用全局信号或属性快照。
+5. 禁止 UI 直接写宠物条目 `pet[DataKeys.Skill.PASSIVE]`；必须经 `PetDomainCommand.upgrade_passive/upgrade_all_passives`。
 
 ## 5. 门禁
 
@@ -60,6 +64,8 @@ flowchart LR
 | `PASSIVE_POLLING` | `_process`/`_physics_process` 中调用 `get_passive_skill_properties` | ERROR |
 | `PASSIVE_SNAPSHOT_WRITE` | 非白名单文件写 `pasl_prop` | ERROR |
 | `PASSIVE_DATA_WRITE` | 非 `player_data.gd`/`local_coop.gd` 写 `player_data[DataKeys.Skill.PASSIVE]` | ERROR |
+| `PET_PASSIVE_WRITE` | 非 `player_data.gd`/`pet_domain_command.gd` 写宠物条目 `pet[DataKeys.Skill.PASSIVE]` | ERROR |
+| `PET_PASSIVE_COMMAND` | 宠物 UI 未调用 `PetDomainCommand` 的被动升级命令 | ERROR |
 
 自测：`python scripts/contract_scan.py --self-test` 覆盖轮询、快照直写、档案直写与正常读取样本。
 
@@ -74,10 +80,13 @@ flowchart LR
 | 切档 | 快照随档案切换刷新 |
 | 属性实例重建 | 新实例的 `pasl_prop` 立即正确 |
 | 重复触发 `passive_skills_changed` | 签名相同不重复写，结果不变 |
+| 宠物被动升级保存失败 | 等级与共享灵魂恢复；活体宠物保持旧属性 |
+| 宠物被动一键升级 | 按可负担级数一次扣费/保存；失败整批恢复 |
 
 ## 7. 关联
 
 - [`architecture.md`](architecture.md) §2、§3
 - [`../decisions/ADR-029-passive-snapshot-event-driven.md`](../decisions/ADR-029-passive-snapshot-event-driven.md)
+- [`../decisions/ADR-030-pet-passive-command-and-table.md`](../decisions/ADR-030-pet-passive-command-and-table.md)
 - [`acceptance.md`](acceptance.md) §4.1
 - [`global_runtime_inventory.md`](global_runtime_inventory.md)

@@ -29,6 +29,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 21. Global 表面门禁 (Global Surface Baseline): 禁止新增未登记的 Global 业务字段或 add 系入口
 22. 全局信号基线门禁 (Global Signal Baseline): Autoload 脚本禁止新增未登记的全局信号
 23. 被动属性边界门禁 (Passive Boundary): 禁止轮询刷新被动快照、业务直写 pasl_prop 或被动等级字典
+24. 宠物被动边界门禁 (Pet Passive Boundary): 宠物被动等级只允许 PlayerData 补全与 PetDomainCommand 写入
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1084,6 +1085,13 @@ class ContractScanner:
     PASSIVE_DATA_WRITE_RE = re.compile(
         r'player_data\[\s*(?:DataKeys\.Skill\.PASSIVE|"被动技能")\s*\]\s*(?:\[[^\]]*\]\s*)?(?:=|\+=|-=|\*=|/=)'
     )
+    PET_PASSIVE_WRITE_ALLOWLIST = {
+        "Script/memory_class/player_data.gd",
+        "Script/pet/pet_domain_command.gd",
+    }
+    PET_PASSIVE_WRITE_RE = re.compile(
+        r'\bpet\[\s*(?:DataKeys\.Skill\.PASSIVE|"被动技能")\s*\]\s*(?:\[[^\]]*\]\s*)?(?:=|\+=|-=|\*=|/=)'
+    )
     GLOBAL_SURFACE_BASELINE_PATH = os.path.join(REPO_ROOT, "scripts", "global_surface_baseline.json")
     GLOBAL_SURFACE_FIELD_RE = re.compile(r"^var\s+([A-Za-z_]\w*)")
     GLOBAL_SURFACE_ADD_RE = re.compile(r"^func\s+(add[A-Za-z0-9_]*)\s*\(")
@@ -1986,6 +1994,48 @@ class ContractScanner:
                         rule_id="PASSIVE_DATA_WRITE",
                     ))
 
+    def scan_pet_passive_boundary(self):
+        print("[*] 扫描宠物被动边界门禁 (Phase 28-3)...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            if rel_p.startswith("addons/") or rel_p.startswith("_"):
+                continue
+            if rel_p in self.PET_PASSIVE_WRITE_ALLOWLIST:
+                continue
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            line = self.first_regex_line(content, self.PET_PASSIVE_WRITE_RE)
+            if line:
+                self.findings.append(ContractFinding(
+                    category="pet_passive_boundary",
+                    severity="ERROR",
+                    file_path=rel_p,
+                    line=line,
+                    literal="pet[PASSIVE]",
+                    message="宠物被动等级只允许 PlayerData 补全与 PetDomainCommand 写入",
+                    suggested_fix="通过 PetDomainCommand.upgrade_passive/upgrade_all_passives 提交；禁止 UI 直接改宠物字典",
+                    rule_id="PET_PASSIVE_WRITE",
+                ))
+        pet_ui_path = os.path.join(self.project_dir, "Script/pet/pet_interface.gd")
+        if os.path.exists(pet_ui_path):
+            ui_content = open(pet_ui_path, "r", encoding="utf-8", errors="ignore").read()
+            if (
+                "PetDomainCommand.upgrade_passive" not in ui_content
+                or "PetDomainCommand.upgrade_all_passives" not in ui_content
+            ):
+                self.findings.append(ContractFinding(
+                    category="pet_passive_boundary",
+                    severity="ERROR",
+                    file_path="Script/pet/pet_interface.gd",
+                    line=0,
+                    literal="PetDomainCommand",
+                    message="宠物被动升级必须经 PetDomainCommand 命令提交",
+                    suggested_fix="改为调用 PetDomainCommand.upgrade_passive/upgrade_all_passives，禁止在 UI 内扣费或写等级",
+                    rule_id="PET_PASSIVE_COMMAND",
+                ))
+
     def scan_archive_boundary(self):
         print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
         self._scan_rule(
@@ -2060,6 +2110,7 @@ class ContractScanner:
         self.scan_global_surface_boundary()
         self.scan_global_signal_baseline()
         self.scan_passive_boundary()
+        self.scan_pet_passive_boundary()
         self.scan_archive_boundary()
         self.scan_slot_boundary()
         self.scan_panel_operator()
@@ -2148,6 +2199,7 @@ class ContractScanner:
             "input_boundary": "17. 输入写入边界门禁 (Input Boundary)",
             "global_signal": "18. 全局信号基线门禁 (Global Signal)",
             "passive_boundary": "19. 被动属性边界门禁 (Passive Boundary)",
+            "pet_passive_boundary": "20. 宠物被动边界门禁 (Pet Passive Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -2990,6 +3042,26 @@ def run_passive_boundary_self_test() -> bool:
     return passed
 
 
+def run_pet_passive_boundary_self_test() -> bool:
+    """宠物被动边界门禁自测：宠物字典直写必须拦截，只读访问必须放行。"""
+    print("[*] 宠物被动边界门禁负向自测...")
+    passed = True
+    bad = 'func f():\n\tpet["被动技能"]["热血"] = 1\n'
+    good = 'func f():\n\tvar v = pet["被动技能"]["热血"]\n'
+    if ContractScanner.first_regex_line(bad, ContractScanner.PET_PASSIVE_WRITE_RE) == 0:
+        print("    [X] 宠物被动直写未拦截", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 宠物被动直写已拦截")
+    if ContractScanner.first_regex_line(good, ContractScanner.PET_PASSIVE_WRITE_RE) != 0:
+        print("    [X] 宠物被动读取被误报", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 宠物被动读取已放行")
+    print("[SUCCESS] 宠物被动边界门禁自测通过" if passed else "[FAIL] 宠物被动边界门禁自测失败")
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -2997,7 +3069,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/全局信号基线/被动属性边界/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/全局信号基线/被动属性边界/宠物被动边界/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -3020,6 +3092,7 @@ def main():
         panel_operator_ok = run_panel_operator_self_test()
         global_signal_ok = run_global_signal_self_test()
         passive_ok = run_passive_boundary_self_test()
+        pet_passive_ok = run_pet_passive_boundary_self_test()
         sys.exit(
             0
             if manifest_ok
@@ -3040,6 +3113,7 @@ def main():
             and panel_operator_ok
             and global_signal_ok
             and passive_ok
+            and pet_passive_ok
             else 1
         )
 

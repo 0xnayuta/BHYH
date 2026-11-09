@@ -215,10 +215,14 @@ func setup_pet_turtle(stage: int) -> void:
 		equipment_bonus = PlayerData.get_pet_equipment_bonuses(pet_data)
 	var hp_bonus := int(equipment_bonus.get(DataKeys.HP, 0))
 	var mp_bonus := int(equipment_bonus.get(DataKeys.MP, 0))
-	var passive_value = pet_data.get("被动技能", {})
+	var passive_value = pet_data.get(DataKeys.Skill.PASSIVE, {})
 	var passive: Dictionary = passive_value if passive_value is Dictionary else {}
-	var passive_hp := int(PaSkill.get_value("热血", int(passive.get("热血", 0))))
-	var passive_mp := int(PaSkill.get_value("魔泉", int(passive.get("魔泉", 0))))
+	var passive_hp := int(
+		PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_HP, int(passive.get(DataKeys.Skill.PASSIVE_HP, 0)))
+	)
+	var passive_mp := int(
+		PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_MP, int(passive.get(DataKeys.Skill.PASSIVE_MP, 0)))
+	)
 	level = maxi(1, pet_level)
 	my_mr_name = str(TURTLE_STAGE_NAMES[turtle_stage])
 	attack_in = maxi(1, int(pet_data.get(DataKeys.ATTACK, 65)) + int(equipment_bonus.get(DataKeys.ATTACK, 0)))
@@ -236,12 +240,20 @@ func setup_pet_turtle(stage: int) -> void:
 	hp_recover_per_second = (
 		int(pet_data.get("回血", 2))
 		+ int(equipment_bonus.get("回血", 0))
-		+ int(PaSkill.get_value("永恒", int(passive.get("永恒", 0))))
+		+ int(
+			PassiveSkillTable.get_value(
+				DataKeys.Skill.PASSIVE_HP_REGEN, int(passive.get(DataKeys.Skill.PASSIVE_HP_REGEN, 0))
+			)
+		)
 	)
 	mp_recover_per_second = (
 		int(pet_data.get("回魔", 1))
 		+ int(equipment_bonus.get("回魔", 0))
-		+ int(PaSkill.get_value("辉煌", int(passive.get("辉煌", 0))))
+		+ int(
+			PassiveSkillTable.get_value(
+				DataKeys.Skill.PASSIVE_MP_REGEN, int(passive.get(DataKeys.Skill.PASSIVE_MP_REGEN, 0))
+			)
+		)
 	)
 	self_rhp = hp_recover_per_second
 	def = int(pet_data.get(DataKeys.DEFENSE, pet_data.get("物防", 60))) + int(equipment_bonus.get(DataKeys.DEFENSE, 0))
@@ -254,13 +266,15 @@ func setup_pet_turtle(stage: int) -> void:
 	crit = (
 		int(pet_data.get("暴击", 12))
 		+ int(equipment_bonus.get("暴击", 0))
-		+ int(PaSkill.get_value("狂暴", int(passive.get("狂暴", 0))))
+		+ int(
+			PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_CRIT, int(passive.get(DataKeys.Skill.PASSIVE_CRIT, 0)))
+		)
 	)
 	miss = int(pet_data.get("闪避", 6)) + int(equipment_bonus.get("闪避", 0))
 	htarget = (
 		int(pet_data.get("命中", 0))
 		+ int(equipment_bonus.get("命中", 0))
-		+ int(PaSkill.get_value("敏锐", int(passive.get("敏锐", 0))))
+		+ int(PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_HIT, int(passive.get(DataKeys.Skill.PASSIVE_HIT, 0))))
 	)
 	lucky = int(pet_data.get("幸运", 10)) + int(equipment_bonus.get("幸运", 0))
 	toughness = int(pet_data.get("韧性", 0)) + int(equipment_bonus.get("韧性", 0))

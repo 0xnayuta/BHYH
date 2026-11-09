@@ -3916,10 +3916,17 @@ func ensure_pet_tiger() -> bool:
 
 
 func _normalize_pet_passives(pet: Dictionary) -> void:
-	if not pet.has("被动技能") or not (pet["被动技能"] is Dictionary):
-		pet["被动技能"] = {}
-	var levels: Dictionary = pet["被动技能"]
-	for skill_name in ["热血", "魔泉", "狂暴", "永恒", "辉煌", "敏锐"]:
+	if not pet.has(DataKeys.Skill.PASSIVE) or not (pet[DataKeys.Skill.PASSIVE] is Dictionary):
+		pet[DataKeys.Skill.PASSIVE] = {}
+	var levels: Dictionary = pet[DataKeys.Skill.PASSIVE]
+	for skill_name in [
+		DataKeys.Skill.PASSIVE_HP,
+		DataKeys.Skill.PASSIVE_MP,
+		DataKeys.Skill.PASSIVE_CRIT,
+		DataKeys.Skill.PASSIVE_HP_REGEN,
+		DataKeys.Skill.PASSIVE_MP_REGEN,
+		DataKeys.Skill.PASSIVE_HIT,
+	]:
 		levels[skill_name] = max(0, int(levels.get(skill_name, 0)))
 
 

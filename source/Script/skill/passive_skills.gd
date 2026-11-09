@@ -1,5 +1,8 @@
 extends Node
 
+## 玩家被动技能单例：持有玩家槽位的 pasl_prop 快照。
+## 数值规则由 PassiveSkillTable 提供；本类不轮询，刷新由 PlayerData.passive_skills_changed 驱动。
+
 var PlayerData: PlayerDataStore:
 	get:
 		var coop := get_node_or_null("/root/LocalCoop")
@@ -13,38 +16,6 @@ var RoleProp: BaseRoleProperties:
 			return coop.props_for(self) as BaseRoleProperties
 		return get_tree().root.get_node_or_null("RoleProp") as BaseRoleProperties
 
-var need_lh_list = [
-	5000,
-	10000,
-	15000,
-	20000,
-	25000,
-	30000,
-	35000,
-	40000,
-	45000,
-	50000,
-	55000,
-	60000,
-	65000,
-	70000,
-	75000,
-	80000,
-	85000,
-	90000,
-	95000,
-	100000,
-	105000
-]
-var rx_value = [
-	0, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100
-]
-var mq_value = [0, 100, 130, 160, 200, 240, 280, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
-var kb_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-var yh_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-var hh_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-var mr_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-
 var _last_passive_levels := PackedInt32Array([-1, -1, -1, -1, -1, -1, -1])
 var _last_props_id: int = 0
 
@@ -55,36 +26,11 @@ func _ready() -> void:
 
 
 func get_unlocked_level(source_level: int) -> int:
-	return int(max(0, source_level) / 3)
-
-
-func _extend_linear(values: Array, level: int) -> int:
-	if level <= 0:
-		return int(values[0])
-	if level < values.size():
-		return int(values[level])
-	var last_index = values.size() - 1
-	var step = int(values[last_index]) - int(values[last_index - 1])
-	return int(values[last_index]) + step * (level - last_index)
+	return PassiveSkillTable.get_unlocked_level(source_level)
 
 
 func get_value(_name: String, level: int) -> int:
-	match _name:
-		DataKeys.Skill.PASSIVE_HP:
-			return _extend_linear(rx_value, level)
-		DataKeys.Skill.PASSIVE_MP:
-			return _extend_linear(mq_value, level)
-		DataKeys.Skill.PASSIVE_CRIT:
-			return _extend_linear(kb_value, level)
-		DataKeys.Skill.PASSIVE_HP_REGEN:
-			return _extend_linear(yh_value, level)
-		DataKeys.Skill.PASSIVE_MP_REGEN:
-			return _extend_linear(hh_value, level)
-		DataKeys.Skill.PASSIVE_HIT:
-			return _extend_linear(mr_value, level)
-		DataKeys.Skill.PASSIVE_SOUL_GAIN:
-			return max(0, level) * 5
-	return 0
+	return PassiveSkillTable.get_value(_name, level)
 
 
 func get_soul_gain_bonus_percent() -> int:
@@ -136,7 +82,4 @@ func get_lh(_name):
 
 
 func get_lh_for_level(_name: String, level: int) -> int:
-	var get_level := maxi(0, level)
-	if get_level < need_lh_list.size():
-		return need_lh_list[get_level]
-	return 5000 * (get_level + 1)
+	return PassiveSkillTable.get_cost_for_level(level)

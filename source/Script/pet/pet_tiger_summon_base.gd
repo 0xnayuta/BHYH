@@ -232,9 +232,15 @@ func setup_pet_tiger(stage: int) -> void:
 	var hp_bonus := int(equipment_bonus.get(DataKeys.HP, 0))
 	var mp_bonus := int(equipment_bonus.get(DataKeys.MP, 0))
 	my_mr_name = str(pet_data.get(DataKeys.NAME, _tiger_stage_name(tiger_stage)))
-	var passive: Dictionary = pet_data.get("被动技能", {}) if pet_data.get("被动技能", {}) is Dictionary else {}
-	var passive_hp := int(PaSkill.get_value("热血", int(passive.get("热血", 0))))
-	var passive_mp := int(PaSkill.get_value("魔泉", int(passive.get("魔泉", 0))))
+	var passive: Dictionary = (
+		pet_data.get(DataKeys.Skill.PASSIVE, {}) if pet_data.get(DataKeys.Skill.PASSIVE, {}) is Dictionary else {}
+	)
+	var passive_hp := int(
+		PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_HP, int(passive.get(DataKeys.Skill.PASSIVE_HP, 0)))
+	)
+	var passive_mp := int(
+		PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_MP, int(passive.get(DataKeys.Skill.PASSIVE_MP, 0)))
+	)
 	attack_in = max(1, attack_from_pet + int(equipment_bonus.get(DataKeys.ATTACK, 0)))
 	attack_in += PET_LEARNED_SKILL_RUNTIME.permanent_stat_bonus(pet_data, "天生蛮力", attack_in)
 	pet_skill_cooldown_multiplier = 1.0 - float(clampi(int(pet_data.get("灵力", 0)), 0, 25)) * 0.02
@@ -253,12 +259,20 @@ func setup_pet_tiger(stage: int) -> void:
 	hp_recover_per_second = (
 		int(pet_data.get("回血", 0))
 		+ int(equipment_bonus.get("回血", 0))
-		+ int(PaSkill.get_value("永恒", int(passive.get("永恒", 0))))
+		+ int(
+			PassiveSkillTable.get_value(
+				DataKeys.Skill.PASSIVE_HP_REGEN, int(passive.get(DataKeys.Skill.PASSIVE_HP_REGEN, 0))
+			)
+		)
 	)
 	mp_recover_per_second = (
 		int(pet_data.get("回魔", 0))
 		+ int(equipment_bonus.get("回魔", 0))
-		+ int(PaSkill.get_value("辉煌", int(passive.get("辉煌", 0))))
+		+ int(
+			PassiveSkillTable.get_value(
+				DataKeys.Skill.PASSIVE_MP_REGEN, int(passive.get(DataKeys.Skill.PASSIVE_MP_REGEN, 0))
+			)
+		)
 	)
 	self_rhp = hp_recover_per_second
 	def = int(pet_data.get(DataKeys.DEFENSE, pet_data.get("物防", 120))) + int(equipment_bonus.get(DataKeys.DEFENSE, 0))
@@ -268,10 +282,15 @@ func setup_pet_tiger(stage: int) -> void:
 	crit = (
 		int(pet_data.get("暴击", 30))
 		+ int(equipment_bonus.get("暴击", 0))
-		+ int(PaSkill.get_value("狂暴", int(passive.get("狂暴", 0))))
+		+ int(
+			PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_CRIT, int(passive.get(DataKeys.Skill.PASSIVE_CRIT, 0)))
+		)
 	)
 	miss = int(pet_data.get("闪避", 8)) + int(equipment_bonus.get("闪避", 0))
-	htarget = int(equipment_bonus.get("命中", 0)) + int(PaSkill.get_value("敏锐", int(passive.get("敏锐", 0))))
+	htarget = (
+		int(equipment_bonus.get("命中", 0))
+		+ int(PassiveSkillTable.get_value(DataKeys.Skill.PASSIVE_HIT, int(passive.get(DataKeys.Skill.PASSIVE_HIT, 0))))
+	)
 	lucky = int(pet_data.get("幸运", 20)) + int(equipment_bonus.get("幸运", 0))
 	toughness = int(equipment_bonus.get("韧性", 0))
 	ar = int(equipment_bonus.get("破甲", 0))

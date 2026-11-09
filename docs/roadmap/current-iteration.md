@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。**Phase 28 已完成（28-1、28-2）；Phase 29 未启动。**
-> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；Phase 28 架构治理已完成（28-1、28-2）。PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。**Phase 28 已完成（28-1、28-2、28-3）；Phase 29 未启动。**
+> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；Phase 28 架构治理已完成（28-1、28-2、28-3）。PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -99,7 +99,7 @@
 - **完成判定**：按 [`migration_playbook.md`](../guides/migration_playbook.md) Phase 2 出口逐项满足范围完整、语义完整、资产完整、双人完整、失败边界、证据可复核与文档一致；生产未映射 0，删除/数据表/场景属性/UI 文本均有处置结论；不以“路径存在”或“L3 通过”替代语义复核。
 - **非目标与边界**：不夹带上游之外的玩法重设计、数值再平衡、存档格式变更、旧路径/旧后端/旧存档迁移链、Autoload/`Global` 扩张、目录大规模迁移、PCK/release 或平台验证；解包、密钥、参考树、逐文件台账与本地绝对路径只在仓库外；测试探针按 [`ADR-019`](../decisions/ADR-019-test-fixtures-outside-production-source.md) 放在 `scripts/`；`addons/` 非插件维护任务不修改。
 
-### 1.7 Phase 28 全局通信与派生属性契约（28-1、28-2 完成）
+### 1.7 Phase 28 全局通信与派生属性契约（28-1、28-2、28-3 完成）
 
 - **目标**：移除全局确认信号 `Signals`，把确认回调归打开者所有；把被动属性快照从每帧轮询改为档案变更事件驱动；为这两条边界建立单一写者与门禁。
 - **入口**：全局确认面 `Script/base/signals.gd`、`Scene/show_text/choose_scene.gd`、`Script/runtime/popup_factory.gd`；被动数值面 `Script/skill/passive_skills.gd`、`Script/memory_class/player_data.gd`、`Script/coop/local_coop.gd`。
@@ -123,6 +123,17 @@
 - `DataKeys` 增加玩家被动技能键常量，替换 `PaSkill`、`PlayerData`、`bd_skill`、`back_pack` 中的裸中文键；宠物被动键保持独立域。
 - 新增 `docs/reference/passive_skill_contract.md`；`contract_scan.py` 增加 `PASSIVE_SNAPSHOT_WRITE`、`PASSIVE_POLLING`、`PASSIVE_DATA_WRITE`。
 - **出口**：新建档、读档、单技能/一键升级、保存失败回滚、双人 link/取消、切档、属性实例重建的验证矩阵全部通过；`check_all`、`health_check`、`coop_probe_runner`、档案探针与关卡回归通过。
+
+#### 28-3 宠物被动成长命令与数值表契约（完成）
+
+- **目标**：把宠物被动升级从 UI 直写改为 `PetDomainCommand` 命令，保存失败恢复等级与共享灵魂；提取玩家/宠物共用的只读数值表 `PassiveSkillTable`，消除宠物域对 `PaSkill` Autoload 的依赖；收敛宠物被动键并建立写入门禁。
+- **入口**：`Script/pet/pet_interface.gd` 的 `_upgrade_pet_passive`/`_upgrade_all_pet_passives`/`_pet_passive_levels`；`Script/pet/pet_domain_command.gd`；4 个 `pet_*_summon_base.gd`；`Script/memory_class/player_data.gd` 的 `_normalize_pet_passives`。
+- **非目标**：不改宠物数值、等级上限、费用公式、宠物列表/出战槽位规则；不改玩家 `pasl_prop` 刷新；不处理 Phase 29 目录。
+- **28-3A 命令化与失败回滚**：新增 `PetDomainCommand.upgrade_passive()` 与 `upgrade_all_passives()`；快照用 `profile.snapshot_state()`（覆盖 1P/2P 与共享灵魂），保存失败 `restore_state()`；UI 只调用命令并在成功后刷新活体。
+- **28-3B 数值表提取**：新增 `Script/skill/passive_skill_table.gd`（`class_name PassiveSkillTable`）；`PaSkill` 公开函数委托；宠物域 4 个召唤物、面板与命令改用静态表。
+- **28-3C 键与门禁**：`PET_PASSIVE_KEYS`、默认宠物字典、`_normalize_pet_passives`、召唤物读取改用 `DataKeys.Skill.PASSIVE_*`；`contract_scan` 新增 `pet_passive_boundary` 与自测；更新 `pet_domain_contract.md`、`passive_skill_contract.md`、`acceptance.md`、`scripts/README.md`。
+- **28-3D 验证**：单次/一键升级成功与保存失败回滚、满级/灵魂不足、1P/2P 快照作用域、读档/切档、活体宠物属性刷新、宠物背包共享不受影响；`check_all`、`health_check`、`contract_scan --self-test`、`archive_probe_runner`、`coop_probe_runner`、`level_1` 通过。
+- **出口**：宠物被动升级保存失败不产生等级或灵魂变化；宠物域不再调用 `PaSkill`；UI 直写被门禁拦截。
 
 ### 1.8 Phase 29 `Scene/` 脚本落位（未启动）
 
@@ -211,7 +222,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 28 已完成（28-1、28-2）；下一步启动 Phase 29-0 `Scene/` 脚本落位规范与逐文件清单。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 28 已完成（28-1、28-2、28-3）；下一步启动 Phase 29-0 `Scene/` 脚本落位规范与逐文件清单。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

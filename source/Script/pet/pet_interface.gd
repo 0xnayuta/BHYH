@@ -89,8 +89,22 @@ const QUALITY_FEED_HOLD_DELAY := 2.0
 const QUALITY_FEED_REPEAT_INTERVAL := 0.12
 const POTENTIAL_MAX := 32
 const STRENGTH_BUY_ITEM := "珍珠"
-const PET_PASSIVE_KEYS := ["热血", "魔泉", "狂暴", "永恒", "辉煌", "敏锐"]
-const PET_PASSIVE_EFFECT_NAMES := {"热血": "生命上限", "魔泉": "魔法上限", "狂暴": "暴击", "永恒": "回血", "辉煌": "回魔", "敏锐": "命中"}
+const PET_PASSIVE_KEYS := [
+	DataKeys.Skill.PASSIVE_HP,
+	DataKeys.Skill.PASSIVE_MP,
+	DataKeys.Skill.PASSIVE_CRIT,
+	DataKeys.Skill.PASSIVE_HP_REGEN,
+	DataKeys.Skill.PASSIVE_MP_REGEN,
+	DataKeys.Skill.PASSIVE_HIT,
+]
+const PET_PASSIVE_EFFECT_NAMES := {
+	DataKeys.Skill.PASSIVE_HP: "生命上限",
+	DataKeys.Skill.PASSIVE_MP: "魔法上限",
+	DataKeys.Skill.PASSIVE_CRIT: "暴击",
+	DataKeys.Skill.PASSIVE_HP_REGEN: "回血",
+	DataKeys.Skill.PASSIVE_MP_REGEN: "回魔",
+	DataKeys.Skill.PASSIVE_HIT: "命中",
+}
 
 const PET_SKILL_ICON_PATHS := {
 	"生命加成": "res://Art/pet/skillicon/smjc.png",
@@ -241,7 +255,15 @@ const EMPTY_PET := {
 	"强化点": 0,
 	"普通培养次数": 0,
 	"超级培养次数": 0,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
 }
@@ -282,7 +304,15 @@ const PET_TIGER_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["猛扑", "虎啸"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -325,7 +355,15 @@ const PET_DRAGON_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["分身"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -373,7 +411,15 @@ const PET_TURTLE_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["水疗盾"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -420,7 +466,15 @@ const PET_RABBIT_PET := {
 	"强化点": 0,
 	"普通培养次数": 0,
 	"超级培养次数": 0,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["月光"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -468,7 +522,15 @@ const PET_MOUSE_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["鼠窜"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -516,7 +578,15 @@ const PET_NEAT_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["蛮牛冲撞"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -564,7 +634,15 @@ const PET_YIN_TIGER_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["虎啸"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1522,7 +1600,9 @@ func _pet_attribute_display_value(pet: Variant, stat_key: String, equipment_bonu
 		var base_value := int(pet_data.get(stat_key, 0))
 		var maximum := int(pet_data.get(stat_key + "上限", base_value))
 		var equipment_value := _pet_stat(pet_data, stat_key, equipment_bonus) - base_value
-		var passive_value := _pet_passive_value(pet_data, "热血" if stat_key == "生命" else "魔泉")
+		var passive_value := _pet_passive_value(
+			pet_data, DataKeys.Skill.PASSIVE_HP if stat_key == "生命" else DataKeys.Skill.PASSIVE_MP
+		)
 		var final_maximum := maximum + equipment_value + passive_value
 		var learned_bonus := _learned_pet_self_stat_bonus(pet_data, stat_key, final_maximum)
 		final_maximum += learned_bonus
@@ -1947,8 +2027,8 @@ func _refresh_current_pet() -> void:
 	_set_label(leveltxt, str(int(pet.get(DataKeys.LEVEL, 1))))
 	_set_label(tiger_level_text, str(int(pet.get(DataKeys.LEVEL, 1))))
 	_set_label(expmc, "%d/%d" % [int(pet.get(DataKeys.EXP, 0)), int(pet.get("经验上限", 100))])
-	var passive_hp := _pet_passive_value(pet, "热血")
-	var passive_mp := _pet_passive_value(pet, "魔泉")
+	var passive_hp := _pet_passive_value(pet, DataKeys.Skill.PASSIVE_HP)
+	var passive_mp := _pet_passive_value(pet, DataKeys.Skill.PASSIVE_MP)
 	var equipment_bonus := _pet_equipment_bonuses(pet)
 	var equipment_hp := int(equipment_bonus.get(DataKeys.HP, 0))
 	var equipment_mp := int(equipment_bonus.get(DataKeys.MP, 0))
@@ -2446,20 +2526,16 @@ func _setup_pet_passive_panel() -> void:
 
 
 func _pet_passive_levels(pet: Dictionary) -> Dictionary:
-	if not pet.has("被动技能") or not (pet["被动技能"] is Dictionary):
-		pet["被动技能"] = {}
-	var levels: Dictionary = pet["被动技能"]
-	for skill_name in PET_PASSIVE_KEYS:
-		levels[skill_name] = max(0, int(levels.get(skill_name, 0)))
-	return levels
+	var value: Variant = pet.get(DataKeys.Skill.PASSIVE, {})
+	return value if value is Dictionary else {}
 
 
 func _pet_passive_max_level(pet: Dictionary) -> int:
-	return PaSkill.get_unlocked_level(int(pet.get(DataKeys.LEVEL, 1)))
+	return PassiveSkillTable.get_unlocked_level(int(pet.get(DataKeys.LEVEL, 1)))
 
 
 func _pet_passive_cost(level: int) -> int:
-	return 5000 * (max(0, level) + 1)
+	return PassiveSkillTable.get_cost_for_level(level)
 
 
 func _refresh_pet_passive_panel(pet: Dictionary) -> void:
@@ -2478,8 +2554,8 @@ func _refresh_pet_passive_panel(pet: Dictionary) -> void:
 	for skill_name in PET_PASSIVE_KEYS:
 		var level := int(levels.get(skill_name, 0))
 		var at_cap := level >= max_level
-		var current_value := int(PaSkill.get_value(skill_name, level))
-		var next_value := int(PaSkill.get_value(skill_name, level + 1))
+		var current_value := int(PassiveSkillTable.get_value(skill_name, level))
+		var next_value := int(PassiveSkillTable.get_value(skill_name, level + 1))
 		var level_label := pet_passive_level_labels.get(skill_name) as Label
 		var effect_label := pet_passive_effect_labels.get(skill_name) as Label
 		var cost_label := pet_passive_cost_labels.get(skill_name) as Label
@@ -2505,43 +2581,20 @@ func _on_pet_passive_upgrade_pressed(skill_name: String) -> void:
 	_upgrade_pet_passive(skill_name)
 
 
-func _upgrade_all_pet_passives(pet: Dictionary) -> int:
-	var levels := _pet_passive_levels(pet)
-	var max_level := _pet_passive_max_level(pet)
-	var upgraded_count := 0
-	while true:
-		var upgraded_this_round := false
-		for skill_name in PET_PASSIVE_KEYS:
-			var level := int(levels.get(skill_name, 0))
-			if level >= max_level:
-				continue
-			var cost := _pet_passive_cost(level)
-			if PlayerData.get_soul() < cost:
-				continue
-			PlayerData.spend_soul(cost)
-			levels[skill_name] = level + 1
-			upgraded_count += 1
-			upgraded_this_round = true
-		if not upgraded_this_round:
-			break
-	return upgraded_count
-
-
 func _on_pet_passive_one_key_upgrade_pressed() -> void:
 	var pet: Variant = _current_pet()
 	if not (pet is Dictionary):
 		_show_tip("当前没有宠物")
 		return
-	var upgraded_count := _upgrade_all_pet_passives(pet)
-	if upgraded_count <= 0:
+	var result := PetDomainCommand.upgrade_all_passives(PlayerData, current_pet_index)
+	if not bool(result.get("ok", false)):
 		_refresh_pet_passive_panel(pet)
-		_show_tip("灵魂不足或已达当前宠物等级上限")
+		_show_tip(str(result.get("message", "升级失败")))
 		return
 	_refresh_live_pet_passives(pet)
 	_refresh_current_pet()
 	_refresh_pet_passive_panel(pet)
-	_save_pet_changes()
-	_show_tip("一键升级完成，共提升%d级" % upgraded_count)
+	_show_tip("一键升级完成，共提升%d级" % int(result.get("upgraded_count", 0)))
 
 
 func _on_pet_passive_button_down(button: BaseButton, skill_name: String) -> void:
@@ -2596,22 +2649,13 @@ func _upgrade_pet_passive(skill_name: String) -> bool:
 	var pet: Variant = _current_pet()
 	if not (pet is Dictionary) or not skill_name in PET_PASSIVE_KEYS:
 		return false
-	var levels := _pet_passive_levels(pet)
-	var level := int(levels.get(skill_name, 0))
-	if level >= _pet_passive_max_level(pet):
-		_show_tip("已达到当前宠物等级上限")
+	var result := PetDomainCommand.upgrade_passive(PlayerData, current_pet_index, skill_name)
+	if not bool(result.get("ok", false)):
+		_show_tip(str(result.get("message", "升级失败")))
 		return false
-	var cost := _pet_passive_cost(level)
-	if PlayerData.get_soul() < cost:
-		_show_tip("灵魂不足！")
-		return false
-	PlayerData.spend_soul(cost)
-	levels[skill_name] = level + 1
 	_refresh_live_pet_passives(pet)
 	_refresh_current_pet()
 	_refresh_pet_passive_panel(pet)
-	if not Global.request_save_with_feedback("pet_passive_upgrade", self):
-		return false
 	return true
 
 
@@ -3908,20 +3952,20 @@ func _strength_cost(level: int) -> int:
 
 func _pet_passive_value(pet: Dictionary, skill_name: String) -> int:
 	var levels := _pet_passive_levels(pet)
-	return int(PaSkill.get_value(skill_name, int(levels.get(skill_name, 0))))
+	return int(PassiveSkillTable.get_value(skill_name, int(levels.get(skill_name, 0))))
 
 
 func _pet_final_stat(pet: Dictionary, key: String, equipment_bonus: Variant = null) -> int:
 	var value := _pet_stat(pet, key, equipment_bonus)
 	match key:
 		"暴击":
-			value += _pet_passive_value(pet, "狂暴")
+			value += _pet_passive_value(pet, DataKeys.Skill.PASSIVE_CRIT)
 		"回血":
-			value += _pet_passive_value(pet, "永恒")
+			value += _pet_passive_value(pet, DataKeys.Skill.PASSIVE_HP_REGEN)
 		"回魔":
-			value += _pet_passive_value(pet, "辉煌")
+			value += _pet_passive_value(pet, DataKeys.Skill.PASSIVE_MP_REGEN)
 		"命中":
-			value += _pet_passive_value(pet, "敏锐")
+			value += _pet_passive_value(pet, DataKeys.Skill.PASSIVE_HIT)
 	value += _learned_pet_self_stat_bonus(pet, key, value)
 	return value
 

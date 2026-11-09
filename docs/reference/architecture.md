@@ -73,7 +73,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 3 | `MemoryClass` | `Script/memory_class/memory_class.gd` | 本地存档加密读写、备份、后台保存、设置文件 | 本地存档 IO 主入口；云存档导入/导出在归档界面单独加密读写 |
 | 4 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
 | 5 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
-| 6 | `PaSkill` | `Script/skill/passive_skills.gd` | 被动技能数值表、灵魂收益与 `pasl_prop` 快照 | 读取 `PlayerData`；唯一写 `RoleProp.pasl_prop`；由 `passive_skills_changed` 刷新 |
+| 6 | `PaSkill` | `Script/skill/passive_skills.gd` | 玩家槽位 `pasl_prop` 快照 | 数值规则由 `PassiveSkillTable` 提供；唯一写 `RoleProp.pasl_prop`；由 `passive_skills_changed` 刷新 |
 | 7 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
 | 8 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
 | 9 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
@@ -95,6 +95,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
 - 被动属性快照 `pasl_prop` 只由 `PaSkill` 写入；不得在 `_process`/`_physics_process` 轮询刷新；契约见 [`passive_skill_contract.md`](passive_skill_contract.md)。
+- 宠物被动等级只经 `PetDomainCommand` 提交；玩家与宠物共用 `PassiveSkillTable` 的只读数值规则。
 - 10 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 已由 21-3A~J 收口（`add` 系入口共 120 个，其中 113 个为带 `add_` 前缀的族工厂薄转发；当前字段/入口基线见 [`global_runtime_inventory.md`](global_runtime_inventory.md)）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
 
 ### 2.4 运行时服务

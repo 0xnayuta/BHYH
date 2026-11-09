@@ -67,7 +67,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `format_all.py` | `gdformat` 校验/格式化 |
 | `health_check.py` | 场景引用、Autoload、死代码、Headless 编译与静态 warning |
 | `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme/字体/表面色与白名单子门禁 |
-| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；含 Global 表面基线、全局信号基线与被动属性边界；`--self-test` 覆盖正负样本 |
+| `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；含 Global 表面基线、全局信号基线、被动属性边界与宠物被动边界；`--self-test` 覆盖正负样本 |
 | `naming_audit.py` | 目录/文件 `snake_case`；`--all` 全量 |
 | `naming_compliance_audit.py` | 全量命名终审；人工执行，不在日常 `check_all` 内 |
 | `whitelist_audit.py` | 白名单冻结、未登记与失效项 |
