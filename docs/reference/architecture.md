@@ -34,7 +34,7 @@ BHYH/
 |:---|:---|:---|
 | 引擎 | Godot **4.7.2** | `source/project.godot`、`docs/reference/status.md` |
 | 语言 | GDScript 2.0，优先静态类型 | `docs/standards/godot_design_standard.md` |
-| 主场景 | `res://Scene/other_scene/load_scene.tscn` | `source/project.godot` |
+| 主场景 | `res://Scene/other_scene/startup_loading.tscn` | `source/project.godot` |
 | 渲染后端 | 默认 `mobile`；Web 使用 `forward_plus` | `source/project.godot` `[rendering]` |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
@@ -135,15 +135,16 @@ Autoload 按 `project.godot` 中的顺序初始化：
 
 ```mermaid
 flowchart TD
-    A["load_scene.tscn<br/>主场景 / 加载页"] --> B["main_menu.tscn<br/>主菜单"]
+    A["startup_loading.tscn<br/>主场景 / 首帧进度"] --> A2["load_scene.tscn<br/>加载页"]
+    A2 --> B["main_menu.tscn<br/>主菜单"]
     B --> C["read_archive_interface.tscn<br/>存档列表"]
     C -->|"空存档 / 新建"| D["choose_player.tscn<br/>选角 / 双人配置"]
     C -->|"已有存档"| E["map_0.tscn<br/>世界地图"]
     D --> E
     E --> F["map_1 … map_9_1<br/>区域地图"]
     F --> G["level_info.tscn<br/>关卡信息弹窗"]
-    G -->|"挑战"| A
-    A -->|"预载完成，覆盖式切换"| H["level_*.tscn<br/>BaseLevel 子类"]
+    G -->|"挑战"| A2
+    A2 -->|"预载完成，覆盖式切换"| H["level_*.tscn<br/>BaseLevel 子类"]
     H -->|"清空阶段并进入出口"| I["victory.tscn"]
     H -->|"角色死亡（双人须全灭）"| J["defeat.tscn"]
     I -->|"返回地图 / 自动重战"| F
@@ -171,8 +172,9 @@ flowchart TD
 
 返回值只表示**请求已接受并已提交场景切换**，不表示加载页最终完成；异步预载失败通过加载页失败状态处理（Phase 15-2C/15-3C），失败/取消/超时保留加载页，不提交未完成目标。
 
-加载页 `Scene/other_scene/load_scene.gd` 负责：
+启动与加载流程负责：
 
+- 启动页 `Scene/other_scene/startup_loading.gd` 在主场景阶段显示首帧进度，线程加载 `load_scene.tscn`，以 `startup_progress=0.1` 元数据交接；不新增 Autoload，不复制 `project.binary`，Android 签名校验仍由加载页内联流程执行；
 - 窗口策略：可用屏幕小于 1600×1000 时进入全屏；
 - Android 首启完整性校验（仅 Android 且存在平台单例时）；
 - 构建预载清单：目标场景、角色/宠物/剑阵/法宝、首波怪物、必要背景与音效；关卡怪物与弹体场景来自构建期 `LevelPreloadCatalog`；
