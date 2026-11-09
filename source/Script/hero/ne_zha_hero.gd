@@ -575,7 +575,7 @@ func get_skill(skill_name):
 	var level := scene_parent.get_parent()
 	if level == null or not is_instance_valid(level) or level.is_queued_for_deletion():
 		return
-	if level is Level17 or level is Level22:
+	if level is Level17:
 		return
 	if name == SKILL_YINYANG and _yinyang_toggle_locked:
 		return

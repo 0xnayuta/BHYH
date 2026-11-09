@@ -840,7 +840,7 @@ func get_skill(skill_name):
 	if level < 1 or float(role1_skill_inter.get(key, 0.0)) > 0.0:
 		return
 	var level_node := get_parent().get_parent()
-	if level_node is Level17 or level_node is Level22:
+	if level_node is Level17:
 		return
 	var cost := int(get_need_mp(key, false))
 	var props := _props()
