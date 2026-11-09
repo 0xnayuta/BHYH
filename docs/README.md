@@ -1,6 +1,6 @@
 # 项目文档索引
 
-本目录按“参考 / 决策 / 路线 / 指南 / 规范 / 审计 / 报告 / 归档”分层。版本与阶段状态分别以 [`reference/status.md`](reference/status.md) 与 [`roadmap/roadmap.md`](roadmap/roadmap.md) 为准；当前活跃候选为 Phase 38（7.4 内容回植准备），Phase 26 长期暂缓。唯一活跃工程位于仓库根目录的 `source/`。
+本目录按“参考 / 决策 / 路线 / 指南 / 规范 / 审计 / 报告 / 归档”分层。版本与阶段状态分别以 [`reference/status.md`](reference/status.md) 与 [`roadmap/roadmap.md`](roadmap/roadmap.md) 为准；当前活跃候选为 Phase 39（Scene/Script 目录收敛，未启动），Phase 35–38、28、29 已归档，Phase 26 长期暂缓。唯一活跃工程位于仓库根目录的 `source/`。
 
 历史阶段报告与逐文件台账不进入活跃文档；已完成阶段保留在 [`archive/`](archive/README.md)。本页只做目录导航，具体清单由各子目录索引维护。
 

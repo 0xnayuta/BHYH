@@ -1,4 +1,51 @@
-# `Scene/` 脚本落位迁移清单（Phase 29-0）
+# Phase 29 Scene 脚本落位归档
+
+> **归档日期**：2026-11-09
+> **状态**：Archived
+> **关联**：[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)、[`../standards/naming_standard.md`](../standards/naming_standard.md) §1.4、[`../reference/architecture.md`](../reference/architecture.md)
+
+## Phase 29 `Scene/` 脚本落位（29-0~29-4 完成；Phase 29 完成）
+
+- **目标**：统一 GDScript 落位规则为“`Scene/` 不存放 `.gd`，全部归 `Script/<domain>/`”，迁移当前 56 个场景脚本。
+- **入口**：`source/Scene/` 下 56 个 `.gd`；[`naming_standard.md`](../standards/naming_standard.md) §1.2、§2.1；`scripts/naming_audit.py`。
+- **非目标**：不改脚本行为；不搬 `Scene/` 下的 `.tscn`/`.tres`；不新建顶层类型目录；不处理 `global.gd`。
+
+#### 29-0 规范与清单（完成）
+
+- 更新 `naming_standard.md`：`Scene/` 承载场景树与预制体，`.gd` 一律归 `Script/<domain>/`。
+- 产出 56 个文件的逐文件目标路径清单，检查同名冲突与场景引用。
+- 新增或修订目录落位 ADR，同步 `architecture.md` 的目录说明。
+- **产出**：`naming_standard.md` v2.2.0（§1.2、§1.4、§2.1）；[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)；本页附录的 56 文件迁移清单；56 个映射无同名冲突，10 个目标目录均无同名目标文件。
+
+#### 29-1 应用编排与档案（完成）
+
+- `load_scene.gd`、`startup_loading.gd`、`userload.gd`、`auto_battle_config.gd` → `Script/runtime/`。
+- `bacis_ar_button.gd` → `Script/archive_interface/`。
+- **完成记录**：`rename_path.py` 批量迁移 5 个脚本与 `.uid`；5 个 `.tscn` 的 `ext_resource` 同步；更新 `contract_scan.py` 路径基线、两份 theme 基线、`naming_whitelist.md` 与 `ADR-018` 链接；`check_all`、`health_check`、`level_1` 通过。
+
+#### 29-2 菜单、关卡、奖励、阵法与怪物（29-2A、29-2B、29-2C 完成）
+
+- 菜单、帮助、结算、角色选择 → `Script/main_menu/`、`Script/other_menu/`、`Script/level/`。
+- 奖励与幻化 → `Script/other_menu/`；阵法与技能图标 → `Script/skill/`。
+- 怪物、血条、受击、Buff、光环 → `Script/monster/`；怪物数据 → `Script/data/`。
+
+#### 29-3 文本表现与角色特效（完成）
+
+- `choose_scene.gd` → `Script/runtime/`；`combo`、`message`、`moment_text`、`touch_text`、`liji` → `Script/hittext/`。
+- `special_effect_bullet.gd` → `Script/hero/`。
+- **完成记录**：`rename_path.py` 批量迁移 9 个脚本与 `.uid`；同步 9 个 `.tscn` 的 `ext_resource`；更新两份 theme 基线的 `message_info` 路径；`contract_gate`、`check_all`、`health_check`、`level_1` 通过；`Scene/` 下 `.gd` 为 0。
+
+#### 29-4 门禁启用（完成）
+
+- `naming_audit.py` 增加 `source/Scene/**/*.gd` 报 ERROR 的规则；清理路径变化产生的白名单旧条目。
+- **完成记录**：`naming_audit.py` 落位规则已启用；负向探针被拦截；`naming_audit --all`、`naming_compliance_audit --fail-on-error`、`whitelist_audit --fail-on-error`、`check_all`、`docs_audit` 通过。
+- **出口**：`Scene/` 下 `.gd` 为 0；`check_all`、`health_check`、`scene_probe_runner`、相关关卡回归通过；`docs_audit` 0 缺失链接。
+
+---
+
+---
+
+### 56 文件迁移清单（Phase 29-0）
 
 > **状态**：29-1、29-2A、29-2B、29-2C、29-3 已迁移；`source/Scene/` 下 `.gd` 为 0；29-4 门禁已启用；Phase 29 完成。
 >

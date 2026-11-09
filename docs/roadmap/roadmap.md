@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.4 内容基线；**Phase 38 已完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 12~38 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**Phase 28 已完成（28-1、28-2、28-3），Phase 29 已完成（29-0~29-4）**。
+> **当前版本**：7.4 内容基线；Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**Phase 39 Scene/Script 目录收敛（未启动）**。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -39,14 +39,15 @@
 | Phase 32 UI Theme 契约 | 完成、归档 | [`iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)；当前契约 [`ui_theme_contract.md`](../reference/ui_theme_contract.md) |
 | Phase 33 装备数据契约 | 完成、归档 | [`iteration_33_equipment_data_contract.md`](../archive/iteration_33_equipment_data_contract.md)；当前契约 [`equipment_data_contract.md`](../reference/equipment_data_contract.md) |
 | Phase 34 7.0 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；角色 8、2P、UI 与系统修复见状态页 |
-| Phase 35 7.1 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
-| Phase 37 7.3 内容回植 | **完成（37-0~37-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
-| Phase 38 7.4 内容回植 | **完成（38-0~38-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.4，PCK/release 暂缓 |
-| Phase 28 全局通信与派生属性契约 | **完成（28-1、28-2、28-3）** | [`current-iteration.md`](current-iteration.md) §1.7；移除 `Signals`、玩家与宠物被动契约 |
-| Phase 29 `Scene/` 脚本落位 | **完成（29-0~29-4）** | [`current-iteration.md`](current-iteration.md) §1.8；56 个场景脚本归 `Script/<domain>/`；`Scene/**/*.gd` 门禁 |
+| Phase 35 7.1 内容回植 | 完成、归档；待发布验证 | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；L3 收口完成，PCK/release 暂缓 |
+| Phase 36 7.2 内容回植 | 完成、归档；待发布验证 | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；L3 收口完成，PCK/release 暂缓 |
+| Phase 37 7.3 内容回植 | **完成（37-0~37-6；L3 通过；归档）** | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；PCK/release 暂缓 |
+| Phase 38 7.4 内容回植 | **完成（38-0~38-6；L3 通过；归档）** | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md)；PCK/release 暂缓 |
+| Phase 28 全局通信与派生属性契约 | **完成（28-1、28-2、28-3；归档）** | [`iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md)；移除 `Signals`、玩家与宠物被动契约 |
+| Phase 29 `Scene/` 脚本落位 | **完成（29-0~29-4；归档）** | [`iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；56 个场景脚本归 `Script/<domain>/`；`Scene/**/*.gd` 门禁 |
+| Phase 39 Scene/Script 目录收敛 | **未启动** | [`current-iteration.md`](current-iteration.md) §1.3；根级清零、`other_scene` 拆分、场景合并与根级门禁 |
 
-**编号边界**：Phase 22~29 为本轮新增候选（Phase 28/29 于 2026-11-09 登记），不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
+**编号边界**：Phase 22~29 为本轮新增候选；Phase 30 已被使用，Phase 39 为本轮新登记候选；不重开已归档的 Phase 31~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
 ## 2. 总体架构工作流
 

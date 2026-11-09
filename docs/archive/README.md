@@ -100,3 +100,6 @@
 | [`iteration_24_ui_growth_boundaries.md`](iteration_24_ui_growth_boundaries.md) | Phase 24 UI 与成长命令边界：面板契约盘点、`PetAttributePages` 拆分、`CoopPanelHost` 宿主、阵法升级命令与阶段验收 | 2026-11-06 |
 | [`iteration_25_combat_behavior.md`](iteration_25_combat_behavior.md) | Phase 25 战斗实体行为切片：自动战斗、法宝展示、Boss 保护、受击/来源控制器、探针覆盖与阶段验收 | 2026-11-06 |
 | [`iteration_27_theme_font_convergence.md`](iteration_27_theme_font_convergence.md) | Phase 27 Theme 与字体契约收敛：token 源、字号/颜色、变体层级、字体资产、动态覆盖与验收 | 2026-11-06 |
+| [`iteration_35_38_content_backport.md`](iteration_35_38_content_backport.md) | Phase 35–38 7.1–7.4 内容回植：范围、三方语义合并、批次、L3 收口、发布边界与缺口修复 | 2026-11-09 |
+| [`iteration_28_global_signal_and_passive_contract.md`](iteration_28_global_signal_and_passive_contract.md) | Phase 28 全局确认信号移除、被动属性快照事件化与宠物被动命令/共享数值表 | 2026-11-09 |
+| [`iteration_29_scene_script_relocation.md`](iteration_29_scene_script_relocation.md) | Phase 29 `Scene/` 脚本落位：规范、56 文件迁移清单、29-1~29-4 批次与门禁 | 2026-11-09 |

@@ -11,7 +11,6 @@
 | [`status.md`](status.md) | **当前状态单一事实源**：版本、门禁、最近验证与已知边界 |
 | [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与变更矩阵 |
 | [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 10 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |
-| [`scene_script_migration_matrix.md`](scene_script_migration_matrix.md) | Phase 29-0：`Scene/` 下 56 个 `.gd` 的逐文件目标路径、引用点、迁移批次与门禁 |
 | [`passive_skill_contract.md`](passive_skill_contract.md) | Phase 28-2：被动等级、`pasl_prop` 快照所有权、刷新事件与 `passive_boundary` 门禁 |
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
 | [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |

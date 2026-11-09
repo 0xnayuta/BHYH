@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-09。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 38 的 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）；Phase 37 的 7.3 内容回植与 37-6 缺口修复完成（37-0~37-6 批次完成；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口完成、待发布验证；Phase 35 的 7.1 L3 收口完成、待发布验证；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+> **阶段状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28 全局通信/被动契约与 Phase 29 `Scene/` 脚本落位已完成并归档；**Phase 39 Scene/Script 目录收敛未启动**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，归档索引见 [`../archive/README.md`](../archive/README.md)。
 
 ---
 
@@ -181,7 +181,7 @@
 
 - `naming_standard.md` 升级 v2.2.0：`Scene/` 仅承载 `.tscn`/`.tres` 与场景资源；新增 §1.4 GDScript 落位规则，`.gd` 统一归 `Script/<domain>/`；§2.1 同步文件基线。
 - 新增 `ADR-031`：职责分离、零例外、`rename_path.py` 引用同步、29-1~29-4 分批与 29-4 门禁；同步 `docs/decisions/README.md` 与 `docs/reference/README.md`。
-- 新增 `scene_script_migration_matrix.md`：56 个 `.gd` 逐文件源/目标路径、引用点、批次与统计；56/56 映射完整，10 个目标目录无同名冲突，55 个同名 `.tscn` 加 1 个跨脚本引用。
+- 新增 56 文件迁移清单，已随 Phase 29 归档到 [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)：56 个 `.gd` 逐文件源/目标路径、引用点、批次与统计；56/56 映射完整，10 个目标目录无同名冲突，55 个同名 `.tscn` 加 1 个跨脚本引用。
 - 边界：仅规范与清单；无代码、场景或资源变更；Phase 29-1 未启动。
 
 ### Phase 29-1 应用编排与档案迁移（2026-11-09）
@@ -235,6 +235,12 @@
 - `naming_audit.py --all`、`naming_compliance_audit.py --fail-on-error`、`whitelist_audit.py --fail-on-error` 全部通过；`check_all --skip-engine` 7/7；`docs_audit` 940 链接 / 0 缺失。
 - 同步 `naming_standard.md` §1.4、`acceptance.md` 门禁表、`scripts/README.md` 与迁移清单。
 - **Phase 29 完成**：`source/Scene/` 下 `.gd` 为 0；56 个脚本全部归 `Script/<domain>/`；门禁已启用。
+
+### Phase 39 Scene/Script 目录收敛规划（未启动）
+
+- Phase 35–38、28、29 已完成并归档；Phase 26 平台与发布验证继续长期暂缓。
+- Phase 39 计划：39-0 根级 4 文件清零与 `Scene/*.tscn`/`Script/*.gd` 门禁；39-1 拆分 `Scene/other_scene` 44 个场景；39-2 合并 `show_text`、`monster_blood`/`monster_damage`、`special_effect` 共 29 个场景；39-3 评估 `Scene/level/zmws`、`Script/monster` 数据形态与 2 个零引用 shader；39-4 验收与文档。
+- 详细批次、44 文件映射表、非目标与出口见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.3；尚未执行，不改变当前运行时与存档行为。
 
 ## 3. 当前已知边界
 

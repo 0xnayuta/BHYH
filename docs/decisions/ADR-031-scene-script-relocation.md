@@ -2,7 +2,7 @@
 
 - **状态**：Accepted
 - **日期**：2026-11-09
-- **关联**：[`ADR-004`](ADR-004-naming-contract-and-frozen-whitelist.md)、[`ADR-008`](ADR-008-type-based-directories-with-feature-subdirectories.md)、[`ADR-013`](ADR-013-tool-guaranteed-path-migration.md)、[`../standards/naming_standard.md`](../standards/naming_standard.md) §1.2/§1.4、[`../reference/scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md)
+- **关联**：[`ADR-004`](ADR-004-naming-contract-and-frozen-whitelist.md)、[`ADR-008`](ADR-008-type-based-directories-with-feature-subdirectories.md)、[`ADR-013`](ADR-013-tool-guaranteed-path-migration.md)、[`../standards/naming_standard.md`](../standards/naming_standard.md) §1.2/§1.4、[`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)
 
 ## 1. 背景
 
@@ -24,7 +24,7 @@
 1. **职责分离**：`source/Scene/` 只承载 `.tscn`、`.tres` 与场景资源；`source/Script/` 承载全部 GDScript。
 2. **落位规则**：所有 `.gd` 必须位于 `source/Script/<domain>/`；`Scene/` 下不得新增 `.gd`。
 3. **例外为零**：不保留 `Scene/**/*.gd` 白名单，也不以“脚本与场景同名”为理由保留。`addons/` 第三方插件不受本规则影响，但不得作为规避通道。
-4. **迁移范围**：本阶段迁移 `Scene/` 下 56 个 `.gd`；目标路径以 [`scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md) 为唯一清单。
+4. **迁移范围**：本阶段迁移 `Scene/` 下 56 个 `.gd`；目标路径以[归档迁移清单](../archive/iteration_29_scene_script_relocation.md)为唯一清单。
 5. **引用同步**：迁移只通过 `scripts/rename_path.py` 执行；该工具负责更新 `.tscn` 的 `ext_resource`、脚本内 `res://` 字符串、`.uid`、`project.godot` 与资源引用。禁止手工批量替换路径。
 6. **门禁**：Phase 29-4 在 `scripts/naming_audit.py` 增加 `source/Scene/**/*.gd` 报 `ERROR` 的目录规则，并清理因路径变化失效的白名单旧条目；门禁启用前不得再新增 `Scene/` 下 `.gd`。
 
@@ -87,7 +87,7 @@
 
 ## 7. 证据
 
-- 文件清单与引用点：[`../reference/scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md)
+- 文件清单与引用点：[`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)
 - 路径迁移工具：[`../../scripts/rename_path.py`](../../scripts/rename_path.py)
 - 命名与目录规范：[`../standards/naming_standard.md`](../standards/naming_standard.md) §1.2、§1.4
 - 当前目录职责：[`../reference/architecture.md`](../reference/architecture.md) §1
