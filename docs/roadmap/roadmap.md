@@ -1,7 +1,7 @@
 # BHYH 后续开发路线图
 
 > **定位**：长期阶段顺序、阶段状态与独立项目的唯一来源；不保存批次实施流水账。
-> **当前版本**：7.4 内容基线；**Phase 38 已完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 12~38 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；当前无活跃候选。
+> **当前版本**：7.4 内容基线；**Phase 38 已完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 12~38 除 Phase 26 外均已完成、关闭或归档；Phase 21 的 21-2A 最低设备确认与 21-2B 平台测量暂缓；Phase 26 与 7.3/7.4 PCK/release 长期暂缓；**当前候选 Phase 28（28-1 进行中），Phase 29 未启动**。
 > **依据**：[`target_architecture_contract.md`](../standards/target_architecture_contract.md)；当前实现见 [`architecture.md`](../reference/architecture.md)，验证事实见 [`status.md`](../reference/status.md)，门禁见 [`acceptance.md`](../reference/acceptance.md)。
 
 ## 1. 状态与文档边界
@@ -43,8 +43,10 @@
 | Phase 36 7.2 内容回植 | 完成、待发布验证 | [`status.md`](../reference/status.md)；L3 收口完成，PCK/release 暂缓 |
 | Phase 37 7.3 内容回植 | **完成（37-0~37-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.3，PCK/release 暂缓 |
 | Phase 38 7.4 内容回植 | **完成（38-0~38-6；L3 通过；PCK/release 暂缓）** | [`current-iteration.md`](current-iteration.md)；目标 7.4，PCK/release 暂缓 |
+| Phase 28 全局通信与派生属性契约 | **进行中（28-1）；28-2 未启动** | [`current-iteration.md`](current-iteration.md) §1.7；移除 `Signals`、被动属性事件化 |
+| Phase 29 `Scene/` 脚本落位 | **未启动** | [`current-iteration.md`](current-iteration.md) §1.8；56 个场景脚本归 `Script/<domain>/` |
 
-**编号边界**：Phase 22~27 为本轮新增候选，不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
+**编号边界**：Phase 22~29 为本轮新增候选（Phase 28/29 于 2026-11-09 登记），不重开已归档的 Phase 30~33；历史归档保持原貌。已完成阶段的批次、截图、计数与逐项验证只在归档中保留。
 
 ## 2. 总体架构工作流
 
@@ -69,6 +71,7 @@
 | 数据/资源（Phase 14、30、33） | 已完成；构建源、Catalog 与发布闭包已验证 |
 | UI Theme / 字体（Phase 32 → 27） | 已完成；token 源、语义基类与字体角色已收口 |
 | 平台/发布（Phase 21、26） | 21 可执行项完成；26 长期暂缓 |
+| 全局通信 / 派生属性 / 脚本落位（Phase 28→29） | 28-1 进行中；28-2 与 Phase 29 未启动 |
 
 约束：
 

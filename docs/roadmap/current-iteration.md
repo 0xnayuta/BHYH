@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
-> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。**当前候选 Phase 28 已登记，28-1 进行中；Phase 29 未启动。**
+> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；当前候选为 Phase 28 架构治理（28-1 进行中）。PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -99,6 +99,64 @@
 - **完成判定**：按 [`migration_playbook.md`](../guides/migration_playbook.md) Phase 2 出口逐项满足范围完整、语义完整、资产完整、双人完整、失败边界、证据可复核与文档一致；生产未映射 0，删除/数据表/场景属性/UI 文本均有处置结论；不以“路径存在”或“L3 通过”替代语义复核。
 - **非目标与边界**：不夹带上游之外的玩法重设计、数值再平衡、存档格式变更、旧路径/旧后端/旧存档迁移链、Autoload/`Global` 扩张、目录大规模迁移、PCK/release 或平台验证；解包、密钥、参考树、逐文件台账与本地绝对路径只在仓库外；测试探针按 [`ADR-019`](../decisions/ADR-019-test-fixtures-outside-production-source.md) 放在 `scripts/`；`addons/` 非插件维护任务不修改。
 
+### 1.7 Phase 28 全局通信与派生属性契约（28-1 进行中；28-2 未启动）
+
+- **目标**：移除全局确认信号 `Signals`，把确认回调归打开者所有；把被动属性快照从每帧轮询改为档案变更事件驱动；为这两条边界建立单一写者与门禁。
+- **入口**：全局确认面 `Script/base/signals.gd`、`Scene/show_text/choose_scene.gd`、`Script/runtime/popup_factory.gd`；被动数值面 `Script/skill/passive_skills.gd`、`Script/memory_class/player_data.gd`、`Script/coop/local_coop.gd`。
+- **非目标**：不改玩法数值、存档格式、输入映射；不新增 Autoload；不迁移 `Scene/` 下其余脚本（归 Phase 29）；不处理 `global.gd` 的根目录位置。
+
+#### 28-1 移除全局确认信号（进行中）
+
+- `choose_scene.gd` 增加 `confirmed`/`cancelled` 实例信号；确认与取消先发信号、再释放实例。
+- 10 个 `connect_choose_box_signal` 调用点改为在 `Global.add_choose_text()` 返回值上连接；`decompose.gd` 的连接从 `_ready` 移到打开处。
+- `PopupFactory` 维护活动确认框：新确认框打开时显式关闭旧实例，固化“最后打开者接管”的单确认框语义，不再依赖信号断开。
+- 删除 `Script/base/signals.gd` 与伴生 `.uid`，从 `project.godot` 移除 `Signals` 注册项；Autoload 由 11 项降为 10 项（9 个业务单例 + `MCPGameBridge`）。
+- 新增 ADR 记录“确认框回调归打开者所有”；更新 `autoload_boundary_matrix.md`、`architecture.md`、`global_runtime_inventory.md` 的注册项计数。
+- 新增全局信号基线门禁：扫描 Autoload 脚本的 `signal` 声明，与基线比较，新增报 ERROR；删除 `Signals` 后基线为 `MemoryClass` 的 `background_save_finished` 与 `save_failed`。
+- **出口**：10 条确认路径（存档删除、出售、分解、挑战、商店购买、技能升级等）确认/取消各执行一次；连续打开、暂停、场景切换释放正常；`check_all`、`health_check`、`scene_probe_runner`、`coop_probe_runner`、`level_1` 与变更影响回归通过；文档计数一致。
+
+#### 28-2 被动属性快照事件化（未启动）
+
+- 删除 `passive_skills.gd` 的 `_physics_process` 轮询与 `LocalCoop.secondary_passives` 的轮询。
+- `PlayerData` 增加 `passive_skills_changed` 信号；在 `apply_passive_skill_upgrades()` 成功、`ensure_player_passive_skills()` 实际修正、档案载入完成后发出。
+- `PaSkill` 连接信号并保留启动刷新；`LocalCoop` 只刷新 2P 槽位；`get_passive_skill_properties()` 增加等级与属性实例签名短路。
+- `DataKeys` 增加玩家被动技能键常量，替换 `PaSkill`、`PlayerData`、`bd_skill`、`back_pack` 中的裸中文键；宠物被动键保持独立域。
+- 新增 `docs/reference/passive_skill_contract.md`；`contract_scan.py` 增加 `PASSIVE_SNAPSHOT_WRITE`、`PASSIVE_POLLING`、`PASSIVE_DATA_WRITE`。
+- **出口**：新建档、读档、单技能/一键升级、保存失败回滚、双人 link/取消、切档、属性实例重建的验证矩阵全部通过；`check_all`、`health_check`、`coop_probe_runner`、档案探针与关卡回归通过。
+
+### 1.8 Phase 29 `Scene/` 脚本落位（未启动）
+
+- **目标**：统一 GDScript 落位规则为“`Scene/` 不存放 `.gd`，全部归 `Script/<domain>/`”，迁移当前 56 个场景脚本。
+- **入口**：`source/Scene/` 下 56 个 `.gd`；[`naming_standard.md`](../standards/naming_standard.md) §1.2、§2.1；`scripts/naming_audit.py`。
+- **非目标**：不改脚本行为；不搬 `Scene/` 下的 `.tscn`/`.tres`；不新建顶层类型目录；不处理 `global.gd`。
+
+#### 29-0 规范与清单（未启动）
+
+- 更新 `naming_standard.md`：`Scene/` 承载场景树与预制体，`.gd` 一律归 `Script/<domain>/`。
+- 产出 56 个文件的逐文件目标路径清单，检查同名冲突与场景引用。
+- 新增或修订目录落位 ADR，同步 `architecture.md` 的目录说明。
+
+#### 29-1 应用编排与档案（未启动）
+
+- `load_scene.gd`、`startup_loading.gd`、`userload.gd`、`auto_battle_config.gd` → `Script/runtime/`。
+- `bacis_ar_button.gd` → `Script/archive_interface/`。
+
+#### 29-2 菜单、关卡、奖励、阵法与怪物（未启动）
+
+- 菜单、帮助、结算、角色选择 → `Script/main_menu/`、`Script/other_menu/`、`Script/level/`。
+- 奖励与幻化 → `Script/other_menu/`；阵法与技能图标 → `Script/skill/`。
+- 怪物、血条、受击、Buff、光环 → `Script/monster/`；怪物数据 → `Script/data/`。
+
+#### 29-3 文本表现与角色特效（未启动）
+
+- `choose_scene.gd` → `Script/runtime/`；`combo`、`message`、`moment_text`、`touch_text`、`liji` → `Script/hittext/`。
+- `special_effect_bullet.gd` → `Script/hero/`。
+
+#### 29-4 门禁启用（未启动）
+
+- `naming_audit.py` 增加 `source/Scene/**/*.gd` 报 ERROR 的规则；清理路径变化产生的白名单旧条目。
+- **出口**：`Scene/` 下 `.gd` 为 0；`check_all`、`health_check`、`scene_probe_runner`、相关关卡回归通过；`docs_audit` 0 缺失链接。
+
 ---
 
 ## 2. Phase 26：平台与发布验证（长期暂缓）
@@ -153,7 +211,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 38 内容回植与 38-6 缺口修复已收口，当前无活跃候选。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：执行 Phase 28-1 移除全局确认信号（进行中）；28-1 收口后进入 28-2 被动属性快照事件化。Phase 29 `Scene/` 脚本落位在 Phase 28 收口后启动。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)
