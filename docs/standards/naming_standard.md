@@ -1,6 +1,6 @@
 # BHYH 全工程命名规范与契约白皮书 (Comprehensive Naming & Contract Standard)
 
-> **版本**：v2.1.1（2026-10-27，总体目标架构关联与迁移边界澄清）
+> **版本**：v2.2.0（2026-11-09，Phase 29-0：`Scene/` 不承载 GDScript，脚本统一归 `Script/<domain>/`）
 >
 > **生效范围**：`source/` 活跃开发主工程全量代码、场景、资源与目录
 >
@@ -35,7 +35,7 @@
 
 | 顶层目录 | 规范 | 职责边界 |
 |:---|:---|:---|
-| `source/Scene/` | 业务子目录 `snake_case` | 场景树、预制体 |
+| `source/Scene/` | 业务子目录 `snake_case`；禁止存放 `.gd` | 场景树、预制体与场景资源（`.tscn`/`.tres`） |
 | `source/Script/` | 业务子目录 `snake_case` | GDScript 业务逻辑 |
 | `source/Art/` | 业务子目录 `snake_case` | 美术、精灵帧、图集 |
 | `source/Music/` | 业务子目录 `snake_case` | 音乐与音效 |
@@ -48,6 +48,14 @@
 - `source/` 内目录/文件改名必须通过 `scripts/rename_path.py`；禁止裸改或单步 `git mv`。
 - 本规则不要求全仓搬迁；保留类型顶层，在其内部功能聚合。`docs/`、`scripts/` 本身不在该迁移工具范围，移动后另行同步链接。
 - 凡单批次目录/文件重命名 ≥ 3 个、涉及 `.gd/.tscn/.tres/.import/.json` 引用、涉及字典键/动画名/UI 文案或机器导出白名单的迁移，必须在提交信息与变更说明中登记迁移范围、引用同步与白名单例外。
+
+### 1.4 GDScript 落位规则
+
+- **`Scene/` 不承载脚本**：`source/Scene/` 只保存 `.tscn`、`.tres` 与场景资源；不得新增或保留 `.gd`。
+- **脚本统一落位**：所有 GDScript 必须位于 `source/Script/<domain>/`；`<domain>` 为功能域目录（如 `runtime`、`main_menu`、`monster`、`skill`、`data`），不得按 `.tscn` 所在目录镜像新建平行约定。
+- **存量迁移**：现有 `Scene/` 下 56 个 `.gd` 按 [`../reference/scene_script_migration_matrix.md`](../reference/scene_script_migration_matrix.md) 分批迁移；决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
+- **例外为零**：不保留 `Scene/**/*.gd` 白名单；`addons/` 第三方插件不在本规则范围，但不得作为规避通道。
+- **门禁**：Phase 29-4 起 `scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；门禁启用前也不得新增。
 
 ---
 
@@ -70,7 +78,7 @@ extends Object
 因此本项目执行以下规则：
 
 - **所有 `.tscn` 场景文件**：`snake_case`；
-- **所有 `.gd` 脚本文件**：`snake_case`，即使声明了 `class_name`；
+- **所有 `.gd` 脚本文件**：`snake_case`，即使声明了 `class_name`；且必须位于 `source/Script/<domain>/`，不得放在 `source/Scene/` 下；
 - **资源与资产文件**：`.tres`、`.res`、`.png`、`.jpg`、`.webp`、`.mp3`、`.ogg`、`.wav`、`.ttf`、`.otf`、`.gdshader`、`.json` 等默认 `snake_case`；
 - **伴生元数据**：`.import`、`.uid` 必须与源文件全名完全同步；
 - **机器导出例外**：Flash/TexturePacker 产物允许保留工具生成名称，但必须进入 `scripts/contract_whitelist.json` 的精确冻结表。

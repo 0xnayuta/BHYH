@@ -55,6 +55,7 @@ ADR 只记录**架构级、跨模块、长期有效**的决定；局部实现细
 | [ADR-028](ADR-028-confirm-dialog-callback-ownership.md) | 确认框回调归打开者所有，移除全局确认信号 | Accepted | 删除 `Signals` Autoload；`choose_scene` 实例信号；单确认框由 `PopupFactory` 显式维护 |
 | [ADR-029](ADR-029-passive-snapshot-event-driven.md) | 被动属性快照改为档案变更事件驱动 | Accepted | 删除每帧轮询；`PlayerData.passive_skills_changed`；`pasl_prop` 单一写者；`passive_boundary` 门禁 |
 | [ADR-030](ADR-030-pet-passive-command-and-table.md) | 宠物被动成长命令与共享数值表 | Accepted | `PetDomainCommand` 升级与失败回滚；`PassiveSkillTable`；`pet_passive_boundary` 门禁 |
+| [ADR-031](ADR-031-scene-script-relocation.md) | `Scene/` 不承载 GDScript，脚本统一归 `Script/<domain>/` | Accepted | 56 个场景脚本迁移；`rename_path.py` 引用同步；`Scene/**/*.gd` 门禁 |
 
 ### 2.1 常见决策检索
 

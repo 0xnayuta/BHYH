@@ -58,6 +58,9 @@ flowchart TD
 
 这是当前主要运行依赖的简图，不是严格分层：`Global`、档案、UI 与双人会话仍有交叉依赖。目标依赖方向见总体契约 §2。当前目录保留类型顶层，新功能在内部使用功能子目录；不以全仓目录搬迁为目标。
 
+- `Scene/` 只承载 `.tscn`、`.tres` 与场景资源；全部 `.gd` 归 `Script/<domain>/`，规则见 [`../standards/naming_standard.md`](../standards/naming_standard.md) §1.4；
+- 56 个场景脚本的逐文件迁移路径见 [`scene_script_migration_matrix.md`](scene_script_migration_matrix.md)；决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
+
 ---
 
 ## 2. Autoload 与全局状态

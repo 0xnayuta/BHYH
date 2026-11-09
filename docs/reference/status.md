@@ -175,7 +175,14 @@
 - 门禁：`contract_scan` 新增 `pet_passive_boundary`（`PET_PASSIVE_WRITE`/`PET_PASSIVE_COMMAND`）与自测。
 - 验证：`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`contract_scan --self-test` 全通过；`contract_scan --fail-on-error` ERROR=0；`archive_probe_runner` 344/344；`level_1` 4 阶段 0/0/0；宠物被动命令临时场景探针 PASS（成功升级、失败回滚、一键升级）。
 - 验证补充：`coop_probe_runner` 38/38 PASS（295.72s）。
-- 边界：Phase 29 未启动。
+- 边界：Phase 29-0 已完成，见下节；迁移未启动。
+
+### Phase 29-0 `Scene/` 脚本落位规范与清单（2026-11-09）
+
+- `naming_standard.md` 升级 v2.2.0：`Scene/` 仅承载 `.tscn`/`.tres` 与场景资源；新增 §1.4 GDScript 落位规则，`.gd` 统一归 `Script/<domain>/`；§2.1 同步文件基线。
+- 新增 `ADR-031`：职责分离、零例外、`rename_path.py` 引用同步、29-1~29-4 分批与 29-4 门禁；同步 `docs/decisions/README.md` 与 `docs/reference/README.md`。
+- 新增 `scene_script_migration_matrix.md`：56 个 `.gd` 逐文件源/目标路径、引用点、批次与统计；56/56 映射完整，10 个目标目录无同名冲突，55 个同名 `.tscn` 加 1 个跨脚本引用。
+- 边界：仅规范与清单；无代码、场景或资源变更；Phase 29-1 未启动。
 
 ## 3. 当前已知边界
 
