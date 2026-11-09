@@ -1169,7 +1169,7 @@ class ContractScanner:
         "Script/base/base_magic_weapon.gd",
         "Script/pet/pet_interface.gd",
         "Script/skill/zd_skill.gd",
-        "Scene/other_scene/skill_icon.gd",
+        "Script/skill/skill_icon.gd",
     }
     PHASE17_DEEP_PATH_BUDGETS = {
         "Script/pet/pet_interface.gd": 0,
@@ -1181,7 +1181,7 @@ class ContractScanner:
     # 20-3A：HUD/面板域只读——禁止直接档案 IO 与 PlayerData 字典直写；
     # 面板与命令面板都必须经 request_save 与 PlayerData 写入口方法。
     HUD_PANEL_FILES = {
-        "Scene/other_scene/skill_icon.gd",
+        "Script/skill/skill_icon.gd",
         "Script/backpack.gd",
         "Script/pet/pet_interface.gd",
         "Script/pet/pet_attribute_pages.gd",
@@ -2501,9 +2501,9 @@ def run_run_state_boundary_self_test() -> bool:
         "旧关卡名直写": ("Global.current_level = \"花果山\"\n", "Script/level/sample.gd"),
         "旧塔层自增": ("Global.llbt_level += 1\n", "Script/level/level_llbt.gd"),
         "统计字段自增": ("Global.total_role_hit += 5\n", "Script/base/base_monster.gd"),
-        "统计字段读取": ("var v = Global.total_cure_hp\n", "Scene/other_scene/after_level_end.gd"),
+        "统计字段读取": ("var v = Global.total_cure_hp\n", "Script/level/after_level_end.gd"),
         "无尽模式直写": ("Global.sss_lendless_mode = false\n", "Script/level/level_sssl.gd"),
-        "八仙选择直写": ("Global.selected_eight_immortal_id = 3\n", "Scene/other_scene/level_info.gd"),
+        "八仙选择直写": ("Global.selected_eight_immortal_id = 3\n", "Script/level/level_info.gd"),
         "死减益标志直写": ("Global.is_stun = false\n", "Script/main_menu/map_1.gd"),
         "旧祖先工具": ("var a = Global.get_ancestor(node, 2)\n", "Script/hero/sample.gd"),
         "旧品质名工具": ("var n = Global.get_clean_name(item_id)\n", "Script/back_pack/sample.gd"),
@@ -2513,12 +2513,12 @@ def run_run_state_boundary_self_test() -> bool:
         "运行上下文 accessor": ("Global.set_current_level_name(\"花果山\")\n", "Script/level/sample.gd"),
         "塔层 accessor": ("Global.set_tower_floor(8)\n", "Script/level/level_llbt.gd"),
         "统计方法": ("Global.get_run_context().add_damage_dealt(5)\n", "Script/base/base_monster.gd"),
-        "统计读取": ("var v = Global.get_run_context().healing\n", "Scene/other_scene/after_level_end.gd"),
+        "统计读取": ("var v = Global.get_run_context().healing\n", "Script/level/after_level_end.gd"),
         "无尽模式整体赋值": (
             "Global.set_special_dungeon_endless(path, true)\n",
-            "Scene/other_scene/level_info.gd",
+            "Script/level/level_info.gd",
         ),
-        "八仙选择 accessor": ("Global.set_selected_eight_immortal_id(3)\n", "Scene/other_scene/level_info.gd"),
+        "八仙选择 accessor": ("Global.set_selected_eight_immortal_id(3)\n", "Script/level/level_info.gd"),
         "NodeUtils 工具": ("var a = NodeUtils.ancestor(node, 2)\n", "Script/hero/sample.gd"),
         "ItemUtils 工具": ("var n = ItemUtils.clean_fashion_name(item_id)\n", "Script/back_pack/sample.gd"),
         "注释中的旧入口": ("# Global.current_level = \"x\" legacy note\n", "Script/level/sample.gd"),
@@ -2761,7 +2761,7 @@ def run_hud_panel_boundary_self_test() -> bool:
     bad_samples = {
         "HUD 直写档案": ("MemoryClass.save_game(path)\n", "Script/base/base_role.gd"),
         "面板直接写盘": ("MemoryClass.safe_write_archive(path, data)\n", "Script/pet/pet_interface.gd"),
-        "技能图标读档": ("var d = MemoryClass.load_game(path)\n", "Scene/other_scene/skill_icon.gd"),
+        "技能图标读档": ("var d = MemoryClass.load_game(path)\n", "Script/skill/skill_icon.gd"),
         "HUD 字典下标直写": ('PlayerData.player_data["技能"][0] = 1\n', "Script/base/base_role.gd"),
         "面板字典属性直写": ("PlayerData.player_data.技能 = 1\n", "Script/pet/pet_interface.gd"),
         "任务面板直写进度": ('PlayerData.player_data["天庭"] = 1\n', "Script/task/basic_task.gd"),
@@ -2837,7 +2837,7 @@ def run_phase17_boundary_self_test() -> bool:
         ("Script/shop/shop_purchase_command.gd", "func execute():\n\tvar s = PlayerData.snapshot_state()\n"),
         ("Scene/other_scene/transmogtified_box.gd", "func f():\n\tPlayerData.player_data[DataKeys.TRANSMOG_LIST][\"x\"] = 1\n"),
         ("Script/base/base_magic_weapon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
-        ("Scene/other_scene/skill_icon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
+        ("Script/skill/skill_icon.gd", "var n = get_node(\"/root/PlayerData\")\n"),
     )
     passed = True
     for rel_path, content in good.items():

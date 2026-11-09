@@ -1,4 +1,9 @@
 extends Node2D
+
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+
 @onready var text_1: Label = $PropText/text_1
 @onready var text_2: Label = $PropText/text_2
 @onready var text_3: Label = $PropText/text_3

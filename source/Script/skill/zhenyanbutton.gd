@@ -1,4 +1,9 @@
 extends TextureRect
+
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+
 @onready var locandlevel: Label = $locandlevel
 @onready var pic: Button = $Pic
 @onready var jt: Sprite2D = $jt

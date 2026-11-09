@@ -31,7 +31,7 @@ var shop_items: Dictionary = {}
 
 
 func initialize() -> void:
-	var level_script := load("res://Scene/other_scene/level_info.gd")
+	var level_script := load("res://Script/level/level_info.gd")
 	var level_instance = level_script.new()
 	for level_name in level_instance.level_info:
 		_register_level(str(level_name), level_instance.level_info[level_name])

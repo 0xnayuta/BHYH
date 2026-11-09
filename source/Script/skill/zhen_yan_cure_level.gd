@@ -1,4 +1,9 @@
 extends Node2D
+
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+
 @onready var up_button: TextureRect = $UpButton
 @onready var down_button: TextureRect = $DownButton
 @onready var level_info_old: Label = $PropInfoBg/OldPropList/LevelInfo_old

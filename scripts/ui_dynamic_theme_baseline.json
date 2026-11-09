@@ -13,7 +13,7 @@
       "tokenized": 5,
       "total": 5
     },
-    "Scene/other_scene/level_info.gd": {
+    "Script/level/level_info.gd": {
       "data": 1,
       "layout": 4,
       "tokenized": 6,
@@ -29,7 +29,7 @@
       "data": 2,
       "total": 2
     },
-    "Scene/other_scene/skill_icon.gd": {
+    "Script/skill/skill_icon.gd": {
       "layout": 1,
       "tokenized": 3,
       "total": 4
@@ -43,15 +43,15 @@
       "tokenized": 2,
       "total": 3
     },
-    "Scene/other_scene/zhen_fa_tu_po.gd": {
+    "Script/skill/zhen_fa_tu_po.gd": {
       "tokenized": 2,
       "total": 2
     },
-    "Scene/other_scene/zhen_fa_ui.gd": {
+    "Script/skill/zhen_fa_ui.gd": {
       "tokenized": 4,
       "total": 4
     },
-    "Scene/other_scene/zhen_yan_cure_level.gd": {
+    "Script/skill/zhen_yan_cure_level.gd": {
       "tokenized": 2,
       "total": 2
     },
@@ -267,67 +267,67 @@
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2333,
       "kind": "color",
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2377,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2378,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2379,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2380,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2381,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2653,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2654,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2655,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2656,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/level_info.gd",
+      "file": "Script/level/level_info.gd",
       "line": 2657,
       "kind": "font_size",
       "category": "tokenized"
@@ -411,25 +411,25 @@
       "category": "data"
     },
     {
-      "file": "Scene/other_scene/skill_icon.gd",
+      "file": "Script/skill/skill_icon.gd",
       "line": 179,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/skill_icon.gd",
+      "file": "Script/skill/skill_icon.gd",
       "line": 180,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/skill_icon.gd",
+      "file": "Script/skill/skill_icon.gd",
       "line": 181,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/skill_icon.gd",
+      "file": "Script/skill/skill_icon.gd",
       "line": 182,
       "kind": "constant",
       "category": "layout"
@@ -477,49 +477,49 @@
       "category": "layout"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_tu_po.gd",
+      "file": "Script/skill/zhen_fa_tu_po.gd",
       "line": 141,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_tu_po.gd",
+      "file": "Script/skill/zhen_fa_tu_po.gd",
       "line": 143,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "file": "Script/skill/zhen_fa_ui.gd",
       "line": 78,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "file": "Script/skill/zhen_fa_ui.gd",
       "line": 81,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "file": "Script/skill/zhen_fa_ui.gd",
       "line": 84,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_fa_ui.gd",
+      "file": "Script/skill/zhen_fa_ui.gd",
       "line": 87,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_yan_cure_level.gd",
+      "file": "Script/skill/zhen_yan_cure_level.gd",
       "line": 58,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Scene/other_scene/zhen_yan_cure_level.gd",
+      "file": "Script/skill/zhen_yan_cure_level.gd",
       "line": 60,
       "kind": "color",
       "category": "tokenized"

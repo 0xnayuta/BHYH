@@ -193,6 +193,15 @@
 - 验证补充：`scene_probe_runner` 全量 PASS（345.46s）；`docs_audit` 940 链接 / 0 缺失。
 - 边界：29-2/29-3 未启动；`Scene/` 下 `.gd` 未清零。
 
+### Phase 29-2A 数据、技能与关卡脚本迁移（2026-11-09）
+
+- 13 个脚本迁移：`monster_attr_data` → `Script/data/`；`skill_icon` 与 7 个阵法脚本 → `Script/skill/`；`after_level_end`、`level_info`、`ping_jia`、`star` → `Script/level/`。
+- 迁移触发面板门禁：6 个阵法 UI 增加槽位 `PlayerData` getter；`zhen_fa_ui` 的佩戴/取消佩戴写入改经 `PlayerData.set_equipped_formation()`；新增 `DataKeys.Skill.EQUIPPED_FORMATION`。
+- 基线同步：`contract_scan.py` 的 `skill_icon`/`after_level_end`/`level_info` 路径；`ui_dynamic_theme_baseline.json` 与 `theme_override_baseline.json` 对应路径；`module_api_matrix.md`、`ui_panel_contract_matrix.md`、`missing_assets_registry.md`。
+- 验证：`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`level_1` 4 阶段 0/0/0。
+- 验证补充：`scene_probe_runner` 全量 PASS（355.92s）；`docs_audit` 940 链接 / 0 缺失。
+- 边界：29-2B/29-2C、29-3 未启动；`Scene/` 剩余 38 个 `.gd`。
+
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。

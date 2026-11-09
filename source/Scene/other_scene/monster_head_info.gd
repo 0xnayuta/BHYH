@@ -1,7 +1,7 @@
 extends TextureRect
 signal selection_requested(head: Node)
 
-const MonsterAttrData = preload("res://Scene/other_scene/monster_attr_data.gd")
+const MonsterAttrData = preload("res://Script/data/monster_attr_data.gd")
 const MONSTER_HEAD_FALLBACKS := {
 	"stz_nz": "res://Art/monster/game_3_monster/three_prince/nezha/idle/1.png",
 	"stz_mz": "res://Art/monster/game_3_monster/three_prince/muzha/idle/1.png",

@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/after_level_end.gd" id="1"]
+[ext_resource type="Script" path="res://Script/level/after_level_end.gd" id="1"]
 
 [ext_resource type="Texture2D" path="res://Art/backpack/28.png" id="2"]
 

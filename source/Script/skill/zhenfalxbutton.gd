@@ -1,5 +1,9 @@
 extends Button
 
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+
 @onready var pd: Label = $pd
 var real_name
 var zhenfa_name: String

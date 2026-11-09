@@ -47,11 +47,11 @@
 
 | # | 资源 | 代码位置 | 回退行为 | 恢复证据 | 状态 |
 |:--:|:---|:---|:---|:---|:---|
-| 14 | `Art/TwentyEightConstellations/42.png` | `Scene/other_scene/zhen_fa_ui.gd` `_refresh_use_button_icon` | Use 按钮显示“使用”，`icon = null` | 原 UID `uid://s0kne1rnj3c` 仅存在于场景/编辑器缓存；v1.2.0.1、v1.3.3.2、extracted/6.5.0.0 均无文件 | **有回退（文本）** |
-| 15 | `Art/TwentyEightConstellations/43.png` | `Scene/other_scene/zhen_fa_ui.gd` `_refresh_use_button_icon` | Use 按钮显示“已装备”，`icon = null` | 同上；无可用 UID 映射 | **有回退（文本）** |
-| 16 | `Art/backpack/all_items/lslztian.png` | `Scene/other_scene/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“天” | 森罗阵·天；v1.2.0.1、v1.3.3.2、extracted/6.5.0.0 与导入缓存均无 PNG | **有回退（文本）** |
-| 17 | `Art/backpack/all_items/lslzdi.png` | `Scene/other_scene/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“地” | 森罗阵·地；同上 | **有回退（文本）** |
-| 18 | `Art/backpack/all_items/ren.png` | `Scene/other_scene/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“人” | 森罗阵·人；`renshen.png` 为不同物品（人参），不得替代 | **有回退（文本）** |
+| 14 | `Art/TwentyEightConstellations/42.png` | `Script/skill/zhen_fa_ui.gd` `_refresh_use_button_icon` | Use 按钮显示“使用”，`icon = null` | 原 UID `uid://s0kne1rnj3c` 仅存在于场景/编辑器缓存；v1.2.0.1、v1.3.3.2、extracted/6.5.0.0 均无文件 | **有回退（文本）** |
+| 15 | `Art/TwentyEightConstellations/43.png` | `Script/skill/zhen_fa_ui.gd` `_refresh_use_button_icon` | Use 按钮显示“已装备”，`icon = null` | 同上；无可用 UID 映射 | **有回退（文本）** |
+| 16 | `Art/backpack/all_items/lslztian.png` | `Script/skill/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“天” | 森罗阵·天；v1.2.0.1、v1.3.3.2、extracted/6.5.0.0 与导入缓存均无 PNG | **有回退（文本）** |
+| 17 | `Art/backpack/all_items/lslzdi.png` | `Script/skill/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“地” | 森罗阵·地；同上 | **有回退（文本）** |
+| 18 | `Art/backpack/all_items/ren.png` | `Script/skill/zhenyanbutton.gd` `_physics_process` / `load_` | 阵眼按钮清空图标，显示“人” | 森罗阵·人；`renshen.png` 为不同物品（人参），不得替代 | **有回退（文本）** |
 
 > **已修复（非回退）**：`Art/TwentyEightConstellations/{slz,lpz,tsz,tqz}.png` 的真实资源位于
 > `Art/zhenfa/{senluozhen,luopozhen,tengshezhen,taiqingzhen}/`，已通过 `Global.ZHENFA_ICON_PATHS`

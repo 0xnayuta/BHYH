@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/skill_icon.gd" id="1"]
+[ext_resource type="Script" path="res://Script/skill/skill_icon.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/skill/ne_zha_hud/nz_power_eff_strip.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/skill/ne_zha_hud/nz_open_eff_strip.png" id="3"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]

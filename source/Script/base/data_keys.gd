@@ -105,6 +105,7 @@ class Skill:
 	const SKILL_10 = "技能10"
 	const AWAKENED = "技能觉醒"
 	const AWAKENED_ENABLED = "技能觉醒启用"
+	const EQUIPPED_FORMATION = "已佩戴阵法"
 
 
 ## 日常任务与跨日进度契约

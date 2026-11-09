@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/other_scene/zhen_fa_tu_po.gd" id="1"]
+[ext_resource type="Script" path="res://Script/skill/zhen_fa_tu_po.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/show_text/daojukuang.png" id="3"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="4"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]

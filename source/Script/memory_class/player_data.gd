@@ -2403,6 +2403,10 @@ func get_active_mount() -> Dictionary:
 	return mount if bool(mount.get(MOUNT_UNLOCKED_KEY, false)) else {}
 
 
+func set_equipped_formation(formation_id: String) -> void:
+	player_data[DataKeys.Skill.EQUIPPED_FORMATION] = formation_id
+
+
 func set_active_mount(mount_id: String) -> bool:
 	ensure_mount_data()
 	if mount_id != "":

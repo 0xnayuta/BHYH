@@ -71,7 +71,7 @@
 | `zd_skill.gd` | 26 | 0 | `SKILL_UI_ROOT`、`_skill_root_node`、`_skill_column_node`、`_skill_grandchild`、`_skill_column_path` |
 | `base_role.gd` | 12 | 0 | 删除 `/root` 回落；宠物 HUD 先取 `hp_bar`/`mp_bar`/`exp_bar`/`PanelContainer` |
 | `base_magic_weapon.gd` | 4 | 0 | 法宝数据/属性改由 `LocalCoop` 槽位查询 |
-| `Scene/other_scene/skill_icon.gd` | 2 处 `/root` | 0 | 删除 `/root/LocalCoop` 与 `/root/PlayerData`/`RoleProp` 回落 |
+| `Script/skill/skill_icon.gd` | 2 处 `/root` | 0 | 删除 `/root/LocalCoop` 与 `/root/PlayerData`/`RoleProp` 回落 |
 
 统计口径：`get_node()`/`get_node_or_null()` 字符串参数中包含 `/` 或 `/root` 的字面路径；不含动态拼接后的运行时结果。
 

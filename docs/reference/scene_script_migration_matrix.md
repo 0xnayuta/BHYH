@@ -1,6 +1,6 @@
 # `Scene/` 脚本落位迁移清单（Phase 29-0）
 
-> **状态**：29-1 已迁移并验证；29-2/29-3 未开始（Phase 29-1 起逐批执行）。
+> **状态**：29-1、29-2A 已迁移并验证；29-2B/29-2C、29-3 未开始（Phase 29-1 起逐批执行）。
 >
 > **规则**：`source/Scene/` 只承载 `.tscn`/`.tres`；全部 `.gd` 归 `source/Script/<domain>/`。决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 >
@@ -35,6 +35,8 @@
 
 ## 3. Phase 29-2：菜单、帮助、结算、奖励、阵法与怪物（42）
 
+> **29-2A 已完成（13）**：`monster_attr_data.gd` → `Script/data/`；`skill_icon.gd` 与 7 个阵法脚本 → `Script/skill/`；`after_level_end.gd`、`level_info.gd`、`ping_jia.gd`、`star.gd` → `Script/level/`。迁移后 6 个阵法 UI 增加槽位 `PlayerData` getter，`zhen_fa_ui.gd` 的佩戴写入改经 `PlayerData.set_equipped_formation()`；`Scene/` 剩余 38 个 `.gd`。验证：`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（355.92s）、`docs_audit` 940/0。29-2B（main_menu/other_menu 19）与 29-2C（monster 10）未开始。
+
 ### 3.1 主菜单与设置（11）
 
 | 源路径 | 目标路径 | 场景/引用 |
@@ -64,7 +66,7 @@
 | `Scene/other_scene/reward_interface.gd` | `Script/other_menu/reward_interface.gd` | `reward_interface.tscn`；`reward_factory.gd` |
 | `Scene/other_scene/transmogtified_box.gd` | `Script/other_menu/transmogtified_box.gd` | `transmogtified_box.tscn`；`shop_factory.gd`、`ui_runtime.gd` |
 
-### 3.3 关卡信息与结算（4）
+### 3.3 关卡信息与结算（4）· 已完成
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|
@@ -73,7 +75,7 @@
 | `Scene/other_scene/ping_jia.gd` | `Script/level/ping_jia.gd` | `ping_jia.tscn`；`show_text_factory.gd` |
 | `Scene/other_scene/star.gd` | `Script/level/star.gd` | `star.tscn`；未发现引用 |
 
-### 3.4 技能与阵法（8）
+### 3.4 技能与阵法（8）· 已完成
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|
@@ -101,7 +103,7 @@
 | `Scene/other_scene/monster_head_info.gd` | `Script/monster/monster_head_info.gd` | `monster_head_info.tscn`；`monster_display_factory.gd` |
 | `Scene/other_scene/nmw_aura.gd` | `Script/monster/nmw_aura.gd` | `nmw_aura.tscn`；`effect_factory.gd` |
 
-### 3.6 怪物数据（1）
+### 3.6 怪物数据（1）· 已完成
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|

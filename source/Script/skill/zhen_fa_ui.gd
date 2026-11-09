@@ -1,4 +1,9 @@
 extends Node2D
+
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
+
 @onready var zhenfaname: Label = $BG/zhenfaname
 @onready var zhenfaicon: TextureRect = $BG/zhenfaicon
 @onready var zhen_fa_button_list: VBoxContainer = $BG/ZhenFaButton/ZhenFaButtonList
@@ -147,11 +152,11 @@ func _on_use_pressed() -> void:
 		"":
 			name_str = ""
 	if PlayerData.player_data["已佩戴阵法"] == current_zhen_fa_name:
-		PlayerData.player_data["已佩戴阵法"] = ""
+		PlayerData.set_equipped_formation("")
 		Global.add_message_show(Global.get_ui_runtime().windows, "取消佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305))
 	else:
 		if PlayerData.player_data[name_str]["Level"] > 0:
-			PlayerData.player_data["已佩戴阵法"] = current_zhen_fa_name
+			PlayerData.set_equipped_formation(current_zhen_fa_name)
 			Global.add_message_show(
 				Global.get_ui_runtime().windows, "佩戴" + str(name_str) + "！！", 1.5, Vector2(500, 305)
 			)
