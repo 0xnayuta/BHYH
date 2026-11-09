@@ -34,7 +34,7 @@ BHYH/
 |:---|:---|:---|
 | 引擎 | Godot **4.7.2** | `source/project.godot`、`docs/reference/status.md` |
 | 语言 | GDScript 2.0，优先静态类型 | `docs/standards/godot_design_standard.md` |
-| 主场景 | `res://Scene/other_scene/startup_loading.tscn` | `source/project.godot` |
+| 主场景 | `res://Scene/runtime/startup_loading.tscn` | `source/project.godot` |
 | 渲染后端 | 默认 `mobile`；Web 使用 `forward_plus` | `source/project.godot` `[rendering]` |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
@@ -611,7 +611,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 | 伤害文本 | `Script/hittext/` | 伤害数字/文字/Miss，走对象池 | `damage_number.gd`、`damage_text.gd` |
 | 子弹 | `Script/bullet/`、`Scene/bullet/` | 直线/追踪弹与 slim 场景 | `fly_bullet.gd`、`chase_bullet.gd` |
 | 音频 | `Script/all_sound/`、`Script/runtime/audio_runtime.gd` | BGM 单实例、主菜单 BGM、命中音效池与声部仲裁 | `AudioRuntime`、`bgm.gd`、`monster_be_hit.gd` |
-| 特殊玩法 | `Script/other_menu/`、`Script/skill/`、`Script/main_menu/`、`Scene/other_scene/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd`、`twenty_eight_constellations.gd` |
+| 特殊玩法 | `Script/other_menu/`、`Script/skill/`、`Script/main_menu/`、`Scene/other_menu/`、`Scene/skill/`、`Scene/main_menu/`、`Scene/runtime/` | 幻化、换装、阵法、星宿、玲珑宝塔 | `transmogrified.gd`、`zhen_fa_ui.gd`、`twenty_eight_constellations.gd` |
 | 工具/输入 | `Script/tools/` | 虚拟摇杆、按键设置、场景 viewport、无状态静态工具（节点/向量、物品图标与条目） | `set_com.gd`、`user_key.gd`、`node_utils.gd`、`item_utils.gd` |
 | 物理层常量 | `Script/base/physics_layers.gd` | 脚本侧 2D 物理层具名位值，与 `project.godot` 层名一一对应 | `physics_layers.gd` |
 

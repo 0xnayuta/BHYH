@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；**Phase 39 Scene/Script 目录收敛（进行中：39-0 已完成）**；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
-> **版本**：7.4 内容基线；Phase 28 架构治理与 Phase 29 脚本落位已完成并归档；Phase 39 目录收敛进行中，39-0 已完成。PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28、29 已完成并归档；**Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1 已完成）**；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。
+> **版本**：7.4 内容基线；Phase 28 架构治理与 Phase 29 脚本落位已完成并归档；Phase 39 目录收敛进行中，39-0、39-1 已完成。PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -24,7 +24,7 @@
 | Phase 38 7.4 内容回植 | 完成并归档 | [`iteration_35_38_content_backport.md`](../archive/iteration_35_38_content_backport.md) |
 | Phase 28 全局通信与派生属性契约 | 完成并归档 | [`iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md) |
 | Phase 29 `Scene/` 脚本落位 | 完成并归档 | [`iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md) |
-| Phase 39 Scene/Script 目录收敛 | 进行中（39-0 已完成；39-1~39-4 未启动） | 本页 §1.3 |
+| Phase 39 Scene/Script 目录收敛 | 进行中（39-0、39-1 已完成；39-2~39-4 未启动） | 本页 §1.3 |
 | Phase 26 平台与发布验证 | 长期暂缓 | 见 §2 |
 
 阶段产物与当前契约：
@@ -42,12 +42,12 @@
 4. 失败显式：缺资源、无来源、保存失败、加载失败、过期回调必须报告给拥有者；不默认 1P、不猜旧路径、不静默成功。
 5. 回滚通过版本控制，不保留永久双实现、兼容 facade 或双写路径。
 
-### 1.3 Phase 39 Scene/Script 目录收敛（进行中：39-0 已完成）
+### 1.3 Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1 已完成）
 
-> **批次状态**：39-0 已完成（2026-11-09）；39-1、39-2、39-3、39-4 未启动。
+> **批次状态**：39-0、39-1 已完成（2026-11-09）；39-2、39-3、39-4 未启动。
 
 - **目标**：在 Phase 29 脚本落位完成后，收敛 `Scene/` 根级场景与混合场景目录：`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 清零；拆分 `Scene/other_scene`；合并文本、怪物血条/受击、魂卡特效场景；启用根级落位门禁。不改变玩法、数值、存档或输入行为。
-- **入口**：39-0 已完成，原 `Scene/auto_battle_config.tscn`、`Scene/set_menu.tscn` 已归 `Scene/level/`，`Script/backpack.gd`、`Script/monster_86.gd` 已归域；39-1/39-2 继续以 `Scene/other_scene/` 44 个 `.tscn`、`Scene/show_text/` 8 个场景、`Scene/monster_blood/` 2 个场景、`Scene/monster_damage/` 1 个场景、`Scene/special_effect/elite_soul_card/` 18 个场景为入口；`Scene/level/zmws/` 与 `Shader/` 只做评估。
+- **入口**：39-0、39-1 已完成；`Scene/other_scene/` 已清空并删除，44 个场景已归 `Scene/main_menu/`、`Scene/other_menu/`、`Scene/skill/`、`Scene/level/`、`Scene/monster/`、`Scene/runtime/`、`Scene/archive_interface/`。39-2 继续以 `Scene/show_text/` 8 个场景、`Scene/monster_blood/` 2 个场景、`Scene/monster_damage/` 1 个场景、`Scene/special_effect/elite_soul_card/` 18 个场景为入口；`Scene/level/zmws/` 与 `Shader/` 只做评估。
 - **非目标**：不改玩法、数值、掉落、时序、存档格式或输入映射；不搬 `Scene/level/zmws` 的 1727 个导入参考场景；不批量拆 `Scene/level`、`Scene/monster`、`Script/monster`；不处理 `global.gd` 与 `addons/`；不执行 PCK/release、最低配置或其他平台验证。
 
 #### 39-0 根级清零与门禁（已完成）
@@ -60,7 +60,7 @@
 - **结果**：4 个根级文件已迁移；`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 为 0；`naming_audit.py` 已启用根级拦截；`contract_scan.py` 已同步 `Script/level/role_information_hud.gd`；`Scene` 探针路径已同步。
 - **验证结果**：`check_all --skip-engine` 全维度 PASS；`health_check` 823 脚本 0 Parse Error / 0 Warning；`scene_probe_runner` 31/31 PASS；`archive_probe_runner` 344/344 PASS；`level_1` PASS；`docs_audit` 969 链接 / 0 缺失；根级负向探针 2/2 被拦截并清理。
 
-#### 39-1 `Scene/other_scene/` 拆分（44）
+#### 39-1 `Scene/other_scene/` 拆分（44，已完成）
 
 | 目标 | 数量 | 文件 |
 |:---|:---:|:---|
@@ -73,6 +73,8 @@
 | `Scene/archive_interface/` | 1 | `bacis_ar_button` |
 
 - 使用 `rename_path.py` 批次迁移；每批后运行 `scene_probe_runner`、`level_1`、`archive_probe_runner` 与 `docs_audit`；`Scene/other_scene` 清空后删除。
+- **结果**：44 个场景按 10/11/8/4/7/3/1 完成迁移；`Scene/other_scene` 已删除；新增 `Scene/other_menu/` 与 `Scene/runtime/`；根级 `project.godot` 主场景已同步 `res://Scene/runtime/startup_loading.tscn`。
+- **验证结果**：7 批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失。
 
 #### 39-2 文本、怪物与特效场景合并
 
@@ -149,7 +151,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：Phase 35–38、28、29 已完成并归档；Phase 39 已启动，39-0 已完成。下一轮执行 39-1，再按批次推进 39-2/39-3/39-4；PCK/release、最低配置与其他平台验证按用户决策另行执行。恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 35–38、28、29 已完成并归档；Phase 39 已启动，39-0、39-1 已完成。下一轮执行 39-2，再按批次推进 39-3/39-4；PCK/release、最低配置与其他平台验证按用户决策另行执行。恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

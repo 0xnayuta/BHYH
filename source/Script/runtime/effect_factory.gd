@@ -7,8 +7,8 @@ extends Node
 ## 缓存槽位与迁移前的 Global.monster141_aura/smb_effect/role_special_effect/ws_effect/line 一致。
 ## 灵魄数值加成仍由 PaSkill 统一计算，本工厂只负责实例化与字段写入。
 
-const MONSTER141_AURA_SCENE_PATH := "res://Scene/other_scene/nmw_aura.tscn"
-const AURA_PATH := "res://Scene/other_scene/auras.tscn"
+const MONSTER141_AURA_SCENE_PATH := "res://Scene/monster/nmw_aura.tscn"
+const AURA_PATH := "res://Scene/monster/auras.tscn"
 const SMB_EFFECT_SCENE_PATH := "res://Scene/hero/role_2/smb_effect.tscn"
 const ROLE_SPECIAL_EFFECT_SCENE_PATH := "res://Scene/hero/role_special_effect.tscn"
 const WS_EFFECT_SCENE_PATH := "res://Scene/hero/role_1/ws_effect.tscn"

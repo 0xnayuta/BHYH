@@ -6,7 +6,7 @@ extends Node
 
 const RESULT_PREFIX := "RUN_CONTEXT_PROBE_RESULT="
 const TEARDOWN_MARKER := "RUN_CONTEXT_PROBE_TEARDOWN"
-const SETTLEMENT_SCENE := "res://Scene/other_scene/after_level_end.tscn"
+const SETTLEMENT_SCENE := "res://Scene/level/after_level_end.tscn"
 
 var _failures: Array[String] = []
 

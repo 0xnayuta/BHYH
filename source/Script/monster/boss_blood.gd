@@ -12,7 +12,7 @@ class_name BossBlood
 @onready var protect_value: Label = $ProtectBar/ProtectValue
 @onready var buff_list: HBoxContainer = $BuffList
 
-const BUFF_ICON_SCENE = preload("res://Scene/other_scene/buff_icon.tscn")
+const BUFF_ICON_SCENE = preload("res://Scene/monster/buff_icon.tscn")
 const YUTU_POISON_BUFFS := ["YutuWeakPoison", "YutuStrongPoison", "YutuWeakExtraPoison", "YutuStrongExtraPoison"]
 
 var buff_icon_cache: Dictionary = {}

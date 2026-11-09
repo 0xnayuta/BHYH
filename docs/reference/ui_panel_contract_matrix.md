@@ -91,7 +91,7 @@
 
 | 面板/数据 | 入口 | 操作者 | 保存 | 结论 |
 |:---|:---|:---|:---|:---|
-| `LevelInfo` | `LevelEntryRuntime.add_level_info`，`Scene/other_scene/level_info.tscn` | 直接全局 `PlayerData` | 无 | 只读关卡信息；不进入协作面板槽位体系 |
+| `LevelInfo` | `LevelEntryRuntime.add_level_info`，`Scene/level/level_info.tscn` | 直接全局 `PlayerData` | 无 | 只读关卡信息；不进入协作面板槽位体系 |
 | `MonsterHeadInfo` + `MonsterAttrData` | HUD/怪物头像 | 直接全局 `PlayerData`/`RoleProp`；`MonsterAttrData` 是 `RefCounted` 数据表 | 无 | 只读属性悬浮层；不保存、不创建面板宿主 |
 
 ---

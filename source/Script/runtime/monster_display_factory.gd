@@ -5,9 +5,9 @@ extends Node
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 三个场景槽位常驻，与迁移前的 Global.monster_head/monster_info/basic_monment_info 一致，不随关卡清理。
 
-const MONSTER_HEAD_SCENE_PATH := "res://Scene/other_scene/monster_head_info.tscn"
+const MONSTER_HEAD_SCENE_PATH := "res://Scene/monster/monster_head_info.tscn"
 const MONSTER_INFO_SCENE_PATH := "res://Scene/monster/boss_info.tscn"
-const BASIC_MOMENT_INFO_SCENE_PATH := "res://Scene/other_scene/basic_monment_info.tscn"
+const BASIC_MOMENT_INFO_SCENE_PATH := "res://Scene/monster/basic_monment_info.tscn"
 const MONSTER_HANDS_SCENE_PATH := "res://Scene/monster/monster_25.tscn"
 
 var _host = null

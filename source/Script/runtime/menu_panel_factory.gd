@@ -9,20 +9,20 @@ extends Node
 
 const GAME_SET_SCENE_PATH := "res://Scene/main_menu/game_set.tscn"
 const SKILL_KEY_SET_SCENE_PATH := "res://Scene/skill/skill_key_set.tscn"
-const MUSIC_SET_SCENE_PATH := "res://Scene/other_scene/choose_music.tscn"
+const MUSIC_SET_SCENE_PATH := "res://Scene/main_menu/choose_music.tscn"
 const LDL_SCENE_PATH := "res://Scene/ldl/ldl.tscn"
 const GAME_INFORMATION_SCENE_PATH := "res://Scene/main_menu/game_information.tscn"
 const LEARN_SKILL_SCENE_PATH := "res://Scene/skill/learn_skill.tscn"
 const MOSAIC_HELP_SCENE_PATH := "res://Scene/ldl/mosaic_help.tscn"
 const MOSAIC_SCENE_PATH := "res://Scene/ldl/mosaic.tscn"
-const BASIC_AR_BUTTON_PATH := "res://Scene/other_scene/bacis_ar_button.tscn"
-const CHANGE_BG_PATH := "res://Scene/other_scene/change_back_ground.tscn"
+const BASIC_AR_BUTTON_PATH := "res://Scene/archive_interface/bacis_ar_button.tscn"
+const CHANGE_BG_PATH := "res://Scene/other_menu/change_back_ground.tscn"
 const CD_JM_PATH := "res://Scene/archive_interface/read_archive_interface.tscn"
-const RETURN_BACK_MAP_PATH := "res://Scene/other_scene/return_back_map.tscn"
-const LHHJ_HELP_PATH := "res://Scene/other_scene/lhhj_help.tscn"
-const LIST_BUTTON_PATH := "res://Scene/other_scene/list_button.tscn"
-const LHHJ_PATH := "res://Scene/other_scene/lhhj.tscn"
-const LHHJ_BUTTON_PATH := "res://Scene/other_scene/lhhj_button.tscn"
+const RETURN_BACK_MAP_PATH := "res://Scene/main_menu/return_back_map.tscn"
+const LHHJ_HELP_PATH := "res://Scene/main_menu/lhhj_help.tscn"
+const LIST_BUTTON_PATH := "res://Scene/other_menu/list_button.tscn"
+const LHHJ_PATH := "res://Scene/main_menu/lhhj.tscn"
+const LHHJ_BUTTON_PATH := "res://Scene/main_menu/lhhj_button.tscn"
 
 const GAME_SET_DESIGN_SIZE := Vector2(942, 589)
 

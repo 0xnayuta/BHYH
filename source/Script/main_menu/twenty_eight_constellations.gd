@@ -1,6 +1,6 @@
 extends Node2D
 
-const BUTTON_SCENE := preload("res://Scene/other_scene/twenty_eight_constellations_button.tscn")
+const BUTTON_SCENE := preload("res://Scene/main_menu/twenty_eight_constellations_button.tscn")
 const NAMES := ["轸宿", "翼火蛇", "张月鹿", "星日马", "柳宿", "鬼宿", "井宿", "壁宿", "室宿", "危宿", "虚宿", "女宿", "牛宿", "斗宿"]
 
 @onready var panel: Panel = $XingXiuBg

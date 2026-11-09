@@ -5,11 +5,11 @@ extends Node
 ## 关卡结算面板的运行时场景缓存。由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务代码仍通过 Global.add_* 正式入口调用。
 
-const REWARD_INFO_PATH := "res://Scene/other_scene/reward_interface.tscn"
-const REWARD_BOX_PATH := "res://Scene/other_scene/reward_box_2.tscn"
+const REWARD_INFO_PATH := "res://Scene/other_menu/reward_interface.tscn"
+const REWARD_BOX_PATH := "res://Scene/other_menu/reward_box_2.tscn"
 const TASK_REWARD_PATH := "res://Scene/task/task_reward.tscn"
 const BASIC_TASK_PATH := "res://Scene/task/basic_task.tscn"
-const AFTER_LEVEL_END_PATH := "res://Scene/other_scene/after_level_end.tscn"
+const AFTER_LEVEL_END_PATH := "res://Scene/level/after_level_end.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}

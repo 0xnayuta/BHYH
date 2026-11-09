@@ -2,7 +2,7 @@
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
 > **最后更新**：2026-11-09。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28 全局通信/被动契约与 Phase 29 `Scene/` 脚本落位已完成并归档；**Phase 39 Scene/Script 目录收敛进行中（39-0 已完成）**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，归档索引见 [`../archive/README.md`](../archive/README.md)。
+> **阶段状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28 全局通信/被动契约与 Phase 29 `Scene/` 脚本落位已完成并归档；**Phase 39 Scene/Script 目录收敛进行中（39-0、39-1 已完成）**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，归档索引见 [`../archive/README.md`](../archive/README.md)。
 
 ---
 
@@ -14,7 +14,7 @@
 | 当前内容版本 | **7.4**（38-0~38-6 内容回植、缺口修复与 L3 完成；PCK/release 待发布验证） |
 | 引擎 | Godot **4.7.2**（默认 `mobile`；Web 使用 `forward_plus`） |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
-| 主场景 | `res://Scene/other_scene/startup_loading.tscn` |
+| 主场景 | `res://Scene/runtime/startup_loading.tscn` |
 | 工程根 | `source/` |
 | Autoload | **10 个注册项**：9 个业务单例 + 1 个编辑器调试桥；注册与职责见 [`architecture.md`](architecture.md) §2 |
 | 语言 | GDScript 2.0，优先静态类型 |
@@ -236,14 +236,16 @@
 - 同步 `naming_standard.md` §1.4、`acceptance.md` 门禁表、`scripts/README.md` 与迁移清单。
 - **Phase 29 完成**：`source/Scene/` 下 `.gd` 为 0；56 个脚本全部归 `Script/<domain>/`；门禁已启用。
 
-### Phase 39 Scene/Script 目录收敛（进行中：39-0 已完成）
+### Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1 已完成）
 
 - Phase 35–38、28、29 已完成并归档；Phase 26 平台与发布验证继续长期暂缓。
 - **39-0 已完成（2026-11-09）**：`Scene/set_menu.tscn`、`Scene/auto_battle_config.tscn` 归 `Scene/level/`；`Script/main_menu/set_menu.gd` 归 `Script/level/set_menu.gd`；`Script/backpack.gd` 归 `Script/level/role_information_hud.gd`；`Script/monster_86.gd` 归 `Script/monster/monster_86.gd`；`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 为 0。
 - **门禁**：`naming_audit.py` 新增 `Scene/*.tscn`、`Script/*.gd` 直接子文件 `ERROR`；保留 `Scene/**/*.gd` 规则；`contract_scan.py` 的 `HUD_PANEL_FILES` 同步新路径。
 - **验证（2026-11-09）**：`check_all --skip-engine` 全维度 PASS；`health_check` 823 脚本 0 Parse Error / 0 Warning；`scene_probe_runner` 31/31 PASS；`archive_probe_runner` 344/344 PASS；`level_1` PASS；`docs_audit` 969 链接 / 0 缺失；根级负向探针 2/2 被拦截并清理。
-- Phase 39 后续计划：39-1 拆分 `Scene/other_scene` 44 个场景；39-2 合并 `show_text`、`monster_blood`/`monster_damage`、`special_effect` 共 29 个场景；39-3 评估 `Scene/level/zmws`、`Script/monster` 数据形态与 2 个零引用 shader；39-4 验收与文档。
-- 详细批次、44 文件映射表、非目标与出口见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.3；39-1~39-4 尚未执行，不改变当前运行时与存档行为。
+- **39-1 已完成（2026-11-09）**：`Scene/other_scene/` 44 个场景按 10/11/8/4/7/3/1 迁移至 `Scene/main_menu/`、`Scene/other_menu/`、`Scene/skill/`、`Scene/level/`、`Scene/monster/`、`Scene/runtime/`、`Scene/archive_interface/`；`Scene/other_scene` 已删除；`project.godot` 主场景同步 `res://Scene/runtime/startup_loading.tscn`。
+- **39-1 验证（2026-11-09）**：7 批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失。
+- Phase 39 后续计划：39-2 合并 `show_text`、`monster_blood`/`monster_damage`、`special_effect` 共 29 个场景；39-3 评估 `Scene/level/zmws`、`Script/monster` 数据形态与 2 个零引用 shader；39-4 验收与文档。
+- 详细批次、44 文件映射表、非目标与出口见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.3；39-2~39-4 尚未执行，不改变当前运行时与存档行为。
 
 ## 3. 当前已知边界
 

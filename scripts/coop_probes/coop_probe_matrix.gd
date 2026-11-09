@@ -241,7 +241,7 @@ func _check_coop_presentation(first: Node, second: Node) -> void:
 	camera.queue_free()
 
 	# 灵气：应追踪最近玩家，而不是全局 1P 别名。
-	var aura: Node = load("res://Scene/other_scene/auras.tscn").instantiate()
+	var aura: Node = load("res://Scene/monster/auras.tscn").instantiate()
 	aura.position = Vector2.ZERO
 	aura.idle = false
 	aura.speed = 1.0
@@ -254,7 +254,7 @@ func _check_coop_presentation(first: Node, second: Node) -> void:
 	aura.queue_free()
 
 	# Buff 图标：无有效父 Buff 时回退到当前槽位的 SourcePlayer。
-	var buff: Node = load("res://Scene/other_scene/buff_icon.tscn").instantiate()
+	var buff: Node = load("res://Scene/monster/buff_icon.tscn").instantiate()
 	buff.set_meta("coop_slot", 2)
 	stage.add_child(buff)
 	buff.call("_physics_process", 0.0)
@@ -720,7 +720,7 @@ func _labels(node: Node) -> String:
 func _case_monster_info() -> void:
 	coop.create_secondary(7)
 	await _make_stage()
-	var head: Node = load("res://Scene/other_scene/monster_head_info.tscn").instantiate()
+	var head: Node = load("res://Scene/monster/monster_head_info.tscn").instantiate()
 	stage.add_child(head)
 	await process_frame
 	head.monster_name = "dxx"

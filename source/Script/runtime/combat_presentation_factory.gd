@@ -8,7 +8,7 @@ extends Node
 ## 通过 Global.get_combat_pool() 取还节点；池状态由 CombatPoolRuntime 持有。
 
 const BASE_BUFF_PATH := "res://Scene/base/base_buff.tscn"
-const BUFF_ICON_PATH := "res://Scene/other_scene/buff_icon.tscn"
+const BUFF_ICON_PATH := "res://Scene/monster/buff_icon.tscn"
 const TRAP_PATH := "res://Scene/level/trap.tscn"
 const SPECIAL_EFFECT_BULLET_PATH := "res://Scene/hero/role_1/hmz_effect/special_effect_bullet.tscn"
 const HIT_TEXT_PATH := "res://Scene/hittext/hit_text.tscn"

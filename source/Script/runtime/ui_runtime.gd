@@ -286,12 +286,12 @@ func is_runtime_ui_scene_path(scene_path: String) -> bool:
 			"res://Scene/main_menu/game_set.tscn",
 			"res://Scene/main_menu/game_announcement.tscn",
 			"res://Scene/main_menu/game_information.tscn",
-			"res://Scene/other_scene/choose_music.tscn",
-			"res://Scene/other_scene/twenty_eight_constellations.tscn",
-			"res://Scene/other_scene/zhen_fa_ui.tscn",
-			"res://Scene/other_scene/transmogtified_box.tscn",
-			"res://Scene/other_scene/transmogrified.tscn",
-			"res://Scene/other_scene/change_back_ground.tscn",
+			"res://Scene/main_menu/choose_music.tscn",
+			"res://Scene/main_menu/twenty_eight_constellations.tscn",
+			"res://Scene/skill/zhen_fa_ui.tscn",
+			"res://Scene/other_menu/transmogtified_box.tscn",
+			"res://Scene/other_menu/transmogrified.tscn",
+			"res://Scene/other_menu/change_back_ground.tscn",
 			"res://Scene/magic_weapon/magic_help.tscn",
 		]
 	)

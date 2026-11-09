@@ -5,12 +5,12 @@ extends Node
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 六个场景槽位常驻，与迁移前的 Global.zhen_fa_* / zhenyanbutton 一致。
 
-const HELP_SCENE_PATH := "res://Scene/other_scene/zhen_fa_help.tscn"
-const TU_PO_SCENE_PATH := "res://Scene/other_scene/zhen_fa_tu_po.tscn"
-const CURE_LEVEL_SCENE_PATH := "res://Scene/other_scene/zhen_yan_cure_level.tscn"
-const INFO_SCENE_PATH := "res://Scene/other_scene/zhenfainfo.tscn"
-const LX_BUTTON_SCENE_PATH := "res://Scene/other_scene/zhenfalxbutton.tscn"
-const EYE_BUTTON_SCENE_PATH := "res://Scene/other_scene/zhenyanbutton.tscn"
+const HELP_SCENE_PATH := "res://Scene/skill/zhen_fa_help.tscn"
+const TU_PO_SCENE_PATH := "res://Scene/skill/zhen_fa_tu_po.tscn"
+const CURE_LEVEL_SCENE_PATH := "res://Scene/skill/zhen_yan_cure_level.tscn"
+const INFO_SCENE_PATH := "res://Scene/skill/zhenfainfo.tscn"
+const LX_BUTTON_SCENE_PATH := "res://Scene/skill/zhenfalxbutton.tscn"
+const EYE_BUTTON_SCENE_PATH := "res://Scene/skill/zhenyanbutton.tscn"
 
 var _host = null
 var _help_scene: PackedScene = null

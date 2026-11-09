@@ -19,7 +19,7 @@ const USE_MAGIC_WEAPON_PATH := "res://Scene/back_pack/use_magic_weapon.tscn"
 const SKILL_SELECT_PATH := "res://Scene/back_pack/skill_select.tscn"
 const SELL_OR_EQU_PATH := "res://Scene/back_pack/sell_or_equ.tscn"
 const ROLE_INFORMATION_PATH := "res://Scene/level/role_information.tscn"
-const H_HJM_PATH := "res://Scene/other_scene/transmogrified.tscn"
+const H_HJM_PATH := "res://Scene/other_menu/transmogrified.tscn"
 const EQUIPMENT_FALL_PATH := "res://Scene/back_pack/equipment_fall.tscn"
 const BOX_CLICK_COOLDOWN_FRAMES := 6
 

@@ -443,7 +443,7 @@ func _test_reward_interface_visual() -> void:
 	# 无会话：命令失败后奖励盒必须隐藏，错误标题可见。
 	_reset_profile(1, 1)
 	Global.end_archive_session()
-	var failed_reward: Node = load("res://Scene/other_scene/reward_interface.tscn").instantiate()
+	var failed_reward: Node = load("res://Scene/other_menu/reward_interface.tscn").instantiate()
 	failed_reward.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(failed_reward)
 	await get_tree().process_frame
@@ -472,7 +472,7 @@ func _test_reward_interface_visual() -> void:
 	# 有会话：成功时奖励盒保留。
 	_reset_profile(1, 1)
 	_open_session(TEST_ARCHIVE_PREFIX + "056.json")
-	var success_reward: Node = load("res://Scene/other_scene/reward_interface.tscn").instantiate()
+	var success_reward: Node = load("res://Scene/other_menu/reward_interface.tscn").instantiate()
 	success_reward.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(success_reward)
 	await get_tree().process_frame
@@ -2410,7 +2410,7 @@ func _check_reward_and_menu_saves() -> void:
 	_open_session(PANEL_ARCHIVE_PATH)
 	MemoryClass.request_save("probe_reward_seed")
 	_set_archive_time_value(PANEL_ARCHIVE_PATH, "2000-01-01 00:00:00")
-	var reward: Node = (load("res://Scene/other_scene/reward_interface.tscn") as PackedScene).instantiate()
+	var reward: Node = (load("res://Scene/other_menu/reward_interface.tscn") as PackedScene).instantiate()
 	reward.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(reward)
 	await get_tree().process_frame

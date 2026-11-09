@@ -6,7 +6,7 @@ extends Node
 
 const RESULT_PREFIX := "LOAD_GUARD_PROBE_RESULT="
 const TEARDOWN_MARKER := "LOAD_GUARD_PROBE_TEARDOWN"
-const LOAD_SCENE := "res://Scene/other_scene/load_scene.tscn"
+const LOAD_SCENE := "res://Scene/runtime/load_scene.tscn"
 const LEVEL_1 := "res://Scene/level/level_1.tscn"
 const LEVEL_2 := "res://Scene/level/level_2.tscn"
 const LEVEL_3 := "res://Scene/level/level_3.tscn"

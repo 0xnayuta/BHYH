@@ -7,8 +7,8 @@ extends Node
 ## 三个入口均登记为临时 UI；活动之谜另挂窗口守卫。
 
 const HDZM_SCENE_PATH := "res://Scene/level/hdzm.tscn"
-const LSH_SCENE_PATH := "res://Scene/other_scene/lsh.tscn"
-const LXDY_SCENE_PATH := "res://Scene/other_scene/lxdy.tscn"
+const LSH_SCENE_PATH := "res://Scene/main_menu/lsh.tscn"
+const LXDY_SCENE_PATH := "res://Scene/main_menu/lxdy.tscn"
 const HDZM_WINDOW_GUARD_SCRIPT := preload("res://Script/level/hdzm_window_guard.gd")
 
 var _host = null

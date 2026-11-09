@@ -6,10 +6,10 @@ extends Node
 ## 缓存槽位与迁移前的 Global.task_title/pj/add_font/some_monster_help/letter_for_player 一致。
 
 const TASK_TITLE_SCENE_PATH := "res://Scene/task/task_title.tscn"
-const PING_JIA_SCENE_PATH := "res://Scene/other_scene/ping_jia.tscn"
+const PING_JIA_SCENE_PATH := "res://Scene/level/ping_jia.tscn"
 const MESSAGE_INFO_SCENE_PATH := "res://Scene/show_text/message_info.tscn"
 const SOME_MONSTER_HELP_SCENE_PATH := "res://Scene/monster/some_monster_help.tscn"
-const LETTER_FOR_PLAYER_SCENE_PATH := "res://Scene/other_scene/a_letter_for_all_players.tscn"
+const LETTER_FOR_PLAYER_SCENE_PATH := "res://Scene/other_menu/a_letter_for_all_players.tscn"
 
 var _host = null
 var _task_title_scene: PackedScene = null

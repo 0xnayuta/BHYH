@@ -2,7 +2,7 @@
 ## Android 签名校验仍由 load_scene 的既有内联流程执行，不新增 Autoload。
 extends CanvasLayer
 
-const LOADING_SCENE := "res://Scene/other_scene/load_scene.tscn"
+const LOADING_SCENE := "res://Scene/runtime/load_scene.tscn"
 const TIPS := [
 	"神秘商店中有概率出现强化石哦~~",
 	"打不过关卡时，可以尝试回去强化装备。",

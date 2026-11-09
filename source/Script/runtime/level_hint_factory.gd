@@ -6,9 +6,9 @@ extends Node
 ## 四个场景槽位常驻，与迁移前的 Global.level_fall_box/game_need_know/hc_help/help_thing 一致。
 
 const BOX_SCENE_PATH := "res://Scene/back_pack/box_1.tscn"
-const GAME_NEED_KNOW_SCENE_PATH := "res://Scene/other_scene/game_need_know.tscn"
-const HC_HELP_SCENE_PATH := "res://Scene/other_scene/hc_help.tscn"
-const HELP_THING_SCENE_PATH := "res://Scene/other_scene/help_things.tscn"
+const GAME_NEED_KNOW_SCENE_PATH := "res://Scene/other_menu/game_need_know.tscn"
+const HC_HELP_SCENE_PATH := "res://Scene/other_menu/hc_help.tscn"
+const HELP_THING_SCENE_PATH := "res://Scene/other_menu/help_things.tscn"
 
 var _host = null
 var _box_scene: PackedScene = null

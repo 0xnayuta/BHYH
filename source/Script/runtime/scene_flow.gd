@@ -86,5 +86,5 @@ func change_scene(target, force_loading_screen: bool = false, require_archive_se
 		var fast_err := tree.change_scene_to_packed(cached)
 		return fast_err == OK
 
-	var load_err := tree.change_scene_to_file("res://Scene/other_scene/load_scene.tscn")
+	var load_err := tree.change_scene_to_file("res://Scene/runtime/load_scene.tscn")
 	return load_err == OK

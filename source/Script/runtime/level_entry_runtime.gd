@@ -5,7 +5,7 @@ extends Node
 ## 由 Global 作为普通子节点持有，不是 Autoload；
 ## 业务侧仍经 Global.add_level_info / get_current_level_fall_pro / sync_level_drop_pro_data 正式入口访问。
 
-const LEVEL_INFO_SCENE_PATH := "res://Scene/other_scene/level_info.tscn"
+const LEVEL_INFO_SCENE_PATH := "res://Scene/level/level_info.tscn"
 const FORCED_INFO_LEVEL_PATHS := [
 	"res://Scene/level/level_stz.tscn",
 	"res://Scene/level/level_esbxx.tscn",

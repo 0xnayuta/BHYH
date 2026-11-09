@@ -12,7 +12,7 @@ const COMBO_PATH := "res://Scene/show_text/combo.tscn"
 const COMBO_NUM_PATH := "res://Scene/show_text/combo_num.tscn"
 const CHOOSE_TEXT_PATH := "res://Scene/show_text/choose_scene.tscn"
 const TOUCH_TEXT_PATH := "res://Scene/show_text/touch_text.tscn"
-const BUFF_INFOR_PATH := "res://Scene/other_scene/buff_information.tscn"
+const BUFF_INFOR_PATH := "res://Scene/monster/buff_information.tscn"
 const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
 
 var _host: Node = null

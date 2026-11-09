@@ -13,7 +13,7 @@ const SYNTHESIS_PATH := "res://Scene/ldl/synthesis.tscn"
 const STRENGTH_PATH := "res://Scene/ldl/strength.tscn"
 const YES_NO_HELP_PATH := "res://Scene/ldl/s_yn_help.tscn"
 const CURE_TIMES_BOX_PATH := "res://Scene/shop/cure_times_box.tscn"
-const TRANS_BOX_PATH := "res://Scene/other_scene/transmogtified_box.tscn"
+const TRANS_BOX_PATH := "res://Scene/other_menu/transmogtified_box.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}

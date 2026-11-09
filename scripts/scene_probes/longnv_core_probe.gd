@@ -97,7 +97,7 @@ func _run() -> void:
 		DataKeys.WINGS: "hhyq",
 		DataKeys.TITLE: "",
 	}
-	var transmog = load("res://Scene/other_scene/transmogrified.tscn").instantiate()
+	var transmog = load("res://Scene/other_menu/transmogrified.tscn").instantiate()
 	add_child(transmog)
 	await get_tree().process_frame
 	await get_tree().physics_frame
