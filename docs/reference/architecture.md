@@ -38,7 +38,7 @@ BHYH/
 | 渲染后端 | 默认 `mobile`；Web 使用 `forward_plus` | `source/project.godot` `[rendering]` |
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
-| 最大 FPS | 150（`run/max_fps`） | `source/project.godot` |
+| 最大 FPS | 120（`run/max_fps`） | `source/project.godot` |
 | Autoload | **11**：10 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
 | 输入动作 | 集中定义于 `source/project.godot`；数量以配置为准 | `source/project.godot` `[input]` |
 | 2D 物理层 | 具名层；名称与数量以 `source/project.godot` 为准 | `source/project.godot` `[layer_names]` |

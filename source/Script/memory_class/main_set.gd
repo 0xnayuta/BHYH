@@ -1,7 +1,7 @@
 extends Node
 
-const FRAME_RATE_OPTIONS := [30, 60, 90, 120, 150]
-const DEFAULT_FRAME_RATE := 150
+const FRAME_RATE_OPTIONS := [30, 60, 90, 120, 144, 180, 240]
+const DEFAULT_FRAME_RATE := 120
 const DEFAULT_MOBILE_FRAME_RATE := 60
 # 主菜单背景按主线进度解锁：索引 1 为默认背景，2~6 对应 CurrentLevelPage 阈值。
 const MAIN_MENU_BACKGROUND_UNLOCK_PAGES := [1, 2, 3, 4, 5, 6]
