@@ -4,7 +4,7 @@
 
 ## 1. 当前注册项
 
-`source/project.godot` 当前有 **11 个注册项**：10 个业务单例 + 1 个编辑器调试桥。
+`source/project.godot` 当前有 **10 个注册项**：9 个业务单例 + 1 个编辑器调试桥。
 
 | # | Autoload | 当前职责 | 决策 |
 |:---:|:---|:---|:---|
@@ -14,13 +14,12 @@
 | 4 | `MainSet` | 设置字典、帧率、主菜单背景 | 保留（设置） |
 | 5 | `MLdl` | 锻造台 UI 会话状态 | 迁移候选（场景状态） |
 | 6 | `PaSkill` | 被动技能数值与灵魂收益 | 保留（被动数值） |
-| 7 | `Signals` | 全局确认框信号 | 保留；禁止新增全局信号 |
-| 8 | `Global` | 场景流、工厂、缓存/池/预载入口 | 拆分边界；不得继续扩张 |
-| 9 | `LocalCoop` | 双人会话、槽位数据/属性/输入/面板 | 保留（双人会话） |
-| 10 | `MCPGameBridge` | 编辑器调试桥 | 保留；不计业务 |
-| 11 | `ZmwsConfig` | ZMWS 数值配置表查询与缓存 | 保留（配置查询） |
+| 7 | `Global` | 场景流、工厂、缓存/池/预载入口 | 拆分边界；不得继续扩张 |
+| 8 | `LocalCoop` | 双人会话、槽位数据/属性/输入/面板 | 保留（双人会话） |
+| 9 | `MCPGameBridge` | 编辑器调试桥 | 保留；不计业务 |
+| 10 | `ZmwsConfig` | ZMWS 数值配置表查询与缓存 | 保留（配置查询） |
 
-已删除：`BaseHit`、`MainMusic`、`AE`。旧 `all_equipment.gd` 与 `all_equipment_data.gd` 不再存在。
+已删除：`Signals`（[`ADR-028`](../decisions/ADR-028-confirm-dialog-callback-ownership.md)）、`BaseHit`、`MainMusic`、`AE`。旧 `all_equipment.gd` 与 `all_equipment_data.gd` 不再存在。
 
 ## 2. 边界规则
 

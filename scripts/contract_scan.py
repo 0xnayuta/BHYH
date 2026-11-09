@@ -27,6 +27,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 19. HUD/面板只读门禁 (HUD Panel Boundary): HUD 与面板域禁止直接档案 IO 与 PlayerData 字典直写
 20. 音频入口门禁 (Audio Entry Boundary): BGM/SFX 只经 AudioRuntime，业务禁止自建播放器或直读其私有状态
 21. Global 表面门禁 (Global Surface Baseline): 禁止新增未登记的 Global 业务字段或 add 系入口
+22. 全局信号基线门禁 (Global Signal Baseline): Autoload 脚本禁止新增未登记的全局信号
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1058,6 +1059,12 @@ class ContractScanner:
     )
     RUNTIME_STATE_TOTAL_RE = re.compile(r"\bGlobal\.total_[A-Za-z0-9_]*\b")
     GLOBAL_SURFACE_FILE = "global.gd"
+    GLOBAL_SIGNAL_BASELINE = {
+        "Script/memory_class/memory_class.gd": {
+            "background_save_finished",
+            "save_failed",
+        },
+    }
     GLOBAL_SURFACE_BASELINE_PATH = os.path.join(REPO_ROOT, "scripts", "global_surface_baseline.json")
     GLOBAL_SURFACE_FIELD_RE = re.compile(r"^var\s+([A-Za-z_]\w*)")
     GLOBAL_SURFACE_ADD_RE = re.compile(r"^func\s+(add[A-Za-z0-9_]*)\s*\(")
@@ -1855,6 +1862,39 @@ class ContractScanner:
             if not self.whitelist.is_suppressed(finding):
                 self.findings.append(finding)
 
+    def _autoload_script_paths(self):
+        """解析 project.godot 的 [autoload] 段，返回脚本相对路径。"""
+        project_file = os.path.join(self.project_dir, "project.godot")
+        try:
+            text = open(project_file, "r", encoding="utf-8", errors="ignore").read()
+        except OSError:
+            return []
+        return re.findall(r'^\w+="\*res://([^"]+\.gd)"', text, re.M)
+
+    def scan_global_signal_baseline(self):
+        print("[*] 扫描全局信号基线门禁 (Phase 28-1)...")
+        for rel_p in self._autoload_script_paths():
+            abs_p = os.path.join(self.project_dir, rel_p)
+            if not os.path.exists(abs_p):
+                continue
+            try:
+                text = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            declared = set(re.findall(r"^signal\s+([A-Za-z_]\w*)", text, re.M))
+            allowed = self.GLOBAL_SIGNAL_BASELINE.get(rel_p, set())
+            for signal_name in sorted(declared - allowed):
+                self.findings.append(ContractFinding(
+                    category="global_signal",
+                    severity="ERROR",
+                    file_path=rel_p,
+                    line=0,
+                    literal=signal_name,
+                    message="Autoload 脚本新增未登记的全局信号",
+                    suggested_fix="确认框/UI 回调归打开者所有；确需全局信号时先评审并更新 scripts/contract_scan.py 基线",
+                    rule_id="GLOBAL_SIGNAL_UNBASELINED",
+                ))
+
     def scan_archive_boundary(self):
         print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
         self._scan_rule(
@@ -1927,6 +1967,7 @@ class ContractScanner:
         self.scan_pool_ui_boundary()
         self.scan_run_state_boundary()
         self.scan_global_surface_boundary()
+        self.scan_global_signal_baseline()
         self.scan_archive_boundary()
         self.scan_slot_boundary()
         self.scan_panel_operator()
@@ -2013,6 +2054,7 @@ class ContractScanner:
             "shared_ledger": "15. 共享账本登记门禁 (Shared Ledger)",
             "phase17_boundary": "16. Phase 17 边界门禁 (Phase 17 Boundary)",
             "input_boundary": "17. 输入写入边界门禁 (Input Boundary)",
+            "global_signal": "18. 全局信号基线门禁 (Global Signal)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -2767,6 +2809,47 @@ def run_panel_operator_self_test() -> bool:
     return passed
 
 
+def run_global_signal_self_test() -> bool:
+    """全局信号基线门禁自测：新增信号必须拦截，基线信号必须放行。"""
+    print("[*] 全局信号基线门禁负向自测...")
+    import tempfile
+
+    passed = True
+    with tempfile.TemporaryDirectory() as tmp:
+        script_rel = "Script/memory_class/fake.gd"
+        os.makedirs(os.path.join(tmp, "Script", "memory_class"))
+        with open(os.path.join(tmp, "project.godot"), "w", encoding="utf-8") as f:
+            f.write('[autoload]\nFake="*res://Script/memory_class/fake.gd"\n')
+        script_path = os.path.join(tmp, script_rel)
+        with open(script_path, "w", encoding="utf-8") as f:
+            f.write("extends Node\nsignal allowed_signal\nsignal new_signal\n")
+
+        scanner = ContractScanner.__new__(ContractScanner)
+        scanner.project_dir = tmp
+        scanner.findings = []
+        scanner.GLOBAL_SIGNAL_BASELINE = {script_rel: {"allowed_signal"}}
+        scanner.scan_global_signal_baseline()
+        new_signals = [f.literal for f in scanner.findings if f.rule_id == "GLOBAL_SIGNAL_UNBASELINED"]
+        if new_signals != ["new_signal"]:
+            print(f"    [X] 新增信号未拦截: {new_signals}", file=sys.stderr)
+            passed = False
+        else:
+            print("    [√] 新增信号已拦截")
+
+        scanner.findings = []
+        with open(script_path, "w", encoding="utf-8") as f:
+            f.write("extends Node\nsignal allowed_signal\n")
+        scanner.scan_global_signal_baseline()
+        if scanner.findings:
+            print("    [X] 基线信号被误报", file=sys.stderr)
+            passed = False
+        else:
+            print("    [√] 基线信号已放行")
+
+    print("[SUCCESS] 全局信号基线门禁自测通过" if passed else "[FAIL] 全局信号基线门禁自测失败")
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -2795,6 +2878,7 @@ def main():
         phase17_ok = run_phase17_boundary_self_test()
         input_ok = run_input_boundary_self_test()
         panel_operator_ok = run_panel_operator_self_test()
+        global_signal_ok = run_global_signal_self_test()
         sys.exit(
             0
             if manifest_ok
@@ -2813,6 +2897,7 @@ def main():
             and audio_entry_ok
             and input_ok
             and panel_operator_ok
+            and global_signal_ok
             else 1
         )
 

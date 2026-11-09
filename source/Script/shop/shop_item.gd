@@ -94,13 +94,14 @@ func _on_goumai_pressed() -> void:
 	if not _can_pay_for_count(buy_num):
 		Global.add_message_show(_parent, "灵魂不足！", 1.5, Vector2(485, 295))
 		return
-	Signals.connect_choose_box_signal(self, "gm")
 	choose_jm = Global.add_choose_text(
 		_parent,
 		Vector2(0, 0),
 		"确定花费" + str(_get_safe_total_cost(buy_num)) + "灵魂购买" + str(buy_num) + "个" + str(item_name.text) + "吗？",
 		0
 	)
+	if choose_jm != null:
+		choose_jm.confirmed.connect(gm)
 
 
 func add_item_toplayer(times):

@@ -358,10 +358,10 @@ func _on_sell_pressed() -> void:
 
 func _show_sell_confirm(confirm_text: String) -> void:
 	self.visible = false
-	Signals.connect_choose_box_signal(self, "sell")
 	jm = Global.add_choose_text(Global.get_ui_runtime().get_popup_layer(), Vector2.ZERO, confirm_text, 0)
 	if jm == null:
 		return
+	jm.confirmed.connect(sell)
 	var popup := jm as Control
 	if popup == null:
 		return

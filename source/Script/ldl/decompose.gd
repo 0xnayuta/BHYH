@@ -28,7 +28,6 @@ var is_set: bool
 
 
 func _ready() -> void:
-	Signals.connect_choose_box_signal(self, "fj")
 	remove_items.is_in_ldl_gz = true
 
 
@@ -221,11 +220,17 @@ func _on_decompose_button_pressed() -> void:
 		var typee := item_definition.category
 		var item_name := item_definition.display_name
 		if cur_level > 0:
-			Global.add_choose_text(
+			var dialog_enhanced = Global.add_choose_text(
 				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？（返还累计消耗强化石的80%，各等级分别向下取整）", 0
 			)
+			if dialog_enhanced != null:
+				dialog_enhanced.confirmed.connect(fj)
 		else:
-			Global.add_choose_text(NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0)
+			var dialog_plain = Global.add_choose_text(
+				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定要分解" + str(item_name) + "吗？", 0
+			)
+			if dialog_plain != null:
+				dialog_plain.confirmed.connect(fj)
 	else:
 		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧～", 1.5, Vector2(500, 305))
 

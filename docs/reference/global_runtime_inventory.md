@@ -110,7 +110,7 @@ grep -RIn '"/root/' source --include='*.gd'
 
 ## 3. 普通子服务与所有权
 
-`source/project.godot` 当前有 **11 个注册项**：10 个业务单例 + `MCPGameBridge` 调试桥。以下 26 项是 `Global._ready()` 创建、挂到 `Global` 下的普通节点，**不是 Autoload**：
+`source/project.godot` 当前有 **10 个注册项**：9 个业务单例 + `MCPGameBridge` 调试桥。以下 26 项是 `Global._ready()` 创建、挂到 `Global` 下的普通节点，**不是 Autoload**：
 
 | 服务 | 当前职责 | 目标 |
 |:---|:---|:---|

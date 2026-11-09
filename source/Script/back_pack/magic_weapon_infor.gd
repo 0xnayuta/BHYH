@@ -328,23 +328,26 @@ func czl() -> void:
 func _on_wxxl_pressed() -> void:
 	if not _has_equipped_weapon():
 		return
-	Signals.connect_choose_box_signal(self, "low_wx")
-	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗五行洗炼石洗炼法宝的五行吗？", 0)
+	var dialog = Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗五行洗炼石洗炼法宝的五行吗？", 0)
+	if dialog != null:
+		dialog.confirmed.connect(low_wx)
 
 
 func _on_gjwx_pressed() -> void:
 	if not _has_equipped_weapon():
 		return
-	Signals.connect_choose_box_signal(self, "high_wx")
 	var wx_num = PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS].size() * 5
-	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用" + str(wx_num) + "颗五行洗炼石高级洗炼一次法宝的五行吗？", 0)
+	var dialog = Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用" + str(wx_num) + "颗五行洗炼石高级洗炼一次法宝的五行吗？", 0)
+	if dialog != null:
+		dialog.confirmed.connect(high_wx)
 
 
 func _on_czlxl_pressed() -> void:
 	if not _has_equipped_weapon():
 		return
-	Signals.connect_choose_box_signal(self, "czl")
-	Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗成长率洗炼石洗炼法宝的成长率吗？", 0)
+	var dialog = Global.add_choose_text(get_parent(), Vector2(0, 0), "确定要使用1颗成长率洗炼石洗炼法宝的成长率吗？", 0)
+	if dialog != null:
+		dialog.confirmed.connect(czl)
 
 
 func magic_weapon_czl(_name):

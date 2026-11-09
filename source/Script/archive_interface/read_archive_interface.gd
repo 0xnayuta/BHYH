@@ -635,8 +635,9 @@ func _on_delete_pressed() -> void:
 		Global.add_message_show(self, "找不到存档信息，请确保正确输入了存档号！！", 1.5, Vector2(470, 300))
 		return
 	else:
-		Signals.connect_choose_box_signal(self, "_remove_save_data")
-		Global.add_choose_text(self, Vector2(0, 0), "确定要删除存档" + str(cd_number.text) + "吗？\n（删除后无法恢复！）", 0)
+		var dialog = Global.add_choose_text(self, Vector2(0, 0), "确定要删除存档" + str(cd_number.text) + "吗？\n（删除后无法恢复！）", 0)
+		if dialog != null:
+			dialog.confirmed.connect(_remove_save_data)
 
 
 func _remove_save_data():

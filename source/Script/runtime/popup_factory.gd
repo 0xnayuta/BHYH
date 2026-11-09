@@ -17,6 +17,7 @@ const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
 
 var _host: Node = null
 var _scenes: Dictionary = {}
+var _active_choose: Node = null
 
 
 func setup(host: Node) -> void:
@@ -86,9 +87,19 @@ func add_buff_information(parent, position, data):
 
 
 func add_choose_text(parent, _position, text_, calm_time):
+	if is_instance_valid(_active_choose):
+		if _active_choose is CanvasItem:
+			(_active_choose as CanvasItem).visible = false
+		_active_choose.queue_free()
 	var target = _host.instance_scene(_scene(CHOOSE_TEXT_PATH), parent)
 	if target == null:
 		return null
+	_active_choose = target
+	target.tree_exited.connect(
+		func():
+			if _active_choose == target:
+				_active_choose = null
+	)
 	target.z_index = 99
 	target.position = _position
 	target.my_text = text_

@@ -1,4 +1,8 @@
 extends Control
+
+signal confirmed
+signal cancelled
+
 var my_text
 var is_qd = false
 var is_qx = false
@@ -23,12 +27,13 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_qx_pressed() -> void:
+	cancelled.emit()
 	is_qx = true
 	queue_free()
 
 
 func _on_qd_pressed() -> void:
-	Signals.choose_pressed.emit()
+	confirmed.emit()
 	is_qd = true
 	queue_free()
 

@@ -16,7 +16,7 @@
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×；`canvas_items` + `expand`） |
 | 主场景 | `res://Scene/other_scene/startup_loading.tscn` |
 | 工程根 | `source/` |
-| Autoload | **11 个注册项**：10 个业务单例 + 1 个编辑器调试桥；注册与职责见 [`architecture.md`](architecture.md) §2 |
+| Autoload | **10 个注册项**：9 个业务单例 + 1 个编辑器调试桥；注册与职责见 [`architecture.md`](architecture.md) §2 |
 | 语言 | GDScript 2.0，优先静态类型 |
 
 版本谱系与归档入口见 [`../archive/README.md`](../archive/README.md)。
@@ -149,6 +149,12 @@
 - **2026-11-04 运行时回归修复**：宠物预热门禁与寅虎动作帧修复（`convert_monster_action_views.py --check` **5/5**，`pet-runtime` PASS）；183 个场景 **412** 条 AnimationMixer 单键 value track 改为离散更新；关卡回归保留失败关首轮证据并过滤三类已验证 headless 噪声，阶段清场后等待物理帧再传送。全量 **128/128 + SKIP 5**。
 
 ---
+
+### Phase 28-1 全局确认信号移除（2026-11-09）
+
+- Autoload 注册项 11 → 10：删除 `Signals`；`choose_scene` 暴露 `confirmed`/`cancelled` 实例信号，10 个调用点改为在 `Global.add_choose_text()` 返回值上连接；`PopupFactory` 显式关闭旧确认框，维持单实例语义。
+- 验证：`contract_scan --self-test` 通过（含 `global_signal` 正负样本）；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7 PASS；`health_check --no-cache` 822 脚本 0 Parse / 0 Error / 0 Warning；`level_1` 4 阶段 0/0/0；`choose_scene` 临时探针确认 `confirmed` 信号且无脚本错误。
+- 边界：Phase 28-2 未启动；`scene_probe_runner` 全量复跑结果以该批次出口记录为准。
 
 ## 3. 当前已知边界
 

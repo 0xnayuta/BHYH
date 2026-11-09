@@ -866,8 +866,6 @@ func _on_skill_13_pressed() -> void:
 
 
 func _show_tip():
-	Signals.connect_choose_box_signal(self, "up_level")
-
 	var skill_name = get_skill_name(target_skill)
 	var old_mp = 0
 	var new_mp = 0
@@ -891,7 +889,9 @@ func _show_tip():
 			var book_need := get_skill_book_need(level)
 			var book_id := get_skill_book_id(level)
 			tip += " 消耗：%sx%s（持有%s）" % [get_skill_book_name(level), book_need, PlayerData.get_item_data(book_id)]
-	Global.add_choose_text(NodeUtils.ancestor(self, 4), Vector2(0, 0), tip, 0)
+	var dialog = Global.add_choose_text(NodeUtils.ancestor(self, 4), Vector2(0, 0), tip, 0)
+	if dialog != null:
+		dialog.confirmed.connect(up_level)
 
 
 func _on_ski_1_pressed() -> void:

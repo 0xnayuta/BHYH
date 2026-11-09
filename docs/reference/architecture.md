@@ -39,7 +39,7 @@ BHYH/
 | 设计画布 / 默认窗口 | **1280×800 / 1600×1000**（16:10，1.25×） | `source/project.godot` `[display]` |
 | 拉伸策略 | `canvas_items` + `expand` | `source/project.godot` |
 | 最大 FPS | 120（`run/max_fps`） | `source/project.godot` |
-| Autoload | **11**：10 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
+| Autoload | **10**：9 个业务单例 + 1 个编辑器调试桥 | `source/project.godot` `[autoload]` |
 | 输入动作 | 集中定义于 `source/project.godot`；数量以配置为准 | `source/project.godot` `[input]` |
 | 2D 物理层 | 具名层；名称与数量以 `source/project.godot` 为准 | `source/project.godot` `[layer_names]` |
 | 场景树分组 | `Player`、`Monster` | `source/project.godot` `[global_group]` |
@@ -74,11 +74,10 @@ Autoload 按 `project.godot` 中的顺序初始化：
 | 4 | `MainSet` | `Script/memory_class/main_set.gd` | 全局设置字典、帧率策略、主菜单背景解锁 | `set_data` |
 | 5 | `MLdl` | `Script/ldl/main_ldl.gd` | 锻造台 UI 会话状态 | 无业务依赖 |
 | 6 | `PaSkill` | `Script/skill/passive_skills.gd` | 被动技能数值表与灵魂收益 | 读取 `PlayerData`、`RoleProp` |
-| 7 | `Signals` | `Script/base/signals.gd` | 全局确认框信号 `choose_pressed` | 唯一全局信号路由 |
-| 8 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
-| 9 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
-| 10 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
-| 11 | `ZmwsConfig` | `Script/config/config.gd` | ZMWS 数值配置表查询与缓存 | 按需加载，不预载全表 |
+| 7 | `Global` | `global.gd` | 场景切换、UI 工厂、资源缓存、对象池、异步预载、部分业务判定 | 遗留上帝对象；拆分边界见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) |
+| 8 | `LocalCoop` | `Script/coop/local_coop.gd` | 本地双人会话、2P 数据/属性/输入/面板 | 最后注册的业务单例 |
+| 9 | `MCPGameBridge` | `addons/godot_mcp/game_bridge/mcp_game_bridge.gd` | 编辑器调试桥 | 无 `*` 前缀，非业务 |
+| 10 | `ZmwsConfig` | `Script/config/config.gd` | ZMWS 数值配置表查询与缓存 | 按需加载，不预载全表 |
 
 ### 2.2 依赖与初始化约束
 
@@ -95,7 +94,7 @@ Autoload 按 `project.godot` 中的顺序初始化：
 - 新增 Autoload 必须评审生命周期、依赖、清理方式与替代方案；
 - 能用场景节点、`Resource`、静态函数或 `class_name` 工具类解决的，不新增 Autoload；
 - 新功能不得以“方便访问”为理由塞进全局单例。
-- 11 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 已由 21-3A~J 收口（`add` 系入口共 120 个，其中 113 个为带 `add_` 前缀的族工厂薄转发；当前字段/入口基线见 [`global_runtime_inventory.md`](global_runtime_inventory.md)）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
+- 10 个注册项的逐项处置、`Global` 切面与迁移顺序见 [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)（Phase 20-1B；`BaseHit` 已删除、`MainMusic` 并入 `AudioRuntime`，W1~W8 已执行，S5 已由 21-3A~J 收口（`add` 系入口共 120 个，其中 113 个为带 `add_` 前缀的族工厂薄转发；当前字段/入口基线见 [`global_runtime_inventory.md`](global_runtime_inventory.md)）；Spine 跨平台转入 Phase 21-1；类型化 Atlas accessor 已由 21-1C 完成；`_bundled` 经 21-1B 取证拒绝转换（无源场景，`.godot` 导出缓存不作为转换源））。
 
 ### 2.4 运行时服务
 
@@ -544,7 +543,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 
 - 由 `Global.add_*` 工厂延迟实例化，挂到 `Global.get_ui_runtime().windows` 或 `GlobalUiPopupLayer`；
 - `UiRuntime.windows` 由当前场景设置；`LocalCoop` 打开 2P 面板时使用 `push_windows()`，关闭时 `pop_windows()`，不再复制 `_previous_windows`；
-- 确认框统一通过 `Signals.choose_pressed` 回调；
+- 确认框通过 `choose_scene` 的 `confirmed`/`cancelled` 实例信号回调，由打开者在 `Global.add_choose_text()` 返回值上连接；单确认框由 `PopupFactory` 显式维护；
 - 临时 UI 通过 `Global.get_ui_runtime().register_transient_ui(node, close_method, scene_path)` 显式登记；LevelInfo、GameSet、LDL、商店、技能、奖励、选择框、轮回/星座/返回地图等工厂均已登记。`UiRuntime.cleanup_transient_ui` 只关闭登记实例并清理弹出层；永久小 UI 路径跳过，active 守卫保留。名称兜底和 51 处业务显式调用已删除；地图/商店阴影与 `message_show` 由所属场景/父节点释放；
 
 - 新 UI 优先场景组合、`@export` 注入与 `%UniqueName`，不新增跨场景深层 `get_node()`。
@@ -658,7 +657,7 @@ Phase 30-4 完成数据容器边界收口：69 个脚本已迁出布局、6 个�
 以下差异在写文档或验收时必须显式承认，不能按旧文档宣称：
 
 1. **`FrameSequence` 已落地**：类型、Catalog、转换器、固定目录、四剑阵技能、星座动态 body、星座技能与五台弹道非 swf 序列均已迁移；`StreamedPngEffect` 只消费 `FrameSequence`。资产身份为 `asset_id`，播放策略由实例覆盖，不再是复合 key。
-2. **Autoload 数量**：共 11 个注册项，其中 10 个是业务单例，`MCPGameBridge` 是调试桥；说“11 个业务 Autoload”不准确。
+2. **Autoload 数量**：共 10 个注册项，其中 9 个是业务单例，`MCPGameBridge` 是调试桥；说“10 个业务 Autoload”不准确。
 3. **门禁维度**：维度清单以 `acceptance.md` §3 与 `check_all.py` 实际注册为准；本文不复制数量。历史记录中的“七维门禁”是 `--skip-engine`（或 `--fast`）口径。
 4. **双人探针**：用例清单由 `coop_probe_runner.py` 维护；历史文档中的旧基线不代表当前用例数量。
 5. **规模数字**：具体规模以 [`status.md`](status.md) 的当前快照为准；本文不复制脚本、场景与资源数量。

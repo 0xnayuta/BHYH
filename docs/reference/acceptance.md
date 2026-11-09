@@ -98,8 +98,8 @@ python scripts/check_all.py --no-cache -j 6
 
 | 子门禁 | 命令 | 作用 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 二十一类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
-| 契约自测 | `contract_scan.py --self-test` | 二十一类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、Global 表面、音频入口、HUD 面板只读与输入写入边界 |
+| 契约扫描 | `contract_scan.py --fail-on-error` | 二十二类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/全局信号基线/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
+| 契约自测 | `contract_scan.py --self-test` | 二十二类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、Global 表面、全局信号基线、音频入口、HUD 面板只读与输入写入边界 |
 | Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
 | Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
 | 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
@@ -118,7 +118,7 @@ python scripts/check_all.py --no-cache -j 6
 | UI 表面色 token | `ui_surface_token_audit.py --check` | 自绘 StyleBox 裸色或 `main_menu` 裸色超过冻结基线；`--self-test` 覆盖正负样本 |
 | 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
 
-### 4.1 `contract_scan.py` 二十一类契约
+### 4.1 `contract_scan.py` 二十二类契约
 
 扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
 
@@ -145,6 +145,7 @@ python scripts/check_all.py --no-cache -j 6
 | HUD/面板只读 | HUD 与面板域直接档案 IO 或 `PlayerData` 字典直写 | ERROR（`HUD_PANEL_WRITE_FORBIDDEN`） |
 | Phase 17 边界 | 结算文件重复保存或缺 `LevelSettlement`、命令文件缺快照、表现文件直写档案、试点文件深层路径超预算 | ERROR（`PHASE17_BOUNDARY_FORBIDDEN`） |
 | 输入写入边界 | `Input`/`PlayerInput` 输入读取行同时出现 `PlayerData` 或 `request_save` | ERROR（`INPUT_BOUNDARY_STATE_WRITE`） |
+| 全局信号基线 | Autoload 脚本新增未登记的 `signal` 声明 | ERROR（`GLOBAL_SIGNAL_UNBASELINED`） |
 
 只有 **ERROR** 参与 `--fail-on-error` 的退出判定；WARNING 与 INFO 进入报告但不阻断。
 
@@ -161,7 +162,7 @@ python scripts/check_all.py --no-cache -j 6
 ### 4.3 `--self-test` 的边界
 
 - `convert_atlas_metadata.py --self-test` 在 `contract_gate` 内；
-- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、运行状态、Global 表面、档案、槽位、共享账本、Phase 17 边界、输入写入边界与面板操作者的正负样本；
+- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、运行状态、Global 表面、全局信号基线、档案、槽位、共享账本、Phase 17 边界、输入写入边界与面板操作者的正负样本；
 - 涉及契约扫描规则变更时，应单独执行 `python scripts/contract_scan.py --self-test`。
 
 ---
@@ -468,6 +469,7 @@ Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `
 | Phase 17 边界守卫 | L1 九维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
 | 输入写入边界守卫 | L1 九维 + `contract_scan --self-test` | `input_boundary` 好/坏样本；全量扫描 ERROR=0 | 只改文档；例外未登记；输入读取行夹带写档 |
 | Global 表面守卫 | L1 九维 + `contract_scan --self-test` | `global_surface` 好/坏样本；`--fail-on-error`；基线字段/add 入口守恒 | 只改文档；基线未更新；新增字段/add 入口未登记 |
+| 全局信号守卫 | L1 九维 + `contract_scan --self-test` | `global_signal` 好/坏样本；`--fail-on-error`；Autoload 信号基线守恒 | 只改文档；基线未更新；新增全局信号未登记 |
 | 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
 
 

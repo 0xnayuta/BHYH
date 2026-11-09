@@ -251,10 +251,11 @@ func use_xhp():
 				Global.add_message_show(parent, "需通关“奈何桥”！", 1.5, Vector2(450, 300))
 		"mpyj":
 			self.visible = false
-			Signals.connect_choose_box_signal(self, "use_mpyj")
 			choose_jm = Global.add_choose_text(
 				NodeUtils.ancestor(self, 3), Vector2(0, 0), "确定使用孟婆药剂吗，所有高于1级的技能等级将清除为1（不返还灵魂）？", 0
 			)
+			if choose_jm != null:
+				choose_jm.confirmed.connect(use_mpyj)
 		"qhsbx":
 			var a = ItemUtils.random_item_entries(["qhs_1", "qhs_2", "qhs_3", "qhs_4"], be_number, randi_range(3, 4))
 			Global.add_reward_info(NodeUtils.ancestor(self, 3), Vector2(0, 0), a, my_name, be_number)
