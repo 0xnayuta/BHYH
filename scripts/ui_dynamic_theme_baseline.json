@@ -55,7 +55,7 @@
       "tokenized": 2,
       "total": 2
     },
-    "Scene/show_text/message_info.gd": {
+    "Script/hittext/message_info.gd": {
       "data": 4,
       "layout": 1,
       "total": 5
@@ -525,31 +525,31 @@
       "category": "tokenized"
     },
     {
-      "file": "Scene/show_text/message_info.gd",
+      "file": "Script/hittext/message_info.gd",
       "line": 11,
       "kind": "color",
       "category": "data"
     },
     {
-      "file": "Scene/show_text/message_info.gd",
+      "file": "Script/hittext/message_info.gd",
       "line": 12,
       "kind": "color",
       "category": "data"
     },
     {
-      "file": "Scene/show_text/message_info.gd",
+      "file": "Script/hittext/message_info.gd",
       "line": 13,
       "kind": "constant",
       "category": "layout"
     },
     {
-      "file": "Scene/show_text/message_info.gd",
+      "file": "Script/hittext/message_info.gd",
       "line": 15,
       "kind": "font",
       "category": "data"
     },
     {
-      "file": "Scene/show_text/message_info.gd",
+      "file": "Script/hittext/message_info.gd",
       "line": 16,
       "kind": "font_size",
       "category": "data"

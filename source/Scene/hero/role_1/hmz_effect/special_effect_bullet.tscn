@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://Scene/hero/role_1/hmz_effect/special_effect_bullet.gd" id="1"]
+[ext_resource type="Script" path="res://Script/hero/special_effect_bullet.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1/hmz_old.png" id="2"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1/role1_hmz_2.png" id="3"]
 [ext_resource type="Texture2D" path="res://Art/hero_picture/role_1/hmz_z4/481.png" id="4"]

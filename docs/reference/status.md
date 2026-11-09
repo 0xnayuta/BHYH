@@ -220,6 +220,15 @@
 - 验证补充：`scene_probe_runner` 全量 PASS（348.46s）。
 - 边界：29-3 未启动；`Scene/` 剩余 9 个 `.gd`。
 
+### Phase 29-3 文本表现与角色特效脚本迁移（2026-11-09）
+
+- 9 个脚本迁移：`choose_scene` → `Script/runtime/`；`combo`、`combo_num`、`liji`、`message_info`、`message_show`、`moment_text`、`touch_text` → `Script/hittext/`；`special_effect_bullet` → `Script/hero/`。
+- `source/Scene/` 下 `.gd` 为 **0**；全部 56 个脚本已按目标路径落位。
+- 基线同步：`ui_dynamic_theme_baseline.json` 与 `theme_override_baseline.json` 的 `message_info` 路径。
+- 验证：`contract_gate` 全 PASS；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7；`health_check` 823 脚本 0/0/0；`level_1` 4 阶段 0/0/0。
+- 验证补充：`scene_probe_runner` 全量 PASS（346.34s）。
+- 边界：29-4 门禁未启用；`naming_audit.py` 尚未对 `Scene/**/*.gd` 报错。
+
 ## 3. 当前已知边界
 
 1. **平台**：Spine GDExtension 当前仅入库 Windows x86_64；21-2A 最低设备确认与 21-2B 平台测量仍暂缓。

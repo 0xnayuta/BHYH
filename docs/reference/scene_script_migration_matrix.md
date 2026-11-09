@@ -1,6 +1,6 @@
 # `Scene/` 脚本落位迁移清单（Phase 29-0）
 
-> **状态**：29-1、29-2A、29-2B、29-2C 已迁移；29-3 未开始（Phase 29-1 起逐批执行）。
+> **状态**：29-1、29-2A、29-2B、29-2C、29-3 已迁移；`source/Scene/` 下 `.gd` 为 0；29-4 门禁未启用。
 >
 > **规则**：`source/Scene/` 只承载 `.tscn`/`.tres`；全部 `.gd` 归 `source/Script/<domain>/`。决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
 >
@@ -40,6 +40,8 @@
 > **29-2B 已完成（19）**：11 个主菜单脚本 → `Script/main_menu/`；8 个公告/帮助/奖励/幻化脚本 → `Script/other_menu/`。`twenty_eight_constellations_button.gd` 的南北星宿颜色改用 `UiColorTokens.TEXT_CONSTELLATION_NORTH/SOUTH`（token 源新增两项并重新生成）；`Scene/` 剩余 19 个 `.gd`。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（347.42s）、`docs_audit` 940/0。29-2C（monster 10）与 29-3（9）未开始。
 >
 > **29-2C 已完成（10）**：10 个怪物、血条、受击、Buff 与光环脚本 → `Script/monster/`。`monster_head_info.gd` 的 4 处 StyleBox 颜色改用 `UiSurfaceTokens.OVERLAY_EARTH` 与新增 `MONSTER_SELECT_BG`/`MONSTER_SELECT_BORDER`/`MONSTER_INFO_BORDER`（token 源新增三项并重新生成）；`Scene/` 剩余 9 个 `.gd`。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（348.46s）、`docs_audit` 940/0。29-3 未开始。
+>
+> **29-3 已完成（9）**：`choose_scene.gd` → `Script/runtime/`；`combo`、`combo_num`、`liji`、`message_info`、`message_show`、`moment_text`、`touch_text` → `Script/hittext/`；`special_effect_bullet.gd` → `Script/hero/`。`source/Scene/` 下 `.gd` 为 **0**。验证：`contract_gate` 全 PASS、`check_all` 7/7、`health_check` 823 脚本 0/0/0、`level_1` 4 阶段 0/0/0、`scene_probe_runner` 全量 PASS（346.34s）、`docs_audit` 940/0。29-4 门禁未启用。
 
 ### 3.1 主菜单与设置（11）· 已完成
 
@@ -113,7 +115,7 @@
 |:---|:---|:---|
 | `Scene/other_scene/monster_attr_data.gd` | `Script/data/monster_attr_data.gd` | 无同名 `.tscn`；`monster_head_info.gd` 引用 |
 
-## 4. Phase 29-3：文本表现与角色特效（9）
+## 4. Phase 29-3：文本表现与角色特效（9）· 已完成
 
 | 源路径 | 目标路径 | 场景/引用 |
 |:---|:---|:---|

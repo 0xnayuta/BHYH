@@ -667,7 +667,7 @@
       "Script/skill/zhen_fa_tu_po.gd",
       "Script/skill/zhen_fa_ui.gd",
       "Script/skill/zhen_yan_cure_level.gd",
-      "Scene/show_text/message_info.gd",
+      "Script/hittext/message_info.gd",
       "Script/back_pack/dj_information.gd",
       "Script/back_pack/equipment_properies.gd",
       "Script/back_pack/wq.gd",
