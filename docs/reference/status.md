@@ -116,7 +116,7 @@
 - **38-2 验证**：`check_all --godot-bin` **9/9**、`health_check --no-cache` **816 脚本 0 Parse / 0 Error / 0 Warning**、`level_1` 四阶段 **0/0/0**、`level_1 --role 6/7/8` 四阶段 **0/0/0**、`level_elite` 通用冒烟 **PASS**（1 阶段，Boss 存活，0/0/0）；变更影响关卡回归 **129/129 PASS + 5 SKIP**（含 `level_elite` PASS，377.4s）；临时探针验证 SoulCardData 属性/星级倍率、EliteBossStats 分档、精英 Boss 掉落奖励、qly 特效生成与护盾吸收，以及 sfe 精英攻击载体生成（2 个存活实例）。
 - **项目设置边界**：7.4 `project.binary` 的主场景切换已按评审接入为 `startup_loading.tscn`；`AndroidIntegrity` 未注册为 Autoload，`load_scene` 既有内联首启 APK 签名校验保留；未复制 `project.binary`，未启用传感器；boot splash 保持与 `Art/set_menu/313.png` 像素一致的当前资源。
 - **下一步**：38-4 2P 与剩余脚本/场景；随后 38-5 L3 收口。PCK/release 与最低配置/其他平台验证继续暂缓。
-- **边界**：解包、密钥、参考树与台账只在仓库外；38-0~38-3 证据已通过；38-4/38-5 尚未执行；`scene_probe_runner`/全量回归以 38-5 结果为准。
+- **边界**：解包、密钥、参考树与台账只在仓库外；38-0~38-3 证据已通过；38-4/38-5 尚未执行；`scene_probe_runner`/`coop_probe_runner`/`archive_probe_runner` 与 PCK/release 以 38-5 结果为准。
 
 ### 性能对照基线（2026-11-09）
 
