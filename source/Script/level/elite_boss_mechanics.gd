@@ -168,7 +168,7 @@ func _emit(point: Vector2, visual: String, radius_: float, mult: float, directio
 	attack.card_id = id
 	attack.visual = visual
 	attack.radius = radius_
-	attack.direction_ = direction_
+	attack.move_direction = direction_
 	attack.is_hazard = hazard
 	attack.warning = 1.0 if direction_ == Vector2.ZERO else 0.65
 	attack.duration = 3.0 if hazard else 2.8 if direction_ != Vector2.ZERO else 0.35
