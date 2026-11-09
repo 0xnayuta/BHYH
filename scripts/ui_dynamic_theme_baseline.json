@@ -2,11 +2,11 @@
   "schema_id": "ui_dynamic_theme_baseline",
   "schema_version": 1,
   "totals": {
-    "data": 43,
-    "dynamic_style": 40,
-    "layout": 96,
-    "tokenized": 173,
-    "total": 352
+    "data": 49,
+    "dynamic_style": 42,
+    "layout": 112,
+    "tokenized": 183,
+    "total": 386
   },
   "files": {
     "Scene/auto_battle_config.gd": {
@@ -125,6 +125,10 @@
       "tokenized": 1,
       "total": 3
     },
+    "Script/main_menu/elite_challenge_page.gd": {
+      "layout": 2,
+      "total": 2
+    },
     "Script/main_menu/equipment_catalog_page.gd": {
       "data": 4,
       "dynamic_style": 4,
@@ -144,6 +148,26 @@
       "layout": 11,
       "tokenized": 6,
       "total": 36
+    },
+    "Script/main_menu/soul_card_loadout_page.gd": {
+      "data": 2,
+      "dynamic_style": 1,
+      "layout": 7,
+      "tokenized": 1,
+      "total": 11
+    },
+    "Script/main_menu/soul_card_page.gd": {
+      "data": 1,
+      "dynamic_style": 1,
+      "layout": 4,
+      "tokenized": 4,
+      "total": 10
+    },
+    "Script/main_menu/soul_card_panel_base.gd": {
+      "data": 3,
+      "layout": 3,
+      "tokenized": 5,
+      "total": 11
     },
     "Script/main_menu/wan_ling_catalog_page.gd": {
       "dynamic_style": 9,
@@ -214,97 +238,97 @@
   "calls": [
     {
       "file": "Scene/auto_battle_config.gd",
-      "line": 248,
+      "line": 269,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/auto_battle_config.gd",
-      "line": 253,
+      "line": 274,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/auto_battle_config.gd",
-      "line": 260,
+      "line": 281,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/auto_battle_config.gd",
-      "line": 265,
+      "line": 286,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/auto_battle_config.gd",
-      "line": 276,
+      "line": 297,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2309,
+      "line": 2333,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2352,
+      "line": 2377,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2353,
+      "line": 2378,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2354,
+      "line": 2379,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2355,
+      "line": 2380,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2356,
+      "line": 2381,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2586,
+      "line": 2653,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2587,
+      "line": 2654,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2588,
+      "line": 2655,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2589,
+      "line": 2656,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Scene/other_scene/level_info.gd",
-      "line": 2590,
+      "line": 2657,
       "kind": "font_size",
       "category": "tokenized"
     },
@@ -352,25 +376,25 @@
     },
     {
       "file": "Scene/other_scene/monster_head_info.gd",
-      "line": 1295,
+      "line": 1323,
       "kind": "font_size",
       "category": "data"
     },
     {
       "file": "Scene/other_scene/monster_head_info.gd",
-      "line": 1296,
+      "line": 1324,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Scene/other_scene/monster_head_info.gd",
-      "line": 1297,
+      "line": 1325,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/monster_head_info.gd",
-      "line": 1298,
+      "line": 1326,
       "kind": "constant",
       "category": "layout"
     },
@@ -388,25 +412,25 @@
     },
     {
       "file": "Scene/other_scene/skill_icon.gd",
-      "line": 168,
+      "line": 179,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/skill_icon.gd",
-      "line": 169,
+      "line": 180,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/skill_icon.gd",
-      "line": 170,
+      "line": 181,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Scene/other_scene/skill_icon.gd",
-      "line": 171,
+      "line": 182,
       "kind": "constant",
       "category": "layout"
     },
@@ -550,109 +574,109 @@
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 215,
+      "line": 178,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 216,
+      "line": 179,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 308,
+      "line": 271,
       "kind": "font_size",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 309,
+      "line": 272,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 310,
+      "line": 273,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 311,
+      "line": 274,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 412,
+      "line": 347,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 413,
+      "line": 348,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 414,
+      "line": 349,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 415,
+      "line": 350,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 419,
+      "line": 354,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 743,
+      "line": 678,
       "kind": "font",
       "category": "data"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 744,
+      "line": 679,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/back_pack/equipment_properies.gd",
-      "line": 745,
+      "line": 680,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/back_pack/wq.gd",
-      "line": 51,
+      "line": 53,
       "kind": "stylebox",
       "category": "data"
     },
     {
       "file": "Script/base/base_role.gd",
-      "line": 708,
+      "line": 736,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/base/base_role.gd",
-      "line": 709,
+      "line": 737,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/base/base_role.gd",
-      "line": 710,
+      "line": 738,
       "kind": "constant",
       "category": "layout"
     },
@@ -688,13 +712,13 @@
     },
     {
       "file": "Script/hero/yutu_hero.gd",
-      "line": 110,
+      "line": 149,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/hero/yutu_hero.gd",
-      "line": 111,
+      "line": 150,
       "kind": "font_size",
       "category": "tokenized"
     },
@@ -730,43 +754,43 @@
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 176,
+      "line": 177,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 178,
+      "line": 179,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 180,
+      "line": 181,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 218,
+      "line": 219,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 386,
+      "line": 387,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 388,
+      "line": 389,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/ldl/forge.gd",
-      "line": 390,
+      "line": 391,
       "kind": "constant",
       "category": "layout"
     },
@@ -808,33 +832,45 @@
     },
     {
       "file": "Script/level/role_information.gd",
-      "line": 173,
+      "line": 172,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/level/role_information.gd",
-      "line": 174,
+      "line": 173,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/choose_player.gd",
-      "line": 102,
+      "line": 126,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/choose_player.gd",
-      "line": 167,
+      "line": 191,
       "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/main_menu/choose_player.gd",
-      "line": 199,
+      "line": 223,
       "kind": "color",
       "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/elite_challenge_page.gd",
+      "line": 21,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/elite_challenge_page.gd",
+      "line": 27,
+      "kind": "constant",
+      "category": "layout"
     },
     {
       "file": "Script/main_menu/equipment_catalog_page.gd",
@@ -1072,73 +1108,79 @@
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 66,
+      "line": 65,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 74,
+      "line": 73,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 77,
+      "line": 76,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 80,
+      "line": 79,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 109,
+      "line": 108,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 162,
+      "line": 161,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 184,
+      "line": 183,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 187,
+      "line": 186,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 200,
+      "line": 199,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 221,
+      "line": 220,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 231,
+      "line": 230,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 268,
+      "line": 267,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 285,
       "kind": "constant",
       "category": "layout"
     },
@@ -1150,111 +1192,111 @@
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 287,
+      "line": 314,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 315,
+      "line": 346,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 347,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/main_menu/mount_panel.gd",
-      "line": 359,
+      "line": 358,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 362,
+      "line": 361,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 380,
+      "line": 379,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 387,
+      "line": 386,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 393,
+      "line": 392,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 410,
+      "line": 409,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 466,
+      "line": 465,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 480,
+      "line": 479,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 527,
+      "line": 526,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 703,
+      "line": 702,
       "kind": "stylebox",
       "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 906,
+      "kind": "font_size",
+      "category": "data"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
       "line": 907,
-      "kind": "font_size",
+      "kind": "color",
       "category": "data"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
       "line": 908,
       "kind": "color",
-      "category": "data"
-    },
-    {
-      "file": "Script/main_menu/mount_panel.gd",
-      "line": 909,
-      "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 910,
+      "line": 909,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
-      "line": 922,
+      "line": 921,
       "kind": "font_size",
       "category": "data"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 922,
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/mount_panel.gd",
@@ -1265,104 +1307,266 @@
     {
       "file": "Script/main_menu/mount_panel.gd",
       "line": 924,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 927,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/mount_panel.gd",
+      "line": 930,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 30,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 33,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 56,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 65,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 69,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 70,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 76,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 84,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 159,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 160,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_loadout_page.gd",
+      "line": 198,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 79,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 102,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 105,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 110,
       "kind": "color",
       "category": "tokenized"
     },
     {
-      "file": "Script/main_menu/mount_panel.gd",
-      "line": 925,
-      "kind": "stylebox",
-      "category": "dynamic_style"
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 117,
+      "kind": "constant",
+      "category": "layout"
     },
     {
-      "file": "Script/main_menu/mount_panel.gd",
-      "line": 928,
-      "kind": "stylebox",
-      "category": "dynamic_style"
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 121,
+      "kind": "constant",
+      "category": "layout"
     },
     {
-      "file": "Script/main_menu/mount_panel.gd",
-      "line": 931,
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 130,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 170,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 185,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_page.gd",
+      "line": 189,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 33,
       "kind": "stylebox",
-      "category": "dynamic_style"
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 36,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 54,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 55,
+      "kind": "font_size",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 73,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 122,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 125,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 144,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 145,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 146,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/soul_card_panel_base.gd",
+      "line": 147,
+      "kind": "constant",
+      "category": "layout"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 318,
+      "line": 323,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 319,
+      "line": 324,
       "kind": "color",
       "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 320,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 321,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 322,
-      "kind": "stylebox",
-      "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
       "line": 325,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 326,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 327,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 328,
+      "line": 330,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 331,
+      "line": 333,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 376,
+      "line": 336,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 379,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 380,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 381,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 382,
-      "kind": "constant",
-      "category": "layout"
+      "line": 383,
+      "kind": "stylebox",
+      "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
@@ -1372,111 +1576,141 @@
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 394,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 395,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 413,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 414,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 421,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 422,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 427,
+      "line": 387,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 440,
+      "line": 388,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 389,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 393,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 401,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 441,
+      "line": 402,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 450,
+      "line": 420,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 451,
+      "line": 421,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 452,
+      "line": 428,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 429,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 453,
-      "kind": "stylebox",
-      "category": "dynamic_style"
+      "line": 434,
+      "kind": "constant",
+      "category": "layout"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 456,
-      "kind": "stylebox",
-      "category": "dynamic_style"
+      "line": 447,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 448,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 457,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 458,
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
       "line": 459,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 460,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 462,
+      "line": 463,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/wan_ling_catalog_page.gd",
-      "line": 489,
+      "line": 466,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 469,
+      "kind": "stylebox",
+      "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/wan_ling_catalog_page.gd",
+      "line": 496,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 273,
+      "line": 272,
       "kind": "font_size",
       "category": "data"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 273,
+      "kind": "color",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
@@ -1487,19 +1721,19 @@
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
       "line": 275,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 276,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 282,
+      "line": 281,
       "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 282,
+      "kind": "color",
       "category": "tokenized"
     },
     {
@@ -1523,38 +1757,38 @@
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
       "line": 286,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 287,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 288,
+      "line": 287,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 291,
+      "line": 290,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 294,
+      "line": 293,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 323,
+      "line": 322,
       "kind": "stylebox",
       "category": "dynamic_style"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 329,
+      "kind": "constant",
+      "category": "layout"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
@@ -1576,13 +1810,13 @@
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 333,
+      "line": 336,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 337,
+      "line": 382,
       "kind": "constant",
       "category": "layout"
     },
@@ -1594,32 +1828,32 @@
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 384,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 427,
+      "line": 426,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 431,
+      "line": 430,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 471,
+      "line": 470,
       "kind": "constant",
       "category": "layout"
+    },
+    {
+      "file": "Script/main_menu/zhen_yao_tower.gd",
+      "line": 487,
+      "kind": "font_size",
+      "category": "tokenized"
     },
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
       "line": 488,
-      "kind": "font_size",
+      "kind": "color",
       "category": "tokenized"
     },
     {
@@ -1637,12 +1871,6 @@
     {
       "file": "Script/main_menu/zhen_yao_tower.gd",
       "line": 491,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/main_menu/zhen_yao_tower.gd",
-      "line": 492,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
@@ -1672,241 +1900,235 @@
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2099,
+      "line": 2094,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2100,
+      "line": 2095,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2101,
+      "line": 2096,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2102,
+      "line": 2097,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2113,
+      "line": 2108,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2114,
+      "line": 2109,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2115,
+      "line": 2110,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2116,
+      "line": 2111,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2371,
+      "line": 2380,
       "kind": "stylebox",
       "category": "data"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2377,
+      "line": 2386,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2384,
+      "line": 2393,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2385,
+      "line": 2394,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2389,
+      "line": 2398,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2397,
+      "line": 2406,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2404,
+      "line": 2413,
       "kind": "constant",
       "category": "layout"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 2409,
-      "kind": "color",
-      "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
       "line": 2418,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 2424,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 2813,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2814,
+      "line": 2427,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2433,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2822,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2815,
+      "line": 2823,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 2824,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2816,
+      "line": 2825,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 2833,
+      "line": 2842,
       "kind": "stylebox",
       "category": "data"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3072,
+      "line": 3081,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3080,
+      "line": 3089,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3081,
+      "line": 3090,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3082,
+      "line": 3091,
       "kind": "color",
       "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3083,
-      "kind": "constant",
-      "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
       "line": 3092,
-      "kind": "font_size",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3093,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3094,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3095,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3105,
+      "line": 3101,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3106,
+      "line": 3102,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3107,
+      "line": 3103,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3108,
+      "line": 3104,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3119,
+      "line": 3114,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3131,
+      "line": 3115,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3116,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3117,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3128,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3141,
+      "line": 3140,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3151,
+      "line": 3150,
       "kind": "font_size",
       "category": "tokenized"
     },
@@ -1918,170 +2140,182 @@
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3161,
-      "kind": "color",
+      "line": 3169,
+      "kind": "font_size",
       "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3162,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3163,
-      "kind": "constant",
-      "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
       "line": 3170,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3171,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3172,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3200,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3201,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3202,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3203,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3204,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3217,
-      "kind": "stylebox",
-      "category": "dynamic_style"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3232,
+      "line": 3179,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3249,
-      "kind": "font_size",
+      "line": 3209,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3210,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3211,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3212,
+      "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3353,
+      "line": 3213,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3226,
       "kind": "stylebox",
       "category": "dynamic_style"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3362,
+      "line": 3241,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3258,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 3363,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3364,
-      "kind": "color",
-      "category": "tokenized"
+      "line": 3356,
+      "kind": "stylebox",
+      "category": "dynamic_style"
     },
     {
       "file": "Script/pet/pet_interface.gd",
       "line": 3365,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3373,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3424,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3425,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3426,
-      "kind": "stylebox",
-      "category": "data"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3427,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/pet/pet_interface.gd",
-      "line": 3428,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 4813,
+      "line": 3366,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 4814,
+      "line": 3367,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 4815,
+      "line": 3368,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/pet/pet_interface.gd",
-      "line": 4816,
+      "line": 3376,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3427,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3428,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3429,
+      "kind": "stylebox",
+      "category": "data"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3430,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 3431,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4841,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4842,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4843,
+      "kind": "constant",
+      "category": "layout"
+    },
+    {
+      "file": "Script/pet/pet_interface.gd",
+      "line": 4844,
+      "kind": "font_size",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/runtime/runtime_diagnostics.gd",
+      "line": 160,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/runtime/runtime_diagnostics.gd",
       "line": 161,
-      "kind": "font_size",
+      "kind": "color",
       "category": "tokenized"
     },
     {
@@ -2093,30 +2327,24 @@
     {
       "file": "Script/runtime/runtime_diagnostics.gd",
       "line": 163,
-      "kind": "color",
-      "category": "tokenized"
+      "kind": "constant",
+      "category": "layout"
     },
     {
       "file": "Script/runtime/runtime_diagnostics.gd",
       "line": 164,
-      "kind": "constant",
-      "category": "layout"
-    },
-    {
-      "file": "Script/runtime/runtime_diagnostics.gd",
-      "line": 165,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/runtime/runtime_diagnostics.gd",
-      "line": 166,
+      "line": 165,
       "kind": "constant",
       "category": "layout"
     },
     {
       "file": "Script/runtime/runtime_diagnostics.gd",
-      "line": 167,
+      "line": 166,
       "kind": "constant",
       "category": "layout"
     },
@@ -2224,31 +2452,31 @@
     },
     {
       "file": "Script/skill/skill_key_set.gd",
-      "line": 28,
+      "line": 30,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/skill/zd_skill.gd",
-      "line": 1295,
+      "line": 1323,
       "kind": "font_size",
       "category": "tokenized"
     },
     {
       "file": "Script/skill/zd_skill.gd",
-      "line": 1296,
+      "line": 1324,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/skill/zd_skill.gd",
-      "line": 1297,
+      "line": 1325,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/skill/zd_skill.gd",
-      "line": 1298,
+      "line": 1326,
       "kind": "constant",
       "category": "layout"
     },
@@ -2290,13 +2518,19 @@
     },
     {
       "file": "Script/task/task_title.gd",
+      "line": 19,
+      "kind": "color",
+      "category": "tokenized"
+    },
+    {
+      "file": "Script/task/task_title.gd",
       "line": 20,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/task/task_title.gd",
-      "line": 21,
+      "line": 28,
       "kind": "color",
       "category": "tokenized"
     },
@@ -2308,19 +2542,13 @@
     },
     {
       "file": "Script/task/task_title.gd",
-      "line": 30,
+      "line": 33,
       "kind": "color",
       "category": "tokenized"
     },
     {
       "file": "Script/task/task_title.gd",
       "line": 34,
-      "kind": "color",
-      "category": "tokenized"
-    },
-    {
-      "file": "Script/task/task_title.gd",
-      "line": 35,
       "kind": "color",
       "category": "tokenized"
     }

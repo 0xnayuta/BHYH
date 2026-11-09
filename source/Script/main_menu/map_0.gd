@@ -10,6 +10,8 @@ const PET_SCENE_PATH := "res://Scene/pet/pet_interface.tscn"
 const MOUNT_SCENE_PATH := "res://Scene/main_menu/mount_panel.tscn"
 const ZHUXIAN_SWORD_PAGE_PATH := "res://Scene/main_menu/zhu_xian_sword_page.tscn"
 const WANLING_CATALOG_PAGE_PATH := "res://Scene/main_menu/wan_ling_catalog_page.tscn"
+const SOUL_CARD_PAGE_PATH := "res://Scene/main_menu/soul_card_loadout_page.tscn"
+const ELITE_CHALLENGE_PAGE_PATH := "res://Scene/main_menu/elite_challenge_page.tscn"
 const EQUIPMENT_CATALOG_PAGE_PATH := "res://Scene/main_menu/equipment_catalog_page.tscn"
 const BODY_TRAINING_SCENE_PATH := "res://Scene/main_menu/body_training.tscn"
 const ZHENYAO_TOWER_SCENE_PATH := "res://Scene/main_menu/zhen_yao_tower.tscn"
@@ -40,6 +42,8 @@ var mount_page: Node = null
 var skill_page: Node = null
 var zhuxian_sword_page: Node = null
 var wanling_catalog_page: Node = null
+var soul_card_page: Node = null
+var elite_challenge_page: Node = null
 var equipment_catalog_page: Node = null
 var body_training_page: Node = null
 var zhenyao_tower_page: Node = null
@@ -271,6 +275,14 @@ func _on_zhuxian_pressed() -> void:
 
 func _on_wanling_catalog_pressed() -> void:
 	wanling_catalog_page = _toggle_scene(wanling_catalog_page, WANLING_CATALOG_PAGE_PATH)
+
+
+func _on_soul_card_pressed() -> void:
+	soul_card_page = _toggle_scene(soul_card_page, SOUL_CARD_PAGE_PATH)
+
+
+func _on_elite_challenge_pressed() -> void:
+	elite_challenge_page = _toggle_scene(elite_challenge_page, ELITE_CHALLENGE_PAGE_PATH)
 
 
 func _on_equipment_catalog_pressed() -> void:

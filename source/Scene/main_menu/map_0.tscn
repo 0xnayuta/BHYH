@@ -62,7 +62,59 @@
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_normal.png" id="61"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_pressed.png" id="62"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_hover.png" id="63"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/wanling_catalog.png" id="64"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/soul_card.png" id="65"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/elite_entry.png" id="66"]
+[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/equipment_catalog.png" id="67"]
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_wanling_normal"]
+content_margin_top = 39.0
+texture = ExtResource("64")
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_wanling_pressed"]
+content_margin_top = 39.0
+texture = ExtResource("64")
+modulate_color = Color(0.78, 0.74, 0.64, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_wanling_hover"]
+content_margin_top = 39.0
+texture = ExtResource("64")
+modulate_color = Color(1.2, 1.15, 1.05, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_soul_card_normal"]
+content_margin_top = 39.0
+texture = ExtResource("65")
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_soul_card_pressed"]
+content_margin_top = 39.0
+texture = ExtResource("65")
+modulate_color = Color(0.78, 0.74, 0.64, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_soul_card_hover"]
+content_margin_top = 39.0
+texture = ExtResource("65")
+modulate_color = Color(1.2, 1.15, 1.05, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_elite_entry"]
+content_margin_top = 39.0
+texture = ExtResource("66")
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_equipment_catalog_normal"]
+content_margin_top = 39.0
+texture = ExtResource("67")
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_equipment_catalog_pressed"]
+content_margin_top = 39.0
+texture = ExtResource("67")
+modulate_color = Color(0.78, 0.74, 0.64, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBox_equipment_catalog_hover"]
+content_margin_top = 39.0
+texture = ExtResource("67")
+modulate_color = Color(1.2, 1.15, 1.05, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_entry_focus"]
 
 [node name="Map_0" type="Node2D" unique_id=306605179]
 script = ExtResource("1")
@@ -298,23 +350,61 @@ texture_hover = ExtResource("41")
 [node name="WanLingCatalog" type="Button" parent="TopButtons" unique_id=1050870640]
 theme_type_variation = "Map0CatalogButton"
 theme = ExtResource("theme")
-offset_left = 498.0
-offset_top = 27.0
-offset_right = 582.0
-offset_bottom = 71.0
+offset_left = 490.0
+offset_top = 16.0
+offset_right = 562.0
+offset_bottom = 76.0
 tooltip_text = "万灵图录"
 focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBox_wanling_normal")
+theme_override_styles/pressed = SubResource("StyleBox_wanling_pressed")
+theme_override_styles/hover = SubResource("StyleBox_wanling_hover")
+theme_override_styles/focus = SubResource("StyleBox_entry_focus")
 text = "万灵图录"
+
+[node name="SoulCard" type="Button" parent="TopButtons"]
+theme_type_variation = "Map0CatalogButton"
+theme = ExtResource("theme")
+offset_left = 564.0
+offset_top = 16.0
+offset_right = 636.0
+offset_bottom = 76.0
+tooltip_text = "魂卡"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBox_soul_card_normal")
+theme_override_styles/pressed = SubResource("StyleBox_soul_card_pressed")
+theme_override_styles/hover = SubResource("StyleBox_soul_card_hover")
+theme_override_styles/focus = SubResource("StyleBox_entry_focus")
+text = "魂卡"
+
+[node name="EliteChallenge" type="Button" parent="TopButtons"]
+theme_type_variation = "Map0CatalogButton"
+theme = ExtResource("theme")
+offset_left = 638.0
+offset_top = 16.0
+offset_right = 714.0
+offset_bottom = 76.0
+tooltip_text = "精英副本：挑战强化Boss，收集魂卡"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBox_elite_entry")
+theme_override_styles/pressed = SubResource("StyleBox_elite_entry")
+theme_override_styles/hover = SubResource("StyleBox_elite_entry")
+theme_override_styles/focus = SubResource("StyleBox_entry_focus")
+text = "精英副本"
 
 [node name="EquipmentCatalog" type="Button" parent="." unique_id=440307013]
 theme_type_variation = "Map0CatalogButton"
 theme = ExtResource("theme")
 offset_left = 834.0
-offset_top = 27.0
-offset_right = 918.0
-offset_bottom = 71.0
+offset_top = 16.0
+offset_right = 906.0
+offset_bottom = 76.0
 tooltip_text = "装备图鉴"
 focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBox_equipment_catalog_normal")
+theme_override_styles/pressed = SubResource("StyleBox_equipment_catalog_pressed")
+theme_override_styles/hover = SubResource("StyleBox_equipment_catalog_hover")
+theme_override_styles/focus = SubResource("StyleBox_entry_focus")
 text = "装备图鉴"
 
 [node name="BottomButtons" type="Node2D" parent="." unique_id=1759593118]
@@ -405,6 +495,8 @@ texture_hover = ExtResource("63")
 [connection signal="pressed" from="TopButtons/BodyTraining" to="." method="_on_body_training_pressed"]
 [connection signal="pressed" from="TopButtons/ZhuXian" to="." method="_on_zhuxian_pressed"]
 [connection signal="pressed" from="TopButtons/WanLingCatalog" to="." method="_on_wanling_catalog_pressed"]
+[connection signal="pressed" from="TopButtons/SoulCard" to="." method="_on_soul_card_pressed"]
+[connection signal="pressed" from="TopButtons/EliteChallenge" to="." method="_on_elite_challenge_pressed"]
 [connection signal="pressed" from="EquipmentCatalog" to="." method="_on_equipment_catalog_pressed"]
 [connection signal="pressed" from="BottomButtons/Shop" to="." method="_on_shop_pressed"]
 [connection signal="pressed" from="BottomButtons/Alchemy" to="." method="_on_alchemy_pressed"]

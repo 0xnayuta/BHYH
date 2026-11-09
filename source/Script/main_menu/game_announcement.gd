@@ -120,6 +120,17 @@ var _last_secret_pointer_msec := -1
 var verisions_name: String = "V6_0"
 var verisions: String = "V6.0"
 var text_data = {
+	"V7_4":
+	[
+		"",
+		"一、版本新增内容：==============================",
+		"1.修复部分魂晶显示异常",
+		"2.移除九重天副本禁止释放技能",
+		"3.优化部分按钮UI",
+		"4.优化游戏加载速度",
+		"5.新增精英副本",
+		"6.新增魂卡系统",
+	],
 	"V7_3":
 	[
 		"",
@@ -1618,4 +1629,10 @@ func _on_v_0_53_pressed() -> void:
 func _on_v_0_54_pressed() -> void:
 	verisions_name = "V7_3"
 	verisions = "V7.3"
+	add_text_info()
+
+
+func _on_v_0_55_pressed() -> void:
+	verisions_name = "V7_4"
+	verisions = "V7.4"
 	add_text_info()

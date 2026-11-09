@@ -2,25 +2,29 @@
   "schema_id": "theme_override_baseline",
   "schema_version": 1,
   "totals": {
-    "direct_properties": 0,
+    "direct_properties": 16,
     "animation_track_refs": 26,
-    "textual_references": 26,
-    "scenes": 1
+    "textual_references": 42,
+    "scenes": 2
   },
-  "property_categories": {},
+  "property_categories": {
+    "styles": 16
+  },
   "animation_categories": {
     "colors": 15,
     "constants": 5,
     "font_sizes": 5,
     "fonts": 1
   },
-  "node_types": {},
+  "node_types": {
+    "Button": 16
+  },
   "unassigned_direct": 0,
   "themes": {
     "resources": [
       "Scene/theme/bhyh_theme.tres"
     ],
-    "scene_refs": 1117,
+    "scene_refs": 1124,
     "type_variations": [
       "AnnouncementActionRow",
       "AnnouncementAlert",
@@ -157,6 +161,7 @@
       "ChooseItemList",
       "ChooseItemTitle",
       "ChooseItemVSeparator",
+      "ChooseMusicButton",
       "ChooseMusicList",
       "ChoosePlayerCardRow",
       "ChoosePlayerInfo",
@@ -362,7 +367,6 @@
       "MapLocationText",
       "MapReturnText",
       "MenuActionButton",
-      "MenuActionButtonGroup",
       "MenuActionButtonOutline",
       "MenuHintLabel",
       "MessageShowText",
@@ -472,6 +476,7 @@
       "SellPageInput",
       "SellTitle",
       "SellWarning",
+      "SetMenuActionButtonGroup",
       "SetMenuHintLabel",
       "SettingsButton",
       "SettingsButtonBright",
@@ -516,6 +521,7 @@
       "SkillAwakenStatus",
       "SkillCooldownLabel",
       "SkillGridRow",
+      "SkillHeaderLabel",
       "SkillIconButton",
       "SkillIconButtonTexture",
       "SkillIconTime",
@@ -640,7 +646,7 @@
       "ZhenYanSlotButton",
       "ZhenYanSlotLabel"
     ],
-    "variation_refs": 1420
+    "variation_refs": 1435
   },
   "fonts": {
     "scene_refs": 0,
@@ -648,8 +654,8 @@
     "paths": []
   },
   "dynamic_add_theme": {
-    "calls": 352,
-    "files": 41,
+    "calls": 386,
+    "files": 45,
     "paths": [
       "Scene/auto_battle_config.gd",
       "Scene/other_scene/level_info.gd",
@@ -676,9 +682,13 @@
       "Script/ldl/strength.gd",
       "Script/level/role_information.gd",
       "Script/main_menu/choose_player.gd",
+      "Script/main_menu/elite_challenge_page.gd",
       "Script/main_menu/equipment_catalog_page.gd",
       "Script/main_menu/game_mode_select.gd",
       "Script/main_menu/mount_panel.gd",
+      "Script/main_menu/soul_card_loadout_page.gd",
+      "Script/main_menu/soul_card_page.gd",
+      "Script/main_menu/soul_card_panel_base.gd",
       "Script/main_menu/wan_ling_catalog_page.gd",
       "Script/main_menu/zhen_yao_tower.gd",
       "Script/main_menu/zhu_xian_sword_page.gd",
@@ -698,7 +708,11 @@
     "Scene/hittext/hit_text.tscn": {
       "direct": 0,
       "animation": 26
+    },
+    "Scene/main_menu/map_0.tscn": {
+      "direct": 16,
+      "animation": 0
     }
   },
-  "generated_at": "2026-11-05"
+  "generated_at": "2026-11-09"
 }

@@ -12,18 +12,18 @@ var textlist = [
 var textlist2 = [
 	"没关系的，你迟早会需要我，哈哈哈哈！",
 	"哦？你可不要后悔哦！",
-	"好吧好吧，我会等着你的～",
+	"好吧好吧，我会等着你的~",
 	"没有人可以拒绝我的力量，你也不可能！！马上，你就会选择我，哈哈哈哈！！！",
 	"不不不，你需要的，也许下一次，你就会接受我。",
 	"嗯？坚守正义吗？哈哈哈哈！！！正义给你带来了什么呢？不要搞笑了，好吗？",
 	"假惺惺的，你真的是正义吗？",
-	"没有我，你不可能通关的，好好想想哦！～",
-	"哦吼？呵呵！～",
+	"没有我，你不可能通关的，好好想想哦！~",
+	"哦吼？呵呵！~",
 	"装模做样，不敢永远拒绝吗？那还装什么呢？接受我吧！",
 ]
 var textlist3 = [
-	"好吧，好吧，看来你还是有点骨气的，祝你好运喽～",
-	"？你真的敢！？下个存档再见喽！～",
+	"好吧，好吧，看来你还是有点骨气的，祝你好运喽~",
+	"？你真的敢！？下个存档再见喽！~",
 	"躲得了一时，躲不了一世，你迟早会接受我，无论什么原因！",
 ]
 const DEFEAT_DESIGN_SIZE := Vector2(940.0, 590.0)
@@ -77,7 +77,8 @@ func _auto_rechallenge() -> void:
 
 
 func _return_map_path() -> String:
-	if Global.get_current_level_name() == "镇妖塔":
+	var current_level := Global.get_current_level_name()
+	if current_level == "镇妖塔" or current_level.begins_with("精英副本 · "):
 		return "res://Scene/main_menu/map_0.tscn"
 	match int(PlayerData.player_data["Map_num"]):
 		1:

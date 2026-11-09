@@ -329,6 +329,10 @@ static func portrait_path(id: String) -> String:
 	return "res://Art/monster/creature_codex/%d.png" % int(CARDS[id].monster)
 
 
+static func portrait_art_path(id: String) -> String:
+	return "res://Art/soul_card/elite/%s_portrait.tres" % id
+
+
 static func claim(profile: Dictionary, id: String, tier: int, roll: float = -1.0) -> Dictionary:
 	if not CARDS.has(id) or tier < 0 or tier > 2:
 		return {}

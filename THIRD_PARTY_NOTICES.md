@@ -38,6 +38,14 @@ root MIT license.
   subject to Microsoft's own license; it is not redistributed by this
   repository.
 
+## RuiC Card Skill
+
+- Source: https://github.com/HRuiCcc/RuiC-card-skill
+- Copyright (c) 2026 HRuiCcc
+- License: MIT
+- Used by: `source/Shader/soul_card.gdshader` (holographic foil shader adaptation)
+- Full license text: https://github.com/HRuiCcc/RuiC-card-skill/blob/main/LICENSE
+
 ## Excluded game assets
 
 `source/Art/`, `source/Music/`, `source/Font/`, and `source/Spritesheet/` are
