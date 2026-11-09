@@ -9,7 +9,7 @@ const BAG_KEYS := ["装备列表", "道具列表", "消耗品列表", "宠物背
 const PLAYER_DATA_SCRIPT := preload("res://Script/memory_class/player_data.gd")
 const PROPS_SCRIPT := preload("res://Script/base/base_role_properies.gd")
 const BODY_TRAINING_DATA := preload("res://Script/data/body_training_data.gd")
-const PASSIVE_SCRIPT := preload("res://passive_skills.gd")
+const PASSIVE_SCRIPT := preload("res://Script/skill/passive_skills.gd")
 const INPUT_VIEW := preload("res://Script/coop/coop_input.gd")
 const P2_KEYS := {
 	"move_left": KEY_LEFT,

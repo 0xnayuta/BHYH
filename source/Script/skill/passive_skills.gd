@@ -1,13 +1,17 @@
 extends Node
 
-var PlayerData: Node:
+var PlayerData: PlayerDataStore:
 	get:
 		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.data_for(self) if coop != null else get_tree().root.get_node_or_null("PlayerData")
-var RoleProp: Node:
+		if coop != null:
+			return coop.data_for(self) as PlayerDataStore
+		return get_tree().root.get_node_or_null("PlayerData") as PlayerDataStore
+var RoleProp: BaseRoleProperties:
 	get:
 		var coop := get_node_or_null("/root/LocalCoop")
-		return coop.props_for(self) if coop != null else get_tree().root.get_node_or_null("RoleProp")
+		if coop != null:
+			return coop.props_for(self) as BaseRoleProperties
+		return get_tree().root.get_node_or_null("RoleProp") as BaseRoleProperties
 
 var need_lh_list = [
 	5000,
