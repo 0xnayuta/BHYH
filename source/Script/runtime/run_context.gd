@@ -24,6 +24,7 @@ var constellation_endless: bool = false
 var selected_eight_immortal_id: int = 0
 var selected_three_prince_id: int = 0
 var selected_constellation_level: int = 1
+var elite_challenge_selection: Dictionary = {}
 var player_direction: bool = false
 
 # 玲珑宝塔挑战模式：入口按模式整体赋值；普通菜单清空全部模式。
@@ -152,6 +153,14 @@ func get_selected_constellation_level() -> int:
 
 func set_selected_constellation_level(value: int) -> void:
 	selected_constellation_level = value
+
+
+func get_elite_challenge_selection() -> Dictionary:
+	return elite_challenge_selection.duplicate(true)
+
+
+func set_elite_challenge_selection(value: Dictionary) -> void:
+	elite_challenge_selection = value.duplicate(true)
 
 
 func get_player_direction() -> bool:

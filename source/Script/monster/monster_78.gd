@@ -71,7 +71,9 @@ func _ready() -> void:
 
 func ai_think():
 	get_monster_76()
-	if my_brother != null:
+	if has_meta("elite_card"):
+		pass
+	elif my_brother != null:
 		self.def = 600
 		self.mdef = 600
 	else:

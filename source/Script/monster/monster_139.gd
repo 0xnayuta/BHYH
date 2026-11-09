@@ -217,6 +217,12 @@ func hurt_reduce_hp(value, target):
 	else:
 		if is_miss:
 			add_hurt_text(last_value, target)
+	if last_value > 0 and target is Node and not target.get_meta("soul_card_damage", false):
+		var soul_player: BaseHero = _get_damage_source_player(target)
+		if is_instance_valid(soul_player):
+			var soul_runtime: Node = soul_player.get_node_or_null("SoulCardRuntime")
+			if soul_runtime != null:
+				soul_runtime.on_damage_dealt(self, target, is_crit)
 	is_crit = false
 	is_miss = false
 	_notify_yutu_damage_dealt(int(last_value), target)

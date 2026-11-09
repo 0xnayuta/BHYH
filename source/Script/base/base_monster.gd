@@ -602,7 +602,7 @@ func _physics_process(delta: float) -> void:
 	count += 1
 	if death():
 		state = State.DEATH
-		if has_meta("tower_floor") and not get_meta("death_drops_settled", false):
+		if (has_meta("tower_floor") or has_meta("elite_card")) and not get_meta("death_drops_settled", false):
 			settle_death_drops()
 	else:
 		state = State.OTHER
@@ -817,7 +817,7 @@ func is_spawn_damage_protected() -> bool:
 
 
 func is_control_immune() -> bool:
-	return super_armor_active or is_boss_protecting() or is_white_bar_control_immune()
+	return has_meta("elite_card") or super_armor_active or is_boss_protecting() or is_white_bar_control_immune()
 
 
 func _reset_white_bar_skill_cooldowns() -> void:
@@ -1454,6 +1454,11 @@ func settle_death_drops() -> void:
 	if get_meta("death_drops_settled", false):
 		return
 	set_meta("death_drops_settled", true)
+	if has_meta("elite_card"):
+		var elite_level: Node = get_level_node()
+		if elite_level != null and elite_level.has_method("on_elite_monster_defeated"):
+			elite_level.call("on_elite_monster_defeated", self)
+		return
 	if _settle_nightmare_soul_drop():
 		return
 
@@ -2362,6 +2367,12 @@ func hurt_reduce_hp(value, target):
 	else:
 		if is_miss:
 			add_hurt_text(last_value, target)
+	if last_value > 0 and target is Node and not target.get_meta("soul_card_damage", false):
+		var soul_player: BaseHero = _get_damage_source_player(target)
+		if is_instance_valid(soul_player):
+			var soul_runtime: Node = soul_player.get_node_or_null("SoulCardRuntime")
+			if soul_runtime != null:
+				soul_runtime.on_damage_dealt(self, target, is_crit)
 	is_crit = false
 	is_miss = false
 	_notify_yutu_damage_dealt(int(last_value), target)
@@ -2869,6 +2880,8 @@ func change_hd_cure_hp(zhl):
 
 
 func difficult():
+	if has_meta("elite_card"):
+		return
 	var mult := 1.0
 	var difficulty := int(MainSet.set_data.get("Difficult", 0))
 	if difficulty == 1:

@@ -154,14 +154,28 @@ func add_child_1():
 		rotation_value = 11
 		rotation2 = -40
 	var child = Global.add_bullet(
-		"Monster77Bullet2", bullet, monster_direction, 2, position + po, "hit2", self.obj_attack_dict["hit2"]
+		"Monster77Bullet2",
+		bullet,
+		monster_direction,
+		6 if has_meta("elite_card") else 2,
+		position + po,
+		"hit2",
+		self.obj_attack_dict["hit2"]
 	)
 	child.rotation_degrees = rotation_value
 	var dir = monster_direction
 	await get_tree().create_timer(1, false).timeout
 	for i in bullet_spawn_positions:
+		if not is_inside_tree() or death():
+			return
 		child = Global.add_bullet(
-			"Monster77Bullet3", bullet, dir, 2, position + i, "hit3", self.obj_attack_dict["hit3"]
+			"Monster77Bullet3",
+			bullet,
+			dir,
+			6 if has_meta("elite_card") else 2,
+			position + i,
+			"hit3",
+			self.obj_attack_dict["hit3"]
 		)
 		child.rotation_degrees = rotation2
 		await get_tree().create_timer(0.5, false).timeout
@@ -174,5 +188,11 @@ func add_child_2():
 	else:
 		po = Vector2(-50, 0)
 	var child = Global.add_bullet(
-		"Monster77Bullet1", bullet, monster_direction, 2, position + po, "hit1", self.obj_attack_dict["hit1"]
+		"Monster77Bullet1",
+		bullet,
+		monster_direction,
+		6 if has_meta("elite_card") else 2,
+		position + po,
+		"hit1",
+		self.obj_attack_dict["hit1"]
 	)
