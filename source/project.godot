@@ -21,8 +21,8 @@ config/features=PackedStringArray("4.7", "Mobile")
 run/max_fps=120
 run/low_processor_mode_sleep_usec=16000
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 0)
-boot_splash/image="res://Art/set_menu/313.png"
 boot_splash/stretch_mode=5
+boot_splash/image="res://Art/set_menu/313.png"
 config/icon="res://Art/main_game/bhpic.png"
 config/windows_native_icon="res://Art/main_game/bhico.ico"
 
@@ -222,10 +222,10 @@ MDS={
 [input_devices]
 
 compatibility/legacy_just_pressed_behavior=true
-pointing/emulate_touch_from_mouse=true
 sensors/enable_accelerometer=true
 sensors/enable_gravity=true
 sensors/enable_gyroscope=true
+pointing/emulate_touch_from_mouse=true
 
 [layer_names]
 
