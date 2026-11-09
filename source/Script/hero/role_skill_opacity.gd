@@ -41,11 +41,11 @@ func _is_role_skill_visual(node: CanvasItem) -> bool:
 	return false
 
 
-func _register_visual(node: Node) -> void:
-	var visual := node as CanvasItem
-	if visual == null or not is_instance_valid(visual) or not visual.is_inside_tree():
+func _register_visual(node: Variant) -> void:
+	if not is_instance_valid(node) or not node is CanvasItem or not node.is_inside_tree():
 		return
-	var id := visual.get_instance_id()
+	var visual := node as CanvasItem
+	var id: int = visual.get_instance_id()
 	if _visuals.has(id):
 		return
 	_visuals[id] = {

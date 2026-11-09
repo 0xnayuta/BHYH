@@ -3,6 +3,9 @@ extends "res://Script/main_menu/soul_card_panel_base.gd"
 
 const ROLE_PREVIEW := preload("res://Script/main_menu/soul_card_role_preview.gd")
 const FOIL_PREVIEW := preload("res://Script/main_menu/soul_card_foil_preview.gd")
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
 var foil_preview: Control
 var selected_id := "qly"
 var card_buttons: Dictionary = {}

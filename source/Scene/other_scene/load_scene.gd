@@ -88,8 +88,9 @@ func _ready() -> void:
 	_request_generation = Global.get_scene_request_generation()
 	var startup_progress := float(get_meta("startup_progress", 0.0))
 	loading_bar.value = startup_progress
-	loading_text.text = "%d%%" % int(round(startup_progress * 100.0))
+	loading_text.text = "%d%%" % int(startup_progress * 100.0)
 	_pick_tip()
+	# 7.4 AndroidIntegrity Autoload 的等价内联实现；按当前架构不新增 Autoload。
 	_initialize_first_launch_integrity()
 	_begin_load_after_first_frame()
 
@@ -351,7 +352,7 @@ func _set_progress(value: float) -> void:
 	# 文本与填充使用同一个单调进度值，避免两者不一致。
 	var displayed := maxf(float(loading_bar.value), value)
 	loading_bar.value = displayed
-	loading_text.text = str(int(round(displayed * 100.0))) + "%"
+	loading_text.text = str(int(floor(displayed * 100.0 + 0.0001))) + "%"
 
 
 func _mark_load_phase(stage: String) -> void:

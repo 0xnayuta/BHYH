@@ -2,6 +2,9 @@
 extends "res://Script/main_menu/soul_card_panel_base.gd"
 
 const BOSS_STATS := preload("res://Script/level/elite_boss_stats.gd")
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
 var boss_attributes: Dictionary = {}
 var attributes: RichTextLabel
 var selected_id := "qly"

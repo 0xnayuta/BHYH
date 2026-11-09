@@ -3,6 +3,9 @@ extends Node2D
 
 const BACKPACK_PATH := "res://Scene/back_pack/back_pack.tscn"
 const PREVIEW := preload("res://Script/back_pack/ne_zha_backpack_preview.gd")
+var PlayerData: PlayerDataStore:
+	get:
+		return LocalCoop.data_for(self) as PlayerDataStore
 var role_id := 1
 
 
