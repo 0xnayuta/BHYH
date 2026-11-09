@@ -233,6 +233,7 @@ func load_game(路径) -> Dictionary:
 	PlayerData.ensure_shengu_slot()
 	PlayerData.ensure_acquired_equipment_data()
 	PlayerData.ensure_player_passive_skills()
+	PlayerData.notify_passive_skills_changed()
 	PlayerData._remove_retired_wudu_magic_weapons()
 	if PlayerData.has_method("ensure_special_dungeon_progress"):
 		PlayerData.ensure_special_dungeon_progress()

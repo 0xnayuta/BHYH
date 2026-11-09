@@ -68,6 +68,7 @@ func _ready() -> void:
 	add_child(panel_host)
 	panel_host.setup(self)
 	get_tree().scene_changed.connect(_on_scene_changed)
+	PlayerData.passive_skills_changed.connect(_on_passive_skills_changed)
 
 
 func is_enabled() -> bool:
@@ -109,8 +110,8 @@ func load_profile() -> void:
 	secondary_data.set_meta("coop_slot", 2)
 	secondary_data.player_data = _default_profile()
 	secondary_data.player_data.merge(profile.duplicate(true), true)
-	var shared_passives: Dictionary = PlayerData.player_data["被动技能"]
-	var old_passives: Variant = profile.get("被动技能", {})
+	var shared_passives: Dictionary = PlayerData.player_data[DataKeys.Skill.PASSIVE]
+	var old_passives: Variant = profile.get(DataKeys.Skill.PASSIVE, {})
 	if old_passives is Dictionary:
 		for skill_name: String in PlayerData.PLAYER_PASSIVE_SKILL_KEYS:
 			shared_passives[skill_name] = maxi(int(shared_passives[skill_name]), int(old_passives.get(skill_name, 0)))
@@ -220,7 +221,7 @@ func _link_shared_attribute_progression() -> void:
 func link_passive_skills() -> void:
 	if not is_enabled():
 		return
-	secondary_data.player_data["被动技能"] = data_for_slot(1).player_data["被动技能"]
+	secondary_data.player_data[DataKeys.Skill.PASSIVE] = data_for_slot(1).player_data[DataKeys.Skill.PASSIVE]
 
 
 func refresh_passive_skills() -> void:
@@ -234,6 +235,11 @@ func refresh_passive_skills() -> void:
 		props.get_last_prop()
 		props.check_hp()
 		props.check_mp()
+
+
+func _on_passive_skills_changed() -> void:
+	if is_instance_valid(secondary_passives):
+		secondary_passives.get_passive_skill_properties()
 
 
 func link_main_sword_array() -> void:
@@ -266,7 +272,7 @@ func refresh_main_sword_array() -> void:
 func shared_keys() -> Array[String]:
 	var keys: Array[String] = []
 	keys.append_array(BAG_KEYS)
-	keys.append("被动技能")
+	keys.append(DataKeys.Skill.PASSIVE)
 	keys.append(PlayerData.MAIN_SWORD_ARRAY_KEY)
 	keys.append(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY)
 	keys.append("炼体")

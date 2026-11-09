@@ -45,8 +45,12 @@ var yh_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 1
 var hh_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 var mr_value = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
+var _last_passive_levels := PackedInt32Array([-1, -1, -1, -1, -1, -1, -1])
+var _last_props_id: int = 0
 
-func _physics_process(_delta: float) -> void:
+
+func _ready() -> void:
+	PlayerData.passive_skills_changed.connect(get_passive_skill_properties)
 	get_passive_skill_properties()
 
 
@@ -66,29 +70,29 @@ func _extend_linear(values: Array, level: int) -> int:
 
 func get_value(_name: String, level: int) -> int:
 	match _name:
-		"热血":
+		DataKeys.Skill.PASSIVE_HP:
 			return _extend_linear(rx_value, level)
-		"魔泉":
+		DataKeys.Skill.PASSIVE_MP:
 			return _extend_linear(mq_value, level)
-		"狂暴":
+		DataKeys.Skill.PASSIVE_CRIT:
 			return _extend_linear(kb_value, level)
-		"永恒":
+		DataKeys.Skill.PASSIVE_HP_REGEN:
 			return _extend_linear(yh_value, level)
-		"辉煌":
+		DataKeys.Skill.PASSIVE_MP_REGEN:
 			return _extend_linear(hh_value, level)
-		"敏锐":
+		DataKeys.Skill.PASSIVE_HIT:
 			return _extend_linear(mr_value, level)
-		"收益":
+		DataKeys.Skill.PASSIVE_SOUL_GAIN:
 			return max(0, level) * 5
 	return 0
 
 
 func get_soul_gain_bonus_percent() -> int:
-	var passive_value: Variant = PlayerData.player_data.get("被动技能", {})
+	var passive_value: Variant = PlayerData.player_data.get(DataKeys.Skill.PASSIVE, {})
 	if not (passive_value is Dictionary):
 		return 0
 	var passive_levels: Dictionary = passive_value
-	return get_value("收益", int(passive_levels.get("收益", 0)))
+	return get_value(DataKeys.Skill.PASSIVE_SOUL_GAIN, int(passive_levels.get(DataKeys.Skill.PASSIVE_SOUL_GAIN, 0)))
 
 
 func apply_soul_gain_bonus(base_value: int) -> int:
@@ -97,18 +101,38 @@ func apply_soul_gain_bonus(base_value: int) -> int:
 	return int(float(base_value) * float(100 + get_soul_gain_bonus_percent()) / 100.0)
 
 
-func get_passive_skill_properties():
-	var target = PlayerData.player_data["被动技能"]
-	RoleProp.pasl_prop.SHp = get_value("热血", int(target["热血"]))
-	RoleProp.pasl_prop.SMp = get_value("魔泉", int(target["魔泉"]))
-	RoleProp.pasl_prop.Crit = get_value("狂暴", int(target["狂暴"]))
-	RoleProp.pasl_prop.R_hp = get_value("永恒", int(target["永恒"]))
-	RoleProp.pasl_prop.R_mp = get_value("辉煌", int(target["辉煌"]))
-	RoleProp.pasl_prop.htarget = get_value("敏锐", int(target["敏锐"]))
+func get_passive_skill_properties() -> void:
+	var passive_value: Variant = PlayerData.player_data.get(DataKeys.Skill.PASSIVE, {})
+	if not (passive_value is Dictionary):
+		return
+	var target: Dictionary = passive_value
+	var props := RoleProp
+	var props_id := props.get_instance_id()
+	var levels := PackedInt32Array(
+		[
+			int(target.get(DataKeys.Skill.PASSIVE_HP, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_MP, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_CRIT, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_HP_REGEN, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_MP_REGEN, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_HIT, 0)),
+			int(target.get(DataKeys.Skill.PASSIVE_SOUL_GAIN, 0)),
+		]
+	)
+	if props_id == _last_props_id and levels == _last_passive_levels:
+		return
+	_last_props_id = props_id
+	_last_passive_levels = levels
+	props.pasl_prop.SHp = get_value(DataKeys.Skill.PASSIVE_HP, levels[0])
+	props.pasl_prop.SMp = get_value(DataKeys.Skill.PASSIVE_MP, levels[1])
+	props.pasl_prop.Crit = get_value(DataKeys.Skill.PASSIVE_CRIT, levels[2])
+	props.pasl_prop.R_hp = get_value(DataKeys.Skill.PASSIVE_HP_REGEN, levels[3])
+	props.pasl_prop.R_mp = get_value(DataKeys.Skill.PASSIVE_MP_REGEN, levels[4])
+	props.pasl_prop.htarget = get_value(DataKeys.Skill.PASSIVE_HIT, levels[5])
 
 
 func get_lh(_name):
-	return get_lh_for_level(_name, int(PlayerData.player_data["被动技能"].get(_name, 0)))
+	return get_lh_for_level(_name, int(PlayerData.player_data[DataKeys.Skill.PASSIVE].get(_name, 0)))
 
 
 func get_lh_for_level(_name: String, level: int) -> int:

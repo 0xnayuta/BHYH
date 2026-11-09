@@ -1,7 +1,7 @@
 # BHYH 当前候选迭代
 
-> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。**当前候选 Phase 28 已登记，28-1 进行中；Phase 29 未启动。**
-> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；当前候选为 Phase 28 架构治理（28-1 进行中）。PCK/release 与最低配置/其他平台验证暂缓。
+> **状态**：**Phase 38 7.4 内容回植与 38-6 缺口修复完成（38-0~38-6；L3 已通过；PCK/release 暂缓）**。Phase 37 的 7.3 内容回植与 37-6 缺口修复已完成（37-0~37-6；L3 已通过；PCK/release 暂缓）；Phase 36 的 7.2 L3 收口已完成、待发布验证；Phase 35 的 7.1 L3 收口已完成、待发布验证；Phase 22 / 23 / 24 / 25 / 27 已完成并归档；Phase 34 7.0 内容回植已完成、待发布验证；Phase 26 平台与发布验证长期暂缓；7.3/7.4 PCK/release 暂缓。**Phase 28 已完成（28-1、28-2）；Phase 29 未启动。**
+> **版本**：7.4 内容基线（38-0~38-6 完成，L3 已通过）；Phase 28 架构治理已完成（28-1、28-2）。PCK/release 与最低配置/其他平台验证暂缓。
 > **当前基线**：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)、[`architecture.md`](../reference/architecture.md)、[`status.md`](../reference/status.md)、[`acceptance.md`](../reference/acceptance.md)。
 > **历史指针**：归档文档中的 `current-iteration.md §1.2` 指向本页“跨阶段不变量”；`§4`、`§5C`、`§5D` 指向已迁移的批次记录，完整内容见 [`../archive/README.md`](../archive/README.md)。
 
@@ -99,13 +99,13 @@
 - **完成判定**：按 [`migration_playbook.md`](../guides/migration_playbook.md) Phase 2 出口逐项满足范围完整、语义完整、资产完整、双人完整、失败边界、证据可复核与文档一致；生产未映射 0，删除/数据表/场景属性/UI 文本均有处置结论；不以“路径存在”或“L3 通过”替代语义复核。
 - **非目标与边界**：不夹带上游之外的玩法重设计、数值再平衡、存档格式变更、旧路径/旧后端/旧存档迁移链、Autoload/`Global` 扩张、目录大规模迁移、PCK/release 或平台验证；解包、密钥、参考树、逐文件台账与本地绝对路径只在仓库外；测试探针按 [`ADR-019`](../decisions/ADR-019-test-fixtures-outside-production-source.md) 放在 `scripts/`；`addons/` 非插件维护任务不修改。
 
-### 1.7 Phase 28 全局通信与派生属性契约（28-1 进行中；28-2 未启动）
+### 1.7 Phase 28 全局通信与派生属性契约（28-1、28-2 完成）
 
 - **目标**：移除全局确认信号 `Signals`，把确认回调归打开者所有；把被动属性快照从每帧轮询改为档案变更事件驱动；为这两条边界建立单一写者与门禁。
 - **入口**：全局确认面 `Script/base/signals.gd`、`Scene/show_text/choose_scene.gd`、`Script/runtime/popup_factory.gd`；被动数值面 `Script/skill/passive_skills.gd`、`Script/memory_class/player_data.gd`、`Script/coop/local_coop.gd`。
 - **非目标**：不改玩法数值、存档格式、输入映射；不新增 Autoload；不迁移 `Scene/` 下其余脚本（归 Phase 29）；不处理 `global.gd` 的根目录位置。
 
-#### 28-1 移除全局确认信号（进行中）
+#### 28-1 移除全局确认信号（完成）
 
 - `choose_scene.gd` 增加 `confirmed`/`cancelled` 实例信号；确认与取消先发信号、再释放实例。
 - 10 个 `connect_choose_box_signal` 调用点改为在 `Global.add_choose_text()` 返回值上连接；`decompose.gd` 的连接从 `_ready` 移到打开处。
@@ -115,7 +115,7 @@
 - 新增全局信号基线门禁：扫描 Autoload 脚本的 `signal` 声明，与基线比较，新增报 ERROR；删除 `Signals` 后基线为 `MemoryClass` 的 `background_save_finished` 与 `save_failed`。
 - **出口**：10 条确认路径（存档删除、出售、分解、挑战、商店购买、技能升级等）确认/取消各执行一次；连续打开、暂停、场景切换释放正常；`check_all`、`health_check`、`scene_probe_runner`、`coop_probe_runner`、`level_1` 与变更影响回归通过；文档计数一致。
 
-#### 28-2 被动属性快照事件化（未启动）
+#### 28-2 被动属性快照事件化（完成）
 
 - 删除 `passive_skills.gd` 的 `_physics_process` 轮询与 `LocalCoop.secondary_passives` 的轮询。
 - `PlayerData` 增加 `passive_skills_changed` 信号；在 `apply_passive_skill_upgrades()` 成功、`ensure_player_passive_skills()` 实际修正、档案载入完成后发出。
@@ -211,7 +211,7 @@
 
 ## 4. 当前恢复入口
 
-**当前下一步**：执行 Phase 28-1 移除全局确认信号（进行中）；28-1 收口后进入 28-2 被动属性快照事件化。Phase 29 `Scene/` 脚本落位在 Phase 28 收口后启动。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
+**当前下一步**：Phase 28 已完成（28-1、28-2）；下一步启动 Phase 29-0 `Scene/` 脚本落位规范与逐文件清单。PCK/release、最低配置与其他平台验证按用户决策另行执行；恢复前先按 [`acceptance.md`](../reference/acceptance.md) 与 [`status.md`](../reference/status.md) 的发布边界复核。
 
 - 当前架构：[`architecture.md`](../reference/architecture.md)
 - Global 清单：[`global_runtime_inventory.md`](../reference/global_runtime_inventory.md)

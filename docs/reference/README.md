@@ -10,7 +10,8 @@
 | [`global_runtime_inventory.md`](global_runtime_inventory.md) | **Phase 22 已收口**：`Global` 状态字段、公开入口、26 个普通子服务、删除/迁出项、剩余字段所有者与机读守卫 |
 | [`status.md`](status.md) | **当前状态单一事实源**：版本、门禁、最近验证与已知边界 |
 | [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与变更矩阵 |
-| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 11 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |
+| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 10 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |
+| [`passive_skill_contract.md`](passive_skill_contract.md) | Phase 28-2：被动等级、`pasl_prop` 快照所有权、刷新事件与 `passive_boundary` 门禁 |
 | [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
 | [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |
 | [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |

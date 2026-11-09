@@ -14,7 +14,7 @@
 2. `choose_scene.gd` 暴露实例信号 `confirmed` 与 `cancelled`；确认/取消先发信号，再释放实例。
 3. 确认回调归打开者所有：调用方在 `Global.add_choose_text()` 返回值上连接，不再经过全局路由。
 4. 单确认框约束由 `PopupFactory` 显式维护：新确认框打开时隐藏并释放旧实例，不依赖信号断开。
-5. 新增全局信号基线门禁：Autoload 脚本的 `signal` 声明与基线比较，新增报 ERROR。删除 `Signals` 后基线为 `MemoryClass` 的 `background_save_finished` 与 `save_failed`。
+5. 新增全局信号基线门禁：Autoload 脚本的 `signal` 声明与基线比较，新增报 ERROR。当前基线为 `MemoryClass` 的 `background_save_finished`、`save_failed` 与 `PlayerData.passive_skills_changed`（见 [`ADR-029`](ADR-029-passive-snapshot-event-driven.md)）。
 
 ## 后果
 

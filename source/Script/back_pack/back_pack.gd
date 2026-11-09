@@ -127,14 +127,14 @@ func get_level():
 func calculate_combat_power():
 	var level_power = RoleProp.baseroleprop.Level * 15
 
-	var passive_data = PlayerData.player_data["被动技能"]
+	var passive_data = PlayerData.player_data[DataKeys.Skill.PASSIVE]
 	var passive_per_level = 15
-	var rx_level = passive_data["热血"]
-	var mq_level = passive_data["魔泉"]
-	var kb_level = passive_data["狂暴"]
-	var yh_level = passive_data["永恒"]
-	var hh_level = passive_data["辉煌"]
-	var mr_level = passive_data["敏锐"]
+	var rx_level = passive_data[DataKeys.Skill.PASSIVE_HP]
+	var mq_level = passive_data[DataKeys.Skill.PASSIVE_MP]
+	var kb_level = passive_data[DataKeys.Skill.PASSIVE_CRIT]
+	var yh_level = passive_data[DataKeys.Skill.PASSIVE_HP_REGEN]
+	var hh_level = passive_data[DataKeys.Skill.PASSIVE_MP_REGEN]
+	var mr_level = passive_data[DataKeys.Skill.PASSIVE_HIT]
 	var passive_power = (rx_level + mq_level + kb_level + yh_level + hh_level + mr_level) * passive_per_level
 
 	var pill_power = 0

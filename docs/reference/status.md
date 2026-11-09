@@ -155,7 +155,16 @@
 - Autoload 注册项 11 → 10：删除 `Signals`；`choose_scene` 暴露 `confirmed`/`cancelled` 实例信号，10 个调用点改为在 `Global.add_choose_text()` 返回值上连接；`PopupFactory` 显式关闭旧确认框，维持单实例语义。
 - 验证：`contract_scan --self-test` 通过（含 `global_signal` 正负样本）；`contract_scan --fail-on-error` ERROR=0；`check_all --skip-engine` 7/7 PASS；`health_check --no-cache` 822 脚本 0 Parse / 0 Error / 0 Warning；`level_1` 4 阶段 0/0/0；`choose_scene` 临时探针确认 `confirmed` 信号且无脚本错误。
 - 验证补充：`scene_probe_runner` 全量 31 项 PASS（342.54s）。
-- 边界：Phase 28-2 未启动。
+- 边界：28-2 已实施，见下节；Phase 29 未启动。
+
+### Phase 28-2 被动属性快照事件化（2026-11-09）
+
+- 删除 `PaSkill._physics_process` 与 `secondary_passives` 轮询；`PlayerData` 新增 `passive_skills_changed`，在升级保存成功、`ensure_*` 实际修正、档案载入完成后发出；`PaSkill` 启动刷新 + 7 级与属性实例签名短路；`LocalCoop` 只刷新 2P。
+- 键收敛：新增 `DataKeys.Skill.PASSIVE_*`；`PlayerData` 默认档案、`PaSkill`、`bd_skill`、`back_pack` 与双人 link 不再散落裸键；宠物被动键保持独立。
+- 门禁：`contract_scan` 新增 `passive_boundary`（`PASSIVE_POLLING`/`PASSIVE_SNAPSHOT_WRITE`/`PASSIVE_DATA_WRITE`）与自测；共享账本 token 改为 `DataKeys.Skill.PASSIVE`。
+- 验证：`health_check --no-cache` 822 脚本 0/0/0；`contract_scan --fail-on-error` ERROR=0；`docs_audit` 905/0；`level_1` 4 阶段 0/0/0；`archive_probe_runner` 344/344；被动快照临时场景探针 PASS（信号刷新、等级变化、幂等）。
+- 验证补充：`check_all --skip-engine` 7/7 PASS；`coop_probe_runner` 38/38 PASS（309.53s）。
+- 边界：Phase 29 未启动。
 
 ## 3. 当前已知边界
 

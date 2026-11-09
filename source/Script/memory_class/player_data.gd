@@ -1,6 +1,8 @@
 extends Node
 class_name PlayerDataStore
 
+signal passive_skills_changed
+
 var RoleProp: BaseRoleProperties:
 	get:
 		var coop := get_node_or_null("/root/LocalCoop")
@@ -563,7 +565,15 @@ const WANLING_HEAVEN_MONSTER_EFFECTS := {
 	136: {"SHp": 1000.0},
 	137: {"Crit": 20.0},
 }
-const PLAYER_PASSIVE_SKILL_KEYS := ["热血", "魔泉", "狂暴", "永恒", "辉煌", "敏锐", "收益"]
+const PLAYER_PASSIVE_SKILL_KEYS := [
+	DataKeys.Skill.PASSIVE_HP,
+	DataKeys.Skill.PASSIVE_MP,
+	DataKeys.Skill.PASSIVE_CRIT,
+	DataKeys.Skill.PASSIVE_HP_REGEN,
+	DataKeys.Skill.PASSIVE_MP_REGEN,
+	DataKeys.Skill.PASSIVE_HIT,
+	DataKeys.Skill.PASSIVE_SOUL_GAIN,
+]
 const CONSTELLATION_PROGRESS_KEY := "ConstellationHighestDefeatedTier"
 const MAP5_PROGRESSION_LEVELS := [
 	"绝仙门",
@@ -611,7 +621,15 @@ const PET_TIGER_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["猛扑", "虎啸"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -729,7 +747,15 @@ var initialized_data: Dictionary = {
 			"强化点": 0,
 			"技能重置次数": 0,
 			"属性重置次数": 0,
-			"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+			DataKeys.Skill.PASSIVE:
+			{
+				DataKeys.Skill.PASSIVE_HP: 0,
+				DataKeys.Skill.PASSIVE_MP: 0,
+				DataKeys.Skill.PASSIVE_CRIT: 0,
+				DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+				DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+				DataKeys.Skill.PASSIVE_HIT: 0
+			},
 			"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 			"背包": [],
 			"出战": false
@@ -881,7 +907,16 @@ var initialized_data: Dictionary = {
 		"技能13": {"学习": 0, "等级": 0},
 		"技能键位": {"Y": "", "U": "", "I": "", "O": "", "L": ""}
 	},
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0, "收益": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0,
+		DataKeys.Skill.PASSIVE_SOUL_GAIN: 0
+	},
 	"翅膀显示": true,
 	"头衔显示": true,
 	"时装显示": true,
@@ -1157,7 +1192,15 @@ var player_data: Dictionary = {
 			"强化点": 0,
 			"技能重置次数": 0,
 			"属性重置次数": 0,
-			"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+			DataKeys.Skill.PASSIVE:
+			{
+				DataKeys.Skill.PASSIVE_HP: 0,
+				DataKeys.Skill.PASSIVE_MP: 0,
+				DataKeys.Skill.PASSIVE_CRIT: 0,
+				DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+				DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+				DataKeys.Skill.PASSIVE_HIT: 0
+			},
 			"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 			"背包": [],
 			"出战": false
@@ -1307,7 +1350,16 @@ var player_data: Dictionary = {
 		"技能13": {"学习": 0, "等级": 0},
 		"技能键位": {"Y": "", "U": "", "I": "", "O": "", "L": ""}
 	},
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0, "收益": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0,
+		DataKeys.Skill.PASSIVE_SOUL_GAIN: 0
+	},
 	"翅膀显示": true,
 	"头衔显示": true,
 	"时装显示": true,
@@ -1644,7 +1696,15 @@ const PET_PHOENIX_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["涅槃"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1690,7 +1750,15 @@ const PET_DRAGON_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["分身"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1738,7 +1806,15 @@ const PET_TURTLE_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["水疗盾"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1786,7 +1862,15 @@ const PET_RABBIT_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["月光"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1834,7 +1918,15 @@ const PET_MOUSE_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["鼠窜"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1882,7 +1974,15 @@ const PET_NEAT_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["蛮牛冲撞"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1930,7 +2030,15 @@ const PET_YIN_TIGER_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["虎啸"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -1978,7 +2086,15 @@ const PET_NIAN_PET := {
 	"普通培养次数": 0,
 	"超级培养次数": 0,
 	"放生": false,
-	"被动技能": {"热血": 0, "魔泉": 0, "狂暴": 0, "永恒": 0, "辉煌": 0, "敏锐": 0},
+	DataKeys.Skill.PASSIVE:
+	{
+		DataKeys.Skill.PASSIVE_HP: 0,
+		DataKeys.Skill.PASSIVE_MP: 0,
+		DataKeys.Skill.PASSIVE_CRIT: 0,
+		DataKeys.Skill.PASSIVE_HP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_MP_REGEN: 0,
+		DataKeys.Skill.PASSIVE_HIT: 0
+	},
 	"技能": ["年兽扑击"],
 	"装备": {"zbst": {}, "zbmz": {}, "zbxz": {}, "zbyf": {}, "zbjn": {}},
 	"出战": false
@@ -2423,13 +2539,24 @@ func ensure_shengu_slot() -> Array:
 
 
 func ensure_player_passive_skills() -> void:
-	var passive_value: Variant = player_data.get("被动技能", {})
+	var changed := false
+	var passive_value: Variant = player_data.get(DataKeys.Skill.PASSIVE, {})
 	if not (passive_value is Dictionary):
 		passive_value = {}
-		player_data["被动技能"] = passive_value
+		player_data[DataKeys.Skill.PASSIVE] = passive_value
+		changed = true
 	var passive_levels: Dictionary = passive_value
 	for skill_name in PLAYER_PASSIVE_SKILL_KEYS:
-		passive_levels[skill_name] = max(0, int(passive_levels.get(skill_name, 0)))
+		var normalized: int = max(0, int(passive_levels.get(skill_name, 0)))
+		if not passive_levels.has(skill_name) or int(passive_levels[skill_name]) != normalized:
+			passive_levels[skill_name] = normalized
+			changed = true
+	if changed:
+		passive_skills_changed.emit()
+
+
+func notify_passive_skills_changed() -> void:
+	passive_skills_changed.emit()
 
 
 ## 被动技能批量升级命令：plan 为 [{name, level}]，一次性扣灵魂并保存。
@@ -2448,7 +2575,7 @@ func apply_passive_skill_upgrades(plan: Array, total_cost: int, save_reason: Str
 	if not spend_soul(total_cost):
 		restore_state(snapshot)
 		return false
-	var passive_value: Variant = player_data.get("被动技能", {})
+	var passive_value: Variant = player_data.get(DataKeys.Skill.PASSIVE, {})
 	if not passive_value is Dictionary:
 		restore_state(snapshot)
 		return false
@@ -2459,6 +2586,7 @@ func apply_passive_skill_upgrades(plan: Array, total_cost: int, save_reason: Str
 	if not MemoryClass.request_save(save_reason, false):
 		restore_state(snapshot)
 		return false
+	passive_skills_changed.emit()
 	return true
 
 

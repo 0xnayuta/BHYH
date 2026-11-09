@@ -32,7 +32,15 @@ var RoleProp: BaseRoleProperties:
 @onready var one_key_upgrade_button := $HBoxContainer/Up_level/OneKeyUpgradeButton as Button
 
 const TABLE_ROW_HEIGHT := 34.0
-const PASSIVE_SKILL_NAMES := ["热血", "魔泉", "狂暴", "永恒", "辉煌", "敏锐", "收益"]
+const PASSIVE_SKILL_NAMES := [
+	DataKeys.Skill.PASSIVE_HP,
+	DataKeys.Skill.PASSIVE_MP,
+	DataKeys.Skill.PASSIVE_CRIT,
+	DataKeys.Skill.PASSIVE_HP_REGEN,
+	DataKeys.Skill.PASSIVE_MP_REGEN,
+	DataKeys.Skill.PASSIVE_HIT,
+	DataKeys.Skill.PASSIVE_SOUL_GAIN
+]
 const TABLE_COLUMN_WIDTHS := {
 	"Skill_Name": 100.0,
 	"Current_e": 210.0,
@@ -139,72 +147,110 @@ func get_current_max_level() -> int:
 
 
 func set_infor():
-	var target = PlayerData.player_data["被动技能"]
-	if target["热血"] != 0:
-		c_name_1.text = "生命上限增加至 " + str(PaSkill.get_value("热血", int(target["热血"])))
+	var target = PlayerData.player_data[DataKeys.Skill.PASSIVE]
+	if target[DataKeys.Skill.PASSIVE_HP] != 0:
+		c_name_1.text = (
+			"生命上限增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HP, int(target[DataKeys.Skill.PASSIVE_HP])))
+		)
 	else:
 		c_name_1.text = ""
-	if target["魔泉"] != 0:
-		c_name_2.text = "魔法上限增加至 " + str(PaSkill.get_value("魔泉", int(target["魔泉"])))
+	if target[DataKeys.Skill.PASSIVE_MP] != 0:
+		c_name_2.text = (
+			"魔法上限增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_MP, int(target[DataKeys.Skill.PASSIVE_MP])))
+		)
 	else:
 		c_name_2.text = ""
-	if target["狂暴"] != 0:
-		c_name_3.text = "暴击增加至 " + str(PaSkill.get_value("狂暴", int(target["狂暴"])))
+	if target[DataKeys.Skill.PASSIVE_CRIT] != 0:
+		c_name_3.text = (
+			"暴击增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_CRIT, int(target[DataKeys.Skill.PASSIVE_CRIT])))
+		)
 	else:
 		c_name_3.text = ""
-	if target["永恒"] != 0:
-		c_name_4.text = "回血增加至 " + str(PaSkill.get_value("永恒", int(target["永恒"])))
+	if target[DataKeys.Skill.PASSIVE_HP_REGEN] != 0:
+		c_name_4.text = (
+			"回血增加至 "
+			+ str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HP_REGEN, int(target[DataKeys.Skill.PASSIVE_HP_REGEN])))
+		)
 	else:
 		c_name_4.text = ""
-	if target["辉煌"] != 0:
-		c_name_5.text = "回魔增加至 " + str(PaSkill.get_value("辉煌", int(target["辉煌"])))
+	if target[DataKeys.Skill.PASSIVE_MP_REGEN] != 0:
+		c_name_5.text = (
+			"回魔增加至 "
+			+ str(PaSkill.get_value(DataKeys.Skill.PASSIVE_MP_REGEN, int(target[DataKeys.Skill.PASSIVE_MP_REGEN])))
+		)
 	else:
 		c_name_5.text = ""
-	if target["敏锐"] != 0:
-		c_name_6.text = "命中增加至 " + str(PaSkill.get_value("敏锐", int(target["敏锐"])))
+	if target[DataKeys.Skill.PASSIVE_HIT] != 0:
+		c_name_6.text = (
+			"命中增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HIT, int(target[DataKeys.Skill.PASSIVE_HIT])))
+		)
 	else:
 		c_name_6.text = ""
-	if target["收益"] != 0:
-		c_name_7.text = "杀怪灵魂获取 +" + str(PaSkill.get_value("收益", int(target["收益"]))) + "%"
+	if target[DataKeys.Skill.PASSIVE_SOUL_GAIN] != 0:
+		c_name_7.text = (
+			"杀怪灵魂获取 +"
+			+ str(PaSkill.get_value(DataKeys.Skill.PASSIVE_SOUL_GAIN, int(target[DataKeys.Skill.PASSIVE_SOUL_GAIN])))
+			+ "%"
+		)
 	else:
 		c_name_7.text = ""
 
-	if target["热血"] < get_current_max_level():
-		n_name_1.text = "生命上限增加至 " + str(PaSkill.get_value("热血", int(target["热血"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_HP] < get_current_max_level():
+		n_name_1.text = (
+			"生命上限增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HP, int(target[DataKeys.Skill.PASSIVE_HP]) + 1))
+		)
 	else:
 		n_name_1.text = "已达到当前等级上限"
-	if target["魔泉"] < get_current_max_level():
-		n_name_2.text = "魔法上限增加至 " + str(PaSkill.get_value("魔泉", int(target["魔泉"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_MP] < get_current_max_level():
+		n_name_2.text = (
+			"魔法上限增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_MP, int(target[DataKeys.Skill.PASSIVE_MP]) + 1))
+		)
 	else:
 		n_name_2.text = "已达到当前等级上限"
-	if target["狂暴"] < get_current_max_level():
-		n_name_3.text = "暴击增加至 " + str(PaSkill.get_value("狂暴", int(target["狂暴"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_CRIT] < get_current_max_level():
+		n_name_3.text = (
+			"暴击增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_CRIT, int(target[DataKeys.Skill.PASSIVE_CRIT]) + 1))
+		)
 	else:
 		n_name_3.text = "已达到当前等级上限"
-	if target["永恒"] < get_current_max_level():
-		n_name_4.text = "回血增加至 " + str(PaSkill.get_value("永恒", int(target["永恒"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_HP_REGEN] < get_current_max_level():
+		n_name_4.text = (
+			"回血增加至 "
+			+ str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HP_REGEN, int(target[DataKeys.Skill.PASSIVE_HP_REGEN]) + 1))
+		)
 	else:
 		n_name_4.text = "已达到当前等级上限"
-	if target["辉煌"] < get_current_max_level():
-		n_name_5.text = "回魔增加至 " + str(PaSkill.get_value("辉煌", int(target["辉煌"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_MP_REGEN] < get_current_max_level():
+		n_name_5.text = (
+			"回魔增加至 "
+			+ str(PaSkill.get_value(DataKeys.Skill.PASSIVE_MP_REGEN, int(target[DataKeys.Skill.PASSIVE_MP_REGEN]) + 1))
+		)
 	else:
 		n_name_5.text = "已达到当前等级上限"
-	if target["敏锐"] < get_current_max_level():
-		n_name_6.text = "命中增加至 " + str(PaSkill.get_value("敏锐", int(target["敏锐"]) + 1))
+	if target[DataKeys.Skill.PASSIVE_HIT] < get_current_max_level():
+		n_name_6.text = (
+			"命中增加至 " + str(PaSkill.get_value(DataKeys.Skill.PASSIVE_HIT, int(target[DataKeys.Skill.PASSIVE_HIT]) + 1))
+		)
 	else:
 		n_name_6.text = "已达到当前等级上限"
-	if target["收益"] < get_current_max_level():
-		n_name_7.text = "杀怪灵魂获取 +" + str(PaSkill.get_value("收益", int(target["收益"]) + 1)) + "%"
+	if target[DataKeys.Skill.PASSIVE_SOUL_GAIN] < get_current_max_level():
+		n_name_7.text = (
+			"杀怪灵魂获取 +"
+			+ str(
+				PaSkill.get_value(DataKeys.Skill.PASSIVE_SOUL_GAIN, int(target[DataKeys.Skill.PASSIVE_SOUL_GAIN]) + 1)
+			)
+			+ "%"
+		)
 	else:
 		n_name_7.text = "已达到当前等级上限"
 
-	l_name_1.text = str(PaSkill.get_lh("热血"))
-	l_name_2.text = str(PaSkill.get_lh("魔泉"))
-	l_name_3.text = str(PaSkill.get_lh("狂暴"))
-	l_name_4.text = str(PaSkill.get_lh("永恒"))
-	l_name_5.text = str(PaSkill.get_lh("辉煌"))
-	l_name_6.text = str(PaSkill.get_lh("敏锐"))
-	l_name_7.text = str(PaSkill.get_lh("收益"))
+	l_name_1.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_HP))
+	l_name_2.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_MP))
+	l_name_3.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_CRIT))
+	l_name_4.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_HP_REGEN))
+	l_name_5.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_MP_REGEN))
+	l_name_6.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_HIT))
+	l_name_7.text = str(PaSkill.get_lh(DataKeys.Skill.PASSIVE_SOUL_GAIN))
 	if one_key_upgrade_button != null:
 		var max_level := get_current_max_level()
 		one_key_upgrade_button.disabled = PASSIVE_SKILL_NAMES.all(
@@ -214,7 +260,7 @@ func set_infor():
 
 func _upgrade_all_passives() -> int:
 	PlayerData.ensure_player_passive_skills()
-	var target: Dictionary = PlayerData.player_data["被动技能"]
+	var target: Dictionary = PlayerData.player_data[DataKeys.Skill.PASSIVE]
 	var max_level := get_current_max_level()
 	var levels := {}
 	for skill_name in PASSIVE_SKILL_NAMES:
@@ -265,7 +311,7 @@ func _on_one_key_upgrade_pressed() -> void:
 
 func up_level(_name) -> bool:
 	PlayerData.ensure_player_passive_skills()
-	var target: Dictionary = PlayerData.player_data["被动技能"]
+	var target: Dictionary = PlayerData.player_data[DataKeys.Skill.PASSIVE]
 	var level := int(target.get(_name, 0))
 	var max_level := get_current_max_level()
 	if level >= max_level:
@@ -285,49 +331,49 @@ func up_level(_name) -> bool:
 
 
 func _on_up_1_pressed() -> void:
-	if _passive_suppress_click_skill == "热血":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_HP:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("热血")
+	up_level(DataKeys.Skill.PASSIVE_HP)
 
 
 func _on_up_2_pressed() -> void:
-	if _passive_suppress_click_skill == "魔泉":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_MP:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("魔泉")
+	up_level(DataKeys.Skill.PASSIVE_MP)
 
 
 func _on_up_3_pressed() -> void:
-	if _passive_suppress_click_skill == "狂暴":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_CRIT:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("狂暴")
+	up_level(DataKeys.Skill.PASSIVE_CRIT)
 
 
 func _on_up_4_pressed() -> void:
-	if _passive_suppress_click_skill == "永恒":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_HP_REGEN:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("永恒")
+	up_level(DataKeys.Skill.PASSIVE_HP_REGEN)
 
 
 func _on_up_5_pressed() -> void:
-	if _passive_suppress_click_skill == "辉煌":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_MP_REGEN:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("辉煌")
+	up_level(DataKeys.Skill.PASSIVE_MP_REGEN)
 
 
 func _on_up_6_pressed() -> void:
-	if _passive_suppress_click_skill == "敏锐":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_HIT:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("敏锐")
+	up_level(DataKeys.Skill.PASSIVE_HIT)
 
 
 func _on_up_7_pressed() -> void:
-	if _passive_suppress_click_skill == "收益":
+	if _passive_suppress_click_skill == DataKeys.Skill.PASSIVE_SOUL_GAIN:
 		_passive_suppress_click_skill = ""
 		return
-	up_level("收益")
+	up_level(DataKeys.Skill.PASSIVE_SOUL_GAIN)

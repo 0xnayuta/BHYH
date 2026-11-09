@@ -28,6 +28,7 @@ BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 20. 音频入口门禁 (Audio Entry Boundary): BGM/SFX 只经 AudioRuntime，业务禁止自建播放器或直读其私有状态
 21. Global 表面门禁 (Global Surface Baseline): 禁止新增未登记的 Global 业务字段或 add 系入口
 22. 全局信号基线门禁 (Global Signal Baseline): Autoload 脚本禁止新增未登记的全局信号
+23. 被动属性边界门禁 (Passive Boundary): 禁止轮询刷新被动快照、业务直写 pasl_prop 或被动等级字典
 
 输出格式：
 - Markdown 报告: docs/reports/contract_audit.md
@@ -1060,11 +1061,29 @@ class ContractScanner:
     RUNTIME_STATE_TOTAL_RE = re.compile(r"\bGlobal\.total_[A-Za-z0-9_]*\b")
     GLOBAL_SURFACE_FILE = "global.gd"
     GLOBAL_SIGNAL_BASELINE = {
+        "Script/memory_class/player_data.gd": {
+            "passive_skills_changed",
+        },
         "Script/memory_class/memory_class.gd": {
             "background_save_finished",
             "save_failed",
         },
     }
+    PASSIVE_SNAPSHOT_ALLOWLIST = {
+        "Script/base/base_role_properies.gd",
+        "Script/skill/passive_skills.gd",
+    }
+    PASSIVE_DATA_WRITE_ALLOWLIST = {
+        "Script/memory_class/player_data.gd",
+        "Script/coop/local_coop.gd",
+    }
+    PASSIVE_POLLING_RE = re.compile(r"get_passive_skill_properties\s*\(")
+    PASSIVE_SNAPSHOT_WRITE_RE = re.compile(
+        r"\bpasl_prop\s*(?:=|\+=|-=|\*=|/=)|\.pasl_prop\.\w+\s*(?:=|\+=|-=|\*=|/=)"
+    )
+    PASSIVE_DATA_WRITE_RE = re.compile(
+        r'player_data\[\s*(?:DataKeys\.Skill\.PASSIVE|"被动技能")\s*\]\s*(?:\[[^\]]*\]\s*)?(?:=|\+=|-=|\*=|/=)'
+    )
     GLOBAL_SURFACE_BASELINE_PATH = os.path.join(REPO_ROOT, "scripts", "global_surface_baseline.json")
     GLOBAL_SURFACE_FIELD_RE = re.compile(r"^var\s+([A-Za-z_]\w*)")
     GLOBAL_SURFACE_ADD_RE = re.compile(r"^func\s+(add[A-Za-z0-9_]*)\s*\(")
@@ -1116,7 +1135,7 @@ class ContractScanner:
     # 共享键族登记：四个背包键由 BAG_KEYS 统一登记，其余为显式族名。
     SHARED_LEDGER_REQUIRED_TOKENS = (
         "BAG_KEYS",
-        "被动技能",
+        "DataKeys.Skill.PASSIVE",
         "MAIN_SWORD_ARRAY_KEY",
         "MAIN_SWORD_ARRAY_LEVEL_KEY",
         "炼体",
@@ -1895,6 +1914,78 @@ class ContractScanner:
                     rule_id="GLOBAL_SIGNAL_UNBASELINED",
                 ))
 
+    @classmethod
+    def passive_polling_violation(cls, content: str):
+        """返回 _process/_physics_process 中调用被动快照刷新的首个位置。"""
+        in_loop = False
+        for lineno, line in enumerate(content.splitlines(), 1):
+            stripped = line.strip()
+            clean = line.split("#", 1)[0]
+            if re.match(r"func\s+_(?:process|physics_process)\s*\(", stripped):
+                in_loop = True
+                continue
+            if in_loop and re.match(r"func\s+", stripped):
+                in_loop = False
+            if in_loop and cls.PASSIVE_POLLING_RE.search(clean):
+                return (lineno, "get_passive_skill_properties")
+        return (0, "")
+
+    @staticmethod
+    def first_regex_line(content: str, pattern):
+        for lineno, line in enumerate(content.splitlines(), 1):
+            if pattern.search(line.split("#", 1)[0]):
+                return lineno
+        return 0
+
+    def scan_passive_boundary(self):
+        print("[*] 扫描被动属性边界门禁 (Phase 28-2)...")
+        for abs_p in self.script_files:
+            rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
+            if rel_p.startswith("addons/") or rel_p.startswith("_"):
+                continue
+            try:
+                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
+            except OSError:
+                continue
+            line, marker = self.passive_polling_violation(content)
+            if line:
+                self.findings.append(ContractFinding(
+                    category="passive_boundary",
+                    severity="ERROR",
+                    file_path=rel_p,
+                    line=line,
+                    literal=marker,
+                    message="被动属性快照不得在 _process/_physics_process 轮询刷新",
+                    suggested_fix="删除轮询，改为 PlayerData.passive_skills_changed 或明确生命周期刷新",
+                    rule_id="PASSIVE_POLLING",
+                ))
+            if rel_p not in self.PASSIVE_SNAPSHOT_ALLOWLIST:
+                line = self.first_regex_line(content, self.PASSIVE_SNAPSHOT_WRITE_RE)
+                if line:
+                    self.findings.append(ContractFinding(
+                        category="passive_boundary",
+                        severity="ERROR",
+                        file_path=rel_p,
+                        line=line,
+                        literal="pasl_prop",
+                        message="被动属性快照只允许 PaSkill 写入",
+                        suggested_fix="通过 PaSkill.get_passive_skill_properties() 刷新；禁止业务直接写 pasl_prop",
+                        rule_id="PASSIVE_SNAPSHOT_WRITE",
+                    ))
+            if rel_p not in self.PASSIVE_DATA_WRITE_ALLOWLIST:
+                line = self.first_regex_line(content, self.PASSIVE_DATA_WRITE_RE)
+                if line:
+                    self.findings.append(ContractFinding(
+                        category="passive_boundary",
+                        severity="ERROR",
+                        file_path=rel_p,
+                        line=line,
+                        literal="被动技能",
+                        message="被动技能等级只允许 PlayerData 命令与双人 link 写入",
+                        suggested_fix="UI 走 PlayerData.apply_passive_skill_upgrades()；禁止直接改字典",
+                        rule_id="PASSIVE_DATA_WRITE",
+                    ))
+
     def scan_archive_boundary(self):
         print(f"[*] 扫描档案边界门禁 (Phase 16-2/16-3)...")
         self._scan_rule(
@@ -1968,6 +2059,7 @@ class ContractScanner:
         self.scan_run_state_boundary()
         self.scan_global_surface_boundary()
         self.scan_global_signal_baseline()
+        self.scan_passive_boundary()
         self.scan_archive_boundary()
         self.scan_slot_boundary()
         self.scan_panel_operator()
@@ -2055,6 +2147,7 @@ class ContractScanner:
             "phase17_boundary": "16. Phase 17 边界门禁 (Phase 17 Boundary)",
             "input_boundary": "17. 输入写入边界门禁 (Input Boundary)",
             "global_signal": "18. 全局信号基线门禁 (Global Signal)",
+            "passive_boundary": "19. 被动属性边界门禁 (Passive Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -2525,7 +2618,7 @@ def run_shared_ledger_self_test() -> bool:
         "func shared_keys() -> Array[String]:\n"
         "\tvar keys: Array[String] = []\n"
         "\tkeys.append_array(BAG_KEYS)\n"
-        "\tkeys.append(\"被动技能\")\n"
+        "\tkeys.append(DataKeys.Skill.PASSIVE)\n"
         "\tkeys.append(PlayerData.MAIN_SWORD_ARRAY_KEY)\n"
         "\tkeys.append(PlayerData.MAIN_SWORD_ARRAY_LEVEL_KEY)\n"
         "\tkeys.append(\"炼体\")\n"
@@ -2850,6 +2943,53 @@ def run_global_signal_self_test() -> bool:
     return passed
 
 
+def run_passive_boundary_self_test() -> bool:
+    """被动属性边界门禁自测：轮询、快照写入、档案直写必须拦截，正常读取必须放行。"""
+    print("[*] 被动属性边界门禁负向自测...")
+    passed = True
+    polling_bad = "extends Node\nfunc _physics_process(delta):\n\tget_passive_skill_properties()\n"
+    polling_good = "extends Node\nfunc _ready():\n\tget_passive_skill_properties()\n"
+    if ContractScanner.passive_polling_violation(polling_bad)[0] == 0:
+        print("    [X] 轮询样本未拦截", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 轮询样本已拦截")
+    if ContractScanner.passive_polling_violation(polling_good)[0] != 0:
+        print("    [X] 正常刷新被误报", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 正常刷新已放行")
+
+    snapshot_bad = "func f():\n\tRoleProp.pasl_prop.SHp = 1\n"
+    snapshot_good = "func f():\n\tvar v = RoleProp.pasl_prop.SHp\n"
+    if ContractScanner.first_regex_line(snapshot_bad, ContractScanner.PASSIVE_SNAPSHOT_WRITE_RE) == 0:
+        print("    [X] 快照直写未拦截", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 快照直写已拦截")
+    if ContractScanner.first_regex_line(snapshot_good, ContractScanner.PASSIVE_SNAPSHOT_WRITE_RE) != 0:
+        print("    [X] 快照读取被误报", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 快照读取已放行")
+
+    data_bad = 'func f():\n\tPlayerData.player_data["被动技能"]["热血"] = 1\n'
+    data_good = 'func f():\n\tvar v = PlayerData.player_data["被动技能"]["热血"]\n'
+    if ContractScanner.first_regex_line(data_bad, ContractScanner.PASSIVE_DATA_WRITE_RE) == 0:
+        print("    [X] 档案直写未拦截", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 档案直写已拦截")
+    if ContractScanner.first_regex_line(data_good, ContractScanner.PASSIVE_DATA_WRITE_RE) != 0:
+        print("    [X] 档案读取被误报", file=sys.stderr)
+        passed = False
+    else:
+        print("    [√] 档案读取已放行")
+
+    print("[SUCCESS] 被动属性边界门禁自测通过" if passed else "[FAIL] 被动属性边界门禁自测失败")
+    return passed
+
+
 def main():
     parser = argparse.ArgumentParser(description="BHYH 全工程字面量契约全量扫描器 (Phase 8-1)")
     parser.add_argument("--project-dir", default="source", help="工程目标根目录")
@@ -2857,7 +2997,7 @@ def main():
     parser.add_argument("--json-output", default="docs/reports/contract_audit.json", help="JSON 报告输出路径")
     parser.add_argument("--whitelist", default="scripts/contract_whitelist.json", help="白名单配置文件路径")
     parser.add_argument("--fail-on-error", action="store_true", help="若存在 ERROR 级缺陷返回退出码 1")
-    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
+    parser.add_argument("--self-test", action="store_true", help="全部边界门禁自测（manifest/Atlas/预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/全局信号基线/被动属性边界/档案/槽位/共享账本/HUD 面板只读/音频入口/Phase 17 边界/输入写入边界/面板操作者；不执行全量扫描、不写报告）")
 
     args = parser.parse_args()
 
@@ -2879,6 +3019,7 @@ def main():
         input_ok = run_input_boundary_self_test()
         panel_operator_ok = run_panel_operator_self_test()
         global_signal_ok = run_global_signal_self_test()
+        passive_ok = run_passive_boundary_self_test()
         sys.exit(
             0
             if manifest_ok
@@ -2898,6 +3039,7 @@ def main():
             and input_ok
             and panel_operator_ok
             and global_signal_ok
+            and passive_ok
             else 1
         )
 
