@@ -5,13 +5,13 @@ extends Node
 ## touch_text、liji、combo 与游戏公告的运行时场景缓存。由 Global 作为普通子节点持有，
 ## 不是 Autoload；业务代码仍通过 Global.add_* 正式入口调用。
 
-const MESSAGE_SHOW_PATH := "res://Scene/show_text/message_show.tscn"
-const MOMENT_TEXT_PATH := "res://Scene/show_text/moment_text.tscn"
-const LIJI_PATH := "res://Scene/show_text/liji.tscn"
-const COMBO_PATH := "res://Scene/show_text/combo.tscn"
-const COMBO_NUM_PATH := "res://Scene/show_text/combo_num.tscn"
-const CHOOSE_TEXT_PATH := "res://Scene/show_text/choose_scene.tscn"
-const TOUCH_TEXT_PATH := "res://Scene/show_text/touch_text.tscn"
+const MESSAGE_SHOW_PATH := "res://Scene/hittext/message_show.tscn"
+const MOMENT_TEXT_PATH := "res://Scene/hittext/moment_text.tscn"
+const LIJI_PATH := "res://Scene/hittext/liji.tscn"
+const COMBO_PATH := "res://Scene/hittext/combo.tscn"
+const COMBO_NUM_PATH := "res://Scene/hittext/combo_num.tscn"
+const CHOOSE_TEXT_PATH := "res://Scene/runtime/choose_scene.tscn"
+const TOUCH_TEXT_PATH := "res://Scene/hittext/touch_text.tscn"
 const BUFF_INFOR_PATH := "res://Scene/monster/buff_information.tscn"
 const GAME_ANNOUNCEMENT_PATH := "res://Scene/main_menu/game_announcement.tscn"
 

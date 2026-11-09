@@ -268,7 +268,7 @@ func _get_target_first_wave_monster_scene_paths() -> Array[String]:
 		if ResourceLoader.exists(scene_path):
 			paths.append(scene_path)
 	if str(_target_scene) == TZSIJIAN_LEVEL_SCENE:
-		for special_path in ["res://Scene/monster/monster_951.tscn", "res://Scene/monster_blood/boss_blood.tscn"]:
+		for special_path in ["res://Scene/monster/monster_951.tscn", "res://Scene/monster/boss_blood.tscn"]:
 			if ResourceLoader.exists(special_path) and not paths.has(special_path):
 				paths.append(special_path)
 	return paths

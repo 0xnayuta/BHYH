@@ -7,7 +7,7 @@ extends Node
 
 const TASK_TITLE_SCENE_PATH := "res://Scene/task/task_title.tscn"
 const PING_JIA_SCENE_PATH := "res://Scene/level/ping_jia.tscn"
-const MESSAGE_INFO_SCENE_PATH := "res://Scene/show_text/message_info.tscn"
+const MESSAGE_INFO_SCENE_PATH := "res://Scene/hittext/message_info.tscn"
 const SOME_MONSTER_HELP_SCENE_PATH := "res://Scene/monster/some_monster_help.tscn"
 const LETTER_FOR_PLAYER_SCENE_PATH := "res://Scene/other_menu/a_letter_for_all_players.tscn"
 

@@ -1,8 +1,8 @@
 # 当前工程状态 (Status)
 
 > **定位**：当前版本、运行基线、门禁与已知边界的单一事实源。
-> **最后更新**：2026-11-09。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
-> **阶段状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28 全局通信/被动契约与 Phase 29 `Scene/` 脚本落位已完成并归档；**Phase 39 Scene/Script 目录收敛进行中（39-0、39-1 已完成）**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，归档索引见 [`../archive/README.md`](../archive/README.md)。
+> **最后更新**：2026-11-10。历史验证记录已归档到 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；Phase 24/25/27 的实施记录见 [`../archive/README.md`](../archive/README.md)；本页只保留当前事实与最近基线。
+> **阶段状态**：Phase 35–38 的 7.1–7.4 内容回植已完成并归档；Phase 28 全局通信/被动契约与 Phase 29 `Scene/` 脚本落位已完成并归档；**Phase 39 Scene/Script 目录收敛进行中（39-0、39-1、39-2 已完成）**；Phase 26 发布/平台测量长期暂缓。完整阶段顺序见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，归档索引见 [`../archive/README.md`](../archive/README.md)。
 
 ---
 
@@ -236,7 +236,7 @@
 - 同步 `naming_standard.md` §1.4、`acceptance.md` 门禁表、`scripts/README.md` 与迁移清单。
 - **Phase 29 完成**：`source/Scene/` 下 `.gd` 为 0；56 个脚本全部归 `Script/<domain>/`；门禁已启用。
 
-### Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1 已完成）
+### Phase 39 Scene/Script 目录收敛（进行中：39-0、39-1、39-2 已完成）
 
 - Phase 35–38、28、29 已完成并归档；Phase 26 平台与发布验证继续长期暂缓。
 - **39-0 已完成（2026-11-09）**：`Scene/set_menu.tscn`、`Scene/auto_battle_config.tscn` 归 `Scene/level/`；`Script/main_menu/set_menu.gd` 归 `Script/level/set_menu.gd`；`Script/backpack.gd` 归 `Script/level/role_information_hud.gd`；`Script/monster_86.gd` 归 `Script/monster/monster_86.gd`；`Scene/` 根级 `.tscn` 与 `Script/` 根级 `.gd` 为 0。
@@ -244,8 +244,10 @@
 - **验证（2026-11-09）**：`check_all --skip-engine` 全维度 PASS；`health_check` 823 脚本 0 Parse Error / 0 Warning；`scene_probe_runner` 31/31 PASS；`archive_probe_runner` 344/344 PASS；`level_1` PASS；`docs_audit` 969 链接 / 0 缺失；根级负向探针 2/2 被拦截并清理。
 - **39-1 已完成（2026-11-09）**：`Scene/other_scene/` 44 个场景按 10/11/8/4/7/3/1 迁移至 `Scene/main_menu/`、`Scene/other_menu/`、`Scene/skill/`、`Scene/level/`、`Scene/monster/`、`Scene/runtime/`、`Scene/archive_interface/`；`Scene/other_scene` 已删除；`project.godot` 主场景同步 `res://Scene/runtime/startup_loading.tscn`。
 - **39-1 验证（2026-11-09）**：7 批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失。
-- Phase 39 后续计划：39-2 合并 `show_text`、`monster_blood`/`monster_damage`、`special_effect` 共 29 个场景；39-3 评估 `Scene/level/zmws`、`Script/monster` 数据形态与 2 个零引用 shader；39-4 验收与文档。
-- 详细批次、44 文件映射表、非目标与出口见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.3；39-2~39-4 尚未执行，不改变当前运行时与存档行为。
+- **39-2 已完成（2026-11-10）**：29 个场景完成合并；`choose_scene.tscn` 归 `Scene/runtime/`，7 个文本场景归 `Scene/hittext/`，2 个怪物血条 + 1 个受击场景归 `Scene/monster/`，18 个魂卡特效场景归 `Scene/hero/elite_soul_card/`；`Scene/show_text`、`Scene/monster_blood`、`Scene/monster_damage`、`Scene/special_effect` 已删除。
+- **39-2 验证（2026-11-10）**：三批均执行迁移与批间验证；最终全量 `scene_probe_runner` 31/31 PASS、`archive_probe_runner` 344/344 PASS、`level_1` PASS、`check_all --skip-engine` 全维度 PASS、`health_check` 823 脚本 0 Parse Error / 0 Warning、`docs_audit` 969 链接 / 0 缺失、`naming_compliance_audit` 与 `whitelist_audit` 通过。
+- Phase 39 后续计划：39-3 评估 `Scene/level/zmws`、`Script/monster` 数据形态与 2 个零引用 shader；39-4 验收与文档。
+- 详细批次、44 文件映射表、非目标与出口见 [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md) §1.3；39-3~39-4 尚未执行，不改变当前运行时与存档行为。
 
 ## 3. 当前已知边界
 
