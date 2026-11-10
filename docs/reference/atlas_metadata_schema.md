@@ -1,183 +1,55 @@
-# AtlasMetadata 生产者、schema 与消费者矩阵
+# AtlasMetadata schema 与读写边界
 
-> **状态**：Phase 14 已完成并归档（2026-10-28）。六个直接消费者均已迁移到 `AtlasMetadataView`；`AtlasMetadataStore.data_for`、`validate_path`、`clear_cache`、`NorthBossProjectile.source_masks` 与惰性 atlas 配置已删除；`contract_scan.py` 的 `atlas_boundary` 规则已阻断旧入口、非 View `.data` 与 `source_masks` 覆盖。**21-1C 类型化 accessor 复核已完成（2026-10-31）**：atlas 页名查询改为 `Array[String]`，其余消费者字段均以原生值类型返回；不新增嵌套 typed Resource、不改变路径身份。
-> **范围**：`manifest.json` → `metadata.tres` → `AtlasMetadataStore` → 生产消费者，以及直接读取源文件的构建工具。
-> **事实快照**：本页数量来自当前私有完整素材工作区；公开 clone 缺少 `source/Art/`，不能复现本页的 379 个 manifest 与 267 个运行时可达资源。当前实现与验证事实分别见 [`architecture.md`](architecture.md)、[`status.md`](status.md)。
-> **目标边界**：总体目标见 [`target_architecture_contract.md`](../standards/target_architecture_contract.md) §5、§7；Phase 14 批次见 [`iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)。
+> **职责**：说明 AtlasMetadata 的构建期序列化格式、运行时支持的 schema、Store/View 读写职责与失败语义，以及构建期与运行时的边界。当前验证与工程状态以 [`status.md`](status.md) 为准；运行架构见 [`architecture.md`](architecture.md)，验收判据见 [`acceptance.md`](acceptance.md)。路径身份与失败决策见 [`ADR-022`](../decisions/ADR-022-atlas-metadata-view-and-path-identity.md)。
 
-## 1. 数据流与职责
+## 1. 生产、序列化与读取角色
 
-```mermaid
-flowchart LR
-    M["私有素材 manifest.json<br/>379 个"] --> C["convert_atlas_metadata.py<br/>构建期转换 + --check"]
-    C --> R["同目录 metadata.tres<br/>AtlasMetadata.data 原始 JSON"]
-    R --> S["AtlasMetadataStore"]
-    S --> SV["view_for() -> AtlasMetadataView"]
-    SV --> P["PalaceBossProjectile<br/>masks / geometry"]
-    SV --> V["MountVisual<br/>animation + frames"]
-    SV --> PF["PalaceFlyingBoss<br/>geometry / masks"]
-    SV --> E["East / Cloud<br/>sequences"]
-    SV --> N["North<br/>sequences / geometry / masks"]
-    M --> B1["convert_monster_frames.py"]
-    M --> B2["convert_frame_sequences.py"]
-    R --> B1
+```text
+manifest.json --convert_atlas_metadata.py--> metadata.tres
+                                             |
+                                             v
+                              AtlasMetadataStore.view_for(path)
+                                             |
+                                             v
+                                    AtlasMetadataView
 ```
 
-- 仓库内唯一的 AtlasMetadata 生产者是 `scripts/convert_atlas_metadata.py`；它把每个 `manifest.json` 原样写入同目录 `metadata.tres`，只对顶层数组包装 `__top_level=array` 与 `items`。
-- 运行时入口只有 `AtlasMetadataStore.view_for(path)`，返回只读 `AtlasMetadataView`；`data_for` 已删除。六个直接消费者均走该入口，空路径与无效 path 由 Store 报告并返回 `null`。
-- 构建期工具直接读取 `metadata.tres` 文本或源 manifest；它们不应被误算成运行时 `AtlasMetadataStore` 消费者。
-- `manifest.json` 的生成链路不在公共仓库；本页只覆盖已入库的转换器与运行时读取边界。
+- `scripts/convert_atlas_metadata.py` 是仓库内 AtlasMetadata 资源的构建期生产者：将 manifest 数据序列化到同目录 `metadata.tres`；顶层数组包装为 `{"__top_level": "array", "items": [...]}`。`--check` 只比较预期输出，不写资源。
+- 转换器从 `source/Art/` 中发现的 `manifest.json` 读取输入并写入同目录资源；仓库内该脚本没有定义 manifest 的上游生成者，故本页不推断其来源链路，也不登记私有素材数量。
+- `AtlasMetadata` 以 `schema_id = "atlas_metadata"`、`schema_version = 1` 和 `data: Dictionary` 序列化。资源负责存储与浅层顶层检查；`data` 不是业务侧的可写接口。运行时只通过 `AtlasMetadataStore.view_for(path)` 取得只读查询对象，不直接取出或修改原始字典。
+- 构建转换器可读取 manifest 或 `metadata.tres` 并生成 `SpriteFrames` 等资源；这些构建期读取不构成运行时 `AtlasMetadataStore` 消费。
 
-## 2. 源文件形态
+## 2. 运行时 schema 契约
 
-### 2.1 当前快照
+`AtlasMetadataView` 只接受真实运行时消费的两种结构；其它源数据可以留给相应构建工具处理，不应为它们增加通用运行时模型。
 
-`source/Art/**/manifest.json` 共 **379** 个，均有同目录 `metadata.tres`，`convert_atlas_metadata.py --check` 为 **379/379 同步**。按顶层键/值形态分为 8 组：
-
-| 形态 | 数量 | 代表路径 | 运行时读取 |
-|:---|:---:|:---|:---|
-| `pages + sequences + files` | 95 | `monster/swf_png/3005/atlas/manifest.json` | `sequences` 可被 East 读取；`files` 未被 Store 消费者读取 |
-| `pages + sequences` | 63 | `monster/swf_png/.../atlas/manifest.json` | East 读取 `sequences` |
-| `pages + sequences + masks` | 54 | `monster/cloud_boss/model_3352/manifest.json` | Cloud/North/Palace/Projectile 读取 `geometry`、`masks`、`sequences` |
-| `animation + frames` | 130 | `mount/runtime/mounts/.../manifest.json` | MountVisual 读取完整动画结构 |
-| `animations`（旧形态） | 18 | 剑 Boss、北俱芦洲道具、角色特效 | 无 Store 读取；剑 Boss 由构建期帧转换器读取 |
-| 顶层数组 | 16 | 关卡地图、角色装备图集 | 无 Store 读取 |
-| `files`（独立关卡图集） | 1 | `level/game_4_level/runtime_atlas/level_50_52` | 无 Store 读取 |
-| 索引/其它字典 | 2 | `constellations/`、`monster/swf_png/` 索引 | 无 Store 读取 |
-
-合计 379。不同目录的键组合共有 18 种签名；它们不构成 18 套运行时类型。
-
-### 2.2 结论
-
-原先“四种 schema”的说法不足以覆盖真实输入：
-
-- `files` 既可以是 `pages + sequences` 的可选字段，也可以是独立关卡图集；
-- 存在旧 `animations` 形态、顶层数组和纯索引入口；
-- 运行时 Store 实际只直接使用两类顶层数据：
-  1. `pages + sequences`（可带 `files`、`geometry`、`masks`）；
-  2. `animation + frames`（MountVisual）。
-- `files`、旧 `animations`、顶层数组与索引字典是构建/溯源边界，不应为了“统一”强行生成运行时对象。
-
-## 3. 资源域与运行时可达范围
-
-按 Store 的路径规则统计，**267** 个 metadata 资源可被当前运行时入口按路径触达；这不等于所有资源都会在每一局加载。`view_for` 支持 `pages+sequences` 与 `animation+frames`：137 个序列资源、130 个 Mount 动画资源均可建立 View。
-
-| 资源域 | 路径规则 | 可触达数量 | 实际读取者 |
-|:---|:---|:---:|:---|
-| East 普通怪物 | `Art/monster/swf_png/<id>/atlas/metadata.tres` | 83 | `EastContinentMonster` 及子类 |
-| North 怪物 | `Art/monster/north_original/<model>/metadata.tres` | 51 | `NorthContinentMonster` |
-| Palace Boss | `Art/monster/palace_boss/<kind>/metadata.tres` | 2 | `PalaceFlyingBoss` |
-| Cloud Boss | `Art/monster/cloud_boss/model_3352/metadata.tres` | 1 | `CloudBoss` |
-| 坐骑运行时 | `Art/mount/runtime/mounts/<mount>/<candidate>/metadata.tres` | 86 | `MountVisual` |
-| 坐骑特效 | `Art/mount/runtime/effects/<mount>/<candidate>/metadata.tres` | 44 | `MountVisual`（effect root） |
-| **合计** | | **267** | 6 个代码调用点 + 间接弹体读取 |
-
-其余 112 个 metadata 未被 `AtlasMetadataStore` 路径规则触达；它们可能只服务构建、溯源、地图/角色图集或尚未迁移的代码，不能据此断言“无消费者”。本阶段只确认 Store 边界。
-
-### 3.1 未触达 metadata 分类（Phase 19-3B，2026-10-30）
-
-只读复核口径：以 metadata 所在目录是否被运行时场景/脚本直接引用、同目录或相邻目录是否存在生成帧资源、是否被构建期转换器/发布依赖清单读取，以及 `consumer_scenes`/`monster_ids` 等溯源字段为证据。**112 项均保留，不删除**：
-
-| 主分类 | 数量 | 消费证据 | 处理 |
-|:---|:---:|:---|:---|
-| 未迁移代码 | 41 | 40 个 legacy `atlas_small_monsters` 由场景直接引用 `atlas/pages`，`consumer_scenes` 全部存在；1 个法宝图集由场景直接引用页面 | 保留；迁移到构建期资源另立批次 |
-| 构建/溯源 | 38 | 星座 Boss/剑 Boss 的 `*_frames.tres` 与 FrameSequence、弹体/怪物/坐骑/宠物/法宝生成帧、`swf_png` 与星座索引 | 保留；metadata 作为构建源，不建立运行时 accessor |
-| 地图/关卡 | 30 | 15 个地图 manifest 的 `items[].assets` 指向 `imported/pool/*.png`；13 个北俱芦洲道具由关卡场景直接引用单独 PNG；2 个 runtime atlas（level_50_52 页面、level_62 背景帧） | 保留；地图 manifest 未发现 metadata 直接运行时读取 |
-| 角色图集 | 3 | `role_3_special_effects.tres`、`ne_zha_effects.tres` 与哪吒装备帧 `.tres` 由角色脚本/场景加载 | 保留；metadata 作为构建源 |
-| **合计** | **112** | | |
-
-补充事实：
-
-- 40 个 legacy 图集的 `consumer_scenes` 路径全部存在；其中 40 项仍由场景直接读取 `atlas/pages`，属于未迁移代码，不得按“无 Store 消费者”删除。
-- 15 个地图 manifest 未发现 metadata 直接运行时读取，但其 `items[].assets` 指向 `imported/pool/*.png`；按构建/溯源保留。
-- 完整 112 行清单由只读分析生成到 `docs/reports/atlas_metadata_untouched.md`（机器报告，不提交）；本页保留分类结论与访问依据。
-- 19-3B 未修改 `source/` 或 `source/Art/`，未删除任何 metadata。
-
-## 4. 运行时消费者矩阵
-
-**直接 Store 调用点**共 6 个，全部使用 `view_for`：Cloud、East、North、PalaceBossProjectile、PalaceFlyingBoss 与 MountVisual。`data_for` 已删除；弹体会从 Cloud/North/Palace 接收同一批 metadata 路径，形成间接读取，但不新增资源域。
-
-| # | 消费者 | 路径来源 | 使用字段 | 共享/复制 | 失败路径 |
-|:---:|:---|:---|:---|:---|:---|
-| 1 | `Script/monster/cloud_boss.gd` | 固定 `cloud_boss/model_3352/metadata.tres` | View 的 `geometry[sequence].center`；继承 East 读取 `sequences`；向 `PalaceBossProjectile` 传同一路径 | `_cloud_view` 为只读 View，不再保存共享字典 | View 无效时视觉偏移为零；Store 报告失败 |
-| 2 | `Script/monster/east_continent_monster.gd` | `swf_png/<monster_kind>/atlas/metadata.tres`，不存在时返回空路径；PalaceFlyingBoss/CloudBoss 继承此路径 | View 的 `sequence_frame_count`、`frame_reg_anchor`、`frame_size`、`frame_center` | Store 按路径缓存只读 View；删除 `_east_metadata_cache` | View 无效或路径为空时帧数为 0、anchor 为零、帧几何为哨兵；不直接索引裸字典 |
-| 3 | `Script/monster/north_continent_monster.gd` | `north_original/<model>/metadata.tres` | View 的 `sequences`、`geometry`（`center`/`size`/`origin`）、`masks`；传路径给弹体 | `_north_view` 为只读 View；`source_masks` 已删除，mask alias 由 `mask_sequence` + View 处理 | View 无效时序列为 0/哨兵、几何为零；`NorthBossProjectile` 无 View 时拒绝配置 |
-| 4 | `Script/monster/palace_boss_projectile.gd` | 配置键 `source_masks_metadata`，来自 Cloud/North/Palace | View 的 `masks` / `geometry`；NorthBossProjectile 使用 `mask_sequence` 别名选择 mask，不再写 `source_masks` | `view_for` 返回只读 View；无额外覆盖字典 | 非空路径 view 无效时 `configure()` 返回 false；空路径表示未请求 masks |
-| 5 | `Script/monster/palace_flying_boss.gd` | `palace_boss/<monster_kind>/metadata.tres` | View 的 `geometry`（`center`/`size`/`origin`）与 `masks["hit1"]`；`sequences` 仍经 East 继承；传路径给弹体 | `_palace_view` 为只读 View，不再保存共享字典 | View 无效时自有几何为零、hit1 碰撞禁用；Store 报告失败；继承 East 序列仍为迁移期行为 |
-| 6 | `Script/mount/mount_visual.gd` | `Art/mount/runtime/mounts|effects/<mount>/<candidate>/metadata.tres` | View 的 `animation`/`fps`/`loop`/`frame_count`、帧层 `page`/`region`/`offset`、`ride`/`official_ride`；原生骨骼 parts 分支不走 metadata | `view_for` 返回只读 View；骨骼分支保留 parts 数据 | 非空路径 View 无效时 `play()` 返回 false；缺失候选在 `ResourceLoader.exists` 处返回 false |
-
-### 4.1 字段契约
-
-| 字段 | 实际结构 | 使用者 | 说明 |
-|:---|:---|:---|:---|
-| `pages` | `[{path: String}]` | 构建期 `convert_monster_frames` | 运行时消费者不读取；不可用它推断加载依赖 |
-| `sequences` | `{name: {frames: [[frame, page, x, y, w, h, margin_l, margin_t, margin_r, margin_b]]}}` | East、Cloud、North、Palace | 运行时几何使用 `w/h/margin`；构建期使用页索引与 region |
-| `geometry` | `{name: {center: [x,y], size: [w,h], origin: [x,y]}}` | Cloud、North、Palace、Projectile | `center` 用于视觉/受击中心，`size`/`origin` 用于碰撞与取景；`source_*` 仅是溯源 |
-| `masks` | `{name: [[x, y, w, h] or []]}` | North、Cloud、Palace、Projectile | 空 mask 是合法“无碰撞”；不能把空数组当作缺失资源 |
-| `animation` + `frames` + `back_atlases`/`front_atlases` | 动画名、FPS、loop、帧数、图集页名、逐帧 back/front/ride | MountVisual | 页名相对于 `_base_path`；`region` 与 `offset` 是显示几何 |
-| `files` | 路径映射/清单 | 未发现 Store 消费者 | 不建立运行时 accessor；仅作为构建/溯源数据 |
-| `animations` | 旧动画名到帧条目的映射 | `convert_monster_frames`（剑 Boss 目标） | 不作为运行时统一 schema |
-| 顶层数组 `items` | 地图图层或装备图集条目 | 未发现 Store 消费者 | 不建立通用运行时模型 |
-
-`AtlasMetadataView` 已覆盖 `pages+sequences` 的序列帧元组、页索引、geometry、masks，以及 `animation+frames` 的 fps/loop/frame_count/图层/transform 校验；`AtlasMetadata.validate()` 仍保留浅层资源级检查。East、Cloud、PalaceFlyingBoss、East 继承序列路径与 North 已在 14-3B-2/14-3B-3 迁移；六个直接消费者均使用 View。
-
-## 5. 构建期消费者
-
-| 工具 | 读取范围 | 当前结果 | 与运行时边界 |
-|:---|:---|:---|:---|
-| `scripts/convert_atlas_metadata.py` | 全部 379 个 manifest | `--check` 379 同步；`--self-test` 4 个帧数样本通过 | 生产者；输出 `metadata.tres` |
-| `scripts/convert_monster_frames.py` | `Art/monster/**/metadata.tres`，其中 194 个含序列/旧动画 | 152 个目标（148 个 `sequences`，4 个旧 `animations`）；41 个空序列 + 1 个聚合宠物跳过 | 生成 `*_frames.tres`；不进入运行时 Store |
-| `scripts/convert_frame_sequences.py` | 4 个剑阵 `manifest.json` 的 `pages`/`animations` | 4 套 × 3 个动作 | 生成流式帧序列；不进入运行时 Store |
-| `scripts/contract_scan.py` | `.tres` 中 `script_class="AtlasMetadata"` | 跳过其内部源路径，不作为运行时依赖扫描 | 防止把构建溯源路径误算成依赖 |
-
-构建工具的成功条件不能证明运行时消费正确；同样，运行时读取通过不能代替 `--check` 的源/生成同步。
-
-## 6. 已发现但不在 Store 边界的引用
-
-以下配置/常量在当前代码中没有形成 AtlasMetadata 读取链，不能在 Phase 14 中当作消费者继续类型化：
-
-- `emei_boss3040.gd`、`emei_boss3041.gd`、`linggan_king_boss.gd`、`monster_3370.gd` 写入 `atlas_metadata`/`atlas_sequence` 配置；
-- `nanhai_projectile.gd` 把 `atlas_metadata`、`impact_atlas_metadata` 读入成员变量，但当前没有读取这些成员来加载 AtlasMetadata；`_configure_atlas_visual()` 直接返回 `false`；
-- `minghai_boss3117.gd`、`zhuque_street_monster.gd` 定义 `ATLAS_METADATA` 常量，但静态检索未发现其使用；
-- `source_masks_metadata` 是唯一的运行时“间接 metadata 路径”配置，读取者为 `palace_boss_projectile.gd`，来源为 Cloud/North/Palace；
-- 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已在 Phase 14-4 清理；`contract_scan.py` 守卫旧入口。
-
-`AtlasMetadataStore.validate_path()`、`clear_cache()` 与 `data_for()` 已删除；`view_for("")` 统一报告空路径并返回 `null`，不再存在静默空字典入口。
-
-## 7. 失败、缓存与身份风险
-
-| 问题 | 证据 | Phase 14 处理方向 |
+| 运行时结构 | 数据形态 | View 接纳检查与查询边界 |
 |:---|:---|:---|
-| 共享字典泄露可写面 | `data_for` 已删除，六个直接消费者均只读 View；`AtlasMetadata.data` 仍为序列化内部字段 | 业务不可直接读 `.data`；保留序列化拥有者内部边界 |
-| 空数据静默退化 | 各 View 消费者在无效路径下返回零/哨兵或拒绝配置；North 的 View 无效时同样退化且 `NorthBossProjectile` 拒绝配置 | 14-4 继续核对失败语义与边界守卫；不再保留裸字典回退 |
-| schema 校验浅层 | `AtlasMetadata.validate()` 未验证帧元组、页索引、geometry/masks、Mount 帧 | `AtlasMetadataView` 已深度校验 `pages+sequences` 与 `animation+frames` |
-| Store 公共 API 未使用 | `validate_path`/`clear_cache` 已删除 | 保留 `view_for` 作为唯一公开入口 |
-| metadata 缺少资源头 UID | `render_tres()` 未生成 `uid://`，资源身份当前是路径 | 已按 ADR-022 登记为路径身份例外；不在本次或 14-3B-3 中加 UID |
-| 旧配置残留 | 4 个 `atlas_metadata` 写入方、2 个未使用常量与 `nanhai_projectile` 惰性成员已清理 | 不把它们加入 typed 消费者清单；由 `contract_scan.py` 守卫旧入口与 `.data`/`source_masks` |
+| `pages` + `sequences` | `pages: [{path: String}]`；`sequences: {name: {frames: [[frame, page, x, y, w, h, margin_l, margin_t, margin_r, margin_b]]}}`；可带 `geometry`、`masks` 及构建/溯源用 `files` | 页与序列需为非空数组/字典；页路径为非空字符串；帧条目至少含 10 个数值，页索引须为整数且位于页表范围内。`geometry` 的 `center`、`size`、`origin` 是二元数值数组；`masks` 是逐帧数组，非空矩形至少含 4 个数值。空 mask 合法，表示该帧没有碰撞区域；`files` 不由 View 读取。 |
+| `animation` + `frames` | 单一动画及逐帧 `back` / `front` 图层，可选 `ride` / `official_ride` 变换 | 动画名非空；`fps` 为正数；`loop` 为布尔值；`frame_count` 与非空帧数组长度一致；`back_atlases`、`front_atlases` 为字符串数组。图层页索引、region、offset 及可选变换均按对应结构检查。 |
 
-## 8. 当前实现边界
+`AtlasMetadata.validate()` 检查 schema 标识/版本与资源级顶层形状；更深的帧元组、页索引、geometry、mask、动画层及变换检查由 `AtlasMetadataView` 在接纳时完成。越界或缺失查询按对应 accessor 返回零值、空结果、`-1` 或单位变换，不向业务侧暴露底层字典。
+View 的公开查询返回值为帧数/页索引等标量、`Vector2`、`Rect2`、`Transform2D` 或 `Array[String]`；不向业务侧暴露底层字典。
 
-六个直接消费者（Cloud/East/North/PalaceBossProjectile/PalaceFlyingBoss/MountVisual）均只调用 `AtlasMetadataView` 的公开查询；业务侧无裸 `.data` 读取，`contract_scan.py` 的 `atlas_boundary` 守卫保持。`animation_back_atlas_names()` / `animation_front_atlas_names()` 返回 `Array[String]`，其余帧几何、geometry、mask、播放参数与 rider transform 使用值类型。不建立 `files` 通用 accessor、旧 `animations` 运行时模型或索引字典模型；缺失/类型错误由消费者显式处理。
+`files`、旧式 `animations`、顶层数组包装结构和索引字典不是运行时 View schema；它们只作为序列化输入、溯源数据或相应构建转换器的输入保留。不要从它们推断运行时加载依赖，也不要为统一格式而强行建立运行时 accessor。
 
-Phase 14-2~14-4 与 21-1C 的实现批次、探针数量与逐项验证见 [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)。
+## 3. 运行时消费者与失败语义
 
-## 9. 验证与复现
+| 消费者 | View 查询职责 | 消费者侧处理 |
+|:---|:---|:---|
+| `EastContinentMonster` | 序列帧数、帧尺寸、registration anchor 与帧几何；`CloudBoss`、`PalaceFlyingBoss` 继承其序列读取 | View 无效时帧数为 0、anchor 为零；不可用帧几何使用显式缺失哨兵，不直接索引裸字典。 |
+| `CloudBoss` | `geometry.center`，用于视觉偏移 | View 无效时视觉偏移为零；序列仍由继承的 East 路径读取。 |
+| `NorthContinentMonster` | 序列、`geometry` 与 `masks`；向弹体传递 metadata 路径及可选 mask 序列别名 | View 缺失时序列数为 0、几何为零；弹体的 mask 别名选择查询序列，不复制或覆盖 mask 字典。 |
+| `PalaceFlyingBoss` | 自有 `geometry` 与 `hit1` mask；序列沿 East 继承路径读取 | View 无效时偏移/几何查询为零，依赖 mask 的攻击碰撞禁用。 |
+| `PalaceBossProjectile`（含 `NorthBossProjectile`） | `source_masks_metadata` 对应的 `geometry` / `masks` | 非空路径无法建立有效 View 时 `configure()` 返回 `false`；空路径表示未请求可选 masks。空 mask 是合法无碰撞帧，不是资源加载失败。 |
+| `MountVisual` | `animation`、播放参数、逐帧图层 region/offset 与 ride transform | 缺失或无效 metadata 时 `play()` 返回 `false`。原生骨骼 parts 分支使用其既有数据，不经 AtlasMetadata。 |
 
-构建期检查：
+`AtlasMetadataStore.view_for()` 对空路径、文件缺失、资源类型不符或 schema 无效报告错误并返回 `null`；调用方表示“未请求可选资源”时不应把空路径传给 Store。成功 View 与非空路径的失败状态按路径缓存，错误报告按路径去重。消费者对 `null` 的处理由上表和相应实现决定；不得把无效 metadata 静默替换为另一 schema、旧路径或裸字典。
 
-```bash
-python scripts/convert_atlas_metadata.py --check
-python scripts/convert_atlas_metadata.py --self-test
-python scripts/convert_monster_frames.py --check
-```
+metadata 的稳定身份为资源路径加 `schema_id` / `schema_version`，不新增 `uid://`；路径变更须同步引用与确定性生成，详见 ADR-022。
 
-运行时检查：
+## 4. 构建期边界与守卫
 
-```bash
-python scripts/scene_probe_runner.py --godot <godot> --probe atlas-accessor
-python scripts/check_all.py --godot-bin <godot>
-```
-
-判据：Atlas manifest 与生成资源同步；帧数负向自测全部拦截；怪物帧目标无缺失；`atlas-accessor` 探针覆盖两类 schema、越界查询、缺失 mask 与无效 View；`level_1` 与全量关卡回归无新增失败。具体计数以脚本输出为准。
-
-Phase 14 的一次性探针、逐资源比对数量与旧门禁口径见 [`../archive/iteration_14_atlas_metadata_boundary.md`](../archive/iteration_14_atlas_metadata_boundary.md)；临时探针已删除，再次调查时应从当前源码、资源与命令输出重新生成。
+- 构建转换器可直接读取 manifest 或序列化后的 `metadata.tres` 并生成 `SpriteFrames` 等资源，例如 `convert_frame_sequences.py` 消费 manifest、`convert_monster_frames.py` 消费 metadata。构建期读取不等于游戏运行时读取，也不能代替运行时消费者对 View 的校验。
+- 运行时不得直接解析 atlas manifest。`scripts/contract_scan.py` 的运行时 manifest 规则守住此边界；`atlas_boundary` 规则禁止恢复旧 Store 入口、业务直接读取 `.data` 或 `source_masks` 字典覆盖，业务查询应使用 `view_for()` 与 View 值接口。
+- 当前验证结果由 `status.md` 汇总；需要执行的命令与判据由 `acceptance.md` 维护，本页不复制阶段记录或一次性探针结果。

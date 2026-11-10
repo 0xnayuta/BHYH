@@ -1,10 +1,8 @@
 # Godot 现代项目设计规范
 
-> **版本**：v1.1.0（2026-10-27，总体目标架构对齐）
->
 > **适用范围**：新增代码与主动重构代码。
 >
-> **遗留边界**：现有 Flash 正位重构结构按“遗留例外”处理；本规范不授权无计划的大规模重构。
+> **遗留边界**：仅对 [`../reference/architecture.md`](../reference/architecture.md) 明确记录的存量结构按遗留处理；本文不授权无计划重构，也不允许新增同类依赖。
 >
 > **关联规范**：[`target_architecture_contract.md`](target_architecture_contract.md) 定义总体职责、依赖、所有权与生命周期；本文规定具体 Godot 设计方法；[`naming_standard.md`](naming_standard.md) 规定命名，例外见 [`naming_whitelist.md`](naming_whitelist.md)。
 
@@ -155,113 +153,40 @@ Autoload 仅适用于：
 
 ### 4.3 遗留例外
 
-- 当前 10 个注册项是遗留基线，不是最终数量目标；增删/合并需评审调用面、初始化与关闭行为；
-- `global.gd` 不再接收新业务职责；提取按所有权切片，不能只把字段搬进另一个 Manager；
-- 新功能不以方便访问为由全局化；被替换 API 的调用方同批迁移，删除过时入口。正式职责仍正确的唯一入口可保留名称，不留兼容转发链。
+- Autoload 数量不是目标；每次新增、合并或移除都必须评审替代方案、调用面、初始化顺序、生命周期与清理方式。
+- 全局编排对象不得因便于访问而新增业务职责；职责提取必须按所有权边界迁移生产调用方、删除旧实现与过时入口，不保留兼容转发链。
 
 ---
 
-## 5. 项目结构
+## 5. 项目结构与迁移边界
 
-### 5.1 当前结构
-
-当前顶层按类型划分：
-
-```text
-source/
-├── Scene/
-├── Script/
-├── Art/
-├── Music/
-├── Font/
-├── Shader/
-├── Spritesheet/
-├── addons/
-└── bin/
-```
-
-项目保留现有类型顶层，并在其内部功能聚合；这是 ADR-008 的明确选择，不将全仓目录搬迁视作架构完成条件。
-
-### 5.2 新代码规则
-
-- 新功能在现有顶层目录下使用功能子目录，例如：
-  - `Scene/<feature>/`
-  - `Script/<feature>/`
-  - `Art/<feature>/`
-- 不在同一功能中再建立第二套并行目录体系；
-- 不新增顶层类型目录，除非经过独立架构评审；
-- 目录与文件命名继续遵循 [`naming_standard.md`](naming_standard.md)。
-
-### 5.3 迁移边界
-
-任何跨目录重构必须：
-
-1. 先提交迁移方案；
-2. 使用 `scripts/rename_path.py`；
-3. 完成引用扫描、UID/`.import` 同步；
-4. 通过静态门禁与实机冒烟；
-5. 保留回滚路径。
-
-禁止借“规范化”名义进行无边界目录搬迁。
+- 按 ADR-008 保留现有类型顶层目录，在其内部按功能组织场景、脚本和资源；不得建立同一功能的平行目录体系。
+- 不新增顶层类型目录，除非经过独立架构评审；不以“规范化”为由进行无边界的全工程搬迁。
+- 目录与文件命名、路径迁移工具和引用同步要求遵循 [`naming_standard.md`](naming_standard.md)。跨目录迁移必须先有方案，并按 [`../reference/acceptance.md`](../reference/acceptance.md) 验证受影响行为。
 
 ---
 
 ## 6. 输入、物理层与项目设置
 
-- 基础输入动作统一在 `project.godot` 定义；`LocalCoop` 集中生成 `p2_*` 为已登记派生动作边界，不新增散落裸键或任意动态注册。
+- 基础输入动作应在 `project.godot` 集中定义；运行时派生动作必须由明确的集中所有者管理，不得散落裸键或随意动态注册。
 - 物理层使用具名层；碰撞掩码不得使用无注释的裸整数。
-- 关卡内 HUD 窗口的 ESC 由 `backpack.gd` 统一分发；可关闭子层实现 `request_escape_close() -> bool`，只关闭一层并返回 `true`，不得在各窗口重复监听 `菜单` 打开设置。
-- 新增窗口、渲染、音频、输入配置必须说明平台影响。
-- `project.godot` 属于可审查配置；`.godot/` 导入缓存不入库。
-- 活动 SceneTree 与玩法状态由主线程修改；后台只处理隔离数据/IO/受支持加载。线程交接明确同步、会话身份、过期结果拒绝与关闭路径。
-- 新增平台导出前，先确认公开仓库素材边界与许可证。
+- `project.godot` 属于可审查配置；`.godot/` 导入缓存不得作为项目资源提交。
+- UI 窗口栈、槽位绑定、输入交接及平台边界遵循 [`target_architecture_contract.md`](target_architecture_contract.md)；其当前实现见 [`../reference/architecture.md`](../reference/architecture.md)。
 
 ---
 
 ## 7. 验证要求
 
-新增或重构场景/资源后，至少执行：
-
-```bash
-python scripts/check_all.py --skip-engine
-python scripts/health_check.py --project source --godot-bin <godot>
-python scripts/level_test_runner.py --godot <godot> --level res://Scene/level/level_1.tscn
-```
-
-说明：
-
-- 私有完整工作区必须保持 0 ERROR / 0 WARNING；
-- 公开 clone 缺少第三方素材，出现资源缺失提示属于预期；
-- 新增 Autoload、输入动作、物理层或全局资源路径时，必须执行对应实机验证。
+新增或主动重构场景、Resource、Autoload、输入动作或物理层时，必须按 [`../reference/acceptance.md`](../reference/acceptance.md) 选择适用验收档位，完成相关静态门禁与运行期验证；不得以单项工具通过替代验收。具体命令、失败判据与运行时夹具见 acceptance 和 [`../../scripts/README.md`](../../scripts/README.md)，本文不重复列单。
 
 ---
 
-## 8. 遗留例外清单
+## 8. 存量结构边界
 
-以下结构暂按遗留处理，不在本规范生效时强制迁移：
+以下仅为已存在代码的有限遗留边界，不构成新增代码先例：
 
-| 项目 | 状态 |
-|:---|:---|
-| 现有 Autoload 注册 | 遗留基线；变更需评审，不设数量目标 |
-| `global.gd` 全局编排 | 禁止扩张；按职责闭环迁移，不永久保留旧 API |
-| 字典/JSON 业务数据 | 保留存档边界；静态配置优先 Resource，可变状态按域拥有 |
-| `Scene/Script/Art` 类型顶层 | 保留；内部功能聚合，不强制全仓搬迁 |
-| 既有深层 `get_node()` / 绝对路径 | 保留，新增代码禁止 |
-| 既有场景继承与节点路径 | 保留，重构时同步清理 |
-| 2P 面板全局视图交换 | 现状与保存快照互斥；目标显式槽位绑定，迁移时联动验证 |
+- 按 ADR-008 保留 `Scene/Script/Art` 等类型顶层目录，在其内部按功能组织；不强制全工程搬迁，也不新增顶层类型目录。
+- 既有深层节点路径与场景继承只在尚未迁移的存量范围内保留；新增代码必须使用明确注入和场景内部引用，重构时同步修正节点路径。
+- 既有双人面板全局视图交换属于迁移中的遗留路径；新增 UI 显式绑定操作者/槽位，且完整迁移前必须保留既有保存保护。决策见 [ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)，实际边界见 [`../reference/architecture.md`](../reference/architecture.md) 与 [`../reference/acceptance.md`](../reference/acceptance.md)。
 
-迁移遗留结构必须单独立项，不得混入普通功能提交。
-
----
-
-## 9. PR 自检清单
-
-- [ ] 新场景是否单一职责、可复用、尽量自包含？
-- [ ] 外部依赖是否通过 `@export` / 上层注入，而非深层 `get_node()`？
-- [ ] 子节点是否通过 signal 通知父级，而不是反向控制父级？
-- [ ] 新数据是否优先使用 Resource / `.tres`？
-- [ ] 是否新增 Autoload？是否完成评审说明？
-- [ ] 输入动作、物理层是否使用具名配置？
-- [ ] 是否新增公开素材或改变 `.gitignore` 边界？
-- [ ] 是否执行静态门禁与必要的实机验证？
-- [ ] 是否把遗留改造误混入普通功能提交？
+其他存量实现边界以 [`../reference/architecture.md`](../reference/architecture.md) 为准；跨域职责、所有权与生命周期目标以 [`target_architecture_contract.md`](target_architecture_contract.md) 为准。遗留改造须独立评估，不混入普通功能提交。

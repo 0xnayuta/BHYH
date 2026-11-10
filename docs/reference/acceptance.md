@@ -1,544 +1,213 @@
-# BHYH 验收标准 (Acceptance)
+# BHYH 验收标准
 
-> **状态**：活跃参考文档（2026-10-25 新建）。
+> **职责**：定义当前脚本门禁、可复现运行夹具、通过阈值和按变更类型必须补充的验收。实际执行事实只记 [`status.md`](status.md)，阶段状态只记 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。命令注册依据 `scripts/check_all.py` 与 `scripts/contract_gate.py`，工具目录和参数索引见 [`../../scripts/README.md`](../../scripts/README.md)。
 >
-> **定位**：回答“一个改动凭什么算通过”。本文记录当前门禁的**实际行为**、通过判据、失败语义与分档验收矩阵。
->
-> **事实源**：门禁实际行为以 `scripts/` 为准；验证事实见 [`status.md`](status.md)，当前实现见 [`architecture.md`](architecture.md)；跨模块不变量与目标见 [`总体目标契约`](../standards/target_architecture_contract.md)。目标新增要求不代表已有自动门禁覆盖。
->
-> **重要前提**：完整验收依赖本地合法授权的完整素材工作区。公开 clone 缺少 `source/Art/`、`Music/`、`Font/`、`Spritesheet/`，出现缺失资源提示属于预期，不据此判定失败。
+> 完整工作区含合法授权素材；公开 clone 可能缺少 `Art/`、`Music/`、`Font/`、`Spritesheet/`。资源扫描对缺失素材根的处理按各门禁实际范围；缺失资源提示不是通用豁免。
 
----
+## 1. 验收档位
 
-## 1. 验收原则
-
-1. **证据优先**：只接受实际执行的命令、退出码、日志、报告或截图；代码审阅、反编译成功、单测通过都不能替代运行时验收。
-2. **不放宽门禁**：不得通过删除检查、扩大白名单、跳过维度或把失败改写成警告来“通过”。
-3. **完整工作区口径**：0 ERROR / 0 WARNING 以含本地素材的完整工作区为准；公开 clone 的缺失资源不计。
-4. **测试即规格**：探针与冒烟夹具是可执行规格，放在 `scripts/`，不进入生产 `source/`。
-5. **原子验证**：每个功能域单独移植、单独验证、单独提交；不要用一个巨型提交掩盖失败来源。
-6. **失败可复现**：记录失败命令、首个错误、日志位置与复现步骤；修复后重跑同一命令。
-
----
-
-## 2. 验收分层
-
-```mermaid
-flowchart TD
-    A["L0 静态门禁<br/>check_all --skip-engine"] --> B["L1 引擎健康<br/>check_all --godot-bin"]
-    B --> C["L2 运行期夹具<br/>关卡冒烟 / 回归 / 双人探针"]
-    C --> D["L3 发布收口<br/>全量回归 + 命名终审 + 构建资源同步"]
-```
-
-| 档位 | 适用场景 | 最低要求 |
+| 档位 | 适用 | 必需证据 |
 |:---|:---|:---|
-| **L0 静态门禁** | 每次提交；无 Godot 环境 | `check_all.py --skip-engine` 7/7 PASS |
-| **L1 引擎健康** | 改脚本、场景、资源、输入、物理层 | L0 + `check_all.py --godot-bin <godot>` 9/9 PASS |
-| **L2 运行期夹具** | 改玩法、关卡、双人、HUD、加载流程 | L1 + 相关关卡冒烟 / 回归 / 双人探针 |
-| **L3 发布收口** | 版本迁移、里程碑、发布前 | L2 + 全量关卡回归 + 命名终审 + 构建期资源同步 + 文档链接检查 |
+| **L0 静态门禁** | 无 Godot 的提交前检查 | `python scripts/check_all.py --skip-engine`；执行行尾、格式、核心 lint、契约/资源、命名、NodePath/Global 引用及资源路径维度。引擎与 DragonBones 两维被显式跳过，不能据此声称 L1 通过。 |
+| **L1 引擎健康** | 改动 GDScript、场景、资源、输入或物理层 | `python scripts/check_all.py --godot-bin "<godot>"`；检查当前全部已注册维度。 |
+| **L2 运行期** | 改动玩法、关卡、双人、HUD、场景流、存档或资源消费者 | L1 + 受影响的单关冒烟、双人探针、场景探针或档案夹具；正常逻辑、边界和失败路径均需覆盖。 |
+| **L3 发布 / 发布依赖** | 发布、目标包依赖变更或全量收口 | L2 + 全量关卡回归、命名终审、文档索引/链接审计；改动导出依赖时执行相应实际 PCK 探针。 |
 
----
+跳过门禁的开关只能用于明确的较低档位或定向诊断，不能把跳过维度计为完成的验证。
 
-## 3. L0：`check_all.py` 九维总门禁
+## 2. `check_all.py` 当前注册维度
 
-### 3.1 调用方式
+标准运行包含下列维度；顺序就是脚本固定的汇总顺序。
 
-```bash
-# 无 Godot：跳过第 4 与第 9 维，7/7
-python scripts/check_all.py --skip-engine
+| 维度 | 实际命令 | 通过判据 |
+|:---:|:---|:---|
+| 1 | `python scripts/normalize_eol.py source --dry-run` | stdout 含 `发现并清洗 CRLF 文件数: 0`。`--fix` 时，行尾维度以修复命令退出码 0 通过。 |
+| 2 | `python scripts/format_all.py source --check` | 命令退出码 0，且 stdout 含 `所有代码完全符合代码格式规范`；`--fix` 格式修复以命令成功文本/退出码通过。GDScript 行宽为 **120**。 |
+| 3 | `gdlint`（`check_all.py` 登记的核心脚本子集） | 退出码 0，stdout 含 `no problems found`；不是全仓 lint。 |
+| 4 | `python scripts/health_check.py`（可透传 `--godot-bin`） | 退出码 0，且 stdout 含 `0 Parse Error`（或 `0 严重编译错误`）及 `0 处断裂引用`。Godot 编译子进程超时 **30 秒**。 |
+| 5 | `python scripts/contract_gate.py` | 所有已注册子命令退出码 0；`docs/reports/contract_audit.json` 存在且 `ERROR=0`、`WARNING≤1050`。 |
+| 6 | `python scripts/naming_audit.py --all` | 退出码 0。 |
+| 7 | `python scripts/runtime_reference_audit.py` | 退出码 0；不得有无法解析的场景 NodePath 或未声明的 `Global` 方法引用。 |
+| 8 | `python scripts/resource_path_audit.py --project source` | 退出码 0；静态资源大小写、可识别动态路径/Spine 页名与登记工厂目标符合规则。 |
+| 9 | `python scripts/verify_dragonbones_factories.py`（可透传 `--godot`） | 退出码 0；登记工厂均完成加载验证。 |
 
-# 有 Godot：9/9
-python scripts/check_all.py --godot-bin "<Godot 4.7.2 可执行文件>"
+`--skip-engine` 与 `--fast` 明确跳过维度 4、9；这是七个非引擎维度的运行配置，不是全维度门禁。其余支持的跳过参数为 `--skip-contract`、`--skip-naming`、`--skip-runtime`、`--skip-resource`。`--godot-bin` 传给引擎检查；`--dragonbones-full` 强制 DragonBones 全量；`--health-full` 强制引擎重编译；`--no-cache` 禁用适用缓存，`-j/--jobs` 调整并发（默认 **6**）。`--fix` 先串行修复行尾/格式，再并行执行只读门禁。
 
-# 串行修复行尾与格式后，再并发跑其余维度
-python scripts/check_all.py --fix
+### 2.1 失败语义
 
-# 其他开关
-python scripts/check_all.py --fast            # 只跳过引擎编译，等同该维度的 --skip-engine
-python scripts/check_all.py --skip-contract   # 跳过整个契约域（子命令以 contract_gate.COMMANDS 为准）
-python scripts/check_all.py --skip-naming
-python scripts/check_all.py --skip-runtime
-python scripts/check_all.py --skip-resource
-python scripts/check_all.py --no-cache -j 6
-```
+- 行尾检查由 `check_all.py` 再看报告文本；正常检查必须出现 CRLF 数为零的文本。修复模式要求修复命令成功。
+- 引擎检查默认 `WARNING_ALLOWLIST` 为空：Parse Error、`SCRIPT ERROR:` 或未豁免 GDScript warning 会使健康检查标记 failed；普通 `ERROR:` 行本身不属于该脚本编译失败条件。场景资源断裂写入报告，但 `check_all.py` 另要求健康输出明确包含 `0 处断裂引用`。
+- `health_check.py` 在 Godot 不可用时可返回 `skipped` 且退出码为 0；其超时/内部 `error` 也不一定以非零码退出。`check_all.py` 还要求上述成功文本，所以无 Godot 时必须显式用 `--skip-engine`，不得把 skipped 当作 L1。
+- 契约维度有两层条件：任一 `contract_gate.COMMANDS` 子命令非零即失败；其后还需报告存在、`ERROR=0` 且 `WARNING≤1050`。预算是上限，不得以扩大豁免或改成 WARNING 隐藏 ERROR。
+- `check_all.py` 成功退出 `0`，任一启用维度失败退出 `1`；由运行配置跳过的维度会显示为 skipped/不运行，不构成相应档位证据。
 
-- 默认并发 **6** 个线程；只读模式下 9 个维度并行，`--fix` 模式下维度 1→2 串行写修复，维度 3~9 并行。
-- 汇总顺序固定为维度 1→9；全部通过返回 `0`，任一失败返回 `1`。
-- 启动时切换到仓库根，因此命令可在任意当前目录执行。
-- Godot 可执行文件通过 `--godot-bin` / `--godot` 或 `GODOT_BIN` 环境变量指定，不写入仓库。
+## 3. `contract_gate.py` 当前子门禁
 
-### 3.2 九维定义与通过判据
+下列命令是 `scripts/contract_gate.py` 的实际 `COMMANDS` 注册，不是整个 `scripts/` 工具目录清单。命令并发运行，任一非零退出即 gate 失败：
 
-| 维度 | 门禁项 | 实际命令 | 通过判据 | 需要 Godot |
-|:---:|:---|:---|:---|:---:|
-| 1 | 跨平台行尾 LF | `normalize_eol.py source --dry-run` | 输出含 `发现并清洗 CRLF 文件数: 0`；`--fix` 模式下只看退出码 0 | ❌ |
-| 2 | GDScript 格式化 | `format_all.py source --check` | 输出含 `所有代码完全符合代码格式规范`（或修复模式的 `代码格式化操作完成`）且退出码 0 | ❌ |
-| 3 | 静态异味 | `gdlint` 作用于核心脚本子集 | 退出码 0 且输出含 `no problems found` | ❌ |
-| 4 | 引擎静态编译 | `health_check.py [--godot-bin X]` | 退出码 0，且输出命中 `0 Parse Error`（或 `0 严重编译错误`）与 `0 处断裂引用` | ✅ |
-| 5 | 契约与资源域 | `contract_gate.py` | 退出码 0；`docs/reports/contract_audit.json` 存在且 `ERROR == 0`、`WARNING <= 1050` | ❌ |
-| 6 | 全量命名 | `naming_audit.py --all` | 退出码 0 | ❌ |
-| 7 | 运行时引用 | `runtime_reference_audit.py` | 退出码 0 | ❌ |
-| 8 | 资源路径与工厂 | `resource_path_audit.py --project source` | 退出码 0 | ❌ |
-| 9 | DragonBones 工厂加载 | `verify_dragonbones_factories.py [--godot X]` | 退出码 0；工厂加载验证通过 | ✅ |
+| 检查面 | 注册命令 |
+|:---|:---|
+| 契约扫描与负/正样本 | `python scripts/contract_scan.py --fail-on-error`<br>`python scripts/contract_scan.py --self-test` |
+| Atlas Metadata | `python scripts/convert_atlas_metadata.py --check`<br>`python scripts/convert_atlas_metadata.py --self-test` |
+| 构建帧/序列 | `python scripts/convert_frame_sequences.py --check`<br>`python scripts/convert_monster_frames.py --check`<br>`python scripts/convert_numbered_frames.py --all --check`<br>`python scripts/convert_sheet_frames.py --check`<br>`python scripts/convert_liu_sha_frames.py --check`<br>`python scripts/convert_monster_action_views.py --check` |
+| 关卡/怪物/装备 Catalog | `python scripts/convert_level_preload_catalog.py --check`<br>`python scripts/convert_level_layout_catalog.py --check`<br>`python scripts/level_layout_migration_audit.py --fail-on-error`<br>`python scripts/convert_external_monster_catalog.py --check`<br>`python scripts/convert_equipment_catalog.py --check`<br>`python scripts/equipment_data_audit.py --check` |
+| 运行时帧与原始导出清单 | `python scripts/runtime_frames_audit.py --fail-on-error`<br>`python scripts/export_raw_manifest.py --check --allow-missing`<br>`python scripts/png_stream_audit.py --fail-on-error` |
+| Theme、字体与表面 token | `python scripts/theme_override_audit.py --check`<br>`python scripts/convert_ui_theme_tokens.py --check`<br>`python scripts/theme_token_audit.py --check`<br>`python scripts/theme_variant_audit.py --check`<br>`python scripts/ui_dynamic_theme_audit.py --check`<br>`python scripts/font_coverage_audit.py --check`<br>`python scripts/font_role_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --self-test` |
+| 冻结豁免 | `python scripts/whitelist_audit.py --fail-on-error` |
 
-### 3.3 必须知道的实现口径
+### 3.1 `contract_scan.py` 注册类别与报告级别
 
-1. **七维与九维是同一脚本的两种运行口径**：`--skip-engine` 跳过维度 4 与 9；`status.md` 中的“7/7 PASS”通常指此口径。
-2. **维度 1 的失败判定依赖 stdout 文本**：`normalize_eol.py` 自身永远返回 0（目标不存在时返回 2）；CRLF 未清零由 `check_all.py` 的文本匹配拦截。
-3. **维度 3 只覆盖核心脚本子集**：清单硬编码在 `check_all.py`；不是全量 lint。
-4. **维度 4 在没有 Godot 时不会“通过”**：`health_check.py` 在无引擎时可能返回 `skipped` 且退出码 0，但 `check_all` 找不到成功文本，仍会 FAIL。无引擎环境必须显式 `--skip-engine`。
-5. **维度 5 是双重判据**：`contract_gate` 任一子命令非零直接失败；子命令全通过后，才检查 JSON 的 ERROR 与 WARNING 预算。
-6. **WARNING 预算 1050 是棘轮**：ERROR 必须为 0；WARNING 不得超过当前预算。新增 WARNING 需要先降低存量或调整预算，不能静默增长。
+下列类别名与当前 `ContractScanner.run_all_checks()` 注册一致；本节不把类别数或历史报告数量作为接口契约。
 
----
-
-## 4. 契约域：`contract_gate.py`
-
-`contract_gate.py` 并发执行所列子门禁，任一失败即整体失败；实现清单以 `COMMANDS` 为准：
-
-| 子门禁 | 命令 | 作用 |
+| 类别组 | 当前类别名 | 判定 |
 |:---|:---|:---|
-| 契约扫描 | `contract_scan.py --fail-on-error` | 二十四类字面量契约与 AtlasMetadata/关卡预载/场景入口/加载页缓存/池 UI/运行状态/Global 表面/全局信号基线/被动属性边界/宠物被动边界/档案/槽位/面板操作者/共享账本/音频入口/HUD 面板/Phase 17 边界/输入写入边界 |
-| 契约自测 | `contract_scan.py --self-test` | 二十四类边界规则的正负样本；含 Phase 17 结算/命令/表现层/路径预算、运行状态、Global 表面、全局信号基线、被动属性边界、宠物被动边界、音频入口、HUD 面板只读与输入写入边界 |
-| Atlas 同步 | `convert_atlas_metadata.py --check` | `manifest.json` 与 `metadata.tres` 逐字一致 |
-| Atlas 负向自测 | `convert_atlas_metadata.py --self-test` | `source_frames` 帧数校验的负向样本 |
-| 外部怪物映射 | `convert_external_monster_catalog.py --check` | `monster.json` 名称与 BHYH 怪物脚本 `my_mr_name` 精确匹配，唯一归一化补 6 条；外部 ID/场景路径/名称逐字一致 |
-| 关卡布局同步 | `convert_level_layout_catalog.py --check` | `level_layout_sources.json` 与布局 `.tres`/Catalog 逐字一致；stage 连续、点位唯一、依赖存在、矩形范围（终屏 screen_rect 允许零宽）与场景路径校验 |
-| 装备 Catalog/字段 | `convert_equipment_catalog.py --check`、`equipment_data_audit.py --check` | 1,035 条定义、32 字段、`defined_fields`/`randomized_fields`/`random_rolls`、嵌套强化键、int/float 类型与构建源同源；随机字段不得保存采样值；33-2 Rules/Roller 与旧实现逐项对照；33-3 四簇与 33-4 `base_role_properies` 规则调用全部迁移；33-4 删除旧脚本/字典入口/Autoload；33-5 需通过审计、全量回归与包含 `equipment_catalog` 的 PCK 闭包 |
-| FrameSequence 同步 | `convert_frame_sequences.py --check` | 内容、schema、`asset_id` 唯一、单目录单序列、UID、Catalog、延迟纹理路径闭包与陈旧输出；不等于导出包完整 |
-| 怪物帧同步 | `convert_monster_frames.py --check` | 148 个目标的动画名集合、帧数、页闭包、`region`/`margin`、PNG 边界、确定性 UID 与全局 UID 冲突；历史无 UID 目标记为已评审例外 |
-| PNG 流 guard | `png_stream_audit.py --fail-on-error` | 未登记使用、已迁移消费者旧数组/扫描/猜名回归 |
-| UI Theme 基线 | `theme_override_audit.py --check` | 直接属性/Animation 轨道/直接字体/动态调用或文件数超过基线，新增带覆盖场景 |
-| 字体覆盖/资产 | `font_coverage_audit.py --check` | 静态中文缺字、动态样本缺字、Theme 字体文件 >6、Theme 字体资源未引用或字体文件不可读 |
-| 字体角色 | `font_role_audit.py --check` | 有效字体归属、角色包装/fallback、脚本与场景直接字体、宋体残留、字号例外基线 |
-| Theme token | `theme_token_audit.py --check` | 新增/改写字号、描边、字体颜色或 Button 基类偏离 token 契约 |
-| Theme 变体层级 | `theme_variant_audit.py --check` | 618 冻结变体缺失、语义基类成环、Theme 属性 >2,000、StyleBox >36 或独立重复签名组 >10 |
-| 动态 Theme 覆盖 | `ui_dynamic_theme_audit.py --check` | `source/**/*.gd`（排除 addons/.godot）静态角色覆盖 >0、跨行调用解析失败、调用总数增长或新增未登记文件；`--self-test` 覆盖跨行正负样本 |
-| UI Theme token 源 | `convert_ui_theme_tokens.py --check` | `ui_theme_tokens.json` 与 `UiColorTokens`/`UiSurfaceTokens`/Theme 受管属性不一致 |
-| UI 表面色 token | `ui_surface_token_audit.py --check` | 自绘 StyleBox 裸色或 `main_menu` 裸色超过冻结基线；`--self-test` 覆盖正负样本 |
-| 白名单冻结 | `whitelist_audit.py --fail-on-error` | 冻结摘要、磁盘登记与评审记录 |
+| 引用/字面量检查 | `resource_path`, `node_path`, `reflection`, `anim_track`, `dict_key` | 路径/节点/反射/动画规则命中大小写或符号失配时为 ERROR；无场景节点末段疑似大小写问题为 WARNING；未知反射方法为 INFO、未知信号为 WARNING；DataKeys 已登记的中文键为 WARNING、未登记的为 INFO。 |
+| 运行时边界 | `runtime_manifest`, `atlas_boundary`, `preload_boundary`, `scene_entry`, `load_cache`, `pool_ui`, `run_state_boundary` | 禁止运行时解析 manifest、绕过 Atlas View/预载 Catalog/`Global.change_scene`/缓存交接边界，以及已退役状态/池/UI 私有入口；违规为 ERROR。 |
+| 全局与数据所有权 | `global_surface`, `global_signal`, `archive_boundary`, `slot_boundary`, `panel_operator`, `shared_ledger` | 新增未登记 Global 表面/信号、绕过存档入口、硬编码 1P、缺少面板操作者或共享账本登记/快照互斥均为 ERROR。Global 表面登记源为 `scripts/global_surface_baseline.json`。 |
+| 业务访问边界 | `audio_entry_boundary`, `hud_panel_boundary`, `phase17_boundary`, `input_boundary`, `passive_boundary`, `pet_passive_boundary` | 音频旁路、HUD/面板直接写档、结算/命令/表现边界、输入与写档混行、被动快照/宠物被动写入违规均为 ERROR。 |
 
-### 4.1 `contract_scan.py` 二十四类契约
+资源路径大小写不符是 ERROR；指向带文件扩展名且非格式动态路径的缺失文件为 ERROR，不能确定为文件路径的缺失项为 WARNING。`--fail-on-error` 只因 ERROR 返回非零；WARNING/INFO 写入报告，但 WARNING 总量仍受 `check_all.py` 的 **1050** 棘轮上限约束。
 
-扫描范围：`.gd`、`.tscn`、`.tres`、`project.godot`、`.cfg`、`.import`；跳过 `.godot`、`godot`、`.git`；`addons/godot_mcp` 通过 `suppressed_files` 整体豁免。
+`contract_scan.py --self-test` 只运行其已登记边界规则的好/坏样本，不执行全项目扫描、也不写全项目报告；它已包含在 contract gate 注册中。修改契约规则时，仍需确认相应类别的自测和全扫描均通过。白名单为 `schema_version=2`、`frozen=true` 的精确集合；磁盘登记与实际集合/冻结摘要必须一致，不能用新增豁免消除新违规。
 
-| 类别 | 检查内容 | 失败级别 |
-|:---|:---|:---|
-| 资源路径 | `res://` 路径逐段大小写；缺失文件 | 大小写不符 → ERROR；缺失且像文件路径 → ERROR，否则 WARNING |
-| 节点路径 | `get_node`、`get_node_or_null`、`NodePath`、`$` 与场景树真实节点名 | 大小写不符 → ERROR；无场景绑定仅末段比对 → WARNING |
-| 动态反射 | `call` / `call_deferred` / `has_method` / 信号连接等字符串参数 | 仅大小写或下划线不同 → ERROR；未知方法 → INFO；未知信号 → WARNING |
-| 动画轨道 | `.tscn` 动画轨道的节点路径与方法轨道方法名 | 大小写不符 → ERROR |
-| 字典键 | `.gd` 中的中文键字面量 | 已收录 `DataKeys` → WARNING；未收录 → INFO |
-| 运行时 manifest | 同时使用 `FileAccess` / `JSON` 与 manifest 标识的脚本 | ERROR（`RUNTIME_MANIFEST_FORBIDDEN`） |
-| AtlasMetadata 边界 | 旧 `data_for`/`validate_path`/`clear_cache` 入口、非 View 的 `.data` 读取、`source_masks` 覆盖 | ERROR（`ATLAS_BOUNDARY_FORBIDDEN`） |
-| 关卡预载边界 | `load_scene.gd` 中的目录扫描、`ResourceLoader.get_dependencies`、`FileAccess`/JSON manifest 解析 | ERROR（`PRELOAD_BOUNDARY_FORBIDDEN`） |
-| 场景入口边界 | 业务脚本直接调用 `change_scene_to_file/packed`，仅 `global.gd` 豁免 | ERROR（`SCENE_ENTRY_BYPASS`） |
-| 加载页私有缓存 | `load_scene.gd` 访问 `Global._resource_cache` 等私有缓存/租约/写入函数 | ERROR（`LOAD_CACHE_PRIVATE_ACCESS`） |
-| 池/UI 清理入口 | 业务直接调用 `Global.get_ui_runtime().cleanup_transient_ui`、`Global._clear_runtime_pools`，或访问 `Global.get_ui_runtime()` 的私有 UI 表/释放入口 | ERROR（`POOL_UI_CLEANUP_UNREGISTERED`） |
-| 运行状态边界 | 直写已迁入 `RunContext`/运行时的 `Global` 字段，或调用已删除的无状态工具入口 | ERROR（`RUN_STATE_RETIRED_ENTRY`） |
-| Global 表面基线 | 新增未登记的 `Global` 业务字段或 `add` 系入口 | ERROR（`GLOBAL_SURFACE_UNAPPROVED`） |
-| 档案边界 | 业务拼接 `user://MyAr_`；业务直调 `load_game`/`save_game`/`safe_write_archive`（登记入口豁免） | ERROR（`ARCHIVE_BOUNDARY_FORBIDDEN`） |
-| 槽位边界 | 业务硬编码 `/root/PlayerData`/`/root/RoleProp`；重新引入 `suspend/resume_player_view` | ERROR（`SLOT_BOUNDARY_FORBIDDEN`） |
-| 面板操作者 | 面板域脚本使用 `PlayerData`/`RoleProp` 但自身与祖先均未声明槽位操作者 | ERROR（`PANEL_OPERATOR_UNBOUND`） |
-| 共享账本与快照互斥 | `LocalCoop` 缺少 `shared_keys()` 登记、`save_profile` 同源剥离或 `is_save_snapshot_in_progress()` 互斥 | ERROR（`SHARED_LEDGER_UNREGISTERED`） |
-| 音频入口 | 业务自建 `AudioStreamPlayer`、直引 `Scene/all_sound/` 场景或直读 `AudioRuntime` 私有状态；`Script/runtime/` 与 `global.gd` 放行 | ERROR（`AUDIO_ENTRY_BYPASS`） |
-| HUD/面板只读 | HUD 与面板域直接档案 IO 或 `PlayerData` 字典直写 | ERROR（`HUD_PANEL_WRITE_FORBIDDEN`） |
-| Phase 17 边界 | 结算文件重复保存或缺 `LevelSettlement`、命令文件缺快照、表现文件直写档案、试点文件深层路径超预算 | ERROR（`PHASE17_BOUNDARY_FORBIDDEN`） |
-| 输入写入边界 | `Input`/`PlayerInput` 输入读取行同时出现 `PlayerData` 或 `request_save` | ERROR（`INPUT_BOUNDARY_STATE_WRITE`） |
-| 全局信号基线 | Autoload 脚本新增未登记的 `signal` 声明 | ERROR（`GLOBAL_SIGNAL_UNBASELINED`） |
-| 被动属性边界 | `_process`/`_physics_process` 轮询 `get_passive_skill_properties`；非白名单写 `pasl_prop`；非 `player_data.gd`/`local_coop.gd` 写被动等级字典 | ERROR（`PASSIVE_POLLING` / `PASSIVE_SNAPSHOT_WRITE` / `PASSIVE_DATA_WRITE`） |
-| 宠物被动边界 | 非 `player_data.gd`/`pet_domain_command.gd` 写宠物被动字典；宠物 UI 未调用 `PetDomainCommand` | ERROR（`PET_PASSIVE_WRITE` / `PET_PASSIVE_COMMAND`） |
+### 3.2 UI / Theme 阈值
 
-只有 **ERROR** 参与 `--fail-on-error` 的退出判定；WARNING 与 INFO 进入报告但不阻断。
+以下值是当前守卫的上限/契约，不是历史跑数：
 
-### 4.2 白名单机制
+| 门禁 | 通过规则 |
+|:---|:---|
+| `font_coverage_audit.py` | 静态与动态样本不能缺字；Theme 字体文件不超过 **6**；无未引用 Theme 字体资源，字体文件必须可读。 |
+| `theme_variant_audit.py` | 冻结变体不得缺失、变体继承无环、引用 StyleBox 均存在；Theme 属性 ≤ **2,000**、StyleBox ≤ **36**、有效重复签名组 ≤ **10**。 |
+| `theme_override_audit.py` | 与冻结基线相比，新增场景覆盖/静态属性/动画轨道/场景直接字体、动态主题调用总数/文件数/路径均失败。 |
+| `ui_dynamic_theme_audit.py` | 静态角色覆盖必须为 **0**；调用总数、登记文件与单文件范围不得越过基线；解析失败为失败。 |
+| `font_role_audit.py` | 字体角色/包装/fallback 与字号符合 token/基线；新增、失效或被改写的字号例外均失败。 |
+| `theme_token_audit.py` / `ui_surface_token_audit.py` | 新增/改写 Theme 值只能使用已登记 token；自绘 StyleBox 与主菜单裸色不得超过冻结基线。 |
 
-- `suppressed_literals`：字面量完全相等才豁免；
-- `suppressed_files`：文件路径子串命中；
-- `missing_asset_known_allowlist`：已知缺失资源；
-- `known_extension_methods`：仅反射类别的扩展方法；
-- `numeric_scene_allowlist`：数字 ID 场景，仅供冻结摘要计算。
+## 4. L1 引擎健康检查
 
-白名单是**冻结表**：`schema_version=2`、`frozen=true`、含 `frozen_at` 与 `frozen_manifest_sha256`；磁盘实有项与登记表必须双向一致（未登记、已失效都要报错）。
-
-### 4.3 `--self-test` 的边界
-
-- `convert_atlas_metadata.py --self-test` 在 `contract_gate` 内；
-- `contract_scan.py --self-test` **不在** `contract_gate` 内，属于人工复核命令；覆盖运行时 manifest、AtlasMetadata、关卡预载、场景入口、加载页私有缓存、池/UI、运行状态、Global 表面、全局信号基线、被动属性边界、宠物被动边界、档案、槽位、共享账本、Phase 17 边界、输入写入边界与面板操作者的正负样本；
-- 涉及契约扫描规则变更时，应单独执行 `python scripts/contract_scan.py --self-test`。
-
----
-
-## 5. L1：引擎健康检查
-
-### 5.1 命令
+`health_check.py` 的实际命令由 `check_all.py` 组装；单独诊断可用：
 
 ```bash
 python scripts/health_check.py --project source --godot-bin "<godot>"
 ```
 
-### 5.2 检查内容
+它检查工程脚本编译/静态 warning、场景外部资源引用，并生成报告。健康通过要求没有 Parse Error / `SCRIPT ERROR:` / 未豁免 GDScript warning；全场景断裂引用另由 `check_all` 文本判据要求为零。死代码候选只进报告，不是通过阈值。此检查不把普通 `ERROR:` 行作为单独编译失败条件，运行期 0/0 应由下节夹具判定。
 
-| 阶段 | 规则 | 是否影响退出码 |
-|:---|:---|:---|
-| 资产清点 | 统计 `.gd`、`.tscn` 与其他资源；排除 `.godot`、`godot`、`.git`、`addons` | 否 |
-| Autoload 解析 | 读取 `project.godot` 的 `[autoload]` | 否 |
-| 场景拓扑 | 解析 `.tscn` 的 `[ext_resource]`，磁盘不存在的目标记为断裂引用 | 间接：`check_all` 要求输出 `0 处断裂引用` |
-| 符号拓扑 | 统计 `class_name`、`extends`、静态加载与动态前缀 | 否 |
-| 死代码候选 | 未被引用且无 `class_name` / 动态前缀 / `@tool` 的脚本写入报告 | 否，仅建议 |
-| Headless 编译 | 生成临时驱动场景，加载全部 `.gd`，30 秒超时 | 是 |
-| 日志门禁 | 解析编译输出的 Parse Error、SCRIPT ERROR 与 warning | 是 |
+## 5. L2 运行期验收
 
-### 5.3 0 ERROR / 0 WARNING 的实际含义
-
-`health_check.py` 的失败条件是：
-
-- 日志中检测到 `Parse Error` 或 `SCRIPT ERROR:`；
-- 检测到白名单外的 GDScript 静态分析 warning。
-
-当前 `WARNING_ALLOWLIST` 为**空**，即默认严格 0 warning；解析已登记的 GDScript 警告码，未识别项记 `UNKNOWN`：
-
-`CONFUSABLE_LOCAL_DECLARATION`、`CONFUSABLE_LOCAL_USAGE`、`INCOMPATIBLE_TERNARY`、`UNUSED_PRIVATE_CLASS_VARIABLE`、`REDUNDANT_AWAIT`、`STANDALONE_EXPRESSION`、`STANDALONE_TERNARY`、`UNREACHABLE_CODE`、`PROPERTY_WILL_BE_MODIFIED`。
-
-### 5.4 实现边界（不要过度宣称）
-
-1. `health_check` **不把普通 `ERROR:` 行计入失败**；严格的 `0 ERROR` 由关卡冒烟夹具另行检查。
-2. 临时驱动加载失败的 `failed` 列表当前未被 Python 侧消费；若引擎没有输出 `SCRIPT ERROR` / `Parse Error`，该失败可能不改变状态。
-3. `health_check` 在 `skipped`、超时或内部 `error` 时退出码仍为 0；只有 `status == "failed"` 才返回 1。因此**不能只依赖退出码**，必须同时检查 `check_all` 的文本判据。
-4. 场景断裂引用与死代码只写报告；`check_all` 通过文本 `0 处断裂引用` 间接强制前者，死代码数量不阻断。
-
----
-
-## 6. L2：运行期验收
-
-发布前 L2 固定验收项为以下三条命令，必须全部 PASS；任一项 FAIL 均阻断发布：
+涉及运行行为时，基线命令为：
 
 ```bash
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
-# 第三条内部固定执行 constellation / level-selection / level-resource-lease / load-guard / role-skills / magic-weapons
 ```
 
-变更触及特定关卡或资源链路时，另加对应关卡冒烟；双人探针的 `SKIP` 不计为 PASS，场景探针不提供 `SKIP`。存档 IO、档案校验、保存入口或角色范围变更时，另跑档案持久化定向夹具 `python scripts/archive_probe_runner.py --godot "<godot>"`；该夹具含失败/负向断言（无会话拒绝保存、写入失败结构化结果、后台失败重试、音频无效父节点/空路径/重复停止）。
+`scene_probe_runner.py` 无 `--probe` 时依次执行 `PROBES` 全部注册项；单项定向复跑使用 `--probe <registered-key>`，各项默认 timeout 以 `ProbeSpec.timeout_seconds` 为准，`--timeout` 可覆盖。L2 的关卡、双人或资产特定变更还须增加受影响的目标关卡/探针；档案读写、身份、补全或保存边界改动须另跑 `archive_probe_runner.py`。
 
-第三条固定项内部固定执行 `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 六个探针（`scene_probe_runner.py` 套件另含 `level-progress-exit`、`ui-factories`、`run-context`、`level-entry`、`boss-multiplier`、`yutu-drop`、`utils`、`weiyang-symbol`、`action-frames`、`atlas-accessor`、`pet-runtime`、`pet-nian`、`awaken-72`、`menu-ui-72`）；探针日志门禁扫描完整输出（不按收尾标记截断），并校验收尾标记存在；探针主动构造的失败日志必须在 `ProbeSpec.expected_noise` 逐条登记理由，禁止泛化匹配；契约扫描的 `hud_panel_boundary` 约束 HUD/面板域不直写档案与字典，并识别 `_data()`、`data_for(_slot)(...).player_data`、嵌套修改与别名；`audio_entry_boundary` 约束 BGM/SFX 只经 `AudioRuntime`。`archive_probe_runner` 的 BGM 重挂断言按帧轮询播放状态，避免 headless 音频驱动时序抖动误报；角色 2/4 技能与法宝探针不再作为独立命令重复执行。除非只修改对应资源，可使用 `--probe role-skills` 或 `--probe magic-weapons` 单独复跑；发布门禁仍以完整套件为准。每个探针的实际耗时写入 `docs/reports/*_probe_report.{md,json}`，耗时快照见 [`status.md`](status.md)。
-
-### 6.1 单关冒烟：`level_test_runner.py`
+### 5.1 单关冒烟：`level_test_runner.py`
 
 ```bash
 python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn
-python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn \
-    --performance-sample-frames 300 --performance-warmup-frames 120
-python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn \
-    --performance-sample-frames 300 --performance-warmup-frames 120 --performance-hud-full
-python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn \
-    --performance-sample-frames 300 --performance-warmup-frames 120 --render-window
-python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn \
-    --measure-load --render-window
+python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn --performance-sample-frames 300 --performance-warmup-frames 120
+python scripts/level_test_runner.py --godot "<godot>" --level res://Scene/level/level_1.tscn --measure-load --render-window
 ```
 
-| 项目 | 默认/规则 |
+| 参数/判据 | 当前行为 |
 |:---|:---|
-| 超时 | 300 秒 |
-| 关卡加载上限 | 45,000 ms / 20,000 帧 |
-| 主角稳定 | 60 帧 |
-| 阶段等待 | 15 帧，最多 40 次尝试 |
-| 倍速 | 3.0 |
-| 沙盒 | 内存态 HP/护盾极大、无敌、秒杀、禁用坠落死亡 |
-| 阶段断言 | 读取 `_stage_count`、`_stage_trigger_x`、`_screen_starts`、`_screen_rights`，逐阶段瞬移并断言 `current_stage` 推进 |
-| 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头、以 `WARNING` 开头的行都必须为 0 |
-| 唯一噪声豁免 | `ERROR: Parameter "t" is null.` 及其缩进栈（headless dummy 渲染噪声） |
-| 产物 | 临时驱动/报告/日志写入 `source/`，运行后自动清理；**不写 `docs/reports/`** |
-| 性能采样（可选） | `--performance-sample-frames N`：逐帧读取 `Performance.get_monitor(Performance.TIME_PROCESS)`（该监视器约每 1 秒刷新一次，值是窗口内最大 process step，不是逐帧值），报告 `mean_ms / p50_ms / p95_ms / min_ms / max_ms`，以及采样窗口内 `damage_text_peak`（活跃伤害数字峰值）与 `pool_stats_start/end/delta`（各对象池 size/limit/hits/misses，delta 为窗口内取用命中/新建）；p50/p95 采用 nearest-rank，样本数不足记 FAIL |
-| 节流判定与重跑 | `p95_ms >= 8.0` 判为整段节流（`p50_ms < 2.0` 记 `sporadic`，否则 `sustained`）；默认 `--performance-retries 1`，命中时重跑并保留 `p95` 最低的一次（报告 `attempts` / `throttled_attempts`）；仍节流不判 FAIL，但数值不可用于前后对照 |
-| 性能预热 | `--performance-warmup-frames N`（默认 120）：采样前先 `Engine.time_scale=1.0`，并等待第 1 阶段进入战斗（有存活怪物）；预热须覆盖至少 1 个 `TIME_PROCESS` 刷新窗口（约 1 秒），HUD 装配帧不计入稳态；HUD 档或 `--render-window` 建议 300 帧（装配帧含首次绘制/纹理上传）；超时记 FAIL |
-| 性能 HUD 档 | `--performance-hud-full`：采样期间维持 80 个活跃伤害数字（对象池上限），每 10 帧回收 1 个并补 1 个制造受控 churn，用于统计 `damage_text` 池命中；未达上限记 FAIL |
-| 性能推进方式 | `Game4ImportedLevel` 先 `_stage_activate(0)`（北俱芦洲）或 `_start_stage(1)`（Boss 关）；普通关先 `advance_stage(1)` + `level_create_monster(1)` |
-| 渲染模式 | 默认 `--headless`（`--display-driver headless` + dummy 渲染器，无 draw、无窗口呈现，故不产生 GPU 侧证据）；`--render-window` 以 `--windowed --disable-vsync` 启动真实渲染路径（不加 `--headless`），采样包含 draw、GPU 提交与窗口呈现/同步。报告 `performance.render_window / vsync_mode / max_fps`：`vsync_mode` 取 `DisplayServer.window_get_vsync_mode()` 原值（`0` = `VSYNC_DISABLED`），headless 下不探测该接口、记 `-1`；`max_fps` 取 `Engine.max_fps`（本工程 `run/max_fps=120`）。窗口模式仍**不是**最低配置/目标平台基准：受桌面合成器、窗口分辨率与 120 帧上限影响，只用于补齐 headless 缺失的渲染/同步事实（ADR-027） |
-| 加载测量（可选） | `--measure-load`：只测加载链路并提前结束，报告 `load` 字段：`ready_to_change_ms`、`load_scene_visible_ms`、`preload_started_ms` / `preload_done_ms` / `preload_ms`、`finish_started_ms`、`scene_changed_ms` / `switch_ms`、`hero_ready_ms` / `total_ms`；以及加载期峰值 `peak_video_mem_mb`、`peak_object_count`、`peak_node_count`、`peak_render_objects`、`peak_draw_calls`、`peak_primitives`；阶段明细 `phase_marks`（各阶段点相对就绪时刻的毫秒）与 `phase_deltas`（相邻阶段差值，用于定位法宝/宠物等段耗时），以及加载页帧耗时 `load_frame_stats`（count / mean_ms / p95_ms / max_ms）。headless 下 VRAM 与渲染计数为 0，需与 `--render-window` 组合才有 GPU 数据；测量不推进关卡阶段。`--loadout base\|full` 控制沙盒装备：`base` 无宠物/无法宝，`full` 寅虎 4 阶 + 法宝 `xianyjp` |
+| 默认关卡/倍速/超时 | `level_1.tscn` / **3.0×** / **300 s**；Godot 通过 `--godot` 或 `GODOT_BIN` 指定。 |
+| 加载守卫 | 等待目标关卡最多 **45,000 ms** 或 **20,000 帧**；主角稳定 **60 帧**后推进阶段断言。 |
+| 通过条件 | 驱动 JSON 报告 `ok`，且报告前运行日志中的 `SCRIPT ERROR`、`ERROR:`、`WARNING:` 计数均为 0；退出码 0 通过，1 为失败，2 为夹具异常。 |
+| headless 豁免 | 只剔除 dummy renderer 的 `Parameter "t" is null`、`Parameter "mem" is null` 与 `Initializing already initialized RID` 噪声（含缩进栈）；其他日志不可泛化豁免。 |
+| 可选性能采样 | `--performance-sample-frames N` 默认关闭；warmup 默认 **120 帧**。`p95_ms≥8.0` 标记整段节流，`p50_ms<2.0` 时归为偶发；默认最多重跑 **1** 次并保留较低 p95。持续节流本身不判 FAIL，读数不可用于性能对照。 |
+| HUD 压力场景 | `--performance-hud-full` 维持 **80** 个活跃伤害数字；须与帧采样一起使用，达不到上限为 FAIL。 |
+| GPU 证据 | 默认 headless/dummy 渲染无实际绘制/GPU 呈现证据；`--render-window` 才走窗口渲染路径。该模式仍不是目标硬件性能基线。 |
+| 加载测量 | `--measure-load` 单测加载阶段并提前结束；需 `--render-window` 才有可用 GPU 数据。报告的加载阶段/峰值字段见 `scripts/README.md`，不判定硬件 SLA。 |
 
-通过条件：驱动报告 `ok` 且三类日志计数全为 0。退出码：`0` PASS，`1` FAIL，`2` 夹具异常（仍输出可解析 JSON）。
+性能报告是 runner 指定的诊断口径，不把一次测量升级成硬件 SLA。临时驱动资源、报告和日志位于 `source/` 并由 runner 清理。
 
-### 6.2 关卡回归：`level_regression_all.py`
+### 5.2 关卡回归：`level_regression_all.py`
 
 ```bash
 python scripts/level_regression_all.py
-python scripts/level_regression_all.py --jobs 4 --timeout 90  # 稳定排障口径
-python scripts/level_regression_all.py --changed-only --diff-base HEAD
 python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 ```
 
-| 项目 | 规则 |
-|:---|:---|
-| 候选发现 | `Scene/level/` 下 `level_<数字>` 为编号关；脚本登记的 `EXTRA_LEVELS` 与非纯数字 `level_*` 场景为特殊关 |
-| 当前规模 | 候选数由当前 `Scene/level/` 清单动态发现，不在文档中硬编码 |
-| SKIP | 命中 `NON_BATTLE_SPECIALS` 的菜单/地图/交互场景直接 `passed=True, skipped=True`，**SKIP 计入通过**（这是关卡回归的既定口径；与双人探针的 SKIP 语义不同） |
-| 单关超时 | 默认 150 秒；子进程超时为 `timeout + 90` 秒 |
-| 并发 | 默认 `auto = min(12, max(4, CPU 核数))`；实测 12 并发全量 275.7s，瞬态失败自动串行重试；`--jobs 4` 为稳定排障口径 |
-| 重试 | 失败关串行重试 1 次；报告保留首轮 `errors/stages/log` 并标 `retry_after_failure`，不得用重试结果覆盖失败证据 |
-| headless 噪声 | 仅过滤已验证的 dummy renderer 三类错误（`Parameter "t"/"mem" is null`、重复 RID 初始化）；其他 ERROR/WARNING 仍失败并保留样本 |
-| changed-only | 关卡/脚本/Art 目录直接映射；其他源码走反向依赖；无法映射时全量回退 |
-| 日常口径 | 提交前跑 `--changed-only --diff-base HEAD~1`，只跑受影响关卡 |
-| 发布口径 | 发布前跑全量（默认 auto 并发）；`--warmup` 默认 0（实测无收益）；进程复用未采用（5 关/组实测更慢） |
-| 产物 | `docs/reports/level_regression_manifest.json` + 报告 `.md/.json` |
+候选从 `Scene/level/` 当前场景名动态发现。默认单关 timeout **150 s**，外层子进程上限为 `timeout + 90 s`；失败关串行重试一次，并在报告保留首轮失败证据。`--changed-only` 无法映射的源码会保守回退全量；无变更的 changed-only 返回 0。`NON_BATTLE_SPECIALS` 中无 Hero 根节点的场景报告为 SKIP，既定回归口径中 SKIP 计入通过；L2 改动仍须覆盖真正受影响的战斗路径。退出码：全部通过（含该类 SKIP）为 0；失败或筛选后无候选为 1；工程缺失或 git diff 失败为 2。
 
-退出码：`0` 全部通过（含 SKIP）；`1` 有 FAIL 或筛选后无候选；`2` 工程缺失/git diff 失败。
+### 5.3 双人矩阵：`coop_probe_runner.py`
 
-### 6.3 双人探针：`coop_probe_runner.py`
+- `CASES` 是夹具用例事实源；runner 串行执行，单探针默认 timeout **180 s**，可用 `--timeout` 覆盖。
+- 每个结果必须有可解析的最后一条 `COOP_MATRIX_RESULT=<json>`；缺失/无效结果或超时为 FAIL。
+- `SCRIPT ERROR:` / `ERROR:` 行失败，唯一日志豁免为 `resources still in use at exit`；结果中的 `SKIP` 不能算 PASS。runner 进程退出 0 只表示没有 `FAIL`；L2 验收必须检查报告并确认所需用例没有未覆盖的 SKIP。
+
+### 5.4 场景夹具与档案持久化
+
+`scene_probe_runner.py` 对每个注册 `ProbeSpec` 使用完整工程生命周期启动临时场景。每项须产出有效 `*_PROBE_RESULT`，通过结果、要求的 teardown marker、引擎退出码以及无未登记 `SCRIPT ERROR` / `ERROR` / `WARNING`；缺少规格/工程或 Godot 为 2，任一探针失败/超时为 1。只忽略脚本明确列出的 `expected_noise`、dummy renderer `Parameter "t" is null` 和引擎退出的 RID/ObjectDB 清理噪声。不得按 marker 泛化豁免日志。
+
+存档/身份/保存命令改动：
 
 ```bash
-python scripts/coop_probe_runner.py --godot "<godot>"
+python scripts/archive_probe_runner.py --godot "<godot>"
 ```
 
-- 用例清单由 `coop_probe_runner.py` 的 `CASES` 维护，覆盖状态、玩法、技能切换、怪物数值、面板、性能、宠物、宠物槽位（预热/装备加成/法宝复活）、共享魂、按键、被动、剑/坐骑、创建 UI、归属来源、池复用、伤害数值分离、无双归属与胜败结算、输入隔离与键位布局即时应用/恢复默认、成长命令与 HUD/音频边界与模块 API/场景依赖；执行前以脚本实际列表为准；
-- 串行执行，单探针超时 **180 秒**；
-- 输出中以 `SCRIPT ERROR:` 或 `ERROR:` 开头的行判 FAIL；唯一豁免为 `resources still in use at exit`；
-- 结果取最后一条 `COOP_MATRIX_RESULT=<json>`；缺失结果或超时判 FAIL；
-- `SKIP` 不计为 PASS；当前矩阵的 `_skip` 没有调用点，实际只产出 PASS/FAIL；
-- 产物：`docs/reports/coop_probe_matrix_report.{md,json}`。
+该夹具使用隔离临时 `user://` 并运行真实档案写入路径；默认 timeout **120 s**。缺少结果、任一断言失败、隔离目录检查失败、未登记 ERROR/WARNING 或超时均不能通过；测试用的预期拒绝日志仅按脚本显式标记忽略。
 
-### 6.4 场景探针套件：`scene_probe_runner.py`
+## 6. 构建资源与发布包验收
+
+AtlasMetadata、FrameSequence、编号帧、sheet 帧、怪物帧、关卡预载/布局、装备和外部怪物 Catalog 的源同步/结构检查由 §3 注册于 `contract_gate.py` 的 `--check` / `--fail-on-error` 子命令执行。哪吒预览转换器未在当前 gate 注册，涉及该输入/输出时须另跑：
 
 ```bash
-python scripts/scene_probe_runner.py --godot "<godot>"
-python scripts/scene_probe_runner.py --godot "<godot>" --probe level-selection
-python scripts/scene_probe_runner.py --godot "<godot>" --probe level-resource-lease
-python scripts/scene_probe_runner.py --godot "<godot>" --probe load-guard
-python scripts/scene_probe_runner.py --godot "<godot>" --probe role-skills
-python scripts/scene_probe_runner.py --godot "<godot>" --probe magic-weapons
-```
-
-| 项目 | 规则 |
-|:---|:---|
-| 启动方式 | `--scene` 启动临时场景，使用完整项目生命周期；不使用 `--script` |
-| 探针规格 | `scripts/scene_probes/` 下的 `constellation_probe`、`level_selection_probe`、`level_resource_lease_probe`、`load_guard_probe`、`role_skill_probe`、`magic_weapon_probe`、`atlas_accessor_probe`、`pet_runtime_probe`、`north_daynight_probe`、`north_hurt_ice_probe` 等；运行期复制到 `source/`，结束后清理 |
-| L2 固定子项 | `constellation`、`level-selection`、`level-resource-lease`、`load-guard`、`role-skills`、`magic-weapons` 全部执行，不提供 `SKIP`；单次耗时写入报告 |
-| 星座覆盖 | body Catalog/首帧、技能显式唯一后端、纹理预热、共享请求、末帧保持、手动跳帧、销毁后请求回收；不是逐帧视觉或性能验收 |
-| 选择态覆盖 | `level_bxgh` 八仙 8 个选择值 + 非法值回退；`level_stz` 三太子 3 个选择值 + 非法值回退；逐项断言 `monster_group["stage_1"]`、关卡自预载场景缓存、租约目标与背景可见性 |
-| 租约覆盖 | 目标/ID/路径/怪物/弹体/纹理分类；只释放本租约路径；未登记共享缓存保留；旧租约 ID 不能释放新租约；重战清理与 `end_archive_session` 退出清理不误删共享缓存 |
-| 加载守卫覆盖 | 预载单槽缺失/显式清理；重复切换只提交最新目标；超时置失败态并保留加载页；失败/取消不进入目标场景 |
-| 北俱芦洲昼夜覆盖 | 82 关 3 段 `JITrigger` 区段激活 `triggerID=110/112/113` 的 `DayNightEntity`；触发后 15 秒内保持白色、超过 15 秒 `_darkness` 压暗；一次性触发不重置昼夜起点 |
-| 北俱芦洲冰刺覆盖 | 76 关 13 个 `HurtIceEntity` 由 13 个 `JITrigger` 一一激活：未触发时不伤害，触发后按 0.5 秒冷却重复伤害；79 关无 `triggerID` 的 `HurtEntity` 为静态陷阱，始终伤害 |
-| 角色技能覆盖 | 角色 2 `by` 触发 BingYuEffect、角色 4 `cmly` 触发 CangMuLongYunEffect；校验 5 个角色特效 `preload_effect_data` 为 true |
-| 小龙女覆盖 | `longnv-core` 验证 20 技能入口、角色卡/技能页/自动战斗/外观/2P 关卡；`longnv-71` 验证 7.1 技能数据、觉醒冷却、冲刺无敌、分刃、暂停层与技能透明度；`longnv-mechanism` 验证七星洞升墙、入口门、尾妖林灯、北俱芦洲龙珠与白骨/玲珑宝塔 |
-| 7.1 菜单/UI 覆盖 | `menu-ui-71` 验证 GameSet 技能透明度、公告 V7.1、自动战斗角色 8 名称、觉醒浮层小龙女/玉兔/白龙描述、`zd_skill` 角色 8 觉醒按钮与玉兔冲刺无敌 |
-| 法宝/角色特效覆盖 | 诛仙剑阵、青莲、青龙剑/太极、八仙 8 场景；Lyfb 兼容特效与哪吒阴阳剑/光环/Launch；校验构建期 `.tres` 加载、动画名、帧数、duration、loop/speed |
-| 结果通道 | 各探针最后一条 `*_PROBE_RESULT=<json>`；缺失或 JSON 无效判 FAIL |
-| 日志门禁 | `SCRIPT ERROR`、以 `ERROR` 开头的行、以 `WARNING` 开头的行均为 0；唯一豁免为 `ERROR: Parameter "t" is null.` 及其缩进栈 |
-| 退出阶段 | 探针输出 `*_PROBE_TEARDOWN` 后进入引擎退出；退出期 RID/ObjectDB 清理噪声不计入门禁 |
-| 超时 | 星座 90 秒、选择态 240 秒、租约 60 秒、加载守卫 180 秒、角色技能 180 秒、法宝 180 秒；`--timeout` 可覆盖 |
-| 产物 | `docs/reports/constellation_probe_report.{md,json}`、`docs/reports/level_selection_probe_report.{md,json}`、`docs/reports/level_resource_lease_probe_report.{md,json}`、`docs/reports/load_guard_probe_report.{md,json}`、`docs/reports/role_skill_probe_report.{md,json}`、`docs/reports/magic_weapon_probe_report.{md,json}` |
-| 退出码 | `0` PASS；`1` 任一探针失败；`2` 规格/工程缺失 |
-
-### 6.5 构建期资源校验
-
-```bash
-python scripts/convert_atlas_metadata.py --check
-python scripts/convert_atlas_metadata.py --self-test
-python scripts/convert_numbered_frames.py --all --check
 python scripts/convert_nezha_preview_frames.py --check
 ```
 
+源文件与生成清单一致，不能证明实际 PCK 闭包。涉及导出依赖或发布资源时另跑：
+
 ```bash
-python scripts/convert_monster_frames.py --check
-python scripts/convert_frame_sequences.py --check
-python scripts/convert_frame_sequences.py --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test
 python scripts/frame_sequence_pack_probe.py --godot "<godot>"
-python scripts/export_raw_manifest.py --check
 python scripts/export_closure_probe.py --self-test
 python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
+python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)"
+python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)" --output "<release output>"
 ```
 
-`convert_level_preload_catalog.py --check` 由 `contract_gate.py` 调用，校验 `source/Script/data/level_preload_catalog.tres` 与 `source/Script/data/level_preload_export_dependencies.json` 均与源脚本/动态路径/布局源一致；发布清单 schema 3 包含 `layout_catalog`、`equipment_catalog`（`equipment_catalog.tres`）与 98 个布局路径。
+`frame_sequence_pack_probe.py` 检查实际导出/挂载的 PCK 对必需清单路径的可达性；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。缺少模板、PCK 或结果时为 BLOCKED/非通过（相关探针返回 2），不可作为 PASS；插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 是清单预检与实际 PCK 探针包装，可选产出 release 可执行文件；该命令不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
 
-`convert_level_layout_catalog.py --check` 同样由 `contract_gate.py` 调用，校验 `scripts/level_layout_sources.json` 生成的单关布局 `.tres` 与 `level_layout_catalog.tres` 一致；Phase 30-1 试点关卡为 `level_48`，Phase 30-2 增加 20 个原始 ZMWS 代表关卡，Phase 30-3 收口增加 69 个布局化的 BHYH 关卡（20 个单屏 + 13 个多阶段 + 36 个截断对齐）；另 6 个空数据表删除，10 个动态/非连续脚本登记例外。。`level_layout_migration_audit.py --fail-on-error` 阻断「已登记布局 + 脚本内仍有 `monster_group = {`」的双数据源；剩余数据表必须与 `level_layout_data_exceptions.json` 精确一致，未登记或失效例外均失败。
+## 7. 命名、文档与其他人工门禁
 
-`convert_external_monster_catalog.py --check` 校验外部 ZMWS 怪物 ID → BHYH 怪物 ID/场景映射；当前精确中文名优先，去除空白/全角/间隔号后唯一匹配次之，未匹配项不猜测。
+```bash
+python scripts/naming_compliance_audit.py --fail-on-error
+python scripts/docs_audit.py --check
+python scripts/normalize_eol.py docs --dry-run
+```
 
-`--export-preset` 只读检查 `source/export_presets.cfg` 的声明覆盖；仓库内有验证用（`Windows Desktop (validation)`）与发布用（`Windows Desktop (release)`）两个 `all_resources` 预设。原始数据由 `bhyh_export` 插件按生成清单加入，不使用 `include_filter` 兜底；预设声明不等于 PCK 已验证。
+`check_all.py` 已执行 `naming_audit.py --all`；`naming_compliance_audit.py` 是覆盖目录、文件、标识符与白名单的独立终审。`docs_audit.py` 检查 Markdown 相对链接、文档目录索引和 `scripts/README.md` 工具索引；它不属于 `check_all`。脚本名称、职责及其余人工工具以 [`../../scripts/README.md`](../../scripts/README.md) 为准。
 
-> 延迟纹理在导出包内表现为 `.import` 声明与 `.ctex` 容器，源路径本身不可直接 `FileAccess` 打开；探针因此使用 `ResourceLoader.exists()` 判定。2026-11-01 Phase 30-4 实测该预设导出 PCK 内 **4,191 条**依赖全部可达（FrameSequence + 关卡预载 + 布局 Catalog/90 个布局合并，PCK 约 7.56 GB，含全部私有素材）。2026-11-02 Phase 33-5 重新导出并校验 **4,200/4,200 可达**（新增 `equipment_catalog.tres`），PCK **7,628,138,078 字节**，sha256 `b0d6d3526256…`，导出+校验 **758.55s**。这证明包内路径闭包，不等于 release 加载、最低配置/其他平台 VRAM 与首帧耗时已验证。
+## 8. 按变更类型的验收矩阵
 
-`frame_sequence_pack_probe.py` 才验证发布包闭包：实际 `--export-pack` 生成 PCK，再在最小空工程中挂载该 PCK，由引擎 `FileAccess` 判定每条依赖（含 `.remap`）是否存在。配置、源清单、实际包与发布包装证据必须分开记录：
-
-| 证据 | 命令 | 覆盖范围 |
+| 变更类型 | 必需门禁 / 追加证据 | 不构成通过 |
 |:---|:---|:---|
-| 源闭包 | `convert_frame_sequences.py --check` + `convert_level_preload_catalog.py --check` | 源文件存在、schema、UID、Catalog、FrameSequence 与关卡预载依赖清单一致 |
-| 预设声明 | `convert_frame_sequences.py --export-preset` | 预设过滤器不会排除依赖；仍是配置级 |
-| 发布包 | `frame_sequence_pack_probe.py` | 合并两份清单后，引擎挂载 PCK 逐条判定 FrameSequence/关卡预载/布局 Catalog/装备 Catalog/序列/延迟纹理/怪物场景/弹体/动态纹理可达；缺模板、无 PCK 或探针无结果返回 2（BLOCKED） |
-| 原始数据源清单 | `python scripts/export_raw_manifest.py --check` | 清单与素材树、根配置、生产脚本 `res://...json/bin` 字面量、插件启用和 `include_filter` 兜底一致；素材缺失返回 BLOCKED |
-| 原始数据包 | `python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"` | 实际导出 PCK；插件日志 `files == expected` 且 `missing == 0`；挂载后逐条 `FileAccess` 检查 JSON/BIN；缺模板返回 BLOCKED |
-| 发布包装 | `python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)"` | 先跑清单预检，再跑原始数据 PCK 探针；可选 `--output` 导出 release 可执行文件 |
+| 文档 | `docs_audit.py --check`、`normalize_eol.py docs --dry-run`；同步职责索引和相对链接 | 只改正文但留断链/索引遗漏；将本次未运行写成 PASS |
+| 纯 GDScript | L1；触及生产行为时追加受影响场景/单关 smoke 或定向 probe | 只运行 lint；无引擎 L0 冒充 L1 |
+| 场景 / 节点 / 动画轨道 | L1；相关关卡冒烟、实际 NodePath 与动画轨道绑定 | 只编译，不走生产场景；绕过门禁的直接场景切换 |
+| 美术 / 音频 / 字体 | L1 与实际 Godot 导入/加载；对应构建转换 `--check`；相关关卡或消费者探针 | 只检查路径字符串/文件存在，未加载实际资源；headless 性能数字当 GPU 证据 |
+| 输入 / 物理层 | L1；P1/P2 的真实输入路径与碰撞/关卡行为；涉及双人时跑完整 coop 矩阵 | 只改 `project.godot` 不验证生效行为；只测 P1 |
+| 档案、会话或保存入口 | L1 + `archive_probe_runner.py`；当前/新档、缺字段、损坏/备份、失败回滚、切档/退出身份边界 | 只测新档成功保存；无会话/写入失败无断言 |
+| 双人槽位 / 共享账本 / 面板操作者 | L1 + coop 矩阵和受影响面板运行路径；核对 `slot_snapshot`、`shared_keys` 与显式 `coop_slot` | 只测 1P；把 SKIP 当通过；引入全局 1P/2P 视图交换或漏登记共享键 |
+| 宠物 View / 命令 / 关卡生成 | L1 + 相应 `pet-runtime` / `pet-nian` 场景探针和槽位/保存路径；失败时检查档案及共享资源回滚 | 只检查编译；将其他宠物 UI 写入错误地宣称已全部命令化 |
+| UI / HUD / 显示 / Theme | L1 + 受影响 UI 场景；桌面 16:10、16:9、21:9 与 P1/P2 截图；触控布局单独覆盖 | 单分辨率截图、未检查 HUD/安全边界；绕过 Theme token/baseline |
+| 关卡 / 玩法 / 战斗来源 | L1 + 受影响关卡 `level_test_runner.py` 与 changed-only 回归；覆盖阶段推进、刷怪、出口、奖励/结算一次 | 只测首阶段；延迟弹体/召唤/法宝来源默认落到 1P |
+| 场景流 / 缓存 / 池 / 异步 | L1 + `scene_probe_runner.py` 的 `load-guard` / `level-resource-lease` 和冷启动/返回/重战路径 | 只移字段或清缓存；不覆盖过期请求、提前退出、所有者外误删 |
+| 资源构建/边界规则 | L1（含 gate/self-test）+ 对应源转换 `--check`；改导出依赖时实际 PCK 探针 | 只检查产物存在或预设声明，不校验内容/PCK；BLOCKED 记为通过 |
+| Release / 完整验收 | L3：全量 `level_regression_all.py`、命名终审、docs 索引检查；实际受影响 PCK 与 release 运行路径 | changed-only 替代发布全量；其他平台/设备/分辨率被默认推定通过 |
 
-判定：
+## 9. 证据与失败处置
 
-- Atlas：`metadata.tres` 与 `manifest.json` 重新渲染结果逐字一致，且 `source_frames` 与实际帧数一致；
-- 编号帧：登记 profile 的输出存在且内容未过期；
-- 哪吒：输出存在、内容与预览 JSON 一致、源 schema 合法；分类报告 `missing` / `stale` / `invalid`，任一非零即失败。
+1. 保留原失败命令、首个错误、报告与复现条件；重跑不能覆盖首轮证据。
+2. 区分源码/数据/资源/门禁/环境问题。不得通过删除检查、扩大豁免、把错误降级或加入兼容回退来得到绿灯。
+3. 修复后重跑同一门禁及受影响生产路径；跨档案、槽位、暂停与异步生命周期的失败须覆盖相应边界。
+4. 未执行的平台、硬件、分辨率、导出包或 probe 明确标为未验证；计划不属于验证事实。
+5. 验证结论只写 `status.md`；`docs/reports/` 是工具产物，不手工修改或用历史报告替代当前运行。
 
-Atlas、FrameSequence、编号帧与 sheet 帧检查经 `contract_gate` 进入 `check_all`；`export_raw_manifest.py --check` 也进入 `contract_gate`，校验清单、素材、插件启用与生产脚本字面量。哪吒转换器仍需在对应资源变更时单独执行。`frame_sequence_pack_probe.py`、`export_closure_probe.py` 与 `export_release.py` 依赖本机导出模板，不进入日常门禁，发布前单独执行；缺模板时明确 BLOCKED，不得记为通过。源码枚举门禁与向 `source/` 临时安装夹具的运行探针串行执行。
-
----
-
-## 7. 命名、引用与资源路径审计
-
-| 脚本 | 检查范围 | 失败判据 | 是否在 `check_all` |
-|:---|:---|:---|:---|
-| `naming_audit.py` | 目录与文件 `snake_case`；`Scene/` 根级 `.tscn`、`Script/` 根级 `.gd`、`Scene/` 下 `.gd` 报 ERROR；默认只查 Git 新增，`--all` 全量 | 任一目录/文件 stem 违规或 `Scene/*.tscn`、`Script/*.gd`、`Scene/**/*.gd` | ✅ 维度 6（固定 `--all`） |
-| `naming_compliance_audit.py` | 四张表：目录、文件、代码标识符、白名单登记 | 任一违规 | ❌ 人工终审 |
-| `runtime_reference_audit.py` | `@onready` 行中的 NodePath、`Global.<method>()` | 路径无法在挂载场景解析；Global 方法未声明 | ✅ 维度 7 |
-| `resource_path_audit.py` | 静态 `res://` 大小写、`%d/%s/%f` 动态路径、Spine atlas 页名、`add_role_bullet` / `add_role_special_effect` 工厂目标 | 任一不匹配 | ✅ 维度 8 |
-| `whitelist_audit.py` | 冻结摘要、磁盘实有项与登记表双向比对、评审记录 | 未登记/失效/摘要不符 | ✅ 经 `contract_gate` |
-| `png_stream_audit.py` | `StreamedPngEffect` 未登记使用 | allowlist 外引用 | ✅ 经 `contract_gate`（必须带 `--fail-on-error`） |
-
-### 7.1 命名审计的实际边界
-
-- `naming_audit.py` 的目录检查**跳过 `source/` 顶层目录**；顶层目录按历史约定保留；
-- 白名单是精确集合，不做 `DefineSprite_*` 或数字前缀通配；
-- 受检扩展名：`.tscn`、`.gd`、`.tres`、`.res`、`.gdshader`、`.mp3`、`.ogg`、`.wav`、`.png`、`.webp`、`.jpg`、`.jpeg`、`.ttf`、`.otf`、`.json`；其他扩展名静默跳过；
-- `naming_compliance_audit.py` 允许函数/变量前导下划线（`_snake_case`），与 `naming_audit.py` 的目录规则不同；
-- `PlayerData`、`RoleProp`、`PlayerInput` 三个 Autoload 桥接变量允许 PascalCase，仅限这三个名字。
-
-### 7.2 资源路径审计的公开 clone 行为
-
-`resource_path_audit.py` 在 `Art`、`Font`、`Music`、`Spritesheet` 任一目录不存在时，跳过对应前缀下的静态/动态素材路径校验；这保证公开 clone 可运行静态门禁，但不能替代完整工作区验收。
-
-### 7.3 人工审计与迁移工具
-
-| 工具 | 用途 | 验收方式 |
-|:---|:---|:---|
-| `asset_reference_audit.py` | 单遍 `rg` 扫描旧资产基名引用 | 手动执行；`--fail-on-match` 时命中返回 `3`，否则只报告 |
-| `rename_path.py` | `source/` 内原子重命名、引用同步、回滚 | 迁移后必须重跑静态门禁、命名审计与受影响关卡冒烟 |
-| `naming_compliance_audit.py` | 全量命名终审四张表 | 人工终审；`--fail-on-error` 有违规返回 `1` |
-| `contract_scan.py --self-test` | 契约扫描负向/正向样本 | 规则变更或迁移前后手动执行 |
-
-这些工具**不在** `check_all` 的日常九维内；使用后仍需执行对应门禁，不能以“工具跑过”替代通过证据。
-
----
-
-## 8. 硬性阈值与基线数字
-
-| 项目 | 值 | 归属/说明 |
-|:---|:---|:---|
-| `check_all` 并发 | 默认 6 | 可用 `-j` 调整 |
-| `gdlint` 覆盖 | 核心脚本子集 | 不是全量 lint；清单见 `check_all.py` |
-| `health_check` 编译超时 | 30 秒 | 超时后 Windows 使用 `taskkill /F /T` |
-| GDScript warning 白名单 | 0 条 | 白名单外必须为 0 |
-| warning 码映射 | 已登记警告码 | 未识别记 `UNKNOWN` |
-| 契约 WARNING 预算 | ≤ 1050 | ERROR 必须为 0 |
-| 契约规则 | 二十一类契约 | ERROR 才阻断 |
-| 白名单冻结 | schema 2 / frozen | SHA-256 校验 |
-| PNG 流 allowlist | 由 `scripts/png_stream_allowlist.json` 维护 | 清单外的 `StreamedPngEffect` 使用失败 |
-| 关卡冒烟倍速 | 3.0 | `level_test_runner.py` |
-| 关卡冒烟超时 | 300 秒 | 加载上限 45,000 ms / 20,000 帧 |
-| 关卡回归候选 | 由 `Scene/level/` 清单动态发现 | 非战斗场景按 `NON_BATTLE_SPECIALS` 跳过 |
-| 关卡回归并发 | 默认 `auto`（`min(12, max(4, CPU 核数))`）；`--jobs 4` 为稳定排障口径 | 失败重试 1 次 |
-| 关卡回归单关超时 | 默认 150 秒 | 子进程 +90 秒 |
-| 双人探针 | 用例清单由 `coop_probe_runner.py` 维护 | 单探针 180 秒，串行 |
-| 场景探针套件 | `scene_probe_runner.py` | 固定 6 项（星座/关卡选择态/关卡资源租约/加载守卫/角色 2/4 技能/法宝）；单项 90/240/60/180/180/180 秒；`--scene` 启动；日志 0/0 |
-| 档案持久化夹具 | `archive_probe_runner.py` | 独立临时 `user://`；缺失/空/损坏档的显式 `status`、备份恢复、角色 1/7/0/8、`request_save`、面板/地图页/结算真实写盘、身份 epoch 与过期回写拒绝、补全后置条件、会话绑定/结束/角色变化/重进同档、无会话拒绝保存与关卡入口；单次 120 秒 |
-| 数字 ID 场景 | 由冻结白名单登记 | 改名需评审 |
-| 格式行宽 | 120 | `format_all.py` |
-| 格式批次 | 100 | `format_all.py` |
-
-### 8.1 历史基线
-
-历史门禁口径与旧计数见 [`../archive/validation_history_2026.md`](../archive/validation_history_2026.md)；本文只维护当前阈值与变更矩阵，不复跑历史数字。
-
----
-
-## 9. 按变更类型的验收矩阵
-
-| 变更类型 | 最低门禁 | 追加验证 | 不算通过的情况 |
-|:---|:---|:---|:---|
-| 纯文档 | 相对链接检查；`normalize_eol.py docs --dry-run` | 更新索引与状态引用 | 只改文字、不更新索引/链接 |
-| 纯 GDScript（无场景/资源） | L1 九维 | 受影响关卡冒烟或定向探针 | `--skip-engine` 后宣称 7/7 |
-| 场景/节点改动 | L1 九维 | `level_test_runner` 代表关；NodePath/动画轨道契约 | 只跑 `gdlint` |
-| 新增/修改美术或音频 | L1 九维 + `--import` | Atlas/编号帧/哪吒 `--check`；相关关卡冒烟 | 未生成 `.import`/UID；未重建导入缓存 |
-| 存档/数据结构 | L1 九维 | 当前格式已有档/新档读取、缺字段补全、损坏档拒绝、备份策略、保存/重载与退出、双人槽位 | 只测新档；猜旧结构；失败空档覆盖原档；将“旧档”误作跨版本兼容 |
-| 输入/物理层 | L1 九维 | 单/双人按键路径；`LocalCoopInputIsolationProbe`/`LocalCoopKeyConfigProbe`；相关关卡冒烟 | 只改 `project.godot` 不实机验证 |
-| 双人/LocalCoop | L1 九维 | `coop_probe_runner` 全部用例；P1/P2 归属探针 | 只测 1P；把 SKIP 当 PASS |
-| UI/HUD/显示 | L1 九维 | 单/双人多分辨率截图；`LocalCoopHudReadOnlyProbe`（槽位 HP/MP/经验/无双/宠物与只读快照）；`level_1` 冒烟 | 只测一个分辨率；截图无 HUD/边界检查 |
-| 关卡/玩法 | L1 九维 | 单关冒烟 + changed-only 回归 | 只验证第 1 阶段；未验证出口 |
-| 构建期资源管线 | L1 九维 | 对应转换器 `--check`；负向样本 | 只检查文件存在，不检查内容 |
-| AtlasMetadata View/消费者 | L1 九维 + 定向运行路径 | `view_for` 覆盖受影响运行时资源域；真实消费者正常/错误路径；相关关卡冒烟 | 只编译或只检查单个 API；跳过资源域/消费者 |
-| 应用/场景编排、缓存/池/异步 | L1 九维 + 定向运行路径 | 冷启动/返回/重战、覆盖式切换与 HUD 就绪、提前退出/过期回调、资源交接与池重置；涉及发布则 PCK/release | 只搬字段、只清字典或编译；后台请求/旧 API 仍留存 |
-| 档案会话/2P 面板上下文 | L1 九维 + 双人定向探针 | P2 面板开关/暂停/切档、保存快照恢复 1P 视图、共享库存与个体状态、退出未决保存；槽位枚举（`slot_snapshot`）与共享账本一致性（`shared_ledger_report`）由 `LocalCoopSlotLedgerProbe` 覆盖；面板显式操作者、快照互斥与关闭恢复由 `LocalCoopPanelOperatorProbe` 覆盖；Phase 16 另需档案矩阵登记的写入者/失败边界（16-1 矩阵：[`archive_session_matrix.md`](archive_session_matrix.md)） | 只改 UI 或只改 LocalCoop；1P 档案混入 2P；两套可写真源；新增共享键未登记到 `shared_keys()` |
-| 战斗来源/结算边界 | L1 九维 + 生产攻击/关卡路径 | 弹体/召唤/法宝延迟归属、池化复用、吸血/无双/Buff 槽位、通关/重战与重复结算 | 仅场景存在；来源默认 1P；只验证第一阶段 |
-| 玩法/表现模块边界（Phase 17） | L1 九维 + 定向运行路径 | 归属探针（普攻/技能/弹体/召唤/法宝）、池化复用两轮、阶段推进与结算一次、成长命令失败无副作用、HUD/输入/音频残留；写入者/失败边界见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 只改基类或只改 UI；来源默认 1P；重复发奖；表现层写档 |
-| Phase 17 边界守卫 | L1 九维 + `contract_scan --self-test` | 结算 `LevelSettlement`、命令 `snapshot/restore`、表现层无写档、四试点无 `/root` 与路径预算；见 [`gameplay_module_matrix.md`](gameplay_module_matrix.md) §19 | 只改文档；守卫无负样本；路径预算放宽 |
-| 输入写入边界守卫 | L1 九维 + `contract_scan --self-test` | `input_boundary` 好/坏样本；全量扫描 ERROR=0 | 只改文档；例外未登记；输入读取行夹带写档 |
-| Global 表面守卫 | L1 九维 + `contract_scan --self-test` | `global_surface` 好/坏样本；`--fail-on-error`；基线字段/add 入口守恒 | 只改文档；基线未更新；新增字段/add 入口未登记 |
-| 全局信号守卫 | L1 九维 + `contract_scan --self-test` | `global_signal` 好/坏样本；`--fail-on-error`；Autoload 信号基线守恒 | 只改文档；基线未更新；新增全局信号未登记 |
-| 被动属性守卫 | L1 九维 + `contract_scan --self-test` | `passive_boundary` 好/坏样本；`--fail-on-error`；`pasl_prop` 单一写者与刷新路径 | 只改文档；轮询未删除；业务直写快照或等级字典 |
-| 宠物被动守卫 | L1 九维 + `contract_scan --self-test` | `pet_passive_boundary` 好/坏样本；`--fail-on-error`；升级经 `PetDomainCommand` 且失败可恢复 | 只改文档；UI 直写宠物字典；保存失败不回滚 |
-| 版本迁移 | L3 全量 | 全量回归 + 双人矩阵 + 命名终审 + Atlas/帧同步；逐文件处置结论 | 整包覆盖；复制反编译代码；临时探针入库 |
-
-
-### 9.1 总体架构收敛的验证边界
-
-- 正常路径、边界、失败与退出均以真实生产调用验证；阶段套件不能替代新增行为的定向场景。
-- 上述矩阵是变更验收义务，不声称现有 `coop_probe_runner`/`scene_probe_runner` 已覆盖全部保存竞态、过期回调和 UI 交换；缺覆盖时补定向夹具并登记。
-- 接口替换须核对生产调用方、删除旧入口；不以 deprecated facade、双实现或无法复现的只读审查充当完成。正式职责仍正确的唯一入口可保留名称。
-- 仅文档修改执行链接、行尾/空白、规范/索引与修改范围检查，不因目标范围扩大重跑引擎，也不刷新已有 release 验证时间。
-- 资源路径、类型或导出依赖变化触发实际包验证；不强制每个只读调查或 API 内部改动都重导 release。
----
-
-## 10. 失败处置
-
-1. **先复现**：保留失败命令、首个错误与日志；不要用重跑覆盖证据。
-2. **定根因**：区分代码缺陷、数据缺陷、资源缺失、契约漂移与环境差异；不以公告文案代替证据。
-3. **最小修复**：只改必要范围；禁止为通过门禁而删除检查、扩大白名单或增加兼容分支。
-4. **回归**：重跑同一门禁，再跑受影响面；共享状态、暂停、场景生命周期属于高风险路径，失败时回退整个逻辑批次。
-5. **记录**：更新 `status.md` 的验证结果与已知边界；机器报告不手改、不提交历史报告。
-6. **未认证边界**：未执行的平台、分辨率、硬件或探针必须明确写出“未验证”，不能默认为通过。
-
-**不构成验收证据**：
-
-- 仅代码审阅或类型检查；
-- 仅编译成功，没有运行时路径；
-- 单个用例通过，没有覆盖失败分支；
-- 反编译/解包成功；
-- 未说明跳过维度的“全绿”；
-- 未附分辨率与场景的截图；
-- 临时探针留在 `source/` 或报告中。
-
----
-
-## 11. 环境、平台与交付边界
-
-- `.gitignore` 排除 `source/Art/`、`Music/`、`Font/`、`Spritesheet/` 及其导入产物；
-- 禁止使用 `git add -f` 绕过忽略规则；
-- 公开 clone 无法直接运行，Godot 报告缺失资源属于预期；
-- 自有代码 MIT；第三方组件与 Spine 运行时分别遵循其许可证，见 `LICENSE`、`THIRD_PARTY_NOTICES.md`；
-- 完整验收必须在本地合法授权的完整素材工作区执行；文档不得记录本地二进制、解密沙盒或绝对路径；
-- Spine 运行时当前仅入库 **Windows x86_64**；其他平台发布前必须补齐运行库并验证；
-- Steam Deck 全屏、Android 实机与移动端触控布局未在当前硬件环境完整验收；未执行的平台必须标注“未验证”；
-- 本地 `git commit` 可在门禁通过后执行；未经明确允许不得 `git push`；
-- 提交信息遵循中文 Conventional Commits，核心修复/重构需在正文写明根因、方案与实测证据。
-
----
-
-## 12. 维护约定
-
-1. 门禁规则变更时，先改 `scripts/` 与对应规范，再更新本文；
-2. 阈值变化必须同步 §8 的数字表；
-3. 新增门禁脚本必须登记到 [`../../scripts/README.md`](../../scripts/README.md) 与本文；
-4. 历史验证结果只写入 `status.md`，本文只保留判据与当前阈值；
-5. 文档移动后更新相对链接，并执行链接检查。
-
----
-
-## 13. 关联文档
-
-- [`architecture.md`](architecture.md)：运行时架构、分层与遗留边界
-- [`atlas_metadata_schema.md`](atlas_metadata_schema.md)：Phase 14 生产者、schema、消费者、只读 View 与失败矩阵
-- [`status.md`](status.md)：版本、规模与历史验证结果
-- [`../standards/naming_standard.md`](../standards/naming_standard.md)：命名与契约规范
-- [`../standards/godot_design_standard.md`](../standards/godot_design_standard.md)：Godot 设计规范
-- [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)：总体目标、所有权、生命周期与分域验收不变量
-- [`../guides/migration_playbook.md`](../guides/migration_playbook.md)：版本迁移流程与红线
-- [`../audit/README.md`](../audit/README.md)：人工代码质量审计模板、报告与证据规则
-- [`../../scripts/README.md`](../../scripts/README.md)：脚本索引、命令与产物
+不构成验收证据：仅代码审阅/静态类型检查、仅编译、单个成功样本覆盖失败路径、未说明的跳过项、source 清单/导出预设声明代替实际包测试，或缺少目标布局/场景上下文的截图。

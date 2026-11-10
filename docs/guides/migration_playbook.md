@@ -231,38 +231,7 @@ git merge-file --diff3 -p <ours.gd> <base.gd> <theirs.gd> > <merged.gd>
 
 本检查表覆盖总体接入边界，不替代 §1~§4 的功能代码三方语义合并。玩法、数值与显示变更单列验收，不与架构治理混写。
 
-### 5.2 治理后路径与符号变更索引（7.4 基线）
-
-> **适用范围**：7.4 基线及之后的 7.5+ 内容回植。Phase 28、29、39 已归档；`Scene/level/zmws`、`Script/monster` 与 10 个 shader 按 39-3 决策保持现状。Phase 39 已完成，后续结构变更需重新立项。
->
-> **边界**：本节只记录回植判定的最小事实，不复制逐文件台账。56 个 `Scene/**/*.gd` 的完整目标路径见
-> [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)；
-> Phase 28 的完整批次见 [`../archive/iteration_28_global_signal_and_passive_contract.md`](../archive/iteration_28_global_signal_and_passive_contract.md)。
-
-| 类别 | 上游/旧路径或符号 | 当前路径/替代 | 回植动作 |
-|:---|:---|:---|:---|
-| 全局确认信号 | `Script/base/signals.gd`、Autoload `Signals`、`choose_pressed` / `connect_choose_box_signal` | 已删除；`Script/runtime/choose_scene.gd` 的 `confirmed`/`cancelled` 实例信号；`Global.add_choose_text()` 返回实例 | 不恢复 Autoload；确认回调归打开者；保持 `PopupFactory` 单实例语义 |
-| 被动数值入口 | `source/passive_skills.gd` | `Script/skill/passive_skills.gd`（Autoload 名 `PaSkill` 不变） | 按新路径合并；不恢复 `_physics_process` 轮询 |
-| 被动刷新 | 每帧轮询 `get_passive_skill_properties()` | `PlayerData.passive_skills_changed`；`PaSkill` 启动刷新 + 等级/属性实例签名短路；`LocalCoop` 只刷新 2P | 新变更接事件；新增刷新路径必须在装配点显式调用 |
-| 共享数值表 | `PaSkill` 内的等级/费用/数值函数 | `Script/skill/passive_skill_table.gd`（`PassiveSkillTable`）；`PaSkill` 公开函数委托 | 新代码优先用静态表；不要复制第二份数值表 |
-| 宠物被动写入 | UI 直写 `pet[DataKeys.Skill.PASSIVE]` | `PetDomainCommand.upgrade_passive` / `upgrade_all_passives` | 禁止 UI 直写；保存失败恢复等级与共享灵魂 |
-| 阵法佩戴写入 | `PlayerData.player_data["已佩戴阵法"] = ...` | `PlayerData.set_equipped_formation()`；`DataKeys.Skill.EQUIPPED_FORMATION` | 不恢复裸键直写 |
-| 场景脚本 | `Scene/**/*.gd`（56 个） | `Script/<domain>/*.gd`；完整映射见 Phase 29 归档 | 先按基名搜索；找不到时查归档矩阵；禁止把新脚本放回 `Scene/` |
-| 根级脚本 | `Script/backpack.gd`、`Script/monster_86.gd` | 39-0 已完成：`Script/level/role_information_hud.gd`、`Script/monster/monster_86.gd` | 按新路径合并；禁止新增 `Script/*.gd` |
-| 场景文件 | `Scene/other_scene/*.tscn`、`Scene/show_text/*.tscn`、`Scene/monster_blood/*.tscn`、`Scene/monster_damage/*.tscn`、`Scene/special_effect/elite_soul_card/*.tscn`（均已删除/迁移） | 39-0~39-2 已完成：根级场景在 `Scene/level/`；文本在 `Scene/hittext/`，`choose_scene` 在 `Scene/runtime/`，怪物血条/受击在 `Scene/monster/`，魂卡特效在 `Scene/hero/elite_soul_card/` | 按当前路径合并；不得再写 `Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 或 `Scene/other_scene/` |
-| 大型参考域 | `Scene/level/zmws/*.tscn`（1727，平铺） | 保持平铺；仅 28 个 `Scene/level/zmws_playable/*.tscn` 为玩法包装 | 不建子目录；不更新 1727 条资产元数据；边界见 Phase 39 归档与 ZMWS 资产矩阵 |
-| Shader | `Shader/base_hero.gdshader`、`Shader/equipment_properies.gdshader` | 零引用但保留；角色描边暂缓；装备品质边框创意见 `roadmap.md` §4.3 | 不删除、不假设已接入；接入前另立创意批次 |
-
-回植判定顺序：
-
-1. **按基名搜索**：上游路径不存在时，先用文件名在 `source/Script/` 搜索；脚本域迁移通常保留文件名。
-2. **查归档矩阵**：`Scene/**/*.gd` 的 56 个目标路径以 Phase 29 归档为准；不要凭目录名猜测。
-3. **路径不存在 ≠ 功能删除**：先判断是否被移动、合并，或改由命令/表承载；禁止直接判定“上游没有、当前也不用”。
-4. **删除文件不重建**：`signals.gd` 是治理性删除，不恢复；确认/取消映射到实例信号。
-5. **UI 直写不回流**：`PlayerData` 字典直写、宠物被动直写、阵法佩戴直写均已有命令/写入口；只合并语义，不恢复旧写法。
-6. **Phase 39 状态明确**：39-0~39-4 已完成；根级场景与根级脚本已清零，`Scene/other_scene/`、`Scene/show_text/`、`Scene/monster_blood/`、`Scene/monster_damage/`、`Scene/special_effect/` 已删除；`Scene/level/zmws`、`Script/monster`、`monster_zhw` 与 10 个 shader 按 39-3 决策保留。新回植按 `Scene/hittext/`、`Scene/runtime/`、`Scene/monster/`、`Scene/hero/elite_soul_card/` 等当前域合并。
-
-> Phase 28/29 的决策依据见 [`ADR-028`](../decisions/ADR-028-confirm-dialog-callback-ownership.md)、[`ADR-029`](../decisions/ADR-029-passive-snapshot-event-driven.md)、[`ADR-030`](../decisions/ADR-030-pet-passive-command-and-table.md)、[`ADR-031`](../decisions/ADR-031-scene-script-relocation.md)；当前架构见 [`../reference/architecture.md`](../reference/architecture.md) §1~§3。
+本节不维护治理后路径/符号映射；遇到上游旧路径时，先按当前目录与命名规范检索，再查询对应的 Phase 28、29 或 39 归档。阶段状态见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)，当前架构以 [`../reference/architecture.md`](../reference/architecture.md) 为准。
 
 ---
 

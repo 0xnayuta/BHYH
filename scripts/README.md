@@ -78,9 +78,9 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `font_role_audit.py` | UI 字体角色语义门禁：有效字体归类、角色包装与 fallback、脚本/场景直接字体、宋体残留与字号例外基线；`--write` 生成 `font_role_baseline.json` |
 | `ui_text_punctuation_audit.py` | 报告式扫描 `.gd`/`.tscn` 中文自然语言 ASCII 标点；排除日志、数学公式、`@export_enum`、路径与编号标记；默认 report-only，`--fail-on-findings` 可阻断，支持 `--self-test` |
 | `theme_token_audit.py` | 检查新变体/改写值是否使用 token 字号、描边、颜色与 Button 基类；基线见 `theme_token_baseline.json` |
-| `theme_variant_audit.py` | Phase 27-4 语义基类、冻结变体、Theme 属性/StyleBox 上限与独立变体重复签名门禁；冻结清单见 `theme_legacy_variants.json` |
-| `ui_dynamic_theme_audit.py` | Phase 27-7 全 `source/**/*.gd`（排除 addons/.godot）`add_theme_*` 跨行分类、静态角色/解析错误/总计数不增长门禁；`--self-test` 覆盖跨行正负样本；基线见 `ui_dynamic_theme_baseline.json` |
-| `font_retirement_manifest.json` | Phase 27-7/P2.1 字体角色、已删除/替换字体、已退役 Theme 资源与私有保留资产边界 |
+| `theme_variant_audit.py` | Semantic 基类、冻结变体、Theme 属性/StyleBox 上限与独立重复组基线 |
+| `ui_dynamic_theme_audit.py` | `source/**/*.gd` 中 `add_theme_*` 分类、解析错误及基线守恒；`--self-test` 覆盖跨行正负样本 |
+| `font_retirement_manifest.json` | 字体角色、已退役字体/Theme 与私有保留资产边界 |
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
@@ -113,7 +113,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 
 | 脚本 | 作用 |
 |:---|:---|
-| `level_test_runner.py` | 单关冒烟夹具；沙盒、阶段断言、物理帧门?、日志门禁与自动清理；`--performance-sample-frames` / `--performance-warmup-frames` / `--performance-hud-full` 为可选 `Performance.TIME_PROCESS` 逐帧采样（mean/p50/p95）；`--performance-retries` 在 `p95>=8ms` 整段节流时重跑；`--render-window` 改用 `--windowed --disable-vsync` 走真实渲染路径采样（含 draw/呈现/同步），报告 `performance.render_window / vsync_mode / max_fps`；`--measure-load` 只测加载链路，输出分阶段耗时与加载期峰值 VRAM/对象数；`--loadout base|full` 控制沙盒装备组合（满配 = 寅虎 4 阶 + 法宝 xianyjp） |
+| `level_test_runner.py` | 单关冒烟夹具；支持阶段断言、日志门禁、装备组合、加载测量与可选性能/真实渲染采样，具体参数见 `--help` |
 | `level_regression_all.py` | 全量/变更影响关卡回归；失败串行重试并保留首轮失败证据；`--dry-run` 只打印计划 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵 |
 | `scene_probe_runner.py` | 场景级运行时探针套件 |
@@ -145,14 +145,14 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `contract_whitelist.json` | 命名/契约/机器导出白名单 |
 | `png_stream_allowlist.json` | StreamedPngEffect 允许文件 |
 | `runtime_frames_allowlist.json` | 运行时 `SpriteFrames.new()` 允许文件 |
-| `global_surface_baseline.json` | Phase 22 收口后的 Global 字段与 add 系入口冻结基线 |
+| `global_surface_baseline.json` | `Global` 字段与 `add` 入口冻结基线 |
 | `theme_override_baseline.json` | Theme 直接属性/动画轨道场景级上限 |
 | `font_role_baseline.json` | 字体角色字号存量例外；只允许收紧，不允许新增未登记例外 |
 | `ui_theme_tokens.json` | 字号、语义色、字体角色、Theme 受管属性与 Theme token 审计集合的单一来源 |
-| `theme_token_baseline.json` | Theme 变体字号/描边/颜色/Button 基类的迁移期冻结基线 |
-| `ui_surface_token_baseline.json` | 自绘 StyleBox 与 `main_menu` 裸色的迁移期冻结基线 |
+| `theme_legacy_variants.json` | UI Theme 冻结变体名集合，供 Theme 变体审计校验 |
+| `ui_dynamic_theme_baseline.json` | `source/**/*.gd` 脚本动态 Theme 调用的冻结基线 |
 | `monster_action_maps.json` / `monster_action_views.json` | 怪物动作与视图构建源 |
-| `level_layout_sources.json` / `level_layout_data_exceptions.json` | 关卡布局构建源与 10 个动态/非连续例外 |
+| `level_layout_sources.json` / `level_layout_data_exceptions.json` | 关卡布局构建源与经评审的动态/非连续例外 |
 | `equipment_sources.json` | 装备/物品构建源；由 `convert_equipment_catalog.py` 生成 Catalog |
 | `monster_dynamic_paths.json` | 关卡预载动态怪物/纹理/额外场景来源 |
 | `export_raw_roots.json` | FileAccess JSON/BIN 的根目录、扩展名与消费者；生成 `source/Script/data/export_raw_dependencies.json` |

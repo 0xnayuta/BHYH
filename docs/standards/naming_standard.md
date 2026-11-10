@@ -1,7 +1,5 @@
 # BHYH 全工程命名规范与契约白皮书 (Comprehensive Naming & Contract Standard)
 
-> **版本**：v2.2.0（2026-11-09，Phase 29-0：`Scene/` 不承载 GDScript，脚本统一归 `Script/<domain>/`）
->
 > **生效范围**：`source/` 活跃开发主工程全量代码、场景、资源与目录
 >
 > **职责关联**：[`target_architecture_contract.md`](target_architecture_contract.md) 规定总体架构与所有权；本文只规定命名、路径与冻结例外，不授权按目录外观重划业务。
@@ -45,18 +43,17 @@
 
 ### 1.3 目录迁移硬性约束
 
-- `source/` 内目录/文件改名必须通过 `scripts/rename_path.py`；禁止裸改或单步 `git mv`。
-- 本规则不要求全仓搬迁；保留类型顶层，在其内部功能聚合。`docs/`、`scripts/` 本身不在该迁移工具范围，移动后另行同步链接。
-- 凡单批次目录/文件重命名 ≥ 3 个、涉及 `.gd/.tscn/.tres/.import/.json` 引用、涉及字典键/动画名/UI 文案或机器导出白名单的迁移，必须在提交信息与变更说明中登记迁移范围、引用同步与白名单例外。
+- `source/` 内路径改名必须通过 `scripts/rename_path.py`，同步 `.import`、`.uid`、`res://` 路径、Autoload、场景资源、动画轨道和字典键引用；禁止裸改或单步 `git mv`。
+- 保留类型顶层并在内部聚合功能；本文不要求全仓搬迁。`docs/`、`scripts/` 不在该迁移工具范围内，移动时另行同步链接。
+- 多路径或影响代码、场景、资源、字典键、动画名、UI 文案或白名单的迁移，必须记录范围、引用同步与白名单例外。
 
 ### 1.4 GDScript 落位规则
 
 - **`Scene/` 不承载脚本**：`source/Scene/` 只保存 `.tscn`、`.tres` 与场景资源；不得新增或保留 `.gd`。
 - **脚本统一落位**：所有 GDScript 必须位于 `source/Script/<domain>/`；`<domain>` 为功能域目录（如 `runtime`、`main_menu`、`monster`、`skill`、`data`），不得按 `.tscn` 所在目录镜像新建平行约定。
 - **根级清零**：`source/Script/` 根级不承载 `.gd`；`source/Scene/` 根级不承载 `.tscn`。新脚本与新场景分别归 `Script/<domain>/`、`Scene/<domain>/`。
-- **存量迁移**：现有 `Scene/` 下 56 个 `.gd` 按 [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md) 分批迁移；决策见 [`../decisions/ADR-031-scene-script-relocation.md`](../decisions/ADR-031-scene-script-relocation.md)。
-- **例外为零**：不保留 `Scene/**/*.gd` 白名单；`addons/` 第三方插件不在本规则范围，但不得作为规避通道。
-- **门禁**：自 Phase 29-4 起，`scripts/naming_audit.py` 对 `source/Scene/**/*.gd` 报 `ERROR`；自 Phase 39-0 起，同时拦截 `source/Scene/*.tscn` 与 `source/Script/*.gd`。存量已清零，新增文件不得再落根级。
+- 存量位置的当前状态以 [`../reference/architecture.md`](../reference/architecture.md) 为准；迁移决策与历史记录见 [ADR-031](../decisions/ADR-031-scene-script-relocation.md) 与 [`../archive/iteration_29_scene_script_relocation.md`](../archive/iteration_29_scene_script_relocation.md)。
+- **机器门禁**：`scripts/naming_audit.py` 必须将 `source/Scene/**/*.gd`、`source/Scene/*.tscn`、`source/Script/*.gd` 判为 `ERROR`；门禁调用与完整判据以 [`../reference/acceptance.md`](../reference/acceptance.md) 和 [`../../scripts/README.md`](../../scripts/README.md) 为准。
 
 ---
 
@@ -82,7 +79,7 @@ extends Object
 - **所有 `.gd` 脚本文件**：`snake_case`，即使声明了 `class_name`；且必须位于 `source/Script/<domain>/`，不得放在 `source/Scene/` 下；
 - **资源与资产文件**：`.tres`、`.res`、`.png`、`.jpg`、`.webp`、`.mp3`、`.ogg`、`.wav`、`.ttf`、`.otf`、`.gdshader`、`.json` 等默认 `snake_case`；
 - **伴生元数据**：`.import`、`.uid` 必须与源文件全名完全同步；
-- **机器导出例外**：Flash/TexturePacker 产物允许保留工具生成名称，但必须进入 `scripts/contract_whitelist.json` 的精确冻结表。
+- **机器导出例外**：仅 [`naming_whitelist.md`](naming_whitelist.md) 与 `scripts/contract_whitelist.json` 登记的精确条目豁免；不按前缀、通配或目录名自动放行。
 
 ### 2.2 文件命名样例
 
@@ -103,18 +100,8 @@ BaseHero.gd               # class_name 为 PascalCase，但文件名应 snake_ca
 heroDefaultStats.tres
 ```
 
-### 2.3 机器导出与素材工具产物
+### 2.3 构建期生成资源命名
 
-以下名称由上游 Flash/TexturePacker/Spine 工具生成，允许不作为普通业务文件重命名，但必须逐条登记：
-
-- `DefineSprite_*`、`symbolClass`、`*-assets`、`*.sprites`、`glb_*`；
-- 纯数字资源 ID 目录与数字 ID 场景；
-- `addons/` 下第三方插件；
-- `.atlas`、`.spine-json`、`.translation` 等工具链伴生文件。
-
-未登记的机器导出结构、新增数字 ID 目录或新增数字 ID 场景，均视为违规。
-
-构建期生成资源（如 `source/Art/frame_sequences/*.tres`）：
 
 - 文件名由资产身份（`asset_id`）派生 `snake_case` slug，超长时截断并追加 8 位身份哈希；
 - 文件名只用于定位与检索，资产身份由 `asset_id` 与资源头 UID 承载；改文件名不改变身份；
@@ -159,12 +146,8 @@ heroDefaultStats.tres
 
 ### 4.2 细部规则
 
-- **Autoload 兼容桥接变量例外**：`PlayerData`、`RoleProp`、`PlayerInput` 三个名称在继承上下文（`BaseObject`、`BaseRole`、`BaseMagicWeapon`、`SkillIcon`、`BaseRoleProperties`）中作为同名 Autoload 的按槽位桥接属性保留 PascalCase；仅限这三个名称，不得用于其它业务变量。
-
 - **禁止尾下划线**：`add_font_`、`load_`、`aura_` 不是合法 `snake_case`；需要私有语义时使用前置下划线，如 `_add_font`；
 - **类别名常量例外**：`const ClassAlias = preload("res://...")` / `load(...)` 允许 PascalCase，遵循 Godot 官方示例；普通值常量仍必须 `UPPER_SNAKE_CASE`；
-- **枚举成员**必须 `UPPER_SNAKE_CASE`，不得使用 `PascalCase` 或 `camelCase`；
-- **信号**使用 `snake_case`，推荐过去时动词；
 - **函数参数**与局部变量遵循 `snake_case`，不得遮蔽基类成员或全局符号。
 
 ---
@@ -193,62 +176,25 @@ var level: int = PlayerData.player_data[DataKeys.PLAYER_LEVEL]
 
 ---
 
-## 6. 外围只读资产与机器导出白名单制度 (Asset Whitelisting)
+## 6. 命名例外
 
-### 6.1 白名单范围
-
-以下范围可享受只读豁免，但必须逐条登记：
-
-1. **Flash 反编译与时间轴导出资产**：`DefineSprite_*`、`symbolClass`、`*-assets` 等；
-2. **TexturePacker 机器生成图集**：`*.sprites/` 及索引清单；
-3. **外部第三方插件**：`source/addons/`；
-4. **数值与配置 ID 驱动的目录/场景**：纯数字 ID 且由运行时按资源 ID 动态拼接。
-
-### 6.2 白名单管理
-
-- 所有豁免条目必须在 `scripts/contract_whitelist.json` 中显式登记；
-- **只减不增**：普通业务文件、脚本、场景、资源不得以“历史原因”加入白名单；
-- 白名单按精确路径匹配，禁止使用 `DefineSprite_*` 或数字前缀通配自动放行；
-- 新增条目必须附技术评审记录，并更新 `frozen_manifest_sha256`。
+所有命名豁免仅限 [`naming_whitelist.md`](naming_whitelist.md) 列出的有限范围；机器路径名单由 `scripts/contract_whitelist.json` 精确冻结。未登记的旧结构或第三方资产不得自动获得豁免，新业务文件、目录、场景、脚本与资源不得因历史原因加入例外。
 
 ---
 
-## 7. 质量流水线与门禁执行铁律 (Quality Gates)
+## 7. 机器门禁与迁移
 
-任何提交合并入主干前必须通过：
-
-1. `scripts/normalize_eol.py`：全工程 LF；
-2. `scripts/format_all.py --check`：`gdformat` 格式；
-3. `gdlint`：静态异味；
-4. `scripts/health_check.py`：Godot 4.7.2 全量编译/引用，并扫描 GDScript 静态分析 warning（白名单外必须为 0）；
-5. `scripts/contract_gate.py`：字面量契约、AtlasMetadata、PNG allowlist、白名单冻结；
-6. `scripts/naming_audit.py`：目录与新增文件命名；
-7. `scripts/runtime_reference_audit.py`：NodePath 与 `Global.<method>()` 静态运行时引用；
-8. `scripts/naming_compliance_audit.py`：全量命名终审（存量 + 代码标识符）；
-9. `scripts/resource_path_audit.py`：静态资源路径大小写、动态格式路径、Spine atlas 页名与动态工厂目标。
-
-> `naming_compliance_audit.py` 是人工全量终审，不在 `check_all.py` 的日常并发门禁内；其结论必须单独执行。
-
-### 7.1 门禁基线
-
-- `check_all.py` 全部维度必须 100% PASS；
-- `naming_audit.py --all` 与 `naming_compliance_audit.py --fail-on-error` 用于全量终审；
-- 存量命名债务必须保持在机读基线中逐步递减，不得新增；
-- 任何新增文件若违反本白皮书，`naming_audit.py` 必须拦截。
-
-### 7.2 路径迁移
-
-- 涉及目录/文件改名必须使用 `scripts/rename_path.py`；
-- 迁移后必须同步 `.import`、`.uid`、`res://` 引用、Autoload 路径、场景 `ext_resource`、动画轨道和字典键；
-- 每批迁移后运行 `check_all.py`、对应关卡冒烟与全量命名报告。
-
+- `naming_audit.py` 执行目录/文件命名约束；`naming_compliance_audit.py` 执行全量代码标识符终审；适用档位见 [`../reference/acceptance.md`](../reference/acceptance.md)。
+- 白名单检查必须拒绝未登记、失效或未获评审的条目；命名债务只能递减，不得新增违规。
+合并前门禁与路径迁移后验证不得跳过相关维度或以单项工具通过替代验收；具体命令以 [`../reference/acceptance.md`](../reference/acceptance.md) 和 [`../../scripts/README.md`](../../scripts/README.md) 为准。
+路径迁移必须使用 `scripts/rename_path.py` 并完整同步引用；本文不复制命令清单。
 ---
 
 ## 8. 规范裁决与解释权
 
 1. 本白皮书与 Godot 官方文档冲突时，以 Godot 官方文档为准；项目级偏离必须在本文件明确记录并附技术评审；
 2. 本白皮书与 `scripts/contract_whitelist.json` 冲突时，以本白皮书为规范、以冻结表为机器执行边界；
-3. 命名规则变更必须先更新本文件与审计工具，再运行全量报告，最后才允许修改业务文件；
+3. 命名规则变更必须先修订本文件与相应审计工具，再迁移业务文件；验收档位与命令以 [`../reference/acceptance.md`](../reference/acceptance.md) 和 [`../../scripts/README.md`](../../scripts/README.md) 为准。
 4. 本文件由工程规范维护者解释；任何例外必须有书面记录，不得口头豁免。
 
 ---

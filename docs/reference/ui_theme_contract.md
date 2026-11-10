@@ -1,63 +1,26 @@
 # UI Theme 契约
 
-> **类型**：当前契约（Current）
-> **来源**：Phase 32 完成（2026-11-02）；P0/P2 字体与 token 批次见 [`../archive/iteration_27_theme_font_convergence.md`](../archive/iteration_27_theme_font_convergence.md) 与 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md)。
-> **范围**：`source/Scene/**/*.tscn` 的静态控件样式、Theme 资源、`theme_type_variation` 与审计；不约束运行时业务状态。
-> **规范边界**：字体角色、组件选择与字号边界见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)；本文只记录 Theme 实现、变体、覆盖和审计事实。
-> **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-006](../decisions/ADR-006-resource-first-data-and-data-keys.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
+> **范围**：`source/Scene/**/*.tscn` 的 Theme 绑定、`theme_type_variation` 与 Theme 覆盖边界。字体角色选择以 [`ui_typography_contract.md`](../standards/ui_typography_contract.md) 为准；token 数值和生成/消费关系见 [`typography_tokens.md`](typography_tokens.md)。
+> **依据**：[ADR-003](../decisions/ADR-003-modern-godot-design-with-legacy-exceptions.md)、[ADR-005](../decisions/ADR-005-no-compatibility-or-fallback-layers.md)、[ADR-016](../decisions/ADR-016-display-canvas-window-and-hud-baseline.md)、[ADR-021](../decisions/ADR-021-project-wide-target-architecture.md)。
 
-## 1. 目标
+## 唯一 Theme 与所有权
 
-用共享 `Theme` 承载可复用的字体、字号、颜色、描边、阴影与按钮状态；用 `theme_type_variation` 表达控件角色；不在场景中重复内联值。保持现有视觉、布局、输入与显示基线不变。
+- `source/Scene/theme/bhyh_theme.tres` 是唯一正式 Theme；`project.godot` 不设置全局 `gui/theme/custom`，使用显式节点/场景绑定。不得恢复或新增平行 Theme、Theme Manager 或相关 Autoload。
+- Theme 承载静态、可复用的 UI 样式。运行时不得把实例状态写回共享 Theme，也不得为控件实例深复制 Theme。
+- 每个场景变体必须来自 `bhyh_theme.tres` 中已登记的 `theme_type_variation`。名称使用 `PascalCase` 并按可复用角色组织；冻结变体不静默重命名或删除。新增变体需评审，并遵循既有 `Semantic*` 基类与 token 基类规则。
+- 一次性局部样式只允许作为有理由的场景例外，不得推广为新的通用样式。Theme 使用的字体素材授权与公开仓库边界见[字体规范](../standards/ui_typography_contract.md)。
+- 运行时品质、HP/MP、奖励状态等数据驱动表现仍由数据和脚本拥有，不迁入静态 Theme。
 
-Theme 只承载静态 UI 定义。HP/MP、品质色、奖励状态和战斗飘字继续由数据与脚本驱动。
+## 静态、动画与动态覆盖边界
 
-## 2. 资源与所有权
+- **场景静态属性**：禁止新增未评审的 `theme_override_*`。当前保留项以 [`theme_override_baseline.json`](../../scripts/theme_override_baseline.json) 为准；`source/Scene/main_menu/map_0.tscn` 的图鉴按钮使用局部 StyleBox 例外。通过门禁不代表该基线冻结了属性值或免除视觉评审。
+- **动画轨道**：`source/Scene/hittext/hit_text.tscn` 保留运行时命中、治疗等飘字动画所需的 Theme 覆盖；除此以外不得扩展动画 `theme_override_*`。同一基线按场景和数量登记例外。
+- **脚本 `add_theme_*`**：仅供数据/状态驱动、token、布局或动态样式需要；静态字体角色不能在脚本中覆盖。可抽象为语义 token 的动态颜色、表面色和字号应使用对应生成 token 类，数据驱动业务状态仍由数据拥有。
+- [`theme_override_audit.py`](../../scripts/theme_override_audit.py) `--check` 对照各场景和总量基线，拒绝新增带覆盖场景、直接属性/动画轨道数量增长、场景直接字体引用增长，以及动态调用总数/文件数/路径增长。该基线记录数量与路径，不校验现存局部 StyleBox 的资源值或样式含义。
+- [`ui_dynamic_theme_audit.py`](../../scripts/ui_dynamic_theme_audit.py) `--check` 在动态调用无法解析、发现静态角色覆盖、调用总数超出基线、出现未登记文件或单文件调用数增长时失败。允许的动态调用分类与基线详见该脚本及 [`acceptance.md`](acceptance.md)。
 
-| 项 | 规则 |
-|:---|:---|
-| 基础 Theme | `source/Scene/theme/bhyh_theme.tres`，唯一正式 Theme |
-| 旧 Theme | `backpack_action_theme.tres` 已退役，不再恢复 |
-| 全局 Theme | `project.godot` **不设置** `gui/theme/custom`；采用显式节点/场景绑定 |
-| 运行时写入 | 不把控件状态写回 Theme；不为实例深复制 Theme |
-| Autoload | 不新增 Theme Manager、Autoload 或服务定位器 |
-| 局部主题 | 继承链必须可追踪；新增局部覆盖需登记理由 |
+## 结构门禁
 
-## 3. 命名与变体
+[`theme_variant_audit.py`](../../scripts/theme_variant_audit.py) `--check` 保护冻结变体清单，检查继承成环和缺失的 StyleBox 子资源引用，并限制 Theme 属性数、StyleBox 数与有效重复签名组（上限分别为 2,000、36、10）。Theme 字号、字体色、描边和 Button 基类使用 [`typography_tokens.md`](typography_tokens.md) 所述 token 审计；所有门禁判据见 [`acceptance.md`](acceptance.md)。
 
-- Theme 文件使用 `snake_case`：`bhyh_theme.tres`。
-- `theme_type_variation` 使用 `PascalCase` 角色名；禁止路径、中文、空格与下划线分隔。
-- 变体按角色命名，不按具体面板命名；同一角色跨面板复用。
-- 变体必须登记在 `bhyh_theme.tres`；未定义变体、缺失类型或 Theme 加载失败均应在审计/加载阶段失败，不回退到内联样式。
-- 32-4 冻结的完整变体名单与字体映射见归档页；新增/重命名变体必须评审。
-- 字号、颜色、描边与 Button token 见 [`typography_tokens.md`](typography_tokens.md)；字体角色选择见 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md)。
-
-## 4. 静态、动画与动态覆盖
-
-| 类别 | 处置 |
-|:---|:---|
-| 直接 `theme_override_*` 属性 | 必须为 **0**；由 Theme 基础类型或变体替代 |
-| Animation 轨道 `theme_override_*` 路径 | 保留 `hit_text.tscn` 的 **26 条**最终例外 |
-| 脚本 `add_theme_*` | 保留为数据/状态驱动；当前 352 处、41 文件，不计入静态迁移 |
-| 一次性布局/特效覆盖 | 登记场景例外；不得复制成新的通用样式 |
-
-## 5. 审计与基线
-
-```bash
-python scripts/theme_override_audit.py --check
-python scripts/font_coverage_audit.py --check
-```
-
-基线：`scripts/theme_override_baseline.json`。基线是上限，不是迁移目标；直接属性或动画引用增加必须显式评审并更新基线，不能静默增长。
-
-当前结果：直接属性 **0**；动画轨道 **26**（仅 `hit_text`）；静态变体缺失 **0**；旧 Theme 资源引用 **0**。字体覆盖审计：135 个显式绑定 Theme 的场景 / 788 个中文文本节点 / **0 缺字**。
-
-变体规模、属性上限、StyleBox 与重复组结果见 [`theme_font_inventory.md`](theme_font_inventory.md) 与 [`status.md`](status.md)。
-
-## 6. 边界
-
-- 不做主题切换、换肤、布局重排、动画时序修改或显示基线调整。
-- 不把运行时品质色、血量色、奖励状态色迁入 Theme。
-- 不为兼容旧场景保留第二套 Theme；迁移完成即删除旧入口。
-- 字体资产替换、子集化与删除必须保留授权与回滚证据；公开仓库不包含字体文件。
-- 完整批次、截图、控件转储与历史计数见 [`../archive/iteration_32_ui_theme.md`](../archive/iteration_32_ui_theme.md) 与 [`../archive/iteration_27_theme_font_convergence.md`](../archive/iteration_27_theme_font_convergence.md)。
+变体审计校验冻结清单与 Theme 结构；这些 UI Theme 门禁不应被描述为逐一验证任意场景中的全部 `theme_type_variation` 名称。最近验证快照见 [`status.md`](status.md)。

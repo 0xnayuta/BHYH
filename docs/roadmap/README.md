@@ -6,7 +6,7 @@
 
 | 文档 | 内容 |
 |:---|:---|
-| [`roadmap.md`](roadmap.md) | 项目状态、长期阶段顺序与近期重点的唯一来源 |
+| [`roadmap.md`](roadmap.md) | 阶段状态、未完成范围/恢复条件与长期候选 |
 | [`current-iteration.md`](current-iteration.md) | 当前候选；无活跃候选时明确写“无” |
 | [`../archive/README.md`](../archive/README.md) | 已完成阶段的实施记录与长期参考 |
 

@@ -6,7 +6,7 @@
 
 ## 背景
 
-当前有 11 个 Autoload 注册项（Phase 20-1B P1 删除 `BaseHit` 前为 13 个；W4 删除 `MainMusic`），承担存档、属性、设置、装备、锻造、被动、音乐、信号、全局工厂、双人等职责。它们与业务代码深度耦合，立即移除会破坏启动流程与双人模型；但继续新增“方便访问”的单例会让耦合进一步失控。
+在 Phase 20-1B 决策时工程有 11 个 Autoload 注册项；后续已删除 `Signals`，当前数量与顺序以 [`../reference/architecture.md`](../reference/architecture.md) §2.1 的实际注册表为准。单例长期结构与新增评审边界见 ADR-007 原决策与当前 [`../reference/autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)。
 
 ## 决策
 

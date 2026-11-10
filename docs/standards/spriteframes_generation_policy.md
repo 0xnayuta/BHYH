@@ -1,35 +1,19 @@
 # SpriteFrames 生成策略
 
-> 本文只规定帧资源生成与播放时序细则；内容选型、共享/实例状态、加载生命周期与发布边界见 [`项目总体目标架构契约 §7`](target_architecture_contract.md#7-资源与视觉资产子契约)。不要求全部视觉内容转成 SpriteFrames。
+> 本文规定 SpriteFrames 生成、命名与播放时序；资源类型选型、共享/实例状态、加载生命周期与发布边界见 [`target_architecture_contract.md` §7](target_architecture_contract.md#7-资源与视觉资产子契约)。当前转换器和具体输出由 [`scripts/README.md`](../../scripts/README.md) 维护；门禁判据与验收档位见 [`../reference/acceptance.md`](../reference/acceptance.md)。并非所有视觉内容都应转为 SpriteFrames。
 
-## 默认规则
+## 生成规则
 
-- `speed` 统一使用源素材 FPS（默认 24；30 FPS 源显式传 `--fps 30`）；
-- 逐帧 `duration` 使用相对时长，绝对帧时长 = `duration / (speed × playing_speed)`；禁止把绝对秒数写入 `duration` 后再叠加 `speed`，否则播放速度会放大 `speed` 倍；
-- 与 `AnimatedSprite2D` 配合时，`AnimationPlayer` 可编排状态、属性、事件与时长，但不得对同一帧播放时钟重复驱动或额外叠加速度倍率；
-- 循环动画命名：`wait`、`walk`、`idle`、`run`、`Monster*`；
-- 一次性攻击/受伤/死亡/特效默认不循环；
-- 特效如确需循环，必须在生成命令显式传 `--loop` 或 `--loop-all`；
-- `SpriteFrames` 内部动画名、源序列名和 `--strip-prefix` 结果必须唯一；
-- 新增静态资产优先使用构建期转换器生成，不允许运行时目录扫描；
-- Atlas 源元数据由 `scripts/convert_atlas_metadata.py` 生成；哪吒专用预览帧由 `scripts/convert_nezha_preview_frames.py` 转为构建期 SpriteFrames `.tres`，运行时不再解析 `preview_*.json`；完整工具职责见 [`scripts/README.md`](../../scripts/README.md)；
-- 连续编号 PNG 序列由通用 `scripts/convert_numbered_frames.py` 生成构建期 SpriteFrames；当前登记 BiLuoTian cast/hit、LeiTingJieZhen formation/lightning、Wutai 3077 tornado、青莲 idle/effect/aura 与法宝/宠物弹体等，运行时不再拼路径建帧；
-- 固定/按需驻留序列由 `scripts/convert_frame_sequences.py` 生成 FrameSequence、Catalog、确定性 UID 与独立发布依赖清单；构建定义显式选择图集、原始帧或静态保持来源，不在缺失时自动替代。数量以转换器检查输出和状态快照为准。
-- 单张纹理 sheet 的固定网格帧由 `scripts/convert_sheet_frames.py` 生成 `AtlasTexture` 子资源；青龙剑/太极/八仙模型、Lyfb 兼容特效与哪吒阴阳特效不再在运行时裁剪/建帧。
+- 固定或静态帧序列应由构建期工具生成 SpriteFrames 资源；运行时不得扫描目录、猜编号或拼接静态序列路径来重建动画。
+- 每个动画资源必须声明唯一正式来源与所用帧序列；缺帧或缺动画不得静默替换为其他来源或单图。合法静态保持必须显式声明。
+- `speed` 使用源素材 FPS，默认 24 FPS；30 FPS 源必须显式设置 `--fps 30`。
+- 逐帧 `duration` 是相对时长，绝对帧时长为 `duration / (speed × playing_speed)`。不得把绝对秒数写入 `duration` 后再叠加 `speed`，否则速度会被重复放大。
+- 配合 `AnimatedSprite2D` 时，`AnimationPlayer` 可编排状态、属性、事件与时长，但不得重复驱动同一帧播放时钟或额外叠加速度倍率。
+- 循环动画使用 `wait`、`walk`、`idle`、`run`、`Monster*` 等约定名称；攻击、受伤、死亡与特效默认不循环。特效确需循环时，必须在生成定义中显式声明。
+- `SpriteFrames` 内部动画名、源序列名及去除前缀后的名称必须唯一；名称冲突必须失败，不能静默覆盖或改名消解。
+- 运行时 `SpriteFrames.new()` 仅允许 [`runtime_frames_exceptions.md`](../reference/runtime_frames_exceptions.md) 和机器 allowlist 登记的有限例外；新增例外须经评审并满足该页准入规则。
+- 确定性输出、资源身份、陈旧输出清理和生成内容校验遵循 [`target_architecture_contract.md` §7.2](target_architecture_contract.md#7-资源与视觉资产子契约)；具体源格式及转换器职责以 [`scripts/README.md`](../../scripts/README.md) 为准。
 
-## 校验
+## 验收
 
-- `scripts/convert_atlas_metadata.py --check` 校验 manifest/metadata 同步；
-- `scripts/convert_atlas_metadata.py --self-test` 校验 `source_frames` 负向样本；
-- `scripts/convert_nezha_preview_frames.py --check` 校验全部输出存在且内容一致（数量以预览源清单为准）；
-- `scripts/convert_numbered_frames.py --all --check` 校验全部登记序列（含青莲 idle/effect/aura）构建期帧存在且未过期；
-- `scripts/convert_sheet_frames.py --check` 校验青龙剑/太极模型 sheet 资源存在且内容一致；
-- `scripts/convert_monster_action_views.py --check` 校验 `play` 帧资源或连续 PNG 到动作视图的帧子集、逐帧 duration、loop/speed 与确定性 UID（含宠物寅虎 stage1/2）；已接入 `contract_gate`；
-- `scripts/convert_liu_sha_frames.py --check` 校验流沙河 Boss/分身动作表与构建期 SpriteFrames 逐字一致（逐帧 duration、确定性 UID）；已接入 `contract_gate`；
-- `scripts/convert_monster_frames.py --check` 校验怪物 `AtlasMetadata.sequences` 与既有 `*_frames.tres` 的动画名集合、帧数与 `region`/`margin`、页路径闭包、确定性 UID 唯一性；`--all` 按 `scripts/monster_action_maps.json` 追加动作别名（共享原 `AtlasTexture` 子资源）并修正 loop，`--rewrite` 只补 UID 头；已接入 `contract_gate`；
-- 怪物消费者直接 `load` 帧资源，不再运行时 `SpriteFrames.new()` 重建动画；动作名以 `monster_action_maps.json` 为构建期契约，资源中必须同时存在 sequence 名与动作别名；
-- 剑 Boss（951~954）的 `sword_boss_<name>_frames.tres` 由旧 `animations` schema 的 metadata 生成：`idle/walk/hurt/death` 为实际帧，`hit1/2/3` 固定单帧 `null`（技能视觉由 FrameSequence 流式播放），`speed` 与 `SwordBossBase.SOURCE_FPS` 一致；
-- `scripts/convert_frame_sequences.py --check` 校验内容、schema、UID、Catalog 与延迟纹理路径闭包；已接入 `contract_gate`；
-- `scripts/convert_frame_sequences.py --export-preset [NAME]` 只读检查实际导出预设；缺预设明确失败，配置通过不等于导出包通过；
-- `png_stream_audit.py --fail-on-error` 限制未登记使用，并拦截已迁移消费者恢复旧字段、目录扫描或编号探测；
-- `runtime_frames_audit.py --fail-on-error` 守恒运行时 `SpriteFrames.new()` 集合与 `scripts/runtime_frames_allowlist.json`；新增未登记文件、失效条目或空理由均失败。
+生成器的校验必须覆盖源数据/schema、帧次序与内容、duration、循环/速度、资源身份及必要的发布依赖闭包，不能只检查输出文件存在。对受影响转换器执行 `--check`、必要的负向样本以及受影响消费者的运行期验收；实际脚本、参数、门禁接入与验收档位以 [`../reference/acceptance.md`](../reference/acceptance.md) 和 [`scripts/README.md`](../../scripts/README.md) 为准。源资源检查通过不等于导出包闭包或目标平台已验收。

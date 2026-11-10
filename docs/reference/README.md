@@ -1,40 +1,45 @@
 # 参考文档 (Reference)
 
-本目录保存当前工程事实、架构、验收和仍生效的契约。已完成阶段的实施记录、历史验证与逐项决策见 [`../archive/README.md`](../archive/README.md)。
+本目录维护当前实现、当前状态、验收判据和仍生效的契约。阶段实施记录与历史验证见 [`../archive/README.md`](../archive/README.md)。本页只提供文档入口，不复制阶段状态、验证计数或契约正文。
 
 ## 1. 当前文档
 
-| 文档 | 内容 |
+| 文档 | 唯一职责 |
 |:---|:---|
-| [`architecture.md`](architecture.md) | **当前运行时架构**：Autoload、场景流、战斗、档案/双人、资源、UI/输入及遗留边界 |
-| [`global_runtime_inventory.md`](global_runtime_inventory.md) | **Phase 22 已收口**：`Global` 状态字段、公开入口、26 个普通子服务、删除/迁出项、剩余字段所有者与机读守卫 |
-| [`status.md`](status.md) | **当前状态单一事实源**：版本、门禁、最近验证与已知边界 |
-| [`acceptance.md`](acceptance.md) | **验收标准**：`check_all` 总门禁、契约域、引擎健康、运行期夹具与变更矩阵 |
-| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | 当前 10 个 Autoload 与 `Global` 边界；完整迁移记录见归档 |
-| [`passive_skill_contract.md`](passive_skill_contract.md) | Phase 28-2：被动等级、`pasl_prop` 快照所有权、刷新事件与 `passive_boundary` 门禁 |
-| [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、加载、缓存/租约、清理与退出边界；完整记录见归档 |
-| [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本与失败边界；完整记录见归档 |
-| [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 当前归属、对象池、阶段/结算、成长命令、HUD/输入/音频与模块 API 边界；完整记录见归档 |
-| [`combat_behavior_matrix.md`](combat_behavior_matrix.md) | Phase 25-0~25-5（Phase 25 已关闭）：`BaseHero`/`AutoBattleContext`/`AutoBattleController` 自动战斗、`MagicWeaponPresentationController` 法宝展示实例、`BossProtectionController` Boss 保护/白条、`HitReactionController` 受击代次/来源快照/退出重置、`BaseMonster` 受击/控制免疫/死亡/掉落、定向探针与验收/回滚边界 |
-| [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md) | Phase 23（已关闭）：`BaseLevel` 宠物调用面、八族矩阵、`PetLevelController` 与族规则、2P 写回修复、共享槽位边界及 73→16 收口证据 |
-| [`pet_domain_contract.md`](pet_domain_contract.md) | Phase 23-4/24-3：`PlayerData` 宠物域只读 View、出战/休息/成长/阵法命令、保存失败回滚、共享容器恢复与调用面 |
-| [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md) | Phase 24-0/24-1/24-2/24-3/24-4：`CoopPanelHost`、`pet_interface` 子区域、阵法成长命令、LDL 成长面板、操作者/保存/直接与间接写档边界及登记例外 |
-| [`module_api_matrix.md`](module_api_matrix.md) | Phase 17-6 试点模块公开 API 与依赖方向 |
-| [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | AtlasMetadata 生产者、schema、消费者、只读 View 与失败边界 |
-| [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | 运行时建帧冻结例外与后续边界 |
-| [`level_layout_contract.md`](level_layout_contract.md) | 当前关卡布局对象模型、字段、构建与运行时契约 |
-| [`equipment_data_contract.md`](equipment_data_contract.md) | 当前装备定义/规则/实例三层契约与发布闭包 |
-| [`ui_theme_contract.md`](ui_theme_contract.md) | 当前 Theme 资源、变体命名、最终例外与审计 |
-| [`theme_font_inventory.md`](theme_font_inventory.md) | 当前 Theme/字体规模、变体结构、字体资产、动态覆盖与契约指标 |
-| [`typography_tokens.md`](typography_tokens.md) | 当前字号、颜色、描边、Button 共享族与审计门禁 |
-| [`spine_platform_baseline.md`](spine_platform_baseline.md) | Spine 运行时、平台、许可证与暂缓边界 |
-| [`zmws_asset_integration_matrix.md`](zmws_asset_integration_matrix.md) | ZMWS 已导入资产的域级消费矩阵、生命周期状态与垂直切片；生成脚本为 `scripts/asset_library_catalog.py` |
+| [`status.md`](status.md) | 当前内容版本、最近一次完整验证和未验证边界 |
+| [`architecture.md`](architecture.md) | 当前运行时架构、项目配置映射、初始化/场景流和遗留边界 |
+| [`acceptance.md`](acceptance.md) | 门禁实际行为、验收档位、失败语义和变更矩阵 |
+| [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md) | Autoload 增删评审规则与 `Global` 边界；注册表在 `architecture.md` |
+| [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md) | 当前场景流、资源租约、清理、退出和异步失败边界 |
+| [`archive_session_matrix.md`](archive_session_matrix.md) | 当前保存入口、档案会话、槽位、共享账本和持久化失败边界 |
+| [`gameplay_module_matrix.md`](gameplay_module_matrix.md) | 战斗归属、关卡结算、对象池、成长与表现的跨模块边界 |
+| [`combat_behavior_matrix.md`](combat_behavior_matrix.md) | 自动战斗、法宝展示、Boss 保护与受击反应的当前所有权 |
+| [`pet_domain_contract.md`](pet_domain_contract.md) | 宠物档案 View/Command 及失败回滚；关卡族生命周期见 architecture §4.3 |
+| [`passive_skill_contract.md`](passive_skill_contract.md) | 玩家被动等级、`pasl_prop` 快照及事件刷新规则 |
+| [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md) | 面板操作者、生命周期与未闭合写入风险 |
+| [`module_api_matrix.md`](module_api_matrix.md) | 四个试点模块当前公开 API 与依赖方向 |
+| [`atlas_metadata_schema.md`](atlas_metadata_schema.md) | AtlasMetadata schema、运行时消费者、构建工具和失败语义 |
+| [`runtime_frames_exceptions.md`](runtime_frames_exceptions.md) | 运行时建帧例外的人工评审边界 |
+| [`level_layout_contract.md`](level_layout_contract.md) | 关卡布局 Resource 字段、不变量和消费语义 |
+| [`equipment_data_contract.md`](equipment_data_contract.md) | 装备定义、规则、实例所有权与随机数据语义 |
+| [`ui_theme_contract.md`](ui_theme_contract.md) | 唯一当前 Theme 契约：资源所有权、变体和静态/动画/动态覆盖边界 |
+| [`theme_font_inventory.md`](theme_font_inventory.md) | Theme 字体角色包装与基础字体映射 |
+| [`typography_tokens.md`](typography_tokens.md) | token JSON 的机器事实源、生成目标与审计消费者 |
+| [`spine_platform_baseline.md`](spine_platform_baseline.md) | Spine GDExtension、资源格式、加载路径与许可证事实；平台承诺见 ADR-027 |
+| [`zmws_asset_integration_matrix.md`](zmws_asset_integration_matrix.md) | 由 `asset_library_catalog.py` 生成的资产生命周期与消费矩阵 |
 
-## 2. 边界
+两个保留的 Phase 22/23 历史链接入口见 [`../archive/README.md`](../archive/README.md) 的 retired path 索引；它们不是当前契约。
+## 2. 归档链接入口
 
-- 字体角色、Theme 使用边界与字号选择以 [`../standards/ui_typography_contract.md`](../standards/ui_typography_contract.md) 为准；本目录的字体页只保留事实、资源映射与审计结果；
-- 当前状态、架构、验收和仍生效的契约放在本目录；
-- 架构决策放在 [`../decisions/`](../decisions/README.md)；规范放在 [`../standards/`](../standards/README.md)；
-- 已完成阶段的实施记录、历史计数和验证快照进入 [`../archive/`](../archive/README.md)；
-- 新增或移动文件时同步本索引，不复制完整清单到其他入口；
-- 本文档目录不把目标写成已实现，不复制历史批次台账。
+以下两个历史路径仅用于解析 Phase 22/23 归档中的旧链接，不是当前契约正文；原矩阵快照见 [`../archive/README.md`](../archive/README.md) §7。
+
+- [`global_runtime_inventory.md`](global_runtime_inventory.md)
+- [`pet_level_boundary_matrix.md`](pet_level_boundary_matrix.md)
+
+
+## 3. 边界
+
+- 当前状态只见 [`status.md`](status.md)；阶段状态只见 [`../roadmap/roadmap.md`](../roadmap/roadmap.md)。
+- 当前实现架构只见 [`architecture.md`](architecture.md)；目标和规范见 [`../standards/`](../standards/README.md)；长期决策见 [`../decisions/`](../decisions/README.md)。
+- 当前门禁判据只见 [`acceptance.md`](acceptance.md)；脚本参数和产物索引见 [`../../scripts/README.md`](../../scripts/README.md)。
+- 本目录只保留当前行为契约或仍有运行时价值的专题事实；历史批次与过期验证进入归档，不在入口索引展开。

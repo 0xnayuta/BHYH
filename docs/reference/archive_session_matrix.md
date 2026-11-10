@@ -1,56 +1,34 @@
-# 档案会话、持久化与玩家槽位边界（当前）
+# 档案会话、持久化与共享账本
 
-> **状态**：Phase 16 已完成并归档；本页保留当前保存入口、会话、槽位和失败边界。完整 16-2~16-6 实施记录见 [`../archive/iteration_16_archive_session_matrix.md`](../archive/iteration_16_archive_session_matrix.md)。
+> **职责**：回答档案身份如何建立、保存如何提交以及双人数据如何归属；运行时场景退出次序见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)，总体数据层见 [`architecture.md`](architecture.md) §5。
 
-## 1. 保存入口
+## 身份与会话
 
-| 入口 | 用途 | 约束 |
-|:---|:---|:---|
-| `MemoryClass.request_save(reason)` | 业务唯一保存入口 | 需要有效档案会话；失败可观察 |
-| `MemoryClass.request_save_result(...)` | 需要结构化结果/反馈的调用 | 返回 `ok/reason/error/message/path/notify` |
-| `MemoryClass.save_game(path)` | 持久化边界内部委托 | 业务代码不得直接调用 |
-| `MemoryClass.safe_write_archive(...)` | 存档界面写回 | 仅限登记入口 |
-| `MemoryClass.request_background_save(...)` | 后台保存 | 携带代次；过期任务不写回 |
+- `Global.set_cd_path()` 是档案路径唯一写入口。档案路径变化时先 flush 待写任务、结束旧会话，再更新路径并推进档案身份 epoch；flush 失败会通过 `false` 暴露，但路径切换仍继续。异步任务以路径和 epoch 校验，旧身份不得更新当前档案元数据。
+- `Global.bind_archive_session()` 只在当前路径可解析为正档案号且角色 ID 有效时建立 `ArchiveSession`；会话快照只读提供档案号、角色、路径和会话代次。会话代次用于运行时预热，档案 identity epoch 用于存档写入，两者不是同一计数。
+- 没有有效会话时，同步/后台保存及默认关卡入口拒绝；保存路径只能由会话提供，业务不得拼接档案路径或把路径参数用于越过当前身份。
+- `load_game()` 对非法路径、缺失、空、不可读、结构无效和成功返回显式状态；可从 `.bak` 恢复。只有有效档案进入合并前才清空内存档并装载，再执行当前有限、幂等的规范化；不是通用跨版本迁移链。
 
-业务侧 `save_game` 直调为 0。保存失败通过 `save_failed` 信号、`last_save_outcome` 或 `Global` 反馈观察；不得丢弃失败假象。
+## 保存提交与失败
 
-## 2. 档案身份与会话
+- 业务走 `MemoryClass.request_save(reason)`；需要结果时用 `request_save_result()`，其结果包含 `ok/reason/error/message/path/notify`。失败写入 `last_save_outcome` 并发出 `save_failed`，调用方不能把失败当成功。
+- 保存前使用固定补全步骤及后置条件；无效数据、补全失败、会话缺失/过期均阻止写盘。业务命令是否恢复内存状态由该命令的事务边界负责，持久化层本身不替任意面板恢复其操作。
+- 加密档以稳定密钥写入 `.tmp`，回读校验后将旧档转为 `.bak` 再替换；替换失败时保留旧档或备份。`.tmp` 不作为已提交档案。
+- 后台保存任务绑定档案路径和 identity epoch，旧任务不会覆盖新档；失败快照保留供同一身份的 flush/重试。应用暂停、关闭请求及 `MemoryClass._exit_tree()` 会尝试 flush。flush 失败不会阻止 `set_cd_path()` 继续切换身份。
 
-- `Global.set_cd_path()` 是唯一身份写入口；切换前 flush 待写队列并推进 session/epoch。
-- 云存档登录会话由 `MemoryClass` 持有的 `CloudSession`（`RefCounted`）保存，不写入本地档案；档案界面通过 `MemoryClass.get_cloud_session()` 使用，不新增 Autoload。
-- `ArchiveSession` 只读持有档案号、角色、路径与会话代次；业务查询会话，不直接读写 `cd_path`。
-- 无会话时保存、关卡入口和后台保存必须拒绝；过期身份回写不得覆盖当前档案。
-- `load_game` 在合并前重置内存档，并按 `loaded/missing/empty/unreadable/invalid/invalid_path` 返回显式状态。
-
-## 3. 补全与原子写
-
-- 保存侧使用固定补全清单，并在补全后执行后置条件校验；失败拒绝写入，不出现“补全失败但保存成功”。
-- 写盘顺序：`.tmp` → 回读校验 → 旧档转 `.bak` → 原子替换；失败保留可读旧档。
-- 当前格式规范化必须幂等；不引入跨版本迁移链或旧目录回退。
-- 加密格式、密钥、`.tmp`/`.bak` 与字段语义不变。
-
-## 4. 槽位与共享账本
-
-- `slot_for`/`data_for`/`props_for`/`slot_snapshot` 是槽位查询入口；面板使用显式 `coop_slot`，不交换全局 `PlayerData`/`RoleProp`。
-- `shared_keys()` 登记共享键；`save_profile` 按登记剥离 2P 档案的共享副本。
-- 运行期共享背包/宠物背包/被动/剑阵/炼体/万灵/灵魂保持单容器；个体等级、属性、技能、装备和出战状态保留个体归属。
-- 新增共享键必须登记，`shared_ledger_report()` 必须能逐键校验。
-
-## 5. 面板与快照
-
-- 面板根/弹出层携带 `coop_slot`；脚本通过显式 `PlayerData`/`RoleProp` 属性解析操作者。
-- 保存快照期间 `is_save_snapshot_in_progress()` 阻止面板打开/切换。
-- 面板关闭保存必须检查会话；关闭失败不得静默改写 1P 视图或残留全局别名。
-
-## 6. 失败边界
-
-| 场景 | 语义 |
+| 失败场景 | 当前语义 |
 |:---|:---|
-| 无会话/身份过期 | 拒绝保存和关卡入口；返回结构化错误 |
-| 非法路径/非法角色 | 拒绝加载或写入；不落到 1 号档 |
-| 写盘失败 | 保留旧档；恢复快照；发出可观察信号 |
-| 补全后置条件失败 | 拒绝写入并报告键 |
-| 切档/退出 | 先 flush；旧后台任务按 epoch 丢弃 |
-| 快照与面板并发 | 互斥入口拒绝面板操作 |
+| 无会话、非法路径或身份已过期 | 拒绝保存/加载；返回或发出可观察失败，不转写到 1 号档。 |
+| 档案不可读、为空或结构无效 | 返回对应读取状态，不合并该档；不猜测旧目录或另一种存档格式。 |
+| 补全或后置条件失败 | 拒绝写入并报告失败键/原因。 |
+| 临时文件写入、回读或替换失败 | 不报告成功；旧档/备份保留以便恢复。内存回滚由调用命令负责。 |
+| 切档时 flush 失败 | 返回 `false`，但路径与身份 epoch 仍切换；旧后台任务不能写入新的身份。 |
 
-完整实施细节、历史计数与逐项关闭记录见归档页；本页只描述当前契约。
+## 双人槽位与共享账本
+
+- `LocalCoop` 持有独立 2P `PlayerDataStore`、属性与输入；`data_for/props_for` 按节点槽位解析。新调用方显式携带 `coop_slot` 或显式传入档案，不用全局视图交换代替操作者身份。
+- `shared_keys()` 是共享键清单的写入所有者：四类背包、玩家被动、剑阵及等级、炼体、万灵图录、共享灵魂。运行期这些键使用单一共享容器；个体宠物列表、等级/属性/技能/装备与出战状态留在各自档案。
+- `save_profile()` 将 2P 独有数据写入双人档案并剥离共享键副本；新增共享键必须登记。读入旧双人数据时，有限的共享键规范化由 `LocalCoop` 处理，不据此扩展为通用迁移框架。
+- 档案快照期间 `is_save_snapshot_in_progress()` 阻止协作面板**打开**；切换面板的守卫范围见 [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md)。
+
+历史实施记录见 [`../archive/iteration_16_archive_session_matrix.md`](../archive/iteration_16_archive_session_matrix.md)；保存/档案验收判据见 [`acceptance.md`](acceptance.md)。

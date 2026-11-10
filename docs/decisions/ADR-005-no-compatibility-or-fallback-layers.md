@@ -42,8 +42,8 @@
 
 ## 证据
 
-- [`../reference/architecture.md`](../reference/architecture.md) §2.3、§4.2、§6.3、§9.1
-- [`../reference/status.md`](../reference/status.md) §6 已知边界第 6 条
+- [`../reference/architecture.md`](../reference/architecture.md)：当前缺失和失败显式边界。
+- [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md) §10：失败语义与迁移纪律。
 - 提交 `1b4ef73`：移除角色资源清单兼容回退
 - 提交 `dd86d0c`：将重技能帧改为构建期 SpriteFrames，删除运行时 PNG 拼路径
 - [`../../source/Script/memory_class/memory_class.gd`](../../source/Script/memory_class/memory_class.gd) `_read_encrypted_dictionary_compatible`、`_atomic_write_encrypted_dictionary`

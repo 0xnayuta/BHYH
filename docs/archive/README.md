@@ -104,3 +104,17 @@
 | [`iteration_28_global_signal_and_passive_contract.md`](iteration_28_global_signal_and_passive_contract.md) | Phase 28 全局确认信号移除、被动属性快照事件化与宠物被动命令/共享数值表 | 2026-11-09 |
 | [`iteration_29_scene_script_relocation.md`](iteration_29_scene_script_relocation.md) | Phase 29 `Scene/` 脚本落位：规范、56 文件迁移清单、29-1~29-4 批次与门禁 | 2026-11-09 |
 | [`iteration_39_scene_script_layout.md`](iteration_39_scene_script_layout.md) | Phase 39 根级清零、`other_scene` 拆分、文本/怪物/魂卡场景合并、大型目录与 shader 保留决策、最终验收 | 2026-11-10 |
+| [`iteration_37c2cf8_meta_lookup_fix.md`](iteration_37c2cf8_meta_lookup_fix.md) | `get_meta(key, null)` 同心链接缺键修复与复现证据 | 2026-11-10 |
+| [`iteration_34_7_0_content_backport.md`](iteration_34_7_0_content_backport.md) | Phase 34 7.0 内容回植与未验证发布边界 | 2026-11-10 |
+| [`ui_runtime_fixes_2026_11_04_06.md`](ui_runtime_fixes_2026_11_04_06.md) | 2026-11-04 至 2026-11-06 UI、字体与运行时维护快照 | 2026-11-10 |
+
+## 7. Retired reference paths
+
+The following Phase 22/23 snapshots are retained under `docs/reference/` only as link targets for the archived reports; they are not active references. Current contracts are maintained in `reference/architecture.md`, `reference/autoload_boundary_matrix.md`, and `reference/pet_domain_contract.md`.
+
+| Link target | Current/history source |
+|:---|:---|
+| [`../reference/global_runtime_inventory.md`](../reference/global_runtime_inventory.md) | Phase 22 archived record; current Global boundary: [`../reference/autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md) and [`../reference/architecture.md`](../reference/architecture.md) |
+| [`../reference/pet_level_boundary_matrix.md`](../reference/pet_level_boundary_matrix.md) | Phase 23 archived record; current pet ownership: [`../reference/architecture.md`](../reference/architecture.md) and [`../reference/pet_domain_contract.md`](../reference/pet_domain_contract.md) |
+| [`iteration_22_global_runtime_inventory_snapshot.md`](iteration_22_global_runtime_inventory_snapshot.md) | Phase 22-1 Global 字段、公开入口及普通服务的完整历史快照 | 2026-11-10 |
+| [`iteration_23_pet_level_boundary_matrix_snapshot.md`](iteration_23_pet_level_boundary_matrix_snapshot.md) | Phase 23 宠物关卡调用面、八族迁移、槽位边界与历史验证快照 | 2026-11-10 |

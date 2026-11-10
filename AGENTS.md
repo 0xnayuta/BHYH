@@ -1,6 +1,6 @@
 # Project: 造梦西游八荒湮隳（BHYH）
 
-> 本文指导 agent 在本仓库工作：边界、规则、验证与交付。版本、阶段状态、规模与验证计数不在本文维护；以 [`docs/reference/status.md`](docs/reference/status.md) 和脚本输出为准。
+> 本文指导 agent 在本仓库工作：边界、规则、验证与交付。当前版本、验证快照与未验证边界见 [`docs/reference/status.md`](docs/reference/status.md)；阶段状态与未完成范围见 [`docs/roadmap/roadmap.md`](docs/roadmap/roadmap.md)。
 
 ## 1. 项目边界
 
@@ -11,7 +11,7 @@
 - `source/addons/` 非插件维护任务严禁修改。
 - `docs/` 保存规范、参考、决策、路线、指南、审计与归档；`scripts/` 保存门禁、审计、回归与构建工具。
 - `.omp/skills/` 保存项目本地 agent skills（`bhyh-audit`、`bhyh-doc-sync`）；仅技能目录入库，`.omp` 其他本地配置忽略。
-- 索引入口：[`docs/README.md`](docs/README.md)、[`docs/reference/README.md`](docs/reference/README.md)、[`docs/standards/README.md`](docs/standards/README.md)、[`docs/decisions/README.md`](docs/decisions/README.md)、[`docs/roadmap/README.md`](docs/roadmap/README.md)、[`docs/audit/README.md`](docs/audit/README.md)、[`docs/archive/README.md`](docs/archive/README.md)、[`scripts/README.md`](scripts/README.md)。
+- 文档导航以 [`docs/README.md`](docs/README.md) 为入口；脚本索引见 [`scripts/README.md`](scripts/README.md)。
 
 ### 1.2 公开仓库边界
 
@@ -124,17 +124,12 @@ python scripts/whitelist_audit.py --fail-on-error
 
 ## 8. 文档与路径维护
 
-1. **分层职责**：`reference/` 当前状态/架构/验收/契约；`standards/` 活跃规范；`decisions/` ADR；`roadmap/` 阶段顺序与候选；`guides/` 操作方法；`audit/` 人工审计；`reports/` 机器报告；`archive/` 已完成阶段的长期参考。
-2. **单一事实源**：状态以 `reference/status.md` 为准；架构以 `reference/architecture.md` 为准；验收以 `reference/acceptance.md` 为准；长期阶段顺序以 `roadmap/roadmap.md` 为准；字体/Theme 使用边界以 `standards/ui_typography_contract.md` 为准；决策以 `decisions/` 为准。
-3. **活跃文档不承载批次流水**：批次实施、历史计数、截图与逐项验证移入 `archive/`；当前页只保留仍生效的契约、失败边界和必要入口。
-4. **归档只追加**：新归档在 `archive/README.md` 追加索引，不改既有归档正文；归档不接收机器报告、临时台账、旧路径映射或本地绝对路径。
-5. **链接可验证**：移动文档后更新相对链接；`scripts/docs_audit.py` 负责检查。
-6. **报告不手改**：`reports/` 由脚本覆盖；结论写入 `status.md`。
-7. **路径迁移**：
-   - `source/` 内文件/目录重命名必须使用 `scripts/rename_path.py`（大小写安全、引用同步、失败回滚）；
-   - `docs/` 与 `scripts/` 使用普通文件移动或 `git mv`，并更新所有相对链接；
-   - `migration_playbook.md` 只保留可复用的迁移方法，不收录逐文件台账；
-   - 规范变更顺序：先改 `docs/standards/`，再改代码/门禁，最后重新生成报告。
+1. **导航与索引**：目录职责和文档维护边界以 [`docs/README.md`](docs/README.md) 为准；各子目录 README 维护本目录完整索引。本文不复制文档清单或项目状态。
+2. **单一事实源**：遵循 `docs/README.md` 规定的文档职责；不在此重复版本、阶段状态或验证结果。
+3. **历史与报告**：活跃文档不承载批次流水；既有归档正文只读，新归档只追加索引；机器报告由脚本生成，禁止手工修改。
+4. **链接**：移动或新增文档时同步相对链接与所属索引；使用 `scripts/docs_audit.py` 检查。
+5. **路径迁移**：`source/` 内重命名必须使用 `scripts/rename_path.py`；`docs/` 与 `scripts/` 变更使用普通文件移动并更新链接。
+6. **规范变更顺序**：先更新 `docs/standards/`，再改代码/门禁，最后重新生成报告。
 
 ## 9. 交付检查清单与结束输出
 

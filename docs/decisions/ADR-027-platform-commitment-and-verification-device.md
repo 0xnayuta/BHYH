@@ -45,7 +45,7 @@
 ## 证据
 
 - [`../reference/spine_platform_baseline.md`](../reference/spine_platform_baseline.md) §3：Windows x86_64 为当前目标平台，最低设备未声明且确认暂缓；验证机基线
-- [`../roadmap/roadmap.md`](../roadmap/roadmap.md) §3 Phase 26：26-0~26-4 与恢复条件
+- [`../roadmap/roadmap.md`](../roadmap/roadmap.md) §2：Phase 26 平台与发布验证范围/恢复条件。
 - [`../reference/status.md`](../reference/status.md)：release 冷启动证据与“最低配置/其他平台”未验证边界
 - [`../reference/acceptance.md`](../reference/acceptance.md) §6：`--measure-load`、`--render-window` 与发布验证口径
 - [`../../AGENTS.md`](../../AGENTS.md) §1.3、§6：环境隔离与验证门禁
