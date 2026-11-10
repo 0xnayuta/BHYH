@@ -44,24 +44,50 @@ EXPECTED_ERROR_MARKERS = (
 )
 
 
-def write_fixture(instance_id: str) -> list[Path]:
-    gd_path = PROJECT / f"_archive_persistence_probe_{instance_id}.gd"
-    scene_path = PROJECT / f"_archive_persistence_probe_{instance_id}.tscn"
+def write_fixture(gd_path: Path, scene_path: Path) -> None:
     shutil.copy2(FIXTURE_DIR / "archive_persistence_probe.gd", gd_path)
     scene_text = (FIXTURE_DIR / "archive_persistence_probe.tscn").read_text(encoding="utf-8")
     scene_text = scene_text.replace("__PROBE_SCRIPT__", f"res://{gd_path.name}")
     scene_path.write_text(scene_text, encoding="utf-8", newline="\n")
-    return [gd_path, scene_path]
 
 
-def cleanup_temp(paths: list[Path], user_dir: Path) -> None:
-    for path in paths:
-        if path.exists():
-            path.unlink()
-        uid_path = path.with_name(path.name + ".uid")
-        if uid_path.exists():
-            uid_path.unlink()
-    shutil.rmtree(user_dir, ignore_errors=True)
+def cleanup_temp(paths: list[Path], user_dir: Path | None) -> None:
+    cleanup_error: OSError | None = None
+    try:
+        for path in paths:
+            for temp_path in (path, path.with_name(path.name + ".uid")):
+                try:
+                    temp_path.unlink(missing_ok=True)
+                except OSError as error:
+                    if cleanup_error is None:
+                        cleanup_error = error
+    finally:
+        if user_dir is not None:
+            shutil.rmtree(user_dir, ignore_errors=True)
+    if cleanup_error is not None:
+        raise cleanup_error
+
+
+def redact_user_dir(value: object, user_dir: Path) -> object:
+    resolved_user_dir = user_dir.resolve()
+    paths = (str(user_dir), user_dir.as_posix(), str(resolved_user_dir), resolved_user_dir.as_posix())
+    flags = re.IGNORECASE if os.name == "nt" else 0
+
+    def redact(text: str) -> str:
+        for path in paths:
+            text = re.sub(re.escape(path), "<temporary user dir>", text, flags=flags)
+        return text
+
+    if isinstance(value, str):
+        return redact(value)
+    if isinstance(value, list):
+        return [redact_user_dir(item, user_dir) for item in value]
+    if isinstance(value, dict):
+        return {
+            redact(key) if isinstance(key, str) else key: redact_user_dir(item, user_dir)
+            for key, item in value.items()
+        }
+    return value
 
 
 def parse_result(output: str) -> dict:
@@ -104,69 +130,74 @@ def collect_runtime_errors(output: str) -> list[str]:
 
 def run(godot: str, timeout: int) -> int:
     instance_id = uuid.uuid4().hex[:10]
-    user_dir = Path(tempfile.mkdtemp(prefix="bhyh_archive_probe_"))
-    fixture_paths = write_fixture(instance_id)
-    env = os.environ.copy()
-    env["APPDATA"] = str(user_dir)
-    env["XDG_DATA_HOME"] = str(user_dir)
-    command = [
-        godot,
-        "--headless",
-        "--path",
-        str(PROJECT),
-        "--scene",
-        f"res://{fixture_paths[1].name}",
+    fixture_paths = [
+        PROJECT / f"_archive_persistence_probe_{instance_id}.gd",
+        PROJECT / f"_archive_persistence_probe_{instance_id}.tscn",
     ]
+    user_dir = Path(tempfile.mkdtemp(prefix="bhyh_archive_probe_"))
     try:
-        completed = subprocess.run(
-            command,
-            cwd=str(ROOT),
-            env=env,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-    except subprocess.TimeoutExpired:
-        print(f"FAIL: 探针超时（{timeout}s）")
+        write_fixture(fixture_paths[0], fixture_paths[1])
+        env = os.environ.copy()
+        env["APPDATA"] = str(user_dir)
+        env["XDG_DATA_HOME"] = str(user_dir)
+        command = [
+            godot,
+            "--headless",
+            "--path",
+            str(PROJECT),
+            "--scene",
+            f"res://{fixture_paths[1].name}",
+        ]
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=str(ROOT),
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+            print(f"FAIL: 探针超时（{timeout}s）")
+            return 1
+
+        output = (completed.stdout or "") + (completed.stderr or "")
+        result = parse_result(output)
+        isolated_dir = collect_isolated_user_dir(output)
+        isolation_ok = bool(isolated_dir) and Path(isolated_dir).resolve().is_relative_to(user_dir.resolve())
+        runtime_errors = collect_runtime_errors(output)
+
+        failures = list(result.get("failures", []))
+        if not isolation_ok:
+            failures.append("user:// 未隔离到临时目录")
+        if runtime_errors:
+            failures.append("运行期出现非预期 ERROR/WARNING：" + " | ".join(runtime_errors[:5]))
+
+        checks = result.get("checks", {})
+        print(f"user:// = {isolated_dir or '<missing>'}")
+        print(f"隔离目录 = {user_dir}")
+        for name in sorted(checks):
+            item = checks[name]
+            print(f"  [{'PASS' if item.get('ok') else 'FAIL'}] {name} {item.get('detail', '')}")
+        print(f"检查项 {len(checks)}，失败 {len(failures)}")
+
+        report = {
+            "ok": not failures,
+            "checks": redact_user_dir(checks, user_dir),
+            "failures": redact_user_dir(failures, user_dir),
+            "isolation_ok": isolation_ok,
+            "runtime_errors": redact_user_dir(runtime_errors, user_dir),
+            "returncode": completed.returncode,
+        }
+        write_json(REPORT_DIR / "archive_persistence_probe_report.json", report)
+        if failures:
+            for failure in failures:
+                print(" - " + failure)
+            return 1
+        print("ARCHIVE PERSISTENCE PROBE: PASS")
+        return 0
+    finally:
         cleanup_temp(fixture_paths, user_dir)
-        return 1
-
-    output = (completed.stdout or "") + (completed.stderr or "")
-    result = parse_result(output)
-    isolated_dir = collect_isolated_user_dir(output)
-    isolation_ok = bool(isolated_dir) and Path(isolated_dir).resolve().is_relative_to(user_dir.resolve())
-    runtime_errors = collect_runtime_errors(output)
-
-    failures = list(result.get("failures", []))
-    if not isolation_ok:
-        failures.append(f"user:// 未隔离到临时目录：{isolated_dir or '<missing>'}")
-    if runtime_errors:
-        failures.append("运行期出现非预期 ERROR/WARNING：" + " | ".join(runtime_errors[:5]))
-
-    checks = result.get("checks", {})
-    print(f"user:// = {isolated_dir or '<missing>'}")
-    print(f"隔离目录 = {user_dir}")
-    for name in sorted(checks):
-        item = checks[name]
-        print(f"  [{'PASS' if item.get('ok') else 'FAIL'}] {name} {item.get('detail', '')}")
-    print(f"检查项 {len(checks)}，失败 {len(failures)}")
-
-    report = {
-        "ok": not failures,
-        "checks": checks,
-        "failures": failures,
-        "isolated_user_dir": isolated_dir,
-        "runtime_errors": runtime_errors,
-        "returncode": completed.returncode,
-    }
-    write_json(REPORT_DIR / "archive_persistence_probe_report.json", report)
-    cleanup_temp(fixture_paths, user_dir)
-    if failures:
-        for failure in failures:
-            print(" - " + failure)
-        return 1
-    print("ARCHIVE PERSISTENCE PROBE: PASS")
-    return 0
 
 
 def main() -> int:

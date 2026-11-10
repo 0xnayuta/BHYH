@@ -70,6 +70,53 @@ class DynamicPaths:
     missing: list[str] = field(default_factory=list)
 
 
+@dataclass
+class PreloadCache:
+    """Source text and parsed data owned by one ``run`` invocation."""
+
+    script_text: dict[Path, str] = field(default_factory=dict)
+    stripped_script_text: dict[Path, str] = field(default_factory=dict)
+    script_chains: dict[Path, tuple[Path, ...]] = field(default_factory=dict)
+    script_parents: dict[Path, tuple[str, str] | None] = field(default_factory=dict)
+    script_constants: dict[Path, tuple[dict[str, int], dict[str, list[int]]]] = field(
+        default_factory=dict
+    )
+    scene_text: dict[Path, str] = field(default_factory=dict)
+
+
+def read_script_text(path: Path, cache: PreloadCache | None = None) -> str:
+    if cache is not None:
+        text = cache.script_text.get(path)
+        if text is not None:
+            return text
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if cache is not None:
+        cache.script_text[path] = text
+    return text
+
+
+def read_stripped_script_text(path: Path, cache: PreloadCache | None = None) -> str:
+    if cache is not None:
+        text = cache.stripped_script_text.get(path)
+        if text is not None:
+            return text
+    text = strip_comments(read_script_text(path, cache))
+    if cache is not None:
+        cache.stripped_script_text[path] = text
+    return text
+
+
+def read_scene_text(path: Path, cache: PreloadCache | None = None) -> str:
+    if cache is not None:
+        text = cache.scene_text.get(path)
+        if text is not None:
+            return text
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if cache is not None:
+        cache.scene_text[path] = text
+    return text
+
+
 def strip_comments(text: str) -> str:
     out: list[str] = []
     quote = ""
@@ -135,9 +182,17 @@ def parse_exported_ints(text: str) -> set[str]:
     return names
 
 
-def parse_script_constants(path: Path) -> tuple[dict[str, int], dict[str, list[int]]]:
-    text = strip_comments(path.read_text(encoding="utf-8", errors="replace"))
-    return parse_constants(text)
+def parse_script_constants(
+    path: Path, cache: PreloadCache | None = None
+) -> tuple[dict[str, int], dict[str, list[int]]]:
+    if cache is not None:
+        constants = cache.script_constants.get(path)
+        if constants is not None:
+            return constants
+    constants = parse_constants(read_stripped_script_text(path, cache))
+    if cache is not None:
+        cache.script_constants[path] = constants
+    return constants
 
 
 def find_extends(text: str) -> tuple[str, str] | None:
@@ -151,25 +206,44 @@ def find_extends(text: str) -> tuple[str, str] | None:
     return None
 
 
-def build_class_index() -> dict[str, Path]:
+def script_parent(
+    path: Path,
+    cache: PreloadCache | None = None,
+    text: str | None = None,
+) -> tuple[str, str] | None:
+    if cache is not None and path in cache.script_parents:
+        return cache.script_parents[path]
+    parent = find_extends(text if text is not None else read_stripped_script_text(path, cache))
+    if cache is not None:
+        cache.script_parents[path] = parent
+    return parent
+
+
+def build_class_index(cache: PreloadCache | None = None) -> dict[str, Path]:
     index: dict[str, Path] = {}
     for path in SOURCE.rglob("*.gd"):
-        text = path.read_text(encoding="utf-8", errors="replace")
+        text = read_script_text(path, cache)
         match = re.search(r"^class_name\s+([A-Za-z_]\w*)", text, re.M)
         if match:
             index[match.group(1)] = path
     return index
 
 
-def script_chain(path: Path, class_index: dict[str, Path]) -> list[Path]:
+def script_chain(
+    path: Path, class_index: dict[str, Path], cache: PreloadCache | None = None
+) -> list[Path]:
+    if cache is not None:
+        cached_chain = cache.script_chains.get(path)
+        if cached_chain is not None:
+            return list(cached_chain)
     chain: list[Path] = []
     seen: set[Path] = set()
     current: Path | None = path
     while current is not None and current not in seen and current.is_file():
         chain.append(current)
         seen.add(current)
-        text = strip_comments(current.read_text(encoding="utf-8", errors="replace"))
-        parent = find_extends(text)
+        text = read_stripped_script_text(current, cache)
+        parent = script_parent(current, cache, text)
         if parent is None:
             break
         kind, value = parent
@@ -177,14 +251,18 @@ def script_chain(path: Path, class_index: dict[str, Path]) -> list[Path]:
             current = SOURCE / value.removeprefix("res://")
         else:
             current = class_index.get(value)
+    if cache is not None:
+        cache.script_chains[path] = tuple(chain)
     return chain
 
 
-def chain_constants(chain: list[Path]) -> tuple[dict[str, int], dict[str, list[int]]]:
+def chain_constants(
+    chain: list[Path], cache: PreloadCache | None = None
+) -> tuple[dict[str, int], dict[str, list[int]]]:
     ints: dict[str, int] = {}
     arrays: dict[str, list[int]] = {}
     for path in reversed(chain):
-        more_ints, more_arrays = parse_script_constants(path)
+        more_ints, more_arrays = parse_script_constants(path, cache)
         ints.update(more_ints)
         arrays.update(more_arrays)
     return ints, arrays
@@ -334,38 +412,44 @@ def scene_overrides(scene_text: str, exported: set[str]) -> dict[str, int]:
     return overrides
 
 
-def scene_level_scripts(scene_path: Path, class_index: dict[str, Path]) -> list[Path]:
-    text = scene_path.read_text(encoding="utf-8", errors="replace")
+def scene_level_scripts(
+    scene_path: Path,
+    class_index: dict[str, Path],
+    cache: PreloadCache | None = None,
+) -> list[Path]:
+    text = read_scene_text(scene_path, cache)
     scripts: list[Path] = []
     seen: set[Path] = set()
     for match in re.finditer(r'path="(res://Script/level/[^"]+\.gd)"', text):
         candidate = SOURCE / match.group(1).removeprefix("res://")
-        for script in script_chain(candidate, class_index):
+        for script in script_chain(candidate, class_index, cache):
             if script not in seen:
                 seen.add(script)
                 scripts.append(script)
     return scripts
 
 
-def collect_levels(class_index: dict[str, Path]) -> dict[str, LevelEntry]:
+def collect_levels(
+    class_index: dict[str, Path], cache: PreloadCache | None = None
+) -> dict[str, LevelEntry]:
     levels: dict[str, LevelEntry] = {}
     for scene_path in sorted(LEVEL_SCENE_DIR.glob("*.tscn")):
         entry = LevelEntry()
         scene_res = "res://" + scene_path.relative_to(SOURCE).as_posix()
-        chain = scene_level_scripts(scene_path, class_index)
+        chain = scene_level_scripts(scene_path, class_index, cache)
         if not chain:
             levels[scene_res] = entry
             continue
-        ints, arrays = chain_constants(chain)
+        ints, arrays = chain_constants(chain, cache)
         declared_exported: set[str] = set()
         for script in chain:
-            text = strip_comments(script.read_text(encoding="utf-8", errors="replace"))
+            text = read_stripped_script_text(script, cache)
             declared_exported |= parse_exported_ints(text)
         overrides = scene_overrides(
-            scene_path.read_text(encoding="utf-8", errors="replace"), declared_exported
+            read_scene_text(scene_path, cache), declared_exported
         )
         for script in chain:
-            text = strip_comments(script.read_text(encoding="utf-8", errors="replace"))
+            text = read_stripped_script_text(script, cache)
             extract_stage_groups(text, ints, arrays, overrides, declared_exported, entry)
             extract_birth_point_stages(text, entry)
             extract_monster_ids(text, ints, arrays, entry)
@@ -424,20 +508,20 @@ def merge_level_layout_sources(levels: dict[str, LevelEntry]) -> None:
                 entry.monster_ids.append(monster_id)
 
 
-def collect_monster_bullets() -> dict[str, list[str]]:
+def collect_monster_bullets(cache: PreloadCache | None = None) -> dict[str, list[str]]:
     by_lower = {path.stem.lower(): path.name for path in BULLET_SCENE_DIR.glob("*.tscn")}
     bullets: dict[str, list[str]] = {}
     for scene_path in sorted(MONSTER_SCENE_DIR.glob("monster_*.tscn")):
-        text = scene_path.read_text(encoding="utf-8", errors="replace")
+        text = read_scene_text(scene_path, cache)
         texts: list[str] = []
         seen: set[str] = set()
         for match in sorted(set(re.findall(r'path="(res://Script/[^"]+\.gd)"', text))):
             current: Path | None = SOURCE / match.removeprefix("res://")
             while current is not None and current not in seen and current.is_file():
                 seen.add(current)
-                script_text = strip_comments(current.read_text(encoding="utf-8", errors="replace"))
+                script_text = read_stripped_script_text(current, cache)
                 texts.append(script_text)
-                parent = find_extends(script_text)
+                parent = script_parent(current, cache, script_text)
                 if parent is None or parent[0] != "path":
                     break
                 current = SOURCE / parent[1].removeprefix("res://")
@@ -700,14 +784,15 @@ def run(check_only: bool) -> int:
     if not LEVEL_SCENE_DIR.is_dir():
         print(f"[FAIL] 缺少关卡场景目录: {LEVEL_SCENE_DIR.relative_to(ROOT)}", file=sys.stderr)
         return 2
-    class_index = build_class_index()
-    levels = collect_levels(class_index)
+    cache = PreloadCache()
+    class_index = build_class_index(cache)
+    levels = collect_levels(class_index, cache)
     try:
         merge_level_layout_sources(levels)
     except ValueError as error:
         print(f"[FAIL] {error}", file=sys.stderr)
         return 1
-    bullets = collect_monster_bullets()
+    bullets = collect_monster_bullets(cache)
     try:
         dynamic = build_dynamic_paths(levels)
     except ValueError as error:

@@ -16,6 +16,11 @@ import json
 import sys
 from pathlib import Path
 
+if __package__:
+    from .theme_inheritance import effective_theme_properties
+else:
+    from theme_inheritance import effective_theme_properties
+
 ROOT = Path(__file__).resolve().parent.parent
 THEME = ROOT / "source" / "Scene" / "theme" / "bhyh_theme.tres"
 BASELINE = ROOT / "scripts" / "theme_token_baseline.json"
@@ -71,33 +76,12 @@ def read_variants() -> dict[str, dict[str, str]]:
 
 
 def effective_variants(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
-    """解析语义基类链，返回每个变体的有效 Theme 项。
-
-    Theme 的 ``base_type`` 不在资源内保存继承结果；审计必须沿链读取，
-    否则基类收敛后的字号/颜色会逃逸检查。
-    """
-
-    memo: dict[str, dict[str, str]] = {}
-    visiting: set[str] = set()
-
-    def resolve(name: str) -> dict[str, str]:
-        if name in memo:
-            return memo[name]
-        if name in visiting:
-            return {}
-        visiting.add(name)
-        props = variants.get(name, {})
-        base = props.get("base_type", "").strip('&"')
-        effective = dict(resolve(base)) if base in variants else {}
-        effective.update({key: value for key, value in props.items() if key != "base_type"})
-        visiting.discard(name)
-        memo[name] = effective
-        return effective
-
+    """解析语义基类链，保留每个变体显式声明的 ``base_type``。"""
+    effective = effective_theme_properties(variants)
     result: dict[str, dict[str, str]] = {}
     for name, props in variants.items():
         entry = {"base_type": props.get("base_type", "")}
-        entry.update(resolve(name))
+        entry.update(effective[name])
         result[name] = entry
     return result
 

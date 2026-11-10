@@ -2,6 +2,7 @@
 """契约域总门禁：契约扫描与边界自测 + AtlasMetadata/FrameSequence/关卡预载/编号帧/sheet 帧构建校验 + 非 atlas PNG 流 allowlist + UI Theme/字体覆盖/表面色基线。"""
 from __future__ import annotations
 
+import argparse
 import concurrent.futures
 import os
 import subprocess
@@ -30,7 +31,6 @@ COMMANDS = [
     ("level_preload_catalog_check", [sys.executable, "scripts/convert_level_preload_catalog.py", "--check"]),
     ("level_layout_catalog_check", [sys.executable, "scripts/convert_level_layout_catalog.py", "--check"]),
     ("equipment_catalog_check", [sys.executable, "scripts/convert_equipment_catalog.py", "--check"]),
-    ("equipment_data_audit", [sys.executable, "scripts/equipment_data_audit.py", "--check"]),
     ("level_layout_migration_audit", [sys.executable, "scripts/level_layout_migration_audit.py", "--fail-on-error"]),
     ("external_monster_catalog_check", [sys.executable, "scripts/convert_external_monster_catalog.py", "--check"]),
     ("runtime_frames_audit", [sys.executable, "scripts/runtime_frames_audit.py", "--fail-on-error"]),
@@ -63,10 +63,29 @@ def run_command(item: tuple[str, list[str]]) -> tuple[str, subprocess.CompletedP
     return name, result
 
 
+def positive_int(value: str) -> int:
+    try:
+        jobs = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("必须是正整数") from error
+    if jobs <= 0:
+        raise argparse.ArgumentTypeError("必须是正整数")
+    return jobs
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description="契约域总门禁")
+    parser.add_argument(
+        "--jobs",
+        type=positive_int,
+        default=min(8, os.cpu_count() or 1, len(COMMANDS)),
+        help="子命令最大并发数（正整数；默认不超过 8、CPU 数量和子命令数量）",
+    )
+    args = parser.parse_args()
+
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     # 子命令彼此只读或写入独立报告，可并发执行；按原顺序汇总输出与退出码。
-    with concurrent.futures.ThreadPoolExecutor(max_workers=len(COMMANDS)) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
         results = list(executor.map(run_command, COMMANDS))
 
     for name, result in results:

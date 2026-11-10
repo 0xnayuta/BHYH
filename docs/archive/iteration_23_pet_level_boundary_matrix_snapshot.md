@@ -188,7 +188,7 @@ PetFamilySpec (RefCounted, 各族实现)
 
 ### 6.2 批次结果
 
-23-1 龟族与 23-2 七族的迁移清单、验证与 P2 写回修复见 [`../archive/iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)。当前结构：八族均由 `PetLevelController` + 族规则持有，`BaseLevel` 只保留控制器入口；`PlayerData` 载入补全与宠物域 View/命令见 [`pet_domain_contract.md`](pet_domain_contract.md)。
+23-1 龟族与 23-2 七族的迁移清单、验证与 P2 写回修复见 [`../archive/iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)。当前结构：八族均由 `PetLevelController` + 族规则持有，`BaseLevel` 只保留控制器入口；`PlayerData` 载入补全与宠物域 View/命令见 [`../reference/pet_domain_contract.md`](../reference/pet_domain_contract.md)。
 
 
 ## 7. 历史覆盖与现状说明

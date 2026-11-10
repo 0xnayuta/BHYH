@@ -29,18 +29,20 @@ check_all.py
 │   ├── convert_liu_sha_frames.py --check
 │   ├── convert_monster_action_views.py --check
 │   ├── convert_level_preload_catalog.py --check
-│   ├── convert_level_layout_catalog.py --check
-│   ├── level_layout_migration_audit.py --fail-on-error
-│   ├── convert_external_monster_catalog.py --check
-│   ├── convert_equipment_catalog.py --check
-│   ├── equipment_data_audit.py --check
-│   ├── png_stream_audit.py / runtime_frames_audit.py
-│   ├── export_raw_manifest.py --check
-│   ├── theme_override_audit.py / font_coverage_audit.py / font_role_audit.py / theme_token_audit.py / whitelist_audit.py
+│   ├── convert_level_layout_catalog.py --check / level_layout_migration_audit.py --fail-on-error
+│   ├── convert_external_monster_catalog.py --check / convert_equipment_catalog.py --check
+│   ├── runtime_frames_audit.py --fail-on-error / png_stream_audit.py --fail-on-error
+│   ├── export_raw_manifest.py --check / theme_override_audit.py --check
+│   ├── convert_ui_theme_tokens.py --check / theme_token_audit.py --check / theme_variant_audit.py --check
+│   ├── ui_dynamic_theme_audit.py --check / font_coverage_audit.py --check / font_role_audit.py --check
+│   ├── ui_surface_token_audit.py --check / --self-test
+│   └── whitelist_audit.py --fail-on-error
 ├── naming_audit.py --all
 ├── runtime_reference_audit.py
 ├── resource_path_audit.py
 └── verify_dragonbones_factories.py
+
+`contract_gate.py --jobs N` limits child-command concurrency; `check_all.py --jobs N` limits outer gate concurrency.
 
 level_regression_all.py → level_test_runner.py
 coop_probe_runner.py → coop_probes/
@@ -61,12 +63,10 @@ frame_sequence_pack_probe.py（发布前独立执行）
 
 ### 3.2 静态与契约门禁
 
-| 脚本 | 作用 |
-|:---|:---|
-| `normalize_eol.py` | LF/CRLF 归一化与增量缓存 |
-| `format_all.py` | `gdformat` 校验/格式化 |
-| `health_check.py` | 场景引用、Autoload、死代码、Headless 编译与静态 warning |
-| `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme/字体/表面色与白名单子门禁 |
+| `normalize_eol.py` | LF/CRLF 归一化与增量缓存；`--no-cache` 不读写缓存 |
+| `format_all.py` | `gdformat` 校验/格式化；缓存按格式化器版本与参数隔离，`--no-cache` 不读写缓存 |
+| `health_check.py` | 场景引用、Autoload、死代码、Headless 编译与静态 warning；缓存按项目脚本与 Godot 可执行文件身份失效 |
+| `contract_gate.py` | 契约扫描、资源转换校验、PNG guard、Theme/字体/表面色与白名单子门禁；`--jobs N` 限制子门禁并发（默认上限 8） |
 | `contract_scan.py` | 资源路径、NodePath、反射、动画轨道、字典键与运行边界扫描；含 Global 表面基线、全局信号基线、被动属性边界与宠物被动边界；`--self-test` 覆盖正负样本 |
 | `naming_audit.py` | 目录/文件 `snake_case`；`Scene/` 根级 `.tscn`、`Script/` 根级 `.gd`、`Scene/` 下 `.gd` 报 ERROR；`--all` 全量 |
 | `naming_compliance_audit.py` | 全量命名终审；人工执行，不在日常 `check_all` 内 |
@@ -83,9 +83,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `font_retirement_manifest.json` | 字体角色、已退役字体/Theme 与私有保留资产边界 |
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
-| `resource_path_audit.py` | `res://` 路径大小写、动态格式路径与工厂目标 |
-| `verify_dragonbones_factories.py` | `.dbfactory` 独立子进程加载与坏资源二分定位 |
-| `asset_library_catalog.py` | 从私有素材库生成 ZMWS 资产库存与消费矩阵；`--check` 校验已提交矩阵；策略见 `asset_library_policy.json` |
+| `asset_library_catalog.py` | 从私有素材库生成 ZMWS 资产库存与消费矩阵；`--check` 同时校验矩阵和 inventory JSON；策略见 `asset_library_policy.json` |
 | `icon_alpha_audit.py` | Report-only 扫描 `source/Art/hero_picture/role_*/equipment.json` 引用图标，报告不透明黑色底板；默认不阻断，`--strict` 可返回非零；公开 clone 缺素材时扫描 0 项并正常退出 |
 
 ### 3.3 构建期转换
@@ -97,8 +95,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `convert_monster_frames.py` | 怪物帧资源与动作别名；`--check` |
 | `convert_numbered_frames.py` | 编号 PNG 序列 → SpriteFrames；`--all --check` |
 | `convert_sheet_frames.py` | sheet 网格 → SpriteFrames；`--check` |
-| `convert_liu_sha_frames.py` | 流沙河动作表 → SpriteFrames；`--check` |
-| `convert_monster_action_views.py` | 动作视图与相对 duration；`--check` |
+| `convert_liu_sha_frames.py` | 流沙河动作表 → SpriteFrames；`--check`（全部登记资源） |
 | `convert_nezha_preview_frames.py` | 哪吒预览 JSON → SpriteFrames；`--check` |
 | `convert_level_preload_catalog.py` | 关卡刷怪/弹体/动态路径 → Catalog 与发布依赖清单 |
 | `convert_level_layout_catalog.py` | 布局源 → 单关布局与 Catalog |
@@ -130,6 +127,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `rename_path.py` | `source/` 内原子重命名、引用同步与失败回滚；文档移动不要使用 |
 | `tool_common.py` | runner 共用 `ROOT`/`SOURCE`/`REPORT_DIR`、Godot 解析与 JSON 报告写入 |
 | `docs_audit.py` | 文档相对链接、目录索引与脚本索引审计；不进入 `check_all` 维度 |
+| `theme_inheritance.py` | Theme `base_type` 属性继承展开；供 Theme token 与变体审计共用 |
 | `equipment_data_schema.py` | 装备构建源白名单、类型与随机规格校验（供生成器/审计导入） |
 
 ### 3.6 素材维护

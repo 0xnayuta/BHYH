@@ -23,13 +23,11 @@ scripts/level_regression_all.py
 
 输出
 ----
-- `docs/reports/level_regression_manifest.json`
 - `docs/reports/level_regression_report.json`（全量）
 - `docs/reports/level_regression_report.md`（全量）
 - `docs/reports/level_regression_changed_report.json`（changed-only）
 - `docs/reports/level_regression_changed_report.md`（changed-only）
 """
-
 import argparse
 import json
 import os
@@ -44,8 +42,6 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_ROOT = os.path.join(PROJECT_ROOT, "source")
 LEVEL_DIR = os.path.join(PROJECT_ROOT, "source", "Scene", "level")
 RUNNER = os.path.join(PROJECT_ROOT, "scripts", "level_test_runner.py")
-MANIFEST_JSON = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_manifest.json")
-REPORT_JSON = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_report.json")
 REPORT_MD = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_report.md")
 REPORT_JSON_CHANGED = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_changed_report.json")
 REPORT_MD_CHANGED = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_changed_report.md")
@@ -191,21 +187,6 @@ def collect_levels() -> Tuple[List[int], List[str]]:
     return sorted(numbered), sorted(special)
 
 
-def write_manifest(numbered: List[int], special: List[str]) -> None:
-    payload = {
-        "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "numbered_count": len(numbered),
-        "special_count": len(special),
-        "numbered": [f"level_{n}" for n in numbered],
-        "special": special,
-        "special_scenes": [
-            {"name": scene_stem, "non_battle": scene_stem in NON_BATTLE_SPECIALS}
-            for scene_stem in special
-        ],
-        "non_battle": {scene_stem: True for scene_stem in special if scene_stem in NON_BATTLE_SPECIALS},
-    }
-    with open(MANIFEST_JSON, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(payload, fh, ensure_ascii=False, indent=2)
 
 
 def run_one(scene_stem: str, timeout: int) -> Dict[str, Any]:
@@ -455,7 +436,6 @@ def main() -> int:
             print(f"    - {stem}")
         return 0
 
-    write_manifest(numbered, special)
     if scope == "full":
         print(f"[*] 全量关卡回归：{len(targets)} 个场景（并发 {jobs}，单关超时 {args.timeout}s）")
     else:

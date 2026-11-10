@@ -81,13 +81,16 @@ def _resolve_exact(project: Path, resource_path: str) -> bool:
     return True
 
 
-def _find_near_path(project: Path, resource_path: str, all_files: list[str]) -> str:
-    wanted = _normalize_name(resource_path)
+def _normalized_path_lookup(all_files: list[str]) -> dict[str, str]:
+    lookup: dict[str, str] = {}
     for candidate in all_files:
-        if _normalize_name("res://" + candidate) == wanted:
-            return "res://" + candidate
-    return ""
+        resource_path = "res://" + candidate
+        lookup.setdefault(_normalize_name(resource_path), resource_path)
+    return lookup
 
+
+def _find_near_path(resource_path: str, normalized_paths: dict[str, str]) -> str:
+    return normalized_paths.get(_normalize_name(resource_path), "")
 
 def _normalize_name(value: str) -> str:
     return value.replace("_", "").lower()
@@ -127,6 +130,19 @@ def _normalized_regex(value: str) -> re.Pattern[str]:
     return re.compile("^" + "".join(parts) + "$")
 
 
+def _cached_dynamic_regex(
+    value: str,
+    normalized: bool,
+    cache: dict[tuple[str, bool], re.Pattern[str]],
+) -> re.Pattern[str]:
+    key = (value, normalized)
+    regex = cache.get(key)
+    if regex is None:
+        regex = _normalized_regex(value) if normalized else _dynamic_regex(value)
+        cache[key] = regex
+    return regex
+
+
 def _is_skipped_asset_path(resource_path: str, missing_roots: set[str]) -> bool:
     return any(resource_path.startswith(f"res://{root}/") for root in missing_roots)
 
@@ -135,14 +151,14 @@ def _audit_static_path(
     project: Path,
     source_path: Path,
     resource_path: str,
-    all_files: list[str],
+    normalized_paths: dict[str, str],
     missing_roots: set[str],
 ) -> str | None:
     if _is_skipped_asset_path(resource_path, missing_roots):
         return None
     if _resolve_exact(project, resource_path):
         return None
-    near = _find_near_path(project, resource_path, all_files)
+    near = _find_near_path(resource_path, normalized_paths)
     if near:
         return f"{_display(source_path)}: 大小写/命名不一致: {resource_path} -> {near}"
     return f"{_display(source_path)}: 文件不存在: {resource_path}"
@@ -153,14 +169,15 @@ def _audit_dynamic_path(
     resource_path: str,
     candidates: list[str],
     missing_roots: set[str],
+    regex_cache: dict[tuple[str, bool], re.Pattern[str]],
 ) -> str | None:
     if _is_skipped_asset_path(resource_path, missing_roots):
         return None
-    exact_regex = _dynamic_regex(resource_path)
+    exact_regex = _cached_dynamic_regex(resource_path, False, regex_cache)
     resource_candidates = ["res://" + candidate for candidate in candidates]
     if any(exact_regex.fullmatch(candidate) for candidate in resource_candidates):
         return None
-    normalized_regex = _normalized_regex(resource_path)
+    normalized_regex = _cached_dynamic_regex(resource_path, True, regex_cache)
     near = [
         candidate for candidate in resource_candidates if normalized_regex.fullmatch(_normalize_name(candidate))
     ]
@@ -258,17 +275,19 @@ def _bullet_slim_filename(value: str) -> str:
     return "".join(result) + ".tscn"
 
 
-def _audit_factories(project: Path, sources: list[Path]) -> list[str]:
+def _audit_factories(project: Path, sources: list[Path], source_texts: dict[Path, str]) -> list[str]:
     findings: list[str] = []
     bullet_dir = project / "Scene" / "hero" / "role_bullet_slim"
     effect_dir = project / "Scene" / "hero" / "role_special_effect_slim"
     bullet_calls = 0
     effect_calls = 0
     for source_path in sources:
-        try:
-            source = source_path.read_text(encoding="utf-8")
-        except OSError:
-            continue
+        source = source_texts.get(source_path)
+        if source is None:
+            try:
+                source = source_path.read_text(encoding="utf-8")
+            except OSError:
+                continue
         for call_text in _factory_calls(source, "add_role_bullet"):
             literal = _factory_literal(call_text)
             if not literal or literal in SPECIAL_BULLET_NAMES:
@@ -328,6 +347,7 @@ def run(project: Path) -> tuple[list[str], dict[str, int]]:
         for path in project.rglob("*")
         if path.is_file()
     ]
+    normalized_paths = _normalized_path_lookup(all_files)
     files_by_dir: dict[str, list[str]] = {}
     for relative in all_files:
         parent = relative.rsplit("/", 1)[0] if "/" in relative else ""
@@ -336,11 +356,15 @@ def run(project: Path) -> tuple[list[str], dict[str, int]]:
     static_count = 0
     dynamic_count = 0
     sources = sorted(project.rglob("*.gd")) + sorted(project.rglob("*.tscn"))
+    dynamic_regex_cache: dict[tuple[str, bool], re.Pattern[str]] = {}
+    source_texts: dict[Path, str] = {}
     for source_path in sources:
         try:
             text = source_path.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
+        if source_path.suffix == ".gd":
+            source_texts[source_path] = text
         for match in PATH_LITERAL_RE.finditer(text):
             resource_path = match.group(1)
             if "%" in resource_path:
@@ -356,16 +380,18 @@ def run(project: Path) -> tuple[list[str], dict[str, int]]:
                         dynamic_candidates = files_by_dir.get(fixed_dir)
                         if dynamic_candidates is None:
                             dynamic_candidates = all_files
-                finding = _audit_dynamic_path(source_path, resource_path, dynamic_candidates, missing_roots)
+                finding = _audit_dynamic_path(
+                    source_path, resource_path, dynamic_candidates, missing_roots, dynamic_regex_cache
+                )
             else:
                 suffix = Path(resource_path).suffix.lower()
                 if suffix not in RESOURCE_SUFFIXES:
                     continue
                 static_count += 1
-                finding = _audit_static_path(project, source_path, resource_path, all_files, missing_roots)
+                finding = _audit_static_path(project, source_path, resource_path, normalized_paths, missing_roots)
             if finding:
                 findings.append(finding)
-    findings.extend(_audit_factories(project, [path for path in sources if path.suffix == ".gd"]))
+    findings.extend(_audit_factories(project, [path for path in sources if path.suffix == ".gd"], source_texts))
     atlas_findings, atlas_pages = _audit_atlases(project / "Art")
     findings.extend(atlas_findings)
     stats = {

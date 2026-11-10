@@ -15,12 +15,14 @@ BHYH 全工程 GDScript 自动化格式化流水线工具 (Format All Pipeline)
 import os
 import sys
 import json
+import hashlib
+import re
 import shutil
 import argparse
 import subprocess
 import concurrent.futures
 from pathlib import Path
-from typing import List, Tuple, Dict, Set
+from typing import List, Tuple, Dict, Set, Optional
 
 # 排除目录
 EXCLUDE_DIRS = {
@@ -28,6 +30,7 @@ EXCLUDE_DIRS = {
 }
 
 DEFAULT_CACHE_REL_PATH = Path(".godot") / "format_cache.json"
+
 
 def resolve_gdformat_cmd() -> List[str]:
     """解析并定位 gdformat 可执行命令，优先使用本地独立可执行文件"""
@@ -42,6 +45,73 @@ def resolve_gdformat_cmd() -> List[str]:
     
     print("[ERROR] 未找到 gdformat 或 uv 工具！请先运行: uv tool install gdtoolkit", file=sys.stderr)
     sys.exit(1)
+
+FORMAT_CACHE_SCHEMA = 2
+def formatter_cache_identity(
+    cmd_base: List[str], line_length: int, mode: str
+) -> Optional[str]:
+    """Build a cache key only when a local formatter version is verifiable."""
+    if mode == "diff" or len(cmd_base) != 1:
+        return None
+
+    executable = shutil.which(cmd_base[0])
+    if executable is None and os.path.isfile(cmd_base[0]):
+        executable = cmd_base[0]
+    if executable is None:
+        return None
+
+    executable_path = os.path.realpath(executable)
+    if not os.path.isfile(executable_path):
+        return None
+    try:
+        binary_stat = os.stat(executable_path)
+        version_result = subprocess.run(
+            [executable_path, "--version"],
+            capture_output=True,
+            text=True,
+            errors="ignore",
+            timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+    version = (version_result.stdout or "").strip()
+    if not version:
+        version = (version_result.stderr or "").strip()
+    if version_result.returncode != 0 or not re.search(r"\d+(?:\.\d+)+", version):
+        return None
+    if any(marker in version.lower() for marker in ("usage:", "unknown option", "unrecognized option")):
+        return None
+
+    try:
+        mtime_ns = binary_stat.st_mtime_ns
+    except AttributeError:
+        try:
+            mtime_ns = int(binary_stat.st_mtime * 1_000_000_000)
+        except (AttributeError, OverflowError, ValueError):
+            return None
+
+    command_options = ["-l", str(line_length)]
+    if mode == "check":
+        command_options.append("--check")
+    identity = {
+        "schema": FORMAT_CACHE_SCHEMA,
+        "command": [*cmd_base, *command_options],
+        "mode": mode,
+        "line_length": line_length,
+        "formatter_version": version,
+        "binary": {
+            "path": executable_path,
+            "device": getattr(binary_stat, "st_dev", None),
+            "inode": getattr(binary_stat, "st_ino", None),
+            "size": binary_stat.st_size,
+            "mtime_ns": mtime_ns,
+            "ctime_ns": getattr(binary_stat, "st_ctime_ns", None),
+            "mode": binary_stat.st_mode,
+        },
+    }
+    encoded = json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 def collect_gd_files(target_path: str) -> List[str]:
     """安全递归收集目标路径下的所有有效 .gd 脚本"""
@@ -113,24 +183,30 @@ def run_batch(
         print(output + "\n")
     return res.returncode, reformatted, errors
 
-def load_cache(cache_path: Path) -> Dict[str, List[float]]:
-    """加载已通过校验的文件 mtime 和 size 缓存"""
-    if cache_path.exists():
-        try:
-            with open(cache_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            pass
-    return {}
+def load_cache(cache_path: Path, identity: str) -> Dict[str, List[float]]:
+    """Load file status only when cache settings and formatter identity match."""
+    try:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    if not isinstance(data, dict) or data.get("schema") != FORMAT_CACHE_SCHEMA:
+        return {}
+    if data.get("identity") != identity:
+        return {}
+    files = data.get("files")
+    return files if isinstance(files, dict) else {}
 
-def save_cache(cache_path: Path, cache_data: Dict[str, List[float]]) -> None:
-    """持久化保存缓存"""
+def save_cache(cache_path: Path, cache_data: Dict[str, List[float]], identity: str) -> None:
+    """Persist file status together with the formatter/settings identity."""
     try:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         with open(cache_path, "w", encoding="utf-8") as f:
-            json.dump(cache_data, f, ensure_ascii=False)
+            json.dump({"schema": FORMAT_CACHE_SCHEMA, "identity": identity, "files": cache_data},
+                      f, ensure_ascii=False)
     except Exception:
         pass
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -199,7 +275,10 @@ def main():
     if not cache_file.parent.exists():
         cache_file = Path(".cache") / "format_cache.json"
 
-    cache_data = {} if args.no_cache else load_cache(cache_file)
+    use_cache = not args.no_cache and mode != "diff"
+    cache_identity = formatter_cache_identity(cmd_base, args.line_length, mode) if use_cache else None
+    cache_enabled = cache_identity is not None
+    cache_data = load_cache(cache_file, cache_identity) if cache_enabled else {}
 
     # 增量筛选：仅对未在缓存中、或 mtime/size 改变的文件执行 gdformat
     files_to_process: List[str] = []
@@ -266,22 +345,23 @@ def main():
                 except Exception:
                     pass
 
-        # 更新通过检查的文件缓存
-        problem_files: Set[str] = set()
-        for rf in total_reformatted:
-            problem_files.add(os.path.normpath(rf))
-        for ef in total_errors:
-            problem_files.add(os.path.normpath(ef))
+        if cache_enabled:
+            # 更新通过检查的文件缓存
+            problem_files: Set[str] = set()
+            for rf in total_reformatted:
+                problem_files.add(os.path.normpath(rf))
+            for ef in total_errors:
+                problem_files.add(os.path.normpath(ef))
 
-        for fp in files_to_process:
-            norm_fp = os.path.normpath(fp)
-            if norm_fp not in problem_files:
-                try:
-                    st = os.stat(fp)
-                    cache_data[fp] = [st.st_mtime, st.st_size]
-                except OSError:
-                    pass
-        save_cache(cache_file, cache_data)
+            for fp in files_to_process:
+                norm_fp = os.path.normpath(fp)
+                if norm_fp not in problem_files:
+                    try:
+                        st = os.stat(fp)
+                        cache_data[fp] = [st.st_mtime, st.st_size]
+                    except OSError:
+                        pass
+            save_cache(cache_file, cache_data, cache_identity)
     else:
         print(" -> [缓存命中] 所有目标文件均未变动且符合规范，直接通过！")
 

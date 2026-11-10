@@ -119,6 +119,25 @@ class MetadataModel:
 
 
 @dataclass
+class MetadataCache:
+    """Source text and parsed metadata retained only for one target collection."""
+
+    source_text: dict[Path, str] = field(default_factory=dict)
+    models: dict[Path, MetadataModel] = field(default_factory=dict)
+
+
+def metadata_text(path: Path, cache: MetadataCache | None = None) -> str:
+    if cache is not None:
+        text = cache.source_text.get(path)
+        if text is not None:
+            return text
+    text = path.read_text(encoding="utf-8")
+    if cache is not None:
+        cache.source_text[path] = text
+    return text
+
+
+@dataclass
 class Target:
     metadata: Path
     frames_path: Path
@@ -191,8 +210,12 @@ def parse_godot_dict(text: str, marker: str = "data = {") -> dict:
     return value
 
 
-def load_metadata(path: Path) -> MetadataModel:
-    data = parse_godot_dict(path.read_text(encoding="utf-8"))
+def load_metadata(path: Path, cache: MetadataCache | None = None) -> MetadataModel:
+    if cache is not None:
+        model = cache.models.get(path)
+        if model is not None:
+            return model
+    data = parse_godot_dict(metadata_text(path, cache))
     pages: list[str] = []
     raw_pages = data.get("pages") or []
     legacy_pages = bool(raw_pages) and all(isinstance(entry, str) for entry in raw_pages)
@@ -253,11 +276,14 @@ def load_metadata(path: Path) -> MetadataModel:
                 raise MetadataParseError(f"{path}: 动画 {name!r} 没有帧")
             sequences.append((str(name), frames))
     fps = data.get("fps")
-    return MetadataModel(
+    model = MetadataModel(
         pages=pages,
         sequences=sequences,
         fps=float(fps) if isinstance(fps, (int, float)) else None,
     )
+    if cache is not None:
+        cache.models[path] = model
+    return model
 
 
 def parse_frames(path: Path) -> FramesModel:
@@ -359,11 +385,12 @@ def collect_targets() -> tuple[list[Target], list[tuple[str, str]]]:
     targets: list[Target] = []
     skipped: list[tuple[str, str]] = []
     action_maps = load_action_maps()
+    metadata_cache = MetadataCache()
     for metadata in sorted(MONSTER_ROOT.rglob("metadata.tres")):
-        text = metadata.read_text(encoding="utf-8")
+        text = metadata_text(metadata, metadata_cache)
         if '"sequences"' not in text and '"animations"' not in text:
             continue
-        model = load_metadata(metadata)
+        model = load_metadata(metadata, metadata_cache)
         if not model.sequences:
             skipped.append(
                 (metadata.relative_to(MONSTER_ROOT).as_posix(), "metadata sequences 为空（聚合或占位）")

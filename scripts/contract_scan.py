@@ -5,7 +5,7 @@ scripts/contract_scan.py
 
 BHYH 全工程字面量契约全量扫描器 (Phase 8-1)
 ====================================================================
-用于全量扫描并比对工程中十七类契约与真源的一致性：
+用于全量扫描并比对工程中多项契约与真源的一致性：
 1. 资源路径契约 (Resource Path Contract): res:// 路径存在性与严格大小写敏感校验
 2. 节点路径契约 (Node Path Contract): get_node/NodePath/$ 节点树层级与大小写敏感校验
 3. 动态反射契约 (Reflection Contract): call/has_method/set/get/connect 字符串与符号声明比对
@@ -44,7 +44,7 @@ import time
 import argparse
 from pathlib import Path
 from collections import defaultdict
-from typing import Dict, List, Set, Tuple, Optional, Any
+from typing import Callable, Dict, List, Set, Tuple, Optional, Any
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -153,7 +153,11 @@ class SceneTreeParser:
         self.all_node_names: Set[str] = set()
         self.node_name_to_paths: Dict[str, Set[str]] = defaultdict(set)
 
-    def parse_all_scenes(self, scene_files: List[str]):
+    def parse_all_scenes(
+        self,
+        scene_files: List[str],
+        read_text: Optional[Callable[[str], Optional[str]]] = None,
+    ):
         node_def_re = re.compile(r'^\[node\s+name="([^"]+)"(?:\s+type="([^"]*)")?(?:\s+parent="([^"]*)")?(?:\s+instance=ExtResource\("([^"]*)"\))?', re.M)
         script_ext_re = re.compile(r'script\s*=\s*ExtResource\("([^"]+)"\)')
         ext_res_re = re.compile(r'\[ext_resource\s+[^\]]*path="([^"]+)"[^\]]*id="([^"]+)"')
@@ -163,8 +167,12 @@ class SceneTreeParser:
             scn_res = "res://" + rel_p
 
             try:
-                content = open(scn_abs, "r", encoding="utf-8", errors="ignore").read()
+                content = read_text(scn_abs) if read_text is not None else open(
+                    scn_abs, "r", encoding="utf-8", errors="ignore"
+                ).read()
             except OSError:
+                continue
+            if content is None:
                 continue
 
             # 建立 ext_resource id -> path 映射
@@ -290,7 +298,11 @@ class CodeSymbolIndex:
         self.lower_to_props: Dict[str, Set[str]] = defaultdict(set)
         self.class_names: Dict[str, str] = {}  # ClassName -> res://Path.gd
 
-    def parse_all_scripts(self, script_files: List[str]):
+    def parse_all_scripts(
+        self,
+        script_files: List[str],
+        read_text: Optional[Callable[[str], Optional[str]]] = None,
+    ):
         func_re = re.compile(r'^\s*(?:static\s+)?func\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(', re.M)
         var_re = re.compile(r'^\s*(?:@export[a-z_()0-9, ]*\s+)?(?:@onready\s+)?(?:var|const)\s+([A-Za-z_][A-Za-z0-9_]*)', re.M)
         signal_re = re.compile(r'^\s*signal\s+([A-Za-z_][A-Za-z0-9_]*)', re.M)
@@ -301,8 +313,12 @@ class CodeSymbolIndex:
             sc_res = "res://" + rel_p
 
             try:
-                text = open(sc_abs, "r", encoding="utf-8", errors="ignore").read()
+                text = read_text(sc_abs) if read_text is not None else open(
+                    sc_abs, "r", encoding="utf-8", errors="ignore"
+                ).read()
             except OSError:
+                continue
+            if text is None:
                 continue
 
             for m in func_re.finditer(text):
@@ -331,17 +347,28 @@ class DataKeysIndex:
     """
     解析 data_keys.gd，提取已契约化中文字典键。
     """
-    def __init__(self, datakeys_abs: str):
+    def __init__(
+        self,
+        datakeys_abs: str,
+        read_text: Optional[Callable[[str], Optional[str]]] = None,
+    ):
         self.defined_keys: Dict[str, str] = {}  # "中文字符串" -> "DataKeys.Class.CONST"
         if os.path.exists(datakeys_abs):
-            self._parse(datakeys_abs)
+            self._parse(datakeys_abs, read_text)
 
-    def _parse(self, fp: str):
+    def _parse(self, fp: str, read_text: Optional[Callable[[str], Optional[str]]] = None):
         current_class = "Root"
         cls_re = re.compile(r'^\s*class\s+([A-Za-z0-9_]+):')
         const_re = re.compile(r'^\s*const\s+([A-Za-z0-9_]+)\s*=\s*["\']([^"\']+)["\']')
 
-        for line in open(fp, "r", encoding="utf-8", errors="ignore"):
+        if read_text is None:
+            lines = open(fp, "r", encoding="utf-8", errors="ignore")
+        else:
+            text = read_text(fp)
+            if text is None:
+                return
+            lines = text.split("\n")
+        for line in lines:
             clean = line.strip()
             m_cls = cls_re.match(clean)
             if m_cls:
@@ -468,6 +495,23 @@ class ContractScanner:
         self.scene_parser: Optional[SceneTreeParser] = None
         self.symbol_index: Optional[CodeSymbolIndex] = None
         self.datakeys_index: Optional[DataKeysIndex] = None
+        # 仅本次扫描复用成功读取的 .gd/.tscn 文本，避免重复 I/O；不缓存其他资源或落盘。
+        self._source_text_cache: Dict[str, str] = {}
+
+    def _read_source_text(self, fp: str) -> Optional[str]:
+        source_cache = getattr(self, "_source_text_cache", None)
+        cacheable = fp.endswith((".gd", ".tscn"))
+        cache_key = os.path.normcase(os.path.abspath(fp))
+        if cacheable and source_cache is not None and cache_key in source_cache:
+            return source_cache[cache_key]
+        try:
+            with open(fp, "r", encoding="utf-8", errors="ignore") as source:
+                content = source.read()
+        except OSError:
+            return None
+        if cacheable and source_cache is not None:
+            source_cache[cache_key] = content
+        return content
 
     def collect_project_files(self):
         """收集工程待测文件"""
@@ -492,14 +536,14 @@ class ContractScanner:
 
         print(f"[*] 解析全量场景节点拓扑 ({len(self.scene_files)} 个场景)...")
         self.scene_parser = SceneTreeParser(self.project_dir)
-        self.scene_parser.parse_all_scenes(self.scene_files)
+        self.scene_parser.parse_all_scenes(self.scene_files, self._read_source_text)
 
         print(f"[*] 索引全量代码符号定义 ({len(self.script_files)} 个脚本)...")
         self.symbol_index = CodeSymbolIndex(self.project_dir)
-        self.symbol_index.parse_all_scripts(self.script_files)
+        self.symbol_index.parse_all_scripts(self.script_files, self._read_source_text)
 
         datakeys_path = os.path.join(self.project_dir, "Script", "base", "data_keys.gd")
-        self.datakeys_index = DataKeysIndex(datakeys_path)
+        self.datakeys_index = DataKeysIndex(datakeys_path, self._read_source_text)
         print(f"[*] 索引初始化完成，耗时: {time.time() - t0:.2f}s")
 
     @classmethod
@@ -535,9 +579,8 @@ class ContractScanner:
 
         for abs_p in target_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             # AtlasMetadata 为构建期生成的数据容器，内部保留原始源帧路径用于溯源，
             # 并非运行时资源依赖；其实际依赖由 SpriteFrames.tres 与转换器保证。
@@ -599,9 +642,8 @@ class ContractScanner:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
             sc_res = "res://" + rel_p
 
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
 
             # 获取挂载此脚本的场景节点上下文
@@ -729,9 +771,8 @@ class ContractScanner:
 
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
 
             for lineno, line in enumerate(content.splitlines(), 1):
@@ -816,9 +857,8 @@ class ContractScanner:
             scn_res = "res://" + rel_p
             nodes_in_scene = self.scene_parser.scenes.get(scn_res, {})
 
-            try:
-                content = open(scn_abs, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(scn_abs)
+            if content is None:
                 continue
 
             for m in track_block_re.finditer(content):
@@ -939,9 +979,8 @@ class ContractScanner:
 
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
 
             for lineno, line in enumerate(content.splitlines(), 1):
@@ -1454,9 +1493,8 @@ class ContractScanner:
         extends_re = re.compile(r"^\s*extends\s+(.+?)\s*$", re.M)
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                text = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            text = self._read_source_text(abs_p)
+            if text is None:
                 continue
             match = extends_re.search(text)
             extends_map[rel_p] = match.group(1).strip().strip('"') if match else ""
@@ -1503,9 +1541,8 @@ class ContractScanner:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
             if not rel_p.startswith(self.PANEL_OPERATOR_DIRS):
                 continue
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_op = self.panel_operator_usage(content)
             if hit_line and self._resolves_operator(rel_p, hit_op):
@@ -1531,9 +1568,8 @@ class ContractScanner:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
             if rel_p in self.RUNTIME_MANIFEST_FROZEN_ALLOWLIST:
                 continue
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.runtime_manifest_violation(content)
             if hit_line == 0:
@@ -1555,9 +1591,8 @@ class ContractScanner:
         print(f"[*] 扫描 AtlasMetadata 运行时边界门禁...")
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.atlas_boundary_violation(content, rel_p)
             if hit_line == 0:
@@ -1581,9 +1616,8 @@ class ContractScanner:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
             if rel_p != self.PRELOAD_BOUNDARY_FILE:
                 continue
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.preload_boundary_violation(content)
             if hit_line == 0:
@@ -1605,9 +1639,8 @@ class ContractScanner:
         print(f"[*] 扫描场景入口边界门禁...")
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.scene_entry_boundary_violation(content, rel_p)
             if hit_line == 0:
@@ -1629,9 +1662,8 @@ class ContractScanner:
         print(f"[*] 扫描加载页私有缓存访问门禁...")
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.load_cache_boundary_violation(content, rel_p)
             if hit_line == 0:
@@ -1799,9 +1831,8 @@ class ContractScanner:
         print(f"[*] 扫描池/UI 清理入口登记门禁...")
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = self.pool_ui_boundary_violation(content, rel_p)
             if hit_line == 0:
@@ -1871,9 +1902,8 @@ class ContractScanner:
                 rule_id="GLOBAL_SURFACE_BASELINE_INVALID",
             ))
             return
-        try:
-            content = open(global_path, "r", encoding="utf-8", errors="ignore").read()
-        except OSError:
+        content = self._read_source_text(global_path)
+        if content is None:
             return
         for line, marker in self.global_surface_violations(content, baseline, self.GLOBAL_SURFACE_FILE):
             finding = ContractFinding(
@@ -1892,9 +1922,8 @@ class ContractScanner:
     def _autoload_script_paths(self):
         """解析 project.godot 的 [autoload] 段，返回脚本相对路径。"""
         project_file = os.path.join(self.project_dir, "project.godot")
-        try:
-            text = open(project_file, "r", encoding="utf-8", errors="ignore").read()
-        except OSError:
+        text = self._read_source_text(project_file)
+        if text is None:
             return []
         return re.findall(r'^\w+="\*res://([^"]+\.gd)"', text, re.M)
 
@@ -1904,9 +1933,8 @@ class ContractScanner:
             abs_p = os.path.join(self.project_dir, rel_p)
             if not os.path.exists(abs_p):
                 continue
-            try:
-                text = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            text = self._read_source_text(abs_p)
+            if text is None:
                 continue
             declared = set(re.findall(r"^signal\s+([A-Za-z_]\w*)", text, re.M))
             allowed = self.GLOBAL_SIGNAL_BASELINE.get(rel_p, set())
@@ -1951,9 +1979,8 @@ class ContractScanner:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
             if rel_p.startswith("addons/") or rel_p.startswith("_"):
                 continue
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             line, marker = self.passive_polling_violation(content)
             if line:
@@ -2002,9 +2029,8 @@ class ContractScanner:
                 continue
             if rel_p in self.PET_PASSIVE_WRITE_ALLOWLIST:
                 continue
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             line = self.first_regex_line(content, self.PET_PASSIVE_WRITE_RE)
             if line:
@@ -2020,8 +2046,8 @@ class ContractScanner:
                 ))
         pet_ui_path = os.path.join(self.project_dir, "Script/pet/pet_interface.gd")
         if os.path.exists(pet_ui_path):
-            ui_content = open(pet_ui_path, "r", encoding="utf-8", errors="ignore").read()
-            if (
+            ui_content = self._read_source_text(pet_ui_path)
+            if ui_content is not None and (
                 "PetDomainCommand.upgrade_passive" not in ui_content
                 or "PetDomainCommand.upgrade_all_passives" not in ui_content
             ):
@@ -2069,9 +2095,8 @@ class ContractScanner:
     def _scan_rule(self, category, violation, message, suggested_fix, rule_id):
         for abs_p in self.script_files:
             rel_p = os.path.relpath(abs_p, self.project_dir).replace("\\", "/")
-            try:
-                content = open(abs_p, "r", encoding="utf-8", errors="ignore").read()
-            except OSError:
+            content = self._read_source_text(abs_p)
+            if content is None:
                 continue
             hit_line, hit_pattern = violation(content, rel_p)
             if hit_line == 0:
@@ -2090,8 +2115,13 @@ class ContractScanner:
                 self.findings.append(finding)
 
     def run_all_checks(self):
-        """执行完整二十类契约扫描流水线"""
+        """执行完整契约扫描流水线"""
         t0 = time.time()
+        self.script_files.clear()
+        self.scene_files.clear()
+        self.res_files.clear()
+        self.other_scan_files.clear()
+        self._source_text_cache.clear()
         self.collect_project_files()
         self.build_indexes()
 
@@ -2122,6 +2152,7 @@ class ContractScanner:
 
         duration = time.time() - t0
         print(f"[*] 全量契约扫描完成，累计耗时: {duration:.2f}s，发现条目: {len(self.findings)} 个")
+        self._source_text_cache.clear()
         return duration
 
     def generate_reports(self, duration: float):
@@ -2174,32 +2205,36 @@ class ContractScanner:
         lines.append("")
         lines.append("---")
         lines.append("")
-        lines.append("## 一、十七类契约健康看板")
+        lines.append("## 一、契约健康看板")
         lines.append("")
         lines.append("| 契约类别 (Category) | 严重错误 (ERROR) | 告警/建议 (WARNING) | 待收敛 (INFO) | 合计条目 | 健康状态 |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
 
         cat_names = {
-            "resource_path": "1. 资源路径契约 (Resource Path)",
-            "node_path": "2. 节点路径契约 (Node Path)",
-            "reflection": "3. 动态反射契约 (Reflection)",
-            "anim_track": "4. 动画轨道契约 (Anim Track)",
-            "dict_key": "5. 中文字典键契约 (Dict Key)",
-            "runtime_manifest": "6. 运行时 manifest 门禁 (Runtime Manifest)",
-            "atlas_boundary": "7. AtlasMetadata 边界门禁 (Atlas Metadata Boundary)",
-            "preload_boundary": "8. 关卡预载边界门禁 (Preload Boundary)",
-            "scene_entry": "9. 场景入口边界门禁 (Scene Entry Boundary)",
-            "load_cache": "10. 加载页私有缓存门禁 (Load Cache Boundary)",
-            "pool_ui": "11. 池/UI 清理入口门禁 (Pool/UI Boundary)",
-            "archive_boundary": "12. 档案边界门禁 (Archive Boundary)",
-            "slot_boundary": "13. 槽位边界门禁 (Slot Boundary)",
-            "panel_operator": "14. 面板操作者门禁 (Panel Operator)",
-            "shared_ledger": "15. 共享账本登记门禁 (Shared Ledger)",
-            "phase17_boundary": "16. Phase 17 边界门禁 (Phase 17 Boundary)",
-            "input_boundary": "17. 输入写入边界门禁 (Input Boundary)",
-            "global_signal": "18. 全局信号基线门禁 (Global Signal)",
-            "passive_boundary": "19. 被动属性边界门禁 (Passive Boundary)",
-            "pet_passive_boundary": "20. 宠物被动边界门禁 (Pet Passive Boundary)",
+            "resource_path": "资源路径契约 (Resource Path)",
+            "node_path": "节点路径契约 (Node Path)",
+            "reflection": "动态反射契约 (Reflection)",
+            "anim_track": "动画轨道契约 (Anim Track)",
+            "dict_key": "中文字典键契约 (Dict Key)",
+            "runtime_manifest": "运行时 manifest 门禁 (Runtime Manifest)",
+            "atlas_boundary": "AtlasMetadata 边界门禁 (Atlas Metadata Boundary)",
+            "preload_boundary": "关卡预载边界门禁 (Preload Boundary)",
+            "scene_entry": "场景入口边界门禁 (Scene Entry Boundary)",
+            "load_cache": "加载页私有缓存门禁 (Load Cache Boundary)",
+            "pool_ui": "池/UI 清理入口门禁 (Pool/UI Boundary)",
+            "run_state_boundary": "运行状态边界门禁 (Run State Boundary)",
+            "global_surface": "Global 表面基线门禁 (Global Surface Baseline)",
+            "global_signal": "全局信号基线门禁 (Global Signal)",
+            "passive_boundary": "被动属性边界门禁 (Passive Boundary)",
+            "pet_passive_boundary": "宠物被动边界门禁 (Pet Passive Boundary)",
+            "archive_boundary": "档案边界门禁 (Archive Boundary)",
+            "slot_boundary": "槽位边界门禁 (Slot Boundary)",
+            "panel_operator": "面板操作者门禁 (Panel Operator)",
+            "shared_ledger": "共享账本登记门禁 (Shared Ledger)",
+            "audio_entry_boundary": "音频入口门禁 (Audio Entry Boundary)",
+            "hud_panel_boundary": "HUD/面板只读门禁 (HUD Panel Boundary)",
+            "phase17_boundary": "Phase 17 边界门禁 (Phase 17 Boundary)",
+            "input_boundary": "输入写入边界门禁 (Input Boundary)",
         }
 
         for cat_key, cat_label in cat_names.items():
@@ -2242,11 +2277,13 @@ class ContractScanner:
 
         lines.append("---")
         lines.append("")
-        lines.append("## 三、Phase 8-2 推荐修复执行优先级")
+        lines.append("## 三、通用处置建议")
         lines.append("")
-        lines.append("1. **高危阻断项 (ERROR)**：优先清零 `resource_path` 大小写失配与 `node_path` 大小写失配，防止运行时抛出 `Node not found` 与 `Resource not found` 崩溃；")
-        lines.append("2. **动画方法轨道 (anim_track)**：对齐动画帧 method 轨道大小写，消除方法静默不调用；")
-        lines.append("3. **字典键收敛 (dict_key)**：分批将已收录于 `DataKeys` 的中文硬编码键迁移为强类型常量引用。")
+        lines.append("1. **ERROR**：优先修复对应的契约违规项。")
+        lines.append("2. **WARNING**：逐项评估并按需收敛告警。")
+        lines.append("3. **INFO**：结合上下文处理待收敛建议。")
+        lines.append("")
+        lines.append("完整 findings 内容以同次扫描生成的 JSON 报告为准；本 Markdown 每个类别最多展示 40 条。")
         lines.append("")
 
         with open(self.md_output, "w", encoding="utf-8") as mf:

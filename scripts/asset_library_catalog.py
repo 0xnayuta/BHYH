@@ -42,6 +42,23 @@ def count_ext(root: Path, patterns: set[str]) -> int:
     return sum(1 for p in root.rglob("*") if p.is_file() and p.suffix.lower() in patterns)
 
 
+def _scan_effect_assets(root: Path, png_root: Path) -> tuple[list[Path], int]:
+    """Reuse the DragonBones effect walk only for PNGs nested in its static group."""
+    if not root.is_dir():
+        return [], 0
+    db_factories: list[Path] = []
+    png_count = 0
+    for path in root.rglob("*"):
+        if not path.is_file():
+            continue
+        if path.match("*.dbfactory"):
+            db_factories.append(path)
+        if path.is_relative_to(png_root) and path.suffix.lower() == ".png":
+            png_count += 1
+    db_factories.sort()
+    return db_factories, png_count
+
+
 def append_status_table(lines: list[str], title: str,
                         legend: dict[str, str], used: set[str]) -> None:
     lines += [
@@ -63,7 +80,7 @@ def main() -> int:
     parser.add_argument("--policy", type=Path, default=POLICY_PATH)
     parser.add_argument("--matrix", type=Path, default=MATRIX_PATH)
     parser.add_argument("--inventory", type=Path, default=INVENTORY_PATH)
-    parser.add_argument("--check", action="store_true", help="Fail if the committed matrix is stale")
+    parser.add_argument("--check", action="store_true", help="Fail if either generated artifact is missing or stale")
     args = parser.parse_args()
 
     assets = Path(args.assets_root).expanduser().resolve() if args.assets_root else DEFAULT_ASSETS
@@ -87,9 +104,13 @@ def main() -> int:
         "ui_effect": assets / "Art/ui_effect",
         "ws_effect": assets / "Art/ws_effect",
     }
+    effect_db_factories, effect_png_count = _scan_effect_assets(
+        db_roots["effect"], assets / "Art/effect/all_effects"
+    )
     db_count = 0
     for group, root in db_roots.items():
-        for p in files(root, "*.dbfactory"):
+        group_files = effect_db_factories if group == "effect" else files(root, "*.dbfactory")
+        for p in group_files:
             inventory_assets.append({
                 "asset_id": f"zmws_dragonbones/{rel(p, assets).removesuffix('.dbfactory')}",
                 "domain": "dragonbones",
@@ -101,7 +122,6 @@ def main() -> int:
             })
             db_count += 1
     rows.append(("dragonbones", db_count, domains.get("dragonbones", {})))
-
     # Maps are imported Godot scenes in the public project.
     maps = files(SOURCE / "Scene/level/zmws", "*.tscn")
     for p in maps:
@@ -159,7 +179,7 @@ def main() -> int:
     ]
     ui_total = 0
     for key, root, exts, consumer in static:
-        n = count_ext(root, exts)
+        n = effect_png_count if key == "effect.all_effects" else count_ext(root, exts)
         inventory_assets.append({
             "asset_id": f"zmws_static/{key}",
             "domain": key,
@@ -191,7 +211,7 @@ def main() -> int:
     other_used = {slice_info.get("status", "")}
     other_used.update(item.get("status", "") for item in policy.get("quarantined", []))
 
-    generated = args.matrix.read_text(encoding="utf-8") if args.matrix.exists() else ""
+    generated = args.matrix.read_text(encoding="utf-8") if args.matrix.is_file() else None
     lines = [
         "# ZMWS Asset Integration Matrix",
         "",
@@ -269,24 +289,37 @@ def main() -> int:
     ]
     matrix = "\n".join(lines)
 
-    if args.check:
-        if generated != matrix:
-            print("STALE: docs/reference/zmws_asset_integration_matrix.md")
-            return 1
-        print("OK: asset integration matrix is current")
-        return 0
-
-    args.matrix.parent.mkdir(parents=True, exist_ok=True)
-    args.matrix.write_text(matrix, encoding="utf-8", newline="\n")
-    args.inventory.parent.mkdir(parents=True, exist_ok=True)
-    args.inventory.write_text(json.dumps({
+    inventory = json.dumps({
         "schema_version": 1,
         "source_root": ".",  # relative to BHYH-assets-private, never an absolute path
         "status_default": "imported_unbound",
         "quarantined": policy.get("quarantined", []),
         "domains": [{"domain": key, "count": count, **meta} for key, count, meta in deduped],
         "assets": inventory_assets,
-    }, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
+    }, ensure_ascii=False, indent=2)
+
+    if args.check:
+        stale = []
+        if generated is None:
+            stale.append(f"MISSING: {args.matrix}")
+        elif generated != matrix:
+            stale.append(f"STALE: {args.matrix}")
+        inventory_generated = args.inventory.read_text(encoding="utf-8") if args.inventory.is_file() else None
+        if inventory_generated is None:
+            stale.append(f"MISSING: {args.inventory}")
+        elif inventory_generated != inventory:
+            stale.append(f"STALE: {args.inventory}")
+        if stale:
+            for item in stale:
+                print(item)
+            return 1
+        print("OK: asset integration matrix and inventory are current")
+        return 0
+
+    args.matrix.parent.mkdir(parents=True, exist_ok=True)
+    args.matrix.write_text(matrix, encoding="utf-8", newline="\n")
+    args.inventory.parent.mkdir(parents=True, exist_ok=True)
+    args.inventory.write_text(inventory, encoding="utf-8", newline="\n")
     print(f"WROTE {args.matrix}")
     print(f"WROTE {args.inventory}")
     print(f"assets={len(inventory_assets)} domains={len(deduped)}")

@@ -17,6 +17,11 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+if __package__:
+    from .theme_inheritance import effective_theme_properties
+else:
+    from theme_inheritance import effective_theme_properties
+
 ROOT = Path(__file__).resolve().parent.parent
 THEME = ROOT / "source" / "Scene" / "theme" / "bhyh_theme.tres"
 MANIFEST = ROOT / "scripts" / "theme_legacy_variants.json"
@@ -50,24 +55,7 @@ def base_name(props: dict[str, str]) -> str:
 
 
 def effective(variants: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
-    memo: dict[str, dict[str, str]] = {}
-    visiting: set[str] = set()
-
-    def resolve(name: str) -> dict[str, str]:
-        if name in memo:
-            return memo[name]
-        if name in visiting:
-            return {}
-        visiting.add(name)
-        props = variants.get(name, {})
-        base = base_name(props)
-        result = dict(resolve(base)) if base in variants else {}
-        result.update({key: value for key, value in props.items() if key != "base_type"})
-        visiting.discard(name)
-        memo[name] = result
-        return result
-
-    return {name: resolve(name) for name in variants}
+    return effective_theme_properties(variants)
 
 
 def native_root(variants: dict[str, dict[str, str]], name: str) -> str:

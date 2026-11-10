@@ -189,11 +189,11 @@ PetFamilySpec (RefCounted, 各族实现)
 
 ### 6.2 批次结果
 
-23-1 龟族与 23-2 七族的迁移清单、验证与 P2 写回修复见 [`../archive/iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)。当前结构：八族均由 `PetLevelController` + 族规则持有，`BaseLevel` 只保留控制器入口；`PlayerData` 载入补全与宠物域 View/命令见 [`pet_domain_contract.md`](pet_domain_contract.md)。
+23-1 龟族与 23-2 七族的迁移清单、验证与 P2 写回修复见 [`../archive/iteration_23_pet_domain_boundary.md`](../archive/iteration_23_pet_domain_boundary.md)。当前结构：八族均由 `PetLevelController` + 族规则持有，`BaseLevel` 只保留控制器入口；`PlayerData` 载入补全与宠物域 View/命令见 [`../reference/pet_domain_contract.md`](../reference/pet_domain_contract.md)。
 
 ## 7. 当前验证与边界
 
 - `BaseLevel` 宠物相关函数由基线 73 降至 16；八族生成只经 `PetLevelController`；
-- 当前基线：`check_all` **9/9**、`archive_probe_runner` **344/344**、`coop_probe_runner` **37/37**、`scene_probe_runner` **17/17**、`level_1` 4 阶段 0/0/0、全量 **128/128 + 5 SKIP**；具体日期与耗时见 [`status.md`](status.md)；
-- 未覆盖：活跃名显示名清理由后续阶段处理；`PlayerData` 宠物域只读 View 与显式命令见 [`pet_domain_contract.md`](pet_domain_contract.md)；
+- 当前基线：`check_all` **9/9**、`archive_probe_runner` **344/344**、`coop_probe_runner` **37/37**、`scene_probe_runner` **17/17**、`level_1` 4 阶段 0/0/0、全量 **128/128 + 5 SKIP**；具体日期与耗时见 [`../reference/status.md`](../reference/status.md)；
+- 未覆盖：活跃名显示名清理由后续阶段处理；`PlayerData` 宠物域只读 View 与显式命令见 [`../reference/pet_domain_contract.md`](../reference/pet_domain_contract.md)；
 - 选型不按文件行数；2P 写回回归固化在现有 `LocalCoopPetExperienceProbe` 用例中。

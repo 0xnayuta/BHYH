@@ -18,11 +18,13 @@ import argparse
 import subprocess
 from pathlib import Path
 from collections import defaultdict
-from typing import Dict, List, Set, Tuple, Any
+from typing import Dict, List, Set, Tuple, Any, Optional
 
 # 不内置本地绝对路径；优先使用 --godot-bin 或 PATH 中的可执行文件。
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_GODOT_CANDIDATES = ("godot", "godot4")
+
+COMPILE_CACHE_SCHEMA = 2
 
 # GDScript 警告文本与警告码的映射；Godot CLI --debug 输出仅含文本，
 # 编辑器调试器输出还包含 <GDScript 错误> 警告码，因此两种格式都要兼容。
@@ -421,23 +423,90 @@ class ProjectHealthChecker:
     def _compile_cache_path(self) -> str:
         return os.path.join(self.project_dir, ".godot", "health_check_compile_cache.json")
 
-    def _compile_fingerprint(self) -> str:
-        """所有被扫描脚本的 res 路径 + mtime + size，外加 project.godot。"""
-        digest = hashlib.sha256()
-        for res_p in sorted(self.all_scripts):
-            disk = os.path.join(self.project_dir, res_p[len("res://"):].replace("/", os.sep))
+    def _godot_cache_identity(self) -> Optional[Dict[str, Any]]:
+        """Return a trustworthy local engine identity, without using a package runner."""
+        executable = shutil.which(self.godot_bin)
+        if executable is None and os.path.isfile(self.godot_bin):
+            executable = self.godot_bin
+        if executable is None:
+            return None
+
+        executable_path = os.path.realpath(executable)
+        if not os.path.isfile(executable_path):
+            return None
+        try:
+            binary_stat = os.stat(executable_path)
+            version_result = subprocess.run(
+                [executable_path, "--version"],
+                capture_output=True,
+                text=True,
+                errors="ignore",
+                timeout=10,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+
+        version = "\n".join(
+            part.strip()
+            for part in (version_result.stdout, version_result.stderr)
+            if part and part.strip()
+        )
+        if version_result.returncode != 0 or not re.search(r"\d+(?:\.\d+)+", version):
+            return None
+
+        mtime_ns = getattr(binary_stat, "st_mtime_ns", None)
+        if mtime_ns is None:
             try:
-                st = os.stat(disk)
-                digest.update(f"{res_p}\0{st.st_mtime}\0{st.st_size}\n".encode("utf-8"))
-            except OSError:
-                digest.update(f"{res_p}\0missing\n".encode("utf-8"))
-        for extra in ("project.godot",):
-            path = os.path.join(self.project_dir, extra)
+                mtime_ns = int(binary_stat.st_mtime * 1_000_000_000)
+            except (AttributeError, OverflowError, ValueError):
+                return None
+
+        return {
+            "path": executable_path,
+            "device": getattr(binary_stat, "st_dev", None),
+            "inode": getattr(binary_stat, "st_ino", None),
+            "size": binary_stat.st_size,
+            "mtime_ns": mtime_ns,
+            "ctime_ns": getattr(binary_stat, "st_ctime_ns", None),
+            "mode": binary_stat.st_mode,
+            "version": version,
+        }
+
+    def _compile_fingerprint(self) -> Optional[str]:
+        """Identify the engine, project settings, and scanned script file states."""
+        engine_identity = self._godot_cache_identity()
+        if engine_identity is None:
+            return None
+
+        digest = hashlib.sha256()
+        digest.update(json.dumps(
+            {"schema": COMPILE_CACHE_SCHEMA, "godot": engine_identity},
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8"))
+
+        def add_file_state(label: str, path: str) -> bool:
             try:
                 st = os.stat(path)
-                digest.update(f"{extra}\0{st.st_mtime}\0{st.st_size}\n".encode("utf-8"))
             except OSError:
-                pass
+                return False
+            mtime_ns = getattr(st, "st_mtime_ns", None)
+            if mtime_ns is None:
+                try:
+                    mtime_ns = int(st.st_mtime * 1_000_000_000)
+                except (AttributeError, OverflowError, ValueError):
+                    return False
+            digest.update(f"{label}\0{mtime_ns}\0{st.st_size}\n".encode("utf-8"))
+            return True
+
+        for res_p in sorted(self.all_scripts):
+            disk = os.path.join(self.project_dir, res_p[len("res://"):].replace("/", os.sep))
+            if not add_file_state(res_p, disk):
+                return None
+
+        project_settings = os.path.join(self.project_dir, "project.godot")
+        if not add_file_state("project.godot", project_settings):
+            return None
         return digest.hexdigest()
 
     def _load_compile_cache(self) -> dict:
@@ -451,7 +520,7 @@ class ProjectHealthChecker:
                 data = json.load(f)
         except (OSError, json.JSONDecodeError):
             return {}
-        if data.get("schema") != 1:
+        if data.get("schema") != COMPILE_CACHE_SCHEMA:
             return {}
         return data
 
@@ -462,36 +531,38 @@ class ProjectHealthChecker:
         try:
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w", encoding="utf-8", newline="\n") as f:
-                json.dump({"schema": 1, "fingerprint": fingerprint, "result": result},
+                json.dump({"schema": COMPILE_CACHE_SCHEMA, "fingerprint": fingerprint, "result": result},
                           f, ensure_ascii=False, indent=1)
                 f.write("\n")
         except OSError:
             pass
 
+
     def run_headless_syntax_compilation(self) -> Dict[str, Any]:
         """运行 Headless Godot 引擎预编译校验全量脚本"""
-        fingerprint = self._compile_fingerprint()
-        cached = self._load_compile_cache()
-        if cached and cached.get("fingerprint") == fingerprint:
-            result = dict(cached.get("result") or {})
-            result["cached"] = True
-            result["cost_seconds"] = 0.0
-            print(f"\n[*] 脚本集合与 mtime/size 未变，复用上次编译结果 "
-                  f"（{len(self.all_scripts)} 个脚本；--no-cache 可强制重跑）")
-            cached_parse = result.get("parse_errors") or []
-            cached_warn = result.get("fatal_warnings") or []
-            print(f"    - Headless 扫描耗时: 0.00 秒（缓存）")
-            print(f"    - 严重语法与编译错误 (Parse/Compile Errors): {len(cached_parse)} 个")
-            print(f"    - GDScript 静态分析警告: {len(cached_warn)} 个")
-            if result.get("status") == "passed":
-                print("    [√] 全量脚本全部通过 GDScript 编译与语法树解析 "
-                      "(0 Parse Error, 0 Error, 0 Warning)!")
-            for warning in cached_warn[:100]:
-                print(f"        [!] {warning['code']} "
-                      f"{warning['source'] or '(no source)'} :: {warning['message']}")
-            return result
+        fingerprint = None if self.no_cache else self._compile_fingerprint()
+        if fingerprint is not None and not self.no_cache:
+            cached = self._load_compile_cache()
+            if cached and cached.get("fingerprint") == fingerprint:
+                result = dict(cached.get("result") or {})
+                result["cached"] = True
+                result["cost_seconds"] = 0.0
+                print(f"\n[*] 引擎、脚本集合与 project.godot 未变，复用上次编译结果 "
+                      f"（{len(self.all_scripts)} 个脚本；--no-cache 可强制重跑）")
+                cached_parse = result.get("parse_errors") or []
+                cached_warn = result.get("fatal_warnings") or []
+                print(f"    - Headless 扫描耗时: 0.00 秒（缓存）")
+                print(f"    - 严重语法与编译错误 (Parse/Compile Errors): {len(cached_parse)} 个")
+                print(f"    - GDScript 静态分析警告: {len(cached_warn)} 个")
+                if result.get("status") == "passed":
+                    print("    [√] 全量脚本全部通过 GDScript 编译与语法树解析 "
+                          "(0 Parse Error, 0 Error, 0 Warning)!")
+                for warning in cached_warn[:100]:
+                    print(f"        [!] {warning['code']} "
+                          f"{warning['source'] or '(no source)'} :: {warning['message']}")
+                return result
         print(f"\n[*] 启动 Godot 4.7.2 Headless 模式进行 {len(self.all_scripts)} 个脚本全量编译校验...")
-        if not os.path.exists(self.godot_bin):
+        if not os.path.isfile(self.godot_bin):
             print(f"[!] 警告: 未找到 Godot 执行程序 ({self.godot_bin})，跳过 Headless 运行时编译测试")
             return {"status": "skipped", "message": "Godot binary not found"}
 
@@ -593,7 +664,8 @@ script = ExtResource("1_check")
                 "warnings": warnings,
                 "fatal_warnings": fatal_warnings,
             }
-            self._save_compile_cache(fingerprint, result)
+            if fingerprint is not None and not self.no_cache:
+                self._save_compile_cache(fingerprint, result)
             return result
         except subprocess.TimeoutExpired:
             print("[!] Headless 编译超时 (30s)，强制销毁进程树...")
@@ -646,7 +718,14 @@ script = ExtResource("1_check")
         md.append(f"| **GDScript 静态分析警告** | **{warning_count} 处** | `{'PASSED' if warning_count == 0 else 'FAILED'}` | 由 Godot `--debug` 输出解析；白名单外警告必须清零 |")
         md.append(f"| **直接引用活跃脚本** | **{len(self.referenced_scripts)} 个 ({len(self.referenced_scripts)/len(self.all_scripts)*100:.1f}%)** | `HEALTHY` | 被场景、代码 `preload`/`load` 或 Autoload 明确消费 |")
         md.append(f"| **动态加载/全局符号脚本** | **{len(self.implicit_active_scripts)} 个** | `PROTECTED` | 具备动态字符串前缀或全局 `class_name`，严禁误杀 |")
-        md.append(f"| **确认纯死代码 (Dead Code)** | **{len(self.dead_code_candidates)} 个** | `PENDING_CLEANUP` | 全局 0 引用、无动态前缀、无继承，可在 Phase 2 安全下线 |")
+        candidate_count = len(self.dead_code_candidates)
+        if candidate_count:
+            candidate_status = "REVIEW_ONLY"
+            candidate_conclusion = "候选需人工复核；此报告不授权删除或下线"
+        else:
+            candidate_status = "NONE"
+            candidate_conclusion = "未发现候选；无待清理或可安全删除的脚本"
+        md.append(f"| **纯死代码候选** | **{candidate_count} 个** | `{candidate_status}` | {candidate_conclusion} |")
         md.append("\n---\n")
 
         # 动态前缀保护清单
@@ -664,11 +743,21 @@ script = ExtResource("1_check")
             md.append(f"| `{item['path']}` | {item['reason']} | {item['detail']} |")
         md.append("\n---\n")
 
-        # 确认死代码清单
-        md.append(f"## 四、确认纯真死代码清单 ({len(self.dead_code_candidates)} 个 · 建议 Phase 2 安全下线)\n")
-        md.append("经过全量场景、代码 AST、Autoload、`class_name` 反射与动态字符串前缀多重交叉检验，以下脚本**确认为完全无引用的历史陈旧代码**，可在 Phase 2 作为第一批瘦身对象安全移除：\n")
-        md.append("| 序号 | 脚本相对路径 | 源码大小 (字节) | 归属类别建议 |")
-        md.append("|:---|:---|:---|:---|")
+        candidate_count = len(self.dead_code_candidates)
+        if candidate_count:
+            candidate_heading = "纯死代码候选清单（仅供复核，不授权移除）"
+            candidate_guidance = (
+                "以下脚本仅为基于静态引用分析的候选，须人工复核其运行时、工具链和外部消费契约；"
+                "本报告不授权删除、下线或其他移除操作。"
+            )
+        else:
+            candidate_heading = "纯死代码候选清单（0 个候选）"
+            candidate_guidance = "本次未发现纯死代码候选；无待清理或可安全删除的脚本。"
+        md.append(f"## 四、{candidate_heading}\n")
+        md.append(candidate_guidance + "\n")
+        if candidate_count:
+            md.append("| 序号 | 脚本相对路径 | 源码大小 (字节) | 归属类别建议 |")
+            md.append("|:---|:---|:---|:---|")
         for idx, dc in enumerate(self.dead_code_candidates):
             abs_p = self.res_to_abs(dc)
             sz = os.path.getsize(abs_p) if os.path.exists(abs_p) else 0
@@ -677,7 +766,10 @@ script = ExtResource("1_check")
 
         # 后续行动指南
         md.append("## 五、对 Phase 2 重构行动的指导约束\n")
-        md.append("1. **下线限制**：Phase 2 仅允许下线本报告第四节列出的纯真死代码，严禁触碰第三节受保护的隐式活跃脚本；")
+        if candidate_count:
+            md.append("1. **复核限制**：第四节仅列出待人工复核的候选，本报告不授权删除、下线或移除任何候选；")
+        else:
+            md.append("1. **候选状态**：第四节未发现纯死代码候选，无待清理或可安全删除的脚本；")
         md.append("2. **原子化验证**：每次删除或重构后，必须重新运行 `python scripts/health_check.py`，确认 `broken_scene_refs` 维持为 0。")
 
         with open(self.report_path, "w", encoding="utf-8") as f:

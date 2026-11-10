@@ -542,7 +542,10 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
         if completed.returncode != 0:
             result["ok"] = False
             result["failures"].append(f"Godot 退出码 {completed.returncode}")
-        result["output_tail"] = "\n".join(output.strip().splitlines()[-12:])
+        if result.get("ok"):
+            result.pop("output_tail", None)
+        else:
+            result["output_tail"] = "\n".join(output.strip().splitlines()[-12:])
     except subprocess.TimeoutExpired:
         result = {
             "ok": False,
@@ -559,7 +562,10 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
 def write_reports(spec: ProbeSpec, result: dict) -> None:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     report_md = REPORT_DIR / f"{spec.report_stem}.md"
-    write_json(REPORT_DIR / f"{spec.report_stem}.json", result)
+    report_result = result
+    if result.get("ok") and "output_tail" in result:
+        report_result = {key: value for key, value in result.items() if key != "output_tail"}
+    write_json(REPORT_DIR / f"{spec.report_stem}.json", report_result)
     lines = [
         f"# {spec.title}报告",
         "",
@@ -577,7 +583,7 @@ def write_reports(spec: ProbeSpec, result: dict) -> None:
     if failures:
         lines.extend(["", "## 失败", ""])
         lines.extend(f"- {failure}" for failure in failures)
-    output_tail = result.get("output_tail")
+    output_tail = report_result.get("output_tail")
     if output_tail:
         lines.extend(["", "## 输出尾部", "", "```text", output_tail, "```"])
     report_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -595,7 +601,8 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=None, help="覆盖单个探针超时秒数")
     args = parser.parse_args()
 
-    for spec in PROBES:
+    selected = [spec for spec in PROBES if not args.probe or spec.key in args.probe]
+    for spec in selected:
         if not spec.script_path.exists() or not spec.scene_path.exists():
             print(f"缺少探针规格: {spec.key} ({FIXTURE_DIR})", file=sys.stderr)
             return 2
@@ -607,7 +614,6 @@ def main() -> int:
     if godot is None:
         print("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。", file=sys.stderr)
         return 2
-    selected = [spec for spec in PROBES if not args.probe or spec.key in args.probe]
     failures: list[tuple[ProbeSpec, dict]] = []
     for spec in selected:
         result = run_probe(godot, spec, args.timeout)

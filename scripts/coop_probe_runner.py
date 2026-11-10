@@ -12,13 +12,15 @@ import json
 import shutil
 import subprocess
 import sys
+import uuid
+from datetime import datetime
 from pathlib import Path
 
 from tool_common import REPORT_DIR, ROOT, SOURCE, resolve_godot, write_json
 
 PROJECT = SOURCE
 MATRIX_SOURCE = ROOT / "scripts" / "coop_probes" / "coop_probe_matrix.gd"
-MATRIX_TEMP = PROJECT / "_coop_probe_matrix.gd"
+MATRIX_TEMP_PREFIX = "_coop_probe_matrix_"
 REPORT_MD = REPORT_DIR / "coop_probe_matrix_report.md"
 REPORT_JSON = REPORT_DIR / "coop_probe_matrix_report.json"
 
@@ -63,20 +65,22 @@ CASES = [
     "LocalCoopAutoBattleProbe",
 ]
 
-def cleanup_temp() -> None:
-    for path in (MATRIX_TEMP, MATRIX_TEMP.with_suffix(".gd.uid")):
-        if path.exists():
-            path.unlink()
+
+def cleanup_temp(matrix_temp: Path) -> None:
+    try:
+        matrix_temp.unlink(missing_ok=True)
+    finally:
+        matrix_temp.with_suffix(".gd.uid").unlink(missing_ok=True)
 
 
-def run_case(godot: str, case: str, timeout: int) -> dict:
+def run_case(godot: str, case: str, timeout: int, matrix_temp: Path) -> dict:
     command = [
         godot,
         "--headless",
         "--path",
         str(PROJECT),
         "--script",
-        f"res://{MATRIX_TEMP.name}",
+        f"res://{matrix_temp.name}",
         "--",
         f"--case={case}",
     ]
@@ -129,12 +133,26 @@ def run_case(godot: str, case: str, timeout: int) -> dict:
         }
 
 
-def write_reports(results: list[dict]) -> None:
-    write_json(REPORT_JSON, {"cases": results})
+def write_reports(results: list[dict], scope: str, selected_cases: list[str]) -> None:
+    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    report = {
+        "generated_at": generated_at,
+        "scope": scope,
+        "selected_cases": selected_cases if scope == "only" else None,
+        "cases": results,
+    }
+    write_json(REPORT_JSON, report)
+    scope_note = (
+        f"`full` (全部 {len(CASES)} 个用例)"
+        if scope == "full"
+        else f"`--only` ({', '.join(selected_cases)})"
+    )
     lines = [
         "# LocalCoop 验证矩阵报告",
         "",
         "> 由 `scripts/coop_probe_runner.py` 生成；探针只在执行期间复制到工程根目录。",
+        f"> 范围: {scope_note}",
+        f"> 生成时间: `{generated_at}`",
         "",
         "| 探针 | 状态 | 说明 |",
         "|---|---|---|",
@@ -167,7 +185,8 @@ def main() -> int:
     godot = resolve_godot(args.godot)
     if godot is None:
         raise SystemExit("未找到 Godot 可执行文件，请使用 --godot 或 GODOT_BIN 指定。")
-    cases = args.only or CASES
+    cases = args.only if args.only is not None else CASES
+    scope = "only" if args.only is not None else "full"
     unknown = [case for case in cases if case not in CASES]
     if unknown:
         raise SystemExit(f"未知探针: {', '.join(unknown)}")
@@ -177,18 +196,18 @@ def main() -> int:
     if not (PROJECT / "project.godot").exists():
         raise SystemExit(f"工程目录不存在或缺少 project.godot: {PROJECT}")
     PROJECT.mkdir(parents=True, exist_ok=True)
-    cleanup_temp()
-    shutil.copy2(MATRIX_SOURCE, MATRIX_TEMP)
+    matrix_temp = PROJECT / f"{MATRIX_TEMP_PREFIX}{uuid.uuid4().hex}.gd"
     results: list[dict] = []
     try:
+        shutil.copy2(MATRIX_SOURCE, matrix_temp)
         for index, case in enumerate(cases, 1):
             print(f"[{index}/{len(cases)}] {case}", flush=True)
-            result = run_case(godot, case, args.timeout)
+            result = run_case(godot, case, args.timeout, matrix_temp)
             results.append(result)
             print(f"  -> {result['status']}", flush=True)
     finally:
-        cleanup_temp()
-    write_reports(results)
+        cleanup_temp(matrix_temp)
+    write_reports(results, scope, cases)
     failed = [result for result in results if result["status"] == "FAIL"]
     print(f"报告: {REPORT_MD}")
     return 1 if failed else 0

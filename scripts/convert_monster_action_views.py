@@ -9,7 +9,7 @@
 - `loop`、`speed`。
 
 输出沿用既有目录，动画名等于怪物动作名。资源头写入由输出路径派生的
-确定性 UID。`--check` 逐字比较；`--all` 生成。
+确定性 UID。`--check` 逐字比较。
 """
 from __future__ import annotations
 
@@ -39,7 +39,14 @@ def source_path(resource_path: str) -> Path:
     return SOURCE / resource_path.removeprefix("res://")
 
 
-def parse_source_frames(resource_path: str) -> list[tuple[str, float]]:
+def parse_source_frames(
+    resource_path: str,
+    cache: dict[str, list[tuple[str, float]]] | None = None,
+) -> list[tuple[str, float]]:
+    if cache is not None:
+        cached = cache.get(resource_path)
+        if cached is not None:
+            return cached
     text = source_path(resource_path).read_text(encoding="utf-8")
     ids = {ext_id: path for path, ext_id in EXT_RESOURCE_PATTERN.findall(text)}
     frames: list[tuple[str, float]] = []
@@ -51,6 +58,8 @@ def parse_source_frames(resource_path: str) -> list[tuple[str, float]]:
         frames.append((path, float(duration)))
     if not frames:
         raise ValueError(f"{resource_path}: 没有解析到帧")
+    if cache is not None:
+        cache[resource_path] = frames
     return frames
 
 
@@ -73,7 +82,11 @@ def format_float(value: float) -> str:
     return text if text else "0"
 
 
-def build_tres(view_path: str, spec: dict) -> str:
+def build_tres(
+    view_path: str,
+    spec: dict,
+    source_frames_cache: dict[str, list[tuple[str, float]]] | None = None,
+) -> str:
     animations: list[tuple[str, bool, float, list[tuple[str, float]]]] = []
     unique_paths: list[str] = []
     for action, config in spec["animations"].items():
@@ -93,7 +106,7 @@ def build_tres(view_path: str, spec: dict) -> str:
                 if path not in unique_paths:
                     unique_paths.append(path)
         else:
-            source_frames = parse_source_frames(config["source"])
+            source_frames = parse_source_frames(config["source"], source_frames_cache)
             for position, index in enumerate(indices):
                 if not 0 <= index < len(source_frames):
                     raise ValueError(f"{action}: 帧索引 {index} 越界 ({len(source_frames)} 帧)")
@@ -133,16 +146,16 @@ def build_tres(view_path: str, spec: dict) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="怪物动作视图构建期转换器")
-    parser.add_argument("--all", action="store_true", help="生成全部登记资源")
     parser.add_argument("--check", action="store_true", help="只校验输出存在且内容一致")
     args = parser.parse_args(argv)
 
     views = json.loads(VIEWS_PATH.read_text(encoding="utf-8"))
     passed = True
+    source_frames_cache: dict[str, list[tuple[str, float]]] = {}
     for view_path, spec in views.items():
         output = source_path(view_path)
         try:
-            content = build_tres(view_path, spec)
+            content = build_tres(view_path, spec, source_frames_cache)
         except (OSError, ValueError, KeyError) as error:
             print(f"[FAIL] {view_path}: {error}", file=sys.stderr)
             passed = False

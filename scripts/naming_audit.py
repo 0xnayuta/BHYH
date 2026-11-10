@@ -102,6 +102,13 @@ def is_file_whitelisted(rel: str) -> bool:
     return False
 
 
+def _check_directory_name(rel: str, name: str, violations: list[str]) -> None:
+    if is_dir_whitelisted(rel):
+        return
+    if not SNAKE_RE.match(name):
+        violations.append(f"目录命名违规: {rel} (期望 snake_case)")
+
+
 def check_directories(violations: list[str]) -> int:
     checked = 0
     project_abs = os.path.abspath(PROJECT_ROOT)
@@ -112,10 +119,7 @@ def check_directories(violations: list[str]) -> int:
         for name in dirs:
             rel = rel_to_project(os.path.join(rel_root, name))
             checked += 1
-            if is_dir_whitelisted(rel):
-                continue
-            if not SNAKE_RE.match(name):
-                violations.append(f"目录命名违规: {rel} (期望 snake_case)")
+            _check_directory_name(rel, name, violations)
     return checked
 
 
@@ -151,9 +155,9 @@ def disk_all_files() -> list[str]:
     return sorted(paths)
 
 
-def check_files(violations: list[str], all_files: bool = False) -> int:
+def _check_file_paths(violations: list[str], file_paths: list[str]) -> int:
     checked = 0
-    for git_path in (disk_all_files() if all_files else git_new_files()):
+    for git_path in file_paths:
         if not git_path.startswith(PROJECT_ROOT + "/"):
             continue
         rel = git_path[len(PROJECT_ROOT) + 1:]
@@ -192,6 +196,34 @@ def check_files(violations: list[str], all_files: bool = False) -> int:
     return checked
 
 
+def check_files(violations: list[str], all_files: bool = False) -> int:
+    return _check_file_paths(violations, disk_all_files() if all_files else git_new_files())
+
+
+def check_all(violations: list[str]) -> tuple[int, int]:
+    """Combine the full-directory walk while retaining each scan's exclusions and order."""
+    checked_dirs = 0
+    all_files: list[str] = []
+    excluded_dirs = {".git", ".godot", "godot"}
+    root_abs = os.path.abspath(PROJECT_ROOT)
+    for root, dirs, files in os.walk(root_abs):
+        rel_root = os.path.relpath(root, root_abs)
+        if rel_root != ".":
+            for name in dirs:
+                rel = rel_to_project(os.path.join(rel_root, name))
+                checked_dirs += 1
+                _check_directory_name(rel, name, violations)
+        rel_parts = () if rel_root == "." else rel_root.split(os.sep)
+        if any(part in excluded_dirs for part in rel_parts):
+            continue
+        for filename in files:
+            rel = os.path.relpath(os.path.join(root, filename), root_abs).replace(os.sep, "/")
+            all_files.append(f"{PROJECT_ROOT}/{rel}")
+    return checked_dirs, _check_file_paths(violations, sorted(all_files))
+
+
+
+
 def main() -> int:
     global PROJECT_ROOT
 
@@ -207,8 +239,11 @@ def main() -> int:
     apply_registry(load_registry())
 
     violations: list[str] = []
-    dir_count = check_directories(violations)
-    file_count = check_files(violations, all_files=args.all)
+    if args.all:
+        dir_count, file_count = check_all(violations)
+    else:
+        dir_count = check_directories(violations)
+        file_count = check_files(violations, all_files=False)
 
     print(f"[*] 目录命名检查: {dir_count} 个")
     print(f"[*] {'全量' if args.all else '新增'}文件命名检查: {file_count} 个")

@@ -128,8 +128,8 @@ def scan_and_normalize(target_dir: str, dry_run: bool = False, no_cache: bool = 
                     except OSError:
                         pass
 
-        # 保存缓存
-        if not dry_run or total_modified == 0:
+        # A dry run must not persist results derived from content it did not normalize.
+        if not no_cache and (not dry_run or total_modified == 0):
             try:
                 cache_file.parent.mkdir(parents=True, exist_ok=True)
                 with open(cache_file, "w", encoding="utf-8") as f:

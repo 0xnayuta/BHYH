@@ -334,9 +334,9 @@ Phase 22-2~22-4 的逐批删除项、迁移字段与验证见 [`../archive/itera
 
 ## 7. 相关文档
 
-- [`architecture.md`](architecture.md)：当前运行时架构与 `Global` 服务说明
-- [`autoload_boundary_matrix.md`](autoload_boundary_matrix.md)：11 个 Autoload 处置与 `Global` 边界
-- [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)：缓存、租约、退出与失败边界
-- [`archive_session_matrix.md`](archive_session_matrix.md)：保存、会话、槽位与失败边界
+- [`../reference/architecture.md`](../reference/architecture.md)：当前运行时架构与 `Global` 服务说明
+- [`../reference/autoload_boundary_matrix.md`](../reference/autoload_boundary_matrix.md)：`Global` 边界与 Autoload 处置
+- [`../reference/runtime_lifecycle_matrix.md`](../reference/runtime_lifecycle_matrix.md)：缓存、租约、退出与失败边界
+- [`../reference/archive_session_matrix.md`](../reference/archive_session_matrix.md)：保存、会话、槽位与失败边界
 - [`../roadmap/current-iteration.md`](../roadmap/current-iteration.md)：Phase 22 当前批次与后续阶段
 - [`../standards/target_architecture_contract.md`](../standards/target_architecture_contract.md)：状态所有权与迁移纪律

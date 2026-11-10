@@ -125,29 +125,42 @@ def main() -> int:
             print("[BLOCKED] 常见原因：缺少导出模板，或导出插件/预设未加载", file=sys.stderr)
             return 2
         plugin_files, plugin_expected, plugin_missing = parse_plugin_marker(output_text)
-        if plugin_files is None:
-            print("[FAIL] 导出日志缺少 BHYH_RAW_EXPORT 标记，插件可能未启用", file=sys.stderr)
+        if plugin_files is None or plugin_expected is None or plugin_missing is None:
+            print("[FAIL] 导出日志的 BHYH_RAW_EXPORT 计数标记不完整", file=sys.stderr)
             return 1
-        if plugin_missing != 0 or plugin_files != plugin_expected:
+        if (
+            plugin_files != len(expected)
+            or plugin_expected != len(expected)
+            or plugin_missing != 0
+        ):
             print(
-                f"[FAIL] 导出插件未完整写入原始数据: files={plugin_files} "
-                f"expected={plugin_expected} missing={plugin_missing}",
+                f"[FAIL] 导出插件与清单计数不一致或未完整写入: files={plugin_files} "
+                f"expected={plugin_expected} manifest={len(expected)} missing={plugin_missing}",
                 file=sys.stderr,
             )
             return 1
 
         status, payload, error = run_probe(
-            godot, pck_path.resolve(), probe_manifest.resolve(), max(args.probe_timeout, 1)
+            godot,
+            pck_path.resolve(),
+            probe_manifest.resolve(),
+            max(args.probe_timeout, 1),
+            len(expected),
         )
-        if status != 0 or not payload:
-            print(f"[BLOCKED] 包内校验未取得结果: {error}", file=sys.stderr)
+        if status == 2:
+            print(f"[BLOCKED] 包内校验未取得有效结果: {error}", file=sys.stderr)
             return 2
-        missing = [str(item) for item in payload.get("missing", [])]
+        missing = payload["missing"]
         digest = hashlib.sha256()
         with pck_path.open("rb") as handle:
             for chunk in iter(lambda: handle.read(1 << 20), b""):
                 digest.update(chunk)
         report = {
+            "ok": status == 0,
+            "probe_ok": payload["ok"],
+            "probe_required": payload["required"],
+            "probe_imported": payload["imported"],
+            "probe_error": error,
             "preset": preset,
             "manifest": str(manifest_path.resolve().relative_to(ROOT)),
             "pck_bytes": pck_path.stat().st_size,
@@ -155,23 +168,28 @@ def main() -> int:
             "required_paths": len(expected),
             "plugin_files": plugin_files,
             "plugin_expected": plugin_expected,
+            "plugin_missing": plugin_missing,
             "missing": missing[:50],
             "missing_count": len(missing),
         }
         if args.report:
             write_json(Path(args.report), report)
-        if missing:
-            print(
-                f"[FAIL] PCK 缺少 {len(missing)}/{len(expected)} 条原始数据，例如: "
-                + ", ".join(missing[:5]),
-                file=sys.stderr,
-            )
+        if status == 1:
+            if missing:
+                print(
+                    f"[FAIL] PCK 缺少 {len(missing)}/{len(expected)} 条原始数据，例如: "
+                    + ", ".join(missing[:5]),
+                    file=sys.stderr,
+                )
+            else:
+                print(f"[FAIL] 包内校验未通过: {error}", file=sys.stderr)
             return 1
         print(
             f"[OK] 原始数据 PCK 闭包通过: {len(expected)} 条路径全部在包内，"
             f"PCK {report['pck_bytes']} 字节，sha256 {report['pck_sha256'][:12]}"
         )
         return 0
+
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 

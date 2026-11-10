@@ -43,14 +43,14 @@
 
 ## 3. `contract_gate.py` 当前子门禁
 
-下列命令是 `scripts/contract_gate.py` 的实际 `COMMANDS` 注册，不是整个 `scripts/` 工具目录清单。命令并发运行，任一非零退出即 gate 失败：
+下列命令是 `scripts/contract_gate.py` 的实际 `COMMANDS` 注册。子命令按登记顺序汇总；`--jobs N` 限制并发数（正整数，默认不超过 8、CPU 数量和子命令数）。任一子命令非零即 gate 失败。
 
 | 检查面 | 注册命令 |
 |:---|:---|
 | 契约扫描与负/正样本 | `python scripts/contract_scan.py --fail-on-error`<br>`python scripts/contract_scan.py --self-test` |
 | Atlas Metadata | `python scripts/convert_atlas_metadata.py --check`<br>`python scripts/convert_atlas_metadata.py --self-test` |
 | 构建帧/序列 | `python scripts/convert_frame_sequences.py --check`<br>`python scripts/convert_monster_frames.py --check`<br>`python scripts/convert_numbered_frames.py --all --check`<br>`python scripts/convert_sheet_frames.py --check`<br>`python scripts/convert_liu_sha_frames.py --check`<br>`python scripts/convert_monster_action_views.py --check` |
-| 关卡/怪物/装备 Catalog | `python scripts/convert_level_preload_catalog.py --check`<br>`python scripts/convert_level_layout_catalog.py --check`<br>`python scripts/level_layout_migration_audit.py --fail-on-error`<br>`python scripts/convert_external_monster_catalog.py --check`<br>`python scripts/convert_equipment_catalog.py --check`<br>`python scripts/equipment_data_audit.py --check` |
+| 关卡/怪物/装备 Catalog | `python scripts/convert_level_preload_catalog.py --check`<br>`python scripts/convert_level_layout_catalog.py --check`<br>`python scripts/level_layout_migration_audit.py --fail-on-error`<br>`python scripts/convert_external_monster_catalog.py --check`<br>`python scripts/convert_equipment_catalog.py --check` |
 | 运行时帧与原始导出清单 | `python scripts/runtime_frames_audit.py --fail-on-error`<br>`python scripts/export_raw_manifest.py --check --allow-missing`<br>`python scripts/png_stream_audit.py --fail-on-error` |
 | Theme、字体与表面 token | `python scripts/theme_override_audit.py --check`<br>`python scripts/convert_ui_theme_tokens.py --check`<br>`python scripts/theme_token_audit.py --check`<br>`python scripts/theme_variant_audit.py --check`<br>`python scripts/ui_dynamic_theme_audit.py --check`<br>`python scripts/font_coverage_audit.py --check`<br>`python scripts/font_role_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --self-test` |
 | 冻结豁免 | `python scripts/whitelist_audit.py --fail-on-error` |
@@ -172,7 +172,7 @@ python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (re
 python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)" --output "<release output>"
 ```
 
-`frame_sequence_pack_probe.py` 检查实际导出/挂载的 PCK 对必需清单路径的可达性；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。缺少模板、PCK 或结果时为 BLOCKED/非通过（相关探针返回 2），不可作为 PASS；插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 是清单预检与实际 PCK 探针包装，可选产出 release 可执行文件；该命令不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
+`frame_sequence_pack_probe.py` 检查实际导出/挂载的 PCK 对必需清单路径的可达性；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。缺少导出模板/PCK、探针超时或结果协议无效为 BLOCKED（返回 2）；有效结果声明缺少路径为 FAIL（返回 1），不能作为 PASS。插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 是清单预检与实际 PCK 探针包装，可选产出 release 可执行文件；该命令不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
 
 ## 7. 命名、文档与其他人工门禁
 

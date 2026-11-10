@@ -226,10 +226,14 @@ class SceneGraph:
         return result
 
 
-def collect_scene_index(graph: SceneGraph, project_dir: Path) -> Dict[str, List[Tuple[str, Set[str]]]]:
+def collect_scene_index(
+    graph: SceneGraph,
+    project_dir: Path,
+    scene_paths: List[Path],
+) -> Dict[str, List[Tuple[str, Set[str]]]]:
     """返回 script_rel -> [(scene_rel, owner_paths)]。"""
     index: Dict[str, List[Tuple[str, Set[str]]]] = {}
-    for path in project_dir.rglob("*.tscn"):
+    for path in scene_paths:
         if ".godot" in path.parts:
             continue
         rel = path.relative_to(project_dir).as_posix()
@@ -239,9 +243,14 @@ def collect_scene_index(graph: SceneGraph, project_dir: Path) -> Dict[str, List[
     return index
 
 
-def scan_script_paths(project_dir: Path, scene_index: Dict[str, List[Tuple[str, Set[str]]]], graph: SceneGraph):
+def scan_script_paths(
+    project_dir: Path,
+    scene_index: Dict[str, List[Tuple[str, Set[str]]]],
+    graph: SceneGraph,
+    script_paths: List[Path],
+):
     issues: List[Dict[str, str]] = []
-    for path in project_dir.rglob("*.gd"):
+    for path in script_paths:
         if ".godot" in path.parts:
             continue
         script_rel = path.relative_to(project_dir).as_posix()
@@ -333,9 +342,13 @@ def collect_global_methods(project_dir: Path) -> Set[str]:
     return set(re.findall(r"^func\s+([A-Za-z_]\w*)\s*\(", text, re.M))
 
 
-def scan_global_calls(project_dir: Path, definitions: Set[str]) -> List[Dict[str, str]]:
+def scan_global_calls(
+    project_dir: Path,
+    definitions: Set[str],
+    script_paths: List[Path],
+) -> List[Dict[str, str]]:
     issues: List[Dict[str, str]] = []
-    for path in project_dir.rglob("*.gd"):
+    for path in script_paths:
         if ".godot" in path.parts:
             continue
         rel = path.relative_to(project_dir).as_posix()
@@ -367,15 +380,17 @@ def main() -> int:
         return 2
 
     graph = SceneGraph(project_dir)
-    scene_index = collect_scene_index(graph, project_dir)
-    node_issues = scan_script_paths(project_dir, scene_index, graph)
+    scene_paths = list(project_dir.rglob("*.tscn"))
+    script_paths = list(project_dir.rglob("*.gd"))
+    scene_index = collect_scene_index(graph, project_dir, scene_paths)
+    node_issues = scan_script_paths(project_dir, scene_index, graph, script_paths)
     global_defs = collect_global_methods(project_dir)
-    method_issues = scan_global_calls(project_dir, global_defs)
+    method_issues = scan_global_calls(project_dir, global_defs, script_paths)
     issues = node_issues + method_issues
 
     payload = {
         "project": str(project_dir),
-        "scene_count": len(list(project_dir.rglob("*.tscn"))),
+        "scene_count": len(scene_paths),
         "script_scene_mappings": len(scene_index),
         "global_methods": len(global_defs),
         "node_path_issues": len(node_issues),

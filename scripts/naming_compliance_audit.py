@@ -73,33 +73,52 @@ def path_is_whitelisted(rel: str, machine: set[str], numeric: set[str], numeric_
     return False
 
 
-def scan_dirs(data: dict) -> dict:
+def _scan_walk_inputs() -> tuple[list[tuple[str, str]], list[tuple[str, str]], list[tuple[str, str]]]:
+    directories: list[tuple[str, str]] = []
+    files: list[tuple[str, str]] = []
+    code_files: list[tuple[str, str]] = []
+    code_exclusions = {".git", ".godot", "godot", "addons"}
+    for dirpath, dirnames, filenames in os.walk(PROJECT):
+        relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
+        directories.extend((relroot, name) for name in dirnames)
+        components = () if relroot == "." else tuple(relroot.split("/"))
+        if ".git" not in components:
+            files.extend((relroot, filename) for filename in filenames)
+        if not any(component in code_exclusions for component in components):
+            code_files.extend((relroot, filename) for filename in filenames if filename.endswith(".gd"))
+    return directories, files, code_files
+
+
+def scan_dirs(data: dict, directories: list[tuple[str, str]] | None = None) -> dict:
     machine, numeric, scenes, third_party, _companions = registry_sets(data)
     total = compliant = whitelisted = 0
     violations: list[dict] = []
     categories: Counter[str] = Counter()
-    for dirpath, dirnames, _files in os.walk(PROJECT):
-        relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
-        for name in dirnames:
-            rel = f"{relroot}/{name}" if relroot != "." else name
-            total += 1
-            if "/" not in rel and name in ROOT_STANDARD_DIRS:
-                whitelisted += 1
-                categories["root_standard"] += 1
-            elif any(rel == p.rstrip("/") or rel.startswith(p) for p in third_party):
-                whitelisted += 1
-                categories["third_party"] += 1
-            elif rel in machine:
-                whitelisted += 1
-                categories["machine_export"] += 1
-            elif rel in numeric:
-                whitelisted += 1
-                categories["numeric_id"] += 1
-            elif SNAKE.match(name):
-                compliant += 1
-                categories["snake_case"] += 1
-            else:
-                violations.append({"path": rel, "expected": "snake_case", "actual": name})
+    if directories is None:
+        directories = []
+        for dirpath, dirnames, _files in os.walk(PROJECT):
+            relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
+            directories.extend((relroot, name) for name in dirnames)
+    for relroot, name in directories:
+        rel = f"{relroot}/{name}" if relroot != "." else name
+        total += 1
+        if "/" not in rel and name in ROOT_STANDARD_DIRS:
+            whitelisted += 1
+            categories["root_standard"] += 1
+        elif any(rel == p.rstrip("/") or rel.startswith(p) for p in third_party):
+            whitelisted += 1
+            categories["third_party"] += 1
+        elif rel in machine:
+            whitelisted += 1
+            categories["machine_export"] += 1
+        elif rel in numeric:
+            whitelisted += 1
+            categories["numeric_id"] += 1
+        elif SNAKE.match(name):
+            compliant += 1
+            categories["snake_case"] += 1
+        else:
+            violations.append({"path": rel, "expected": "snake_case", "actual": name})
     return {
         "total": total, "compliant": compliant, "whitelisted": whitelisted,
         "violations": len(violations), "categories": dict(categories), "details": violations,
@@ -112,46 +131,49 @@ def autoload_paths() -> set[str]:
     return {m.group(2) for m in AUTOLOAD_RE.finditer(text)}
 
 
-def scan_files(data: dict) -> dict:
+def scan_files(data: dict, file_paths: list[tuple[str, str]] | None = None) -> dict:
     machine, numeric, numeric_scenes, third_party, companions = registry_sets(data)
     total = compliant = whitelisted = 0
     violations: list[dict] = []
     by_ext: dict[str, dict] = defaultdict(lambda: {"total": 0, "compliant": 0, "whitelisted": 0, "violations": 0})
-    for dirpath, dirnames, filenames in os.walk(PROJECT):
-        relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
-        dirnames[:] = [d for d in dirnames if d not in (".git",)]
-        for filename in filenames:
-            rel = f"{relroot}/{filename}" if relroot != "." else filename
-            ext = os.path.splitext(filename)[1].lower()
-            if ext in IGNORE_EXTS:
-                continue
-            if ext not in ASSET_EXTS and ext not in {".tscn", ".gd"}:
-                continue
-            total += 1
-            row = by_ext[ext]
-            row["total"] += 1
-            if path_is_whitelisted(rel, machine, numeric, numeric_scenes, third_party):
-                whitelisted += 1
-                row["whitelisted"] += 1
-                continue
-            stem = os.path.splitext(filename)[0]
-            ok = True
+    if file_paths is None:
+        file_paths = []
+        for dirpath, dirnames, filenames in os.walk(PROJECT):
+            relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
+            dirnames[:] = [d for d in dirnames if d not in (".git",)]
+            file_paths.extend((relroot, filename) for filename in filenames)
+    for relroot, filename in file_paths:
+        rel = f"{relroot}/{filename}" if relroot != "." else filename
+        ext = os.path.splitext(filename)[1].lower()
+        if ext in IGNORE_EXTS:
+            continue
+        if ext not in ASSET_EXTS and ext not in {".tscn", ".gd"}:
+            continue
+        total += 1
+        row = by_ext[ext]
+        row["total"] += 1
+        if path_is_whitelisted(rel, machine, numeric, numeric_scenes, third_party):
+            whitelisted += 1
+            row["whitelisted"] += 1
+            continue
+        stem = os.path.splitext(filename)[0]
+        ok = True
+        expected = "snake_case"
+        if ext == ".tscn":
             expected = "snake_case"
-            if ext == ".tscn":
-                expected = "snake_case"
-                ok = bool(SNAKE.match(stem))
-            elif ext == ".gd":
-                expected = "snake_case"
-                ok = bool(SNAKE.match(stem))
-            elif ext in ASSET_EXTS:
-                expected = "snake_case"
-                ok = bool(SNAKE.match(stem))
-            if ok:
-                compliant += 1
-                row["compliant"] += 1
-            else:
-                row["violations"] += 1
-                violations.append({"path": rel, "extension": ext, "expected": expected, "actual": stem})
+            ok = bool(SNAKE.match(stem))
+        elif ext == ".gd":
+            expected = "snake_case"
+            ok = bool(SNAKE.match(stem))
+        elif ext in ASSET_EXTS:
+            expected = "snake_case"
+            ok = bool(SNAKE.match(stem))
+        if ok:
+            compliant += 1
+            row["compliant"] += 1
+        else:
+            row["violations"] += 1
+            violations.append({"path": rel, "extension": ext, "expected": expected, "actual": stem})
     for ext in by_ext:
         by_ext[ext]["compliance_rate"] = round(by_ext[ext]["compliant"] / max(by_ext[ext]["total"] - by_ext[ext]["whitelisted"], 1) * 100, 4)
     return {
@@ -161,76 +183,73 @@ def scan_files(data: dict) -> dict:
     }
 
 
-def scan_code(data: dict) -> dict:
+def scan_code(data: dict, code_files: list[tuple[str, str]] | None = None) -> dict:
     total = compliant = 0
     violations: list[dict] = []
     by_kind: dict[str, dict] = defaultdict(lambda: {"total": 0, "compliant": 0, "violations": 0})
-    for dirpath, dirnames, filenames in os.walk(PROJECT):
-        relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
-        dirnames[:] = [d for d in dirnames if d not in (".git", ".godot", "godot", "addons")]
-        for filename in filenames:
-            if not filename.endswith(".gd"):
-                continue
-            rel = f"{relroot}/{filename}" if relroot != "." else filename
-            text = (PROJECT / rel).read_text(encoding="utf-8", errors="ignore")
-            checks = (
-                ("func", FUNC_RE, SNAKE), ("var", VAR_RE, SNAKE),
-                ("signal", SIGNAL_RE, SNAKE), ("class_name", CLASS_RE, PASCAL), ("enum", ENUM_RE, PASCAL),
+    if code_files is None:
+        code_files = []
+        exclusions = (".git", ".godot", "godot", "addons")
+        for dirpath, dirnames, filenames in os.walk(PROJECT):
+            relroot = os.path.relpath(dirpath, PROJECT).replace("\\", "/")
+            dirnames[:] = [d for d in dirnames if d not in exclusions]
+            code_files.extend(
+                (relroot, filename) for filename in filenames if filename.endswith(".gd")
             )
-            for kind, pattern, rule in checks:
-                for match in pattern.finditer(text):
-                    name = match.group(1)
-                    total += 1
-                    by_kind[kind]["total"] += 1
-                    if rule.match(name) or (kind == "var" and name in AUTLOAD_BRIDGE_VARS):
-                        compliant += 1
-                        by_kind[kind]["compliant"] += 1
-                    else:
-                        by_kind[kind]["violations"] += 1
-                        line = text.count("\n", 0, match.start()) + 1
-                        violations.append({"file": rel, "line": line, "kind": kind, "name": name, "expected": rule.pattern})
-            # 常量：普通常量 UPPER；`const ClassAlias = preload/load(...)` 允许 PascalCase。
-            const_aliases: set[str] = set()
-            search_start = 0
-            while True:
-                alias_match = CLASS_ALIAS_RE.search(text, search_start)
-                if not alias_match:
-                    break
-                const_aliases.add(alias_match.group(1))
-                search_start = alias_match.end()
-            for match in CONST_RE.finditer(text):
+    for relroot, filename in code_files:
+        if not filename.endswith(".gd"):
+            continue
+        rel = f"{relroot}/{filename}" if relroot != "." else filename
+        text = (PROJECT / rel).read_text(encoding="utf-8", errors="ignore")
+        checks = (
+            ("func", FUNC_RE, SNAKE), ("var", VAR_RE, SNAKE),
+            ("signal", SIGNAL_RE, SNAKE), ("class_name", CLASS_RE, PASCAL), ("enum", ENUM_RE, PASCAL),
+        )
+        for kind, pattern, rule in checks:
+            for match in pattern.finditer(text):
                 name = match.group(1)
-                is_class_alias = name in const_aliases
                 total += 1
-                by_kind["const"]["total"] += 1
-                if UPPER.match(name) or (is_class_alias and PASCAL.match(name)):
+                by_kind[kind]["total"] += 1
+                if rule.match(name) or (kind == "var" and name in AUTLOAD_BRIDGE_VARS):
                     compliant += 1
-                    by_kind["const"]["compliant"] += 1
+                    by_kind[kind]["compliant"] += 1
                 else:
-                    by_kind["const"]["violations"] += 1
+                    by_kind[kind]["violations"] += 1
                     line = text.count("\n", 0, match.start()) + 1
-                    expected = "UPPER_SNAKE_CASE or PascalCase(class alias)"
-                    violations.append({"file": rel, "line": line, "kind": "const", "name": name, "expected": expected})
-            # 枚举成员必须 UPPER_SNAKE_CASE。
-            for block in ENUM_BLOCK_RE.finditer(text):
-                base_line = text.count("\n", 0, block.start()) + 1
-                for offset, raw in enumerate(block.group(1).splitlines()):
-                    member = raw.split("#", 1)[0].strip().rstrip(",").strip()
-                    if not member:
-                        continue
-                    name = member.split("=", 1)[0].strip()
-                    if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
-                        continue
-                    total += 1
-                    by_kind["enum_member"]["total"] += 1
-                    if UPPER.match(name):
-                        compliant += 1
-                        by_kind["enum_member"]["compliant"] += 1
-                    else:
-                        by_kind["enum_member"]["violations"] += 1
-                        violations.append({"file": rel, "line": base_line + offset, "kind": "enum_member", "name": name, "expected": UPPER.pattern})
-    for row in by_kind.values():
-        row["compliance_rate"] = round(row["compliant"] / max(row["total"], 1) * 100, 4)
+                    violations.append({"file": rel, "line": line, "kind": kind, "name": name, "expected": rule.pattern})
+        # 常量：普通常量 UPPER；`const ClassAlias = preload/load(...)` 允许 PascalCase。
+        const_aliases = {match.group(1) for match in CLASS_ALIAS_RE.finditer(text)}
+        for match in CONST_RE.finditer(text):
+            name = match.group(1)
+            is_class_alias = name in const_aliases
+            total += 1
+            by_kind["const"]["total"] += 1
+            if UPPER.match(name) or (is_class_alias and PASCAL.match(name)):
+                compliant += 1
+                by_kind["const"]["compliant"] += 1
+            else:
+                by_kind["const"]["violations"] += 1
+                line = text.count("\n", 0, match.start()) + 1
+                expected = "UPPER_SNAKE_CASE or PascalCase(class alias)"
+                violations.append({"file": rel, "line": line, "kind": "const", "name": name, "expected": expected})
+        # 枚举成员必须 UPPER_SNAKE_CASE。
+        for block in ENUM_BLOCK_RE.finditer(text):
+            base_line = text.count("\n", 0, block.start()) + 1
+            for offset, raw in enumerate(block.group(1).splitlines()):
+                member = raw.split("#", 1)[0].strip().rstrip(",").strip()
+                if not member:
+                    continue
+                name = member.split("=", 1)[0].strip()
+                if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+                    continue
+                total += 1
+                by_kind["enum_member"]["total"] += 1
+                if UPPER.match(name):
+                    compliant += 1
+                    by_kind["enum_member"]["compliant"] += 1
+                else:
+                    by_kind["enum_member"]["violations"] += 1
+                    violations.append({"file": rel, "line": base_line + offset, "kind": "enum_member", "name": name, "expected": UPPER.pattern})
     return {
         "total": total, "compliant": compliant, "violations": len(violations),
         "by_kind": dict(sorted(by_kind.items())), "details": violations,
@@ -264,19 +283,31 @@ def main() -> int:
         print(f"[FAIL] 工程目录不存在: {PROJECT}", file=sys.stderr)
         return 2
     data = load_registry()
+    directories, file_paths, code_files = _scan_walk_inputs()
     tables = {
-        "directories": scan_dirs(data),
-        "files": scan_files(data),
-        "code": scan_code(data),
+        "directories": scan_dirs(data, directories),
+        "files": scan_files(data, file_paths),
+        "code": scan_code(data, code_files),
         "whitelist": scan_whitelist(data),
     }
     total_violations = sum(tables[key]["violations"] for key in ("directories", "files", "code"))
     report = {
-        "metadata": {"generated_at": datetime.now().isoformat(timespec="seconds"), "project": PROJECT.relative_to(ROOT).as_posix(), "standard": "docs/standards/naming_standard.md"},
-        "summary": {"total_violations": total_violations, "status": "PASS" if total_violations == 0 else "FAIL"},
+        "metadata": {
+            "generated_at": datetime.now().isoformat(timespec="seconds"),
+            "project": PROJECT.relative_to(ROOT).as_posix(),
+            "standard": "docs/standards/naming_standard.md",
+        },
+        "summary": {
+            "total_violations": total_violations,
+            "status": "PASS" if total_violations == 0 else "FAIL",
+        },
         "tables": tables,
     }
-    OUT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    OUT_JSON.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     d, f, c, w = tables["directories"], tables["files"], tables["code"], tables["whitelist"]
     lines = [
         "# Phase 11-1 全工程命名合规终审",

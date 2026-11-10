@@ -175,7 +175,53 @@ class SequenceSpec:
 
 
 ASSET_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[_./][a-z0-9]+)*$")
+
 SLUG_MAX_LENGTH = 96
+
+
+
+@dataclass
+class DirectoryEnumerationCache:
+    """Directory listings shared only within a single frame-sequence build."""
+
+    entries: dict[Path, tuple[Path, ...]] = field(default_factory=dict)
+    recursive_entries: dict[Path, tuple[Path, ...]] = field(default_factory=dict)
+    recursive_children: dict[Path, dict[Path, tuple[Path, ...]]] = field(default_factory=dict)
+    recursive_directories: dict[Path, set[Path]] = field(default_factory=dict)
+
+    def iterdir(self, directory: Path) -> tuple[Path, ...]:
+        cached = self.entries.get(directory)
+        if cached is not None:
+            return cached
+        for root, directories in self.recursive_directories.items():
+            if directory in directories:
+                entries = self.recursive_children[root].get(directory, ())
+                self.entries[directory] = entries
+                return entries
+        entries = tuple(directory.iterdir())
+        self.entries[directory] = entries
+        return entries
+
+    def rglob(self, directory: Path) -> tuple[Path, ...]:
+        cached = self.recursive_entries.get(directory)
+        if cached is not None:
+            return cached
+        entries = tuple(directory.rglob("*"))
+        grouped: dict[Path, list[Path]] = {}
+        for path in entries:
+            grouped.setdefault(path.parent, []).append(path)
+        self.recursive_entries[directory] = entries
+        self.recursive_children[directory] = {
+            parent: tuple(children) for parent, children in grouped.items()
+        }
+        directories = self.recursive_directories.setdefault(directory, set())
+        if not directory.is_symlink():
+            directories.add(directory)
+        return entries
+
+    def remember_recursive_directory(self, root: Path, directory: Path) -> None:
+        if not directory.is_symlink():
+            self.recursive_directories[root].add(directory)
 
 
 def natural_key(path: Path) -> tuple:
@@ -369,7 +415,10 @@ def catalog_content(specs: list[tuple[str, str]]) -> str:
     return "\n".join(lines)
 
 
-def collect_directories(profile: dict[str, object]) -> list[Path]:
+def collect_directories(
+    profile: dict[str, object],
+    cache: DirectoryEnumerationCache | None = None,
+) -> list[Path]:
     root = source_path(str(profile["root"]))
     if not root.is_dir():
         raise FileNotFoundError(f"缺少帧目录: {root.relative_to(ROOT)}")
@@ -378,31 +427,42 @@ def collect_directories(profile: dict[str, object]) -> list[Path]:
     if bool(profile.get("include_root", False)):
         directories.append(root)
     if bool(profile.get("recursive", False)):
-        directories.extend(
-            path for path in sorted(root.rglob("*"), key=natural_key) if path.is_dir() and path.name not in excluded
-        )
+        entries = root.rglob("*") if cache is None else cache.rglob(root)
+        for path in sorted(entries, key=natural_key):
+            if path.is_dir():
+                if cache is not None:
+                    cache.remember_recursive_directory(root, path)
+                if path.name not in excluded:
+                    directories.append(path)
     elif not bool(profile.get("include_root", False)):
+        entries = root.iterdir() if cache is None else cache.iterdir(root)
         directories.extend(
-            path for path in sorted(root.iterdir(), key=natural_key) if path.is_dir() and path.name not in excluded
+            path for path in sorted(entries, key=natural_key) if path.is_dir() and path.name not in excluded
         )
     return directories
 
 
-def collect_frames(directory: Path) -> list[str]:
+def collect_frames(
+    directory: Path,
+    cache: DirectoryEnumerationCache | None = None,
+) -> list[str]:
+    entries = directory.iterdir() if cache is None else cache.iterdir(directory)
     files = sorted(
-        (path for path in directory.iterdir() if path.is_file() and path.suffix.lower() == ".png"),
+        (path for path in entries if path.is_file() and path.suffix.lower() == ".png"),
         key=natural_key,
     )
     return [resource_path_for(path) for path in files]
 
 
-def collect_directory_specs() -> list[SequenceSpec]:
+def collect_directory_specs(
+    cache: DirectoryEnumerationCache | None = None,
+) -> list[SequenceSpec]:
     specs: list[SequenceSpec] = []
     seen: set[str] = set()
     for profile in PROFILES:
         fps, loop, hold = profile["default"]
-        for directory in collect_directories(profile):
-            paths = collect_frames(directory)
+        for directory in collect_directories(profile, cache):
+            paths = collect_frames(directory, cache)
             if not paths:
                 continue
             asset_id = asset_id_for_directory(resource_path_for(directory), profile)
@@ -533,7 +593,9 @@ def parse_sprite_frames(path: Path) -> dict[str, list[tuple[str, list[float], li
     return result
 
 
-def collect_constellation_specs() -> list[SequenceSpec]:
+def collect_constellation_specs(
+    directory_cache: DirectoryEnumerationCache | None = None,
+) -> list[SequenceSpec]:
     source = (SOURCE / "Script/monster/constellation_boss.gd").read_text(encoding="utf-8")
     counts = extract_gdscript_const(source, "BODY_ACTION_COUNTS")
     stops = extract_gdscript_const(source, "BODY_ACTION_STOPS")
@@ -551,7 +613,7 @@ def collect_constellation_specs() -> list[SequenceSpec]:
                 continue
             if action in CONSTELLATION_RAW_BODY_ACTIONS.get(source_id, set()):
                 raw_root = SOURCE / "Art/constellations/boss" / str(source_id) / "body" / str(row + 1)
-                frames = [(path, [], []) for path in collect_frames(raw_root)]
+                frames = [(path, [], []) for path in collect_frames(raw_root, directory_cache)]
             elif action in CONSTELLATION_STATIC_BODY_ACTIONS.get(source_id, set()):
                 if not body_frames:
                     raise FileNotFoundError(f"星座静态 body 来源缺失: {source_id}/{action}")
@@ -580,7 +642,9 @@ def collect_constellation_specs() -> list[SequenceSpec]:
     return specs
 
 
-def collect_constellation_skill_specs() -> list[SequenceSpec]:
+def collect_constellation_skill_specs(
+    directory_cache: DirectoryEnumerationCache | None = None,
+) -> list[SequenceSpec]:
     specs: list[SequenceSpec] = []
     boss_root = SOURCE / "Art/constellations/boss"
     if not boss_root.is_dir():
@@ -591,7 +655,7 @@ def collect_constellation_skill_specs() -> list[SequenceSpec]:
         for directory in sorted(boss_dir.glob("skill*"), key=natural_key):
             if not directory.is_dir():
                 continue
-            paths = collect_frames(directory)
+            paths = collect_frames(directory, directory_cache)
             if not paths:
                 continue
             asset_id = "constellation/%s/skill/%s" % (boss_dir.name, directory.name)
@@ -1113,12 +1177,13 @@ def run(check_only: bool, preset_filter: str | None) -> int:
             file=sys.stderr,
         )
         return 1
+    directory_cache = DirectoryEnumerationCache()
     try:
         specs = (
-            collect_directory_specs()
+            collect_directory_specs(directory_cache)
             + collect_sword_specs()
-            + collect_constellation_specs()
-            + collect_constellation_skill_specs()
+            + collect_constellation_specs(directory_cache)
+            + collect_constellation_skill_specs(directory_cache)
         )
         validation_errors = validate_specs(specs)
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:

@@ -10,7 +10,7 @@
 - `Art/monster/liu_sha_river/monster_<kind>/liu_sha_boss_<kind>_frames.tres`
 - `Art/monster/liu_sha_river/shadow_<1|2>/liu_sha_shadow_<kind>_frames.tres`
 
-`--check` 逐字比较；`--all` 生成。资源头写入由输出路径派生的确定性 UID。
+`--check` 逐字比较全部登记输出；资源头写入由输出路径派生的确定性 UID。
 """
 from __future__ import annotations
 
@@ -170,10 +170,8 @@ def profiles() -> list[tuple[str, Path, dict[str, list], str]]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="流沙河逐帧动作表 → 构建期 SpriteFrames")
-    parser.add_argument("--all", action="store_true", help="生成全部登记资源")
     parser.add_argument("--check", action="store_true", help="只校验输出存在且内容一致")
     args = parser.parse_args(argv)
-
     passed = True
     for name, output, actions, folder in profiles():
         resource_path = "res://" + output.relative_to(SOURCE).as_posix()
