@@ -34,15 +34,15 @@ def _chunks(data: bytes):
         pos += 12 + length
 
 
-def _unfilter(raw: bytes, width: int, height: int, channels: int) -> bytes:
+def _iter_unfiltered_rows(raw: bytes, width: int, height: int, channels: int):
     stride = width * channels
-    out = bytearray()
     previous = bytearray(stride)
+    source = memoryview(raw)
     pos = 0
     for _y in range(height):
-        filter_kind = raw[pos]
+        filter_kind = source[pos]
         pos += 1
-        line = bytearray(raw[pos:pos + stride])
+        line = bytearray(source[pos:pos + stride])
         pos += stride
         for x in range(stride):
             left = line[x - channels] if x >= channels else 0
@@ -66,13 +66,18 @@ def _unfilter(raw: bytes, width: int, height: int, channels: int) -> bytes:
                 else:
                     paeth = upper_left
                 line[x] = (line[x] + paeth) & 0xFF
-        out += line
         previous = line
+        yield line
+
+
+def _unfilter(raw: bytes, width: int, height: int, channels: int) -> bytes:
+    out = bytearray()
+    for line in _iter_unfiltered_rows(raw, width, height, channels):
+        out.extend(line)
     return bytes(out)
 
 
-def read_png(path: Path):
-    """Return decoded RGBA pixels for bit-depth-8, non-interlaced PNGs."""
+def _read_png_data(path: Path):
     data = path.read_bytes()
     if data[:8] != b"\x89PNG\r\n\x1a\n":
         return None, "not_png"
@@ -103,6 +108,15 @@ def read_png(path: Path):
     if channels is None:
         return None, f"unsupported_color_type_{color_type}"
     raw = zlib.decompress(bytes(compressed))
+    return (width, height, color_type, channels, palette, transparency, raw), ""
+
+
+def read_png(path: Path):
+    """Return decoded RGBA pixels for bit-depth-8, non-interlaced PNGs."""
+    decoded, error = _read_png_data(path)
+    if decoded is None:
+        return None, error
+    width, height, color_type, channels, palette, transparency, raw = decoded
     pixels = _unfilter(raw, width, height, channels)
     rgba = []
     for y in range(height):
@@ -138,18 +152,44 @@ def read_png(path: Path):
 
 
 def analyze(path: Path):
-    decoded, error = read_png(path)
+    decoded, error = _read_png_data(path)
     if decoded is None:
         return None, error
-    width, height, color_type, pixels = decoded
+    width, height, color_type, channels, palette, transparency, raw = decoded
+    transparent_rgb = None
+    if color_type == 2 and transparency is not None and len(transparency) >= 6:
+        transparent_rgb = struct.unpack(">HHH", transparency[:6])
+
     opaque = 0
     transparent = 0
     black = 0
-    for row in pixels:
-        for r, g, b, a in row:
+    for row in _iter_unfiltered_rows(raw, width, height, channels):
+        for x in range(width):
+            index = x * channels
+            if color_type == 6:
+                r, g, b, a = row[index], row[index + 1], row[index + 2], row[index + 3]
+            elif color_type == 2:
+                r, g, b = row[index], row[index + 1], row[index + 2]
+                a = 0 if transparent_rgb == (r, g, b) else 255
+            elif color_type == 3:
+                palette_index = row[index]
+                palette_offset = palette_index * 3
+                if palette_offset + 2 >= len(palette):
+                    return None, "bad_palette"
+                r, g, b = palette[palette_offset], palette[palette_offset + 1], palette[palette_offset + 2]
+                a = 255
+                if transparency is not None and palette_index < len(transparency):
+                    a = transparency[palette_index]
+            elif color_type == 0:
+                r = g = b = row[index]
+                a = 255
+            else:  # 4: grayscale + alpha
+                r = g = b = row[index]
+                a = row[index + 1]
+
             if a > ALPHA_OPAQUE:
                 opaque += 1
-                if max(r, g, b) < BLACK_THRESHOLD:
+                if r < BLACK_THRESHOLD and g < BLACK_THRESHOLD and b < BLACK_THRESHOLD:
                     black += 1
             elif a < ALPHA_TRANSPARENT:
                 transparent += 1
@@ -163,6 +203,7 @@ def analyze(path: Path):
         "black": black,
         "ratio": ratio,
     }, ""
+
 
 
 def role_icon_paths(root: Path, role_glob: str, icon_dir: str, allowed_roles=None):
