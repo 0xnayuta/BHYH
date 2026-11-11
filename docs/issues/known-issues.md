@@ -28,3 +28,39 @@ Godot 4.7 的 [`Object.get_meta`](https://docs.godotengine.org/en/4.7/classes/cl
 2. 修正允许缺键的路径；不得为消除日志而改变业务默认值或隐藏真实失败。
 3. 覆盖键存在、键缺失和对象已失效的实际运行路径，并检查日志。
 4. 修复并验证前，继续按 [`../reference/acceptance.md`](../reference/acceptance.md) 的日志门禁处理；不以命中数或改写数量宣称完成。
+
+## Godot 4.7.2 线程加载泄漏 `LoadToken`（嵌套 `preload`）
+
+`ResourceLoader.load_threaded_request` + `load_threaded_get` 在加载包含嵌套 `preload()` 的资源时，`LoadToken` 的 `unreference()` 返回值被忽略，计数归零但对象不释放；泄漏的 token 继续持有加载结果，连带其引用链上的资源（实测为 `Scene/all_sound/bgm.tscn` 中的音频流）在退出时残留。上游记录见 [#120661](https://github.com/godotengine/godot/issues/120661)，修复 PR [#121025](https://github.com/godotengine/godot/pull/121025) 未合并。
+
+### 实测证据（Godot 4.7.2.stable）
+
+- 最小对照：40 场景嵌套 `preload`，同步 `load` 与普通 `Thread` + `ResourceLoader.load` 各 3 次均 0 泄漏；`load_threaded_request` / `get` 每次泄漏 39 个零引用对象。
+- 项目场景：独立加载 `ldl.tscn` 泄漏 4 个，`load_scene.tscn` 泄漏 2 个；同步与普通线程对照均为 0。
+- release EXE：`level_1` 探针退出 19 个 `ObjectDB`（验收 FAIL）；窗口冷启动 + `WM_CLOSE` 18 个零引用 `RefCounted`。
+
+### 工程规避
+
+`ResourceRuntime` 用普通 `Thread` + `ResourceLoader.load` 串行加载，主线程轮询 `get_thread_load_state`，`take_thread_load_resource` 取回结果后 `join`；排队、取消、代次失效与过期结果由作业表收尾。启动加载页、关卡加载页、UI 作用域、永久小 UI、单槽与 legacy 预载已切换。实现见 [`resource_runtime.gd`](../../source/Script/runtime/resource_runtime.gd)、[`startup_loading.gd`](../../source/Script/runtime/startup_loading.gd)、[`load_scene.gd`](../../source/Script/runtime/load_scene.gd)。
+
+**工作线程约束**：加载线程内可能把 `resource_changed` 回调投递到主线程 `MessageQueue` 并等待；主线程阻塞在 `wait_to_finish()` 上会死锁。清理与退出只做非阻塞收尾；应用在加载进行中退出时，运行中的作业交由进程回收。
+
+### 未切换调用点
+
+仍使用 `load_threaded_request` 的调用点只加载纹理与 `SpriteFrames`，不触发嵌套 `preload` 路径，复测未见残留：`frame_texture_requests.gd`、`ba_di_qian_kun_effect.gd`、`streaming_role_bullet.gd`、`wu_shuang_huo_yan_jin_jing_effect.gd`、`mirror.gd`、`sword_boss_base.gd`、`mount_visual.gd`。新增含嵌套 `preload` 的资源不得使用线程请求接口。
+
+### 处置与验收
+
+1. 升级到包含上游修复的 Godot 版本后再评估恢复线程请求接口；升级前保持现有普通线程路径。
+2. 回归时同时检查 release `level_1` 的 `ObjectDB` 与窗口 `WM_CLOSE` 的零引用对象，二者均为 0 才算通过。
+3. 退出时仍存的纹理 RID 与 `RenderingServer::get_singleton() is null` 是独立问题，见下一节。
+
+## 窗口退出残留 2 个 Texture RID 与 `RenderingServer::get_singleton() is null`
+
+release EXE 窗口冷启动后发送 `WM_CLOSE`，退出日志包含 `~CompressedTexture2D` 在 `RenderingServer::get_singleton()` 为 null 时析构、2 个 Texture RID 与 1 个 `TextureStorage::Texture` 泄漏。改造前的旧 EXE 同条件同样出现，与线程加载改造无关。headless 关卡探针不触发该路径。根因待确认：可能是空窗口、`CompressedTexture2D` 析构顺序或 `mobile` 渲染方法的引擎退出顺序问题。
+
+### 处置与验收
+
+1. 用最小窗口分别对比空场景、单张 `CompressedTexture2D`、音频与组合，确认触发条件。
+2. 确认前不得通过延迟退出、隐藏日志或跳过关卡日志门禁规避该告警。
+3. 若归属引擎退出顺序且无工程侧可行修复，在 `status.md` 未验证边界中保持登记，发布验收不得据此宣称退出零告警。
