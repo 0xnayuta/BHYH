@@ -745,7 +745,7 @@ func _await_level_ready(report: Dictionary, measure: Dictionary = {{}}) -> Node:
 					str(ls.get("_changing_scene")),
 					("%.1f" % float(bar.value)) if bar != null else "n/a",
 				]
-			diag.append("f=%d scene=%s %s target=%s" % [frames, last_scene_name, st, String(Global.target_scene)])
+			diag.append("f=%d scene=%s %s target=%s" % [frames, last_scene_name, st, Global.get_scene_flow().get_target_scene()])
 		if cs == null:
 			continue
 		if last_scene_name == "LoadScene":

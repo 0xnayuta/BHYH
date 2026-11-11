@@ -42,13 +42,13 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_ROOT = os.path.join(PROJECT_ROOT, "source")
 LEVEL_DIR = os.path.join(PROJECT_ROOT, "source", "Scene", "level")
 RUNNER = os.path.join(PROJECT_ROOT, "scripts", "level_test_runner.py")
+REPORT_JSON = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_report.json")
 REPORT_MD = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_report.md")
 REPORT_JSON_CHANGED = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_changed_report.json")
 REPORT_MD_CHANGED = os.path.join(PROJECT_ROOT, "docs", "reports", "level_regression_changed_report.md")
 EXTRA_LEVELS = ("bai_gu_level", "boat", "bsz", "hdzm", "jctfloor_1")
-# 这 5 个场景是 Node2D 菜单/地图/交互场景，没有 Hero 根节点，
-# 不属于战斗关卡冒烟范围；在报告中登记为 SKIP，而不是伪装成 FAIL。
-NON_BATTLE_SPECIALS = {"bai_gu_level", "boat", "bsz", "hdzm", "jctfloor_1"}
+# 这些场景是菜单/地图/信息面板，没有 Hero 根节点；由专用场景探针覆盖。
+NON_BATTLE_SPECIALS = {"bai_gu_level", "boat", "bsz", "hdzm", "jctfloor_1", "level_info"}
 DEPENDENCY_EXTS = (".gd", ".tscn", ".tres")
 RES_PATH_RE = re.compile(r'res://([^"\'\s\)]+)')
 
