@@ -20,7 +20,7 @@ import tempfile
 from pathlib import Path
 
 from tool_common import ROOT, SOURCE, resolve_godot, write_json
-from frame_sequence_pack_probe import find_preset_name, normalize, run_probe
+from frame_sequence_pack_probe import check_export_result, find_preset_name, normalize, run_probe
 
 MANIFEST_PATH = SOURCE / "Script" / "data" / "export_raw_dependencies.json"
 EXPORT_MARKER = "BHYH_RAW_EXPORT"
@@ -48,19 +48,19 @@ def load_manifest(path: Path) -> list[str]:
     return paths
 
 
-def export_pack(godot: str, preset: str, output: Path, timeout: int) -> tuple[str | None, str]:
+def export_pack(godot: str, preset: str, output: Path, timeout: int) -> tuple[int, str, str]:
     command = [godot, "--headless", "--path", str(SOURCE), "--export-pack", preset, str(output)]
     try:
         result = subprocess.run(
             command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout
         )
     except subprocess.TimeoutExpired:
-        return f"导出在 {timeout}s 内未完成", ""
-    output_text = (result.stdout or "") + (result.stderr or "")
-    if not output.is_file():
-        detail = output_text.strip().splitlines()
-        return (detail[-1] if detail else f"导出退出码 {result.returncode}"), output_text
-    return None, output_text
+        return 2, f"导出在 {timeout}s 内未完成", ""
+    except OSError as error:
+        return 2, f"无法启动导出: {error}", ""
+    output_text = (result.stdout or "") + "\n" + (result.stderr or "")
+    status, detail = check_export_result(output, result.returncode, output_text)
+    return status, detail, output_text
 
 
 def parse_plugin_marker(output: str) -> tuple[int | None, int | None, int | None]:
@@ -117,13 +117,12 @@ def main() -> int:
     probe_manifest = workdir / "required.json"
     probe_manifest.write_text(json.dumps({"required": expected}, ensure_ascii=False), encoding="utf-8")
     try:
-        failure, output_text = export_pack(
+        export_status, failure, output_text = export_pack(
             godot, preset, pck_path, max(args.export_timeout, 1)
         )
-        if failure is not None:
-            print(f"[BLOCKED] 导出未产生 PCK: {failure}", file=sys.stderr)
-            print("[BLOCKED] 常见原因：缺少导出模板，或导出插件/预设未加载", file=sys.stderr)
-            return 2
+        if export_status:
+            print(f"[{'FAIL' if export_status == 1 else 'BLOCKED'}] PCK 导出未通过: {failure}", file=sys.stderr)
+            return export_status
         plugin_files, plugin_expected, plugin_missing = parse_plugin_marker(output_text)
         if plugin_files is None or plugin_expected is None or plugin_missing is None:
             print("[FAIL] 导出日志的 BHYH_RAW_EXPORT 计数标记不完整", file=sys.stderr)

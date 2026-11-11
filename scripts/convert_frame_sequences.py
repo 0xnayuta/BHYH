@@ -1073,47 +1073,192 @@ def split_export_filters(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
-def glob_matches(path: str, pattern: str) -> bool:
+def godot_matchn(value: str, pattern: str) -> bool:
+    """复刻 Godot 4 String.matchn：`*` 跨目录、`?` 不匹配 '.'、不区分大小写。
+
+    与引擎一致：空字符串或空模式不匹配，且模式必须覆盖整串。
+    """
+    if not value or not pattern:
+        return False
     parts: list[str] = []
     for char in pattern:
         if char == "*":
             parts.append(".*")
         elif char == "?":
-            parts.append(".")
+            # 引擎的 '?' 只排除 '.'，包括 '/' 在内的其他字符都可以匹配。
+            parts.append("[^.]")
         else:
             parts.append(re.escape(char))
-    return re.match("^" + "".join(parts) + "$", path, re.IGNORECASE) is not None
+    return re.fullmatch("".join(parts), value, re.IGNORECASE) is not None
+
+
+def matches_export_filter(resource_path: str, pattern: str) -> bool:
+    """按导出器的方式匹配 include/exclude 过滤器。
+
+    editor_export_platform.cpp 对同一文件同时用完整 res:// 路径和去掉 res://
+    的路径调用 matchn，因此 Art/... 这类相对规则也会命中 res://Art/... 依赖。
+    """
+    candidates = [resource_path]
+    if resource_path.startswith("res://"):
+        candidates.append(resource_path.removeprefix("res://"))
+    else:
+        candidates.append("res://" + resource_path)
+    return any(godot_matchn(candidate, pattern) for candidate in candidates)
 
 
 def preset_coverage_errors(
     preset: dict[str, object],
     required_paths: list[str],
 ) -> list[str]:
-    errors: list[str] = []
     export_filter = str(preset["export_filter"])
-    export_file_set = {str(path) for path in preset["export_files"]}
-    exclude_filters = split_export_filters(str(preset["exclude_filter"]))
-    supported = {"all_resources", "resources", "customized", "selected_scenes"}
+    supported = {"all_resources", "resources", "scenes", "customized", "exclude"}
     if export_filter not in supported:
         return [f"export_filter 缺失或无法识别: {export_filter!r}"]
 
+    errors: list[str] = []
+    export_file_set = {str(path) for path in preset["export_files"]}
+    exclude_patterns = split_export_filters(str(preset["exclude_filter"]))
+    # 排除优先于 include：导出器在清单汇总后统一应用 exclude_filter。
     for resource_path in required_paths:
-        for pattern in exclude_filters:
-            if glob_matches(resource_path, pattern):
+        for pattern in exclude_patterns:
+            if matches_export_filter(resource_path, pattern):
                 errors.append(f"被 exclude_filter 排除: {resource_path} ({pattern})")
                 break
     if export_filter == "all_resources":
         return errors
-    if export_filter == "selected_scenes":
+    if export_filter == "scenes":
+        # Godot 4 的序列化值就是 "scenes"；只导出场景及其资源依赖。
         return errors + [
-            "selected_scenes 只导出场景及其资源依赖；延迟 Texture 路径不是资源依赖，"
+            "scenes（选定场景）只导出场景及其资源依赖；延迟 Texture 路径不是资源依赖，"
             "无法证明覆盖；请使用 all_resources 或 resources 并显式列出"
         ]
+    if export_filter == "customized":
+        # customized 的覆盖由 customized_files 的逐文件导出模式决定，
+        # 本检查不解析该字典，明确拒绝而不是按 export_files 误判为已覆盖。
+        return errors + [
+            "customized 预设由 customized_files 的逐文件导出模式决定；"
+            "本检查不解析该字典，无法证明覆盖；请使用 all_resources 或 resources"
+        ]
+    if export_filter == "exclude":
+        # exclude 从全量资源反向剔除 export_files 中显式选定的文件。
+        for path in required_paths:
+            if path in export_file_set:
+                errors.append(f"被 exclude 预设显式排除: {path}")
+        return errors
 
     missing = [path for path in required_paths if path not in export_file_set]
     if missing:
         errors.append(f"selected 资源未显式覆盖 {len(missing)} 条，例如: {missing[:5]}")
     return errors
+
+
+def self_test() -> int:
+    """导出预设覆盖规则的回归样本；不读取素材与实际预设，可在公开 clone 运行。"""
+
+    def make_preset(
+        export_filter: str,
+        export_files: list[str] | None = None,
+        exclude_filter: str = "",
+    ) -> dict[str, object]:
+        return {
+            "name": "self_test",
+            "platform": "Windows Desktop",
+            "export_filter": export_filter,
+            "export_files": export_files or [],
+            "include_filter": "",
+            "exclude_filter": exclude_filter,
+        }
+
+    cases: list[tuple[str, dict[str, object], list[str], str | None]] = [
+        (
+            "相对排除规则命中 res:// 依赖",
+            make_preset("all_resources", exclude_filter="Art/zmws_spine/*"),
+            ["res://Art/zmws_spine/role_1/body.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "绝对排除规则命中 res:// 依赖",
+            make_preset("all_resources", exclude_filter="res://Art/zmws_spine/*"),
+            ["res://Art/zmws_spine/role_1/body.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "排除规则不区分大小写",
+            make_preset("all_resources", exclude_filter="ART/Zmws_Spine/*"),
+            ["res://Art/zmws_spine/body.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "逗号分隔的排除规则与空白",
+            make_preset("all_resources", exclude_filter="Art/other/* , Art/zmws_spine/* "),
+            ["res://Art/zmws_spine/body.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "'*' 跨目录匹配",
+            make_preset("all_resources", exclude_filter="Art/*/body.png"),
+            ["res://Art/zmws_spine/role_1/body.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "'?' 匹配非点号字符",
+            make_preset("all_resources", exclude_filter="Art/role?.png"),
+            ["res://Art/role1.png"],
+            "被 exclude_filter 排除",
+        ),
+        (
+            "'?' 不匹配点号",
+            make_preset("all_resources", exclude_filter="Art/role?.png"),
+            ["res://Art/role.1.png"],
+            None,
+        ),
+        (
+            "排除规则不误伤相似前缀",
+            make_preset("all_resources", exclude_filter="Art/zmws_spine/*"),
+            ["res://Art/zmws_spine_extra/body.png", "res://Art/frame_sequences/sequence.tres"],
+            None,
+        ),
+        (
+            "resources 显式覆盖仍被接受",
+            make_preset("resources", export_files=["res://Art/frame_sequences/sequence.tres"]),
+            ["res://Art/frame_sequences/sequence.tres"],
+            None,
+        ),
+        (
+            "resources 缺少显式覆盖被拒绝",
+            make_preset("resources"),
+            ["res://Art/frame_sequences/sequence.tres"],
+            "selected 资源未显式覆盖",
+        ),
+        (
+            "scenes 序列化值被明确拒绝",
+            make_preset("scenes"),
+            ["res://Art/frame_sequences/sequence.tres"],
+            "scenes（选定场景）",
+        ),
+        (
+            "customized 不被宣称为已支持",
+            make_preset("customized"),
+            ["res://Art/frame_sequences/sequence.tres"],
+            "customized 预设由 customized_files",
+        ),
+        (
+            "exclude 显式剔除被拒绝",
+            make_preset("exclude", export_files=["res://Art/frame_sequences/sequence.tres"]),
+            ["res://Art/frame_sequences/sequence.tres"],
+            "被 exclude 预设显式排除",
+        ),
+    ]
+    failed = 0
+    for label, preset, required_paths, expected in cases:
+        errors = preset_coverage_errors(preset, required_paths)
+        passed = not errors if expected is None else any(expected in error for error in errors)
+        if not passed:
+            failed += 1
+            actual = errors[0] if errors else "无错误"
+            print(f"FAIL self-test {label}: expected {expected!r}, got {actual}", file=sys.stderr)
+    print(f"export preset coverage self-test: {len(cases) - failed}/{len(cases)} PASS")
+    return 0 if failed == 0 else 1
 
 
 def run_export_preset_check(required_paths: list[str], preset_filter: str) -> int:
@@ -1284,7 +1429,12 @@ def main() -> int:
         metavar="NAME",
         help="校验实际 export_presets.cfg 的 resources 覆盖（隐含 --check；省略 NAME 检查全部预设）",
     )
+    parser.add_argument(
+        "--self-test", action="store_true", help="运行导出预设覆盖规则正负样本，不读取素材或实际预设"
+    )
     args = parser.parse_args()
+    if args.self_test:
+        return self_test()
     check_only = args.check or args.export_preset is not None
     try:
         return run(check_only, args.export_preset)

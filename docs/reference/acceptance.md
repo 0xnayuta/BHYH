@@ -49,9 +49,9 @@
 |:---|:---|
 | 契约扫描与负/正样本 | `python scripts/contract_scan.py --fail-on-error`<br>`python scripts/contract_scan.py --self-test` |
 | Atlas Metadata | `python scripts/convert_atlas_metadata.py --check`<br>`python scripts/convert_atlas_metadata.py --self-test` |
-| 构建帧/序列 | `python scripts/convert_frame_sequences.py --check`<br>`python scripts/convert_monster_frames.py --check`<br>`python scripts/convert_numbered_frames.py --all --check`<br>`python scripts/convert_sheet_frames.py --check`<br>`python scripts/convert_liu_sha_frames.py --check`<br>`python scripts/convert_monster_action_views.py --check` |
+| 构建帧/序列 | `python scripts/convert_frame_sequences.py --check`<br>`python scripts/convert_frame_sequences.py --self-test`<br>`python scripts/convert_monster_frames.py --check`<br>`python scripts/convert_numbered_frames.py --all --check`<br>`python scripts/convert_sheet_frames.py --check`<br>`python scripts/convert_liu_sha_frames.py --check`<br>`python scripts/convert_monster_action_views.py --check` |
 | 关卡/怪物/装备 Catalog | `python scripts/convert_level_preload_catalog.py --check`<br>`python scripts/convert_level_layout_catalog.py --check`<br>`python scripts/level_layout_migration_audit.py --fail-on-error`<br>`python scripts/convert_external_monster_catalog.py --check`<br>`python scripts/convert_equipment_catalog.py --check` |
-| 运行时帧与原始导出清单 | `python scripts/runtime_frames_audit.py --fail-on-error`<br>`python scripts/export_raw_manifest.py --check --allow-missing`<br>`python scripts/png_stream_audit.py --fail-on-error` |
+| 运行时帧与原始导出清单 | `python scripts/runtime_frames_audit.py --fail-on-error`<br>`python scripts/export_raw_manifest.py --check --allow-missing`<br>`python -m unittest discover -s scripts/tests -p test_export_asset_exclusions.py`<br>`python -m unittest discover -s scripts/tests -p test_export_diagnostics.py`<br>`python scripts/png_stream_audit.py --fail-on-error` |
 | Theme、字体与表面 token | `python scripts/theme_override_audit.py --check`<br>`python scripts/convert_ui_theme_tokens.py --check`<br>`python scripts/theme_token_audit.py --check`<br>`python scripts/theme_variant_audit.py --check`<br>`python scripts/ui_dynamic_theme_audit.py --check`<br>`python scripts/font_coverage_audit.py --check`<br>`python scripts/font_role_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --check`<br>`python scripts/ui_surface_token_audit.py --self-test` |
 | 冻结豁免 | `python scripts/whitelist_audit.py --fail-on-error` |
 
@@ -133,7 +133,7 @@ python scripts/level_regression_all.py
 python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 ```
 
-候选从 `Scene/level/` 当前场景名动态发现。默认单关 timeout **150 s**，外层子进程上限为 `timeout + 90 s`；失败关串行重试一次，并在报告保留首轮失败证据。`--changed-only` 无法映射的源码会保守回退全量；无变更的 changed-only 返回 0。`NON_BATTLE_SPECIALS` 中无 Hero 根节点的场景报告为 SKIP，既定回归口径中 SKIP 计入通过；L2 改动仍须覆盖真正受影响的战斗路径。退出码：全部通过（含该类 SKIP）为 0；失败或筛选后无候选为 1；工程缺失或 git diff 失败为 2。
+候选从 `Scene/level/` 当前场景名动态发现。默认单关 timeout **150 s**，外层子进程上限为 `timeout + 90 s`；失败关串行重试一次，并在报告保留首轮失败证据。`--changed-only` 无法映射的源码会保守回退全量；无变更的 changed-only 返回 0。`NON_BATTLE_SPECIALS` 中无 Hero 根节点的菜单、地图和信息面板报告为 SKIP，既定战斗关卡回归口径中 SKIP 计入通过；`level_info` 由 `scene_probe_runner.py --probe level-entry` 在档案会话上下文中验证，不由战斗关卡夹具直接启动。L2 改动仍须覆盖真正受影响的战斗路径。退出码：全部通过（含该类 SKIP）为 0；失败或筛选后无候选为 1；工程缺失或 git diff 失败为 2。
 
 ### 5.3 双人矩阵：`coop_probe_runner.py`
 
@@ -161,18 +161,25 @@ AtlasMetadata、FrameSequence、编号帧、sheet 帧、怪物帧、关卡预载
 python scripts/convert_nezha_preview_frames.py --check
 ```
 
+当前 Windows 发布预设保留 `all_resources` 基线。`Scene/level/zmws/`、`Scene/level/zmws_playable/`、`Art/level/zmws/` 与未绑定的 ZMWS 资产库不进入发布包；源场景和私有素材保留供编辑器使用。背包图标、既有 Spine 资源和 `data/zmws_config/` 原始数据仍须保留。混合素材目录中的排除前缀只能命中 DragonBones 工厂目录；新增实际消费者或前缀误伤必须先调整发布策略，不能静默漏包。
+
 源文件与生成清单一致，不能证明实际 PCK 闭包。涉及导出依赖或发布资源时另跑：
 
 ```bash
+python scripts/export_asset_exclusions.py --check
+python scripts/convert_frame_sequences.py --check --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test
-python scripts/frame_sequence_pack_probe.py --godot "<godot>"
+python scripts/frame_sequence_pack_probe.py --godot "<godot>" --preset "Windows Desktop (release)" --check-exclusions
 python scripts/export_closure_probe.py --self-test
 python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
 python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)"
 python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)" --output "<release output>"
+python scripts/release_exe_level_runner.py --exe "<release exe>" --pck "<release pck>" --work-dir "<isolated output>"
 ```
 
-`frame_sequence_pack_probe.py` 检查实际导出/挂载的 PCK 对必需清单路径的可达性；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。缺少导出模板/PCK、探针超时或结果协议无效为 BLOCKED（返回 2）；有效结果声明缺少路径为 FAIL（返回 1），不能作为 PASS。插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 是清单预检与实际 PCK 探针包装，可选产出 release 可执行文件；该命令不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
+`export_asset_exclusions.py --check` 校验预设一致性、指定目录和 DragonBones 工厂覆盖、混合目录误伤及可静态解析的生产引用；缺少私有素材返回 BLOCKED。它不证明动态拼接路径或实际包内容。`frame_sequence_pack_probe.py --check-exclusions` 在实际导出并挂载的 PCK 中检查必需路径存在、排除资源及其已登记导入产物不可达；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。导出必须同时生成产物、退出码为 0、日志无 SCRIPT ERROR / ERROR / WARNING；产物存在不能掩盖导出诊断。缺少导出模板/PCK、探针超时或结果协议无效为 BLOCKED（返回 2）；导出诊断、非零退出、缺少必需路径或意外包含排除资源为 FAIL（返回 1）。插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 运行上述预检及两种 PCK 探针，可选产出 release 可执行文件；它不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
+
+`release_exe_level_runner.py` 使用官方 release EXE 与发行 PCK，在独立运行目录追加仅指向 `user://` 的测试 Autoload；不修改 EXE/PCK，也不覆盖 `res://` 资源。它验证启动场景、生产 Autoload、`level_1` 四阶段、结算预载及切关清理；引擎日志、报告和进程退出码均须通过。该探针使用内存测试状态、直接切关和强制清怪，不替代用户输入、结算流程或目标设备实测。
 
 ## 7. 命名、文档与其他人工门禁
 

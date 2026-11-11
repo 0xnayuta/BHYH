@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""FrameSequence 发布包闭包探针：实际导出 PCK，并交给 Godot 自己校验包内路径。
+"""发布包闭包探针：实际导出 PCK，并交给 Godot 校验保留与排除路径。
 
-源目录闭包与 export_presets.cfg 声明覆盖都不等于发布包完整；本探针必须看到
-真实 PCK 中的 Catalog、每个序列资源与全部延迟纹理路径。
+源目录闭包与 export_presets.cfg 声明覆盖都不等于发布包完整；本探针检查
+FrameSequence、关卡预载依赖，并可验证排除资源不可达。
 
-不使用自写的 PCK 二进制解析器：PCK 头格式随引擎版本变化，误判会制造假通过或
-假失败。改为在最小空工程中挂载 PCK，用引擎的 FileAccess 判定路径是否存在。
+不使用自写的 PCK 二进制解析器；在最小空工程中挂载 PCK，用引擎检查路径。
 
 退出码：
-- 0 已验证：PCK 内包含全部依赖，探针标记与 Godot 退出码一致；
-- 1 验证失败：有效探针报告缺少依赖/错误，或 Godot 非零退出；
-- 2 无法验证：缺少 Godot、导出预设、探针结果或结果协议无效。
+- 0 已验证：必需路径存在、指定排除路径不可达，探针标记与退出码一致；
+- 1 验证失败：缺少依赖、意外包含排除资源或 Godot 非零退出；
+- 2 无法验证：缺少 Godot、素材、导出预设、探针结果或结果协议无效。
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -72,6 +72,14 @@ func _initialize() -> void:
 		return
 	for item in items:
 		required.append(str(item))
+	var excluded: Array[String] = []
+	var excluded_items: Variant = manifest.get("excluded", [])
+	if not excluded_items is Array:
+		print("PACK_PROBE_ERROR=manifest.excluded is not an array")
+		quit(2)
+		return
+	for item in excluded_items:
+		excluded.append(str(item))
 	if not ProjectSettings.load_resource_pack(pck_path, true):
 		print(
 			RESULT_PREFIX
@@ -81,6 +89,8 @@ func _initialize() -> void:
 					"required": required.size(),
 					"imported": 0,
 					"missing": required,
+					"excluded": excluded.size(),
+					"unexpected": [],
 					"error": "load_resource_pack failed",
 				}
 			)
@@ -101,13 +111,29 @@ func _initialize() -> void:
 			imported += 1
 			continue
 		missing.append(path)
+	var unexpected: Array[String] = []
+	for path in excluded:
+		if (
+			FileAccess.file_exists(path)
+			or FileAccess.file_exists(path + ".remap")
+			or FileAccess.file_exists(path + ".import")
+			or ResourceLoader.exists(path)
+		):
+			unexpected.append(path)
 	print(
 		RESULT_PREFIX
 		+ JSON.stringify(
-			{"ok": missing.is_empty(), "required": required.size(), "imported": imported, "missing": missing}
+			{
+				"ok": missing.is_empty() and unexpected.is_empty(),
+				"required": required.size(),
+				"imported": imported,
+				"missing": missing,
+				"excluded": excluded.size(),
+				"unexpected": unexpected,
+			}
 		)
 	)
-	quit(0 if missing.is_empty() else 1)
+	quit(0 if missing.is_empty() and unexpected.is_empty() else 1)
 """ % RESULT_PREFIX
 
 
@@ -152,19 +178,34 @@ def find_preset_name() -> str:
     raise ValueError("export_presets.cfg 未找到预设名称")
 
 
-def run_export(godot: str, preset: str, output: Path, timeout: int) -> str | None:
-    """返回失败原因；None 表示导出产生了 PCK。"""
+def check_export_result(output: Path, returncode: int, log: str) -> tuple[int, str]:
+    """导出文件存在不足以证明成功；报告引擎错误和非零退出。"""
+    diagnostics = [
+        line.strip() for line in log.splitlines()
+        if line.lstrip().startswith(("SCRIPT ERROR:", "ERROR:", "WARNING:"))
+    ]
+    detail = " | ".join(diagnostics[:5])
+    if returncode != 0:
+        return 1, f"导出退出码 {returncode}" + (f"；{detail}" if detail else "")
+    if diagnostics:
+        return 1, detail
+    if not output.is_file():
+        return 2, "未生成导出文件"
+    return 0, ""
+
+
+def run_export(godot: str, preset: str, output: Path, timeout: int) -> tuple[int, str]:
+    """导出 PCK 并校验退出码、产物和引擎日志。"""
     command = [godot, "--headless", "--path", str(SOURCE), "--export-pack", preset, str(output)]
     try:
         result = subprocess.run(
             command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout
         )
     except subprocess.TimeoutExpired:
-        return f"导出在 {timeout}s 内未完成"
-    if output.is_file():
-        return None
-    detail = (result.stderr or result.stdout or "").strip().splitlines()
-    return detail[-1] if detail else f"退出码 {result.returncode}"
+        return 2, f"导出在 {timeout}s 内未完成"
+    except OSError as error:
+        return 2, f"无法启动导出: {error}"
+    return check_export_result(output, result.returncode, (result.stdout or "") + "\n" + (result.stderr or ""))
 
 
 def _interpret_probe_result(
@@ -190,20 +231,28 @@ def _interpret_probe_result(
     required = payload.get("required")
     imported = payload.get("imported")
     missing = payload.get("missing")
+    excluded = payload.get("excluded", 0)
+    unexpected = payload.get("unexpected", [])
     if not isinstance(ok, bool):
         return 2, {}, "探针结果 ok 不是布尔值"
     if type(required) is not int or type(imported) is not int:
         return 2, {}, "探针结果 required/imported 不是整数"
     if not isinstance(missing, list) or any(not isinstance(path, str) for path in missing):
         return 2, {}, "探针结果 missing 不是字符串数组"
+    if type(excluded) is not int or not isinstance(unexpected, list) or any(
+        not isinstance(path, str) for path in unexpected
+    ):
+        return 2, {}, "探针结果 excluded/unexpected 类型无效"
     if "error" in payload and not isinstance(payload["error"], str):
         return 2, {}, "探针结果 error 不是字符串"
     if required != expected_count:
         return 2, {}, f"探针 required 数量不匹配: 收到 {required}, 预期 {expected_count}"
     if required < 0 or imported < 0 or imported > required or len(missing) > required:
         return 2, {}, "探针结果 required/imported/missing 数量无效"
-    if ok != (len(missing) == 0):
-        return 2, {}, "探针结果 ok 与 missing 列表不一致"
+    if excluded < 0 or len(unexpected) > excluded:
+        return 2, {}, "探针结果 excluded/unexpected 数量无效"
+    if ok != (not missing and not unexpected):
+        return 2, {}, "探针结果 ok 与 missing/unexpected 列表不一致"
 
     declared_error = payload.get("error", "")
     if returncode != 0:
@@ -212,7 +261,7 @@ def _interpret_probe_result(
             detail += f": {declared_error}"
         return 1, payload, detail
     if not ok or declared_error:
-        detail = declared_error or f"探针报告缺少 {len(missing)} 条路径"
+        detail = declared_error or f"探针报告缺少 {len(missing)} 条路径，意外保留 {len(unexpected)} 条"
         return 1, payload, detail
     return 0, payload, ""
 
@@ -223,6 +272,7 @@ def run_probe(
     manifest_copy: Path,
     timeout: int,
     expected_count: int,
+    expected_excluded: int = 0,
 ) -> tuple[int, dict[str, object], str]:
     workdir = Path(tempfile.mkdtemp(prefix="bhyh_pack_probe_proj_"))
     try:
@@ -247,7 +297,14 @@ def run_probe(
             return 2, {}, f"包内校验在 {timeout}s 内未完成"
         except OSError as error:
             return 2, {}, f"无法启动包内校验探针: {error}"
-        return _interpret_probe_result(result.stdout or "", result.returncode, expected_count, result.stderr or "")
+        status, payload, error = _interpret_probe_result(
+            result.stdout or "", result.returncode, expected_count, result.stderr or ""
+        )
+        if payload and expected_excluded and (
+            payload.get("excluded") != expected_excluded or "unexpected" not in payload
+        ):
+            return 2, {}, "探针 excluded/unexpected 与请求不一致"
+        return status, payload, error
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 
@@ -271,10 +328,12 @@ def _probe_result_contract_self_test() -> int:
     non_list_missing = {**success, "missing": "res://missing.tres"}
     count_mismatch = {**success, "required": expected_count - 1}
     wrong_type = {**success, "ok": 1}
+    unexpected = {**success, "ok": False, "excluded": 1, "unexpected": ["res://excluded.png"]}
     cases = (
         ("good result", marked(success), 0, 0),
         ("ok=false with exit 0", marked(declared_miss), 0, 1),
         ("exit 1 despite ok=true", marked(success), 1, 1),
+        ("unexpected exported resource", marked(unexpected), 1, 1),
         ("missing missing field", marked(missing_field), 0, 2),
         ("non-list missing", marked(non_list_missing), 0, 2),
         ("required count mismatch", marked(count_mismatch), 0, 2),
@@ -354,6 +413,7 @@ def main() -> int:
     parser.add_argument("--godot", default=None, help="Godot 可执行文件路径（或设 GODOT_BIN）")
     parser.add_argument("--preset", default=None, help="导出预设名称；默认取第一个预设")
     parser.add_argument("--manifest", action="append", default=None, help="依赖清单路径；可重复，默认读取两份构建清单")
+    parser.add_argument("--check-exclusions", action="store_true", help="同时验证预设排除资源未进入 PCK")
     parser.add_argument("--self-test", action="store_true", help="校验依赖清单与探针结果契约")
     parser.add_argument("--report", default=None, help="可选 JSON 报告输出路径")
     parser.add_argument("--export-timeout", type=int, default=1800, help="导出子进程墙钟上限（秒）")
@@ -385,30 +445,55 @@ def main() -> int:
     except (OSError, ValueError) as error:
         print(f"[BLOCKED] {error}", file=sys.stderr)
         return 2
+    excluded: list[str] = []
+    if args.check_exclusions:
+        from export_asset_exclusions import run_check
+
+        audit = run_check(SOURCE, EXPORT_PRESETS_PATH)
+        if not audit["ok"]:
+            print(f"[{audit['status']}] 资源排除策略未通过，无法校验发布包", file=sys.stderr)
+            return 2 if audit["status"] == "BLOCKED" else 1
+        if not any(item["name"] == preset and item["export_filter"] == "all_resources" for item in audit["presets"]):
+            print(f"[FAIL] 预设未纳入 all_resources 排除策略: {preset}", file=sys.stderr)
+            return 1
+        excluded = audit["excluded_resources"]
+
+        imported_targets: set[str] = set()
+        for path in excluded:
+            descriptor = SOURCE / (path.removeprefix("res://") + ".import")
+            if descriptor.is_file():
+                imported_targets.update(
+                    re.findall(
+                        r'res://\.godot/imported/[^"\]\s,]+',
+                        descriptor.read_text(encoding="utf-8", errors="replace"),
+                    )
+                )
+        excluded = list(dict.fromkeys(excluded + sorted(imported_targets)))
 
     workdir = Path(tempfile.mkdtemp(prefix="bhyh_pack_probe_"))
     pck_path = workdir / "publish_probe.pck"
     manifest_copy = workdir / "manifest.json"
     manifest_copy.write_text(
-        json.dumps({"required": expected}, ensure_ascii=False), encoding="utf-8"
+        json.dumps({"required": expected, "excluded": excluded}, ensure_ascii=False), encoding="utf-8"
     )
     try:
-        failure = run_export(godot, preset, pck_path, max(args.export_timeout, 1))
-        if failure is not None:
-            print(f"[BLOCKED] 导出未产生 PCK，无法验证发布闭包: {failure}", file=sys.stderr)
-            print("[BLOCKED] 常见原因：缺少导出模板（编辑器 Install Export Templates）", file=sys.stderr)
-            return 2
+        export_status, failure = run_export(godot, preset, pck_path, max(args.export_timeout, 1))
+        if export_status:
+            print(f"[{'FAIL' if export_status == 1 else 'BLOCKED'}] PCK 导出未通过: {failure}", file=sys.stderr)
+            return export_status
         status, payload, error = run_probe(
             godot,
             pck_path.resolve(),
             manifest_copy.resolve(),
             max(args.probe_timeout, 1),
             len(expected),
+            len(excluded),
         )
         if status == 2:
             print(f"[BLOCKED] 包内校验未取得有效结果: {error}", file=sys.stderr)
             return 2
         missing = payload["missing"]
+        unexpected = payload["unexpected"]
         digest_handle = hashlib.sha256()
         with pck_path.open("rb") as handle:
             for chunk in iter(lambda: handle.read(1 << 20), b""):
@@ -426,6 +511,9 @@ def main() -> int:
             "required_paths": len(expected),
             "missing": missing[:50],
             "missing_count": len(missing),
+            "excluded_paths": len(excluded),
+            "unexpected": unexpected[:50],
+            "unexpected_count": len(unexpected),
         }
         if args.report:
             write_json(Path(args.report), report)
@@ -436,11 +524,17 @@ def main() -> int:
                     + ", ".join(missing[:5]),
                     file=sys.stderr,
                 )
-            else:
+            if unexpected:
+                print(
+                    f"[FAIL] PCK 意外保留 {len(unexpected)}/{len(excluded)} 条排除资源，例如: "
+                    + ", ".join(unexpected[:5]),
+                    file=sys.stderr,
+                )
+            if not missing and not unexpected:
                 print(f"[FAIL] 包内校验未通过: {error}", file=sys.stderr)
             return 1
         print(
-            f"[OK] PCK 闭包验证通过: {len(expected)} 条发布依赖全部在包内，"
+            f"[OK] PCK 闭包验证通过: {len(expected)} 条发布依赖在包内，{len(excluded)} 条排除资源不在包内，"
             f"PCK {report['pck_bytes']} 字节，sha256 {report['pck_sha256'][:12]}"
         )
         return 0

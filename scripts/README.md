@@ -22,7 +22,7 @@ check_all.py
 ├── contract_gate.py
 │   ├── contract_scan.py（类别以注册为准）
 │   ├── convert_atlas_metadata.py --check / --self-test
-│   ├── convert_frame_sequences.py --check
+│   ├── convert_frame_sequences.py --check / --self-test
 │   ├── convert_monster_frames.py --check
 │   ├── convert_numbered_frames.py --all --check
 │   ├── convert_sheet_frames.py --check
@@ -32,7 +32,7 @@ check_all.py
 │   ├── convert_level_layout_catalog.py --check / level_layout_migration_audit.py --fail-on-error
 │   ├── convert_external_monster_catalog.py --check / convert_equipment_catalog.py --check
 │   ├── runtime_frames_audit.py --fail-on-error / png_stream_audit.py --fail-on-error
-│   ├── export_raw_manifest.py --check / theme_override_audit.py --check
+│   ├── export_raw_manifest.py --check / export_asset_exclusions.py 测试 / 导出诊断测试 / theme_override_audit.py --check
 │   ├── convert_ui_theme_tokens.py --check / theme_token_audit.py --check / theme_variant_audit.py --check
 │   ├── ui_dynamic_theme_audit.py --check / font_coverage_audit.py --check / font_role_audit.py --check
 │   ├── ui_surface_token_audit.py --check / --self-test
@@ -84,6 +84,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `ui_surface_token_audit.py` | 扫描自绘 StyleBox 与 `main_menu` 裸色；基线见 `ui_surface_token_baseline.json`；支持 `--self-test` |
 | `runtime_reference_audit.py` | `@onready` NodePath 与 `Global.<method>()` 静态引用 |
 | `asset_library_catalog.py` | 从私有素材库生成 ZMWS 资产库存与消费矩阵；`--check` 同时校验矩阵和 inventory JSON；策略见 `asset_library_policy.json` |
+| `export_asset_exclusions.py` | 发布排除规则与可解析生产引用审计；`--check`、`--json`；私有素材缺失返回 BLOCKED，不代替 PCK 探针 |
 | `icon_alpha_audit.py` | Report-only 扫描 `source/Art/hero_picture/role_*/equipment.json` 引用图标，报告不透明黑色底板；默认不阻断，`--strict` 可返回非零；公开 clone 缺素材时扫描 0 项并正常退出 |
 
 ### 3.3 构建期转换
@@ -91,7 +92,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | 脚本 | 输出/校验 |
 |:---|:---|
 | `convert_atlas_metadata.py` | manifest → metadata；`--check` / `--self-test` |
-| `convert_frame_sequences.py` | FrameSequence/Catalog/延迟纹理清单；`--check` / `--export-preset` |
+| `convert_frame_sequences.py` | FrameSequence/Catalog/延迟纹理清单；`--check` / `--export-preset` / `--self-test` |
 | `convert_monster_frames.py` | 怪物帧资源与动作别名；`--check` |
 | `convert_numbered_frames.py` | 编号 PNG 序列 → SpriteFrames；`--all --check` |
 | `convert_sheet_frames.py` | sheet 网格 → SpriteFrames；`--check` |
@@ -112,12 +113,13 @@ frame_sequence_pack_probe.py（发布前独立执行）
 |:---|:---|
 | `level_test_runner.py` | 单关冒烟夹具；支持阶段断言、日志门禁、装备组合、加载测量与可选性能/真实渲染采样，具体参数见 `--help` |
 | `level_regression_all.py` | 全量/变更影响关卡回归；失败串行重试并保留首轮失败证据；`--dry-run` 只打印计划 |
+| `release_exe_level_runner.py` | 用正式 Windows release EXE 与发行 PCK 验证 `level_1` 四阶段、结算预载和隔离退出；通过临时 `override.cfg` 追加 `release_exe_level_probe.gd`，不覆盖包内资源 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵 |
 | `scene_probe_runner.py` | 场景级运行时探针套件 |
 | `archive_probe_runner.py` | 档案持久化定向夹具；隔离临时 `user://` |
-| `frame_sequence_pack_probe.py` | 实际导出 PCK 并在最小工程挂载校验路径闭包 |
+| `frame_sequence_pack_probe.py` | 实际导出 PCK 并挂载校验依赖；`--check-exclusions` 同时验证排除资源不可达 |
 | `export_closure_probe.py` | 原始数据清单 → 实际 PCK 挂载校验 JSON/BIN；插件日志计数与清单一致 |
-| `export_release.py` | 发布前包装：清单预检 + PCK 闭包；可选 release 可执行导出 |
+| `export_release.py` | 发布前包装：原始数据与资源排除预检、PCK 双向闭包；可选 release 可执行导出 |
 | `asset_reference_audit.py` | 单遍 `rg` 扫描旧资产基名；手动执行 |
 
 ### 3.5 迁移与共用模块
@@ -177,8 +179,10 @@ python scripts/archive_probe_runner.py --godot "<godot>"
 
 # 契约自测与发布闭包
 python scripts/contract_scan.py --self-test
+python scripts/export_asset_exclusions.py --check
+python scripts/convert_frame_sequences.py --check --export-preset
 python scripts/frame_sequence_pack_probe.py --self-test
-python scripts/frame_sequence_pack_probe.py --godot "<godot>"
+python scripts/frame_sequence_pack_probe.py --godot "<godot>" --preset "Windows Desktop (release)" --check-exclusions
 python scripts/export_raw_manifest.py --check
 python scripts/export_closure_probe.py --self-test
 python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
