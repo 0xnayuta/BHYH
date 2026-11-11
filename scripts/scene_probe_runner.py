@@ -76,6 +76,15 @@ class ProbeSpec:
 
 PROBES: tuple[ProbeSpec, ...] = (
     ProbeSpec(
+        key="newbullet",
+        title="旧弹体动画与方向探针",
+        script_name="newbullet_probe.gd",
+        scene_name="newbullet_probe.tscn",
+        result_prefix="NEWBULLET_PROBE_RESULT=",
+        report_stem="newbullet_probe_report",
+        teardown_marker="NEWBULLET_PROBE_TEARDOWN",
+    ),
+    ProbeSpec(
         key="constellation",
         title="星座 Boss 运行时探针",
         script_name="constellation_probe.gd",

@@ -9,7 +9,7 @@ animations = [{
 "texture": null
 }],
 "loop": 1,
-"name": &"Empty",
+"name": &"new_animation",
 "speed": 1.0
 }]
 
