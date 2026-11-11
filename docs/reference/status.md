@@ -45,13 +45,14 @@
 - 2026-11-12 线程加载改造：`ResourceRuntime`、启动加载页与关卡加载页改用普通 `Thread` + `ResourceLoader.load`，一次只运行一个加载线程并由主线程轮询取回，不再调用 `load_threaded_request`。同机 release EXE 复测：`level_1` 四阶段通过，日志 0 SCRIPT ERROR / 0 ERROR / 0 WARNING（改造前 19 个 `ObjectDB`，FAIL）；窗口冷启动 `WM_CLOSE` 退出码 0，零引用 `RefCounted` 从 18 降为 0。窗口退出仍有纹理 RID 泄漏（1 个 RID / 2 个 Texture RID）与 `RenderingServer::get_singleton() is null`，改造前旧 EXE 同样出现，属独立问题；此前挂在该 LoadToken 上的 `AudioStreamPlaybackMP3` / `AudioStreamMP3` 随 token 消除。
 - 改造后单次窗口测量（无截图）：加载页首绘到主菜单/地图/`level_1` 首绘为 1,047 / 611 / 1,136 ms（改造前同条件 959 / 576 / 894 ms）；面板首绘与内容齐全基本不变（读档 30/33、任务 8/48、炼丹 27、合成 9、暂停 10 ms）。串行加载以约 0.1–0.24 s 的加载页耗时换取退出零 LoadToken 泄漏；单次样本，不是正式性能验收。
 - 线程加载约束：工作线程在加载中可能把 `resource_changed` 回调投递到主线程 MessageQueue 并等待，主线程阻塞在加载线程上会死锁；因此清理与退出只做非阻塞收尾，探针退出前等待作业空闲。应用在加载进行中直接关闭时，运行中的作业交由进程退出回收。
+- 2026-11-12 退出纹理 RID：根因为 `display/mouse_cursor/custom_image` 的 `CompressedTexture2D` 在 `RenderingServer` 关闭后才由引擎释放；`Global._exit_tree()` 重置光标后，release 窗口 `WM_CLOSE` 退出 0 泄漏、0 诊断，`--quit-after 5` 不再出现纹理 RID 与 `RenderingServer` 空单例错误。同批探针中曾有一次 `level_1` 出现 2 个 `ObjectDB` 与 1 个资源残留，修复版与原版重跑均为 0，属未归因的偶发残留，不据此宣称稳定。详见 [`../issues/known-issues.md`](../issues/known-issues.md)。
 - 冷进程中并行预热互相依赖的炼丹场景曾发生加载等待并超时；当前串行预热的目标路径已返回 `SCOPE_READY=true`。
 
 详细缓存所有权与场景交接见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)。
 
 ## 3. 当前未验证边界
 
-- **发布**：线程加载的 LoadToken 泄漏已消除，release `level_1` 四阶段与日志门禁通过；窗口退出仍有纹理 RID 残留与 `RenderingServer::get_singleton() is null`（旧版同现，独立问题），正式发布前需单独确认。真实输入到结算、物理屏幕呈现延迟、设备 VRAM 全路径和双人完整矩阵仍未验证。`export_release.py` 对打开的工程运行时曾因 `godot-mcp` 端口冲突失败。
+- **发布**：线程加载的 LoadToken 泄漏与窗口退出的光标纹理 RID 残留均已消除；release `level_1` 四阶段与窗口退出（0 RID / 0 `ObjectDB` / 无 `RenderingServer` 空单例）通过。真实输入到结算、物理屏幕呈现延迟、设备 VRAM 全路径和双人完整矩阵仍未验证。`export_release.py` 对打开的工程运行时曾因 `godot-mcp` 端口冲突失败。
 - **平台**：Spine GDExtension 只入库 Windows x86_64；最低硬件配置未声明，其他平台延期/未验证。决策见 [ADR-010](../decisions/ADR-010-spine-runtime-boundary.md) 与 [ADR-027](../decisions/ADR-027-platform-commitment-and-verification-device.md)。
 - **外部服务**：云存档服务端、训练和成就闭环依赖外部能力，不据本地内容回植宣称已完成。
 - **公开仓库**：第三方美术、音乐、字体和精灵表不入库；公开 clone 缺素材提示属于预期。

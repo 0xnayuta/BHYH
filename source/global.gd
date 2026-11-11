@@ -184,6 +184,9 @@ const MONSTER_FRAME_CACHE_REGISTRY := preload("res://Script/monster/monster_fram
 
 func _exit_tree() -> void:
 	_shutting_down = true
+	# 引擎在 RenderingServer 关闭后才释放自定义光标纹理，导致 CompressedTexture2D 析构晚于渲染服务器；
+	# 退出清理前重置光标，让纹理在服务器存活时释放。
+	Input.set_custom_mouse_cursor(null)
 	_advance_runtime_generation()
 	if _scene_flow != null:
 		_scene_flow.clear_runtime_state()

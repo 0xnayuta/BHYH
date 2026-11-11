@@ -17,7 +17,7 @@
 - UI 场景可能通过脚本 `preload` 相互依赖，因此 UI 请求以路径去重并串行提交；加载页目标队列与既有资源预载通过暂停门错峰。切换、结束档案或清空作用域递增令牌并释放其强引用；已启动的过期请求继续轮询，完成后取回并丢弃，不能回写新作用域。普通切换不等待线程；应用退出只同步收尾已结束的线程。
 - 线程加载统一由一个普通 `Thread` 逐个执行 `ResourceLoader.load`，主线程轮询取回并 join，不使用 `load_threaded_request`（规避 4.7.2 嵌套 `preload` 的 `LoadToken` 泄漏）。工作线程在加载中可能把 `resource_changed` 回调投递到主线程消息队列并等待，因此主线程不得阻塞在加载线程上；退出阶段只 join 已结束线程，运行中的作业交由进程退出回收。
 - 场景请求先清理已登记临时 UI，再按场景/档案作用域释放 UI 缓存。属于当前作用域的界面关闭后保留场景资源，直到作用域切换；其余临时界面按原规则释放。已打开节点、其他持有者和引擎缓存可能仍引用资源，清字典不代表立即回收内存。面板自己的关闭保存语义见 [`ui_panel_contract_matrix.md`](ui_panel_contract_matrix.md)。
-- 战斗对象池跨关卡保留，档案结束和 `Global` 退出时统一清理；应用退出时 `Global` 使运行时代次失效并清理缓存、池、音频与 UI 状态。待写档案由 `MemoryClass` 独立 flush，见 [`archive_session_matrix.md`](archive_session_matrix.md)。
+- 战斗对象池跨关卡保留，档案结束和 `Global` 退出时统一清理；应用退出时 `Global` 使运行时代次失效并清理缓存、池、音频与 UI 状态，并在清理前重置自定义光标，使光标纹理在 `RenderingServer` 关闭前释放。待写档案由 `MemoryClass` 独立 flush，见 [`archive_session_matrix.md`](archive_session_matrix.md)。
 
 ## 失败与退出语义
 

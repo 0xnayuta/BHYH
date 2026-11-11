@@ -57,10 +57,16 @@ Godot 4.7 的 [`Object.get_meta`](https://docs.godotengine.org/en/4.7/classes/cl
 
 ## 窗口退出残留 2 个 Texture RID 与 `RenderingServer::get_singleton() is null`
 
-release EXE 窗口冷启动后发送 `WM_CLOSE`，退出日志包含 `~CompressedTexture2D` 在 `RenderingServer::get_singleton()` 为 null 时析构、2 个 Texture RID 与 1 个 `TextureStorage::Texture` 泄漏。改造前的旧 EXE 同条件同样出现，与线程加载改造无关。headless 关卡探针不触发该路径。根因待确认：可能是空窗口、`CompressedTexture2D` 析构顺序或 `mobile` 渲染方法的引擎退出顺序问题。
+根因已确认：`display/mouse_cursor/custom_image="res://Art/main_game/sbgb.png"` 由引擎在启动时加载为 `CompressedTexture2D` 并持有到退出；引擎在 `RenderingServer` 关闭后才释放该纹理，析构时调用空单例，并残留 1 个 `TextureStorage::Texture` 与 2 个 `Texture` RID。与线程加载改造无关：改造前旧 EXE 同条件同样出现，headless 关卡探针不触发渲染路径。
+
+最小复现：导出空场景，仅设置 `mouse_cursor/custom_image`，退出日志与正式包一致；移除该设置后为 0。启动图、窗口图标与 autoload 对照均不触发。
+
+### 规避
+
+`Global._exit_tree()` 在缓存与场景清理前调用 `Input.set_custom_mouse_cursor(null)`，让引擎提前释放自定义光标纹理。实现在 [`global.gd`](../../source/global.gd)。
 
 ### 处置与验收
 
-1. 用最小窗口分别对比空场景、单张 `CompressedTexture2D`、音频与组合，确认触发条件。
-2. 确认前不得通过延迟退出、隐藏日志或跳过关卡日志门禁规避该告警。
-3. 若归属引擎退出顺序且无工程侧可行修复，在 `status.md` 未验证边界中保持登记，发布验收不得据此宣称退出零告警。
+1. 回归时保留自定义光标设置，检查 release 窗口冷启动 + `WM_CLOSE` 退出：无 `RID allocations ... leaked`、无 `~CompressedTexture2D` 空单例错误、0 `ObjectDB` 泄漏。
+2. 若后续升级 Godot 或更换渲染后端，重新验证该退出顺序；未被本项覆盖的平台不得据此推定通过。
+3. 确认前不得通过延迟退出、隐藏日志或跳过关卡日志门禁规避该告警。
