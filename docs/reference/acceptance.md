@@ -11,7 +11,7 @@
 | **L0 静态门禁** | 无 Godot 的提交前检查 | `python scripts/check_all.py --skip-engine`；执行行尾、格式、核心 lint、契约/资源、命名、NodePath/Global 引用及资源路径维度。引擎与 DragonBones 两维被显式跳过，不能据此声称 L1 通过。 |
 | **L1 引擎健康** | 改动 GDScript、场景、资源、输入或物理层 | `python scripts/check_all.py --godot-bin "<godot>"`；检查当前全部已注册维度。 |
 | **L2 运行期** | 改动玩法、关卡、双人、HUD、场景流、存档或资源消费者 | L1 + 受影响的单关冒烟、双人探针、场景探针或档案夹具；正常逻辑、边界和失败路径均需覆盖。 |
-| **L3 发布 / 发布依赖** | 发布、目标包依赖变更或全量收口 | L2 + 全量关卡回归、命名终审、文档索引/链接审计；改动导出依赖时执行相应实际 PCK 探针。 |
+| **L3 发布 / 发布依赖** | 发布、目标包依赖变更或全量收口 | L2 + 全量关卡回归、release 窗口冷启动/`WM_CLOSE` 退出探针、命名终审、文档索引/链接审计；改动导出依赖时执行相应实际 PCK 探针。 |
 
 跳过门禁的开关只能用于明确的较低档位或定向诊断，不能把跳过维度计为完成的验证。
 
@@ -177,11 +177,14 @@ python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Deskt
 python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)"
 python scripts/export_release.py --godot "<godot>" --preset "Windows Desktop (release)" --output "<release output>"
 python scripts/release_exe_level_runner.py --exe "<release exe>" --pck "<release pck>" --work-dir "<isolated output>"
+python scripts/release_exe_window_probe.py --exe "<release exe>" --pck "<release pck>" --work-dir "<isolated output>"
 ```
 
 `export_asset_exclusions.py --check` 校验预设一致性、指定目录和 DragonBones 工厂覆盖、混合目录误伤及可静态解析的生产引用；缺少私有素材返回 BLOCKED。它不证明动态拼接路径或实际包内容。`frame_sequence_pack_probe.py --check-exclusions` 在实际导出并挂载的 PCK 中检查必需路径存在、排除资源及其已登记导入产物不可达；`export_closure_probe.py` 检查插件写入数与原始 JSON/BIN 路径。导出必须同时生成产物、退出码为 0、日志无 SCRIPT ERROR / ERROR / WARNING；产物存在不能掩盖导出诊断。缺少导出模板/PCK、探针超时或结果协议无效为 BLOCKED（返回 2）；导出诊断、非零退出、缺少必需路径或意外包含排除资源为 FAIL（返回 1）。插件日志的 `files` 必须等于 `expected` 且 `missing=0`。`export_release.py` 运行上述预检及两种 PCK 探针，可选产出 release 可执行文件；它不代替冷启动、目标设备/平台加载、VRAM 或首帧实测。版本/当前平台结论另见 `status.md` 和 [`spine_platform_baseline.md`](spine_platform_baseline.md)。
 
 `release_exe_level_runner.py` 使用官方 release EXE 与发行 PCK，在独立运行目录追加仅指向 `user://` 的测试 Autoload；不修改 EXE/PCK，也不覆盖 `res://` 资源。它验证启动场景、生产 Autoload、`level_1` 四阶段、结算预载及切关清理；引擎日志、报告和进程退出码均须通过。该探针使用内存测试状态、直接切关和强制清怪，不替代用户输入、结算流程或目标设备实测。
+
+`release_exe_window_probe.py` 在 Windows 桌面会话直接启动同一发行包，不注入 override/Autoload；等待唯一可见窗口后发送 `WM_CLOSE`，验证真实窗口退出路径。通过判据为退出码 0、无 RID/ObjectDB/资源泄漏、无 `RenderingServer` 空单例错误、0 SCRIPT ERROR 与 0 ERROR/WARNING。Vulkan 驱动/加载器的窗口启动噪声按固定模式单独计数，不计为引擎诊断；其余告警不得豁免。非 Windows 或无法创建可见窗口返回 BLOCKED（2），headless 结果不能替代该路径。
 
 ## 7. 命名、文档与其他人工门禁
 
@@ -209,7 +212,7 @@ python scripts/normalize_eol.py docs --dry-run
 | 关卡 / 玩法 / 战斗来源 | L1 + 受影响关卡 `level_test_runner.py` 与 changed-only 回归；覆盖阶段推进、刷怪、出口、奖励/结算一次 | 只测首阶段；延迟弹体/召唤/法宝来源默认落到 1P |
 | 场景流 / 缓存 / 池 / 异步 | L1 + `scene_probe_runner.py` 的 `load-guard` / `level-resource-lease` 和冷启动/返回/重战路径 | 只移字段或清缓存；不覆盖过期请求、提前退出、所有者外误删 |
 | 资源构建/边界规则 | L1（含 gate/self-test）+ 对应源转换 `--check`；改导出依赖时实际 PCK 探针 | 只检查产物存在或预设声明，不校验内容/PCK；BLOCKED 记为通过 |
-| Release / 完整验收 | L3：全量 `level_regression_all.py`、命名终审、docs 索引检查；实际受影响 PCK 与 release 运行路径 | changed-only 替代发布全量；其他平台/设备/分辨率被默认推定通过 |
+| Release / 完整验收 | L3：全量 `level_regression_all.py`、`release_exe_level_runner.py`、`release_exe_window_probe.py`、命名终审、docs 索引检查；实际受影响 PCK 与 release 运行路径 | changed-only 替代发布全量；其他平台/设备/分辨率被默认推定通过 |
 
 ## 9. 证据与失败处置
 

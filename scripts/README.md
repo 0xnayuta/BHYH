@@ -114,6 +114,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `level_test_runner.py` | 单关冒烟夹具；支持阶段断言、日志门禁、装备组合、加载测量与可选性能/真实渲染采样，具体参数见 `--help` |
 | `level_regression_all.py` | 全量/变更影响关卡回归；失败串行重试并保留首轮失败证据；`--dry-run` 只打印计划 |
 | `release_exe_level_runner.py` | 用正式 Windows release EXE 与发行 PCK 验证 `level_1` 四阶段、结算预载和隔离退出；通过临时 `override.cfg` 追加 `release_exe_level_probe.gd`，不覆盖包内资源 |
+| `release_exe_window_probe.py` | 用正式 Windows release EXE 与发行 PCK 验证窗口冷启动 + `WM_CLOSE` 退出：唯一可见窗口、退出码 0、0 RID/ObjectDB 泄漏与 0 ERROR/WARNING；不注入 override/Autoload，隔离运行目录，驱动噪声单独计数 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵 |
 | `scene_probe_runner.py` | 场景级运行时探针套件；`--probe ui-scope` 检查预热释放/过期/失败，`--probe ldl-runtime` 检查炼丹页切换、背包刷新和保存回滚，后者使用隔离 `user://` |
 | `archive_probe_runner.py` | 档案持久化定向夹具；隔离临时 `user://` |
@@ -188,6 +189,7 @@ python scripts/frame_sequence_pack_probe.py --godot "<godot>" --preset "Windows 
 python scripts/export_raw_manifest.py --check
 python scripts/export_closure_probe.py --self-test
 python scripts/export_closure_probe.py --godot "<godot>" --preset "Windows Desktop (release)"
+python scripts/release_exe_window_probe.py --exe "<release exe>" --pck "<release pck>" --work-dir "<isolated output>"
 ```
 
 ## 6. 约定

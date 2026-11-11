@@ -14,7 +14,7 @@
 
 ## 2. 最近一次发布相关验证
 
-以下结果来自 UI 加载优化之前的 2026-11-11 完整工作区与隔离 Windows release 验证；发布包装在已打开的编辑器占用 MCP 端口时失败，隔离导出和实际包探针另行通过，不将该包装记为通过。
+以下结果来自 UI 加载优化之前的 2026-11-11 完整工作区与隔离 Windows release 验证；发布包装在已打开的编辑器占用 MCP 端口时失败，隔离导出和实际包探针另行通过，不将该包装记为通过。窗口退出探针行为 2026-11-12 结果。
 
 | 验证 | 记录结果 |
 |:---|:---|
@@ -23,6 +23,7 @@
 | `coop_probe_runner` | 38/38 PASS，无 SKIP |
 | `level_regression_all --jobs 12` | 129/129 PASS + 6 SKIP；`level_dsg_4` 首轮有 3 条 RID/material 错误，串行重试通过 |
 | `level_1` | 引擎夹具和正式 release EXE 各 4 阶段 PASS；两者均 0 ERROR / 0 WARNING |
+| `release_exe_window_probe.py` | 修复版 release 包：退出码 0，0 泄漏实例、0 ERROR / 0 WARNING，唯一可见窗口；驱动噪声 2 行单列。修复前旧包同条件 FAIL（RID / ObjectDB / 空单例） |
 | 命名与白名单终审、文档审计 | PASS；命名违规 0、白名单未登记/失效条目 0、文档断链 0 |
 | 正式 release PCK | 5,233 条必需路径存在；68,437 条排除资源及其导入产物不可达；隔离导出日志 0 ERROR / 0 WARNING |
 

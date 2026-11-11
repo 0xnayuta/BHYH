@@ -61,6 +61,8 @@ Godot 4.7 的 [`Object.get_meta`](https://docs.godotengine.org/en/4.7/classes/cl
 
 最小复现：导出空场景，仅设置 `mouse_cursor/custom_image`，退出日志与正式包一致；移除该设置后为 0。启动图、窗口图标与 autoload 对照均不触发。
 
+**上游定性**：这是 Godot 引擎缺陷，不是本项目引入的问题；任何设置自定义光标的工程都会触发。issue [#98806](https://github.com/godotengine/godot/issues/98806)（confirmed，Windows；4.2.1 / 4.3 / 4.4.dev3 可复现）记录同一组日志；修复 PR [#125110](https://github.com/godotengine/godot/pull/125110) 于 2026-11-04 合入 master（4.8 里程碑），在 `finalize_display()` 中先调用 `DisplayServer::cursor_clear_custom_image_cache()` 再 `rendering_server->finish()`。截至 2026-11-12 未检索到 4.7 回移植，当前 4.7.2 仍受影响，工程内保留退出重置光标的规避。
+
 ### 规避
 
 `Global._exit_tree()` 在缓存与场景清理前调用 `Input.set_custom_mouse_cursor(null)`，让引擎提前释放自定义光标纹理。实现在 [`global.gd`](../../source/global.gd)。
