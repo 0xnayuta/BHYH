@@ -48,9 +48,11 @@ func set_normal_info() -> void:
 				% [p1_level, _role_name(role_id), p2_level, _role_name(int((p2_value as Dictionary).get("Myself", 0)))]
 			)
 			return
-	level_and_role.text = (
-		"Lv：" + str(MemoryClass.get_archive_level(_archive_path(archive_num))) + "    " + _role_name(role_id)
-	)
+	# 复用本次已读取的字典，避免再次读盘；保持缺字段默认1与上下限约束。
+	var archive_level: int = 1
+	if archive_data.has(DataKeys.PLAYER_LEVEL):
+		archive_level = clampi(int(archive_data[DataKeys.PLAYER_LEVEL]), 1, int(PlayerData.PLAYER_MAX_LEVEL))
+	level_and_role.text = "Lv：" + str(archive_level) + "    " + _role_name(role_id)
 
 
 func _archive_path(archive_number: int) -> String:

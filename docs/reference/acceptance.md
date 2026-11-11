@@ -145,6 +145,8 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD~1
 
 `scene_probe_runner.py` 对每个注册 `ProbeSpec` 使用完整工程生命周期启动临时场景。每项须产出有效 `*_PROBE_RESULT`，通过结果、要求的 teardown marker、引擎退出码以及无未登记 `SCRIPT ERROR` / `ERROR` / `WARNING`；缺少规格/工程或 Godot 为 2，任一探针失败/超时为 1。只忽略脚本明确列出的 `expected_noise`、dummy renderer `Parameter "t" is null` 和引擎退出的 RID/ObjectDB 清理噪声。不得按 marker 泛化豁免日志。
 
+UI 作用域和炼丹界面改动另跑 `--probe ui-scope` 与 `--probe ldl-runtime`；分别覆盖真实资源预热、跨作用域释放、过期与失败请求，以及同帧页签切换、背包数据刷新和强化保存失败回滚。`ldl-runtime` 使用隔离临时 `user://`；指定的缺失资源失败样本只按唯一路径允许引擎诊断。
+
 存档/身份/保存命令改动：
 
 ```bash

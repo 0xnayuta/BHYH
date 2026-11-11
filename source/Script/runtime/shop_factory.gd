@@ -35,6 +35,8 @@ func _is_tree_paused() -> bool:
 
 
 func _scene(path: String) -> PackedScene:
+	if path == SYNTHESIS_PATH or path == STRENGTH_PATH:
+		return _host.load_cached_scene(path)
 	var cached: Variant = _scenes.get(path)
 	if cached is PackedScene:
 		return cached as PackedScene

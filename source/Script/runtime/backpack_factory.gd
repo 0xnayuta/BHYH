@@ -58,6 +58,8 @@ func clear_scene_caches() -> void:
 
 
 func _scene(path: String) -> PackedScene:
+	if path == BACK_PACK_PATH or path == MAGIC_WEAPON_INFOR_PATH:
+		return _host.load_cached_scene(path)
 	var cached: Variant = _scenes.get(path)
 	if cached is PackedScene:
 		return cached as PackedScene

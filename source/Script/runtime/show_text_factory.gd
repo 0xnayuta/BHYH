@@ -12,7 +12,6 @@ const SOME_MONSTER_HELP_SCENE_PATH := "res://Scene/monster/some_monster_help.tsc
 const LETTER_FOR_PLAYER_SCENE_PATH := "res://Scene/other_menu/a_letter_for_all_players.tscn"
 
 var _host = null
-var _task_title_scene: PackedScene = null
 var _ping_jia_scene: PackedScene = null
 var _message_info_scene: PackedScene = null
 var _some_monster_help_scene: PackedScene = null
@@ -24,7 +23,6 @@ func setup(host: Node) -> void:
 
 
 func clear_scene_caches() -> void:
-	_task_title_scene = null
 	_ping_jia_scene = null
 	_message_info_scene = null
 	_some_monster_help_scene = null
@@ -32,9 +30,7 @@ func clear_scene_caches() -> void:
 
 
 func get_task_title_scene() -> PackedScene:
-	if _task_title_scene == null:
-		_task_title_scene = _host.load_cached_scene(TASK_TITLE_SCENE_PATH)
-	return _task_title_scene
+	return _host.load_cached_scene(TASK_TITLE_SCENE_PATH)
 
 
 func get_ping_jia_scene() -> PackedScene:

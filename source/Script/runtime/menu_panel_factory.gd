@@ -30,14 +30,10 @@ var _host = null
 var _game_set_scene: PackedScene = null
 var _skill_key_set_scene: PackedScene = null
 var _music_set_scene: PackedScene = null
-var _ldl_scene: PackedScene = null
 var _game_information_scene: PackedScene = null
-var _learn_skill_scene: PackedScene = null
 var _mosaic_help_scene: PackedScene = null
 var _mosaic_scene: PackedScene = null
-var _basic_ar_button_scene: PackedScene = null
 var _change_bg_scene: PackedScene = null
-var _cd_jm_scene: PackedScene = null
 var _return_back_map_scene: PackedScene = null
 var _lhhj_help_scene: PackedScene = null
 var _list_button_scene: PackedScene = null
@@ -53,14 +49,10 @@ func clear_scene_caches() -> void:
 	_game_set_scene = null
 	_skill_key_set_scene = null
 	_music_set_scene = null
-	_ldl_scene = null
 	_game_information_scene = null
-	_learn_skill_scene = null
 	_mosaic_help_scene = null
 	_mosaic_scene = null
-	_basic_ar_button_scene = null
 	_change_bg_scene = null
-	_cd_jm_scene = null
 	_return_back_map_scene = null
 	_lhhj_help_scene = null
 	_list_button_scene = null
@@ -87,9 +79,7 @@ func get_music_set_scene() -> PackedScene:
 
 
 func get_ldl_scene() -> PackedScene:
-	if _ldl_scene == null:
-		_ldl_scene = _host.load_cached_scene(LDL_SCENE_PATH)
-	return _ldl_scene
+	return _host.load_cached_scene(LDL_SCENE_PATH)
 
 
 func get_game_information_scene() -> PackedScene:
@@ -99,9 +89,7 @@ func get_game_information_scene() -> PackedScene:
 
 
 func get_learn_skill_scene() -> PackedScene:
-	if _learn_skill_scene == null:
-		_learn_skill_scene = _host.load_cached_scene(LEARN_SKILL_SCENE_PATH)
-	return _learn_skill_scene
+	return _host.load_cached_scene(LEARN_SKILL_SCENE_PATH)
 
 
 func get_mosaic_help_scene() -> PackedScene:
@@ -117,9 +105,7 @@ func get_mosaic_scene() -> PackedScene:
 
 
 func get_basic_ar_button_scene() -> PackedScene:
-	if _basic_ar_button_scene == null:
-		_basic_ar_button_scene = _host.load_cached_scene(BASIC_AR_BUTTON_PATH)
-	return _basic_ar_button_scene
+	return _host.load_cached_scene(BASIC_AR_BUTTON_PATH)
 
 
 func get_change_bg_scene() -> PackedScene:
@@ -129,14 +115,7 @@ func get_change_bg_scene() -> PackedScene:
 
 
 func get_cd_jm_scene() -> PackedScene:
-	if _cd_jm_scene == null:
-		_cd_jm_scene = _host.load_cached_scene(CD_JM_PATH)
-	return _cd_jm_scene
-
-
-## 角色技能图标线程预热完成后调用：只接受已缓存场景，未命中时保持为空，由入口按需加载。
-func prime_learn_skill_scene() -> void:
-	_learn_skill_scene = _host.get_cached_packed_scene(LEARN_SKILL_SCENE_PATH)
+	return _host.load_cached_scene(CD_JM_PATH)
 
 
 func add_game_set(parent, position):

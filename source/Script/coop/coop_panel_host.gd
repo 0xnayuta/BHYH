@@ -56,12 +56,16 @@ func open_panel(slot: int, type: String) -> void:
 	var scene := get_tree().current_scene
 	if scene == null:
 		return
+	var panel_scene := Global.load_ui_scene(str(PANEL_PATHS[type]))
+	if panel_scene == null:
+		push_warning("协作面板加载失败：%s" % str(PANEL_PATHS[type]))
+		return
 	_set_ui_slot(slot)
 	_panel_was_paused = get_tree().paused
 	_has_open_panel = true
 	get_tree().paused = true
 	_panel_type = type
-	_panel_scene = load(PANEL_PATHS[type]) as PackedScene
+	_panel_scene = panel_scene
 	var layer := CanvasLayer.new()
 	layer.layer = 30
 	# 弹出层携带槽位，供当前 UI 宿主下的子面板与弹窗解析操作者。

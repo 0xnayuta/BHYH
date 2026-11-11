@@ -1643,7 +1643,6 @@ func _case_pet_yin_tiger() -> void:
 	await process_frame
 
 
-
 ## 36-3 年兽族：四阶、阶段技能、档案默认条目、P2 写回、死亡别名与双槽生成。
 func _case_pet_nian() -> void:
 	coop.create_secondary(7)
@@ -1755,6 +1754,7 @@ func _find_pet_entry(profile: Node, pet_type: String) -> Dictionary:
 		if pet is Dictionary and str(pet.get("类型", "")) == pet_type:
 			return pet
 	return {}
+
 
 func _case_shared_soul() -> void:
 	coop.create_secondary(7)
@@ -2332,7 +2332,10 @@ func _case_pool_reuse() -> void:
 		_check(not mr._recycled and mr.visible, "mr_hurt active")
 		mr.recycle()
 		_check(mr._recycled and not mr.visible and not mr.animation_player.is_playing(), "mr_hurt cleaned on return")
-		await create_timer(0.06).timeout
+		# 受击限流使用系统单调时钟；物理计时器的 delta 不保证等于真实耗时。
+		var deadline_msec := Time.get_ticks_msec() + CombatPoolRuntime.MR_HURT_MIN_INTERVAL_MSEC + 1
+		while Time.get_ticks_msec() < deadline_msec:
+			await process_frame
 		var mr2: Node = global.add_mr_hurt(monster, Vector2.ZERO)
 		_check(mr2 == mr, "mr_hurt reused from pool")
 		if mr2 != null:
@@ -2703,12 +2706,8 @@ func _case_auto_battle() -> void:
 	settings.set_auto_battle_enabled(true)
 	skill_controller.reset()
 	skill_controller.tick(0.22)
-	_check(
-		float(skill_hero.role1_skill_inter.get("slz", 0.0)) > 0.0, "real skill starts through controller"
-	)
-	_check(
-		int(skill_controller.get_skill_cast_counts().get("slz", 0)) == 1, "skill cast count tracks start"
-	)
+	_check(float(skill_hero.role1_skill_inter.get("slz", 0.0)) > 0.0, "real skill starts through controller")
+	_check(int(skill_controller.get_skill_cast_counts().get("slz", 0)) == 1, "skill cast count tracks start")
 	skill_hero.is_using_skills = false
 	skill_hero.is_attacking = false
 	skill_hero.get_action = "wait"
@@ -2716,9 +2715,7 @@ func _case_auto_battle() -> void:
 	skill_hero.RoleProp.roleprop.Mp = skill_hero.RoleProp.roleprop.SMp
 	skill_hero.role_action_player.stop()
 	skill_controller.tick(0.22)
-	_check(
-		skill_controller.get_skill_cast_counts().is_empty(), "skill count clears after required casts"
-	)
+	_check(skill_controller.get_skill_cast_counts().is_empty(), "skill count clears after required casts")
 	_check(skill_controller.get_skill_cursor() == 0, "skill cursor wraps after count")
 	skill_controller.reset()
 	_check(skill_controller.get_target() == null and skill_controller.get_skill_cursor() == 0, "reset clears state")

@@ -15,7 +15,6 @@ const FORCED_INFO_LEVEL_PATHS := [
 ]
 
 var _host = null
-var _level_info_scene: PackedScene = null
 var _drop_pro_by_level: Dictionary = {}
 
 
@@ -23,11 +22,9 @@ func setup(host: Node) -> void:
 	_host = host
 
 
-## level_info.tscn 是常驻信息面板场景槽位，与迁移前的 Global.level_info 一样不随关卡清理。
+## 信息面板场景由资源运行时按作用域持有。
 func get_level_info_scene() -> PackedScene:
-	if _level_info_scene == null:
-		_level_info_scene = _host.load_cached_scene(LEVEL_INFO_SCENE_PATH)
-	return _level_info_scene
+	return _host.load_cached_scene(LEVEL_INFO_SCENE_PATH)
 
 
 func sync_drop_pro_data(source: Dictionary) -> void:

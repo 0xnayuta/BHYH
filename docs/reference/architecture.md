@@ -74,11 +74,11 @@ flowchart TD
 `Global.change_scene(target, force_loading_screen=false, require_archive_session=true) -> bool` 的实际行为：
 
 1. `SceneFlow` 要求目标非空、后缀为 `.tscn`/`.scn` 且 `ResourceLoader.exists`；启用默认会话要求时，`res://Scene/level/` 目标还要求有效档案会话。无效目标直接 `false`，不清理运行态。
-2. 接受后推进场景请求与运行时代次，关闭已登记临时 UI，按退出场景需要结束档案会话；释放旧关卡资源租约并为新目标建立租约。
-3. 已预载 PackedScene 的普通 `res://Scene/level/` 目标可直接切换（`level_hdzm.tscn` 与 `force_loading_screen` 除外）；其他目标经 `load_scene.tscn`。
-4. 加载页在 `_ready` 固定目标路径和请求代次。线程结果只有在代次仍有效且目标匹配时才可缓存或提交；旧请求不覆盖新请求。
+2. 接受后推进场景请求与运行时代次，关闭已登记临时 UI，按退出场景需要结束档案会话；释放旧关卡资源租约并为新目标建立租约和 UI 作用域。
+3. 已预载 PackedScene 的普通 `res://Scene/level/` 目标仅在 UI 作用域已就绪时直接切换（`level_hdzm.tscn` 与 `force_loading_screen` 除外）；其他目标经 `load_scene.tscn`。
+4. 加载页在 `_ready` 固定目标路径和请求代次，等待作用域与永久小 UI 线程预热后再加载目标；线程结果只有在代次仍有效且目标匹配时才可缓存或提交。
 
-返回 `true` 只表示当前引擎切换调用已接受，不保证后续加载完成。加载页使用构建期 `LevelPreloadCatalog` / `LevelPreloadStore` 与已登记资源，不运行时扫描目录或解析 manifest；加载超时默认 **120,000 ms**，`application/run/load_timeout_msec` 可覆盖。失败、取消或超时会留在加载页并显示失败，不提交未完成目标；Godot 没有公开线程加载取消接口，因此过期后台结果只停止轮询/写回/提交并丢弃。
+返回 `true` 只表示当前引擎切换调用已接受，不保证后续加载完成。加载页使用构建期 `LevelPreloadCatalog` / `LevelPreloadStore` 与已登记资源，不运行时扫描目录或解析 manifest；目标加载超时默认 **120,000 ms**，`application/run/load_timeout_msec` 可覆盖；UI 作用域预热另有 **60,000 ms** 等待上限。失败或超时时加载页显示失败，不提交未完成目标；请求过期时旧加载页不再提交。UI 与资源预载的过期线程请求由资源运行时跨帧收尾；加载页自身的请求清理边界见生命周期矩阵。
 
 更完整的租约、清理、退出和异步失败语义见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)。
 

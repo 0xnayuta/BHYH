@@ -1235,19 +1235,6 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	checks["menu_lhhj_button_created"] = lhhj_button != null and lhhj_button.get_parent() == host
 	if lhhj_button != null:
 		created.append(lhhj_button)
-	checks["menu_panel_scenes_cached"] = (
-		Global.is_resource_cached(GAME_SET_PATH)
-		and Global.is_resource_cached(SKILL_KEY_SET_PATH)
-		and Global.is_resource_cached(MUSIC_SET_PATH)
-		and Global.is_resource_cached(LDL_PATH)
-		and Global.is_resource_cached(GAME_INFORMATION_PATH)
-		and Global.is_resource_cached(LEARN_SKILL_PATH)
-		and Global.is_resource_cached(MOSAIC_HELP_PATH)
-		and Global.is_resource_cached(MOSAIC_PATH)
-		and Global.is_resource_cached(BASIC_AR_BUTTON_PATH)
-		and Global.is_resource_cached(CHANGE_BG_PATH)
-		and Global.is_resource_cached(CD_JM_PATH)
-	)
 	# 负向断言：已删除的死入口不得复活。
 	checks["set_menu_entry_removed"] = not Global.has_method("add_set_menu")
 	_cleanup(created, host)

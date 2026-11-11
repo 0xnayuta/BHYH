@@ -57,6 +57,7 @@ var _target_scene: String = ""
 var _request_generation: int = 0
 var _load_started_msec: int = 0
 var _failure_reported := false
+var _ui_preload_paused := false
 var _first_launch_integrity_required := false
 var _first_launch_integrity_valid := true
 var _integrity_thread: Thread
@@ -87,6 +88,8 @@ func _ready() -> void:
 		scene_flow.set_target_scene(DEFAULT_TARGET_SCENE)
 	_target_scene = scene_flow.get_target_scene()
 	_request_generation = Global.get_scene_request_generation()
+	# 启动加载页不经过 SceneFlow；由 ResourceRuntime 保证同一目标请求幂等。
+	Global.get_resource_runtime().begin_ui_scope(_target_scene)
 	var startup_progress := float(get_meta("startup_progress", 0.0))
 	loading_bar.value = startup_progress
 	loading_text.text = "%d%%" % int(startup_progress * 100.0)
@@ -170,6 +173,25 @@ func _start_archive_preload() -> void:
 		PET_DRAGON_SUMMON_SCRIPT.clear_cached_scenes()
 		PET_TURTLE_SUMMON_SCRIPT.clear_cached_scenes()
 		PET_TURTLE_BULLET_SCRIPT.clear_cached_frames()
+	var ui_ready: bool = await Global.get_resource_runtime().wait_ui_scope_ready()
+	if not _is_request_current():
+		return
+	if not ui_ready:
+		var ui_error := str(Global.get_resource_runtime().get_ui_scope_snapshot().get("error", "未知错误"))
+		_fail_scene_load("界面资源预热失败：" + ui_error)
+		return
+	var permanent_ready: bool = await Global.prewarm_permanent_small_ui_scenes()
+	if not _is_request_current():
+		return
+	if not permanent_ready:
+		_fail_scene_load("常用界面预热失败：" + Global.get_resource_runtime().get_permanent_ui_prewarm_error())
+		return
+	Global.get_resource_runtime().begin_ui_preload_pause()
+	_ui_preload_paused = true
+	await Global.get_resource_runtime().wait_ui_preload_idle()
+	if not _is_request_current():
+		_resume_ui_preload()
+		return
 	var paths := _build_archive_preload_paths()
 	if _is_battle_target_scene():
 		_log_battle_load_context(paths)
@@ -292,7 +314,7 @@ func _request_preload_path(path: String) -> void:
 	var preload_type := "PackedScene" if uncached_target else ""
 	var cache_mode := ResourceLoader.CACHE_MODE_IGNORE_DEEP if uncached_target else ResourceLoader.CACHE_MODE_REUSE
 	var err := ResourceLoader.load_threaded_request(path, preload_type, false, cache_mode)
-	if err == OK or err == ERR_BUSY:
+	if err == OK:
 		_pending_paths.append(path)
 	else:
 		var resource := load(path)
@@ -309,9 +331,7 @@ func _fill_preload_slots() -> void:
 
 func _poll_pending_paths() -> void:
 	if not _is_request_current():
-		_pending_paths.clear()
-		_queued_paths.clear()
-		_load_started = false
+		_cancel_pending_requests()
 		return
 	var changed := false
 	var i := _pending_paths.size() - 1
@@ -325,6 +345,8 @@ func _poll_pending_paths() -> void:
 			_completed_paths += 1
 			changed = true
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			if status == ResourceLoader.THREAD_LOAD_FAILED:
+				ResourceLoader.load_threaded_get(path)
 			print("preload failed: ", path)
 			_pending_paths.remove_at(i)
 			_completed_paths += 1
@@ -414,6 +436,7 @@ func _finish_loading() -> void:
 	if _finishing or _changing_scene or not _is_request_current():
 		return
 	_finishing = true
+	_resume_ui_preload()
 	var equipped_magic_weapon := str(PlayerData.player_data.get("实战法宝", ""))
 	if equipped_magic_weapon == "" and PlayerData.player_data.get(DataKeys.MAGIC_WEAPON, []).size() > 0:
 		equipped_magic_weapon = str(PlayerData.player_data[DataKeys.MAGIC_WEAPON][0].get(DataKeys.NAME, ""))
@@ -694,8 +717,16 @@ func _is_request_current() -> bool:
 	return not _failure_reported and is_inside_tree() and Global.is_scene_request_current(_request_generation)
 
 
+func _resume_ui_preload() -> void:
+	if _ui_preload_paused:
+		_ui_preload_paused = false
+		Global.get_resource_runtime().end_ui_preload_pause()
+
+
 # 取消只停止轮询与提交；ResourceLoader 没有公开的线程取消 API，后台请求完成后丢弃。
 func _cancel_pending_requests() -> void:
+	_resume_ui_preload()
+	Global.get_resource_runtime().discard_threaded_requests(_pending_paths)
 	_pending_paths.clear()
 	_queued_paths.clear()
 	_load_started = false

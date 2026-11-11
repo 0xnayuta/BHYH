@@ -173,7 +173,10 @@ func _on_ui_runtime_instance_exited(instance_id: int) -> void:
 func _release_ui_scene_cache_if_unused(scene_path: String) -> void:
 	if int(_ui_runtime_instance_counts.get(scene_path, 0)) > 0:
 		return
-	if _host.get_resource_runtime().is_permanent_small_ui_scene_path(scene_path):
+	if (
+		_host.get_resource_runtime().is_permanent_small_ui_scene_path(scene_path)
+		or _host.get_resource_runtime().is_ui_scope_scene_path(scene_path)
+	):
 		return
 	_host.get_resource_runtime().erase_cached_scene(scene_path)
 	_clear_packed_scene_members_for_path(scene_path)

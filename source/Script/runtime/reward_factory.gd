@@ -31,6 +31,8 @@ func _is_tree_paused() -> bool:
 
 
 func _scene(path: String) -> PackedScene:
+	if path == BASIC_TASK_PATH:
+		return _host.load_cached_scene(path)
 	var cached: Variant = _scenes.get(path)
 	if cached is PackedScene:
 		return cached as PackedScene

@@ -200,7 +200,7 @@ func _exit_tree() -> void:
 		_ui_runtime.release_ui_runtime_cache(true)
 		_ui_runtime.clear_runtime_state()
 	if _resource_runtime != null:
-		_resource_runtime.clear_runtime_state()
+		_resource_runtime.shutdown_runtime_state()
 	if _audio_runtime != null:
 		_audio_runtime.clear_runtime_state()
 	FrameSequenceStore.clear_cache()
@@ -329,7 +329,6 @@ func _ready() -> void:
 		MemoryClass.background_save_finished.connect(_on_background_save_finished)
 	if MemoryClass != null and not MemoryClass.save_failed.is_connected(_on_save_failed):
 		MemoryClass.save_failed.connect(_on_save_failed)
-	call_deferred("prewarm_permanent_small_ui_scenes")
 
 
 func get_runtime_diagnostics() -> RuntimeDiagnostics:
@@ -667,8 +666,8 @@ func load_cached_scene(path: String) -> PackedScene:
 	return _resource_runtime.load_scene(path)
 
 
-func prewarm_permanent_small_ui_scenes(generation: int = -1) -> void:
-	await _resource_runtime.prewarm_permanent_small_ui_scenes(generation)
+func prewarm_permanent_small_ui_scenes(generation: int = -1) -> bool:
+	return await _resource_runtime.prewarm_permanent_small_ui_scenes(generation)
 
 
 # 加载页只读查询：不暴露缓存字典，也不触发加载。
@@ -739,7 +738,6 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 	if not is_runtime_generation_current(request_generation):
 		return
 	var paths: Array = [
-		"res://Scene/skill/learn_skill.tscn",
 		"res://Scene/skill/zd_skill.tscn",
 		"res://Scene/skill/bd_skill.tscn",
 	]
@@ -759,7 +757,6 @@ func prewarm_skill_page_resources(generation: int = -1) -> void:
 	await _preload_paths_threaded(paths, request_generation)
 	if not is_runtime_generation_current(request_generation):
 		return
-	_menu_panel_factory.prime_learn_skill_scene()
 	_skill_panel_factory.prime_skill_scenes()
 
 
@@ -1243,7 +1240,12 @@ func begin_archive_session(prewarm: bool = true) -> bool:
 	var generation := _archive_session_generation
 	var role_id := _archive_session.get_role_id()
 	var runtime_generation := _runtime_generation
-	await prewarm_permanent_small_ui_scenes(runtime_generation)
+	var ui_ready: bool = await prewarm_permanent_small_ui_scenes(runtime_generation)
+	if not ui_ready:
+		if _is_archive_session_current(generation, role_id, runtime_generation):
+			push_warning("常用界面预热失败：" + _resource_runtime.get_permanent_ui_prewarm_error())
+		_finish_archive_prewarm(prewarm_token)
+		return false
 	if not _is_archive_session_current(generation, role_id, runtime_generation):
 		_finish_archive_prewarm(prewarm_token)
 		return false
@@ -1348,6 +1350,7 @@ func end_archive_session() -> void:
 	if MemoryClass != null and MemoryClass.has_method("flush_pending_saves"):
 		MemoryClass.flush_pending_saves()
 	_advance_runtime_generation()
+	_resource_runtime.clear_ui_scope()
 	if not is_archive_session_active():
 		return
 	_archive_session_generation += 1

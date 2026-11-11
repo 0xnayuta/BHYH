@@ -115,7 +115,7 @@ frame_sequence_pack_probe.py（发布前独立执行）
 | `level_regression_all.py` | 全量/变更影响关卡回归；失败串行重试并保留首轮失败证据；`--dry-run` 只打印计划 |
 | `release_exe_level_runner.py` | 用正式 Windows release EXE 与发行 PCK 验证 `level_1` 四阶段、结算预载和隔离退出；通过临时 `override.cfg` 追加 `release_exe_level_probe.gd`，不覆盖包内资源 |
 | `coop_probe_runner.py` | LocalCoop 探针矩阵 |
-| `scene_probe_runner.py` | 场景级运行时探针套件 |
+| `scene_probe_runner.py` | 场景级运行时探针套件；`--probe ui-scope` 检查预热释放/过期/失败，`--probe ldl-runtime` 检查炼丹页切换、背包刷新和保存回滚，后者使用隔离 `user://` |
 | `archive_probe_runner.py` | 档案持久化定向夹具；隔离临时 `user://` |
 | `frame_sequence_pack_probe.py` | 实际导出 PCK 并挂载校验依赖；`--check-exclusions` 同时验证排除资源不可达 |
 | `export_closure_probe.py` | 原始数据清单 → 实际 PCK 挂载校验 JSON/BIN；插件日志计数与清单一致 |
@@ -175,6 +175,8 @@ python scripts/level_regression_all.py --changed-only --diff-base HEAD
 # 运行期探针
 python scripts/coop_probe_runner.py --godot "<godot>"
 python scripts/scene_probe_runner.py --godot "<godot>"
+python scripts/scene_probe_runner.py --godot "<godot>" --probe ui-scope
+python scripts/scene_probe_runner.py --godot "<godot>" --probe ldl-runtime
 python scripts/archive_probe_runner.py --godot "<godot>"
 
 # 契约自测与发布闭包

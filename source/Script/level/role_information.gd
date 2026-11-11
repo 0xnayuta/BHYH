@@ -35,7 +35,6 @@ const WUSHUANG_POSITION_X_P2 := 82.0
 
 func _ready() -> void:
 	add_to_group("RoleInformation")
-	Global.call_deferred("prewarm_permanent_small_ui_scenes")
 	player = _main_role()
 	if player == null:
 		player = RoleProp.source_player

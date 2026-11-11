@@ -131,6 +131,7 @@ func get_cache_scope_snapshot() -> Dictionary:
 			"active_sound_players": int(_host.get_audio_runtime().get_snapshot().get("active_sound_players", 0)),
 		},
 		"ui": _host.get_ui_runtime().get_scope_snapshot(),
+		"ui_prewarm": _host.get_resource_runtime().get_ui_scope_snapshot(),
 	}
 
 

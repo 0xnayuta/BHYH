@@ -30,16 +30,24 @@ Godot 工程根目录，用 `--scene` 启动完整项目生命周期，结束后
 - `phase37-6`：寒山坡出口初始隐藏/清关可见、小龙女装备权限、分解帮助文本与固定概率掉落。
 - `phase38-6a`：非 qly 精英 signature 的 EliteAttack 方向属性。
 - `phase38-6`：72/73 魂晶图标、2P 魂卡属性隔离与双人精英实际属性。
+- `ui-scope`：main menu archive / map / battle 作用域的真实预热与实例化、跨作用域释放、
+  同作用域重复 begin 幂等、在途请求切换后的过期等待与队列清空、begin_ui_preload_pause
+  的 idle 语义、隔离注入缺失路径的失败传播/旧 token 清理与暂停 UI 关闭后缓存保留。
+- `ldl-runtime`：一次性 user:// 目录中的真实档案会话与 `Global.add_ldl`；同帧
+  强化/合成/镶嵌/返回切换的面板归属与实例替换、背包 grid 增量刷新（原地修改与
+  同值 Data 引用替换）、强化保存失败时的材料/灵魂回滚。
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 from dataclasses import dataclass
@@ -64,6 +72,9 @@ class ProbeSpec:
     timeout_seconds: int = 90
     # 探针主动构造的失败场景会打印固定日志；必须逐条给出理由，禁止泛化匹配。
     expected_noise: tuple[str, ...] = ()
+    # 需要建立真实档案会话并落盘的探针必须使用一次性 user:// 目录，
+    # 避免读写本机存档、.save_key 与 MainGame.json；默认关闭以保持既有探针行为。
+    isolated_user_dir: bool = False
 
     @property
     def script_path(self) -> Path:
@@ -441,6 +452,33 @@ PROBES: tuple[ProbeSpec, ...] = (
         quit_after_frames=900,
         timeout_seconds=120,
     ),
+    ProbeSpec(
+        key="ui-scope",
+        title="UI 作用域缓存切换与过期请求探针",
+        script_name="ui_scope_probe.gd",
+        scene_name="ui_scope_probe.tscn",
+        result_prefix="UI_SCOPE_PROBE_RESULT=",
+        report_stem="ui_scope_probe_report",
+        teardown_marker="UI_SCOPE_PROBE_TEARDOWN",
+        quit_after_frames=18000,
+        timeout_seconds=300,
+        # 隔离失败探针故意向真实 ResourceLoader 请求 __ui_scope_probe_missing.tscn：
+        # 引擎只为该唯一路径打印 Cannot open file / Failed loading resource /
+        # No loader found，按唯一文件名放行，不泛化其它加载错误。
+        expected_noise=("__ui_scope_probe_missing.tscn",),
+    ),
+    ProbeSpec(
+        key="ldl-runtime",
+        title="ldl 同帧页切换/背包刷新/强化回滚探针",
+        script_name="ldl_runtime_probe.gd",
+        scene_name="ldl_runtime_probe.tscn",
+        result_prefix="LDL_RUNTIME_PROBE_RESULT=",
+        report_stem="ldl_runtime_probe_report",
+        teardown_marker="LDL_RUNTIME_PROBE_TEARDOWN",
+        quit_after_frames=600,
+        timeout_seconds=180,
+        isolated_user_dir=True,
+    ),
 )
 
 
@@ -515,6 +553,10 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
     instance_id = uuid.uuid4().hex[:10]
     gd_path, scene_path = write_fixture(spec, instance_id)
     temp_paths = [gd_path, scene_path]
+    # 落盘类探针使用一次性用户目录；先于 Godot 启动注入，确保 user:// 全程隔离。
+    user_dir: Path | None = None
+    if spec.isolated_user_dir:
+        user_dir = Path(tempfile.mkdtemp(prefix=f"bhyh_{spec.key.replace('-', '_')}_probe_"))
     command = [
         godot,
         "--headless",
@@ -529,9 +571,17 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
     result: dict = {"ok": False, "failures": [], "checks": {}}
     started = time.perf_counter()
     try:
+        env = os.environ.copy()
+        if user_dir is not None:
+            env["APPDATA"] = str(user_dir)
+            env["LOCALAPPDATA"] = str(user_dir)
+            env["TEMP"] = str(user_dir)
+            env["TMP"] = str(user_dir)
+            env["XDG_DATA_HOME"] = str(user_dir)
         completed = subprocess.run(
             command,
             cwd=ROOT,
+            env=env,
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -564,6 +614,8 @@ def run_probe(godot: str, spec: ProbeSpec, timeout_override: int | None) -> dict
         }
     finally:
         cleanup_temp(temp_paths)
+        if user_dir is not None:
+            shutil.rmtree(user_dir, ignore_errors=True)
         result["duration_seconds"] = round(time.perf_counter() - started, 2)
     return result
 

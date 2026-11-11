@@ -57,7 +57,6 @@ func _ready() -> void:
 	if not get_viewport().size_changed.is_connected(_fit_to_fullscreen):
 		get_viewport().size_changed.connect(_fit_to_fullscreen)
 	_save_if_possible()
-	Global.call_deferred("prewarm_permanent_small_ui_scenes")
 
 
 func _exit_tree() -> void:

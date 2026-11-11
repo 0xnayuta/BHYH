@@ -71,14 +71,18 @@ func change_scene(target, force_loading_screen: bool = false, require_archive_se
 
 	_host.clear_level_resource_cache()
 	_host.get_resource_runtime().begin_level_resource_lease(target_path)
+	_host.get_resource_runtime().begin_ui_scope(target_path)
 
-	var cached = _host.get_resource_runtime().take_preloaded_scene(target_path)
+	var cached: PackedScene = null
+	if not force_loading_screen and not _host.get_resource_runtime().has_ui_scope_pending():
+		cached = _host.get_resource_runtime().take_preloaded_scene(target_path)
 	if cached == null:
 		_host.get_resource_runtime().clear_preloaded_scene_slot()
 	target_scene = target_path
 
 	if (
 		not force_loading_screen
+		and not _host.get_resource_runtime().has_ui_scope_pending()
 		and cached != null
 		and target_path.begins_with("res://Scene/level/")
 		and target_path != "res://Scene/level/level_hdzm.tscn"
