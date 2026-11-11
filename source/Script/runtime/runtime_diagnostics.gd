@@ -141,6 +141,7 @@ func get_preloaded_scene_slot_snapshot() -> Dictionary:
 			"path": "",
 			"ready_path": "",
 			"ready": false,
+			"state": ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,
 		}
 	return _host.get_resource_runtime().get_preloaded_slot_snapshot()
 

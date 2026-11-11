@@ -78,7 +78,7 @@ flowchart TD
 3. 已预载 PackedScene 的普通 `res://Scene/level/` 目标仅在 UI 作用域已就绪时直接切换（`level_hdzm.tscn` 与 `force_loading_screen` 除外）；其他目标经 `load_scene.tscn`。
 4. 加载页在 `_ready` 固定目标路径和请求代次，等待作用域与永久小 UI 线程预热后再加载目标；线程结果只有在代次仍有效且目标匹配时才可缓存或提交。
 
-返回 `true` 只表示当前引擎切换调用已接受，不保证后续加载完成。加载页使用构建期 `LevelPreloadCatalog` / `LevelPreloadStore` 与已登记资源，不运行时扫描目录或解析 manifest；目标加载超时默认 **120,000 ms**，`application/run/load_timeout_msec` 可覆盖；UI 作用域预热另有 **60,000 ms** 等待上限。失败或超时时加载页显示失败，不提交未完成目标；请求过期时旧加载页不再提交。UI 与资源预载的过期线程请求由资源运行时跨帧收尾；加载页自身的请求清理边界见生命周期矩阵。
+返回 `true` 只表示当前引擎切换调用已接受，不保证后续加载完成。加载页使用构建期 `LevelPreloadCatalog` / `LevelPreloadStore` 与已登记资源，不运行时扫描目录或解析 manifest；目标加载超时默认 **120,000 ms**，`application/run/load_timeout_msec` 可覆盖；UI 作用域预热另有 **60,000 ms** 等待上限。失败或超时时加载页显示失败，不提交未完成目标；请求过期时旧加载页不再提交。线程加载统一由资源运行时登记、轮询与收尾（普通 `Thread` + `ResourceLoader.load`，不使用 `load_threaded_request`）；主线程只轮询，不阻塞等待加载线程，具体边界见生命周期矩阵。
 
 更完整的租约、清理、退出和异步失败语义见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)。
 

@@ -85,11 +85,15 @@ var _legacy_preload_epoch: int = 0
 var _legacy_preload_lock_owner_id: int = 0
 var _legacy_preload_waiter_next_id: int = 0
 var _legacy_preload_waiters: Array[Dictionary] = []
-var _legacy_active_requests: Dictionary = {}
-## legacy `_preload_paths_threaded_impl` 成功 request 的未收尾 token（path -> count）。
-## generation 失效/失败时转入，由 ResourceRuntime 持续轮询收尾；退出可同步清空。
-var _orphan_threaded_requests: Dictionary = {}
-var _threaded_orphans_shutting_down: bool = false
+var _legacy_active_requests: Array = []
+## 普通 Thread 加载作业：4.7.2 的 load_threaded_request 在嵌套 preload 时
+## 泄漏 LoadToken（godot#120661）。一次只运行一个普通 Thread 加载，避免两个
+## 线程互相等待对方依赖而死锁；排队项由主线程逐帧推进。
+var _thread_load_jobs: Dictionary = {}
+var _thread_load_queue: Array = []
+var _active_thread_load_job: ThreadLoadJob = null
+var _thread_load_job_next_id: int = 0
+var _thread_load_jobs_shutting_down := false
 
 ## 关卡资源租约
 var _level_resource_lease: Dictionary = {}
@@ -99,6 +103,7 @@ var _level_resource_lease_id: int = 0
 var _preloaded_scene: PackedScene = null
 var _preloaded_scene_path: String = ""
 var _preloading_path: String = ""
+var _preloading_job_id: int = 0
 
 
 func setup(host: Node) -> void:
@@ -112,19 +117,170 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_poll_thread_load_jobs()
 	_poll_ui_scene_requests()
-	_poll_orphan_threaded_requests()
 	_fill_ui_scene_request_slots()
 	_refresh_permanent_ui_prewarm_state()
-	if _ui_scene_requests.is_empty() and _orphan_threaded_requests.is_empty():
+	if _ui_scene_requests.is_empty() and not _has_unsettled_thread_loads():
 		set_process(false)
 	elif (
 		_ui_preload_pause_count > 0
 		and _count_ui_scene_requests_in_state(UI_SCENE_REQUEST_STATE_LOADING) == 0
-		and _orphan_threaded_requests.is_empty()
+		and not _has_unsettled_thread_loads()
 	):
 		# 暂停期无在途请求：只保留排队状态，等 end_ui_preload_pause 再恢复。
 		set_process(false)
+
+
+## 是否存在仍需主线程推进的作业：排队、运行中或已放弃但未 join。
+func _has_unsettled_thread_loads() -> bool:
+	if _active_thread_load_job != null or not _thread_load_queue.is_empty():
+		return true
+	for job_value in _thread_load_jobs.values():
+		if (job_value as ThreadLoadJob).state == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			return true
+	return false
+
+
+## 单个线程加载作业：工作线程只执行 ResourceLoader.load，结果由主线程取回。
+## `joined` 保证每个 Thread 只 wait_to_finish 一次。
+class ThreadLoadJob:
+	extends RefCounted
+	var job_id: int = 0
+	var thread: Thread
+	var path: String
+	var type_hint: String
+	var cache_mode: int = ResourceLoader.CACHE_MODE_REUSE
+	var resource: Resource
+	var state: int = ResourceLoader.THREAD_LOAD_IN_PROGRESS
+	var abandoned := false
+	var joined := false
+
+
+## 登记一个普通 Thread 加载并返回作业 id；实际执行由主线程逐个启动。
+func start_thread_load(path: String, type_hint: String = "", cache_mode: int = ResourceLoader.CACHE_MODE_REUSE) -> int:
+	if path.is_empty():
+		return 0
+	_thread_load_job_next_id += 1
+	var job := ThreadLoadJob.new()
+	job.job_id = _thread_load_job_next_id
+	job.path = path
+	job.type_hint = type_hint
+	job.cache_mode = cache_mode
+	_thread_load_jobs[job.job_id] = job
+	_thread_load_queue.append(job.job_id)
+	_ensure_ui_request_processing()
+	return job.job_id
+
+
+func get_thread_load_state(job_id: int) -> int:
+	var job_value: Variant = _thread_load_jobs.get(job_id)
+	if job_value == null:
+		return ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+	return (job_value as ThreadLoadJob).state
+
+
+## 取回已完成作业的结果并释放句柄；仍在进行中时返回 null 并保留作业。
+func take_thread_load_resource(job_id: int) -> Resource:
+	var job_value: Variant = _thread_load_jobs.get(job_id)
+	if job_value == null:
+		return null
+	var job: ThreadLoadJob = job_value
+	if job.state == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		return null
+	_thread_load_jobs.erase(job_id)
+	_thread_load_queue.erase(job_id)
+	_join_thread_load_job(job)
+	return job.resource
+
+
+## 放弃作业结果：运行中的作业标记为 abandoned，结束后由主线程 join 丢弃；
+## 排队项直接移除，不创建线程。
+func retire_thread_load(job_id: int) -> void:
+	if job_id <= 0:
+		return
+	var job_value: Variant = _thread_load_jobs.get(job_id)
+	if job_value == null:
+		return
+	var job: ThreadLoadJob = job_value
+	_thread_load_jobs.erase(job_id)
+	_thread_load_queue.erase(job_id)
+	if job == _active_thread_load_job:
+		job.abandoned = true
+	else:
+		_join_thread_load_job(job)
+	_ensure_ui_request_processing()
+
+
+## 工作线程入口：不能触碰场景树或节点，只做资源加载。
+static func _load_resource_on_thread(path: String, type_hint: String, cache_mode: int) -> Resource:
+	return ResourceLoader.load(path, type_hint, cache_mode)
+
+
+func _poll_thread_load_jobs() -> void:
+	var active := _active_thread_load_job
+	if active != null:
+		if active.thread != null and active.thread.is_alive():
+			return
+		_join_thread_load_job(active)
+		if not active.abandoned:
+			active.state = (
+				ResourceLoader.THREAD_LOAD_LOADED if active.resource != null else ResourceLoader.THREAD_LOAD_FAILED
+			)
+		_active_thread_load_job = null
+	_start_next_thread_load_job()
+
+
+func _start_next_thread_load_job() -> void:
+	while _active_thread_load_job == null and not _thread_load_queue.is_empty():
+		var job_id := int(_thread_load_queue.pop_front())
+		var job_value: Variant = _thread_load_jobs.get(job_id)
+		if job_value == null:
+			continue
+		var job: ThreadLoadJob = job_value
+		var thread := Thread.new()
+		var err := thread.start(ResourceRuntime._load_resource_on_thread.bind(job.path, job.type_hint, job.cache_mode))
+		if err != OK:
+			job.state = ResourceLoader.THREAD_LOAD_FAILED
+			_thread_load_jobs.erase(job_id)
+			continue
+		job.thread = thread
+		_active_thread_load_job = job
+
+
+func _join_thread_load_job(job: ThreadLoadJob) -> void:
+	if job.joined:
+		return
+	job.joined = true
+	if job.thread == null:
+		return
+	job.resource = job.thread.wait_to_finish() as Resource
+	job.thread = null
+
+
+## 退出或清空：只 join 已结束的线程。运行中的工作线程需要主循环刷新主线程
+## MessageQueue 上的回调才能结束，退出阶段无法再推进帧；放弃它并交由进程退出
+## 回收，绝不阻塞主线程导致窗口无法关闭。
+func _join_all_thread_load_jobs() -> void:
+	var active := _active_thread_load_job
+	if active != null and not active.joined:
+		if active.thread == null or not active.thread.is_alive():
+			_join_thread_load_job(active)
+	_active_thread_load_job = null
+	_thread_load_jobs.clear()
+	_thread_load_queue.clear()
+
+
+func _retire_thread_load_ids(job_ids: Array) -> void:
+	for job_id in job_ids:
+		retire_thread_load(int(job_id))
+	job_ids.clear()
+
+
+func _erase_thread_load_id(job_ids: Array, job_id: int) -> void:
+	var index := job_ids.find(job_id)
+	if index >= 0:
+		job_ids.remove_at(index)
 
 
 func is_generation_current(generation: int) -> bool:
@@ -191,14 +347,13 @@ func shutdown_runtime_state() -> void:
 
 
 func _clear_runtime_state_internal(shutting_down: bool) -> void:
-	# 旧协程可能停在 await；清理前先取得其待收尾 token 的所有权。
-	_transfer_orphan_threaded_requests(_legacy_active_requests)
-	_abort_ui_scene_requests()
+	# 旧协程可能停在 await；清理前把已发起的 legacy 作业转交主线程继续收尾。
+	_retire_thread_load_ids(_legacy_active_requests)
+	_abort_ui_scene_requests(shutting_down)
 	_ui_preload_pause_count = 0
 	_legacy_preload_epoch += 1
 	_legacy_preload_lock_owner_id = 0
 	_legacy_preload_waiters.clear()
-	_orphan_threaded_requests.clear()
 	_ui_scope_token += 1
 	_ui_scope_name = UI_SCOPE_NONE
 	_ui_scope_target_scene = ""
@@ -221,8 +376,10 @@ func _clear_runtime_state_internal(shutting_down: bool) -> void:
 	_level_resource_lease_id = 0
 	_permanent_ui_prewarm_in_progress = false
 	_permanent_ui_prewarmed = false
-	# 可重用 clear 恢复正常调度；真正 shutdown 保持禁止，晚到协程只能同步收尾。
-	_threaded_orphans_shutting_down = shutting_down
+	# 可重用 clear 恢复正常调度；真正 shutdown 保持禁止，晚到回调只能同步收尾。
+	_thread_load_jobs_shutting_down = shutting_down
+	if not shutting_down:
+		_ensure_ui_request_processing()
 
 
 # -----------------------------------------------------------------------------
@@ -272,10 +429,9 @@ func load_scene(path: String) -> PackedScene:
 	return cached_scene as PackedScene
 
 
-## 同步 API 的唯一读入口：若同路径已有线程请求在途，也绝不调用
-## load_threaded_get 抢占其 token。注意 REUSE 在未命中缓存时可能等待同路径
-## 已开始的线程请求，因此本函数只保证“不主动制造第二份 token”，不承诺零阻塞；
-## 正常入口会在加载页等待 UI 作用域就绪后再发布目标场景。
+## 同步 API 的唯一读入口：REUSE 在未命中缓存时可能等待同路径已开始的普通线程加载，
+## 因此本函数只保证不重复制造加载任务，不承诺零阻塞；正常入口会在加载页等待 UI
+## 作用域就绪后再发布目标场景。
 func _load_scene_synchronously(path: String) -> PackedScene:
 	return ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE) as PackedScene
 
@@ -483,11 +639,24 @@ func wait_ui_preload_idle() -> void:
 		await tree.process_frame
 
 
-## 已启动请求（UI manager/legacy orphan）是否全部收尾；不含排队项。
+## 已启动请求（UI manager/legacy 预载）是否全部收尾；不含排队项，保持迁移前语义。
 func is_threaded_preload_idle() -> bool:
 	return (
-		_count_ui_scene_requests_in_state(UI_SCENE_REQUEST_STATE_LOADING) == 0 and _orphan_threaded_requests.is_empty()
+		_count_ui_scene_requests_in_state(UI_SCENE_REQUEST_STATE_LOADING) == 0
+		and _active_thread_load_job == null
+		and _thread_load_queue.is_empty()
 	)
+
+
+## 只读诊断：未收尾的线程加载作业数（含排队与运行中）。
+func get_in_progress_thread_load_count() -> int:
+	var count := 0
+	for job_value in _thread_load_jobs.values():
+		if (job_value as ThreadLoadJob).state == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			count += 1
+	if _active_thread_load_job != null and _active_thread_load_job.abandoned:
+		count += 1
+	return count
 
 
 func _wait_ui_preload_idle_for_generation(generation: int, epoch: int) -> bool:
@@ -944,20 +1113,17 @@ func _poll_ui_scene_requests() -> void:
 		var record: Dictionary = _ui_scene_requests[path]
 		if int(record.get("state", UI_SCENE_REQUEST_STATE_QUEUED)) != UI_SCENE_REQUEST_STATE_LOADING:
 			continue
-		var status := ResourceLoader.load_threaded_get_status(path)
+		var status := get_thread_load_state(int(record.get("job_id", 0)))
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			_resolve_loaded_ui_scene(path, record)
 		elif status == ResourceLoader.THREAD_LOAD_FAILED:
-			# 每次成功的 load_threaded_request 都必须各自 get；失败也要取回以平衡 user_rc。
-			ResourceLoader.load_threaded_get(path)
 			_fail_ui_scene_request(path, record, "线程加载失败")
 		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			_resolve_invalid_ui_scene(path, record)
 
 
 func _resolve_loaded_ui_scene(path: String, record: Dictionary) -> void:
-	# 该 path 的每一次成功 request 都归本记录，直接 get 平衡并取回本 owner 的结果。
-	var resource: Variant = ResourceLoader.load_threaded_get(path)
+	var resource := take_thread_load_resource(int(record.get("job_id", 0)))
 	_complete_ui_scene_request(path, record, resource)
 
 
@@ -966,7 +1132,7 @@ func _resolve_invalid_ui_scene(path: String, record: Dictionary) -> void:
 
 
 func _fill_ui_scene_request_slots() -> void:
-	if _ui_preload_pause_count > 0 or not _orphan_threaded_requests.is_empty():
+	if _ui_preload_pause_count > 0:
 		return
 	var limit := 1
 	var loading := _count_ui_scene_requests_in_state(UI_SCENE_REQUEST_STATE_LOADING)
@@ -981,14 +1147,13 @@ func _fill_ui_scene_request_slots() -> void:
 		if _try_adopt_cached_ui_scene(path, kind, int(record.get("token", 0))):
 			_ui_scene_requests.erase(path)
 			continue
-		# 4.7 同路径多次 request 会各自成功并各自增加 user_rc：
-		# 本记录只发一次 request，成功即由本记录负责在 LOADED/FAILED 后 get 平衡。
-		var err := ResourceLoader.load_threaded_request(path, "PackedScene", false, ResourceLoader.CACHE_MODE_REUSE)
-		if err == OK:
+		var job_id := start_thread_load(path, "PackedScene", ResourceLoader.CACHE_MODE_REUSE)
+		if job_id > 0:
+			record["job_id"] = job_id
 			record["state"] = UI_SCENE_REQUEST_STATE_LOADING
 			loading += 1
 		else:
-			_fail_ui_scene_request(path, record, "线程加载请求被拒绝（错误码 %d）" % err)
+			_fail_ui_scene_request(path, record, "线程加载请求被拒绝")
 
 
 func _complete_ui_scene_request(path: String, record: Dictionary, resource: Variant) -> void:
@@ -1016,6 +1181,7 @@ func _complete_ui_scene_request(path: String, record: Dictionary, resource: Vari
 
 
 func _fail_ui_scene_request(path: String, record: Dictionary, message: String) -> void:
+	take_thread_load_resource(int(record.get("job_id", 0)))
 	_ui_scene_requests.erase(path)
 	_ui_scene_request_queue.erase(path)
 	var kind := str(record.get("kind", ""))
@@ -1110,104 +1276,23 @@ func _count_ui_scene_requests_in_state(state: int) -> int:
 
 
 func _ensure_ui_request_processing() -> void:
-	if _threaded_orphans_shutting_down:
+	if _thread_load_jobs_shutting_down:
 		return
-	if not _ui_scene_requests.is_empty() or not _orphan_threaded_requests.is_empty():
+	if not _ui_scene_requests.is_empty() or _has_unsettled_thread_loads():
 		set_process(true)
 
 
-## 独立轮询 legacy 未收尾 token：LOADED/FAILED 时为本 owner 的每个成功 request 各 get 一次。
-func _poll_orphan_threaded_requests() -> void:
-	if _threaded_orphans_shutting_down or _orphan_threaded_requests.is_empty():
-		return
-	var request_paths: Array = _orphan_threaded_requests.keys()
-	for path_value in request_paths:
-		var path := str(path_value)
-		if not _orphan_threaded_requests.has(path):
-			continue
-		var count := int(_orphan_threaded_requests[path])
-		if count <= 0:
-			_orphan_threaded_requests.erase(path)
-			continue
-		var status := ResourceLoader.load_threaded_get_status(path)
-		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			continue
-		if status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			# 成功 request 未 get 前不应出现；引擎已无可收 token，丢弃避免永久轮询。
-			_orphan_threaded_requests.erase(path)
-			continue
-		for _index in range(count):
-			ResourceLoader.load_threaded_get(path)
-		_orphan_threaded_requests.erase(path)
-
-
-func _consume_owned_threaded_count(counts: Dictionary, path: String) -> void:
-	var remaining := int(counts.get(path, 0)) - 1
-	if remaining > 0:
-		counts[path] = remaining
-	else:
-		counts.erase(path)
-
-
-## 加载页撤销请求时交出其成功 request 的 token；过期结果只取回并释放。
-func discard_threaded_requests(paths: Array) -> void:
-	var counts: Dictionary = {}
-	for path_value in paths:
-		var path := str(path_value)
-		counts[path] = int(counts.get(path, 0)) + 1
-	_transfer_orphan_threaded_requests(counts)
-
-
-## generation 失效/退出时把本协程尚未收集的 token 转交孤儿集合；退出期可直接阻塞收尾。
-func _transfer_orphan_threaded_requests(counts: Dictionary) -> void:
-	if counts.is_empty():
-		return
-	for path_value in counts.keys():
-		var path := str(path_value)
-		var count := int(counts[path_value])
-		if count <= 0:
-			continue
-		if _threaded_orphans_shutting_down:
-			_get_orphan_threaded_tokens(path, count)
-		else:
-			_orphan_threaded_requests[path] = int(_orphan_threaded_requests.get(path, 0)) + count
-	counts.clear()
-	if not _threaded_orphans_shutting_down:
-		_ensure_ui_request_processing()
-
-
-func _get_orphan_threaded_tokens(path: String, count: int) -> void:
-	if count <= 0:
-		return
-	if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-		return
-	for _index in range(count):
-		ResourceLoader.load_threaded_get(path)
-
-
-func _drain_orphan_threaded_requests() -> void:
-	for path_value in _orphan_threaded_requests.keys():
-		var path := str(path_value)
-		_get_orphan_threaded_tokens(path, int(_orphan_threaded_requests[path_value]))
-	_orphan_threaded_requests.clear()
-
-
-## 退出时允许同步收尾：本管理器发起的线程请求阻塞取回并释放，不遗留加载器 token。
-func _abort_ui_scene_requests() -> void:
-	_threaded_orphans_shutting_down = true
-	set_process(false)
-	var request_paths: Array = _ui_scene_requests.keys()
-	for path_value in request_paths:
-		var path := str(path_value)
-		var record: Dictionary = _ui_scene_requests[path]
-		if int(record.get("state", UI_SCENE_REQUEST_STATE_QUEUED)) != UI_SCENE_REQUEST_STATE_LOADING:
-			continue
-		if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			continue
-		ResourceLoader.load_threaded_get(path)
+## 清空请求：在途作业转交主线程收尾；真正退出时同步 join 全部线程。
+func _abort_ui_scene_requests(shutting_down: bool) -> void:
+	_thread_load_jobs_shutting_down = shutting_down
+	for record_value in _ui_scene_requests.values():
+		retire_thread_load(int((record_value as Dictionary).get("job_id", 0)))
 	_ui_scene_requests.clear()
 	_ui_scene_request_queue.clear()
-	_drain_orphan_threaded_requests()
+	if shutting_down:
+		_join_all_thread_load_jobs()
+	else:
+		_ensure_ui_request_processing()
 
 
 # -----------------------------------------------------------------------------
@@ -1549,7 +1634,7 @@ func preload_next(path: String) -> void:
 	if path == "" or (_preloaded_scene != null and _preloaded_scene_path == path):
 		return
 	if _preloading_path == path:
-		var existing_status := ResourceLoader.load_threaded_get_status(path)
+		var existing_status := get_thread_load_state(_preloading_job_id)
 		if (
 			existing_status == ResourceLoader.THREAD_LOAD_FAILED
 			or existing_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
@@ -1567,15 +1652,14 @@ func preload_next(path: String) -> void:
 			_preloaded_scene_path = path
 			return
 	_preloading_path = path
-	var err := ResourceLoader.load_threaded_request(path)
-	if err != OK:
+	_preloading_job_id = start_thread_load(path)
+	if _preloading_job_id <= 0:
 		_preloading_path = ""
 
 
 func clear_preloaded_scene_slot() -> void:
-	if not _preloading_path.is_empty():
-		var pending := {_preloading_path: 1}
-		_transfer_orphan_threaded_requests(pending)
+	retire_thread_load(_preloading_job_id)
+	_preloading_job_id = 0
 	_preloaded_scene = null
 	_preloaded_scene_path = ""
 	_preloading_path = ""
@@ -1590,10 +1674,10 @@ func take_preloaded_scene(path: String) -> PackedScene:
 		_preloaded_scene = null
 		_preloaded_scene_path = ""
 	if _preloading_path == path:
-		var status = ResourceLoader.load_threaded_get_status(path)
+		var status := get_thread_load_state(_preloading_job_id)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var ps = ResourceLoader.load_threaded_get(path) as PackedScene
-			_preloading_path = ""
+			var ps := take_thread_load_resource(_preloading_job_id) as PackedScene
+			_preloading_job_id = 0
 			clear_preloaded_scene_slot()
 			return ps
 		if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
@@ -1602,10 +1686,16 @@ func take_preloaded_scene(path: String) -> PackedScene:
 
 
 func get_preloaded_slot_snapshot() -> Dictionary:
+	var state: int = ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+	if _preloaded_scene != null:
+		state = ResourceLoader.THREAD_LOAD_LOADED
+	elif _preloading_job_id > 0:
+		state = get_thread_load_state(_preloading_job_id)
 	return {
 		"path": _preloading_path,
 		"ready_path": _preloaded_scene_path,
 		"ready": _preloaded_scene != null,
+		"state": state,
 	}
 
 
@@ -1633,16 +1723,16 @@ func preload_paths_threaded(paths: Array, generation: int = -1) -> void:
 		end_ui_preload_pause()
 		return
 	if _is_legacy_preload_current(request_generation, waiter_epoch):
-		_legacy_active_requests = {}
+		_legacy_active_requests.clear()
 		await _preload_paths_threaded_impl(paths, request_generation, waiter_epoch)
 	_release_legacy_preload_turn(waiter_id)
 	end_ui_preload_pause()
 
 
 func _preload_paths_threaded_impl(paths: Array, request_generation: int, request_epoch: int) -> void:
-	var owned_counts: Dictionary = _legacy_active_requests
+	var owned_jobs: Array = _legacy_active_requests
 	if not _is_legacy_preload_current(request_generation, request_epoch):
-		_transfer_orphan_threaded_requests(owned_counts)
+		_retire_thread_load_ids(owned_jobs)
 		return
 	var request_paths: Array[String] = []
 	var seen_paths: Dictionary = {}
@@ -1666,60 +1756,59 @@ func _preload_paths_threaded_impl(paths: Array, request_generation: int, request
 	var batch_start := 0
 	while batch_start < request_paths.size():
 		if not _is_legacy_preload_current(request_generation, request_epoch):
-			_transfer_orphan_threaded_requests(owned_counts)
+			_retire_thread_load_ids(owned_jobs)
 			return
-		var pending: Array[String] = []
+		var pending: Array[int] = []
+		var pending_paths: Dictionary = {}
 		var batch_end := mini(batch_start + batch_size, request_paths.size())
 		for index in range(batch_start, batch_end):
 			if not _is_legacy_preload_current(request_generation, request_epoch):
-				_transfer_orphan_threaded_requests(owned_counts)
+				_retire_thread_load_ids(owned_jobs)
 				return
 			var path := request_paths[index]
-			var err = ResourceLoader.load_threaded_request(path)
-			if err == OK:
-				owned_counts[path] = int(owned_counts.get(path, 0)) + 1
-				pending.append(path)
+			var job_id := start_thread_load(path)
+			if job_id > 0:
+				owned_jobs.append(job_id)
+				pending.append(job_id)
+				pending_paths[job_id] = path
 			else:
-				# 非成功 request 没有 user_rc；保持原同步回退路径。
-				var resource = load(path)
-				cache_threaded_resource(path, resource)
+				# 线程无法启动时保持原同步回退路径。
+				cache_threaded_resource(path, load(path))
 		while not pending.is_empty():
 			if not _is_legacy_preload_current(request_generation, request_epoch):
-				_transfer_orphan_threaded_requests(owned_counts)
+				_retire_thread_load_ids(owned_jobs)
 				return
 			var i := pending.size() - 1
 			while i >= 0:
-				var path := pending[i]
-				var status = ResourceLoader.load_threaded_get_status(path)
+				var job_id := pending[i]
+				var path := str(pending_paths.get(job_id, ""))
+				var status := get_thread_load_state(job_id)
 				if status == ResourceLoader.THREAD_LOAD_LOADED:
-					if not _is_legacy_preload_current(request_generation, request_epoch):
-						_transfer_orphan_threaded_requests(owned_counts)
-						return
-					var resource = ResourceLoader.load_threaded_get(path)
-					_consume_owned_threaded_count(owned_counts, path)
+					var resource := take_thread_load_resource(job_id)
+					_erase_thread_load_id(owned_jobs, job_id)
 					cache_threaded_resource(path, resource)
 					pending.remove_at(i)
+					pending_paths.erase(job_id)
 				elif (
 					status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
 				):
-					# INVALID 表示引擎已无 token；失败请求则仍需取回以平衡 user_rc。
-					if status == ResourceLoader.THREAD_LOAD_FAILED:
-						ResourceLoader.load_threaded_get(path)
-					_consume_owned_threaded_count(owned_counts, path)
+					take_thread_load_resource(job_id)
+					_erase_thread_load_id(owned_jobs, job_id)
 					pending.remove_at(i)
+					pending_paths.erase(job_id)
 				i -= 1
 			if not pending.is_empty():
 				var tree := get_tree()
 				if tree == null:
-					_transfer_orphan_threaded_requests(owned_counts)
+					_retire_thread_load_ids(owned_jobs)
 					return
 				await tree.process_frame
 				if not _is_legacy_preload_current(request_generation, request_epoch):
-					_transfer_orphan_threaded_requests(owned_counts)
+					_retire_thread_load_ids(owned_jobs)
 					return
 		batch_start = batch_end
-	# 正常完成时 owned_counts 应为空；防御性转交，避免任何未记录早退遗留 token。
-	_transfer_orphan_threaded_requests(owned_counts)
+	# 正常完成时不应残留作业；防御性转交，避免任何早退遗留线程。
+	_retire_thread_load_ids(owned_jobs)
 
 
 func get_threaded_preload_batch_size(request_count: int) -> int:

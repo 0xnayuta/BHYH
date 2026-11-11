@@ -167,6 +167,12 @@ func _run() -> void:
 	)
 	ProjectSettings.set_setting("application/run/load_timeout_msec", 120000)
 
+	# 退出前等待线程加载收尾：退出阶段主循环不再刷新消息队列，运行中的作业无法完成。
+	for _frame in range(600):
+		if Global.get_resource_runtime().get_in_progress_thread_load_count() == 0:
+			break
+		await get_tree().process_frame
+
 	for check_name in checks:
 		if not bool(checks[check_name]):
 			_failures.append(str(check_name))

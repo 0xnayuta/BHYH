@@ -416,33 +416,31 @@ func _run() -> void:
 	await _await_frames(2)
 	checks["isolated_runtime_freed"] = not is_instance_valid(failing_runtime)
 
-	# legacy 线程预载在途时 clear_runtime_state：转移 orphan 后同步收尾 token。
+	# legacy 线程预载在途时 clear_runtime_state：同步 join 后不残留线程加载。
 	# 先清空运行时缓存，再从 engine cache 未命中的大场景中选择候选。
 	runtime.clear_runtime_state()
 	var legacy_paths := _select_legacy_preload_paths()
 	checks["legacy_candidates_available"] = not legacy_paths.is_empty()
-	var legacy_in_progress := ""
+	var legacy_in_progress := false
 	if not legacy_paths.is_empty():
 		Global._preload_paths_threaded(legacy_paths)
-		legacy_in_progress = _first_in_progress_threaded_request(legacy_paths)
-		# 有界等待请求进入 LOADING；不同步等待其完成，避免错过 IN_PROGRESS。
+		# 有界等待 legacy 作业进入在途；计数大于 0 即表示仍有线程加载未收尾。
 		for _frame in range(240):
-			if legacy_in_progress != "":
+			if runtime.get_in_progress_thread_load_count() > 0:
+				legacy_in_progress = true
 				break
 			await get_tree().process_frame
-			legacy_in_progress = _first_in_progress_threaded_request(legacy_paths)
-	checks["legacy_preload_in_progress"] = legacy_in_progress != ""
-	# 立即清理；若同步 drain 阻塞，只会等待真实加载完成，不做循环重试。
+	checks["legacy_preload_in_progress"] = legacy_in_progress
+	# 立即清理：clear_runtime_state 转交在途作业，由主线程继续轮询 join，不阻塞调用方。
 	runtime.clear_runtime_state()
-	checks["legacy_detected_token_settled"] = (
-		legacy_in_progress != ""
-		and ResourceLoader.load_threaded_get_status(legacy_in_progress) != ResourceLoader.THREAD_LOAD_IN_PROGRESS
-	)
-	var legacy_tokens_settled := true
-	for path_value in legacy_paths:
-		if ResourceLoader.load_threaded_get_status(str(path_value)) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			legacy_tokens_settled = false
-	checks["legacy_tokens_settled"] = legacy_tokens_settled
+	var legacy_settled := false
+	for _frame in range(600):
+		if runtime.get_in_progress_thread_load_count() == 0:
+			legacy_settled = true
+			break
+		await get_tree().process_frame
+	checks["legacy_detected_token_settled"] = legacy_in_progress and legacy_settled
+	checks["legacy_tokens_settled"] = legacy_settled
 	checks["legacy_threaded_idle"] = runtime.is_threaded_preload_idle()
 	checks["legacy_no_stale_cache"] = _none_cached(runtime, legacy_paths)
 	checks["legacy_resource_cache_empty"] = runtime.get_resource_cache_size() == 0
@@ -463,6 +461,12 @@ func _run() -> void:
 	_check_instances(runtime, ARCHIVE_PATHS, "archive_reuse_legacy", checks)
 	_check_scope_queue_drained(runtime, "archive_reuse_legacy", checks)
 	checks["legacy_no_stale_cache_after_reuse"] = _none_cached(runtime, legacy_paths)
+
+	# 退出前等待线程加载收尾：退出阶段主循环不再刷新消息队列，运行中的作业无法完成。
+	for _frame in range(600):
+		if runtime.get_in_progress_thread_load_count() == 0:
+			break
+		await get_tree().process_frame
 
 	for check_name in checks:
 		if not bool(checks[check_name]):
@@ -574,14 +578,6 @@ func _none_cached(runtime: ResourceRuntime, paths: Array) -> bool:
 		if runtime.is_resource_cached(str(path_value)):
 			return false
 	return true
-
-
-func _first_in_progress_threaded_request(paths: Array) -> String:
-	for path_value in paths:
-		var path := str(path_value)
-		if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			return path
-	return ""
 
 
 func _select_legacy_preload_paths() -> Array:

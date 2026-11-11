@@ -42,13 +42,16 @@
 - 同次测量中，读档面板从工厂调用到首绘 29 ms、6 个空档槽位文字全部出现 32 ms；任务面板首绘 7 ms、18 个任务标题全部出现 49 ms；炼丹炉首绘 27 ms、切合成首绘 9 ms、暂停菜单首绘 9 ms。`frame_post_draw` 表示引擎完成视口更新，不是显示器物理呈现或输入延迟；每项只有单次样本。另行截图验证了首帧和完整内容；截图会增加耗时，未混入上述无截图值。
 - release `level_1` 四阶段均通过，进程退出码 0，但出现 19 个 `ObjectDB` 泄漏警告，整项验收 FAIL。无注入探针的窗口冷启动后发送 `WM_CLOSE`，退出码 0，仍有 18 个零引用 `RefCounted` 泄漏；旧版 EXE 同条件为 2 个。窗口退出还报告纹理 RID 泄漏和 `RenderingServer::get_singleton() is null`，新旧版本均出现，其根因未确认。
 - 最小对照与项目场景对照均支持 Godot 4.7.2 线程加载 `LoadToken` 缺陷：40 场景嵌套 `preload` 的同步加载和普通 `Thread` 各 3 次均无泄漏；`load_threaded_request` / `get` 各次泄漏 39 个零引用对象。独立加载 `ldl.tscn` 与 `load_scene.tscn` 时，线程加载分别泄漏 4 和 2 个；同步及普通线程对照均为 0。参见 Godot [#120661](https://github.com/godotengine/godot/issues/120661) 和未合并修复 [#121025](https://github.com/godotengine/godot/pull/121025)。这些证据不能证明正式 EXE 的每一个泄漏对象或额外纹理 RID 均由同一根因造成。
+- 2026-11-12 线程加载改造：`ResourceRuntime` 与加载页改用普通 `Thread` + `ResourceLoader.load`，一次只运行一个加载线程并由主线程轮询取回，不再调用 `load_threaded_request`。同机 release EXE 复测：`level_1` 四阶段通过，退出 `ObjectDB` 从 19 降为 2；窗口冷启动 `WM_CLOSE` 从 18 降为 2，与改造前旧 EXE 的 2 个一致。`--verbose` 显示残留为 `AudioStreamPlaybackMP3` + `AudioStreamMP3`（并伴随 1 个资源仍在使用），纹理 RID（1 个 RID / 2 个 Texture RID）与 `RenderingServer::get_singleton() is null` 在旧版同样出现：LoadToken 泄漏已消除，音频退出清理与纹理 RID 属独立问题，release 探针仍因这 2 个对象和 1 个资源计为 FAIL。
+- 改造后单次窗口测量（无截图）：加载页首绘到主菜单/地图/`level_1` 首绘为 1,047 / 611 / 1,136 ms（改造前同条件 959 / 576 / 894 ms）；面板首绘与内容齐全基本不变（读档 30/33、任务 8/48、炼丹 27、合成 9、暂停 10 ms）。串行加载以约 0.1–0.24 s 的加载页耗时换取退出零 LoadToken 泄漏；单次样本，不是正式性能验收。
+- 线程加载约束：工作线程在加载中可能把 `resource_changed` 回调投递到主线程 MessageQueue 并等待，主线程阻塞在加载线程上会死锁；因此清理与退出只做非阻塞收尾，探针退出前等待作业空闲。应用在加载进行中直接关闭时，运行中的作业交由进程退出回收。
 - 冷进程中并行预热互相依赖的炼丹场景曾发生加载等待并超时；当前串行预热的目标路径已返回 `SCOPE_READY=true`。
 
 详细缓存所有权与场景交接见 [`runtime_lifecycle_matrix.md`](runtime_lifecycle_matrix.md)。
 
 ## 3. 当前未验证边界
 
-- **发布**：UI 变更后已独立导出正式 EXE/PCK 并做包内闭包及窗口诊断，但退出泄漏未解决、`level_1` release 探针日志门禁失败；正式发布不得计为通过。真实输入到结算、物理屏幕呈现延迟、设备 VRAM 全路径和双人完整矩阵仍未验证。`export_release.py` 对打开的工程运行时曾因 `godot-mcp` 端口冲突失败。
+- **发布**：UI 变更后已独立导出正式 EXE/PCK 并做包内闭包及窗口诊断；线程加载的 LoadToken 泄漏已消除，但退出仍有音频对象/资源与纹理 RID 残留，`level_1` release 探针日志门禁仍失败，正式发布不得计为通过。真实输入到结算、物理屏幕呈现延迟、设备 VRAM 全路径和双人完整矩阵仍未验证。`export_release.py` 对打开的工程运行时曾因 `godot-mcp` 端口冲突失败。
 - **平台**：Spine GDExtension 只入库 Windows x86_64；最低硬件配置未声明，其他平台延期/未验证。决策见 [ADR-010](../decisions/ADR-010-spine-runtime-boundary.md) 与 [ADR-027](../decisions/ADR-027-platform-commitment-and-verification-device.md)。
 - **外部服务**：云存档服务端、训练和成就闭环依赖外部能力，不据本地内容回植宣称已完成。
 - **公开仓库**：第三方美术、音乐、字体和精灵表不入库；公开 clone 缺素材提示属于预期。

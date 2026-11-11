@@ -408,14 +408,18 @@ func _consume_victory_preload() -> void:
 		return
 	var deadline := Time.get_ticks_msec() + LOAD_TIMEOUT_MS
 	while Time.get_ticks_msec() < deadline:
-		var status := ResourceLoader.load_threaded_get_status(VICTORY_PATH)
-		if status == ResourceLoader.THREAD_LOAD_LOADED:
+		var state := int(
+			resource_runtime
+			. get_preloaded_slot_snapshot()
+			. get("state", ResourceLoader.THREAD_LOAD_INVALID_RESOURCE)
+		)
+		if state == ResourceLoader.THREAD_LOAD_LOADED:
 			var result := resource_runtime.take_preloaded_scene(VICTORY_PATH)
 			if result == null:
 				_report["errors"].append("victory_preload_result_missing")
 			return
-		if status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			_report["errors"].append("victory_preload_failed:%s" % status)
+		if state != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			_report["errors"].append("victory_preload_failed:%s" % state)
 			return
 		await get_tree().process_frame
 	_report["errors"].append("victory_preload_timeout")

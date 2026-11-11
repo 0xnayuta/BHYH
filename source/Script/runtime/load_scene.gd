@@ -47,6 +47,7 @@ var _finishing := false
 var _changing_scene := false
 var _visible_since_msec := 0
 var _pending_paths: Array[String] = []
+var _pending_job_ids: Dictionary = {}
 var _queued_paths: Array[String] = []
 var _request_limit := 2
 var _total_paths := 0
@@ -198,6 +199,7 @@ func _start_archive_preload() -> void:
 	_total_paths = max(paths.size(), 1)
 	_completed_paths = 0
 	_pending_paths.clear()
+	_pending_job_ids.clear()
 	_queued_paths.clear()
 	_target_packed_scene = null
 	_target_packed_scene_path = ""
@@ -313,9 +315,10 @@ func _request_preload_path(path: String) -> void:
 	var uncached_target := _is_uncached_target_scene(path)
 	var preload_type := "PackedScene" if uncached_target else ""
 	var cache_mode := ResourceLoader.CACHE_MODE_IGNORE_DEEP if uncached_target else ResourceLoader.CACHE_MODE_REUSE
-	var err := ResourceLoader.load_threaded_request(path, preload_type, false, cache_mode)
-	if err == OK:
+	var job_id := Global.get_resource_runtime().start_thread_load(path, preload_type, cache_mode)
+	if job_id > 0:
 		_pending_paths.append(path)
+		_pending_job_ids[path] = job_id
 	else:
 		var resource := load(path)
 		_cache_resource(path, resource)
@@ -337,16 +340,18 @@ func _poll_pending_paths() -> void:
 	var i := _pending_paths.size() - 1
 	while i >= 0:
 		var path := _pending_paths[i]
-		var status := ResourceLoader.load_threaded_get_status(path)
+		var job_id := int(_pending_job_ids.get(path, 0))
+		var status := Global.get_resource_runtime().get_thread_load_state(job_id)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var resource := ResourceLoader.load_threaded_get(path)
+			var resource: Resource = Global.get_resource_runtime().take_thread_load_resource(job_id)
+			_pending_job_ids.erase(path)
 			_cache_resource(path, resource)
 			_pending_paths.remove_at(i)
 			_completed_paths += 1
 			changed = true
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			if status == ResourceLoader.THREAD_LOAD_FAILED:
-				ResourceLoader.load_threaded_get(path)
+			Global.get_resource_runtime().take_thread_load_resource(job_id)
+			_pending_job_ids.erase(path)
 			print("preload failed: ", path)
 			_pending_paths.remove_at(i)
 			_completed_paths += 1
@@ -723,10 +728,14 @@ func _resume_ui_preload() -> void:
 		Global.get_resource_runtime().end_ui_preload_pause()
 
 
-# 取消只停止轮询与提交；ResourceLoader 没有公开的线程取消 API，后台请求完成后丢弃。
+# 取消只停止等待与提交；线程无法中断，已发起的作业转交运行时后台 join 后丢弃。
 func _cancel_pending_requests() -> void:
 	_resume_ui_preload()
-	Global.get_resource_runtime().discard_threaded_requests(_pending_paths)
+	for path in _pending_paths:
+		var job_id := int(_pending_job_ids.get(path, 0))
+		if job_id > 0:
+			Global.get_resource_runtime().retire_thread_load(job_id)
+	_pending_job_ids.clear()
 	_pending_paths.clear()
 	_queued_paths.clear()
 	_load_started = false
