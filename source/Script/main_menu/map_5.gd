@@ -169,7 +169,7 @@ func _ready() -> void:
 	Global.set_current_level_name("")
 
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5)
 
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
@@ -195,7 +195,7 @@ func _require_map5_prerequisite(level_name: String, message: String = "") -> boo
 	if _is_map5_level_cleared(level_name):
 		return true
 	var prompt := message if message != "" else "需要先通关" + level_name + "！"
-	Global.add_message_show(_ui_parent(), prompt, 1.5, Vector2(470, 300))
+	Global.add_message_show(_ui_parent(), prompt, 1.5)
 	return false
 
 
@@ -275,7 +275,7 @@ func _on_hdzm_pressed() -> void:
 
 func _on_memory_class_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5)
 
 
 func _on_shop_pressed() -> void:
@@ -294,7 +294,7 @@ func _on_skill_pressed() -> void:
 
 
 func _on_activity_pressed() -> void:
-	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5)
 
 
 func _on_task_pressed() -> void:

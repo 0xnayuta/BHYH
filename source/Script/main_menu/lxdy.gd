@@ -50,7 +50,7 @@ func _on_return_xhy_pressed() -> void:
 
 
 func _on_return_xs_pressed() -> void:
-	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5)
 
 
 func _on_close_pressed() -> void:

@@ -69,6 +69,11 @@ var pet_random_labels: Array = []
 var _anchor := Vector2.ZERO
 var _has_anchor := false
 
+const TOOLTIP_MIN_WIDTH := 240.0
+const TOOLTIP_MAX_WIDTH := 360.0
+const TOOLTIP_SIDE_PADDING := 12.0
+const TOOLTIP_TEXT_GAP := 12.0
+
 const PET_RANDOM_STAT_NAMES := {
 	"SHp": "生命",
 	"SMp": "魔法",
@@ -252,6 +257,7 @@ func _set_pet_information() -> void:
 	eq_ms.visible = description != ""
 	if eq_ms.visible:
 		eq_ms.text = UiTextFormat.description(description)
+	_fit_content_width()
 	eq_sj.visible = pet_sale_price > 0
 	if eq_sj.visible:
 		eq_sj.text = UiTextFormat.price(pet_sale_price)
@@ -290,7 +296,7 @@ func _pet_value(value: Variant) -> float:
 
 func _update_pet_popup_background() -> void:
 	if is_pet_equipment and is_instance_valid(color_rect):
-		color_rect.size = $pro_wk/information.size
+		color_rect.size = _content_size()
 
 
 func _ready() -> void:
@@ -324,17 +330,35 @@ func _apply_layout() -> void:
 	)
 
 
+func _fit_content_width() -> void:
+	if pro_wk == null or eq_ms == null:
+		return
+	var target_width := TOOLTIP_MIN_WIDTH
+	if eq_ms.visible and not eq_ms.text.strip_edges().is_empty():
+		var font := eq_ms.get_theme_font(&"font")
+		var font_size := eq_ms.get_theme_font_size(&"font_size")
+		if font != null:
+			var text_width := font.get_string_size(eq_ms.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+			target_width = clampf(
+				text_width + TOOLTIP_SIDE_PADDING * 2.0 + TOOLTIP_TEXT_GAP, TOOLTIP_MIN_WIDTH, TOOLTIP_MAX_WIDTH
+			)
+	pro_wk.custom_minimum_size.x = target_width
+
+
 func _content_size() -> Vector2:
-	var size := information.get_combined_minimum_size()
+	# 容器排序后的实际尺寸才是可见背景的尺寸；最小尺寸只在首帧布局前兜底。
+	var size := information.size
 	if size.x <= 0.0 or size.y <= 0.0:
-		size = information.size
+		size = information.get_combined_minimum_size()
+	if size.x <= 0.0 or size.y <= 0.0:
+		size = pro_wk.size
 	return size
 
 
 func _visual_rect() -> Rect2:
 	var rect := Rect2(color_rect.position, color_rect.size)
-	if information != null:
-		rect = rect.merge(Rect2(pro_wk.position + information.position, _content_size()))
+	if pro_wk != null:
+		rect = rect.merge(Rect2(pro_wk.position, _content_size()))
 	return rect
 
 
@@ -411,6 +435,7 @@ func _set_equipment_info(_name: String):
 		else:
 			eq_ms.text = UiTextFormat.description(str(EquipmentService.data(_name)["描述"]))
 		eq_sj.text = UiTextFormat.price(EquipmentService.data(_name)["售价"])
+		_fit_content_width()
 		return
 
 	var display_name: String = EquipmentService.rules().get_divine_forge_display_name(StringName(_name), eq_prop)
@@ -611,6 +636,7 @@ func _set_description_and_sale(_name: String) -> void:
 	if eq_sj != null:
 		eq_sj.visible = true
 		eq_sj.text = UiTextFormat.price(data.get("售价", 0))
+	_fit_content_width()
 
 
 func set_bs_infor():

@@ -110,7 +110,7 @@ func _physics_process(delta: float) -> void:
 
 func _bind_key(key_name: String) -> void:
 	if not PlayerData.set_skill_key(key_name, need_name):
-		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0)
 		return
 	_prepare_longnv_loadout()
 	queue_free()

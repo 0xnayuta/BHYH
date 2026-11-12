@@ -1,8 +1,8 @@
 class_name MapButtonHover
 extends RefCounted
 
-## 地图左列按钮的统一悬停描边。复用关卡按钮着色器，不新增美术资源。
-## 仅对缺少独立 hover 贴图的按钮启用；已有 hover 贴图的商城/公告保持原状。
+## 地图按钮的统一悬停描边。复用关卡按钮着色器，不新增美术资源。
+## 公告/随机掉落/任务与左列按钮共用同一描边；商城保留独立悬停贴图。
 
 const HOVER_SHADER: Shader = preload("res://Shader/level_button.gdshader")
 const HOVER_COLOR: Color = UiColorTokens.TEXT_GOLD_AMBER
@@ -30,7 +30,7 @@ static func _apply_material(root: CanvasItem, material: ShaderMaterial, include_
 		return
 	for child in root.get_children():
 		if child is CanvasItem:
-			(child as CanvasItem).material = material
+			_apply_material(child as CanvasItem, material, true)
 
 
 static func _on_mouse_entered(button: Control, material: ShaderMaterial) -> void:

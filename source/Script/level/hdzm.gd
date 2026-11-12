@@ -21,16 +21,16 @@ func _physics_process(_delta: float) -> void:
 
 func _on_ttzstz_pressed() -> void:
 	if PlayerData.check_eq_zb("头衔", "xczg"):
-		Global.add_message_show(get_parent(), "本副本不允许使用修成正果头衔！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "本副本不允许使用修成正果头衔！", 1.5)
 		return
 	if PlayerData.player_data[DataKeys.PLAYER_LEVEL] <= 50:
-		Global.add_message_show(get_parent(), "需要角色等级大于50级！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需要角色等级大于50级！", 1.5)
 		return
 	elif PlayerData.get_item_data("ttlp") == 0:
-		Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5)
 		return
 	elif not PlayerData.player_data["截教天镜"]:
-		Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5)
 		return
 	Global.change_scene("res://Scene/level/level_hdzm.tscn")
 
@@ -40,11 +40,11 @@ func _on_csm_pressed() -> void:
 		return
 	if parent_node is Map3:
 		if PlayerData.player_data[DataKeys.PLAYER_LEVEL] < 50:
-			Global.add_message_show(get_parent(), "需要角色等级大于等于50级！", 1.5, Vector2(470, 300))
+			Global.add_message_show(get_parent(), "需要角色等级大于等于50级！", 1.5)
 		elif PlayerData.get_item_data("ttlp") == 0:
-			Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5, Vector2(470, 300))
+			Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5)
 		elif not PlayerData.player_data["截教天镜"]:
-			Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5, Vector2(470, 300))
+			Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5)
 		else:
 			if PlayerData.player_data["FristJiejiao"]:
 				var dialog = Global.add_choose_text(
@@ -63,23 +63,23 @@ func challenge():
 	PlayerData.player_data["FristJiejiao"] = false
 	if not MemoryClass.request_save("level_hdzm_challenge", false):
 		PlayerData.player_data["FristJiejiao"] = first_jiejiao_before
-		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 		return
 	Global.change_scene("res://Scene/main_menu/map_4.tscn")
 
 
 func _on_hdgq_pressed() -> void:
 	if PlayerData.check_eq_zb("头衔", "xczg"):
-		Global.add_message_show(get_parent(), "本副本不允许使用修成正果头衔！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "本副本不允许使用修成正果头衔！", 1.5)
 		return
 	if PlayerData.player_data[DataKeys.PLAYER_LEVEL] <= 50:
-		Global.add_message_show(get_parent(), "需要角色等级大于50级！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需要角色等级大于50级！", 1.5)
 		return
 	elif PlayerData.get_item_data("ttlp") == 0:
-		Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需要拥有通天令牌！", 1.5)
 		return
 	elif not PlayerData.player_data["截教天镜"]:
-		Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "前置关卡要求未达到！", 1.5)
 		return
 	Global.addhdgqmap(self, Vector2(0, 0))
 

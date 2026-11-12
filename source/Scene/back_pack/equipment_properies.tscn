@@ -13,16 +13,16 @@ script = ExtResource("1")
 [node name="ColorRect" type="ColorRect" parent="." unique_id=485655802]
 material = SubResource("1")
 offset_left = 15.0
-offset_right = 215.0
+offset_right = 255.0
 offset_bottom = 1219.0
 color = Color(0, 0, 0, 0.705882)
 metadata/_edit_lock_ = true
 
 [node name="pro_wk" type="MarginContainer" parent="." unique_id=1135014821]
 theme = ExtResource("theme")
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(240, 0)
 offset_left = 15.0
-offset_right = 121.0
+offset_right = 255.0
 offset_bottom = 1219.0
 size_flags_vertical = 0
 metadata/_edit_lock_ = true
@@ -325,7 +325,7 @@ theme = ExtResource("theme")
 layout_mode = 2
 text = ""
 vertical_alignment = 1
-autowrap_mode = 1
+autowrap_mode = 3
 
 [node name="eq_sj" type="Label" parent="pro_wk/information/inf/VBoxContainer" unique_id=1014534768]
 theme_type_variation = "EquipmentSale"

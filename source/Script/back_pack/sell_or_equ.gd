@@ -315,7 +315,7 @@ func _on_sell_pressed() -> void:
 		return
 	if _is_locked():
 		lock_button.grab_focus()
-		Global.add_message_show(Global.get_ui_runtime().get_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5, Vector2.ZERO)
+		Global.add_message_show(Global.get_ui_runtime().get_popup_layer(), "该物品已锁定，请先解锁后再出售！", 1.5)
 		return
 	if eq_prop == null:
 		PlayerData.remove_zb(page, number)
@@ -331,7 +331,7 @@ func _on_sell_pressed() -> void:
 				pass
 			else:
 				var parent = NodeUtils.ancestor(self, 3)
-				Global.add_message_show(parent, "请先卸下该装备上的宝石！！", 1.5, Vector2(485, 240))
+				Global.add_message_show(parent, "请先卸下该装备上的宝石！！", 1.5)
 				return
 	var abc = PlayerData.get_zb_data(page, number)
 
@@ -465,7 +465,7 @@ func check_can_equipment(EquipmentName):
 			role_base = "小龙女"
 			if eq_base == "小龙女":
 				return true
-	Global.add_message_show(parent, name_str + "属于" + eq_base + "，" + role_base + "无法穿戴！！", 1.5, Vector2(485, 240))
+	Global.add_message_show(parent, name_str + "属于" + eq_base + "，" + role_base + "无法穿戴！！", 1.5)
 	return false
 
 

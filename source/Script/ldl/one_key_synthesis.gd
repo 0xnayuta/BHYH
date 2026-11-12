@@ -247,7 +247,7 @@ func perform_onekey_synthesis(target_dan_name: String, times: int):
 
 	for mat in materials_needed:
 		if not PlayerData.remove_item(mat, materials_needed[mat]):
-			Global.add_message_show(Global.get_ui_runtime().windows, "材料不足，扣除失败！", 1.5, Vector2(470, 300))
+			Global.add_message_show(Global.get_ui_runtime().windows, "材料不足，扣除失败！", 1.5)
 			return
 
 	PlayerData.add_dj(target_dan_name, times)
@@ -255,8 +255,7 @@ func perform_onekey_synthesis(target_dan_name: String, times: int):
 	Global.add_message_show(
 		Global.get_ui_runtime().windows,
 		"一键合成成功！获得 " + EquipmentService.definition(StringName(target_dan_name)).display_name + " x" + str(times),
-		1.5,
-		Vector2(470, 300)
+		1.5
 	)
 
 
@@ -290,7 +289,7 @@ func _on_target_dan_selected(index: int):
 func _on_onekey_syn_pressed():
 	var idx: int = selected_target_index
 	if idx < 0:
-		Global.add_message_show(Global.get_ui_runtime().windows, "请选择目标丹药！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请选择目标丹药！", 1.5)
 		return
 
 	var target = target_keys[idx]
@@ -307,12 +306,10 @@ func _on_onekey_syn_pressed():
 	var max_times = get_max_synthesis(target, stock)
 
 	if times <= 0:
-		Global.add_message_show(Global.get_ui_runtime().windows, "次数必须大于0！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "次数必须大于0！", 1.5)
 		return
 	if times > max_times:
-		Global.add_message_show(
-			Global.get_ui_runtime().windows, "材料不足，最多合成 " + str(max_times) + " 次", 1.5, Vector2(470, 300)
-		)
+		Global.add_message_show(Global.get_ui_runtime().windows, "材料不足，最多合成 " + str(max_times) + " 次", 1.5)
 		times = max_times
 		spin_box.value = times
 

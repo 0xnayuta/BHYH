@@ -729,7 +729,7 @@ func _commit_progress_before_transition() -> bool:
 		saved = MemoryClass.request_save("level_progress_transition", false)
 	if saved:
 		return true
-	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 	_auto_exit_settling = false
 	return false
 
@@ -749,7 +749,7 @@ func _restart_level_for_auto_battle() -> bool:
 	if Global.get_run_context().get_last_level_path() == "":
 		return false
 	if not MemoryClass.request_save("auto_battle_retry", false):
-		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 		return false
 	RoleProp.set_full_hp()
 	RoleProp.set_full_mp()

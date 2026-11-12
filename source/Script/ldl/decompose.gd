@@ -202,13 +202,13 @@ func set_remove_items_properies():
 
 func _on_decompose_button_pressed() -> void:
 	if not can_de:
-		Global.add_message_show(Global.get_ui_runtime().windows, "点击过快！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "点击过快！", 1.5)
 		return
 	else:
 		can_de = false
 		wait.start(0.1)
 	if PlayerData.get_soul() < need_lh:
-		Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！", 1.5)
 		return
 
 	if PlayerData.player_data[DataKeys.DECOMPOSE_LIST].size() != 0:
@@ -232,7 +232,7 @@ func _on_decompose_button_pressed() -> void:
 			if dialog_plain != null:
 				dialog_plain.confirmed.connect(fj)
 	else:
-		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧～", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "先放点什么吧～", 1.5)
 
 
 func fj():
@@ -277,14 +277,11 @@ func fj():
 								)
 								PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
 					Global.add_reward_info(NodeUtils.ancestor(self, 3), Vector2(0, 0), list, null, null)
-					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5)
 					PlayerData.spend_soul(need_lh)
 				else:
 					Global.add_message_show(
-						Global.get_ui_runtime().windows,
-						str(typee) + str(item_name) + "不会分解出任何物品！！",
-						1.5,
-						Vector2(500, 305)
+						Global.get_ui_runtime().windows, str(typee) + str(item_name) + "不会分解出任何物品！！", 1.5
 					)
 
 			"道具":
@@ -292,9 +289,7 @@ func fj():
 				if not normal_items.has(name_str):
 					var _name := item_definition.display_name
 					var type := item_definition.category
-					Global.add_message_show(
-						Global.get_ui_runtime().windows, str(type) + str(_name) + "不可以进行分解！！", 1.5, Vector2(500, 305)
-					)
+					Global.add_message_show(Global.get_ui_runtime().windows, str(type) + str(_name) + "不可以进行分解！！", 1.5)
 					return
 				else:
 					PlayerData.spend_soul(need_lh)
@@ -306,7 +301,7 @@ func fj():
 						)
 					Global.add_reward_info(NodeUtils.ancestor(self, 3), Vector2(0, 0), list, null, null)
 					PlayerData.player_data[DataKeys.DECOMPOSE_LIST].clear()
-					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(Global.get_ui_runtime().windows, "分解成功！！", 1.5)
 
 
 func remove_infomation():

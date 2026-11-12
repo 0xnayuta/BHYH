@@ -101,7 +101,7 @@ func _on_pressed() -> void:
 	var load_status := str(load_result.get("status", ""))
 	if not bool(load_result.get("ok", false)):
 		if load_status != "missing" and load_status != "empty":
-			Global.add_message_show(get_parent(), str(load_result.get("message", "")), 1.5, Vector2(470, 340))
+			Global.add_message_show(get_parent(), str(load_result.get("message", "")), 1.5)
 			return
 		# 空档/缺档：保留当前路径作为新建目标槽位，进入创建模式选角后写回该槽。
 		_open_creation_mode()
@@ -110,10 +110,10 @@ func _on_pressed() -> void:
 		if float(PlayerData.player_data["FileValue"]) <= float(MainSet.FILE_VALUE):
 			PlayerData.player_data["FileValue"] = MainSet.FILE_VALUE
 		else:
-			Global.add_message_show(get_parent(), "当前游戏不是最新版本，请使用最新版本游戏！！！", 1.5, Vector2(470, 340))
+			Global.add_message_show(get_parent(), "当前游戏不是最新版本，请使用最新版本游戏！！！", 1.5)
 			return
 	if not await Global.begin_archive_session():
-		Global.add_message_show(get_parent(), "档案会话建立失败，请重试。", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "档案会话建立失败，请重试。", 1.5)
 		return
 	change_to_map()
 

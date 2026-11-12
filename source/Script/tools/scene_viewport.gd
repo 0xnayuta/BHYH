@@ -13,10 +13,10 @@ func _ready() -> void:
 	tcp_server = TCPServer.new()
 	if tcp_server.listen(8889, "127.0.0.1") != OK:
 		if Global.has_method("add_message_show"):
-			Global.add_message_show(self, "服务器创建失败！", 1.5, Vector2(470, 300))
+			Global.add_message_show(self, "服务器创建失败！", 1.5)
 	else:
 		if Global.has_method("add_message_show"):
-			Global.add_message_show(self, "服务器创建成功！", 1.5, Vector2(470, 300))
+			Global.add_message_show(self, "服务器创建成功！", 1.5)
 
 
 func loop_server() -> void:

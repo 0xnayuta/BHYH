@@ -29,7 +29,7 @@ func _on_hddy_body_entered(body: Node2D) -> void:
 			profile.remove_dj("bsz", profile.get_dj_page("bsz"), 1)
 			if not MemoryClass.request_save("level_17_gate", false):
 				profile.add_dj("bsz", 1)
-				Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+				Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 				return
 			Global.change_scene("res://Scene/level/level_hddy.tscn")
 		else:

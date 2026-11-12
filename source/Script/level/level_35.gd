@@ -192,7 +192,7 @@ func spawn_final_boss():
 
 
 func show_puzzle_hint(text: String, duration: float = 2.0):
-	Global.add_message_show(self, text, duration, Vector2(470, 300))
+	Global.add_message_show(self, text, duration)
 
 
 func update_puzzle_hint():

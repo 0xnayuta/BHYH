@@ -43,7 +43,7 @@ func _notify_settlement_save_failure() -> void:
 	if _save_failure_notified:
 		return
 	_save_failure_notified = true
-	Global.add_message_show(self, "存档保存失败，请重试", 2.0, Vector2(470, 300))
+	Global.add_message_show(self, "存档保存失败，请重试", 2.0)
 
 
 func _begin_leave() -> bool:

@@ -200,7 +200,7 @@ func _keep_click_menu_near_item(menu: Node, _parent: Node) -> void:
 func on_press_when_strength():
 	if bool(eq_prop.get("不可强化", false)) and get_item_name not in ["cjxianjie", "cdxianjie", "zhxianjie"]:
 		var _parent = NodeUtils.ancestor(self, 7)
-		Global.add_message_show(_parent, "该装备不可强化！", 1.5, Vector2(500, 305))
+		Global.add_message_show(_parent, "该装备不可强化！", 1.5)
 		return
 	var get_tt = "宠物装备" if strength_source == "宠物背包" else EquipmentService.data(get_item_name)[DataKeys.TYPE]
 	if get_tt != "道具" and get_tt != "消耗品" and get_tt != "法宝":
@@ -215,14 +215,14 @@ func on_press_when_strength():
 			MLdl.qh_list["Data"] = eq_prop
 		else:
 			var _parent = NodeUtils.ancestor(self, 7)
-			Global.add_message_show(_parent, "装备等级已达最高等级！！无法继续强化！", 1.5, Vector2(500, 305))
+			Global.add_message_show(_parent, "装备等级已达最高等级！！无法继续强化！", 1.5)
 
 
 func on_press_when_divine_forge() -> void:
 	var item_data: Dictionary = EquipmentService.data_or_empty(get_item_name)
 	if item_data.is_empty() or not EquipmentService.rules().can_divine_forge(StringName(get_item_name), eq_prop):
 		var _parent = NodeUtils.ancestor(self, 7)
-		Global.add_message_show(_parent, "只有神器及以上品质的武器、防具和饰品可以神铸！", 1.5, Vector2(500, 305))
+		Global.add_message_show(_parent, "只有神器及以上品质的武器、防具和饰品可以神铸！", 1.5)
 		return
 	MLdl.qh_list[DataKeys.NAME] = get_item_name
 	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = qh_level
@@ -239,7 +239,7 @@ func on_press_when_bone_forge() -> void:
 	var next_stage := str(eq_prop.get("下一阶段", item_data.get("下一阶段", "")))
 	if item_data.is_empty() or item_type != "神骨" or next_stage == "":
 		var _parent = NodeUtils.ancestor(self, 7)
-		Global.add_message_show(_parent, "只有设置了下一阶段的神骨装备才可以淬骨！", 1.5, Vector2(500, 305))
+		Global.add_message_show(_parent, "只有设置了下一阶段的神骨装备才可以淬骨！", 1.5)
 		return
 	MLdl.qh_list[DataKeys.NAME] = get_item_name
 	MLdl.qh_list[DataKeys.ENHANCE_LEVEL] = qh_level
@@ -269,7 +269,7 @@ func _has_socketed_gems(data: Dictionary) -> bool:
 func on_press_when_synthesis():
 	if strength_source == "人物穿戴":
 		var equipped_parent = NodeUtils.ancestor(self, 7)
-		Global.add_message_show(equipped_parent, "请先将穿戴中的装备卸下后再进行合成！", 1.5, Vector2(500, 305))
+		Global.add_message_show(equipped_parent, "请先将穿戴中的装备卸下后再进行合成！", 1.5)
 		return
 
 	if not is_in_ldl_gz:
@@ -279,10 +279,10 @@ func on_press_when_synthesis():
 			if mylist.size() == 0:
 				var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 				if not is_synthesis_allowed(str(get_tt), str(get_item_name)):
-					Global.add_message_show(_parent, "法宝无法参与合成！！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "法宝无法参与合成！！！", 1.5)
 					return
 				if get_tt == "消耗品":
-					Global.add_message_show(_parent, "消耗品无法参与合成！！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "消耗品无法参与合成！！！", 1.5)
 					return
 				PlayerData.player_data["放入列表"][i].push_back(str(get_item_name))
 				PlayerData.player_data["放入列表"][i].push_back(PlayerData.get_dj_page(get_item_name))
@@ -299,7 +299,7 @@ func on_press_when_synthesis():
 				):
 					if _has_socketed_gems(eq_prop):
 						PlayerData.player_data["放入列表"][i].clear()
-						Global.add_message_show(_parent, "请先卸下该装备上的宝石！！！", 1.5, Vector2(500, 305))
+						Global.add_message_show(_parent, "请先卸下该装备上的宝石！！！", 1.5)
 						return
 					else:
 						PlayerData.remove_zb(_get_equipment_source_page(), _get_equipment_source_index())
@@ -343,16 +343,16 @@ func on_press_when_dz():
 	var have := str(item_data.get("所属", ""))
 	var item_name := str(item_data.get(DataKeys.NAME, ""))
 	if type == "" or have == "" or item_name == "":
-		Global.add_message_show(NodeUtils.ancestor(self, 7), "物品数据异常，无法参与打造！", 1.5, Vector2(500, 305))
+		Global.add_message_show(NodeUtils.ancestor(self, 7), "物品数据异常，无法参与打造！", 1.5)
 		return
 	var _parent = NodeUtils.ancestor(self, 7)
 	if not is_in_ldl_gz:
 		if type != "道具":
-			Global.add_message_show(_parent, str(item_name) + "不可以参与打造！", 1.5, Vector2(500, 305))
+			Global.add_message_show(_parent, str(item_name) + "不可以参与打造！", 1.5)
 			return
 		if forge.zzs.get_children().size() <= 0:
 			if have != "制作书":
-				Global.add_message_show(_parent, "只有制作书可以参与打造！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "只有制作书可以参与打造！", 1.5)
 				return
 			else:
 				forge.replace_book(get_item_name, qh_level, eq_prop)
@@ -362,7 +362,7 @@ func on_press_when_dz():
 				var count_jingshi = 0
 				var jewels_value: Variant = PlayerData.player_data.get("宝珠列表", [])
 				if not jewels_value is Array:
-					Global.add_message_show(_parent, "宝珠数据异常，无法参与打造！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "宝珠数据异常，无法参与打造！", 1.5)
 					return
 				for item_value in jewels_value as Array:
 					if not item_value is Dictionary:
@@ -380,10 +380,10 @@ func on_press_when_dz():
 
 				if have == "宝珠" or have == "晶石":
 					if count_baozhu + count_jingshi >= 4:
-						Global.add_message_show(_parent, "最多4颗！", 1.5, Vector2(500, 305))
+						Global.add_message_show(_parent, "最多4颗！", 1.5)
 						return
 				else:
-					Global.add_message_show(_parent, "只能放入宝珠或晶石！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "只能放入宝珠或晶石！", 1.5)
 					return
 
 				var bz_prop = {"名字": get_item_name, "强化等级": qh_level, "Data": eq_prop.duplicate(true)}
@@ -400,7 +400,7 @@ func on_press_when_dz():
 func on_press_whenfj():
 	if strength_source == "人物穿戴":
 		var equipped_parent = NodeUtils.ancestor(self, 7)
-		Global.add_message_show(equipped_parent, "穿戴中的装备不能分解，请先卸下！", 1.5, Vector2(500, 305))
+		Global.add_message_show(equipped_parent, "穿戴中的装备不能分解，请先卸下！", 1.5)
 		return
 	if not is_in_ldl_gz:
 		var _parent = NodeUtils.ancestor(self, 7)
@@ -422,19 +422,19 @@ func on_press_whenfj():
 		var get_tt2 = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 		match get_tt2:
 			"法宝":
-				Global.add_message_show(_parent, "法宝不可以分解！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "法宝不可以分解！！", 1.5)
 				return
 			"消耗品":
-				Global.add_message_show(_parent, "消耗品不可以分解！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "消耗品不可以分解！！", 1.5)
 				return
 			"翅膀":
-				Global.add_message_show(_parent, "翅膀无不可以分解！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "翅膀无不可以分解！！", 1.5)
 				return
 			"时装":
-				Global.add_message_show(_parent, "时装不可以分解！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "时装不可以分解！！", 1.5)
 				return
 			"头衔":
-				Global.add_message_show(_parent, "头衔不可以分解！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "头衔不可以分解！！", 1.5)
 				return
 			"道具":
 				PlayerData.player_data[DataKeys.DECOMPOSE_LIST].push_back(
@@ -443,14 +443,14 @@ func on_press_whenfj():
 				PlayerData.remove_dj(get_item_name, current_page, 1)
 			"武器", "防具", "饰品", "翅膀", "时装", "头衔":
 				if _has_socketed_gems(eq_prop):
-					Global.add_message_show(_parent, "请先卸下该装备上的宝石！！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "请先卸下该装备上的宝石！！！", 1.5)
 					return
 				PlayerData.player_data[DataKeys.DECOMPOSE_LIST].push_back(
 					{"名字": get_item_name, "强化等级": qh_level, "Data": eq_prop.duplicate(true)}
 				)
 				PlayerData.remove_zb(_get_equipment_source_page(), _get_equipment_source_index())
 			"":
-				Global.add_message_show(_parent, "错误？？！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "错误？？！！", 1.5)
 				return
 	else:
 		if PlayerData.player_data[DataKeys.DECOMPOSE_LIST].size() != 0:
@@ -473,28 +473,28 @@ func on_press_when_xq():
 		var _parent = NodeUtils.ancestor(self, 7)
 		if strength_source == "宠物背包":
 			if PlayerData.player_data[DataKeys.INLAY_LIST].size() != 0:
-				Global.add_message_show(_parent, "请先将镶嵌格子内装备卸下！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "请先将镶嵌格子内装备卸下！！", 1.5)
 				return
 			if not PlayerData.take_pet_equipment_for_mosaic(strength_index, eq_prop, get_item_name):
-				Global.add_message_show(_parent, "宠物装备位置已变化，请重新选择！！", 1.5, Vector2(500, 305))
+				Global.add_message_show(_parent, "宠物装备位置已变化，请重新选择！！", 1.5)
 			return
 		var get_tt = EquipmentService.data(get_item_name)[DataKeys.TYPE]
 		var base = EquipmentService.data(get_item_name)["所属"]
 		if PlayerData.player_data[DataKeys.INLAY_LIST].size() == 0:
 			match get_tt:
 				"法宝":
-					Global.add_message_show(_parent, "法宝不可以镶嵌宝石！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "法宝不可以镶嵌宝石！！", 1.5)
 					return
 				"消耗品":
-					Global.add_message_show(_parent, "不可放入消耗品！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "不可放入消耗品！！", 1.5)
 					return
 
 				"道具":
 					if base == "宝石":
 						if PlayerData.player_data[DataKeys.INLAY_LIST].size() == 0:
-							Global.add_message_show(_parent, "请先放入装备！！", 1.5, Vector2(500, 305))
+							Global.add_message_show(_parent, "请先放入装备！！", 1.5)
 					else:
-						Global.add_message_show(_parent, "该道具不可用于镶嵌！！", 1.5, Vector2(500, 305))
+						Global.add_message_show(_parent, "该道具不可用于镶嵌！！", 1.5)
 
 				"武器", "防具", "饰品", "神骨", "翅膀", "时装", "头衔":
 					if strength_source == "人物穿戴":
@@ -503,7 +503,7 @@ func on_press_when_xq():
 							equipped_slot, get_item_name, eq_prop
 						)
 						if taken_equipment.is_empty():
-							Global.add_message_show(_parent, "穿戴装备位置已变化，请重新选择！", 1.5, Vector2(500, 305))
+							Global.add_message_show(_parent, "穿戴装备位置已变化，请重新选择！", 1.5)
 							return
 					else:
 						PlayerData.player_data[DataKeys.INLAY_LIST].push_back(
@@ -513,16 +513,16 @@ func on_press_when_xq():
 					NodeUtils.ancestor(self, 6).set_box_data()
 
 				"":
-					Global.add_message_show(_parent, "错误？？！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "错误？？！！", 1.5)
 					return
 		else:
 			var data = PlayerData.player_data[DataKeys.INLAY_LIST][0]["Data"]
 			match get_tt:
 				"法宝":
-					Global.add_message_show(_parent, "法宝不可以镶嵌宝石！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "法宝不可以镶嵌宝石！！", 1.5)
 					return
 				"消耗品":
-					Global.add_message_show(_parent, "不可放入消耗品！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "不可放入消耗品！！", 1.5)
 					return
 				"道具":
 					if base == "宝石":
@@ -539,18 +539,16 @@ func on_press_when_xq():
 								PlayerData.remove_dj(get_item_name, current_page, 1)
 
 						else:
-							Global.add_message_show(
-								_parent, "最多镶嵌" + str(get_max_bs()) + "个宝石！！", 1.5, Vector2(500, 305)
-							)
+							Global.add_message_show(_parent, "最多镶嵌" + str(get_max_bs()) + "个宝石！！", 1.5)
 							return
 					else:
-						Global.add_message_show(_parent, "该道具不可用于镶嵌！！", 1.5, Vector2(500, 305))
+						Global.add_message_show(_parent, "该道具不可用于镶嵌！！", 1.5)
 						return
 				"武器", "防具", "饰品", "神骨", "翅膀", "时装", "头衔":
-					Global.add_message_show(_parent, "请先将镶嵌格子内装备卸下！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "请先将镶嵌格子内装备卸下！！", 1.5)
 					return
 				"":
-					Global.add_message_show(_parent, "错误？？！！", 1.5, Vector2(500, 305))
+					Global.add_message_show(_parent, "错误？？！！", 1.5)
 					return
 	else:
 		if PlayerData.player_data[DataKeys.INLAY_LIST].size() != 0:
@@ -580,7 +578,7 @@ func _on_pressed() -> void:
 		if is_in_hh or is_in_shop or is_in_hhgz:
 			return
 		else:
-			Global.add_message_show(_parent, "点击过快！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(_parent, "点击过快！！", 1.5)
 		return
 	else:
 		backpack_factory.start_box_click_cooldown()

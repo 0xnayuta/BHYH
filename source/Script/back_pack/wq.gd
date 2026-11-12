@@ -169,7 +169,7 @@ func _physics_process(_delta: float) -> void:
 func _on_pressed() -> void:
 	_close_equ_box()
 	if PlayerData.check_can_use_page("装备列表") == 0:
-		Global.add_message_show(NodeUtils.ancestor(self, 5), "背包已满，无法卸下！！", 1.5, Vector2(80, 0))
+		Global.add_anchored_message_show(NodeUtils.ancestor(self, 5), "背包已满，无法卸下！！", 1.5, Vector2(80, 0))
 		return
 	match str(self.name):
 		"wq":

@@ -128,7 +128,7 @@ func _on_all_lights_on():
 	is_play = true
 	lights_on = true
 
-	Global.add_message_show(self, "所有灯已点亮！", 2.5, Vector2(500, 300))
+	Global.add_message_show(self, "所有灯已点亮！", 2.5)
 
 	$Check/check.disabled = false
 
@@ -166,7 +166,7 @@ func _on_check_area_entered(area: Area2D) -> void:
 		if hurt_count >= 3 and not is_transporting:
 			is_transporting = true
 
-			Global.add_message_show(self, "传送开启！", 1.5, Vector2(500, 200))
+			Global.add_message_show(self, "传送开启！", 1.5)
 
 			call_deferred("_transport_to_hidden_level")
 

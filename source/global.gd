@@ -566,7 +566,7 @@ func _on_save_failed(reason: String, error: String, message: String, notify: boo
 		return
 	_save_failure_notify_key = key
 	_save_failure_notify_msec = now
-	add_message_show(_ui_runtime.get_popup_layer(), message, 2.0, Vector2.ZERO)
+	add_message_show(_ui_runtime.get_popup_layer(), message, 2.0)
 
 
 func set_save_failure_feedback_enabled(enabled: bool) -> void:
@@ -2578,8 +2578,12 @@ func set_magic_summon_for(player: Node, summon: Node) -> void:
 	_magic_weapon_runtime.set_magic_summon_for(player, summon)
 
 
-func add_message_show(parent_node, need_text: String, time: float, target_pos: Vector2):
-	return _popup_factory.add_message_show(parent_node, need_text, time, target_pos)
+func add_message_show(parent_node, need_text: String, time: float):
+	return _popup_factory.add_message_show(parent_node, need_text, time)
+
+
+func add_anchored_message_show(parent_node, need_text: String, time: float, anchor: Vector2):
+	return _popup_factory.add_anchored_message_show(parent_node, need_text, time, anchor)
 
 
 ## 统一保存反馈：失败时在可见 UI 层提示，并返回 false 供调用方回滚。
@@ -2590,7 +2594,7 @@ func request_save_with_feedback(reason: String, parent: Node = null, failure_pre
 	if bool(outcome.get("ok", false)):
 		return true
 	var target: Node = parent if is_instance_valid(parent) else _ui_runtime.get_popup_layer()
-	add_message_show(target, failure_prefix + str(outcome.get("message", "")), 2.0, Vector2.ZERO)
+	add_message_show(target, failure_prefix + str(outcome.get("message", "")), 2.0)
 	return false
 
 

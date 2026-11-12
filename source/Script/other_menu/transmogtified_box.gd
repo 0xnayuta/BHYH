@@ -56,33 +56,21 @@ func _on_change_pressed() -> void:
 	var item_name = EquipmentService.data(self_name)[DataKeys.NAME]
 	if cdorxx.text == "穿戴":
 		if not already_have(self_name):
-			Global.add_message_show(
-				Global.get_ui_runtime().windows, "您还未获得过" + str(item_name) + "！！", 1.5, Vector2(470, 295)
-			)
+			Global.add_message_show(Global.get_ui_runtime().windows, "您还未获得过" + str(item_name) + "！！", 1.5)
 			return
 		if not PlayerData.change_transmog(lx, self_name):
 			Global.add_message_show(
-				Global.get_ui_runtime().windows,
-				"存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(),
-				2.0,
-				Vector2(470, 295)
+				Global.get_ui_runtime().windows, "存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(), 2.0
 			)
 			return
-		Global.add_message_show(
-			Global.get_ui_runtime().windows, str(lx) + "幻化为：" + str(item_name) + "！！", 1.5, Vector2(470, 295)
-		)
+		Global.add_message_show(Global.get_ui_runtime().windows, str(lx) + "幻化为：" + str(item_name) + "！！", 1.5)
 	elif cdorxx.text == "卸下":
 		if not PlayerData.change_transmog(lx, ""):
 			Global.add_message_show(
-				Global.get_ui_runtime().windows,
-				"存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(),
-				2.0,
-				Vector2(470, 295)
+				Global.get_ui_runtime().windows, "存档保存失败，本次幻化已撤销：%s" % MemoryClass.describe_save_error(), 2.0
 			)
 			return
-		Global.add_message_show(
-			Global.get_ui_runtime().windows, "取消" + str(lx) + "：" + str(item_name) + "的幻化！！", 1.5, Vector2(470, 295)
-		)
+		Global.add_message_show(Global.get_ui_runtime().windows, "取消" + str(lx) + "：" + str(item_name) + "的幻化！！", 1.5)
 	else:
 		return
 	transmogrified.on_eqchange()

@@ -33,7 +33,7 @@ func _on_beisu_pressed() -> void:
 	if int($beisu/beisu_l.text) > 0:
 		over_player.speed_scale = int($beisu/beisu_l.text)
 	else:
-		Global.add_message_show(self, "请正确输入速度！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(self, "请正确输入速度！！", 1.5)
 
 
 func _on_bg_1_pressed() -> void:

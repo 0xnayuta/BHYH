@@ -638,7 +638,7 @@ func _show_message(message: String) -> void:
 	var parent_node: Node = Global.get_ui_runtime().get_popup_layer()
 	if parent_node == null:
 		parent_node = get_parent()
-	Global.add_message_show(parent_node, message, 1.5, Vector2.ZERO)
+	Global.add_message_show(parent_node, message, 1.5)
 
 
 func _make_button_style(background: Color, border: Color) -> StyleBoxFlat:

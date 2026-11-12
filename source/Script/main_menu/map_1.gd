@@ -174,7 +174,7 @@ func _ready():
 		MemoryClass.main_bc()
 	Global.set_current_level_name("")
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5)
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 	get_tree().paused = false
@@ -202,11 +202,14 @@ func update_button_texture():
 
 
 func _attach_left_button_hover() -> void:
-	for button_name in ["bc_game", "Skill_learn", "turn_mainmenu", "BossTreasureCheckBox"]:
+	for button_name in ["bc_game", "Skill_learn", "turn_mainmenu", "GameAn", "BossTreasureCheckBox"]:
 		var button := get_node_or_null(button_name) as Control
 		if button == null:
 			continue
 		MapButtonHover.attach(button, button_name == "Skill_learn")
+	var task_button := get_node_or_null("Task") as Control
+	if task_button != null:
+		MapButtonHover.attach(task_button, true)
 
 
 func _on_boss_treasure_toggled():
@@ -218,7 +221,7 @@ func _on_boss_treasure_toggled():
 	MemoryClass.main_bc()
 
 	var mode_text = "普通掉落模式" if not is_chest_mode else "宝箱掉落模式（Boss 将掉落自选宝箱）"
-	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5)
 
 
 func _on_level_1_pressed() -> void:
@@ -263,7 +266,7 @@ func _on_level_10_pressed() -> void:
 
 func _on_bc_game_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5)
 
 
 func _on_skill_learn_pressed() -> void:

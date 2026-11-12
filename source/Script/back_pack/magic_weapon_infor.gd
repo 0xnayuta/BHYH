@@ -208,10 +208,10 @@ func _on_up_level_pressed() -> void:
 			PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.ENHANCE_LEVEL] += 1
 			MemoryClass.request_save("magic_weapon_enhance")
 		else:
-			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(0, 0))
+			Global.add_anchored_message_show(self, "灵魂不足！！", 1.5, Vector2(0, 0))
 			MemoryClass.request_save("magic_weapon_enhance")
 	else:
-		Global.add_message_show(self, "法宝已经满级了！", 1.5, Vector2(0, 0))
+		Global.add_anchored_message_show(self, "法宝已经满级了！", 1.5, Vector2(0, 0))
 		MemoryClass.request_save("magic_weapon_enhance")
 
 
@@ -275,9 +275,9 @@ func low_wx() -> void:
 	if PlayerData.get_item_data("wxxls") >= 1:
 		PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.FIVE_ELEMENTS] = ItemUtils.random_element_set(0)
 		PlayerData.remove_dj("wxxls", PlayerData.get_dj_page("wxxls"), 1)
-		Global.add_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
 	else:
-		Global.add_message_show(get_parent(), "五行洗炼石数量不足！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "五行洗炼石数量不足！", 1.5, Vector2(490, 280))
 
 
 func high_wx() -> void:
@@ -307,9 +307,9 @@ func high_wx() -> void:
 					5
 				)
 		PlayerData.remove_dj("wxxls", PlayerData.get_dj_page("wxxls"), wx_num)
-		Global.add_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "法宝五行已重置！！", 1.5, Vector2(490, 280))
 	else:
-		Global.add_message_show(get_parent(), "五行洗炼石数量不足！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "五行洗炼石数量不足！", 1.5, Vector2(490, 280))
 
 
 func czl() -> void:
@@ -320,9 +320,9 @@ func czl() -> void:
 			PlayerData.player_data[DataKeys.MAGIC_WEAPON][0][DataKeys.NAME]
 		)
 		PlayerData.remove_dj("czlxls", PlayerData.get_dj_page("czlxls"), 1)
-		Global.add_message_show(get_parent(), "法宝成长已重置！！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "法宝成长已重置！！", 1.5, Vector2(490, 280))
 	else:
-		Global.add_message_show(get_parent(), "成长率洗炼石数量不足！", 1.5, Vector2(490, 280))
+		Global.add_anchored_message_show(get_parent(), "成长率洗炼石数量不足！", 1.5, Vector2(490, 280))
 
 
 func _on_wxxl_pressed() -> void:

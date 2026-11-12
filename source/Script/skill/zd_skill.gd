@@ -694,7 +694,7 @@ func set_skill_lh():
 
 func up_level():
 	if target_skill <= 0:
-		Global.add_message_show(self, "技能信息获取失败，无法升级！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "技能信息获取失败，无法升级！！", 1.5, Vector2(395, 180))
 		return
 
 	var role_key = get_role_key()
@@ -710,10 +710,10 @@ func up_level():
 		and role_key != "角色5"
 		and role_key != "角色8"
 	):
-		Global.add_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
 		return
 	if target_skill > max_skill:
-		Global.add_message_show(self, "技能不存在！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "技能不存在！！", 1.5, Vector2(395, 180))
 		return
 
 	var target_internal: String = str(skill_list[target_skill - 1])
@@ -722,41 +722,43 @@ func up_level():
 	var level := PlayerData.get_skill_level(skill_key)
 
 	if level >= get_skill_max_level(target_internal):
-		Global.add_message_show(self, "技能已经满级！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "技能已经满级！！", 1.5, Vector2(395, 180))
 		return
 
 	var snapshot: Dictionary = PlayerData.snapshot_state()
 	if _uses_standard_upgrades(target_internal) and level >= SKILL_BOOK_START_LEVEL:
 		var book_need := get_skill_book_need(level)
 		if not _consume_skill_book(level):
-			Global.add_message_show(
+			Global.add_anchored_message_show(
 				self, get_skill_book_name(level) + "不足，需" + str(book_need) + "个！！", 1.5, Vector2(395, 180)
 			)
 			return
 	elif target_internal in PASSIVE_SKILLS:
 		var need_level = skill10_xz(level)
 		if RoleProp.baseroleprop["Level"] < need_level:
-			Global.add_message_show(self, "等级不足，需达到：" + str(need_level) + "级！！", 1.5, Vector2(395, 180))
+			Global.add_anchored_message_show(self, "等级不足，需达到：" + str(need_level) + "级！！", 1.5, Vector2(395, 180))
 			return
 		var need = 500 + 500 * level
 		if not PlayerData.spend_soul(need):
-			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
+			Global.add_anchored_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
 			return
 	else:
 		var i = target_skill - 1
 		var need = 100 + (i * 300) + 500 * level
 		if not PlayerData.spend_soul(need):
-			Global.add_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
+			Global.add_anchored_message_show(self, "灵魂不足！！", 1.5, Vector2(395, 180))
 			return
 
 	if not PlayerData.set_skill_level(skill_key, level + 1):
 		PlayerData.restore_state(snapshot)
-		Global.add_message_show(self, "技能数据异常，本次升级已撤销！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "技能数据异常，本次升级已撤销！！", 1.5, Vector2(395, 180))
 		return
 	if not refresh_infor():
 		PlayerData.restore_state(snapshot)
 		refresh_infor(false)
-		Global.add_message_show(self, "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(395, 180))
+		Global.add_anchored_message_show(
+			self, "存档保存失败，本次升级已撤销：%s" % MemoryClass.describe_save_error(), 2.0, Vector2(395, 180)
+		)
 
 
 func refresh_infor(save_state: bool = true) -> bool:
@@ -946,7 +948,7 @@ func _on_ski_11_pressed():
 	):
 		_set_key(10)
 	else:
-		Global.add_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
 
 
 func _on_ski_12_pressed() -> void:
@@ -960,14 +962,14 @@ func _on_ski_13_pressed() -> void:
 func _set_key(index):
 	var skill_list = skill_ids_by_role[get_role_key()]
 	if index >= skill_list.size():
-		Global.add_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "该角色无此技能！！", 1.5, Vector2(395, 180))
 		return
 	if skill_list[index] in PASSIVE_SKILLS:
-		Global.add_message_show(self, "被动技能不可以设置按键！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "被动技能不可以设置按键！！", 1.5, Vector2(395, 180))
 		return
 	var level = get_skill_level_by_index(index)
 	if level == 0:
-		Global.add_message_show(self, "先学习技能才能设置按键！！", 1.5, Vector2(395, 180))
+		Global.add_anchored_message_show(self, "先学习技能才能设置按键！！", 1.5, Vector2(395, 180))
 		return
 	var name = skill_list[index]
 	Global.add_skill_key_set(self, Vector2(350, 140), name)
@@ -1115,7 +1117,7 @@ func _on_hmz_version_selected(id: int):
 	if not PlayerData.select_skill_variant(data_key, id):
 		(
 			Global
-			. add_message_show(
+			. add_anchored_message_show(
 				self,
 				"技能变体保存失败，本次切换已撤销：%s" % MemoryClass.describe_save_error(),
 				2.0,

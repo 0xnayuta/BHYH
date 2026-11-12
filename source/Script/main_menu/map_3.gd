@@ -215,7 +215,7 @@ func _ready():
 	if Global.get_ui_runtime().windows == null:
 		Global.get_ui_runtime().windows = _ui_parent()
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5)
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 
@@ -260,7 +260,7 @@ func _on_boss_treasure_toggled():
 	MemoryClass.main_bc()
 
 	var mode_text = "普通掉落模式" if not is_chest_mode else "宝箱掉落模式（Boss 将掉落自选宝箱）"
-	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5)
 
 
 func check_pass_level():
@@ -391,14 +391,14 @@ func _on_level_stz_pressed() -> void:
 
 func _on_level_dsg_pressed() -> void:
 	if int(PlayerData.player_data.get("兜率宫", 0)) == 0:
-		Global.add_message_show(get_parent(), "需通关玲珑宝塔！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需通关玲珑宝塔！", 1.5)
 	else:
 		Global.add_level_info(_ui_parent(), "兜率宫", Vector2(0, 0), "兜率宫")
 
 
 func _on_level_hdzm_pressed() -> void:
 	if PlayerData.player_data.截教天镜 == false:
-		Global.add_message_show(get_parent(), "需通关兜率宫！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需通关兜率宫！", 1.5)
 	else:
 		Global.add_hdzm(_ui_parent(), self)
 
@@ -430,14 +430,14 @@ func _on_bxgh_pressed() -> void:
 
 func _on_tzhy_pressed() -> void:
 	if PlayerData.player_data[DataKeys.PLAYER_LEVEL] < 40:
-		Global.add_message_show(get_parent(), "需要角色等级大于等于40级！", 1.5, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "需要角色等级大于等于40级！", 1.5)
 		return
 	Global.change_scene("res://Scene/level/level_tzhy.tscn")
 
 
 func _on_memory_game_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5)
 
 
 func _on_shop_pressed() -> void:
@@ -456,7 +456,7 @@ func _on_learn_skill_pressed() -> void:
 
 
 func _on_actity_pressed() -> void:
-	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "敬请期待！！！！", 1.5)
 
 
 func _on_task_pressed() -> void:
@@ -498,7 +498,7 @@ func _on_zhu_xian_sword_pressed() -> void:
 		return
 	var page_scene := load(ZHUXIAN_SWORD_PAGE_PATH) as PackedScene
 	if page_scene == null:
-		Global.add_message_show(_ui_parent(), "诛仙剑阵页面加载失败", 1.5, Vector2(470, 300))
+		Global.add_message_show(_ui_parent(), "诛仙剑阵页面加载失败", 1.5)
 		return
 	zhuxian_sword_page = page_scene.instantiate()
 	var popup_parent: Node = Global.get_ui_runtime().get_popup_layer()
@@ -524,7 +524,7 @@ func _enter_challenge_four_swords(level_name: String, level_path: String) -> voi
 	}
 	var prerequisite := str(prerequisites.get(level_name, ""))
 	if prerequisite != "" and not bool(PlayerData.player_data.get(prerequisite, false)):
-		Global.add_message_show(_ui_parent(), "需要先通关" + prerequisite + "！", 1.5, Vector2(470, 300))
+		Global.add_message_show(_ui_parent(), "需要先通关" + prerequisite + "！", 1.5)
 		return
 	_hide_challenge_four_swords_panel()
 	Global.add_level_info(_ui_parent(), level_name, Vector2(0, 0), level_path)

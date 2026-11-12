@@ -477,7 +477,7 @@ func _advance_tower_floor() -> void:
 	if not MemoryClass.request_save("tower_floor_advance", false):
 		for key in previous_progress:
 			PlayerData.player_data[key] = previous_progress[key]
-		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 		return
 	_runtime_ready = false
 	_tower_exit_can_use = false

@@ -23,6 +23,11 @@ var is_set = false
 var _anchor := Vector2.ZERO
 var _has_anchor := false
 
+const TOOLTIP_MIN_WIDTH := 240.0
+const TOOLTIP_MAX_WIDTH := 360.0
+const TOOLTIP_SIDE_PADDING := 12.0
+const TOOLTIP_TEXT_GAP := 12.0
+
 
 func _get_display_name():
 	var name1 = my_name
@@ -59,6 +64,21 @@ func _apply_layout() -> void:
 	PopupLayout.place_parent_anchor(self, _anchor, rect.size, PopupLayout.DEFAULT_MARGIN, true, rect.position)
 
 
+func _fit_content_width() -> void:
+	if margin_container == null or ms == null:
+		return
+	var target_width := TOOLTIP_MIN_WIDTH
+	if not ms.text.strip_edges().is_empty():
+		var font := ms.get_theme_font(&"font")
+		var font_size := ms.get_theme_font_size(&"font_size")
+		if font != null:
+			var text_width := font.get_string_size(ms.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+			target_width = clampf(
+				text_width + TOOLTIP_SIDE_PADDING * 2.0 + TOOLTIP_TEXT_GAP, TOOLTIP_MIN_WIDTH, TOOLTIP_MAX_WIDTH
+			)
+	margin_container.custom_minimum_size.x = target_width
+
+
 func _physics_process(_delta: float) -> void:
 	color_rect.size = margin_container.size
 	if is_set == false:
@@ -73,6 +93,7 @@ func _physics_process(_delta: float) -> void:
 			sl.text = "拥有：" + str(PlayerData.get_item_data(_get_display_name())) + " 个"
 		ms.text = UiTextFormat.description(str(EquipmentService.data(_get_display_name())["描述"]))
 		sj.text = UiTextFormat.price(EquipmentService.data(_get_display_name())["售价"])
+		_fit_content_width()
 		is_set = true
 	_apply_layout()
 

@@ -162,10 +162,10 @@ func _on_tiaoguo_pressed() -> void:
 	Global.get_audio_runtime().add_bgm(self, "res://Music/main_scene_music/2_sd_xz.mp3")
 	if MainSet.set_data["剧情跳过"]:
 		MainSet.set_data["剧情跳过"] = false
-		Global.add_message_show(get_parent(), "将不会跳过结束剧情！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "将不会跳过结束剧情！！", 1.5)
 	else:
 		MainSet.set_data["剧情跳过"] = true
-		Global.add_message_show(get_parent(), "将会跳过结束剧情！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "将会跳过结束剧情！！", 1.5)
 	MemoryClass.main_bc()
 
 
@@ -190,7 +190,7 @@ func check_time():
 		push_error("在HTTP请求中发生了一个错误。")
 	times += 1
 	if times >= 15:
-		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5)
 
 
 func _on_body_received(request, body):
@@ -198,19 +198,19 @@ func _on_body_received(request, body):
 	if time_str == "":
 		print("无法获取时间1！！")
 		check_time()
-		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5)
 		return null
 	var utc_time = JSON.parse_string(time_str)
 	if utc_time == null:
 		print("无法获取时间2！！")
 		check_time()
-		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5)
 		return null
 	var t_ime_unix = int(utc_time["sysTime2"])
 	if t_ime_unix == null or str(t_ime_unix) == "":
 		print("无法获取时间3！！")
 		check_time()
-		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5, Vector2(470, 340))
+		Global.add_message_show(get_parent(), "获取时间信息失败，网络连接可能存在问题，部分功能将无法使用！！", 1.5)
 		return null
 	return t_ime_unix
 

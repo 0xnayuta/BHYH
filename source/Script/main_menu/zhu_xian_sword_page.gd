@@ -358,4 +358,4 @@ func _show_message(message: String) -> void:
 	var parent: Node = self
 	if Global.get_ui_runtime().windows != null:
 		parent = Global.get_ui_runtime().windows
-	Global.add_message_show(parent, message, 1.2, get_viewport().get_visible_rect().size * 0.5)
+	Global.add_message_show(parent, message, 1.2)

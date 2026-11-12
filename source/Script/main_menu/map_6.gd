@@ -131,7 +131,7 @@ func _ready() -> void:
 		Global.get_audio_runtime().add_main_menu_music()
 	Global.set_current_level_name("")
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5)
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 	get_tree().paused = false
@@ -201,23 +201,23 @@ func _set_level_highlight_width(width: float, highlight_material: ShaderMaterial
 func _on_map_level_pressed(level_number: int) -> void:
 	var level_name: String = MAP_LEVEL_NAMES.get(level_number, "南瞻部洲关卡")
 	if level_number > LAST_OPEN_LEVEL:
-		Global.add_message_show(_ui_parent(), "%s暂未开放" % level_name, 1.5, Vector2(470, 300))
+		Global.add_message_show(_ui_parent(), "%s暂未开放" % level_name, 1.5)
 		return
 	if not _has_map6_prerequisite(level_number):
 		var prerequisite_name: String = MAP_LEVEL_NAMES.get(level_number - 1, "前置关卡")
-		Global.add_message_show(_ui_parent(), "需要先通关%s！" % prerequisite_name, 1.5, Vector2(470, 300))
+		Global.add_message_show(_ui_parent(), "需要先通关%s！" % prerequisite_name, 1.5)
 		return
 	var level_path := "res://Scene/level/level_%d.tscn" % level_number
 	if ResourceLoader.exists(level_path):
 		Global.add_level_info(_ui_parent(), level_name, Vector2.ZERO, level_path)
 		return
-	Global.add_message_show(_ui_parent(), "%s尚未接入，敬请期待！" % level_name, 1.5, Vector2(470, 300))
+	Global.add_message_show(_ui_parent(), "%s尚未接入，敬请期待！" % level_name, 1.5)
 
 
 func _on_memory_class_pressed() -> void:
 	if Global.is_archive_session_active():
 		MemoryClass.request_save("map_save")
-	Global.add_message_show(_ui_parent(), "保存成功！", 1.5, Vector2(470, 300))
+	Global.add_message_show(_ui_parent(), "保存成功！", 1.5)
 
 
 func _on_shop_pressed() -> void:
@@ -236,7 +236,7 @@ func _on_skill_pressed() -> void:
 
 
 func _on_activity_pressed() -> void:
-	Global.add_message_show(_ui_parent(), "敬请期待！！！！", 1.5, Vector2(470, 300))
+	Global.add_message_show(_ui_parent(), "敬请期待！！！！", 1.5)
 
 
 func _on_task_pressed() -> void:

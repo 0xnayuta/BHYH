@@ -201,7 +201,7 @@ func _ui_parent() -> Node:
 
 
 func _show_message(message: String) -> void:
-	var message_show: Node = Global.add_message_show(_ensure_message_layer(), message, 1.2, Vector2.ZERO) as Node
+	var message_show: Node = Global.add_message_show(_ensure_message_layer(), message, 1.2) as Node
 	if message_show is CanvasItem:
 		message_show.z_index = 100000
 		message_show.z_as_relative = false

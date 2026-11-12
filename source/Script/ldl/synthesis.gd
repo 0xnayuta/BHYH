@@ -135,16 +135,16 @@ func _on_syn_pressed() -> void:
 
 	var recipe_info = get_recipe(name_1, name_2, name_3)
 	if not recipe_info[0]:
-		Global.add_message_show(get_parent(), "合成公式错误！", 1.5, Vector2(15, -45))
+		Global.add_anchored_message_show(get_parent(), "合成公式错误！", 1.5, Vector2(15, -45))
 		return
 	var nn_lh = recipe_info[2]
 	if PlayerData.get_soul() < nn_lh:
-		Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
+		Global.add_anchored_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
 		return
 	var snapshot := PlayerData.snapshot_state()
 	if not PlayerData.spend_soul(nn_lh):
 		PlayerData.restore_state(snapshot)
-		Global.add_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
+		Global.add_anchored_message_show(get_parent(), "灵魂不足！！！", 1.5, Vector2(15, -45))
 		return
 	var _item = recipe_info[1]
 	var get_tt := EquipmentService.definition(StringName(_item)).category
@@ -157,7 +157,7 @@ func _on_syn_pressed() -> void:
 		granted = PlayerData.add_fb(_item, 0, EquipmentService.rules().get_wx(), item_4.eq_prop)
 	if not granted:
 		PlayerData.restore_state(snapshot)
-		Global.add_message_show(get_parent(), "背包已满，合成已撤销！", 1.5, Vector2(15, -45))
+		Global.add_anchored_message_show(get_parent(), "背包已满，合成已撤销！", 1.5, Vector2(15, -45))
 		return
 
 	PlayerData.player_data["放入列表"]["物品1"].clear()
@@ -165,11 +165,11 @@ func _on_syn_pressed() -> void:
 	PlayerData.player_data["放入列表"]["物品3"].clear()
 	if not MemoryClass.request_save("ldl_synthesis", false):
 		PlayerData.restore_state(snapshot)
-		Global.add_message_show(
+		Global.add_anchored_message_show(
 			get_parent(), "存档保存失败，合成已撤销：" + MemoryClass.describe_save_error(), 1.5, Vector2(15, -45)
 		)
 		return
-	Global.add_message_show(
+	Global.add_anchored_message_show(
 		get_parent(),
 		"合成成功！获得：" + EquipmentService.definition(StringName(_item)).display_name + " × 1！",
 		1.5,

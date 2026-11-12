@@ -276,13 +276,13 @@ func _on_qued_pressed() -> void:
 		LocalCoop.clear_runtime()
 		PlayerData.player_data.erase(LocalCoop.SAVE_KEY)
 	if not Global.bind_archive_session():
-		Global.add_message_show(self, "存档槽位无效，请返回主菜单重新选择。", 2.0, Vector2(470, 340))
+		Global.add_message_show(self, "存档槽位无效，请返回主菜单重新选择。", 2.0)
 		return
 	if not MemoryClass.request_save("choose_player", false):
-		Global.add_message_show(self, MemoryClass.describe_save_error(), 2.0, Vector2(470, 340))
+		Global.add_message_show(self, MemoryClass.describe_save_error(), 2.0)
 		return
 	if not await Global.begin_archive_session():
-		Global.add_message_show(self, "档案会话建立失败，请返回主菜单重试。", 2.0, Vector2(470, 340))
+		Global.add_message_show(self, "档案会话建立失败，请返回主菜单重试。", 2.0)
 		return
 	Global.change_scene("res://Scene/main_menu/map_0.tscn")
 

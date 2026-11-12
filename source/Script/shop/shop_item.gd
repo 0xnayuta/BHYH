@@ -92,7 +92,7 @@ func _on_goumai_pressed() -> void:
 	var _parent = NodeUtils.ancestor(self, 3)
 	var buy_num := _get_safe_buy_num()
 	if not _can_pay_for_count(buy_num):
-		Global.add_message_show(_parent, "灵魂不足！", 1.5, Vector2(485, 295))
+		Global.add_message_show(_parent, "灵魂不足！", 1.5)
 		return
 	choose_jm = Global.add_choose_text(
 		_parent,
@@ -110,9 +110,9 @@ func add_item_toplayer(times):
 	_set_total_num(buy_num)
 	var result: Dictionary = ShopPurchaseCommand.execute(_item_name, buy_num, _effective_price())
 	if not bool(result.get("ok", false)):
-		Global.add_message_show(_parent, str(result.get("message", "购买失败！")), 2.0, Vector2(485, 295))
+		Global.add_message_show(_parent, str(result.get("message", "购买失败！")), 2.0)
 		return
-	Global.add_message_show(_parent, "购买成功！", 1.5, Vector2(485, 295))
+	Global.add_message_show(_parent, "购买成功！", 1.5)
 
 
 func gm():

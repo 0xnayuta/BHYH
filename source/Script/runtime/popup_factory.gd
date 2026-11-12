@@ -45,23 +45,38 @@ func _scene(path: String) -> PackedScene:
 	return scene
 
 
-func add_message_show(parent_node, need_text: String, time: float, target_pos: Vector2):
-	var target = _host.instance_scene(_scene(MESSAGE_SHOW_PATH), parent_node)
+## 屏幕级文字提示：始终落在当前可见区域中心。
+func add_message_show(parent_node, need_text: String, time: float):
+	var target = _spawn_message(parent_node, need_text, time)
 	if target == null:
 		return null
-	target.z_index = 999
-	if target_pos == Vector2.ZERO or target_pos == Vector2(470, 300):
-		target.position = _host.viewport_center_for_parent(parent_node)
-	else:
-		target.position = target_pos
-	target.show_text = need_text
-	target.last_time = time
+	target.position = _host.viewport_center_for_parent(parent_node)
 	_host.center_popup_texts(target)
 	return target
 
 
+## 世界/面板局部文字提示：按调用方给定的父节点局部锚点定位。
+func add_anchored_message_show(parent_node, need_text: String, time: float, anchor: Vector2):
+	var target = _spawn_message(parent_node, need_text, time)
+	if target == null:
+		return null
+	target.position = anchor
+	_host.center_popup_texts(target)
+	return target
+
+
+func _spawn_message(parent_node, need_text: String, time: float):
+	var target = _host.instance_scene(_scene(MESSAGE_SHOW_PATH), parent_node)
+	if target == null:
+		return null
+	target.z_index = 999
+	target.show_text = need_text
+	target.last_time = time
+	return target
+
+
 func add_buff_info(parent, _position, message_text: String):
-	return add_message_show(parent, message_text, 1.5, _position)
+	return add_anchored_message_show(parent, message_text, 1.5, _position)
 
 
 func add_game_announcement(parent, position):

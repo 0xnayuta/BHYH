@@ -160,7 +160,7 @@ func _ready():
 		MemoryClass.main_bc()
 	Global.set_current_level_name("")
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5)
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 
@@ -197,7 +197,7 @@ func _on_boss_treasure_toggled():
 	MemoryClass.main_bc()
 
 	var mode_text = "普通掉落模式" if not is_chest_mode else "宝箱掉落模式（Boss 将掉落自选宝箱）"
-	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5, Vector2(470, 300))
+	Global.add_message_show(Global.get_ui_runtime().windows, mode_text, 1.5)
 
 
 func _on_changetomain_pressed() -> void:
@@ -210,7 +210,7 @@ func _on_ld_l_pressed() -> void:
 
 func _on_memory_game_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5)
 
 
 func check_pass_level():
@@ -401,9 +401,9 @@ func _on_changetott_pressed() -> void:
 		Global.change_scene("res://Scene/main_menu/map_3.tscn")
 	else:
 		if PlayerData.player_data.转轮殿 != 1:
-			Global.add_message_show(get_parent(), "需要通关转轮殿！！", 1.5, Vector2(470, 300))
+			Global.add_message_show(get_parent(), "需要通关转轮殿！！", 1.5)
 		elif PlayerData.get_item_data("ttlp") == 0:
-			Global.add_message_show(get_parent(), "需要通天令牌！！", 1.5, Vector2(470, 300))
+			Global.add_message_show(get_parent(), "需要通天令牌！！", 1.5)
 
 
 func _on_game_an_pressed() -> void:

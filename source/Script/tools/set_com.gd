@@ -399,7 +399,7 @@ func _on_button_pressed() -> void:
 	_save_keys_config()
 	get_tree().call_group("TouchControlSetCom", "init")
 	if Global.has_method("add_message_show"):
-		Global.add_message_show(self, "保存成功！", 1.5, Vector2(470, 300))
+		Global.add_message_show(self, "保存成功！", 1.5)
 
 
 func _save_keys_config() -> void:
@@ -415,7 +415,7 @@ func _on_reset_layout_pressed() -> void:
 	_apply_keys_to_nodes()
 	_save_keys_config()
 	if Global.has_method("add_message_show"):
-		Global.add_message_show(self, "布局已重置！", 1.5, Vector2(470, 300))
+		Global.add_message_show(self, "布局已重置！", 1.5)
 
 
 func _apply_keys_to_nodes() -> void:

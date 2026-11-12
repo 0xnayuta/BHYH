@@ -148,11 +148,11 @@ func set_box():
 
 func _on_purchase_pressed() -> void:
 	if new_list.is_empty():
-		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5)
 		return
 	var item_name := str(new_list.get("Name", ""))
 	if item_name == "" or not EquipmentService.has(StringName(item_name)):
-		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "商品信息错误！！", 1.5)
 		return
 	var item_type := EquipmentService.definition(StringName(item_name)).category
 	var quantity := 1 if item_type in ["武器", "饰品", "防具", "时装", "头衔", "法宝"] else int(new_list.get("Value", 1))
@@ -164,11 +164,9 @@ func _on_purchase_pressed() -> void:
 		new_list.get("WX", []) if new_list.get("WX", []) is Array else []
 	)
 	if not bool(result.get("ok", false)):
-		Global.add_message_show(
-			Global.get_ui_runtime().windows, str(result.get("message", "购买失败！！")), 2.0, Vector2(520, 340)
-		)
+		Global.add_message_show(Global.get_ui_runtime().windows, str(result.get("message", "购买失败！！")), 2.0)
 		return
-	Global.add_message_show(Global.get_ui_runtime().windows, "购买成功", 1.5, Vector2(520, 340))
+	Global.add_message_show(Global.get_ui_runtime().windows, "购买成功", 1.5)
 	open_and_close_box()
 
 

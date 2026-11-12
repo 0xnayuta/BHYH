@@ -143,7 +143,7 @@ func _refresh_stats() -> void:
 
 func _show_unavailable(feature_name: String) -> void:
 	if Global != null and Global.has_method("add_message_show"):
-		Global.add_message_show(self, "%s暂未开放" % feature_name, 1.2, Vector2(470, 300))
+		Global.add_message_show(self, "%s暂未开放" % feature_name, 1.2)
 
 
 func _on_achievement_shop_pressed() -> void:
@@ -671,7 +671,7 @@ func _purchase_shop_item(
 
 func _show_shop_message(message: String) -> void:
 	if Global != null and Global.has_method("add_message_show"):
-		Global.add_message_show(self, message, 1.2, Vector2.ZERO)
+		Global.add_message_show(self, message, 1.2)
 
 
 func _save_tower_data() -> void:

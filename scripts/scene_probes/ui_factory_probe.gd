@@ -181,7 +181,7 @@ func _check_factory_wiring(checks: Dictionary) -> void:
 func _check_popup_family(checks: Dictionary) -> void:
 	var host := _make_host("PopupProbeHost")
 	var created: Array[Node] = []
-	var message: Node = Global.add_message_show(host, "探针消息", 1.5, Vector2.ZERO)
+	var message: Node = Global.add_message_show(host, "探针消息", 1.5)
 	await _settle()
 	checks["popup_message_created"] = message != null and message.get_parent() == host
 	checks["popup_message_text"] = message != null and str(message.show_text) == "探针消息"
@@ -356,8 +356,7 @@ func _check_backpack_family(checks: Dictionary) -> void:
 		var tooltip = back_pack.get("message")
 		var tooltip_expected: Vector2 = (back_pack as Node2D).get_global_mouse_position() + Vector2(12.0, 18.0)
 		checks["backpack_tooltip_near_cursor"] = (
-			tooltip is Control
-			and (tooltip as Control).get_global_rect().position.distance_to(tooltip_expected) <= 1.0
+			tooltip is Control and (tooltip as Control).get_global_rect().position.distance_to(tooltip_expected) <= 1.0
 		)
 		back_pack.call("remove_text")
 	# 使用真实装备 ID，避免面板 _physics_process 在探针多帧存活期间访问不存在的数据。
@@ -400,23 +399,15 @@ func _check_backpack_family(checks: Dictionary) -> void:
 		magp.call("_physics_process", 0.0)
 		if magic_id != "":
 			var magic_name_label := magp.get_node_or_null("BG/Content/Name_") as Label
-			var magic_skill_title := (
-				magp.get_node_or_null("BG/Content/MagicWeaponSkillTitle") as Label
-			)
+			var magic_skill_title := magp.get_node_or_null("BG/Content/MagicWeaponSkillTitle") as Label
 			checks["backpack_magp_data_name"] = (
 				magic_name_label != null
 				and magic_name_label.text == str(EquipmentService.data(magic_id)[DataKeys.NAME])
 			)
-			checks["backpack_magp_skill_title"] = (
-				magic_skill_title != null and not magic_skill_title.text.is_empty()
-			)
+			checks["backpack_magp_skill_title"] = (magic_skill_title != null and not magic_skill_title.text.is_empty())
 			var magic_def_label := magp.get_node_or_null("BG/Content/bg_2/m_Def") as Label
-			checks["backpack_magp_single_defense"] = (
-				magp.get_node_or_null("BG/Content/bg_2/m_MDef") == null
-			)
-			checks["backpack_magp_def_value"] = (
-				magic_def_label != null and not magic_def_label.text.is_empty()
-			)
+			checks["backpack_magp_single_defense"] = (magp.get_node_or_null("BG/Content/bg_2/m_MDef") == null)
+			checks["backpack_magp_def_value"] = (magic_def_label != null and not magic_def_label.text.is_empty())
 		created.append(magp)
 	var buff_text: Node = Global.add_buff_icon_text(host, "poision")
 	await _settle()
@@ -433,9 +424,7 @@ func _check_backpack_family(checks: Dictionary) -> void:
 		await _settle()
 		var expected_level_text := "Lv: %d" % (1 + (1 if magic_id == "tjbg" else 0))
 		var real_level_label := (
-			real_skill_select.get_node_or_null("BG/SkillName/Level") as Label
-			if real_skill_select != null
-			else null
+			real_skill_select.get_node_or_null("BG/SkillName/Level") as Label if real_skill_select != null else null
 		)
 		checks["backpack_skill_select_level_integer"] = (
 			real_level_label != null and real_level_label.text == expected_level_text
@@ -450,8 +439,7 @@ func _check_backpack_family(checks: Dictionary) -> void:
 		var page_label := use_weapon.get_node_or_null("BG/HBoxContainer/PageInfor") as Label
 		checks["backpack_use_weapon_pages"] = int(use_weapon.max_page) > 0
 		checks["backpack_use_weapon_page_text"] = (
-			page_label != null
-			and page_label.text == "1/" + str(use_weapon.max_page)
+			page_label != null and page_label.text == "1/" + str(use_weapon.max_page)
 		)
 		checks["backpack_use_weapon_entries"] = (use_weapon.infor_list as Array).size() == 3
 		created.append(use_weapon)
@@ -459,22 +447,14 @@ func _check_backpack_family(checks: Dictionary) -> void:
 	checks["backpack_equipment_id_available"] = equipment_id != ""
 	var equipment_popup: Node = null
 	if equipment_id != "":
-		equipment_popup = Global.add_equ_propeties_box(
-			host, Vector2(80, 80), equipment_id, 0, [], {DataKeys.GEM: []}
-		)
+		equipment_popup = Global.add_equ_propeties_box(host, Vector2(80, 80), equipment_id, 0, [], {DataKeys.GEM: []})
 		await _settle()
-	checks["backpack_equipment_popup_created"] = (
-		equipment_popup != null and equipment_popup.get_parent() == host
-	)
+	checks["backpack_equipment_popup_created"] = (equipment_popup != null and equipment_popup.get_parent() == host)
 	if equipment_popup != null:
 		equipment_popup.call("_set_equipment_info", equipment_id)
 		var equipment_data := EquipmentService.data(equipment_id)
-		var description := equipment_popup.get_node_or_null(
-			"pro_wk/information/inf/VBoxContainer/eq_ms"
-		) as Label
-		var sale := equipment_popup.get_node_or_null(
-			"pro_wk/information/inf/VBoxContainer/eq_sj"
-		) as Label
+		var description := equipment_popup.get_node_or_null("pro_wk/information/inf/VBoxContainer/eq_ms") as Label
+		var sale := equipment_popup.get_node_or_null("pro_wk/information/inf/VBoxContainer/eq_sj") as Label
 		checks["backpack_equipment_description"] = (
 			description != null
 			and description.visible
@@ -484,8 +464,7 @@ func _check_backpack_family(checks: Dictionary) -> void:
 			description != null and description.get_theme_font_size("font_size") == 18
 		)
 		checks["backpack_equipment_description_indent"] = (
-			description != null
-			and description.text.begins_with(UiTextFormat.PARAGRAPH_INDENT)
+			description != null and description.text.begins_with(UiTextFormat.PARAGRAPH_INDENT)
 		)
 		checks["backpack_equipment_sale"] = (
 			sale != null
@@ -503,15 +482,11 @@ func _check_backpack_family(checks: Dictionary) -> void:
 			host, Vector2(90, 90), treasure_id, 0, [], treasure_factory_data
 		)
 		await _settle()
-		checks["backpack_treasure_popup_created"] = (
-			treasure_popup != null and treasure_popup.get_parent() == host
-		)
+		checks["backpack_treasure_popup_created"] = (treasure_popup != null and treasure_popup.get_parent() == host)
 		if treasure_popup != null:
 			treasure_popup.call("_set_equipment_info", treasure_id)
 			var treasure_data := EquipmentService.data(treasure_id)
-			var treasure_sale := treasure_popup.get_node_or_null(
-				"pro_wk/information/inf/VBoxContainer/eq_sj"
-			) as Label
+			var treasure_sale := treasure_popup.get_node_or_null("pro_wk/information/inf/VBoxContainer/eq_sj") as Label
 			checks["backpack_treasure_sale"] = (
 				treasure_sale != null
 				and treasure_sale.visible
@@ -678,10 +653,7 @@ func _check_combat_family(checks: Dictionary) -> void:
 func _check_combat_pool(checks: Dictionary) -> void:
 	var pool := Global.get_combat_pool()
 	var milestones: Array[int] = []
-	pool.combo_milestone_reached.connect(
-		func(milestone: int) -> void:
-			milestones.append(milestone)
-	)
+	pool.combo_milestone_reached.connect(func(milestone: int) -> void: milestones.append(milestone))
 	pool.clear_combo_state()
 	checks["combo_count_increment"] = pool.register_combo_hit() == 1 and pool.register_combo_hit() == 2
 	for _frame in range(101):
@@ -1203,9 +1175,7 @@ func _check_menu_panel_family(checks: Dictionary) -> void:
 	var return_map: Node = Global.addhdgqmap(host, Vector2(35, 36))
 	await _settle()
 	checks["menu_return_map_created"] = return_map != null and return_map.get_parent() == host
-	checks["menu_return_map_registered"] = (
-		return_map != null and ui_runtime.is_transient_ui_registered(return_map)
-	)
+	checks["menu_return_map_registered"] = (return_map != null and ui_runtime.is_transient_ui_registered(return_map))
 	if return_map != null:
 		created.append(return_map)
 	var lhhj_help: Node = Global.addlhhjhelp(host, Vector2(37, 38))

@@ -200,15 +200,15 @@ func request_escape_close() -> bool:
 
 func _on_confirm_pressed() -> void:
 	if not _is_supported_awaken_skill(skill_id):
-		Global.add_message_show(self, "当前技能觉醒暂未开启", 1.5, Vector2(470, 270))
+		Global.add_message_show(self, "当前技能觉醒暂未开启", 1.5)
 		return
 	if _is_skill_awakened(skill_id):
 		return
 	if PlayerData.count_item_amount("tjs") < 15:
-		Global.add_message_show(self, "一阶觉醒石不足15个", 1.5, Vector2(470, 270))
+		Global.add_message_show(self, "一阶觉醒石不足15个", 1.5)
 		return
 	if not PlayerData.awaken_skill(skill_id):
-		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0)
 		return
 	_refresh_awaken_state()
 	var skill_display_name := (
@@ -310,7 +310,7 @@ func _on_confirm_pressed() -> void:
 		skill_display_name = "疾影刺"
 	elif skill_id == "xln_llmt":
 		skill_display_name = "玲珑漫天"
-	Global.add_message_show(self, skill_display_name + "觉醒成功", 1.5, Vector2(470, 270))
+	Global.add_message_show(self, skill_display_name + "觉醒成功", 1.5)
 
 
 func _on_awaken_enabled_toggled(enabled: bool) -> void:
@@ -321,5 +321,5 @@ func _on_awaken_enabled_toggled(enabled: bool) -> void:
 	if enabled_value is Dictionary:
 		enabled_data = enabled_value.duplicate(true)
 	if not PlayerData.set_skill_awakened_enabled(skill_id, enabled):
-		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0, Vector2(470, 270))
+		Global.add_message_show(self, "存档保存失败：" + MemoryClass.describe_save_error(), 2.0)
 		_refresh_awaken_state()

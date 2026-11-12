@@ -118,7 +118,7 @@ func _on_return_map_pressed() -> void:
 func _on_re_challenge_pressed() -> void:
 	var last_level_path := Global.get_run_context().get_last_level_path()
 	if last_level_path == "":
-		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "获取关卡信息时出现错误，请手动更换关卡！！", 1.5)
 		return
 	if not _begin_rechallenge():
 		return
@@ -145,7 +145,7 @@ func _on_js_pressed() -> void:
 	var equipment_before: Dictionary = PlayerData.player_data[DataKeys.EQUIPMENT_LIST].duplicate(true)
 	var acquired_before: Array = PlayerData.player_data.get(DataKeys.ACQUIRED_EQUIPMENT_LIST, []).duplicate(true)
 	if not PlayerData.add_zb("xczg", 0, {}):
-		Global.add_message_show(self, "装备背包已满，无法领取黑暗力量", 2.0, Vector2(470, 300))
+		Global.add_message_show(self, "装备背包已满，无法领取黑暗力量", 2.0)
 		return
 	if not _request_settlement_save("level_defeat_reward"):
 		PlayerData.player_data[DataKeys.EQUIPMENT_LIST] = equipment_before
@@ -193,7 +193,7 @@ func _on_lqjl_pressed() -> void:
 	]
 	var items_before: Dictionary = PlayerData.player_data[DataKeys.ITEM_LIST].duplicate(true)
 	if not PlayerData.add_dj_batch(entries):
-		Global.add_message_show(self, "道具背包空间不足，无法领取通关奖励", 2.0, Vector2(470, 300))
+		Global.add_message_show(self, "道具背包空间不足，无法领取通关奖励", 2.0)
 		return
 	PlayerData.player_data[DataKeys.DEFEAT_REWARD_CLAIMED] = true
 	if not _request_settlement_save("level_defeat_reward"):

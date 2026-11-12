@@ -18,16 +18,16 @@ script = ExtResource("1")
 layout_mode = 0
 offset_left = 17.0
 offset_top = 3.0
-offset_right = 217.0
+offset_right = 257.0
 offset_bottom = 228.0
 color = Color(0, 0, 0, 0.705882)
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1661786683]
-custom_minimum_size = Vector2(200, 170)
+custom_minimum_size = Vector2(240, 170)
 layout_mode = 0
 offset_left = 17.0
 offset_top = 3.0
-offset_right = 217.0
+offset_right = 257.0
 offset_bottom = 228.0
 metadata/_edit_lock_ = true
 
@@ -99,7 +99,7 @@ theme = ExtResource("theme")
 layout_mode = 2
 text = ""
 vertical_alignment = 1
-autowrap_mode = 1
+autowrap_mode = 3
 
 [node name="sj" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1805706074]
 theme_type_variation = "DjInfoSale"

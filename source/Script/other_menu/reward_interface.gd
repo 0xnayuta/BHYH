@@ -31,7 +31,7 @@ func _process(_delta: float) -> void:
 		if pl != null:
 			pl.stop()
 		_hide_reward_boxes()
-		Global.add_message_show(self, str(result.get("message", "奖励发放失败")), 2.0, Vector2(470, 300))
+		Global.add_message_show(self, str(result.get("message", "奖励发放失败")), 2.0)
 	else:
 		_reward_succeeded = true
 	set_process(false)

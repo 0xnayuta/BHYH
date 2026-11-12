@@ -491,7 +491,7 @@ func _clear_children_now(parent: Node) -> void:
 
 func _on_froge_pressed() -> void:
 	if zzs == null or zzs.get_child_count() != 1:
-		Global.add_message_show(Global.get_ui_runtime().windows, "请先放入制作书！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "请先放入制作书！！", 1.5)
 		return
 
 	var book_box: Node = zzs.get_child(0)
@@ -503,20 +503,20 @@ func _on_froge_pressed() -> void:
 		or not item_material_list.has(book_name)
 		or not EquipmentService.has(StringName(item_name))
 	):
-		Global.add_message_show(Global.get_ui_runtime().windows, "制作书数据异常，无法打造！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "制作书数据异常，无法打造！！", 1.5)
 		return
 	if PlayerData.get_soul() < 5000:
-		Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "灵魂不足！！", 1.5)
 		return
 	if not check_full_material():
-		Global.add_message_show(Global.get_ui_runtime().windows, "材料或制作书不足！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "材料或制作书不足！！", 1.5)
 		return
 
 	var item_data := EquipmentService.data(StringName(item_name))
 	var equipment_type := EquipmentService.definition(StringName(item_name)).category
 	var jewels_value: Variant = PlayerData.player_data.get("宝珠列表", [])
 	if not jewels_value is Array:
-		Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5)
 		return
 
 	var snapshot: Dictionary = PlayerData.player_data.duplicate(true)
@@ -530,12 +530,12 @@ func _on_froge_pressed() -> void:
 	var jewels: Array = jewels_value
 	for jewel_value in jewels:
 		if not jewel_value is Dictionary:
-			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5)
 			return
 		var jewel: Dictionary = jewel_value
 		var jewel_name := str(jewel.get(DataKeys.NAME, ""))
 		if jewel_name == "" or not EquipmentService.has(StringName(jewel_name)):
-			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(Global.get_ui_runtime().windows, "宝珠数据异常，无法打造！！", 1.5)
 			return
 		var jewel_data := EquipmentService.data(StringName(jewel_name))
 		for prop in EquipmentRules.PROP_LIST_NAME:
@@ -554,26 +554,23 @@ func _on_froge_pressed() -> void:
 		"武器", "防具", "饰品", "神骨", "时装", "头衔", "翅膀":
 			added = PlayerData.add_zb(item_name, 0, new_equip_data)
 		_:
-			Global.add_message_show(Global.get_ui_runtime().windows, "该制作书的装备类型不支持打造！！", 1.5, Vector2(500, 305))
+			Global.add_message_show(Global.get_ui_runtime().windows, "该制作书的装备类型不支持打造！！", 1.5)
 			return
 	if not added:
-		Global.add_message_show(Global.get_ui_runtime().windows, "装备栏已满或装备数据无效，未扣除材料！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "装备栏已满或装备数据无效，未扣除材料！！", 1.5)
 		return
 
 	if not remove_all() or not PlayerData.spend_soul(5000):
 		_restore_forge_state(snapshot, book_name, book_level, book_props)
-		Global.add_message_show(Global.get_ui_runtime().windows, "打造失败，材料未扣除！！", 1.5, Vector2(500, 305))
+		Global.add_message_show(Global.get_ui_runtime().windows, "打造失败，材料未扣除！！", 1.5)
 		return
 	if not MemoryClass.request_save("forge", false):
 		_restore_forge_state(snapshot, book_name, book_level, book_props)
 		Global.add_message_show(
-			Global.get_ui_runtime().windows,
-			"存档保存失败，本次打造已撤销：%s" % MemoryClass.describe_save_error(),
-			2.0,
-			Vector2(500, 305)
+			Global.get_ui_runtime().windows, "存档保存失败，本次打造已撤销：%s" % MemoryClass.describe_save_error(), 2.0
 		)
 		return
-	Global.add_message_show(Global.get_ui_runtime().windows, "打造成功！！", 1.5, Vector2(500, 305))
+	Global.add_message_show(Global.get_ui_runtime().windows, "打造成功！！", 1.5)
 
 
 func _get_material_list(book_name: String) -> Dictionary:

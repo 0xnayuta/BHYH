@@ -47,10 +47,10 @@ func _physics_process(_delta: float) -> void:
 
 func _on_qd_pressed() -> void:
 	if page < 1 or page > 20:
-		Global.add_message_show(get_parent(), "请正确输入目标页码！", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "请正确输入目标页码！", 1.5, Vector2(-240, 150))
 		return
 	if sell_pz.size() <= 0:
-		Global.add_message_show(get_parent(), "请至少勾选一种品质！！", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "请至少勾选一种品质！！", 1.5, Vector2(-240, 150))
 		return
 	var coin_number: int = 0
 	for u in range(15):
@@ -74,7 +74,7 @@ func _on_qd_pressed() -> void:
 				PlayerData.add_soul(value)
 				coin_number += value
 	if coin_number > 0:
-		Global.add_message_show(get_parent(), "卖出成功！获得：" + str(coin_number) + "灵魂。", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "卖出成功！获得：" + str(coin_number) + "灵魂。", 1.5, Vector2(-240, 150))
 	MemoryClass.request_save("back_pack_sell")
 
 
@@ -171,7 +171,7 @@ func remove_text():
 
 func _on_sell_all_pressed():
 	if sell_pz.size() <= 0:
-		Global.add_message_show(get_parent(), "请至少勾选一种品质！", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "请至少勾选一种品质！", 1.5, Vector2(-240, 150))
 		return
 
 	var coin_number: int = 0
@@ -216,9 +216,9 @@ func _on_sell_all_pressed():
 			i -= 1
 
 	if coin_number > 0:
-		Global.add_message_show(get_parent(), "全部出售成功！获得：" + str(coin_number) + " 灵魂", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "全部出售成功！获得：" + str(coin_number) + " 灵魂", 1.5, Vector2(-240, 150))
 	else:
-		Global.add_message_show(get_parent(), "没有可出售的装备", 1.5, Vector2(-240, 150))
+		Global.add_anchored_message_show(get_parent(), "没有可出售的装备", 1.5, Vector2(-240, 150))
 
 	MemoryClass.request_save("back_pack_sell_all")
 

@@ -237,7 +237,7 @@ func _save_auto_battle_progress() -> bool:
 func _commit_auto_battle_progress() -> bool:
 	if _save_auto_battle_progress():
 		return true
-	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 	return false
 
 

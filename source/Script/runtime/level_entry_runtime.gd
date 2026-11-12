@@ -58,7 +58,7 @@ func get_current_level_fall_pro(default_pro: float) -> float:
 
 func add_level_info(parent, level_name, position, target_path):
 	if not _host.is_archive_session_active():
-		_host.add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
+		_host.add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5)
 		return null
 	_host.set_current_level_name(str(level_name))
 	var show_level_info := bool(MainSet.set_data.get("LevelInfo", true))
@@ -79,7 +79,7 @@ func add_level_info(parent, level_name, position, target_path):
 				nightmare_block_message = str(probe.call("_get_nightmare_entry_block_message"))
 			probe.free()
 			if nightmare_block_message != "":
-				_host.add_message_show(parent, nightmare_block_message, 1.5, Vector2(470, 300))
+				_host.add_message_show(parent, nightmare_block_message, 1.5)
 				return null
 		return enter_level_without_info(parent, target_path)
 	var target = _host.instance_scene(scene, parent)
@@ -98,7 +98,7 @@ func add_level_info(parent, level_name, position, target_path):
 
 func enter_level_without_info(parent, target_path):
 	if str(target_path).begins_with("res://Scene/level/") and not _host.is_archive_session_active():
-		_host.add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5, Vector2(470, 300))
+		_host.add_message_show(parent, "请先进入一个存档后再挑战关卡。", 1.5)
 		return null
 	if target_path == "res://Scene/level/level_llbt.tscn":
 		return _host.addllbt_challenge(parent, Vector2(0, 0))

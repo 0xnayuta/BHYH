@@ -400,7 +400,7 @@ func _handle_boss_death() -> void:
 	_boss_death_handled = true
 	PlayerData.record_eight_immortal_daily_defeat(selected_boss_id)
 	if not MemoryClass.request_save("level_bxgh_boss", false):
-		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0, Vector2(470, 300))
+		Global.add_message_show(get_parent(), "存档保存失败，请重试", 2.0)
 	if stage_501_boat != null:
 		stage_501_boat.set_static()
 
