@@ -234,7 +234,9 @@ func _set_hover_icon(role_id: int, show_icon: bool) -> void:
 	var card := role_cards.get_node("Role" + str(role_id)) as Control
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.size = Vector2(138, 66) * role_cards.scale
+	# 小龙女是官方两行标题（130×95），其余角色为单行标题。
+	var hover_size := Vector2(138, 95) if role_id == 8 else Vector2(138, 66)
+	icon.size = hover_size * role_cards.scale
 	icon.position = (
 		role_cards.position
 		+ card.position * role_cards.scale
