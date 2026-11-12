@@ -1,15 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dl4tey4wh8q0a"]
 
-[ext_resource type="Script" path="res://Script/back_pack/main_backpack.gd" id="1"]
-[ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="3"]
-[ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="4"]
+[ext_resource type="Script" uid="uid://cf5jq4o6dapax" path="res://Script/back_pack/main_backpack.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dyph0mtsdoktl" path="res://Art/backpack/zb_button.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://b46pww0bfn5cx" path="res://Art/backpack/zb_button_choose.png" id="4"]
 [ext_resource type="PackedScene" path="res://Scene/back_pack/box_1.tscn" id="6"]
-[ext_resource type="Texture2D" path="res://Art/backpack/last_page_n.png" id="8"]
-[ext_resource type="Texture2D" path="res://Art/backpack/last_page_y.png" id="9"]
-[ext_resource type="Texture2D" path="res://Art/backpack/next_page_n.png" id="10"]
-[ext_resource type="Texture2D" path="res://Art/backpack/next_page_y.png" id="11"]
-[ext_resource type="Texture2D" path="res://Art/backpack/lh_wk.png" id="12"]
-[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
+[ext_resource type="Texture2D" uid="uid://c6ngaooscqe5l" path="res://Art/backpack/last_page_n.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://ceo3j0rnlnl5q" path="res://Art/backpack/last_page_y.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://bu8lviwybbbse" path="res://Art/backpack/next_page_n.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://bwok24tiyro62" path="res://Art/backpack/next_page_y.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://dw6rm6br6c8h8" path="res://Art/backpack/lh_wk.png" id="12"]
+[ext_resource type="Theme" uid="uid://bhyhuitheme01" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [sub_resource type="ImageTexture" id="5"]
 
@@ -47,8 +47,6 @@ color = Color(0.219608, 0.109804, 0.0313726, 1)
 metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1764074565]
-theme_type_variation = "BackpackInnerMargin"
-theme = ExtResource("theme")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -62,27 +60,29 @@ offset_bottom = 173.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.98, 0.98)
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackInnerMargin"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=510231164]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 
 [node name="title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=202287283]
-theme_type_variation = "BackpackTitle"
-theme = ExtResource("theme")
 layout_mode = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTitle"
 text = "装备背包"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TabBar" type="TabBar" parent="MarginContainer/VBoxContainer" unique_id=589044420]
-theme_type_variation = "BackpackTabBar"
-theme = ExtResource("theme")
 visible = false
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 size_flags_vertical = 0
 mouse_default_cursor_shape = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabBar"
 current_tab = 0
 max_tab_width = 50
 tab_count = 3
@@ -94,9 +94,9 @@ tab_2/title = "消耗品"
 tab_2/icon = ExtResource("3")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=706633980]
-theme_type_variation = "BackpackTabRow"
-theme = ExtResource("theme")
 layout_mode = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabRow"
 
 [node name="zb" type="TextureButton" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=889233724]
 layout_mode = 2
@@ -106,12 +106,12 @@ texture_hover = ExtResource("4")
 texture_focused = ExtResource("4")
 
 [node name="zb" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/zb" unique_id=1201712991]
-theme_type_variation = "BackpackTabLabel"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 73.0
 offset_bottom = 26.0
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabLabel"
 text = "装备"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -125,12 +125,12 @@ texture_hover = ExtResource("4")
 texture_focused = ExtResource("4")
 
 [node name="dj" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/dj" unique_id=460962029]
-theme_type_variation = "BackpackTabLabelLarge"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 73.0
 offset_bottom = 26.0
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabLabelLarge"
 text = "道具"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -144,12 +144,12 @@ texture_hover = ExtResource("4")
 texture_focused = ExtResource("4")
 
 [node name="xhp" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/xhp" unique_id=952420447]
-theme_type_variation = "BackpackTabLabel"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 73.0
 offset_bottom = 26.0
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabLabel"
 text = "消耗品"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -164,12 +164,12 @@ texture_focused = ExtResource("4")
 metadata/_edit_lock_ = true
 
 [node name="plcs" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/pl_sell" unique_id=915769425]
-theme_type_variation = "BackpackTabLabelSmall"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 73.0
 offset_bottom = 26.0
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabLabelSmall"
 text = "批量出售"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -184,29 +184,29 @@ texture_hover = ExtResource("4")
 texture_focused = ExtResource("4")
 
 [node name="label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/pet_backpack" unique_id=1674521416]
-theme_type_variation = "BackpackTabLabelSmall"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_top = 1.0
 offset_right = 73.0
 offset_bottom = 26.0
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackTabLabelSmall"
 text = "宠物背包"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1678146141]
-theme_type_variation = "BackpackGridMargin"
-theme = ExtResource("theme")
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackGridMargin"
 
 [node name="Sc_Box" type="ScrollContainer" parent="MarginContainer/VBoxContainer/MarginContainer" unique_id=137598432]
 layout_mode = 2
 
 [node name="Gd_Box" type="GridContainer" parent="MarginContainer/VBoxContainer/MarginContainer/Sc_Box" unique_id=1629384978]
-theme_type_variation = "BackpackGrid"
-theme = ExtResource("theme")
 layout_mode = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackGrid"
 columns = 5
 
 [node name="box_1" parent="MarginContainer/VBoxContainer/MarginContainer/Sc_Box/Gd_Box" unique_id=1385262857 instance=ExtResource("6")]
@@ -285,7 +285,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SortButton" type="Button" parent="." unique_id=2051265514]
-theme_type_variation = "BackpackActionButton"
 z_index = 2
 layout_mode = 0
 offset_left = 96.0
@@ -296,17 +295,18 @@ tooltip_text = "整理全部页：装备按品质排序，道具按关联分组�
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = ExtResource("theme")
+theme_type_variation = &"BackpackActionButton"
 text = "整理"
 
 [node name="ChangePage" type="HBoxContainer" parent="." unique_id=367034305]
-theme_type_variation = "BackpackPageRow"
-theme = ExtResource("theme")
 layout_mode = 0
 offset_left = -153.0
 offset_top = 166.0
 offset_right = 55.0
 offset_bottom = 199.0
 scale = Vector2(0.84, 0.91)
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackPageRow"
 metadata/_edit_lock_ = true
 
 [node name="LastPage" type="TextureButton" parent="ChangePage" unique_id=524106438]
@@ -317,10 +317,10 @@ texture_hover = ExtResource("9")
 texture_disabled = ExtResource("8")
 
 [node name="CurrentPageText" type="Label" parent="ChangePage" unique_id=2019300876]
-theme_type_variation = "BackpackPageLabel"
-theme = ExtResource("theme")
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackPageLabel"
 text = "1/4"
 vertical_alignment = 2
 
@@ -338,13 +338,20 @@ texture = ExtResource("12")
 metadata/_edit_lock_ = true
 
 [node name="coin_number" type="Label" parent="coin_text" unique_id=2144805374]
-theme_type_variation = "BackpackCoinLabel"
-theme = ExtResource("theme")
-offset_left = -10.0243
-offset_top = -7.92307
-offset_right = 60.9757
-offset_bottom = 9.07693
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -139.0
+offset_top = -23.0
+offset_right = -69.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 2
 scale = Vector2(1, 1.3)
+theme = ExtResource("theme")
+theme_type_variation = &"BackpackCoinLabel"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true

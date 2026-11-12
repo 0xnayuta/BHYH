@@ -1,74 +1,32 @@
-[gd_resource type="Theme" load_steps=30 format=3 uid="uid://bhyhuitheme01"]
+[gd_resource type="Theme" format=3 uid="uid://bhyhuitheme01"]
 
-[ext_resource type="FontVariation" path="res://Scene/theme/font_accent.tres" id="font_accent"]
-[ext_resource type="FontVariation" path="res://Scene/theme/font_display.tres" id="font_display"]
-[ext_resource type="FontVariation" path="res://Scene/theme/font_body.tres" id="font_body"]
-[ext_resource type="FontVariation" path="res://Scene/theme/font_ui.tres" id="font_ui"]
+[ext_resource type="FontVariation" uid="uid://bhyhfontmain" path="res://Scene/theme/font_accent.tres" id="font_accent"]
+[ext_resource type="FontVariation" uid="uid://bw2o0d4vui437" path="res://Scene/theme/font_body.tres" id="font_body"]
+[ext_resource type="FontVariation" uid="uid://bhyhfontdisp" path="res://Scene/theme/font_display.tres" id="font_display"]
+[ext_resource type="FontVariation" uid="uid://bhyhfontui" path="res://Scene/theme/font_ui.tres" id="font_ui"]
+[ext_resource type="Texture2D" uid="uid://bfwt3qx7bk4jm" path="res://Art/shop/56.png" id="tex_56"]
+[ext_resource type="Texture2D" uid="uid://dyph0mtsdoktl" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
+[ext_resource type="Texture2D" uid="uid://b46pww0bfn5cx" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
+[ext_resource type="Texture2D" uid="uid://ccr1y0cuy1wdy" path="res://Art/backpack/all_items/empty.png" id="tex_box_empty"]
 
-[ext_resource type="Texture2D" path="res://Art/shop/56.png" id="tex_56"]
+[sub_resource type="StyleBoxFlat" id="archive_black_panel"]
+bg_color = Color(0, 0, 0, 1)
 
-[ext_resource type="Texture2D" path="res://Art/backpack/zb_button.png" id="tex_backpack_tab"]
-[ext_resource type="Texture2D" path="res://Art/backpack/zb_button_choose.png" id="tex_backpack_tab_selected"]
-[ext_resource type="Texture2D" path="res://Art/backpack/all_items/empty.png" id="tex_box_empty"]
-
-[sub_resource type="StyleBoxEmpty" id="empty_button"]
-
-[sub_resource type="StyleBoxLine" id="slider_track"]
-color = Color(1, 1, 1, 1)
-grow_begin = 0.0
-grow_end = -8.0
-thickness = 6
-
-[sub_resource type="StyleBoxFlat" id="slider_fill"]
-bg_color = Color(1, 0.0392157, 0.0235294, 1)
-
-[sub_resource type="StyleBoxFlat" id="tower_button_normal"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-bg_color = Color(0.219608, 0.137255, 0.094118, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.752941, 0.611765, 0.337255, 1)
+[sub_resource type="StyleBoxFlat" id="announcement_secret_hover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.24, 0.27, 0.3, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.64, 0.25, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="tower_button_hover"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
-bg_color = Color(0.376471, 0.239216, 0.12549, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.85098, 0.478431, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="tower_panel"]
-content_margin_left = 18.0
-content_margin_top = 20.0
-content_margin_right = 18.0
-content_margin_bottom = 20.0
-bg_color = Color(0.137255, 0.0862745, 0.054902, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.752941, 0.611765, 0.337255, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="announcement_secret_normal"]
 content_margin_left = 16.0
@@ -102,26 +60,19 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="announcement_secret_hover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.24, 0.27, 0.3, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.85, 0.64, 0.25, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxTexture" id="skill_text_pressed"]
-
-[sub_resource type="StyleBoxFlat" id="archive_black_panel"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="wan_ling_stage_panel"]
+bg_color = Color(0.067, 0.078, 0.084, 0.985)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.73, 0.58, 0.28, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.72)
+shadow_size = 12
 
 [sub_resource type="StyleBoxFlat" id="sub_CloudInput"]
 bg_color = Color(0.0352941, 0.0352941, 0.0352941, 1)
@@ -130,6 +81,20 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.45, 0.45, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="empty_button"]
+
+[sub_resource type="StyleBoxFlat" id="sub_CloudButtonHover"]
+bg_color = Color(0.18, 0.18, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.415686, 0, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -147,59 +112,6 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxFlat" id="sub_CloudButtonHover"]
-bg_color = Color(0.18, 0.18, 0.18, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.415686, 0, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxTexture" id="shop_search_input_texture"]
-texture = ExtResource("tex_56")
-texture_margin_left = 10.0
-texture_margin_bottom = 2.0
-
-[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_stat"]
-bg_color = Color(0.290196, 0.129412, 0.0588235, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.784314, 0.568627, 0.227451, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page"]
-bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.878431, 0.662745, 0.294118, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page_hover"]
-bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.878431, 0.662745, 0.294118, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
 [sub_resource type="StyleBoxFlat" id="auto_battle_panel"]
 content_margin_left = 22.0
 content_margin_top = 16.0
@@ -216,35 +128,91 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="tower_button_hover"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.376471, 0.239216, 0.12549, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.85098, 0.478431, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="tower_button_normal"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.219608, 0.137255, 0.094118, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.752941, 0.611765, 0.337255, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="StyleBoxTexture" id="backpack_tab_unselected"]
 texture = ExtResource("tex_backpack_tab")
 
 [sub_resource type="StyleBoxTexture" id="backpack_tab_hovered"]
 texture = ExtResource("tex_backpack_tab_selected")
 
-[sub_resource type="StyleBoxFlat" id="map0_catalog_normal"]
-bg_color = Color(0.13, 0.17, 0.16, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.68, 0.52, 0.24, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxTexture" id="box_item_empty"]
+texture = ExtResource("tex_box_empty")
 
-[sub_resource type="StyleBoxFlat" id="map0_catalog_hover"]
-bg_color = Color(0.2, 0.29, 0.25, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.92, 0.75, 0.38, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="choose_item_hseparator"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 16
+corner_detail = 9
+
+[sub_resource type="StyleBoxFlat" id="choose_item_panel"]
+bg_color = Color(0.568627, 0.32549, 0.129412, 1)
+
+[sub_resource type="StyleBoxFlat" id="choose_item_vseparator"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 4
+corner_radius_top_right = 11
+corner_radius_bottom_right = 6
+corner_detail = 16
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="divine_forge_hover"]
+bg_color = Color(0.564706, 0.27451, 0.0784314, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.92549, 0.427451, 1)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxFlat" id="divine_forge_normal"]
+bg_color = Color(0.411765, 0.176471, 0.0470588, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.862745, 0.568627, 0.196078, 1)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxTexture" id="skill_text_pressed"]
 
 [sub_resource type="StyleBoxFlat" id="learn_damage_normal"]
 content_margin_left = 8.0
@@ -274,89 +242,65 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="wan_ling_stage_panel"]
-bg_color = Color(0.067, 0.078, 0.084, 0.985)
+[sub_resource type="StyleBoxFlat" id="map0_catalog_hover"]
+bg_color = Color(0.2, 0.29, 0.25, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.73, 0.58, 0.28, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0, 0, 0.72)
-shadow_size = 12
-
-[sub_resource type="StyleBoxFlat" id="wan_ling_close_normal"]
-bg_color = Color(0.28, 0.1, 0.105, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.72, 0.42, 0.34, 1)
+border_color = Color(0.92, 0.75, 0.38, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="wan_ling_close_hover"]
-bg_color = Color(0.46, 0.15, 0.15, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.94, 0.72, 0.46, 1)
+[sub_resource type="StyleBoxFlat" id="map0_catalog_normal"]
+bg_color = Color(0.13, 0.17, 0.16, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.68, 0.52, 0.24, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="choose_item_panel"]
-bg_color = Color(0.568627, 0.32549, 0.129412, 1)
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_stat"]
+bg_color = Color(0.290196, 0.129412, 0.0588235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.784314, 0.568627, 0.227451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
-[sub_resource type="StyleBoxFlat" id="choose_item_vseparator"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 4
-corner_radius_top_right = 11
-corner_radius_bottom_right = 6
-corner_detail = 16
-shadow_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page_hover"]
+bg_color = Color(0.552941, 0.298039, 0.0784314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
-[sub_resource type="StyleBoxFlat" id="choose_item_hseparator"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 3
-border_width_top = 3
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 16
-corner_detail = 9
-
-[sub_resource type="StyleBoxTexture" id="box_item_empty"]
-texture = ExtResource("tex_box_empty")
-
-[sub_resource type="StyleBoxFlat" id="divine_forge_normal"]
-bg_color = Color(0.411765, 0.176471, 0.0470588, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.862745, 0.568627, 0.196078, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
-
-[sub_resource type="StyleBoxFlat" id="divine_forge_hover"]
-bg_color = Color(0.564706, 0.27451, 0.0784314, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 0.92549, 0.427451, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
+[sub_resource type="StyleBoxFlat" id="sub_StyleBoxFlat_pet_page"]
+bg_color = Color(0.415686, 0.203922, 0.0705882, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.878431, 0.662745, 0.294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="role_shield_bg"]
 bg_color = Color(0.2, 0.2, 0.2, 0.55)
@@ -370,2527 +314,1843 @@ border_blend = true
 [sub_resource type="StyleBoxFlat" id="role_shield_fill"]
 bg_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxFlat" id="slider_fill"]
+bg_color = Color(1, 0.0392157, 0.0235294, 1)
+
+[sub_resource type="StyleBoxLine" id="slider_track"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = -8.0
+thickness = 6
+
+[sub_resource type="StyleBoxTexture" id="shop_search_input_texture"]
+texture = ExtResource("tex_56")
+texture_margin_left = 10.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="tower_panel"]
+content_margin_left = 18.0
+content_margin_top = 20.0
+content_margin_right = 18.0
+content_margin_bottom = 20.0
+bg_color = Color(0.137255, 0.0862745, 0.054902, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.752941, 0.611765, 0.337255, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_close_hover"]
+bg_color = Color(0.46, 0.15, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.94, 0.72, 0.46, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="wan_ling_close_normal"]
+bg_color = Color(0.28, 0.1, 0.105, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.42, 0.34, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [resource]
 default_font = ExtResource("font_body")
-
 AnnouncementActionRow/base_type = &"TowerFloorPicker"
-
 AnnouncementAlert/base_type = &"SemanticAnnouncementAlert"
 AnnouncementAlert/colors/font_color = Color(1, 0.290196, 0, 1)
-
 AnnouncementButton/base_type = &"SemanticAnnouncementButton3"
 AnnouncementButton/font_sizes/font_size = 28
-
 AnnouncementCheckButton/base_type = &"SemanticAnnouncementCheckButton"
 AnnouncementCheckButton/fonts/font = ExtResource("font_ui")
-
 AnnouncementCheckButtonSmall/base_type = &"AnnouncementCheckButton"
-
 AnnouncementFunctionColumns/base_type = &"HBoxContainer"
 AnnouncementFunctionColumns/constants/separation = 22
-
 AnnouncementFunctionContent/base_type = &"VBoxContainer"
 AnnouncementFunctionContent/constants/separation = 8
-
 AnnouncementFunctionMargin/base_type = &"MarginContainer"
-AnnouncementFunctionMargin/constants/margin_left = 22
-AnnouncementFunctionMargin/constants/margin_top = 16
-AnnouncementFunctionMargin/constants/margin_right = 18
 AnnouncementFunctionMargin/constants/margin_bottom = 14
-
+AnnouncementFunctionMargin/constants/margin_left = 22
+AnnouncementFunctionMargin/constants/margin_right = 18
+AnnouncementFunctionMargin/constants/margin_top = 16
 AnnouncementHeading/base_type = &"SemanticAnnouncementHeading"
-AnnouncementHeading/fonts/font = ExtResource("font_display")
 AnnouncementHeading/font_sizes/font_size = 36
-
+AnnouncementHeading/fonts/font = ExtResource("font_display")
 AnnouncementLeftColumn/base_type = &"LevelInfoModeGroup"
-
 AnnouncementListGroup/base_type = &"SemanticAnnouncementListGroup"
-
 AnnouncementOption/base_type = &"OptionButton"
-AnnouncementOption/fonts/font = ExtResource("font_ui")
 AnnouncementOption/font_sizes/font_size = 18
-
+AnnouncementOption/fonts/font = ExtResource("font_ui")
 AnnouncementOverlayPanel/base_type = &"PanelContainer"
 AnnouncementOverlayPanel/styles/panel = SubResource("archive_black_panel")
-
 AnnouncementPasswordContent/base_type = &"TowerContent"
-
 AnnouncementPasswordInput/base_type = &"LineEdit"
-AnnouncementPasswordInput/fonts/font = ExtResource("font_ui")
 AnnouncementPasswordInput/font_sizes/font_size = 20
-
+AnnouncementPasswordInput/fonts/font = ExtResource("font_ui")
 AnnouncementPasswordMargin/base_type = &"MarginContainer"
-AnnouncementPasswordMargin/constants/margin_left = 24
-AnnouncementPasswordMargin/constants/margin_top = 20
-AnnouncementPasswordMargin/constants/margin_right = 24
 AnnouncementPasswordMargin/constants/margin_bottom = 20
-
+AnnouncementPasswordMargin/constants/margin_left = 24
+AnnouncementPasswordMargin/constants/margin_right = 24
+AnnouncementPasswordMargin/constants/margin_top = 20
 AnnouncementPrompt/base_type = &"SemanticAnnouncementAlert"
 AnnouncementPrompt/colors/font_color = Color(0.84, 0.86, 0.9, 1)
 AnnouncementPrompt/font_sizes/font_size = 18
-
 AnnouncementSecretButton/base_type = &"SemanticAnnouncementCheckButton"
 AnnouncementSecretButton/fonts/font = ExtResource("font_ui")
-AnnouncementSecretButton/styles/normal = SubResource("announcement_secret_normal")
 AnnouncementSecretButton/styles/hover = SubResource("announcement_secret_hover")
+AnnouncementSecretButton/styles/normal = SubResource("announcement_secret_normal")
 AnnouncementSecretButton/styles/pressed = SubResource("announcement_secret_pressed")
-
 AnnouncementSecretButtonSmall/base_type = &"AnnouncementSecretButton"
 AnnouncementSecretButtonSmall/font_sizes/font_size = 18
-
 AnnouncementSecretButtonTiny/base_type = &"AnnouncementSecretButton"
-
 AnnouncementSecretPanel/base_type = &"PanelContainer"
 AnnouncementSecretPanel/styles/panel = SubResource("wan_ling_stage_panel")
-
 AnnouncementStatus/base_type = &"SemanticAnnouncementAlert"
 AnnouncementStatus/colors/font_color = Color(0.42, 0.88, 0.7, 1)
-
 AnnouncementSubtitle/base_type = &"SemanticAnnouncementHeading"
 AnnouncementSubtitle/colors/font_color = Color(0.94, 0.73, 0.34, 1)
 AnnouncementSubtitle/font_sizes/font_size = 28
-
 AnnouncementTitle/base_type = &"AnnouncementSubtitle"
-
 AnnouncementWarning/base_type = &"SemanticAnnouncementWarning"
 AnnouncementWarning/colors/font_color = Color(1, 0, 0, 1)
 AnnouncementWarning/colors/font_outline_color = Color(1, 0, 0, 1)
 AnnouncementWarning/constants/shadow_outline_size = 6
 AnnouncementWarning/font_sizes/font_size = 18
-
 ArchiveActionButtonSmall/base_type = &"SemanticArchiveActionButtonSmall2"
 ArchiveActionButtonSmall/font_sizes/font_size = 18
-
 ArchiveCdButton/base_type = &"SemanticAnnouncementButton2"
 ArchiveCdButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveCdButton/colors/font_outline_color = Color(1, 1, 1, 1)
 ArchiveCdButton/constants/outline_size = 1
-
 ArchiveCloudButton/base_type = &"SemanticArchiveCloudButton"
 ArchiveCloudButton/constants/outline_size = 2
 ArchiveCloudButton/styles/focus = SubResource("sub_CloudInput")
-
 ArchiveConfirmButton/base_type = &"SemanticArchiveCloudButton"
-
 ArchiveDeleteButton/base_type = &"SemanticArchiveDeleteButton"
 ArchiveDeleteButton/colors/font_color = Color(1, 1, 1, 1)
 ArchiveDeleteButton/colors/font_hover_pressed_color = Color(0.827451, 0.552941, 0, 1)
 ArchiveDeleteButton/constants/outline_size = 2
 ArchiveDeleteButton/font_sizes/font_size = 20
-ArchiveDeleteButton/styles/normal = SubResource("archive_black_panel")
-ArchiveDeleteButton/styles/pressed = SubResource("archive_black_panel")
 ArchiveDeleteButton/styles/disabled = SubResource("empty_button")
 ArchiveDeleteButton/styles/focus = SubResource("archive_black_panel")
-
+ArchiveDeleteButton/styles/normal = SubResource("archive_black_panel")
+ArchiveDeleteButton/styles/pressed = SubResource("archive_black_panel")
 ArchiveDialogActionButton/base_type = &"SemanticArchiveActionButtonSmall2"
-ArchiveDialogActionButton/fonts/font = ExtResource("font_display")
 ArchiveDialogActionButton/font_sizes/font_size = 24
-
+ArchiveDialogActionButton/fonts/font = ExtResource("font_display")
 ArchiveDialogTitle/base_type = &"SemanticArchiveDialogTitle"
 ArchiveDialogTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ArchiveDialogTitle/constants/outline_size = 2
-
 ArchiveFieldTitle/base_type = &"SemanticArchiveFieldTitle"
-
 ArchiveHelpButton/base_type = &"SemanticArchiveActionButtonSmall2"
 ArchiveHelpButton/font_sizes/font_size = 14
-
 ArchiveLoginButton/base_type = &"SemanticArchiveCloudButton"
 ArchiveLoginButton/styles/disabled = SubResource("sub_CloudInput")
-
 ArchiveLoginInput/base_type = &"SemanticArchiveLoginInput"
-ArchiveLoginInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
-ArchiveLoginInput/colors/caret_color = Color(1.0, 0.85098, 0.478431, 1.0)
+ArchiveLoginInput/colors/caret_color = Color(1, 0.85098, 0.478431, 1)
 ArchiveLoginInput/colors/font_color = Color(1, 1, 1, 1)
 ArchiveLoginInput/colors/font_placeholder_color = Color(0.65, 0.65, 0.65, 1)
+ArchiveLoginInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
 ArchiveLoginInput/font_sizes/font_size = 18
-ArchiveLoginInput/styles/normal = SubResource("sub_CloudInput")
 ArchiveLoginInput/styles/focus = SubResource("sub_CloudButtonHover")
-
+ArchiveLoginInput/styles/normal = SubResource("sub_CloudInput")
 ArchiveLoginLabel/base_type = &"SemanticAnnouncementCheckButton"
-
 ArchiveMessageText/base_type = &"ArchiveFieldTitle"
-
 ArchiveMutedButton/base_type = &"SemanticArchiveActionButtonSmall"
 ArchiveMutedButton/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
 ArchiveMutedButton/font_sizes/font_size = 18
-
 ArchiveNumberInput/base_type = &"SemanticArchiveLoginInput"
-ArchiveNumberInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
-ArchiveNumberInput/colors/caret_color = Color(1.0, 0.85098, 0.478431, 1.0)
+ArchiveNumberInput/colors/caret_color = Color(1, 0.85098, 0.478431, 1)
 ArchiveNumberInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
-ArchiveNumberInput/constants/outline_size = 3
+ArchiveNumberInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
 ArchiveNumberInput/constants/minimum_character_width = 0
+ArchiveNumberInput/constants/outline_size = 3
 ArchiveNumberInput/font_sizes/font_size = 18
+ArchiveNumberInput/styles/focus = SubResource("empty_button")
 ArchiveNumberInput/styles/normal = SubResource("archive_black_panel")
 ArchiveNumberInput/styles/read_only = SubResource("empty_button")
-ArchiveNumberInput/styles/focus = SubResource("empty_button")
-
 ArchivePanelTitle/base_type = &"ArchiveDialogTitle"
-
 ArchivePopupPanel/base_type = &"Panel"
 ArchivePopupPanel/styles/panel = SubResource("sub_CloudPanel")
-
 ArchiveReadOnlyLink/base_type = &"LineEdit"
 ArchiveReadOnlyLink/colors/font_color = Color(1, 0.84, 0.54, 1)
 ArchiveReadOnlyLink/font_sizes/font_size = 14
 ArchiveReadOnlyLink/styles/normal = SubResource("sub_CloudInput")
 ArchiveReadOnlyLink/styles/read_only = SubResource("sub_CloudInput")
-
 ArchiveSectionTitle/base_type = &"SemanticArchiveFieldTitle"
 ArchiveSectionTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
-
 ArchiveStatusText/base_type = &"Label"
 ArchiveStatusText/colors/font_color = Color(1, 0.84, 0.54, 1)
-
 ArchiveStepText/base_type = &"Label"
 ArchiveStepText/colors/font_color = Color(0.94, 0.94, 0.94, 1)
-
 ArchiveUidHash/base_type = &"SemanticArchiveUidHash"
 ArchiveUidHash/colors/font_color = Color(1, 0.84, 0.54, 1)
 ArchiveUidHash/styles/normal = SubResource("sub_CloudInput")
 ArchiveUidHash/styles/read_only = SubResource("sub_CloudInput")
-
 ArchiveUploadButton/base_type = &"SemanticArchiveActionButtonSmall2"
-ArchiveUploadButton/fonts/font = ExtResource("font_display")
 ArchiveUploadButton/font_sizes/font_size = 24
+ArchiveUploadButton/fonts/font = ExtResource("font_display")
 ArchiveUploadButton/styles/disabled = SubResource("sub_CloudInput")
-
 AutoBattleActionButton/base_type = &"AutoBattleSmallButton"
-
 AutoBattleActions/base_type = &"HBoxContainer"
 AutoBattleActions/constants/separation = 20
-
 AutoBattleCheck/base_type = &"SemanticAnnouncementCheckButton"
 AutoBattleCheck/colors/font_color = Color(1, 0.84, 0.54, 1)
 AutoBattleCheck/fonts/font = ExtResource("font_display")
-
 AutoBattleContent/base_type = &"AnnouncementFunctionContent"
-
 AutoBattleHint/base_type = &"SemanticAutoBattleHint"
 AutoBattleHint/colors/font_color = Color(0.84, 0.86, 0.9, 1)
-
 AutoBattleOption/base_type = &"SemanticAnnouncementCheckButton"
 AutoBattleOption/colors/font_color = Color(1, 0.84, 0.54, 1)
 AutoBattleOption/fonts/font = ExtResource("font_display")
-
 AutoBattleOptionsGrid/base_type = &"GridContainer"
 AutoBattleOptionsGrid/constants/h_separation = 20
 AutoBattleOptionsGrid/constants/v_separation = 2
-
 AutoBattlePanel/base_type = &"PanelContainer"
 AutoBattlePanel/styles/panel = SubResource("auto_battle_panel")
-
 AutoBattleSectionLabel/base_type = &"SemanticAutoBattleSectionLabel"
 AutoBattleSectionLabel/colors/font_color = Color(0.84, 0.86, 0.9, 1)
-
 AutoBattleSelectedList/base_type = &"TowerOptions"
-
 AutoBattleSkillOption/base_type = &"SemanticAnnouncementCheckButton"
 AutoBattleSkillOption/fonts/font = ExtResource("font_display")
-AutoBattleSkillOption/styles/normal = SubResource("tower_button_normal")
 AutoBattleSkillOption/styles/hover = SubResource("tower_button_hover")
-
+AutoBattleSkillOption/styles/normal = SubResource("tower_button_normal")
 AutoBattleSkillRow/base_type = &"LevelInfoFilterGroup"
-
 AutoBattleSmallButton/base_type = &"SemanticAnnouncementCheckButton"
 AutoBattleSmallButton/fonts/font = ExtResource("font_display")
-AutoBattleSmallButton/styles/normal = SubResource("tower_button_normal")
 AutoBattleSmallButton/styles/hover = SubResource("tower_button_hover")
-
+AutoBattleSmallButton/styles/normal = SubResource("tower_button_normal")
 AutoBattleTitle/base_type = &"SemanticAutoBattleTitle"
 AutoBattleTitle/colors/font_color = Color(1, 0.941176, 0.470588, 1)
 AutoBattleTitle/colors/font_outline_color = Color(0.02, 0.03, 0.05, 0.8)
 AutoBattleTitle/constants/outline_size = 3
-
 BacisInfoLevel/base_type = &"SemanticBacisInfoLevel"
 BacisInfoLevel/colors/font_outline_color = Color(1, 1, 1, 1)
 BacisInfoLevel/constants/outline_size = 1
-
 BacisInfoName/base_type = &"SemanticBacisInfoName"
 BacisInfoName/colors/font_outline_color = Color(1, 1, 1, 1)
 BacisInfoName/constants/outline_size = 1
 BacisInfoName/fonts/font = ExtResource("font_body")
-
 BacisInfoNumber/base_type = &"SemanticArchiveDialogTitle"
-BacisInfoNumber/fonts/font = ExtResource("font_body")
 BacisInfoNumber/colors/font_color = Color(0.964706, 0.403922, 0, 1)
 BacisInfoNumber/colors/font_outline_color = Color(0.964706, 0.403922, 0, 1)
 BacisInfoNumber/constants/outline_size = 1
-
+BacisInfoNumber/fonts/font = ExtResource("font_body")
 BacisInfoTime/base_type = &"SemanticBacisInfoTime2"
 BacisInfoTime/colors/font_outline_color = Color(1, 1, 1, 1)
-BacisInfoTime/fonts/font = ExtResource("font_body")
 BacisInfoTime/font_sizes/font_size = 14
-
+BacisInfoTime/fonts/font = ExtResource("font_body")
 BacisInfoVBox/base_type = &"BdSkillColumn"
-
 BackpackActionButton/base_type = &"PetLearnButton"
-
 BackpackCoinLabel/base_type = &"SemanticArchiveUidHash"
-
 BackpackCompactVBox/base_type = &"VBoxContainer"
 BackpackCompactVBox/constants/separation = -2
-
 BackpackEquipmentColumn/base_type = &"MenuActionButtonGroup"
-
 BackpackEquipmentRow/base_type = &"HBoxContainer"
 BackpackEquipmentRow/constants/separation = 19
-
 BackpackExpLabel/base_type = &"Label"
 BackpackExpLabel/constants/outline_size = 6
-
 BackpackGrid/base_type = &"GridContainer"
 BackpackGrid/constants/h_separation = 11
 BackpackGrid/constants/v_separation = 11
-
 BackpackGridMargin/base_type = &"MarginContainer"
 BackpackGridMargin/constants/margin_left = -3
-
 BackpackHeadButton/base_type = &"EmptyButton"
-
 BackpackHpLabel/base_type = &"BackpackTitleLabel"
-
 BackpackHpValue/base_type = &"SemanticBacisInfoTime"
 BackpackHpValue/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 BackpackHpValue/constants/outline_size = 6
-
 BackpackInnerMargin/base_type = &"MarginContainer"
 BackpackInnerMargin/constants/margin_left = 5
-
 BackpackLockText/base_type = &"SemanticArchiveUidHash"
 BackpackLockText/colors/font_color = Color(0, 0, 0, 1)
 BackpackLockText/constants/outline_size = 0
-
 BackpackMessageLabel/base_type = &"SemanticAutoBattleSectionLabel"
 BackpackMessageLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
-
 BackpackMpLabel/base_type = &"BackpackTitleLabel"
-
 BackpackNameInput/base_type = &"LineEdit"
 BackpackNameInput/colors/font_placeholder_color = Color(1, 1, 1, 1)
 BackpackNameInput/fonts/font = ExtResource("font_accent")
+BackpackNameInput/styles/focus = SubResource("empty_button")
 BackpackNameInput/styles/normal = SubResource("empty_button")
 BackpackNameInput/styles/read_only = SubResource("empty_button")
-BackpackNameInput/styles/focus = SubResource("empty_button")
-
 BackpackPageLabel/base_type = &"BackpackTabLabel"
-
 BackpackPageRow/base_type = &"HBoxContainer"
 BackpackPageRow/constants/separation = -1
-
 BackpackTabBar/base_type = &"TabBar"
 BackpackTabBar/constants/h_separation = 16
 BackpackTabBar/constants/icon_max_width = 14
-BackpackTabBar/fonts/font = ExtResource("font_display")
 BackpackTabBar/font_sizes/font_size = 18
-BackpackTabBar/styles/tab_unselected = SubResource("backpack_tab_unselected")
+BackpackTabBar/fonts/font = ExtResource("font_display")
+BackpackTabBar/styles/button_pressed = SubResource("backpack_tab_unselected")
 BackpackTabBar/styles/tab_hovered = SubResource("backpack_tab_hovered")
 BackpackTabBar/styles/tab_selected = SubResource("backpack_tab_hovered")
-BackpackTabBar/styles/button_pressed = SubResource("backpack_tab_unselected")
-
+BackpackTabBar/styles/tab_unselected = SubResource("backpack_tab_unselected")
 BackpackTabLabel/base_type = &"SemanticAnnouncementHeading"
-
 BackpackTabLabelLarge/base_type = &"SemanticBackpackTabLabelLarge"
-
 BackpackTabLabelSmall/base_type = &"BackpackTabLabel"
-
 BackpackTabRow/base_type = &"HBoxContainer"
-
 BackpackTitle/base_type = &"CureTimesHeader"
-
 BackpackTitleLabel/base_type = &"Label"
-
 BackpackToggleButton/base_type = &"Button"
 BackpackToggleButton/colors/font_disabled_color = Color(1, 1, 1, 1)
-
 BackpackWingLabel/base_type = &"SemanticBackpackWingLabel4"
-BackpackWingLabel/fonts/font = ExtResource("font_body")
 BackpackWingLabel/colors/font_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/colors/font_outline_color = Color(1, 0.84, 0.54, 1)
 BackpackWingLabel/constants/shadow_outline_size = 6
 BackpackWingLabel/font_sizes/font_size = 12
-
+BackpackWingLabel/fonts/font = ExtResource("font_body")
 BackpackWingsButton/base_type = &"EmptyButton"
-
 BaseThroughLevelNotice/base_type = &"SemanticBaseThroughLevelNotice"
 BaseThroughLevelNotice/colors/font_color = Color(1, 0, 0, 1)
 BaseThroughLevelNotice/colors/font_outline_color = Color(1, 0, 0, 1)
 BaseThroughLevelNotice/constants/shadow_outline_size = 11
 BaseThroughLevelNotice/font_sizes/font_size = 18
-
 BasicMonmentText/base_type = &"SemanticBasicMonmentText"
 BasicMonmentText/font_sizes/font_size = 18
-
 BasicTaskNumber/base_type = &"PetFormationLevel"
-
 BasicTaskText/base_type = &"SemanticBackpackWingLabel2"
 BasicTaskText/colors/font_outline_color = Color(1, 1, 1, 1)
 BasicTaskText/constants/shadow_outline_size = 0
 BasicTaskText/font_sizes/font_size = 18
-
 BasicTaskTitle/base_type = &"SemanticBacisInfoTime"
 BasicTaskTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 BasicTaskTitle/constants/shadow_offset_x = 0
 BasicTaskTitle/constants/shadow_offset_y = 0
 BasicTaskTitle/constants/shadow_outline_size = 0
 BasicTaskTitle/font_sizes/font_size = 18
-
 BdSkillColumn/base_type = &"SemanticBacisInfoVBox"
-
 BdSkillName/base_type = &"SettingsControlLabel"
-
 BdSkillRow/base_type = &"HBoxContainer"
 BdSkillRow/constants/separation = 0
-
 BdSkillTitle/base_type = &"SettingsSection"
 BdSkillTitle/fonts/font = ExtResource("font_display")
-
 BdSkillUpgradeButton/base_type = &"SemanticBacisInfoTime"
 BdSkillUpgradeButton/font_sizes/font_size = 20
-
 BodyTrainingDetailAttribute/base_type = &"Label"
 BodyTrainingDetailAttribute/colors/font_color = Color(0.2, 0.12, 0.07, 1)
-
 BodyTrainingDetailLevel/base_type = &"SemanticBodyTrainingDetailLevel"
 BodyTrainingDetailLevel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-
 BodyTrainingDetailMaterial/base_type = &"SemanticBodyTrainingDetailMaterial"
 BodyTrainingDetailMaterial/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-
 BodyTrainingDetailProgress/base_type = &"SemanticBodyTrainingDetailMaterial"
-
 BodyTrainingHitButton/base_type = &"SemanticBackpackHeadButton2"
-
 BodyTrainingLevelLabel/base_type = &"PetStatName"
-
 BodyTrainingMainLabel/base_type = &"SemanticBodyTrainingLevelLabel2"
 BodyTrainingMainLabel/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-
 BodyTrainingTrainButton/base_type = &"SemanticBackpackActionButton2"
 BodyTrainingTrainButton/colors/font_hover_color = Color(1, 1, 1, 1)
-
 BossBloodName/base_type = &"SemanticBossBloodName"
 BossBloodName/constants/outline_size = 13
-
 BossBloodValue/base_type = &"SemanticBacisInfoName"
 BossBloodValue/constants/outline_size = 7
-
 BossInfoTitle/base_type = &"SemanticBossInfoTitle"
-
 BossProtectName/base_type = &"SemanticAutoBattleTitle"
 BossProtectName/constants/outline_size = 13
-
 BoxItemButton/base_type = &"Button"
-BoxItemButton/styles/normal = SubResource("box_item_empty")
-BoxItemButton/styles/pressed = SubResource("box_item_empty")
-BoxItemButton/styles/hover = SubResource("box_item_empty")
 BoxItemButton/styles/disabled = SubResource("box_item_empty")
 BoxItemButton/styles/focus = SubResource("box_item_empty")
-
+BoxItemButton/styles/hover = SubResource("box_item_empty")
+BoxItemButton/styles/normal = SubResource("box_item_empty")
+BoxItemButton/styles/pressed = SubResource("box_item_empty")
 BoxItemNumber/base_type = &"SemanticBoxItemNumber"
 BoxItemNumber/colors/font_color = Color(1, 0.584314, 0, 1)
 BoxItemNumber/constants/outline_size = 6
 BoxItemNumber/font_sizes/font_size = 18
-
 BoxLockMark/base_type = &"SemanticBodyTrainingLevelLabel2"
 BoxLockMark/colors/font_color = Color(1, 0.752941, 0, 1)
-
 BuffIconTime/base_type = &"SemanticBuffIconTime"
 BuffIconTime/constants/outline_size = 5
 BuffIconTime/font_sizes/font_size = 10
-
 BuffIconTimes/base_type = &"SemanticBuffIconTimes"
 BuffIconTimes/font_sizes/font_size = 10
-
 BuffInformationMargin/base_type = &"MarginContainer"
-BuffInformationMargin/constants/margin_left = 6
-BuffInformationMargin/constants/margin_top = 5
-BuffInformationMargin/constants/margin_right = 7
 BuffInformationMargin/constants/margin_bottom = 1
-
+BuffInformationMargin/constants/margin_left = 6
+BuffInformationMargin/constants/margin_right = 7
+BuffInformationMargin/constants/margin_top = 5
 BuffInformationRoot/base_type = &"MarginContainer"
-
 BuffInformationText/base_type = &"SemanticBuffInformationText"
 BuffInformationText/colors/font_color = Color(1, 1, 0, 1)
 BuffInformationText/colors/font_outline_color = Color(1, 1, 0, 1)
-
 ChangeBackgroundButton/base_type = &"SemanticAnnouncementButton"
-ChangeBackgroundButton/fonts/font = ExtResource("font_display")
 ChangeBackgroundButton/font_sizes/font_size = 24
-
+ChangeBackgroundButton/fonts/font = ExtResource("font_display")
 ChangeBackgroundList/base_type = &"TowerContent"
 ChangeBackgroundList/constants/separation = 8
-
 ChangeBackgroundTitle/base_type = &"SemanticAutoBattleTitle"
 ChangeBackgroundTitle/colors/font_color = Color(1, 0.584314, 0, 1)
-
 ChangeClothesAction/base_type = &"TransmogrifiedActionLabel"
-
 ChangeClothesName/base_type = &"SemanticAnnouncementHeading"
 ChangeClothesName/constants/outline_size = 7
-
 ChangeClothesStatus/base_type = &"SemanticArchiveUidHash"
 ChangeClothesStatus/colors/font_color = Color(1, 0, 0, 1)
 ChangeClothesStatus/constants/outline_size = 10
-
 ChooseItemHSeparator/base_type = &"HSeparator"
 ChooseItemHSeparator/styles/separator = SubResource("choose_item_hseparator")
-
 ChooseItemList/base_type = &"ItemList"
 ChooseItemList/colors/font_color = Color(1, 1, 1, 1)
 ChooseItemList/colors/guide_color = Color(1, 1, 1, 1)
-ChooseItemList/constants/v_separation = 5
 ChooseItemList/constants/outline_size = 10
-ChooseItemList/fonts/font = ExtResource("font_accent")
+ChooseItemList/constants/v_separation = 5
 ChooseItemList/font_sizes/font_size = 20
-ChooseItemList/styles/panel = SubResource("choose_item_panel")
+ChooseItemList/fonts/font = ExtResource("font_accent")
 ChooseItemList/styles/focus = SubResource("empty_button")
-
+ChooseItemList/styles/panel = SubResource("choose_item_panel")
 ChooseItemTitle/base_type = &"SemanticChooseItemTitle"
-
 ChooseItemVSeparator/base_type = &"VSeparator"
 ChooseItemVSeparator/constants/separation = 10
 ChooseItemVSeparator/styles/separator = SubResource("choose_item_vseparator")
-
 ChooseMusicButton/base_type = &"MenuActionButton"
 ChooseMusicButton/font_sizes/font_size = 20
-
 ChooseMusicList/base_type = &"PetSkillList"
 ChooseMusicList/constants/separation = 4
-
 ChoosePlayerCardRow/base_type = &"HBoxContainer"
 ChoosePlayerCardRow/constants/separation = 14
-
 ChoosePlayerInfo/base_type = &"SemanticBoxItemNumber"
 ChoosePlayerInfo/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 ChoosePlayerProp/base_type = &"SemanticAnnouncementCheckButton"
 ChoosePlayerProp/colors/font_color = Color(0, 1, 0, 1)
 ChoosePlayerProp/colors/font_shadow_color = Color(0, 0, 0, 1)
-
 ChoosePlayerRoleName/base_type = &"SemanticChoosePlayerRoleName"
-ChoosePlayerRoleName/fonts/font = ExtResource("font_accent")
 ChoosePlayerRoleName/colors/font_color = Color(1, 0.72, 0.16, 1)
 ChoosePlayerRoleName/constants/shadow_offset_y = 2
 ChoosePlayerRoleName/font_sizes/font_size = 24
-
+ChoosePlayerRoleName/fonts/font = ExtResource("font_accent")
 ChoosePlayerTitle/base_type = &"SemanticChoosePlayerRoleName"
-ChoosePlayerTitle/fonts/font = ExtResource("font_display")
 ChoosePlayerTitle/colors/font_color = Color(1, 0.72, 0.16, 1)
 ChoosePlayerTitle/constants/shadow_offset_y = 2
 ChoosePlayerTitle/font_sizes/font_size = 36
-
+ChoosePlayerTitle/fonts/font = ExtResource("font_display")
 ChooseSceneCountdown/base_type = &"SemanticArchiveFieldTitle"
 ChooseSceneCountdown/colors/font_color = Color(1, 0, 0, 1)
-
 ChooseSceneText/base_type = &"SemanticChooseSceneText"
 ChooseSceneText/constants/shadow_outline_size = 9
-
 ComKeyLabel/base_type = &"UserKeyKey"
-
 ComboFather/base_type = &"HBoxContainer"
 ComboFather/constants/separation = -41
-
 ComboRow/base_type = &"HBoxContainer"
 ComboRow/constants/separation = -23
-
 ComboText/base_type = &"HBoxContainer"
 ComboText/constants/separation = 11
-
 ConstellationGrid/base_type = &"PetBackpackGrid"
-
 ConstellationPanel/base_type = &"PetStatPanel"
-
 ConstellationTitle/base_type = &"TowerFloorText"
-
 CureTimesCurrency/base_type = &"SemanticCureTimesCurrency"
 CureTimesCurrency/constants/outline_size = 6
-
 CureTimesHeader/base_type = &"SemanticAutoBattleTitle"
-
 CureTimesHint/base_type = &"SemanticAutoBattleHint"
 CureTimesHint/colors/font_color = Color(1, 0.752941, 0, 1)
 CureTimesHint/fonts/font = ExtResource("font_body")
-
 CureTimesRow/base_type = &"BdSkillRow"
-
 CureTimesSection/base_type = &"SellTitle"
-
 DamageNumberRow/base_type = &"LxdyButtonRow"
-
 DecomposeHelpBody/base_type = &"SemanticDecomposeHelpBody"
 DecomposeHelpBody/colors/font_color = Color(1, 0.584314, 0, 1)
 DecomposeHelpBody/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 DecomposeHelpBody/font_sizes/font_size = 20
-
 DecomposeHelpRow/base_type = &"BoxContainer"
 DecomposeHelpRow/constants/separation = -10
-
 DecomposeHelpTitle/base_type = &"SemanticDecomposeHelpTitle"
 DecomposeHelpTitle/constants/shadow_outline_size = 8
 DecomposeHelpTitle/font_sizes/font_size = 24
-
 DecomposeItemList/base_type = &"GridContainer"
 DecomposeItemList/constants/h_separation = 18
 DecomposeItemList/constants/v_separation = 20
-
 DecomposeTitle/base_type = &"ForgeTitle"
-
 DecomposeTitleOrange/base_type = &"SemanticAutoBattleTitle"
 DecomposeTitleOrange/colors/font_color = Color(0.964706, 0.403922, 0, 1)
 DecomposeTitleOrange/constants/outline_size = 10
-
 DefeatMessageLabel/base_type = &"SemanticBasicMonmentText"
 DefeatMessageLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 DefeatMessageLabel/font_sizes/font_size = 20
-
 DefeatYellowLabel/base_type = &"SemanticDefeatYellowLabel"
 DefeatYellowLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 DefeatYellowLabel/constants/shadow_outline_size = 5
-
 DivineForgeButton/base_type = &"SemanticBackpackActionButton"
-DivineForgeButton/colors/font_pressed_color = Color(1, 0.941176, 0.470588, 1)
 DivineForgeButton/colors/font_hover_color = Color(1, 1, 1, 1)
+DivineForgeButton/colors/font_pressed_color = Color(1, 0.941176, 0.470588, 1)
 DivineForgeButton/constants/outline_size = 6
-DivineForgeButton/fonts/font = ExtResource("font_display")
 DivineForgeButton/font_sizes/font_size = 32
+DivineForgeButton/fonts/font = ExtResource("font_display")
+DivineForgeButton/styles/focus = SubResource("divine_forge_hover")
+DivineForgeButton/styles/hover = SubResource("divine_forge_hover")
 DivineForgeButton/styles/normal = SubResource("divine_forge_normal")
 DivineForgeButton/styles/pressed = SubResource("divine_forge_hover")
-DivineForgeButton/styles/hover = SubResource("divine_forge_hover")
-DivineForgeButton/styles/focus = SubResource("divine_forge_hover")
-
 DjInfoDescription/base_type = &"SemanticBoxItemNumber"
 DjInfoDescription/constants/outline_size = 6
-
 DjInfoInnerVBox/base_type = &"EquipmentInfoGroup"
-
 DjInfoLine/base_type = &"ArchiveLoginLabel"
-
 DjInfoMargin/base_type = &"SemanticDjInfoMargin"
 DjInfoMargin/constants/margin_left = 5
 DjInfoMargin/constants/margin_right = 5
-
 DjInfoSale/base_type = &"SemanticBackpackTabLabelLarge"
 DjInfoSale/colors/font_color = Color(1, 0.752941, 0, 1)
-
 DjInfoTitle/base_type = &"SemanticDjInfoTitle"
-
 DjInfoVBox/base_type = &"BdSkillColumn"
-
 DjSellCloseButton/base_type = &"Button"
 DjSellCloseButton/colors/font_color = Color(1, 0, 0, 1)
 DjSellCloseButton/font_sizes/font_size = 76
 DjSellCloseButton/styles/normal = SubResource("empty_button")
-
 DjSellInfo/base_type = &"SemanticChangeClothesAction2"
 DjSellInfo/colors/font_outline_color = Color(1, 1, 1, 1)
-
 DjSellMargin/base_type = &"MarginContainer"
-DjSellMargin/constants/margin_left = 8
-DjSellMargin/constants/margin_top = 4
-DjSellMargin/constants/margin_right = 10
 DjSellMargin/constants/margin_bottom = 6
-
+DjSellMargin/constants/margin_left = 8
+DjSellMargin/constants/margin_right = 10
+DjSellMargin/constants/margin_top = 4
 DjSellNumber/base_type = &"SemanticArchiveUidHash"
 DjSellNumber/colors/font_placeholder_color = Color(1, 1, 0, 1)
 DjSellNumber/constants/outline_size = 10
+DjSellNumber/styles/focus = SubResource("empty_button")
 DjSellNumber/styles/normal = SubResource("empty_button")
 DjSellNumber/styles/read_only = SubResource("empty_button")
-DjSellNumber/styles/focus = SubResource("empty_button")
-
 DsgChooseButton/base_type = &"GameInfoNoticeButton"
-
 DsgChooseTitle/base_type = &"SemanticDefeatYellowLabel"
 DsgChooseTitle/font_sizes/font_size = 24
-
 EmptyButton/base_type = &"SemanticBackpackHeadButton4"
-
 EndStatsColumn/base_type = &"VBoxContainer"
 EndStatsColumn/constants/separation = 50
-
 EndStatsCritCount/base_type = &"SemanticEndStatsCritCount"
 EndStatsCritCount/colors/font_color = Color(0.964706, 0.403922, 0, 1)
 EndStatsCritCount/colors/font_outline_color = Color(0.964706, 0.403922, 0, 1)
-
 EndStatsCure/base_type = &"SemanticEndStatsCritCount"
 EndStatsCure/colors/font_color = Color(0.42, 0.88, 0.7, 1)
 EndStatsCure/colors/font_outline_color = Color(0.42, 0.88, 0.7, 1)
-
 EndStatsHeaderRow/base_type = &"HBoxContainer"
 EndStatsHeaderRow/constants/separation = 80
-
 EndStatsHit/base_type = &"SemanticEndStatsCritCount"
 EndStatsHit/colors/font_color = Color(1, 0, 0, 1)
 EndStatsHit/colors/font_outline_color = Color(1, 0, 0, 1)
-
 EndStatsHitCount/base_type = &"SemanticEndStatsCritCount"
 EndStatsHitCount/colors/font_color = Color(1, 0.290196, 0, 1)
 EndStatsHitCount/colors/font_outline_color = Color(1, 0.290196, 0, 1)
-
 EndStatsHurt/base_type = &"SemanticEndStatsCritCount"
 EndStatsHurt/colors/font_color = Color(0.84, 0.86, 0.9, 1)
 EndStatsHurt/colors/font_outline_color = Color(0.84, 0.86, 0.9, 1)
-
 EndStatsHurtCount/base_type = &"SemanticEndStatsCritCount"
 EndStatsHurtCount/colors/font_color = Color(0.94, 0.73, 0.34, 1)
 EndStatsHurtCount/colors/font_outline_color = Color(0.94, 0.73, 0.34, 1)
-
 EndStatsMagicHit/base_type = &"SemanticEndStatsCritCount"
 EndStatsMagicHit/colors/font_color = Color(0, 0.6, 1, 1)
 EndStatsMagicHit/colors/font_outline_color = Color(0, 0.6, 1, 1)
-
 EndStatsMagicHurt/base_type = &"SemanticEndStatsCritCount"
 EndStatsMagicHurt/colors/font_color = Color(0.376471, 0.184314, 0.815686, 1)
 EndStatsMagicHurt/colors/font_outline_color = Color(0.376471, 0.184314, 0.815686, 1)
-
 EndStatsMissCount/base_type = &"SemanticEndStatsCritCount"
-
 EndStatsMoreInfo/base_type = &"SemanticEndStatsMoreInfo"
-EndStatsMoreInfo/fonts/font = ExtResource("font_display")
 EndStatsMoreInfo/font_sizes/font_size = 36
-
+EndStatsMoreInfo/fonts/font = ExtResource("font_display")
 EndStatsPhysicalHit/base_type = &"SemanticEndStatsCritCount"
 EndStatsPhysicalHit/colors/font_color = Color(1, 0.584314, 0, 1)
 EndStatsPhysicalHit/colors/font_outline_color = Color(1, 0.584314, 0, 1)
-
 EndStatsPhysicalHurt/base_type = &"EndStatsHit"
-
 EndStatsRealHit/base_type = &"SemanticEndStatsCritCount"
 EndStatsRealHit/colors/font_color = Color(0.65, 0.65, 0.65, 1)
 EndStatsRealHit/colors/font_outline_color = Color(0.65, 0.65, 0.65, 1)
-
 EndStatsRealHurt/base_type = &"EndStatsRealHit"
-
 EndStatsWarning/base_type = &"SemanticBasicMonmentText2"
 EndStatsWarning/colors/font_color = Color(1, 0.584314, 0, 1)
 EndStatsWarning/colors/font_outline_color = Color(1, 0.584314, 0, 1)
-
 EquipmentDescription/base_type = &"SemanticBasicMonmentText"
 EquipmentDescription/font_sizes/font_size = 18
-
 EquipmentInfoGroup/base_type = &"VBoxContainer"
 EquipmentInfoGroup/constants/separation = 16
-
 EquipmentItemHighlight/base_type = &"SemanticEquipmentItemHighlight"
 EquipmentItemHighlight/colors/font_outline_color = Color(1, 1, 1, 1)
 EquipmentItemHighlight/fonts/font = ExtResource("font_ui")
-
-EquipmentItemMeta/base_type = &"SemanticEquipmentItemHighlight"
-EquipmentItemMeta/fonts/font = ExtResource("font_ui")
-
+EquipmentItemMeta/base_type = &"EquipmentItemHighlight"
 EquipmentName/base_type = &"SemanticAnnouncementCheckButton"
 EquipmentName/constants/outline_size = 2
 EquipmentName/fonts/font = ExtResource("font_accent")
-
 EquipmentPanelPadding/base_type = &"SemanticDjInfoMargin"
 EquipmentPanelPadding/constants/margin_left = 10
 EquipmentPanelPadding/constants/margin_right = 10
-
 EquipmentSale/base_type = &"SemanticBasicMonmentText2"
 EquipmentSale/colors/font_color = Color(1, 0.584314, 0, 1)
 EquipmentSale/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 EquipmentSale/font_sizes/font_size = 18
-
 EquipmentStatGroup/base_type = &"VBoxContainer"
 EquipmentStatGroup/constants/separation = 5
-
 EquipmentStatLabel/base_type = &"Label"
 EquipmentStatLabel/colors/font_color = Color(1, 0.584314, 0, 1)
-
 EquipmentStatValue/base_type = &"SemanticDefeatYellowLabel"
 EquipmentStatValue/fonts/font = ExtResource("font_body")
-
 EquipmentTitle/base_type = &"SemanticDefeatYellowLabel"
 EquipmentTitle/font_sizes/font_size = 20
-
 ForgeBoxRow/base_type = &"HBoxContainer"
 ForgeBoxRow/constants/separation = 32
-
 ForgeHelpLine/base_type = &"SemanticAutoBattleSectionLabel"
 ForgeHelpLine/constants/outline_size = 6
-
 ForgeHelpList/base_type = &"AnnouncementListGroup"
-
 ForgeHelpTitle/base_type = &"SemanticDecomposeTitle"
 ForgeHelpTitle/font_sizes/font_size = 36
-
 ForgeItemName/base_type = &"SemanticBossBloodName"
 ForgeItemName/colors/font_color = Color(0.65, 0.65, 0.65, 1)
 ForgeItemName/constants/outline_size = 6
-
 ForgeMaterialNeed/base_type = &"SemanticForgeMaterialNeed"
 ForgeMaterialNeed/colors/font_color = Color(0, 1, 0, 1)
-
 ForgeMaterialRow/base_type = &"PelletTypeRow"
-
 ForgeSoulLabel/base_type = &"SemanticArchiveDialogTitle"
-ForgeSoulLabel/fonts/font = ExtResource("font_body")
 ForgeSoulLabel/constants/outline_size = 10
-
+ForgeSoulLabel/fonts/font = ExtResource("font_body")
 ForgeSubtitle/base_type = &"SemanticAutoBattleTitle"
 ForgeSubtitle/colors/font_color = Color(0, 1, 0, 1)
 ForgeSubtitle/constants/outline_size = 6
-
 ForgeTitle/base_type = &"SemanticDecomposeTitle"
 ForgeTitle/font_sizes/font_size = 32
-
 GameInfoBodyText/base_type = &"PelletTabLabel"
-
 GameInfoContentPanel/base_type = &"PanelContainer"
 GameInfoContentPanel/styles/panel = SubResource("skill_text_pressed")
-
 GameInfoDetailButton/base_type = &"GameInfoNoticeButton"
-
 GameInfoGuideButton/base_type = &"SemanticAnnouncementButton3"
-
 GameInfoHeaderRow/base_type = &"HBoxContainer"
 GameInfoHeaderRow/constants/separation = 300
-
 GameInfoNoticeButton/base_type = &"SemanticAnnouncementButton2"
-
 GameInfoNoticeRow/base_type = &"VBoxContainer"
 GameInfoNoticeRow/constants/separation = 11
-
 GameInfoSectionColumn/base_type = &"VBoxContainer"
 GameInfoSectionColumn/constants/separation = 25
-
 GameInfoSectionTitle/base_type = &"PelletTabLabel"
-
 GameInfoTitle/base_type = &"SemanticGameInfoBodyText2"
-GameInfoTitle/fonts/font = ExtResource("font_display")
 GameInfoTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 GameInfoTitle/font_sizes/font_size = 28
-
+GameInfoTitle/fonts/font = ExtResource("font_display")
 GameNeedKnowButton/base_type = &"SemanticGameNeedKnowButton"
 GameNeedKnowButton/colors/font_disabled_color = Color(1, 0, 0, 1)
 GameNeedKnowButton/font_sizes/font_size = 20
-
 GameNeedKnowFooter/base_type = &"SemanticBacisInfoLevel"
 GameNeedKnowFooter/constants/outline_size = 2
-
 GameNeedKnowIntro/base_type = &"SemanticCureTimesCurrency"
 GameNeedKnowIntro/constants/outline_size = 8
-
 GameNeedKnowMargin/base_type = &"MarginContainer"
 GameNeedKnowMargin/constants/margin_left = 57
-
 GameNeedKnowRule/base_type = &"SemanticAnnouncementWarning2"
 GameNeedKnowRule/colors/font_outline_color = Color(1, 1, 1, 1)
-
 GameNeedKnowRulePlain/base_type = &"SemanticAnnouncementWarning2"
-
 GameNeedKnowTitle/base_type = &"SemanticBacisInfoLevel"
-GameNeedKnowTitle/fonts/font = ExtResource("font_display")
 GameNeedKnowTitle/constants/outline_size = 1
 GameNeedKnowTitle/font_sizes/font_size = 36
-
+GameNeedKnowTitle/fonts/font = ExtResource("font_display")
 GameNeedKnowVBox/base_type = &"TowerContent"
-
 GameNeedKnowYellow/base_type = &"SemanticBuffIconTime"
-
 GameOverSubtitle/base_type = &"SemanticBossBloodName"
 GameOverSubtitle/constants/outline_size = 7
-
 GameOverTitle/base_type = &"SellTitle"
-
 HcHelpColumnLabel/base_type = &"SemanticChooseItemTitle"
 HcHelpColumnLabel/colors/font_color = Color(0, 0, 0, 1)
 HcHelpColumnLabel/colors/font_outline_color = Color(1, 1, 1, 1)
 HcHelpColumnLabel/constants/outline_size = 7
-
 HcHelpColumnRow/base_type = &"HBoxContainer"
 HcHelpColumnRow/constants/separation = 90
-
 HcHelpPage/base_type = &"SemanticBackpackTabLabelLarge"
 HcHelpPage/constants/outline_size = 6
-
 HcHelpTabLabel/base_type = &"SemanticHcHelpTabLabel"
 HcHelpTabLabel/constants/outline_size = 6
 HcHelpTabLabel/font_sizes/font_size = 24
-
 HcHelpTabRow/base_type = &"HBoxContainer"
 HcHelpTabRow/constants/separation = 30
-
 HcHelpTitle/base_type = &"SemanticHcHelpTitle"
 HcHelpTitle/colors/font_outline_color = Color(1, 1, 1, 1)
 HcHelpTitle/constants/outline_size = 7
-HcHelpTitle/fonts/font = ExtResource("font_display")
 HcHelpTitle/font_sizes/font_size = 32
-
+HcHelpTitle/fonts/font = ExtResource("font_display")
 HelpContentList/base_type = &"AnnouncementListGroup"
-
 HelpThingsText/base_type = &"SemanticHcHelpTitle"
 HelpThingsText/colors/font_outline_color = Color(1, 1, 1, 1)
 HelpThingsText/constants/outline_size = 11
 HelpThingsText/font_sizes/font_size = 100
-
 HeroName/base_type = &"SemanticAnnouncementWarning"
 HeroName/colors/font_color = Color(1, 1, 0, 1)
 HeroName/colors/font_outline_color = Color(1, 1, 0, 1)
 HeroName/constants/shadow_outline_size = 10
-
 HeroNameFlat/base_type = &"SemanticBaseThroughLevelNotice"
 HeroNameFlat/colors/font_color = Color(1, 1, 0, 1)
 HeroNameFlat/colors/font_outline_color = Color(1, 1, 0, 1)
 HeroNameFlat/constants/shadow_outline_size = 10
-
 HitTextBase/base_type = &"SemanticBoxItemNumber"
 HitTextBase/colors/font_color = Color(0, 1, 0, 1)
 HitTextBase/constants/outline_size = 10
 HitTextBase/font_sizes/font_size = 24
-
 LdlDzButton/base_type = &"MenuActionButton"
-
 LdlFjButton/base_type = &"MenuActionButton"
-
 LdlHcButton/base_type = &"MenuActionButton"
-
 LdlQhButton/base_type = &"MenuActionButton"
-
 LdlReturnButton/base_type = &"MenuActionButton"
-
 LdlTitleLabel/base_type = &"ArchiveLoginLabel"
-
 LdlXqButton/base_type = &"MenuActionButton"
-
 LearnSkillButton/base_type = &"MonsterHelpButton"
 LearnSkillButton/fonts/font = ExtResource("font_display")
-
 LearnSkillDescriptionButton/base_type = &"SemanticAnnouncementButton"
 LearnSkillDescriptionButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 LearnSkillDescriptionButton/colors/font_pressed_color = Color(0.94, 0.73, 0.34, 1)
 LearnSkillDescriptionButton/constants/outline_size = 2
-LearnSkillDescriptionButton/fonts/font = ExtResource("font_display")
 LearnSkillDescriptionButton/font_sizes/font_size = 20
+LearnSkillDescriptionButton/fonts/font = ExtResource("font_display")
+LearnSkillDescriptionButton/styles/focus = SubResource("learn_damage_normal")
+LearnSkillDescriptionButton/styles/hover = SubResource("learn_damage_hover")
 LearnSkillDescriptionButton/styles/normal = SubResource("learn_damage_normal")
 LearnSkillDescriptionButton/styles/pressed = SubResource("learn_damage_hover")
-LearnSkillDescriptionButton/styles/hover = SubResource("learn_damage_hover")
-LearnSkillDescriptionButton/styles/focus = SubResource("learn_damage_normal")
-
 LearnSkillLevelValue/base_type = &"SemanticLearnSkillLevelValue"
-LearnSkillLevelValue/fonts/font = ExtResource("font_display")
 LearnSkillLevelValue/colors/font_outline_color = Color(1, 1, 1, 1)
 LearnSkillLevelValue/constants/shadow_outline_size = -5
-
+LearnSkillLevelValue/fonts/font = ExtResource("font_display")
 LearnSkillTitle/base_type = &"SemanticLearnSkillTitle"
-LearnSkillTitle/fonts/font = ExtResource("font_display")
 LearnSkillTitle/font_sizes/font_size = 28
-
+LearnSkillTitle/fonts/font = ExtResource("font_display")
 LetterBody/base_type = &"SemanticLetterBody"
 LetterBody/colors/font_shadow_color = Color(1, 1, 1, 1)
-
 LetterPageButton/base_type = &"AnnouncementButton"
-
 LetterPageLabel/base_type = &"SemanticAutoBattleHint"
 LetterPageLabel/font_sizes/font_size = 36
-
 LetterTitle/base_type = &"SemanticDjInfoTitle"
 LetterTitle/colors/font_color = Color(0, 0, 0, 1)
 LetterTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
-
 Level17Text/base_type = &"SemanticChooseItemTitle"
 Level17Text/constants/outline_size = 8
-
 Level17TextRed/base_type = &"SemanticBackpackTabLabelLarge"
 Level17TextRed/colors/font_color = Color(1, 0, 0, 1)
 Level17TextRed/constants/outline_size = 8
-
 LevelInfoAlertText/base_type = &"SemanticBackpackWingLabel4"
 LevelInfoAlertText/colors/font_color = Color(1, 0, 0, 1)
 LevelInfoAlertText/colors/font_outline_color = Color(1, 0, 0, 1)
 LevelInfoAlertText/constants/shadow_outline_size = 12
 LevelInfoAlertText/font_sizes/font_size = 20
-
 LevelInfoChallengeTitle/base_type = &"SemanticEndStatsMoreInfo"
 LevelInfoChallengeTitle/constants/outline_size = 9
 LevelInfoChallengeTitle/font_sizes/font_size = 32
-
 LevelInfoDialogTitle/base_type = &"SemanticAnnouncementAlert"
 LevelInfoDialogTitle/colors/font_color = Color(1, 1, 0, 1)
 LevelInfoDialogTitle/constants/outline_size = 6
 LevelInfoDialogTitle/font_sizes/font_size = 24
-
 LevelInfoDropGroup/base_type = &"HBoxContainer"
 LevelInfoDropGroup/constants/separation = 7
-
 LevelInfoEnemyTitle/base_type = &"SemanticHcHelpTabLabel"
 LevelInfoEnemyTitle/constants/outline_size = 10
 LevelInfoEnemyTitle/font_sizes/font_size = 24
-
 LevelInfoFall/base_type = &"SemanticLevelInfoFall"
 LevelInfoFall/constants/shadow_outline_size = 10
 LevelInfoFall/font_sizes/font_size = 20
-
 LevelInfoFilterGroup/base_type = &"SemanticAnnouncementPasswordContent"
-
 LevelInfoModeButton/base_type = &"SemanticAnnouncementButton"
 LevelInfoModeButton/colors/font_color = Color(1, 1, 0, 1)
 LevelInfoModeButton/constants/outline_size = 5
-LevelInfoModeButton/fonts/font = ExtResource("font_ui")
 LevelInfoModeButton/font_sizes/font_size = 24
-
+LevelInfoModeButton/fonts/font = ExtResource("font_ui")
 LevelInfoModeGroup/base_type = &"VBoxContainer"
 LevelInfoModeGroup/constants/separation = 12
-
 LevelInfoMyPj/base_type = &"SemanticDjInfoTitle"
 LevelInfoMyPj/colors/font_color = Color(0.65, 0.65, 0.65, 1)
 LevelInfoMyPj/constants/outline_size = 12
-
 LevelInfoShadowText/base_type = &"SemanticLevelInfoFall"
 LevelInfoShadowText/constants/shadow_outline_size = 12
 LevelInfoShadowText/font_sizes/font_size = 20
-
 LevelInfoSuccessText/base_type = &"SemanticDecomposeHelpBody"
 LevelInfoSuccessText/colors/font_color = Color(0, 1, 0, 1)
 LevelInfoSuccessText/colors/font_outline_color = Color(0, 1, 0, 1)
 LevelInfoSuccessText/font_sizes/font_size = 24
-
 LevelInfoTitle/base_type = &"SemanticEndStatsMoreInfo"
-LevelInfoTitle/fonts/font = ExtResource("font_display")
 LevelInfoTitle/constants/outline_size = 10
 LevelInfoTitle/font_sizes/font_size = 36
-
+LevelInfoTitle/fonts/font = ExtResource("font_display")
 LevelInfoValue/base_type = &"SemanticHcHelpTabLabel"
 LevelInfoValue/constants/outline_size = 9
 LevelInfoValue/font_sizes/font_size = 28
-
 LevelLlbtText/base_type = &"SemanticAutoBattleTitle"
 LevelLlbtText/colors/font_color = Color(0, 0, 0, 1)
 LevelLlbtText/colors/font_outline_color = Color(1, 1, 1, 1)
 LevelLlbtText/constants/outline_size = 6
-
 LhhjActionLabel/base_type = &"SemanticBuffIconTime"
 LhhjActionLabel/constants/outline_size = 8
-
 LhhjAltValueInput/base_type = &"LhhjValueInput"
-
 LhhjBossGrid/base_type = &"GridContainer"
 LhhjBossGrid/constants/v_separation = 3
-
 LhhjButtonRole/base_type = &"GameInfoGuideButton"
-
 LhhjHelpBody/base_type = &"MagicHelpBody"
-
 LhhjHelpList/base_type = &"VBoxContainer"
 LhhjHelpList/constants/separation = 14
-
 LhhjHelpTitle/base_type = &"MagicHelpTitle"
-
 LhhjHpLabel/base_type = &"Label"
 LhhjHpLabel/colors/font_color = Color(1, 0, 0, 1)
 LhhjHpLabel/constants/outline_size = 7
-
 LhhjSectionText/base_type = &"SemanticBacisInfoName"
 LhhjSectionText/colors/font_color = Color(1, 0.415686, 0, 1)
-LhhjSectionText/colors/font_shadow_color = Color(0, 0, 0, 1)
 LhhjSectionText/colors/font_outline_color = Color(1, 0.415686, 0, 1)
+LhhjSectionText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LhhjSectionText/constants/outline_size = 2
 LhhjSectionText/constants/shadow_offset_x = 0
 LhhjSectionText/constants/shadow_offset_y = 0
-LhhjSectionText/constants/outline_size = 2
 LhhjSectionText/constants/shadow_outline_size = 8
-
 LhhjSelfValueInput/base_type = &"LhhjValueInput"
-
 LhhjTitle/base_type = &"SemanticBossInfoTitle"
 LhhjTitle/colors/font_color = Color(1, 0.415686, 0, 1)
 LhhjTitle/constants/outline_size = 8
-
 LhhjValueInput/base_type = &"SemanticArchiveUidHash"
-
 LijiText/base_type = &"SemanticAnnouncementHeading"
-LijiText/fonts/font = ExtResource("font_display")
 LijiText/colors/font_color = Color(1, 0.290196, 0, 1)
 LijiText/colors/font_shadow_color = Color(0, 0, 0, 1)
+LijiText/constants/outline_size = 11
 LijiText/constants/shadow_offset_x = 15
 LijiText/constants/shadow_offset_y = -4
-LijiText/constants/outline_size = 11
 LijiText/constants/shadow_outline_size = 3
 LijiText/font_sizes/font_size = 50
-
+LijiText/fonts/font = ExtResource("font_display")
 ListButtonRole/base_type = &"GameInfoGuideButton"
-
 LlbtCgmsButton/base_type = &"SemanticAnnouncementButton2"
-LlbtCgmsButton/fonts/font = ExtResource("font_display")
 LlbtCgmsButton/font_sizes/font_size = 24
-
+LlbtCgmsButton/fonts/font = ExtResource("font_display")
 LlbtCureText/base_type = &"PelletLuckyTab"
-
 LlbtList/base_type = &"VBoxContainer"
 LlbtList/constants/separation = -4
-
 LlbtTitle/base_type = &"SemanticAnnouncementCheckButton"
 LlbtTitle/colors/font_color = Color(1, 1, 0, 1)
-
 LlbtTslzzButton/base_type = &"LlbtCgmsButton"
-
 LlbtTznzButton/base_type = &"LlbtCgmsButton"
-
 LlbtTztttwButton/base_type = &"LlbtCgmsButton"
-
 LlbtTztxsButton/base_type = &"LlbtCgmsButton"
-
 LlbtWxmsButton/base_type = &"LlbtCgmsButton"
-
 LoadSceneNotice/base_type = &"SemanticLoadSceneNotice"
 LoadSceneNotice/colors/font_color = Color(1, 0.84, 0.54, 1)
 LoadSceneNotice/colors/font_outline_color = Color(0.12, 0.06, 0, 1)
 LoadSceneNotice/font_sizes/font_size = 32
-
 LoadScenePanelMargin/base_type = &"MarginContainer"
-LoadScenePanelMargin/constants/margin_left = 64
-LoadScenePanelMargin/constants/margin_top = 64
-LoadScenePanelMargin/constants/margin_right = 64
 LoadScenePanelMargin/constants/margin_bottom = 128
-
+LoadScenePanelMargin/constants/margin_left = 64
+LoadScenePanelMargin/constants/margin_right = 64
+LoadScenePanelMargin/constants/margin_top = 64
 LoadSceneProgress/base_type = &"SemanticAutoBattleHint"
 LoadSceneProgress/font_sizes/font_size = 24
-
 LoadSceneTips/base_type = &"SemanticAnnouncementHeading"
 LoadSceneTips/colors/font_color = Color(0, 0, 0, 1)
-
 LxdyButtonRow/base_type = &"HBoxContainer"
 LxdyButtonRow/constants/separation = -10
-
 LxdyLastTimes/base_type = &"SemanticEquipmentItemHighlight"
 LxdyLastTimes/colors/font_shadow_color = Color(0, 0, 0, 1)
 LxdyLastTimes/constants/shadow_offset_x = 0
 LxdyLastTimes/constants/shadow_offset_y = 0
 LxdyLastTimes/constants/shadow_outline_size = 10
 LxdyLastTimes/fonts/font = ExtResource("font_ui")
-
 LxdyStageInfo/base_type = &"SemanticDecomposeHelpBody"
-
 LxdyStageLabel/base_type = &"SemanticAnnouncementCheckButton"
 LxdyStageLabel/colors/font_shadow_color = Color(0.815686, 0.815686, 0.815686, 1)
-
 MagicHelpBody/base_type = &"SemanticDecomposeHelpTitle"
 MagicHelpBody/constants/shadow_outline_size = 6
 MagicHelpBody/font_sizes/font_size = 18
-
 MagicHelpTitle/base_type = &"SemanticEndStatsMoreInfo"
-MagicHelpTitle/fonts/font = ExtResource("font_display")
 MagicHelpTitle/constants/outline_size = 8
 MagicHelpTitle/font_sizes/font_size = 28
-
-MagicWeaponAction/base_type = &"SemanticAnnouncementCheckButton"
-MagicWeaponAction/colors/font_color = Color(0, 1, 1, 1)
-MagicWeaponAction/constants/outline_size = 10
-
+MagicHelpTitle/fonts/font = ExtResource("font_display")
+MagicWeaponAction/base_type = &"MagicWeaponActionAlt"
 MagicWeaponActionAlt/base_type = &"SemanticMagicWeaponActionAlt"
 MagicWeaponActionAlt/colors/font_color = Color(0, 1, 1, 1)
-
 MagicWeaponActionSmall/base_type = &"SemanticForgeMaterialNeed"
 MagicWeaponActionSmall/colors/font_color = Color(0, 1, 1, 1)
-
 MagicWeaponAttr/base_type = &"SemanticBacisInfoName"
 MagicWeaponAttr/colors/font_outline_color = Color(1, 1, 1, 1)
 MagicWeaponAttr/constants/outline_size = 2
-
 MagicWeaponCdText/base_type = &"BackpackExpLabel"
-
 MagicWeaponEmpty/base_type = &"ShopHintLabel"
-
 MagicWeaponName/base_type = &"SemanticLoadSceneNotice"
-
 MagicWeaponPsSkill/base_type = &"SemanticBodyTrainingDetailMaterial"
 MagicWeaponPsSkill/constants/shadow_offset_x = 0
 MagicWeaponPsSkill/constants/shadow_offset_y = 0
-
 MagicWeaponPsTitle/base_type = &"SemanticLoadSceneNotice"
 MagicWeaponPsTitle/constants/shadow_offset_x = 0
 MagicWeaponPsTitle/constants/shadow_offset_y = 0
-
 MagicWeaponSkillBody/base_type = &"SemanticMagicWeaponSkillBody"
 MagicWeaponSkillBody/colors/font_outline_color = Color(1, 1, 1, 1)
 MagicWeaponSkillBody/constants/shadow_outline_size = 8
-
 MagicWeaponSkillGroup/base_type = &"SettingsGroup"
-
 MagicWeaponSkillTitle/base_type = &"SemanticBodyTrainingDetailLevel"
-MagicWeaponSkillTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
 MagicWeaponSkillTitle/colors/font_outline_color = Color(1, 1, 1, 1)
+MagicWeaponSkillTitle/colors/font_shadow_color = Color(0, 0, 0, 1)
 MagicWeaponSkillTitle/constants/shadow_outline_size = 13
-
 MagicWeaponStat/base_type = &"BackpackTitleLabel"
-
 MagicWeaponStatHp/base_type = &"BackpackTitleLabel"
-
 MagicWeaponValue/base_type = &"BackpackTitleLabel"
-
 MainMenuLabel/base_type = &"SemanticBoxItemNumber"
-MainMenuLabel/fonts/font = ExtResource("font_display")
 MainMenuLabel/font_sizes/font_size = 24
-
+MainMenuLabel/fonts/font = ExtResource("font_display")
 MainMenuPlayerDetail/base_type = &"SemanticArchiveFieldTitle"
 MainMenuPlayerDetail/colors/font_color = Color(1, 0.72, 0.16, 1)
 MainMenuPlayerDetail/constants/outline_size = 2
-
 MainMenuPlayerName/base_type = &"Label"
-MainMenuPlayerName/fonts/font = ExtResource("font_display")
 MainMenuPlayerName/colors/font_outline_color = Color(1, 1, 1, 1)
 MainMenuPlayerName/font_sizes/font_size = 32
-
+MainMenuPlayerName/fonts/font = ExtResource("font_display")
 MainMenuTitle/base_type = &"SemanticArchiveFieldTitle"
 MainMenuTitle/colors/font_color = Color(1, 0.290196, 0, 1)
 MainMenuTitle/colors/font_outline_color = Color(0.964706, 0.403922, 0, 1)
 MainMenuTitle/constants/outline_size = 1
-
 Map0CatalogButton/base_type = &"SemanticBacisInfoTime"
 Map0CatalogButton/colors/font_color = Color(1, 0.84, 0.54, 1)
-Map0CatalogButton/colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
 Map0CatalogButton/colors/font_hover_color = Color(1, 0.956863, 0.74902, 1)
+Map0CatalogButton/colors/font_pressed_color = Color(0.85, 0.76, 0.55, 1)
 Map0CatalogButton/constants/outline_size = 2
 Map0CatalogButton/font_sizes/font_size = 18
+Map0CatalogButton/styles/hover = SubResource("map0_catalog_hover")
 Map0CatalogButton/styles/normal = SubResource("map0_catalog_normal")
 Map0CatalogButton/styles/pressed = SubResource("map0_catalog_hover")
-Map0CatalogButton/styles/hover = SubResource("map0_catalog_hover")
-
 Map0PlayerLevel/base_type = &"SemanticArchiveUidHash"
 Map0PlayerLevel/constants/outline_size = 1
-
 Map3ButtonTitle/base_type = &"SemanticAnnouncementHeading"
 Map3ButtonTitle/colors/font_color = Color(1, 0.290196, 0, 1)
 Map3ButtonTitle/constants/outline_size = 2
-
 Map3RegionLabel/base_type = &"SemanticBackpackTabLabelLarge"
 Map3RegionLabel/colors/font_color = Color(1, 0.290196, 0, 1)
-
 MapLocationText/base_type = &"Map3RegionLabel"
-
 MapReturnText/base_type = &"SemanticAutoBattleHint"
 MapReturnText/colors/font_color = Color(1, 0.584314, 0, 1)
 MapReturnText/constants/outline_size = 5
-
 MenuActionButton/base_type = &"SemanticAnnouncementButton3"
 MenuActionButton/font_sizes/font_size = 24
-
 MenuActionButtonGroup/base_type = &"SemanticBackpackEquipmentColumn"
-
-SetMenuActionButtonGroup/base_type = &"MenuActionButtonGroup"
-SetMenuActionButtonGroup/constants/separation = 11
-
 MenuActionButtonOutline/base_type = &"MenuActionButton"
 MenuActionButtonOutline/colors/font_outline_color = Color(1, 1, 1, 1)
-
 MenuHintLabel/base_type = &"SettingsSmallLabel"
 MenuHintLabel/fonts/font = ExtResource("font_body")
-
 MessageShowText/base_type = &"SemanticDecomposeHelpTitle"
 MessageShowText/constants/shadow_outline_size = 10
 MessageShowText/font_sizes/font_size = 24
-
 MomentTextLabel/base_type = &"BossInfoTitle"
-
 Monster139Button/base_type = &"SemanticGameNeedKnowButton"
-
 Monster139DamageLabel/base_type = &"SemanticChooseSceneText"
 Monster139DamageLabel/constants/shadow_outline_size = 10
-
 MonsterBloodText/base_type = &"SemanticBuffIconTimes"
-
 MonsterHeadBoss/base_type = &"SemanticAnnouncementHeading"
 MonsterHeadBoss/colors/font_color = Color(1, 0.415686, 0, 1)
 MonsterHeadBoss/constants/outline_size = 10
-
 MonsterHeadInfoName/base_type = &"SemanticAnnouncementButton2"
 MonsterHeadInfoName/colors/font_color = Color(1, 1, 1, 1)
 MonsterHeadInfoName/colors/font_disabled_color = Color(1, 1, 1, 1)
 MonsterHeadInfoName/constants/outline_size = 5
 MonsterHeadInfoName/font_sizes/font_size = 14
-
 MonsterHeadName/base_type = &"SemanticGameNeedKnowButton"
 MonsterHeadName/constants/outline_size = 6
-
 MonsterHelpButton/base_type = &"SemanticLearnSkillButton2"
-
 MonsterHelpTitle/base_type = &"SemanticArchiveDialogTitle"
 MonsterHelpTitle/constants/outline_size = 1
 MonsterHelpTitle/fonts/font = ExtResource("font_display")
-
 MonsterHelpTitleLarge/base_type = &"MonsterHelpTitle"
 MonsterHelpTitleLarge/font_sizes/font_size = 28
-
 MonsterHelpWarning/base_type = &"SemanticBacisInfoTime2"
 MonsterHelpWarning/colors/font_color = Color(1, 0.584314, 0, 1)
 MonsterHelpWarning/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 MonsterHelpWarning/font_sizes/font_size = 28
-
 MosaicHelpLine/base_type = &"SemanticAnnouncementWarning"
 MosaicHelpLine/constants/shadow_outline_size = 12
 MosaicHelpLine/font_sizes/font_size = 18
-
 MosaicHelpTitle/base_type = &"SemanticLoadSceneNotice"
-MosaicHelpTitle/fonts/font = ExtResource("font_display")
 MosaicHelpTitle/font_sizes/font_size = 32
-
+MosaicHelpTitle/fonts/font = ExtResource("font_display")
 MysteryShopInfo/base_type = &"SemanticHcHelpTitle"
-
 MysteryShopLabel/base_type = &"SemanticLetterBody"
 MysteryShopLabel/font_sizes/font_size = 14
-
 MysteryShopList/base_type = &"HBoxContainer"
 MysteryShopList/constants/separation = 9
-
 MysteryShopPurchase/base_type = &"SemanticBackpackHeadButton4"
 MysteryShopPurchase/colors/icon_hover_color = Color(1, 1, 1, 0.682353)
-
 MysteryShopTitle/base_type = &"SemanticLetterBody"
-MysteryShopTitle/fonts/font = ExtResource("font_body")
 MysteryShopTitle/font_sizes/font_size = 12
-
+MysteryShopTitle/fonts/font = ExtResource("font_body")
 PelletAttTab/base_type = &"SemanticLlbtCureText2"
 PelletAttTab/colors/font_color = Color(1, 0.584314, 0, 1)
 PelletAttTab/colors/font_outline_color = Color(1, 0.584314, 0, 1)
-
 PelletAttValue/base_type = &"SemanticPelletAttValue"
 PelletAttValue/colors/font_color = Color(1, 0.584314, 0, 1)
-
 PelletCritTab/base_type = &"SemanticLlbtCureText2"
 PelletCritTab/colors/font_color = Color(0.65, 0.65, 0.65, 1)
 PelletCritTab/colors/font_outline_color = Color(0.65, 0.65, 0.65, 1)
-
 PelletCritValue/base_type = &"SemanticPelletAttValue"
 PelletCritValue/colors/font_color = Color(0.65, 0.65, 0.65, 1)
-
 PelletEatLabel/base_type = &"SemanticBackpackWingLabel2"
 PelletEatLabel/colors/font_color = Color(1, 1, 0, 1)
 PelletEatLabel/constants/outline_size = 3
 PelletEatLabel/constants/shadow_outline_size = 5
 PelletEatLabel/font_sizes/font_size = 20
-
 PelletEmpTab/base_type = &"SemanticLlbtCureText2"
 PelletEmpTab/colors/font_color = Color(0, 0.6, 1, 1)
 PelletEmpTab/colors/font_outline_color = Color(0, 0.6, 1, 1)
-
 PelletEmpValue/base_type = &"SemanticPelletAttValue"
 PelletEmpValue/colors/font_color = Color(0, 0.6, 1, 1)
-
 PelletHpTab/base_type = &"SemanticLlbtCureText2"
 PelletHpTab/colors/font_color = Color(1, 0, 0, 1)
 PelletHpTab/colors/font_outline_color = Color(1, 0, 0, 1)
-
 PelletHpValue/base_type = &"SemanticPelletAttValue2"
 PelletHpValue/colors/font_color = Color(1, 0, 0, 1)
 PelletHpValue/constants/shadow_outline_size = 8
-
 PelletLineLabel/base_type = &"ArchiveLoginLabel"
-
 PelletLuckyTab/base_type = &"SemanticLlbtCureText"
-
 PelletLuckyValue/base_type = &"SemanticPelletAttValue"
 PelletLuckyValue/colors/font_color = Color(1, 1, 0, 1)
-
 PelletMpTab/base_type = &"SemanticLlbtCureText2"
 PelletMpTab/colors/font_color = Color(0, 1, 1, 1)
 PelletMpTab/colors/font_outline_color = Color(0, 1, 1, 1)
-
 PelletMpValue/base_type = &"SemanticPelletAttValue"
 PelletMpValue/colors/font_color = Color(0, 1, 1, 1)
-
 PelletNameColumn/base_type = &"VBoxContainer"
 PelletNameColumn/constants/separation = 39
-
 PelletPropertyButtonColumn/base_type = &"VBoxContainer"
 PelletPropertyButtonColumn/constants/separation = 17
-
 PelletPropertyColumn/base_type = &"VBoxContainer"
 PelletPropertyColumn/constants/separation = 43
-
 PelletStageList/base_type = &"TowerContent"
-
 PelletStageProperty/base_type = &"SemanticGameInfoBodyText3"
 PelletStageProperty/colors/font_color = Color(1, 1, 0, 1)
 PelletStageProperty/colors/font_outline_color = Color(1, 1, 0, 1)
-
 PelletStagePropertyRow/base_type = &"HBoxContainer"
 PelletStagePropertyRow/constants/separation = 31
-
 PelletStageRow/base_type = &"SkillGridRow"
-
 PelletSysTitle/base_type = &"SemanticEndStatsCritCount"
 PelletSysTitle/colors/font_outline_color = Color(1, 1, 1, 1)
-
 PelletTabLabel/base_type = &"SemanticGameInfoBodyText"
-
 PelletTitle/base_type = &"SemanticAutoBattleHint"
 PelletTitle/colors/font_color = Color(1, 0.584314, 0, 1)
 PelletTitle/constants/outline_size = 3
 PelletTitle/font_sizes/font_size = 40
-
 PelletTotalGrid/base_type = &"GridContainer"
 PelletTotalGrid/constants/h_separation = 30
 PelletTotalGrid/constants/v_separation = 10
-
 PelletTotalValue/base_type = &"SemanticBackpackWingLabel"
-PelletTotalValue/fonts/font = ExtResource("font_display")
 PelletTotalValue/colors/font_color = Color(0, 1, 0, 1)
 PelletTotalValue/constants/outline_size = 2
 PelletTotalValue/constants/shadow_outline_size = 7
 PelletTotalValue/font_sizes/font_size = 28
-
+PelletTotalValue/fonts/font = ExtResource("font_display")
 PelletTypeRow/base_type = &"HBoxContainer"
 PelletTypeRow/constants/separation = 15
-
 PetBackpackGrid/base_type = &"SemanticConstellationGrid"
 PetBackpackGrid/constants/v_separation = 8
-
 PetBackpackSlotButton/base_type = &"SemanticBackpackHeadButton3"
-
 PetBackpackSlotButtonEmpty/base_type = &"EmptyButton"
-
 PetBackpackSlotNumber/base_type = &"SemanticBoxItemNumber"
 PetBackpackSlotNumber/colors/font_color = Color(1, 0.584314, 0, 1)
 PetBackpackSlotNumber/constants/outline_size = 4
-
 PetBookCount/base_type = &"SemanticPetBookCount"
 PetBookCount/colors/font_color = Color(0.388235, 0.780392, 1, 1)
-
 PetExpLabel/base_type = &"SemanticPetBookCount"
 PetExpLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 PetFormationCost/base_type = &"SemanticArchiveUidHash"
 PetFormationCost/colors/font_color = Color(0.94, 0.94, 0.94, 1)
-
 PetFormationEffect/base_type = &"SemanticArchiveUidHash"
 PetFormationEffect/colors/font_color = Color(0.388235, 0.780392, 1, 1)
-
 PetFormationLevel/base_type = &"SemanticBacisInfoName"
-
 PetFormationList/base_type = &"EquipmentStatGroup"
-
 PetFormationName/base_type = &"Label"
 PetFormationName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 PetLearnButton/base_type = &"SemanticBackpackActionButton2"
-
 PetLearnRowPanel/base_type = &"PanelContainer"
 PetLearnRowPanel/styles/panel = SubResource("sub_StyleBoxFlat_pet_stat")
-
 PetLevelLabel/base_type = &"PetStatName"
-
 PetNameLabel/base_type = &"PetStatName"
-
 PetPageButton/base_type = &"Button"
 PetPageButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 PetPageButton/font_sizes/font_size = 14
+PetPageButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_hover")
+PetPageButton/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
 PetPageButton/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
 PetPageButton/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
-PetPageButton/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
-PetPageButton/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_hover")
-
 PetPopupTitle/base_type = &"SemanticBodyTrainingDetailLevel"
 PetPopupTitle/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 PetResourceLabel/base_type = &"SemanticArchiveUidHash"
 PetResourceLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
 PetResourceLabel/constants/outline_size = 2
-
 PetSkillDescription/base_type = &"SemanticArchiveUidHash"
 PetSkillDescription/colors/font_color = Color(0.94, 0.94, 0.94, 1)
 PetSkillDescription/constants/outline_size = 2
-
 PetSkillLevel/base_type = &"PetStatName"
-
 PetSkillList/base_type = &"SemanticChooseMusicList"
-
 PetSkillMana/base_type = &"SemanticBodyTrainingLevelLabel2"
 PetSkillMana/colors/font_color = Color(0.388235, 0.780392, 1, 1)
-
 PetSkillName/base_type = &"SemanticBodyTrainingDetailMaterial"
 PetSkillName/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 PetSkillNeed/base_type = &"SemanticPetBookCount"
 PetSkillNeed/colors/font_color = Color(0.815686, 0.815686, 0.815686, 1)
-
 PetSoulLabel/base_type = &"SemanticBodyTrainingDetailMaterial"
 PetSoulLabel/colors/font_color = Color(0.388235, 0.780392, 1, 1)
-
 PetStatName/base_type = &"SemanticBodyTrainingLevelLabel"
-
 PetStatPanel/base_type = &"Panel"
 PetStatPanel/styles/panel = SubResource("sub_StyleBoxFlat_pet_stat")
-
 PetStatValue/base_type = &"SemanticPetBookCount"
-
 RewardBoxName/base_type = &"SemanticBasicMonmentText"
 RewardBoxName/colors/font_shadow_color = Color(0, 0, 0, 1)
 RewardBoxName/constants/shadow_outline_size = 8
 RewardBoxName/font_sizes/font_size = 20
-
 RewardItemGrid/base_type = &"GridContainer"
 RewardItemGrid/constants/h_separation = 40
 RewardItemGrid/constants/v_separation = 33
-
 RewardQd/base_type = &"SemanticLevelInfoFall"
 RewardQd/constants/shadow_outline_size = 8
 RewardQd/font_sizes/font_size = 18
-
 RewardTitle/base_type = &"SemanticDecomposeTitle2"
 RewardTitle/constants/outline_size = 8
 RewardTitle/font_sizes/font_size = 28
-
 RoleButtonName/base_type = &"SemanticBdSkillName"
 RoleButtonName/colors/font_color = Color(1, 1, 0, 1)
-RoleButtonName/colors/font_shadow_color = Color(0, 0, 0, 1)
 RoleButtonName/colors/font_outline_color = Color(1, 1, 0, 1)
+RoleButtonName/colors/font_shadow_color = Color(0, 0, 0, 1)
 RoleButtonName/constants/shadow_offset_x = 0
 RoleButtonName/constants/shadow_offset_y = 0
 RoleButtonName/constants/shadow_outline_size = 10
-
 RoleExpText/base_type = &"PetFormationLevel"
-
 RoleHpText/base_type = &"SemanticBacisInfoName"
 RoleHpText/constants/shadow_outline_size = -6
-
 RoleInformationGrid/base_type = &"GridContainer"
 RoleInformationGrid/constants/h_separation = 0
 RoleInformationGrid/constants/v_separation = 6
-
 RoleKeyLabel/base_type = &"Label"
 RoleKeyLabel/constants/outline_size = 2
-
 RoleLevelLabel/base_type = &"SemanticAutoBattleHint"
-
 RoleMagicNeedText/base_type = &"SemanticRoleMagicNeedText"
 RoleMagicNeedText/constants/shadow_outline_size = 9
 RoleMagicNeedText/font_sizes/font_size = 18
-
 RoleMpText/base_type = &"PetFormationLevel"
-
 RoleNatureHp/base_type = &"SemanticRoleNatureHp"
-
 RoleNatureMp/base_type = &"SemanticRoleNatureHp"
 RoleNatureMp/colors/font_shadow_color = Color(0, 0, 0, 1)
 RoleNatureMp/constants/shadow_offset_x = 2
 RoleNatureMp/constants/shadow_offset_y = 0
-
 RolePetSkillRow/base_type = &"HBoxContainer"
 RolePetSkillRow/constants/separation = 5
-
 RoleShieldBar/base_type = &"ProgressBar"
 RoleShieldBar/styles/background = SubResource("role_shield_bg")
 RoleShieldBar/styles/fill = SubResource("role_shield_fill")
-
 RoleSkillRow/base_type = &"HBoxContainer"
 RoleSkillRow/constants/separation = -5
-
 RoleSkillRowTight/base_type = &"HBoxContainer"
 RoleSkillRowTight/constants/separation = -3
-
 SellFilterCs/base_type = &"SemanticSellFilterCs"
 SellFilterCs/colors/font_color = Color(1, 0.584314, 0, 1)
 SellFilterCs/colors/font_outline_color = Color(1, 0.584314, 0, 1)
-
 SellFilterGxms/base_type = &"SemanticSellFilterCs2"
 SellFilterGxms/colors/font_color = Color(1, 0.415686, 0, 1)
 SellFilterGxms/colors/font_outline_color = Color(1, 0.415686, 0, 1)
-
 SellFilterHq/base_type = &"SemanticSellFilterCs"
 SellFilterHq/colors/font_color = Color(0, 1, 1, 1)
 SellFilterHq/colors/font_outline_color = Color(0, 1, 1, 1)
-
 SellFilterHsh/base_type = &"SemanticSellFilterCs"
 SellFilterHsh/colors/font_color = Color(1, 0, 0, 1)
 SellFilterHsh/colors/font_outline_color = Color(1, 0, 0, 1)
-
 SellFilterJl/base_type = &"SemanticSellFilterCs"
 SellFilterJl/colors/font_color = Color(0, 0.6, 1, 1)
 SellFilterJl/colors/font_outline_color = Color(0, 0.6, 1, 1)
-
 SellFilterList/base_type = &"VBoxContainer"
 SellFilterList/constants/separation = 2
-
 SellFilterPt/base_type = &"SemanticSellFilterCs"
 SellFilterPt/colors/font_color = Color(1, 1, 1, 1)
 SellFilterPt/colors/font_outline_color = Color(1, 1, 1, 1)
-
 SellFilterSq/base_type = &"SellFilterHsh"
-
 SellFilterSs/base_type = &"SemanticSellFilterCs"
 SellFilterSs/colors/font_color = Color(0.592157, 0.254902, 1, 1)
 SellFilterSs/colors/font_outline_color = Color(0.592157, 0.254902, 1, 1)
-
 SellFilterXl/base_type = &"SemanticSellFilterCs"
 SellFilterXl/colors/font_color = Color(0.65, 0.65, 0.65, 1)
 SellFilterXl/colors/font_outline_color = Color(0.65, 0.65, 0.65, 1)
-
 SellFilterYx/base_type = &"SemanticSellFilterCs"
 SellFilterYx/colors/font_color = Color(0, 1, 0, 1)
 SellFilterYx/colors/font_outline_color = Color(0, 1, 0, 1)
-
 SellOrEquInfo/base_type = &"SemanticChoosePlayerRoleName"
 SellOrEquInfo/constants/shadow_outline_size = 8
 SellOrEquInfo/font_sizes/font_size = 10
-
 SellPageInput/base_type = &"LineEdit"
 SellPageInput/colors/font_outline_color = Color(1, 0, 0, 1)
 SellPageInput/colors/font_placeholder_color = Color(1, 0, 0, 1)
 SellPageInput/constants/outline_size = 1
 SellPageInput/fonts/font = ExtResource("font_ui")
-
 SellTitle/base_type = &"SemanticAutoBattleSectionLabel"
-
 SellWarning/base_type = &"SemanticAnnouncementWarning2"
 SellWarning/colors/font_color = Color(1, 0, 0, 1)
 SellWarning/colors/font_outline_color = Color(1, 0, 0, 1)
 SellWarning/font_sizes/font_size = 14
-
+SemanticAnnouncementAlert/base_type = &"Label"
+SemanticAnnouncementAlert/fonts/font = ExtResource("font_ui")
+SemanticAnnouncementButton/base_type = &"Button"
+SemanticAnnouncementButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
+SemanticAnnouncementButton2/base_type = &"SemanticAnnouncementButton"
+SemanticAnnouncementButton2/styles/disabled = SubResource("empty_button")
+SemanticAnnouncementButton2/styles/focus = SubResource("empty_button")
+SemanticAnnouncementButton2/styles/hover = SubResource("empty_button")
+SemanticAnnouncementButton2/styles/normal = SubResource("empty_button")
+SemanticAnnouncementButton2/styles/pressed = SubResource("empty_button")
+SemanticAnnouncementButton3/base_type = &"SemanticAnnouncementButton2"
+SemanticAnnouncementButton3/fonts/font = ExtResource("font_display")
+SemanticAnnouncementCheckButton/base_type = &"Label"
+SemanticAnnouncementCheckButton/font_sizes/font_size = 20
+SemanticAnnouncementHeading/base_type = &"Label"
+SemanticAnnouncementHeading/fonts/font = ExtResource("font_accent")
+SemanticAnnouncementListGroup/base_type = &"Control"
+SemanticAnnouncementListGroup/constants/separation = 15
+SemanticAnnouncementPasswordContent/base_type = &"Control"
+SemanticAnnouncementPasswordContent/constants/separation = 10
+SemanticAnnouncementWarning/base_type = &"SemanticAnnouncementWarning2"
+SemanticAnnouncementWarning/colors/font_shadow_color = Color(0, 0, 0, 1)
+SemanticAnnouncementWarning2/base_type = &"SemanticAnnouncementAlert"
+SemanticAnnouncementWarning2/constants/outline_size = 2
+SemanticArchiveActionButtonSmall/base_type = &"SemanticAnnouncementButton"
+SemanticArchiveActionButtonSmall/styles/hover = SubResource("sub_CloudButtonHover")
+SemanticArchiveActionButtonSmall/styles/normal = SubResource("sub_CloudInput")
+SemanticArchiveActionButtonSmall/styles/pressed = SubResource("sub_CloudButtonHover")
+SemanticArchiveActionButtonSmall2/base_type = &"SemanticArchiveActionButtonSmall"
+SemanticArchiveActionButtonSmall2/colors/font_color = Color(1, 1, 1, 1)
+SemanticArchiveCloudButton/base_type = &"SemanticArchiveActionButtonSmall2"
+SemanticArchiveCloudButton/font_sizes/font_size = 20
+SemanticArchiveDeleteButton/base_type = &"Button"
+SemanticArchiveDeleteButton/styles/hover = SubResource("empty_button")
+SemanticArchiveDialogTitle/base_type = &"Control"
+SemanticArchiveDialogTitle/font_sizes/font_size = 24
+SemanticArchiveDialogTitle/fonts/font = ExtResource("font_display")
+SemanticArchiveFieldTitle/base_type = &"Control"
+SemanticArchiveFieldTitle/font_sizes/font_size = 18
+SemanticArchiveLoginInput/base_type = &"Control"
+SemanticArchiveLoginInput/colors/caret_color = Color(1, 0.85098, 0.478431, 1)
+SemanticArchiveLoginInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
+SemanticArchiveUidHash/base_type = &"Label"
+SemanticArchiveUidHash/font_sizes/font_size = 12
+SemanticAutoBattleHint/base_type = &"Label"
+SemanticAutoBattleHint/fonts/font = ExtResource("font_display")
+SemanticAutoBattleSectionLabel/base_type = &"SemanticAutoBattleHint"
+SemanticAutoBattleSectionLabel/font_sizes/font_size = 20
+SemanticAutoBattleTitle/base_type = &"SemanticAutoBattleHint"
+SemanticAutoBattleTitle/font_sizes/font_size = 24
+SemanticBacisInfoLevel/base_type = &"Control"
+SemanticBacisInfoLevel/fonts/font = ExtResource("font_accent")
+SemanticBacisInfoName/base_type = &"Label"
+SemanticBacisInfoName/font_sizes/font_size = 14
+SemanticBacisInfoTime/base_type = &"Label"
+SemanticBacisInfoTime/fonts/font = ExtResource("font_accent")
+SemanticBacisInfoTime2/base_type = &"SemanticBacisInfoTime"
+SemanticBacisInfoTime2/constants/outline_size = 1
+SemanticBacisInfoVBox/base_type = &"Control"
+SemanticBacisInfoVBox/constants/separation = 0
+SemanticBackpackActionButton/base_type = &"Button"
+SemanticBackpackActionButton/colors/font_color = Color(1, 1, 1, 1)
+SemanticBackpackActionButton2/base_type = &"SemanticBackpackActionButton"
+SemanticBackpackActionButton2/font_sizes/font_size = 14
+SemanticBackpackActionButton2/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_hover")
+SemanticBackpackActionButton2/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
+SemanticBackpackActionButton2/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
+SemanticBackpackActionButton2/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
+SemanticBackpackEquipmentColumn/base_type = &"Control"
+SemanticBackpackEquipmentColumn/constants/separation = 20
+SemanticBackpackHeadButton/base_type = &"SemanticArchiveDeleteButton"
+SemanticBackpackHeadButton/styles/normal = SubResource("empty_button")
+SemanticBackpackHeadButton2/base_type = &"SemanticBackpackHeadButton"
+SemanticBackpackHeadButton2/styles/pressed = SubResource("empty_button")
+SemanticBackpackHeadButton3/base_type = &"SemanticBackpackHeadButton2"
+SemanticBackpackHeadButton3/styles/disabled = SubResource("empty_button")
+SemanticBackpackHeadButton4/base_type = &"SemanticBackpackHeadButton3"
+SemanticBackpackHeadButton4/styles/focus = SubResource("empty_button")
+SemanticBackpackTabLabelLarge/base_type = &"SemanticAnnouncementHeading"
+SemanticBackpackTabLabelLarge/font_sizes/font_size = 18
+SemanticBackpackWingLabel/base_type = &"SemanticAnnouncementAlert"
+SemanticBackpackWingLabel/constants/shadow_offset_x = 0
+SemanticBackpackWingLabel2/base_type = &"SemanticBackpackWingLabel"
+SemanticBackpackWingLabel2/constants/shadow_offset_y = 0
+SemanticBackpackWingLabel3/base_type = &"SemanticBackpackWingLabel2"
+SemanticBackpackWingLabel3/colors/font_shadow_color = Color(0, 0, 0, 1)
+SemanticBackpackWingLabel4/base_type = &"SemanticBackpackWingLabel3"
+SemanticBackpackWingLabel4/constants/outline_size = 1
+SemanticBaseThroughLevelNotice/base_type = &"SemanticBackpackWingLabel3"
+SemanticBaseThroughLevelNotice/constants/outline_size = 2
+SemanticBasicMonmentText/base_type = &"SemanticBasicMonmentText2"
+SemanticBasicMonmentText/colors/font_outline_color = Color(1, 1, 1, 1)
+SemanticBasicMonmentText2/base_type = &"SemanticAnnouncementAlert"
+SemanticBasicMonmentText2/constants/outline_size = 1
+SemanticBdSkillName/base_type = &"SemanticBacisInfoTime2"
+SemanticBdSkillName/font_sizes/font_size = 20
+SemanticBdSkillTitle/base_type = &"SemanticBacisInfoTime2"
+SemanticBdSkillTitle/font_sizes/font_size = 24
+SemanticBodyTrainingDetailLevel/base_type = &"SemanticAnnouncementCheckButton"
+SemanticBodyTrainingDetailLevel/constants/outline_size = 3
+SemanticBodyTrainingDetailMaterial/base_type = &"Control"
+SemanticBodyTrainingDetailMaterial/constants/outline_size = 3
+SemanticBodyTrainingLevelLabel/base_type = &"SemanticBodyTrainingLevelLabel2"
+SemanticBodyTrainingLevelLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
+SemanticBodyTrainingLevelLabel2/base_type = &"SemanticBacisInfoName"
+SemanticBodyTrainingLevelLabel2/constants/outline_size = 3
+SemanticBossBloodName/base_type = &"SemanticAutoBattleHint"
+SemanticBossBloodName/font_sizes/font_size = 28
+SemanticBossInfoTitle/base_type = &"Control"
+SemanticBossInfoTitle/font_sizes/font_size = 28
+SemanticBossInfoTitle/fonts/font = ExtResource("font_display")
+SemanticBoxItemNumber/base_type = &"Label"
+SemanticBoxItemNumber/colors/font_shadow_color = Color(0, 0, 0, 1)
+SemanticBuffIconTime/base_type = &"Label"
+SemanticBuffIconTime/colors/font_color = Color(1, 1, 0, 1)
+SemanticBuffIconTimes/base_type = &"Control"
+SemanticBuffIconTimes/constants/outline_size = 5
+SemanticBuffInformationText/base_type = &"SemanticBackpackWingLabel2"
+SemanticBuffInformationText/constants/outline_size = 2
+SemanticChangeClothesAction/base_type = &"SemanticChangeClothesAction2"
+SemanticChangeClothesAction/constants/outline_size = 6
+SemanticChangeClothesAction2/base_type = &"SemanticArchiveUidHash"
+SemanticChangeClothesAction2/colors/font_color = Color(1, 1, 0, 1)
+SemanticChooseItemTitle/base_type = &"SemanticAnnouncementHeading"
+SemanticChooseItemTitle/font_sizes/font_size = 24
+SemanticChooseMusicList/base_type = &"Control"
+SemanticChooseMusicList/constants/separation = 6
+SemanticChoosePlayerRoleName/base_type = &"SemanticBoxItemNumber"
+SemanticChoosePlayerRoleName/constants/shadow_offset_x = 2
+SemanticChooseSceneText/base_type = &"SemanticBaseThroughLevelNotice"
+SemanticChooseSceneText/colors/font_outline_color = Color(1, 1, 1, 1)
+SemanticComKeyLabel/base_type = &"SemanticBackpackWingLabel4"
+SemanticComKeyLabel/colors/font_color = Color(1, 1, 0, 1)
+SemanticConstellationGrid/base_type = &"Control"
+SemanticConstellationGrid/constants/h_separation = 8
+SemanticConstellationTitle/base_type = &"SemanticAnnouncementAlert"
+SemanticConstellationTitle/font_sizes/font_size = 20
+SemanticCureTimesCurrency/base_type = &"SemanticAutoBattleTitle"
+SemanticCureTimesCurrency/colors/font_color = Color(1, 1, 0, 1)
+SemanticDecomposeHelpBody/base_type = &"SemanticBackpackWingLabel4"
+SemanticDecomposeHelpBody/constants/shadow_outline_size = 10
+SemanticDecomposeHelpTitle/base_type = &"SemanticBuffInformationText"
+SemanticDecomposeHelpTitle/colors/font_color = Color(0, 0, 0, 1)
+SemanticDecomposeHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
+SemanticDecomposeTitle/base_type = &"SemanticDecomposeTitle2"
+SemanticDecomposeTitle/constants/outline_size = 6
+SemanticDecomposeTitle2/base_type = &"SemanticAutoBattleHint"
+SemanticDecomposeTitle2/colors/font_color = Color(1, 1, 0, 1)
+SemanticDefeatYellowLabel/base_type = &"SemanticBasicMonmentText2"
+SemanticDefeatYellowLabel/colors/font_color = Color(1, 1, 0, 1)
+SemanticDefeatYellowLabel/colors/font_outline_color = Color(1, 1, 0, 1)
+SemanticDjInfoMargin/base_type = &"Control"
+SemanticDjInfoMargin/constants/margin_bottom = 10
+SemanticDjInfoMargin/constants/margin_top = 10
+SemanticDjInfoTitle/base_type = &"SemanticAnnouncementHeading"
+SemanticDjInfoTitle/font_sizes/font_size = 20
+SemanticEndStatsCritCount/base_type = &"SemanticAnnouncementWarning2"
+SemanticEndStatsCritCount/font_sizes/font_size = 24
+SemanticEndStatsMoreInfo/base_type = &"SemanticAnnouncementHeading"
+SemanticEndStatsMoreInfo/colors/font_color = Color(1, 1, 0, 1)
+SemanticEquipmentItemHighlight/base_type = &"SemanticAnnouncementCheckButton"
+SemanticEquipmentItemHighlight/constants/outline_size = 1
+SemanticForgeMaterialNeed/base_type = &"SemanticBacisInfoName"
+SemanticForgeMaterialNeed/constants/outline_size = 6
+SemanticGameInfoBodyText/base_type = &"SemanticGameInfoBodyText3"
+SemanticGameInfoBodyText/colors/font_outline_color = Color(1, 1, 1, 1)
+SemanticGameInfoBodyText2/base_type = &"SemanticBaseThroughLevelNotice"
+SemanticGameInfoBodyText2/constants/shadow_outline_size = 7
+SemanticGameInfoBodyText3/base_type = &"SemanticGameInfoBodyText2"
+SemanticGameInfoBodyText3/font_sizes/font_size = 20
+SemanticGameNeedKnowButton/base_type = &"SemanticAnnouncementButton3"
+SemanticGameNeedKnowButton/colors/font_color = Color(1, 1, 1, 1)
+SemanticHcHelpTabLabel/base_type = &"SemanticBacisInfoTime"
+SemanticHcHelpTabLabel/colors/font_color = Color(1, 1, 0, 1)
+SemanticHcHelpTitle/base_type = &"Control"
+SemanticHcHelpTitle/colors/font_color = Color(0, 0, 0, 1)
+SemanticLearnSkillButton/base_type = &"SemanticAnnouncementButton2"
+SemanticLearnSkillButton/fonts/font = ExtResource("font_accent")
+SemanticLearnSkillButton2/base_type = &"SemanticLearnSkillButton"
+SemanticLearnSkillButton2/font_sizes/font_size = 24
+SemanticLearnSkillLevelValue/base_type = &"SemanticBacisInfoTime"
+SemanticLearnSkillLevelValue/font_sizes/font_size = 24
+SemanticLearnSkillMainButton/base_type = &"Button"
+SemanticLearnSkillMainButton/fonts/font = ExtResource("font_accent")
+SemanticLearnSkillMainLabel/base_type = &"Label"
+SemanticLearnSkillMainLabel/fonts/font = ExtResource("font_accent")
+SemanticLearnSkillTitle/base_type = &"SemanticBacisInfoTime"
+SemanticLearnSkillTitle/constants/outline_size = 2
+SemanticLetterBody/base_type = &"SemanticBasicMonmentText2"
+SemanticLetterBody/colors/font_color = Color(0, 0, 0, 1)
+SemanticLevelInfoFall/base_type = &"SemanticComKeyLabel"
+SemanticLevelInfoFall/colors/font_outline_color = Color(1, 1, 0, 1)
+SemanticLlbtCureText/base_type = &"SemanticLlbtCureText2"
+SemanticLlbtCureText/colors/font_color = Color(1, 1, 0, 1)
+SemanticLlbtCureText/colors/font_outline_color = Color(1, 1, 0, 1)
+SemanticLlbtCureText2/base_type = &"SemanticBackpackWingLabel4"
+SemanticLlbtCureText2/constants/shadow_outline_size = 7
+SemanticLoadSceneNotice/base_type = &"SemanticAnnouncementHeading"
+SemanticLoadSceneNotice/constants/outline_size = 6
+SemanticMagicWeaponActionAlt/base_type = &"SemanticAnnouncementCheckButton"
+SemanticMagicWeaponActionAlt/constants/outline_size = 6
+SemanticMagicWeaponSkillBody/base_type = &"SemanticMagicWeaponSkillBody2"
+SemanticMagicWeaponSkillBody/constants/outline_size = 2
+SemanticMagicWeaponSkillBody2/base_type = &"SemanticBoxItemNumber"
+SemanticMagicWeaponSkillBody2/constants/shadow_offset_x = 0
+SemanticMagicWeaponSkillBody2/constants/shadow_offset_y = 0
+SemanticMagicWeaponSkillGroup/base_type = &"Control"
+SemanticMagicWeaponSkillGroup/constants/separation = 7
+SemanticMountMainButton/base_type = &"Button"
+SemanticMountMainButton/fonts/font = ExtResource("font_accent")
+SemanticMountMainLabel/base_type = &"Label"
+SemanticMountMainLabel/fonts/font = ExtResource("font_accent")
+SemanticPelletAttValue/base_type = &"SemanticPelletAttValue2"
+SemanticPelletAttValue/constants/shadow_outline_size = 7
+SemanticPelletAttValue2/base_type = &"SemanticBuffInformationText"
+SemanticPelletAttValue2/font_sizes/font_size = 20
+SemanticPetBookCount/base_type = &"SemanticArchiveUidHash"
+SemanticPetBookCount/constants/outline_size = 3
+SemanticRoleMagicNeedText/base_type = &"SemanticBackpackWingLabel4"
+SemanticRoleMagicNeedText/colors/font_outline_color = Color(1, 1, 1, 1)
+SemanticRoleNatureHp/base_type = &"SemanticAnnouncementHeading"
+SemanticRoleNatureHp/font_sizes/font_size = 12
+SemanticRoleNatureHp/fonts/font = ExtResource("font_body")
+SemanticSellFilterCs/base_type = &"SemanticSellFilterCs2"
+SemanticSellFilterCs/styles/disabled = SubResource("empty_button")
+SemanticSellFilterCs/styles/focus = SubResource("empty_button")
+SemanticSellFilterCs/styles/hover = SubResource("empty_button")
+SemanticSellFilterCs/styles/hover_pressed = SubResource("empty_button")
+SemanticSellFilterCs/styles/normal = SubResource("empty_button")
+SemanticSellFilterCs/styles/pressed = SubResource("empty_button")
+SemanticSellFilterCs2/base_type = &"CheckBox"
+SemanticSellFilterCs2/constants/outline_size = 1
+SemanticSellFilterCs2/fonts/font = ExtResource("font_ui")
+SemanticShopTabRow/base_type = &"Control"
+SemanticShopTabRow/constants/separation = -2
+SemanticSynthesisTitle/base_type = &"SemanticBuffIconTime"
+SemanticSynthesisTitle/constants/outline_size = 6
+SemanticTowerMainButton/base_type = &"Button"
+SemanticTowerMainButton/fonts/font = ExtResource("font_accent")
+SemanticTowerMainInput/base_type = &"LineEdit"
+SemanticTowerMainInput/fonts/font = ExtResource("font_accent")
+SemanticTowerMainLabel/base_type = &"Label"
+SemanticTowerMainLabel/fonts/font = ExtResource("font_accent")
+SemanticWanLingMainButton/base_type = &"Button"
+SemanticWanLingMainButton/fonts/font = ExtResource("font_accent")
+SemanticWanLingMainLabel/base_type = &"Label"
+SemanticWanLingMainLabel/fonts/font = ExtResource("font_accent")
+SemanticZhenFaInfoSkill/base_type = &"SemanticLlbtCureText2"
+SemanticZhenFaInfoSkill/colors/font_color = Color(1, 0.415686, 0, 1)
+SemanticZhenFaInfoSkill/colors/font_outline_color = Color(1, 0.415686, 0, 1)
+SetMenuActionButtonGroup/base_type = &"MenuActionButtonGroup"
+SetMenuActionButtonGroup/constants/separation = 11
+SetMenuHintLabel/base_type = &"Label"
+SetMenuHintLabel/font_sizes/font_size = 24
+SetMenuHintLabel/fonts/font = ExtResource("font_display")
 SettingsButton/base_type = &"SemanticLearnSkillButton2"
 SettingsButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
-
 SettingsButtonBright/base_type = &"SettingsButton"
 SettingsButtonBright/colors/font_color = Color(1, 1, 1, 1)
-
 SettingsButtonCompact/base_type = &"SettingsButtonTiny"
-
 SettingsButtonMedium/base_type = &"SettingsButton"
-
 SettingsButtonSmall/base_type = &"SemanticLearnSkillButton"
 SettingsButtonSmall/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButtonSmall/font_sizes/font_size = 18
-
 SettingsButtonSmallBright/base_type = &"SettingsButtonSmall"
 SettingsButtonSmallBright/colors/font_color = Color(1, 1, 1, 1)
-
 SettingsButtonTiny/base_type = &"SemanticLearnSkillButton"
 SettingsButtonTiny/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsButtonTiny/font_sizes/font_size = 20
-
 SettingsButtonTinyBright/base_type = &"SettingsButtonTiny"
 SettingsButtonTinyBright/colors/font_color = Color(1, 1, 1, 1)
-
 SettingsCompactLabel/base_type = &"SettingsControlLabel"
-
 SettingsControlLabel/base_type = &"SemanticBdSkillName"
-
 SettingsGroup/base_type = &"SemanticMagicWeaponSkillGroup"
-
 SettingsGroupSpacious/base_type = &"VBoxContainer"
 SettingsGroupSpacious/constants/separation = 13
-
 SettingsOption/base_type = &"SemanticAnnouncementCheckButton"
 SettingsOption/fonts/font = ExtResource("font_accent")
-
 SettingsOptionLabel/base_type = &"SettingsSection"
-
 SettingsPlainLabel/base_type = &"SemanticBacisInfoTime2"
-
 SettingsReturnButton/base_type = &"SemanticAnnouncementButton3"
 SettingsReturnButton/colors/font_color = Color(0.87451, 0.87451, 0.87451, 1)
 SettingsReturnButton/constants/outline_size = 3
 SettingsReturnButton/font_sizes/font_size = 32
-
 SettingsSection/base_type = &"SemanticBdSkillTitle"
-
 SettingsSlider/base_type = &"HSlider"
-SettingsSlider/styles/slider = SubResource("slider_track")
 SettingsSlider/styles/grabber_area_highlight = SubResource("slider_fill")
-
+SettingsSlider/styles/slider = SubResource("slider_track")
 SettingsSmallLabel/base_type = &"SemanticBacisInfoTime2"
 SettingsSmallLabel/font_sizes/font_size = 18
-
 SettingsTitle/base_type = &"SemanticLearnSkillTitle"
-SettingsTitle/fonts/font = ExtResource("font_display")
 SettingsTitle/font_sizes/font_size = 36
-
+SettingsTitle/fonts/font = ExtResource("font_display")
 SettingsValue/base_type = &"SettingsSection"
-
 ShopCloseButton/base_type = &"MenuActionButton"
-
 ShopDamageText/base_type = &"SemanticLevelInfoFall"
 ShopDamageText/constants/shadow_outline_size = 8
-
 ShopHintLabel/base_type = &"SemanticArchiveDialogTitle"
 ShopHintLabel/fonts/font = ExtResource("font_body")
-
 ShopItemBuyButton/base_type = &"SemanticBackpackHeadButton4"
 ShopItemBuyButton/colors/icon_hover_color = Color(0.788235, 0.811765, 0.576471, 1)
-
 ShopItemName/base_type = &"SemanticBackpackWingLabel2"
 ShopItemName/colors/font_color = Color(0, 0, 0, 1)
 ShopItemName/colors/font_shadow_color = Color(1, 1, 1, 1)
 ShopItemName/constants/outline_size = 1
 ShopItemName/constants/shadow_outline_size = 9
-
 ShopItemNumber/base_type = &"SemanticArchiveUidHash"
+ShopItemNumber/styles/focus = SubResource("empty_button")
 ShopItemNumber/styles/normal = SubResource("empty_button")
 ShopItemNumber/styles/read_only = SubResource("empty_button")
-ShopItemNumber/styles/focus = SubResource("empty_button")
-
 ShopItemSoulText/base_type = &"SemanticArchiveUidHash"
 ShopItemSoulText/colors/font_color = Color(0, 0, 0, 1)
 ShopItemSoulText/colors/font_outline_color = Color(0, 0, 0, 0)
 ShopItemSoulText/constants/outline_size = 6
-
 ShopItemSoulValue/base_type = &"SemanticArchiveFieldTitle"
 ShopItemSoulValue/colors/font_color = Color(0, 0, 0, 1)
-
 ShopMessageText/base_type = &"SemanticAnnouncementWarning2"
 ShopMessageText/colors/font_color = Color(1, 0.584314, 0, 1)
 ShopMessageText/colors/font_outline_color = Color(1, 0.584314, 0, 1)
-
 ShopPageLabel/base_type = &"SemanticArchiveDialogTitle"
-ShopPageLabel/fonts/font = ExtResource("font_body")
 ShopPageLabel/colors/font_color = Color(0, 0, 0, 1)
-
+ShopPageLabel/fonts/font = ExtResource("font_body")
 ShopRoleText/base_type = &"SemanticCureTimesCurrency"
 ShopRoleText/constants/outline_size = 10
-
 ShopSearchInput/base_type = &"LineEdit"
+ShopSearchInput/colors/caret_color = Color(0.2, 0.12, 0.07, 1)
 ShopSearchInput/colors/font_color = Color(0, 0, 0, 1)
 ShopSearchInput/colors/font_placeholder_color = Color(0, 0, 0, 1)
-ShopSearchInput/colors/caret_color = Color(0.2, 0.12, 0.07, 1)
 ShopSearchInput/colors/selection_color = Color(0.2, 0.12, 0.07, 0.25)
 ShopSearchInput/constants/outline_size = 1
 ShopSearchInput/fonts/font = ExtResource("font_accent")
+ShopSearchInput/styles/focus = SubResource("shop_search_input_texture")
 ShopSearchInput/styles/normal = SubResource("shop_search_input_texture")
 ShopSearchInput/styles/read_only = SubResource("shop_search_input_texture")
-ShopSearchInput/styles/focus = SubResource("shop_search_input_texture")
-
 ShopSearchRow/base_type = &"HBoxContainer"
 ShopSearchRow/constants/separation = -17
-
 ShopStatTitle/base_type = &"SemanticEndStatsMoreInfo"
 ShopStatTitle/constants/outline_size = 6
 ShopStatTitle/font_sizes/font_size = 24
-
 ShopTabRow/base_type = &"SemanticShopTabRow"
-
 ShopTabText/base_type = &"SemanticRoleMagicNeedText"
 ShopTabText/constants/shadow_outline_size = 8
-
 ShopTabTextStrong/base_type = &"SemanticRoleMagicNeedText"
 ShopTabTextStrong/constants/shadow_outline_size = 9
-
 ShopTitleText/base_type = &"SemanticLearnSkillTitle"
-
 SkillAwakenCheck/base_type = &"CheckBox"
 SkillAwakenCheck/colors/font_color = Color(0.84, 0.86, 0.9, 1)
 SkillAwakenCheck/colors/font_outline_color = Color(0.02, 0.03, 0.05, 0.8)
 SkillAwakenCheck/constants/outline_size = 2
-
 SkillAwakenDescription/base_type = &"SemanticLearnSkillTitle"
 SkillAwakenDescription/colors/font_color = Color(0.84, 0.86, 0.9, 1)
 SkillAwakenDescription/colors/font_outline_color = Color(0.02, 0.03, 0.05, 0.8)
-
 SkillAwakenName/base_type = &"SemanticHcHelpTabLabel"
 SkillAwakenName/colors/font_outline_color = Color(0.12, 0.06, 0, 1)
 SkillAwakenName/constants/outline_size = 4
 SkillAwakenName/font_sizes/font_size = 20
-
 SkillAwakenStatus/base_type = &"SemanticBacisInfoTime"
 SkillAwakenStatus/colors/font_color = Color(0.94, 0.73, 0.34, 1)
 SkillAwakenStatus/colors/font_outline_color = Color(0.02, 0.03, 0.05, 0.8)
 SkillAwakenStatus/constants/outline_size = 3
 SkillAwakenStatus/font_sizes/font_size = 20
-
 SkillCooldownLabel/base_type = &"SemanticBuffIconTime"
 SkillCooldownLabel/constants/outline_size = 10
 SkillCooldownLabel/font_sizes/font_size = 24
-
 SkillGridRow/base_type = &"HBoxContainer"
 SkillGridRow/constants/separation = 25
-
+SkillHeaderLabel/base_type = &"SkillLabel"
+SkillHeaderLabel/fonts/font = ExtResource("font_display")
 SkillIconButton/base_type = &"EmptyButton"
-
 SkillIconButtonTexture/base_type = &"SkillIconButton"
 SkillIconButtonTexture/styles/pressed = SubResource("skill_text_pressed")
-
 SkillIconTime/base_type = &"UserKeyTimeSmall"
-
 SkillKeySetButton/base_type = &"MenuActionButton"
-
 SkillKeySetLabel/base_type = &"SemanticBackpackTabLabelLarge"
 SkillKeySetLabel/colors/font_color = Color(1, 1, 0, 1)
 SkillKeySetLabel/constants/outline_size = 5
-
 SkillLabel/base_type = &"SettingsSection"
-
-SkillHeaderLabel/base_type = &"SkillLabel"
-SkillHeaderLabel/fonts/font = ExtResource("font_display")
-
 SkillNeedLabel/base_type = &"SemanticHcHelpTabLabel"
 SkillNeedLabel/colors/font_outline_color = Color(1, 1, 0, 1)
 SkillNeedLabel/constants/outline_size = 2
-
 SkillPopupMenu/base_type = &"PopupMenu"
 SkillPopupMenu/fonts/font = ExtResource("font_accent")
-
 SkillSelectInfo/base_type = &"SemanticHcHelpTitle"
 SkillSelectInfo/colors/font_shadow_color = Color(1, 1, 1, 1)
+SkillSelectInfo/constants/outline_size = 1
 SkillSelectInfo/constants/shadow_offset_x = 0
 SkillSelectInfo/constants/shadow_offset_y = 0
-SkillSelectInfo/constants/outline_size = 1
 SkillSelectInfo/constants/shadow_outline_size = 6
-
 SkillSelectLevel/base_type = &"SemanticMagicWeaponSkillBody"
 SkillSelectLevel/colors/font_color = Color(1, 0.584314, 0, 1)
 SkillSelectLevel/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 SkillSelectLevel/constants/shadow_outline_size = 8
-
 SkillSelectName/base_type = &"SemanticMagicWeaponSkillBody"
 SkillSelectName/colors/font_color = Color(1, 1, 0, 1)
 SkillSelectName/colors/font_outline_color = Color(1, 1, 0, 1)
 SkillSelectName/constants/shadow_outline_size = 10
-
 SkillSelectNoHave/base_type = &"SemanticDjInfoTitle"
 SkillSelectNoHave/colors/font_color = Color(1, 0, 0, 1)
 SkillSelectNoHave/constants/outline_size = 10
-
 SkillShadowLabel/base_type = &"SemanticBacisInfoTime2"
 SkillShadowLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 SkillShadowLabel/constants/shadow_outline_size = 3
-
 SkillShadowLabelPlain/base_type = &"SemanticBacisInfoTime2"
 SkillShadowLabelPlain/constants/shadow_outline_size = 3
-
 SkillSmallLabel/base_type = &"SettingsControlLabel"
-
 SkillTextButton/base_type = &"SemanticBackpackHeadButton"
-SkillTextButton/fonts/font = ExtResource("font_accent")
 SkillTextButton/font_sizes/font_size = 20
-SkillTextButton/styles/pressed = SubResource("skill_text_pressed")
+SkillTextButton/fonts/font = ExtResource("font_accent")
 SkillTextButton/styles/focus = SubResource("empty_button")
-
+SkillTextButton/styles/pressed = SubResource("skill_text_pressed")
 StrengthCost/base_type = &"BackpackTitleLabel"
-
 StrengthNumber/base_type = &"SemanticMagicWeaponActionAlt"
 StrengthNumber/colors/font_color = Color(0, 1, 0, 1)
-
 StrengthNumberSmall/base_type = &"StrengthNumber"
-
 SwordPageLevelLabel/base_type = &"SemanticBackpackTabLabelLarge"
 SwordPageLevelLabel/colors/font_color = Color(1, 1, 0, 1)
 SwordPageLevelLabel/constants/outline_size = 3
-
 SwordPageMaterialLabel/base_type = &"SemanticAnnouncementHeading"
 SwordPageMaterialLabel/constants/outline_size = 3
-
 SwordPageStatLabel/base_type = &"SemanticBackpackTabLabelLarge"
 SwordPageStatLabel/constants/outline_size = 3
-
 SynHelpBody/base_type = &"SemanticRoleNatureHp"
 SynHelpBody/colors/font_color = Color(1, 0.941176, 0.470588, 1)
-SynHelpBody/fonts/font = ExtResource("font_ui")
 SynHelpBody/font_sizes/font_size = 14
-
+SynHelpBody/fonts/font = ExtResource("font_ui")
 SynHelpSection/base_type = &"AnnouncementListGroup"
-
 SynHelpTitle/base_type = &"ShopHintLabel"
 SynHelpTitle/fonts/font = ExtResource("font_display")
-
 SynHelpTitleRow/base_type = &"HBoxContainer"
 SynHelpTitleRow/constants/separation = 33
-
 SynthesisCost/base_type = &"BackpackTitleLabel"
-
 SynthesisItemName/base_type = &"SemanticArchiveFieldTitle"
 SynthesisItemName/colors/font_outline_color = Color(1, 1, 1, 1)
 SynthesisItemName/constants/outline_size = 1
-
 SynthesisTargetDan/base_type = &"Button"
-
 SynthesisTitle/base_type = &"UseItemUpLabel"
 SynthesisTitle/fonts/font = ExtResource("font_display")
-
 TaskRewardTitle/base_type = &"SemanticRoleMagicNeedText"
 TaskRewardTitle/constants/shadow_outline_size = 6
 TaskRewardTitle/font_sizes/font_size = 14
-
 TaskTitleHeading/base_type = &"SemanticMagicWeaponSkillBody2"
 TaskTitleHeading/colors/font_outline_color = Color(1, 1, 1, 1)
 TaskTitleHeading/constants/outline_size = 1
 TaskTitleHeading/constants/shadow_outline_size = 7
-TaskTitleHeading/fonts/font = ExtResource("font_accent")
 TaskTitleHeading/font_sizes/font_size = 28
-
+TaskTitleHeading/fonts/font = ExtResource("font_accent")
 TaskTitleStatus/base_type = &"SemanticGameInfoBodyText2"
 TaskTitleStatus/colors/font_color = Color(0, 1, 1, 1)
 TaskTitleStatus/colors/font_outline_color = Color(0, 1, 1, 1)
-
 TouchTextLabel/base_type = &"SemanticHcHelpTitle"
 TouchTextLabel/fonts/font = ExtResource("font_ui")
-
 TouchTextMargin/base_type = &"MarginContainer"
-TouchTextMargin/constants/margin_left = 25
-TouchTextMargin/constants/margin_top = 25
-TouchTextMargin/constants/margin_right = 25
 TouchTextMargin/constants/margin_bottom = 25
-
+TouchTextMargin/constants/margin_left = 25
+TouchTextMargin/constants/margin_right = 25
+TouchTextMargin/constants/margin_top = 25
 TowerButton/base_type = &"SemanticBacisInfoTime"
 TowerButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 TowerButton/colors/font_hover_color = Color(1, 0.956863, 0.74902, 1)
 TowerButton/constants/outline_size = 2
 TowerButton/font_sizes/font_size = 18
-TowerButton/styles/normal = SubResource("tower_button_normal")
 TowerButton/styles/hover = SubResource("tower_button_hover")
+TowerButton/styles/normal = SubResource("tower_button_normal")
 TowerButton/styles/pressed = SubResource("tower_button_hover")
-
 TowerButtonSmall/base_type = &"TowerButton"
 TowerButtonSmall/font_sizes/font_size = 16
-
 TowerContent/base_type = &"SemanticAnnouncementPasswordContent"
-
 TowerFloorInput/base_type = &"SemanticArchiveLoginInput"
-TowerFloorInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
-TowerFloorInput/colors/caret_color = Color(1.0, 0.85098, 0.478431, 1.0)
+TowerFloorInput/colors/caret_color = Color(1, 0.85098, 0.478431, 1)
 TowerFloorInput/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 TowerFloorInput/colors/font_placeholder_color = Color(1, 0.956863, 0.74902, 0.7)
+TowerFloorInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
 TowerFloorInput/constants/outline_size = 2
-TowerFloorInput/fonts/font = ExtResource("font_accent")
 TowerFloorInput/font_sizes/font_size = 20
-TowerFloorInput/styles/normal = SubResource("tower_button_normal")
+TowerFloorInput/fonts/font = ExtResource("font_accent")
 TowerFloorInput/styles/focus = SubResource("tower_button_hover")
-
+TowerFloorInput/styles/normal = SubResource("tower_button_normal")
 TowerFloorPicker/base_type = &"HBoxContainer"
 TowerFloorPicker/constants/separation = 12
-
 TowerFloorText/base_type = &"SemanticConstellationTitle"
 TowerFloorText/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 TowerFloorText/constants/outline_size = 3
-
 TowerHintText/base_type = &"SemanticAnnouncementWarning2"
 TowerHintText/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
 TowerLabel/base_type = &"SemanticLearnSkillTitle"
 TowerLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 TowerLabel/font_sizes/font_size = 20
-
 TowerOptions/base_type = &"VBoxContainer"
-
 TowerPanel/base_type = &"PanelContainer"
 TowerPanel/styles/panel = SubResource("tower_panel")
-
 TowerRow/base_type = &"HBoxContainer"
 TowerRow/constants/separation = 8
-
 TowerSmallLabel/base_type = &"TowerLabel"
 TowerSmallLabel/font_sizes/font_size = 16
-
 TransCollectValue/base_type = &"SemanticConstellationTitle"
 TransCollectValue/colors/font_color = Color(0, 0, 0, 1)
 TransCollectValue/colors/font_shadow_color = Color(0, 0, 0, 1)
-
 TransGrid/base_type = &"GridContainer"
 TransGrid/constants/h_separation = 14
 TransGrid/constants/v_separation = 16
-
 TransPage/base_type = &"SemanticDjInfoTitle"
 TransPage/constants/outline_size = 7
-
 TransRoleLabel/base_type = &"SemanticDecomposeTitle2"
 TransRoleLabel/constants/outline_size = 10
 TransRoleLabel/font_sizes/font_size = 40
-
 TransSlotLabel/base_type = &"SemanticHcHelpTabLabel"
 TransSlotLabel/constants/outline_size = 9
 TransSlotLabel/font_sizes/font_size = 20
-
 TransTabLabel/base_type = &"SemanticSynthesisTitle"
-
 TransTabRow/base_type = &"ShopTabRow"
-
 TransTips/base_type = &"SemanticAnnouncementCheckButton"
 TransTips/constants/outline_size = 10
 TransTips/fonts/font = ExtResource("font_accent")
-
 TransTipsSmall/base_type = &"SemanticArchiveFieldTitle"
 TransTipsSmall/constants/outline_size = 8
 TransTipsSmall/fonts/font = ExtResource("font_accent")
-
 TransmogrifiedActionLabel/base_type = &"SemanticChangeClothesAction"
 TransmogrifiedActionLabel/fonts/font = ExtResource("font_body")
-
 TransmogrifiedEqName/base_type = &"SemanticChooseSceneText"
 TransmogrifiedEqName/constants/shadow_outline_size = 11
-
 TransmogrifiedHaveOrNot/base_type = &"SemanticBacisInfoTime2"
 TransmogrifiedHaveOrNot/colors/font_color = Color(1, 0, 0, 1)
-TransmogrifiedHaveOrNot/colors/font_shadow_color = Color(0, 0, 0, 1)
 TransmogrifiedHaveOrNot/colors/font_outline_color = Color(1, 0, 0, 1)
+TransmogrifiedHaveOrNot/colors/font_shadow_color = Color(0, 0, 0, 1)
 TransmogrifiedHaveOrNot/constants/shadow_offset_x = 0
 TransmogrifiedHaveOrNot/constants/shadow_offset_y = 0
 TransmogrifiedHaveOrNot/constants/shadow_outline_size = 8
-
 UseItemDownLabel/base_type = &"SemanticSynthesisTitle"
 UseItemDownLabel/font_sizes/font_size = 36
-
 UseItemInput/base_type = &"LineEdit"
 UseItemInput/colors/font_color = Color(1, 1, 1, 1)
 UseItemInput/constants/outline_size = 6
-
 UseItemKey/base_type = &"TransTabLabel"
-
 UseItemMaxLabel/base_type = &"SemanticSynthesisTitle"
 UseItemMaxLabel/font_sizes/font_size = 10
-
 UseItemMinLabel/base_type = &"SemanticChangeClothesAction"
-
 UseItemName/base_type = &"SemanticForgeMaterialNeed"
 UseItemName/colors/font_color = Color(1, 1, 0, 1)
-
 UseItemStatName/base_type = &"SemanticForgeMaterialNeed"
-
 UseItemUpLabel/base_type = &"SemanticSynthesisTitle"
 UseItemUpLabel/font_sizes/font_size = 32
-
 UseItemsTitle/base_type = &"SemanticDecomposeTitle"
-
 UseMagicPage/base_type = &"SemanticEndStatsMoreInfo"
 UseMagicPage/constants/outline_size = 6
-
 UseMagicRow/base_type = &"LevelInfoFilterGroup"
-
 UseMagicTitle/base_type = &"SemanticBaseThroughLevelNotice"
 UseMagicTitle/colors/font_color = Color(1, 0.584314, 0, 1)
 UseMagicTitle/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 UseMagicTitle/constants/shadow_outline_size = 10
-
 UserKeyKey/base_type = &"SemanticComKeyLabel"
 UserKeyKey/constants/shadow_outline_size = 8
 UserKeyKey/font_sizes/font_size = 24
-
 UserKeyTime/base_type = &"SemanticArchiveDialogTitle"
-UserKeyTime/fonts/font = ExtResource("font_body")
 UserKeyTime/constants/outline_size = 9
-
+UserKeyTime/fonts/font = ExtResource("font_body")
 UserKeyTimeSmall/base_type = &"Label"
 UserKeyTimeSmall/constants/outline_size = 9
-
 UserLoadIdRow/base_type = &"ShopTabRow"
-
 UserLoadInputLabel/base_type = &"SemanticBuffIconTime"
 UserLoadInputLabel/constants/outline_size = 10
 UserLoadInputLabel/font_sizes/font_size = 18
-
 UserLoadKeyRow/base_type = &"BackpackPageRow"
-
 UserLoadTitle/base_type = &"SemanticDecomposeTitle2"
 UserLoadTitle/constants/outline_size = 7
 UserLoadTitle/font_sizes/font_size = 36
-
 VictoryInfoLabel/base_type = &"HcHelpPage"
-
 VictoryMoreButton/base_type = &"SemanticBackpackHeadButton4"
 VictoryMoreButton/colors/font_color = Color(1, 0.584314, 0, 1)
-VictoryMoreButton/colors/font_pressed_color = Color(1, 0.584314, 0, 1)
 VictoryMoreButton/colors/font_disabled_color = Color(1, 0.584314, 0, 1)
+VictoryMoreButton/colors/font_pressed_color = Color(1, 0.584314, 0, 1)
 VictoryMoreButton/constants/outline_size = 5
-VictoryMoreButton/fonts/font = ExtResource("font_accent")
 VictoryMoreButton/font_sizes/font_size = 28
-
+VictoryMoreButton/fonts/font = ExtResource("font_accent")
 WanLingAttributeContent/base_type = &"TowerContent"
-
 WanLingAttributeMargin/base_type = &"MarginContainer"
-WanLingAttributeMargin/constants/margin_left = 14
-WanLingAttributeMargin/constants/margin_top = 12
-WanLingAttributeMargin/constants/margin_right = 14
 WanLingAttributeMargin/constants/margin_bottom = 12
-
+WanLingAttributeMargin/constants/margin_left = 14
+WanLingAttributeMargin/constants/margin_right = 14
+WanLingAttributeMargin/constants/margin_top = 12
 WanLingAttributeText/base_type = &"SemanticBacisInfoTime"
 WanLingAttributeText/colors/font_color = Color(0.76, 0.9, 0.83, 1)
-
 WanLingAttributeTitle/base_type = &"SemanticBacisInfoTime"
 WanLingAttributeTitle/colors/font_color = Color(1, 0.84, 0.54, 1)
 WanLingAttributeTitle/font_sizes/font_size = 20
-
 WanLingCategoryList/base_type = &"SettingsGroup"
-
 WanLingCategoryMargin/base_type = &"SemanticDjInfoMargin"
 WanLingCategoryMargin/constants/margin_left = 9
 WanLingCategoryMargin/constants/margin_right = 9
-
 WanLingCloseButton/base_type = &"SemanticBacisInfoTime"
 WanLingCloseButton/colors/font_color = Color(1, 0.956863, 0.74902, 1)
 WanLingCloseButton/colors/font_hover_color = Color(1, 1, 1, 1)
 WanLingCloseButton/font_sizes/font_size = 24
+WanLingCloseButton/styles/hover = SubResource("wan_ling_close_hover")
 WanLingCloseButton/styles/normal = SubResource("wan_ling_close_normal")
 WanLingCloseButton/styles/pressed = SubResource("wan_ling_close_normal")
-WanLingCloseButton/styles/hover = SubResource("wan_ling_close_hover")
-
 WanLingEmptyLabel/base_type = &"SemanticLearnSkillLevelValue"
 WanLingEmptyLabel/colors/font_color = Color(0.67, 0.72, 0.73, 1)
-
 WanLingMonsterGrid/base_type = &"SemanticConstellationGrid"
 WanLingMonsterGrid/constants/v_separation = 9
-
 WanLingSectionPanel/base_type = &"ArchivePopupPanel"
-
 WanLingSectionTitle/base_type = &"SemanticLearnSkillLevelValue"
 WanLingSectionTitle/colors/font_color = Color(0.76, 0.9, 0.83, 1)
-
 WanLingStagePanel/base_type = &"Panel"
 WanLingStagePanel/styles/panel = SubResource("wan_ling_stage_panel")
-
 WanLingTitle/base_type = &"SemanticBacisInfoTime"
 WanLingTitle/colors/font_color = Color(1, 0.84, 0.54, 1)
 WanLingTitle/constants/outline_size = 3
 WanLingTitle/font_sizes/font_size = 28
-
 ZhenFaActiveLabel/base_type = &"SemanticGameInfoBodyText2"
 ZhenFaActiveLabel/colors/font_color = Color(1, 0.290196, 0, 1)
 ZhenFaActiveLabel/colors/font_outline_color = Color(1, 0.290196, 0, 1)
 ZhenFaActiveLabel/font_sizes/font_size = 24
-
 ZhenFaCurrentLabel/base_type = &"SemanticBdSkillTitle"
 ZhenFaCurrentLabel/colors/font_color = Color(0, 0, 0, 1)
 ZhenFaCurrentLabel/colors/font_shadow_color = Color(1, 1, 1, 1)
 ZhenFaCurrentLabel/constants/shadow_offset_x = 0
 ZhenFaCurrentLabel/constants/shadow_offset_y = 0
 ZhenFaCurrentLabel/constants/shadow_outline_size = 7
-
 ZhenFaCurrentName/base_type = &"SemanticDjInfoTitle"
 ZhenFaCurrentName/colors/font_color = Color(0, 0, 0, 1)
 ZhenFaCurrentName/colors/font_outline_color = Color(1, 1, 1, 1)
 ZhenFaCurrentName/constants/outline_size = 5
-
 ZhenFaEmptyButton/base_type = &"EmptyButton"
-
 ZhenFaHelpBody/base_type = &"SemanticBaseThroughLevelNotice"
 ZhenFaHelpBody/colors/font_color = Color(0, 1, 1, 1)
 ZhenFaHelpBody/colors/font_outline_color = Color(0, 1, 1, 1)
 ZhenFaHelpBody/constants/shadow_outline_size = 9
-
 ZhenFaHelpTitle/base_type = &"SemanticBacisInfoTime2"
-ZhenFaHelpTitle/fonts/font = ExtResource("font_display")
 ZhenFaHelpTitle/colors/font_color = Color(0, 0, 0, 1)
 ZhenFaHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
 ZhenFaHelpTitle/constants/shadow_offset_x = 0
 ZhenFaHelpTitle/constants/shadow_offset_y = 0
 ZhenFaHelpTitle/constants/shadow_outline_size = 5
 ZhenFaHelpTitle/font_sizes/font_size = 28
-
+ZhenFaHelpTitle/fonts/font = ExtResource("font_display")
 ZhenFaInfoAddProp/base_type = &"PelletMpTab"
-
 ZhenFaInfoBodyGroup/base_type = &"TowerContent"
-
 ZhenFaInfoLevelLabel/base_type = &"PelletLuckyTab"
-
 ZhenFaInfoPropGroup/base_type = &"PetSkillList"
-
 ZhenFaInfoPropLabel/base_type = &"SemanticGameInfoBodyText2"
 ZhenFaInfoPropLabel/colors/font_color = Color(0.827451, 0.552941, 0, 1)
 ZhenFaInfoPropLabel/colors/font_outline_color = Color(0.827451, 0.552941, 0, 1)
 ZhenFaInfoPropLabel/font_sizes/font_size = 18
-
 ZhenFaInfoSkill/base_type = &"SemanticZhenFaInfoSkill"
-
 ZhenFaNameLabel/base_type = &"SemanticChooseItemTitle"
 ZhenFaNameLabel/colors/font_color = Color(1, 0.584314, 0, 1)
 ZhenFaNameLabel/constants/outline_size = 7
-
 ZhenFaSourceLabel/base_type = &"SemanticGameInfoBodyText2"
 ZhenFaSourceLabel/colors/font_color = Color(0, 0.6, 1, 1)
 ZhenFaSourceLabel/colors/font_outline_color = Color(0, 0.6, 1, 1)
-
 ZhenFaTabLabel/base_type = &"SemanticBdSkillTitle"
 ZhenFaTabLabel/colors/font_color = Color(1, 0.415686, 0, 1)
-ZhenFaTabLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 ZhenFaTabLabel/colors/font_outline_color = Color(1, 0.415686, 0, 1)
+ZhenFaTabLabel/colors/font_shadow_color = Color(0, 0, 0, 1)
 ZhenFaTabLabel/constants/shadow_offset_x = 0
 ZhenFaTabLabel/constants/shadow_offset_y = 0
 ZhenFaTabLabel/constants/shadow_outline_size = 10
-
 ZhenFaTabRow/base_type = &"AnnouncementFunctionColumns"
-
 ZhenFaTuPoHeader/base_type = &"PelletLuckyTab"
-
 ZhenFaTuPoList/base_type = &"PetSkillList"
-
 ZhenFaTuPoNeed/base_type = &"BackpackTitleLabel"
-
 ZhenFaTuPoNeedNote/base_type = &"PetFormationLevel"
-
 ZhenFaTuPoProp/base_type = &"PelletLuckyTab"
-
 ZhenFaTuPoSkill/base_type = &"ZhenFaInfoSkill"
-
 ZhenYanLevelInfo/base_type = &"PelletLuckyTab"
-
 ZhenYanNeedNote/base_type = &"PetFormationLevel"
-
 ZhenYanNeedNum/base_type = &"SemanticBuffIconTimes"
 ZhenYanNeedNum/colors/font_color = Color(1, 0, 0, 1)
-
 ZhenYanNeedTitle/base_type = &"SemanticLlbtCureText2"
 ZhenYanNeedTitle/colors/font_outline_color = Color(1, 1, 1, 1)
-
 ZhenYanPropInfo/base_type = &"ZhenFaInfoSkill"
-
 ZhenYanPropList/base_type = &"MenuActionButtonGroup"
-
 ZhenYanSlotButton/base_type = &"EmptyButton"
-
 ZhenYanSlotLabel/base_type = &"SemanticMagicWeaponSkillBody2"
 ZhenYanSlotLabel/colors/font_color = Color(1, 0.584314, 0, 1)
 ZhenYanSlotLabel/colors/font_outline_color = Color(1, 0.584314, 0, 1)
 ZhenYanSlotLabel/constants/outline_size = 1
 ZhenYanSlotLabel/constants/shadow_outline_size = 7
-
-SemanticAnnouncementAlert/base_type = &"Label"
-SemanticAnnouncementAlert/fonts/font = ExtResource("font_ui")
-
-SemanticAnnouncementHeading/base_type = &"Label"
-SemanticAnnouncementHeading/fonts/font = ExtResource("font_accent")
-
-SemanticBacisInfoTime/base_type = &"Label"
-SemanticBacisInfoTime/fonts/font = ExtResource("font_accent")
-
-SemanticAutoBattleHint/base_type = &"Label"
-SemanticAutoBattleHint/fonts/font = ExtResource("font_display")
-
-SemanticAnnouncementButton/base_type = &"Button"
-SemanticAnnouncementButton/colors/font_hover_color = Color(1, 0.415686, 0, 1)
-
-SemanticBacisInfoName/base_type = &"Label"
-SemanticBacisInfoName/font_sizes/font_size = 14
-
-SemanticAnnouncementCheckButton/base_type = &"Label"
-SemanticAnnouncementCheckButton/font_sizes/font_size = 20
-
-SemanticArchiveUidHash/base_type = &"Label"
-SemanticArchiveUidHash/font_sizes/font_size = 12
-
-SemanticBoxItemNumber/base_type = &"Label"
-SemanticBoxItemNumber/colors/font_shadow_color = Color(0, 0, 0, 1)
-
-SemanticBuffIconTime/base_type = &"Label"
-SemanticBuffIconTime/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticArchiveDialogTitle/base_type = &"Control"
-SemanticArchiveDialogTitle/fonts/font = ExtResource("font_display")
-SemanticArchiveDialogTitle/font_sizes/font_size = 24
-
-SemanticArchiveFieldTitle/base_type = &"Control"
-SemanticArchiveFieldTitle/font_sizes/font_size = 18
-
-SemanticArchiveDeleteButton/base_type = &"Button"
-SemanticArchiveDeleteButton/styles/hover = SubResource("empty_button")
-
-SemanticAnnouncementPasswordContent/base_type = &"Control"
-SemanticAnnouncementPasswordContent/constants/separation = 10
-
-SemanticHcHelpTitle/base_type = &"Control"
-SemanticHcHelpTitle/colors/font_color = Color(0, 0, 0, 1)
-
-SemanticBodyTrainingDetailMaterial/base_type = &"Control"
-SemanticBodyTrainingDetailMaterial/constants/outline_size = 3
-
-SemanticBackpackActionButton/base_type = &"Button"
-SemanticBackpackActionButton/colors/font_color = Color(1, 1, 1, 1)
-
-SemanticChooseMusicList/base_type = &"Control"
-SemanticChooseMusicList/constants/separation = 6
-
-SemanticAnnouncementListGroup/base_type = &"Control"
-SemanticAnnouncementListGroup/constants/separation = 15
-
-SemanticConstellationGrid/base_type = &"Control"
-SemanticConstellationGrid/constants/h_separation = 8
-
-SemanticShopTabRow/base_type = &"Control"
-SemanticShopTabRow/constants/separation = -2
-
-SemanticBossInfoTitle/base_type = &"Control"
-SemanticBossInfoTitle/fonts/font = ExtResource("font_display")
-SemanticBossInfoTitle/font_sizes/font_size = 28
-
-SemanticBuffIconTimes/base_type = &"Control"
-SemanticBuffIconTimes/constants/outline_size = 5
-
-SemanticBacisInfoLevel/base_type = &"Control"
-SemanticBacisInfoLevel/fonts/font = ExtResource("font_accent")
-
-SemanticMagicWeaponSkillGroup/base_type = &"Control"
-SemanticMagicWeaponSkillGroup/constants/separation = 7
-
-SemanticBackpackEquipmentColumn/base_type = &"Control"
-SemanticBackpackEquipmentColumn/constants/separation = 20
-
-SemanticBacisInfoVBox/base_type = &"Control"
-SemanticBacisInfoVBox/constants/separation = 0
-
-SemanticBackpackWingLabel/base_type = &"SemanticAnnouncementAlert"
-SemanticBackpackWingLabel/constants/shadow_offset_x = 0
-
-SemanticAnnouncementWarning2/base_type = &"SemanticAnnouncementAlert"
-SemanticAnnouncementWarning2/constants/outline_size = 2
-
-SemanticBacisInfoTime2/base_type = &"SemanticBacisInfoTime"
-SemanticBacisInfoTime2/constants/outline_size = 1
-
-SemanticBasicMonmentText2/base_type = &"SemanticAnnouncementAlert"
-SemanticBasicMonmentText2/constants/outline_size = 1
-
-SemanticAutoBattleTitle/base_type = &"SemanticAutoBattleHint"
-SemanticAutoBattleTitle/font_sizes/font_size = 24
-
-SemanticBackpackTabLabelLarge/base_type = &"SemanticAnnouncementHeading"
-SemanticBackpackTabLabelLarge/font_sizes/font_size = 18
-
-SemanticSellFilterCs2/base_type = &"CheckBox"
-SemanticSellFilterCs2/constants/outline_size = 1
-SemanticSellFilterCs2/fonts/font = ExtResource("font_ui")
-
-SemanticBodyTrainingLevelLabel2/base_type = &"SemanticBacisInfoName"
-SemanticBodyTrainingLevelLabel2/constants/outline_size = 3
-
-SemanticEndStatsMoreInfo/base_type = &"SemanticAnnouncementHeading"
-SemanticEndStatsMoreInfo/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticDecomposeTitle2/base_type = &"SemanticAutoBattleHint"
-SemanticDecomposeTitle2/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticBackpackHeadButton/base_type = &"SemanticArchiveDeleteButton"
-SemanticBackpackHeadButton/styles/normal = SubResource("empty_button")
-
-SemanticDjInfoTitle/base_type = &"SemanticAnnouncementHeading"
-SemanticDjInfoTitle/font_sizes/font_size = 20
-
-SemanticHcHelpTabLabel/base_type = &"SemanticBacisInfoTime"
-SemanticHcHelpTabLabel/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticAutoBattleSectionLabel/base_type = &"SemanticAutoBattleHint"
-SemanticAutoBattleSectionLabel/font_sizes/font_size = 20
-
-SemanticSynthesisTitle/base_type = &"SemanticBuffIconTime"
-SemanticSynthesisTitle/constants/outline_size = 6
-
-SemanticLearnSkillTitle/base_type = &"SemanticBacisInfoTime"
-SemanticLearnSkillTitle/constants/outline_size = 2
-
-SemanticChooseItemTitle/base_type = &"SemanticAnnouncementHeading"
-SemanticChooseItemTitle/font_sizes/font_size = 24
-
-SemanticLoadSceneNotice/base_type = &"SemanticAnnouncementHeading"
-SemanticLoadSceneNotice/constants/outline_size = 6
-
-SemanticForgeMaterialNeed/base_type = &"SemanticBacisInfoName"
-SemanticForgeMaterialNeed/constants/outline_size = 6
-
-SemanticChangeClothesAction2/base_type = &"SemanticArchiveUidHash"
-SemanticChangeClothesAction2/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticPetBookCount/base_type = &"SemanticArchiveUidHash"
-SemanticPetBookCount/constants/outline_size = 3
-
-SemanticConstellationTitle/base_type = &"SemanticAnnouncementAlert"
-SemanticConstellationTitle/font_sizes/font_size = 20
-
-SemanticRoleNatureHp/base_type = &"SemanticAnnouncementHeading"
-SemanticRoleNatureHp/fonts/font = ExtResource("font_body")
-SemanticRoleNatureHp/font_sizes/font_size = 12
-
-SemanticLearnSkillLevelValue/base_type = &"SemanticBacisInfoTime"
-SemanticLearnSkillLevelValue/font_sizes/font_size = 24
-
-SemanticBossBloodName/base_type = &"SemanticAutoBattleHint"
-SemanticBossBloodName/font_sizes/font_size = 28
-
-SemanticBodyTrainingDetailLevel/base_type = &"SemanticAnnouncementCheckButton"
-SemanticBodyTrainingDetailLevel/constants/outline_size = 3
-
-SemanticEquipmentItemHighlight/base_type = &"SemanticAnnouncementCheckButton"
-SemanticEquipmentItemHighlight/constants/outline_size = 1
-
-SemanticMagicWeaponActionAlt/base_type = &"SemanticAnnouncementCheckButton"
-SemanticMagicWeaponActionAlt/constants/outline_size = 6
-
-SemanticChoosePlayerRoleName/base_type = &"SemanticBoxItemNumber"
-SemanticChoosePlayerRoleName/constants/shadow_offset_x = 2
-
-SemanticArchiveLoginInput/base_type = &"Control"
-SemanticArchiveLoginInput/colors/caret_color = Color(1.0, 0.85098, 0.478431, 1.0)
-SemanticArchiveLoginInput/colors/selection_color = Color(0.752941, 0.611765, 0.337255, 0.45)
-
-SemanticDjInfoMargin/base_type = &"Control"
-SemanticDjInfoMargin/constants/margin_top = 10
-SemanticDjInfoMargin/constants/margin_bottom = 10
-
-SemanticBackpackWingLabel2/base_type = &"SemanticBackpackWingLabel"
-SemanticBackpackWingLabel2/constants/shadow_offset_y = 0
-
-SemanticEndStatsCritCount/base_type = &"SemanticAnnouncementWarning2"
-SemanticEndStatsCritCount/font_sizes/font_size = 24
-
-SemanticBdSkillTitle/base_type = &"SemanticBacisInfoTime2"
-SemanticBdSkillTitle/font_sizes/font_size = 24
-
-SemanticBackpackHeadButton2/base_type = &"SemanticBackpackHeadButton"
-SemanticBackpackHeadButton2/styles/pressed = SubResource("empty_button")
-
-SemanticBdSkillName/base_type = &"SemanticBacisInfoTime2"
-SemanticBdSkillName/font_sizes/font_size = 20
-
-SemanticBodyTrainingLevelLabel/base_type = &"SemanticBodyTrainingLevelLabel2"
-SemanticBodyTrainingLevelLabel/colors/font_color = Color(1, 0.956863, 0.74902, 1)
-
-SemanticMagicWeaponSkillBody2/base_type = &"SemanticBoxItemNumber"
-SemanticMagicWeaponSkillBody2/constants/shadow_offset_x = 0
-SemanticMagicWeaponSkillBody2/constants/shadow_offset_y = 0
-
-SemanticBasicMonmentText/base_type = &"SemanticBasicMonmentText2"
-SemanticBasicMonmentText/colors/font_outline_color = Color(1, 1, 1, 1)
-
-SemanticDecomposeTitle/base_type = &"SemanticDecomposeTitle2"
-SemanticDecomposeTitle/constants/outline_size = 6
-
-SemanticAnnouncementWarning/base_type = &"SemanticAnnouncementWarning2"
-SemanticAnnouncementWarning/colors/font_shadow_color = Color(0, 0, 0, 1)
-
-SemanticLetterBody/base_type = &"SemanticBasicMonmentText2"
-SemanticLetterBody/colors/font_color = Color(0, 0, 0, 1)
-
-SemanticCureTimesCurrency/base_type = &"SemanticAutoBattleTitle"
-SemanticCureTimesCurrency/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticChangeClothesAction/base_type = &"SemanticChangeClothesAction2"
-SemanticChangeClothesAction/constants/outline_size = 6
-
-SemanticBackpackWingLabel3/base_type = &"SemanticBackpackWingLabel2"
-SemanticBackpackWingLabel3/colors/font_shadow_color = Color(0, 0, 0, 1)
-
-SemanticBuffInformationText/base_type = &"SemanticBackpackWingLabel2"
-SemanticBuffInformationText/constants/outline_size = 2
-
-SemanticArchiveActionButtonSmall/base_type = &"SemanticAnnouncementButton"
-SemanticArchiveActionButtonSmall/styles/normal = SubResource("sub_CloudInput")
-SemanticArchiveActionButtonSmall/styles/pressed = SubResource("sub_CloudButtonHover")
-SemanticArchiveActionButtonSmall/styles/hover = SubResource("sub_CloudButtonHover")
-
-SemanticBackpackHeadButton3/base_type = &"SemanticBackpackHeadButton2"
-SemanticBackpackHeadButton3/styles/disabled = SubResource("empty_button")
-
-SemanticDefeatYellowLabel/base_type = &"SemanticBasicMonmentText2"
-SemanticDefeatYellowLabel/colors/font_color = Color(1, 1, 0, 1)
-SemanticDefeatYellowLabel/colors/font_outline_color = Color(1, 1, 0, 1)
-
-SemanticMagicWeaponSkillBody/base_type = &"SemanticMagicWeaponSkillBody2"
-SemanticMagicWeaponSkillBody/constants/outline_size = 2
-
-SemanticBackpackWingLabel4/base_type = &"SemanticBackpackWingLabel3"
-SemanticBackpackWingLabel4/constants/outline_size = 1
-
-SemanticBaseThroughLevelNotice/base_type = &"SemanticBackpackWingLabel3"
-SemanticBaseThroughLevelNotice/constants/outline_size = 2
-
-SemanticArchiveActionButtonSmall2/base_type = &"SemanticArchiveActionButtonSmall"
-SemanticArchiveActionButtonSmall2/colors/font_color = Color(1, 1, 1, 1)
-
-SemanticPelletAttValue2/base_type = &"SemanticBuffInformationText"
-SemanticPelletAttValue2/font_sizes/font_size = 20
-
-SemanticBackpackHeadButton4/base_type = &"SemanticBackpackHeadButton3"
-SemanticBackpackHeadButton4/styles/focus = SubResource("empty_button")
-
-SemanticAnnouncementButton2/base_type = &"SemanticAnnouncementButton"
-SemanticAnnouncementButton2/styles/normal = SubResource("empty_button")
-SemanticAnnouncementButton2/styles/pressed = SubResource("empty_button")
-SemanticAnnouncementButton2/styles/hover = SubResource("empty_button")
-SemanticAnnouncementButton2/styles/disabled = SubResource("empty_button")
-SemanticAnnouncementButton2/styles/focus = SubResource("empty_button")
-
-SemanticLlbtCureText2/base_type = &"SemanticBackpackWingLabel4"
-SemanticLlbtCureText2/constants/shadow_outline_size = 7
-
-SemanticGameInfoBodyText2/base_type = &"SemanticBaseThroughLevelNotice"
-SemanticGameInfoBodyText2/constants/shadow_outline_size = 7
-
-SemanticComKeyLabel/base_type = &"SemanticBackpackWingLabel4"
-SemanticComKeyLabel/colors/font_color = Color(1, 1, 0, 1)
-
-SemanticPelletAttValue/base_type = &"SemanticPelletAttValue2"
-SemanticPelletAttValue/constants/shadow_outline_size = 7
-
-SemanticRoleMagicNeedText/base_type = &"SemanticBackpackWingLabel4"
-SemanticRoleMagicNeedText/colors/font_outline_color = Color(1, 1, 1, 1)
-
-SemanticDecomposeHelpTitle/base_type = &"SemanticBuffInformationText"
-SemanticDecomposeHelpTitle/colors/font_color = Color(0, 0, 0, 1)
-SemanticDecomposeHelpTitle/colors/font_shadow_color = Color(1, 1, 1, 1)
-
-SemanticDecomposeHelpBody/base_type = &"SemanticBackpackWingLabel4"
-SemanticDecomposeHelpBody/constants/shadow_outline_size = 10
-
-SemanticChooseSceneText/base_type = &"SemanticBaseThroughLevelNotice"
-SemanticChooseSceneText/colors/font_outline_color = Color(1, 1, 1, 1)
-
-SemanticArchiveCloudButton/base_type = &"SemanticArchiveActionButtonSmall2"
-SemanticArchiveCloudButton/font_sizes/font_size = 20
-
-SemanticBackpackActionButton2/base_type = &"SemanticBackpackActionButton"
-SemanticBackpackActionButton2/font_sizes/font_size = 14
-SemanticBackpackActionButton2/styles/normal = SubResource("sub_StyleBoxFlat_pet_page")
-SemanticBackpackActionButton2/styles/pressed = SubResource("sub_StyleBoxFlat_pet_page_hover")
-SemanticBackpackActionButton2/styles/hover = SubResource("sub_StyleBoxFlat_pet_page_hover")
-SemanticBackpackActionButton2/styles/disabled = SubResource("sub_StyleBoxFlat_pet_page_hover")
-
-SemanticAnnouncementButton3/base_type = &"SemanticAnnouncementButton2"
-SemanticAnnouncementButton3/fonts/font = ExtResource("font_display")
-
-SemanticLearnSkillButton/base_type = &"SemanticAnnouncementButton2"
-SemanticLearnSkillButton/fonts/font = ExtResource("font_accent")
-
-SemanticGameInfoBodyText3/base_type = &"SemanticGameInfoBodyText2"
-SemanticGameInfoBodyText3/font_sizes/font_size = 20
-
-SemanticLevelInfoFall/base_type = &"SemanticComKeyLabel"
-SemanticLevelInfoFall/colors/font_outline_color = Color(1, 1, 0, 1)
-
-SemanticSellFilterCs/base_type = &"SemanticSellFilterCs2"
-SemanticSellFilterCs/styles/normal = SubResource("empty_button")
-SemanticSellFilterCs/styles/pressed = SubResource("empty_button")
-SemanticSellFilterCs/styles/hover = SubResource("empty_button")
-SemanticSellFilterCs/styles/hover_pressed = SubResource("empty_button")
-SemanticSellFilterCs/styles/disabled = SubResource("empty_button")
-SemanticSellFilterCs/styles/focus = SubResource("empty_button")
-
-SemanticLlbtCureText/base_type = &"SemanticLlbtCureText2"
-SemanticLlbtCureText/colors/font_color = Color(1, 1, 0, 1)
-SemanticLlbtCureText/colors/font_outline_color = Color(1, 1, 0, 1)
-
-SemanticGameNeedKnowButton/base_type = &"SemanticAnnouncementButton3"
-SemanticGameNeedKnowButton/colors/font_color = Color(1, 1, 1, 1)
-
-SemanticLearnSkillButton2/base_type = &"SemanticLearnSkillButton"
-SemanticLearnSkillButton2/font_sizes/font_size = 24
-
-SemanticGameInfoBodyText/base_type = &"SemanticGameInfoBodyText3"
-SemanticGameInfoBodyText/colors/font_outline_color = Color(1, 1, 1, 1)
-
-SemanticZhenFaInfoSkill/base_type = &"SemanticLlbtCureText2"
-SemanticZhenFaInfoSkill/colors/font_color = Color(1, 0.415686, 0, 1)
-SemanticZhenFaInfoSkill/colors/font_outline_color = Color(1, 0.415686, 0, 1)
-
-SemanticWanLingMainLabel/base_type = &"Label"
-SemanticWanLingMainLabel/fonts/font = ExtResource("font_accent")
-
-SemanticWanLingMainButton/base_type = &"Button"
-SemanticWanLingMainButton/fonts/font = ExtResource("font_accent")
-
-SemanticMountMainLabel/base_type = &"Label"
-SemanticMountMainLabel/fonts/font = ExtResource("font_accent")
-
-SemanticMountMainButton/base_type = &"Button"
-SemanticMountMainButton/fonts/font = ExtResource("font_accent")
-
-SemanticTowerMainLabel/base_type = &"Label"
-SemanticTowerMainLabel/fonts/font = ExtResource("font_accent")
-
-SemanticTowerMainButton/base_type = &"Button"
-SemanticTowerMainButton/fonts/font = ExtResource("font_accent")
-
-SemanticTowerMainInput/base_type = &"LineEdit"
-SemanticTowerMainInput/fonts/font = ExtResource("font_accent")
-
-SemanticLearnSkillMainLabel/base_type = &"Label"
-SemanticLearnSkillMainLabel/fonts/font = ExtResource("font_accent")
-
-SemanticLearnSkillMainButton/base_type = &"Button"
-SemanticLearnSkillMainButton/fonts/font = ExtResource("font_accent")
-
-SetMenuHintLabel/base_type = &"Label"
-SetMenuHintLabel/fonts/font = ExtResource("font_display")
-SetMenuHintLabel/font_sizes/font_size = 24

@@ -1,16 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://d14r6jardtheh"]
 
-[ext_resource type="Script" path="res://Script/main_menu/game_announcement.gd" id="1"]
-
-[ext_resource type="Texture2D" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
-
-[ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="6"]
-
-[ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="7"]
-
-[ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="8"]
-
-[ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
+[ext_resource type="Script" uid="uid://bxb1wptl7iuy7" path="res://Script/main_menu/game_announcement.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dx8h2nym36ekq" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
+[ext_resource type="Texture2D" uid="uid://boh2t4k7mj8kl" path="res://Art/game_pic/679.PNG" id="6"]
+[ext_resource type="Texture2D" uid="uid://dy6di5exxa3sk" path="res://Art/ldl/86.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://cmaxhcvx6roda" path="res://Art/ldl/87.png" id="8"]
+[ext_resource type="Theme" uid="uid://bhyhuitheme01" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="GameAnnouncement" type="CanvasLayer" unique_id=377112224]
 layer = 2
@@ -26,17 +21,16 @@ color = Color(1, 1, 1, 0)
 metadata/_edit_lock_ = true
 
 [node name="BG" type="TextureRect" parent="." unique_id=516419683]
-theme = ExtResource("theme")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("theme")
 texture = ExtResource("2")
 metadata/_edit_lock_ = true
 
 [node name="BB2" type="Label" parent="BG" unique_id=1080045584]
-theme_type_variation = "AnnouncementHeading"
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -46,10 +40,10 @@ offset_left = -245.0
 offset_right = 245.0
 offset_bottom = 39.0
 grow_horizontal = 2
+theme_type_variation = &"AnnouncementHeading"
 text = "点击版本号查看该版本更新内容"
 
 [node name="BB4" type="Label" parent="BG" unique_id=895155344]
-theme_type_variation = "AnnouncementWarning"
 visible = false
 texture_filter = 2
 layout_mode = 1
@@ -63,23 +57,23 @@ offset_top = -42.0
 offset_right = 311.5
 grow_horizontal = 2
 grow_vertical = 0
+theme_type_variation = &"AnnouncementWarning"
 text = "本作为作者为自己制作的游戏，仅用于分享，难度可能较高，敬请理解！！"
 vertical_alignment = 1
 autowrap_mode = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="BG" unique_id=1854818146]
 self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(900, 400)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -452.0
-offset_top = -200.0
-offset_right = 452.0
-offset_bottom = 200.0
+offset_left = -500.0
+offset_top = -275.0
+offset_right = 500.0
+offset_bottom = 275.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -93,313 +87,314 @@ size_flags_horizontal = 0
 color = Color(0, 0, 0, 0.47451)
 
 [node name="BB" type="Label" parent="BG/PanelContainer/HBoxContainer/BBBg" unique_id=1189698376]
-theme_type_variation = "AnnouncementHeading"
 layout_mode = 0
-offset_left = 35.0
-offset_top = 11.0
-offset_right = 140.0
-offset_bottom = 50.0
+offset_left = 45.0
+offset_top = 10.0
+offset_right = 155.0
+offset_bottom = 60.0
+theme_type_variation = &"AnnouncementHeading"
 text = "版本号"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BG/PanelContainer/HBoxContainer/BBBg" unique_id=241269770]
 layout_mode = 1
-offset_top = 58.0
-offset_right = 171.0
-offset_bottom = 398.0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 190.0
+offset_bottom = 535.0
 
 [node name="bblist" type="VBoxContainer" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer" unique_id=275287977]
-theme_type_variation = "AnnouncementListGroup"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_type_variation = &"AnnouncementListGroup"
 
-[node name="V0_55" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist"]
-theme_type_variation = "AnnouncementButton"
+[node name="V0_55" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1392001787]
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V7.4"
 
 [node name="V0_54" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1623596692]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V7.3"
 
 [node name="V0_53" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1623596691]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V7.2"
 
 [node name="V0_52" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177989]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V7.1"
 
 [node name="V0_51" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177988]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V7.0"
 
 [node name="V0_50" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177987]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.9"
 
 [node name="V0_49" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177986]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.8"
 
 [node name="V0_48" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177985]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.7"
 
 [node name="V0_47" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=196177984]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.6"
 
 [node name="V0_46" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=919031042]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.5"
 
 [node name="V0_45" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1593163070]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.4"
 
 [node name="V0_44" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1364626708]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.3"
 
 [node name="V0_43" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1712604638]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.2"
 
 [node name="V0_42" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1464738426]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.1"
 
 [node name="V0_41" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1457732676]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V6.0"
 
 [node name="V0_40" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1415391027]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.9"
 
 [node name="V0_39" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=640176444]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.8"
 
 [node name="V0_38" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=261161902]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.7"
 
 [node name="V0_37" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1311977258]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.6"
 
 [node name="V0_36" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=823098141]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.5"
 
 [node name="V0_35" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=387286087]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.4"
 
 [node name="V0_34" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1255284526]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.3"
 
 [node name="V0_33" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1685272890]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.2"
 
 [node name="V0_32" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=820559512]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.1"
 
 [node name="V0_31" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1538184066]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V5.0"
 
 [node name="V0_30" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1749937624]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.9"
 
 [node name="V0_29" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=23757967]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.8"
 
 [node name="V0_28" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1789630380]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.7"
 
 [node name="V0_27" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2044758744]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.6"
 
 [node name="V0_26" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=921040510]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.5"
 
 [node name="V0_25" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1683956074]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.4"
 
 [node name="V0_24" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1240950451]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.3"
 
 [node name="V0_23" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1090311978]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.2"
 
 [node name="V0_22" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=560859540]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.1"
 
 [node name="V0_21" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=408632720]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V4.0"
 
 [node name="V0_20" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1208993157]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.9"
 
 [node name="V0_19" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2068737848]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.8"
 
 [node name="V0_18" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=249035668]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.7"
 
 [node name="V0_17" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1814679579]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.6"
 
 [node name="V0_16" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1527444074]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.5"
 
 [node name="V0_15" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1125621856]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.4"
 
 [node name="V0_14" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=151032407]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.3"
 
 [node name="V0_13" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=491337932]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.2"
 
 [node name="V0_12" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=125061279]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.1"
 
 [node name="V0_11" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=623437161]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V3.0"
 
 [node name="V0_10" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=542297150]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.9"
 
 [node name="V0_9" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1183515802]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.8"
 
 [node name="V0_8" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1496513143]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.7"
 
 [node name="V0_7" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1588242122]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.6"
 
 [node name="V0_6" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=79620139]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.5"
 
 [node name="V0_5" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=466941460]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.4"
 
 [node name="V0_1" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1134402506]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.3"
 
 [node name="V0_2" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=1961812522]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.2"
 
 [node name="V0_3" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=838416926]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.1"
 
 [node name="V0_4" type="Button" parent="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist" unique_id=2109742497]
-theme_type_variation = "AnnouncementButton"
 layout_mode = 2
+theme_type_variation = &"AnnouncementButton"
 text = "V2.0"
 
 [node name="InfoBg" type="ColorRect" parent="BG/PanelContainer/HBoxContainer" unique_id=317568821]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 color = Color(0, 0, 0, 0.47451)
 
 [node name="BB" type="Label" parent="BG/PanelContainer/HBoxContainer/InfoBg" unique_id=501686216]
-theme_type_variation = "AnnouncementHeading"
 layout_mode = 0
-offset_top = 7.0
-offset_right = 659.0
-offset_bottom = 46.0
+offset_top = 10.0
+offset_right = 800.0
+offset_bottom = 60.0
+theme_type_variation = &"AnnouncementHeading"
 text = "V0.1更新详情"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -408,28 +403,25 @@ metadata/_edit_lock_ = true
 [node name="Line_1" type="TextureRect" parent="BG/PanelContainer/HBoxContainer/InfoBg/BB" unique_id=837163451]
 show_behind_parent = true
 layout_mode = 0
-offset_left = -52.0
-offset_top = -2.0
-offset_right = 731.0
-offset_bottom = 38.0
+offset_right = 800.0
+offset_bottom = 40.0
 texture = ExtResource("6")
 metadata/_edit_lock_ = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BG/PanelContainer/HBoxContainer/InfoBg" unique_id=405711218]
 layout_mode = 1
-offset_left = 24.0
-offset_top = 53.0
-offset_right = 650.0
-offset_bottom = 393.0
+offset_left = 25.0
+offset_top = 60.0
+offset_right = 775.0
+offset_bottom = 535.0
 metadata/_edit_lock_ = true
 
 [node name="TextList" type="VBoxContainer" parent="BG/PanelContainer/HBoxContainer/InfoBg/ScrollContainer" unique_id=1025919198]
-theme_type_variation = "AnnouncementListGroup"
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AnnouncementListGroup"
 
 [node name="SecretPasswordOverlay" type="Control" parent="." unique_id=1605558437]
-theme = ExtResource("theme")
 visible = false
 z_index = 200
 layout_mode = 3
@@ -438,6 +430,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("theme")
 
 [node name="Dim" type="ColorRect" parent="SecretPasswordOverlay" unique_id=1564874006]
 layout_mode = 1
@@ -449,7 +442,6 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.48)
 
 [node name="PasswordPanel" type="PanelContainer" parent="SecretPasswordOverlay" unique_id=2263979]
-theme_type_variation = "AnnouncementSecretPanel"
 custom_minimum_size = Vector2(500, 230)
 layout_mode = 1
 anchors_preset = 8
@@ -463,30 +455,31 @@ offset_right = 250.0
 offset_bottom = 115.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"AnnouncementSecretPanel"
 
 [node name="PasswordMargin" type="MarginContainer" parent="SecretPasswordOverlay/PasswordPanel" unique_id=732276928]
-theme_type_variation = "AnnouncementPasswordMargin"
 layout_mode = 2
+theme_type_variation = &"AnnouncementPasswordMargin"
 
 [node name="PasswordContent" type="VBoxContainer" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin" unique_id=1399961327]
-theme_type_variation = "AnnouncementPasswordContent"
 layout_mode = 2
+theme_type_variation = &"AnnouncementPasswordContent"
 
 [node name="PasswordTitle" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=367939056]
-theme_type_variation = "AnnouncementSubtitle"
 layout_mode = 2
+theme_type_variation = &"AnnouncementSubtitle"
 text = "功能验证"
 horizontal_alignment = 1
 
 [node name="PasswordPrompt" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=1152474948]
-theme_type_variation = "AnnouncementPrompt"
 layout_mode = 2
+theme_type_variation = &"AnnouncementPrompt"
 text = "请输入密钥"
 
 [node name="PasswordInput" type="LineEdit" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=66168510]
-theme_type_variation = "AnnouncementPasswordInput"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementPasswordInput"
 placeholder_text = "密钥"
 caret_blink = true
 caret_blink_interval = 0.5
@@ -494,29 +487,29 @@ secret = true
 secret_character = "*"
 
 [node name="PasswordStatus" type="Label" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=324293791]
-theme_type_variation = "AnnouncementAlert"
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
+theme_type_variation = &"AnnouncementAlert"
 horizontal_alignment = 1
 
 [node name="PasswordButtons" type="HBoxContainer" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent" unique_id=623950188]
-theme_type_variation = "AnnouncementActionRow"
 layout_mode = 2
+theme_type_variation = &"AnnouncementActionRow"
 
 [node name="LeftSpacer" type="Control" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=1387843916]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Cancel" type="Button" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=1560459393]
-theme_type_variation = "AnnouncementSecretButtonSmall"
 custom_minimum_size = Vector2(110, 40)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButtonSmall"
 text = "取消"
 
 [node name="Confirm" type="Button" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=105351120]
-theme_type_variation = "AnnouncementSecretButtonSmall"
 custom_minimum_size = Vector2(110, 40)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButtonSmall"
 text = "确认"
 
 [node name="RightSpacer" type="Control" parent="SecretPasswordOverlay/PasswordPanel/PasswordMargin/PasswordContent/PasswordButtons" unique_id=253270133]
@@ -524,7 +517,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="SecretFunctionOverlay" type="Control" parent="." unique_id=610758542]
-theme = ExtResource("theme")
 visible = false
 z_index = 200
 layout_mode = 3
@@ -533,6 +525,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("theme")
 
 [node name="Dim" type="ColorRect" parent="SecretFunctionOverlay" unique_id=1048168290]
 layout_mode = 1
@@ -544,7 +537,6 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.48)
 
 [node name="FunctionPanel" type="PanelContainer" parent="SecretFunctionOverlay" unique_id=432419472]
-theme_type_variation = "AnnouncementSecretPanel"
 custom_minimum_size = Vector2(720, 460)
 layout_mode = 1
 anchors_preset = 8
@@ -558,23 +550,24 @@ offset_right = 360.0
 offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"AnnouncementSecretPanel"
 
 [node name="FunctionMargin" type="MarginContainer" parent="SecretFunctionOverlay/FunctionPanel" unique_id=168983529]
-theme_type_variation = "AnnouncementFunctionMargin"
 layout_mode = 2
+theme_type_variation = &"AnnouncementFunctionMargin"
 
 [node name="FunctionContent" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin" unique_id=1196087010]
-theme_type_variation = "AnnouncementFunctionContent"
 layout_mode = 2
+theme_type_variation = &"AnnouncementFunctionContent"
 
 [node name="Header" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=2104542680]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 
 [node name="Title" type="Label" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/Header" unique_id=1783780181]
-theme_type_variation = "AnnouncementTitle"
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AnnouncementTitle"
 text = "功能页面"
 vertical_alignment = 1
 
@@ -593,122 +586,123 @@ stretch_mode = 5
 layout_mode = 2
 
 [node name="FunctionColumns" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=1670624087]
-theme_type_variation = "AnnouncementFunctionColumns"
 layout_mode = 2
 size_flags_vertical = 3
+theme_type_variation = &"AnnouncementFunctionColumns"
 
 [node name="LeftColumn" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns" unique_id=644336649]
-theme_type_variation = "AnnouncementLeftColumn"
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AnnouncementLeftColumn"
 
 [node name="Invincible" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1956689057]
-theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
+theme_type_variation = &"AnnouncementCheckButton"
 text = "无敌"
 
 [node name="InstantKill" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1064476348]
-theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
+theme_type_variation = &"AnnouncementCheckButton"
 text = "秒杀"
 
 [node name="AllMaps" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=794288554]
-theme_type_variation = "AnnouncementCheckButton"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
+theme_type_variation = &"AnnouncementCheckButton"
 text = "地图全开"
 
 [node name="AddSouls" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=768345083]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "添加1亿灵魂"
 
 [node name="OneClickDivineSet" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/LeftColumn" unique_id=1997904806]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "一键神装"
 
 [node name="RightColumn" type="VBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns" unique_id=331778278]
-theme_type_variation = "AnnouncementFunctionContent"
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AnnouncementFunctionContent"
 
 [node name="FreeShop" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=386484875]
-theme_type_variation = "AnnouncementCheckButtonSmall"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_type_variation = &"AnnouncementCheckButtonSmall"
 text = "商店0元购"
 
 [node name="AllShopItems" type="CheckButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=810771676]
-theme_type_variation = "AnnouncementCheckButtonSmall"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_type_variation = &"AnnouncementCheckButtonSmall"
 text = "商店全物品"
 
 [node name="PlayerMaxLevel" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=114725072]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "人物满级"
 
 [node name="PetsMaxLevel" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=1755412070]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "宠物全满级"
 
 [node name="PetGrowthMax" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=1153977825]
-theme_type_variation = "AnnouncementSecretButtonTiny"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButtonTiny"
 text = "宠物资质根骨全满"
 
 [node name="WanLingMax" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/FunctionColumns/RightColumn" unique_id=898742156]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "全部图录满级"
 
 [node name="MapProgressRow" type="HBoxContainer" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=608156548]
-theme_type_variation = "AnnouncementActionRow"
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
+theme_type_variation = &"AnnouncementActionRow"
 
 [node name="MapSelector" type="OptionButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/MapProgressRow" unique_id=2068075119]
-theme_type_variation = "AnnouncementOption"
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "选择要清除进度的地图"
+theme_type_variation = &"AnnouncementOption"
 
 [node name="ClearProgress" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/MapProgressRow" unique_id=139116305]
-theme_type_variation = "AnnouncementSecretButton"
 custom_minimum_size = Vector2(160, 42)
 layout_mode = 2
+theme_type_variation = &"AnnouncementSecretButton"
 text = "清除进度"
 
 [node name="FunctionStatus" type="Label" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=1733901869]
-theme_type_variation = "AnnouncementStatus"
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
+theme_type_variation = &"AnnouncementStatus"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1907988831]
-theme = ExtResource("theme")
-theme_type_variation = "AnnouncementOverlayPanel"
-custom_minimum_size = Vector2(100, 0)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -100.0
-offset_bottom = 40.0
+offset_left = -180.0
+offset_top = 20.0
+offset_right = -55.0
+offset_bottom = 70.0
 grow_horizontal = 0
+theme = ExtResource("theme")
+theme_type_variation = &"AnnouncementOverlayPanel"
 
 [node name="Close" type="TextureButton" parent="PanelContainer" unique_id=1653267160]
 layout_mode = 2
@@ -725,9 +719,9 @@ texture_disabled = ExtResource("7")
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_52" to="." method="_on_v_0_52_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_51" to="." method="_on_v_0_51_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_50" to="." method="_on_v_0_50_pressed"]
-[connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_47" to="." method="_on_v_0_47_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_49" to="." method="_on_v_0_49_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_48" to="." method="_on_v_0_48_pressed"]
+[connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_47" to="." method="_on_v_0_47_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_46" to="." method="_on_v_0_46_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_45" to="." method="_on_v_0_45_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_44" to="." method="_on_v_0_44_pressed"]
