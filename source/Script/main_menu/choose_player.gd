@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const CHOOSE_PLAYER_DESIGN_SIZE := Vector2(940.0, 590.0)
+
 @onready var role_cards: HBoxContainer = $FitRoot/RoleCards
 @onready var shengcun: HBoxContainer = $FitRoot/InfoPanel/Stats/shengcun
 @onready var gongji: HBoxContainer = $FitRoot/InfoPanel/Stats/gongji
@@ -71,15 +73,12 @@ var selected_player_icon := TextureRect.new()
 
 
 func _fit_choose_player_to_viewport() -> void:
-	var design_size := Vector2(1070, 590)
+	var design_size := CHOOSE_PLAYER_DESIGN_SIZE
 	var viewport_size = get_viewport().get_visible_rect().size
 	var fit_scale = min(viewport_size.x / design_size.x, viewport_size.y / design_size.y)
 	var fit_root := $FitRoot as Control
 	fit_root.size = design_size
-	var bg := fit_root.get_node_or_null("Bg") as TextureRect
-	if bg != null:
-		bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		bg.stretch_mode = TextureRect.STRETCH_SCALE
+	role_cards.position.x = (design_size.x - role_cards.size.x * role_cards.scale.x) * 0.5
 	start_button.position.x = (design_size.x - start_button.size.x) * 0.5
 	fit_root.scale = Vector2(fit_scale, fit_scale)
 	fit_root.position = (viewport_size - design_size * fit_scale) * 0.5

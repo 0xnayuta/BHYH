@@ -2045,6 +2045,13 @@ func _case_creation_ui() -> void:
 	current_scene = selection
 	stage = selection
 	await process_frame
+	var fit_root: Control = selection.get_node("FitRoot")
+	_check(fit_root.size.is_equal_approx(Vector2(940, 590)), "choose player design keeps 940x590")
+	var return_button: Control = selection.get_node("FitRoot/TopBar/ReturnMainMenu")
+	_check(
+		is_equal_approx(return_button.position.x + return_button.size.x, fit_root.size.x - 12.0),
+		"choose player return button keeps 12px right margin"
+	)
 	var role7: Control = selection.role_cards.get_node_or_null("Role7")
 	_check(role7 != null, "role7 exists")
 	if role7 != null:
