@@ -19,24 +19,25 @@ var all_daily_list = {
 		"task_info": "分别击败八位八仙，各1次。每完成一轮可领取1颗三级昆仑玉。",
 		"task_reward": [{"Name": "kly3", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}],
 	},
+}
+var all_activity_list = {
 	"关注八荒湮隳":
 	{
 		"task_name": "关注八荒湮隳",
-		"task_type": "DailyTask",
-		"task_info": "关注八荒湮隳",
+		"task_type": "ActivityTask",
+		"task_info": "关注八荒湮隳（仅可领取一次）",
+		"FinishType": 0,
 		"task_reward": [{"Name": "bhyh", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}],
-		"UnlimitedClaim": true,
 	},
 	"至尊骨养成一":
 	{
 		"task_name": "至尊骨养成一",
-		"task_type": "DailyTask",
+		"task_type": "ActivityTask",
 		"task_info": "玩家等级达到1级就可以领取\n（" + str(PlayerData.player_data[DataKeys.PLAYER_LEVEL]) + "/1）",
+		"TaskTarget": {"玩家等级": 1},
+		"FinishType": 2,
 		"task_reward": [{"Name": "psdzzg", "Value": 1, "Prop": {}, "WX": [], "strength_value": 0}],
-		"UnlimitedClaim": true,
 	},
-}
-var all_activity_list = {
 	"新的旅途":
 	{
 		"task_name": "新的旅途",
@@ -470,7 +471,7 @@ func _on_lqjl_pressed() -> void:
 	var claim_callable := Callable()
 	if current_task_type == 2 and current_task_name == DataKeys.Daily.EIGHT_IMMORTAL_TASK:
 		claim_callable = Callable(PlayerData, "claim_eight_immortal_daily")
-	elif not bool(task_data.get("UnlimitedClaim", false)):
+	else:
 		var task_name := current_task_name
 		claim_callable = func() -> bool: return PlayerData.claim_task(task_name)
 	var list = task_data["task_reward"]

@@ -39,6 +39,8 @@ func check_task_finish():
 	match task_type:
 		"ActivityTask":
 			match my_father.all_activity_list[task_name]["FinishType"]:
+				0:
+					return true
 				1:
 					var target = my_father.all_activity_list[task_name]["TaskTarget"]
 					for i in target:

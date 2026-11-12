@@ -924,6 +924,7 @@ var initialized_data: Dictionary = {
 	"截教": false,
 	"新的旅途": false,
 	"至尊骨养成一": false,
+	"关注八荒湮隳": false,
 	"七魔尽伏": false,
 	"十殿肃清": false,
 	"成长礼包1": false,
@@ -1367,6 +1368,7 @@ var player_data: Dictionary = {
 	"截教": false,
 	"新的旅途": false,
 	"至尊骨养成一": false,
+	"关注八荒湮隳": false,
 	"七魔尽伏": false,
 	"十殿肃清": false,
 	"成长礼包1": false,
@@ -5197,6 +5199,8 @@ func claim_eight_immortal_daily() -> bool:
 
 func claim_task(task_name: String) -> bool:
 	if task_name.strip_edges() == "":
+		return false
+	if bool(player_data.get(task_name, false)):
 		return false
 	player_data[task_name] = true
 	return true
