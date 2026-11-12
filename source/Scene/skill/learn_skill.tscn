@@ -103,7 +103,7 @@ text = "被动技能"
 metadata/_edit_lock_ = true
 
 [node name="close" type="Button" parent="bg" unique_id=1562434379]
-theme_type_variation = "LearnSkillButton"
+theme_type_variation = &"SemanticBackButton"
 theme = ExtResource("theme")
 offset_left = 390.0
 offset_top = -279.0

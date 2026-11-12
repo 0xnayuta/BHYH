@@ -3,8 +3,6 @@
 [ext_resource type="Script" uid="uid://bxb1wptl7iuy7" path="res://Script/main_menu/game_announcement.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dx8h2nym36ekq" path="res://Art/ldl/lian_dan_lu_bei_jing.jpg" id="2"]
 [ext_resource type="Texture2D" uid="uid://boh2t4k7mj8kl" path="res://Art/game_pic/679.PNG" id="6"]
-[ext_resource type="Texture2D" uid="uid://dy6di5exxa3sk" path="res://Art/ldl/86.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://cmaxhcvx6roda" path="res://Art/ldl/87.png" id="8"]
 [ext_resource type="Theme" uid="uid://bhyhuitheme01" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="GameAnnouncement" type="CanvasLayer" unique_id=377112224]
@@ -571,16 +569,13 @@ theme_type_variation = &"AnnouncementTitle"
 text = "功能页面"
 vertical_alignment = 1
 
-[node name="Close" type="TextureButton" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/Header" unique_id=860992957]
-custom_minimum_size = Vector2(42, 42)
+[node name="Close" type="Button" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent/Header" unique_id=860992957]
+custom_minimum_size = Vector2(63, 42)
 layout_mode = 2
 tooltip_text = "关闭"
-texture_normal = ExtResource("7")
-texture_pressed = ExtResource("7")
-texture_hover = ExtResource("8")
-texture_disabled = ExtResource("7")
-ignore_texture_size = true
-stretch_mode = 5
+theme = ExtResource("theme")
+theme_type_variation = &"SemanticBackButton"
+text = "关 闭"
 
 [node name="Separator" type="HSeparator" parent="SecretFunctionOverlay/FunctionPanel/FunctionMargin/FunctionContent" unique_id=84851584]
 layout_mode = 2
@@ -704,14 +699,14 @@ grow_horizontal = 0
 theme = ExtResource("theme")
 theme_type_variation = &"AnnouncementOverlayPanel"
 
-[node name="Close" type="TextureButton" parent="PanelContainer" unique_id=1653267160]
+[node name="Close" type="Button" parent="PanelContainer" unique_id=1653267160]
+custom_minimum_size = Vector2(63, 33)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("7")
-texture_pressed = ExtResource("7")
-texture_hover = ExtResource("8")
-texture_disabled = ExtResource("7")
+theme = ExtResource("theme")
+theme_type_variation = &"SemanticBackButton"
+text = "返 回"
 
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_55" to="." method="_on_v_0_55_pressed"]
 [connection signal="pressed" from="BG/PanelContainer/HBoxContainer/BBBg/ScrollContainer/bblist/V0_54" to="." method="_on_v_0_54_pressed"]

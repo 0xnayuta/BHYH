@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" path="res://Script/monster/some_monster_help.gd" id="1"]
 [ext_resource type="Texture2D" path="res://Art/game_pic/679.PNG" id="4"]
-[ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="5"]
-[ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="6"]
 
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
@@ -458,16 +456,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Close" type="TextureButton" parent="BG" unique_id=1110825680]
+[node name="Close" type="Button" parent="BG" unique_id=1110825680]
 layout_mode = 0
-offset_left = 866.0
-offset_top = 18.0
+offset_left = 857.0
+offset_top = 11.0
 offset_right = 920.0
-offset_bottom = 38.0
-texture_normal = ExtResource("5")
-texture_pressed = ExtResource("5")
-texture_hover = ExtResource("6")
-texture_disabled = ExtResource("5")
+offset_bottom = 44.0
+theme = ExtResource("theme")
+theme_type_variation = &"SemanticBackButton"
+text = "返 回"
 metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="BG/ColorRect/MonsterName/ScrollContainer/VBoxContainer/dxx" to="." method="_on_dxx_pressed" flags=18]

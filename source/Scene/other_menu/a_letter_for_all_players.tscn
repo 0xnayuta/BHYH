@@ -6,10 +6,6 @@
 
 [ext_resource type="Texture2D" path="res://Art/show_text/letter_bg.png" id="3"]
 
-[ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="6"]
-
-[ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="7"]
-
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 
 [node name="ALetterForAllPlayers" type="Node2D" unique_id=2000630699]
@@ -212,15 +208,14 @@ text = "上当受骗。
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="Close" type="TextureButton" parent="." unique_id=883005500]
-offset_left = 860.0
-offset_top = 14.0
+[node name="Close" type="Button" parent="." unique_id=883005500]
+offset_left = 851.0
+offset_top = 8.0
 offset_right = 914.0
-offset_bottom = 34.0
-texture_normal = ExtResource("6")
-texture_pressed = ExtResource("6")
-texture_hover = ExtResource("7")
-texture_disabled = ExtResource("7")
+offset_bottom = 41.0
+theme = ExtResource("theme")
+theme_type_variation = &"SemanticBackButton"
+text = "返 回"
 metadata/_edit_lock_ = true
 
 [node name="LastPage" type="Button" parent="." unique_id=1600470892]

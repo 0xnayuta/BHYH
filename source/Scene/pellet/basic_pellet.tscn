@@ -12,11 +12,6 @@
 
 [ext_resource type="Texture2D" path="res://Art/backpack/fydy.png" id="8"]
 
-[ext_resource type="Texture2D" path="res://Art/ldl/86.png" id="9"]
-
-[ext_resource type="Texture2D" path="res://Art/ldl/87.png" id="10"]
-
-
 [ext_resource type="Theme" path="res://Scene/theme/bhyh_theme.tres" id="theme"]
 [node name="BasicPellet" type="Node2D" unique_id=991376514]
 script = ExtResource("1")
@@ -559,15 +554,14 @@ theme = ExtResource("theme")
 layout_mode = 2
 text = "回魔："
 
-[node name="Close" type="TextureButton" parent="BG" unique_id=229833894]
-offset_left = 393.0
-offset_top = -272.0
+[node name="Close" type="Button" parent="BG" unique_id=229833894]
+offset_left = 384.0
+offset_top = -278.0
 offset_right = 447.0
-offset_bottom = -252.0
-texture_normal = ExtResource("9")
-texture_pressed = ExtResource("9")
-texture_hover = ExtResource("10")
-texture_disabled = ExtResource("9")
+offset_bottom = -245.0
+theme = ExtResource("theme")
+theme_type_variation = &"SemanticBackButton"
+text = "返 回"
 metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="BG/TypeButonList/HpDy" to="." method="_on_hp_dy_pressed"]

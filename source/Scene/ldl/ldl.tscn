@@ -48,7 +48,7 @@ vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="return" type="Button" parent="." unique_id=1721434748]
-theme_type_variation = "LdlReturnButton"
+theme_type_variation = &"SemanticBackButton"
 theme = ExtResource("theme")
 offset_left = 844.0
 offset_top = 12.0
