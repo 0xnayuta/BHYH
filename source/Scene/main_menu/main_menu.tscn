@@ -55,15 +55,6 @@ offset_right = 210.0
 offset_bottom = 71.0
 text = "《八荒湮隳篇·力战七大魔王》"
 
-[node name="title" type="Label" parent="." unique_id=2079814506]
-theme_type_variation = "MainMenuTitle"
-theme = ExtResource("theme")
-offset_left = 32.0
-offset_top = 3.0
-offset_right = 907.0
-offset_bottom = 30.0
-text = "本改版游戏完全免费 如果你是收费购买的 请申请退款 免费就是对作者最大的支持"
-
 [node name="Begin_game" type="TextureButton" parent="." unique_id=2006426438]
 offset_left = 379.0
 offset_top = 450.0
@@ -197,6 +188,9 @@ grow_vertical = 2
 text = "跳过剧情"
 
 [node name="Letter" type="TextureButton" parent="." unique_id=1552204181]
+visible = false
+mouse_filter = 2
+focus_mode = 0
 offset_left = 815.0
 offset_top = 543.0
 offset_right = 963.0

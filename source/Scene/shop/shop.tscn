@@ -380,7 +380,7 @@ offset_left = -4.0
 offset_top = -17.0
 offset_right = 577.0
 offset_bottom = 34.0
-text = "提示：此版本为单机版本，无法进行充值，请使用游戏货币“灵魂”进行商品的选购，切勿将游戏用于商业用途！！！"
+text = "提示：本作为单机版本，无法充值，请使用游戏内货币“灵魂”购买商品。"
 autowrap_mode = 1
 metadata/_edit_lock_ = true
 

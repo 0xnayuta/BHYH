@@ -229,7 +229,7 @@ offset_left = 941.0
 offset_top = 16.0
 offset_right = 2645.0
 offset_bottom = 45.0
-text = "欢迎来到造梦西游——八荒湮隳篇，当前版本完全免费，请勿用于商业用途，谨防受骗上当，不足之处还请谅解，请更多支持原版造梦，感谢各位支持！！"
+text = "欢迎来到八荒湮隳篇"
 metadata/_edit_lock_ = true
 
 [node name="lj_tt" type="Node2D" parent="CanvasLayer" unique_id=1029771696]

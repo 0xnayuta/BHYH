@@ -42,73 +42,42 @@ metadata/_edit_lock_ = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=864097569]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=1808178199]
 theme_type_variation = "GameNeedKnowVBox"
 theme = ExtResource("theme")
+custom_minimum_size = Vector2(840, 0)
+size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="tt" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=174134754]
 theme_type_variation = "GameNeedKnowIntro"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "           欢迎来到造梦西游最新改版——《八荒湮隳篇》
-  为确保游戏的正常运行，保障您的游戏体验，请仔细阅读以下内容
-  并严格遵守规定，感谢您的理解和支持！！！"
+text = "           欢迎来到《八荒湮隳篇》
+  请阅读以下游戏说明。"
 autowrap_mode = 1
 
 [node name="1" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1076318593]
 theme_type_variation = "GameNeedKnowRule"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "1.该同人作品由B站早春樱花制作，本人新手，游戏并非在原版代码基础上进行修改，是完全重新自制的游戏，所以很多大部分机制和内容并不会和原版一致，如若遇到任何问题，可以向我反馈，不足之处还请谅解！！"
+text = "1.游戏仍在持续完善中，遇到问题请记录并反馈。"
 autowrap_mode = 1
 
 [node name="2" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=2097435363]
 theme_type_variation = "GameNeedKnowRule"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "2.本作品完全免费，严禁私自倒卖，收费，用于任何商业用途，一经发现，将永久停止更新。"
+text = "2.请规范进行游戏，禁止作弊。"
+autowrap_mode = 1
 
 [node name="3" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=362328100]
 theme_type_variation = "GameNeedKnowRule"
 theme = ExtResource("theme")
 layout_mode = 2
-text = "3.请尊重原版游戏，严禁与其进行比较，禁止诋毁，侮辱任何版本的原版游戏，尊重所有作者的劳动成果！"
-
-[node name="4" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1608361675]
-theme_type_variation = "GameNeedKnowRule"
-theme = ExtResource("theme")
-layout_mode = 2
-text = "4.本作品无任何侵犯原作品的意图，本意是作者给自己做的游戏，大家呼声比较高，遂尝试发布，如若侵犯原版作者的任何利益，将停止一切发布行为，并永久不再更新任何相关内容！"
-autowrap_mode = 1
-
-[node name="5" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1182505791]
-theme_type_variation = "GameNeedKnowRule"
-theme = ExtResource("theme")
-layout_mode = 2
-text = "5.当前版本为不完整版，也是我第一次做游戏，难免会有些无法避免的bug，还请理解，如果不涉及其他问题，会考虑更新后续的内容。"
-autowrap_mode = 1
-
-[node name="6" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=683659007]
-theme_type_variation = "GameNeedKnowRulePlain"
-theme = ExtResource("theme")
-layout_mode = 2
-text = "6.请规范进行游戏，禁止作弊行为，既然你选择尝试玩改版游戏，那就不要再做这些毫无意义的事情，单机游戏还要开挂，不是给自己找麻烦吗？"
-autowrap_mode = 1
-
-[node name="7" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1914289394]
-theme_type_variation = "GameNeedKnowRulePlain"
-theme = ExtResource("theme")
-layout_mode = 2
-text = "7.本游戏比较难，需要有一定的造梦基础，如果从前并没有玩过原版游戏，建议先去尝试原版游戏。"
-autowrap_mode = 1
-
-[node name="8" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1911373860]
-theme_type_variation = "GameNeedKnowRulePlain"
-theme = ExtResource("theme")
-layout_mode = 2
-text = "8.违反以上规定任意一条，游戏将永久停止更新！"
+text = "3.本作难度较高，建议先熟悉基础操作后再挑战。"
 autowrap_mode = 1
 
 [node name="Button" type="Button" parent="." unique_id=1035637844]
@@ -119,7 +88,7 @@ offset_top = 479.0
 offset_right = 646.0
 offset_bottom = 510.0
 disabled = true
-text = "我已知晓，并保证遵守以上所有规定！"
+text = "我已知晓"
 
 [node name="cd" type="Label" parent="Button" unique_id=80263367]
 theme_type_variation = "GameNeedKnowYellow"
@@ -134,17 +103,6 @@ metadata/_edit_lock_ = true
 
 [node name="ReadCD" type="Timer" parent="." unique_id=745577587]
 one_shot = true
-
-[node name="Label" type="Label" parent="." unique_id=669126520]
-theme_type_variation = "GameNeedKnowFooter"
-theme = ExtResource("theme")
-offset_left = 754.0
-offset_top = 486.0
-offset_right = 893.0
-offset_bottom = 512.0
-text = "作者：B站早春樱花
-"
-metadata/_edit_lock_ = true
 
 [node name="title_pc_1" type="Sprite2D" parent="." unique_id=1800228783]
 position = Vector2(313.5, 98.5)

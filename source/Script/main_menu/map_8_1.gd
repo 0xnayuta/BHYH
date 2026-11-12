@@ -121,7 +121,7 @@ func _ready() -> void:
 		Global.get_audio_runtime().add_main_menu_music()
 	Global.set_current_level_name("")
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 	get_tree().paused = false
@@ -160,7 +160,7 @@ func _on_mainline_portal_pressed() -> void:
 func _on_memory_class_pressed() -> void:
 	if Global.is_archive_session_active():
 		MemoryClass.request_save("map_save")
-	Global.add_message_show(_ui_parent(), "保存成功！本作品完全免费，谨防受骗上当！", 1.5, Vector2(470, 300))
+	Global.add_message_show(_ui_parent(), "保存成功！", 1.5, Vector2(470, 300))
 
 
 func _on_shop_pressed() -> void:

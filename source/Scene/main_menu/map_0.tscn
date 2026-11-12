@@ -460,6 +460,8 @@ texture_pressed = ExtResource("56")
 texture_hover = ExtResource("57")
 
 [node name="Group" type="TextureButton" parent="BottomButtons" unique_id=1240517321]
+visible = false
+mouse_filter = 2
 offset_left = 340.0
 offset_top = 510.0
 offset_right = 410.0

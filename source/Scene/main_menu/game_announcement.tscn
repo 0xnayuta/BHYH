@@ -41,25 +41,6 @@ grow_horizontal = 2
 theme_type_variation = &"AnnouncementHeading"
 text = "点击版本号查看该版本更新内容"
 
-[node name="BB4" type="Label" parent="BG" unique_id=895155344]
-visible = false
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -311.5
-offset_top = -42.0
-offset_right = 311.5
-grow_horizontal = 2
-grow_vertical = 0
-theme_type_variation = &"AnnouncementWarning"
-text = "本作为作者为自己制作的游戏，仅用于分享，难度可能较高，敬请理解！！"
-vertical_alignment = 1
-autowrap_mode = 1
-
 [node name="PanelContainer" type="PanelContainer" parent="BG" unique_id=1854818146]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
