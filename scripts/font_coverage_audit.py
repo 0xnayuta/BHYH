@@ -29,9 +29,9 @@ CJK_END = 0x9FFF
 
 NODE_RE = re.compile(r'^\[node name="([^"]*)"')
 TEXT_RE = re.compile(r'^text\s*=\s*"((?:[^"\\]|\\.)*)"', re.MULTILINE)
-VARIATION_RE = re.compile(r'^theme_type_variation\s*=\s*"([^"]+)"', re.MULTILINE)
+VARIATION_RE = re.compile(r'^theme_type_variation\s*=\s*&?"([^"]+)"', re.MULTILINE)
 THEME_RE = re.compile(r'^theme\s*=\s*ExtResource\("([^"]+)"\)', re.MULTILINE)
-EXT_RE = re.compile(r'^\[ext_resource type="([^"]+)" path="([^"]+)" id="([^"]+)"\]')
+EXT_RE = re.compile(r'^\[ext_resource type="([^"]+)"(?: uid="[^"]*")? path="([^"]+)" id="([^"]+)"\]')
 EXT_REF_RE = re.compile(r'ExtResource\("([^"]+)"\)')
 BASE_TYPE_RE = re.compile(r'^base_type\s*=\s*&?"([^"]+)"')
 

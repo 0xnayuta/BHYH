@@ -180,11 +180,19 @@ def render_font_size_class(data: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+_INTEGRAL_FLOAT_RE = re.compile(r'(?<![\d.])(-?\d+)\.0(?![\d])')
+
+
+def _canonical_color_text(value: str) -> str:
+    """按 Godot 文本序列化规范去掉整数值的小数尾巴（1.0 -> 1）。"""
+    return _INTEGRAL_FLOAT_RE.sub(r"\1", value)
+
+
 def expected_theme_value(data: dict, key: str) -> str:
     ref = data["theme_properties"][key]
     if ref == "font.default":
         return f'ExtResource("{data["default_font"]["resource_id"]}")'
-    return resolve_color(data, resolve(data, ref))
+    return _canonical_color_text(resolve_color(data, resolve(data, ref)))
 
 
 def _find_theme_line(lines: list[str], key: str) -> int:
@@ -203,9 +211,15 @@ def render_theme(data: dict) -> str:
         index = _find_theme_line(lines, key)
         lines[index] = f"{key} = {value}"
     font = data["default_font"]
-    resource_line = f'[ext_resource type="FontVariation" path="{font["path"]}" id="{font["resource_id"]}"]'
-    if resource_line not in lines:
-        raise ValueError(f"Theme 缺少 default_font 资源声明: {resource_line}")
+    # 编辑器保存会给 ext_resource 追加 uid 并可能调整属性顺序；
+    # 这里按 type/path/id 三个属性匹配，不依赖整行文本与 uid 是否存在。
+    if not any(
+        line.startswith('[ext_resource type="FontVariation"')
+        and f'path="{font["path"]}"' in line
+        and f'id="{font["resource_id"]}"' in line
+        for line in lines
+    ):
+        raise ValueError(f"Theme 缺少 default_font 资源声明: {font['path']} (id={font['resource_id']})")
     return "\n".join(lines) + "\n"
 
 

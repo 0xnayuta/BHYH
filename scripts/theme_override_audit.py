@@ -33,7 +33,7 @@ NODE_RE = re.compile(r'^\[node name="([^"]*)"(?: type="([^"]*)")?')
 DIRECT_RE = re.compile(r"^theme_override_([a-zA-Z0-9_/]+)\s*=")
 ANIMATION_REF_RE = re.compile(r'NodePath\("[^"]*theme_override_([a-zA-Z0-9_/]+)"\)')
 THEME_REF_RE = re.compile(r'^theme\s*=\s*ExtResource\("([^"]+)"\)')
-THEME_VARIATION_RE = re.compile(r'^theme_type_variation\s*=\s*"([^"]+)"')
+THEME_VARIATION_RE = re.compile(r'^theme_type_variation\s*=\s*&?"([^"]+)"')
 FONT_RE = re.compile(r'^\[ext_resource type="FontFile"[^\]]*path="([^"]+)"')
 THEME_RESOURCE_RE = re.compile(r'^\[gd_resource type="Theme"')
 

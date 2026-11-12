@@ -28,7 +28,8 @@ TOKEN_SOURCE = ROOT / "scripts" / "ui_theme_tokens.json"
 BASELINE = ROOT / "scripts" / "font_role_baseline.json"
 ROLE_ORDER = ("body", "ui", "display", "accent")
 FONT_EXT_RE = re.compile(
-    r'^\[ext_resource type="([^"]+)" path="([^"]+)" id="([^"]+)"\]', re.MULTILINE
+    r'^\[ext_resource type="([^"]+)"(?: uid="[^"]*")? path="([^"]+)" id="([^"]+)"\]',
+    re.MULTILINE,
 )
 EXT_REF_RE = re.compile(r'ExtResource\("([^"]+)"\)')
 PROP_RE = re.compile(r'^([A-Za-z0-9_]+)/([A-Za-z0-9_]+) = (.+)$')
