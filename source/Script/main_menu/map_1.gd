@@ -160,6 +160,7 @@ func _ready():
 		MemoryClass.main_bc()
 
 	update_button_texture()
+	_attach_left_button_hover()
 	Global.set_tower_floor(1)
 	Global.get_run_context().clear_llbt_challenge_modes()
 	RoleProp.set_full_hp()
@@ -173,7 +174,7 @@ func _ready():
 		MemoryClass.main_bc()
 	Global.set_current_level_name("")
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 	get_tree().paused = false
@@ -198,6 +199,14 @@ func update_button_texture():
 		boss_treasure_checkbox.texture_pressed = texture
 	else:
 		print("错误：找不到纹理 ", tex_path)
+
+
+func _attach_left_button_hover() -> void:
+	for button_name in ["bc_game", "Skill_learn", "turn_mainmenu", "BossTreasureCheckBox"]:
+		var button := get_node_or_null(button_name) as Control
+		if button == null:
+			continue
+		MapButtonHover.attach(button, button_name == "Skill_learn")
 
 
 func _on_boss_treasure_toggled():
@@ -254,7 +263,7 @@ func _on_level_10_pressed() -> void:
 
 func _on_bc_game_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！本作品完全免费，谨防受骗上当！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
 
 
 func _on_skill_learn_pressed() -> void:

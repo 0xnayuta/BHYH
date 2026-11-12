@@ -190,6 +190,9 @@ func _ready():
 		MemoryClass.main_bc()
 
 	update_button_texture()
+	var treasure_button := get_node_or_null("BossTreasureCheckBox") as Control
+	if treasure_button != null:
+		MapButtonHover.attach(treasure_button)
 
 	MainSet.set_data["LevelTT"] = true
 	MemoryClass.main_bc()
@@ -212,7 +215,7 @@ func _ready():
 	if Global.get_ui_runtime().windows == null:
 		Global.get_ui_runtime().windows = _ui_parent()
 	if Global.get_ui_runtime().consume_welcome_message():
-		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！作品完全免费！！", 1.5, Vector2(470, 300))
+		Global.add_message_show(Global.get_ui_runtime().windows, "欢迎进入游戏！", 1.5, Vector2(470, 300))
 	Global.get_run_context().reset_player_hit_count()
 	Global.get_run_context().clear_last_level_path()
 
@@ -434,7 +437,7 @@ func _on_tzhy_pressed() -> void:
 
 func _on_memory_game_pressed() -> void:
 	MemoryClass.request_save("map_save")
-	Global.add_message_show(get_parent(), "保存成功！本作品完全免费，谨防受骗上当！", 1.5, Vector2(470, 300))
+	Global.add_message_show(get_parent(), "保存成功！", 1.5, Vector2(470, 300))
 
 
 func _on_shop_pressed() -> void:
