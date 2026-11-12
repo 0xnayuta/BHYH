@@ -106,16 +106,19 @@ func _show_buff_info() -> void:
 		buff_info.last_hurt = data_list.get("value", 0.0)
 		buff_info.z_index = 4095
 		buff_info.top_level = false
+		call_deferred("_fit_buff_info_to_screen")
 	else:
-		Global.apply_popup_screen_layout(buff_info, Global.screen_popup_position(Vector2(18, 22)), Vector2(320, 120))
+		_fit_buff_info_to_screen()
+
+
+func _fit_buff_info_to_screen() -> void:
+	if buff_info == null or not is_instance_valid(buff_info):
+		return
+	var popup_size := PopupLayout.resolved_size(buff_info, Vector2(320, 120))
+	var anchor := Global.screen_popup_position(Vector2(18, 22))
 	if data_list.has("TimeLeft"):
-		var popup_size: Vector2 = buff_info.get_combined_minimum_size().max(Vector2(320, 120))
-		var screen := get_viewport_rect()
-		var anchor := get_global_rect().end + Vector2(10, 10)
-		buff_info.position = Vector2(
-			clampf(anchor.x, 8.0, maxf(8.0, screen.end.x - popup_size.x - 8.0)),
-			clampf(anchor.y, 8.0, maxf(8.0, screen.end.y - popup_size.y - 8.0))
-		)
+		anchor = get_global_rect().end + Vector2(10, 10)
+	PopupLayout.place_screen(buff_info, anchor, popup_size, PopupLayout.DEFAULT_MARGIN, true)
 
 
 func _hide_buff_info() -> void:

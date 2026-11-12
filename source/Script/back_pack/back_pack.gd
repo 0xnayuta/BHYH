@@ -447,26 +447,17 @@ func _clamp_tooltip_to_viewport(tooltip: Control) -> void:
 	await get_tree().process_frame
 	if not is_instance_valid(tooltip) or tooltip.is_queued_for_deletion():
 		return
-	var viewport_rect := get_viewport().get_visible_rect()
-	var mouse := get_global_mouse_position()
 	var visual := tooltip.get_node_or_null("MarginContainer") as Control
 	var rect := visual.get_global_rect() if visual != null else tooltip.get_global_rect()
-	var target := rect.position
-	if target.x + rect.size.x > viewport_rect.end.x - TOOLTIP_VIEWPORT_MARGIN:
-		target.x = mouse.x - rect.size.x - TOOLTIP_CURSOR_OFFSET.x
-	if target.y + rect.size.y > viewport_rect.end.y - TOOLTIP_VIEWPORT_MARGIN:
-		target.y = mouse.y - rect.size.y - TOOLTIP_CURSOR_OFFSET.y
-	target.x = clampf(
-		target.x,
-		viewport_rect.position.x + TOOLTIP_VIEWPORT_MARGIN,
-		viewport_rect.end.x - rect.size.x - TOOLTIP_VIEWPORT_MARGIN
+	var visual_offset := rect.position - tooltip.global_position
+	PopupLayout.place_screen(
+		tooltip,
+		get_global_mouse_position() + TOOLTIP_CURSOR_OFFSET,
+		rect.size,
+		TOOLTIP_VIEWPORT_MARGIN,
+		true,
+		visual_offset
 	)
-	target.y = clampf(
-		target.y,
-		viewport_rect.position.y + TOOLTIP_VIEWPORT_MARGIN,
-		viewport_rect.end.y - rect.size.y - TOOLTIP_VIEWPORT_MARGIN
-	)
-	tooltip.global_position = target
 
 
 func remove_text():

@@ -637,20 +637,10 @@ func _show_monster_attr_panel() -> void:
 func _fit_hover_panel_to_screen() -> void:
 	if hover_attr_panel == null or not is_instance_valid(hover_attr_panel):
 		return
-	var viewport_size = get_viewport().get_visible_rect().size
-	var panel_size = hover_attr_panel.size
-	if panel_size.x <= 0 or panel_size.y <= 0:
-		panel_size = hover_attr_panel.get_combined_minimum_size()
-	var pos = Global.screen_popup_position(Vector2(18, 18))
-	if pos.x + panel_size.x > viewport_size.x - 8:
-		pos.x = viewport_size.x - panel_size.x - 8
-	if pos.y + panel_size.y > viewport_size.y - 8:
-		pos.y = viewport_size.y - panel_size.y - 8
-	if pos.x < 8:
-		pos.x = 8
-	if pos.y < 8:
-		pos.y = 8
-	hover_attr_panel.position = pos
+	var panel_size := PopupLayout.resolved_size(hover_attr_panel, Vector2(320, 120))
+	PopupLayout.place_screen(
+		hover_attr_panel, Global.screen_popup_position(Vector2(18, 18)), panel_size, PopupLayout.DEFAULT_MARGIN, true
+	)
 
 
 func _create_monster_attr_panel() -> Control:

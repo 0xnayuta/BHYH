@@ -1947,18 +1947,11 @@ func screen_popup_position(offset := Vector2(25, 20)) -> Vector2:
 
 
 func apply_popup_screen_layout(node: Node, position: Vector2, estimated_size := Vector2(240, 240)) -> void:
-	var viewport_size = get_viewport().get_visible_rect().size
-	var final_pos = position
-	if final_pos.x + estimated_size.x > viewport_size.x:
-		final_pos.x = position.x - estimated_size.x - 50.0
-	if final_pos.x < 0.0:
-		final_pos.x = 8.0
-	if final_pos.y < 0.0:
-		final_pos.y = 8.0
-	if node is Node2D:
-		(node as Node2D).position = final_pos
-	elif node is Control:
-		(node as Control).position = final_pos
+	if not (node is CanvasItem):
+		return
+	var canvas_item := node as CanvasItem
+	var size := PopupLayout.resolved_size(canvas_item, estimated_size)
+	PopupLayout.place_screen(canvas_item, position, size, PopupLayout.DEFAULT_MARGIN, true)
 
 
 func popup_position_for_parent(parent_node: Node, offset := Vector2(25, 20)) -> Vector2:

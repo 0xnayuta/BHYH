@@ -3612,21 +3612,10 @@ func _pet_item_sell_price(item: Dictionary) -> int:
 func _position_pet_click_menu(popup: Control) -> void:
 	if popup == null:
 		return
-	var viewport_size := get_viewport().get_visible_rect().size
-	var estimated_size := popup.size
-	if estimated_size.x <= 0.0 or estimated_size.y <= 0.0:
-		estimated_size = Vector2(135, 95)
-	var mouse_pos := get_tree().get_root().get_mouse_position()
-	var screen_pos := mouse_pos + Vector2(18, 18)
-	if screen_pos.x + estimated_size.x > viewport_size.x:
-		screen_pos.x = mouse_pos.x - estimated_size.x - 18.0
-	if screen_pos.y + estimated_size.y > viewport_size.y:
-		screen_pos.y = viewport_size.y - estimated_size.y - 8.0
-	if screen_pos.x < 8.0:
-		screen_pos.x = 8.0
-	if screen_pos.y < 8.0:
-		screen_pos.y = 8.0
-	popup.position = get_global_transform().affine_inverse() * screen_pos
+	var menu_size := PopupLayout.resolved_size(popup, Vector2(135, 95))
+	PopupLayout.place_screen(
+		popup, get_viewport().get_mouse_position() + Vector2(18, 18), menu_size, PopupLayout.DEFAULT_MARGIN, true
+	)
 
 
 func _connect_pet_hover(control: Control, entered: Callable, exited: Callable) -> void:
@@ -3689,21 +3678,12 @@ func _show_pet_item_properties(item: Dictionary, _anchor: Control) -> void:
 func _position_pet_property_popup_at_mouse() -> void:
 	if not is_instance_valid(pet_property_popup):
 		return
-	var viewport_size := get_viewport().get_visible_rect().size
-	var mouse_pos := get_tree().get_root().get_mouse_position()
-	var estimated_size := Vector2(215, 240)
-	var background := pet_property_popup.get_node_or_null("ColorRect") as ColorRect
-	if background != null and background.size.y > 0.0:
-		estimated_size = background.size
-	estimated_size.y = minf(estimated_size.y, viewport_size.y - 16.0)
-	var screen_pos := mouse_pos + Vector2(25, 20)
-	if screen_pos.x + estimated_size.x > viewport_size.x:
-		screen_pos.x = mouse_pos.x - estimated_size.x - 25.0
-	if screen_pos.y + estimated_size.y > viewport_size.y:
-		screen_pos.y = viewport_size.y - estimated_size.y - 8.0
-	screen_pos.x = maxf(8.0, screen_pos.x)
-	screen_pos.y = maxf(8.0, screen_pos.y)
-	pet_property_popup.position = get_global_transform().affine_inverse() * screen_pos
+	var anchor_local := get_global_transform().affine_inverse() * (get_global_mouse_position() + Vector2(25, 20))
+	if pet_property_popup.has_method("layout_at"):
+		pet_property_popup.call("layout_at", anchor_local)
+		return
+	var estimated_size := PopupLayout.resolved_size(pet_property_popup, Vector2(215, 240))
+	PopupLayout.place_parent_anchor(pet_property_popup, anchor_local, estimated_size, PopupLayout.DEFAULT_MARGIN, true)
 
 
 func _hide_pet_property_popup() -> void:

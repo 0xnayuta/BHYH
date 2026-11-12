@@ -10,6 +10,7 @@ var RoleProp: BaseRoleProperties:
 
 @onready var title: Label = $MarginContainer/MarginContainer/VBoxContainer/title
 @onready var color_rect: ColorRect = $ColorRect
+@onready var margin_container: MarginContainer = $MarginContainer
 
 @onready var _name: Label = $MarginContainer/MarginContainer/VBoxContainer/name
 @onready var lx: Label = $MarginContainer/MarginContainer/VBoxContainer/lx
@@ -19,6 +20,8 @@ var RoleProp: BaseRoleProperties:
 @onready var sj: Label = $MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/sj
 var my_name
 var is_set = false
+var _anchor := Vector2.ZERO
+var _has_anchor := false
 
 
 func _get_display_name():
@@ -28,23 +31,36 @@ func _get_display_name():
 
 func _ready() -> void:
 	self.modulate = Color(1, 1, 1, 0)
+	call_deferred("_capture_initial_anchor")
+
+
+func _capture_initial_anchor() -> void:
+	if _has_anchor:
+		return
+	_anchor = position
+	_has_anchor = true
+	_apply_layout()
+
+
+func layout_at(anchor: Vector2) -> void:
+	_anchor = anchor
+	_has_anchor = true
+	_apply_layout()
+
+
+func _apply_layout() -> void:
+	if not _has_anchor:
+		return
+	var rect := Rect2(color_rect.position, color_rect.size)
+	if margin_container != null:
+		rect = rect.merge(Rect2(margin_container.position, margin_container.size))
+	if rect.size.x <= 0.0 or rect.size.y <= 0.0:
+		return
+	PopupLayout.place_parent_anchor(self, _anchor, rect.size, PopupLayout.DEFAULT_MARGIN, true, rect.position)
 
 
 func _physics_process(_delta: float) -> void:
-	color_rect.size = $MarginContainer.size
-	if get_parent().get_script() != null and get_parent().get_script().resource_path.ends_with("BackPack.gdc"):
-		if self.position.y + color_rect.size.y >= 320:
-			self.position.y = 320 - color_rect.size.y
-	elif get_parent() == Global.get_ui_runtime().windows:
-		var viewport_size := get_viewport().get_visible_rect().size
-		if self.position.y + color_rect.size.y >= viewport_size.y:
-			self.position.y = viewport_size.y - color_rect.size.y - 8.0
-		if self.position.x + color_rect.size.x >= viewport_size.x:
-			self.position.x = get_tree().get_root().get_mouse_position().x - color_rect.size.x - 25.0
-		if self.position.x < 8.0:
-			self.position.x = 8.0
-		if self.position.y < 8.0:
-			self.position.y = 8.0
+	color_rect.size = margin_container.size
 	if is_set == false:
 		create_tween().tween_property(self, "modulate", Color(1, 1, 1, 1), 0.2)
 		set_color()
@@ -58,6 +74,7 @@ func _physics_process(_delta: float) -> void:
 		ms.text = UiTextFormat.description(str(EquipmentService.data(_get_display_name())["描述"]))
 		sj.text = UiTextFormat.price(EquipmentService.data(_get_display_name())["售价"])
 		is_set = true
+	_apply_layout()
 
 
 func set_color():

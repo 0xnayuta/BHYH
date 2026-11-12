@@ -86,7 +86,10 @@ func _process(_delta: float) -> void:
 	if popup_parent == null:
 		popup_parent = _get_window_parent()
 	gl_po = Global.popup_position_for_parent(popup_parent, Vector2(25, 20))
-	add_equ_box.position = gl_po
+	if add_equ_box.has_method("layout_at"):
+		add_equ_box.call("layout_at", gl_po)
+	else:
+		add_equ_box.position = gl_po
 
 
 func _physics_process(delta: float) -> void:
@@ -184,31 +187,14 @@ func on_press_when_in_back():
 
 
 func _keep_click_menu_near_item(menu: Node, _parent: Node) -> void:
-	if menu == null or _parent == null:
+	if menu == null or not (menu is CanvasItem):
 		return
-	var viewport_size = get_viewport().get_visible_rect().size
 	var estimated_size := Vector2(135, 95)
-	if menu is Control:
-		estimated_size = (menu as Control).size
-		if estimated_size.x <= 0.0 or estimated_size.y <= 0.0:
-			estimated_size = Vector2(135, 95)
-	var mouse_pos = get_tree().get_root().get_mouse_position()
-	var screen_pos = mouse_pos + Vector2(18, 18)
-	if screen_pos.x + estimated_size.x > viewport_size.x:
-		screen_pos.x = mouse_pos.x - estimated_size.x - 18.0
-	if screen_pos.y + estimated_size.y > viewport_size.y:
-		screen_pos.y = viewport_size.y - estimated_size.y - 8.0
-	if screen_pos.x < 8.0:
-		screen_pos.x = 8.0
-	if screen_pos.y < 8.0:
-		screen_pos.y = 8.0
-	var local_pos = screen_pos
-	if _parent is CanvasItem:
-		local_pos = (_parent as CanvasItem).get_global_transform().affine_inverse() * screen_pos
-	if menu is Control:
-		(menu as Control).position = local_pos
-	elif menu is Node2D:
-		(menu as Node2D).position = local_pos
+	var canvas_menu := menu as CanvasItem
+	var menu_size := PopupLayout.resolved_size(canvas_menu, estimated_size)
+	PopupLayout.place_screen(
+		canvas_menu, get_viewport().get_mouse_position() + Vector2(18, 18), menu_size, PopupLayout.DEFAULT_MARGIN, true
+	)
 
 
 func on_press_when_strength():

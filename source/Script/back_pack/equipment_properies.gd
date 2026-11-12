@@ -32,6 +32,8 @@ var RoleProp: BaseRoleProperties:
 @onready var eq_ms: Label = $pro_wk/information/inf/VBoxContainer/eq_ms
 @onready var eq_sj: Label = $pro_wk/information/inf/VBoxContainer/eq_sj
 @onready var color_rect: ColorRect = $ColorRect
+@onready var pro_wk: MarginContainer = $pro_wk
+@onready var information: MarginContainer = $pro_wk/information
 @onready var bs_pro_list = $pro_wk/information/inf/BsProp
 @onready var have: Label = $pro_wk/information/inf/VBoxContainer2/have
 @onready var v_box_container_3: VBoxContainer = $pro_wk/information/inf/VBoxContainer3
@@ -64,6 +66,8 @@ var is_pet_equipment: bool = false
 var pet_item: Dictionary = {}
 var pet_sale_price: int = 0
 var pet_random_labels: Array = []
+var _anchor := Vector2.ZERO
+var _has_anchor := false
 
 const PET_RANDOM_STAT_NAMES := {
 	"SHp": "生命",
@@ -291,34 +295,62 @@ func _update_pet_popup_background() -> void:
 
 func _ready() -> void:
 	self.modulate = Color(1, 1, 1, 0)
+	call_deferred("_capture_initial_anchor")
+
+
+func _capture_initial_anchor() -> void:
+	if _has_anchor:
+		return
+	_anchor = position
+	_has_anchor = true
+	_apply_layout()
+
+
+## 外部锚点使用父节点局部坐标；box_1 每帧调用以保持 tooltip 跟随鼠标。
+func layout_at(anchor: Vector2) -> void:
+	_anchor = anchor
+	_has_anchor = true
+	_apply_layout()
+
+
+func _apply_layout() -> void:
+	if not _has_anchor:
+		return
+	var visual_rect := _visual_rect()
+	if visual_rect.size.x <= 0.0 or visual_rect.size.y <= 0.0:
+		return
+	PopupLayout.place_parent_anchor(
+		self, _anchor, visual_rect.size, PopupLayout.DEFAULT_MARGIN, true, visual_rect.position
+	)
+
+
+func _content_size() -> Vector2:
+	var size := information.get_combined_minimum_size()
+	if size.x <= 0.0 or size.y <= 0.0:
+		size = information.size
+	return size
+
+
+func _visual_rect() -> Rect2:
+	var rect := Rect2(color_rect.position, color_rect.size)
+	if information != null:
+		rect = rect.merge(Rect2(pro_wk.position + information.position, _content_size()))
+	return rect
 
 
 func _physics_process(_delta: float) -> void:
-	if get_parent().get_script() != null and get_parent().get_script().resource_path.ends_with("BackPack.gdc"):
-		if self.position.y + color_rect.size.y >= 320:
-			self.position.y = 320 - color_rect.size.y
-		if self.position.x + color_rect.size.x >= 495:
-			self.position.x = 270 - color_rect.size.x
-	elif get_parent() == Global.get_ui_runtime().windows:
-		var viewport_size := get_viewport().get_visible_rect().size
-		if self.position.y + color_rect.size.y >= viewport_size.y:
-			self.position.y = viewport_size.y - color_rect.size.y - 8.0
-		if self.position.x + color_rect.size.x >= viewport_size.x:
-			self.position.x = get_tree().get_root().get_mouse_position().x - color_rect.size.x - 25.0
-		if self.position.x < 8.0:
-			self.position.x = 8.0
-		if self.position.y < 8.0:
-			self.position.y = 8.0
 	if is_pet_equipment:
-		color_rect.size = $pro_wk/information.size
+		color_rect.size = _content_size()
 		if not is_set:
 			create_tween().tween_property(self, "modulate", Color(1, 1, 1, 1), 0.2)
 			_set_pet_information()
 			is_set = true
+		_apply_layout()
 		return
 	if nam == "empty":
+		_apply_layout()
 		return
-	color_rect.size = $pro_wk/information.size
+	color_rect.size = _content_size()
 	if bs_pro_list != null:
 		if eq_prop != {}:
 			if eq_prop.has(DataKeys.GEM):
