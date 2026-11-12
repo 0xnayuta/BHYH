@@ -43,7 +43,6 @@ var set_data: Dictionary = {
 	"MusicFB_2": 0,
 	"NoShowMonsterBody": true,
 	"HpBarDelay": false,
-	"FristGame": true,
 	"automatically_pick_up_items": false,
 	"PickUpItemsMusic": false,
 	"CurrentLevelPage": 0,

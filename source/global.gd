@@ -1820,10 +1820,6 @@ func add_mosaic_help(parent, position):
 	return _menu_panel_factory.add_mosaic_help(parent, position)
 
 
-func add_letter_for_player(parent, position):
-	return _show_text_factory.add_letter_for_player(parent, position)
-
-
 func add_cure_times_box(parent, position):
 	return _shop_factory.add_cure_times_box(parent, position)
 
@@ -2038,10 +2034,6 @@ func add_level_fall_box(parent, Inldl, Inhhgz, Name, qh_level, wx, EqProp):
 
 func add_item_box(parent, Inldl, Inhhgz, Name, qh_level, num, wx, EqProp):
 	return _level_hint.add_item_box(parent, Inldl, Inhhgz, Name, qh_level, num, wx, EqProp)
-
-
-func add_game_need_know(parent, position):
-	return _level_hint.add_game_need_know(parent, position)
 
 
 func add_new_bullet(parent, position, dir, _name, dic):

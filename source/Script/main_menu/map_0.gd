@@ -315,10 +315,6 @@ func _on_task_pressed() -> void:
 	Global.add_basic_task(_ui_parent(), Vector2.ZERO)
 
 
-func _on_group_pressed() -> void:
-	_show_unavailable("群组")
-
-
 func _on_return_pressed() -> void:
 	_save_if_possible()
 	Global.change_scene("res://Scene/main_menu/main_menu.tscn")

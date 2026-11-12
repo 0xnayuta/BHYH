@@ -1,7 +1,7 @@
 extends Node
 
 ## 档案持久化定向探针：缺失档、空档、损坏档、备份恢复、原子写、
-## Myself 范围、云存档收集与 request_save 行为。
+## Myself 范围、角色 ID 校验与 request_save 行为。
 ## 由 scripts/archive_probe_runner.py 以独立 user:// 目录运行。
 
 const LEVEL_PROGRESS_COMMAND := preload("res://Script/base/level_progress_command.gd")
@@ -86,7 +86,7 @@ func _run() -> void:
 	_test_corrupt_archive()
 	_test_backup_recovery()
 	_test_role_range()
-	_test_cloud_validation()
+	_test_role_validation()
 	_test_request_save()
 	_test_archive_session()
 	_test_background_save_order()
@@ -310,11 +310,11 @@ func _test_role_range() -> void:
 	_check("role_7_load_accepted", bool(valid_loaded.get("ok", false)), "status=%s" % valid_loaded.get("status"))
 
 
-func _test_cloud_validation() -> void:
-	_check("cloud_role_7_valid", MemoryClass.is_valid_role_id(7))
-	_check("cloud_role_0_invalid", not MemoryClass.is_valid_role_id(0))
-	_check("cloud_role_8_valid", MemoryClass.is_valid_role_id(8))
-	_check("cloud_role_text_invalid", not MemoryClass.is_valid_role_id("7"))
+func _test_role_validation() -> void:
+	_check("role_7_valid", MemoryClass.is_valid_role_id(7))
+	_check("role_0_invalid", not MemoryClass.is_valid_role_id(0))
+	_check("role_8_valid", MemoryClass.is_valid_role_id(8))
+	_check("role_text_invalid", not MemoryClass.is_valid_role_id("7"))
 
 
 func _test_request_save() -> void:

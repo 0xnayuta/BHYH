@@ -56,9 +56,6 @@
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_normal.png" id="55"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_pressed.png" id="56"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/task_hover.png" id="57"]
-[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_normal.png" id="58"]
-[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_pressed.png" id="59"]
-[ext_resource type="Texture2D" path="res://Art/main_menu/map_0/group_hover.png" id="60"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_normal.png" id="61"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_pressed.png" id="62"]
 [ext_resource type="Texture2D" path="res://Art/main_menu/map_0/return_hover.png" id="63"]
@@ -459,18 +456,6 @@ texture_normal = ExtResource("55")
 texture_pressed = ExtResource("56")
 texture_hover = ExtResource("57")
 
-[node name="Group" type="TextureButton" parent="BottomButtons" unique_id=1240517321]
-visible = false
-mouse_filter = 2
-offset_left = 340.0
-offset_top = 510.0
-offset_right = 410.0
-offset_bottom = 586.0
-focus_mode = 0
-texture_normal = ExtResource("58")
-texture_pressed = ExtResource("59")
-texture_hover = ExtResource("60")
-
 [node name="Return" type="TextureButton" parent="BottomButtons" unique_id=829179327]
 offset_left = 407.0
 offset_top = 510.0
@@ -505,5 +490,4 @@ texture_hover = ExtResource("63")
 [connection signal="pressed" from="BottomButtons/Skill" to="." method="_on_skill_pressed"]
 [connection signal="pressed" from="BottomButtons/Activity" to="." method="_on_activity_pressed"]
 [connection signal="pressed" from="BottomButtons/Task" to="." method="_on_task_pressed"]
-[connection signal="pressed" from="BottomButtons/Group" to="." method="_on_group_pressed"]
 [connection signal="pressed" from="BottomButtons/Return" to="." method="_on_return_pressed"]

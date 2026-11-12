@@ -18,7 +18,6 @@ const MONSTER_HEAD_INFO_PATH := "res://Scene/monster/monster_head_info.tscn"
 const BOSS_INFO_PATH := "res://Scene/monster/boss_info.tscn"
 const BASIC_MOMENT_INFO_PATH := "res://Scene/monster/basic_monment_info.tscn"
 const BOX_SCENE_PATH := "res://Scene/back_pack/box_1.tscn"
-const GAME_NEED_KNOW_PATH := "res://Scene/other_menu/game_need_know.tscn"
 const HC_HELP_PATH := "res://Scene/other_menu/hc_help.tscn"
 const HELP_THING_PATH := "res://Scene/other_menu/help_things.tscn"
 const ZHEN_FA_HELP_PATH := "res://Scene/skill/zhen_fa_help.tscn"
@@ -60,7 +59,6 @@ const ZD_SKILL_PATH := "res://Scene/skill/zd_skill.tscn"
 const BD_SKILL_PATH := "res://Scene/skill/bd_skill.tscn"
 const MAGIC_HELP_PATH := "res://Scene/magic_weapon/magic_help.tscn"
 const SOME_MONSTER_HELP_PATH := "res://Scene/monster/some_monster_help.tscn"
-const LETTER_FOR_PLAYER_PATH := "res://Scene/other_menu/a_letter_for_all_players.tscn"
 const CURE_TIMES_BOX_PATH := "res://Scene/shop/cure_times_box.tscn"
 const TRANS_BOX_PATH := "res://Scene/other_menu/transmogtified_box.tscn"
 const MOSAIC_HELP_PATH := "res://Scene/ldl/mosaic_help.tscn"
@@ -774,12 +772,6 @@ func _check_level_hint_family(checks: Dictionary) -> void:
 	checks["item_box_no_fall_meta"] = item_box != null and not item_box.has_meta("level_fall_box")
 	if item_box != null:
 		created.append(item_box)
-	var know: Node = Global.add_game_need_know(host, Vector2(21, 22))
-	await _settle()
-	checks["game_need_know_created"] = know != null and know.get_parent() == host
-	checks["game_need_know_position"] = know != null and know.position == Vector2(21, 22)
-	if know != null:
-		created.append(know)
 	var hc_help: Node = Global.add_hc_help(host, Vector2(31, 32))
 	await _settle()
 	checks["hc_help_created"] = hc_help != null and hc_help.get_parent() == host
@@ -795,7 +787,6 @@ func _check_level_hint_family(checks: Dictionary) -> void:
 		created.append(help_thing)
 	checks["level_hint_scenes_cached"] = (
 		Global.is_resource_cached(BOX_SCENE_PATH)
-		and Global.is_resource_cached(GAME_NEED_KNOW_PATH)
 		and Global.is_resource_cached(HC_HELP_PATH)
 		and Global.is_resource_cached(HELP_THING_PATH)
 	)
@@ -1309,12 +1300,6 @@ func _check_show_text_family(checks: Dictionary) -> void:
 	checks["show_text_monster_help_position"] = monster_help != null and monster_help.position == Vector2(15, 16)
 	if monster_help != null:
 		created.append(monster_help)
-	var letter: Node = Global.add_letter_for_player(host, Vector2(17, 18))
-	await _settle()
-	checks["show_text_letter_created"] = letter != null and letter.get_parent() == host
-	checks["show_text_letter_position"] = letter != null and letter.position == Vector2(17, 18)
-	if letter != null:
-		created.append(letter)
 	# 这些场景属于运行期 UI 路径：最后一个实例退出后 UiRuntime 会释放场景缓存，
 	# 工厂槽位仍持有强引用，因此断言取用可用而不是 is_resource_cached。
 	var show_text_factory := Global.get_show_text_factory()
@@ -1323,7 +1308,6 @@ func _check_show_text_family(checks: Dictionary) -> void:
 		and show_text_factory.get_ping_jia_scene() != null
 		and show_text_factory.get_message_info_scene() != null
 		and show_text_factory.get_some_monster_help_scene() != null
-		and show_text_factory.get_letter_for_player_scene() != null
 	)
 	checks["show_text_dead_entries_removed"] = (
 		not Global.has_method("add_star") and not Global.has_method("add_role_magic_need")

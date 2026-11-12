@@ -213,8 +213,6 @@
     "TowerFloorInput/colors/font_placeholder_color": "theme_only.tower_placeholder",
     "ShopSearchInput/colors/caret_color": "theme_only.input_caret_light",
     "ShopSearchInput/colors/selection_color": "theme_only.input_selection_light",
-    "ArchiveLoginInput/colors/caret_color": "surface.INPUT_CARET",
-    "ArchiveLoginInput/colors/selection_color": "surface.INPUT_SELECTION",
     "ArchiveNumberInput/colors/caret_color": "surface.INPUT_CARET",
     "ArchiveNumberInput/colors/selection_color": "surface.INPUT_SELECTION"
   },

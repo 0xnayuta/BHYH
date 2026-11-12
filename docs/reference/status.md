@@ -55,7 +55,7 @@
 
 - **发布**：线程加载的 LoadToken 泄漏与窗口退出的光标纹理 RID 残留均已消除；release `level_1` 四阶段与窗口退出（0 RID / 0 `ObjectDB` / 无 `RenderingServer` 空单例）通过。真实输入到结算、物理屏幕呈现延迟、设备 VRAM 全路径和双人完整矩阵仍未验证。`export_release.py` 对打开的工程运行时曾因 `godot-mcp` 端口冲突失败。
 - **平台**：Spine GDExtension 只入库 Windows x86_64；最低硬件配置未声明，其他平台延期/未验证。决策见 [ADR-010](../decisions/ADR-010-spine-runtime-boundary.md) 与 [ADR-027](../decisions/ADR-027-platform-commitment-and-verification-device.md)。
-- **外部服务**：云存档服务端、训练和成就闭环依赖外部能力，不据本地内容回植宣称已完成。
+- **外部服务**：训练和成就闭环依赖外部能力，不据本地内容回植宣称已完成。
 - **公开仓库**：第三方美术、音乐、字体和精灵表不入库；公开 clone 缺素材提示属于预期。
 - **待复核风险**：`get_meta(key, null)` 的调用点清单见 [`../issues/known-issues.md`](../issues/known-issues.md)；缺失资产见 [`../standards/missing_assets_registry.md`](../standards/missing_assets_registry.md)。
 

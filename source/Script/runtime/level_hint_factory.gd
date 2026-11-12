@@ -3,16 +3,14 @@ extends Node
 
 ## 关卡提示族场景工厂：掉落箱/道具箱、进入条件提示、回收提示与物品悬浮提示。
 ## 由 Global 作为普通子节点持有，不是 Autoload；
-## 四个场景槽位常驻，与迁移前的 Global.level_fall_box/game_need_know/hc_help/help_thing 一致。
+## 三个场景槽位常驻，与迁移前的 Global.level_fall_box/hc_help/help_thing 一致。
 
 const BOX_SCENE_PATH := "res://Scene/back_pack/box_1.tscn"
-const GAME_NEED_KNOW_SCENE_PATH := "res://Scene/other_menu/game_need_know.tscn"
 const HC_HELP_SCENE_PATH := "res://Scene/other_menu/hc_help.tscn"
 const HELP_THING_SCENE_PATH := "res://Scene/other_menu/help_things.tscn"
 
 var _host = null
 var _box_scene: PackedScene = null
-var _game_need_know_scene: PackedScene = null
 var _hc_help_scene: PackedScene = null
 var _help_thing_scene: PackedScene = null
 
@@ -25,12 +23,6 @@ func get_box_scene() -> PackedScene:
 	if _box_scene == null:
 		_box_scene = _host.load_cached_scene(BOX_SCENE_PATH)
 	return _box_scene
-
-
-func get_game_need_know_scene() -> PackedScene:
-	if _game_need_know_scene == null:
-		_game_need_know_scene = _host.load_cached_scene(GAME_NEED_KNOW_SCENE_PATH)
-	return _game_need_know_scene
 
 
 func get_hc_help_scene() -> PackedScene:
@@ -70,12 +62,6 @@ func add_item_box(parent, in_ldl, in_hhgz, item_name, quality_level, total_numbe
 	target.eq_prop = equipment_prop
 	target.get_item_name = item_name
 	target.set_meta("item_name", item_name)
-	return target
-
-
-func add_game_need_know(parent, position):
-	var target = _host.instance_scene(get_game_need_know_scene(), parent)
-	target.position = position
 	return target
 
 

@@ -187,73 +187,10 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "跳过剧情"
 
-[node name="Letter" type="TextureButton" parent="." unique_id=1552204181]
-visible = false
-mouse_filter = 2
-focus_mode = 0
-offset_left = 815.0
-offset_top = 543.0
-offset_right = 963.0
-offset_bottom = 625.0
-scale = Vector2(0.6, 0.6)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource("8")
-texture_pressed = ExtResource("8")
-texture_hover = ExtResource("9")
-texture_disabled = ExtResource("8")
-
-[node name="Label" type="Label" parent="Letter" unique_id=2115427416]
-theme_type_variation = "MainMenuLabel"
-theme = ExtResource("theme")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -52.0
-offset_top = -15.0
-offset_right = 60.0
-offset_bottom = 23.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "致玩家信"
-
-[node name="GameWarn" type="TextureButton" parent="." unique_id=8739319]
+[node name="GameSet" type="TextureButton" parent="." unique_id=1147478889]
 offset_left = 695.0
 offset_top = 543.0
 offset_right = 843.0
-offset_bottom = 625.0
-scale = Vector2(0.6, 0.6)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource("8")
-texture_pressed = ExtResource("8")
-texture_hover = ExtResource("9")
-texture_disabled = ExtResource("8")
-
-[node name="Label" type="Label" parent="GameWarn" unique_id=328253848]
-theme_type_variation = "MainMenuLabel"
-theme = ExtResource("theme")
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -52.0
-offset_top = -15.0
-offset_right = 60.0
-offset_bottom = 23.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "游戏须知"
-
-[node name="GameSet" type="TextureButton" parent="." unique_id=1147478889]
-offset_left = 575.0
-offset_top = 543.0
-offset_right = 723.0
 offset_bottom = 625.0
 scale = Vector2(0.6, 0.6)
 size_flags_horizontal = 4
@@ -297,7 +234,5 @@ position = Vector2(470, 295)
 [connection signal="pressed" from="gmae_help" to="." method="_on_gmae_help_pressed"]
 [connection signal="pressed" from="changeBg" to="." method="_on_change_bg_pressed"]
 [connection signal="pressed" from="tiaoguo" to="." method="_on_tiaoguo_pressed"]
-[connection signal="pressed" from="Letter" to="." method="_on_letter_pressed"]
-[connection signal="pressed" from="GameWarn" to="." method="_on_game_warn_pressed"]
 [connection signal="pressed" from="GameSet" to="." method="_on_game_set_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
