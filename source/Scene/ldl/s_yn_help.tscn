@@ -313,6 +313,6 @@ position = Vector2(110, 3)
 texture = ExtResource("10")
 metadata/_edit_lock_ = true
 
-[connection signal="pressed" from="BG/Close" to="." method="_on_close_pressed" flags=18]
-[connection signal="pressed" from="BG/CUre" to="." method="_on_c_ure_pressed" flags=18]
-[connection signal="pressed" from="BG/CUre/Page/reduce" to="." method="_on_reduce_pressed" flags=18]
+[connection signal="pressed" from="BG/Close" to="." method="_on_close_pressed" flags=2]
+[connection signal="pressed" from="BG/CUre" to="." method="_on_c_ure_pressed" flags=2]
+[connection signal="pressed" from="BG/CUre/Page/reduce" to="." method="_on_reduce_pressed" flags=2]

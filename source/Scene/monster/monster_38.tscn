@@ -561,4 +561,4 @@ metadata/_edit_lock_ = true
 wait_time = 15.0
 autostart = true
 
-[connection signal="timeout" from="Death" to="." method="_on_death_timeout" flags=18]
+[connection signal="timeout" from="Death" to="." method="_on_death_timeout" flags=2]

@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 		animation_player.play("Trap3")
 
 
-func _on_area_2d_area_entered(area: Area2D, _extra = null) -> void:
+func _on_area_2d_area_entered(area: Area2D) -> void:
 	if my_name == "Trap1":
 		drop = true
 		animation_player.play("Trap1")
@@ -40,7 +40,7 @@ func _on_area_2d_area_entered(area: Area2D, _extra = null) -> void:
 		drop = false
 
 
-func _on_hit_box_area_entered(area: Area2D, _extra = null) -> void:
+func _on_hit_box_area_entered(area: Area2D) -> void:
 	var target = area.get_parent().get_parent()
 	if target is BaseHero:
 		target.reduce_hp(_get_trap_power(), self, self)

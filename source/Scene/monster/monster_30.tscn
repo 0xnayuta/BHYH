@@ -878,4 +878,4 @@ metadata/_edit_lock_ = true
 
 [node name="call_bai" type="Timer" parent="." index="10" unique_id=1515828506]
 
-[connection signal="timeout" from="call_bai" to="." method="_on_call_bai_timeout" flags=18]
+[connection signal="timeout" from="call_bai" to="." method="_on_call_bai_timeout" flags=2]

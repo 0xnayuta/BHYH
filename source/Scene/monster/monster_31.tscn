@@ -1054,4 +1054,4 @@ metadata/_edit_lock_ = true
 
 [node name="relife" type="Timer" parent="." index="10" unique_id=720187811]
 
-[connection signal="timeout" from="relife" to="." method="_on_relife_timeout" flags=18]
+[connection signal="timeout" from="relife" to="." method="_on_relife_timeout" flags=2]

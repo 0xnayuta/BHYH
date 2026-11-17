@@ -753,5 +753,5 @@ collision_mask = 128
 position = Vector2(2, 72)
 shape = SubResource("55")
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered" flags=18]
-[connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered" flags=18]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered" flags=2]
+[connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered" flags=2]
