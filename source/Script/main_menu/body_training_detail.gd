@@ -22,7 +22,6 @@ const TRAINING_KEY := "炼体"
 var selected_index := -1
 var owner_page: Node = null
 var body_data: Dictionary = {}
-var message_layer: CanvasLayer = null
 
 @onready var detail_icon: Sprite2D = $DetailIcon
 @onready var detail_level: Label = $DetailLevel
@@ -42,11 +41,6 @@ func _ready() -> void:
 	_ensure_body_data()
 	if selected_index >= 0:
 		_refresh()
-
-
-func _exit_tree() -> void:
-	if message_layer != null and is_instance_valid(message_layer):
-		message_layer.queue_free()
 
 
 func setup(page: Node, index: int) -> void:
@@ -201,20 +195,7 @@ func _ui_parent() -> Node:
 
 
 func _show_message(message: String) -> void:
-	var message_show: Node = Global.add_message_show(_ensure_message_layer(), message, 1.2) as Node
-	if message_show is CanvasItem:
-		message_show.z_index = 100000
-		message_show.z_as_relative = false
-
-
-func _ensure_message_layer() -> CanvasLayer:
-	if message_layer != null and is_instance_valid(message_layer):
-		return message_layer
-	message_layer = CanvasLayer.new()
-	message_layer.name = "BodyTrainingMessageLayer"
-	message_layer.layer = 10000
-	get_tree().root.add_child(message_layer)
-	return message_layer
+	Global.add_message_show(_ui_parent(), message, 1.2)
 
 
 func _save_if_possible() -> void:
