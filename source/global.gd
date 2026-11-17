@@ -169,7 +169,6 @@ const MONSTER_ATLAS_LOCATIONS := {
 	3040: "res://Art/monster/swf_png/3040",
 	3041: "res://Art/monster/swf_png/3041",
 }
-const MONSTER_BULLET_PATH := "res://Scene/monster/monster65bullet.tscn"
 const FLY_BULLET_PATH := "res://Scene/bullet/fly_bullet.tscn"
 const FLY_BULLET_SLIM_DIR := "res://Scene/bullet/fly_bullet_slim"
 const CHASE_BULLET_PATH := "res://Scene/bullet/chase_bullet.tscn"
@@ -927,22 +926,57 @@ func preload_level_texture_paths(texture_paths: Array, textures_per_frame: int =
 
 
 func load_monster_bullet_scene(bullet_name: String) -> PackedScene:
-	var slim_path := MONSTER_BULLET_SLIM_DIR.path_join(bullet_name + ".tscn")
-	if ResourceLoader.exists(slim_path):
-		return load_scene_uncached(slim_path)
-
-	var fallback := load_scene_uncached(MONSTER_BULLET_PATH)
-	if fallback != null:
-		return fallback
+	for candidate in _bullet_scene_name_candidates(bullet_name):
+		var slim_path := MONSTER_BULLET_SLIM_DIR.path_join(candidate + ".tscn")
+		if ResourceLoader.exists(slim_path):
+			return load_scene_uncached(slim_path)
+	# 缺场景必须显式失败；回退到无关弹体会制造类型不匹配与错误特效。
 	push_error("Missing MonsterBullet scene: %s" % bullet_name)
 	return null
 
 
 func load_fly_bullet_scene(bullet_name: String) -> PackedScene:
-	var slim_path := FLY_BULLET_SLIM_DIR.path_join(bullet_name + ".tscn")
-	if ResourceLoader.exists(slim_path):
-		return load_scene_uncached(slim_path)
+	for candidate in _bullet_scene_name_candidates(bullet_name):
+		var slim_path := FLY_BULLET_SLIM_DIR.path_join(candidate + ".tscn")
+		if ResourceLoader.exists(slim_path):
+			return load_scene_uncached(slim_path)
 	return _cached_scene(&"fly_bullet", FLY_BULLET_PATH)
+
+
+## 弹体调用名保留原工程写法（PascalCase 或下划线数字），场景文件按命名规范为 snake_case。
+static func _bullet_scene_name_candidates(bullet_name: String) -> Array[String]:
+	var snake_name := ProjectileFactory.slim_scene_basename(bullet_name)
+	var compact_name := _compact_alpha_numeric_underscores(snake_name)
+	var candidates: Array[String] = [snake_name]
+	if compact_name != snake_name:
+		candidates.append(compact_name)
+	return candidates
+
+
+## monster_130_bullet_2 → monster130_bullet2；仅删除字母与数字之间的分隔下划线，保留数字后的下划线。
+static func _compact_alpha_numeric_underscores(value: String) -> String:
+	var result := ""
+	var length := value.length()
+	for index in length:
+		var character := value[index]
+		if (
+			character == "_"
+			and index > 0
+			and index + 1 < length
+			and _is_ascii_letter(value[index - 1])
+			and _is_ascii_digit(value[index + 1])
+		):
+			continue
+		result += character
+	return result
+
+
+static func _is_ascii_letter(character: String) -> bool:
+	return (character >= "a" and character <= "z") or (character >= "A" and character <= "Z")
+
+
+static func _is_ascii_digit(character: String) -> bool:
+	return character >= "0" and character <= "9"
 
 
 func _cache_threaded_resource(path: String, resource: Resource) -> void:

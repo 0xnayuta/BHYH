@@ -109,7 +109,7 @@ func add_role_bullet(parent, position, dir, bullet_name, dic, source_player: Bas
 	elif resolved_name == "Role3Bullet3":
 		scene = _host.load_scene_uncached(ROLE3_BULLET3_SLIM_PATH)
 	else:
-		var slim_path := ROLE_BULLET_SLIM_DIR.path_join(_slim_filename(resolved_name))
+		var slim_path := ROLE_BULLET_SLIM_DIR.path_join(slim_scene_basename(resolved_name) + ".tscn")
 		if not ResourceLoader.exists(slim_path):
 			push_error("Missing slim role bullet scene: " + slim_path)
 			return null
@@ -190,7 +190,8 @@ func add_weapon_bullet(parent, position, bullet_name, attack_list, dir, random_s
 	return target
 
 
-func _slim_filename(bullet_name: String) -> String:
+## 弹体名沿用原工程 PascalCase（如 Monster32Bullet），瘦身场景文件按命名规范使用 snake_case。
+static func slim_scene_basename(bullet_name: String) -> String:
 	var result := ""
 	var length := bullet_name.length()
 	for index in length:
@@ -208,4 +209,4 @@ func _slim_filename(bullet_name: String) -> String:
 			result += character.to_lower()
 		else:
 			result += character
-	return result + ".tscn"
+	return result

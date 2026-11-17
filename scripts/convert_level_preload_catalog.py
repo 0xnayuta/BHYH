@@ -508,6 +508,55 @@ def merge_level_layout_sources(levels: dict[str, LevelEntry]) -> None:
                 entry.monster_ids.append(monster_id)
 
 
+def snake_scene_basename(bullet_name: str) -> str:
+    """与运行时 ProjectileFactory.slim_scene_basename 保持同一 PascalCase→snake_case 规则。"""
+    result: list[str] = []
+    length = len(bullet_name)
+    for index, character in enumerate(bullet_name):
+        if "A" <= character <= "Z":
+            previous = bullet_name[index - 1] if index > 0 else ""
+            next_character = bullet_name[index + 1] if index + 1 < length else ""
+            previous_breaks = (
+                "a" <= previous <= "z"
+                or "0" <= previous <= "9"
+                or ("A" <= previous <= "Z" and "a" <= next_character <= "z")
+            )
+            if previous_breaks:
+                result.append("_")
+            result.append(character.lower())
+        else:
+            result.append(character)
+    return "".join(result)
+
+
+def compact_alpha_numeric_underscores(value: str) -> str:
+    """与运行时 Global._compact_alpha_numeric_underscores 一致：monster_130_bullet_2 → monster130_bullet2。"""
+    result: list[str] = []
+    length = len(value)
+    for index, character in enumerate(value):
+        if (
+            character == "_"
+            and index > 0
+            and index + 1 < length
+            and value[index - 1].isascii()
+            and value[index - 1].isalpha()
+            and value[index + 1].isascii()
+            and value[index + 1].isdigit()
+        ):
+            continue
+        result.append(character)
+    return "".join(result)
+
+
+def bullet_scene_name_candidates(literal: str) -> list[str]:
+    snake_name = snake_scene_basename(literal)
+    compact_name = compact_alpha_numeric_underscores(snake_name)
+    candidates = [snake_name]
+    if compact_name != snake_name:
+        candidates.append(compact_name)
+    return candidates
+
+
 def collect_monster_bullets(cache: PreloadCache | None = None) -> dict[str, list[str]]:
     by_lower = {path.stem.lower(): path.name for path in BULLET_SCENE_DIR.glob("*.tscn")}
     bullets: dict[str, list[str]] = {}
@@ -527,10 +576,14 @@ def collect_monster_bullets(cache: PreloadCache | None = None) -> dict[str, list
                 current = SOURCE / parent[1].removeprefix("res://")
         found: set[str] = set()
         for script_text in texts:
-            for literal in re.findall(r'"([^"]+)"', script_text):
+            # 空字符串 "" 与转义引号会破坏朴素引号配对，必须按 GDScript 字符串 token 匹配。
+            for literal in re.findall(r'"((?:[^"\\\n]|\\.)*)"', script_text):
                 if not literal or "/" in literal:
                     continue
-                actual = by_lower.get(literal.lower())
+                actual = next(
+                    (by_lower[name] for name in bullet_scene_name_candidates(literal) if name in by_lower),
+                    None,
+                )
                 if actual:
                     found.add(f"{BULLET_SCENE_DIR.relative_to(SOURCE).as_posix()}/{actual}")
         if found:

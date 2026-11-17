@@ -2332,9 +2332,18 @@ func _prepare_bullet_animation_material(animation_name: String) -> void:
 func call_monster_56_bullet():
 	state = remove
 	bullet_player.speed_scale = 1.8
+	if not bullet_player.has_animation("Monster56Bullet"):
+		# Monster57Bullet 场景缺少第二阶段动画；播放完当前阶段后回收，避免报错与永久存活。
+		if not bullet_player.animation_finished.is_connected(_on_monster56_replay_finished):
+			bullet_player.animation_finished.connect(_on_monster56_replay_finished, CONNECT_ONE_SHOT)
+		return
 	_prepare_bullet_animation_material("Monster56Bullet")
 	bullet_player.play("Monster56Bullet")
 	await bullet_player.animation_finished
+
+
+func _on_monster56_replay_finished(_animation_name: StringName) -> void:
+	queue_free()
 
 
 func shake(strength, times, interv):
